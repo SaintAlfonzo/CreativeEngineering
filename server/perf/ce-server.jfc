@@ -837,8 +837,9 @@
       <setting name="threshold">0 ms</setting>
     </event>
 
+    <!-- off (perf.md 19): DH 3.0.2 hits an uncommon trap ~14,500 times a second, 361 of a 504 MB dump -->
     <event name="jdk.Deoptimization">
-      <setting name="enabled">true</setting>
+      <setting name="enabled">false</setting>
       <setting name="stackTrace">false</setting>
     </event>
 

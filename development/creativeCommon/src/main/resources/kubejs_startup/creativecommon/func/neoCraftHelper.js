@@ -749,7 +749,7 @@ global.NCH = {
   // G5 for filters: an input/output id (or tag) of a mod that is not loaded matches nothing; count the call for that
   // mod instead of letting KubeJS parse it. Walks plain objects and arrays (or / not / lists); Java objects pass through
   // as before. (The "Empty array?" errors this was first written for were IE output tags, _pruneEmptyIeOutputs.)
-  _absentInFilter(v, context, key) {
+  _absentInFilter(v, context, key, nested) {
     if (v === undefined || v === null) return
     if (typeof v === 'string' || v instanceof String) {
       if (key === 'input' || key === 'output') global.NCH._absent(String(v).replace(/^#/, ''), context)
@@ -759,14 +759,24 @@ global.NCH = {
     if (Array.isArray(v)) {
       // a list under input/output is a choice of items: left to KubeJS (one absent entry must not drop the call)
       if (key === 'input' || key === 'output') return
-      for (var n = 0; n < v.length; n++) global.NCH._absentInFilter(v[n], context, key)
+      for (var n = 0; n < v.length; n++) global.NCH._absentInFilter(v[n], context, key, true)
       return
     }
     if (Object.prototype.toString.call(v) !== '[object Object]') return
+    // a top-level { id: 'mod:recipe' } / { mod: 'mod' } filter of an absent mod matches nothing: count the call for
+    // that mod instead of failing on its (undefined) dict entries. Not inside a list (a list of filters is an OR).
+    if (!nested) {
+      if (typeof v.id === 'string' || v.id instanceof String) global.NCH._absent(String(v.id), context)
+      if ((typeof v.mod === 'string' || v.mod instanceof String) && !global.has.mod(String(v.mod))) {
+        var merr = new Error('[NCH] ' + context + ': mod ' + v.mod + ' is not loaded')
+        merr.nchAbsent = String(v.mod)
+        throw merr
+      }
+    }
     var keys = Object.keys(v)
     for (var k = 0; k < keys.length; k++) {
       var kk = keys[k]
-      global.NCH._absentInFilter(v[kk], context, (kk === 'input' || kk === 'output') ? kk : key)
+      global.NCH._absentInFilter(v[kk], context, (kk === 'input' || kk === 'output') ? kk : key, true)
     }
   },
 
@@ -814,11 +824,36 @@ global.NCH = {
 
   // Sets the cooking time (ticks) of every loaded recipe the filter matches (smelting-style and Farmer's Delight
   // pot recipes both read `cookingtime`). Returns the number of recipes changed.
+  // The time goes in as a parsed JSON number: a JS number (and even Integer.valueOf) makes Rhino pick
+  // addProperty(String, String) and write "400.0", which Farmer's Delight rejects ("Expected cookingtime to be a Int"),
+  // dropping the recipe (checked on a scratch server 2026-11-07).
   setCookTime(filter, time, e) {
     if (!e) throw new Error('setCookTime called without event object!')
     global.NCH._pruneEmptyIeOutputs(e)
     var n = 0
-    e.forEachRecipe(filter, r => { r.json.addProperty('cookingtime', time); n++ })
+    var ticks = Java.loadClass('com.google.gson.JsonParser').parseString(String(Math.round(time)))
+    e.forEachRecipe(filter, r => { r.json.add('cookingtime', ticks); n++ })
+    return n
+  },
+
+  // Multiplies an integer field of every loaded recipe the filter matches (Botany Pots `growthTicks`). factor is a
+  // number or a function (recipe json) -> number; 1 (or 0 / null) leaves that recipe alone. The result is rounded,
+  // at least 1, and written as a parsed JSON integer for the same reason as setCookTime. Recipes without the field
+  // are skipped. Returns the number of recipes changed.
+  scaleRecipeInt(filter, key, factor, e) {
+    if (!e) throw new Error('scaleRecipeInt called without event object!')
+    global.NCH._pruneEmptyIeOutputs(e)
+    var parser = Java.loadClass('com.google.gson.JsonParser')
+    var n = 0
+    e.forEachRecipe(filter, r => {
+      var json = r.json
+      if (!json || !json.has(key) || !json.get(key).isJsonPrimitive()) return
+      var f = typeof factor === 'function' ? factor(json) : factor
+      if (!f || f === 1) return
+      var v = json.get(key).getAsDouble()
+      json.add(key, parser.parseString(String(Math.max(1, Math.round(v * f)))))
+      n++
+    })
     return n
   },
 
@@ -2539,6 +2574,9 @@ global.NCH = {
 
 	ieMetalPress(output, input, mold, e, idOverride) {
 		if (!global.has('immersiveengineering')) return global.NCH._skip('immersiveengineering')
+		// the only IE helper built on KubeJS IE's recipe schema (the others write JSON): without that addon the schema
+		// is missing ("Constructor for immersiveengineering:metal_press with 3 arguments not found", r1107cc chain boot)
+		if (!global.has('kubejs_immersive_engineering')) return global.NCH._skip('kubejs_immersive_engineering')
   if (!e) throw new Error('ieMetalPress called without event object!')
   var idSuffix = idOverride ?? global.NCH.toId(output, input, "iepressing")
   var ctx = 'ieMetalPress ' + idSuffix
@@ -2672,7 +2710,8 @@ global.NCH = {
 
 	// IE Bottling Machine. NBT-aware like ieBlueprint: a result may be Item.of(id, '{nbt}'), an input
 	// Item.of(id, '{nbt}') / { item, nbt } (forge:partial_nbt). fluid: an id, Fluid.of(...), or
-	// { tag | fluid, amount, nbt } (the fluid NBT is subset-matched, patcherMod FluidTagInputMixin).
+	// { tag, amount, nbt }. IE matches the fluid NBT exactly; with Creative Engineering (FluidTagInputMixin) the match is
+	// a subset and { fluid: id } inputs also load. Use a tag in jars that do not require Engineering.
 	//   R.ieBottling(Item.of(i.tipped_arrow, '{Potion:"minecraft:swiftness"}'),
 	//     { tag: f.t_potion, amount: 20, nbt: '{Bottle:"LINGERING",Potion:"minecraft:swiftness"}' }, i.arrow, e, 'tipped_arrow/swiftness')
 	ieBottling(results, fluid, inputs, e, idOverride, amount) {

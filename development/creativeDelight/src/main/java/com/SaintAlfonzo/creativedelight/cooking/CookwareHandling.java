@@ -45,7 +45,8 @@ import net.minecraftforge.items.IItemHandlerModifiable;
  * <li>Sneak right-click with an empty main hand picks the block up: every slot of its inventory (ingredients, meal,
  * containers, output) goes into the player's inventory (overflow drops at the player), and the hand gets the station
  * as a plain item (the loot drop without {@code BlockEntityTag}, so the skillet keeps its own enchantments and a
- * renamed station its name). Respects break protection (a {@link BlockEvent.BreakEvent} is posted).</li>
+ * renamed station its name). Respects break protection (a {@link BlockEvent.BreakEvent} is posted). With QoL-8
+ * ({@link CookwareContents}) the item keeps the contents instead, and only the leftover slots drop at the block.</li>
  * <li>Left-click (punch) with an empty main hand, sneaking or not, toggles the block's state instead of breaking it:
  * the kettle's {@code lid}, the pots' handle ({@code support=handle} against the tray state upstream would give).
  * The skillet has no toggle and breaks as normal. Holding the button counts as one punch (see {@link #HELD_GAP}).</li>
@@ -140,15 +141,19 @@ public final class CookwareHandling {
 		if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player))) return;
 
 		BlockEntity be = level.getBlockEntity(pos);
-		List<ItemStack> contents = takeContents(be);
+		// QoL-8 (cooking/kitchen #40): the station keeps its contents in the item; only the leftover slots drop
+		// (the block's onRemove). Off: the inventory goes to the player and the item is plain.
+		boolean keep = CookwareContents.enabled();
+		if (keep) CookwareContents.markKeep(be);
+		List<ItemStack> contents = keep ? List.of() : takeContents(be);
 		List<ItemStack> drops = Block.getDrops(state, server, pos, be, player, ItemStack.EMPTY);
 		ItemStack station = drops.isEmpty() ? new ItemStack(state.getBlock()) : drops.get(0).copy();
 		CompoundTag tag = station.getTag();
-		if (tag != null) {
+		if (tag != null && !keep) {
 			tag.remove("BlockEntityTag");
 			if (tag.isEmpty()) station.setTag(null);
 		}
-		// Inventory is empty now, so the block's onRemove throws nothing out
+		// Inventory is empty now (or its kept slots are left out), so the block's onRemove throws only leftovers out
 		if (!level.removeBlock(pos, false)) return;
 		level.levelEvent(2001, pos, Block.getId(state));
 		SoundType sound = state.getSoundType(level, pos, player);

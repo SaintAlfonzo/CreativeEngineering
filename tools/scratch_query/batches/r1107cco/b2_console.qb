@@ -1,0 +1,146 @@
+# r1107cco boot 1 continued (same `full` server as b1_full.qb, level cco1, group B, difficulty=normal,
+# spawn-monsters=true): the console rows SQ-CCO-05 to -11, -15, -16 (defaults half). Toggled halves (IW fast path off,
+# gravityLimitDimensions false, effects removed) are b3_toggled.qb on a reboot of the same srv.
+# Copies the scratch probes in and reloads first: s5_probe.js (/s5 rest), cc_phantom_probe.js (/zph),
+# cc_dict_probe.js ([ccdict] lines).
+pace 2
+
+## SQ-CCO-15 | Common startup files loaded, Common tags exist, dict keys of absent mods do not throw
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log
+shell cp "$INST/tools/scratch_query/s5_probe.js" kubejs/server_scripts/zz_s5_probe.js && cp "$INST/tools/scratch_query/cc_phantom_probe.js" kubejs/server_scripts/zz_cc_phantom_probe.js && cp "$INST/tools/scratch_query/cc_dict_probe.js" kubejs/server_scripts/zz_cc_dict_probe.js && echo probes copied
+> reload
+sleep 20
+> zq itemtag creativecommon:bark
+> zq itemtag creativecommon:metal_dusts
+sleep 2
+shell grep -E "\[ccdict\]" logs/kubejs/server.log | head -40
+shell grep -ciE "exception|error" logs/kubejs/server.log || true
+reject Unknown or incomplete command
+look startup line says creativecommon N of N files loaded; both tags list items (or the zq line says empty for a tag whose items are all from absent mods); [ccdict] lines show skip values, no exception
+
+## SQ-CCO-05 | Immersive Weathering fast random tick: no ASM warning, moss still spreads
+bootreject (?i)unknown signature|handler not found
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+> pbot remove-all
+sleep 2
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+> forceload add 0 0 31 31
+> fill 8 66 8 23 68 23 minecraft:stone
+> fill 8 69 8 23 69 23 minecraft:cobblestone
+> fill 8 70 8 23 72 23 minecraft:air
+> setblock 15 69 15 minecraft:mossy_cobblestone
+> setblock 16 70 16 minecraft:water
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> gamerule randomTickSpeed 300
+sleep 60
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> zq count 8 69 8 23 69 23 minecraft:cobblestone
+> gamerule randomTickSpeed 3
+look mossy_cobblestone count after 60 s at randomTickSpeed 300 is higher than the first count (growth happens with the fast path)
+
+## SQ-CCO-06 | Armor Trims item list cache survives two reloads
+> give s5pb1 minecraft:diamond_chestplate
+> reload
+sleep 20
+> reload
+sleep 20
+reject (?i)(armortrims|ArmorTrimsItemCache|LargeItemLists).*(error|exception|stale)
+reject (?i)/ERROR\].*(trim)
+shell grep -iE "armor_?trims|ArmorTrimsItemCache" logs/latest.log | grep -viE "loading|found mod|Mixing|\.mixins\.json" | head -5
+
+## SQ-CCO-07 | Quark Spiral Spires teleport hook skipped outside the End: /tp into new terrain is quick
+> say CCO07 start
+> tp s5pb1 50000 100 50000
+> say CCO07 arrived
+waitlog CCO07 arrived 120
+reject (?i)QuarkSpiralSpires|Can't keep up|watchdog|single server tick took
+look seconds between the CCO07 start and arrived lines (vanilla /tp does not wait for the chunk: a few seconds at most)
+> tp s5pb1 0 70 0
+
+## SQ-CCO-08 | Create Gravity per-entity logic runs in the End only (gravityLimitDimensions = true)
+# Gravity adds its low-gravity modifier only while the entity falls (removed on landing): read it mid-fall from y 200.
+# NoAI mobs do not move at all in 1.19, so these zombies have AI
+bootreject (?i)CreateGravityDimensionMixin.*(error|fail)
+shell grep -E "biome_configs" cco1/serverconfig/create_gravity-server.toml
+> kill @e[tag=cco08]
+> execute in minecraft:the_end run forceload add 0 0
+> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+sleep 2
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
+> data get entity @e[tag=cco08o,limit=1] Pos[1]
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Attributes
+> data get entity @e[tag=cco08o,limit=1] Attributes
+look End zombie is higher after the same time (slower fall) and carries the Low Gravity Biome modifier on forge:entity_gravity ([I;2020721635,269896998,-1235373740,-1522950634]); the overworld zombie falls at vanilla speed with no modifier
+> kill @e[tag=cco08]
+
+## SQ-CCO-09 | Nock Enough Arrows whistle goal: no mixin error, mobs with no whistling arrow do not search
+bootreject (?i)NeaWhistle.*(error|fail)
+> summon minecraft:pig 5 70 5 {NoAI:0b,PersistenceRequired:1b,Tags:["cco09"]}
+> summon minecraft:cow 6 70 5 {PersistenceRequired:1b,Tags:["cco09"]}
+> summon nock_enough_arrows:whistling_arrow 5 72 5
+sleep 5
+> kill @e[tag=cco09]
+reject (?i)/ERROR\].*(nock|whistl)
+look no NEA error with mobs ticking and a whistling arrow summoned (if the entity id is unknown the console says so: note it). Tick cost is a JFR / client check (CQ-CCO-03)
+
+## SQ-CCO-10 | Better Beacons Phantom Bane on the first player skips only that player (/zph, fresh spawner passes)
+> pbot remove-all
+sleep 2
+> effect clear s5pb1
+> time set 18000
+# platforms in unloaded chunks are not placed (bots then fall into caves with no sky): forceload first
+> forceload add -208 -8 -192 8
+> forceload add 192 -208 208 -192
+> fill -202 149 -2 -198 149 2 minecraft:stone
+> fill 198 149 -202 202 149 -198 minecraft:stone
+> pbot spawn s5pb1 -200 150 0 minecraft:overworld survival
+sleep 2
+> pbot spawn s5pb2 200 150 -200 minecraft:overworld survival
+sleep 5
+> s5 rest s5pb1 1200000
+> s5 rest s5pb2 1200000
+> zph 10
+sleep 3
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10C phantom near bot 1
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10C phantom near bot 2
+expect CCO10C phantom near bot 1
+expect CCO10C phantom near bot 2
+> kill @e[type=minecraft:phantom]
+> effect give s5pb1 better_beacons:phantom_bane 9999
+sleep 2
+> zph 10
+sleep 3
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10 phantom near bot 2
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10 phantom near bot 1
+expect CCO10 phantom near bot 2
+reject CCO10 phantom near bot 1
+> kill @e[type=minecraft:phantom]
+> time set noon
+> forceload remove -208 -8 -192 8
+> forceload remove 192 -208 208 -192
+> pbot remove-all
+reject (No player was found|no such bot|Unknown or incomplete command)
+
+## SQ-CCO-11 | Immersive Portals + Serene Seasons + Heartstone on a server: conform line once, Nether trip
+shell grep -c "overwrites conform" logs/latest.log; grep -c "cannot reduce visibility\|Static binding violation" logs/latest.log
+> pbot spawn s5pb1 0 70 0 minecraft:overworld survival
+sleep 2
+> execute in minecraft:the_nether run tp s5pb1 0 100 0
+sleep 8
+> execute in minecraft:overworld run tp s5pb1 0 80 0
+sleep 5
+reject (?i)exception|crash
+# one "Static binding violation ... visibility will be upgraded" for MixinChunkMap_C is the designed result of the conform
+bootreject ^(?!.*Static binding violation).*cannot reduce visibilit|InvalidMixinException
+look conform count 1, Static binding violation count 1 (designed, MixinChunkMap_C upgraded); the Heartstone priority line is client-only (CQ-CCO-01)
+
+## SQ-CCO-16 | trader offers and advancements on Common's defaults
+> summon minecraft:wandering_trader 4 71 4 {NoAI:1b,Tags:["cco16"]}
+sleep 2
+> data get entity @e[tag=cco16,limit=1] Offers.Recipes
+> advancement grant s5pb1 only minecraft:story/root
+expect (?i)granted the advancement|has the advancement|Granted
+> kill @e[tag=cco16]
+> pbot remove-all
+look trader offers are vanilla (no pack trade ids, [wandering_trader] enabled = false); the advancement grant works

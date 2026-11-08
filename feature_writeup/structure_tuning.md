@@ -3833,3 +3833,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 
 - 2026-10-28: planned from the scratchpad: more water-replace checks for lakes, tent camps and ruins floating in water, seen on a client scratch server (TODO `structures/earthfill #12`). No code changed.
 - 2026-10-30: earth-fill fixes (3.13, TODO `structures/earthfill #9`, `#10`, bugs A and B of [briefs/structures_earthfill.md](briefs/structures_earthfill.md)). An override with every limit -1 is never cancelled under `log = ALL` (only measured), so a `log = ALL` run cancels exactly what `CANCELLED` does. A sunk start's beard reach and mound test start at its bottom plus the sink (`EarthCheck.cancels`), so earth over a gap the raised beard no longer reaches counts; expect slightly more Campsite cancels on slopes. Pruning (`pruned`) still uses the unsunk bottom; no pruned structure is sunk today. Offline: EarthFillTest 74 checks green. Tests SQ-WG30-A01 to -A03 (scratch_queue.md), with reruns of ST-54 at `log = ALL` and ST-199. Scratch 2026-10-30: A01 PASSED (34 village starts under an all -1 override, all kept); A02 PARTIAL (27 Campsite starts, 1 cancel, on water; ST-199's camp at [-7, -9] is no longer picked after the weight strip, a sampled sunk camp sits flush; no old-jar comparison); A03 PARTIAL (the -1 village kept, the limit-0 ruins never had earth over water or air, so their cancel was not exercised).
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Waystones require a diamond or netherite pickaxe to break (owner). Row `structures/contents #10`.

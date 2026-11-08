@@ -1,0 +1,16 @@
+# r1108cge boot 6: tools/scratch_query/cpp_chain_srv.sh OUT cpp4 chain (Brewing chain without Engineering, group B),
+# probe zz_cc_seqasm_probe.js. SQ-CPP-04.
+pace 2
+
+## SQ-CPP-04 | Brewing's IE potion recipes load and work without Engineering
+bootreject Mixin apply failed|InvalidMixinException
+bootreject Expected cookingtime
+bootexpect Done \(
+> zsa bottle minecraft:swiftness
+waitlog \[zsa\] done 20
+expect bottle recipe creativebrewing:iebottling/create_potion/minecraft_swiftness_regular
+shell grep -c "Error parsing recipe" logs/latest.log || true
+shell grep -c "creativebrewing:iebottling/create_potion/" logs/latest.log || true
+shell grep -cE "\[ERROR\]" logs/kubejs/server.log
+shell grep -E "\[ERROR\]" logs/kubejs/server.log | cut -c1-220 | head -30
+look 0 parse errors naming creativebrewing; swiftness bottles; KubeJS ERRORs = r1107cc's 23 known Delight / Brewing findings (TODO creativebrewing/publish #24, #25) and nothing new

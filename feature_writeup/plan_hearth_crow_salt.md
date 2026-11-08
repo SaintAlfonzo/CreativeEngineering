@@ -181,3 +181,7 @@ All six section 7 calls are answered; the details are in [hearth_and_harvest.md]
 6. **Salt caves: added**, then examined in game for a further eval (HNH-87 to HNH-89).
 
 New tests: HNH-87 theft takes exactly 1 item from a stack, from the hotbar only (a main-inventory item and a ground item are never taken); HNH-88 a crow carrying loot does not despawn, and the loot is in its NBT and drops on its death; HNH-89 a salt cave generates, its shell is raw rock salt block, and the cave is logged for eval; HNH-90 corn and corn kernels tempt and tame a wild crow; HNH-91 a pecking-on default: an unprotected crop is pecked, a scarecrow-covered one is not.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Crows and crow nests in villages: spawn more of both (owner). Row `mobs/tweaks #23`; the ported nest stash is C-section work in this plan.

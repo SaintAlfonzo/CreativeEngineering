@@ -24,6 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
  *   <li>{@link #OWN_PICK_CROPS}: {@code CropBlock}s with their own ripe right-click (pick the fruit, drop back a few
  *       stages). Quark's search would harvest and replant them to stage 0 first; instead an empty hand or a 1x1 hoe
  *       leaves them to the block, and a hoe area clicks them like berry bushes ({@code mixin/QuarkOwnPickMixin}).</li>
+ *   <li>{@link #HARVEST_FROM_BOTTOM}: two-high crops whose top half is the same block on top of the lower half (corn).
+ *       Quark's harvest map only holds the lower half's ripe state, so a click on the top half did nothing; it is
+ *       sent to the lower half instead ({@code mixin/QuarkTopHalfHarvestMixin}).</li>
  * </ul>
  *
  * Right-click and hoe right-click replant aren't here: those are Quark's {@code Harvestable Blocks}
@@ -40,6 +43,14 @@ public final class CropParity {
             new ResourceLocation(CreativeDelight.NS, "crops/farmland_crops"));
     public static final TagKey<Block> OWN_PICK_CROPS = BlockTags.create(
             new ResourceLocation(CreativeDelight.NS, "crops/own_pick"));
+
+    public static final TagKey<Block> HARVEST_FROM_BOTTOM = BlockTags.create(
+            new ResourceLocation(CreativeDelight.NS, "crops/harvest_from_bottom"));
+
+    /** True for the top half of a {@link #HARVEST_FROM_BOTTOM} crop: tagged, with the same block right below. */
+    public static boolean isTopHalf(BlockState plant, BlockState below) {
+        return plant.is(HARVEST_FROM_BOTTOM) && below.is(plant.getBlock());
+    }
 
     public static boolean isFarmlandSoil(BlockState soil) {
         return soil.is(Blocks.FARMLAND) || soil.is(FARMLAND_SOILS);

@@ -1,7 +1,10 @@
 package com.SaintAlfonzo.creativecalendar.mixin;
 
+import com.SaintAlfonzo.creativecalendar.seasons.SeasonAnswers;
 import com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.ForgeConfigSpec;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -45,6 +48,14 @@ public class SeasonColorUtilMixin {
 		}
 		Season.SubSeason own = ownTint(biome);
 		if (own != null && provider != own) cir.setReturnValue(SeasonColorUtil.applySeasonalFoliageColouring(own, biome, originalColour));
+	}
+
+	/** changeGrassColor / changeFoliageColor read once per config reload, not per tinted block (perf.md 19). */
+	@Redirect(method = {"applySeasonalGrassColouring", "applySeasonalFoliageColouring"}, remap = false, require = 2,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraftforge/common/ForgeConfigSpec$BooleanValue;get()Ljava/lang/Object;"))
+	private static Object creativeengineering$knownToggle(ForgeConfigSpec.BooleanValue value) {
+		return SeasonAnswers.config(value, value::get);
 	}
 
 	@Nullable

@@ -3222,3 +3222,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
   take several effects (`wine|a+b+c|level|ticks`), Jellie Wine gives Regeneration, Absorption, Resistance and Fire
   Resistance and `vinery:jellie` is unregistered ([effects.md](effects.md) 2.7, EF-29); Double Jump keeps the higher of
   its power and Jump Boost's (TODO `potions/effects #14`). Installed in `mods/` 2026-10-31 00:41, not yet booted.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Stomping: expand the heavy armour list; stomping moves to the H&H stomping basin. Row `alcohol/vineryport #29`.

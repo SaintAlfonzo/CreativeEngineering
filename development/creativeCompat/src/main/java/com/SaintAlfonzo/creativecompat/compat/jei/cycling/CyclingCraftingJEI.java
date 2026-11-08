@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativecompat.compat.jei.cycling;
 
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiGate;
 import com.SaintAlfonzo.creativecompat.CreativeCompat;
 import java.util.List;
 
@@ -43,11 +44,19 @@ public class CyclingCraftingJEI implements IModPlugin {
 
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+        JeiGate.run("registerVanillaCategoryExtensions", () -> registerVanillaCategoryExtensions0(registration));
+    }
+
+    private void registerVanillaCategoryExtensions0(IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addCategoryExtension(CyclingCraftingDisplay.class, CyclingCraftingExtension::new);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+    }
+
+    private void registerRecipes0(IRecipeRegistration registration) {
         if (Minecraft.getInstance().level == null) {
             return;
         }
@@ -59,6 +68,10 @@ public class CyclingCraftingJEI implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime runtime) {
+        JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
+    }
+
+    private void onRuntimeAvailable0(IJeiRuntime runtime) {
         if (!ForgeRegistries.ITEMS.containsKey(FACADE)) {
             return;
         }

@@ -52,7 +52,7 @@ import java.util.List;
  *
  * <p>The row-0 Y formula and the row drawing loop are adapted from Detail Armor Bar 2.6.4
  * ({@code ArmorBarRenderer#render}), Copyright (c) RedLime, MIT License; see
- * creativecommon-NOTICE-thirdparty.txt.
+ * creativeequipment-NOTICE-thirdparty.txt.
  */
 @Mod.EventBusSubscriber(modid = com.SaintAlfonzo.creativeequipment.CreativeEquipment.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ArmorOverflowRenderer {

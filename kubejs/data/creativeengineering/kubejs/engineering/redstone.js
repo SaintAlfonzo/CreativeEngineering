@@ -164,10 +164,10 @@ R.ieBlueprint(Item.of(i.repeater, 1), [Item.of(i.smooth_stone_slab, 1), Item.of(
 // seq assemble, workbench recipes
 const incFastRepeater = R.incomplete('fast_repeater')
 R.createSequencedAssembly(Item.of(i.fast_repeater, 1), i.repeater, [
-	e.recipes.create.deploying(incFastRepeater, [incFastRepeater, i.nugget_gold]),
+	e.recipes.create.deploying(incFastRepeater, [incFastRepeater, i.any_nugget_gold]),
 	e.recipes.create.pressing(incFastRepeater, incFastRepeater)
 ], ['fast_repeater'], e, 'fast_repeater_sequenced_assembly', 5)
-R.ieBlueprint(Item.of(i.fast_repeater, 1), [Item.of(i.repeater, 1), Item.of(i.nugget_gold, 3)], 'redstonecomponents', e)
+R.ieBlueprint(Item.of(i.fast_repeater, 1), [Item.of(i.repeater, 1), { id: i.any_nugget_gold, count: 3 }], 'redstonecomponents', e)
 
 //Slow Repeater
 //Change to cast iron, seq assemble, workbench recipes

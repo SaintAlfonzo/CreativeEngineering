@@ -12,6 +12,10 @@ if (global.CD) global.CD.genPut('can_servings', 'delightful', {
   "canned_field_salad": 8,
   "canned_sinigang": 8,
   "canned_pumpkin_pie_filling": 4,
-  "canned_salmonberry_pie_filling": 4
+  "canned_salmonberry_pie_filling": 4,
+  "canned_cantaloupe_bread": 4,
+  "canned_cactus_chili": 8,
+  "canned_cactus_soup": 8,
+  "canned_stuffed_cantaloupe": 6
  }
 })

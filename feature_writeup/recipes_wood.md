@@ -13,7 +13,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
 | Create saw: planks → every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
-| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood merged into oak, azalea tree back to an oak trunk (2026-11-02, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
+| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
   SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags included Botania, driftwood, crimson and warped.
@@ -73,6 +73,7 @@ Create's, Farmer's Delight's, Quark Delight's and Abnormals Delight's (driftwood
 | Compost ×1 | dirt + 3 brown mulch (or bark) + 3 bone mulch + 2 waste mulch | dirt + 2 brown mulch (or bark) + 2 bone + 2 waste |
 | Fertile soil ×6 | 3 rich soil + one of each mulch (brown or bark, bone, waste, green, fungus, fertilizer) | 2 rich soil + the same |
 | Fertile soil ×3 | 3 rich soil + 3 of one base mulch (brown or bark, bone, waste) + green, fungus, fertilizer | 2 rich soil + the same |
+| Fertile soil ×1 | 3 rich soil, shapeless, hand only (2026-11-07, `farming/crops #41`) | none |
 | Nulch block ×6 (Immersive Weathering) | 3 netherrack, 2 scales, ash, magma cream, nether wart, blaze powder | 2 netherrack, 1 scale, the rest |
 
 Immersive Weathering's mulch block and nulch block recipes are removed. The mulches are `#forge:mulch/*`.
@@ -128,16 +129,23 @@ pack's leaf decay reads the same rules). The pack overrides that rule in
 Mulberry leaves still do not connect through other leaves (the rule's `leaves` list is unchanged). `/reload`; already
 placed leaves recheck on their next block update or tick.
 
-**Quark azalea wood (2026-11-02, `farming/trees #5`).** Quark's `Azalea Wood` module is off in `config/quark-common.toml`
-(backup in `configs_edited/root_config/` and the CreEngServer mirror). Quark still registers the blocks (old worlds keep
-them); with the module off, its `enabledStatusChanged` puts the vanilla oak log back as the azalea tree's trunk
-(`TreeFeatures.AZALEA_TREE`), so naturally generated and bone-mealed azalea trees have oak trunks again. The wood is merged
-into oak like river (`removedWoods.azalea`, 100 ids: Quark's 27 wood ids, Every Compat's 46, Lightman's Currency's 20,
-Dramatic Doors' 2, Supplementaries' 2, Supp Squared's shelf, Abnormals Delight's cabinet, Immersive Weathering's bark; Creative Delight's three azalea racks were pulled from `RackWoods` instead, never released) plus the six Railways tracks (hidden only).
-The azalea rows were taken out of `wood_types.js`, `bark.js`, `engineeringtags.js`, `fabric.js` and the CD `kitchen.js` rack
-list; the jar sawmill jsons for azalea are removed at load by the output purge. Azalea bushes, leaves, flowers, leaf carpets,
-hedges, leaf piles and azalea tea stay. Restart (startup list and Quark config). Generated lists that still name azalea wood
-(`item_physics_families.json`, `wthit/silk_touch_blocks.json`) refresh on the next `/cdevgen`. Test RW-29.
+**Quark azalea wood: removed 2026-11-02 (`farming/trees #5`, shipped 1.2.00), restored 2026-11-07 (`farming/trees #7`).**
+The removal turned Quark's `Azalea Wood` module off (oak trunk on the azalea tree) and merged 100 azalea wood ids into
+oak (`removedWoods.azalea`: Quark's 27, Every Compat's 46, Lightman's Currency's 20, Dramatic Doors' 2, Supplementaries' 2,
+Supp Squared's shelf, Abnormals Delight's cabinet, Immersive Weathering's bark), hid the six Railways azalea tracks and
+pulled the three azalea racks from Creative Delight. Owner 2026-11-04: the removal was hasty, restore it. The restore
+reverses all of it: module back on in `config/quark-common.toml` (backup in `configs_edited/root_config/` and the
+CreEngServer mirror), so Quark puts its azalea log back as the azalea tree's trunk (`TreeFeatures.AZALEA_TREE`);
+`removedWoods.azalea` and the six tracks are gone from `removed_woods.js` (Creative Common), so nothing is hidden,
+tag-stripped, loot-swapped or turned into oak any more; the azalea rows are back in `wood_types.js`, `bark.js`,
+`engineeringtags.js`, `fabric.js` (Creative Engineering scripts) and the CD `kitchen.js` rack list, and `azalea` is back
+in Creative Delight's `RackWoods`, `ArtRecipes.PLANKS` (`quark:block/azalea_planks`) and `tools/gen_cfb_racks.py`
+(`creativedelight:azalea_spice_rack`, `_tool_rack`, `_fruit_basket`, dict keys in `item_dict.js`; never released, so no
+id swap). The merge was KubeJS only (pack group: recipes, loot, inventory), no world-side swap, so items already turned
+into oak stay oak (owner Q11) and placed azalea blocks drop themselves again. The jar sawmill jsons for azalea were never
+deleted and come back once the output purge stops naming them. Generated lists (`item_physics_families.json`,
+`wthit/silk_touch_blocks.json`) were never regenerated during the removal and still name azalea wood; the next
+`/dumpall` + `/cdevgen` keeps them in step. Restart (startup list, Quark config, three jars). Test RW-29.
 
 **D&D woods (2026-10-31).** Create: Dreams & Desires rose, rubber and spirit wood have no source: the jar has no tree, sapling,
 leaves or worldgen, no recipe or loot table outputs their logs, and nothing in the pack adds one (creative only). The three
@@ -224,6 +232,7 @@ None.
 - [ ] **RW-05 Reattach:** mangrove bark + stripped mangrove log → mangrove log; oak bark + stripped oak log → nothing.
 - [ ] **RW-06 Creosote sawdust:** spout 250 mB creosote on sawdust → creosote sawdust; mix 4 + 4 → 6 wood pellets.
 - [ ] **RW-07 Soils:** mixer recipe for compost and fertile soil ×6 → as 2.3.
+- [ ] **RW-31 Rich soil to fertile soil:** 3 Rich Soil anywhere in the crafting grid → 1 Fertile Soil; JEI shows it beside the mulch recipes.
 - [ ] **RW-08 Saw shapes:** blossom planks on the saw with a filter → each shape in JEI, slabs ×2.
 - [ ] **RW-09 Soot:** scrape a dirty brick chimney with an axe 20 times → about 15 soot.
 - [ ] **RW-10 Torch:** animal fat over a stick → 12 torches.
@@ -251,11 +260,12 @@ None.
 - [ ] **RW-26 No overlap:** JEI shows smoked planks only in the 100 mB recipes, and the createaddition recipe is gone.
 - [ ] **RW-28 D&D woods gone [game]:** JEI search `rose`, `rubber`, `spirit`: no log, wood, planks, door, Every Compat furniture, sign, track or bark of those woods (rose gold, rose quartz, raw rubber and rubber blocks stay); the item list has no D&D bark. `/give @s create_dd:rose_planks 4` gives 4 oak planks. Startup log: `[removedWoods] 4 woods merged into oak`, no `[item_dict] Missing` line.
 - [ ] **RW-27 Bark leather:** 4 bark (mixed species, also crimson scales and driftwood bark) + salt in the Pickling Jar -> 1 leather after 2400 ticks; non-bark logs do nothing.
-- [ ] **RW-29 Azalea wood gone [game, after restart]:** JEI search `azalea`: only the azalea and flowering azalea bushes,
-  leaves, leaf carpets, hedges, leaf piles, flowers and Azalea Tea; no azalea log, planks, door, boat, chest, Every Compat
-  furniture, Lightman's Currency display, rack, sign, track or bark. `/place feature minecraft:azalea_tree` and bone meal
-  on an azalea bush: oak log trunk, azalea leaves. A Quark azalea log given by `/give` turns into an oak log in the
-  inventory; one mined from an old world drops an oak log.
+- [ ] **RW-29 Azalea wood restored [game, after restart]:** JEI search `azalea`: Quark azalea log, wood, planks and
+  shapes, door, boat, chest, sign, Every Compat furniture, Lightman's Currency displays, Railways azalea tracks,
+  Immersive Weathering azalea bark and the Azalea Spice Rack, Tool Rack and Fruit Basket are listed, with recipes
+  (planks from the log, sawmill, rack from azalea slabs). `/place feature minecraft:azalea_tree` and bone meal on an
+  azalea bush: azalea log trunk. A Quark azalea log from `/give` stays an azalea log. An oak log made from azalea during
+  the removal stays oak. The racks show azalea planks art.
 - [ ] **RW-30 Mulberry leaves on oak [game]:** `/place feature upgrade_aquatic:river_tree` (or bone-meal a Mulberry Sapling),
   wait 2 minutes: no Mulberry Leaves decay. Break one leaf next to the trunk: the rest stay. Break the trunk: the leaves
   decay as other leaves do.
@@ -289,3 +299,7 @@ None.
 - 2026-11-02: `farming/trees #5`: Quark azalea wood removed (module off, 100 ids merged into oak, 6 tracks hidden, azalea racks pulled
   from Creative Delight); the azalea tree has an oak trunk again, its leaves and flowers stay (owner 2026-11-02). `farming/trees #4`: Separated Leaves rule for Mulberry Leaves also accepts oak logs
   (`kubejs/data/upgrade_aquatic/separated_leaves/river.json`). RW-29, RW-30; not run in game.
+- 2026-11-07: `farming/trees #7`: azalea wood restored (reverses `farming/trees #5`; Quark module on, `removedWoods.azalea`
+  and the six tracks dropped, rows back in the wood scripts, azalea racks back in Creative Delight). Items already turned
+  into oak stay oak (owner Q11). RW-29 rewritten; not run in game.
+- 2026-11-07: 3 Rich Soil craft 1 Fertile Soil, shapeless, hand only (`sawdust.js`, `farming/crops #41`, plan_farming_cooking_batch A7). RW-31.

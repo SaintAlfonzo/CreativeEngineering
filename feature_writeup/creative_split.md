@@ -914,3 +914,12 @@ Build: the nine jars `:build` OK, MassPlacerTest 30/30. Tests: scratch section S
   Create/IE setup guard fixed, Common and CB rebuilt, not installed. Next: SQ-DEP-01 to -06 on the SQ-CNS boot.
 - 2026-11-04, dependency audit follow-up (7.17): campfire rain tags moved to `creativecommon` on both sides, 40
   `NEEDS_MOD` gates for Common's third-party mixins, Storage Delight requires Farmer's Delight. Built, not installed.
+
+#### Creative Common 1.1.0 test list (queued 2026-11-07; server rows run r1107cc the same evening)
+
+Queue section "SQ-CC Creative Common 1.1.0 full check" in `testing/scratch_queue.md`: SQ-CC-01 to -16 (jar contents, full-pack boot,
+Common-only boot, neutral and pack defaults, dict probe, scrap tags, Immersive Portals ordering, swap list, Magic Resistance and
+Better Beacons, effect rules, trade sync, JFR events, pack settings, Gravity, stall fixes) and CQ-CC-01 to -06 (launch with
+Heartstone, tip bar and moved Creative Tips, mod names, mirror glass, changelog viewer). Status: built, installed 2026-11-07 19:35,
+scratch server PASSED: SQ-CC-01..11, -13..16 (r1107cc, [scratch_run_2026-11-07.md](testing/scratch_run_2026-11-07.md) 3, with
+three NCH fixes made in the run). Open: SQ-CC-12 (owner client on a server), CQ-CC-01 to -06.

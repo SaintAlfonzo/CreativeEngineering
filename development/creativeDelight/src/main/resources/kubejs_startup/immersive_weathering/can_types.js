@@ -56,7 +56,7 @@ if (global.CD) global.CD.genPut('can_types', 'immersive_weathering', {
   "canned_enchanted_golden_moss_clump": {
    "section": "golden",
    "existing": false,
-   "name": "Canned Enchanted Golden Moss Clump",
+   "name": "Canned Gilded Moss Clump",
    "servings": 10,
    "hunger": 2,
    "modifier": 0.6,

@@ -25,7 +25,7 @@ ServerEvents.tags('item', e => {
 		'quark:vertical_oak_planks', 'quark:vertical_spruce_planks', 'quark:vertical_birch_planks',
 		'quark:vertical_jungle_planks', 'quark:vertical_acacia_planks', 'quark:vertical_dark_oak_planks',
 		'quark:vertical_mangrove_planks', 'quark:vertical_crimson_planks', 'quark:vertical_warped_planks',
-		'quark:vertical_ancient_planks', 'quark:vertical_blossom_planks',
+		'quark:vertical_ancient_planks', 'quark:vertical_azalea_planks', 'quark:vertical_blossom_planks',
 		'everycomp:q/architects_palette/vertical_twisted_planks',
 	])
 	t.add(e, 'creativeengineering:railings', [
@@ -33,7 +33,7 @@ ServerEvents.tags('item', e => {
 		'architects_palette:jungle_railing', 'architects_palette:acacia_railing', 'architects_palette:dark_oak_railing',
 		'architects_palette:mangrove_railing', 'architects_palette:crimson_railing', 'architects_palette:warped_railing',
 		'architects_palette:twisted_railing',
-		'everycomp:ap/quark/ancient_railing', 'everycomp:ap/quark/blossom_railing',
+		'everycomp:ap/quark/ancient_railing', 'everycomp:ap/quark/azalea_railing', 'everycomp:ap/quark/blossom_railing',
 	])
 })
 

@@ -50,6 +50,15 @@ mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+# JEI: drink fluid effect lines in fluid tooltips (mixin/JeiFluidHelperTooltipMixin, from Creative Common 2026-11-07);
+# the tested range is in EngineeringMixinPlugin MOD_RANGE
+[[dependencies.creativeengineering]]
+modId="jei"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
 [[dependencies.creativeengineering]]
 modId="immersiveposts"
 mandatory=false

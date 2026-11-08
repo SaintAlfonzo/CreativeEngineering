@@ -7,7 +7,7 @@ import glob, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # project folder -> mod id of the jar a player installs (the folder's donor is needed only with that jar)
-OWNER = {'creativeBrewing': 'creativebrewing', 'creativeCompat': 'creativecompat', 'creativeDelight': 'creativedelight', 'creativeWorldgen': 'creativeworldgen'}
+OWNER = {'backportedTempad': 'tempad', 'creativeBrewing': 'creativebrewing', 'creativeCompat': 'creativecompat', 'creativeDelight': 'creativedelight', 'creativeWorldgen': 'creativeworldgen'}
 JAR = re.compile(r'new Jar\(\s*"([^"]+)",\s*"([0-9a-f]{40})"(?:,\s*"((?:[^"\\]|\\.)*)")?', re.S)
 
 

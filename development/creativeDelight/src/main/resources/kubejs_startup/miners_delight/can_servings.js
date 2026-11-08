@@ -7,6 +7,9 @@ if (global.CD) global.CD.genPut('can_servings', 'miners_delight', {
   "canned_bat_soup": 8,
   "canned_cave_soup": 8,
   "canned_insect_stew": 8,
-  "canned_golden_nutritional_bar": 10
+  "canned_golden_nutritional_bar": 10,
+  "canned_fake_meatloaf": 6,
+  "canned_glazed_arachnid_limbs": 6,
+  "canned_stuffed_squid": 6
  }
 })

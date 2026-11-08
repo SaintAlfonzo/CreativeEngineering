@@ -89,6 +89,36 @@ if (global.CD) global.CD.genPut('can_types', 'brewinandchewin', {
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_pizza": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Pizza",
+   "servings": 6,
+   "hunger": 5,
+   "modifier": 1.0,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "pizza_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pizza"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
   "canned_flaxen_cheese": {
    "section": "dairy",
    "existing": false,

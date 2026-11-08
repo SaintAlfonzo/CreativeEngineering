@@ -16,3 +16,11 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_curios_face, i.cob_pipe)
 	t.add(e, i.t_curios_head, i.cob_pipe)
 })
+
+ServerEvents.tags('block', e => {
+	if (!global.CD) return
+	var b = global.blocks
+
+	// Quark right-click on the top half of ripe corn harvests the lower half (crops.md G13, CD mixin/quark/QuarkTopHalfHarvestMixin)
+	global.tags.add(e, b.t_harvest_from_bottom, b.corn_crop)
+})

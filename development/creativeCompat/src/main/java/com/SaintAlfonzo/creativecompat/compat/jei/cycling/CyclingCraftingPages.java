@@ -279,10 +279,12 @@ final class CyclingCraftingPages {
                 }
                 CraftingProbe one = new CraftingProbe(r, level);
                 addDyeVariants(one, base);
-                CyclingCraftingDisplay page = one.page(path(item), true);
-                if (page != null) {
-                    pages.add(page);
-                    variants += page.variants();
+                List<CyclingCraftingDisplay> made = one.page(path(item), true);
+                if (!made.isEmpty()) {
+                    for (CyclingCraftingDisplay page : made) {
+                        pages.add(page);
+                        variants += page.variants();
+                    }
                     done.add(item);
                 }
             }
@@ -859,16 +861,17 @@ final class CyclingCraftingPages {
                 .filter(CraftingRecipe.class::isInstance).map(CraftingRecipe.class::cast);
     }
 
-    private void emit(String id, @Nullable CyclingCraftingDisplay page) {
-        summary.merge(id, emitCounted(page), Integer::sum);
+    private void emit(String id, List<CyclingCraftingDisplay> made) {
+        summary.merge(id, emitCounted(made), Integer::sum);
     }
 
-    private int emitCounted(@Nullable CyclingCraftingDisplay page) {
-        if (page == null) {
-            return 0;
+    private int emitCounted(List<CyclingCraftingDisplay> made) {
+        int variants = 0;
+        for (CyclingCraftingDisplay page : made) {
+            pages.add(page);
+            variants += page.variants();
         }
-        pages.add(page);
-        return page.variants();
+        return variants;
     }
 
     // ------------------------------------------------------------------ stacks

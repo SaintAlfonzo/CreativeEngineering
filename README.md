@@ -88,9 +88,9 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 
 | Needed by | Folder (in the game directory) | File | sha1 | Where to get it |
 |---|---|---|---|---|
+| tempad | `tempad_upstream/` | `tempad-1.21.1-3.0.4-all.jar` | `7a4d6837c6f7a4c9a8f4e7054952df25c148033e` | https://cdn.modrinth.com/data/gKNwt7xu/versions/T26aJH7E/tempad-1.21.1-3.0.4-all.jar (Modrinth, Tempad 3.0.4 for NeoForge 1.21.1) |
 | creativebrewing | `vinery_upstream/` | `letsdo-vinery-fabric-1.5.5.jar` | `9d4c7646b91219a75a432b6dea1d7a7c41faaaec` | https://cdn.modrinth.com/data/1DWmBJVA/versions/PDi0T5xs/letsdo-vinery-fabric-1.5.5.jar (Modrinth, Let's Do Vinery 1.5.5 for Fabric 1.21.1) |
 | creativebrewing | `vinery_upstream/` | `letsdo-vinery-forge-1.3.10.jar` | `fbbd4ae7c10a9d0aa13819e09b70167f3b4ff81c` | https://www.curseforge.com/minecraft/mc-mods/lets-do-vinery/files (Let's Do Vinery 1.3.10 for Forge 1.19.2) |
-| creativecompat | `tempad_upstream/` | `tempad-1.21.1-3.0.4-all.jar` | `7a4d6837c6f7a4c9a8f4e7054952df25c148033e` | https://cdn.modrinth.com/data/gKNwt7xu/versions/T26aJH7E/tempad-1.21.1-3.0.4-all.jar (Modrinth, Tempad 3.0.4 for NeoForge 1.21.1) |
 | creativedelight | `enders_upstream/` | `endersdelight-1.1.4.jar` | `d1541d70c7dbae71c2a7e1693f512f2166908802` | https://cdn.modrinth.com/data/2uEhdGKt/versions/Jaf9wxnO/endersdelight-1.1.4.jar (Modrinth, Ender's Delight 1.1.4 for Forge 1.20.1) |
 | creativedelight | `goldenfood_upstream/` | `goldenfood-1.19.2-2.0.0.jar` | `4109e4d6d484892b8efc201b1a32b9361df930cd` | the Golden Food 2.0.0 release for Forge 1.19.2 by GGWPJason (CurseForge, file goldenfood-1.19.2-2.0.0.jar), or the pack's server files |
 | creativedelight | `largemeals_upstream/` | `largemeals-1.20.1-1.3.0.jar` | `7662138788a75832a0c6bad6b13b006cac383496` | CurseForge, Large Meals 1.3.0 for Forge 1.20.1 (largemeals-1.20.1-1.3.0.jar) |

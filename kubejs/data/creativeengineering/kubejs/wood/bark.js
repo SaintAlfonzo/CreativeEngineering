@@ -26,7 +26,7 @@ var compatSpecies = [
 	{ log: i.log_twisted, wood: i.wood_twisted, strippedLog: i.log_twisted_stripped, strippedWood: i.wood_twisted_stripped, bark: i.bark_twisted, hollowLog: i.log_twisted_hollow, cutLog: 'create:cutting/compat/architects_palette/twisted_log', cutWood: 'create:cutting/compat/architects_palette/twisted_wood', reattach: true },
 	{ log: i.log_blossom, wood: i.wood_blossom, strippedLog: i.log_blossom_stripped, strippedWood: i.wood_blossom_stripped, bark: i.bark_blossom, hollowLog: i.log_blossom_hollow, cutLog: 'create:cutting/compat/quark/blossom_log', cutWood: 'create:cutting/compat/quark/blossom_wood', fdLog: 'quarkdelight:cutting/axe/blossom_log', fdWood: 'quarkdelight:cutting/axe/blossom_wood', reattach: true },
 	{ log: i.log_ancient, wood: i.wood_ancient, strippedLog: i.log_ancient_stripped, strippedWood: i.wood_ancient_stripped, bark: i.bark_ancient, hollowLog: i.log_ancient_hollow, cutLog: 'create:cutting/compat/quark/ancient_log', cutWood: 'create:cutting/compat/quark/ancient_wood', fdLog: 'quarkdelight:cutting/axe/ancient_log', fdWood: 'quarkdelight:cutting/axe/ancient_wood', reattach: true },
-	// azalea: removed wood, merged into oak (removed_woods.js, farming/trees #5, 2026-11-02)
+	{ log: i.log_azalea, wood: i.wood_azalea, strippedLog: i.log_azalea_stripped, strippedWood: i.wood_azalea_stripped, bark: i.bark_azalea, hollowLog: i.log_azalea_hollow, cutLog: 'create:cutting/compat/quark/azalea_log', cutWood: 'create:cutting/compat/quark/azalea_wood', fdLog: 'quarkdelight:cutting/axe/azalea_log', fdWood: 'quarkdelight:cutting/axe/azalea_wood', reattach: true },
 	// Upgrade Aquatic driftwood: Abnormals Delight's cutting-board recipes (river wood goes with recipes/wood #3)
 	{ log: i.log_driftwood, wood: i.wood_driftwood, strippedLog: i.log_driftwood_stripped, strippedWood: i.wood_driftwood_stripped, bark: i.upgrade_aquatic_driftwood_bark, cutLog: 'create:cutting/compat/upgrade_aquatic/driftwood_log', cutWood: 'create:cutting/compat/upgrade_aquatic/driftwood', fdLog: 'abnormals_delight:upgrade_aquatic/cutting/driftwood_log', fdWood: 'abnormals_delight:upgrade_aquatic/cutting/driftwood' },
 ]
@@ -78,12 +78,12 @@ R.remove({ id: 'quarkdelight:cutting/axe/hollow_logs' }, e)
 var hollowSpecies = [
 	i.log_oak_hollow, i.log_spruce_hollow, i.log_birch_hollow, i.log_dark_oak_hollow,
 	i.log_jungle_hollow, i.log_acacia_hollow, i.log_mangrove_hollow, i.log_crimson_hollow,
-	i.log_warped_hollow, i.log_twisted_hollow, i.log_ancient_hollow, i.log_blossom_hollow,
+	i.log_warped_hollow, i.log_twisted_hollow, i.log_ancient_hollow, i.log_blossom_hollow, i.log_azalea_hollow,
 ]
 var hollowBark = [
 	i.bark_oak, i.bark_spruce, i.bark_birch, i.bark_dark_oak,
 	i.bark_jungle, i.bark_acacia, i.bark_mangrove, i.bark_crimson,
-	i.bark_warped, i.bark_twisted, i.bark_ancient, i.bark_blossom,
+	i.bark_warped, i.bark_twisted, i.bark_ancient, i.bark_blossom, i.bark_azalea,
 ]
 R.bulk('fdCutting', hollowSpecies.map((log, idx) => [log, R.AXE, hollowBark[idx], e]))
 

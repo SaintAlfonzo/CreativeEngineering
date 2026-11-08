@@ -31,7 +31,7 @@ ordering="NONE"
 side="BOTH"
 
 # KubeJS (brings Rhino and Architectury): the jar startup script loader, server and client script trees and 6 mixins.
-# Required over the tested range in perf/CEMixinPlugin MOD_RANGE, since Common's scripts cannot load without them.
+# Required over the tested range in perf/CommonMixinPlugin MOD_RANGE, since Common's scripts cannot load without them.
 [[dependencies.creativecommon]]
 modId="kubejs"
 mandatory=true
@@ -42,25 +42,9 @@ side="BOTH"
 # Optional integrations. versionRange stays "*": the tested ranges are in each jar's mixin plugin MOD_RANGE, which skips a
 # mod's mixins (one warning in the log) when its version is outside them, where a range here would stop the boot.
 
-# sequenced assembly mixin
-[[dependencies.creativecommon]]
-modId="create"
-mandatory=false
-versionRange="*"
-ordering="AFTER"
-side="BOTH"
-
 # block growth fixes and the random-tick fast path (3 mixins)
 [[dependencies.creativecommon]]
 modId="immersive_weathering"
-mandatory=false
-versionRange="*"
-ordering="NONE"
-side="BOTH"
-
-# fluid tag input mixin (shared API; WTHIT sheet metal tank lines: Creative Compat)
-[[dependencies.creativecommon]]
-modId="immersiveengineering"
 mandatory=false
 versionRange="*"
 ordering="NONE"
@@ -114,11 +98,18 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# Effect remap of Fruits Delight's jam and jelly effect lines
+# Immersive Portals 2.3.x: its ChunkMap overwrite conforms to Serene Seasons' access transformer, and Heartstone's
+# client mixin is ordered before Immersive Portals' (both crash fixes in perf/CommonMixinPlugin)
 [[dependencies.creativecommon]]
-modId="fruitsdelight"
+modId="immersive_portals"
 mandatory=false
 versionRange="*"
 ordering="NONE"
 side="BOTH"
 
+[[dependencies.creativecommon]]
+modId="heartstone"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"

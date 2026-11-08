@@ -157,3 +157,7 @@ none
 | vintagedelight | `vintagedelight:ghost_pepper_crop` | `vintagedelight:ghost_pepper_seeds` | nether | Sp/Su | yes | nether |
 | vintagedelight | `vintagedelight:oat_crop` | `vintagedelight:oat_seeds` | temperate | Au/Wi | yes | temperate |
 | vintagedelight | `vintagedelight:peanut_crop` | `vintagedelight:peanut` | warm_dry | Au/Wi | yes | warm_dry |
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Crop growth penalty below Y 48 (owner). Row `farming/crops #44`.

@@ -16,8 +16,9 @@ global.NCH.remove({ id: 'immersiveengineering:potion_bottling_list' }, e)
 // ── Bottle Create's potion fluid ─────────────────────────────────────────────
 // create:potion (in #forge:fluid/potion) + glass bottle -> the matching potion / splash
 // potion / lingering potion item, one concrete recipe per potion x bottle type so each
-// shows correctly in JEI. The fluid nbt is subset-matched by patcherMod's FluidTagInputMixin,
-// so extra keys on the fluid stack (CustomPotionColor, ...) don't break the match.
+// shows correctly in JEI. IE matches the fluid nbt exactly ({Bottle, Potion}, what Create writes on its potion
+// fluid); with Creative Engineering installed its FluidTagInputMixin makes that a subset match, so extra keys on the
+// fluid stack (CustomPotionColor, ...) also match. Nothing here needs Engineering.
 var i = global.item
 var f = global.fluid
 var R = global.NCH

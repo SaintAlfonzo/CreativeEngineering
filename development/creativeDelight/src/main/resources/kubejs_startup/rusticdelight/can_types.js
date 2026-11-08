@@ -29,7 +29,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
        "any": [
         "any_bell_pepper"
        ],
-       "n": 8
+       "n": 6
       }
      ]
     },
@@ -40,7 +40,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
        "any": [
         "any_bell_pepper"
        ],
-       "n": 6
+       "n": 4
       },
       {
        "any": [
@@ -58,7 +58,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
        "any": [
         "any_bell_pepper"
        ],
-       "n": 6
+       "n": 4
       },
       {
        "any": [
@@ -281,6 +281,195 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_bell_pepper_medley": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Bell Pepper Medley",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "stuffed_bell_pepper_red",
+    "stuffed_bell_pepper_green",
+    "stuffed_bell_pepper_yellow"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "bell_pepper_medley"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_pale_bell_pepper_medley": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Pale Bell Pepper Medley",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "stuffed_bell_pepper_white",
+    "stuffed_bell_pepper_orange",
+    "stuffed_bell_pepper_pink"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "pale_bell_pepper_medley"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_dark_bell_pepper_medley": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Dark Bell Pepper Medley",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "stuffed_bell_pepper_black",
+    "stuffed_bell_pepper_blue",
+    "stuffed_bell_pepper_purple"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "dark_bell_pepper_medley"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_rice_roll_royale": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Rice Roll Royale",
+   "servings": 6,
+   "hunger": 7,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "calamari_roll",
+    "cherry_blossom_roll",
+    "bell_pepper_roll_red",
+    "kelp_roll_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "rice_roll_royale"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_sweet_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Sweet Salad",
+   "servings": 8,
+   "hunger": 10,
+   "modifier": 0.7,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 75,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 1800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "sweet_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "sweet_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "sweet_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
   "canned_bell_pepper_soup": {
    "section": "soup",
    "existing": false,
@@ -314,6 +503,61 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
       {
        "any": [
         "bell_pepper_soup"
+       ],
+       "n": 3
+      },
+      {
+       "any": [
+        "salt",
+        "bone_broth"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_rabit_stew"
+  },
+  "canned_calamari_soup": {
+   "section": "soup",
+   "existing": false,
+   "name": "Canned Calamari Soup",
+   "servings": 8,
+   "hunger": 13,
+   "modifier": 0.769,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 3600,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "calamari_soup"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "calamari_soup"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_broth",
+     "inputs": [
+      {
+       "any": [
+        "calamari_soup"
        ],
        "n": 3
       },

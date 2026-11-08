@@ -1,7 +1,10 @@
 package com.SaintAlfonzo.creativemagic.block;
 
+import com.SaintAlfonzo.creativemagic.dimension.IPNetherPortalBridge;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.fml.ModList;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -81,6 +84,16 @@ public class DarkFireBlock extends BaseFireBlock {
                         PortalShape::isValid,
                         Direction.Axis.X
                 );
+
+        // With Immersive Portals loaded, a valid rectangle (the vanilla check above, so no new shapes) becomes an IP
+        // seamless portal instead of vanilla portal blocks (plan_portal_changes.md 1, N1). The bridge returns false
+        // when IP's mode is vanilla/disabled, outside the Overworld and the Nether, or when IP finds no frame; the
+        // vanilla path below then runs as before. Loaded only behind the ModList check, as it touches IP classes.
+        if (optional.isPresent() && level instanceof ServerLevel serverLevel
+                && ModList.get().isLoaded("imm_ptl_core")
+                && IPNetherPortalBridge.light(serverLevel, pos)) {
+            return;
+        }
 
         // This is just shape-detection + event-firing, not portal creation.
         // Whether (and how) the resulting shape actually gets turned into

@@ -11,10 +11,12 @@
 // Known-dead placeholder fluids - tags.js already strips these down to nothing
 // (server_scripts/tags/fluidtags.js: "dead placeholder fluids"), so don't resurrect them
 // into JEI as if they were real/usable. Listed as the JEI order's packHidden fluids
-// (startup_scripts/jei/order.js), so the order report counts them as hidden by the pack.
-const DEAD_FLUIDS = global.jeiOrder.packHidden('fluid')
-
+// (startup_scripts/jei/order.js), so the order report counts them as hidden by the pack. global.jeiOrder is
+// Creative Compat's; without Compat no fluid is skipped.
+// Only with JEI: JEIEvents does not exist without it (Common alone).
+if (Platform.isLoaded('jei')) {
 JEIEvents.addFluids(e => {
+	const DEAD_FLUIDS = global.jeiOrder ? global.jeiOrder.packHidden('fluid') : []
 	const ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 
 	// same registry-iteration idiom as the working /dumpfluids command (server_scripts/
@@ -38,6 +40,7 @@ JEIEvents.addFluids(e => {
 
 	console.log(`[fluid_jei] added ${n} fluids to JEI`)
 })
+}
 
 // The create:potion stacks (one REGULAR bottle per potion): Creative Brewing,
 // kubejs/assets/creativebrewing/kubejs/creativeengineering/potion_fluid_jei.js (moved 2026-11-01).

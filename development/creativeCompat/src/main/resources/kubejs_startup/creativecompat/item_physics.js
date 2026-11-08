@@ -15,10 +15,10 @@
 //  Membership updates on /reload (no restart). Populate them in
 //  kubejs/data/creativecompat/kubejs/tags/item_physics_tags.js (or any datapack):
 //
-//    creativeengineering:physics/floats     → floats in water
-//    creativeengineering:physics/sinks      → force-sink (wins over floats)
-//    creativeengineering:physics/fireproof  → survives open fire, still burns in lava
-//    creativeengineering:physics/lavaproof  → immune to BOTH fire and lava (wins over fireproof)
+//    creativecompat:physics/floats     → floats in water
+//    creativecompat:physics/sinks      → force-sink (wins over floats)
+//    creativecompat:physics/fireproof  → survives open fire, still burns in lava
+//    creativecompat:physics/lavaproof  → immune to BOTH fire and lava (wins over fireproof)
 //
 //  Creative Compat ships starter contents for these tags (netherite, boats, …).
 //
@@ -37,7 +37,7 @@
 //    .burnExclude(...idOrTag)                             never transform (checked first)
 //    .burnClear(idOrTag)
 //  Backed by Creative Compat ItemBurnTransform + the discard() redirect in ItemPhysicServerMixin.
-//  Bucket membership (#creativeengineering:burn/*) is reload-able in the tags file.
+//  Bucket membership (#creativecompat:burn/*) is reload-able in the tags file.
 // ─────────────────────────────────────────────────────────────────────────────
 
 console.log('Item Physics (fire/lava split) starting')
@@ -138,7 +138,7 @@ console.log('Item Physics (fire/lava split) starting')
 	// ── Burn-transform rules ────────────────────────────────────────────────
 	//  Fires when fire/lava would destroy the dropped item — in FIRE only if the item
 	//  isn't in the physics/fireproof tag, otherwise LAVA only. Bucket membership
-	//  (#forge:glass, #quark:shards, #creativeengineering:burn/*) is reload-able in
+	//  (#forge:glass, #quark:shards, #creativecompat:burn/*) is reload-able in
 	//  creativecompat/kubejs/tags/item_physics_tags.js; only the params below need a restart.
 
 	// exclusions FIRST — the end products never re-transform when re-dropped
@@ -147,12 +147,12 @@ console.log('Item Physics (fire/lava split) starting')
 	api.burnReplace('#forge:glass',       'quark:dirty_glass',      1.0, true)   // glass block  -> dirty glass  (tinted_glass is in #forge:glass)
 	api.burnReplace('#forge:glass_panes', 'quark:dirty_glass_pane', 1.0, true)   // glass pane   -> dirty glass pane
 	api.burnReplace('#quark:shards',      'quark:dirty_shard',      1.0, true)   // glass shard  -> dirty shard
-	api.burnReplace('#creativeengineering:burn/to_ash', 'supplementaries:ash', 0.25, true) // wood -> ~1-in-4 ash per plank/log
+	api.burnReplace('#creativecompat:burn/to_ash', 'supplementaries:ash', 0.25, true) // wood -> ~1-in-4 ash per plank/log
 
 	api.burnExplode('minecraft:tnt',          2.0, 1.0, true)   // shrapnel — see CEConfig.Shrapnel
 	api.burnExplode('minecraft:tnt_minecart', 2.0, 1.0, true)
 	api.burnExplode('minecraft:gunpowder',    1.0, 1.0)
-	api.burnExplode('#creativeengineering:burn/explosive', 1.0, 1.0)             // spare bucket for anything else
+	api.burnExplode('#creativecompat:burn/explosive', 1.0, 1.0)             // spare bucket for anything else
 
 	console.log('[item_physics] ' + api.summary())
 })()

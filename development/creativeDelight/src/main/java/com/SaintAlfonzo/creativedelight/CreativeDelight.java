@@ -149,6 +149,8 @@ public class CreativeDelight {
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.RemainderBufferStorage.class);
 		// Cookware: sneak right-click picks up, sneak left-click toggles the handle (QoL-7, cooking/kitchen #27).
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.CookwareHandling.class);
+		// Cookware keeps its contents in the item on a player break or pickup, glint and "Holds:" tooltip (QoL-8, cooking/kitchen #40).
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.CookwareContents.class);
 		// Multi-serving cans ([canning]): max-servings cache cleared on tag reload + the "Servings" tooltip line.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServingsTooltip.class);
@@ -163,6 +165,8 @@ public class CreativeDelight {
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.PlacedFoodSol.class);
 		// Per-hoe Quark harvest area: the "Harvest area: 3x3" tooltip (the area is mixin.quark.QuarkHoeArea*).
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.crops.HoeHarvestTooltip.class);
+		// Water bucket / bottle soaks farmland soils (farming/crops #17)
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.crops.WaterOnSoil.class);
 		modBus.addListener(CreativeDelight::commonSetup);
 	}
 
@@ -203,6 +207,14 @@ public class CreativeDelight {
 			event.enqueueWork(() -> net.minecraft.client.gui.screens.MenuScreens.register(
 					com.SaintAlfonzo.creativedelight.oven.OvenRegistry.OVEN_MENU.get(),
 					com.SaintAlfonzo.creativedelight.oven.client.OvenScreen::new));
+		}
+
+		/** Supplementaries faucet moved toward the block it drains (cooking/kitchen #26); after the mods' own wrappers. */
+		@SubscribeEvent(priority = net.minecraftforge.eventbus.api.EventPriority.LOWEST)
+		public static void onModelsBaked(net.minecraftforge.client.event.ModelEvent.BakingCompleted event) {
+			if (ModList.get().isLoaded("supplementaries")) {
+				com.SaintAlfonzo.creativedelight.compat.supplementaries.client.FaucetFitModel.wrap(event);
+			}
 		}
 
 		@SubscribeEvent

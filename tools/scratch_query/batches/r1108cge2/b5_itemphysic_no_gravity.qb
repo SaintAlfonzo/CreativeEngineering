@@ -1,0 +1,17 @@
+# r1108cge2 boot 5: tools/scratch_query/cc_only_srv.sh OUT cge2d without=gravity, plus ItemPhysic and CreativeCore from
+# mods/ (cge2_run.sh server adds them). Create Gravity absent: LowGravityItemPhysicMixin must be skipped by CommonMixinPlugin
+# (LowGravity needs Create Gravity's classes), so no boot or tick error and every type at vanilla speed in both dimensions.
+pace 2
+
+## SQ-CGE-16 | ItemPhysic without Create Gravity: boots, ticks items without an error, vanilla fall everywhere
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException|NoClassDefFoundError
+bootexpect Done \(
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject NoClassDefFoundError|LowGravity
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld same
+look every type the same in the End and the overworld (no Create Gravity, so no low gravity at all), no error line naming LowGravity

@@ -1,6 +1,6 @@
-// creativecommon:jei/<path> tags for the pack's JEI order: one tag per node of the definition
-// (startup_scripts/jei/order.js) that has members (`list` + `from`). patcherMod's PackIngredientOrder
-// reads them on the client to place each ingredient. Helper: startup_scripts/func/jei_order.js.
+// creativecompat:jei/<path> tags for the pack's JEI order: one tag per node of the definition
+// (startup_scripts/jei/order.js) that has members (`list` + `from`). Creative Compat PackIngredientOrder
+// reads them on the client to place each ingredient. Helper: Creative Compat kubejs_startup/creativecompat/func/jei_order.js.
 // Multiblocks have no registry, so they have no tags (their nodes place by `list` on the client).
 ServerEvents.tags('item', e => global.jeiOrder.tag(e, 'item'))
 ServerEvents.tags('fluid', e => global.jeiOrder.tag(e, 'fluid'))

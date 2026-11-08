@@ -133,6 +133,11 @@ GROUP_SPRITE = {
     'cake': 'canned_goods:items/canned_cake',
 }
 
+# per-can opts merged into any can, explicit or found from the food types (explicit opts win); same keys as below
+CAN_OPTS = {
+    'canned_oatmeal': dict(extra=[('_sugar', ['sugar'], 3, 1)]),   # oatmeal takes sugar, not salt / broth (plan_farming_cooking_batch A5)
+}
+
 # explicit cans: (section, can key, display name, source keys (first = value source), existing Canned Goods can?[, opts])
 # opts: input = recipe input keys instead of the sources (tags, feast blocks); pie = whole pie a full can + pie crust
 #       makes; code_fx = Canned Goods applies the effects itself (no copy); values = fixed meal for a food not in the
@@ -395,6 +400,44 @@ EXPLICIT = [
      dict(input=['mushroom_pot_pie_block'])),
     ('feast', 'canned_roasted_mutton_rack', 'Canned Roasted Rack of Mutton', ['roasted_mutton_rack'], False,
      dict(input=['roasted_mutton_rack_block'])),
+    # every other feast block (cans/canning #17, plan_farming_cooking_batch A12 / Q9). Several-plate feasts take their
+    # first plate as the value source (as the hoglin feast). Gleaming Salad has no row: its salad can already exists.
+    ('feast', 'canned_pizza', 'Canned Pizza', ['pizza_slice'], False, dict(input=['pizza'])),
+    ('feast', 'canned_cheese_pizza', 'Canned Cheese Pizza', ['cheese_pizza_slice'], False, dict(input=['cheese_pizza'])),
+    ('feast', 'canned_meat_pizza', 'Canned Meat Pizza', ['meat_pizza_slice'], False, dict(input=['meat_pizza'])),
+    ('feast', 'canned_vegan_pizza', 'Canned Vegan Pizza', ['vegan_pizza_slice'], False, dict(input=['vegan_pizza'])),
+    ('feast', 'canned_stuffed_cantaloupe', 'Canned Stuffed Cantaloupe', ['stuffed_cantaloupe'], False,
+     dict(input=['stuffed_cantaloupe_block'])),
+    ('feast', 'canned_dragon_meat_stew', 'Canned Dragon Meat Stew', ['dragon_meat_stew'], False,
+     dict(input=['dragon_meat_stew_block'])),
+    ('feast', 'canned_grilled_shulker', 'Canned Grilled Shulker', ['grilled_shulker'], False,
+     dict(input=['grilled_shulker_block'])),
+    ('feast', 'canned_steamed_dragon_egg', 'Canned Steamed Dragon Egg', ['steamed_dragon_egg'], False,
+     dict(input=['steamed_dragon_egg_block'])),
+    ('feast', 'canned_rice_roll_medley', 'Canned Rice Roll Medley', ['kelp_roll_slice', 'cod_roll', 'salmon_roll'], False,
+     dict(input=['rice_medley'])),
+    ('feast', 'canned_fake_meatloaf', 'Canned Fake Meatloaf', ['plate_of_fake_meatloaf'], False, dict(input=['fake_meatloaf'])),
+    ('feast', 'canned_glazed_arachnid_limbs', 'Canned Glazed Arachnid Limbs', ['plate_of_glazed_arachnid_limbs'], False,
+     dict(input=['glazed_arachnid_limbs'])),
+    ('feast', 'canned_stuffed_squid', 'Canned Stuffed Squid', ['bowl_of_stuffed_squid'], False, dict(input=['stuffed_squid'])),
+    ('feast', 'canned_guardian_soup', 'Canned Guardian Soup', ['bowl_of_guardian_soup'], False, dict(input=['guardian_soup'])),
+    ('feast', 'canned_legendary_roll_medley', 'Canned Legendary Roll Medley',
+     ['amazing_salmon_roll_slice', 'mushroom_roll_slice', 'tobiko_roll'], False, dict(input=['legendary_roll_medley'])),
+    ('feast', 'canned_mythical_roll_medley', 'Canned Mythical Roll Medley',
+     ['golden_roll_slice', 'ancient_roll_slice', 'nether_roll'], False, dict(input=['mythical_roll_medley'])),
+    ('feast', 'canned_bell_pepper_medley', 'Canned Bell Pepper Medley',
+     ['stuffed_bell_pepper_red', 'stuffed_bell_pepper_green', 'stuffed_bell_pepper_yellow'], False, dict(input=['bell_pepper_medley'])),
+    ('feast', 'canned_pale_bell_pepper_medley', 'Canned Pale Bell Pepper Medley',
+     ['stuffed_bell_pepper_white', 'stuffed_bell_pepper_orange', 'stuffed_bell_pepper_pink'], False,
+     dict(input=['pale_bell_pepper_medley'])),
+    ('feast', 'canned_dark_bell_pepper_medley', 'Canned Dark Bell Pepper Medley',
+     ['stuffed_bell_pepper_black', 'stuffed_bell_pepper_blue', 'stuffed_bell_pepper_purple'], False,
+     dict(input=['dark_bell_pepper_medley'])),
+    ('feast', 'canned_rice_roll_royale', 'Canned Rice Roll Royale',
+     ['calamari_roll', 'cherry_blossom_roll', 'bell_pepper_roll_red', 'kelp_roll_slice'], False, dict(input=['rice_roll_royale'])),
+    ('feast', 'canned_lasagna', 'Canned Lasagna', ['lasagna_slice'], False, dict(input=['lasagna_pan'])),
+    ('feast', 'canned_stuffed_bell_peppers', 'Canned Stuffed Bell Peppers', ['stuffed_bellpepper'], False,
+     dict(input=['stuffed_bellpeppers_block'])),
 
     # drinks: honey clears poison in Canned Goods' code; milk is not a food, the can clears effects itself
     ('drink', 'canned_honey_bottles', None, ['honey_bottle'], True, dict(code_fx=True)),
@@ -569,11 +612,11 @@ def build(foods, names, keymap_all, keymap_base, types):
     problems = []
 
     def add(section, can_key, display, sources, existing, opts=None):
-        opts = opts or {}
+        opts = dict(CAN_OPTS.get(can_key, {}), **(opts or {}))
         spec = SECTIONS[section]
         if 'meal' in opts:
             spec = dict(spec, meal=opts['meal'])   # this can's own meal size in a meal section
-        for k in ('adv', 'n', 'servings', 'counts'):
+        for k in ('adv', 'n', 'servings', 'counts', 'extra'):
             if k in opts:
                 spec = dict(spec, **{k: opts[k]})
         for k in sources + opts.get('input', []) + ([opts['pie']] if 'pie' in opts else []):

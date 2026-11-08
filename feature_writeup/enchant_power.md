@@ -97,3 +97,7 @@ Open decisions: which families to take, and the pylon and Wise Oak values.
 
 - 2026-10-31: audit written. Nothing built.
 - 2026-11-04: the enchanting rows now live in Creative Magic ([creative_magic.md](creative_magic.md)); this plan's tags and values go there when built.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Dimension-bound enchantment: applied to items given in the tutorial dimension and to temporary items in puzzle dimensions (owner). Row `potions/enchanting #10`.

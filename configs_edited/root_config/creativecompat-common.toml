@@ -1,3 +1,4 @@
+
 #Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW
 #leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at.
 [leaf_piles]
@@ -69,6 +70,52 @@
 	#true: each Sophisticated Backpacks tier (leather, copper, iron, gold, diamond, netherite)
 	#remembers its own trash slot position and on/off state. false: all backpacks share one.
 	splitBackpacksByTier = true
+
+#Pet cats and the Feather on a Stick (server side).
+[cats]
+	#true: a cast Feather on a Stick sticks to a mob it hits, like a fishing hook (reeling in lets go, no
+	#pull), and the caster's tamed cats nearby attack the hooked mob while it stays hooked. Sitting cats and
+	#Cozy's Improved Cats cats in Stay mode do not join. false: the feather passes through mobs (Domestication
+	#Innovation's own behaviour).
+	featherHooksMobs = true
+	#Hostile mobs (monsters that are not neutral) can be hooked.
+	hookHostile = true
+	#Peaceful and neutral mobs (animals, villagers, iron golems, wolves, endermen, zombified piglins, ...) can
+	#be hooked. The caster's own pets never can.
+	hookNeutralAndPassive = false
+	#Players other than the caster can be hooked, and the caster's cats attack them. Independent of the
+	#server's pvp setting.
+	hookPlayers = false
+	#A cat that lands an attack on a mob hooked by its owner's feather gets Strength, Resistance and
+	#Regeneration for this many seconds (0: no effects).
+	#Range: 0 ~ 600
+	buffSeconds = 10
+	#Level of those three effects (3 = III).
+	#Range: 1 ~ 10
+	buffLevel = 3
+
+#Alex's Mobs giant squid (server side).
+[giant_squid]
+	#A giant squid starts fleeing a cachalot whale within this many blocks (Alex's Mobs: 50).
+	#Range: 1 ~ 64
+	whaleFleeStart = 16
+	#It keeps fleeing while that whale is within this many blocks (Alex's Mobs: 60). Kept at least
+	#whaleFleeStart.
+	#Range: 1 ~ 96
+	whaleFleeStop = 24
+
+#Immersive Paintings: every modded painting variant is offered on its Datapacks page, built from the
+#art in the installed mod jars when the world's data loads (server side). Vanilla paintings come from
+#the pack's own datapack, not from here.
+[paintings]
+	#Build the modded paintings set.
+	enabled = true
+	#More places to read painting art from (assets/<mod>/textures/painting/<id>.png and the en_us lang),
+	#after the installed mods; a later entry wins for the same painting. Paths are relative to the game
+	#folder (or absolute). Each entry is a jar or zip (a painting mod, a resource pack that retextures
+	#paintings), a folder with assets/ in it, or a folder of jars and zips.
+	#Example: ["resourcepacks/My Paintings.zip", "painting_jars"]
+	extraSources = []
 
 #TNT shrapnel: when a primed TNT entity or a burning TNT item explodes, it also
 #flings out a burst of fast, gravity-immune projectiles mostly along the horizontal
@@ -248,4 +295,237 @@
 	#Also refuse when the vein mine broke a block with a block entity (chests, furnaces...).
 	#A restored chest keeps its unrolled loot table, so mine-and-undo would reroll structure loot.
 	denyBlockEntities = true
+
+#JEI recipe screen tweaks (client side).
+[jei]
+	#When the recipe screen is opened over a screen that can take recipe transfers (crafting table,
+	#inventory, modded crafting GUIs), list the recipes whose + button is enabled first. The rest follow,
+	#most-complete first (the share of inputs you already have). Other screens keep JEI's own order.
+	#Takes effect the next time a recipe lookup opens.
+	craftableFirst = true
+	#Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its
+	#creativecommon:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
+	#each category's own order. Ingredients with no place keep JEI's own order ([sorting] in
+	#config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.
+	#Takes effect the next time JEI starts (rejoin or /reload). Default off (JEI's order); the pack sets true.
+	packOrder = true
+	#Write kubejs/exported/jei_order.json at every JEI start: every item, fluid, effect and multiblock with
+	#its place in the pack order and whether JEI shows it (shown / hidden by the pack / hidden by a mod /
+	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
+	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
+	orderReport = false
+	#Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes
+	#with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the
+	#Crafting and Mixing pages. Off: they stay where their mods put them.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	seasoningCategory = true
+	#Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and
+	#draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the
+	#Crafting, Spout Filling, Item Draining and Bottling Machine pages.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	potionBucketCategory = true
+	#Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering
+	#potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling
+	#and Bottling Machine pages.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	tippedArrowCategory = true
+	#Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans
+	#(crafts that take a can). Off: they stay on the Crafting page.
+	#Takes effect the next time JEI starts (rejoin or /reload).
+	canCategories = true
+	#How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.
+	#LOG: small amounts stay visible and 250, 1000 and 8000 mB look different. SQRT: a milder curve.
+	#LINEAR: JEI's own (fill = amount / tank size, so small amounts are a sliver).
+	#Takes effect at once.
+	#Allowed Values: LOG, SQRT, LINEAR
+	fluidAmountScale = "LOG"
+
+#Container title plaques from GUI resource packs (client side).
+[gui_title]
+	#When a container title is wider than the plaque the resource pack painted behind it, stretch the
+	#plaque to fit. Titles wider than the whole GUI are cut short with "...". Only screens that draw
+	#their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces).
+	stretchPlaque = true
+	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
+	#(screen class, texture, title and widths; kept across sessions).
+	logOverflow = true
+
+#Pop-up toasts in the top-right corner (client side).
+[toasts]
+	#Show tutorial toasts: vanilla's (move, find a tree, punch, craft planks, open inventory,
+	#social interactions, bundles), Exposure's camera/lightroom hints and Fairy Lights' Clippy
+	#balloons. Takes effect for the next toast. Default on (vanilla); the pack sets false.
+	tutorial = false
+	#Show advancement toasts (vanilla's "Advancement Made!" and Patchouli's book-unlocked toast).
+	#Only matters while [advancements] enabled is on. Default on (vanilla); the pack sets false.
+	advancement = false
+
+#Item tooltips (client side).
+[tooltips]
+	#A tooltip taller than the screen starts at the top and runs off the bottom (vanilla keeps the
+	#bottom on screen and cuts off the name). Takes effect on the next frame.
+	keepTopOnScreen = true
+
+#Brewin' and Chewin' coasters (client side).
+[coaster]
+	#WTHIT lines on a coaster: 'Coaster: 3 / 4' ('(put away)' once the coaster itself was taken
+	#back) and one line per item on it, in the order they went on.
+	wthit = true
+
+#WTHIT look-at overlay lines (client side). See feature_writeup/wthit_lines.md.
+[wthit]
+	#Block model icons: a block with no item (or whose item draws as the purple/black missing model)
+	#shows its own block model in WTHIT's icon slot. Off = WTHIT's empty icon, Display Delight included.
+	iconBlockModel = true
+	#Block model icons: before drawing the model, ask Forge's hit-aware pick block (what middle-click
+	#gives), so a block holding several things shows the part looked at (Supplementaries' skull pile).
+	iconForgePick = true
+	#Block model icons: use the iconItems list below.
+	iconSubstitutes = true
+	#Block model icons: when the looked-at block has no item, or its item draws as the purple/black
+	#missing model, WTHIT's icon slot shows the block's own model instead. Blocks listed here keep
+	#WTHIT's normal icon. Entries: a namespace ('create') or a block id ('create:belt').
+	#/cdevdumpicons + tools/wthit_icon_audit.py list every block the icon applies to.
+	iconExclude = []
+	#Block model icons: an item to show for a block that has none and draws no model of its own
+	#(block-entity rendered). Entries 'block=item'. D&D's powered flywheel is Create's flywheel.
+	iconItems = ["create_dd:powered_flywheel=create:flywheel"]
+	#Supplementaries jars, goblets and cages: 'Contents: Honey (6 / 12)' (fluid in bottles, with the
+	#jar's capacity; a goblet just 'Water'), 'Contents: Cookie (5 / 12)', or the mob inside.
+	holderContents = true
+	#Under a potion in a jar or goblet, one line per effect with its strength and length, as the
+	#potion's own tooltip shows them ('Instant Health II', 'Regeneration (0:45)').
+	holderPotionEffects = true
+	#A one-bottle holder (goblet) shows just the fluid ('Contents: Water'). Off = 'Water (1 / 1)'.
+	holderSingleName = true
+	#Beehives and bee nests: 'Bees: 2 / 3'. The count comes from the server (WTHIT and the pack's
+	#mod on both sides); without it the line is left out.
+	hiveBees = true
+	#The Bees line takes the place of WTHIT's occupant-names line ('2 Bee') and sits above Honey Level.
+	#Off = WTHIT's names line stays and Bees goes at the end.
+	hiveBeesOnTop = true
+	#Beehives and bee nests: WTHIT's 'Honey Level: 3' becomes 'Honey Level: 3 / 5'. Still follows
+	#WTHIT's own 'Show Beehive Honey Level' option.
+	hiveHoneyMax = true
+	#Numbers kept in block state: 'Servings: 3 / 4' (feasts), 'Slices: 5 / 7' (cakes, pies), 'Eggs' and
+	#'Hatching' (nests, turtle eggs), 'Level' (cauldrons WTHIT has no fluid bar for), anchor charges,
+	#sea pickles. Rules in assets/creativecompat/state_lines.json (override from kubejs/assets).
+	stateLines = true
+	#Lit campfires: Unlit Campfire's burn line ('Burns forever' / 'Burn time: 42s'). Server data.
+	campfireBurn = true
+	#Lit plain campfires: the pack's rain rule ('Rain: Puts it out', 'Going out in 6s', 'Safe (fuel
+	#block below)'). Server data.
+	campfireRain = true
+	#IE sheetmetal tanks: the tank's fluid bar on every part, not only the two fluid ports. Server side.
+	sheetmetalTank = true
+	#Applied Cooking's ME Kitchen Station: online / offline and the security terminal it is tied to.
+	kitchenStation = true
+	#FD cooking pot, Farmer's Respite kettle and oven: 'Holding: 3 Glass Bottle, 1 Bucket' for the two
+	#leftover slots, and 'Waiting: leftover slots full' while a craft waits for room ([cooking] stallWhenFull).
+	remainderBuffer = true
+	#Grass-like blocks cut with shears (fertile=false: grass, mycelium, lush grass, grass slabs):
+	#'Sheared, prevents spreading and converting to dirt'. Sheared vines ([vine_shearing]) and Vinery's
+	#sterilized jungle grape vine: 'Sheared, stops growing'. Weeping, twisting and cave vine and kelp
+	#tips and Immersive Weathering ivy at their last age: 'Stopped growing'.
+	sheared = true
+	#'Silk Touch Required' line: True (green) when nothing drops without Silk Touch, Drops Differently
+	#(yellow) when something else drops (block tags creativecommon:wthit/needs_silk_touch and
+	#wthit/silk_touch_differs, from tools/gen_silk_touch_blocks.py). Hidden while the main-hand tool has Silk Touch.
+	silkTouch = true
+	#WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players
+	#with operatorBlockLevel see the blocks in operatorBlockList; everyone else still sees through them.
+	operatorBlocks = true
+	#Blocks shown to operators only (block ids).
+	operatorBlockList = ["minecraft:barrier", "minecraft:structure_void", "minecraft:light"]
+	#Permission level that sees them: 2 = operators who can use /give and command blocks (also single
+	#player with cheats on), 4 = server owners only, 0 = every player.
+	#Range: 0 ~ 4
+	operatorBlockLevel = 2
+	#Also show 'Silk Touch Required: False' (red) on every other block. Off by default.
+	silkTouchShowFalse = false
+	#Flower pots, flower boxes and planter boxes: 'Contains: Poppy' (every plant inside, a box's plants
+	#in slot order, '2 Poppy' for a double); a Twigs silt pot 'Rooted Dirt: Yes / No'. A Beautify hanging
+	#pot standing on the ground is named 'Rich Pot'.
+	potContents = true
+
+	#One switch per state line (a label added by an overriding state_lines.json is always on).
+	[wthit.state_lines]
+		#'Servings: 3 / 4' (feasts, Rustic Delight pancakes)
+		servings = true
+		#'Slices: 5 / 7' (cakes, pies, Brewin' cheese wheels and pizza)
+		slices = true
+		#'Eggs: 3 / 6' (nests, turtle eggs)
+		eggs = true
+		#'Hatching: 1 / 2' (turtle, crocodile, terrapin eggs)
+		hatch = true
+		#'Level: 2 / 3' (cauldrons)
+		level = true
+		#'Charges: 2 / 4' (respawn anchor)
+		charges = true
+		#'Pickles: 3 / 4' (sea pickles)
+		pickles = true
+
+#Immersive Portals rendering (client side).
+[immersive_portals]
+	#Mirrors farther than this many blocks from the camera are not rendered through and show their
+	#glass. 0 = no limit.
+	#Range: 0 ~ 512
+	mirrorRenderDistance = 12
+	#Reflections drawn inside reflections when every portal in the chain is a mirror. Immersive
+	#Portals' own maxPortalLayer still caps every portal (and stays the cap for gun portals).
+	#Range: 1 ~ 16
+	mirrorMaxBounces = 4
+	#Blocks of world drawn inside a mirror, rounded up to whole chunks (a hard cut; the mirror fog
+	#below fades it instead). 0 = the normal render distance.
+	#Range: 0 ~ 512
+	mirrorViewDistance = 32
+
+	#Fog drawn while looking through a portal, per portal type. Distances are blocks past the portal
+	#plane: clear up to start, full fog at end. enabled = false keeps the normal fog. Keep nether.end at
+	#Immersive Portals' indirectLoadingRadiusCap x 16 (4 chunks = 64), where the far side stops.
+	[immersive_portals.fog]
+
+		#Nether portals.
+		[immersive_portals.fog.nether]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 8
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+		#Portal Gun portals.
+		[immersive_portals.fog.portalGun]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 16
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+		#Mirrors.
+		[immersive_portals.fog.mirror]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 16
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+#Portal Gun portals.
+[portalgun]
+	#Client side. Gun portals are not rendered through: each shows a flat disc in its colour. Walking
+	#through still works.
+	opaquePortals = false
+	#Server side. A gun portal dissolves when its owner is farther than this many blocks from it
+	#(checked every heartbeat). Portals also dissolve when the owner logs out or changes dimension.
+	#0 = no distance limit.
+	#Range: 0 ~ 100000
+	despawnDistance = 128
+	#Server side. Seconds between a gun portal's distance checks.
+	#Range: 1 ~ 600
+	heartbeatSeconds = 10
 

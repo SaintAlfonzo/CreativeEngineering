@@ -221,3 +221,243 @@ JFR_MAX 200m per boot).
 
 Row wording to fix in the queue: SQ-TP-33's TNT step applies to the marker / chronomark / projector only (workstation
 and metronome resist 1200).
+
+## 3. r1107cc: Creative Common 1.1.0 full check (SQ-CC, with the SQ-CPP rows it reruns)
+
+Owner request 2026-11-07 18:10: "execute the creative common scratch tests, debug as you go along for anything that
+doesn't require a decision, and update the dev and port test instance afterwards". Scope: queue sections "SQ-CC Creative
+Common 1.1.0 full check" (server rows) and "SQ-CPP Creative Common publish cleanup" (its server rows are reruns inside
+SQ-CC). Client rows (CQ-CC-01..06, CQ-CPP-01) and SQ-CC-12 (needs the owner client): not run. Targeted run, no perf
+session (JFR on per boot; SQ-CC-13 takes its own recording). "Dev instance" = this instance's `mods/`, "port test
+instance" = `CEPortTesting/mods/`.
+
+- Jars: build/libs as of 18:16 (Common 18:02, Compat 18:03, Calendar 17:40, Engineering 17:01, Delight / Brewing /
+  Equipment 17:03, Magic 16:59), none installed; no source newer than its jar. prep_srv swaps them in.
+- b1: srv `cc/` in the session scratchpad, level r1107cc, group A. Left out: loadingscreentips (as r1107tp). Kept:
+  Immersive Portals 2.3.7 and Portal Gun (SQ-CC-08 needs IP with Serene Seasons). Probes: `cc_dict_probe.js`,
+  `cc_seqasm_probe.js` (new: `/zsa <seq assembly id>`, `/zsa bottle|refine <potion>`, `/zsa selftest`), zq, s5.
+
+### Run notes
+
+- 18:16 claim, preflight: no JVM, 61 GB free. SQ-CC-01 (no boot) PASS.
+- 18:17 boot b1, Done 11.0 s. Mixin "Error loading class" WARNs are absent optional mods; one third-party D&D client
+  class error; tag failures only creategoggles' Mekanism reference; Railways loot tables (third-party).
+- 18:19 probe fix (tooling): `cc_dict_probe.js` read `global.block`; the block dict is `global.blocks`.
+- 18:20-18:24 SQ-CC-06, -07, -05, -10 (Magic Resistance half), -08, -14, -15, -16, -13: see verdicts. Bots are Forge
+  FakePlayers (invulnerable): damage checks use NoAI villagers (pigs are discarded with spawn-animals=false).
+- 18:27 SQ-CPP-02 sequenced assembly: `/zsa` walks the recipe through Create's public
+  `SequencedAssemblyRecipe.getRecipe(level, stack, type, class)` (advance() is private): echo shovel and felsic
+  leggings keep Unbreaking III and the name. Rhino notes: KubeJS `enchant` returns a copy; no Mojmap `getItems` /
+  `getTag` here (use `getStacks` / `getNbt`).
+- 18:30-18:45 FINDING (IE fluid inputs): `/zsa selftest`: every IE recipe holding a FluidTagInput rejects the first of
+  its own `getMatchingFluidStacks()` (bottling 1906, mixer 14, refinery 20, Immersive Petroleum 12; plain and NBT
+  alike); `BottlingMachineRecipe.findRecipe(glass bottle, REGULAR swiftness)` = none. The fluid is in the tag
+  (`Fluid.is` true), the tags are equal (`equals`, `NbtUtils.compareNbt` both ways true). Engineering's
+  FluidTagInputMixin is the only mixin into the class. Next boot exports the transformed class.
+- 18:33 FINDING (fixed in source): 22 Fruits Delight jelly Cooking Pot recipes fail to parse ("Expected cookingtime to
+  be a Int, was "400.0""), also 88 times in the owner's own 17:56 log: `NCH.setCookTime` passed a JS number to
+  `JsonObject.addProperty`; Rhino picks the String overload (checked: plain number and `Integer.valueOf` both give
+  "400.0"; `JsonParser.parseString` gives 400). Fixed in `neoCraftHelper.js` (Common rebuild). Not shipped (the
+  deployed Creative Delight jar has no setCookTime call), so no new changelog bullet: the unreleased "Jams" bullet
+  (cook for 20 seconds) becomes true with the fix.
+- 18:35 SQ-CC-10b (Phantom Bane, r1102b SQ-PSU-04 batch with fixed coordinates,
+  `tools/scratch_query/batches/r1107cc/b1_phantom.qb`) started, about 13 min.
+- 18:50 IE "finding" WITHDRAWN (probe fault): KubeJS converts every FluidStack a script passes into a Java method,
+  and a raw FluidStack does not survive it (`fl.isFluidStackIdentical(fl)` = false, `isFluidEqual` ambiguous with the
+  ItemStack overload). Passed as `Fluid.of(id, amount, nbt)`: `/zsa selftest` 1952 pass, 0 fail; bottling REGULAR
+  swiftness -> `creativebrewing:iebottling/create_potion/minecraft_swiftness_regular` (Swiftness potion); refinery
+  SPLASH swiftness + `create_central_kitchen:dragon_breath` -> `creativebrewing:lingerification/minecraft_swiftness_from_splash`
+  (LINGERING). Probe fixed; gotcha added.
+- 18:47-18:55 SQ-CC-10b on b1: UNDECIDED (no phantom near either bot in the control pass). Cause: group A's
+  `spawn-monsters=false` (the phantom spawner needs enemy spawning; r1102b's world had it on). Batch also counted
+  the `rest` lines too strictly (4 in the row, wanted == 2; now >= 2).
+- 18:55 b1 stopped. Common rebuilt 18:51 with the setCookTime fix; copied (not linked) into srv/mods.
+- 18:56 b2 (same srv and world; `spawn-monsters=true`; `[effects] removed = ["minecraft:slowness"]` for SQ-CC-11),
+  Done 4.2 s. 0 "Expected cookingtime" (b1: 22 recipes x every reload); `farmersdelight:cooking/apple_jelly` loads.
+  SQ-CC-11 PASS. SQ-CC-09 (emulated: chest NBT `Potion:"creativecommon:long_reach"` written with setblock, the way an
+  11-06 save holds it): `/ccswap items` 0 rewritten (it rewrites item merges, not potion ids); `/zsa potionat`:
+  the stack reads `creativebrewing:long_reach` with Better Beacons Long Reach 3600 t; NBT keeps the old string,
+  which is the documented design of `PotionByNameRemapMixin`. PASS (row wording).
+- 19:00 configs_edited refreshed from the live config for Common, Equipment, Brewing, Delight (keys moved in the carve;
+  no value differed in any Creative config).
+- 19:01 SQ-CC-10b rerun on b2 (`res_b2`).
+- 19:15 SQ-CC-10b on b2 again no phantom (not a FAIL): `/zph` (new `cc_phantom_probe.js`: fresh PhantomSpawner passes)
+  showed seaLevel=63 in this superflat; the spawner skips players below sea level and the bots stood at y -60.
+  Bots on stone platforms at y 70: control 10 passes, 27 phantoms, phantoms near both bots; Phantom Bane on the first
+  bot: 10 passes, 15 phantoms, all near the second bot, none near the first. PASS (also settles SQ-PSU-04, OPEN since
+  r1103). Batch fixed (platforms at y 70), gotcha added.
+- 19:20 b3 (`cc3/`: Rhino, Architectury, KubeJS, Serene Seasons, Common, Compat, Calendar; empty kubejs/, config/,
+  defaultconfigs/). First try crashed: my setup removed the `*_upstream` links and Compat's nested Tempad needs
+  `tempad_upstream` (by design). The crashed JVM hung and a second boot started beside it: both mine, both stopped
+  (stop_wait killed the hung one), world wiped, clean reboot Done 5.6 s. Lesson: `stop_wait.sh` after every CRASH.
+- 19:23 SQ-CC-03: no class or mixin error with Create, IE, Fruits Delight, Immersive Portals, Heartstone absent; one
+  KubeJS ERROR per load: Compat `misc_mods.js` `R.replaceInput({ id: 'supplementaries:soap' }, ...)` with Supplementaries
+  absent (dict values undefined). FIXED (Common): `NCH._absentInFilter` now counts a top-level `{ id }` / `{ mod }`
+  filter of an absent mod in the absent-mods summary (not inside OR lists or nested filters). Audit: all 66
+  namespaces used in such filters across the scripts are loaded mod ids in the full pack. SQ-CC-04 PASS.
+- 19:25 Common rebuilt, b3 rebooted (Done 3.3 s): 0 KubeJS errors, 0 class errors. SQ-CC-03 PASS, SQ-CPP-05 PASS.
+- 19:27 b4 (`cc4/`: chain without Engineering: Rhino, Architectury, KubeJS, KubeJS Create / Delight, LootJS, MoreJS,
+  Create, Serene Seasons, IE, Fruits Delight, Common, Compat, Calendar, Delight, Brewing; CEPortTesting's kubejs/;
+  group B seed 8675309), Done 25.0 s. SQ-CPP-04 PASS: 0 recipe parse errors, 267
+  `creativebrewing:iebottling/create_potion/` recipes, REGULAR swiftness bottles to a Swiftness potion with IE's exact
+  NBT match (no Engineering); the refinery half cannot apply (no dragon's breath fluid without Central Kitchen).
+  KubeJS: 24 NCH ERRORs. One was Common's: `ieMetalPress` uses KubeJS IE's schema, absent here ("Constructor for
+  immersiveengineering:metal_press with 3 arguments not found"). FIXED: skipped (counted) without
+  `kubejs_immersive_engineering`. The other 23 are FINDINGS for Delight / Brewing in this reduced chain (TODO
+  `creativebrewing/publish #24`, `#25`): tags `#forge:tortilla`, `#forge:fruits/banana`, `#forge:animal_fat`,
+  `#creativecommon:bark` empty; undefined outputs (cut copper vertical slab splashing, mixing, ceBaking, vdPickling);
+  `replaceItems` aborted by a Delight IE Bottling recipe whose result is the tag `#forge:dough/wheat`
+  (`kubejs/data/creativedelight/kubejs/create/recipes.js` 48, `R.ieBottling(i.dough, ...)`).
+- 19:31 Common rebuilt (final), b4 rebooted: metal press error gone, the 23 remain.
+- 19:32 b5 (`cc5/`, fresh prep_srv group A, final Common 19:31), Done 11.1 s: 0 mixin errors, all 10 jars' startup files
+  loaded, 0 KubeJS errors, 0 "Expected cookingtime", 14 parse errors (all third-party), dict probe 8 lines. Absent
+  summary as b2 plus one line (`createsifter`, the `{ mod: 'createsifter' }` replaceOutput in Engineering's
+  metal_base_materials.js: was a silent no-op, now counted). 19:34 stopped; no JVM up.
+- 19:35-19:38 installed to the dev instance `mods/` (installToMods): Common 19:35 (same neoCraftHelper.js as the tested
+  19:31 jar), Compat, Calendar, Delight, Brewing, Equipment, Engineering, Magic, Devtools, Worldgen. Brewing's install
+  first failed in the nested Vinery member ("vinery.refmap.json is not in backportedVinery-...jar", build-logic's
+  refmap backstop): `:backportedVinery:clean`, then it built. `repackedStorage` -02 (11-07 14:39) in build/libs is newer
+  than the -01 in `mods/`: not part of this run, left. CEPortTesting/mods: Common replaced (old one in its
+  `jar_archive/displaced/creativecommon-1.1.0.1938.jar`); its 4 jars now match the dev instance's.
+
+### Verdicts (r1107cc, server rows)
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CC-01 | PASS (row wording) | no moved class, no `resourcepacks/creative_tips`, no `data/create/tags`; 40 mixins all with classes; no create / IE / fruitsdelight row; immersive_portals and heartstone listed (optional, `ordering="NONE"`: the order fix is in the mixin plugin, as the mods.toml comment says) |
+| SQ-CC-02 | PASS | b1 and b5: no mixin apply error, no out-of-range WARN, all startup files loaded (Common 23 of 23), 0 startup script errors; mixin "Error loading class" WARNs are absent optional mods |
+| SQ-CC-03 | PASS (after fix) | Common + Compat + Calendar: no class error; the one script error fixed in NCH (absent-mod id filter) |
+| SQ-CC-04 | PASS | generated config: overrides [], removed [], advancements on, creative menu not disabled, gravity limit on |
+| SQ-CC-05 | PASS | pack config keeps the 3 removed effects and the name list; restfulness / power_down refused; Speed applies |
+| SQ-CC-06 | PASS | `any_bark` = `#creativecommon:bark`, `t_metal_dusts` = `#creativecommon:metal_dusts`; Create Framed / SecurityCraft keys print ids; mirror glass tags `#creativecompat:mirror_glass(_panes)`; bark 19, metal_dusts 15 |
+| SQ-CC-07 | PASS | scrap_wood_small 124, scrap_copper_blocks 8 with Create Recycle; no error naming a scrap tag |
+| SQ-CC-08 | PASS | "[compat] Immersive Portals overwrites conform to target visibility (Serene Seasons widens ChunkMap)"; bot to the Nether and back; no mixin apply error |
+| SQ-CC-09 | PASS (row wording, emulated save) | `Potion:"creativecommon:long_reach"` reads `creativebrewing:long_reach` (Long Reach 3600 t); NBT keeps the old string by design; `/ccswap items` rewrites item merges only (0) |
+| SQ-CC-10 | PASS | Magic Resistance I: Poison I and Wither I no damage (control lost 6), Poison II 20 % cut; Phantom Bane on the first bot: 15 phantoms, all at the second bot (control: 27, both) |
+| SQ-CC-11 | PASS | `removed = ["minecraft:slowness"]`: Slowness refused, Speed applies, no config error |
+| SQ-CC-12 | not run | needs the owner client |
+| SQ-CC-13 | PASS | JFR profile 60 s: creativecommon.LevelTick, ServerTick, KubeJSHandler(Stats), EntityTypeTicks, ChunkWaitStats |
+| SQ-CC-14 | PASS | advancement grant: "Unknown advancement"; trader 31 offers (quill + 25 + 5) |
+| SQ-CC-15 | PASS | mixin applied; End villager gravity 0.016, overworld 0.08, the modifier removed after leaving the End |
+| SQ-CC-16 | PASS (whistle not shot) | Done 11.0 s; WorldEdit / Quark / Nock Enough Arrows mixins applied, no range WARN; tp to 50000 under a second, no "Can't keep up" |
+| SQ-CPP-01 | PASS (row wording) | = SQ-CC-02 / -06 / -05; bark is Immersive Weathering only, as the old `creativeengineering:bark` was (no FD tree bark) |
+| SQ-CPP-02 | PASS | `/zsa`: echo shovel and felsic leggings keep Unbreaking III and the name; Brewing's iebottling and lingerification recipes load |
+| SQ-CPP-03 | PASS (lookup, no multiblock) | bottling REGULAR swiftness -> Swiftness potion; refinery SPLASH swiftness + dragon's breath -> LINGERING; selftest 1952 of 1952 |
+| SQ-CPP-04 | PASS | chain without Engineering boots; 267 IE potion bottling recipes; bottling works with IE's exact match (23 Delight / Brewing script errors: findings) |
+| SQ-CPP-05 | PASS | Common + Compat without Create Recycle: physics tags load, no `create:scrap_*` error |
+| SQ-PSU-04 | PASS (via SQ-CC-10b) | open since r1103 |
+| CQ-CC-01..06, CQ-CPP-01 | not run | client rows |
+
+### Findings and fixes (r1107cc)
+
+- FIXED, Common: `NCH.setCookTime` wrote `"cookingtime":"400.0"`; the 22 Fruits Delight jelly Cooking Pot recipes failed
+  to parse (also in the owner's 17:56 log). Never shipped; the unreleased "Jams" changelog bullet now holds.
+- FIXED, Common: an `{ id }` / `{ mod }` filter of an absent mod logged an ERROR (Compat's Supplementaries soap / fodder
+  rows) instead of joining the absent-mods summary.
+- FIXED, Common: `ieMetalPress` without KubeJS Immersive Engineering logged an ERROR; now skipped and counted.
+- OPEN (TODO `creativebrewing/publish #24`): 22 Delight / Brewing script errors in the Brewing chain without
+  Engineering (empty tags and undefined dict outputs of absent mods).
+- OPEN (TODO `creativebrewing/publish #25`): Delight's `R.ieBottling(i.dough, ...)` writes a tag as a result; the item
+  merge recipe swap aborts on it in the reduced chain.
+- WITHDRAWN: "IE fluid inputs reject every fluid" was the probe (KubeJS converts a raw FluidStack); gotcha added.
+- Done: `configs_edited/` copies of Common, Equipment, Brewing, Delight refreshed from `config/` (no value differed).
+- Tooling: `cc_dict_probe.js` (global.blocks), new `cc_seqasm_probe.js` (`/zsa`), `cc_phantom_probe.js` (`/zph`),
+  `batches/r1107cc/b1_phantom.qb` (platforms at y 70).
+
+Row wording to fix in the queue (done in the rows): SQ-CC-06 / -07 / SQ-CPP-01 use `/zq itemtag` (KubeJS 1902 has no
+`/kubejs dump_tag`); SQ-CPP-01 bark has no FD tree bark; SQ-CC-09 pass = reads the new id (NBT unchanged);
+SQ-CC-01 ordering is in the mixin plugin; SQ-CC-10 damage on villagers, phantom bots at y 70.
+
+## 4. r1107cco: Creative Common with its optional mods only (SQ-CCO)
+
+Owner request 2026-11-07 20:35: "execute the latest creative common scratch tests with all optional mods loaded". Scope:
+queue section "SQ-CCO Creative Common with its optional mods only", server rows SQ-CCO-01 to -16. Not run: CQ-CCO-01 to
+-03 (client rows; need a window). Targeted run, no perf session (JFR on per boot, recordings in each srv's perf/).
+
+- Jars: Common `creativecommon-1.1.0` 11-07 20:28 (build/libs = `mods/`), the optional mods from `mods/`, perfBot
+  `cdevperfbot-0.1.0` 19:37. Servers from `tools/scratch_query/cc_only_srv.sh` (group B, seed 8675309, difficulty normal).
+- Boots: b1/b2 `full` (srv `cco1`, Done 28.9 s), b3 `full` toggled (IW fast path off, gravityLimitDimensions false,
+  effects removed Slowness), seven set boots (`tools/scratch_query/cco_sets.sh`: six `without=` + `alone`, Done 27.2 to
+  30.9 s), b5 `full` defaults again. Batches `tools/scratch_query/batches/r1107cco/` b1_full, b2_console, b3_toggled,
+  b4_without, b5_gravity; results `perf/runs/r1107cco/`.
+
+### Run notes
+
+- 20:37 claim, preflight: no JVM, 60 GB free; Common in `mods/` = newest build.
+- 20:37 tooling: `cc_only_srv.sh` pruned the perfBot jar (bots for every effect row): added to the always-kept list.
+  b1_full.qb spawned its bot in SQ-CCO-03 after SQ-CCO-02 used it: moved up.
+- 20:38 first boot CRASHED at world creation: unbound `terralith:overworld_large_biomes/...` density function.
+  `cc_only_srv.sh` kept the pack's `kubejs/data/` (Terralith noise overrides, every Creative jar's data); fixed to
+  keep only the zq scratch data. The hung JVM (mine) killed by stop_wait.sh.
+- 20:51 b1 Done 28.9 s. Batch faults fixed and rerun: the class-error reject caught Quark's own mixin probing absent
+  Lootr ("Error loading class", third-party); the Heartstone priority line is client-only (`orderHeartstoneBeforePortals`
+  returns on a dedicated server: CQ-CCO-01 checks it); "Applied effect Phantom Bane" is the console text, not the id.
+- 20:55 b2_console: SQ-CCO-11's "Static binding violation ... MixinChunkMap_C ... visibility will be upgraded" is the
+  designed result of the conform (one line; Mixin's own text says "visibiliy", so a "cannot reduce visibility" regex
+  must exclude it). SQ-CCO-10 first try: platforms in unloaded chunks were not placed, bot 2 fell into a cave
+  (sky=false): forceload added; bot 1 kept Phantom Bane across respawns (player data persists): `effect clear` added.
+- 21:00-21:12 SQ-CCO-08 (Create Gravity): no low-gravity modifier on a falling zombie, a survival bot or a standing
+  villager in the End, with Common's gate on (b2, b5) AND off (b3): Gravity applies nothing on this set
+  (default `biome_configs = ["#minecraft:is_end;;"]`, written fresh), while r1107cc saw End villager 0.016 in the full
+  pack. Common's gate is not the cause; not chased further (third-party). PARTIAL, TODO `creativecommon/publish #3`.
+  Learned: NoAI mobs do not move at all in 1.19; `@e` without a position searches every dimension.
+- 21:10-21:22 seven set boots, all clean (table below). 21:24 b5: SQ-CCO-14 (emulated) and the Gravity recheck.
+- 21:27 all JVMs stopped.
+
+### Verdicts (r1107cco)
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CCO-01 | PASS | Done 28.9 s; no mixin / class error from our jars (only Quark -> Lootr, third-party); IW callTick and IP conform lines; no other Creative jar; 22 of 22 Common startup files, 0 KubeJS errors. Heartstone line: client-only, CQ-CCO-01 |
+| SQ-CCO-02 | PASS | Magic Resistance and Phantom Bane apply on a bot; no `[CE potions] not present` line |
+| SQ-CCO-03 | PASS (fill; `//set` needs a player) | fill works, no WorldEdit mixin error; `full` Done 28.9 s vs `without=we` 30.0 s (no stall) |
+| SQ-CCO-04 | PASS | fresh config: overrides = [], removed = [], gravityLimitDimensions = true, [advancements] enabled = true, [creative_menu] disabled = false |
+| SQ-CCO-05 | PASS | no ASM warning; mossy cobblestone 1 -> 83 in 60 s (fast path); fast path off: off line logged, 1 -> 84 |
+| SQ-CCO-06 | PASS | two `/reload`s, no Armor Trims / cache error |
+| SQ-CCO-07 | PASS | `/tp` to 50000 100 50000 inside the 4 s of the two pace steps; no "Can't keep up", no Quark mixin error |
+| SQ-CCO-08 | PARTIAL | no mixin error; overworld fall vanilla; End modifier never applied on this set even with the gate off (see notes) |
+| SQ-CCO-09 | PASS (server part) | pig, cow and a whistling arrow ticking, no NEA error; tick cost is CQ-CCO-03 |
+| SQ-CCO-10 | PASS | `/zph` with bots on y 150 platforms: control (Bane off) phantoms reach bot 1; Bane on bot 1: 10 and 9 phantoms, all near bot 2, none near bot 1 |
+| SQ-CCO-11 | PASS | conform line 1, one designed Static binding violation, no "cannot reduce visibility"; Nether trip and back clean |
+| SQ-CCO-12 | PASS | six sets: each boots, reloads, stops; 0 KubeJS startup errors; Common mixins listed only for mods in the set; Phantom Bane unknown only without Better Beacons (no skip line: Common's only potion row, Magic Resistance, has no needsMod) |
+| SQ-CCO-13 | PASS | `alone`: Done 30.9 s, 0 KubeJS errors, no optional-mod mixin applied, Magic Resistance applies |
+| SQ-CCO-14 | PASS (emulated) | chest potion `creativecommon:long_reach` kept as is after save-all with Brewing absent, no error |
+| SQ-CCO-15 | PASS | 22 of 22 files; `creativecommon:bark` 12 items (IW), `metal_dusts` empty (no metal-dust mod in the set); `[ccdict]` values print, 0 exceptions |
+| SQ-CCO-16 | PASS | trader offers vanilla + Quark's own (no pack trades); advancement grant works; with Slowness removed it is refused and Speed applies |
+| CQ-CCO-01..03 | see section 5 | owner client 2026-11-07: -01 PASS, -02 / -03 PARTIAL |
+
+Tooling: `cc_only_srv.sh` (perfBot kept, pack `kubejs/data` dropped), new `cco_sets.sh`, batches r1107cco b1 (fixed),
+b2 to b5. No gameplay change, no changelog bullet (test-only session).
+
+## 5. Owner client rows, CEPortTesting (CQ-CCO, CQ-CMV-01, CQ-SPFX-02, CQ-CCB-01, -03)
+
+Owner client, 2026-11-07 21:40 to 22:54, CEPortTesting with Common 21:38 (`build/libs`; the dev `mods/` still holds
+20:28). Launch plan: 1 = the `cc_only_srv.sh full` set, 2 = minus Legendary Tooltips and Immersive Portals, 3 = Common
+alone, 4 = Common + Compat without JEI. Logs read per launch from `CEPortTesting/logs/` (the owner's greps ran on the dev
+instance's log by mistake; re-run here): launch 1 = `2026-11-07-3/-4/-5.log.gz`, launch 2 = `-6`, launch 3 = `-7`,
+launch 4 = `latest.log` + `crash-reports/crash-2026-11-07_22.54.33-fml.txt`.
+
+### Verdicts
+
+| ID | Result | Evidence |
+|---|---|---|
+| CQ-CCO-01 | PASS (Mods screen description not reported) | title screen reached every launch; Heartstone priority line once per launch; `Loading tips: 321 tips from 1 files` (Common alone has no pack tips: expected); no `Mixin apply failed`, no `NoClassDefFound` |
+| CQ-CCO-02 | PARTIAL | Armor Trims works (owner). Nether trip made (Immersive Portals `too many portal nearby` ERRORs in the Nether, third-party). Not reported: creative inventory speed, Heartstone render with a portal in view. Log: Armor Trims' own JEI `There is no recipe category registered for armor_trims:armor_trimming` (third-party, every launch with JEI) |
+| CQ-CCO-03 | PARTIAL | whistle arrows work, no error in the log (only Nock Enough Arrows' own `light_air` missing-model WARN); Quark biome locate and teleport work; Create Gravity: a survival player falls slowly in the End, falling blocks fall at normal speed there (owner). WorldEdit `//wand` / `//set` not reported |
+| CQ-CMV-01 | PASS | launch 2 (`-6`): Iceberg without Legendary Tooltips, tooltips look fine, no crash. Owner: the underline on 3D item tooltips is fixed |
+| CQ-SPFX-02 | PARTIAL | first half PASS (one `priority 1000 -> 999` line, no apply failure). Second half not done: launch 2 still had Immersive Portals (priority line present in `-6`). Outline check moved to the server join |
+| CQ-CCB-01 | PASS | launch 3 (`-7`, Common alone): Magic Resistance icon right (owner); grep for `magic_resistance.png`, `JEIEvents`, `jei_order` and the `#creativedelight:stoves` never-match WARN: no line. Other lines: `[absent mods] skipped 2 tag entry rows for absent nock_enough_arrows`, KubeJS `Failed to get filter section from pack kubejs` (KubeJS's own) |
+| CQ-CCB-03 | FAIL (crash, not debugged: owner) | launch 4 (Common + Compat + Tempad port, no JEI): `Mod loading error`, `IllegalStateException: Tempad reads its textures, models and recipes from the original Tempad 3.0.4 jar, which must be in the folder 'tempad_upstream' of the game directory`. CEPortTesting has no `tempad_upstream/`. TODO `creativecompat/publish #1` |
+
+Aside from the owner's dev-instance grep (full pack, 16:52, Common 20:28 or older): `java.lang.NoClassDefFoundError:
+com/sammy/minersdelight/jei/CopperPotCookingRecipeCategory`. Not chased; recheck in CQ-CC-01 on the next full-pack launch.
+
+Still to run: CQ-CCO-02 / -03 leftovers (inventory speed, Heartstone with a portal, WorldEdit), CQ-SPFX-02 second launch
+(Immersive Portals and Portal Gun out), CQ-CCB-03 after the Tempad fix, the full-pack rows (CQ-CC-01..06, CQ-CMV-02, -03,
+CQ-CPP-01, CQ-CCB-02, CQ-CIF-01) after Common 21:38 goes into `mods/`, and SQ-CC-12 with the server rows on the owner's
+signal. No gameplay change, no changelog bullet (test-only).
+
+### 5.1 Owner follow-up (2026-11-07 late)
+
+- CQ-CCO-02: PASS (creative inventory speed good, no Heartstone issue). CQ-CCO-03: WorldEdit worked; whistle arrow, Quark, player gravity PASS; **Create Gravity in the End: falling blocks do not get low gravity, owner expects every entity in the End to** (TODO `creativecommon/publish #3`, now also a possible real gap, not only a test-set difference).
+- CQ-SPFX-02 stays PARTIAL; open part = (a) launch with Immersive Portals (and Portal Gun) removed: no `Heartstone LevelRendererMixin` line, title screen reached; (b) two bonded players (server join): the partner keeps the Heartstone outline.

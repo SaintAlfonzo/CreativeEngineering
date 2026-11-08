@@ -307,6 +307,8 @@ var i = global.item;
 		[i.crying_obsidian, ['Ignite to light permanent soul fire', col.rare]],
 		[i.chain, ["Ends of chain stick to blocks w/o glue, and sides won't stick to slime blocks", col.uncm]]
 	);
+	// Botany Pots growth is 8x slower for crops, 2x for flowers (server_scripts/other/botany_pots.js)
+	if (Platform.isLoaded('botanypots')) addTooltipPattern(e, 'botanypots:*botany_pot', ['Useful for flowers, not great for crops', col.norm]);
 		
 // ############################## Decor ##############################	
 

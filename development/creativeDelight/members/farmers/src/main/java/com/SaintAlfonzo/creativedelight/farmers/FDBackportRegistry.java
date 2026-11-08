@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativedelight.farmers;
 
 import com.SaintAlfonzo.creativedelight.farmers.block.GleamingSaladBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.HangingCanvasSignBlock;
+import com.SaintAlfonzo.creativedelight.farmers.block.HangingSkilletBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.PumpkinPieBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.RopeFenceBlock;
 import com.SaintAlfonzo.creativedelight.farmers.block.RopeFenceGateBlock;
@@ -91,6 +92,15 @@ public final class FDBackportRegistry {
 			() -> new ConsumableItem(ModItems.bowlFoodItem(GLEAMING_SALAD_FOOD), true));
 
 	/**
+	 * Hung skillet (TODO cooking/kitchen #39, pack addition): the skillet on a wall, placed by the skillet item
+	 * (mixin SkilletHangMixin); no item of its own, drops the skillet. Skillet block properties (metal, 0.5 / 6.0,
+	 * lantern sound). Keeps FD's skillet block entity ({@link #allowExtraBoards} adds it to that type).
+	 */
+	public static final RegistryObject<Block> HANGING_SKILLET = BLOCKS.register("hanging_skillet",
+			() -> new HangingSkilletBlock(BlockBehaviour.Properties.of(Material.METAL).strength(0.5F, 6.0F)
+					.sound(SoundType.LANTERN).noOcclusion()));
+
+	/**
 	 * Stone cutting boards (TODO cooking/kitchen #25, pack addition): Farmer's Delight's cutting board block in granite,
 	 * andesite and diorite. Same block class and block entity as the wooden board ({@link #allowExtraBoards} adds them to
 	 * the cutting board block entity type), stone sound and hardness, pickaxe-mineable (pack tag).
@@ -127,7 +137,7 @@ public final class FDBackportRegistry {
 	}
 
 	/**
-	 * Common setup: the stone and wood boards keep a cutting board block entity (BlockEntityType.validBlocks, SRG
+	 * Common setup: the stone and wood boards keep a cutting board block entity, the hanging skillet a skillet one (BlockEntityType.validBlocks, SRG
 	 * f_58915_).
 	 */
 	@SuppressWarnings("unchecked")
@@ -141,6 +151,15 @@ public final class FDBackportRegistry {
 			field.set(type, valid);
 		} catch (ReflectiveOperationException | RuntimeException e) {
 			FarmersDelight.LOGGER.error("[creativedelight] could not add the stone and wood cutting boards to the cutting board block entity", e);
+		}
+		try {
+			BlockEntityType<?> skillet = ModBlockEntityTypes.SKILLET.get();
+			Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
+			Set<Block> valid = new HashSet<>((Set<Block>) field.get(skillet));
+			valid.add(HANGING_SKILLET.get());
+			field.set(skillet, valid);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			FarmersDelight.LOGGER.error("[creativedelight] could not add the hanging skillet to the skillet block entity", e);
 		}
 	}
 

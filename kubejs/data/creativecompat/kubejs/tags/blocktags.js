@@ -24,4 +24,20 @@ ServerEvents.tags('block', e => {
 	// never dye in world (sacks lost their contents, canvas signs their text); no_world_dye is for plain blocks the
 	// dyeing audit takes out too (TODO blocks/dyeing #1). Empty until then.
 	t.add(e, b.t_no_world_dye, [])
+
+	// Immersive Portals mirrors (plan_portal_changes.md 4, IPMirrorGlassMixin): IP takes only GlassBlock, stained glass
+	// and IronBarsBlock panes, so these glass blocks and panes are added. Frosty glass: sneak + flint and steel (plain use
+	// melts the frost).
+	var colours = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan',
+		'purple', 'blue', 'brown', 'green', 'red', 'black']
+	t.add(e, b.t_mirror_glass, [i.tinted_glass, i.reinforced_tinted_glass,
+		i.tinted_framed_glass, i.horizontal_tinted_framed_glass, i.vertical_tinted_framed_glass,
+		i.createframed_tinted_framed_glass, i.createframed_horizontal_tinted_framed_glass,
+		i.createframed_vertical_tinted_framed_glass, i.createframed_tinted_tiled_glass,
+		i.quark_framed_glass, i.dirty_glass, i.frosty_glass, i.rainbow_glass]
+		.concat(colours.map(c => i[c + '_framed_glass'])))
+	t.add(e, b.t_mirror_glass_panes, [i.createframed_tinted_framed_glass_pane,
+		i.createframed_horizontal_tinted_framed_glass_pane, i.createframed_vertical_tinted_framed_glass_pane,
+		i.createframed_tinted_tiled_glass_pane, i.framed_glass_pane, i.dirty_glass_pane, i.frosty_glass_pane]
+		.concat(colours.map(c => i[c + '_framed_glass_pane'])))
 })

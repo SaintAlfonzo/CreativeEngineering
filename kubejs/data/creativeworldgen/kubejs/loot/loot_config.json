@@ -10670,7 +10670,7 @@
       }
     },
     "supplementaries:flax_seeds": {
-      "remove": false,
+      "remove": true,
       "frequency": 1,
       "chests": 5,
       "where": {

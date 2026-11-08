@@ -18,7 +18,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Check jar times right before booting, and again before trusting a rerun: parallel sessions have installed jars
   mid-run, once a boot-crashing mixin (10-27).
 - Mods for the server: every `mods/*.jar` except `client` rows in mod_sides.md; never `server_mods/` (stale).
-  `vinery_upstream/` must be reachable from srv/ (the Vinery port refuses to load without it).
+  Every `*_upstream/` donor folder in the instance root (`ls -d *_upstream`) must be linked into srv/ BEFORE the boot;
+  ports that refuse to load without theirs (Vinery, Tempad) fail mod construction. A bundle loads every nested
+  member, so a donor is needed for any jar that nests its port, not only for the port's own jar. Until 2026-11-07
+  Tempad was nested in Compat and a Common + Compat boot failed this way; Tempad is its own jar since then.
 - Jars in `mods/` but not in `mod_sides.md` are another session's work in progress: a scratch srv takes them (prep_srv
   copies every non-client jar), and they can crash the boot. 2026-11-06: Immersive Portals 2.3.7 + Serene Seasons' ChunkMap
   wildcard AT crash at world creation (`MixinChunkMap_C ... cannot reduce visibility`). List the unlisted jars before
@@ -250,3 +253,63 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   weapon.mainhand with ITEM{nbt}` to re-place a dropped block with its exact NBT (r1107tp2).
 - 1.19.2 has no `contents` slot for item entities (`item replace ... from entity @e[type=item] contents` = "Unknown
   slot") and no `execute if loaded` (r1107tp2).
+
+## Found in r1107cc (Creative Common, 2026-11-07)
+
+- **Never pass a raw FluidStack from a probe into a Java method.** KubeJS converts every FluidStack argument and a raw
+  one does not survive: `fl.isFluidStackIdentical(fl)` is false, and IE's `FluidTagInput.testIgnoringAmount` /
+  `BottlingMachineRecipe.findRecipe` / `RefineryRecipe.findRecipe` reject everything (made every IE fluid recipe look
+  broken). Pass `Fluid.of(id, amount, nbtString)` instead (`cc_seqasm_probe.js` `zsaFluid`). `isFluidEqual(fs)` is
+  "ambiguous" (ItemStack overload) for the same reason.
+- Rhino overloads: `JsonObject.addProperty('k', 400)` and `addProperty('k', Integer.valueOf(400))` both write the
+  STRING "400.0". Use `json.add('k', JsonParser.parseString('400'))`. `java.lang.Integer` as a bare global throws an
+  uncatchable error inside a command handler ("An unexpected error occurred"); use `Java.loadClass`.
+- Mojmap names Rhino does not see here: `Ingredient.getItems` (use `getStacks().toList()`), `ItemStack.getTag` (use
+  `getNbt()`); KubeJS `stack.enchant(...)` returns a COPY. Create's `SequencedAssemblyRecipe.advance` is private: walk
+  an assembly with the public `SequencedAssemblyRecipe.getRecipe(level, stack, type, ProcessingRecipe)` and the step's
+  `rollResults()` (`/zsa <id>`).
+- `spawn-animals=false` (group A) discards every animal at once, summoned NoAI pigs too: use villagers for damage rows.
+- Phantoms (SQ-PSU-04, SQ-CC-10b): the group A superflat reports sea level 63 and the phantom spawner skips every
+  player below sea level, so bots at y -60 never get one (r1102b's and r1107cc's first two tries). Put the bots on
+  platforms at y 70, with `spawn-monsters=true`. `/zph N` (`cc_phantom_probe.js`) runs N fresh spawner passes at once.
+
+## Found in r1107cco (Common-only sets, 2026-11-07)
+
+- `cc_only_srv.sh` must keep the dev perfBot jar (bots) and drop the pack's `kubejs/data/`: that folder holds Terralith
+  noise overrides and crashes world creation without Terralith ("unbound value ... density_function").
+- NoAI mobs do not move at all in 1.19 (no fall): use a mob with AI (Silent) for fall or gravity checks.
+- `@e[...]` with no x/y/z/distance searches every dimension, even under `execute in`: pin cross-dimension selectors.
+- Platforms in unloaded chunks are not placed: `forceload add` before `fill`, or bots fall into caves (phantoms need sky).
+- A bot keeps its effects across `pbot remove-all` / respawn (player data persists): `effect clear` before a control pass.
+- Mixin's "Static binding violation ... cannot reduce visibiliy" (its typo) is a WARN, not the IP crash: a regex for
+  "cannot reduce visibility" must exclude "Static binding violation" lines.
+- Create Gravity's low-gravity modifier is added only while an entity falls; on the Common-only set it was never added
+  at all (TODO `creativecommon/publish #3`).
+- `qrun.py` with a mid-pattern `(?i)` warns on Python 3.10 and applies the flag to the whole regex; put it first.
+
+## Found in r1108cge (Creative Common gravity, 2026-11-08)
+
+- Create Gravity 1.2.0 on a dedicated server was inert until a `/reload` (its biome list is built only on
+  TagsUpdatedEvent after its server config loads). Common 11-08 00:49 builds it at server start; with an older Common, a
+  gravity row needs a `/reload` first, and a manual `/reload` spoils any "as booted" check of that boot.
+- `world/serverconfig/*.toml`: edit only while the server is stopped. Forge writes the in-memory config back on
+  shutdown (an edit made while up is overwritten), and a live edit was not picked up within 6 s.
+- 1.19.2 has no `execute if biome` (1.19.3+): read the biome with a probe (`/zgv cfg`, `/zq`).
+- End main island: y 70 at 0 0 is inside the terrain; NoAI mobs summoned there suffocate within about 10 s (use y 75).
+  `cc_only_srv.sh` and `cpp_chain_srv.sh` servers are peaceful unless `difficulty=normal` is passed: hostile mobs vanish.
+- `qrun.py --rows` skips setup lines (forceload, bot spawn) that live in an earlier row: put each row's setup in the row.
+- Rhino: `const` inside a function that has a `try` threw "redeclaration of var server" in a command handler; use `var`.
+  `level.dimension()` is ambiguous (use KubeJS `getDimension()`); KubeJS `entity.getType()` returns the id string.
+- Create Gravity's low-gravity modifier is transient: `data get entity ... Attributes` never shows it; read the value
+  with `attribute <target> forge:entity_gravity get` (0.016 = factor -0.8).
+
+## Found in r1108cge2 (Creative Common low gravity, 2026-11-08)
+
+- `set -o pipefail` with `| grep -q`: grep exits at the first match, the writer dies on SIGPIPE, the pipeline reads as "not found". Capture the output first.
+- `qrun.py client`: on a hitch the opening `t` also lands in the chat box and the command goes out as a chat message (`<Player> t/...`), or trailing characters are lost. `cmd` now waits longer and clears the line. A `/reload` in a client batch swallows the next commands typed during its hitch: install datapacks before launch.
+- Client batches: `tp @s x y z` stays in the current dimension (use `execute in`); `fill` fails on chunks the player has not loaded, so arrive first; a creative player who is not flying still falls (put the camera on glass); typed summons are about 5 s apart, so use one `/function` for anything that must happen together.
+- This client log has no `Resource reload finished` line: do not wait on it to open a world (open by hand or wait on `Sound engine started` plus time).
+- A row that restarts a world reloads the bot's saved inventory (SQ-CGE-10 kept the backtank from -10b): clear the slot at the start of the row.
+- A wide entity at the edge of a cleared column wedges in the terrain (a boat is 1.375 wide, drop 0.000): clear a margin.
+- `stop_wait.sh` can return a few seconds before the JVM is gone: wait for `game_jvms.sh` to be empty before the next boot.
+- Rows that need a client AND a dedicated server up together cannot be run by an agent (one game JVM at a time, no exceptions): give them to the owner as test IDs.

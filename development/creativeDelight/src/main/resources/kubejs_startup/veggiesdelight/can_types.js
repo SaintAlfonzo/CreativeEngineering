@@ -538,7 +538,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": "farmersdelight:nourishment",
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -629,6 +629,103 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    ],
    "pie": "sweet_potato_pie",
    "texture": "canned_goods:items/canned_pumpkin_pie"
+  },
+  "canned_vegan_pizza": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Vegan Pizza",
+   "servings": 6,
+   "hunger": 5,
+   "modifier": 0.5,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "vegan_pizza_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "vegan_pizza"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_lasagna": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Lasagna",
+   "servings": 6,
+   "hunger": 14,
+   "modifier": 0.75,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "lasagna_slice"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "lasagna_pan"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_stuffed_bell_peppers": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Stuffed Bell Peppers",
+   "servings": 6,
+   "hunger": 8,
+   "modifier": 0.65,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "stuffed_bellpepper"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "stuffed_bellpeppers_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
   },
   "canned_cauliflower_bread": {
    "section": "bread",
@@ -769,7 +866,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": "farmersdelight:nourishment",
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -815,7 +912,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "existing": false,
    "name": "Canned Coleslaw",
    "servings": 8,
-   "hunger": 10,
+   "hunger": 15,
    "modifier": 0.6,
    "meat": false,
    "fast": true,
@@ -823,8 +920,8 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
-     "ticks": 1800,
+     "effect": "farmersdelight:nourishment",
+     "ticks": 3600,
      "amp": 0,
      "chance": 1
     }

@@ -1,0 +1,30 @@
+# r1108cge2 boot 2: same srv and world, stopped first; the runner sets in r1108cge2/serverconfig/create_gravity-server.toml
+#   biome_configs = ["#minecraft:is_end;;-1", "#minecraft:is_nether;;"]
+# and keeps Common's gravityDimensions at the default (the End only).
+pace 2
+
+## SQ-CGE-14 | factor -1 holds every type still in the End
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv cfg the_end 0 70 0
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1\b
+> zgv dropall the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld zero
+
+## SQ-CGE-09a | dimension limit: a gravity biome in the Nether is ignored while the Nether is not in gravityDimensions
+# clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
+> execute in minecraft:the_nether run forceload add -3 -3 9 21
+> execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
+> zgv cfg the_nether 0 100 0
+expect \[zgv\] cfg dim=minecraft:the_nether .*factor=-0\.8
+> zgv dropall the_nether 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_nether 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nether overworld same
+> execute in minecraft:the_nether run summon minecraft:villager 3 100 3 {NoAI:1b,PersistenceRequired:1b,NoGravity:1b,Tags:["cge09"]}
+sleep 6
+> execute in minecraft:the_nether run attribute @e[tag=cge09,limit=1] forge:entity_gravity get
+expect Entity Gravity for entity .* is 0\.08
+look Nether drops = overworld (vanilla) and the Nether villager 0.08, although the Nether biome is listed

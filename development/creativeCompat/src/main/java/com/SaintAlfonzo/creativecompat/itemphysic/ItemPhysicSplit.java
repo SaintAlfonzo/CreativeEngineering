@@ -27,10 +27,10 @@ import java.util.Set;
  * Resolved live via {@link ItemStack#is(TagKey)}, so membership changes take effect on the
  * next {@code /reload} with no relog or restart:
  * <ul>
- *   <li>{@code creativeengineering:physics/floats}  — floats in water</li>
- *   <li>{@code creativeengineering:physics/sinks}   — force-sink; wins over everything float-side</li>
- *   <li>{@code creativeengineering:physics/fireproof} — survives open fire, still burns/melts in lava</li>
- *   <li>{@code creativeengineering:physics/lavaproof} — immune to <em>both</em> open fire and lava (wins over fireproof)</li>
+ *   <li>{@code creativecompat:physics/floats}  — floats in water</li>
+ *   <li>{@code creativecompat:physics/sinks}   — force-sink; wins over everything float-side</li>
+ *   <li>{@code creativecompat:physics/fireproof} — survives open fire, still burns/melts in lava</li>
+ *   <li>{@code creativecompat:physics/lavaproof} — immune to <em>both</em> open fire and lava (wins over fireproof)</li>
  * </ul>
  * Defaults (config/itemphysic.json): no tag ⇒ the item sinks and is destroyed by fire and lava.
  *
@@ -43,9 +43,9 @@ import java.util.Set;
  */
 public final class ItemPhysicSplit {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("creativeengineering/itemphysic");
+    private static final Logger LOGGER = LoggerFactory.getLogger("creativecompat/itemphysic");
 
-    public static final String TAG_NS = "creativeengineering";
+    public static final String TAG_NS = "creativecompat";
     public static final TagKey<Item> FLOATS    = itemTag(TAG_NS, "physics/floats");
     public static final TagKey<Item> SINKS     = itemTag(TAG_NS, "physics/sinks");
     public static final TagKey<Item> FIREPROOF = itemTag(TAG_NS, "physics/fireproof");

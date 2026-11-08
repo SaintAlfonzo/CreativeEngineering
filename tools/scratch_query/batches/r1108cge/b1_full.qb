@@ -1,0 +1,83 @@
+# r1108cge boot 1: full pack, group A superflat, Common 11-08 00:01 (prep_srv.sh swaps it in). Probes copied into
+# kubejs/server_scripts: zz_cge_probe.js (/zgv), zz_cc_seqasm_probe.js (/zsa). SQ-CGE-01 to -04, SQ-CPP-01 to -03.
+# The Create Gravity rows read Create Gravity's biome list BEFORE any /reload first: the mod builds that list only on
+# TagsUpdatedEvent, and returns early while its server config is not loaded (suspected cause of SQ-CCO-08).
+pace 2
+
+## SQ-CGE-01 | boots, no mixin error naming the Create Gravity mixins
+bootreject Mixin apply failed|InvalidMixinException
+bootreject (?i)(CreateGravityEntitiesMixin|CreateGravityDimensionMixin).*(error|fail|warn)
+bootreject outside the tested range.*create_gravity
+bootexpect Done \(
+look Done line present; no WARN/ERROR naming either Create Gravity mixin
+
+## SQ-CGE-02a | Create Gravity's biome lookup on a fresh boot, before any /reload
+> execute in minecraft:the_end run forceload add 0 0
+> zgv cfg the_end 0 70 0
+> zgv cfg overworld 0 -60 0
+waitlog \[zgv\] cfg dim=minecraft:overworld 10
+look config=null on the End before any reload = Create Gravity's list is not built on a dedicated server (third-party bug); factor=-0.8 = built
+
+## SQ-CGE-02b | falling block, item, TNT drop in the End vs the overworld (state as booted)
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+look t=40 drops: End under 40 percent of overworld (about 20); overworld about 27 (vanilla)
+
+## SQ-CGE-02c | the same after Create Gravity's list is built (/reload fires TagsUpdatedEvent)
+> reload
+sleep 8
+> zgv cfg the_end 0 70 0
+waitlog \[zgv\] cfg dim=minecraft:the_end 10
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-0\.8
+look t=40 End drops about 20 percent of overworld for all three types; overworld about 27
+
+## SQ-CGE-03 | item and TNT in the End (covered by the drop lines of 02b / 02c: type=item.minecraft.stone, entity.minecraft.tnt)
+> say CGE03 see SQ-CGE-02c
+look judged from SQ-CGE-02c lines of the item and TNT types
+
+## SQ-CGE-04 | resting entities in the End: no upward drift, landed block becomes a block
+> execute in minecraft:the_end run fill -2 60 -2 10 60 2 minecraft:obsidian
+> execute in minecraft:the_end run fill -2 61 -2 10 70 2 minecraft:air
+> zgv watch the_end 0 63 0 180
+waitlog \[zgv\] watch done dim=minecraft:the_end 20
+> execute in minecraft:the_end run data get block 0 61 0
+> execute in minecraft:the_end run kill @e[tag=zgv]
+look item y stays 61.000 after landing (no climb), falling block removed=true and block 0 61 0 is sand; tnt rests on 61
+
+## SQ-CGE-02d | gravity on living entities after the list is built (compare with SQ-CCO-08)
+> execute in minecraft:the_end run summon minecraft:villager 0 70 4 {NoAI:1b,PersistenceRequired:1b,Tags:["cge02v"]}
+> summon minecraft:villager 3 -59 3 {NoAI:1b,PersistenceRequired:1b,Tags:["cge02o"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[tag=cge02v,limit=1] forge:entity_gravity get
+> attribute @e[tag=cge02o,limit=1] forge:entity_gravity get
+> kill @e[tag=cge02v]
+> kill @e[tag=cge02o]
+look End villager 0.016, overworld 0.08
+
+## SQ-CPP-01 | mixin and tag checks, tags, Common config pack values
+bootreject ClassNotFoundException.*(creativecommon|creativeengineering)
+> zq itemtag creativecommon:metal_dusts
+> zq itemtag creativecommon:bark
+shell grep -c "Failed to load tag\|Couldn't load tag" logs/latest.log
+shell grep -n "removed\|overrides" config/creativecommon-common.toml | cut -c1-100
+look metal_dusts lists IE dusts and zinc grit; bark lists IW barks; 0 tag load failures; config holds the 3 removed effects and the name list
+
+## SQ-CPP-02 | sequenced assembly keeps enchantments and name; potion recipes load
+> zsa creativeequipment:createsequencedassembly/echo_shovel_sequenced_assembly
+waitlog \[zsa\] done 20
+> zsa selftest
+waitlog \[zsa\] done 60
+look result keeps Unbreaking III and the name; selftest 0 fail
+
+## SQ-CPP-03 | IE bottling and refinery potion recipes
+> zsa bottle minecraft:swiftness
+waitlog \[zsa\] done 20
+> zsa refine minecraft:swiftness
+waitlog \[zsa\] done 20
+look bottling REGULAR swiftness -> creativebrewing:iebottling/create_potion/minecraft_swiftness_regular; refinery -> lingering

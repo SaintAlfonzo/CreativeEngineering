@@ -552,3 +552,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 - 2026-10-28: `ui/wthit #9` to `#11` built: Silk Touch line from a generated block tag (2.11, 707 blocks), Fertile
   Seasons and out-of-season lines (2.12), barriers and the other blacklisted technical blocks shown to operators (2.13).
   Six new `[wthit]` switches. patcherMod 1.1.03 built; installed since and shipped in 1.1.04 (client 2026-10-29). WL-37 to WL-42.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Config option to show the current season growth effect (faster / slower) in the crop WTHIT line. Row `ui/wthit #16`.

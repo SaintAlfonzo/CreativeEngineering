@@ -311,3 +311,8 @@ patcherMod's copies to see whether the jar is current.
   sprite from `i.wire_coil_<metal>` (`transition_items.js`). No recipe change.
 - 2026-10-30: exclusive chance outputs for Create processing recipes and rose quartz sand blasting
   (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. patcherMod 1.1.04 built, not installed.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Monazite rod (Architect's Palette): hard Nether resource hanging above lava lakes; tooltip on where it is found; one use each in automation, magic and equipment. Row `blocks/new #20`.
+- Portal Gun and Tempad as the creative computing endgame goal: recipes that need computing / electronics components from long production chains and complex processes (see the row for the list). Row `engineering/sawmill-and-components #15`.

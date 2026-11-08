@@ -146,11 +146,15 @@ with the rules emptied (the generator refuses a baseline taken with rules).
 
 ### Planned from the scratchpad (2026-10-24)
 
-Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Nothing here is built.
+Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Built so far: honeycomb shearing (below, 2026-11-07).
 
-- [TODO](todo/TODO.md) `mobs/bees #3`: shearing a hive gives about 2.5 honeycombs on average (vanilla gives a fixed 3 from `BeehiveBlock.dropHoneycomb`,
-  unverified in the jar), Looting adds more. Needs a patcherMod mixin and config values (base 2, +1 at 50%). Open: exact numbers, and
-  what Looting means on shears (it only counts when something puts it on the shears). See `dishes/ingredients #22` for honeycomb as sugar.
+- `mobs/bees #3` honeycomb shearing: BUILT 2026-11-07 (plan_farming_cooking_batch A9, owner decision Q7: 6 per shear, no
+  Looting). Vanilla's `BeehiveBlock.dropHoneycomb` (`m_49600_`) pops a fixed 3 (checked in the 1.19.2 jar); Creative Common
+  `mixin/BeehiveHoneycombMixin` multiplies that constant by `[bees] honeycombMultiplier` in creativecommon-common.toml
+  (default 2, so 6; 1 = vanilla; 1 to 16; read live). Hand shearing and dispenser shearing both go through that method.
+  Hives from other mods with their own drop code are untouched. Test BN-HC-01: shear a full (honey level 5) hive with
+  shears → 6 honeycombs; a dispenser with shears facing a full nest → 6; set the key to 1 → 3. See `dishes/ingredients #22`
+  for honeycomb as sugar.
 
 ## 5. File map
 

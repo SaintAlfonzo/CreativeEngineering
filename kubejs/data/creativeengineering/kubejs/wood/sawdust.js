@@ -6,6 +6,8 @@ ServerEvents.recipes(e => {
 	const R = global.NCH
 	var i = global.item;
 	var f = global.fluid;
+	// Scrap wood tags are Create Recycle's (create_crush_everything); without it they do not exist.
+	var recycle = global.has('create_crush_everything')
 
 	//Removes
 	R.bulk('remove', [
@@ -23,8 +25,10 @@ ServerEvents.recipes(e => {
 	R.createCrushing([Item.of(i.sawdust, 2), Item.of(i.sawdust, 1).withChance(0.50)], i.any_log, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 3), i.any_log, e)
 
-	R.createCrushing([Item.of(i.sawdust, 2), Item.of(i.sawdust, 1).withChance(0.50)], i.scrap_wood_large, e, undefined, true)
-	R.ieCrushing(Item.of(i.sawdust, 3), i.scrap_wood_large, e)
+	if (recycle) {
+		R.createCrushing([Item.of(i.sawdust, 2), Item.of(i.sawdust, 1).withChance(0.50)], i.scrap_wood_large, e, undefined, true)
+		R.ieCrushing(Item.of(i.sawdust, 3), i.scrap_wood_large, e)
+	}
 
 	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.50)], i.planks, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 2), i.planks, e)
@@ -32,8 +36,10 @@ ServerEvents.recipes(e => {
 	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.any_wooden_stairs, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 2), i.any_wooden_stairs, e)
 
-	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.scrap_wood_medium, e, undefined, true)
-	R.ieCrushing(Item.of(i.sawdust, 2), i.scrap_wood_medium, e)
+	if (recycle) {
+		R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.scrap_wood_medium, e, undefined, true)
+		R.ieCrushing(Item.of(i.sawdust, 2), i.scrap_wood_medium, e)
+	}
 
 	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.any_wooden_fences, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 2), i.any_wooden_fences, e)
@@ -41,8 +47,10 @@ ServerEvents.recipes(e => {
 	R.createCrushing(Item.of(i.sawdust, 1).withChance(0.75), i.wood_slab, e, undefined, true)
 	R.ieCrushing(Item.of(i.sawdust, 1), i.wood_slab, e)
 
-	R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.scrap_wood_small, e, undefined, true)
-	R.ieCrushing(Item.of(i.sawdust, 2), i.scrap_wood_small, e)
+	if (recycle) {
+		R.createCrushing([Item.of(i.sawdust, 1), Item.of(i.sawdust, 1).withChance(0.25)], i.scrap_wood_small, e, undefined, true)
+		R.ieCrushing(Item.of(i.sawdust, 2), i.scrap_wood_small, e)
+	}
 
 	// Ash conversion
 	R.smelting(i.ash, i.sawdust, e)
@@ -76,6 +84,8 @@ ServerEvents.recipes(e => {
 	R.shaped(Item.of(i.fertile_soil, 3), ['SSS', 'RRR', 'GFZ'], { S: i.rich_soil, R: i.any_bark, G: i.mulch_green, F: i.mulch_fungus, Z: i.mulch_fertilizer }, e, 'fertile_soil_bark_manual_only')
 	R.shaped(Item.of(i.fertile_soil, 3), ['SSS', 'OOO', 'GFZ'], { S: i.rich_soil, O: i.mulch_bone, G: i.mulch_green, F: i.mulch_fungus, Z: i.mulch_fertilizer }, e, 'fertile_soil_bone_manual_only')
 	R.shaped(Item.of(i.fertile_soil, 3), ['SSS', 'WWW', 'GFZ'], { S: i.rich_soil, W: i.mulch_waste, G: i.mulch_green, F: i.mulch_fungus, Z: i.mulch_fertilizer }, e, 'fertile_soil_waste_manual_only')
+	// mulch-free route (TODO farming/crops #41, plan_farming_cooking_batch.md A7)
+	R.shapeless(Item.of(i.fertile_soil, 1), [Item.of(i.rich_soil, 3)], e, 'fertile_soil_from_rich_soil_manual_only')
 
 	R.createMixing(Item.of(i.fertile_soil, 3), [Item.of(i.rich_soil, 2), i.mulch_brown, i.mulch_brown, i.mulch_brown, i.mulch_green, i.mulch_fungus, i.mulch_fertilizer], e, 'fertile_soil_mixing_brown', 'n/a')
 	R.createMixing(Item.of(i.fertile_soil, 3), [Item.of(i.rich_soil, 2), i.any_bark, i.any_bark, i.any_bark, i.mulch_green, i.mulch_fungus, i.mulch_fertilizer], e, 'fertile_soil_mixing_bark', 'n/a')

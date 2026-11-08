@@ -227,3 +227,7 @@ removes the Rich Farmland pool. Those values were replaced on 2026-11-03; the re
 - 2026-10-28 night: scratch server PASS (SQ-SY-01 to -07); config changes need a restart (doc corrected).
 - 2026-10-28: built (owner, scratchpad "better soils increases extra yield chance"): overworld crops, off by default per
   crop; nether crops outlined only.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Tilled End Stone integrates with all End crops (Ender Crop is the only one tied to it). Row `farming/crops #45`.

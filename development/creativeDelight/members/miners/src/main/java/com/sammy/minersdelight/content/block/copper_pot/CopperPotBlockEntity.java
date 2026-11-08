@@ -211,8 +211,44 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
         compound.put("RecipesUsed", recipes);
     }
 
-    /** What a broken or picked pot keeps: the meal, its container and the name. Empty when there is no meal. */
+    /**
+     * Creative Delight QoL-8 (kitchen.md 2.12, TODO cooking/kitchen #40): a break marked this tick by Creative
+     * Delight's CookwareContents (the key in the Forge persistent data) keeps every slot but the leftover slot in the
+     * item. The key string is the same as CookwareContents.KEEP_KEY.
+     */
+    private static final String KEEP_KEY = "creativedelight:keep_contents";
+
+    private boolean keepingContents() {
+        CompoundTag data = getPersistentData();
+        return level != null && data.contains(KEEP_KEY) && data.getLong(KEEP_KEY) == level.getGameTime();
+    }
+
+    private boolean holdsKeptSlots() {
+        for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
+            if (slot != LEFTOVER_SLOT && !inventory.getStackInSlot(slot).isEmpty()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * What a broken or picked pot keeps: the meal, its container and the name; empty when there is no meal. On a
+     * marked break (QoL-8) also the ingredients, the container slot, the output and the cook progress.
+     */
     public CompoundTag writeMeal(CompoundTag compound) {
+        if (keepingContents() && holdsKeptSlots()) {
+            ItemStackHandler kept = new ItemStackHandler(INVENTORY_SIZE);
+            for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
+                if (slot != LEFTOVER_SLOT) kept.setStackInSlot(slot, inventory.getStackInSlot(slot));
+            }
+            if (customName != null) {
+                compound.putString("CustomName", Component.Serializer.toJson(customName));
+            }
+            compound.put("Container", mealContainerStack.serializeNBT());
+            compound.put("Inventory", kept.serializeNBT());
+            compound.putInt("CookTime", cookTime);
+            compound.putInt("CookTimeTotal", cookTimeTotal);
+            return compound;
+        }
         if (getMeal().isEmpty()) {
             return compound;
         }
@@ -557,8 +593,9 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
 
     public NonNullList<ItemStack> getDroppableInventory() {
         NonNullList<ItemStack> drops = NonNullList.create();
+        boolean keep = keepingContents();
         for (int slot = 0; slot < INVENTORY_SIZE; slot++) {
-            if (slot != MEAL_DISPLAY_SLOT) {
+            if (keep ? slot == LEFTOVER_SLOT : slot != MEAL_DISPLAY_SLOT) {
                 drops.add(inventory.getStackInSlot(slot));
             }
         }

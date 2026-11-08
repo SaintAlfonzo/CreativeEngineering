@@ -24,6 +24,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
     private static final List<String> COZY = List.of("cozys_improved_cats");
     private static final List<String> ORE_EXCAVATION = List.of("oreexcavation");
     private static final List<String> BLOCKRUNNER = List.of("blockrunner");
+    private static final List<String> IMM_PTL = List.of("imm_ptl_core");
 
     private static final Map<String, List<String>> NEEDS_MOD = Map.ofEntries(
             Map.entry("HandcraftedItemHoldingSaveMixin", HANDCRAFTED),
@@ -55,6 +56,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("TrashSlotComponentMixin", TRASHSLOT),
             Map.entry("TrashSlotSaveStateAccessor", TRASHSLOT),
             Map.entry("DhCloudHeightMixin", List.of("distanthorizons")),
+            Map.entry("DhNoGenerationMixin", List.of("distanthorizons")),
             Map.entry("XaeroAtlasColourMixin", List.of("xaeroworldmap")),
             // Hats worn in the pack's Curios Face slot drawn like the head slot (curios_slots.md)
             Map.entry("SimpleHatsFaceSlotMixin", List.of("simplehats")),
@@ -80,12 +82,20 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("CopycatMaterialOrderMixin", List.of("copycats")),
             // Portal Gun: lift after a teleport only on floor exits (portalgun/PortalGunExitLift, plan_portal_gun.md 3)
             Map.entry("PortalGunExitLiftMixin", List.of("portalgun")),
+            // Portal changes (plan_portal_changes.md): gun portal despawn, opaque gun portals, mirror glass, mirror
+            // limits and portal fog
+            Map.entry("PortalGunHeartbeatMixin", List.of("portalgun")),
+            Map.entry("PortalGunPortalInvoker", List.of("portalgun")),
+            Map.entry("PortalGunRendererOpaqueMixin", List.of("portalgun")),
+            Map.entry("IPMirrorGlassMixin", IMM_PTL),
+            Map.entry("IPPortalRenderingAccessor", IMM_PTL),
+            Map.entry("IPPortalRenderLimitsMixin", IMM_PTL),
+            Map.entry("IPPortalFogMixin", IMM_PTL),
             // interface mixins from Creative Common (JEI, tooltips, GUI titles, toasts, effect icons; 2026-11-07)
             Map.entry("SubMenuConfigScreenMixin", List.of("create")),
             Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
             Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),
             Map.entry("JeiRecipeLayoutTooltipMixin", List.of("jei")),
-            Map.entry("JeiFluidHelperTooltipMixin", List.of("jei")),
             Map.entry("JeiFluidTankScaleMixin", List.of("jei")),
             Map.entry("JeiRecipesGuiTooltipMixin", List.of("jei")),
             Map.entry("JeiIngredientFilterAccessor", List.of("jei")),
@@ -119,7 +129,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
      * 2026-11-07): outside it the mod's mixins are skipped with one warning instead of crashing the boot.
      */
     private static final Map<String, String> MOD_RANGE = Map.ofEntries(
-            Map.entry("jei", "[11.8.1.1034,11.9)"),
+            Map.entry("jei", com.SaintAlfonzo.creativecompat.compat.jei.JeiGate.RANGE),
             Map.entry("jeed", "[1.19.2-2.1.4,1.19.2-2.2)"),
             Map.entry("create", "[0.5.1.i,0.5.2)"),
             Map.entry("lightmanscurrency", "[1.19.2-2.2.1.3g,1.19.2-2.3)"),
@@ -146,6 +156,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("PrettyPipesCraftingTerminalPolymorphMixin", List.of("polymorph", "prettypipes")),
             // Create's breaker target, Quark's monster box
             Map.entry("CreateBreakerMonsterBoxMixin", List.of("create", "quark")),
+            // Immersive Weathering's azalea flowers place Twigs' azalea flowers block (item_merges.md 2.21)
+            Map.entry("IwAzaleaFlowersPlaceMixin", List.of("immersive_weathering", "twigs")),
             // GeckoLib item in the hotbar flushing ImmediatelyFast's HUD item batch (plan_portal_gun.md 2)
             Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")));
 

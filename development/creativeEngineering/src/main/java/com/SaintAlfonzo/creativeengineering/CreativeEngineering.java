@@ -45,6 +45,12 @@ public class CreativeEngineering {
         // IE: arc recycling of springs, prefixToIngotMap override (onServerAboutToStart).
         MinecraftForge.EVENT_BUS.register(IECompat.class);
 
+        // Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common 2026-11-07):
+        // client only, and only with Create, whose emptying recipes it reads.
+        if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient() && ModList.get().isLoaded("create")) {
+            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativeengineering.compat.DrinkFluidEffects::onRecipesUpdated);
+        }
+
         LOGGER.info("[creativeengineering] loaded");
     }
 

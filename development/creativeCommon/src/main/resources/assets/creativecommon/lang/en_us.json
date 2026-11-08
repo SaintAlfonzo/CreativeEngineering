@@ -11,5 +11,17 @@
   "effect.creativecommon.part.screen_flash": "Screen Flash",
   "effect.creativecommon.part.elytra_lift": "Elytra Lift",
   "effect.creativecommon.magic_resistance": "Magic Resistance",
-  "effect.creativecommon.magic_resistance.description": "Reduces magic damage (potions, evoker fangs, thorns, sonic booms, curses and life drain) by 20% per level. Poison and Wither ticks deal no damage while their level is at most this effect's level."
+  "effect.creativecommon.magic_resistance.description": "Reduces magic damage (potions, evoker fangs, thorns, sonic booms, curses and life drain) by 20% per level. Poison and Wither ticks deal no damage while their level is at most this effect's level.",
+  "item.minecraft.lingering_potion.effect.magic_resistance": "Lingering Potion of Magic Resistance",
+  "item.minecraft.lingering_potion.effect.long_magic_resistance": "Lingering Potion of Magic Resistance",
+  "item.minecraft.lingering_potion.effect.strong_magic_resistance": "Lingering Potion of Magic Resistance",
+  "item.minecraft.potion.effect.magic_resistance": "Potion of Magic Resistance",
+  "item.minecraft.potion.effect.long_magic_resistance": "Potion of Magic Resistance",
+  "item.minecraft.potion.effect.strong_magic_resistance": "Potion of Magic Resistance",
+  "item.minecraft.splash_potion.effect.magic_resistance": "Splash Potion of Magic Resistance",
+  "item.minecraft.splash_potion.effect.long_magic_resistance": "Splash Potion of Magic Resistance",
+  "item.minecraft.splash_potion.effect.strong_magic_resistance": "Splash Potion of Magic Resistance",
+  "item.minecraft.tipped_arrow.effect.magic_resistance": "Arrow of Magic Resistance",
+  "item.minecraft.tipped_arrow.effect.long_magic_resistance": "Arrow of Magic Resistance",
+  "item.minecraft.tipped_arrow.effect.strong_magic_resistance": "Arrow of Magic Resistance"
 }

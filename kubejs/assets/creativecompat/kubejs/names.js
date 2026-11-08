@@ -5,6 +5,8 @@ ClientEvents.lang('en_us', e => {
 	// soil (recipe in creativecompat/kubejs/other/flowers.js; on the ground WTHIT names it Rich Pot, WthitPotContents)
 	e.add('block.supplementaries.flower_box', 'Large Flower Box')
 	e.add('block.beautify.hanging_pot', 'Rich Hanging Pot')
+	// Redeco's jar is a terrarium (TODO ui/names #15)
+	e.add('block.redeco.jar', 'Empty Terrarium')
 
 	// Cozy's Improved Cats guide (feature_writeup/cozy_cats.md 10): no genders, no ancient fish (merged into vanilla
 	// fish), vanilla cod and salmon tame
@@ -30,4 +32,9 @@ ClientEvents.lang('en_us', e => {
 	e.add('portalgun', 'entity.portalgun.custom_portal', 'Portal')
 	e.add('imm_ptl_core', 'entity.imm_ptl_core.mirror', 'Mirror')
 	e.add('imm_ptl_core', 'entity.imm_ptl_core.breakable_mirror', 'Mirror')
+
+	// Design and Decor's tinted framed glass shared Create Framed's names (plan_portal_changes.md 4, M2)
+	e.add('design_decor', 'block.design_decor.tinted_framed_glass', 'Smooth Tinted Glass')
+	e.add('design_decor', 'block.design_decor.horizontal_tinted_framed_glass', 'Horizontal Smooth Tinted Glass')
+	e.add('design_decor', 'block.design_decor.vertical_tinted_framed_glass', 'Vertical Smooth Tinted Glass')
 })

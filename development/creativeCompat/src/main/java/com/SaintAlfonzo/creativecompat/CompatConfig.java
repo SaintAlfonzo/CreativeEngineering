@@ -36,6 +36,8 @@ public final class CompatConfig {
     public static final Tooltips TOOLTIPS;
     public static final Coaster COASTER;
     public static final Wthit WTHIT;
+    public static final ImmersivePortals IMMERSIVE_PORTALS;
+    public static final PortalGun PORTAL_GUN;
 
     /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve, 2026-11-07). */
     public static final List<String> COMMON_SECTIONS = List.of("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit");
@@ -74,6 +76,9 @@ public final class CompatConfig {
         TOOLTIPS = new Tooltips(builder);
         COASTER = new Coaster(builder);
         WTHIT = new Wthit(builder);
+        // Immersive Portals and the Portal Gun (feature_writeup/plan_portal_changes.md, 2026-11-07)
+        IMMERSIVE_PORTALS = new ImmersivePortals(builder);
+        PORTAL_GUN = new PortalGun(builder);
         SPEC = builder.build();
     }
 
@@ -640,7 +645,7 @@ public final class CompatConfig {
 
             packOrder = b.comment(
                     "Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its",
-                    "creativecommon:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then",
+                    "creativecompat:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then",
                     "each category's own order. Ingredients with no place keep JEI's own order ([sorting] in",
                     "config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.",
                     "Takes effect the next time JEI starts (rejoin or /reload). Default off (JEI's order); the pack sets true."
@@ -954,6 +959,106 @@ public final class CompatConfig {
             ).defineInRange("operatorBlockLevel", 2, 0, 4);
 
             b.pop(); // wthit
+        }
+    }
+
+    /**
+     * Immersive Portals rendering (client side; feature_writeup/plan_portal_changes.md 2 and 4). Mirror limits are read
+     * by mixin/IPPortalRenderLimitsMixin through portals/PortalLimits, the fog by mixin/IPPortalFogMixin through
+     * portals/PortalFog. Read every frame.
+     */
+    public static final class ImmersivePortals {
+        public final ForgeConfigSpec.IntValue mirrorRenderDistance;
+        public final ForgeConfigSpec.IntValue mirrorMaxBounces;
+        public final ForgeConfigSpec.IntValue mirrorViewDistance;
+        public final ForgeConfigSpec.IntValue portalGunViewDistance;
+        public final ForgeConfigSpec.IntValue netherViewDistance;
+        public final Fog nether;
+        public final Fog portalGun;
+        public final Fog mirror;
+
+        private ImmersivePortals(ForgeConfigSpec.Builder b) {
+            b.comment("Immersive Portals rendering (client side).").push("immersive_portals");
+
+            mirrorRenderDistance = b.comment(
+                    "Mirrors farther than this many blocks from the camera are not rendered through and show their",
+                    "glass. 0 = no limit."
+            ).defineInRange("mirrorRenderDistance", 12, 0, 512);
+            mirrorMaxBounces = b.comment(
+                    "Reflections drawn inside reflections when every portal in the chain is a mirror. Immersive",
+                    "Portals' own maxPortalLayer still caps every portal (and stays the cap for gun portals)."
+            ).defineInRange("mirrorMaxBounces", 4, 1, 16);
+            mirrorViewDistance = b.comment(
+                    "Blocks of world drawn inside a mirror, rounded up to whole chunks (a hard cut; the mirror fog",
+                    "below fades it instead). 0 = the normal render distance."
+            ).defineInRange("mirrorViewDistance", 32, 0, 512);
+            portalGunViewDistance = b.comment(
+                    "Blocks of world drawn through a Portal Gun portal, rounded up to whole chunks (a hard cut; the",
+                    "portalGun fog below fades it). 0 = the normal render distance."
+            ).defineInRange("portalGunViewDistance", 32, 0, 512);
+            netherViewDistance = b.comment(
+                    "Blocks of world drawn through a Nether portal, rounded up to whole chunks (a hard cut; the nether",
+                    "fog below fades it). Immersive Portals loads the far side to its indirectLoadingRadiusCap (2 chunks",
+                    "in this pack). 0 = the normal render distance."
+            ).defineInRange("netherViewDistance", 32, 0, 512);
+
+            b.comment(
+                    "Fog drawn while looking through a portal, per portal type. Distances are blocks past the portal",
+                    "plane: clear up to start, full fog at end. enabled = false keeps the normal fog. Keep nether.end at",
+                    "netherViewDistance, portalGun.end at portalGunViewDistance and mirror.end at mirrorViewDistance,",
+                    "where the world seen through stops."
+            ).push("fog");
+            nether = new Fog(b, "nether", "Nether portals.", true, 8, 32);
+            portalGun = new Fog(b, "portalGun", "Portal Gun portals.", true, 16, 32);
+            mirror = new Fog(b, "mirror", "Mirrors.", true, 16, 32);
+            b.pop(); // fog
+
+            b.pop(); // immersive_portals
+        }
+
+        public static final class Fog {
+            public final ForgeConfigSpec.BooleanValue enabled;
+            public final ForgeConfigSpec.IntValue start;
+            public final ForgeConfigSpec.IntValue end;
+
+            private Fog(ForgeConfigSpec.Builder b, String name, String what, boolean on, int start, int end) {
+                b.comment(what).push(name);
+                enabled = b.define("enabled", on);
+                this.start = b.comment("Blocks past the portal plane where the fog starts.").defineInRange("start", start, 0, 1024);
+                this.end = b.comment("Blocks past the portal plane where the fog is full (kept above start).")
+                        .defineInRange("end", end, 1, 1024);
+                b.pop();
+            }
+        }
+    }
+
+    /**
+     * Portal Gun portals (feature_writeup/plan_portal_changes.md 3 and 3.1). opaquePortals is client side
+     * (mixin/IPPortalRenderLimitsMixin, mixin/PortalGunRendererOpaqueMixin); despawn is server side
+     * (portalgun/PortalGunDissolve).
+     */
+    public static final class PortalGun {
+        public final ForgeConfigSpec.BooleanValue opaquePortals;
+        public final ForgeConfigSpec.IntValue despawnDistance;
+        public final ForgeConfigSpec.IntValue heartbeatSeconds;
+
+        private PortalGun(ForgeConfigSpec.Builder b) {
+            b.comment("Portal Gun portals.").push("portalgun");
+
+            opaquePortals = b.comment(
+                    "Client side. Gun portals are not rendered through: each shows a flat disc in its colour. Walking",
+                    "through still works."
+            ).define("opaquePortals", false);
+            despawnDistance = b.comment(
+                    "Server side. A gun portal dissolves when its owner is farther than this many blocks from it",
+                    "(checked every heartbeat). Portals also dissolve when the owner logs out or changes dimension.",
+                    "0 = no distance limit."
+            ).defineInRange("despawnDistance", 128, 0, 100000);
+            heartbeatSeconds = b.comment(
+                    "Server side. Seconds between a gun portal's distance checks."
+            ).defineInRange("heartbeatSeconds", 10, 1, 600);
+
+            b.pop(); // portalgun
         }
     }
 }

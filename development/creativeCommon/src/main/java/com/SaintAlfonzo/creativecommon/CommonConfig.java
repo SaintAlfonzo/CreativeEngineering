@@ -34,6 +34,7 @@ public final class CommonConfig {
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final Perf PERF;
     public static final WanderingTrader WANDERING_TRADER;
+    public static final Bees BEES;
     public static final Advancements ADVANCEMENTS;
     public static final CreativeMenu CREATIVE_MENU;
     public static final ModNames MOD_NAMES;
@@ -56,6 +57,7 @@ public final class CommonConfig {
         PERF = new Perf(builder);
         // [seasons], [crop_seasons], [time]: creativecalendar-common.toml (Creative Calendar, 2026-11-01)
         WANDERING_TRADER = new WanderingTrader(builder);
+        BEES = new Bees(builder);
         ADVANCEMENTS = new Advancements(builder);
         CREATIVE_MENU = new CreativeMenu(builder);
         MOD_NAMES = new ModNames(builder);
@@ -151,7 +153,7 @@ public final class CommonConfig {
 
         private LoadingTips(ForgeConfigSpec.Builder b) {
             b.comment("Tip bar on the world loading screens (client side). The tips come from the built-in",
-                    "resource packs Loading Tips and Creative Tips (assets/<namespace>/loading_tips/*.json)."
+                    "resource pack Loading Tips and any resource pack with assets/<namespace>/loading_tips/*.json."
             ).push("loading_tips");
 
             enabled = b.comment("Show the tip bar while a world or dimension loads.")
@@ -234,6 +236,20 @@ public final class CommonConfig {
         }
     }
 
+    /** {@code mixin/BeehiveHoneycombMixin}: honeycomb from shearing a full hive or nest (farming_crops A9). */
+    public static final class Bees {
+        public final ForgeConfigSpec.IntValue honeycombMultiplier;
+
+        private Bees(ForgeConfigSpec.Builder b) {
+            b.comment("Bees.").push("bees");
+            honeycombMultiplier = b.comment(
+                    "Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).",
+                    "Vanilla drops 3, so 2 gives 6 (the pack's setting). 1 = vanilla. Read live."
+            ).defineInRange("honeycombMultiplier", 2, 1, 16);
+            b.pop(); // bees
+        }
+    }
+
     /** {@code mixin/ServerAdvancementManagerMixin}: the pack has no advancements at all (user, 2026-10-18). */
     public static final class Advancements {
         public final ForgeConfigSpec.BooleanValue enabled;
@@ -275,125 +291,9 @@ public final class CommonConfig {
                     "\"modid=Name\" entries replacing the name from the mod's mods.toml. Applied at startup and when this",
                     "file is saved; JEI and WTHIT keep the name they read first, so a change shows after a restart.",
                     "Removing an entry gives the mod its own name back. The mod id stays the same (JEI @<modid> still works).",
-                    "Pack style (feature_writeup/names.md 12): words spaced, possessive apostrophes, '&' for and / 'n',",
-                    "Title Case, Create addons as \"Create: <name>\", no author handles, the pack's own mods end in (Alfonzo)."
+                    "Empty by default; a pack lists its own names here (the Creative Engineering pack's list moved to its",
+                    "config 2026-11-07, creative_engineering.md 7.1)."
             ).defineList("overrides", List.of(
-                    "abnormals_delight=Abnormals' Delight",
-                    "apexcore=Apex Core",
-                    "appleskin=Apple Skin",
-                    "astikorcarts=Astikor Carts",
-                    "autoreglib=Auto Reg Lib",
-                    "baby_mobs=Baby Mobs (Alfonzo)",
-                    "betterdays=Better Days",
-                    "betterf3=Better F3",
-                    "boatview360=Boat View 360",
-                    "bobberdetector=Create: Bobber Detector",
-                    "brewinandchewin=Brewin' & Chewin' Backport (Alfonzo)",
-                    "canned_goods=Canned Goods (Creative Delight)",
-                    "cb_microblock=CB Microblock",
-                    "cb_multipart=CB Multipart",
-                    "cb_multipart_minecraft=CB Multipart Minecraft",
-                    "cccbridge=Create: CC Bridge",
-                    "chefsdelight=Chef's Delight",
-                    "cherisheditems=Cherished Items",
-                    "codechickenlib=Code Chicken Lib",
-                    "compressedcreativity=Create: Compressed Creativity",
-                    "conditional_mixin=Conditional Mixin",
-                    "cookingforblockheads=Cooking for Blockheads",
-                    "corpsecurioscompat=Corpse Curios Compat",
-                    "cosmeticarmorreworked=Cosmetic Armor Reworked",
-                    "create__the_salt=Create: The Salt (Creative Delight)",
-                    "create_compressed=Create: Compressed",
-                    "create_confectionery=Create: Confectionery",
-                    "create_crush_everything=Create: Recycling",
-                    "create_enchantment_industry=Create: Enchantment Industry",
-                    "create_mechanical_extruder=Create: Mechanical Extruder",
-                    "create_questing=Create: Questing",
-                    "create_things_and_misc=Create: Things & Misc",
-                    "createaddition=Create: Crafts & Additions",
-                    "createappliedkinetics=Create: Applied Kinetics",
-                    "createdeco=Create: Deco",
-                    "creategbd=Create: Guardian Beam Defense",
-                    "creategoggles=Create: Goggles",
-                    "createliquidfuel=Create: Liquid Fuel",
-                    "creative_labels=Creative Labels (Alfonzo)",
-                    "creativecore=Creative Core",
-                    "creativeengineering=Creative Engineering (Alfonzo)",
-                    "ctm=Connected Textures Mod",
-                    "darkpaintings=Dark Paintings",
-                    "deathknell=Death Knell",
-                    "design_decor=Create: Design & Decor",
-                    "do_a_barrel_roll=Do a Barrel Roll",
-                    "dont_void_arrows=Don't Void Arrows",
-                    "dragonloot=Dragon Loot",
-                    "dummmmmmy=Target Dummy",
-                    "enchdesc=Enchantment Descriptions",
-                    "enderstorage=Ender Storage",
-                    "entityculling=Entity Culling",
-                    "everythingcopper=Everything Is Copper",
-                    "exposure=Exposure Backport & Extras (Alfonzo)",
-                    "exposure_catalog=Exposure Catalog Backport (Alfonzo)",
-                    "exposure_expanded=Exposure: Expanded Backport (Alfonzo)",
-                    "exposure_extras=Exposure Extras (Alfonzo)",
-                    "exposure_polaroid=Exposure Polaroid Backport (Alfonzo)",
-                    "extendedgears=Create: Extended Cogwheels",
-                    "farmers_structures=Farmer's Structures",
-                    "fastfurnace=Fast Furnace",
-                    "fireflybushport=Firefly Bush Port",
-                    "fishontheline=Fish on the Line",
-                    "fortuneonneterite_i_ig_z=Fortune on Netherite",
-                    "foundation=Foundation Vinery Backport (Alfonzo)",
-                    "framedblocks=Framed Blocks",
-                    "geckolib3=Gecko Lib",
-                    "hobbit_house_=Hobbit House",
-                    "hopour=Hopo Better Underwater Ruins",
-                    "immediatelyfast=Immediately Fast",
-                    "ipo=Improved Pillager Outpost",
-                    "itemphysic=Item Physic",
-                    "just_enough_beacons=Just Enough Beacons",
-                    "kotlinforforge=Kotlin for Forge",
-                    "kubejsdelight=KubeJS Delight",
-                    "lightmansdiscord=Lightman's Discord Integration",
-                    "littlecontraptions=Create: Little Contraptions",
-                    "minecraft_style_paintings=Minecraft Style Paintings",
-                    "mixinsquared=Mixin Squared",
-                    "more_mooblooms=More Mooblooms (Alfonzo)",
-                    "netherportalfix=Nether Portal Fix",
-                    "nocubescreateexp=Create: Compact Exp",
-                    "notenoughanimations=Not Enough Animations",
-                    "old_swamp_fisherman_house=Old Swamp Fisherman House",
-                    "oreexcavation=Ore Excavation",
-                    "portablewardrobe=Portable Wardrobe",
-                    "projectred_core=Project Red Core",
-                    "projectred_fabrication=Project Red Fabrication",
-                    "projectred_illumination=Project Red Illumination",
-                    "projectred_integration=Project Red Integration",
-                    "projectred_transmission=Project Red Transmission",
-                    "railways=Create: Steam & Rails",
-                    "restapi=REST API",
-                    "sawmillhouse=Sawmill House",
-                    "seasonhud=Season HUD",
-                    "simplehats=Simple Hats",
-                    "sliceanddice=Create: Slice & Dice",
-                    "spectrelib=Spectre Lib",
-                    "supermartijn642configlib=Config Library",
-                    "supermartijn642corelib=Core Lib",
-                    "swingthroughgrass=Swing Through Grass",
-                    "t_and_t=Towns & Towers",
-                    "takesapillage=It Takes a Pillage",
-                    "tmted=Engineer's Delight",
-                    "transition=Transition",
-                    "trashslot=Trash Slot",
-                    "treechop=HT's Tree Chop",
-                    "villagersellanimals=Villagers Sell Animals",
-                    "vinery=Let's Do Vinery Backport (Alfonzo)",
-                    "w2w2=Waystones 2 Waypoints 2",
-                    "waila=Waila",
-                    "whitenoise=White Noise",
-                    "worldedit=World Edit",
-                    "wthit=WTHIT",
-                    "xaerolib=Xaero Lib",
-                    "xaerozoomout=Xaero Zoomout"
             ), o -> o instanceof String str && str.indexOf('=') > 0);
 
             b.pop(); // mod_names
@@ -457,9 +357,6 @@ public final class CommonConfig {
                     "Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",
                     "by KubeJS (Creative Brewing's potions.js). Server side, read live."
             ).defineList("removed", List.of(
-                    "upgrade_aquatic:restfulness",
-                    "upgrade_aquatic:insomnia",
-                    "alexsmobs:power_down"
             ), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
             b.pop(); // effects
         }

@@ -55,6 +55,10 @@ public class SmithingTemplateJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+    }
+
+    private void registerRecipes0(IRecipeRegistration registration) {
         reshown = Set.of();
         if (!ModList.get().isLoaded("armor_trims") || Minecraft.getInstance().level == null) {
             return;
@@ -75,6 +79,10 @@ public class SmithingTemplateJEI implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime runtime) {
+        JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
+    }
+
+    private void onRuntimeAvailable0(IJeiRuntime runtime) {
         if (reshown.isEmpty()) {
             return;
         }

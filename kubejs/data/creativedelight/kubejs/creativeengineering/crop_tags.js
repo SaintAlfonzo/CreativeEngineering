@@ -15,6 +15,16 @@ ServerEvents.tags('block', e => {
 	// dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Their right-click
 	// replant is a separate line in config/quark-common.toml "Harvestable Blocks".
 	t.add(e, 'creativeengineering:crops/farmland_crops', item.tobacco_seeds)
+
+	// Farming batch 2026-11-07 (plan_farming_cooking_batch.md C1, Q1, Q13; briefs/farming_crops.md G8, G15, crops #4).
+	// G8: Quark's right-click never harvests or replants weeds (break them instead); also stops villagers replanting them.
+	if (global.has(item.weeds)) t.add(e, 'quark:simple_harvest_blacklisted', item.weeds)
+	// Q1: weeds can be hand-planted on Rich Farmland. Only WeedsBlock.mayPlaceOn reads this tag; natural weed growth
+	// stays on vanilla farmland only (IW block_growths owner block), so rich soils still never grow weeds by themselves.
+	if (global.has(item.weeds)) t.add(e, 'immersive_weathering:fertile_blocks', item.rich_farmland)
+	// G15: pineapples (planted and wild) also grow on the farmland soils, besides sand, red sand and coarse dirt.
+	if (Platform.isLoaded('fruitsdelight'))
+		t.add(e, 'fruitsdelight:pineapple_grows_on', '#creativeengineering:crops/farmland_soils')
 })
 
 ServerEvents.tags('item', e => {

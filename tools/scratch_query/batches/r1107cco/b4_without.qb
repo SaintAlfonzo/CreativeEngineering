@@ -1,0 +1,23 @@
+# r1107cco boots 3 to 8 (SQ-CCO-12) and 9 (SQ-CCO-13): one fresh srv per set, same batch:
+#   cc_only_srv.sh OUT cco1 without=<keys> | alone   (group B, seed 8675309)
+# Sets: without=we, without=iw, without=quark,gravity,nea, without=beacons, without=portals,heartstone,seasons,
+# without=trims, then alone. Results dir per set: perf/runs/r1107cco/b4_<set>/.
+# 'Error loading class' WARNs are third-party mixin configs probing absent mods (e.g. Quark -> Lootr): not ours.
+pace 2
+
+## SQ-CCO-12 | boots, reloads and stops clean with this set; absent mods' mixins skipped, effects still work
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set

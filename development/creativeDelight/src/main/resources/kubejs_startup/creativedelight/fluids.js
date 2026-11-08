@@ -6,7 +6,7 @@
 // in tanks, basins and pipes only. Ids in _lib/fluid_dict.js ("Pack fluids"), forge:fluid/<name> tags in
 // server_scripts/tags/fluidtags.js, recipes in server_scripts/cooking/cooking.js ("Fluids"). JEI lists every
 // registered fluid (creativecommon client _lib/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
-// emptying recipe (patcherMod DrinkFluidEffects).
+// emptying recipe (Creative Engineering's DrinkFluidEffects).
 
 StartupEvents.registry('fluid', e => {
     var f = global.fluid

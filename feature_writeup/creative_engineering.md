@@ -132,6 +132,7 @@ holds only the textures. Hand-made JSONs for these ids in the jar are ignored (t
 ## 5. Tests
 
 Scratch SQ-CEN-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)); SQ-CMG and SQ-CEQ run on the same jars.
+Common with only its optional mods (no Compat, Calendar or other Creative jar): SQ-CCO-01 to -16, CQ-CCO-01 to -03 (server from `tools/scratch_query/cc_only_srv.sh`, batches `r1107cco/`); scratch r1107cco 2026-11-07: SQ-CCO-01..07, -09..16 PASS, SQ-CCO-08 PARTIAL (Create Gravity inert on the Common-only set, TODO `creativecommon/publish #3`), CQ-CCO-01..03 not run ([scratch_run_2026-11-07.md](testing/scratch_run_2026-11-07.md) 4).
 In game: the 37 KubeJS blocks (dust piles, plate blocks, coil blocks) show textures; CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other
 client rows (creative_split.md 7.8).
 
@@ -251,6 +252,144 @@ library behaviour, not pack taste. Pack-flavoured defaults still in place and no
 description draft in [project_pages/creative_common.md](project_pages/creative_common.md). Update it when a feature,
 dependency range or default changes.
 
-**Still open before an upload**: standalone boot (SQ-CMV-02), the out-of-range check (SQ-CMV-03), vanilla defaults
-(SQ-CMV-04, CQ-CMV-03), the Immersive Portals fixes (SQ-SPFX-01, CQ-SPFX-02), commit, push and tag the
-source (creative_brewing.md 9.4 R6), project page.
+**Project page rewritten 2026-11-07 evening** for the interface carve (creative_split.md 7.19, 7.20): JEI, WTHIT,
+tooltip, toast, title plaque, JEED and Create config widget rows now point to Creative Compat, the armor bar to Equipment;
+Better Beacons potions (Brewing) and Farmer's Respite Caffeinated (Delight) dropped; the `[toasts]` and `[jei] packOrder`
+settings left the table (Compat's file); added trade sync, armor and tool effect frameworks, absent-mod summary, effect
+rules, drink fluid effects, the Loading Tips (Naw7k, MIT) credit; the dependency table above is pre-carve (AE2, FTB,
+Patchouli, Lightman's, Pretty Pipes, Wares, Legendary Tooltips, JEI, Detail Armor Bar rows are no longer Common's).
+
+**Still open before an upload** (review 2026-11-07 evening; items 2 to 5 done the same evening, 7.2):
+1. Installed 2026-11-07 19:35 and booted in scratch r1107cc ([scratch_run_2026-11-07.md](testing/scratch_run_2026-11-07.md) 3):
+   SQ-CC-01..11, -13..16 and SQ-CPP-01 to -05 PASS, which cover SQ-CMV-01, -02 (Common alone, with Compat and Calendar),
+   -04 and SQ-SPFX-01 on this build. Owner client 2026-11-07 evening (scratch_run_2026-11-07.md 5): CQ-CCO-01,
+   CQ-CMV-01, CQ-CCB-01 PASS; CQ-CCO-02, -03, CQ-SPFX-02 partly done; CQ-CCB-03 crashed (Compat needs the Tempad donor
+   jar, TODO `creativecompat/publish #1`). Still open: the full-pack client rows (CQ-CC-01 to -06, CQ-CPP-01,
+   CQ-CMV-02, -03, CQ-CCB-02, CQ-CIF-01), SQ-CC-12, SQ-CMV-03 (out-of-range version WARN), SQ-CCO-08 / Gravity.
+2. Done: `mods.toml` description (gradle.properties `mod_description`) matches the project page.
+3. Done: Detail Armor Bar notice moved to Equipment's `NOTICE-thirdparty.txt`.
+4. Done: `[mod_names] overrides` and `[effects] removed` default to empty; Creative Tips left the jar for the pack's
+   `kubejs/assets/creative_tips/`. Still pack-flavoured, kept: `[effects] forceHudIcon` / `forceHudIconItems` (they
+   only show icons).
+5. Done: no tag in another jar's namespace (7.2).
+6. Commit, push and tag the source (creative_brewing.md 9.4 R6); the page links the repo.
+
+**Release scope 2026-11-08 (owner): dedicated server tests are not completed for this release.** Dropped from the upload
+gate: SQ-CC-12, SQ-CMV-03, CQ-CGE-03, -03a to -03c, the server-join half of CQ-SPFX-02 (CQ-CGE-01 is superseded by
+SQ-CGE part 2). So trade sync, the out-of-range version warning and low gravity on a client joined to a dedicated
+server ship untested on this build. Project page updated the same day for 7.4 (low gravity, ItemPhysic, script phase).
+Gate now: the client rows CQ-CC-01 to -06, CQ-CPP-01, CQ-CMV-02, -03, CQ-CCB-02, CQ-CIF-01, the no-Immersive-Portals
+launch of CQ-SPFX-02; `mod_description` and an optional `itemphysic` row in `mods.toml` for 7.4; source push and tag.
+
+### 7.2 Publish cleanup (2026-11-07 evening; built, NOT installed: the game was running)
+
+Owner request: mods.toml, licence notice, pack-held defaults, foreign tag namespaces, Create / IE / Fruits Delight code
+out of Common.
+
+| Change | Where now | Guard |
+|---|---|---|
+| `SequencedAssemblyRecipeMixin` (gear NBT through sequenced assembly; `CEStash` key kept) | Engineering `mixin/` | `EngineeringMixinPlugin` `create` + range `[0.5.1.i,0.5.2)` |
+| `CreateTeaPipeIconMixin` (Builder's Tea pipe Haste icon) | Engineering `mixin/` | same |
+| `FluidTagInputMixin` (IE fluid input by id, subset NBT match) | Engineering `mixin/` | `immersiveengineering` + range `[1.19.2-9.2.4-170,1.19.2-9.3)` |
+| `DrinkFluidEffects` and its JEI half `JeiFluidHelperTooltipMixin` (was Compat's; Compat would otherwise need Engineering) | Engineering `compat/`, `mixin/` (client) | listener registered only on the client with Create; `lines()` returns nothing without Create; mixin gated on `jei` `[11.8.1.1034,11.9)`; `jei` optional in mods.toml |
+| `FruitsDelightEffectFuncMixin` (effect remap in jam / jelly lines) | Delight `mixin/fruitsdelight/` | the `fruitsdelight.` compartment (Fruits Delight 0.5.11 only) |
+
+Engineering's plugin gained a `MOD_RANGE` (create, IE, JEI), so its older Create and IE mixins are now range-gated too.
+Common's `mods.toml` dropped `create`, `immersiveengineering`, `fruitsdelight` and gained `immersive_portals`,
+`heartstone` (optional, for the two crash fixes).
+
+**Effects without the IE fix**: IE reads `tag` and `nbt` natively with an exact NBT match (checked in IE 9.2's
+`FluidTagInput.deserialize`). Every `ieBottling` caller passes a tag, and Brewing's potion inputs (Lingerification, the
+mixer generator, `potion_bottling.js`, `tipped_arrows.js`) carry exactly `{Bottle, Potion}`, what Create writes on a
+potion fluid, so they match without Engineering. Only potion fluids with extra keys (CustomPotionColor) need the subset
+match. NCH's `ieBottling` note says to use tags in jars that do not require Engineering.
+
+**Tags**: `creativeengineering:bark` and `creativeengineering:metal_dusts` became `creativecommon:bark` /
+`creativecommon:metal_dusts` (the dict is Common's; every user goes through `i.any_bark` / `i.t_metal_dusts`).
+The six empty `create:scrap_*` placeholders were dropped: those tags belong to Create Recycle
+(`create_crush_everything`), which defines them under `create:`, so they cannot move. They existed only because a required
+`#tag` entry fails its whole target tag; Compat's `item_physics_tags.js` and Engineering's `sawdust.js` now add them
+only with Create Recycle. Not touched: Compat writes `creativeengineering:burn/to_ash` and similar physics tags (Compat's
+own cleanup).
+
+**Licence**: Common's `NOTICE-thirdparty.txt` keeps Immersive Weathering only; Equipment's new `NOTICE-thirdparty.txt`
+(Detail Armor Bar, MIT) ships as `creativeequipment-NOTICE-thirdparty.txt`; `ArmorOverflowRenderer` points to it.
+
+**Pack-held values**: `config/creativecommon-common.toml` already holds the full `[mod_names]` list and the three removed
+effects; on a deploy the `[effects]` values come over from `configs_edited/root_config/creativebrewing-common.toml`
+(`ConfigRename.mergeSections`). Common's `configs_edited/` copy was refreshed from `config/` on 2026-11-07 (r1107cc; no value differed). Creative Tips loads from `kubejs/assets/` (always on, as the required built-in pack was).
+
+Tests: SQ-CPP-01 to -05 PASS (scratch r1107cc 2026-11-07); CQ-CPP-01 open (client). Rows SQ-CGE-01 to -06, CQ-CGE-01 (gravity for falling blocks, items, TNT; SQ-CCO-08 rerun) queued 2026-11-08, with the re-run list for the 11-08 00:01 jar. Scratch r1108cge 2026-11-08 ([scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) 1) on Common 00:49: SQ-CGE-01 to -06 PASS after two Common fixes (Create Gravity's biome list built at server start; the entity correction moved before the move), SQ-CPP-01 to -05 PASS again, SQ-CMV-04 PASS; also fixed: `JarStartupScripts` runs Compat's script pack before `startup_scripts/` (the pack's `jei/order.js` needs Compat's `global.jeiOrder`). CQ-CGE-01 and the client re-run rows open.
+
+Found and fixed in r1107cc (Common, `neoCraftHelper.js`): `setCookTime` now writes a JSON number (a JS number made
+Rhino write "400.0" and Farmer's Delight dropped the 22 Fruits Delight jelly recipes); a top-level `{ id }` / `{ mod }`
+filter of an absent mod joins the absent-mods summary instead of logging an ERROR; `ieMetalPress` is skipped and counted
+without KubeJS Immersive Engineering (the only IE helper on its recipe schema).
+
+### 7.3 Common-alone client boot fixes (2026-11-07 20:00; built and installed in this instance)
+
+Found by the owner's client boot of Common alone (CEPortTesting: Forge, Architectury, KubeJS, Rhino, Common 19:37).
+
+| Finding in `latest.log` | Fix |
+|---|---|
+| `Using missing texture, file creativecommon:textures/mob_effect/magic_resistance.png not found`: the effect is Common's since plan_cb_polish (11-06), the icon stayed in Brewing under `creativebrewing:` (so the pack showed it missing too, unreleased) | icon moved to Common `assets/creativecommon/textures/mob_effect/`; recolored purple (hue shift of the vanilla Resistance icon, owner 2026-11-07 20:25) |
+| `[damage-tags] ... includes '#creativedelight:stoves' ... never match` on every boot without Creative Delight | `DamageTagSnapshot` skips the undefined-include WARN when the include's namespace is a mod that is not loaded (a typo in a loaded namespace still warns) |
+| Potion, splash, lingering and tipped arrow names of Magic Resistance (3 variants each, 12 keys) blank when Common runs alone: they sat in the pack's `kubejs/assets/kubejs/lang/` | moved to Common's `lang/en_us.json` (removed from the pack file) |
+| `fluid_jei.js`: `ReferenceError: "JEIEvents" is not defined` | wrapped in `Platform.isLoaded('jei')`; `global.jeiOrder` read inside the event, empty skip list without Compat |
+| `jei_order.js`: Compat's `PackIngredientOrder` class not found | the JEI order moved to Creative Compat: helper `global.jeiOrder` to `kubejs_startup/creativecompat/func/jei_order.js`, client handoff to `kubejs/assets/creativecompat/kubejs/jei_order.js` (also guarded on JEI, optional for Compat); the order tags are now `creativecompat:jei/...` (`TAG_ROOT`, `PackIngredientOrder.TAG_NAMESPACE`) |
+
+Client notes (owner, Common + all optionals, 20:24): panorama, creative menu, toasts, recipe book, Quark, Immersive Weathering, Nock Enough Arrows, Heartstone and Immersive Portals as expected; no JEI order (correct, it is Compat's). Lag after a resource reload: server 361 ticks behind at 20:23:31 on a world save, view distance 32 with Immersive Portals' 7 alternate dimensions (settled at 16); not Common. Rotating-model item underline (Legendary Tooltips) is the old Compat bug, not Common.
+
+Not changed: `item_dict` WARN `incomplete -> kubejs:incomplete_item` (pack-registered item); the 66 `[mod names] ... not
+loaded` WARNs came from that instance's old config holding the pack's `overrides` list (delete the file to get the empty
+default). Tests SQ-CCB-01, CQ-CCB-01 to -03 ([scratch_queue.md](testing/scratch_queue.md)).
+
+### 7.4 Low gravity for every falling entity, End oxygen, startup script phase (2026-11-08; built, NOT installed)
+
+Owner request 2026-11-08 after scratch r1108cge: low gravity for falling blocks, items, TNT, arrows and other
+projectiles, boats, minecarts and every mob, with no network cost, the dimension limit on all of it, the End's oxygen
+rule working, a cleaner script load order, and the physics tags named for Compat. Owner answers: client mirror, keep
+low oxygen in the End, per-file header.
+
+- **Mobs**: Create: Gravity already lowers the gravity attribute of every living entity in a gravity biome except
+  `#create_gravity:low_gravity_blacklist` (= `#forge:bosses`: Ender Dragon, Wither), elytra flyers, creative and
+  spectator players and anyone in Create diving boots (`#create_gravity:anti_low_gravity_boots`); falling mobs also
+  take less fall damage (fall distance x0.925 a tick). The attribute is synced, so players predict it themselves.
+  Common keeps its dimension limit on that handler (`CreateGravityDimensionMixin`).
+- **Everything else** (`gravity/LowGravity` + `LowGravity*Mixin`): these entities add a fixed pull per tick; Common
+  scales that constant by `1 + factor` (0.2 at -0.8, 0 at -1): items, falling blocks, TNT, minecarts, Shulker bullets
+  (0.04), XP orbs and fishing bobbers (0.03), arrows / tridents (0.05), llama spit (0.06), thrown projectiles via
+  `getGravity()` (snowball, egg, pearl, potions, bottle o' enchanting, modded subclasses), boats out of water (in water
+  that pull balances buoyancy). With ItemPhysic installed, items take their pull from ItemPhysic's own -0.04 in
+  `ItemPhysicServer.updatePre` instead of vanilla's: `LowGravityItemPhysicMixin` scales that one (applies only with
+  ItemPhysic and Create Gravity both loaded; version range `[1.6.7,1.7)`). Modded entities with their own gravity code (Create's potato cannon projectile and
+  so on) are not covered.
+- **Network (client mirror)**: the scaling runs on server and client alike. The client predicts items, blocks, TNT,
+  orbs, arrows and throwables itself and moves a boat its player steers, so both sides compute the same path and only
+  vanilla's normal position updates are sent. The first version (11-08 00:49) set `hurtMarked` and sent one motion
+  packet per airborne entity per tick; it is gone. Server lookup = the mod's `ServerConfig.getBiomeConfig`; client
+  lookup = Common's own parse of the mod's `biome_configs` strings (`CreateGravityConfigAccessor`; Forge syncs SERVER
+  configs at login; the mod's parsed list is always empty on a dedicated client because each entry needs the server).
+- **Dimension limit**: `LowGravity.dimensionAllowed` (perf `gravityLimitDimensions` / `gravityDimensions`, default
+  the End only) gates the lookup for every type and the living handler. The client uses its own copy of Common's
+  config (the pack ships the same file to both sides).
+- **End oxygen (kept)**: Create: Gravity's default makes every gravity biome low-oxygen (factor 100): a survival player
+  with no air supply loses about 1 air a second (measured: air out after about 290 s, 4 air at a time; not the 4 s
+  the config comment implies) and then takes 6 damage every 3 s; a backtank with air stops it
+  (`full_set` false: no helmet needed), Respiration slows it. Was effectively off on dedicated servers until a
+  `/reload` (fixed at 00:49). The mod's tags listed only Create's copper and netherite pieces: Compat
+  `tags/misctags.js` adds every `#create:pressurized_air_sources` backtank (Create Goggles' five) to
+  `create_gravity:backtanks` and the two goggle diving helmets to `create_gravity:diving_helmets`.
+- **Startup script phase** (concern 5 of r1108cge): `JarStartupScripts` runs Creative Common's pack first, then from
+  each other jar only the files headed `// phase: helpers` (one `<modid>_helpers` pack per jar, own scope), then the
+  pack's `startup_scripts/`, then the rest of every jar. Compat's `func/jei_order.js` carries the header. Replaces the
+  hard-coded list (`creativecommon`, `creativecompat`) of 00:23.
+- **Tags**: Compat's item physics tags `creativeengineering:physics/{floats,sinks,fireproof,lavaproof}` and
+  `creativeengineering:burn/*` are now `creativecompat:` (Java `ItemPhysicSplit.TAG_NS`, both scripts, the audit tool).
+  The old `data/creativeengineering/tags/items/physics/` files were removed from Compat 15:08, so the old tags are empty.
+
+Install: Common and Compat together (the new Common with the old Compat crashes the full pack's startup: the old
+Compat's `jei_order.js` has no header). Common and Compat rebuilt 15:08 (Common also logs one client line per parse of the synced list,
+`[low gravity] client biome list: ...`, for the join test). Tests: run r1108cge2 ([scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) 2): SQ-CGE-07 to -16 with -10b PASS;
+CQ-CGE-02a, -02, -02b, -04, -04b PASS on the jars before the ItemPhysic patch, -02c not judged; CQ-CGE-03a to -03c not run (owner), run by `tools/scratch_query/cge2_run.sh` (server: four boots; client: single player and a join
+to the scratch server), judged by `cge_judge.py`; queue section "SQ-CGE part 2".

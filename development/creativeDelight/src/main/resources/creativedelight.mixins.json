@@ -10,6 +10,7 @@
     "fruitsdelight.FruitsDelightLeafCheckMixin",
     "fruitsdelight.MangosteenCakeEffectMixin",
     "fruitsdelight.LemonTreePickYieldMixin",
+    "fruitsdelight.FruitsDelightEffectFuncMixin",
     "farmersdelight.CookingPotRemainderMixin",
     "farmersdelight.CookingPotMenuRemainderMixin",
     "farmersdelight.CookingPotItemHandlerMixin",
@@ -49,7 +50,9 @@
     "quark.QuarkHoeAreaHarvestMixin",
     "quark.QuarkHoeHarvestMixin",
     "quark.QuarkOwnPickMixin",
+    "quark.QuarkTopHalfHarvestMixin",
     "the_dirty_stuff.TobaccoPlacementMixin",
+    "farmersrespite.TeaBushSoilMixin",
     "cookingforblockheads.BlockStateCounterTopperMixin",
     "cookingforblockheads.CfbOvenFuelMixin",
     "cookingforblockheads.CfbOvenSmokingMixin",
@@ -62,7 +65,11 @@
     "untitledduckmod.DuckEntityEggLayerMixin",
     "untitledduckmod.GooseEntityEggLayerMixin",
     "incubation.LayEggInNestGoalMixin",
-    "farmersrespite.CaffeinatedEffectMixin"
+    "farmersrespite.CaffeinatedEffectMixin",
+    "farmersdelight.CookingPotKeepContentsMixin",
+    "farmersrespite.KettleKeepContentsMixin",
+    "minecraft.ItemStackCookwareGlintMixin",
+    "farmersrespite.CoffeeBushRemovedMixin"
   ],
   "client": [
     "farmersdelight.CookingPotScreenRemainderMixin",
@@ -77,7 +84,8 @@
     "create_central_kitchen.CckBrewingGuideMealTooltipMixin",
     "farmersdelight.CuttingBoardRendererOffsetMixin",
     "brewinandchewin.CoasterRendererOffsetMixin",
-    "cookingforblockheads.CfbOvenRendererMixin"
+    "cookingforblockheads.CfbOvenRendererMixin",
+    "supplementaries.FaucetStreamFitMixin"
   ],
   "server": [],
   "injectors": {

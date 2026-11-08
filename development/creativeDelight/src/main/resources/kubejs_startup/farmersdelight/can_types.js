@@ -585,7 +585,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": "farmersdelight:nourishment",
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -901,6 +901,38 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
    ],
    "texture": "canned_goods:items/canned_food"
   },
+  "canned_rice_roll_medley": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Rice Roll Medley",
+   "servings": 6,
+   "hunger": 6,
+   "modifier": 0.5,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [],
+   "sources": [
+    "kelp_roll_slice",
+    "cod_roll",
+    "salmon_roll"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "rice_medley"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
   "canned_tomato_sauce": {
    "section": "preserve",
    "existing": false,
@@ -1030,6 +1062,60 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
       {
        "any": [
         "fruit_salad"
+       ],
+       "n": 5
+      },
+      {
+       "any": [
+        "vinegar"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "creativeengineering:item/canned_cabbage"
+  },
+  "canned_gleaming_salad": {
+   "section": "salad",
+   "existing": false,
+   "name": "Canned Gleaming Salad",
+   "servings": 8,
+   "hunger": 18,
+   "modifier": 0.729,
+   "meat": false,
+   "fast": true,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 1800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "gleaming_salad"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "gleaming_salad"
+       ],
+       "n": 6
+      }
+     ]
+    },
+    {
+     "suffix": "_vinegar",
+     "inputs": [
+      {
+       "any": [
+        "gleaming_salad"
        ],
        "n": 5
       },

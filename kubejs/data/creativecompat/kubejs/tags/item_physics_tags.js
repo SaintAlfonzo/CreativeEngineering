@@ -3,10 +3,10 @@
 // Item-physics behaviour tags (Creative Compat ItemPhysicSplit). Runs on /reload — dropped
 // items pick up membership changes on the next tick, no restart.
 //
-//   creativeengineering:physics/floats      → floats in water
-//   creativeengineering:physics/sinks       → force-sink (wins over floats)
-//   creativeengineering:physics/fireproof   → survives open fire, still burns/melts in lava
-//   creativeengineering:physics/lavaproof   → immune to BOTH open fire and lava (wins over fireproof)
+//   creativecompat:physics/floats      → floats in water
+//   creativecompat:physics/sinks       → force-sink (wins over floats)
+//   creativecompat:physics/fireproof   → survives open fire, still burns/melts in lava
+//   creativecompat:physics/lavaproof   → immune to BOTH open fire and lava (wins over fireproof)
 //
 // floats vs sinks is the WATER axis; fireproof vs lavaproof is the FIRE axis — an item can be
 // on both (e.g. a wooden boat floats AND nether wood is fireproof). Default for anything
@@ -39,14 +39,14 @@ console.log('item physics tags starting')
 //  to their current ids minus the exceptions. Alias over global.tags.addMatching.
 // ─────────────────────────────────────────────────────────────────────────────
 const PHYSICS_TAG = {
-	float:      'creativeengineering:physics/floats',
-	floats:     'creativeengineering:physics/floats',
-	sink:       'creativeengineering:physics/sinks',
-	sinks:      'creativeengineering:physics/sinks',
-	fireproof:  'creativeengineering:physics/fireproof',
-	lavaproof:  'creativeengineering:physics/lavaproof',
-	unburnable: 'creativeengineering:physics/lavaproof',
-	never:      'creativeengineering:physics/lavaproof',
+	float:      'creativecompat:physics/floats',
+	floats:     'creativecompat:physics/floats',
+	sink:       'creativecompat:physics/sinks',
+	sinks:      'creativecompat:physics/sinks',
+	fireproof:  'creativecompat:physics/fireproof',
+	lavaproof:  'creativecompat:physics/lavaproof',
+	unburnable: 'creativecompat:physics/lavaproof',
+	never:      'creativecompat:physics/lavaproof',
 }
 
 function physicsFromTag(event, behaviour, sourceTags, opts) {
@@ -79,6 +79,9 @@ ServerEvents.tags('item', e => {
 	const t   = global.tags
 	const i   = global.item
 	const add = (behaviour, entries) => t.add(e, PHYSICS_TAG[behaviour], entries)
+	// The create:scrap_* tags belong to Create Recycle (create_crush_everything); without it they do not exist and a
+	// required #tag entry would stop the whole target tag from loading (creative_engineering.md 7.1 item 5).
+	const recycle = global.has('create_crush_everything')
 
 	// Resolve a bare id through the pack dict (global.item) when it has a CONCRETE
 	// mapping there; otherwise fall back to minecraft:<id>. Strings that already carry
@@ -109,7 +112,6 @@ ServerEvents.tags('item', e => {
 		'#minecraft:wooden_pressure_plates', '#forge:fence_gates/wooden',
 		'#minecraft:signs', '#minecraft:boats', '#minecraft:banners',
 		'#forge:chests/wooden', '#forge:rods/wooden',
-		'#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large',
 		// plant / organic
 		'#minecraft:saplings', '#minecraft:leaves', '#minecraft:flowers',
 		// textile / fibre / hide
@@ -120,6 +122,7 @@ ServerEvents.tags('item', e => {
 		// food-ish
 		'#minecraft:fishes',
 	])
+	if (recycle) physicsFromTag(e, 'floats', ['#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large'])
 	// (b) explicit vanilla items with no clean tag of their own
 	add('floats', mc([
 		'mangrove_roots', 'sponge',                                          // (pack originals)
@@ -185,8 +188,8 @@ ServerEvents.tags('item', e => {
 		'#minecraft:dirt', '#forge:concrete', '#minecraft:terracotta',
 		'#forge:raw_materials', '#forge:ingots', '#forge:nuggets',      // netherite excluded (lavaproof wins)
 		'#minecraft:rails', '#minecraft:anvil', '#minecraft:music_discs',
-		'#create:scrap_copper_blocks', '#create:scrap_copper_blocks_cut',
 	])
+	if (recycle) physicsFromTag(e, 'fireproof', ['#create:scrap_copper_blocks', '#create:scrap_copper_blocks_cut'])
 	add('fireproof', mc([
 		// (pack originals)
 		'crimson_nylium', 'warped_nylium',
@@ -387,16 +390,18 @@ ServerEvents.tags('item', e => {
 	//                     already have their own per-id rules with tuned power)
 	// Glass → quark:dirty_glass is driven straight off #forge:glass / #forge:glass_panes
 	// in the startup script, so it needs no bucket here.
-	t.add(e, 'creativeengineering:burn/to_ash', [
+	t.add(e, 'creativecompat:burn/to_ash', [
 		'#minecraft:planks', '#minecraft:logs',
 		'#minecraft:wooden_slabs', '#minecraft:wooden_stairs', '#minecraft:wooden_fences',
 		'#forge:fence_gates/wooden', '#minecraft:wooden_doors', '#minecraft:wooden_trapdoors',
 		'#minecraft:wooden_buttons','#minecraft:wooden_pressure_plates','#minecraft:signs',
 		'#minecraft:boats','#minecraft:banners','#forge:chests/wooden','#forge:rods/wooden',
-		'#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large',
-		'#minecraft:beds','#create:scrap_wood_and_book'
+		'#minecraft:beds'
 	])
-	// t.add(e, 'creativeengineering:burn/explosive', ['minecraft:fire_charge'])
+	if (recycle) t.add(e, 'creativecompat:burn/to_ash', [
+		'#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large', '#create:scrap_wood_and_book'
+	])
+	// t.add(e, 'creativecompat:burn/explosive', ['minecraft:fire_charge'])
 })
 
 console.log('item physics tags finished')

@@ -29,6 +29,7 @@ public final class ArtRecipes {
 		PLANKS.put("vertical_treated_wood", "immersiveengineering:block/wooden_decoration/treated_wood_vertical");
 		PLANKS.put("rubberwood", "myrtrees:block/rubberwood_planks");
 		PLANKS.put("ancient", "quark:block/ancient_planks");
+		PLANKS.put("azalea", "quark:block/azalea_planks");
 		PLANKS.put("bamboo", "quark:block/bamboo_planks");
 		PLANKS.put("driftwood", "upgrade_aquatic:block/driftwood_planks");
 	}

@@ -23,6 +23,15 @@ R.replaceInput({ id: 'supplementaries:soap' },
 R.createMixing(Item.of(i.soap, 9), [[Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], Item.of(i.ash, 3), Fluid.of(f.water, 500)], e, 'soap_heated_mixing', 'heated')
 R.createMixing(Item.of(i.soap, 2), [Item.of(i.ash, 2), Fluid.of(f.water, 250), Fluid.of(f.plantoil, 250)], e, 'soap_vegan_heated_mixing', 'heated')
 
+// Flax is removed (F1, merges/materials #2; item_merges.md 2.22). Flax is off in supplementaries-common.toml, so
+// Supplementaries' own flag recipes switch: rope from 3 string, sack from wheat and string, no flax to string, no
+// flax doormat. These recipes have no flax flag and still name flax:
+R.remove({id: 'supplementaries:flax_block'}, e)
+R.remove({id: 'supplementaries:flax_block_uncrafting'}, e)
+R.remove({id: 'supplementaries:botany_flax'}, e)
+R.remove({id: 'botanypots:supplementaries/crop/flax'}, e)
+R.remove({id: 'create:milling/compat/supplementaries/flax'}, e)
+
 // Fodder
 //Replace flax bale w/ rice and straw bale
 R.replaceInput({ id: 'supplementaries:fodder' },

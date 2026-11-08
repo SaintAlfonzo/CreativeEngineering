@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/azalea_tool_rack"
+    },
+    "facing=east": {
+      "model": "creativedelight:block/azalea_tool_rack",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "creativedelight:block/azalea_tool_rack",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/azalea_tool_rack",
+      "y": 270
+    }
+  }
+}

@@ -13,6 +13,7 @@
     "BetterDaysTimePauseMixin",
     "ServerLevelTimePauseMixin",
     "SeasonBiomeConfigMixin",
+    "SeasonServerConfigMixin",
     "SeasonHooksTypesMixin",
     "SeasonFertilityMixin",
     "GrassSpreadSeasonMixin",

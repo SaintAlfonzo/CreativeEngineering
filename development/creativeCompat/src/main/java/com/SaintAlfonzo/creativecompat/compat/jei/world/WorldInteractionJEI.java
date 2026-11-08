@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativecompat.compat.jei.world;
 
+import com.SaintAlfonzo.creativecompat.compat.jei.JeiGate;
 import com.SaintAlfonzo.creativecompat.CreativeCompat;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -59,6 +60,10 @@ public class WorldInteractionJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        JeiGate.run("registerCategories", () -> registerCategories0(registration));
+    }
+
+    private void registerCategories0(IRecipeCategoryRegistration registration) {
         IGuiHelper helper = registration.getJeiHelpers().getGuiHelper();
         WorldSlotRenderer slotRenderer = new WorldSlotRenderer(
                 registration.getJeiHelpers().getIngredientManager().getIngredientRenderer(VanillaTypes.ITEM_STACK));
@@ -69,6 +74,10 @@ public class WorldInteractionJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+    }
+
+    private void registerRecipes0(IRecipeRegistration registration) {
         Map<WorldTab, List<JsonObject>> raw = readResources();
         int total = 0;
         for (WorldTab tab : WorldTab.values()) {
@@ -88,6 +97,10 @@ public class WorldInteractionJEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        JeiGate.run("registerRecipeCatalysts", () -> registerRecipeCatalysts0(registration));
+    }
+
+    private void registerRecipeCatalysts0(IRecipeCatalystRegistration registration) {
         for (WorldTab tab : WorldTab.values()) {
             for (String catalyst : tab.catalysts) {
                 for (ItemStack stack : stacks(catalyst)) {

@@ -3,14 +3,14 @@
 [debug]
 
 	#The pack's generator scripts (tools/*.py: structure/biome/loot configs, effect descriptions,
-	#pack manifest, reports) listed in tools/generators.json. /cdevgen run [target] runs them in game;
+	#pack manifest, reports) listed in tools/generators.json. /cegen run [target] runs them in game;
 	#these knobs also let them run by themselves every time the game starts.
 	[debug.generators]
 		#Debug mode. When true, the generators run in the background as the game starts (from common
 		#setup), and loading waits for them before finishing, so the first world load already reads
-		#fresh files. Results go to latest.log, logs/cdevgen/<id>.log and /cdevgen status. Off by default.
+		#fresh files. Results go to latest.log, logs/cegen/<id>.log and /cegen status. Off by default.
 		runAtStartup = false
-		#What the startup run and a bare /cdevgen run execute: 'all', a group or one generator id
+		#What the startup run and a bare /cegen run execute: 'all', a group or one generator id
 		#from tools/generators.json.
 		target = "core"
 		#Python interpreter to run the scripts with (a name on PATH or a full path).
@@ -42,14 +42,14 @@
 	#The names audit (feature_writeup/names.md, tools/name_audit.py).
 	[debug.names]
 		#Client: write kubejs/exported/display_names.json (every block, item, effect... name and the pack
-		#that set it) and names.json the first time the title screen opens, as /cdevdumpnames does in game.
+		#that set it) and names.json the first time the title screen opens, as /cedumpnames does in game.
 		#For a scratch client that never joins a world. Off by default.
 		dumpAtTitle = false
 
 	#The WTHIT icon audit (feature_writeup/wthit_lines.md, tools/wthit_icon_audit.py).
 	[debug.wthit]
 		#Client: write kubejs/exported/wthit_icons.json (every block's WTHIT icon verdict and every item
-		#with a missing model) the first time the title screen opens, as /cdevdumpicons does in game.
+		#with a missing model) the first time the title screen opens, as /cedumpicons does in game.
 		#For a scratch client that never joins a world. Off by default.
 		dumpIconsAtTitle = false
 
@@ -70,9 +70,9 @@
 #Worldgen test tools.
 [worldgen]
 
-	#/cdevplace structures <filter> and /cdevplace templates <glob>: place every match in rows (one row per
+	#/ceplace structures <filter> and /ceplace templates <glob>: place every match in rows (one row per
 	#type tag, group, mod or template folder), starting at your position and going +X, rows stacked +Z.
-	#Meant for a flat world with Generate Structures off. /cdevplace preview ... lists without placing.
+	#Meant for a flat world with Generate Structures off. /ceplace preview ... lists without placing.
 	[worldgen.mass_place]
 		#Blocks between two structures in a row.
 		#Range: 0 ~ 512

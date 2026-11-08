@@ -16,9 +16,13 @@
     "ProcessingRecipeMixin",
     "ProcessingRecipeSerializerMixin",
     "ExcavationDrillItemMixin",
-    "DeforesterSawItemMixin"
+    "DeforesterSawItemMixin",
+    "SequencedAssemblyRecipeMixin",
+    "CreateTeaPipeIconMixin",
+    "FluidTagInputMixin"
   ],
   "client": [
-    "SkullBlockEntityMixin"
+    "SkullBlockEntityMixin",
+    "JeiFluidHelperTooltipMixin"
   ]
 }

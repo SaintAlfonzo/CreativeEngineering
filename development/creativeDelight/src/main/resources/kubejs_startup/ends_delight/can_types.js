@@ -79,6 +79,171 @@ if (global.CD) global.CD.genPut('can_types', 'ends_delight', {
     }
    ],
    "texture": "creativeengineering:item/canned_raw_beef"
+  },
+  "canned_dragon_meat_stew": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Dragon Meat Stew",
+   "servings": 6,
+   "hunger": 10,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:absorption",
+     "ticks": 1500,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 300,
+     "amp": 1,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:strength",
+     "ticks": 600,
+     "amp": 1,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "dragon_meat_stew"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "dragon_meat_stew_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_grilled_shulker": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Grilled Shulker",
+   "servings": 6,
+   "hunger": 8,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 100,
+     "amp": 0,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:levitation",
+     "ticks": 40,
+     "amp": 1,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:comfort",
+     "ticks": 2400,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "grilled_shulker"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "grilled_shulker_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
+  },
+  "canned_steamed_dragon_egg": {
+   "section": "feast",
+   "existing": false,
+   "name": "Canned Steamed Dragon Egg",
+   "servings": 6,
+   "hunger": 12,
+   "modifier": 0.6,
+   "meat": false,
+   "fast": false,
+   "always": false,
+   "glow": false,
+   "effects": [
+    {
+     "effect": "minecraft:absorption",
+     "ticks": 1200,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:regeneration",
+     "ticks": 1200,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:strength",
+     "ticks": 1200,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "minecraft:resistance",
+     "ticks": 1200,
+     "amp": 2,
+     "chance": 1
+    },
+    {
+     "effect": "farmersdelight:nourishment",
+     "ticks": 4800,
+     "amp": 0,
+     "chance": 1
+    }
+   ],
+   "sources": [
+    "steamed_dragon_egg"
+   ],
+   "recipes": [
+    {
+     "suffix": "",
+     "inputs": [
+      {
+       "any": [
+        "steamed_dragon_egg_block"
+       ],
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "texture": "canned_goods:items/canned_food"
   }
  }
 })

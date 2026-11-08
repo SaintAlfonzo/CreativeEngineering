@@ -15,6 +15,8 @@ ServerEvents.tags('item', e => {
 		['rods', 'gold', i.rod_gold],
 		['rods', 'zinc', i.rod_zinc],
 		['rods', 'gold', i.rod_rose_gold],
+		['plates', 'gold', i.plate_rose_gold],
+		['wires', 'gold', i.wire_rose_gold],
 		['wires', 'iron', i.wire_iron],
 		['wires', 'gold', i.wire_gold],
 		['wires', 'zinc', i.wire_zinc],

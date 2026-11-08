@@ -21,7 +21,8 @@ import java.nio.file.Path;
  * The tip resource packs built into this jar ({@code resourcepacks/<folder>/}), registered as required client
  * packs so they are always on (feature_writeup/loading_tips.md). One pack per source, each under its own
  * namespace so the files never shadow each other: Loading Tips (filtered upstream text, MIT, see its
- * CREDITS.txt) and Creative Tips (the pack's own tips).
+ * CREDITS.txt). The Creative Engineering pack's own tips (Creative Tips) left the jar 2026-11-07 for the pack's
+ * {@code kubejs/assets/creative_tips/loading_tips/tips.json}; any resource pack can add tips the same way.
  */
 @Mod.EventBusSubscriber(modid = CreativeCommon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class LoadingTipPacks {
@@ -30,7 +31,6 @@ public final class LoadingTipPacks {
     /** Folder under resourcepacks/ and the pack's display name. */
     private static final String[][] PACKS = {
             {"loading_tips", "Loading Tips"},
-            {"creative_tips", "Creative Tips"},
     };
 
     private LoadingTipPacks() {}

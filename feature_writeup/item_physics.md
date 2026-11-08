@@ -2,11 +2,13 @@
 
 ## 0. At a glance
 
+Tag namespace: `creativecompat:physics/*` and `creativecompat:burn/*` since 2026-11-08 (were `creativeengineering:`; renamed with the Compat build of 13:21, creative_engineering.md 7.4).
+
 | Part | Status |
 |---|---|
 | Fire/lava split on top of ItemPhysic: per item, survive fire, survive lava, both, or neither (`ItemPhysicSplit` + `ItemPhysicServerMixin`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); its recurring `$1` crash (F1) was fixed in 1.0.9 |
 | Float/sink control in water, additive to ItemPhysic's own list | DEPLOYED |
-| Four item tags `#creativeengineering:physics/{floats,sinks,fireproof,lavaproof}`, filled in KubeJS (reloadable) with a small jar baseline | DEPLOYED |
+| Four item tags `#creativecompat:physics/{floats,sinks,fireproof,lavaproof}`, filled in KubeJS (reloadable) with a small jar baseline | DEPLOYED |
 | Burn transforms: glass → dirty glass, wood → 25% ash, TNT / TNT minecart / gunpowder explode (TNT with shrapnel) | DEPLOYED |
 | Family classification audit: `/dumpphysics` + `tools/item_physics_audit.py` → [item_physics_audit.md](item_physics_audit.md) (section 9) | BUILT 2026-10-28, report only; `/dumpphysics` not run yet (SQ-IP-16) |
 | Surface floating for light items and lava floating for lavaproof items (section 10) | DESIGNED 2026-10-28, not built |
@@ -77,9 +79,9 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 | `#forge:glass` (incl. tinted) | Quark dirty glass | 100%, per item in the stack |
 | `#forge:glass_panes` | Quark dirty glass pane | 100%, per item |
 | `#quark:shards` | Quark dirty shard | 100%, per item |
-| `#creativeengineering:burn/to_ash` (planks, logs, wooden building blocks, boats, banners, beds, chests, scrap wood) | Supplementaries ash | 25%, per item |
+| `#creativecompat:burn/to_ash` (planks, logs, wooden building blocks, boats, banners, beds, chests, scrap wood) | Supplementaries ash | 25%, per item |
 | `minecraft:tnt`, `tnt_minecart` | explosion power 2, plus a TNT shrapnel burst | 100% |
-| `minecraft:gunpowder`, `#creativeengineering:burn/explosive` | explosion power 1 | 100% |
+| `minecraft:gunpowder`, `#creativecompat:burn/explosive` | explosion power 1 | 100% |
 
 - Explosions don't break blocks and hurt on every difficulty (`BurnBlastDamage`: an explosion source without
   difficulty scaling, so Peaceful players take damage too; Blast Protection applies).
@@ -298,7 +300,7 @@ in one table, and each maps to a material a player would recognise.
 
 1. Run `/dumpphysics` and the audit, and settle the decisions (9.6).
 2. Move the classifier's tables into a generator mode of the same script that writes one item tag per family,
-   `creativeengineering:physics/family/<family>`, as JSON under `kubejs/data/creativeengineering/tags/items/physics/family/`.
+   `creativecompat:physics/family/<family>`, as JSON under `kubejs/data/creativeengineering/tags/items/physics/family/`.
    It reads the manual-override list too, so every item lands in exactly one family tag.
 3. `item_physics_tags.js` maps families to behaviour with nested tag refs through `global.tags` (e.g. floats ⊇
    `#…/family/wood`, `#…/family/produce`). The hand lists shrink to the override list.
@@ -356,7 +358,7 @@ which keeps the dip-and-rise of heavier wood and food but stops the endless bob.
 ### 10.3 Build sketch
 
 - `ItemPhysicSplit`: a `Buoyancy` query (SKIM / FLOAT / SINK in water; FLOAT / SINK in lava) from a new
-  `creativeengineering:physics/skims` tag and the existing `lavaproof` tag. Reload-able like the other four.
+  `creativecompat:physics/skims` tag and the existing `lavaproof` tag. Reload-able like the other four.
 - `ItemPhysicServerMixin`: extend the existing `updatePre` TAIL inject; read `ItemPhysicServer.fluid` (a public
   ThreadLocal set at the start of `updatePre`). It runs on both sides (item ticks are simulated client-side too,
   and tags are synced), so the motion is smooth without extra packets.

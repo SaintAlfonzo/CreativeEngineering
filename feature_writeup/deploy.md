@@ -368,3 +368,7 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   changes. Applied 2026-11-03 20:40 to CreativeEngineeringClient (`apply.sh client --no-world`: old jars to
   `mods_before_1.2.00/`, 1085 removals, verify --installed OK, 407 jars); snapshot client 1.2.00, server still 1.1.05. The dev
   instance is the build source (already 1.2.00). Not booted on these jars yet.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Upstream folders: download an upstream jar into `mods/` first, then move it into an upstream folder system; unify the ten `*_upstream/` root folders under one `/upstream`. Row `tooling/generators-and-tests #12`.

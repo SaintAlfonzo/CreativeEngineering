@@ -116,7 +116,7 @@ The seed items are what place the bushes (red, white, savanna and taiga types). 
 | Growth chance per random tick | 1/5 (about 5.7 min per stage) | 1/3 (about 3.4 min) | 1/5 |
 
 - **Light:** this is the block's raw light level, so time of day doesn't matter. Open sky is always 15.
-- **Ground:** the block below must be a full opaque block (`isSolidRender`). Farmland doesn't count.
+- **Ground:** the block below must be a full opaque block (`isSolidRender`). Farmland doesn't count. The six ground seeds carry a tooltip saying so (Creative Brewing `vinery/tooltips.js`, 2026-11-07, Q13).
 - **Survival:** the light and ground rules are also the survival rules. A bush pops when a neighbour update finds them broken.
 - **Stages:** 0 → 3.
 - **Harvest:** right-click at stage 2 or more. Stage 2 drops 0-1 grapes and stage 3 drops 1-2. Resets to stage 1.

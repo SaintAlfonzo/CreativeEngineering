@@ -97,6 +97,18 @@ public class CreativeCompat {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeCompat::commonSetup);
 
+        // Known harmless log lines repeated by the hundred thousand (compat/LogSpamFilter, perf.md 19)
+        com.SaintAlfonzo.creativecompat.compat.LogSpamFilter.install();
+        // Distant Horizons per dimension (compat/DhDimensions): no Nether generation is mixin.DhNoGenerationMixin;
+        // the Nether's LOD radius and far fog are API overrides set on the client.
+        if (FMLEnvironment.dist == Dist.CLIENT && ModList.get().isLoaded("distanthorizons")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.DhDimensionView.class);
+        }
+        // One deep red fog colour for the whole Nether (compat/NetherFogColour, perf.md 19.3)
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.NetherFogColour.class);
+        }
+
         // The TNT shrapnel entity (shrapnel/, from Creative Engineering 2026-11-06, id creativeengineering:shrapnel):
         // fired on primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through
         // Common's util.BurnBursts. Tuning: [shrapnel].
@@ -107,6 +119,10 @@ public class CreativeCompat {
         // Portal Gun dyeing (portalgun/, plan_portal_gun.md 4): the serializer names the gun only by id, so it registers
         // always; its recipe JSON loads only with the mod.
         PortalGunRecipes.register(modEventBus);
+        // Gun portals dissolve on the owner's logout or dimension change (plan_portal_changes.md 3.1)
+        if (ModList.get().isLoaded("portalgun")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.portalgun.PortalGunDissolve.class);
+        }
 
         // Walking on blocks (surface/, from Creative Engineering 2026-11-06; [surface]). Framed / copycat blocks: say
         // on BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from

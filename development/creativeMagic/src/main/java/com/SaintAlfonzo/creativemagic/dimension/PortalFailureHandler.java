@@ -176,6 +176,9 @@ public class PortalFailureHandler {
         // which is what this check - and PortalShape's own interior logic -
         // key off, so this covers vanilla fire, soul fire, and Dark Fire
         // uniformly without needing per-block identity checks.
-        return state.isAir() || state.is(BlockTags.FIRE);
+        // Nether portal blocks count too: Smaller Nether Portals fills the frame with portal blocks before it posts
+        // the event (and ignores the cancel), so the fill met portal blocks and gave up on the frame. Once the frame
+        // turns to crying obsidian those portal blocks lose their frame and break on the neighbour update.
+        return state.isAir() || state.is(BlockTags.FIRE) || state.is(Blocks.NETHER_PORTAL);
     }
 }

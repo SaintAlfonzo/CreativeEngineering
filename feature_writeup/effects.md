@@ -859,3 +859,8 @@ ingredient type.
   and Jump Boost together (`potions/effects #14`).
 - 2026-11-01: `potions/effects #17` checked (4, One Haste effect): every Haste source already gives vanilla
   `minecraft:haste`; the open question is the duplicate Rustic and Miner's potion lines (MND-40). Nothing built.
+
+## Owner notes (scratchpad 2026-11-07)
+
+- Harmony effect: add to a lit or signal campfire, more sources (owner). Row `potions/effects #20`; Neapolitan's Harmony exists.
+- Copper gear: ensure it is waxable, waxing prevents copper poisoning; warning tooltip on oxidised gear is `ui/tooltips #14`. Row `potions/effects #21`.

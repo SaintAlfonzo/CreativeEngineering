@@ -149,12 +149,6 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:speed",
-     "ticks": 400,
-     "amp": 0,
-     "chance": 1
-    },
-    {
      "effect": "minecraft:regeneration",
      "ticks": 400,
      "amp": 0,

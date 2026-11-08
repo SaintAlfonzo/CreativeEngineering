@@ -32,4 +32,9 @@ ServerEvents.tags('item', e => {
 		i.microblock_stone_rod, i.microblock_stone_saw,
 		i.microblock_iron_saw, i.microblock_diamond_saw,
 	])
+
+	// Create: Gravity air supply in low-oxygen biomes (the End): its tags list only Create's copper and netherite pieces.
+	// Every backtank Create itself accepts as an air source (Create Goggles' five) and the goggle diving helmets count.
+	t.add(e, 'create_gravity:backtanks', '#create:pressurized_air_sources')
+	t.add(e, 'create_gravity:diving_helmets', [i.goggle_diving_helmet, i.goggle_netherite_diving_helmet])
 })

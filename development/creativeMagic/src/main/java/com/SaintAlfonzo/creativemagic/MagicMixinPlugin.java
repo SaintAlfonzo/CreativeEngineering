@@ -33,7 +33,9 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
             Map.entry("PneumaticCraftUtilsMixin", PNC),
             Map.entry("XPFluidManagerMixin", PNC),
             Map.entry("XpHelperMixin", SOPHISTICATED),
-            Map.entry("XpPumpUpgradeWrapperMixin", SOPHISTICATED));
+            Map.entry("XpPumpUpgradeWrapperMixin", SOPHISTICATED),
+            // Immersive Portals: ordinary fire no longer builds portals, Dark Fire does (plan_portal_changes.md 1)
+            Map.entry("IPFireGateMixin", List.of("imm_ptl_core")));
 
     public MagicMixinPlugin() {
         super("[creativemagic]", NEEDS_MOD);

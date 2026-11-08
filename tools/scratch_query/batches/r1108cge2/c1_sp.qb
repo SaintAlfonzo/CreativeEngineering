@@ -1,0 +1,86 @@
+# r1108cge2 client block 1 (tools/scratch_query/cge2_run.sh client): throwaway client (eval_client.py), its mods/ with
+# Common 13:51 + Compat 13:21 swapped in by the runner, single player world CGE2 = copy of the b1 world (sp_world.py,
+# cheats on). Run with qrun.py client GAME this-file RES after the world is open (in game, no screen open).
+# Shots go to RES/shots/; the agent reads them and the owner judges smoothness (LOOK rows).
+pace 2
+
+## CQ-CGE-02a | client boot clean, no mixin error, world joined
+bootexpect Sound engine started|FIRST_CLIENT_TICK
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+bootreject (?i)(LowGravity|CreateGravity)\w*Mixin.*(error|fail|warn)
+> gamemode creative
+> time set noon
+> gamerule doDaylightCycle false
+shot joined
+
+## CQ-CGE-02 | End: every fixed-pull type falls slowly and smoothly (client prediction matches the server)
+# datapack tools/scratch_query/datapack/cge2_drop in the world: one function summons everything in one tick (typed one
+# by one they spread over 35 s); the camera stands on glass (a creative player not flying falls to the ground).
+# No /reload in this row: the commands typed during its hitch were lost (cge2_run.sh installs the datapack before launch).
+> gamemode creative
+> execute in minecraft:the_end run tp @s 14 125 9
+sleep 8
+> execute in minecraft:the_end run fill 12 111 7 16 111 11 minecraft:glass
+> execute in minecraft:the_end run fill -2 60 -2 8 125 20 minecraft:air
+> execute in minecraft:the_end run tp @s 14 112 9 facing 3 115 9
+sleep 3
+> function cge2:drop_end
+shot end_t0
+sleep 1
+shot end_t1
+sleep 2
+shot end_t3
+sleep 3
+shot end_t6
+look shots: the seven objects descend slowly together (about 1 block in the first second, about 5 by 3 s at most), no jumps back up between shots; owner: watch it live once for stutter or rubber-banding (none expected)
+
+## CQ-CGE-02b | client lookup ran: the client parsed Create Gravity's list (single player)
+bootexpect \[low gravity\] client biome list: 1 of 1 entries \[#minecraft:is_end;;\]
+look the line appears once (it is logged on each (re)parse)
+
+## CQ-CGE-02c | overworld: the same objects fall at vanilla speed
+> execute in minecraft:overworld run tp @s 14 -30 9
+sleep 8
+> execute in minecraft:overworld run fill 12 -41 7 16 -41 11 minecraft:glass
+> execute in minecraft:overworld run tp @s 14 -40 9 facing 3 -36 9
+sleep 3
+> function cge2:drop_over
+shot over_t0
+sleep 1
+shot over_t1
+look shots: vanilla fall (most of the 30 blocks in under 2 s)
+
+## CQ-CGE-04 | End oxygen with a real player: damage without a backtank, none with one
+# Create Gravity drains air slowly (about 1 a second measured), damage starts when it reaches -10. No dragon on the long wait.
+# Arrive in creative and let the End chunks load before the platform: the fill fails on unloaded chunks and survival then falls.
+> gamemode creative
+> execute in minecraft:the_end run tp @s 32 90 0
+sleep 8
+> execute in minecraft:the_end run kill @e[type=minecraft:ender_dragon]
+> execute in minecraft:the_end run fill 30 75 -2 34 75 2 minecraft:obsidian
+> execute in minecraft:the_end run tp @s 32 76 0
+sleep 3
+> effect clear @s
+> gamemode survival
+# Air ran out about 290 s after arriving (r1108cge2), then the player died within about 25 s: wait on the log, not a clock.
+waitlog ran out of air|msgId='out_of_oxygen' 420
+shot oxygen_no_tank
+> gamemode creative
+look the waitlog line appeared (out_of_oxygen damage or death "ran out of air")
+
+## CQ-CGE-04b | End oxygen with a backtank: no damage past the time the air would have run out
+> gamemode creative
+> execute in minecraft:the_end run tp @s 32 76 0
+sleep 3
+> effect give @s minecraft:instant_health 1 5
+> item replace entity @s armor.chest with creategoggles:leather_backtank{Air:900}
+sleep 2
+> gamemode survival
+sleep 330
+> data get entity @s Health
+expect has the following entity data: 20(\.0)?f
+reject ran out of air
+shot oxygen_tank
+> gamemode creative
+> item replace entity @s armor.chest with minecraft:air
+look with the backtank Health stays 20 past the 290 s no-tank run-out, and the backtank air bar shows

@@ -29,6 +29,7 @@
     "QuarkSortingHandlerMixin",
     "VineBlockShearMixin",
     "LeafPileSlowMixin",
+    "IwAzaleaFlowersPlaceMixin",
     "MonsterBoxBlockEntityMixin",
     "CreateBreakerMonsterBoxMixin",
     "DiFeatherEntityMixin",
@@ -46,7 +47,11 @@
     "BlockRunnerSpeedConfigMixin",
     "FramedDoubleCamoOrderMixin",
     "CopycatMaterialOrderMixin",
-    "PortalGunExitLiftMixin"
+    "PortalGunExitLiftMixin",
+    "PortalGunHeartbeatMixin",
+    "PortalGunPortalInvoker",
+    "IPMirrorGlassMixin",
+    "DhNoGenerationMixin"
   ],
   "client": [
     "GeckoItemHudBatchMixin",
@@ -70,7 +75,6 @@
     "JeiRecipeGuiLogicMixin",
     "JeiMissingSlotsErrorAccessor",
     "JeiRecipeLayoutTooltipMixin",
-    "JeiFluidHelperTooltipMixin",
     "JeiFluidTankScaleMixin",
     "JeiRecipesGuiTooltipMixin",
     "JeiIngredientFilterAccessor",
@@ -100,7 +104,12 @@
     "AeGuideItemTooltipMixin",
     "JeedEffectInfoMixin",
     "JeedEffectRendererMixin",
-    "GuiEffectIconMixin"
+    "GuiEffectIconMixin",
+    "IPPortalRenderingAccessor",
+    "IPPortalRenderLimitsMixin",
+    "IPPortalFogMixin",
+    "PortalGunRendererOpaqueMixin",
+    "SignTextDistanceMixin"
   ],
   "server": []
 }

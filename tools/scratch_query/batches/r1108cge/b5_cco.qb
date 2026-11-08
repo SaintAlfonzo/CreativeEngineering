@@ -1,0 +1,39 @@
+# r1108cge boot 5: cc_only_srv.sh OUT cco full (Common 00:49 + its optional mods only, group B, fresh config), probe
+# zz_cge_probe.js copied in. SQ-CGE-06 (SQ-CCO-08 rerun with entity data), SQ-CMV-04 (vanilla defaults, generated config).
+# Run once with gravityLimitDimensions true (default), then again after qrun.py toml ... false and a reboot (rows -06b).
+pace 2
+
+## SQ-CMV-04 | Common's generated config keeps vanilla defaults; advancements load
+shell grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled|gravityLimitDimensions) =" config/creativecommon-common.toml
+> execute in minecraft:the_end run forceload add 0 0
+> pbot spawn cge06 0 75 0 minecraft:the_end survival
+sleep 3
+> advancement grant cge06 only minecraft:story/root
+expect Granted the advancement
+look shell.txt: advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, packOrder = false, tutorial and advancement = true, creative_menu disabled = false
+
+## SQ-CGE-06 | Create Gravity on living entities in the End with Common's dimension gate, no /reload
+> difficulty normal
+> execute in minecraft:the_end run forceload add 0 0
+> pbot spawn cge06 0 75 0 minecraft:the_end survival
+sleep 3
+> zgv cfg the_end 0 70 0
+waitlog \[zgv\] cfg dim=minecraft:the_end 10
+> execute in minecraft:the_end run summon minecraft:zombie 0 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge06"]}
+> execute in minecraft:the_end run summon minecraft:villager 5 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge06"]}
+sleep 6
+# 1.19.2 has no `execute if biome`: the probe's cfg line names the biome at the spot
+> execute in minecraft:the_end run attribute @e[type=zombie,tag=cge06,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute @e[type=villager,tag=cge06,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute cge06 forge:entity_gravity get
+> execute in minecraft:the_end run data get entity @e[type=zombie,tag=cge06,limit=1] Attributes
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+> kill @e[tag=cge06]
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-0\.8
+expect \[zgv\] cfg dim=minecraft:the_end biome=minecraft:the_end
+count Entity Gravity for entity .* is 0\.01599 >= 3
+# the low-gravity modifier is transient (addTransientModifier): not in the saved Attributes, the value is the check
+look End drops about 20 percent of the overworld's (4.9 vs 24.6 at t=40)

@@ -357,6 +357,7 @@ classes, lives in a compartment that loads only when that mod is present (sectio
 | QoL-5 | Heatless pot routes and grid-meal moves (`_manual_only`) | member writeups | KubeJS cooking rules | CD server scripts through `global.NCH`, as today |
 | QoL-6 | Crop-growth WTHIT line, JEI info pages | member writeups | patcherMod / KubeJS | WTHIT line: CD Java, soft dependency; JEI info pages: CD client scripts with `// requires: jei` |
 | QoL-7 | Cookware pickup (sneak right-click) and handle toggle (sneak left-click), 2026-11-02, TODO `cooking/kitchen #27` | [kitchen.md](kitchen.md) 2.9 | CD Java | `cooking/CookwareHandling`, tag `#creativedelight:cookware_pickup`, `[qol] cookwarePickup` |
+| QoL-8 | Cooking pot, copper pot and kettle keep their contents in the item (player break, QoL-7 pickup), 2026-11-07, TODO `cooking/kitchen #40` | [kitchen.md](kitchen.md) 2.12 | CD Java | `cooking/CookwareContents`, mixins `*KeepContentsMixin`, copper pot in the Miner's member, `[qol] cookwareKeepContents` |
 
 ### 8.1 Creative Delight config (Q21, proposal)
 

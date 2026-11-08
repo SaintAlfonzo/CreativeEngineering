@@ -465,3 +465,67 @@
 		#'Pickles: 3 / 4' (sea pickles)
 		pickles = true
 
+#Immersive Portals rendering (client side).
+[immersive_portals]
+	#Mirrors farther than this many blocks from the camera are not rendered through and show their
+	#glass. 0 = no limit.
+	#Range: 0 ~ 512
+	mirrorRenderDistance = 12
+	#Reflections drawn inside reflections when every portal in the chain is a mirror. Immersive
+	#Portals' own maxPortalLayer still caps every portal (and stays the cap for gun portals).
+	#Range: 1 ~ 16
+	mirrorMaxBounces = 4
+	#Blocks of world drawn inside a mirror, rounded up to whole chunks (a hard cut; the mirror fog
+	#below fades it instead). 0 = the normal render distance.
+	#Range: 0 ~ 512
+	mirrorViewDistance = 32
+
+	#Fog drawn while looking through a portal, per portal type. Distances are blocks past the portal
+	#plane: clear up to start, full fog at end. enabled = false keeps the normal fog. Keep nether.end at
+	#Immersive Portals' indirectLoadingRadiusCap x 16 (4 chunks = 64), where the far side stops.
+	[immersive_portals.fog]
+
+		#Nether portals.
+		[immersive_portals.fog.nether]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 8
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+		#Portal Gun portals.
+		[immersive_portals.fog.portalGun]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 16
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+		#Mirrors.
+		[immersive_portals.fog.mirror]
+			enabled = true
+			#Blocks past the portal plane where the fog starts.
+			#Range: 0 ~ 1024
+			start = 16
+			#Blocks past the portal plane where the fog is full (kept above start).
+			#Range: 1 ~ 1024
+			end = 32
+
+#Portal Gun portals.
+[portalgun]
+	#Client side. Gun portals are not rendered through: each shows a flat disc in its colour. Walking
+	#through still works.
+	opaquePortals = false
+	#Server side. A gun portal dissolves when its owner is farther than this many blocks from it
+	#(checked every heartbeat). Portals also dissolve when the owner logs out or changes dimension.
+	#0 = no distance limit.
+	#Range: 0 ~ 100000
+	despawnDistance = 128
+	#Server side. Seconds between a gun portal's distance checks.
+	#Range: 1 ~ 600
+	heartbeatSeconds = 10
+

@@ -150,6 +150,17 @@
       "apply": "rejoin the world (the snapshot is read at world load); only newly generated chunks use it"
     },
     {
+      "id": "moobloom_rules",
+      "script": "tools/gen_moobloom_rules.py",
+      "groups": ["worldgen"],
+      "dumps": ["dumpspawns"],
+      "outputs": [
+        "kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json",
+        "feature_writeup/mooblooms.md"
+      ],
+      "apply": "/reload for new spawns (kubejs/data); rebuild and install :creativeWorldgen: so the jar ships the same file"
+    },
+    {
       "id": "bee_nests",
       "script": "tools/gen_bee_nests.py",
       "groups": ["worldgen"],

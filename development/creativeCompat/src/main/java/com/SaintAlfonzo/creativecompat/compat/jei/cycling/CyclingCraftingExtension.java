@@ -34,9 +34,21 @@ public class CyclingCraftingExtension implements ICraftingCategoryExtension {
         if (recipe.shapeless()) {
             builder.setShapeless();
         }
-        List<IIngredientAcceptor<?>> linked = new ArrayList<>(inputs);
+        // JEI links only slots that hold the same number of stacks: the filled cells (every variant has a stack there)
+        // and the output. Blank cells hold none, and a cell that is blank in some variants is kept off the link by the
+        // page split in CraftingProbe.page, so this check is a guard against a page that still mixes them.
+        int variants = recipe.outputs().size();
+        List<IIngredientAcceptor<?>> linked = new ArrayList<>(inputs.size() + 1);
+        for (int i = 0; i < inputs.size() && i < recipe.slots().size(); i++) {
+            long filled = recipe.slots().get(i).stream().filter(s -> !s.isEmpty()).count();
+            if (filled == variants) {
+                linked.add(inputs.get(i));
+            }
+        }
         linked.add(output);
-        builder.createFocusLink(linked.toArray(new IIngredientAcceptor<?>[0]));
+        if (linked.size() > 1) {
+            builder.createFocusLink(linked.toArray(new IIngredientAcceptor<?>[0]));
+        }
     }
 
     @Override

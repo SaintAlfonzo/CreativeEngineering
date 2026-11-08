@@ -43,6 +43,8 @@ public class CreativeCalendar {
         MinecraftForge.EVENT_BUS.register(TimePush.class);
         MinecraftForge.EVENT_BUS.register(SeasonClock.class);
         MinecraftForge.EVENT_BUS.register(TimeCommand.class);
+        // Serene Seasons' per-biome answers kept until a tag or config reload (seasons/SeasonAnswers, perf.md 19)
+        com.SaintAlfonzo.creativecalendar.seasons.SeasonAnswers.register(modEventBus);
 
         LOGGER.info("[creativecalendar] time, seasons and crop seasons loaded (config/{}-common.toml)", MOD_ID);
         CalendarConfigMigration.readAndStrip();

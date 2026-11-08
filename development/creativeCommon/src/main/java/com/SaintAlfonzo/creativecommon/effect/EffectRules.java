@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * CommonConfig {@code [effects]} {@code remap}, {@code removed}, {@code forceHudIcon} and {@code forceHudIconItems}
  * ({@code potions/effects #8, #9}).
- * Read by {@code mixin/LivingEntityEffectRemapMixin} (every {@code addEffect}), {@code mixin/FruitsDelightEffectFuncMixin}
+ * Read by {@code mixin/LivingEntityEffectRemapMixin} (every {@code addEffect}), Creative Delight's {@code FruitsDelightEffectFuncMixin}
  * and the client {@code mixin/GuiEffectIconMixin}. Each list is re-parsed when the config hands back a new list (Create's
  * Configs screen or a hand edit), as in {@link EffectCategories}.
  */
