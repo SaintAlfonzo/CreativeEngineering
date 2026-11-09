@@ -36,6 +36,8 @@ ServerEvents.tags('block', e => {
 		i.createframed_vertical_tinted_framed_glass, i.createframed_tinted_tiled_glass,
 		i.quark_framed_glass, i.dirty_glass, i.frosty_glass, i.rainbow_glass]
 		.concat(colours.map(c => i[c + '_framed_glass'])))
+	// Framed Blocks' panes and bars extend IronBarsBlock, which Immersive Portals accepts; camouflage blocks are never mirrors
+	t.add(e, b.t_not_mirror_glass, [i.framed_pane, i.framed_bars])
 	t.add(e, b.t_mirror_glass_panes, [i.createframed_tinted_framed_glass_pane,
 		i.createframed_horizontal_tinted_framed_glass_pane, i.createframed_vertical_tinted_framed_glass_pane,
 		i.createframed_tinted_tiled_glass_pane, i.framed_glass_pane, i.dirty_glass_pane, i.frosty_glass_pane]

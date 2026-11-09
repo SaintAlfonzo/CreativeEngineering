@@ -39,7 +39,8 @@ ServerEvents.recipes(e => {
 	var splashing = [[Item.of(i.exposed_copper), i.block_copper, e, 'copper_block_exposed'],
 		[Item.of(i.weathered_copper), i.exposed_copper, e, 'copper_block_weathered'],
 		[Item.of(i.oxidized_copper), i.weathered_copper, e, 'copper_block_oxidized']]
-	copperShapes.forEach(shape => {
+	// cut_copper_vertical_slab is Quark's: the dict drops it when Quark is absent
+	copperShapes.filter(shape => global.has(i[shape], i['exposed_' + shape], i['weathered_' + shape], i['oxidized_' + shape])).forEach(shape => {
 		splashing.push([Item.of(i['exposed_' + shape]), i[shape], e, shape + '_exposed'])
 		splashing.push([Item.of(i['weathered_' + shape]), i['exposed_' + shape], e, shape + '_weathered'])
 		splashing.push([Item.of(i['oxidized_' + shape]), i['weathered_' + shape], e, shape + '_oxidized'])

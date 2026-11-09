@@ -22,7 +22,7 @@ Scope rule: integration adds no recipe or mechanic that is not in the mod or def
 | New systems and mechanics | 3.2 | 24 rows |
 | Upstream issues | 3.3 | B1 to B12 (no load errors: never installed) |
 | Integration | 4 | 4.0 and 4.1 built; 4.2 lists 24 steps, port first |
-| Decisions | 5 | D1 to D14 and N1 to N22 answered or recorded; D15 to D26 raised 11-06, open (defaults apply); a few sub-calls open |
+| Decisions | 5 | D1 to D14 and N1 to N22 answered or recorded; D15 to D26 raised 11-06; D15, D16, D19 to D24 and D26 answered 11-08 (N26, section 5.10); a few sub-calls open |
 | Tests | 8 | HNH-01 to HNH-90 drafted; 4.0 / 4.1 pieces mostly PASSED on scratch (r1031, r1101, r1102b, r1103); CQ-WC-04, -06, -07 open |
 
 - **Jar:** `hearthandharvest` 1.4.1, author AlabasterLeking, "A homesteading addon for Farmer's Delight".
@@ -90,7 +90,7 @@ Searched: `item_dict.js`, `items_by_mod/*.json`, `display_names.json`, in-tree l
 | Apple, Blueberry, Glow Berry, Melon, Sweet Berry Jam | Fruits Delight jellies in mason jars (`jams #8`, 22 FD jams); Vintage's own jam jars are removed items | **Drop**; survivor is FD's jam in its mason jar form |
 | Raspberry, Cherry, Grape Jam | **Built**: `vintagedelight:raspberry_jam_jar` (from `hearthandharvest:raspberry`, `jams #7`), `cherry_jam_jar`, `red_grape_jam_jar`, `green_grape_jam_jar` (`jams #4`, shipped 1.1.05) | **Drop**; already in the pack (was "add through jams #1") |
 | Pickled Beetroots, Pickled Onions | `vintagedelight:pickled_beetroot`, `pickled_onion` | **Drop**; Vintage's |
-| Pickled Cabbage | `vintagedelight:kimchi` (merge 2.19 survivor, built 11-03) | **Drop** (D19, scan: near-duplicate under the D6 rule; owner call if wanted) |
+| Pickled Cabbage | `vintagedelight:kimchi` (merge 2.19 survivor, built 11-03) | **Drop** (D19, scan: near-duplicate under the D6 rule; accepted 11-08, N26-3) |
 | Pickled Carrots, Potatoes | none (Vintage pickles 5 others) | not an overlap: **new**, made in Vintage's pickling jar (3.1) **Add (owner 2026-11-06, N20)**: the new pickles, made in Vintage's pickling jar. Not built. |
 | Peanut Butter | `vintagedelight:nut_mash_jar` ("Nut Mash"; Delightful nut butter merged in, item_merges 2.18); `#forge:nut_butter` | **Drop**. H&H recipes take Nut Mash; names should follow |
 | Peanut Butter & Jelly | `vintagedelight:pb_j` "Nut Mash and Jam Sandwich" (built) | **Drop** |
@@ -132,7 +132,7 @@ Searched: `item_dict.js`, `items_by_mod/*.json`, `display_names.json`, in-tree l
 | Waffle (block) | `create_factory:waffle` | **Drop** **Reversed (owner 2026-11-06, N20): add the Waffle and compare** with `create_factory:waffle` (texture, values, stacking) to pick the survivor or keep both. |
 | Sugar Cubes | `supplementaries:sugar_cube` | **Drop**; also removes the hidden Horse Boost (3.1 effects) |
 | Raw / Cooked Skewered Sausage | `barbequesdelight:raw_pork_sausage_skewer` / `grilled_pork_sausage_skewer` (port 11-01) | **Drop** (scan); recipes needing a skewered sausage take Barbeque's |
-| Chicken Pot Pie (+ slice) | `largemeals:mushroom_pot_pie` feast (raw chicken, carrot, cabbage, milk, pie crust), pot pie family (port 11-01) | **Drop** (D19, scan: near-duplicate); owner call if a sliceable chicken pie is wanted |
+| Chicken Pot Pie (+ slice) | `largemeals:mushroom_pot_pie` feast (raw chicken, carrot, cabbage, milk, pie crust), pot pie family (port 11-01) | **Drop** (D19, scan: near-duplicate); accepted 11-08, N26-3 |
 | Macaroni and Cheese | `brewinandchewin:cheesy_pasta`, `vintagedelight:cheese_pasta` | **Drop** unless Extra Delight is added (it is ED's survivor, D19) **Reversed (owner 2026-11-06, N21): add Mac and Cheese** and evaluate its overlap with `brewinandchewin:cheesy_pasta` and `vintagedelight:cheese_pasta` (same dish or a distinct one; fold or keep both). Needs butter and cheese (see 3.1). Not built. **N22: added from H&H now** (with H&H's butter), evaluated against the pack's pasta dishes afterwards. |
 
 **Tools, gear, farm blocks**
@@ -157,7 +157,7 @@ Searched: `item_dict.js`, `items_by_mod/*.json`, `display_names.json`, in-tree l
 | Mulch | `immersive_weathering:mulch_block` ("Fertile Soil") | **Drop (D11, owner 11-04)** |
 | Keg | `brewinandchewin:keg` (Backported Brewin) | **Drop**; the kept recipes are rebuilt as Brewin' keg recipes |
 | Cask | Vinery Aging Barrel, Brewin' Heating Cask | **Drop (D12, owner 11-05)**; no Aged / Fine / Reserve tiers, so the 63 `aging` recipes and vintage-scaled values go too |
-| Stomping Basin | Vinery Apple Press (apple mash only), Grapevine Pot (grape to wine juice only), Create / IE machines | **Keep as the manual juicer, pending an eval (D12, owner note 11-05)**: berry, cherry, glow berry, melon and oil recipes; apple cider and grape juices dropped; slime / sponge / sugar extras only if the owner wants them. Not built **Investigate (owner 2026-11-06, N20)** (the eval above is the investigation); no build until it reports. |
+| Stomping Basin | Vinery Apple Press (apple mash only), Grapevine Pot (grape to wine juice only), Create / IE machines | **Keep as the manual juicer, pending an eval (D12, owner note 11-05)**: berry, cherry, glow berry, melon and oil recipes; apple cider and grape juices dropped; no slime / sponge / sugar or other extra recipes before the eval (owner 2026-11-08, N26-6). Not built **Investigate (owner 2026-11-06, N20)** (the eval above is the investigation); no build until it reports. |
 | Jug | IE Jerrycan (10 000 mB, not placeable) | role overlap only (scan): **Keep, renamed "Fluid Jug" (owner 2026-11-07, N24-4)** (3.1) |
 
 **Storage blocks**
@@ -203,9 +203,9 @@ Owner 11-06 (N20): compare the textures of the storage rows below once more befo
 | Goat milking, goat milk bucket "Clears All Effects" | vanilla goats give cow milk | not an overlap: **Keep** (3.2) |
 | Chicken plucking and gliding | none | not an overlap: **Keep** (3.2) |
 | Alcohol: Drunk effect, wines, Aged / Fine / Reserve tiers | Brewin' Tipsy + Intoxication, Vinery wine aging, `global.alcohol` (Creative Brewing `alcohol_drinks.js`, "Intoxicating Drink" line) | **Drop Drunk and tiers (cask dropped); kept drinks join `global.alcohol`**. Per-drink call in 3.1 (D16, scan) **Compare the Drunk effect with Tipsy / Intoxication (owner 2026-11-06, N20)** before it is dropped (drop on hold); tiers stay dropped. |
-| Keg fermenting (juice to wine, milk to cheese, brine, pickling) | Brewin' keg, Vintage pickling jar (`vintagedelight:fermenting`) | **Rebuild kept recipes on the Brewin' keg / Vintage jar**; H&H already ships `brewinandchewin:fermenting` copies for its drinks and cheeses |
+| Keg fermenting (juice to wine, milk to cheese, brine, pickling) | Brewin' keg, Vintage pickling jar (`vintagedelight:fermenting`) | **Rebuild kept recipes on the Brewin' keg / Vintage jar**; H&H already ships `brewinandchewin:fermenting` copies for its drinks and cheeses **owner 2026-11-08 (N26-1): brine is added for evaluation; pickling routes stay as written until it reports (5.10).** |
 | Cask aging | Vinery aging barrel, wine racks | **Drop (D12)** |
-| Hoe enchants Tilling / Harvesting | per-hoe harvest areas (`hoe_harvest/NxN` tags, Creative Delight `HoeHarvestArea`, Quark Simple Harvest) | **Drop both enchantments (N8 / D21, scan)**; Harvesting duplicates the pack areas; Tilling becomes area tilling by the hoe's existing area (3.2). Tilling call still the scan's default |
+| Hoe enchants Tilling / Harvesting | per-hoe harvest areas (`hoe_harvest/NxN` tags, Creative Delight `HoeHarvestArea`, Quark Simple Harvest) | **Drop both enchantments (N8 / D21, scan)**; Harvesting duplicates the pack areas; Tilling becomes area tilling by the hoe's existing area (3.2). Tilling call still the scan's default **Superseded (owner 2026-11-08, N26-8): Harvesting is dropped; Tilling is not dropped before an eval (N23-12 tiers).** |
 | Mulch counts as water for farmland | IW mulch = Fertile Soil | **Drop (D11)** |
 | Manure (sheep manure, fertiliser, bricks) | compost framework, fertilisers (IE, S&D, Botania, Create) | **Keep and implement (N9, owner 11-04)**; design in 3.2 |
 | Wild crops worldgen | `wild_crops.json`, `gen_crop_worldgen_table.py` | **Drop H&H's grape / cotton / peanut / blueberry features; raspberry Built; wild hops to add (N10)** |
@@ -262,17 +262,17 @@ Values are hunger / saturation modifier; durations in seconds; "II" = amplifier 
 | Sweet Berry Juice | 0/0, Tempting 60 s | 4 sweet berries | **Keep**; D16 |
 | Glow Berry Juice | 0/0, Night Vision 30 s | 4 glow berries | **Keep**; D16 |
 | Blueberry / Raspberry / Sweet Berry / Glow Berry / Melon Wine (5) | upstream 1/0.2, Drunk I 180 s 75 % plus two effects | Brewin' keg: 3 fruit + 1000 mB water; H&H keg 250 mB juice, 60 s; Create mixing (no heat) | **Keep as Vinery-style wines (D16, scan; default applies); N22 (owner 2026-11-06): add all five wines for evaluation, and port every wine and juice recipe to Vinery's stations** (Apple Press for the juices where a pressing fits, Grapevine Pot and Fermentation Barrel for the wines, in place of the H&H keg, cask and basin recipes; the Brewin' keg recipes listed here stay as the second route only if the owner wants both). Evaluation: taste each against the Vinery wines for effect, hunger and cost, then keep, merge or drop; nothing is dropped before that. Values as follows: `global.alcohol` (1/0, Intoxication 90 s, Nausea 5 s), keep both drink effects and chances, one drink per 250 mB bottle (no 4 glasses). Drunk not ported. Melon juice fluid: Central Kitchen's. Drop or slow the Create mixing recipes (they skip the keg) |
-| Glow Berry Wine effect Clarity | Clarity 60 s + Night Vision | | **Clarity not registered (D23, scan)**; the wine gives Fruits Delight's Brightening (same effect) |
+| Glow Berry Wine effect Clarity | Clarity 60 s + Night Vision | | **Clarity not registered (D23, scan)**; the wine gives Fruits Delight's Brightening (same effect) **Reversed (owner 2026-11-08, N26-9): Clarity is added for evaluation; the wine gives Clarity and Night Vision as upstream, compared with Brightening in the eval.** |
 | Root Beer | 1/0.2, Drunk I 60 s 50 %, Night Vision 30 s, Haste 30 s | Brewin' keg: 2 hanging roots + sugar + water | **Soft drink (D16)**: type `drink` 0/0, Night Vision and Haste kept, not in `global.alcohol`. **Owner 2026-11-07 (N24-5): added as the first member of a "Soda" family; fold in / integrate with all other sodas in the pack** (integration report; not built) |
-| Moonshine | 1/0.2, Drunk II 180 s, Saturation II 180 s, Strength II 60 s, Slowness II 60 s | keg: 2 corn flour + sugar + water | **Keep like Vodka (D16)**: Tipsy I 180 s, Intoxication 150 s, keep Strength II and Slowness II, **drop Saturation II** (refills hunger against Intoxication). Corn flour to cornmeal |
+| Moonshine | 1/0.2, Drunk II 180 s, Saturation II 180 s, Strength II 60 s, Slowness II 60 s | keg: 2 corn flour + sugar + water | **Keep like Vodka (D16)**: Tipsy I 180 s, Intoxication 150 s, keep Strength II and Slowness II, **drop Saturation II** (refills hunger against Intoxication). Corn flour to cornmeal **Accepted (owner 2026-11-08, N26-3).** |
 | Goat Milk Bottle / Bucket (+ fluid) | bottle clears 1 effect, bucket all | adult goat with bottle / bucket; keg pouring 250 / 1000 mB | **Keep (N5, D17 scan)**: goat milk as a pack fluid (alcohol.md 4.1 rules); keep both textures (near-copies of the vanilla bucket / FD bottle, cream recolour); **Owner 2026-11-07 (N24-2): goat milk is in `#forge:milk` and counts as milk everywhere except cow-milk-specific applications (cheese, ice creams, dairy sweets)**; those take `#creativedelight:cow_milk`. Lists in 5.8 |
-| Brine Bottle / Bucket (+ fluid) | not edible | water bottle + salt; keg / mixing | **Drop (D15, scan)**: its only use was pickling, which moves to the Vintage jar (takes salt, no fluid) |
+| Brine Bottle / Bucket (+ fluid) | not edible | water bottle + salt; keg / mixing | **Drop (D15, scan)**: its only use was pickling, which moves to the Vintage jar (takes salt, no fluid) **Reversed (owner 2026-11-08, N26-1): add the bottle, bucket and fluid for evaluation.** Hooks in 5.10 |
 
 **Jams, pickles, dairy.**
 
 | Item | Values / effects | Made by | Decision |
 |---|---|---|---|
-| Pickled Carrots, Pickled Potatoes | 4/0.5, Nourishment 60 s / Health Boost I 60 s | keg + brine upstream | **Keep, made in the Vintage pickling jar** (5 of the vegetable + salt, no fluid), `dishes/pickles-and-ferments`; values align with `cooked/veggie` (D18). Effects kept |
+| Pickled Carrots, Pickled Potatoes | 4/0.5, Nourishment 60 s / Health Boost I 60 s | keg + brine upstream | **Keep, made in the Vintage pickling jar** (5 of the vegetable + salt, no fluid), `dishes/pickles-and-ferments`; values align with `cooked/veggie` (D18). Effects kept **Brine eval (owner 2026-11-08, N26-1) decides whether these keep salt or take brine.** Salt in the Vintage jar until then |
 | Butter | not edible | salt + milk to 2 | **N22: H&H's butter is applied now** (supersedes "blocked on ED"): own item in `#forge:butter`, so Croissant, Scone, Mac and Cheese and the pie crust are no longer blocked. Extra Delight's butter merges into it later |
 | Unripe Goat Cheese Wheel, Goat Cheese Wheel (blocks) | not edible | Brewin' keg: 1000 mB goat milk + salt, temperature 4; placed, two random-tick stages at 10 % (about 23 min); wheel gives 4 slices (knife click or cutting board) | **Keep, keg only, no cask (D17, scan)**. Unripe slice texture unused (leftover) |
 | Goat Cheese Slice | 3/0.3 | wheel | **Keep; values to the `dairy` type 4/0.8 and into `#forge:cheese` (D17, D18)** so the 13 pack dishes (23 recipes) take it. Feeds Tamale and Street Corn. **N22: crafted the same way as the Brewin' cheeses** (the same keg-and-wheel flow and the same wheel-to-slice cutting); the Brewin' recipes are the template |
@@ -288,7 +288,7 @@ Values are hunger / saturation modifier; durations in seconds; "II" = amplifier 
 | Raspberry Scone | 6/0.3 (upstream copies the Blueberry Muffin) | shaped: butter, 2 raspberry, sugar, batter | **Keep; align to the pack type (B12, D18)**; blocked on butter |
 | Cider Donut | 5/0.5, Nourishment 10 s | FD pot: FD apple cider + oil + salt + egg + sugar to 2 | **Keep** |
 | Baked Apple | 5/0.5 (upstream copies the donut) | smelt / smoke / campfire apple | **Keep; align to `cooked/fruit` 4/0.3 (B12, D18)** |
-| Candy Corn | 4/0.6 | FD pot: corn kernels + orange dye + syrup + sugar to 4 | **Keep; saturation to the `sweet` norm 0.35 (D18)**; kernels to Corn Delight seeds (owner call) |
+| Candy Corn | 4/0.6 | FD pot: corn kernels + orange dye + syrup + sugar to 4 | **Keep; saturation to the `sweet` norm 0.35 (D18)**; Corn Delight's kernels (owner 2026-11-08, N26-5) |
 | Raspberry / Grape / Peanut Butter Pie (+ slices) | slice 3/0.3 | shaped pie; FD `PieBlock`, 4 slices | **Keep** as placeable pies; grape pie takes the Vinery tags; the peanut pie takes whole peanuts upstream; pie / feast family rows needed |
 | Charred Marshmallow | 1/0.1, Poison 10 s | held near a campfire 10 s more | **Keep (D7)** on Delightful's `cooked_marshmallow_stick`, type `hazard`; stick back |
 
@@ -353,9 +353,9 @@ Values are hunger / saturation modifier; durations in seconds; "II" = amplifier 
 
 | Effect | Behaviour | Decision |
 |---|---|---|
-| Pungent | goal on every mob: flees the holder within 8 blocks (12 at II); hostile melee mobs flee too; brain mobs ignore it | **Keep with the B10 fix (D22, scan)**: scan from effect holders. Close to Neapolitan Harmony; no pack effect equals it |
+| Pungent | goal on every mob: flees the holder within 8 blocks (12 at II); hostile melee mobs flee too; brain mobs ignore it | **Keep with the B10 fix (D22, accepted 11-08, N26-3)**: scan from effect holders. Close to Neapolitan Harmony; no pack effect equals it |
 | Tempting | animals within 8 blocks walk to the holder | **Keep (D22)**; new |
-| Clarity | refuses and clears Blindness / Darkness | **Not registered (D23)**: Fruits Delight's Brightening |
+| Clarity | refuses and clears Blindness / Darkness | **Not registered (D23)**: Fruits Delight's Brightening **Reversed (owner 2026-11-08, N26-9): registered for evaluation against Brightening.** |
 | Prickly | 1 + level thorns damage every 0.5 s to anything touching the holder (raspberry juice and wine) | **Keep** (S); hits pets and players who touch you |
 | Pinned | speed and jump -100 % | **Registered (N23-5, reverses D24 / N22)**; applied only by the thrown pitchfork, 10 s (3 s on players); bosses, flying mobs and swimming mobs exempt (N25) |
 | Scared Still (`alexsmobs:fear`) | Alex's Mobs effect; applied by the tiger's reveal and the dragon shovel | **N22 (owner 2026-11-06): remove it from the pitchfork and from the tiger, and the effect must not show in game** (no HUD icon, no tooltip colour entry, no JEI / JEED page, no potion or effect list). **Also removed from the dragon shovel (owner, N22 follow-up)**, so no source remains. Remove the tiger hook through the AM config or a mixin; check what an effect that no longer has any source means for the effects table generator |
@@ -367,23 +367,23 @@ Values are hunger / saturation modifier; durations in seconds; "II" = amplifier 
 
 | System | Behaviour | Decision |
 |---|---|---|
-| Crow mechanics on Alex's Mobs' crow | H&H crow: tame by corn kernels (1 in 5), shoulder, fetch, steal shiny items into nests, crop pecking, wariness / trust. AM crow already shoulders, picks up items, deposits into item-frame chests, scatters from pumpkins and the scarecrow tag; its peck is animation only (no crop damage) and it drops a vanilla feather | **D2 (owner 11-05): implement on AM's crow, H&H entity not ported.** Per feature: **crop pecking: owner 11-05, crows damage crops, default on** (a goal resetting crop age over a pack tag; mobGriefing and a config gate; about 90 lines); **shiny stealing: as the plan (C2)**, cheap variant if wanted (about 40 lines drop beside an Incubation nest) or the full steal goal with the ported nest (about 150 + 250 lines); tame crows must not steal; **trust system: deep dive first (owner 11-05)**, mixin on `mobInteract` would change every AM taming, config switch default off; **crow feather item and Bad Omen brew: added (owner 11-05, reverses the earlier drop advice)**. Plan: [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (P1 to P7, R1, R2, C2, S1 to S7, tests HNH-48 to HNH-68). Hook: `EntityJoinLevelEvent` adding goals (as `FoxBerryGoals`), mixin only for private state. Not built **(owner 2026-11-06, N21): both crows (AM's with the mechanics, and H&H's) need an in-game evaluation** before the crow question is final; nests are dropped, so theft has no stash (see the plan). |
+| Crow mechanics on Alex's Mobs' crow | H&H crow: tame by corn kernels (1 in 5), shoulder, fetch, steal shiny items into nests, crop pecking, wariness / trust. AM crow already shoulders, picks up items, deposits into item-frame chests, scatters from pumpkins and the scarecrow tag; its peck is animation only (no crop damage) and it drops a vanilla feather | **D2 (owner 11-05): implement on AM's crow, H&H entity not ported.** Per feature: **crop pecking: owner 11-05, crows damage crops, default on** (a goal resetting crop age over a pack tag; mobGriefing and a config gate; about 90 lines); **shiny stealing: as the plan (C2)**, cheap variant if wanted (about 40 lines drop beside an Incubation nest) or the full steal goal with the ported nest (about 150 + 250 lines); tame crows must not steal; **trust system: deep dive first (owner 11-05)**, mixin on `mobInteract` would change every AM taming, config switch default off; **crow feather item and Bad Omen brew: added (owner 11-05, reverses the earlier drop advice)**. Plan: [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (P1 to P7, R1, R2, C2, S1 to S7, tests HNH-48 to HNH-68). Hook: `EntityJoinLevelEvent` adding goals (as `FoxBerryGoals`), mixin only for private state. Not built **(owner 2026-11-06, N21): both crows (AM's with the mechanics, and H&H's) need an in-game evaluation** before the crow question is final; nests are dropped, so theft has no stash (see the plan). **owner 2026-11-08 (N26-2): nests are no longer dropped outright; they are evaluated with the crows.** |
 | Scarecrow repels crows | tag only | `crow_fears` and the pack's repels tag (2.1). Not built Needs an in-game eval of the crows (owner 2026-11-06, N21). |
 | Salt licking | right-click degrades a salt block (5 % per lick), honeycomb waxes, axe unwaxes, salt restores; last lick pops 1 salt; every animal gets a goal to stay within 12 blocks of salt and lick every 8 min | **Implement (D13, owner 11-05)** on the pack's block: three stage blocks plus waxed variants as `SaltSandBlock`s in the pack's peach palette (quantile map from H&H's texture), dispenser rule, lick-block registry instead of a per-animal scan (S5). Side effect: pens beside salt blocks. Not built |
 | Salt caves | 33-block carved caves, salt shell with calcite and tuff, 1.2 % pools, drips; 1 in 24 chunks, Y -40 to 30, dry / desert / badlands / savanna / beach | **Implement swapped (D13, owner note 11-05)**: shell of raw rock salt block (a Salt Block shell would dissolve into the pools), drips become The Salt's buds and cluster (removes `SaltDripBlock`, 204 lines), Forge biome tags, config for rarity and height. Port of the 428-line feature plus a biome modifier. Final cave call still open |
-| Chicken plucking and gliding | sneak + use gives 1 feather, 30 s cooldown per chicken; shears lose 1 durability; bare hand 25 % for 1 damage; babies pluckable; vanilla chickens only. Held chicken slows falls | **Keep (D20, scan)**: port as upstream (`EntityInteract`, cooldown in chicken NBT, S). **Karma (N6)**: no karma system exists (only planned `largecontent/karma #1` and a comment hook in `NamedMobs.onDeath`); loss only on a damaging pluck, more for a baby, once karma exists; add the action to the TODO karma list. No karma now |
+| Chicken plucking and gliding | sneak + use gives 1 feather, 30 s cooldown per chicken; shears lose 1 durability; bare hand 25 % for 1 damage; babies pluckable; vanilla chickens only. Held chicken slows falls | **Keep (D20, scan)**: port as upstream (`EntityInteract`, cooldown in chicken NBT, S). **Karma (N6)**: no karma system exists (only planned `largecontent/karma #1` and a comment hook in `NamedMobs.onDeath`); loss only on a damaging pluck, more for a baby, once karma exists; add the action to the TODO karma list. No karma now **Accepted (owner 2026-11-08, N26-3)**: plucking only (gliding out, N23-10). |
 | Goat milking | adult goat with bucket / bottle (replaces vanilla's cow-milk bucket from goats) | **Keep** (3.1 goat milk) |
 | Cow bottle milking, rabbit and pig litters | 2.2 | **Add (N3, N4, D14)** |
-| Manure | fed adult unnamed animals (not chickens or crows) drop 1 manure 30 to 60 s later (player or trough); sheep after grazing; random pooping off; player Shift+P (1 hunger, 15 s). Fuel 200 ticks; throwable (Pungent + Poison 5 s); `bonemeal_substitutes`; not usable as bone meal and not compostable upstream | **Implement (N9, owner 11-04), design per D26 (scan)**: sources as upstream (mixin on `Sheep.ate`, trough), **drop player pooping**; add a by-hand bone-meal use (vanilla `applyBonemeal`, so season rules apply), composter values (manure 0.85, bag 1.0), IE cloche and Botany Pots fertiliser recipes, FD organic compost through NCH; throwing kept; 13 block data entries. M; changelog family "Manure" |
-| Hoe area tilling | Tilling: sneak-use tills a 3x3 / 5x5 / 7x7 ring by a hard-coded map (modded soils ignored, B9) | **Drop both enchantments (D21, scan; default)**; sneak-use tills the hoe's existing `hoe_harvest/NxN` area through `ToolActions.HOE_TILL` (modded soils work), 1 durability per click, in the `HoeHarvestArea` code. Alternative: Tilling adds +1 radius. S |
+| Manure | fed adult unnamed animals (not chickens or crows) drop 1 manure 30 to 60 s later (player or trough); sheep after grazing; random pooping off; player Shift+P (1 hunger, 15 s). Fuel 200 ticks; throwable (Pungent + Poison 5 s); `bonemeal_substitutes`; not usable as bone meal and not compostable upstream | **Implement (N9, owner 11-04), design per D26 (scan)**: sources as upstream (mixin on `Sheep.ate`, trough), **drop player pooping**; add a by-hand bone-meal use (vanilla `applyBonemeal`, so season rules apply), composter values (manure 0.85, bag 1.0), IE cloche fertiliser recipe, FD organic compost through NCH; throwing kept; 13 block data entries. M; changelog family "Manure" **Accepted (owner 2026-11-08, N26-4), without Botany Pots: the pack removed every pot fertilizer.** |
+| Hoe area tilling | Tilling: sneak-use tills a 3x3 / 5x5 / 7x7 ring by a hard-coded map (modded soils ignored, B9) | **Drop both enchantments (D21, scan; default)**; sneak-use tills the hoe's existing `hoe_harvest/NxN` area through `ToolActions.HOE_TILL` (modded soils work), 1 durability per click, in the `HoeHarvestArea` code. Alternative: Tilling adds +1 radius. S **Superseded (N23-12, then owner 2026-11-08, N26-8): the Tilling enchantment stays for an eval with the N23-12 tiers; no enchantment-free area tilling is built.** |
 | Campfire roasting | marshmallow / sausage held within 1 block of a fire or while burning for 10 s | **Add on Delightful's stick (D7)** and the Skewered Sausage idea only via Barbeque's. Not built |
 | Farmer's hat XP | 2.1 | hat rule, config per hat (D8) |
 | Seed pouch changes | 2.1 | extend Quark's pouch (D8) |
 | Wild hops / season tags / mums / villager trades | 2.2 | N10, N11, N12, N15 |
 | Corn Maze (custom structure type), Lilliput Lane (one template, 7 chest tables) | | **Add Corn Maze; investigate Lilliput Lane (N14)** through the structure framework (groups, spacing, priority, biome fits), loot through [loot.md](loot.md). Village crop and trade code not ported |
 | Latex rename | D&D sap to "Latex" | **N19 decided 11-05; rename confirmed 11-07 (N24-1); merge with `myrtrees:latex` marked for an integration report** (2.1 Sap Bucket) |
-| Stomping basin | landing after a 0.3-block drop stomps; 2x2 group forms a multiblock (4 slots, 32 B tank); 15 recipes (8 juices, 3 oils, slime, sponge, sugar) | **Keep as the manual juicer pending an eval (D12, owner note 11-05)**; berry juices need new fluids; apple cider and melon juice fluids exist (Central Kitchen), cooking oil is Create Additions' |
-| Every Compat module (half cabinets for other woods) | | check the pack's Every Compat config (step 22) |
+| Stomping basin | landing after a 0.3-block drop stomps; 2x2 group forms a multiblock (4 slots, 32 B tank); 15 recipes (8 juices, 3 oils, slime, sponge, sugar) | **Keep as the manual juicer pending an eval (D12, owner note 11-05)**; berry juices need new fluids; apple cider and melon juice fluids exist (Central Kitchen), cooking oil is Create Additions' **No extra recipes before the eval (owner 2026-11-08, N26-6).** |
+| Every Compat module (half cabinets for other woods) | | check the pack's Every Compat config (step 22) **Not extended to other woods for now (owner 2026-11-08, N26-7).** |
 
 ### 3.3 Upstream issues
 
@@ -543,20 +543,20 @@ Routing (memory `creative-delight-routing`): food recipes, tags, food values and
 | 6 | **Item merges**: none (nothing installed) | [item_merges.md](item_merges.md) | D1 | None (decided D1) |
 | 7 | **Potions**: Pungent, Tempting (long / strong), tipped arrows, potion buckets, IE / Create mixer routes; Bad Omen from the crow feather | [potions.md](potions.md), [potion_buckets.md](potion_buckets.md) | D22, P5 | Decided; not built |
 | 8 | **Alcohol**: kept wines and Moonshine join `global.alcohol` (Intoxication, Nausea, "Intoxicating Drink"); Root Beer a soft drink; Drunk removed; Create mixing recipes dropped or slowed | [alcohol.md](alcohol.md) 11 | D16 | Default applies; owner confirm Root Beer |
-| 9 | **Machines**: keg recipes to the Brewin' keg (wines, moonshine, goat cheese); pickles to the Vintage jar; stomping basin per eval; Create filling / mixing / compacting kept where they make kept items | | D12, D17 | Keg / jar decided; basin pending eval |
+| 9 | **Machines**: keg recipes to the Brewin' keg (wines, moonshine, goat cheese, brine for eval); pickles to the Vintage jar; stomping basin per eval; Create filling / mixing / compacting kept where they make kept items | | D12, D17 | Keg / jar decided; basin pending eval |
 | 10 | **Recipes by pack rules** (butter is H&H's now, N22) via `global.NCH`: heatless `_manual_only` for cooking-pot meals, roll and sandwich rules, baking (pies, croissant, scone, donut, cookies) through the oven, S&D and Central Kitchen mirrors, container remainders | [recipes_cooking.md](recipes_cooking.md), [oven.md](oven.md) | 4, butter (ED) | Not built; croissant, scone, tamale wait on ED butter / husk |
-| 11 | **Effects**: JEED text for Pungent, Tempting, Prickly; check the effects-table generator; Brightening reused; Scared Still hidden (N22) | [effects.md](effects.md) | D22 to D24 | Decided |
+| 11 | **Effects**: JEED text for Pungent, Tempting, Prickly, Clarity (eval, N26-9); check the effects-table generator; Brightening compared with Clarity; Scared Still hidden (N22) | [effects.md](effects.md) | D22 to D24 | Decided |
 | 12 | **Food types and values**, `tools/food_families.py --check` (jam, pickle, pie, pizza, sausage / skewer, cheese families), stack sizes, cans and jars | [food.md](food.md), [stack_sizes.md](stack_sizes.md), [cans.md](cans.md) | 4 | D18 default: align each outlier |
 | 13 | **Compost**: kept crops, pips, husks, manure (0.85), bag (1.0) in the pack framework | [composting.md](composting.md) | N9 | Decided |
 | 14 | **Crops, wild crops, seasons**: hops trellis soil rules, WTHIT growth line, wild hops through `wild_crops.json` + `gen_crop_worldgen_table.py`, mums through `wild_flowers.json` and the flower pot matrix, Botany Pots entries (`farming/crops #36`); H&H biome modifiers removed | [crops.md](crops.md), [flowers.md](flowers.md), [flower_pots.md](flower_pots.md) | 2, 3 | N10 to N12 decided; raspberry built |
-| 15 | **Worldgen and structures**: Corn Maze and Lilliput Lane through the framework, chest loot; salt caves swapped; ground nests dropped | memory `structure-gen-framework` | 2 | N14 decided; caves final call open |
+| 15 | **Worldgen and structures**: Corn Maze and Lilliput Lane through the framework, chest loot; salt caves swapped; ground nests per the crow eval (N26-2) | memory `structure-gen-framework` | 2 | N14 decided; caves final call open |
 | 16 | **Names and lang**: clashes "Spool", "Crate", "Counter", "Drawer", "Sink", "Trellis", "Mulch", "Jug"; Nut Mash naming for the peanut butter cookie / pie; "Latex" | [names.md](names.md) | | Bottle Crate and Field Sprinkler already renamed in the decisions |
 | 17 | **Mob and block audit**: BlockRunner tier (salt stages, manure), mineable tags, Item Physic, WTHIT lines for crops, jug, sprinkler | [wthit_lines.md](wthit_lines.md) | | Not built |
 | 18 | **Tooltips and JEI**: H&H info texts reworded to pack style; JEI categories of kept machines; pouch / hat tooltip lines | [tooltips.md](tooltips.md), [jei_coverage.md](jei_coverage.md) | | Not built |
 | 19 | **Placeables / Display Delight**: pies, cheese wheels, jugs, hay rugs | [placeable_food.md](placeable_food.md) | | Not built |
 | 20 | **Kitchen furniture**: half cabinets only | [kitchen.md](kitchen.md) | D10 | Decided |
 | 21 | **Trades and chests**: farmer buys H&H crops, wandering trader, botanist (mums), through the pack trade lists | [wandering_trader.md](wandering_trader.md) | N15 | Decided; not built |
-| 22 | **Every Compat**: half cabinets for other woods; check the pack config | | | Open |
+| 22 | **Every Compat**: half cabinets for other woods; check the pack config | | | Closed for now (N26-7): no other woods |
 | 23 | **Config**: `configs_edited/` copy of the port's config (water bottle stacking off, litters, crow options, village crops off) | | | Not built |
 | 24 | **Release**: `mod_sides.md` row, changelog bullets per family ("Manure", crow, etc.; only when built), TODO row, plan row | skill `release` | | 4.0 / 4.1 bullets shipped; none in `unreleased.md` |
 
@@ -584,25 +584,26 @@ Each decision is written in full in the row it concerns (section 2 / 3 / 4). Thi
 | N1 to N4, N17 | Crow audit, scarecrows, litters, bottle milking, blocked content | 3.2, 2.3 | done / decided |
 | N5 to N9, N16, N18 | Goat cheese, karma, alcohol, hoe enchants, manure, Pungent / Tempting / Bad Omen, overlap refresh | 3.1, 3.2, 2 | investigated 11-06; D15 to D26 raised |
 | N10 to N15, N19 | Hops worldgen, season tags, mums, salt caves, structures, trades, Latex | 2.2, 3.2 | decided; not built |
-| D15 | Drop brine | 3.1 drinks | scan default (drop) |
-| D16 | H&H alcohol under `global.alcohol` | 3.1 drinks | scan default (as recommended) |
+| D15 | Drop brine | 3.1 drinks | **reversed 11-08 (N26-1): add for evaluation** |
+| D16 | H&H alcohol under `global.alcohol` | 3.1 drinks | answered 11-08 (N26-3): default accepted |
 | D17 | Goat cheese line, `#forge:milk` | 3.1 | answered 11-07 (N24-2): keep; goat milk is milk except in cow-specific dairy |
 | D18 | Value outliers | 3.1 | scan default (align) |
-| D19 | Items no longer new | 2.1 | scan default (drop) |
-| D20 | Chicken plucking, karma | 3.2 | scan default (port, no karma) |
-| D21 | Hoe enchants | 3.2 | scan default (drop both, area tilling) |
-| D22 | Pungent / Tempting | 3.1 effects | scan default (keep, B10 fix) |
-| D23, D24 | Clarity to Brightening; Pinned registered (N23-5 reverses D24; N25 rules; no Scared Still) | 3.1 effects | scan default (merge) |
+| D19 | Items no longer new | 2.1 | answered 11-08 (N26-3): default accepted; Spool and Mac and Cheese stay as N21 / N22 |
+| D20 | Chicken plucking, karma | 3.2 | answered 11-08 (N26-3): default accepted |
+| D21 | Hoe enchants | 3.2 | answered 11-08 (N26-8): Harvesting dropped; Tilling held for an eval |
+| D22 | Pungent / Tempting | 3.1 effects | answered 11-08 (N26-3): default accepted |
+| D23, D24 | Clarity to Brightening; Pinned registered (N23-5 reverses D24; N25 rules; no Scared Still) | 3.1 effects | D23 reversed 11-08 (N26-9): Clarity added for evaluation; D24 closed by N23-5 and N25 |
 | D25 | Latex clash with `myrtrees:latex` | 2.1 crops | answered 11-07 (N24-1): rename, merge / integration report pending |
 | N20 | Owner review notes 11-06: reversals (chocolate milk, cheese, cotton candy, waffle, crow, hat, bottle racks, Drunk) and confirmations | 2.1, 2.2 | decided; comparisons open; not built |
 | N22 | Owner notes 11-06, third pass: H&H first, ED later (butter, mac and cheese, glazed carrots, sunflower seeds); all juices and wines in, wine and juice recipes on Vinery's stations; goat cheese as Brewin' cheeses; family matches and value alignment; horseshoe speed boost stacking with sugar cube; no Scared Still (pitchfork, tiger); Water Trough (water only); farmer's hat on all hats | 2.1, 3.1 | decided; not built |
 | N23 | Owner notes 11-07, fourth pass: corn husk drops and grinding, mum dyes, Prickly spares pets, pinned source, sugar-cube and horseshoe stacking, luck route, salt lick build, no carry-on, hoe enchantments as tiers, Quark pouch behaviour, lemon wine, cherry leaves, sunflower growth, pitchfork to straw, hat XP, port as a CD member | 5.7 | decided / investigated; not built |
 | N21 | Owner notes 11-06 on the plan: corn husk, mac and cheese, hats, scarecrow, trough, animal feed, trellis / hops, spool, crows, nests, seasons | 2.1, 2.2, 3.1, 3.2 | decided; evals open; not built |
-| D26 | Manure fertiliser use | 3.2 | scan default (as recommended) |
+| D26 | Manure fertiliser use | 3.2 | answered 11-08 (N26-4): default accepted, no Botany Pots |
 | N25 | Owner notes 11-07: Pinned rules (3 s on players; bosses, flying and swimming mobs exempt) | 5.9 | decided; not built |
 | N24 | Owner answers 11-07: Latex, goat milk, Fertilizer Bag, Fluid Jug, Soda family, crow and salt calls, caves, stale rows | 5.8 | decided; not built |
+| N26 | Owner answers 11-08: brine and Clarity for eval, crow nests in the crow eval, D16 / D19 / D20 / D22 / D26, candy corn, basin extras, half cabinets, hoe enchantments | 5.10 | decided; evals open; not built |
 
-Also open, no id: Spool (evaluation); the cleaver check; the Soda family and Latex integration reports (N24-1, N24-5). Closed 11-07 (N24): Root Beer, Fertilizer Bag, Jug. Settled earlier: Cherry Juice (kept, N22), Corn Husk source (N23-1), trellis (N21).
+Also open, no id: Spool (evaluation); the cleaver check (undefined: no row says what it was); the brine, Clarity and Tilling evals (N26); the Soda family and Latex integration reports (N24-1, N24-5). Closed 11-07 (N24): Root Beer, Fertilizer Bag, Jug. Settled earlier: Cherry Juice (kept, N22), Corn Husk source (N23-1), trellis (N21).
 
 ### 5.7 Owner notes N23 (2026-11-07, fourth pass)
 
@@ -612,7 +613,7 @@ Recorded from the owner's list, with what the investigation found. Nothing is bu
 |---|---|---|---|
 | N23-1 | Corn husk: random drop from harvesting, milling, crushing; higher chance on cutting; husk grinds to 0.2 cornmeal | Source was open (ED's route, cutting board only). Husk to cornmeal is not an upstream recipe | **Add**: Corn Delight corn gives a husk by random chance on harvest (hand / hoe / Create harvester), Create milling and crushing, with a higher chance on the Farmer's Delight cutting board. Grinding a husk (mortar, mill) gives 0.2 cornmeal, which is chance-based output (0.2 = 20 % chance of 1) unless a fractional-output rule exists; check the pack's `cornmeal` rules. Chances to config |
 | N23-2 | Dye recipes for each of the 8 mums | Upstream has dye only by cutting board (3.1, N12) | **Add** one crafting recipe per mum to a matching dye (colour map to write, 8 rows) plus the cutting board route kept; through `global.NCH` |
-| N23-3 | Clarity vs Brightening overlap | Clarity clears Blindness / Darkness; Fruits Delight's Brightening gives immunity to both | Same effect: **Clarity stays unregistered (D23)**; Glow Berry Wine gives Brightening. Restated |
+| N23-3 | Clarity vs Brightening overlap | Clarity clears Blindness / Darkness; Fruits Delight's Brightening gives immunity to both | Same effect: **Clarity stays unregistered (D23)**; Glow Berry Wine gives Brightening. Restated **Reversed 11-08 (N26-9): Clarity added for evaluation.** |
 | N23-4 | Prickly must not hit any pets, owner or not | Upstream thorns hit anything touching the holder (3.1) | **Change**: Prickly damage skips every tamed animal (any owner, and untamed-owner-less pets). Needs an entity check on `TamableAnimal.isTame()` / `OwnableEntity` plus Quark / AM pets that are not `TamableAnimal` (list in the test). Players and hostile mobs still take it |
 | N23-5 | Pinned: determine the source and add it; Scared Still removed | The only source is the **thrown** pitchfork hitting a target (`ThrownPitchfork`, 200 ticks, level 0). Nothing else applies it; a melee hit does not | N22 had "Pinned not registered, nothing replaces it". **Reversed by this note: register Pinned** (speed and jump -100 %, 10 s) and apply it from the thrown pitchfork only. Scared Still stays removed from the pitchfork, the tiger and the effect lists (restated). Update HNH-73 (hit applies nothing) to: throw applies Pinned 10 s, melee does not |
 | N23-6 | Drunk overlap | Upstream Drunk escalates to blindness and item drops; pack has Tipsy + Intoxication in `global.alcohol` | **Not ported, drinks use Tipsy / Intoxication (2.2, N20)**; compare result stays: no overlap left to add. Restated |
@@ -621,7 +622,7 @@ Recorded from the owner's list, with what the investigation found. Nothing is bu
 | N23-9 | Salt lick: 4 rock salt in a square, the existing rock salt texture on the lick shape, slurp sound on lick by player or animal | Plan in [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) | **Add** the crafting recipe (2x2 rock salt) and texture to the plan; a slurp sound (new sound event, existing vanilla sound as fallback, e.g. a pitched drink or honey sound) played on player use and on the animal lick goal. Tests HNH-48 to HNH-68 get a row |
 | N23-10 | No chicken pick-up to glide; Carry On not in the pack | Gliding with a held chicken is upstream. **Carry On is not installed** (only `Carry Cats 2.5`, a different mod; the Carry On tag in barbeques is dropped) | **Drop gliding** (keep plucking, 3.2); nothing to remove for Carry On. Verified in `mods/` |
 | N23-11 | Player pooping | Upstream: player Shift+P (1 hunger, 15 s) drops manure; animals drop manure after feeding (3.2) | **Owner 2026-11-07: not added.** Animal manure stays |
-| N23-12 | Both hoe enchantments, tiered | Upstream: Harvesting = cube flood-fill of ripe crops, Tilling = ring by a hard-coded map (B9). Pack: per-hoe `hoe_harvest/NxN` areas (Creative Delight `HoeHarvestArea`, Quark Simple Harvest) | **Owner 2026-11-07, reverses D21 for both.** **Harvesting I / II / III set the hoe's harvest area to 3x3 / 4x4 / 5x5** through the existing hoe harvest mechanic (`HoeHarvestArea`); the H&H cube harvest is not ported. A hoe whose own area is already that size or larger is unchanged (the enchant never shrinks it). **Tilling I / II / III let the hoe till 3x3 / 4x4 / 5x5** (sneak-use; even sizes reach one block toward the look direction as `HoeHarvestArea` does); **1 durability per block tilled** (upstream costs 1 per use). Tillable set: everything the hoe tool action tills **including modded dirts, Immersive Weathering / Rich Soil, and end stone** (**tilled end stone (owner 2026-11-07) is its own farmland-type block**, used for ender crops (**which crops: left for a later ender crop audit**): a new block (tilled end stone texture, moisture and trample rules as farmland, ender crops may plant on it); check the pack's existing End crop soils first). Enchants are Java enchantments on 1.19.2 (hoes, max III) |
+| N23-12 | Both hoe enchantments, tiered | Upstream: Harvesting = cube flood-fill of ripe crops, Tilling = ring by a hard-coded map (B9). Pack: per-hoe `hoe_harvest/NxN` areas (Creative Delight `HoeHarvestArea`, Quark Simple Harvest) | **Owner 2026-11-07, reverses D21 for both.** **Harvesting I / II / III set the hoe's harvest area to 3x3 / 4x4 / 5x5** through the existing hoe harvest mechanic (`HoeHarvestArea`); the H&H cube harvest is not ported. A hoe whose own area is already that size or larger is unchanged (the enchant never shrinks it). **Tilling I / II / III let the hoe till 3x3 / 4x4 / 5x5** (sneak-use; even sizes reach one block toward the look direction as `HoeHarvestArea` does); **1 durability per block tilled** (upstream costs 1 per use). Tillable set: everything the hoe tool action tills **including modded dirts, Immersive Weathering / Rich Soil, and end stone** (**tilled end stone (owner 2026-11-07) is its own farmland-type block**, used for ender crops (**which crops: left for a later ender crop audit**): a new block (tilled end stone texture, moisture and trample rules as farmland, ender crops may plant on it); check the pack's existing End crop soils first). Enchants are Java enchantments on 1.19.2 (hoes, max III) **Changed 11-08 (N26-8): Harvesting dropped; Tilling tiers stand as an eval build.** |
 | N23-13 | Seed pouch: behaviour of the Quark pouch, from the dropped H&H version | H&H: 512, hotbar pickup, plants 1x1 to 9x9, dispenser | **Add to Quark's pouch**: hotbar pickup of seeds into the pouch, planting area from the `Shift Range`, dispenser planting. **Owner 2026-11-07: planting range 5x5** (`Shift Range` in `quark-common.toml` plus its `configs_edited/` copy). Capacity stays Quark's |
 | N23-14 | Lemon wine as a mirror of the other ported wines if it has a texture | Upstream has the item texture, the block bottle texture and a model, but no item, lang or recipe (B2) | **Add** lemon wine with the five-wine pattern (lemon from the pack's lemon, Vinery station route, values by N22). It has a texture, so it is kept |
 | N23-15 | Vinery cherry or cherry blossom leaves in place of vanilla cherry leaves | Upstream GLM targets `minecraft:cherry_leaves` (B3); the cherry is Vinery's | **Retarget**: loot modifier for cherries (2 %) on Vinery's cherry leaves (or its cherry blossom leaves) |
@@ -699,6 +700,34 @@ List `#creativedelight:crow_shiny_items` (generated through `global.tags`, not h
 | # | Note | Rule |
 |---|---|---|
 | N25-1 | Pitchfork: Pinned exemptions and player duration | Pinned (thrown pitchfork only, N23-5) is **3 s on players**, 10 s on other targets. **Exempt:** bosses, flying mobs, swimming mobs. Exempt targets take the hit damage but get no effect. The exact test for each class (boss tag, flying / swimming check or tag) is picked at build time; prefer entity-type tags built through `global.tags` over per-tick checks. Test HNH-90 |
+
+### 5.10 Owner answers N26 (2026-11-08)
+
+Nothing is built. Each answer is also written into the row it concerns.
+
+| # | Decision | Detail |
+|---|---|---|
+| N26-1 | **Brine is added for evaluation** (reverses D15) | Bottle, bucket and fluid ported: water bottle + salt, keg and Create routes, salt set to the pack's salt. Kept pickles stay on salt in the Vintage jar until the eval reports. Hooks below |
+| N26-2 | **Crow nests are evaluated with the crows** (N21's total drop is on hold) | The nest block joins the crow eval. If ported, nests are more common in villages (`mobs/tweaks #23`). If not, N24-8 theft without a nest stands. Plan section 11 |
+| N26-3 | **D16, D19, D20 and D22 defaults accepted** | Moonshine like Vodka and the juice and wine rows; Pickled Cabbage and Chicken Pot Pie dropped; chicken plucking ported, no karma until a karma system exists; Pungent and Tempting kept with the B10 fix |
+| N26-4 | **D26 manure default accepted, except Botany Pots** | Pots take no fertilizer in the pack (`kubejs/server_scripts/other/botany_pots.js` removes the recipe type). By-hand bone-meal use, composter values, IE cloche and FD organic compost stand |
+| N26-5 | **Candy Corn uses Corn Delight's kernels** | Through `global.NCH` at step 4 |
+| N26-6 | **No extra stomping recipes before the basin eval** | Slime, sponge, sugar and any other addition wait for D12's eval |
+| N26-7 | **Half cabinets do not extend to other woods for now** | Every Compat module not ported; closes step 22 |
+| N26-8 | **Harvesting enchantment dropped; Tilling enchantment not dropped before an eval** | Harvesting I to III (N23-12) are not built; hoe areas stay on `HoeHarvestArea`. Tilling I to III as designed in N23-12 (3x3 / 4x4 / 5x5, 1 durability per block, tilled end stone) are built for the eval |
+| N26-9 | **Clarity added for evaluation** (reverses D23) | Registered; Glow Berry Wine gives Clarity and Night Vision as upstream; compared with Fruits Delight's Brightening, which covers the same two effects |
+
+#### Features waiting on brine (N26-1)
+
+| Hook | Where | State | For the eval |
+|---|---|---|---|
+| Brine Jar | `dishes/jams #8`; art in `textureswapper/mason_jar/implement/new_jar/brine_jar.png` and the mason jar interior texture | Waiting only on a brine bottle in the pack | Build the jar once the bottle exists |
+| Pickle family recipe rule | `tools/food_families.py` `preserve/pickle`: "Keg: vegetable + salt / brine" | Live rule, already names brine, and disagrees with H&H's move to the Vintage jar | Settle which station and input the family uses |
+| H&H pickles | Upstream feeds carrots, cabbage, beetroots, potatoes and onions from brine; carrots and potatoes are kept on salt | Salt until the eval | Whether kept pickles take brine |
+| Extra Delight pickle juice | [extra_delight.md](extra_delight.md): brine is the input, pickle juice the byproduct, keep both | Waits for the Extra Delight merge | Keep brine's id stable for it |
+| Port plumbing | Upstream Create filling and mixing, bottle fluid map, short bottle tag | Build step | Fluid dict entry at step 3 |
+
+`items/jars #10` (brine colours) uses the word for each pickle's jar tint and does not depend on the fluid.
 
 ## 6. File map (planned)
 
@@ -782,7 +811,7 @@ List `#creativedelight:crow_shiny_items` (generated through `global.tags`, not h
 | HNH-75 | Sprinkler: farmland moist within radius 7, fertiliser use, redstone pauses it, endless refill from an adjacent water source | |
 | HNH-76 | Hops on a trellis with and without farmland; sunflower seeds plant a growing sunflower, not a full one (B7 fix) | |
 | HNH-77 | Chicken plucking: sneak-use gives 1 feather, 30 s cooldown; shears lose 1 durability and do no damage; bare hand sometimes hurts the chicken | |
-| HNH-78 | Manure: a fed cow drops manure 30 to 60 s later, a sheep after grazing; none from a named or baby animal; bone-meal use and composter (D26) | |
+| HNH-78 | Manure: a fed cow drops manure 30 to 60 s later, a sheep after grazing; none from a named or baby animal; bone-meal use and composter (D26); not a Botany Pots fertiliser (N26-4) | |
 | HNH-79 | Sneak-use with an iron hoe on grass and on rich soil tills the hoe's harvest area (D21) | |
 | HNH-81 | Horseshoe plus a Supplementaries sugar cube on the same horse: both boosts apply and stack; removing one leaves the other (N22) | |
 | HNH-82 | Scared Still: a revealing tiger and the pitchfork no longer apply it; the effect has no icon, tooltip entry or JEI / JEED page (N22; the dragon shovel no longer applies it either) | |
@@ -791,7 +820,12 @@ List `#creativedelight:crow_shiny_items` (generated through `global.tags`, not h
 | HNH-85 | H&H butter, mac and cheese, glazed carrots, sunflower seeds craft and show in JEI; butter in `#forge:butter` (N22) | |
 | HNH-86 | Farmer's hat effect on all four pack hats and the H&H hat; scarecrow takes any of them (N21) | |
 | HNH-90 | Pinned exemptions (N25): thrown pitchfork on a player gives 3 s; no Pinned on a boss (ender dragon, wither), a flying mob (bat, phantom, parrot) or a swimming mob (fish, squid, dolphin) | | |
-| HNH-80 | Pungent potion: a zombie flees, a villager does not; Tempting potion: cows follow; Glow Berry Wine gives Brightening and clears Blindness (D23) | |
+| HNH-80 | Pungent potion: a zombie flees, a villager does not; Tempting potion: cows follow; Glow Berry Wine gives Clarity and Night Vision and clears Blindness (eval, N26-9) | |
+| HNH-92 | Brine (N26-1): water bottle + salt gives a brine bottle; bucket, keg and Create routes work; JEI shows them; compare pickling on brine and on salt for the eval | |
+| HNH-93 | Tilling I / II / III (N26-8): sneak-use tills 3x3 / 4x4 / 5x5 including modded dirts and end stone, 1 durability per block; log for the eval | |
+| HNH-94 | Harvesting enchantment (N26-8) does not exist in JEI, the enchanting table or loot; hoe harvest areas are unchanged | |
+| HNH-95 | Clarity (N26-9): refuses and clears Blindness and Darkness; compare with Brightening for the eval | |
+| HNH-96 | Crow nests (N26-2): nest generates, crows use it alongside both crows in the eval; if kept, nests appear more often in villages | |
 
 ## 9. History
 
@@ -820,6 +854,7 @@ List `#creativedelight:crow_shiny_items` (generated through `global.tags`, not h
 - 2026-11-06: owner notes N22 recorded in the rows (H&H first and complete, ED merges later; butter applied; juices and wines for evaluation on Vinery's stations; goat cheese like Brewin' cheeses; value and family alignment; horseshoe speed boost and sugar cube stacking; Scared Still removed from pitchfork, tiger and dragon shovel and hidden; trough investigated and renamed Water Trough, water-only tank; README row rewritten to the current state). Nothing built.
 - 2026-11-06: owner notes N21 added to the rows: corn husk implemented; mac and cheese added (overlap eval); hat effect on the four pack hats and the H&H hat; scarecrow takes any farmer's hat; trough as an eval build; animal feed not included (per-animal breeding-food audit first); H&H trellis not ported, hops on Vinery's trellis; spool kept for eval; both crows need an in-game eval; nests dropped totally; all included crops get Calendar season tags. Nothing built.
 - 2026-11-07: owner notes N23 recorded as section 5.7 with investigation results (Pinned source is the thrown pitchfork only, lemon wine has a texture, Carry On is not in the pack, Four-Leaf Clover is item-only in Buzzier Bees). Nothing built.
+- 2026-11-08: owner answers N26 recorded in section 5.10 and the rows; brine hooks listed; tests HNH-92 to HNH-96 added. Nothing built.
 
 ## Owner notes (scratchpad 2026-11-07)
 

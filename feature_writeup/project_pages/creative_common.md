@@ -2,8 +2,6 @@
 
 **The shared library behind the Creative mods.** Creative Common is the core that every Creative mod is built on. On its own it adds no blocks or items. It provides the shared code, scripting helpers and data the other Creative mods need, plus bug fixes and performance fixes that help any large Forge 1.19.2 pack.
 
-Looking for the JEI, WTHIT and tooltip improvements? They are in **Creative Compat**. The armor bar overflow is in **Creative Equipment**; the Create and Immersive Engineering tweaks are in **Creative Engineering**.
-
 ***
 
 ## Mods that require Creative Common

@@ -166,7 +166,7 @@ Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md
 | commonmark-java 0.21.0, shaded to `...creativecommon.shadow.commonmark` | BSD-2-Clause | yes, with `NOTICE-commonmark.txt` | fixed 2026-11-05 (names Creative Common and the `creativecommon` package) |
 | `kubejs_startup/creativecommon/_lib` (12 dicts) and `func/` helpers, `kubejs/_lib` scripts, data, lang, plugin json | own | yes | OK |
 | 12 `textures/gui/*_tint.png` (27x9) | **Mojang-derived**: recolours of the vanilla armor icon | yes | OK: vanilla art and edits of it are accepted everywhere (owner 2026-11-05, [creative_brewing.md](creative_brewing.md) 9.5) |
-| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | no since 2026-11-07 (moved to the pack's `kubejs/assets/`, 7.1) | OK |
+| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | no (out 2026-11-07; back and out again 2026-11-08: the capture is a flat sky with no terrain, so it looked blank; vanilla by default); the pack keeps its `kubejs/assets/` copy | OK |
 | `credit.txt` (Numismatics by Layers of Railways, LGPL-3.0; owner 2026-11-05: https://www.curseforge.com/minecraft/mc-mods/numismatics) | the file it covers is not traced (no Numismatics jar to compare against) | yes | OK: kept, URL added |
 | `mods.toml` `GPL-3.0-only`, `creativecommon-LICENSE.txt` | own | yes | OK |
 | Farmer's Structures donor (ARR) | read at runtime from `farmers_upstream/` | no | OK |
@@ -243,7 +243,7 @@ copy), which already held every value explicitly:
 | `[creative_menu] disabled` (new key; `CreativeMenuDisableMixin` now asks it, before: always on) | false | true |
 
 The title panorama left the jar for `kubejs/assets/minecraft/textures/gui/title/background/` (pack-owned, shipped to
-clients as `assets/*`; KubeJS assets rank above mod jars). The `mods.toml` description now says the pack settings are off by
+clients as `assets/*`; KubeJS assets rank above mod jars). **2026-11-08 (owner): the six images were put back in Common's jar, found to be a terrain-free sky capture (blank on screen) and taken out again; Common ships no panorama (vanilla). A new capture is owner work; the planned switch is a built-in resource pack, enabled by default, with a client config key, stepping aside when a panorama mod is installed.** The `mods.toml` description now says the pack settings are off by
 default. Kept as they are: the swap triggers (`creativecommon-swaps.toml`) act only on merge lists that jars ship, so they are
 library behaviour, not pack taste. Pack-flavoured defaults still in place and not in this change: `[mod_names] overrides`
 (the pack's display-name list), `[effects]` remap / removed / HUD lists. Tests SQ-CMV-04, CQ-CMV-03.
@@ -279,7 +279,17 @@ gate: SQ-CC-12, SQ-CMV-03, CQ-CGE-03, -03a to -03c, the server-join half of CQ-S
 SQ-CGE part 2). So trade sync, the out-of-range version warning and low gravity on a client joined to a dedicated
 server ship untested on this build. Project page updated the same day for 7.4 (low gravity, ItemPhysic, script phase).
 Gate now: the client rows CQ-CC-01 to -06, CQ-CPP-01, CQ-CMV-02, -03, CQ-CCB-02, CQ-CIF-01, the no-Immersive-Portals
-launch of CQ-SPFX-02; `mod_description` and an optional `itemphysic` row in `mods.toml` for 7.4; source push and tag.
+launch of CQ-SPFX-02; source tag on the final commit. `mod_description` and the optional `itemphysic` row in `mods.toml`
+done 2026-11-08 17:57 (built, in CEPortTesting, NOT installed in this instance). CEPortTesting set for the Common client
+rows: Common, Compat, KubeJS, Rhino, Architectury, JEI 11.8.1.1034, WTHIT, Bad Packets, Create, Heartstone, Moonlight,
+Immersive Portals, Framed Blocks, SecurityCraft; this instance's Common, Compat and Immersive Portals configs (its own
+in `config_backup_2026-11-08/`), tips, panorama and changelog. Full-pack only: the Engineering half of CQ-CPP-01,
+CQ-CCB-02, the JEI order check of CQ-CMV-03, CQ-CIF-01 (Compat and Engineering features).
+
+**Log cleanup 2026-11-08 evening** (scratch_run_2026-11-08.md 4, tests CQ-CLOG-01, -02; Common and Compat built, in
+CEPortTesting, NOT installed in this instance): NCH's Create helpers that use KubeJS Create's schema now skip and count
+for `kubejs_create` when that addon is missing; Compat guards the copper vertical slab and soap rows and registers the
+flower box extra models only with the mods they draw from.
 
 ### 7.2 Publish cleanup (2026-11-07 evening; built, NOT installed: the game was running)
 

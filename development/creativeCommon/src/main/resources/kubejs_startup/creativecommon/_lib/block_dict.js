@@ -211,6 +211,7 @@ b.t_storage_blocks = '#forge:storage_blocks';
 b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world
 b.t_mirror_glass = '#creativecompat:mirror_glass';             // IPMirrorGlassMixin: flint and steel makes Immersive Portals mirrors from these
 b.t_mirror_glass_panes = '#creativecompat:mirror_glass_panes'; // IPMirrorGlassMixin: the same, as glass panes
+b.t_not_mirror_glass = '#creativecompat:not_mirror_glass';     // IPMirrorGlassMixin: never a mirror, even if Immersive Portals would accept the block
 b.t_fishing_net_kelp = '#creativeengineering:fishing_net/kelp';           // OceanicDelightFishingNetMixin: net uses the kelp table
 b.t_fishing_net_sea_grass = '#creativeengineering:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
