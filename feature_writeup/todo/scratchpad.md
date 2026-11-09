@@ -36,24 +36,29 @@ build a plan for these changes. weeds should not grow naturally on rich soil/far
     - chronomarker used for mining/resource dimension navigation, more valuable resource dimensions availible w/ own tempad (unlock location cards?)
 
 - weathered cardboard box is toot small, 4 faces on each block face, doesnt wrap correctly
-
+- immersive portals portal block needs block name
 - public pack notes
     - wild food in nearly every biome
     - botany pots, very nerfed, useful for flowers and low usage crops
         - tooltip, 'Useful for flowers, not great for crops'
 
+- saurkraut
+- unify similar burgers, goal: remove 50%
+- veggie soups and stews
+    - soup and stew have no differentiation
+        - stew has meat, soup doesnt? rename to match
 
 - golden food buffs
     - all effects and saturation/hunger are identical within family
     - fruit
-        - golden: regen 2 5s,  speed 2 15s, nourishment 1 30s
-        - gilded: regen 2 20s, speed 2 60s, nourishment 1 60s
+        - golden: regen 2 5s,  speed 2 30s, nourishment 1 30s
+        - gilded: regen 3 20s, speed 3 60s, nourishment 1 60s
     - veggie
-        - golden: regen 2 5s,  jump boost 2 15s, nourishment 1 30s
-        - gilded: regen 2 20s, jump boost 2 60s, nourishment 1 60s
+        - golden: regen 2 5s,  jump boost 2 30s, nourishment 1 30s
+        - gilded: regen 3 20s, jump boost 3 60s, nourishment 1 60s
     - meat/fish
-        - golden: regen 2 5s,  speed 2 15s, nourishment 1 30s
-        - gilded: 
+        - golden: absorption 2 60s,  resistance 2 15s, nourishment 1 60s
+        - gilded: absorption 4 120s, resistance 4 60s, nourishment 1 120s
     - sweets
         - golden: regen 2 5s,  speed 2 15s, nourishment 1 30s
         - gilded: 

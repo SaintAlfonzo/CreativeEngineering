@@ -1642,7 +1642,7 @@ global.NCH = {
 	},
 
 	createHaunting(output, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createHaunting called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "haunting")
 		var ctx = 'createHaunting ' + idSuffix
@@ -1654,7 +1654,7 @@ global.NCH = {
 	},
 
 	createSplashing(output, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createSplashing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "splashing")
 		var ctx = 'createSplashing ' + idSuffix
@@ -1878,7 +1878,7 @@ global.NCH = {
 	},
 
 	createCrushing(output, input, e, idOverride, mirrorMilling) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createCrushing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createcrushing")
 		var ctx = 'createCrushing ' + idSuffix
@@ -1897,7 +1897,7 @@ global.NCH = {
 	},
 
 	createMilling(output, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createMilling called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createmilling")
 		var ctx = 'createMilling ' + idSuffix
@@ -1975,7 +1975,7 @@ global.NCH = {
 	},
 
 	createPressing(output, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createPressing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createpressing")
 		var ctx = 'createPressing ' + idSuffix
@@ -1988,7 +1988,7 @@ global.NCH = {
 	},
 
 	createCompacting(output, input, e, idOverride, heat) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createCompacting called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "compacting")
 		var ctx = 'createCompacting ' + idSuffix
@@ -2005,7 +2005,7 @@ global.NCH = {
 	},
 
 	createMixing(output, input, e, idOverride, heat) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createMixing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "mixing")
 		var ctx = 'createMixing ' + idSuffix
@@ -2022,7 +2022,7 @@ global.NCH = {
 	},
 
 	createSaw(output, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createSaw called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createsawing")
 		var ctx = 'createSaw ' + idSuffix
@@ -2036,7 +2036,7 @@ global.NCH = {
 	},
 
 	createDeploying(output, input, e, idOverride, keepIngredient) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createDeploying called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "deploying")
 		var ctx = 'createDeploying ' + idSuffix
@@ -2080,7 +2080,7 @@ global.NCH = {
 	// NOTE: idOverride sits in the "first optional arg" slot for positional consistency,
 	// but this function still throws if it's missing - it is not truly optional here.
 	createSequencedAssembly(output, input, sequence, transitionalItem, e, idOverride, loops) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createSequencedAssembly called without event object!')
 		if (!idOverride) throw new Error('createSequencedAssembly requires an explicit idOverride - auto-generated ids are unreliable for chance-output arrays!')
 
@@ -2234,7 +2234,7 @@ global.NCH = {
 	},
 
 	createMechanicalCrafting(output, pattern, keys, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createMechanicalCrafting called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "mechanicalcrafting")
 		var ctx = 'createMechanicalCrafting ' + idSuffix
@@ -2270,7 +2270,7 @@ global.NCH = {
 	// Create Item Drain: input -> outputs, an item and/or a fluid.
 	//   R.createEmptying([i.tankard, Fluid.of(f.beer, 250)], i.beer, e, 'beer')
 	createEmptying(outputs, input, e, idOverride) {
-		if (!global.has('create')) return global.NCH._skip('create')
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createEmptying called without event object!')
 		var outArr = Array.isArray(outputs) ? outputs : [outputs]
 		var idSuffix = idOverride ?? global.NCH.toId(outArr[0], input, "createemptying")

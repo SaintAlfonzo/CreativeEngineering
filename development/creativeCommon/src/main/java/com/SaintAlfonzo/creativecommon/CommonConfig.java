@@ -30,7 +30,6 @@ public final class CommonConfig {
 
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final Changelog CHANGELOG;
-    public static final LoadingTips LOADING_TIPS;
     public static final DamageTagConfig DAMAGE_TAGS;
     public static final Perf PERF;
     public static final WanderingTrader WANDERING_TRADER;
@@ -48,7 +47,7 @@ public final class CommonConfig {
         // [botania]: creativemagic-common.toml (Creative Magic, 2026-11-04)
         // [shrapnel], [surface], [vein_undo]: creativeengineering-common.toml (Creative Engineering, 2026-11-04)
         CHANGELOG = new Changelog(builder);
-        LOADING_TIPS = new LoadingTips(builder);
+        // [loading_tips]: creativecommon-client.toml (CommonClientConfig, per client, 2026-11-08)
         DAMAGE_TAGS = new DamageTagConfig(builder);
         // [armor_overflow]: creativeequipment-common.toml; [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit]:
         // creativecompat-common.toml (interface carve, 2026-11-07)
@@ -143,25 +142,6 @@ public final class CommonConfig {
             ).define("updatePopup", true);
 
             b.pop(); // changelog
-        }
-    }
-
-    /** Loading screen tips ({@code loadingtips/} package, feature_writeup/loading_tips.md). */
-    public static final class LoadingTips {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.IntValue cycleSeconds;
-
-        private LoadingTips(ForgeConfigSpec.Builder b) {
-            b.comment("Tip bar on the world loading screens (client side). The tips come from the built-in",
-                    "resource pack Loading Tips and any resource pack with assets/<namespace>/loading_tips/*.json."
-            ).push("loading_tips");
-
-            enabled = b.comment("Show the tip bar while a world or dimension loads.")
-                    .define("enabled", true);
-            cycleSeconds = b.comment("Seconds each tip stays before the next one rolls in.")
-                    .defineInRange("cycleSeconds", 7, 2, 120);
-
-            b.pop(); // loading_tips
         }
     }
 

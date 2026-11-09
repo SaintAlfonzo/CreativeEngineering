@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativecommon.loadingtips;
 
-import com.SaintAlfonzo.creativecommon.CommonConfig;
+import com.SaintAlfonzo.creativecommon.CommonClientConfig;
 import com.SaintAlfonzo.creativecommon.CreativeCommon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -72,9 +72,9 @@ public final class LoadingTipBar {
     @SubscribeEvent
     public static void onScreenRender(ScreenEvent.Render.Post event) {
         Screen s = event.getScreen();
-        if (!isLoadingScreen(s) || !CommonConfig.LOADING_TIPS.enabled.get()) return;
+        if (!isLoadingScreen(s) || !CommonClientConfig.LOADING_TIPS.enabled.get()) return;
         long now = System.currentTimeMillis();
-        long cycle = CommonConfig.LOADING_TIPS.cycleSeconds.get() * 1000L;
+        long cycle = CommonClientConfig.LOADING_TIPS.cycleSeconds.get() * 1000L;
         if (s != screen || current == null || now - shownAt >= cycle) {
             screen = s;
             current = nextTip();

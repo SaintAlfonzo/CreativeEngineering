@@ -28,7 +28,7 @@
 
 ## Interface & Tooltips <!-- icon: minecraft:written_book -->
 
-- **New:** Tip bar on the world loading screen; a new tip every 7 seconds, from 335 tips
+- **New:** Tip bar on the world loading screen; a new tip every 10 seconds, from 335 tips. Client option.
 - **Changed:** Grass, Tall Grass, Ferns and Large Ferns no longer show growing seasons in tooltips and WTHIT; grass-type blocks that spread are off in winter only [summer and the wet and dry seasons]
 - **Changed:** JEI, WTHIT, tooltip, toast and container title settings are in Creative Compat's config file, armor bar overflow settings in Creative Equipment's [Creative Common's]. Edited values carry over.
 - **Fixed:** JEI crafting pages for repairing, banner and book copying, map cloning, armor and leather dyeing, firework rockets and firework stars gave errors in the log; recipes that leave different grid cells empty now have one page per layout
@@ -160,6 +160,7 @@
   - Tinted, Reinforced Tinted, Rainbow, Smooth Tinted and Dirty Glass.
   - Quark's Framed Glass, all colours; Create Framed's tinted glass.
   - Frosty Glass while sneaking (otherwise it melts the frost).
+- **Changed:** Framed Blocks' panes and bars no longer make mirrors.
 - **Changed:** Mirrors reflect only within 12 blocks, show at most 4 reflections inside each other, and show 32 blocks of world.
 - **Changed:** Portal Gun portals show 32 blocks of world through them.
 - **Changed:** Design and Decor's Tinted Framed Glass is renamed Smooth Tinted Glass (Horizontal and Vertical too).

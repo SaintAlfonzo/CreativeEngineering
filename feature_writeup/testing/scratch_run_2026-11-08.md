@@ -160,3 +160,60 @@ Owner request 2026-11-08: "build and run these scratch tests". Targeted run, two
 | CQ-JG-02 | PASS for Creative Compat (2 third-party JER errors left) | 0 cycling `broken recipe`, order handed over, pages built; page layout names and counts not read from the log |
 | CQ-JG-03 | not run | needs hand work in the JEI window (press R / U on a cycling page); owner |
 
+
+## 4. Owner client, CEPortTesting minimum set (Common 17:57, 14 jars; run 18:00 to 18:12)
+
+Owner report: tip bar shows on world load, no creative menu, no toasts, WTHIT works, JEI tabs work, Immersive Portals works.
+Log: `Loading tips: 335 tips from 2 files`, one Heartstone priority line, no `Mixin apply failed`.
+
+| ID | Result | Left |
+|---|---|---|
+| CQ-CC-01 | PARTIAL | launch PASS; Mods screen description not reported |
+| CQ-CC-02 | PARTIAL | tip bar and count PASS; 7 s roll, Resource Packs list, custom tip not reported |
+| CQ-CMV-03 | PARTIAL | creative E and toasts PASS; panorama not reported; JEI order needs the full pack |
+| CQ-CC-06 | PARTIAL | WTHIT and JEI PASS; changelog viewer not reported |
+
+Log triage (79 ERROR, 570 WARN):
+
+- Fixed, Common: 60 `Failed to create recipe for type 'create:splashing'` plus 60 WARN. The Create helpers in NCH use KubeJS
+  Create's schema; with Create but no KubeJS Create they failed per row. Now skipped and counted for `kubejs_create` in the
+  `[absent mods]` line (same as `ieMetalPress`).
+- Fixed, Compat: 10 `[NCH] ... output: is undefined/null` (copper vertical slabs need Quark, soap needs Supplementaries);
+  rows now guarded with `global.has`.
+- Fixed, Compat: flower box extra models registered with their owners absent (2 missing textures, `cross_template`,
+  `#missingno`); now registered only with Supplementaries + Quark (berries) or Beautify (lichen).
+- Test set only: about 240 `[mod names] X is not loaded` WARN from copying the pack's config; CEPortTesting's list is now
+  empty, the published default. `Removed resource pack` lines (stale options.txt), first-run `Incorrect key` config lines.
+- Third-party, left: Immersive Portals (5 `minVersion` ERROR, duplicate codec ERROR, `nether_portal_block` missing variant,
+  `Received passengers for unknown entity`), KubeJS `Failed to get filter section from pack kubejs` (also in the full pack; its
+  pack has no readable `pack.mcmeta`, vanilla then applies no filter), SecurityCraft, Heartstone refmap, vanilla sound lines.
+
+## 5. Owner client, CEPortTesting, second launch (Common and Compat with the log cleanup, 18:29 to 18:38)
+
+Owner report: world loads; Mods screen has the gravity description and the repo link works; changelog viewer works and shows
+every version's changelog (accepted); tips roll every 7 s; flint and steel makes mirrors on tinted and reinforced tinted
+glass, not on a framed cube with tinted glass (correct, owner: framed and copycat blocks are never mirrors).
+Panorama: blank on the title screen with the images in the jar; owner accepted it and closed the check, cause not found.
+
+| ID | Result | Left |
+|---|---|---|
+| CQ-CLOG-01 | PASS | 8 ERROR: the expected 7 plus one Immersive Portals `Null RenderChunk` on the Nether's client world creation (`MyBuiltChunkStorage`); `[absent mods]` names `kubejs_create` (32 rows); no mod names or flower box lines |
+| CQ-CC-01, CQ-CMV-02 | PASS | |
+| CQ-CMV-03 | PASS for Common (panorama closed by owner) | JEI order needs the full pack |
+| CQ-CC-06 | PASS | |
+| CQ-CC-02 | PARTIAL | Resource Packs list and custom tip after F3+T not reported |
+| CQ-CC-05 | PARTIAL | framed pane and framed bars not yet tried |
+
+Static finding: Immersive Portals' mirror check accepts every `IronBarsBlock`, and Framed Blocks' `FramedPaneBlock` extends it, so
+framed panes and bars would have become mirrors. Fixed: new tag `creativecompat:not_mirror_glass` (`IPMirrorGlassMixin`).
+Copycats+ has no such block, and Create's copycat bars class is not an `IronBarsBlock` subclass in the jar scan.
+
+CEPortTesting config set for the next launch: `[mod_names] overrides = ["create=Create Test"]`, `[loading_tips] cycleSeconds = 2`.
+
+## 6. Owner client, CEPortTesting, third launch (18:48 on)
+
+CQ-CC-05 PASS (framed panes and bars make no mirror). CQ-CC-04 first half PASS (Create items read "Create Test" in all three screens). Owner saw the tips roll faster at the small GUI scale: not the scale, CEPortTesting had `cycleSeconds = 2` set for CQ-LT-04. Owner: default 10 s, per client; moved to `creativecommon-client.toml` (CQ-LTC-01). CQ-LT-04's wrap result not reported. Test tips for CQ-CC-02 added to CEPortTesting only (`creative_tips/.../tips.json` line and `kubejs/assets/zz_tip_test/`); remove after the check.
+
+## 7. Last launch (19:09 to 19:2x)
+
+CQ-LTC-01, CQ-CC-04 (second half), CQ-SPFX-02 PASS (log: no Heartstone line, no mixin failure). CQ-LT-06 PASS (owner: no tip bar with `enabled = false` in `creativecommon-client.toml`). Panorama: the six jar images are a terrain-free sky capture (contact sheet: flat blue, hazy ground, sun), hence blank; removed from Common's jar, vanilla by default.

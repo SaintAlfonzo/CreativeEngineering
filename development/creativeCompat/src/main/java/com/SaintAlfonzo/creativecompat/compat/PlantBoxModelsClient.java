@@ -13,17 +13,21 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.fml.ModList;
 
 /** Client half of {@link PlantBoxModels}: the extra models and the flower box plant renderer. */
 public final class PlantBoxModelsClient {
 
     private PlantBoxModelsClient() {}
 
-    /** Client mod bus. */
+    /** Client mod bus. Each model uses another mod's files, so it is only registered when those mods are loaded. */
     public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
-        event.register(PlantBoxModels.GLOW_BERRIES);
-        event.register(PlantBoxModels.GLOW_LICHEN);
-        event.register(PlantBoxModels.GLOW_LICHEN_POT);
+        ModList mods = ModList.get();
+        if (mods.isLoaded("supplementaries") && mods.isLoaded("quark")) event.register(PlantBoxModels.GLOW_BERRIES);
+        if (mods.isLoaded("beautify")) {
+            event.register(PlantBoxModels.GLOW_LICHEN);
+            event.register(PlantBoxModels.GLOW_LICHEN_POT);
+        }
     }
 
     /**

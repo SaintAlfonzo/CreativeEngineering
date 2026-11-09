@@ -1,6 +1,6 @@
 # Hearth and Harvest: crow and salt lick plan (2026-11-05)
 
-Status: PLANNED, nothing built. **Owner answers 2026-11-07 (N24, section 10) close every open call in section 7: crop pecking on, pack corn as crow food, theft limited to one hotbar item and surviving without a nest, dressable scarecrows pinned, slower salt lick wear, salt caves added.** **Owner notes 2026-11-06 (N21) override this plan in three places: nests are dropped totally (P2, C6, C7, C9, section 5 are void), both crows need an in-game evaluation (P1 not final), and the scarecrow accepts any farmer's hat (R1).** See section 9.
+Status: PLANNED, nothing built. **Owner answers 2026-11-07 (N24, section 10) close every open call in section 7: crop pecking on, pack corn as crow food, theft limited to one hotbar item and surviving without a nest, dressable scarecrows pinned, slower salt lick wear, salt caves added.** **Owner notes 2026-11-06 (N21) override this plan in three places: nests are dropped totally (P2, C6, C7, C9, section 5 are void), both crows need an in-game evaluation (P1 not final), and the scarecrow accepts any farmer's hat (R1).** See section 9. **Owner 2026-11-08 (N26-2): nests are on hold for the crow eval, no longer void; see section 11.**
 stash, the crow feather, crop pecking and the wild and taming mechanics. This **supersedes the D2 default ("drop H&H's crow")
 and the D13 default ("no licking")** in [hearth_and_harvest.md](hearth_and_harvest.md) section 5. Findings behind it:
 5.3 (D13) and 5.4 (crow on Alex's Mobs). Source: `DecompiledMods/hearthandharvest-1.21.1-1.4.1-src` (MIT, port route allowed;
@@ -11,7 +11,7 @@ notice in the member's `NOTICE-upstream-MIT.txt`).
 | # | Decision | Answer |
 |---|---|---|
 | P1 | Which crow carries the mechanics | **Alex's Mobs' crow** (`alexsmobs:crow`) by default; H&H's entity not ported **until the eval: both crows get an in-game evaluation (owner 2026-11-06, N21)**, then one stays. Not final |
-| P2 | Stash sink | ~~Port H&H's ground nest block~~ **Void (owner 2026-11-06, N21): drop nests totally.** No nest block, stash or nest worldgen |
+| P2 | Stash sink | ~~Port H&H's ground nest block~~ **Void (owner 2026-11-06, N21): drop nests totally.** No nest block, stash or nest worldgen **On hold (owner 2026-11-08, N26-2): evaluated with the crows; section 11.** |
 | P3 | Home | Creative Delight member `development/creativeDelight/members/hearth` (`backportedHearth`), packages `hearth.crow`, `hearth.salt`, `hearth.nest`. Goals attach through `EntityJoinLevelEvent` like `FoxBerryGoals`; AM mixins, if any, go in `creativeDelight/.../mixin/alexsmobs/` |
 | P4 | Config | Section `[hearth.crow]` and `[hearth.salt]` in `creativedelight-common.toml`, every feature switchable; copy to `configs_edited/root_config/` |
 | P5 | Crow feather and Bad Omen brew | **Add both** (owner 2026-11-05): the `crow_feather` item and the Bad Omen potion brewed from it (C8). Reverses 5.4's "do not add the item" |
@@ -83,13 +83,13 @@ All goals attach to `alexsmobs:crow` only while it is wild (`!isTame()`, not sit
 | C4 | **Taming paths on AM:** hand-feed crow food, 1 in 5 (event, wild only); eating dropped crow food heals 1 and 1 in 8 tames the thrower (`EatDroppedFoodGoal`); a stolen item picked up from a player's throw tames 1 in 3 and the item is returned (see C6). AM's thrown-seed taming is left as is | 130 |
 | C5 | **Crop pecking:** `EatCropsGoal` (scan 8, peck 40 ticks, resets `age` to 0); needs `mobGriefing` and `crow.eatCrops` (default **on**, as the owner asked; flagged in section 7); protected by scarecrow range, `#alexsmobs:crow_fears`, and a crow-proof corn state when corn exists. Tag `#creativedelight:crow_edible_crops` built through `global.tags` from pack crops (wheat, stems, berries, FD cabbages and tomatoes, raspberry, trellis crops, peanuts, corn) | 100 |
 | C6 | **Theft (nest sink void, N21; with no nest only the "fly away and drop" variant remains, decide after the crow eval):** `SeekShinyItemGoal`: scan 10, **N24-8: take 1 item (never more, even from a stack) from the player's hotbar only**, from `#creativedelight:crow_shiny_items` (gems, ingots, nuggets, raw ores, glowstone dust, ender pearl and eye; tools, armour and enchanted items are cut), carry it in the main hand and fly away from the nearest player; the loot survives without a nest (crow does not despawn while carrying, NBT-saved, dropped on death or after `crow.carryTicks`, item entity without despawn timer); full rules in [hearth_and_harvest.md](hearth_and_harvest.md) 5.8. Never while tame; `crow.stealShinyItems` switch | 170 |
-| C7 | **Void (nests dropped, N21).** ~~Stash:~~ the nest block (section 5) is the sink; deposit marks it `CrowStash`. Wild-loot nests only count as a stash when marked | in section 5 |
+| C7 | **Void (nests dropped, N21).** ~~Stash:~~ the nest block (section 5) is the sink; deposit marks it `CrowStash`. Wild-loot nests only count as a stash when marked | in section 5 **On hold with the nest block (N26-2).** |
 | C8 | **Crow feather:** item `crow_feather` in `#forge:feathers`; AM crow loot swapped to it (0 to 1, looting) through a global loot modifier replacing the vanilla feather; arrows, brush and book and quill need no recipe (tag). Bad Omen potion (awkward + crow feather) added as a Forge `BrewingRecipeRegistry` entry; effect text and the Pungent and Tempting potions stay with N16 | 60 |
 | C9 | **Spawning:** keep the pack's `flying_birds` rule; add `LivingSpawnEvent.CheckSpawn` ALLOW for crows near a generated nest or `crow.cropRequirement` crops (the H&H rule, additive so AM spawns do not drop); optional deny mode off | 70 |
 
-## 5. Nest block (the stash sink) -- VOID, nests dropped totally (owner 2026-11-06, N21)
+## 5. Nest block (the stash sink) -- ON HOLD for the crow eval (owner 2026-11-08, N26-2; was void, N21)
 
-Kept below only as history; do not build.
+Built for the crow eval; kept only if the eval keeps it (section 11).
 
 Port of `NestBlock` (187 lines), `NestBlockEntity` (4 slots, `CrowStash` flag, insert, drops on break), loot table, model and blockstates; `GENERATED`
 state marks world-generated nests. Worldgen: ground-nest placed feature plus a Forge `add_features` biome modifier into the `vegetal_decoration` step, in
@@ -181,6 +181,10 @@ All six section 7 calls are answered; the details are in [hearth_and_harvest.md]
 6. **Salt caves: added**, then examined in game for a further eval (HNH-87 to HNH-89).
 
 New tests: HNH-87 theft takes exactly 1 item from a stack, from the hotbar only (a main-inventory item and a ground item are never taken); HNH-88 a crow carrying loot does not despawn, and the loot is in its NBT and drops on its death; HNH-89 a salt cave generates, its shell is raw rock salt block, and the cave is logged for eval; HNH-90 corn and corn kernels tempt and tame a wild crow; HNH-91 a pecking-on default: an unprotected crop is pecked, a scarecrow-covered one is not.
+
+## 11. Owner answer 2026-11-08 (N26-2)
+
+Crow nests still need evaluating with the crows, so N21's total drop is on hold. The nest block (section 5) joins the crow eval. If it is ported, nests are more common in villages (`mobs/tweaks #23`). If it is not, N24-8 theft without a nest stands. If it is, the eval also decides whether theft deposits into nests. Tests HNH-57, HNH-60, HNH-66 (nest part) and HNH-68 return for the eval, and HNH-96 is added in the main report.
 
 ## Owner notes (scratchpad 2026-11-07)
 

@@ -131,12 +131,3 @@
 	#([shields].unblockableEffectTicks).
 	negatedEffectTicks = "minecraft:poison, minecraft:wither"
 
-#Tip bar on the world loading screens (client side). The tips come from the built-in
-#resource packs Loading Tips and Creative Tips (assets/<namespace>/loading_tips/*.json).
-[loading_tips]
-	#Show the tip bar while a world or dimension loads.
-	enabled = true
-	#Seconds each tip stays before the next one rolls in.
-	#Range: 2 ~ 120
-	cycleSeconds = 7
-

@@ -74,9 +74,17 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# dimension lookup fix
+# dimension limit, low gravity for non-living entities (8 mixins, client and server)
 [[dependencies.creativecommon]]
 modId="create_gravity"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
+# dropped items follow Create: Gravity's low gravity (1 mixin; needs create_gravity too)
+[[dependencies.creativecommon]]
+modId="itemphysic"
 mandatory=false
 versionRange="*"
 ordering="NONE"

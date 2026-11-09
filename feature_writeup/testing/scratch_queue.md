@@ -5080,7 +5080,7 @@ and `metal_dusts`; dict keys for Create Framed / SecurityCraft tinted glass and 
 | CQ-CC-02 | client | new singleplayer world, watch the loading screen; options, Resource Packs; `grep "Loading tips:" logs/latest.log` | tip bar shows, tips roll about every 7 s; the pack list no longer shows "Creative Tips"; the pack's own tips (from `kubejs/assets/creative_tips/`) are in the count (335 as in the changelog) and a custom tip added to that tips.json shows after F3+T | `LoadingTipPacks` still looking for the removed pack, KubeJS assets not read as a tip pack |
 | CQ-CC-03 | client | rerun CQ-LT-04 to -06 (wrap at GUI scale 4, `enabled = false`) and CQ-CMV-03 (panorama, creative E, no toasts) | all as written there | config keys moved, `CreativeMenuDisableMixin` |
 | CQ-CC-04 | client | rename display: add `create=Create Test` under `[mod_names] overrides` (restart); hover a Create item in JEI, WTHIT on a Create block, Mods screen; then clear the list | the mod line reads the override in all three; cleared list shows the real names (the list is empty by default) | `ModNames` not reading the pack's list |
-| CQ-CC-05 | client | Mirror glass of the portal change (SQ-IP rows): flint and steel on a framed tinted glass and on SecurityCraft reinforced tinted glass | a mirror portal appears; both blocks accepted | tag `creativecompat:mirror_glass` contents, dict keys |
+| CQ-CC-05 | client | Mirror glass of the portal change (SQ-IP rows): flint and steel on tinted glass and on SecurityCraft reinforced tinted glass; then on a Framed Blocks framed cube with tinted glass as camouflage, a framed pane and framed bars | a mirror portal appears on the two glass blocks; none on any framed block (owner 2026-11-08: framed and copycat blocks are never mirrors) | tag `creativecompat:mirror_glass` contents, dict keys |
 | CQ-CC-06 | client | changelog viewer: title screen and pause menu buttons; open it, scroll the Unreleased list, close | the viewer opens with the pack changelog and all family headings; Creative Compat's WTHIT and JEI still work (carve) | `[changelog]` config, jar assets |
 
 ## SQ-CCB Common-alone boot fixes, 2026-11-07 20:00 builds of Common, Compat, Brewing ([creative_engineering.md](../creative_engineering.md) 7.3, [jei_ordering.md](../jei_ordering.md))
@@ -5260,3 +5260,20 @@ Targets Compat `creativecompat-1.0.0` of 11-08 15:49 (build/libs, NOT installed)
 | CQ-JG-02 | client, full pack (JEI 11.8.1.1034) | launch, join a world, open JEI; same grep; recipes of Repair Item, Banner Duplicate, Book Cloning, Map Cloning, Firework Rocket, Firework Star, Armor Dye | 0 `broken recipe` lines; `[jei cycle] built`; the pages exist, one per layout (names end `_1`, `_2` where a recipe has several); the pack JEI order still applies (CQ-CCB-02) | `CraftingProbe.page`, `CyclingCraftingExtension.setRecipe` |
 | CQ-JG-03 | client | a cycling page: press R / U on a dye or tool in it | every filled slot and the result cycle together | the link filter in `CyclingCraftingExtension` |
 
+
+## CQ-CLOG Creative Common and Compat log cleanup after the minimum-set client run, 2026-11-08 ([scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 4)
+
+Not run. Common and Compat built 2026-11-08 in CEPortTesting, NOT installed in this instance.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-CLOG-01 | client, CEPortTesting | launch, load a world, quit; `grep -E "/(ERROR\|FATAL)\]" logs/latest.log \| cut -c1-120`; `grep "absent mods" logs/latest.log`; `grep -cE "mod names\]\|flower_box\|potted/cave_vines\|glow_lichen_pot" logs/latest.log` | 7 ERROR lines, all Immersive Portals (6) or KubeJS filter section (1); `[absent mods]` line names `kubejs_create`; last count 0 | `global.has('kubejs_create')` false negative or a Create helper still unguarded; `onRegisterAdditional` conditions |
+| CQ-CLOG-02 | client, full pack, after installing both jars | launch, load a world; `grep -cE "Failed to create recipe\|was skipped" logs/latest.log`; JEI: a Create splashing recipe for exposed cut copper vertical slab, the soap heated mixing recipes | count 0; recipes present (guards do not drop rows in the full pack) | guard condition false with the mods loaded |
+
+## CQ-LTC Loading tip bar settings moved to a per-client file, 10 s default, 2026-11-08 ([loading_tips.md](../loading_tips.md))
+
+Not run. Common built 2026-11-08, needs the game closed to go into CEPortTesting. Keys in `config/creativecommon-client.toml`, no longer in `creativecommon-common.toml`, so CQ-LT-04 and -06 edit that file.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| CQ-LTC-01 | client, CEPortTesting | launch; `grep -n "cycleSeconds" config/creativecommon-client.toml config/creativecommon-common.toml`; load a world and time the tips | client file has `cycleSeconds = 10`, the common file has none; a new tip about every 10 s | `registerConfig` CLIENT line, `LoadingTipBar` reading `CommonClientConfig` |

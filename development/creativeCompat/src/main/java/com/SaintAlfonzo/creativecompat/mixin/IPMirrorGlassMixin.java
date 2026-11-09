@@ -32,16 +32,29 @@ public abstract class IPMirrorGlassMixin {
     @Unique
     private static final TagKey<Block> creativecompat$PANES =
             TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativecompat", "mirror_glass_panes"));
+    /** Never mirrors: camouflage blocks that Immersive Portals' own class check would accept (Framed Blocks' panes). */
+    @Unique
+    private static final TagKey<Block> creativecompat$NOT_GLASS =
+            TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativecompat", "not_mirror_glass"));
 
     @Inject(method = "isGlass", at = @At("RETURN"), cancellable = true, remap = false, require = 1)
     private static void creativecompat$tagGlass(Level level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValueZ()) return;
         BlockState state = level.getBlockState(pos);
+        if (state.is(creativecompat$NOT_GLASS)) {
+            cir.setReturnValue(false);
+            return;
+        }
+        if (cir.getReturnValueZ()) return;
         if (state.is(creativecompat$GLASS) || state.is(creativecompat$PANES)) cir.setReturnValue(true);
     }
 
     @Inject(method = "isGlassPane", at = @At("RETURN"), cancellable = true, remap = false, require = 1)
     private static void creativecompat$tagPane(Level level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() && level.getBlockState(pos).is(creativecompat$PANES)) cir.setReturnValue(true);
+        BlockState state = level.getBlockState(pos);
+        if (state.is(creativecompat$NOT_GLASS)) {
+            cir.setReturnValue(false);
+            return;
+        }
+        if (!cir.getReturnValueZ() && state.is(creativecompat$PANES)) cir.setReturnValue(true);
     }
 }

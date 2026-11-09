@@ -77,6 +77,7 @@ public class CreativeCommon
             com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS);
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(OLD_FILE, FILE, CommonConfig.EFFECT_SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, FILE);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CommonClientConfig.CLIENT_SPEC, "creativecommon-client.toml");
 
         // Every potion and mob effect the Creative mods own (plan_cb_polish.md 2, from Creative Brewing 2026-11-06):
         // the creativecommon: potions (Magic Resistance; Better Beacons potions are Creative Brewing's since 2026-11-07; the vanilla-effect ones are KubeJS,
