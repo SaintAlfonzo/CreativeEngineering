@@ -8,11 +8,13 @@
 // The server jar copy is not a dump command: run tools/dump_server_mods.py (by hand, or through /cdevgen when
 // tools/generators.json lists it).
 //
+// Worldgen dumps (WORLDGEN_COMMANDS) are skipped by plain /dumpall; /dumpall full includes them.
+//
 // /dumploot runs without "all" because its trade half writes the same villager_trades.json as
-// /dumptrades. Adding a new /dump* command? Add it to DUMP_ALL_COMMANDS below.
+// /dumptrades. Adding a new /dump* command? Add it to ALL_COMMANDS below (and WORLDGEN_COMMANDS if it is a worldgen dump).
 
 ;(function () {
-	const DUMP_ALL_COMMANDS = [
+	const ALL_COMMANDS = [
 		'dumpbiomes',
 		'dumpspawns',
 		'dumpfluids',
@@ -40,7 +42,11 @@
 		'dumpworldjei',     // patcherMod (Java): world-interaction JEI facts (tools/gen_jei_world.py)
 	]
 
-	function runAll(source) {
+	// Skipped unless "/dumpall full": biome/spawn/structure/climate dumps (the climate ones are slow).
+	const WORLDGEN_COMMANDS = ['dumpbiomes', 'dumpspawns', 'dumpstructures', 'dumpstructuregen', 'dumpclimate', 'dumpclimatecaves']
+
+	function runAll(source, full) {
+		const DUMP_ALL_COMMANDS = ALL_COMMANDS.filter(c => full || WORLDGEN_COMMANDS.indexOf(c) < 0)
 		const commands = source.getServer().getCommands()
 		const started = Date.now()
 		const failed = []
@@ -72,7 +78,8 @@
 		event.register(
 			Commands.literal('dumpall')
 				.requires(src => src.hasPermission(2))
-				.executes(ctx => runAll(ctx.source))
+				.executes(ctx => runAll(ctx.source, false))
+				.then(Commands.literal('full').executes(ctx => runAll(ctx.source, true)))
 		)
 	})
 })()

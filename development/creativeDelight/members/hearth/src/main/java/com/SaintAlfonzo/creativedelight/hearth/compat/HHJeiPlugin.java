@@ -27,7 +27,18 @@ public class HHJeiPlugin implements IModPlugin {
     }
 
     @Override
+    public void registerCategories(mezz.jei.api.registration.IRecipeCategoryRegistration registration) {
+        com.SaintAlfonzo.creativedelight.hearth.machine.client.MachineJei.categories(registration);
+    }
+
+    @Override
+    public void registerRecipeCatalysts(mezz.jei.api.registration.IRecipeCatalystRegistration registration) {
+        com.SaintAlfonzo.creativedelight.hearth.machine.client.MachineJei.catalysts(registration);
+    }
+
+    @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        com.SaintAlfonzo.creativedelight.hearth.machine.client.MachineJei.recipes(registration);
         for (RegistryObject<Item> can : HHItems.ITEMS.getEntries()) {
             if (!(can.get() instanceof WateringCanItem item)) continue;
             WateringCanTier t = item.getTier();

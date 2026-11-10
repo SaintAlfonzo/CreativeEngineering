@@ -1,0 +1,22 @@
+pace 1
+## DBG-4 | thrown fork at squid: hit or miss, with a pig as control from the same spot
+> forceload add 6400 6100
+> pbot spawn bot1 6400 -60 6100 minecraft:overworld survival
+> clear bot1
+sleep 3
+> summon minecraft:squid 6400 -59 6104 {NoAI:1b,PersistenceRequired:1b,Tags:["s1"],Attributes:[{Name:"generic.max_health",Base:300.0d}],Health:300f}
+sleep 1
+> tp bot1 6400 -60 6100 0 0
+> pbot hold bot1 hearthandharvest:pitchfork
+> zhh1 throw bot1 20
+sleep 2
+> data get entity @e[tag=s1,limit=1] Health
+> data get entity @e[tag=s1,limit=1] Air
+> kill @e[tag=s1]
+> summon minecraft:squid 6400 -59 6108 {PersistenceRequired:1b,Tags:["s2"],Attributes:[{Name:"generic.max_health",Base:300.0d}],Health:300f}
+> tp bot1 6400 -60 6105 0 0
+> pbot hold bot1 hearthandharvest:pitchfork
+> zhh1 throw bot1 20
+sleep 2
+> data get entity @e[tag=s2,limit=1] Health
+look does a squid take the fork at all, NoAI or not

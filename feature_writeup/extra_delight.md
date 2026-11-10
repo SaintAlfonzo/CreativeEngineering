@@ -4,12 +4,20 @@ Survey for TODO `largecontent/mod-additions #11`. Written 2026-10-30, **nothing 
 `devmods/toBackport/later_large_content_overlap/extradelight-2.6.6.jar`, unpacked to `DecompiledMods/extradelight-2.6.6/`,
 decompiled to `DecompiledMods/extradelight-2.6.6-src/` (349 files). Licence **CC BY-NC-SA 4.0** (not GPL-compatible,
 section 0 and D2). The jar is NeoForge 1.21.1 (the TODO row said Forge 1.20.1), so using 2.6.6 needs a **port**
-(skill `port`). Upstream also has a **native Forge 1.19.2 line, last release 1.3.3 (2024-07-10)**, which is not on disk
-(D1). Short name in this file: **ED**. Test prefix: `EXD-`.
+(skill `port`). Upstream also has a **native Forge 1.19.2 line, last release 1.3.3 (2024-07-10)**, unpacked to
+`DecompiledMods/extradelight-1.3.3/` and compared in section 2.7. Short name in this file: **ED**. Test prefix: `EXD-`.
+
+**Second pass 2026-11-08, still nothing built.** Section 2.7 compares 1.3.3 with 2.6.6 and reads the licence against the
+plan. Result: fork upstream's 1.19.2 source and backport only the missing lines from 2.6.6 (D1), and keep everything taken
+from ED out of the GPLv3 trees (D2). Steps 0, 1 and 11, the routing note and the file map are corrected in place.
 
 Stage 2 of the large content addition: ED is merged with **Hearth and Harvest** ([hearth_and_harvest.md](hearth_and_harvest.md),
 short name H&H). Section 2.5 compares the two item by item and settles H&H's 2.6 placeholders. H&H decisions that waited for this pass are
 answered in 5.1.
+
+**Refreshed 2026-11-08, still nothing built.** ED is applied **on top of** the existing Delight mods and the installed H&H
+port (owner, N22 in the H&H report): where ED and an installed mod share an item, the installed one stays and ED points at
+it. Section 2.6 holds the re-scan; rows it changed are corrected in place, and the 2.6 tables say what moved.
 
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
 asks by name; upstream bugs are fixed.
@@ -20,30 +28,34 @@ asks by name; upstream bugs are fixed.
 |---|---|---|
 | Inventory: 1490 named ids (668 item, 822 block lang keys; 1441 item models), 35 fluids, 3 effects, 0 potions, 0 entities, 1 dimension + biome + 23 structures, 7 fruit / spice trees, 2 woods, 10 crops + 11 wild crops, about 2470 recipe files, 21 chest GLMs, 2160 advancements | 1 | read from the jar |
 | Of the 1490: about 695 foods and ingredients, 233 furniture / display, 208 wallpapers, 99 candy and chocolate decor, 73 fluid blocks and buckets, 58 storage blocks, 51 stations and tools, 49 wood / tree, 24 crops | 1 | regex classification, see Facts |
-| Overlap: same item in an installed mod | 2.1 | about **120** ids listed by name (food, crops, crates, stations) |
+| Overlap: same item in an installed mod | 2.1, 2.6 | about **120** ids listed by name (food, crops, crates, stations), plus about 25 found by the 2026-11-08 re-scan |
 | Overlap: same system (oven and bakeware, mortar, salt and evaporator, keg, jar, pickling, coffee, chocolate, ice cream, citrus trees, corn) | 2.3 | 18 systems |
-| Overlap with Hearth and Harvest | 2.5 | 41 shared or competing rows; H&H 2.6 placeholders settled |
-| Dead in the pack: recipes whose slot only Butchercraft-style tags fill (sausage, offal, cuts) | 3.6 B5 | 33 recipe files, about 27 dishes |
-| New to the pack | 3 | about **560** ids (most of the food, the decor, 4 crops, 4 trees) |
+| Overlap with Hearth and Harvest | 2.5, 2.6 | 41 shared or competing rows; H&H is installed now and wins every shared item (6 survivors reversed) |
+| Dead in the pack: recipes whose slot only Butchercraft-style tags fill (sausage, offal, cuts) | 3.6 B5, 2.6 | 35 recipe files by the 2026-11-08 scan; 6 are the sausage dishes, craftable once H&H's sausages are tagged |
+| New to the pack | 3 | about **520** ids after the re-scan (was about 560; most of the food, the decor, 4 crops, 4 trees) |
 | Upstream issues | 3.6 | B1-B8 (never loaded in the pack, no log) |
 | Fold-in | 4 | 26 steps |
-| Decisions | 5 | D1-D16; H&H D4, D7, D12 answered in 5.1 |
-| Tests | 8 | EXD-01..EXD-30 drafted |
+| 1.3.3 and licence pass | 2.7 | 1.3.3 has 807 named ids (755 shared with 2.6.6) and no fluids, effects or chiller; route and licence boundary changed |
+| Decisions | 5 | D1-D20; H&H D4, D7, D12 answered in 5.1 |
+| Tests | 8 | EXD-01..EXD-34 drafted |
 
 - **Jar:** `extradelight` 2.6.6 (its `neoforge.mods.toml` says 2.6.5, B1), authors Lance5057 and nine others, "A new more
   involved way to craft". Patchouli cookbook in `data/extradelight/patchouli_books/`.
-- **Licence:** CC BY-NC-SA 4.0 (toml, CurseForge and Modrinth agree). Fork allowed, but the fork must stay CC BY-NC-SA
-  with attribution, can't become GPLv3, and must stay non-commercial. CurseForge page rule: don't rehost the jar,
-  no pay-to-play servers. Port route: its own in-tree jar under that licence, **not** inside the GPLv3 Creative Delight
+- **Licence:** CC BY-NC-SA 4.0 on both lines (2.7.2). The 1.3.3 `mods.toml` says MIT; treat that as a stale field, not a
+  grant. Fork allowed, but the fork must stay CC BY-NC-SA with attribution, can't become GPLv3, and must stay
+  non-commercial. CurseForge page FAQ: don't rehost the jar, don't claim the mod as your own, no pay-to-play or cash shop
+  modpacks or servers. Port route: its own in-tree jar under that licence, **not** inside the GPLv3 Creative Delight
   bundle (D2).
 - **Dependencies:** NeoForge 21+, Minecraft 1.21, Farmer's Delight 1.2.8+ (required). Optional by `mod_loaded`: Create
   (209 mixing recipes), Butchercraft (1). Tag-only compat: Brewin' and Chewin', Corn Delight, Cultural Delights, Pizza
   Delight, The Salt, Serene Seasons, Tough As Nails.
 - **Pack references today:** none in code. Docs: TODO rows `mod-additions #10` / `#11`, `farming/crops #8` (watering
   can held for "Bountiful Harvest or Extra Delight"), H&H report 2.5 / 2.6.
-- **Already live:** nothing. No old world holds ED ids, so anything dropped at port time needs no item merge.
-- **Dumps:** `kubejs/exported/items_by_mod/` is from 2026-10-24, `display_names.json` from 2026-10-20 (the overlap
-  search also read in-tree `development/**/lang/en_us.json`). ED isn't installed, so nothing in the dumps needs refreshing yet.
+- **Already live:** nothing from ED. No old world holds ED ids, so anything dropped at port time needs no item merge. H&H's
+  port is installed (tranches 1 and 2, 112 item ids); its in-game checks have not been run.
+- **Dumps:** the 2026-11-08 re-scan used `kubejs/exported/items_by_mod/` and `tags/` from 2026-11-08 (H&H included).
+  `display_names.json` is from 2026-10-20, so in-tree `lang/en_us.json` files supplied the newer names. ED isn't installed, so
+  nothing in the dumps needs refreshing for it yet.
 
 ## 1. Overview
 
@@ -118,7 +130,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Hazelnuts, Hazelnuts in Shell, hazelnut tree | none | new nut and tree | keep (3) |
 | Cinnamon tree, Raw Cinnamon, Cinnamon Bark / Stick, Ground Cinnamon, cinnamon wood set | none | new spice and wood | keep (3) |
 | Chili, Ginger, Mallow Root, Soybean (+ seeds, wild) | none (Rustic bell peppers, Vintage ghost pepper are other plants) | new | keep (3) |
-| Sunflower Seeds | H&H sunflower seeds | same item, both new to the pack | one survivor, 2.5 |
+| Sunflower Seeds | `hearthandharvest:sunflower_seeds` (installed) | same item | Drop; H&H's |
 | Cactus (food item `extradelight:cactus`), Cooked Cactus | `delightful:cactus_flesh`, `cactus_steak` | same food | Drop; Delightful's |
 | Salt | `vintagedelight:salt_dust` (pack salt, item_merges 2.9), The Salt, H&H salt | fifth salt | Drop; `#forge:salts` |
 | Flour | `create:wheat_flour`, `#forge:flour/wheat`; H&H flour (dropped) | same | Drop; `i.flour` |
@@ -127,7 +139,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 
 | ED item | Overlaps with | Problem | Proposal |
 |---|---|---|---|
-| Butter (+ block, slab, stairs) | H&H butter (new to the pack too) | same item in both stage-2 mods | one butter, ED's (2.5, D10) |
+| Butter (+ block, slab, stairs) | `hearthandharvest:butter` (installed, the only `#forge:butter`) | same item | Drop the item; H&H's. Block, slab and stairs: new, crafted from H&H butter (D10) |
 | Cheese (+ block, slab, stairs) | Vintage cheese wheel / slice, Brewin' cheeses, `#forge:cheese`; H&H cheese (dropped) | another cheese | Drop the item; `#forge:cheese`. Blocks: D10 |
 | Cooking Oil, oil fluid | `rusticdelight:cooking_oil`; H&H (dropped) | same | Drop; Rustic's, pack oil fluid if one exists (alcohol.md 4.1 fluid rule) |
 | Vinegar, vinegar fluid, Vinegar Pot | `vintagedelight:vinegar_bottle` / `vinegar_jar` | same | Drop; Vintage's |
@@ -136,7 +148,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Apple Sauce | `vintagedelight:apple_sauce_bottle` / `jar` | same | Drop |
 | Kimchi | `vintagedelight:kimchi`, `brewinandchewin:kimchi` | third kimchi | Drop |
 | Pickled Onion, Beet, Egg, Cucumber (gherkin) and their jars | Vintage pickled onion, beetroot, egg, pickle | same pickles | Drop; Vintage's |
-| Pickled Carrot (+ jar) | H&H pickled carrots (new to the pack) | same in both stage-2 mods | one survivor, 2.5 |
+| Pickled Carrot (+ jar) | `hearthandharvest:pickled_carrots` (installed) | same item | Drop; H&H's |
 | Scrambled Eggs | `incubation:scrambled_eggs` | same | Drop |
 | Omelette | `moredelight:omelette` | same | Drop |
 | Boiled Egg, Egg White, Egg Yolk, Egg Mix fluid | pack egg solution fluid (recipes_cooking.md 2.2) | egg mix = egg solution | Drop Egg Mix; map to the egg solution. Boiled egg, white, yolk new |
@@ -159,8 +171,8 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Hot Cocoa fluid | `farmersdelight:hot_cocoa` | fluid for an existing item | map to the pack's hot cocoa fluid |
 | Apple Cider fluid, Melon Juice fluid | `farmersdelight:apple_cider`, `melon_juice` | fluid for an existing item | map to the pack fluids (Central Kitchen) |
 | Lemon Juice, Orange Juice | Fruits Delight juices | same | Drop |
-| Glow Berry Juice, Sweet Berry Juice | H&H juices (both new) | same in both stage-2 mods | one survivor, 2.5 |
-| Chocolate Milk | Neapolitan chocolate milkshake; H&H chocolate milk (H&H D5: drop) | similar | Drop (follows H&H D5) |
+| Glow Berry Juice, Sweet Berry Juice | `hearthandharvest:glow_berry_juice`, `sweet_berry_juice` (installed) | same item | Drop, with ED's fluids; H&H's |
+| Chocolate Milk | `hearthandharvest:chocolate_milk_bottle` (installed); Neapolitan chocolate milkshake | same item | Drop; H&H's |
 | Chocolate, Mint Chip Milkshake; Chocolate Ice Cream | `neapolitan:chocolate_milkshake`, `mint_milkshake`, `chocolate_ice_cream`, `mint_ice_cream`; D&D chocolate milkshake | same | Drop; Neapolitan's |
 | Milkshake (plain, fluid) | `neapolitan:vanilla_milkshake`, D&D vanilla milkshake bucket | similar | D7 |
 | Tomato Juice, Lime / Grapefruit / Cactus / Pickle Juice, Lemonade, Limeade, Orangeade, Ginger Beer, Horchata, Eggnog, Punch, Xocolatl, Gourmet Hot Chocolate, Dalgona Coffee, Soy Milk | none | new | keep (3) |
@@ -201,12 +213,12 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Keg (8-bucket tank with tap) | `brewinandchewin:keg`, H&H keg, H&H jug (8 buckets) | fourth keg | D11 (recommend drop, H&H jug covers the tank) |
 | Whisk | `create:whisk` (Create mixer part) | name clash | rename "Kitchen Whisk" if kept (4.16) |
 | Sink, Counter Cabinet (13 woods each) | Cooking for Blockheads sink and counter, H&H sink / counter (H&H D10: drop) | another family | Drop (follows H&H D10) |
-| Half Cabinet (13 woods) | **H&H half cabinets (11 woods)**, FD cabinets | same block in both stage-2 mods | one family, 2.5 / D11 |
-| Spice Rack (13 woods, empty and full) | `cookingforblockheads:spice_rack` | same | Drop |
+| Half Cabinet (13 woods) | **`hearthandharvest:*_half_cabinet` (9 woods, installed)**, FD cabinets | same block | Drop the 9 shared woods; cherry and bamboo blocked (2.4); cinnamon and fruit: D11 |
+| Spice Rack (13 woods, empty and full) | `cookingforblockheads:spice_rack`, `creativedelight:*_spice_rack` (20 woods) | same | Drop |
 | Food Display (13 woods) | Display Delight plates, Supplementaries item shelf | same job | Drop |
 | Crates: Apple, Golden Apple, Golden Carrot, Sweet Berry, Glow Berry, Red / Brown Mushroom | Quark crates and sacks, Fungi Delight mushroom crates, Fruits Delight apple crate; the same H&H crates (dropped) | same block | Drop |
 | Sacks: Cocoa Beans, Coffee Beans, Sugar, Flour, Cornmeal, Peanut (3) | Quark cocoa sack, Respite coffee sack, Create Compressed flour pile; Vintage peanut crate | same | Drop; keep sacks for new items only (chili powder, cinnamon, hazelnut, ginger, mallow powder, soybean, cocoa solids, breadcrumbs) |
-| Corn Crate, Corn Sack, Corn Cob / Husk Bundles | Corn Delight crate and kernel bag; H&H corn husk bundle | same | Drop the crate and sack; husk bundle: 2.5 |
+| Corn Crate, Corn Sack, Corn Cob / Husk Bundles | Corn Delight crate and kernel bag; `hearthandharvest:corn_husk_bundle` (installed) | same | Drop the crate, sack and husk bundle; dried husk bundle and cob bundle are new |
 | Salt Block | The Salt `salt_block`, Vintage salt block | same | Drop |
 
 ### 2.2 Mob drops, dishes, ingredients
@@ -216,7 +228,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 - **Tag inputs nothing in the pack fills** (3.6 B5): `c:sausage` (+ raw / cooked), offal (`c:liver`, `heart`,
   `brain`, `lung`, `stomach`, `blood`, `offal`), cuts (`c:chicken/breast|thigh|wing|cubed`, `c:beef/cubed|scrap|ground|oxtail|roast`,
   `c:pork/roast|scrap/cooked`, `c:meat/ribs/raw`, `c:mutton/ribs|cooked`, `c:fat`). These come from Butchercraft, which
-  isn't installed. H&H's sausage fills the sausage tags (2.5); FD cuts can fill the cut tags (D13).
+  isn't installed. H&H's sausages exist now but no `forge:sausage` tag does (2.6); FD cuts can fill the cut tags (D13).
 - Inputs to retag at port time (ED literal ids that go to a pack survivor): corn, cucumber, peanut, garlic, mint, coffee
   beans, apple / lemon / orange, cheese, butter (if H&H's survives), oil, vinegar, nut butter, salt, flour, cornmeal,
   jar, cocoa butter and powder, caramel, marshmallow, chocolate bars, bread slice, toast, egg mix.
@@ -230,7 +242,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Mixing bowl (108, stirring with a spoon) | crafting grid, Cooking Pot `_manual_only` rule, Create mixer (ED itself ships 209 Create mixing mirrors) | partly | D3 |
 | Mortar and pestle (35) | NCH `foodGrinding` (crushing wheels, Millstone, pack mortar) | **same** | through `foodGrinding` |
 | Chiller (75: ice cream, jellies, popsicles, puddings) | none (Neapolitan ice cream by crafting) | new | D3 (keep) |
-| Juicer (11) | Vinery apple press, H&H stomping basin, Create | partly | one juicer for stage 2 (2.5, D12) |
+| Juicer (11) | Vinery Apple Press (H&H's juices are built on it), H&H stomping basin (pending eval), Create | **same job** | Drop the juicer; kept juices on the Apple Press (D12) |
 | Melting pot (11, chocolate syrups) | Create Confectionery chocolate fluids, Create mixer | partly | D6 |
 | Vat (23: pickles, kimchi, sauerkraut, salami, natto, miso) | Vintage fermenting jar (pack pickling, `dishes/pickles-and-ferments`), Brewin' keg, H&H keg | **same job** | Drop the vat; recipes onto the Vintage jar (step 9) |
 | Drying rack (10: dried fruit, chili, jerky, corn husk) | none in the pack | new | keep |
@@ -245,7 +257,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Citrus and fruit trees (7) | Fruits Delight trees (apple, lemon, orange...), Vinery apple tree; pack tree worldgen | 3 of 7 the same | D5 |
 | Corn and the Cornfield dimension | Corn Delight corn; H&H Corn Maze structure | same crop, competing maze | D4 |
 | Wild crops (10 patches) | `wild_crops.json`, `tools/gen_crop_worldgen_table.py` (crops.md 2.7) | corn, coffee, cucumber, garlic, mint, peanut already placed by the pack | keep chili, ginger, mallow, soybean through `wild_crops.json` (step 14) |
-| Effects: Sunshine (lowers Darkness / Blindness) | H&H Clarity (immune to both) | **same job** | D12 |
+| Effects: Sunshine (lowers Darkness / Blindness) | H&H Clarity (registered, under eval against Fruits Delight's Brightening, N26-9) | **same job, third effect** | Drop Sunshine (D12) |
 | Chest GLMs (21) | loot system (loot.md, `loot_runtime_additions.json`) | format | through loot.md (step 5) |
 | Villager and wandering trades (code) | Dynamic Villager Trades, wandering trader catalog | format | drop the code (D14) |
 | Melon slice leaves a rind (event) | none | new, small | keep (rind feeds pickled rinds, stir fry) |
@@ -272,31 +284,31 @@ placeholders are all answered here.
 
 | Item | H&H | ED | Uses in own recipes (H&H / ED) | Survivor |
 |---|---|---|---|---|
-| Butter | item | item + block, slab, stairs; `#c:butter` | 7 / 114 (tag) | **ED**; H&H recipes on `#forge:butter` |
-| Half cabinets | 11 vanilla woods (+ cherry, bamboo, palm blocked) | 13 woods (11 vanilla + cinnamon + fruit) | - | **ED** (covers ED's own woods); H&H's dropped |
-| Sunflower Seeds | from sunflowers | from sunflowers, 2 uses | 0 / 2 | **ED** |
-| Trail Mix | raisins + nuts | dried fruit + nuts | - | **H&H** if raisins stay, else ED (D15) |
+| Butter | item | item + block, slab, stairs; `#c:butter` | 7 / 114 (tag) | **H&H** (installed, N22); ED's 114 recipes on `#forge:butter`; ED's block, slab, stairs kept |
+| Half cabinets | 9 woods installed | 13 woods (11 vanilla + cinnamon + fruit) | - | **H&H** (installed); no other woods for now (N26-7), so ED's cinnamon and fruit: D11 |
+| Sunflower Seeds | from sunflowers | from sunflowers, 2 uses | 0 / 2 | **H&H** (installed, N22) |
+| Trail Mix | raisins + nuts | dried fruit + nuts | - | **H&H** (installed) |
 | Glow Berry Juice, Sweet Berry Juice | bottle + fluid | bottle + fluid | 6 / 2 each | **H&H** (more uses, wine chain) |
 | Pickled Carrots | keg / jar | vat + jar block | - | **H&H**'s food, made in the Vintage jar (both machines dropped) |
-| Macaroni and Cheese | dish | pot + bowl (feast) | - | **ED** (feast block, macaroni ingredient) |
-| Glazed Carrots | dish | dish | - | **ED** (oven recipe already planned) |
-| Corn Husk, Corn Husk Bundle | husk + bundle | husk, dried husk, bundles, doll | 5 / 4 | **ED** (dried husk and doll use it), as Corn Delight cutting outputs |
-| Juice block | stomping basin (15) | juicer (11) | - | **one**: D12 |
-| Keg | fermenting keg | 8-bucket tank | - | both dropped: Brewin' keg ferments, H&H jug stores |
+| Macaroni and Cheese | dish (built on FD raw pasta) | pot + bowl (feast) | - | **H&H** (installed, N22); ED's feast pot: D17 |
+| Glazed Carrots | dish | dish | - | **H&H** (installed, N22) |
+| Corn Husk, Corn Husk Bundle | husk + bundle, built with drop routes | husk, dried husk, bundles, doll | 5 / 4 | **H&H** (installed, N23-1); ED's dried husk, dried bundle and doll stay, made from H&H's husk |
+| Juice block | stomping basin (15, pending eval); juices built on Vinery's Apple Press | juicer (11) | - | ED's dropped: D12 |
+| Keg | fermenting keg | 8-bucket tank | - | both dropped: Brewin' keg ferments, H&H Fluid Jug stores (not built yet) |
 | Jar | H&H jar | ED jar | 14 / 0 | both dropped: Vintage mason jar |
 | Salt, salt block | yes | yes | - | both dropped |
 | Crates (apple, golden apple, golden carrot, sweet / glow berry, mushrooms) | yes | yes | - | both dropped (Quark, Fruits Delight, Fungi) |
 | Cooking oil, flour, cheese, cornmeal, corn, peanuts, roasted peanuts, popcorn, caramel apple, smore, chocolate cake, jerky, marshmallow, chocolate milk, sink, counter | yes | yes | - | both dropped (pack survivors in each report's 2.1) |
-| Clarity / Sunshine | Clarity | Sunshine | - | **one**: D12 |
+| Clarity / Sunshine | Clarity (registered, eval N26-9) | Sunshine | - | ED's dropped: D12 |
 | Corn maze | Corn Maze structure (overworld) | Cornfield dimension (Halloween) | - | **one**: D4 |
 
 **Complementary (one mod fills a gap in the other)**
 
 | Need | From | Into |
 |---|---|---|
-| Sausage item for ED's 5 sausage dishes (currywurst, deviled sausages, pickled sausage, sauerkraut and sausage, sausage roll) | H&H Raw / Cooked Sausage | `#forge:sausage`, `#forge:sausage/raw`, `#forge:sausage/cooked` (the port's `c:` tags) |
-| Gravy for H&H Biscuits and Gravy | ED gravy (item, fluid) | H&H recipe |
-| Raisins for ED's dried fruit chain | H&H raisins | D15 |
+| Sausage item for ED's 5 sausage dishes (currywurst, deviled sausages, pickled sausage, sauerkraut and sausage, sausage roll) | H&H Raw / Cooked Sausage (installed, cleaver recipes) | `#forge:sausage`, `#forge:sausage/raw`, `#forge:sausage/cooked`: **these tags don't exist yet**, step 3 adds them |
+| Gravy for H&H Biscuits and Gravy | ED gravy (item, fluid) | Optional now: H&H's dish is built without gravy (cooked sausage, salt, milk, flour). Don't retarget unless the owner asks (scope rule) |
+| Raisins for ED's dried fruit chain | H&H raisins (installed) | D15 |
 | Jam fruits | H&H raspberry, cherry, grape | pack jam family (D9 drops ED's dynamic jam) |
 | Brine (H&H) and pickle juice (ED) | both | keep both: brine is the pickling input, pickle juice the byproduct |
 | Mallow root (ED) | ED crop | marshmallow source for H&H's charred marshmallow (H&H D7) |
@@ -321,17 +333,164 @@ placeholders are all answered here.
 - Two port jars, not one. The licences differ: H&H is MIT (can be GPLv3), ED is CC BY-NC-SA (must stay CC BY-NC-SA).
   One shared drop list (this section) and one CD tree per mod for pack glue (food values, tags, recipes).
 - Build order: H&H first (smaller, MIT, owns the farm tools and sausages ED's recipes need), then ED. The survivor
-  table above is the contract: neither port registers an id the other one owns.
+  table above is the contract: the ED port registers no id H&H owns.
+
+### 2.6 Re-scan on top of the pack and H&H (2026-11-08)
+
+Rule: **an installed mod always wins a shared item.** ED adds only what the pack lacks and takes existing items as inputs.
+
+Method: all 1472 ED lang-named ids against 20669 pack ids (dumps of 2026-11-08), by normalised display name, id suffix and
+word set; then 103 near matches and a 70-keyword concept sweep, read by hand. Result: 197 ids matched by name (28 of them
+H&H ids), 103 near matches. A name match is only a lead: false ones are listed below.
+
+**Survivors reversed by H&H being installed first**
+
+| Item | 2026-10-30 | Now | Ids that leave ED |
+|---|---|---|---|
+| Butter | ED | H&H | `butter` (block, slab, stairs stay) |
+| Sunflower Seeds | ED | H&H | `sunflower_seeds` |
+| Macaroni and Cheese | ED | H&H | `macaroni_cheese`; `macaroni_cheese_block` per D17 |
+| Glazed Carrots | ED | H&H | `glazed_carrot` |
+| Corn Husk, Corn Husk Bundle | ED | H&H | `corn_husk`, `corn_husk_bundle` |
+| Half cabinets | ED | H&H | the 9 shared woods |
+
+Also H&H's, now installed: Trail Mix (was conditional on D15), Pickled Carrots, Glow Berry and Sweet Berry Juice, and
+Chocolate Milk (the 2026-10-30 table dropped it from both mods; H&H registers it).
+
+**New overlaps found (not in the 2026-10-30 tables)**
+
+| ED item | Overlaps with | Proposal |
+|---|---|---|
+| Chili Powder | `barbequesdelight:chili_powder` | Drop; Barbeque's. The recipe dump shows no recipe for it, so ED's chili could become its source (D18) |
+| BBQ Sauce (jar, fluid, bucket) | `barbequesdelight:barbeque_sauce` | Drop; Barbeque's. ED's BBQ dishes take it |
+| Potato Soup; Rice Pudding; Sweet Berry Custard | `largemeals:potato_soup`, `rice_pudding`, `sweet_berry_custard` | Drop; Large Meals' |
+| Rack of Lamb (+ feast block) | `largemeals:roasted_mutton_rack` (+ block, raw and cooked rack) | Drop; Large Meals' |
+| Bacon Egg Sandwich | `moredelight:egg_with_bacon_sandwich` | Drop. Bacon Egg Cheese Sandwich stays |
+| Roasted Garlic | `veggiesdelight:roasted_garlic_clove` | Drop; Veggies' |
+| Step Stools (13 woods) | `creativeengineering:*_stepstool` (16 colours, the pack's own) | Drop (D11) |
+| Egg Crate | `incubation:chicken_egg_crate` | Drop |
+| Cucumber Crate, Garlic Crate | `vintagedelight:cucumber_crate`, `veggiesdelight:garlic_crate` | Drop |
+| Sweet Berry and Glow Berry Crates | `quark:berry_sack`, `quark:glowberry_sack` (the Quark storage named in 2.1) | Drop stands |
+| Pasta: Macaroni, Penne, Lasagna Noodles, Cooked Pasta | `farmersdelight:raw_pasta` (H&H's Mac and Cheese uses it) | New shapes, kept; ED's pasta dishes accept FD raw pasta only where the shape doesn't matter (D19) |
+| Frosting (16 colours) | `creativeengineering:frosting` (one item) | Keep the colours; white is the pack's frosting (D3 baking bases) |
+
+**Close but different food: keep, no merge**
+
+Curry (`largemeals:chicken_curry`, Respite tea curry); Fudge (`neapolitan:vanilla_fudge`, `brewinandchewin:cocoa_fudge`);
+French Fries (`endersdelight:steak_fries`, `pneumaticcraft:chips`); Stuffed Mushrooms and Baked Cod (Veggies' garlic versions);
+Stuffing (`corn_delight:cornbread_stuffing`); Dipped Apple Slice (`create_factory:*_apple`, whole apples); Dipped Marshmallow
+(`create_confectionery:*_glazed_marshmallow`: same idea, so D6 decides); Pumpkin Milkshake (`create_dd:pumpkin_milkshake_bucket` is
+a Create fluid); Nut Butter Cookie (`hearthandharvest:peanut_butter_cookie`: same idea, D19); Roasted, Stewed and Stuffed Apples
+(`hearthandharvest:baked_apple`); Grilled Corn on Cob (`hearthandharvest:street_corn`, dressed); Pamonha
+(`hearthandharvest:tamale`); fruit bowl (`creativedelight:*_fruit_basket`); moulded wallpapers (`design_decor` wavy wallpaper, D11).
+
+**False matches, no overlap**
+
+`fruitsdelight:*_jelly` is named Jam in the pack and ED's jellies are gelatin desserts; `barbequesdelight:tray` is a serving tray;
+`blocky_siege:mortar` is a weapon; `botania:lime_petal` is a flower petal; `simplehats:toast` is a hat; `supplementaries:jar` and
+`redeco:jar` are storage.
+
+**Tags and recipe inputs**
+
+| Finding | Detail | Action |
+|---|---|---|
+| 273 recipe tags in ED | 70 already filled in the pack; 154 ED fills itself; 49 are in neither | Step 3 |
+| Plain renames among the 49 | `c:tools/knife` (93 recipes) to `#forge:tools/knives`, `c:foods/berry` to `#forge:berries`, fish, strings, glass, stone | port conversion |
+| ED's own vanilla-based tags among the 49 | `extradelight:sweetener` (266 recipes), `extradelight:broth` (54), `makes_stock` | ship with the port |
+| Butchercraft-type tags | 27 tags, 35 recipe files: 6 sausage (5 dishes) and 29 others | sausage: add the tags. Others: D13 |
+| `#forge:butter` | holds only H&H's butter, so it is ready for ED's 114 recipes | none |
+| Items only in 1.20+ or missing mods | `minecraft:cherry_slab`, `bamboo_slab` (20 recipes each), `pink_petals`, `pitcher_plant`, `torchflower`, netherite template, `farmersdelight:bamboo_basket` (16), `butchercraft:extruder_tip` | drop or retarget per 2.4 |
+
+**What this changes in the fold-in:** H&H's Apple Press route takes ED's kept juices (D12); ED's pickles follow the H&H pickle
+station result (Vintage jar now, brine eval N26-1 open), and pickle juice stays a byproduct, so brine's id must stay stable.
+H&H's juice, wine, milk and goat fluids exist, so ED maps to them and registers none of those.
+
+### 2.7 The 1.3.3 jar and the licence (2026-11-08)
+
+Read from `DecompiledMods/extradelight-1.3.3/` (jar in ATLauncher's `downloads/`), `tools/jar_diff.py` against 2.6.6, the
+upstream repository, the CurseForge page and the licence text. Not compiled or loaded. Licence reading below is a working
+interpretation, not legal advice.
+
+#### 2.7.1 What 1.3.3 is
+
+| | 1.3.3 | 2.6.6 |
+|---|---|---|
+| Loader | Forge 1.19.2 (loader 43), needs Farmer's Delight 1.2.0+ only | NeoForge 1.21.1 |
+| Source | public: upstream branch `1.19.2`, head `22c522ad` ("1.3.3"); all 163 top-level jar classes have source; Parchment mappings | decompile only (349 files) |
+| Named ids | 807 (755 shared, 52 only here) | 1473 (718 only here) |
+| Recipes | 1362 own: 439 oven, 343 shapeless, 126 shaped, 124 FD cooking, 83 mixing bowl, 47 feast, 35 cutting, 31 mortar, 19 dough shaping, 15 tool on block, 8 drying rack; plus 194 Create mixing | about 2470 |
+| Fluids, effects | none | 35, 3 |
+| Stations | oven, mixing bowl, mortar, drying rack, dough shaping | those plus chiller, juicer, melting pot, vat, evaporator, keg, funnel and tap |
+| Same as 2.6.6 | Cornfield dimension (23 structures), 21 chest GLMs, turns off FD recipes (12 files), advancements (1216) | |
+| Soft dependencies | Create and Patchouli data, `ButchercraftAddon` has no Butchercraft class reference | |
+
+Against the keep list (section 3):
+
+| In 1.3.3 | Only in 2.6.6 |
+|---|---|
+| Ginger, cinnamon tree and wood, mixing bowl, drying rack, dough shaping, spoons, offset spatulas, grater, yeast pot | Chili, mallow root, soybean, lime, grapefruit, hazelnut, fruit wood |
+| Cheesecakes, custards, ice creams, milkshakes, popsicles, cookies, shaped gingerbread and sugar cookies, 16 jellies, candies, stews and most mains | Chiller and every fluid; chocolate chips, truffles, dipped foods and fondues (8 chocolate ids against 123); pickles and ferments, soy chain |
+| 176 wallpapers, ribbons, wreaths, candy and gingerbread blocks | Gingham, picnic baskets, Pickled and Pucker Up |
+
+The 52 ids only in 1.3.3 are older dishes (jam and jam toast, rabbit and goat dishes, oyakodon, nasi kebuli, chicken
+patties) and renamed tools (`mortar_*`, `muffin_tin`, `round_pan`). See D20.
+
+**Routes**
+
+| Route | Result |
+|---|---|
+| A. Native 1.3.3 jar, untouched | Rejected. Lacks about half the keep list; registers all 807 ids, so every Drop row is a merge and JEI hide; the Cornfield and chest GLMs stay unless overridden; 439 ED oven recipes run beside the pack oven; can't go in the deploy payload (2.7.2) |
+| B. Port all of 2.6.6 (the 2026-10-30 plan) | Works, but ports 349 decompiled classes from NeoForge 1.21.1, including stations that 1.3.3 already has running on 1.19.2 |
+| C. **Fork branch `1.19.2`, backport the missing lines from 2.6.6** | Recommended. The Forge 1.19.2 engine, stations, feasts and JEI code come as real source. Drops remove registrations (no merges, as in B). Port work shrinks to chiller, the kept fluids, new crops and trees, and new food |
+
+Both versions carry the same licence and author, so combining them in one fork is allowed. Ids match for 755, so 2.6.6 data
+carries over after the format changes of step 1. Kept recipes follow 2.6.6 where the two differ (1171 files changed
+between the jars), so the overlap tables above stand.
+
+#### 2.7.2 What the licence changes
+
+**Which licence applies.** `license = "MIT"` in the 1.3.3 `mods.toml` should not be relied on. The same branch holds the
+full CC BY-NC-SA 4.0 text in `LICENSE.txt`: the first commit (2024-04-03) added BY-NC by mistake and the next one,
+"helps to c/p the proper thing", swapped in BY-NC-SA, three months before 1.3.3. CurseForge lists BY-NC-SA, the jar has no
+MIT notice, and 2.6.6 declares `CC BY-NC-SA 4.0 Deed`. Only written permission from Lance5057 would change this.
+
+| Clause | Effect on this plan |
+|---|---|
+| 2(a)(1)(b), adapting allowed | A fork of source is fine; no need to rewrite from behaviour as for ARR mods. The GitHub source replaces the decompile |
+| 2(a)(4), format changes | Pure format conversion isn't an adaptation, but dropping ids and retargeting is, so the fork is Adapted Material |
+| 3(b)(1) and (3), ShareAlike | The fork stays CC BY-NC-SA 4.0 or later. No GPLv3, no added restrictions on the fork |
+| Section 4, database rights | Reusing a substantial part of ED's recipe, food value or name tables carries the same conditions. One recipe is thin; hundreds of transcribed recipes are not |
+| 1(k) and 2(a)(1), NonCommercial | Free distribution is fine; paid access is not. The FAQ adds "no pay to play/cash shop modpacks or servers", so server ranks or paid perks would break it. The repo shows no monetisation (owner to confirm, D2) |
+| 3(a)(1), attribution | Keep Lance5057 and all credited contributors from both versions, a licence and disclaimer notice, the link to the project, and a statement of what changed |
+| 2(a)(6), no endorsement | Display name and description say it is an unofficial fork (FAQ: don't claim the mod as your own) |
+| 6(a) and (b), termination | A breach ends the licence at once; it reinstates if cured within 30 days of discovery |
+
+**Boundary with the GPLv3 jars** (the part that changes the fold-in):
+
+- **ED-derived Java goes only in the fork.** Step 11 put Pickled and Pucker Up in Creative Common; that can't hold ED code.
+  They stay in the fork, or Common gets its own version written from behaviour.
+- **Transcribed ED data goes only in the fork**: recipe lists, food values, lang names and tooltips. The routing note
+  put them in Creative Delight trees; they move to the fork's own script folders (it can carry `kubejs_startup/`, memory
+  `kubejs-jar-startup-scripts`). Bare ids in `item_dict.js`, tags and recipes the pack designs itself stay GPLv3.
+- **The fork shouldn't compile against GPLv3 jars.** NonCommercial is a further restriction GPLv3 forbids. Keep it on
+  Farmer's Delight, Create and JEI APIs; script calls to `global.NCH` need a one-line permission from the owner, who holds
+  that copyright.
+- Bundling the fork alongside GPLv3 jars in the pack is aggregation and is fine; nesting it inside Creative Delight stays
+  ruled out.
+
+**Rehosting.** The licence alone would allow sharing the unmodified jar, but the FAQ asks not to, so the unmodified jar
+stays out of the payload. The fork is a different work, and an unofficial 1.20.1 port is already on CurseForge under the
+same licence. Route A would need a download step that `build_deploy.py` doesn't have.
 
 ## 3. New content
 
-About 560 ids are new to the pack after section 2 (the rest drop). By line:
+About 520 ids are new to the pack after sections 2.1 to 2.6 (the rest drop). By line:
 
 ### 3.1 Crops, trees, woods
 
 | Line | Ids | Notes |
 |---|---|---|
-| Chili | chili, chili seeds, dried chili, sliced chili, chili powder, hanging chili / dried chili, wild chili, chili crate, chili powder sack | dried on the drying rack |
+| Chili | chili, chili seeds, dried chili, sliced chili, hanging chili / dried chili, wild chili, chili crate, chili powder sack | dried on the drying rack; chili powder is Barbeque's (2.6, D18) |
 | Ginger | ginger, ginger cutting (seed), peeled / sliced / grated ginger, candied ginger, pickled ginger, wild ginger, crate | propagated by cutting |
 | Mallow root | mallow root, mallow powder, wild mallow root, crate, powder sack | marshmallow source |
 | Soybean | soybean pod, soybeans, soaked / cooked / mashed soybeans, edamame, soy milk, wild soybean, sack | soy sauce, miso, natto chain |
@@ -371,7 +530,7 @@ Cornfield only), corn cob pipe.
 
 ### 3.4 Decor
 
-208 moulded wallpapers (13 woods x 16 colours), step stools, knife blocks, dried corn fences, picnic baskets (16),
+208 moulded wallpapers (13 woods x 16 colours), knife blocks, dried corn fences, picnic baskets (16),
 wreaths (15), fruit and candy bowls, chocolate boxes (16), jar display, gingham (16 + 16 carpets), ribbon bows (16),
 chocolate building blocks (4 kinds x 8 shapes), jelly blocks (16), candy cane blocks (3), frosted gingerbread blocks (16),
 hanging produce (chili, corn, garlic, ham, mint, onions), 4 paintings, citrus rind banner pattern. D11.
@@ -389,7 +548,7 @@ text needed for each kept one.
 | B2 | `SugarRushEffect` is never registered | `effects/SugarRushEffect.java`; `ExtraDelightMobEffects` registers only 3 | drop the class |
 | B3 | 17 files under the 1.20 path `data/farmersdelight/recipes/` are dead on 1.21 (the live overrides are in `recipe/`) | jar layout | leftovers; drop |
 | B4 | 4 biome modifiers under the 1.20 path `data/extradelight/forge/biome_modifier/` (cinnamon, mint, wild corn, wild ginger) duplicate the live `neoforge/` ones | jar layout | drop |
-| B5 | 33 recipe files (about 27 dishes) have a slot that only Butchercraft-style tags fill (`c:sausage*`, offal, cuts, `c:fat`); ED defines none of them, so these dishes are uncraftable without Butchercraft. Blood chocolate's whole line hangs on `c:blood` | tag scan of `data/*/recipe` against `data/*/tags` | D13 |
+| B5 | 35 recipe files (re-scanned 2026-11-08; about 29 dishes) have a slot that only Butchercraft-style tags fill (`c:sausage*`, offal, cuts, `c:fat`); ED defines none of them, so these dishes are uncraftable without Butchercraft. Blood chocolate's whole line hangs on `c:blood` | tag scan of `data/*/recipe` against `data/*/tags` | D13 |
 | B6 | Id typos: `lasanga`, `caramel_cheescake_slice` (display names are right) | lang | ids kept (port rule: keep upstream ids) |
 | B7 | The Cornfield trigger reads the real date (1 October to 10 November), so it is active in normal play every autumn; today (2026-10-30) included | `CornTop.isHalloween`, `CornBottom` | follows D4 |
 | B8 | 2160 recipe advancements (recipe book unlocks) | `data/*/advancement` | dropped by the pack |
@@ -398,13 +557,12 @@ No load errors: the jar was never loaded in the pack.
 
 ## 4. Fold-in, in build order
 
-0. **Decide D1 and D2 first** (native 1.3.3 vs port of 2.6.6; licence and delivery). Get the 1.3.3 jar (owner
-   download from CurseForge) and run `python3 tools/jar_diff.py extradelight-1.3.3.jar extradelight-2.6.6.jar`
-   (method: [devmods_evaluation.md](devmods_evaluation.md) section 1). The steps below assume the recommendation:
-   an in-tree port of 2.6.6 that registers only the kept content.
-1. **Port** (skill `port`, [feature_porting.md](feature_porting.md)): `development/backportedExtraDelight/` (mod id
-   `extradelight`, version `2.6.6-ce-19.2-01`), licence file CC BY-NC-SA 4.0 with attribution to Lance5057 et al., root
-   `settings.gradle`, `IN_TREE_MODS`. NeoForge 1.21.1 -> Forge 1.19.2: data components (dynamic food, feast state,
+0. **Decide D1 and D2 first** (route; licence and delivery; 2.7). The steps below assume the recommendation: a fork of
+   upstream's `1.19.2` branch that registers only the kept content, with the missing lines backported from 2.6.6.
+1. **Fork and backport** (skill `port`, [feature_porting.md](feature_porting.md)): `development/backportedExtraDelight/`
+   (mod id `extradelight`, version `1.3.3-ce-19.2-01`) from commit `22c522ad`, with the fork's licence file, notices and
+   display name per 2.7.2, root `settings.gradle`, `IN_TREE_MODS`. Remove the Drop ids of 2.1 and the Cornfield from the
+   fork. Then backport what 1.3.3 lacks (2.7.1). For that 2.6.6 code and data only, NeoForge 1.21.1 -> Forge 1.19.2: data components (dynamic food, feast state,
    containers) -> NBT; `DeferredHolder` -> `RegistryObject`; `ItemInteractionResult` / `useItemOn` -> 1.19.2 `use`;
    menus, capabilities (`WellFluidCapability`, fluid tanks) -> Forge caps; data paths `recipe` -> `recipes`,
    `loot_table` -> `loot_tables`, `tags/item` -> `tags/items`; result `id` -> `item`; `neoforge:compound` ->
@@ -414,7 +572,8 @@ No load errors: the jar was never loaded in the pack.
    coverage, stack sizes, physics, WTHIT icons, crop table, paintings).
 3. **Ids and tags:** `item_dict.js` (and block / fluid dicts) keys for every kept id; tags through `global.tags` in a CD
    `extradelight/tags.js`: crops and seeds (`#forge:crops/chili|ginger|soybean|mallow_root`, `#forge:seeds/*`), fruit
-   (`#forge:fruits/lime|grapefruit`), nuts (`#forge:nuts/hazelnut`), `#forge:butter`, `#forge:sausage*` (H&H items),
+   (`#forge:fruits/lime|grapefruit`), nuts (`#forge:nuts/hazelnut`), **new** `#forge:sausage`, `/raw`, `/cooked` on H&H's items
+   (`#forge:butter` already holds H&H's butter),
    cut tags per D13, storage blocks, saplings / leaves / logs (`#minecraft:logs_that_burn`, `#minecraft:saplings`),
    Serene Seasons crop tags.
 4. **Recipe retargets** (port data or CD `extradelight/recipes.js` via `global.NCH`): every kept recipe that named a
@@ -427,15 +586,16 @@ No load errors: the jar was never loaded in the pack.
 7. **Potions** ([potions.md](potions.md)): none (ED has no potions). Pickled / Pucker Up / Sunshine potions are not
    added (scope rule).
 8. **Alcohol:** none (ED's drinks are non-alcoholic). Ginger beer stays non-alcoholic.
-9. **Machines:** vat recipes -> Vintage fermenting jar; mortar -> `foodGrinding`; evaporator -> Vintage; melting pot,
-   juicer, keg per D6 / D12 / D11; kept stations (chiller, mixing bowl, drying rack, dough shaping) ported as is with
+9. **Machines:** vat recipes -> Vintage fermenting jar (pickle station per H&H's brine eval, N26-1); mortar -> `foodGrinding`;
+   evaporator -> Vintage; juicer -> Vinery Apple Press through `R.vineryPressing` (D12); melting pot, keg per D6 / D11; kept stations (chiller, mixing bowl, drying rack, dough shaping) ported as is with
    JEI categories. Create mixing mirrors (209) kept where they make kept items.
 10. **Recipes by pack rules** through `global.NCH` ([recipes_cooking.md](recipes_cooking.md)): the 525 oven recipes ->
     `creativeengineering:baking` with pack bakeware (D3), pack bases (cake base, pie crust, frosting, cookie dough),
     muffins on paper; heatless `_manual_only` for pot meals; roll and sandwich rules; Slice & Dice and Central Kitchen
     mirrors; container remainders (bowls, bottles, buckets, pans not consumed).
-11. **Effects** ([effects.md](effects.md), JEED): Pickled, Pucker Up, and the D12 survivor; check the effects table
-    generator picks them up.
+11. **Effects** ([effects.md](effects.md), JEED): Pickled and Pucker Up stay in the fork (licence, 2.7.2), an exception to
+    the rule that effects live in Creative Common (memory `creative-delight-routing`), unless Common writes its own from
+    behaviour; check the effects table generator picks them up. Sunshine dropped (D12).
 12. **Food types and values** (`food_types.json`, [food.md](food.md)): about 460 edible items need a type (the pack has
     1030 today); food families (`tools/food_families.py --check`: cheesecake, custard, ice cream, milkshake, popsicle,
     cookie, candy, jelly, pickle, chocolate families); stack sizes ([stack_sizes.md](stack_sizes.md)); cans and jars
@@ -466,20 +626,23 @@ No load errors: the jar was never loaded in the pack.
 25. **Config:** `configs_edited/` copy of the port's config (mint spread off since mint is dropped; all-year spooky off).
 26. **Release:** `mod_sides.md` row, changelog bullets per family (only when built), TODO row, plan row.
 
-Order: 0 and 1 before everything; the H&H port before step 3 (sausage tags); 2 after 1 and again after 3-4; 3 before
+Order: 0 and 1 before everything; H&H's port is in, so step 3 can add the sausage tags at once; H&H's brine eval before the
+pickle part of step 9; 2 after 1 and again after 3-4; 3 before
 4 and 9-15; 9 before 10; 12 after 10; 14-15 after 2 (crop table and worldgen dumps); 26 last.
 
-Routing (memory `creative-delight-routing`): food recipes, tags, values and cooking rules go in a CD tree
-`development/creativeDelight/src/main/resources/kubejs_startup/extradelight/` (startup) and
-`kubejs/data/creativedelight/kubejs/extradelight/` (server). Those are pack scripts (GPLv3), not ED code. Engine code
-(stations, blocks, feasts) stays in the CC BY-NC-SA port jar. ED has no alcohol, so nothing goes to the alcohol scripts.
+Routing, **changed by the licence (2.7.2)**: this overrides memory `creative-delight-routing` for ED. Anything transcribed
+from ED (recipe lists, food values, names, tooltips) and all engine code go in the CC BY-NC-SA fork, including its own
+`kubejs_startup/extradelight/` and server script folders. The GPLv3 CD trees
+(`development/creativeDelight/src/main/resources/kubejs_startup/extradelight/`, `kubejs/data/creativedelight/kubejs/extradelight/`)
+hold only what the pack defines itself: tags, removals, and recipes designed to pack rules. ED has no alcohol, so nothing goes
+to the alcohol scripts.
 
 ## 5. Decisions for the owner
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
-| D1 | Route: native Extra Delight **1.3.3** (Forge 1.19.2, untouched, merges for every duplicate) or a **port of 2.6.6** registering only kept content? | get 1.3.3 and diff it first; if 1.3.3 lacks the citrus, fermentation and soy lines, port 2.6.6 (new content only), the same shape as H&H | **blocks building**: no route until the diff |
-| D2 | Licence CC BY-NC-SA 4.0: OK to ship a port jar under that licence (separate from the GPLv3 jars), and to keep servers non-commercial? The deploy payload shouldn't rehost the upstream jar (deploy.md Vinery note) | yes: own jar, licence file and attribution, never inside the CD bundle; a published pack downloads the native jar if D1 goes native | blocks building |
+| D1 | **Changed 2026-11-08 (2.7.1).** Route: native 1.3.3 untouched, a port of all of 2.6.6, or a fork of upstream's `1.19.2` source with the missing lines backported from 2.6.6? | fork and backport | **Answered 2026-11-08: approved.** Route is the fork |
+| D2 | **Changed 2026-11-08 (2.7.2).** Licence CC BY-NC-SA 4.0: OK to ship the fork under that licence, keep ED-derived code and data out of the GPLv3 trees, give `global.NCH` a one-line permission for the fork, and keep the pack and any server free of paid access or cash shops? | yes to all; the unmodified upstream jar never goes in the payload | **Answered 2026-11-08: approved** (licence boundary and the `global.NCH` permission for the fork; owner states the pack and its servers will never be monetised) |
 | D3 | Stations: ED oven, pans, mortar, mixing bowl, chiller | drop ED oven and mortar (pack oven, `foodGrinding`); map pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold: keep as new bakeware or map to the cake pan / baking sheet; keep the chiller; mixing bowl: keep (manual mixing with spoons has no pack equivalent) | as recommended, mixing bowl kept |
 | D4 | Corn and the Cornfield dimension | drop ED corn (Corn Delight's) and the Cornfield (dimension, maze, 23 structures, Halloween portal); H&H Corn Maze is the stage-2 maze. Keep corn husk, silk, dried husk, doll and pipe as Corn Delight byproducts | drop |
 | D5 | Trees: apple, lemon, orange duplicate Fruits Delight | drop those 3; keep lime, grapefruit, hazelnut, cinnamon and the fruit wood (lime and grapefruit grow on it) | as recommended |
@@ -487,13 +650,17 @@ Routing (memory `creative-delight-routing`): food recipes, tags, values and cook
 | D7 | Ice cream and milkshakes vs Neapolitan | drop ED chocolate and mint duplicates and the plain milkshake (Neapolitan vanilla); keep the other flavours | as recommended |
 | D8 | Coffee and tea | drop ED's coffee crop, beans, drink and tea; ED coffee dishes (dalgona, affogato, coffee jelly, chocolate-dipped coffee beans) take Respite beans; Ground Coffee kept only if a recipe needs it after retargets | as recommended |
 | D9 | Dynamic jam and toast (one id, ingredient components) vs the jam family (one id per fruit, mason jar) | drop both dynamic items; ED jam fluid dropped | drop |
-| D10 | Butter and cheese | ED butter is the stage-2 butter (block, slab, stairs kept); ED cheese item dropped; cheese block, slab, stairs: keep as decor on Vintage cheese or drop | butter as recommended, cheese decor dropped |
-| D11 | Furniture and decor: half cabinets (ED and H&H), knife block, step stool, picnic basket, wreaths, bowls, chocolate box, gingham, ribbons, 208 wallpapers; ED keg | one half-cabinet family (ED's); drop sinks, counters, spice racks, food displays, keg; keep the small decor; wallpapers: owner (208 ids for one look) | wallpapers dropped, the rest as recommended |
-| D12 | Juicer (ED) vs stomping basin (H&H); Sunshine (ED) vs Clarity (H&H) | juicer: ED's (a station with JEI, covers citrus); basin dropped unless the owner wants the stomping look. Effect: keep H&H **Clarity** (plain immunity, easier to describe); ED foods that gave Sunshine give Clarity | as recommended |
-| D13 | Butchercraft-dependent dishes (B5) | fill the tags from pack items where a cut clearly fits (sausage -> H&H sausage; chicken breast / thigh / wing / cubed -> FD chicken cuts; beef cubed / scrap / ground -> FD minced beef; roasts -> raw beef / porkchop / mutton; ribs -> Alex's Mobs moose ribs only for BBQ ribs); drop the offal dishes (haggis, fried brains, liver and onions, stuffed heart, oxtail soup), fat potatoes and salami (`c:fat`) unless Carnivore (`mod-additions #12`) brings offal | as recommended |
+| D10 | Butter and cheese | **Changed 2026-11-08:** H&H's butter is the pack's (N22); ED's butter item dropped; ED's butter block, slab and stairs kept and crafted from it; ED cheese item dropped; cheese block, slab, stairs: keep as decor on Vintage cheese or drop | butter as recommended, cheese decor dropped |
+| D11 | Furniture and decor: half cabinets (ED and H&H), knife block, step stool, picnic basket, wreaths, bowls, chocolate box, gingham, ribbons, 208 wallpapers; ED keg | **Changed 2026-11-08:** H&H's half cabinets stay (9 woods); ED's cinnamon and fruit variants wait with N26-7 (no other woods for now); step stools dropped (the pack has its own); drop sinks, counters, spice racks, food displays, keg; keep the other small decor; wallpapers: owner (208 ids for one look) | wallpapers and cinnamon / fruit half cabinets dropped, the rest as recommended |
+| D12 | Juicer (ED) vs stomping basin (H&H); Sunshine (ED) vs Clarity (H&H) | **Changed 2026-11-08:** drop ED's juicer; lime, grapefruit, tomato, cactus and pickle juice go on the Vinery Apple Press like H&H's juices (loses the juicer's dye and bone meal byproducts); basin eval stays H&H's (D12 there). Drop Sunshine; ED foods that gave it give whichever of Clarity and Brightening wins the N26-9 eval | as recommended |
+| D13 | Butchercraft-dependent dishes (B5) | fill the tags from pack items where a cut clearly fits (sausage -> H&H sausage, tags to be added; chicken breast / thigh / wing / cubed -> FD chicken cuts; beef cubed / scrap / ground -> FD minced beef; roasts -> raw beef / porkchop / mutton; ribs -> Alex's Mobs moose ribs only for BBQ ribs); drop the offal dishes (haggis, fried brains, liver and onions, stuffed heart, oxtail soup), fat potatoes and salami (`c:fat`) unless Carnivore (`mod-additions #12`) brings offal | as recommended |
 | D14 | Trades and chest GLMs | drop the trade code; chest additions: a few ED foods per structure through loot.md, not the 21 GLMs as written | as recommended |
 | D15 | Raisins (H&H) vs dried fruit (ED); trail mix | keep both raisins and dried fruit (dried fruit is the drying rack's generic output); trail mix: H&H's, on raisins | as recommended |
-| D16 | Build order for stage 2 | H&H port first, then ED; neither registers an id the other owns (2.5) | as recommended |
+| D16 | Build order for stage 2 | H&H port first (installed), then ED; ED registers no id H&H owns (2.5, 2.6) | as recommended |
+| D17 | ED's Pot of Mac and Cheese feast block, now that H&H owns the dish | drop it (H&H's dish is a bowl); or keep the pot and serve H&H's bowl from it | drop |
+| D18 | Chili powder: Barbeque's item has no recipe in the dump | check in game, then add ED chili as its source through `foodGrinding` if it has none | as recommended |
+| D19 | Near duplicates of H&H and FD: ED Nut Butter Cookie vs H&H Peanut Butter Cookie; ED pasta shapes vs FD raw pasta | drop ED's cookie and use H&H's; keep macaroni, penne and lasagna noodles as shapes, use FD raw pasta where a dish names no shape | as recommended |
+| D20 | The 52 ids only in 1.3.3 (2.7.1): upstream later removed or renamed them | drop by default, so the fork matches 2.6.6's list; the jam items follow D9, the renamed tools take 2.6.6's ids; rabbit, goat and rice dishes can be kept by name if wanted | drop |
 
 ### 5.1 H&H decisions answered by this pass
 
@@ -508,10 +675,10 @@ Routing (memory `creative-delight-routing`): food recipes, tags, values and cook
 
 | Path | What |
 |---|---|
-| `development/backportedExtraDelight/` | the port (Java, assets, data of kept content), CC BY-NC-SA 4.0 licence file and attribution |
-| `development/creativeDelight/src/main/resources/kubejs_startup/extradelight/` | items dict glue, food values, tags (CD startup) |
-| `kubejs/data/creativedelight/kubejs/extradelight/` | recipes (NCH), oven retargets, removals (CD server) |
-| `kubejs/startup_scripts/_lib/item_dict.js` | `global.item` keys for kept ids |
+| `development/backportedExtraDelight/` | the fork (Java, assets, data and scripts of kept content, including transcribed recipes and food values), CC BY-NC-SA 4.0 licence file and attribution |
+| `development/creativeDelight/src/main/resources/kubejs_startup/extradelight/` | pack-defined glue only: tags (CD startup) |
+| `kubejs/data/creativedelight/kubejs/extradelight/` | pack-defined recipes and removals only (CD server) |
+| `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js` | `global.item` keys for kept ids (`:creativeCommon:` rebuild) |
 | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json` | wild chili, ginger, mallow, soybean |
 | `mod_sides.md`, `configs_edited/root_config/extradelight-*.toml` | sides row, config backup |
 
@@ -558,9 +725,20 @@ Routing (memory `creative-delight-routing`): food recipes, tags, values and cook
 | EXD-28 | Decor: half cabinets (13 woods) store items; gingham, ribbons, picnic baskets, wreaths place | |
 | EXD-29 | Kept chest additions appear in their structure chests; no dropped id in any chest | |
 | EXD-30 | Names: no duplicate display names with Create (whisk), the pack oven, Vintage cheese, More Delight toast | |
+| EXD-31 | JEI: no ED butter, sunflower seeds, mac and cheese item, glazed carrot, corn husk or shared-wood half cabinet; H&H's are the only ones | |
+| EXD-32 | ED recipe that needs butter accepts H&H's butter | |
+| EXD-33 | Currywurst and Sausage Roll craft with H&H cooked or raw sausage | |
+| EXD-34 | Lime juice comes from the Vinery Apple Press; no ED juicer in JEI | |
 
 ## 9. History
 
 - 2026-10-30: investigation written (overlap, stage-2 comparison with Hearth and Harvest, integration process),
   nothing built. Jar unpacked to `DecompiledMods/extradelight-2.6.6/` and decompiled to `-src/`. Found that upstream
   has a native Forge 1.19.2 line (1.3.3) and that the licence is CC BY-NC-SA 4.0; D1 and D2 block building.
+- 2026-11-08: re-scan on top of the existing Delight mods and the installed H&H port (2.6): 6 survivors reversed to H&H, about
+  25 more ids overlap, sausage tags found missing, D10 to D12 changed, D17 to D19 added. Nothing built.
+- 2026-11-08: second pass with the 1.3.3 jar and the CurseForge licence (2.7): route changed to a fork of upstream's
+  `1.19.2` source plus a backport of the missing lines; licence boundary keeps ED code and data out of the GPLv3 trees;
+  D1 and D2 rewritten, D20 added. Nothing built.
+- 2026-11-08: owner approved D1 (fork and backport) and D2 (licence boundary, `global.NCH` permission for the fork, no
+  monetisation ever). Building is unblocked; remaining decisions D3 to D20 keep their defaults until answered.

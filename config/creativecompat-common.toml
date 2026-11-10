@@ -304,7 +304,7 @@
 	#Takes effect the next time a recipe lookup opens.
 	craftableFirst = true
 	#Order JEI's ingredient list by the pack's definition (kubejs/startup_scripts/jei/order.js) and its
-	#creativecommon:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
+	#creativecompat:jei/... tags: by type (items, multiblocks, fluids, effects), then category, then
 	#each category's own order. Ingredients with no place keep JEI's own order ([sorting] in
 	#config/jei/jei-client.ini) after the placed ones of their type. Off: JEI's own order only.
 	#Takes effect the next time JEI starts (rejoin or /reload). Default off (JEI's order); the pack sets true.
@@ -479,10 +479,20 @@
 	#below fades it instead). 0 = the normal render distance.
 	#Range: 0 ~ 512
 	mirrorViewDistance = 32
+	#Blocks of world drawn through a Portal Gun portal, rounded up to whole chunks (a hard cut; the
+	#portalGun fog below fades it). 0 = the normal render distance.
+	#Range: 0 ~ 512
+	portalGunViewDistance = 32
+	#Blocks of world drawn through a Nether portal, rounded up to whole chunks (a hard cut; the nether
+	#fog below fades it). Immersive Portals loads the far side to its indirectLoadingRadiusCap (2 chunks
+	#in this pack). 0 = the normal render distance.
+	#Range: 0 ~ 512
+	netherViewDistance = 32
 
 	#Fog drawn while looking through a portal, per portal type. Distances are blocks past the portal
 	#plane: clear up to start, full fog at end. enabled = false keeps the normal fog. Keep nether.end at
-	#Immersive Portals' indirectLoadingRadiusCap x 16 (4 chunks = 64), where the far side stops.
+	#netherViewDistance, portalGun.end at portalGunViewDistance and mirror.end at mirrorViewDistance,
+	#where the world seen through stops.
 	[immersive_portals.fog]
 
 		#Nether portals.

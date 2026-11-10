@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "moisture=0": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=1": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=2": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=3": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=4": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=5": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=6": {
+      "model": "hearthandharvest:block/tilled_end_stone"
+    },
+    "moisture=7": {
+      "model": "hearthandharvest:block/tilled_end_stone_moist"
+    }
+  }
+}

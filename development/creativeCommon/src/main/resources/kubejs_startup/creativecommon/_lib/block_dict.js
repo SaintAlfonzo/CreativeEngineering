@@ -7,6 +7,7 @@ global.blocks = {};
 var b = global.blocks;
 
 b.dark_fire = 'creativeengineering:dark_fire';
+b.hh_four_leaf_clover = 'hearthandharvest:four_leaf_clover'; // placed Four-Leaf Clover (hearth/worldgen), no item of its own
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 b.emu_nest = 'creativedelight:emu_nest';         // Creative Delight compat/incubation/nest/EmuNests.java
 b.emu_egg_nest = 'creativedelight:emu_egg_nest'; // the 1-6 egg state; no item

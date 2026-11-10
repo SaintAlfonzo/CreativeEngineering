@@ -1,0 +1,26 @@
+pace 1
+## DBG-5 | sheep ate() vs feeding wheat, then game time skip
+> forceload add 6500 6100
+> pbot spawn bot1 6500 -60 6100 minecraft:overworld survival
+> clear bot1
+sleep 3
+> summon minecraft:sheep 6500 -60 6103 {NoAI:1b,Tags:["g1"]}
+> summon minecraft:sheep 6506 -60 6103 {NoAI:1b,Tags:["g2"]}
+sleep 1
+> zhh1 ate g1
+> tp bot1 6506 -60 6100
+> pbot hold bot1 minecraft:wheat 4
+> zhh1 interact bot1 g2
+> zhh1 skip 1300
+sleep 3
+> zhh1 drops 6500 -60 6103 5
+> zhh1 drops 6506 -60 6103 5
+look g1 (ate only) vs g2 (fed): which gives manure
+## DBG-6 | squid takes an arrow?
+> forceload add 6600 6100
+> summon minecraft:squid 6600 -59 6104 {NoAI:1b,PersistenceRequired:1b,Tags:["s3"],Attributes:[{Name:"generic.max_health",Base:300.0d}],Health:300f}
+sleep 1
+> summon minecraft:arrow 6600.5 -58.6 6102 {Motion:[0.0d,0.0d,2.0d],damage:4.0d}
+sleep 2
+> data get entity @e[tag=s3,limit=1] Health
+look does an arrow hurt it

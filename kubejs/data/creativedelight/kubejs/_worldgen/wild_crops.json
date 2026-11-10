@@ -152,6 +152,13 @@
       "requires": "hearthandharvest",
       "notes": "Hearth and Harvest 1.4.1's patch (Farmer's Delight wild crop: ripe bushes on dirt with grass and coarse dirt, 1 in 62 chunks), as Creative Delight's copy. 1.4.1 placed it in every overworld biome of temperature 0.4 to 0.9; here the temperate grassy biomes, plus the blueberry biomes (cold grassy snowy; owner 2026-11-02, farming/wild-crops #7)."
     },
+    "wild_hops": {
+      "label": "Wild Hops",
+      "where": ["temperate grassy forest"],
+      "features": ["creativedelight:wild/wild_hops"],
+      "requires": "hearthandharvest",
+      "notes": "Hearth and Harvest 1.4.1's patch (Farmer's Delight wild crop: wild hops on dirt with grass and coarse dirt, 1 in 120 chunks), as Creative Delight's copy. 1.4.1 placed it in #is_forest; here the temperate forests, Terralith's included (N10)."
+    },
     "blueberry": {
       "label": "Blueberry",
       "where": ["cold grassy snowy"],

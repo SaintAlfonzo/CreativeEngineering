@@ -213,6 +213,12 @@
         "#mod/villager_tannery"
       ]
     },
+    "mod/hearthandharvest": {
+      "note": "Hearth and Harvest (Creative Delight member): the Corn Maze.",
+      "values": [
+        "hearthandharvest:*"
+      ]
+    },
     "mod/hopo": {
       "values": [
         "hopo:*"
@@ -481,6 +487,7 @@
     "type/house": {
       "note": "Standalone friendly buildings: homes, farms, cook houses, fish farms, the one-building villager house mods and Simply Houses' empty buildings (its \"forest fort\" is house-sized, not a walled compound). undergardens_sea targets the Undergarden dimension's biomes, so it likely never spawns here.",
       "values": [
+        "#mod/hearthandharvest",
         "beautify:botanist_house_*",
         "farmers_structures:*",
         "minecraft:igloo",
@@ -1156,6 +1163,7 @@
     "land/plains": {
       "note": "Biome fit: Vanilla plains village; Terralith fortified village; T&T plains-type villages + outposts; T&T Tudor village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Oak/spruce camps and small buildings; Plains-only buildings; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/plains biomes. Real tag: creativeengineering:land/plains.",
       "values": [
+        "hearthandharvest:corn_maze",
         "animal_barn:barn",
         "bighorsestable:big_horse_stable",
         "campsite_structures:armorer_campsite",

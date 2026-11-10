@@ -340,6 +340,45 @@
       "rate": "1/12",
       "disable_modifiers": ["buzzier_bees:add_feature/pink_clover"],
       "notes": "Buzzier Bees: birch forests only, 1/64. Now also the flower biomes."
+    },
+    "mums": {
+      "label": "Mums (Hearth and Harvest)",
+      "blocks": {
+        "hearthandharvest:white_mum": 1, "hearthandharvest:yellow_mum": 1, "hearthandharvest:orange_mum": 1, "hearthandharvest:red_mum": 1,
+        "hearthandharvest:pink_mum": 1, "hearthandharvest:purple_mum": 1, "hearthandharvest:blue_mum": 1, "hearthandharvest:light_blue_mum": 1
+      },
+      "where": ["temperate grassy plains !mountain", "temperate grassy forest oak"],
+      "add": ["minecraft:meadow"],
+      "rate": "1/5",
+      "notes": "N12. 1.4.1 used 28 two-colour patches at 1 in 120 each (one patch per 4.3 chunks) in plains, forest, flower forest and meadow; here one patch of all 8 colours at the same rate, in those biomes' families. No Flower Patch blocks exist for mums."
+    },
+    "four_leaf_clover": {
+      "label": "Four-Leaf Clover",
+      "blocks": {
+        "hearthandharvest:four_leaf_clover": 1
+      },
+      "add": [
+        "minecraft:flower_forest", "minecraft:meadow", "minecraft:sunflower_plains",
+        "terralith:moonlight_grove", "terralith:moonlight_valley", "terralith:blooming_plateau", "terralith:blooming_valley",
+        "terralith:lavender_forest", "terralith:lavender_valley", "terralith:lush_valley"
+      ],
+      "rate": "1/48",
+      "patch": { "tries": 6, "xz_spread": 3, "y_spread": 2 },
+      "notes": "N23-8 (owner 2026-11-07): rare, in exactly these biomes. The sky dimensions flowergrove, flowerhills and flowerridge are flower_forest, so this list covers them. Chest loot stays."
+    },
+    "clover_patches_rare": {
+      "label": "Clover patches (Four-Leaf Clover biomes)",
+      "blocks": {
+        "buzzier_bees:white_clover": 1, "buzzier_bees:pink_clover": 1
+      },
+      "add": [
+        "minecraft:flower_forest", "minecraft:meadow", "minecraft:sunflower_plains",
+        "terralith:moonlight_grove", "terralith:moonlight_valley", "terralith:blooming_plateau", "terralith:blooming_valley",
+        "terralith:lavender_forest", "terralith:lavender_valley", "terralith:lush_valley"
+      ],
+      "rate": "1/48",
+      "patch": { "tries": 16, "xz_spread": 4, "y_spread": 2 },
+      "notes": "N23-8: Buzzier Bees' clover also generates rarely in the Four-Leaf Clover biomes. Buzzier Bees 5.0.1 has no clover patch block or feature (its clover_patch model is unused), so this is its pink and white clover flowers."
     }
   },
 

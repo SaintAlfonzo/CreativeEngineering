@@ -1,0 +1,8 @@
+{
+  "type": "hearthandharvest:replace_item",
+  "conditions": [
+    { "condition": "forge:loot_table_id", "loot_table_id": "alexsmobs:entities/crow" }
+  ],
+  "from": "minecraft:feather",
+  "to": "hearthandharvest:crow_feather"
+}

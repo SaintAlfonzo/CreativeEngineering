@@ -9,11 +9,23 @@
     "component": "java-runtime-gamma",
     "majorVersion": 17
   },
-  "jvmArgs": "-Dlog4j.configurationFile=/home/liam/.local/share/atlauncher/assets/log_configs/client-1.19-debug.xml -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
+  "jvmArgs": "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
   "resourcePackOrder": [
+    "tempad_upstream_assets",
+    "rustic_upstream_assets",
+    "roll_upstream_assets",
+    "oceanic_upstream_assets",
+    "miners_upstream_assets",
+    "largemeals_upstream_assets",
+    "goldenfood_upstream_assets",
+    "enders_upstream_assets",
+    "creativedelight_compartment_art",
+    "creativedelight:incubation/untitledduckmod",
+    "creativedelight:incubation/alexsmobs",
+    "creativedelight:cookingforblockheads",
+    "creativecompat_banner_patterns",
+    "creative_labels_donor_art",
     "vinery_upstream_assets",
-    "incubation_additions:untitledduckmod",
-    "incubation_additions:alexsmobs",
     "vanilla",
     "mod_resources",
     "Everycomp Generated Pack",
@@ -46,7 +58,8 @@
     "file/SHC Enhanced Fire.zip",
     "file/IE Breaker Switch Sound.zip",
     "file/SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
-    "file/Fancy Crops v1.2.zip"
+    "file/Fancy Crops v1.2.zip",
+    "creativecommon:loading_tips"
   ],
   "mods": [
     {
@@ -3029,6 +3042,15 @@
       }
     },
     {
+      "file": "backportedTempad-3.0.4-ce-19.2-01.jar",
+      "name": "backportedTempad-3.0.4-ce-19.2-01.jar",
+      "version": "Unknown",
+      "sha1": "043a41e5f48a9af1fe3d53fb75d2f91f6dc068be",
+      "modId": "tempad",
+      "side": "both",
+      "source": "local"
+    },
+    {
       "file": "badpackets-forge-0.2.3.jar",
       "name": "bad packets",
       "version": "forge-0.2.3",
@@ -4489,90 +4511,90 @@
     },
     {
       "file": "creativeLabels-1.0.1.jar",
-      "name": "creativeLabels-1.0.1",
-      "version": "",
-      "sha1": "5ef374a6a11f5e3ff72043670a5b5ff4c970c03f",
+      "name": "creativeLabels-1.0.1.jar",
+      "version": "Unknown",
+      "sha1": "e3a46419d2894a112f1530ce0ac5b889aa7e37ee",
       "modId": "creative_labels",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativebrewing-1.0.0.jar",
-      "name": "creativebrewing-1.0.0",
-      "version": "",
-      "sha1": "214444fd5ab00dbd2be8ec2fdfdc318ae777ffc8",
+      "name": "creativebrewing-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "2cdf19ab3b99f3dcfb9df013f6e93aa2efab0867",
       "modId": "creativebrewing",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativecalendar-1.0.0.jar",
-      "name": "creativecalendar-1.0.0",
-      "version": "",
-      "sha1": "90278e3875e0bf1dfa2f5d7ae86c75d42c41e7e6",
+      "name": "creativecalendar-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "ea7a3b136821e501e27d272b13d16f52c28be958",
       "modId": "creativecalendar",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativecommon-1.1.0.jar",
-      "name": "creativecommon-1.1.0",
-      "version": "",
-      "sha1": "f5cf0d1714ce1a2d661727567f6f850bf50b944b",
+      "name": "creativecommon-1.1.0.jar",
+      "version": "Unknown",
+      "sha1": "7ea079e10dc35434001f755bbe4c20e553a741fa",
       "modId": "creativecommon",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativecompat-1.0.0.jar",
-      "name": "creativecompat-1.0.0",
-      "version": "",
-      "sha1": "de608b64b3d13b70f7bbe14bedcd329c4f5315d8",
+      "name": "creativecompat-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "42e7415c16bf8a9139ff9342aac989d96b3b44fc",
       "modId": "creativecompat",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativedelight-1.1.0.jar",
-      "name": "creativedelight-1.1.0",
-      "version": "",
-      "sha1": "90676d4f6af23557e8dc9106539ec37a655c854f",
+      "name": "creativedelight-1.1.0.jar",
+      "version": "Unknown",
+      "sha1": "123142a9ad7526475de1a1b6cf06d135efb96015",
       "modId": "creativedelight",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativeengineering-2.0.0.jar",
-      "name": "creativeengineering-2.0.0",
-      "version": "",
-      "sha1": "15e19f9d95261e16da4955e865e3a166d2b3bb7e",
+      "name": "creativeengineering-2.0.0.jar",
+      "version": "Unknown",
+      "sha1": "8d1a70e29ce2094af71ce3b59b3fd943f3693936",
       "modId": "creativeengineering",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativeequipment-1.0.0.jar",
-      "name": "creativeequipment-1.0.0",
-      "version": "",
-      "sha1": "66e2cb8f993c4f965c03be3e3d7ae724426f5100",
+      "name": "creativeequipment-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "69b2b88776626d0e239126e0dab3d755be266a4f",
       "modId": "creativeequipment",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativemagic-1.0.0.jar",
-      "name": "creativemagic-1.0.0",
-      "version": "",
-      "sha1": "d6b342350848c1041847cb51506838039a55149c",
+      "name": "creativemagic-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "7b85a36ae21116b4c437249ce8505312ec7ce2a4",
       "modId": "creativemagic",
       "side": "both",
       "source": "local"
     },
     {
       "file": "creativeworldgen-1.0.0.jar",
-      "name": "creativeworldgen-1.0.0",
-      "version": "",
-      "sha1": "c311daf741a04b188538f6bd2144410f4e383ce9",
+      "name": "creativeworldgen-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "7e36543ab6b91dbe5adeec573316e064b6a4a890",
       "modId": "creativeworldgen",
       "side": "both",
       "source": "local"
@@ -5102,7 +5124,7 @@
       "file": "exposureBackport-1.9.19-ce-19.2-04.jar",
       "name": "exposureBackport-1.9.19-ce-19.2-04.jar",
       "version": "Unknown",
-      "sha1": "ebe944e42be1b1f844a10ba5dd7b0fa7abfd2423",
+      "sha1": "6b5aa4513630eda03a16bbab148648e3d7913288",
       "modId": "exposure",
       "side": "both",
       "source": "local"
@@ -5620,6 +5642,29 @@
           "slug": "ice-prevents-crop-growth",
           "url": "https://modrinth.com/mod/ice-prevents-crop-growth/version/4DjoH1Kn",
           "download": "https://cdn.modrinth.com/data/6rPhicfw/versions/4DjoH1Kn/icepreventscropgrowth-1.19.2-3.2.jar"
+        }
+      }
+    },
+    {
+      "file": "immersive-portals-2.3.7-mc1.19.2-forge.jar",
+      "name": "Immersive Portals (for Forge)",
+      "version": "2.3.7",
+      "sha1": "c2c56e62b82c5f7132760d92a0a7a018e852192a",
+      "modId": "immersive_portals",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 355440,
+          "fileId": 5093111,
+          "slug": "immersive-portals-for-forge",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/immersive-portals-for-forge/files/5093111"
+        },
+        "modrinth": {
+          "projectId": "zf4Szzx2",
+          "versionId": "HCgRFzXb",
+          "slug": "immersive-portals-neoforge",
+          "url": "https://modrinth.com/mod/immersive-portals-neoforge/version/HCgRFzXb",
+          "download": "https://cdn.modrinth.com/data/zf4Szzx2/versions/HCgRFzXb/immersive-portals-2.3.7-mc1.19.2-forge.jar"
         }
       }
     },
@@ -6997,6 +7042,22 @@
       }
     },
     {
+      "file": "portalgun-1.19.2-5.0.0.jar",
+      "name": "Immersive Portal Gun (Forge)",
+      "version": "portalgun-1.19.2-5.0.0.jar",
+      "sha1": "9fed59a2ab1880a7719e9217523013cd20309f81",
+      "modId": "portalgun",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 955798,
+          "fileId": 4993339,
+          "slug": "immersive-portal-gun-forge",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/immersive-portal-gun-forge/files/4993339"
+        }
+      }
+    },
+    {
       "file": "potionbundles-1.19.1-1.6.jar",
       "name": "Potion Bundles",
       "version": "1.6",
@@ -7115,8 +7176,8 @@
     },
     {
       "file": "repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar",
-      "name": "repackedStorage-25.12.09-1.19-forge-ce-19.2-01",
-      "version": "",
+      "name": "repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar",
+      "version": "Unknown",
       "sha1": "5b83e5bd884cd12f13e27c4daf073fcbcf3b7369",
       "modId": "storagedelight",
       "side": "both",
@@ -9381,7 +9442,7 @@
       "version": "Unknown",
       "sha1": "1fa70b09b66dd113b68f20c5966f60c96dbd6e05",
       "enabled": true,
-      "loadOrder": 13,
+      "loadOrder": 25,
       "flaggedIncompatible": false,
       "source": "local"
     },
@@ -9408,7 +9469,7 @@
       "version": "Copycat Framed Block.zip",
       "sha1": "2e300fb05d0edc238dd96d4356798ca2964ba4ad",
       "enabled": true,
-      "loadOrder": 14,
+      "loadOrder": 26,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9425,7 +9486,7 @@
       "version": "1.2.1",
       "sha1": "2f7e22eb0ca0a3ab7382c290b49995df66bba97e",
       "enabled": true,
-      "loadOrder": 15,
+      "loadOrder": 27,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9449,7 +9510,7 @@
       "version": "Create Tweaks Compats v17.zip",
       "sha1": "a52384c905017e4ba35a3cfa315a0876f5c3ee4c",
       "enabled": true,
-      "loadOrder": 16,
+      "loadOrder": 28,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9466,7 +9527,7 @@
       "version": "1.1.2",
       "sha1": "37230d133003a3574a2380326bfd6faf8a1c3124",
       "enabled": true,
-      "loadOrder": 17,
+      "loadOrder": 29,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9514,7 +9575,7 @@
       "version": "1.0",
       "sha1": "6d5ac607061fa5aedea571ec0c3ae842327dbf7c",
       "enabled": true,
-      "loadOrder": 18,
+      "loadOrder": 30,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9538,7 +9599,7 @@
       "version": "1.3.0",
       "sha1": "e960b4770f08761c294dd67530f94232acadc68e",
       "enabled": true,
-      "loadOrder": 19,
+      "loadOrder": 31,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9562,7 +9623,7 @@
       "version": " \tEngineers_GUIs_1.18.2_v.01.0",
       "sha1": "cdb59cac42a434bb74359f5b1bfa90c44733d9e0",
       "enabled": true,
-      "loadOrder": 20,
+      "loadOrder": 32,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9579,7 +9640,7 @@
       "version": "1.2",
       "sha1": "b7b75543839378884e4e86aa8c0d445f8cf354e4",
       "enabled": true,
-      "loadOrder": 35,
+      "loadOrder": 47,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9627,7 +9688,7 @@
       "version": "Golden crit.zip",
       "sha1": "2780c0d9711aeca8073ed10d441a7d0c78789fc9",
       "enabled": true,
-      "loadOrder": 21,
+      "loadOrder": 33,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9644,7 +9705,7 @@
       "version": "IE Breaker Switch Sound.zip",
       "sha1": "64b43eeeddee345082edce2f7ac7dfeb2ea5d546",
       "enabled": true,
-      "loadOrder": 33,
+      "loadOrder": 45,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9695,7 +9756,7 @@
       "version": "LootrChestRetexture_v1.1_1.19.zip",
       "sha1": "89baa371773d4783c5b2a21ada4aa0a032e289ff",
       "enabled": true,
-      "loadOrder": 22,
+      "loadOrder": 34,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9712,7 +9773,7 @@
       "version": "26.2",
       "sha1": "96932a034fff4cd0cad08ba12db730450c4772da",
       "enabled": true,
-      "loadOrder": 23,
+      "loadOrder": 35,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9736,7 +9797,7 @@
       "version": "Lower Shield.zip",
       "sha1": "b9f51386e4bcac7f402c15ea9fd4194c05b6dfc3",
       "enabled": true,
-      "loadOrder": 24,
+      "loadOrder": 36,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9787,7 +9848,7 @@
       "version": "v1",
       "sha1": "ee536a8763d6475231dce48b080eed8b20cefc3b",
       "enabled": true,
-      "loadOrder": 32,
+      "loadOrder": 44,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9828,7 +9889,7 @@
       "version": "SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
       "sha1": "f0b0ff9fef3f5e5371ce926a7ab1bbea67d31abf",
       "enabled": true,
-      "loadOrder": 34,
+      "loadOrder": 46,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9845,7 +9906,7 @@
       "version": "Updated_Engineering_v1.7.zip",
       "sha1": "63c38fd48f109d949ddcb0359073c2a16fe8d558",
       "enabled": true,
-      "loadOrder": 31,
+      "loadOrder": 43,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9886,7 +9947,7 @@
       "version": "create_style_pretty_fluid_pipes-1.0.0",
       "sha1": "2c61693b522ffcab036cb850ec9e973fa2de54cf",
       "enabled": true,
-      "loadOrder": 30,
+      "loadOrder": 42,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {

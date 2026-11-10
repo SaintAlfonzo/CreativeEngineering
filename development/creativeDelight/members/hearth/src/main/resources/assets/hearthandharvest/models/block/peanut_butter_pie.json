@@ -1,0 +1,9 @@
+{
+  "parent": "farmersdelight:block/template_pie",
+  "textures": {
+    "particle": "hearthandharvest:block/peanut_butter_pie_top",
+    "bottom": "farmersdelight:block/pie_bottom",
+    "side": "farmersdelight:block/pie_side",
+    "top": "hearthandharvest:block/peanut_butter_pie_top"
+  }
+}

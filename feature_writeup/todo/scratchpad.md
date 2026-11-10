@@ -13,7 +13,7 @@ build a plan for these changes. weeds should not grow naturally on rich soil/far
     - a system should allow porting error and warning logs to an 'aknowledged' and 'in progress' file, and the remaining to latest.log. a small note should print in latest.log saying where the event was sent to instead of printed, but the goal is to make standard log output more readable 
 
 - tempad notes
-    - change chronons to [chronotons ](https://futurama.fandom.com/wiki/Chronitons)
+    - change chronons to [chronitons](https://futurama.fandom.com/wiki/Chronitons)
     - allow knowledge projector recipes to update based on actual recipe
     - change knowledge projector lore (remove TVA)
     - fix 'hold {X} chronotons' knowledge projector
@@ -35,14 +35,18 @@ build a plan for these changes. weeds should not grow naturally on rich soil/far
 - tempad in server
     - chronomarker used for mining/resource dimension navigation, more valuable resource dimensions availible w/ own tempad (unlock location cards?)
 
-- weathered cardboard box is toot small, 4 faces on each block face, doesnt wrap correctly
+- weathered cardboard box is too small, 4 faces on each block face, doesnt wrap correctly
 - immersive portals portal block needs block name
 - public pack notes
     - wild food in nearly every biome
     - botany pots, very nerfed, useful for flowers and low usage crops
         - tooltip, 'Useful for flowers, not great for crops'
 
-- saurkraut
+- saurkraut?
+- pitchfork entity needs name
+- corn husk block placable as log
+- corn and hemp, other 2 tall block crops, slow player down
+- new sausage recipe
 - unify similar burgers, goal: remove 50%
 - veggie soups and stews
     - soup and stew have no differentiation

@@ -221,6 +221,22 @@ MoreJSEvents.registerPotionBrewing(event => {
 	})
 	LUCK_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
 
+	// Hearth and Harvest (hearth_and_harvest.md 3.1, N23-8, D22). Lengthen redstone, amplify glowstone, as every pack potion.
+	// No long Bad Omen (3.1); Bad Omen + fermented spider eye gives Luck, strong Bad Omen strong Luck (N23-8).
+	const I = global.item
+	;[
+		[I.poisonous_potato, 'minecraft:awkward', 'hearthandharvest:pungent'],
+		[I.redstone, 'hearthandharvest:pungent', 'hearthandharvest:long_pungent'],
+		[I.glowstone, 'hearthandharvest:pungent', 'hearthandharvest:strong_pungent'],
+		[I.fermented_spider_eye, 'hearthandharvest:pungent', 'hearthandharvest:tempting'],
+		[I.redstone, 'hearthandharvest:tempting', 'hearthandharvest:long_tempting'],
+		[I.glowstone, 'hearthandharvest:tempting', 'hearthandharvest:strong_tempting'],
+		[I.crow_feather, 'minecraft:awkward', 'hearthandharvest:bad_omen'],
+		[I.glowstone, 'hearthandharvest:bad_omen', 'hearthandharvest:strong_bad_omen'],
+		[I.fermented_spider_eye, 'hearthandharvest:bad_omen', 'minecraft:luck'],
+		[I.fermented_spider_eye, 'hearthandharvest:strong_bad_omen', 'buzzier_bees:strong_luck']
+	].forEach(row => mix(row[0], row[1], row[2]))
+
 	// Resilience, Restfulness, Insomnia: out (REMOVED_POTIONS)
 	REMOVED_POTIONS.forEach(id => {
 		const p = potion(id)

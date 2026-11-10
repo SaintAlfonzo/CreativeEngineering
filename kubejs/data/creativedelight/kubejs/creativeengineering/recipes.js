@@ -44,8 +44,11 @@ ServerEvents.recipes(e => {
 			// The mortar matches the machines' cornmeal average exactly: corn and wild corn 2 -> 3, kernels 3 -> 1. Crates and
 			// bags are machine-only, as are the kernels.
 			// Corn and wild corn also give a Corncob 10% of the time (corn_delight.md 2.1); a byproduct, so not from the mortar.
-			R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25),
-				Item.of(i.corncob, 1).withChance(0.1)], i.t_crops_corn, e, 'corn_cornmeal', { mortar: { count: 3, inputs: 2 } })
+			// Corn Husk by chance on the machines (N23-1); on the cutting board 75 %, on harvest by config.
+			var cornByproducts = [Item.of(i.corncob, 1).withChance(0.1)]
+			if (global.CD.on('hearthandharvest')) cornByproducts.push(Item.of(i.corn_husk, 1).withChance(0.25))
+			R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25)].concat(cornByproducts),
+				i.t_crops_corn, e, 'corn_cornmeal', { mortar: { count: 3, inputs: 2 } })
 			R.foodGrinding([i.cornmeal, Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 1).withChance(0.25),
 				Item.of(i.corncob, 1).withChance(0.1)], i.wild_corn, e, 'wild_corn_cornmeal', { mortar: { count: 3, inputs: 2 } })
 			R.foodGrinding([Item.of(i.cornmeal, 13), Item.of(i.cornmeal, 1).withChance(0.5), Item.of(i.corn_seeds, 2),

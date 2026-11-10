@@ -61,7 +61,7 @@ Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpos
 
 Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
 
-Capped (old combined density above the group grid): 70 biome(s), 32% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
+Capped (old combined density above the group grid): 70 biome(s), 33% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -290,7 +290,7 @@ Lone camps and cabins: the T&T wandering trader camp and every single-building h
 
 Grid: spacing 24, separation 12 (members never start closer than 13 chunks = 208 blocks apart). At most 1 structure per 24 x 24 chunks anywhere.
 
-Capped (old combined density above the group grid): 78 biome(s), 78% of the group's area. Largest: `terralith:yellowstone` 1 per 10 -> 23, `minecraft:plains` 1 per 8 -> 22, `minecraft:forest` 1 per 9 -> 24, `terralith:highlands` 1 per 8 -> 22, `terralith:rocky_mountains` 1 per 8 -> 22, `minecraft:meadow` 1 per 7 -> 22.
+Capped (old combined density above the group grid): 78 biome(s), 78% of the group's area. Largest: `terralith:yellowstone` 1 per 10 -> 23, `minecraft:plains` 1 per 7 -> 22, `minecraft:forest` 1 per 9 -> 24, `terralith:highlands` 1 per 8 -> 22, `terralith:rocky_mountains` 1 per 8 -> 22, `minecraft:meadow` 1 per 7 -> 22.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -300,8 +300,8 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 | `beautify:botanist_house_snowy` | 100 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 | `beautify:botanist_house_taiga` | 100 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 | `farmers_structures:aquacultures_beach` | 100 | 0.0307 | 86 | 371 | 0.05 |  |
-| `farmers_structures:aquacultures_common` | 100 | 1.0 | 63 | 100 | 0.41 |  |
-| `farmers_structures:cooks` | 100 | 0.417675 | 53 | 146 | 0.13 |  |
+| `farmers_structures:aquacultures_common` | 100 | 1.0 | 63 | 100 | 0.40 |  |
+| `farmers_structures:cooks` | 100 | 0.417675 | 53 | 147 | 0.13 |  |
 | `farmers_structures:cooks_moss` | 100 | 1.0 | - | - | - | no biome in this pack |
 | `farmers_structures:sushis` | 100 | 0.1058 | 71 | 74 | 0.94 |  |
 | `greek_villager_house:greek_house` | 100 | 1.0 | 45 | 68 | 0.44 |  |
@@ -313,62 +313,63 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 | `simply_houses:forest_fort` | 100 | 0.120438 | 171 | 319 | 0.29 |  |
 | `simply_houses:forest_house` | 100 | 0.1196 | 121 | 320 | 0.14 |  |
 | `simply_houses:forest_stonemason` | 100 | 0.1196 | 121 | 320 | 0.14 |  |
-| `simply_houses:plains_house` | 100 | 1.0 | 85 | 131 | 0.42 |  |
-| `simply_houses:plains_mansion` | 100 | 1.0 | 85 | 131 | 0.42 |  |
+| `simply_houses:plains_house` | 100 | 1.0 | 85 | 135 | 0.39 |  |
+| `simply_houses:plains_mansion` | 100 | 1.0 | 85 | 135 | 0.39 |  |
 | `simply_houses:taiga_forge` | 100 | 0.266606 | 122 | 193 | 0.40 |  |
 | `simply_houses:taiga_house` | 100 | 0.266606 | 122 | 193 | 0.40 |  |
 | `simply_houses:taiga_inn` | 100 | 0.266606 | 87 | 193 | 0.20 |  |
 | `simply_houses:taiga_woodcutter` | 100 | 0.266606 | 87 | 193 | 0.20 |  |
 | `small_viking_villager_house:small_viking_house` | 100 | 1.0 | 48 | 100 | 0.23 |  |
-| `small_villager_greenhouse:small_villager_greenhouse` | 100 | 1.0 | 45 | 124 | 0.13 |  |
+| `small_villager_greenhouse:small_villager_greenhouse` | 100 | 1.0 | 45 | 126 | 0.13 |  |
 | `towns_and_towers:exclusives/village_wandering_trader_camp` | 100 | 0.36673 | 62 | 76 | 0.66 |  |
-| `villager_butcher_house:butcher_house` | 100 | 1.0 | 43 | 127 | 0.12 |  |
-| `villager_cartographer_house:villager_cartographer_house` | 100 | 1.0 | 42 | 127 | 0.11 |  |
-| `villager_cleric_house:villager_cleric_house` | 100 | 1.0 | 39 | 127 | 0.09 |  |
+| `villager_butcher_house:butcher_house` | 100 | 1.0 | 43 | 128 | 0.11 |  |
+| `villager_cartographer_house:villager_cartographer_house` | 100 | 1.0 | 42 | 128 | 0.11 |  |
+| `villager_cleric_house:villager_cleric_house` | 100 | 1.0 | 39 | 128 | 0.09 |  |
 | `villager_country_house:country_house` | 100 | 0.166203 | 50 | 166 | 0.09 |  |
-| `villager_farmer_house:villager_farmer_house` | 100 | 1.0 | 47 | 127 | 0.14 |  |
-| `villager_fletcher_house:villager_fletcher_house` | 100 | 1.0 | 38 | 127 | 0.09 |  |
-| `villager_flower_house:flower_house` | 100 | 0.273887 | 45 | 223 | 0.04 |  |
-| `villager_tannery:tannery` | 100 | 1.0 | 45 | 119 | 0.14 |  |
+| `villager_farmer_house:villager_farmer_house` | 100 | 1.0 | 47 | 128 | 0.13 |  |
+| `villager_fletcher_house:villager_fletcher_house` | 100 | 1.0 | 38 | 128 | 0.09 |  |
+| `villager_flower_house:flower_house` | 100 | 0.273887 | 45 | 226 | 0.04 |  |
+| `villager_tannery:tannery` | 100 | 1.0 | 45 | 120 | 0.14 |  |
 | `ancient_enchantment_temple:temple` | 100 | 0.1264 | 45 | 95 | 0.22 |  |
-| `animal_barn:barn` | 100 | 1.0 | 45 | 131 | 0.12 |  |
-| `bighorsestable:big_horse_stable` | 100 | 1.0 | 40 | 119 | 0.11 |  |
+| `animal_barn:barn` | 100 | 1.0 | 45 | 135 | 0.11 |  |
+| `bighorsestable:big_horse_stable` | 100 | 1.0 | 40 | 120 | 0.11 |  |
 | `desert_village_temple:village_temple` | 100 | 0.293336 | 45 | 77 | 0.34 |  |
 | `desert_watchtower:watchtower` | 110 | 0.342886 | 45 | 75 | 0.36 |  |
-| `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 40 | 88 | 0.21 |  |
-| `gothic_church:church` | 100 | 1.0 | 45 | 119 | 0.14 |  |
+| `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 40 | 88 | 0.20 |  |
+| `gothic_church:church` | 100 | 1.0 | 45 | 120 | 0.14 |  |
 | `llama_stable:llama_stable` | 100 | 1.0 | 45 | 78 | 0.33 |  |
-| `mini_clock_tower:mini_clock_tower` | 108 | 0.740947 | 43 | 85 | 0.26 |  |
-| `plains_villager_tents:big_villager_tent` | 100 | 1.0 | 45 | 131 | 0.12 |  |
+| `mini_clock_tower:mini_clock_tower` | 108 | 0.740947 | 43 | 85 | 0.25 |  |
+| `plains_villager_tents:big_villager_tent` | 100 | 1.0 | 45 | 135 | 0.11 |  |
 | `saloon:saloon` | 100 | 0.43779 | 28 | 61 | 0.21 |  |
-| `smallhorsestable:horse_stable` | 100 | 1.0 | 34 | 124 | 0.08 |  |
+| `smallhorsestable:horse_stable` | 100 | 1.0 | 34 | 126 | 0.07 |  |
 | `snowy_tents:snowy_tent` | 100 | 1.0 | 23 | 80 | 0.08 |  |
-| `villager_archer_camp:villager_archer_camp` | 100 | 1.0 | 45 | 124 | 0.13 |  |
-| `villager_circus_tent:villager_circus_tent` | 100 | 1.0 | 45 | 124 | 0.13 |  |
+| `villager_archer_camp:villager_archer_camp` | 100 | 1.0 | 45 | 126 | 0.13 |  |
+| `villager_circus_tent:villager_circus_tent` | 100 | 1.0 | 45 | 126 | 0.13 |  |
 | `villager_fish_shop:fish_shop` | 100 | 1.0 | 45 | 65 | 0.48 |  |
-| `villager_fishermans_hut:villager_fishermans_hut` | 100 | 1.0 | 42 | 127 | 0.11 |  |
-| `villager_forge:villager_forge` | 100 | 1.0 | 45 | 127 | 0.13 |  |
+| `villager_fishermans_hut:villager_fishermans_hut` | 100 | 1.0 | 42 | 128 | 0.11 |  |
+| `villager_forge:villager_forge` | 100 | 1.0 | 45 | 128 | 0.12 |  |
 | `villager_gold_washing_facility:villager_gold_washing_facility` | 100 | 1.0 | 50 | 41 | 1.51 |  |
-| `villager_windmill:windmill` | 100 | 1.0 | 50 | 127 | 0.16 |  |
-| `watchtower_building:fresh_watchtower` | 160 | 1.0 | 67 | 79 | 0.71 |  |
-| `creativeengineering:meta/farmers_camp` | 1 | 1.0 | - | 137 | new |  |
-| `creativeengineering:meta/house_camp` | 1 | 1.0 | - | 101 | new |  |
-| `creativeengineering:meta/waysign_camps` | 1 | 1.0 | - | 128 | new |  |
-| `creativeengineering:meta/waysign_house_camp` | 1 | 1.0 | - | 124 | new |  |
-| `campsite_structures:armorer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
-| `campsite_structures:butcher_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
-| `campsite_structures:cartographer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
-| `campsite_structures:cleric_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
-| `campsite_structures:farmer_campsite` | 60 | 1.0 | 32 | 161 | 0.04 |  |
+| `villager_windmill:windmill` | 100 | 1.0 | 50 | 128 | 0.15 |  |
+| `watchtower_building:fresh_watchtower` | 160 | 1.0 | 67 | 80 | 0.71 |  |
+| `creativeengineering:meta/farmers_camp` | 1 | 1.0 | - | 138 | new |  |
+| `creativeengineering:meta/house_camp` | 1 | 1.0 | - | 100 | new |  |
+| `creativeengineering:meta/waysign_camps` | 1 | 1.0 | - | 130 | new |  |
+| `creativeengineering:meta/waysign_house_camp` | 1 | 1.0 | - | 122 | new |  |
+| `campsite_structures:armorer_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
+| `campsite_structures:butcher_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
+| `campsite_structures:cartographer_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
+| `campsite_structures:cleric_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
+| `campsite_structures:farmer_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
 | `campsite_structures:fisher_campsite` | 15 | 1.0 | 32 | 168 | 0.04 |  |
-| `eugene:camp` | 100 | 1.0 | 59 | 99 | 0.35 |  |
-| `farmers_structures:aquacultures_cod` | 100 | 1.0 | 103 | 100 | 1.07 |  |
+| `eugene:camp` | 100 | 1.0 | 59 | 100 | 0.35 |  |
+| `farmers_structures:aquacultures_cod` | 100 | 1.0 | 103 | 100 | 1.06 |  |
 | `farmers_structures:cacaos` | 100 | 0.1561 | 86 | 86 | 1.00 |  |
 | `farmers_structures:fishs_stew` | 100 | 1.0 | 48 | 80 | 0.36 |  |
 | `farmers_structures:ratatouilles` | 100 | 1.0 | 58 | 48 | 1.46 |  |
-| `farmers_structures:shepherd_farms` | 100 | 1.0 | 186 | 95 | 3.89 |  |
+| `farmers_structures:shepherd_farms` | 100 | 1.0 | 186 | 95 | 3.84 |  |
 | `farmers_structures:squids` | 100 | 1.0 | 50 | 116 | 0.19 |  |
-| `creativeengineering:meta/trader_caravan` | 1 | 1.0 | - | 193 | new |  |
+| `creativeengineering:meta/trader_caravan` | 1 | 1.0 | - | 194 | new |  |
+| `hearthandharvest:corn_maze` | 400 | 1.0 | 32 | 72 | 0.20 |  |
 
 ### `sky` -> `creativeengineering:group/sky`
 
@@ -399,13 +400,13 @@ Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 b
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
-| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
-| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.90 |  |
+| `philipsruins:nether_lava_ruins` | 100 | 0.5993 | 52 | 38 | 1.92 |  |
+| `philipsruins:sealedruinedghaststatue1` | 100 | 0.5993 | 52 | 38 | 1.92 |  |
+| `philipsruins:start_nether_dungeon` | 100 | 0.5993 | 52 | 38 | 1.92 |  |
 | `twigs:bloodstone_obelisk` | 100 | 1.0 | 20 | 30 | 0.43 |  |
 | `philipsruins:lost_soul_dungeon` | 100 | 0.5993 | 60 | 36 | 2.75 |  |
-| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 180 | 3.98 |  |
-| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.67 |  |
+| `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 179 | 4.04 |  |
+| `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.68 |  |
 
 ### `way_signs` -> `creativeengineering:group/way_signs`
 

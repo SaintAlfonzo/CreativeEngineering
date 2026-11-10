@@ -1503,6 +1503,26 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:pickling/${idSuffix}`)
 	},
 
+	// Hearth and Harvest's Stomping Basin (hearth_and_harvest.md 3.2). Each entry of inputs is one slot unit; use count
+	// (`{ id, count }`, or an Item.of) to repeat an ingredient.
+	//   R.hhStomping({ id: f.blueberry_juice, amount: 500 }, [{ id: i.t_fruits_blueberry, count: 4 }], e, 'blueberry_juice')
+	hhStomping(fluid, inputs, e, idOverride, itemOutput) {
+		if (!global.has('hearthandharvest')) return global.NCH._skip('hearthandharvest')
+		if (!e) throw new Error('hhStomping called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(fluid ? fluid.id : itemOutput, inputs[0], "stomping")
+		var ctx = 'hhStomping ' + idSuffix
+		var ingredients = []
+		inputs.forEach(input => {
+			var count = Math.max(1, global.NCH._resolveIdCount(input).count || 1)
+			var json = global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' })
+			for (var n = 0; n < count; n++) ingredients.push(json)
+		})
+		var json = { type: 'hearthandharvest:stomping', ingredients: ingredients }
+		if (fluid) json.result_fluid = { id: String(fluid.id), amount: fluid.amount }
+		if (itemOutput) json.result_item = global.NCH._itemJson(itemOutput, { allowTag: false, context: ctx + ' item output' })
+		e.custom(json).id(`${global.NCH.ns()}:stomping/${idSuffix}`)
+	},
+
 	// Barbeque's Delight (Creative Delight member barbequesdelight, barbeques_delight.md 4 step 7). The port ships no recipe
 	// data; these three types come from here.
 	// Skewering: right-click an Ingredients Basin slot holding Item.of(ingredient, n) with the tool (a stick) in the main
@@ -1618,6 +1638,39 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:fermenting/${idSuffix}`)
+	},
+
+	// Vinery's Fermentation Barrel. inputs: 1-3 slots (an entry is one slot; give a repeated fruit once per slot).
+	// juice: { type: 'red_general' | 'white_general' | 'red_grape' | 'white_grape', amount } (the barrel's juice units).
+	vineryFermenting(output, inputs, juice, e, idOverride, opts) {
+		if (!global.has('vinery')) return global.NCH._skip('vinery')
+		opts = opts || {}
+		if (!e) throw new Error('vineryFermenting called without event object!')
+		var idSuffix = idOverride != null ? idOverride : global.NCH.toId(output, inputs, "vineryfermenting")
+		var ctx = 'vineryFermenting ' + idSuffix
+		var list = Array.isArray(inputs) ? inputs : [inputs]
+		if (list.length < 1 || list.length > 3) global.NCH._warn(ctx, 'needs 1-3 ingredient slots, got ' + list.length)
+		e.custom({
+			type: 'vinery:wine_fermentation',
+			juice: { type: juice.type, amount: juice.amount },
+			ingredients: list.map((v, idx) => global.NCH._itemJson(v, { countMode: 'none', context: ctx + ' input[' + idx + ']' })),
+			wine_bottle: { required: opts.wineBottle !== false },
+			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' })
+		}).id(`${global.NCH.ns()}:wine_fermentation/${idSuffix}`)
+	},
+
+	// Vinery's Apple Press, fermenting side: 1 input (mash slot or left slot) + bottle -> output.
+	vineryPressing(output, input, bottle, e, idOverride) {
+		if (!global.has('vinery')) return global.NCH._skip('vinery')
+		if (!e) throw new Error('vineryPressing called without event object!')
+		var idSuffix = idOverride != null ? idOverride : global.NCH.toId(output, input, "vinerypressing")
+		var ctx = 'vineryPressing ' + idSuffix
+		e.custom({
+			type: 'vinery:apple_fermenting',
+			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			bottle: global.NCH._itemJson(bottle, { countMode: 'none', context: ctx + ' bottle' }),
+			output: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
+		}).id(`${global.NCH.ns()}:apple_fermenting/${idSuffix}`)
 	},
 
   // ========================================================================
@@ -2706,6 +2759,19 @@ global.NCH = {
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:iemixer/${idSuffix}`)
+	},
+
+	// IE Garden Cloche fertilizer: input item or tag, growth multiplier (bone meal is 1.25).
+	ieFertilizer(input, growthModifier, e, idOverride) {
+		if (!global.has('immersiveengineering')) return global.NCH._skip('immersiveengineering')
+		if (!e) throw new Error('ieFertilizer called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(input, input, 'iefertilizer')
+		var ctx = 'ieFertilizer ' + idSuffix
+		e.custom({
+			type: 'immersiveengineering:fertilizer',
+			input: global.NCH._itemJson(input, { context: ctx + ' input' }),
+			growthModifier: global.NCH._or(growthModifier, 1.25)
+		}).id(`${global.NCH.ns()}:iefertilizer/${idSuffix}`)
 	},
 
 	// IE Bottling Machine. NBT-aware like ieBlueprint: a result may be Item.of(id, '{nbt}'), an input

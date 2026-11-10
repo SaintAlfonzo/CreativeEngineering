@@ -1,0 +1,9 @@
+{
+  "parent": "hearthandharvest:block/half_cabinet",
+  "textures": {
+    "back": "hearthandharvest:block/oak_cabinet_side",
+    "front": "hearthandharvest:block/oak_cabinet_front",
+    "side": "hearthandharvest:block/oak_half_cabinet_side",
+    "top": "hearthandharvest:block/oak_half_cabinet_top"
+  }
+}

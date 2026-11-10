@@ -35,8 +35,17 @@ Every color must stay findable: petals of all 16 are crafting inputs.
 
 | Flower | Color | Before per 1000 chunks | After | Biomes after |
 |---|---|---|---|---|
-| buzzier_bees:pink_clover | pink | 0.1 | 4.3 | 14 |
-| buzzier_bees:white_clover | white | 0.4 | 3.9 | 14 |
+| buzzier_bees:pink_clover | pink | 0.1 | 4.6 | 15 |
+| buzzier_bees:white_clover | white | 0.4 | 4.2 | 20 |
+| hearthandharvest:blue_mum | blue | 0.0 | 1.7 | 10 |
+| hearthandharvest:four_leaf_clover | green | 0.0 | 0.5 | 10 |
+| hearthandharvest:light_blue_mum | light_blue | 0.0 | 1.7 | 10 |
+| hearthandharvest:orange_mum | orange | 0.0 | 1.7 | 10 |
+| hearthandharvest:pink_mum | pink | 0.0 | 1.7 | 10 |
+| hearthandharvest:purple_mum | purple | 0.0 | 1.7 | 10 |
+| hearthandharvest:red_mum | red | 0.0 | 1.7 | 10 |
+| hearthandharvest:white_mum | white | 0.0 | 1.7 | 10 |
+| hearthandharvest:yellow_mum | yellow | 0.0 | 1.7 | 10 |
 | minecraft:allium | magenta | 7.2 | 14.9 | 20 |
 | minecraft:azure_bluet | white | 3.4 | 11.9 | 39 |
 | minecraft:blue_orchid | light_blue | 13.7 | 20.1 | 14 |
@@ -75,8 +84,8 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | dark_forest | 1.49 | 1/3.3 | 1/1.3 | 1/3.0 | white 18%, black 18%, yellow 17%, magenta 11%, red 7%, brown 6%, gray 6%, green 6%, purple 6%, pink 4% | black black black brown gray green purple |
 | desert | 0.32 | 1/6.4 | 1/24 | 1/24 | brown 33%, orange 33%, yellow 33% | brown orange yellow |
 | eroded_badlands | 0.86 | 1/8.0 | 1/24 | 1/24 | brown 33%, orange 33%, red 33% | brown orange red |
-| flower_forest | 0.17 | 1/1.3 | 1.23 | 1/3.0 | white 25%, yellow 17%, pink 17%, red 14%, magenta 10%, orange 7%, blue 4%, light_blue 3%, purple 3% | light_blue magenta orange pink purple red white yellow |
-| forest | 2.29 | 1/3.2 | 1/1.6 | 1/8.0 | white 36%, yellow 24%, red 17%, pink 8%, magenta 6% | brown green lime pink red white yellow |
+| flower_forest | 0.17 | 1/1.3 | 1.47 | 1/3.0 | white 23%, pink 16%, yellow 16%, red 13%, magenta 8%, orange 8%, blue 5%, light_blue 5%, purple 5% | light_blue magenta orange pink purple red white yellow |
+| forest | 2.29 | 1/3.2 | 1/1.2 | 1/8.0 | white 30%, yellow 21%, red 16%, pink 9%, magenta 4%, orange 3%, purple 3%, blue 3%, light_blue 3% | brown green lime pink red white yellow |
 | frozen_peaks | 0.73 | 1/8.0 | 1/24 | 1/24 | light_blue 33%, light_gray 33%, white 33% | light_blue light_gray white |
 | frozen_river | 0.32 | 1/6.4 | 1/16 | 1/16 | light_blue 50%, white 50% | light_blue white |
 | grove | 0.12 | 1/8.0 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_blue 11%, light_gray 11% | blue light_blue light_gray white |
@@ -84,12 +93,12 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | jagged_peaks | 0.44 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
 | jungle | 0.45 | 1/5.3 | 1/1.6 | 1/8.0 | red 25%, light_blue 24%, yellow 23%, orange 12%, cyan 4%, green 4%, lime 4%, pink 3% | cyan green lime orange red |
 | mangrove_swamp | 0.38 | 1/8.0 | 1/3.4 | 1/8.0 | light_blue 46%, magenta 11%, brown 11%, cyan 11%, green 11%, lime 11% | brown cyan green lime |
-| meadow | 0.79 | 1/1.1 | 1.67 | 1/3.0 | white 27%, yellow 22%, magenta 14%, blue 14%, red 11%, pink 8%, light_blue 3% | blue light_blue magenta pink white yellow |
+| meadow | 0.79 | 1/1.1 | 1.91 | 1/3.0 | white 26%, yellow 20%, blue 14%, magenta 12%, red 11%, pink 9%, light_blue 4% | blue light_blue magenta pink white yellow |
 | mushroom_fields | 0.82 | 1/8.0 | 1/4.0 | 1/4.0 | black 20%, brown 20%, gray 20%, purple 20%, red 20% | black brown gray purple red |
 | old_growth_birch_forest | 0.45 | 8.31 | 8.67 | 1/8.0 | magenta 37%, pink 26%, white 18%, blue 15% | light_gray white yellow |
 | old_growth_pine_taiga | 0.77 | 1/6.4 | 1/1.9 | 1/8.0 | blue 29%, yellow 25%, white 16%, red 12%, brown 6%, green 6%, orange 6% | blue brown green orange |
 | old_growth_spruce_taiga | 0.73 | 1/6.4 | 1/1.9 | 1/8.0 | blue 28%, yellow 25%, white 16%, red 12%, black 5%, brown 5%, green 5%, purple 5% | black blue brown green purple |
-| plains | 1.98 | 1/2.4 | 1/1.3 | 1/8.0 | yellow 32%, white 28%, red 13%, blue 12%, pink 8%, orange 5% | blue lime pink red white yellow |
+| plains | 1.98 | 1/2.4 | 1/1.0 | 1/8.0 | yellow 28%, white 24%, red 13%, blue 12%, pink 9%, orange 7% | blue lime pink red white yellow |
 | river | 1.88 | 1/6.4 | 1/4.6 | 1/16 | yellow 62%, red 10%, blue 7%, cyan 7%, light_blue 7%, white 7% | blue cyan light_blue white |
 | savanna | 1.02 | 1/5.3 | 1/1.8 | 1/8.0 | yellow 48%, red 27%, orange 19%, brown 6% | brown orange red yellow |
 | savanna_plateau | 0.71 | 1/5.3 | 1/2.0 | 1/8.0 | yellow 44%, red 29%, orange 21%, brown 6% | brown orange red yellow |
@@ -100,7 +109,7 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | sparse_jungle | 0.60 | 1/5.3 | 1/1.6 | 1/8.0 | yellow 28%, light_blue 24%, red 21%, orange 13%, green 5%, lime 5%, pink 3% | green lime orange yellow |
 | stony_peaks | 0.40 | 1/8.0 | 1/24 | 1/24 | gray 33%, light_gray 33%, white 33% | gray light_gray white |
 | stony_shore | 0.30 | 1/6.4 | 1/4.6 | 1/16 | yellow 62%, red 10%, cyan 10%, gray 10%, light_gray 10% | cyan gray light_gray |
-| sunflower_plains | 0.11 | 1/1.3 | 1.21 | 1/3.0 | yellow 60%, white 15%, orange 10%, pink 10%, red 4% | orange white yellow yellow |
+| sunflower_plains | 0.11 | 1/1.3 | 1.46 | 1/3.0 | yellow 51%, white 15%, pink 11%, orange 10%, red 5% | orange white yellow yellow |
 | swamp | 0.84 | 1/6.4 | 1/2.8 | 1/8.0 | light_blue 55%, magenta 15%, brown 6%, cyan 6%, green 6%, lime 6%, purple 6% | brown cyan green lime magenta purple |
 | taiga | 0.91 | 1/6.4 | 1/1.9 | 1/8.0 | blue 29%, yellow 25%, white 16%, red 12%, brown 6%, green 6%, orange 6% | blue brown green orange |
 | windswept_forest | 0.10 | 1/5.8 | 1/1.4 | 1/8.0 | blue 30%, white 25%, yellow 19%, red 9%, magenta 5%, gray 4%, green 4%, light_gray 4% | blue gray green light_gray |
@@ -108,7 +117,7 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | windswept_hills | 0.29 | 1/6.4 | 1/2.1 | 1/8.0 | yellow 28%, white 27%, blue 20%, magenta 7%, gray 6%, light_gray 6%, red 4% | blue gray light_gray white |
 | windswept_savanna | 0.62 | 1/6.4 | 1/1.9 | 1/8.0 | yellow 43%, red 24%, orange 20%, brown 6%, gray 6% | brown gray orange red |
 | wooded_badlands | 0.23 | 1/8.0 | 1/2.2 | 1/8.0 | yellow 39%, orange 24%, red 24%, brown 7%, green 7% | brown green orange red |
-| terralith:alpha_islands | 0.13 | 1.12 | 1.46 | 1/8.0 | yellow 46%, red 39%, white 12% | lime red yellow |
+| terralith:alpha_islands | 0.13 | 1.12 | 1.66 | 1/8.0 | yellow 42%, red 36%, white 12% | lime red yellow |
 | terralith:alpha_islands_winter | 0.00 | 1.12 | 1.42 | 1/8.0 | yellow 44%, red 35%, white 16%, light_blue 4% | light_blue white |
 | terralith:alpine_grove | 0.09 | 1/8.0 | 1/3.4 | 1/8.0 | white 71%, blue 14%, light_blue 14% | blue light_blue white |
 | terralith:alpine_highlands | 0.73 | 1/8.0 | 1/1.9 | 1/8.0 | white 48%, blue 29%, magenta 6%, light_gray 6%, yellow 6%, red 5% | blue light_gray white yellow |
@@ -119,8 +128,8 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | terralith:ashen_savanna | 0.26 | 1/5.3 | 1/2.0 | 1/8.0 | yellow 38%, red 29%, orange 21%, black 6%, gray 6% | black gray orange red |
 | terralith:basalt_cliffs | 0.30 | 1/6.4 | 1/4.6 | 1/16 | yellow 62%, black 14%, gray 14%, red 10% | black gray |
 | terralith:birch_taiga | 0.20 | 1/6.4 | 1/3.4 | 1/8.0 | white 68%, blue 11%, light_gray 11%, yellow 11% | blue light_gray white yellow |
-| terralith:blooming_plateau | 0.27 | 1.62 | 2.08 | 1/3.0 | white 36%, yellow 16%, pink 14%, magenta 10%, red 10%, blue 7%, orange 7% | magenta pink red white yellow |
-| terralith:blooming_valley | 0.22 | 1.62 | 2.04 | 1/3.0 | white 35%, pink 14%, yellow 13%, magenta 10%, blue 7%, orange 7%, red 7%, light_blue 3%, purple 3% | light_blue magenta pink purple white |
+| terralith:blooming_plateau | 0.27 | 1.62 | 2.12 | 1/3.0 | white 36%, yellow 16%, pink 14%, magenta 10%, red 10%, blue 7%, orange 7% | magenta pink red white yellow |
+| terralith:blooming_valley | 0.22 | 1.62 | 2.08 | 1/3.0 | white 35%, pink 15%, yellow 13%, magenta 10%, blue 7%, orange 7%, red 7%, light_blue 3%, purple 3% | light_blue magenta pink purple white |
 | terralith:brushland | 1.32 | 1/5.3 | 1/1.8 | 1/8.0 | yellow 48%, red 27%, orange 19%, brown 6% | brown orange red yellow |
 | terralith:bryce_canyon | 0.32 | 1/8.0 | 1/24 | 1/24 | orange 50%, red 50% | orange red |
 | terralith:caldera | 0.30 | 1/6.4 | 1/2.1 | 1/8.0 | yellow 28%, white 21%, blue 14%, red 13%, black 9%, gray 9%, magenta 7% | black gray red |
@@ -142,13 +151,13 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | terralith:hot_shrubland | 0.56 | 1/2.4 | 1/1.3 | 1/8.0 | yellow 44%, red 20%, orange 18%, white 8%, pink 5%, brown 4% | brown orange red yellow |
 | terralith:ice_marsh | 0.54 | 1/6.4 | 1/2.1 | 1/8.0 | white 61%, light_blue 30%, cyan 9% | cyan light_blue white |
 | terralith:jungle_mountains | 0.03 | 1/5.3 | 1/1.6 | 1/8.0 | light_blue 24%, yellow 23%, red 21%, orange 15%, green 7%, lime 7%, pink 3% | green lime orange |
-| terralith:lavender_forest | 0.45 | 1/1.6 | 2.04 | 1/3.0 | magenta 55%, white 9%, yellow 8%, purple 8%, pink 6%, red 4%, light_blue 4% | light_blue magenta purple purple |
-| terralith:lavender_valley | 0.14 | 1/1.6 | 2.04 | 1/3.0 | magenta 55%, pink 10%, white 9%, yellow 8%, purple 8%, red 4% | magenta pink purple purple |
+| terralith:lavender_forest | 0.45 | 1/1.6 | 2.08 | 1/3.0 | magenta 54%, white 9%, yellow 8%, purple 8%, pink 7%, red 4%, light_blue 4% | light_blue magenta purple purple |
+| terralith:lavender_valley | 0.14 | 1/1.6 | 2.08 | 1/3.0 | magenta 54%, pink 11%, white 9%, yellow 8%, purple 8%, red 4% | magenta pink purple purple |
 | terralith:lush_desert | 1.35 | 1/6.4 | 1/24 | 1/24 | lime 33%, orange 33%, yellow 33% | lime orange yellow |
-| terralith:lush_valley | 0.09 | 1/6.4 | 1/1.9 | 1/8.0 | yellow 31%, blue 29%, white 16%, red 12%, green 6%, lime 6% | blue green lime yellow |
+| terralith:lush_valley | 0.09 | 1/6.4 | 1/1.7 | 1/8.0 | yellow 29%, blue 27%, white 16%, red 11%, green 9%, lime 5% | blue green lime yellow |
 | terralith:mirage_isles | 0.12 | 1/3.3 | 1/2.4 | 1/8.0 | yellow 32%, magenta 16%, white 16%, red 13%, pink 8%, cyan 7%, light_blue 7% | cyan light_blue magenta white |
-| terralith:moonlight_grove | 0.21 | 1/1.3 | 1.55 | 1/3.0 | blue 43%, white 30%, light_blue 17%, purple 5%, pink 5% | blue light_blue purple white |
-| terralith:moonlight_valley | 0.18 | 2.64 | 3.43 | 1/3.0 | orange 55%, blue 19%, white 13%, light_blue 8% | blue light_blue purple white |
+| terralith:moonlight_grove | 0.21 | 1/1.3 | 1.59 | 1/3.0 | blue 42%, white 29%, light_blue 17%, pink 6%, purple 5% | blue light_blue purple white |
+| terralith:moonlight_valley | 0.18 | 2.64 | 3.47 | 1/3.0 | orange 54%, blue 19%, white 14%, light_blue 8% | blue light_blue purple white |
 | terralith:orchid_swamp | 0.69 | 3.12 | 3.63 | 1/3.0 | light_blue 56%, yellow 20%, blue 17%, magenta 3% | cyan light_blue magenta pink |
 | terralith:painted_mountains | 0.60 | 1/8.0 | 1/24 | 1/24 | orange 25%, purple 25%, red 25%, yellow 25% | orange purple red yellow |
 | terralith:red_oasis | 1.01 | 1/6.4 | 1/24 | 1/24 | cyan 25%, lime 25%, orange 25%, red 25% | cyan lime orange red |
@@ -173,11 +182,11 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | terralith:snowy_badlands | 0.52 | 1/8.0 | 1/24 | 1/24 | orange 33%, red 33%, white 33% | orange red white |
 | terralith:snowy_maple_forest | 0.15 | 1/2.2 | 1/1.6 | 1/8.0 | white 47%, red 46%, orange 7% | orange red white |
 | terralith:snowy_shield | 0.07 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, blue 21% | blue white |
-| terralith:steppe | 0.49 | 1/8.0 | 1/2.7 | 1/8.0 | white 33%, yellow 22%, blue 15%, brown 11%, light_gray 11%, red 7% | brown light_gray yellow |
+| terralith:steppe | 0.49 | 1/8.0 | 1/1.7 | 1/8.0 | white 26%, yellow 19%, blue 14%, red 9%, brown 7%, light_gray 7%, orange 4%, pink 4%, purple 4%, light_blue 4% | brown light_gray yellow |
 | terralith:stony_spires | 0.21 | 1/8.0 | 1/8.0 | 1/8.0 | gray 50%, light_gray 50% | gray light_gray |
-| terralith:temperate_highlands | 0.61 | 1/1.4 | 1.29 | 1/3.0 | white 35%, red 27%, orange 13%, magenta 10%, green 5%, purple 5%, yellow 5% | green magenta purple red yellow |
+| terralith:temperate_highlands | 0.61 | 1/1.4 | 1.49 | 1/3.0 | white 32%, red 25%, orange 13%, magenta 8%, purple 6%, yellow 6%, green 4% | green magenta purple red yellow |
 | terralith:tropical_jungle | 0.10 | 1/5.3 | 1/1.6 | 1/8.0 | light_blue 24%, yellow 23%, red 21%, orange 13%, cyan 5%, lime 5%, magenta 5%, pink 3% | cyan lime magenta orange |
-| terralith:valley_clearing | 0.30 | 1/8.0 | 1/2.7 | 1/8.0 | white 44%, yellow 22%, blue 15%, lime 11%, red 7% | lime white yellow |
+| terralith:valley_clearing | 0.30 | 1/8.0 | 1/1.7 | 1/8.0 | white 33%, yellow 19%, blue 14%, red 9%, lime 7%, orange 4%, pink 4%, purple 4%, light_blue 4% | lime white yellow |
 | terralith:volcanic_crater | 0.15 | 1/8.0 | 1/24 | 1/24 | black 50%, red 50% | black red |
 | terralith:volcanic_peaks | 0.69 | 1/8.0 | 1/24 | 1/24 | black 33%, gray 33%, red 33% | black gray red |
 | terralith:warm_river | 1.17 | 1/6.4 | 1/4.6 | 1/16 | yellow 62%, cyan 14%, lime 14%, red 10% | cyan lime |
@@ -189,7 +198,7 @@ Total = all flower patches per chunk (Botania included). Colors after = share of
 | terralith:wintry_lowlands | 0.04 | 1/6.4 | 1/3.4 | 1/8.0 | white 79%, light_blue 21% | light_blue white |
 | terralith:yellowstone | 4.28 | 1/6.4 | 1/1.6 | 1/8.0 | blue 27%, yellow 26%, white 18%, red 12%, brown 4%, cyan 4%, green 4%, orange 4% | brown cyan green orange yellow |
 | terralith:yosemite_cliffs | 0.19 | 1/8.0 | 1/3.1 | 1/8.0 | white 44%, blue 33%, gray 13%, magenta 10% | blue gray white |
-| terralith:yosemite_lowlands | 0.12 | 1/5.7 | 1/1.3 | 1/8.0 | white 38%, yellow 27%, blue 21%, red 10%, green 4% | blue green white yellow |
+| terralith:yosemite_lowlands | 0.12 | 1/5.7 | 1/1.0 | 1/8.0 | white 33%, yellow 24%, blue 19%, red 10%, green 3% | blue green white yellow |
 
 ## 5. Existing features (biome files)
 
@@ -350,3 +359,6 @@ patch blocks; dual-noise providers (meadow) cannot be converted and are counted 
 | wild_flowers/meadow/r3 (meadow) | 1/3.0 | meadow |
 | wild_flowers/white_clover/r24 (white_clover) | 1/24 | flower_forest, forest, meadow, plains, sunflower_plains, terralith:alpha_islands, terralith:alpine_highlands, terralith:blooming_plateau, terralith:highlands, terralith:shield_clearing, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_lowlands |
 | wild_flowers/pink_clover/r12 (pink_clover) | 1/12 | birch_forest, flower_forest, meadow, old_growth_birch_forest, sunflower_plains, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:moonlight_grove, terralith:moonlight_valley, terralith:sakura_grove, terralith:sakura_valley, terralith:skylands_spring |
+| wild_flowers/mums/r5 (mums) | 1/5.0 | flower_forest, forest, meadow, plains, sunflower_plains, terralith:alpha_islands, terralith:steppe, terralith:temperate_highlands, terralith:valley_clearing, terralith:yosemite_lowlands |
+| wild_flowers/four_leaf_clover/r48 (four_leaf_clover) | 1/48 | flower_forest, meadow, sunflower_plains, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:lush_valley, terralith:moonlight_grove, terralith:moonlight_valley |
+| wild_flowers/clover_patches_rare/r48 (clover_patches_rare) | 1/48 | flower_forest, meadow, sunflower_plains, terralith:blooming_plateau, terralith:blooming_valley, terralith:lavender_forest, terralith:lavender_valley, terralith:lush_valley, terralith:moonlight_grove, terralith:moonlight_valley |

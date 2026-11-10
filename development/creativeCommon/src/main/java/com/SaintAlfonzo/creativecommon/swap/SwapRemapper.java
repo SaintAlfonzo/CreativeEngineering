@@ -3,10 +3,14 @@ package com.SaintAlfonzo.creativecommon.swap;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.minecraftforge.registries.RegistryManager;
 import org.slf4j.Logger;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * The world half of the swap lists ({@link SwapLists}): when a world (or a server's registry sync) still holds an id that
@@ -19,6 +23,8 @@ import org.slf4j.Logger;
  */
 public final class SwapRemapper {
 	private static final Logger LOGGER = LogUtils.getLogger();
+	/** Forge has no API to remove an alias. The field is Forge's own name, not obfuscated. */
+	private static final Field ALIASES = aliasesField();
 
 	private SwapRemapper() {}
 
@@ -61,7 +67,39 @@ public final class SwapRemapper {
 		T value = registry.getValue(target);
 		if (value == null) return false;
 		mapping.remap(value);
+		dropAliasFromSurvivor(mapping.getRegistry(), registry.getKey(value));
 		return true;
+	}
+
+	/**
+	 * Removes the alias leading out of a survivor from the registry Forge is loading into. Forge is about to add old -> survivor,
+	 * and a world saved before an earlier swap the other way (old -> survivor is the reverse of a saved survivor -> old) would
+	 * then hold a cycle. {@code ForgeRegistry.getRaw} follows aliases with no cycle check and spins forever when neither name is
+	 * registered yet, which is the case while it copies the staging registry into the active one (hang found 2026-11-08).
+	 * The survivor is a registered name, so names win over its alias and the alias is dead anyway. Dropping it unconditionally
+	 * also covers cycles closed by two remaps in one event, which a walk of the saved aliases could not see: Forge adds the new
+	 * aliases only after the event, and with every survivor a sink no new alias can be part of a cycle.
+	 */
+	static void dropAliasFromSurvivor(Object registry, ResourceLocation survivor) {
+		if (!(registry instanceof ForgeRegistry<?>)) return;
+		try {
+			@SuppressWarnings("unchecked")
+			Map<ResourceLocation, ResourceLocation> aliases = (Map<ResourceLocation, ResourceLocation>) ALIASES.get(registry);
+			ResourceLocation stale = aliases.remove(survivor);
+			if (stale != null) LOGGER.info("[swaps] dropped stale alias {} -> {}: the id is registered again", survivor, stale);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("[swaps] could not read ForgeRegistry.aliases", e);
+		}
+	}
+
+	private static Field aliasesField() {
+		try {
+			Field field = ForgeRegistry.class.getDeclaredField("aliases");
+			field.setAccessible(true);
+			return field;
+		} catch (NoSuchFieldException e) {
+			throw new IllegalStateException("[swaps] ForgeRegistry.aliases not found", e);
+		}
 	}
 
 	/** The event is fired once per registry; its key's type is only known as a wildcard. */

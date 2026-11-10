@@ -44,6 +44,9 @@ COLORS = {
     'minecraft:wither_rose': 'black', 'minecraft:sunflower': 'yellow', 'minecraft:lilac': 'magenta',
     'minecraft:rose_bush': 'red', 'minecraft:peony': 'pink',
     'buzzier_bees:pink_clover': 'pink', 'buzzier_bees:white_clover': 'white',
+    'hearthandharvest:white_mum': 'white', 'hearthandharvest:yellow_mum': 'yellow', 'hearthandharvest:orange_mum': 'orange', 'hearthandharvest:red_mum': 'red',
+    'hearthandharvest:pink_mum': 'pink', 'hearthandharvest:purple_mum': 'purple', 'hearthandharvest:blue_mum': 'blue', 'hearthandharvest:light_blue_mum': 'light_blue',
+    'hearthandharvest:four_leaf_clover': 'green',
     'upgrade_aquatic:pink_searocket': 'pink', 'upgrade_aquatic:white_searocket': 'white',
     'upgrade_aquatic:flowering_rush': 'pink', 'twigs:azalea_flowers': 'magenta',
 }
