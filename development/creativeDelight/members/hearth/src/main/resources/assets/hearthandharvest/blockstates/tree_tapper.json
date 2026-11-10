@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=west": {
+      "model": "hearthandharvest:block/tree_tapper",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "hearthandharvest:block/tree_tapper"
+    },
+    "facing=north": {
+      "model": "hearthandharvest:block/tree_tapper",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "hearthandharvest:block/tree_tapper",
+      "y": 270
+    }
+  }
+}

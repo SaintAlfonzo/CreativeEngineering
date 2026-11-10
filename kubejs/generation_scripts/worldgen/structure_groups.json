@@ -1436,6 +1436,11 @@
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
+        },
+        "hearthandharvest:corn_maze": {
+          "weight": 400,
+          "frequency": 1.0,
+          "tuned": "Corn Maze: weight 400 instead of the fitted 987, about 10 % of the plains slots of this group, so the single-building houses keep their share (H&H port, 2026-11-08); kept by the weight strip"
         }
       }
     },

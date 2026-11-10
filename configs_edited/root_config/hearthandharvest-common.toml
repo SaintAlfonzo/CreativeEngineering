@@ -1,0 +1,25 @@
+
+[animals]
+	#A glass bottle milks cows and goats.
+	bottleMilking = true
+	#Sneak-use on a chicken plucks a feather.
+	chickenPlucking = true
+	#Breeding pigs and rabbits can give one extra baby.
+	litters = true
+	#Chance of an extra baby.
+	#Range: 0.0 ~ 1.0
+	litterChance = 0.3333333333333333
+	#Chance of that extra baby when pigs were bred with a truffle (on top of Fungi Delight's own extra piglets).
+	#Range: 0.0 ~ 1.0
+	truffleLitterChance = 0.6666666666666666
+	#Animals drop manure 30 to 60 s after being fed or, for sheep, after grazing.
+	manureFromFedAnimals = true
+
+[farming]
+	#Chance every 2 s that a tree tapper collects 10 mB of sap.
+	#Range: 0.0 ~ 1.0
+	tapperChance = 0.5
+	#Chance of a Corn Husk when harvesting corn.
+	#Range: 0.0 ~ 1.0
+	cornHuskHarvestChance = 0.25
+

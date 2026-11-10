@@ -57,7 +57,7 @@
       "upgrade_aquatic:mulberry_vine"
     ],
     "warm_dry": [
-      "minecraft:cactus", "fruitsdelight:hamimelon_stem", "fruitsdelight:attached_hamimelon_stem",
+      "hearthandharvest:sunflower_stem", "minecraft:cactus", "fruitsdelight:hamimelon_stem", "fruitsdelight:attached_hamimelon_stem",
       "rusticdelight:bell_peppers", "rusticdelight:dark_bell_peppers", "rusticdelight:pale_bell_peppers",
       "rusticdelight:cotton", "rusticdelight:coffee", "farmersrespite:coffee_bush", "farmersrespite:coffee_stem",
       "farmersrespite:coffee_stem_double", "farmersrespite:coffee_stem_middle", "vintagedelight:peanut_crop",
@@ -72,7 +72,7 @@
       "fruitsdelight:mangosteen_leaves", "fruitsdelight:durian_leaves"
     ],
     "autumn_fruit": [
-      "vinery:apple_leaves", "fruitsdelight:apple_leaves"
+      "vinery:apple_leaves", "fruitsdelight:apple_leaves", "hearthandharvest:hops"
     ],
     "grass": [
       "minecraft:grass_block", "minecraft:grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:large_fern",

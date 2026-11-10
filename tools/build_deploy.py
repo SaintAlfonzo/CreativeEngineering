@@ -309,6 +309,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/structure_config.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_groups.json', 'runtime'),   # worldgen/structure_overrides.js
     ('generation_scripts/worldgen/structure_tags.json', 'runtime'),     # structure_overrides.js, MassPlacer
+    ('generation_scripts/worldgen/moobloom_rules.json', 'dev'),         # gen_moobloom_rules.py input/output only; nothing reads it at runtime
     ('generation_scripts/worldgen/biome_traits.json', 'runtime'),       # CD wild crops, mushroom_spawns, wild_flowers, bee_nests, mob_spawns
     ('generation_scripts/worldgen/mob_spawns.json', 'runtime'),         # worldgen/mob_spawns.js
     ('generation_scripts/worldgen/spawn_boxes.json', 'runtime'),        # StructureSpawnBoxes

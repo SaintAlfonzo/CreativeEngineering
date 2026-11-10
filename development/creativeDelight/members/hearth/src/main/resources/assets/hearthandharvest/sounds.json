@@ -1,0 +1,13 @@
+{
+  "entities.fart": {
+    "sounds": [
+      "hearthandharvest:entities/fart/fart"
+    ]
+  },
+  "entities.lick": {
+    "subtitle": "hearthandharvest.subtitles.entity.lick",
+    "sounds": [
+      "hearthandharvest:entities/lick/lick"
+    ]
+  }
+}

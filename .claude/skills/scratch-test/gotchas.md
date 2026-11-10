@@ -313,3 +313,15 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - A wide entity at the edge of a cleared column wedges in the terrain (a boat is 1.375 wide, drop 0.000): clear a margin.
 - `stop_wait.sh` can return a few seconds before the JVM is gone: wait for `game_jvms.sh` to be empty before the next boot.
 - Rows that need a client AND a dedicated server up together cannot be run by an agent (one game JVM at a time, no exceptions): give them to the owner as test IDs.
+
+## Found in r1108hh (Hearth and Harvest, 2026-11-09)
+
+- Never run Gradle while a scratch JVM is up or between its boots: srv jars hard-linked to `build/libs` get rewritten in place, and the `jar` step leaves an un-reobfuscated file behind (`NoSuchMethodError` on a Mojang name, or `ClassNotFoundException` mid-load).
+- `srv/kubejs/data` is a copy made at prep and outranks the jar: a script fix needs that copy updated or a new prep.
+- A `stop` sent to a hung JVM stays in `in.fifo` and stops the next boot right after `Done`: kill the feeder and remove the fifo after a hang.
+- `latest.log` rolls over at midnight; the qrun row running then gets an empty segment.
+- Bots vacuum up items within about 2 blocks: read the bot's `Inventory` as well as `drops`. Bots also get the starter kit a few seconds after spawn, off-hand item included: `clear` after a wait.
+- Rhino: `String(args).trim().split(/\s+/)` (a Java string with a JS regex does not split). Level `getGameTime` is not reachable, use `getLevelData().getGameTime()`. A Forge `FluidStack` built in Rhino can reach `fill()` as a non-matching stack (accepted 0): use `Fluid.of(id, n).getFluidStack()`.
+- NBT dumps do not sort keys (`{id: ..., Count: 1b}`), and floats print in full (0.3 is 0.30000001192092896): write row regexes for both.
+- Create fluid tanks ignore bucket use from a bot, vanilla water included.
+

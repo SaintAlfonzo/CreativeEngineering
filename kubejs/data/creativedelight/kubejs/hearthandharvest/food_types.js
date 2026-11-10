@@ -5,8 +5,80 @@
 // Food types, hearthandharvest part. Readers merge every part with global.CD.genMerge('food_types') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('food_types', 'hearthandharvest', {
  "types": {
+  "raw/veggie": [
+   "sunflower_seeds"
+  ],
   "raw/fruit": [
    "raspberry"
+  ],
+  "raw/meat": [
+   "raw_sausage"
+  ],
+  "cooked/veggie": [
+   "pickled_carrots",
+   "pickled_potatoes"
+  ],
+  "cooked/fruit": [
+   "baked_apple",
+   "raisins"
+  ],
+  "cooked/meat": [
+   "cooked_sausage"
+  ],
+  "baked": [
+   "croissant",
+   "raspberry_scone"
+  ],
+  "dairy": [
+   "goat_cheese_slice"
+  ],
+  "sweet": [
+   "candy_corn",
+   "cider_donut",
+   "grape_pie_slice",
+   "peanut_butter_cookie",
+   "peanut_butter_pie_slice",
+   "raisin_cookie",
+   "raspberry_pie_slice",
+   "trail_mix"
+  ],
+  "sweet/pancake": [
+   "hh_waffle"
+  ],
+  "handheld": [
+   "hot_dog",
+   "street_corn",
+   "tamale"
+  ],
+  "salad": [
+   "hops_salad"
+  ],
+  "meal": [
+   "biscuits_and_gravy",
+   "glazed_carrots",
+   "macaroni_and_cheese"
+  ],
+  "drink": [
+   "blueberry_juice",
+   "cherry_juice",
+   "chocolate_milk_bottle",
+   "glow_berry_juice",
+   "goat_milk_bottle",
+   "raspberry_juice",
+   "root_beer",
+   "sweet_berry_juice"
+  ],
+  "drink/alcohol": [
+   "blueberry_wine",
+   "glow_berry_wine",
+   "lemon_wine",
+   "melon_wine",
+   "moonshine",
+   "raspberry_wine",
+   "sweet_berry_wine"
+  ],
+  "hazard": [
+   "charred_marshmallow_stick"
   ]
  },
  "canned": {}

@@ -42,7 +42,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'corn_delight:cutting/corn' }, e)
 		R.remove({ id: 'corn_delight:cutting/wild_corn' }, e)
 		R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/wild_corn' }, e)
-		R.fdCutting(i.t_crops_corn, i.any_knife, Item.of(i.corn_seeds, 4), e, 'corn_kernels')   // 4 kernels a maize
+		R.fdCutting(i.t_crops_corn, i.any_knife, global.CD.on('hearthandharvest') ? [Item.of(i.corn_seeds, 4), Item.of(i.corn_husk, 1).withChance(0.75)] : Item.of(i.corn_seeds, 4), e, 'corn_kernels')   // 4 kernels a maize
 		R.fdCutting(i.wild_corn, i.any_knife, i.corn_seeds, e, 'wild_corn_kernels')
 		if (Platform.isLoaded('immersiveengineering')) {
 			R.ieCrushing(i.corn_seeds, i.wild_corn, e, 'wild_corn_kernels', [], 3200)

@@ -243,6 +243,7 @@ CROP_BLOCKS = {
     'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
     'ends_delight:chorus_succulent': 'Chorus Succulent',
     'hearthandharvest:raspberry_bush': 'Raspberry',
+    'hearthandharvest:wild_hops': 'Wild Hops',
     'vinery:red_grape_bush': 'Grapes: red', 'vinery:white_grape_bush': 'Grapes: white',
     'vinery:savanna_grape_bush_red': 'Grapes: savanna red', 'vinery:savanna_grape_bush_white': 'Grapes: savanna white',
     'vinery:taiga_grape_bush_red': 'Grapes: taiga red', 'vinery:taiga_grape_bush_white': 'Grapes: taiga white',

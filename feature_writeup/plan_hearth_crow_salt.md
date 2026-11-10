@@ -1,6 +1,6 @@
 # Hearth and Harvest: crow and salt lick plan (2026-11-05)
 
-Status: PLANNED, nothing built. **Owner answers 2026-11-07 (N24, section 10) close every open call in section 7: crop pecking on, pack corn as crow food, theft limited to one hotbar item and surviving without a nest, dressable scarecrows pinned, slower salt lick wear, salt caves added.** **Owner notes 2026-11-06 (N21) override this plan in three places: nests are dropped totally (P2, C6, C7, C9, section 5 are void), both crows need an in-game evaluation (P1 not final), and the scarecrow accepts any farmer's hat (R1).** See section 9. **Owner 2026-11-08 (N26-2): nests are on hold for the crow eval, no longer void; see section 11.**
+Status: BUILT 2026-11-08 (hearth_and_harvest.md 4.6, judgement calls in 4.5), not run in game; section 8 deep dive written. Was: PLANNED, nothing built. **Owner answers 2026-11-07 (N24, section 10) close every open call in section 7: crop pecking on, pack corn as crow food, theft limited to one hotbar item and surviving without a nest, dressable scarecrows pinned, slower salt lick wear, salt caves added.** **Owner notes 2026-11-06 (N21) override this plan in three places: nests are dropped totally (P2, C6, C7, C9, section 5 are void), both crows need an in-game evaluation (P1 not final), and the scarecrow accepts any farmer's hat (R1).** See section 9. **Owner 2026-11-08 (N26-2): nests are on hold for the crow eval, no longer void; see section 11.**
 stash, the crow feather, crop pecking and the wild and taming mechanics. This **supersedes the D2 default ("drop H&H's crow")
 and the D13 default ("no licking")** in [hearth_and_harvest.md](hearth_and_harvest.md) section 5. Findings behind it:
 5.3 (D13) and 5.4 (crow on Alex's Mobs). Source: `DecompiledMods/hearthandharvest-1.21.1-1.4.1-src` (MIT, port route allowed;
@@ -149,16 +149,62 @@ Logic tests in a javac harness for the wariness class and the lick goal's decisi
 - 2026-11-05: plan written from the owner's direction; nothing built.
 - 2026-11-05: salt lick design revised: vanilla POI system instead of a per-level registry, radius 20 and interval 500 ticks, allowlist of licking animals, no home area, standing-spot targeting (sections 1, 2 S4 and S5, tests HNH-51 to HNH-53). Still nothing built.
 
-## 8. Trust deep dive on crows (note, to do)
+## 8. Trust deep dive on crows (written 2026-11-08; the gate on C1, C3, C4)
 
-Owner 2026-11-05: write a deep dive on the crow trust system before any of C1, C3, C4 is built. To cover, from H&H `CrowWariness`, `CrowWaryTemptGoal`,
-`CrowFleeEntityGoal`, `CrowEntity.mobInteract` and the config (`Config.java` crow section), against AM's `EntityCrow`:
+Read from H&H 1.4.1 `CrowWariness`, `CrowWaryTemptGoal`, `CrowFleeEntityGoal`, `CrowEntity.mobInteract`, `Config` (crow section) against AM's `EntityCrow` (decompiled from the pack's `alexsmobs-1.21.1.jar`).
 
-- Every number: alarm length and range, trust cap and gain / decay per tick, comfort and wary distances, thresholds for fleeing, which entities are scary (`scary_for_crow`), the tame odds on each path (feed 1 in 5, dropped food 1 in 8, thrown pickup 1 in 3).
-- How trust interacts with AM: its thrown-seed taming (`seedThrowerID`), `crow_foodstuffs`, scatter and pumpkin fears, and what a tame crow does with trust (nothing in H&H: trust is wild only).
-- What a player sees (approach distance, feedback, particles), what is saved to NBT, multiplayer (per player trust or per crow), and the cost of the capability.
-- Balance: taming time, interaction with crop pecking (P6), scarecrow range, hostile or neutral play styles; options (trust only changes approach distance; trust gates taming; off by switch).
-- A recommendation with a test list, replacing the C1 / C3 / C4 rows here.
+### 8.1 H&H, every number
+
+| Item | Value | Where |
+|---|---|---|
+| Alarm length | 120 ticks (6 s), refreshed by each new hit | `CrowWariness.ALARM_DURATION` |
+| Alarm range | Box inflated 16 on each axis around the hit crow (a cube, not a sphere); wild crows only | `CrowEntity.raiseAlarm` |
+| Effect of an alarm | Sets trust to 0; source becomes a threat within 16 until the alarm ends | `alarm()`, `getThreatRadius` |
+| Trust range | 0 to 200, one number per crow | `FULL_TRUST` |
+| Trust gain | +1 per tick while tempted, +2 if the player sneaks | `CrowWaryTemptGoal.tick` |
+| Trust loss | -5 per tick while the tempting player sprints; -1 per tick whenever not being tempted (the `tick()` decay) | same, `CrowWariness.tick` |
+| Comfort distance (where it hovers) | lerp 4.0 at trust 0 to 1.5 at full; it stops inside comfort -0.75 to comfort +1.0 | `comfortDistance` |
+| Wary distance (flee radius with food held) | lerp 2.5 to 1.0; capped by the scare radius | `waryDistance`, `getThreatRadius` |
+| Tempt range | 10 to start, 14 to give up, 40 tick cooldown after stopping, repath every 10 | `CrowWaryTemptGoal` |
+| Threats | `scary_for_crow` (player, villager) within `crowScareRadius` (6, 0 turns scaring off); creative and spectator never; holding crow food shrinks to the wary distance; a snatching crow uses at most 2.5 | `getThreatRadius` |
+| Flee stop | radius x 1.25 from the alarm source, x 1.6 from others; scan every 10 to 20 ticks, at once on a fresh alarm | `CrowFleeEntityGoal` |
+| Tame odds | Hand feed 1 in 5; dropped food 1 in 8 (if a player threw it); stolen item thrown by a player 1 in 3, item given back | `mobInteract`, `tryTameFromFood`, `tryTameFromPickup` |
+
+Time to full trust: 200 ticks walking (10 s), 100 ticks sneaking (5 s). A sprint undoes it in 40 ticks, walking away in 10 s.
+
+### 8.2 Against AM
+
+- AM's thrown-seed taming is separate: a crow picks up a wheat seed thrown by a player, holds it 60 ticks, eats it, 30 % to tame (`seedThrowerID`). Trust does not touch it. **AM's `AITargetItems` always reaches dropped food first** (any edible or `crow_foodstuffs` item within 16), so H&H's dropped-food path never fires unless AM is kept off those items; a one-method mixin on AM's `canTargetItem` does that for wild crows and every crow food except wheat seeds. Wheat seeds stay on AM's path.
+- `crow_foodstuffs` holds eggs, sugar and `#forge:seeds`; the pack's corn is not in it. Only the seeds and corn are crow food (C3).
+- AM's `AIScatter` (priority 4, a 2-block box around the crow) would chase off a tempted crow, so the tempt goal runs at priority 3, one above H&H's 4.
+- AM's pumpkin fear (`crow_fears`, search out to 20, stops at 16) is wider than H&H's 6; the scarecrow joins both tags, so it works through both. Scattering and pumpkins ignore trust, as in H&H.
+- A tame crow does nothing with trust, in H&H or here; the goals are wild only. AM's hurt handling, retaliation (`HurtByTargetGoal`) and its "right-click takes the held item" stay; a fleeing crow drops its target.
+- AM moves by `setFlying` plus `MoveControl` or a ground navigator switched on the flying flag; H&H's `CrowMoveControl` is not ported.
+
+### 8.3 Player view, state, multiplayer, cost
+
+- Feedback in H&H is motion only: the crow comes closer as trust fills. No particles for trust; hearts or smoke on a feed attempt, crumbs when eating dropped food.
+- H&H saves none of it (the fields are transient). HNH-67 asks for NBT: trust, alarm ticks and the alarm source's UUID are saved, tempted and snatching are not.
+- Trust is per crow, not per player: a second player's food or sprint moves the same number. Per-player trust would need a map per crow for no visible gain.
+- Cost: one small object per `alexsmobs:crow`, a decrement per tick. Nothing for any other mob (the capability attaches to crows only).
+
+### 8.4 Balance
+
+Hand feeding averages 5 food. Comfort distance is reachable from the first second (4 blocks, inside reach), so trust is not a taming gate in H&H; it only lets a crow be fed without chasing it. Pecking (P6) is wild only and unaffected by trust; a scarecrow's 6 blocks and a player's 6 blocks are the same radius. A hostile player gets no trust while alarms fall every hit (0 trust and a 16-block scare for 6 s); a neutral one is ignored until they carry food.
+
+Options: (a) trust only changes approach distance, as H&H; (b) trust gates taming, which punishes the player for a meaningless number; (c) off by switch.
+
+### 8.5 Recommendation, replacing the C1, C3 and C4 rows
+
+**(a), with (c) as `crow.tempting`.** Keep H&H's numbers.
+
+| Step | Work |
+|---|---|
+| C1 | Capability `CrowWariness` on `alexsmobs:crow` only: alarm 120 ticks with source UUID, trust 0 to 200, decay -1 when not tempted, plus the theft flags; saved to NBT |
+| C3 | `CrowWaryTemptGoal` at priority 3: comfort 4 to 1.5, wary 2.5 to 1, gain +1 (+2 sneaking), -5 sprinting, range 10, give up 14, cooldown 40; `#creativedelight:crow_food` |
+| C4 | Hand feed 1 in 5 by event; dropped food 1 in 8 by goal, every crow food but wheat seeds (AM kept off them by a mixin on `canTargetItem`); thrown shiny item 1 in 3, returned; AM's thrown wheat seed 30 % unchanged |
+
+Tests: HNH-61 (approach, sneak, sprint), HNH-62 (three taming paths and AM's seed), HNH-63 (flock alarm 16 blocks, 6 s, trust 0), HNH-67 (NBT), HNH-90 (corn tempts and tames).
 
 ## 9. Owner notes 2026-11-06 (N21)
 

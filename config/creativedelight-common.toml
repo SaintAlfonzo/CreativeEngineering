@@ -48,6 +48,10 @@
 	#skillet (#creativedelight:cookware_pickup) into the hand, as if broken; sneak left-click toggles the handle.
 	#Off: sneak right-click toggles the handle as in the original mods.
 	cookwarePickup = true
+	#QoL-8: a cooking pot, copper pot or kettle broken by a player (or picked up, QoL-7) keeps
+	#its ingredients, meal and output in the item, restored when placed; the leftover slots drop. Off: everything but
+	#the meal drops, as in the original mods (QoL-7 pickup then empties the station into the inventory).
+	cookwareKeepContents = true
 
 #One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world
 #to apply; only chunks generated afterwards change.

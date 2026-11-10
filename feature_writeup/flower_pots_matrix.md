@@ -7,25 +7,25 @@ Y = accepted, blank = refused, part = accepted by one variant only (rich vs plai
 
 ## Summary: accepted plants per holder and kind
 
-| Holder | flower (66) | tall flower (6) | botania (203) | sapling (33) | mushroom (13) | grass / fern (18) | vine (60) | crop / seed (45) | water (74) | cactus / cane (8) | hedge (0) | other (18) | All |
+| Holder | flower (73) | tall flower (6) | botania (203) | sapling (33) | mushroom (13) | grass / fern (18) | vine (61) | crop / seed (45) | water (74) | cactus / cane (8) | hedge (0) | other (19) | All |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Flower pot | 40 | 4 | 0 | 29 | 5 | 10 | 6 | 14 | 1 | 4 | 0 | 2 | 115 |
-| Framed pot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 1 | 5 |
-| Hanging pot (Supp.) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Flower box (Supp.) | 61 | 6 | 100 | 33 | 11 | 10 | 3 | 10 | 5 | 4 | 0 | 2 | 245 |
-| Planter box (AF) | 58 | 0 | 84 | 33 | 9 | 1 | 1 | 0 | 1 | 1 | 0 | 0 | 188 |
+| Flower pot | 47 | 4 | 0 | 29 | 5 | 10 | 7 | 14 | 1 | 4 | 0 | 2 | 123 |
+| Framed pot | 9 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 1 | 13 |
+| Hanging pot (Supp.) | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| Flower box (Supp.) | 67 | 6 | 100 | 33 | 11 | 10 | 4 | 10 | 5 | 4 | 0 | 3 | 253 |
+| Planter box (AF) | 57 | 0 | 84 | 33 | 9 | 1 | 2 | 0 | 1 | 1 | 0 | 0 | 188 |
 | Hanging pot (Beautify) | 13 | 4 | 0 | 0 | 0 | 2 | 5 | 1 | 0 | 0 | 0 | 0 | 25 |
 | Large pot (Floral) | 13 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 17 |
 | Vinery pot | 0 | 6 | 16 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 22 |
-| Vinery box | 55 | 0 | 68 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 123 |
-| Silt pot (Twigs) | 38 | 0 | 87 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 125 |
-| Planter (Supp.) | 62 | 4 | 203 | 33 | 13 | 13 | 18 | 37 | 0 | 4 | 0 | 9 | 396 |
+| Vinery box | 54 | 0 | 68 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 123 |
+| Silt pot (Twigs) | 47 | 0 | 87 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 134 |
+| Planter (Supp.) | 70 | 4 | 203 | 33 | 13 | 13 | 18 | 37 | 0 | 4 | 0 | 10 | 405 |
 
 ## Plants no flower pot takes
 
 Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 
-- **flower** (26): `minecraft:flowering_azalea_leaves`, `corn_delight:wild_corn`, `delightful:wild_salmonberries`, `farmersdelight:wild_beetroots`, `farmersdelight:wild_cabbages`, `farmersdelight:wild_carrots`, `farmersdelight:wild_onions`, `farmersdelight:wild_potatoes`, `farmersdelight:wild_tomatoes`, `fireflybushport:firefly_bush`, `immersive_weathering:azalea_flower_pile`, `immersive_weathering:flowering_azalea_leaf_pile`, `miners_delight:wild_cave_carrots`, `nethersdelight:mimicarnation`, `supplementaries:wild_flax`, `veggiesdelight:mature_dandelion`, `veggiesdelight:wild_broccoli`, `veggiesdelight:wild_cauliflowers`, `veggiesdelight:wild_garlic`, `veggiesdelight:wild_sweet_potatoes`, `veggiesdelight:wild_turnips`, `veggiesdelight:wild_zucchinis`, `vintagedelight:wild_cucumbers`, `vintagedelight:wild_ghost_peppers`, `vintagedelight:wild_oats`, `vintagedelight:wild_peanuts`
+- **flower** (26): `minecraft:flowering_azalea_leaves`, `corn_delight:wild_corn`, `delightful:wild_salmonberries`, `farmersdelight:wild_beetroots`, `farmersdelight:wild_cabbages`, `farmersdelight:wild_carrots`, `farmersdelight:wild_onions`, `farmersdelight:wild_potatoes`, `farmersdelight:wild_tomatoes`, `fireflybushport:firefly_bush`, `hearthandharvest:wild_hops`, `immersive_weathering:azalea_flower_pile`, `immersive_weathering:flowering_azalea_leaf_pile`, `miners_delight:wild_cave_carrots`, `nethersdelight:mimicarnation`, `veggiesdelight:mature_dandelion`, `veggiesdelight:wild_broccoli`, `veggiesdelight:wild_cauliflowers`, `veggiesdelight:wild_garlic`, `veggiesdelight:wild_sweet_potatoes`, `veggiesdelight:wild_turnips`, `veggiesdelight:wild_zucchinis`, `vintagedelight:wild_cucumbers`, `vintagedelight:wild_ghost_peppers`, `vintagedelight:wild_oats`, `vintagedelight:wild_peanuts`
 - **tall flower** (2): `farmersdelight:wild_rice`, `upgrade_aquatic:flowering_rush`
 - **botania** (203): `botania:agricarnation`, `botania:agricarnation_chibi`, `botania:bellethorn`, `botania:bellethorn_chibi`, `botania:bergamute`, `botania:black_double_flower`, `botania:black_floating_flower`, `botania:black_mushroom`, `botania:black_mystical_flower`, `botania:black_petal`, `botania:black_shiny_flower`, `botania:blue_double_flower`, `botania:blue_floating_flower`, `botania:blue_mushroom`, `botania:blue_mystical_flower`, `botania:blue_petal`, `botania:blue_shiny_flower`, `botania:brown_double_flower`, `botania:brown_floating_flower`, `botania:brown_mushroom`, `botania:brown_mystical_flower`, `botania:brown_petal`, `botania:brown_shiny_flower`, `botania:bubbell`, `botania:bubbell_chibi`, `botania:clayconia`, `botania:clayconia_chibi`, `botania:cyan_double_flower`, `botania:cyan_floating_flower`, `botania:cyan_mushroom`, `botania:cyan_mystical_flower`, `botania:cyan_petal`, `botania:cyan_shiny_flower`, `botania:daffomill`, `botania:dandelifeon`, `botania:daybloom_motif`, `botania:dreadthorn`, `botania:endoflame`, `botania:entropinnyum`, `botania:exoflame`, `botania:fallen_kanade`, `botania:floating_agricarnation`, `botania:floating_agricarnation_chibi`, `botania:floating_bellethorn`, `botania:floating_bellethorn_chibi`, `botania:floating_bergamute`, `botania:floating_bubbell`, `botania:floating_bubbell_chibi`, `botania:floating_clayconia`, `botania:floating_clayconia_chibi`, `botania:floating_daffomill`, `botania:floating_dandelifeon`, `botania:floating_dreadthorn`, `botania:floating_endoflame`, `botania:floating_entropinnyum`, `botania:floating_exoflame`, `botania:floating_fallen_kanade`, `botania:floating_gourmaryllis`, `botania:floating_heisei_dream`, `botania:floating_hopperhock`, `botania:floating_hopperhock_chibi`, `botania:floating_hyacidus`, `botania:floating_hydroangeas`, `botania:floating_jaded_amaranthus`, `botania:floating_jiyuulia`, `botania:floating_jiyuulia_chibi`, `botania:floating_kekimurus`, `botania:floating_labellia`, `botania:floating_loonium`, `botania:floating_manastar`, `botania:floating_marimorphosis`, `botania:floating_marimorphosis_chibi`, `botania:floating_medumone`, `botania:floating_munchdew`, `botania:floating_narslimmus`, `botania:floating_orechid`, `botania:floating_orechid_ignem`, `botania:floating_pollidisiac`, `botania:floating_pure_daisy`, `botania:floating_rafflowsia`, `botania:floating_rannuncarpus`, `botania:floating_rannuncarpus_chibi`, `botania:floating_rosa_arcana`, `botania:floating_shulk_me_not`, `botania:floating_solegnolia`, `botania:floating_solegnolia_chibi`, `botania:floating_spectranthemum`, `botania:floating_spectrolus`, `botania:floating_tangleberrie`, `botania:floating_tangleberrie_chibi`, `botania:floating_thermalily`, `botania:floating_tigerseye`, `botania:floating_vinculotus`, `botania:gourmaryllis`, `botania:gray_double_flower`, `botania:gray_floating_flower`, `botania:gray_mushroom`, `botania:gray_mystical_flower`, `botania:gray_petal`, `botania:gray_shiny_flower`, `botania:green_double_flower`, `botania:green_floating_flower`, `botania:green_mushroom`, `botania:green_mystical_flower`, `botania:green_petal`, `botania:green_shiny_flower`, `botania:heisei_dream`, `botania:hopperhock`, `botania:hopperhock_chibi`, `botania:hyacidus`, `botania:hydroangeas`, `botania:hydroangeas_motif`, `botania:jaded_amaranthus`, `botania:jiyuulia`, `botania:jiyuulia_chibi`, `botania:kekimurus`, `botania:labellia`, `botania:light_blue_double_flower`, `botania:light_blue_floating_flower`, `botania:light_blue_mushroom`, `botania:light_blue_mystical_flower`, `botania:light_blue_petal`, `botania:light_blue_shiny_flower`, `botania:light_gray_double_flower`, `botania:light_gray_floating_flower`, `botania:light_gray_mushroom`, `botania:light_gray_mystical_flower`, `botania:light_gray_petal`, `botania:light_gray_shiny_flower`, `botania:lime_double_flower`, `botania:lime_floating_flower`, `botania:lime_mushroom`, `botania:lime_mystical_flower`, `botania:lime_petal`, `botania:lime_shiny_flower`, `botania:loonium`, `botania:magenta_double_flower`, `botania:magenta_floating_flower`, `botania:magenta_mushroom`, `botania:magenta_mystical_flower`, `botania:magenta_petal`, `botania:magenta_shiny_flower`, `botania:manastar`, `botania:marimorphosis`, `botania:marimorphosis_chibi`, `botania:medumone`, `botania:munchdew`, `botania:narslimmus`, `botania:nightshade_motif`, `botania:orange_double_flower`, `botania:orange_floating_flower`, `botania:orange_mushroom`, `botania:orange_mystical_flower`, `botania:orange_petal`, `botania:orange_shiny_flower`, `botania:orechid`, `botania:orechid_ignem`, `botania:pink_double_flower`, `botania:pink_floating_flower`, `botania:pink_mushroom`, `botania:pink_mystical_flower`, `botania:pink_petal`, `botania:pink_shiny_flower`, `botania:pollidisiac`, `botania:pure_daisy`, `botania:purple_double_flower`, `botania:purple_floating_flower`, `botania:purple_mushroom`, `botania:purple_mystical_flower`, `botania:purple_petal`, `botania:purple_shiny_flower`, `botania:rafflowsia`, `botania:rannuncarpus`, `botania:rannuncarpus_chibi`, `botania:red_double_flower`, `botania:red_floating_flower`, `botania:red_mushroom`, `botania:red_mystical_flower`, `botania:red_petal`, `botania:red_shiny_flower`, `botania:rosa_arcana`, `botania:shulk_me_not`, `botania:solegnolia`, `botania:solegnolia_chibi`, `botania:spectranthemum`, `botania:spectrolus`, `botania:tangleberrie`, `botania:tangleberrie_chibi`, `botania:thermalily`, `botania:tigerseye`, `botania:vinculotus`, `botania:white_double_flower`, `botania:white_floating_flower`, `botania:white_mushroom`, `botania:white_mystical_flower`, `botania:white_petal`, `botania:white_shiny_flower`, `botania:yellow_double_flower`, `botania:yellow_floating_flower`, `botania:yellow_mushroom`, `botania:yellow_mystical_flower`, `botania:yellow_petal`, `botania:yellow_shiny_flower`
 - **sapling** (4): `myrtrees:rubberwood_sapling`, `vinery:apple_tree_sapling`, `vinery:cherry_sapling`, `vintagedelight:magic_peanut`
@@ -35,7 +35,7 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - **crop / seed** (31): `minecraft:melon`, `minecraft:pumpkin`, `corn_delight:corn_seeds`, `delightful:cantaloupe`, `delightful:cantaloupe_seeds`, `delightful:mini_melon`, `endercrop:ender_seeds`, `farmersdelight:cabbage_seeds`, `farmersdelight:onion`, `farmersdelight:tomato_seeds`, `fruitsdelight:hamimelon`, `fruitsdelight:hamimelon_seeds`, `hearthandharvest:raspberry_pips`, `immersive_weathering:weeds`, `miners_delight:cave_carrot`, `rusticdelight:bell_pepper_seeds`, `rusticdelight:coffee_beans`, `rusticdelight:cotton_seeds`, `rusticdelight:dark_bell_pepper_seeds`, `rusticdelight:pale_bell_pepper_seeds`, `veggiesdelight:broccoli_seeds`, `veggiesdelight:cauliflower_seeds`, `veggiesdelight:garlic_clove`, `veggiesdelight:sweet_potato`, `veggiesdelight:turnip_seeds`, `veggiesdelight:zucchini_seeds`, `vintagedelight:cucumber_seeds`, `vintagedelight:ghost_pepper`, `vintagedelight:ghost_pepper_seeds`, `vintagedelight:oat_seeds`, `vintagedelight:peanut`
 - **water** (73): `minecraft:brain_coral`, `minecraft:brain_coral_fan`, `minecraft:bubble_coral`, `minecraft:bubble_coral_fan`, `minecraft:dead_brain_coral`, `minecraft:dead_brain_coral_fan`, `minecraft:dead_bubble_coral`, `minecraft:dead_bubble_coral_fan`, `minecraft:dead_fire_coral`, `minecraft:dead_fire_coral_fan`, `minecraft:dead_horn_coral`, `minecraft:dead_horn_coral_fan`, `minecraft:dead_tube_coral`, `minecraft:dead_tube_coral_fan`, `minecraft:fire_coral`, `minecraft:fire_coral_fan`, `minecraft:horn_coral`, `minecraft:horn_coral_fan`, `minecraft:kelp`, `minecraft:lily_pad`, `minecraft:seagrass`, `minecraft:tube_coral`, `minecraft:tube_coral_fan`, `upgrade_aquatic:acan_coral`, `upgrade_aquatic:acan_coral_fan`, `upgrade_aquatic:branch_coral`, `upgrade_aquatic:branch_coral_fan`, `upgrade_aquatic:chrome_coral`, `upgrade_aquatic:chrome_coral_fan`, `upgrade_aquatic:dead_acan_coral`, `upgrade_aquatic:dead_acan_coral_fan`, `upgrade_aquatic:dead_branch_coral`, `upgrade_aquatic:dead_branch_coral_fan`, `upgrade_aquatic:dead_chrome_coral`, `upgrade_aquatic:dead_chrome_coral_fan`, `upgrade_aquatic:dead_finger_coral`, `upgrade_aquatic:dead_finger_coral_fan`, `upgrade_aquatic:dead_moss_coral`, `upgrade_aquatic:dead_moss_coral_fan`, `upgrade_aquatic:dead_petal_coral`, `upgrade_aquatic:dead_petal_coral_fan`, `upgrade_aquatic:dead_pillow_coral`, `upgrade_aquatic:dead_pillow_coral_fan`, `upgrade_aquatic:dead_rock_coral`, `upgrade_aquatic:dead_rock_coral_fan`, `upgrade_aquatic:dead_silk_coral`, `upgrade_aquatic:dead_silk_coral_fan`, `upgrade_aquatic:dead_star_coral`, `upgrade_aquatic:dead_star_coral_fan`, `upgrade_aquatic:elder_prismarine_coral`, `upgrade_aquatic:elder_prismarine_coral_fan`, `upgrade_aquatic:elder_prismarine_coral_shower`, `upgrade_aquatic:finger_coral`, `upgrade_aquatic:finger_coral_fan`, `upgrade_aquatic:moss_coral`, `upgrade_aquatic:moss_coral_fan`, `upgrade_aquatic:ochre_kelp`, `upgrade_aquatic:petal_coral`, `upgrade_aquatic:petal_coral_fan`, `upgrade_aquatic:pillow_coral`, `upgrade_aquatic:pillow_coral_fan`, `upgrade_aquatic:polar_kelp`, `upgrade_aquatic:prismarine_coral`, `upgrade_aquatic:prismarine_coral_fan`, `upgrade_aquatic:prismarine_coral_shower`, `upgrade_aquatic:rock_coral`, `upgrade_aquatic:rock_coral_fan`, `upgrade_aquatic:silk_coral`, `upgrade_aquatic:silk_coral_fan`, `upgrade_aquatic:star_coral`, `upgrade_aquatic:star_coral_fan`, `upgrade_aquatic:thorny_kelp`, `upgrade_aquatic:tongue_kelp`
 - **cactus / cane** (4): `minecraft:chorus_plant`, `endersdelight:chorusflame`, `ends_delight:chorus_succulent`, `twigs:bamboo_leaves`
-- **other** (16): `minecraft:big_dripleaf`, `minecraft:moss_block`, `minecraft:spore_blossom`, `alexsmobs:banana_peel`, `delightful:salmonberry_pips`, `endersdelight:amberveil`, `endersdelight:ethereal_saffron`, `farmersdelight:rice`, `farmersdelight:sandy_shrub`, `fruitsdelight:blueberry`, `fruitsdelight:blueberry_bush`, `fruitsdelight:cranberry`, `fruitsdelight:pineapple_sapling`, `fruitsdelight:wild_pineapple`, `neapolitan:strawberry_pips`, `nethersdelight:propelplant_cane`
+- **other** (17): `minecraft:big_dripleaf`, `minecraft:moss_block`, `minecraft:spore_blossom`, `alexsmobs:banana_peel`, `delightful:salmonberry_pips`, `endersdelight:amberveil`, `endersdelight:ethereal_saffron`, `farmersdelight:rice`, `farmersdelight:sandy_shrub`, `fruitsdelight:blueberry`, `fruitsdelight:blueberry_bush`, `fruitsdelight:cranberry`, `fruitsdelight:pineapple_sapling`, `fruitsdelight:wild_pineapple`, `neapolitan:strawberry_pips`, `nethersdelight:propelplant_cane`, `supplementaries:wild_flax`
 
 ## Probe against prediction
 
@@ -467,8 +467,12 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 - silt: `rusticdelight:wild_pale_bell_peppers` predicted yes, probe no
 - framed: `supplementaries:flax_seeds` predicted yes, probe no
 - hanging: `supplementaries:flax_seeds` predicted yes, probe no
+- fbox: `supplementaries:wild_flax` predicted no, probe yes
 - framed: `twigs:azalea_flowers` predicted yes, probe no
 - hanging: `twigs:azalea_flowers` predicted yes, probe no
+- fbox: `twigs:azalea_flowers` predicted no, probe yes
+- pbox: `twigs:azalea_flowers` predicted no, probe yes
+- vbox: `twigs:azalea_flowers` predicted no, probe yes
 - planter: `upgrade_aquatic:beachgrass` predicted yes, probe no
 - planter: `upgrade_aquatic:flowering_rush` predicted yes, probe no
 - framed: `upgrade_aquatic:pink_searocket` predicted yes, probe no
@@ -1000,11 +1004,20 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 | `morel_mushroom` | mushroom |  |  |  | Y | Y |  |  |  |  |  | Y |
 | `morel_mushroom_colony` | mushroom |  |  |  | Y | Y |  |  |  |  |  | Y |
 
-### hearthandharvest (1)
+### hearthandharvest (10)
 
 | Plant | Kind | Flower pot | Framed pot | Hanging pot (Supp.) | Flower box (Supp.) | Planter box (AF) | Hanging pot (Beautify) | Large pot (Floral) | Vinery pot | Vinery box | Silt pot (Twigs) | Planter (Supp.) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `blue_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `light_blue_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `orange_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `pink_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `purple_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
 | `raspberry_pips` | crop / seed |  |  |  |  |  |  |  |  |  |  | Y |
+| `red_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `white_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
+| `wild_hops` | flower |  |  |  |  |  |  |  |  |  | Y | Y |
+| `yellow_mum` | flower | Y | Y | Y | Y |  |  |  |  |  | Y | Y |
 
 ### immersive_weathering (9)
 
@@ -1092,13 +1105,13 @@ Plants the vanilla pot (and so the framed and hanging pots) refuses, by kind:
 | Plant | Kind | Flower pot | Framed pot | Hanging pot (Supp.) | Flower box (Supp.) | Planter box (AF) | Hanging pot (Beautify) | Large pot (Floral) | Vinery pot | Vinery box | Silt pot (Twigs) | Planter (Supp.) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | `flax_seeds` | crop / seed | Y |  |  | Y |  |  |  |  |  |  | Y |
-| `wild_flax` | flower |  |  |  | Y |  |  |  |  |  |  | Y |
+| `wild_flax` | other |  |  |  | Y |  |  |  |  |  |  | Y |
 
 ### twigs (3)
 
 | Plant | Kind | Flower pot | Framed pot | Hanging pot (Supp.) | Flower box (Supp.) | Planter box (AF) | Hanging pot (Beautify) | Large pot (Floral) | Vinery pot | Vinery box | Silt pot (Twigs) | Planter (Supp.) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `azalea_flowers` | flower | Y |  |  | Y | Y |  |  |  | Y |  |  |
+| `azalea_flowers` | vine | Y |  |  | Y | Y |  |  |  | Y |  |  |
 | `bamboo_leaves` | cactus / cane |  |  |  |  |  |  |  |  |  |  | Y |
 | `petrified_lichen` | vine |  |  |  |  |  |  |  |  |  |  |  |
 

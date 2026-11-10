@@ -1812,6 +1812,28 @@
         ]
       }
     },
+    "hearthandharvest:corn_maze": {
+      "source": "creativedelight-1.1.0.jar!backportedHearth-1.4.1-ce-19.2-04.jar",
+      "structures": [
+        {
+          "structure": "hearthandharvest:corn_maze",
+          "weight": 4,
+          "biomes": "#hearthandharvest:has_structure/corn_maze"
+        }
+      ],
+      "original": {
+        "type": "minecraft:random_spread",
+        "spacing": 32,
+        "separation": 12,
+        "salt": 64231,
+        "frequency": 1.0,
+        "locate_offset": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
     "hearths:netherrack_spirals": {
       "source": "hearths-v1.0.0-mc1.19u1.19.3.jar",
       "structures": [

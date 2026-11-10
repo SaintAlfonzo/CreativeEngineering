@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "hearthandharvest:corn_maze",
+      "weight": 4
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 64231,
+    "spacing": 32,
+    "separation": 12
+  }
+}

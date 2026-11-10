@@ -1,0 +1,10 @@
+
+#Tip bar on the world loading screens. The tips come from the built-in resource pack
+#Loading Tips and any resource pack with assets/<namespace>/loading_tips/*.json.
+[loading_tips]
+	#Show the tip bar while a world or dimension loads.
+	enabled = true
+	#Seconds each tip stays before the next one rolls in.
+	#Range: 2 ~ 120
+	cycleSeconds = 10
+

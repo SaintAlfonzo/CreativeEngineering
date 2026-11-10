@@ -440,6 +440,13 @@ Engineering for good.
   remap hook: CD keeps a load-only alias `creative_delight:village_farm_crops` for farm pieces saved inline in structure
   starts. `swap/ConfigRename.carryOver` renames an old `creative_delight-common.toml` / `creative_brewing-common.toml`
   to the new name before the config loads, so player values stay.
+  **Alias cycle fix (2026-11-08):** an id swapped A -> B and later back B -> A hung the world load forever. The save held the alias
+  B -> A, Forge added A -> B for the remap, and `ForgeRegistry.getRaw` follows aliases with no cycle check. First hit by the five Better
+  Beacons potions (Brewing -> Common -> Brewing, world saved between the moves). `SwapRemapper` now removes the alias leading out of every
+  survivor from the staging registry before Forge adds the new one (reflection: Forge has no API). A survivor is a registered name, so that
+  alias is dead anyway, and with every survivor a sink no remap can close a cycle, including two remaps in one event. Harness on the real
+  broken `level.dat` (real `getRaw`, all 22 registries, 20 remaps): without the fix 15 aliases never resolve, with it none, and every old id
+  resolves to its survivor. Live tests: CQ-SWL-01, CQ-SWL-02, SQ-SWL-01.
 - **Prep (7.3 step 0).** `CEMixinPlugin` is a `GatedMixinPlugin` (`shared_sources=packs,mixinplugin`; table holds
   `IwServerLevelTickMixin`; each carve takes its rows); IW `postApply` kept. `NCH.cfg` looks a section up in every
   registered config class (`global.NCH.registerConfig(modId, className)`; `modid:SECTION` pins one). Common APIs:

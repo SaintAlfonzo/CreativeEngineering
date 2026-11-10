@@ -526,7 +526,7 @@
 	[tools.seed_pouch]
 		"Max Items" = 640
 		"Show All Variants In Creative" = true
-		"Shift Range" = 3
+		"Shift Range" = 5
 
 	[tools.skull_pikes]
 		"Pike Range" = 5.0

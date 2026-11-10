@@ -1,0 +1,240 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "vinery:block/grapevine_lattice",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "age": "0"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age0",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "age": "1"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age1",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "age": "2"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age2",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "age": "3"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age3",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "age": "4"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age4",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "vinery:block/grapevine_lattice",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "age": "0"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age0",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "age": "1"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "age": "2"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "age": "3"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "age": "4"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "vinery:block/grapevine_lattice",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "age": "0"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age0",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "age": "1"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age1",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "age": "2"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age2",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "age": "3"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age3",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "age": "4"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age4",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "vinery:block/grapevine_lattice",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "age": "0"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age0",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "age": "1"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "age": "2"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age2",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "age": "3"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age3",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "age": "4"
+      },
+      "apply": {
+        "model": "hearthandharvest:block/hops_age4",
+        "y": 270
+      }
+    }
+  ]
+}

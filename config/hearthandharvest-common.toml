@@ -1,0 +1,117 @@
+
+[animals]
+	#A glass bottle milks cows and goats.
+	bottleMilking = true
+	#Sneak-use on a chicken plucks a feather.
+	chickenPlucking = true
+	#Breeding pigs and rabbits can give one extra baby.
+	litters = true
+	#Chance of an extra baby.
+	#Range: 0.0 ~ 1.0
+	litterChance = 0.3333333333333333
+	#Chance of that extra baby when pigs were bred with a truffle (on top of Fungi Delight's own extra piglets).
+	#Range: 0.0 ~ 1.0
+	truffleLitterChance = 0.6666666666666666
+	#Animals drop manure 30 to 60 s after being fed or, for sheep, after grazing.
+	manureFromFedAnimals = true
+
+[farming]
+	#Chance every 2 s that a tree tapper collects 10 mB of sap.
+	#Range: 0.0 ~ 1.0
+	tapperChance = 0.5
+	#Chance of a Corn Husk when harvesting corn.
+	#Range: 0.0 ~ 1.0
+	cornHuskHarvestChance = 0.25
+	#Hops only grow when the bottom of their lattice column stands on farmland.
+	hopsRequireFarmland = true
+
+[machines]
+	#Water Trough stops breeding when this many animals stand within 20x8x20 blocks of it.
+	#Range: 1 ~ 256
+	troughBreedingCap = 16
+	#Ticks between a Field Sprinkler's scans of its area for farmland, crops and fire (20 = 1 s).
+	#Range: 20 ~ 1200
+	sprinklerRescanTicks = 100
+	#Items that fit in one Stomping Basin slot (one slot alone, four in a 2x2 group).
+	#Range: 1 ~ 512
+	stompingBasinSlotLimit = 64
+
+[worldgen]
+	#Generate salt caves.
+	saltCaves = true
+	#One salt cave attempt in this many chunks of a salt cave biome.
+	#Range: 1 ~ 100000
+	saltCaveRarity = 24
+	#Lowest centre height of a salt cave.
+	#Range: -64 ~ 300
+	saltCaveMinY = -40
+	#Highest centre height of a salt cave.
+	#Range: -64 ~ 300
+	saltCaveMaxY = 30
+	#Generate corn mazes (their rate is in the pack's structure tables).
+	cornMaze = true
+
+[salt]
+	#Right-clicking a salt block with both hands empty licks it.
+	playerLicking = true
+	#Animals in the salt_lickers tag stay near salt blocks and lick them.
+	animalLicking = true
+	#Chance that a player's lick wears the block one stage.
+	#Range: 0.0 ~ 1.0
+	saltPlayerLickChance = 0.05
+	#Chance that an animal's lick wears the block one stage.
+	#Range: 0.0 ~ 1.0
+	saltAnimalStageChance = 0.125
+	#Blocks an animal keeps within of a salt block. The search reaches 2 further.
+	#Range: 1 ~ 64
+	saltAnimalRadius = 20
+	#Ticks between searches for a salt block.
+	#Range: 20 ~ 6000
+	saltSearchInterval = 200
+	#Average ticks between an animal's licks, randomised by a quarter either way. The first lick comes after half to one and a half intervals.
+	#Range: 200 ~ 72000
+	saltLickInterval = 1200
+
+[crow]
+	#Wild crows flee players, villagers and whoever hurt them.
+	fleeing = true
+	#Hurting a wild crow alarms the wild crows within 16 blocks.
+	flockAlarm = true
+	#Wild crows come to a player holding crow food and slowly let them closer.
+	tempting = true
+	#Feeding crow food by hand can tame a wild crow, 1 in 5.
+	handFeeding = true
+	#Wild crows eat crow food on the ground, 1 in 8 to tame the thrower.
+	eatDroppedFood = true
+	#Tame crows also breed with corn and corn seeds.
+	cornBreeding = true
+	#Wild crows peck crops back to age 0. Also needs mobGriefing.
+	eatCrops = true
+	#Wild crows take one shiny item from a player's hotbar.
+	stealShinyItems = true
+	#Chance per second that a wild crow within 10 blocks starts a theft.
+	#Range: 0.0 ~ 1.0
+	stealChance = 0.1
+	#A crow carrying loot leaves it in a nest within 16 blocks. For the crow eval.
+	stashInNests = true
+	#A hit makes a crow drop its loot. Off, it keeps the loot until it dies or the carry time ends.
+	dropOnHurt = true
+	#Ticks a crow carries loot before dropping it.
+	#Range: 20 ~ 72000
+	carryTicks = 1200
+	#Blocks at which players, villagers and repelling blocks scare wild crows. 0 stops them being scared.
+	#Range: 0 ~ 32
+	scareRadius = 6
+	#Ground nests generate in new chunks. For the crow eval.
+	generateNests = true
+	#Crows may spawn near world-generated nests.
+	spawnNearNests = true
+	#Radius checked for nests and crops when a crow spawns. 0 skips the check.
+	#Range: 0 ~ 16
+	spawnRadius = 8
+	#Crops needed within the radius for a crow to spawn near them. 0 skips the crop check.
+	#Range: 0 ~ 256
+	cropRequirement = 8
+	#Crows spawn only near nests or crops (the upstream rule). Off keeps every other spawn.
+	denySpawnsElsewhere = false
+

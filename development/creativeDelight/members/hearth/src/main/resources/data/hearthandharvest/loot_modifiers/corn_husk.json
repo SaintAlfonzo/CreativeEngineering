@@ -1,0 +1,6 @@
+{
+  "type": "hearthandharvest:corn_husk",
+  "conditions": [
+    { "condition": "forge:loot_table_id", "loot_table_id": "corn_delight:blocks/corn_crop" }
+  ]
+}

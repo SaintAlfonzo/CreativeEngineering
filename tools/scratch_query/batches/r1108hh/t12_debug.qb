@@ -1,0 +1,52 @@
+# r1108hh debugging repros (not queue rows)
+pace 1
+## DBG-1 | pluck: where does the feather go
+> forceload add 6100 6100
+> pbot spawn bot1 6100 -60 6100 minecraft:overworld survival
+> clear bot1
+sleep 3
+> summon minecraft:chicken 6100 -60 6102 {NoAI:1b,Tags:["d1"]}
+sleep 1
+> pbot hold bot1 minecraft:shears
+> zhh1 interact bot1 d1 sneak
+sleep 1
+> zhh1 drops 6100 -60 6102 6
+> data get entity bot1 Inventory
+look feather on the ground or in the bot inventory
+## DBG-2 | cutting board: knife vs cleaver, corn and a control
+> forceload add 6200 6100
+> pbot spawn bot1 6200 -60 6100 minecraft:overworld survival
+> clear bot1
+sleep 3
+> setblock 6200 -60 6101 farmersdelight:cutting_board[facing=south]
+> pbot hold bot1 corn_delight:corn
+> pbot use bot1 6200 -60 6101
+> data get block 6200 -60 6101
+> pbot hold bot1 farmersdelight:iron_knife
+> pbot use bot1 6200 -60 6101
+sleep 1
+> data get block 6200 -60 6101
+> zhh1 drops 6200 -60 6101 6
+> zq makes corn_delight:corn_seeds
+> setblock 6200 -60 6101 minecraft:air
+> setblock 6200 -60 6101 farmersdelight:cutting_board[facing=south]
+> pbot hold bot1 minecraft:carrot
+> pbot use bot1 6200 -60 6101
+> pbot hold bot1 hearthandharvest:iron_cleaver
+> pbot use bot1 6200 -60 6101
+sleep 1
+> data get block 6200 -60 6101
+> zhh1 drops 6200 -60 6101 6
+look which one drops anything
+## DBG-3 | Create tank control: water bucket vs sap bucket, on the block and from the side
+> forceload add 6300 6100
+> pbot spawn bot1 6300 -60 6100 minecraft:overworld survival
+> clear bot1
+sleep 3
+> setblock 6300 -60 6102 create:fluid_tank
+> pbot hold bot1 minecraft:water_bucket
+> pbot use bot1 6300 -60 6102
+sleep 1
+> data get block 6300 -60 6102 TankContent
+> data get entity bot1 SelectedItem
+look does vanilla water go in with the bot at all

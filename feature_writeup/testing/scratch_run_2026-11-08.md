@@ -217,3 +217,56 @@ CQ-CC-05 PASS (framed panes and bars make no mirror). CQ-CC-04 first half PASS (
 ## 7. Last launch (19:09 to 19:2x)
 
 CQ-LTC-01, CQ-CC-04 (second half), CQ-SPFX-02 PASS (log: no Heartstone line, no mixin failure). CQ-LT-06 PASS (owner: no tip bar with `enabled = false` in `creativecommon-client.toml`). Panorama: the six jar images are a terrain-free sky capture (contact sheet: flat blue, hazy ground, sun), hence blank; removed from Common's jar, vanilla by default.
+
+## 8. r1108hh: Hearth and Harvest full suite (SQ-HH-201 to -1612)
+
+Owner request (23:04): execute the scratch test queue for Hearth and Harvest, debug as you go. Batches `tools/scratch_query/batches/r1108hh/` (generated from the queue by `tools/scratch_query/hh_queue_to_qb.py`), results `perf/runs/r1108hh/<block>/`, perf session r1108hh. Jars: Common 22:02, Delight 22:00, Brewing 21:56 from `mods/`. Loadingscreentips left out of every srv (unlisted, as r1107cc).
+
+### Run notes
+
+- 23:08 claim, preflight clean (no JVM, 52 GB free). 545 server rows, 32 client rows.
+- 23:06 boot hh12 (group A, spawn-animals, normal): Done, no mixin or registry error. SQ-HH-1101 finding: five juice compacting recipes (`creativedelight:createcompacting/*_juice_compacting`) fail to parse, `ingredients: [[]]`; `recipes.js` passes `F.slot(...)` to `R.createCompacting`, which only the pack's cooking helpers understand.
+- 23:43 batch t12_a (SQ-HH-1102..1323) first pass 163 PASS, 36 FAIL, 23 LOOK. Most FAILs were tooling: Rhino cannot reach `getGameTime` / `distanceTo` / 3-arg `setDeltaMovement` here (probe fixed), NBT key order and full float printing in the row regexes (fixed in `hh_queue_to_qb.py`). `latest.log` rolls over at midnight, so qrun loses that one row's segment (DBG-5).
+- 00:06 findings so far: (1) compacting juice recipes, fixed in `recipes.js` (needs the CD rebuild); (2) Quark's Pig Litters also fires, plain pigs get about 1.9 extra per pair instead of 0.33; (3) the comfort and nourishment rule strips Nourishment from H&H foods (no H&H key in the generated JSON). Create tank ignores bot bucket use even for vanilla water (SQ-HH-1307 not testable with a bot).
+- 00:22 boot 2 of hh12 hung in mod loading (`ClassNotFoundException BotanistPotBlockEntity`, Registry Object not present): my own `:creativeDelight:build` ran during the boot and rewrote the Compat and Delight jars the srv hard-links from `build/libs` (known gotcha). Not a pack bug. Rule for this run: never build while a scratch JVM is up.
+- 00:34 hh12 restart rows done; compacting recipes parse clean (the srv's `kubejs/data` copy outranks the jar, so a script fix needs that copy updated too). SQ-HH-1326: 148 extra pigs with H&H litters off, so Quark's Pig Litters is the source of the excess. `stop` sent to a hung JVM stays in the fifo and stops the next boot: remove `in.fifo` after a hang.
+- 00:54 Machines first pass useless: `hh_mw_probe.js` split a Java string with a JS regex, so a[1], a[2] were undefined (fixed, and the same pattern in the crow probe). Bots pick up items within reach: SQ-HH-1225, -1234, -1236, -1252, -1309, -1327 passed once the bot inventory was read. Rerunning Machines on a fresh world hhm2.
+- 01:37 Machines passes 2 and 3: `fill` returned 0 from a Rhino-built Forge FluidStack even on a valid stack and tank; a stack from KubeJS `Fluid.of(...).getFluidStack()` simulates 500 accepted, so it is a probe artifact, not a tank bug. Probe switched. Rows 246, 255, 264, 268 to 273 describe fixtures in prose and need hand expansion in the batch.
+- 01:55 stopped here, at the owner's standing rule for long debugging loops. All JVMs down, perf session closed, RUNNER idle.
+
+### Resume point
+
+Done: tranches 1 and 2 (SQ-HH-1101 to -1328, judged below). In progress: Machines boot 1, last pass `perf/runs/r1108hh/mach4` (world discarded with the scratchpad): 48 of 73 rows clean by `hh_prejudge.py`, 25 in doubt, not yet judged. Not run: Machines boot 2 (SQ-HH-274 to -277, -318, -319), Worldgen (SQ-HH-301 to -329), Crow (SQ-HH-401 to -502), Gear (SQ-HH-1500 to -1612), all CQ-HH client rows, the re-run list in the suite's intro.
+
+Machines rows still to fix in the batch, not the mod: bots keep the starter kit, whose off-hand item takes the lava in SQ-HH-209 and -210 (add `clear hb1` after a short wait in SQ-HH-201); "16 times summon" in -226 expands to one cow; rows without a `tp` are out of reach (-231 `use PASS`); -255, -264, -268 to -273 name fixtures in prose (`...` placeholders) and need writing out; `Count: ?Nb` spans in the rows are NBT key order. -258 (`count: 1`, row wants 2 crate halves) is unjudged and could be real.
+
+Generate batches with `tools/scratch_query/hh_queue_to_qb.py gen FROM TO OUT.qb`; pre-judge LOOK rows with `hh_prejudge.py RES`, then read what it lists (it also flags prose spans).
+
+### Verdicts, tranches 1 and 2
+
+SQ-HH-1101 PASS after the fix (boot clean; the five juice compacting recipes failed to parse, fixed in `recipes.js`, 0 errors on the rerun). Rows not listed passed from their own checks. Totals with SQ-HH-1101: PASS 219, FAIL 8, OPEN 2 of 229 (SQ-HH-1328 is in PASS: shell output `False` and the sound line both match).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-HH-1102 | PASS | dropped-id list in the probe is stale (the 11 ids are later tranches); the rest match |
+| SQ-HH-1104 | PASS | 8 keys ok, nested jar has the mixin json; row grepped the outer jar |
+| SQ-HH-1106 | FAIL | Nourishment stripped from Cider Donut |
+| SQ-HH-1109 | FAIL | Nourishment stripped from Biscuits and Gravy |
+| SQ-HH-1110 | FAIL | Nourishment stripped from Tamale, Street Corn, Macaroni and Cheese |
+| SQ-HH-1111 | FAIL | Nourishment stripped from Pickled Carrots |
+| SQ-HH-1230 | FAIL | 572 extra of 300: Quark Pig Litters stacks |
+| SQ-HH-1232 | FAIL | 541 extra of 300: Quark Pig Litters stacks |
+| SQ-HH-1237 | PASS | row fixture polluted by reruns; DBG-5 at a fresh spot gave manure from ate() |
+| SQ-HH-1252 | PASS | corn_seeds x4 in the bot inventory |
+| SQ-HH-1259 | PASS | pinned 38 ticks left |
+| SQ-HH-1267 | OPEN | squid took no fork damage; a summoned arrow also did not hurt it, so not fork-specific; unresolved |
+| SQ-HH-1269 | PASS | straw x597; extra mixed seeds from pack grass loot broke the $ anchor |
+| SQ-HH-1273 | FAIL | expected FAIL as written (writeup 8.2): straw on hemp at growth=bottom0 |
+| SQ-HH-1276 | PASS | Amount 60 on first pass |
+| SQ-HH-1277 | PASS | Amount 90 on first pass |
+| SQ-HH-1278 | PASS | Amount 60 on first pass |
+| SQ-HH-1307 | OPEN | Create tank ignores bot bucket use, vanilla water too; needs a real player |
+| SQ-HH-1309 | PASS | 3 on ground + 1 in bot inventory |
+| SQ-HH-1314 | PASS | 5 apples held, cabinet and apples dropped on first pass |
+| SQ-HH-1326 | FAIL | 148 extra with H&H litters off: Quark |
+| SQ-HH-1327 | PASS | slice in bot inventory |

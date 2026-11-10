@@ -32,6 +32,8 @@ global.alcohol = {
 		'bottle_mojang_noir', 'chorus_wine', 'creepers_crush', 'mellohi_wine', 'praetorian_wine',
 		// Fruits Delight, Engineer's Delight
 		'bellini_cocktail', 'bottle_of_wodka',
+		// Hearth and Harvest (hearth_and_harvest.md D16). Root Beer is a soft drink and stays out.
+		'blueberry_wine', 'raspberry_wine', 'sweet_berry_wine', 'glow_berry_wine', 'melon_wine', 'lemon_wine', 'moonshine',
 	],
 	// fermented from other wines: Jellie (Apple, Chenet, Bolvar), Mojang Noir (Red Wine)
 	mixed: ['jellie_wine', 'bottle_mojang_noir'],
