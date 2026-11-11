@@ -30,15 +30,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * reaching several blocks past it, and every air block above. Placed on a slope, the pad is a flat square
  * slab and the air cuts a square notch into the hill.
  *
- * <p>For a structure in the structure tag {@code creativeengineering:template_trim} (kubejs
+ * <p>For a structure in the structure tag {@code creativeworldgen:template_trim} (kubejs
  * worldgen/terrain_adaptation.js), every template placement splits the template into columns. A column
  * with a built block (anything that isn't air, pad or plant, see {@link #kind}) is kept whole. In every
- * other column the air, the pad blocks (block tag {@code creativeengineering:template_trim/pad}) and the
- * plants on them ({@code creativeengineering:template_trim/plants}) are not placed, so the natural ground
+ * other column the air, the pad blocks (block tag {@code creativeworldgen:template_trim/pad}) and the
+ * plants on them ({@code creativeworldgen:template_trim/plants}) are not placed, so the natural ground
  * stays there. A template with no built column at all (a foundation plate another piece stands on) is
  * left alone.
  *
- * <p>Structures in {@code creativeengineering:template_trim/air} get the mild form ({@link #trimAir}): only the
+ * <p>Structures in {@code creativeworldgen:template_trim/air} get the mild form ({@link #trimAir}): only the
  * air in columns with nothing solid (no built block, pad or plant) is dropped. For a tall rigid structure whose
  * pieces carry a big air box (Terralith's spire) and whose snow cover rests on another piece's stone, where the
  * full trim would strip the snow.

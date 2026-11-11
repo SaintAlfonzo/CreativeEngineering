@@ -250,7 +250,7 @@ CROP_BLOCKS = {
     'vinery:jungle_grape_bush_red': 'Grapes: jungle red', 'vinery:jungle_grape_bush_white': 'Grapes: jungle white',
     'vinery:apple_leaves': 'Apple (Vinery tree)', 'vinery:cherry_leaves': 'Cherry (Vinery tree)',
     'vinery:dark_cherry_leaves': 'Cherry (Vinery tree)',  # 1.5.5 id; the port renames dark_cherry_* to cherry_*
-    # the pack's own json versions of Java features (creativeengineering:wild/*, Creative Worldgen packs/<modid>/)
+    # the pack's own json versions of Java features (creativeworldgen:wild/*, Creative Worldgen packs/<modid>/)
     'farmersdelight:wild_cabbages': 'Cabbage', 'farmersdelight:wild_beetroots': 'Beetroot (Sea Beet)',
     'farmersdelight:brown_mushroom_colony': 'Brown Mushroom Colony', 'farmersdelight:red_mushroom_colony': 'Red Mushroom Colony',
     'fruitsdelight:hamimelon': 'Cantaloupe', 'delightful:cantaloupe': 'Mini Cantaloupe',  # item_merges.md 2.10

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Rarity;
 
 /**
  * The eight tier rungs, in ladder order. Seven of them (copper..dragon) are dedicated new items
- * ({@code creativeengineering:<id>_shield}, registered by {@link ShieldItems} for every tier
+ * ({@code creativeequipment:<id>_shield}, registered by {@link ShieldItems} for every tier
  * EXCEPT {@link #IRON}). IRON is folded into the player's REAL vanilla shield ({@code Items.SHIELD})
  * instead of spawning an 8th new item - see {@link #of(ItemStack)}, the single place that decides
  * "what tier (if any) is this stack", used everywhere a hit needs to know it (`ShieldBlocking`,
@@ -155,7 +155,7 @@ public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add v
         this.defaultChemical = defaultElementalBreakdown[3];
     }
 
-    /** Registry-name prefix ({@code creativeengineering:<id>_shield}) and toml section name. */
+    /** Registry-name prefix ({@code creativeequipment:<id>_shield}) and toml section name. */
     public String id() {
         return id;
     }

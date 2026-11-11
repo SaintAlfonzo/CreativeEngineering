@@ -14,7 +14,7 @@ import vazkii.quark.content.tweaks.module.HoeHarvestingModule;
 /**
  * Square area for Quark's hoe harvesting (right-click replant and the area break), sized per hoe.
  * Quark only knows odd squares around the block (3x3, 5x5); this adds 1x1 to 9x9, even sizes
- * included. The size comes from the item tags {@code creativeengineering:hoe_harvest/<N>x<N>}
+ * included. The size comes from the item tags {@code creativedelight:hoe_harvest/<N>x<N>}
  * (kubejs equipmenttags.js "Hoe harvest area"); when a hoe is in several, the largest wins. A hoe in
  * none keeps Quark's own size (its {@code Regular / High Tier Hoe Radius} config).
  *
@@ -33,14 +33,14 @@ public final class HoeHarvestArea {
     /** Most extra levels a hoe area click climbs up a column of own-pick crops (tomatoes on ropes). */
     public static final int MAX_CLIMB = 6;
 
-    /** TAGS[n] = {@code creativeengineering:hoe_harvest/nxn}; index 0 unused. */
+    /** TAGS[n] = {@code creativedelight:hoe_harvest/nxn}; index 0 unused. */
     private static final TagKey<Item>[] TAGS = makeTags();
 
     @SuppressWarnings("unchecked")
     private static TagKey<Item>[] makeTags() {
         TagKey<Item>[] tags = new TagKey[MAX_SIZE + 1];
         for (int n = 1; n <= MAX_SIZE; n++) {
-            tags[n] = ItemTags.create(new ResourceLocation(CreativeDelight.NS, "hoe_harvest/" + n + "x" + n));
+            tags[n] = ItemTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "hoe_harvest/" + n + "x" + n));
         }
         return tags;
     }

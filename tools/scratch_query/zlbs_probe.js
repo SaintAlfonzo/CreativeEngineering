@@ -51,7 +51,7 @@
         ['trashcans:liquid_trash_can', -1.25], ['trashcans:energy_trash_can', -1.25], ['trashcans:ultimate_trash_can', -1.25],
         ['vintagedelight:fermenting_jar', -1.25], ['botanypots:terracotta_botany_pot', -4]
     ]
-    // centre-note hosts whose top takes one note (creative_labels:paper/note_on_top, plan_scratch_bugfix_1103 4.4)
+    // centre-note hosts whose top takes one note (creativelabels:paper/note_on_top, plan_scratch_bugfix_1103 4.4)
     const TOP_OK = ['supplementaries:jar', 'vintagedelight:fermenting_jar']
     const TOL = 0.002
     let results = { pass: 0, fail: 0 }
@@ -110,7 +110,7 @@
     function near(a, b) { return Math.abs(a - b) <= TOL }
     function placeStr(fc) { return fc == null ? 'no face' : fc.inset + '/' + fc.offX + '/' + fc.offY + '/' + fc.labelSize }
     function note(text) {
-        let st = Item.of('creative_labels:sticky_note', 4)
+        let st = Item.of('creativelabels:sticky_note', 4)
         let cl = new $ZLCompound()
         cl.putString('Text', text)
         st.getOrCreateTag().put('CreativeLabels', cl)
@@ -139,7 +139,7 @@
             let hp = labelHost(i)
             air(level, cellOf(hp, 'north'))
             setSpec(level, hp, h[0])
-            let r = click(p, level, hp, 'north', Item.of('creative_labels:label', 4), true)
+            let r = click(p, level, hp, 'north', Item.of('creativelabels:label', 4), true)
             let fc = faceOf(level, hp, 'north')
             let ok = fc != null && fc.hasLabel() && near(fc.inset, h[1]) && near(fc.offX, h[2]) && near(fc.offY, h[3]) && near(fc.labelSize, h[4])
             check('labels', h[0], ok, 'click ' + r + ', label ' + (fc != null && fc.hasLabel()) + ', place ' + placeStr(fc)
@@ -169,7 +169,7 @@
             if (c[0].indexOf('pressure') >= 0) setSpec(level, pos(hp.getX(), Y - 1, hp.getZ()), 'minecraft:stone')
             air(level, cellOf(hp, c[2]))
             c[1].forEach(s => setSpec(level, pos(hp.getX() + s[0], hp.getY() + s[1], hp.getZ()), s[2]))
-            let r = click(p, level, hp, c[2], Item.of('creative_labels:label', 4), true)
+            let r = click(p, level, hp, c[2], Item.of('creativelabels:label', 4), true)
             let cell = cellOf(hp, c[2])
             let cid = blockId(level, cell), left = p.getMainHandItem().getCount()
             check('refused', c[0], cid.indexOf('face_paper') < 0 && left == 4,
@@ -209,8 +209,8 @@
             killDrops(level, cell)
             air(level, hp)
             let d = drops(level, cell), cid = blockId(level, cell)
-            let hit = d.filter(s => s.indexOf(want) >= 0 && (want != 'creative_labels:sticky_note' || s.indexOf('Text') >= 0))
-            let blank = want != 'creative_labels:label' || hit.every(s => s.indexOf('{') < 0)
+            let hit = d.filter(s => s.indexOf(want) >= 0 && (want != 'creativelabels:sticky_note' || s.indexOf('Text') >= 0))
+            let blank = want != 'creativelabels:label' || hit.every(s => s.indexOf('{') < 0)
             check('refit', host, had.indexOf('face_paper') >= 0 && hit.length == 1 && blank && cid == 'minecraft:air',
                 'cell before ' + had + ', after ' + cid + ', drops ' + (d.join(' | ') || 'none'))
         }
@@ -223,8 +223,8 @@
         let cd = drops(level, ct)
         check('refit', 'control wall torch', cd.some(s => s.indexOf('minecraft:torch') >= 0),
             'torch cell after ' + blockId(level, ct) + ', drops ' + (cd.join(' | ') || 'none') + ' (none = every block drop skipped)')
-        LABEL_HOSTS.forEach((h, i) => one(labelHost(i), 'label on ' + h[0], 'creative_labels:label'))
-        CENTRE_HOSTS.forEach((h, i) => one(centreHost(i), 'note on ' + h[0], 'creative_labels:sticky_note'))
+        LABEL_HOSTS.forEach((h, i) => one(labelHost(i), 'label on ' + h[0], 'creativelabels:label'))
+        CENTRE_HOSTS.forEach((h, i) => one(centreHost(i), 'note on ' + h[0], 'creativelabels:sticky_note'))
         pistonCase(level)
     }
 
@@ -243,7 +243,7 @@
         setSpec(level, rp, 'minecraft:redstone_block')
         level.getServer().scheduleInTicks(10, () => {
             let d = drops(level, cell), cid = blockId(level, cell)
-            let ok = had.indexOf('face_paper') >= 0 && d.some(s => s.indexOf('creative_labels:sticky_note') >= 0 && s.indexOf('Text') >= 0) && cid == 'minecraft:air'
+            let ok = had.indexOf('face_paper') >= 0 && d.some(s => s.indexOf('creativelabels:sticky_note') >= 0 && s.indexOf('Text') >= 0) && cid == 'minecraft:air'
             console.info('[zlbs] ' + (ok ? 'PASS' : 'FAIL') + ' refit piston push: cell before ' + had + ', after ' + cid + ', host now ' +
                 blockId(level, pos(311, Y, 44)) + ', drops ' + (d.join(' | ') || 'none'))
         })

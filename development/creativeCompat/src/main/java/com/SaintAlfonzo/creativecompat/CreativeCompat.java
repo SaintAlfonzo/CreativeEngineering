@@ -62,16 +62,18 @@ import java.util.regex.Pattern;
  * it; it requires patcherMod ({@code creativeengineering}, later Creative Common). Each tweak applies only when its mod
  * is loaded: mixins through compat/CompatMixinPlugin, listeners through the {@link ModList} checks below.
  *
- * Ids stay: the botanist pot block entity, the sack network channel, models, textures, tags, loot tables and lang keys
- * keep the {@code creativeengineering} namespace ({@link #NS}). This mod id is only the jar's identity, its config
+ * Ids follow the owner (feature_writeup/namespace_move.md): the shrapnel entity, the botanist pot block entity, the
+ * cardboard box, models, textures, tags and loot tables use this mod's namespace ({@link #NS}); until 2026-11-10 they
+ * were {@code creativeengineering}, and data/creativecompat/swaps/owner_namespace.json carries old saves. Lang keys
+ * and NBT keys kept their old text. This mod id is only the jar's identity, its config
  * file and its script packs.
  */
 @Mod(CreativeCompat.MOD_ID)
 public class CreativeCompat {
 
     public static final String MOD_ID = "creativecompat";
-    /** The namespace of every id this mod uses: patcherMod's, unchanged by the carve. */
-    public static final String NS = "creativeengineering";
+    /** The namespace of every id this mod uses (was creativeengineering until the 2026-11-10 namespace move). */
+    public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String OLD_FILE = "creativeengineering-common.toml";
@@ -109,7 +111,7 @@ public class CreativeCompat {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.NetherFogColour.class);
         }
 
-        // The TNT shrapnel entity (shrapnel/, from Creative Engineering 2026-11-06, id creativeengineering:shrapnel):
+        // The TNT shrapnel entity (shrapnel/, from Creative Engineering 2026-11-06, id creativecompat:shrapnel):
         // fired on primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through
         // Common's util.BurnBursts. Tuning: [shrapnel].
         ShrapnelEntities.register(modEventBus);

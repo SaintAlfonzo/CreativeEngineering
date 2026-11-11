@@ -2857,7 +2857,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/apples"
+     "tag": "creativedelight:jar_family/apples"
     },
     {
      "item": "supplementaries:jar"
@@ -2876,7 +2876,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/berries"
+     "tag": "creativedelight:jar_family/berries"
     },
     {
      "item": "supplementaries:jar"
@@ -2895,7 +2895,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/candied_apples"
+     "tag": "creativedelight:jar_family/candied_apples"
     },
     {
      "item": "supplementaries:jar"
@@ -2914,7 +2914,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/candied_berries"
+     "tag": "creativedelight:jar_family/candied_berries"
     },
     {
      "item": "supplementaries:jar"
@@ -2933,7 +2933,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/candies"
+     "tag": "creativedelight:jar_family/candies"
     },
     {
      "item": "supplementaries:jar"
@@ -2952,7 +2952,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/chocolate_bars"
+     "tag": "creativedelight:jar_family/chocolate_bars"
     },
     {
      "item": "supplementaries:jar"
@@ -2971,7 +2971,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/cookies"
+     "tag": "creativedelight:jar_family/cookies"
     },
     {
      "item": "supplementaries:jar"
@@ -2990,7 +2990,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/dried_fruit"
+     "tag": "creativedelight:jar_family/dried_fruit"
     },
     {
      "item": "supplementaries:jar"
@@ -3009,7 +3009,7 @@
   {
    "inputs": [
     {
-     "tag": "creativeengineering:jar_family/marshmallows"
+     "tag": "creativedelight:jar_family/marshmallows"
     },
     {
      "item": "supplementaries:jar"

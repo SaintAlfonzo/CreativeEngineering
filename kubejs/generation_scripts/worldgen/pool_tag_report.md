@@ -637,7 +637,7 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 
 ### sky_structures
 
-- `creativeengineering:sky_island` (pool total weight 16): `sky_structures:grass_island` 2, `sky_structures:grass_island_acacia` 2, `sky_structures:grass_island_bees` 1, `sky_structures:grass_island_birch` 2, `sky_structures:grass_island_darkoak` 2, `sky_structures:grass_island_jungle` 2, `sky_structures:grass_island_oak` 2, `sky_structures:grass_island_spruce` 2, `sky_structures:sky_grass_blacksmith` 1
+- `creativeworldgen:sky_island` (pool total weight 16): `sky_structures:grass_island` 2, `sky_structures:grass_island_acacia` 2, `sky_structures:grass_island_bees` 1, `sky_structures:grass_island_birch` 2, `sky_structures:grass_island_darkoak` 2, `sky_structures:grass_island_jungle` 2, `sky_structures:grass_island_oak` 2, `sky_structures:grass_island_spruce` 2, `sky_structures:sky_grass_blacksmith` 1
 
 ### veggiesdelight
 
@@ -664,7 +664,7 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 
 ### waystones
 
-- `creativeengineering:waystone_ruin_part` (pool total weight 1): `waystones:village/common/waystone` 1
+- `creativeworldgen:waystone_ruin_part` (pool total weight 1): `waystones:village/common/waystone` 1
 
 ## Tags
 

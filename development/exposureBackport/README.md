@@ -2,7 +2,7 @@
 
 Exposure **1.9.19** and its addons **Exposure: Expanded 1.0.1**, **Exposure Polaroid 1.1.6** and
 **Exposure Catalog 1.1.2** (NeoForge 1.21.1, all MIT) ported to **Forge 1.19.2**, plus **Exposure Extras**
-(`exposure_extras`, this pack's own additions), in one jar: `exposureBackport-<mod_version>.jar`. The base mod's
+(`exposureextras`, this pack's own additions), in one jar: `exposureBackport-<mod_version>.jar`. The base mod's
 display name is **Exposure (Backport & Extras)** (`mod_name`).
 
 Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`, see [exposure.md](../../feature_writeup/exposure.md) for the current state and tests):
@@ -18,10 +18,10 @@ Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`,
   server its palettes load into the registry (`/exposure palette export`) and its dungeon loot rolls through the
   merged global loot modifiers; the dev client loads its models, textures and lang. Not yet tested in game.
 - Catalog (`exposure_catalog`) is still empty, and on hold (user, 2026-10-01: not wanted for now).
-- **Extras (`exposure_extras`, 2026-10-02):** the leather/iron/netherite camera bags, moved here from patcherMod
+- **Extras (`exposureextras`, 2026-10-02):** the leather/iron/netherite camera bags, moved here from patcherMod
   (they were `creativeengineering:*_camera_bag`; a MissingMappingsEvent remap carries old bags over). Slot counts
-  are `config/exposure_extras-common.toml` `[camera_bag]`. What a bag accepts is the item tag
-  `#exposure_extras:camera_equipment`: defaults in `src/extras/resources/data/exposure_extras/tags/items/`, pack
+  are `config/exposureextras-common.toml` `[camera_bag]`. What a bag accepts is the item tag
+  `#exposureextras:camera_equipment`: defaults in `src/extras/resources/data/exposureextras/tags/items/`, pack
   adjustments in kubejs `server_scripts/tags/equipmenttags.js`. No recipes in the jar (kubejs
   `equipment/camera_bag.js`). The bag item models and GUI use Spice of Life (`solapplepie`) textures.
 - **Installed in `mods/` (2026-10-01)**, replacing stock Exposure 1.6.0 (moved to `jar_archive/displaced/`, along
@@ -36,7 +36,7 @@ Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`,
   and each ported file can be diffed against its upstream original.
 - The upstream source sets stay a faithful port. Pack recipes, tags and loot go through KubeJS (`global.NCH`,
   `global.tags`, LootJS); Java tweaks to other mods go in patcherMod. New Exposure-related content of our own goes
-  in `src/extras` (mod id `exposure_extras`, package `com.SaintAlfonzo.exposure_extras`).
+  in `src/extras` (mod id `exposureextras`, package `com.SaintAlfonzo.exposureextras`).
 
 ## Version
 
@@ -53,7 +53,7 @@ One Gradle source set per mod. All five go into the one jar and into the dev run
 | `src/polaroid` | `exposure_polaroid` | Exposure Polaroid 1.1.6 | `io.github.mortuusars.exposure_polaroid` |
 | `src/catalog` | `exposure_catalog` | Exposure Catalog 1.1.2 | `io.github.mortuusars.exposure_catalog` |
 | `src/expanded` | `exposure_expanded` | Exposure: Expanded 1.0.1 | `dev.titanite.sparkwave.exposureexpanded` |
-| `src/extras` | `exposure_extras` | none (this pack's own) | `com.SaintAlfonzo.exposure_extras` |
+| `src/extras` | `exposureextras` | none (this pack's own) | `com.SaintAlfonzo.exposureextras` |
 
 - **Separation is enforced by the compiler.** Addons compile against `main`, and `expanded` also against
   `polaroid` (upstream's optional instant-slide support). `main` sees no addon code, so the base mod can't

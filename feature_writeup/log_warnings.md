@@ -436,3 +436,7 @@ for `forge/biome_modifier/*.json` containing `forge:none` (none found). The S5 c
 `RuntimeDistCleaner` line in `latest.log`. The S2 list: the `Missing minecraft:item:` block, checked against
 `kubejs/assets/creativecommon/changelog/1.2.00.md`. The server's own `logs/kubejs/*.log` were not included in
 `debug/11_03/`, so section 5 (K-rows) is only re-checked through the KubeJS lines that reach `latest.log`.
+
+## 11. Runtime acknowledger (owner idea, scratchpad 2026-11-09)
+
+Not built. Section 6 covers the scan-time acknowledgement (`log_warnings_ack.txt`). Wanted on top: known or expected warnings and errors are written to an "acknowledged" file, ones being worked on to an "in progress" file, and only the rest to latest.log, with a one-line note in latest.log saying where the event went, so the normal log reads better. TODO `tooling/generators-and-tests #14`.

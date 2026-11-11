@@ -96,7 +96,7 @@
   "computercraft:treasure_disk": null,
   "corn_delight:shipwreck_supply": "minecraft:chest",
   "corn_delight:village_house": "minecraft:chest",
-  "creativeengineering:misc/monster_box_reward": "minecraft:chest",
+  "creativecompat:misc/monster_box_reward": "minecraft:chest",
   "desert_village_temple:chests/fixed/1d30e06aa9": "minecraft:chest",
   "desert_village_temple:chests/fixed/70abde37ea": "minecraft:chest",
   "desert_village_temple:chests/fixed/799090db68": "minecraft:chest",
@@ -2556,14 +2556,14 @@
   },
   "minecraft:bone_block": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "hopo:chests/food",
     "minecraft:chests/bastion_other",
     "philipsruins:chest/nether_ruins_low",
     "terralith:spire/common"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "hopo:chests/food",
     "minecraft:chests/bastion_other",
     "philipsruins:chest/nether_ruins_low",
@@ -2642,7 +2642,7 @@
     "betterstrongholds:chests/grand_library",
     "betterstrongholds:chests/library_md",
     "cloudstorage:chests/loot_balloon",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/a415bd50d9",
     "forgotten_church:chests/fixed/76668b036a",
     "gothic_church:chests/fixed/22960186d8",
@@ -2850,7 +2850,7 @@
     "betterdeserttemples:chests/food_storage",
     "betterstrongholds:chests/common",
     "betterstrongholds:chests/mess",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/a415bd50d9",
     "eugene:chests/carriage_chest",
     "eugene:chests/trader_camp_chest",
@@ -3519,7 +3519,7 @@
     "betterstrongholds:chests/armoury",
     "betterstrongholds:chests/common",
     "betterstrongholds:chests/prison_lg",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "forest_ruins:chests/fixed/9952d57750",
     "forest_watchtower:chests/fixed/85432f6caa",
     "hopo:chests/food",
@@ -3655,7 +3655,7 @@
     "betterdungeons:small_dungeon/chests/loot_piles",
     "betterdungeons:spider_dungeon/chests/egg_room",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "eugene:chests/undead_castle_chest",
     "mes:abandoned",
     "mes:empty",
@@ -3676,7 +3676,7 @@
     "betterdungeons:small_dungeon/chests/loot_piles",
     "betterdungeons:spider_dungeon/chests/egg_room",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "eugene:chests/undead_castle_chest",
     "mes:abandoned",
     "mes:empty",
@@ -4092,10 +4092,10 @@
   },
   "minecraft:creeper_head": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward"
+    "creativecompat:misc/monster_box_reward"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward"
+    "creativecompat:misc/monster_box_reward"
    ]
   },
   "minecraft:crimson_fungus": {
@@ -4340,7 +4340,7 @@
     "betterstrongholds:chests/trap",
     "betterstrongholds:chests/treasure",
     "cloudstorage:chests/loot_balloon",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "eugene:chests/carriage_chest",
     "illagerwarship:chests/fixed/e619f9c386",
     "kaisyn:village/exclusives/village_classic_blacksmith",
@@ -4523,7 +4523,7 @@
     "betterfortresses:chests/keep",
     "betterjungletemples:chests/campsite",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "mes:swamps",
     "minecraft:chests/ancient_city",
@@ -4543,7 +4543,7 @@
     "betterfortresses:chests/keep",
     "betterjungletemples:chests/campsite",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "mes:swamps",
     "minecraft:chests/ancient_city",
@@ -4604,7 +4604,7 @@
   },
   "minecraft:diamond_pickaxe": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/bastion_hoglin_stable",
     "minecraft:chests/bastion_other",
     "minecraft:chests/end_city_treasure",
@@ -4657,7 +4657,7 @@
     "betterdungeons:zombie_dungeon/chests/tombstone",
     "betterstrongholds:chests/armoury",
     "betterstrongholds:chests/cmd_yung",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/bastion_treasure",
     "minecraft:chests/end_city_treasure",
     "philipsruins:chest/bone_dungeon_loot",
@@ -4673,7 +4673,7 @@
     "betterdungeons:zombie_dungeon/chests/tombstone",
     "betterstrongholds:chests/armoury",
     "betterstrongholds:chests/cmd_yung",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/bastion_treasure",
     "minecraft:chests/end_city_treasure",
     "philipsruins:chest/bone_dungeon_loot",
@@ -5922,7 +5922,7 @@
     "betterdungeons:zombie_dungeon/chests/special",
     "betterstrongholds:chests/mess",
     "betterstrongholds:chests/trap",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/799090db68",
     "desert_watchtower:chests/fixed/2ca75e3c4d",
     "forgotten_church:chests/fixed/76668b036a",
@@ -6184,7 +6184,7 @@
     "betterfortresses:chests/keep",
     "betterjungletemples:chests/campsite",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "mes:swamps",
     "minecraft:chests/desert_pyramid",
@@ -6212,7 +6212,7 @@
     "betterfortresses:chests/keep",
     "betterjungletemples:chests/campsite",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "mes:swamps",
     "minecraft:chests/desert_pyramid",
@@ -6917,7 +6917,7 @@
     "betterfortresses:chests/keep",
     "betterjungletemples:chests/campsite",
     "betterstrongholds:chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "domesticationinnovation:chests/petshop_chest",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "mes:swamps",
@@ -8141,18 +8141,18 @@
   },
   "minecraft:music_disc_11": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_13": {
    "edit": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/ancient_city",
     "minecraft:chests/simple_dungeon",
     "minecraft:chests/woodland_mansion",
@@ -8160,7 +8160,7 @@
    ],
    "reach": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/ancient_city",
     "minecraft:chests/simple_dungeon",
     "minecraft:chests/woodland_mansion",
@@ -8171,18 +8171,18 @@
   "minecraft:music_disc_blocks": {
    "edit": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_cat": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/ancient_city",
     "minecraft:chests/simple_dungeon",
     "minecraft:chests/woodland_mansion",
@@ -8198,7 +8198,7 @@
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "minecraft:chests/ancient_city",
     "minecraft:chests/simple_dungeon",
     "minecraft:chests/woodland_mansion",
@@ -8218,44 +8218,44 @@
   "minecraft:music_disc_chirp": {
    "edit": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
     "betterdungeons:small_nether_dungeon/chests/common",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_far": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "philipsruins:chest/badlands_dungeon_loot_high",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "philipsruins:chest/badlands_dungeon_loot_high",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_mall": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_mellohi": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
@@ -8294,43 +8294,43 @@
   },
   "minecraft:music_disc_stal": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_strad": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_wait": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "mysticrift_pillagers_towers_aris:chests/fixed/6670cd9330",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "mysticrift_pillagers_towers_aris:chests/fixed/6670cd9330",
     "subterrestrial:chests/cabin/music"
    ]
   },
   "minecraft:music_disc_ward": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "subterrestrial:chests/cabin/music"
    ]
   },
@@ -8366,7 +8366,7 @@
     "betterdungeons:spider_dungeon/chests/egg_room",
     "betterdungeons:zombie_dungeon/chests/common",
     "betterdungeons:zombie_dungeon/chests/special",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "hopo:chests/materials",
     "minecraft:chests/abandoned_mineshaft",
     "minecraft:chests/ancient_city",
@@ -8385,7 +8385,7 @@
     "betterdungeons:spider_dungeon/chests/egg_room",
     "betterdungeons:zombie_dungeon/chests/common",
     "betterdungeons:zombie_dungeon/chests/special",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "hopo:chests/materials",
     "minecraft:chests/abandoned_mineshaft",
     "minecraft:chests/ancient_city",
@@ -9538,7 +9538,7 @@
   },
   "minecraft:rabbit_hide": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_watchtower:chests/fixed/2ca75e3c4d",
     "subterrestrial:chests/cabin/weaving",
     "terralith:village/desert/archer",
@@ -9554,7 +9554,7 @@
     "wares:package/village/desert"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_watchtower:chests/fixed/2ca75e3c4d",
     "subterrestrial:chests/cabin/weaving",
     "terralith:village/desert/archer",
@@ -9594,13 +9594,13 @@
   },
   "minecraft:raw_copper": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/8ceac6a077",
     "hopo:chests/copper",
     "terralith:underground/chest"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/8ceac6a077",
     "hopo:chests/copper",
     "terralith:underground/chest"
@@ -9619,7 +9619,7 @@
   "minecraft:raw_gold": {
    "edit": [
     "betterfortresses:chests/storage",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/799090db68",
     "hopo:chests/materials",
     "kaisyn:village/exclusives/village_wandering_trader_hut",
@@ -9634,7 +9634,7 @@
    ],
    "reach": [
     "betterfortresses:chests/storage",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/799090db68",
     "hopo:chests/materials",
     "kaisyn:village/exclusives/village_wandering_trader_hut",
@@ -9660,7 +9660,7 @@
   },
   "minecraft:raw_iron": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/799090db68",
     "desert_village_temple:chests/fixed/8ceac6a077",
     "desert_watchtower:chests/fixed/2ca75e3c4d",
@@ -9674,7 +9674,7 @@
     "villager_forge:chests/fixed/c240b7e40a"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "desert_village_temple:chests/fixed/799090db68",
     "desert_village_temple:chests/fixed/8ceac6a077",
     "desert_watchtower:chests/fixed/2ca75e3c4d",
@@ -10019,7 +10019,7 @@
     "bighorsestable:chests/fixed/6b30f5527e",
     "bighorsestable:chests/fixed/c8ef58641f",
     "bighorsestable:chests/fixed/ed1a64f478",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "kaisyn:village/village_jungle_house",
     "mes:swamps",
@@ -10066,7 +10066,7 @@
     "bighorsestable:chests/fixed/6b30f5527e",
     "bighorsestable:chests/fixed/c8ef58641f",
     "bighorsestable:chests/fixed/ed1a64f478",
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "kaisyn:village/exclusives/village_classic_blacksmith",
     "kaisyn:village/village_jungle_house",
     "mes:swamps",
@@ -10341,13 +10341,13 @@
   },
   "minecraft:skeleton_skull": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "mysticrift_pillagers_towers_aris:chests/fixed/e9c56aef04",
     "underground_bunkers:chests/underground_bunker/underground_bunker_normal",
     "underground_bunkers:chests/underground_bunker/underground_bunker_supply"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward",
+    "creativecompat:misc/monster_box_reward",
     "mysticrift_pillagers_towers_aris:chests/fixed/e9c56aef04",
     "underground_bunkers:chests/underground_bunker/underground_bunker_normal",
     "underground_bunkers:chests/underground_bunker/underground_bunker_supply"
@@ -11852,10 +11852,10 @@
   },
   "minecraft:zombie_head": {
    "edit": [
-    "creativeengineering:misc/monster_box_reward"
+    "creativecompat:misc/monster_box_reward"
    ],
    "reach": [
-    "creativeengineering:misc/monster_box_reward"
+    "creativecompat:misc/monster_box_reward"
    ]
   },
   "miners_delight:cave_carrot": {

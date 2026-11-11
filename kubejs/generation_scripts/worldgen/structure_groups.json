@@ -1,6 +1,6 @@
 {
   "_readme": {
-    "what": "Every structure's spawn rate, in one file. A GROUP is one shared structure_set (creativeengineering:group/<name>) holding every structure in the structure tag group/<name> (structure_tags.json): all members share its grid, so no two of them ever start closer than its separation, whatever mod they come from. Every structure that is in no group keeps its own set and is tuned under \"standalone\". Rejoin the world to apply (new chunks only); structure_tag_report.md shows what the game applied.",
+    "what": "Every structure's spawn rate, in one file. A GROUP is one shared structure_set (creativeworldgen:group/<name>) holding every structure in the structure tag group/<name> (structure_tags.json): all members share its grid, so no two of them ever start closer than its separation, whatever mod they come from. Every structure that is in no group keeps its own set and is tuned under \"standalone\". Rejoin the world to apply (new chunks only); structure_tag_report.md shows what the game applied.",
     "group placement": "spacing: one grid slot per spacing x spacing chunks (the group's top density). separation: minimum chunks between any two members. salt: which grid (leave it). Optional: spread_type, frequency (chance per slot for the whole group), locate_offset, exclusion_zone {other_set, chunk_count} (keep off another set's grid slots; it checks slots, not real structures, so keep chunk_count small).",
     "per structure": "weight: who wins a slot where several members can spawn (relative, whole numbers). frequency: 0..1, chance that the winner really spawns; otherwise the slot stays empty, so lowering one never makes another more common. enabled: false removes it. Where a structure is the only member that fits the biome, it gets every slot x its frequency. fit_base: written by --fit-rates for structures in a biome fit (biome_fits.json) = the weight and frequency it had on its mod's own biome list; --fit-rates solves from it. fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbours crowd the structure's biomes, so it keeps its density (the towers); others are capped instead. replaces + share: this member never wins a slot by its weight; it takes share (0..1) of the slots the named member of the same group wins and keeps, where both can stand (the vanilla swamp hut in YUNG's witch hut slots), so the two together are as common as the named one was. Keep its weight at 1. CEConfig [worldgen.systems] structureReplacements turns them off.",
     "standalone": "Keyed by the structure_set id in structure_config.json. placement: only the fields you change (spacing, separation, frequency, count, locate_offset...; the rest come from \"original\" in structure_config.json). structures: frequency / enabled / optional weight, same meaning as in a group.",
@@ -167,22 +167,22 @@
           "frequency": 0.340365,
           "fit_keep": false
         },
-        "creativeengineering:meta/village_towers": {
+        "creativeworldgen:meta/village_towers": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/fortified_camps": {
+        "creativeworldgen:meta/fortified_camps": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/fortified_ruins": {
+        "creativeworldgen:meta/fortified_ruins": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/town_villages": {
+        "creativeworldgen:meta/town_villages": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -192,17 +192,17 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/meteorite_village": {
+        "creativeworldgen:meta/meteorite_village": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/village_siege_camp": {
+        "creativeworldgen:meta/village_siege_camp": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/village_siege_ring": {
+        "creativeworldgen:meta/village_siege_ring": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -216,7 +216,7 @@
         "separation": 8,
         "salt": 1867953461,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 4
         }
       },
@@ -446,32 +446,32 @@
           "fit_keep": true,
           "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30); weight x3 by hand (user, 2026-11-01)"
         },
-        "creativeengineering:meta/pillager_camp_ruin": {
+        "creativeworldgen:meta/pillager_camp_ruin": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/pillager_camp_ruins": {
+        "creativeworldgen:meta/pillager_camp_ruins": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/pillager_camp_siege": {
+        "creativeworldgen:meta/pillager_camp_siege": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/pillager_great_tower_siege": {
+        "creativeworldgen:meta/pillager_great_tower_siege": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/pillager_stronghold_siege": {
+        "creativeworldgen:meta/pillager_stronghold_siege": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/pillager_tower_siege": {
+        "creativeworldgen:meta/pillager_tower_siege": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -496,7 +496,7 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/pillager_camp_meteorite": {
+        "creativeworldgen:meta/pillager_camp_meteorite": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -621,12 +621,12 @@
           "fit_keep": true,
           "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
-        "creativeengineering:meta/ruin_cluster": {
+        "creativeworldgen:meta/ruin_cluster": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/ruin_scatter": {
+        "creativeworldgen:meta/ruin_scatter": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -661,7 +661,7 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/waystone_ruins": {
+        "creativeworldgen:meta/waystone_ruins": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -713,7 +713,7 @@
           "frequency": 0.026314,
           "fit_keep": false
         },
-        "creativeengineering:meta/jungle_temple_ruins": {
+        "creativeworldgen:meta/jungle_temple_ruins": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -750,7 +750,7 @@
           "frequency": 0.9374,
           "fit_keep": false
         },
-        "creativeengineering:meta/witch_coven": {
+        "creativeworldgen:meta/witch_coven": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -835,17 +835,17 @@
           "frequency": 0.4444,
           "fit_keep": false
         },
-        "creativeengineering:meta/shipwreck_debris": {
+        "creativeworldgen:meta/shipwreck_debris": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/shipwreck_graveyard": {
+        "creativeworldgen:meta/shipwreck_graveyard": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/sunken_ruin_cluster": {
+        "creativeworldgen:meta/sunken_ruin_cluster": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -855,7 +855,7 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/underwater_meteorite": {
+        "creativeworldgen:meta/underwater_meteorite": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -876,7 +876,7 @@
           "frequency": 0.1,
           "tuned": "Frequency 0.1 set by hand (rare monuments); kept by the weight strip (user, 2026-10-30)"
         },
-        "creativeengineering:meta/struck_monument": {
+        "creativeworldgen:meta/struck_monument": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -941,12 +941,12 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/pillager_fleet": {
+        "creativeworldgen:meta/pillager_fleet": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/raft_convoy": {
+        "creativeworldgen:meta/raft_convoy": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -961,7 +961,7 @@
         "salt": 1805269162
       },
       "structures": {
-        "creativeengineering:meta/driftwood_flotilla": {
+        "creativeworldgen:meta/driftwood_flotilla": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
@@ -976,32 +976,32 @@
         "salt": 1349061187
       },
       "structures": {
-        "creativeengineering:meta/deadwood_acacia": {
+        "creativeworldgen:meta/deadwood_acacia": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/deadwood_birch": {
+        "creativeworldgen:meta/deadwood_birch": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/deadwood_cherry": {
+        "creativeworldgen:meta/deadwood_cherry": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/deadwood_jungle": {
+        "creativeworldgen:meta/deadwood_jungle": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/deadwood_oak": {
+        "creativeworldgen:meta/deadwood_oak": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/deadwood_spruce": {
+        "creativeworldgen:meta/deadwood_spruce": {
           "weight": 100,
           "frequency": 1.0,
           "fit_keep": false
@@ -1317,22 +1317,22 @@
           "fit_keep": true,
           "tuned": "fit_keep tower: --fit-rates keeps its density on its own biome list (biome fits, 2026-10-12); kept by the weight strip (user, 2026-10-30)"
         },
-        "creativeengineering:meta/farmers_camp": {
+        "creativeworldgen:meta/farmers_camp": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/house_camp": {
+        "creativeworldgen:meta/house_camp": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/waysign_camps": {
+        "creativeworldgen:meta/waysign_camps": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/waysign_house_camp": {
+        "creativeworldgen:meta/waysign_house_camp": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -1432,7 +1432,7 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/trader_caravan": {
+        "creativeworldgen:meta/trader_caravan": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -1445,7 +1445,7 @@
       }
     },
     "sky": {
-      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeengineering:sky_island) since 2026-11-06.",
+      "note": "Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeworldgen:sky_island) since 2026-11-06.",
       "placement": {
         "spacing": 64,
         "separation": 16,
@@ -1472,32 +1472,32 @@
           "frequency": 1.0,
           "fit_keep": false
         },
-        "creativeengineering:meta/balloon_fleet": {
+        "creativeworldgen:meta/balloon_fleet": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/cloud_balloons": {
+        "creativeworldgen:meta/cloud_balloons": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/cloud_cluster": {
+        "creativeworldgen:meta/cloud_cluster": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/sky_village_islands": {
+        "creativeworldgen:meta/sky_village_islands": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/meteor_shower": {
+        "creativeworldgen:meta/meteor_shower": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:sky_island": {
+        "creativeworldgen:sky_island": {
           "weight": 100,
           "frequency": 0.985,
           "fit_keep": false,
@@ -1554,7 +1554,7 @@
         "separation": 10,
         "salt": 247022060,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 8
         }
       },
@@ -1573,12 +1573,12 @@
         "separation": 16,
         "salt": 1361593970,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 4
         }
       },
       "biome_frequency": {
-        "#creativeengineering:harsh": 1.0,
+        "#creativeworldgen:harsh": 1.0,
         "default": 0.5
       },
       "structures": {
@@ -1655,12 +1655,12 @@
           },
           "tuned": "Vehicles group rates hand-set, equal weights (plan 7.4.5, 2026-10-14); kept by the weight strip (user, 2026-10-30)"
         },
-        "creativeengineering:meta/pillager_caravan": {
+        "creativeworldgen:meta/pillager_caravan": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
         },
-        "creativeengineering:meta/witch_cart_caravan": {
+        "creativeworldgen:meta/witch_cart_caravan": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -1687,14 +1687,14 @@
           "frequency": 0.285,
           "fit_keep": false
         },
-        "creativeengineering:meta/meteorite_desert_pyramid": {
+        "creativeworldgen:meta/meteorite_desert_pyramid": {
           "weight": 1,
           "frequency": 1.0,
           "replaces": "betterdeserttemples:desert_temple",
           "share": 0.08,
           "note": "Replacement (a meta structure without an anchor): never picked by this weight; takes 8% of the slots YUNG's desert temple wins and keeps, and builds a vanilla desert pyramid struck by an AE2 meteorite there (user, 2026-10-30: more common than the plain vanilla pyramid, which went from 10% to 5%). Keep the weight at 1."
         },
-        "creativeengineering:meta/desert_temple_ruins": {
+        "creativeworldgen:meta/desert_temple_ruins": {
           "weight": 1,
           "frequency": 1.0,
           "note": "Meta structure with an anchor: never picked by this weight; it takes \"share\" (meta_structures.json) of the slots its anchors win here, so no member's rate changes. Keep the weight at 1."
@@ -1755,7 +1755,7 @@
         "separation": 31,
         "frequency": 0.985926,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 6
         }
       },
@@ -1773,7 +1773,7 @@
         "separation": 25,
         "frequency": 0.9504,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 6
         }
       },
@@ -1789,7 +1789,7 @@
         "separation": 27,
         "frequency": 0.97626,
         "exclusion_zone": {
-          "other_set": "creativeengineering:group/settlements",
+          "other_set": "creativeworldgen:group/settlements",
           "chunk_count": 6
         }
       },

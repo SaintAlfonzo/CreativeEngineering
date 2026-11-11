@@ -14,15 +14,15 @@ The ask, from cooking.md:
 
 | Part | Status |
 |---|---|
-| Oven block, block entity, menu/screen, `creativeengineering:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |
+| Oven block, block entity, menu/screen, `creativedelight:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |
 | Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | (Superseded 2026-10-22) Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
 | Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01, deployed 2026-10-22; OV-29 in game |
-| Ingredient `count` in `creativeengineering:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
+| Ingredient `count` in `creativedelight:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
 | Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); scratch server PASSED r1031 (SQ-BJ-01: no pot muffin recipe; deep scan 2026-11-02), OV-36 in game. TODO `cooking/oven #3` closed by it |
 | Crafting recipes: oven (placeholder pattern, 2.1); bakeware by hammering, iron plate -> baking sheet -> muffin tin -> pie tin -> cake pan, on the cutting board or in the grid (2.5) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| IE hammer doesn't rotate the cutting board (`#creativeengineering:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
+| IE hammer doesn't rotate the cutting board (`#creativedelight:hammer_no_rotate`, patcherMod `IECompat`) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no errors), not tested |
 | Dummy baking recipes (one per bakeware piece) | REMOVED 2026-10-18 (2.7) |
 
 Files to open first:
@@ -30,7 +30,7 @@ Files to open first:
 - `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/`: `OvenBlock`, `OvenBlockEntity`,
   `OvenHeat`, `OvenItemHandler`, `OvenMenu`, `OvenResultSlot`, `BakingRecipe`, `OvenRegistry`, `client/OvenScreen`,
   `jei/OvenJeiPlugin`, `jei/BakingRecipeCategory`
-- [kubejs/data/creativedelight/kubejs/creativeengineering/baking.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js): baking and crafting recipes
+- [kubejs/data/creativedelight/kubejs/creativedelight/baking.js](../kubejs/data/creativedelight/kubejs/creativedelight/baking.js): baking and crafting recipes
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js): bakeware items
 - [development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js): frosting, cookie dough
 - `global.NCH.ceBaking` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js)
@@ -100,23 +100,23 @@ None of them does what the ask needs, so this is a new block.
 
 | | |
 |---|---|
-| Id | `creativeengineering:oven` (`i.oven`, `b.oven`), registered by patcherMod `OvenRegistry` |
+| Id | `creativedelight:oven` (`i.oven`, `b.oven`), registered by patcherMod `OvenRegistry` |
 | States | `facing` (front faces the player on placement) x `lit`. `lit` = heated from below, mirrored every server tick by the block entity |
 | Stats | FD stove's (`Properties.copy(Blocks.BRICKS)`): hardness 2, resistance 6, needs a pickaxe; light 13 while lit |
-| Models | `creativeengineering:block/oven` / `oven_on` in the patcherMod jar: `orientable_with_bottom` on `farmersdelight:block/stove_*` (placeholder art) |
+| Models | `creativedelight:block/oven` / `oven_on` in the patcherMod jar: `orientable_with_bottom` on `farmersdelight:block/stove_*` (placeholder art) |
 | Item tab | Decorations |
 | Loot | drops itself (patcherMod `loot_tables/blocks/oven.json`); breaking it also drops every slot, the waiting result included |
 | Crafting | `PPP / B B / BBB`, P = `#forge:plates/iron`, B = bricks (`creativeengineering:shaped/oven`) |
 
-### 2.2 Recipe type `creativeengineering:baking`
+### 2.2 Recipe type `creativedelight:baking`
 
 FD's cooking JSON plus an optional `tool`:
 
 ```json
 {
-  "type": "creativeengineering:baking",
+  "type": "creativedelight:baking",
   "ingredients": [ { "tag": "forge:fruits/fig" }, { "item": "farmersdelight:pie_crust" }, { "tag": "forge:eggs" } ],
-  "tool": { "tag": "creativeengineering:bakeware/pie_tin" },
+  "tool": { "tag": "creativedelight:bakeware/pie_tin" },
   "container": { "item": "minecraft:paper" },
   "result": { "item": "fruitsdelight:fig_tart", "count": 2 },
   "experience": 0.1,
@@ -142,7 +142,7 @@ both as `n(id, count)`); scripts write the recipe's count (the overhaul's only r
 | Slot | Role | GUI position |
 |---|---|---|
 | 0-5 | ingredients | FD's 3x2 grid |
-| 6 | tool (only `#creativeengineering:bakeware`, stack limit 1) | new slot left of the grid |
+| 6 | tool (only `#creativedelight:bakeware`, stack limit 1) | new slot left of the grid |
 | 7 | result waiting for plating (display only) | FD's meal slot |
 | 8 | plating container | FD's bowl slot |
 | 9 | output (take only; taking awards recipe xp) | FD's output slot |
@@ -152,12 +152,12 @@ both as `n(id, count)`); scripts write the recipe's count (the overhaul's only r
 
 | Tag | Members | Where |
 |---|---|---|
-| `#creativeengineering:oven_heat_sources` (block) | `#farmersdelight:tray_heat_sources` (fire, campfires, lava; nested), `magma_block`, `lava_cauldron`, `create:blaze_burner`, `create:lit_blaze_burner`, `quark:blaze_lantern` | blocktags.js |
-| `#farmersdelight:heat_sources` (block) | `+ creativeengineering:oven` | blocktags.js |
-| `minecraft:mineable/pickaxe` (block) | `+ creativeengineering:oven` | blocktags.js |
-| `#creativeengineering:bakeware/{baking_sheet,cake_pan,pie_tin,muffin_tin}` (item) | the matching item | cookingtags.js |
-| `#creativeengineering:bakeware` (item) | the four kind tags | cookingtags.js |
-| `#creativeengineering:hammer_no_rotate` (block) | `farmersdelight:cutting_board` | blocktags.js |
+| `#creativedelight:oven_heat_sources` (block) | `#farmersdelight:tray_heat_sources` (fire, campfires, lava; nested), `magma_block`, `lava_cauldron`, `create:blaze_burner`, `create:lit_blaze_burner`, `quark:blaze_lantern` | blocktags.js |
+| `#farmersdelight:heat_sources` (block) | `+ creativedelight:oven` | blocktags.js |
+| `minecraft:mineable/pickaxe` (block) | `+ creativedelight:oven` | blocktags.js |
+| `#creativedelight:bakeware/{baking_sheet,cake_pan,pie_tin,muffin_tin}` (item) | the matching item | cookingtags.js |
+| `#creativedelight:bakeware` (item) | the four kind tags | cookingtags.js |
+| `#creativedelight:hammer_no_rotate` (block) | `farmersdelight:cutting_board` | blocktags.js |
 
 ### 2.5 Bakeware
 
@@ -165,10 +165,10 @@ One iron plate, hammered into each shape in turn with the Engineer's Hammer (`R.
 
 | Item | From | Used for |
 |---|---|---|
-| `creativeengineering:baking_sheet` | `#forge:plates/iron` | cookies, tarts |
-| `creativeengineering:muffin_tin` | baking sheet | muffins (plated on paper) |
-| `creativeengineering:pie_tin` | muffin tin | pies |
-| `creativeengineering:cake_pan` | pie tin | cakes, cheesecake, cake base |
+| `creativedelight:baking_sheet` | `#forge:plates/iron` | cookies, tarts |
+| `creativedelight:muffin_tin` | baking sheet | muffins (plated on paper) |
+| `creativedelight:pie_tin` | muffin tin | pies |
+| `creativedelight:cake_pan` | pie tin | cakes, cheesecake, cake base |
 
 Each step is two recipes: `farmersdelight:cutting` with the hammer as the tool (`farmersdelightcutting/<item>_hammering`;
 put the piece on a cutting board, use the hammer on it, 1 durability), and a shapeless craft, hammer + piece
@@ -178,7 +178,7 @@ placeholder shaped patterns are gone.
 The IE hammer rotates any block that has no IE block entity (`HammerItem.onItemUseFirst` -> `RotationUtil.rotateBlock`),
 and that runs before the block's own `use`. FD's cutting board implements `rotate`, so without a fix the hammer turned
 the board and never cut. `IECompat.registerHammerNoRotate` adds an IE rotation blacklist entry (main thread, via
-`enqueueWork`) that refuses blocks in `#creativeengineering:hammer_no_rotate`; the hammer then passes and the board's
+`enqueueWork`) that refuses blocks in `#creativedelight:hammer_no_rotate`; the hammer then passes and the board's
 `use` runs the cutting recipe.
 
 Textures are `creativeengineering:item/<id>` (from `textureswapper/`); the muffin tin uses `item/baking_sheet` until it
@@ -194,7 +194,7 @@ The old mirrors of every mod's recipe (38, 2026-10-18 to 10-21) are gone. Muffin
 "Manual craft" is a shapeless craft with an id ending `_manual_only`, which Create's mixer and mechanical crafter skip.
 Every base is manual craft or oven only: no Create or IE machine recipe (the removal takes every other mod's, and the
 pack adds none; 2026-10-22, user). Sugar is `#forge:sugar`, flour is
-`#creativeengineering:flour_or_cornmeal` (wheat flour or cornmeal), dough is `#forge:dough`, milk is `#forge:milk`
+`#creativedelight:flour_or_cornmeal` (wheat flour or cornmeal), dough is `#forge:dough`, milk is `#forge:milk`
 (bucket or bottle). Times are 200 ticks and 0.1 xp unless noted.
 
 **Bases**
@@ -204,8 +204,8 @@ pack adds none; 2026-10-22, user). Sugar is `#forge:sugar`, flour is
 | Raw cake base (`createaddition:cake_base`) | 3 flour, 2 egg, 2 sugar; or 3 dough, egg, 2 sugar | manual craft |
 | Baked cake base (`createaddition:cake_base_baked`) | 2 flour, 2 egg, 2 sugar; or 2 dough, egg, 2 sugar; or a raw base (100 ticks, 0 xp) | oven, cake pan |
 | Pie crust, 3 | 3 flour, egg, milk; or 3 dough, milk | manual craft |
-| Frosting (`creativeengineering:frosting`), 2 | sugar, 2 milk; or 250 mB frosting fluid -> 1 (compactor; the fluid is heated mixer sugar + 250 mB milk -> 500 mB, [recipes_cooking.md](recipes_cooking.md) 2.2) | manual craft; compactor |
-| Cookie dough (`creativeengineering:cookie_dough`) | dough, 2 sugar | manual craft |
+| Frosting (`creativedelight:frosting`), 2 | sugar, 2 milk; or 250 mB frosting fluid -> 1 (compactor; the fluid is heated mixer sugar + 250 mB milk -> 500 mB, [recipes_cooking.md](recipes_cooking.md) 2.2) | manual craft; compactor |
+| Cookie dough (`creativedelight:cookie_dough`) | dough, 2 sugar | manual craft |
 
 Frosting and cookie dough are new plain items (not food) in `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js`, with
 their own textures (2026-10-25, textures/food #3): frosting is the user's `textureswapper/frosting.png`; the dough
@@ -326,7 +326,7 @@ Smoker-only foods that now cook in the CfB oven include `farmersdelight:ham` -> 
 
 ### 3.1 Heat (`OvenHeat`)
 
-- Heated when the block below is in `#creativeengineering:oven_heat_sources` and active, or a
+- Heated when the block below is in `#creativedelight:oven_heat_sources` and active, or a
   `#farmersdelight:heat_conductors` block (hopper, Create chute) sits between the oven and such a source.
 - Active: a block with `lit` counts only while lit (FD's rule); a Create Blaze Burner whose `blaze` heat level is
   `none` doesn't count (the Brewin port's rule, matched by property name so no Create classes are needed).
@@ -348,7 +348,7 @@ oven with it).
 
 ### 3.4 Tool slot
 
-Every baking recipe asks for bakeware (2.6). The tool is never used up. Filter: `#creativeengineering:bakeware`.
+Every baking recipe asks for bakeware (2.6). The tool is never used up. Filter: `#creativedelight:bakeware`.
 
 ### 3.5 Automation (`OvenItemHandler`), the same on every face
 
@@ -367,7 +367,7 @@ leftovers that don't go to the buffer eject from the front instead of the left. 
 
 ### 3.7 Lang
 
-`block.creativeengineering.oven`, `container.creativeengineering.oven[.heated|.not_heated|.served_on]`,
+`block.creativedelight.oven`, `container.creativeengineering.oven[.heated|.not_heated|.served_on]`,
 `jei.creativeengineering.baking[.heat]` in the patcherMod `en_us.json`. Bakeware names come from KubeJS `displayName`.
 
 ### 3.8 Muffin pot recipes
@@ -419,7 +419,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
   Gingerbread and Gingerbread Man (COOKIES), Chorus Fruit Pie and Sponge Pie (renamed from Sponge Cake; PIES, no can),
   Rotten, Green and Chorus Flower pie (HAND_PIES, `handPieBake`), Sweet Potato Cupcake (`muffinBake`); Honey Cake takes
   honey bottle + honeycomb. Wheat swap for the rest:
-  [baked_goods.js](../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) turns the wheat of bread
+  [baked_goods.js](../kubejs/data/creativedelight/kubejs/creativedelight/baked_goods.js) turns the wheat of bread
   (and Quark's bent bread), Glow Bread, Adzuki Bun, Banana Bread, Strawberry Scones, Strange Eclair, Sweet Potato Dough
   into flour; Rustic batter (pot, Slice & Dice copy, and the egg solution mix) takes wheat flour, cornmeal or rice in
   each grain slot (2026-10-29, `dishes/ingredients #24`; was wheat flour). Left on wheat, not baked: Brewin'
@@ -447,7 +447,7 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 | `development/creativeCommon/src/main/resources/data/creativeengineering/loot_tables/blocks/oven.json` | drop |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/bakeware.js` | bakeware items |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/baking_ingredients.js` | frosting, cookie dough (baking overhaul) |
-| `kubejs/data/creativedelight/kubejs/creativeengineering/baking.js` | baking + crafting recipes |
+| `kubejs/data/creativedelight/kubejs/creativedelight/baking.js` | baking + crafting recipes |
 | `kubejs/server_scripts/cooking/cooking.js` "Muffins" | the dough fix |
 | `kubejs/server_scripts/tags/blocktags.js`, `cookingtags.js` | tags (2.4) |
 | `kubejs/startup_scripts/func/neoCraftHelper.js` | `ceBaking`, `hammering` |
@@ -485,7 +485,7 @@ The test sources are scratch-only (not in the repo).
 
 Needs a patcherMod build in `mods/`.
 
-- [ ] **OV-01 Boot:** no registry, recipe or tag errors for `creativeengineering:oven`, `creativeengineering:baking/*`,
+- [ ] **OV-01 Boot:** no registry, recipe or tag errors for `creativedelight:oven`, `creativeengineering:baking/*`,
   bakeware and the oven tags in `latest.log` / KubeJS logs.
 - [ ] **OV-02 Look:** placed oven faces you, looks like an unlit FD stove; lit state shows the lit stove front/top.
 - [ ] **OV-03 Craft:** oven and the four bakeware recipes show in JEI and craft. Baking sheet, pie tin and cake pan show their own textures; the muffin tin looks like the baking sheet.

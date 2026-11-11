@@ -34,7 +34,7 @@ import java.util.OptionalInt;
 @Mixin(value = RegistryLoader.class, remap = false)
 public class RegistryLoaderPresetOverworldMixin {
 
-	@Unique private static final Logger creativeengineering$LOG = LogManager.getLogger("creativeengineering/worldgen");
+	@Unique private static final Logger creativeengineering$LOG = LogManager.getLogger("creativeworldgen/worldgen");
 	@Unique private static final ThreadLocal<LevelStem> creativeengineering$presetOverworld = new ThreadLocal<>();
 
 	@Inject(method = "m_206762_", at = @At("HEAD"), require = 1, remap = false)

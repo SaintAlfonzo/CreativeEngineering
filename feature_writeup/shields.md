@@ -61,14 +61,14 @@ for three damage groups (physical, elemental, magic), and can block damage vanil
 
 | Tier | Item | Durability | Physical | Elemental | Magic | KB threshold | Burn / thorn ticks | Repair item | Extras |
 |---|---|---|---|---|---|---|---|---|---|
-| copper | `creativeengineering:copper_shield` | 242 | 20 | electric 50, rest 0 | 0 | 1 | no / no | copper ingot | |
-| gold | `creativeengineering:gold_shield` | 168 | 30 | 30 (blanket) | 30 | 2 | no / no | gold ingot | |
+| copper | `creativeequipment:copper_shield` | 242 | 20 | electric 50, rest 0 | 0 | 1 | no / no | copper ingot | |
+| gold | `creativeequipment:gold_shield` | 168 | 30 | 30 (blanket) | 30 | 2 | no / no | gold ingot | |
 | iron | `minecraft:shield` (renamed "Iron Shield") | 336 | 40 | fire 25, rest 0 | 0 | 3 | no / no | iron ingot (not planks) | |
-| diamond | `creativeengineering:diamond_shield` | 1561 | 50 | fire 50, rest 0 | 25 | 4 | no / yes | diamond | rare |
-| netherite | `creativeengineering:netherite_shield` | 2031 | 60 | fire 100, rest 0 | 50 | 5 | yes / yes | netherite ingot | rare, fireproof |
-| echo | `creativeengineering:echo_shield` | 2124 | 70 | 50 (blanket) | 60 | 6 | yes / yes | echo ingot | epic, fireproof |
-| felsic | `creativeengineering:felsic_shield` | 2501 | 80 | 75 (blanket) | 75 | 7 | yes / yes | felsic ingot | epic, fireproof |
-| dragon | `creativeengineering:dragon_shield` | 3350 | 100 | 100 (blanket) | 100 | 8 | yes / yes | dragon scale | epic, fireproof; holder gets Regeneration I 5 s, attacker gets Poison I 5 s; dragon-gear autorepair |
+| diamond | `creativeequipment:diamond_shield` | 1561 | 50 | fire 50, rest 0 | 25 | 4 | no / yes | diamond | rare |
+| netherite | `creativeequipment:netherite_shield` | 2031 | 60 | fire 100, rest 0 | 50 | 5 | yes / yes | netherite ingot | rare, fireproof |
+| echo | `creativeequipment:echo_shield` | 2124 | 70 | 50 (blanket) | 60 | 6 | yes / yes | echo ingot | epic, fireproof |
+| felsic | `creativeequipment:felsic_shield` | 2501 | 80 | 75 (blanket) | 75 | 7 | yes / yes | felsic ingot | epic, fireproof |
+| dragon | `creativeequipment:dragon_shield` | 3350 | 100 | 100 (blanket) | 100 | 8 | yes / yes | dragon scale | epic, fireproof; holder gets Regeneration I 5 s, attacker gets Poison I 5 s; dragon-gear autorepair |
 
 Wear is 100% (vanilla) for every tier and group. Global: `wearThreshold = 3.0`, `disableCooldownTicks = 20`,
 `unblockableEffectTicks` = poison, wither, `everythingcopper:copper_poisoning`, `alexsmobs:debilitating_sting`,
@@ -265,7 +265,7 @@ message ids in `data/creativecommon/damage_tags/<name>.json`:
     Copper's removed shield.
   - Recipes: [shield.js](../kubejs/server_scripts/equipment/shield.js) and
     [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js).
-  - The dragon shield is in `#creativeengineering:dragon_gear`, so it repairs itself.
+  - The dragon shield is in `#creativeequipment:dragon_gear`, so it repairs itself.
   - The echo, felsic and dragon assemblies have transitional items in `transition_items.js`.
 - **Damage tags:** the `damage/` package.
   - `DamageTagLoader` (reload listener) and `DamageTagSnapshot` (merge plus a per-(id, flags) cache).

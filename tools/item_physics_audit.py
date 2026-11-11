@@ -82,8 +82,8 @@ TAG_RULES = [
     ('masonry',    ['minecraft:terracotta', 'forge:concrete', 'forge:bricks']),
     ('earth',      ['forge:sand', 'forge:gravel', 'minecraft:dirt', 'forge:concrete_powders', 'forge:clay']),
     ('ice',        ['minecraft:ice', 'minecraft:snow']),
-    ('container',  ['forge:buckets', 'forge:bottles', 'creativeengineering:food_type/canned',
-                    'creativeengineering:food_type/drink']),
+    ('container',  ['forge:buckets', 'forge:bottles', 'creativedelight:food_type/canned',
+                    'creativedelight:food_type/drink']),
     ('metal',      ['forge:ingots', 'forge:nuggets', 'forge:plates', 'forge:gears', 'forge:wires', 'forge:raw_materials',
                     'forge:storage_blocks/raw', 'minecraft:rails', 'minecraft:anvil', 'forge:sheetmetals',
                     'forge:rods/all_metal', 'forge:scaffoldings', 'create:casing']),
@@ -100,7 +100,7 @@ TAG_RULES = [
                     'forge:raw_fishes', 'forge:rope', 'forge:hides']),
     ('produce',    ['forge:crops', 'forge:fruits', 'forge:vegetables', 'forge:mushrooms', 'forge:berries', 'forge:grain',
                     'forge:nuts']),
-    ('food',       ['creativeengineering:food_type']),
+    ('food',       ['creativedelight:food_type']),
     ('technical',  ['forge:spawn_eggs']),
 ]
 # tag prefixes: an item tag equal to or under one of these matches (forge:ingots/iron matches forge:ingots)
@@ -248,7 +248,7 @@ MOD_DEFAULTS = {
     'colored_water': 'container', 'ppfluids': 'container', 'splash_milk': 'container', 'potionbundles': 'container',
     'floralench': 'foliage', 'bushierflowers': 'foliage', 'buzzier_bees': 'organic', 'alexsmobs': 'organic',
     'alexsabnormalities': 'organic', 'untitledduckmod': 'organic', 'upgrade_aquatic': 'organic',
-    'exposure': 'machine', 'exposure_expanded': 'machine', 'exposure_polaroid': 'fibre', 'exposure_extras': 'fibre',
+    'exposure': 'machine', 'exposure_expanded': 'machine', 'exposure_polaroid': 'fibre', 'exposureextras': 'fibre',
     'geode': 'crystal', 'create_crystal_clear': 'glass', 'glow_ink_plus': 'organic',
 }
 

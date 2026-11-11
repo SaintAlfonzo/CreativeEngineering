@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,43 +12,41 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 
-/** Shared movement, threat and taming rules of the crow goals (H&H 1.4.1 behaviour, re-based on AM's flight and navigation). */
+/** Shared movement, threat and taming rules of the crow goals (H&H 1.4.1 behaviour). */
 public final class CrowLogic {
     public static final double ALARM_RANGE = 16.0D;
+    /** On loot a crow let go of, so tame crows do not fetch it back (upstream checks the item's owner, which 1.19.2 does not keep). */
+    public static final String CROW_DROPPED_TAG = "hearthandharvest:crow_dropped";
     private static final double SNATCHING_RADIUS = 2.5D;
 
     private CrowLogic() {
     }
 
     /** The goals act on wild, free crows only. */
-    public static boolean isWild(TamableAnimal crow) {
-        return !crow.isTame() && !crow.isOrderedToSit() && !CrowAccess.isSitting(crow) && !crow.isPassenger();
+    public static boolean isWild(CrowEntity crow) {
+        return !crow.isTame() && !crow.isOrderedToSit() && !crow.isInSittingPose() && !crow.isPassenger();
     }
 
-    /** Far away or already airborne: fly, as AM's own item goal does. Otherwise walk. */
-    public static void moveTo(TamableAnimal crow, double x, double y, double z, double speed) {
-        if (CrowAccess.isFlying(crow) || crow.distanceToSqr(x, y, z) > 64.0D) {
+    /** Far away or already airborne: straight flight through the move control. Otherwise a path, which walks short hops on the ground. */
+    public static void moveTo(CrowEntity crow, double x, double y, double z, double speed) {
+        if (crow.isFlying() || crow.distanceToSqr(x, y, z) > 64.0D) {
             fly(crow, x, y, z, speed);
         } else {
             crow.getNavigation().moveTo(x, y, z, speed);
         }
     }
 
-    public static void fly(TamableAnimal crow, double x, double y, double z, double speed) {
-        CrowAccess.setFlying(crow, true);
+    /** Straight flight; any path in progress is dropped so it does not override the wanted position. */
+    public static void fly(CrowEntity crow, double x, double y, double z, double speed) {
+        if (!crow.getNavigation().isDone()) {
+            crow.getNavigation().stop();
+        }
         crow.getMoveControl().setWantedPosition(x, y, z, speed);
     }
 
-    /** Settles a crow that has come down at its goal, the same check AM's idle goal makes. */
-    public static void land(TamableAnimal crow) {
-        if (CrowAccess.isFlying(crow) && crow.isOnGround()) {
-            CrowAccess.setFlying(crow, false);
-        }
-    }
-
-    /** A spot 8 blocks directly away from the threat and 3 to 5 up; AM's flight goes straight, so no ground search is needed. */
+    /** A spot 8 blocks directly away from the threat and 3 to 5 up; the flight goes straight, so no ground search is needed. */
     @Nullable
-    public static Vec3 fleeTarget(TamableAnimal crow, double fromX, double fromZ) {
+    public static Vec3 fleeTarget(CrowEntity crow, double fromX, double fromZ) {
         Vec3 away = new Vec3(crow.getX() - fromX, 0.0D, crow.getZ() - fromZ);
         if (away.lengthSqr() < 1.0E-8D) {
             return null;
@@ -63,7 +60,7 @@ public final class CrowLogic {
     }
 
     /** The radius at which {@code entity} scares this crow, or -1 if it does not. */
-    public static double threatRadius(TamableAnimal crow, CrowWariness wariness, LivingEntity entity, double baseRadius) {
+    public static double threatRadius(CrowEntity crow, CrowWariness wariness, LivingEntity entity, double baseRadius) {
         if (entity == crow || !entity.isAlive() || wariness.isSnatchTarget(entity)) {
             return -1.0D;
         }
@@ -85,7 +82,7 @@ public final class CrowLogic {
         return radius;
     }
 
-    public static boolean isSpotThreatened(TamableAnimal crow, CrowWariness wariness, Vec3 pos) {
+    public static boolean isSpotThreatened(CrowEntity crow, CrowWariness wariness, Vec3 pos) {
         double base = CrowConfig.SCARE_RADIUS.get();
         double scan = crow.level instanceof ServerLevel level && wariness.isAlarmed(level) ? Math.max(base, ALARM_RANGE) : base;
         return !crow.level.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos, scan * 2.0D, scan * 2.0D, scan * 2.0D), entity -> {
@@ -95,7 +92,7 @@ public final class CrowLogic {
     }
 
     /** Whether a repelling block (scarecrow, carved pumpkin, jack o'lantern) stands within the scare radius of a position. */
-    public static boolean isGuarded(TamableAnimal crow, BlockPos center) {
+    public static boolean isGuarded(CrowEntity crow, BlockPos center) {
         int radius = CrowConfig.SCARE_RADIUS.get();
         if (radius <= 0) {
             return false;
@@ -109,10 +106,9 @@ public final class CrowLogic {
     }
 
     /** Tames on success, with the hearts; smoke otherwise. */
-    public static boolean tryTame(TamableAnimal crow, Player player, int odds) {
+    public static boolean tryTame(CrowEntity crow, Player player, int odds) {
         if (crow.getRandom().nextInt(odds) == 0 && !ForgeEventFactory.onAnimalTame(crow, player)) {
             crow.tame(player);
-            CrowAccess.setFollowing(crow);
             crow.level.broadcastEntityEvent(crow, (byte) 7);
             return true;
         }
@@ -120,21 +116,21 @@ public final class CrowLogic {
         return false;
     }
 
-    public static void holdLoot(TamableAnimal crow, CrowWariness wariness, ItemStack stack) {
+    public static void holdLoot(CrowEntity crow, CrowWariness wariness, ItemStack stack) {
         crow.setItemSlot(EquipmentSlot.MAINHAND, stack);
         crow.setGuaranteedDrop(EquipmentSlot.MAINHAND);
         wariness.startCarrying(CrowConfig.CARRY_TICKS.get());
     }
 
     /** Lets go of the loot as an item that never despawns and resists fire, lava and explosions (N24-8). */
-    public static void dropLoot(TamableAnimal crow, CrowWariness wariness) {
+    public static void dropLoot(CrowEntity crow, CrowWariness wariness) {
         ItemStack stack = !wariness.getHeldBack().isEmpty() ? wariness.getHeldBack() : crow.getMainHandItem();
         spawnProtected(crow, stack);
         crow.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         wariness.stopCarrying();
     }
 
-    public static void spawnProtected(TamableAnimal crow, ItemStack stack) {
+    public static void spawnProtected(CrowEntity crow, ItemStack stack) {
         if (stack.isEmpty()) {
             return;
         }
@@ -142,6 +138,7 @@ public final class CrowLogic {
         item.setUnlimitedLifetime();
         item.setInvulnerable(true);
         item.setDefaultPickUpDelay();
+        item.getPersistentData().putBoolean(CROW_DROPPED_TAG, true);
         crow.level.addFreshEntity(item);
     }
 }

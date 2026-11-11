@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,7 +34,7 @@ public class CrowSeekShinyGoal extends Goal {
     private static final int NEST_WAIT = 20;
     private static final double ESCAPE_FROM_SQR = 256.0D;
 
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     @Nullable
     private Player victim;
     @Nullable
@@ -50,7 +49,7 @@ public class CrowSeekShinyGoal extends Goal {
     private int chaseTicks;
     private boolean completed;
 
-    public CrowSeekShinyGoal(TamableAnimal crow) {
+    public CrowSeekShinyGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -59,7 +58,7 @@ public class CrowSeekShinyGoal extends Goal {
         return wariness.isCarrying() && !crow.getMainHandItem().isEmpty();
     }
 
-    /** Stealable: in the shiny list, plain (no enchantment, name or other NBT) and not food, which AM would eat in the beak. */
+    /** Stealable: in the shiny list, plain (no enchantment, name or other NBT) and not food. */
     public static boolean stealable(ItemStack stack) {
         return !stack.isEmpty() && stack.is(CrowTags.SHINY_ITEMS) && !stack.hasTag() && !stack.isEdible();
     }
@@ -78,8 +77,7 @@ public class CrowSeekShinyGoal extends Goal {
         if (carrying(wariness)) {
             return nearestPlayer(ESCAPE_FROM_SQR) != null || nearbyNest() != null;
         }
-        if (!CrowConfig.STEAL_SHINY_ITEMS.get() || !crow.getMainHandItem().isEmpty() || crow.getTarget() != null
-                || CrowAccess.isFetchingItem(crow) || wariness.isAlarmed(level)) {
+        if (!CrowConfig.STEAL_SHINY_ITEMS.get() || !crow.getMainHandItem().isEmpty() || crow.getTarget() != null || wariness.isAlarmed(level)) {
             return false;
         }
         thrown = findThrownItem();
@@ -251,7 +249,7 @@ public class CrowSeekShinyGoal extends Goal {
         CrowLogic.spawnProtected(crow, stack);
     }
 
-    /** No nest: keep away from the nearest player; with none around the goal lets go and AM's idle flight carries on. */
+    /** No nest: keep away from the nearest player; with none around the goal lets go and wandering carries on. */
     private void fleePlayers() {
         Player player = nearestPlayer(ESCAPE_FROM_SQR);
         if (player == null) {

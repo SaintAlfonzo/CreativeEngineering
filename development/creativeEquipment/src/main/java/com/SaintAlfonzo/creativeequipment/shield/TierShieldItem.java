@@ -21,7 +21,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * One of the seven DEDICATED tier shields ({@code creativeengineering:<tier>_shield}) - every
+ * One of the seven DEDICATED tier shields ({@code creativeequipment:<tier>_shield}) - every
  * {@link ShieldTier} except {@link ShieldTier#IRON}, which is folded into the player's real
  * vanilla shield instead (see {@link ShieldTier#of}); that one has no class of its own.
  *

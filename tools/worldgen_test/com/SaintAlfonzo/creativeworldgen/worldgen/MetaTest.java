@@ -93,31 +93,31 @@ public class MetaTest {
 			check(r.result().isPresent(), "parses: " + e.getKey() + r.error().map(err -> " (" + err.message() + ")").orElse(""));
 			r.result().ifPresent(m -> parsed.put(e.getKey(), m));
 		}
-		MetaStructure villages = parsed.get("creativeengineering:meta/village_towers");
+		MetaStructure villages = parsed.get("creativeworldgen:meta/village_towers");
 		if (villages != null) {
 			MetaStructure.Part p = partsOf(villages).get(0);
-			check(p.structures().orElseThrow().equals(List.of("#creativeengineering:meta/peaceful_towers")) && p.count().min() == 1 && p.count().max() == 3
+			check(p.structures().orElseThrow().equals(List.of("#creativeworldgen:meta/peaceful_towers")) && p.count().min() == 1 && p.count().max() == 3
 					&& p.distance().min() == 40 && p.distance().max() == 104 && p.spacing() == 48 && p.margin() == 6 && p.tries() == 16,
 					"village_towers: towers part read with its fields and defaults");
 			check(villages.terrainAdaptation() == TerrainAdjustment.BEARD_THIN && villages.step() == GenerationStep.Decoration.SURFACE_STRUCTURES,
 					"village_towers: beard_thin, surface_structures");
 		}
-		MetaStructure flotilla = parsed.get("creativeengineering:meta/driftwood_flotilla");
+		MetaStructure flotilla = parsed.get("creativeworldgen:meta/driftwood_flotilla");
 		if (flotilla != null) {
 			List<MetaStructure.Part> parts = partsOf(flotilla);
 			check(parts.size() == 2 && parts.get(0).chance() == 0.25f && parts.get(0).count().min() == 1
-					&& parts.get(1).features().orElseThrow().equals(List.of("creativeengineering:meta/flotilla_driftwood"))
+					&& parts.get(1).features().orElseThrow().equals(List.of("creativeworldgen:meta/flotilla_driftwood"))
 					&& parts.get(1).count().min() == 8 && parts.get(1).waterDepth() == 2 && parts.get(1).radius() == 6,
 					"driftwood_flotilla: optional raft + 8-16 driftwood over 2+ deep water");
 		}
-		MetaStructure struck = parsed.get("creativeengineering:meta/meteorite_village");
+		MetaStructure struck = parsed.get("creativeworldgen:meta/meteorite_village");
 		if (struck != null) {
 			MetaStructure.Part p = partsOf(struck).get(0);
-			check(p.overlap() && p.structures().orElseThrow().equals(List.of("#creativeengineering:meta/meteorites")) && p.distance().max() == 16,
+			check(p.overlap() && p.structures().orElseThrow().equals(List.of("#creativeworldgen:meta/meteorites")) && p.distance().max() == 16,
 					"meteorite_village: the meteorite part overlaps the village");
 		}
 		check(villages == null || !partsOf(villages).get(0).overlap(), "overlap defaults to false");
-		MetaStructure siege = parsed.get("creativeengineering:meta/village_siege_camp");
+		MetaStructure siege = parsed.get("creativeworldgen:meta/village_siege_camp");
 		if (siege != null) check(partsOf(siege).get(0).cluster() == 40 && partsOf(siege).get(0).spacing() == 18, "village_siege_camp: siege weapons clustered within 40");
 		check(villages == null || partsOf(villages).get(0).cluster() == 0, "cluster defaults to 0 (off)");
 
@@ -152,7 +152,7 @@ public class MetaTest {
 		MetaStructure meta = new MetaStructure(new Structure.StructureSettings(HolderSet.direct(), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE), Optional.of(List.of("ns:village")), 0.5F, List.of());
 		StructureSet group = new StructureSet(List.of(entry(anchor, "ns:village", 100), entry(other, "ns:other_village", 100),
-				entry(meta, "creativeengineering:meta/test", 50)), null);
+				entry(meta, "creativeworldgen:meta/test", 50)), null);
 		Map<String, Map<String, Float>> table = Map.of("ns:group", Map.of("ns:village", 0.25F));
 		StructureFrequencies.setActiveForTest(StructureFrequencies.resolve(table, id -> Optional.of(group)));
 		long seed = 123456789L;
@@ -202,10 +202,10 @@ public class MetaTest {
 		MetaStructure lonely = new MetaStructure(new Structure.StructureSettings(HolderSet.direct(), Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES,
 				TerrainAdjustment.NONE), Optional.of(List.of("ns:elsewhere")), 0.5F, List.of());
 		StructureSet ruins = new StructureSet(List.of(entry(ruinA, "ns:ruin_a", 100), entry(ruinB, "ns:ruin_b", 100), entry(camp, "ns:camp", 100),
-				entry(m1, "creativeengineering:meta/m1", 1), entry(m2, "creativeengineering:meta/m2", 1), entry(lonely, "creativeengineering:meta/lonely", 1)), null);
+				entry(m1, "creativeworldgen:meta/m1", 1), entry(m2, "creativeworldgen:meta/m2", 1), entry(lonely, "creativeworldgen:meta/lonely", 1)), null);
 		Map<Structure, String> ids = new java.util.IdentityHashMap<>();
 		ids.put(ruinA, "ns:ruin_a"); ids.put(ruinB, "ns:ruin_b"); ids.put(camp, "ns:camp");
-		ids.put(m1, "creativeengineering:meta/m1"); ids.put(m2, "creativeengineering:meta/m2"); ids.put(lonely, "creativeengineering:meta/lonely");
+		ids.put(m1, "creativeworldgen:meta/m1"); ids.put(m2, "creativeworldgen:meta/m2"); ids.put(lonely, "creativeworldgen:meta/lonely");
 		Map<MetaStructure, List<Structure>> cands = new java.util.IdentityHashMap<>();
 		cands.put(m1, List.of(ruinA, ruinB)); cands.put(m2, List.of(ruinA)); cands.put(lonely, List.of(new Fake("ns:elsewhere")));
 		MetaSlots.Index idx = MetaSlots.build(List.of(ruins), ids::get, cands::get);
@@ -259,7 +259,7 @@ public class MetaTest {
 				entry(orphan, "ns:orphan", 1)), null);
 		Map<Structure, String> wIds = new java.util.IdentityHashMap<>();
 		wIds.put(hut, "ns:hut"); wIds.put(circle, "ns:circle"); wIds.put(vanillaHut, "ns:swamp_hut"); wIds.put(orphan, "ns:orphan");
-		wIds.put(hutMeta, "creativeengineering:meta/hut_meta");
+		wIds.put(hutMeta, "creativeworldgen:meta/hut_meta");
 		Map<String, Structure> byId = Map.of("ns:hut", hut, "ns:circle", circle, "ns:swamp_hut", vanillaHut, "ns:orphan", orphan);
 		Map<Structure, MetaSlots.Replacement> repl = new java.util.IdentityHashMap<>();
 		repl.put(vanillaHut, new MetaSlots.Replacement("ns:hut", 0.1));
@@ -298,7 +298,7 @@ public class MetaTest {
 				"in the YUNG hut's slot the swamp hut generates, only where the YUNG hut's biomes allow it");
 		MetaSlots.endConversion();
 		MetaSlots.Index both = MetaSlots.build(List.of(new StructureSet(List.of(entry(hut, "ns:hut", 172), entry(vanillaHut, "ns:swamp_hut", 1),
-				entry(hutMeta, "creativeengineering:meta/hut_meta", 1)), null)), wIds::get, m -> List.of(hut), repl::get, byId::get);
+				entry(hutMeta, "creativeworldgen:meta/hut_meta", 1)), null)), wIds::get, m -> List.of(hut), repl::get, byId::get);
 		List<MetaSlots.Conversion> forBoth = both.byAnchor.get(hut);
 		check(forBoth.size() == 2 && forBoth.get(0).target() == hutMeta && forBoth.get(1).target() == vanillaHut
 				&& Math.abs(forBoth.get(1).from() - 0.95) < 1e-6 && forBoth.get(1).to() == 1.0

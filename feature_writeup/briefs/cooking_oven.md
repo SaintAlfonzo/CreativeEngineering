@@ -4,9 +4,9 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cooking`, Sub `oven`; swep
 [oven.md](../oven.md) (block, `creativeengineering:baking`, OV- tests),
 [food_families.md](../food_families.md) 3.1 and 4.6 (family rules), [remainder_buffer.md](../remainder_buffer.md),
 [creative_delight.md](../creative_delight.md) 30 (`global.CD.food`).
-Code: [baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) (181 lines: cake / pie /
+Code: [baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) (181 lines: cake / pie /
 cookie / muffin / tart / hand-pie tables, oven and bakeware recipes),
-[baked_goods.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js) (wheat -> flour swap),
+[baked_goods.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baked_goods.js) (wheat -> flour swap),
 the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar), `global.NCH.ceBaking` (line 1161), `fdCooking` (1074), `hammering` (1142) in
 [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
@@ -114,7 +114,7 @@ the oven, add tools or dishes where needed, and let the oven smoke (decided 2026
 
 ### Build
 1. **Smoking in the oven, KubeJS route** (recommended): in a new CD script
-   `kubejs/data/creativedelight/kubejs/creativeengineering/oven_smoking.js`, walk every loaded `minecraft:smoking`
+   `kubejs/data/creativedelight/kubejs/creativedelight/oven_smoking.js`, walk every loaded `minecraft:smoking`
    recipe with a food result (`e.forEachRecipe({ type: 'minecraft:smoking' }, r => ...)`, skip non-food results) and
    write `R.ceBaking([input], result, e, 'smoking/<path>', { time: <its cookingtime>, exp: <its xp> })` with no tool
    (a recipe without `tool` ignores the tool slot, oven.md 2.2). Inside `global.CD.recipes`, ids

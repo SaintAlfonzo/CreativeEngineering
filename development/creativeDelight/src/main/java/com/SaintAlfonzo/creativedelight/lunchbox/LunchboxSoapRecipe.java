@@ -13,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Crafting grid: one lunchbox + one Supplementaries soap. A dyed box loses its dye; an undyed box with a skin
  * loses the skin (back to its own look). Supplementaries' own soap recipe only cleans leather-style dyeables
- * and block colour sets, so it never matches a lunchbox. Type {@code creativeengineering:lunchbox_soap}.
+ * and block colour sets, so it never matches a lunchbox. Type {@code creativedelight:lunchbox_soap}.
  */
 public class LunchboxSoapRecipe extends CustomRecipe {
 

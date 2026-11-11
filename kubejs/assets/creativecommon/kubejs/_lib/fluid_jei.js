@@ -43,4 +43,4 @@ JEIEvents.addFluids(e => {
 }
 
 // The create:potion stacks (one REGULAR bottle per potion): Creative Brewing,
-// kubejs/assets/creativebrewing/kubejs/creativeengineering/potion_fluid_jei.js (moved 2026-11-01).
+// kubejs/assets/creativebrewing/kubejs/creativebrewing/potion_fluid_jei.js (moved 2026-11-01).

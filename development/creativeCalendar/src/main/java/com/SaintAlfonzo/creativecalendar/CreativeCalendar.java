@@ -19,15 +19,16 @@ import org.slf4j.Logger;
  * types by biome and crop seasons, carved out of patcherMod on 2026-11-01. Creative Delight and Creative Brewing require
  * it; it requires patcherMod ({@code creativeengineering}, later Creative Common).
  *
- * Ids stay: tags, WTHIT option ids and lang keys keep the {@code creativeengineering} namespace ({@link #NAMESPACE}),
- * the command stays {@code /ccaltime}. This mod id is only the jar's own identity, its config file and its script packs.
+ * Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE}) since
+ * 2026-11-10 (namespace_move.md step 6); they were {@code creativeengineering:} until then. Tags are not saved, so no
+ * alias. Lang keys keep their {@code creativeengineering.} prefix (text only); the command stays {@code /ccaltime}.
  */
 @Mod(CreativeCalendar.MOD_ID)
 public class CreativeCalendar {
 
     public static final String MOD_ID = "creativecalendar";
-    /** The namespace of every id this mod uses (tags, WTHIT lines): patcherMod's, unchanged by the carve. */
-    public static final String NAMESPACE = "creativeengineering";
+    /** The namespace of every tag this mod keys (its own mod id since 2026-11-10). */
+    public static final String NAMESPACE = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public CreativeCalendar() {

@@ -1,14 +1,14 @@
 // requires: creativedelight
 // requires: hearthandharvest
-// Tags of the salt lick, the scarecrow and the crow mechanics on alexsmobs:crow (plan_hearth_crow_salt.md; hearth_and_harvest.md
-// 5.8 N24-7 and N24-8). Read by the member's hearth/crow, hearth/salt and hearth/nest packages.
+// Tags of the salt lick, the scarecrow, the crow (hearthandharvest:crow) and its nests (plan_hearth_crow_salt.md,
+// plan_hearth_crow_swap.md; hearth_and_harvest.md 5.8 N24-7 and N24-8). Read by the member's hearth/crow, hearth/salt and hearth/nest packages.
 
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 	var t = global.tags
 	var i = global.item
 
-	// Crow food: AM's seeds (not its eggs and sugar) plus the pack's corn and corn seeds (N24-7). Taming, tempting, dropped food.
+	// Crow food: seeds plus the pack's corn and corn seeds (N24-7). Taming, tempting, dropped food.
 	t.add(e, 'creativedelight:crow_food', ['#forge:seeds', i.t_crops_corn, i.t_seeds_corn])
 
 	// N24-8 list. Bricks sit in #forge:ingots in this pack and are not shiny; netherite and the end-tier metals are cut.
@@ -31,7 +31,6 @@ ServerEvents.tags('block', e => {
 
 	// Crows
 	t.add(e, 'creativedelight:repels_crows', ['minecraft:carved_pumpkin', 'minecraft:jack_o_lantern', i.scarecrow])
-	t.add(e, 'alexsmobs:crow_fears', i.scarecrow)
 	t.add(e, 'creativedelight:nests', i.nest)
 	t.add(e, '#minecraft:mineable/hoe', [i.nest, i.scarecrow])
 	t.add(e, 'creativedelight:crow_edible_crops', [
@@ -55,13 +54,10 @@ ServerEvents.tags('entity_type', e => {
 	t.add(e, 'creativedelight:scary_for_crow', ['minecraft:player', 'minecraft:villager', 'mca:male_villager', 'mca:female_villager'])
 })
 
-// Ground nests: the grass biomes of the crow spawn list (spawns.json); the snow, rock and sky biomes on that list are left out.
+// Tree-top nests (plan_hearth_crow_swap.md 5.1): the temperate forests (in no non-temperate list of season_types.json).
+// Crows have no biome spawn entries; they live around these nests and village roof nests.
 ServerEvents.tags('worldgen/biome', e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
-	global.tags.add(e, 'creativedelight:has_crows', ['minecraft:birch_forest', 'minecraft:dark_forest', 'minecraft:flower_forest', 'minecraft:forest',
-		'minecraft:meadow', 'minecraft:old_growth_birch_forest', 'minecraft:old_growth_pine_taiga', 'minecraft:old_growth_spruce_taiga', 'minecraft:plains',
-		'minecraft:sunflower_plains', 'minecraft:taiga', 'terralith:birch_taiga', 'terralith:blooming_valley', 'terralith:cloud_forest', 'terralith:cold_shrubland',
-		'terralith:forested_highlands', 'terralith:highlands', 'terralith:hot_shrubland', 'terralith:lavender_forest', 'terralith:lavender_valley', 'terralith:lush_valley',
-		'terralith:moonlight_grove', 'terralith:moonlight_valley', 'terralith:rocky_shrubland', 'terralith:sakura_grove', 'terralith:sakura_valley', 'terralith:shield',
-		'terralith:shield_clearing', 'terralith:steppe', 'terralith:temperate_highlands', 'terralith:valley_clearing', 'terralith:yosemite_lowlands'])
+	global.tags.add(e, 'creativedelight:crow_nest_forests', ['minecraft:forest', 'minecraft:birch_forest', 'minecraft:old_growth_birch_forest',
+		'minecraft:dark_forest', 'minecraft:flower_forest', 'terralith:lavender_forest', 'terralith:moonlight_grove', 'terralith:sakura_grove'])
 })

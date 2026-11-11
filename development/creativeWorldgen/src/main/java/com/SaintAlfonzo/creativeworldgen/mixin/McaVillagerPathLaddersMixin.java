@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Ladders in MCA's villager node maker, which has no vertical moves: a ladder block in mid-air was OPEN (the walker
  * dropped through it) and a path never went up one. A block in both {@code #minecraft:climbable} and
- * {@code #creativeengineering:villager_ladders} (KubeJS blocktags.js, every "ladder" block; no vines, ropes, chains or
+ * {@code #creativeworldgen:villager_ladders} (KubeJS blocktags.js, every "ladder" block; no vines, ropes, chains or
  * scaffolding) is now:
  * <ul>
  *   <li>WALKABLE in getLandNodeType, so a villager can stand at any height of a ladder and a walk off a floor into a
@@ -42,7 +42,7 @@ public abstract class McaVillagerPathLaddersMixin extends NodeEvaluator {
 
     @Unique
     private static final TagKey<Block> CWG_VILLAGER_LADDERS =
-            TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeengineering", "villager_ladders"));
+            TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeworldgen", "villager_ladders"));
 
     @Shadow(remap = false)
     protected abstract ExtendedPathNodeType getNodeType(Mob entity, int x, int y, int z);

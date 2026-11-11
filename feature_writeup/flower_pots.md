@@ -94,7 +94,7 @@ gossypium. `/dumppots` replaces this count with the live map.
 ### 3.1 Botanist workbench as a flower pot (pack)
 
 Beautify's `BotanistWorkbench` is a plain `HorizontalDirectionalBlock`. `mixin/BotanistWorkbenchPotMixin` (`@Pseudo`)
-adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:botanist_pot`
+adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botanist_pot`
 (`compat/BotanistPotBlockEntity`) stores the plant's block id (NBT `Plant`).
 
 - **Plant list:** `compat/BotanistPot.use` follows vanilla `FlowerPotBlock.use` against the vanilla pot's
@@ -127,11 +127,11 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativeengineering:
 3. **Plant lists** (`kubejs/server_scripts/tags/misctags.js`). `#another_furniture:planter_box_placeables` gains beetroot
    seeds, cactus, carrot, chorus flower, cocoa beans, crimson and warped roots, dead bush, grass, fern, lilac, melon
    seeds, peony, potato, pumpkin seeds, rose bush, sunflower, nether sprouts, nether wart, glow berries, glow lichen.
-   `#creativeengineering:not_in_flower_boxes` (azalea, flowering azalea) goes in AF's `planter_box_banned` and the
+   `#creativecompat:not_in_flower_boxes` (azalea, flowering azalea) goes in AF's `planter_box_banned` and the
    Supplementaries box refuses it (`mixin/SuppFlowerBoxPlantsMixin`; boxes already holding one keep it).
-   `#creativeengineering:flower_box_plants` = the planter box list minus that tag, the Vinery box's list.
+   `#creativecompat:flower_box_plants` = the planter box list minus that tag, the Vinery box's list.
 4. **Botanist workbench** takes glow lichen (not in the vanilla pot map): `BotanistPot.pottedFor` returns the glow lichen
-   block itself, drawn from `creativeengineering:block/flower_box/glow_lichen_pot` (base at the pot soil, y4).
+   block itself, drawn from `creativecompat:block/flower_box/glow_lichen_pot` (base at the pot soil, y4).
 5. **Soil holders.** A Twigs silt pot filled with rooted dirt sustains any plant on top, like a Supplementaries planter
    (`mixin/SiltPotSoilMixin`, `canSustainPlant` true facing up). Silt pot items say "Use Rooted Dirt on it to fill it;
    plants then grow on top" (`tooltips.js`). The Vinery flower pot takes any `IPlantable` block

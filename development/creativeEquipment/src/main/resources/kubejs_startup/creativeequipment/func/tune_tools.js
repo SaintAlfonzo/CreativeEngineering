@@ -113,7 +113,7 @@ var i = global.item;
 
 	// ───────────────────────────── Deep Dark · echo ─────────────────────────────
 	tune(i.echo_sword,   { damage: 9,  attackSpeed: 1.65,               durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true }) // create_deep_dark:echo_sword
-	tune(i.echo_pickaxe, { damage: 6,   attackSpeed: 1.2, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true }) // creativeengineering:echo_pickaxe
+	tune(i.echo_pickaxe, { damage: 6,   attackSpeed: 1.2, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true }) // creativeequipment:echo_pickaxe
 	tune(i.echo_axe,     { damage: 12,  attackSpeed: 1, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true })
 	tune(i.echo_shovel,  { damage: 7, attackSpeed: 1.2, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true })
 	tune(i.echo_hoe,     { damage: 1,   attackSpeed: 4.5, miningSpeed: 10, durability: 2124, enchantability: 18, miningLevel: 4, rarity: 'epic', fireproof: true })

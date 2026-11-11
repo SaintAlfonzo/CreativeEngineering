@@ -199,7 +199,7 @@ Foods that get vinegar added carry a Foul Taste effect, on more foods than today
 1. Effect: per Decisions. A new one is a patcherMod `MobEffect` (pattern `potion/MagicResistanceEffect.java`), id
    `creativeengineering:foul_taste`, JEED text per [effects.md](../effects.md).
 2. Marking "vinegar added": the can item cannot tell, so either (a) the `_vinegar` recipes output the can with an NBT flag and a
-   KubeJS `ItemEvents.foodEaten` handler (CD `creativeengineering/canning.js` area) applies the effect, or (b) the effect goes on
+   KubeJS `ItemEvents.foodEaten` handler (CD `creativedelight/canning.js` area) applies the effect, or (b) the effect goes on
    every food whose recipe includes vinegar as an ingredient (cheese curds today, and any dish built later).
 3. JEED provider (jeed_providers.js) and tooltip line; changelog bullet.
 

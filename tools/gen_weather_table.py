@@ -493,7 +493,7 @@ def main():
       'in winter thunder is cleared and a dry spell longer than 1.5 days is cut to 0.5-1.5; in spring a dry spell '
       'longer than 4 days is cut to 0.5-4; in summer the wait for thunder is cut the same way to 0.5-1.5 days).\n')
     w('### 1.3 The pack\'s season types (Creative Calendar `seasons/SeasonTypes`)\n')
-    w('Biome tags `creativeengineering:seasons/<type>` from `kubejs/generation_scripts/worldgen/season_types.json`; '
+    w('Biome tags `creativecalendar:seasons/<type>` from `kubejs/generation_scripts/worldgen/season_types.json`; '
       'details and tests in [weather.md](weather.md). A tagged biome ignores Serene Seasons\' tropical rule and its '
       'blacklist (oceans). Oceans that are not frozen-tagged get the seasonal weather but keep vanilla ice (they never '
       'freeze over); frozen oceans freeze with the season.\n')
@@ -529,7 +529,7 @@ def main():
           'no block can sit that high, so snow only tells a flyer they are above build height; their snow-line '
           f'column reads "y{SNOW_LINE_MIN}". Frozen and permanent-season biomes keep their own rules. World generation '
           'keeps vanilla snow caps, which melt in seasons warm enough to rain.\n')
-        w('**Snow seasons** (`season_types.json` `snow_seasons`, tags `creativeengineering:snow/no_<sub_season>`): '
+        w('**Snow seasons** (`season_types.json` `snow_seasons`, tags `creativecalendar:snow/no_<sub_season>`): '
           'the sub-seasons a biome may snow in. In any other sub-season it rains instead, however cold the season '
           'makes it (below the snow line). Frozen biomes ignore it.\n')
         if SNOW_ALLOWED:
@@ -719,7 +719,7 @@ def main():
     others = sorted((b for b in biomes.values() if b.dims and 'minecraft:overworld' not in b.dims),
                     key=lambda b: (b.dims[0], b.id))
     w('## 4. Other dimensions (no seasons, vanilla rules)\n')
-    w('Overworld biomes reused in the pack\'s own dimensions (`creativeengineering:*`) are in section 3; they '
+    w('Overworld biomes reused in the pack\'s own dimensions (`creativeworldgen:*`) are in section 3; they '
       'follow vanilla rules there, since only the overworld is whitelisted (the season tags do nothing outside it).\n')
     w('| Biome | Dimensions | Base | Declared | At sea level | Snow line |')
     w('|---|---|---|---|---|---|')

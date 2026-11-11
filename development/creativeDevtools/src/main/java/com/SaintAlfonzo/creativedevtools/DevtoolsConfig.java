@@ -29,7 +29,9 @@ public final class DevtoolsConfig {
             new String[]{"testRecipes", "The Create test and showcase recipes (create/: a mechanical-crafting grid per metal and per",
                     "wood, and one sequenced-assembly chain with every legal step). Server scripts re-read it on /reload."},
             new String[]{"flowerWorld", "The Flower Test world builder (flowerworld/flower_world.js): builds the table on the first start",
-                    "of a Flower Test world, and /flowerworld."}
+                    "of a Flower Test world, and /flowerworld."},
+            new String[]{"structureCatalogue", "The Structure Catalogue world type (cdevplace/StructureCatalogue): lays out every structure on the",
+                    "first start of such a world, and /cdevplace catalogue build."}
     );
 
     public static final ForgeConfigSpec SPEC;

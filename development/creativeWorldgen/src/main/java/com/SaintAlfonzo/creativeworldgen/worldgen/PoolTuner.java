@@ -77,7 +77,7 @@ import java.util.regex.Pattern;
  */
 public final class PoolTuner {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/pool-tuning");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/pool-tuning");
 
 	static final String CONFIG = BiomeLayoutTuner.WORLDGEN_DIR + "pool_config.json";
 	static final String TAGS = BiomeLayoutTuner.WORLDGEN_DIR + "pool_tags.json";

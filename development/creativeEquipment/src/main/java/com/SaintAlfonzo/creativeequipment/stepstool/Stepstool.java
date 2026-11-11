@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
- * Stepstools: an item from {@code #creativeengineering:stepstools} in the Curios feet slot lets a player stand on it,
+ * Stepstools: an item from {@code #creativeequipment:stepstools} in the Curios feet slot lets a player stand on it,
  * one block higher (feature_writeup/stepstool.md).
  *
  * <ul>
@@ -60,7 +60,7 @@ import java.util.function.Supplier;
  */
 public final class Stepstool {
 
-    public static final TagKey<Item> TAG = ItemTags.create(new ResourceLocation("creativeengineering", "stepstools"));
+    public static final TagKey<Item> TAG = ItemTags.create(new ResourceLocation("creativeequipment", "stepstools"));
 
     private static final String PROTOCOL = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(

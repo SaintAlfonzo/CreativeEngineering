@@ -33,6 +33,9 @@ ClientEvents.lang('en_us', e => {
 	e.add('imm_ptl_core', 'entity.imm_ptl_core.mirror', 'Mirror')
 	e.add('imm_ptl_core', 'entity.imm_ptl_core.breakable_mirror', 'Mirror')
 
+	// Immersive Portals' Nether portal block shipped no name (TODO gameplay/tnt-and-portal #26; WTHIT showed the raw key)
+	e.add('imm_ptl_core', 'block.imm_ptl_core.nether_portal_block', 'Nether Portal')
+
 	// Design and Decor's tinted framed glass shared Create Framed's names (plan_portal_changes.md 4, M2)
 	e.add('design_decor', 'block.design_decor.tinted_framed_glass', 'Smooth Tinted Glass')
 	e.add('design_decor', 'block.design_decor.horizontal_tinted_framed_glass', 'Horizontal Smooth Tinted Glass')

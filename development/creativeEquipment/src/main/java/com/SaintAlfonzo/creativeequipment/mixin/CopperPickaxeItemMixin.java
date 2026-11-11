@@ -13,7 +13,7 @@ import com.SaintAlfonzo.creativeequipment.CEQTiers;
 /**
  * Everything Copper builds its copper pickaxe on {@link Tiers#STONE}. This swaps that tier
  * for the pack's {@link CEQTiers#COPPER} (mining level 1 plus the
- * {@code creativeengineering:needs_copper_tool} block tag, 180 uses, speed 6) as the
+ * {@code creativeequipment:needs_copper_tool} block tag, 180 uses, speed 6) as the
  * constructor's tier argument comes in. Any other tier passed in is left alone.
  */
 @Mixin(CopperPickaxeItem.class)

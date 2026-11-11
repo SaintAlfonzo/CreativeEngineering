@@ -112,7 +112,7 @@ public final class WorldgenConfig {
 	public static int groundBaseLayers() { return get(() -> wg().groundMatch.baseLayers.get(), 3); }
 	public static double groundNativeShare() { return get(() -> wg().groundMatch.nativeShare.get(), 0.35); }
 	public static int groundMinSamples() { return get(() -> wg().groundMatch.minSamples.get(), 16); }
-	public static List<? extends String> groundFamilies() { return get(() -> wg().groundMatch.families.get(), List.of("creativeengineering:ground_match/grass")); }
+	public static List<? extends String> groundFamilies() { return get(() -> LegacyIds.configIds(wg().groundMatch.families.get()), List.of("creativeworldgen:ground_match/grass")); }
 	public static boolean groundLog() { return get(() -> wg().groundMatch.log.get(), false); }
 	public static int groundCenterStride() { return get(() -> wg().groundMatch.centerStride.get(), 2); }
 	public static int groundNeighbourStride() { return get(() -> wg().groundMatch.neighbourStride.get(), 4); }
@@ -142,15 +142,15 @@ public final class WorldgenConfig {
 				get(() -> wg().earthFill.sizes.large.get(), List.of(160, 64)), get(() -> wg().earthFill.sizes.huge.get(), List.of(320, 128)));
 	}
 	public static int earthBaseLayers() { return get(() -> wg().earthFill.baseLayers.get(), 3); }
-	public static List<? extends String> earthBlocks() { return get(() -> wg().earthFill.blocks.get(), List.of("creativeengineering:earth_fill/earth")); }
-	public static List<? extends String> earthOverrides() { return get(() -> wg().earthFill.overrides.get(), List.<String>of()); }
+	public static List<? extends String> earthBlocks() { return get(() -> LegacyIds.configIds(wg().earthFill.blocks.get()), List.of("creativeworldgen:earth_fill/earth")); }
+	public static List<? extends String> earthOverrides() { return get(() -> LegacyIds.configIds(wg().earthFill.overrides.get()), List.<String>of()); }
 	public static int earthSampleGrid() { return get(() -> wg().earthFill.sampleGrid.get(), 4); }
 	public static CWGConfig.EarthFillLog earthLog() { return get(() -> wg().earthFill.log.get(), CWGConfig.EarthFillLog.CANCELLED); }
 
 	// ── water fill ───────────────────────────────────────────────────────────
 	public static int waterMaxIntoGround() { return get(() -> wg().waterFill.maxIntoGround.get(), 32); }
 	public static int waterMaxIntoAir() { return get(() -> wg().waterFill.maxIntoAir.get(), 16); }
-	public static List<? extends String> waterOverrides() { return get(() -> wg().waterFill.overrides.get(), List.of("#creativeengineering:water_fill/ponds=-1,16")); }
+	public static List<? extends String> waterOverrides() { return get(() -> LegacyIds.configIds(wg().waterFill.overrides.get()), List.of("#creativeworldgen:water_fill/ponds=-1,16")); }
 	public static CWGConfig.EarthFillLog waterLog() { return get(() -> wg().waterFill.log.get(), CWGConfig.EarthFillLog.CANCELLED); }
 
 	// ── terrain adaptation ───────────────────────────────────────────────────

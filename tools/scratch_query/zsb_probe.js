@@ -1,7 +1,7 @@
 // Scratch-only probe for run r1103 slice B (tools/scratch_query/batches/r1103/sB_*.qb). Copy into a scratch server's
 // kubejs/server_scripts as zz_zsb_probe.js, never into the pack. Output: "[zsb] ..." lines in logs/latest.log, then
 // "[zsb] done".
-//   /zsb cans                    every recipe with an ingredient that accepts a pack can (#creativeengineering:cans or a
+//   /zsb cans                    every recipe with an ingredient that accepts a pack can (#creativedelight:cans or a
 //                                creativeengineering:canned_* item): "can <serializer> <id> -> <result>"; "VIOLATION ..."
 //                                for a crafting recipe whose id does not end _manual_only, or a create:mixing /
 //                                create:mechanical_crafting / immersiveengineering:* / ae2:* recipe taking a can whose
@@ -37,7 +37,7 @@
     }
     function packCans() {
         let set = {}
-        let key = $ZSBTagKey.create($ZSBReg.ITEM_REGISTRY, new $ZSBRL('creativeengineering:cans'))
+        let key = $ZSBTagKey.create($ZSBReg.ITEM_REGISTRY, new $ZSBRL('creativedelight:cans'))
         $ZSBReg.ITEM.getTagOrEmpty(key).forEach(h => { set[String($ZSBReg.ITEM.getKey(h.value()))] = true })
         $ZSBReg.ITEM.keySet().forEach(rl => {
             let id = String(rl)

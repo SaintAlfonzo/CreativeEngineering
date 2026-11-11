@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 /**
- * creativeengineering:air_brake - the item itself (paper texture, bow-style hold-to-use
+ * creativeequipment:air_brake - the item itself (paper texture, bow-style hold-to-use
  * duration) is registered entirely in KubeJS ({@code startup_scripts/items/air_brake.js});
  * what KubeJS can't do is touch a player's velocity mid-flight, so the actual slowdown
  * lives here.
@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 public final class AirBrakeHandler {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ITEM_ID = new ResourceLocation("creativeengineering", "air_brake");
+    private static final ResourceLocation ITEM_ID = new ResourceLocation("creativeequipment", "air_brake");
 
     // Entity's own FLAG_FALL_FLYING bit index (see Entity#isFallFlying's shared-flag lookup) -
     // there's no public API to clear it, so stopFallFlying() below reaches Entity#setSharedFlag

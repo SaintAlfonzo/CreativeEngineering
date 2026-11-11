@@ -23,6 +23,7 @@ public final class CWGConfig {
     public static final Perf PERF;
     public static final Worldgen WORLDGEN;
     public static final NamedMobs NAMED_MOBS;
+    public static final WiseOak WISE_OAK;
 
     /** The toml tables carried over from creativeengineering-common.toml ({@code [perf]} keeps only its mob cap keys). */
     public static final List<String> SECTIONS =
@@ -36,10 +37,83 @@ public final class CWGConfig {
         PERF = new Perf(builder);
         WORLDGEN = new Worldgen(builder);
         NAMED_MOBS = new NamedMobs(builder);
+        WISE_OAK = new WiseOak(builder);
         SPEC = builder.build();
     }
 
     public enum PullDirection { TOWARD, AWAY }
+
+    /** Timers for {@code mixin/wiseoak/WiseOakTileMixin} (feature_writeup/wise_oak.md 4.3). */
+    public static final class WiseOak {
+        public final ForgeConfigSpec.IntValue sleepDurationSeconds;
+        public final ForgeConfigSpec.IntValue angerDurationSeconds;
+        public final ForgeConfigSpec.IntValue angrySleepDurationSeconds;
+        public final ForgeConfigSpec.DoubleValue giftChancePercent;
+        public final ForgeConfigSpec.IntValue giftTrustThreshold;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> giftSaplings;
+        public final ForgeConfigSpec.IntValue giftSaplingCount;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> giftFruitSaplings;
+        public final ForgeConfigSpec.IntValue giftFruitSaplingCount;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> giftFruit;
+        public final ForgeConfigSpec.IntValue giftFruitCount;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> giftLeaves;
+        public final ForgeConfigSpec.IntValue giftLeavesCount;
+
+        private WiseOak(ForgeConfigSpec.Builder b) {
+            b.comment("Wise Oak sleep and anger timers, in real seconds. Server side.").push("wise_oak");
+            sleepDurationSeconds = b.comment("How long a Wise Oak sleeps after it gets tired of talking.")
+                    .defineInRange("sleepDurationSeconds", 300, 0, 86400);
+            angerDurationSeconds = b.comment("How long a Wise Oak stays angry.")
+                    .defineInRange("angerDurationSeconds", 30, 0, 86400);
+            angrySleepDurationSeconds = b.comment("How long a Wise Oak sleeps once its anger ends.")
+                    .defineInRange("angrySleepDurationSeconds", 600, 0, 86400);
+
+            b.comment(
+                    "Gifts: after a conversation with an awake Wise Oak, a player at or above the trust threshold has a",
+                    "chance of a drop. One of the four lists is picked evenly, then one item in it. An empty list is left",
+                    "out of the draw; an unknown id is skipped with a warning in the log."
+            ).push("gifts");
+            giftChancePercent = b.comment("Chance of a gift per conversation, in percent. 0 turns gifts off.")
+                    .defineInRange("chancePercent", 5.0D, 0.0D, 100.0D);
+            giftTrustThreshold = b.comment("Trust needed for a gift (0 to 100, +5 per conversation).")
+                    .defineInRange("trustThreshold", 75, 0, 100);
+            giftSaplings = b.comment("Saplings of Overworld trees.")
+                    .defineListAllowEmpty(List.of("saplings"), () -> List.of(
+                    "minecraft:oak_sapling", "minecraft:spruce_sapling", "minecraft:birch_sapling", "minecraft:jungle_sapling",
+                    "minecraft:acacia_sapling", "minecraft:dark_oak_sapling", "minecraft:mangrove_propagule", "minecraft:azalea",
+                    "minecraft:flowering_azalea", "myrtrees:rubberwood_sapling", "quark:ancient_sapling", "quark:blue_blossom_sapling",
+                    "quark:lavender_blossom_sapling", "quark:orange_blossom_sapling", "quark:pink_blossom_sapling", "quark:red_blossom_sapling",
+                    "quark:yellow_blossom_sapling"), o -> o instanceof String);
+            giftSaplingCount = b.comment("Items dropped from the saplings list.").defineInRange("saplingCount", 1, 1, 64);
+            giftFruitSaplings = b.comment("Fruit tree saplings.")
+                    .defineListAllowEmpty(List.of("fruitSaplings"), () -> List.of(
+                    "fruitsdelight:bayberry_sapling", "fruitsdelight:durian_sapling", "fruitsdelight:fig_sapling", "fruitsdelight:hawberry_sapling",
+                    "fruitsdelight:kiwi_sapling", "fruitsdelight:lychee_sapling", "fruitsdelight:mango_sapling", "fruitsdelight:mangosteen_sapling",
+                    "fruitsdelight:orange_sapling", "fruitsdelight:peach_sapling", "fruitsdelight:pear_sapling", "fruitsdelight:persimmon_sapling",
+                    "vinery:apple_tree_sapling", "vinery:cherry_sapling"), o -> o instanceof String);
+            giftFruitSaplingCount = b.comment("Items dropped from the fruitSaplings list.").defineInRange("fruitSaplingCount", 1, 1, 64);
+            giftFruit = b.comment("Fruit of trees that grow in the Overworld.")
+                    .defineListAllowEmpty(List.of("fruit"), () -> List.of(
+                    "minecraft:apple", "vinery:cherry", "fruitsdelight:bayberry",
+                    "fruitsdelight:durian", "fruitsdelight:fig", "fruitsdelight:hawberry", "fruitsdelight:kiwi",
+                    "fruitsdelight:lychee", "fruitsdelight:mango", "fruitsdelight:mangosteen", "fruitsdelight:orange",
+                    "fruitsdelight:peach", "fruitsdelight:pear", "fruitsdelight:persimmon"), o -> o instanceof String);
+            giftFruitCount = b.comment("Items dropped from the fruit list.").defineInRange("fruitCount", 4, 1, 64);
+            giftLeaves = b.comment("Leaves of the trees in the two sapling lists.")
+                    .defineListAllowEmpty(List.of("leaves"), () -> List.of(
+                    "minecraft:oak_leaves", "minecraft:spruce_leaves", "minecraft:birch_leaves", "minecraft:jungle_leaves",
+                    "minecraft:acacia_leaves", "minecraft:dark_oak_leaves", "minecraft:mangrove_leaves", "minecraft:azalea_leaves",
+                    "minecraft:flowering_azalea_leaves", "myrtrees:rubberwood_leaves", "quark:blue_blossom_leaves",
+                    "quark:lavender_blossom_leaves", "quark:orange_blossom_leaves", "quark:pink_blossom_leaves", "quark:red_blossom_leaves",
+                    "quark:yellow_blossom_leaves", "fruitsdelight:bayberry_leaves", "fruitsdelight:durian_leaves", "fruitsdelight:fig_leaves",
+                    "fruitsdelight:hawberry_leaves", "fruitsdelight:kiwi_leaves", "fruitsdelight:lychee_leaves", "fruitsdelight:mango_leaves",
+                    "fruitsdelight:mangosteen_leaves", "fruitsdelight:orange_leaves", "fruitsdelight:peach_leaves", "fruitsdelight:pear_leaves",
+                    "fruitsdelight:persimmon_leaves", "vinery:apple_leaves", "vinery:cherry_leaves"), o -> o instanceof String);
+            giftLeavesCount = b.comment("Items dropped from the leaves list.").defineInRange("leavesCount", 16, 1, 64);
+            b.pop();
+            b.pop();
+        }
+    }
 
     /** Dials for {@code mixin/ForgivingVoidMixin}'s origin-pull behaviour. */
     public static final class ForgivingVoid {
@@ -316,10 +390,10 @@ public final class CWGConfig {
             waterFill = b.comment("Cancel a water structure whose water would replace too much dry ground or air ([worldgen.water_fill]).",
                     "New chunks only.")
                     .define("waterFill", true);
-            terrainAdaptation = b.comment("The creativeengineering:terrain_adaptation/* structure tags replace a structure's own terrain adaptation",
+            terrainAdaptation = b.comment("The creativeworldgen:terrain_adaptation/* structure tags replace a structure's own terrain adaptation",
                     "(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.")
                     .define("terrainAdaptation", true);
-            templateTrim = b.comment("Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,",
+            templateTrim = b.comment("Structures in the creativeworldgen:template_trim tag skip their template's air and bare pad (grass,",
                     "dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.")
                     .define("templateTrim", true);
             metaStructures = b.comment("meta_structures.json: our structures built from other structures and features (a village with peaceful",
@@ -478,8 +552,8 @@ public final class CWGConfig {
                     "Structure bases that don't match the ground. As a structure generates, grass/dirt in the bottom",
                     "layers of its templates is compared with the natural ground sampled around that chunk; where the",
                     "ground isn't grass/dirt (volcanic peaks, deserts, snowy slopes, badlands...) the base becomes that",
-                    "ground instead. Blocks: tags creativeengineering:ground_match/* (kubejs blocktags.js). Exempt a",
-                    "structure with the structure tag creativeengineering:ground_match/exempt. New chunks only."
+                    "ground instead. Blocks: tags creativeworldgen:ground_match/* (kubejs blocktags.js). Exempt a",
+                    "structure with the structure tag creativeworldgen:ground_match/exempt. New chunks only."
             ).push("ground_match");
 
             mode = b.comment(
@@ -507,7 +581,7 @@ public final class CWGConfig {
             families = b.comment(
                     "Block tags, one per base family. A family block in a base is swapped where its family isn't",
                     "native. Add a tag here (and fill it in blocktags.js) to match another kind of base, e.g. sand."
-            ).defineList("families", List.of("creativeengineering:ground_match/grass"),
+            ).defineList("families", List.of("creativeworldgen:ground_match/grass"),
                     o -> o instanceof String str && str.contains(":"));
 
             log = b.comment("Log each changed template (chunk, family share, palettes). For testing.")
@@ -534,7 +608,7 @@ public final class CWGConfig {
      * Knobs for {@code worldgen/EarthFill}: a structure is cancelled before it is stored when the earth
      * blocks in the bottom layers of its templates would sit on water or in air, judged against the
      * terrain the generator predicts there. Which blocks are earth is a block tag (kubejs blocktags.js);
-     * structures that float on purpose are in the structure tag creativeengineering:earth_fill/exempt
+     * structures that float on purpose are in the structure tag creativeworldgen:earth_fill/exempt
      * (kubejs worldgen/earth_fill.js). Read while chunks generate. On/off: [worldgen.systems] earthFill.
      */
     public static final class EarthFill {
@@ -570,7 +644,7 @@ public final class CWGConfig {
                     "limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared",
                     "with other structures tries the next pick). The limits scale with the structure's size (its earth",
                     "base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never",
-                    "counted. Exempt a structure with the structure tag creativeengineering:earth_fill/exempt. New",
+                    "counted. Exempt a structure with the structure tag creativeworldgen:earth_fill/exempt. New",
                     "chunks only; /place structure is not checked."
             ).push("earth_fill");
 
@@ -589,7 +663,7 @@ public final class CWGConfig {
                     "doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,",
                     "whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers",
                     "blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in",
-                    "creativeengineering:water_fill/structures; an override with every limit -1 skips it too. Default 0",
+                    "creativeworldgen:water_fill/structures; an override with every limit -1 skips it too. Default 0",
                     "(2026-10-30, was 0.5): the strictest setting, any start standing more on water than on ground goes."
             ).defineInRange("maxWaterSurplus", 0.0, -1.0, 1000.0);
             footprintAllPieces = b.comment(
@@ -631,7 +705,7 @@ public final class CWGConfig {
                     "limit. Off until calibrated on a log = ALL scratch run."
             ).define("beardFootprint", false);
             prune = b.comment(
-                    "For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start",
+                    "For structures in the structure tag creativeworldgen:earth_fill/prune (villages): before the whole start",
                     "is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound",
                     "is dropped with every piece attached below it (a house over deep water with its villagers). So is a piece",
                     "whose own footprint is too wet (maxWaterSurplus) with at least pruneMinWetColumns water columns. The street",
@@ -651,8 +725,8 @@ public final class CWGConfig {
                     "With prune on, every other jigsaw structure on the surface (camps, outposts, ruins, towers; meta",
                     "structure parts and anchors too) drops a piece whose own footprint is too wet the same way, with every",
                     "piece attached below it; the piece limits above stay for villages. The first piece is never dropped,",
-                    "and the rest is then judged as usual. Not for creativeengineering:water_fill/structures,",
-                    "creativeengineering:earth_fill/wet_ok or the structure tag creativeengineering:earth_fill/no_prune",
+                    "and the rest is then judged as usual. Not for creativeworldgen:water_fill/structures,",
+                    "creativeworldgen:earth_fill/wet_ok or the structure tag creativeworldgen:earth_fill/no_prune",
                     "(structures whose pieces only make sense together). Off: only villages are pruned (before 2026-10-30)."
             ).define("pruneWetJigsaws", true);
             footprintMinWater = b.comment(
@@ -667,12 +741,12 @@ public final class CWGConfig {
             blocks = b.comment(
                     "Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag",
                     "here to count another kind of block."
-            ).defineList("blocks", List.of("creativeengineering:earth_fill/earth"),
+            ).defineList("blocks", List.of("creativeworldgen:earth_fill/earth"),
                     o -> o instanceof String str && str.contains(":"));
             overrides = b.comment(
                     "Per-structure limits, one entry each: \"<structure id or #structure tag>=<water>,<air>[,<mound>]\",",
                     "e.g. \"philipsruins:ancient_ruins=0,16\" (never over water, at most 16 over air after the beard,",
-                    "mound from its size) or \"#creativeengineering:type/village=-1,-1,-1\" (no limits). They replace the",
+                    "mound from its size) or \"#creativeworldgen:type/village=-1,-1,-1\" (no limits). They replace the",
                     "size's limits. The first matching entry wins; -1 = no limit."
             ).defineList("overrides", List.of(), o -> o instanceof String str && str.contains("="));
             sampleGrid = b.comment(
@@ -723,7 +797,7 @@ public final class CWGConfig {
 
     /**
      * Knobs for the water half of {@code worldgen/EarthFill}: a structure in the structure tag
-     * creativeengineering:water_fill/structures (kubejs worldgen/water_fill.js) is cancelled before it is
+     * creativeworldgen:water_fill/structures (kubejs worldgen/water_fill.js) is cancelled before it is
      * stored when the water its templates carry would replace too much dry ground or air, judged against
      * the same predicted terrain as earth fill (and its sampleGrid). On/off: [worldgen.systems] waterFill.
      */
@@ -736,7 +810,7 @@ public final class CWGConfig {
         private WaterFill(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Water structures that would flood the land. Just before a structure start in the structure tag",
-                    "creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,",
+                    "creativeworldgen:water_fill/structures is stored, every water block of its template pieces (water,",
                     "waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts",
                     "at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water",
                     "replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)",
@@ -754,10 +828,10 @@ public final class CWGConfig {
             ).defineInRange("maxIntoAir", 16, -1, 100000);
             overrides = b.comment(
                     "Per-structure limits, one entry each: \"<structure id or #structure tag>=<ground>,<air>\". The default",
-                    "lets the structures in creativeengineering:water_fill/ponds (fish ponds, a house on a pond) dig their",
+                    "lets the structures in creativeworldgen:water_fill/ponds (fish ponds, a house on a pond) dig their",
                     "water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.",
-                    "Only structures in creativeengineering:water_fill/structures are checked at all."
-            ).defineList("overrides", List.of("#creativeengineering:water_fill/ponds=-1,16"), o -> o instanceof String str && str.contains("="));
+                    "Only structures in creativeworldgen:water_fill/structures are checked at all."
+            ).defineList("overrides", List.of("#creativeworldgen:water_fill/ponds=-1,16"), o -> o instanceof String str && str.contains("="));
             log = b.comment(
                     "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
                     "structure that carries any water. For tuning the limits."
@@ -779,9 +853,9 @@ public final class CWGConfig {
                     "Terrain around structures. Vanilla's beard flattens the whole template bounding box and blends it out",
                     "over about 8 blocks around it, so a small structure with a flat pad or a lot of saved air leaves a flat",
                     "rectangle the size of its whole template in a curved hillside. Structures in the structure tag",
-                    "creativeengineering:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but",
+                    "creativeworldgen:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but",
                     "only under the template's built columns (pad and air columns left out when the structure is also in",
-                    "creativeengineering:template_trim), blending out over a short round skirt. Tags: kubejs",
+                    "creativeworldgen:template_trim), blending out over a short round skirt. Tags: kubejs",
                     "worldgen/terrain_adaptation.js. New chunks only."
             ).push("terrain_adaptation");
             skirtBump = b.comment(
@@ -990,10 +1064,10 @@ public final class CWGConfig {
                     "fitted, or which part fell short (the slot is then the plain anchor)."
             ).define("log", false);
             avoidCoasts = b.comment(
-                    "Keep meta structures out of coasts and rivers (the biome tag creativeengineering:coast_river: beaches,",
+                    "Keep meta structures out of coasts and rivers (the biome tag creativeworldgen:coast_river: beaches,",
                     "shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box",
                     "(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,",
-                    "which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,",
+                    "which still spawns as it would alone. Metas in the structure tag creativeworldgen:meta/coast_ok (fleets,",
                     "flotillas, wrecks, sunken ruins) are not affected. New chunks only."
             ).define("avoidCoasts", true);
             keepShortParts = b.comment(

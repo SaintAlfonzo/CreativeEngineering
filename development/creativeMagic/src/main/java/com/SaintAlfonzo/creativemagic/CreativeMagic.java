@@ -31,15 +31,16 @@ import org.slf4j.Logger;
  * Creative Engineering 2026-11-06). Requires patcherMod
  * ({@code creativeengineering}, later Creative Common) and Creative Compat.
  *
- * Ids stay: Dark Fire and Flint and Terrasteel keep the {@code creativeengineering} namespace ({@link #NS}); this mod id
- * is only the jar's identity, its config file and its script packs.
+ * Dark Fire and Flint and Terrasteel are registered under this mod's namespace ({@link #NS}); until the 2026-11-10
+ * namespace move (feature_writeup/namespace_move.md) they were {@code creativeengineering}, and the swap list
+ * data/creativemagic/swaps/owner_namespace.json carries old saves.
  */
 @Mod(CreativeMagic.MOD_ID)
 public class CreativeMagic {
 
     public static final String MOD_ID = "creativemagic";
-    /** The namespace of every id this mod registers: patcherMod's, unchanged by the carve. */
-    public static final String NS = "creativeengineering";
+    /** The namespace of every id this mod registers (was creativeengineering until the 2026-11-10 namespace move). */
+    public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String OLD_FILE = "creativeengineering-common.toml";

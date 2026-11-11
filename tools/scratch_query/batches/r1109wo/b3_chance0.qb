@@ -1,0 +1,18 @@
+# r1109wo boot A3: chancePercent 0, trustThreshold 0.
+pace 1
+## SQ-WO-31 | chance 0 never gifts
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> time set noon
+> setblock 610 -60 300 mysticaloaktree:wise_oak
+repeat 5
+> wiseoak trust 610 -60 300 G 100
+> pbot use G 610 -60 300 up
+> zwo skip 60
+end
+> zwo drops 610 -60 300 3
+sleep 1
+expect \[zwo\] drops none

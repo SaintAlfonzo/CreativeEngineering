@@ -205,7 +205,7 @@
         let missing = SOUPS.filter(id => items.get(item(id)) == null)
         check('24 soups are soft fluid items', missing.length == 0, missing.length + ' missing: ' + missing.join(', '))
         let tagIds = []
-        let it = Ingredient.of('#creativeengineering:food_type/soup').getStacks().iterator()
+        let it = Ingredient.of('#creativedelight:food_type/soup').getStacks().iterator()
         while (it.hasNext()) tagIds.push(itemId(it.next()))
         let tagMissing = tagIds.filter(id => items.get(item(id)) == null)
         check('every #food_type/soup item is a soft fluid item', tagMissing.length == 0, tagMissing.join(', ') || 'all')

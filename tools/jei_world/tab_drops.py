@@ -263,7 +263,7 @@ def jar_rows(ctx, pack):
 
 def cookie_rows(pack, cap):
     rows = []
-    families = sorted(t for t in pack.item_tags if t.startswith('creativeengineering:jar_family/'))
+    families = sorted(t for t in pack.item_tags if t.startswith('creativedelight:jar_family/'))
     in_family = set()
     for t in families:
         members = [m for m in pack.item_tags[t] if pack.ok(m)]

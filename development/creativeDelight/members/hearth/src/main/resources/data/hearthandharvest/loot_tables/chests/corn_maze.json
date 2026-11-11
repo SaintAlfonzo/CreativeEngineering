@@ -80,7 +80,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "creativeengineering:cornmeal",
+          "name": "creativedelight:cornmeal",
           "weight": 6,
           "functions": [
             {

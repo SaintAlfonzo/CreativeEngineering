@@ -13,7 +13,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Bread rolls ####################
-		// Sweet roll and the Create Factory rolls took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		// Sweet roll and the Create Factory rolls took only vanilla bread; any bread works (creativedelight/bread_tags.js)
 		R.replaceInput([{ id: 'create:filling/sweet_roll' }, { id: /^create_factory:(caramel|chocolate|dark_chocolate|honey|ruby_chocolate|white_chocolate)_roll$/ }],
 			i.minecraft_bread, i.t_bread, e)
 
@@ -50,7 +50,7 @@ ServerEvents.recipes(e => {
 				R.ieBottling(i.dough_block, f.t_water, i.wheat_flour_pile, e, undefined, 1000)
 			}
 		}
-		// Dough blocks for the other doughs: creativeengineering/recipes.js
+		// Dough blocks for the other doughs: creativedelight/recipes.js
 		if (Platform.isLoaded('immersiveengineering')) {
 			R.ieCrushing(Item.of(i.flour, 2), i.wheat, e)
 			R.ieCrushing(Item.of(i.flour, 18), i.hay_bale, e)

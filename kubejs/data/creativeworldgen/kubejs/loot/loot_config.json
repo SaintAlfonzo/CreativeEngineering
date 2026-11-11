@@ -2054,7 +2054,7 @@
       "chests": 5,
       "where": {
         "minecraft:chests/bastion_other": 24.4,
-        "creativeengineering:misc/monster_box_reward": 11.3,
+        "creativecompat:misc/monster_box_reward": 11.3,
         "philipsruins:chest/nether_ruins_low": 10.3,
         "hopo:chests/food": 8.5,
         "terralith:spire/common": 5.23
@@ -2210,7 +2210,7 @@
         "minecraft:chests/jungle_temple": 3.21,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
-        "creativeengineering:misc/monster_box_reward": 1.41,
+        "creativecompat:misc/monster_box_reward": 1.41,
         "minecraft:chests/bastion_hoglin_stable": 0.257
       }
     },
@@ -2398,7 +2398,7 @@
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_normal": 9.38,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_treasure": 9.38,
         "wares:agreement/village/desert_requested_sell": 8.33,
-        "creativeengineering:misc/monster_box_reward": 7.06
+        "creativecompat:misc/monster_box_reward": 7.06
       }
     },
     "minecraft:brewing_stand": {
@@ -2915,7 +2915,7 @@
         "hopo:chests/small_ruin_cold": 17.7,
         "wares:agreement/village/snowy_requested_sell": 14.3,
         "betterstrongholds:chests/armoury": 12.8,
-        "creativeengineering:misc/monster_box_reward": 11.3,
+        "creativecompat:misc/monster_box_reward": 11.3,
         "hopo:chests/small_ruin_warm": 10.6,
         "hopo:chests/food": 10.5,
         "philipsruins:chest/ocean_ruin_fortress": 10.4,
@@ -3006,7 +3006,7 @@
         "underground_bunkers:chests/underground_bunker/underground_bunker_supply": 34.4,
         "underground_bunkers:chests/underground_bunker/underground_bunker_normal": 25.0,
         "betterstrongholds:chests/common": 12.7,
-        "creativeengineering:misc/monster_box_reward": 8.47
+        "creativecompat:misc/monster_box_reward": 8.47
       }
     },
     "minecraft:cocoa_beans": {
@@ -3315,7 +3315,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "creativeengineering:misc/monster_box_reward": 2.82
+        "creativecompat:misc/monster_box_reward": 2.82
       }
     },
     "minecraft:crimson_fungus": {
@@ -3595,7 +3595,7 @@
         "betterdungeons:spider_dungeon/chests/egg_room": 4.24,
         "terralith:village/desert/smith/novice": 3.84,
         "skyvillages:chests/supplementaries/sky_village_supplementaries_urn": 3.45,
-        "creativeengineering:misc/monster_box_reward": 2.82,
+        "creativecompat:misc/monster_box_reward": 2.82,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 2.44,
         "simply_houses:chests/taiga_house/taiga_house_normal": 2.44,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 2.44,
@@ -3722,7 +3722,7 @@
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
         "betterfortresses:chests/keep": 1.53,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:diamond_leggings": {
@@ -3771,7 +3771,7 @@
         "terralith:village/desert/smith": 5.0,
         "terralith:village/fortified/smith": 5.0,
         "terralith:underground/chest": 4.55,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:diamond_shovel": {
@@ -3811,7 +3811,7 @@
         "betterdungeons:zombie_dungeon/chests/common": 4.94,
         "betterdungeons:zombie_dungeon/chests/special": 4.94,
         "betterstrongholds:chests/armoury": 3.76,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:dirt": {
@@ -4852,7 +4852,7 @@
         "simply_houses:chests/taiga_forge/taiga_forge_barrels": 1.28,
         "simply_houses:chests/taiga_house/taiga_house_barrels": 1.28,
         "simply_houses:chests/taiga_woodcutter/taiga_woodcutter_barrels": 1.28,
-        "creativeengineering:misc/monster_box_reward": 0.282,
+        "creativecompat:misc/monster_box_reward": 0.282,
         "simply_houses:chests/taiga_forge/taiga_forge_normal": 0.0384,
         "simply_houses:chests/taiga_house/taiga_house_normal": 0.0384,
         "simply_houses:chests/taiga_inn/taiga_inn_barrels": 0.0384,
@@ -5037,7 +5037,7 @@
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
         "philipsruins:chest/sculk_dungeon_loot": 2.27,
-        "creativeengineering:misc/monster_box_reward": 0.847
+        "creativecompat:misc/monster_box_reward": 0.847
       }
     },
     "minecraft:golden_leggings": {
@@ -5612,7 +5612,7 @@
         "betterjungletemples:chests/campsite": 2.96,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
-        "creativeengineering:misc/monster_box_reward": 1.69
+        "creativecompat:misc/monster_box_reward": 1.69
       }
     },
     "minecraft:iron_ingot": {
@@ -6661,7 +6661,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_13": {
@@ -6674,7 +6674,7 @@
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 24.6,
         "minecraft:chests/simple_dungeon": 21.4,
         "minecraft:chests/ancient_city": 16.1,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_5": {
@@ -6694,7 +6694,7 @@
         "betterdungeons:small_nether_dungeon/chests/common": 26.9,
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_cat": {
@@ -6715,7 +6715,7 @@
         "philipsruins:chest/nether_lava_ruins_loot": 4.65,
         "philipsruins:chest/bone_dungeon_loot": 3.76,
         "philipsruins:chest/sculk_dungeon_loot": 3.02,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_chirp": {
@@ -6726,7 +6726,7 @@
         "betterdungeons:small_nether_dungeon/chests/common": 26.9,
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_far": {
@@ -6737,7 +6737,7 @@
         "philipsruins:chest/badlands_dungeon_loot_high": 6.31,
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_mall": {
@@ -6747,7 +6747,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_mellohi": {
@@ -6757,7 +6757,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_otherside": {
@@ -6793,7 +6793,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_strad": {
@@ -6803,7 +6803,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_wait": {
@@ -6814,7 +6814,7 @@
         "mysticrift_pillagers_towers_aris:chests/fixed/6670cd9330": 100.0,
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:music_disc_ward": {
@@ -6824,7 +6824,7 @@
       "where": {
         "subterrestrial:chests/cabin/music": 5.29,
         "underground_bunkers:chests/underground_bunker/underground_bunker_treasure": 3.95,
-        "creativeengineering:misc/monster_box_reward": 0.282
+        "creativecompat:misc/monster_box_reward": 0.282
       }
     },
     "minecraft:mutton": {
@@ -6868,7 +6868,7 @@
         "philipsruins:chest/ocean_ruins_loot": 7.73,
         "betterdungeons:skeleton_dungeon/chests/common": 7.23,
         "philipsruins:chest/ocean_ruin_fortress": 6.88,
-        "creativeengineering:misc/monster_box_reward": 2.82
+        "creativecompat:misc/monster_box_reward": 2.82
       }
     },
     "minecraft:nautilus_shell": {
@@ -7750,7 +7750,7 @@
         "wares:agreement/village/desert_payment_buy": 15.6,
         "wares:package/village/desert": 9.8,
         "wares:agreement/village/desert_requested_sell": 8.33,
-        "creativeengineering:misc/monster_box_reward": 7.06
+        "creativecompat:misc/monster_box_reward": 7.06
       }
     },
     "minecraft:rabbit_stew": {
@@ -7780,7 +7780,7 @@
         "desert_village_temple:chests/fixed/8ceac6a077": 100.0,
         "terralith:underground/chest": 32.7,
         "hopo:chests/copper": 32.4,
-        "creativeengineering:misc/monster_box_reward": 11.3
+        "creativecompat:misc/monster_box_reward": 11.3
       }
     },
     "minecraft:raw_copper_block": {
@@ -7809,7 +7809,7 @@
         "terralith:underground/chest": 32.7,
         "terralith:village/fortified/treasure": 20.4,
         "hopo:chests/materials": 18.0,
-        "creativeengineering:misc/monster_box_reward": 8.47
+        "creativecompat:misc/monster_box_reward": 8.47
       }
     },
     "minecraft:raw_gold_block": {
@@ -7837,7 +7837,7 @@
         "terralith:underground/chest": 32.7,
         "hopo:chests/materials": 18.0,
         "kaisyn:outpost/common/armory": 14.9,
-        "creativeengineering:misc/monster_box_reward": 11.3
+        "creativecompat:misc/monster_box_reward": 11.3
       }
     },
     "minecraft:raw_iron_block": {
@@ -8149,7 +8149,7 @@
         "betterfortresses:chests/keep": 3.79,
         "betterstrongholds:chests/common": 2.64,
         "minecraft:chests/stronghold_corridor": 2.48,
-        "creativeengineering:misc/monster_box_reward": 1.13
+        "creativecompat:misc/monster_box_reward": 1.13
       }
     },
     "minecraft:salmon": {
@@ -8355,7 +8355,7 @@
         "mysticrift_pillagers_towers_aris:chests/fixed/e9c56aef04": 100.0,
         "underground_bunkers:chests/underground_bunker/underground_bunker_normal": 25.0,
         "underground_bunkers:chests/underground_bunker/underground_bunker_supply": 18.0,
-        "creativeengineering:misc/monster_box_reward": 2.82
+        "creativecompat:misc/monster_box_reward": 2.82
       }
     },
     "minecraft:slime_ball": {
@@ -9504,7 +9504,7 @@
       "frequency": 1,
       "chests": 1,
       "where": {
-        "creativeengineering:misc/monster_box_reward": 2.82
+        "creativecompat:misc/monster_box_reward": 2.82
       }
     },
     "miners_delight:baked_squid": {

@@ -27,7 +27,7 @@ import java.util.Set;
 
 /**
  * Spawn conditions from the {@code conditions} list of kubejs/generation_scripts/worldgen/mob_spawns.json
- * (feature_writeup/mob_spawns.md section 3.1). They ride in the same {@code creativeengineering:tune_spawns}
+ * (feature_writeup/mob_spawns.md section 3.1). They ride in the same {@code creativeworldgen:tune_spawns}
  * biome modifier as the rules; {@link SpawnTuning#modify} installs them, so they follow the CWGConfig
  * {@code mobSpawns} switch and reload with the world.
  *

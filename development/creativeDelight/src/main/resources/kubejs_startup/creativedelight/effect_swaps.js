@@ -72,3 +72,9 @@ ItemEvents.modification(e => {
 	}))
 	e.modify(i.rose_hip_pie_slice, it => it.setFoodProperties(fb => fb.removeEffect(effect('minecraft:speed'))))
 })
+
+// Street Corn gains Fire Resistance 30 s (TODO dishes/meals #63; its Nourishment and Haste stay as HHFoods sets them).
+ItemEvents.modification(e => {
+	if (!global.has('hearthandharvest')) return
+	e.modify(global.item.street_corn, it => it.setFoodProperties(fb => fb.effect(global.effect.fire_resistance, 600, 0, 1.0)))
+})

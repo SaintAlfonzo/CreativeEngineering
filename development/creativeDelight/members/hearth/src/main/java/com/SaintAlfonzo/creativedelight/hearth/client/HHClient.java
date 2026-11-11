@@ -29,6 +29,7 @@ public final class HHClient {
         bus.addListener(HHClient::renderers);
         bus.addListener(HHClient::layers);
         com.SaintAlfonzo.creativedelight.hearth.machine.client.HHMachineClient.init(bus);
+        com.SaintAlfonzo.creativedelight.hearth.client.crow.CrowClient.init(bus);
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {

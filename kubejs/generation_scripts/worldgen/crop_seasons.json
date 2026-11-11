@@ -1,7 +1,7 @@
 {
   "_readme": [
     "Crop growing season types. Read by kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js, which fills the block tags",
-    "creativeengineering:crop_seasons/<type> (blocks) and the item tags of the same name (items); patcherMod",
+    "creativeworldgen:crop_seasons/<type> (blocks) and the item tags of the same name (items); patcherMod",
     "seasons/CropSeasons reads them for growth, the planting-item tooltip and WTHIT. Edit, then /reload.",
     "Reference and owner spec: feature_writeup/crops.md 2.12.1; check with python3 tools/crop_season_audit.py.",
     "",

@@ -58,21 +58,21 @@ import java.util.function.Predicate;
 /**
  * Per-structure terrain adaptation, chosen by structure tags instead of each structure's own json.
  *
- * <p><b>The tags.</b> {@code creativeengineering:terrain_adaptation/<mode>} (kubejs worldgen/terrain_adaptation.js)
+ * <p><b>The tags.</b> {@code creativeworldgen:terrain_adaptation/<mode>} (kubejs worldgen/terrain_adaptation.js)
  * replaces the structure's own {@code terrain_adaptation}: {@code none}, {@code bury}, {@code beard_thin},
  * {@code beard_box} are vanilla's, {@code soft} is the pack's own (below). mixin/StructureTerrainAdaptationMixin
  * answers Structure#terrainAdaptation from this table, so every vanilla use follows it: the Beardifier, and the
  * 12-block reference margin a terrain-adapted start gets. A structure in two mode tags takes the first in
  * {@link Mode} order and is logged. Structures whose class answers terrainAdaptation itself (YUNG's jigsaw
  * structures, which have their own enhanced adaptation) can't be changed this way; that is logged too.
- * {@code creativeengineering:template_trim} is read by {@link TemplateTrim}.
+ * {@code creativeworldgen:template_trim} is read by {@link TemplateTrim}.
  *
  * <p><b>Sunk starts.</b> The beard (vanilla's and the soft one) levels the ground to a piece's bottom layer: right
  * for a jigsaw start set onto the heightmap with start height 0, whose bottom layer replaces the surface block. A
  * start height below 0 sinks the template that many layers into the ground (Campsite Structures' camps sit on a dirt
  * dome 4 layers deep under their grass layer), and the beard then digs the ground down to the dome's
  * bottom around it: the buried layers stand out of a flat ring as a plinth. For a structure in
- * {@code creativeengineering:terrain_adaptation/sunk_start} with a constant start height below 0 and a heightmap
+ * {@code creativeworldgen:terrain_adaptation/sunk_start} with a constant start height below 0 and a heightmap
  * projection, every piece's beard is raised by that many layers ({@link #sink}), so it levels the ground to the
  * surface the start was projected to. Opt-in: other mods sink starts with beard_box on purpose (Philip's crypts).
  *
@@ -102,7 +102,7 @@ import java.util.function.Predicate;
  */
 public final class TerrainAdaptation {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/terrain-adaptation");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/terrain-adaptation");
 
 	/** Tag modes, in precedence order. SOFT is a beard_thin to every vanilla caller; only the Beardifier hook tells it apart. */
 	public enum Mode {
@@ -218,14 +218,14 @@ public final class TerrainAdaptation {
 		FIELDS.clear();
 	}
 
-	/** In creativeengineering:template_trim. */
+	/** In creativeworldgen:template_trim. */
 	public static boolean trims(Structure structure) {
 		Shape s = shapes.get(structure);
 		return s != null && s.trim();
 	}
 
 	/**
-	 * In creativeengineering:template_trim/air (and not template_trim): only air in columns with nothing solid is
+	 * In creativeworldgen:template_trim/air (and not template_trim): only air in columns with nothing solid is
 	 * dropped. The footprint and earth count stay the untrimmed ones (nothing solid is dropped).
 	 */
 	public static boolean airTrims(Structure structure) {

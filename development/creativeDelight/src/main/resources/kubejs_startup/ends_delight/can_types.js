@@ -78,7 +78,7 @@ if (global.CD) global.CD.genPut('can_types', 'ends_delight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_beef"
+   "texture": "creativedelight:item/canned_raw_beef"
   },
   "canned_dragon_meat_stew": {
    "section": "feast",

@@ -20,7 +20,7 @@ Nothing was changed in game; "verify" marks a result read from code that still n
 
 | ID | Mechanism | What it does | Where |
 |---|---|---|---|
-| D1 | Supplementaries `[tweaks.dye_blocks]` | Dye on any member of a Moonlight colour set swaps it for that colour (`BlocksColorAPI.changeColor`, block state copied, block entity not). Skipped for every block with a block entity and `#creativeengineering:no_world_dye` (empty) | `SupplementariesDyeBlocksMixin` |
+| D1 | Supplementaries `[tweaks.dye_blocks]` | Dye on any member of a Moonlight colour set swaps it for that colour (`BlocksColorAPI.changeColor`, block state copied, block entity not). Skipped for every block with a block entity and `#creativecompat:no_world_dye` (empty) | `SupplementariesDyeBlocksMixin` |
 | D2 | Create's own blocks | Sails (and the sail frame), seats, valve handles, toolboxes: swap block. Belts, nixie tubes, flap displays: colour in the block entity (flap displays also take glow ink) | `SailBlock`, `SeatBlock`, `ValveHandleBlock`, `ToolboxBlock`, `BeltBlock`, `NixieTubeBlock`, `FlapDisplayBlock` |
 | D3 | Cooking for Blockheads | Cooking table, counter, corner, hanging corner, fridge, sink recolour (block entity colour) | `BlockDyeableKitchen` |
 | D4 | Sign text | Vanilla signs, Farmer's Delight canvas signs (D1 skips them), FramedBlocks framed signs, plus glow ink | vanilla, `AbstractFramedSignBlock` |
@@ -95,7 +95,7 @@ asked about shulker boxes, banners and presents in the TODO row.
    Furniture beds (14, no block entity, so D1 does not skip them; dyeing one half of a two-block bed), Fantasy
    Furniture venthyr and bone candles, Buzzier Bees soul candle, Supplementaries soul candle holder, and the Farmer's
    Respite coffee candle cakes in the vanilla candle cake set. Soap leaves them alone (no pair). Likely fix: put
-   them in `#creativeengineering:no_world_dye` (DY-01, DY-02).
+   them in `#creativecompat:no_world_dye` (DY-01, DY-02).
 2. **Valve handles wash to the white handle**, not the undyed copper valve handle (S1 has no base for the set).
 3. **Toolboxes wash to the white toolbox**; Create's crafted toolbox is brown.
 4. **Rusted iron does not wash, oxidised copper does.** S2 takes exposed and weathered Immersive Weathering iron
@@ -147,7 +147,7 @@ Not soap cases: Botania mossy apothecary (its own block), sandy waystone (a styl
 
 | # | Proposal | Work | Size |
 |---|---|---|---|
-| P1 | Add the 2.5.1 tag-joined members to `#creativeengineering:no_world_dye` | KubeJS tag via `global.tags` | small |
+| P1 | Add the 2.5.1 tag-joined members to `#creativecompat:no_world_dye` | KubeJS tag via `global.tags` | small |
 | P2 | Soap on unclean blocks (2.7): mossy, overgrown, rusty, dirty, sandy, ashen, rusted IW iron; a pair list generated from the dump and applied by the same soap hook | patcherMod (soap mixin on `SoapWashableHelper`), generator | medium |
 | P3 | Fix soap targets: valve handle to copper, toolbox to brown, chalk mark removed | patcherMod (same hook) | small |
 | P4 | Soap clears block-entity colours: CfB units, Create belts / nixie / flap displays, Steam Rails, PneumaticCraft, framed target, cat collars | patcherMod, one adapter per mod | medium |
@@ -180,7 +180,7 @@ below point back to the audit tables. Nothing is built yet.
 | Coloured Water interaction | Disable the in-world dye interaction of coloured water (the Coloured Water fluid block and cauldrons, 2.2 "Light and misc"). Coloured water dyeing by fan (`blocks/dyeing #2`) is a separate recipe and stays planned |
 | Turtle water bucket washing | Disable W1 for CC: Tweaked turtles (water bucket no longer clears the dye) |
 | Banners with more than one colour | In-world dye and in-world soap do nothing on a banner (or wall banner, ceiling banner, flag) that has any pattern layer. Only a plain single-colour banner can be dyed or soaped in world. The crafting-table recipes (banner + dye, banner + soap) are not touched and still work on any banner |
-| Botania flowers | Not dyed and not soaped in world: mystical, shiny, double flowers, buried petals, mushrooms, petal blocks, floating flowers (2.2 Botania row, 2.3). Add them to `#creativeengineering:no_world_dye` and to a soap block list (a `no_world_soap` tag, or the existing `clean_blacklist`) |
+| Botania flowers | Not dyed and not soaped in world: mystical, shiny, double flowers, buried petals, mushrooms, petal blocks, floating flowers (2.2 Botania row, 2.3). Add them to `#creativecompat:no_world_dye` and to a soap block list (a `no_world_soap` tag, or the existing `clean_blacklist`) |
 
 ### 3.2 Port the "soap works" list to dye (P6)
 

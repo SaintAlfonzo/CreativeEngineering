@@ -31,6 +31,8 @@ echo "== 1. ground matching"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.GroundMatchTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 2. /cdevplace + WorldgenConfig"
 java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.cdevplace.MassPlacerTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED| +T&T)|Exception|Error' || status=1
+echo "== 2b. Structure Catalogue rules and layout"
+java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.cdevplace.StructureCatalogueTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 3. earth fill"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.EarthFillTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 4. debug structure density"

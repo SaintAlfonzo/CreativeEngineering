@@ -27,10 +27,10 @@ import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 /**
- * {@code creativeengineering:baking}: Farmer's Delight's {@code farmersdelight:cooking} JSON (CookingPotRecipe,
+ * {@code creativedelight:baking}: Farmer's Delight's {@code farmersdelight:cooking} JSON (CookingPotRecipe,
  * MIT) plus an optional {@code tool}, an ingredient that must sit in the oven's tool slot and is never used up.
  * <pre>
- * { "type": "creativeengineering:baking", "ingredients": [ ...1-6... ], "tool": {...}?, "container": {...}?,
+ * { "type": "creativedelight:baking", "ingredients": [ ...1-6... ], "tool": {...}?, "container": {...}?,
  *   "result": {...}, "experience": 0.0?, "cookingtime": 200? }
  * </pre>
  * {@code container} is the plating item (FD semantics: the result waits until one is supplied); it defaults to the

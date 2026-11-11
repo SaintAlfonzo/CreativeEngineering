@@ -20,6 +20,10 @@ public final class HHEntities {
     public static final RegistryObject<EntityType<com.SaintAlfonzo.creativedelight.hearth.gear.ThrownHorseshoe>> THROWN_HORSESHOE = ENTITIES.register("thrown_horseshoe",
             () -> EntityType.Builder.<com.SaintAlfonzo.creativedelight.hearth.gear.ThrownHorseshoe>of(com.SaintAlfonzo.creativedelight.hearth.gear.ThrownHorseshoe::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build("thrown_horseshoe"));
 
+    /** Hearth and Harvest 1.4.1's crow (plan_hearth_crow_swap.md). No natural spawn entries: nests make crows (nest/NestCrows). */
+    public static final RegistryObject<EntityType<com.SaintAlfonzo.creativedelight.hearth.crow.CrowEntity>> CROW = ENTITIES.register("crow",
+            () -> EntityType.Builder.<com.SaintAlfonzo.creativedelight.hearth.crow.CrowEntity>of(com.SaintAlfonzo.creativedelight.hearth.crow.CrowEntity::new, MobCategory.CREATURE).sized(0.4F, 0.5F).clientTrackingRange(8).build("crow"));
+
     private HHEntities() {
     }
 }

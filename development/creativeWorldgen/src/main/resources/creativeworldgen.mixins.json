@@ -5,6 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.SaintAlfonzo.creativeworldgen.WorldgenMixinPlugin",
   "mixins": [
+    "ResourceKeyLegacyDimensionMixin",
+    "ChunkSerializerLegacyStructuresMixin",
+    "StructureCheckLegacyStructuresMixin",
+    "LevelStorageAccessDimensionMoveMixin",
     "AeMeteoriteHeightMixin",
     "LCItemsForMapTradeMixin",
     "CSSellingMapMixin",
@@ -64,8 +68,19 @@
     "MobCapLevelTickMixin",
     "MobCapMixin",
     "MobCapSpawnAreaMixin",
-    "NaturalSpawnerBoxHeightMixin"
+    "NaturalSpawnerBoxHeightMixin",
+    "wiseoak.WiseOakTileMixin",
+    "wiseoak.TreeLoreManagerMixin",
+    "visceralheap.HeapDeferredRegisterMixin",
+    "visceralheap.HeapResourcePackLoaderMixin",
+    "visceralheap.HeapModBiomesMixin",
+    "visceralheap.HeapModVanillaCompatMixin",
+    "visceralheap.HeapFleshTendonFeatureMixin"
   ],
-  "client": [],
+  "client": [
+    "visceralheap.HeapColorHandlerMixin",
+    "visceralheap.HeapEntityRendererHandlerMixin",
+    "visceralheap.HeapParticleFactoryHandlerMixin"
+  ],
   "server": []
 }

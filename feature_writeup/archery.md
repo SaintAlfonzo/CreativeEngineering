@@ -85,7 +85,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 | `#forge:arrow_shaft/metal` | every metal rod above, plus copper, iron, zinc, nickel, brass, constantan, steel |
 | `#forge:arrow_shaft/blazing` | blaze rod (the explosive arrow's shaft) |
 | `#forge:arrow_shaft` | all of the above |
-| `#forge:fletching` | feather, `creativeengineering:arrow_fletching`, roadrunner feather (AM) |
+| `#forge:fletching` | feather, `creativeequipment:arrow_fletching`, roadrunner feather (AM) |
 
 The shaft class only decides which recipe accepts it; it doesn't change the arrow.
 
@@ -194,7 +194,7 @@ IE's own cartridge recipes are untouched.
 - [server_scripts/engineering/blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js): `archery` and `bullet` blueprints, blueprint duplication.
 - [server_scripts/tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js): `#forge:fletching`, `#forge:arrow_shaft/*`.
 - [server_scripts/magic/enchants.js](../kubejs/server_scripts/magic/enchants.js), [client_scripts/jeichanges.js](../kubejs/client_scripts/jeichanges.js): NEA enchantments.
-- [startup_scripts/items/misc_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/misc_items.js) (`creativeengineering:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
+- [startup_scripts/items/misc_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/misc_items.js) (`creativeequipment:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
 - [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 592-618 and 673: one line per arrow.
 - patcherMod: [CycleEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
 - `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1787) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).

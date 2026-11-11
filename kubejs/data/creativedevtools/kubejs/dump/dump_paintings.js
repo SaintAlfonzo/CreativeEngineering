@@ -5,7 +5,7 @@
 // whether it is in #minecraft:placeable (the random-placement / Cycle Paintings pool; the old
 // earth/wind/fire/water are registered but not placeable).
 // tools/gen_immersive_paintings.py reads this to copy every variant into Immersive Paintings'
-// Datapacks page (kubejs/data/creativeengineering/paintings/).
+// Datapacks page (kubejs/data/creativecompat/paintings/).
 
 ServerEvents.commandRegistry(event => {
 	const { commands: Commands } = event

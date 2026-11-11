@@ -102,7 +102,7 @@ The member files' cut, cook, bake, heatless meal, sequenced assembly and golden 
 ### Now
 Helper: [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar; values in `global.CD.FOOD` from line 38: slices 40, cook 44). Callers since 2026-10-27 (`#11`):
-`creativeengineering/baking.js`, `rusticdelight/recipes.js`, `creativeengineering/cultivated_meat.js`. Hand rows left
+`creativedelight/baking.js`, `rusticdelight/recipes.js`, `creativedelight/cultivated_meat.js`. Hand rows left
 (all under `kubejs/data/creativedelight/kubejs/`, checked 2026-10-31):
 
 | File:line | Row | Family call |

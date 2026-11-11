@@ -6,7 +6,7 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// Feet: the stepstools (stepstool/Stepstool reads #creativeengineering:stepstools; feature_writeup/stepstool.md).
+	// Feet: the stepstools (stepstool/Stepstool reads #creativeequipment:stepstools; feature_writeup/stepstool.md).
 	var colours = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray',
 		'light_gray', 'cyan', 'purple', 'blue', 'brown', 'green', 'red', 'black']
 	t.add(e, i.t_stepstools, colours.map(c => i[c + '_stepstool']))

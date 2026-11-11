@@ -71,7 +71,7 @@ import java.util.function.Predicate;
  */
 public final class MetaSlots {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/meta-structures");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/meta-structures");
 
 	private MetaSlots() {}
 
@@ -151,7 +151,7 @@ public final class MetaSlots {
 			if (total > 1.0 + 1e-9) index.warnings.add(idOf.apply(e.getKey()) + ": the metas and replacements it anchors share " + Math.round(total * 100)
 					+ "% of its slots; cut to 100% in id order");
 			index.byAnchor.put(e.getKey(), List.copyOf(out));
-			index.rollHash.put(e.getKey(), ("meta-share:" + idOf.apply(e.getKey())).hashCode());
+			index.rollHash.put(e.getKey(), ("meta-share:" + LegacyIds.seed(idOf.apply(e.getKey()))).hashCode());
 		}
 		return index;
 	}

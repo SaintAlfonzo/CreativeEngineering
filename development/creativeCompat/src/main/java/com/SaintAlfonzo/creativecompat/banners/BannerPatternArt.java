@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  */
 public final class BannerPatternArt {
 
-    public static final String OUT_NS = "creativeengineering";
+    public static final String OUT_NS = "creativecompat";
 
     /** One jar's banner pattern textures: {@code "<ns>/<id>"} to the PNG bytes. */
     public record Source(String label, Map<String, Supplier<byte[]>> patterns) {}

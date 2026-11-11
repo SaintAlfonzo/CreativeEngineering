@@ -11,7 +11,7 @@ Mod behaviour this follows, read from the jars:
   the copper in #immersive_weathering:copper. Both need axe_rusting.
 - Supplementaries: dye on a block of a Moonlight colour set swaps it for that colour and uses one dye ([tweaks]
   dye_blocks); patcherMod's SupplementariesDyeBlocksMixin stops it on blocks with a block entity and
-  #creativeengineering:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a coloured
+  #creativecompat:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a coloured
   block back to its plain one (not beds, not [functional.soap] clean_blacklist), then a sticky piston into a piston,
   then strips wax and all oxidation at once. Each wash uses one soap.
 - Create sails, seats and valve handles dye through their own code (manual rows), so their colour sets are left out of

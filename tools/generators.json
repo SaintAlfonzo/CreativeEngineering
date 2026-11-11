@@ -93,6 +93,15 @@
       "apply": "new worlds only (solved at world load)"
     },
     {
+      "id": "visceral_heap",
+      "script": "tools/gen_visceral_heap.py",
+      "groups": ["worldgen"],
+      "outputs": [
+        "development/creativeWorldgen/src/main/resources/packs/biomesoplenty/data/minecraft/worldgen/noise_settings/nether.json"
+      ],
+      "apply": "rebuild Creative Worldgen, then new chunks only"
+    },
+    {
       "id": "structure_groups",
       "script": "tools/gen_structure_groups.py",
       "groups": ["core", "worldgen"],
@@ -166,6 +175,15 @@
       "groups": ["worldgen"],
       "outputs": ["feature_writeup/bee_nests_by_biome.md"],
       "apply": "report only; for measured numbers run /dumpbeenests reset, generate new chunks, /dumpbeenests first"
+    },
+    {
+      "id": "wise_oak_biomes",
+      "script": "tools/gen_wise_oak_biomes.py",
+      "groups": ["worldgen"],
+      "dumps": ["dumpbiomes"],
+      "outputs": ["kubejs/data/creativeworldgen/tags/worldgen/biome/wise_oak_biomes.json"],
+      "highlight": ["^wise oak biomes:"],
+      "apply": "restart the world load; only newly generated chunks change"
     },
     {
       "id": "loot_config",
@@ -412,7 +430,7 @@
       "script": "tools/gen_immersive_paintings.py",
       "groups": ["pack"],
       "dumps": ["dumppaintings"],
-      "outputs": ["kubejs/data/creativeengineering/paintings/minecraft"],
+      "outputs": ["kubejs/data/creativecompat/paintings/minecraft"],
       "apply": "/reload (Immersive Paintings re-reads its datapack paintings)"
     },
     {
@@ -438,7 +456,7 @@
       "script": "tools/gen_soup_soft_fluids.py",
       "groups": ["food"],
       "dumps": ["dumpfood"],
-      "outputs": ["development/creativeDelight/src/main/resources/data/creativeengineering/moonlight/soft_fluids"],
+      "outputs": ["development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids"],
       "warnExit": [1],
       "apply": ":creativeDelight: rebuild + install, then restart (the soft fluids ship in the CD jar)"
     },

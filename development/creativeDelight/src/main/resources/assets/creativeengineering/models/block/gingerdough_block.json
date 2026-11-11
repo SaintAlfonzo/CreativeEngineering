@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/dough_block/gingerdough_block",
-    "particle": "creativeengineering:block/dough_block/gingerdough_block"
-  },
-  "render_type": "solid"
-}

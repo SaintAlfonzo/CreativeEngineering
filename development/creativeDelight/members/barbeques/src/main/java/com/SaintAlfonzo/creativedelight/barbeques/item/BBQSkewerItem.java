@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
  * tooltip line only.
  */
 public class BBQSkewerItem extends FoodItem {
-    private static final ResourceLocation GARLIC = new ResourceLocation("creativeengineering", "garlic");
+    private static final ResourceLocation GARLIC = new ResourceLocation("creativedelight", "garlic");
 
     public BBQSkewerItem(Properties properties) {
         super(properties);

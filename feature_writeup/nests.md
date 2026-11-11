@@ -174,9 +174,9 @@ eggs on air above a grass block and tries to spawn 4 of the bird nearby), one se
 
 | Nest | Placed feature | Bird spawned | Mod default biomes (`#creativedelight:has_feature/<bird>_nest`) | Pack adds (CD `incubation/bird_nests.js`) |
 |---|---|---|---|---|
-| Duck nest (`duck_egg_nest`) | `creativedelight:nest_duck` | `untitledduckmod:duck` | `#untitledduckmod:duck_spawn` (rivers) | `#creativeengineering:mob_spawns/duck_wetlands` (swamps, beaches) |
-| Goose nest (`goose_egg_nest`) | `creativedelight:nest_goose` | `untitledduckmod:goose` | `#untitledduckmod:goose_spawn` (rivers) | `#creativeengineering:mob_spawns/goose_wetlands` |
-| Emu nest (`emu_egg_nest`) | `creativedelight:nest_emu` | `alexsmobs:emu` | `#minecraft:is_savanna` | `#creativeengineering:mob_spawns/am_emu_savanna` (savanna trait, Terralith's included) |
+| Duck nest (`duck_egg_nest`) | `creativedelight:nest_duck` | `untitledduckmod:duck` | `#untitledduckmod:duck_spawn` (rivers) | `#creativeworldgen:mob_spawns/duck_wetlands` (swamps, beaches) |
+| Goose nest (`goose_egg_nest`) | `creativedelight:nest_goose` | `untitledduckmod:goose` | `#untitledduckmod:goose_spawn` (rivers) | `#creativeworldgen:mob_spawns/goose_wetlands` |
+| Emu nest (`emu_egg_nest`) | `creativedelight:nest_emu` | `alexsmobs:emu` | `#minecraft:is_savanna` | `#creativeworldgen:mob_spawns/am_emu_savanna` (savanna trait, Terralith's included) |
 
 Placement as Incubation's chicken nests: rarity 1 in 32 chunks, in square, heightmap, biome filter; biome modifiers
 `forge:add_features`, step `vegetal_decoration`. Files: `packs/incubation/<mod>/data/creativedelight/worldgen/

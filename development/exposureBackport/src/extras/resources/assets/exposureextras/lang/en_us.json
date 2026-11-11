@@ -1,0 +1,7 @@
+{
+  "item.exposureextras.leather_camera_bag": "Leather Camera Bag",
+  "item.exposureextras.iron_camera_bag": "Iron Camera Bag",
+  "item.exposureextras.netherite_camera_bag": "Netherite Camera Bag",
+  "tooltip.exposureextras.camera_bag.slots": "%s / %s slots used",
+  "tooltip.exposureextras.camera_bag.entry": "%s x%s"
+}

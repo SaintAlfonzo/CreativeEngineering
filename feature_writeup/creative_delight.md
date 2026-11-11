@@ -63,6 +63,8 @@ engine" now means these scripts.
 
 ### 0.3 Naming rule (owner)
 
+Creative Delight's own content (not its members) moved from `creativeengineering` to `creativedelight` on 2026-11-10 ([plan_cd_namespace.md](plan_cd_namespace.md); saves carried by the generated swap list `swaps/cd_namespace.json`; seasoning ids excepted, plan D6). Tests: SQ-CDNS-01 to -12, CQ-CDNS-01.
+
 Every member keeps its registry namespace and its mod id as its own `[[mods]]` entry in the jar. Only the **display name**
 changes: `displayName = "<Name> (Creative Delight)"`, e.g. "Veggies Delight (Creative Delight)", "Fungi Delight (Creative
 Delight)", "Miner's Delight (Creative Delight)", "End's Delight (Creative Delight)", "Oceanic Delight (Creative Delight)".
@@ -903,7 +905,7 @@ Open:
 | NCH namespace (10.3, Q24) | NCH `ns()`, `withNamespace(ns, fn)` (`apiVersion` removed 2026-10-27) | Scoped (answers the open Q24 detail): every recipe ID the helpers write uses `ns()`, recipe TYPES keep `modId` (`creativeengineering:seasoning`, ...). Restores after an error and when nested |
 | Build (14.3 B1, B3, B4, B5) | `build-logic`: `ce.forge-repack`, `ce.forge-bundle`; `ce.forge-mod` gains `shipped_jar_task`, `bundled_in`, `mixin_configs=none` | A repack refuses another upstream sha1 and any path the overlay and upstream both hold; `replaced_classes` is the B3 guard (no class replaced today). A member's `installToMods` refuses and names CD's task |
 | Repacks (B2) | `development/creativeDelight/members/{oceans,oceanic,ends}`, projects `repackedOceans`, `repackedOceanic`, `repackedEnds` | Versions `1.0.2-1.19.2-ce-19.2-01`, `1.0.1-ce-19.2-01`, `1.19.2-2.1-ce-19.2-01` (14.1.4). Upstream entries checked byte-identical (CRC) apart from `mods.toml` and the manifest. Upstream jars in `development/creativeDelight/upstream/` (git-ignored, copied from `mods/`). MIT notices written from the `mods.toml` data, since the jars ship none; years and sources checked against upstream 2026-10-25 (28.1) |
-| Oceanic overlay (B7) | `members/oceanic/src`, package `com.SaintAlfonzo.creativedelight.oceanic.mixin`, config `oceanic_delight.ce.mixins.json` | Moved from patcherMod: normal mixin, `@Mixin(FishingNetExtractingProcedure.class)`, SRG names with `remap = false` (checked reobfed). Tag ids stay `creativeengineering:fishing_net/*` (filled by `loottags.js`, not moved). `loot/BiomeTagCondition` stays in patcherMod |
+| Oceanic overlay (B7) | `members/oceanic/src`, package `com.SaintAlfonzo.creativedelight.oceanic.mixin`, config `oceanic_delight.ce.mixins.json` | Moved from patcherMod: normal mixin, `@Mixin(FishingNetExtractingProcedure.class)`, SRG names with `remap = false` (checked reobfed). Tag ids stay `creativedelight:fishing_net/*` (filled by `loottags.js`, not moved). `loot/BiomeTagCondition` stays in patcherMod |
 | CD jar (B6) | `development/creativeDelight`: `@Mod creativedelight`, `CDConfig`, `kubejs_startup/creativedelight/cd_core.js` (`global.CD`) | `creativedelight-1.0.0.jar` (Q17), reproducible. Dependencies: patcherMod `[1.1.02,)` and Farmer's Delight; at boot it logs an error when the installed patcherMod has no loader. `replaces_jars` = the three upstream jars and stray repacks |
 | CD config (8.1, Q21) | `config/creativedelight-common.toml` | Only `[members]` (one switch per member, default on); `qol`, `integrations`, `swappers` keys come with the first feature that moves. Scripts: `global.CD.on(id)` inside callbacks (COMMON config loads after startup scripts) |
 | CD script trees (10.4) | `kubejs/data/creativedelight/kubejs/`, `kubejs/assets/creativedelight/kubejs/` | Only `_core/` checks so far (warn when `global.CD` is missing). The jar build copies both trees and fails if a tree has no script. `build_deploy.py` classes both trees `dev` (Q25) |
@@ -1380,7 +1382,7 @@ Server scripts under `kubejs/data/creativedelight/kubejs/`, startup scripts unde
 | `golden.js` | `minecraft/golden.js`, `create/golden.js`, `immersiveengineering/golden.js` |
 | `chocolate.js`, `milk_jar.js` | `create_confectionery/chocolate.js`, `cookingforblockheads/milk_jar.js` |
 | `tags/cookingtags.js` | split by the mod owning each entry into `<mod>/tags.js` (new `minecraft`, `creativeengineering`, `pneumaticcraft`, `create`, `incubation`, `alexsmobs`, `alexsdelight`, `quark`, `corn_delight`, `upgrade_aquatic`, `neapolitan`, `veggiesdelight`; merged into `farmersdelight`, `rusticdelight`, `delightful`, `fruitsdelight`). Left: Brewin' tags (29.3) |
-| `tags/foodtypetags.js`, `cantags.js`, `jartags.js` | whole: `creativeengineering/food_type_tags.js`, `can_tags.js`, `jar_tags.js` |
+| `tags/foodtypetags.js`, `cantags.js`, `jartags.js` | whole: `creativedelight/food_type_tags.js`, `can_tags.js`, `jar_tags.js` |
 | `startup_scripts/cooking/{bakeware,baking_ingredients,cornmeal,fluids,seasonings}.js`, `items/cans.js` | whole, `kubejs_startup/creativeengineering/` (ids unchanged: every `e.create` takes a full id from the dicts) |
 | `startup_scripts/cooking/food_values.js` | value copies: applier `creativeengineering/food_value_copies.js`, rows in `minecraft/food_values.js` and `delightful/delightful_foods.js` (each `Object.assign`s into `global.foodValueCopies`). Left: the effect swaps and Farmer's Respite slice effects (29.3) |
 | `startup_scripts/compost/compost_rules.js` | `kubejs_startup/creativeengineering/compost_rules.js` (`priority: 900`) |
@@ -1390,13 +1392,13 @@ Creative Split wave 4 (2026-11-01, creative_split.md 7.6) moved the remaining CD
 
 | Old pack file | Now |
 |---|---|
-| `server_scripts/tags/blocktags.js` oven heat and bakeware hammering rows, `storageblocktags.js` dough blocks | `creativeengineering/kitchen_tags.js` |
-| `blocktags.js` crop parity rows, `equipmenttags.js` hoe harvest area tags | `creativeengineering/crop_tags.js` |
+| `server_scripts/tags/blocktags.js` oven heat and bakeware hammering rows, `storageblocktags.js` dough blocks | `creativedelight/kitchen_tags.js` |
+| `blocktags.js` crop parity rows, `equipmenttags.js` hoe harvest area tags | `creativedelight/crop_tags.js` |
 | `fluidtags.js` food and drink fluid subtags | `creativeengineering/fluid_tags.js` |
 | `loottags.js` Oceanic Delight fishing net tags | `oceanic_delight/fishing_net_tags.js` (member switch guard) |
 | `server_scripts/other/harvest.js` (metal and ore block mining tiers; 7.6 owner row) | `creativeengineering/harvest.js` |
-| `server_scripts/engineering/sample_syringe.js`, startup `func/` and `items/sample_syringe.js` | `creativeengineering/sample_syringe.js`; startup `creativeengineering/sample_syringe.js`, `sample_syringe_items.js` |
-| `client_scripts/namechanges.js` Delight dish, crop and fluid names, lunchbox tier names | client `creativeengineering/names.js` |
+| `server_scripts/engineering/sample_syringe.js`, startup `func/` and `items/sample_syringe.js` | `creativedelight/sample_syringe.js`; startup `creativedelight/sample_syringe.js`, `sample_syringe_items.js` |
+| `client_scripts/namechanges.js` Delight dish, crop and fluid names, lunchbox tier names | client `creativedelight/names.js` |
 | `client_scripts/tooltips.js` bowl, basket and soil lines | client `farmersdelight/client.js` (before the villager line, as before) |
 | CD `kubejs_startup/brewinandchewin/` and `vinery/compost_values.js` | moved out to Creative Brewing (creative_brewing.md 4.5) |
 
@@ -1462,11 +1464,11 @@ in the pack folder until 2026-11-01, moved with Creative Split wave 4). Every sc
 
 - CD startup `kubejs_startup/creativeengineering/cultures.js` (7 cultures, 7 culture blocks; moved from the pack's
   `startup_scripts/items/cultures.js`, ids unchanged, registered from the dict keys);
-- CD server `creativeengineering/cultivated_meat.js` (syringe, samples, mixer and cooking pot growth, cutting, culture
-  blocks) and `creativeengineering/cultivated_meat_tags.js` (`#creativeengineering:culture_base` from the pack's
+- CD server `creativedelight/cultivated_meat.js` (syringe, samples, mixer and cooking pot growth, cutting, culture
+  blocks) and `creativedelight/cultivated_meat_tags.js` (`#creativedelight:culture_base` from the pack's
   `engineeringtags.js`, the 7 culture storage block tags from `storageblocktags.js`);
 - CD startup `kubejs_startup/creativeengineering/sample_syringe_items.js` and `sample_syringe.js` (were the pack's
-  `startup_scripts/items/` and `func/sample_syringe.js`), CD server `creativeengineering/sample_syringe.js` (was
+  `startup_scripts/items/` and `func/sample_syringe.js`), CD server `creativedelight/sample_syringe.js` (was
   `server_scripts/engineering/sample_syringe.js`), all moved 2026-11-01;
 - comment only (data files take no header): the culture and syringe textures and models under
   `kubejs/assets/creativeengineering/`, the BlockRunner "spongy" row for `*_culture_block` in the pack's `blocktags.js`,
@@ -1488,11 +1490,11 @@ they use KubeJS's own `e.add(id, Text.<colour>(...))` and `e.renameItem` because
 | From | To |
 |---|---|
 | `startup_scripts/items/cultures.js` | CD startup `creativeengineering/cultures.js` (29.5) |
-| `server_scripts/tags/engineeringtags.js` culture base, `storageblocktags.js` culture blocks | `creativeengineering/cultivated_meat_tags.js` (29.5) |
+| `server_scripts/tags/engineeringtags.js` culture base, `storageblocktags.js` culture blocks | `creativedelight/cultivated_meat_tags.js` (29.5) |
 | `server_scripts/tags/blocktags.js` ghost pepper soil tag | `vintagedelight/tags.js` (block tags; now behind the Vintage member switch) |
 | `server_scripts/loot/09_crop_drops.js` (Rustic bell pepper drops) | `rusticdelight/crop_drops.js` (behind the Rustic member switch; runs after every pack loot script, none of which touches the table) |
-| `server_scripts/tags/placeabletags.js` | `creativeengineering/placeable_tags.js` (not switched; `tools/placeable_catalog.py` output text points at it) |
-| `client_scripts/seasoning_lang.js` | assets `creativeengineering/seasoning_lang.js` |
+| `server_scripts/tags/placeabletags.js` | `creativedelight/placeable_tags.js` (not switched; `tools/placeable_catalog.py` output text points at it) |
+| `client_scripts/seasoning_lang.js` | assets `creativedelight/seasoning_lang.js` |
 | `client_scripts/tooltips.js` villager soil lines (`fdVillagerLine`, removed) | assets `farmersdelight/client.js` (behind the FD member switch) |
 | `tooltips.js` food rows: lead knife | assets `delightful/client.js` |
 | sugar cube, candy, pancakes | assets `supplementaries/client.js` |
@@ -1586,10 +1588,10 @@ are in `global.CD.FOOD` at the top of the file.
   Furnace + 5; `goldenEnchant`: gold block, 250 mB liquid XP, press, 4 loops). Oven parts for one-off recipes: `F.slot`,
   `F.ware`, `F.SWEET`.
 - **Culture family** (owner 2026-10-27: meat cultures are their own family): `cultureCut(culture, meat, count)`, knife on
-  the board, 4 unless given, no bone meal from the fish cultures (`creativeengineering/cultivated_meat.js`).
-- **State (2026-10-27):** the three files that called `global.foodFamily` call `global.CD.food`: `creativeengineering/baking.js`
+  the board, 4 unless given, no bone meal from the fish cultures (`creativedelight/cultivated_meat.js`).
+- **State (2026-10-27):** the three files that called `global.foodFamily` call `global.CD.food`: `creativedelight/baking.js`
   (cake, pie, cookie, muffin, tart tables), `rusticdelight/recipes.js` (cookies, cheesecakes, glowing calamari cooks),
-  `creativeengineering/cultivated_meat.js` (cultures); the seven unused `var F` lines are gone, `food_family_recipes.js` is
+  `creativedelight/cultivated_meat.js` (cultures); the seven unused `var F` lines are gone, `food_family_recipes.js` is
   deleted with no alias (no fallbacks between in-tree pieces, [pack_hygiene.md](pack_hygiene.md) A). The family sweep replaces
   the per-file removals (Rustic's cookies and cheesecakes, baking.js's table outputs); the muffin call's pot route replaces
   Fruits Delight's hand row (same recipe and id). Owner 2026-10-27: the `CD.FOOD` values are the rules (fruit cook xp 0.35,
@@ -1642,10 +1644,10 @@ SQ-CM-33, -34 (Storage Delight JEI order and name) not run: repack jar not insta
 
 ## 32. Bread tags (2026-10-27)
 
-`#forge:bread` (`i.t_bread`) is any bread for general-bread recipes: `creativeengineering/bread_tags.js` adds the flavored loaves
+`#forge:bread` (`i.t_bread`) is any bread for general-bread recipes: `creativedelight/bread_tags.js` adds the flavored loaves
 (garlic, banana, cantaloupe; the filled honey, mulberry, glow and jelly breads are not bread, baking/baked-goods #33), bread slice and toast to the mods' plain/corn/cauliflower/sourdough
 loaves. Food named toast (cheese, caviar, toast with ...) and the vanilla-only conversions (honey, jelly, mulberry, golden bread,
-cans, salted bread mixing) are not general. `#creativeengineering:bread_loaves` (`i.t_bread_loaf`) is the plain loaves, used
+cans, salted bread mixing) are not general. `#creativedelight:bread_loaves` (`i.t_bread_loaf`) is the plain loaves, used
 where a bread becomes more bread (Veggies garlic bread, Veggies bread slice cutting) so the wider tag cannot copy items.
 Explicit vanilla-bread inputs moved to `i.t_bread`: Hostile guardian burger/sandwich, turtle egg sandwich, FD roast chicken,
 Ocean's caesar salad, End's crawling sandwich, Create sweet roll and Create Factory rolls. Caviar toast now takes toast.
@@ -1794,9 +1796,9 @@ game reads only the member scripts; nothing reads the JSONs by instance path any
 
 | Generator | Member script (one per namespace) | `global.CD` name | Reader |
 |---|---|---|---|
-| `food_catalog.py` (and `gen_can_types.py` through it) | `kubejs/data/creativedelight/kubejs/<ns>/food_types.js` (51) | `food_types` | `creativeengineering/food_type_tags.js` |
-| `placeable_catalog.py` | `.../<ns>/placeable.js` (24) | `placeable` | `creativeengineering/placeable_tags.js` |
-| `gen_mortar_catalog.py` | `.../<ns>/mortar_catalog.js` (4; by the source recipe's mod) | `mortar_catalog` | `creativeengineering/mortar.js` |
+| `food_catalog.py` (and `gen_can_types.py` through it) | `kubejs/data/creativedelight/kubejs/<ns>/food_types.js` (51) | `food_types` | `creativedelight/food_type_tags.js` |
+| `placeable_catalog.py` | `.../<ns>/placeable.js` (24) | `placeable` | `creativedelight/placeable_tags.js` |
+| `gen_mortar_catalog.py` | `.../<ns>/mortar_catalog.js` (4; by the source recipe's mod) | `mortar_catalog` | `creativedelight/mortar.js` |
 | `gen_can_types.py` (hand run) | `development/creativeDelight/src/main/resources/kubejs_startup/<ns>/can_types.js` (29) and `can_servings.js` (30), by each can's first source food | `can_types`, `can_servings` | startup `creativeengineering/cans.js`; server `canning.js`, `can_tags.js` |
 
 - **Shape of a member script:** first line the `gen_out.header` line, `// priority: 900`, `// requires: <ns>` (none for
@@ -1852,7 +1854,7 @@ Keep-or-convert list (files under `kubejs/data/creativedelight/kubejs/`; `rustic
 
 Not converted, not named in the row: heatless and wrap rows of `veggiesdelight/cooking.js` and `fungidelight/cooking.js`
 (QoL-5 files), `corn_delight/recipes.js` corn soup, `endersdelight/` (being reworked by the Ender's stream the same day),
-the burger table in `creativeengineering/recipes.js`. Alex's Delight's own catfish slice cooking (1 xp, 200 ticks in all
+the burger table in `creativedelight/recipes.js`. Alex's Delight's own catfish slice cooking (1 xp, 200 ticks in all
 three) is a mod recipe, not a hand row; a `fishCook` call would make it 0.35 / 100 / 600 (owner call).
 
 Value changes (CD.FOOD, owner 2026-10-27 rule): Fruits' three cooked fruits 0.35 xp in furnace, smoker and campfire (were

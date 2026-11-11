@@ -1,13 +1,11 @@
 {
   "key.creativeengineering.stepstool": "Step Up (Stepstool)",
-  "item.creativeengineering.copper_shield": "Copper Shield",
-  "item.creativeengineering.gold_shield": "Gold Shield",
-  "item.creativeengineering.diamond_shield": "Diamond Shield",
-  "item.creativeengineering.netherite_shield": "Netherite Shield",
-  "item.creativeengineering.echo_shield": "Echo Shield",
-  "item.creativeengineering.felsic_shield": "Felsic Shield",
-  "item.creativeengineering.dragon_shield": "Dragon Shield",
-  "waila.h12y.tier.creativeengineering.copper": "Copper",
-  "item.creativeengineering.wooden_bucket": "Wooden Bucket",
-  "item.creativeengineering.wooden_water_bucket": "Wooden Water Bucket"
+  "item.creativeequipment.copper_shield": "Copper Shield",
+  "item.creativeequipment.gold_shield": "Gold Shield",
+  "item.creativeequipment.diamond_shield": "Diamond Shield",
+  "item.creativeequipment.netherite_shield": "Netherite Shield",
+  "item.creativeequipment.echo_shield": "Echo Shield",
+  "item.creativeequipment.felsic_shield": "Felsic Shield",
+  "item.creativeequipment.dragon_shield": "Dragon Shield",
+  "waila.h12y.tier.creativeengineering.copper": "Copper"
 }

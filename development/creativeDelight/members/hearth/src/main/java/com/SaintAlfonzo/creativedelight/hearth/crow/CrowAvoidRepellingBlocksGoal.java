@@ -3,21 +3,20 @@ package com.SaintAlfonzo.creativedelight.hearth.crow;
 import java.util.EnumSet;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 
 /** Wild crows keep clear of {@code #creativedelight:repels_crows} (R2): flee inside the scare radius, stop at 1.6 times it. */
 public class CrowAvoidRepellingBlocksGoal extends Goal {
     private static final double SPEED = 1.3D;
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     @Nullable
     private BlockPos source;
     @Nullable
     private Vec3 target;
     private int scanCooldown;
 
-    public CrowAvoidRepellingBlocksGoal(TamableAnimal crow) {
+    public CrowAvoidRepellingBlocksGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }

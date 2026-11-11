@@ -1,0 +1,11 @@
+{
+  "_comment": "namespace_move.md step 6 (2026-11-10): Creative Worldgen's ids moved from creativeengineering: to creativeworldgen:. Never prune. Forge-registry ids (the two biome modifier codecs) are remapped from here. The structure type and piece types sit in vanilla registries with no Forge remap and are listed for the record; old chunks are read through worldgen/LegacyIds (structure starts, references, piece types, meta parts) and the old dimensions through LegacyIds#keyAlias and DimensionMove. Data ids (structures, dimensions, noise settings, placed features, biome modifiers) are not registry entries Forge saves.",
+  "replaces": {
+    "creativeworldgen:tune_spawns": ["creativeengineering:tune_spawns"],
+    "creativeworldgen:bee_nests": ["creativeengineering:bee_nests"],
+    "creativeworldgen:meta": ["creativeengineering:meta"],
+    "creativeworldgen:meta_index": ["creativeengineering:meta_index"],
+    "creativeworldgen:meta_feature": ["creativeengineering:meta_feature"],
+    "creativeworldgen:meta_punch": ["creativeengineering:meta_punch"]
+  }
+}

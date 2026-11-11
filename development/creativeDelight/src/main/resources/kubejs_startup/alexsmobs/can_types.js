@@ -139,7 +139,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsmobs', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_flying_fish": {
    "section": "raw_fish",
@@ -204,7 +204,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsmobs', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_raw_lobster": {
    "section": "raw_fish",
@@ -269,7 +269,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsmobs', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_raw_catfish": {
    "section": "raw_fish",
@@ -338,7 +338,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsmobs', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_maggots": {
    "section": "hazard",

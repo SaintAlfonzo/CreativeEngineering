@@ -41,7 +41,7 @@
 	#Range: > 20
 	cooldownTicks = 72000
 	#Loot table rolled once for the reward; one stack of the result is ejected.
-	rewardTable = "creativeengineering:misc/monster_box_reward"
+	rewardTable = "creativecompat:misc/monster_box_reward"
 	#true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.
 	rewardSingleCount = false
 	#A wave mob farther than this many blocks from its box counts as gone.
@@ -251,7 +251,7 @@
 		copyCamo = true
 
 	#Visual soul-sand-style sinking: entities standing on a full block in the soft, dust,
-	#spongy or very_sticky tier (#creativeengineering:sinking) are drawn lower, and so is the
+	#spongy or very_sticky tier (#creativecompat:sinking) are drawn lower, and so is the
 	#camera. Collision, hitboxes, movement, mob AI and shadows are untouched.
 	[surface.sinking]
 		#How far the camera and entities appear to sink, in 1/16-block pixels (soul sand's real sink is 2). 0 = off.
@@ -286,7 +286,7 @@
 		hideUntyped = true
 
 #Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
-##creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
+##creativecompat:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
 #debris; filled by KubeJS). Server side.
 [vein_undo]
 	#Seconds a player waits after a successful undo before the next one. 0 = none.

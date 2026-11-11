@@ -88,7 +88,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - **Rebuild order:** clear → rules → values (beat rules) → exclusions (beat both). The log has `[compost] <cause>: N
   compostable (...)` and warnings for values naming items that don't exist or an unknown tier.
 - **Seed milling (2026-10-30, TODO `farming/composting #4`):** `server_scripts/wood/compost.js` mills any seed in
-  `#creativeengineering:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
+  `#creativedelight:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
   `tags/wood_tags.js` from `#forge:seeds` and `#c:seeds` minus corn kernels, which mill into cornmeal, and rice). The
   composter needs about 21 seeds per bone meal; the mill about 7. Test CP-01 (scratch queue SQ-CP-01): PASSED r1031 (2026-10-31). Shipped 1.1.05 (Gameplay bullet).
 - **Generator:** since 2026-10-25 (creative_delight.md 29) the rows are 35 generated `<mod>/compost_values.js` files in

@@ -66,7 +66,7 @@ import java.util.function.Predicate;
  */
 public final class StructureBiomeRules {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/structure-biome-rules");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/structure-biome-rules");
 
 	record Rule(List<String> biomes, Set<String> allow, Set<String> surfaceCheck) {
 		Rule(List<String> biomes, Set<String> allow) { this(biomes, allow, Set.of()); }

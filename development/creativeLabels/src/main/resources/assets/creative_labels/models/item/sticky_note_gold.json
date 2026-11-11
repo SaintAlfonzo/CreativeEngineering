@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "creative_labels:generated/note_item_gold"
-  }
-}

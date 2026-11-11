@@ -31,7 +31,7 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 | 1 | `solapplepie:lunchbag` | Lunchbag | 5 | paper (unchanged) | Spice of Life's: 6 paper |
 | 2 | `solapplepie:lunchbox` | Copper Lunchbox | 9 | copper | Bundle + 6 Copper Ingots |
 | 3 | `solapplepie:golden_lunchbox` | Iron Lunchbox | 14 (7 x 2) | iron | Copper Lunchbox + 6 Iron Ingots |
-| 4 | `solapplepie:netherite_lunchbox` (pack) | Netherite Lunchbox | 18 (9 x 2) | netherite | smithing: Iron Lunchbox + Netherite Ingot + Netherite Upgrade template |
+| 4 | `creativedelight:netherite_lunchbox` (pack) | Netherite Lunchbox | 18 (9 x 2) | netherite | smithing: Iron Lunchbox + Netherite Ingot + Netherite Upgrade template |
 
 The ids keep Spice of Life's names so existing boxes and their contents carry over. `item_dict` has the aliases
 `i.copper_lunchbox` and `i.iron_lunchbox`.
@@ -62,7 +62,7 @@ The ids keep Spice of Life's names so existing boxes and their contents carry ov
 
 ## 3. What the pack changes
 
-1. **Netherite tier.** patcherMod registers `solapplepie:netherite_lunchbox` (`LunchboxItems`), 18 slots, fire
+1. **Netherite tier.** patcherMod registers `creativedelight:netherite_lunchbox` (`LunchboxItems`), 18 slots, fire
    resistant, only when Spice of Life is loaded.
 2. **Looks.** New item models in `kubejs/assets/solapplepie/models/item/` point Lunchbox at the copper texture and
    Golden Lunchbox at the iron texture. Spice of Life's own `lunchbox.png` and `golden_lunchbox.png` are untouched:

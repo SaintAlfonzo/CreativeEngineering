@@ -3,31 +3,31 @@
   "overrides": [
     {
       "predicate": {
-        "creativeengineering:lunchbox_dyed": 1
+        "creativedelight:lunchbox_dyed": 1
       },
       "model": "solapplepie:item/lunchbox_look/lunchbag_dyed"
     },
     {
       "predicate": {
-        "creativeengineering:lunchbox_skin": 4
+        "creativedelight:lunchbox_skin": 4
       },
       "model": "fantasyfurniture:item/decorations/berry_basket_empty"
     },
     {
       "predicate": {
-        "creativeengineering:lunchbox_skin": 5
+        "creativedelight:lunchbox_skin": 5
       },
       "model": "fantasyfurniture:item/decorations/berry_basket_blueberry"
     },
     {
       "predicate": {
-        "creativeengineering:lunchbox_skin": 6
+        "creativedelight:lunchbox_skin": 6
       },
       "model": "fantasyfurniture:item/decorations/berry_basket_strawberry"
     },
     {
       "predicate": {
-        "creativeengineering:lunchbox_skin": 7
+        "creativedelight:lunchbox_skin": 7
       },
       "model": "fantasyfurniture:item/decorations/berry_basket_sweetberry"
     }

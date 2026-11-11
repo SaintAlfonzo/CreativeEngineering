@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Smithing: lunchbox + a skin item gives the same box (contents, name and dye kept) wearing that item's look.
  * The skin item is used up. Allowed skins: a lower-tier, empty lunchbox, or a Fantasy Furniture berry basket
- * ({@link Lunchboxes#canTakeSkin}). Type {@code creativeengineering:lunchbox_skin}; emitted by
+ * ({@link Lunchboxes#canTakeSkin}). Type {@code creativedelight:lunchbox_skin}; emitted by
  * {@code global.NCH.lunchboxSkin}. Soap takes the skin off again ({@link LunchboxSoapRecipe}).
  */
 public class LunchboxSkinRecipe extends UpgradeRecipe {

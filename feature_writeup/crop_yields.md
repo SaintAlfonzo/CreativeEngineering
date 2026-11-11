@@ -8,7 +8,7 @@ Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights
 | Part | Status | Where |
 |---|---|---|
 | Current drop yields, every overworld farmland crop | reference (loot dump 2026-10-26) | section 2.1 |
-| Soil yield, overworld crops (26) | BUILT 2026-10-28; reworked 2026-11-03 to Rich +33% / Fertile Soil +66% of each crop's average, every crop on, Ender Crop out; Creative Delight jar in `mods/` 2026-11-03; SQ-SY-08 to -13 queued (the 10-28 PASS covered the old values) | section 2.4, 3, `creativeengineering/soil_yield.js` |
+| Soil yield, overworld crops (26) | BUILT 2026-10-28; reworked 2026-11-03 to Rich +33% / Fertile Soil +66% of each crop's average, every crop on, Ender Crop out; Creative Delight jar in `mods/` 2026-11-03; SQ-SY-08 to -13 queued (the 10-28 PASS covered the old values) | section 2.4, 3, `creativedelight/soil_yield.js` |
 | Soil yield, nether crops | Planned, outline only (TODO `farming/crops #24`) | section 4 |
 
 Config: `config/creativedelight-common.toml` `[crop_drops.soil_yield]` (moved from `creativeengineering-common.toml` in the Creative Split) (one bonus per soil) and
@@ -123,7 +123,7 @@ where Fertile Soil was the weaker soil).
 
 ## 3. What the pack changes
 
-`kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js`, on `ServerEvents.genericLootTables` (the raw
+`kubejs/data/creativedelight/kubejs/creativedelight/soil_yield.js`, on `ServerEvents.genericLootTables` (the raw
 table JSON before the game parses it, the same method as `rusticdelight/crop_drops.js`). For each crop switched on, for
 each soil with a bonus above 0, one pool is appended:
 

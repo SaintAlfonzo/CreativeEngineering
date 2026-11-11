@@ -1,7 +1,7 @@
 {
   "_readme": [
     "Season types per biome, for Serene Seasons in the overworld. Read by kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js,",
-    "which fills the biome tags creativeengineering:seasons/<type>; patcherMod seasons/SeasonTypes reads the tags.",
+    "which fills the biome tags creativeworldgen:seasons/<type>; patcherMod seasons/SeasonTypes reads the tags.",
     "Edit, then /reload (tags). Reference: feature_writeup/weather.md; per-biome result:",
     "feature_writeup/weather_by_biome.md (python3 tools/gen_weather_table.py reads this file too).",
     "",
@@ -37,7 +37,7 @@
     "winter). [] = never snows. Biomes not listed snow whenever they are cold enough. Frozen and permanent",
     "biomes ignore it (their type decides). Applies below the snow line, CEConfig [seasons] snowLineY (320, build",
     "height): below it height alone never turns rain into snow; at and above it temperate and cold biomes always",
-    "snow. Filled into the tags creativeengineering:snow/no_<sub_season> by seasontags.js."
+    "snow. Filled into the tags creativeworldgen:snow/no_<sub_season> by seasontags.js."
   ],
   "arid": [
     "minecraft:badlands",

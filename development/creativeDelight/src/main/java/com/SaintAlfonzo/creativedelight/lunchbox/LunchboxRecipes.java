@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class LunchboxRecipes {
 
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
 
     public static final RegistryObject<RecipeSerializer<?>> SHAPED =
             SERIALIZERS.register("lunchbox_shaped", LunchboxShapedRecipe.Serializer::new);

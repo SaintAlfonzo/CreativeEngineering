@@ -80,7 +80,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_green_tea_cookie": {
    "section": "cookies",

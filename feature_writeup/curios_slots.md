@@ -16,7 +16,7 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 | Hands slot (1, Curios `HANDS` preset: priority 140, Curios hands icon) | `CuriosSlots` |
 | Face slot (1, priority 50 between head and necklace, vanilla empty helmet icon, lang "Face"; own `empty_face_slot.png` dropped 2026-11-04, it rendered as the missing texture) | `CuriosSlots` (`minecraft:item/empty_armor_slot_helmet`), `curios.identifier.face` in `lang/en_us.json` |
 | Feet slot (1, priority 190 between belt and charm, vanilla empty boots icon, lang "Feet"), 2026-10-29 | `CuriosSlots`, `curios.identifier.feet` in `lang/en_us.json` |
-| Feet items: the 16 stepstools ([stepstool.md](stepstool.md)) | tag `curios:feet` = `#creativeengineering:stepstools`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
+| Feet items: the 16 stepstools ([stepstool.md](stepstool.md)) | tag `curios:feet` = `#creativeequipment:stepstools`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
 | Player gets all three slots | IMC slots go to every player by default (no entities file in 5.1.x) |
 | Hands items: Falconry Glove (the only glove in the pack) | tag `curios:hands`, [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) |
 | Face items: Simple Hats chalk stick, smoking pipe (2026-11-04) and six masks (tribal, cucumber eye, ghost, hockey, horse, sleep eye), Botania cosmetic masks (ancient, eerie, tiny potato) | tag `curios:face`, same script (Simple Hats rows in Creative Compat's `tags/curiostags.js`) |

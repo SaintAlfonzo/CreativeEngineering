@@ -6,7 +6,7 @@ Compared against: **the tuning before groups (archived 2026-09-27)**. Ratio = ne
 
 ## Groups
 
-### `settlements` -> `creativeengineering:group/settlements`
+### `settlements` -> `creativeworldgen:group/settlements`
 
 Friendly settlements: vanilla, Towns & Towers and Missing Villages villages, Terralith fortified villages. Meta structures join later.
 
@@ -60,11 +60,11 @@ Grid: spacing 24, separation 10 (members never start closer than 11 chunks = 176
 | `towns_and_towers:village_swamp` | 142 | 0.5026 | 53 | 60 | 58 | 1.06 |  |
 | `towns_and_towers:village_wooded_badlands` | 205 | 0.1738 | 66 | 74 | 73 | 1.03 |  |
 
-### `pillager_settlements` -> `creativeengineering:group/pillager_settlements`
+### `pillager_settlements` -> `creativeworldgen:group/pillager_settlements`
 
 Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpost except the ship (boats).
 
-Grid: spacing 32, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
+Grid: spacing 32, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeworldgen:group/settlements` grid slots.
 
 | Structure | Weight | Frequency | Mod default 1 per | Before 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|---|
@@ -98,7 +98,7 @@ Grid: spacing 32, separation 16 (members never start closer than 17 chunks = 272
 | `towns_and_towers:pillager_outpost_taiga` | 45 | 1.0 | 152 | 70 | 71 | 0.96 |  |
 | `towns_and_towers:pillager_outpost_wooded_badlands` | 81 | 0.7962 | 145 | 52 | 50 | 1.09 |  |
 
-### `ruins` -> `creativeengineering:group/ruins`
+### `ruins` -> `creativeworldgen:group/ruins`
 
 Surface land ruins: Philip's Ruins and Terralith's glacial hut. Underground ruins stay standalone.
 
@@ -121,7 +121,7 @@ Grid: spacing 11, separation 6 (members never start closer than 7 chunks = 112 b
 | `philipsruins:start_nether_ruin` | 3 | 0.8688 | 310 | 179 | 178 | 1.01 |  |
 | `terralith:glacial_hut` | 261 | 0.249 | 27 | 22 | 22 | 1.00 |  |
 
-### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
+### `surface_dungeons` -> `creativeworldgen:group/surface_dungeons`
 
 Surface dungeons: YUNG's temples and witch huts, the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The vanilla temples YUNG's blocks in code stay out.
 
@@ -138,7 +138,7 @@ Grid: spacing 18, separation 7 (members never start closer than 8 chunks = 128 b
 | `terralith:spire` | 103 | 0.415 | 36 | 28 | 28 | 1.00 |  |
 | `towns_and_towers:mimic_desert` | 79 | 0.7049 | 32 | 32 | 32 | 1.00 |  |
 
-### `ocean_ruins` -> `creativeengineering:group/ocean_ruins`
+### `ocean_ruins` -> `creativeworldgen:group/ocean_ruins`
 
 Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.
 
@@ -157,7 +157,7 @@ Grid: spacing 8, separation 4 (members never start closer than 5 chunks = 80 blo
 | `philipsruins:ocean_ruins` | 58 | 0.4946 | 50 | 44 | 44 | 1.00 |  |
 | `towns_and_towers:wreckage_ocean` | 108 | 0.3243 | 32 | 39 | 39 | 1.00 |  |
 
-### `ocean_dungeons` -> `creativeengineering:group/ocean_dungeons`
+### `ocean_dungeons` -> `creativeworldgen:group/ocean_dungeons`
 
 Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.
 
@@ -167,7 +167,7 @@ Grid: spacing 32, separation 5 (members never start closer than 6 chunks = 96 bl
 |---|---|---|---|---|---|---|---|
 | `minecraft:monument` | 100 | 0.1 | 32 | 101 | 101 | 1.00 |  |
 
-### `sky` -> `creativeengineering:group/sky`
+### `sky` -> `creativeworldgen:group/sky`
 
 Sky structures: Cloud Storage's hot air balloons and sky temples. Meta structures join later.
 
@@ -178,7 +178,7 @@ Grid: spacing 151, separation 114 (members never start closer than 115 chunks = 
 | `cloudstorage:big_balloon` | 100 | 0.9896 | 32 | 215 | 215 | 1.00 |  |
 | `cloudstorage:sky_temple` | 100 | 0.9896 | 40 | 215 | 215 | 1.00 |  |
 
-### `boats` -> `creativeengineering:group/boats`
+### `boats` -> `creativeworldgen:group/boats`
 
 Ships at sea: the Towns & Towers ship village and pillager ship. Meta structures join later.
 
@@ -189,7 +189,7 @@ Grid: spacing 41, separation 21 (members never start closer than 22 chunks = 352
 | `towns_and_towers:pillager_outpost_ocean` | 72 | 0.9618 | 110 | 71 | 71 | 1.00 |  |
 | `towns_and_towers:village_ocean` | 138 | 0.9588 | 53 | 52 | 52 | 1.00 |  |
 
-### `remote` -> `creativeengineering:group/remote`
+### `remote` -> `creativeworldgen:group/remote`
 
 Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.
 

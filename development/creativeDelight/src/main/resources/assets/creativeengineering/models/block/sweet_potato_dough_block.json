@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/dough_block/sweet_potato_dough_block",
-    "particle": "creativeengineering:block/dough_block/sweet_potato_dough_block"
-  },
-  "render_type": "solid"
-}

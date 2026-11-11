@@ -11,7 +11,7 @@
     "  mode: surface (vegetal_decoration; biomes marked ocean or cave never match) or cave (underground_decoration;",
     "    every biome can match, the placed features search a cave floor below sea level and 13+ blocks under the surface).",
     "  where / add / except / features / disable_modifiers / label / notes: as in wild_crops.json.",
-    "Rates live in the placed features (kubejs/data/creativeengineering/worldgen/placed_feature/wild/mushrooms/):",
+    "Rates live in the placed features (development/creativeWorldgen packs/<modid>/data/creativeworldgen/worldgen/placed_feature/wild/mushrooms/):",
     "  sparse = dark forest and swamps: patch 1 in 1365, colony 1 in 60, huge 1 in 7 chunks: a quarter of the mean of",
     "    brown and red there (patches 1/256 and 1/512, FD colonies 1/15 each, huge 16 x 2.5% and 16 x 4.9% per chunk",
     "    from dark_forest_vegetation);",
@@ -27,7 +27,7 @@
       "label": "Brown Mushroom Colony",
       "mode": "surface",
       "where": ["mushroom", "dark_oak forest !mountain"],
-      "features": ["creativeengineering:wild/brown_mushroom_colonies"],
+      "features": ["creativeworldgen:wild/brown_mushroom_colonies"],
       "disable_modifiers": ["farmersdelight:brown_mushroom_colony"],
       "notes": "Pack feature: FD's own needs mycelium; this one also takes podzol/grass in shade (dark forest floor). Moved here from wild_crops.json."
     },
@@ -35,56 +35,56 @@
       "label": "Red Mushroom Colony",
       "mode": "surface",
       "where": ["mushroom", "dark_oak forest !mountain"],
-      "features": ["creativeengineering:wild/red_mushroom_colonies"],
+      "features": ["creativeworldgen:wild/red_mushroom_colonies"],
       "disable_modifiers": ["farmersdelight:red_mushroom_colony"]
     },
     "inky_cap_dark_forest": {
       "label": "Inky Cap (dark forest)",
       "mode": "surface",
       "where": ["dark_oak forest !mountain"],
-      "features": ["creativeengineering:wild/mushrooms/inky_cap_patch_sparse", "creativeengineering:wild/mushrooms/inky_cap_colonies_sparse", "creativeengineering:wild/mushrooms/huge_inky_cap_sparse"],
+      "features": ["creativeworldgen:wild/mushrooms/inky_cap_patch_sparse", "creativeworldgen:wild/mushrooms/inky_cap_colonies_sparse", "creativeworldgen:wild/mushrooms/huge_inky_cap_sparse"],
       "notes": "Patch 1 in 1365, colony 1 in 60, huge 1 in 7 chunks: a quarter of the brown/red rates there."
     },
     "morel_dark_forest_swamp": {
       "label": "Morel (dark forest, swamps)",
       "mode": "surface",
       "where": ["dark_oak forest !mountain", "swamp"],
-      "features": ["creativeengineering:wild/mushrooms/morel_patch_sparse", "creativeengineering:wild/mushrooms/morel_colonies_sparse", "creativeengineering:wild/mushrooms/huge_morel_sparse"],
+      "features": ["creativeworldgen:wild/mushrooms/morel_patch_sparse", "creativeworldgen:wild/mushrooms/morel_colonies_sparse", "creativeworldgen:wild/mushrooms/huge_morel_sparse"],
       "notes": "Same rates as inky cap in the dark forest. Swamps have the same brown/red patches as the dark forest (Terralith's swamp-only patches place nothing) and no FD colony, so the dark forest colony rate is used."
     },
     "inky_cap_mushroom_fields": {
       "label": "Inky Cap (mushroom fields)",
       "mode": "surface",
       "where": ["mushroom"],
-      "features": ["creativeengineering:wild/mushrooms/inky_cap_patch_fields", "creativeengineering:wild/mushrooms/inky_cap_colonies_fields", "creativeengineering:wild/mushrooms/huge_inky_cap_fields"],
+      "features": ["creativeworldgen:wild/mushrooms/inky_cap_patch_fields", "creativeworldgen:wild/mushrooms/inky_cap_colonies_fields", "creativeworldgen:wild/mushrooms/huge_inky_cap_fields"],
       "notes": "Fungi Delight's rates: patch 1 in 16, colony 1 in 15, huge 1 in 3 chunks."
     },
     "morel_mushroom_fields": {
       "label": "Morel (mushroom fields)",
       "mode": "surface",
       "where": ["mushroom"],
-      "features": ["creativeengineering:wild/mushrooms/morel_patch_fields", "creativeengineering:wild/mushrooms/morel_colonies_fields", "creativeengineering:wild/mushrooms/huge_morel_fields"],
+      "features": ["creativeworldgen:wild/mushrooms/morel_patch_fields", "creativeworldgen:wild/mushrooms/morel_colonies_fields", "creativeworldgen:wild/mushrooms/huge_morel_fields"],
       "notes": "Fungi Delight's rates: patch 1 in 12, colony 1 in 15, huge 1 in 4 chunks."
     },
     "cave_patches": {
       "label": "Inky Cap and Morel (caves)",
       "mode": "cave",
       "where": ["!ocean", "ocean"],
-      "features": ["creativeengineering:wild/mushrooms/inky_cap_patch_cave", "creativeengineering:wild/mushrooms/morel_patch_cave"],
+      "features": ["creativeworldgen:wild/mushrooms/inky_cap_patch_cave", "creativeworldgen:wild/mushrooms/morel_patch_cave"],
       "notes": "Every overworld biome. 1 in 1024 chunks each; a rolled chunk tries 8 cave floor spots (crops_by_biome.md counts all 8 as attempts, most land in rock). On the plant's own placeable_on tag (stone included)."
     },
     "cave_colonies": {
       "label": "Mushroom colonies (caves)",
       "mode": "cave",
       "where": ["!ocean", "ocean"],
-      "features": ["creativeengineering:wild/mushrooms/brown_colonies_cave", "creativeengineering:wild/mushrooms/red_colonies_cave", "creativeengineering:wild/mushrooms/inky_cap_colonies_cave", "creativeengineering:wild/mushrooms/morel_colonies_cave"],
+      "features": ["creativeworldgen:wild/mushrooms/brown_colonies_cave", "creativeworldgen:wild/mushrooms/red_colonies_cave", "creativeworldgen:wild/mushrooms/inky_cap_colonies_cave", "creativeworldgen:wild/mushrooms/morel_colonies_cave"],
       "notes": "Every overworld biome. 1 in 120 chunks each; a rolled chunk tries 8 cave floor spots (crops_by_biome.md counts all 8 as attempts, most land in rock). Only on #minecraft:mushroom_grow_block or #minecraft:dirt (moss, rooted dirt, dirt pockets), never on bare stone."
     },
     "cave_carrots": {
       "label": "Cave Carrots (caves)",
       "mode": "cave",
       "where": ["!ocean", "ocean"],
-      "features": ["creativeengineering:wild/cave_carrots/core", "creativeengineering:wild/cave_carrots/deep", "creativeengineering:wild/cave_carrots/high"],
+      "features": ["creativeworldgen:wild/cave_carrots/core", "creativeworldgen:wild/cave_carrots/deep", "creativeworldgen:wild/cave_carrots/high"],
       "notes": "Miner's Delight wild cave carrots, every overworld biome, never above Y 48 (patch origin Y 44 at most; a patch spreads 3 up). Three bands, each 1 in N chunks, 8 floor spots tried: core Y -24 to 24 1 in 2, deep Y -64 to -25 1 in 5, high Y 25 to 44 1 in 8 (per Y layer the deep and high bands are about half the core density). On stone, deepslate or dirt, in noise caves and in carver caves (air and cave_air; the mushrooms are noise caves only). The Miner's port ships no modifier of its own (upstream: 1 in 3 chunks, Y -54 to 48, no cave check)."
     }
   }

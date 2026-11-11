@@ -60,7 +60,7 @@ public final class CalendarConfig {
 
         private Seasons(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Season types on top of Serene Seasons. The biome lists are the tags creativeengineering:seasons/",
+                    "Season types on top of Serene Seasons. The biome lists are the tags creativecalendar:seasons/",
                     "arid, frozen, tropical and adaptive (kubejs/generation_scripts/worldgen/season_types.json).",
                     "Arid: no rain all year. Frozen: snow all year. Tropical: wet and dry seasons, savannas included.",
                     "Adaptive (rivers, beaches): each column behaves like the nearest land biome. SeasonHUD shows",
@@ -103,7 +103,7 @@ public final class CalendarConfig {
 
         private CropSeasons(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Every crop has a type (block tags creativeengineering:crop_seasons/<type>, filled from",
+                    "Every crop has a type (block tags creativecalendar:crop_seasons/<type>, filled from",
                     "kubejs/generation_scripts/worldgen/crop_seasons.json). Each season is fertile (grows faster),",
                     "neutral or off (grows slower) for that type, read from the biome's own calendar: spring to winter",
                     "in temperate and cold biomes, wet and dry in tropical, dry and arid ones. Replaces Serene Seasons'",

@@ -1,4 +1,4 @@
-// creativeLabels: Creative Labels (mod id creative_labels), sticky notes and labels as one face_paper block.
+// creativeLabels: Creative Labels (mod id creativelabels), sticky notes and labels as one face_paper block.
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
 // Build from the instance root (`./gradlew :creativeLabels:build`) or from here (`./gradlew build`).
 plugins {

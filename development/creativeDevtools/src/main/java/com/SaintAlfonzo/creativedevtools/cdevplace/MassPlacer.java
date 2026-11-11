@@ -5,7 +5,6 @@ import com.SaintAlfonzo.creativedevtools.DevtoolsConfig.VerticalAlign;
 import com.SaintAlfonzo.creativeworldgen.worldgen.BiomeLayoutTuner;
 import com.SaintAlfonzo.creativeworldgen.worldgen.PoolTuner;
 import com.SaintAlfonzo.creativecommon.util.WorldgenFiles;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -58,7 +57,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -79,6 +77,7 @@ import java.util.stream.Stream;
  * /cdevplace templates &lt;glob...&gt;                         raw templates, one row per folder
  * /cdevplace preview structures|templates ...             list the rows without placing
  * /cdevplace status | stop
+ * /cdevplace catalogue build|preview|status|stop          the Structure Catalogue ({@link StructureCatalogue})
  * </pre>
  *
  * Filter terms (space separated, like structure_tags.json values): an id, a glob with *, {@code @namespace},
@@ -142,12 +141,16 @@ public final class MassPlacer {
 	}
 
 	/** Keeps a chunk loaded between being generated and being built on; expires by itself after a minute. */
-	private static final net.minecraft.server.level.TicketType<ChunkPos> TICKET =
+	static final net.minecraft.server.level.TicketType<ChunkPos> TICKET =
 			net.minecraft.server.level.TicketType.create("creativedevtools_cdevplace", Comparator.comparingLong(ChunkPos::toLong), 1200);
 
 	private static Job job;   // server thread only
 
 	private MassPlacer() {}
+
+	static boolean running() {
+		return job != null;
+	}
 
 	// ── commands ─────────────────────────────────────────────────────────────
 
@@ -158,7 +161,8 @@ public final class MassPlacer {
 				.then(templatesNode(false))
 				.then(Commands.literal("preview").then(structuresNode(true)).then(templatesNode(true)))
 				.then(Commands.literal("status").executes(ctx -> status(ctx.getSource())))
-				.then(Commands.literal("stop").executes(ctx -> stop(ctx.getSource())));
+				.then(Commands.literal("stop").executes(ctx -> stop(ctx.getSource())))
+				.then(StructureCatalogue.commandNode());
 		event.getDispatcher().register(root);
 	}
 
@@ -225,6 +229,7 @@ public final class MassPlacer {
 		if (preview) return total;
 
 		if (job != null) return error(src, "a /cdevplace run is already going (" + job.done + "/" + job.total + "); /cdevplace stop first");
+		if (StructureCatalogue.running()) return error(src, "a catalogue build is going; /cdevplace catalogue stop first");
 		int max = DevtoolsConfig.placeMaxItems();
 		if (total > max) return error(src, total + " matches is more than [worldgen.mass_place] maxItems (" + max + "): narrow the filter or raise it");
 		ServerLevel level = src.getLevel();
@@ -443,12 +448,12 @@ public final class MassPlacer {
 	}
 
 	/** First free block above the ground at x, z (loads the chunk). */
-	private static int groundY(ServerLevel level, int x, int z) {
+	static int groundY(ServerLevel level, int x, int z) {
 		level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
 		return level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
 	}
 
-	private static void sign(ServerLevel level, BlockPos pos, List<String> lines) {
+	static void sign(ServerLevel level, BlockPos pos, List<String> lines) {
 		BlockState state = Blocks.OAK_SIGN.defaultBlockState().setValue(StandingSignBlock.ROTATION, 8);   // text faces -Z, the aisle
 		level.setBlock(pos, state, Block.UPDATE_ALL);
 		if (level.getBlockEntity(pos) instanceof SignBlockEntity be) {
@@ -460,7 +465,7 @@ public final class MassPlacer {
 
 	// ── pure helpers (headless-tested) ───────────────────────────────────────
 
-	static final int SIGN_WIDTH = 16;   // about what a sign line (90 px) holds; the renderer clips the rest
+	static final int SIGN_WIDTH = CatalogueLayout.SIGN_WIDTH;
 
 	/** Namespace on the first line, the path wrapped on '/' and '_' over the rest; {@code maxLines} lines at most. */
 	static List<String> signLines(String id, int maxLines) {
@@ -583,56 +588,22 @@ public final class MassPlacer {
 		return out;
 	}
 
-	/** structure_tags.json resolved over the live structure ids (unknown ids are just skipped here). */
+	/** structure_tags.json resolved over the live structure ids (unknown ids are just skipped here), in the file's order. */
 	static Map<String, Set<String>> packTags(List<String> all) {
-		Map<String, List<String>> defs = new LinkedHashMap<>();
 		try {
 			String text = WorldgenFiles.readText(TAGS);
 			if (text == null) return Map.of();
 			JsonObject tags = PoolTuner.parseLenient(text).getAsJsonObject("tags");
 			if (tags == null) return Map.of();
-			for (Map.Entry<String, JsonElement> e : tags.entrySet()) {
-				List<String> values = new ArrayList<>();
-				JsonElement v = e.getValue().isJsonObject() ? e.getValue().getAsJsonObject().get("values") : null;
-				if (v != null && v.isJsonArray()) for (JsonElement x : v.getAsJsonArray()) values.add(x.getAsString());
-				defs.put(e.getKey(), values);
-			}
+			return CatalogueRules.resolveTags(tags, all);
 		} catch (RuntimeException | java.io.IOException e) {
 			LOG.warn("[cdevplace] could not read {}: {}", TAGS, e.toString());
 			return Map.of();
 		}
-		Map<String, Set<String>> done = new LinkedHashMap<>();
-		for (String name : defs.keySet()) resolve(name, defs, all, done, new LinkedHashSet<>());
-		return done;
-	}
-
-	private static Set<String> resolve(String name, Map<String, List<String>> defs, List<String> all, Map<String, Set<String>> done, Set<String> resolving) {
-		if (done.containsKey(name)) return done.get(name);
-		if (!defs.containsKey(name) || !resolving.add(name)) return Set.of();
-		Set<String> inc = new LinkedHashSet<>(), exc = new LinkedHashSet<>();
-		for (String raw : defs.get(name)) {
-			boolean neg = raw.startsWith("!");
-			String v = neg ? raw.substring(1) : raw;
-			Collection<String> ids;
-			if (v.startsWith("#")) ids = resolve(v.substring(1), defs, all, done, resolving);
-			else if (v.contains("*")) { Pattern p = glob(v); ids = all.stream().filter(id -> p.matcher(id).matches()).toList(); }
-			else ids = all.contains(v) ? List.of(v) : List.of();
-			(neg ? exc : inc).addAll(ids);
-		}
-		resolving.remove(name);
-		inc.removeAll(exc);
-		done.put(name, inc);
-		return inc;
 	}
 
 	static Pattern glob(String g) {
-		StringBuilder sb = new StringBuilder("^");
-		String[] parts = g.split("\\*", -1);
-		for (int i = 0; i < parts.length; i++) {
-			if (i > 0) sb.append(".*");
-			sb.append(Pattern.quote(parts[i]));
-		}
-		return Pattern.compile(sb.append('$').toString());
+		return CatalogueRules.glob(g);
 	}
 
 	private static Collection<String> registryTag(Registry<Structure> reg, String tagId) {
@@ -653,7 +624,7 @@ public final class MassPlacer {
 	 * {@code structures.nbt} path and its substring throws (StringIndexOutOfBounds, 09_phase_9.md 3.1), which killed
 	 * the whole templates mode. Per pack, a stray path is just skipped. Cached until the next /reload.
 	 */
-	private static synchronized List<String> templateIds(MinecraftServer server) {
+	static synchronized List<String> templateIds(MinecraftServer server) {
 		ResourceManager rm = server.getResourceManager();
 		if (rm == templateIdsFrom) return templateIdsCache;
 		Set<String> ids = new TreeSet<>();

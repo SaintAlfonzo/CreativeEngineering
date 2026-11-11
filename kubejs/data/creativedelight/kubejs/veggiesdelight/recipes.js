@@ -15,7 +15,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Bread ####################
-		// #forge:bread takes every bread, slice and toast (creativeengineering/bread_tags.js). Garlic bread and the slicing
+		// #forge:bread takes every bread, slice and toast (creativedelight/bread_tags.js). Garlic bread and the slicing
 		// recipe turn a bread into more bread, so they stay on the plain loaves (4 garlic bread from a garlic bread, or 4
 		// slices from a slice, would copy items).
 		R.replaceInput({ id: 'veggiesdelight:garlic_bread' }, i.t_bread, i.t_bread_loaf, e)
@@ -23,7 +23,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Juices #########################
 		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
-		// Delight's pot recipes removed: pot and Kettle follow the drink rules (creativeengineering/drinks.js, food/drinks #15).
+		// Delight's pot recipes removed: pot and Kettle follow the drink rules (creativedelight/drinks.js, food/drinks #15).
 		// Create mixer, heated: Veggies Delight's pot inputs + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at
 		// 250 mB.
 		;[
@@ -89,11 +89,16 @@ ServerEvents.recipes(e => {
 		F.assemble(fd.veggie_cooked_zucchini, [VD_COOKED_MEAT, { fill: Fluid.of(f.milk, 250) }], fd.dish_stuffed_zucchini_boat)
 		F.assemble(fd.veggie_cooked_zucchini, [fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, VD_COOKED_MEAT, fd.sauce_tomato], fd.dish_stuffed_zucchinis)
 
-		//######################### Vegetarian patty #########################
+		//######################### Veggie patty #########################
 		// Patty family (creativedelight/members #30 R11): the raw patty cooks by the cooking trio like any cooked cut piece
 		// (VD's own furnace, smoker and campfire recipes are replaced by the family's).
 		F.veggieCook(fd.veggie_vegetarian_patty, fd.veggie_cooked_vegetarian_patty)
-		// Burger rule (creativeengineering/recipes.js): shaped, toppings on top, patty in the middle, bread at the bottom,
+		// Miner's Delight's cave carrot (dishes/ingredients #43): cut for 2 raw patties, the baked one for 2 cooked ones
+		if (Platform.isLoaded('miners_delight')) {
+			R.fdCutting(i.cave_carrot, i.any_knife, n(fd.veggie_vegetarian_patty, 2), e, 'raw_veggie_patty_from_cave_carrot')
+			R.fdCutting(i.baked_cave_carrot, i.any_knife, n(fd.veggie_cooked_vegetarian_patty, 2), e, 'cooked_veggie_patty_from_baked_cave_carrot')
+		}
+		// Burger rule (creativedelight/recipes.js): shaped, toppings on top, patty in the middle, bread at the bottom,
 		// plus one assembly. Started on the patty, as the egg burger: assemblies on bread need a first step of their own.
 		R.remove({ id: 'veggiesdelight:vegetarian_burger' }, e)
 		F.burgerAssemble(['C T', ' P ', ' B '], { C: i.cabbage, T: i.tomato, P: fd.veggie_cooked_vegetarian_patty, B: i.t_bread },

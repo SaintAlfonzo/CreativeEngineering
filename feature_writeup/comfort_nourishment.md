@@ -989,7 +989,7 @@ Cans copy their source food (`gen_can_types.py`). Copper cup meals take their bo
   of section 5 (bars and salads Comfort, meat rice and stew cutoff 10) apply only to foods the input test leaves bare.
 - **B. Vanilla soups (Mushroom Stew, Beetroot Soup, Rabbit Stew, and their cans and cups) get Comfort 30 s.** The 30 s is for those
   three only; the 60 s rule (Comfort on a food restoring 7 or less) still applies to every other light Comfort food.
-- **C. A new food is classified by its food type tag** (`#creativeengineering:food_type/...`, `food_types.json`), no named list for the
+- **C. A new food is classified by its food type tag** (`#creativedelight:food_type/...`, `food_types.json`), no named list for the
   type itself. Only the exceptions that a type cannot express (meat rice and stew, plain rice, bars) are a small named list.
 - **D. Formless foods lose Comfort and Nourishment** and are all marked to get another effect later (11.7).
 

@@ -186,7 +186,7 @@ each. Checks for an older copy add code paths that are never taken and hide a br
    (`global.CD.worldgen ? ... : true`). Fix: call the getter directly.
 5. **Dead fallbacks for keys and globals that always exist.** **FIXED 2026-10-27** (section 9). Reinvent.
    - CD [_qol/placeable_tooltip.js:23-28](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js) `tagOf(key, fallback)` hard-codes five tag ids in case `i.t_placeable*` is missing; all five keys exist (`item_dict.js:13744-13748`).
-   - [placeabletags.js:51](../kubejs/server_scripts/tags/placeabletags.js) and CD `creativeengineering/food_type_tags.js:56`: `i.t_placeable_on_coaster || '#creativeengineering:...'`.
+   - [placeabletags.js:51](../kubejs/server_scripts/tags/placeabletags.js) and CD `creativedelight/food_type_tags.js:56`: `i.t_placeable_on_coaster || '#creativeengineering:...'`.
    - CD `kubejs/data/creativedelight/kubejs/_core/item_merges.js:8`: `!global.itemMergeRun` (always set by `startup_scripts/_lib/item_merges.js:40`).
    - CD startup `compost.js:10` in farmersdelight, fungidelight, veggiesdelight, vintagedelight, and the CD client scripts (`endersdelight/client.js`, `ends_delight/*`, `fungidelight/jei_info.js`, `_core/cd_client.js`): `!!global.CD &&` inside the jar that defines `global.CD` at priority 1000. The routing memory documents this guard for server scripts only.
    - [seasoning_lang.js:3-8](../kubejs/client_scripts/seasoning_lang.js): `global.seasoning || {}`.
@@ -281,7 +281,7 @@ a case). Counts: raw `e.custom` 21 calls in 6 files (12 are sequenced-assembly s
     hand-written and generated sections overlap. Fix: one key per id, the others as `i.x = i.y` aliases or dropped.
 21. **Server scripts reassign dict keys.** **FIXED 2026-10-27** (section 9). Rule. Same value as the dict: `tags/wood_tags.js:6` `i.barrel` (dict :109),
     `engineering/end.js:7` `i.ender_shard` (:2118), `engineering/redstone.js:9` `i.mundane_potion` (:1374),
-    `engineering/dust.js:8` `i.matcha` (:115), CD `creativeengineering/cultivated_meat.js:23` `i.culture_base` (:29).
+    `engineering/dust.js:8` `i.matcha` (:115), CD `creativedelight/cultivated_meat.js:23` `i.culture_base` (:29).
     New key at runtime inside a recipe event: `wood/ash.js:7` `i.any_animal_fat = '#forge:animal_fat'`. Fix: delete the
     lines; move `any_animal_fat` into the dict.
 24. **Block dict and item dict share 51 ids.** **CLOSED 2026-10-27** (owner: no change). Judgement, probably intended (separate registries; e.g. `b.coaster` /
@@ -294,7 +294,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 `tags/cookingtags.js` are the documented exception and are not listed.
 
 25. **Meat cultures registered in the pack.** **FIXED 2026-10-27** (section 9). `startup_scripts/items/cultures.js:16-44` (7 cultures, 7 blocks); their
-    recipes already moved to CD `creativeengineering/cultivated_meat.js`. Fix: move the file to CD.
+    recipes already moved to CD `creativedelight/cultivated_meat.js`. Fix: move the file to CD.
 26. **Member content in pack server scripts.** **FIXED 2026-10-27** (section 9). `tags/blocktags.js:20-22` (Vintage Delight ghost-pepper soil tag),
     `loot/09_crop_drops.js` (Rustic Delight bell-pepper drops, built 10-21 and not moved; creative_delight.md 29.3 does
     not exempt it), `tags/placeabletags.js` (its tooltip moved to CD `_qol/placeable_tooltip.js`, the tags stayed).

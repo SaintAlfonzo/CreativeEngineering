@@ -1,0 +1,6 @@
+{
+  "loader": "creativelabels:face_paper",
+  "textures": {
+    "particle": "sticky_it:entities/sticky"
+  }
+}

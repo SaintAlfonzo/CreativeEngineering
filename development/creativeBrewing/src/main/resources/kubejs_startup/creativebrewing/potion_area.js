@@ -3,7 +3,7 @@
 // global.potionArea — spawns the expanding lingering-potion dome for the
 // creativeengineering potion buckets (potion_buckets.js (this folder)).
 // The right-click behaviour that calls this lives in
-// CB server creativeengineering/potion_buckets.js.
+// CB server creativebrewing/potion_buckets.js.
 //
 // A potion bucket spawns a STACK of vanilla AreaEffectClouds - one "ring" per level, up to
 // `rings` per bucket - instead of one flat disc:
@@ -118,7 +118,7 @@ console.log('potion_area func loading')
     // calls (see CreativeEngineering#commonSetup) and just forwards into whatever handler we
     // install here - keeping global.potionArea.spawn (below) the single place that knows
     // about rings/radii/colours/effects. Right-click still goes straight through
-    // CB server creativeengineering/potion_buckets.js -> global.potionArea.spawn directly;
+    // CB server creativebrewing/potion_buckets.js -> global.potionArea.spawn directly;
     // this wiring only covers the dispenser path.
     try {
         // no const/let here: Rhino throws "redeclaration of var" for a block-scoped decl in this try
@@ -136,7 +136,7 @@ console.log('potion_area func loading')
         DEFAULT_EFFECTS: DEFAULT_EFFECTS,
 
         // the effect as a ring applies it (duration x the bucket's effectMult) - the tooltip
-        // in CB client creativeengineering/potion_buckets.js shows this, so it matches what the player gets
+        // in CB client creativebrewing/potion_buckets.js shows this, so it matches what the player gets
         scaled(itemId, inst) {
             const dial = BUCKETS[itemId] || BUCKETS['creativebrewing:potion_bucket']
             return scaledInstance(inst, dial.effectMult)

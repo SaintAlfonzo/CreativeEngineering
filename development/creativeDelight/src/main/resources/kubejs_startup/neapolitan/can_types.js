@@ -204,7 +204,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_dried_banana": {
    "section": "cooked_veggie",

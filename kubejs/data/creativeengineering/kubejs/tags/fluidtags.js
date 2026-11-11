@@ -44,7 +44,7 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/ethylene', f.ethylene],
 		['forge:fluid/lpg', f.lpg],
 
-		// magic (potion and dragon's breath rows: Creative Brewing, kubejs/data/creativebrewing/kubejs/creativeengineering/fluid_tags.js;
+		// magic (potion and dragon's breath rows: Creative Brewing, kubejs/data/creativebrewing/kubejs/creativebrewing/fluid_tags.js;
 		// the xp tags and the XP fluid merge: Creative Magic, kubejs/data/creativemagic/kubejs/tags/fluidtags.js)
 		['forge:fluid/ink', f.ink],
 	].forEach(([tag, fluid]) => t.addFluid(e, tag, fluid))

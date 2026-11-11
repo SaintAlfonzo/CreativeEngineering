@@ -143,7 +143,7 @@ since the last restart), a WARNING says so.
 
 | Field | Meaning |
 |---|---|
-| `id` | unique, lowercase `a-z 0-9 _`; names the biome tag `creativeengineering:mob_spawns/<id>` and the log lines |
+| `id` | unique, lowercase `a-z 0-9 _`; names the biome tag `creativeworldgen:mob_spawns/<id>` and the log lines |
 | `mob` | entity id; a mod that isn't loaded skips the rule with a warning |
 | `action` | `set`: spawn at `weight` (and `min`/`max` when given). Where the mob already spawns, its entries become one, in place, keeping its group unless given; where it doesn't, it is added to `category` (default the mob's own), group 1-1 unless given. Weight 0 = remove. `scale`: every existing weight x `factor`, rounded half up, at least 1; 0 = remove; never adds. `remove`: every entry, every category |
 | `where` / `add` / `except` | as `wild_crops.json`: `where` clauses OR'ed, traits in a clause AND'ed, `!trait` negated, traits from the `biomes` table in `wild_crops.json` (overworld only). `add`: biome ids or `#tags` (Nether, End). `except`: ids; it can't take members out of an added `#tag`. Unlike crops, ocean and cave biomes match |
@@ -179,6 +179,7 @@ since the last restart), a WARNING says so.
 | `duck_wetlands`, `goose_wetlands` | duck 6 / goose 4 (2-4) in swamps and on beaches, spawning anywhere as on rivers | 9.6 |
 | `duck_ponds`, `goose_ponds` | duck 4 / goose 3 (2-4) in grassy land biomes (not swamp, river, beach, sky); water only, see 3.1 | 9.6 |
 | `lone_villagers` | villager 1 (1-1), creature, in plains, sunflower plains, steppe, valley clearing, meadow, blooming plateau, highlands; condition `lone_villagers_daylight` (light_only) | spawns #4 |
+| `no_alexsmobs_crow` | Alex's Mobs' crow removed from every overworld biome; Hearth and Harvest's crow, which spawns only from nests, replaces it (2026-11-10) | [plan_hearth_crow_swap.md](plan_hearth_crow_swap.md) 6.3 |
 | `allay_mystical` | allay 3 (1-2), creature, in Terralith moonlight, lavender and amethyst biomes and the Mirage Isles; condition `allay_daylight` (light_only) | spawns #5 |
 
 Shiba (9.4) is off at the source: Quark's `Shiba` module is `false` in `config/quark-common.toml` (and `configs_edited/`).
@@ -189,7 +190,7 @@ Shiba (9.4) is off at the source: Quark's `Shiba` module is `false` in `config/q
 
 ```json
 "conditions": [
-  { "id": "flying_birds", "condition": "light_only", "mobs": ["minecraft:parrot", "alexsmobs:crow"] },
+  { "id": "flying_birds", "condition": "light_only", "mobs": ["minecraft:parrot", "alexsmobs:seagull"] },
   { "id": "waterfowl_ponds", "condition": "water_only", "mobs": ["untitledduckmod:duck"], "rules": ["duck_ponds"] }
 ],
 "spawn_ground": { "minecraft:animals_spawnable_on": ["#minecraft:dirt"] }
@@ -210,7 +211,7 @@ registered rule too (Alex's Mobs' crow).
 
 | Condition | Kind | Mobs | Where | Plan |
 |---|---|---|---|---|
-| `flying_birds` | light_only | parrot, crow, seagull, bald eagle, sunbird, toucan, blue jay, hummingbird, potoo | everywhere | 9.5 |
+| `flying_birds` | light_only | parrot, seagull, bald eagle, sunbird, toucan, blue jay, hummingbird, potoo | everywhere | 9.5 |
 | `chicken_shores` | light_only | chicken | the `chicken_shores` rule's biomes (beaches, rivers): sand and gravel work there | 9.3 |
 | `waterfowl_ponds` | water_only | duck, goose | the `duck_ponds` / `goose_ponds` biomes: lakes and ponds only | 9.6 |
 

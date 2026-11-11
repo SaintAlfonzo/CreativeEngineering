@@ -39,7 +39,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
   `mixin/CfbCornerStorageMixin`, `mixin/CfbCornerUseMixin`, `kitchen/CornerStorage`, `client/FridgeTopFill`, `rack/`;
   [tools/gen_cfb_racks.py](../tools/gen_cfb_racks.py);
   [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js);
-  [cooking/mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js) and NCH `mortar` / `foodGrinding`;
+  [cooking/mortar.js](../kubejs/data/creativedelight/kubejs/creativedelight/mortar.js) and NCH `mortar` / `foodGrinding`;
   [tools/gen_mortar_catalog.py](../tools/gen_mortar_catalog.py).
 - **Knobs:** `config/creativedelight-common.toml` `[cookingforblockheads] cuttingBoardOffsetX / Y / Z` and `plateOffsetX / Y / Z`
   (pixels; Y default -1; in `blockheads_additions-common.toml [kitchen]` until M8 2026-11-04 and
@@ -88,9 +88,9 @@ water".
   port's coaster either. CfB's counter and corner are 15 px tall (`Block.box(0.5, 0, 0, 15.5, 15, 16)`, model worktop
   at y 15, backsplash to y 17 at the back), so they have no top face at all.
 - "Counter toppers" (`compat/CounterToppers`, TODO `cooking/kitchen #8`, `#20`): a block in
-  `#creativeengineering:counter_toppers` (`b.t_counter_toppers` = FD `cutting_board`, Display Delight `food_plate`,
+  `#creativedelight:counter_toppers` (`b.t_counter_toppers` = FD `cutting_board`, Display Delight `food_plate`,
   `small_food_plate`, every `*plated_*` block, `brewinandchewin:coaster`) above a block in
-  `#creativeengineering:counter_supports` (`b.t_counter_supports` = `b.cfb_counter`, `b.cfb_corner`; `blocktags.js`;
+  `#creativedelight:counter_supports` (`b.t_counter_supports` = `b.cfb_counter`, `b.cfb_corner`; `blocktags.js`;
   was `cutting_board_supports` until 2026-10-24) stays.
 - `BlockStateCounterTopperMixin` on `BlockStateBase`: RETURN on `canSurvive` (m_60710_) turns a `false` into `true`
   for a topper on a support. `BlockItem.canPlace` and the board's and coaster's `updateShape` all ask through the
@@ -175,7 +175,7 @@ water".
   bamboo isn't the cheap route.
 - **Mortar and pestle** (`creativeengineering:mortar_and_pestle`, `i.mortar_and_pestle`, KubeJS item in
   `items/misc_items.js`, 512 durability, texture copied from Old Guns' (AGPL-3.0)). Crafting table: lever over
-  polished granite in Old Guns' bench shape (Creative Delight `creativeengineering/recipes.js`, was `cooking.js`; `shaped/mortar_and_pestle`). NCH
+  polished granite in Old Guns' bench shape (Creative Delight `creativedelight/recipes.js`, was `cooking.js`; `shaped/mortar_and_pestle`). NCH
   `mortar(output, input, e, id, inputCount)` writes a shapeless craft with `damageIngredient` (1 durability, the
   mortar comes back), id `mortar/<id>`, up to 8 inputs.
 - **Powder Pestle:** Old Guns' own `oldguns:mortar_and_pestle` (`i.powder_pestle`) is renamed in `namechanges.js`
@@ -237,7 +237,7 @@ water".
 ### 2.9 Cookware pickup and punch toggle (built 2026-11-02, reworked 2026-11-03; r1102b PASS covers the 11-02 version only; tests SQ-FCB-08, -08b, CQ-FCB-04, -04b; TODO `cooking/kitchen #27`)
 
 - Blocks: `#creativedelight:cookware_pickup` (Farmer's Delight cooking pot and skillet, Miner's copper pot, Farmer's
-  Respite kettle; CD `creativeengineering/kitchen_tags.js`). Code: CD Java `cooking/CookwareHandling`, switch
+  Respite kettle; CD `creativedelight/kitchen_tags.js`). Code: CD Java `cooking/CookwareHandling`, switch
   `[qol] cookwarePickup` (QoL-7); WTHIT line `compat/wthit/WthitCookwareToggle`.
 - Sneak right-click, empty main hand: every slot of the block's inventory (ingredients, stored meal, containers,
   output) goes into the player's inventory, overflow drops at the player (owner 2026-11-03). The hand gets the station
@@ -337,7 +337,7 @@ water".
 
 - Config: `cookingforblockheads-common.toml` (`ovenRequiresCookingOil`, `sinkRequiresWater`); `creativeengineering-common.toml`
   `[kitchen]`.
-- Tags: `#balm:cooking_oil` + Rustic Delight oil; `#creativeengineering:counter_supports`, `#creativeengineering:counter_toppers`.
+- Tags: `#balm:cooking_oil` + Rustic Delight oil; `#creativedelight:counter_supports`, `#creativedelight:counter_toppers`.
 - Creative Delight member blockheadsAdditions (section 9) mixins (all `remap = false`, SRG names): CfB oven fuel and
   smoking, `BlockStateBase#canSurvive` / `#updateShape` / `#getOffset` (counter toppers), FD board and Brewin' coaster
   renderers (client), CfB corner block entity and use, CfB oven `lit` state, sync, shape and renderer (2.10). Fridge
@@ -379,7 +379,7 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
   `CfbOvenRendererMixin`), `kitchen/` (`CounterToppers`, `CornerStorage`), `rack/` (`RackWoods`,
   `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `client/OvenRaise`, `BAConfig`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
-  [mortar.js](../kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
+  [mortar.js](../kubejs/data/creativedelight/kubejs/creativedelight/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
   [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js) (rack
   recipes and tags, counter tags, oven heat source tag), [client.js](../kubejs/assets/creativedelight/kubejs/cookingforblockheads/client.js) (oven, sink tooltips),
   NCH in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js); dict keys `i.mortar_and_pestle`, `i.powder_pestle`,
@@ -560,7 +560,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbCornerStorage` (now `kitchen/CornerStorage`),
   `CounterToppers`, `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
   `CEConfig.Kitchen` (then `BAConfig`, now `CDConfig.CFB`, same keys). Kept ids: the corner capability
-  `creativeengineering:corner_storage` and the tags `#creativeengineering:counter_supports` / `counter_toppers`. The
+  `creativeengineering:corner_storage` and the tags `#creativedelight:counter_supports` / `counter_toppers`. The
   pack's own Display Delight dishes are recognised by their Display Delight block class. The counter tags live in
   `cookingforblockheads/kitchen.js`.
 - **New:** wood racks (2.7), fridge fill in code (2.4), oven as a stove (2.10).

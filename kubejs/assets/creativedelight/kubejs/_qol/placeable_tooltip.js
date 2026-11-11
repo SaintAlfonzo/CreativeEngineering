@@ -1,12 +1,12 @@
 // requires: creativedelight
 // Placeable food tooltip lines: Creative Delight QoL-2 (creative_delight.md 8; moved from client_scripts/ 2026-10-25),
 // switch [qol] placeableTooltips (off: no lines and the mods' own lines stay). From the tags in the pack's
-// kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js:
-//   "Placeable"                     #creativeengineering:placeable
-//   "Placeable (while sneaking)"    ...and #creativeengineering:placeable/sneak
-//   "Placeable on plate"            #creativeengineering:placeable_on_plate        (Display Delight Food Plate)
-//   "Placeable on small plate"      #creativeengineering:placeable_on_small_plate  (Display Delight Small Food Plate)
-//   "Placeable on a coaster"        #creativeengineering:placeable_on_coaster      (Brewin' and Chewin' coaster)
+// kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js:
+//   "Placeable"                     #creativedelight:placeable
+//   "Placeable (while sneaking)"    ...and #creativedelight:placeable/sneak
+//   "Placeable on plate"            #creativedelight:placeable_on_plate        (Display Delight Food Plate)
+//   "Placeable on small plate"      #creativedelight:placeable_on_small_plate  (Display Delight Small Food Plate)
+//   "Placeable on a coaster"        #creativedelight:placeable_on_coaster      (Brewin' and Chewin' coaster)
 //
 // Tags sync from the server on join, so the check runs per tooltip (addAdvancedToAll) rather than on a
 // list fixed when this script loads. stack.hasTag(id) is KubeJS's one-argument kjs$hasTag; vanilla

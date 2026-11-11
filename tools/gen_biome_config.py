@@ -54,6 +54,8 @@ VANILLA_NETHER = {
                 {'biome': 'minecraft:crimson_forest', 'parameters': _p(t=0.4)},
                 {'biome': 'minecraft:warped_forest', 'parameters': _p(h=0.5, o=0.375)},
                 {'biome': 'minecraft:basalt_deltas', 'parameters': _p(t=-0.5, o=0.175)},
+                # Biomes O' Plenty's Visceral Heap, kept alone from that jar (feature_writeup/visceral_heap.md)
+                {'biome': 'biomesoplenty:visceral_heap', 'parameters': _p(t=0.45, h=0.5, o=0.2)},
             ],
         },
     },

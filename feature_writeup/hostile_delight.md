@@ -299,7 +299,7 @@ literally; every overlap is a concept.
 | Soda | End's `dragon_breath_soda` (dragon's breath too), Canned Goods `soda` ("Soda") | Keep, rename to avoid a second "Soda" (D15) |
 | Sea Pickle Tea, Marine Cocktale | Farmer's Respite kettle teas; `drink/tea`, `drink/other` | Families only; no kettle route (scope rule) |
 | Prepared Sea Pickle | Ocean's `braised_sea_pickle`, Oceanic `sea_pickle_slices` | Fix B2; it has no use, so a candidate for removal (D14) |
-| Blazing Ale | Name says alcohol; no Tipsy, no `#creativeengineering:food_type/drink/alcohol` | `drink/other`, not alcohol (D15) |
+| Blazing Ale | Name says alcohol; no Tipsy, no `#creativedelight:food_type/drink/alcohol` | `drink/other`, not alcohol (D15) |
 | Blazing Apple, Glowing Apple | Golden apple tier (25 golden foods, `golden` overlay) | `special`, not golden (no gold) |
 | Cave Skewer | Ender's crispy skewer, Nether's skewer (`skewer`) | Family only |
 | Rotten Ham line, Frozen Flesh | Pack rotten flesh uses: creosote -> prepared flesh, dog food, mulch, cleric trade | Keep; `hazard` (raw) and `meat` (cooked) |
@@ -365,7 +365,7 @@ with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate 
    `dumpall-refresh-workflow`). Gives `display_names.json`, `food/`, `recipes/`, `loot_tables/` rows for Hostile.
 1. **Ids and tags in one place.** Every item in `item_dict.js` (keys `hd_*` or per line, as the Fungi keys),
    the block in the block dict. Tags through `global.tags`: `#forge:raw_endermite` / the survivor's tag (D2),
-   `#forge:raw_guardian`, `#forge:cooked_guardian`, the pack's `#creativeengineering:food_type/*` through
+   `#forge:raw_guardian`, `#forge:cooked_guardian`, the pack's `#creativedelight:food_type/*` through
    `food_types.json` (step 9), `#forge:storage_blocks/candied_slime`, `#forge:slimeballs` users checked,
    `#forge:ice_cubes` users.
 2. **Upstream recipe removals.** Remove B1 and B2 by id; every other Hostile recipe is either kept, rebuilt by a rule

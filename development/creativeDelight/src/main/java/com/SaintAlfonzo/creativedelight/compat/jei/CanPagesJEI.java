@@ -43,7 +43,7 @@ import net.minecraft.world.item.crafting.Ingredient;
  * Moves the can crafts off the Crafting page onto two pages of their own:
  * <ul>
  *   <li><b>Canning</b> (icon: empty can + crafting table): crafts that take an empty can and make a can
- *       ({@code #creativeengineering:cans});</li>
+ *       ({@code #creativedelight:cans});</li>
  *   <li><b>Using Cans</b> (icon: crushed can + crafting table): crafts that take a can (NCH's {@code cans} argument:
  *       uncanning, pies from a can, ...).</li>
  * </ul>
@@ -65,7 +65,7 @@ public class CanPagesJEI implements IModPlugin {
 
     private static final ResourceLocation EMPTY_CAN = new ResourceLocation("canned_goods", "empty_can");
     private static final ResourceLocation CRUSHED_CAN = new ResourceLocation("canned_goods", "crushed_empty_can");
-    private static final TagKey<Item> CANS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(CreativeDelight.NS, "cans"));
+    private static final TagKey<Item> CANS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(CreativeDelight.MOD_ID, "cans"));
     /** Seasoning crafts have their own page ({@link SeasoningJEI}). */
     private static final String SEASON_PREFIX = "shapeless/season/";
 
@@ -123,7 +123,7 @@ public class CanPagesJEI implements IModPlugin {
             for (CraftingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
                 ResourceLocation id = recipe.getId();
                 if (recipe.isSpecial() || recipe.getResultItem().isEmpty()
-                        || (id.getNamespace().equals(CreativeDelight.NS) && id.getPath().startsWith(SEASON_PREFIX))) {
+                        || (id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX))) {
                     continue;
                 }
                 if (recipe.getResultItem().is(CANS) && !emptyCan.isEmpty() && takes(recipe, stack -> stack.is(emptyCan.getItem()))) {

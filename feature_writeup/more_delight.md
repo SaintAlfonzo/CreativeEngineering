@@ -90,7 +90,7 @@ Prefix `MRD-`. Restart needed (startup scripts and a CD jar change). Queue: SQ-M
 | MRD-02 | Eat Toast, a topped toast and Caviar Toast: each takes the fast eating time (about 0.8 s) |
 | MRD-03 | Cheese Toast: shapeless Toast + Flaxen Cheese Wedge, eats fast, 5 hunger; JEI shows the recipe, the icon is the cheese toast sprite |
 | MRD-04 | `/dumptags`: `forge:sliced_potato` and `forge:sliced_potatoes` hold Rustic's potato slices and the Sliced Sweet Potato; More Delight's mashed potatoes, potato salad and four diced potato dishes show the slices in JEI; fries and the Veggies Delight potato dishes still craft |
-| MRD-05 | `/dumptags`: `creativeengineering:exotic_fruit`, `fruit_salad_slice`, `roasted_bell_pepper`, `soup_veggie_cooked` filled; Bowl of Exotic Fruits and Fruit Salad still craft from fruit |
+| MRD-05 | `/dumptags`: `creativedelight:exotic_fruit`, `fruit_salad_slice`, `roasted_bell_pepper`, `soup_veggie_cooked` filled; Bowl of Exotic Fruits and Fruit Salad still craft from fruit |
 | MRD-06 | Carrot Soup still gives Comfort |
 
 ## 5. Built

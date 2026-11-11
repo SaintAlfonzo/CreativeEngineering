@@ -29,8 +29,8 @@ OWN_PREFIXES = ("creative", "cdev")
 
 # (check, root mod id, id) pairs kept on purpose. See plan section 4.
 ALLOW = {
-    # JEI category that mirrors the registered recipe type creativeengineering:baking (like dragon_breathing).
-    ("jei", "creativedelight", "creativeengineering:baking"),
+    # JEI category that mirrors the registered recipe type creativedelight:baking (like dragon_breathing).
+    ("jei", "creativedelight", "creativedelight:baking"),
 }
 
 STR_CONST = re.compile(r'\b(?:public\s+|private\s+|protected\s+)?static\s+final\s+String\s+(\w+)\s*=\s*([^;]+);')
@@ -277,6 +277,30 @@ def main():
     for root, mod_id in roots.items():
         if mod_id.startswith("ce") and mod_id != "creativeengineering" and not mod_id.startswith("creative"):
             flag("ce-name", root, root / "gradle.properties", 1, f"mod id {mod_id}", mod_id)
+
+    # Every jar owns its namespace (plan_cd_namespace.md section 0, namespace_move.md): only Engineering registers, keys
+    # resources or builds ResourceLocations under creativeengineering. Old ids live on as text only in swap lists and in the
+    # named read aliases below.
+    alias_ok = re.compile(r"OLD_NAMESPACE|OLD_FILE|LEGACY_NS|swaps/")
+    for jar in sorted((ROOT / "development").iterdir()):
+        if not jar.is_dir() or jar.name in ("creativeEngineering", "build-logic") or jar.name.startswith("."):
+            continue
+        for p in sorted(jar.rglob("*.java")):
+            if any(x in p.parts for x in ("build", "moved_code_backup", "upstream")):
+                continue
+            text = p.read_text(errors="replace")
+            for m in re.finditer(r'(?:DeferredRegister\.create\([^;]*?|new ResourceLocation\(|String\s+\w+\s*=\s*)\s*"creativeengineering"', text):
+                line = text[text.rfind("\n", 0, m.start()) + 1:text.find("\n", m.end())]
+                if not alias_ok.search(line):
+                    findings.append(f"owner-ns   {p.relative_to(ROOT)}:{line_of(text, m.start())}  register, ResourceLocation or namespace constant under creativeengineering")
+        for res in jar.rglob("src/main/resources"):
+            if any(x in res.parts for x in ("build", "moved_code_backup")):
+                continue
+            for sub in ("assets/creativeengineering", "data/creativeengineering"):
+                base = res / sub
+                if base.is_dir():
+                    n = sum(1 for f in base.rglob("*") if f.is_file())
+                    findings.append(f"owner-ns   {base.relative_to(ROOT)}  {n} resources under creativeengineering")
 
     for f in sorted(set(findings)):
         print(f)

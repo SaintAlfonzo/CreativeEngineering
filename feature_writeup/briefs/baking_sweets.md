@@ -18,7 +18,7 @@ Fruits Delight 0.5.11, Farmer's Delight 1.2.4, Abnormals Delight 4.1.2, More Del
 **Where the code goes (since 2026-10-25, memory `creative-delight-routing`):** all food KubeJS lives in the Creative
 Delight trees, one folder per mod; pack-native sweets go in `creativeengineering/`: startup
 `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/sweets.js` (needs a CD rebuild +
-restart), server `kubejs/data/creativedelight/kubejs/creativeengineering/sweets.js` inside `global.CD.recipes(() => ...)`
+restart), server `kubejs/data/creativedelight/kubejs/creativedelight/sweets.js` inside `global.CD.recipes(() => ...)`
 (recipe ids `creativedelight:<type>/<suffix>`). Edits to an upstream mod's own recipes go in that mod's folder
 (`delightful/`, `neapolitan/`, `fruitsdelight/`). Item ids keep the `creativeengineering:` namespace, as
 `creativeengineering:corn_popsicle` (CD `corn_delight/corn_items.js:16`).
@@ -68,7 +68,7 @@ Order: #4 b/e → #2 → #1 → #3 → #4 c/d/f/g.
   (food_families.md 3.1), compost values (Delightful gives its gummy 0.65:
   [delightful/compost_values.js:60](../../development/creativeDelight/src/main/resources/kubejs_startup/delightful/compost_values.js#L60);
   pack items go in CD `creativeengineering/` compost per compost_rules.js), the Supplementaries jar tag for candies
-  ([jar_tags.js:42](../../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js#L42)), and a `/`
+  ([jar_tags.js:42](../../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js#L42)), and a `/`
   row per item in [can_parity.md](../can_parity.md) (`cans/canning #2`). Sprites go in
   `kubejs/assets/creativeengineering/textures/item/<id>.png` (as `corn_popsicle.png`; recolours of the mod sprite
   named in each row).
@@ -108,7 +108,7 @@ Cooking Pot recipe, and a bulk Create recipe.
 ### Build
 1. Pick the fruits (D1) and add `i.<fruit>_gummy` keys plus any missing `i.t_fruits_*` keys (see Shared).
 2. Tag `#creativeengineering:gelling_agents` = kelp, slime ball (D3 for dried kelp) in CD
-   [creativeengineering/tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/tags.js) via
+   [creativedelight/tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/tags.js) via
    `global.tags` `t.add(e, i.t_gelling_agents, [i.kelp, i.slime_ball])`, dict key
    `i.t_gelling_agents = '#creativeengineering:gelling_agents'` (no such key or tag yet).
 3. Register the items from the sweets table:
@@ -175,7 +175,7 @@ echo shard variants; identify other crystals usable for rock candy (D1 below lis
 - `delightful:rock_candy` (`i.rock_candy`, item_dict.js:11426). `ConsumableItem`: hands back a stick; fast, Speed
   120 ticks (verified `Nutrition.ROCK_CANDY`); hunger / saturation 4 / 0.5 since the 3.8.1 values
   ([delightful_foods.js:16](../../development/creativeDelight/src/main/resources/kubejs_startup/delightful/delightful_foods.js#L16),
-  was 4 / 0.2). It is in the Supplementaries jar tag (CD `creativeengineering/jar_tags.js:42`).
+  was 4 / 0.2). It is in the Supplementaries jar tag (CD `creativedelight/jar_tags.js:42`).
 - Recipe `delightful:cooking/rock_candy` (verified, not edited by the pack): FD pot `[#forge:gems/rose_quartz x2,
   #forge:sugar]`, container `minecraft:stick`, 200 ticks, 0.35 xp, loads only while that tag isn't empty.
   `forge:gems/rose_quartz` = `create:rose_quartz` (live dump `kubejs/exported/tags/item_tags.json`).
@@ -285,7 +285,7 @@ Verified: the table above (`i.glow_berry_custard` 11608, `i.blueberry_custard` 1
 - The melon popsicle's live recipe is Abnormals Delight's ice-cube copy, not FD's. A `R.replaceInput` keyed on FD's id
   finds nothing.
 - Food Plate placement is the frozen family's rule for popsicles (food_families.md 3.1, `frozen/popsicle`): add the new
-  ones to the placeable tooltip tags (CD `creativeengineering/placeable_tags.js`) if Food Plate takes them.
+  ones to the placeable tooltip tags (CD `creativedelight/placeable_tags.js`) if Food Plate takes them.
 
 ### Tests
 (proposed, numbered when queued; were RC-24 in the 2026-10-21 brief, since used by other docs)

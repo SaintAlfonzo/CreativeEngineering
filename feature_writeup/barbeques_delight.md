@@ -693,7 +693,7 @@ plan from a basin recipe to a craft by hand.
   reflection from `SeasoningItem`); 1.3.0's info text only without Creative Delight. Salt is not a pack seasoning (The Salt's
   "Salted"), so it is unchanged.
 - **Names** (C11a): Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick are Barbecue Skewer, End Skewer,
-  Improvised Skewer (CD `creativeengineering/names.js`; Display Delight plated names follow).
+  Improvised Skewer (CD `creativedelight/names.js`; Display Delight plated names follow).
 - **Family and cans** (C5, C6): every cooked skewer is `skewer` (name rule also matches "barbecue stick" until the renames reach
   the dump); raw skewers are not foods, so no family; no skewer can row or type loop.
 

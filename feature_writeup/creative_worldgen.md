@@ -96,6 +96,27 @@ own Java plus two nested members. Same behaviour as before the carve; every regi
 Scratch SQ-CWG-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)). In game (client rows pinned until wave 8+,
 7.8): CWG-01 More Mooblooms and baby squid render with models; CWG-02 `/cwglocate` and a map trade from a cartographer.
 
+## 5a. Namespace move (2026-11-10, BUILT, not installed)
+
+Every id this jar owns moved from `creativeengineering:` to `creativeworldgen:` ([namespace_move.md](namespace_move.md)
+step 6): dimensions, `hub_type`, noise settings, structures, sets, pools, placed features, biome modifiers and their
+codecs, the `meta` structure and piece types, all tags (`mod/creativeengineering` is now `mod/creativeworldgen`) and
+config defaults. How old worlds carry over:
+- Biome modifier codecs: swap list `data/creativeworldgen/swaps/owner_namespace.json`.
+- Dimension, dimension type and noise keys: `mixin/ResourceKeyLegacyDimensionMixin` (HEAD of `ResourceKey.create`)
+  through `worldgen/LegacyIds.keyAlias`; only the listed ids, so nothing else is aliased. Covers level.dat, player data,
+  Waystones, FTB Chunks, portal targets and typed `/execute in`.
+- Dimension folders: `mixin/LevelStorageAccessDimensionMoveMixin` runs `worldgen/DimensionMove` after the session lock
+  and before level.dat is read; if both folders exist it leaves both and warns.
+- Structure starts, references and pieces in chunk NBT: `ChunkSerializerLegacyStructuresMixin`,
+  `StructureCheckLegacyStructuresMixin` (`LegacyIds.upgradeStructures`); renamed only when the old id is unregistered
+  and the new one registered. Our meta pieces read old ids too (`MetaStructure`, `MetaFeaturePiece`).
+- Old config values: `LegacyIds.configIds`.
+- Generation stays identical: hash seeds keep the old strings (`LegacyIds.seed`, `DistantClip.FLOOR_RANDOM` under
+  `LEGACY_NS`, `group_salt`, the overworld `surface_mix/*` names).
+- Not migrated: client caches keyed by dimension (Xaero maps, Distant Horizons LODs), structure ids other mods keep in
+  their own data. Tests SQ-NSM-07, -08.
+
 ## 6. History
 
 - 2026-11-02: carved (wave 5). patcherMod 1.1.08 loses the classes, 60 mixins, 6 sections and the resources; More

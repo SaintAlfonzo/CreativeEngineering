@@ -19,7 +19,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'delightful:food/kettle/matcha_latte_neapolitan' }, e)
 
 		// Chocolate cake. Abnormals Delight's 7 slices -> cake now makes Create Crafts & Additions' cake (output
-		// swapped by the merge); its other recipes are creativeengineering/baking.js's (baking overhaul). The knife
+		// swapped by the merge); its other recipes are creativedelight/baking.js's (baking overhaul). The knife
 		// recipe is rewritten on the cake that stays.
 		R.remove({ id: 'abnormals_delight:neapolitan/cutting/chocolate_cake' }, e)
 		R.fdCutting(i.chocolate_cake, i.any_knife, Item.of(i.abnormals_delight_chocolate_cake_slice, 7), e, 'chocolate_cake')

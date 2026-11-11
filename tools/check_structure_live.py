@@ -11,7 +11,7 @@ Reads:
 Prints:
   1. live structure_sets missing from structure_config.json (not tunable: re-run
      tools/gen_structure_config.py, or add a code-registered set to its CODE_REGISTERED_SETS table);
-     the creativeengineering:group/* sets are expected and not listed, and sets with no members are skipped
+     the creativeworldgen:group/* sets are expected and not listed, and sets with no members are skipped
   2. config sets that aren't live (a mod was removed: re-run the scanner)
   3. live structures that belong to no set (never generate on their own)
   4. every set the script would write, checked against the live spacing / separation / count and
@@ -27,7 +27,7 @@ import json, os, re, shutil, subprocess, sys, tempfile, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUMP = os.path.join(ROOT, 'kubejs/exported/worldgen/structuregen.json')
 CONFIG = os.path.join(ROOT, 'kubejs/generation_scripts/worldgen/structure_config.json')
-GROUP = 'creativeengineering:group/'
+GROUP = 'creativeworldgen:group/'
 
 def stamp(path):
     return datetime.datetime.fromtimestamp(os.path.getmtime(path)).strftime('%Y-%m-%d %H:%M')

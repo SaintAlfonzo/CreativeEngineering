@@ -7,13 +7,13 @@
 // feature_writeup/crops_by_biome.md (python3 tools/gen_crop_worldgen_table.py evaluates the same rules offline).
 //
 // Same machinery as Creative Delight's wild crops (_biome_rules.js, global.biomeRules) and the same biome words:
-// biome_traits.json. Per rule key: biome tag creativeengineering:mushroom_spawns/<key>, one forge:add_features
-// modifier creativeengineering:mushroom_spawns/<key>, the mods' own modifiers in disable_modifiers replaced by
+// biome_traits.json. Per rule key: biome tag creativeworldgen:mushroom_spawns/<key>, one forge:add_features
+// modifier creativeworldgen:mushroom_spawns/<key>, the mods' own modifiers in disable_modifiers replaced by
 // forge:none. Each rule has a mode:
 //   - surface: vegetal_decoration; biomes marked ocean or cave never match (as in the wild crop rules);
 //   - cave: underground_decoration; every biome can match (the placed features search a cave floor below sea level,
 //     at least 13 blocks under the surface, so they stay out of the light).
-// Rarity lives in the placed features (kubejs/data/creativeengineering/worldgen/placed_feature/wild/mushrooms/).
+// Rarity lives in the placed features (development/creativeWorldgen packs/<modid>/data/creativeworldgen/worldgen/placed_feature/wild/mushrooms/).
 // Vanilla's own brown and red patches and huge mushrooms are not touched.
 //
 // creativeworldgen-common.toml [worldgen.systems] mushroomSpawns = false: nothing here runs. Farmer's Delight colonies come back on
@@ -33,8 +33,8 @@
 			biomesPath: 'kubejs/generation_scripts/worldgen/biome_traits.json',
 			rulesKey: 'rules',
 			ruleWord: 'mushroom',
-			tagPrefix: 'creativeengineering:mushroom_spawns/',
-			modifierPrefix: 'creativeengineering:forge/biome_modifier/mushroom_spawns/',
+			tagPrefix: 'creativeworldgen:mushroom_spawns/',
+			modifierPrefix: 'creativeworldgen:forge/biome_modifier/mushroom_spawns/',
 			offMessage: 'off in creativeworldgen-common.toml [worldgen.systems] mushroomSpawns: mushrooms spawn where their mods put them',
 			enabled: enabled,
 			never: function (rule) { return rule.mode === 'cave' ? {} : { ocean: true, cave: true } },

@@ -5,7 +5,7 @@ ItemEvents.tooltip(e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 	var i = global.item
 	var hat = Text.gray('Grants XP when harvesting crops')
-	;[i.farmers_hat_helmet, i.straw_hat, i.farmerbrim, i.summerhat].forEach(id => e.add(id, hat))
+	;[i.farmers_hat_helmet, i.straw_hat, i.farmerbrim].forEach(id => e.add(id, hat))
 	e.add(i.seed_pouch, Text.gray('Tops up from seeds picked up while on the hotbar'))
 	e.add(i.seed_pouch, Text.gray('Plants in a dispenser'))
 })

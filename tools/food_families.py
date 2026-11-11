@@ -20,7 +20,7 @@ checks). Cannable compliance reads each member's Want cell in feature_writeup/ca
 of kubejs/generation_scripts/food/can_types.json.
 
 Also writes kubejs/generation_scripts/food/food_families.json: each family's own edible members (item ids), which
-Creative Delight's creativeengineering/seasoning_tags.js turns into #creativeengineering:food_family/<path> item tags
+Creative Delight's creativeengineering/seasoning_tags.js turns into #creativedelight:food_family/<path> item tags
 (a parent tag holds its subfamilies) and the per-seasoning seasonable tags.
 
 Source data: kubejs/exported/food/{catalog,foods,food_blocks,recipes,placeable}.json (/dumpfood,
@@ -224,7 +224,7 @@ STATION = {
     'minecraft:smoking': 'Smoker',
     'minecraft:smelting': 'Furnace',
     'minecraft:campfire_cooking': 'Campfire / Skillet',
-    'creativeengineering:baking': 'Oven',
+    'creativedelight:baking': 'Oven',
     'creativeengineering:dragon_breathing': 'Dragon breath',
     'vinery:wine_fermentation': 'Fermentation Barrel',
     'vinery:apple_fermenting': 'Apple Press',

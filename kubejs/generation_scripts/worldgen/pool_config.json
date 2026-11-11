@@ -1618,7 +1618,7 @@
         "campsite_structures:fisher_campsite": { "original": 1, "current": 1, "enabled": true }
       }
     },
-    "creativeengineering:sky_island": {
+    "creativeworldgen:sky_island": {
       "fallback": "minecraft:empty",
       "elements": {
         "sky_structures:grass_island": { "original": 2, "current": 2, "enabled": true },
@@ -1632,7 +1632,7 @@
         "sky_structures:sky_grass_blacksmith": { "original": 1, "current": 1, "enabled": true }
       }
     },
-    "creativeengineering:waystone_ruin_part": {
+    "creativeworldgen:waystone_ruin_part": {
       "fallback": "minecraft:empty",
       "elements": {
         "waystones:village/common/waystone": { "original": 1, "current": 1, "enabled": true }

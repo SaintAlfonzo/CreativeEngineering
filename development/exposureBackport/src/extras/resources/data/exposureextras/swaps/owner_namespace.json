@@ -1,0 +1,12 @@
+{
+  "_comment": "namespace_move.md D-EXPO (2026-11-10, owner decision): the mod id exposure_extras became exposureextras (naming rule: no underscore in own mod ids). Every id moved to the same path in the new namespace; the replaces entries keep the old ids as permanent aliases (item NBT inside other containers, structure NBT). Bag contents live in the stack's CameraBag tag and move with the item. The older creativeengineering:<tier>_camera_bag ids are remapped by ExposureExtras itself. Read by Creative Common (SwapLists). Never prune.",
+  "namespaces": {
+    "exposure_extras": "exposureextras"
+  },
+  "replaces": {
+    "exposureextras:leather_camera_bag": ["exposure_extras:leather_camera_bag"],
+    "exposureextras:iron_camera_bag": ["exposure_extras:iron_camera_bag"],
+    "exposureextras:netherite_camera_bag": ["exposure_extras:netherite_camera_bag"],
+    "exposureextras:camera_bag": ["exposure_extras:camera_bag"]
+  }
+}

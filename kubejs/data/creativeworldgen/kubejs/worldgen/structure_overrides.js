@@ -8,7 +8,7 @@
 // updating mods, run `python3 tools/gen_structure_groups.py` to give new members fitted values.
 //
 // THE MODEL
-//   Group: one structure_set, creativeengineering:group/<name>, holding every structure in the tag
+//   Group: one structure_set, creativeworldgen:group/<name>, holding every structure in the tag
 //   group/<name>. All members share its grid, so no two ever start closer than its separation.
 //   Per member: weight (who wins a slot where several fit the biome) and frequency (chance the
 //   winner really spawns; else the slot stays empty, no fall-through to another member).
@@ -25,7 +25,7 @@
 //
 // BIOME FITS (biome_fits.json): a fit is a biome list and the structure tag of the same name (land/oak). A structure
 // in the tag spawns in its fit's biomes plus every parent fit's (land/oak: land/oak + land), never a sibling's, in
-// place of its mod's own list. Each fit is also added as the real biome tag and structure tag creativeengineering:<fit>
+// place of its mod's own list. Each fit is also added as the real biome tag and structure tag creativeworldgen:<fit>
 // (ServerEvents.tags below). Handed to patcherMod (worldgen/StructureBiomeFits), which answers Structure#biomes().
 //
 // META STRUCTURES (meta_structures.json): our structures built from other structures and features (a village with
@@ -33,7 +33,7 @@
 // when patcherMod has worldgen/MetaStructure (its structure type) and [worldgen.systems] metaStructures is on; otherwise
 // it stays out of every group set (an unknown structure type, or a set naming a missing structure, fails the world load).
 // They live only in groups. The meta/* tags of structure_tags.json are also added as real structure tags
-// creativeengineering:meta/<name> (the anchors and parts the definitions name), from ServerEvents.tags below.
+// creativeworldgen:meta/<name> (the anchors and parts the definitions name), from ServerEvents.tags below.
 //
 // PLACEMENT PRIORITY ("priority" in structure_groups.json): a rank per group (and per tag, for the fortified towns); a
 // structure whose pieces would overlap a higher-ranked structure's never starts. A meta structure's "companions" are
@@ -51,8 +51,8 @@
 // BIOME FREQUENCY (a group's "biome_frequency", 2026-10-14): {"#biome tag" | "biome id": factor 0..1, ..., "default": factor}.
 // Every member's frequency is multiplied by the factor of the biome at its generation point (the first rule the biome
 // matches, else default); patcherMod rolls it in generation and in /locate's prediction alike. The vehicles use it to be
-// twice as common in #creativeengineering:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",
-// added as real tags creativeengineering:<name> below.
+// twice as common in #creativeworldgen:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",
+// added as real tags creativeworldgen:<name> below.
 //
 // frequency < 1 is not a vanilla feature: the table is handed to patcherMod
 // (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
@@ -67,7 +67,7 @@
 // errors land in the log + the report. structure_tag_report.md (same folder as the configs) is
 // rewritten on every load.
 //
-// creativeworldgen-common.toml [worldgen] (config/creativeengineering-common.toml, read through patcherMod's WorldgenConfig):
+// creativeworldgen-common.toml [worldgen] (config/creativeworldgen-common.toml, read through patcherMod's WorldgenConfig):
 //   systems.structureGroups = false  -> groups and standalone edits are ignored: every set as its mod ships it.
 //   debug.structureDensity = x       -> every set's rate times x (see scalePlacement), grouped or not.
 //   debug.testOverrides = true       -> structure_test_overrides.json loosens soft rules for scratch tests (see
@@ -85,7 +85,7 @@
 	var FITS_PATH = DIR + 'biome_fits.json'
 	var TEST_PATH = DIR + 'structure_test_overrides.json'
 	var REPORT_PATH = DIR + 'structure_tag_report.md'
-	var GROUP_SET_PREFIX = 'creativeengineering:group/'
+	var GROUP_SET_PREFIX = 'creativeworldgen:group/'
 	var TAG = '[structure-tuning] '
 
 	// Codec limits (RandomSpreadStructurePlacement / ConcentricRingsStructurePlacement / ExclusionZone, 1.19.2).
@@ -104,7 +104,7 @@
 	var TEST_RULE = 'test overrides loosen soft rules only (frequency, weight, share, spacing, separation; structure_tuning.md 7.4.8); '
 		+ 'biomes, biome rules, fits, surface checks, peaceful radius, priority and earth/water fill are correctness rules and stay'
 	var REDUCTION_METHODS = ['default', 'legacy_type_1', 'legacy_type_2', 'legacy_type_3']
-	var META_TYPE = 'creativeengineering:meta'
+	var META_TYPE = 'creativeworldgen:meta'
 	var META_KEYS = ['note', 'tuned', 'type', 'biomes', 'step', 'terrain_adaptation', 'spawn_overrides', 'anchor', 'share', 'parts', 'companions']
 	var COMPANION_KEYS = ['structures', 'count', 'distance']
 	var META_PART_KEYS = ['structures', 'features', 'count', 'chance', 'distance', 'spacing', 'margin', 'tries', 'water_depth', 'radius', 'overlap', 'cluster', 'punch']
@@ -537,7 +537,7 @@
 			var cp = mp.def.companions
 			var ids = []
 			entryList(cp.structures).forEach(function (e) {
-				var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+				var t = e.indexOf('#creativeworldgen:') === 0 ? e.substring('#creativeworldgen:'.length) : null
 				if (t) Object.keys(tagMembers[t] || {}).forEach(function (a) { ids.push(a) })
 				else if (e.charAt(0) !== '#') ids.push(e)
 			})
@@ -629,21 +629,21 @@
 	}
 
 	// Problems with one definition (it is then left out, the rest still apply). Checks what the Java codec would
-	// reject, so a typo can't fail the world load, plus #creativeengineering:meta/* tags that structure_tags.json lacks.
+	// reject, so a typo can't fail the world load, plus #creativeworldgen:meta/* tags that structure_tags.json lacks.
 	function metaProblems(id, def, tagDefs) {
 		var errs = []
 		if (!def || typeof def !== 'object' || Array.isArray(def)) return ['must be an object']
 		Object.keys(def).forEach(function (k) { if (META_KEYS.indexOf(k) < 0) errs.push('unknown field "' + k + '"') })
 		if (def.type !== META_TYPE) errs.push('type must be "' + META_TYPE + '"')
-		if (id.indexOf('creativeengineering:') !== 0) errs.push('the id must be in the creativeengineering namespace')
+		if (id.indexOf('creativeworldgen:') !== 0) errs.push('the id must be in the creativeworldgen namespace')
 		;['biomes', 'step', 'spawn_overrides'].forEach(function (k) { if (!(k in def)) errs.push('needs "' + k + '"') })
 		function checkEntries(where, v) {
 			var list = entryList(v)
 			if (!list) return errs.push(where + ' must be "#tag", an id, or a list of them')
 			list.forEach(function (e) {
-				var tagPrefix = '#creativeengineering:' + META_TAG_PREFIX
-				if (e.indexOf(tagPrefix) === 0 && !tagDefs[e.substring('#creativeengineering:'.length)]) {
-					errs.push(where + ': ' + e + ' has no ' + e.substring('#creativeengineering:'.length) + ' tag in structure_tags.json')
+				var tagPrefix = '#creativeworldgen:' + META_TAG_PREFIX
+				if (e.indexOf(tagPrefix) === 0 && !tagDefs[e.substring('#creativeworldgen:'.length)]) {
+					errs.push(where + ': ' + e + ' has no ' + e.substring('#creativeworldgen:'.length) + ' tag in structure_tags.json')
 				}
 			})
 		}
@@ -966,7 +966,7 @@
 			if (mp.off || !('anchor' in mp.def) || !owner[mp.id]) return
 			var anchors = []
 			entryList(mp.def.anchor).forEach(function (e) {
-				var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+				var t = e.indexOf('#creativeworldgen:') === 0 ? e.substring('#creativeworldgen:'.length) : null
 				if (t) Object.keys(tagMembers[t] || {}).forEach(function (a) { anchors.push(a) })
 				else if (e.charAt(0) !== '#') anchors.push(e)
 			})
@@ -1242,7 +1242,7 @@
 		out('')
 		out('A structure in a fit\'s structure tag spawns in that fit\'s biomes plus its parents\' instead of its own list '
 			+ '(`biome_fits.json`, Creative Worldgen StructureBiomeFits, creativeworldgen-common.toml [worldgen.systems] structureBiomeFits). Each fit is also the real '
-			+ 'biome tag and structure tag `creativeengineering:<fit>`. The game log line `[structure-biome-fits]` gives each structure\'s '
+			+ 'biome tag and structure tag `creativeworldgen:<fit>`. The game log line `[structure-biome-fits]` gives each structure\'s '
 			+ 'old and new biome count.')
 		out('')
 		if (!Object.keys(biomeFits.fits).length) out('None.')
@@ -1333,7 +1333,7 @@
 		out('## Meta structures')
 		out('')
 		out('Our structures built from other structures and features (`meta_structures.json`, patcherMod MetaStructure). '
-			+ 'They generate only through their group. `#creativeengineering:meta/*` = the `meta/*` tags below.')
+			+ 'They generate only through their group. `#creativeworldgen:meta/*` = the `meta/*` tags below.')
 		out('')
 		if (!metaPlans.length) out('None defined.')
 		metaPlans.forEach(function (mp) {
@@ -1347,7 +1347,7 @@
 			if (mp.problems.length) mp.problems.forEach(function (e) { out('- error: ' + e) })
 			function members(entries) {
 				return (entryList(entries) || []).map(function (e) {
-					var t = e.indexOf('#creativeengineering:') === 0 ? e.substring('#creativeengineering:'.length) : null
+					var t = e.indexOf('#creativeworldgen:') === 0 ? e.substring('#creativeworldgen:'.length) : null
 					return t && tagMembers[t] ? code(e) + ' (' + Object.keys(tagMembers[t]).sort().map(code).join(', ') + ')' : code(e)
 				}).join(', ')
 			}
@@ -1468,10 +1468,10 @@
 		writeReport(result.report)
 	})
 
-	// The meta/* tags of structure_tags.json as real structure tags creativeengineering:meta/<name>: the anchors
+	// The meta/* tags of structure_tags.json as real structure tags creativeworldgen:meta/<name>: the anchors
 	// and parts meta_structures.json names (patcherMod MetaStructure reads them when it generates). The type/* tags
-	// too (creativeengineering:type/<name>): earth_fill.js prunes #type/village, and [earth_fill] overrides may name
-	// them. Also every biome fit's structure tag as creativeengineering:<fit> (for /locate and other datapacks; the fit
+	// too (creativeworldgen:type/<name>): earth_fill.js prunes #type/village, and [earth_fill] overrides may name
+	// them. Also every biome fit's structure tag as creativeworldgen:<fit> (for /locate and other datapacks; the fit
 	// itself is staged).
 	ServerEvents.tags('worldgen/structure', function (e) {
 		var config = readJson(CONFIG_PATH)
@@ -1482,13 +1482,13 @@
 		resolved.errors.forEach(function (err) { console.error(TAG + 'meta tags: structure_tags.json: ' + err) })
 		Object.keys(tagsDoc.tags).filter(function (t) { return t.indexOf(META_TAG_PREFIX) === 0 || t.indexOf(TYPE_TAG_PREFIX) === 0 }).forEach(function (t) {
 			var ids = Object.keys(resolved.members[t] || {}).sort()
-			if (ids.length) global.tags.add(e, 'creativeengineering:' + t, ids)
+			if (ids.length) global.tags.add(e, 'creativeworldgen:' + t, ids)
 			else console.warn(TAG + 'meta tags: ' + t + ' has no members')
 		})
 		var fits = readFits()
 		Object.keys(fits).filter(function (t) { return tagsDoc.tags[t] }).forEach(function (t) {
 			var ids = Object.keys(resolved.members[t] || {}).sort()
-			if (ids.length) global.tags.add(e, 'creativeengineering:' + t, ids)
+			if (ids.length) global.tags.add(e, 'creativeworldgen:' + t, ids)
 		})
 		// Way signs point at the nearest #supplementaries:way_sign_destinations: every settlement the group holds, so
 		// meta/village_towers (stored under the meta's id, not the village's) and Terralith's fortified villages count too.
@@ -1497,21 +1497,21 @@
 		else console.warn(TAG + 'way sign destinations: group/' + WAY_SIGN_GROUP + ' has no members')
 	})
 
-	// Every biome fit as the real biome tag creativeengineering:<fit>; StructureBiomeFits resolves the fit through it.
+	// Every biome fit as the real biome tag creativeworldgen:<fit>; StructureBiomeFits resolves the fit through it.
 	// Also biome_fits.json "biome_tags" (biome tags that are not fits, e.g. harsh for biome_frequency) as
-	// creativeengineering:<name>; they may name fit tags (#creativeengineering:land/desert).
+	// creativeworldgen:<name>; they may name fit tags (#creativeworldgen:land/desert).
 	// Unknown biome ids are reported by StructureBiomeFits at world load (this handler runs as a pre-pass, see _biome_rules.js).
 	ServerEvents.tags('worldgen/biome', function (e) {
 		var fits = readFits()
 		Object.keys(fits).forEach(function (name) {
 			var biomes = fits[name] && fits[name].biomes
-			if (FIT_NAME.test(name) && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeengineering:' + name, biomes)
+			if (FIT_NAME.test(name) && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeworldgen:' + name, biomes)
 		})
 		var doc = readJson(FITS_PATH)
 		var extra = (doc && doc.biome_tags) || {}
 		Object.keys(extra).forEach(function (name) {
 			var biomes = extra[name] && extra[name].biomes
-			if (FIT_NAME.test(name) && !fits[name] && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeengineering:' + name, biomes)
+			if (FIT_NAME.test(name) && !fits[name] && Array.isArray(biomes) && biomes.length) global.tags.add(e, 'creativeworldgen:' + name, biomes)
 			else console.warn(TAG + 'biome_fits.json biome_tags.' + name + ': needs a tag path name (not a fit) and a list of biomes')
 		})
 	})

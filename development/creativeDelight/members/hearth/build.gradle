@@ -12,8 +12,6 @@ dependencies {
     compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
     // Optional: the watering can info pages (compat/HHJeiPlugin). The plugin class is only loaded by JEI.
     compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
-    // Crow and salt lick systems: alexsmobs:crow (hearth/crow only through CrowAccess; SRG-named classes, so no fg.deobf).
-    compileOnly 'local:alexsmobs:1.21.1'
     // Optional: the seed pouch additions and the Farmer's Hat on simple harvest (gear/QuarkCompat, loaded only with Quark).
     compileOnly fg.deobf('local:Quark-3.4:418')
     compileOnly fg.deobf('local:AutoRegLib-1.8.2:55')

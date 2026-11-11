@@ -221,7 +221,7 @@ Status **In Progress** / Work KubeJS / `food/types-and-tuning #9`
 The 7 cultures are (poor) food; the Cooking Pot grows them less efficiently than the mixer.
 
 ### Done
-- Recipes ([cultivated_meat.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js), CD,
+- Recipes ([cultivated_meat.js](../../kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js), CD,
   85 lines): syringe; syringe + culture base + slime -> 1 culture (29-35); heated mixing 1 culture + 250 mB diluted
   bonemeal + 250 mB plant oil -> 3 (37-43); cutting board -> raw meat / fish slices (57 on); blocks 9 <-> 1.
 - 2026-10-27: Cooking Pot route, culture + bone meal + cooking oil -> **3** (lines 45-54, `<animal>_culture_cooking`,
@@ -269,7 +269,7 @@ type entry.
 ### Now
 - Design: food.md 3.5 (one config, startup apply, server SoL map, starting bands per type, canned parity rule).
   Decisions D1 to D6 (4.3) are open.
-- Pieces that exist: types and tags (CD `kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js`;
+- Pieces that exist: types and tags (CD `kubejs/data/creativedelight/kubejs/creativedelight/food_type_tags.js`;
   families and their tags, row #13), `tools/food_catalog.py` (classifier, `--check`, catalog,
   `kubejs/exported/food/catalog.json` per food with values, effects, code effects, SoL now and by formula), three
   value writers already at startup: CD cans.js (generated cans + the Canned Goods overrides, `ceCanFood` sets flags

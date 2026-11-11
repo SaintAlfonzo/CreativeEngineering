@@ -214,7 +214,7 @@
    "block.createdeco.zinc_bars_overlay": "Zinc Panel Bars"
   },
   "creativeengineering": {
-   "entity.creativeengineering.shrapnel": "Shrapnel"
+   "entity.creativecompat.shrapnel": "Shrapnel"
   },
   "davebuildingmod": {
    "block.davebuildingmod.arrow_left_sign": "Arrow Left",
@@ -3252,13 +3252,13 @@
    "kind": "entity",
    "id": "create_things_and_misc:projectile_spout_gun_water"
   },
-  "entity.creativeengineering.shrapnel": {
+  "entity.creativecompat.shrapnel": {
    "name": "Shrapnel",
    "ns": "creativeengineering",
-   "was": "entity.creativeengineering.shrapnel",
+   "was": "entity.creativecompat.shrapnel",
    "why": "raw",
    "kind": "entity",
-   "id": "creativeengineering:shrapnel"
+   "id": "creativecompat:shrapnel"
   },
   "entity.decorative_blocks.dummy_entity": {
    "name": "Seat",

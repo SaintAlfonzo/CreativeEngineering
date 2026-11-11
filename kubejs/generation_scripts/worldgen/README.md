@@ -15,7 +15,7 @@ Everything in this folder is config, read at every world load (including world c
 | `pool_config.json` + `pool_tags.json` | patcherMod `worldgen/PoolTuner` (`ServerAboutToStartEvent`, LOWEST) | rejoin the world; new chunks only |
 | `loot_container_swaps.json` | patcherMod `worldgen/LootContainerSwaps` + `mixin/StructureTemplateLootSwapMixin` | rejoin the world; new chunks only |
 
-Above these files sits `config/creativeengineering-common.toml` `[worldgen]` (also in Create's config screen): an on/off
+Above these files sits `config/creativeworldgen-common.toml` `[worldgen]` (also in Create's config screen): an on/off
 switch for each system above plus ground matching, `[worldgen.debug] structureDensity` (every structure's rate times x,
 for testing), the solvers' constants, ground matching and `/cdevplace`. Switching a system off never touches these files;
 the game just uses the mods' own values while it's off. See `feature_writeup/structure_tuning.md` 3.9 and 3.10.
@@ -28,7 +28,7 @@ needed after a mod update or a group membership change.
 
 ## The model (since 2026-09-27)
 
-- **Group:** one shared structure_set, `creativeengineering:group/<name>`, holding every structure
+- **Group:** one shared structure_set, `creativeworldgen:group/<name>`, holding every structure
   in the tag `group/<name>`. Members share its grid, so **no two members ever start closer than
   `separation + 1` chunks**, whatever mod they come from, and the grid allows at most one member per
   `spacing x spacing` chunks. Groups: `settlements`, `pillager_settlements` (kept 4 chunks off
@@ -54,7 +54,7 @@ needed after a mod update or a group membership change.
   pillager fleet, a driftwood flotilla), defined in `meta_structures.json` and added to the datapack by the script only
   when patcherMod has `MetaStructure` and `MetaSlots`. A meta with an anchor takes a `share` of the slots its anchors
   already won in its group (its own group entry, weight 1, never generates), so no structure's rate changes. Who may
-  take part: the `meta/*` tags in `structure_tags.json`, also added as real tags `creativeengineering:meta/*`.
+  take part: the `meta/*` tags in `structure_tags.json`, also added as real tags `creativeworldgen:meta/*`.
   `/locate` finds a meta by its id and a structure inside one by the structure's id.
   Reference: `feature_writeup/structure_tuning.md` 3.16.
 - **Placement priority** (2026-10-12): `priority` in `structure_groups.json` ranks groups (and the fortified towns);

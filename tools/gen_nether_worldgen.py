@@ -39,7 +39,7 @@ MANIFEST = WORLDGEN / 'nether_worldgen_manifest.json'
 DATA = INSTANCE / 'kubejs/data'
 NOISE_SETTINGS = ('overworld', 'large_biomes')
 # Creative Worldgen's jar (moved from kubejs/data on 2026-11-06; ids unchanged). Instance-relative.
-MODIFIER_DIR = 'development/creativeWorldgen/src/main/resources/data/creativeengineering/forge/biome_modifier/nether_worldgen'
+MODIFIER_DIR = 'development/creativeWorldgen/src/main/resources/data/creativeworldgen/forge/biome_modifier/nether_worldgen'
 BAND = 16
 Y_MIN, Y_MAX = -64, 320
 GRADIENT_SPAN = 1900       # anchors must stay within +-2032 (VerticalAnchor's absolute range)
@@ -76,6 +76,7 @@ def block(name):
 
 def mix(rule_id, choices):
     """Sequence that picks one of [(block, weight)] per block position at random."""
+    # Random seed names, not ids: they stay under the old namespace so the surface of existing worlds does not change.
     names = [f'creativeengineering:surface_mix/{rule_id}/{i}' for i in range(len(choices) - 1)]
     bands = []
     for lo in range(Y_MIN, Y_MAX, BAND):

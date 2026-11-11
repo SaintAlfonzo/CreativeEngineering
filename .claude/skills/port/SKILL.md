@@ -18,6 +18,9 @@ Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (f
    - ARR (code or assets): upstream jar unmodified in `<name>_upstream/` as a donor; our jar ships only our own
      code written from behaviour, never translated from the decompile (memories `miners-delight-backport-plan`,
      `backported-vinery`, `farmers-structures-donor`).
+     Donor jars go unmodified to local dev instances only; at publish the pack links official sources and Creative
+     Common files the detected jars into the upstream folder (memory `upstream-jar-distribution-policy`). Do not
+     raise rehosting as a blocker.
    - Small feature: tier it as in feature_porting.md (KubeJS / data, or one patcherMod handler or mixin).
 3. **Home.** Food content: Creative Delight member or CD tree (memory `creative-delight-routing`); else its own
    in-tree mod. New project: root `settings.gradle`, `installToMods`, `IN_TREE_MODS` in `tools/build_deploy.py`,

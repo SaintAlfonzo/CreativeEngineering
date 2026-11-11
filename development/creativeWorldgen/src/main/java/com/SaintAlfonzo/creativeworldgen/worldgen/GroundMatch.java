@@ -54,18 +54,18 @@ import java.util.function.Predicate;
  * /place template are left alone. For the chunk being placed it samples the natural ground: the top solid block and the three below it, on a grid over
  * this chunk and its 8 neighbours, skipping every column where a structure piece reaches the sampled ground's
  * height (a piece deep below or high above that ground leaves it natural). A base family (a block
- * tag, default {@code creativeengineering:ground_match/grass}) is native when enough of those tops belong
+ * tag, default {@code creativeworldgen:ground_match/grass}) is native when enough of those tops belong
  * to it; otherwise its blocks in the template's bottom layers are replaced (CWGConfig [worldgen.ground_match]):
  * exposed ones by a sampled top block, covered ones by a sampled under-block, both picked by position
  * hash with the sample's own proportions. Plants standing on a replaced block are dropped with it.
  *
  * <p>So nothing is configured per biome or per structure: a plains ruin stays grassy, the same ruin on
  * volcanic peaks sits on basalt/blackstone, in a desert on sand and sandstone. The structure tag
- * {@code creativeengineering:ground_match/exempt} opts a structure out.
+ * {@code creativeworldgen:ground_match/exempt} opts a structure out.
  */
 public final class GroundMatch {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/ground-match");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/ground-match");
 
 	static final TagKey<Block> PLANTS = BlockTags.create(new ResourceLocation(CreativeWorldgen.NS, "ground_match/plants"));
 	static final TagKey<Block> NOT_GROUND = BlockTags.create(new ResourceLocation(CreativeWorldgen.NS, "ground_match/not_ground"));

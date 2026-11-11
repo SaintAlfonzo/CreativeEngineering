@@ -37,16 +37,16 @@ ServerEvents.recipes(e => {
 		}
 
 		//######################### Cornmeal #########################
-		// The pack's cornmeal rule and grinding: creativeengineering/recipes.js. Corn gives no straw: the knife and IE
+		// The pack's cornmeal rule and grinding: creativedelight/recipes.js. Corn gives no straw: the knife and IE
 		// crusher recipes that did keep their kernels only.
 		R.remove({ id: 'corn_delight:cutting/corn' }, e)
 		R.remove({ id: 'corn_delight:cutting/wild_corn' }, e)
 		R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/wild_corn' }, e)
-		R.fdCutting(i.t_crops_corn, i.any_knife, global.CD.on('hearthandharvest') ? [Item.of(i.corn_seeds, 4), Item.of(i.corn_husk, 1).withChance(0.75)] : Item.of(i.corn_seeds, 4), e, 'corn_kernels')   // 4 kernels a maize
-		R.fdCutting(i.wild_corn, i.any_knife, i.corn_seeds, e, 'wild_corn_kernels')
-		if (Platform.isLoaded('immersiveengineering')) {
-			R.ieCrushing(i.corn_seeds, i.wild_corn, e, 'wild_corn_kernels', [], 3200)
-		}
+		// Corn and wild corn cut alike (farming/crops #48): 6 kernels, a Corncob at 75 %, the husk at 33 %
+		var cornCut = [Item.of(i.corn_seeds, 6), Item.of(i.corncob, 1).withChance(0.75)]
+		if (global.CD.on('hearthandharvest')) cornCut.push(Item.of(i.corn_husk, 1).withChance(0.33))
+		R.fdCutting(i.t_crops_corn, i.any_knife, cornCut, e, 'corn_kernels')
+		R.fdCutting(i.wild_corn, i.any_knife, cornCut, e, 'wild_corn_kernels')
 		// Required in tortillas and cornbread batter (corn -> cornmeal, same counts). Raw tortilla: 3 cornmeal over a water
 		// bucket or bottle (the container comes back), or 1:1 by washing or the Bottler (250 mB water, as flour -> dough)
 		// in place of Corn Delight's washed corn (dishes/ingredients #14).
@@ -77,8 +77,8 @@ ServerEvents.recipes(e => {
 
 		//######################### 1.2.11 items #########################
 		// Corncob, Corn Popsicle, Cob Pipe (CD startup corn_delight/corn_items.js; corn_delight.md 2). The cob's 10% from
-		// corn milling and crushing: creativeengineering/recipes.js, immersiveengineering/recipes.js.
-		// Cob on the cutting board: 2 kernels; the mortar gives 3 and the machines 4 (+0.5 cornmeal): creativeengineering/
+		// corn milling and crushing: creativedelight/recipes.js, immersiveengineering/recipes.js.
+		// Cob on the cutting board: 2 kernels; the mortar and the machines give 3 (+0.5 cornmeal on the machines): creativeengineering/
 		// recipes.js (Create, mortar), immersiveengineering/recipes.js (crusher). corn_delight.md 2.1
 		R.fdCutting(i.corncob, i.any_knife, Item.of(i.corn_seeds, 2), e, 'corncob_kernels')
 		// Corn Popsicle: upstream's shape, the family's ice cubes (frozen/popsicle, food_families.md)

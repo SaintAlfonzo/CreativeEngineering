@@ -1,6 +1,6 @@
 {
   "_readme": "Written by tools/gen_soil_compat.py: the kubejs/data overrides it owns. Do not edit.",
-  "tag": "creativeengineering:worldgen/grass_like_soils",
+  "tag": "creativeworldgen:worldgen/grass_like_soils",
   "files": [
     "kubejs/data/fruitsdelight/worldgen/configured_feature/blueberry_bush.json",
     "kubejs/data/fruitsdelight/worldgen/configured_feature/cranberry_bush.json",

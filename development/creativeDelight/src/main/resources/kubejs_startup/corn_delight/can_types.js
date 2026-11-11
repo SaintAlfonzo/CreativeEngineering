@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'corn_delight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_boiled_corn": {
    "section": "cooked_veggie",

@@ -5,6 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.SaintAlfonzo.creativecommon.perf.CommonMixinPlugin",
   "mixins": [
+    "SwapCapabilityKeysMixin",
+    "SwapReportItemStackMixin",
+    "SwapReportChunkMixin",
     "IwBlockGrowthHandlerMixin",
     "IwBlockGrowthHolderMixin",
     "IwServerLevelTickMixin",

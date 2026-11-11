@@ -80,7 +80,7 @@ import java.util.function.Supplier;
  * {@code maxMoundHeight} below a piece counts once as a mound column. The air and mound limits come from
  * the start's size, its own earth base block count ([worldgen.earth_fill.sizes]). Past any limit the whole
  * start is dropped and the slot stays empty (a slot shared with other structures falls through to the next
- * pick, as for a wrong biome). For a structure in {@code creativeengineering:template_trim} only earth that
+ * pick, as for a wrong biome). For a structure in {@code creativeworldgen:template_trim} only earth that
  * {@link TemplateTrim} still places counts.
  *
  * <p>The footprint's water share, after the limits: the bounding box columns of every earth piece, at the layer the
@@ -89,17 +89,17 @@ import java.util.function.Supplier;
  * left standing where the template has no block) outnumbers the dry ground (replaced or left alone) by more than
  * {@code maxWaterSurplus} (default 0: any water majority; 0.5 = water 50% over ground), the start is dropped too: a camp on an island, a ruin
  * reaching far out over a lake. A spot under more than {@code baseLayers} blocks of predicted terrain counts as neither
- * (underground structures in aquifers or under the sea). Water structures ({@code creativeengineering:water_fill/structures})
+ * (underground structures in aquifers or under the sea). Water structures ({@code creativeworldgen:water_fill/structures})
  * are not checked.
  *
- * <p>Pruning (structures in {@code creativeengineering:earth_fill/prune}, the villages): before the start is judged,
+ * <p>Pruning (structures in {@code creativeworldgen:earth_fill/prune}, the villages): before the start is judged,
  * each jigsaw piece but the first is judged alone against [worldgen.earth_fill] pruneMaxHanging and pruneMaxMound. A
  * piece past either is dropped with every piece attached below it in the jigsaw tree (a house over deep water, with its
  * villagers), and its parent forgets the jigsaw junction to it. The rest is then judged as a whole, as usual. So one
  * house over a river no longer costs the whole village.
  *
  * <p>Water fill is the same check the other way round, for the structures in the
- * {@code creativeengineering:water_fill/structures} tag (underwater ruins, ships, stilted huts: they carry
+ * {@code creativeworldgen:water_fill/structures} tag (underwater ruins, ships, stilted huts: they carry
  * their own water). Every water block of their templates (water, waterlogged blocks, kelp, seagrass; all
  * layers) is compared with the same predicted terrain: water landing in water is fine, and so is water
  * replacing a sea, lake or river bed (a solid block under a water column). Water replacing dry ground
@@ -107,7 +107,7 @@ import java.util.function.Supplier;
  * {@code maxIntoAir}, CWGConfig [worldgen.water_fill].
  *
  * <p>Terrain-matching pieces (village streets, which a gravity processor lays on the ground column by column) are
- * skipped, and so are structures in the {@code creativeengineering:earth_fill/exempt} tag (floating
+ * skipped, and so are structures in the {@code creativeworldgen:earth_fill/exempt} tag (floating
  * ones). The predicted terrain is the noise terrain from {@code ChunkGenerator#getBaseColumn}: no
  * carvers, surface rules, features or other structures' terrain adaptation. {@code /place structure}
  * and {@code /locate} don't go through this check (the same as the biome rules). A meta structure is checked part
@@ -115,7 +115,7 @@ import java.util.function.Supplier;
  */
 public final class EarthFill {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/earth-fill");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/earth-fill");
 
 	static final TagKey<Structure> EXEMPT = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeWorldgen.NS, "earth_fill/exempt"));
 	static final TagKey<Structure> PRUNE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeWorldgen.NS, "earth_fill/prune"));
@@ -402,7 +402,7 @@ public final class EarthFill {
 
 	/**
 	 * Local positions of a template's earth blocks (bottom layers, first palette), by template, one map per base layers,
-	 * earth tag list and trim (structures in creativeengineering:template_trim: earth in pad columns the trim drops isn't
+	 * earth tag list and trim (structures in creativeworldgen:template_trim: earth in pad columns the trim drops isn't
 	 * placed). Stone-base structures use a second tag list, so the lists live side by side instead of clearing each other.
 	 */
 	private static final Map<String, Map<StructureTemplate, long[]>> LOCAL = new ConcurrentHashMap<>();
@@ -656,7 +656,7 @@ public final class EarthFill {
 	private static volatile BaseTags baseTags;
 
 	/**
-	 * The earth tags plus creativeengineering:earth_fill/stone_base and / or earth_fill/sand_base, for structures in the
+	 * The earth tags plus creativeworldgen:earth_fill/stone_base and / or earth_fill/sand_base, for structures in the
 	 * structure tags of those names.
 	 */
 	static List<TagKey<Block>> withBases(List<TagKey<Block>> earth, boolean stone, boolean sand) {

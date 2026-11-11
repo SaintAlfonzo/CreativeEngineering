@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/placed_cauliflower_kuku"
+    },
+    "facing=south": {
+      "model": "creativedelight:block/placed_cauliflower_kuku",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/placed_cauliflower_kuku",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativedelight:block/placed_cauliflower_kuku",
+      "y": 90
+    }
+  }
+}

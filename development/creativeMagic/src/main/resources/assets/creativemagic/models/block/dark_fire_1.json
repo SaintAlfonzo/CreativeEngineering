@@ -1,0 +1,8 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "block/cross",
+  "textures": {
+    "cross": "creativemagic:block/dark_fire_1",
+    "particle": "creativemagic:block/dark_fire_1"
+  }
+}

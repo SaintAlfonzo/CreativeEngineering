@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
  * without jumping. The player reads this as "the rocket only works sometimes".
  *
  * <p>This forces {@code inAir} to {@code false} whenever the player wears a
- * {@code #creativeengineering:elytra_chestplates} item, so those chestplates can rocket-takeoff
+ * {@code #creativeequipment:elytra_chestplates} item, so those chestplates can rocket-takeoff
  * from anywhere — matching their own jump-in-air glide, which has no such ground requirement.
  * Vanilla elytra are tag-gated out and keep EET's stock behaviour.
  *

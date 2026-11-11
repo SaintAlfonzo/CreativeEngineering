@@ -10,7 +10,7 @@ What changes on the way (feature_writeup/fungi_delight.md 4 step 1 and 5.1):
     features (the pack places everything itself); the biome tags only those used; the Botany Pots recipes; tags of
     mods not in the pack (Autumnity, Spawn); 1.20-only block tags (enchantment_power_transmitter, replaceable,
     replaceable_by_trees, sword_efficient) and sniffer_food; forge:alcohol (Weak Stomach reads the pack's
-    creativeengineering:food_type/drink/alcohol instead)
+    creativedelight:food_type/drink/alcohol instead)
   * kept: the 8 configured features under their upstream ids (the pack's placed features reference them)
   * patch_inky_cap_mushroom reads #fungidelight:inky_cap_placeable_on (upstream read the morel tag)
   * the three suspicious stew recipes become fungidelight:effect_stew recipes that name the effect by registry id

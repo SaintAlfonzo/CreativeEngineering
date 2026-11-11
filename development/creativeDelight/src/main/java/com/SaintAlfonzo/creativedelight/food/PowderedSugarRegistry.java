@@ -15,17 +15,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Powdered sugar block {@code creativeengineering:powdered_sugar_block} and its bucket
- * {@code creativeengineering:powdered_sugar_bucket}, the powder snow pair. The plain item
- * {@code creativeengineering:powdered_sugar} and every recipe are KubeJS (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/baking_ingredients.js,
- * kubejs/data/creativedelight/kubejs/creativeengineering/powdered_sugar.js). TODO dishes/ingredients #16.
+ * Powdered sugar block {@code creativedelight:powdered_sugar_block} and its bucket
+ * {@code creativedelight:powdered_sugar_bucket}, the powder snow pair. The plain item
+ * {@code creativedelight:powdered_sugar} and every recipe are KubeJS (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/baking_ingredients.js,
+ * kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js). TODO dishes/ingredients #16.
  */
 public final class PowderedSugarRegistry {
 
     private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
     private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
 
     // Powder snow's stats (strength 0.25, powder snow sounds, dynamic shape); no block item, the bucket places it.
     public static final RegistryObject<Block> POWDERED_SUGAR_BLOCK = BLOCKS.register("powdered_sugar_block",

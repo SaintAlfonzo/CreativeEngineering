@@ -1,0 +1,23 @@
+{
+  "_readme": [
+    "Display Delight placed blocks for foods Display Delight 1.2.0 has none for (compat/DisplayDelightDishes,",
+    "feature_writeup/placeable_food.md). One block creativeengineering:<block> per entry, linked to its item on server",
+    "world load. dish: bowl (Display Delight's bowl with a food surface cut from the item sprite) or plate (the item",
+    "sprite laid flat on Display Delight's food plate). crop: the sprite area [u1, v1, u2, v2] used as the bowl's food",
+    "surface. After editing, run python3 tools/gen_dd_dishes.py (blockstates, models, loot tables, tag, lang) and",
+    "rebuild patcherMod."
+  ],
+  "dishes": [
+    {"block": "placed_vegetable_omelet", "item": "brewinandchewin:vegetable_omelet", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_shulker_omelette", "item": "ends_delight:shulker_omelette", "dish": "plate"},
+    {"block": "placed_inky_cap_scrambled_eggs", "item": "fungidelight:inky_cap_scrambled_eggs", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_suspicious_bacon_and_eggs", "item": "hostiledelight:suspiciousbaconandaggs", "dish": "plate"},
+    {"block": "placed_diced_potatoes_with_egg_and_tomato", "item": "moredelight:diced_potatoes_with_egg_and_tomato", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_omelette", "item": "moredelight:omelette", "dish": "plate"},
+    {"block": "placed_cauliflower_kuku", "item": "veggiesdelight:cauliflower_kuku", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_dandelion_and_eggs", "item": "veggiesdelight:dandelion_and_eggs", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_shakshouka", "item": "veggiesdelight:shakshouka", "dish": "bowl", "crop": [4, 5, 12, 10]},
+    {"block": "placed_sweet_potato_pancakes", "item": "veggiesdelight:sweet_potato_pancakes", "dish": "bowl", "crop": [4, 3, 12, 8]},
+    {"block": "placed_corn_popsicle", "item": "creativedelight:corn_popsicle", "dish": "plate", "name": "Corn Popsicle"}
+  ]
+}

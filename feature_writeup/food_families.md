@@ -606,7 +606,7 @@ No direct members; see the subfamilies.
 | Maize | `corn_delight:corn` | ok | **no** | - | yes / yes | - | - |
 | Mint Leaves | `neapolitan:mint_leaves` | ok | **no** | - | no / no | - | - |
 | Moss | `miners_delight:moss` | - | **no** | - | no row / no | - | - |
-| Netherite Lunchbox | `solapplepie:netherite_lunchbox` | - | **no** | - | no row / no | - | creativeengineering:lunchbox_skin, creativeengineering:lunchbox_upgrade |
+| Netherite Lunchbox | `creativedelight:netherite_lunchbox` | - | **no** | - | no row / no | - | creativeengineering:lunchbox_skin, creativeengineering:lunchbox_upgrade |
 | Onion | `farmersdelight:onion` | ok | ok | - | yes / yes | coaster | Cutting Board, Mixer, Slice and Dice |
 | Orange Bell Pepper | `rusticdelight:bell_pepper_orange` | ok | **no** | - | yes / yes | - | - |
 | Orange Bell Pepper Roll | `rusticdelight:bell_pepper_roll_orange` | **no** | **no** | - | yes / no | - | Crafting, Sequenced assembly |
@@ -3149,7 +3149,7 @@ in `global.CD.FOOD` at the top of that file. The table below is the first helper
 | `muffinBake(berry, key, count, id)`, `tartBake(fruit, key, count, id)` | muffin tin with paper; baking sheet | 4, 2 |
 
 Result keys are `global.item` keys or full ids; recipe ids are unchanged from the hand-written rows. Moved onto the
-helpers: `creativeengineering/baking.js` (cake, pie, cookie, muffin and tart tables), `creativeengineering/cultivated_meat.js`,
+helpers: `creativedelight/baking.js` (cake, pie, cookie, muffin and tart tables), `creativedelight/cultivated_meat.js`,
 and the cut and cook rows of the Alex's, Delightful, Hostile, Miner's, Abnormals, Farmer's, Fruits and Rustic Delight
 files. Outliers kept as before through overrides: Roasted Acorn xp 0.35 (rule fruit 0.1), Hostile's campfire cooks xp 1
 (rule 0.35). Left hand-written: Baklava (not the standard pie shape), bread and sourdough (bread family undecided),
@@ -3160,8 +3160,8 @@ Create, Cooking Pot and sequenced-assembly rows. Next families get a call here w
 no bone meal) families, makes its own ids (`<output>_from_<input>` on the board and in the cooking trio, the output's path
 in the oven) and sweeps the old recipes of the output. Owner 2026-10-27: its values are the rules (fruit cook xp 0.35, veggie
 slice 2; the old 0.1 and 4 are gone); outliers such as Roasted Acorn and Hostile's xp 1 follow the rule when their rows move
-(TODO `creativedelight/framework #12`, a changelog bullet then). Callers today: `creativeengineering/baking.js`,
-`creativeengineering/cultivated_meat.js`, `rusticdelight/recipes.js`.
+(TODO `creativedelight/framework #12`, a changelog bullet then). Callers today: `creativedelight/baking.js`,
+`creativedelight/cultivated_meat.js`, `rusticdelight/recipes.js`.
 
 ### 4.6 Baked families restructured and applied (2026-10-27)
 
@@ -3179,7 +3179,7 @@ sits in `pie` (`FAMILY_OVERRIDE` until the next dump carries the new name). Rule
 baked base (plain and chocolate cake); hand pies get an oven rule; Sponge Pie and End's Chorus Fruit Pie have no filling
 can (R4 exception); honey cake takes 1 honey + 1 honeycomb (TODO baked-goods #26).
 
-Applied (Creative Delight `creativeengineering/baking.js` tables, so each family call sweeps the mods' own recipes):
+Applied (Creative Delight `creativedelight/baking.js` tables, so each family call sweeps the mods' own recipes):
 
 | Family | Members brought onto the rule | Recipe now |
 |---|---|---|
@@ -3225,7 +3225,7 @@ The rule (tool `RULES['dessert/pancake']`, 3.1):
 - **No base item:** each pancake keeps its own recipes; nothing is folded into the Supplementaries Pancake.
 - **Food type:** `sweet/pancake`, nested in `sweet` (so every `sweet` reader still sees them): Sweet Potato Pancakes and
   the six Rustic singles ([food.md](food.md) 2.1, `tools/food_catalog.py` TYPES and its name rule;
-  `#creativeengineering:food_type/sweet/pancake`, `i.t_food_sweet_pancake`). Block items stay out of the food types.
+  `#creativedelight:food_type/sweet/pancake`, `i.t_food_sweet_pancake`). Block items stay out of the food types.
 - **Placeable:** every pancake can be put down. Sweet Potato Pancakes got a Display Delight placed dish,
   `creativeengineering:placed_sweet_potato_pancakes` (bowl dish, food surface cut from the top of the sprite, crop
   4,3 to 12,8), in Creative Delight's `displaydelight_dishes.json`, written by `tools/gen_dd_dishes.py`. Sneak + right
@@ -3286,7 +3286,7 @@ Needs the patcherMod and Creative Delight jars from this change installed and a 
 - [ ] **FF-12 Hand pies and cupcake:** JEI: Rotten Pie, Green Pie and Chorus Flower Pie only in the Oven (pie crust + filling, baking sheet); Sweet Potato Cupcake in the Oven (muffin tin, 4) and the Cooking Pot (2)
 - [ ] **FF-13 Pies and cakes:** Sponge Cake shows as Sponge Pie (slice: Sponge Pie Slice) and bakes in the pie tin from crust + sponge + prismarine shard + 2 sugar; Chorus Fruit Pie bakes from crust + 2 chorus fruit grain + 2 sugar; Honey Cake: baked cake base + frosting + honey bottle + honeycomb by hand, raw base in the oven; no other recipe for any of them except slices -> whole
 - [ ] **FF-14 Zucchini quiche assembly:** JEI shows a sequenced assembly on a pie crust: 3 roasted zucchini, cooked meat, 250 mB milk -> Zucchini Quiche; the incomplete item has a grey quiche sprite
-- [ ] **FF-15 Pancake food type (2026-11-02):** after `/dumpall`, `/dumpfood` and `/tags` show `#creativeengineering:food_type/sweet/pancake` with Sweet Potato Pancakes and the six Rustic single pancakes; each is still in `#creativeengineering:food_type/sweet`; `#creativeengineering:food_family/dessert/pancake` holds the same seven
+- [ ] **FF-15 Pancake food type (2026-11-02):** after `/dumpall`, `/dumpfood` and `/tags` show `#creativedelight:food_type/sweet/pancake` with Sweet Potato Pancakes and the six Rustic single pancakes; each is still in `#creativedelight:food_type/sweet`; `#creativedelight:food_family/dessert/pancake` holds the same seven
 - [ ] **FF-16 Sweet Potato Pancakes placed:** sneak + right click the top of a block with Sweet Potato Pancakes -> a bowl of pancakes, facing you, named Placed Sweet Potato Pancakes in WTHIT; empty hand takes it back; breaking it drops the pancakes, no bowl dupe; then `/dumpall` and `python3 tools/placeable_catalog.py` give it the "Placeable" tooltip line
 - [ ] **FF-17 Every pancake kept:** JEI: Pancake (Supplementaries), the seven Rustic plates, the six Rustic singles and Sweet Potato Pancakes each keep their recipes (no recipe removed or added by this change)
 - [ ] **FFH-03 (offline):** `tools/test_cd_food.sh` runs; the only ids not in the last recipe dump are `truffle_pie` (dead, `fungiport #3`), the 7 culture cuts and the 6 glowing calamari cooks

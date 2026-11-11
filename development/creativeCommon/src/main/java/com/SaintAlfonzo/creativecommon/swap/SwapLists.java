@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.IModInfo;
@@ -31,7 +33,8 @@ import java.util.stream.Stream;
  *   "replaces":   { "newmod:thing": ["oldmod:thing", "oldmod:other_thing"] },
  *   "removed":    ["oldmod:dropped_thing"],
  *   "merges":     { "mod:survivor": ["othermod:purged"] },
- *   "requires":   ["othermod", "mod"]
+ *   "requires":   ["othermod", "mod"],
+ *   "capabilities": { "newmod:cap": ["oldmod:cap"] }
  * }
  * </pre>
  * {@code namespaces} moves every id of the old namespace to the same path in the new one; {@code replaces} names single
@@ -40,7 +43,8 @@ import java.util.stream.Stream;
  * (item merges, item_merges.md 6) name two items that are both still registered: the purged one gives way to the survivor in
  * recipes, loot and tags ({@link #scriptMerges}, read by a jar's startup script) and in every stack in the world
  * ({@link ItemMerges}); like {@code replaces} they also remap the purged id once it is no longer registered. A file's
- * {@code requires} (mod ids) gates its merges: they apply only while every listed mod is loaded. The lists are never pruned, so a world last saved on any older version can still be
+ * {@code requires} (mod ids) gates its merges: they apply only while every listed mod is loaded. {@code capabilities} renames
+ * saved capability keys ({@link #renameCapabilityKeys}). The lists are never pruned, so a world last saved on any older version can still be
  * read. Read once, from the jars (not from datapacks: {@link SwapRemapper} needs them before any datapack loads).
  */
 public final class SwapLists {
@@ -52,6 +56,8 @@ public final class SwapLists {
 	private final Map<ResourceLocation, ResourceLocation> ids;
 	private final Set<ResourceLocation> removed;
 	private final List<Merge> merges;
+	private final Map<ResourceLocation, ResourceLocation> replaces;
+	private final Map<String, String> capabilities;
 
 	/** One item merge: {@code old} gives way to {@code survivor}; listed by {@code modId}, applied while {@code requires} are loaded. */
 	public record Merge(String modId, ResourceLocation old, ResourceLocation survivor, List<String> requires) {
@@ -61,11 +67,14 @@ public final class SwapLists {
 		}
 	}
 
-	private SwapLists(Map<String, String> namespaces, Map<ResourceLocation, ResourceLocation> ids, Set<ResourceLocation> removed, List<Merge> merges) {
+	private SwapLists(Map<String, String> namespaces, Map<ResourceLocation, ResourceLocation> ids, Set<ResourceLocation> removed, List<Merge> merges,
+			Map<ResourceLocation, ResourceLocation> replaces, Map<String, String> capabilities) {
 		this.namespaces = Collections.unmodifiableMap(namespaces);
 		this.ids = Collections.unmodifiableMap(ids);
 		this.removed = Collections.unmodifiableSet(removed);
 		this.merges = Collections.unmodifiableList(merges);
+		this.replaces = Collections.unmodifiableMap(replaces);
+		this.capabilities = Collections.unmodifiableMap(capabilities);
 	}
 
 	public static SwapLists get() {
@@ -108,6 +117,25 @@ public final class SwapLists {
 		return out;
 	}
 
+	/** The {@code replaces} renames alone, old id -> survivor: what {@link SwapRemapper} keeps as permanent aliases. */
+	public Map<ResourceLocation, ResourceLocation> replaces() {
+		return replaces;
+	}
+
+	/**
+	 * Renames saved capability keys in a {@code ForgeCaps} tag to their new ids, in place, before Forge hands the tag to the
+	 * providers. A new key that is already there wins and the old one is dropped.
+	 */
+	public void renameCapabilityKeys(CompoundTag caps) {
+		if (caps == null || capabilities.isEmpty() || caps.isEmpty()) return;
+		for (Map.Entry<String, String> e : capabilities.entrySet()) {
+			Tag old = caps.get(e.getKey());
+			if (old == null) continue;
+			caps.remove(e.getKey());
+			if (!caps.contains(e.getValue())) caps.put(e.getValue(), old);
+		}
+	}
+
 	public boolean isEmpty() {
 		return namespaces.isEmpty() && ids.isEmpty() && removed.isEmpty();
 	}
@@ -118,6 +146,8 @@ public final class SwapLists {
 		Set<ResourceLocation> removed = new HashSet<>();
 		List<Merge> merges = new ArrayList<>();
 		Set<ResourceLocation> merged = new HashSet<>();
+		Map<ResourceLocation, ResourceLocation> replaces = new HashMap<>();
+		Map<String, String> capabilities = new HashMap<>();
 		int files = 0;
 		for (IModInfo mod : ModList.get().getMods()) {
 			Path dir = mod.getOwningFile().getFile().findResource("data", mod.getModId(), "swaps");
@@ -142,7 +172,15 @@ public final class SwapLists {
 					if (root.has("replaces")) {
 						for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("replaces").entrySet()) {
 							ResourceLocation survivor = new ResourceLocation(e.getKey());
-							for (JsonElement old : e.getValue().getAsJsonArray()) ids.put(new ResourceLocation(old.getAsString()), survivor);
+							for (JsonElement old : e.getValue().getAsJsonArray()) {
+								ids.put(new ResourceLocation(old.getAsString()), survivor);
+								replaces.put(new ResourceLocation(old.getAsString()), survivor);
+							}
+						}
+					}
+					if (root.has("capabilities")) {
+						for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("capabilities").entrySet()) {
+							for (JsonElement old : e.getValue().getAsJsonArray()) capabilities.put(old.getAsString(), e.getKey());
 						}
 					}
 					if (root.has("removed")) {
@@ -171,7 +209,7 @@ public final class SwapLists {
 			}
 		}
 		removed.removeAll(ids.keySet());
-		LOGGER.info("[swaps] {} list file(s): {} namespace move(s), {} single id(s), {} removed id(s), {} item merge(s)", files, namespaces.size(), ids.size(), removed.size(), merges.size());
-		return new SwapLists(namespaces, ids, removed, merges);
+		LOGGER.info("[swaps] {} list file(s): {} namespace move(s), {} single id(s), {} removed id(s), {} item merge(s), {} capability key(s)", files, namespaces.size(), ids.size(), removed.size(), merges.size(), capabilities.size());
+		return new SwapLists(namespaces, ids, removed, merges, replaces, capabilities);
 	}
 }

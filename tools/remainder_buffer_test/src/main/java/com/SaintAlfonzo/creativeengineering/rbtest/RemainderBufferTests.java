@@ -208,7 +208,7 @@ public class RemainderBufferTests {
         CookingPotBlockEntity pot = pot(h);
         buffer(pot).setStackInSlot(1, new ItemStack(Items.BOWL, 5));
         CompoundTag tag = pot.saveWithFullMetadata();
-        check(tag.getCompound("ForgeCaps").contains("creativeengineering:remainder_buffer"), "not saved: " + tag);
+        check(tag.getCompound("ForgeCaps").contains("creativedelight:remainder_buffer"), "not saved: " + tag);
         BlockState state = h.getBlockState(POS);
         BlockEntity copy = BlockEntity.loadStatic(h.absolutePos(POS), state, tag);
         check(copy != null, "load failed");
@@ -316,7 +316,7 @@ public class RemainderBufferTests {
         CookingPotBlockEntity pot = pot(h);
         buffer(pot).setStackInSlot(0, new ItemStack(Items.BOWL, 2));
         CompoundTag tag = pot.getUpdateTag();
-        check(tag.getCompound("ForgeCaps").contains("creativeengineering:remainder_buffer"), "not in update tag: " + tag);
+        check(tag.getCompound("ForgeCaps").contains("creativedelight:remainder_buffer"), "not in update tag: " + tag);
         h.succeed();
     }
 

@@ -4,7 +4,7 @@
 
 | Part | Status | Where |
 |---|---|---|
-| Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |
+| Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |
 | Mixing in a placed jar (one item per slot, filled bottom to top) | BUILT 2026-10-21 | patcherMod `mixin/SupplementariesJarTileMixin`, `mixin/ItemDisplayTileAccessor`, rules in `compat/JarMixing` |
 | Layers drawn per item (placed jar, jar item) | BUILT 2026-10-21 | `mixin/SupplementariesJarRendererMixin`, `mixin/SupplementariesJarItemRendererMixin` (client) |
 | Jar item tooltip, one line per kind | BUILT 2026-10-21 | `mixin/SupplementariesJarItemTooltipMixin` |
@@ -28,7 +28,7 @@ at a time. In this pack:
 
 ## 2. Reference
 
-**Families** (`#creativeengineering:jar_family/<name>`; an item joins a jar when one family holds it and everything
+**Families** (`#creativedelight:jar_family/<name>`; an item joins a jar when one family holds it and everything
 already inside; items in no family still fill a jar on their own):
 
 | Family | Members |
@@ -113,7 +113,7 @@ Brief: [briefs/items_jars.md](briefs/items_jars.md). Nothing here is built.
 
 ## 5. File map
 
-- [kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js): families
+- [kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js](../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js): families
 - [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `i.t_jar_cookies`, `i.t_jar_family_*`
 - [compat/JarMixing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/JarMixing.java): rules
 - [mixin/SupplementariesJarTileMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesJarTileMixin.java), [ItemDisplayTileAccessor.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemDisplayTileAccessor.java)
@@ -188,7 +188,7 @@ Supplementaries jars hold liquids as Moonlight *soft fluids*, data files at
 an empty bowl on the jar takes one bowl (2 units) back out. In and out move the same amount, so a jar
 cannot duplicate soup (a bottle soup is 1 unit both ways). Moonlight and Supplementaries ship 11 soups (beetroot soup, mushroom,
 rabbit and suspicious stew; beef stew, baked cod stew, chicken soup, fish stew, pumpkin soup, vegetable soup, sopa de
-macaco). The pack adds the other 24, so every item in `#creativeengineering:food_type/soup` and every Golden Food
+macaco). The pack adds the other 24, so every item in `#creativedelight:food_type/soup` and every Golden Food
 soup and stew goes in a jar:
 
 - Acacia Blossom Soup, Kangaroo Stew, Adzuki Stew, Bell Pepper Soup, Blazing Chili, Bone Broth, Carrot Soup, Cavern

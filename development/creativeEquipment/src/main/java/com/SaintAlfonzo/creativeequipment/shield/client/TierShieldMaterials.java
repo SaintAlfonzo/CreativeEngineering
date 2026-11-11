@@ -44,7 +44,7 @@ public final class TierShieldMaterials {
 
     private static Material sprite(ShieldTier tier, String suffix) {
         return new Material(TextureAtlas.LOCATION_BLOCKS,
-                new ResourceLocation("creativeengineering", "entity/shield/" + tier.id() + suffix));
+                new ResourceLocation(CreativeEquipment.NS, "entity/shield/" + tier.id() + suffix));
     }
 
     public static Pair of(ShieldTier tier) {

@@ -777,7 +777,7 @@
    "why": "built in code, no templates to read"
   },
   {
-   "id": "creativeengineering:sky_island",
+   "id": "creativeworldgen:sky_island",
    "type": "minecraft:jigsaw",
    "origin": "kubejs/data",
    "adaptation": "none",
@@ -802,7 +802,7 @@
    "why": "floats or stands in water on purpose (earth_fill/exempt)"
   },
   {
-   "id": "creativeengineering:waystone_ruin_part",
+   "id": "creativeworldgen:waystone_ruin_part",
    "type": "minecraft:jigsaw",
    "origin": "kubejs/data",
    "adaptation": "beard_thin",

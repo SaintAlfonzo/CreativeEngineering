@@ -12,7 +12,7 @@ ServerEvents.recipes(e => {
 		var F = global.CD.food(e)
 
 		//######################### Bread ####################
-		// Their sandwiches and burger took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		// Their sandwiches and burger took only vanilla bread; any bread works (creativedelight/bread_tags.js)
 		R.replaceInput([{ id: 'hostiledelight:gburgerrecp' }, { id: 'hostiledelight:gsandrecp' }, { id: 'hostiledelight:teggsandrecp' }],
 			i.minecraft_bread, i.t_bread, e)
 

@@ -41,16 +41,17 @@ import java.util.List;
  * harvest tiers). Requires patcherMod ({@code creativeengineering}, later Creative Common: the damage tag framework and
  * {@code shield.EffectTickContext} stay there as Common APIs) and Creative Compat.
  *
- * Ids stay: the shields, the recipe serializers, the copper tier, the stepstool channel, tags and lang keys keep the
- * {@code creativeengineering} namespace ({@link #NS}). This mod id is only the jar's identity, its config file and its
- * script packs. The registrations below are the ones patcherMod's constructor made, in the same order.
+ * Ids follow the owner (feature_writeup/namespace_move.md): the shields, the recipe serializers, the copper tier, the
+ * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}); until 2026-11-10 they were
+ * {@code creativeengineering}, and the swap list data/creativeequipment/swaps/owner_namespace.json carries old saves.
+ * The registrations below are the ones patcherMod's constructor made, in the same order.
  */
 @Mod(CreativeEquipment.MOD_ID)
 public class CreativeEquipment {
 
     public static final String MOD_ID = "creativeequipment";
-    /** The namespace of every id this mod uses: patcherMod's, unchanged by the carve. */
-    public static final String NS = "creativeengineering";
+    /** The namespace of every id this mod uses (was creativeengineering until the 2026-11-10 namespace move). */
+    public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String OLD_FILE = "creativeengineering-common.toml";
@@ -85,16 +86,14 @@ public class CreativeEquipment {
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check widening in
         // mixin/LivingEntityShieldMixin, everything tunable in CEQConfig.SHIELDS.
         ShieldItems.register(modEventBus);
-        // Wooden bucket (water only; bucket/, from Creative Engineering 2026-11-06): creativeengineering:wooden_bucket and
-        // creativeengineering:wooden_water_bucket. Recipe: KubeJS.
-        com.SaintAlfonzo.creativeequipment.bucket.WoodenBucketItems.register(modEventBus);
+        // The wooden bucket moved to Creative Delight 2026-11-09 (creativedelight:wooden_*; farm/bucket/ there).
         // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
         BackpackSkinSerializers.register(modEventBus);
         boolean curios = ModList.get().isLoaded("curios");
         if (curios) MinecraftForge.EVENT_BUS.register(BackpackSkinCurios.class);
         // Stepstools: stand a block higher on the stool in the Curios feet slot (stepstool/; the client half is
         // stepstool/client, the collision mixin.EntityStepstoolCollisionMixin; feature_writeup/stepstool.md). The
-        // channel keeps its id, creativeengineering:stepstool.
+        // channel is creativeequipment:stepstool.
         Stepstool.register();
         if (curios) MinecraftForge.EVENT_BUS.register(Stepstool.class);
         // Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative

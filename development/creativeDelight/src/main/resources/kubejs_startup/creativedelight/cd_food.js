@@ -17,7 +17,7 @@
 //                   cultureCut (culture, meat, count): a meat culture is its own family; raw meat or fish, no bone meal
 //   cooking trio    fruitCook, veggieCook, meatCook, fishCook, eggCook (input, output): furnace, smoker and campfire
 //   oven            cakeBake (flavour, cake, second)  baked base + frosting + 2 flavour (or flavour + second) by hand; raw base in the oven
-//                   pieBake (flavour, pie, can)       crust + 2 flavour + 2 sweet; with a filling can key also the pot
+//                   pieBake (flavour, pie, can)       crust + 3 flavour + 2 sweet; with a filling can key also the pot
 //                                                     filling and crust + full can
 //                   cookieBake (flavour, cookie, second)  cookie dough + 2 flavour (or flavour + second) -> 12
 //                   muffinBake (fruit, muffin)        oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
@@ -149,9 +149,9 @@ global.CD.food = function (e) {
 		pieBake(flavour, output, can) {
 			F._sweep(output)
 			var s = suffix(output, '')
-			R.ceBaking([i.pie_crust, n(flavour, 2), SWEET, SWEET], Item.of(output, 1), e, s, ware.pie)
+			R.ceBaking([i.pie_crust, n(flavour, 3), SWEET, SWEET], Item.of(output, 1), e, s, ware.pie)
 			if (!can) return
-			R.fdCooking([flavour, flavour, SWEET, SWEET], Item.of(i[can], 1), e, can + '_pot', V.bake.exp, V.bake.time, i.empty_can)
+			R.fdCooking([flavour, flavour, flavour, SWEET, SWEET], Item.of(i[can], 1), e, can + '_pot', V.bake.exp, V.bake.time, i.empty_can)
 			R.ceBaking([i.pie_crust, i[can]], Item.of(output, 1), e, s + '_from_filling', ware.pie)
 		},
 		cookieBake(flavour, output, second) {

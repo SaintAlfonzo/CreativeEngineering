@@ -19,9 +19,9 @@ import net.minecraft.world.item.ItemStack;
  * to top, so different items can share a jar and each layer keeps its own item.
  *
  * <p>What may share a jar: two items mix when they are the same item, or when one
- * {@code #creativeengineering:jar_family/<name>} tag holds both (cookies, candied berries ...). A new item has to
+ * {@code #creativedelight:jar_family/<name>} tag holds both (cookies, candied berries ...). A new item has to
  * share one family with every item already inside. Items in no family still go in a jar on their own, as before.
- * What goes in a jar at all is still {@code #supplementaries:cookies}. Tags: kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js,
+ * What goes in a jar at all is still {@code #supplementaries:cookies}. Tags: kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js,
  * feature_writeup/mixed_jars.md.
  *
  * <p>Everything here works on the jar as a plain {@link Container} so it runs on the tile, the client copy and the
@@ -29,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class JarMixing {
 
-    private static final String FAMILY_NAMESPACE = "creativeengineering";
+    private static final String FAMILY_NAMESPACE = "creativedelight";
     private static final String FAMILY_PREFIX = "jar_family/";
 
     private JarMixing() {}

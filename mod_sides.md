@@ -115,7 +115,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
 | both | Creative Common | `creativecommon` | `creativecommon-1.1.0.jar` | The pack's own core (development/creativeCommon; patcherMod until the Creative Split swap, 2026-11-04, creative_split.md 7.13): config framework, KubeJS startup loader and shared helpers, swap lists, damage tags, trades and trade sync, engine fixes and perf, the interface (JEI, WTHIT, tooltips, toasts, GUI title plaques, armor bar, changelog viewer); every Creative jar requires it; client-only parts are guarded. Displaces the old `creativeengineering-1.x` jars |
-| both | Creative Labels | `creative_labels` | `creativeLabels-1.0.1.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
+| both | Creative Labels | `creativelabels` (was `creative_labels` until 2026-11-10) | `creativeLabels-1.0.1.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -144,7 +144,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Every Compat | `everycomp` | `everycomp-1.19.2-2.5.36.jar` |  |
 | both | Everything is Copper | `everythingcopper` | `everythingcopper-1.19.2-2.3.4.jar` |  |
 | both | Explorer's Compass | `explorerscompass` | `ExplorersCompass-1.19.2-1.3.0-forge.jar` |  |
-| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-04.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposure_extras (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
+| both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-04.jar` | This pack's port of Exposure 1.9.19 (development/exposureBackport); one jar with mod ids exposure, exposure_polaroid, exposure_catalog, exposure_expanded, plus exposureextras (was exposure_extras until 2026-11-10) (camera bags). Replaced exposure-1.19.2-1.6.0-forge.jar |
 | both | Extended Cogwheels | `extendedgears` | `extendedgears-2.1.1-1.19.2-0.5.1.f-forge.jar` |  |
 | both | Fairy Lights | `fairylights` | `fairylights-6.0.1-1.19.2.jar` |  |
 | both | Fantasy's Furniture | `fantasyfurniture` | `fantasyfurniture-1.19.2-6.7.0.jar` |  |
@@ -279,6 +279,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | SwingThroughGrass | `swingthroughgrass` | `swingthroughgrass-1.19.2-1.10.0.jar` |  |
 | both | Tactical Fishing | `tactical_fishing` | `TacticalFishing-1.19.x2-v1.2.jar` |  |
 | both | Tempad | `tempad` | `backportedTempad-3.0.4-ce-19.2-01.jar` | Tempad 3.0.4 ported to Forge 1.19.2 (development/backportedTempad, its own jar since 2026-11-07, nested in Creative Compat before; planned to fold into Creative Computing; immersive_portals.md 2.1.1): items, timedoor entity, packets and menus on both sides; reads its art and data from `tempad_upstream/` on both sides (not mods/). Replaced tempad-forge-1.19.2-1.4.5.jar 2026-11-06. Nested ids take the bundle's side; the row keeps its side if the member moves to its own jar |
+| both | Biomes O' Plenty | `biomesoplenty` | `BiomesOPlenty-1.19.2-17.1.2.544.jar` | Reduced by Creative Worldgen to the Visceral Heap biome; its TerraBlender dependency is a stub nested in Creative Worldgen |
 | both | Tectonic | `tectonic` | `tectonic-forge-1.19-2.3.5a.jar` |  |
 | both | Terralith | `terralith` | `Terralith_1.19.3_v2.3.12.jar` |  |
 | both | Towns and Towers | `t_and_t` | `Towns-and-Towers-v.1.10-_FORGE-1.19.2_.jar` |  |

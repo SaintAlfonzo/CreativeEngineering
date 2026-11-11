@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Registers the {@code creativeengineering:elytra_duplication} recipe serializer.
+ * Registers the {@code creativeequipment:elytra_duplication} recipe serializer.
  * The recipe TYPE is left as vanilla's shared {@code minecraft:crafting} (the
  * {@code CraftingRecipe} interface's default {@code getType()}) - only the serializer
  * is ours, the same way vanilla's own {@code ArmorDyeRecipe}/{@code BookCloningRecipe}

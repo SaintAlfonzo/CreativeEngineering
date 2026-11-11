@@ -36,7 +36,7 @@
                         -1,
                         0
                       ],
-                      "tag": "creativeengineering:worldgen/grass_like_soils"
+                      "tag": "creativeworldgen:worldgen/grass_like_soils"
                     }
                   ]
                 }
@@ -118,7 +118,7 @@
                         -1,
                         0
                       ],
-                      "tag": "creativeengineering:worldgen/grass_like_soils"
+                      "tag": "creativeworldgen:worldgen/grass_like_soils"
                     }
                   ]
                 }
@@ -200,7 +200,7 @@
                         -1,
                         0
                       ],
-                      "tag": "creativeengineering:worldgen/grass_like_soils"
+                      "tag": "creativeworldgen:worldgen/grass_like_soils"
                     }
                   ]
                 }
@@ -282,7 +282,7 @@
                         -1,
                         0
                       ],
-                      "tag": "creativeengineering:worldgen/grass_like_soils"
+                      "tag": "creativeworldgen:worldgen/grass_like_soils"
                     }
                   ]
                 }

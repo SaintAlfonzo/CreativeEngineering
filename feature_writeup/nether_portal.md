@@ -5,8 +5,8 @@
 | Part | Status |
 |---|---|
 | Any ordinary portal ignition fails: the portal doesn't form, the fire turns to soul fire, the obsidian frame turns to crying obsidian (`PortalFailureHandler`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); "until confirmed working" diagnostic log still in |
-| Dark Fire block (`creativeengineering:dark_fire`): lights a frame into a working portal | DEPLOYED |
-| Flint and Terrasteel (`creativeengineering:flint_and_terrasteel`, 65 uses, flint + terrasteel ingot) places Dark Fire | DEPLOYED, marked **"TEMPORARY testing behavior"** in its own code: no frame check (F1) |
+| Dark Fire block (`creativemagic:dark_fire`): lights a frame into a working portal | DEPLOYED |
+| Flint and Terrasteel (`creativemagic:flint_and_terrasteel`, 65 uses, flint + terrasteel ingot) places Dark Fire | DEPLOYED, marked **"TEMPORARY testing behavior"** in its own code: no frame check (F1) |
 
 - **Pending:** nothing built and unshipped. NP-01 to NP-12 have never been run (the TODO list says stability isn't
   confirmed). Findings F1 to F6 (section 4) are open; F1 and F2 need your call.
@@ -48,7 +48,7 @@ the frame, lava lighting the frame interior.
 
 | | |
 |---|---|
-| Block | `creativeengineering:dark_fire`, a `BaseFireBlock` with 1.0 fire damage, light 5, no collision, instant break, wool sounds |
+| Block | `creativemagic:dark_fire`, a `BaseFireBlock` with 1.0 fire damage, light 5, no collision, instant break, wool sounds |
 | Burns things | no (`canBurn` false), never spreads, never goes out by itself |
 | Survives | next to any sturdy face (any of six sides, unlike fire's floor rule), else it breaks on the next update |
 | Portal | on placement it finds a valid frame (`PortalShape::isValid`, X then Z) and fires `PortalSpawnEvent`; `PortalFailureHandler` sees Dark Fire and creates the portal blocks |

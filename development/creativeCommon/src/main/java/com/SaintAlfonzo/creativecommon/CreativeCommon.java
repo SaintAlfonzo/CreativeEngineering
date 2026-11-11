@@ -103,6 +103,7 @@ public class CreativeCommon
         // Corn Delight cob pipe: Creative Delight (2026-11-01).
         // Swap lists (swap/, Common API): every jar's data/<modid>/swaps/*.json remaps ids it moved when a world loads.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.SwapRemapper.class);
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.SwapReport.class);
         // Item merges in the lists ("merges", both items still registered): stacks in the world become the survivor
         // (swap/ItemMerges, triggers in creativecommon-swaps.toml; feature_writeup/item_merges.md 6).
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, com.SaintAlfonzo.creativecommon.swap.SwapConfig.SPEC, MODID + "-swaps.toml");

@@ -1,0 +1,11 @@
+{
+  "type": "creativeworldgen:hub_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "creativeworldgen:y32plus",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "minecraft:flower_forest"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
  "_readme": [
   "Servings per can: item_dict key -> how many times one can is eaten (or used in a crafting recipe) before it is empty.",
-  "server_scripts/tags/cantags.js turns this into #creativeengineering:cans/servings/<n> (and #creativeengineering:cans); /reload applies it.",
+  "server_scripts/tags/cantags.js turns this into #creativedelight:cans/servings/<n> (and #creativedelight:cans); /reload applies it.",
   "1 = one serving, but the emptied can still rolls empty/crushed/nothing (CEConfig [canning]). Leave a can out for plain Canned Goods behaviour.",
   "Each serving gives the can's full food value: the Canned Goods values are sized for 2 foods, so 2 servings doubles a can until the parity tuning (feature_writeup/food.md 3.5) sets per-serving values."
  ],

@@ -64,10 +64,10 @@ project(':creativeDevtools').projectDir = file('development/creativeDevtools')
 }
 
 // Creative Worldgen (feature_writeup/creative_worldgen.md): world generation and fauna, and its members under
-// development/creativeWorldgen/members/ (More Mooblooms and Baby Mobs; project names and mod ids unchanged).
+// development/creativeWorldgen/members/ (More Mooblooms, Baby Mobs and the TerraBlender stub; project names and mod ids unchanged).
 include 'creativeWorldgen'
 project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
-['moreMooblooms': 'mooblooms', 'babyMobs': 'babymobs'].each { name, dir ->
+['moreMooblooms': 'mooblooms', 'babyMobs': 'babymobs', 'terrablenderStub': 'terrablenderstub'].each { name, dir ->
     include name
     project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }

@@ -47,7 +47,7 @@ public class GroundMatchTest {
 	public static void main(String[] args) {
 		net.minecraft.SharedConstants.tryDetectVersion();
 		net.minecraft.server.Bootstrap.bootStrap();
-		GRASS = BlockTags.create(new ResourceLocation("creativeengineering", "ground_match/grass"));
+		GRASS = BlockTags.create(new ResourceLocation("creativeworldgen", "ground_match/grass"));
 
 		// the tags blocktags.js fills (subset)
 		Map<TagKey<Block>, List<Holder<Block>>> tags = new HashMap<>();
@@ -164,7 +164,7 @@ public class GroundMatchTest {
 		// 5. config defaults (read through WorldgenConfig; an unloaded config falls back to the defaults)
 		check(WorldgenConfig.groundMatchEnabled() && WorldgenConfig.groundMode() == GroundMode.TERRAIN && WorldgenConfig.groundBaseLayers() == 3
 				&& WorldgenConfig.groundNativeShare() == 0.35 && WorldgenConfig.groundMinSamples() == 16 && WorldgenConfig.groundMaxPlantHeight() == 4
-				&& WorldgenConfig.groundFamilies().equals(List.of("creativeengineering:ground_match/grass")), "CEConfig [worldgen.ground_match] defaults");
+				&& WorldgenConfig.groundFamilies().equals(List.of("creativeworldgen:ground_match/grass")), "CEConfig [worldgen.ground_match] defaults");
 		GroundMatch.Rewrite low = GroundMatch.rewrite(ruin, oy, box, fams, 3, GroundMode.PALETTE, 1, f -> vp, pos -> false);
 		check(low != null && low.plants() == 2, "maxPlantHeight 1: the upper tall-grass half stays (" + (low == null ? "-" : low.plants()) + " dropped)");
 

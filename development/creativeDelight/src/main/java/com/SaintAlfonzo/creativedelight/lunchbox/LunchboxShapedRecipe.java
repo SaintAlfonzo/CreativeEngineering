@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 /**
  * A shaped tier upgrade that keeps the lunchbox: the result takes the grid box's name, dye, skin and contents.
  * A vanilla shaped recipe would hand back an empty box and delete what was inside. Also refuses a bundle that
- * still holds items. Type {@code creativeengineering:lunchbox_shaped} (plain shaped JSON); emitted by
+ * still holds items. Type {@code creativedelight:lunchbox_shaped} (plain shaped JSON); emitted by
  * {@code global.NCH.lunchboxShaped}.
  */
 public class LunchboxShapedRecipe extends ShapedRecipe {

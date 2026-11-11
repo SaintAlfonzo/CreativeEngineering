@@ -3,7 +3,7 @@
 Structure groups: builds, syncs and checks kubejs/generation_scripts/worldgen/structure_groups.json.
 
 THE MODEL
-  A group is ONE structure_set, creativeengineering:group/<name>, holding every structure in the
+  A group is ONE structure_set, creativeworldgen:group/<name>, holding every structure in the
   structure tag group/<name> (structure_tags.json). All members share its grid, so no two of them
   ever start closer than the group's separation, whatever mod they come from. Per member:
     weight     who wins a grid slot where several members could spawn (vanilla set weight)
@@ -76,7 +76,7 @@ MIGRATION_REPORT = WG / 'structure_group_migration.md'
 KUBEJS_DATA = INSTANCE / 'kubejs/data'
 ARCHIVE = INSTANCE / 'kubejs/archive/worldgen/pre_groups_2026-09-27'
 
-GROUP_SET_PREFIX = 'creativeengineering:group/'
+GROUP_SET_PREFIX = 'creativeworldgen:group/'
 QUANTILE = 1.0
 MEDIAN_WEIGHT = 100
 EPS_AREA = 1e-4          # a biome that exists but never showed up in the climate sample
@@ -123,7 +123,7 @@ GROUP_SPECS = OrderedDict([
     }),
     ('flotsam', {
         'note': 'Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.',
-        'values': ['creativeengineering:meta/driftwood_flotilla'],
+        'values': ['creativeworldgen:meta/driftwood_flotilla'],
     }),
     ('remote', {
         'note': 'Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer\'s Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.',
@@ -163,6 +163,7 @@ def fmt_sp(d):
 
 
 def group_salt(name):
+    # Seed string, not an id: kept as it was before the 2026-11-10 namespace move so salts never change.
     return zlib.crc32(('creativeengineering:group/' + name).encode()) & 0x7fffffff
 
 
@@ -416,12 +417,12 @@ class Pack:
         self.apply_biome_rules(raw, cache)
 
     def meta_entries(self, entries):
-        """A meta structure's "#creativeengineering:meta/x" / id entries -> structure ids (meta/x = the
+        """A meta structure's "#creativeworldgen:meta/x" / id entries -> structure ids (meta/x = the
         structure_tags.json tag; other tags aren't known here and count as empty)."""
         out = set()
         for e in entries or []:
-            if e.startswith('#creativeengineering:'):
-                out |= set(self.tag_members.get(e[len('#creativeengineering:'):], ()))
+            if e.startswith('#creativeworldgen:'):
+                out |= set(self.tag_members.get(e[len('#creativeworldgen:'):], ()))
             elif not e.startswith('#'):
                 out.add(e)
         return out - set(self.meta)
@@ -482,13 +483,13 @@ class Pack:
         return [t[len('group/'):] for t in self.tag_defs if t.startswith('group/')]
 
     def biome_entry(self, entry, stack=frozenset()):
-        """A biome id or #tag -> biome ids. #creativeengineering:<fit> is the fit's own list (the real tag
-        structure_overrides.js adds), #creativeengineering:<name> of biome_fits.json biome_tags likewise."""
+        """A biome id or #tag -> biome ids. #creativeworldgen:<fit> is the fit's own list (the real tag
+        structure_overrides.js adds), #creativeworldgen:<name> of biome_fits.json biome_tags likewise."""
         if not entry.startswith('#'):
             return {full_id(entry)}
         tag = full_id(entry[1:])
         doc = read_json(FITS) if FITS.exists() else {}
-        name = tag[len('creativeengineering:'):] if tag.startswith('creativeengineering:') else None
+        name = tag[len('creativeworldgen:'):] if tag.startswith('creativeworldgen:') else None
         own = (doc.get('fits', {}).get(name) or doc.get('biome_tags', {}).get(name)) if name else None
         if own is not None and tag not in stack:
             return set().union(*(self.biome_entry(b, stack | {tag}) for b in own.get('biomes', [])))
@@ -1201,7 +1202,7 @@ def migration_report(pack, doc):
 def groups_readme():
     return OrderedDict([
         ('what', 'Every structure\'s spawn rate, in one file. A GROUP is one shared structure_set '
-                 '(creativeengineering:group/<name>) holding every structure in the structure tag group/<name> '
+                 '(creativeworldgen:group/<name>) holding every structure in the structure tag group/<name> '
                  '(structure_tags.json): all members share its grid, so no two of them ever start closer than its '
                  'separation, whatever mod they come from. Every structure that is in no group keeps its own set '
                  'and is tuned under "standalone". Rejoin the world to apply (new chunks only); '
@@ -1258,10 +1259,10 @@ def tags_readme():
                      'structure can have more than one type. dungeon/* = dungeons split by location (surface / '
                      'underground) and origin (vanilla / better = YUNG\'s / modded). group/* = the shared grids. meta/* = the '
                      'structures a meta structure may use as its anchor or parts (meta_structures.json); each is also a '
-                     'real structure tag creativeengineering:meta/<name>, added by structure_overrides.js. land and '
+                     'real structure tag creativeworldgen:meta/<name>, added by structure_overrides.js. land and '
                      'land/* = biome fits (biome_fits.json): a structure in one spawns in that fit\'s biomes plus its '
                      'parents\' (land/oak: land/oak + land biomes) instead of its own list; each is also a real '
-                     'structure tag creativeengineering:<name>.'),
+                     'structure tag creativeworldgen:<name>.'),
     ])
 
 

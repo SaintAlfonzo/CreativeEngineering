@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * signs (a colour set) turned into another colour and lost their text before vanilla's sign code could
  * dye the text.
  *
- * <p>Here the tweak passes on every block with a block entity and on {@code #creativeengineering:no_world_dye},
+ * <p>Here the tweak passes on every block with a block entity and on {@code #creativecompat:no_world_dye},
  * so the click falls through to the block's own use (a canvas sign dyes its text, like any sign). Plain
  * blocks (wool, concrete, terracotta, glass, candles ...) still dye in world. Crafting-grid dye and soap
  * recipes are untouched. Which blocks should dye or soap in world is open: [TODO] {@code blocks/dyeing #1}.
@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SupplementariesDyeBlocksMixin {
 
     private static final TagKey<Block> NO_WORLD_DYE = TagKey.create(Registry.BLOCK_REGISTRY,
-            new ResourceLocation("creativeengineering", "no_world_dye"));
+            new ResourceLocation("creativecompat", "no_world_dye"));
 
     @Inject(method = "tryPerformingAction", at = @At("HEAD"), cancellable = true, remap = false)
     private void creativeengineering$skipDataBlocks(Level level, Player player, InteractionHand hand, ItemStack stack,

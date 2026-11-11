@@ -193,7 +193,7 @@
 	#as moist farmland for the stem's own growth roll. Melon, pumpkin and cantaloupe stems alike.
 	fertileSoilBoost = false
 
-#Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with
+#Cans in #creativedelight:cans/servings/<n> hold n servings. Eating or crafting with
 #one takes a serving; the servings left show as a durability bar and a tooltip line. The
 #last serving leaves an empty can, a crushed can or nothing, rolled with the chances below.
 [canning]
@@ -412,9 +412,9 @@
 	cookingforblockheads = true
 
 #Cooking for Blockheads compartment ([compartments] cookingforblockheads).
-#Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):
+#Small blocks on a Cooking for Blockheads counter or corner (#creativedelight:counter_supports):
 #Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's
-#coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full
+#coaster (#creativedelight:counter_toppers). The counter's worktop is 1 px lower than a full
 #block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):
 #cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as
 #seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward

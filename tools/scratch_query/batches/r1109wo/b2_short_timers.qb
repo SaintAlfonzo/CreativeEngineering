@@ -1,0 +1,309 @@
+# r1109wo boot A2: sleepDurationSeconds, angerDurationSeconds, angrySleepDurationSeconds = 5; chance 100, threshold 75.
+# randomTickSpeed 0 throughout, except the window in SQ-WO-14. Deviations from the queue text, scratch-only:
+# timer rows run at pace 0.2 (at 2 s per command the 5 s timers expire before they are read);
+# SQ-WO-14 opens a short random-tick window then reads at once (a 5 s tired sleep inside a 90 s wait is usually over);
+# SQ-WO-18 and the angry case of -28 make the tree angry by waking a sleeper, so it has a real timer (a bare [state=angry] has none and sleeps within 23 ticks);
+# SQ-WO-28 uses one Z per case (a fresh tree, no leftover blow or cooldown).
+pace 1
+
+## SETUP-A2 | forceload, bots
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+> pbot spawn H 276 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> weather clear
+> time set noon
+
+pace 0.5
+## SQ-WO-14 | twelve talks make it tired; timed sleep, then awake
+> setblock 440 -60 300 mysticaloaktree:wise_oak
+repeat 12
+> pbot use G 440 -60 300 up
+> zwo skip 60
+end
+> gamerule randomTickSpeed 4096
+> gamerule randomTickSpeed 0
+> zwo state 440 -60 300
+> data get block 440 -60 300 creativeworldgen_sleep_until
+sleep 8
+> zwo state 440 -60 300
+sleep 1
+expect \[zwo\] 440 -60 300 .*state=sleeping
+expect \[zwo\] 440 -60 300 .*state=(none|blinking)
+expect has the following block data
+look sleep_until at most game + 100
+
+pace 0.2
+## SQ-WO-15 | timer ends at night: stays asleep, wakes right after dawn
+> time set noon
+> setblock 450 -60 300 mysticaloaktree:wise_oak[state=angry]
+sleep 3
+> time set midnight
+sleep 8
+> zwo state 450 -60 300
+> data get block 450 -60 300 creativeworldgen_sleep_until
+> time set noon
+sleep 3
+> zwo state 450 -60 300
+sleep 1
+expect \[zwo\] 450 -60 300 .*state=sleeping
+expect \[zwo\] 450 -60 300 .*state=(none|blinking)
+
+## SQ-WO-16 | wake a sleeper: trust -20, angry timer, timed sleep, awake
+> time set noon
+> setblock 460 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> wiseoak trust 460 -60 300 G 30
+> pbot use G 460 -60 300 up
+> zwo state 460 -60 300
+> wiseoak trust 460 -60 300 G
+> data get block 460 -60 300 creativeworldgen_angry_until
+sleep 7
+> zwo state 460 -60 300
+> data get block 460 -60 300 creativeworldgen_sleep_until
+sleep 7
+> zwo state 460 -60 300
+sleep 1
+expect \[zwo\] 460 -60 300 .*state=angry
+expect Trust of G at .*: 10
+expect \[zwo\] 460 -60 300 .*state=sleeping
+expect \[zwo\] 460 -60 300 .*state=(none|blinking)
+count has the following block data == 2
+
+pace 1
+## SQ-WO-17 | trust floor
+> setblock 470 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> wiseoak trust 470 -60 300 G 10
+> pbot use G 470 -60 300 up
+> wiseoak trust 470 -60 300 G
+sleep 1
+expect Trust of G at .*: 0
+
+pace 0.2
+## SQ-WO-18 | angry tree ignores a talk: no trust, no gift
+> setblock 480 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> pbot use G 480 -60 300 up
+> wiseoak trust 480 -60 300 G 50
+> pbot use G 480 -60 300 up
+> wiseoak trust 480 -60 300 G
+> zwo drops 480 -60 300 3
+sleep 1
+expect use PASS
+expect Trust of G at .*: 50
+expect \[zwo\] drops none
+
+## SQ-WO-19 | a hit blows, then anger with a timer, sleep, awake
+> time set noon
+> setblock 490 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 490 -60 300 G 50
+> zwo punch G 490 -60 300
+> zwo state 490 -60 300
+> wiseoak trust 490 -60 300 G
+sleep 3
+> zwo state 490 -60 300
+> data get block 490 -60 300 creativeworldgen_angry_until
+sleep 7
+> zwo state 490 -60 300
+sleep 7
+> zwo state 490 -60 300
+sleep 1
+expect \[zwo\] 490 -60 300 .*state=(blowing|thicc)
+expect Trust of G at .*: 30
+expect \[zwo\] 490 -60 300 .*state=angry
+expect has the following block data
+expect \[zwo\] 490 -60 300 .*state=sleeping
+expect \[zwo\] 490 -60 300 .*state=(none|blinking)
+
+## SQ-WO-20 | a second hit restarts the blow
+> setblock 500 -60 300 mysticaloaktree:wise_oak
+> zwo punch G 500 -60 300
+sleep 1
+> zwo punch G 500 -60 300
+sleep 0.8
+> zwo state 500 -60 300
+sleep 2
+> zwo state 500 -60 300
+sleep 1
+expect \[zwo\] 500 -60 300 .*state=(blowing|thicc)
+expect \[zwo\] 500 -60 300 .*state=angry
+
+## SQ-WO-21 | a hit on a sleeper blows
+> time set noon
+> setblock 510 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> zwo punch G 510 -60 300
+> zwo state 510 -60 300
+sleep 3
+> zwo state 510 -60 300
+sleep 1
+expect \[zwo\] 510 -60 300 .*state=(blowing|thicc)
+expect \[zwo\] 510 -60 300 .*state=angry
+
+## SQ-WO-22 | angry sleep at night stays asleep past its timer
+> time set midnight
+> setblock 520 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> pbot use G 520 -60 300 up
+> zwo state 520 -60 300
+sleep 7
+> zwo state 520 -60 300
+sleep 7
+> zwo state 520 -60 300
+> time set noon
+sleep 3
+> zwo state 520 -60 300
+sleep 1
+expect \[zwo\] 520 -60 300 .*state=angry
+count \[zwo\] 520 -60 300 .*state=sleeping == 2
+expect \[zwo\] 520 -60 300 .*state=(none|blinking)
+
+## SQ-WO-23 | talk cooldown 54 ticks
+> time set noon
+> setblock 530 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 530 -60 300 G 50
+> pbot use G 530 -60 300 up
+> pbot use G 530 -60 300 up
+> wiseoak trust 530 -60 300 G
+> zwo skip 60
+> pbot use G 530 -60 300 up
+> wiseoak trust 530 -60 300 G
+sleep 1
+expect use PASS
+expect Trust of G at .*: 55
+expect Trust of G at .*: 60
+
+pace 1
+## SQ-WO-24 | trust cap
+> setblock 540 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 540 -60 300 G 100
+> pbot use G 540 -60 300 up
+> wiseoak trust 540 -60 300 G
+> zwo drops 540 -60 300 3
+sleep 1
+expect Trust of G at .*: 100
+
+## SQ-WO-25 | trust is per player
+> setblock 550 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 550 -60 300 G 100
+> wiseoak trust 550 -60 300 H 0
+> pbot use H 550 -60 300 up
+> wiseoak trust 550 -60 300 H
+> wiseoak trust 550 -60 300 G
+> zwo drops 550 -60 300 3
+sleep 1
+expect Trust of H at .*: 5
+expect Trust of G at .*: 100
+expect \[zwo\] drops none
+
+## SQ-WO-26 | threshold is on the trust after the talk
+> setblock 560 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 560 -60 300 G 65
+> pbot use G 560 -60 300 up
+> zwo drops 560 -60 300 3
+> zwo skip 60
+> wiseoak trust 560 -60 300 G 70
+> pbot use G 560 -60 300 up
+> zwo drops 560 -60 300 3
+> zwo skip 60
+> wiseoak trust 560 -60 300 G 100
+> pbot use G 560 -60 300 up
+> zwo drops 560 -60 300 3
+sleep 1
+count \[zwo\] drops none == 1
+count \[zwo\] drops [a-z_0-9]+:[a-z_0-9/]+ x == 2
+look the drops none line is the first (trust 65)
+
+pace 0.3
+## SQ-WO-27 | forty rolls: one id per drop, all four lists, right counts
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 10
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 10
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 10
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 10
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+sleep 1
+count \[zwo\] drops none == 0
+look wo_judge.py gifts on this row log: every drop one id, count matches its list, all four lists seen
+
+pace 0.2
+## SQ-WO-28 | no gift from a sleeper, an angry tree, during a blow; one gift for a double click
+> setblock 580 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> wiseoak trust 580 -60 300 G 100
+> pbot use G 580 -60 300 up
+> zwo drops 580 -60 300 3
+> setblock 580 -60 306 mysticaloaktree:wise_oak[state=sleeping]
+> pbot use G 580 -60 306 up
+> wiseoak trust 580 -60 306 G 100
+> pbot use G 580 -60 306 up
+> zwo drops 580 -60 306 3
+> setblock 580 -60 312 mysticaloaktree:wise_oak
+> wiseoak trust 580 -60 312 G 100
+> zwo punch G 580 -60 312
+> wiseoak trust 580 -60 312 G 100
+> pbot use G 580 -60 312 up
+> zwo drops 580 -60 312 3
+> setblock 580 -60 318 mysticaloaktree:wise_oak
+> wiseoak trust 580 -60 318 G 100
+> pbot use G 580 -60 318 up
+> pbot use G 580 -60 318 up
+> zwo drops 580 -60 318 3
+sleep 1
+count \[zwo\] drops none == 3
+count \[zwo\] drops [a-z_0-9]+:[a-z_0-9/]+ x == 1
+look the one gift is the last drops line, and it is a single id
+
+pace 1
+## SQ-WO-29 | the gift comes out on the facing side
+> setblock 590 -60 300 mysticaloaktree:wise_oak[facing=north]
+> wiseoak trust 590 -60 300 G 100
+> pbot use G 590 -60 300 up
+> execute as @e[type=item,x=590,y=-60,z=300,distance=..3] run data get entity @s Pos
+> zwo stacks 590 -60 300 1
+> zwo drops 590 -60 300 3
+> setblock 590 -60 300 mysticaloaktree:wise_oak[facing=south]
+> wiseoak trust 590 -60 300 G 100
+> zwo skip 60
+> pbot use G 590 -60 300 up
+> execute as @e[type=item,x=590,y=-60,z=300,distance=..3] run data get entity @s Pos
+> zwo stacks 590 -60 300 1
+sleep 1
+count \[zwo\] stacks 1 == 2
+look Pos of the item: Z below 300 for north, Z above 301 for south, not inside the block
+
+## SQ-WO-30 | silk touch keeps trust and no timers; plain axe drops a log
+> setblock 600 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 600 -60 300 G 80
+> loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe{Enchantments:[{id:"minecraft:silk_touch",lvl:1}]}
+> data get entity @e[type=item,limit=1,sort=nearest,x=600,y=-60,z=300] Item
+> zwo drops 600 -60 300 3
+> loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe
+> zwo drops 600 -60 300 3
+sleep 1
+expect \[zwo\] drops mysticaloaktree:wise_oak x1
+expect \[zwo\] drops minecraft:oak_log
+reject creativeworldgen_(sleep|angry)_until
+look Item NBT holds a relationship with trust 80 and no timer keys

@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/powder_snow",
-  "textures": {
-    "texture": "creativeengineering:block/powdered_sugar_block",
-    "particle": "creativeengineering:block/powdered_sugar_block"
-  }
-}

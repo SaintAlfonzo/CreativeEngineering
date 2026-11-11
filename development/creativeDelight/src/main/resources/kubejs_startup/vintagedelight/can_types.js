@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_ghost_pepper": {
    "section": "raw_veggie",
@@ -132,7 +132,7 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_oatmeal_cookie": {
    "section": "cookies",
@@ -737,7 +737,7 @@ if (global.CD) global.CD.genPut('can_types', 'vintagedelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_ghostly_chili": {
    "section": "soup",

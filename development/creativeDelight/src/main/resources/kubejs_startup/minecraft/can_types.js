@@ -601,7 +601,7 @@ if (global.CD) global.CD.genPut('can_types', 'minecraft', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_beef"
+   "texture": "creativedelight:item/canned_raw_beef"
   },
   "canned_raw_mutton": {
    "section": "raw_meat",
@@ -796,7 +796,7 @@ if (global.CD) global.CD.genPut('can_types', 'minecraft', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_beef"
+   "texture": "creativedelight:item/canned_raw_beef"
   },
   "canned_raw_cod": {
    "section": "raw_fish",

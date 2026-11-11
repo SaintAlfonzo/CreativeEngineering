@@ -28,7 +28,7 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
   The pack runs Quark's defaults: empty-hand harvest on, no durability cost, harvesting search on,
   villagers use simple harvest, hoe radius 2 (3x3) and 3 (5x5). The pack overrides the size per hoe
-  with the `creativeengineering:hoe_harvest/NxN` item tags (§2.3); Quark's radius only covers untagged hoes.
+  with the `creativedelight:hoe_harvest/NxN` item tags (§2.3); Quark's radius only covers untagged hoes.
 - **Tobacco:** it isn't a crop class at all. It's a plain MCreator block with a block entity, and
   its placement check is hard-coded to `minecraft:farmland` (§2.5). The pack's crop parity layer (§2.6)
   now gives it the same soils, right-click replant, hoe replant and hoe area break as wheat.
@@ -48,7 +48,7 @@ Three separate systems decide how a crop behaves:
    Farmland, and Immersive Weathering Mulch (renamed **Fertile Soil** in the pack), each override it
    with their own rules (§2.4). A crop that skips `canSustainPlant` and checks the block below directly
    (tobacco, grape bushes) ignores those overrides. For tobacco the pack replaces that check with the
-   `creativeengineering:crops/farmland_soils` tag (§2.6).
+   `creativedelight:crops/farmland_soils` tag (§2.6).
 3. **Quark** adds the harvesting conveniences. *Simple Harvest* turns a right-click on a ripe crop into
    "drop the harvest and replant". *Hoe Harvesting* makes a hoe work on an area, for right-clicks and
    for breaking.
@@ -90,7 +90,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 - Adzuki (`neapolitan:adzuki_sprouts`) behaves like a bush for soil (Dirt, Farmland, Rich, RichF and Fertile all
   yes, plus Adzuki Soil) but has no right-click. Break it when grown. Hoe RC no, hoe break yes.
 
-**Picked crops (a `CropBlock` with its own ripe pick, `#creativeengineering:crops/own_pick`, §2.2)**
+**Picked crops (a `CropBlock` with its own ripe pick, `#creativedelight:crops/own_pick`, §2.2)**
 
 | Crop | Block | Dirt | Farmland | Rich | RichF | Fertile | Right-click | Hoe RC | Hoe break |
 |---|---|---|---|---|---|---|---|---|---|
@@ -126,7 +126,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
   makes the top fail its survival check, so the top breaks and drops its own corn. Clicking the top harvests the
   lower half the same way (G13, fixed 2026-11-07).
 - **Tomatoes:** both resets go to stage 0, so the result is the same. Since 2026-11-02 (`farming/crops #29`) all four
-  tomato blocks are in `#creativeengineering:crops/own_pick` (CD `farmersdelight/tags.js`), so Quark leaves every vine
+  tomato blocks are in `#creativedelight:crops/own_pick` (CD `farmersdelight/tags.js`), so Quark leaves every vine
   to FD's own pick (1-2 tomatoes, 5 % rotten tomato, back to stage 0, the vine stays), and an area hoe clicks every
   ripe vine in reach, climbing the column (§2.3). Tomatoes on Supplementaries sticks and ropes
   (`supplementaries:stick_tomatoes`, `rope_tomatoes`) use the same tomato code and the same own pick.
@@ -250,7 +250,7 @@ From `vazkii.quark.content.tweaks.module.SimpleHarvestModule` (Quark 3.4-418).
 - **Opt-out tag:** `#quark:simple_harvest_blacklisted` (empty in the pack).
 - **Own-pick crops (pack, 2026-10-25):** a `CropBlock` with its own ripe right-click (pick the fruit, back a few
   stages) would be found by the search and replanted to stage 0 before its own pick runs. Blocks in
-  `#creativeengineering:crops/own_pick` get the bush treatment instead (patcherMod `QuarkOwnPickMixin`): empty hand or
+  `#creativedelight:crops/own_pick` get the bush treatment instead (patcherMod `QuarkOwnPickMixin`): empty hand or
   1x1 hoe, the block's own pick; hoe area, Quark clicks each. Members: cucumber, ghost pepper (Vintage port), zucchini
   (Veggies port). Villagers still replant them to stage 0. Test VTD-76.
 
@@ -261,7 +261,7 @@ includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
 
 | Hoe | Area | Tag |
 |---|---|---|
-| Wooden, Stone | 1x1 (no area) | `creativeengineering:hoe_harvest/1x1` |
+| Wooden, Stone | 1x1 (no area) | `creativedelight:hoe_harvest/1x1` |
 | Copper, Golden | 2x2 | `hoe_harvest/2x2` |
 | Iron, IE Steel | 3x3 | `hoe_harvest/3x3` |
 | Diamond, Netherite, Elementium, Manasteel | 4x4 | `hoe_harvest/4x4` |
@@ -276,7 +276,7 @@ includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
   along an axis, the sideways half flips with tiny head turns.
 - **Odd sizes** are centred, same as Quark.
 - **Climbing own-pick columns** (2026-11-02, `farming/crops #29`): Quark reaches the clicked height and one above. For
-  crops in `#creativeengineering:crops/own_pick` (tomatoes on ropes, sticks and treated sticks) an area hoe goes on up
+  crops in `#creativedelight:crops/own_pick` (tomatoes on ropes, sticks and treated sticks) an area hoe goes on up
   the column, clicking each level, while the block and the one below it are own-pick crops, at most 6 levels
   (`HoeHarvestArea.MAX_CLIMB`). Area hoes only: a 1x1 hoe or an empty hand clicks just the vine it targets.
 - **How:** `mixin/QuarkHoeAreaHarvestMixin` (right-click, `SimpleHarvestModule.click`) and
@@ -352,11 +352,11 @@ Quark's right-click harvest, so a bucket on a ripe crop over dry soil waters ins
 
 | Stock behaviour | Cause | Pack fix |
 |---|---|---|
-| Refuses Rich Farmland and Fertile Soil | identity check on `Blocks.FARMLAND` | `TobaccoPlacementMixin`: the check becomes "vanilla farmland or `#creativeengineering:crops/farmland_soils`" |
-| Dry vanilla farmland under it turns to dirt and pops it (wheat keeps its farmland) | Forge's `FarmBlock.isUnderCrops` only counts `IPlantable`s | `FarmBlockUnderCropsMixin`: `#creativeengineering:crops/farmland_crops` counts as a crop |
+| Refuses Rich Farmland and Fertile Soil | identity check on `Blocks.FARMLAND` | `TobaccoPlacementMixin`: the check becomes "vanilla farmland or `#creativedelight:crops/farmland_soils`" |
+| Dry vanilla farmland under it turns to dirt and pops it (wheat keeps its farmland) | Forge's `FarmBlock.isUnderCrops` only counts `IPlantable`s | `FarmBlockUnderCropsMixin`: `#creativedelight:crops/farmland_crops` counts as a crop |
 | No bone-meal step from soaked Fertile Soil | IW only calls `CropBlock.growCrops` | `MulchBlockCropGrowthMixin`: one `performBonemeal` under IW's own conditions |
 | No right-click or hoe right-click replant | Quark only auto-finds `CropBlock`s | Quark `Harvestable Blocks` line `the_dirty_stuff:tobacco_seeds[blockstate=7]` |
-| Not caught by the hoe area break | not `IPlantable`, material `PLANT` isn't replaceable | `QuarkHoeHarvestMixin`: `#creativeengineering:crops/farmland_crops` counts in `canHarvest` |
+| Not caught by the hoe area break | not `IPlantable`, material `PLANT` isn't replaceable | `QuarkHoeHarvestMixin`: `#creativedelight:crops/farmland_crops` counts in `canHarvest` |
 | Rich Farmland's 20% growth boost | already worked: FD bone-meals any `BonemealableBlock` | none needed |
 
 ### 2.6 Crop parity approach (how to bring any crop in line)
@@ -368,8 +368,8 @@ like wheat on every soil in §2.4 and with both Quark mechanics in §2.2 and §2
 
 | Piece | Where | What it does |
 |---|---|---|
-| `creativeengineering:crops/farmland_soils` (block tag) | [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), "Crop parity" | soils that count as farmland for crops whose own check is hard-coded. Today: farmland, Rich Farmland, Fertile Soil. Untilled Rich Soil stays out (G6). Vanilla farmland counts even if the tag is empty or not loaded yet |
-| `creativeengineering:crops/farmland_crops` (block tag) | same | non-`CropBlock` plants treated as farmland crops: vanilla farmland under them doesn't revert to dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Today: tobacco |
+| `creativedelight:crops/farmland_soils` (block tag) | [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), "Crop parity" | soils that count as farmland for crops whose own check is hard-coded. Today: farmland, Rich Farmland, Fertile Soil. Untilled Rich Soil stays out (G6). Vanilla farmland counts even if the tag is empty or not loaded yet |
+| `creativedelight:crops/farmland_crops` (block tag) | same | non-`CropBlock` plants treated as farmland crops: vanilla farmland under them doesn't revert to dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Today: tobacco |
 | Quark `Harvestable Blocks` | [config/quark-common.toml](../config/quark-common.toml) `[tweaks.simple_harvest]` | one `"mod:block[age_prop=max]"` line per crop (optionally `,mod:block[age_prop=0]` for the replant state). Gives right-click and hoe right-click replant. Backed up in `configs_edited/root_config/` and the CreEngServer mirror |
 
 **Code, written once** (patcherMod, `crops/CropParity` holds both tag keys and the two checks):
@@ -1213,7 +1213,7 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
   Farmland. Not a bug.
 - **G7 Grape bushes refuse Farmland and Rich Farmland.** That's Vinery's full-opaque-block rule ([vinery.md](vinery.md)).
 - **G8 Right-clicking ripe Weeds replants them.** Weeds are a `CropBlock`, so Quark's search picks them up. **Fixed
-  2026-11-07:** `immersive_weathering:weeds` is in `#quark:simple_harvest_blacklisted` (CD `creativeengineering/crop_tags.js`);
+  2026-11-07:** `immersive_weathering:weeds` is in `#quark:simple_harvest_blacklisted` (CD `creativedelight/crop_tags.js`);
   right-click does nothing, break them. Same tag script: weeds can be hand-planted on Rich Farmland
   (`#immersive_weathering:fertile_blocks`, read only by `WeedsBlock.mayPlaceOn`); natural growth stays on vanilla
   Farmland (IW `block_growths/weeds*.json` owner block), so rich soils never grow weeds by themselves (Q1, `farming/crops #4`). CR-108, CR-109.
@@ -1233,13 +1233,13 @@ G1 to G3 are fixed (§2.6). The rest are open, each with a suggested fix for you
   (tea bone meal is off). CR-33.
 - **G13 Corn's top half doesn't respond to right-click.** Quark records only the `upper=false` ripe state.
   BUILT 2026-11-07: CD `mixin/quark/QuarkTopHalfHarvestMixin` sends Quark's per-block `handle` to the lower half when
-  the clicked block is the top of a `#creativeengineering:crops/harvest_from_bottom` crop (the same block directly
+  the clicked block is the top of a `#creativedelight:crops/harvest_from_bottom` crop (the same block directly
   below; tag holds `corn_delight:corn_crop`, CD `corn_delight/tags.js`). Covers the empty hand, 1x1 hoes and area hoes.
   Flax (G9) is not fixed: flax is being removed (plan item F1). CR-31.
 - **G14 Coffee eats neighbouring crops.** Farmer's Respite design; keep coffee 3+ blocks from other crops, or grow
   it in the Nether. Turning bone meal on (`enableBoneMealCoffeeBush`) is the only config knob.
 - **G15 Pineapple only grows on sand, red sand and coarse dirt.** Fruits Delight design (the tag
-  `fruitsdelight:pineapple_grows_on`). **Fixed 2026-11-07:** the tag also holds `#creativeengineering:crops/farmland_soils`
+  `fruitsdelight:pineapple_grows_on`). **Fixed 2026-11-07:** the tag also holds `#creativedelight:crops/farmland_soils`
   (Farmland, Rich Farmland, Fertile Soil), CD `crop_tags.js`. CR-110.
 
 **Wild generation findings (2026-10-03).** Inputs for the vegetation worldgen system. Nothing is changed
@@ -1724,7 +1724,7 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   and SQ-CD-00 to SQ-CD-02 PASS on the scratch server. CR-74 done; the rest keep their game halves. `[wild-crops]` also
   warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error).
 - 2026-10-24: planned from the scratchpad: bone meal in planters, other plants in random growth (`farming/crops #14`, `#15`). No code changed.
-- 2026-10-25: own-pick crops (§2.2): `#creativeengineering:crops/own_pick` + patcherMod `QuarkOwnPickMixin` keep Quark
+- 2026-10-25: own-pick crops (§2.2): `#creativedelight:crops/own_pick` + patcherMod `QuarkOwnPickMixin` keep Quark
   off the cucumber, ghost pepper and zucchini picks (vintageport #8). Test VTD-76.
 - 2026-10-30: growing seasons audit (§2.12, TODO `farming/crops #5` step 1): `tools/crop_season_audit.py` and the generated crop_seasons_audit.md, `/dumpcropgrowth` records the planting item; findings F-SS2 (hemp, sea grapes, Nether fungus colonies have no grow event), F-SS3 (inert tags). No gameplay change.
 - 2026-10-30: crop seasons BUILT (§2.12.1, TODO `farming/crops #5`): types for all 123 audited plants in

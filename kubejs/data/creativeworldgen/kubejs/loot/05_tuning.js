@@ -375,7 +375,7 @@
         resetCaches()
     }
 
-    // L.frequency('#creativeengineering:loot/chalk', 0.5)        half as often, every chest
+    // L.frequency('#creativeworldgen:loot/chalk', 0.5)        half as often, every chest
     // L.frequency(['a:b', '@mod'], 0.25, { except: ['mod:keep'] })
     // L.frequency('minecraft:golden_apple', 2)                    boost: twice the chance per roll
     // L.frequency('minecraft:emerald', 2, { tables: /village/ })  only in matching tables

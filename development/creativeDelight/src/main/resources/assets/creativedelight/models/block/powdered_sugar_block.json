@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/powder_snow",
+  "textures": {
+    "texture": "creativedelight:block/powdered_sugar_block",
+    "particle": "creativedelight:block/powdered_sugar_block"
+  }
+}

@@ -15,8 +15,8 @@ moved to the Creative Delight server tree by the mod of the food it makes (2026-
 258, heatless meal rule comment line 259), [brewinandchewin/recipes.js](../../kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js)
 (pizza, quiche, omelet, cheesy pasta), [veggiesdelight/cooking.js](../../kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js),
 [vintagedelight/cooking.js](../../kubejs/data/creativedelight/kubejs/vintagedelight/cooking.js),
-[creativeengineering/recipes.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/recipes.js) (burgers, line 54),
-[creativeengineering/baking.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js) (oven). Food values:
+[creativedelight/recipes.js](../../kubejs/data/creativedelight/kubejs/creativedelight/recipes.js) (burgers, line 54),
+[creativedelight/baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) (oven). Food values:
 CD startup `development/creativeDelight/src/main/resources/kubejs_startup/<mod>/<mod>_foods.js` (pattern:
 `alexsmobs/alexsmobs_foods.js`). Food tooltips and names: `kubejs/assets/creativedelight/kubejs/<mod>/client.js`
 (the pack's `tooltips.js` Food section moved there 2026-10-27). The Brewin' port is a Creative Brewing member,
@@ -250,7 +250,7 @@ Autumnity leftover "remove or integrate pancakes").
 
 ### Now
 - Food types: [food_types.json](../../kubejs/generation_scripts/food/food_types.json) `types`, one type per food, `/` nests
-  (`sweet` holds 220 foods); `kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js` turns each into
+  (`sweet` holds 220 foods); `kubejs/data/creativedelight/kubejs/creativedelight/food_type_tags.js` turns each into
   `#creativeengineering:food_type/<type>` (nested types also in their parents). No pancake type; the family is
   `dessert/pastry` in food_families.md.
 - Pancakes in the pack (2026-10-31):
@@ -274,7 +274,7 @@ Autumnity leftover "remove or integrate pancakes").
 2. New type `sweet/pancake` in `food_types.json`: move `sweet_potato_pancakes` and the 7 Rustic servings into it (the
    stacks are block items, in the type only if they are edible as items). Run `/cdevgen run food_catalog` to check.
 3. Sweet potato pancakes placeable: add the key to the Food Plate list through `tools/placeable_catalog.py` rules (the
-   generated `kubejs/generation_scripts/food/placeable.json`, read by `creativeengineering/placeable_tags.js`), not by hand.
+   generated `kubejs/generation_scripts/food/placeable.json`, read by `creativedelight/placeable_tags.js`), not by hand.
    Alternative: make it a Rustic-style stack (Java), not recommended now.
 4. Changelog bullet (food types are not player-visible unless a recipe or tooltip reads them; the placeable line is).
 
@@ -344,7 +344,7 @@ One patty group so recipes take any patty ("every patty type is always interchan
 - Patties (food_types.json): cooked `beef_patty` (FD, `cooked/meat`), `bison_patty` (Alex's Delight, `cooked/meat`),
   `cooked_vegetarian_patty` (Veggies, `cooked/veggie`), `vegan_patty` (Miner's, `cooked/veggie/sliced`); raw
   `raw_vegetarian_patty` (`raw/veggie`), `guardianpatty` (Hostile, `raw/fish/sliced`).
-- Recipes name patties one by one: the burger table in `creativeengineering/recipes.js` lines 70-85 (`i.beef_patty`,
+- Recipes name patties one by one: the burger table in `creativedelight/recipes.js` lines 70-85 (`i.beef_patty`,
   `i.bison_patty`), Vintage's burgers `vintagedelight/recipes.js` line 115 (`vtdPatty = [i.beef_patty, i.cooked_vegetarian_patty]`),
   the stuffed burrito (`vintagedelight/cooking.js` line 23, `i.beef_patty`), pasta with meatballs
   (`farmersdelight/recipes.js` line 278, 2 `i.beef_patty`).
@@ -352,7 +352,7 @@ One patty group so recipes take any patty ("every patty type is always interchan
 
 ### Build
 1. Tag `#creativeengineering:patty/cooked` (key `i.t_patty_cooked`) via `global.tags` in
-   `creativeengineering/tags.js`: beef, bison, cooked vegetarian, vegan patty (and the cooked guardian patty if Hostile has
+   `creativedelight/tags.js`: beef, bison, cooked vegetarian, vegan patty (and the cooked guardian patty if Hostile has
    one: check the jar). Optional `#creativeengineering:patty/raw`.
 2. Replace the single-patty slots with `i.t_patty_cooked` in the recipes above, keeping the named burgers that are the
    dish (bison burger keeps bison, the vegetarian burger keeps the vegetarian patty: decision below).
@@ -727,7 +727,7 @@ options in the cucumber salad.
 - Pickled items: `i.pickled_onion`, `i.pickled_pepper`, `i.pickled_beetroot`, `i.pickle` (Vintage), `i.kimchi`
   (Brewin'); tag `i.t_pickled_veg` (`#creativeengineering:pickled_veg`, pickle soup). Garlic: only
   `i.fermented_garlic_honey` (Veggies), no pickled garlic.
-- Targets: burgers `creativeengineering/recipes.js` lines 70-85 and `vintagedelight/recipes.js` lines 117-121 (onion
+- Targets: burgers `creativedelight/recipes.js` lines 70-85 and `vintagedelight/recipes.js` lines 117-121 (onion
   slots); salads: maggot salad (`alexsdelight:maggot_salad_recipe`, `_2`), potato salad (`rusticdelight:potato_salad`,
   `moredelight:cooking/potato_salad`, `oceanic_delight:potato_salad`; the merge is `merges/dishes #4`), chicken salad
   (`moredelight:chicken_salad`), broccoli salad (`veggiesdelight/cooking.js` line 37: broccoli, tomato, onion, bowl),
@@ -1148,9 +1148,9 @@ accepts any cheese; mark every burger for an ingredient-variant audit and balanc
   108-128): shaped `['STO', 'APE', 'CB ']` with `C: i.cheese_slice` only, patty `[i.beef_patty, i.cooked_vegetarian_patty]`,
   plus an assembly on the patty.
 - More Delight `moredelight:loaded_hamburger` (`i.loaded_hamburger`): pack shaped `_manual_only` + assembly in
-  [creativeengineering/recipes.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/recipes.js) line 82-83.
+  [creativedelight/recipes.js](../../kubejs/data/creativedelight/kubejs/creativedelight/recipes.js) line 82-83.
 - Burgers (14): hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison,
-  kangaroo (`creativeengineering/recipes.js` lines 70-87), Vintage cheese and Loaded (`vintagedelight/recipes.js`),
+  kangaroo (`creativedelight/recipes.js` lines 70-87), Vintage cheese and Loaded (`vintagedelight/recipes.js`),
   vegetarian burger (Veggies), vegan and cave hamburger (Miner's), guardian burger (Hostile).
 
 ### Build

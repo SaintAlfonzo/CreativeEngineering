@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "creativeengineering:flower_test"
+    "creativedevtools:flower_test",
+    "creativedevtools:structure_catalogue"
   ]
 }

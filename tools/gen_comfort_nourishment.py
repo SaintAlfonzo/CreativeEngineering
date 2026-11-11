@@ -71,7 +71,7 @@ CODE_CONTAINERS = {'oceanic_delight:' + n: BOWL for n in (
 # feast servings the food_blocks dump does not link (Oceanic's own plate blocks): serving -> feast block item
 CODE_FEASTS = {'oceanic_delight:bowl_of_paella': 'oceanic_delight:paella_plate',
                'oceanic_delight:plate_of_stuffed_pufferfish': 'oceanic_delight:stuffed_pufferfish'}
-CAN_NAMESPACES = ('creativeengineering', 'canned_goods')
+CAN_NAMESPACES = ('creativedelight', 'canned_goods')
 RECIPE_ORDER = ('farmersdelight:cooking', 'minecraft:crafting_shapeless', 'minecraft:crafting_shaped')
 # recipes a crafted non-food input is valued through
 VALUE_TYPES = set(RECIPE_ORDER)

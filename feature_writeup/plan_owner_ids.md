@@ -173,7 +173,7 @@ Engineering's own `ce_BladeProfile` / `ce_ResolvedRecipe` are correct. `CEI` (Cr
 | What | Why |
 |---|---|
 | `NS = "creativeengineering"` in Compat, Equipment, Magic, Calendar, Worldgen, Delight and its registered content | Rule 1: saves hold these ids |
-| Capability ids `creativeengineering:nightstand_storage`, `jar_fluid_pipes` (Compat), CornerStorage (Delight) | Saved in block entity NBT under the id; a rename empties the storage |
+| Capability ids `creativeengineering:nightstand_storage`, `jar_fluid_pipes` (Compat). CornerStorage (Delight) moved 2026-11-10 with its saved data (plan_cd_namespace.md D2, swap list `capabilities`) | Saved in block entity NBT under the id; a rename without a `capabilities` entry empties the storage |
 | Keybind `key.creativeengineering.stepstool` | `options.txt` stores bindings by this name; a rename resets the player's key |
 | Tags `creativecommon:wthit/*`, Common's `data/creativeengineering/tags` | Pack data from KubeJS / content tags, not code ids |
 | Lang keys `creativecommon.wthit.*`, `creativecommon.jei.*` | Rule 1 (key names stay) |

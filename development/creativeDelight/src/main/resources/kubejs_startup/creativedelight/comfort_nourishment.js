@@ -84,7 +84,7 @@ ItemEvents.modification(e => {
 	$CNRegistries.ITEMS.getKeys().forEach(rl => {
 		var id = String(rl)
 		var ns = id.split(':')[0]
-		if (handled[id] || ns === 'creativeengineering' || ns === 'canned_goods') return
+		if (handled[id] || ns === 'creativedelight' || ns === 'canned_goods') return
 		var food = foodOf(id)
 		if (food && has(food, nourishment)) others.push(id)
 	})

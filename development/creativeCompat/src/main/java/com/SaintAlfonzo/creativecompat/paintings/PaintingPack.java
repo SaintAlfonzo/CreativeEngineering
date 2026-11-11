@@ -39,7 +39,7 @@ import java.util.zip.ZipFile;
  *
  * <p>Sources, lowest priority first: every installed mod jar (by file name), then {@code [paintings] extraSources} in
  * order. Vanilla's own paintings are not built here: the dedicated server has no vanilla textures, and the pack ships
- * them as a datapack (kubejs/data/creativeengineering/paintings/minecraft/, tools/gen_immersive_paintings.py).
+ * them as a datapack (kubejs/data/creativecompat/paintings/minecraft/, tools/gen_immersive_paintings.py).
  * Built once, on the first data load; rebuilt when the extra source list changes.
  */
 public final class PaintingPack {

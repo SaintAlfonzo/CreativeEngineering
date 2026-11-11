@@ -371,7 +371,7 @@
     }
     function hasEff(p, id, amp) { return effects(p).some(s => s.indexOf(id + '/' + (amp == null ? '' : amp)) == 0) }
     function stomach(level, server) {
-        let alcTag = 'creativeengineering:food_type/drink/alcohol'
+        let alcTag = 'creativedelight:food_type/drink/alcohol'
         let alc = tagList($GReg.ITEMS, alcTag)
         note('alcohol tag size', alc.length + ' first ' + alc.slice(0, 3).join(', '))
         let p = fake(level)

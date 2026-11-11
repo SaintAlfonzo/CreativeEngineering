@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.LongAdder;
  * bottom into air, the floor over the structure is gone, and the sea floods it (seen with Subterrestrial's jungle
  * cabin under an ocean).
  *
- * A structure in the structure tag {@code creativeengineering:seabed_clearance} (kubejs/server_scripts/worldgen/
+ * A structure in the structure tag {@code creativeworldgen:seabed_clearance} (kubejs/server_scripts/worldgen/
  * terrain_adaptation.js) is dropped when, at the centre or a corner of its box widened by {@link #REACH}, the ground
  * (OCEAN_FLOOR_WG) is no more than {@link #CLEARANCE} blocks above the box top and a fluid lies on that ground
  * (WORLD_SURFACE_WG above OCEAN_FLOOR_WG). Starts deeper under the seabed, and every start under dry land, are kept.
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 public final class SeabedClearance {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/seabed-clearance");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/seabed-clearance");
 
 	public static final TagKey<Structure> TAG = TagKey.create(Registry.STRUCTURE_REGISTRY,
 			new ResourceLocation(CreativeWorldgen.NS, "seabed_clearance"));

@@ -84,7 +84,7 @@ import java.util.WeakHashMap;
  */
 public final class PlacementPriority {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/placement-priority");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/placement-priority");
 	/** Starts reach at most this many chunks from their start chunk (ChunkStatus.STRUCTURE_REFERENCES' radius). */
 	static final int REACH = 8;
 	private static final int CACHE_SIZE = 16384;
@@ -415,7 +415,7 @@ public final class PlacementPriority {
 
 	/** The chunks a companion-bearing meta started at `meta` sends its companions to (deterministic). */
 	static List<ChunkPos> companionChunks(Companion rule, long seed, ChunkPos meta) {
-		int salt = ("companions:" + rule.spec.structures()).hashCode();
+		int salt = ("companions:" + LegacyIds.seed(String.valueOf(rule.spec.structures()))).hashCode();
 		int n = rule.spec.min() + (int) (StructureFrequencies.roll(seed, meta.x, meta.z, salt) * (rule.spec.max() - rule.spec.min() + 1));
 		double base = StructureFrequencies.roll(seed, meta.x, meta.z, salt + 1) * Math.PI * 2;
 		List<ChunkPos> out = new ArrayList<>();

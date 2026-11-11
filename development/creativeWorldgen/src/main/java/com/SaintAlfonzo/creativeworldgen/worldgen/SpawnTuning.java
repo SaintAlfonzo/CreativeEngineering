@@ -36,7 +36,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Biome modifier type {@code creativeengineering:tune_spawns}: the mob spawn tuning rules from
+ * Biome modifier type {@code creativeworldgen:tune_spawns}: the mob spawn tuning rules from
  * kubejs/generation_scripts/worldgen/mob_spawns.json, written as one modifier by
  * kubejs/server_scripts/worldgen/mob_spawns.js (feature_writeup/mob_spawns.md section 3).
  *

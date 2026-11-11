@@ -5,22 +5,21 @@ import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.phys.Vec3;
 
-/** Wild crows flee players, villagers and the alarm source (C2). Runs above AM's melee, so a hurt crow flies off rather than fighting. */
+/** Wild crows flee players, villagers and the alarm source (C2). */
 public class CrowFleeGoal extends Goal {
     private static final double FLEE_SPEED = 1.4D;
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     @Nullable
     private LivingEntity threat;
     @Nullable
     private Vec3 target;
     private int scanCooldown;
 
-    public CrowFleeGoal(TamableAnimal crow) {
+    public CrowFleeGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }

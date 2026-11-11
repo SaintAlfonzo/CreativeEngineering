@@ -1,5 +1,0 @@
-kelp_encrusted_cod.png: from Ocean's Delight 1.0.4 (NeoForge 1.21.1) by Scouter456, MIT licence (mods.toml license="MIT"),
-copied unchanged for the pack's Kelp Encrusted Cod (creativeengineering:kelp_encrusted_cod, TODO dishes/ocean #7,
-ocean_delight.md 3.1). Copyright (c) Scouter456. Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files, to deal in the Software without restriction, subject to
-the MIT licence notice being included in all copies or substantial portions of the Software.

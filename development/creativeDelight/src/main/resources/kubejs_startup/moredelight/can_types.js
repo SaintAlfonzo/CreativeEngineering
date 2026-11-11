@@ -173,7 +173,7 @@ if (global.CD) global.CD.genPut('can_types', 'moredelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_carrot_soup": {
    "section": "soup",

@@ -3,7 +3,7 @@
 // Jams (TODO dishes/jams #1, #3, #4; owner 2026-10-29; feature_writeup/briefs/dishes_jams.md). Jams are mason jars
 // only: the jam and relish bottles and Vintage's sweet berry and glow berry jams are removed items (CD startup
 // vintagedelight/vintage_items.js); their recipes go here. The relish jar stays as an ingredient
-// (#creativeengineering:food_type/ingredient), not a jam. New mason jar jams: green grape, red grape, cherry, salmonberry and raspberry (pack
+// (#creativedelight:food_type/ingredient), not a jam. New mason jar jams: green grape, red grape, cherry, salmonberry and raspberry (pack
 // additions to the Vintage port), from the pot: 4 fruit + sugar + lemon slice -> 1 jar (dishes/jams #2 pattern; 2 jars until
 // dishes/jams #5, 2026-11-02), in an empty mason jar. Slice & Dice copies the pot recipe to the heated mixer.
 ServerEvents.tags('item', e => {

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#creativedelight:crow_nest_forests",
+  "features": "hearthandharvest:nest_tree_top",
+  "step": "top_layer_modification"
+}

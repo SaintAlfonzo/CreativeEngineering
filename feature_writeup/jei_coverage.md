@@ -437,7 +437,7 @@ the recipes on their old pages. Takes effect at the next JEI start (rejoin or `/
 |---|---|---|---|---|
 | Tipped Arrows (icon: tipped arrow) | `tippedArrowCategory` | potion (119) | by hand (8 arrows + lingering potion -> 8, + glass bottle), Spout (25 mB), Bottling Machine (20 mB) | Crafting (JEI's own `minecraft:jei.tipped.arrow.*` pages), Spout Filling, Bottling Machine: 238 + JEI's |
 | Potion Buckets (icon: potion bucket) | `potionBucketCategory` | potion x bucket (357) | fill by hand (bucket + 4 potions -> bucket + 4 glass bottles), drain by hand (bucket + 4 glass bottles -> 4 potions + bucket), Spout, Item Drain, Bottling Machine | Crafting, Spout Filling, Item Draining, Bottling Machine: 1,785 |
-| Canning (icon: empty can + small crafting table, Create's two-item tab icon) | `canCategories` | recipe | crafting grid | Crafting: crafts that take an empty can and make a `#creativeengineering:cans` can (~380) |
+| Canning (icon: empty can + small crafting table, Create's two-item tab icon) | `canCategories` | recipe | crafting grid | Crafting: crafts that take an empty can and make a `#creativedelight:cans` can (~380) |
 | Using Cans (icon: crushed can + small crafting table) | `canCategories` | recipe | crafting grid | Crafting: crafts that take a can (NCH `cans` argument: pie from a can, meals that use a can, ...) |
 
 Found by recipe id: buckets `creativeengineering:shapeless/potion_bucket_fill|drain/<key>`,

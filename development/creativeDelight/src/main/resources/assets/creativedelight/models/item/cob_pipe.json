@@ -1,0 +1,26 @@
+{
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "creativedelight:item/cob_pipe_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "creativedelight:item/cob_pipe"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "creativedelight:item/cob_pipe"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "creativedelight:item/cob_pipe"
+      }
+    }
+  }
+}

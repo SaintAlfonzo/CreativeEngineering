@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,12 +20,12 @@ public class CrowEatCropsGoal extends Goal {
     private static final int PECK_AT = 20;
     private static final int PECK_END = 40;
     private static final double SPEED = 1.2D;
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     @Nullable
     private BlockPos crop;
     private int peckTime;
 
-    public CrowEatCropsGoal(TamableAnimal crow) {
+    public CrowEatCropsGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -80,9 +79,6 @@ public class CrowEatCropsGoal extends Goal {
         crow.getNavigation().stop();
         crow.getLookControl().setLookAt(crop.getX() + 0.5D, crop.getY() + 0.5D, crop.getZ() + 0.5D);
         peckTime++;
-        if (peckTime % 10 == 0) {
-            CrowAccess.peck(crow);
-        }
         if (peckTime == PECK_AT && crow.level instanceof ServerLevel level) {
             peck(level);
         }

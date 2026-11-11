@@ -1,27 +1,27 @@
 {
   "_readme": {
-    "what": "Meta structures: our own structures built from other structures and placed features (patcherMod worldgen/MetaStructure, structure type creativeengineering:meta). kubejs/server_scripts/worldgen/structure_overrides.js adds each one to the datapack at world load as data/<ns>/worldgen/structure/<path>.json, but only when the patcherMod jar has MetaStructure and MetaSlots and [worldgen.systems] metaStructures is on (an unknown structure type would fail the world load). A meta structure only generates through a group: put its id in a group/* tag in structure_tags.json (the group its anchors are in) and give it an entry in structure_groups.json (weight 1 for a meta with an anchor). Rejoin to apply; new chunks only. /locate finds a meta by its id, and a structure inside a meta by the structure's own id. Reference: feature_writeup/structure_tuning.md 3.16.",
+    "what": "Meta structures: our own structures built from other structures and placed features (patcherMod worldgen/MetaStructure, structure type creativeworldgen:meta). kubejs/server_scripts/worldgen/structure_overrides.js adds each one to the datapack at world load as data/<ns>/worldgen/structure/<path>.json, but only when the patcherMod jar has MetaStructure and MetaSlots and [worldgen.systems] metaStructures is on (an unknown structure type would fail the world load). A meta structure only generates through a group: put its id in a group/* tag in structure_tags.json (the group its anchors are in) and give it an entry in structure_groups.json (weight 1 for a meta with an anchor). Rejoin to apply; new chunks only. /locate finds a meta by its id, and a structure inside a meta by the structure's own id. Reference: feature_writeup/structure_tuning.md 3.16.",
     "structure fields": "biomes, step, terrain_adaptation, spawn_overrides: as in any structure json (the meta's own; biomes is where its start may be, the parts still check their own lists). note: ignored by the game. spawn_overrides: leave it {}. Each part (the anchor too) keeps its own overrides and spawn box on its own pieces (patcherMod StructureSpawnBoxes); the meta's own would apply to every piece of every part.",
     "anchor": "Optional. \"#tag\" or a structure id, or a list of them. With an anchor the meta never takes a group slot of its own: when the group's pick lands on one of these (in the meta's own group) and that structure keeps its frequency roll, the slot becomes the meta with chance \"share\", built on that very structure exactly as it would be on its own. If the parts fall short, the slot is the plain anchor. So no structure's rate and no group's slot count changes. No anchor: the meta is an ordinary group member (its weight and frequency count), and the parts centre on the start chunk's middle. A meta without an anchor may also be a replacement (\"replaces\" + \"share\" on its entry in structure_groups.json): it then builds its parts in the slots the named member wins, centred on the start chunk (meta/meteorite_desert_pyramid). Its first part, when that is a structure part at distance [0, 0] with chance 1, is its core: a short core fails the meta even with keepShortParts (the slot is then the plain named member), and the core does not count as a satellite.",
     "share": "Needed with an anchor: 0..1, the chance that a slot one of its anchors won becomes this meta. Several metas may share an anchor; their shares add up (the total is cut at 1, in id order). /place structure <meta> without a slot behind it picks the anchor by its weight in the group.",
     "parts": "Placed in order after the anchor; put structure parts before feature parts (features keep clear of structures placed before them, not after). Each part has \"structures\" or \"features\" (placed features, \"#tag\" or ids), plus: count = n or [min, max] copies (fewer than min placed: the whole meta fails and the group slot falls through to its next member); chance (0..1, default 1) = the part is tried at all (a skipped part never fails the meta); distance = [min, max] blocks from the anchor's centre (default [0, 64], at most 112); spacing = least blocks between two copies of this part (default 0); margin = blocks of clearance from every structure piece placed before (default 4); tries per copy (default 16; structures try from the near end of the range outwards); water_depth (features) = least water depth at the spot (default 0 = any ground); radius (features) = half-width of the piece box (default 6); overlap = true lets its copies stand on pieces placed before (no margin check against them; put such a part last, its box counts for the parts after it). An AE2 meteorite part with overlap carves its crater through the anchor: a start places its pieces in order, the anchor's first. punch (overlap structure parts) = true: an AE2 meteorite in the part gets no crater (the sphere replaces the blocks it overlaps, as in the ocean) and a shaft of air from the sphere up through the pieces placed before (a meteorite through a pyramid roof). cluster (structures) = blocks: the first copy lands in the distance ring, every later copy within cluster blocks of the first (spacing still applies), so the copies stand as a group on one side instead of around the anchor.",
-    "tags": "The structure tags named here (creativeengineering:meta/*) are generated from the meta/* tags in structure_tags.json, so membership is edited there.",
-    "placed features": "A placed feature used by a part must have no \"minecraft:biome\" modifier (it only works for features a biome lists). Ours are in kubejs/data/creativeengineering/worldgen/placed_feature/meta/.",
+    "tags": "The structure tags named here (creativeworldgen:meta/*) are generated from the meta/* tags in structure_tags.json, so membership is edited there.",
+    "placed features": "A placed feature used by a part must have no \"minecraft:biome\" modifier (it only works for features a biome lists). Ours are in Creative Worldgen data/creativeworldgen/worldgen/placed_feature/meta/ (and packs/<modid>/).",
     "companions": "Optional (needs an anchor): {structures, count, distance}. Structures started in chunks of their own around the meta (patcherMod PlacementPriority), count = n or [min, max], distance = [min, max] blocks from the meta's start chunk (16..512), spread evenly around it. Each is a full start, so it keeps its whole reach (unlike a part, which must stay within 7 chunks). Companions take no grid slot, skip frequency rolls, and rank one below their group in the placement priority. Only members of the meta's own group are used. \"parts\" may be empty when a meta has companions."
   },
   "structures": {
-    "creativeengineering:meta/village_towers": {
+    "creativeworldgen:meta/village_towers": {
       "note": "A village with 1 to 3 peaceful watchtowers or clock towers just outside it. A third of village slots try for towers; towers only stand where their own biome list allows, so a village where none fits stays a plain village.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/villages",
+      "anchor": "#creativeworldgen:meta/villages",
       "share": 0.33,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/peaceful_towers",
+          "structures": "#creativeworldgen:meta/peaceful_towers",
           "count": [
             1,
             3
@@ -35,16 +35,16 @@
         }
       ]
     },
-    "creativeengineering:meta/driftwood_flotilla": {
+    "creativeworldgen:meta/driftwood_flotilla": {
       "note": "A raft of floating driftwood logs out at sea, packed closer since 2026-10-12 (logs within 26 blocks), sometimes with a villager raft drifting in the middle.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_ocean",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "structures": "#creativeengineering:meta/flotilla_rafts",
+          "structures": "#creativeworldgen:meta/flotilla_rafts",
           "chance": 0.25,
           "count": 1,
           "distance": [
@@ -54,7 +54,7 @@
           "margin": 3
         },
         {
-          "features": "creativeengineering:meta/flotilla_driftwood",
+          "features": "creativeworldgen:meta/flotilla_driftwood",
           "count": [
             8,
             16
@@ -70,18 +70,18 @@
         }
       ]
     },
-    "creativeengineering:meta/ruin_cluster": {
+    "creativeworldgen:meta/ruin_cluster": {
       "note": "A large ruin (Philip's level-three or rare ruin, an ancient tower, the forgotten church) with 2 to 5 small ruins scattered close around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/large_ruins",
+      "anchor": "#creativeworldgen:meta/large_ruins",
       "share": 0.5,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             2,
             5
@@ -95,18 +95,18 @@
         }
       ]
     },
-    "creativeengineering:meta/ruin_scatter": {
+    "creativeworldgen:meta/ruin_scatter": {
       "note": "2 to 4 small ruins together: one small ruin's slot, plus 1 to 3 more nearby.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/small_ruins",
+      "anchor": "#creativeworldgen:meta/small_ruins",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             1,
             3
@@ -120,18 +120,18 @@
         }
       ]
     },
-    "creativeengineering:meta/waystone_ruins": {
-      "note": "A small ruin with a waystone standing beside it (plan_worldgen_edit A6). The part is creativeengineering:waystone_ruin_part, a one-piece jigsaw of Waystones' village waystone, in no structure set, so it never spawns alone. Shares with the other small-ruin metas: ruin_scatter 0.3 + this 0.2 = 0.5.",
-      "type": "creativeengineering:meta",
+    "creativeworldgen:meta/waystone_ruins": {
+      "note": "A small ruin with a waystone standing beside it (plan_worldgen_edit A6). The part is creativeworldgen:waystone_ruin_part, a one-piece jigsaw of Waystones' village waystone, in no structure set, so it never spawns alone. Shares with the other small-ruin metas: ruin_scatter 0.3 + this 0.2 = 0.5.",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/small_ruins",
+      "anchor": "#creativeworldgen:meta/small_ruins",
       "share": 0.2,
       "parts": [
         {
-          "structures": "creativeengineering:waystone_ruin_part",
+          "structures": "creativeworldgen:waystone_ruin_part",
           "count": 1,
           "distance": [
             4,
@@ -142,18 +142,18 @@
         }
       ]
     },
-    "creativeengineering:meta/sunken_ruin_cluster": {
+    "creativeworldgen:meta/sunken_ruin_cluster": {
       "note": "A large underwater ruin (Hopo's big ruins, Philip's ocean ruins or ocean fortress) with 2 or 3 small underwater ruins around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/underwater_large_ruins",
+      "anchor": "#creativeworldgen:meta/underwater_large_ruins",
       "share": 0.5,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/underwater_small_ruins",
+          "structures": "#creativeworldgen:meta/underwater_small_ruins",
           "count": [
             2,
             3
@@ -167,18 +167,18 @@
         }
       ]
     },
-    "creativeengineering:meta/raft_convoy": {
+    "creativeworldgen:meta/raft_convoy": {
       "note": "2 to 5 villager rafts drifting together.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/flotilla_rafts",
+      "anchor": "#creativeworldgen:meta/flotilla_rafts",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/flotilla_rafts",
+          "structures": "#creativeworldgen:meta/flotilla_rafts",
           "count": [
             1,
             4
@@ -192,18 +192,18 @@
         }
       ]
     },
-    "creativeengineering:meta/shipwreck_debris": {
+    "creativeworldgen:meta/shipwreck_debris": {
       "note": "A sunken shipwreck with its debris around it: 1 to 3 floating wreckage on the surface (wider apart) and up to 6 driftwood logs close to the wreck (ocean_ruins; 30% of sunken wreck slots). Shallow oceans for the wreckage.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/sunken_shipwrecks",
+      "anchor": "#creativeworldgen:meta/sunken_shipwrecks",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/floating_wreckage",
+          "structures": "#creativeworldgen:meta/floating_wreckage",
           "count": [
             1,
             3
@@ -216,7 +216,7 @@
           "margin": 2
         },
         {
-          "features": "creativeengineering:meta/flotilla_driftwood",
+          "features": "creativeworldgen:meta/flotilla_driftwood",
           "count": [
             0,
             6
@@ -232,18 +232,18 @@
         }
       ]
     },
-    "creativeengineering:meta/shipwreck_graveyard": {
+    "creativeworldgen:meta/shipwreck_graveyard": {
       "note": "A shipwreck graveyard: 3 to 8 shipwrecks, sunken or beached, within about 70 blocks.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/shipwrecks",
+      "anchor": "#creativeworldgen:meta/shipwrecks",
       "share": 0.12,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/shipwrecks",
+          "structures": "#creativeworldgen:meta/shipwrecks",
           "count": [
             2,
             7
@@ -257,18 +257,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_tower_siege": {
+    "creativeworldgen:meta/pillager_tower_siege": {
       "note": "A standard pillager outpost tower (vanilla or Towns & Towers) with 1 or 2 siege-weapon camps or pillager camps around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_towers",
+      "anchor": "#creativeworldgen:meta/pillager_towers",
       "share": 0.35,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/pillager_outworks",
+          "structures": "#creativeworldgen:meta/pillager_outworks",
           "count": [
             1,
             2
@@ -282,18 +282,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_great_tower_siege": {
+    "creativeworldgen:meta/pillager_great_tower_siege": {
       "note": "A large pillager tower (Mysticrift) with 2 to 4 siege-weapon camps or pillager camps around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_large_towers",
+      "anchor": "#creativeworldgen:meta/pillager_large_towers",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/pillager_outworks",
+          "structures": "#creativeworldgen:meta/pillager_outworks",
           "count": [
             2,
             4
@@ -307,18 +307,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_stronghold_siege": {
+    "creativeworldgen:meta/pillager_stronghold_siege": {
       "note": "A special pillager outpost (a Towns & Towers fort or the mushroom tower) with 2 or 3 siege-weapon camps or pillager camps around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_strongholds",
+      "anchor": "#creativeworldgen:meta/pillager_strongholds",
       "share": 0.4,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/pillager_outworks",
+          "structures": "#creativeworldgen:meta/pillager_outworks",
           "count": [
             2,
             3
@@ -332,18 +332,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_camp_siege": {
+    "creativeworldgen:meta/pillager_camp_siege": {
       "note": "A pillager camp with 1 or 2 more camps and 1 or 2 siege-weapon camps: 2 to 3 camps and 1 to 2 siege weapons in all.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_camps",
+      "anchor": "#creativeworldgen:meta/pillager_camps",
       "share": 0.2,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/pillager_camps",
+          "structures": "#creativeworldgen:meta/pillager_camps",
           "count": [
             1,
             2
@@ -356,7 +356,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/siege_weapons",
+          "structures": "#creativeworldgen:meta/siege_weapons",
           "count": [
             1,
             2
@@ -370,18 +370,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_camp_ruin": {
+    "creativeworldgen:meta/pillager_camp_ruin": {
       "note": "Pillagers camped at a large ruin: a pillager camp, the ruin, and sometimes a second camp.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_camps",
+      "anchor": "#creativeworldgen:meta/pillager_camps",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/large_ruins",
+          "structures": "#creativeworldgen:meta/large_ruins",
           "count": 1,
           "distance": [
             24,
@@ -390,7 +390,7 @@
           "margin": 6
         },
         {
-          "structures": "#creativeengineering:meta/pillager_camps",
+          "structures": "#creativeworldgen:meta/pillager_camps",
           "count": [
             0,
             1
@@ -404,18 +404,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_camp_ruins": {
+    "creativeworldgen:meta/pillager_camp_ruins": {
       "note": "Pillagers camped among small ruins: a pillager camp, 2 to 4 small ruins, and sometimes a second camp.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_camps",
+      "anchor": "#creativeworldgen:meta/pillager_camps",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             2,
             4
@@ -428,7 +428,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/pillager_camps",
+          "structures": "#creativeworldgen:meta/pillager_camps",
           "count": [
             0,
             1
@@ -442,18 +442,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_fleet": {
+    "creativeworldgen:meta/pillager_fleet": {
       "note": "A pillager fleet: 2 or 3 pillager ships with 2 to 5 patches of floating wreckage and shipwrecks around them.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_boats",
+      "anchor": "#creativeworldgen:meta/pillager_boats",
       "share": 0.35,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/pillager_boats",
+          "structures": "#creativeworldgen:meta/pillager_boats",
           "count": [
             1,
             2
@@ -466,7 +466,7 @@
           "margin": 8
         },
         {
-          "structures": "#creativeengineering:meta/fleet_wreckage",
+          "structures": "#creativeworldgen:meta/fleet_wreckage",
           "count": [
             2,
             5
@@ -480,19 +480,19 @@
         }
       ]
     },
-    "creativeengineering:meta/fortified_ruins": {
+    "creativeworldgen:meta/fortified_ruins": {
       "tuned": "Share 0.25 [0.2], user 2026-10-30 (rates-and-groups #6: findable within the 300 s /locate timeout)",
       "note": "A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 6 small ruins outside its walls (settlements; 25% of fortified town slots: D1 2026-10-14 had 20%, raised 2026-10-30 so /locate finds it within the 300 s search timeout; 10% of fortified towns stay plain).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/fortified_towns",
+      "anchor": "#creativeworldgen:meta/fortified_towns",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             2,
             6
@@ -506,19 +506,19 @@
         }
       ]
     },
-    "creativeengineering:meta/fortified_camps": {
+    "creativeworldgen:meta/fortified_camps": {
       "tuned": "Share 0.25 [0.2], user 2026-10-30 (rates-and-groups #6: findable within the 300 s /locate timeout)",
       "note": "A fortified town or fort (a meta/fortified_towns anchor: Terralith's fortified villages, the red roof castle) with 2 to 4 friendly camps (villager tents, archer camp, circus tent, trader camps, Campsite camps) outside its walls (settlements; 25% of fortified town slots: D1 2026-10-14 had 20%, raised 2026-10-30 so /locate finds it within the 300 s search timeout; 10% of fortified towns stay plain).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/fortified_towns",
+      "anchor": "#creativeworldgen:meta/fortified_towns",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/friendly_camps",
+          "structures": "#creativeworldgen:meta/friendly_camps",
           "count": [
             2,
             4
@@ -532,18 +532,18 @@
         }
       ]
     },
-    "creativeengineering:meta/farmers_camp": {
+    "creativeworldgen:meta/farmers_camp": {
       "note": "1 to 3 Farmer's Structures (the anchor plus 0 to 2 more) with 1 to 2 friendly camps nearby (remote; 30% of their slots).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/farmers_structures",
+      "anchor": "#creativeworldgen:meta/farmers_structures",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/farmers_structures",
+          "structures": "#creativeworldgen:meta/farmers_structures",
           "count": [
             0,
             2
@@ -556,7 +556,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/friendly_camps",
+          "structures": "#creativeworldgen:meta/friendly_camps",
           "count": [
             1,
             2
@@ -570,18 +570,18 @@
         }
       ]
     },
-    "creativeengineering:meta/house_camp": {
+    "creativeworldgen:meta/house_camp": {
       "note": "A lone house with a friendly camp a short way off (remote; 15% of lone house slots).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/lone_houses",
+      "anchor": "#creativeworldgen:meta/lone_houses",
       "share": 0.15,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/friendly_camps",
+          "structures": "#creativeworldgen:meta/friendly_camps",
           "count": 1,
           "distance": [
             16,
@@ -591,18 +591,18 @@
         }
       ]
     },
-    "creativeengineering:meta/waysign_camps": {
+    "creativeworldgen:meta/waysign_camps": {
       "note": "A way sign by 1 to 3 friendly camps (the anchor plus 0 to 2 more) (remote; 25% of camp slots). The sign points at the nearest settlements.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/friendly_camps",
+      "anchor": "#creativeworldgen:meta/friendly_camps",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/friendly_camps",
+          "structures": "#creativeworldgen:meta/friendly_camps",
           "count": [
             0,
             2
@@ -615,7 +615,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/way_signs",
+          "structures": "#creativeworldgen:meta/way_signs",
           "count": 1,
           "distance": [
             10,
@@ -625,18 +625,18 @@
         }
       ]
     },
-    "creativeengineering:meta/waysign_house_camp": {
+    "creativeworldgen:meta/waysign_house_camp": {
       "note": "A lone house, a friendly camp and a way sign together (remote; 10% of lone house slots).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/lone_houses",
+      "anchor": "#creativeworldgen:meta/lone_houses",
       "share": 0.1,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/friendly_camps",
+          "structures": "#creativeworldgen:meta/friendly_camps",
           "count": 1,
           "distance": [
             16,
@@ -645,7 +645,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/way_signs",
+          "structures": "#creativeworldgen:meta/way_signs",
           "count": 1,
           "distance": [
             10,
@@ -655,18 +655,18 @@
         }
       ]
     },
-    "creativeengineering:meta/town_villages": {
+    "creativeworldgen:meta/town_villages": {
       "note": "A fortified town or fort (a meta/fortified_towns anchor, the red roof castle included) with 1 to 3 villages around it, 64 to 96 blocks out (pulled in from 112 to 160 on 2026-10-19: at that range no companion reached its town, 08_phase_8.md; settlements; 40% of fortified town slots, D1 2026-10-14; the three shares sum to 0.8, so 20% of towns stay plain). The villages are companions: full starts in chunks of their own (patcherMod PlacementPriority), so they keep their whole reach; the town outranks them, so a village that would run into it doesn't start.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/fortified_towns",
+      "anchor": "#creativeworldgen:meta/fortified_towns",
       "share": 0.4,
       "parts": [],
       "companions": {
-        "structures": "#creativeengineering:meta/villages",
+        "structures": "#creativeworldgen:meta/villages",
         "count": [
           1,
           3
@@ -677,18 +677,18 @@
         ]
       }
     },
-    "creativeengineering:meta/cloud_cluster": {
+    "creativeworldgen:meta/cloud_cluster": {
       "note": "2 to 4 of Cloud Storage's storage clouds (sky temples) together: one cloud's slot, plus 1 to 3 more around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/sky_clouds",
+      "anchor": "#creativeworldgen:meta/sky_clouds",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/sky_clouds",
+          "structures": "#creativeworldgen:meta/sky_clouds",
           "count": [
             1,
             3
@@ -703,18 +703,18 @@
         }
       ]
     },
-    "creativeengineering:meta/balloon_fleet": {
+    "creativeworldgen:meta/balloon_fleet": {
       "note": "2 to 6 of Cloud Storage's hot air balloons flying together: one balloon's slot, plus 1 to 5 more around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/sky_balloons",
+      "anchor": "#creativeworldgen:meta/sky_balloons",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/sky_balloons",
+          "structures": "#creativeworldgen:meta/sky_balloons",
           "count": [
             1,
             5
@@ -729,18 +729,18 @@
         }
       ]
     },
-    "creativeengineering:meta/cloud_balloons": {
+    "creativeworldgen:meta/cloud_balloons": {
       "note": "1 or 2 storage clouds with 1 or 2 hot air balloons moored around them: a cloud's slot, maybe one more cloud, and the balloons.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/sky_clouds",
+      "anchor": "#creativeworldgen:meta/sky_clouds",
       "share": 0.2,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/sky_clouds",
+          "structures": "#creativeworldgen:meta/sky_clouds",
           "count": [
             0,
             1
@@ -754,7 +754,7 @@
           "tries": 24
         },
         {
-          "structures": "#creativeengineering:meta/sky_balloons",
+          "structures": "#creativeworldgen:meta/sky_balloons",
           "count": [
             1,
             2
@@ -769,18 +769,18 @@
         }
       ]
     },
-    "creativeengineering:meta/sky_village_islands": {
-      "note": "A sky village with 2 to 5 of Sky Structures' floating islands around it, at about the village's height (creativeengineering:sky_island: one island template, 135 to 165 blocks above the ground).",
-      "type": "creativeengineering:meta",
+    "creativeworldgen:meta/sky_village_islands": {
+      "note": "A sky village with 2 to 5 of Sky Structures' floating islands around it, at about the village's height (creativeworldgen:sky_island: one island template, 135 to 165 blocks above the ground).",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/sky_villages",
+      "anchor": "#creativeworldgen:meta/sky_villages",
       "share": 0.5,
       "parts": [
         {
-          "structures": "creativeengineering:sky_island",
+          "structures": "creativeworldgen:sky_island",
           "count": [
             2,
             5
@@ -795,18 +795,18 @@
         }
       ]
     },
-    "creativeengineering:meta/witch_cart_caravan": {
+    "creativeworldgen:meta/witch_cart_caravan": {
       "note": "A witch cart caravan: 2 or 3 witch wagons together, with a witch hut nearby where one fits (swamps; in a dark forest the wagons travel alone). Each hut and wagon keeps its own respawns on its own pieces.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/caravan_wagons",
+      "anchor": "#creativeworldgen:meta/caravan_wagons",
       "share": 0.3,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/caravan_wagons",
+          "structures": "#creativeworldgen:meta/caravan_wagons",
           "count": [
             1,
             2
@@ -819,7 +819,7 @@
           "margin": 3
         },
         {
-          "structures": "#creativeengineering:meta/caravan_witch_huts",
+          "structures": "#creativeworldgen:meta/caravan_witch_huts",
           "count": [
             0,
             1
@@ -832,18 +832,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_caravan": {
+    "creativeworldgen:meta/pillager_caravan": {
       "note": "A pillager caravan: 2 to 4 loot carriages (or prison vans) together, half the time with a siege weapon or a pillager camp beside them.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/caravan_carriages",
+      "anchor": "#creativeworldgen:meta/caravan_carriages",
       "share": 0.35,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/caravan_carriages",
+          "structures": "#creativeworldgen:meta/caravan_carriages",
           "count": [
             1,
             3
@@ -856,7 +856,7 @@
           "margin": 3
         },
         {
-          "structures": "#creativeengineering:meta/pillager_outworks",
+          "structures": "#creativeworldgen:meta/pillager_outworks",
           "chance": 0.5,
           "count": 1,
           "distance": [
@@ -867,18 +867,18 @@
         }
       ]
     },
-    "creativeengineering:meta/trader_caravan": {
+    "creativeworldgen:meta/trader_caravan": {
       "note": "A trader caravan: 2 or 3 trader camps along the way, with a way sign.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/trader_camps",
+      "anchor": "#creativeworldgen:meta/trader_camps",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/trader_camps",
+          "structures": "#creativeworldgen:meta/trader_camps",
           "count": [
             1,
             2
@@ -891,7 +891,7 @@
           "margin": 4
         },
         {
-          "structures": "#creativeengineering:meta/way_signs",
+          "structures": "#creativeworldgen:meta/way_signs",
           "count": 1,
           "distance": [
             10,
@@ -900,18 +900,18 @@
         }
       ]
     },
-    "creativeengineering:meta/meteorite_village": {
+    "creativeworldgen:meta/meteorite_village": {
       "note": "A village (any type) struck by an AE2 sky stone meteorite near its middle: the crater cuts through the houses and roads.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/villages",
+      "anchor": "#creativeworldgen:meta/villages",
       "share": 0.05,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": 1,
           "distance": [
             0,
@@ -922,18 +922,18 @@
         }
       ]
     },
-    "creativeengineering:meta/desert_temple_ruins": {
+    "creativeworldgen:meta/desert_temple_ruins": {
       "note": "YUNG's desert temple with 2 to 4 small desert ruins scattered around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/better_desert_temples",
+      "anchor": "#creativeworldgen:meta/better_desert_temples",
       "share": 0.35,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             2,
             4
@@ -948,18 +948,18 @@
         }
       ]
     },
-    "creativeengineering:meta/jungle_temple_ruins": {
+    "creativeworldgen:meta/jungle_temple_ruins": {
       "note": "YUNG's jungle temple with 2 to 4 small ruins scattered around it in the jungle.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/better_jungle_temples",
+      "anchor": "#creativeworldgen:meta/better_jungle_temples",
       "share": 0.35,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/small_ruins",
+          "structures": "#creativeworldgen:meta/small_ruins",
           "count": [
             2,
             4
@@ -974,9 +974,9 @@
         }
       ]
     },
-    "creativeengineering:meta/meteorite_desert_pyramid": {
+    "creativeworldgen:meta/meteorite_desert_pyramid": {
       "note": "A vanilla desert pyramid struck by an AE2 sky stone meteorite: the meteorite lands within 4 blocks of the centre and punches through (punch: no crater, the sphere replaces what it overlaps, a shaft above it). No anchor: a replacement taking 8% of YUNG's desert temple slots (structure_groups.json), built on the slot's chunk.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
@@ -993,7 +993,7 @@
           "tries": 1
         },
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": 1,
           "distance": [
             0,
@@ -1005,18 +1005,18 @@
         }
       ]
     },
-    "creativeengineering:meta/underwater_meteorite": {
+    "creativeworldgen:meta/underwater_meteorite": {
       "note": "A large underwater ruin struck by a sky stone meteorite on the seabed (AE2's ocean meteorite, no crater), half the time with 1 or 2 small ruins around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/underwater_large_ruins",
+      "anchor": "#creativeworldgen:meta/underwater_large_ruins",
       "share": 0.1,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/underwater_small_ruins",
+          "structures": "#creativeworldgen:meta/underwater_small_ruins",
           "chance": 0.5,
           "count": [
             1,
@@ -1030,7 +1030,7 @@
           "margin": 3
         },
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": 1,
           "distance": [
             0,
@@ -1041,18 +1041,18 @@
         }
       ]
     },
-    "creativeengineering:meta/pillager_camp_meteorite": {
+    "creativeworldgen:meta/pillager_camp_meteorite": {
       "note": "A pillager camp with a sky stone meteorite strike: anywhere from the middle of the camp to 44 blocks out, so it may hit the camp or land beside it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/pillager_camps",
+      "anchor": "#creativeworldgen:meta/pillager_camps",
       "share": 0.1,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": 1,
           "distance": [
             0,
@@ -1063,18 +1063,18 @@
         }
       ]
     },
-    "creativeengineering:meta/meteor_shower": {
+    "creativeworldgen:meta/meteor_shower": {
       "note": "A meteor shower in a sand desert: 2 to 4 AE2 sky stone meteorites close together, one meteorite's slot plus 1 to 3 more.",
-      "type": "creativeengineering:meta",
-      "biomes": "#creativeengineering:land/desert",
+      "type": "creativeworldgen:meta",
+      "biomes": "#creativeworldgen:land/desert",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/meteorites",
+      "anchor": "#creativeworldgen:meta/meteorites",
       "share": 0.33,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": [
             1,
             3
@@ -1089,18 +1089,18 @@
         }
       ]
     },
-    "creativeengineering:meta/witch_coven": {
+    "creativeworldgen:meta/witch_coven": {
       "note": "A witch coven in a swamp: YUNG's witch circle with a witch hut and 1 or 2 witch wagons around it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/witch_circles",
+      "anchor": "#creativeworldgen:meta/witch_circles",
       "share": 0.4,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/coven_huts",
+          "structures": "#creativeworldgen:meta/coven_huts",
           "count": 1,
           "distance": [
             24,
@@ -1110,7 +1110,7 @@
           "tries": 24
         },
         {
-          "structures": "#creativeengineering:meta/caravan_wagons",
+          "structures": "#creativeworldgen:meta/caravan_wagons",
           "count": [
             1,
             2
@@ -1125,18 +1125,18 @@
         }
       ]
     },
-    "creativeengineering:meta/village_siege_ring": {
+    "creativeworldgen:meta/village_siege_ring": {
       "note": "A village under siege: 2 to 6 illager siege weapons around it (open land only: the siege camps' own biomes).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/villages",
+      "anchor": "#creativeworldgen:meta/villages",
       "share": 0.04,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/siege_weapons",
+          "structures": "#creativeworldgen:meta/siege_weapons",
           "count": [
             2,
             6
@@ -1151,18 +1151,18 @@
         }
       ]
     },
-    "creativeengineering:meta/village_siege_camp": {
+    "creativeworldgen:meta/village_siege_camp": {
       "note": "A village under siege from one side: 2 to 6 illager siege weapons grouped within 40 blocks of each other outside it.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "beard_thin",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/villages",
+      "anchor": "#creativeworldgen:meta/villages",
       "share": 0.04,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/siege_weapons",
+          "structures": "#creativeworldgen:meta/siege_weapons",
           "count": [
             2,
             6
@@ -1178,18 +1178,18 @@
         }
       ]
     },
-    "creativeengineering:meta/struck_monument": {
+    "creativeworldgen:meta/struck_monument": {
       "note": "An ocean monument struck by a sky stone meteorite (AE2's ocean meteorite: no crater, the sphere replaces the monument's blocks it overlaps). Guardians respawn in the monument as in a lone one (the part's own spawn overrides), not in the meteorite.",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#minecraft:is_overworld",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
-      "anchor": "#creativeengineering:meta/monuments",
+      "anchor": "#creativeworldgen:meta/monuments",
       "share": 0.25,
       "parts": [
         {
-          "structures": "#creativeengineering:meta/meteorites",
+          "structures": "#creativeworldgen:meta/meteorites",
           "count": 1,
           "distance": [
             0,
@@ -1200,16 +1200,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_acacia": {
+    "creativeworldgen:meta/deadwood_acacia": {
       "note": "A patch of dead acacia wood in savannas: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/acacia",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_acacia",
+          "features": "creativeworldgen:meta/deadwood_stump_acacia",
           "count": [
             3,
             6
@@ -1224,7 +1224,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_acacia",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_acacia",
           "count": [
             2,
             4
@@ -1240,16 +1240,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_birch": {
+    "creativeworldgen:meta/deadwood_birch": {
       "note": "A patch of dead birch wood in birch forests: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/birch",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_birch",
+          "features": "creativeworldgen:meta/deadwood_stump_birch",
           "count": [
             3,
             6
@@ -1264,7 +1264,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_birch",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_birch",
           "count": [
             2,
             4
@@ -1280,16 +1280,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_cherry": {
+    "creativeworldgen:meta/deadwood_cherry": {
       "note": "A patch of dead cherry wood in sakura groves: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/cherry",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_cherry",
+          "features": "creativeworldgen:meta/deadwood_stump_cherry",
           "count": [
             3,
             6
@@ -1304,7 +1304,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_cherry",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_cherry",
           "count": [
             2,
             4
@@ -1320,16 +1320,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_jungle": {
+    "creativeworldgen:meta/deadwood_jungle": {
       "note": "A patch of dead jungle wood in jungles: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/jungle",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_jungle",
+          "features": "creativeworldgen:meta/deadwood_stump_jungle",
           "count": [
             3,
             6
@@ -1344,7 +1344,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_jungle",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_jungle",
           "count": [
             2,
             4
@@ -1360,16 +1360,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_oak": {
+    "creativeworldgen:meta/deadwood_oak": {
       "note": "A patch of dead oak wood in oak forests, swamps and woodland: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/oak",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_oak",
+          "features": "creativeworldgen:meta/deadwood_stump_oak",
           "count": [
             3,
             6
@@ -1384,7 +1384,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_oak",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_oak",
           "count": [
             2,
             4
@@ -1400,16 +1400,16 @@
         }
       ]
     },
-    "creativeengineering:meta/deadwood_spruce": {
+    "creativeworldgen:meta/deadwood_spruce": {
       "note": "A patch of dead spruce wood in taigas and snowy spruce lands: several stumps with fallen logs among them (Geophilic Reforged features). Biomes are Geophilic's own list for the wood. No anchor: one member of group/deadwood (trees #2, 2026-10-25).",
-      "type": "creativeengineering:meta",
+      "type": "creativeworldgen:meta",
       "biomes": "#geophilic_reforged:wood_type/mc/spruce",
       "step": "surface_structures",
       "terrain_adaptation": "none",
       "spawn_overrides": {},
       "parts": [
         {
-          "features": "creativeengineering:meta/deadwood_stump_spruce",
+          "features": "creativeworldgen:meta/deadwood_stump_spruce",
           "count": [
             3,
             6
@@ -1424,7 +1424,7 @@
           "radius": 1
         },
         {
-          "features": "creativeengineering:meta/deadwood_fallen_log_spruce",
+          "features": "creativeworldgen:meta/deadwood_fallen_log_spruce",
           "count": [
             2,
             4

@@ -257,7 +257,7 @@ the player's main hand is chopsticks, then (1) every non-instant, non-ambient ef
 food has its duration lengthened, (2) the chopsticks take 1 damage. Both happen only when a food was actually eaten (**B5**
 fixed); a block, a tool, a non-listed food, an interrupted meal or a failed hunger gate costs nothing.
 
-**Which foods (the "sushi / seafood" list).** A new item tag `creativeengineering:chopstick_foods`, built through `global.tags`
+**Which foods (the "sushi / seafood" list).** A new item tag `creativedelight:chopstick_foods`, built through `global.tags`
 from an explicit id list (3.3.1; the `roll` family tag is not used as it holds foods that are excluded). Realistic chopstick foods found in the pack (ids from `item_dict.js` and the
 2026-10-24 food dump):
 
@@ -275,7 +275,7 @@ from an explicit id list (3.3.1; the `roll` family tag is not used as it holds f
 
 #### 3.3.1 Resolved whitelist (owner round five, 2026-11-01)
 
-The tag `creativeengineering:chopstick_foods` is this explicit list, built through `global.tags`, plus the Roll Delight foods and the
+The tag `creativedelight:chopstick_foods` is this explicit list, built through `global.tags`, plus the Roll Delight foods and the
 rows of the 3.3 table (Roll Delight rolls and slices, FD Salmon Slice / Cod Slice and their cooked slices, Salmon Tempura,
 Guardian Roll / Sashimi, Ocean's Fugu Roll / Elder Guardian Roll, Kelp Roll, Cooked Nether Wart). Every id below was checked
 against the 2026-10-24 food dump (84 of 84 after the round-six correction). Canned forms are not in the tag.
@@ -316,10 +316,10 @@ by how closely they match what the owner already listed. **None is in the tag un
 
 #### 3.3.3 Round six (owner, 2026-11-01): what is accepted from 3.3.2
 
-**By rule (family tags, so ids that later leave the pack drop out by themselves):** the tag `creativeengineering:chopstick_foods`
-includes the generated tags `#creativeengineering:food_family/fish/raw_cut` (any raw fish slice, including the overlapping guardian
-slices, some of which will be removed), `#creativeengineering:food_family/fish/cooked_cut` (any cooked slice) and
-`#creativeengineering:food_family/fish/raw` (any raw whole fish) and `#creativeengineering:food_family/fish/cooked` (any cooked whole fish, round seven). Currently 16 raw slices, 10 cooked slices and 22 raw whole items; the
+**By rule (family tags, so ids that later leave the pack drop out by themselves):** the tag `creativedelight:chopstick_foods`
+includes the generated tags `#creativedelight:food_family/fish/raw_cut` (any raw fish slice, including the overlapping guardian
+slices, some of which will be removed), `#creativedelight:food_family/fish/cooked_cut` (any cooked slice) and
+`#creativedelight:food_family/fish/raw` (any raw whole fish) and `#creativedelight:food_family/fish/cooked` (any cooked whole fish, round seven). Currently 16 raw slices, 10 cooked slices and 22 raw whole items; the
 raw tag also holds the raw shellfish, squid, tentacle and egg items (lobster tail, crab leg, calamari, shrimp, squid, glow squid,
 Caviar, Ancient Fish Eggs, Elder Guardian Eye / Slab, Guardian Tail, Lionfish, Perch, Pike, Cod, Salmon, Tropical Fish, Blobfish, Flying
 Fish, Shulker Mollusk). Enders Delight's Shulker Filet (a raw slice) and Shulker Mollusk (raw) come in through these tags: the owner's
@@ -332,7 +332,7 @@ Notes and flags:
 - "Stuffed squid bowl" is the Bowl of Stuffed Squid, already in 3.3.1; the plain Stuffed Squid item stays out.
 - **End's Delight (`ends_delight`) is to be removed (owner).** Every `ends_delight` id in the tag becomes dead then: Ender Noodle, Ender Congee, Ender Bamboo Rice, Stir Fried Shulker Meat, Raw / Roasted Dragon Meat Cuts (all 3.3.1) and **Stuffed Rice Cake** (the "rice cake", this round), and no `endersdelight` food is a rice cake or a dragon dish. The tag builder lists them as optional entries (ignored while the mod is absent) and the removal pass prunes them; the owner should say whether any of them gets a replacement in the pack (the noodle, congee and bamboo rice are the same kind of food as the pack's other rice and noodle dishes).
 - **Still excluded:** `ends_delight` Shulker Meat and its cuts (the mod is going), the other shulker dishes, Squid Salad, Sea Salad, Caviar Toast, plated fish (Black Cod, Grilled Salmon, Garlic Baked Cod, the Stuffed Cods, Guardian Tartar, Cabbage-Wrapped Elder Guardian), cured fish (salted cod / salmon, surstromming, kippers), the other stews and Guardian Soups, the remaining candidates of 3.3.2.
-- **Two gaps, settled (owner, round seven):** (1) **cooked whole fish** is in, through the tag `#creativeengineering:food_family/fish/cooked` (13 items today: Cooked Cod, Salmon, Perch, Pike, Catfish, Lionfish, Guardian Tail, Lobster Tail, Crab Leg, Calamari, Baked Squid, plus Kippers and Surstromming, which the rule brings in although 3.3.2 had listed cured fish as out; say if those two should be excluded); (2) **`minecraft:pufferfish`** is in by id (typed `hazard`, so no fish tag holds it). It keeps its poison; chopsticks only lengthen the effects it gives (Poison, Hunger, Nausea), which is a downside for the player and is noted in ROLL-19's checks.
+- **Two gaps, settled (owner, round seven):** (1) **cooked whole fish** is in, through the tag `#creativedelight:food_family/fish/cooked` (13 items today: Cooked Cod, Salmon, Perch, Pike, Catfish, Lionfish, Guardian Tail, Lobster Tail, Crab Leg, Calamari, Baked Squid, plus Kippers and Surstromming, which the rule brings in although 3.3.2 had listed cured fish as out; say if those two should be excluded); (2) **`minecraft:pufferfish`** is in by id (typed `hazard`, so no fish tag holds it). It keeps its poison; chopsticks only lengthen the effects it gives (Poison, Hunger, Nausea), which is a downside for the player and is noted in ROLL-19's checks.
 
 **Lengthening.** Duration x 1.5 (built as `roll_delight-common.toml` `[chopsticks] lengthenFactor`, the member's own config, as the other CD members; D17) on each qualifying effect.
 Instant effects (Saturation, Instant Health) and effects the player already had longer are left alone. The amplifier never
@@ -342,7 +342,7 @@ kept (TODO `food/types-and-tuning #20`) to add a variety of short effects to sea
 Breathing on Salmon Roll, Dolphin's Grace on Cod Roll, Speed on Kelp Roll Slice, Regeneration, Absorption, Night Vision, Fire
 Resistance) is the starting list for that later pass.
 
-**Tooltips on every chopstick food (owner).** Each item in `creativeengineering:chopstick_foods` gets a gray tooltip line from a
+**Tooltips on every chopstick food (owner).** Each item in `creativedelight:chopstick_foods` gets a gray tooltip line from a
 client tooltip handler in the CD member:
 
 - food with at least one non-instant effect: `Can be eaten in the offhand w/ chopsticks, lengthens effect length`
@@ -418,7 +418,7 @@ Code goes into a Creative Delight member (memory `creative-delight-routing`, Rus
 13. **Cans and jars:** rolls and slices none (handhelds are never canned, `roll` family). Cooked Nether Wart follows the
     cooked-vegetable can rule ([can_parity.md](can_parity.md) 2.6): a generated canned form (4.1).
 14. **Compost:** CD `compost.js` values by the pack's compost framework (drop the 100 % entries). Chopsticks tag: the
-    `creativeengineering:chopstick_foods` tag via `global.tags` (3.3 list).
+    `creativedelight:chopstick_foods` tag via `global.tags` (3.3 list).
 15. **Names and tooltips:** B1; chopsticks two-line tooltip and the per-food chopstick tooltip (3.3, lang keys, no logging on any path); D4: display names "Salmon Maki Roll" and "Salmon Maki" (slice) in lang; registry ids keep the upstream
     `amazing_salmon_roll` / `amazing_salmon_roll_slice` so the donor art and models resolve; add a [names.md](names.md) row when built. JEI info page for the shears-on-frogspawn drop ([jei_coverage.md](jei_coverage.md)).
 16. **Mob and block audit:** medleys and wrapped chopsticks: mineable tag (axe or none, cake-like), BlockRunner tier,
@@ -544,7 +544,7 @@ so nothing was eaten; rerun after the off-hand fallback in the probe.
 | ROLL-20 | Ancient Roll in JEI and craft; Cooked Nether Wart can | recipe shows Ancient Fruit and Chorus Flower; the cooked wart can exists and opens to 4 servings |
 | ROLL-21 | Hover a chopstick food without effects (Salmon Slice), one with effects (Glowing Calamari Roll, Cooked Rice), and a non-listed food | first: `Can be eaten in the offhand w/ chopsticks`; the effect foods: `..., lengthens effect length`; non-listed: no line |
 | ROLL-22 | Anvil repair of damaged chopsticks with oak, spruce and a modded plank | each repairs |
-| ROLL-23 | JEI uses of Cooked Nether Wart; `/dumptags` item `creativeengineering:food_type/cooked/veggie` | Nether Roll only (and its can); not in the cooked-vegetable tag; the can still crafts |
+| ROLL-23 | JEI uses of Cooked Nether Wart; `/dumptags` item `creativedelight:food_type/cooked/veggie` | Nether Roll only (and its can); not in the cooked-vegetable tag; the can still crafts |
 | ROLL-24 | Hover the Salmon Maki slice | "Salmon Maki Roll Slice" |
 | ROLL-25 | Eat a Golden Roll and a Golden Roll Slice (AppleSkin) | 20 / 0.6 and 10 / 0.5, no effects, not eaten at full hunger, stack 64 |
 | ROLL-26 | JEI uses of the Golden Roll Slice | cutting result only; no gilding recipe with the slice as base or result |

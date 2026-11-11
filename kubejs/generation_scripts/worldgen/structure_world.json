@@ -1,0 +1,189 @@
+{
+  "_readme": {
+    "what": "Hand-edited rules of the Structure Catalogue world type (feature_writeup/plan_structure_catalogue.md). Read by Creative Devtools (cdevplace/CatalogueRules) when the catalogue is planned: /cdevplace catalogue preview shows the result of an edit without a restart.",
+    "regex": "Every regex is a Java find (not a whole-string match). 'path' is the id without its namespace, 'leaf' the last segment of the path, 'id' the whole id.",
+    "when": "A 'when' holds any of type (a type/* tag, without the prefix), typePrefix, path; it passes when ANY of its keys matches. A rule or choice with no 'when' always passes.",
+    "whole": "First matching rule gives a whole structure its category. Multi-type structures land by this order. No type/* tag at all = unmapped, decided before these rules run.",
+    "order": "Categories, subfamilies and functions are built in the order listed here; a name not listed goes after the listed ones. Biome columns and variations are in natural order.",
+    "overrides": "Per id: any of category, subfamily, function, biome, dry (true/false), template (place this template instead of generating the structure, for structures refused on flat ground). An unmapped structure takes only dry and template."
+  },
+  "gaps": { "category": 50, "subfamily": 25, "function": 10, "biome": 5, "variation": 5 },
+  "origin": { "x": 16, "z": 8 },
+  "order": {
+    "categories": ["Village", "Pillager", "Ruins", "Underground", "Underwater", "Sky", "Buildings", "Nature and Decor", "Nether", "End", "Composite"],
+    "subfamilies": [
+      "Villager Houses", "Villager Structures", "Decor and Infrastructure", "Whole villages",
+      "Outposts", "Towers", "Camps", "Ships", "Siege and wagons", "Witches and mansions",
+      "Portals", "Surface ruins",
+      "Mineshafts", "Cabins", "Other",
+      "Ruins", "Shipwrecks", "Fossils",
+      "Balloons and temples", "Sky village: Villager Houses", "Sky village: Villager Structures", "Sky village: Decor and Infrastructure",
+      "Towers and castles", "Houses and workplaces",
+      "Statues and markers", "Environmental",
+      "Constructed",
+      "Villages", "Pillager", "Camps and houses", "Underwater", "Sky", "Nature"
+    ],
+    "functions": [
+      "Armorer", "Butcher", "Cartographer", "Cleric", "Farmer", "Fisher", "Fletcher", "Leatherworker", "Librarian", "Mason", "Shepherd", "Toolsmith", "Weaponsmith", "Weaver",
+      "Small homes", "Medium homes", "Large homes", "Other homes",
+      "Town centres", "Temples", "Farms", "Animal pens", "Gates and towers", "Workplaces", "Other",
+      "Streets", "Animals", "Lamps", "Trees", "Decor",
+      "Farms and stables", "Churches and temples", "Watchtowers", "Food", "Homes",
+      "Towers", "Camps", "Houses", "Portals", "Decoration"
+    ]
+  },
+  "skipStructures": "^terralith:zpointer/",
+  "replacedByPieces": {
+    "type": "village",
+    "notPath": "^meta/",
+    "ids": ["skyvillages:skyvillage"]
+  },
+  "pieceMatch": [
+    { "id": "^towns_and_towers:(?:exclusives/)?village_(.+)$", "pieces": "^kaisyn:village/(?:exclusives/)?$1[_/]" },
+    { "id": "^terralith:fortified_desert_village$", "pieces": "^terralith:village/desert/" },
+    { "id": "^terralith:fortified_village$", "pieces": "^terralith:village/fortified/" },
+    { "id": "^minecraft:village_(.+)$", "pieces": "^minecraft:village/$1/" },
+    { "id": "^skyvillages:skyvillage$", "pieces": "^skyvillages:" }
+  ],
+  "whole": [
+    {
+      "when": { "path": "^meta/" }, "category": "Composite",
+      "subfamilyFromFirstType": {
+        "ruin": "Ruins", "village": "Villages", "house": "Camps and houses", "enemy_building": "Pillager", "sky": "Sky",
+        "ship": "Ships", "shipwreck": "Underwater", "underwater_ruin": "Underwater", "environmental": "Nature"
+      }
+    },
+    { "when": { "type": ["sky"] }, "category": "Sky", "subfamily": "Balloons and temples" },
+    {
+      "when": { "typePrefix": ["end_"] }, "category": "End",
+      "subfamily": [ { "when": { "type": ["end_constructed"] }, "value": "Constructed" }, { "value": "Environmental" } ],
+      "function": [ { "when": { "type": ["tower"] }, "value": "Towers" }, { "when": { "type": ["decoration"] }, "value": "Decoration" } ]
+    },
+    {
+      "when": { "typePrefix": ["nether_"] }, "category": "Nether",
+      "subfamily": [ { "when": { "type": ["nether_constructed"] }, "value": "Constructed" }, { "value": "Environmental" } ],
+      "function": [
+        { "when": { "type": ["tower"] }, "value": "Towers" },
+        { "when": { "type": ["camp"] }, "value": "Camps" },
+        { "when": { "type": ["house"] }, "value": "Houses" },
+        { "when": { "type": ["ruined_portal"] }, "value": "Portals" },
+        { "when": { "type": ["decoration"] }, "value": "Decoration" }
+      ]
+    },
+    {
+      "when": { "type": ["underwater_ruin", "shipwreck"], "path": "underwater" }, "category": "Underwater",
+      "subfamily": [ { "when": { "type": ["shipwreck"] }, "value": "Shipwrecks" }, { "when": { "path": "fossil" }, "value": "Fossils" }, { "value": "Ruins" } ]
+    },
+    {
+      "when": { "type": ["underground", "mineshaft"] }, "category": "Underground",
+      "subfamily": [ { "when": { "type": ["mineshaft"] }, "value": "Mineshafts" }, { "when": { "path": "cabin" }, "value": "Cabins" }, { "value": "Other" } ]
+    },
+    {
+      "when": { "type": ["enemy_building"] }, "category": "Pillager",
+      "subfamily": [
+        { "when": { "type": ["fort"] }, "value": "Outposts" },
+        { "when": { "type": ["tower"] }, "value": "Towers" },
+        { "when": { "type": ["camp"] }, "value": "Camps" },
+        { "when": { "type": ["ship"] }, "value": "Ships" },
+        { "when": { "type": ["vehicle"] }, "value": "Siege and wagons" },
+        { "value": "Witches and mansions" }
+      ]
+    },
+    { "when": { "type": ["ruined_portal"] }, "category": "Ruins", "subfamily": "Portals" },
+    {
+      "when": { "type": ["ruin"] }, "category": "Ruins",
+      "subfamily": [ { "when": { "type": ["tower"] }, "value": "Towers" }, { "value": "Surface ruins" } ]
+    },
+    { "when": { "type": ["ship"] }, "category": "Buildings", "subfamily": "Ships" },
+    { "when": { "type": ["castle", "tower"] }, "category": "Buildings", "subfamily": "Towers and castles" },
+    { "when": { "type": ["camp"] }, "category": "Buildings", "subfamily": "Camps" },
+    {
+      "when": { "type": ["house"] }, "category": "Buildings", "subfamily": "Houses and workplaces",
+      "function": [
+        { "when": { "path": "armorer" }, "value": "Armorer" },
+        { "when": { "path": "butcher" }, "value": "Butcher" },
+        { "when": { "path": "cartographer" }, "value": "Cartographer" },
+        { "when": { "path": "cleric" }, "value": "Cleric" },
+        { "when": { "path": "farmer" }, "value": "Farmer" },
+        { "when": { "path": "fish" }, "value": "Fisher" },
+        { "when": { "path": "fletcher" }, "value": "Fletcher" },
+        { "when": { "path": "tannery" }, "value": "Leatherworker" },
+        { "when": { "path": "forge" }, "value": "Weaponsmith" },
+        { "when": { "path": "farm|stable|barn|greenhouse|cacao|corn|windmill" }, "value": "Farms and stables" },
+        { "when": { "path": "church|temple|chapel" }, "value": "Churches and temples" },
+        { "when": { "path": "watchtower|clock" }, "value": "Watchtowers" },
+        { "when": { "path": "cook|sushi|fishs|aquacul|aether|undergarden|ratatou|squid" }, "value": "Food" },
+        { "value": "Homes" }
+      ]
+    },
+    { "when": { "type": ["decoration"] }, "category": "Nature and Decor", "subfamily": "Statues and markers" },
+    { "when": { "type": ["village"] }, "category": "Village", "subfamily": "Whole villages" },
+    { "category": "Nature and Decor", "subfamily": "Environmental" }
+  ],
+  "wholeBiome": {
+    "words": ["desert", "badlands", "mesa", "savanna", "snowy", "ice", "taiga", "jungle", "swamp", "plains", "forest", "beach", "ocean", "birch", "acacia", "cherry", "mangrove", "spruce", "oak", "mushroom", "meadow", "grove", "classic", "iberian", "mediterranean", "rustic", "oriental", "swedish", "tudor", "warm", "deepslate", "crimson", "warped", "default"],
+    "aliases": { "mesa": "Badlands" },
+    "landTagPrefix": "land/",
+    "landTagIgnore": ["land/any", "land/any/deep"]
+  },
+  "pieces": {
+    "idMatch": ":villages?/|^skyvillages:",
+    "sky": { "id": "^skyvillages:", "category": "Sky", "subfamilyPrefix": "Sky village: ", "biome": "Sky" },
+    "category": "Village",
+    "rules": [
+      { "path": "/streets?/|/terminators?/|street|road|/bridge|^bridge|bridge_|term\\d|terminator|crossroad|turn_|corner_|straight_|/paths?/", "subfamily": "Decor and Infrastructure", "function": "Streets" },
+      { "path": "/villagers?/|^villager$|iron_golem", "skip": "entity" },
+      { "path": "waystone|planter|plants_|wood_pile|drakkar|cardboard", "subfamily": "Decor and Infrastructure", "function": "Decor" },
+      { "path": "chickens_", "subfamily": "Decor and Infrastructure", "function": "Animals" },
+      { "path": "trader_tent", "subfamily": "Villager Structures", "function": "Workplaces" },
+      { "path": "start_castle", "subfamily": "Villager Structures", "function": "Town centres" },
+      { "path": "/animals?/|cows|sheep|pigs|chicken_?pen|llama|horses?_", "notLeaf": "pen_|stable", "subfamily": "Decor and Infrastructure", "function": "Animals" },
+      { "leaf": "lamp|lantern|torch", "subfamily": "Decor and Infrastructure", "function": "Lamps" },
+      { "path": "/trees?/|tree_|sapling", "subfamily": "Decor and Infrastructure", "function": "Trees" },
+      { "path": "decor|deco_|accessory|/decays?/|(?<!s)table|bench|flowers?_|fence|statue|sign", "notLeaf": "house|flower_forest_(?!decor)", "subfamily": "Decor and Infrastructure", "function": "Decor" },
+      { "path": "/town_?cent|/center|meeting|fountain|well_|_well|plaza|square|base_plate", "subfamily": "Villager Structures", "function": "Town centres" },
+      { "leaf": "armou?rer", "subfamily": "Villager Houses", "function": "Armorer" },
+      { "leaf": "butcher", "subfamily": "Villager Houses", "function": "Butcher" },
+      { "leaf": "cartograph|map_?maker", "subfamily": "Villager Houses", "function": "Cartographer" },
+      { "leaf": "cleric|alchemist", "subfamily": "Villager Houses", "function": "Cleric" },
+      { "leaf": "farmer(?!s)|_farmer", "subfamily": "Villager Houses", "function": "Farmer" },
+      { "leaf": "fisher|fish_", "subfamily": "Villager Houses", "function": "Fisher" },
+      { "leaf": "fletcher", "subfamily": "Villager Houses", "function": "Fletcher" },
+      { "leaf": "leather|letherworker|tanner", "subfamily": "Villager Houses", "function": "Leatherworker" },
+      { "leaf": "librar", "subfamily": "Villager Houses", "function": "Librarian" },
+      { "leaf": "mason|stonemason", "subfamily": "Villager Houses", "function": "Mason" },
+      { "leaf": "shepherd|shepard", "subfamily": "Villager Houses", "function": "Shepherd" },
+      { "leaf": "tool_?smith", "subfamily": "Villager Houses", "function": "Toolsmith" },
+      { "leaf": "weapon_?smith|blacksmith|forge", "subfamily": "Villager Houses", "function": "Weaponsmith" },
+      { "leaf": "loom|weaver", "subfamily": "Villager Houses", "function": "Weaver" },
+      { "leaf": "temple|church|chapel|shrine", "subfamily": "Villager Structures", "function": "Temples" },
+      { "leaf": "_farm|^farm|greenhouse|garden|field|orchard|vinery|vineyard|winery", "subfamily": "Villager Structures", "function": "Farms" },
+      { "leaf": "animal_pen|pen_|stable|coop|barn|paddock", "subfamily": "Villager Structures", "function": "Animal pens" },
+      { "leaf": "gate|wall|fort|tower|lighthouse|keep", "subfamily": "Villager Structures", "function": "Gates and towers" },
+      { "path": "scientist|workshop|brewery|engineer|bank|shop|market|_inn|tavern|mill|dustrial|machin|prison|factory|smithy|wares|warehouse|depot|garage|forestry|botanist|hall", "subfamily": "Villager Structures", "function": "Workplaces" },
+      { "leaf": "small_?house|tiny|small_|hut|cottage|cabin", "subfamily": "Villager Houses", "function": "Small homes" },
+      { "leaf": "medium", "subfamily": "Villager Houses", "function": "Medium homes" },
+      { "leaf": "big|large|villa|manor|mansion", "subfamily": "Villager Houses", "function": "Large homes" },
+      { "path": "hous|home|/houses/", "subfamily": "Villager Houses", "function": "Other homes" },
+      { "subfamily": "Villager Structures", "function": "Other" }
+    ],
+    "biome": {
+      "rules": [
+        { "id": "^kaisyn:[^/]+/exclusives/([^/]+)" },
+        { "id": "^kaisyn:[^/]+/([^/]+)" },
+        { "id": "^minecraft:[^/]+/(plains|desert|savanna|snowy|taiga)/" },
+        { "id": "^terralith:[^/]+/([^/]+)/", "prefix": "Terralith " }
+      ],
+      "words": ["desert", "plains", "savanna", "snowy", "taiga", "jungle", "swamp", "badlands"],
+      "zombie": "/zombie/",
+      "zombieSuffix": " zombie",
+      "zombieMergedIn": ["Streets"]
+    }
+  },
+  "drying": {
+    "categories": ["Underwater"],
+    "subfamilies": ["Ships"],
+    "id": "ocean|underwater|sunken|wreck|monument"
+  },
+  "overrides": {}
+}

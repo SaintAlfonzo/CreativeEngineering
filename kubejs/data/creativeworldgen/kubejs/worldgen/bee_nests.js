@@ -7,13 +7,13 @@
 // (python3 tools/gen_bee_nests.py applies the same rules offline, and reads the last /dumpbeenests).
 //
 // Per rule in the config:
-//   - biome tag creativeengineering:bee_nests/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
-//   - chance / scale go into ONE biome modifier, creativeengineering:forge/biome_modifier/bee_nests.json, of
-//     patcherMod's type creativeengineering:bee_nests (worldgen/BeeNests): the rules fold in file order per biome,
+//   - biome tag creativeworldgen:bee_nests/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
+//   - chance / scale go into ONE biome modifier, creativeworldgen:forge/biome_modifier/bee_nests.json, of
+//     patcherMod's type creativeworldgen:bee_nests (worldgen/BeeNests): the rules fold in file order per biome,
 //     and every tree generated there gets the result (TreeFeatureBeeNestsMixin). One modifier keeps the order;
-//   - trees: a placed feature creativeengineering:bee_nests/<id> (the configured tree at the rate, placed like a
+//   - trees: a placed feature creativeworldgen:bee_nests/<id> (the configured tree at the rate, placed like a
 //     vanilla tree: on dry ground where the sapling would survive) and a forge:add_features modifier
-//     creativeengineering:forge/biome_modifier/bee_nests/<id>.json, step vegetal_decoration.
+//     creativeworldgen:forge/biome_modifier/bee_nests/<id>.json, step vegetal_decoration.
 // Written in ServerEvents.highPriorityData (KubeJS's top-priority virtual datapack, above the mod jars).
 //
 // A tree feature of a mod that isn't loaded is skipped (an unknown feature id stops the world loading).
@@ -32,8 +32,8 @@
 
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/bee_nests.json'
 	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/biome_traits.json'
-	var TAG_PREFIX = 'creativeengineering:bee_nests/'
-	var MODIFIER_PATH = 'creativeengineering:forge/biome_modifier/bee_nests.json'
+	var TAG_PREFIX = 'creativeworldgen:bee_nests/'
+	var MODIFIER_PATH = 'creativeworldgen:forge/biome_modifier/bee_nests.json'
 	var NESTS_CLASS = 'com.SaintAlfonzo.creativeworldgen.worldgen.BeeNests'
 	var NEVER = ['ocean', 'cave']
 	var DEFAULT_SAPLING = 'minecraft:oak_sapling'
@@ -119,7 +119,7 @@
 
 	function modLoaded(id) {
 		var ns = namespace(id)
-		return ns === 'minecraft' || ns === 'creativeengineering' || Platform.isLoaded(ns)
+		return ns === 'minecraft' || ns === 'creativeworldgen' || Platform.isLoaded(ns)
 	}
 
 	// '1/16' | '3' | 0.5 -> trees per chunk
@@ -246,14 +246,14 @@
 		var out = tuned.map(function (u) {
 			return { id: u.rule.id, biomes: '#' + TAG_PREFIX + u.rule.id, chance: u.rule.chance, scale: u.rule.scale }
 		})
-		if (out.length) event.add(MODIFIER_PATH, toJson({ type: 'creativeengineering:bee_nests', rules: out }))
+		if (out.length) event.add(MODIFIER_PATH, toJson({ type: 'creativeworldgen:bee_nests', rules: out }))
 		var trees = 0
 		rules.forEach(function (u) {
 			if (!u.trees) return
 			var id = TAG_PREFIX + u.rule.id
-			event.add('creativeengineering:worldgen/placed_feature/bee_nests/' + u.rule.id + '.json',
+			event.add('creativeworldgen:worldgen/placed_feature/bee_nests/' + u.rule.id + '.json',
 				toJson({ feature: String(u.rule.trees.feature), placement: treePlacement(u.rule) }))
-			event.add('creativeengineering:forge/biome_modifier/bee_nests/' + u.rule.id + '.json',
+			event.add('creativeworldgen:forge/biome_modifier/bee_nests/' + u.rule.id + '.json',
 				toJson({ type: 'forge:add_features', biomes: '#' + id, features: id, step: 'vegetal_decoration' }))
 			trees++
 		})

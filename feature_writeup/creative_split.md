@@ -112,7 +112,7 @@ missed.
 
 Taken from creative_brewing.md 4.1 and creative_calendar.md 3, extended to several jars:
 
-1. **Ids stay.** Every registered id keeps the `creativeengineering:` namespace whichever jar registers it (a
+1. **Superseded 2026-11-09 (owner): content is registered under the id of the mod it belongs to**, saves carried by the swap lists ([plan_cd_namespace.md](plan_cd_namespace.md) section 0; TODO `creativesplit/ids #24`, `#25`). Original rule, kept as the record: **Ids stay.** Every registered id keeps the `creativeengineering:` namespace whichever jar registers it (a
    `DeferredRegister` for that namespace). No conversions (CLAUDE.md). Lang keys keep their names.
    Exception (owner, 2026-11-04, 7.14): Creative Common's own data (nothing registered) moved to `creativecommon`.
 2. **Dependencies point down.** Common depends on nothing of ours. Content jars depend on Common, and Calendar sits

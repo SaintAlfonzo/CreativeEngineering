@@ -20,7 +20,7 @@ public final class ShrapnelEntities {
                     .updateInterval(10)
                     .noSave()
                     .fireImmune()
-                    .build("creativeengineering:shrapnel"));
+                    .build("creativecompat:shrapnel"));
 
     private ShrapnelEntities() {}
 

@@ -4,7 +4,7 @@
 The assignments live in kubejs/generation_scripts/food/food_types.json (type -> item_dict keys). Every write also
 splits them by item namespace into Creative Delight member scripts, kubejs/data/creativedelight/kubejs/<namespace>/
 food_types.js (`// requires: <namespace>`, outRoot in tools/generators.json, creative_delight.md 28.2); the tag script
-Creative Delight creativeengineering/food_type_tags.js merges those into #creativeengineering:food_type/<type> item
+Creative Delight creativeengineering/food_type_tags.js merges those into #creativedelight:food_type/<type> item
 tags, and every nested type also lands in its parents (raw/meat/sliced -> raw/meat -> raw -> food_type). The game
 never reads the JSON.
 
@@ -35,8 +35,8 @@ EXPORT = INSTANCE / 'kubejs/exported/food'
 DICT = pack_paths.ITEM_DICT
 TYPES_JSON = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 
-TAG_ROOT = 'creativeengineering:food_type'
-CANNED_TAG = 'creativeengineering:canned_source'
+TAG_ROOT = 'creativedelight:food_type'
+CANNED_TAG = 'creativedelight:canned_source'
 
 # Every type, in display order. A '/' nests a type under its parent (the tag chain follows it).
 TYPES = OrderedDict([
@@ -122,7 +122,7 @@ OVERRIDES = {
     'buzzier_bees:glazed_porkchop': 'cooked/meat',
     'buzzier_bees:honey_apple': 'sweet',
     'brewinandchewin:kimchi': 'cooked/veggie',
-    'creativeengineering:pickled_sea_pickle': 'cooked/veggie',
+    'creativedelight:pickled_sea_pickle': 'cooked/veggie',
     'brewinandchewin:kippers': 'cooked/fish',
     'brewinandchewin:jerky': 'cooked/meat',
     'pneumaticcraft:chips': 'cooked/veggie',
@@ -384,12 +384,12 @@ def classify(f, cooked_from, cut_from, feast_servings):
 
 README = [
     'Food type assignments: every food in exactly one type, as item_dict keys (development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js).',
-    'creativedelight creativeengineering/food_type_tags.js turns each type into #creativeengineering:food_type/<type>; a nested type',
-    '(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativeengineering:food_type).',
+    'creativedelight creativeengineering/food_type_tags.js turns each type into #creativedelight:food_type/<type>; a nested type',
+    '(raw/meat/sliced) is also in its parents (raw/meat, raw, and #creativedelight:food_type).',
     'Move an item by moving its key. python3 tools/food_catalog.py adds foods that are in no type yet and checks',
     'the rest; it never moves an item you placed. Reference: feature_writeup/food.md.',
     'excluded: edible items that are not food for tuning (never tagged). canned: can -> the foods it is made from',
-    '(those land in #creativeengineering:canned_source).',
+    '(those land in #creativedelight:canned_source).',
 ]
 
 
@@ -787,7 +787,7 @@ def write_catalog(foods, blocks, recipes, data, id_of_key, cooked_from, cut_from
     w('')
     w('## Summary by type')
     w('')
-    w('| Type | Tag (`#creativeengineering:food_type/...`) | Foods | Hunger min / median / max | Mod min / median / max | SoL median | Has a can |')
+    w('| Type | Tag (`#creativedelight:food_type/...`) | Foods | Hunger min / median / max | Mod min / median / max | SoL median | Has a can |')
     w('|---|---|---:|---|---|---:|---:|')
     for t, desc in TYPES.items():
         fs = [by_id[i] for i, tt in type_of.items() if tt == t and i in by_id]
@@ -806,7 +806,7 @@ def write_catalog(foods, blocks, recipes, data, id_of_key, cooked_from, cut_from
         fs = sorted((by_id[i] for i, tt in type_of.items() if tt == t and i in by_id), key=lambda f: (f['name'], f['id']))
         w(f'## {t} ({len(fs)})')
         w('')
-        w(f'{desc}. Tag `#creativeengineering:food_type/{t}`, key `i.{type_tag_key(t)}`.')
+        w(f'{desc}. Tag `#creativedelight:food_type/{t}`, key `i.{type_tag_key(t)}`.')
         w('')
         if not fs:
             continue

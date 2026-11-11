@@ -57,7 +57,7 @@ import java.util.Map;
  */
 public final class RingPositionCache {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/worldgen");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/worldgen");
 	private static final String FILE = "creativeengineering_ring_positions.json";
 	private static final int PROBE_ANGLES = 64;
 	private static final int MAX_ENTRIES = 32;

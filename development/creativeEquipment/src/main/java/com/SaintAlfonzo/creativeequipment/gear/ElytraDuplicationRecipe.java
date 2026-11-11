@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
  * see creativecommon/_lib/removed_items.js). This class re-implements the same
  * matches()/assemble()/getRemainingItems() behaviour, but reads the catalyst ingredient
  * and the result item from the recipe JSON instead of naming either in Java, so it isn't
- * tied to one mod's items. Datapack / KubeJS type id: {@code creativeengineering:elytra_duplication}
+ * tied to one mod's items. Datapack / KubeJS type id: {@code creativeequipment:elytra_duplication}
  * (see NCH.elytraDuplication in kubejs/startup_scripts/func/neoCraftHelper.js).
  */
 public class ElytraDuplicationRecipe extends CustomRecipe {

@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   Terralith's warm_river in the hot band) snows next to jungles and deserts that never do.
  *
  * THE FIX:
- *   Biome tags {@code creativeengineering:seasons/arid|frozen|dry|tropical|temperate|adaptive} (filled from
+ *   Biome tags {@code creativecalendar:seasons/arid|frozen|dry|tropical|temperate|adaptive} (filled from
  *   kubejs/generation_scripts/worldgen/season_types.json) pick the type; untagged biomes keep Serene Seasons'
  *   rule. A tagged biome always has seasons, even when Serene Seasons' blacklist names it (oceans). Dry and
  *   tropical both run the wet/dry cycle: dry (savannas) rains in Mid Wet only, tropical (jungles) in every
@@ -64,7 +64,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   - {@link #seasonTemperature} (getBiomeTemperatureInSeason): what each type's season does to temperature.
  *   - {@link #applySnowRules} (every Level temperature read): the snow line at CalendarConfig seasons.snowLineY
  *     (build height): below it nothing snows from height alone; above it temperate and cold biomes always
- *     snow (a height gauge for flyers). Plus per-biome snow seasons ({@code creativeengineering:snow/no_<sub_season>}
+ *     snow (a height gauge for flyers). Plus per-biome snow seasons ({@code creativecalendar:snow/no_<sub_season>}
  *     tags, season_types.json snow_seasons).
  *
  * PERMANENT SEASONS (permanent_spring|summer|autumn|winter):
@@ -335,7 +335,7 @@ public final class SeasonTypes {
     /** Rain stays rain at this temperature (Biome.warmEnoughToRain: >= 0.15). */
     private static final float RAIN_MIN_TEMPERATURE = 0.15F;
 
-    /** Per sub-season: biomes that may not snow then ({@code creativeengineering:snow/no_<sub_season>}). */
+    /** Per sub-season: biomes that may not snow then ({@code creativecalendar:snow/no_<sub_season>}). */
     private static final TagKey<Biome>[] SNOW_BLOCKED = snowBlockedTags();
 
     @SuppressWarnings("unchecked")

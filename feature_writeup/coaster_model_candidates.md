@@ -13,7 +13,7 @@ Those stay out until they get a recoloured model. Tag 304.
 
 ## 1. Tag state
 
-`#creativeengineering:placeable_on_coaster` (and through it `#brewinandchewin:placeable_on_coaster`) already holds only foods with a coaster model: 152 entries in `kubejs/generation_scripts/food/placeable.json`, 152 coaster model files (96 from the Brewin' port, 56 pack files from `tools/gen_coaster_models.py`). The cut of unmodelled foods was made 2026-10-25 ([food_families.md](food_families.md) 4.4; `tools/placeable_catalog.py` `add_coaster` only adds modelled items). Nothing was left to cut.
+`#creativedelight:placeable_on_coaster` (and through it `#brewinandchewin:placeable_on_coaster`) already holds only foods with a coaster model: 152 entries in `kubejs/generation_scripts/food/placeable.json`, 152 coaster model files (96 from the Brewin' port, 56 pack files from `tools/gen_coaster_models.py`). The cut of unmodelled foods was made 2026-10-25 ([food_families.md](food_families.md) 4.4; `tools/placeable_catalog.py` `add_coaster` only adds modelled items). Nothing was left to cut.
 
 Two things found while checking:
 

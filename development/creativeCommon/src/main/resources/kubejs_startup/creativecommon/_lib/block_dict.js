@@ -6,7 +6,7 @@ global.blocks = {};
 // ############################## Assignments ##############################
 var b = global.blocks;
 
-b.dark_fire = 'creativeengineering:dark_fire';
+b.dark_fire = 'creativemagic:dark_fire';
 b.hh_four_leaf_clover = 'hearthandharvest:four_leaf_clover'; // placed Four-Leaf Clover (hearth/worldgen), no item of its own
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 b.emu_nest = 'creativedelight:emu_nest';         // Creative Delight compat/incubation/nest/EmuNests.java
@@ -17,7 +17,7 @@ b.goose_nest = 'creativedelight:goose_nest';
 b.goose_egg_nest = 'creativedelight:goose_egg_nest';
 b.duck_egg_crate = 'creativedelight:duck_egg_crate';   // Creative Delight compat/incubation/crate/WaterfowlEggCrates.java
 b.goose_egg_crate = 'creativedelight:goose_egg_crate';
-b.oven = 'creativeengineering:oven';                 // patcherMod oven/OvenBlock.java
+b.oven = 'creativedelight:oven';                 // patcherMod oven/OvenBlock.java
 // Oven heat (feature_writeup/oven.md 2.4): non-stove sources below the oven
 b.magma_block = 'minecraft:magma_block';
 b.lava_cauldron = 'minecraft:lava_cauldron';
@@ -85,7 +85,7 @@ b.botania_blaze_block = 'botania:blaze_block';       // Blaze Mesh fuel block, a
 b.snow = 'minecraft:snow';                             // snow layers
 b.snow_block = 'minecraft:snow_block';
 b.powder_snow = 'minecraft:powder_snow';
-b.powdered_sugar_block = 'creativeengineering:powdered_sugar_block'; // patcherMod food/PowderedSugarBlock.java
+b.powdered_sugar_block = 'creativedelight:powdered_sugar_block'; // patcherMod food/PowderedSugarBlock.java
 b.thin_ice = 'immersive_weathering:thin_ice';
 b.iw_permafrost = 'immersive_weathering:permafrost';
 b.iw_cryosol = 'immersive_weathering:cryosol';
@@ -173,7 +173,7 @@ b.roasted_mutton_rack_block = 'largemeals:roasted_mutton_rack_block'; // FeastBl
 
 // Tags
 b.any_bricks = '#minecraft:bricks';
-b.t_oven_heat_sources = '#creativeengineering:oven_heat_sources'; // OvenHeat.OVEN_HEAT_SOURCES
+b.t_oven_heat_sources = '#creativedelight:oven_heat_sources'; // OvenHeat.OVEN_HEAT_SOURCES
 b.t_fd_heat_sources = '#farmersdelight:heat_sources';
 b.t_fd_tray_heat_sources = '#farmersdelight:tray_heat_sources';   // fire, campfires, lava
 b.t_fd_mineable_knife = '#farmersdelight:mineable/knife';
@@ -184,16 +184,23 @@ b.t_forge_fences = '#forge:fences';
 b.t_forge_fence_gates = '#forge:fence_gates';
 b.t_keg_heat_sources = '#brewinandchewin:heat_sources';     // Brewin port: keg + Vinery cold storage; holds FD heat_sources
 b.t_keg_freeze_sources = '#brewinandchewin:freeze_sources';
-b.t_own_pick_crops = '#creativeengineering:crops/own_pick'; // CropParity.OWN_PICK_CROPS: Quark leaves these to their own pick
-b.t_harvest_from_bottom = '#creativeengineering:crops/harvest_from_bottom'; // CropParity.HARVEST_FROM_BOTTOM: Quark harvests the lower half when the top half is clicked
+b.t_own_pick_crops = '#creativedelight:crops/own_pick'; // CropParity.OWN_PICK_CROPS: Quark leaves these to their own pick
+b.t_harvest_from_bottom = '#creativedelight:crops/harvest_from_bottom'; // CropParity.HARVEST_FROM_BOTTOM: Quark harvests the lower half when the top half is clicked
 b.t_ghost_pepper_soil = '#vintagedelight:ghost_pepper_soil'; // Vintage port: where ghost pepper seeds plant (vintage_delight.md 2.1)
 b.t_create_non_movable = '#create:non_movable';    // contraptions can't pick these up
 b.t_ice = '#minecraft:ice';                          // ice, packed, blue, frosted, rare-ice
-b.t_hammer_no_rotate = '#creativeengineering:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
+b.t_hammer_no_rotate = '#creativedelight:hammer_no_rotate'; // IECompat.HAMMER_NO_ROTATE: the IE hammer won't turn these
 b.t_end_plant_soil_slow = '#creativedelight:end_plant_soil_slow'; // enders_additions: End plants survive here, grow slowly (ends_delight.md 3.1)
 b.t_end_plant_soil_fast = '#creativedelight:end_plant_soil_fast'; // same, grow fast
 b.t_mineable_axe = '#minecraft:mineable/axe';
 b.t_mineable_pickaxe = '#minecraft:mineable/pickaxe';
+
+// Visceral Heap blocks kept from Biomes O' Plenty (visceral_heap.md)
+b.flesh = 'biomesoplenty:flesh';
+b.porous_flesh = 'biomesoplenty:porous_flesh';
+b.flesh_tendons = 'biomesoplenty:flesh_tendons';
+b.flesh_tendons_strand = 'biomesoplenty:flesh_tendons_strand';
+b.eyebulb = 'biomesoplenty:eyebulb';
 
 // End food blocks (ends_delight.md 3.1)
 b.end_stone = 'minecraft:end_stone';
@@ -201,20 +208,20 @@ b.tilled_end_stone = 'endercrop:tilled_end_stone';
 b.chorus_crate = 'endersdelight:chorus_crate';
 b.endstone_stove = 'endersdelight:endstone_stove';
 b.chorus_fruit_crate = 'ends_delight:chorus_fruit_crate';
-b.t_counter_supports = '#creativeengineering:counter_supports'; // CounterToppers.SUPPORTS: toppers stay on these, drawn shifted
-b.t_counter_toppers = '#creativeengineering:counter_toppers';   // CounterToppers.TOPPERS: cutting board, plates, coaster
+b.t_counter_supports = '#creativedelight:counter_supports'; // CounterToppers.SUPPORTS: toppers stay on these, drawn shifted
+b.t_counter_toppers = '#creativedelight:counter_toppers';   // CounterToppers.TOPPERS: cutting board, plates, coaster
 b.t_campfire_rain_douses = '#creativecommon:campfire/rain_douses';         // CampfireRain.RAIN_DOUSES
 b.t_campfire_rain_proof_fuel = '#creativecommon:campfire/rain_proof_fuel'; // CampfireRain.RAIN_PROOF_FUEL
-b.t_vein_undo_denied = '#creativeengineering:vein_undo_denied'; // VeinUndo.DENIED: an Ore Excavation undo touching these is refused
-b.t_villager_ladders = '#creativeengineering:villager_ladders'; // McaVillagerPathLaddersMixin: villagers path up and down these (also need minecraft:climbable)
+b.t_vein_undo_denied = '#creativecompat:vein_undo_denied'; // VeinUndo.DENIED: an Ore Excavation undo touching these is refused
+b.t_villager_ladders = '#creativeworldgen:villager_ladders'; // McaVillagerPathLaddersMixin: villagers path up and down these (also need minecraft:climbable)
 b.t_ores = '#forge:ores';
 b.t_storage_blocks = '#forge:storage_blocks';
-b.t_no_world_dye = '#creativeengineering:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world
+b.t_no_world_dye = '#creativecompat:no_world_dye'; // SupplementariesDyeBlocksMixin: dye can't recolour these in world
 b.t_mirror_glass = '#creativecompat:mirror_glass';             // IPMirrorGlassMixin: flint and steel makes Immersive Portals mirrors from these
 b.t_mirror_glass_panes = '#creativecompat:mirror_glass_panes'; // IPMirrorGlassMixin: the same, as glass panes
 b.t_not_mirror_glass = '#creativecompat:not_mirror_glass';     // IPMirrorGlassMixin: never a mirror, even if Immersive Portals would accept the block
-b.t_fishing_net_kelp = '#creativeengineering:fishing_net/kelp';           // OceanicDelightFishingNetMixin: net uses the kelp table
-b.t_fishing_net_sea_grass = '#creativeengineering:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
+b.t_fishing_net_kelp = '#creativedelight:fishing_net/kelp';           // OceanicDelightFishingNetMixin: net uses the kelp table
+b.t_fishing_net_sea_grass = '#creativedelight:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
 
 // ############################## Validation ##############################

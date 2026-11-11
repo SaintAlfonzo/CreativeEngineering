@@ -105,8 +105,8 @@ All in [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.j
 | Plants | spore blossom, four-leaf clover | common, 3, 4 uses |
 | Natural blocks | coarse dirt x8; clay, mud, ice, snow block, calcite, dripstone block x4; grass block x2; mycelium x2 (3 emeralds) | common |
 | Natural blocks | sponge (no renewable source) | rare, 8, 3 uses |
-| Random golden food | one random member of `#creativeengineering:trades/golden_food` per trader: golden apple, golden carrot, Golden Food's plain golden foods, no golden chorus fruit | rare, 6, 3 uses |
-| Random canned golden | one random member of `#creativeengineering:trades/canned_golden` (canned golden apples, canned golden carrot) | rare, 12, 2 uses |
+| Random golden food | one random member of `#creativecommon:trades/golden_food` per trader: golden apple, golden carrot, Golden Food's plain golden foods, no golden chorus fruit | rare, 6, 3 uses |
+| Random canned golden | one random member of `#creativecommon:trades/canned_golden` (canned golden apples, canned golden carrot) | rare, 12, 2 uses |
 | Mob buckets | cod, salmon, tadpole, squid | rare, 3, 4 uses |
 | Mob buckets | glow squid, jellyfish, perch, crab, axolotl, terrapin, small / medium / large catfish, mudskipper, lobster, flying fish | rare, 5, 4 uses |
 | Winemaker | 12 Fruits Delight tree saplings (5 emeralds; the apple sapling dropped 2026-10-22, Vinery's apple tree is the pack's) and the pineapple sapling (3); white jungle grape seeds (1; Vinery's own slot sells the grape) | Winemaker pool, 8 uses |
@@ -166,8 +166,8 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   listing classes; CC/AP's `VillagerTrade` and Lightman's `SimpleTrade` are neither.
 - **Wares: both listings x20.** "Move it to the common pool" read as the rare agreement moving, "20x" applied to
   each. That is about 4.9 agreements per trader; `weight` in `t.move` changes it.
-- **Golden food tag of its own.** `#creativeengineering:loot/golden_food` includes golden chorus fruit (End), so
-  trades use `#creativeengineering:trades/golden_food` (same set minus it), in
+- **Golden food tag of its own.** `#creativeworldgen:loot/golden_food` includes golden chorus fruit (End), so
+  trades use `#creativecommon:trades/golden_food` (same set minus it), in
   [tradetags.js](../kubejs/server_scripts/tags/tradetags.js).
 - **Ancient sapling and sponge in the rare pool** at 8 emeralds: both have no other renewable source.
 - **Winemaker still draws 8.** Its pool grew from 20 to 35; a count knob was not asked for.

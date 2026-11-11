@@ -20,7 +20,7 @@
 
 global.LOOT = {
 
-  modId: 'creativeengineering',
+  modId: 'creativeworldgen',
   strict: true, // true = throw on an unknown item/tag id, false = warn and continue
 
   // ── content lists (fill from a /dumploot export) ────────────────────────────
