@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#forge:seeds/cotton",
+      "required": false
+    },
+    {
+      "id": "#forge:seeds/bell_pepper",
+      "required": false
+    },
+    {
+      "id": "#forge:seeds/coffee_beans",
+      "required": false
+    },
+    {
+      "id": "#forge:seeds/coffee",
+      "required": false
+    }
+  ]
+}

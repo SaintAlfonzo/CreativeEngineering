@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_coffee"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "rusticdelight:coffee_beans_bag"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "rusticdelight:coffee_beans"
+  }
+}

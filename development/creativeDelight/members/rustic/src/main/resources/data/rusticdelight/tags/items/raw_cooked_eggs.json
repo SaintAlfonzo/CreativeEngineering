@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#forge:eggs",
+      "required": false
+    },
+    {
+      "id": "#forge:cooked_eggs",
+      "required": false
+    }
+  ]
+}

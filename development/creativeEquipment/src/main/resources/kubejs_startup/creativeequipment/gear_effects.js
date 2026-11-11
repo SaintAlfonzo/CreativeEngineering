@@ -99,7 +99,7 @@
 
 	// ═══════════════════════════ tool bonuses ═══════════════════════════════════
 
-	// Echo tools (creativeengineering:echo_pickaxe/axe/shovel/hoe, see
+	// Echo tools (creativeequipment:echo_pickaxe/axe/shovel/hoe, see
 	// [[echo-tier-tools]]) mirror create_deep_dark:echo_sword's own on-hit Weakness II +
 	// Darkness II (5 sec.). Previously hardcoded in its own dedicated
 	// server_scripts/magic/echo_tool_effects.js + manual .tooltip() lines in

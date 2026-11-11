@@ -71,6 +71,7 @@ ClientEvents.lang('en_us', e => {
   e.renameItem('create_compressed:sturdy_sheet_block', 'Sturdy Plate Block')
   e.renameItem('vintageimprovements:netherite_sheet', 'Netherite Plate')
   e.renameItem('createdeco:cast_iron_sheet', 'Cast Iron Plate')
+  e.renameItem('createdeco:cast_iron_block', 'Cast Iron Plating')  // Dustrial Decor's Cast Iron Block keeps the plain name
   e.renameItem('create:brass_sheet', 'Brass Plate')
   e.renameItem('create:sturdy_sheet', 'Sturdy Plate')
   e.renameItem('create_things_and_misc:rose_quartz_sheet', 'Rose Quartz Plate')

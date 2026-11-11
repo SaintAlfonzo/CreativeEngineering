@@ -34,9 +34,9 @@
     const $CLCreativeTab = Java.loadClass('net.minecraft.world.item.CreativeModeTab')
     const $CLNonNull = Java.loadClass('net.minecraft.core.NonNullList')
     const $CLAnchor = Java.loadClass('net.minecraft.commands.arguments.EntityAnchorArgument$Anchor')
-    const $CLNoteData = Java.loadClass('com.SaintAlfonzo.creative_labels.block.NoteData')
-    const $CLItemLabels = Java.loadClass('com.SaintAlfonzo.creative_labels.item.ItemLabels')
-    const $CLColours = Java.loadClass('com.SaintAlfonzo.creative_labels.item.NoteColours')
+    const $CLNoteData = Java.loadClass('com.SaintAlfonzo.creativelabels.block.NoteData')
+    const $CLItemLabels = Java.loadClass('com.SaintAlfonzo.creativelabels.item.ItemLabels')
+    const $CLColours = Java.loadClass('com.SaintAlfonzo.creativelabels.item.NoteColours')
 
     const Y = -58          // hosts float above the superflat ground (grass at -61)
     let results = { pass: 0, fail: 0 }
@@ -158,7 +158,7 @@
         return out
     }
     function note(opts) {
-        let st = stack('creative_labels:sticky_note', (opts && opts.count) || 64)
+        let st = stack('creativelabels:sticky_note', (opts && opts.count) || 64)
         if (opts && opts.text) {
             let tag = st.getOrCreateTag()
             let cl = new $CLCompound()
@@ -288,13 +288,13 @@
         let hl = pos(X + 4, Y, 6)
         set(level, hl, 'minecraft:stone')
         click(p, level, hl, 'north', 0.5, 0.5, note({ count: 1 }), false)
-        let lr = click(p, level, hl, 'north', 0.5, 0.5, stack('creative_labels:label'), false)
+        let lr = click(p, level, hl, 'north', 0.5, 0.5, stack('creativelabels:label'), false)
         let hasLabel = faceOf(level, hl, 'north').hasLabel()
         // the cell north of hl: put a stone further north-west so the same cell has a second host on its west
         let cell = cellOf(hl, 'north')
         let west = pos(cell.getX() - 1, cell.getY(), cell.getZ())
         set(level, west, 'minecraft:stone')
-        let lr2 = click(p, level, west, 'east', 0.5, 0.5, stack('creative_labels:label'), false)
+        let lr2 = click(p, level, west, 'east', 0.5, 0.5, stack('creativelabels:label'), false)
         let b = be(level, cell)
         let both = b != null && b.face(dir('south')).noteCount() == 1 && b.face(dir('west')).hasLabel()
         let nr = click(p, level, west, 'east', 0.5, 0.5, note({ count: 1 }), false)
@@ -355,7 +355,7 @@
         let got = null
         for (let i = 0; i < p.getInventory().getContainerSize(); i++) {
             var s = p.getInventory().getItem(i)
-            if (!s.isEmpty() && String($CLForgeReg.ITEMS.getKey(s.getItem())) == 'creative_labels:sticky_note') got = s
+            if (!s.isEmpty() && String($CLForgeReg.ITEMS.getKey(s.getItem())) == 'creativelabels:sticky_note') got = s
         }
         check('SN-13', 'remove', got != null && $CLNoteData.readColor(got) == want && notesOn(level, h, 'north') == 1,
             got == null ? 'no note in inventory' : 'got ' + got.getOrCreateTag() + ', ' + notesOn(level, h, 'north') + ' left')
@@ -370,10 +370,10 @@
         let n0 = ce.note(spot)
         let t0 = String(n0.text), col0 = n0.color
         let gold0 = String(n0.special)
-        clickPaper(p, level, cellOf(he, 'north'), 'south', 0.5, 0.5, stack('creative_labels:eraser'), false)
+        clickPaper(p, level, cellOf(he, 'north'), 'south', 0.5, 0.5, stack('creativelabels:eraser'), false)
         let n1 = faceOf(level, he, 'north').note(spot)
         let t1 = String(n1.text), col1 = n1.color
-        clickPaper(p, level, cellOf(he, 'north'), 'south', 0.5, 0.5, stack('creative_labels:eraser'), false)
+        clickPaper(p, level, cellOf(he, 'north'), 'south', 0.5, 0.5, stack('creativelabels:eraser'), false)
         let n2 = faceOf(level, he, 'north').note(spot)
         check('SN-14', 'eraser on a placed note', t0 == 'Iron' && t1 == '' && col1 == wantRed && n2.color < 0 && n2.isPlain(),
             'before "' + t0 + '" ' + hex(col0) + ' (special ' + gold0 + '); 1st "' + t1 + '" ' + hex(col1) + '; 2nd ' + hex(n2.color) + ' plain ' + n2.isPlain())
@@ -436,7 +436,7 @@
         let h = pos(X, Y, 2)
         set(level, h, 'minecraft:stone')
         for (let i = 0; i < 5; i++) click(p, level, h, 'north', 0.5, 0.5, note({ count: 1, text: 'N' + i }), false)
-        click(p, level, h, 'east', 0.5, 0.5, stack('creative_labels:label'), false)
+        click(p, level, h, 'east', 0.5, 0.5, stack('creativelabels:label'), false)
         clickPaper(p, level, cellOf(h, 'east'), 'west', 0.5, 0.5, stack('minecraft:diamond'), true)
         let pic = faceOf(level, h, 'east') != null && faceOf(level, h, 'east').hasLabel() ? String(faceOf(level, h, 'east').label.picture) : 'none'
         killItems(level, X)
@@ -445,8 +445,8 @@
         let joined = drops.join(' | ')
         let noteDrops = 0, written = 0, labelBlank = false
         for (let i = 0; i < drops.length; i++) {
-            if (drops[i].indexOf('creative_labels:sticky_note') >= 0) { noteDrops++; if (drops[i].indexOf('Text') >= 0) written++ }
-            if (drops[i].indexOf('creative_labels:label') >= 0 && drops[i].indexOf('{') < 0) labelBlank = true
+            if (drops[i].indexOf('creativelabels:sticky_note') >= 0) { noteDrops++; if (drops[i].indexOf('Text') >= 0) written++ }
+            if (drops[i].indexOf('creativelabels:label') >= 0 && drops[i].indexOf('{') < 0) labelBlank = true
         }
         let gone = String(level.getBlockState(cellOf(h, 'north')).getBlock()) + ' / ' + String(level.getBlockState(cellOf(h, 'east')).getBlock())
         check('SN-18', 'host mined', noteDrops == 5 && written == 5 && labelBlank,
@@ -456,7 +456,7 @@
         let ho = pos(X, Y, 6)
         set(level, ho, 'minecraft:obsidian')
         for (let i = 0; i < 5; i++) click(p, level, ho, 'north', 0.5, 0.5, note({ count: 1, text: 'O' + i }), false)
-        click(p, level, ho, 'up', 0.5, 0.5, stack('creative_labels:label'), false)
+        click(p, level, ho, 'up', 0.5, 0.5, stack('creativelabels:label'), false)
         killItems(level, X)
         level.explode(null, X + 0.5, Y + 0.5, 6 - 1.8, 4.0, $CLExplosion.BlockInteraction.BREAK)
         let kept = notesOn(level, ho, 'north')
@@ -467,7 +467,7 @@
         let hs = pos(X + 4, Y, 6)
         set(level, hs, 'minecraft:stone')
         for (let i = 0; i < 5; i++) click(p, level, hs, 'north', 0.5, 0.5, note({ count: 1, text: 'S' + i }), false)
-        click(p, level, hs, 'up', 0.5, 0.5, stack('creative_labels:label'), false)
+        click(p, level, hs, 'up', 0.5, 0.5, stack('creativelabels:label'), false)
         killItems(level, X)
         level.explode(null, X + 4.5, Y + 0.5, 6 + 1.5, 4.0, $CLExplosion.BlockInteraction.BREAK)
         let hostAfter = String(level.getBlockState(hs).getBlock())
@@ -475,8 +475,8 @@
         let dropsB = dropSummary(level, X + 4)
         let nB = 0, lB = 0
         for (let i = 0; i < dropsB.length; i++) {
-            if (dropsB[i].indexOf('creative_labels:sticky_note') >= 0 && dropsB[i].indexOf('Text') >= 0) nB += parseInt(dropsB[i])
-            if (dropsB[i].indexOf('creative_labels:label') >= 0) lB += parseInt(dropsB[i])
+            if (dropsB[i].indexOf('creativelabels:sticky_note') >= 0 && dropsB[i].indexOf('Text') >= 0) nB += parseInt(dropsB[i])
+            if (dropsB[i].indexOf('creativelabels:label') >= 0) lB += parseInt(dropsB[i])
         }
         check('SN-19', 'explosion, host destroyed', hostAfter.indexOf('stone') < 0 && nB == 5 && lB == 1,
             'host now ' + hostAfter + '; written notes dropped ' + nB + ', labels ' + lB + '; drops: ' + dropsB.join(' | '))
@@ -554,10 +554,10 @@
         check('SN-26', 'special + dye gives nothing', r5.out == null || r5.out.isEmpty(), 'creeper + red -> ' + r5.id)
 
         // SN-27 eraser in the grid
-        let e1 = craft(level, p, [note({ count: 1, text: 'Iron', color: red }), stack('creative_labels:eraser')])
-        let e2 = e1.out == null ? null : craft(level, p, [e1.out, stack('creative_labels:eraser')])
+        let e1 = craft(level, p, [note({ count: 1, text: 'Iron', color: red }), stack('creativelabels:eraser')])
+        let e2 = e1.out == null ? null : craft(level, p, [e1.out, stack('creativelabels:eraser')])
         let rem = e1.rem == null ? '' : String(e1.rem)
-        let eraser = stack('creative_labels:eraser')
+        let eraser = stack('creativelabels:eraser')
         let ok27 = e1.out != null && String($CLNoteData.readText(e1.out)) == '' && $CLNoteData.readColor(e1.out) == red &&
             e2 != null && e2.out != null && $CLNoteData.readColor(e2.out) < 0 && rem.indexOf('eraser') >= 0 && !eraser.isDamageableItem()
         check('SN-27', 'eraser in the grid', ok27,
@@ -631,7 +631,7 @@
             var pe = fake(level, 'erase')
             pe.getInventory().setItem(9, target)
             var se = pe.inventoryMenu.getSlot(9)
-            var er = stack('creative_labels:eraser')
+            var er = stack('creativelabels:eraser')
             er.getItem().overrideStackedOnOther(er, se, $CLClickAction.SECONDARY, pe)
             target = se.getItem()
             pe.discard()
@@ -671,7 +671,7 @@
         let cell = cellOf(h, 'north')
 
         // SN-36 place (sneak on a chest), flush: inset 0
-        let r = click(p, level, h, 'north', 0.5, 0.5, stack('creative_labels:label', 4), true)
+        let r = click(p, level, h, 'north', 0.5, 0.5, stack('creativelabels:label', 4), true)
         let c = faceOf(level, h, 'north')
         check('SN-36', 'place', c != null && c.hasLabel(), 'click ' + r + ', label ' + (c != null && c.hasLabel()) + ', inset ' + (c == null ? '-' : c.inset) + ', labels left ' + p.getMainHandItem().getCount())
 
@@ -685,7 +685,7 @@
         // SN-38 stack tints kept in the picture (C2 strips the rest): healing potion, dyed leather
         let h2 = pos(X + 2, Y, 2)
         set(level, h2, 'minecraft:stone')
-        click(p, level, h2, 'north', 0.5, 0.5, stack('creative_labels:label'), false)
+        click(p, level, h2, 'north', 0.5, 0.5, stack('creativelabels:label'), false)
         let potion = stack('minecraft:potion')
         potion.getOrCreateTag().putString('Potion', 'minecraft:healing')
         let junk = ''
@@ -729,14 +729,14 @@
         p.setItemInHand($CLHand.MAIN_HAND, $CLItemStack.EMPTY)
         let ok = p.gameMode.destroyBlock(cell)
         let drops = dropSummary(level, X)
-        check('SN-44', 'break', ok && drops.length == 1 && drops[0] == '1x creative_labels:label' && String(level.getBlockState(cell).getBlock()).indexOf('air') >= 0,
+        check('SN-44', 'break', ok && drops.length == 1 && drops[0] == '1x creativelabels:label' && String(level.getBlockState(cell).getBlock()).indexOf('air') >= 0,
             'destroyBlock ' + ok + ', drops ' + drops.join(' | ') + ', cell ' + level.getBlockState(cell).getBlock())
 
         // SN-45 floor label turns to the placer's facing
         let hf = pos(X + 4, Y, 2)
         set(level, hf, 'minecraft:stone')
         place(p, X + 2.5, Y + 1, 2.5, -90, 30)   // facing east
-        click(p, level, hf, 'up', 0.5, 0.5, stack('creative_labels:label'), false)
+        click(p, level, hf, 'up', 0.5, 0.5, stack('creativelabels:label'), false)
         check('SN-45', 'floor label', String(faceOf(level, hf, 'up').rotation) == 'east', 'rotation ' + faceOf(level, hf, 'up').rotation)
         p.discard()
     }
@@ -753,9 +753,9 @@
             var out = rec.getResultItem()
             var id = out == null || out.isEmpty() ? '' : String($CLForgeReg.ITEMS.getKey(out.getItem()))
             if (id.indexOf('sticky_it:') == 0 || id.indexOf('labels:') == 0) makers.push(String(rec.getId()) + ' -> ' + id)
-            if (id == 'creative_labels:sticky_note') ours.note++
-            if (id == 'creative_labels:label') ours.label++
-            if (id == 'creative_labels:eraser') ours.eraser++
+            if (id == 'creativelabels:sticky_note') ours.note++
+            if (id == 'creativelabels:label') ours.label++
+            if (id == 'creativelabels:eraser') ours.eraser++
         }
         check('SN-49', 'donor recipes gone', makers.length == 0, makers.length == 0 ? 'none; recipes making ours ' + JSON.stringify(ours) : makers.join(', '))
         let tabs = $CLCreativeTab.TABS
@@ -772,7 +772,7 @@
             }
         }
         let ourList = $CLNonNull.create()
-        item('creative_labels:sticky_note').fillItemCategory($CLCreativeTab.TAB_DECORATIONS, ourList)
+        item('creativelabels:sticky_note').fillItemCategory($CLCreativeTab.TAB_DECORATIONS, ourList)
         let ourTab = ourList.size() == 5
         check('SN-49', 'donor items out of the tabs', shown.length == 0 && ourTab, (shown.length == 0 ? 'none shown' : shown.join(', ')) + '; our note lists ' + ourList.size() + ' entries in decorations (plain + 4 specials)')
 

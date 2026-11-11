@@ -31,8 +31,8 @@ public final class Lunchboxes {
     public static final ResourceLocation LUNCHBOX = new ResourceLocation(SOL, "lunchbox");
     /** Iron Lunchbox in game (the pack renames it). */
     public static final ResourceLocation GOLDEN_LUNCHBOX = new ResourceLocation(SOL, "golden_lunchbox");
-    /** Registered by the pack ({@link LunchboxItems}). */
-    public static final ResourceLocation NETHERITE_LUNCHBOX = new ResourceLocation(SOL, "netherite_lunchbox");
+    /** Registered by the pack ({@link LunchboxItems}), under creativedelight: (was solapplepie:, swap list carries saves). */
+    public static final ResourceLocation NETHERITE_LUNCHBOX = new ResourceLocation(com.SaintAlfonzo.creativedelight.CreativeDelight.MOD_ID, "netherite_lunchbox");
 
     /** Lowest tier first. A box can wear the look of any tier below its own. */
     public static final List<ResourceLocation> TIERS = List.of(LUNCHBAG, LUNCHBOX, GOLDEN_LUNCHBOX, NETHERITE_LUNCHBOX);

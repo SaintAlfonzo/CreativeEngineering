@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_coffee"
+    }
+  ],
+  "key": {
+    "C": [
+      {
+        "item": "rusticdelight:coffee_beans"
+      },
+      {
+        "item": "rusticdelight:roasted_coffee_beans"
+      }
+    ],
+    "G": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "GCG",
+    "GGG"
+  ],
+  "result": {
+    "item": "rusticdelight:golden_coffee_beans"
+  },
+  "show_notification": true
+}

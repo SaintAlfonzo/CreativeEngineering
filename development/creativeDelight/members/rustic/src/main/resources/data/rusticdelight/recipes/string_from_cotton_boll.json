@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_cotton"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "rusticdelight:cotton_boll"
+    }
+  ],
+  "result": {
+    "item": "minecraft:string"
+  }
+}

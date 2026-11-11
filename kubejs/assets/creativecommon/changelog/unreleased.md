@@ -4,6 +4,14 @@
 
 - **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, with flesh, blood lakes, eyebulbs, hair and flesh tendons.
 - **New:** Flesh slows walking to 0.6x. Porous Flesh slows walking to 0.45x, halves jump height and slides you down its sides, like a Honey Block.
+- **New:** Flesh Tendons can be climbed like a ladder.
+- **New:** Crushing Wheels and the Millstone crush Flesh and Porous Flesh into drops from four groups. In JEI each group is one slot that cycles its items.
+- **New:** Crushed Flesh gives 1 meat (rotten flesh, Rotten Ham, leather, Spider Leg, Hoglin Ear, Hoglin Loin), bone at 75% (bone, bone meal, Broken Bone, Bone Chunk, Bone Serpent Tooth), eye at 25% (spider eye, Eyebulb, fermented spider eye), and Pus Bubble, Flesh Tendons or Hair at 25%.
+- **New:** Crushed Porous Flesh gives 1 meat plus a second at 50%, 1 eye, and a Pus Bubble, Flesh Tendons or Hair at 50%, no bone.
+- **New:** Crushing a Pus Bubble gives a slimeball at 25%; crushing Hair gives string at 50%.
+- **New:** Heated mixing turns Flesh into 250 mB of blood and a bone at 25%, Porous Flesh into 500 mB, Flesh Tendons into 250 mB.
+- **New:** Mixing 2 Porous Flesh, 2 Flesh and 1000 mB of plant oil, seed oil or vegetable oil gives 2 Porous Flesh and 3 Flesh.
+- **New:** Mixing 2 Flesh Tendons, 1 Flesh and 250 mB of blood gives 1 Porous Flesh.
 
 ## Walk Speed <!-- icon: minecraft:honey_block -->
 
@@ -11,6 +19,12 @@
 - **Changed:** Standing on a Honey Block shows the same sink depth as wool or sand (was a smaller one).
 - **Changed:** Dropped items lie on top of sinking blocks instead of sinking into them.
 - **Changed:** Banana Slug Slime Blocks slide you down their sides like a Honey Block, with no fall damage.
+- **Fixed:** Framed Blocks and Copycats+ blocks walked at normal speed instead of the speed of their material.
+- **Fixed:** Create Confectionery blocks, Metal Fences and Mosaic Masonry blocks walked at normal speed instead of their own.
+- **Changed:** Placed dishes, plates, jars and bottles, cakes, ice cream, chocolate blocks and chocolate coins walk at 0.85x [1x].
+- **Changed:** Coralstone, tooth and scute blocks and crystal clusters walk at 1.05x, coral blocks at 0.92x, kelpy cobblestone and mossy flower cobblestone at 1.15x, kelpy, tooth and mossy flower bricks, scute shingles and manure bricks at 1.25x, scute pavements and polished manure at 1.25x [1x].
+- **Changed:** Sleeping bags, hammocks, bedrolls, pet beds, nests, kelp and thatch blocks, licked salt blocks and cardboard boxes walk at 0.88x [1x].
+- **Changed:** Vintage Delight jam and jello blocks walk at 0.45x [1x]; crates of produce, eggs and animals and beehives at 1.1x [1x].
 
 ## Wise Oak <!-- icon: minecraft:oak_log -->
 
@@ -68,6 +82,12 @@
 
 - **Changed:** Salt Dust is named Salt.
 
+## Bees <!-- icon: minecraft:honeycomb -->
+
+- **Changed:** Wild plants (wild carrots, beetroots, rice, tomatoes and the rest) no longer breed bees or feed hummingbirds; bees still pollinate wild onions, carrots and potatoes and no other wild plant.
+- **Changed:** Botania special flowers, the flower crown and azalea leaf and flower piles no longer breed bees or feed hummingbirds.
+- **New:** Just Enough Breeding pages for ducks, geese, grizzly bears (Buzzier Bees), Fungi Delight mooshrooms and Cozy cats.
+
 ## Rabbits <!-- icon: minecraft:rabbit_foot -->
 
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
@@ -89,3 +109,16 @@
 ## Portals <!-- icon: portalgun:portal_gun -->
 
 - **Fixed:** The Immersive Portals portal block has a name.
+
+## Food & Cooking
+
+- **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
+- **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
+- **Changed:** The Spice of Life Food Book is called Diet Tracker.
+- **Changed:** Lunchboxes show as not counting for food diversity; the food eaten out of them still counts.
+- **Changed:** Diet Tracker bonuses start after 5 foods eaten [10]. Applies to new worlds.
+- **Fixed:** Flavoured Rustic Delight pancakes placed on a coaster showed a missing model.
+
+## Blocks <!-- icon: createdeco:cast_iron_block -->
+
+- **Changed:** Create Deco's Cast Iron Block is now called Cast Iron Plating (was Cast Iron Block).

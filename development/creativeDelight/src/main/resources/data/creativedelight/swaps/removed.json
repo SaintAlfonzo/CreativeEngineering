@@ -1,8 +1,26 @@
 {
-  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Display baked tentacle plate: tentacle foods removed (creativedelight members #36, plan_creative_delight.md I1, 2026-11-02). Golden Food enchantment goldenfood:gf_enchantment removed with its anvil recipe; enchanted golden foods come from sequenced assembly (creativedelight members #50, golden_food.md 3.4, 2026-11-02). Delightful's nut dough removed (merges/dishes #7, owner 2026-11-02; still registered by the repack, hidden through the removed items).",
+  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Display baked tentacle plate: tentacle foods removed (creativedelight members #36, plan_creative_delight.md I1, 2026-11-02). Golden Food enchantment goldenfood:gf_enchantment removed with its anvil recipe; enchanted golden foods come from sequenced assembly (creativedelight members #50, golden_food.md 3.4, 2026-11-02). Golden and gilded mushroom stew, beetroot soup and rabbit stew and their cans removed (owner 2026-11-10; old-world stacks deleted, not converted). Delightful's nut dough removed (merges/dishes #7, owner 2026-11-02; still registered by the repack, hidden through the removed items).",
   "removed": [
     "displaydelight:od_plated_baked_tentacle_on_a_stick",
     "goldenfood:gf_enchantment",
-    "delightful:nut_dough"
+    "delightful:nut_dough",
+    "goldenfood:golden_mushroom_stew",
+    "creativedelight:canned_golden_mushroom_stew",
+    "creativeengineering:canned_golden_mushroom_stew",
+    "goldenfood:enchanted_golden_mushroom_stew",
+    "creativedelight:canned_enchanted_golden_mushroom_stew",
+    "creativeengineering:canned_enchanted_golden_mushroom_stew",
+    "goldenfood:golden_beetroot_soup",
+    "creativedelight:canned_golden_beetroot_soup",
+    "creativeengineering:canned_golden_beetroot_soup",
+    "goldenfood:enchanted_golden_beetroot_soup",
+    "creativedelight:canned_enchanted_golden_beetroot_soup",
+    "creativeengineering:canned_enchanted_golden_beetroot_soup",
+    "goldenfood:golden_rabbit_stew",
+    "creativedelight:canned_golden_rabbit_stew",
+    "creativeengineering:canned_golden_rabbit_stew",
+    "goldenfood:enchanted_golden_rabbit_stew",
+    "creativedelight:canned_enchanted_golden_rabbit_stew",
+    "creativeengineering:canned_enchanted_golden_rabbit_stew"
   ]
 }

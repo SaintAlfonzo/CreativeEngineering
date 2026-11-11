@@ -233,7 +233,7 @@ which `audit_loot_containers.py` uses too.
   paths, `*` in the file name = first match), `resource_guard_own_files`, `resource_guard_name` and optional
   `resource_guard_arr=true` add `checkNoUpstreamResources` (or `checkNoArrResources`) to `check` and `jar`: the build
   fails if `src/main/resources` has a path that is also in one of the jars, except the own files. Used by
-  backportedMiners, backportedVinery (two jars; a clash names its jar), Rustic and Ender's (ARR: the installed
+  backportedMiners, backportedVinery (two jars; a clash names its jar) and Ender's (Rustic until its 2026-11-10 bake, which ships the MIT files) (ARR: the installed
   `mods/endersdelight-*.jar`). Not `upstream_jar`, which is the donor or repack jar of `ce.forge-repack` and the port
   tools.
 - **Shared Java sources** (`development/shared/<module>/`, 2026-10-27, pack_hygiene findings 36 and 38). Code that

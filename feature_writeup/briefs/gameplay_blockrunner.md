@@ -99,7 +99,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 ### Build
 1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modelled on
    [devtools/WthitIconDump.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java)
-   (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/cedumpsurface` (op 2;
+   (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/dumpsurface` (op 2;
    tags are loaded on the server) writes `kubejs/exported/surface_audit.json`, one row per block (default state):
    `id`, `collisionTop` (`getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).max(Y)`, -1 when empty),
    `tier` (`RunSpeed.tierOf`), `override` (`BlockSpeedManager.INSTANCE.hasBlockSpeed` without a tier), `friction`
@@ -109,7 +109,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
    `collisionTop >= 0.2`, an item, no tier / override / native factor, and not in the baseline; group per mod as today;
    exit 3 when anything is listed. `--write-baseline` writes `tools/blockrunner_untiered_baseline.json` (the reviewed
    "untiered on purpose" set). Keep the old regex mode for when no dump exists.
-3. **generators.json:** extend `blockrunner_scan`: `dumps` += `"cedumpsurface"`, `args: ["--audit",
+3. **generators.json:** extend `blockrunner_scan`: `dumps` += `"dumpsurface"`, `args: ["--audit",
    "kubejs/exported/surface_audit.json"]`, `warnExit: [3]`, `highlight` for the "untyped" lines. With
    `[debug.generators]` on, it runs at dev-instance startup: that is the watcher.
 4. **The audit itself.** In the dev instance: `/cdevgen run blockrunner dumps`, read the list, tier each newcomer in
@@ -142,7 +142,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 - item_dict.js / tag_helper.js are startup scripts: new keys need a restart, not `/reload`.
 
 ### Tests
-- **BR-53 Audit dump:** `/cedumpsurface` -> `kubejs/exported/surface_audit.json` exists, IP asphalt reads tier
+- **BR-53 Audit dump:** `/dumpsurface` -> `kubejs/exported/surface_audit.json` exists, IP asphalt reads tier
   `asphalt`, soul sand `speedFactor 0.4` and no tier, a carpet `collisionTop` 0.0625; `python3 tools/blockrunner_scan.py
   --audit kubejs/exported/surface_audit.json` exits 0 against the fresh baseline.
 - **BR-54 Watcher catches a newcomer:** remove one tiered id from blocktags.js (e.g. `item.ice_crate`), restart with
@@ -177,7 +177,7 @@ asphalt, and no block keeps a speed of its own on top of a tier.
   No offline list of modded blocks with `speedFactor != 1`, `friction < 0.6` or `jumpFactor != 1` exists.
 
 ### Build
-1. Run #2's `/cedumpsurface` and filter its rows: `speedFactor != 1.0` or `friction < 0.6` (grippier than normal,
+1. Run #2's `/dumpsurface` and filter its rows: `speedFactor != 1.0` or `friction < 0.6` (grippier than normal,
    like D&D asphalt was) or `jumpFactor != 1.0`, excluding soul sand / soil.
 2. For each hit: put it in the tier that matches its material (BlockRunner then overrides its speed factor), and reset
    friction < 0.6 to 0.6 in `block_properties.js` the same way as D&D asphalt (`e.modify(global.item[key], b =>

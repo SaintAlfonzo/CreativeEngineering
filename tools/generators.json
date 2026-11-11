@@ -305,6 +305,16 @@
       "apply": "input for tools/blockrunner_tag_sim.js (node), nothing in game"
     },
     {
+      "id": "blockrunner_audit",
+      "script": "tools/blockrunner_scan.py",
+      "args": ["--audit", "kubejs/exported/surface_audit.json"],
+      "groups": ["reports", "blockrunner"],
+      "dumps": ["dumpsurface"],
+      "apply": "report only: tier the listed blocks in kubejs/server_scripts/tags/blocktags.js, then /reload and rerun",
+      "warnExit": [3],
+      "highlight": ["^# walkable, no tier: [1-9]", "^## "]
+    },
+    {
       "id": "display_delight_names",
       "script": "tools/gen_display_delight_names.py",
       "groups": ["names"],

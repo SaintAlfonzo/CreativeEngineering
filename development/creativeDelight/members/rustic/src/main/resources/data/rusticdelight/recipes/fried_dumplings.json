@@ -1,0 +1,27 @@
+{
+  "type": "farmersdelight:cooking",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_fried_foods"
+    }
+  ],
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "tag": "rusticdelight:cooking_oil"
+    },
+    {
+      "item": "farmersdelight:dumplings"
+    },
+    {
+      "item": "farmersdelight:dumplings"
+    }
+  ],
+  "recipe_book_tab": "misc",
+  "result": {
+    "count": 2,
+    "item": "rusticdelight:fried_dumplings"
+  }
+}

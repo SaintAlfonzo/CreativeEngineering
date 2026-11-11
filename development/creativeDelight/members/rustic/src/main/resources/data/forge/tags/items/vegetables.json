@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#forge:vegetables/potato",
+      "required": false
+    },
+    {
+      "id": "#forge:vegetables/bell_pepper",
+      "required": false
+    }
+  ]
+}

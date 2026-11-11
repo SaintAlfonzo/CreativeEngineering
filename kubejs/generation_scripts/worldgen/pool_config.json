@@ -4835,7 +4835,7 @@
     "minecraft:village/desert/streets": {
       "fallback": "minecraft:village/desert/terminators",
       "elements": {
-        "beautify:botanist_house_desert": { "original": 2, "current": 2, "enabled": true },
+        "beautify:botanist_house_desert": { "original": 1, "current": 1, "enabled": true },
         "minecraft:village/desert/streets/corner_01": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/corner_02": { "original": 3, "current": 3, "enabled": true },
         "minecraft:village/desert/streets/crossroad_01": { "original": 3, "current": 3, "enabled": true },
@@ -5027,7 +5027,7 @@
     "minecraft:village/plains/streets": {
       "fallback": "minecraft:village/plains/terminators",
       "elements": {
-        "beautify:botanist_house_plains": { "original": 2, "current": 2, "enabled": true },
+        "beautify:botanist_house_plains": { "original": 1, "current": 1, "enabled": true },
         "minecraft:village/plains/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/plains/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5234,7 +5234,7 @@
     "minecraft:village/savanna/streets": {
       "fallback": "minecraft:village/savanna/terminators",
       "elements": {
-        "beautify:botanist_house_savanna": { "original": 2, "current": 2, "enabled": true },
+        "beautify:botanist_house_savanna": { "original": 1, "current": 1, "enabled": true },
         "minecraft:village/savanna/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/savanna/streets/crossroad_02": { "original": 1, "current": 1, "enabled": true },
@@ -5453,7 +5453,7 @@
     "minecraft:village/snowy/streets": {
       "fallback": "minecraft:village/snowy/terminators",
       "elements": {
-        "beautify:botanist_house_snowy": { "original": 2, "current": 2, "enabled": true },
+        "beautify:botanist_house_snowy": { "original": 1, "current": 1, "enabled": true },
         "minecraft:village/snowy/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/snowy/streets/corner_03": { "original": 2, "current": 2, "enabled": true },
@@ -5660,7 +5660,7 @@
     "minecraft:village/taiga/streets": {
       "fallback": "minecraft:village/taiga/terminators",
       "elements": {
-        "beautify:botanist_house_taiga": { "original": 2, "current": 2, "enabled": true },
+        "beautify:botanist_house_taiga": { "original": 1, "current": 1, "enabled": true },
         "minecraft:village/taiga/streets/corner_01": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_02": { "original": 2, "current": 2, "enabled": true },
         "minecraft:village/taiga/streets/corner_03": { "original": 2, "current": 2, "enabled": true },

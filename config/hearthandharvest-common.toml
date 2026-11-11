@@ -92,7 +92,7 @@
 	#Chance per second that a wild crow within 10 blocks starts a theft.
 	#Range: 0.0 ~ 1.0
 	stealChance = 0.1
-	#A crow carrying loot leaves it in a nest within 16 blocks. For the crow eval.
+	#A crow carrying loot leaves it in a nest within 16 blocks.
 	stashInNests = true
 	#A hit makes a crow drop its loot. Off, it keeps the loot until it dies or the carry time ends.
 	dropOnHurt = true
@@ -102,16 +102,37 @@
 	#Blocks at which players, villagers and repelling blocks scare wild crows. 0 stops them being scared.
 	#Range: 0 ~ 32
 	scareRadius = 6
-	#Ground nests generate in new chunks. For the crow eval.
+	#Nests generate on tree tops in temperate forests in new chunks.
 	generateNests = true
-	#Crows may spawn near world-generated nests.
-	spawnNearNests = true
-	#Radius checked for nests and crops when a crow spawns. 0 skips the check.
+	#Tame crows pick up items near their owner and bring them over.
+	fetchItems = true
+	#Tame crows also fetch items their owner threw away.
+	fetchThrownItems = true
+	#Tame crows hop off their owner's shoulder to fetch an item.
+	leaveShoulderToFetch = true
+	#Nests generate on village house roofs in new chunks.
+	villageRoofNests = true
+	#Chance per village house of a roof nest.
+	#Range: 0.0 ~ 1.0
+	villageRoofNestChance = 0.25
+	#Fewest crows a nest generates with. Crows have no other natural spawn.
+	#Range: 0 ~ 8
+	nestFlockMin = 2
+	#Most crows a nest generates with.
+	#Range: 0 ~ 8
+	nestFlockMax = 3
+	#A generated nest stops refilling once this many crows are within nestCrowRange.
 	#Range: 0 ~ 16
-	spawnRadius = 8
-	#Crops needed within the radius for a crow to spawn near them. 0 skips the crop check.
-	#Range: 0 ~ 256
-	cropRequirement = 8
-	#Crows spawn only near nests or crops (the upstream rule). Off keeps every other spawn.
-	denySpawnsElsewhere = false
+	nestCrowCap = 3
+	#Blocks around a nest in which crows count towards nestCrowCap.
+	#Range: 4 ~ 64
+	nestCrowRange = 24
+	#Minutes of game time between two crows from the same nest.
+	#Range: 1 ~ 120
+	nestRespawnMinutes = 5
+	#A nest refills only with a player within this many blocks.
+	#Range: 8 ~ 128
+	nestPlayerRange = 48
+	#Player-placed nests also make crows. Off stops crow farms.
+	playerNestsSpawnCrows = false
 

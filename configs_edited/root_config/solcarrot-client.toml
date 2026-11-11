@@ -1,0 +1,11 @@
+["milestone celebration"]
+	shouldPlayMilestoneSounds = false
+	shouldSpawnIntermediateParticles = false
+	shouldSpawnMilestoneParticles = false
+
+[miscellaneous]
+	#Pack: off, Diet Tracker's tooltip already shows eaten state.
+	isFoodTooltipEnabled = false
+	shouldShowProgressAboveHotbar = false
+	#The Food Dictionary lists foods you have not eaten yet.
+	shouldShowUneatenFoods = true

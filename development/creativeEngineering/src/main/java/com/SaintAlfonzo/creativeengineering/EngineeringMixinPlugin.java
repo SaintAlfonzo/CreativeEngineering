@@ -4,6 +4,7 @@ import com.SaintAlfonzo.creativeengineering.shared.GatedMixinPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Mixin config plugin for creativeengineering.mixins.json: the table form of the shared {@link GatedMixinPlugin}
@@ -35,6 +36,9 @@ public class EngineeringMixinPlugin extends GatedMixinPlugin {
             // Exclusive results on Create processing recipes (fan/)
             Map.entry("ProcessingRecipeMixin", CREATE),
             Map.entry("ProcessingRecipeSerializerMixin", CREATE),
+            // Result pools (fan/ResultPools, plan_flesh_recipes.md 5.3): crushing and milling output cap, crusher inventory
+            Map.entry("CrushingOutputCapMixin", CREATE),
+            Map.entry("ProcessingInventoryMixin", CREATE),
             // From Creative Common 2026-11-07 (creative_engineering.md 7.1): sequenced assembly keeps gear NBT, Builder's
             // Tea pipe Haste icon, IE fluid inputs by id with subset NBT match, drink fluid effect lines in JEI
             Map.entry("SequencedAssemblyRecipeMixin", CREATE),
@@ -57,5 +61,15 @@ public class EngineeringMixinPlugin extends GatedMixinPlugin {
 
     public EngineeringMixinPlugin() {
         super("[creativeengineering]", NEEDS_MOD, MOD_RANGE);
+    }
+
+    /** Mixins on Create's JEI categories: they need Create and JEI both, where the table gate is any of its mods. */
+    private static final Set<String> NEEDS_CREATE_AND_JEI = Set.of("JeiCrushingPoolsMixin", "JeiMillingPoolsMixin");
+
+    @Override
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (NEEDS_CREATE_AND_JEI.contains(mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1)))
+            return modOn("create") && modOn("jei");
+        return super.shouldApplyMixin(targetClassName, mixinClassName);
     }
 }

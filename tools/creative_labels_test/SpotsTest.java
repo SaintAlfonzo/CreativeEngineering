@@ -1,9 +1,9 @@
-import com.SaintAlfonzo.creative_labels.block.FaceContent;
-import com.SaintAlfonzo.creative_labels.block.FacePaperInteractions;
-import com.SaintAlfonzo.creative_labels.block.LabelData;
-import com.SaintAlfonzo.creative_labels.block.NoteData;
-import com.SaintAlfonzo.creative_labels.block.PieceHit;
-import com.SaintAlfonzo.creative_labels.block.Spots;
+import com.SaintAlfonzo.creativelabels.block.FaceContent;
+import com.SaintAlfonzo.creativelabels.block.FacePaperInteractions;
+import com.SaintAlfonzo.creativelabels.block.LabelData;
+import com.SaintAlfonzo.creativelabels.block.NoteData;
+import com.SaintAlfonzo.creativelabels.block.PieceHit;
+import com.SaintAlfonzo.creativelabels.block.Spots;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

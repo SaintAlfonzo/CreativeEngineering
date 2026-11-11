@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_pancakes"
+    },
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_syrup_foods"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "supplementaries:pancake"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "item": "rusticdelight:pancakes"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_coffee"
+    }
+  ],
+  "cookingtime": 100,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "rusticdelight:coffee_beans"
+  },
+  "result": "rusticdelight:roasted_coffee_beans"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "squids_drop_calamari"
+    }
+  ],
+  "cookingtime": 100,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "rusticdelight:calamari"
+  },
+  "result": "rusticdelight:cooked_calamari"
+}

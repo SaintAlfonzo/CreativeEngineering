@@ -1,7 +1,7 @@
-import com.SaintAlfonzo.creative_labels.block.Spots;
-import com.SaintAlfonzo.creative_labels.client.DonorArt;
-import com.SaintAlfonzo.creative_labels.client.LabelQuads;
-import com.SaintAlfonzo.creative_labels.client.NoteShape;
+import com.SaintAlfonzo.creativelabels.block.Spots;
+import com.SaintAlfonzo.creativelabels.client.DonorArt;
+import com.SaintAlfonzo.creativelabels.client.LabelQuads;
+import com.SaintAlfonzo.creativelabels.client.NoteShape;
 import net.minecraft.core.Direction;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.phys.AABB;

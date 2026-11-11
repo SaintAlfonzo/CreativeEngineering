@@ -98,7 +98,6 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 | creativedelight | `miners_upstream/` | `miners_delight-1.19.2-1.1.2.jar` | `23701e0772676ff74c0290387c90fd9365987673` | https://mediafilez.forgecdn.net/files/4738/272/miners_delight-1.19.2-1.1.2.jar (CurseForge, Miner's Delight 1.19.2-1.1.2 for Forge 1.19.2, project 689630 file 4738272) |
 | creativedelight | `oceanic_upstream/` | `oceanic_delight-1.0.1-forge-1.19.2.jar` | `91fd8842a5bf9b55c2d9fb39f721129bc6cae1b5` | https://cdn.modrinth.com/data/O1qboAbB/versions/9JkMCuAa/oceanic_delight-1.0.1-forge-1.19.2.jar (Modrinth, Oceanic Delight 1.0.1 for Forge 1.19.2) |
 | creativedelight | `roll_upstream/` | `roll_delight-1.3.1-forge-1.20.1.jar` | `e23d48373f2a62c51533d15cd99eb24397f8d8d8` | CurseForge, Roll Delight 1.3.1 for Forge 1.20.1 (file "[1.20.1] Roll Delight-1.3.1-forge-.jar", renamed) |
-| creativedelight | `rustic_upstream/` | `rusticdelight-forge-1.20.1-1.7.0.jar` | `bca9adf60b59951ae5049149185da64a6f7b6f8a` | https://cdn.modrinth.com/data/foa4fGIH/versions/z29Gd3ec/rusticdelight-forge-1.20.1-1.7.0.jar (Modrinth, Rustic Delight 1.7.0 for Forge 1.20.1) |
 | creativeworldgen | `farmers_upstream/` | `FarmersStructures-1.0.6-1.21.1_neoforge.jar` | `94262398153d7ca5dc9ffb93e49acdbad85af223` | Farmer's Structures 1.0.6 for NeoForge 1.21.1 (CurseForge / Modrinth) |
 
 4. Copy `kubejs/`, `config/` and `defaultconfigs/` into the instance.

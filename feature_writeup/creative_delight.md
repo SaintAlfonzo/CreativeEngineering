@@ -1116,7 +1116,7 @@ tested in node (on, off, throwing). Live checks are queued (scratch_queue.md SQ-
 
 Owner: execute the Rustic Delight fold-in and backport. Rustic Delight is all rights reserved, so it cannot be repacked:
 `backportedRustic` (`members/rustic`) is a fresh port of 1.7.0 that reads art and data from the unmodified donor in
-`rustic_upstream/` (the Miner's route), built as a member from the start (`bundled_in=creativeDelight`, fifth in
+`rustic_upstream/` (the Miner's route; since 2026-11-10 MIT is confirmed and the files are baked into the member instead, no donor folder: [rustic_delight.md](rustic_delight.md) 5.14), built as a member from the start (`bundled_in=creativeDelight`, fifth in
 `bundle_members`; `rusticdelight-*.jar` in `replaces_jars`). Member switch `rusticdelight` comes from the generated member
 list. Its pack rows are in `kubejs/data/creativedelight/kubejs/rusticdelight/` (`loot.js`, `recipes.js`, `tags.js`,
 `trades.js`). The village farm crop processor (`farm/VillageFarmCrops`, `creativedelight:village_farm_crops`) lives in the CD

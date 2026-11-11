@@ -383,6 +383,8 @@ global.NCH = {
 		}
 		if (!id && typeof v.fluid === 'string') id = v.fluid
 		if (!id && typeof v.tag === 'string') id = v.tag
+		// Create's own fluid tag shape (createFluidTag): { fluidTag: 'ns:path', amount }
+		if (!id && typeof v.fluidTag === 'string') id = '#' + v.fluidTag
 		if (!id && typeof v.id === 'string') id = v.id
 
 		var amount
@@ -1813,7 +1815,7 @@ global.NCH = {
 		if (!global.has('sophisticatedbackpacks')) return global.NCH._skip('sophisticatedbackpacks')
 		var idSuffix = idOverride ?? 'backpack_skin'
 		e.custom({
-			type: `${global.NCH.modId}:backpack_skin`,
+			type: 'creativeequipment:backpack_skin',
 			addition: { tag: skinTag }
 		}).id(`${global.NCH.ns()}:smithing/${idSuffix}`)
 	},
@@ -1822,7 +1824,7 @@ global.NCH = {
 		if (!e) throw new Error('backpackSkinClear called without event object!')
 		if (!global.has('sophisticatedbackpacks')) return global.NCH._skip('sophisticatedbackpacks')
 		var idSuffix = idOverride ?? 'backpack_skin_clear'
-		e.custom({ type: `${global.NCH.modId}:backpack_skin_clear` }).id(`${global.NCH.ns()}:backpackskin/${idSuffix}`)
+		e.custom({ type: 'creativeequipment:backpack_skin_clear' }).id(`${global.NCH.ns()}:backpackskin/${idSuffix}`)
 	},
 
 	// Lunchboxes (patcherMod lunchbox/): Spice of Life keeps a box's food in a capability, which vanilla
@@ -1883,7 +1885,7 @@ global.NCH = {
 		global.NCH._validateAny(result, ctx + ' result')
 
 		e.custom({
-			type: `${global.NCH.modId}:elytra_duplication`,
+			type: 'creativeequipment:elytra_duplication',
 			catalyst: global.NCH._itemJson(catalyst, { countMode: 'none', context: ctx + ' catalyst' }),
 			result: global.NCH._itemJson(result, { countMode: 'flat', allowTag: false, context: ctx + ' result' })
 		}).id(`${global.NCH.ns()}:elytraduplication/${idSuffix}`)
@@ -1930,7 +1932,12 @@ global.NCH = {
 		], [key], e, key + '_sequenced_assembly', loops)
 	},
 
-	createCrushing(output, input, e, idOverride, mirrorMilling) {
+	// opts.pools: result pools (creativeEngineering fan/ResultPools, plan_flesh_recipes.md 3): lists of output indices.
+	// Per processed item a pool gives floor(sum of its chances) picks plus one more at the fraction, each pick one of
+	// its outputs weighted by its chance; outputs in no pool roll on their own. JEI shows one cycling slot per pool.
+	// Both machines take up to 24 outputs with pools. opts.processingTime (100) applies with pools only.
+	//   R.createCrushing([meat1, meat2, bone1, Item.of(x).withChance(0.5)], i.flesh, e, 'flesh', true, { pools: [[0, 1], [2]] })
+	createCrushing(output, input, e, idOverride, mirrorMilling, opts) {
 		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createCrushing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createcrushing")
@@ -1939,17 +1946,19 @@ global.NCH = {
 		global.NCH._validateAny(output, ctx + ' output')
 		global.NCH._validateAny(input, ctx + ' input')
 
-		e.recipes.create.crushing(output,input).id(`${global.NCH.ns()}:createcrushing/${idSuffix}`)
+		if (opts && opts.pools) global.NCH._pooledProcessing('create:crushing', output, input, e, ctx, opts)
+			.id(`${global.NCH.ns()}:createcrushing/${idSuffix}`)
+		else e.recipes.create.crushing(output,input).id(`${global.NCH.ns()}:createcrushing/${idSuffix}`)
 
 		// Optional: also register the same output/input as a Millstone recipe, for
 		// ores/materials that should be processable on either machine (the Millstone
 		// is simpler but doesn't need Crushing Wheels). Gets its own toId-derived id
 		// rather than reusing idSuffix - a "_by_createcrushing" suffix on a milling
 		// recipe would be misleading.
-		if (mirrorMilling) global.NCH.createMilling(output, input, e)
+		if (mirrorMilling) global.NCH.createMilling(output, input, e, undefined, opts)
 	},
 
-	createMilling(output, input, e, idOverride) {
+	createMilling(output, input, e, idOverride, opts) {
 		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
 		if (!e) throw new Error('createMilling called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "createmilling")
@@ -1958,7 +1967,33 @@ global.NCH = {
 		global.NCH._validateAny(output, ctx + ' output')
 		global.NCH._validateAny(input, ctx + ' input')
 
-		e.recipes.create.milling(output,input).id(`${global.NCH.ns()}:createmilling/${idSuffix}`)
+		if (opts && opts.pools) global.NCH._pooledProcessing('create:milling', output, input, e, ctx, opts)
+			.id(`${global.NCH.ns()}:createmilling/${idSuffix}`)
+		else e.recipes.create.milling(output,input).id(`${global.NCH.ns()}:createmilling/${idSuffix}`)
+	},
+
+	// A Create processing recipe with result_pools, as JSON (kubejs-create has no key for it). Checks the indices.
+	_pooledProcessing(type, output, input, e, ctx, opts) {
+		var outputs = Array.isArray(output) ? output : [output]
+		if (outputs.length > 24) global.NCH._warn(ctx, 'takes up to 24 outputs with pools')
+		var used = {}
+		var pools = opts.pools.map((pool, p) => {
+			if (!Array.isArray(pool) || pool.length === 0) throw new Error(ctx + ': pool ' + p + ' must be a non-empty list of output indices')
+			return pool.map(index => {
+				if (typeof index !== 'number' || index < 0 || index >= outputs.length || index % 1 !== 0)
+					throw new Error(ctx + ': pool ' + p + ' names output ' + index + ', there are ' + outputs.length)
+				if (used[index]) throw new Error(ctx + ': output ' + index + ' is in more than one pool')
+				used[index] = true
+				return index
+			})
+		})
+		return e.custom({
+			type: type,
+			ingredients: [global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' })],
+			results: outputs.map((o, n) => global.NCH._itemJson(o, { countMode: 'flat', includeChance: true, context: ctx + ' output ' + n })),
+			processingTime: global.NCH._or(opts.processingTime, 100),
+			result_pools: pools
+		})
 	},
 
 	// Mortar and pestle (creativedelight:mortar_and_pestle, i.mortar_and_pestle), shapeless in the crafting table:
@@ -2055,6 +2090,15 @@ global.NCH = {
 		if (heat === "superheated") r.superheated()
 
 		r.id(`${global.NCH.ns()}:createcompacting/${idSuffix}`)
+	},
+
+	// A fluid tag ingredient for Create basin, filling and spout recipes (mixing, compacting...). Fluid.of() takes one
+	// fluid only; kubejs-create reads an object with a fluidTag key as Create's FluidIngredient. Accepts '#ns:path'
+	// (a fluid_dict f.t_ key) or 'ns:path'. Pass an explicit idOverride with it: toId cannot name a tag object.
+	//   R.createMixing(out, [i.flesh, R.createFluidTag(f.t_plantoil, 1000)], e, 'flesh_cultivation')
+	createFluidTag(tag, amount) {
+		if (typeof tag !== 'string' || !tag) throw new Error('createFluidTag: tag must be a string, got ' + tag)
+		return { fluidTag: tag.startsWith('#') ? tag.substring(1) : tag, amount: global.NCH._or(amount, 1000) }
 	},
 
 	createMixing(output, input, e, idOverride, heat) {

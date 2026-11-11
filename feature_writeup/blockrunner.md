@@ -12,7 +12,8 @@ the block you're looking at.
 
 | Part | Layer | Status |
 |---|---|---|
-| 26 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). 2026-10-02: 1.0.4 mods tiered, sim 6355 ids, 0 overlaps; needs a restart (new item_dict keys), BR-52. The 11:54 `/dumptags` export matched the sim exactly |
+| Audit 2026-11-10: every walkable block tiered, 2 new 1.00 tiers (`furniture`, `flora`), `@mod` filter fix, watcher (`/dumpsurface` + `--audit`) | KubeJS tags, Creative Common `has.js`, Creative Compat `SurfaceTier`, Creative Devtools `SurfaceAudit` | Sim 13828 ids, 0 overlaps. Jars built, not installed (game open); restart needed. BR-59..64 |
+| 28 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). 2026-10-02: 1.0.4 mods tiered, sim 6355 ids, 0 overlaps; needs a restart (new item_dict keys), BR-52. The 11:54 `/dumptags` export matched the sim exactly |
 | SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | Loaded since the 14:49 restart (Rhino harness tested); untested in game (BR-38) |
 | Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behaviour untested |
 | Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behaviour untested |
@@ -85,37 +86,39 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
 
 ## 2. Reference: speed tiers
 
-Counts come from `tools/blockrunner_tag_sim.js` on 2026-09-27, after the whole-pack scan. They include
+Counts come from `tools/blockrunner_tag_sim.js` on 2026-11-10, after the audit (8). They include
 blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.speed]` keeps the same order. The × column shows the defaults.
 
 | Tier (`blockrunner:surface/…`) | × | # | What belongs | Examples |
 |---|---|---|---|---|
 | `asphalt` | 1.50 | 19 | Asphalt | IP asphalt + slab/stair, D&D Painted Asphalt (16 colours, renamed 2026-10-30; friction reset, see 3.5) |
-| `concrete` | 1.40 | 74 | Concrete | 16 vanilla concretes, IE concrete (leaded, tile, brick, sheet…) and hempcrete, Engineer's Decor rebar concrete, Dustrial Decor cinder blocks |
+| `concrete` | 1.40 | 75 | Concrete | 16 vanilla concretes, IE concrete (leaded, tile, brick, sheet…) and hempcrete, Engineer's Decor rebar concrete, Dustrial Decor cinder blocks |
 | `grating` | 1.30 | 52 | See-through walkway floors | Create Deco / Design n' Decor catwalks, Engineer's Decor steel catwalks and floor grating, Quark grate, Everything is Copper grates, Create and IE metal scaffolding (grate-top + standard), Dustrial Decor chain and iron-bar trapdoors |
-| `metal` | 1.25 | 1247 | Solid metal | storage blocks, every copper stage incl. waxed, sheet metal and plating (IE, Create Deco, Design n' Decor, Dustrial Decor, Architect's Palette), Railways locometal, davebuildingmod steel and boilers, Create copper shingles/tiles, metal fences, gates and trapdoors, CE plate and coil blocks, Canned Goods' sealed canned dirt |
-| `slippery` | 1.25 | 16 | Ice and soap | ice, packed/blue/frosted ice, Architect's Palette packed-ice family, Supplementaries soap block, IW thin ice |
-| `constructed_smooth` | 1.25 | 710 | Cut, polished and tiled stone | smooth stone, polished granite, quartz block, glazed terracotta, dark prismarine, diamond/emerald blocks, Quark pillars, Supplementaries checker + daub, Create polished cut limestone, Botania quartz, pavement and azulejo, AE2 quartz and fluix, Twigs polished stones and columns, kitchen floors |
-| `constructed_brick` | 1.25 | 1764 | Bricks and masonry | bricks, stone/nether/mud bricks, deepslate tiles, prismarine, purpur, Quark shingles, every modded brick and tile family (Create Deco, Architect's Palette, Botania, Twigs, Clayworks, Design n' Decor castel, PneumaticCraft incl. plastic bricks, IE alloy/blast/coke brick), Mosaic Masonry bonds, Engineer's Decor clinker bricks and shingle roofs |
-| `natural_path` | 1.15 | 92 | Trodden ground | dirt path, coarse dirt, gravel, IE slag gravel, raked gravel, every cobblestone family incl. Botania metamorphic cobble, ballast, rocky dirt, dense grit |
-| `wood` | 1.10 | 632 | Wood | planks, logs, stripped wood, wooden slabs/stairs, wooden fences, fence gates and trapdoors, vanilla scaffolding, IE treated wood, Quark vertical planks/hollow logs/crates, Architect's Palette boards, Decorative Blocks beams and palisades, drawer trims, food crates, log piles, timber frames |
-| `natural_smooth` | 1.05 | 488 | Raw rock | stone, deepslate, tuff, calcite, terracotta, every ore (`#forge:ores`), obsidian, amethyst and budding amethyst, bone blocks, bedrock, Quark jasper/limestone/corundum, Create asurine, D&D gabbro, Botania livingrock, AE2 sky stone, Twigs schist/rhyolite/bloodstone, geode crystal blocks |
-| `machinery` | 1.00 | 0 | *Reserved for Create/IE machines.* Not filled yet | — |
-| `functional` | 1.00 | 0 | *Reserved for chests, furnaces, workstations.* Not filled yet | — |
-| `decorative` | 1.00 | 0 | *Reserved for furniture, lamps, signage.* Not filled yet | — |
+| `metal` | 1.25 | 1261 | Solid metal | storage blocks, every copper stage incl. waxed, sheet metal and plating (IE, Create Deco, Design n' Decor, Dustrial Decor, Architect's Palette), Railways locometal, davebuildingmod steel and boilers, Create copper shingles/tiles, metal fences, gates and trapdoors, CE plate and coil blocks, Canned Goods' sealed canned dirt |
+| `slippery` | 1.25 | 17 | Ice and soap | ice, packed/blue/frosted ice, Architect's Palette packed-ice family, Supplementaries soap block, IW thin ice |
+| `constructed_smooth` | 1.25 | 748 | Cut, polished and tiled stone | smooth stone, polished granite, quartz block, glazed terracotta, dark prismarine, diamond/emerald blocks, Quark pillars, Supplementaries checker + daub, Create polished cut limestone, Botania quartz, pavement and azulejo, AE2 quartz and fluix, Twigs polished stones and columns, kitchen floors |
+| `constructed_brick` | 1.25 | 1877 | Bricks and masonry | bricks, stone/nether/mud bricks, deepslate tiles, prismarine, purpur, Quark shingles, every modded brick and tile family (Create Deco, Architect's Palette, Botania, Twigs, Clayworks, Design n' Decor castel, PneumaticCraft incl. plastic bricks, IE alloy/blast/coke brick), Mosaic Masonry bonds, Engineer's Decor clinker bricks and shingle roofs |
+| `natural_path` | 1.15 | 135 | Trodden ground | dirt path, coarse dirt, gravel, IE slag gravel, raked gravel, every cobblestone family incl. Botania metamorphic cobble, ballast, rocky dirt, dense grit |
+| `wood` | 1.10 | 863 | Wood | planks, logs, stripped wood, wooden slabs/stairs, wooden fences, fence gates and trapdoors, vanilla scaffolding, IE treated wood, Quark vertical planks/hollow logs/crates, Architect's Palette boards, Decorative Blocks beams and palisades, drawer trims, food crates, log piles, timber frames |
+| `natural_smooth` | 1.05 | 657 | Raw rock | stone, deepslate, tuff, calcite, terracotta, every ore (`#forge:ores`), obsidian, amethyst and budding amethyst, bone blocks, bedrock, Quark jasper/limestone/corundum, Create asurine, D&D gabbro, Botania livingrock, AE2 sky stone, Twigs schist/rhyolite/bloodstone, geode crystal blocks |
+| `machinery` | 1.00 | 1178 | Machines, logic and electronics | Create, D&D, Create addons, IE, IP, PneumaticCraft, AE2, ComputerCraft and peripherals, pipes, belts, casings, tanks, gates, SecurityCraft devices, pistons, hoppers, observers, redstone lamp, Quark magnets and pipes |
+| `functional` | 1.00 | 1473 | Workstations and magic or utility blocks | crafting tables, furnaces, smokers, anvils, cauldrons, stoves, ovens, cooking pots, kegs, Botania apothecaries, pools and spreaders, waystones, Botany Pots, Lightman's Currency traders, Supplementaries, Blocky Siege weapons, beacon, spawner, TNT |
+| `decorative` | 1.00 | 1498 | Decor with no walk material of its own | trim, girders, supports, vents, lamps, statues, headstones, coin piles, Architect's Palette nubs and lamps, davebuildingmod signs and vanta/ultra blocks, what is left of the decor and food mods |
+| `furniture` | 1.00 | 1980 | Furniture and storage | Handcrafted, Fantasy Furniture, redeco, Another Furniture, Storage Delight, Storage Drawers, cabinets, chests, barrels, shulker boxes, bookshelves, Every Compat furniture, backpacks |
+| `flora` | 1.00 | 92 | Plants you can stand on | cactus, chorus plant, big dripleaf, cocoa, Botania floating flowers, mushroom colonies, Neapolitan fronds and beanstalks |
 | `camouflage` | 1.00* | 169 | Blocks that copy another block's look | all FramedBlocks (minus the framing saw and item frames), all Copycats+, Create copycat panel/step. *Uses the camo's speed instead, see 3.3 |
-| `glass` | 1.00 | 217 | Glass | `#forge:glass`, tinted glass, Quark/Create:Framed framed glass, AE2 quartz glass, IE insulating/slag glass, Crystal Clear glass casings, panzerglass, Create windows, glass trapdoors, sea lantern, crystallized honey |
-| `dirt` | 1.00 | 24 | Leftover `#minecraft:dirt` (added last) | grass block, dirt, rooted dirt, Botania grasses and enchanted soil, FD rich soil, dirt/grass/loam slabs |
-| `natural_rough` | 0.92 | 69 | Rough, crumbly ground | podzol, mycelium, nylium, netherrack, basalt, coral blocks, raw ore blocks, ancient debris, coal/charcoal/coke blocks, glowstone, mangrove roots, IW and Twigs silt, compost |
-| `soft` | 0.88 | 338 | Soft and fibrous | wool, sponge, hay, target, moss, mushroom blocks, sculk (not vein), every bed, pet beds, froglights, petal blocks, D&D velvet and padded rubber, padded and cardboard blocks, sacks/bags/bales, honeycomb and paraffin wax blocks, thatch |
+| `glass` | 1.00 | 222 | Glass | `#forge:glass`, tinted glass, Quark/Create:Framed framed glass, AE2 quartz glass, IE insulating/slag glass, Crystal Clear glass casings, panzerglass, Create windows, glass trapdoors, sea lantern, crystallized honey |
+| `dirt` | 1.00 | 26 | Leftover `#minecraft:dirt` (added last) | grass block, dirt, rooted dirt, Botania grasses and enchanted soil, FD rich soil, dirt/grass/loam slabs |
+| `natural_rough` | 0.92 | 98 | Rough, crumbly ground | podzol, mycelium, nylium, netherrack, basalt, coral blocks, raw ore blocks, ancient debris, coal/charcoal/coke blocks, glowstone, mangrove roots, IW and Twigs silt, compost |
+| `soft` | 0.88 | 506 | Soft and fibrous | wool, sponge, hay, target, moss, mushroom blocks, sculk (not vein), every bed, pet beds, froglights, petal blocks, D&D velvet and padded rubber, padded and cardboard blocks, sacks/bags/bales, honeycomb and paraffin wax blocks, thatch |
 | `dust` | 0.85 | 67 | Loose powder | sand, red sand, concrete powder, gravisand, ash, IW sand layers, CE metal dust piles, flour and crushed-ore piles, powdered obsidian, gunpowder blocks, IE sawdust |
-| `confectionery` | 0.85 | 75 | Edible blocks | Create Confectionery chocolate/caramel/gingerbread, cake, pies, feasts (pizza, quiche, pancakes), ice cream blocks, FD ham/roast blocks, AP bread, sugar cube, melon, pumpkins, chorus fruit block, Golden Food's golden and enchanted golden cakes |
-| `tilled` | 0.80 | 3 | Crop fields | farmland, FD rich soil farmland, tilled end stone |
-| `leaves` | 0.78 | 43 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves |
+| `confectionery` | 0.85 | 630 | Edible blocks | Create Confectionery chocolate/caramel/gingerbread, cake, pies, feasts (pizza, quiche, pancakes), ice cream blocks, FD ham/roast blocks, AP bread, sugar cube, melon, pumpkins, chorus fruit block, Golden Food's golden and enchanted golden cakes |
+| `tilled` | 0.80 | 5 | Crop fields | farmland, FD rich soil farmland, tilled end stone |
+| `leaves` | 0.78 | 71 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves |
 | `snow` | 0.75 | 5 | Snow | snow block, snow layers (3+ layers register), powder snow (standable in leather boots), coarse snow |
 | `sticky` | 0.65 | 8 | One sticky face (facing-aware, see 3.2) | sticky piston, vanilla/Create piston heads, Create sticky mechanical piston, CTM sticky launchers, SecurityCraft reinforced sticky piston + head |
-| `spongy` | 0.60 | 13 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block, Visceral Heap flesh |
-| `very_sticky` | 0.45 | 3 | Whole slime/honey blocks | honey block, slime block, banana slug slime, Visceral Heap porous flesh (honey jump) |
+| `spongy` | 0.60 | 27 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block, Visceral Heap flesh |
+| `very_sticky` | 0.45 | 69 | Whole slime/honey blocks | honey block, slime block, banana slug slime, Visceral Heap porous flesh (honey jump) |
 
 SecurityCraft's reinforced blocks and disguised mines sit in the same tier as the vanilla block they copy (3.1).
 
@@ -125,11 +128,13 @@ tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys alw
 
 **Deliberately untiered:**
 - **Soul sand and soul soil:** a tier would stop Soul Speed from cancelling the slowdown.
-- **Magma**, and functional blocks until `functional`/`machinery` are filled: furniture, machines,
-  storage, workstations and doors (framed/copycat doors stay in camouflage).
-- **Anything too thin to register** (section 1).
-- **No clear material:** Architect's Palette cod/salmon logs and scales and the scute block,
-  davebuildingmod vanta/ultra colour blocks, Botania's disguising platforms (patcherMod can't read their camo).
+- **Magma:** left out (`auditSkip` in blocktags.js) until decided; the audit (`--audit`, 6) lists it.
+- **Fluids, portals, moving pistons, SecurityCraft fake water/lava, reinforced soul soil:** `auditSkip`.
+- **Anything too thin to register** (section 1), and plants with no collision (`#minecraft:flowers`,
+  `#minecraft:crops` are kept out of the whole-mod entries).
+- Since the 2026-11-10 audit, blocks with no clear material go in a 1.00 tier (no speed change): Architect's
+  Palette cod/salmon logs and scales and davebuildingmod vanta/ultra blocks in `decorative`, Botania's disguising
+  platforms in `functional`. Doors not in camouflage stay untiered (thin when open, never stood on when closed).
 
 **Helper tags** (pack-owned, read by patcherMod):
 - `#creativecompat:sinking` = soft + dust + spongy + very_sticky
@@ -491,6 +496,9 @@ the blocks touching the entity's sides.
 - Tooltip side: [tooltips.md](tooltips.md)
 - Offline tier check: [tools/blockrunner_tag_sim.js](../tools/blockrunner_tag_sim.js)
 - Whole-pack scan: [tools/blockrunner_scan.py](../tools/blockrunner_scan.py), writes [tools/blockrunner_untagged_blocks.json](../tools/blockrunner_untagged_blocks.json)
+- Audit dump: `/dumpsurface` (in `/dumpall`), [SurfaceAudit.java](../development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/dump/SurfaceAudit.java)
+  in Creative Devtools, writes `kubejs/exported/surface_audit.json`; reads `RunSpeed.REGISTER_HEIGHT` and `RunSpeed.runnerFactor`
+  from Creative Compat (install both jars together). Generator entry `blockrunner_audit` in [tools/generators.json](../tools/generators.json)
 
 ## 6. Offline checks
 
@@ -504,6 +512,12 @@ the blocks touching the entity's sides.
 - **What's left untiered:** `node tools/blockrunner_tag_sim.js /tmp/t.json && python3 tools/blockrunner_scan.py /tmp/t.json`
   prints every untiered block that could register, per mod, colours and wood types collapsed. Re-run
   `/dumptags` and `/kubejs export` in game after adding mods, then this, to tier the newcomers.
+  Names alone decide "thin" here, so it misses walkable tables, shelves and lamps; the audit below does not.
+- **Watcher (2026-11-10):** `/dumpsurface` in game (or `/cdevgen run blockrunner_audit`), then
+  `python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json`. Lists every block with an item,
+  collision top >= 0.2, no tier, no json override and its own speed factor 1, grouped per mod, and exits 3 when
+  there is any (the generator warns). Then an outlier list: friction != 0.6, jump != 1 or speed != 1, tiered or
+  not (a tier replaces the speed factor; friction and jump stay). After every new mod: run it, tier what it lists.
 - **patcherMod:** `cd patcherMod && ./gradlew build --offline`. Then copy
   `build/libs/creativeengineering-1.0.1.jar` to `mods/` **with the game closed** and compare `md5sum`
   of both files.
@@ -561,10 +575,10 @@ the blocks touching the entity's sides.
 - [x] **BR-24 Others sink:** a pig on wool, a dropped item on sand and a ridden horse on sand all sit lower. The rider sinks with the horse.
 - [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, mid-jump over sand → no extra sink. (Honey changed 2026-11-10, see BR-54.)
 - [ ] **BR-26 Off switch:** `depthPixels = 0` → nothing sinks. Set it back to `2` afterwards.
-- [ ] **BR-53 No bump between sunken blocks (2026-11-10):** default `depthPixels = 2`, first person. Walk slowly across slime → honey → slime, wool → mud → wool, and wool → dirt path. → The view never pops up at the seam; it only moves once you are on the next block (none at all slime/honey and wool/mud, a 1 px drop onto the path).
-- [ ] **BR-54 Even depth:** F5 beside a pig on wool and one on a honey block. → Both sit equally deep (honey 1 px real + 1 px drawn).
-- [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. → Still sunk; it rises only as you fall.
-- [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. → Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` → the item on sand sinks in; wool unchanged. Remove the line afterwards.
+- [ ] **BR-53 No bump between sunken blocks (2026-11-10):** default `depthPixels = 2`, first person. Walk slowly across slime → honey → slime, wool → mud → wool, and wool → dirt path. → The view never pops up at the seam; it only moves once you are on the next block (none at all slime/honey and wool/mud, a 1 px drop onto the path). Queue: CQ-SINK-01.
+- [ ] **BR-54 Even depth:** F5 beside a pig on wool and one on a honey block. → Both sit equally deep (honey 1 px real + 1 px drawn). Queue: CQ-SINK-02.
+- [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. → Still sunk; it rises only as you fall. Queue: CQ-SINK-01.
+- [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. → Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` → the item on sand sinks in; wool unchanged. Remove the line afterwards. Queue: CQ-SINK-03.
 
 **Camo sinking (3.4, needs the rebuilt patcherMod jar)** (`[surface.sinking] depthPixels = 8` makes these easy to see)
 - [ ] **BR-30 Frames sink like their camo:** a framed cube camo'd with wool → you sink on it (camera and model). Re-camo with stone → no sink. An empty frame → no sink.
@@ -602,8 +616,16 @@ the blocks touching the entity's sides.
 
 - [ ] **BR-52 1.0.4 mod blocks:** after a restart, a Fruits Delight crate → wood tier; a Farmer's Respite tea leaves sack and a Corn Kernel Bag → soft; a placed Hamimelon and a Coffee Cake → confectionery; an apple jelly block and an apple jello block → very sticky (same as honey / slime). The tier overlap log line still says 0 overlaps.
 
-- [ ] **BR-57 Visceral Heap flesh (2026-11-10):** after a restart, in the Heap (or placed): `M` on flesh → **−0.04** (spongy); on porous flesh → **−0.055** (very sticky). Jump on porous flesh → about half a normal jump, no bounce when landing from a height. Both sink 2 px.
-- [ ] **BR-58 Wall slide (3.9):** survival, build a 10-high porous flesh pillar beside a honey pillar. Jump off the top pressed against each side. → Both slide down at the same slow speed with the slide sound and particles (flesh-coloured on flesh), no fall damage at the bottom. Standing on top, or jumping next to it without touching → no slide. A pig pushed off beside it slides too. Plain flesh → no slide. A Banana Slug Slime Block pillar slides the same way, with yellow particles, no fall damage.
+- [ ] **BR-57 Visceral Heap flesh (2026-11-10):** after a restart, in the Heap (or placed): `M` on flesh → **−0.04** (spongy); on porous flesh → **−0.055** (very sticky). Jump on porous flesh → about half a normal jump, no bounce when landing from a height. Both sink 2 px. Queue: CQ-VH-04.
+- [ ] **BR-58 Wall slide (3.9):** survival, build a 10-high porous flesh pillar beside a honey pillar. Jump off the top pressed against each side. → Both slide down at the same slow speed with the slide sound and particles (flesh-coloured on flesh), no fall damage at the bottom. Standing on top, or jumping next to it without touching → no slide. A pig pushed off beside it slides too. Plain flesh → no slide. A Banana Slug Slime Block pillar slides the same way, with yellow particles, no fall damage. Queue: CQ-VH-05.
+- [ ] **BR-59 Audit dump (2026-11-10):** after installing Creative Compat + Creative Devtools, `/dumpsurface`. → `kubejs/exported/surface_audit.json` written, `errors` empty or listed. In it: `immersivepetroleum:asphalt` has tier `asphalt`; `minecraft:soul_sand` no tier, speedFactor 0.4; `minecraft:white_carpet` collisionTop 0.0625. Queue: SQ-BRA-02.
+- [ ] **BR-60 Watcher lists nothing:** `python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json`. → Only magma in the untiered list (exit 3 for it alone), or empty if magma has been decided. Every block in the outlier list gets a decision (reset in `block_properties.js`, or recorded in 3.5). Queue: SQ-BRA-03.
+- [ ] **BR-61 Watcher catches a gap:** remove `upgrade_aquatic:*_beehive` from the wood entries, `/reload`, `/dumpsurface`, rerun `--audit`. → The two beehives are listed under upgrade_aquatic. Put the line back.
+- [ ] **BR-62 Framed blocks copy their camo again:** a framed block with a stone camo and a Copycats+ block with planks. `M` on each → stone's and wood's modifier (+0.005, +0.01), WTHIT "from camo". An empty framed block → no modifier. (The `@mod` entries were dropped from every tag from 2026-11-06 until the `has.js` fix.) Queue: CQ-BRA-01.
+- [ ] **BR-63 New tiers feel right:** `M` on: a Neapolitan chocolate brick and a placed Display Delight plate → −0.015 (confectionery); an Upgrade Aquatic coralstone → +0.005 (natural smooth); a kelpy stone brick → +0.025 (constructed brick); a Comforts sleeping bag → −0.012 (soft) or, if it is too thin to register, the block under it; a Vintage jam block → −0.055 (very sticky, honey jump kept); a Create mechanical press, a crafting table and a Handcrafted counter → no modifier. WTHIT: `hideNormal = false` shows "1.00× (Machinery)", "(Functional)", "(Furniture)". Queue: SQ-BRA-04, SQ-BRA-05, CQ-BRA-01.
+- [ ] **BR-64 Reload time:** `/reload` with the audit block. → The `block tags finished` line follows `block tags starting` within a few seconds; the log line says 0 overlaps. Queue: SQ-BRA-01.
+- [ ] **BR-65 Changelog values (2026-11-11):** `M` on a sleeping bag, hammock, pet bed, thatch and cardboard box → **−0.012**; a cake and a placed roast chicken → **−0.015**; a tube coral block → **−0.008**; kelpy cobblestone → **+0.015**; scute pavement, polished manure, manure bricks → **+0.025**; a carrot crate and a beehive → **+0.01**; a Vintage Delight jello block → **−0.055**. Queue: SQ-BRA-06.
+- [ ] **BR-66 Mod filters:** Mosaic Masonry common and English bond, a Metal Fences copper fence and closed gate (stand on top) → **+0.025** each. Queue: SQ-BRA-07.
 
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. → Same values, and no rubber-banding when walking across camo'd frames.
@@ -677,3 +699,19 @@ the blocks touching the entity's sides.
   sticky with honey's jump factor (3.5). BR-25 edited, BR-53..57 added. Built, not installed (game open).
 - 2026-11-10: wall slide for non-honey blocks (3.9, `WallSlide` + `WallSlideMixin`, tag `#creativecompat:wall_slide`),
   porous flesh in it; sticky-block survey with proposals in 3.9. BR-58 added. Built, not installed.
+- 2026-11-10: **audit** ([plan_blockrunner_audit.md](plan_blockrunner_audit.md), `gameplay/blockrunner #2`). Found first:
+  `has.namespace('@mod')` returned `@mod`, so the tag helper's absent-mod filter (since the 2026-11-06 split) dropped
+  every `@mod` entry: camouflage held 2 blocks instead of 169 (Framed Blocks and Copycats+ walked untyped), and Create
+  Confectionery, Metal Fences and Mosaic Masonry lost their tiers. Fixed in Creative Common `has.js`. The Creative
+  Delight culture blocks moved namespace (`creativedelight:*_culture_block`). Then every walkable block was tiered:
+  part 1 real materials (Upgrade Aquatic coralstone natural smooth, kelpy and tooth bricks and scute shingles
+  constructed brick, pavements constructed smooth, coral blocks natural rough; Alex's Abnormalities likewise; Floral
+  Enchantment mossy cobble and bricks; crystal clusters and buds natural smooth; produce and egg crates wood; beds,
+  bedrolls, sleeping bags, nests, kelp and thatch blocks, licked salt blocks soft; Vintage jam and jello blocks very
+  sticky; every placed dish, plate, jar and bottle, Neapolitan cakes, ice cream and chocolate, chocolate coins
+  confectionery; Blocky Siege cast iron and coin blocks metal). Part 2, the 1.00 tiers, two new: `furniture` and `flora`
+  (Creative Compat `SurfaceTier`), and `machinery`, `functional`, `decorative` filled, mostly whole mods (`@mod`) minus
+  what a tier holds. Sim: 13828 ids (was 6254), 0 overlaps, no dead patterns; scan leaves only plants with no
+  collision, fluids, thin blocks and `auditSkip`. Watcher tooling: `/dumpsurface`, `blockrunner_scan.py --audit`
+  (6). The friction/jump outlier pass (`#5`) waits for the first dump. BR-59..64 added. Jars built, not installed
+  (game open): Common, Compat, Devtools.

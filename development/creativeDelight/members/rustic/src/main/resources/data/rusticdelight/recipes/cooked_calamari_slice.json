@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "squids_drop_calamari"
+    }
+  ],
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "rusticdelight:calamari_slice"
+  },
+  "result": "rusticdelight:cooked_calamari_slice"
+}

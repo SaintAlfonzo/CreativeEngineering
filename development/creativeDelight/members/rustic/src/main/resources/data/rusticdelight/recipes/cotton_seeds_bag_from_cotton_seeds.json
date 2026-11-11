@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_cotton"
+    }
+  ],
+  "key": {
+    "#": {
+      "item": "rusticdelight:cotton_seeds"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "rusticdelight:cotton_seeds_bag"
+  },
+  "show_notification": true
+}

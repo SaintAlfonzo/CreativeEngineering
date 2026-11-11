@@ -21,7 +21,8 @@ feature or recipe exists. TerraBlender is not installed; an empty mod with its i
 | Biome and worldgen tags, surface rule | `packs/biomesoplenty/`, on only while BOP is loaded |
 | Surface rule generator | `tools/gen_visceral_heap.py`, input `vanilla_nether_noise_settings.json` |
 | Placement | Sixth entry of `VANILLA_NETHER` in `tools/gen_biome_config.py`, ``target_pct` per Nether biome in `biome_config.json` (section 4) |
-| Axe tag | `kubejs/data/creativeworldgen/kubejs/tags/visceral_heap.js`, ids in `block_dict.js` |
+| Axe and climbable tags | `kubejs/data/creativeworldgen/kubejs/tags/visceral_heap.js`, ids in `block_dict.js` |
+| Recipes (crush, blood, cultivation) | `kubejs/data/creativeworldgen/kubejs/recipes/visceral_heap.js`; ids in `item_dict.js` / `fluid_dict.js`; result pools from Creative Engineering (`fan/ResultPools`, [engineering.md](engineering.md)) |
 
 A newer BOP jar fails the version gate, so the mixins are skipped with one warning and BOP then needs real TerraBlender. Bump
 the range in `WorldgenMixinPlugin` only after rechecking the targets, row 9 above all.
@@ -67,6 +68,12 @@ hit the solver's penalty range (offset 0.6) and note as unreachable; SQ-VH-05 re
 | VH-13 | Worldgen without BOP | SQ-VH-12 |
 | VH-14 | Tendons whole, inside the Heap | CQ-VH-03 |
 | VH-15 | Flesh walk speeds, porous flesh honey jump ([blockrunner.md](blockrunner.md) BR-57) | CQ-VH-04 |
+| VH-16 | Tendons and strand climbable, strand standable | CQ-FLR-01 |
+| VH-17 | Flesh and porous flesh crush totals per pool (EN-22) | SQ-FLR-02, -03 |
+| VH-18 | JEI crushing and milling pool slots (EN-23) | CQ-FLR-02 |
+| VH-19 | Pus bubble 25 % slimeball, hair 50 % string | SQ-FLR-04 |
+| VH-20 | Blood mixes and both cultivation recipes, all three oils | SQ-FLR-05 |
+| VH-21 | Eyebulb drop places | CQ-FLR-03 |
 
 ## 6. Still to do
 
@@ -75,6 +82,12 @@ Needs the game: `/dumpall`, `/cdevgen run all dumps`, `/dumpclimate` (plan secti
 `integration-report` skill for the kept blocks (step 5).
 
 Walk speed (2026-11-10, owner): flesh is in BlockRunner's spongy tier (0.60), porous flesh in very sticky (0.45) with
-honey's jump factor 0.5 instead of slime's feel ([blockrunner.md](blockrunner.md) 3.5). Deferred (owner): Create crushing
-recipes for flesh and porous flesh (rotten flesh, bone, spider eye), loaded by Creative Engineering only when Creative
-Worldgen and Biomes O' Plenty are loaded; TODO `worldgen/biomes #11`.
+honey's jump factor 0.5 instead of slime's feel ([blockrunner.md](blockrunner.md) 3.5). 
+
+Recipes (2026-11-10, [plan_flesh_recipes.md](plan_flesh_recipes.md), TODO `worldgen/biomes #11`): BUILT, jars NOT
+installed (game open). Crushing wheels and millstone turn flesh and porous flesh into drops from four pools (meat, bone,
+eye, misc; plan section 3) through Create result pools; pus bubble gives a slimeball at 25 %, hair string at 50 %.
+Heated mixing renders flesh (250 mB blood, bone at 25 %), porous flesh (500 mB) and tendons (250 mB). Cultivation:
+2 porous + 2 flesh + 1000 mB of any `#forge:plantoil` gives 2 porous + 3 flesh; 2 tendons + 1 flesh + 250 mB blood gives
+1 porous flesh. Tendons and the strand are climbable (not villager ladders). Item physics for the Heap items stays
+deferred (plan section 6).

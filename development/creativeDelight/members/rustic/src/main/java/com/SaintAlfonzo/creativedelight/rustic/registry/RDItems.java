@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * The items of Rustic Delight 1.7.0 less the ones removed from the pack (RusticTranslator.REMOVED: Fruit Beignet, the plain
+ * The items of Rustic Delight 1.7.0 less the ones removed from the pack (tools/bake_upstream.py REMOVED: Fruit Beignet, the plain
  * Pancake, Fried Dough), every other 1.3.0 id among them, plus the pack's Glowing Calamari Crate. Block items first, then
  * the rest in upstream's order, which is also the creative tab's order.
  */

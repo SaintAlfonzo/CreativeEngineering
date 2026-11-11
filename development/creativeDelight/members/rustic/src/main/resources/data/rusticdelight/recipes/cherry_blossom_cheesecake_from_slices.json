@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_cherry_blossom_foods"
+    }
+  ],
+  "key": {
+    "#": {
+      "item": "rusticdelight:cherry_blossom_cheesecake_slice"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "item": "rusticdelight:cherry_blossom_cheesecake"
+  },
+  "show_notification": true
+}

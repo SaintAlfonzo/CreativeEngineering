@@ -313,9 +313,6 @@
     "creativedelight:canned_enchanted_golden_beetroot": [
       "creativeengineering:canned_enchanted_golden_beetroot"
     ],
-    "creativedelight:canned_enchanted_golden_beetroot_soup": [
-      "creativeengineering:canned_enchanted_golden_beetroot_soup"
-    ],
     "creativedelight:canned_enchanted_golden_bread": [
       "creativeengineering:canned_enchanted_golden_bread"
     ],
@@ -367,14 +364,8 @@
     "creativedelight:canned_enchanted_golden_moss_clump": [
       "creativeengineering:canned_enchanted_golden_moss_clump"
     ],
-    "creativedelight:canned_enchanted_golden_mushroom_stew": [
-      "creativeengineering:canned_enchanted_golden_mushroom_stew"
-    ],
     "creativedelight:canned_enchanted_golden_pumpkin_pie": [
       "creativeengineering:canned_enchanted_golden_pumpkin_pie"
-    ],
-    "creativedelight:canned_enchanted_golden_rabbit_stew": [
-      "creativeengineering:canned_enchanted_golden_rabbit_stew"
     ],
     "creativedelight:canned_enchanted_golden_sweet_berries": [
       "creativeengineering:canned_enchanted_golden_sweet_berries"
@@ -445,9 +436,6 @@
     "creativedelight:canned_golden_beetroot": [
       "creativeengineering:canned_golden_beetroot"
     ],
-    "creativedelight:canned_golden_beetroot_soup": [
-      "creativeengineering:canned_golden_beetroot_soup"
-    ],
     "creativedelight:canned_golden_bread": [
       "creativeengineering:canned_golden_bread"
     ],
@@ -496,17 +484,11 @@
     "creativedelight:canned_golden_moss_clump": [
       "creativeengineering:canned_golden_moss_clump"
     ],
-    "creativedelight:canned_golden_mushroom_stew": [
-      "creativeengineering:canned_golden_mushroom_stew"
-    ],
     "creativedelight:canned_golden_nutritional_bar": [
       "creativeengineering:canned_golden_nutritional_bar"
     ],
     "creativedelight:canned_golden_pumpkin_pie": [
       "creativeengineering:canned_golden_pumpkin_pie"
-    ],
-    "creativedelight:canned_golden_rabbit_stew": [
-      "creativeengineering:canned_golden_rabbit_stew"
     ],
     "creativedelight:canned_golden_sweet_berries": [
       "creativeengineering:canned_golden_sweet_berries"

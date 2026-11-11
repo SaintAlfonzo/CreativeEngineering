@@ -80,9 +80,11 @@ ServerEvents.tags('block', e => {
 		natural_path:       'blockrunner:surface/natural_path',       // 1.15
 		wood:               'blockrunner:surface/wood',               // 1.10
 		natural_smooth:     'blockrunner:surface/natural_smooth',     // 1.05
-		machinery:          'blockrunner:surface/machinery',          // 1.00  not filled yet
-		functional:         'blockrunner:surface/functional',         // 1.00  not filled yet
-		decorative:         'blockrunner:surface/decorative',         // 1.00  not filled yet
+		machinery:          'blockrunner:surface/machinery',          // 1.00
+		functional:         'blockrunner:surface/functional',         // 1.00
+		decorative:         'blockrunner:surface/decorative',         // 1.00
+		furniture:          'blockrunner:surface/furniture',          // 1.00
+		flora:              'blockrunner:surface/flora',              // 1.00
 		camouflage:         'blockrunner:surface/camouflage',         // 1.00
 		glass:              'blockrunner:surface/glass',              // 1.00
 		dirt:               'blockrunner:surface/dirt',               // 1.00
@@ -380,7 +382,7 @@ ServerEvents.tags('block', e => {
 		'create_compressed:dough_block', item.prepared_flesh_block,
 		item.gingerdough_block, item.cookie_dough_block, item.sweet_potato_dough_block, item.oat_dough_block,
 		item.cucumber_dough_block, item.sourdough_block,
-		'creativeengineering:*_culture_block',  // meat culture blocks (reserved for Creative Cultivation, creative_delight.md 29.5)
+		'creativedelight:*_culture_block',  // meat culture blocks (reserved for Creative Cultivation, creative_delight.md 29.5)
 		'/^architects_palette:(rotten_flesh_block|entrails[a-z_]*)$/',
 		b.flesh, // Visceral Heap (only registered with Creative Worldgen + Biomes O' Plenty)
 	])
@@ -398,6 +400,176 @@ ServerEvents.tags('block', e => {
 		'fruitsdelight:*_jelly_block', 'fruitsdelight:*_jello_block', // extend HoneyBlock / SlimeBlock
 		b.porous_flesh, // Visceral Heap; honey's jump factor (block_properties.js), wall slide (creativecompat:wall_slide below)
 	])
+
+	// ── Audit 2026-11-10 (plan_blockrunner_audit.md): every walkable block gets a tier ──────────
+	// Part 1, real materials: families that walk like a tier above. Part 2, the 1.00 tiers: what is
+	// left of each mod goes in whole ('@mod'), minus blocks a tier already holds (auditLeft). Blocks
+	// with no collision ignore their tag, so whole-mod entries are safe for plants and pipes.
+	// Never tiered (a tier replaces the block's own speed): soul sand and soil, magma, fluids.
+	var auditSkip = [
+		'minecraft:soul_sand', 'minecraft:soul_soil', 'securitycraft:reinforced_soul_soil', 'minecraft:magma_block',
+		'minecraft:water', 'minecraft:lava', 'minecraft:bubble_column', 'minecraft:moving_piston',
+		'minecraft:structure_void', 'minecraft:end_gateway', 'minecraft:end_portal', 'minecraft:nether_portal',
+		'securitycraft:fake_water_block', 'securitycraft:fake_lava_block', 'biomesoplenty:blood',
+	]
+
+	// Part 1: real materials
+	t.addMatching(e, runner.metal, [
+		'/^blocky_siege:(block_of_cast_iron[a-z_]*|cast_iron_fence)$/',   // leaves with Blocky Siege cast iron (plan note)
+		'/^lightmanscurrency:coinblock_(copper|iron|gold|emerald|diamond|netherite)$/',
+	])
+	t.addMatching(e, runner.constructed_brick, [
+		// Upgrade Aquatic kelpy and tooth bricks, scute shingles, prismarine; Alex's Abnormalities tooth bricks and tiles
+		'/^upgrade_aquatic:([a-z]+_)?kelpy_stone_brick[a-z_]*$/', '/^upgrade_aquatic:(chiseled_)?tooth_(brick|tile)[a-z_]*$/',
+		'/^upgrade_aquatic:tooth_(slab|stairs|vertical_slab|wall)$/',
+		'/^upgrade_aquatic:(chiseled_)?scute_shingle[a-z_]*$/', 'upgrade_aquatic:prismarine_rod_bundle',
+		'upgrade_aquatic:luminous_prismarine*',
+		'/^alexsabnormalities:(chiseled_)?[a-z_]+_tooth_(brick|tile)[a-z_]*$/',
+		'/^alexsabnormalities:(chiseled_)?[a-z_]*scute_shingle[a-z_]*$/',
+		'floralench:*_mossy_stone_brick', '/^hearthandharvest:manure_brick[a-z_]*$/',
+	])
+	t.addMatching(e, runner.constructed_smooth, [
+		'/^upgrade_aquatic:scute_pavement[a-z_]*$/', '/^alexsabnormalities:[a-z_]*scute_pavement[a-z_]*$/',
+		'upgrade_aquatic:chiseled_*coralstone', '/^hearthandharvest:polished_manure[a-z_]*$/',
+	])
+	t.addMatching(e, runner.natural_path, ['/^upgrade_aquatic:([a-z]+_)?kelpy_cobblestone[a-z_]*$/', 'floralench:*_mossy_cobblestone'])
+	t.addMatching(e, runner.wood, [
+		'upgrade_aquatic:*_boards', 'upgrade_aquatic:*_beehive', 'minecraft:beehive', 'minecraft:bee_nest',
+		'/^architects_palette:[a-z_]*_totem(_wing)?$/', '/^neapolitan:(carved_)?banana_stalk$/',
+		// crates of produce and eggs (Fruits Delight crate precedent)
+		'neapolitan:*_crate', 'veggiesdelight:*_crate', 'fungidelight:*_crate', 'ends_delight:chorus_fruit_crate',
+		'miners_delight:cave_carrot_crate', 'hearthandharvest:*crate', 'creativedelight:goose_egg_crate',
+		'alexsabnormalities:*_crate', 'incubation:*_crate', 'villagersellanimals:crate_*',
+	])
+	t.addMatching(e, runner.natural_smooth, [
+		// coralstone is stone with coral in it; bone-like tooth and scute blocks follow the bone block
+		'/^upgrade_aquatic:(?!chiseled_)([a-z_]+_)?coralstone(_slab|_stairs|_vertical_slab|_wall)?$/', 'upgrade_aquatic:embedded_ammonite',
+		'upgrade_aquatic:tooth_block', 'upgrade_aquatic:scute_block', 'architects_palette:scute_block',
+		'alexsabnormalities:*_tooth_block', 'alexsabnormalities:*scute_block',
+		// crystal clusters and buds, like amethyst
+		'minecraft:*amethyst_bud', 'minecraft:amethyst_cluster', 'minecraft:pointed_dripstone', '/^geode:[a-z_]*(cluster|bud|crystal)$/',
+		'ae2:*quartz_bud', 'ae2:quartz_cluster', 'salt:*salt_bud', 'salt:salt_cluster', 'salt:*rock_salt_ore',
+		'diamethysts:budding_diamethyst_block', 'alexsmobs:straddlite_block',
+	])
+	t.addMatching(e, runner.natural_rough, [
+		'/^upgrade_aquatic:(dead_)?[a-z_]+_coral_block$/', 'fortuneonneterite_i_ig_z:*_block',
+		'hearthandharvest:manure_block', 'blocky_siege:permafrost', 'alexsmobs:leafcutter_ant_chamber',
+		'immersive_weathering:fulgurite',
+	])
+	t.addMatching(e, runner.soft, [
+		// beds, bedrolls, sleeping bags, hammocks, pet beds
+		'upgrade_aquatic:*bedroll', 'comforts:*', 'redeco:*_pet_bed', 'cozys-improved-cats:cat_bed',
+		// thatch, kelp and reed blocks, pods
+		'upgrade_aquatic:beachgrass_thatch*', 'neapolitan:frond_thatch*', '/^upgrade_aquatic:[a-z_]*kelp_block$/',
+		'/^upgrade_aquatic:(boiled_)?[a-z_]+_pickerelweed_block$/', 'neapolitan:*vanilla_pod_block',
+		// bags, bundles, cloth, cushioning, cardboard
+		'/^hearthandharvest:(corn_husk_bundle|hops_bag|manure_bag)$/', 'immersiveengineering:cushion', 'immersiveengineering:balloon',
+		'botania:cocoon', 'fantasyfurniture:decorations/bolts_of_cloth', '/^wares:(cardboard_box|package)$/',
+		'design_decor:cardboard_box', 'dustrial_decor:cardboard_scrap',
+		// the salt blocks in their licked stages (salt:salt_block precedent)
+		'/^hearthandharvest:(waxed_)?([a-z]+_licked_)?salt_block$/',
+		// nests and mushroom caps (#forge:mushroom_caps precedent)
+		'/^(incubation|hearthandharvest|creativedelight):[a-z_]*nest$/', '/^fungidelight:[a-z_]+_mushroom_block$/',
+		'/^farmersdelight:(full|half)_tatami_mat$/', '/^hearthandharvest:(hay|straw)_rug$/',
+	])
+	t.addMatching(e, runner.tilled, ['*:tilled_end_stone', 'neapolitan:adzuki_soil'])
+	t.addMatching(e, runner.very_sticky, [
+		// jam blocks extend HoneyBlock, jello blocks SlimeBlock (Fruits Delight precedent)
+		'vintagedelight:*_jam_block', 'vintagedelight:*_jello_block', 'upgrade_aquatic:mulberry_jam_block',
+	])
+	// confectionery: every placed dish, plate, jar and bottle (decided 2026-11-10), food blocks, chocolate
+	t.addMatching(e, runner.confectionery, [
+		'@displaydelight', '@neapolitan',
+		'/^lightmanscurrency:coin(block|pile)_chocolate_[a-z]+$/',
+		'fruitsdelight:*_jelly', 'fruitsdelight:durian', 'fruitsdelight:pineapple',
+		'/^vintagedelight:[a-z_]+_jar$/', 'vintagedelight:golden_egg',
+		'/^brewinandchewin:(?!keg$|coaster$)[a-z_]+$/',
+		'/^hearthandharvest:([a-z_]+_pie|waffle|jug|(unripe_)?goat_cheese_wheel)$/',
+		'/^veggiesdelight:(beetroot_brownie_tray|carrot_cake|lasagna_pan|stuffed_bellpeppers_block|sweet_potato_pie|vegan_pizza|zucchini_quiche)$/',
+		'/^vinery:[a-z_]+_wine$/', '/^ends_delight:(chorus_fruit_pie|[a-z_]+_block)$/', 'nethersdelight:stuffed_hoglin',
+		'/^miners_delight:(fake_meatloaf|glazed_arachnid_limbs|stuffed_squid)$/', 'delightful:baklava',
+		'delightful:stuffed_cantaloupe_block', 'oceanic_delight:sponge_cake', 'oceansdelight:guardian_soup',
+		'roll_delight:wrapped_chopsticks', 'farmersdelight:gleaming_salad_block', 'hostiledelight:candiedslimeblock',
+		'/^rusticdelight:bell_pepper_[a-z_]+_block$/', 'upgrade_aquatic:mulberry_punnet',
+		'fantasyfurniture:decorations/muffins_*', 'fantasyfurniture:decorations/nordic_sweetrolls',
+		'fantasyfurniture:decorations/nordic_boiled_creme_treats',
+	], { except: [
+		'#' + runner.wood, '#' + runner.soft, '#' + runner.tilled,   // Neapolitan crates, pods, thatch, soil
+		'/^neapolitan:(banana_frond|large_banana_frond|small_banana_frond|beanstalk|beanstalk_thorns|mint|[a-z_]*milkshake_cauldron|milk_cauldron|[a-z_]*_basket)$/',
+		'neapolitan:chimpanzee_head',
+	] })
+
+	// Part 2: the 1.00 tiers, whole mods last. auditLeft(tier) keeps what no tier holds yet.
+	var auditTiers = Object.keys(runner).map(k => runner[k])
+	var auditLeft = function (tier) { return { except: auditTiers.filter(x => x !== tier).map(x => "#" + x)
+		.concat(["#minecraft:dirt", "#minecraft:flowers", "#minecraft:crops"], auditSkip) } }
+	t.addMatching(e, runner.flora, [
+		'minecraft:cactus', 'minecraft:chorus_plant', 'minecraft:chorus_flower', 'minecraft:big_dripleaf', 'minecraft:cocoa',
+		'botania:floating_*', '/^botania:[a-z_]+_floating_flower$/', 'neapolitan:*banana_frond', 'neapolitan:beanstalk*',
+		'neapolitan:mint', 'fungidelight:*_colony', 'farmersdelight:*_colony', 'ends_delight:chorus_succulent',
+		'nethersdelight:mimicarnation', 'fruitsdelight:lemon_tree', 'upgrade_aquatic:*_kelp_plant',
+		'@flowerpatch', '@bushierflowers', '/^farmersrespite:coffee_stem[a-z_]*$/',
+	], auditLeft(runner.flora))
+	t.addMatching(e, runner.machinery, [
+		'@create', '@create_dd', '@createaddition', '@vintageimprovements', '@extendedgears', '@create_things_and_misc',
+		'@create_enchantment_industry', '@create_power_loader', '@creategoggles', '@sliceanddice', '@create_mechanical_extruder',
+		'@railways', '@littlecontraptions', '@littlelogistics', '@nocubescreateexp', '@compressedcreativity',
+		'@immersiveengineering', '@immersivepetroleum', '@controlengineering', '@more_immersive_wires', '@pneumaticcraft',
+		'@ae2', '@appbot', '@fulleng', '@createappliedkinetics', '@advancedperipherals', '@computercraft', '@cccbridge',
+		'@prettypipes', '@ppfluids', '@sculktransporting', '@trashcans', '@creategbd', '@gates', '@bobberdetector',
+		'@brickhopper', '@projectred_core', '@projectred_fabrication', '@projectred_illumination',
+		'/^securitycraft:(?!reinforced_|fake_)(?![a-z_]+_mine$)[a-z_]+$/',   // reinforced blocks and mines: the mirror below
+		'@engineersdecor', '@enderstorage',
+		'minecraft:piston', 'minecraft:sticky_piston', 'minecraft:observer', 'minecraft:dispenser', 'minecraft:dropper',
+		'minecraft:hopper', 'minecraft:daylight_detector', 'minecraft:redstone_lamp', 'minecraft:target',
+		'/^everythingcopper:[a-z_]*copper_hopper$/', 'quark:magnet', 'quark:pipe', 'quark:encased_pipe', 'quark:chute',
+		'quark:ender_watcher', 'quark:redstone_randomizer', 'quark:magnetized_block', 'sereneseasons:season_sensor',
+		'create_central_kitchen:blaze_stove', 'creativedelight:oven', 'immersive_weathering:*',
+	], auditLeft(runner.machinery))
+	t.addMatching(e, runner.functional, [
+		'@botania', '@waystones', '@ftbquests', '@questsadditions', '@lootr', '@tempad', '@well', '@colored_water',
+		'@lightmanscurrency', '@monobank', '@etched', '@clayworks', '@appliedcooking', '@the_dirty_stuff', '@dragonloot',
+		'@myrtrees', '@cloudstorage', '@botanypots',
+		'minecraft:*crafting_table', 'minecraft:*_table', 'minecraft:*furnace', 'minecraft:smoker', 'minecraft:*anvil',
+		'minecraft:grindstone', 'minecraft:stonecutter', 'minecraft:loom', 'minecraft:lectern', 'minecraft:brewing_stand',
+		'minecraft:*cauldron', 'minecraft:composter', 'minecraft:beacon', 'minecraft:conduit', 'minecraft:respawn_anchor',
+		'minecraft:lodestone', 'minecraft:jukebox', 'minecraft:note_block', 'minecraft:bell', 'minecraft:spawner',
+		'minecraft:*command_block', 'minecraft:structure_block', 'minecraft:jigsaw', 'minecraft:barrier',
+		'minecraft:end_portal_frame', 'minecraft:tnt', 'minecraft:frogspawn', 'minecraft:turtle_egg',
+		'/^everythingcopper:[a-z_]*copper_anvil$/', 'everythingcopper:weathering_station',
+		'*:*_cauldron', '*:*stove', '*:*_oven', '/^[a-z_]+:[a-z_]*(cooking_pot|copper_pot|skillet|kettle|keg)$/',
+		'farmersdelight:*cutting_board', 'farmersdelight:safety_net', 'vintagedelight:cheese_mold', 'vintagedelight:evaporator',
+		'vintagedelight:fermenting_jar', '/^hearthandharvest:(sprinkler|stomping_basin|tree_tapper|trough)$/',
+		'/^nethersdelight:[a-z_]*(furnace|smoker)$/', '/^vinery:(fermentation_barrel|wine_press)$/',
+		'quark:matrix_enchanter', 'quark:monster_box', 'quark:feeding_trough', 'quark:*_furnace',
+		'alexsmobs:capsid', 'alexsmobs:gustmaker', 'alexsmobs:transmutation_table', 'oldguns:*', 'blocky_siege:*',
+		'supplementaries:*', 'domesticationinnovation:drum', 'mca:jeweler_workbench', 'wares:delivery_table',
+		'exposure:lightroom', 'projectred_fabrication:*_table', 'creativelabels:*', 'cookingforblockheads:cooking_table',
+		'neapolitan:*milk*_cauldron', 'myrtrees:tree_tap', 'framedblocks:framing_saw',
+	], auditLeft(runner.functional))
+	t.addMatching(e, runner.furniture, [
+		'@handcrafted', '@fantasyfurniture', '@redeco', '@another_furniture', '@storagedelight', '@storagedrawers',
+		'@abnormals_delight', '@cookingforblockheads', '@interiors', '@wardrobe', '@sophisticatedbackpacks', '@berry_good',
+		'@everycomp',
+		'minecraft:*chest', 'minecraft:barrel', 'minecraft:*shulker_box', 'minecraft:bookshelf', 'quark:*chest',
+		'quark:*bookshelf', 'upgrade_aquatic:*chest', 'upgrade_aquatic:*_bookshelf', 'twigs:*_table',
+		'farmersdelight:*_cabinet', 'farmersdelight:basket', 'creativedelight:*', 'delightful:*_cabinet', 'vinery:*',
+		'neapolitan:*_basket', 'hearthandharvest:*_cabinet', 'miners_delight:sticky_basket', 'decorative_blocks:*_seat',
+		'immersiveengineering:*crate', 'immersiveengineering:*barrel', 'securitycraft:keypad_chest', 'securitycraft:keypad_barrel',
+		'securitycraft:reinforced_bookshelf', 'pneumaticcraft:*chest', 'ae2:*chest',
+	], auditLeft(runner.furniture))
+	t.addMatching(e, runner.decorative, [
+		'@davebuildingmod', '@design_decor', '@createdeco', '@bellsandwhistles', '@dustrial_decor', '@suppsquared',
+		'@immersiveposts', '@chimes', '@mca', '@moyai', '@mysticaloaktree', '@yuushya', '@decorative_blocks', '@beautify',
+		'@floralench', '@twigs', '@chalk', '@fairylights', '@canned_goods', '@architects_palette', '@quark',
+		'@upgrade_aquatic', '@alexsabnormalities', '@alexsmobs', '@hearthandharvest', '@incubation', '@vintagedelight',
+		'@fruitsdelight', '@veggiesdelight', '@rusticdelight', '@fungidelight', '@farmersdelight', '@delightful',
+		'@ends_delight', '@endersdelight', '@nethersdelight', '@miners_delight', '@oceanic_delight', '@farmersrespite',
+		'@corn_delight', '@salt', '@tintedcampfires', '@buzzier_bees', '@biomesoplenty', '@geode', '@diamethysts',
+		'@nock_enough_arrows', 'everythingcopper:*copper_lamp',
+		'minecraft:dragon_egg', 'minecraft:*_head', 'minecraft:*_skull', 'minecraft:flower_pot', 'minecraft:end_rod',
+		'minecraft:*_stained_glass_pane', 'minecraft:light', 'minecraft:sculk_vein', 'minecraft:glow_lichen',
+	], auditLeft(runner.decorative))
 
 	// Last: whatever's left of #minecraft:dirt (grass, dirt, rooted dirt, modded grasses/soils)
 	// once the tiers above have claimed coarse dirt, podzol, mud, moss etc.

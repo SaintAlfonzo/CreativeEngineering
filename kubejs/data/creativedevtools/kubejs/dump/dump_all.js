@@ -22,6 +22,7 @@
 		'dumpnames',
 		'dumpitemsbymod',
 		'dumptags',
+		'dumpsurface',     // Creative Devtools (Java): BlockRunner surface audit (tools/blockrunner_scan.py --audit)
 		'dumprecipes',
 		'dumpcraftingaudit',
 		'dumpgear',

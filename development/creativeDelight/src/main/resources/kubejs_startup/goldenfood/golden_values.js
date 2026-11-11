@@ -33,8 +33,8 @@ ItemEvents.modification(e => {
 		minecraft_beetroot: 'beetroot', dried_kelp: 'dried_kelp', beef_cooked: 'cooked_beef',
 		porkchop_cooked: 'cooked_porkchop', mutton_cooked: 'cooked_mutton', chicken_cooked: 'cooked_chicken',
 		rabbit_cooked: 'cooked_rabbit', cod_cooked: 'cooked_cod', salmon_cooked: 'cooked_salmon',
-		minecraft_bread: 'bread', cookie: 'cookie', pumpkin_pie: 'pumpkin_pie', mushroom_stew: 'mushroom_stew',
-		beetroot_soup: 'beetroot_soup', rabbit_stew: 'rabbit_stew', honey_bottle: 'honey_bottle',
+		minecraft_bread: 'bread', cookie: 'cookie', pumpkin_pie: 'pumpkin_pie',
+		honey_bottle: 'honey_bottle',
 	}
 	var done = 0
 	var apply = (inputId, targetKey, mult) => {

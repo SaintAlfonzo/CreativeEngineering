@@ -1,0 +1,12 @@
+
+#Camera bags hold anything tagged #exposureextras:camera_equipment, in any slot, at the
+#item's normal stack size. Slots per tier (1-27). Lowering a value moves the items in the
+#removed slots into the player's inventory (or drops them) the next time that bag is opened.
+[camera_bag]
+	#Range: 1 ~ 27
+	leatherSlots = 5
+	#Range: 1 ~ 27
+	ironSlots = 9
+	#Range: 1 ~ 27
+	netheriteSlots = 14
+

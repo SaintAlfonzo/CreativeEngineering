@@ -1,4 +1,8 @@
 {
   "create.recipe.fan_dragon_breathing": "Dragon Breathing",
-  "create.recipe.fan_dragon_breathing.fan": "Fan behind Dragon Head"
+  "create.recipe.fan_dragon_breathing.fan": "Fan behind Dragon Head",
+  "creativeengineering.jei.result_pool.one": "1 pick from this group",
+  "creativeengineering.jei.result_pool.whole": "%s picks from this group",
+  "creativeengineering.jei.result_pool.chance": "%s%% chance of 1 pick from this group",
+  "creativeengineering.jei.result_pool.whole_and_chance": "%s picks from this group, %s%% chance of 1 more"
 }

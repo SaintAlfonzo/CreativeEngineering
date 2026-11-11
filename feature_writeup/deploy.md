@@ -235,6 +235,10 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   already shipped is neither listed as added nor stopped by preflight. 1.0.7 shipped `backportedBrewin-...-01.jar`
   beside `BrewinAndChewin-1.19-2.0.jar` this way ([plan_1.0.7.md](plan_1.0.7.md) 2.2). Proposed: a preflight error
   when `mods/` (or `client_mods/`) holds two jars with one mod id. Built 2026-10-19 in `collect()` (dev instance only; an installed folder is recorded as it is).
+- **`rustic_upstream/` is no longer shipped** (2026-11-10, [plan_rustic_fold_in.md](plan_rustic_fold_in.md)). Rustic
+  Delight's MIT art and data are baked into the `backportedRustic` member (from `-02`), so `build_deploy.py` dropped the
+  folder from the payload, `UPSTREAM_DONORS` and the README note. A machine that still has the folder from an older
+  version ignores it; players may delete it. The jar stays in the dev instance as the bake script's pinned source.
 - `pool_config.json` (1.1 MB) is the largest runtime input left. It's hand-edited and rewritten by
   PoolTuner, so it stays readable.
 

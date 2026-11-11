@@ -1,7 +1,7 @@
 // requires: creativedelight
 // requires: rusticdelight
 // Rustic Delight 1.7.0 chest loot (feature_writeup/rustic_delight.md 5.4). The upstream jungle temple, village and
-// shipwreck seed swaps are not ported (RusticTranslator); the Pale and Dark seeds come only from these chests and the
+// shipwreck seed swaps are not ported (members/rustic bake_upstream.py); the Pale and Dark seeds come only from these chests and the
 // Wandering Trader (economy/wandering_trades.js), so the wild and giant pepper patches stay base colours.
 // Very rare (owner 2026-11-02, 95th to 99th percentile): one seed, share 0.03. Marked for the loot overhaul (TODO loot).
 //

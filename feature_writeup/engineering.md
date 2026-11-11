@@ -11,6 +11,7 @@
 | Wire coils and coil blocks for 12 metals plus the HV coil, by crafting, assembly and blueprint, with disassembly | DEPLOYED |
 | Sample syringe: empty + 7 filled variants, sample 8 mob types, feeds cultivated meat | DEPLOYED |
 | Exclusive chance outputs (`"exclusive_results"` on any Create processing recipe); rose quartz sand blasting 80 % rough / 20 % polished | BUILT 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); EN-21 recipe and log half scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b); EN-19, EN-20 in game pending |
+| Result pools (`"result_pools"` on any Create processing recipe): several weighted-pick groups per recipe, JEI crushing and milling show one cycling slot per pool; crushing and milling take 24 outputs; crushing wheel inventory 32 slots | BUILT 2026-11-10 (plan_flesh_recipes.md 5.3), jar NOT installed (game open); EN-22 to EN-24 |
 
 - **Pending:** exclusive chance outputs and rose quartz sand blasting (built 2026-10-30, jar installed 2026-10-31 00:44; EN-21 server half PASSED
   r1031 2026-10-31; EN-19, EN-20 and the EN-21 JEI look in game). EN-01 to EN-18 have never been run. Findings F1 to F8 (section 4) are
@@ -169,6 +170,22 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   `fan/ExclusiveResults.roll`. Works for every Create processing type that rolls through `rollResults` (fans, D&D
   sanding, millstone, crushing, basin); sequenced assembly's forced result keeps Create's path. KubeJS: pass
   `{ exclusive: true }` to a helper that supports it (so far `NCH.ddSanding`).
+- **Result pools** (2026-11-10, [plan_flesh_recipes.md](plan_flesh_recipes.md) 5.3, first user the Visceral Heap flesh
+  crushes): `"result_pools": [[0, 1, 2], [3, 4]]` groups a recipe's results by index. Per processed item each pool gives
+  `floor(sum of its chances)` picks plus one more at the fractional chance, and each pick is one of its outputs, weighted
+  by chance; a result's chance is therefore its overall chance per item. Results in no pool keep Create's independent
+  roll. `fan/ResultPools` parses (a malformed key logs `[result-pools]` and is ignored), rolls and syncs; pools win over
+  `exclusive_results` (warning when both are set). Unlike the exclusive flag, the pools travel in the recipe sync packet
+  (after Create's data in the final `toNetwork` / `fromNetwork`) because JEI needs them. `ProcessingRecipeMixin` applies
+  them only when the rolled list is the recipe's own results. JEI: `JeiCrushingPoolsMixin` and `JeiMillingPoolsMixin`
+  (client, gated on Create and JEI both in `EngineeringMixinPlugin`) give each pool one slot holding all its items,
+  then one slot per other output, in Create's own layouts (crushing row wraps past 9); the tooltip of the shown item
+  keeps Create's chance line and adds the pool's picks (lang `creativeengineering.jei.result_pool.*`). Recipes without
+  pools keep Create's layout. `CrushingOutputCapMixin` raises crushing (7) and milling (4) to 24 outputs, which Create
+  only warned about. `ProcessingInventoryMixin` grows Create's `ProcessingInventory` (crushing wheel controller,
+  mechanical saw) from 16 to 32 slots, also on load: the wheel rolls a whole inserted stack and dropped any distinct
+  item past its 15 output slots, and a 64 stack of flesh can roll 17. KubeJS: `{ pools: [[...], ...] }` as the last
+  argument of `NCH.createCrushing` / `NCH.createMilling` (writes the recipe as JSON; `processingTime` 100 unless given).
 - **Rose quartz sand blasting:** D&D's `create_dd:sanding/rose_quartz` (100 % polished) is replaced by
   `creativeengineering:ddsanding/rose_quartz` in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js):
   exclusive, 80 % rose quartz / 20 % polished. One pass polishes about a fifth; loop the belt (funnel or chute back to
@@ -254,6 +271,7 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 - Fan: patcherMod [fan/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/server_scripts/magic/dragon_breathing.js); `NCH.dragonBreathing`.
 - Components and coils: [items/components.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js), [items/coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js), [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js), [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js), [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js).
 - Exclusive outputs: patcherMod [fan/ExclusiveResults.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js).
+- Result pools: [fan/ResultPools.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ResultPools.java), [compat/ResultPoolsJei.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/ResultPoolsJei.java), mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`, `CrushingOutputCapMixin`, `ProcessingInventoryMixin`, `JeiCrushingPoolsMixin`, `JeiMillingPoolsMixin`; helper `_pooledProcessing` in neoCraftHelper.js
 - Syringe: [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), [server_scripts/engineering/sample_syringe.js](../kubejs/data/creativeengineering/kubejs/engineering/sample_syringe.js).
 
 ## 6. Offline checks
@@ -296,6 +314,16 @@ patcherMod's copies to see whether the jar is current.
 - [ ] **EN-20 Loop:** feed the rough output back through the fan (funnel loop) until none is left → 64 polished.
 - [ ] **EN-21 JEI and log:** *Recipe and log half: scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b).* JEI on rose quartz (U) → the D&D sanding page shows only the pack recipe (80 % / 20 %), not
   D&D's 100 % one; `latest.log` has no `[exclusive-results]` warning.
+- [ ] **EN-22 Pools roll:** crushing wheels, 200 flesh in stacks of 64 → every crush gives exactly 1 meat-pool item, the
+  totals match [plan_flesh_recipes.md](plan_flesh_recipes.md) section 3 within sampling error, nothing is lost (count the
+  output); repeat on a millstone with a few flesh. Run as VH-17.
+- [ ] **EN-23 Pools JEI:** JEI on flesh (R) → crushing page with 4 output slots (meat, bone, eye, misc) cycling their items,
+  the shown item's tooltip has its chance and the pool line ("1 pick from this group", "75% chance of 1 pick from this
+  group"); the millstone page shows the same 4 slots in a 2x2 grid; JEI on hoglin ear (R) finds both pages; other
+  crushing and milling pages (e.g. any ore) are unchanged. Run as VH-18.
+- [ ] **EN-24 No regressions:** rose quartz sanding (EN-19) still exclusive; a crushing wheel with a stack of a normal
+  ore still outputs all of it; a crushing wheel or saw placed before the update loads with its items; no `[result-pools]`
+  line or Create "has more outputs" warning in `latest.log`.
 
 ## 8. History
 

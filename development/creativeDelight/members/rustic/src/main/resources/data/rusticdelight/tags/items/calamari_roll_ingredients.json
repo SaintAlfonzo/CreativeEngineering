@@ -1,0 +1,15 @@
+{
+  "remove": [
+    "rusticdelight:calamari"
+  ],
+  "values": [
+    {
+      "id": "#forge:raw_fishes/calamari",
+      "required": false
+    },
+    {
+      "id": "miners_delight:tentacles",
+      "required": false
+    }
+  ]
+}
