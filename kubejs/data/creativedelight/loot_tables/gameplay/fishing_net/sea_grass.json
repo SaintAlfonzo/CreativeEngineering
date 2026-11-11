@@ -31,8 +31,8 @@
           "weight": 4,
           "conditions": [
             {
-              "condition": "creativeengineering:biome_tag",
-              "tag": "creativeengineering:fishing_net/shrimp_ocean"
+              "condition": "creativedelight:biome_tag",
+              "tag": "creativedelight:fishing_net/shrimp_ocean"
             }
           ]
         },
@@ -42,8 +42,8 @@
           "weight": 3,
           "conditions": [
             {
-              "condition": "creativeengineering:biome_tag",
-              "tag": "creativeengineering:fishing_net/river"
+              "condition": "creativedelight:biome_tag",
+              "tag": "creativedelight:fishing_net/river"
             }
           ]
         },
@@ -53,8 +53,8 @@
           "weight": 2,
           "conditions": [
             {
-              "condition": "creativeengineering:biome_tag",
-              "tag": "creativeengineering:fishing_net/warm_ocean"
+              "condition": "creativedelight:biome_tag",
+              "tag": "creativedelight:fishing_net/warm_ocean"
             }
           ]
         }
@@ -64,8 +64,8 @@
       "rolls": 1,
       "conditions": [
         {
-          "condition": "creativeengineering:biome_tag",
-          "tag": "creativeengineering:fishing_net/ocean"
+          "condition": "creativedelight:biome_tag",
+          "tag": "creativedelight:fishing_net/ocean"
         }
       ],
       "entries": [

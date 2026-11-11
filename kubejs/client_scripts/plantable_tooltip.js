@@ -1,11 +1,11 @@
 // Plantable item tooltip line, one per item, from the family tags built in server_scripts/tags/plantabletags.js:
-//   "Seed Item"       #creativeengineering:plantable/seed
-//   "Plantable Crop"  #creativeengineering:plantable/crop
-//   "Sapling"         #creativeengineering:plantable/sapling
-//   "Fungi Sapling"   #creativeengineering:plantable/fungi_sapling
-//   "Water Plant"     #creativeengineering:plantable/water
-//   "Vine"            #creativeengineering:plantable/vine
-//   "Vertical Crop"   #creativeengineering:plantable/vertical
+//   "Seed Item"       #creativecommon:plantable/seed
+//   "Plantable Crop"  #creativecommon:plantable/crop
+//   "Sapling"         #creativecommon:plantable/sapling
+//   "Fungi Sapling"   #creativecommon:plantable/fungi_sapling
+//   "Water Plant"     #creativecommon:plantable/water
+//   "Vine"            #creativecommon:plantable/vine
+//   "Vertical Crop"   #creativecommon:plantable/vertical
 //
 // Tags sync from the server on join, so the check runs per tooltip (addAdvancedToAll), as placeable_tooltip.js does.
 // stack.hasTag(id) is KubeJS's one-argument kjs$hasTag.
@@ -13,7 +13,7 @@
 
 ItemEvents.tooltip(e => {
 	var i = global.item
-	var tagOf = (key, name) => String(i[key] || ('#creativeengineering:plantable/' + name)).replace(/^#/, '')
+	var tagOf = (key, name) => String(i[key] || ('#creativecommon:plantable/' + name)).replace(/^#/, '')
 	var LINES = [
 		[tagOf('t_plantable_seed', 'seed'), 'Seed Item'],
 		[tagOf('t_plantable_crop', 'crop'), 'Plantable Crop'],
@@ -23,7 +23,7 @@ ItemEvents.tooltip(e => {
 		[tagOf('t_plantable_vine', 'vine'), 'Vine'],
 		[tagOf('t_plantable_vertical', 'vertical'), 'Vertical Crop'],
 	]
-	var T_ANY = String(i.t_plantable || 'creativeengineering:plantable').replace(/^#/, '')
+	var T_ANY = String(i.t_plantable || 'creativecommon:plantable').replace(/^#/, '')
 
 	e.addAdvancedToAll((item, advanced, text) => {
 		if (!item.hasTag(T_ANY)) return

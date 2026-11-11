@@ -160,7 +160,7 @@ with the block's position as the loot origin. The existing 2.5 s cooldown is the
 
 **What the pack changes.**
 - Blocks: patcherMod `OceanicDelightFishingNetMixin` redirects the procedure's four `getBlock()` reads. A block in
-  `#creativeengineering:fishing_net/kelp` reads as a kelp stalk, a block in `#creativeengineering:fishing_net/sea_grass`
+  `#creativedelight:fishing_net/kelp` reads as a kelp stalk, a block in `#creativedelight:fishing_net/sea_grass`
   as tall seagrass. Kelp tag: vanilla kelp and Upgrade Aquatic's ochre, polar, thorny and tongue kelp (top and stalk
   blocks). Sea grass tag: seagrass, tall seagrass, wild sea grape, the sea grape crop, blue and purple pickerelweed (short
   and tall). The "kelp above" rule reads through the same tags. Tags: `server_scripts/tags/loottags.js`.
@@ -185,7 +185,7 @@ with the block's position as the loot origin. The existing 2.5 s cooldown is the
 - Extra pools in both tables: `creativeengineering:gameplay/fishing_net/ocean_treasure` in `fishing_net/ocean` (nautilus
   shell 2 %, heart of the sea 0.2 %, rolled apart), and 5 % of searches anywhere roll `.../fishing_net/junk`. Coral is its
   own table so the corals share one weight (a `tag` entry with `expand` gives every member the full weight); it picks from
-  `#creativeengineering:fishing_net/coral`: the 15 live coral types (5 vanilla, 10 Upgrade Aquatic), plant or fan, through
+  `#creativedelight:fishing_net/coral`: the 15 live coral types (5 vanilla, 10 Upgrade Aquatic), plant or fan, through
   Upgrade Aquatic's per-type tags. Dead and prismarine corals stay out.
 - Junk = the pack's loaded vanilla fishing junk table minus: lily pad (a surface plant), water bottle (fishing joke; the net
   fills no bottles), damaged fishing rod (a tool that rivals the net), 10 ink sacs (joke stack; squids drop ink), bamboo
@@ -256,7 +256,7 @@ data are read at load from the unmodified upstream jar:
   and is picked up by using it), the sponge cake (knife cuts a slice, else eat a slice: 3 hunger, 1 saturation, Water Breathing
   0:30), the crates; the fishing net (5.1: same cooldowns, durability, break and pufferfish chances, attributes); compost
   chances; the Mining Fatigue brewing steps; the wandering trader's Salmon Eggs; the six JEI information pages.
-- **Fishing net, now our own code** (`content/FishingNetItem`): it reads `#creativeengineering:fishing_net/kelp` and
+- **Fishing net, now our own code** (`content/FishingNetItem`): it reads `#creativedelight:fishing_net/kelp` and
   `/sea_grass` directly (the mixin and its `getBlock` redirect are gone) and rolls `creativedelight:gameplay/fishing_net/kelp`
   and `/sea_grass`. Those tables, with their `coral`, `ocean_treasure` and `junk` sub-tables, moved out of the pack
   (`kubejs/data/oceanic_delight/loot_tables/gameplay/`, `kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net/`) to

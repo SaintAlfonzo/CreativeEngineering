@@ -1,6 +1,6 @@
 // requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/equipment/dragon_autorepair.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
-// Passive slow self-repair for dragon-tier gear (#creativeengineering:dragon_gear -
+// Passive slow self-repair for dragon-tier gear (#creativeequipment:dragon_gear -
 // server_scripts/tags/equipmenttags.js) while worn/held - the same "repairs very slowly
 // over time when in use" idiom as Allurement's `allurement:reforming` enchantment, but
 // built in-house rather than silently forcing that mod's real enchantment onto our gear:
@@ -39,7 +39,7 @@
 	// types - this Rhino build can't disambiguate a raw tag argument between them
 	// (see [[rhino-fieldandmethods-gotcha]]), so tag membership goes through a KubeJS
 	// Ingredient's .test() (a plain unambiguous Predicate<ItemStack>) instead of .is().
-	const DRAGON_GEAR_INGREDIENT = Ingredient.of('#creativeengineering:dragon_gear')
+	const DRAGON_GEAR_INGREDIENT = Ingredient.of('#creativeequipment:dragon_gear')
 	const DRAGON_ARMOR_SLOTS = [$DragonEqSlot.HEAD, $DragonEqSlot.CHEST, $DragonEqSlot.LEGS, $DragonEqSlot.FEET]
 
 	function repairIfDragonGear(stack, amount) {

@@ -67,7 +67,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 final class WorldJeiToolPairs {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final TagKey<Block> NO_WORLD_DYE = TagKey.create(Registry.BLOCK_REGISTRY,
-            new ResourceLocation("creativeengineering", "no_world_dye"));
+            new ResourceLocation("creativecompat", "no_world_dye"));
     /** Above this many states only the default state and its axis variants are tried. */
     private static final int MAX_STATES = 48;
 

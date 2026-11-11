@@ -136,7 +136,7 @@
   },
   {
    "note": "Vintage Delight backport: wild ghost peppers in crimson and warped forests only (nylium). The port ships the feature and no biome modifier; Vintage's own placed them in every Nether biome (feature_writeup/vintage_delight.md 2.2)",
-   "path": "development/creativeWorldgen/src/main/resources/packs/vintagedelight/data/creativeengineering/forge/biome_modifier/vintage_wild_ghost_peppers.json",
+   "path": "development/creativeWorldgen/src/main/resources/packs/vintagedelight/data/creativeworldgen/forge/biome_modifier/vintage_wild_ghost_peppers.json",
    "json": {
     "type": "forge:add_features",
     "biomes": [

@@ -44,9 +44,9 @@ BIOME_CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/biome_config.json'
 VANILLA_RULES = INSTANCE / 'tools/spawn_rules_vanilla.json'
 OUT_MD = INSTANCE / 'feature_writeup/spawns_by_biome.md'
 
-TAG_PREFIX = 'creativeengineering:mob_spawns/'
+TAG_PREFIX = 'creativeworldgen:mob_spawns/'
 ACTIONS = ('set', 'scale', 'remove')
-COND_PREFIX = 'creativeengineering:spawn_conditions/'
+COND_PREFIX = 'creativeworldgen:spawn_conditions/'
 CONDITIONS = ('light_only', 'water_only')
 CATEGORIES = ['monster', 'creature', 'ambient', 'axolotls', 'underground_water_creature', 'water_creature',
               'water_ambient', 'misc']
@@ -349,7 +349,7 @@ def build(dump, cfg, traits):
     tuned = {b: {c: [dict(e) for e in lst] for c, lst in sp.items()} for b, sp in untuned.items()}
     entities = dump.get('entities', {})
     problems, warnings, rows, seen, vocab = [], [], [], set(), set().union(*traits.values())
-    namespaces = {'minecraft', 'creativeengineering'} | {m.split(':')[0] for m in entities}
+    namespaces = {'minecraft', 'creativeworldgen'} | {m.split(':')[0] for m in entities}
     applied = []      # rule ids mob_spawns.js puts in the modifier
     changes = defaultdict(list)
     for n, rule in enumerate(cfg.get('rules', []), 1):
@@ -411,7 +411,7 @@ def build_conditions(dump, cfg, traits, rows):
     """mob_spawns.json 'conditions' as mob_spawns.js resolves them.
     Returns ([(cond, mobs, biomes or None = everywhere)], problems, warnings)."""
     biome_tags = {b: set(v.get('tags', [])) for b, v in dump['biomes'].items()}
-    namespaces = {'minecraft', 'creativeengineering'} | {m.split(':')[0] for m in dump.get('entities', {})}
+    namespaces = {'minecraft', 'creativeworldgen'} | {m.split(':')[0] for m in dump.get('entities', {})}
     usable = {r['id']: r for r, hit, _ in rows if hit}
     out, problems, warnings, seen = [], [], [], set()
     for n, c in enumerate(cfg.get('conditions', []), 1):

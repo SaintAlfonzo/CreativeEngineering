@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * mods.
  *
  * <p>So: if bedspreads already ships a curated texture for this pattern, leave its own location
- * alone. Otherwise fall back to {@code creativeengineering:entity/<originNamespace>/<path>} — a
+ * alone. Otherwise fall back to {@code creativecompat:entity/<originNamespace>/<path>} — a
  * texture built at load by {@code banners/BannerPatternPack}, which reproduces
  * bedspreads' own recentering convention for every other installed mod's patterns. Both that and
  * bedspreads' own textures are bound against {@code InventoryMenu.BLOCK_ATLAS} (confirmed
@@ -70,9 +70,9 @@ public class BedspreadsBannerPatternMixin {
         String originPath = rest.substring(slash + 1);
 
         String relativePath = "entity/" + originNamespace + "/" + originPath;
-        ResourceLocation generatedFile = new ResourceLocation("creativeengineering", "textures/" + relativePath + ".png");
+        ResourceLocation generatedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, "textures/" + relativePath + ".png");
         if (Minecraft.getInstance().getResourceManager().getResource(generatedFile).isPresent()) {
-            return new ResourceLocation("creativeengineering", relativePath);
+            return new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, relativePath);
         }
         return bedspreadsLocation;
     }

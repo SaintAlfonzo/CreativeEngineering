@@ -87,7 +87,7 @@ public class TerrainAdaptationTest {
 				h(Blocks.MUD), h(Blocks.MOSS_BLOCK), h(Blocks.MUDDY_MANGROVE_ROOTS)));
 		tags.put(TemplateTrim.PLANTS, List.of(h(Blocks.POPPY), h(Blocks.GRASS), h(Blocks.TALL_GRASS), h(Blocks.FERN), h(Blocks.LARGE_FERN),
 				h(Blocks.DANDELION), h(Blocks.SNOW), h(Blocks.MOSS_CARPET), h(Blocks.OAK_SAPLING)));
-		TagKey<Block> earth = BlockTags.create(new ResourceLocation("creativeengineering", "earth_fill/earth"));
+		TagKey<Block> earth = BlockTags.create(new ResourceLocation("creativeworldgen", "earth_fill/earth"));
 		tags.put(earth, List.of(h(Blocks.GRASS_BLOCK), h(Blocks.DIRT)));
 		Registry.BLOCK.bindTags(tags);
 
@@ -190,8 +190,8 @@ public class TerrainAdaptationTest {
 		check(TerrainAdaptation.resolve(t -> false) == null, "no tag -> null (structure keeps its own)");
 		check(TerrainAdaptation.Mode.SOFT.vanilla == TerrainAdjustment.BEARD_THIN && TerrainAdaptation.Mode.NONE.vanilla == TerrainAdjustment.NONE
 				&& TerrainAdaptation.Mode.BEARD_BOX.vanilla == TerrainAdjustment.BEARD_BOX, "soft is beard_thin to vanilla; others map 1:1");
-		check(TerrainAdaptation.Mode.SOFT.tag.location().toString().equals("creativeengineering:terrain_adaptation/soft")
-				&& TerrainAdaptation.TRIM.location().toString().equals("creativeengineering:template_trim"), "tag ids");
+		check(TerrainAdaptation.Mode.SOFT.tag.location().toString().equals("creativeworldgen:terrain_adaptation/soft")
+				&& TerrainAdaptation.TRIM.location().toString().equals("creativeworldgen:template_trim"), "tag ids");
 
 		// 7. config defaults
 		check(WorldgenConfig.softSkirtBump() == 0 && TerrainAdaptation.skirt() == 4, "skirtBump default 0 -> skirt 4");

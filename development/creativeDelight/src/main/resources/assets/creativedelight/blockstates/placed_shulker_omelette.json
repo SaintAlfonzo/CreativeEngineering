@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/placed_shulker_omelette"
+    },
+    "facing=south": {
+      "model": "creativedelight:block/placed_shulker_omelette",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/placed_shulker_omelette",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativedelight:block/placed_shulker_omelette",
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "creativeworldgen:hub_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:flower_forest",
+      "lakes": false,
+      "features": false,
+      "layers": [
+      	{"block": "minecraft:air","height": 1}
+      ],
+      "structure_overrides": []
+    }
+  }
+}

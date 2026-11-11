@@ -3,7 +3,6 @@ package com.SaintAlfonzo.creativedelight.hearth.crow;
 import java.util.EnumSet;
 import javax.annotation.Nullable;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +13,7 @@ public class CrowWaryTemptGoal extends Goal {
     private static final double TEMPT_RANGE = 10.0D;
     private static final double GIVE_UP_RANGE_SQR = 196.0D;
     private static final double SPEED = 1.0D;
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     private final TargetingConditions conditions = TargetingConditions.forNonCombat().range(TEMPT_RANGE).ignoreLineOfSight()
             .selector(entity -> entity instanceof Player player && !player.isSpectator() && CrowLogic.isHoldingFood(player));
     @Nullable
@@ -22,7 +21,7 @@ public class CrowWaryTemptGoal extends Goal {
     private int repath;
     private int cooldown;
 
-    public CrowWaryTemptGoal(TamableAnimal crow) {
+    public CrowWaryTemptGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -93,7 +92,6 @@ public class CrowWaryTemptGoal extends Goal {
         double distance = crow.distanceTo(player);
         if (distance > comfort - 0.75D && distance < comfort + 1.0D) {
             crow.getNavigation().stop();
-            CrowLogic.land(crow);
         } else if (--repath <= 0 || crow.getNavigation().isDone()) {
             repath = 10;
             Vec3 away = new Vec3(crow.getX() - player.getX(), 0.0D, crow.getZ() - player.getZ());

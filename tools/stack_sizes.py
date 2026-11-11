@@ -30,7 +30,7 @@ COOKING_MODS = {
     'goldenfood', 'moredelight', 'neapolitan', 'nethersdelight', 'quarkdelight', 'refinedcooking',
     'rusticdelight', 'salt', 'solapplepie', 'storagedelight', 'vinery',
 }
-FOOD_TAG = re.compile(r'^(creativeengineering:food_type/|forge:foods|forge:crops|forge:vegetables|forge:fruits|'
+FOOD_TAG = re.compile(r'^(creativedelight:food_type/|forge:foods|forge:crops|forge:vegetables|forge:fruits|'
                       r'forge:milk|forge:eggs|forge:dough|forge:flour|forge:cooking_oil|forge:salt|forge:sugar|'
                       r'forge:raw_|forge:cooked_|forge:bread|farmersdelight:|brewinandchewin:)')
 FOOD_BLOCK = re.compile(r'(Cake|Feast|Pie|Pizza|Pudding|Sandwich|Roast|Platter|Food)')
@@ -193,7 +193,7 @@ def main():
              f'weapon, or anything with durability ({len(excluded)} items). '
              'Cooking items come first, then everything else by category.')
     L.append('')
-    L.append('**Columns.** Stack: max stack size. Food type: `#creativeengineering:food_type/...` from the food '
+    L.append('**Columns.** Stack: max stack size. Food type: `#creativedelight:food_type/...` from the food '
              'catalog ([food_catalog.md](food_catalog.md)). Leaves: the crafting remainder handed back '
              '(bowl, bottle, bucket). Notes: pack changes, and "stack-aware override" when the item reports one '
              'value and its stacks another.')

@@ -19,7 +19,7 @@ import gen_out, pack_paths  # noqa: E402
 GEN = ROOT / 'kubejs/generation_scripts/food'
 DATA = ROOT / gen_out.DATA_ROOT
 START = ROOT / gen_out.STARTUP_ROOT
-CD = 'kubejs/data/creativedelight/kubejs/creativeengineering/'
+CD = 'kubejs/data/creativedelight/kubejs/creativedelight/'
 
 
 def rel(p):

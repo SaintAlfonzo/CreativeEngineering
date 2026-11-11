@@ -492,7 +492,7 @@ Right-click harvest (vintageport #8, investigated 2026-10-25): Quark's harvestin
 zucchini was broken for its loot and replanted at stage 0: cucumber / pepper 1 fruit + 0 to 3 seeds (one seed kept
 back as the replant), zucchini 0 to 3 zucchini; the own pick (1 to 2 cucumbers, 1 pepper, 1 to 2 zucchini; back to 5,
 5 and 4) never ran. Kept the own pick (it regrows in 2 or 3 stages, a berry-bush crop): patcherMod
-`QuarkOwnPickMixin` on `SimpleHarvestModule.getAction` gives blocks in `#creativeengineering:crops/own_pick` Quark's
+`QuarkOwnPickMixin` on `SimpleHarvestModule.getAction` gives blocks in `#creativedelight:crops/own_pick` Quark's
 berry bush treatment (empty hand or 1x1 hoe: Quark steps aside and the block's pick runs; hoe area: Quark clicks each).
 Tag filled in the CD trees (`vintagedelight/tags.js`, `veggiesdelight/tags.js`). Quark's villager harvest still
 replants them at stage 0 (villagers only farm farmland, so not ghost peppers). Test VTD-76.
@@ -676,7 +676,7 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
   (`global.itemMerges`, pushed from the same startup file); the pack's honey jar recipe for them is gone (`alcohol.js`);
   compost 0.5 and the cooked soup veggie tag moved to it. `canned_pickled_pickles` keeps its id as Canned Pickles
   (pickle + pickled sea pickle; `gen_can_types.py`, applied at the next `/cdevgen` after `/dumpfood`).
-- **Pickle soup:** Vintage's pot recipe replaced: `#creativeengineering:pickled_veg` (pickle, pickled sea pickle, pickled
+- **Pickle soup:** Vintage's pot recipe replaced: `#creativedelight:pickled_veg` (pickle, pickled sea pickle, pickled
   beetroot, onion and pepper, both kimchis; CD `vintagedelight/tags.js`), 2 `#forge:vegetables` (was carrot + potato),
   beetroot, `#forge:salad_ingredients`; 200 ticks, 1.0 xp as before.
 - Tests: VTD-55, VTD-57 below; SQ-CDB-08, -09.
@@ -957,8 +957,8 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
   `development/creativeDelight/moved_code_backup/2026-11-02-vintage/`; the member's own files apply. Kimchi merge
   (`merges/dishes #9`): Brewin's kimchi is a removed item (CD `vintage_items.js`; Creative Brewing `swaps/removed.json`),
   the pack's `brewin_kimchi` jar recipe is gone (Creative Brewing `alcohol.js`), six new jar recipes in CD
-  `vintagedelight/recipes.js` (`kimchi_from_*`), new tag `#creativeengineering:whole_raw_fish`; Vintage kimchi takes
-  Brewin's place in `#creativeengineering:soup_veggie_cooked` and alone fills Canned Kimchi (`gen_can_types.py`; the can
+  `vintagedelight/recipes.js` (`kimchi_from_*`), new tag `#creativedelight:whole_raw_fish`; Vintage kimchi takes
+  Brewin's place in `#creativedelight:soup_veggie_cooked` and alone fills Canned Kimchi (`gen_can_types.py`; the can
   now takes Vintage's values). Kimchi, nut mash (`merges/dishes #7`) and quiche (`merges/dishes #8`): item_merges.md 2.18 to 2.20.
 
 ### Owner decisions 2026-11-02

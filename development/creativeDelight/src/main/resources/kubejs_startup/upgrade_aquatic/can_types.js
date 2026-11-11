@@ -145,7 +145,7 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_raw_perch": {
    "section": "raw_fish",
@@ -221,7 +221,7 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_raw_pike": {
    "section": "raw_fish",
@@ -297,7 +297,7 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_boiled_blue_pickerelweed": {
    "section": "cooked_veggie",

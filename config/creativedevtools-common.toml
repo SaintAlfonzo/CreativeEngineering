@@ -107,4 +107,7 @@
 	#The Flower Test world builder (flowerworld/flower_world.js): builds the table on the first start
 	#of a Flower Test world, and /flowerworld.
 	flowerWorld = true
+	#The Structure Catalogue world type (cdevplace/StructureCatalogue): lays out every structure on the
+	#first start of such a world, and /cdevplace catalogue build.
+	structureCatalogue = true
 

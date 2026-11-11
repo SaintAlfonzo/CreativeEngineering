@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_cantaloupe": {
    "section": "raw_fruit",
@@ -498,7 +498,7 @@ if (global.CD) global.CD.genPut('can_types', 'delightful', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_cactus_chili": {
    "section": "soup",

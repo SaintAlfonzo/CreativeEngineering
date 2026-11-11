@@ -12,18 +12,18 @@
 ServerEvents.tags('worldgen/structure', function (e) {
 	// Water dug into the ground on purpose: a pond replaces dry ground every time, so only water in air
 	// (a pond spilling down a slope) should cancel. The default [water_fill] overrides entry
-	// "#creativeengineering:water_fill/ponds=-1,16" lifts the ground limit for these.
-	global.tags.add(e, 'creativeengineering:water_fill/ponds', [
+	// "#creativeworldgen:water_fill/ponds=-1,16" lifts the ground limit for these.
+	global.tags.add(e, 'creativeworldgen:water_fill/ponds', [
 		'farmers_structures:aquacultures_beach', 'farmers_structures:aquacultures_carp', 'farmers_structures:aquacultures_common',
 		'old_swamp_fisherman_house:fisherman_house',
 	])
-	global.tags.add(e, 'creativeengineering:water_fill/structures', [
+	global.tags.add(e, 'creativeworldgen:water_fill/structures', [
 		// the seabed: Hopo's ruins and fossils sit on the ocean floor, full of water up to 20 blocks high
 		'hopo:underwater_ruins', 'hopo:underwater_small_ruins', 'hopo:underwater_warm_small_ruins', 'hopo:underwater_fossils',
 		// at sea: a water plate / hull water at sea level
 		'towns_and_towers:pillager_outpost_ocean', 'towns_and_towers:village_ocean',
 		// a stilted stall in rivers
 		'farmers_structures:sushis',
-		'#creativeengineering:water_fill/ponds',
+		'#creativeworldgen:water_fill/ponds',
 	])
 })

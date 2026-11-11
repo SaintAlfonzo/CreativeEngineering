@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
- * Biome modifier type {@code creativeengineering:bee_nests}: the per-biome bee nest rules from
+ * Biome modifier type {@code creativeworldgen:bee_nests}: the per-biome bee nest rules from
  * kubejs/generation_scripts/worldgen/bee_nests.json, written as one modifier by
  * kubejs/server_scripts/worldgen/bee_nests.js (feature_writeup/bee_nests.md section 3).
  *

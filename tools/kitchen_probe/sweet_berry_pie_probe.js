@@ -11,7 +11,7 @@
     const $SBForgeReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
     const $SBServings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings')
 
-    const CAN = 'creativeengineering:canned_sweet_berry_pie_filling'
+    const CAN = 'creativedelight:canned_sweet_berry_pie_filling'
     const PIE = 'farmersdelight:sweet_berry_cheesecake'
     const SLICE = 'farmersdelight:sweet_berry_cheesecake_slice'
     const CRUST = 'farmersdelight:pie_crust'
@@ -84,7 +84,7 @@
             let type = String(r.getType())
             let line = r.getId() + ' [' + ingIds(r).join(', ') + ']'
             if (idOf(res) == CAN && type == 'farmersdelight:cooking') pot.push(line)
-            if (idOf(res) == PIE && type == 'creativeengineering:baking') oven.push(line)
+            if (idOf(res) == PIE && type == 'creativedelight:baking') oven.push(line)
         })
         check('pot filling', pot.length == 1 && pot[0].indexOf('minecraft:sweet_berries') >= 0, pot.join(' | ') || 'none')
         check('oven pies', oven.length == 2 && oven.some(l => l.indexOf(CAN) >= 0), oven.join(' | ') || 'none')

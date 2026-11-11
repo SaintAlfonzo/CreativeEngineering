@@ -79,7 +79,7 @@ import java.util.function.Supplier;
  */
 public final class StructureFrequencies {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/structure-frequency");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/structure-frequency");
 
 	private static final Field CHECK_SEED = field(StructureCheck.class, "f_197245_", "seed");
 
@@ -267,7 +267,7 @@ public final class StructureFrequencies {
 				}
 				float freq = f == null ? 1.0F : f;
 				if (freq < 1.0F || factors != null) rolled++;
-				members.put(structure, new Member(set, freq, id.hashCode(), factors));
+				members.put(structure, new Member(set, freq, LegacyIds.seed(id).hashCode(), factors));
 			}
 			for (String missing : wanted.keySet()) {
 				LOG.warn("[structure-frequency] {} is not a member of {}; its frequency is ignored", missing, setId);

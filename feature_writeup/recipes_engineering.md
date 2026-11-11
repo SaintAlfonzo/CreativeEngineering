@@ -281,4 +281,7 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   `shaped/bucket_from_plates` and `shaped/wooden_bucket`; patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`
   (`creativeengineering:wooden_bucket`, `wooden_water_bucket`; water only; cech12's MIT texture). Not done: dispenser,
   cauldron, use as `minecraft:water_bucket` in recipes. Tests RE-28 to RE-30 (scratch queue). Not run in game.
+- 2026-11-09: the wooden bucket moved to Creative Delight as a farm tool (`creativedelight:wooden_*`, CD `farm/bucket/`,
+  recipe in CD `creativedelight/recipes.js`; old ids remapped). It now also holds sap, milk and honey. See
+  [hearth_and_harvest.md](hearth_and_harvest.md) owner notes and TODO `largecontent/mod-additions #58`.
 - 2026-10-31: scratchpad notes translated into TODO rows (`engineering/dreams-and-desires #9`, `recipes/engineering #7`). No code changed.

@@ -79,7 +79,7 @@ if (global.CD) global.CD.genPut('can_types', 'quarkdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_lush_moss_salad": {
    "section": "salad",
@@ -126,7 +126,7 @@ if (global.CD) global.CD.genPut('can_types', 'quarkdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_miso_with_bamboo_sprouts": {
    "section": "soup",

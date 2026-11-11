@@ -15,7 +15,7 @@ and one item model per box with the overrides for its skins and dye. The outline
 iron_lunchbox_outline.png (netherite_lunchbox_outline.png must match it); the latches are LATCH colours; the
 lunchbag has no outline file, so its darkest browns (every channel under BAG_OUTLINE_MAX) are its outline.
 
-Override numbers: the item property creativeengineering:lunchbox_skin is the position in SKINS + 1, which must
+Override numbers: the item property creativedelight:lunchbox_skin is the position in SKINS + 1, which must
 match Lunchboxes.SKINS in patcherMod. Only append to both.
 
     python3 tools/gen_lunchbox_looks.py           write the files
@@ -74,8 +74,8 @@ SKINS = [
     ('fantasyfurniture:decorations/berry_basket_strawberry', None, 'fantasyfurniture:item/decorations/berry_basket_strawberry'),
     ('fantasyfurniture:decorations/berry_basket_sweetberry', None, 'fantasyfurniture:item/decorations/berry_basket_sweetberry'),
 ]
-SKIN_KEY = 'creativeengineering:lunchbox_skin'
-DYED_KEY = 'creativeengineering:lunchbox_dyed'
+SKIN_KEY = 'creativedelight:lunchbox_skin'
+DYED_KEY = 'creativedelight:lunchbox_dyed'
 
 
 def load_lunchbag():

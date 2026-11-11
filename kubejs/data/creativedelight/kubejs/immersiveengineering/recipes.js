@@ -12,7 +12,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Cornmeal #########################
-		// The pack's cornmeal (creativeengineering/recipes.js has the rule and the grinding).
+		// The pack's cornmeal (creativedelight/recipes.js has the rule and the grinding).
 		// IE crusher: corn 2 cornmeal + 0.5 kernels + 0.1 Corncob (replaces Corn Delight's corn -> kernels + straw; the cob is
 		// corn_delight.md 2.1), kernels 0.5 cornmeal.
 		// The crusher takes one item and can't roll its main output, so single kernels have no recipe; the bag does.
@@ -20,12 +20,14 @@ ServerEvents.recipes(e => {
 			R.remove({ id: 'corn_delight:integration/immersiveengineering/crusher/corn' }, e)
 			R.ieCrushing(Item.of(i.cornmeal, 2), i.t_crops_corn, e, 'corn_cornmeal',
 				[{ chance: 0.5, output: i.corn_seeds }, { chance: 0.1, output: i.corncob }], 3200)
+			R.ieCrushing(Item.of(i.cornmeal, 2), i.wild_corn, e, 'wild_corn_cornmeal',   // wild corn as corn (farming/crops #48)
+				[{ chance: 0.5, output: i.corn_seeds }, { chance: 0.1, output: i.corncob }], 3200)
 			R.ieCrushing(Item.of(i.cornmeal, 18), i.corn_crate, e, 'corn_crate_cornmeal',
 				[{ chance: 1, output: Item.of(i.corn_seeds, 4) }, { chance: 0.5, output: i.corn_seeds }], 3200)
 			R.ieCrushing(Item.of(i.cornmeal, 4), i.corn_kernel_bag, e, 'corn_kernel_bag_cornmeal',
 				[{ chance: 0.5, output: i.cornmeal }], 3200)
-			// Corncob: 4 kernels + 0.5 cornmeal, as the Create machines (creativeengineering/recipes.js)
-			R.ieCrushing(Item.of(i.corn_seeds, 4), i.corncob, e, 'corncob_kernels', [{ chance: 0.5, output: i.cornmeal }], 3200)
+			// Corncob: 3 kernels + 0.5 cornmeal, as the Create machines (creativedelight/recipes.js)
+			R.ieCrushing(Item.of(i.corn_seeds, 3), i.corncob, e, 'corncob_kernels', [{ chance: 0.5, output: i.cornmeal }], 3200)
 		}
 	})
 })

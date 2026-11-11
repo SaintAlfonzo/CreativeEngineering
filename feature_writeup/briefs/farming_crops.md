@@ -787,7 +787,7 @@ The soil yield of `farming/crops #23` for nether crops: extra produce on Nulch (
 - The outline is [crop_yields.md](../crop_yields.md) 4 (owner: outline only): nether wart, ghost pepper, propelplant,
   crimson and warped fungus colonies; a second soil list `[crop_drops.soil_yield.nether]`, crop switches all off.
 - Overworld code: CD
-  [creativeengineering/soil_yield.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/soil_yield.js),
+  [creativedelight/soil_yield.js](../../kubejs/data/creativedelight/kubejs/creativedelight/soil_yield.js),
   CEConfig `[crop_drops.soil_yield]` (`CEConfig.java` around lines 688-743; `CROPS` table order = config keys).
 - Dict keys (checked 2026-10-31): `i.nether_wart` (642), `i.nulch` (678, `immersive_weathering:nulch_block`),
   `i.soul_sand` (1288), `i.soul_soil` (1289), `i.crimson_fungus_colony` / `i.warped_fungus_colony` (13340, 13342),

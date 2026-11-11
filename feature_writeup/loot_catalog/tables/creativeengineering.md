@@ -6,10 +6,10 @@ Source: creativecompat-1.0.0 (1)
 
 | Table | Role | Pools | Entries |
 |---|---|---:|---:|
-| [`creativeengineering:misc/monster_box_reward`](#creativeengineering-misc-monster_box_reward) | code / unused | 1 | 33 |
+| [`creativecompat:misc/monster_box_reward`](#creativeengineering-misc-monster_box_reward) | code / unused | 1 | 33 |
 
 <a id="creativeengineering-misc-monster_box_reward"></a>
-### `creativeengineering:misc/monster_box_reward`
+### `creativecompat:misc/monster_box_reward`
 
 - **Mod / source:** creativecompat-1.0.0 | declared type `minecraft:chest`
 - **Placed by:** referenced outside the loot tables, i.e. set by code or data (found in `creativecompat-1.0.0` CompatConfig$MonsterBox.class)

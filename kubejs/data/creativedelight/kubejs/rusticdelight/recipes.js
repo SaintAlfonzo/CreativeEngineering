@@ -26,7 +26,7 @@ ServerEvents.recipes(e => {
 			[i.maple_cookie, i.syrup, i.honey_bottle],
 		] // G5 end
 		COOKIES.forEach(c => F.cookieBake(c[1], c[0], c[2]))
-		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 2 flavour + 2 sweet. Slices back to a
+		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 3 flavour + 2 sweet. Slices back to a
 		// whole cheesecake stay.
 		var CHEESECAKES = [
 			[i.syrup_cheesecake, i.syrup],

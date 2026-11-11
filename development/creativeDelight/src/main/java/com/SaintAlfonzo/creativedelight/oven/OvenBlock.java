@@ -41,7 +41,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 
 /**
- * {@code creativeengineering:oven}. {@code lit} means "heated from below" (OvenHeat), not "switched on": the block
+ * {@code creativedelight:oven}. {@code lit} means "heated from below" (OvenHeat), not "switched on": the block
  * entity mirrors the heat state into it every tick, and because the oven is in {@code #farmersdelight:heat_sources}
  * FD's lit gate then heats a cooking pot or skillet on top only while the oven itself is heated. FD stove behaviour
  * kept: burns entities standing on it while lit, fire path type, front smoke and crackle.

@@ -28,11 +28,11 @@ feature are documented with that feature and only pointed to here.
 | 2.19 | Others: creative inventory off, XP fluid merge, IE recycling tag order, copper pickaxe tier | various | DEPLOYED |
 | 2.20 | Quark's sort button deletes items from containers holding stacks over the max size | `QuarkSafeSort`, `QuarkSortingHandlerMixin` | DEPLOYED with 1.0.7, see [testing/fridge_sort/plan.md](testing/fridge_sort/plan.md) (FS-01 to FS-05) |
 | 2.21 | Exposure viewfinder outlives its player and eats clicks inside screens | exposureBackport `-04` | DEPLOYED with 1.0.7, see [exposure.md](exposure.md) |
-| 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativeengineering:hammer_no_rotate` | DEPLOYED with 1.0.8, see [oven.md](oven.md) 2.5 |
+| 2.22 | IE Engineer's Hammer rotates the FD cutting board instead of running a hammer cutting recipe | `IECompat.registerHammerNoRotate`, `#creativedelight:hammer_no_rotate` | DEPLOYED with 1.0.8, see [oven.md](oven.md) 2.5 |
 | 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol.md](alcohol.md) Part B |
 | 2.24 | AppleSkin bars missing in cooking/meal slots, keg tank, recipe books, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2 | `MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + client mixins; Brewin' and Vinery ports | BUILT 2026-10-20, not tested, see [tooltips.md](tooltips.md) (TT-19 to TT-30) |
 | 2.25 | Botania Trinket Case holds any item; Quark sort, transfer and search in its screen | `TrinketCaseRules`, 3 `TrinketCase*Mixin`s, `ItemBackedInventoryAccessor`, `[botania]`, Quark `Allowed Screens` | built, scratch server PASSED 2026-10-22 (rules, slots, shift-click, sort, config off); FX-21 to FX-23 client halves in game |
-| 2.26 | Ore Excavation undo: cooldown, denied blocks, drops into the inventory, XP taken once | `excavation/VeinUndo`, 5 `OreExcavation*Mixin`s, `#creativeengineering:vein_undo_denied`, `[vein_undo]`, OE `Auto Pickup = true` | built 2026-10-22, patcherMod 1.1.01 in `mods/`, built, scratch server PASSED 2026-10-22 for the refusal rules, cooldown, Auto Pickup, the offline guard and both config keys (SQ-GM-08, SQ-GM-05); FX-29 to FX-33 in game |
+| 2.26 | Ore Excavation undo: cooldown, denied blocks, drops into the inventory, XP taken once | `excavation/VeinUndo`, 5 `OreExcavation*Mixin`s, `#creativecompat:vein_undo_denied`, `[vein_undo]`, OE `Auto Pickup = true` | built 2026-10-22, patcherMod 1.1.01 in `mods/`, built, scratch server PASSED 2026-10-22 for the refusal rules, cooldown, Auto Pickup, the offline guard and both config keys (SQ-GM-08, SQ-GM-05); FX-29 to FX-33 in game |
 | 2.27 | Config-only (2026-10-22): JEI tooltip search behind `$`, Breezy wind particles x3, every Chalk symbol unlocked; Cosmetic Armor keep-on-death checked, unchanged | `jei-client.ini`, `breezy-client.toml`, `chalk-common.toml` (all in `configs_edited/root_config/`) | done, not deployed, untested: FX-25, FX-26 client only; FX-27 server half scratch server PASSED 2026-10-22 (SQ-GM-06); FX-28 in game |
 | 2.28 | Polymorph recipe choice in the Sophisticated Backpacks crafting upgrade | `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `SophisticatedCraftingPolymorphMixin`, `SophisticatedUpgradeOpenMixin`, `PolymorphRecipeSelectionPacketMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-35 to FX-38 in game |
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
@@ -127,7 +127,7 @@ Create update: [deploy.md](deploy.md) "Mod updates". Used by e.g. `[crafting.fel
 ### 2.9 Bonemeal charm
 
 Lets Do: Vinery's Winemaker set refunds bone meal; the pack generalises it to one held item. Using bone meal with an
-item from `#creativeengineering:bonemeal_charms` in the **other** hand: `chance` 0.5 to give the bone meal back,
+item from `#creativeequipment:bonemeal_charms` in the **other** hand: `chance` 0.5 to give the bone meal back,
 `damageChance` 0.1 to take `damagePerUse` 1 durability from the charm. Today the tag holds only the dragon hoe
 ([gear_tuning.md](gear_tuning.md)). Any error falls back to vanilla bone meal.
 
@@ -210,7 +210,7 @@ Each is documented where it belongs; one line each here.
   `MouseButton.Pre` also fires before an open screen gets the click. The port now drops the viewfinder when the
   ticking player has no active camera or logs out, and ignores clicks while a screen is open.
 - **2.22 IE hammer:** the hammer's `onItemUseFirst` rotates any block without an IE block entity before the block's
-  own `use()`. Blocks in `#creativeengineering:hammer_no_rotate` are added to IE's rotation blacklist.
+  own `use()`. Blocks in `#creativedelight:hammer_no_rotate` are added to IE's rotation blacklist.
 - **2.23 Grass slab bonemeal:** the port forwarded the slab's own state to `Blocks.GRASS_BLOCK`, which Immersive
   Weathering replaces with a block that sets `fertile`; the slab has no such property. It now passes
   `GRASS_BLOCK.defaultBlockState()`. Logs: `debug/10_18/`.
@@ -248,7 +248,7 @@ Each is documented where it belongs; one line each here.
 - **Fix:** `mixin/OreExcavationCommandUndoMixin` runs `excavation/VeinUndo.refusal` at the head of the command:
   a per-player cooldown after each successful undo (`[vein_undo] cooldownSeconds`, default 5; a normal return from
   OE's command is a success, every failure throws) and a refusal when the newest vein mine broke a block in
-  `#creativeengineering:vein_undo_denied` (KubeJS blocktags.js: `#forge:ores`, `#forge:storage_blocks`, ancient
+  `#creativecompat:vein_undo_denied` (KubeJS blocktags.js: `#forge:ores`, `#forge:storage_blocks`, ancient
   debris, spawner, every `*:budding_*`) or, with `denyBlockEntities` (default on), any block with a block entity.
   The message names the block. OE's `Auto Pickup = true` (`oreexcavation-common.toml`, backed up in
   `configs_edited/`); OE alone only spawns the drops at the player's feet, so `mixin/OreExcavationMiningAgentMixin`
@@ -326,7 +326,7 @@ but changed nothing on the server.
 
 Moss Block and Moss Carpet take the biome's grass colour (`gameplay/misc #13`), client only. Vanilla moss has no tint
 index, so with `[moss] biomeTint` on (default) `block/MossTint` swaps every moss block / carpet state and item model at
-bake time for `creativeengineering:block/moss_block_tinted` / `moss_carpet_tinted` (tint index 0 on a grayscale copy of
+bake time for `creativecompat:block/moss_block_tinted` / `moss_carpet_tinted` (tint index 0 on a grayscale copy of
 the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model load (F3+T or restart).
 
 - Tint = `0x738E3A` (the fit that turns the grayscale texture back into vanilla moss, max 13 per channel off on the

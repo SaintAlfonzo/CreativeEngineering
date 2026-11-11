@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * can only take off by jump-in-air, not with a rocket.
  *
  * <p>This widens the check: any armour-slot stack that Forge already considers elytra-capable
- * ({@code ItemStack#canElytraFly}) OR that is in {@code #creativeengineering:elytra_chestplates}
+ * ({@code ItemStack#canElytraFly}) OR that is in {@code #creativeequipment:elytra_chestplates}
  * (populated in KubeJS, reload-able) counts as "wearing an elytra". Once this returns true
  * EET force-sets the fall-flying flag for a few ticks and DragonLoot's own tick mixin keeps
  * the glide going.

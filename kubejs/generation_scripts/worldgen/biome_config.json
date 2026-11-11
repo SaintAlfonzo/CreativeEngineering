@@ -1218,126 +1218,138 @@
       "entry_count": 7,
       "samples": {
         "file": "climate/minecraft__the_end.json.gz",
-        "points": 48161,
-        "seed": "-3738999671541249500",
-        "generated": "2026-11-09T03:18:21.087Z",
+        "points": 48184,
+        "seed": "-2402036498901397500",
+        "generated": "2026-11-09T23:41:09.727Z",
         "layer_points": {
           "surface": 20000,
-          "underground": 28161
+          "underground": 28184
         }
       },
-      "model_agreement_pct": 15.99,
+      "model_agreement_pct": 85.74,
       "biomes": {
         "minecraft:end_highlands": {
           "multiplier": 1,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 62.69,
-          "result_pct": 57.665
+          "share_pct": 65.37,
+          "result_pct": 63.12
         },
         "minecraft:small_end_islands": {
           "multiplier": 1,
           "replace_with": null,
           "entries": 1,
           "layer": "underground",
-          "share_pct": 2.07,
-          "result_pct": 2.049
+          "share_pct": 2.274,
+          "result_pct": 2.271
         },
         "minecraft:the_end": {
           "multiplier": 1,
           "replace_with": null,
           "entries": 1,
           "layer": "underground",
-          "share_pct": 0.16,
-          "result_pct": 0.16
+          "share_pct": 0.121,
+          "result_pct": 0.121
         },
         "nullscape:crystal_peaks": {
           "multiplier": 3,
           "replace_with": null,
           "entries": 2,
           "layer": "surface",
-          "share_pct": 3.9,
-          "result_pct": 8.215,
-          "note": "aimed for 11.7%, got 8.215% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+          "share_pct": 2.74,
+          "result_pct": 9.205,
+          "note": "aimed for 8.22%, got 9.205% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
         },
         "nullscape:shadowlands": {
           "multiplier": 0.75,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 19.525,
-          "result_pct": 14.645
+          "share_pct": 18.555,
+          "result_pct": 13.955
         },
         "nullscape:void_barrens": {
           "multiplier": 2,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 3.83,
-          "result_pct": 9.485,
-          "note": "aimed for 7.66%, got 9.485% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+          "share_pct": 3.465,
+          "result_pct": 3.85,
+          "note": "aimed for 6.93%, got 3.85% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
         }
       }
     },
     "minecraft:the_nether": {
       "source": "vanilla_preset:minecraft:nether",
       "baseline": "biome_baselines/minecraft__the_nether.json",
-      "biome_count": 5,
-      "entry_count": 5,
+      "biome_count": 6,
+      "entry_count": 6,
       "samples": {
         "file": "climate/minecraft__the_nether.json.gz",
         "points": 100000,
-        "seed": "-3738999671541249500",
-        "generated": "2026-11-09T03:14:46.993Z",
+        "seed": "-2402036498901397500",
+        "generated": "2026-11-09T23:37:50.433Z",
         "layer_points": {
           "surface": 100000,
           "underground": 0
         }
       },
-      "model_agreement_pct": 99.985,
+      "model_agreement_pct": 80.49,
       "biomes": {
+        "biomesoplenty:visceral_heap": {
+          "multiplier": 1.0,
+          "replace_with": null,
+          "entries": 1,
+          "layer": "surface",
+          "share_pct": 5.84,
+          "result_pct": 4.995,
+          "target_pct": 5
+        },
         "minecraft:basalt_deltas": {
           "multiplier": 0.666,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 16.815,
-          "result_pct": 11.2
+          "share_pct": 15.89,
+          "result_pct": 15,
+          "target_pct": 15
         },
         "minecraft:crimson_forest": {
           "multiplier": 0.75,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 22.04,
-          "result_pct": 16.525
+          "share_pct": 18.61,
+          "result_pct": 15,
+          "target_pct": 15
         },
         "minecraft:nether_wastes": {
           "multiplier": 2,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 33.545,
-          "result_pct": 45.235,
-          "note": "aimed for 67.09%, got 45.235% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+          "share_pct": 37.36,
+          "result_pct": 30.005,
+          "target_pct": 30
         },
         "minecraft:soul_sand_valley": {
           "multiplier": 1.25,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 17.945,
-          "result_pct": 19.805,
-          "note": "aimed for 22.431%, got 19.805% -- either out of the penalty range (offset 0.6 either way) or its climate space is all-or-nothing (overlapping boxes)"
+          "share_pct": 16.555,
+          "result_pct": 20,
+          "target_pct": 20
         },
         "minecraft:warped_forest": {
           "multiplier": 0.75,
           "replace_with": null,
           "entries": 1,
           "layer": "surface",
-          "share_pct": 9.655,
-          "result_pct": 7.235
+          "share_pct": 5.745,
+          "result_pct": 15,
+          "target_pct": 15
         }
       }
     }

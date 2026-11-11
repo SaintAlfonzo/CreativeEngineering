@@ -125,7 +125,7 @@ one of each. Plan: a tag of the two (`global.tags`, in `upgrade_aquatic/tags.js`
 `abnormals_delight:pickerelweed_juice` and `abnormals_delight:pike_with_beetroot`; keep results, 1.0 xp, 200 ticks, the
 drinks / meals tab, the sugar, the `#forge:raw_fishes/pike` and the beetroot as they are.
 
-As built: tag `#creativeengineering:pickerelweed` (`i.t_pickerelweed`) in `upgrade_aquatic/tags.js`; recipes in
+As built: tag `#creativedelight:pickerelweed` (`i.t_pickerelweed`) in `upgrade_aquatic/tags.js`; recipes in
 `abnormals_delight/upgrade_aquatic.js`, ids `farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot`. New
 key `i.raw_pike` (`#forge:raw_fishes/pike`). The beetroot is `i.beetroot` (`#forge:crops/beetroot`). **Not kept: the
 recipe book tab.** `NCH.fdCooking` has no tab argument (no pack Cooking Pot recipe sets one), so both land on FD's default

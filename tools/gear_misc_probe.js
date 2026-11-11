@@ -35,10 +35,10 @@
 
     const SHIELDS = [
         // id, expected [effect, amplifier] on the holder, attacker effect or null
-        ['creativeengineering:netherite_shield', [], null],
-        ['creativeengineering:echo_shield', [['minecraft:resistance', 0]], null],
-        ['creativeengineering:felsic_shield', [['minecraft:resistance', 1]], null],
-        ['creativeengineering:dragon_shield', [['minecraft:resistance', 1], ['minecraft:regeneration', 0]], 'minecraft:poison']
+        ['creativeequipment:netherite_shield', [], null],
+        ['creativeequipment:echo_shield', [['minecraft:resistance', 0]], null],
+        ['creativeequipment:felsic_shield', [['minecraft:resistance', 1]], null],
+        ['creativeequipment:dragon_shield', [['minecraft:resistance', 1], ['minecraft:regeneration', 0]], 'minecraft:poison']
     ]
     const BOW = 'dragonloot:dragon_bow', CROSSBOW = 'dragonloot:dragon_crossbow'
 
@@ -105,7 +105,7 @@
     }
 
     function bag() {
-        const $Bag = Java.loadClass('com.SaintAlfonzo.exposure_extras.camerabag.CameraBag')
+        const $Bag = Java.loadClass('com.SaintAlfonzo.exposureextras.camerabag.CameraBag')
         check($Bag.canHold(stack('minecraft:redstone_lamp', 1)), 'bag holds a redstone lamp')
         check($Bag.canHold(stack('immersiveengineering:light_bulb', 1)), 'bag holds an IE light bulb')
         check(!$Bag.canHold(stack('minecraft:stick', 1)), 'bag refuses a stick')

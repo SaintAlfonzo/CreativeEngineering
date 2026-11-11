@@ -47,11 +47,11 @@ temporary source ships with the port.
   `#salt:can_be_salted` or `#forge:salts`.
 - **`#salt:can_be_salted`**: 148 items in the 2026-10-30 tag dump (`kubejs/exported/tags/item_tags.json`), still the
   jar's list; no pack script adds to or removes from it (the only mention is a comment in
-  [seasoning_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning_tags.js) line 13).
+  [seasoning_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/seasoning_tags.js) line 13).
   Intermediates still in it: `farmersdelight:bone_broth`, `cooked_rice`, `tomato_sauce`.
 - **Create: The Salt**: 67 `create__the_salt:*` `create:mixing` recipes in the 2026-10-30 recipe dump (food + salt ->
   the same food `{Salted:1b}`, FD foods and vanilla only). Its salt production recipes are removed.
-- **Salt routes** ([salt.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/salt.js), CD): raw rock salt
+- **Salt routes** ([salt.js](../../kubejs/data/creativedelight/kubejs/creativedelight/salt.js), CD): raw rock salt
   -> 4 salt by hand, crushing, milling (and the mortar via `mortar_catalog.json`); heated basin 200 mB water -> 60 %
   salt (`water_salt`); cauldron evaporation bonus 50 % (`kubejs/data/salt/loot_tables/cauldron_evaporation/`); Large
   Salt Lamp from 7 Salt Blocks. Salt's own butcher trades are on (`ButcherSaltTradesEnabled = true`); the trade dump
@@ -60,7 +60,7 @@ temporary source ships with the port.
   [seasonings.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js)
   (5 seasonings: cheese, onion, garlic, sugar, void_pepper), patcherMod `food/Seasonings.java` (223 lines; bonus
   kinds `nutrition`, `saturation`, `heal`, `effects`; `combines`), `food/SeasoningRecipe`, crafts by `NCH.season`
-  (neoCraftHelper.js 1400-1412) from [seasoning.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/seasoning.js),
+  (neoCraftHelper.js 1400-1412) from [seasoning.js](../../kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js),
   foods by `#<ns>:seasonable/<path>` from `families` / `add` / `remove`. Today every seasoning with foods is on popcorn
   only; sugar has none.
 

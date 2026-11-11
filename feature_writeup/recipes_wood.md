@@ -16,7 +16,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
-  SQ-RW-23 FAILED: the `#creativeengineering:smokable/*` shape tags included Botania, driftwood, crimson and warped.
+  SQ-RW-23 FAILED: the `#creativecommon:smokable/*` shape tags included Botania, driftwood, crimson and warped.
   FIXED 2026-11-01 (`engineering/dreams-and-desires #10`, owner call): the 13 tags are now an allow-list of the seven
   vanilla overworld woods (oak, spruce, birch, jungle, acacia, dark oak, mangrove), no modded or nether wood;
   SQ-RW-23 to rerun; SQ-RW-25,
@@ -287,12 +287,12 @@ None.
   the bark species. Tests RW-21, RW-22. Not run in game.
 - 2026-10-24: planned `recipes/wood #4` and `recipes/materials #7` added; no code changed.
 - 2026-10-30: `server_scripts/wood/smoked_wood.js`: smoking recipes (200 ticks) for the 13 Dreams & Desires smoked blocks from
-  any wood of the same shape (tags `creativeengineering:smokable/<shape>`, built in `wood_tags.js` from the vanilla / forge wood tags,
+  any wood of the same shape (tags `creativecommon:smokable/<shape>`, built in `wood_tags.js` from the vanilla / forge wood tags,
   minus smoked, polished, vertical, beams, Botania woods); createaddition's treated-wood filling replaced by the same recipe over new tag
   `creativeengineering:unsmoked_planks` (125 mB), IE bottling mirror (125 mB), and smoked planks 100 mB in Create and IE.
   Smoked wood had no source before. Tests RW-23 to RW-26. Not run in game.
 - 2026-10-30: `recipes/wood #4` built in `server_scripts/wood/bark.js`: Pickling Jar, 4 `#immersive_weathering:bark` + salt -> leather, 2400 ticks (`leather_from_bark`). RW-27; not run in game.
-- 2026-11-01: `engineering/dreams-and-desires #10`: the 13 `creativeengineering:smokable/<shape>` tags in `wood_tags.js`
+- 2026-11-01: `engineering/dreams-and-desires #10`: the 13 `creativecommon:smokable/<shape>` tags in `wood_tags.js`
   are built from an allow-list (item_dict keys of oak, spruce, birch, jungle, acacia, dark oak, mangrove) instead of the
   vanilla / forge wood tags minus exclusions; Botania, driftwood, Quark and every other modded wood and crimson / warped
   no longer smoke. RW-23 rewritten. `/reload`; not run in game.

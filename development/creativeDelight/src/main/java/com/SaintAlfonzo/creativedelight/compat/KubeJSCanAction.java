@@ -15,7 +15,7 @@ import com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions;
  */
 public final class KubeJSCanAction {
 
-    public static final String ID = "creativeengineering:can_serving";
+    public static final String ID = "creativedelight:can_serving";
 
     private KubeJSCanAction() {}
 

@@ -10,7 +10,7 @@ import net.minecraft.world.item.Items;
 
 public class CEQTiers {
     public static final TagKey<Block> NEEDS_COPPER_TOOL =
-        TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeengineering", "needs_copper_tool"));
+        TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeequipment", "needs_copper_tool"));
 
     public static final ForgeTier COPPER = new ForgeTier(
         1,

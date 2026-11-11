@@ -2,28 +2,19 @@ package com.SaintAlfonzo.creativedelight.hearth.crow;
 
 import java.util.UUID;
 import javax.annotation.Nullable;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
 
 /**
- * Per-crow alarm, trust and theft state (plan_hearth_crow_salt.md 8.5, C1), a capability on {@code alexsmobs:crow} only.
+ * Per-crow alarm, trust and theft state (plan_hearth_crow_salt.md 8.5, C1), kept on {@link CrowEntity} (a capability on Alex's
+ * Mobs' crow before the swap, plan_hearth_crow_swap.md P3).
  * Trust changes only how close a wild crow lets a player come; it never gates taming.
  */
-public class CrowWariness implements INBTSerializable<CompoundTag> {
-    public static final Capability<CrowWariness> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
-    });
+public class CrowWariness {
     public static final int ALARM_DURATION = 120;
     public static final int FULL_TRUST = 200;
 
@@ -40,9 +31,8 @@ public class CrowWariness implements INBTSerializable<CompoundTag> {
     private int carryTicks;
     private ItemStack heldBack = ItemStack.EMPTY;
 
-    @Nullable
-    public static CrowWariness of(TamableAnimal crow) {
-        return crow.getCapability(CAPABILITY).orElse(null);
+    public static CrowWariness of(CrowEntity crow) {
+        return crow.getWariness();
     }
 
     public void tick() {
@@ -137,13 +127,12 @@ public class CrowWariness implements INBTSerializable<CompoundTag> {
         return heldBack;
     }
 
-    /** Loot kept out of AM's "drop on any hit" for a tick while {@code crow.dropOnHurt} is off. */
+    /** Loot kept out of the hand for a tick while {@code crow.dropOnHurt} is off. */
     public void setHeldBack(ItemStack stack) {
         heldBack = stack;
     }
 
-    @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putInt("Trust", trust);
         tag.putInt("AlarmTicks", alarmTicks);
@@ -158,33 +147,12 @@ public class CrowWariness implements INBTSerializable<CompoundTag> {
         return tag;
     }
 
-    @Override
-    public void deserializeNBT(CompoundTag tag) {
+    public void load(CompoundTag tag) {
         trust = Mth.clamp(tag.getInt("Trust"), 0, FULL_TRUST);
         alarmTicks = tag.getInt("AlarmTicks");
         alarmSource = tag.hasUUID("AlarmSource") ? tag.getUUID("AlarmSource") : null;
         carrying = tag.getBoolean("Carrying");
         carryTicks = tag.getInt("CarryTicks");
         heldBack = tag.contains("HeldBack") ? ItemStack.of(tag.getCompound("HeldBack")) : ItemStack.EMPTY;
-    }
-
-    public static final class Provider implements ICapabilitySerializable<CompoundTag> {
-        private final CrowWariness instance = new CrowWariness();
-        private final LazyOptional<CrowWariness> optional = LazyOptional.of(() -> instance);
-
-        @Override
-        public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
-            return capability == CAPABILITY ? optional.cast() : LazyOptional.empty();
-        }
-
-        @Override
-        public CompoundTag serializeNBT() {
-            return instance.serializeNBT();
-        }
-
-        @Override
-        public void deserializeNBT(CompoundTag tag) {
-            instance.deserializeNBT(tag);
-        }
     }
 }

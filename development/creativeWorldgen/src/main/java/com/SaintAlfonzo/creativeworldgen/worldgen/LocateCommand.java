@@ -56,7 +56,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public final class LocateCommand {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/locate");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/locate");
 	static final String BATCH_OUT = "kubejs/exported/worldgen/locate_batch.json";
 	static final String CENSUS_OUT = "kubejs/exported/worldgen/locate_census.json";
 	static final String STATS_OUT = "kubejs/exported/worldgen/locate_stats.json";

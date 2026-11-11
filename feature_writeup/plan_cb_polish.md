@@ -34,7 +34,7 @@ but their on-hit rows sit in CB's `kubejs_startup/creativeengineering/tool_effec
 - Java to Equipment: `CopperPoisoningHandler`, `CopperPoisoningEffectMixin` (Equipment already depends on Everything Copper);
   `EchoArmorEffectProcedureMixin`, `EchoArmorTooltipMixin` (Create: Deep Dark echo set bonus; add `create_deep_dark` as an
   optional dependency in Equipment's `mods.toml` and a guard in `EquipmentMixinPlugin`).
-- JEED rows for echo armor (`kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js:137-139`) move with the
+- JEED rows for echo armor (`kubejs/data/creativebrewing/kubejs/creativebrewing/jeed_providers.js:137-139`) move with the
   rows; `kubejs/data/creativebrewing/kubejs/alexsmobs/lava_vision.js` needs a look to pick Equipment or CD.
 - Echo gear is split four ways today (items in Equipment, rows in CB, mixins in CB, JEED rows in CB): one owner after this.
 - Tests: rerun SQ-CBO-01 and the 22 rows that failed only on the leak; add an Equipment-only boot (Common, Compat, Equipment,
@@ -62,7 +62,7 @@ Today the effect framework and almost every effect definition are in CB. Common 
 
 | Piece | Now | Notes |
 |---|---|---|
-| `global.armorEffects`, `global.toolEffects` frameworks, tick applier, tooltip scripts (`armor_effects.js`, `tool_effects.js`, their data script and `*_tooltip.js` asset scripts in the pack's `kubejs/data|assets/creativebrewing/kubejs/creativeengineering/`) | CB | the two files share helpers and move together; priority -100 and `global.item` load order; the applier is gated on `global.CB`, the gate changes to the framework's own flag |
+| `global.armorEffects`, `global.toolEffects` frameworks, tick applier, tooltip scripts (`armor_effects.js`, `tool_effects.js`, their data script and `*_tooltip.js` asset scripts in the pack's `kubejs/data|assets/creativebrewing/kubejs/creativebrewing/`) | CB | the two files share helpers and move together; priority -100 and `global.item` load order; the applier is gated on `global.CB`, the gate changes to the framework's own flag |
 | `EffectRules`, `EffectCategories`, `LivingEntityEffectRemapMixin`, `MobEffectCategoryMixin`, `GuiEffectIconMixin`, `LivingEntityUseItemIconMixin`, `CreateTeaPipeIconMixin`, `FruitsDelightEffectFuncMixin` | CB, driven by `CBConfig [effects]` | `[effects]` config section moves to the Common config; carry-over shim for edited `creativebrewing-*.toml` values (as `CDConfig.java:69` did) |
 | `CompoundEffects`, `CompoundEffectTooltip`, `JeedEffectInfoMixin`, `JeedEffectRendererMixin` | CB | JEED and the Vinery wine table stay optional |
 | `PhantomBaneRules`, `PhantomSpawnerBaneSkipMixin`, `CaffeinatedEffectMixin` | CB | Common, or the Farmer's Respite half into CD (CD already holds the kettle mixins) |

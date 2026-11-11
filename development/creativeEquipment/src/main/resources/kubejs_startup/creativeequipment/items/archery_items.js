@@ -4,5 +4,5 @@
 // item/generated model; texture at assets/creativeengineering/textures/item/arrow_fletching.png in this jar.
 
 StartupEvents.registry('item', e => {
-    e.create('creativeengineering:arrow_fletching')
+    e.create('creativeequipment:arrow_fletching')
 })

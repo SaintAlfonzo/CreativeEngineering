@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#creativeworldgen:wise_oak_biomes",
+  "features": "mysticaloaktree:wise_oak",
+  "step": "vegetal_decoration"
+}

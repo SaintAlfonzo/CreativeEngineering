@@ -29,7 +29,7 @@ import java.util.WeakHashMap;
  */
 public final class TemplateSpawnerFilter {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/spawner-filter");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/spawner-filter");
 	private static final Set<StructureTemplate> DONE = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
 
 	private TemplateSpawnerFilter() {}

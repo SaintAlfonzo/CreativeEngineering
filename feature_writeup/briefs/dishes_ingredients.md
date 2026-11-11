@@ -250,9 +250,9 @@ Honeycomb counts as sugar in heated mixing (2 sugar per honeycomb), as honey in 
 
 ### Now (checked 2026-10-31)
 - Done by row 3 (shipped 1.1.03): honeycomb is in `#creativeengineering:sweeteners` (`i.any_sweetener`, item_dict 1870;
-  [creativeengineering/tags.js:14](../../kubejs/data/creativedelight/kubejs/creativeengineering/tags.js)) and the brewing tier,
+  [creativedelight/tags.js:14](../../kubejs/data/creativedelight/kubejs/creativedelight/tags.js)) and the brewing tier,
   so every cooking sugar slot takes it 1 for 1; drinks do not.
-- Done: honey cake takes a honey bottle and a honeycomb ([creativeengineering/baking.js:51](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js),
+- Done: honey cake takes a honey bottle and a honeycomb ([creativedelight/baking.js:51](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js),
   `baking/baked-goods #26`).
 - Open: the 2-per-comb rate, other honey uses, the toast spread. More Delight `toast_with_honey` is toast + honey bottle
   (fast-eating toast list in CD startup `moredelight/toast.js`); no honeycomb toast recipe.
@@ -283,14 +283,14 @@ cake base (scratchpad 2026-10-22).
 
 ### Now (checked 2026-10-31)
 - `rusticdelight:batter` (`i.batter`, item_dict 12721). Made in the pot (`rusticdelight:cooking/batter`) and its Slice & Dice
-  copy, grain slots wheat flour, cornmeal or rice (row 24, [creativeengineering/baked_goods.js:21-27](../../kubejs/data/creativedelight/kubejs/creativeengineering/baked_goods.js),
+  copy, grain slots wheat flour, cornmeal or rice (row 24, [creativedelight/baked_goods.js:21-27](../../kubejs/data/creativedelight/kubejs/creativedelight/baked_goods.js),
   shipped 1.1.05); heated mix with egg solution ([rusticdelight/recipes.js:46-47](../../kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)).
   So "batter made from wheat flour or cornmeal" is **done**.
 - Users (upstream Rustic 1.7.0 data): the seven pancakes (grid and pot), fried calamari, fried chicken, fried fish; the pack's
   salmon tempura ([pneumaticcraft/recipes.js:57](../../kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js)).
 - Not using batter: Supplementaries pancakes (sweetener + egg + milk + grain, [supplementaries/recipes.js:28-33](../../kubejs/data/creativedelight/kubejs/supplementaries/recipes.js)),
   muffins (oven, flour + milk + egg + sweetener, CD startup `creativedelight/cd_food.js:160-164`), the cake base (flour or
-  dough, [creativeengineering/baking.js:99-105](../../kubejs/data/creativedelight/kubejs/creativeengineering/baking.js)).
+  dough, [creativedelight/baking.js:99-105](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js)).
 
 ### Build
 1. Cake base: in baking.js add `R.shapeless(i.cake_base, [Item.of(i.batter, 2), i.eggs, i.any_sweetener, i.any_sweetener], e, 'cake_base_batter_manual_only')`

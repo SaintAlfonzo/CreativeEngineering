@@ -1,0 +1,26 @@
+{
+  "__comment": "One Geophilic birch stump for creativeworldgen:meta/deadwood_birch (meta_structures.json). No count, rarity, square or biome modifier: the meta structure picks the spots. Ground, dry land and sapling-survival checks are upstream's.",
+  "feature": "geophilic_reforged:tree_stumps/mc/birch",
+  "placement": [
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR"
+    },
+    {
+      "type": "minecraft:surface_water_depth_filter",
+      "max_water_depth": 0
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "minecraft:oak_sapling",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    }
+  ]
+}

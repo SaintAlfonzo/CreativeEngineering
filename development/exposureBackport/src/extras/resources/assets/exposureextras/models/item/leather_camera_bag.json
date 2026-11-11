@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "exposureextras:item/camera_bag_dyable",
+    "layer1": "exposureextras:item/camera_bag_outline_leather"
+  }
+}

@@ -29,8 +29,9 @@ import java.util.regex.Pattern;
  * offline harness; {@link PaintingPack} feeds it the registry and the jars and serves the result.
  *
  * <p>Immersive reads {@code data/<ns>/paintings/**.png} plus a sibling json {name, author, width, height (blocks),
- * resolution (px per block)}. Each variant {@code ns:path} becomes {@code data/creativeengineering/paintings/<ns>/<path>.png}
- * + .json: the ids the old generated datapack used, so paintings already placed keep their picture. Same rules as the old
+ * resolution (px per block)}. Each variant {@code ns:path} becomes {@code data/creativecompat/paintings/<ns>/<path>.png}
+ * + .json (until 2026-11-10 under creativeengineering; mixin/ImmersivePaintingMotiveAliasMixin moves placed paintings
+ * that still name the old id). Same rules as the old
  * generator (tools/gen_immersive_paintings.py, which now writes only the vanilla ones):
  * <ul>
  *   <li>texture {@code assets/<ns>/textures/painting/<path>.png}, the last source that has it wins;</li>
@@ -43,7 +44,7 @@ import java.util.regex.Pattern;
  */
 public final class PaintingArt {
 
-    public static final String OUT_NAMESPACE = "creativeengineering";
+    public static final String OUT_NAMESPACE = "creativecompat";
     public static final int TARGET_RES = 32;
 
     /** A registered painting variant: id parts and size in pixels (16 per block). */

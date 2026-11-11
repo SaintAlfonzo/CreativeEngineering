@@ -2,8 +2,8 @@
 // Restart to apply.
 //
 // Drink rules (feature_writeup/creative_delight_drinks.md, TODO food/drinks #15): the pack's new teas and juices
-// (ids reserved in section 6) and the fluids the rules brew on. Recipes: data/creativedelight/kubejs/creativeengineering/
-// drinks.js; names and fluid names of renamed drinks: assets/creativedelight/kubejs/creativeengineering/names.js.
+// (ids reserved in section 6) and the fluids the rules brew on. Recipes: data/creativedelight/kubejs/creativedelight/
+// drinks.js; names and fluid names of renamed drinks: assets/creativedelight/kubejs/creativedelight/names.js.
 // Art: this jar's assets/creativeengineering/textures/item/<id>.png, recoloured from Farmer's Respite's green tea (teas) and
 // Farmer's Delight's melon juice (juices), both MIT (notice beside them).
 //

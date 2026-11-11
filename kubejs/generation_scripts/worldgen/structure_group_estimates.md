@@ -6,7 +6,7 @@ Compared against: **mod defaults**. Ratio = new / that; 1.00 = unchanged.
 
 ## Groups
 
-### `settlements` -> `creativeengineering:group/settlements`
+### `settlements` -> `creativeworldgen:group/settlements`
 
 Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.
 
@@ -46,20 +46,20 @@ Capped (old combined density above the group grid): 77 biome(s), 80% of the grou
 | `towns_and_towers:village_sunflower_plains` | 100 | 0.544825 | 99 | 156 | 0.40 |  |
 | `towns_and_towers:village_swamp` | 100 | 0.582744 | 64 | 77 | 0.70 |  |
 | `towns_and_towers:village_wooded_badlands` | 100 | 0.340365 | 78 | 128 | 0.37 |  |
-| `creativeengineering:meta/village_towers` | 1 | 1.0 | - | 109 | new |  |
-| `creativeengineering:meta/fortified_camps` | 1 | 1.0 | - | 184 | new |  |
-| `creativeengineering:meta/fortified_ruins` | 1 | 1.0 | - | 181 | new |  |
-| `creativeengineering:meta/town_villages` | 1 | 1.0 | - | 143 | new |  |
+| `creativeworldgen:meta/village_towers` | 1 | 1.0 | - | 109 | new |  |
+| `creativeworldgen:meta/fortified_camps` | 1 | 1.0 | - | 184 | new |  |
+| `creativeworldgen:meta/fortified_ruins` | 1 | 1.0 | - | 181 | new |  |
+| `creativeworldgen:meta/town_villages` | 1 | 1.0 | - | 143 | new |  |
 | `eugene:red_roof_castle` | 100 | 1.0 | 97 | 102 | 0.90 |  |
-| `creativeengineering:meta/meteorite_village` | 1 | 1.0 | - | 275 | new |  |
-| `creativeengineering:meta/village_siege_camp` | 1 | 1.0 | - | 294 | new |  |
-| `creativeengineering:meta/village_siege_ring` | 1 | 1.0 | - | 294 | new |  |
+| `creativeworldgen:meta/meteorite_village` | 1 | 1.0 | - | 275 | new |  |
+| `creativeworldgen:meta/village_siege_camp` | 1 | 1.0 | - | 294 | new |  |
+| `creativeworldgen:meta/village_siege_ring` | 1 | 1.0 | - | 294 | new |  |
 
-### `pillager_settlements` -> `creativeengineering:group/pillager_settlements`
+### `pillager_settlements` -> `creativeworldgen:group/pillager_settlements`
 
 Pillager outposts: vanilla, and every Towns & Towers tower, fort and camp outpost except the ship (boats).
 
-Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
+Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 blocks apart). At most 1 structure per 32 x 32 chunks anywhere. Excluded within 4 chunks of `creativeworldgen:group/settlements` grid slots.
 
 Capped (old combined density above the group grid): 70 biome(s), 33% of the group's area. Largest: `terralith:yellowstone` 1 per 27 -> 28, `minecraft:plains` 1 per 26 -> 27, `terralith:highlands` 1 per 26 -> 27, `terralith:brushland` 1 per 30 -> 27, `terralith:lush_desert` 1 per 30 -> 27, `terralith:rocky_mountains` 1 per 26 -> 27.
 
@@ -102,19 +102,19 @@ Capped (old combined density above the group grid): 70 biome(s), 33% of the grou
 | `mysticrift_pillagers_towers_aris:jungle_pillager_tower` | 30 | 0.973476 | 128 | 91 | 1.96 |  |
 | `mysticrift_pillagers_towers_aris:mangrove_pillager_tower` | 15 | 0.038089 | 160 | 765 | 0.04 |  |
 | `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower` | 15 | 0.467934 | 127 | 190 | 0.45 |  |
-| `creativeengineering:meta/pillager_camp_ruin` | 1 | 1.0 | - | 128 | new |  |
-| `creativeengineering:meta/pillager_camp_ruins` | 1 | 1.0 | - | 124 | new |  |
-| `creativeengineering:meta/pillager_camp_siege` | 1 | 1.0 | - | 138 | new |  |
-| `creativeengineering:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 276 | new |  |
-| `creativeengineering:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 105 | new |  |
-| `creativeengineering:meta/pillager_tower_siege` | 1 | 1.0 | - | 88 | new |  |
+| `creativeworldgen:meta/pillager_camp_ruin` | 1 | 1.0 | - | 128 | new |  |
+| `creativeworldgen:meta/pillager_camp_ruins` | 1 | 1.0 | - | 124 | new |  |
+| `creativeworldgen:meta/pillager_camp_siege` | 1 | 1.0 | - | 138 | new |  |
+| `creativeworldgen:meta/pillager_great_tower_siege` | 1 | 1.0 | - | 276 | new |  |
+| `creativeworldgen:meta/pillager_stronghold_siege` | 1 | 1.0 | - | 105 | new |  |
+| `creativeworldgen:meta/pillager_tower_siege` | 1 | 1.0 | - | 88 | new |  |
 | `takesapillage:bastille` | 34 | 1.0 | 55 | 124 | 0.20 |  |
 | `takesapillage:pillager_camp` | 87 | 1.0 | 39 | 78 | 0.25 |  |
 | `eugene:fake_trader_camp` | 100 | 1.0 | 200 | 78 | 6.68 |  |
 | `eugene:pillager_camp` | 100 | 1.0 | 58 | 78 | 0.56 |  |
-| `creativeengineering:meta/pillager_camp_meteorite` | 1 | 1.0 | - | 189 | new |  |
+| `creativeworldgen:meta/pillager_camp_meteorite` | 1 | 1.0 | - | 189 | new |  |
 
-### `ruins` -> `creativeengineering:group/ruins`
+### `ruins` -> `creativeworldgen:group/ruins`
 
 Surface land ruins: Philip's Ruins and Terralith's glacial hut. Underground ruins stay standalone.
 
@@ -145,17 +145,17 @@ Capped (old combined density above the group grid): 62 biome(s), 62% of the grou
 | `forest_ruins:ruin_7` | 100 | 0.904155 | 45 | 72 | 0.39 |  |
 | `forgotten_church:forgotten_church` | 100 | 1.0 | 55 | 69 | 0.64 |  |
 | `watchtower_building:abandoned_watchtower` | 21 | 0.194882 | 48 | 115 | 0.17 |  |
-| `creativeengineering:meta/ruin_cluster` | 1 | 1.0 | - | 52 | new |  |
-| `creativeengineering:meta/ruin_scatter` | 1 | 1.0 | - | 40 | new |  |
+| `creativeworldgen:meta/ruin_cluster` | 1 | 1.0 | - | 52 | new |  |
+| `creativeworldgen:meta/ruin_scatter` | 1 | 1.0 | - | 40 | new |  |
 | `old_illager_statue:old_illager_statue` | 26 | 1.0 | 42 | 104 | 0.16 |  |
 | `oldvillagerstatue:old_villager_statue` | 26 | 1.0 | 40 | 104 | 0.15 |  |
 | `small_cat_statues:cat_1` | 19 | 1.0 | 30 | 119 | 0.06 |  |
 | `small_cat_statues:cat_2` | 19 | 1.0 | 30 | 119 | 0.06 |  |
 | `small_cat_statues:cat_3` | 19 | 1.0 | 30 | 119 | 0.06 |  |
 | `eugene:ruined_drum_tower` | 100 | 1.0 | 101 | 70 | 2.09 |  |
-| `creativeengineering:meta/waystone_ruins` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
+| `creativeworldgen:meta/waystone_ruins` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
 
-### `surface_dungeons` -> `creativeengineering:group/surface_dungeons`
+### `surface_dungeons` -> `creativeworldgen:group/surface_dungeons`
 
 Surface dungeons: YUNG's desert and jungle temples, the vanilla desert pyramid and jungle temple (each in 10% of its YUNG's version's slots, "replaces" in structure_groups.json), the woodland mansion, Terralith's spire, the T&T desert mimic, Philip's badlands dungeon. The witch huts have their own group (group/witch_huts).
 
@@ -170,9 +170,9 @@ Grid: spacing 16, separation 10 (members never start closer than 11 chunks = 176
 | `towns_and_towers:mimic_desert` | 100 | 0.521 | 32 | 24 | 1.76 |  |
 | `minecraft:jungle_pyramid` | 1 | 1.0 | 32 | 58 | 0.30 | replaces `betterjungletemples:jungle_temple` in 10% of its slots |
 | `eugene:undead_castle` | 100 | 0.026314 | 93 | 100 | 0.87 |  |
-| `creativeengineering:meta/jungle_temple_ruins` | 1 | 1.0 | - | 31 | new |  |
+| `creativeworldgen:meta/jungle_temple_ruins` | 1 | 1.0 | - | 31 | new |  |
 
-### `witch_huts` -> `creativeengineering:group/witch_huts`
+### `witch_huts` -> `creativeworldgen:group/witch_huts`
 
 Witch huts, swamps only (land/swamp): YUNG's witch hut and witch circle, the Villages & Pillages witch village, and the vanilla swamp hut as a replacement of YUNG's hut. Own grid (at least 144 blocks between huts), so they no longer compete with the surface dungeons.
 
@@ -186,9 +186,9 @@ Capped (old combined density above the group grid): 4 biome(s), 100% of the grou
 | `betterwitchhuts:witch_circle` | 100 | 0.9433 | 40 | 29 | 1.97 |  |
 | `betterwitchhuts:witch_hut` | 100 | 0.935 | 30 | 30 | 0.99 |  |
 | `villagesandpillages:village_witch` | 100 | 0.9374 | 24 | 29 | 0.70 |  |
-| `creativeengineering:meta/witch_coven` | 1 | 1.0 | - | 45 | new |  |
+| `creativeworldgen:meta/witch_coven` | 1 | 1.0 | - | 45 | new |  |
 
-### `entrance_dungeons` -> `creativeengineering:group/entrance_dungeons`
+### `entrance_dungeons` -> `creativeworldgen:group/entrance_dungeons`
 
 Surface-entrance dungeons, land only: YUNG's zombie dungeon (crypt) and spider dungeon (spider cave). Own grid (at least 272 blocks apart); the water rule's surface check keeps their entrances out of the sea.
 
@@ -199,7 +199,7 @@ Grid: spacing 32, separation 16 (members never start closer than 17 chunks = 272
 | `betterdungeons:spider_dungeon` | 100 | 0.9754 | 44 | 46 | 0.92 |  |
 | `betterdungeons:zombie_dungeon` | 100 | 0.971 | 48 | 46 | 1.09 |  |
 
-### `ocean_ruins` -> `creativeengineering:group/ocean_ruins`
+### `ocean_ruins` -> `creativeworldgen:group/ocean_ruins`
 
 Ocean ruins and wrecks: vanilla, Hopo's and Philip's ocean ruins, Philip's ocean fortress, vanilla shipwrecks, the T&T wreckage.
 
@@ -219,13 +219,13 @@ Capped (old combined density above the group grid): 2 biome(s), 21% of the group
 | `towns_and_towers:wreckage_ocean` | 100 | 0.3243 | 32 | 34 | 0.90 |  |
 | `revamped_shipwrecks:shipwreck` | 100 | 1.0 | 24 | 20 | 1.48 |  |
 | `revamped_shipwrecks:shipwreck_beached` | 100 | 0.4444 | 24 | 12 | 4.00 |  |
-| `creativeengineering:meta/shipwreck_debris` | 1 | 1.0 | - | 35 | new |  |
-| `creativeengineering:meta/shipwreck_graveyard` | 1 | 1.0 | - | 53 | new |  |
-| `creativeengineering:meta/sunken_ruin_cluster` | 1 | 1.0 | - | 24 | new |  |
+| `creativeworldgen:meta/shipwreck_debris` | 1 | 1.0 | - | 35 | new |  |
+| `creativeworldgen:meta/shipwreck_graveyard` | 1 | 1.0 | - | 53 | new |  |
+| `creativeworldgen:meta/sunken_ruin_cluster` | 1 | 1.0 | - | 24 | new |  |
 | `hopo:underwater_fossils` | 100 | 1.0 | 18 | 20 | 0.78 |  |
-| `creativeengineering:meta/underwater_meteorite` | 1 | 1.0 | - | 54 | new |  |
+| `creativeworldgen:meta/underwater_meteorite` | 1 | 1.0 | - | 54 | new |  |
 
-### `ocean_dungeons` -> `creativeengineering:group/ocean_dungeons`
+### `ocean_dungeons` -> `creativeworldgen:group/ocean_dungeons`
 
 Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later.
 
@@ -234,9 +234,9 @@ Grid: spacing 32, separation 6 (members never start closer than 7 chunks = 112 b
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
 | `minecraft:monument` | 100 | 0.1 | 32 | 101 | 0.10 |  |
-| `creativeengineering:meta/struck_monument` | 1 | 1.0 | - | 202 | new |  |
+| `creativeworldgen:meta/struck_monument` | 1 | 1.0 | - | 202 | new |  |
 
-### `boats` -> `creativeengineering:group/boats`
+### `boats` -> `creativeworldgen:group/boats`
 
 Ships at sea: the Towns & Towers ship village and pillager ship. Meta structures join later.
 
@@ -256,10 +256,10 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 | `villager_rafts:raft_1` | 100 | 1.0 | 50 | 135 | 0.14 |  |
 | `villager_rafts:raft_2` | 100 | 1.0 | 50 | 135 | 0.14 |  |
 | `villager_rafts:raft_3` | 100 | 1.0 | 50 | 135 | 0.14 |  |
-| `creativeengineering:meta/pillager_fleet` | 1 | 1.0 | - | 141 | new |  |
-| `creativeengineering:meta/raft_convoy` | 1 | 1.0 | - | 142 | new |  |
+| `creativeworldgen:meta/pillager_fleet` | 1 | 1.0 | - | 141 | new |  |
+| `creativeworldgen:meta/raft_convoy` | 1 | 1.0 | - | 142 | new |  |
 
-### `flotsam` -> `creativeengineering:group/flotsam`
+### `flotsam` -> `creativeworldgen:group/flotsam`
 
 Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.
 
@@ -267,9 +267,9 @@ Grid: spacing 32, separation 8 (members never start closer than 9 chunks = 144 b
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `creativeengineering:meta/driftwood_flotilla` | 100 | 1.0 | - | 32 | new |  |
+| `creativeworldgen:meta/driftwood_flotilla` | 100 | 1.0 | - | 32 | new |  |
 
-### `deadwood` -> `creativeengineering:group/deadwood`
+### `deadwood` -> `creativeworldgen:group/deadwood`
 
 Patches of dead wood on land: stumps and fallen logs by wood type (meta structures). Its own grid, so it takes no slots from buildings or ruins.
 
@@ -277,14 +277,14 @@ Grid: spacing 16, separation 5 (members never start closer than 6 chunks = 96 bl
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
-| `creativeengineering:meta/deadwood_acacia` | 100 | 1.0 | - | 16 | new |  |
-| `creativeengineering:meta/deadwood_birch` | 100 | 1.0 | - | 20 | new |  |
-| `creativeengineering:meta/deadwood_cherry` | 100 | 1.0 | - | 16 | new |  |
-| `creativeengineering:meta/deadwood_jungle` | 100 | 1.0 | - | 16 | new |  |
-| `creativeengineering:meta/deadwood_oak` | 100 | 1.0 | - | 20 | new |  |
-| `creativeengineering:meta/deadwood_spruce` | 100 | 1.0 | - | 16 | new |  |
+| `creativeworldgen:meta/deadwood_acacia` | 100 | 1.0 | - | 16 | new |  |
+| `creativeworldgen:meta/deadwood_birch` | 100 | 1.0 | - | 20 | new |  |
+| `creativeworldgen:meta/deadwood_cherry` | 100 | 1.0 | - | 16 | new |  |
+| `creativeworldgen:meta/deadwood_jungle` | 100 | 1.0 | - | 16 | new |  |
+| `creativeworldgen:meta/deadwood_oak` | 100 | 1.0 | - | 20 | new |  |
+| `creativeworldgen:meta/deadwood_spruce` | 100 | 1.0 | - | 16 | new |  |
 
-### `remote` -> `creativeengineering:group/remote`
+### `remote` -> `creativeworldgen:group/remote`
 
 Lone camps and cabins: the T&T wandering trader camp and every single-building house mod in the Overworld. The two Farmer's Structures houses whose biomes come from mods this pack does not have (Aether, Undergarden) stay out.
 
@@ -351,10 +351,10 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 | `villager_gold_washing_facility:villager_gold_washing_facility` | 100 | 1.0 | 50 | 41 | 1.51 |  |
 | `villager_windmill:windmill` | 100 | 1.0 | 50 | 128 | 0.15 |  |
 | `watchtower_building:fresh_watchtower` | 160 | 1.0 | 67 | 80 | 0.71 |  |
-| `creativeengineering:meta/farmers_camp` | 1 | 1.0 | - | 138 | new |  |
-| `creativeengineering:meta/house_camp` | 1 | 1.0 | - | 100 | new |  |
-| `creativeengineering:meta/waysign_camps` | 1 | 1.0 | - | 130 | new |  |
-| `creativeengineering:meta/waysign_house_camp` | 1 | 1.0 | - | 122 | new |  |
+| `creativeworldgen:meta/farmers_camp` | 1 | 1.0 | - | 138 | new |  |
+| `creativeworldgen:meta/house_camp` | 1 | 1.0 | - | 100 | new |  |
+| `creativeworldgen:meta/waysign_camps` | 1 | 1.0 | - | 130 | new |  |
+| `creativeworldgen:meta/waysign_house_camp` | 1 | 1.0 | - | 122 | new |  |
 | `campsite_structures:armorer_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
 | `campsite_structures:butcher_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
 | `campsite_structures:cartographer_campsite` | 60 | 1.0 | 32 | 163 | 0.04 |  |
@@ -368,12 +368,12 @@ Capped (old combined density above the group grid): 78 biome(s), 78% of the grou
 | `farmers_structures:ratatouilles` | 100 | 1.0 | 58 | 48 | 1.46 |  |
 | `farmers_structures:shepherd_farms` | 100 | 1.0 | 186 | 95 | 3.84 |  |
 | `farmers_structures:squids` | 100 | 1.0 | 50 | 116 | 0.19 |  |
-| `creativeengineering:meta/trader_caravan` | 1 | 1.0 | - | 194 | new |  |
+| `creativeworldgen:meta/trader_caravan` | 1 | 1.0 | - | 194 | new |  |
 | `hearthandharvest:corn_maze` | 400 | 1.0 | 32 | 72 | 0.20 |  |
 
-### `sky` -> `creativeengineering:group/sky`
+### `sky` -> `creativeworldgen:group/sky`
 
-Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeengineering:sky_island) since 2026-11-06.
+Sky structures: Cloud Storage's hot air balloons and sky temples, AE2 meteorites (same rate as the clouds). Meta structures join later; floating islands (creativeworldgen:sky_island) since 2026-11-06.
 
 Grid: spacing 64, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 64 x 64 chunks anywhere.
 
@@ -385,14 +385,14 @@ Capped (old combined density above the group grid): 145 biome(s), 100% of the gr
 | `cloudstorage:big_balloon` | 100 | 0.985 | 32 | 138 | 0.05 |  |
 | `cloudstorage:sky_temple` | 100 | 0.985 | 40 | 138 | 0.08 |  |
 | `skyvillages:skyvillage` | 100 | 1.0 | 70 | 143 | 0.24 |  |
-| `creativeengineering:meta/balloon_fleet` | 1 | 1.0 | - | 251 | new |  |
-| `creativeengineering:meta/cloud_balloons` | 1 | 1.0 | - | 308 | new |  |
-| `creativeengineering:meta/cloud_cluster` | 1 | 1.0 | - | 251 | new |  |
-| `creativeengineering:meta/sky_village_islands` | 1 | 1.0 | - | 202 | new |  |
-| `creativeengineering:meta/meteor_shower` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
-| `creativeengineering:sky_island` | 100 | 0.985 | 64 | 138 | 0.22 |  |
+| `creativeworldgen:meta/balloon_fleet` | 1 | 1.0 | - | 251 | new |  |
+| `creativeworldgen:meta/cloud_balloons` | 1 | 1.0 | - | 308 | new |  |
+| `creativeworldgen:meta/cloud_cluster` | 1 | 1.0 | - | 251 | new |  |
+| `creativeworldgen:meta/sky_village_islands` | 1 | 1.0 | - | 202 | new |  |
+| `creativeworldgen:meta/meteor_shower` | 1 | 1.0 | - | - | - | empty biome tag: never spawns unless a mod fills it at runtime |
+| `creativeworldgen:sky_island` | 100 | 0.985 | 64 | 138 | 0.22 |  |
 
-### `nether_ruins` -> `creativeengineering:group/nether_ruins`
+### `nether_ruins` -> `creativeworldgen:group/nether_ruins`
 
 Nether ruins: Twigs' bloodstone obelisk and Philip's three Nether ruins (Nether dungeon, sealed ghast statue, lava ruins). Grid from their crowding (spacing 14, separation 7). Added 2026-10-12. 2026-11-02 (structures/contents #1): Philip's lost soul dungeon, rare ruin and blackstone Nether ruin moved in from the Overworld; the dungeon and the blackstone ruin set by hand to the other Philip Nether ruins' weight and frequency (the fit to their Overworld rates gave weights 148 and 214), the rare ruin kept rare as fitted.
 
@@ -408,21 +408,21 @@ Grid: spacing 14, separation 7 (members never start closer than 8 chunks = 128 b
 | `philipsruins:rare_ruin` | 6 | 0.3759 | 360 | 179 | 4.04 |  |
 | `philipsruins:start_nether_ruin` | 100 | 0.5993 | 310 | 39 | 61.68 |  |
 
-### `way_signs` -> `creativeengineering:group/way_signs`
+### `way_signs` -> `creativeworldgen:group/way_signs`
 
 Supplementaries' way signs on a grid of their own (2026-10-12): the old set's placement (19/10, kept 8 chunks off settlement grid slots), so the rate is unchanged. Each sign points at the nearest #supplementaries:way_sign_destinations, which structure_overrides.js fills with every group/settlements member (villages, fortified villages, meta/village_towers).
 
-Grid: spacing 19, separation 10 (members never start closer than 11 chunks = 176 blocks apart). At most 1 structure per 19 x 19 chunks anywhere. Excluded within 8 chunks of `creativeengineering:group/settlements` grid slots.
+Grid: spacing 19, separation 10 (members never start closer than 11 chunks = 176 blocks apart). At most 1 structure per 19 x 19 chunks anywhere. Excluded within 8 chunks of `creativeworldgen:group/settlements` grid slots.
 
 | Structure | Weight | Frequency | Mod default 1 per | New 1 per | Ratio | Note |
 |---|---|---|---|---|---|---|
 | `supplementaries:way_sign` | 100 | 1.0 | 32 | 20 | 2.52 |  |
 
-### `vehicles` -> `creativeengineering:group/vehicles`
+### `vehicles` -> `creativeworldgen:group/vehicles`
 
 Vehicles (hostile, 2026-10-14, plan 7.4.5): the 6 Illager Siege Weapons camps (moved out of pillager_settlements), the pillager loot carriage (with the villager chase and the golem prison van) and the witch wagon. Rarer than camps, more common than outposts, twice as common in harsh biomes (biome_frequency). Grid from the harsh rate (spacing 52: about 1 vehicle per 54 chunks in harsh biomes, 1 per 75 elsewhere, 2026-10-14); equal weights. Rates are hand-set (fit_base = the same values).
 
-Grid: spacing 52, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 52 x 52 chunks anywhere. Excluded within 4 chunks of `creativeengineering:group/settlements` grid slots.
+Grid: spacing 52, separation 16 (members never start closer than 17 chunks = 272 blocks apart). At most 1 structure per 52 x 52 chunks anywhere. Excluded within 4 chunks of `creativeworldgen:group/settlements` grid slots.
 
 Capped (old combined density above the group grid): 75 biome(s), 95% of the group's area. Largest: `terralith:yellowstone` 1 per 20 -> 75, `minecraft:plains` 1 per 20 -> 73, `minecraft:dark_forest` 1 per 19 -> 53, `terralith:lush_desert` 1 per 20 -> 52, `terralith:brushland` 1 per 20 -> 73, `terralith:highlands` 1 per 20 -> 75.
 
@@ -436,10 +436,10 @@ Capped (old combined density above the group grid): 75 biome(s), 95% of the grou
 | `illager_siege_weapons:reinforced_battering_ram` | 100 | 1.0 | 50 | 165 | 0.09 |  |
 | `illager_siege_weapons:siege_tower` | 100 | 1.0 | 50 | 165 | 0.09 |  |
 | `illager_siege_weapons:trebuchet` | 100 | 1.0 | 50 | 165 | 0.09 |  |
-| `creativeengineering:meta/pillager_caravan` | 1 | 1.0 | - | 269 | new |  |
-| `creativeengineering:meta/witch_cart_caravan` | 1 | 1.0 | - | 158 | new |  |
+| `creativeworldgen:meta/pillager_caravan` | 1 | 1.0 | - | 269 | new |  |
+| `creativeworldgen:meta/witch_cart_caravan` | 1 | 1.0 | - | 158 | new |  |
 
-### `desert_temples` -> `creativeengineering:group/desert_temples`
+### `desert_temples` -> `creativeworldgen:group/desert_temples`
 
 Desert temples: YUNG's desert temple and the vanilla desert pyramid, which takes a share of YUNG's temple slots ("replaces" in structure_groups.json). Own grid with twice the surface dungeons' minimum distance (structures/rates-and-groups #10).
 
@@ -451,8 +451,8 @@ Capped (old combined density above the group grid): 9 biome(s), 100% of the grou
 |---|---|---|---|---|---|---|
 | `minecraft:desert_pyramid` | 1 | 1.0 | 32 | 268 | 0.01 | replaces `betterdeserttemples:desert_temple` in 5% of its slots |
 | `betterdeserttemples:desert_temple` | 100 | 0.285 | 35 | 64 | 0.29 |  |
-| `creativeengineering:meta/meteorite_desert_pyramid` | 1 | 1.0 | - | 212 | new | replaces `betterdeserttemples:desert_temple` in 8% of its slots |
-| `creativeengineering:meta/desert_temple_ruins` | 1 | 1.0 | - | 101 | new |  |
+| `creativeworldgen:meta/meteorite_desert_pyramid` | 1 | 1.0 | - | 212 | new | replaces `betterdeserttemples:desert_temple` in 8% of its slots |
+| `creativeworldgen:meta/desert_temple_ruins` | 1 | 1.0 | - | 101 | new |  |
 
 ## Standalone sets (changed ones only)
 

@@ -933,7 +933,7 @@
 			#Range: 0 ~ 1000
 			magic = 100
 
-#A charm item (see #creativeengineering:bonemeal_charms) held in the OTHER hand
+#A charm item (see #creativeequipment:bonemeal_charms) held in the OTHER hand
 #from bone meal gives a chance to refund the bone meal that was just used, at
 #the cost of a chance to damage the charm itself.
 [bonemeal_charm]
@@ -950,7 +950,7 @@
 	damagePerUse = 1
 
 #Bottled Air port: right-click a glass bottle in water to breathe from it. The fire sources that
-#evaporate the filled bottle in the other hand are #creativeengineering:bottled_air/fire_sources.
+#evaporate the filled bottle in the other hand are #creativeequipment:bottled_air/fire_sources.
 [bottled_air]
 	enabled = true
 	#Air a bottle gives (vanilla's full supply is 300).

@@ -155,7 +155,7 @@ public final class CEQConfig {
         }
     }
 
-    /** Dials for the {@code creativeengineering:air_brake} elytra item ([[gear.AirBrakeHandler]]). */
+    /** Dials for the {@code creativeequipment:air_brake} elytra item ([[gear.AirBrakeHandler]]). */
     public static final class AirBrake {
         public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.IntValue useDurationTicks;
@@ -348,7 +348,7 @@ public final class CEQConfig {
      * Winemaker armor set does (a chance to refund the bone meal a
      * {@code net.minecraft.world.item.BoneMealItem#useOn} call just consumed), generalized onto
      * a single held item instead of a 4-piece armor set. Any item in
-     * {@code #creativeengineering:bonemeal_charms} (populated in KubeJS -
+     * {@code #creativeequipment:bonemeal_charms} (populated in KubeJS -
      * {@code kubejs/server_scripts/tags/equipmenttags.js}) works from whichever hand ISN'T
      * holding the bone meal.
      */
@@ -360,7 +360,7 @@ public final class CEQConfig {
 
         private BonemealCharm(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "A charm item (see #creativeengineering:bonemeal_charms) held in the OTHER hand",
+                    "A charm item (see #creativeequipment:bonemeal_charms) held in the OTHER hand",
                     "from bone meal gives a chance to refund the bone meal that was just used, at",
                     "the cost of a chance to damage the charm itself."
             ).push("bonemeal_charm");
@@ -392,7 +392,7 @@ public final class CEQConfig {
         private BottledAir(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Bottled Air port: right-click a glass bottle in water to breathe from it. The fire sources that",
-                    "evaporate the filled bottle in the other hand are #creativeengineering:bottled_air/fire_sources."
+                    "evaporate the filled bottle in the other hand are #creativeequipment:bottled_air/fire_sources."
             ).push("bottled_air");
 
             enabled = b.define("enabled", true);

@@ -1,0 +1,8 @@
+{
+  "_comment": "Wooden bucket moved from Creative Equipment to Creative Delight under its own namespace (2026-11-09, TODO largecontent/mod-additions #58). Never prune.",
+  "replaces": {
+    "creativedelight:wooden_bucket": ["creativeengineering:wooden_bucket"],
+    "creativedelight:wooden_water_bucket": ["creativeengineering:wooden_water_bucket"],
+    "creativedelight:wooden_sap_bucket": ["creativeengineering:wooden_sap_bucket"]
+  }
+}

@@ -42,7 +42,7 @@ import java.util.function.Function;
  *
  * DATA FLOW: structure_overrides.js resolves the fits and their parents and stages
  * {"fits": {"land/oak": [listed biome entries]}, "structures": {"<structure id>": ["land/oak", "land"]}} in
- * highPriorityData; it also adds every fit as the real biome tag creativeengineering:<fit>. At ServerAboutToStart
+ * highPriorityData; it also adds every fit as the real biome tag creativeworldgen:<fit>. At ServerAboutToStart
  * (HIGHEST, so StructureBiomeRules and everything after see the new lists) each fit resolves to that biome tag
  * (so a datapack adding to the tag widens the fit); a fit whose tag is missing falls back to the listed entries.
  * Listed ids the registry lacks are logged. ServerStopped clears everything.
@@ -54,8 +54,8 @@ import java.util.function.Function;
  */
 public final class StructureBiomeFits {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/structure-biome-fits");
-	private static final String NS = "creativeengineering";
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/structure-biome-fits");
+	private static final String NS = com.SaintAlfonzo.creativeworldgen.CreativeWorldgen.NS;
 
 	record Staged(Map<String, List<String>> fits, Map<String, List<String>> structures) {
 		static final Staged EMPTY = new Staged(Map.of(), Map.of());
@@ -134,7 +134,7 @@ public final class StructureBiomeFits {
 		log.forEach(LOG::info);
 	}
 
-	/** One fit's biomes: the real tag creativeengineering:<fit>, else (tag missing) its listed entries. Logs unknown ids. */
+	/** One fit's biomes: the real tag creativeworldgen:<fit>, else (tag missing) its listed entries. Logs unknown ids. */
 	private static Collection<Holder<Biome>> fitEntry(Registry<Biome> biomes, String fit, List<String> listed, List<String> log) {
 		if (listed.isEmpty()) return List.of();   // an empty fit (land) gets no biome tag
 		List<String> unknown = new ArrayList<>();

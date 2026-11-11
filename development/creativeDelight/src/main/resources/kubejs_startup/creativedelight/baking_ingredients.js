@@ -5,19 +5,19 @@
 // Baking ingredients of the baking overhaul (feature_writeup/oven.md 2.6): frosting tops every cake, cookie dough is
 // the base of every cookie, powdered sugar is ground sugar. Plain items, not food. Own textures (sources in
 // textureswapper/frosting.png, textureswapper/baking/dough/, textureswapper/powdered_sugar/). Recipes:
-// kubejs/data/creativedelight/kubejs/creativeengineering/baking.js, kubejs/data/creativedelight/kubejs/creativeengineering/powdered_sugar.js. The powdered sugar block and bucket are
+// kubejs/data/creativedelight/kubejs/creativedelight/baking.js, kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js. The powdered sugar block and bucket are
 // patcherMod (food/PowderedSugarRegistry.java).
 
 StartupEvents.registry('item', e => {
     var i = global.item
-    e.create(i.frosting).displayName('Frosting').texture('creativeengineering:item/frosting')
-    e.create(i.cookie_dough).displayName('Cookie Dough').texture('creativeengineering:item/cookie_dough')
-    e.create(i.powdered_sugar).displayName('Powdered Sugar').texture('creativeengineering:item/powdered_sugar')
+    e.create(i.frosting).displayName('Frosting').texture('creativedelight:item/frosting')
+    e.create(i.cookie_dough).displayName('Cookie Dough').texture('creativedelight:item/cookie_dough')
+    e.create(i.powdered_sugar).displayName('Powdered Sugar').texture('creativedelight:item/powdered_sugar')
 })
 
 // Dough blocks (TODO baking/baked-goods #27): 9-dough storage blocks with Create Compressed's dough block stats (sand,
 // slime block sounds, strength 0.5 / 10). Blockstate / block model / block-item model are hand-authored under
-// assets/creativeengineering/ in this jar (cube_all, texture at creativeengineering:block/dough_block/<id>.png, made in
+// assets/creativedelight/ in this jar (cube_all, texture at creativedelight:block/dough_block/<id>.png, made in
 // textureswapper/baking/dough/out/). textureAll sets the same texture: KubeJS's generated block model wins over the jar's. Recipes: server_scripts/cooking/cooking.js.
 StartupEvents.registry('block', e => {
     var i = global.item

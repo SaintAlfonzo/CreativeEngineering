@@ -211,7 +211,7 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
     "End Chicken Curry" by a lang override (id unchanged, so saves and recipes are unaffected). The Large Meals item needs its
     own `item_dict` key, not `chicken_curry` (already Ender's). Serving names become "Bowl of Mushroom Pot Pie" and "Bowl of
     Roasted Rack of Mutton" (B1, D6). Where the rename goes: `item.endersdelight.chicken_curry` in
-    `kubejs/assets/creativedelight/kubejs/creativeengineering/names.js` (line 41), and `block.displaydelight.erd_chicken_curry`
+    `kubejs/assets/creativedelight/kubejs/creativedelight/names.js` (line 41), and `block.displaydelight.erd_chicken_curry`
     ("Placed Chicken Curry") in `kubejs/assets/displaydelight/lang/en_us.json` becomes "Placed End Chicken Curry"; the new
     `lm_` curry block is "Placed Chicken Curry". Also fix the names in `ends_delight.md`, `names.md`, `extra_delight.md`, `display_delight.md`
     and the 1.1.03 changelog mention stays (deployed, never edited). The rename is a player-visible change: changelog bullet.

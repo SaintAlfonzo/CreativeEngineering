@@ -14,7 +14,7 @@ notices them until WTHIT shows a raw key.
 | Display Delight: all 205 placed-food blocks named | BUILT, in-game check pending (NM-01 to NM-04) |
 | Rustic Delight crops and potted plants | BUILT, in-game check pending (NM-05, NM-06). Your `bell_peppers` and `cotton` keys were right; 4 more added |
 | Roll Delight port: Rice Roll Slice (B1), Salmon Maki Roll / Salmon Maki Roll Slice (D4; slice renamed 2026-11-04) | in the member's lang (section 3.3); in-game check with ROLL-02, ROLL-03, ROLL-24 |
-| Skewers (plan_meals_rolls_bbq.md C11a, 2026-11-04): Barbecue Skewer, End Skewer, Improvised Skewer (were Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick); the 8 "Raw ..." pack skewers | CD `creativeengineering/names.js`; raws in the Barbeque's Delight member lang; Display Delight plated names by hand; CQ-BBQ2-01 |
+| Skewers (plan_meals_rolls_bbq.md C11a, 2026-11-04): Barbecue Skewer, End Skewer, Improvised Skewer (were Barbecue on a Stick, End Barbecue Stick, Improvised Barbecue Stick); the 8 "Raw ..." pack skewers | CD `creativedelight/names.js`; raws in the Barbeque's Delight member lang; Display Delight plated names by hand; CQ-BBQ2-01 |
 | Missing-name catalog, part 1: partial blocks | from the real `/dumpnames` export (2026-10-02 21:54, via `/dumpall`): 191 unnamed; triage redone (section 9). NM-07, NM-08 PASSED |
 | Catalog part 2: items, effects, potions, enchantments, entities, fluids, professions | from the dump (section 10): 65 items, 1 effect, 2 potion forms, 53 entities, 2 fluids, 20 professions. Fixed by the audit (section 11) |
 | Display-name audit: raw keys + capitalization, every kind | BUILT 2026-10-20 (section 11): 436 fixes; NM-09 to NM-11 PASSED, NM-12 pending |
@@ -644,7 +644,7 @@ None.
 | entity | `create_things_and_misc:projectile_spout_gun_lava` | entity.create_things_and_misc.projectile_spout_gun_lava | Spout Gun | create_things_and_misc |
 | entity | `create_things_and_misc:projectile_spout_gun_slime` | entity.create_things_and_misc.projectile_spout_gun_slime | Spout Gun | create_things_and_misc |
 | entity | `create_things_and_misc:projectile_spout_gun_water` | entity.create_things_and_misc.projectile_spout_gun_water | Spout Gun | create_things_and_misc |
-| entity | `creativeengineering:shrapnel` | entity.creativeengineering.shrapnel | Shrapnel | creativeengineering |
+| entity | `creativecompat:shrapnel` | entity.creativecompat.shrapnel | Shrapnel | creativeengineering |
 | entity | `decorative_blocks:dummy_entity` | entity.decorative_blocks.dummy_entity | Seat | decorative_blocks |
 | entity | `domesticationinnovation:giant_bubble` | entity.domesticationinnovation.giant_bubble | Giant Bubble | domesticationinnovation |
 | entity | `domesticationinnovation:highlighted_block` | entity.domesticationinnovation.highlighted_block | Highlighted Block | domesticationinnovation |

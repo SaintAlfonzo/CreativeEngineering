@@ -10,7 +10,7 @@ var t = global.tags
 // Chestplates that glide but aren't a vanilla ElytraItem — patcherMod's Easy Elytra
 // Takeoff mixins read this (EasyElytraTakeoffHelperMixin = rocket-takeoff is allowed at
 // all; EasyElytraTakeoffGroundCheckMixin = allowed even mid-fall / on thin blocks).
-global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])
+global.tags.add(e, 'creativeequipment:elytra_chestplates', [i.upgraded_dragon_chestplate])
 
 // Armor Trims allowlist (gear/tuning #14, gear_tuning.md Armor Trims): only standard armor drawn on the vanilla armor
 // model can be trimmed. patcherMod compat/ArmorTrimsItemCache keeps only these in Armor Trims' trimmable list (smithing
@@ -33,7 +33,7 @@ t.add(e, i.t_trimmable_armor, trimmable)
 // armor_effects.js's dragonEffects set, which registers the same set bonus for both
 // for the same reason). dragon_horse_armor is repaired via dragon_autorepair.js's own
 // AbstractHorse walk (worn in the horse's inventory slot, not a player slot/hand).
-global.tags.add(e, 'creativeengineering:dragon_gear', [
+global.tags.add(e, 'creativeequipment:dragon_gear', [
 	i.dragon_helmet, i.dragon_chestplate, i.upgraded_dragon_chestplate, i.dragon_leggings, i.dragon_boots,
 	i.dragon_sword, i.dragon_pickaxe, i.dragon_axe, i.dragon_shovel, i.dragon_hoe,
 	i.dragon_crossbow, i.dragon_bow, i.dragon_trident, i.dragon_anvil, i.dragon_horse_armor,
@@ -45,7 +45,7 @@ global.tags.add(e, 'creativeengineering:dragon_gear', [
 // refund the bone meal just used, at a chance of durability damage to the charm itself.
 // Read by com.SaintAlfonzo.creativeequipment.util.BonemealCharms.TAG; tunable via
 // CEQConfig.BonemealCharm (chance/damageChance/damagePerUse).
-global.tags.add(e, 'creativeengineering:bonemeal_charms', [i.dragon_hoe])
+global.tags.add(e, 'creativeequipment:bonemeal_charms', [i.dragon_hoe])
 
 // Hoe harvest area tags: Creative Delight (creativeengineering/crop_tags.js).
 
@@ -71,10 +71,10 @@ shaft(i.stick_treated, ['wooden'])
 
 })
 
-// Camera equipment (#exposure_extras:camera_equipment) - the only items a camera bag accepts
+// Camera equipment (#exposureextras:camera_equipment) - the only items a camera bag accepts
 // (exposureBackport src/extras CameraBag.canHold; any slot, normal stack size).
 // The mod ships the defaults in
-//   development/exposureBackport/src/extras/resources/data/exposure_extras/tags/items/camera_equipment.json:
+//   development/exposureBackport/src/extras/resources/data/exposureextras/tags/items/camera_equipment.json:
 //   camera, instant camera, camera stand, #exposure:lenses, #exposure:filters, #exposure:film_rolls,
 //   #exposure:developed_film_rolls and the 10 instant slides (Polaroid has no slide tag).
 // Exposure's own tags are nested references, so lenses / filters / films added to them later fit too.

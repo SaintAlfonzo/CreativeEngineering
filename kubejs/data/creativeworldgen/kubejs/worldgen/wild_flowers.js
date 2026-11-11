@@ -12,9 +12,9 @@
 // kubejs/data):
 //   - botania: forge:none over Botania's own modifier; biomes with the same palette and rate share one
 //     simple_random_selector over Botania's per-color patches, placed at that rate, added through the biome tag
-//     creativeengineering:wild_flowers/botania/<n>.
+//     creativeworldgen:wild_flowers/botania/<n>.
 //   - flowers: per entry and rate tier, one flower patch feature (weighted blocks, Flower Patch blocks mixed in),
-//     added through the tag creativeengineering:wild_flowers/<key>/<tier>. disable_modifiers -> forge:none.
+//     added through the tag creativeworldgen:wild_flowers/<key>/<tier>. disable_modifiers -> forge:none.
 //   - existing: the flower features biome files list (snapshot in flower_features.json, made by the generator):
 //     placed features rewritten at their new rate, configured features rewritten with Flower Patch blocks, and
 //     a forge:remove_features per feature over the biomes in its "remove" list.
@@ -33,7 +33,7 @@
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/wild_flowers.json'
 	var SNAPSHOT_PATH = 'kubejs/generation_scripts/worldgen/flower_features.json'
 	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/biome_traits.json'
-	var NS = 'creativeengineering:'
+	var NS = 'creativeworldgen:'
 	var PREFIX = 'wild_flowers/'
 	var NEVER = { ocean: true, cave: true }
 	var LOG = '[wild-flowers] '
@@ -407,7 +407,7 @@
 
 	function modLoaded(id) {
 		var ns = namespace(id)
-		return ns === 'minecraft' || ns === 'creativeengineering' || Platform.isLoaded(ns)
+		return ns === 'minecraft' || ns === 'creativeworldgen' || Platform.isLoaded(ns)
 	}
 
 	function dataPath(id, kind) {

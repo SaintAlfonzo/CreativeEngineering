@@ -47,7 +47,7 @@ ServerEvents.recipes(e => {
 		// Heatless meal rule: farmersdelight/recipes.js "Meals". Bone broth route (TODO dishes/ingredients #4).
 		F.soupCraft([i.cooked_chicken, i.t_fruits_fig, i.t_fruits_fig, i.t_fruits_fig], i.fig_chicken_stew)
 
-		//Muffins: oven only, the muffin family call in creativeengineering/baking.js; it removes Fruits Delight's Cooking
+		//Muffins: oven only, the muffin family call in creativedelight/baking.js; it removes Fruits Delight's Cooking
 		// Pot muffins (TODO cooking/oven #3, baking/baked-goods 2026-10-29).
 
 		//######################### Jam cook time #########################

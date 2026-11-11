@@ -16,7 +16,7 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19, DEPLOYED with 1.1.01 (2026-10-22, changelog Farming & Nature); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
 | Named mobs: a naturally spawned farm animal (cow, mooshroom, pig, sheep, chicken, goat) has a 1 in 100 chance of a random name (MCA citizen names); every player sees its death message ("Bessie the Cow was slain by Steve") (patcherMod `mobs.NamedMobs`, `[named_mobs]`, TODO `mobs/tweaks #6`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-NM-01 to -03); MT-31 to MT-33 pending in game |
 | Villagers treat fence gates as walls (open or closed) and path through Dramatic Doors' tall and short wooden doors, opening them (patcherMod `McaVillagerPathGatesMixin`, `WalkNodeEvaluatorVillagerGateMixin`, TODO `mobs/tweaks #15`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VG-00 to -03); MT-41 to MT-43 pending in game |
-| Villagers path up and down ladders (every block named "ladder" that is climbable; patcherMod `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`, `MoveControlVillagerLadderMixin`, tag `#creativeengineering:villager_ladders`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VL-00 to -02, up and down a ladder); MT-44 to MT-46 pending in game |
+| Villagers path up and down ladders (every block named "ladder" that is climbable; patcherMod `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`, `MoveControlVillagerLadderMixin`, tag `#creativeworldgen:villager_ladders`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VL-00 to -02, up and down a ladder); MT-44 to MT-46 pending in game |
 | Quark monster boxes are vaults: the box stays after its wave, ejects one stack from its own loot table once the wave is dead or gone, then re-arms after a 1 hour cooldown; obsidian hardness (diamond pickaxe); breaks only while sneaking, else a chat warning (Lootr's rule); Create drills and saws skip it (patcherMod `mobs.MonsterBoxVault`, `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, TODO `mobs/tweaks #5`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`, 22:59); scratch server PASSED r1031 (2026-10-31, SQ-MB-01 to -04, -06, -07: stays, one-stack reward, re-arm, Create drill, off switch); SQ-MB-05 hardness client check pending (tags pass; queue says 50, changelog 25); MT-34 to MT-37, MT-47 to MT-50 in game pending |
 
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
@@ -39,7 +39,7 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
   - `[named_mobs]` (section 2.6): `enabled`, `chance` (0.01), `mobs` (ids or `#tags`), `spawnReasons`
     (NATURAL, CHUNK_GENERATION, STRUCTURE), `announceDeaths`, `fallbackNames`. Read live.
   - `[monster_box]` (section 2.9): `vaultMode` (true; false = Quark's self-breaking box), `cooldownTicks` (72000),
-    `rewardTable` (`creativeengineering:misc/monster_box_reward`), `rewardSingleCount` (false), `leashRange` (24),
+    `rewardTable` (`creativecompat:misc/monster_box_reward`), `rewardSingleCount` (false), `leashRange` (24),
     `checkIntervalTicks` (20). Read live. Quark's `Enable Extra Loot Table` is false (`quark-common.toml`), so wave
     mobs drop only their own loot.
 - **How to measure:** `python3 tools/leaf_path_scan.py` (structure templates, offline) and
@@ -209,7 +209,7 @@ Owner 2026-10-30, after 2.7: villagers path up and down ladders.
 
 - **Before.** MCA's node maker (2.7) has no vertical moves. A ladder block above the ground was OPEN, so the walker
   dropped through it, and no path went up one. Vanilla's WalkNodeEvaluator has none either.
-- **Which blocks.** `#minecraft:climbable` and `#creativeengineering:villager_ladders` both. The pack tag is every block
+- **Which blocks.** `#minecraft:climbable` and `#creativeworldgen:villager_ladders` both. The pack tag is every block
   with "ladder" in its id (KubeJS [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), `t.addMatching`, `/reload`;
   45 climbable ladders on 2026-10-30: vanilla, Quark, Create, Create Deco, IE, Everything Copper, Framed, Copycats,
   Upgrade Aquatic, Every Compat, Engineer's Decor). Vines, ropes, chains, scaffolding and grab rails stay out.
@@ -537,7 +537,7 @@ them); orcas and other whales are untouched.
   MCA's node maker (`McaVillagerPathGatesMixin`), open gates FENCE for vanilla villagers
   (`WalkNodeEvaluatorVillagerGateMixin`); patcherMod 1.1.04 rebuilt into `mods/`. MT-41 to MT-43 untested, SQ-VG queued.
 - 2026-10-30 (later): villager ladders (section 2.8): `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`,
-  `MoveControlVillagerLadderMixin`, `#creativeengineering:villager_ladders`; patcherMod 1.1.04 rebuilt into `mods/`.
+  `MoveControlVillagerLadderMixin`, `#creativeworldgen:villager_ladders`; patcherMod 1.1.04 rebuilt into `mods/`.
   MT-44 to MT-46 untested, SQ-VL queued.
 - 2026-10-30 (later): Quark monster box vaults (section 2.9, `mobs/tweaks #5`): `mobs.MonsterBoxVault`,
   `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `[monster_box]`, reward table, obsidian hardness and

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 
 /**
- * The oven's heat rule (oven.md 3.1): the block below is in {@code #creativeengineering:oven_heat_sources} (fire,
+ * The oven's heat rule (oven.md 3.1): the block below is in {@code #creativedelight:oven_heat_sources} (fire,
  * campfires, lava, magma, blaze burners: every stove and oven is left out on purpose) and is active, or a
  * {@code #farmersdelight:heat_conductors} block (hopper, chute) sits between the oven and such a source, as FD allows
  * for the cooking pot. Tags are filled by KubeJS (server_scripts/tags/blocktags.js); no FD classes are used.
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 public final class OvenHeat {
 
     public static final TagKey<Block> OVEN_HEAT_SOURCES =
-            BlockTags.create(new ResourceLocation(CreativeDelight.NS, "oven_heat_sources"));
+            BlockTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "oven_heat_sources"));
     public static final TagKey<Block> HEAT_CONDUCTORS =
             BlockTags.create(new ResourceLocation("farmersdelight", "heat_conductors"));
 

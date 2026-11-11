@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativedevtools;
 
 import com.SaintAlfonzo.creativedevtools.cdevplace.MassPlacer;
+import com.SaintAlfonzo.creativedevtools.cdevplace.StructureCatalogue;
 import com.SaintAlfonzo.creativedevtools.generators.GeneratorCommand;
 import com.SaintAlfonzo.creativedevtools.ie.IeRecyclingDiagnostics;
 import com.SaintAlfonzo.creativedevtools.probe.BlockStateSyncDebug;
@@ -43,7 +44,10 @@ public class CreativeDevtools {
 
         // /cdevplace: every structure or template matching a filter, laid out in rows (flat-world testing);
         // knobs in [worldgen.mass_place]. Built on Creative Worldgen's placement code (an optional dependency).
-        if (ModList.get().isLoaded("creativeworldgen")) MinecraftForge.EVENT_BUS.register(MassPlacer.class);
+        if (ModList.get().isLoaded("creativeworldgen")) {
+            MinecraftForge.EVENT_BUS.register(MassPlacer.class);
+            MinecraftForge.EVENT_BUS.register(StructureCatalogue.class);
+        }
 
         // Probes on patcherMod's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
         // [debug.*] switch is off.

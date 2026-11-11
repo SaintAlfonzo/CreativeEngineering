@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 /**
  * "Chestplates that glide but aren't a vanilla {@link net.minecraft.world.item.ElytraItem}."
  *
- * <p>Membership is the {@code #creativeengineering:elytra_chestplates} item tag, populated in
+ * <p>Membership is the {@code #creativeequipment:elytra_chestplates} item tag, populated in
  * KubeJS ({@code kubejs/server_scripts/tags/equipmenttags.js}) so more modded elytra-chestplates
  * can be added without rebuilding patcherMod. The single source of truth for that tag key on the
  * Java side lives here; the Easy Elytra Takeoff mixins both read it.
@@ -22,7 +22,7 @@ public final class ElytraChestplates {
 
     public static final TagKey<Item> TAG =
             TagKey.create(Registry.ITEM_REGISTRY,
-                    new ResourceLocation("creativeengineering", "elytra_chestplates"));
+                    new ResourceLocation("creativeequipment", "elytra_chestplates"));
 
     private ElytraChestplates() {}
 

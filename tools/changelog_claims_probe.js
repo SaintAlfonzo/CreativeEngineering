@@ -75,7 +75,7 @@
             // a recipe that uses up a filling can; making one from slices + an empty can stays automatable
             if (!inputs(r).some(x => /canned_[a-z_]*pie_filling/.test(x))) return
             let type = String(r.getType())
-            if (type == 'creativeengineering:baking') { log('oven: ' + r.getId()); return }
+            if (type == 'creativedelight:baking') { log('oven: ' + r.getId()); return }
             ok($AllTypes.shouldIgnoreInAutomation(r), 'hand only: ' + r.getId() + ' (' + type + ')')
         })
     }

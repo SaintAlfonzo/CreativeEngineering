@@ -31,10 +31,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class MetaFeaturePiece extends StructurePiece implements PieceBeardifierModifier {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/meta-structures");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/meta-structures");
 	private static final Set<ResourceLocation> MISSING = ConcurrentHashMap.newKeySet();
 
-	private final ResourceLocation feature;
+	private ResourceLocation feature;   // renamed once on first placement when saved under the old namespace
 	private BlockPos spot;
 
 	MetaFeaturePiece(ResourceLocation feature, BlockPos spot, int radius) {
@@ -66,7 +66,15 @@ public final class MetaFeaturePiece extends StructurePiece implements PieceBeard
 	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random,
 			BoundingBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
 		if (!chunkBox.isInside(spot)) return;
-		PlacedFeature placed = level.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY).get(feature);
+		Registry<PlacedFeature> features = level.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
+		PlacedFeature placed = features.get(feature);
+		if (placed == null) {   // a piece saved before the 2026-11-10 namespace move (LegacyIds)
+			ResourceLocation moved = LegacyIds.moved(feature.toString(), features);
+			if (moved != null) {
+				feature = moved;
+				placed = features.get(moved);
+			}
+		}
 		if (placed == null) {
 			if (MISSING.add(feature)) LOG.warn("[meta-structures] placed feature {} does not exist; its pieces place nothing", feature);
 			return;

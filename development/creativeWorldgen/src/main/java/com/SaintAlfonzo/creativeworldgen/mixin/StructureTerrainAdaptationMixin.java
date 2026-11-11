@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Structure#terrainAdaptation (m_226620_) answers from the creativeengineering:terrain_adaptation/* tags (see
+ * Structure#terrainAdaptation (m_226620_) answers from the creativeworldgen:terrain_adaptation/* tags (see
  * worldgen/TerrainAdaptation), so the Beardifier and the 12-block reference margin of terrain-adapted starts
  * both follow the tag. Subclasses that override the method (YUNG's jigsaw structures) are not affected.
  */

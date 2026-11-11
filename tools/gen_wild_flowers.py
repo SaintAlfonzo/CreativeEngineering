@@ -518,13 +518,13 @@ def pack_features(cfg, all_traits):
         dist = defaultdict(float)
         for c in pal:
             dist[f'botania:{c}_mystical_flower'] += 1 / len(pal)
-        out.append((f'creativeengineering:wild_flowers/botania/{i}', key, biomes, dist, 'botania ' + ' '.join(pal)))
+        out.append((f'creativeworldgen:wild_flowers/botania/{i}', key, biomes, dist, 'botania ' + ' '.join(pal)))
     for key, entry in cfg.get('flowers', {}).items():
         blocks = entry.get('blocks', {})
         tw = sum(blocks.values()) or 1
         dist = {b: w / tw for b, w in blocks.items()}
         for t, biomes in entry_plan(cfg, all_traits, key).items():
-            out.append((f'creativeengineering:wild_flowers/{key}/{t}', t, biomes, dist, key))
+            out.append((f'creativeworldgen:wild_flowers/{key}/{t}', t, biomes, dist, key))
     return out
 
 

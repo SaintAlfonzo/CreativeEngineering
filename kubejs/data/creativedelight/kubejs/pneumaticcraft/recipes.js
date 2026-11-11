@@ -13,7 +13,7 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Cornmeal #########################
-		// The pack's cornmeal (creativeengineering/recipes.js has the rule and the grinding).
+		// The pack's cornmeal (creativedelight/recipes.js has the rule and the grinding).
 		// PneumaticCraft: corn as wheat -> flour (3 at 1.5 bar, explosion 1 at 50% loss); kernels 4 -> 3. No crates/bags.
 		if (Platform.isLoaded('corn_delight')) {
 			R.pcPressureChamber(Item.of(i.cornmeal, 3), [i.t_crops_corn], 1.5, e, 'corn_cornmeal')

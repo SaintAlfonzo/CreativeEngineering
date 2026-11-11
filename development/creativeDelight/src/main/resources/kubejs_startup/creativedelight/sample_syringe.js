@@ -5,7 +5,7 @@
 //
 // global.sampleSyringe — shared logic for the Sample Syringe items
 // (sample_syringe_items.js (CD startup tree)). Right-click/attack handlers live in
-// CD server creativeengineering/sample_syringe.js; this just holds the sampleable-mob
+// CD server creativedelight/sample_syringe.js; this just holds the sampleable-mob
 // list and builds the filled-syringe stack.
 //
 // One empty item + one filled item per animal (see sample_syringe_items.js for why) -

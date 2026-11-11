@@ -26,7 +26,7 @@ import java.util.List;
  */
 public final class MeteoriteHeights {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/meteorites");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/meteorites");
 	private static final String PIECE = "appeng.worldgen.meteorite.MeteoriteStructurePiece";
 	private static final int SALT = 0x6d657465;   // "mete"
 

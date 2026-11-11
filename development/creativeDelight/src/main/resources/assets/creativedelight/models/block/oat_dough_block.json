@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "creativedelight:block/dough_block/oat_dough_block",
+    "particle": "creativedelight:block/dough_block/oat_dough_block"
+  },
+  "render_type": "solid"
+}

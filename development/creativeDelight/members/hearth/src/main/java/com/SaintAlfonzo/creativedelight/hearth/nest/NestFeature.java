@@ -3,13 +3,18 @@ package com.SaintAlfonzo.creativedelight.hearth.nest;
 import com.SaintAlfonzo.creativedelight.hearth.crow.CrowConfig;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-/** Places one nest marked as world-generated, which is what crow spawning near nests looks for. */
+/**
+ * Tree-top nest (plan_hearth_crow_swap.md 5.1): placed by {@code placed_feature/nest_tree_top.json} on the MOTION_BLOCKING
+ * heightmap (which stops on leaves) at the top_layer_modification step, after the trees. Places only on leaves with nothing above.
+ * The ground mode of the crow eval is gone; nests it generated stay.
+ */
 public class NestFeature extends Feature<NoneFeatureConfiguration> {
     public NestFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -22,15 +27,11 @@ public class NestFeature extends Feature<NoneFeatureConfiguration> {
         }
         WorldGenLevel level = context.level();
         BlockPos pos = context.origin();
-        BlockState existing = level.getBlockState(pos);
-        if (!existing.getMaterial().isReplaceable() || !existing.getFluidState().isEmpty()) {
+        if (!level.isEmptyBlock(pos) || !level.getBlockState(pos.below()).is(BlockTags.LEAVES)
+                || level.getHeight(Heightmap.Types.WORLD_SURFACE, pos.getX(), pos.getZ()) > pos.getY()) {
             return false;
         }
-        BlockState nest = HHNestRegistry.NEST.get().defaultBlockState().setValue(NestBlock.GENERATED, true);
-        if (!nest.canSurvive(level, pos)) {
-            return false;
-        }
-        level.setBlock(pos, nest, 2);
+        NestCrows.placeGenerated(level, pos, context.random(), NestCrows.TREE_LOOT);
         return true;
     }
 }

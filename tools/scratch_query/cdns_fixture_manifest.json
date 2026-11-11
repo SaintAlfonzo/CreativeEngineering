@@ -1,0 +1,887 @@
+{
+ "holders": [
+  {
+   "name": "block oven",
+   "pos": [
+    0.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block powdered_sugar_block",
+   "pos": [
+    2.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block beef_culture_block",
+   "pos": [
+    4.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block cod_culture_block",
+   "pos": [
+    6.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block mutton_culture_block",
+   "pos": [
+    8.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block pork_culture_block",
+   "pos": [
+    10.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block poultry_culture_block",
+   "pos": [
+    12.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block rabbit_culture_block",
+   "pos": [
+    14.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block salmon_culture_block",
+   "pos": [
+    16.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block cookie_dough_block",
+   "pos": [
+    18.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block cucumber_dough_block",
+   "pos": [
+    20.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block gingerdough_block",
+   "pos": [
+    22.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block oat_dough_block",
+   "pos": [
+    24.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block sourdough_block",
+   "pos": [
+    26.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block sweet_potato_dough_block",
+   "pos": [
+    28.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_cauliflower_kuku",
+   "pos": [
+    30.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_corn_popsicle",
+   "pos": [
+    32.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_dandelion_and_eggs",
+   "pos": [
+    34.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_diced_potatoes_with_egg_and_tomato",
+   "pos": [
+    36.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_inky_cap_scrambled_eggs",
+   "pos": [
+    38.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_omelette",
+   "pos": [
+    40.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_shakshouka",
+   "pos": [
+    42.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_shulker_omelette",
+   "pos": [
+    44.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_suspicious_bacon_and_eggs",
+   "pos": [
+    46.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_sweet_potato_pancakes",
+   "pos": [
+    48.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "block placed_vegetable_omelet",
+   "pos": [
+    50.0,
+    -60.0,
+    0.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "chest",
+   "pos": [
+    0.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "barrel",
+   "pos": [
+    2.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "shulker box",
+   "pos": [
+    4.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "hopper",
+   "pos": [
+    6.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block"
+  },
+  {
+   "name": "hopper",
+   "pos": [
+    8.0,
+    -60.0,
+    4.0
+   ],
+   "note": "cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "dropper",
+   "pos": [
+    10.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "furnace",
+   "pos": [
+    12.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe"
+  },
+  {
+   "name": "furnace",
+   "pos": [
+    14.0,
+    -60.0,
+    4.0
+   ],
+   "note": "oven sourdough_block cornmeal"
+  },
+  {
+   "name": "furnace",
+   "pos": [
+    16.0,
+    -60.0,
+    4.0
+   ],
+   "note": "wooden_water_bucket"
+  },
+  {
+   "name": "brewing stand",
+   "pos": [
+    18.0,
+    -60.0,
+    4.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block"
+  },
+  {
+   "name": "brewing stand",
+   "pos": [
+    20.0,
+    -60.0,
+    4.0
+   ],
+   "note": "cornmeal wooden_water_bucket"
+  },
+  {
+   "name": "shulker box item in chest",
+   "pos": [
+    22.0,
+    -60.0,
+    4.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "ender chest block (contents on the bots)",
+   "pos": [
+    24.0,
+    -60.0,
+    4.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    0.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    2.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    4.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    6.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    8.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    10.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    12.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    14.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    16.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    18.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    20.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    22.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    24.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "all ids chest",
+   "pos": [
+    26.0,
+    -60.0,
+    8.0
+   ],
+   "note": "27 ids"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    0.0,
+    -60.0,
+    12.0
+   ],
+   "note": "canned_corn"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    2.0,
+    -60.0,
+    12.0
+   ],
+   "note": "culture_beef"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    4.0,
+    -60.0,
+    12.0
+   ],
+   "note": "cow_sample_syringe"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    6.0,
+    -60.0,
+    12.0
+   ],
+   "note": "oven"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    8.0,
+    -60.0,
+    12.0
+   ],
+   "note": "sourdough_block"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    10.0,
+    -60.0,
+    12.0
+   ],
+   "note": "cornmeal"
+  },
+  {
+   "name": "item frame",
+   "pos": [
+    12.0,
+    -60.0,
+    12.0
+   ],
+   "note": "wooden_water_bucket"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    14.0,
+    -60.0,
+    12.0
+   ],
+   "note": "canned_corn"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    16.0,
+    -60.0,
+    12.0
+   ],
+   "note": "culture_beef"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    18.0,
+    -60.0,
+    12.0
+   ],
+   "note": "cow_sample_syringe"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    20.0,
+    -60.0,
+    12.0
+   ],
+   "note": "oven"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    22.0,
+    -60.0,
+    12.0
+   ],
+   "note": "sourdough_block"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    24.0,
+    -60.0,
+    12.0
+   ],
+   "note": "cornmeal"
+  },
+  {
+   "name": "dropped item",
+   "pos": [
+    26.0,
+    -60.0,
+    12.0
+   ],
+   "note": "wooden_water_bucket"
+  },
+  {
+   "name": "armor stand",
+   "pos": [
+    28.0,
+    -60.0,
+    12.0
+   ],
+   "note": "canned_corn culture_beef cow_sample_syringe oven sourdough_block cornmeal"
+  },
+  {
+   "name": "armor stand",
+   "pos": [
+    30.0,
+    -60.0,
+    12.0
+   ],
+   "note": "wooden_water_bucket"
+  },
+  {
+   "name": "chest minecart",
+   "pos": [
+    32.0,
+    -60.0,
+    12.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "villager inventory",
+   "pos": [
+    42.0,
+    -60.0,
+    12.0
+   ],
+   "note": "MCA villager (conversion from vanilla); Inventory filled by /cdnsfix mobs"
+  },
+  {
+   "name": "bot online cdnsOn",
+   "pos": [
+    2.0,
+    -60.0,
+    20.0
+   ],
+   "note": "inventory, head, offhand, ender chest, curios"
+  },
+  {
+   "name": "bot logged out cdnsOff",
+   "pos": [
+    6.0,
+    -60.0,
+    20.0
+   ],
+   "note": "same; removed in pack2 so its .dat is an offline player"
+  },
+  {
+   "name": "cfb corner (capability)",
+   "pos": [
+    0.0,
+    -60.0,
+    16.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "remainder buffer (capability)",
+   "pos": [
+    2.0,
+    -60.0,
+    16.0
+   ],
+   "note": "wooden_bucket, mortar_and_pestle"
+  },
+  {
+   "name": "backpack placed",
+   "pos": [
+    4.0,
+    -60.0,
+    16.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "backpack item in chest",
+   "pos": [
+    6.0,
+    -60.0,
+    16.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "storage delight drawer",
+   "pos": [
+    8.0,
+    -60.0,
+    16.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "create toolbox",
+   "pos": [
+    10.0,
+    -60.0,
+    16.0
+   ],
+   "note": "7 kinds"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    12.0,
+    -60.0,
+    16.0
+   ],
+   "note": "canned_corn"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    14.0,
+    -60.0,
+    16.0
+   ],
+   "note": "culture_beef"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    16.0,
+    -60.0,
+    16.0
+   ],
+   "note": "cow_sample_syringe"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    18.0,
+    -60.0,
+    16.0
+   ],
+   "note": "oven"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    20.0,
+    -60.0,
+    16.0
+   ],
+   "note": "sourdough_block"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    22.0,
+    -60.0,
+    16.0
+   ],
+   "note": "cornmeal"
+  },
+  {
+   "name": "create depot",
+   "pos": [
+    24.0,
+    -60.0,
+    16.0
+   ],
+   "note": "wooden_water_bucket"
+  },
+  {
+   "name": "lightmans trader",
+   "pos": [
+    30.0,
+    -60.0,
+    16.0
+   ],
+   "note": "canned_corn for sale and in storage"
+  },
+  {
+   "name": "lootr chest opened by cdnsOn",
+   "pos": [
+    28.0,
+    -60.0,
+    16.0
+   ],
+   "note": "per-player copy in data/lootr"
+  },
+  {
+   "name": "ae2 drive cell",
+   "pos": [
+    0.0,
+    -60.0,
+    18.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "ae2 me chest cell",
+   "pos": [
+    2.0,
+    -60.0,
+    18.0
+   ],
+   "note": ""
+  },
+  {
+   "name": "create belt item",
+   "pos": [
+    6.0,
+    -60.0,
+    18.0
+   ],
+   "note": "cornmeal"
+  },
+  {
+   "name": "mob holding",
+   "pos": [
+    0.0,
+    -60.0,
+    14.0
+   ],
+   "note": "canned_corn culture_beef"
+  },
+  {
+   "name": "mob holding",
+   "pos": [
+    3.0,
+    -60.0,
+    14.0
+   ],
+   "note": "cow_sample_syringe oven"
+  },
+  {
+   "name": "mob holding",
+   "pos": [
+    6.0,
+    -60.0,
+    14.0
+   ],
+   "note": "sourdough_block cornmeal"
+  },
+  {
+   "name": "mob holding",
+   "pos": [
+    9.0,
+    -60.0,
+    14.0
+   ],
+   "note": "wooden_water_bucket"
+  }
+ ],
+ "missing": [],
+ "fails": 0,
+ "allIds": 378,
+ "idsWithNoItem": 12,
+ "lootrX": 28,
+ "y": -60,
+ "rows": {
+  "blocks": 0,
+  "vanilla": 4,
+  "allids": 8,
+  "entities": 12,
+  "pack": 16,
+  "bots": 20
+ },
+ "kinds": [
+  "canned_corn",
+  "culture_beef",
+  "cow_sample_syringe",
+  "oven",
+  "sourdough_block",
+  "cornmeal",
+  "wooden_water_bucket"
+ ],
+ "bots": {
+  "online": "cdnsOn",
+  "loggedOut": "cdnsOff"
+ },
+ "beltX": 6
+}

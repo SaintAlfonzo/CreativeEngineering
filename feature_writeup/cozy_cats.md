@@ -113,7 +113,7 @@ Sell Animals Kitten Crate are unrelated items.
 | Baby lock | `AgeableMobGrowthLockMixin`: every `AgeableMob`, `AgeLocked` NBT, `@ModifyArg` x2 on `aiStep` setAge | DI `AgeableMobMixin` `isBaby` HEAD (Curse of Immaturity); Baby Mobs backport | different targets, no clash | none |
 | Targeting | `Mob.setTarget` HEAD, `HurtByTargetGoal.start` / `TargetGoal.canContinueToUse` wraps | DI `MobMixin` (`tick`, `pickUpItem`, `playAmbientSound`), `TameableAnimalMixin.isAlliedTo` | no shared target | none |
 | Tempt | `TemptGoal.shouldFollow` `@Redirect` on `Ingredient.test` | patcherMod `TemptGoalTroughRetryMixin` adds an interface only | redirect is exclusive, but no other redirect there | none |
-| Cat food | tag `cozys-improved-cats:cat_food`: 7 vanilla raw meats + 2 ancient fish | pack raw foods: `creativeengineering:food_type/raw/fish` (40), `/raw/meat` (42) | cats refuse every modded raw fish and meat | D4: add the two pack tags via `global.tags` |
+| Cat food | tag `cozys-improved-cats:cat_food`: 7 vanilla raw meats + 2 ancient fish | pack raw foods: `creativedelight:food_type/raw/fish` (40), `/raw/meat` (42) | cats refuse every modded raw fish and meat | D4: add the two pack tags via `global.tags` |
 | Taming of cats | ancient fish only | DI pet shop cages and Villagers Sell Animals crates hold vanilla cats | those cats are converted, untamed; fine, but a bought kitten needs ancient fish | JEI info (step 13); D5 |
 | Fishing loot | GLM swaps 5% of cod / salmon catches | pack fishing net tables (`kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net`), Oceanic nets | GLM runs on `gameplay/fishing` only; net catches unchanged | none |
 | Mob drops | cod / salmon pools at 50% (code, `LootTableLoadEvent`) | [loot.md](loot.md) code-pool census | one ancient fish per two fish killed is a lot next to 5% fishing | D6 |
@@ -188,7 +188,7 @@ hunger, genetics, homes, dimensionalCats, toggles, misc, ancientFish, classes, n
 1. **Ids:** 11 keys in `item_dict.js` (new `// ===== cozys-improved-cats` block: `ancient_cod`, `ancient_salmon`,
    `ancient_cooked_cod`, `ancient_cooked_salmon`, `cat_treat`, `yarn_ball`, `training_string`, `cat_collar`,
    `cat_guidebook`, `cat_bed`, `cat_food_bowl`; check each key against existing ones) and the block dict.
-2. **Tags** via `global.tags`: raw ancient fish into `creativeengineering:food_type/raw/fish` and
+2. **Tags** via `global.tags`: raw ancient fish into `creativedelight:food_type/raw/fish` and
    `forge:raw_fishes`; cooked into `forge:cooked_fishes` and the cooked food type; `cat_food` gains the pack raw fish /
    meat tags (D4); `cat_bed` into the bed group where DI's beds sit.
 3. **Upstream recipe removals:** none. Literal inputs to tags: wool, planks, string, iron ingot through NCH if the

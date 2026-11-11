@@ -16,15 +16,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Lunchbox looks, client side. Two item properties drive the model overrides in
  * kubejs/assets/solapplepie/models/item/ (written by tools/gen_lunchbox_looks.py):
- * {@code creativeengineering:lunchbox_skin} (position in {@link Lunchboxes#SKINS} + 1, 0 = own look) and
- * {@code creativeengineering:lunchbox_dyed} (1 when dyed). A dyed look's layer 0 is the greyscale base and
+ * {@code creativedelight:lunchbox_skin} (position in {@link Lunchboxes#SKINS} + 1, 0 = own look) and
+ * {@code creativedelight:lunchbox_dyed} (1 when dyed). A dyed look's layer 0 is the greyscale base and
  * gets the dye colour; layer 1 (outline and latches) is left as drawn. Called from
  * {@code CreativeEngineering.ClientModEvents} when Spice of Life is loaded.
  */
 public final class LunchboxClient {
 
-    public static final ResourceLocation SKIN = new ResourceLocation(CreativeDelight.NS, "lunchbox_skin");
-    public static final ResourceLocation DYED = new ResourceLocation(CreativeDelight.NS, "lunchbox_dyed");
+    public static final ResourceLocation SKIN = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_skin");
+    public static final ResourceLocation DYED = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_dyed");
 
     private LunchboxClient() {}
 

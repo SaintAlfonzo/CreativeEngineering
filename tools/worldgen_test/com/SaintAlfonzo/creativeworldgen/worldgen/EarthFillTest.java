@@ -82,7 +82,7 @@ public class EarthFillTest {
 	public static void main(String[] args) throws Exception {
 		net.minecraft.SharedConstants.tryDetectVersion();
 		net.minecraft.server.Bootstrap.bootStrap();
-		TagKey<Block> earthTag = BlockTags.create(new ResourceLocation("creativeengineering", "earth_fill/earth"));
+		TagKey<Block> earthTag = BlockTags.create(new ResourceLocation("creativeworldgen", "earth_fill/earth"));
 		Map<TagKey<Block>, List<Holder<Block>>> tags = new HashMap<>();
 		tags.put(earthTag, List.of(h(Blocks.DIRT), h(Blocks.GRASS_BLOCK), h(Blocks.SAND)));
 		tags.put(EarthFill.STONE_BLOCKS, List.of(h(Blocks.STONE)));

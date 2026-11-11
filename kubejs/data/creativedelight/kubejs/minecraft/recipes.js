@@ -18,7 +18,7 @@ ServerEvents.recipes(e => {
 		R.shaped(i.bowl, ['B B', ' B '], { B: i.bamboo }, e, 'bowl_from_bamboo')
 
 		//######################### Sugar #########################
-		// Every sugar slot takes a sweetener tag by kind of recipe (TODO dishes/ingredients #3; tags in creativeengineering/tags.js):
+		// Every sugar slot takes a sweetener tag by kind of recipe (TODO dishes/ingredients #3; tags in creativedelight/tags.js):
 		//   brewing (keg, wine)   sugar, powdered sugar, honey bottle, honeycomb
 		//   plain (not food)      sugar, powdered sugar: Botania, speed modules and upgrades, ethanol, potions, spider eye, blaze cake
 		//   drinks                sugar, powdered sugar, honey bottle (no honeycomb)
@@ -50,7 +50,7 @@ ServerEvents.recipes(e => {
 		R.replaceInput({ input: i.sugar, not: BREWING.concat(PLAIN, DRINK) }, i.sugar, i.any_sweetener, e)
 
 		//######################### Sweets #########################
-		// Cakes, pies, cookies, pie crust and cake base: all in creativeengineering/baking.js (baking overhaul,
+		// Cakes, pies, cookies, pie crust and cake base: all in creativedelight/baking.js (baking overhaul,
 		// feature_writeup/oven.md 2.6).
 		//Remove redundant pie
 		R.remove({ id: 'create_central_kitchen:cutting/pumpkin_pie_slice' }, e)

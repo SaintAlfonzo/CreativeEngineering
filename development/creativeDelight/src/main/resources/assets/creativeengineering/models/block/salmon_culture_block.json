@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/culture_block/salmon_culture_block",
-    "particle": "creativeengineering:block/culture_block/salmon_culture_block"
-  },
-  "render_type": "solid"
-}

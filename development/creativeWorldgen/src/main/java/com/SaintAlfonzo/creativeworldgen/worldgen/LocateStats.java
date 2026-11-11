@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 public final class LocateStats {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/locate");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/locate");
 
 	/** Which part of the prediction said "no" (locate.md 3.1). */
 	public enum Stage { PLACEMENT, BIOME, POINT, FREQUENCY, META, META_TARGET }

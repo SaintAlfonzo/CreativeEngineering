@@ -148,7 +148,7 @@ public final class Seasonings {
 
     /**
      * The tag listing the foods a seasoning may go on, {@code #<ns>:seasonable/<path>}: built from food families plus
-     * single adds and removals by Creative Delight's {@code creativeengineering/seasoning_tags.js}.
+     * single adds and removals by Creative Delight's {@code creativedelight/seasoning_tags.js}.
      */
     public static TagKey<Item> seasonableTag(ResourceLocation id) {
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id.getNamespace(), "seasonable/" + id.getPath()));

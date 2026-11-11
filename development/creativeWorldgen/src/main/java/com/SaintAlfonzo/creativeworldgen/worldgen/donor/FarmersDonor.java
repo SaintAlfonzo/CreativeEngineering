@@ -30,7 +30,7 @@ import java.util.zip.ZipInputStream;
  * A missing or different jar adds nothing (one warning), so the pack still runs on the 1.0.0 data alone.
  */
 public final class FarmersDonor {
-    private static final Logger LOG = LogManager.getLogger("creativeengineering/farmers-donor");
+    private static final Logger LOG = LogManager.getLogger("creativeworldgen/farmers-donor");
 
     public static final String FOLDER = "farmers_upstream";
     public static final String FILE = UpstreamJars.FARMERS_STRUCTURES.file();

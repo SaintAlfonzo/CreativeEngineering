@@ -20,7 +20,7 @@ Status **Pinned** / Work: KubeJS / id `creativedelight/qol #3`. Rules still in d
 ### Now (checked 2026-10-31)
 - The food dict exists (framework #4, built 2026-10-25, In Progress): `kubejs/startup_scripts/_lib/food_dict.js` (1542 keys)
   and `food_grammar.js`; pack scripts alias it `fd` (`f` is the fluid dict there).
-- The food type tags already live in the CD tree: [food_type_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/food_type_tags.js)
+- The food type tags already live in the CD tree: [food_type_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/food_type_tags.js)
   (moved from `server_scripts/tags/foodtypetags.js` 2026-10-25, rows unchanged). It reads
   [food_types.json](../../kubejs/generation_scripts/food/food_types.json), keyed by **item_dict** keys, not food dict keys;
   removed items lose the tags again in `_core/removed_item_tags.js`. No `qol.foodTypes` switch yet

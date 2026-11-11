@@ -11,7 +11,7 @@
 //                    widen its rules without a new dump
 //
 // tools/placeable_catalog.py reads it and builds feature_writeup/placeable_catalog.md plus
-// kubejs/generation_scripts/food/placeable.json (the tag lists for kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js).
+// kubejs/generation_scripts/food/placeable.json (the tag lists for kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js).
 
 ServerEvents.commandRegistry(event => {
 	var { commands: Commands } = event

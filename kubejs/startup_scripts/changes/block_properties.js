@@ -15,6 +15,14 @@ BlockEvents.modification(e => {
 		})
 	})
 
+	// Visceral Heap porous flesh (very sticky tier): honey's jump factor 0.5, so it grips like honey
+	// rather than feeling like slime. Only registered with Creative Worldgen + Biomes O' Plenty.
+	if (Platform.isLoaded('biomesoplenty')) {
+		e.modify(global.blocks.porous_flesh, block => {
+			block.setJumpFactor(0.5)
+		})
+	}
+
 	// Quark monster box (vault box, feature_writeup/mob_block_tweaks.md 2.9): Quark's strength 25 with no tool
 	// becomes obsidian's 50 / 1200, diamond pickaxe (tags in server_scripts/tags/blocktags.js).
 	e.modify(global.blocks.monster_box, block => {

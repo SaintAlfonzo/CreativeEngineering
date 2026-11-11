@@ -28,7 +28,7 @@ import net.minecraftforge.registries.RegistryObject;
  * (all NBT kept, count 1) with those seasonings added ({@link Seasonings}). It doesn't match if the food is outside
  * any of their seasonable tags ({@link Seasonings#seasonableTag}), already has one of them, or any two of the food's
  * seasonings don't combine, the food would go past the cap ({@code [food] maxSeasonings}), or a part is a station
- * seasoning ({@code grilled}). Type {@code creativeengineering:seasoning}; emitted by
+ * seasoning ({@code grilled}). Type {@code creativedelight:seasoning}; emitted by
  * {@code global.NCH.season}. Shown on the Seasoning JEI page.
  */
 public class SeasoningRecipe extends CustomRecipe {
@@ -129,7 +129,7 @@ public class SeasoningRecipe extends CustomRecipe {
     }
 
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
 
     public static final RegistryObject<RecipeSerializer<?>> SERIALIZER = SERIALIZERS.register("seasoning", Serializer::new);
 

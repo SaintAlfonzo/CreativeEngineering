@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativelabels.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "creativelabels.refmap.json",
+  "plugin": "com.SaintAlfonzo.creativelabels.CLMixinPlugin",
+  "mixins": [
+    "ArmorDyeRecipeMixin",
+    "CraftingMenuResultMixin",
+    "FastBenchResultMixin",
+    "ItemHiddenMixin",
+    "StickyItTooltipMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

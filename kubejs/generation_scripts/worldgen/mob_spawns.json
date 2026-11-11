@@ -1,7 +1,7 @@
 {
   "_readme": [
     "Mob spawn tuning: which mobs spawn in which biomes, and how often. Applied at world load by",
-    "kubejs/server_scripts/worldgen/mob_spawns.js as one biome modifier of patcherMod's type creativeengineering:tune_spawns",
+    "kubejs/server_scripts/worldgen/mob_spawns.js as one biome modifier of patcherMod's type creativeworldgen:tune_spawns",
     "(CEConfig [worldgen.systems] mobSpawns). Rejoin the world after editing. Unlike worldgen, spawns change in existing",
     "worlds too, but only for mobs that spawn from then on.",
     "Reference + tests: feature_writeup/mob_spawns.md. Preview the result without the game:",
@@ -10,7 +10,7 @@
     "The rules run after every mod's biome modifiers, in this order, one biome at a time.",
     "",
     "rules: [ { ... }, ... ]",
-    "  id      unique, lowercase a-z 0-9 _ (names the biome tag creativeengineering:mob_spawns/<id> and the log lines)",
+    "  id      unique, lowercase a-z 0-9 _ (names the biome tag creativeworldgen:mob_spawns/<id> and the log lines)",
     "  mob     entity id. A mob of a mod that isn't loaded is skipped with a warning.",
     "  action  set    spawn at 'weight' (and 'min'/'max' group size when given). Where the mob already spawns its",
     "                 entries become one, in place; where it doesn't, it is added to 'category' (default: the mob's",
@@ -31,7 +31,7 @@
     "",
     "conditions: [ { ... }, ... ]   spawn checks instead of biome lists (patcherMod worldgen/SpawnConditions). Natural spawns",
     "          and chunk-generation herds only; spawn eggs, spawners and commands are untouched.",
-    "  id         unique, lowercase a-z 0-9 _ (names the biome tag creativeengineering:spawn_conditions/<id>)",
+    "  id         unique, lowercase a-z 0-9 _ (names the biome tag creativeworldgen:spawn_conditions/<id>)",
     "  condition  light_only  the mob's spawn rule becomes 'light above 8' on any block its placement allows (no ground",
     "                         block requirement). Its own check (Alex's Mobs' 1-in-N roll) still runs.",
     "             water_only  only on the water surface (top block of the column is water). Its own rule still runs.",
@@ -307,6 +307,16 @@
       ],
       "label": "spawns #5",
       "notes": "Allays in the magical Terralith biomes (moonlight, lavender, amethyst, mirage isles). The allay_daylight condition keeps them out of dark cave pockets."
+    },
+    {
+      "id": "no_alexsmobs_crow",
+      "mob": "alexsmobs:crow",
+      "action": "remove",
+      "add": [
+        "#minecraft:is_overworld"
+      ],
+      "label": "plan_hearth_crow_swap.md 6.3 C1",
+      "notes": "Alex's Mobs' crow no longer spawns; Hearth and Harvest's crow replaces it and spawns only from nests. AM crowSpawnWeight 0 is the second guard."
     }
   ],
   "conditions": [
@@ -315,7 +325,6 @@
       "condition": "light_only",
       "mobs": [
         "minecraft:parrot",
-        "alexsmobs:crow",
         "alexsmobs:seagull",
         "alexsmobs:bald_eagle",
         "alexsmobs:sunbird",

@@ -22,6 +22,19 @@ it. Section 2.6 holds the re-scan; rows it changed are corrected in place, and t
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
 asks by name; upstream bugs are fixed.
 
+## Owner rulings 2026-11-09 (override the recommendations below where they differ)
+
+Still nothing built. These five rulings change D3, D6, D8, D11 and D12 and add 3.3 / 3.4 / 3.7 / 3.8; the old recommendation
+text in those rows is kept for history and marked "(rev 11-09)" where it no longer holds.
+
+| # | Ruling | Where |
+|---|---|---|
+| R1 | **Every ED workstation is registered, for evaluation.** Where a recipe also moves onto a pack station (vat recipes onto the Vintage fermenting jar, juicer onto the Apple Press, and so on), it **stays on the ED station as well**: both stations craft it. Dropping a station later is a data removal, no old ids exist (0 ids live) | 3.3, D3, D6, D12 |
+| R2 | **Ground Coffee is kept** (item, plus the recipes that grind and use it). Coffee beans stay Respite's (D8) | D8 |
+| R3 | **All furniture and decor is registered for evaluation**, including the pieces D11 dropped (sinks, counters, spice racks, food displays, step stools, keg, wallpapers, cinnamon and fruit half cabinets, ED's 9 shared half cabinets next to H&H's). Only pieces that need a missing 1.20 block stay out (3.4) | 3.4, D11 |
+| R4 | **The Cornfield dimension, its maze, its 23 structures and the Halloween portal are defined** in 3.7. D4 itself (keep or drop) is not changed by this: it still reads "drop" until you rule | 3.7 |
+| R5 | **Texture comparison plan:** one image per group, ED texture beside the pack texture it loses to, kept in the repo for review | 3.8, [extra_delight_textures.md](extra_delight_textures.md) |
+
 ## 0. At a glance
 
 | Part | Where | Status |
@@ -243,7 +256,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 | Mortar and pestle (35) | NCH `foodGrinding` (crushing wheels, Millstone, pack mortar) | **same** | through `foodGrinding` |
 | Chiller (75: ice cream, jellies, popsicles, puddings) | none (Neapolitan ice cream by crafting) | new | D3 (keep) |
 | Juicer (11) | Vinery Apple Press (H&H's juices are built on it), H&H stomping basin (pending eval), Create | **same job** | Drop the juicer; kept juices on the Apple Press (D12) |
-| Melting pot (11, chocolate syrups) | Create Confectionery chocolate fluids, Create mixer | partly | D6 |
+| Melting pot (11, chocolate syrups) | Create Confectionery chocolate fluids, Create mixer | partly | D6 | **(rev 11-09, R1)** the melting pot is registered; its recipes are also written for the Create mixer. |
 | Vat (23: pickles, kimchi, sauerkraut, salami, natto, miso) | Vintage fermenting jar (pack pickling, `dishes/pickles-and-ferments`), Brewin' keg, H&H keg | **same job** | Drop the vat; recipes onto the Vintage jar (step 9) |
 | Drying rack (10: dried fruit, chili, jerky, corn husk) | none in the pack | new | keep |
 | Dough shaping (21: shaped cookies, pasta shapes) | none | new | keep |
@@ -522,18 +535,61 @@ type ([food.md](food.md) 3.5), so the per-item table is generated after install 
 | Drinks | 3.1 juices, ades, eggnog, horchata, punch, ginger beer, xocolatl, gourmet hot chocolate, dalgona | about 20 |
 | Seasonal | easter egg, candy bowl, Halloween corn items | a few |
 
-### 3.3 Stations and tools (kept per D3)
+### 3.3 Stations and tools (all registered for evaluation, R1)
 
-Chiller, mixing bowl (wooden to netherite spoons), drying rack, dough shaping, juicer (D12), funnel and tap, grater,
-whisk, offset spatulas (5 tiers, serve feasts), yeast pot, corn husk doll (decor; turns to face players in the
-Cornfield only), corn cob pipe.
+**Rule (R1):** every station below is registered. A recipe that is also written for a pack station is written for both:
+the ED station keeps its original recipe (ED ids, ED pans, ED inputs where those survive) and the pack station gets a
+copy with pack inputs (survivor items, mapped bakeware). Outputs are the same item either way. Evaluation decides which
+station stays; the loser is removed by deleting its recipes and block, which is free because no ED id is live. Inputs
+that were dropped (ED corn, ED coffee beans, ED lemon...) are retargeted to the survivor or its tag on **both** copies.
 
-### 3.4 Decor
+| ED station | Recipes | Pack station that also gets the recipes | Notes |
+|---|---|---|---|
+| Oven + 8 pans (pie dish, loaf pan, square pan, tray, sheet, muffin tray, baking stone, bar mold) | 525 | pack oven (`creativeengineering:baking`, patcherMod oven): pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold -> new bakeware or the cake pan / baking sheet | ED copy uses ED pans; pack copy uses mapped bakeware |
+| Mixing bowl + spoons (wooden to netherite) | 108 | none (crafting grid / Cooking Pot `_manual_only` rule has no stirring); ED's 209 Create mixing mirrors stay as upstream ships them | nothing to duplicate |
+| Mortar and pestle (10 stones) | 35 | NCH `foodGrinding` (crushing wheels, Millstone, pack mortar) | |
+| Chiller | 75 | none (Neapolitan ice cream is by crafting) | nothing to duplicate |
+| Juicer | 11 | Vinery Apple Press (H&H's juices are built on it) | the juicer keeps its dye and bone meal byproducts; the Apple Press copy loses them |
+| Melting pot | 11 | Create mixer + Confectionery chocolate fluids | |
+| Fermenting vat with lid | 23 | Vintage fermenting jar (pack pickling, `dishes/pickles-and-ferments`) | pickle juice stays a byproduct, brine id must stay stable (2.6) |
+| Drying rack | 10 | none | |
+| Dough shaping (GUI) | 21 | none | |
+| Evaporator | 1 | Vintage evaporator, The Salt | salt output points at `#forge:salts` survivor |
+| Yeast pot | | none found | |
+| Vinegar pot | | none found in the pack; check Vintage / Brewin' for a vinegar source in eval | no decision row existed before; added by R1 |
+| Keg (8-bucket tank), funnel and tap | | Brewin' keg / H&H keg | |
+| Grater, whisk | | none | tools |
+| Offset spatulas (5 tiers) | | none | serve feast and pie blocks |
+| Corn husk doll, corn cob pipe | | none | decor in the Cornfield sense, see 3.7 |
 
-208 moulded wallpapers (13 woods x 16 colours), knife blocks, dried corn fences, picnic baskets (16),
-wreaths (15), fruit and candy bowls, chocolate boxes (16), jar display, gingham (16 + 16 carpets), ribbon bows (16),
-chocolate building blocks (4 kinds x 8 shapes), jelly blocks (16), candy cane blocks (3), frosted gingerbread blocks (16),
-hanging produce (chili, corn, garlic, ham, mint, onions), 4 paintings, citrus rind banner pattern. D11.
+Extra cost of R1 (so the eval pass can price it): each dual-routed recipe is an extra recipe to keep in step with the
+bakeware map and the survivor-item retargets, and JEI shows the output under two stations. Both are accepted for the
+eval period.
+
+### 3.4 Decor and furniture (all registered for evaluation, R3)
+
+Everything ED ships is registered, including the pieces D11 had dropped. Where the pack or H&H already has an equivalent,
+**both exist under their own ids** until eval picks one (no merge, no hide before eval).
+
+| Group | Count | Pack or H&H equivalent (compare in eval) |
+|---|---|---|
+| Moulded wallpapers (13 woods x 16 colours) | 208 | `design_decor` wavy wallpaper |
+| Half cabinets (ED, 13 woods + cinnamon + fruit wood) | 15 families | H&H half cabinets (9 woods): ED's 9 shared woods now registered too |
+| Step stools (13 woods) | 13 | `creativeengineering:*_stepstool` (16 colours) |
+| Sinks, counters, spice racks, food displays, knife blocks | per wood | none found |
+| Dried corn fences, picnic baskets (16), wreaths (15) | | none |
+| Fruit and candy bowls, chocolate boxes (16), jar display | | `creativedelight:*_fruit_basket` (fruit bowl) |
+| Gingham (16 + 16 carpets), ribbon bows (16) | | none |
+| Chocolate building blocks (4 kinds x 8 shapes), jelly blocks (16), candy cane blocks (3), frosted gingerbread blocks (16) | | none (plain gingerbread and canes dropped by D6 for the food items, the decor blocks stay now) |
+| Hanging produce (chili, corn, garlic, ham, mint, onions) | | none |
+| Butter block, cheese block, slab, stairs | | H&H butter; Vintage cheese |
+| Corn husk doll, dried corn husk bundle | | H&H corn husk (installed) |
+| Paintings (4 big citrus slices), citrus rind banner pattern | | none |
+
+Still blocked, not a choice: cherry and bamboo variants of every family (about 40 ids; vanilla 1.20 woods). Cherry maps to
+Vinery cherry wood (as H&H 2.4) if you want it in eval; bamboo has no 1.19.2 plank in the pack, so it stays out unless a mod
+supplies one. Petal litter stays dropped (1.20 block type). Everything else, including the pieces that duplicate the pack,
+is in.
 
 ### 3.5 Effects
 
@@ -554,6 +610,123 @@ text needed for each kept one.
 | B8 | 2160 recipe advancements (recipe book unlocks) | `data/*/advancement` | dropped by the pack |
 
 No load errors: the jar was never loaded in the pack.
+
+### 3.7 Cornfield dimension, maze, structures and Halloween portal (defined 2026-11-09, R4)
+
+Read from the 2.6.6 jar and source (`CornTop`, `CornBottom`, `CornMazeEvents`, `CornMazeFeature`, `CornMazeRail`,
+`worldgen/`, `structure/`). 1.3.3 has the dimension too (`dimension/corn_dimension.json`, the 23 structure templates under `structures/`, `CornMazeEvents`),
+so the fork would inherit it; values below are 2.6.6's and 1.3.3's differ only if its jar says so (not diffed per value).
+Nothing here is built. D4 says drop; this section is so you can decide with the full picture.
+
+**Dimension** (`extradelight:cornfield`)
+
+| Property | Value |
+|---|---|
+| Type | `extradelight:corn`: fixed time 18000 (always night), ultrawarm, no ceiling, skylight, `min_y` 0, height 64, `bed_works` false, `respawn_anchor_works` false, no raids, piglins not safe |
+| Generator | noise, one fixed biome `extradelight:cornfield`; stone, sea level 0, no aquifers or ore veins, surface rule = grass block |
+| Biome | fog colour dark purple (0x130B24), sky colour 0, grass and foliage 4798742, water 2955861; spawners: zombie (group of 4, weight 95), zombie villager (1, weight 5), witch (1, weight 5), bat (8, weight 10); `has_precipitation` true |
+| Client | fog forced to a short cylinder (near plane -8, far x 0.25) and fog colour grey (0.5, 0.5, 0.5) while in the dimension |
+| Features | `rail_placer` (step 1) and `patch_pumpkin` before the structures; `corn_placer` (maze) last |
+
+**The maze** (`corn_maze_feature`, placed once per chunk)
+
+- Per chunk, an 18 x 18 grid is made with `EllersGen` (Eller's algorithm, row by row), so each chunk holds an independent
+  perfect maze; the border row and column are cut off, leaving a 16 x 16 field. Wall cells (`#`) become `extradelight:corn_bottom`
+  (age 0, `dimension=true`); path cells stay open. Chunk mazes do not line up with each other, so seams are not guaranteed
+  to connect.
+- A wall cell is only placed if a 11 x 11 area around it holds only air or corn already, so structures and the rail
+  are not overwritten.
+- Corn in the dimension: a random tick sets the `dimension` flag on the block (`CornBottom.randomTick`), which makes it survive
+  without light or the usual soil rule. Walking into it slows (x 0.8, 0.75, 0.4); **sprinting hurts 1** (sweet-berry-bush damage).
+- **Rail line:** one feature per chunk row: only chunk Z = 0 gets it. Along Z = 0, an east-west rail on a 3-wide gravel bed with
+  oak fences 4 blocks either side; every chunk X divisible by 100 (every 1600 blocks) a **rail stop** structure replaces the rail.
+
+**Dimension rules**
+
+- **Entry** is only by the portal below; spawn lands at **y = 33**, same X and Z as the corn block, motion kept.
+- **Breaking blocks** is blocked for non-creative players: the break is cancelled and the player takes 1 magic damage and a
+  witch-cackle sound. (Placing is not blocked.)
+- **No death:** a hit that would kill is cancelled. The player is healed to full, **loses every inventory item in the
+  `corn_dim_confiscate` tag** (19 items: corn cob, husk, on cob, seeds, silk, chowder, fritters, corn meal, corn pudding and
+  its feast, cornbread and its feast, caramel popcorn, cooked corn, cream corn, dried husk, grilled corn on cob, popcorn,
+  corn husk doll), and is teleported to their respawn point (world spawn if none) with the message
+  `extradelight.corn_dimension.death`. Only the main inventory list (36 slots, hotbar included) is searched; armour and off-hand are untouched.
+- **There is no exit portal.** Leaving is by dying, or by commands.
+
+**Halloween portal** (an overworld corn crop, not a block)
+
+1. Condition `isHalloween()`: real local date from **1 October to 10 November** inclusive, or config `allYearSpooky` = true.
+2. The block must be **dense corn**: a `corn_top` with `DENSE` = true. A mature top becomes dense when its shape updates and the
+   four neighbours (east, north, west, south) are also mature `corn_top` blocks, so only the inside of a mature corn field qualifies.
+3. A player standing inside it gets Nausea (200 ticks = 10 s) with a 1 in 100 chance **per tick spent inside** (about 1 s expected).
+4. When that Nausea has 3 ticks or fewer left, the block starts the portal: `setPortalCooldown(0)` then `setAsInsidePortal`, the
+   crop being a `Portal` implementation with transition `CONFUSION` (the nausea wobble is the transition).
+5. Destination `extradelight:cornfield` at (x, 33, z) of the crop. The transition's post action is empty.
+6. Outside the date window (or with the config off) dense corn is plain corn.
+
+Pack facts that matter for D4: the pack's corn is Corn Delight's, which has no `DENSE` state; with ED corn dropped (D4) nothing
+triggers the portal. Keeping the dimension therefore needs either ED's corn crop kept for this purpose only or a hook on Corn
+Delight's corn. The real-date check also clashes with Creative Calendar's reserved time and season handling, and
+`allYearSpooky` is the only way around the date; the portal would be live every autumn in normal play (B7).
+H&H's Corn Maze structure (stage 2) is a separate maze with no dimension change.
+
+**The 23 structures.** 23 NBT templates; the structure set `extradelight:corn_structures` holds **21** of them
+(`pumpkin_patch3` is unreferenced, `rail_stop` is placed by the rail feature, not by the set). All are single-piece jigsaw
+structures: `size` 1, `max_distance_from_center` 80, step `surface_structures`, `WORLD_SURFACE_WG` projection, `beard_thin`
+terrain adaptation, biome `extradelight:cornfield` only. Placement is `random_spread`, **spacing 15 chunks, separation 5**, so one
+roll per 240-block cell; the weights decide which of the 21 appears. Total weight 645.
+
+| Structure | Weight (share) | Size (x y z) | Blocks | Contents |
+|---|---|---|---|---|
+| Barn | 1 (0.2 %) | 29 x 17 x 19 | 2412: oak planks, weathered cut copper roof and stairs, spruce fence, 58 hay, 36 canvas rugs | 5 chests (3 common, 1 uncommon, 1 rare); zombie horse, bat, zombie |
+| Haunted house | 1 (0.2 %) | 24 x 15 x 28 | 4422: spruce and dark oak planks and slabs, weathered cut copper, bricks, warped fence | 15 chests (10 common, 3 uncommon, 1 rare, **1 legendary**) |
+| Camp 1 | 5 (0.8 %) | 17 x 11 x 16 | 690: spruce leaves and logs | 1 chest (common), 3 corn husk dolls, soul campfire, 2 jack o'lanterns |
+| Camp 2 | 5 (0.8 %) | 16 x 6 x 16 | 443: wool, carpet, dandelions, barrels | 6 chests (3 uncommon, 2 common, 1 rare), onion crates, cornmeal sacks |
+| Fountain | 5 (0.8 %) | 7 x 7 x 7 | 146: 20 water | soul campfire |
+| Doll circle (plain) | 25 (3.9 %) | 7 x 2 x 7 | 57 | 8 corn husk dolls |
+| Doll circle 1 | 25 (3.9 %) | 7 x 2 x 7 | 58 | 8 dolls, soul campfire |
+| Doll circle 2 | 25 (3.9 %) | 7 x 2 x 7 | 58 | 8 dolls, butter block |
+| Doll circle 3 | 25 (3.9 %) | 7 x 2 x 7 | 58 | 8 dolls, skeleton skull |
+| Doll circle 4 | 25 (3.9 %) | 7 x 2 x 7 | 58 | 8 dolls, **spawner** (zombie) |
+| Table 1, 2, 3 | 25 each (3.9 %) | 3 x 3 x 3 | 19 | spruce stairs and one dish (corn pudding, pumpkin pie, apple pie) |
+| Table 4 | 25 (3.9 %) | 5 x 4 x 9 | 79 | long banquet: corn pudding, shepherd's pie, roast chicken, lamb stew, apple pie (feast blocks) |
+| Pumpkin patch 2, 4, 5 | 100 each (15.5 %) | 3 x 4 x 3 | 36 | 25 pumpkins, carved pumpkin or jack o'lantern, patch 2 has a barrel and 1 chest (common), 4 and 5 a pumpkin pie |
+| Pumpkin pile 1 | 100 (15.5 %) | 3 x 3 x 3 | 16 | 5 pumpkins, carved, jack o'lantern |
+| Sacrifice, Sacrifice 2 | 1 each (0.2 %) | 3 x 4 x 3 | 22 | 5 corn husk dolls, fences and trapdoors (sacrifice has a soul campfire) |
+| Sign | 1 (0.2 %) | 1 x 2 x 1 | 2 | one green canvas sign |
+| Pumpkin patch 3 | not in the set | 3 x 4 x 3 | 36 | 25 pumpkins, carved, pie: unused leftover |
+| Rail stop | placed by the rail feature, every 1600 blocks on Z = 0 | 16 x 8 x 16 | 698: gravel, bricks, spruce planks, 32 rails, 20 signs, 14 oak fences | 1 chest (uncommon) |
+
+Shares by group: pumpkin patches and pile 62 %, doll circles 19 %, tables 15.5 %, camps 1.6 %, everything else under 1 % each
+(the haunted house is a 1 in 645 roll per cell).
+
+**Chest loot** (4 tables, `extradelight:chests/corn_*`, 12 / 11 / 24 / 12 entries)
+
+| Table | Examples |
+|---|---|
+| Common | candy and caramel apples, caramel candy, corn cob, husk, seeds, silk, unshucked corn, bone, bone meal, rotten flesh, skeleton skull |
+| Uncommon | corn chowder, fritters, pudding, cornbread, cream corn, popcorn, caramel candy, FD flint and iron knife, rope, skillet |
+| Rare | milk, dark, white and blood chocolate bars, filled bars and truffles, butter, chocolate cake, cake, corn crate, corn pudding and cornbread feasts, dried husk bundle, FD cooking pot, golden knife, gold ingot, cornflower |
+| Legendary | candy golden apple, caramel golden apple, golden apple, gold block, gold ingot, butter block, corn crate, easter egg, feasts, dried husk bundle |
+
+Death is the only exit (see rules), and it removes the confiscate-tag items, so the corn-themed loot (common and uncommon
+tables, plus the feasts, husk bundle and corn crate in rare and legendary) is lost on the way out; the chocolate, gold, knives,
+skillet, cooking pot, bone and cake survive. The confiscate tag matches the loot's corn items one to one.
+
+**Pack decisions this implies** (not made):
+
+- Corn items in the loot are ED ids; with ED corn dropped (D4) they retarget to Corn Delight's corn, cob and cornmeal, and the
+  confiscate tag follows. Blood chocolate in the rare table is already dropped by D6.
+- The corn husk doll (decor, turns to face players, only animated inside the dimension) is registered for eval under R3 either way.
+- A dimension adds a world folder, a dimension id for Dynamic Villager Trades, Async Locator and the structure-gen config
+  to ignore, and the pack's own structure framework does not touch it (biome `extradelight:cornfield` only).
+
+### 3.8 Texture comparison plan (R5)
+
+Goal: for every ED item, block and fluid that is **dropped, merged or evaluated against a pack equivalent**, render the ED texture
+next to the texture the pack keeps, so the choice can be made by eye and kept as a record. Plan, group list, output paths and
+tooling are in [extra_delight_textures.md](extra_delight_textures.md); output lands in
+`feature_writeup/extra_delight_textures/` (one PNG per group, committed). TODO row added.
 
 ## 4. Fold-in, in build order
 
@@ -643,16 +816,16 @@ to the alcohol scripts.
 |---|---|---|---|
 | D1 | **Changed 2026-11-08 (2.7.1).** Route: native 1.3.3 untouched, a port of all of 2.6.6, or a fork of upstream's `1.19.2` source with the missing lines backported from 2.6.6? | fork and backport | **Answered 2026-11-08: approved.** Route is the fork |
 | D2 | **Changed 2026-11-08 (2.7.2).** Licence CC BY-NC-SA 4.0: OK to ship the fork under that licence, keep ED-derived code and data out of the GPLv3 trees, give `global.NCH` a one-line permission for the fork, and keep the pack and any server free of paid access or cash shops? | yes to all; the unmodified upstream jar never goes in the payload | **Answered 2026-11-08: approved** (licence boundary and the `global.NCH` permission for the fork; owner states the pack and its servers will never be monetised) |
-| D3 | Stations: ED oven, pans, mortar, mixing bowl, chiller | drop ED oven and mortar (pack oven, `foodGrinding`); map pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold: keep as new bakeware or map to the cake pan / baking sheet; keep the chiller; mixing bowl: keep (manual mixing with spoons has no pack equivalent) | as recommended, mixing bowl kept |
+| D3 | Stations: ED oven, pans, mortar, mixing bowl, chiller | drop ED oven and mortar (pack oven, `foodGrinding`); map pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold: keep as new bakeware or map to the cake pan / baking sheet; keep the chiller; mixing bowl: keep (manual mixing with spoons has no pack equivalent) | as recommended, mixing bowl kept. **(rev 11-09, R1)** every station registered for eval, recipes duplicated onto the pack station and kept on ED's; see 3.3 |
 | D4 | Corn and the Cornfield dimension | drop ED corn (Corn Delight's) and the Cornfield (dimension, maze, 23 structures, Halloween portal); H&H Corn Maze is the stage-2 maze. Keep corn husk, silk, dried husk, doll and pipe as Corn Delight byproducts | drop |
 | D5 | Trees: apple, lemon, orange duplicate Fruits Delight | drop those 3; keep lime, grapefruit, hazelnut, cinnamon and the fruit wood (lime and grapefruit grow on it) | as recommended |
-| D6 | Chocolate and candy: ED's 4 chocolates vs Create / Confectionery; blood chocolate needs `c:blood`; melting pot; marshmallow; gingerbread | chocolate base is Create / Confectionery (milk, dark = black, white); ED's chips, truffles, dipped, filled bars and fondues kept on those bases; blood chocolate dropped (no blood item) or fed by Alex's Mobs blood sac if wanted; melting pot dropped (Create mixer and Confectionery fluids); shaped cookies kept; plain gingerbread and canes dropped | as recommended, blood chocolate dropped |
+| D6 | Chocolate and candy: ED's 4 chocolates vs Create / Confectionery; blood chocolate needs `c:blood`; melting pot; marshmallow; gingerbread | chocolate base is Create / Confectionery (milk, dark = black, white); ED's chips, truffles, dipped, filled bars and fondues kept on those bases; blood chocolate dropped (no blood item) or fed by Alex's Mobs blood sac if wanted; melting pot dropped (Create mixer and Confectionery fluids); shaped cookies kept; plain gingerbread and canes dropped | as recommended, blood chocolate dropped. **(rev 11-09, R1)** the melting pot is registered; its recipes are also written for the Create mixer |
 | D7 | Ice cream and milkshakes vs Neapolitan | drop ED chocolate and mint duplicates and the plain milkshake (Neapolitan vanilla); keep the other flavours | as recommended |
-| D8 | Coffee and tea | drop ED's coffee crop, beans, drink and tea; ED coffee dishes (dalgona, affogato, coffee jelly, chocolate-dipped coffee beans) take Respite beans; Ground Coffee kept only if a recipe needs it after retargets | as recommended |
+| D8 | Coffee and tea | drop ED's coffee crop, beans, drink and tea; ED coffee dishes (dalgona, affogato, coffee jelly, chocolate-dipped coffee beans) take Respite beans; Ground Coffee kept only if a recipe needs it after retargets. **(rev 11-09, R2)** Ground Coffee is kept outright: item, its grind recipe (`#forge:coffee_beans` on the mortar and on `foodGrinding`) and every recipe that uses it | as recommended |
 | D9 | Dynamic jam and toast (one id, ingredient components) vs the jam family (one id per fruit, mason jar) | drop both dynamic items; ED jam fluid dropped | drop |
 | D10 | Butter and cheese | **Changed 2026-11-08:** H&H's butter is the pack's (N22); ED's butter item dropped; ED's butter block, slab and stairs kept and crafted from it; ED cheese item dropped; cheese block, slab, stairs: keep as decor on Vintage cheese or drop | butter as recommended, cheese decor dropped |
-| D11 | Furniture and decor: half cabinets (ED and H&H), knife block, step stool, picnic basket, wreaths, bowls, chocolate box, gingham, ribbons, 208 wallpapers; ED keg | **Changed 2026-11-08:** H&H's half cabinets stay (9 woods); ED's cinnamon and fruit variants wait with N26-7 (no other woods for now); step stools dropped (the pack has its own); drop sinks, counters, spice racks, food displays, keg; keep the other small decor; wallpapers: owner (208 ids for one look) | wallpapers and cinnamon / fruit half cabinets dropped, the rest as recommended |
-| D12 | Juicer (ED) vs stomping basin (H&H); Sunshine (ED) vs Clarity (H&H) | **Changed 2026-11-08:** drop ED's juicer; lime, grapefruit, tomato, cactus and pickle juice go on the Vinery Apple Press like H&H's juices (loses the juicer's dye and bone meal byproducts); basin eval stays H&H's (D12 there). Drop Sunshine; ED foods that gave it give whichever of Clarity and Brightening wins the N26-9 eval | as recommended |
+| D11 | Furniture and decor: half cabinets (ED and H&H), knife block, step stool, picnic basket, wreaths, bowls, chocolate box, gingham, ribbons, 208 wallpapers; ED keg | **Changed 2026-11-08:** H&H's half cabinets stay (9 woods); ED's cinnamon and fruit variants wait with N26-7 (no other woods for now); step stools dropped (the pack has its own); drop sinks, counters, spice racks, food displays, keg; keep the other small decor; wallpapers: owner (208 ids for one look) | wallpapers and cinnamon / fruit half cabinets dropped, the rest as recommended. **(rev 11-09, R3)** nothing dropped: all furniture and decor registered for eval, see 3.4 |
+| D12 | Juicer (ED) vs stomping basin (H&H); Sunshine (ED) vs Clarity (H&H) | **Changed 2026-11-08:** drop ED's juicer; lime, grapefruit, tomato, cactus and pickle juice go on the Vinery Apple Press like H&H's juices (loses the juicer's dye and bone meal byproducts); basin eval stays H&H's (D12 there). Drop Sunshine; ED foods that gave it give whichever of Clarity and Brightening wins the N26-9 eval | as recommended. **(rev 11-09, R1)** the ED juicer is registered and keeps its recipes; the Apple Press gets copies without the dye and bone meal byproducts. |
 | D13 | Butchercraft-dependent dishes (B5) | fill the tags from pack items where a cut clearly fits (sausage -> H&H sausage, tags to be added; chicken breast / thigh / wing / cubed -> FD chicken cuts; beef cubed / scrap / ground -> FD minced beef; roasts -> raw beef / porkchop / mutton; ribs -> Alex's Mobs moose ribs only for BBQ ribs); drop the offal dishes (haggis, fried brains, liver and onions, stuffed heart, oxtail soup), fat potatoes and salami (`c:fat`) unless Carnivore (`mod-additions #12`) brings offal | as recommended |
 | D14 | Trades and chest GLMs | drop the trade code; chest additions: a few ED foods per structure through loot.md, not the 21 GLMs as written | as recommended |
 | D15 | Raisins (H&H) vs dried fruit (ED); trail mix | keep both raisins and dried fruit (dried fruit is the drying rack's generic output); trail mix: H&H's, on raisins | as recommended |
@@ -731,6 +904,10 @@ to the alcohol scripts.
 | EXD-34 | Lime juice comes from the Vinery Apple Press; no ED juicer in JEI | |
 
 ## 9. History
+
+- 2026-11-09: owner rulings R1 to R5 (top of file): all workstations registered for eval with recipes also kept on the original
+  station, Ground Coffee kept, all furniture and decor registered for eval, Cornfield dimension / maze / structures / portal
+  defined in 3.7, texture comparison plan (3.8, extra_delight_textures.md). Nothing built.
 
 - 2026-10-30: investigation written (overlap, stage-2 comparison with Hearth and Harvest, integration process),
   nothing built. Jar unpacked to `DecompiledMods/extradelight-2.6.6/` and decompiled to `-src/`. Found that upstream

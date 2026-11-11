@@ -25,7 +25,7 @@ dependencies {
 
 // addon source set -> other addons it may compile against. Order matters: dependencies first.
 // expanded -> polaroid: upstream Expanded's optional instant-slide integration (PolaroidHandler).
-// extras is not upstream code: this pack's additions (camera bags), mod id exposure_extras, no mixins.
+// extras is not upstream code: this pack's additions (camera bags), mod id exposureextras, no mixins.
 def addons = [
         polaroid: [],
         catalog : [],

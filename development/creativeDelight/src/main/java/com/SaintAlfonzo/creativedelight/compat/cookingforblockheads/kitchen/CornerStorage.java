@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat.cookingforblockheads.kitchen;
 
+import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,12 +32,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * through CfB's and Balm's own code, item drops when broken (BlockKitchen#onRemove) and an item handler for hoppers.
  * The mixin also lists it as a kitchen item provider, so the cooking table uses what's inside, and
  * {@code mixin/CfbCornerUseMixin} opens it as a chest. Saved here as an attached capability
- * ({@code ForgeCaps/creativeengineering:corner_storage}), as the corner block entity has no save of its own.
+ * ({@code ForgeCaps/creativedelight:corner_storage}), as the corner block entity has no save of its own.
  */
 public final class CornerStorage {
 
     /** Kept from patcherMod, where this lived until 2026-10-31, so corners already filled keep their contents. */
-    private static final ResourceLocation ID = new ResourceLocation("creativeengineering", "corner_storage");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "corner_storage");
 
     private CornerStorage() {}
 

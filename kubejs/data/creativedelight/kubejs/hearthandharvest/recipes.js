@@ -48,7 +48,7 @@ ServerEvents.recipes(e => {
 		F.cookieBake(i.raisins, i.raisin_cookie)
 		F.cookieBake(i.nut_mash_jar, i.peanut_butter_cookie)
 		F.pieBake(i.t_fruits_raspberries, i.raspberry_pie)
-		R.ceBaking([i.pie_crust, grape, grape, F.SWEET, F.SWEET], i.grape_pie, e, 'grape_pie', F.ware.pie)
+		R.ceBaking([i.pie_crust, grape, grape, grape, F.SWEET, F.SWEET], i.grape_pie, e, 'grape_pie', F.ware.pie)
 		F.pieBake(i.peanut, i.peanut_butter_pie)
 		F.pieSlice(i.raspberry_pie, i.raspberry_pie_slice)
 		F.pieSlice(i.grape_pie, i.grape_pie_slice)
@@ -61,11 +61,11 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.corn_seeds, i.dye_orange, i.syrup, i.sugar], n(i.candy_corn, 4), e, 'candy_corn', 0.35, 100)
 		R.fdCooking([i.batter, i.syrup], i.hh_waffle, e, 'waffle', 0.35, 100)
 		R.fdCooking([i.grilled_corn, i.blaze_powder, i.any_cheese], i.street_corn, e, 'street_corn', 0.35, 100)
-		R.fdCooking([i.cooked_sausage, i.t_salts, i.milk, i.flour], i.biscuits_and_gravy, e, 'biscuits_and_gravy', 1.0, 200, i.bowl)
+		R.fdCooking([i.any_dough, i.raw_sausage, i.t_salts, i.milk], i.biscuits_and_gravy, e, 'biscuits_and_gravy', 1.0, 200, i.bowl)
 		R.fdCooking([i.raw_pasta, i.t_salts, i.milk, i.butter, i.any_cheese], i.macaroni_and_cheese, e, 'macaroni_and_cheese', 1.0, 200, i.bowl)
-		R.fdCooking([i.carrot, i.carrot, i.syrup], i.glazed_carrots, e, 'glazed_carrots', 1.0, 200, i.bowl)
+		var gcCarrot = Platform.isLoaded('miners_delight') ? [i.carrot, i.cave_carrot] : i.carrot   // dishes/meals #64
+		R.fdCooking([gcCarrot, gcCarrot, i.syrup], i.glazed_carrots, e, 'glazed_carrots', 1.0, 200, i.bowl)
 		R.fdCooking([i.t_food_cooked_meat, i.vegetables, i.any_cheese], i.tamale, e, 'tamale', 1.0, 200, i.corn_husk)
-		F.mealCraft([i.cooked_sausage, i.t_salts, i.milk, i.flour, i.bowl], i.biscuits_and_gravy)
 
 		// By hand
 		F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
@@ -117,7 +117,8 @@ ServerEvents.recipes(e => {
 		})
 		F.fruitCook(i.raw_sausage, i.cooked_sausage)
 		R.shaped(i.pitchfork, ['nnn', 'isi', ' s '], { n: i.nugget_iron, i: i.ingot_iron, s: i.stick }, e, 'pitchfork')
-		R.shaped(i.tree_tapper, [' I ', 'SBS', ' S '], { I: i.ingot_iron, S: i.wood_slab, B: i.bucket }, e, 'tree_tapper')
+		// Iron or wooden bucket (largecontent/mod-additions #58)
+		R.shaped(i.tree_tapper, [' I ', 'SBS', ' S '], { I: i.ingot_iron, S: i.wood_slab, B: [i.bucket, i.wooden_bucket] }, e, 'tree_tapper')
 
 		// Juices on the Apple Press (1 fruit + glass bottle) and wines in the Fermentation Barrel (3 fruit + 15 juice + wine
 		// bottle), N22. The other drinks are Brewin' keg recipes, as upstream.
@@ -133,7 +134,7 @@ ServerEvents.recipes(e => {
 		R.bncFermenting(i.root_beer, [i.hanging_roots, i.hanging_roots, i.sugar], f.water, e, 'root_beer')
 		R.bncFermenting(i.moonshine, [i.cornmeal, i.cornmeal, i.sugar], f.water, e, 'moonshine')
 
-		// Corn husk grinds to 0.2 cornmeal (N23-1); its sources are in corn_delight/recipes.js, creativeengineering/recipes.js
+		// Corn husk grinds to 0.2 cornmeal (N23-1); its sources are in corn_delight/recipes.js, creativedelight/recipes.js
 		// and the corn harvest loot modifier.
 		R.foodGrinding([Item.of(i.cornmeal, 1).withChance(0.2)], i.corn_husk, e, 'corn_husk_cornmeal', { mortar: false })
 

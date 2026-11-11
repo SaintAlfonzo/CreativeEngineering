@@ -10,7 +10,7 @@
 //   seen TAG GOAL               did goal class GOAL run in any sample of TAG: "[zhh3] seen TAG GOAL yes|no"
 //   goals TYPE X Y Z R          the goal list of each entity with priorities (available goals, running ones marked)
 //   tally X Y Z R               "tally crows=N tamed=T carrying=C" for the crows in the box
-//   target X Y Z R ITEM        AM crow canTargetItem(ITEM) for each crow (mixin proof): "[zhh3] canTarget ITEM true|false"
+//   target X Y Z R ITEM        CrowEntity.isFood(ITEM) for each crow (#creativedelight:crow_food): "[zhh3] isFood ITEM true|false wild=B"
 //   block X Y Z                 block id and properties
 //   poi X Y Z                   POI type at the position, or none
 //   items X Y Z R [clear]       item entities (id, count, Age, Invulnerable, Thrower present, PickupDelay), then "items total=N id xN ..."
@@ -24,9 +24,9 @@
 //   loot X Y Z R ITEM [TICKS]   CrowLogic.holdLoot on every crow in the box (TICKS overrides the carry timer)
 //   leash NAME X Y Z R TYPE     leash every TYPE in the box to player NAME
 //   enttag TAG                  entity types in an entity type tag
-//   nests X Z R                 ground nests on the surface in a loaded square: generated / placed counts, first 5 with biome
+//   nests X Z R                 nests at the surface (tree tops, roofs, ground) in a loaded square: generated / placed counts, first 5 with biome
 //   kill X Y Z TYPE N LOOT      a fake player with an iron sword of Looting LOOT kills N fresh TYPE at X Y Z; sums the drops
-// TYPE defaults to alexsmobs:crow when written "crow". No chunk loads here: forceload first (Rhino deadlock, scratch-test gotchas).
+// TYPE defaults to hearthandharvest:crow when written "crow" (the Hearth and Harvest crow since 2026-11-10; wariness is the entity's own field, NBT "Wariness"). No chunk loads here: forceload first (Rhino deadlock, scratch-test gotchas).
 (() => {
     const $HH3Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $HH3Reg = Java.loadClass('net.minecraft.core.Registry')
@@ -48,18 +48,18 @@
     const $HH3Collectors = Java.loadClass('java.util.stream.Collectors')
     // Member classes load on first use, so a boot without the member still registers /zhh3
     const HH3PKG = 'com.SaintAlfonzo.creativedelight.hearth.'
-    let $HH3Wary = null, $HH3Logic = null, $HH3Access = null, $HH3Crow = null, $HH3Salt = null
+    let $HH3Wary = null, $HH3Logic = null, $HH3Crow = null, $HH3Salt = null
     function crowCls() {
         if ($HH3Wary === null) {
             $HH3Wary = Java.loadClass(HH3PKG + 'crow.CrowWariness')
             $HH3Logic = Java.loadClass(HH3PKG + 'crow.CrowLogic')
-            $HH3Access = Java.loadClass(HH3PKG + 'crow.CrowAccess')
             $HH3Crow = Java.loadClass(HH3PKG + 'crow.CrowConfig')
             $HH3Salt = Java.loadClass(HH3PKG + 'salt.SaltConfig')
         }
     }
     function out(s) { console.info('[zhh3] ' + s) }
-    function typeId(t) { return t == 'crow' ? 'alexsmobs:crow' : t }
+    const HH3CROW = 'hearthandharvest:crow'
+    function typeId(t) { return t == 'crow' ? HH3CROW : t }
     function lvl(server) { return server.overworld() }
     function box(x, y, z, r) { return new $HH3AABB(x - r, y - r, z - r, x + r, y + r, z + r) }
     // getEncodeId, not getType(): KubeJS shadows Entity.getType with a String; players encode to null
@@ -95,21 +95,21 @@
         s.main = stackStr(e.getMainHandItem())
         let pos = e.getX().toFixed(1) + ',' + e.getY().toFixed(1) + ',' + e.getZ().toFixed(1)
         s.line = id + ' pos=' + pos + ' d=' + s.d.toFixed(2) + ' hp=' + e.getHealth().toFixed(1)
-        if (id == 'alexsmobs:crow') {
+        if (id == HH3CROW) {
             crowCls()
-            let w = $HH3Wary.of(e)
-            let tag = w == null ? new $HH3CT() : w.serializeNBT()
+            let w = e.getWariness()
+            let tag = w == null ? new $HH3CT() : w.save()
             s.trust = tag.getInt('Trust')
             s.alarm = tag.getInt('AlarmTicks')
             s.carry = tag.getBoolean('Carrying')
             s.carryT = tag.getInt('CarryTicks')
             s.tame = e.isTame()
             s.snatch = w != null && w.isSnatching()
-            s.fly = $HH3Access.isFlying(e)
+            s.fly = e.isFlying()
             let tgt = e.getTarget()
             s.tgt = tgt == null ? 'none' : 'set'
-            s.line += ' tame=' + s.tame + ' fly=' + s.fly + ' sit=' + $HH3Access.isSitting(e) + ' trust=' + s.trust + ' alarm=' + s.alarm
-                + ' carry=' + s.carry + '/' + s.carryT + ' snatch=' + s.snatch + ' main=' + s.main + ' target=' + s.tgt + ' cap=' + (w != null)
+            s.line += ' tame=' + s.tame + ' fly=' + s.fly + ' sit=' + e.isInSittingPose() + ' trust=' + s.trust + ' alarm=' + s.alarm
+                + ' carry=' + s.carry + '/' + s.carryT + ' snatch=' + s.snatch + ' main=' + s.main + ' target=' + s.tgt
         } else {
             s.restr = e.hasRestriction()
             s.line += ' restricted=' + s.restr + ' leashed=' + e.isLeashed()
@@ -158,12 +158,15 @@
     const HH3Keys = {
         fleeing: 'c:FLEEING', flockAlarm: 'c:FLOCK_ALARM', tempting: 'c:TEMPTING', handFeeding: 'c:HAND_FEEDING', eatDroppedFood: 'c:EAT_DROPPED_FOOD',
         cornBreeding: 'c:CORN_BREEDING', eatCrops: 'c:EAT_CROPS', stealShinyItems: 'c:STEAL_SHINY_ITEMS', stealChance: 'c:STEAL_CHANCE', stashInNests: 'c:STASH_IN_NESTS',
-        dropOnHurt: 'c:DROP_ON_HURT', carryTicks: 'c:CARRY_TICKS', scareRadius: 'c:SCARE_RADIUS', generateNests: 'c:GENERATE_NESTS', spawnNearNests: 'c:SPAWN_NEAR_NESTS',
-        spawnRadius: 'c:SPAWN_RADIUS', cropRequirement: 'c:CROP_REQUIREMENT', denySpawnsElsewhere: 'c:DENY_SPAWNS_ELSEWHERE',
+        dropOnHurt: 'c:DROP_ON_HURT', carryTicks: 'c:CARRY_TICKS', scareRadius: 'c:SCARE_RADIUS', generateNests: 'c:GENERATE_NESTS',
+        fetchItems: 'c:FETCH_ITEMS', fetchThrownItems: 'c:FETCH_THROWN_ITEMS', leaveShoulderToFetch: 'c:LEAVE_SHOULDER_TO_FETCH', villageRoofNests: 'c:VILLAGE_ROOF_NESTS',
+        villageRoofNestChance: 'c:VILLAGE_ROOF_NEST_CHANCE', nestFlockMin: 'c:NEST_FLOCK_MIN', nestFlockMax: 'c:NEST_FLOCK_MAX', nestCrowCap: 'c:NEST_CROW_CAP',
+        nestCrowRange: 'c:NEST_CROW_RANGE', nestRespawnMinutes: 'c:NEST_RESPAWN_MINUTES', nestPlayerRange: 'c:NEST_PLAYER_RANGE', playerNestsSpawnCrows: 'c:PLAYER_NESTS_SPAWN_CROWS',
         playerLicking: 's:PLAYER_LICKING', animalLicking: 's:ANIMAL_LICKING', saltPlayerLickChance: 's:PLAYER_LICK_CHANCE', saltAnimalStageChance: 's:ANIMAL_STAGE_CHANCE',
         saltAnimalRadius: 's:ANIMAL_RADIUS', saltSearchInterval: 's:SEARCH_INTERVAL', saltLickInterval: 's:LICK_INTERVAL'
     }
-    const HH3Int = { carryTicks: 1, scareRadius: 1, spawnRadius: 1, cropRequirement: 1, saltAnimalRadius: 1, saltSearchInterval: 1, saltLickInterval: 1 }
+    const HH3Int = { carryTicks: 1, scareRadius: 1, nestFlockMin: 1, nestFlockMax: 1, nestCrowCap: 1, nestCrowRange: 1, nestRespawnMinutes: 1, nestPlayerRange: 1,
+        saltAnimalRadius: 1, saltSearchInterval: 1, saltLickInterval: 1 }
     function cfgVal(key) {
         crowCls()
         let m = HH3Keys[key]
@@ -209,7 +212,7 @@
             } else if (what == 'tally') {
                 let list = ofType(level, 'crow', parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3])), tamed = 0, carrying = 0
                 crowCls()
-                list.forEach(e => { if (e.isTame()) tamed++; let w = $HH3Wary.of(e); if (w != null && w.isCarrying()) carrying++ })
+                list.forEach(e => { if (e.isTame()) tamed++; let w = e.getWariness(); if (w != null && w.isCarrying()) carrying++ })
                 out('tally crows=' + list.length + ' tamed=' + tamed + ' carrying=' + carrying)
             } else if (what == 'assert') {
                 let st = hh3Stats[a[0]]
@@ -229,7 +232,7 @@
                 })
             } else if (what == 'target') {
                 let it = Item.of(a[4]);
-                ofType(level, 'crow', parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3])).forEach(e => out('canTarget ' + a[4] + ' ' + e.canTargetItem(it) + ' wild=' + !e.isTame()))
+                ofType(level, 'crow', parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3])).forEach(e => out('isFood ' + a[4] + ' ' + e.isFood(it) + ' wild=' + !e.isTame()))
             } else if (what == 'block') {
                 let p = new $HH3Pos(parseInt(a[0]), parseInt(a[1]), parseInt(a[2])), st = level.getBlockState(p), props = []
                 st.getProperties().forEach(pr => props.push(String(pr.getName()) + '=' + String(st.getValue(pr))))
@@ -300,7 +303,7 @@
                 crowCls()
                 let n = 0
                 ofType(level, 'crow', parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3])).forEach(e => {
-                    let w = $HH3Wary.of(e)
+                    let w = e.getWariness()
                     $HH3Logic.holdLoot(e, w, Item.of(a[4], 1))
                     if (a[5]) w.startCarrying(parseInt(a[5]))
                     n++

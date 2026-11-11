@@ -45,7 +45,7 @@ import java.util.WeakHashMap;
  */
 public final class TemplateBlockSwaps {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/template-swaps");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/template-swaps");
 	/** Read in order; a later file's entry for the same template position replaces an earlier one's. */
 	static final List<String> CONFIGS = List.of(BiomeLayoutTuner.WORLDGEN_DIR + "meat_block_swaps.json",
 			BiomeLayoutTuner.WORLDGEN_DIR + "nether_block_swaps.json");

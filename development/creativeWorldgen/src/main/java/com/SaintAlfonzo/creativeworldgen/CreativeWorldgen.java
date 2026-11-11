@@ -53,16 +53,19 @@ import java.util.regex.Pattern;
  * mobs, mooshrooms, leaf decay, raids glowing, Forgiving Void, the Farmer's Structures donor. Nests More Mooblooms and
  * Baby Mobs. Requires patcherMod ({@code creativeengineering}, later Creative Common) and Creative Compat.
  *
- * Ids stay: the biome modifier codecs, the meta structure and piece types, the loot condition, tags and lang keys keep
- * the {@code creativeengineering} namespace ({@link #NS}). This mod id is only the jar's identity, its config file and
- * its script packs. The registrations below are the ones patcherMod's constructor made, in the same order.
+ * Ids: the biome modifier codecs, the meta structure and piece types, the data (structures, dimensions, noise settings,
+ * placed features, biome modifiers) and the tags are under this jar's own namespace ({@link #NS}) since 2026-11-10
+ * (namespace_move.md step 6); they were {@code creativeengineering:} until then. Old saves keep loading through the swap
+ * list (data/creativeworldgen/swaps), {@link com.SaintAlfonzo.creativeworldgen.worldgen.LegacyIds} (structure starts,
+ * pieces, dimension keys) and {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders).
+ * The registrations below are the ones patcherMod's constructor made, in the same order.
  */
 @Mod(CreativeWorldgen.MOD_ID)
 public class CreativeWorldgen {
 
     public static final String MOD_ID = "creativeworldgen";
-    /** The namespace of every id this mod uses: patcherMod's, unchanged by the carve. */
-    public static final String NS = "creativeengineering";
+    /** The namespace of every id this mod registers or keys (its own mod id since 2026-11-10). */
+    public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String OLD_FILE = "creativeengineering-common.toml";
@@ -83,8 +86,8 @@ public class CreativeWorldgen {
         // packs/<modid>/: worldgen data naming a mod this jar does not require, added only while that mod is loaded.
         modEventBus.addListener(com.SaintAlfonzo.creativeworldgen.compat.ModDataPacks::add);
 
-        // The creativeengineering:biome_tag loot condition moved to Creative Delight (loot/BiomeTagCondition) 2026-11-06.
-        // Meta structures: the creativeengineering:meta structure type and its piece types (worldgen/MetaStructure; the
+        // The creativedelight:biome_tag loot condition moved to Creative Delight (loot/BiomeTagCondition) 2026-11-06.
+        // Meta structures: the creativeworldgen:meta structure type and its piece types (worldgen/MetaStructure; the
         // structures themselves are kubejs meta_structures.json).
         MetaStructure.register(modEventBus);
 
@@ -105,15 +108,19 @@ public class CreativeWorldgen {
         MinecraftForge.EVENT_BUS.register(TemplateBlockSwaps.class);
         // Spawn boxes on pillager and witch structures and their meta parts (spawn_boxes.json); box evokers drop no totem.
         MinecraftForge.EVENT_BUS.register(StructureSpawnBoxes.class);
-        // Mob spawn tuning: biome modifier type creativeengineering:tune_spawns (mob_spawns.json); its change record
+        // Mob spawn tuning: biome modifier type creativeworldgen:tune_spawns (mob_spawns.json); its change record
         // feeds /dumpspawns and is cleared on stop.
         SpawnTuning.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(SpawnTuning.class);
         // Brown mooshrooms on natural spawns (mob_spawns.json brown_chance); the family's breeding is in mixins.
         MinecraftForge.EVENT_BUS.register(MooshroomFamily.class);
+        // /wiseoak trust; only with the mod, whose block entity it needs.
+        if (ModList.get().isLoaded("mysticaloaktree")) {
+            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeworldgen.wiseoak.WiseOakCommand.class);
+        }
         // Named mobs ([named_mobs]): a rare random name on natural spawns, deaths announced in chat.
         MinecraftForge.EVENT_BUS.register(NamedMobs.class);
-        // Bee nest tuning: biome modifier type creativeengineering:bee_nests (bee_nests.json) + the tree/nest/chunk
+        // Bee nest tuning: biome modifier type creativeworldgen:bee_nests (bee_nests.json) + the tree/nest/chunk
         // counters behind /dumpbeenests.
         BeeNests.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(BeeNests.class);

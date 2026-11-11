@@ -181,10 +181,10 @@
 		#mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,
 		#patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.
 		mobSpawns = true
-		#The creativeengineering:terrain_adaptation/* structure tags replace a structure's own terrain adaptation
+		#The creativeworldgen:terrain_adaptation/* structure tags replace a structure's own terrain adaptation
 		#(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.
 		terrainAdaptation = true
-		#Structures in the creativeengineering:template_trim tag skip their template's air and bare pad (grass,
+		#Structures in the creativeworldgen:template_trim tag skip their template's air and bare pad (grass,
 		#dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.
 		templateTrim = true
 		#bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs
@@ -289,8 +289,8 @@
 	#Structure bases that don't match the ground. As a structure generates, grass/dirt in the bottom
 	#layers of its templates is compared with the natural ground sampled around that chunk; where the
 	#ground isn't grass/dirt (volcanic peaks, deserts, snowy slopes, badlands...) the base becomes that
-	#ground instead. Blocks: tags creativeengineering:ground_match/* (kubejs blocktags.js). Exempt a
-	#structure with the structure tag creativeengineering:ground_match/exempt. New chunks only.
+	#ground instead. Blocks: tags creativeworldgen:ground_match/* (kubejs blocktags.js). Exempt a
+	#structure with the structure tag creativeworldgen:ground_match/exempt. New chunks only.
 	[worldgen.ground_match]
 		#TERRAIN: a base block whose spot already holds natural ground is skipped, so the terrain stays;
 		#  the rest (base above the ground) is filled with blocks sampled from the local ground.
@@ -312,7 +312,7 @@
 		minSamples = 16
 		#Block tags, one per base family. A family block in a base is swapped where its family isn't
 		#native. Add a tag here (and fill it in blocktags.js) to match another kind of base, e.g. sand.
-		families = ["creativeengineering:ground_match/grass"]
+		families = ["creativeworldgen:ground_match/grass"]
 		#Log each changed template (chunk, family share, palettes). For testing.
 		log = false
 
@@ -343,7 +343,7 @@
 	#limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared
 	#with other structures tries the next pick). The limits scale with the structure's size (its earth
 	#base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never
-	#counted. Exempt a structure with the structure tag creativeengineering:earth_fill/exempt. New
+	#counted. Exempt a structure with the structure tag creativeworldgen:earth_fill/exempt. New
 	#chunks only; /place structure is not checked.
 	[worldgen.earth_fill]
 		#Most earth blocks that may stand in water the beard won't fill (a pad reaching out over a lake or the
@@ -358,10 +358,10 @@
 		baseLayers = 3
 		#Block tags, one entry each, that count as earth. Fill the default in kubejs blocktags.js; add a tag
 		#here to count another kind of block.
-		blocks = ["creativeengineering:earth_fill/earth"]
+		blocks = ["creativeworldgen:earth_fill/earth"]
 		#Per-structure limits, one entry each: "<structure id or #structure tag>=<water>,<air>[,<mound>]",
 		#e.g. "philipsruins:ancient_ruins=0,16" (never over water, at most 16 over air after the beard,
-		#mound from its size) or "#creativeengineering:type/village=-1,-1,-1" (no limits). They replace the
+		#mound from its size) or "#creativeworldgen:type/village=-1,-1,-1" (no limits). They replace the
 		#size's limits. The first matching entry wins; -1 = no limit.
 		overrides = ["eugene:undead_castle=24,800,400"]
 		#The predicted terrain is read once per N x N block cell instead of per column (cheaper, a little
@@ -402,7 +402,7 @@
 		#measured 2026-10-30: 23% of vanilla outposts and 2 to 18% of villages would newly cross their mound
 		#limit. Off until calibrated on a log = ALL scratch run.
 		beardFootprint = false
-		#For structures in the structure tag creativeengineering:earth_fill/prune (villages): before the whole start
+		#For structures in the structure tag creativeworldgen:earth_fill/prune (villages): before the whole start
 		#is judged, each jigsaw piece but the first is judged alone, and one past pruneMaxHanging or pruneMaxMound
 		#is dropped with every piece attached below it (a house over deep water with its villagers). So is a piece
 		#whose own footprint is too wet (maxWaterSurplus) with at least pruneMinWetColumns water columns. The street
@@ -422,7 +422,7 @@
 		#doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,
 		#whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers
 		#blocks of terrain (underground structures, aquifers) counts as neither. Not for structures in
-		#creativeengineering:water_fill/structures; an override with every limit -1 skips it too. Default 0
+		#creativeworldgen:water_fill/structures; an override with every limit -1 skips it too. Default 0
 		#(2026-10-30, was 0.5): the strictest setting, any start standing more on water than on ground goes.
 		#Range: -1.0 ~ 1000.0
 		maxWaterSurplus = 0.5
@@ -440,8 +440,8 @@
 		#With prune on, every other jigsaw structure on the surface (camps, outposts, ruins, towers; meta
 		#structure parts and anchors too) drops a piece whose own footprint is too wet the same way, with every
 		#piece attached below it; the piece limits above stay for villages. The first piece is never dropped,
-		#and the rest is then judged as usual. Not for creativeengineering:water_fill/structures,
-		#creativeengineering:earth_fill/wet_ok or the structure tag creativeengineering:earth_fill/no_prune
+		#and the rest is then judged as usual. Not for creativeworldgen:water_fill/structures,
+		#creativeworldgen:earth_fill/wet_ok or the structure tag creativeworldgen:earth_fill/no_prune
 		#(structures whose pieces only make sense together). Off: only villages are pruned (before 2026-10-30).
 		pruneWetJigsaws = true
 		#Water columns a whole start's footprint needs before its water share (maxWaterSurplus) can cancel it,
@@ -466,7 +466,7 @@
 			huge = [320, 128]
 
 	#Water structures that would flood the land. Just before a structure start in the structure tag
-	#creativeengineering:water_fill/structures is stored, every water block of its template pieces (water,
+	#creativeworldgen:water_fill/structures is stored, every water block of its template pieces (water,
 	#waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts
 	#at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water
 	#replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)
@@ -482,10 +482,10 @@
 		#Range: -1 ~ 100000
 		maxIntoAir = 16
 		#Per-structure limits, one entry each: "<structure id or #structure tag>=<ground>,<air>". The default
-		#lets the structures in creativeengineering:water_fill/ponds (fish ponds, a house on a pond) dig their
+		#lets the structures in creativeworldgen:water_fill/ponds (fish ponds, a house on a pond) dig their
 		#water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.
-		#Only structures in creativeengineering:water_fill/structures are checked at all.
-		overrides = ["#creativeengineering:water_fill/ponds=-1,16"]
+		#Only structures in creativeworldgen:water_fill/structures are checked at all.
+		overrides = ["#creativeworldgen:water_fill/ponds=-1,16"]
 		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
 		#structure that carries any water. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
@@ -494,9 +494,9 @@
 	#Terrain around structures. Vanilla's beard flattens the whole template bounding box and blends it out
 	#over about 8 blocks around it, so a small structure with a flat pad or a lot of saved air leaves a flat
 	#rectangle the size of its whole template in a curved hillside. Structures in the structure tag
-	#creativeengineering:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but
+	#creativeworldgen:terrain_adaptation/soft get the soft beard instead: the same fill and carve, but
 	#only under the template's built columns (pad and air columns left out when the structure is also in
-	#creativeengineering:template_trim), blending out over a short round skirt. Tags: kubejs
+	#creativeworldgen:template_trim), blending out over a short round skirt. Tags: kubejs
 	#worldgen/terrain_adaptation.js. New chunks only.
 	[worldgen.terrain_adaptation]
 		#Blocks added to the soft beard's minimum skirt of 4 (where its fill and carve fade out, measured from
@@ -515,10 +515,10 @@
 		#Log every meta structure start that is assembled: its anchor, each part and how many of each
 		#fitted, or which part fell short (the slot is then the plain anchor).
 		log = false
-		#Keep meta structures out of coasts and rivers (the biome tag creativeengineering:coast_river: beaches,
+		#Keep meta structures out of coasts and rivers (the biome tag creativeworldgen:coast_river: beaches,
 		#shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box
 		#(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
-		#which still spawns as it would alone. Metas in the structure tag creativeengineering:meta/coast_ok (fleets,
+		#which still spawns as it would alone. Metas in the structure tag creativeworldgen:meta/coast_ok (fleets,
 		#flotillas, wrecks, sunken ruins) are not affected. New chunks only.
 		avoidCoasts = true
 		#A part that fits fewer times than its minimum count (a satellite near a coast, on a cliff) is kept with

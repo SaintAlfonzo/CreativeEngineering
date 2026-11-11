@@ -11,12 +11,12 @@ Cryosol needs nothing: it is placed at top_layer_modification, after vegetation,
 For every placed/configured feature in the mod jars with a block predicate that tests the block below
 (offset [0,-1,0]) against a block list containing minecraft:grass_block, this writes an override to
 kubejs/data/<ns>/worldgen/<kind>/<path>.json in which that predicate becomes
-    any_of(<the original list>, matching_block_tag #creativeengineering:worldgen/grass_like_soils)
+    any_of(<the original list>, matching_block_tag #creativeworldgen:worldgen/grass_like_soils)
 (the tag is filled in kubejs/data/creativeworldgen/kubejs/tags/blocktags.js). The only other change is STATE_SWAPS (merged blocks).
 Features registered in Java (no JSON in the jar) are rebuilt from the decompiled source in JAVA_BASES.
 
 Snow-layer, lake and snow-removal features also test grass, but they shape terrain rather than place
-plants; EXCLUDE leaves them alone. The pack's own creativeengineering:wild/* copies are hand-written and
+plants; EXCLUDE leaves them alone. The pack's own creativeworldgen:wild/* copies are hand-written and
 take the tag directly.
 
 Writes the list of generated files to kubejs/generation_scripts/worldgen/soil_compat_manifest.json, and on
@@ -39,7 +39,7 @@ from pathlib import Path
 INSTANCE = Path(__file__).resolve().parent.parent
 DATA = INSTANCE / 'kubejs/data'
 MANIFEST = INSTANCE / 'kubejs/generation_scripts/worldgen/soil_compat_manifest.json'
-TAG = 'creativeengineering:worldgen/grass_like_soils'
+TAG = 'creativeworldgen:worldgen/grass_like_soils'
 GRASS = 'minecraft:grass_block'
 BELOW = [0, -1, 0]
 # Block states the overrides it writes swap as well: blocks purged by an item merge (feature_writeup/item_merges.md).

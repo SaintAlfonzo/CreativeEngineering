@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Crop seasons for grass spread (farming/crops #28, feature_writeup/crops.md 2.12.1): a grass block's random tick
  * spreads it onto dirt without a crop-grow event, so {@link CropSeasons} never saw it. When the block is typed
- * ({@code creativeengineering:crop_seasons/grass}, the json is the switch) and its season is off, the tick is skipped
+ * ({@code creativecalendar:crop_seasons/grass}, the json is the switch) and its season is off, the tick is skipped
  * with {@code offPenalty}'s chance. A grass block that can no longer be grass (covered) always runs its tick, so
  * turning back to dirt is not slowed. Mycelium and nylium share the class and are untyped: unchanged.
  */

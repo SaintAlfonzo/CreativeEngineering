@@ -4,7 +4,7 @@
 
 | Part | Status |
 |---|---|
-| Three bags `exposure_extras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposure_extras:camera_equipment` | DEPLOYED (patcherMod in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |
+| Three bags `exposureextras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposureextras:camera_equipment` | DEPLOYED (patcherMod in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |
 | Contents in the bag's NBT (tooltip shows them, smithing upgrades keep them, destroyed bags drop them) | DEPLOYED |
 | Dyeable like leather armour, colour kept through upgrades | DEPLOYED with 1.0.4 |
 | Old `creativeengineering:*_camera_bag` items remapped to the new ids | DEPLOYED with 1.0.4; R4-04 never run |
@@ -13,11 +13,11 @@
 - **Pending:** F4 (flashes in the bag tag, `equipmenttags.js`, `/reload`) built 2026-10-22, DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22
   (SQ-GM-03). CB-01 to CB-11 are new; R4-04 to R4-06 and R4-11 stay in
   [plan_1.0.4.md](plan_1.0.4.md). Findings F1 to F4 (section 4); F1 and F2 decided 2026-10-29 (keep the template; lunchbox textures for the tiers); F4 done 2026-10-22.
-- **Files to open:** [camerabag/](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposure_extras/camerabag/),
+- **Files to open:** [camerabag/](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposureextras/camerabag/),
   [camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) (recipes),
-  [camera_equipment.json](../development/exposureBackport/src/extras/resources/data/exposure_extras/tags/items/camera_equipment.json)
+  [camera_equipment.json](../development/exposureBackport/src/extras/resources/data/exposureextras/tags/items/camera_equipment.json)
   (default contents tag), [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) (pack add/remove lists).
-- **Knobs:** `config/exposure_extras-common.toml` `[camera_bag]` (`leatherSlots` 5, `ironSlots` 9, `netheriteSlots` 14;
+- **Knobs:** `config/exposureextras-common.toml` `[camera_bag]` (`leatherSlots` 5, `ironSlots` 9, `netheriteSlots` 14;
   1 to 27); the tag (`/reload`).
 
 ## 1. Overview
@@ -41,7 +41,7 @@ cauldron). All three currently share the leather look (two-layer model: a tinted
 
 ### 2.2 What goes in
 
-`#exposure_extras:camera_equipment`, any slot, normal stack size. Defaults from the jar: the camera, the instant camera,
+`#exposureextras:camera_equipment`, any slot, normal stack size. Defaults from the jar: the camera, the instant camera,
 the camera stand, `#exposure:lenses`, `#exposure:filters` (every glass pane and the Interplanar Projector count as
 filters in Exposure), `#exposure:film_rolls`, `#exposure:developed_film_rolls`, and the 10 instant slides. Not in by
 default: flashes (`#exposure:flashes`), photographs, albums, frames. Never: another bag, or anything that refuses to go
@@ -69,6 +69,10 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
 - **Move from patcherMod (1.0.4):** ids `creativeengineering:*_camera_bag` → `exposure_extras:*_camera_bag`, remapped
   by a `MissingMappingsEvent` handler in `ExposureExtras`; contents come along in the NBT. The old `[camera_bag]`
   section in `creativeengineering-common.toml` was dropped (not carried over). Details: [plan_1.0.4.md](plan_1.0.4.md) 2.
+- **Mod id rename (2026-11-10, namespace_move.md D-EXPO):** `exposure_extras` became `exposureextras` (naming rule).
+  The `exposure_extras:` ids move by the swap list `data/exposureextras/swaps/owner_namespace.json` (Creative Common
+  remaps and aliases them); `exposure_extras-common.toml` is renamed to `exposureextras-common.toml` on first load.
+  The `creativeengineering:` remap above stays as a permanent read alias. BUILT, not yet installed; test SQ-NSM-10.
 - **Recipes** in KubeJS (the mod ships none), smithing on purpose so upgrades keep contents, name and colour.
 
 ## 4. Limits and decisions
@@ -100,10 +104,10 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
 
 ## 5. File map
 
-- exposureBackport `src/extras/java/com/SaintAlfonzo/exposure_extras/`: [camerabag/CameraBag.java](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposure_extras/camerabag/CameraBag.java), `CameraBagItem`, `CameraBagMenu`, `CameraBagTier`, `client/CameraBagScreen`, `client/CameraBagClient`; `ExtrasConfig` (`[camera_bag]`); `ExposureExtras` (remap).
-- exposureBackport `src/extras/resources/`: `data/exposure_extras/tags/items/camera_equipment.json`; `assets/exposure_extras/models/item/*_camera_bag.json`, `textures/item/camera_bag_dyable.png`, `camera_bag_outline_leather.png`.
+- exposureBackport `src/extras/java/com/SaintAlfonzo/exposureextras/`: [camerabag/CameraBag.java](../development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposureextras/camerabag/CameraBag.java), `CameraBagItem`, `CameraBagMenu`, `CameraBagTier`, `client/CameraBagScreen`, `client/CameraBagClient`; `ExtrasConfig` (`[camera_bag]`); `ExposureExtras` (remap).
+- exposureBackport `src/extras/resources/`: `data/exposureextras/tags/items/camera_equipment.json`; `assets/exposureextras/models/item/*_camera_bag.json`, `textures/item/camera_bag_dyable.png`, `camera_bag_outline_leather.png`.
 - KubeJS: [equipment/camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js), [tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js), `item_dict.js` (`i.*_camera_bag`).
-- Config: `config/exposure_extras-common.toml`.
+- Config: `config/exposureextras-common.toml`.
 - Related: [exposure.md](exposure.md) (the rest of the backport).
 
 ## 6. Offline checks

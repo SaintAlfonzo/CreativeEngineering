@@ -63,7 +63,8 @@ public final class DistantClip {
 	/** Marked chunks and their clip height. */
 	private static final Map<ChunkAccess, Integer> CLIPPED = Collections.synchronizedMap(new WeakHashMap<>());
 
-	private static final ResourceLocation FLOOR_RANDOM = new ResourceLocation("creativeengineering", "distant_seabed");
+	// A random seed, not an id: kept under LegacyIds.LEGACY_NS so the seabed of old worlds goes on as before.
+	private static final ResourceLocation FLOOR_RANDOM = new ResourceLocation(LegacyIds.LEGACY_NS, "distant_seabed");
 
 	private DistantClip() {}
 

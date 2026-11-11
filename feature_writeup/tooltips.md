@@ -151,7 +151,7 @@ Examples:
 
 **Added for placeable food** (2026-10-05, [placeable_food.md](placeable_food.md))
 - 164 foods: gray "Placeable" / "Placeable (while sneaking)" / "Placeable on plate" / "Placeable on small plate", drawn from the
-  `#creativeengineering:placeable*` tags at hover time (`addAdvancedToAll`). Catalog: [placeable_catalog.md](placeable_catalog.md).
+  `#creativedelight:placeable*` tags at hover time (`addAdvancedToAll`). Catalog: [placeable_catalog.md](placeable_catalog.md).
 
 **Added by frameworks** (each documented in its own memory):
 - armor effects (`armor_effects_tooltip.js`) and tool effects (`tool_effects_tooltip.js`)

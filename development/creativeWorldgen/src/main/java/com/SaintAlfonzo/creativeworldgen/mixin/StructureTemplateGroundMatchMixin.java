@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Two rewrites of a structure template's processed block list, in this order: worldgen/TemplateTrim drops the
- * air and bare pad around the built columns of creativeengineering:template_trim structures, then
+ * air and bare pad around the built columns of creativeworldgen:template_trim structures, then
  * worldgen/GroundMatch swaps a grass/dirt base for the surrounding ground where that ground isn't grass/dirt.
  * Same target as StructureTemplateLootSwapMixin: Forge's 6-argument processBlockInfos, which keeps its name in
  * production and which every template placement uses.

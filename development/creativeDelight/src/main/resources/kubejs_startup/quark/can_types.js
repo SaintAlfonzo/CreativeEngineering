@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'quark', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_ancient_fruit": {
    "section": "special",
@@ -115,7 +115,7 @@ if (global.CD) global.CD.genPut('can_types', 'quark', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   }
  }
 })

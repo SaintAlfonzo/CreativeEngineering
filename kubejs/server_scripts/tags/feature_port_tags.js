@@ -6,5 +6,5 @@
 ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
-	t.add(e, 'creativeengineering:bottled_air/fire_sources', [i.campfire, i.soul_campfire, i.fire_charge, i.lava_bucket, i.magma_block])
+	t.add(e, 'creativeequipment:bottled_air/fire_sources', [i.campfire, i.soul_campfire, i.fire_charge, i.lava_bucket, i.magma_block])
 })

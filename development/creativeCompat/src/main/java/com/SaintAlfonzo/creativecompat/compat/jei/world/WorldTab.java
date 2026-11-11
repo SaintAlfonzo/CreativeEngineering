@@ -24,7 +24,7 @@ public enum WorldTab {
     JAR_INTERACTION("jar_interaction", List.of("supplementaries:faucet", "minecraft:glass_bottle"), List.of()),
     KNIFE_DROPS("knife_drops", List.of("farmersdelight:iron_knife"), List.of()),
     GRASS_DROPS("grass_drops", List.of("minecraft:wheat_seeds"), List.of()),
-    SAMPLE_SYRINGE("sample_syringe", List.of("creativeengineering:sample_syringe"), List.of("creativeengineering:sample_syringe")),
+    SAMPLE_SYRINGE("sample_syringe", List.of("creativedelight:sample_syringe"), List.of("creativedelight:sample_syringe")),
     MOB_BOTTLING("mob_bottling", List.of("minecraft:axolotl_bucket"), List.of()),
     MOB_TRANSFORMATION("mob_transformation", List.of("minecraft:golden_apple"), List.of()),
     BURNING("burning", List.of("supplementaries:ash", "minecraft:flint_and_steel"), List.of()),

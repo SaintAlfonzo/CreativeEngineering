@@ -18,13 +18,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * Saves the buffer of a mixin-given {@link RemainderBufferHolder} with the block entity, as an attached capability
- * provider (under {@code ForgeCaps/creativeengineering:remainder_buffer}). Forge reads and writes it in
+ * provider (under {@code ForgeCaps/creativedelight:remainder_buffer}). Forge reads and writes it in
  * BlockEntity.load/saveWithoutMetadata, so no mixin into the stations' own load/save is needed. It exposes no
  * capability; automation reaches the buffer through the stations' item handlers.
  */
 public final class RemainderBufferStorage {
 
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.NS, "remainder_buffer");
+    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "remainder_buffer");
 
     private RemainderBufferStorage() {}
 

@@ -657,3 +657,46 @@
 	#Names used when Minecraft Comes Alive is missing or its name lists are not loaded.
 	fallbackNames = ["Bessie", "Clover", "Daisy", "Biscuit", "Maple", "Pepper", "Hazel", "Barnaby", "Rosie", "Winston", "Mabel", "Otis", "Juniper", "Gus", "Poppy", "Waffles"]
 
+#Wise Oak sleep and anger timers, in real seconds. Server side.
+[wise_oak]
+	#How long a Wise Oak sleeps after it gets tired of talking.
+	#Range: 0 ~ 86400
+	sleepDurationSeconds = 300
+	#How long a Wise Oak stays angry.
+	#Range: 0 ~ 86400
+	angerDurationSeconds = 30
+	#How long a Wise Oak sleeps once its anger ends.
+	#Range: 0 ~ 86400
+	angrySleepDurationSeconds = 600
+
+	#Gifts: after a conversation with an awake Wise Oak, a player at or above the trust threshold has a
+	#chance of a drop. One of the four lists is picked evenly, then one item in it. An empty list is left
+	#out of the draw; an unknown id is skipped with a warning in the log.
+	[wise_oak.gifts]
+		#Chance of a gift per conversation, in percent. 0 turns gifts off.
+		#Range: 0.0 ~ 100.0
+		chancePercent = 5.0
+		#Trust needed for a gift (0 to 100, +5 per conversation).
+		#Range: 0 ~ 100
+		trustThreshold = 75
+		#Saplings of Overworld trees.
+		saplings = ["minecraft:oak_sapling", "minecraft:spruce_sapling", "minecraft:birch_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling", "minecraft:mangrove_propagule", "minecraft:azalea", "minecraft:flowering_azalea", "myrtrees:rubberwood_sapling", "quark:ancient_sapling", "quark:blue_blossom_sapling", "quark:lavender_blossom_sapling", "quark:orange_blossom_sapling", "quark:pink_blossom_sapling", "quark:red_blossom_sapling", "quark:yellow_blossom_sapling"]
+		#Items dropped from the saplings list.
+		#Range: 1 ~ 64
+		saplingCount = 1
+		#Fruit tree saplings.
+		fruitSaplings = ["fruitsdelight:bayberry_sapling", "fruitsdelight:durian_sapling", "fruitsdelight:fig_sapling", "fruitsdelight:hawberry_sapling", "fruitsdelight:kiwi_sapling", "fruitsdelight:lychee_sapling", "fruitsdelight:mango_sapling", "fruitsdelight:mangosteen_sapling", "fruitsdelight:orange_sapling", "fruitsdelight:peach_sapling", "fruitsdelight:pear_sapling", "fruitsdelight:persimmon_sapling", "vinery:apple_tree_sapling", "vinery:cherry_sapling"]
+		#Items dropped from the fruitSaplings list.
+		#Range: 1 ~ 64
+		fruitSaplingCount = 1
+		#Fruit of trees that grow in the Overworld.
+		fruit = ["minecraft:apple", "vinery:cherry", "fruitsdelight:bayberry", "fruitsdelight:durian", "fruitsdelight:fig", "fruitsdelight:hawberry", "fruitsdelight:kiwi", "fruitsdelight:lychee", "fruitsdelight:mango", "fruitsdelight:mangosteen", "fruitsdelight:orange", "fruitsdelight:peach", "fruitsdelight:pear", "fruitsdelight:persimmon"]
+		#Items dropped from the fruit list.
+		#Range: 1 ~ 64
+		fruitCount = 4
+		#Leaves of the trees in the two sapling lists.
+		leaves = ["minecraft:oak_leaves", "minecraft:spruce_leaves", "minecraft:birch_leaves", "minecraft:jungle_leaves", "minecraft:acacia_leaves", "minecraft:dark_oak_leaves", "minecraft:mangrove_leaves", "minecraft:azalea_leaves", "minecraft:flowering_azalea_leaves", "myrtrees:rubberwood_leaves", "quark:blue_blossom_leaves", "quark:lavender_blossom_leaves", "quark:orange_blossom_leaves", "quark:pink_blossom_leaves", "quark:red_blossom_leaves", "quark:yellow_blossom_leaves", "fruitsdelight:bayberry_leaves", "fruitsdelight:durian_leaves", "fruitsdelight:fig_leaves", "fruitsdelight:hawberry_leaves", "fruitsdelight:kiwi_leaves", "fruitsdelight:lychee_leaves", "fruitsdelight:mango_leaves", "fruitsdelight:mangosteen_leaves", "fruitsdelight:orange_leaves", "fruitsdelight:peach_leaves", "fruitsdelight:pear_leaves", "fruitsdelight:persimmon_leaves", "vinery:apple_leaves", "vinery:cherry_leaves"]
+		#Items dropped from the leaves list.
+		#Range: 1 ~ 64
+		leavesCount = 16
+

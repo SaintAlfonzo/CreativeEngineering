@@ -11,7 +11,7 @@ import net.mehvahdjukaar.supplementaries.common.block.tiles.FlowerBoxBlockTile;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Supplementaries' flower box refuses {@code #creativeengineering:not_in_flower_boxes} (azalea and flowering azalea,
+ * Supplementaries' flower box refuses {@code #creativecompat:not_in_flower_boxes} (azalea and flowering azalea,
  * which it takes through its special model list). Boxes already holding one keep it and still draw it.
  * flower_pots.md 3.2.
  */

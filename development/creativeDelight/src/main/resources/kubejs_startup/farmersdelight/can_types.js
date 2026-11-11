@@ -1074,7 +1074,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_gleaming_salad": {
    "section": "salad",
@@ -1128,7 +1128,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_mixed_salad": {
    "section": "salad",
@@ -1182,7 +1182,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_nether_salad": {
    "section": "salad",
@@ -1236,7 +1236,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_baked_cod_stew": {
    "section": "soup",

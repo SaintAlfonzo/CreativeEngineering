@@ -48,6 +48,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("QuarkSortingHandlerMixin", QUARK),
             Map.entry("MonsterBoxBlockEntityMixin", QUARK),
             Map.entry("LeafPileSlowMixin", List.of("immersive_weathering")),
+            // old placed paintings move to the creativecompat painting ids (namespace_move.md D-PAINT)
+            Map.entry("ImmersivePaintingMotiveAliasMixin", List.of("immersive_paintings")),
             Map.entry("AnotherFurniturePlanterRenderMixin", List.of("another_furniture")),
             Map.entry("McaCombEyeColourMixin", List.of("mca")),
             Map.entry("BedspreadsBannerPatternMixin", List.of("bedspreads")),

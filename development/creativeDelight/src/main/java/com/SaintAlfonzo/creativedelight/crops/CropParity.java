@@ -38,14 +38,14 @@ public final class CropParity {
     private CropParity() {}
 
     public static final TagKey<Block> FARMLAND_SOILS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.NS, "crops/farmland_soils"));
+            new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_soils"));
     public static final TagKey<Block> FARMLAND_CROPS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.NS, "crops/farmland_crops"));
+            new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_crops"));
     public static final TagKey<Block> OWN_PICK_CROPS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.NS, "crops/own_pick"));
+            new ResourceLocation(CreativeDelight.MOD_ID, "crops/own_pick"));
 
     public static final TagKey<Block> HARVEST_FROM_BOTTOM = BlockTags.create(
-            new ResourceLocation(CreativeDelight.NS, "crops/harvest_from_bottom"));
+            new ResourceLocation(CreativeDelight.MOD_ID, "crops/harvest_from_bottom"));
 
     /** True for the top half of a {@link #HARVEST_FROM_BOTTOM} crop: tagged, with the same block right below. */
     public static boolean isTopHalf(BlockState plant, BlockState below) {

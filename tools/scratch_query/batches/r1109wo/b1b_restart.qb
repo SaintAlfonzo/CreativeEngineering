@@ -1,0 +1,14 @@
+# r1109wo boot A1b: same world after the restart of SQ-WO-10.
+pace 1
+
+## SQ-WO-10r | timer and trust survive the restart (compare the value with SQ-WO-10)
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> wiseoak trust 400 -60 300 G
+> data get block 400 -60 300 creativeworldgen_sleep_until
+sleep 1
+expect Trust of G at .*: 40
+expect has the following block data
+look sleep_until equals the value in SQ-WO-10

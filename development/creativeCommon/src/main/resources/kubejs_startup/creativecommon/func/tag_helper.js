@@ -170,7 +170,7 @@ global.tags = {
 	mineable(event, tool, level, blocks, opts) {
 		opts = opts || {}
 		const tools = ['pickaxe', 'shovel', 'axe', 'hoe']
-		const needs = { stone: 'minecraft:needs_stone_tool', copper: 'creativeengineering:needs_copper_tool',
+		const needs = { stone: 'minecraft:needs_stone_tool', copper: 'creativeequipment:needs_copper_tool',
 			iron: 'minecraft:needs_iron_tool', diamond: 'minecraft:needs_diamond_tool',
 			gold: 'forge:needs_gold_tool', netherite: 'forge:needs_netherite_tool' }
 		if (level && !needs[level]) throw new Error('global.tags.mineable: unknown level "' + level + '"')

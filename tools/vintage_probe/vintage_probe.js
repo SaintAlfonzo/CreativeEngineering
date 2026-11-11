@@ -356,9 +356,9 @@
         Object.keys(seeds).forEach(n => check('#forge:seeds/' + n, tagHas(I, 'forge:seeds/' + n, seeds[n]) && tagHas(I, 'forge:seeds', seeds[n]),
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
-        let rp = tagList(I, 'creativeengineering:roasted_bell_pepper')
+        let rp = tagList(I, 'creativedelight:roasted_bell_pepper')
         // all nine colours since the Rustic Delight 1.7.0 port (creativedelight rusticdelight/tags.js)
-        check('#creativeengineering:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
+        check('#creativedelight:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
             .map(c => 'rusticdelight:roasted_bell_pepper_' + c)), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')
         // VTD-16: Brewin' pickling only in the jar
@@ -373,7 +373,7 @@
         expectGone(server, [C + 'pickling/brewin_pickled_pickles', C + 'pickling/brewin_kimchi'])
         check('jar pickled sea pickle: 5 sea pickles + salt -> 5', has(server, C + 'pickling/pickled_sea_pickle') &&
             takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&
-            resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativeengineering:pickled_sea_pickle x5',
+            resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) == 'creativedelight:pickled_sea_pickle x5',
             has(server, C + 'pickling/pickled_sea_pickle') ? resultOf(rget(server, C + 'pickling/pickled_sea_pickle')) : '-')
         // VTD-11 since the salt merge (item_merges.md 2.9): jar recipes take salt dust and none takes The Salt's salt
         let jarIds = Object.keys(recipes(server)).filter(id => id.indexOf(VT + 'fermenting/') == 0 || id.indexOf(C + 'pickling/') == 0 ||

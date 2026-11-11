@@ -85,10 +85,9 @@ R.replaceInput(
 
 // ############################## Buckets ##############################
 
-//Iron bucket from plates (vanilla's 3-ingot recipe is gone); the wooden one only carries water
+//Iron bucket from plates (vanilla's 3-ingot recipe is gone). The wooden bucket is Creative Delight's (creativeengineering/recipes.js there)
 R.remove({id:'minecraft:bucket'}, e)
 R.shaped(Item.of(i.bucket, 1), ['P P',' P '], {P: i.any_plate_iron}, e, 'bucket_from_plates')
-R.shaped(Item.of(i.wooden_bucket, 1), ['P P',' P '], {P: i.planks}, e, 'wooden_bucket')
 
 console.log('The create process event has finished!')
 })

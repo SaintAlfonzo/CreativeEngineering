@@ -1,0 +1,5 @@
+// Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to the stub.
+plugins {
+    id 'ce.forge-mod'
+}

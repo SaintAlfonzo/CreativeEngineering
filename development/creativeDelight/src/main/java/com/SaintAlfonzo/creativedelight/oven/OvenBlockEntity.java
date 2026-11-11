@@ -65,7 +65,7 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
 
     /** The oven's plating containers: every baking recipe's container, or its result's crafting remainder. */
     private static final class Containers {
-        static final StationContainers OVEN = new StationContainers("creativeengineering:oven",
+        static final StationContainers OVEN = new StationContainers("creativedelight:oven",
                 OvenRegistry.BAKING_TYPE.get(),
                 r -> r instanceof BakingRecipe b
                         ? List.of(b.getOutputContainer().isEmpty() ? b.getResultItem().getCraftingRemainingItem() : b.getOutputContainer())

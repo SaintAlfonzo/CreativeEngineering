@@ -1,12 +1,12 @@
 // requires: creativeequipment
 // Creative Equipment; moved from kubejs/server_scripts/equipment/camera_bag.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
 // Recipe ids are creativeequipment:<type>/<suffix> (global.CEQ.recipes).
-// Camera bags (exposureBackport src/extras, mod exposure_extras): leather -> iron -> netherite.
+// Camera bags (exposureBackport src/extras, mod exposureextras): leather -> iron -> netherite.
 // The upgrades are smithing recipes on purpose: smithing copies the base item's NBT onto the
 // result, and the bag keeps its contents there, so an upgrade keeps everything inside (and the
 // custom name). A crafting-table upgrade would empty the bag.
-// Slot counts per tier: config/exposure_extras-common.toml [camera_bag]. Allowed items:
-// #exposure_extras:camera_equipment (tags/equipmenttags.js).
+// Slot counts per tier: config/exposureextras-common.toml [camera_bag]. Allowed items:
+// #exposureextras:camera_equipment (tags/equipmenttags.js).
 
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {

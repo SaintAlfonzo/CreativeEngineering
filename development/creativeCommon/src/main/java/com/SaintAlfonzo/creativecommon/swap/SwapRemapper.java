@@ -2,15 +2,19 @@ package com.SaintAlfonzo.creativecommon.swap;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IdMappingEvent;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.minecraftforge.registries.RegistryManager;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The world half of the swap lists ({@link SwapLists}): when a world (or a server's registry sync) still holds an id that
@@ -25,6 +29,8 @@ public final class SwapRemapper {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	/** Forge has no API to remove an alias. The field is Forge's own name, not obfuscated. */
 	private static final Field ALIASES = aliasesField();
+	/** Forge's package-private list of a manager's registries; also Forge's own name. */
+	private static final Field REGISTRIES = registriesField();
 
 	private SwapRemapper() {}
 
@@ -54,6 +60,61 @@ public final class SwapRemapper {
 		if (remapped > 0) LOGGER.info("[swaps] {}: {} id(s) remapped to their survivors", event.getKey().location(), remapped);
 		if (ignored > 0) LOGGER.info("[swaps] {}: {} removed id(s) dropped (listed as removed, no replacement)", event.getKey().location(), ignored);
 		if (unresolved > 0) LOGGER.warn("[swaps] {}: {} listed id(s) had no survivor", event.getKey().location(), unresolved);
+	}
+
+	/**
+	 * Keeps every {@code replaces} rename as an alias in the ACTIVE registries, so an old id resolves wherever it comes from
+	 * (player files of another world, structure NBT, item NBT in configs, block entity ids; typed commands do not read aliases). The map keeps the
+	 * aliases out of Forge's locked path. Forge rebuilds ACTIVE's aliases on every freeze, snapshot injection and revert, and
+	 * fires this event after each. Block entity types and other unsaved registries are in no world snapshot, so this is the only
+	 * alias they ever get. Snapshot loading checks only registered names, so the aliases do not hide an id from
+	 * {@link #onMissingMappings}.
+	 */
+	@SubscribeEvent
+	public static void onIdMapping(IdMappingEvent event) {
+		installAliases();
+	}
+
+	/** Forge fires the freeze's IdMappingEvent before its event bus starts, so a fresh world, which has no injection, gets them here. */
+	@SubscribeEvent
+	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		installAliases();
+	}
+
+	private static void installAliases() {
+		Map<ResourceLocation, ResourceLocation> replaces = SwapLists.get().replaces();
+		if (replaces.isEmpty()) return;
+		int aliases = 0;
+		for (ForgeRegistry<?> registry : activeRegistries()) aliases += addAliases(registry, replaces);
+		LOGGER.info("[swaps] {} permanent alias(es) in the active registries", aliases);
+	}
+
+	/** Only pairs whose old id is really gone and whose survivor is registered here; every alias therefore ends on a name. */
+	private static int addAliases(ForgeRegistry<?> registry, Map<ResourceLocation, ResourceLocation> replaces) {
+		Set<ResourceLocation> names = registry.getKeys();
+		int added = 0;
+		try {
+			@SuppressWarnings("unchecked")
+			Map<ResourceLocation, ResourceLocation> aliases = (Map<ResourceLocation, ResourceLocation>) ALIASES.get(registry);
+			for (Map.Entry<ResourceLocation, ResourceLocation> e : replaces.entrySet()) {
+				if (names.contains(e.getKey()) || !names.contains(e.getValue())) continue;
+				dropAliasFromSurvivor(registry, e.getValue());
+				aliases.put(e.getKey(), e.getValue());
+				added++;
+			}
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("[swaps] could not read ForgeRegistry.aliases", e);
+		}
+		return added;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Collection<ForgeRegistry<?>> activeRegistries() {
+		try {
+			return ((Map<ResourceLocation, ForgeRegistry<?>>) REGISTRIES.get(RegistryManager.ACTIVE)).values();
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("[swaps] could not read RegistryManager.registries", e);
+		}
 	}
 
 	/**
@@ -99,6 +160,16 @@ public final class SwapRemapper {
 			return field;
 		} catch (NoSuchFieldException e) {
 			throw new IllegalStateException("[swaps] ForgeRegistry.aliases not found", e);
+		}
+	}
+
+	private static Field registriesField() {
+		try {
+			Field field = RegistryManager.class.getDeclaredField("registries");
+			field.setAccessible(true);
+			return field;
+		} catch (NoSuchFieldException e) {
+			throw new IllegalStateException("[swaps] RegistryManager.registries not found", e);
 		}
 	}
 

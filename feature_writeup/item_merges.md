@@ -174,7 +174,7 @@ bricks and the 17 lamps stay.
 - Recipes (CD `vintagedelight/recipes.js`): the swap leaves two 9 <-> 1 pairs; Vintage's packing (any `#forge:salt`,
   id `vintagedelight:salt_block`, now makes The Salt's block) and The Salt's `salt:salt_unpacking` stay,
   `salt:salt_packing` and `vintagedelight:salt_block_deconstruct` go. The Evaporator and the salt decor recipes take
-  The Salt's block (swap). CD `creativeengineering/salt.js` makes salt dust directly (raw rock salt -> 4, heated basin).
+  The Salt's block (swap). CD `creativedelight/salt.js` makes salt dust directly (raw rock salt -> 4, heated basin).
 - Tags: salt dust joins `#forge:salts` (The Salt's Salting craft), `#forge:dusts`, `#supplementaries:hourglass_dusts`.
 - Loot: cauldron evaporation (`kubejs/data/salt/loot_tables/cauldron_evaporation/salt_{full,level_1,level_2}.json`)
   gives salt dust, same chances. Everything else (butcher trades, mod code) through the loot and inventory swaps.
@@ -243,7 +243,7 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
   <-> 1 Mini Cantaloupe Seeds (`mini_cantaloupe_seeds`, `cantaloupe_seeds_from_mini`); a Mini Cantaloupe + 2 ice cubes +
   stick -> the popsicle (Delightful's `cantaloupe_popsicle_from_cantaloupe`, now with the Mini Cantaloupe). Bread, gummy, wrapped and
   stuffed cantaloupe keep `#forge:fruits/cantaloupe` / the Mini Cantaloupe as before.
-- Tags. The slice joins `#creativeengineering:exotic_fruit` (the hami slice's); it was already in the fruit salad
+- Tags. The slice joins `#creativedelight:exotic_fruit` (the hami slice's); it was already in the fruit salad
   slices. Cantaloupe Seeds join `#forge:seeds`. The survivor popsicle keeps its Display Delight plated form.
 - Compost: the hami slice row removed; food_dict: `fruit_slice_hamimelon`, `can_hamimelon` removed.
 - Worldgen (`_worldgen/wild_crops.json`): the hamimelon rule (warm desert, warm badlands; sand, red sand, terracotta,
@@ -386,11 +386,11 @@ food catalog run.
 Owner 2026-11-02: Vintage's kimchi wins; Brewin's is removed, not merged, and its recipes are not carried over. Brewin's
 kimchi: removed item (CD `vintage_items.js`, only while Brewin' is loaded), id in Creative Brewing's new
 `swaps/removed.json`; the pack's `brewin_kimchi` jar recipe is gone (Creative Brewing `brewinandchewin/alcohol.js`), the
-keg recipe was already removed. Tags: Brewin's kimchi left `#creativeengineering:pickled_veg` and the heatless soup veggie
+keg recipe was already removed. Tags: Brewin's kimchi left `#creativedelight:pickled_veg` and the heatless soup veggie
 tag, Vintage's kimchi joins the latter. Canned Kimchi holds only Vintage's kimchi (`tools/gen_can_types.py`; values now
 from Vintage's kimchi: 8 hunger, 0.3, fast). New jar recipes (CD `vintagedelight/recipes.js`, `kimchi_from_<base>`), the
 upstream ghost pepper recipe kept: 4 cabbage leaves + salt + one of cucumber or zucchini (one recipe), onion, `#forge:eggs`,
-sea pickle, beetroot, `#creativeengineering:whole_raw_fish` -> 4, upstream time, no pickled pepper side output. The fish
+sea pickle, beetroot, `#creativedelight:whole_raw_fish` -> 4, upstream time, no pickled pepper side output. The fish
 tag (CD `vintagedelight/tags.js`): cod, salmon, tropical fish, lionfish, perch, pike, blobfish, flying fish, catfish; no
 slices, squid or shellfish, no pufferfish. Texture: Vintage's own item (`textures/merges #4` needs nothing more).
 
@@ -398,9 +398,9 @@ slices, squid or shellfish, no pufferfish. Texture: Vintage's own item (`texture
 
 The quiche family (food_families.md `quiche`) has two items: Brewin's `brewinandchewin:quiche` and Veggies'
 `veggiesdelight:zucchini_quiche` (with slices). Owner 2026-11-02: baking type, pie tin, oven only, no plating
-(`R.ceBaking`, `{ exp: 0.1, time: 200, tool: #creativeengineering:bakeware/pie_tin }`, no container: a quiche has no
+(`R.ceBaking`, `{ exp: 0.1, time: 200, tool: #creativedelight:bakeware/pie_tin }`, no container: a quiche has no
 crafting remainder). Brewin's (CD `brewinandchewin/recipes.js`, `quiche_meat`, `quiche_fungus`, `quiche_greens`): pie crust
-+ cheese wedge + milk + `#forge:eggs` + one of `#creativeengineering:food_type/cooked/meat`, `#forge:mushrooms`,
++ cheese wedge + milk + `#forge:eggs` + one of `#creativedelight:food_type/cooked/meat`, `#forge:mushrooms`,
 `#forge:salad_ingredients`. Zucchini (CD `veggiesdelight/recipes.js`): pie crust + cheese wedge + milk + `#forge:eggs` + 2
 roasted zucchini. Removed: the grid recipes and the three sequenced assemblies (milk, egg solution, zucchini). Open: the
 pack has no lettuce tag; the lettuce version uses `#forge:salad_ingredients` (cabbage, cabbage leaf, dandelion leaf,
@@ -424,7 +424,7 @@ Immersive Weathering's azalea flowers stay; Twigs' item is purged into it. Twigs
   block texture (Immersive Weathering has no placed form for the item).
 - Recipes: both sets kept. Twigs' two (flowering azalea or flowering azalea leaves -> 6) now make Immersive
   Weathering's flowers through the recipe swap; Immersive Weathering's shearing of a flowering azalea, its flower pile
-  (3 -> 6) and the azalea tea (`#creativeengineering:azalea_flowers`, which now holds only the survivor) are unchanged.
+  (3 -> 6) and the azalea tea (`#creativedelight:azalea_flowers`, which now holds only the survivor) are unchanged.
 - Loot: the placed Twigs block (and its potted form) drops Immersive Weathering's flowers (loot swap). Twigs' worldgen
   patches stay.
 - Not covered: Immersive Weathering's item is not a block item, so it cannot be put in a flower pot; a potted Twigs
@@ -654,7 +654,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
   Farmer's Respite's sack. Apples: drop the bag when Fruits Delight is installed. Sweet berries: drop the Berry Good
   berry basket. (Also `alcohol/decisions #7`, Vinery crates and bags.)
 - Cardboard: PARTLY BUILT 2026-10-28 (scratch test queued SQ-MG-16; shipped to the client in 1.1.04). Design and Decor's cardboard box is renamed Old
-  Cardboard Box; the new `creativeengineering:weathered_cardboard_box` is the last step. Both are made only by washing
+  Cardboard Box; the new `creativecompat:weathered_cardboard_box` is the last step. Both are made only by washing
   (Create splashing in `misc_mods.js`): Dustrial Decor box -> Old -> Weathered; their other recipes are removed.
   The Wares boxes and packages are recoloured brown (`textureswapper/cardboard/`). Still open: remove Design and
   Decor's cardboard sheet, one cardboard item with recipes and tags through NCH / `global.tags`, a longer crafting chain.

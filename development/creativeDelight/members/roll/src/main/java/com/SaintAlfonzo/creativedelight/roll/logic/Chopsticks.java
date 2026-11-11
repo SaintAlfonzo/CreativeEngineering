@@ -37,7 +37,7 @@ import java.util.WeakHashMap;
  */
 public final class Chopsticks {
     /** The chopstick foods; built by the pack's tag scripts (CD roll_delight, global.tags). */
-    public static final TagKey<Item> FOODS = ItemTags.create(new ResourceLocation("creativeengineering", "chopstick_foods"));
+    public static final TagKey<Item> FOODS = ItemTags.create(new ResourceLocation("creativedelight", "chopstick_foods"));
 
     /** Effect durations when an off-hand chopstick meal started, so the Finish hook can tell which effects the food gave. */
     private static final Map<Player, Map<MobEffect, Integer>> STARTED = new WeakHashMap<>();

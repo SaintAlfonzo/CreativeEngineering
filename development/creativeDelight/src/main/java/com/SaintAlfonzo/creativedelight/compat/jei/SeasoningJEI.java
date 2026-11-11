@@ -47,7 +47,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       {@code #salt:can_be_salted} food + salt, food and salted food cycling together;</li>
  *   <li>Create: The Salt's mixes (food + salt -> the same food with {@code Salted}): one page with the mixer;</li>
  *   <li>the pack's seasoning crafts ({@link SeasoningRecipe}, special, so never on the Crafting page) and crafting
- *       recipes with ids {@code creativeengineering:shapeless/season/...}, a page each.</li>
+ *       recipes with ids {@code creativedelight:shapeless/season/...}, a page each.</li>
  * </ol>
  * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] seasoningCategory}; re-run on
  * every JEI reload.
@@ -176,11 +176,11 @@ public class SeasoningJEI implements IModPlugin {
         return hide.size();
     }
 
-    /** A pack seasoning craft: {@code creativeengineering:shapeless/season/...}, short enough for the page. */
+    /** A pack seasoning craft: {@code creativedelight:shapeless/season/...}, short enough for the page. */
     private static boolean isPackSeasoning(CraftingRecipe recipe) {
         ResourceLocation id = recipe.getId();
         int size = recipe.getIngredients().size();
-        return id.getNamespace().equals(CreativeDelight.NS) && id.getPath().startsWith(SEASON_PREFIX)
+        return id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX)
                 && size >= 2 && size <= SeasoningCategory.MAX_INPUTS;
     }
 

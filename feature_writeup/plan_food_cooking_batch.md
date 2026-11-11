@@ -91,7 +91,7 @@ in `mods/`.
 | A2 glycerol | Testing | CD `pneumaticcraft/tags.js` (`t.remove` from `#forge:sugar`); lang override deleted from `kubejs/assets/pneumaticcraft/lang/en_us.json` |
 | A3 shulker meat | Testing | CD startup `endersdelight/item_merges.js`; `endersdelight/recipes.js`; GLM override `kubejs/data/endersdelight/loot_modifiers/scavenging_shulker_mollusk_from_shulker.json` (chance 0); `gen_can_types.py` shulker can on End's meat. End's own art kept; the owner updates the shulker textures later (2026-11-02). Partly undone 2026-11-04 (plan_meals_rolls_bbq.md C3): mollusk and filet out of the merge, GLM override deleted, filet cut back; stuffed shulker on End's meat |
 | A4 taco | Testing | CD `corn_delight/recipes.js`. No roasted onion exists, so the slot is onion or any roasted bell pepper |
-| A5 patty | Testing | CD `creativeengineering/patties.js` (priority -90), `i.t_patty` |
+| A5 patty | Testing | CD `creativedelight/patties.js` (priority -90), `i.t_patty` |
 | A6 kebab wrap | Testing | CD `barbequesdelight/recipes.js` |
 | A7 squid | Testing | CD `miners_delight/loot.js`: `removeLoot(Ingredient.all)` then one squid; no Rustic gate |
 | A8, A9 jams | Testing | CD `vintagedelight/jams.js` (1 jar), `fruitsdelight/recipes.js` (lemon slices; `f.lemon_jam` added) |
@@ -124,6 +124,6 @@ Needed: the roll list and serving count per medley, and whether placeholder reco
   skillet into the hand (block loot to the hand, the meal kept in the item, ingredients drop as on breaking, break
   protection respected); the handle toggles on sneak left-click with an empty hand, on the first hit, without breaking.
   CD Java `cooking/CookwareHandling` (QoL-7 `[qol] cookwarePickup`), tag `#creativedelight:cookware_pickup` (CD
-  `creativeengineering/kitchen_tags.js`). SQ-FCB-08, CQ-FCB-04. Jar built 13:52, not installed (a game was running).
+  `creativedelight/kitchen_tags.js`). SQ-FCB-08, CQ-FCB-04. Jar built 13:52, not installed (a game was running).
 - Plain matcha = the Matcha Latte (input of Ice Berry Matcha); nothing to build (creative_delight_drinks.md 8).
 - `dishes/meals #40` pinned; shulker textures left to the owner.

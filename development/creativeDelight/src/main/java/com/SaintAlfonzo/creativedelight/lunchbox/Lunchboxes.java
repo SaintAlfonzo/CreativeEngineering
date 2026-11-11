@@ -38,7 +38,7 @@ public final class Lunchboxes {
     public static final List<ResourceLocation> TIERS = List.of(LUNCHBAG, LUNCHBOX, GOLDEN_LUNCHBOX, NETHERITE_LUNCHBOX);
 
     /**
-     * Every skin, in model-override order: the item property {@code creativeengineering:lunchbox_skin} is the
+     * Every skin, in model-override order: the item property {@code creativedelight:lunchbox_skin} is the
      * position here + 1 (0 = no skin). The model JSONs in kubejs/assets/solapplepie/models/item/ use the same
      * numbers (tools/gen_lunchbox_looks.py writes them), so only append to this list.
      */

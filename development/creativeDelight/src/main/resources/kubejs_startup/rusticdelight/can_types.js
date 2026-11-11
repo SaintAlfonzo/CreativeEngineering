@@ -138,7 +138,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_raw_salmon"
+   "texture": "creativedelight:item/canned_raw_salmon"
   },
   "canned_roasted_bell_pepper": {
    "section": "cooked_veggie",
@@ -468,7 +468,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_bell_pepper_soup": {
    "section": "soup",

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Draws entities standing on {@code #creativeengineering:sinking} blocks a little lower
+ * Draws entities standing on {@code #creativecompat:sinking} blocks a little lower
  * ({@link SinkingRender}). {@code EntityRenderDispatcher#render} ({@code m_114384_}) translates by
  * the renderer's offset ({@code vec3}, its only Vec3 local), renders the model and name tag, then
  * translates back before the shadow, fire and debug hitbox - so lowering that offset moves only

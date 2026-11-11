@@ -9,7 +9,7 @@
 // 1. Every live Kettle recipe from the mods is rewritten: plain teas and juices on water; long and strong tiers on
 //    the drink's fluid plus milk or honey; recipes that took milk (an ingredient or a milk-bottle container) on milk.
 // 2. New Kettle drinks: Rustic Delight's coffees. The juice, tea and coffee rules (food/drinks #15) add the rest in
-//    creativeengineering/drinks.js.
+//    creativedelight/drinks.js.
 // 3. Spout / Item Drain pairs (glass bottle <-> 250 mB) for the Kettle drinks that had none; the Kettle reads these
 //    pairs to pour and bottle its tank.
 ServerEvents.recipes(e => {
@@ -31,7 +31,7 @@ ServerEvents.recipes(e => {
 		kettle('farmersrespite:brewing/green_tea', [i.green_tea_leaves, i.green_tea_leaves], i.green_tea, 'green_tea', f.water)
 		kettle('farmersrespite:brewing/yellow_tea', [i.yellow_tea_leaves, i.yellow_tea_leaves], i.yellow_tea, 'yellow_tea', f.water)
 		kettle('farmersrespite:brewing/rose_hip_tea', [i.rose_hips, i.rose_hips], i.rose_hip_tea, 'rose_hip_tea', f.water)
-		// dandelion tea and melon juice: the drink rules (creativeengineering/drinks.js, food/drinks #15)
+		// dandelion tea and melon juice: the drink rules (creativedelight/drinks.js, food/drinks #15)
 		kettle('farmersrespite:brewing/purulent_tea', [i.nether_wart, i.fermented_spider_eye], i.purulent_tea, 'purulent_tea', f.water)
 		kettle('farmersrespite:brewing/apple_cider', [i.apple, i.any_sweetener_drink], i.farmersdelight_apple_cider, 'apple_cider', f.water)
 		// 2.0 used a milk bottle as the container; the milk is now the base and the cocoa is bottled in glass
@@ -66,7 +66,7 @@ ServerEvents.recipes(e => {
 		// G5 begin: kettle rows (NCH frBrewing; the remove ids are recipe ids)
 		kettle('create_central_kitchen:brewing/builders_tea', [i.t_respite_tea_leaves, i.milk], Item.of(i.builders_tea, 2), 'builders_tea', f.water)
 		kettle('create:fr/tea', [i.t_tea_leaves, i.t_leaves], i.builders_tea, 'builders_tea_from_leaves', f.milk)
-		// lavender tea: the drink rules (creativeengineering/drinks.js)
+		// lavender tea: the drink rules (creativedelight/drinks.js)
 		// matcha latte: honey is any sugar-like (food/drinks #15)
 		kettle('delightful:food/kettle/matcha_latte', [i.matcha, i.any_sweetener_drink], i.matcha_latte, 'matcha_latte', f.milk)
 		// the pack's berry latte (TODO food/drinks #5): berries on the Matcha Latte in the tank
@@ -94,7 +94,7 @@ ServerEvents.recipes(e => {
 		}
 
 		//######################### 2. Fruits Delight's teas #########################
-		// Moved to the standard tea rule 2026-11-02 (juice tank + any tea leaf + one extra): creativeengineering/drinks.js.
+		// Moved to the standard tea rule 2026-11-02 (juice tank + any tea leaf + one extra): creativedelight/drinks.js.
 		// The same file adds the flavoured coffees straight from the plain coffee tank (milk + additive in one brew).
 
 		//######################### 3. Spout and Item Drain pairs #########################

@@ -298,7 +298,7 @@ bricks and so on).
 
 | Group | Blocks | Lit-gated |
 |---|---|---|
-| Fire | `minecraft:fire`, `soul_fire`, `architects_palette:nether_brass_fire`, `mca:infernal_flame`, `creativeengineering:dark_fire` | no |
+| Fire | `minecraft:fire`, `soul_fire`, `architects_palette:nether_brass_fire`, `mca:infernal_flame`, `creativemagic:dark_fire` | no |
 | Campfires | vanilla campfire + soul campfire, 16 `tintedcampfires:*` | yes |
 | Lava / magma | `minecraft:lava`, `lava_cauldron`, `magma_block` | no |
 | Stoves and ovens | `farmersdelight:stove`, `nethersdelight:blackstone_stove` / `blackstone_furnace` / `blackstone_blast_furnace` / `nether_brick_smoker`, `endersdelight:endstone_stove`, `create_central_kitchen:blaze_stove`, `vinery:stove`, `vinery:wood_fired_oven` | yes where the block has `lit` |
@@ -806,7 +806,7 @@ Lines go in [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tool
   anywhere except a coaster. AL-52 checks both.
 - **Plan:**
   - Add a fifth line to the placeable pipeline: "Placeable on a coaster", tag
-    `creativeengineering:placeable_on_coaster`.
+    `creativedelight:placeable_on_coaster`.
   - `tools/placeable_catalog.py` fills the tag from the coaster model files, plus a short allow-list: Vinery wines
     and juices, Farmer's Respite drinks.
   - `placeabletags.js` and `placeable_tooltip.js` gain the new row, and [placeable_food.md](placeable_food.md) gets
@@ -1627,8 +1627,8 @@ Display Delight models to the coaster; add WTHIT info.
   Items already on a coaster stay, and come off as before.
   - The tag ships in the port, written by `tools/port_resources.py` from its 96 coaster files (the other mods' ids
     optional, so 1.21-only Farmer's Delight foods don't break it).
-  - The pack adds `#creativeengineering:placeable_on_coaster` into it
-    ([placeable_tags.js](../kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js), key `i.t_bnc_placeable_on_coaster`).
+  - The pack adds `#creativedelight:placeable_on_coaster` into it
+    ([placeable_tags.js](../kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js), key `i.t_bnc_placeable_on_coaster`).
 - **Display Delight models (pack + port):** [tools/gen_coaster_models.py](../tools/gen_coaster_models.py) writes 56 coaster
   files to `kubejs/assets/creativeengineering/brewinandchewin/coaster/`, one per food DD links that the port has no
   model for (the other 29 keep the port's). Each points at the DD block's default model: the food on its own first,

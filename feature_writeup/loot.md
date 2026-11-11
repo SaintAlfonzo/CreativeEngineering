@@ -277,7 +277,7 @@ a list) to act only in matching tables. Rules the runtime rejects, with a warnin
 `#tag` patterns work since 2026-09-27 (3.8).
 
 **Live today:** no JSON patterns and no item edits. The three rules that used to sit here moved to `07_rules.js` on
-2026-09-27: `@pneumaticcraft` and the Lightman coin regex became bans, `@chalk` became the `#creativeengineering:loot/chalk`
+2026-09-27: `@pneumaticcraft` and the Lightman coin regex became bans, `@chalk` became the `#creativeworldgen:loot/chalk`
 tag rule (same 0.5). They rewrite the same tables as before: 4 PneumaticCraft tables lose all 36 entries, and the 3
 Chalk sub-tables are reweighted. PneumaticCraft's mechanic house is 100% PNC items, so its chest now rolls nothing.
 That's moot while pool tuning keeps the house out of villages ([structure_tuning.md](structure_tuning.md) ST-12).
@@ -450,9 +450,9 @@ is last) copies the members of every tag a rule names. It also reads during Kube
 re-run (see `tag_helper.js`). If the capture didn't run, the runtime falls back to the registry's bound tags (last
 reload's; empty on a fresh start) and warns. Two meta tags in `tags/loottags.js`:
 
-- `#creativeengineering:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colours follow) + the chalk
+- `#creativeworldgen:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colours follow) + the chalk
   box. `L.frequency(i.t_loot_chalk, 0.5)`: 8 of its 17 members show up in chest loot.
-- `#creativeengineering:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
+- `#creativeworldgen:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
   23 plain `golden_*` foods (the enchanted ones and the notch apple are left out as the rare tier). Only the golden
   apple and carrot are in chest loot today.
 
@@ -731,7 +731,7 @@ Revert every temporary edit and `/reload` afterwards.
   entries; packed 99 loose entries into 146 crate entries; 0 companions, 0 items + 0 pools added, 8 injections
   restored, 16 reverted to vanilla, 11 aliases)` (2026-10-03 sim: 128 tables, 94 entries into 137 crate entries; what `node tools/loot_tuning_sim.js` prints), no `!!!` banner, no
   "tag rules resolved from the registry" warning, and `kubejs/exported/loot_runtime_additions.json` is fresh.
-- [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeengineering:loot/chalk`.
+- [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeworldgen:loot/chalk`.
   `/dumploot`, then `chalk.json` -> `village_chalk_loot` etc. show the halved chalk weights, same as LT-06.
 - [ ] **LT-16 Packed food split, in the export:** `/dumploot`, then in `minecraft.json` ->
   `chests/village/village_plains_house` has potato 353, potato crate 101, potato crate x2 51, apple 353, apple crate
@@ -795,7 +795,7 @@ Revert every temporary edit and `/reload` afterwards.
 - **2026-09-27 (evening):** script rules. `05_tuning.js` got a `global.lootTuning` API (`frequency`, `remove`, `ban`,
   `pack`, `packRate`, `packBoost`, `packExclude`), `#tag` targets (captured from the reload's tag event by
   `95_tag_capture.js`), loud ban alarms and the packed-food pre-roll pass. `07_rules.js` holds the rules: bans on
-  PneumaticCraft and Lightman's coins (their JSON patterns moved here), the `#creativeengineering:loot/chalk` meta tag
+  PneumaticCraft and Lightman's coins (their JSON patterns moved here), the `#creativeworldgen:loot/chalk` meta tag
   at 0.5 (replaces `@chalk`), 16 packed-food pairs at rate 0.1 with villages x3. PneumaticCraft `enable_dungeon_loot`
   and Lightman `[loot.chests] enabled` set to false (finding 6). Catalog regenerated (finding 1; 337 tables, 584 items;
   HopoBetterUnderwaterRuins is new). `tools/loot_tuning_sim.js` added; it caught a packed-weight indexing bug before
@@ -809,7 +809,7 @@ Revert every temporary edit and `/reload` afterwards.
   (finding 3), overridden tables carry vanilla's copy, stale exports are skipped, and the template scan is cached.
   Finding 4: a bytecode audit of every jar with a `LootTableLoadEvent` handler found Chalk, Botania and CC:Tweaked
   as the only village injectors lost to goldenfood. The 16 tables went back to vanilla with those 3 pools restored;
-  golden food is x2 (`#creativeengineering:loot/golden_food`), and the Golden Food book sits beside it and at 1% in
+  golden food is x2 (`#creativeworldgen:loot/golden_food`), and the Golden Food book sits beside it and at 1% in
   114 village/camp/outpost tables. Finding 5: 12 aliases. The 10-40 LootJS scripts are rescoped to LootJS-only edits.
   Census seeds its scope the same way (0 tables outside). The sim caught two problems before deploy: the book landing
   in the outpost's crossbow pool (`add` now picks the main pool) and a companion diluting the igloo's guaranteed

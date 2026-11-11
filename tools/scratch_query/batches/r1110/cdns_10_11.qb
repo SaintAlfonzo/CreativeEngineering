@@ -1,0 +1,97 @@
+# SQ-CDNS-10 and -11 static checks on the full build (feature_writeup/plan_cd_namespace.md 5.2). Fresh world, any type (group A superflat is enough: nothing here depends on terrain or biome).
+# Needs tools/scratch_query/zq_probe.js copied as srv/kubejs/server_scripts/zz_zq_probe.js. Oven, seasoning and lunchbox crafting by hand and
+# Supplementaries pouring need a player: they are checked in CQ-CDNS-01, not here.
+pace 1
+## SQ-CDNS-10a | recipe types load under creativedelight
+bootreject (?i)(unknown|invalid) recipe.*creativeengineering:(baking|seasoning|lunchbox_)
+bootreject creativeengineering:(baking|seasoning|lunchbox_\w+|can_serving|biome_tag)
+bootreject replaceItems.*creativeengineering:canned_
+> zq bytype creativedelight:baking
+waitlog \[zq\] done 30
+count bytype creativedelight:baking >= 90
+> zq bytype creativedelight:seasoning
+waitlog \[zq\] done 30
+count bytype creativedelight:seasoning >= 5
+> zq bytype creativedelight:lunchbox_shaped
+waitlog \[zq\] done 30
+count bytype creativedelight:lunchbox_shaped >= 2
+> zq bytype creativedelight:lunchbox_upgrade
+waitlog \[zq\] done 30
+count bytype creativedelight:lunchbox_upgrade >= 1
+> zq bytype creativedelight:lunchbox_skin
+waitlog \[zq\] done 30
+count bytype creativedelight:lunchbox_skin >= 1
+> zq bytype creativedelight:lunchbox_dye
+waitlog \[zq\] done 30
+count bytype creativedelight:lunchbox_dye >= 1
+> zq bytype creativedelight:lunchbox_soap
+waitlog \[zq\] done 30
+count bytype creativedelight:lunchbox_soap >= 1
+## SQ-CDNS-10b | baking outputs are not air
+> zq bytype creativedelight:baking
+waitlog \[zq\] done 30
+reject bytype creativedelight:baking .* -> .*(minecraft:)?air
+## SQ-CDNS-10c | block loot of every moved block with a loot table
+> forceload add 0 0
+sleep 2
+> setblock 0 150 0 creativedelight:oven
+> loot spawn 0 151 0 mine 0 150 0 minecraft:netherite_pickaxe
+> setblock 1 150 0 creativedelight:placed_cauliflower_kuku
+> loot spawn 1 151 0 mine 1 150 0 minecraft:netherite_pickaxe
+> setblock 2 150 0 creativedelight:placed_corn_popsicle
+> loot spawn 2 151 0 mine 2 150 0 minecraft:netherite_pickaxe
+> setblock 3 150 0 creativedelight:placed_dandelion_and_eggs
+> loot spawn 3 151 0 mine 3 150 0 minecraft:netherite_pickaxe
+> setblock 4 150 0 creativedelight:placed_diced_potatoes_with_egg_and_tomato
+> loot spawn 4 151 0 mine 4 150 0 minecraft:netherite_pickaxe
+> setblock 5 150 0 creativedelight:placed_inky_cap_scrambled_eggs
+> loot spawn 5 151 0 mine 5 150 0 minecraft:netherite_pickaxe
+> setblock 6 150 0 creativedelight:placed_omelette
+> loot spawn 6 151 0 mine 6 150 0 minecraft:netherite_pickaxe
+> setblock 7 150 0 creativedelight:placed_shakshouka
+> loot spawn 7 151 0 mine 7 150 0 minecraft:netherite_pickaxe
+> setblock 8 150 0 creativedelight:placed_shulker_omelette
+> loot spawn 8 151 0 mine 8 150 0 minecraft:netherite_pickaxe
+> setblock 9 150 0 creativedelight:placed_suspicious_bacon_and_eggs
+> loot spawn 9 151 0 mine 9 150 0 minecraft:netherite_pickaxe
+> setblock 10 150 0 creativedelight:placed_sweet_potato_pancakes
+> loot spawn 10 151 0 mine 10 150 0 minecraft:netherite_pickaxe
+> setblock 11 150 0 creativedelight:placed_vegetable_omelet
+> loot spawn 11 151 0 mine 11 150 0 minecraft:netherite_pickaxe
+> setblock 12 150 0 creativedelight:powdered_sugar_block
+> loot spawn 12 151 0 mine 12 150 0 minecraft:netherite_pickaxe
+sleep 1
+count Dropped >= 13
+reject (?i)unknown (block|item|loot)|Incorrect argument
+## SQ-CDNS-10d | fishing net loot with biome_tag parses and rolls
+bootreject (?i)couldn.t parse .*fishing_net
+bootreject (?i)biome_tag.*(unknown|invalid)
+> loot spawn 0 151 0 loot creativedelight:gameplay/fishing_net/kelp
+> loot spawn 0 151 0 loot creativedelight:gameplay/fishing_net/sea_grass
+sleep 1
+count Dropped >= 2
+## SQ-CDNS-10e | tag-driven content resolves under the new tags
+> zq itemtag creativedelight:food_type/raw/meat
+waitlog \[zq\] done 30
+> zq itemtag creativedelight:bakeware
+waitlog \[zq\] done 30
+> zq itemtag creativedelight:cans/servings/3
+waitlog \[zq\] done 30
+> zq itemtag creativedelight:jar_family/cookies
+waitlog \[zq\] done 30
+count \[zq\] itemtag >= 4
+reject itemtag .*: 0$
+> zq itemtag creativecommon:plantable/seed
+waitlog \[zq\] done 30
+> zq itemtag creativecommon:smokable/log
+waitlog \[zq\] done 30
+> zq tagsof creativedelight:canned_corn
+waitlog \[zq\] done 30
+expect creativedelight:cans
+## SQ-CDNS-11a | soft fluids, dish block, food values
+bootreject (?i)soft.?fluid.*(error|failed|unknown)
+> setblock 20 150 0 creativedelight:placed_vegetable_omelet
+expect (?i)changed the block
+> zq food creativedelight:canned_corn
+waitlog \[zq\] done 30
+expect (?i)nutrition

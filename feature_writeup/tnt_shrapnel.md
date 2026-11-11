@@ -6,7 +6,7 @@
 |---|---|
 | Lit TNT and TNT minecarts fire a burst of shrapnel when they explode (`TntShrapnelHandler`) | DEPLOYED (in the patcherMod jar shipped with 1.0.3; first committed 2026-10-02); in-game test pending |
 | Burning TNT items (item physics) fire the same burst (`ItemBurnTransform`, `shrapnel = true`) | DEPLOYED |
-| `creativeengineering:shrapnel` entity: no gravity, flat damage, despawns after a set distance | DEPLOYED |
+| `creativecompat:shrapnel` entity: no gravity, flat damage, despawns after a set distance | DEPLOYED |
 | `[shrapnel]` config: on/off, count, speed, spread, range, damage, item shown | DEPLOYED, live |
 
 - **Pending:** nothing built and unshipped. TN-01 to TN-10 have never been run. Findings F1 to F4 (section 4); F1

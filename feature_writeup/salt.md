@@ -46,7 +46,7 @@ Our overlay is GPLv3.
   at data load with a log line. Create is always in this pack. The upstream MCreator placeholder dependency `allmods` is
   dropped. The upstream mods.toml said version `1.0.0`; the file name's `1.19.2-1.1.0` is the recorded upstream
   version.
-- The pack's removals of three `create__the_salt:` recipes by id (`creativeengineering/salt.js` in Creative Delight)
+- The pack's removals of three `create__the_salt:` recipes by id (`creativedelight/salt.js` in Creative Delight)
   keep working: ids unchanged.
 
 ## 2. Decisions
@@ -131,11 +131,11 @@ on crushing wheels and the millstone (S6). A Salt Block unpacks to 9.
 | Step | Change | Where | Status | Decision |
 |---|---|---|---|---|
 | S1 | Cauldron boiled dry gives 8 salt (full), 5 (two thirds), 3 (one third) [1 + 50 %, 90 %, 75 %] | `kubejs/data/salt/loot_tables/cauldron_evaporation/` (3 tables, `set_count`) | BUILT 2026-11-03, `/reload`; SQ-SALT2-02 | partial levels scaled 8 x 1/3 and 2/3 (owner gave the 8) |
-| S2 | Heated basin 1000 mB water -> 2 salt [200 mB -> 60 %] | CD `creativeengineering/salt.js` `water_salt` | BUILT 2026-11-03, `/reload`; SQ-SALT2-03 | owner 11-03: 2 per bucket |
+| S2 | Heated basin 1000 mB water -> 2 salt [200 mB -> 60 %] | CD `creativedelight/salt.js` `water_salt` | BUILT 2026-11-03, `/reload`; SQ-SALT2-03 | owner 11-03: 2 per bucket |
 | S3 | Raw Rock Salt Block surface `natural_rough` 0.92x [soft 0.88x]; The Salt's Salt Block stays soft | `kubejs/server_scripts/tags/blocktags.js` | BUILT 2026-11-03, `/reload`; SQ-SALT2-04 | none |
 | S4 | Dict key `i.t_salts = '#forge:salts'` | `kubejs/startup_scripts/_lib/item_dict.js` | BUILT 2026-11-03, restart | none |
 | S5 | Create salting matches the grid: one unheated mix per `#salt:can_be_salted` food Create: The Salt does not cover; its mixes for foods outside the tag removed | CD `kubejs/salt/create_salting.js` (65 upstream outputs listed from the jar) | BUILT 2026-11-03, needs S4 (restart); SQ-SALT2-05 | none |
-| S6 | Raw Rock Salt: smashed with the Engineer's Hammer 4 (cutting board and grid, `NCH.hammering`; was a knife on the board, owner 11-03); crushing and milling 4 + 1 at 50 % | CD `creativeengineering/salt.js` | BUILT 2026-11-03, `/reload`; SQ-SALT2-03 | owner 11-03: 0.5 extra, hammer |
+| S6 | Raw Rock Salt: smashed with the Engineer's Hammer 4 (cutting board and grid, `NCH.hammering`; was a knife on the board, owner 11-03); crushing and milling 4 + 1 at 50 % | CD `creativedelight/salt.js` | BUILT 2026-11-03, `/reload`; SQ-SALT2-03 | owner 11-03: 0.5 extra, hammer |
 | S7 | Capped salting nutrition: generator writes `SaltingFoodValues` (+25 % of hunger, 1 to 2) | `tools/gen_salt_values.py`, `config/salt-common.toml` + `configs_edited/` copy; restart | Blocked on `food/types-and-tuning #1` (Planned) | D1 cap accepted (owner 11-03) |
 | S8 | Melting: ice -> water outside ultra-warm dimensions, everything -> air in them; snow -> air. Upstream had the check inverted (`DimensionType.ultraWarm`), so it placed water only in the Nether | Salt member: decompiled `Melting` overlay, `replaced_classes` pin, member `-02` | BUILT 2026-11-03 (CD jar built, not installed); SQ-SALT2-06 | owner 11-03 |
 | S9 | Butcher level 1: 12 emeralds -> 64 salt, 4 uses, 4 XP, as the BBQ powders; Salt's four trades off | CD `kubejs/salt/trades.js`; `salt-common.toml` `ButcherSaltTradesEnabled = false` (+ `configs_edited/`); restart | BUILT 2026-11-03; SQ-SALT2-07 | owner 11-03 |

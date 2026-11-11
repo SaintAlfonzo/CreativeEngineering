@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Multi-serving cans ({@link CanServings}): eating takes one serving, and a partly eaten can
  * draws a durability-style bar. On ItemStack rather than the Canned Goods item classes so any
- * item tagged {@code #creativeengineering:cans/servings/<n>} works, whatever mod it is from.
+ * item tagged {@code #creativedelight:cans/servings/<n>} works, whatever mod it is from.
  *
  * <p>SRG names with {@code remap = false} (no refmap in this build): m_41671_ finishUsingItem,
  * m_150947_ isBarVisible, m_150948_ getBarWidth, m_150949_ getBarColor.

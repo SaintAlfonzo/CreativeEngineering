@@ -1,8 +1,0 @@
-{
-  "type": "creativeengineering:hub_type",
-  "generator": {
-		"type": "minecraft:noise",
-		"settings": "creativeengineering:y208void",
-		"biome_source": { "type": "minecraft:fixed", "biome": "terralith:skylands_spring" }
-	}
-}

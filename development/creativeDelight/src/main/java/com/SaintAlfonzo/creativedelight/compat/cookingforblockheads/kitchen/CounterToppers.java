@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat.cookingforblockheads.kitchen;
 
+import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import com.SaintAlfonzo.creativedelight.CDConfig;
 
 import net.minecraft.core.BlockPos;
@@ -19,8 +20,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Small blocks on a Cooking for Blockheads counter (TODO cooking/kitchen #8, #20): Farmer's Delight's cutting board,
- * Display Delight's plates and plated foods (and the pack's own dishes, which are Display Delight block classes), Brewin' and Chewin's coaster ({@code #creativeengineering:counter_toppers}).
- * The counter and corner ({@code #creativeengineering:counter_supports}) are 15 px tall with no full top face, so these
+ * Display Delight's plates and plated foods (and the pack's own dishes, which are Display Delight block classes), Brewin' and Chewin's coaster ({@code #creativedelight:counter_toppers}).
+ * The counter and corner ({@code #creativedelight:counter_supports}) are 15 px tall with no full top face, so these
  * refused to stay on them, and would float 1 px above the worktop. {@code BlockStateCounterTopperMixin} lets them stay
  * ({@code canSurvive}), breaks them (and every Display Delight block) when the block below goes ({@code updateShape}),
  * and shifts their model ({@code getOffset}); {@code CuttingBoardRendererOffsetMixin} and
@@ -30,9 +31,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class CounterToppers {
 
     public static final TagKey<Block> SUPPORTS =
-            BlockTags.create(new ResourceLocation("creativeengineering", "counter_supports"));
+            BlockTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "counter_supports"));
     public static final TagKey<Block> TOPPERS =
-            BlockTags.create(new ResourceLocation("creativeengineering", "counter_toppers"));
+            BlockTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "counter_toppers"));
     private static final String BOARD_CLASS = "vectorwing.farmersdelight.common.block.CuttingBoardBlock";
     private static final String DISPLAY_DELIGHT = "displaydelight";
     /** Display Delight's (and its port's) block classes; patcherMod's own dish blocks are of these too. */

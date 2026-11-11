@@ -35,16 +35,16 @@ import net.minecraft.world.phys.Vec3;
 /**
  * The Fishing Net (ocean_delight.md 5.1, 5.6). Used on a kelp stalk with more kelp above it, or on tall seagrass, it
  * searches the plant: one roll of a loot table at the plant, dropped there. Blocks count through two block tags the pack
- * fills (Creative Delight {@code oceanic_delight/fishing_net_tags.js}): {@code #creativeengineering:fishing_net/kelp} as
- * kelp, {@code #creativeengineering:fishing_net/sea_grass} as tall seagrass; vanilla kelp and tall seagrass count without
+ * fills (Creative Delight {@code oceanic_delight/fishing_net_tags.js}): {@code #creativedelight:fishing_net/kelp} as
+ * kelp, {@code #creativedelight:fishing_net/sea_grass} as tall seagrass; vanilla kelp and tall seagrass count without
  * them. The tables are the pack's ({@code creativedelight:gameplay/fishing_net/kelp} and {@code .../sea_grass}).
  * <p>Any use: 10 tick cooldown. A search: 50 ticks, one durability (none in creative). A kelp search breaks the stalk 1
  * time in 5, and 1 such break in 5 lets a pufferfish out; a seagrass search breaks it 1 time in 20. 92 uses, not
  * repairable, takes enchantments like a stone tool; a crafting ingredient that comes back one durability worse.
  */
 public class FishingNetItem extends Item {
-    public static final TagKey<Block> KELP = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeengineering", "fishing_net/kelp"));
-    public static final TagKey<Block> SEA_GRASS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeengineering", "fishing_net/sea_grass"));
+    public static final TagKey<Block> KELP = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativedelight", "fishing_net/kelp"));
+    public static final TagKey<Block> SEA_GRASS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativedelight", "fishing_net/sea_grass"));
     public static final ResourceLocation KELP_TABLE = new ResourceLocation("creativedelight", "gameplay/fishing_net/kelp");
     public static final ResourceLocation SEA_GRASS_TABLE = new ResourceLocation("creativedelight", "gameplay/fishing_net/sea_grass");
 

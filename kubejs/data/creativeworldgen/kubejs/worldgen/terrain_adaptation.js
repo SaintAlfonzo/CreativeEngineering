@@ -2,16 +2,16 @@
 // Terrain adaptation by structure tag (Creative Worldgen worldgen/TerrainAdaptation + TemplateTrim, CEConfig
 // [worldgen.terrain_adaptation], feature_writeup/structure_tuning.md 3.15).
 //
-// creativeengineering:terrain_adaptation/<mode> replaces a structure's own terrain_adaptation:
+// creativeworldgen:terrain_adaptation/<mode> replaces a structure's own terrain_adaptation:
 //   none       no fill, no carve: the structure sits where its start lands
 //   bury, beard_thin, beard_box   vanilla's
 //   soft       the pack's beard: vanilla's fill and carve, but only under the template's footprint, fading
 //              out over a short round skirt (4 blocks + [terrain_adaptation] skirtBump) instead of a square
 //              8-block one around the whole template box
-// creativeengineering:template_trim: template columns with only air, grass/dirt pad and plants (no built
+// creativeworldgen:template_trim: template columns with only air, grass/dirt pad and plants (no built
 // block) aren't placed, so the slope around the building stays natural. Goes with soft: the soft footprint
 // then only covers the built columns. soft without trim keeps the pad (and levels it): for walled yards.
-// creativeengineering:template_trim/air: only air in columns with nothing solid is dropped (pad, plants, snow stay).
+// creativeworldgen:template_trim/air: only air in columns with nothing solid is dropped (pad, plants, snow stay).
 // Candidates for more: python3 tools/terrain_adaptation_scan.py -> feature_writeup/terrain_adaptation_scan.md.
 //
 // Structure ids as in /dumpstructuregen; '#tag' works too. A structure in two mode tags takes the first of
@@ -24,7 +24,7 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		'illager_siege_weapons:ballista', 'illager_siege_weapons:battering_ram', 'illager_siege_weapons:catapult',
 		'illager_siege_weapons:reinforced_battering_ram', 'illager_siege_weapons:siege_tower', 'illager_siege_weapons:trebuchet',
 	]
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/none', siegeWeapons)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/none', siegeWeapons)
 
 	// The MCreator structure mods converted to kubejs/data (tools/port_structure_jars.py): flat-world templates
 	// with pads 2 to 279 columns wide around the building and up to 18,000 saved air blocks.
@@ -92,33 +92,33 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	]
 	var paddedRuins = ['philipsruins:level_three_ruins']
 
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', portedMods)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', padHouses)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', outposts)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', walledCompounds)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', endBuilds)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', ponds)
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/soft', paddedRuins)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', portedMods)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', padHouses)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', outposts)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', walledCompounds)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', endBuilds)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', ponds)
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/soft', paddedRuins)
 
-	global.tags.add(e, 'creativeengineering:template_trim', siegeWeapons)
-	global.tags.add(e, 'creativeengineering:template_trim', portedMods)
-	global.tags.add(e, 'creativeengineering:template_trim', padHouses)
-	global.tags.add(e, 'creativeengineering:template_trim', outposts)
-	global.tags.add(e, 'creativeengineering:template_trim', ponds)
-	global.tags.add(e, 'creativeengineering:template_trim', paddedRuins)
+	global.tags.add(e, 'creativeworldgen:template_trim', siegeWeapons)
+	global.tags.add(e, 'creativeworldgen:template_trim', portedMods)
+	global.tags.add(e, 'creativeworldgen:template_trim', padHouses)
+	global.tags.add(e, 'creativeworldgen:template_trim', outposts)
+	global.tags.add(e, 'creativeworldgen:template_trim', ponds)
+	global.tags.add(e, 'creativeworldgen:template_trim', paddedRuins)
 
 	// Air-only trim (patcherMod TemplateTrim#trimAir): only air in columns with nothing solid is dropped. Terralith's
 	// spire (adaptation none) saves a 94x98 air box around its base layer that cut a square notch into the hills; the
 	// full trim would also drop the snow on its upper layers (110 to 273 snow-only columns per layer, resting on the
 	// layer below), so it gets this one and keeps its own adaptation.
-	global.tags.add(e, 'creativeengineering:template_trim/air', ['terralith:spire'])
+	global.tags.add(e, 'creativeworldgen:template_trim/air', ['terralith:spire'])
 
 	// Sunk starts (2026-10-19): start_height below 0 sinks these templates into the ground on purpose, and the beard
 	// levels the ground at the surface they were projected to instead of at their sunk bottom layer (patcherMod
 	// TerrainAdaptation#sink). Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start
 	// height -4: the grass layer replaces the surface block; their old features used -5, a 1-block dip); with the plain
 	// beard_thin the ground around them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
-	global.tags.add(e, 'creativeengineering:terrain_adaptation/sunk_start', [
+	global.tags.add(e, 'creativeworldgen:terrain_adaptation/sunk_start', [
 		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
 		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
 		// Not here: Philip's ancient_crypt and antiquus_crypta, T&T's nilotic village. Their start element is terrain
@@ -133,7 +133,7 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// blocks of a floor with water on it are dropped; their beard carved the seabed open and the sea flooded them.
 	// Not here: the ocean cabin (made for the seabed: y 24..44 in oceans only, it would almost never start), the
 	// deepslate cabin (y -56..-6), Philip's y -40 ruins, and buried treasure (its box sits at y 90 until it is placed).
-	global.tags.add(e, 'creativeengineering:seabed_clearance', [
+	global.tags.add(e, 'creativeworldgen:seabed_clearance', [
 		'terralith:underground/oak_cabin', 'terralith:underground/giant_bee_hive', 'terralith:underground/mining_outpost',
 		'terralith:underground/old_refinery', 'terralith:underground/sunken_tower', 'terralith:underground/witch_hut',
 		'terralith:underground/frosted_dungeon',

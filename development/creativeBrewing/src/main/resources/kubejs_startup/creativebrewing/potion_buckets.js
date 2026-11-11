@@ -9,7 +9,7 @@
 //   (creativeengineering:* up to 2026-11-04; the swap list carries old buckets over, plan_cb_publish.md M4)
 //
 // Right-click behaviour + cloud spawning:
-//   CB server creativeengineering/potion_buckets.js
+//   CB server creativebrewing/potion_buckets.js
 //   potion_area.js (this folder)   (global.potionArea — all the tuning)
 //
 // Textures: the CB jar's assets/creativebrewing/textures/item/<id>.png (body, untinted) +
@@ -61,7 +61,7 @@ StartupEvents.registry('item', e => {
         // layer0 = bucket body (untinted, white = no-op), layer1 = liquid (potion colour)
         .color((stack, layer) => layer === 0 ? SimpleColor.WHITE : potionTint(stack))
         // crafting remainder for the potion_bucket_drain shapeless recipes
-        // (CB server creativeengineering/potion_bottling.js) - same idiom as
+        // (CB server creativebrewing/potion_bottling.js) - same idiom as
         // CD's kubejs_startup/creativedelight/sample_syringe_items.js containerItem calls.
         .containerItem('minecraft:bucket')
 

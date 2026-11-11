@@ -4,7 +4,7 @@
     "vintagedelight"
   ],
   "merges": {
-    "creativeengineering:pickled_sea_pickle": [
+    "creativedelight:pickled_sea_pickle": [
       "brewinandchewin:pickled_pickles"
     ],
     "vintagedelight:salt_dust": [

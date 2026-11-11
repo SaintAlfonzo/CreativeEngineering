@@ -68,7 +68,7 @@ public class LegacyFlowerBoxBlock extends StorageBlock {
     */
    public static final BooleanProperty WALL = BooleanProperty.create("wall");
    /** Pack change: what the box takes (item tag written by the pack's KubeJS). */
-   public static final TagKey<Item> PLANTS = ItemTags.create(new ResourceLocation("creativeengineering", "flower_box_plants"));
+   public static final TagKey<Item> PLANTS = ItemTags.create(new ResourceLocation("creativecompat", "flower_box_plants"));
 
    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
       return (state.getValue(WALL) ? SHAPE : CENTRED_SHAPE).get(state.getValue(FACING));

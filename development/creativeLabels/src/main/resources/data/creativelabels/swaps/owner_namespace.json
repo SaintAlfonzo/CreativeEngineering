@@ -1,0 +1,16 @@
+{
+  "_comment": "namespace_move.md D-LABELS (2026-11-10, owner decision): the mod id creative_labels became creativelabels (naming rule: no underscore in own mod ids). Every id moved to the same path in the new namespace. The replaces entries keep each old id as a permanent alias, which the face_paper block entity type needs (block entity types are in no world snapshot, so a namespace rule alone never reaches them) and which also covers item NBT, structure NBT and old recipe JSON types. Read by Creative Common (SwapLists). Never prune.",
+  "namespaces": {
+    "creative_labels": "creativelabels"
+  },
+  "replaces": {
+    "creativelabels:face_paper": ["creative_labels:face_paper"],
+    "creativelabels:sticky_note": ["creative_labels:sticky_note"],
+    "creativelabels:label": ["creative_labels:label"],
+    "creativelabels:eraser": ["creative_labels:eraser"],
+    "creativelabels:note_dye": ["creative_labels:note_dye"],
+    "creativelabels:note_special": ["creative_labels:note_special"],
+    "creativelabels:note_copy": ["creative_labels:note_copy"],
+    "creativelabels:note_erase": ["creative_labels:note_erase"]
+  }
+}

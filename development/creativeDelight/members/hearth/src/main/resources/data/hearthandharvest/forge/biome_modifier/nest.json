@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#creativedelight:has_crows",
-  "features": "hearthandharvest:nest",
-  "step": "vegetal_decoration"
-}

@@ -1,0 +1,13 @@
+# r1109wo boot S: default config under strace (wo_run.sh). One talk at high trust added so a lookup would be reached if it ran on the server.
+pace 2
+## SQ-WO-37 | no connection to the web lookups, server side
+> forceload add 270 290 900 320
+sleep 15
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 5
+> setblock 650 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 650 -60 300 G 100
+> pbot use G 650 -60 300 up
+sleep 60
+expect Set trust of G
+look wo_run.sh greps wo_net.txt after the stop: no lookup host, and other DNS or connect lines are visible as a control

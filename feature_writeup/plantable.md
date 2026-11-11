@@ -9,15 +9,15 @@ from the class of the block the item places, so any mod's plants are covered wit
 
 | Line | Tag | What gets it |
 |---|---|---|
-| Seed Item | `#creativeengineering:plantable/seed` | seeds, pips, beans, grape seeds, nether wart: plant a crop and are not food |
-| Plantable Crop | `#creativeengineering:plantable/crop` | foods that plant their own crop: carrot, potato, onion, garlic clove, sweet potato, peanut, ghost pepper, cave carrot, sweet / glow berries, blueberry, cranberry, mulberry, chorus succulent |
-| Sapling | `#creativeengineering:plantable/sapling` | saplings, mangrove propagule, azalea, flowering azalea, pineapple sapling, banana frond, magic peanut |
-| Fungi Sapling | `#creativeengineering:plantable/fungi_sapling` | mushrooms and nether fungi that bone meal grows huge (vanilla, Botania glowing mushrooms, Fungi Delight inky cap and morel, Quark glow shroom, crimson / warped fungus) |
-| Water Plant | `#creativeengineering:plantable/water` | kelp (all Upgrade Aquatic kelps), seagrass, sea pickle, lily pad, sea grape plant, pickerelweed |
-| Vine | `#creativeengineering:plantable/vine` | vine, twisting / weeping vines, ivy, vanilla pods, Floral Enchantment flower vines, Quark cut vine |
-| Vertical Crop | `#creativeengineering:plantable/vertical` | sugar cane, cactus, bamboo, chorus flower, propelplant cane |
+| Seed Item | `#creativecommon:plantable/seed` | seeds, pips, beans, grape seeds, nether wart: plant a crop and are not food |
+| Plantable Crop | `#creativecommon:plantable/crop` | foods that plant their own crop: carrot, potato, onion, garlic clove, sweet potato, peanut, ghost pepper, cave carrot, sweet / glow berries, blueberry, cranberry, mulberry, chorus succulent |
+| Sapling | `#creativecommon:plantable/sapling` | saplings, mangrove propagule, azalea, flowering azalea, pineapple sapling, banana frond, magic peanut |
+| Fungi Sapling | `#creativecommon:plantable/fungi_sapling` | mushrooms and nether fungi that bone meal grows huge (vanilla, Botania glowing mushrooms, Fungi Delight inky cap and morel, Quark glow shroom, crimson / warped fungus) |
+| Water Plant | `#creativecommon:plantable/water` | kelp (all Upgrade Aquatic kelps), seagrass, sea pickle, lily pad, sea grape plant, pickerelweed |
+| Vine | `#creativecommon:plantable/vine` | vine, twisting / weeping vines, ivy, vanilla pods, Floral Enchantment flower vines, Quark cut vine |
+| Vertical Crop | `#creativecommon:plantable/vertical` | sugar cane, cactus, bamboo, chorus flower, propelplant cane |
 
-Each family tag also sits in `#creativeengineering:plantable`. No line (owner decision 2026-11-01): flowers, grass,
+Each family tag also sits in `#creativecommon:plantable`. No line (owner decision 2026-11-01): flowers, grass,
 ferns, dead bush, leaves, coral, mushroom colonies, Botania petals and functional flowers.
 
 | Part | Where | Status |

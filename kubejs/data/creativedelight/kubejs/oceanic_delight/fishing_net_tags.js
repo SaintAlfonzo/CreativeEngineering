@@ -11,7 +11,7 @@
 	// Oceanic Delight fishing net (ocean_delight.md 5.1, 5.6; TODO dishes/ocean #1). The net (Creative Delight's
 	// Oceanic rebuild, FishingNetItem) searches every block in fishing_net/kelp with the kelp table and every block in
 	// fishing_net/sea_grass with the sea grass table; the tables (kubejs/data/creativedelight/loot_tables/gameplay/
-	// fishing_net/, shipped in the CD jar too) pick their biome drops with creativeengineering:biome_tag on the biome
+	// fishing_net/, shipped in the CD jar too) pick their biome drops with creativedelight:biome_tag on the biome
 	// tags below.
 	ServerEvents.tags('block', e => {
 		if (!global.CD || !global.CD.on('oceanic_delight')) return
@@ -37,11 +37,11 @@
 	ServerEvents.tags('worldgen/biome', e => {
 		if (!global.CD || !global.CD.on('oceanic_delight')) return
 		// Terralith's deep_warm_ocean is in none of the vanilla ocean tags
-		t.add(e, 'creativeengineering:fishing_net/warm_ocean',
+		t.add(e, 'creativedelight:fishing_net/warm_ocean',
 			['minecraft:warm_ocean', 'minecraft:lukewarm_ocean', 'minecraft:deep_lukewarm_ocean', 'minecraft:deep_warm_ocean'])
-		t.add(e, 'creativeengineering:fishing_net/shrimp_ocean',
-			['#creativeengineering:fishing_net/warm_ocean', 'minecraft:ocean', 'minecraft:deep_ocean'])
-		t.add(e, 'creativeengineering:fishing_net/ocean', ['#minecraft:is_ocean', 'minecraft:deep_warm_ocean'])
-		t.add(e, 'creativeengineering:fishing_net/river', ['#minecraft:is_river', 'terralith:warm_river'])
+		t.add(e, 'creativedelight:fishing_net/shrimp_ocean',
+			['#creativedelight:fishing_net/warm_ocean', 'minecraft:ocean', 'minecraft:deep_ocean'])
+		t.add(e, 'creativedelight:fishing_net/ocean', ['#minecraft:is_ocean', 'minecraft:deep_warm_ocean'])
+		t.add(e, 'creativedelight:fishing_net/river', ['#minecraft:is_river', 'terralith:warm_river'])
 	})
 })()

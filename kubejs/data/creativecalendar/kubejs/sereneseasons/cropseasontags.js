@@ -1,7 +1,7 @@
 // requires: creativecalendar
 // requires: sereneseasons
 // Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01.
-// Crop growing season types: block and item tags creativeengineering:crop_seasons/<type>.
+// Crop growing season types: block and item tags creativecalendar:crop_seasons/<type>.
 //
 // The lists live in kubejs/generation_scripts/worldgen/crop_seasons.json (its _readme says what each type does);
 // Creative Calendar seasons/CropSeasons reads the tags for growth, the planting-item tooltip and WTHIT. Edit the json,
@@ -50,7 +50,7 @@
 				skipped++
 				return false
 			})
-			if (present.length) global.tags.add(event, 'creativeengineering:crop_seasons/' + type, present)
+			if (present.length) global.tags.add(event, 'creativecalendar:crop_seasons/' + type, present)
 		})
 		if (skipped) console.info('[crop-seasons] ' + skipped + ' listed ' + what + 's are not registered')
 	}

@@ -199,7 +199,7 @@ global.NCH = {
     // zero items, which made _validateAny falsely flag every NBT-matched syringe ingredient
     // as "matches no items" and (with global.NCH.strict on) throw, discarding the whole
     // recipe before it ever reached the real e.shapeless(...)/e.shaped(...) call - see
-    // kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js history.
+    // kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history.
     if (isIng) return v
     // InputItem: public `ingredient` + `count` fields, plus kjs$asIngredient()
     var isInputItem = (v.ingredient !== undefined && v.count !== undefined)
@@ -1034,7 +1034,7 @@ global.NCH = {
   // cans: a recipe that uses food cans (feature_writeup/can_parity.md, decision D-C: manual crafts only).
   //   true / filter / array of filters (item, '#tag', slot index): the cans lose one serving instead of
   //     being used up (Creative Delight food.CanServings; the last serving rolls empty/crushed/nothing);
-  //     true = every can slot (#creativeengineering:cans).
+  //     true = every can slot (#creativedelight:cans).
   //   { whole: id or [ids] }: those cans are used up whole and must be full (an opened can gives no result).
   //   { servings: <as above>, whole: [...] }: both.
   //   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
@@ -1093,7 +1093,7 @@ global.NCH = {
     // ingredient-substitution tool (e.g. a script that swaps every recipe's vanilla iron
     // ingot for a modded one), not a per-recipe "leave this behind after crafting" mechanic.
     // Passing a plain Ingredient here silently produced a recipe that could never match any
-    // input (see kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js history) - it just corrupts the
+    // input (see kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history) - it just corrupts the
     // ingredient instead of throwing. For an actual crafting remainder (bucket -> empty
     // bucket, syringe -> empty syringe), set it on the ITEM at registration time instead:
     // e.create(id).containerItem('namespace:item_id') - see startup_scripts/items/sample_syringe.js.
@@ -1133,7 +1133,7 @@ global.NCH = {
   },
 
   // The can guard of shaped() / shapeless(): manual only, whole cans full only, then the
-  // creativeengineering:can_serving ingredient action. KubeJS empties its custom-action map at the
+  // creativedelight:can_serving ingredient action. KubeJS empties its custom-action map at the
   // start of every server script load, so Common's IngredientActions puts every registered action
   // back on each call; the can logic is registered by compat.KubeJSCanAction (CD-bound).
   _canServings(recipe, cans, ctx) {
@@ -1160,7 +1160,7 @@ global.NCH = {
     })
     if (!opts.servings) return
     cans = opts.servings
-    var actionId = global.NCH.modId + ':can_serving'
+    var actionId = 'creativedelight:can_serving'
     try {
       var actions = Java.loadClass('com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions')
       actions.reapply()
@@ -1394,7 +1394,7 @@ global.NCH = {
 	// Hammering by hand with the Engineer's Hammer, two ways to the same result: on a Farmer's Delight cutting
 	// board (the hammer is the cutting tool and loses 1 durability) and in the crafting grid (hammer + input,
 	// shapeless; IE's hammer comes back damaged). Ids farmersdelightcutting/<id>_hammering and
-	// shapeless/<id>_hammering. The board must be in #creativeengineering:hammer_no_rotate (blocktags.js), or the
+	// shapeless/<id>_hammering. The board must be in #creativedelight:hammer_no_rotate (blocktags.js), or the
 	// hammer rotates it instead of cutting.
 	//   R.hammering(i.baking_sheet, i.any_plate_iron, e, 'baking_sheet')
 	hammering(output, input, e, idOverride) {
@@ -1404,7 +1404,7 @@ global.NCH = {
 		global.NCH.shapeless(output, [global.item.ie_hammer, input], e, idSuffix)
 	},
 
-	// Oven baking, creativeengineering:baking (patcherMod oven/, feature_writeup/oven.md 2.2): the FD
+	// Oven baking, creativedelight:baking (patcherMod oven/, feature_writeup/oven.md 2.2): the FD
 	// cooking-pot JSON plus an optional `tool` (bakeware in the oven's tool slot, never used up).
 	// input: one oven slot each (an array entry = any of those). Give a repeated ingredient once with a count,
 	// Item.of(i.wheat, 3) or { id: '#tag', count: 3 } for a tag, and write the original recipe's full cost.
@@ -1429,7 +1429,7 @@ global.NCH = {
 			global.NCH._warn(ctx, 'needs 1-6 ingredients, got ' + inputs.length)
 
 		var json = {
-			type: 'creativeengineering:baking',
+			type: 'creativedelight:baking',
 			ingredients: inputs.map((v, idx) =>
 				global.NCH._itemJson(v, { countMode: 'flat', context: ctx + ' input[' + idx + ']' })),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' result' }),
@@ -1798,7 +1798,7 @@ global.NCH = {
 			parts.push({ seasoning: s.id, ingredient: global.NCH._itemJson(s.item, { countMode: 'none', context: ctx + ' ' + keys[k] }) })
 		}
 		e.custom({
-			type: `${global.NCH.modId}:seasoning`,
+			type: 'creativedelight:seasoning',
 			food: global.NCH._itemJson(food, { countMode: 'none', context: ctx + ' food' }),
 			seasonings: parts
 		}).id(`${global.NCH.ns()}:shapeless/season/${idSuffix}`)
@@ -1837,7 +1837,7 @@ global.NCH = {
 			key[k] = global.NCH._itemJson(keys[k], { countMode: 'none', context: ctx + ' key[' + k + ']' })
 		})
 		e.custom({
-			type: `${global.NCH.modId}:lunchbox_shaped`,
+			type: 'creativedelight:lunchbox_shaped',
 			pattern: pattern,
 			key: key,
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
@@ -1850,7 +1850,7 @@ global.NCH = {
 		var idSuffix = idOverride ?? global.NCH.toId(output, base, "smithing")
 		var ctx = 'lunchboxSmithing ' + idSuffix
 		e.custom({
-			type: `${global.NCH.modId}:lunchbox_upgrade`,
+			type: 'creativedelight:lunchbox_upgrade',
 			base: global.NCH._itemJson(base, { countMode: 'none', context: ctx + ' base' }),
 			addition: global.NCH._itemJson(addition, { countMode: 'none', context: ctx + ' addition' }),
 			result: global.NCH._itemJson(output, { allowTag: false, context: ctx + ' output' })
@@ -1861,17 +1861,17 @@ global.NCH = {
 	// (grid: dye off first, then the skin). The allowed skins are fixed in Java (Lunchboxes.SKINS).
 	lunchboxSkin(e, idOverride) {
 		if (!e) throw new Error('lunchboxSkin called without event object!')
-		e.custom({ type: `${global.NCH.modId}:lunchbox_skin` }).id(`${global.NCH.ns()}:smithing/${idOverride ?? 'lunchbox_skin'}`)
+		e.custom({ type: 'creativedelight:lunchbox_skin' }).id(`${global.NCH.ns()}:smithing/${idOverride ?? 'lunchbox_skin'}`)
 	},
 
 	lunchboxDye(e, idOverride) {
 		if (!e) throw new Error('lunchboxDye called without event object!')
-		e.custom({ type: `${global.NCH.modId}:lunchbox_dye` }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_dye'}`)
+		e.custom({ type: 'creativedelight:lunchbox_dye' }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_dye'}`)
 	},
 
 	lunchboxSoap(e, idOverride) {
 		if (!e) throw new Error('lunchboxSoap called without event object!')
-		e.custom({ type: `${global.NCH.modId}:lunchbox_soap` }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_soap'}`)
+		e.custom({ type: 'creativedelight:lunchbox_soap' }).id(`${global.NCH.ns()}:lunchbox/${idOverride ?? 'lunchbox_soap'}`)
 	},
 
 	elytraDuplication(catalyst, result, e, idOverride) {
@@ -1961,7 +1961,7 @@ global.NCH = {
 		e.recipes.create.milling(output,input).id(`${global.NCH.ns()}:createmilling/${idSuffix}`)
 	},
 
-	// Mortar and pestle (creativeengineering:mortar_and_pestle, i.mortar_and_pestle), shapeless in the crafting table:
+	// Mortar and pestle (creativedelight:mortar_and_pestle, i.mortar_and_pestle), shapeless in the crafting table:
 	// damageIngredient takes 1 durability and hands the mortar back. inputCount copies of the input (up to 8, the
 	// mortar takes the 9th slot). Id mortar/<id>. TODO cooking/kitchen #10. Food grinding goes through foodGrinding() (own
 	// recipes) or the generated catalog loop in cooking/mortar.js (other mods' recipes), not straight here.
@@ -3011,13 +3011,13 @@ global.NCH = {
 	// No item inputs to validate: the ingredients live in the Java matcher.
 	//   R.creativeLabelsSpecial('note_dye', e)
 	creativeLabelsSpecial(type, e, idOverride) {
-		if (!global.has('creative_labels')) return global.NCH._skip('creative_labels')
+		if (!global.has('creativelabels')) return global.NCH._skip('creativelabels')
 		if (!e) throw new Error('creativeLabelsSpecial called without event object!')
 		var types = ['note_dye', 'note_special', 'note_copy', 'note_erase']
 		if (types.indexOf(type) < 0)
 			throw new Error('creativeLabelsSpecial: unknown type "' + type + '" (one of ' + types.join(', ') + ')')
 		var idSuffix = idOverride ?? type
-		return e.custom({ type: 'creative_labels:' + type }).id(`${global.NCH.ns()}:creative_labels/${idSuffix}`)
+		return e.custom({ type: 'creativelabels:' + type }).id(`${global.NCH.ns()}:creative_labels/${idSuffix}`)
 	},
 }
 

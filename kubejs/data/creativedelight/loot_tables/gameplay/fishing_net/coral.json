@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:tag",
-          "name": "creativeengineering:fishing_net/coral",
+          "name": "creativedelight:fishing_net/coral",
           "expand": true
         }
       ]

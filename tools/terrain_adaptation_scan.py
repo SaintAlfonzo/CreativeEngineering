@@ -85,7 +85,7 @@ FALLBACK_TAGS = {
     'minecraft:dirt': ['minecraft:dirt', 'minecraft:grass_block', 'minecraft:podzol', 'minecraft:coarse_dirt', 'minecraft:mycelium',
                        'minecraft:rooted_dirt', 'minecraft:moss_block', 'minecraft:mud', 'minecraft:muddy_mangrove_roots'],
     'forge:sand': ['minecraft:sand', 'minecraft:red_sand'], 'forge:gravel': ['minecraft:gravel'],
-    'creativeengineering:ground_match/plants': ['minecraft:grass', 'minecraft:fern', 'minecraft:tall_grass', 'minecraft:large_fern',
+    'creativeworldgen:ground_match/plants': ['minecraft:grass', 'minecraft:fern', 'minecraft:tall_grass', 'minecraft:large_fern',
                                                 'minecraft:dead_bush', 'minecraft:poppy', 'minecraft:dandelion'],
     'minecraft:flowers': [], 'minecraft:saplings': [],
 }
@@ -115,9 +115,9 @@ def load_tags():
         return out
     # = blocktags.js template_trim/pad and template_trim/plants
     pad = members('minecraft:dirt') | members('forge:sand') | members('forge:gravel') | {'minecraft:clay', 'minecraft:snow_block'}
-    plants = members('creativeengineering:ground_match/plants') | {'minecraft:snow', 'minecraft:moss_carpet'}
-    if tags is None or not members('creativeengineering:ground_match/plants'):
-        plants |= set(FALLBACK_TAGS['creativeengineering:ground_match/plants']) | members('minecraft:flowers') | members('minecraft:saplings')
+    plants = members('creativeworldgen:ground_match/plants') | {'minecraft:snow', 'minecraft:moss_carpet'}
+    if tags is None or not members('creativeworldgen:ground_match/plants'):
+        plants |= set(FALLBACK_TAGS['creativeworldgen:ground_match/plants']) | members('minecraft:flowers') | members('minecraft:saplings')
     return pad, plants, tags is not None
 
 

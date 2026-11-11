@@ -20,7 +20,7 @@ public class IECompat {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final TagKey<Block> HAMMER_NO_ROTATE = TagKey.create(Registry.BLOCK_REGISTRY,
-            new ResourceLocation("creativeengineering", "hammer_no_rotate"));
+            new ResourceLocation("creativedelight", "hammer_no_rotate"));
 
     // -------------------------------------------------------------------------
     // register() — called from CreativeEngineering.commonSetup()
@@ -32,7 +32,7 @@ public class IECompat {
     // -------------------------------------------------------------------------
     // The Engineer's Hammer rotates any block it is used on (onItemUseFirst, before the block's own use), so on a
     // Farmer's Delight cutting board it would turn the board instead of running a hammer cutting recipe
-    // (feature_writeup/oven.md 2.5). Blocks in #creativeengineering:hammer_no_rotate (KubeJS blocktags.js) refuse
+    // (feature_writeup/oven.md 2.5). Blocks in #creativedelight:hammer_no_rotate (KubeJS blocktags.js) refuse
     // the rotation; the hammer then passes and the block's use runs. Called through enqueueWork (IE's list is a plain
     // ArrayList that IE itself fills during setup).
     public static void registerHammerNoRotate() {

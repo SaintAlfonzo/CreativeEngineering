@@ -27,7 +27,7 @@ final class DisplayDelightDishBlocks {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
     private static final List<Entry> ENTRIES = new ArrayList<>();
 
     private record Entry(DisplayDelightDishes.Dish dish, RegistryObject<Block> block) {}

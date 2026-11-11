@@ -26,7 +26,7 @@ public class FungiDelightTags {
    public static final TagKey<Item> STORAGE_BLOCKS_ITEM_MOREL = forgeItemTag("storage_blocks/morel");
    public static final TagKey<Item> STORAGE_BLOCKS_ITEM_TRUFFLE = forgeItemTag("storage_blocks/truffle");
    // Port change: Weak Stomach reacts to the pack's alcohol tag instead of #forge:alcohol (fungi_delight.md 5.1.4).
-   public static final TagKey<Item> ALCOHOL = ItemTags.create(new ResourceLocation("creativeengineering", "food_type/drink/alcohol"));
+   public static final TagKey<Item> ALCOHOL = ItemTags.create(new ResourceLocation("creativedelight", "food_type/drink/alcohol"));
    public static final TagKey<Item> ALCOHOL_REACTION = fungiDelightItemTag("alcohol_reaction");
 
    private static TagKey<Block> fungiDelightBlockTag(String path) {

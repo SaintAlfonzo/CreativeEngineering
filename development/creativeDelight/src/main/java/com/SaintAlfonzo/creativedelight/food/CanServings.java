@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.food;
 
+import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import com.SaintAlfonzo.creativedelight.CDConfig;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,7 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 /**
- * Multi-serving cans. A can in {@code #creativeengineering:cans/servings/<n>} holds n servings;
+ * Multi-serving cans. A can in {@code #creativedelight:cans/servings/<n>} holds n servings;
  * each eat or craft takes one, and the last one leaves an empty can, a crushed can or nothing
  * ({@link CDConfig.Canning} chances).
  *
@@ -46,7 +47,7 @@ public final class CanServings {
     public static final String NBT_KEY = "CanServings";
     /** Tag path prefix; the servings count follows it: {@code cans/servings/4}. */
     public static final String TAG_PREFIX = "cans/servings/";
-    public static final String NAMESPACE = "creativeengineering";
+    public static final String NAMESPACE = CreativeDelight.MOD_ID;
 
     /** Max servings per item, 0 = not a can. Cleared whenever tags reload. */
     private static final Map<Item, Integer> MAX_CACHE = new ConcurrentHashMap<>();

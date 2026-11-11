@@ -1,4 +1,4 @@
-# One jar, five mods (exposure_extras is this pack's own, not an upstream addon). Each keeps its upstream mod id, so upstream ids, tags, data and assets port
+# One jar, five mods (exposureextras is this pack's own, not an upstream addon). Each keeps its upstream mod id, so upstream ids, tags, data and assets port
 # unchanged and ModList.isLoaded("exposure_polaroid")-style checks keep working.
 # Versions all follow the jar (mod_version); the upstream versions are noted per mod.
 modLoader="javafml"
@@ -94,30 +94,30 @@ versionRange="[${mod_version}]"
 ordering="AFTER"
 side="BOTH"
 
-# ---- exposure_extras: this pack's additions, not upstream (src/extras) ----
+# ---- exposureextras: this pack's additions, not upstream (src/extras) ----
 [[mods]]
-modId="exposure_extras"
+modId="exposureextras"
 version="${mod_version}"
 displayName="Exposure Extras"
 authors="SaintAlfonzo"
 logoFile="exposure_icon.png"
-description='''Camera bags (leather, iron, netherite) that hold #exposure_extras:camera_equipment.'''
+description='''Camera bags (leather, iron, netherite) that hold #exposureextras:camera_equipment.'''
 
-[[dependencies.exposure_extras]]
+[[dependencies.exposureextras]]
 modId="exposure"
 mandatory=true
 versionRange="[${mod_version}]"
 ordering="AFTER"
 side="BOTH"
 
-[[dependencies.exposure_extras]]
+[[dependencies.exposureextras]]
 modId="exposure_polaroid"
 mandatory=true
 versionRange="[${mod_version}]"
 ordering="AFTER"
 side="BOTH"
 
-[[dependencies.exposure_extras]]
+[[dependencies.exposureextras]]
 modId="exposure_expanded"
 mandatory=true
 versionRange="[${mod_version}]"

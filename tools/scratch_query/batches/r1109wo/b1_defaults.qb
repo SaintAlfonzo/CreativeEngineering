@@ -1,0 +1,182 @@
+# r1109wo boot A1 (SQ-WO, group A superflat, default config). Probe zz_wo_probe.js (/zwo). Rows run 01-09, 11-13, 10 (restart last).
+# Deviations from the queue text, all scratch-only: gamerule randomTickSpeed 300 and sleep 30 replace sleep 120 (at speed 3 a tree
+# misses every random tick in 120 s about 17 percent of the time); speed 0 outside those rows so a timerless [state=sleeping]
+# tree placed by day is not woken by a stray random tick before the row reads it.
+pace 1
+
+## SQ-WO-01 | boot, web block logged once, config defaults, probe answers
+bootexpect Done \(
+bootreject (?i)wiseoak.*(InjectionError|failed)
+bootreject InvalidInjectionException.*(?i)wiseoak
+shell test "$(grep -c 'Wise Oak web lookups disabled' logs/latest.log)" = 1 && echo "web block line once"
+shell python3 "$INST/tools/scratch_query/wo_judge.py" toml config/creativeworldgen-common.toml 300 30 600 5.0 75 17 14 14 30 1 1 4 16
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+> pbot spawn H 276 -60 280 minecraft:overworld survival
+sleep 3
+> zwo state 310 -60 300
+waitlog \[zwo\] done 20
+expect \[zwo\] 310 -60 300
+> gamerule randomTickSpeed 0
+
+## SQ-WO-02 | trust command reads, writes, selector, per player
+> setblock 320 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 320 -60 300 G
+> wiseoak trust 320 -60 300 G 80
+> wiseoak trust 320 -60 300 G
+> wiseoak trust 320 -60 300 @a[name=G] 50
+> wiseoak trust 320 -60 300 G
+> wiseoak trust 320 -60 300 H
+> data get block 320 -60 300 relationship
+sleep 1
+expect Trust of G at .*: 0
+expect Set trust of G at .* to 80
+expect Trust of G at .*: 80
+expect to 50
+expect Trust of G at .*: 50
+expect Trust of H at .*: 0
+look data get line: one record (G) with trust 50, none for H
+
+## SQ-WO-03 | trust command errors
+> wiseoak trust 330 -60 300 G 50
+> setblock 330 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 330 -60 300 G 101
+> wiseoak trust 330 -60 300 G -1
+> wiseoak trust 330 -60 300 Nobody123 50
+> wiseoak trust 99999 -60 99999 G 50
+> setblock 330 -60 300 minecraft:stone
+> wiseoak trust 330 -60 300 G 50
+sleep 2
+count No Wise Oak at that position == 2
+expect (?i)integer must not be more than 100
+expect (?i)integer must not be less than 0
+expect That player does not exist
+expect That position is not loaded
+reject Exception
+
+## SQ-WO-04 | stays awake by day
+> gamerule randomTickSpeed 300
+> time set noon
+> weather clear
+> setblock 340 -60 300 mysticaloaktree:wise_oak
+sleep 30
+> zwo state 340 -60 300
+waitlog \[zwo\] done 20
+expect \[zwo\] 340 -60 300 .*state=(none|blinking)
+reject \[zwo\] 340 -60 300 .*state=sleeping
+
+## SQ-WO-05 | sleeps at night, wakes by day, no timer
+> setblock 350 -60 300 mysticaloaktree:wise_oak
+> time set midnight
+sleep 30
+> zwo state 350 -60 300
+> time set noon
+sleep 30
+> zwo state 350 -60 300
+> data get block 350 -60 300 creativeworldgen_sleep_until
+sleep 1
+expect \[zwo\] 350 -60 300 .*state=sleeping
+expect \[zwo\] 350 -60 300 .*state=(none|blinking)
+expect (?i)found no elements
+reject has the following block data
+
+## SQ-WO-06 | sleeps in a storm by day, wakes after
+> time set noon
+> setblock 360 -60 300 mysticaloaktree:wise_oak
+> weather thunder 600
+sleep 30
+> zwo state 360 -60 300
+> weather clear
+sleep 30
+> zwo state 360 -60 300
+sleep 1
+expect \[zwo\] 360 -60 300 .*state=sleeping
+expect \[zwo\] 360 -60 300 .*state=(none|blinking)
+
+## SQ-WO-07 | storm ending at night does not wake it
+> time set midnight
+> setblock 370 -60 300 mysticaloaktree:wise_oak
+> weather thunder 600
+sleep 30
+> weather clear
+sleep 30
+> zwo state 370 -60 300
+> time set noon
+sleep 30
+> zwo state 370 -60 300
+sleep 1
+expect \[zwo\] 370 -60 300 .*state=sleeping
+expect \[zwo\] 370 -60 300 .*state=(none|blinking)
+> gamerule randomTickSpeed 0
+
+## SQ-WO-08 | right-click on a sleeper: angry, 600 tick timer
+> time set noon
+> weather clear
+> setblock 380 -60 300 mysticaloaktree:wise_oak[state=sleeping]
+> wiseoak trust 380 -60 300 G 50
+> pbot use G 380 -60 300 up
+> zwo state 380 -60 300
+> data get block 380 -60 300 creativeworldgen_angry_until
+sleep 1
+expect \[zwo\] 380 -60 300 .*state=angry
+expect has the following block data
+look angry_until = game + 600 within 5 ticks
+
+## SQ-WO-09 | anger ends in a timed sleep on the game-time basis
+> zwo skip 601
+sleep 3
+> zwo state 380 -60 300
+> data get block 380 -60 300 creativeworldgen_sleep_until
+> time add 12000
+> data get block 380 -60 300 creativeworldgen_sleep_until
+> zwo state 380 -60 300
+> time set noon
+> zwo skip 12000
+sleep 3
+> zwo state 380 -60 300
+sleep 1
+expect \[zwo\] 380 -60 300 .*state=sleeping
+expect \[zwo\] 380 -60 300 .*state=(none|blinking)
+look sleep_until = game + 12000 within 25 ticks, same value after time add; final state awake
+
+## SQ-WO-11 | lightning grows an oak sapling into a Wise Oak
+> setblock 700 -60 300 minecraft:oak_sapling
+> summon minecraft:lightning_bolt 700 -60 300
+sleep 3
+> fill 692 -60 292 708 -40 308 minecraft:air replace mysticaloaktree:wise_oak
+sleep 1
+expect Successfully filled 1 block
+
+## SQ-WO-12 | no room: sapling restored
+> setblock 730 -60 300 minecraft:oak_sapling
+> fill 726 -59 296 734 -55 304 minecraft:stone
+> summon minecraft:lightning_bolt 730 -60 300
+sleep 3
+> execute if block 730 -60 300 minecraft:oak_sapling
+> fill 722 -60 292 738 -40 308 minecraft:air replace mysticaloaktree:wise_oak
+sleep 1
+expect Test passed
+expect No blocks were filled
+
+## SQ-WO-13 | birch sapling is ignored
+> setblock 760 -60 300 minecraft:birch_sapling
+> summon minecraft:lightning_bolt 760 -60 300
+sleep 3
+> execute if block 760 -60 300 minecraft:birch_sapling
+> fill 752 -60 292 768 -40 308 minecraft:air replace mysticaloaktree:wise_oak
+sleep 1
+expect Test passed
+expect No blocks were filled
+
+## SQ-WO-10 | angry with no timer sleeps at once; save before the restart
+> time set noon
+> setblock 400 -60 300 mysticaloaktree:wise_oak[state=angry]
+> wiseoak trust 400 -60 300 G 40
+sleep 3
+> zwo state 400 -60 300
+> data get block 400 -60 300 creativeworldgen_sleep_until
+> save-all flush
+sleep 5
+expect \[zwo\] 400 -60 300 .*state=sleeping
+expect has the following block data

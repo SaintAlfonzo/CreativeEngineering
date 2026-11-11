@@ -36,7 +36,7 @@ ServerEvents.tags('item', e => {
 	t.add(e, '#forge:feathers', i.crow_feather)
 	t.add(e, i.t_flowers, HH_MUMS.map(c => i[c + '_mum']))
 	// Farmer's Hat XP and the scarecrow's hat slot (N21, N23-18): the four pack hats and H&H's.
-	t.add(e, i.t_farmers_hats, [i.farmers_hat, i.farmers_hat_helmet, i.straw_hat, i.farmerbrim, i.summerhat])
+	t.add(e, i.t_farmers_hats, [i.farmers_hat, i.farmers_hat_helmet, i.straw_hat, i.farmerbrim])
 	t.addTag(e, i.t_seeds_blueberry, i.blueberry_pips)
 })
 
@@ -73,7 +73,7 @@ ServerEvents.tags('entity_type', e => {
 	var t = global.tags
 	// Cleaver butchering (1.4.1's list); manure not from chickens or crows; Pinned exemptions the class checks miss (N25).
 	t.add(e, 'hearthandharvest:can_be_butchered', ['minecraft:chicken', 'minecraft:cow', 'minecraft:pig', 'minecraft:sheep', 'minecraft:rabbit'])
-	t.add(e, 'hearthandharvest:does_not_poop', ['minecraft:chicken', 'alexsmobs:crow'])
+	t.add(e, 'hearthandharvest:does_not_poop', ['minecraft:chicken', 'hearthandharvest:crow'])
 	t.add(e, 'hearthandharvest:pinned_immune', ['minecraft:bat', 'minecraft:vex', 'minecraft:blaze', 'minecraft:allay'])
 })
 

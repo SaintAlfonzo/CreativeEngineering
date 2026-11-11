@@ -22,17 +22,17 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Loot condition {@code creativeengineering:biome_tag}: passes when the biome at the context's origin is in
+ * Loot condition {@code creativedelight:biome_tag}: passes when the biome at the context's origin is in
  * {@code "tag"}. Vanilla 1.19.2 {@code location_check} only takes a single biome id, so biome groups (warm
  * oceans, rivers) would otherwise be long alternative lists that miss modded biomes.
- * <pre>{"condition": "creativeengineering:biome_tag", "tag": "creativeengineering:fishing_net/river"}</pre>
+ * <pre>{"condition": "creativedelight:biome_tag", "tag": "creativedelight:fishing_net/river"}</pre>
  * Used by the fishing net tables (kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/). Moved from Creative
  * Worldgen on 2026-11-06: Creative Delight does not need Worldgen, and the tables failed to parse without it.
  */
 public class BiomeTagCondition implements LootItemCondition {
 
 	public static final DeferredRegister<LootItemConditionType> CONDITIONS =
-			DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, CreativeDelight.NS);
+			DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, CreativeDelight.MOD_ID);
 	public static final RegistryObject<LootItemConditionType> TYPE =
 			CONDITIONS.register("biome_tag", () -> new LootItemConditionType(new Serializer()));
 

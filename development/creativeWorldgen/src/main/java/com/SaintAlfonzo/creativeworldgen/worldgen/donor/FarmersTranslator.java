@@ -43,7 +43,7 @@ import java.util.TreeMap;
  * </ul>
  */
 final class FarmersTranslator {
-    private static final Logger LOG = LogManager.getLogger("creativeengineering/farmers-donor");
+    private static final Logger LOG = LogManager.getLogger("creativeworldgen/farmers-donor");
 
     private static final String NS = "data/farmers_structures/";
 

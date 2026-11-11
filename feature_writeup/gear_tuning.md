@@ -10,10 +10,10 @@
 | Felsic assembly values from config (`[crafting.felsic_<piece>]`, `NCH.cfg`) | DEPLOYED; the felsic shield has no config section (F1) |
 | Assembly keeps enchantments, name, repair cost, Unbreakable, attribute modifiers (`SequencedAssemblyRecipeMixin`) | DEPLOYED (patcherMod), in-game test pending |
 | Armor enchantability overrides for whole materials (echo 18, felsic 21; `ArmorMaterialEnchantabilityMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| Dragon gear autorepair (`#creativeengineering:dragon_gear`, 50 durability every 10 s while worn or held) | DEPLOYED, in-game test pending |
+| Dragon gear autorepair (`#creativeequipment:dragon_gear`, 50 durability every 10 s while worn or held) | DEPLOYED, in-game test pending |
 | Armor cap 50 (vanilla 30) so the full dragon set's 36 armor counts (`ArmorCapMixin`, `[dragon_gear] armorCap`) | BROKEN: Built 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); cap PASSED r1031 (SQ-AC-01, -03), set gives 33 not 36 (SQ-AC-02 FAIL, DragonLoot config overrides the tune) |
-| Dragon scale elytra duplication (`creativeengineering:elytra_duplication`) | DEPLOYED; JEI doesn't show it ([jei_coverage.md](jei_coverage.md), JC-02) |
-| Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeengineering:elytra_chestplates`) | DEPLOYED (patcherMod), in-game test pending |
+| Dragon scale elytra duplication (`creativeequipment:elytra_duplication`) | DEPLOYED; JEI doesn't show it ([jei_coverage.md](jei_coverage.md), JC-02) |
+| Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeequipment:elytra_chestplates`) | DEPLOYED (patcherMod), in-game test pending |
 | Air brake (hold-to-use elytra brake, stall; `AirBrakeHandler`) | DEPLOYED; the 2026-09-13 "does nothing" bug was fixed; in-game test pending |
 
 - **Pending:** built and unshipped: F13 (armor cap 50, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch r1031
@@ -141,7 +141,7 @@ KubeJS build and silently did nothing.
 
 ### 2.6 Dragon gear autorepair
 
-- **What:** every `intervalTicks` (200), any damaged item in `#creativeengineering:dragon_gear` in a player's four
+- **What:** every `intervalTicks` (200), any damaged item in `#creativeequipment:dragon_gear` in a player's four
   armor slots or two hands gets `amountPerInterval` (50) durability back. Dragon horse armor has no durability (vanilla
   `HorseArmorItem`), so it is not repaired; its Regeneration is the horse armor effect.
 - **Not repaired:** items in the inventory, backpacks or curios slots.
@@ -166,19 +166,19 @@ other mod data (F5). Applies to every sequenced assembly, but only does anything
 - **Duplication:** crafting grid, any `ElytraItem` + a dragon scale → a fresh vanilla elytra; the original stays in the
   grid untouched (enchantments, durability, Customizable Elytra styling). Any third item breaks the recipe. Quark's
   own version needs `quark:dragon_scale`, which is removed. Recipe id
-  `creativeengineering:elytraduplication/dragon_scale_elytra`, type `creativeengineering:elytra_duplication`
+  `creativeengineering:elytraduplication/dragon_scale_elytra`, type `creativeequipment:elytra_duplication`
   (catalyst and result from the JSON).
 - **Rocket takeoff:** Easy Elytra Takeoff 4.2 launches you with a firework only if you wear an `ElytraItem` and nothing
   but air is in the 3x3 layer two blocks under your feet. Two patcherMod mixins:
   - `EasyElytraTakeoffHelperMixin`: "wearing an elytra" also counts any armor stack in
-    `#creativeengineering:elytra_chestplates` or for which Forge's `canElytraFly` is true.
+    `#creativeequipment:elytra_chestplates` or for which Forge's `canElytraFly` is true.
   - `EasyElytraTakeoffGroundCheckMixin`: for tagged chestplates the air-below check is skipped, so the rocket works
     from a single glass block or mid-fall. Vanilla elytra keep the stock rule.
   - Tag today: `dragonloot:upgraded_dragon_chestplate` only.
 
 ### 2.9 Air brake
 
-`creativeengineering:air_brake`, unstackable, Tools tab, made by dragon assembly (2.1). Hold right click (bow pose)
+`creativeequipment:air_brake`, unstackable, Tools tab, made by dragon assembly (2.1). Hold right click (bow pose)
 while gliding. Every tick held, on both the client and the server:
 
 | Key | Default | Effect |
@@ -203,7 +203,7 @@ Armor Trims Backport 1.3.3 makes every `ArmorItem` trimmable (226 items, `kubejs
 hats, goggles, backtanks, diving gear and custom-model sets where a trim is invisible or a "mystery belt". The pack keeps
 only standard armor drawn on the vanilla armor model:
 
-| Kept (item tag `creativeengineering:trimmable_armor`, `server_scripts/tags/equipmenttags.js`) |
+| Kept (item tag `creativecommon:trimmable_armor`, `server_scripts/tags/equipmenttags.js`) |
 |---|
 | Vanilla leather, chainmail, iron, gold, diamond, netherite (4 pieces each) and the turtle shell |
 | Everything Copper copper, Create: Dreams & Desires echo, Felsic, Dragon Loot dragon (plus the upgraded dragon chestplate) |
@@ -267,8 +267,8 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
   Resistance fill; the toml comment says "used in the final filling step". A felsic helmet costs 500 + 500 mB a loop.
   Fix the comment, or split it into two keys.
 - **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Hand-written tag line.** [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) line 10 is
-  `e.add('creativeengineering:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')`, against the
-  `global.tags` + item-dict rule. Fix: `global.tags.add(e, 'creativeengineering:elytra_chestplates', [i.upgraded_dragon_chestplate])`.
+  `e.add('creativeequipment:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')`, against the
+  `global.tags` + item-dict rule. Fix: `global.tags.add(e, 'creativeequipment:elytra_chestplates', [i.upgraded_dragon_chestplate])`.
 - **F4. Mining level 5 does nothing over 4. RESOLVED 2026-10-30: dragon set to 4** (`tune_tools.js`, every dragon tool `miningLevel: 4`; TODO `gear/tuning #3`, Testing until GR-05 runs). As far as I know Forge 43 (unverified, no jars in the
   repo): a tier not in `TierSortingRegistry` (KubeJS's per-item tier copies are not) falls back to vanilla's level check,
   and nothing in vanilla needs more than 3; netherite-gated mod blocks (`forge:needs_netherite_tool`) are only checked
@@ -450,7 +450,7 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-11-01: F13 toml fix (`dragonloot-common.toml` 12 chest, 10 legs, toughness 4.5; `gear/tuning #20`). F2 built: `reachPotionMb`
   key per felsic piece (`gear/tuning #6`, patcherMod built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
   in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
-- 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativeengineering:trimmable_armor`,
+- 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativecommon:trimmable_armor`,
   filter in patcherMod `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
 - 2026-11-04: `tuneTools` / `tuneArmor`, armor enchantability, the armor cap, the copper tier and the gear scripts moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)); config tables now in `config/creativeequipment-common.toml`. Same behaviour.
 

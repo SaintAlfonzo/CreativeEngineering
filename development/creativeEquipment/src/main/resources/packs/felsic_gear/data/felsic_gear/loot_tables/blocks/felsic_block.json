@@ -25,7 +25,7 @@
             },
             {
               "type": "minecraft:item",
-              "name": "creativeengineering:felsic_scrap",
+              "name": "creativeequipment:felsic_scrap",
               "functions": [
                 {
                   "function": "minecraft:set_count",

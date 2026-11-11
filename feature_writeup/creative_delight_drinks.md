@@ -169,9 +169,9 @@ Status **Testing**: in the `mods/` Creative Delight jar of 2026-11-02 14:01; scr
 | Part | Where |
 |---|---|
 | 14 new drink items (9 teas, 5 juices), 17 new fluids (the 14, chorus tea, sea grape juice, pickerelweed juice) | CD `kubejs_startup/creativeengineering/drinks.js`; ids `item_dict.js`, `fluid_dict.js`, food dict keys `food_dict.js`, food type `drink` (`food_types.json`) |
-| Every rule in sections 1 to 4 | `kubejs/data/creativedelight/kubejs/creativeengineering/drinks.js`; input tags `drink_tags.js` |
+| Every rule in sections 1 to 4 | `kubejs/data/creativedelight/kubejs/creativedelight/drinks.js`; input tags `drink_tags.js` |
 | Superseded recipes taken out | `farmersrespite/kettle.js` (dandelion tea, melon juice, lavender tea, the five Fruits Delight teas; matcha latte takes any sugar-like; chocolate and pumpkin coffee take the tags), `veggiesdelight/recipes.js` (pot), `endersdelight/recipes.js` (pot), `abnormals_delight/upgrade_aquatic.js` (pot), `delightful/recipes.js` (grid berry latte) |
-| Renames | client `assets/creativedelight/kubejs/creativeengineering/names.js`; fluid names in CD `fluids.js` |
+| Renames | client `assets/creativedelight/kubejs/creativedelight/names.js`; fluid names in CD `fluids.js` |
 | Art | `development/creativeDelight/src/main/resources/assets/creativeengineering/textures/item/<id>.png`: teas recoloured from Farmer's Respite's green tea, juices from Farmer's Delight's melon juice (MIT, `drink_rules_art_notice.txt`) |
 
 Build choices (not decided by the owner; change freely):
@@ -197,7 +197,7 @@ Not built:
 - **Kettle "straight from beans" flavours** (beans + water + milk + additive): the Kettle takes two ingredients.
 - **Serene blossom leaves** for lavender tea: no such item found; lavender takes amethyst shards and `#forge:lavender` (Quark
   lavender blossom leaves).
-- **`flowers #5` item merge**: only the recipe side (`#creativeengineering:azalea_flowers` holds both); the two flower items
+- **`flowers #5` item merge**: only the recipe side (`#creativedelight:azalea_flowers` holds both); the two flower items
   are still separate.
 - Display Delight's placed-drink names ("Placed Ender Nectar", "Placed Iced Berry Matcha Latte") are generated: rerun
   `tools/gen_display_delight_names.py` after a `/dumpnames`.

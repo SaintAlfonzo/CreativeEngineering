@@ -1,7 +1,7 @@
 // Creative Equipment; moved from kubejs/startup_scripts/items/end.js on 2026-11-04. Felsic Scrap, the End gear
 // material (recipes: kubejs/data/creativeequipment/kubejs/equipment/end_gear.js).
 StartupEvents.registry('item', e => {
-    e.create('creativeengineering:felsic_scrap').displayName('Felsic Scrap')
+    e.create('creativeequipment:felsic_scrap').displayName('Felsic Scrap')
 
     // End gear and air brake sequenced assembly incomplete items ('kubejs:incomplete_<key>', ids unchanged; recipes in
     // kubejs/data/creativeequipment/kubejs/equipment/end_gear.js: echoAssembly, felsicAssembly, dragonAssembly). Moved

@@ -1,6 +1,6 @@
 # Creative Labels: sticky notes and labels as face paper
 
-Plan and build notes for **Creative Labels** (`creative_labels`), a new in-tree mod that replaces two mods' placed entities with one
+Plan and build notes for **Creative Labels** (`creativelabels`), a new in-tree mod that replaces two mods' placed entities with one
 block, `face_paper`: **sticky notes** (after Sticky It! 1.2.1) and **labels** with an item picture (after Labels 1.10).
 It also keeps Sticky It's text labels on items. Until our own art exists, both old jars stay installed as unmodified
 art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tracked in [TODO](todo/TODO.md)
@@ -11,7 +11,8 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 | Part | Status |
 |---|---|
 | Investigation of Sticky It 1.2.1 and Labels 1.10 (both decompiled, every class read; licences read) | done 2026-10-20 (section 2) |
-| Creative Labels mod (`development/creativeLabels`, mod id `creative_labels`, GPLv3) | BUILT 2026-10-20 (`creativeLabels-1.0.0.jar`), installed in `mods/` 2026-10-21; [README](../development/creativeLabels/README.md) maps every part to its class |
+| Creative Labels mod (`development/creativeLabels`, mod id `creativelabels`, GPLv3) | BUILT 2026-10-20 (`creativeLabels-1.0.0.jar`), installed in `mods/` 2026-10-21; [README](../development/creativeLabels/README.md) maps every part to its class |
+| Mod id rename `creative_labels` -> `creativelabels` (namespace_move.md D-LABELS; swap list `data/creativelabels/swaps/owner_namespace.json`, configs `creative_labels-*.toml` renamed on first load) | BUILT 2026-11-10, not yet installed; test SQ-NSM-09 |
 | Phase 1: `face_paper` block, sticky notes placed by host shape, directional floors and ceilings, per-note dye / open / remove / erase, covered face | BUILT (3.2 to 3.5) |
 | Phase 2: note items (leather-style colour in the grid and when placed, 4 specials, recipes), note screen with Sticky It's screen art, text labels on items (inventory, anvil, off hand), eraser, tooltips | BUILT (3.6 to 3.9) |
 | Phase 3: labels on `face_paper` (Labels' interactions, real-colour icon, dyed icon, close-only drawing) | BUILT (3.10, 3.11) |
@@ -26,8 +27,8 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
   [BRIEF.md](../development/creativeLabels/BRIEF.md) (the build brief); the decompiled donor mods, `python3 tools/decompile_mod.py mods/<jar> <dir>`; Sticky It
   `client/model/ModelSticky.java`, `client/gui/StickyNoteTextScreen.java`; Labels `LabelEntity.java`,
   `LabelEntityRenderer.java`.
-- **Knobs:** `creative_labels-client.toml`: `pictureDistance` (16 blocks), `textDistance` (6 blocks).
-  `creative_labels-common.toml`: `noteLength` (32), `anvilCost` (1 level), WTHIT lines on/off.
+- **Knobs:** `creativelabels-client.toml`: `pictureDistance` (16 blocks), `textDistance` (6 blocks).
+  `creativelabels-common.toml`: `noteLength` (32), `anvilCost` (1 level), WTHIT lines on/off.
 - **How to measure:** place, dye, open, remove, erase and break notes on each host shape (3.3); punch, shoot and blow
   up papered blocks; JFR ([perf.md](perf.md)) on a wall of 200 labels and 1,000 notes.
 - **Open decisions:** none (4.2). Phases 1 to 4 are built; phase 5 is pinned.
@@ -143,12 +144,12 @@ it (3.14).
 
 ### 3.1 The mod
 
-- `development/creativeLabels`, mod id `creative_labels`, display name "Creative Labels", version 1.0.0, GPLv3 (full
+- `development/creativeLabels`, mod id `creativelabels`, display name "Creative Labels", version 1.0.0, GPLv3 (full
   text in the jar, `mods.toml` `license="GNU GPL3"`), built from the root Gradle build like More Mooblooms
   ([deploy.md](deploy.md) `IN_TREE_MODS`, `mod_sides.md` `both`).
 - Dependencies: Moonlight (required; already in the pack); `sticky_it` and `labels` (required while they are the art
   donors, 3.12); WTHIT (optional).
-- Ids: `creative_labels:sticky_note`, `creative_labels:label`, `creative_labels:eraser`, `creative_labels:face_paper`
+- Ids: `creativelabels:sticky_note`, `creativelabels:label`, `creativelabels:eraser`, `creativelabels:face_paper`
   (block, no item). Item ids into `item_dict.js`; recipes through `global.NCH`.
 
 ### 3.2 The `face_paper` block
@@ -209,8 +210,8 @@ boundary, or inset by at most 1/16 (chests, ender chests, barrels), plus the sha
 | Anything else (carpets, buttons, ladders, doors, trapdoors, plants, heads, odd modded shapes) | none |
 
 How it is decided: block class first (`StairBlock`, `SlabBlock`, `FenceBlock`, `WallBlock`, `IronBarsBlock`,
-`RodBlock`, `ChainBlock`), then tags for modded blocks that don't extend those (`creative_labels:paper/posts`,
-`creative_labels:paper/deny`), then the shape test for full or nearly full faces. Spot masks for stairs, slabs and
+`RodBlock`, `ChainBlock`), then tags for modded blocks that don't extend those (`creativelabels:paper/posts`,
+`creativelabels:paper/deny`), then the shape test for full or nearly full faces. Spot masks for stairs, slabs and
 rotated floors and ceilings are worked out in the face's frame after the face's rotation, so a stair's top-back corner
 lands on the right side whatever way the stair faces.
 
@@ -242,12 +243,12 @@ under 6 px nothing fits. Full faces, chests and barrels get the standard label e
 | Botany pot top | 10 px on the soil, 8 px in |
 | Flower pot side | 6 px |
 
-**Centred notes** (`Spots.centreNoteFit`, block tag `creative_labels:paper/centre_note`, user 2026-11-02): Supplementaries
+**Centred notes** (`Spots.centreNoteFit`, block tag `creativelabels:paper/centre_note`, user 2026-11-02): Supplementaries
 Jar and Sack, the four trash cans, Vintage Delight's Pickling Jar (`vintagedelight:fermenting_jar`) and
 `#botanypots:all_botany_pots`. Each side face takes one note, the centre spot moved to the middle of the host's
 visible side (the bounding box of the usable samples, same 1 px window), at that surface's depth. The note's 9
 sample points must lie on that surface. Shifts: jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
-Tops (owner 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creative_labels:paper/note_on_top` (the
+Tops (owner 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creativelabels:paper/note_on_top` (the
 jar and the Pickling Jar) take one note on top, centred on the lid by the same centre-note test (the Pickling Jar's lid
 is 2.5 px down, too deep for the shape test's 2 px). Every other centre-note top (sack neck, trash can rim, botany pot
 soil) and every bottom takes none; before, tops used the shape test, which let the jar lid and the sack neck carry spot C.
@@ -285,7 +286,7 @@ and keeps that rotation until the face is empty. Notes' curls and labels' pictur
 
 **Colour like leather** (user, 2026-10-20; replaces the 23 fixed variants):
 
-- One item, `creative_labels:sticky_note`, stack 64. It implements vanilla `DyeableLeatherItem`, so the colour is any
+- One item, `creativelabels:sticky_note`, stack 64. It implements vanilla `DyeableLeatherItem`, so the colour is any
   RGB value in `display.color`, mixed by vanilla's `dyeArmor` formula (average of the old colour and the new dyes,
   kept as bright as the brightest). A plain note has no colour tag and shows Sticky It's yellow paper.
 - **Crafting:** any number of identical notes + **one** dye → that many notes with the dye mixed in, text kept
@@ -304,7 +305,7 @@ and keeps that rotation until the face is empty. Notes' curls and labels' pictur
 
   Any number of plain (undyed, non-special) notes + one ingredient. A special note **stays special when broken**
   (left-clicked, or dropped because its host broke). Only a sneak + empty-hand pick-up is governed by
-  `keepSpecialColor` (`creative_labels-common.toml`, default on): off, the picked-up note comes back plain.
+  `keepSpecialColor` (`creativelabels-common.toml`, default on): off, the picked-up note comes back plain.
 - **Eraser:** on a written note, wipes the text; on a blank note, returns it to plain yellow (colour and special
   removed). In the grid (note + eraser, the eraser stays as the remainder) and on placed notes alike. Unbreakable,
   stack 1.
@@ -362,7 +363,7 @@ removing the last line removes the key, and the tag if it's then empty. A note m
   label every slot it crosses. The server allows one cursor labelling per player per 5 ticks; drag clicks arrive
   within a tick or two of each other, so only the first slot is labelled.
 - **Labelled items can't be used in crafting** (user, 2026-10-20): while `blockLabelledCrafting` is on
-  (`creative_labels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labelled item
+  (`creativelabels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labelled item
   in it gives no result. Erase the labels first. A mixin on the menus' shared result update
   (`CraftingMenu.slotChangedCraftingGrid`, used by both). Machines (furnaces, Create, IE) are not covered.
   FastWorkbench (in the pack) overwrites both grids' `slotsChanged` to queue its own
@@ -787,7 +788,7 @@ Labels:
 - [ ] **SN-44 break:** left-click the label → breaks like carpet, drops a blank label. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-45 floor label:** a label on a floor turns to your facing. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-46 distances:** pictures disappear past 16 blocks (paper stays), names past 6; change both in
-  `creative_labels-client.toml` → they follow.
+  `creativelabels-client.toml` → they follow.
 - [ ] **SN-47 WTHIT:** a note → "Sticky Note", colour, text; a label → the chest's name and icon plus "Label: Diamond".
 
 Donor jars and performance:
@@ -841,7 +842,7 @@ Donor jars and performance:
   thickness. Built 3.3a: label surface test, stairs and slabs keep the old label rule, doors and trapdoors none,
   centred notes by tag; `creativeLabels-1.0.1`, not installed. SN-56 to SN-60 added.
 - 2026-11-03 (plan_scratch_bugfix_1103 4.4, 4.5): jar and Pickling Jar tops take one centred note (tag
-  `creative_labels:paper/note_on_top`), other centre-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
+  `creativelabels:paper/note_on_top`), other centre-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
   (no drops when a host went to air) was not a probe fault (the probe already used flag 3) and the Labels code path
   drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a cancelled or failed fluid
   tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.

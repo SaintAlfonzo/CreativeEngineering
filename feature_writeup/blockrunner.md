@@ -1,6 +1,6 @@
 # BlockRunner: walk speed by surface
 
-Test prefix **BR-** · Last updated **2026-09-27** · Overall status **DEPLOYED (2026-09-27 16:45; live in every pack release since, 1.0.9 on 2026-10-19), in-game tests pending**
+Test prefix **BR-** · Last updated **2026-11-10** · Overall status **DEPLOYED (2026-09-27 16:45; live in every pack release since, 1.0.9 on 2026-10-19), in-game tests pending**
 
 ## 0. At a glance
 
@@ -17,6 +17,8 @@ the block you're looking at.
 | Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behaviour untested |
 | Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behaviour untested |
 | Framed / copycat blocks sink like their newest camo | patcherMod (`SinkingRender`) | In game since the 14:49 restart (13:12 jar); untested |
+| Sinking follows the block holding the feet (no pop between sunken blocks), even depth on honey/mud, items lie on top | Creative Compat (`SinkingRender`), tag `#creativecompat:sinking_hides_items` | Built 2026-11-10, not installed (game open); BR-53..56 |
+| Visceral Heap flesh: flesh spongy, porous flesh very sticky with honey's jump | KubeJS tags + `block_properties.js` | Built 2026-11-10 (Common rebuilt for the `porous_flesh` dict key); BR-57 |
 | Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking, wthit | patcherMod (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | Working in game: the mixin applies and the log has `[surface] 26 tier speeds applied` (15:21). The old `[block_sinking]`/`[camouflage_speed]` sections were dropped on first load; they held the defaults, so nothing was lost. The trimmed `blockrunner.json` was put in place at 16:45, so it needs a restart |
 | WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialised 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
 | Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | patcherMod mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
@@ -112,8 +114,8 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 | `leaves` | 0.78 | 43 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves |
 | `snow` | 0.75 | 5 | Snow | snow block, snow layers (3+ layers register), powder snow (standable in leather boots), coarse snow |
 | `sticky` | 0.65 | 8 | One sticky face (facing-aware, see 3.2) | sticky piston, vanilla/Create piston heads, Create sticky mechanical piston, CTM sticky launchers, SecurityCraft reinforced sticky piston + head |
-| `spongy` | 0.60 | 13 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block |
-| `very_sticky` | 0.45 | 3 | Whole slime/honey blocks | honey block, slime block, banana slug slime |
+| `spongy` | 0.60 | 13 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block, Visceral Heap flesh |
+| `very_sticky` | 0.45 | 3 | Whole slime/honey blocks | honey block, slime block, banana slug slime, Visceral Heap porous flesh (honey jump) |
 
 SecurityCraft's reinforced blocks and disguised mines sit in the same tier as the vanilla block they copy (3.1).
 
@@ -130,9 +132,9 @@ tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys alw
   davebuildingmod vanta/ultra colour blocks, Botania's disguising platforms (patcherMod can't read their camo).
 
 **Helper tags** (pack-owned, read by patcherMod):
-- `#creativeengineering:sinking` = soft + dust + spongy + very_sticky
-- `#creativeengineering:blockrunner_face_up` = sticky
-- `#creativeengineering:camo_speed` = camouflage
+- `#creativecompat:sinking` = soft + dust + spongy + very_sticky
+- `#creativecompat:blockrunner_face_up` = sticky
+- `#creativecompat:camo_speed` = camouflage
 
 ## 3. What the pack changes
 
@@ -188,7 +190,7 @@ would slow you too.
   another mixin's method from a higher priority) and `require = 0`: if a BlockRunner update renames
   the method, this silently stops instead of crashing the game.
 - **Rule:** [StickyFacing](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/StickyFacing.java)
-  applies to blocks in `#creativeengineering:blockrunner_face_up`. If the block has a `facing`
+  applies to blocks in `#creativecompat:blockrunner_face_up`. If the block has a `facing`
   property it must be `up`. If it has a piston `type` property it must be `sticky`, since vanilla and
   Create piston heads are shared by plain and sticky pistons. Otherwise BlockRunner's modifier is removed.
 - **Result:** a sticky piston facing up slows you (0.65); sideways or down it doesn't. An extended
@@ -204,7 +206,7 @@ With `[surface.camouflage] copyCamo = true`, a framed or copycat block walks lik
 disguised as: framed concrete runs like concrete, framed honey drags like honey.
 
 - **Speed:** [CamoSpeed](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java)
-  runs from the same hook as 3.2. On a `#creativeengineering:camo_speed` block it reads the camo and
+  runs from the same hook as 3.2. On a `#creativecompat:camo_speed` block it reads the camo and
   swaps BlockRunner's modifier for the one the camo block's own tier gives (same UUID, same formula).
   It keeps the flat tier for an empty frame, a frame disguised as another frame, or while flying.
 - **Reading the camo:** FramedBlocks via `FramedBlockEntity#getCamo()` (double blocks: `getCamo()` /
@@ -244,9 +246,22 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
 Soul sand's real sink is a lower collision box. That was rejected here (see 4), so the sink is visual
 only: collision, hitboxes, movement, mob AI and spawning are untouched.
 
-- **Where:** entities standing on the top face of a *full* block in `#creativeengineering:sinking`
+- **Where:** entities standing on the top face of a *full* block in `#creativecompat:sinking`
   (soft, dust, spongy, very_sticky). Slabs, sensors, carpets on top and layer blocks don't sink.
-  Honey (15/16) and mud (14/16) already sink for real.
+- **Even depth (2026-11-10):** a sinking block that already sinks for real by up to the visual depth only adds the
+  rest: honey (15/16) adds 1 px, mud (14/16) adds nothing at the default 2 px. Every sunken block looks equally deep,
+  so slime to honey or wool to mud keeps the same eye height. (Before, honey showed only its own 1 px.)
+- **Which block decides (2026-11-10):** the block under the centre, when it is the one holding the feet. When it
+  isn't (the centre is already over a lower block, a honey/mud block the feet haven't dropped onto yet, or a gap),
+  the blocks under the hitbox corners that hold the feet decide. The sink only changes once the next block really
+  carries the entity. Before, crossing from a full sunken block onto honey, mud, a path or an edge popped the camera
+  up 2 px for the moment the centre was past the edge, then dropped it: the "bump" at sunken-block edges. Collision
+  was never changed; stepping up onto a block from a real-sink block (honey, mud, soul sand) is vanilla step-up and
+  stays, but the camera no longer moves for it.
+- **Dropped items (2026-11-10):** by default an item lies on top of a sinking block at its real height, so
+  ItemPhysic's flat items stay visible on the texture. Blocks in `#creativecompat:sinking_hides_items` (set in
+  `blocktags.js`, empty for now) swallow items: the item sinks like any other entity. For a framed block the
+  frame or its camo can be in the tag.
 - **Blending:** [SinkingRender](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/SinkingRender.java)
   works the depth out at the entity's previous-tick and current-tick positions and blends by partial
   tick, exactly like a real position change. Stepping on, off, landing and jumping all ease over one
@@ -279,6 +294,10 @@ resets them with `BlockEvents.modification` (startup, so it needs a game restart
   tiered, but it would freeze anyone walking on it if the block ever left the tier.
   **Jump factor 1.25 is kept** (slightly higher jumps on D&D asphalt); reset it the same way if unwanted.
 - Item/block ids come from `global.item` (`white_asphalt_block` … `black_asphalt_block`, D&D section of item_dict.js).
+- **Visceral Heap porous flesh** (2026-11-10): very sticky tier, and jump factor 0.5 (honey's), so it grips like
+  honey instead of feeling like slime. Plain flesh is spongy. BOP's own `FleshBlock` step-on also keeps 95 % of
+  horizontal velocity per tick on both; that stays and costs about 6 % on top of the tier. Porous flesh also has
+  honey's wall slide (3.9). Ids `global.blocks.flesh` / `porous_flesh`; both only exist with Biomes O' Plenty.
 
 ### 3.6 Config files and backups
 
@@ -380,6 +399,41 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
   `[surface.speed]` key to edit.
 - **Not modelled:** a surface's friction (slime's 0.8 friction makes it slower than its tier; ice is
   about even), Soul Speed, and the vertical part of inside slowdowns.
+
+### 3.9 Wall slide on non-honey blocks (Creative Compat, 2026-11-10)
+
+Vanilla only slides you down a Honey Block's side because honey's collision is inset 1/16, so pressing against it
+counts as being inside it. A full block never does that, so
+[WallSlide](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/WallSlide.java)
+runs from `WallSlideMixin` at the end of `Entity#checkInsideBlocks`, the same point honey's slide runs, and checks
+the blocks touching the entity's sides.
+
+- **Blocks:** `#creativecompat:wall_slide` in `blocktags.js` (reloadable). Now: porous flesh, Alex's Mobs Banana Slug Slime
+  Block (added 2026-11-10 from the survey; the slide replaces its own x0.8 drag while you touch its side). Honey and Fruits Delight
+  jelly blocks (they extend HoneyBlock) already slide and are skipped.
+- **Numbers are honey's:** falling faster than 0.08 b/tick, off the ground, feet below the block's top → throttled to
+  0.05 b/tick (horizontal cut too above 0.13), fall distance reset (no fall damage). Honey's slide sound, the wall's
+  own block particles, each 1 tick in 5, sent from the server.
+- Works on non-full blocks too (it uses the block's collision box), so any block can join by tag.
+- No advancement trigger (the pack drops advancements).
+
+**Proposed for the tag (not added, owner to pick, 2026-11-10 survey of every sticky block in the pack):**
+
+| Block | Today | Proposal |
+|---|---|---|
+| Honey Block | vanilla slide | already slides |
+| Fruits Delight jelly blocks (22) | extend HoneyBlock | already slide |
+| Alex's Mobs Banana Slug Slime Block | honey-like: speed 0.4, jump 0.5, inset box, but only damped velocity x0.8 inside it, fall damage kept | **added 2026-11-10** |
+| Fruits Delight jello blocks (22) | extend SlimeBlock: bounce | no: slime family, bounce is the feature |
+| Slime Block, FramedBlocks bouncy cube | bounce | no |
+| Architects' Palette rotten flesh block, entrails | spongy tier | maybe: same goo as Heap flesh; would match porous flesh |
+| Creative Engineering prepared flesh block, culture blocks | spongy tier | maybe, with the line above (one flesh family) |
+| Raw dough blocks (Create Compressed dough, ginger, cookie, sweet potato, oat, cucumber, sourdough) | spongy tier | maybe: raw dough is tacky; low priority |
+| Visceral Heap flesh (plain) | spongy tier | no: you said spongy, not sticky |
+| Mud, muddy mangrove roots, clay, wet sponge | spongy tier | no |
+| Buzzier Bees crystallized honey, Alex's Mobs crystalized mucus | hard crystal | no |
+| Sticky pistons, sticky launchers (one sticky face) | sticky tier, face-up only | no: would need a facing check like 3.2; niche |
+| Miner's Delight sticky basket, Fungi Delight inky goo veil | furniture / thin veil | no |
 
 ## 4. Limits and decisions
 
@@ -505,8 +559,12 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [x] **BR-22 Camera drop:** set `[surface.sinking] depthPixels = 8` for visibility. In first person, walk from stone onto wool and back. → The view drops half a block, and rises back smoothly over a tick.
 - [x] **BR-23 Third person:** F5 on sand. → The body sits in the sand, the shadow stays on the sand's top, and F3+B's hitbox box stays on top.
 - [x] **BR-24 Others sink:** a pig on wool, a dropped item on sand and a ridden horse on sand all sit lower. The rider sinks with the horse.
-- [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, a honey block (keeps its own real sink), mid-jump over sand → no extra sink.
+- [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, mid-jump over sand → no extra sink. (Honey changed 2026-11-10, see BR-54.)
 - [ ] **BR-26 Off switch:** `depthPixels = 0` → nothing sinks. Set it back to `2` afterwards.
+- [ ] **BR-53 No bump between sunken blocks (2026-11-10):** default `depthPixels = 2`, first person. Walk slowly across slime → honey → slime, wool → mud → wool, and wool → dirt path. → The view never pops up at the seam; it only moves once you are on the next block (none at all slime/honey and wool/mud, a 1 px drop onto the path).
+- [ ] **BR-54 Even depth:** F5 beside a pig on wool and one on a honey block. → Both sit equally deep (honey 1 px real + 1 px drawn).
+- [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. → Still sunk; it rises only as you fall.
+- [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. → Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` → the item on sand sinks in; wool unchanged. Remove the line afterwards.
 
 **Camo sinking (3.4, needs the rebuilt patcherMod jar)** (`[surface.sinking] depthPixels = 8` makes these easy to see)
 - [ ] **BR-30 Frames sink like their camo:** a framed cube camo'd with wool → you sink on it (camera and model). Re-camo with stone → no sink. An empty frame → no sink.
@@ -543,6 +601,9 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - [ ] **BR-38 SecurityCraft copies:** reinforced stone and a stone mine → **+0.005** (same as stone); reinforced concrete → **+0.04**; a reinforced sticky piston facing up → **−0.035**, sideways → "no modifier".
 
 - [ ] **BR-52 1.0.4 mod blocks:** after a restart, a Fruits Delight crate → wood tier; a Farmer's Respite tea leaves sack and a Corn Kernel Bag → soft; a placed Hamimelon and a Coffee Cake → confectionery; an apple jelly block and an apple jello block → very sticky (same as honey / slime). The tier overlap log line still says 0 overlaps.
+
+- [ ] **BR-57 Visceral Heap flesh (2026-11-10):** after a restart, in the Heap (or placed): `M` on flesh → **−0.04** (spongy); on porous flesh → **−0.055** (very sticky). Jump on porous flesh → about half a normal jump, no bounce when landing from a height. Both sink 2 px.
+- [ ] **BR-58 Wall slide (3.9):** survival, build a 10-high porous flesh pillar beside a honey pillar. Jump off the top pressed against each side. → Both slide down at the same slow speed with the slide sound and particles (flesh-coloured on flesh), no fall damage at the bottom. Standing on top, or jumping next to it without touching → no slide. A pig pushed off beside it slides too. Plain flesh → no slide. A Banana Slug Slime Block pillar slides the same way, with yellow particles, no fall damage.
 
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. → Same values, and no rubber-banding when walking across camo'd frames.
@@ -609,3 +670,10 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - 2026-11-02: owner decision on the r1102b SQ-VTD7-02 fail: Vintage oat bags and bales, Farmer's Delight straw/rice bales, hay
   bales and the Salt Blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block) stay in `soft` (0.88x,
   `blocktags.js` lines 327 and 341-346); the changelog bullet now says 0.88x. SQ-VTD7-02 rewritten to expect `soft`.
+- 2026-11-10: sinking reworked in Creative Compat `SinkingRender` (3.4): the block holding the feet decides (hitbox
+  corners when the centre is past an edge), so crossing between sunken blocks no longer pops the camera; sinking blocks
+  with a real sink of their own (honey, mud) add only the rest of the depth; dropped items lie on top unless the block is
+  in the new `#creativecompat:sinking_hides_items` (empty). Visceral Heap flesh tiered: flesh spongy, porous flesh very
+  sticky with honey's jump factor (3.5). BR-25 edited, BR-53..57 added. Built, not installed (game open).
+- 2026-11-10: wall slide for non-honey blocks (3.9, `WallSlide` + `WallSlideMixin`, tag `#creativecompat:wall_slide`),
+  porous flesh in it; sticky-block survey with proposals in 3.9. BR-58 added. Built, not installed.

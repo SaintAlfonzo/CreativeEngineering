@@ -79,7 +79,7 @@
         c.setItem(26, Item.of('minecraft:bowl', 5))
         let tag = be.saveWithFullMetadata()
         let caps = tag.getCompound('ForgeCaps')
-        check('KC-03a saved', caps.contains('creativeengineering:corner_storage'), String(caps.getAllKeys()))
+        check('KC-03a saved', caps.contains('creativedelight:corner_storage'), String(caps.getAllKeys()))
         let copy = $KCBlockEntity.loadStatic(h, level.getBlockState(h), tag)
         let cc = copy.getContainer()
         check('KC-03b loaded back', idOf(cc.getItem(0)) == 'minecraft:carrot' && cc.getItem(0).getCount() == 12

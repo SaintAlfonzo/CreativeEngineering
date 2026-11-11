@@ -14,7 +14,7 @@ ServerEvents.recipes(e => {
 		var F = global.CD.food(e)
 
 		//######################### Bread ####################
-		// The roast chicken stuffing took only vanilla bread; any bread works (creativeengineering/bread_tags.js)
+		// The roast chicken stuffing took only vanilla bread; any bread works (creativedelight/bread_tags.js)
 		R.replaceInput({ id: 'farmersdelight:roast_chicken_block' }, i.minecraft_bread, i.t_bread, e)
 
 		//######################### Bread from dough #########################
@@ -266,7 +266,7 @@ ServerEvents.recipes(e => {
 		F.assemble(i.bowl, [i.apple, i.t_fruit_salad_slice, i.t_fruit_salad_slice, i.t_berries, i.t_berries, i.pumpkin_slice],
 			Item.of(i.fruit_salad, 2))
 
-		// Burgers: creativeengineering/recipes.js (one table over several mods)
+		// Burgers: creativedelight/recipes.js (one table over several mods)
 
 		// Assembly meals (TODO dishes/meals #3)
 		// Shepherd's pie: a cheese wedge in place of milk

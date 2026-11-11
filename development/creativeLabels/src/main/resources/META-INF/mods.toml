@@ -9,7 +9,7 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
-itemIcon="creative_labels:sticky_note"
+itemIcon="creativelabels:sticky_note"
 description='''${mod_description}'''
 
 [[dependencies.${mod_id}]]

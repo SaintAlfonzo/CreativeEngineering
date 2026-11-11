@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Crop growing seasons by crop type (owner spec, feature_writeup/crops.md 2.12.1). Replaces Serene Seasons'
  * "in season / out of season at 1/6 speed" rule (its fertility.toml {@code seasonal_crops} is off).
  *
- * <p>Each crop block is in at most one block tag {@code creativeengineering:crop_seasons/<type>} (filled from
+ * <p>Each crop block is in at most one block tag {@code creativecalendar:crop_seasons/<type>} (filled from
  * kubejs/generation_scripts/worldgen/crop_seasons.json by server_scripts/tags/cropseasontags.js). Where it stands,
  * each type is {@link Fertility#FERTILE} (growth +25 %), {@link Fertility#NEUTRAL} or {@link Fertility#OFF}
  * (growth -25 %), read from the biome's own calendar after the pack's season types ({@link SeasonTypes}):

@@ -1,0 +1,23 @@
+# r1109wo boot A4: saplings [oak, nope:bad] x3, leaves [totem] x3, fruit lists empty, chance 100, threshold 0.
+pace 0.5
+## SQ-WO-32 | bad id skipped once, empty lists out of the draw, oversize count split
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> time set noon
+> setblock 620 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 620 -60 300 G 100
+repeat 10
+> pbot use G 620 -60 300 up
+> zwo stacks 620 -60 300 3
+> zwo drops 620 -60 300 3
+> zwo skip 60
+end
+sleep 1
+shell test "$(grep -c 'Wise Oak gift list' logs/latest.log)" = 1 && echo "unknown item warned once"
+bootexpect Wise Oak gift list: unknown item nope:bad
+count \[zwo\] drops none == 0
+reject \[zwo\] drops .*(sapling|totem).*,
+look only oak x3 and totem x3; totem drops are 3 stacks of 1

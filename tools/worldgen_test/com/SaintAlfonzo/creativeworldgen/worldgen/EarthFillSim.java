@@ -84,7 +84,7 @@ public class EarthFillSim {
 		net.minecraft.SharedConstants.tryDetectVersion();
 		net.minecraft.server.Bootstrap.bootStrap();
 
-		TagKey<Block> earthTag = BlockTags.create(new ResourceLocation("creativeengineering", "earth_fill/earth"));
+		TagKey<Block> earthTag = BlockTags.create(new ResourceLocation("creativeworldgen", "earth_fill/earth"));
 		Map<TagKey<Block>, List<Holder<Block>>> tags = new HashMap<>();
 		List<Holder<Block>> earthBlocks = new ArrayList<>();
 		for (Block b : new Block[]{Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.MYCELIUM, Blocks.ROOTED_DIRT, Blocks.MOSS_BLOCK, Blocks.MUD,

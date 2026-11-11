@@ -41,7 +41,7 @@ look is drawn from that value, so storage, upgrades, dyeing, tier upgrades and t
 
 ## 3. What the pack changes
 
-1. **Smithing.** Base: any Sophisticated Backpack. Addition: any block item in the tag `creativeengineering:backpack_skins`.
+1. **Smithing.** Base: any Sophisticated Backpack. Addition: any block item in the tag `creativeequipment:backpack_skins`.
    Result: the same backpack, all data kept, with the skin value set. Custom recipe class (vanilla smithing drops the
    base's data); SB's netherite upgrade recipe is the pattern. Emitted through a new NCH method; the tag through
    `global.tags`. Smithing again with another skin block replaces the skin. Items that are not blocks are rejected.

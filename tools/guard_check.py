@@ -45,7 +45,7 @@ JARS = {
 }
 OWN_NAMESPACES = {'minecraft', 'forge', 'c', 'kubejs', 'creativeengineering', 'creativecommon', 'creativecompat',
                   'creativecalendar', 'creativedelight', 'creativebrewing', 'creativeequipment', 'creativemagic',
-                  'creativeworldgen', 'creativedevtools', 'creative_labels'}
+                  'creativeworldgen', 'creativedevtools', 'creativelabels'}
 DICTS = {'item', 'fluid', 'blocks', 'effect', 'food', 'tool', 'misc'}
 HELPERS = {'NCH', 'tags', 'tooltips'}
 # `// G5` at the end of a row, or `// G5 begin` ... `// G5 end` around a table: the rows only ever reach the NCH, tags or

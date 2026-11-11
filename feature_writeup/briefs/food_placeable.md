@@ -217,7 +217,7 @@ breaking it gives the drink back.
    ([java_guard.js](../../kubejs/server_scripts/_lib/java_guard.js)). Log `[placed_drinks] linked N`.
    `putIfAbsent` makes repeat loads harmless.
 4. **Tag.** Add every listed drink to `#displaydelight:displayable` with `global.tags.addTag` in
-   Creative Delight's [placeable_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/placeable_tags.js)
+   Creative Delight's [placeable_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js)
    (the pack's placeable tags moved there). Add the key
    `i.t_dd_displayable = '#displaydelight:displayable'` to item_dict (tag-key style, next to `i.t_bnc_placeable_on_coaster`, line 1865).
 5. **Tool follow-ups.**
@@ -280,7 +280,7 @@ Every dough has a block; list the doughs that have none.
   (`material('sand')`, slime sounds, 0.5 / 10, hand-made models under `kubejs/assets/creativeengineering/`, textures
   `textures/block/dough_block/<id>.png` from `textureswapper/baking/dough/out/`); keys `i.gingerdough_block` ...
   `i.sourdough_block` (item_dict.js 1853-1858); recipes 9 <-> 1 in
-  [creativeengineering/recipes.js:18](../../kubejs/data/creativedelight/kubejs/creativeengineering/recipes.js#L18).
+  [creativedelight/recipes.js:18](../../kubejs/data/creativedelight/kubejs/creativedelight/recipes.js#L18).
   Create's dough (`create:dough`, `#forge:dough/wheat`) keeps Create Compressed's `create_compressed:dough_block`
   (`i.dough_block`, 202).
 - Every dough item in the pack (`kubejs/exported/items_by_mod`, 2026-10-30): `create:dough`,
@@ -298,7 +298,7 @@ Every dough has a block; list the doughs that have none.
    `oat_dough_block`'s.
 2. Key `i.nut_dough_block = 'creativeengineering:nut_dough_block'` next to line 1858; add
    `[i.nut_dough_block, 'Nut Dough Block']` to the `doughBlocks` list in baking_ingredients.js.
-3. Recipes in creativeengineering/recipes.js "Dough blocks" (the same 9 <-> 1 helper calls the six use), storage and
+3. Recipes in creativedelight/recipes.js "Dough blocks" (the same 9 <-> 1 helper calls the six use), storage and
    shovel tags as the six (`global.tags`).
 4. Changelog bullet under the dough blocks family; oven.md 2.6 list.
 

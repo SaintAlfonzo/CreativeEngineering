@@ -1,7 +1,7 @@
 {
-  "creative_labels:face_paper": {
+  "creativelabels:face_paper": {
     "entrypoints": {
-      "client": "com.SaintAlfonzo.creative_labels.compat.wthit.FacePaperWthit"
+      "client": "com.SaintAlfonzo.creativelabels.compat.wthit.FacePaperWthit"
     },
     "side": "client"
   }

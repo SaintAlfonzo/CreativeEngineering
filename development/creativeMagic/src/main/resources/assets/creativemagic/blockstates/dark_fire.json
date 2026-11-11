@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativemagic:block/dark_fire_0"
+      }
+    },
+    {
+      "apply": {
+        "model": "creativemagic:block/dark_fire_1"
+      }
+    }
+  ]
+}

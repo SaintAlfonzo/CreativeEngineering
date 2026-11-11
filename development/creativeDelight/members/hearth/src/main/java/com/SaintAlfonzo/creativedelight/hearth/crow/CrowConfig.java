@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedelight.hearth.crow;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-/** Section [crow] of hearthandharvest-common.toml (plan_hearth_crow_salt.md section 4, hearth_and_harvest.md 5.8 N24-6 to N24-8). */
+/** Section [crow] of hearthandharvest-common.toml (plan_hearth_crow_salt.md section 4, plan_hearth_crow_swap.md 2.2 and 5). */
 public final class CrowConfig {
     public static ForgeConfigSpec.BooleanValue FLEEING;
     public static ForgeConfigSpec.BooleanValue FLOCK_ALARM;
@@ -15,12 +15,20 @@ public final class CrowConfig {
     public static ForgeConfigSpec.BooleanValue STASH_IN_NESTS;
     public static ForgeConfigSpec.BooleanValue DROP_ON_HURT;
     public static ForgeConfigSpec.BooleanValue GENERATE_NESTS;
-    public static ForgeConfigSpec.BooleanValue SPAWN_NEAR_NESTS;
-    public static ForgeConfigSpec.BooleanValue DENY_SPAWNS_ELSEWHERE;
+    public static ForgeConfigSpec.BooleanValue FETCH_ITEMS;
+    public static ForgeConfigSpec.BooleanValue FETCH_THROWN_ITEMS;
+    public static ForgeConfigSpec.BooleanValue LEAVE_SHOULDER_TO_FETCH;
+    public static ForgeConfigSpec.BooleanValue PLAYER_NESTS_SPAWN_CROWS;
+    public static ForgeConfigSpec.BooleanValue VILLAGE_ROOF_NESTS;
+    public static ForgeConfigSpec.DoubleValue VILLAGE_ROOF_NEST_CHANCE;
+    public static ForgeConfigSpec.IntValue NEST_FLOCK_MIN;
+    public static ForgeConfigSpec.IntValue NEST_FLOCK_MAX;
+    public static ForgeConfigSpec.IntValue NEST_CROW_CAP;
+    public static ForgeConfigSpec.IntValue NEST_CROW_RANGE;
+    public static ForgeConfigSpec.IntValue NEST_RESPAWN_MINUTES;
+    public static ForgeConfigSpec.IntValue NEST_PLAYER_RANGE;
     public static ForgeConfigSpec.IntValue SCARE_RADIUS;
     public static ForgeConfigSpec.IntValue CARRY_TICKS;
-    public static ForgeConfigSpec.IntValue SPAWN_RADIUS;
-    public static ForgeConfigSpec.IntValue CROP_REQUIREMENT;
     public static ForgeConfigSpec.DoubleValue STEAL_CHANCE;
 
     private CrowConfig() {
@@ -37,15 +45,23 @@ public final class CrowConfig {
         EAT_CROPS = b.comment("Wild crows peck crops back to age 0. Also needs mobGriefing.").define("eatCrops", true);
         STEAL_SHINY_ITEMS = b.comment("Wild crows take one shiny item from a player's hotbar.").define("stealShinyItems", true);
         STEAL_CHANCE = b.comment("Chance per second that a wild crow within 10 blocks starts a theft.").defineInRange("stealChance", 0.1D, 0.0D, 1.0D);
-        STASH_IN_NESTS = b.comment("A crow carrying loot leaves it in a nest within 16 blocks. For the crow eval.").define("stashInNests", true);
+        STASH_IN_NESTS = b.comment("A crow carrying loot leaves it in a nest within 16 blocks.").define("stashInNests", true);
+        FETCH_ITEMS = b.comment("Tame crows pick up items near their owner and bring them over.").define("fetchItems", true);
+        FETCH_THROWN_ITEMS = b.comment("Tame crows also fetch items their owner threw away.").define("fetchThrownItems", true);
+        LEAVE_SHOULDER_TO_FETCH = b.comment("Tame crows hop off their owner's shoulder to fetch an item.").define("leaveShoulderToFetch", true);
         DROP_ON_HURT = b.comment("A hit makes a crow drop its loot. Off, it keeps the loot until it dies or the carry time ends.").define("dropOnHurt", true);
         CARRY_TICKS = b.comment("Ticks a crow carries loot before dropping it.").defineInRange("carryTicks", 1200, 20, 72000);
         SCARE_RADIUS = b.comment("Blocks at which players, villagers and repelling blocks scare wild crows. 0 stops them being scared.").defineInRange("scareRadius", 6, 0, 32);
-        GENERATE_NESTS = b.comment("Ground nests generate in new chunks. For the crow eval.").define("generateNests", true);
-        SPAWN_NEAR_NESTS = b.comment("Crows may spawn near world-generated nests.").define("spawnNearNests", true);
-        SPAWN_RADIUS = b.comment("Radius checked for nests and crops when a crow spawns. 0 skips the check.").defineInRange("spawnRadius", 8, 0, 16);
-        CROP_REQUIREMENT = b.comment("Crops needed within the radius for a crow to spawn near them. 0 skips the crop check.").defineInRange("cropRequirement", 8, 0, 256);
-        DENY_SPAWNS_ELSEWHERE = b.comment("Crows spawn only near nests or crops (the upstream rule). Off keeps every other spawn.").define("denySpawnsElsewhere", false);
+        GENERATE_NESTS = b.comment("Nests generate on tree tops in temperate forests in new chunks.").define("generateNests", true);
+        VILLAGE_ROOF_NESTS = b.comment("Nests generate on village house roofs in new chunks.").define("villageRoofNests", true);
+        VILLAGE_ROOF_NEST_CHANCE = b.comment("Chance per village house of a roof nest.").defineInRange("villageRoofNestChance", 0.25D, 0.0D, 1.0D);
+        NEST_FLOCK_MIN = b.comment("Fewest crows a nest generates with. Crows have no other natural spawn.").defineInRange("nestFlockMin", 2, 0, 8);
+        NEST_FLOCK_MAX = b.comment("Most crows a nest generates with.").defineInRange("nestFlockMax", 3, 0, 8);
+        NEST_CROW_CAP = b.comment("A generated nest stops refilling once this many crows are within nestCrowRange.").defineInRange("nestCrowCap", 3, 0, 16);
+        NEST_CROW_RANGE = b.comment("Blocks around a nest in which crows count towards nestCrowCap.").defineInRange("nestCrowRange", 24, 4, 64);
+        NEST_RESPAWN_MINUTES = b.comment("Minutes of game time between two crows from the same nest.").defineInRange("nestRespawnMinutes", 5, 1, 120);
+        NEST_PLAYER_RANGE = b.comment("A nest refills only with a player within this many blocks.").defineInRange("nestPlayerRange", 48, 8, 128);
+        PLAYER_NESTS_SPAWN_CROWS = b.comment("Player-placed nests also make crows. Off stops crow farms.").define("playerNestsSpawnCrows", false);
         b.pop();
     }
 }

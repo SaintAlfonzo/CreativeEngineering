@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 /**
  * Seabed clearance (worldgen/SeabedClearance): the generated start of ChunkGenerator#tryGenerateStructure (m_223104_,
  * slot 15, as in ChunkGeneratorStructureBiomeRulesMixin and ChunkGeneratorEarthFillMixin) of a structure tagged
- * creativeengineering:seabed_clearance becomes INVALID_START when its box reaches a water-covered floor.
+ * creativeworldgen:seabed_clearance becomes INVALID_START when its box reaches a water-covered floor.
  */
 @Mixin(value = ChunkGenerator.class, remap = false)
 public class ChunkGeneratorSeabedClearanceMixin {

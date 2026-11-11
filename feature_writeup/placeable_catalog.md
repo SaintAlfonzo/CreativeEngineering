@@ -8,11 +8,11 @@ Source: **/dumpplaceable (live)**
 
 | Tag | Tooltip line | Items |
 |---|---|---|
-| `#creativeengineering:placeable` | "Placeable" | 281 |
-| `#creativeengineering:placeable/sneak` | "(while sneaking)" | 198 |
-| `#creativeengineering:placeable_on_plate` | "Placeable on plate" | 55 |
-| `#creativeengineering:placeable_on_small_plate` | "Placeable on small plate" | 25 |
-| `#creativeengineering:placeable_on_coaster` | "Placeable on a coaster" | 339 |
+| `#creativedelight:placeable` | "Placeable" | 281 |
+| `#creativedelight:placeable/sneak` | "(while sneaking)" | 198 |
+| `#creativedelight:placeable_on_plate` | "Placeable on plate" | 55 |
+| `#creativedelight:placeable_on_small_plate` | "Placeable on small plate" | 25 |
+| `#creativedelight:placeable_on_coaster` | "Placeable on a coaster" | 339 |
 
 438 items in total across 31 mods.
 

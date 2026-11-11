@@ -65,7 +65,7 @@
 
         // tags
         check('J1', 'apple jarable', stack('minecraft:apple').hasTag('supplementaries:cookies'), 'apple in #supplementaries:cookies')
-        check('J1', 'lemon cookie family', stack('fruitsdelight:lemon_cookie').hasTag('creativeengineering:jar_family/cookies'), 'in jar_family/cookies')
+        check('J1', 'lemon cookie family', stack('fruitsdelight:lemon_cookie').hasTag('creativedelight:jar_family/cookies'), 'in jar_family/cookies')
         check('J1', 'toast solo', stack('moredelight:toast').hasTag('supplementaries:cookies'), 'toast still jarable')
 
         // shape

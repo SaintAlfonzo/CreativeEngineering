@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativedelight.compat;
 
+import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
@@ -26,7 +27,7 @@ import org.slf4j.Logger;
 
 /**
  * Corn Delight 1.2.11 behaviour on the installed 1.0.3 (feature_writeup/corn_delight.md 2.3, 2.6). The items are KubeJS
- * ({@code creativeengineering:cob_pipe}, Creative Delight startup corn_delight/corn_items.js); this is the code they
+ * ({@code creativedelight:cob_pipe}, Creative Delight startup corn_delight/corn_items.js); this is the code they
  * need.
  * <ul>
  * <li>Cob Pipe: goes in the vanilla head slot ({@code mixin.MobCobPipeSlotMixin}). A right click puts it in the pack's
@@ -42,7 +43,7 @@ import org.slf4j.Logger;
 public final class CornDelightCompat {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final ResourceLocation COB_PIPE = new ResourceLocation("creativeengineering", "cob_pipe");
+    public static final ResourceLocation COB_PIPE = new ResourceLocation(CreativeDelight.MOD_ID, "cob_pipe");
     private static final ResourceLocation CORN = new ResourceLocation("corn_delight", "corn");
 
     /** The registered pipe, looked up once (Mob.getEquipmentSlotForItem asks for every stack). */

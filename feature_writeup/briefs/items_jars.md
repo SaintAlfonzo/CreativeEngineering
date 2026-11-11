@@ -22,7 +22,7 @@ Related rows: `cooking/kitchen #18` (lava bottles, folded into row 3), `dishes/i
 
 - **Jar machinery** (all patcherMod, see mixed_jars.md 3 and 5): `mixin/SupplementariesJarTileMixin` (one slot per
   capacity point, one item per slot), `compat/JarMixing` (`canMix`, families = tags `#creativeengineering:jar_family/<name>`
-  from [jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js), keys `i.t_jar_family_*`;
+  from [jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js), keys `i.t_jar_family_*`;
   moved there from `server_scripts/tags/jartags.js` 2026-10-25, Creative Delight data tree, runs only with `global.CD`), the two renderer mixins
   (`SupplementariesJarRendererMixin`, `SupplementariesJarItemRendererMixin`), `SupplementariesJarItemTooltipMixin`,
   `compat/WthitHolderContents`. What a jar takes at all is `#supplementaries:cookies` (`i.t_jar_cookies`).
@@ -113,7 +113,7 @@ seashells (Hostile Delight cookies and lava bottles: done, below), plus the bott
 
 ### Now
 - **Done already (checked 2026-10-31):** the seven Hostile Delight cookies are in the `cookies` family
-  ([jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js) 21-23, baking audit
+  ([jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js) 21-23, baking audit
   2026-10-27); lava bottles go in jars since the Moonlight `lava.json` override (`cooking/kitchen #18`, Testing, shipped
   1.1.03, 1.1.03 changelog Fixed bullet). Drop both from this row.
 - Left out on purpose today (mixed_jars.md 4): non-small fruit (lemons, oranges, mangoes: "a fruit bowl"), jams (they
@@ -210,7 +210,7 @@ makes them look like one.
 
 ### Now
 - They are not a family. `moredelight:toast` is in `#supplementaries:cookies` through its own mod's tag;
-  `i.hyper_experience_bottle` is added at [jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativeengineering/jar_tags.js)
+  `i.hyper_experience_bottle` is added at [jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js)
   78 (header comment line 6). Jarable, no `jar_family/*` tag, so each fills a jar alone (mixed_jars.md 2).
 - The JEI Jar Storage tab builds a last row from every `#supplementaries:cookies` item that is in no family
   (`cookie_rows`, [tab_drops.py](../../tools/jei_world/tab_drops.py) 259-275, notes "Up to {cap}, one per layer." and

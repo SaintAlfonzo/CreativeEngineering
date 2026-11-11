@@ -73,7 +73,7 @@ import java.util.WeakHashMap;
  */
 public final class StructureSpawnBoxes {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/spawn-boxes");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/spawn-boxes");
 	static final String CONFIG = BiomeLayoutTuner.WORLDGEN_DIR + "spawn_boxes.json";
 	static final String BOX_MOB = "creativeengineering:box_spawn";
 

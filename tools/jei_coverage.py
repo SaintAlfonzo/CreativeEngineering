@@ -57,10 +57,10 @@ STAND_INS = {
     'net.p3pp3rf1y.sophisticatedbackpacks.crafting.BackpackDyeRecipe': 'Sophisticated Backpacks DyeRecipesMaker',
     'net.p3pp3rf1y.sophisticatedbackpacks.crafting.BackpackUpgradeRecipe': 'Sophisticated Backpacks SBPPlugin (REGISTERED_RECIPES)',
     'net.p3pp3rf1y.sophisticatedcore.crafting.UpgradeNextTierRecipe': 'Sophisticated Core CorePlugin (REGISTERED_RECIPES)',
-    'com.SaintAlfonzo.creative_labels.crafting.NoteCopyRecipe': 'Creative Labels CreativeLabelsJei',
-    'com.SaintAlfonzo.creative_labels.crafting.NoteDyeRecipe': 'Creative Labels CreativeLabelsJei',
-    'com.SaintAlfonzo.creative_labels.crafting.NoteEraseRecipe': 'Creative Labels CreativeLabelsJei',
-    'com.SaintAlfonzo.creative_labels.crafting.NoteSpecialRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creativelabels.crafting.NoteCopyRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creativelabels.crafting.NoteDyeRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creativelabels.crafting.NoteEraseRecipe': 'Creative Labels CreativeLabelsJei',
+    'com.SaintAlfonzo.creativelabels.crafting.NoteSpecialRecipe': 'Creative Labels CreativeLabelsJei',
     'dan200.computercraft.shared.turtle.recipes.TurtleUpgradeRecipe': 'CC: Tweaked RecipeResolver (recipe manager plugin)',
     'dan200.computercraft.shared.pocket.recipes.PocketComputerUpgradeRecipe': 'CC: Tweaked RecipeResolver (recipe manager plugin)',
     'appeng.recipes.game.FacadeRecipe': 'AE2 FacadeRegistryPlugin (recipe manager plugin)',
@@ -139,7 +139,7 @@ CYCLING_PAGES = {
 }
 
 UNCOVERED = {
-    'creativeengineering:elytra_duplication': ('pack', 'Elytra + Dragon Scale: crafts a fresh elytra and keeps the original.', 'stand-in'),
+    'creativeequipment:elytra_duplication': ('pack', 'Elytra + Dragon Scale: crafts a fresh elytra and keeps the original.', 'stand-in'),
     'alexsmobs:mimicream_repair': ('mod', 'Damaged item + Mimicream: repairs it (AMConfig mimicreamRepair, with a blacklist).', 'stand-in'),
     'armor_trims:crafting_special_untrimming': ('mod', 'Trimmed armor alone: removes the trim.', 'info'),
     'bedspreads:add_pattern': ('mod', 'Bed + patterned banner: puts the banner pattern on the bedspread.', 'stand-in'),

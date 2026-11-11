@@ -15,7 +15,7 @@ ServerEvents.recipes(e => {
 		//######################### Fluids #########################
 		//Chorus juice
 		// The pack's chorus juice fluid (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js, TODO food/drinks #4). Grid: Ender's Delight's
-		// 1 fruit + sugar + bottle (kept). Pot and Kettle: the juice rule (creativeengineering/drinks.js, food/drinks #15).
+		// 1 fruit + sugar + bottle (kept). Pot and Kettle: the juice rule (creativedelight/drinks.js, food/drinks #15).
 		// Create mixer, heated: 1 fruit + sugar + 250 mB water -> 250 mB; spout, drain and IE Bottling Machine at 250 mB.
 		if (Platform.isLoaded('create')) {
 			R.createMixing(Fluid.of(f.chorus_juice, 250), [i.chorus_fruit, i.any_sweetener_drink, Fluid.of(f.water, 250)], e, 'chorus_juice', 'heated')

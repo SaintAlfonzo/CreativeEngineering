@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 
 /**
  * Display Delight placed blocks for foods Display Delight 1.2.0 has none for (food_families.md 3.1 {@code egg/dish},
- * placeable_food.md). The list is {@code creativeengineering/displaydelight_dishes.json} in this jar; each entry is a
+ * placeable_food.md). The list is {@code creativedelight/displaydelight_dishes.json} in this jar; each entry is a
  * Display Delight {@code FoodBlock} named {@code creativeengineering:<block>}, linked to its food on server world load
  * the way Display Delight links its own (sneak + right click a block top with the food puts it down; an empty hand
  * takes it back). The food also needs {@code #displaydelight:displayable} (data/displaydelight/tags/items in this jar).
@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 public final class DisplayDelightDishes {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String LIST = "/creativeengineering/displaydelight_dishes.json";
+    private static final String LIST = "/creativedelight/displaydelight_dishes.json";
 
     /** (block path, food item id) from the list. */
     public record Dish(String block, ResourceLocation item) {}
@@ -47,7 +47,7 @@ public final class DisplayDelightDishes {
     public static void register(IEventBus modEventBus) {
         if (!ModList.get().isLoaded("displaydelight")) return;
         List<Dish> dishes = read();
-        dishes.forEach(d -> BLOCK_IDS.add(new ResourceLocation(CreativeDelight.NS, d.block())));
+        dishes.forEach(d -> BLOCK_IDS.add(new ResourceLocation(CreativeDelight.MOD_ID, d.block())));
         DisplayDelightDishBlocks.register(modEventBus, dishes);
     }
 

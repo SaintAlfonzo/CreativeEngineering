@@ -8,7 +8,7 @@ Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 20
 |---|---|---|
 | 16 items `creativeengineering:<colour>_stepstool`, Another Furniture tall stool models | [stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `item_dict.js` | BUILT, needs restart |
 | Recipe: Create seat of the colour on top of an oak fence | [stepstool.js](../kubejs/server_scripts/equipment/stepstool.js) | BUILT |
-| Tags `#creativeengineering:stepstools`, `#curios:feet` | [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) | BUILT |
+| Tags `#creativeequipment:stepstools`, `#curios:feet` | [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) | BUILT |
 | Curios Feet slot (vanilla boots icon) | patcherMod `compat/CuriosSlots.java` (IMC; the old feet.json was never read by Curios 5.1.x), [curios_slots.md](curios_slots.md) | BUILT 2026-11-01, jar not installed |
 | Step up / step off, collision, server checks, sync | patcherMod `stepstool/Stepstool.java` | BUILT |
 | Keys, stepping off on input, stool drawn under players | patcherMod `stepstool/client/StepstoolClient.java` | BUILT |

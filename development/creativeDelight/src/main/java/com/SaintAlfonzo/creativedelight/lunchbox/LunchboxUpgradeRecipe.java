@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
  * Smithing tier upgrade (iron -> netherite) that keeps the lunchbox's contents. Vanilla smithing copies the
  * base's tag but not its capabilities, which is where Spice of Life keeps the food. Armor Trims' smithing table
  * calls this the same way as a vanilla recipe, so its Netherite Upgrade template rule applies.
- * Type {@code creativeengineering:lunchbox_upgrade} (vanilla smithing JSON); emitted by
+ * Type {@code creativedelight:lunchbox_upgrade} (vanilla smithing JSON); emitted by
  * {@code global.NCH.lunchboxSmithing}.
  */
 public class LunchboxUpgradeRecipe extends UpgradeRecipe {

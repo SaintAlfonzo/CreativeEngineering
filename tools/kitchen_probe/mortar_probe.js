@@ -42,12 +42,12 @@
                 catalog.recipes.forEach(r => ids.push('creativedelight:mortar/' + r.id))
                 ids.forEach(id => check('KM-01 loaded ' + id, rm.byKey(new $KMRL(id)).isPresent(), ''))
 
-                let mortar = () => Item.of('creativeengineering:mortar_and_pestle')
+                let mortar = () => Item.of('creativedelight:mortar_and_pestle')
                 let r1 = craft(level, p, [Item.of('minecraft:wheat'), mortar()])
                 check('KM-02 wheat + mortar', r1 != null && r1.out.indexOf('wheat_flour') >= 0 && r1.rem.indexOf('mortar_and_pestle dmg 1') >= 0,
                     r1 == null ? 'no recipe' : r1.id + ' -> ' + r1.out + ', left ' + r1.rem)
                 let r2 = craft(level, p, [Item.of('corn_delight:corn_seeds'), Item.of('corn_delight:corn_seeds'), Item.of('corn_delight:corn_seeds'), mortar()])
-                check('KM-03 3 kernels + mortar', r2 != null && r2.out == '1x creativeengineering:cornmeal',
+                check('KM-03 3 kernels + mortar', r2 != null && r2.out == '1x creativedelight:cornmeal',
                     r2 == null ? 'no recipe' : r2.id + ' -> ' + r2.out + ', left ' + r2.rem)
                 let r3 = craft(level, p, [Item.of('minecraft:sugar_cane'), mortar()])
                 check('KM-04 sugar cane + mortar', r3 != null && r3.out == '2x minecraft:sugar', r3 == null ? 'no recipe' : r3.id + ' -> ' + r3.out)
@@ -57,22 +57,22 @@
                 let r5 = craft(level, p, [Item.of('minecraft:air'), Item.of('minecraft:lever'), Item.of('minecraft:air'),
                     Item.of('minecraft:polished_granite'), Item.of('minecraft:air'), Item.of('minecraft:polished_granite'),
                     Item.of('minecraft:air'), Item.of('minecraft:polished_granite')])
-                check('KM-06 mortar craft', r5 != null && r5.out == '1x creativeengineering:mortar_and_pestle', r5 == null ? 'no recipe' : r5.id + ' -> ' + r5.out)
+                check('KM-06 mortar craft', r5 != null && r5.out == '1x creativedelight:mortar_and_pestle', r5 == null ? 'no recipe' : r5.id + ' -> ' + r5.out)
                 let r6 = craft(level, p, [Item.of('minecraft:wheat'), Item.of('oldguns:mortar_and_pestle')])
                 check('KM-07 wheat + Powder Pestle gives nothing', r6 == null, r6 == null ? 'no recipe' : r6.id + ' -> ' + r6.out)
                 // corn: the machines average 1.5 cornmeal, so the mortar takes 2 corn for 3 (dishes/ingredients #14)
                 let r7 = craft(level, p, [Item.of('corn_delight:corn'), Item.of('corn_delight:corn'), mortar()])
-                check('KM-08 2 corn + mortar', r7 != null && r7.out == '3x creativeengineering:cornmeal' && r7.rem.indexOf('mortar_and_pestle dmg 1') >= 0,
+                check('KM-08 2 corn + mortar', r7 != null && r7.out == '3x creativedelight:cornmeal' && r7.rem.indexOf('mortar_and_pestle dmg 1') >= 0,
                     r7 == null ? 'no recipe' : r7.id + ' -> ' + r7.out + ' / ' + r7.rem)
                 let r8 = craft(level, p, [Item.of('corn_delight:corn'), mortar()])
                 // crates and bags are machine-only (dishes/ingredients #14)
                 ;['corn_crate_cornmeal', 'corn_kernel_bag_cornmeal'].forEach(id => check('KM-12 no mortar/' + id,
                     !rm.byKey(new $KMRL('creativedelight:mortar/' + id)).isPresent(), ''))
                 let r11 = craft(level, p, [Item.of('corn_delight:wild_corn'), Item.of('corn_delight:wild_corn'), mortar()])
-                check('KM-13 2 wild corn + mortar', r11 != null && r11.out == '3x creativeengineering:cornmeal',
+                check('KM-13 2 wild corn + mortar', r11 != null && r11.out == '3x creativedelight:cornmeal',
                     r11 == null ? 'no recipe' : r11.id + ' -> ' + r11.out)
                 check('KM-09 1 corn + mortar gives nothing', r8 == null, r8 == null ? 'no recipe' : r8.id + ' -> ' + r8.out)
-                let cm = () => Item.of('creativeengineering:cornmeal'), air = () => Item.of('minecraft:air')
+                let cm = () => Item.of('creativedelight:cornmeal'), air = () => Item.of('minecraft:air')
                 let r9 = craft(level, p, [cm(), cm(), cm(), air(), Item.of('minecraft:potion', '{Potion:"minecraft:water"}')])
                 check('KM-10 tortilla with a water bottle', r9 != null && r9.out == '3x corn_delight:tortilla_raw' && r9.rem.indexOf('glass_bottle') >= 0,
                     r9 == null ? 'no recipe' : r9.id + ' -> ' + r9.out + ' / ' + r9.rem)

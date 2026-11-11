@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_cauliflower": {
    "section": "raw_veggie",
@@ -136,7 +136,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_sweet_potato": {
    "section": "raw_veggie",
@@ -205,7 +205,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_turnip": {
    "section": "raw_veggie",
@@ -270,7 +270,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_zucchini": {
    "section": "raw_veggie",
@@ -339,7 +339,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_baked_sweet_potato": {
    "section": "cooked_veggie",
@@ -845,7 +845,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_cesar_salad": {
    "section": "salad",
@@ -905,7 +905,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_coleslaw": {
    "section": "salad",
@@ -959,7 +959,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_turnip_salad": {
    "section": "salad",
@@ -1013,7 +1013,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_broccoli_soup": {
    "section": "soup",

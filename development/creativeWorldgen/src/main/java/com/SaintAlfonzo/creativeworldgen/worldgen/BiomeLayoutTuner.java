@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.minecraftforge.fml.ModList;
 
 /**
  * Biome frequency tuning, solved at world load. kubejs/server_scripts/worldgen/biome_overrides.js
@@ -62,6 +63,10 @@ import java.util.Set;
  * solver never reads a layout an older one wrote.
  */
 public final class BiomeLayoutTuner {
+
+	/** Namespaces of baseline biomes that exist only while their mod is loaded. */
+	private static final Set<String> OPTIONAL_NAMESPACES = Set.of("biomesoplenty");
+
 
 	public static final String WORLDGEN_DIR = "kubejs/generation_scripts/worldgen/";
 	static final String CONFIG = WORLDGEN_DIR + "biome_config.json";
@@ -202,13 +207,16 @@ public final class BiomeLayoutTuner {
 		JsonObject baseline = JsonParser.parseString(baselineText).getAsJsonObject();
 		JsonArray origArr = baseline.getAsJsonObject("generator").getAsJsonObject("biome_source").getAsJsonArray("biomes");
 		List<JsonObject> origEntries = new ArrayList<>();
-		for (JsonElement el : origArr) origEntries.add(el.getAsJsonObject());
+		for (JsonElement el : origArr) {
+			if (!isAbsent(el.getAsJsonObject().get("biome").getAsString())) origEntries.add(el.getAsJsonObject());
+		}
 		JsonObject cfg = dim.getAsJsonObject("biomes");
 
 		// --- validate edits ---
 		int errorsBefore = errors.size();
 		List<String> tuned = new ArrayList<>(), removed = new ArrayList<>(), replaced = new ArrayList<>();
 		for (String b : cfg.keySet()) {
+			if (isAbsent(b)) continue;
 			JsonObject c = cfg.getAsJsonObject(b);
 			c.remove("note");
 			String rw = str(c.get("replace_with"));
@@ -740,12 +748,22 @@ public final class BiomeLayoutTuner {
 		return solverHash;
 	}
 
+	/**
+	 * A baseline entry from an optional mod whose biome does not exist in this install (the Worldgen jar without Biomes O'
+	 * Plenty). Namespace, not registry, on purpose: the pack's data pack biomes are in no static registry at this point.
+	 */
+	private static boolean isAbsent(String biome) {
+		String namespace = biome.substring(0, biome.indexOf(':'));
+		return OPTIONAL_NAMESPACES.contains(namespace) && !ModList.get().isLoaded(namespace);
+	}
+
 	private static String fingerprint(String cfgText, Set<String> dimIds, Map<String, String> baselines, Map<String, String> samples) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		byte[] solver = solverHash();
 		if (solver != null) md.update(solver);
 		md.update(("solver " + maxCandidates + " " + rounds + "\0").getBytes(StandardCharsets.UTF_8));
 		md.update(cfgText.getBytes(StandardCharsets.UTF_8));
+		md.update(("absent " + OPTIONAL_NAMESPACES.stream().filter(n -> !ModList.get().isLoaded(n)).toList() + "\0").getBytes(StandardCharsets.UTF_8));
 		for (String d : dimIds) {
 			md.update(("\0" + d + "\0").getBytes(StandardCharsets.UTF_8));
 			md.update(baselines.get(d).getBytes(StandardCharsets.UTF_8));

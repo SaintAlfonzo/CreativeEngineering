@@ -79,7 +79,7 @@ import java.util.function.Predicate;
  * its rate and every group its slot count; the meta only adds parts around anchors that spawn anyway. Without a
  * slot behind it (/place structure), the anchor is drawn by its weight in the meta's set, as a group pick would.
  *
- * CHOICES: a part's structures come from a structure tag (creativeengineering:meta/*, generated from
+ * CHOICES: a part's structures come from a structure tag (creativeworldgen:meta/*, generated from
  * structure_tags.json) or ids, picked uniformly; each must pass its own biome list AND the meta's own valid-
  * biome predicate (which carries patcherMod's biome rules) at its start. Collisions are checked in x/z between
  * piece boxes grown by the part's margin ('overlap' parts skip it: an AE2 meteorite carves its crater through
@@ -92,16 +92,16 @@ import java.util.function.Predicate;
  * as a satellite (TODO structures/metas #11: a struck pyramid with no pyramid). Earth fill drops a satellite over its limits and prunes village parts the same way.
  *
  * COASTS AND RIVERS (CWGConfig [worldgen.meta_structures] avoidCoasts, on by default since 2026-10-30): no part may start in, or
- * reach with its box (centre and corners) into, a biome of creativeengineering:coast_river. A satellite there is
+ * reach with its box (centre and corners) into, a biome of creativeworldgen:coast_river. A satellite there is
  * tried elsewhere, an anchor there fails the meta (the slot is then the plain anchor). Metas in the structure tag
- * creativeengineering:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
+ * creativeworldgen:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
  *
  * The json lives in kubejs/generation_scripts/worldgen/meta_structures.json; structure_overrides.js adds it to
  * the datapack.
  */
 public final class MetaStructure extends Structure {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/meta-structures");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/meta-structures");
 
 	/** Chunks a part's pieces may reach from the start chunk. */
 	static final int REACH = 7;
@@ -885,6 +885,8 @@ public final class MetaStructure extends Structure {
 			for (net.minecraft.nbt.Tag t : tag.getList("parts", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
 				net.minecraft.nbt.CompoundTag c = (net.minecraft.nbt.CompoundTag) t;
 				ResourceLocation id = ResourceLocation.tryParse(c.getString("structure"));
+				ResourceLocation moved = LegacyIds.moved(c.getString("structure"), reg);   // saved before the 2026-11-10 move
+				if (moved != null) id = moved;
 				Structure s = id == null ? null : reg.get(id);
 				es.add(new Entry(s, c.getInt("from"), c.getInt("to")));
 				rs.add(s);

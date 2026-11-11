@@ -16,6 +16,7 @@ public class WorldgenMixinPlugin extends GatedMixinPlugin {
 
     private static final List<String> QUARK = List.of("quark");
     private static final List<String> MCA = List.of("mca");
+    private static final List<String> BOP = List.of("biomesoplenty");
 
     private static final Map<String, List<String>> NEEDS_MOD = Map.ofEntries(
             // Async map trades (compat/AsyncMapTrades): Lightman's Currency and Cloud Storage explorer-map trades
@@ -31,10 +32,25 @@ public class WorldgenMixinPlugin extends GatedMixinPlugin {
             // MCA villager pathing (its own node maker)
             Map.entry("McaVillagerPathGatesMixin", MCA),
             Map.entry("McaVillagerPathLaddersMixin", MCA),
+            // Wise Oak sleep and anger loop, web lookups off (feature_writeup/wise_oak.md)
+            Map.entry("WiseOakTileMixin", List.of("mysticaloaktree")),
+            Map.entry("TreeLoreManagerMixin", List.of("mysticaloaktree")),
             // AE2 meteorite heights (worldgen/MeteoriteHeights)
-            Map.entry("AeMeteoriteHeightMixin", List.of("ae2")));
+            Map.entry("AeMeteoriteHeightMixin", List.of("ae2")),
+            // Visceral Heap: Biomes O' Plenty reduced to one biome (feature_writeup/visceral_heap.md)
+            Map.entry("HeapDeferredRegisterMixin", BOP),
+            Map.entry("HeapResourcePackLoaderMixin", BOP),
+            Map.entry("HeapModBiomesMixin", BOP),
+            Map.entry("HeapModVanillaCompatMixin", BOP),
+            Map.entry("HeapFleshTendonFeatureMixin", BOP),
+            Map.entry("HeapColorHandlerMixin", BOP),
+            Map.entry("HeapEntityRendererHandlerMixin", BOP),
+            Map.entry("HeapParticleFactoryHandlerMixin", BOP));
+
+    /** HeapFleshTendonFeatureMixin names a synthetic lambda, so these mixins only hold for the jar they were written against. */
+    private static final Map<String, String> MOD_RANGE = Map.of("biomesoplenty", "[17.1.2.544]");
 
     public WorldgenMixinPlugin() {
-        super("[creativeworldgen]", NEEDS_MOD);
+        super("[creativeworldgen]", NEEDS_MOD, MOD_RANGE);
     }
 }

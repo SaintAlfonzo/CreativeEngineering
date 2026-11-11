@@ -165,7 +165,7 @@ One coffee family (Rustic's) with every coffee giving Caffeinated, and no coffee
 - Already in CD: the Farmer's Respite purge (startup and server `farmersrespite/item_merges.js`, 7 merge pairs, coffee recipe removals),
   Kettle coffees (`farmersrespite/kettle.js`), coffee names (`assets/creativedelight/kubejs/rusticdelight/client.js`), compost
   (`kubejs_startup/rusticdelight/compost_values.js`, `farmersrespite/compost_values.js`), coffee fluids (`kubejs_startup/creativeengineering/fluids.js`),
-  canned coffee berries (CD `creativeengineering/canning.js`).
+  canned coffee berries (CD `creativedelight/canning.js`).
 - Still in the pack: the Caffeinated swap [food_values.js:15-16](../../kubejs/startup_scripts/cooking/food_values.js) (coffee, milk, honey,
   chocolate, dark); the coffee fluid tags [fluidtags.js:33-39](../../kubejs/server_scripts/tags/fluidtags.js); the golden coffee bean Haste
   potion `potions.js:115`. food_values.js and potions.js are on Creative Brewing's Phase 1 list (creative_brewing.md 4.2), so they do not go to CD.
@@ -303,7 +303,7 @@ Status Planned / KubeJS / data / lang / `creativedelight/members #25`
    CD `creativeengineering/baking_ingredients.js:22-37`: wood material and sound, hardness 2 as FD crates), dict key `i.glowing_calamari_crate`;
    blockstate and `cube_bottom_top` model under `kubejs/assets/creativeengineering/` (bottom `farmersdelight:block/crate_bottom`, side / top palette-swapped
    from Rustic's calamari crate as the glowing calamari art was, notice beside it); 9 <-> 1 shapeless in CD `rusticdelight/recipes.js` (pattern:
-   CD `creativeengineering/recipes.js:21-28`); `L.pack` row in `rusticdelight/loot.js`; `#minecraft:mineable/axe` and the crate tags through `global.tags`.
+   CD `creativedelight/recipes.js:21-28`); `L.pack` row in `rusticdelight/loot.js`; `#minecraft:mineable/axe` and the crate tags through `global.tags`.
 2. Fried Dough (after the owner confirms): dict key, `removed_items.js` row, `R.remove({ output: i.fried_dough })`.
 3. Veggies stuffed peppers: leave to `merges/dishes #3`.
 4. Changelog bullets (crate New, fried dough Removed); run `/cdevgen` placeable / compost generators for the new block.

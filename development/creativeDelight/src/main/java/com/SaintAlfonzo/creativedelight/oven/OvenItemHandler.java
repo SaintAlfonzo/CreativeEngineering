@@ -14,12 +14,12 @@ import net.minecraftforge.items.IItemHandler;
 /**
  * The oven's automation face (oven.md 3.5), the same on every side: the oven's bottom sits on its heat source and
  * its top usually carries a pot, so FD's "top = ingredients" split would leave nothing open. Inserting routes by
- * item: {@code #creativeengineering:bakeware} to the tool slot, the plating item to the container slot, anything
+ * item: {@code #creativedelight:bakeware} to the tool slot, the plating item to the container slot, anything
  * else to the ingredient slots. Extracting takes from the output slot only.
  */
 public class OvenItemHandler implements IItemHandler {
 
-    public static final TagKey<Item> BAKEWARE = ItemTags.create(new ResourceLocation(CreativeDelight.NS, "bakeware"));
+    public static final TagKey<Item> BAKEWARE = ItemTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "bakeware"));
 
     private final OvenBlockEntity oven;
 

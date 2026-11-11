@@ -67,7 +67,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_blueberry": {
    "section": "raw_fruit",
@@ -132,7 +132,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_cranberry": {
    "section": "raw_fruit",
@@ -262,7 +262,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_fig": {
    "section": "raw_fruit",
@@ -327,7 +327,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_hamimelon": {
    "section": "raw_fruit",
@@ -392,7 +392,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_hawberry": {
    "section": "raw_fruit",
@@ -457,7 +457,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_kiwi": {
    "section": "raw_fruit",
@@ -522,7 +522,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_lemon": {
    "section": "raw_fruit",
@@ -591,7 +591,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_lychee": {
    "section": "raw_fruit",
@@ -656,7 +656,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_mango": {
    "section": "raw_fruit",
@@ -721,7 +721,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_mangosteen": {
    "section": "raw_fruit",
@@ -786,7 +786,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_orange": {
    "section": "raw_fruit",
@@ -855,7 +855,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_peach": {
    "section": "raw_fruit",
@@ -920,7 +920,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_pear": {
    "section": "raw_fruit",
@@ -985,7 +985,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_persimmon": {
    "section": "raw_fruit",
@@ -1050,7 +1050,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_pineapple": {
    "section": "raw_fruit",
@@ -1115,7 +1115,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_apple"
+   "texture": "creativedelight:item/canned_apple"
   },
   "canned_bayberry_cookie": {
    "section": "cookies",
@@ -1896,7 +1896,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_fig_chicken_stew": {
    "section": "soup",

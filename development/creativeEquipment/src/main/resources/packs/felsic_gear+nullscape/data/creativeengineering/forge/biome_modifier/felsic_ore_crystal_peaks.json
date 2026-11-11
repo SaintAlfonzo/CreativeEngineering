@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "nullscape:crystal_peaks",
-  "features": "creativeengineering:felsic_ore_crystal_peaks",
-  "step": "underground_ores"
-}

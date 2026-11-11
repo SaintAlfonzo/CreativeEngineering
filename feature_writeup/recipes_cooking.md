@@ -33,7 +33,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
   closed 2026-10-22 (removals kept).
 - **Files to open:** [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (lines 1-594; 597-1013 is the old
   `global.CE` copy, deleted 2026-10-22), [golden.js](../kubejs/server_scripts/cooking/golden.js),
-  [cultivated_meat.js](../kubejs/data/creativedelight/kubejs/creativeengineering/cultivated_meat.js).
+  [cultivated_meat.js](../kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js).
 - **Knobs:** none. Server scripts (`/reload`); the meal assemblies' incomplete items and the new tag keys are
   startup (`transition_items.js`, `item_dict.js`): restart.
 
@@ -55,7 +55,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile → dough block; 3 flour + egg → 6.
   FD's, tmted's and Create Central Kitchen's dough recipes and tmted's slime ball from dough are removed.
 - **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cornmeal.js`, recolored-flour texture;
-  tags `#forge:flour/corn` and `#creativeengineering:flour_or_cornmeal` = wheat flour or cornmeal). From cooking.md:
+  tags `#forge:flour/corn` and `#creativedelight:flour_or_cornmeal` = wheat flour or cornmeal). From cooking.md:
 
   | Machine | Corn | Corn crate (9) | Kernels | Kernel bag (9) |
   |---|---|---|---|---|
@@ -138,7 +138,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Food | Pack routes |
 |---|---|
 | Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
-| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativeengineering:soup_veggie_cooked`) in place of the raw veggie and carrot |
+| Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativedelight:soup_veggie_cooked`) in place of the raw veggie and carrot |
 | Orange and lemon jam | Fruits Delight's pot (2 fruit + sugar + lemon slice, mason jar) and heated mixing (+ 100 mB water → 125 mB) recipes; since 2026-11-02 each whole-fruit slot also takes that fruit's slice, one for one (orange or orange slice; lemon or lemon slice). The separate from-slices recipes (orange 4 slices 2026-10-23, lemon 5 slices) are removed (TODO `baking/sweets #6`, `dishes/jams #6`) |
 | Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
@@ -152,8 +152,8 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Mutton wrap | shapeless or assembly on a tortilla (FD's bread recipe and CCK's bread assembly removed) |
 | Scrambled eggs (Incubation) | 3 eggs + milk + bowl (was 2 eggs) |
 | Vegetable omelet (Brewin') | pot takes 2 fried eggs (`R.replaceInput`); shapeless 2 omelettes + cheese wedge + onion + carrot + bowl |
-| Bowl of exotic fruits (Quark Delight) | any `#creativeengineering:exotic_fruit` (Fruits Delight fruits, hami melon, melon) in the melon slot |
-| Fruit salad | shapeless with `#creativeengineering:fruit_salad_slice` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
+| Bowl of exotic fruits (Quark Delight) | any `#creativedelight:exotic_fruit` (Fruits Delight fruits, hami melon, melon) in the melon slot |
+| Fruit salad | shapeless with `#creativedelight:fruit_salad_slice` (melon, cantaloupe, hami melon, pineapple, lemon, orange slices) in the melon slots; assembly on a bowl ×2 |
 | Burgers: hamburger, cheeseburger, deluxe cheeseburger, simple hamburger, hamburger with egg, loaded hamburger, bison burger, kangaroo burger; Vintage Delight's cheese burger and deluxe burger (2026-10-23: on its cheese slice, beef or vegetarian patty; the deluxe assembly starts on the patty) | shaped only (toppings top, patty middle, bread bottom), any `#forge:bread`, cheese wedges (Delightful's milk versions removed); one assembly each on bread (the egg burger on the patty). Each assembly starts with a different item: CCK's bacon, chicken and egg sandwiches already start on bread with bacon, chicken and a fried egg |
 | Shepherd's pie | shapeless with a cheese wedge in place of milk; assembly on a bowl |
 | Horror lasagna | shapeless (cooked) and assembly on a bowl ×2 (pasta first, then 250 mB tomato sauce) |
@@ -168,7 +168,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Salmon roll, cod roll | shapeless ×2, assembly ×3 |
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
-| Fish Tempura (PneumaticCraft salmon tempura, renamed) | raw: any whole fish (`#creativeengineering:food_type/raw/fish`) + batter (was salmon + sourdough); pot: cooking oil + raw tempura. PneumaticCraft's Thermopneumatic recipe and the pack's plant-oil mixing removed |
+| Fish Tempura (PneumaticCraft salmon tempura, renamed) | raw: any whole fish (`#creativedelight:food_type/raw/fish`) + batter (was salmon + sourdough); pot: cooking oil + raw tempura. PneumaticCraft's Thermopneumatic recipe and the pack's plant-oil mixing removed |
 | Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potato` (Rustic Delight slices, More Delight diced potatoes) → 2. Thermopneumatic chips removed |
 | Fish and Chips (PneumaticCraft cod 'n' chips, renamed) | pot: cooking oil + any whole fish + 2 sliced potatoes, plated on paper; shapeless fries + cooked fish + paper (`_manual_only`). Tooltip: the chips are fries |
 | Blueberry and cranberry muffins | pot recipes on `#forge:dough` ([oven.md](oven.md)) |
@@ -221,7 +221,7 @@ reverted.
 
 - **Ruby chocolate** (Create Confectionery): heated mixing 250 mB milk + 250 mB dragon's breath + cocoa beans + sugar →
   250 mB (the mod's own recipe removed).
-- **Cultivated meat:** sample syringe (iron rod, 4 glass panes, iron plate); a filled syringe + `#creativeengineering:culture_base`
+- **Cultivated meat:** sample syringe (iron rod, 4 glass panes, iron plate); a filled syringe + `#creativedelight:culture_base`
   + slime ball → a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
   bone meal + 250 mB plant oil → 3; knife on the cutting board → 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
   salmon slices. Culture blocks 9 ↔ 1. Since 2026-10-27 the cooking pot grows them too: culture + bone meal + Rustic
@@ -230,7 +230,7 @@ reverted.
 - **Creative Cultivation reservation (2026-10-27):** all cultivated-meat code (sample syringe, cultures, culture blocks,
   recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
   marked for Creative Brewing ([creative_delight.md](creative_delight.md) 29.5). Items and blocks:
-  CD `kubejs_startup/creativeengineering/cultures.js`; tags: `creativeengineering/cultivated_meat_tags.js`.
+  CD `kubejs_startup/creativeengineering/cultures.js`; tags: `creativedelight/cultivated_meat_tags.js`.
 
 ## 3. What the pack changes
 
@@ -516,7 +516,7 @@ None.
   (Slice & Dice). Cook one: 2 jars out, 2 empty jars used. Each places 1 to 4 per block (sneak-use), shows its green,
   purple or red contents, breaks into the jars it holds; eating one gives 7 hunger, Comfort 5 min, an empty jar back.
   A Supplementaries jar fills from it.
-- [ ] **RC-174 Relish is an ingredient:** (tags: scratch server PASSED r1031, SQ-BJ-03) `/kubejs hand` on a Relish Jar: in `#creativeengineering:food_type/ingredient`,
+- [ ] **RC-174 Relish is an ingredient:** (tags: scratch server PASSED r1031, SQ-BJ-03) `/kubejs hand` on a Relish Jar: in `#creativedelight:food_type/ingredient`,
   not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the Pickling Jar's jam -> vinegar recipe does not accept it.
 - [ ] **RC-175 PB and J takes any jam:** grid bread + nut mash bottle + a Fruits Delight jam, or a grape / cherry jam
   jar -> PB and J; the jar comes back as an empty mason jar.
@@ -607,12 +607,12 @@ None.
   (`dishes/meals #19`), fried rice renamed Egg Fried Rice (`dishes/meals #17`). Tests RC-79 to RC-81. Not run in game.
 - 2026-10-24: planned scratchpad rows added to section 4 (drinks, jams, meals, baking, shulker bowl); no code changed.
 - 2026-10-27: cultures and culture blocks registered by Creative Delight (`kubejs_startup/creativeengineering/cultures.js`,
-  ids unchanged), their tags in `creativeengineering/cultivated_meat_tags.js`; cooking pot culture growth added (7 rows);
+  ids unchanged), their tags in `creativedelight/cultivated_meat_tags.js`; cooking pot culture growth added (7 rows);
   all cultivated-meat code reserved for Creative Cultivation (creative_delight.md 29.5). Test RC-82. Not run in game.
 
 - 2026-10-28: planned from the scratchpad: raise coleslaw nutrition (TODO `dishes/meals #42`), rename cucumber pasta to Veggie Pasta with more vegetables and a less minty colour (`dishes/meals #43`). Tropical Pizza stays `dishes/meals #27`. No code changed.
 
-- 2026-10-29: any bread in any bread recipe (`baking/baked-goods #28`, CD `creativeengineering/bread_recipes.js`; ham and
+- 2026-10-29: any bread in any bread recipe (`baking/baked-goods #28`, CD `creativedelight/bread_recipes.js`; ham and
   cheese sandwich in cooking.js). Jams: the jam and relish bottles and Vintage's sweet berry and glow berry jams removed,
   relish out of the jam tags, Green Grape, Red Grape and Cherry Jam Jars added (Vintage port `-09` + CD
   `vintagedelight/jams.js`), PB and J takes any jam. Tests RC-170 to RC-175. Not run in game.

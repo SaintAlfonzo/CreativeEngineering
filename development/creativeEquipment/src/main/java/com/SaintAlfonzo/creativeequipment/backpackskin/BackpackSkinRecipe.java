@@ -18,7 +18,7 @@ import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem;
 /**
  * Smithing: any Sophisticated Backpack + a block item from the skin tag gives the same backpack (all data
  * kept) with the skin set. Vanilla smithing drops the base's data, so this is a custom {@link UpgradeRecipe}.
- * Type {@code creativeengineering:backpack_skin}; emitted by {@code global.NCH.backpackSkin}.
+ * Type {@code creativeequipment:backpack_skin}; emitted by {@code global.NCH.backpackSkin}.
  */
 public class BackpackSkinRecipe extends UpgradeRecipe {
 

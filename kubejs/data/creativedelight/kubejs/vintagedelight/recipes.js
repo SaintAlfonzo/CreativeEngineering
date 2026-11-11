@@ -69,7 +69,7 @@ ServerEvents.recipes(e => {
 		R.fdCooking([NUT, NUT, NUT, NUT, NUT, i.any_sugar], Item.of(i.nut_mash_jar, 3), e, 'nut_mash_jar', 2.0, 400, i.empty_mason_jar)
 
 		//######################### Pickle soup #########################
-		// Pickle soup (dishes/pickles-and-ferments #3): the pickle slot takes any pickled veggie (#creativeengineering:pickled_veg,
+		// Pickle soup (dishes/pickles-and-ferments #3): the pickle slot takes any pickled veggie (#creativedelight:pickled_veg,
 		// tags.js), and the carrot and potato slots any vegetable (the veggie variant). Beetroot, salad ingredient, time and
 		// xp as upstream.
 		R.remove({ id: 'vintagedelight:cooking/pickle_soup' }, e)
@@ -137,14 +137,14 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.overnight_oats, [i.raw_oats, i.raw_oats, i.raw_oats, i.t_fruit_salad_slice, i.t_berries, i.milk, i.bowl], e, 'overnight_oats')
 
 		//######################### Burgers #########################
-		// The pack's burger rule (creativeengineering/recipes.js): shaped, any #forge:bread, cheese never milk; the assembly is the only
+		// The pack's burger rule (creativedelight/recipes.js): shaped, any #forge:bread, cheese never milk; the assembly is the only
 		// automation. Pattern: toppings on top, patty in the middle, bread at the bottom.
 		;[
 			'vintagedelight:cheese_burger', 'vintagedelight:deluxe_burger',
 			'veggiesdelight:compat/vintagedelight/cheese_burger', 'veggiesdelight:compat/vintagedelight/deluxe_burger',
 		].forEach(id => R.remove({ id: id }, e))
 		// Vintage Delight's two burgers (vintage_delight.md 4 step 9): its cheese slice, so neither grid matches Delightful's
-		// cheeseburgers (wedges) while both lines ship; beef or Veggies Delight's vegetarian patty (Veggies' compat versions).
+		// cheeseburgers (wedges) while both lines ship; beef or Veggies Delight's veggie patty (Veggies' compat versions).
 		// The assemblies start on the slice; the deluxe one on the patty, like the egg burger
 		var vtdPatty = [i.beef_patty, i.cooked_vegetarian_patty]
 		;[

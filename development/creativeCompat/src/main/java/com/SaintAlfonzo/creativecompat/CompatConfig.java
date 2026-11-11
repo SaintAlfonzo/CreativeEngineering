@@ -179,7 +179,7 @@ public final class CompatConfig {
             cooldownTicks = b.comment("Game ticks between the reward and the box re-arming (72000 = 1 hour).")
                     .defineInRange("cooldownTicks", 72000, 20, Integer.MAX_VALUE);
             rewardTable = b.comment("Loot table rolled once for the reward; one stack of the result is ejected.")
-                    .define("rewardTable", "creativeengineering:misc/monster_box_reward");
+                    .define("rewardTable", "creativecompat:misc/monster_box_reward");
             rewardSingleCount = b.comment("true: the ejected stack is cut to 1 item; false: the stack as the table rolled it.")
                     .define("rewardSingleCount", false);
             leashRange = b.comment("A wave mob farther than this many blocks from its box counts as gone.")
@@ -529,7 +529,7 @@ public final class CompatConfig {
             private Sinking(ForgeConfigSpec.Builder b) {
                 b.comment(
                         "Visual soul-sand-style sinking: entities standing on a full block in the soft, dust,",
-                        "spongy or very_sticky tier (#creativeengineering:sinking) are drawn lower, and so is the",
+                        "spongy or very_sticky tier (#creativecompat:sinking) are drawn lower, and so is the",
                         "camera. Collision, hitboxes, movement, mob AI and shadows are untouched."
                 ).push("sinking");
 
@@ -598,7 +598,7 @@ public final class CompatConfig {
         private VeinUndo(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in",
-                    "#creativeengineering:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient",
+                    "#creativecompat:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient",
                     "debris; filled by KubeJS). Server side."
             ).push("vein_undo");
 

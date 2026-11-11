@@ -29,11 +29,11 @@ function airBrakeUseDurationTicks() {
 }
 
 StartupEvents.registry('item', event => {
-	event.create('creativeengineering:air_brake')
+	event.create('creativeequipment:air_brake')
 		.unstackable()
 		.group('tools')
 		.displayName('Air Brake')
-		.texture('creativeengineering:item/air_brake')
+		.texture('creativeequipment:item/air_brake')
 		.useAnimation($UseAnim.BOW)
 		.useDuration(stack => airBrakeUseDurationTicks())
 		// useAnimation/useDuration only describe an in-progress use - something still has

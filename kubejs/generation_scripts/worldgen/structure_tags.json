@@ -3,7 +3,7 @@
     "what": "Named lists of structures. group/* tags decide which structures share a group grid (structure_groups.json); every other tag is for grouping, reports and building those lists. Tags have no multipliers any more (2026-09-27: every rate lives in structure_groups.json).",
     "values": "Entries: \"ns:id\" (one structure), \"ns:*\" or \"ns:prefix_*\" (glob, * matches anything including /), \"#tag/name\" (every member of another tag in this file), and a leading \"!\" on any of those to exclude (exclusions win, whatever their position). Unknown ids and tags are errors (logged, listed in the report, and NO structure changes are applied until fixed), so a typo never silently does nothing.",
     "groups": "A structure may be in at most one group/* tag. After changing one, run python3 tools/gen_structure_groups.py to give new members a fitted weight and frequency.",
-    "families": "mod/* = one tag per namespace (plus mod/yungs for YUNG's 6). type/* = what the structure is; a structure can have more than one type. dungeon/* = dungeons split by location (surface / underground) and origin (vanilla / better = YUNG's / modded). group/* = the shared grids. meta/* = the structures a meta structure may use as its anchor or parts (meta_structures.json); each is also a real structure tag creativeengineering:meta/<name>, added by structure_overrides.js. land and land/* = biome fits (biome_fits.json): a structure in one spawns in that fit's biomes plus its parents' (land/oak: land/oak + land biomes) instead of its own list; each is also a real structure tag creativeengineering:<name>."
+    "families": "mod/* = one tag per namespace (plus mod/yungs for YUNG's 6). type/* = what the structure is; a structure can have more than one type. dungeon/* = dungeons split by location (surface / underground) and origin (vanilla / better = YUNG's / modded). group/* = the shared grids. meta/* = the structures a meta structure may use as its anchor or parts (meta_structures.json); each is also a real structure tag creativeworldgen:meta/<name>, added by structure_overrides.js. land and land/* = biome fits (biome_fits.json): a structure in one spawns in that fit's biomes plus its parents' (land/oak: land/oak + land biomes) instead of its own list; each is also a real structure tag creativeworldgen:<name>."
   },
   "tags": {
     "mod/minecraft": {
@@ -108,10 +108,10 @@
         "#mod/betterstrongholds"
       ]
     },
-    "mod/creativeengineering": {
+    "mod/creativeworldgen": {
       "note": "Our meta structures (meta_structures.json, patcherMod MetaStructure).",
       "values": [
-        "creativeengineering:*"
+        "creativeworldgen:*"
       ]
     },
     "mod/ae2": {
@@ -478,10 +478,10 @@
         "towns_and_towers:village_*",
         "towns_and_towers:exclusives/village_*",
         "terralith:fortified_*",
-        "creativeengineering:meta/village_towers",
-        "creativeengineering:meta/fortified_ruins",
-        "creativeengineering:meta/fortified_camps",
-        "creativeengineering:meta/town_villages"
+        "creativeworldgen:meta/village_towers",
+        "creativeworldgen:meta/fortified_ruins",
+        "creativeworldgen:meta/fortified_camps",
+        "creativeworldgen:meta/town_villages"
       ]
     },
     "type/house": {
@@ -494,10 +494,10 @@
         "#mod/villager_houses",
         "simply_houses:*",
         "#mod/villager_buildings",
-        "creativeengineering:meta/farmers_camp",
-        "creativeengineering:meta/house_camp",
-        "creativeengineering:meta/waysign_camps",
-        "creativeengineering:meta/waysign_house_camp"
+        "creativeworldgen:meta/farmers_camp",
+        "creativeworldgen:meta/house_camp",
+        "creativeworldgen:meta/waysign_camps",
+        "creativeworldgen:meta/waysign_house_camp"
       ]
     },
     "type/camp": {
@@ -583,8 +583,8 @@
         "blocky_siege:pillager_ship",
         "unwrecked_ships:*",
         "villager_rafts:*",
-        "creativeengineering:meta/raft_convoy",
-        "creativeengineering:meta/pillager_fleet"
+        "creativeworldgen:meta/raft_convoy",
+        "creativeworldgen:meta/pillager_fleet"
       ]
     },
     "type/enemy_building": {
@@ -619,9 +619,9 @@
         "forest_ruins:*",
         "watchtower_building:abandoned_watchtower",
         "forgotten_church:*",
-        "creativeengineering:meta/ruin_cluster",
-        "creativeengineering:meta/ruin_scatter",
-        "creativeengineering:meta/waystone_ruins",
+        "creativeworldgen:meta/ruin_cluster",
+        "creativeworldgen:meta/ruin_scatter",
+        "creativeworldgen:meta/waystone_ruins",
         "eugene:ruined_drum_tower"
       ]
     },
@@ -640,8 +640,8 @@
         "hopo:underwater_ruins",
         "hopo:underwater_small_ruins",
         "hopo:underwater_warm_small_ruins",
-        "creativeengineering:meta/sunken_ruin_cluster",
-        "creativeengineering:meta/underwater_meteorite"
+        "creativeworldgen:meta/sunken_ruin_cluster",
+        "creativeworldgen:meta/underwater_meteorite"
       ],
       "note": "Also the sunken ruin cluster (meta structure)."
     },
@@ -650,8 +650,8 @@
         "revamped_shipwrecks:shipwreck",
         "revamped_shipwrecks:shipwreck_beached",
         "towns_and_towers:wreckage_ocean",
-        "creativeengineering:meta/shipwreck_debris",
-        "creativeengineering:meta/shipwreck_graveyard"
+        "creativeworldgen:meta/shipwreck_debris",
+        "creativeworldgen:meta/shipwreck_graveyard"
       ],
       "note": "Revamped Shipwrecks empties minecraft:shipwrecks, so its two jigsaw wrecks stand in for the vanilla shipwreck / shipwreck_beached (same biome tags, which Hopo extends to beaches and rivers). Also the shipwreck meta structures (a wreck with floating wreckage, a shipwreck graveyard)."
     },
@@ -685,13 +685,13 @@
         "terralith:underground/giant_bee_hive",
         "ae2:meteorite",
         "hopo:underwater_fossils",
-        "creativeengineering:meta/driftwood_flotilla",
-        "creativeengineering:meta/deadwood_acacia",
-        "creativeengineering:meta/deadwood_birch",
-        "creativeengineering:meta/deadwood_cherry",
-        "creativeengineering:meta/deadwood_jungle",
-        "creativeengineering:meta/deadwood_oak",
-        "creativeengineering:meta/deadwood_spruce"
+        "creativeworldgen:meta/driftwood_flotilla",
+        "creativeworldgen:meta/deadwood_acacia",
+        "creativeworldgen:meta/deadwood_birch",
+        "creativeworldgen:meta/deadwood_cherry",
+        "creativeworldgen:meta/deadwood_jungle",
+        "creativeworldgen:meta/deadwood_oak",
+        "creativeworldgen:meta/deadwood_spruce"
       ]
     },
     "type/decoration": {
@@ -712,15 +712,15 @@
       ]
     },
     "type/sky": {
-      "note": "Floating structures: Cloud Storage, Sky Villages and the sky meta structures (2026-10-30); Sky Structures' floating island on its own (creativeengineering:sky_island, 2026-11-06).",
+      "note": "Floating structures: Cloud Storage, Sky Villages and the sky meta structures (2026-10-30); Sky Structures' floating island on its own (creativeworldgen:sky_island, 2026-11-06).",
       "values": [
         "cloudstorage:*",
         "skyvillages:*",
-        "creativeengineering:meta/cloud_cluster",
-        "creativeengineering:meta/balloon_fleet",
-        "creativeengineering:meta/cloud_balloons",
-        "creativeengineering:meta/sky_village_islands",
-        "creativeengineering:sky_island"
+        "creativeworldgen:meta/cloud_cluster",
+        "creativeworldgen:meta/balloon_fleet",
+        "creativeworldgen:meta/cloud_balloons",
+        "creativeworldgen:meta/sky_village_islands",
+        "creativeworldgen:sky_island"
       ]
     },
     "type/nether_environmental": {
@@ -896,13 +896,13 @@
         "illagerwarship:*",
         "illager_viking_longship:*",
         "blocky_siege:pillager_ship",
-        "creativeengineering:meta/pillager_tower_siege",
-        "creativeengineering:meta/pillager_great_tower_siege",
-        "creativeengineering:meta/pillager_stronghold_siege",
-        "creativeengineering:meta/pillager_camp_siege",
-        "creativeengineering:meta/pillager_camp_ruin",
-        "creativeengineering:meta/pillager_camp_ruins",
-        "creativeengineering:meta/pillager_fleet",
+        "creativeworldgen:meta/pillager_tower_siege",
+        "creativeworldgen:meta/pillager_great_tower_siege",
+        "creativeworldgen:meta/pillager_stronghold_siege",
+        "creativeworldgen:meta/pillager_camp_siege",
+        "creativeworldgen:meta/pillager_camp_ruin",
+        "creativeworldgen:meta/pillager_camp_ruins",
+        "creativeworldgen:meta/pillager_fleet",
         "eugene:pillager_camp",
         "eugene:pillager_loot_carriage"
       ]
@@ -939,9 +939,9 @@
         "!towns_and_towers:village_ocean",
         "!towns_and_towers:exclusives/village_wandering_trader_camp",
         "eugene:red_roof_castle",
-        "creativeengineering:meta/meteorite_village",
-        "creativeengineering:meta/village_siege_ring",
-        "creativeengineering:meta/village_siege_camp"
+        "creativeworldgen:meta/meteorite_village",
+        "creativeworldgen:meta/village_siege_ring",
+        "creativeworldgen:meta/village_siege_camp"
       ]
     },
     "group/pillager_settlements": {
@@ -952,16 +952,16 @@
         "towns_and_towers:exclusives/pillager_outpost_*",
         "!towns_and_towers:pillager_outpost_ocean",
         "mysticrift_pillagers_towers_aris:*",
-        "creativeengineering:meta/pillager_tower_siege",
-        "creativeengineering:meta/pillager_great_tower_siege",
-        "creativeengineering:meta/pillager_stronghold_siege",
-        "creativeengineering:meta/pillager_camp_siege",
-        "creativeengineering:meta/pillager_camp_ruin",
-        "creativeengineering:meta/pillager_camp_ruins",
+        "creativeworldgen:meta/pillager_tower_siege",
+        "creativeworldgen:meta/pillager_great_tower_siege",
+        "creativeworldgen:meta/pillager_stronghold_siege",
+        "creativeworldgen:meta/pillager_camp_siege",
+        "creativeworldgen:meta/pillager_camp_ruin",
+        "creativeworldgen:meta/pillager_camp_ruins",
         "takesapillage:*",
         "eugene:pillager_camp",
         "eugene:fake_trader_camp",
-        "creativeengineering:meta/pillager_camp_meteorite"
+        "creativeworldgen:meta/pillager_camp_meteorite"
       ]
     },
     "group/ruins": {
@@ -981,7 +981,7 @@
         "!#type/sky",
         "!#group/witch_huts",
         "!#group/desert_temples",
-        "creativeengineering:meta/jungle_temple_ruins"
+        "creativeworldgen:meta/jungle_temple_ruins"
       ]
     },
     "group/desert_temples": {
@@ -989,8 +989,8 @@
       "values": [
         "betterdeserttemples:desert_temple",
         "minecraft:desert_pyramid",
-        "creativeengineering:meta/desert_temple_ruins",
-        "creativeengineering:meta/meteorite_desert_pyramid"
+        "creativeworldgen:meta/desert_temple_ruins",
+        "creativeworldgen:meta/meteorite_desert_pyramid"
       ]
     },
     "group/witch_huts": {
@@ -1000,7 +1000,7 @@
         "betterwitchhuts:witch_circle",
         "villagesandpillages:village_witch",
         "minecraft:swamp_hut",
-        "creativeengineering:meta/witch_coven"
+        "creativeworldgen:meta/witch_coven"
       ]
     },
     "group/entrance_dungeons": {
@@ -1032,8 +1032,8 @@
       "note": "Vehicles (hostile, 2026-10-14, plan 7.4.5): the 6 Illager Siege Weapons camps (moved out of pillager_settlements), the pillager loot carriage (with the villager chase and the golem prison van) and the witch wagon. Rarer than camps, more common than outposts, twice as common in harsh biomes (biome_frequency). The witch cart caravan and pillager caravan metas take their slots from the wagon and the loot carriage here (2026-10-30).",
       "values": [
         "#type/vehicle",
-        "creativeengineering:meta/witch_cart_caravan",
-        "creativeengineering:meta/pillager_caravan"
+        "creativeworldgen:meta/witch_cart_caravan",
+        "creativeworldgen:meta/pillager_caravan"
       ]
     },
     "group/ocean_ruins": {
@@ -1048,7 +1048,7 @@
       "note": "Ocean monuments, on the monuments' own grid (same spacing, spread and salt, so positions match vanilla). Monument meta structures join later. The meteorite-struck monument (meta/struck_monument) takes its slots from the monument here (2026-10-30).",
       "values": [
         "minecraft:monument",
-        "creativeengineering:meta/struck_monument"
+        "creativeworldgen:meta/struck_monument"
       ]
     },
     "group/sky": {
@@ -1056,7 +1056,7 @@
       "values": [
         "#type/sky",
         "ae2:meteorite",
-        "creativeengineering:meta/meteor_shower"
+        "creativeworldgen:meta/meteor_shower"
       ]
     },
     "group/boats": {
@@ -1070,25 +1070,25 @@
         "blocky_siege:pillager_ship",
         "unwrecked_ships:ship",
         "villager_rafts:*",
-        "creativeengineering:meta/raft_convoy",
-        "creativeengineering:meta/pillager_fleet"
+        "creativeworldgen:meta/raft_convoy",
+        "creativeworldgen:meta/pillager_fleet"
       ]
     },
     "group/flotsam": {
       "note": "Floating debris at sea: the driftwood flotilla (meta structure). Its own grid, so it takes no slots from ruins or ships.",
       "values": [
-        "creativeengineering:meta/driftwood_flotilla"
+        "creativeworldgen:meta/driftwood_flotilla"
       ]
     },
     "group/deadwood": {
       "note": "Patches of dead wood on land: stumps and fallen logs by wood type (meta structures). Its own grid, so it takes no slots from buildings or ruins.",
       "values": [
-        "creativeengineering:meta/deadwood_acacia",
-        "creativeengineering:meta/deadwood_birch",
-        "creativeengineering:meta/deadwood_cherry",
-        "creativeengineering:meta/deadwood_jungle",
-        "creativeengineering:meta/deadwood_oak",
-        "creativeengineering:meta/deadwood_spruce"
+        "creativeworldgen:meta/deadwood_acacia",
+        "creativeworldgen:meta/deadwood_birch",
+        "creativeworldgen:meta/deadwood_cherry",
+        "creativeworldgen:meta/deadwood_jungle",
+        "creativeworldgen:meta/deadwood_oak",
+        "creativeworldgen:meta/deadwood_spruce"
       ]
     },
     "group/remote": {
@@ -1102,7 +1102,7 @@
         "#mod/villager_camps",
         "watchtower_building:fresh_watchtower",
         "eugene:camp",
-        "creativeengineering:meta/trader_caravan"
+        "creativeworldgen:meta/trader_caravan"
       ]
     },
     "water_ok": {
@@ -1120,9 +1120,9 @@
         "#type/underground",
         "#type/mineshaft",
         "#dungeon/underground",
-        "creativeengineering:meta/driftwood_flotilla",
+        "creativeworldgen:meta/driftwood_flotilla",
         "!#group/entrance_dungeons",
-        "creativeengineering:meta/struck_monument"
+        "creativeworldgen:meta/struck_monument"
       ]
     },
     "surface_check": {
@@ -1132,17 +1132,17 @@
       ]
     },
     "meta/villages": {
-      "note": "Anchors of creativeengineering:meta/village_towers and the companion villages of meta/town_villages: every settlement village (not the ocean fleet, the wandering trader camp, or the fortified towns, which have metas of their own). Real tag: creativeengineering:meta/villages.",
+      "note": "Anchors of creativeworldgen:meta/village_towers and the companion villages of meta/town_villages: every settlement village (not the ocean fleet, the wandering trader camp, or the fortified towns, which have metas of their own). Real tag: creativeworldgen:meta/villages.",
       "values": [
         "#type/village",
         "!towns_and_towers:village_ocean",
         "!towns_and_towers:exclusives/village_wandering_trader_camp",
-        "!#mod/creativeengineering",
+        "!#mod/creativeworldgen",
         "!#meta/fortified_towns"
       ]
     },
     "meta/peaceful_towers": {
-      "note": "Towers with villagers and no hostile mobs, placed around meta villages: the desert and forest watchtowers, the mini clock tower and the fresh (not abandoned) watchtower. Real tag: creativeengineering:meta/peaceful_towers.",
+      "note": "Towers with villagers and no hostile mobs, placed around meta villages: the desert and forest watchtowers, the mini clock tower and the fresh (not abandoned) watchtower. Real tag: creativeworldgen:meta/peaceful_towers.",
       "values": [
         "desert_watchtower:watchtower",
         "forest_watchtower:forest_watchtower",
@@ -1151,17 +1151,17 @@
       ]
     },
     "meta/flotilla_rafts": {
-      "note": "Villager rafts: the vessel that may drift in the middle of a driftwood flotilla, and the anchor and parts of creativeengineering:meta/raft_convoy. Real tag: creativeengineering:meta/flotilla_rafts.",
+      "note": "Villager rafts: the vessel that may drift in the middle of a driftwood flotilla, and the anchor and parts of creativeworldgen:meta/raft_convoy. Real tag: creativeworldgen:meta/flotilla_rafts.",
       "values": [
         "villager_rafts:*"
       ]
     },
     "land": {
-      "note": "Biome fit (biome_fits.json): the parent of every land/* fit. Its biome list is empty, so a structure tagged only land would never spawn. Real tag: creativeengineering:land.",
+      "note": "Biome fit (biome_fits.json): the parent of every land/* fit. Its biome list is empty, so a structure tagged only land would never spawn. Real tag: creativeworldgen:land.",
       "values": []
     },
     "land/plains": {
-      "note": "Biome fit: Vanilla plains village; Terralith fortified village; T&T plains-type villages + outposts; T&T Tudor village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Oak/spruce camps and small buildings; Plains-only buildings; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/plains biomes. Real tag: creativeengineering:land/plains.",
+      "note": "Biome fit: Vanilla plains village; Terralith fortified village; T&T plains-type villages + outposts; T&T Tudor village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Oak/spruce camps and small buildings; Plains-only buildings; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/plains biomes. Real tag: creativeworldgen:land/plains.",
       "values": [
         "hearthandharvest:corn_maze",
         "animal_barn:barn",
@@ -1242,7 +1242,7 @@
       ]
     },
     "land/highlands": {
-      "note": "Biome fit: Vanilla plains village; Vanilla taiga village; Terralith fortified village; T&T taiga / old-growth taiga village + outposts; T&T Tudor village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Plains-only buildings; Llama stable; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/highlands biomes. Real tag: creativeengineering:land/highlands.",
+      "note": "Biome fit: Vanilla plains village; Vanilla taiga village; Terralith fortified village; T&T taiga / old-growth taiga village + outposts; T&T Tudor village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Plains-only buildings; Llama stable; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/highlands biomes. Real tag: creativeworldgen:land/highlands.",
       "values": [
         "animal_barn:barn",
         "bighorsestable:big_horse_stable",
@@ -1316,7 +1316,7 @@
       ]
     },
     "land/forest": {
-      "note": "Biome fit: T&T forest village + outpost; Tannery, gothic church, big horse stable; Oak/spruce camps and small buildings; Simply Houses forest set (4); Hobbit house; Sawmill; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/forest biomes. Real tag: creativeengineering:land/forest.",
+      "note": "Biome fit: T&T forest village + outpost; Tannery, gothic church, big horse stable; Oak/spruce camps and small buildings; Simply Houses forest set (4); Hobbit house; Sawmill; Farmer's aquaculture ponds; Farmer's cooks; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/forest biomes. Real tag: creativeworldgen:land/forest.",
       "values": [
         "bighorsestable:big_horse_stable",
         "campsite_structures:armorer_campsite",
@@ -1373,7 +1373,7 @@
       ]
     },
     "land/birch": {
-      "note": "Biome fit: T&T birch forest village + outpost; Birch tower (Mysticrift). Spawn in the land/birch biomes. Real tag: creativeengineering:land/birch.",
+      "note": "Biome fit: T&T birch forest village + outpost; Birch tower (Mysticrift). Spawn in the land/birch biomes. Real tag: creativeworldgen:land/birch.",
       "values": [
         "eugene:camp",
         "eugene:fake_trader_camp",
@@ -1384,7 +1384,7 @@
       ]
     },
     "land/flower": {
-      "note": "Biome fit: T&T plains-type villages + outposts; T&T flower forest village + outpost; Villager flower house; Hobbit house. Spawn in the land/flower biomes. Real tag: creativeengineering:land/flower.",
+      "note": "Biome fit: T&T plains-type villages + outposts; T&T flower forest village + outpost; Villager flower house; Hobbit house. Spawn in the land/flower biomes. Real tag: creativeworldgen:land/flower.",
       "values": [
         "eugene:camp",
         "eugene:fake_trader_camp",
@@ -1400,7 +1400,7 @@
       ]
     },
     "land/dark_forest": {
-      "note": "Biome fit: Forest watchtower (spruce + dark oak); Vanilla pillager outpost (dark oak); Siege weapons (6); Tannery, gothic church, big horse stable; Simply Houses forest set (4); Hobbit house; Sawmill; Farmer's aquaculture ponds; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Woodland mansion. Spawn in the land/dark_forest biomes. Real tag: creativeengineering:land/dark_forest.",
+      "note": "Biome fit: Forest watchtower (spruce + dark oak); Vanilla pillager outpost (dark oak); Siege weapons (6); Tannery, gothic church, big horse stable; Simply Houses forest set (4); Hobbit house; Sawmill; Farmer's aquaculture ponds; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Woodland mansion. Spawn in the land/dark_forest biomes. Real tag: creativeworldgen:land/dark_forest.",
       "values": [
         "bighorsestable:big_horse_stable",
         "eugene:camp",
@@ -1447,7 +1447,7 @@
       ]
     },
     "land/taiga": {
-      "note": "Biome fit: Vanilla taiga village; Terralith fortified village; T&T taiga / old-growth taiga village + outposts; T&T Swedish village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Simply Houses taiga set (4); Small viking house; Hobbit house; Sawmill; Farmer's aquaculture ponds; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/taiga biomes. Real tag: creativeengineering:land/taiga.",
+      "note": "Biome fit: Vanilla taiga village; Terralith fortified village; T&T taiga / old-growth taiga village + outposts; T&T Swedish village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Villager profession houses; Tannery, gothic church, big horse stable; Simply Houses taiga set (4); Small viking house; Hobbit house; Sawmill; Farmer's aquaculture ponds; Forest ruins (7), forgotten church; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/taiga biomes. Real tag: creativeworldgen:land/taiga.",
       "values": [
         "bighorsestable:big_horse_stable",
         "eugene:camp",
@@ -1516,7 +1516,7 @@
       ]
     },
     "land/snowy": {
-      "note": "Biome fit: Vanilla snowy village; T&T snowy taiga village + outpost; T&T snowy plains outpost; T&T grove / snowy slopes villages + outposts; T&T Swedish village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Simply Houses taiga set (4); Small viking house; Igloo, snowy tent; Philip's ancient ruins + ancient towers; Philip's field stone rocks; Philip's pumpkin ruins; Philip's crypts (2). Spawn in the land/snowy biomes. Real tag: creativeengineering:land/snowy.",
+      "note": "Biome fit: Vanilla snowy village; T&T snowy taiga village + outpost; T&T snowy plains outpost; T&T grove / snowy slopes villages + outposts; T&T Swedish village + outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Simply Houses taiga set (4); Small viking house; Igloo, snowy tent; Philip's ancient ruins + ancient towers; Philip's field stone rocks; Philip's pumpkin ruins; Philip's crypts (2). Spawn in the land/snowy biomes. Real tag: creativeworldgen:land/snowy.",
       "values": [
         "eugene:pillager_loot_carriage",
         "illager_siege_weapons:ballista",
@@ -1554,14 +1554,14 @@
       ]
     },
     "land/icy": {
-      "note": "Biome fit: Terralith glacial hut; Terralith ice spire. Spawn in the land/icy biomes. Real tag: creativeengineering:land/icy.",
+      "note": "Biome fit: Terralith glacial hut; Terralith ice spire. Spawn in the land/icy biomes. Real tag: creativeworldgen:land/icy.",
       "values": [
         "terralith:glacial_hut",
         "terralith:spire"
       ]
     },
     "land/desert": {
-      "note": "Biome fit: Vanilla desert village; Terralith fortified desert village; T&T desert outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Desert village temple; Philip's desert ruins; YUNG's desert temple, T&T desert mimic. Vanilla desert pyramid (replacement, 2026-10-12). Spawn in the land/desert biomes. Real tag: creativeengineering:land/desert.",
+      "note": "Biome fit: Vanilla desert village; Terralith fortified desert village; T&T desert outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Desert village temple; Philip's desert ruins; YUNG's desert temple, T&T desert mimic. Vanilla desert pyramid (replacement, 2026-10-12). Spawn in the land/desert biomes. Real tag: creativeworldgen:land/desert.",
       "values": [
         "betterdeserttemples:desert_temple",
         "desert_village_temple:village_temple",
@@ -1583,7 +1583,7 @@
       ]
     },
     "land/badlands": {
-      "note": "Biome fit: T&T badlands / wooded badlands villages + outposts; Siege weapons (6); It Takes a Pillage bastille + camp; Saloon, gold washing facility; Philip's badlands ruins + badlands dungeon; Badlands mineshaft. Spawn in the land/badlands biomes. Real tag: creativeengineering:land/badlands.",
+      "note": "Biome fit: T&T badlands / wooded badlands villages + outposts; Siege weapons (6); It Takes a Pillage bastille + camp; Saloon, gold washing facility; Philip's badlands ruins + badlands dungeon; Badlands mineshaft. Spawn in the land/badlands biomes. Real tag: creativeworldgen:land/badlands.",
       "values": [
         "eugene:pillager_loot_carriage",
         "illager_siege_weapons:ballista",
@@ -1606,7 +1606,7 @@
       ]
     },
     "land/savanna": {
-      "note": "Biome fit: Vanilla savanna village; T&T savanna outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Greek house, country house; Llama stable; Farmer's aquaculture ponds; Farmer's cooks; Philip's ancient ruins + ancient towers; Philip's field stone rocks; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/savanna biomes. Real tag: creativeengineering:land/savanna.",
+      "note": "Biome fit: Vanilla savanna village; T&T savanna outpost; Siege weapons (6); It Takes a Pillage bastille + camp; Greek house, country house; Llama stable; Farmer's aquaculture ponds; Farmer's cooks; Philip's ancient ruins + ancient towers; Philip's field stone rocks; Old illager + old villager statues; Small cat statues (3); Philip's crypts (2). Spawn in the land/savanna biomes. Real tag: creativeworldgen:land/savanna.",
       "values": [
         "eugene:pillager_loot_carriage",
         "farmers_structures:aquacultures_cod",
@@ -1639,7 +1639,7 @@
       ]
     },
     "land/warm_dry": {
-      "note": "Biome fit: T&T Mediterranean village + outpost; Greek house, country house. Spawn in the land/warm_dry biomes. Real tag: creativeengineering:land/warm_dry.",
+      "note": "Biome fit: T&T Mediterranean village + outpost; Greek house, country house. Spawn in the land/warm_dry biomes. Real tag: creativeworldgen:land/warm_dry.",
       "values": [
         "greek_villager_house:greek_house",
         "towns_and_towers:exclusives/pillager_outpost_mediterranean",
@@ -1648,7 +1648,7 @@
       ]
     },
     "land/oasis": {
-      "note": "Biome fit: Vanilla desert village; Terralith fortified desert village; T&T desert outpost; T&T Oriental outpost, wandering trader camp; Desert village temple; Philip's desert ruins; YUNG's desert temple, T&T desert mimic. Vanilla desert pyramid (replacement, 2026-10-12). Spawn in the land/oasis biomes. Real tag: creativeengineering:land/oasis.",
+      "note": "Biome fit: Vanilla desert village; Terralith fortified desert village; T&T desert outpost; T&T Oriental outpost, wandering trader camp; Desert village temple; Philip's desert ruins; YUNG's desert temple, T&T desert mimic. Vanilla desert pyramid (replacement, 2026-10-12). Spawn in the land/oasis biomes. Real tag: creativeworldgen:land/oasis.",
       "values": [
         "betterdeserttemples:desert_temple",
         "desert_village_temple:village_temple",
@@ -1663,7 +1663,7 @@
       ]
     },
     "land/jungle": {
-      "note": "Biome fit: T&T jungle / sparse jungle villages + outposts; Jungle tower (Mysticrift); Ancient enchantment temple; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's rare ruin; YUNG's jungle temple; Small cat statues (3). Vanilla jungle temple (replacement, 2026-10-12). Spawn in the land/jungle biomes. Real tag: creativeengineering:land/jungle.",
+      "note": "Biome fit: T&T jungle / sparse jungle villages + outposts; Jungle tower (Mysticrift); Ancient enchantment temple; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's rare ruin; YUNG's jungle temple; Small cat statues (3). Vanilla jungle temple (replacement, 2026-10-12). Spawn in the land/jungle biomes. Real tag: creativeworldgen:land/jungle.",
       "values": [
         "ancient_enchantment_temple:temple",
         "betterjungletemples:jungle_temple",
@@ -1686,7 +1686,7 @@
       ]
     },
     "land/swamp": {
-      "note": "Biome fit: T&T swamp village + outpost; Old swamp fisherman house; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Philip's rare ruin; Witch huts (YUNG's, the Villages & Pillages witch village, vanilla); Philip's crypts (2). Spawn in the land/swamp biomes. Real tag: creativeengineering:land/swamp.",
+      "note": "Biome fit: T&T swamp village + outpost; Old swamp fisherman house; Philip's ancient ruins + ancient towers; Philip's field stone / level ruins (5); Philip's field stone rocks; Philip's pumpkin ruins; Philip's rare ruin; Witch huts (YUNG's, the Villages & Pillages witch village, vanilla); Philip's crypts (2). Spawn in the land/swamp biomes. Real tag: creativeworldgen:land/swamp.",
       "values": [
         "betterwitchhuts:witch_circle",
         "betterwitchhuts:witch_hut",
@@ -1714,7 +1714,7 @@
       ]
     },
     "land/beach": {
-      "note": "Biome fit: T&T beach village + outposts; Villager fish shop. Spawn in the land/beach biomes. Real tag: creativeengineering:land/beach.",
+      "note": "Biome fit: T&T beach village + outposts; Villager fish shop. Spawn in the land/beach biomes. Real tag: creativeworldgen:land/beach.",
       "values": [
         "campsite_structures:fisher_campsite",
         "towns_and_towers:pillager_outpost_beach",
@@ -1723,21 +1723,21 @@
       ]
     },
     "land/peaks": {
-      "note": "Biome fit: Philip's ancient ruins + ancient towers. Spawn in the land/peaks biomes. Real tag: creativeengineering:land/peaks.",
+      "note": "Biome fit: Philip's ancient ruins + ancient towers. Spawn in the land/peaks biomes. Real tag: creativeworldgen:land/peaks.",
       "values": [
         "philipsruins:ancient_ruins",
         "philipsruins:ancient_towers"
       ]
     },
     "land/oak": {
-      "note": "Biome fit: Oak towers. Spawn in the land/oak biomes. Real tag: creativeengineering:land/oak.",
+      "note": "Biome fit: Oak towers. Spawn in the land/oak biomes. Real tag: creativeworldgen:land/oak.",
       "values": [
         "mini_clock_tower:mini_clock_tower",
         "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower"
       ]
     },
     "land/spruce": {
-      "note": "Biome fit: Spruce towers; Forest watchtower (spruce + dark oak). Spawn in the land/spruce biomes. Real tag: creativeengineering:land/spruce.",
+      "note": "Biome fit: Spruce towers; Forest watchtower (spruce + dark oak). Spawn in the land/spruce biomes. Real tag: creativeworldgen:land/spruce.",
       "values": [
         "forest_watchtower:forest_watchtower",
         "watchtower_building:abandoned_watchtower",
@@ -1745,39 +1745,39 @@
       ]
     },
     "land/acacia": {
-      "note": "Biome fit: Acacia tower (Mysticrift). Spawn in the land/acacia biomes. Real tag: creativeengineering:land/acacia.",
+      "note": "Biome fit: Acacia tower (Mysticrift). Spawn in the land/acacia biomes. Real tag: creativeworldgen:land/acacia.",
       "values": [
         "mysticrift_pillagers_towers_aris:acacia_pillager_tower"
       ]
     },
     "land/mangrove": {
-      "note": "Biome fit: Mangrove tower (Mysticrift). Spawn in the land/mangrove biomes. Real tag: creativeengineering:land/mangrove.",
+      "note": "Biome fit: Mangrove tower (Mysticrift). Spawn in the land/mangrove biomes. Real tag: creativeworldgen:land/mangrove.",
       "values": [
         "mysticrift_pillagers_towers_aris:mangrove_pillager_tower"
       ]
     },
     "land/cherry": {
-      "note": "Biome fit: Cherry tower (Mysticrift). Spawn in the land/cherry biomes. Real tag: creativeengineering:land/cherry.",
+      "note": "Biome fit: Cherry tower (Mysticrift). Spawn in the land/cherry biomes. Real tag: creativeworldgen:land/cherry.",
       "values": [
         "mysticrift_pillagers_towers_aris:cherry_pillager_tower"
       ]
     },
     "land/sand": {
-      "note": "Biome fit: Sandstone towers. Spawn in the land/sand biomes. Real tag: creativeengineering:land/sand.",
+      "note": "Biome fit: Sandstone towers. Spawn in the land/sand biomes. Real tag: creativeworldgen:land/sand.",
       "values": [
         "desert_watchtower:watchtower",
         "mysticrift_pillagers_towers_aris:desert_pillager_tower"
       ]
     },
     "land/end": {
-      "note": "Biome fit: End tower (Mysticrift) and Ender's Delight's End House (end highlands and midlands, the mod's own list). Spawn in the land/end biomes. Real tag: creativeengineering:land/end.",
+      "note": "Biome fit: End tower (Mysticrift) and Ender's Delight's End House (end highlands and midlands, the mod's own list). Spawn in the land/end biomes. Real tag: creativeworldgen:land/end.",
       "values": [
         "mysticrift_pillagers_towers_aris:end_pillager_tower",
         "#mod/endersdelight"
       ]
     },
     "land/any": {
-      "note": "Biome fit: underground structures that start near the surface (YUNG's small, spider and zombie dungeons): every land biome. The deep ones are on land/any/deep. Spawn in the land/any biomes. Real tag: creativeengineering:land/any.",
+      "note": "Biome fit: underground structures that start near the surface (YUNG's small, spider and zombie dungeons): every land biome. The deep ones are on land/any/deep. Spawn in the land/any biomes. Real tag: creativeworldgen:land/any.",
       "values": [
         "betterdungeons:small_dungeon",
         "betterdungeons:spider_dungeon",
@@ -1785,20 +1785,20 @@
       ]
     },
     "land/any/deep": {
-      "note": "Biome fit: deep underground structures (YUNG's skeleton dungeon, Philip's bone dungeon), whose start height (y -50 to -30) is in a cave biome: the cave biomes plus every land/any biome. Spawn in the land/any/deep biomes. Real tag: creativeengineering:land/any/deep.",
+      "note": "Biome fit: deep underground structures (YUNG's skeleton dungeon, Philip's bone dungeon), whose start height (y -50 to -30) is in a cave biome: the cave biomes plus every land/any biome. Spawn in the land/any/deep biomes. Real tag: creativeworldgen:land/any/deep.",
       "values": [
         "betterdungeons:skeleton_dungeon",
         "philipsruins:bone_dungeon"
       ]
     },
     "land/sky": {
-      "note": "Biome fit: Sky village. Spawn in the land/sky biomes. Real tag: creativeengineering:land/sky.",
+      "note": "Biome fit: Sky village. Spawn in the land/sky biomes. Real tag: creativeworldgen:land/sky.",
       "values": [
         "skyvillages:skyvillage"
       ]
     },
     "meta/large_ruins": {
-      "note": "Large land ruins (about 15 to 26 blocks across): anchors of meta/ruin_cluster, the ruin of meta/pillager_camp_ruin. Read from the templates: Philip's level-three ruins (13 to 22 wide), the ancient towers, the forgotten church. Real tag: creativeengineering:meta/large_ruins. The rare ruin left 2026-11-02 (moved to the Nether).",
+      "note": "Large land ruins (about 15 to 26 blocks across): anchors of meta/ruin_cluster, the ruin of meta/pillager_camp_ruin. Read from the templates: Philip's level-three ruins (13 to 22 wide), the ancient towers, the forgotten church. Real tag: creativeworldgen:meta/large_ruins. The rare ruin left 2026-11-02 (moved to the Nether).",
       "values": [
         "philipsruins:level_three_ruins",
         "philipsruins:ancient_towers",
@@ -1806,7 +1806,7 @@
       ]
     },
     "meta/small_ruins": {
-      "note": "Small land ruins (about 6 to 15 blocks across): the satellites of meta/ruin_cluster, anchors and parts of meta/ruin_scatter, the ruins of meta/pillager_camp_ruins. Philip's level one and two, field stone, pumpkin, ancient, desert and badlands ruins (not the rock piles), the Forest Ruins, Terralith's glacial hut. Real tag: creativeengineering:meta/small_ruins.",
+      "note": "Small land ruins (about 6 to 15 blocks across): the satellites of meta/ruin_cluster, anchors and parts of meta/ruin_scatter, the ruins of meta/pillager_camp_ruins. Philip's level one and two, field stone, pumpkin, ancient, desert and badlands ruins (not the rock piles), the Forest Ruins, Terralith's glacial hut. Real tag: creativeworldgen:meta/small_ruins.",
       "values": [
         "philipsruins:level_one_ruins",
         "philipsruins:level_two_ruins",
@@ -1821,7 +1821,7 @@
       ]
     },
     "meta/underwater_large_ruins": {
-      "note": "Large underwater ruins: anchors of meta/sunken_ruin_cluster (Hopo's big ruins, Philip's ocean ruins and ocean fortress). Real tag: creativeengineering:meta/underwater_large_ruins.",
+      "note": "Large underwater ruins: anchors of meta/sunken_ruin_cluster (Hopo's big ruins, Philip's ocean ruins and ocean fortress). Real tag: creativeworldgen:meta/underwater_large_ruins.",
       "values": [
         "hopo:underwater_ruins",
         "philipsruins:ocean_ruins",
@@ -1829,40 +1829,40 @@
       ]
     },
     "meta/underwater_small_ruins": {
-      "note": "Small underwater ruins around a meta/sunken_ruin_cluster: Hopo's small cold and warm ruins. Real tag: creativeengineering:meta/underwater_small_ruins.",
+      "note": "Small underwater ruins around a meta/sunken_ruin_cluster: Hopo's small cold and warm ruins. Real tag: creativeworldgen:meta/underwater_small_ruins.",
       "values": [
         "hopo:underwater_small_ruins",
         "hopo:underwater_warm_small_ruins"
       ]
     },
     "meta/shipwrecks": {
-      "note": "Shipwrecks of a meta/shipwreck_graveyard, anchor and parts: Revamped Shipwrecks' sunken and beached wrecks. Real tag: creativeengineering:meta/shipwrecks.",
+      "note": "Shipwrecks of a meta/shipwreck_graveyard, anchor and parts: Revamped Shipwrecks' sunken and beached wrecks. Real tag: creativeworldgen:meta/shipwrecks.",
       "values": [
         "revamped_shipwrecks:shipwreck",
         "revamped_shipwrecks:shipwreck_beached"
       ]
     },
     "meta/sunken_shipwrecks": {
-      "note": "Anchors of meta/shipwreck_debris: the sunken Revamped Shipwrecks wreck. Real tag: creativeengineering:meta/sunken_shipwrecks.",
+      "note": "Anchors of meta/shipwreck_debris: the sunken Revamped Shipwrecks wreck. Real tag: creativeworldgen:meta/sunken_shipwrecks.",
       "values": [
         "revamped_shipwrecks:shipwreck"
       ]
     },
     "meta/floating_wreckage": {
-      "note": "Floating wreckage (planks at sea level): the Towns & Towers wreckage, shallow oceans only. Parts of meta/shipwreck_debris. Real tag: creativeengineering:meta/floating_wreckage.",
+      "note": "Floating wreckage (planks at sea level): the Towns & Towers wreckage, shallow oceans only. Parts of meta/shipwreck_debris. Real tag: creativeworldgen:meta/floating_wreckage.",
       "values": [
         "towns_and_towers:wreckage_ocean"
       ]
     },
     "meta/fleet_wreckage": {
-      "note": "Wreckage around a meta/pillager_fleet: floating wreckage and sunken shipwrecks. Real tag: creativeengineering:meta/fleet_wreckage.",
+      "note": "Wreckage around a meta/pillager_fleet: floating wreckage and sunken shipwrecks. Real tag: creativeworldgen:meta/fleet_wreckage.",
       "values": [
         "#meta/floating_wreckage",
         "revamped_shipwrecks:shipwreck"
       ]
     },
     "meta/pillager_boats": {
-      "note": "Pillager ships: anchors and parts of meta/pillager_fleet (the T&T pillager ship, Blocky Siege's pillager ship, the illager longship and warship). Real tag: creativeengineering:meta/pillager_boats.",
+      "note": "Pillager ships: anchors and parts of meta/pillager_fleet (the T&T pillager ship, Blocky Siege's pillager ship, the illager longship and warship). Real tag: creativeworldgen:meta/pillager_boats.",
       "values": [
         "towns_and_towers:pillager_outpost_ocean",
         "blocky_siege:pillager_ship",
@@ -1871,7 +1871,7 @@
       ]
     },
     "meta/pillager_towers": {
-      "note": "Standard pillager outpost towers: anchors of meta/pillager_tower_siege. The vanilla outpost and the Towns & Towers tower-form outposts (not the mushroom tower, a special one). Real tag: creativeengineering:meta/pillager_towers.",
+      "note": "Standard pillager outpost towers: anchors of meta/pillager_tower_siege. The vanilla outpost and the Towns & Towers tower-form outposts (not the mushroom tower, a special one). Real tag: creativeworldgen:meta/pillager_towers.",
       "values": [
         "minecraft:pillager_outpost",
         "towns_and_towers:pillager_outpost_birch_forest",
@@ -1891,7 +1891,7 @@
       ]
     },
     "meta/fortified_towns": {
-      "note": "Fortified towns: anchors of meta/fortified_ruins and meta/fortified_camps (Terralith's fortified village and fortified desert village, in group/settlements). Real tag: creativeengineering:meta/fortified_towns.",
+      "note": "Fortified towns: anchors of meta/fortified_ruins and meta/fortified_camps (Terralith's fortified village and fortified desert village, in group/settlements). Real tag: creativeworldgen:meta/fortified_towns.",
       "values": [
         "terralith:fortified_village",
         "terralith:fortified_desert_village",
@@ -1899,7 +1899,7 @@
       ]
     },
     "meta/friendly_camps": {
-      "note": "Friendly camps (no hostile mobs): the villager tents, snowy tent, archer camp, circus tent and the T&T wandering trader camp, all in group/remote. Anchors of meta/waysign_camps, parts of the camp metas. Real tag: creativeengineering:meta/friendly_camps.",
+      "note": "Friendly camps (no hostile mobs): the villager tents, snowy tent, archer camp, circus tent and the T&T wandering trader camp, all in group/remote. Anchors of meta/waysign_camps, parts of the camp metas. Real tag: creativeworldgen:meta/friendly_camps.",
       "values": [
         "#mod/villager_camps",
         "towns_and_towers:exclusives/village_wandering_trader_camp",
@@ -1907,31 +1907,31 @@
       ]
     },
     "meta/coast_ok": {
-      "note": "Metas that belong on the water and its shores, or don't mind them: [worldgen.meta_structures] avoidCoasts (on by default since 2026-10-30) leaves them alone, every other meta stays out of the creativeengineering:coast_river biomes when it is on. The fleets, flotillas, wrecks and sunken ruins (2026-10-19); the sky metas (they float) and the meteorite strikes (the meteorite's piece box is 144 blocks wide, so its corners would nearly always touch a river) (2026-10-30). Real tag: creativeengineering:meta/coast_ok.",
+      "note": "Metas that belong on the water and its shores, or don't mind them: [worldgen.meta_structures] avoidCoasts (on by default since 2026-10-30) leaves them alone, every other meta stays out of the creativeworldgen:coast_river biomes when it is on. The fleets, flotillas, wrecks and sunken ruins (2026-10-19); the sky metas (they float) and the meteorite strikes (the meteorite's piece box is 144 blocks wide, so its corners would nearly always touch a river) (2026-10-30). Real tag: creativeworldgen:meta/coast_ok.",
       "values": [
-        "creativeengineering:meta/driftwood_flotilla",
-        "creativeengineering:meta/raft_convoy",
-        "creativeengineering:meta/pillager_fleet",
-        "creativeengineering:meta/shipwreck_debris",
-        "creativeengineering:meta/shipwreck_graveyard",
-        "creativeengineering:meta/sunken_ruin_cluster",
-        "creativeengineering:meta/cloud_cluster",
-        "creativeengineering:meta/balloon_fleet",
-        "creativeengineering:meta/cloud_balloons",
-        "creativeengineering:meta/sky_village_islands",
-        "creativeengineering:meta/meteorite_village",
-        "creativeengineering:meta/meteorite_desert_pyramid",
-        "creativeengineering:meta/underwater_meteorite",
-        "creativeengineering:meta/pillager_camp_meteorite",
-        "creativeengineering:meta/meteor_shower",
-        "creativeengineering:meta/struck_monument"
+        "creativeworldgen:meta/driftwood_flotilla",
+        "creativeworldgen:meta/raft_convoy",
+        "creativeworldgen:meta/pillager_fleet",
+        "creativeworldgen:meta/shipwreck_debris",
+        "creativeworldgen:meta/shipwreck_graveyard",
+        "creativeworldgen:meta/sunken_ruin_cluster",
+        "creativeworldgen:meta/cloud_cluster",
+        "creativeworldgen:meta/balloon_fleet",
+        "creativeworldgen:meta/cloud_balloons",
+        "creativeworldgen:meta/sky_village_islands",
+        "creativeworldgen:meta/meteorite_village",
+        "creativeworldgen:meta/meteorite_desert_pyramid",
+        "creativeworldgen:meta/underwater_meteorite",
+        "creativeworldgen:meta/pillager_camp_meteorite",
+        "creativeworldgen:meta/meteor_shower",
+        "creativeworldgen:meta/struck_monument"
       ]
     },
     "meta/lone_houses": {
-      "note": "Lone houses of group/remote: anchors of meta/house_camp and meta/waysign_house_camp. Every remote house except the peaceful towers, the Farmer's Structures (their own meta), temples and churches. Real tag: creativeengineering:meta/lone_houses.",
+      "note": "Lone houses of group/remote: anchors of meta/house_camp and meta/waysign_house_camp. Every remote house except the peaceful towers, the Farmer's Structures (their own meta), temples and churches. Real tag: creativeworldgen:meta/lone_houses.",
       "values": [
         "#type/house",
-        "!#mod/creativeengineering",
+        "!#mod/creativeworldgen",
         "!#meta/peaceful_towers",
         "!farmers_structures:*",
         "!ancient_enchantment_temple:temple",
@@ -1940,7 +1940,7 @@
       ]
     },
     "meta/farmers_structures": {
-      "note": "Farmer's Structures in the Overworld (cooks, mossy cooks, aquacultures, sushi stall): anchors and parts of meta/farmers_camp. Real tag: creativeengineering:meta/farmers_structures.",
+      "note": "Farmer's Structures in the Overworld (cooks, mossy cooks, aquacultures, sushi stall): anchors and parts of meta/farmers_camp. Real tag: creativeworldgen:meta/farmers_structures.",
       "values": [
         "farmers_structures:cooks",
         "farmers_structures:cooks_moss",
@@ -1954,7 +1954,7 @@
       ]
     },
     "meta/way_signs": {
-      "note": "Supplementaries' way sign: a part of meta/waysign_camps and meta/waysign_house_camp. Real tag: creativeengineering:meta/way_signs.",
+      "note": "Supplementaries' way sign: a part of meta/waysign_camps and meta/waysign_house_camp. Real tag: creativeworldgen:meta/way_signs.",
       "values": [
         "supplementaries:way_sign"
       ]
@@ -1963,19 +1963,19 @@
       "note": "Placement priority: the big settlements that win over villages (structure_groups.json priority.structures): Terralith's fortified towns and the metas built on them.",
       "values": [
         "#meta/fortified_towns",
-        "creativeengineering:meta/fortified_ruins",
-        "creativeengineering:meta/fortified_camps",
-        "creativeengineering:meta/town_villages"
+        "creativeworldgen:meta/fortified_ruins",
+        "creativeworldgen:meta/fortified_camps",
+        "creativeworldgen:meta/town_villages"
       ]
     },
     "meta/pillager_large_towers": {
-      "note": "Large pillager towers: anchors of meta/pillager_great_tower_siege (Mysticrift's 8 towers). Real tag: creativeengineering:meta/pillager_large_towers.",
+      "note": "Large pillager towers: anchors of meta/pillager_great_tower_siege (Mysticrift's 8 towers). Real tag: creativeworldgen:meta/pillager_large_towers.",
       "values": [
         "mysticrift_pillagers_towers_aris:*"
       ]
     },
     "meta/pillager_strongholds": {
-      "note": "Special pillager outposts: anchors of meta/pillager_stronghold_siege. The Towns & Towers forts (type/fort), the mushroom tower and Takes A Pillage's bastille (in group/pillager_settlements since 2026-10-12). Real tag: creativeengineering:meta/pillager_strongholds.",
+      "note": "Special pillager outposts: anchors of meta/pillager_stronghold_siege. The Towns & Towers forts (type/fort), the mushroom tower and Takes A Pillage's bastille (in group/pillager_settlements since 2026-10-12). Real tag: creativeworldgen:meta/pillager_strongholds.",
       "values": [
         "towns_and_towers:pillager_outpost_mushroom_fields",
         "#type/fort",
@@ -1983,7 +1983,7 @@
       ]
     },
     "meta/pillager_camps": {
-      "note": "Pillager camps: the Towns & Towers camp outposts (beach, snowy beach, sparse jungle, wooded badlands) and Takes A Pillage's palisade camp (open land; an anchor too since it joined group/pillager_settlements 2026-10-12). Real tag: creativeengineering:meta/pillager_camps.",
+      "note": "Pillager camps: the Towns & Towers camp outposts (beach, snowy beach, sparse jungle, wooded badlands) and Takes A Pillage's palisade camp (open land; an anchor too since it joined group/pillager_settlements 2026-10-12). Real tag: creativeworldgen:meta/pillager_camps.",
       "values": [
         "towns_and_towers:pillager_outpost_beach",
         "towns_and_towers:pillager_outpost_snowy_beach",
@@ -1994,76 +1994,76 @@
       ]
     },
     "meta/siege_weapons": {
-      "note": "Siege equipment: the illager siege-weapon camps (ballista, rams, catapult, siege tower, trebuchet). Also the siege of meta/village_siege_ring and meta/village_siege_camp (2026-10-30). Real tag: creativeengineering:meta/siege_weapons.",
+      "note": "Siege equipment: the illager siege-weapon camps (ballista, rams, catapult, siege tower, trebuchet). Also the siege of meta/village_siege_ring and meta/village_siege_camp (2026-10-30). Real tag: creativeworldgen:meta/siege_weapons.",
       "values": [
         "illager_siege_weapons:*"
       ]
     },
     "meta/pillager_outworks": {
-      "note": "Siege weapons or pillager camps around a pillager tower or fort. Real tag: creativeengineering:meta/pillager_outworks.",
+      "note": "Siege weapons or pillager camps around a pillager tower or fort. Real tag: creativeworldgen:meta/pillager_outworks.",
       "values": [
         "#meta/siege_weapons",
         "#meta/pillager_camps"
       ]
     },
     "land/mushroom": {
-      "note": "Biome fit: T&T's mushroom village and outpost. Spawn in the land/mushroom biomes (mushroom fields, Mirage Isles). Real tag: creativeengineering:land/mushroom.",
+      "note": "Biome fit: T&T's mushroom village and outpost. Spawn in the land/mushroom biomes (mushroom fields, Mirage Isles). Real tag: creativeworldgen:land/mushroom.",
       "values": [
         "towns_and_towers:village_mushroom_fields",
         "towns_and_towers:pillager_outpost_mushroom_fields"
       ]
     },
     "ocean/deep": {
-      "note": "Biome fit: Philip's ocean fortress (the large ocean-monument-like ruin). Spawn in deep oceans only. Real tag: creativeengineering:ocean/deep.",
+      "note": "Biome fit: Philip's ocean fortress (the large ocean-monument-like ruin). Spawn in deep oceans only. Real tag: creativeworldgen:ocean/deep.",
       "values": [
         "philipsruins:ocean_fortress"
       ]
     },
     "meta/sky_clouds": {
-      "note": "Cloud Storage's sky temples (the storage clouds): anchors and parts of meta/cloud_cluster and meta/cloud_balloons. Real tag: creativeengineering:meta/sky_clouds.",
+      "note": "Cloud Storage's sky temples (the storage clouds): anchors and parts of meta/cloud_cluster and meta/cloud_balloons. Real tag: creativeworldgen:meta/sky_clouds.",
       "values": [
         "cloudstorage:sky_temple"
       ]
     },
     "meta/sky_balloons": {
-      "note": "Cloud Storage's big hot air balloons: anchors and parts of meta/balloon_fleet, parts of meta/cloud_balloons. Real tag: creativeengineering:meta/sky_balloons.",
+      "note": "Cloud Storage's big hot air balloons: anchors and parts of meta/balloon_fleet, parts of meta/cloud_balloons. Real tag: creativeworldgen:meta/sky_balloons.",
       "values": [
         "cloudstorage:big_balloon"
       ]
     },
     "meta/sky_villages": {
-      "note": "Sky Villages' floating village: anchor of meta/sky_village_islands. Real tag: creativeengineering:meta/sky_villages.",
+      "note": "Sky Villages' floating village: anchor of meta/sky_village_islands. Real tag: creativeworldgen:meta/sky_villages.",
       "values": [
         "skyvillages:skyvillage"
       ]
     },
     "meta/meteorites": {
-      "note": "AE2's sky stone meteorite: the strike part of the meteorite metas (village, desert pyramid, sunken ruin, pillager camp). Placed with \"overlap\", so its crater cuts through the anchor. Real tag: creativeengineering:meta/meteorites.",
+      "note": "AE2's sky stone meteorite: the strike part of the meteorite metas (village, desert pyramid, sunken ruin, pillager camp). Placed with \"overlap\", so its crater cuts through the anchor. Real tag: creativeworldgen:meta/meteorites.",
       "values": [
         "ae2:meteorite"
       ]
     },
     "meta/caravan_wagons": {
-      "note": "Witch wagons: anchor and parts of meta/witch_cart_caravan. Real tag: creativeengineering:meta/caravan_wagons.",
+      "note": "Witch wagons: anchor and parts of meta/witch_cart_caravan. Real tag: creativeworldgen:meta/caravan_wagons.",
       "values": [
         "eugene:witch_wagon"
       ]
     },
     "meta/caravan_carriages": {
-      "note": "Pillager loot carriages (with the villager chase and the golem prison van of the same pool): anchor and parts of meta/pillager_caravan. Real tag: creativeengineering:meta/caravan_carriages.",
+      "note": "Pillager loot carriages (with the villager chase and the golem prison van of the same pool): anchor and parts of meta/pillager_caravan. Real tag: creativeworldgen:meta/caravan_carriages.",
       "values": [
         "eugene:pillager_loot_carriage"
       ]
     },
     "meta/trader_camps": {
-      "note": "Trader camps: anchor and parts of meta/trader_caravan (the Creative Content Camps trader camp and the T&T wandering trader camp). Real tag: creativeengineering:meta/trader_camps.",
+      "note": "Trader camps: anchor and parts of meta/trader_caravan (the Creative Content Camps trader camp and the T&T wandering trader camp). Real tag: creativeworldgen:meta/trader_camps.",
       "values": [
         "eugene:camp",
         "towns_and_towers:exclusives/village_wandering_trader_camp"
       ]
     },
     "meta/caravan_witch_huts": {
-      "note": "Witch huts beside a meta/witch_cart_caravan (swamps only, their own biome fit): YUNG's witch hut and witch circle, the vanilla swamp hut. Real tag: creativeengineering:meta/caravan_witch_huts.",
+      "note": "Witch huts beside a meta/witch_cart_caravan (swamps only, their own biome fit): YUNG's witch hut and witch circle, the vanilla swamp hut. Real tag: creativeworldgen:meta/caravan_witch_huts.",
       "values": [
         "betterwitchhuts:witch_hut",
         "betterwitchhuts:witch_circle",
@@ -2071,51 +2071,51 @@
       ]
     },
     "meta/better_desert_temples": {
-      "note": "YUNG's desert temple: anchor of meta/desert_temple_ruins. Real tag: creativeengineering:meta/better_desert_temples.",
+      "note": "YUNG's desert temple: anchor of meta/desert_temple_ruins. Real tag: creativeworldgen:meta/better_desert_temples.",
       "values": [
         "betterdeserttemples:desert_temple"
       ]
     },
     "meta/better_jungle_temples": {
-      "note": "YUNG's jungle temple: anchor of meta/jungle_temple_ruins. Real tag: creativeengineering:meta/better_jungle_temples.",
+      "note": "YUNG's jungle temple: anchor of meta/jungle_temple_ruins. Real tag: creativeworldgen:meta/better_jungle_temples.",
       "values": [
         "betterjungletemples:jungle_temple"
       ]
     },
     "meta/witch_circles": {
-      "note": "YUNG's witch circle: anchor of meta/witch_coven. Real tag: creativeengineering:meta/witch_circles.",
+      "note": "YUNG's witch circle: anchor of meta/witch_coven. Real tag: creativeworldgen:meta/witch_circles.",
       "values": [
         "betterwitchhuts:witch_circle"
       ]
     },
     "meta/coven_huts": {
-      "note": "Witch huts beside a meta/witch_coven: YUNG's witch hut and the vanilla swamp hut. Real tag: creativeengineering:meta/coven_huts.",
+      "note": "Witch huts beside a meta/witch_coven: YUNG's witch hut and the vanilla swamp hut. Real tag: creativeworldgen:meta/coven_huts.",
       "values": [
         "betterwitchhuts:witch_hut",
         "minecraft:swamp_hut"
       ]
     },
     "meta/monuments": {
-      "note": "The ocean monument: anchor of meta/struck_monument. Real tag: creativeengineering:meta/monuments.",
+      "note": "The ocean monument: anchor of meta/struck_monument. Real tag: creativeworldgen:meta/monuments.",
       "values": [
         "minecraft:monument"
       ]
     },
     "nether/soul": {
-      "note": "Biome fit: soul sand valley. Philip's lost soul dungeon and lost soul city, moved from the Overworld 2026-11-02 (structures/contents #1). Real tag: creativeengineering:nether/soul.",
+      "note": "Biome fit: soul sand valley. Philip's lost soul dungeon and lost soul city, moved from the Overworld 2026-11-02 (structures/contents #1). Real tag: creativeworldgen:nether/soul.",
       "values": [
         "philipsruins:lost_soul_dungeon",
         "philipsruins:lost_soul_city"
       ]
     },
     "nether/forest": {
-      "note": "Biome fit: crimson and warped forests. Philip's rare ruin, moved from the Overworld 2026-11-02. Real tag: creativeengineering:nether/forest.",
+      "note": "Biome fit: crimson and warped forests. Philip's rare ruin, moved from the Overworld 2026-11-02. Real tag: creativeworldgen:nether/forest.",
       "values": [
         "philipsruins:rare_ruin"
       ]
     },
     "nether/wastes": {
-      "note": "Biome fit: Nether wastes and basalt deltas. Philip's blackstone Nether ruin, moved from the Overworld 2026-11-02. Real tag: creativeengineering:nether/wastes.",
+      "note": "Biome fit: Nether wastes and basalt deltas. Philip's blackstone Nether ruin, moved from the Overworld 2026-11-02. Real tag: creativeworldgen:nether/wastes.",
       "values": [
         "philipsruins:start_nether_ruin"
       ]

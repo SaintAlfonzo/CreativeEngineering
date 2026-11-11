@@ -29,14 +29,14 @@ import net.minecraftforge.registries.ForgeRegistry;
  * only read and call {@code contains}, which the trimmable list answers from a set.
  *
  * <p>Allowlist ({@code gear/tuning #14}, gear_tuning.md Armor Trims): when the item tag
- * {@code creativeengineering:trimmable_armor} (KubeJS equipmenttags.js) has members, the cached trimmable list keeps
+ * {@code creativecommon:trimmable_armor} (KubeJS equipmenttags.js) has members, the cached trimmable list keeps
  * only them, so the smithing table ({@code TrimmableItem.applyTrim} checks the list), the JEI trim and untrimming pages
  * and the trimmed-item decorator all see the standard armor sets only. An empty or missing tag keeps Armor Trims' list.
  */
 public final class ArmorTrimsItemCache {
 
     private static final TagKey<Item> TRIMMABLE_ARMOR = TagKey.create(net.minecraft.core.Registry.ITEM_REGISTRY,
-            new ResourceLocation("creativeengineering", "trimmable_armor"));
+            new ResourceLocation("creativecommon", "trimmable_armor"));
 
     private static final Map<Class<?>, List<Item>> BY_TYPE = new ConcurrentHashMap<>();
     /** Bumped on every tag (re)load; the trimmable list is valid for one generation. */

@@ -400,7 +400,7 @@ Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativ
 - **KJ client:** as phase 1; `armor_effects_tooltip.js` / `tool_effects_tooltip.js` (gear, CB).
 - **tools:** `gen_effect_descriptions.py` (writes 31 `effect.*` keys into the KJ lang overlay), `gen_coaster_models.py`,
   `effect_audit.py`, `potion_bucket_texture.py` (one-off), `jei_world/tab_drops.py` 183-193 (`per_potion` rows).
-- **Already in CD:** the two compost files (phase 1); CD `creativeengineering/placeable_tags.js` 8-13
+- **Already in CD:** the two compost files (phase 1); CD `creativedelight/placeable_tags.js` 8-13
   (`#placeable_on_coaster`), CD `vintagedelight/recipes.js` 20-21 and 34, `vintagedelight/tags.js` 19 (Vintage rows that
   touch Brewin' items: stay in CD, they are Vintage's); `MangosteenCakeEffectMixin` (food fix, stays).
 - **CEConfig:** `[effects]` 3477-3537, `[magic_resistance]` 453-469, `[copper_poisoning]` 489-511, `[coaster]` 1293-1300,

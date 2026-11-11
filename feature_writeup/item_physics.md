@@ -268,7 +268,7 @@ in one table, and each maps to a material a player would recognise.
 1. **Manual override:** an explicit id list kept in `item_physics_tags.js` (today's hand decisions that differ
    from their family, e.g. prismarine and nether brick lavaproof). Beats everything.
 2. **Tag:** a vanilla / Forge / pack tag (`#minecraft:planks`, `#forge:ingots`, `#forge:glass`, the pack's
-   `creativeengineering:food_type/*`, ...). The most reliable signal, and modded items usually carry Forge tags.
+   `creativedelight:food_type/*`, ...). The most reliable signal, and modded items usually carry Forge tags.
 3. **Fire resistance:** `Item#isFireResistant` → refractory (it survives lava anyway, F5).
 4. **Block material and sound** (block items, from `/dumpphysics`): `Material.WOOD` → wood, `STONE` → refractory unless
    the id says brick / machine / metal, `METAL` → metal, `WOOL` → fibre, `PLANT` / `LEAVES` → foliage, and so on. A

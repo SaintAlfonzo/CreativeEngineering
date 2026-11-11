@@ -239,7 +239,7 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
   Boatload crimson / warped boat and chest boat, and the driftwood furniture, chest boat and furnace boat.
 - Rabbit Stew: baked potato -> `#forge:crops/potato`. Vegetable Noodles: brown mushroom -> `#forge:mushrooms` (FD pot
   recipe only; the pack's `vegetable_noodles_cooked_manual_only` craft in `cooking.js` still names the brown mushroom).
-- Dog Food: `#farmersdelight:wolf_prey` -> `#creativeengineering:food_type/raw/meat` (30 meats). 1.3.4's `#forge:raw_meat`
+- Dog Food: `#farmersdelight:wolf_prey` -> `#creativedelight:food_type/raw/meat` (30 meats). 1.3.4's `#forge:raw_meat`
   holds only Miner's Delight's arthropod and spider leg in this pack, so a literal copy would have broken the recipe.
 - Cabbage Rolls: instead of inlining, the filling tag gains raw meat, raw fish, `#forge:vegetables`, `#forge:mushrooms`
   and loses `#forge:eggs`, so the pot recipe and the pack's manual craft change together and other mods' entries stay.

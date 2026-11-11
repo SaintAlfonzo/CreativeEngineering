@@ -91,6 +91,10 @@ Tooling repointed: `tools/generators.json` readme, `tools/perf/suite/server.py` 
 (perfBot path; prep_srv also swaps in the Devtools build jar), `tools/test_worldgen_tools.sh`, the docstrings of
 `name_audit.py`, `wthit_icon_audit.py`, `diff_block_state_ranges.py`.
 
+### Structure Catalogue (added 2026-11-09)
+
+World type "Structure Catalogue" (`data/creativedevtools/worldgen/world_preset/structure_catalogue.json`): on first start it lays out every structure by family. `/cdevplace catalogue build | preview | status | stop`, switch `[features] structureCatalogue`, rules `kubejs/generation_scripts/worldgen/structure_world.json`, report `kubejs/exported/structure_catalogue_report.json`. Details and tests: [plan_structure_catalogue.md](plan_structure_catalogue.md).
+
 ## 3. Rules
 
 - Commands keep their names; config keys keep their names and comments.

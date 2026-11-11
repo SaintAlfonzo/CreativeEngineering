@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  */
 public final class LootContainerSwaps {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/loot-swaps");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/loot-swaps");
 	static final String CONFIG = BiomeLayoutTuner.WORLDGEN_DIR + "loot_container_swaps.json";
 
 	static volatile Map<Block, Block> swaps = Map.of();   // package-private for headless tests

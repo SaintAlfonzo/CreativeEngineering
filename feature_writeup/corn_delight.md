@@ -37,7 +37,7 @@ Where it goes: the installed 1.0.3 jar stays. New items are KubeJS items in the 
 | Part | Plan |
 |---|---|
 | Item | `creativeengineering:corncob`, stack 64 |
-| Kernel routes | 1 Corncob -> 2 corn kernels on the cutting board (knife), 3 from the mortar and pestle, 4 + 0.5 cornmeal from Create crushing, the Millstone and the IE crusher (owner change 2026-11-04 [6 on the board, no other route]). Board: `corn_delight/recipes.js`; Create and mortar: `creativeengineering/recipes.js` (`foodGrinding` `corncob_kernels`, mortar fixed at 3); IE: `immersiveengineering/recipes.js` |
+| Kernel routes | 1 Corncob -> 2 corn kernels on the cutting board (knife), 3 from the mortar and pestle, 4 + 0.5 cornmeal from Create crushing, the Millstone and the IE crusher (owner change 2026-11-04 [6 on the board, no other route]). Board: `corn_delight/recipes.js`; Create and mortar: `creativedelight/recipes.js` (`foodGrinding` `corncob_kernels`, mortar fixed at 3); IE: `immersiveengineering/recipes.js` |
 | Cornmeal routes | Corn and wild corn through Create milling, the Millstone and the IE crusher: existing cornmeal outputs plus a 10% Corncob secondary (`foodGrinding` and `ieCrushing` secondaries in the Cornmeal block). The mortar mirror is the machine average rounded down, so it gives no cob. Crates, kernel bags, kernels and PneumaticCraft get none |
 | Compost | Same chance as Straw (0.3 in the Farmer's Delight compost rows), as a row in CD's `corn_delight/compost.js` beside the existing one |
 | Other 1.2.11 uses (Paper, Organic Compost, fuel, IE ethanol, pig food) | not taken |
@@ -130,7 +130,7 @@ breaking the corn with a knife: SQ-CN-04b). Client half: CQ-CN-01 (CN-01, CN-05,
 | Items | CD startup `kubejs_startup/corn_delight/corn_items.js`; keys in `item_dict.js` (`i.corncob`, `i.corn_popsicle`, `i.cob_pipe`), `food_dict.js` (`f.dessert_corn_popsicle`), `block_dict.js` (`b.corn_crop`) | KubeJS items, `creativeengineering:` namespace |
 | Art | `kubejs/assets/creativeengineering/textures/item/` (`corncob`, `corn_popsicle`, `cob_pipe`, `cob_pipe_uv`), MIT notice `corn_delight_art_notice.txt` there | The pipe model is `models/item/cob_pipe.json`: Forge `separate_transforms`, 3D (`cob_pipe_3d.json`, 1.2.11's model) in hand and on the head, flat sprite in the GUI, on the ground and in frames. 1.2.11 did this with MML's `MultiModelBakedModel`, which MML 1.2.3 lacks |
 | Compost | CD startup `corn_delight/compost.js` | 0.3 |
-| Recipes | `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativeengineering/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
+| Recipes | `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativedelight/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
 | Tags | `corn_delight/tags.js`: `curios:face`, `curios:head` (mouth dropped 2026-11-02) | The pack's Face slot ([curios_slots.md](curios_slots.md)) is the "mouth or face" slot of 2.3 |
 | Knife loot | `corn_delight/loot.js` (LootJS, `CE/corn_knife_corncob`) | `corn_crop` at age 7, as 1.2.11's straw modifier (either half) |
 | Trades | `corn_delight/trades.js` (MoreJS) | Fixed prices: 24 corn -> 1 emerald (Novice, 16 uses); 8 emeralds -> 8 Cornbread / 8 Tortillas (Apprentice); wanderer corn 1 emerald COMMON, Popcorn Box 2 emeralds RARE |
@@ -148,3 +148,13 @@ Open:
   textures `displaydelight:block/tray_*` where the files say `farmers3d/tray_*`. Both textures exist; left as they are (not
   part of this work). Rerunning the generator rewrites them.
 - 6 kernels from a cob is still the placeholder (2.1).
+
+## Owner notes (scratchpad 2026-11-09)
+
+Rows in [TODO](todo/TODO.md) `farming/crops #47` to `#51`. Status checked 2026-11-09:
+
+- Rename Maize to Corn: not started (`corn_delight:corn` still displays Maize).
+- Drop rates, wanted: corn cob 75% when cutting corn, kernels from corn cutting 6, cob milling 3 [4], cob cutting 2, wild corn identical in every process, husk 20% on harvest. Built: cob cutting 2 and mortar 3 kernels; cutting corn gives 4 kernels and a husk at 75%; machines still give 4; harvest husk not built.
+- Corn, hemp and the other two-tall crops slow the player to 50%: not started.
+- Corn husk block placeable as a log: not started.
+- Corn pipe rendered as a flat item on the head: fixed 2026-11-09 (built, untested). Cause: KubeJS's generated item model outranked the jar's `cob_pipe.json`; the model is now set with `modelJson` in `corn_items.js`. Test CQ-CN-01.

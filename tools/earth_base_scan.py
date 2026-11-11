@@ -2,7 +2,7 @@
 """
 Earth-fill base scan: what the bottom layers (EarthFill baseLayers, 3) of a structure's rigid templates are made of,
 so you can tell whether the earth-fill water / air limits can see its foundation (only blocks in the block tag
-creativeengineering:earth_fill/earth count, plus earth_fill/stone_base for structures in the structure tag of that
+creativeworldgen:earth_fill/earth count, plus earth_fill/stone_base for structures in the structure tag of that
 name). Written 2026-11-02 for the desert check (TODO structures/earthfill #19).
 
   python3 tools/earth_base_scan.py                 structures in land/desert and land/badlands

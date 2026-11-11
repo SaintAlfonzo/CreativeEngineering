@@ -97,8 +97,8 @@ Reads of every other pack global, one row per file:
 | `CDS/botania/botania_items.js` | `global.removedItems` (2) | Common (`_lib`) | stays |
 | `CDS/veggiesdelight/veggies_items.js` | `global.removedItems` (2) | Common | stays |
 | `CDS/vintagedelight/vintage_items.js` | `global.removedItems` (4) | Common | stays |
-| `kubejs/data/creativedelight/kubejs/creativeengineering/canning.js` | `global.removedItems` | Common | stays |
-| `kubejs/data/creativedelight/kubejs/creativeengineering/mortar.js` | `global.removedItems` | Common | stays |
+| `kubejs/data/creativedelight/kubejs/creativedelight/canning.js` | `global.removedItems` | Common | stays |
+| `kubejs/data/creativedelight/kubejs/creativedelight/mortar.js` | `global.removedItems` | Common | stays |
 | `kubejs/data/creativedelight/kubejs/neapolitan/recipes.js` | `global.removedItems` | Common | stays |
 | `kubejs/data/creativedelight/kubejs/_core/removed_item_tags.js` | `global.stripRemovedItemTags` (guarded `if (!global.CD \|\| !global.stripRemovedItemTags) return`) | Devtools? (`server_scripts/_lib` is Devtools per 2.1, but `recipe_scan.js` is a runtime tag strip CD relies on, not a dump) | Common API: keep `stripRemovedItemTags` in a Common server script, or accept the guard as a soft dependency on Devtools (then the strip is dev-only: flag for sweep F) |
 | `CDS/creativeengineering/seasonings.js` | `global.effect` (`var ef = global.effect`) | Common (`_lib/effect_dict.js`, Q4) | stays. Note: effects content is CB's (creative_brewing.md), the dict is Common. |
@@ -122,7 +122,7 @@ only if that jar sorts before them in the mod list (CB already relies on an AFTE
 
 | from (file) | to (file) | target | fix |
 |---|---|---|---|
-| `CDS/creativeengineering/cans.js`, `comfort_nourishment.js`; `kubejs/data/creativedelight/kubejs/creativeengineering/{canning,can_tags,food_type_tags,mortar,placeable_tags,seasoning_tags}.js` | `kubejs/generation_scripts/food/{can_types,can_servings,food_types,comfort_nourishment,mortar_catalog,placeable,food_families}.json` | pack (generators `food_catalog`, `placeable_catalog`, `comfort_nourishment`, `mortar_catalog`, `food_families`; see 3) | pack; `can_servings.json` is already a runtime payload file in build_deploy.py (line 266) |
+| `CDS/creativeengineering/cans.js`, `comfort_nourishment.js`; `kubejs/data/creativedelight/kubejs/creativedelight/{canning,can_tags,food_type_tags,mortar,placeable_tags,seasoning_tags}.js` | `kubejs/generation_scripts/food/{can_types,can_servings,food_types,comfort_nourishment,mortar_catalog,placeable,food_families}.json` | pack (generators `food_catalog`, `placeable_catalog`, `comfort_nourishment`, `mortar_catalog`, `food_families`; see 3) | pack; `can_servings.json` is already a runtime payload file in build_deploy.py (line 266) |
 | `kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js` | `kubejs/generation_scripts/worldgen/crop_seasons.json` | pack (Calendar data: PM `seasons/CropSeasons` reads the same file) | pack; CD reads a Calendar-owned file without a mod dependency: acceptable (file read), note in Calendar's doc |
 | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js`, `wild_crops.json` | `kubejs/generation_scripts/worldgen/biome_traits.json` | pack (Worldgen data) | pack |
 

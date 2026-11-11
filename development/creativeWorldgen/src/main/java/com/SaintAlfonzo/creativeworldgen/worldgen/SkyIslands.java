@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 public final class SkyIslands {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/sky-islands");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/sky-islands");
 
 	public static final String NAMESPACE = "sky_structures";
 	/** The mod's band: 16 + nextInt(64) above the base. */

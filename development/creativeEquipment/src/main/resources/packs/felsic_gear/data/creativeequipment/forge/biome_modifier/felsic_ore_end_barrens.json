@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:end_barrens",
+  "features": "creativeequipment:felsic_ore_end_barrens",
+  "step": "underground_ores"
+}

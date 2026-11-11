@@ -16,7 +16,7 @@ Source data:
   feature_writeup/effects.md                        for EFFECT_OVERRIDES below: effects the ports add or drop
   kubejs/exported/food/foods.json                   /dumpfood: FoodProperties effects, which JEED lists by itself
   mods/jeed-*.jar data/jeed/recipes                 JEED's own effect_provider recipes
-  kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js   the provider recipes (CB; effect ids as
+  kubejs/data/creativebrewing/kubejs/creativebrewing/jeed_providers.js   the provider recipes (CB; effect ids as
                                                     string literals),
   Equipment kubejs_startup/creativeequipment/gear_effects.js, equipment/gear_jeed.js   gear rows; the Vinery [wine] effects
   config/vinery-common.toml, config/jeed-client.toml    config it reads; hidden_effects need no source
@@ -84,7 +84,7 @@ def jei_sources(potions):
                     eff = json.loads(z.read(n)).get('effect')
                     if isinstance(eff, str):
                         add(eff, 'jeed')
-    providers = (INSTANCE / 'kubejs/data/creativebrewing/kubejs/creativeengineering/jeed_providers.js').read_text()
+    providers = (INSTANCE / 'kubejs/data/creativebrewing/kubejs/creativebrewing/jeed_providers.js').read_text()
     for eid in EFFECT_ID.findall(providers):
         add(eid, 'provider')
     # gear rows: Creative Equipment since 2026-11-06 (plan_cb_polish.md 1); the frameworks are Creative Common's

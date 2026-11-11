@@ -72,7 +72,7 @@
 
         // SQ-FN-04: the fishing net block tags (loottags.js)
         let tagged = (name, id) => $CJForgeReg.BLOCKS.tags().getTag($CJTagKey.create($CJRegistry.BLOCK_REGISTRY,
-            new $CJRL('creativeengineering:fishing_net/' + name))).contains($CJForgeReg.BLOCKS.getValue(new $CJRL(id)))
+            new $CJRL('creativedelight:fishing_net/' + name))).contains($CJForgeReg.BLOCKS.getValue(new $CJRL(id)))
         KELPS.forEach(id => check('kelp tag ' + id, tagged('kelp', id) && !tagged('sea_grass', id),
             'kelp ' + tagged('kelp', id) + ', sea_grass ' + tagged('sea_grass', id)))
         SEA_GRASSES.forEach(id => check('sea grass tag ' + id, tagged('sea_grass', id) && !tagged('kelp', id),

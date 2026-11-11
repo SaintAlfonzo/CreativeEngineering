@@ -12,7 +12,7 @@
   "mysticrift_pillagers_towers_aris:oak_wood_pillager_tower": {"weight": 100, "frequency": 1.0},
   "mysticrift_pillagers_towers_aris:cherry_pillager_tower": {"weight": 100, "frequency": 1.0},
   "mysticrift_pillagers_towers_aris:acacia_pillager_tower": {"weight": 100, "frequency": 1.0},
-  "creativeengineering:meta/pillager_great_tower_siege": {"share": 1.0},
+  "creativeworldgen:meta/pillager_great_tower_siege": {"share": 1.0},
   "philipsruins:rare_ruin": {"frequency": 0.25},
   "farmers_structures:aquacultures_beach": {"frequency": 0.5},
   "simply_houses:forest_stonemason": {"frequency": 1.0},
@@ -28,7 +28,7 @@
   "terralith:fortified_village": {"weight": 400},
   "terralith:fortified_desert_village": {"weight": 400},
   "eugene:red_roof_castle": {"weight": 400},
-  "creativeengineering:meta/fortified_camps": {"share": 0.45},
-  "creativeengineering:meta/fortified_ruins": {"share": 0.45},
-  "creativeengineering:meta/town_villages": {"share": 0.1}
+  "creativeworldgen:meta/fortified_camps": {"share": 0.45},
+  "creativeworldgen:meta/fortified_ruins": {"share": 0.45},
+  "creativeworldgen:meta/town_villages": {"share": 0.1}
 }

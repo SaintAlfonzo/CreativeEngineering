@@ -22,7 +22,7 @@ import oreexcavation.undo.ExcavateHistory;
  * Rules on Ore Excavation's {@code /undo_excavation}, checked from {@code mixin/OreExcavationCommandUndoMixin}
  * before Ore Excavation runs its own checks (exact drops and XP back in the inventory, nothing in the way):
  * a per-player cooldown after each successful undo ({@code [vein_undo] cooldownSeconds}), and a refusal when the
- * newest vein mine broke a block in {@code #creativeengineering:vein_undo_denied} or, with
+ * newest vein mine broke a block in {@code #creativecompat:vein_undo_denied} or, with
  * {@code denyBlockEntities}, any block with a block entity. The tag is filled by KubeJS
  * (server_scripts/tags/blocktags.js). Ore Excavation keeps its history in memory, so does the cooldown.
  */

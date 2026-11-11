@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-/** JEI page for {@code creativeengineering:baking}: category, oven as catalyst, arrow click area, "+" transfer. */
+/** JEI page for {@code creativedelight:baking}: category, oven as catalyst, arrow click area, "+" transfer. */
 @JeiPlugin
 public class OvenJeiPlugin implements IModPlugin {
 

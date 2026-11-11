@@ -8,14 +8,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
-/** Crow food on the ground: peck for 24 ticks, heal 1, and 1 in 8 tames whoever threw it (C4). Wheat seeds stay on AM's path. */
+/** Crow food on the ground: peck for 24 ticks, heal 1, and 1 in 8 tames whoever threw it (C4). */
 public class CrowEatDroppedFoodGoal extends Goal {
     private static final double SCAN_RADIUS = 10.0D;
     private static final double GIVE_UP_SQR = 400.0D;
@@ -24,7 +22,7 @@ public class CrowEatDroppedFoodGoal extends Goal {
     private static final int SCAN_TICKS = 20;
     private static final double SPEED = 1.1D;
 
-    private final TamableAnimal crow;
+    private final CrowEntity crow;
     @Nullable
     private ItemEntity target;
     private int scanCooldown;
@@ -32,14 +30,13 @@ public class CrowEatDroppedFoodGoal extends Goal {
     private int threatCheck;
     private boolean ate;
 
-    public CrowEatDroppedFoodGoal(TamableAnimal crow) {
+    public CrowEatDroppedFoodGoal(CrowEntity crow) {
         this.crow = crow;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    /** Also the test of the mixin that keeps AM's item targeting off these items. */
     public static boolean eatsFood(ItemStack stack) {
-        return CrowConfig.EAT_DROPPED_FOOD.get() && stack.is(CrowTags.CROW_FOOD) && !stack.is(Items.WHEAT_SEEDS);
+        return CrowConfig.EAT_DROPPED_FOOD.get() && stack.is(CrowTags.CROW_FOOD);
     }
 
     private boolean unavailable(CrowWariness wariness) {
@@ -112,12 +109,10 @@ public class CrowEatDroppedFoodGoal extends Goal {
             return;
         }
         crow.getNavigation().stop();
-        CrowLogic.land(crow);
         if (peckTimer < 0) {
             peckTimer = PECK_TICKS;
         }
         if (peckTimer % 8 == 0) {
-            CrowAccess.peck(crow);
             crumbs(target.getItem(), 3);
         }
         if (--peckTimer <= 0) {

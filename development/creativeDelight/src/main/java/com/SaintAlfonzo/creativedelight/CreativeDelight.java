@@ -32,15 +32,13 @@ import java.util.List;
  * Since the Creative Split CD carve (2026-11-01, creative_delight.md 34) it also holds the kitchen and food Java that
  * was patcherMod's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
- * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member). Their ids keep the {@code creativeengineering}
- * namespace ({@link #NS}).
+ * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member). Their ids moved to this mod's namespace on
+ * 2026-11-10 (plan_cd_namespace.md).
  */
 @Mod(CreativeDelight.MOD_ID)
 public class CreativeDelight {
 
 	public static final String MOD_ID = "creativedelight";
-	/** The namespace of the ids the code moved from patcherMod registers and reads: patcherMod's, unchanged by the move. */
-	public static final String NS = "creativeengineering";
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public CreativeDelight() {
@@ -80,6 +78,8 @@ public class CreativeDelight {
 		VillageFarmCrops.LEGACY_PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(VillageFarmCrops::onServerAboutToStart);
 		TreatedSticks.register(FMLJavaModLoadingContext.get().getModEventBus());
+		// Wooden bucket and its farm fluids (moved from Creative Equipment 2026-11-09; farm/bucket/)
+		com.SaintAlfonzo.creativedelight.farm.bucket.WoodenBuckets.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 
@@ -109,9 +109,9 @@ public class CreativeDelight {
 	/** The kitchen and food Java moved from patcherMod (creative_delight.md 34), registered as patcherMod did. */
 	private static void registerKitchen(IEventBus modBus) {
 		ModList mods = ModList.get();
-		// Oven: FD cooking-pot style baking block + the creativeengineering:baking recipe type (oven/; oven.md).
+		// Oven: FD cooking-pot style baking block + the creativedelight:baking recipe type (oven/; oven.md).
 		com.SaintAlfonzo.creativedelight.oven.OvenRegistry.register(modBus);
-		// creativeengineering:biome_tag loot condition for the fishing net tables (from Creative Worldgen, 2026-11-06)
+		// creativedelight:biome_tag loot condition for the fishing net tables (from Creative Worldgen, 2026-11-06)
 		com.SaintAlfonzo.creativedelight.loot.BiomeTagCondition.register(modBus);
 		// Powdered sugar block + bucket (food/PowderedSugarRegistry). Item and recipes are KubeJS.
 		com.SaintAlfonzo.creativedelight.food.PowderedSugarRegistry.register(modBus);

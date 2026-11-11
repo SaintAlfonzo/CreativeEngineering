@@ -380,7 +380,7 @@ public final class CDConfig {
 
     /**
      * Crop harvest table values read by Creative Delight's {@code rusticdelight/crop_drops.js} and
-     * {@code creativeengineering/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
+     * {@code creativedelight/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
      */
     public static final class CropDrops {
         public final ForgeConfigSpec.BooleanValue bellPeppers;
@@ -430,7 +430,7 @@ public final class CDConfig {
     }
 
     /**
-     * Extra produce from crops grown on better soil (CD {@code creativeengineering/soil_yield.js}, applied on /reload).
+     * Extra produce from crops grown on better soil (CD {@code creativedelight/soil_yield.js}, applied on /reload).
      * Each soil adds a pool of bonus x the crop's average produce to a ripe crop's harvest; each crop has its own switch
      * (all on by default). Ender Crop is out (it only grows on tilled End Stone).
      * feature_writeup/crop_yields.md.
@@ -601,7 +601,7 @@ public final class CDConfig {
 
     /**
      * Dials for multi-serving cans ({@code food.CanServings}). How many servings a can holds is
-     * NOT here: it comes from the {@code #creativeengineering:cans/servings/<n>} item tags, set in
+     * NOT here: it comes from the {@code #creativedelight:cans/servings/<n>} item tags, set in
      * KubeJS from the {@code kubejs_startup/<mod>/can_servings.js} member scripts (tools/gen_can_types.py).
      */
     public static final class Canning {
@@ -613,7 +613,7 @@ public final class CDConfig {
 
         private Canning(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Cans in #creativeengineering:cans/servings/<n> hold n servings. Eating or crafting with",
+                    "Cans in #creativedelight:cans/servings/<n> hold n servings. Eating or crafting with",
                     "one takes a serving; the servings left show as a durability bar and a tooltip line. The",
                     "last serving leaves an empty can, a crushed can or nothing, rolled with the chances below."
             ).push("canning");
@@ -760,9 +760,9 @@ public final class CDConfig {
 		private Cfb(ForgeConfigSpec.Builder b) {
 			b.comment(
 					"Cooking for Blockheads compartment ([compartments] cookingforblockheads).",
-					"Small blocks on a Cooking for Blockheads counter or corner (#creativeengineering:counter_supports):",
+					"Small blocks on a Cooking for Blockheads counter or corner (#creativedelight:counter_supports):",
 					"Farmer's Delight's cutting board, Display Delight's plates and plated foods, Brewin' and Chewin's",
-					"coaster (#creativeengineering:counter_toppers). The counter's worktop is 1 px lower than a full",
+					"coaster (#creativedelight:counter_toppers). The counter's worktop is 1 px lower than a full",
 					"block, so they and what lies on them are drawn shifted by these offsets, in pixels (1/16 block):",
 					"cuttingBoardOffset* for the board, plateOffset* for the plates and the coaster. X and Z are as",
 					"seen on a counter facing north (door to the north, back edge to the south: +X = east, +Z = toward",

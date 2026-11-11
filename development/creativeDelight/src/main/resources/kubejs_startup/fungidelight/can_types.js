@@ -71,7 +71,7 @@ if (global.CD) global.CD.genPut('can_types', 'fungidelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_carrot"
+   "texture": "creativedelight:item/canned_carrot"
   },
   "canned_cooked_inky_cap": {
    "section": "cooked_veggie",
@@ -209,7 +209,7 @@ if (global.CD) global.CD.genPut('can_types', 'fungidelight', {
      ]
     }
    ],
-   "texture": "creativeengineering:item/canned_cabbage"
+   "texture": "creativedelight:item/canned_cabbage"
   },
   "canned_creamy_morel_soup": {
    "section": "soup",

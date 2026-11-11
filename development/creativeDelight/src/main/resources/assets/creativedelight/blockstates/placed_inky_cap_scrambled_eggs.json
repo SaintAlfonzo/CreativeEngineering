@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/placed_inky_cap_scrambled_eggs"
+    },
+    "facing=south": {
+      "model": "creativedelight:block/placed_inky_cap_scrambled_eggs",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/placed_inky_cap_scrambled_eggs",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativedelight:block/placed_inky_cap_scrambled_eggs",
+      "y": 90
+    }
+  }
+}

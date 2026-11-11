@@ -1,9 +1,9 @@
 // requires: creativecalendar
 // requires: sereneseasons
 // Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01.
-// Season types: biome tags creativeengineering:seasons/{arid,frozen,dry,tropical,temperate,cold,adaptive} and
-// creativeengineering:seasons/permanent_{spring,summer,autumn,winter}.
-// Snow seasons: biome tags creativeengineering:snow/no_<sub_season>, one per sub-season a biome may not snow in
+// Season types: biome tags creativecalendar:seasons/{arid,frozen,dry,tropical,temperate,cold,adaptive} and
+// creativecalendar:seasons/permanent_{spring,summer,autumn,winter}.
+// Snow seasons: biome tags creativecalendar:snow/no_<sub_season>, one per sub-season a biome may not snow in
 // (season_types.json snow_seasons lists the sub-seasons it may snow in; [] = never).
 //
 // The lists live in kubejs/generation_scripts/worldgen/season_types.json (the jar ships a copy, read when the instance
@@ -44,7 +44,7 @@
 		}
 		TYPES.forEach(function (type) {
 			var biomes = cfg[type] || []
-			if (biomes.length) global.tags.add(event, 'creativeengineering:seasons/' + type, biomes)
+			if (biomes.length) global.tags.add(event, 'creativecalendar:seasons/' + type, biomes)
 		})
 
 		var snowSeasons = cfg.snow_seasons || {}
@@ -62,7 +62,7 @@
 			})
 		})
 		SUB_SEASONS.forEach(function (sub) {
-			if (blocked[sub].length) global.tags.add(event, 'creativeengineering:snow/no_' + sub, blocked[sub])
+			if (blocked[sub].length) global.tags.add(event, 'creativecalendar:snow/no_' + sub, blocked[sub])
 		})
 	})
 

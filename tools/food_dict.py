@@ -53,9 +53,9 @@ INGREDIENTS = {
     'minecraft:wheat': 'grain_wheat', 'farmersdelight:rice': 'grain_rice', 'farmersdelight:rice_panicle': 'grain_rice_panicle',
     'vintagedelight:oat': 'grain_oat', 'ends_delight:ender_pearl_grain': 'grain_ender_pearl',
     'create:wheat_flour': 'grain_flour_wheat', 'pneumaticcraft:wheat_flour': 'grain_flour_wheat_pneumaticcraft',
-    'tmted:wheat_flour': 'grain_flour_wheat_tmted', 'creativeengineering:cornmeal': 'grain_flour_corn',
+    'tmted:wheat_flour': 'grain_flour_wheat_tmted', 'creativedelight:cornmeal': 'grain_flour_corn',
     # dough and bases
-    'create:dough': 'dough_wheat', 'creativeengineering:cookie_dough': 'dough_cookie',
+    'create:dough': 'dough_wheat', 'creativedelight:cookie_dough': 'dough_cookie',
     'create_confectionery:gingerdough': 'dough_ginger', 'pneumaticcraft:sourdough': 'dough_sourdough',
     'create_factory:uncooked_waffle': 'dough_waffle', 'create_factory:cake_paste': 'dough_cake_paste',
     'createaddition:cake_base': 'dough_cake_base', 'createaddition:cake_base_baked': 'cake_cooked_base',
@@ -74,14 +74,14 @@ INGREDIENTS = {
     'minecraft:milk_bucket': 'dairy_milk_bucket', 'farmersdelight:milk_bottle': 'dairy_milk_bottle',
     # salt, sugar, spice
     'salt:salt': 'spice_salt', 'vintagedelight:salt_dust': 'spice_salt_dust', 'vintagedelight:salt': 'spice_salt_vintagedelight',
-    'minecraft:sugar': 'spice_sugar', 'creativeengineering:powdered_sugar': 'spice_powdered_sugar',
+    'minecraft:sugar': 'spice_sugar', 'creativedelight:powdered_sugar': 'spice_powdered_sugar',
     'supplementaries:sugar_cube': 'spice_sugar_cube', 'minecraft:cocoa_beans': 'spice_cocoa_beans',
     'create_confectionery:crushed_cocoa': 'spice_crushed_cocoa', 'create_confectionery:cocoa_powder': 'spice_cocoa_powder',
     'neapolitan:vanilla_pods': 'spice_vanilla_pods', 'delightful:matcha': 'spice_matcha',
     # fats, sauces, toppings
     'create_confectionery:cocoa_butter': 'sauce_cocoa_butter', 'delightful:animal_oil_bottle': 'sauce_animal_oil',
     'immersive_weathering:tallow': 'sauce_tallow', 'tmted:tomato_sauce': 'sauce_tomato_tmted',
-    'creativeengineering:frosting': 'sauce_frosting',
+    'creativedelight:frosting': 'sauce_frosting',
     # whole produce that is cut before eating, and raw produce that is only cooked with
     'minecraft:melon': 'fruit_melon', 'minecraft:pumpkin': 'fruit_pumpkin', 'fruitsdelight:pineapple': 'fruit_pineapple',
     'fruitsdelight:durian': 'fruit_durian', 'fruitsdelight:hamimelon': 'fruit_hamimelon', 'delightful:cantaloupe': 'fruit_cantaloupe',

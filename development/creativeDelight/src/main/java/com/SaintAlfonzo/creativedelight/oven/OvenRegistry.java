@@ -20,28 +20,28 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Everything the oven registers: {@code creativeengineering:oven} (block, item, block entity, menu) and the
- * {@code creativeengineering:baking} recipe type + serializer. Plan and behaviour: feature_writeup/oven.md.
- * Recipes are KubeJS ({@code global.NCH.ceBaking}, kubejs/data/creativedelight/kubejs/creativeengineering/baking.js).
+ * Everything the oven registers: {@code creativedelight:oven} (block, item, block entity, menu) and the
+ * {@code creativedelight:baking} recipe type + serializer. Plan and behaviour: feature_writeup/oven.md.
+ * Recipes are KubeJS ({@code global.NCH.ceBaking}, kubejs/data/creativedelight/kubejs/creativedelight/baking.js).
  */
 public final class OvenRegistry {
 
     public static final String NAME = "oven";
     public static final String BAKING = "baking";
-    public static final ResourceLocation BAKING_ID = new ResourceLocation(CreativeDelight.NS, BAKING);
+    public static final ResourceLocation BAKING_ID = new ResourceLocation(CreativeDelight.MOD_ID, BAKING);
 
     private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
     private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CreativeDelight.MOD_ID);
     private static final DeferredRegister<MenuType<?>> MENU_TYPES =
-            DeferredRegister.create(ForgeRegistries.MENU_TYPES, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.MENU_TYPES, CreativeDelight.MOD_ID);
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
     private static final DeferredRegister<RecipeType<?>> TYPES =
-            DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, CreativeDelight.NS);
+            DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, CreativeDelight.MOD_ID);
 
     // FD stove stats (Properties.copy(Blocks.BRICKS)), light 13 while heated.
     public static final RegistryObject<Block> OVEN = BLOCKS.register(NAME, () -> new OvenBlock(

@@ -139,7 +139,7 @@ Searched: `item_dict.js`, `items_by_mod/*.json`, `display_names.json`, in-tree l
 
 | H&H item | Overlaps with | Decision |
 |---|---|---|
-| Crow Spawn Egg (Crow entity) | `alexsmobs:crow` (entity; spawns in `flying_birds`) | **Drop the entity (D2, owner 11-05)**; its mechanics go onto AM's crow (3.2). Not built **Reversed (owner 2026-11-06, N20): add H&H's crow entity to compare with AM's crow** (D2 mechanics-only route on hold). The comparison decides which crow carries the tame / shoulder / fetch / steal mechanics; [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) needs a revision once decided. |
+| Crow Spawn Egg (Crow entity) | `alexsmobs:crow` (entity; spawns in `flying_birds`) | **Drop the entity (D2, owner 11-05)**; its mechanics go onto AM's crow (3.2). Not built **Reversed (owner 2026-11-06, N20): add H&H's crow entity to compare with AM's crow** (D2 mechanics-only route on hold). The comparison decides which crow carries the tame / shoulder / fetch / steal mechanics; [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) needs a revision once decided. **Settled 2026-11-10 (owner, D-2 of [plan_hearth_crow_swap.md](plan_hearth_crow_swap.md)): H&H's crow ported (`hearthandharvest:crow`, `crow_spawn_egg`) and replaces AM's crow; built, not installed (4.7).** |
 | Farmer's Hat | `wardrobe:farmers_hat_helmet`, `vinery:straw_hat`, `simplehats:farmerbrim`, `simplehats:summerhat` (Farmer Brim missed on 10-30) | **Drop the item (D8, owner 11-04 / 11-05)**; the XP-on-harvest rule goes on the four pack hats (3.2). Hat list needs owner confirmation **Reversed (owner 2026-11-06, N20): add the H&H Farmer's Hat** (D8 drop withdrawn); the XP-on-harvest rule goes on it and, if kept, the four pack hats. Compare against the four pack hats. **Settled (owner 2026-11-06, N21): keep the Farmer's Hat effect on all four pack hats and on the H&H hat.** The H&H hat is ported. |
 | Wooden Bucket | `creativeengineering:wooden_bucket`, `myrtrees:wooden_bucket` | **Drop** |
 | Seed Pouch | `quark:seed_pouch` | **Drop (D8, owner note 11-05)**; extend Quark's pouch instead (3.2). Not built |
@@ -147,7 +147,7 @@ Searched: `item_dict.js`, `items_by_mod/*.json`, `display_names.json`, in-tree l
 | Watering Can | TODO `farming/crops #8` | **Built** (4.0): H&H's id, six tiers; shipped |
 | Scarecrow | planned dressable scarecrow (`blocks/new #8`) | **Keep the plain block (owner 11-05, D13 answer)**: added to `#alexsmobs:crow_fears` and `#creativedelight:repels_crows`; the dressable one stays its own row. Recipe needs a farmer's hat (swap to Wardrobe's or Vinery's). Not built **Add confirmed (owner 2026-11-06, N20).** **Accepts any farmer's hat (owner 2026-11-06, N21)** (the four pack hats and the H&H hat, through one hat tag), not only the H&H hat. |
 | Trough | `quark:feeding_trough` | **Keep (D9, owner 11-04)**: also takes water (babies grow faster) next to Quark's trough. Not built **Implement for evaluation (owner 2026-11-06, N21)** (ported as an eval build next to Quark's trough; keep or drop after in-game testing). **N22 investigation and decision:** water is a mechanic (upstream: a 1000 mB tank that accepts only `minecraft:water` and only while the food slot is empty; fills 4 mB a second in rain; every 80 ticks each baby animal within 10x4x10 blocks ages 16 ticks faster for 10 mB). Restrict the tank to water only (still the check `Fluids.WATER`: no potion, modded or flowing-water variants, no other fluid through pipes or the fluid capability), keep the food mode as is. **Rename to differentiate from Quark's "Feeding Trough": "Water Trough"** (name confirmed by the owner, N22 follow-up). Details in 3.1 Trough. |
-| Nest | Incubation nests (egg incubators, take no arbitrary items) | **Keep the 4-slot ground nest as the crow-stash sink only (plan P2; reverses the 10-30 "Drop")**; no chicken laying. Not built **Reversed (owner 2026-11-06, N21): drop nests totally.** No ground nest block, no stash, no nest worldgen, no chicken laying (supersedes plan P2 and the line above). |
+| Nest | Incubation nests (egg incubators, take no arbitrary items) | **Keep the 4-slot ground nest as the crow-stash sink only (plan P2; reverses the 10-30 "Drop")**; no chicken laying. Not built **Reversed (owner 2026-11-06, N21): drop nests totally.** No ground nest block, no stash, no nest worldgen, no chicken laying (supersedes plan P2 and the line above). **Reversed again 2026-11-10 ([plan_hearth_crow_swap.md](plan_hearth_crow_swap.md) 5): the nest stays as the Crow Nest, generated on temperate forest tree tops and village house roofs with stolen items and a crow flock; ground nests dropped; Crow Nest to 2 Straw crafted, 3 milled (4.7).** |
 | Animal Feed | `farmersdelight:horse_feed` (horses only), `supplementaries:fodder` | not an overlap: **Keep** (3.1) **Not included (owner 2026-11-06, N21).** Breeding foods differ per animal and are documented on the animal items; the per-animal difference matters, so an audit is still needed first (owner). |
 | Sink (`basin`), Counter, Drawer | CfB sink / counter, Handcrafted, Redeco, Another Furniture, Storage Delight | **Drop (D10, owner 11-04)** |
 | Empty Crate | `quark:crate` ("Empty Crate"), IE crate (name only) | **Keep, renamed "Bottle Crate" (D10, 11-04 investigate, owner note 11-05)**: no overlap found (bottle and egg display crate); see 3.1. Not built **Investigate the Bottle Crate (owner 2026-11-06, N20).** |
@@ -196,7 +196,7 @@ Owner 11-06 (N20): compare the textures of the storage rows below once more befo
 | H&H system | Pack system | Decision |
 |---|---|---|
 | Salting (food + salt = Salted, +25 % hunger, -10 % saturation) | The Salt's Salting craft (`#forge:salts`), Seasoning JEI page (now in Creative Delight), the seasonings framework (cap 2); item_merges 2.9 | **Same mechanic. Drop H&H's** (`SaltingRecipe`, `SaltedEffectEvents`, `SaltedFoodTooltipHandler`) |
-| Crow entity (spawn, tame, shoulder, fetch, steal, scarecrow repel) | Alex's Mobs crow (`flying_birds`, drops a vanilla feather) | **Mechanics on AM's crow (D2, owner 11-05)**; entity not ported. Comparison and per-feature calls in 3.2 |
+| Crow entity (spawn, tame, shoulder, fetch, steal, scarecrow repel) | Alex's Mobs crow (`flying_birds`, drops a vanilla feather) | **Mechanics on AM's crow (D2, owner 11-05)**; entity not ported. Comparison and per-feature calls in 3.2 **2026-11-10: H&H crow ported, AM crow no longer spawns ([plan_hearth_crow_swap.md](plan_hearth_crow_swap.md); 4.7).** |
 | Nests (chickens lay into them, hoppers) | Incubation nests | **Drop the laying**; nest block kept as stash sink (2.1) **Nests dropped totally (owner 2026-11-06, N21).** |
 | Pig / rabbit litters (1 in 3 breedings +1 baby) | Fungi Delight truffle litters (extra piglets) | **Add both, boost the truffle effect (D14 / N3, owner 11-04 / 11-05)**; pigs no longer wait for `tweaks #13`. Built (4.4) |
 | Cow bottle milking | FD milk bottle (Neapolitan milk merged, pack milk fluids alcohol.md 4.1) | **Add (D14 / N4)**: glass bottle on a cow gives `farmersdelight:milk_bottle`, never an H&H bottle. Built (4.4) |
@@ -367,7 +367,7 @@ Values are hunger / saturation modifier; durations in seconds; "II" = amplifier 
 
 | System | Behaviour | Decision |
 |---|---|---|
-| Crow mechanics on Alex's Mobs' crow | H&H crow: tame by corn kernels (1 in 5), shoulder, fetch, steal shiny items into nests, crop pecking, wariness / trust. AM crow already shoulders, picks up items, deposits into item-frame chests, scatters from pumpkins and the scarecrow tag; its peck is animation only (no crop damage) and it drops a vanilla feather | **D2 (owner 11-05): implement on AM's crow, H&H entity not ported.** Per feature: **crop pecking: owner 11-05, crows damage crops, default on** (a goal resetting crop age over a pack tag; mobGriefing and a config gate; about 90 lines); **shiny stealing: as the plan (C2)**, cheap variant if wanted (about 40 lines drop beside an Incubation nest) or the full steal goal with the ported nest (about 150 + 250 lines); tame crows must not steal; **trust system: deep dive first (owner 11-05)**, mixin on `mobInteract` would change every AM taming, config switch default off; **crow feather item and Bad Omen brew: added (owner 11-05, reverses the earlier drop advice)**. Plan: [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (P1 to P7, R1, R2, C2, S1 to S7, tests HNH-48 to HNH-68). Hook: `EntityJoinLevelEvent` adding goals (as `FoxBerryGoals`), mixin only for private state. Not built **(owner 2026-11-06, N21): both crows (AM's with the mechanics, and H&H's) need an in-game evaluation** before the crow question is final; nests are dropped, so theft has no stash (see the plan). **owner 2026-11-08 (N26-2): nests are no longer dropped outright; they are evaluated with the crows.** |
+| Crow mechanics on Alex's Mobs' crow | H&H crow: tame by corn kernels (1 in 5), shoulder, fetch, steal shiny items into nests, crop pecking, wariness / trust. AM crow already shoulders, picks up items, deposits into item-frame chests, scatters from pumpkins and the scarecrow tag; its peck is animation only (no crop damage) and it drops a vanilla feather | **D2 (owner 11-05): implement on AM's crow, H&H entity not ported.** Per feature: **crop pecking: owner 11-05, crows damage crops, default on** (a goal resetting crop age over a pack tag; mobGriefing and a config gate; about 90 lines); **shiny stealing: as the plan (C2)**, cheap variant if wanted (about 40 lines drop beside an Incubation nest) or the full steal goal with the ported nest (about 150 + 250 lines); tame crows must not steal; **trust system: deep dive first (owner 11-05)**, mixin on `mobInteract` would change every AM taming, config switch default off; **crow feather item and Bad Omen brew: added (owner 11-05, reverses the earlier drop advice)**. Plan: [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (P1 to P7, R1, R2, C2, S1 to S7, tests HNH-48 to HNH-68). Hook: `EntityJoinLevelEvent` adding goals (as `FoxBerryGoals`), mixin only for private state. Not built **(owner 2026-11-06, N21): both crows (AM's with the mechanics, and H&H's) need an in-game evaluation** before the crow question is final; nests are dropped, so theft has no stash (see the plan). **owner 2026-11-08 (N26-2): nests are no longer dropped outright; they are evaluated with the crows.** **2026-11-10: moved onto the ported H&H crow; D2 reversed ([plan_hearth_crow_swap.md](plan_hearth_crow_swap.md)).** |
 | Scarecrow repels crows | tag only | `crow_fears` and the pack's repels tag (2.1). Not built Needs an in-game eval of the crows (owner 2026-11-06, N21). |
 | Salt licking | right-click degrades a salt block (5 % per lick), honeycomb waxes, axe unwaxes, salt restores; last lick pops 1 salt; every animal gets a goal to stay within 12 blocks of salt and lick every 8 min | **Implement (D13, owner 11-05)** on the pack's block: three stage blocks plus waxed variants as `SaltSandBlock`s in the pack's peach palette (quantile map from H&H's texture), dispenser rule, lick-block registry instead of a per-animal scan (S5). Side effect: pens beside salt blocks. Not built |
 | Salt caves | 33-block carved caves, salt shell with calcite and tuff, 1.2 % pools, drips; 1 in 24 chunks, Y -40 to 30, dry / desert / badlands / savanna / beach | **Implement swapped (D13, owner note 11-05)**: shell of raw rock salt block (a Salt Block shell would dissolve into the pools), drips become The Salt's buds and cluster (removes `SaltDripBlock`, 204 lines), Forge biome tags, config for rarity and height. Port of the 428-line feature plus a biome modifier. Final cave call still open |
@@ -446,7 +446,7 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   materials and the smithing route are Claude's picks (owner gave tiers, areas, capacities and
   cauldron costs only); smithing was picked because vanilla smithing copies the base's NBT, so the contents carry over.
   Old cans holding more than a tier's capacity read as the capacity (clamped on read). The copper tier is now
-  "Copper Watering Can". All tiers use the copper (1.4.1) texture for now. Not in `#creativeengineering:dragon_gear`
+  "Copper Watering Can". All tiers use the copper (1.4.1) texture for now. Not in `#creativeequipment:dragon_gear`
   (no durability).
 - **Code (before 2026-10-31):** patcherMod `wateringcan/` (`WateringCanItem`, `WateringCanItems`, `WateringCanJeiPlugin`). Data components
   became stack NBT (`WaterLevel`, `BonemealLevel`, `FertilizerItem`; keys removed at 0, so a used-up can is a plain
@@ -516,7 +516,7 @@ bullets); scratch PASSED r1101 (SQ-HR-01 to -05, CQ-HR-06).
 - **Tags** (CD `hearthandharvest/tags.js`, 1.4.1's `c:` tags as `forge:`): raspberry in `#forge:fruits/raspberries`
   (the pack's existing plural tag) and `#forge:fruits`, `#forge:crops/raspberry` and `#forge:crops`, `#forge:berries`,
   `#forge:fruits/berries`, `#minecraft:fox_food`; pips in `#forge:seeds/raspberry` and `#forge:seeds`. Food type
-  `raw/fruit` (`food_types.json`), jar family `berries` (`creativeengineering/jar_tags.js`).
+  `raw/fruit` (`food_types.json`), jar family `berries` (`creativedelight/jar_tags.js`).
 - **Seasons:** `temperate` in `crop_seasons.json` (1.4.1: spring and summer crop), not Serene Seasons tags.
 - **WTHIT:** growth line rule in CD `crop_growth.json`, harvestable at age 3.
 - **Worldgen:** wild crop rule `raspberry` in `wild_crops.json` ("temperate grassy" or "cold grassy snowy", 44 biomes, crops_by_biome.md; the blueberry biomes added 2026-11-02, `farming/wild-crops #7`),
@@ -590,7 +590,7 @@ Everything here is in the member (`backportedHearth-1.4.1-ce-19.2-03`) unless na
 | Tapper and sap | Tree Tapper on spruce, dark oak or birch log: 50 % per 2 s for 10 mB, 1000 mB tank, buckets and pipes drain it, comparator output. Sap bucket on a cauldron, over fire: 2 steps of 24 s, then a bottle takes 1 Rustic Delight syrup. B6 fixed. **Not ported:** the tapper's fluid preview renderer, own sap particle (vanilla honey drip). The waterlogged state is dropped |
 | Pungent, Tempting | Behaviour added with B10 fixed: holders scan once a second; a mob gets its goal only when first near a holder. Brain mobs ignore Pungent as upstream |
 | Corn husk | 25 % on harvest (config, loot modifier, so hand, hoe and Create harvesters), 25 % on milling and crushing, 75 % on the cutting board; a husk grinds to 20 % cornmeal on the machines. Chances are the build's choice (N23-1 left them open) |
-| Crow feather | Replaces the feather on Alex's Mobs' crow (step 5) |
+| Crow feather | Replaces the feather on Alex's Mobs' crow (step 5) **2026-11-10: from the H&H crow's own loot table (0 to 1, looting); the AM loot modifier is gone.** |
 | Drinks | Juices: Apple Press, 1 fruit + glass bottle (upstream cost 2 fruit a bottle; the press takes one item). Wines: Fermentation Barrel, 3 fruit + 15 juice + wine bottle, red juice for blueberry, raspberry, sweet berry, white for glow berry, melon, lemon. Root Beer and Moonshine: Brewin' keg. Wines and Moonshine in `global.alcohol` (Creative Brewing). New helpers `R.vineryFermenting` and `R.vineryPressing` |
 | Fixed from tranche 1 | The syrup waffle models failed to load in the installed jar (`neoforge:composite`). The rebuilt jar has none |
 
@@ -604,7 +604,7 @@ Choices the build made where the plan, an owner note or upstream did not settle 
 |---|---|---|---|
 | J1 | Litters: one in three breedings gives one extra baby (the plan's figure) | Upstream: 1 to 3 extras on every breeding | `HHConfig` `litterChance` |
 | J2 | Truffle-bred pigs: 2 in 3 for the extra baby, on top of Fungi Delight's own 40 % / 10 % | Any other boost (N3 gave no number) | `truffleLitterChance` |
-| J3 | Corn Husk chances: harvest 25 % (config), milling and crushing 25 %, cutting board 75 % with the 4 kernels | N23-1 left the numbers open | `cornHuskHarvestChance`; `corn_delight/recipes.js`; `creativeengineering/recipes.js` |
+| J3 | Corn Husk chances: harvest 25 % (config), milling and crushing 25 %, cutting board 75 % with the 4 kernels | N23-1 left the numbers open | `cornHuskHarvestChance`; `corn_delight/recipes.js`; `creativedelight/recipes.js` |
 | J4 | Juice on the Apple Press: 1 fruit and a glass bottle per bottle | Upstream cost 2 fruit a bottle; the press takes one item | `hearthandharvest/recipes.js` |
 | J5 | Wines in Vinery's Fermentation Barrel: 3 fruit + 15 juice units + wine bottle. Red juice for blueberry, raspberry and sweet berry; white for glow berry, melon and lemon. The recipes use Vinery's grape juice, not the H&H juices | Take the H&H juice items as input; other red / white split | `recipes.js` |
 | J6 | Root Beer: 2 hanging roots + sugar + water; Moonshine: 2 cornmeal + sugar + water, both on the Brewin' keg with the helper's default time (8 min), temperature 3 and XP | Upstream's own times and temperatures were not copied | `recipes.js` |
@@ -614,7 +614,7 @@ Choices the build made where the plan, an owner note or upstream did not settle 
 | J10 | Pinned immune: bosses (`forge:bosses`), flying and swimming by class and by navigation type, plus a tag holding bat, vex, blaze, allay | Different list (N25 left the test to the build) | `tags.js` `pinned_immune`; `ThrownPitchfork` |
 | J11 | Thrown tools: dropped upstream's speed compensation while charging (charging slows like a trident); a thrown kill is tagged by its damage source; the pitchfork pierces 3 (upstream) | Port the compensation | `ThrownTool`, `CleaverEvents` |
 | J12 | Manure drops only after a feeding the animal accepts (not in love, adult, no breeding cooldown); upstream also dropped it on a refused feed. Pending drops live in memory and are lost on unload or restart | Upstream behaviour; save the timer in NBT | `ManureDrops` |
-| J13 | Never manure: babies, named animals, chickens and Alex's Mobs crows | Chickens could poop | `tags.js` `does_not_poop` |
+| J13 | Never manure: babies, named animals, chickens and Alex's Mobs crows | Chickens could poop | `tags.js` `does_not_poop` **2026-11-10: `hearthandharvest:crow` in place of `alexsmobs:crow`.** |
 | J14 | Manure joins the watering can fertiliser tag (`bonemeal_substitutes`) and is bone meal by hand; hand use consumes one | Keep it bone-meal-only by hand | `tags.js`; `ManureItem` |
 | J15 | Cow milking by bottle also applies to mooshrooms (they are cows) and skips babies; goat milking skips babies | Allow babies | `AnimalEvents` |
 | J16 | Chicken plucking: sneak-use with food in hand feeds instead of plucking; cooldown kept in the chicken's saved data | Upstream plucks regardless | `AnimalEvents` |
@@ -662,11 +662,11 @@ Choices the build made where the plan, an owner note or upstream did not settle 
 | J58 | Lick goal: search radius 22 (`saltAnimalRadius` 20 + 2), standing spots within 1 block with the 3 nearest path-checked, trip limit 300 ticks, lick within 2; new switches `playerLicking`, `animalLicking`; animal licks ignore `mobGriefing` (upstream) | Other values; respect it | `SaltConfig`, `StayNearSaltGoal` |
 | J59 | Lickers: cow, sheep, goat, pig, horse, donkey, mule, llama, rabbit, AM moose, bison, gazelle (AM has no deer; gazelle replaces it). S6 is a tooltip hint and JEI page, **no WTHIT line** (the member has no WTHIT dependency) | Moose and bison only; add a WTHIT plugin | `crow_salt_tags.js`, `CrowSaltJeiPlugin` |
 | J60 | Trust deep dive written (plan 8.1 to 8.5) and built to its recommendation: trust changes approach distance only, `crow.tempting` is the off switch; the gate on C1, C3, C4 is met | Trust gates taming | plan section 8 |
-| J61 | `#creativedelight:crow_food` = `#forge:seeds`, corn, corn seeds; no AM eggs or sugar. Mixin on AM `canTargetItem` skips crow food for wild crows except wheat seeds, so the 1 in 8 path can fire. AM's 30 % wheat-seed taming stays. **AM is now a hard runtime dependency of the member** (required mixin) | All of `crow_foodstuffs`; leave AM (1 in 8 never fires) | `crow_salt_tags.js`, `EntityCrowFoodMixin` |
+| J61 | `#creativedelight:crow_food` = `#forge:seeds`, corn, corn seeds; no AM eggs or sugar. Mixin on AM `canTargetItem` skips crow food for wild crows except wheat seeds, so the 1 in 8 path can fire. AM's 30 % wheat-seed taming stays. **AM is now a hard runtime dependency of the member** (required mixin) | All of `crow_foodstuffs`; leave AM (1 in 8 never fires) | `crow_salt_tags.js`, `EntityCrowFoodMixin` **2026-11-10: the AM mixin is gone with the swap; the member no longer needs AM; wheat seeds are now eaten from the ground like other crow food.** |
 | J62 | Shiny list: `#forge:ingots` except netherite and every id containing "brick" (the pack tags bricks as ingots). The "rare-tier tag" of N24-8 does not exist in the dumps; cut by hand: netherite shard, terrasteel ingot and nugget, refined radiance, shadow steel, experience nugget | Keep them | `crow_salt_tags.js` |
 | J63 | Edible crops: wheat, pumpkin and melon stems, sweet berry, FD cabbage, tomatoes, budding tomatoes, raspberry, blueberry, cranberry, salmonberry, strawberry, stick, rope and treated stick tomatoes, peanut, corn. **No crow-proof corn state** (Corn Delight has none) | Grapevines, more crops | `crow_salt_tags.js` |
-| J64 | Scary for crows: player, villager, MCA male and female villagers; `has_crows` is 32 of the 44 crow biomes (snow, rock, sky ones left out); nest rarity 1 in 32 (upstream) | Vanilla pair; all 44; lower rarity | `crow_salt_tags.js`, `placed_feature/nest.json` |
-| J65 | Crow goals: tempt priority 3 (outranks AM's Scatter), flee and repel priority 1, speeds 1.4 and 1.3 (upstream's were for its own move control); an alarmed wild crow drops its target and flees; taming sets AM command 1 (follow); corn breeding for tame crows through an event, `crow.cornBreeding`, corn and corn seeds only | Upstream speeds; keep AM's retaliation; every crow food | `CrowEvents`, `CrowFleeGoal`, `CrowLogic` |
+| J64 | Scary for crows: player, villager, MCA male and female villagers; `has_crows` is 32 of the 44 crow biomes (snow, rock, sky ones left out); nest rarity 1 in 32 (upstream) | Vanilla pair; all 44; lower rarity | `crow_salt_tags.js`, `placed_feature/nest.json` **2026-11-10: `has_crows` and the ground nest removed; tree-top nests in `creativedelight:crow_nest_forests` at 1 in 6 chunks, roof nests 25 percent per house ([plan_hearth_crow_swap.md](plan_hearth_crow_swap.md) 5).** |
+| J65 | Crow goals: tempt priority 3 (outranks AM's Scatter), flee and repel priority 1, speeds 1.4 and 1.3 (upstream's were for its own move control); an alarmed wild crow drops its target and flees; taming sets AM command 1 (follow); corn breeding for tame crows through an event, `crow.cornBreeding`, corn and corn seeds only | Upstream speeds; keep AM's retaliation; every crow food | `CrowEvents`, `CrowFleeGoal`, `CrowLogic` **2026-11-10: the goals are registered by `CrowEntity` (same priorities and speeds), straight flight goes through the H&H move control; no AM command on taming.** |
 | J66 | Theft numbers: per-second chance `crow.stealChance` 0.1, victim within 10, reach 2, chase limit 200 ticks, cooldown 100 to 180; random eligible hotbar slot, selected included; never an item with NBT or an edible item; action-bar message "A crow stole your X"; the chased player is exempt from flee, others 2.5 | Other values; silent as upstream | `CrowSeekShinyGoal`, `CrowLogic` |
 | J67 | `crow.dropOnHurt` boolean, on: any hit drops the loot (N24-8 said "hit hard"; no damage threshold). Off: held back one tick so AM cannot drop it. Right-clicking a wild crow with loot makes it drop it, protected. After escaping, the crow keeps it to the timeout (N24-8). Loot leaving the crow is unlimited-life and invulnerable even with `doMobLoot` off | A damage threshold; upstream drop on arrival; respect the gamerule | `CrowEvents`, `CrowLogic` |
 | J68 | Thrown shiny item: any item with a thrower in range, 1 in 3 tames and returns it, else carried as loot. Nest deposit built, on by default, 16 blocks (`crow.stashInNests`), for the eval. Nest holds 4 single-item slots, not hopper-able; chicken nest-seeking not ported. Plan's `StolenLoot` flag not needed: AM's deposit goal runs only for tame crows on command 3 | Hotbar only; deposit off until the eval | `CrowSeekShinyGoal`, `hearth/nest` |
@@ -712,7 +712,24 @@ Member `backportedHearth-1.4.1-ce-19.2-04`, in the Creative Delight jar. Creativ
 
 **Not done:** the next `/dumpall` and `/cdevgen` (steps 2, 11 table, 12 recheck, 17, 19, names and JEI generators); WTHIT lines (step 17, salt hint is a tooltip instead); Lilliput Lane (needs a substitution table); Botany Pots entries (`farming/crops #36`); the Soda family and Latex integration reports (N24-1, N24-5; own reports, not port work); H&H's own crow entity (P1, not ported; the "both crows" eval has only AM's crow plus the mechanics). Evals open by design: basin, brine, Clarity, Tilling, nests, crows, trough.
 
-Also: the Corn Maze's corn walls can be walked through (J38); Alex's Mobs is now a hard dependency of the member (J61); the Creative Worldgen and Creative Calendar jars were not rebuilt, the instance copies of the generated tables are read first, so a release must rebuild them.
+Also: the Corn Maze's corn walls can be walked through (J38); Alex's Mobs was a hard dependency of the member (J61) until the crow swap (4.7); the Creative Worldgen and Creative Calendar jars were not rebuilt, the instance copies of the generated tables are read first, so a release must rebuild them.
+
+### 4.7 Crow swap: H&H crow, nest spawning, tree and roof nests (built 2026-11-10; not installed, not run)
+
+Plan and decisions: [plan_hearth_crow_swap.md](plan_hearth_crow_swap.md) (D-1 to D-7, N1 to N4). Fixes the 1.2.02 chunk
+generation crash (the crow spawn check read past the worldgen region). Scratch rows SQ-HCS-01 to -12, CQ-HCS-01, and the
+SQ-HH crow rows rewritten for the new entity.
+
+| Part | State |
+|---|---|
+| Crow | `hearthandharvest:crow` and `crow_spawn_egg`: entity, move control, flight pose, model, the five keyframe animations (`animateWalk` shimmed), renderer, held item and shoulder layers, four sounds, texture, feather loot table. The member's tuned goals retargeted from AM through `CrowAccess` to `CrowEntity`; upstream's wander, item and fetch goals and the shoulder hop-off added. Wariness is a field saved under `Wariness` with the old keys. No advancements |
+| Spawning | No biome entries. A generated nest brings 2 to 3 crows; a generated nest refills one crow per 5 minutes while a player is within 48 and fewer than 3 crows are within 24 (`nest/NestCrows`, random ticks). Player nests make none. Spawn check and both area scans removed |
+| Nests | Tree tops in 8 temperate forest biomes, 1 in 6 chunks (`nest_tree_top`, top_layer_modification). Village house roofs, 25 percent per house, one column in the middle third of the house box, in-chunk only (`ChunkGeneratorCrowNestMixin`, `nest/RoofNests`). Loot tables `chests/crow_nest`, `chests/crow_nest_village` rolled on first touch. Ground nests dropped; existing ones generate crows |
+| AM crow | Spawn rule `no_alexsmobs_crow`, `crowSpawnWeight` 0, egg in `removed_items.js`, dropped from `flying_birds`; mixin, `CrowAccess`, feather modifier and `alexsmobs:crow_fears` removed. Saved AM crows stay |
+| Data | Crow Nest name, straw recipes (2 crafted, 3 milled), `does_not_poop`, dict key `crow_spawn_egg`, new config keys (`nestFlockMin`/`Max`, `nestCrowCap`, `nestCrowRange`, `nestRespawnMinutes`, `nestPlayerRange`, `playerNestsSpawnCrows`, `villageRoofNests`, `villageRoofNestChance`, `fetchItems`, `fetchThrownItems`, `leaveShoulderToFetch`) |
+
+**Not done:** install (the game was running); `/dumpall` and `/cdevgen` after install; recopy `hearthandharvest-common.toml`
+to `configs_edited/` once the game has written the new keys.
 
 ## 5. Decision index
 
@@ -1139,7 +1156,38 @@ Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch
 - 2026-11-08: tranche 2 built (4.4): milking, plucking, litters, manure, cleavers, pitchfork, tapper and sap, Pungent and Tempting, corn husk, crow feather, drink routes, compost, alcohol; jars built and installed; judgement calls J1 to J23 listed in 4.5 for confirmation; tests HNH-97 to HNH-100; scratch rows SQ-HH-08 to -15.
 - 2026-11-08: tranche 3 built and installed (4.6): gear, crops, machines, crow, salt, potions, worldgen, audits; judgement calls J24 to J91 in 4.5; not run.
 - 2026-11-08: full scratch suite written (577 rows, 8.1); findings from writing them in 8.2; nothing run.
+- 2026-11-10: crow swap built (4.7, plan_hearth_crow_swap.md): H&H crow ported, AM crow dropped, nests make crows, tree-top and village roof nests; crash fix; not installed.
 
 ## Owner notes (scratchpad 2026-11-07)
 
 - Manure buildup (owner 2026-11-07): layers build up in cramped or uncleared pens; manure mobs walk to open space to drop it; crammed mobs (no 3x3 clear space, touching other mobs) drop manure layers instead of items with a chance. Row `blocks/new #22`.
+
+## Owner notes (scratchpad 2026-11-09)
+
+Owner change list for the member, all in [TODO](todo/TODO.md) under Hearth and Harvest (`largecontent/mod-additions #54` to `#64`) or the family the item belongs to. Status was checked against the code on 2026-11-09; nothing below is built unless it says so.
+
+| Note | Status | Row |
+|---|---|---|
+| Farmer Hat: remove the summer hat | Built 2026-11-09, untested | `mod-additions #54` |
+| Feather plucking on every bird | Not started (chickens only) | `#55` |
+| Cleaver and pitchfork entity names | Built 2026-11-09, untested | `#56` |
+| Water trough: faster baby growth; bird manure; Quark trough drops | Rename done, rest not started; crowding is `blocks/new #22` | `#57` |
+| Tree tapper takes the wooden bucket | Built 2026-11-09, untested: the wooden bucket moved to Creative Delight (`creativedelight:wooden_*`) and holds water, sap, milk and honey; tapper recipe takes either bucket | `#58` |
+| Salt lick: three shrinking layers, empty block | Different design built (wear stages) | `#59` |
+| Crow nests: rename, tree and roof spawns, loot, straw | Ground nest feature built, rest not started | `#60` |
+| Bottle crate: all bottles and eggs, retexture odd bottles | Renamed; coverage unchecked | `#61` |
+| Spool of String rename | Built 2026-11-09, untested | `#62` |
+| Straw rug break overlay | Bug, not investigated | `#63` |
+| Hops texture, WTHIT line, 2 hops in Brewin' keg recipes | Not started | `#64` |
+| Sunflower seeds and the edible seed family | Not started | `dishes/ingredients #40` |
+| Croissant misc baked family, plain donut, fruit scones | Not started | `baking/baked-goods #39` to `#40` |
+| Sap boiling replaces syrup recipes | Partly (tapper outputs syrup) | `dishes/ingredients #41` |
+| Sausage and butter | Pinned | `dishes/ingredients #42` |
+| Street corn Fire Resistance 30 s | Built 2026-11-09, untested | `dishes/meals #63` |
+| Biscuits and gravy, glazed carrots, hops salad | Built 2026-11-09, untested (hops salad was already a shapeless salad) | `dishes/meals #64`, `#65` |
+| Pickled carrots and potatoes, compressed pickles | Not started | `dishes/pickles-and-ferments #16` |
+| Marshmallow on a stick | Not started (D7 dropped them) | `baking/sweets #7` |
+| Goat and chocolate milk tooltip | Built 2026-11-09, untested | `ui/tooltips #15` |
+| Watering can textures | Tiers built, new art not started | `farming/crops #46` |
+| Tilled End soil: "is this base H&H?" | Answered: yes, H&H's block (J75); its use is `farming/crops #45` | none |
+| Mystic oak sleep behavior and trust gifts | Done, see wise_oak.md and `mobs/tweaks #19` | none |

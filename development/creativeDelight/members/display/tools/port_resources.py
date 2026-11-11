@@ -22,7 +22,7 @@ What changes on the way (feature_writeup/display_delight.md section 5):
     (tools/gen_dd_dishes.py) copied from 1.2.0's bowl and plate
   * item models: a registered block item with no item model gets one parented on its default-state block model
   * `displaydelight:support_exceptions` also holds the pack's Cooking for Blockheads counters
-    (#creativeengineering:counter_supports, optional), so a plate on a counter does not grow a wooden leg
+    (#creativedelight:counter_supports, optional), so a plate on a counter does not grow a wooden leg
   * recipes lose the 1.20 'category' and 'show_notification' fields, loot tables 'random_sequence'; lang gets the
     1.19.2 creative tab key
 """
@@ -62,7 +62,7 @@ PLATES = ['food_plate', 'small_food_plate']
 # The gui transform most plated block models use, for a generated item model whose parent chain has none
 PLATED_GUI = {'rotation': [37, 44, 0], 'translation': [0, 4, 0], 'scale': [0.8, 0.8, 0.8]}
 LEGACY = os.path.join(HERE, 'legacy_1.2.0')
-COUNTER_SUPPORTS = {'id': '#creativeengineering:counter_supports', 'required': False}
+COUNTER_SUPPORTS = {'id': '#creativedelight:counter_supports', 'required': False}
 
 # Java factory per block type (DisplayBlocks)
 FACTORY = {

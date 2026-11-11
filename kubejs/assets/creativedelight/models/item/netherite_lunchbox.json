@@ -1,0 +1,74 @@
+{
+  "parent": "solapplepie:item/lunchbox_look/netherite",
+  "overrides": [
+    {
+      "predicate": {
+        "creativedelight:lunchbox_dyed": 1
+      },
+      "model": "solapplepie:item/lunchbox_look/netherite_dyed"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 1
+      },
+      "model": "solapplepie:item/lunchbox_look/lunchbag"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 1,
+        "creativedelight:lunchbox_dyed": 1
+      },
+      "model": "solapplepie:item/lunchbox_look/lunchbag_dyed"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 2
+      },
+      "model": "solapplepie:item/lunchbox_look/copper"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 2,
+        "creativedelight:lunchbox_dyed": 1
+      },
+      "model": "solapplepie:item/lunchbox_look/copper_dyed"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 3
+      },
+      "model": "solapplepie:item/lunchbox_look/iron"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 3,
+        "creativedelight:lunchbox_dyed": 1
+      },
+      "model": "solapplepie:item/lunchbox_look/iron_dyed"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 4
+      },
+      "model": "fantasyfurniture:item/decorations/berry_basket_empty"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 5
+      },
+      "model": "fantasyfurniture:item/decorations/berry_basket_blueberry"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 6
+      },
+      "model": "fantasyfurniture:item/decorations/berry_basket_strawberry"
+    },
+    {
+      "predicate": {
+        "creativedelight:lunchbox_skin": 7
+      },
+      "model": "fantasyfurniture:item/decorations/berry_basket_sweetberry"
+    }
+  ]
+}

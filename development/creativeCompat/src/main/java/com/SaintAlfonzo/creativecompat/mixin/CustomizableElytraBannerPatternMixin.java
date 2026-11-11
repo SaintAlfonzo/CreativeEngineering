@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * mode as the bed patterns had.
  *
  * <p>So instead: probe the curated location first (unchanged), and if that's missing, probe our
- * own {@code creativeengineering:entity/elytra_banner[_low]/<originNamespace>/<path>} compat
+ * own {@code creativecompat:entity/elytra_banner[_low]/<originNamespace>/<path>} compat
  * texture -- built at load by {@code banners/BannerPatternPack}, which reproduces
  * customizableelytra's own centered-crop convention for every other installed mod's patterns.
  * Only fall back to the original (missing) curated location -- i.e. render nothing, same as
@@ -59,7 +59,7 @@ public class CustomizableElytraBannerPatternMixin {
 
         ResourceLocation key = bannerKey.location();
         String elytraFolder = curated.getPath().contains("elytra_banner_low") ? "elytra_banner_low" : "elytra_banner";
-        ResourceLocation generated = new ResourceLocation("creativeengineering",
+        ResourceLocation generated = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS,
                 "entity/" + elytraFolder + "/" + key.getNamespace() + "/" + key.getPath());
         return isMissing(generated) ? curated : generated;
     }

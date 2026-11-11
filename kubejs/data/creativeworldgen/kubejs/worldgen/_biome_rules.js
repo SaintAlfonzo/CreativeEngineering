@@ -77,7 +77,7 @@
 
 	function modLoaded(id) {
 		var ns = namespace(id)
-		return ns === 'minecraft' || ns === 'creativeengineering' || Platform.isLoaded(ns)
+		return ns === 'minecraft' || ns === 'creativeworldgen' || Platform.isLoaded(ns)
 	}
 
 	function modifierPath(id) {

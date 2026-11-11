@@ -14,75 +14,75 @@
 // can be added, removed, or debugged independently.
 //
 // Behaviour + the sampleable-mob list: sample_syringe.js (CD startup tree) (global.sampleSyringe)
-// Interact/attack handlers:            CD server creativeengineering/sample_syringe.js
+// Interact/attack handlers:            CD server creativedelight/sample_syringe.js
 //
 // All variants share the one empty-syringe texture (assets/creativeengineering/textures/item/
 // sample_syringe.png). Filled syringes are told apart from the empty one by the .glow(true)
 // below, which forces the enchantment glint unconditionally (Item#isFoil always true) -
 // same relationship as book vs. enchanted_book.
 
-const SYRINGE_TEXTURE = 'creativeengineering:item/sample_syringe'
+const SYRINGE_TEXTURE = 'creativedelight:item/sample_syringe'
 
 StartupEvents.registry('item', e => {
-    e.create('creativeengineering:sample_syringe')
+    e.create('creativedelight:sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe')
         .texture(SYRINGE_TEXTURE)
 
-    e.create('creativeengineering:cow_sample_syringe')
+    e.create('creativedelight:cow_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Cow)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:pig_sample_syringe')
+    e.create('creativedelight:pig_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Pig)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:chicken_sample_syringe')
+    e.create('creativedelight:chicken_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Chicken)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:sheep_sample_syringe')
+    e.create('creativedelight:sheep_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Sheep)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:rabbit_sample_syringe')
+    e.create('creativedelight:rabbit_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Rabbit)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:cod_sample_syringe')
+    e.create('creativedelight:cod_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Cod)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 
-    e.create('creativeengineering:salmon_sample_syringe')
+    e.create('creativedelight:salmon_sample_syringe')
         .unstackable()
         .group('tools')
         .displayName('Sample Syringe (Salmon)')
         .texture(SYRINGE_TEXTURE)
-        .containerItem('creativeengineering:sample_syringe')
+        .containerItem('creativedelight:sample_syringe')
         .glow(true)
 })

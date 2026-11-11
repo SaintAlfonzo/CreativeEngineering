@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativedelight.hearth.nest;
 
+import com.SaintAlfonzo.creativedelight.hearth.HHConfig;
+import com.SaintAlfonzo.creativedelight.hearth.crow.CrowConfig;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +34,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-/** Ground nest with the 1.4.1 behaviour: items dropped or used on it go in, an empty hand takes the last one out (sneaking, all of them). */
+/** Crow nest with the 1.4.1 behaviour: items dropped or used on it go in, an empty hand takes the last one out (sneaking, all of them). */
 public class NestBlock extends Block implements EntityBlock {
     public static final BooleanProperty GENERATED = BooleanProperty.create("generated");
     private static final VoxelShape OUTER = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D);
@@ -82,6 +84,18 @@ public class NestBlock extends Block implements EntityBlock {
             level.scheduleTick(pos, this, 1);
         }
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
+    }
+
+    /** Generated nests refill their flock (NestCrows). Player-placed nests do not tick unless {@code playerNestsSpawnCrows} is on. */
+    @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        // the config guard: block states can be asked before the config loads
+        return state.getValue(GENERATED) || HHConfig.SPEC.isLoaded() && CrowConfig.PLAYER_NESTS_SPAWN_CROWS.get();
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        NestCrows.tick(state, level, pos, random);
     }
 
     @Override

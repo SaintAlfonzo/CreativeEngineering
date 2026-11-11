@@ -7,13 +7,13 @@
 // (python3 tools/gen_spawn_table.py applies the same rules offline to the last /dumpspawns).
 //
 // Per rule in the config:
-//   - biome tag creativeengineering:mob_spawns/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
-//   - every rule goes into ONE biome modifier, creativeengineering:forge/biome_modifier/mob_spawns.json, of
-//     patcherMod's type creativeengineering:tune_spawns (worldgen/SpawnTuning), which runs the rules in file order
+//   - biome tag creativeworldgen:mob_spawns/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
+//   - every rule goes into ONE biome modifier, creativeworldgen:forge/biome_modifier/mob_spawns.json, of
+//     patcherMod's type creativeworldgen:tune_spawns (worldgen/SpawnTuning), which runs the rules in file order
 //     after every mod's modifiers (Forge phase AFTER_EVERYTHING). One modifier keeps the order deterministic;
 //   - disable_modifiers: the mods' own biome modifiers, each replaced by forge:none.
 // Per spawn condition (conditions list: light_only, water_only; Creative Worldgen worldgen/SpawnConditions):
-//   - biome tag creativeengineering:spawn_conditions/<id> when it names biomes (where/add/except, or 'rules': the
+//   - biome tag creativeworldgen:spawn_conditions/<id> when it names biomes (where/add/except, or 'rules': the
 //     biomes those rules match); none = everywhere;
 //   - written into the same modifier, which hands them to the spawn checks.
 // spawn_ground: block tag -> entries added to it (ServerEvents.tags('block')), e.g. every dirt into
@@ -36,10 +36,10 @@
 
 	var CONFIG_PATH = 'kubejs/generation_scripts/worldgen/mob_spawns.json'
 	var TRAITS_PATH = 'kubejs/generation_scripts/worldgen/biome_traits.json'
-	var TAG_PREFIX = 'creativeengineering:mob_spawns/'
-	var COND_PREFIX = 'creativeengineering:spawn_conditions/'
+	var TAG_PREFIX = 'creativeworldgen:mob_spawns/'
+	var COND_PREFIX = 'creativeworldgen:spawn_conditions/'
 	var CONDITIONS = { light_only: true, water_only: true }
-	var MODIFIER_PATH = 'creativeengineering:forge/biome_modifier/mob_spawns.json'
+	var MODIFIER_PATH = 'creativeworldgen:forge/biome_modifier/mob_spawns.json'
 	var TUNING_CLASS = 'com.SaintAlfonzo.creativeworldgen.worldgen.SpawnTuning'
 	var ACTIONS = { set: true, scale: true, remove: true }
 	var CATEGORIES = { monster: true, creature: true, ambient: true, water_creature: true, water_ambient: true,
@@ -127,7 +127,7 @@
 
 	function modLoaded(id) {
 		var ns = namespace(id)
-		return ns === 'minecraft' || ns === 'creativeengineering' || Platform.isLoaded(ns)
+		return ns === 'minecraft' || ns === 'creativeworldgen' || Platform.isLoaded(ns)
 	}
 
 	// problems that make a rule unusable -> null when fine
@@ -330,7 +330,7 @@
 			}
 		})
 		if (out.length || conds.length) {
-			event.add(MODIFIER_PATH, toJson({ type: 'creativeengineering:tune_spawns', rules: out, conditions: conds }))
+			event.add(MODIFIER_PATH, toJson({ type: 'creativeworldgen:tune_spawns', rules: out, conditions: conds }))
 		}
 		Object.keys(disabled).forEach(function (id) {
 			event.add(modifierPath(id), toJson({ type: 'forge:none' }))

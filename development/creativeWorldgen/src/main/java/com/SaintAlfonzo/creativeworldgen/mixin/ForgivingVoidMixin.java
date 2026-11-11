@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * player ground and a loop no longer runs forever. All the dials — enabled/disabled,
  * anchor location (default + per-dimension overrides), direction, and jump-distance
  * range — are read through {@link ForgivingVoidBridge}, a read-through layer over the
- * {@code [forgiving_void]} section of CWGConfig ({@code creativeengineering-common.toml}).
+ * {@code [forgiving_void]} section of CWGConfig ({@code creativeworldgen-common.toml}).
  *
  * <p>The {@code teleportTo} call is matched by its SRG name with
  * {@code remap = false} (this project ships no Mixin refmap); the

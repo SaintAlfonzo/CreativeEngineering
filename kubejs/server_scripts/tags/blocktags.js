@@ -382,11 +382,12 @@ ServerEvents.tags('block', e => {
 		item.cucumber_dough_block, item.sourdough_block,
 		'creativeengineering:*_culture_block',  // meat culture blocks (reserved for Creative Cultivation, creative_delight.md 29.5)
 		'/^architects_palette:(rotten_flesh_block|entrails[a-z_]*)$/',
+		b.flesh, // Visceral Heap (only registered with Creative Worldgen + Biomes O' Plenty)
 	])
 
 	// sticky: blocks with one sticky face. Piston heads are shared by plain and sticky pistons, so
 	// patcherMod (StickyFacing) drops the speed unless facing=up and, for heads, type=sticky —
-	// for everything in #creativeengineering:blockrunner_face_up below.
+	// for everything in #creativecompat:blockrunner_face_up below.
 	t.addMatching(e, runner.sticky, [
 		'minecraft:sticky_piston', 'minecraft:piston_head', 'create:sticky_mechanical_piston',
 		'create:mechanical_piston_head', 'create_things_and_misc:*sticky_launcher',
@@ -395,6 +396,7 @@ ServerEvents.tags('block', e => {
 	t.addMatching(e, runner.very_sticky, [
 		'minecraft:honey_block', 'minecraft:slime_block', 'alexsmobs:banana_slug_slime_block',
 		'fruitsdelight:*_jelly_block', 'fruitsdelight:*_jello_block', // extend HoneyBlock / SlimeBlock
+		b.porous_flesh, // Visceral Heap; honey's jump factor (block_properties.js), wall slide (creativecompat:wall_slide below)
 	])
 
 	// Last: whatever's left of #minecraft:dirt (grass, dirt, rooted dirt, modded grasses/soils)
@@ -421,9 +423,15 @@ ServerEvents.tags('block', e => {
 
 	// patcherMod hooks: facing-aware sticky tier, camo-aware camouflage tier, visual sinking
 	// (surface/StickyFacing, CamoSpeed, SinkingRender)
-	t.add(e, 'creativeengineering:blockrunner_face_up', '#' + runner.sticky)
-	t.add(e, 'creativeengineering:camo_speed', '#' + runner.camouflage)
-	t.add(e, 'creativeengineering:sinking', [runner.soft, runner.dust, runner.spongy, runner.very_sticky].map(tag => '#' + tag))
+	t.add(e, 'creativecompat:blockrunner_face_up', '#' + runner.sticky)
+	t.add(e, 'creativecompat:camo_speed', '#' + runner.camouflage)
+	t.add(e, 'creativecompat:sinking', [runner.soft, runner.dust, runner.spongy, runner.very_sticky].map(tag => '#' + tag))
+	// Dropped items lie on top of sinking blocks at their real height; blocks listed here swallow them
+	// (the item sinks like any other entity). Empty for now: every sinking block shows its items.
+	t.add(e, 'creativecompat:sinking_hides_items', [])
+	// Honey's wall slide on blocks that aren't honey (Creative Compat surface/WallSlide; honey and Fruits
+	// Delight jelly blocks already slide, they extend HoneyBlock)
+	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, item.banana_slug_slime_block])
 
 	// wildcards like 'minecraft:polished_*' also catch the family's buttons and pressure plates
 	t.remove(e, runnerTags, '/_(button|pressure_plate)$/')

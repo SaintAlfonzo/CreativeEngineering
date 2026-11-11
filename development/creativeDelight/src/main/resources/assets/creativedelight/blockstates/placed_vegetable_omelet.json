@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "creativedelight:block/placed_vegetable_omelet"
+    },
+    "facing=south": {
+      "model": "creativedelight:block/placed_vegetable_omelet",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "creativedelight:block/placed_vegetable_omelet",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "creativedelight:block/placed_vegetable_omelet",
+      "y": 90
+    }
+  }
+}
