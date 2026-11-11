@@ -1,6 +1,6 @@
 # Namespace moves: what is left after the Creative Delight rename (2026-11-10)
 
-Status: BUILT 2026-11-10, NOT installed (section 6: steps 0 to 7 built, every jar, `id_owner_lint.py` 0 owner-ns). Rule and method: [plan_cd_namespace.md](plan_cd_namespace.md) section 0
+Status: INSTALLED 2026-11-10 21:20 (section 6: steps 0 to 7, every jar; boot and exit PASS b1110; SQ-NSM not run). Rule and method: [plan_cd_namespace.md](plan_cd_namespace.md) section 0
 (content, tags and data ids use the namespace of the jar that owns them). TODO row `creativesplit/ids #25` covers the
 other jars; this file is its inventory and execution plan.
 
@@ -230,3 +230,18 @@ At install (game closed): copy every built jar; then `sed -i 's/creativeengineer
 and `creativecalendar` already emit the new ids. Left on purpose: `kubejs/data/minecraft/worldgen/noise_settings/*`
 `creativeengineering:surface_mix/*` (seed names), generated `*_by_biome.md` tables and JEI-world files (regenerate after
 `/dumpall` and `/cdevgen`).
+
+### 6.1 Fixes at install (2026-11-10, scratch b1110)
+
+The rewrite and `id_owner_lint.py` miss ids built by concatenation or template strings, and one folder move nested
+the old namespace. Found by the first boots on the installed jars, fixed and rebuilt:
+- Worldgen `ResourceKeyLegacyDimensionMixin`: boot crash (NPE), Forge creates a key for a null default key during
+  `Registry.<clinit>`; null guard added.
+- Equipment `items/echo_tools.js` registered `'creativeengineering:' + name`; now `creativeequipment:`.
+- Common `neoCraftHelper.js`: `backpack_skin`, `backpack_skin_clear`, `elytra_duplication` recipe types used
+  `${global.NCH.modId}` (Engineering's id); now `creativeequipment:`. `dragon_breathing` stays Engineering's.
+- Delight `Lunchboxes.NETHERITE_LUNCHBOX` and `LunchboxItems`' register still used `solapplepie`; now `creativedelight`.
+- Devtools world preset `flower_test` sat in `data/creativedevtools/creativeengineering/worldgen/`; moved to
+  `data/creativedevtools/worldgen/`.
+- `tools/creative_labels_test/` (server probe, javac tests) renamed to the `creativelabels` package and ids.
+SQ-NSM fixture: `mods/` now holds the moved jars; build the old save from `deploy/latest/mods/` (1.2.02).

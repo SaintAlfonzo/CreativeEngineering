@@ -17,6 +17,17 @@ memory `miners-delight-backport-plan`): the unmodified upstream jar is a sha1-pi
 its textures, models, lang, recipes and loot tables from it at load time; everything the member ships is our own GPLv3
 code written from the mod's behaviour. Nothing of the upstream jar ships (`checkNoUpstreamResources`, `check_donor.py`).
 
+## 0. Stews removed (2026-11-10, owner)
+
+The 6 golden and gilded stews (mushroom stew, beetroot soup, rabbit stew) are no longer registered, with their 6 cans and 6
+jar soft fluids. Gone from: `GoldenItems` (and `ShinyItems.Bowl`), Common's `item_dict.js` / `food_dict.js`, the `goldenfood`
+can and food-type scripts, `golden.js` (gild and enchant recipes), `golden_values.js`, the soft-fluid JSONs and generator, the
+FD `soupItemList` (config and `configs_edited`), the generated JSON and the jar JEI rows. The 6 stew ids and the 12 can ids
+(`creativedelight:` and `creativeengineering:` forms) are in `swaps/removed.json`: old worlds delete the stacks, nothing is
+converted. Sections 1 to 8 still describe the stews where they were written; read them without the stews. The generated
+catalogs (`food_catalog.md`, `food_families.md`, `can_parity.md`, `stack_sizes.md`, `item_physics_audit.md`) refresh on the
+next `/dumpall` and `/cdevgen`. Test `SQ-GLD-16` replaces SQ-GLD-15.
+
 ## 1. Upstream inventory (goldenfood-1.19.2-2.0.0.jar)
 
 Native Forge 1.19.2, mod id `goldenfood`, author GGWPJason, no dependencies but Forge and Minecraft, no mixins, no
@@ -35,7 +46,7 @@ config, no access transformer, no block entities.
 |---|---|---|---|---|
 | Golden foods (17) | `golden_` + melon_slice, sweet_berries, glow_berries, baked_potato, beetroot, dried_kelp, cooked_beef, cooked_porkchop, cooked_mutton, cooked_chicken, cooked_rabbit, cooked_cod, cooked_salmon, bread, cookie, pumpkin_pie; `golden_chorus_fruit` | plain item; chorus: chorus fruit with a second teleport | 64 | rare |
 | Enchanted foods (17) | `enchanted_golden_` + the same, plus `enchanted_golden_carrot` | vanilla enchanted golden apple class (glint); chorus: glinting chorus with a second teleport | 1 | epic |
-| Stews (3 + 3) | `(enchanted_)golden_mushroom_stew`, `_beetroot_soup`, `_rabbit_stew` | bowl food, bowl back | 1 | rare / epic |
+| Stews (3 + 3) | **REMOVED 2026-11-10** (see section 0): `(enchanted_)golden_mushroom_stew`, `_beetroot_soup`, `_rabbit_stew` | bowl food, bowl back | 1 | rare / epic |
 | Milk (1 + 1) | `(enchanted_)golden_milk_bucket` | milk bucket, bucket back | 1 | rare / epic |
 | Honey (1 + 1) | `(enchanted_)golden_honey_bottle` | honey bottle, bottle back | 8 / 4 | rare / epic |
 | Cakes (1 + 1) | `golden_cake`, `enchanted_golden_cake` | block item (enchanted: glint); **not in the creative tab** | 1 | rare / epic |

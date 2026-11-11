@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "minecraft:honey_bottle",
+      "required": false
+    },
+    "#rusticdelight:syrup"
+  ]
+}

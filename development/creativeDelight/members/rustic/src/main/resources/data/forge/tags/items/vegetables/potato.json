@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "minecraft:potato",
+      "required": false
+    },
+    "rusticdelight:potato_slices"
+  ]
+}

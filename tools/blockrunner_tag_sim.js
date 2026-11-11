@@ -55,6 +55,8 @@ const event = {
 let handler
 global.ServerEvents = { tags: (type, fn) => { if (type === 'block') handler = fn } }
 global.StartupEvents = { postInit: () => {} }
+eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js', 'utf8'))
+{ const loadedNs = new Set(registry.map(id => id.split(':')[0])); global.has.mod = ns => loadedNs.has(ns) || ['c', 'forge', 'minecraft'].includes(ns) }
 eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js', 'utf8'))
 eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/block_dict.js', 'utf8'))
 eval(fs.readFileSync(ROOT + 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js', 'utf8'))

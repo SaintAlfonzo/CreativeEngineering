@@ -23,7 +23,8 @@ public class ResourceKeyLegacyDimensionMixin {
 			at = @At("HEAD"), cancellable = true, require = 1, remap = false)
 	private static <T> void creativeworldgen$legacyDimension(ResourceKey<? extends Registry<T>> registry, ResourceLocation location,
 			CallbackInfoReturnable<ResourceKey<T>> cir) {
-		if (!LegacyIds.LEGACY_NS.equals(location.getNamespace())) return;
+		// Forge's ForgeRegistry constructor creates a key for a null default key during Registry.<clinit>
+		if (location == null || registry == null || !LegacyIds.LEGACY_NS.equals(location.getNamespace())) return;
 		ResourceLocation moved = LegacyIds.keyAlias(registry.location(), location);
 		if (moved != null) cir.setReturnValue(ResourceKey.create(registry, moved));
 	}

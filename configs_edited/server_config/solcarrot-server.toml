@@ -1,0 +1,24 @@
+# Spice of Life: Carrot Edition is only the Food Dictionary (a book listing every food, eaten or not).
+# Diet Tracker (Apple Pie Edition) owns the gameplay, so this one grants nothing.
+
+[milestones]
+	#Number of hearts you start out with.
+	#Range: 0 ~ 1000
+	baseHearts = 10
+	#Pack: 0, no hearts from the Food Dictionary.
+	#Range: 0 ~ 1000
+	heartsPerMilestone = 0
+	#Pack: one unreachable milestone, so no milestone message or particles ever fire.
+	milestones = [100000]
+
+[filtering]
+	blacklist = ["solapplepie:lunchbox", "solapplepie:lunchbag", "solapplepie:golden_lunchbox", "creativedelight:netherite_lunchbox"]
+	whitelist = []
+	#Pack: 0, every food counts as tasted.
+	#Range: 0 ~ 1000
+	minimumFoodValue = 0
+
+[miscellaneous]
+	#Pack: tasted foods stay unlocked.
+	resetOnDeath = false
+	limitProgressionToSurvival = false

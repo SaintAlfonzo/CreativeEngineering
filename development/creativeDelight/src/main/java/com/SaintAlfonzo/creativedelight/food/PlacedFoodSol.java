@@ -40,6 +40,8 @@ import java.util.Map;
  * </ul>
  * A knife cuts a slice instead of biting (pies, fig pudding), so a knife in hand records nothing; the slice counts when
  * it is eaten. Fake players (deployers) never eat.
+ * <p>Each bite is recorded in both books: the Diet Tracker (Apple Pie) and the Food Dictionary (Carrot Edition,
+ * which also gets the plain vanilla cake, as the cake slice).
  */
 public final class PlacedFoodSol {
 
@@ -90,16 +92,22 @@ public final class PlacedFoodSol {
 
         Block block = before.getBlock();
         Item slice;
+        boolean applePie = true;
         if (after.getBlock() == block || after.isAir()) {
-            if (block == Blocks.CAKE) return; // SoL records this one itself
+            // Apple Pie records the plain vanilla cake itself (as the cake slice); the Food Dictionary does not
+            applePie = block != Blocks.CAKE;
             slice = sliceFor(block);
         } else if (block instanceof AbstractCandleBlock) {
             slice = sliceFor(after.getBlock()); // candle cake bitten: it is now its cake with one bite
         } else {
             return;
         }
-        if (slice != null && ModList.get().isLoaded("solapplepie")) {
+        if (slice == null) return;
+        if (applePie && ModList.get().isLoaded("solapplepie")) {
             SolBridge.record(player, slice);
+        }
+        if (ModList.get().isLoaded("solcarrot")) {
+            CarrotBridge.record(player, slice);
         }
     }
 
@@ -118,6 +126,22 @@ public final class PlacedFoodSol {
                 return stack.isEmpty() ? null : stack.getItem();
             }
             return null;
+        }
+    }
+
+    /**
+     * Food Dictionary (Spice of Life: Carrot Edition, food_dictionary.md P1). Its tracker only listens to the item
+     * finish event, so a bite from the world is recorded here the way its {@code FoodTracker.onFoodEaten} does it,
+     * without the milestone sounds, particles and messages (switched off in the pack config). Carrot classes stay out
+     * of the outer class, so it loads without the mod.
+     */
+    private static final class CarrotBridge {
+        static void record(ServerPlayer player, Item slice) {
+            if (com.cazsius.solcarrot.SOLCarrotConfig.limitProgressionToSurvival()
+                    && player.gameMode.getGameModeForPlayer() != net.minecraft.world.level.GameType.SURVIVAL) return;
+            com.cazsius.solcarrot.tracking.FoodList.get(player).addFood(slice);
+            com.cazsius.solcarrot.tracking.MaxHealthHandler.updateFoodHPModifier(player);
+            com.cazsius.solcarrot.tracking.CapabilityHandler.syncFoodList(player);
         }
     }
 

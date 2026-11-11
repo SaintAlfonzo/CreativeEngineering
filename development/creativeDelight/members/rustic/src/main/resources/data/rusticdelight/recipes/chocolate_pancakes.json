@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_pancakes"
+    }
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bowl"
+    },
+    "M": {
+      "item": "rusticdelight:batter"
+    },
+    "T": {
+      "tag": "forge:milk"
+    },
+    "X": {
+      "item": "minecraft:cocoa_beans"
+    },
+    "Y": {
+      "item": "minecraft:cocoa_beans"
+    }
+  },
+  "pattern": [
+    " T ",
+    "XMX",
+    "YBY"
+  ],
+  "result": {
+    "item": "rusticdelight:chocolate_pancakes"
+  },
+  "show_notification": true
+}

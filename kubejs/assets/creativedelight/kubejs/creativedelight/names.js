@@ -117,4 +117,9 @@ ClientEvents.lang('en_us', e => {
   e.add('item.solapplepie.container.golden_lunchbox', 'Iron Lunchbox')
   e.add('item.creativedelight.netherite_lunchbox', 'Netherite Lunchbox')
   e.add('item.solapplepie.container.netherite_lunchbox', 'Netherite Lunchbox')
+
+  // Two food books: Apple Pie's tracks diversity (Diet Tracker), Carrot's lists every food eaten or not (Food Dictionary).
+  if (global.has('solapplepie')) e.renameItem(global.item.diet_tracker, 'Diet Tracker')
+  e.add('key.solapplepie.open_food_book', 'Open Diet Tracker')
+  if (global.has('solcarrot')) e.renameItem(global.item.food_dictionary, 'Food Dictionary')
 })

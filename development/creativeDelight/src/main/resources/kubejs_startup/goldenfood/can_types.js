@@ -114,61 +114,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    ],
    "texture": "canned_goods:items/canned_golden_apples"
   },
-  "canned_golden_beetroot_soup": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Golden Beetroot Soup",
-   "servings": 10,
-   "hunger": 3,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": false,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 25,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "golden_beetroot_soup"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "golden_beetroot_soup"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_golden_apples"
-  },
   "canned_golden_bread": {
    "section": "golden",
    "existing": false,
@@ -994,61 +939,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    ],
    "texture": "canned_goods:items/canned_golden_apples"
   },
-  "canned_golden_mushroom_stew": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Golden Mushroom Stew",
-   "servings": 10,
-   "hunger": 3,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": false,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 25,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "golden_mushroom_stew"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "golden_mushroom_stew"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_golden_apples"
-  },
   "canned_golden_pumpkin_pie": {
    "section": "golden",
    "existing": false,
@@ -1090,61 +980,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
       {
        "any": [
         "golden_pumpkin_pie"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_golden_apples"
-  },
-  "canned_golden_rabbit_stew": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Golden Rabbit Stew",
-   "servings": 10,
-   "hunger": 5,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": false,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 25,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "golden_rabbit_stew"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "golden_rabbit_stew"
        ],
        "n": 2
       },
@@ -1334,73 +1169,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
       {
        "any": [
         "enchanted_golden_beetroot"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_notch_apples"
-  },
-  "canned_enchanted_golden_beetroot_soup": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Gilded Beetroot Soup",
-   "servings": 10,
-   "hunger": 5,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": true,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 100,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:fire_resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 3,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 1200,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "enchanted_golden_beetroot_soup"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "enchanted_golden_beetroot_soup"
        ],
        "n": 2
       },
@@ -2487,73 +2255,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    ],
    "texture": "canned_goods:items/canned_notch_apples"
   },
-  "canned_enchanted_golden_mushroom_stew": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Gilded Mushroom Stew",
-   "servings": 10,
-   "hunger": 5,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": true,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 100,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:fire_resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 3,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 1200,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "enchanted_golden_mushroom_stew"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "enchanted_golden_mushroom_stew"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_notch_apples"
-  },
   "canned_enchanted_golden_pumpkin_pie": {
    "section": "golden",
    "existing": false,
@@ -2607,73 +2308,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
       {
        "any": [
         "enchanted_golden_pumpkin_pie"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_notch_apples"
-  },
-  "canned_enchanted_golden_rabbit_stew": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Gilded Rabbit Stew",
-   "servings": 10,
-   "hunger": 5,
-   "modifier": 0.6,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": true,
-   "effects": [
-    {
-     "effect": "minecraft:regeneration",
-     "ticks": 100,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:fire_resistance",
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": "minecraft:absorption",
-     "ticks": 600,
-     "amp": 3,
-     "chance": 1
-    },
-    {
-     "effect": "farmersdelight:nourishment",
-     "ticks": 1200,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "enchanted_golden_rabbit_stew"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "enchanted_golden_rabbit_stew"
        ],
        "n": 2
       },

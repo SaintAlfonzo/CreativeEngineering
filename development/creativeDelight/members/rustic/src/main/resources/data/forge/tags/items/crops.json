@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#forge:crops/cotton",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/bell_pepper",
+      "required": false
+    },
+    {
+      "id": "#forge:crops/coffee",
+      "required": false
+    }
+  ]
+}

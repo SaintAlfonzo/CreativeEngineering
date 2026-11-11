@@ -24,7 +24,9 @@ global.has = function () {
 global.has.namespace = function (a) {
 	if (a === undefined || a === null) return null
 	var s = String(a)
-	if (s.charAt(0) === '#') s = s.substring(1)
+	// '#tag' and '@mod' (KubeJS's whole-mod entry) name their mod after the sigil; without the '@' strip the
+	// tag helper's absent-mod filter dropped every '@mod' entry (BlockRunner camouflage lost Framed Blocks)
+	if (s.charAt(0) === '#' || s.charAt(0) === '@') s = s.substring(1)
 	if (s === '') return null
 	var colon = s.indexOf(':')
 	return colon < 0 ? s : s.substring(0, colon)

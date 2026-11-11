@@ -8,7 +8,6 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   "golden": [
    "golden_baked_potato",
    "golden_beetroot",
-   "golden_beetroot_soup",
    "golden_bread",
    "golden_chorus_fruit",
    "golden_cooked_beef",
@@ -24,15 +23,12 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
    "golden_honey_bottle",
    "golden_melon_slice",
    "golden_milk_bucket",
-   "golden_mushroom_stew",
    "golden_pumpkin_pie",
-   "golden_rabbit_stew",
    "golden_sweet_berries"
   ],
   "golden/enchanted": [
    "enchanted_golden_baked_potato",
    "enchanted_golden_beetroot",
-   "enchanted_golden_beetroot_soup",
    "enchanted_golden_bread",
    "enchanted_golden_carrot",
    "enchanted_golden_chorus_fruit",
@@ -49,9 +45,7 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
    "enchanted_golden_honey_bottle",
    "enchanted_golden_melon_slice",
    "enchanted_golden_milk_bucket",
-   "enchanted_golden_mushroom_stew",
    "enchanted_golden_pumpkin_pie",
-   "enchanted_golden_rabbit_stew",
    "enchanted_golden_sweet_berries"
   ]
  },
@@ -61,9 +55,6 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   ],
   "canned_enchanted_golden_beetroot": [
    "enchanted_golden_beetroot"
-  ],
-  "canned_enchanted_golden_beetroot_soup": [
-   "enchanted_golden_beetroot_soup"
   ],
   "canned_enchanted_golden_bread": [
    "enchanted_golden_bread"
@@ -113,14 +104,8 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   "canned_enchanted_golden_milk_bucket": [
    "enchanted_golden_milk_bucket"
   ],
-  "canned_enchanted_golden_mushroom_stew": [
-   "enchanted_golden_mushroom_stew"
-  ],
   "canned_enchanted_golden_pumpkin_pie": [
    "enchanted_golden_pumpkin_pie"
-  ],
-  "canned_enchanted_golden_rabbit_stew": [
-   "enchanted_golden_rabbit_stew"
   ],
   "canned_enchanted_golden_sweet_berries": [
    "enchanted_golden_sweet_berries"
@@ -130,9 +115,6 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   ],
   "canned_golden_beetroot": [
    "golden_beetroot"
-  ],
-  "canned_golden_beetroot_soup": [
-   "golden_beetroot_soup"
   ],
   "canned_golden_bread": [
    "golden_bread"
@@ -179,14 +161,8 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   "canned_golden_milk_bucket": [
    "golden_milk_bucket"
   ],
-  "canned_golden_mushroom_stew": [
-   "golden_mushroom_stew"
-  ],
   "canned_golden_pumpkin_pie": [
    "golden_pumpkin_pie"
-  ],
-  "canned_golden_rabbit_stew": [
-   "golden_rabbit_stew"
   ],
   "canned_golden_sweet_berries": [
    "golden_sweet_berries"

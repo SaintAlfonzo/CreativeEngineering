@@ -1,15 +1,18 @@
-Rustic Delight (Creative Delight) is licensed under the GNU General Public License v3 (see LICENSE.txt).
+Rustic Delight (Creative Delight): the port's own code (src/main/java) and own files are licensed under the GNU General
+Public License v3 (see LICENSE.txt).
 
-Rustic Delight by PhantomWing is read at runtime from the player's own copy of its jar (rustic_upstream/); no file
-of that jar ships here. Two textures do derive from it: assets/rusticdelight/textures/block/glowing_calamari_crate_top.png
-and glowing_calamari_crate_side.png are edits of Rustic Delight's calamari_crate textures. Rustic Delight is
-distributed under the MIT License (its CurseForge project page, checked by the owner 2026-11-05), which requires the
-notice below to be kept with those copies.
+Rustic Delight 1.7.0 by PhantomWing (https://github.com/PhantomWing/RusticDelight) is distributed under the MIT License
+below (LICENSE.txt on the version/1.21 branch, checked 2026-11-10; the 1.7.0 tag has no licence file). PhantomWing
+confirmed the MIT terms and welcomed this port on 2026-11-10 (communications/RusticDelight-PhantomWing.png in the pack
+repository). Its textures, models, blockstates, lang and data are copied into src/main/resources by
+tools/bake_upstream.py, translated to Forge 1.19.2; tools/bake_manifest.json lists every such file and the change made.
+The textures assets/rusticdelight/textures/block/glowing_calamari_crate_top.png and _side.png and the six pancake
+recolours listed in tools/own_overrides.json are edits of upstream textures. All of these are covered by this notice.
 
 -------------------------------------------------------------------------------------------------------
 MIT License
 
-Copyright (c) PhantomWing
+Copyright (c) 2025 PhantomWing
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

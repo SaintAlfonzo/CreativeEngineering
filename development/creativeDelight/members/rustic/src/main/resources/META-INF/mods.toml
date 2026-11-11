@@ -1,5 +1,5 @@
 # Rustic Delight 1.7.0 ported to Forge 1.19.2 (Creative Delight member). Keeps the upstream mod id so every resource location,
-# recipe and tag matches the upstream data, which is read from rustic_upstream/ at runtime.
+# recipe and tag matches the upstream data, which is baked into this jar (tools/bake_upstream.py, MIT).
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"

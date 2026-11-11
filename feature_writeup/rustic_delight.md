@@ -10,8 +10,7 @@ with the Creative Delight jar. Before that, installed: `rusticdelight-forge-1.19
 (1.20.1 / Forge), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in
 `DecompiledMods/`. Plan row: `largecontent/mod-additions #19` in [todo/TODO.md](todo/TODO.md).
 
-**Licence: MIT on Forge** (owner-supplied 2026-10-25). Both jars' `mods.toml` still say All Rights Reserved; get the
-upstream licence file confirmed before copying textures, models or code, and until then treat them as All Rights Reserved.
+**Licence: MIT on Forge, CONFIRMED by the author 2026-11-10** (PhantomWing, Discord; screenshot `communications/RusticDelight-PhantomWing.png`; porting and inclusion welcome; the old 1.19.2 build is outdated and gets no content backports). Both jars' `mods.toml` still say All Rights Reserved, which the author's answer overrides. See 5.13.
 Data facts (a recipe's inputs, a food value) can be rewritten in our own scripts. Getting the new items means either
 our own art for KubeJS items, or a donor-jar backport like Vinery and Miner's Delight (upstream jar shipped unmodified,
 our jar holds only our own code). See section 3.
@@ -133,11 +132,11 @@ cut, a syrup for the maple foods.
 
 | Piece | Where | Notes |
 |---|---|---|
-| Project | `development/creativeDelight/members/rustic` (Gradle `:backportedRustic`, `bundled_in=creativeDelight`) | Mod id `rusticdelight`, display name "Rustic Delight (Creative Delight)", version `1.7.0-ce-19.2-01`. Own package `com.SaintAlfonzo.creativedelight.rustic` (nothing in the pack names upstream classes). GPLv3, our code only |
-| Donor | `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar`, sha1 `bca9adf6...`, Modrinth `foa4fGIH/z29Gd3ec` | Read at runtime as two hidden built-in packs (`UpstreamJars` pins, on the shared `DonorJars` / `BuiltInPacks.addUpstream` / `MemoryPackResources`, [pack_tooling.md](pack_tooling.md) 2.8; the Miner's method). Missing or wrong file stops the game with the URL. `build_deploy.py` ships the folder (`UPSTREAM_DONORS`) |
-| Registry | `registry/RDBlocks`, `RDItems`, `RDFoods`, `RDPotions`, `RDLoot`, `RDTab` | Every 1.7.0 id (162) but `fruit_beignet` (and, since 2026-11-01, `pancake` and `fried_dough`, 5.10; plus the pack's `glowing_calamari_crate`); every 1.3.0 id kept, so old worlds need no conversion. `tools/check_donor.py` compares the ids with the donor's lang, blockstates and data (0 problems) |
+| Project | `development/creativeDelight/members/rustic` (Gradle `:backportedRustic`, `bundled_in=creativeDelight`) | Mod id `rusticdelight`, display name "Rustic Delight (Creative Delight)", version `1.7.0-ce-19.2-02` (since the 2026-11-10 bake, 5.14). Own package `com.SaintAlfonzo.creativedelight.rustic`. Licence: MIT upstream art and data (`NOTICE-upstream-MIT.txt`, Copyright (c) 2025 PhantomWing), our code GPLv3 |
+| Upstream files | baked into `src/main/resources` by `tools/bake_upstream.py` from `rusticdelight-forge-1.20.1-1.7.0.jar` (sha1 `bca9adf6...`, Modrinth `foa4fGIH/z29Gd3ec`; the jar stays in `rustic_upstream/` on the dev machine only, never deployed) | Since 2026-11-10 (5.14). Until then read at runtime from the donor as two built-in packs (`UpstreamJars`, `RusticTranslator`, both deleted). `tools/bake_manifest.json` lists every baked file, its upstream sha1 and the rules applied; `tools/own_overrides.json` lists our own files at baked paths (pancake recolours) |
+| Registry | `registry/RDBlocks`, `RDItems`, `RDFoods`, `RDPotions`, `RDLoot`, `RDTab` | Every 1.7.0 id (162) but `fruit_beignet` (and, since 2026-11-01, `pancake` and `fried_dough`, 5.10; plus the pack's `glowing_calamari_crate`); every 1.3.0 id kept, so old worlds need no conversion. `tools/check_donor.py` (until 2026-11-10; now `bake_upstream.py --check` and `--selftest`) compared the ids with the donor (0 problems) |
 | Blocks written from behaviour | `content/` | `PancakeStackBlock` (6 per placed plate, take one, sneak-use puts one back up to 12; keeps upstream's `servings` numbering so 1.3.0 plates load as they were), `PepperMedleyBlock` and `RiceRollRoyaleBlock` (FD `FeastBlock` with their own `servings` range), crops (bell peppers 8 stages, coffee 6, cotton 4), wild crops on `#minecraft:dirt`, coffees that clear one effect (`EffectClearingDrinkItem`) |
-| Translator | `upstream/RusticTranslator` | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colours; in models, FD 1.20's `template_crop_cross` to 1.19.2's `crop_cross` (same model; coffee and the three pepper crops rendered missing without it, fixed 2026-10-26). FD 1.20's `platter` texture (the three medleys) ships in repackedFarmers at FD's own path |
+| Translation rules | `tools/bake_upstream.py` (was `upstream/RusticTranslator` until 2026-11-10) | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colours; in models, FD 1.20's `template_crop_cross` to 1.19.2's `crop_cross` (same model; coffee and the three pepper crops rendered missing without it, fixed 2026-10-26). FD 1.20's `platter` texture (the three medleys) ships in repackedFarmers at FD's own path |
 | Data types | `logic/` | `squids_drop_calamari_modifier` (its drop is replaced: every squid kill, Looting or not, player or not, gives exactly one `miners_delight:squid` through the LootJS rule in `miners_delight/loot.js`, which removes all other loot; checked 2026-11-03, plan_scratch_bugfix_1103 7.4), `config_boolean` (always on: no families config), `configurable_rarity_filter` (fixed N: cotton 96 as the pack's 1.3.0 config, peppers 15, coffee 15, giant 64 [1.7.0: 16]). The village farm processor is Creative Delight's, not Rustic's (5.4) |
 | Not ported | | Config and item families, Thirst compat, advancements, the brewing steps (the pack's `potions.js` mixes brew the three Haste potions), upstream's Pale and Dark trader offers (pack trade, 5.4) |
 
@@ -215,7 +214,8 @@ content group, the worldgen and village rows, the client side and the cutover. R
 ### 5.7 Cutover (when the Creative Delight jar is installed)
 
 `./gradlew :creativeCommon:installToMods :creativeDelight:installToMods --offline` moves `rusticdelight-forge-1.19.2-1.3.0.jar`
-out (`replaces_jars`); copy `rustic_upstream/` beside `mods/` on every client and server. Then drop the 1.3.0-only lines:
+out (`replaces_jars`); until the 2026-11-10 bake (5.14), also copy `rustic_upstream/` beside `mods/` on every client and
+server (no longer needed from `-02` on). Then drop the 1.3.0-only lines:
 `i.fruit_beignet` (item_dict, `removed_items.js`, `cooking.js` 817; done 2026-10-29, including the CD `recipes.js` removal) and the 1.3.0 note in `potions.js`; run `/dumpall`
 and the generators (food types, cans, compost, placeable) for the about 100 new items.
 
@@ -322,3 +322,46 @@ Still open (not decisions): final Glowing Calamari Crate art (`members #25`), SQ
 - **Install and tests:** in the CD jar installed 2026-11-03 00:08, not booted. Queue section SQ-CDJ7: SQ-CDM2-04 (potato salad),
   SQ-RD-22 (rerun, Comfort), SQ-CDF-08 (rerun, after `/dumpcompost`).
 
+### 5.13 Licence answer, 2026-11-10: what changes
+
+PhantomWing confirmed MIT for the Forge builds and welcomed the port. Effects:
+
+- **Nothing breaks and nothing must be redone.** The donor-jar route stays valid; the port is built on 1.7.0 and the author's 1.19.2 build (1.3.0) is the base we already replaced, so there is no newer 1.19.2 source to pull from.
+- **Donor route is now optional.** MIT allows copying the textures, models, lang and data into `members/rustic` and shipping them, so `rustic_upstream/` would no longer be needed on clients and servers (no `DonorJars` / `RusticTranslator` runtime read for these files). Cost: the translator's 1.20 to 1.19.2 fixes would have to be applied once at build time and the result committed. Not started; owner decides (open question below).
+- **Required either way:** keep the MIT licence text and PhantomWing's copyright notice in the jar and in the notices page for any copied file. Our own code stays GPLv3. Check the CD notices file lists Rustic as MIT with the author's name.
+- **Cleanup that is now allowed:** drop the "treat as All Rights Reserved" caution; the Rustic cutover note (5.7) still needs `rustic_upstream/` copied only while the donor route stays.
+- **Answered 2026-11-10: bake in** ([plan_rustic_fold_in.md](plan_rustic_fold_in.md), built: 5.14). Was: keep the donor route (no work, jar read at runtime) or bake the files in (removes the extra folder and the upstream-jar dependency, one build-tool task)? Recommendation: bake in only if you want to drop `rustic_upstream/`; otherwise leave as is.
+
+### 5.14 Built 2026-11-10: art and data baked into the member (plan_rustic_fold_in.md)
+
+- **Route.** `members/rustic/tools/bake_upstream.py` copies the donor's `assets/` and `data/` into the member's
+  `src/main/resources`, applying the former `RusticTranslator` rules once (each rule one function, `--selftest`). Never
+  copied: advancements, biome modifiers, upstream's FD recipe edits, the 8 chest seed and bean loot modifiers, removed-id
+  files. Result: 902 asset and 451 data files, 288 dropped (manifest `tools/bake_manifest.json`). `--check` rebakes in
+  memory and compares with the committed files (0 problems). Rerun the bake for a new upstream version and review the
+  manifest diff.
+- **Static recipe check.** The old runtime drop of recipes naming an unregistered item or serializer is now decided
+  against the last `/dumpall` (items by mod, recipe types): an id from a mod in the pack drops the recipe (1.20-only item),
+  an id from an absent mod gets a `forge:mod_loaded` condition. Today neither happens (no recipe needs it, as at runtime:
+  the live log showed 451 data files and 8 drops, the 8 loot modifiers).
+- **Equivalence.** The real `RusticTranslator` was run offline (registry lookups stubbed from the same dumps) and its 1351
+  files compared with the Python bake: 0 differences before the fix below.
+- **Fix found by the bake (player-visible).** The translator dropped `models/coaster/pancake.json` and
+  `textures/block/coaster/pancake.png` with the removed plain Pancake, but that model is the parent of all six flavoured
+  pancake coaster models, so a flavoured pancake on a Brewin' coaster had a missing model (latest.log: `Unable to load
+  model: 'rusticdelight:coaster/pancake'`). Both files are kept now (`KEPT_SHARED`). Changelog bullet under Rustic Delight.
+- **Member.** `upstream/RusticTranslator.java`, `upstream/UpstreamJars.java` and the built-in pack registration are gone;
+  `shared_sources`, `resource_guard_*` and the donor lines are out of `gradle.properties`; `mod_license` = MIT (upstream art
+  and data); GPL-3.0-only (port code); `tools/check_donor.py` replaced by the bake script. Jar 91 KB to 780 KB.
+- **Pack files folded in.** The six pancake recolours (`kubejs/assets/rusticdelight/textures/item/*_pancake.png`, 5.11)
+  are now member files (`tools/own_overrides.json`, the bake never overwrites them). The three
+  `kubejs/data/rusticdelight/worldgen/configured_feature/wild_*_feature.json` overrides were dropped, not merged: they
+  only overrode 1.3.0 ids that no longer exist; `wild_crops.json` places 1.7.0's `wild_*_placed` features, whose values
+  are unchanged.
+- **Elsewhere.** `build_deploy.py` no longer ships, checks or mentions `rustic_upstream/`; README donor row removed;
+  `options.txt` no longer lists `rustic_upstream_assets`; `pack/manifest.json` regenerated. Players may delete an old
+  `rustic_upstream/` folder; it is ignored (SQ-RDB-06).
+- **Tests.** Offline: bake `--selftest`, `--check`; `:backportedRustic:build` and `:creativeDelight:build` pass; the jar has
+  only our `META-INF` files, no upstream class, every JSON parses, no 1.20 loot condition left (`all_of` remains only as a
+  1.19.2 block predicate in the patch features), every `rusticdelight:` model and texture reference resolves. Live: SQ-RDB-01
+  to -06, CQ-RDB-01 (queued).

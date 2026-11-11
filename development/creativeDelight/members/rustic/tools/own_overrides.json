@@ -1,0 +1,11 @@
+{
+ "_comment": "Own files at baked paths; the bake never overwrites them. Pancake recolours: owner-accepted, rustic_delight.md 5.11 (moved from kubejs/assets 2026-11-10).",
+ "paths": [
+  "assets/rusticdelight/textures/item/cherry_blossom_pancake.png",
+  "assets/rusticdelight/textures/item/chocolate_pancake.png",
+  "assets/rusticdelight/textures/item/coffee_pancake.png",
+  "assets/rusticdelight/textures/item/honey_pancake.png",
+  "assets/rusticdelight/textures/item/pumpkin_pancake.png",
+  "assets/rusticdelight/textures/item/vegetable_pancake.png"
+ ]
+}

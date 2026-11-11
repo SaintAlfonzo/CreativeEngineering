@@ -19,10 +19,14 @@
     "DeforesterSawItemMixin",
     "SequencedAssemblyRecipeMixin",
     "CreateTeaPipeIconMixin",
-    "FluidTagInputMixin"
+    "FluidTagInputMixin",
+    "CrushingOutputCapMixin",
+    "ProcessingInventoryMixin"
   ],
   "client": [
     "SkullBlockEntityMixin",
-    "JeiFluidHelperTooltipMixin"
+    "JeiFluidHelperTooltipMixin",
+    "JeiCrushingPoolsMixin",
+    "JeiMillingPoolsMixin"
   ]
 }

@@ -93,3 +93,39 @@ Namespace session's request, group A (superflat, unaffected by the crow crash), 
 | SQ-CDNS-07 | PASS | Reached `Done`; 690 aliases on a fresh world; `replaceItems canned` 0; no moved id or tag under the old namespace in the log. Normal-world boot still blocked by the crow crash |
 | SQ-CDNS-10a to -10e | PASS | `qrun`, group A per the rewritten rows. Crafting by hand is in CQ-CDNS-01 |
 | SQ-CDNS-11a | PASS | `qrun`. Supplementaries pouring is in CQ-CDNS-01 |
+
+## 11. b1110 rebuild-all boot and exit check, 21:08 to 21:26
+
+Owner request: the owner's client showed KubeJS startup errors on world exit; debug them, rebuild every jar, run a
+brief scratch test that the pack loads and exits cleanly. Server only, group A superflat (normal worlds were blocked by
+the Hearth crow crash in section 9), `NOSWAP=1` so the boot used exactly the installed `mods/`. No perf session (short
+targeted run).
+
+Cause of the owner's errors: `logs/kubejs/startup.log` of the 18:54 session had 14 NCH skips (`#creativeengineering:smokable/*`
+smoking, `#creativeengineering:millable_seeds` milling). The dict already named `creativecommon:` / `creativedelight:`
+(namespace move, [namespace_move.md](../namespace_move.md)); the installed Common jar was from 11-09 23:00. Fixed by the rebuild.
+
+Build: all 14 top-level projects. `:backportedVinery:jar` failed "vinery.refmap.json is not in ..." after an incremental
+compile wrote no refmap; `:backportedVinery:clean` then `:creativeBrewing:build` fixed it. Installed all 14 with the game
+closed, plus the install step of namespace_move.md 6 (`config/creativeworldgen-common.toml` rewritten to `creativeworldgen:`).
+
+Boots (each: fresh prep, Done, startup errors, `stop`, JVM gone):
+- 21:13 boot 1 CRASH at bootstrap: `ResourceKeyLegacyDimensionMixin` NPE, `ForgeRegistry.<init>` calls `ResourceKey.create`
+  with a null default key inside `Registry.<clinit>`. Fixed: null guard on `location` / `registry` (Worldgen rebuilt).
+- 21:17 boot 2 Done 9.6 s. Exit clean. New startup errors, all leftovers of the namespace move the rewrite tool missed:
+  `echo_tools.js` registered `'creativeengineering:' + name` (dict: `creativeequipment:`), so 4 echo and 4 felsic
+  assemblies and 2 JEED rows were skipped; NCH emitted `${global.NCH.modId}:backpack_skin`, `backpack_skin_clear`,
+  `elytra_duplication` (serializers are `creativeequipment:`); `LunchboxItems` registered the Netherite Lunchbox
+  under `Lunchboxes.SOL` (dict and model: `creativedelight:`), so the golden to netherite smithing was skipped.
+  Also the scratch-only `server_probe.js` (tools/creative_labels_test) and the Labels javac tests still named
+  `com.SaintAlfonzo.creative_labels` / `creative_labels:` ids: rewritten to `creativelabels`.
+- 21:22 boot 3 Done 10.3 s, KubeJS errors 0. Exit clean. One of ours left: tag `creativedevtools:flower_test` missing its
+  world preset; the move put it at `data/creativedevtools/creativeengineering/worldgen/world_preset/`. Moved (git mv)
+  to `data/creativedevtools/worldgen/world_preset/`, Devtools rebuilt.
+- 21:24 boot 4 Done 11.6 s. KubeJS ERROR lines 0, no ERROR line from our jars. `stop`: "All dimensions are saved", no
+  ERROR after "Stopping the server", JVM gone. Remaining ERROR lines are third-party (Every Compat templates, Steam 'n'
+  Rails BYG track loot tables, Separated Leaves naming Biomes O' Plenty, Create D&D client particle class).
+
+Verdict: PASS (load and exit, server). Not covered: the client (the original symptom was the client's notice), old-save
+migration (SQ-NSM rows; build the NSM fixture from `deploy/latest/mods/`, the 1.2.02 jars, since `mods/` now holds the
+moved jars).

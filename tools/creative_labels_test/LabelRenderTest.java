@@ -1,7 +1,7 @@
-import com.SaintAlfonzo.creative_labels.block.Spots;
-import com.SaintAlfonzo.creative_labels.client.IconDye;
-import com.SaintAlfonzo.creative_labels.client.LabelLayout;
-import com.SaintAlfonzo.creative_labels.item.NoteColours;
+import com.SaintAlfonzo.creativelabels.block.Spots;
+import com.SaintAlfonzo.creativelabels.client.IconDye;
+import com.SaintAlfonzo.creativelabels.client.LabelLayout;
+import com.SaintAlfonzo.creativelabels.item.NoteColours;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;

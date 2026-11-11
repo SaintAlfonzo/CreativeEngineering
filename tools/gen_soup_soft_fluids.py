@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Write a Supplementaries jar soft fluid for every soup and stew no mod already covers.
 
-Soups are the food_types.json "soup" type plus the Golden Food soups and stews ("golden" and
-"golden/enchanted" keys with soup or stew in the name), as item_dict keys. A soup is covered when a
+Soups are the food_types.json "soup" type, as item_dict keys (the golden and gilded stews were removed 2026-11-10). A soup is covered when a
 soft fluid in mods/*.jar (data/<ns>/moonlight/soft_fluids/*.json) already lists it as a filled item;
 those keep the mod's json and colour. Each remaining soup gets
 development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids/<name>.json (in the
@@ -58,8 +57,6 @@ COLOR_OVERRIDE = {
     'endersdelight:chorus_stew': '#9a6aa0',
     'endersdelight:endermite_stew': '#4a3a5c',
     'delightful:sinigang': '#a8763e',
-    'goldenfood:golden_mushroom_stew': '#c8957a',
-    'goldenfood:enchanted_golden_mushroom_stew': '#c8957a',
     'vintagedelight:oatmeal': '#b29a7c',       # the patch is the bowl's shadow side
     'vintagedelight:pickle_soup': '#e3bf74',   # the broth, not the pickle
 }
@@ -157,8 +154,6 @@ def main():
 
     types = json.loads(TYPES.read_text())['types']
     keys = list(types.get('soup', []))
-    for t in ('golden', 'golden/enchanted'):
-        keys += [k for k in types.get(t, []) if re.search(r'soup|stew', k)]
     _, key_val, _ = parse_dict()
     removed = set(re.findall(r'^\s*i\.(\w+)\s*,', REMOVED_JS.read_text(), re.M))
     keys = [k for k in keys if k not in removed]

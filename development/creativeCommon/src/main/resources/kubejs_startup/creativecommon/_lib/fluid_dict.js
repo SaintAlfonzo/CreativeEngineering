@@ -230,7 +230,11 @@ f.ethylene = 'immersivepetroleum:ethylene';
 f.plantoil = 'immersiveengineering:plantoil';
     f.seed_oil = 'createaddition:seed_oil';
     f.vegetable_oil = 'pneumaticcraft:vegetable_oil';
+    f.t_plantoil = '#forge:plantoil'; // all three oils (flesh cultivation, plan_flesh_recipes.md)
         
+// Visceral Heap (Biomes O' Plenty): flesh blood mixes and porous flesh cultivation (plan_flesh_recipes.md)
+f.blood = 'biomesoplenty:blood';
+
 f.ip_diesel = 'immersivepetroleum:diesel';
     f.pc_diesel = 'pneumaticcraft:diesel';
 

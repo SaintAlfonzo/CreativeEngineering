@@ -7,7 +7,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.EnchantedGoldenAppleItem;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
@@ -24,7 +23,7 @@ import java.util.function.Function;
  * (4 hunger, 1.2 saturation, Regeneration II 5 s, Absorption I 2 min, always edible; rare), every enchanted one like
  * upstream's enchanted golden apple (8 hunger, 8.0 saturation, Regeneration II 20 s, Resistance and Fire Resistance
  * 5 min, Absorption IV 2 min, always edible; epic, glint, stack of 1). The item class only changes how the food is
- * used: chorus fruit teleports, stews leave a bowl, milk clears effects (and, as upstream, never applies its food
+ * used: chorus fruit teleports, milk clears effects (and, as upstream, never applies its food
  * values), honey clears poison and leaves a bottle.
  * <p>
  * As upstream, three vanilla ids are replaced: {@code minecraft:golden_apple}, {@code minecraft:enchanted_golden_apple}
@@ -58,9 +57,7 @@ public final class GoldenItems {
                 "cooked_chicken", "cooked_rabbit", "cooked_cod", "cooked_salmon", "bread", "cookie", "pumpkin_pie"}) {
             plain(food);
         }
-        for (String stew : new String[]{"mushroom_stew", "beetroot_soup", "rabbit_stew"}) {
-            pair(stew, p -> new BowlFoodItem(p.craftRemainder(Items.BOWL)), p -> new ShinyItems.Bowl(p.craftRemainder(Items.BOWL)), 1, 1);
-        }
+        // the golden and gilded stews (mushroom stew, beetroot soup, rabbit stew) are not registered: removed 2026-11-10
         pair("milk_bucket", p -> new ShinyItems.GoldenMilk(p.craftRemainder(Items.BUCKET)), p -> new ShinyItems.Milk(p.craftRemainder(Items.BUCKET)), 1, 1);
         pair("honey_bottle", p -> new HoneyBottleItem(p.craftRemainder(Items.GLASS_BOTTLE)),
                 p -> new ShinyItems.Honey(p.craftRemainder(Items.GLASS_BOTTLE)), 8, 4);

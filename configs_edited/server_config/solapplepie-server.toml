@@ -37,13 +37,13 @@
 	#
 	#
 	#Range: 0 ~ 1000
-	minFoodsToActivate = 10
+	minFoodsToActivate = 5
 
 [Filtering]
 	# Foods in this list won't contribute to food diversity.
 	#
 	#
-	blacklist = []
+	blacklist = ["solapplepie:lunchbox", "solapplepie:lunchbag", "solapplepie:golden_lunchbox", "creativedelight:netherite_lunchbox"]
 	#
 	# When this list contains anything, the blacklist is ignored and instead only foods from here count.
 	#

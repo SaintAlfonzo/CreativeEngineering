@@ -7,7 +7,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 - Java 17
 - JVM args: `-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=5 -XX:G1ReservePercent=10 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
 
-## Mods (413: 370 both, 43 client)
+## Mods (414: 370 both, 43 client, 1 unclassified)
 
 | Side | Mod | Mod id | Version | File | Source |
 |---|---|---|---|---|---|
@@ -38,6 +38,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Better Days | `betterdays` | 1.19.2-3.3.4.3-FORGE | `betterdays-1.19.2-3.3.4.3-FORGE.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/betterdays/files/7013555) [MR](https://modrinth.com/mod/betterdays/version/MdGdgayz) |
 | client | Better Third Person | `betterthirdperson` | BetterThirdPerson - Forge - 1.19 - 1.9.0 | `BetterThirdPerson-Forge-1.19-1.9.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/better-third-person/files/4177088) |
 | client | BetterF3 | `betterf3` | 4.0.1 | `BetterF3-4.0.1-Forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/betterf3/files/4863555) [MR](https://modrinth.com/mod/betterf3/version/mMlLANpz) |
+| both | BiomesOPlenty-1.19.2-17.1.2.544 | `biomesoplenty` |  | `BiomesOPlenty-1.19.2-17.1.2.544.jar` | local |
 | both | Block Runner | `blockrunner` | v4.2.2-1.19.2-Forge | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/block-runner/files/4531217) [MR](https://modrinth.com/mod/block-runner/version/MxlSUiGV) |
 | both | Blocky Siege | `blocky_siege` | Blocky_siege-6.1.91-1.19.2.jar | `blocky_siege-6.1.91-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/luckys-blocky-siege/files/5144430) |
 | both | Blue Flame Burning | `blueflame` | 5 | `blueflame-1.19.2-0.1.0.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/blueflame/files/4034673) [MR](https://modrinth.com/mod/blueflame/version/uheMFxJl) |
@@ -139,7 +140,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | creativedelight-1.1.0.jar | `creativedelight` | Unknown | `creativedelight-1.1.0.jar` | local |
 | both | creativeengineering-2.0.0.jar | `creativeengineering` | Unknown | `creativeengineering-2.0.0.jar` | local |
 | both | creativeequipment-1.0.0.jar | `creativeequipment` | Unknown | `creativeequipment-1.0.0.jar` | local |
-| both | creativeLabels-1.0.1.jar | `creative_labels` | Unknown | `creativeLabels-1.0.1.jar` | local |
+| ? | creativeLabels-1.0.1.jar | `creativelabels` | Unknown | `creativeLabels-1.0.1.jar` | local |
 | both | creativemagic-1.0.0.jar | `creativemagic` | Unknown | `creativemagic-1.0.0.jar` | local |
 | both | creativeworldgen-1.0.0.jar | `creativeworldgen` | Unknown | `creativeworldgen-1.0.0.jar` | local |
 | both | Curios API (Forge/NeoForge) | `curios` | curios-forge-1.19.2-5.1.6.4.jar | `curios-forge-1.19.2-5.1.6.4.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/curios/files/5843737) |
@@ -336,7 +337,7 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | REBIRTH: Paintings | `rebirth_paintings` | REBIRTH: Paintings 5.0.0 \|Minecon Live Update\|1.19.2\| | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/rebirth/files/4821821) |
 | both | Redstone Gates | `gates` | gates-1.8.0.jar | `gates-1.8.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/redstone-gates/files/3965215) |
 | both | Regrowth | `regrowth` | Regrowth-1.19-41.1.31.1.jar | `Regrowth-1.19-41.1.31.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/regrowth/files/4125871) |
-| both | repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar | `storagedelight` | Unknown | `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` | local |
+| both | repackedStorage-25.12.09-1.19-forge-ce-19.2-02 | `storagedelight` |  | `repackedStorage-25.12.09-1.19-forge-ce-19.2-02.jar` | local |
 | both | Resourceful Lib | `resourcefullib` | 1.1.24 | `resourcefullib-forge-1.19.2-1.1.24.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/resourceful-lib/files/4477753) [MR](https://modrinth.com/mod/resourceful-lib/version/VdgtVVWP) |
 | both | Responsive Shields | `responsiveshields` | 2.3 | `responsiveshields-2.3-mc1.18-19-20.x.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/responsive-shields/files/4922027) [MR](https://modrinth.com/mod/responsiveshields/version/6vuwab6O) |
 | both | RestApi | `restapi` | 0.7-1.19.2-forge | `restApi - 0.7 - 1.19.2 - Forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/restapi/files/4802808) [MR](https://modrinth.com/mod/rest-api/version/4KZWSucy) |
@@ -431,24 +432,24 @@ Load order is bottom-to-top as in the in-game menu (higher number = higher prior
 
 | Order | Pack | File | Source |
 |---|---|---|---|
-| 25 | CE2 Iron Armor Fix.zip | `CE2 Iron Armor Fix.zip` | local |
-| 26 | Copycat Framed Blocks | `Copycat Framed Block.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/copycat-framed-blocks/files/4809411) |
-| 27 | Create: ComputerCraft (CC: Tweaked) | `Create Computers 1.2.1 - 1.19.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-computercraft/files/5230447) [MR](https://modrinth.com/resourcepack/create-computercraft/version/auMwAVs0) |
-| 28 | Create Tweaks & Compats | `Create Tweaks Compats.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-modded-compats/files/5837384) |
-| 29 | Create Energistics | `Create-Energistics-1.1.2-mc1.18.x.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-energistics/files/6688465) [MR](https://modrinth.com/resourcepack/create-energistics/version/vKflaS1Y) |
-| 30 | Created Pretty Pipes | `Created Pretty Pipes1.0 FIXED.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/created-pretty-pipes/files/4356655) [MR](https://modrinth.com/resourcepack/created-pretty-pipes/version/O0rnFr9u) |
-| 31 | Eclectic Trove (Legendary Tooltips) | `EclecticTrove-1.19.2-1.3.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/eclectic-trove-legendary-tooltips/files/4934033) [MR](https://modrinth.com/resourcepack/eclectic-trove-legendary-tooltips/version/u6cSdlyB) |
-| 32 | Engineers GUIs | `Engineers_GUIs_1.18.2_v.01.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/engineers-guis/files/4126222) |
-| 33 | Golden crit - Sr_Paulo | `Golden crit.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/golden-crit-sr-paulo/files/4346655) |
-| 34 | LootrChestRetexture for Create! | `LootrChestRetexture_v1.1_1.19.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lootrchestretexture-for-create/files/3943489) |
-| 35 | Low On Fire | `LowOnFire v26.1§8.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/low-on-fire/files/7825035) [MR](https://modrinth.com/resourcepack/low-on-fire/version/yQdcUfnr) |
-| 36 | Lower Shield - Enhanced Combat Visibility | `Lower Shield.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lower-shield/files/6089826) |
-| 42 | Create-Style Pretty Fluid Pipes | `create_style_pretty_fluid_pipes.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-pretty-fluid-pipes/files/6563691) |
-| 43 | Updated Engineering | `Updated_Engineering_v1.7.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/updated-engineering/files/4613047) |
-| 44 | SHC Enhanced Fire | `SHC Enhanced Fire.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/shc-enhanced-fire/files/4618420) [MR](https://modrinth.com/resourcepack/shc-enhanced-fire/version/e2PWHfW5) |
-| 45 | Immersive Engineering Break Switch Sound Replacement | `IE Breaker Switch Sound.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/immersive-engineering-break-switch-sound/files/2909191) |
-| 46 | Squirming Silverfish (+ LITE version)  | `SquirmingSilverfish [1.13 - 26.3]   (v2).zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/squirming-silverfish/files/9013579) |
-| 47 | (Bee's) Fancy Crops | `Fancy Crops v1.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/fancy-crops/files/6779837) [MR](https://modrinth.com/resourcepack/fancy-crops/version/TQMLlyko) |
+| 24 | CE2 Iron Armor Fix.zip | `CE2 Iron Armor Fix.zip` | local |
+| 25 | Copycat Framed Blocks | `Copycat Framed Block.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/copycat-framed-blocks/files/4809411) |
+| 26 | Create: ComputerCraft (CC: Tweaked) | `Create Computers 1.2.1 - 1.19.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-computercraft/files/5230447) [MR](https://modrinth.com/resourcepack/create-computercraft/version/auMwAVs0) |
+| 27 | Create Tweaks & Compats | `Create Tweaks Compats.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-modded-compats/files/5837384) |
+| 28 | Create Energistics | `Create-Energistics-1.1.2-mc1.18.x.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-energistics/files/6688465) [MR](https://modrinth.com/resourcepack/create-energistics/version/vKflaS1Y) |
+| 29 | Created Pretty Pipes | `Created Pretty Pipes1.0 FIXED.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/created-pretty-pipes/files/4356655) [MR](https://modrinth.com/resourcepack/created-pretty-pipes/version/O0rnFr9u) |
+| 30 | Eclectic Trove (Legendary Tooltips) | `EclecticTrove-1.19.2-1.3.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/eclectic-trove-legendary-tooltips/files/4934033) [MR](https://modrinth.com/resourcepack/eclectic-trove-legendary-tooltips/version/u6cSdlyB) |
+| 31 | Engineers GUIs | `Engineers_GUIs_1.18.2_v.01.0.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/engineers-guis/files/4126222) |
+| 32 | Golden crit - Sr_Paulo | `Golden crit.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/golden-crit-sr-paulo/files/4346655) |
+| 33 | LootrChestRetexture for Create! | `LootrChestRetexture_v1.1_1.19.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lootrchestretexture-for-create/files/3943489) |
+| 34 | Low On Fire | `LowOnFire v26.1§8.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/low-on-fire/files/7825035) [MR](https://modrinth.com/resourcepack/low-on-fire/version/yQdcUfnr) |
+| 35 | Lower Shield - Enhanced Combat Visibility | `Lower Shield.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/lower-shield/files/6089826) |
+| 41 | Create-Style Pretty Fluid Pipes | `create_style_pretty_fluid_pipes.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-style-pretty-fluid-pipes/files/6563691) |
+| 42 | Updated Engineering | `Updated_Engineering_v1.7.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/updated-engineering/files/4613047) |
+| 43 | SHC Enhanced Fire | `SHC Enhanced Fire.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/shc-enhanced-fire/files/4618420) [MR](https://modrinth.com/resourcepack/shc-enhanced-fire/version/e2PWHfW5) |
+| 44 | Immersive Engineering Break Switch Sound Replacement | `IE Breaker Switch Sound.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/immersive-engineering-break-switch-sound/files/2909191) |
+| 45 | Squirming Silverfish (+ LITE version)  | `SquirmingSilverfish [1.13 - 26.3]   (v2).zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/squirming-silverfish/files/9013579) |
+| 46 | (Bee's) Fancy Crops | `Fancy Crops v1.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/fancy-crops/files/6779837) [MR](https://modrinth.com/resourcepack/fancy-crops/version/TQMLlyko) |
 | off | Clear Glass with Connected Textures! [16x] | `Clear Glass Pack 1.21.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/clear-glass-pack/files/5431060) |
 | off | Create Style Sophisticated Backpacks | `CreateSophBackpacks.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/create-sophisticated-backpacks/files/7707479) [MR](https://modrinth.com/resourcepack/create-sophisticated-backpacks/version/3WMwR0Mh) |
 | off | Fancy Beds | `Fancy_Beds-v4.2.zip` | [CF](https://www.curseforge.com/minecraft/texture-packs/fancy-beds/files/8672129) [MR](https://modrinth.com/resourcepack/fancy-beds/version/Zdz7XQhL) |
@@ -465,7 +466,6 @@ Full enabled list (includes built-in / mod-provided packs):
 
 ```
 tempad_upstream_assets
-rustic_upstream_assets
 roll_upstream_assets
 oceanic_upstream_assets
 miners_upstream_assets

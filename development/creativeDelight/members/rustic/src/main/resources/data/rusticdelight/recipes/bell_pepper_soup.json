@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_bell_peppers"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    },
+    {
+      "tag": "forge:vegetables/bell_pepper"
+    }
+  ],
+  "result": {
+    "item": "rusticdelight:bell_pepper_soup"
+  }
+}

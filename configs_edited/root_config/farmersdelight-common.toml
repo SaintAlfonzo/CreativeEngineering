@@ -46,7 +46,7 @@
 		#Should BowlFoodItems in the following list become stackable to 16, much like Farmer's Delight's meals?
 		enableStackableSoupItems = true
 		#List of BowlFoodItems. They must extend this class to be affected. Default: vanilla soups and stews.
-		soupItemList = ["minecraft:mushroom_stew", "minecraft:beetroot_soup", "minecraft:rabbit_stew", "goldenfood:golden_mushroom_stew", "goldenfood:golden_beetroot_soup", "goldenfood:golden_rabbit_stew", "goldenfood:enchanted_golden_mushroom_stew", "goldenfood:enchanted_golden_beetroot_soup", "goldenfood:enchanted_golden_rabbit_stew"]
+		soupItemList = ["minecraft:mushroom_stew", "minecraft:beetroot_soup", "minecraft:rabbit_stew"]
 
 #World generation
 [world]

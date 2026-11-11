@@ -10,14 +10,15 @@ import net.minecraftforge.registries.RegistryObject;
 
 /**
  * The Netherite Lunchbox, a fourth Spice of Life tier (18 slots, two rows of 9). Registered under
- * {@code solapplepie:} so Spice of Life's own screen and lang keys ({@code item.solapplepie.container.*})
- * treat it like the other three. Only registered when Spice of Life is loaded.
+ * {@code creativedelight:} (was {@code solapplepie:} until 2026-11-10; the swap list carries saves). Spice of Life's
+ * screen and container lang key ({@code item.solapplepie.container.*}) come from the item class and its name, not
+ * the namespace. Only registered when Spice of Life is loaded.
  */
 public final class LunchboxItems {
 
     public static final int NETHERITE_SLOTS = 18;
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Lunchboxes.SOL);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Lunchboxes.NETHERITE_LUNCHBOX.getNamespace());
 
     public static final RegistryObject<Item> NETHERITE_LUNCHBOX =
             ITEMS.register(Lunchboxes.NETHERITE_LUNCHBOX.getPath(), NetheriteLunchboxItem::new);

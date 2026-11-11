@@ -188,15 +188,21 @@
 		#Raw rock: stone, deepslate, tuff, calcite, terracotta, ores, obsidian.
 		#Range: 0.05 ~ 4.0
 		natural_smooth = 1.05
-		#Reserved for Create/IE machines. Not filled yet.
+		#Machines and plumbing: processing machines, belts, shafts, casings, tanks, pumps, boilers, logic gates and computers.
 		#Range: 0.05 ~ 4.0
 		machinery = 1.0
-		#Reserved for chests, furnaces and workstations. Not filled yet.
+		#Workstations and magic blocks: altars, apothecaries, waystones, anvils, crafting stations.
 		#Range: 0.05 ~ 4.0
 		functional = 1.0
-		#Reserved for furniture, lamps and signage. Not filled yet.
+		#Decor that is not furniture: trim, girders, vents, stepping stones, statues, trophies, coin piles.
 		#Range: 0.05 ~ 4.0
 		decorative = 1.0
+		#Furniture and storage: benches, desks, counters, couches, chests, crates, barrels, drawers, cabinets.
+		#Range: 0.05 ~ 4.0
+		furniture = 1.0
+		#Plants and nature props tall enough to stand on: pots, stumps, coral, mushrooms, nests.
+		#Range: 0.05 ~ 4.0
+		flora = 1.0
 		#Framed / copycat blocks. Only used by an empty frame, or by every frame when [surface.camouflage] copyCamo is false.
 		#Range: 0.05 ~ 4.0
 		camouflage = 1.0

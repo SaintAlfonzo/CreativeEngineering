@@ -12617,6 +12617,17 @@ i.frozen_dark_prismarine      = 'philipsruins:frozen_dark_prismarine';
 i.philips_sand_stone_brick     = 'philipsruins:sand_stone_brick';
 i.philips_red_sand_stone_brick = 'philipsruins:red_sand_stone_brick';
 i.philips_sandstone_tiles      = 'philipsruins:sandstone_tiles';
+
+// ===== Visceral Heap items (Biomes O' Plenty) and flesh crush drops (plan_flesh_recipes.md, 2026-11-10) =====
+i.flesh                       = 'biomesoplenty:flesh';
+i.porous_flesh                = 'biomesoplenty:porous_flesh';
+i.flesh_tendons               = 'biomesoplenty:flesh_tendons';
+i.pus_bubble                  = 'biomesoplenty:pus_bubble';
+i.hair                        = 'biomesoplenty:hair';
+i.eyebulb                     = 'biomesoplenty:eyebulb';
+i.blood_bucket                = 'biomesoplenty:blood_bucket';
+i.bone_chunk                  = 'philipsruins:bone_chunk';
+i.broken_bone                 = 'philipsruins:broken_bone';
 i.steel_floor_grating         = 'engineersdecor:steel_floor_grating';
 i.steel_railing               = 'engineersdecor:steel_railing';
 i.iron_hatch                  = 'engineersdecor:iron_hatch';
@@ -12895,7 +12906,6 @@ i.sweetberry_jelly             = 'fruitsdelight:sweetberry_jelly';
 // ===== goldenfood (45) =====
 i.enchanted_golden_baked_potato    = 'goldenfood:enchanted_golden_baked_potato';
 i.enchanted_golden_beetroot        = 'goldenfood:enchanted_golden_beetroot';
-i.enchanted_golden_beetroot_soup   = 'goldenfood:enchanted_golden_beetroot_soup';
 i.enchanted_golden_bread           = 'goldenfood:enchanted_golden_bread';
 i.enchanted_golden_carrot          = 'goldenfood:enchanted_golden_carrot';
 i.enchanted_golden_chorus_fruit    = 'goldenfood:enchanted_golden_chorus_fruit';
@@ -12912,13 +12922,10 @@ i.enchanted_golden_glow_berries    = 'goldenfood:enchanted_golden_glow_berries';
 i.enchanted_golden_honey_bottle    = 'goldenfood:enchanted_golden_honey_bottle';
 i.enchanted_golden_melon_slice     = 'goldenfood:enchanted_golden_melon_slice';
 i.enchanted_golden_milk_bucket     = 'goldenfood:enchanted_golden_milk_bucket';
-i.enchanted_golden_mushroom_stew   = 'goldenfood:enchanted_golden_mushroom_stew';
 i.enchanted_golden_pumpkin_pie     = 'goldenfood:enchanted_golden_pumpkin_pie';
-i.enchanted_golden_rabbit_stew     = 'goldenfood:enchanted_golden_rabbit_stew';
 i.enchanted_golden_sweet_berries   = 'goldenfood:enchanted_golden_sweet_berries';
 i.golden_baked_potato              = 'goldenfood:golden_baked_potato';
 i.golden_beetroot                  = 'goldenfood:golden_beetroot';
-i.golden_beetroot_soup             = 'goldenfood:golden_beetroot_soup';
 i.golden_bread                     = 'goldenfood:golden_bread';
 i.golden_chorus_fruit              = 'goldenfood:golden_chorus_fruit';
 i.golden_cooked_beef               = 'goldenfood:golden_cooked_beef';
@@ -12934,9 +12941,7 @@ i.golden_glow_berries              = 'goldenfood:golden_glow_berries';
 i.golden_honey_bottle              = 'goldenfood:golden_honey_bottle';
 i.golden_melon_slice               = 'goldenfood:golden_melon_slice';
 i.golden_milk_bucket               = 'goldenfood:golden_milk_bucket';
-i.golden_mushroom_stew             = 'goldenfood:golden_mushroom_stew';
 i.golden_pumpkin_pie               = 'goldenfood:golden_pumpkin_pie';
-i.golden_rabbit_stew               = 'goldenfood:golden_rabbit_stew';
 i.golden_sweet_berries             = 'goldenfood:golden_sweet_berries';
 
 // ===== hostiledelight (67) =====
@@ -13162,11 +13167,15 @@ i.sweet_salad                     = 'rusticdelight:sweet_salad';
 i.syrup_cheesecake_slice          = 'rusticdelight:syrup_cheesecake_slice';
 i.syrup_sandwich                  = 'rusticdelight:syrup_sandwich';
 
-// ===== solapplepie (4) =====
+// ===== solapplepie (5) =====
+i.diet_tracker       = 'solapplepie:food_book';  // renamed Food Book -> Diet Tracker (names.js)
 i.golden_lunchbox    = 'solapplepie:golden_lunchbox';
 i.lunchbag           = 'solapplepie:lunchbag';
 i.lunchbox           = 'solapplepie:lunchbox';
 i.netherite_lunchbox = 'creativedelight:netherite_lunchbox';  // registered by patcherMod lunchbox/
+
+// ===== solcarrot (1) =====
+i.food_dictionary    = 'solcarrot:food_book';  // Spice of Life: Carrot Edition, shown as Food Dictionary (names.js)
 
 // ===== untitledduckmod (4) =====
 i.cooked_duck  = 'untitledduckmod:cooked_duck';
@@ -13513,7 +13522,6 @@ i.canned_glistering_melon_slice             = 'creativedelight:canned_glistering
 i.canned_golden_apple                       = 'creativedelight:canned_golden_apple';
 i.canned_golden_baked_potato                = 'creativedelight:canned_golden_baked_potato';
 i.canned_golden_beetroot                    = 'creativedelight:canned_golden_beetroot';
-i.canned_golden_beetroot_soup               = 'creativedelight:canned_golden_beetroot_soup';
 i.canned_golden_bread                       = 'creativedelight:canned_golden_bread';
 i.canned_ce_golden_carrot                   = 'creativedelight:canned_ce_golden_carrot';
 i.canned_golden_chorus_fruit                = 'creativedelight:canned_golden_chorus_fruit';
@@ -13531,14 +13539,11 @@ i.canned_golden_honey_bottle                = 'creativedelight:canned_golden_hon
 i.canned_golden_melon_slice                 = 'creativedelight:canned_golden_melon_slice';
 i.canned_golden_milk_bucket                 = 'creativedelight:canned_golden_milk_bucket';
 i.canned_golden_moss_clump                  = 'creativedelight:canned_golden_moss_clump';
-i.canned_golden_mushroom_stew               = 'creativedelight:canned_golden_mushroom_stew';
 i.canned_golden_pumpkin_pie                 = 'creativedelight:canned_golden_pumpkin_pie';
-i.canned_golden_rabbit_stew                 = 'creativedelight:canned_golden_rabbit_stew';
 i.canned_golden_sweet_berries               = 'creativedelight:canned_golden_sweet_berries';
 i.canned_enchanted_golden_apple             = 'creativedelight:canned_enchanted_golden_apple';
 i.canned_enchanted_golden_baked_potato      = 'creativedelight:canned_enchanted_golden_baked_potato';
 i.canned_enchanted_golden_beetroot          = 'creativedelight:canned_enchanted_golden_beetroot';
-i.canned_enchanted_golden_beetroot_soup     = 'creativedelight:canned_enchanted_golden_beetroot_soup';
 i.canned_enchanted_golden_bread             = 'creativedelight:canned_enchanted_golden_bread';
 i.canned_enchanted_golden_carrot            = 'creativedelight:canned_enchanted_golden_carrot';
 i.canned_enchanted_golden_chorus_fruit      = 'creativedelight:canned_enchanted_golden_chorus_fruit';
@@ -13556,9 +13561,7 @@ i.canned_enchanted_golden_honey_bottle      = 'creativedelight:canned_enchanted_
 i.canned_enchanted_golden_melon_slice       = 'creativedelight:canned_enchanted_golden_melon_slice';
 i.canned_enchanted_golden_milk_bucket       = 'creativedelight:canned_enchanted_golden_milk_bucket';
 i.canned_enchanted_golden_moss_clump        = 'creativedelight:canned_enchanted_golden_moss_clump';
-i.canned_enchanted_golden_mushroom_stew     = 'creativedelight:canned_enchanted_golden_mushroom_stew';
 i.canned_enchanted_golden_pumpkin_pie       = 'creativedelight:canned_enchanted_golden_pumpkin_pie';
-i.canned_enchanted_golden_rabbit_stew       = 'creativedelight:canned_enchanted_golden_rabbit_stew';
 i.canned_enchanted_golden_sweet_berries     = 'creativedelight:canned_enchanted_golden_sweet_berries';
 // ===== END GENERATED CANS =====
 // ############################## Compost items (generated by tools/gen_compost_values.py) ##############################

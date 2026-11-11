@@ -25,6 +25,8 @@ Status Planned / Work data / KubeJS / TODO `mobs/bees #1` (scratchpad 2026-10-19
 Know which items breed bees, and make every flower the pack has count, consistently with what bees pollinate.
 
 ### Now
+
+> **Correction 2026-11-10 ([breeding_audit.md](../breeding_audit.md) 4):** Buzzier Bees' `flower_blacklist` is read by its bone meal handler (`renewableFlowers`), not by pollination.
 - **Breeding** = vanilla `Bee#isFood`: the item is in `#minecraft:flowers` (from memory of the 1.19.2 code; Buzzier Bees'
   only `Bee` mixin, `BeeEntityMixin`, changes hive-entry weather logic, not food: decompiled
   `buzzier_bees-1.19.2-5.0.1.jar`). **Pollination** uses the block tag `#minecraft:flowers` (vanilla), minus Buzzier

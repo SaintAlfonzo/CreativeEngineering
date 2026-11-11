@@ -1,0 +1,48 @@
+{
+  "values": [
+    {
+      "id": "#forge:raw_fishes",
+      "required": false
+    },
+    {
+      "id": "#forge:raw_pork",
+      "required": false
+    },
+    {
+      "id": "#forge:raw_chicken",
+      "required": false
+    },
+    {
+      "id": "#forge:raw_beef",
+      "required": false
+    },
+    {
+      "id": "#forge:raw_mutton",
+      "required": false
+    },
+    {
+      "id": "#forge:eggs",
+      "required": false
+    },
+    {
+      "id": "#forge:mushrooms",
+      "required": false
+    },
+    {
+      "id": "#forge:vegetables/carrot",
+      "required": false
+    },
+    {
+      "id": "#forge:vegetables/potato",
+      "required": false
+    },
+    {
+      "id": "#forge:vegetables/beetroot",
+      "required": false
+    },
+    {
+      "id": "#forge:vegetables/bell_pepper",
+      "required": false
+    }
+  ]
+}

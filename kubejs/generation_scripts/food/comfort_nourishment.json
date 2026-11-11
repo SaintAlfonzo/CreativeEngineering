@@ -585,10 +585,6 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
-		"enchanted_golden_beetroot_soup": {
-			"effect": "nourishment",
-			"seconds": 240
-		},
 		"enchanted_golden_bread": {
 			"effect": "nourishment",
 			"seconds": 240
@@ -653,15 +649,7 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
-		"enchanted_golden_mushroom_stew": {
-			"effect": "nourishment",
-			"seconds": 240
-		},
 		"enchanted_golden_pumpkin_pie": {
-			"effect": "nourishment",
-			"seconds": 240
-		},
-		"enchanted_golden_rabbit_stew": {
 			"effect": "nourishment",
 			"seconds": 240
 		},
@@ -674,10 +662,6 @@
 			"seconds": 120
 		},
 		"golden_beetroot": {
-			"effect": "nourishment",
-			"seconds": 120
-		},
-		"golden_beetroot_soup": {
 			"effect": "nourishment",
 			"seconds": 120
 		},
@@ -741,15 +725,7 @@
 			"effect": "nourishment",
 			"seconds": 120
 		},
-		"golden_mushroom_stew": {
-			"effect": "nourishment",
-			"seconds": 120
-		},
 		"golden_pumpkin_pie": {
-			"effect": "nourishment",
-			"seconds": 120
-		},
-		"golden_rabbit_stew": {
 			"effect": "nourishment",
 			"seconds": 120
 		},

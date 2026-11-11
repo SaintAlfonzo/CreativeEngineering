@@ -174,7 +174,7 @@ JAVA_PLACED = {
         ground='#minecraft:dirt', notes='48 tries within 4; flower-type feature (bone meal on grass)'),
     'rusticdelight:wild_coffee_placed': dict(crop='Coffee (Rustic Delight)', mods=[rarity(toml_int('rusticdelight-common.toml', 'wild_coffee_chance', 15)), HM_MOTION],
         ground='#minecraft:dirt', notes='48 tries within 6; flower-type feature (bone meal on grass)'),
-    # Rustic Delight 1.7.0 (Creative Delight port; json in the rustic_upstream donor, rarity from the port's ChanceFilter)
+    # Rustic Delight 1.7.0 (Creative Delight port; json baked into members/rustic, rarity from the port's ChanceFilter)
     'rusticdelight:bell_pepper_block_patch_placed': dict(crop='Giant Bell Peppers', mods=[rarity(64), HM_MOTION],
         ground='grass block', notes='48 tries within 7; red, yellow, green giant pepper blocks (needs Creative Delight)'),
     # Nether's Delight 3.1 NDGeneration + PropelplantFeature (CD repackedNethers; 4.0 renamed it propelplant_patch, the pack

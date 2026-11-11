@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "conditions": [
+    {
+      "type": "rusticdelight:config_boolean",
+      "settingId": "enable_syrup_foods"
+    }
+  ],
+  "ingredients": [
+    {
+      "tag": "forge:bread"
+    },
+    {
+      "tag": "rusticdelight:syrup"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "item": "rusticdelight:syrup_sandwich"
+  }
+}

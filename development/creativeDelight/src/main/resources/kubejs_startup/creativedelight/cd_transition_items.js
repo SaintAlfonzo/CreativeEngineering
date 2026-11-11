@@ -53,9 +53,6 @@ StartupEvents.registry('item', e => {
 		['enchanted_golden_bread',                   'goldenfood:item/golden_bread'],
 		['enchanted_golden_cookie',                  'goldenfood:item/golden_cookie'],
 		['enchanted_golden_pumpkin_pie',             'goldenfood:item/golden_pumpkin_pie'],
-		['enchanted_golden_mushroom_stew',           'goldenfood:item/golden_mushroom_stew'],
-		['enchanted_golden_beetroot_soup',           'goldenfood:item/golden_beetroot_soup'],
-		['enchanted_golden_rabbit_stew',             'goldenfood:item/golden_rabbit_stew'],
 		['enchanted_golden_milk_bucket',             'goldenfood:item/golden_milk_bucket'],
 		['enchanted_golden_honey_bottle',            'goldenfood:item/golden_honey_bottle'],
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
@@ -95,7 +92,7 @@ StartupEvents.registry('item', e => {
 		['kebab_wrap'],                                               // Barbeque's Delight combos (plan_meals_rolls_bbq.md C8)
 		['kebab_sandwich'],
 		['crawling_sandwich'],
-		['steak_and_potatoes'],
+		['steak_and_potatoes']
 	]
 	SEQUENCED_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))
 	console.log(`[creativedelight] transition items (${SEQUENCED_ASSEMBLIES.length})`)

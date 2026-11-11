@@ -194,6 +194,7 @@ b.t_end_plant_soil_slow = '#creativedelight:end_plant_soil_slow'; // enders_addi
 b.t_end_plant_soil_fast = '#creativedelight:end_plant_soil_fast'; // same, grow fast
 b.t_mineable_axe = '#minecraft:mineable/axe';
 b.t_mineable_pickaxe = '#minecraft:mineable/pickaxe';
+b.t_climbable = '#minecraft:climbable';
 
 // Visceral Heap blocks kept from Biomes O' Plenty (visceral_heap.md)
 b.flesh = 'biomesoplenty:flesh';

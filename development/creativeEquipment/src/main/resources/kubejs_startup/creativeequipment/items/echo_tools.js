@@ -9,7 +9,7 @@
 // to 4 (netherite-equivalent) so the digging tools actually work. Drop it back to 1
 // in the `setLevel` call below if you want a literal match.
 //
-// Textures: kubejs/assets/creativeengineering/textures/item/echo_<tool>.png (16x192,
+// Textures: Creative Equipment's assets/creativeequipment/textures/item/echo_<tool>.png (16x192,
 // 12-frame animated) + .png.mcmeta — see tools/echo_texture.py. Model is auto-generated
 // (item/handheld) from the item id, no .texture() call needed.
 
@@ -34,7 +34,7 @@ StartupEvents.registry('item', event => {
 
 	Object.keys(ECHO_TOOLS).forEach(name => {
 		const pretty = 'Echo ' + name.split('_')[1].replace(/^./, c => c.toUpperCase())
-		event.create('creativeengineering:' + name, ECHO_TOOLS[name])
+		event.create('creativeequipment:' + name, ECHO_TOOLS[name])
 			.tier('echo')
 			.fireResistant()                              // echo gear survives fire (Item.Properties.fireResistant)
 			.group('tools')

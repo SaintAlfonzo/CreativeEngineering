@@ -210,11 +210,8 @@ CATEGORIES = {
     # the unmodified Miner's Delight jar the merged backport reads its art and data from (miners_delight.md D12), as
     # for Vinery. Never in mods/: it has the port's mod id.
     'miners_upstream': (('server', 'client'), 'miners_upstream'),
-    # the unmodified Rustic Delight 1.7.0 jar the Creative Delight port reads its art and data from (rustic_delight.md
-    # 5), as for Miner's Delight. Never in mods/.
-    'rustic_upstream': (('server', 'client'), 'rustic_upstream'),
     # the unmodified Roll Delight 1.3.1 jar the Creative Delight port reads its art from (roll_delight.md 4), as for
-    # Rustic Delight. Never in mods/.
+    # Miner's Delight. Never in mods/.
     'roll_upstream': (('server', 'client'), 'roll_upstream'),
     # the unmodified Large Meals 1.3.0 jar the Creative Delight port reads its art from (large_meals.md 4), as for
     # Roll Delight. Never in mods/.
@@ -590,8 +587,6 @@ UPSTREAM_DONORS = {
     # in the Creative Worldgen jar since the wave 5 carve (2026-11-02; patcherMod before)
     'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
                          ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
-    'rustic_upstream': ('creativedelight', 'Rustic Delight (Creative Delight)',
-                        ('creativeDelight/members/rustic', 'com', 'SaintAlfonzo', 'creativedelight', 'rustic', 'upstream')),
     'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
                       ('creativeDelight/members/roll', 'com', 'SaintAlfonzo', 'creativedelight', 'roll', 'upstream')),
     'largemeals_upstream': ('creativedelight', 'Large Meals (Creative Delight)',
@@ -1581,14 +1576,12 @@ def render_readme(cur, prev, d, dpay, base, payload):
         rm('server'),
         ("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
         'No server jars changed.',
-        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))} over the server's folders{only_changed}."
-        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream')) else None,
+        f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))} over the server's folders{only_changed}."
+        if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream')) else None,
         ('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
          'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
         ("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
          'stops the game with a message if it is missing.') if has('miners_upstream') else None,
-        ("`rustic_upstream/` goes next to `mods/`, never inside it: Creative Delight's Rustic Delight port reads that jar "
-         'and stops the game with a message if it is missing.') if has('rustic_upstream') else None,
         ("`roll_upstream/` goes next to `mods/`, never inside it: Creative Delight's Roll Delight port reads that jar "
          'and stops the game with a message if it is missing.') if has('roll_upstream') else None,
         ("`largemeals_upstream/` goes next to `mods/`, never inside it: Creative Delight's Large Meals port reads that jar "
@@ -1607,7 +1600,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
     ])
     rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
     show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'rustic_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))
+    client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))
     lines += ['', '## Client', ''] + numbered([
         'Close the game.',
         rm('client'),

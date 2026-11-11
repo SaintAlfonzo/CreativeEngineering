@@ -79,7 +79,7 @@ public final class RunSpeed {
     private static final Info UNTYPED = new Info(1.0, Source.NONE, null);
 
     /** BlockRunner (via vanilla getOnPos) reads the block 0.2F below your feet. */
-    private static final double REGISTER_HEIGHT = 0.2F;
+    public static final double REGISTER_HEIGHT = 0.2F;
 
     private static final float DEFAULT_FRICTION = 0.6f;
 
@@ -216,6 +216,14 @@ public final class RunSpeed {
         ChatFormatting color = isNormal(factor) ? ChatFormatting.WHITE
                 : factor > 1.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
         return Component.literal(text).withStyle(color);
+    }
+
+    /**
+     * BlockRunner's own multiplier for this block (from a tier tag or a one-off json key), or NaN when
+     * it has none. For the surface audit dump (Creative Devtools /dumpsurface).
+     */
+    public static double runnerFactor(Block block) {
+        return BlockSpeedManager.INSTANCE.hasBlockSpeed(block) ? factor(block) : Double.NaN;
     }
 
     private static double factor(Block block) {
