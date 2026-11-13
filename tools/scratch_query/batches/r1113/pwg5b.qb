@@ -1,0 +1,13 @@
+# r1113 pwg5 follow-up on the same running server: /reload with the fixed pwg_p4_probe.js (sourcesOf overload), then zpwg4 check again (SQ-PWG-35 glue half).
+pace 2
+
+## SQ-PWG-35b | zpwg4 check after the probe fix: clutch display source, redstone converter, spinning_rotor damage
+shell cp $INST/tools/scratch_query/pwg_p4_probe.js kubejs/server_scripts/zz_pwg_p4_probe.js
+> reload
+sleep 40
+> zpwg4 check
+waitlog \[zpwg4\] done 30
+expect \[zpwg4\] display clutch=true sources on generator_clutch=1$
+expect \[zpwg4\] redstone converter clutch=true$
+expect \[zpwg4\] damage spinning_rotor msgId=spinning_rotor bypassArmor=false$
+reject \[zpwg4\] (error|display error|redstone converter error|damage error)

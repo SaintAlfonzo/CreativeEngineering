@@ -1,0 +1,13 @@
+# r1112 SQ-RP boot 2: world ladder.json edited (unknown unlock at 3, flat absorption at 4) before the boot.
+pace 2
+
+## SQ-RP-03 | unregistered and unsafe entries skipped, ladder still 38 rungs
+bootexpect skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3\.0
+bootexpect V10: flat minecraft:absorption
+bootexpect Diet ladder: 38 rungs
+shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log
+look exactly one skipped line and one absorption V10 line (counts above both 1)
+
+## SQ-RP-05b | pause list survives the restart
+> solrp pause list
+expect rpb

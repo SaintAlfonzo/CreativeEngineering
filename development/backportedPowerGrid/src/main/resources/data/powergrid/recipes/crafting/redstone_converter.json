@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "powergrid:conductive_casing"
+    },
+    {
+      "item": "minecraft:comparator"
+    },
+    {
+      "item": "powergrid:pins"
+    }
+  ],
+  "result": {
+    "item": "powergrid:redstone_converter"
+  }
+}

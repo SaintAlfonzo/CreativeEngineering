@@ -1,0 +1,422 @@
+# r1113 chunk 3, rerun of boot c3a1's batch faults (verdicts: perf/runs/r1113/verdicts/c3a1.md). Fresh boot, World
+# group A superflat, full pack (ground top y -61, stand at -60). Level name: fixc3a1.
+# Setup before boot (server stopped):
+#   bash tools/scratch_query/prep_srv.sh OUT fixc3a1 A difficulty=normal
+#   cp $INST/tools/scratch_query/c3_probe.js   OUT/srv/kubejs/server_scripts/zz_c3_probe.js    (/zc3)
+#   cp $INST/tools/scratch_query/zp_probe.js   OUT/srv/kubejs/server_scripts/zz_zp_probe.js    (/zp)
+#   cp $INST/tools/scratch_query/zact_probe.js OUT/srv/kubejs/server_scripts/zz_zact_probe.js  (/zact; needs the
+#     2026-11-13 copy with `break ... keep`)
+#   (zq is copied by prep_srv.sh). No config edit before boot; FCK-13 and IP-05 edit configs live and restore them.
+# Fixes against c3_a1.qb:
+#   - `zc3 aim` threw (BotPlayer has no setYRot in Rhino): aims are `execute as BOT at @s run tp @s ~ ~ ~ YAW PITCH`.
+#   - Live config edits: `sed -i` replaces the file (new inode) and Forge's watcher never fired (no "changed, sending
+#     notifies" in debug.log); edits now rewrite the same file (sed > tmp, cat tmp > file).
+#   - MG-22 upper half is coffee_bush[half=upper] (coffee_bush_top is the stem top; the bush died at once on setblock).
+#   - AZW-03 bark is a chance output: read with rdetail (rdetail+ results), not `makes`.
+#   - BOT-03 pot filled by data merge (a right-click on a pot without growth opens its menu, nothing was inserted).
+#   - FCK-09 one rdetail per feast can (the prefix query hit rdetail's 40-line cut).
+#   - FCK-11 bot stands at the well; the can's WaterLevel read before and after.
+#   - FCB-09 broken with a pickaxe (copper pot dropped no item bare-handed) and `keep`, so the drops' NBT can be read;
+#     pots 10 blocks apart (zact clears drops within 3 before each break).
+#   - FCB-10 only the wall-removal case, with a skillet hung by the bot (the /setblock one held no skillet).
+#   - IP-01 reads edge-middle frame blocks (the flood fill converts frame blocks beside the interior, never corners).
+# The after-restart halves (c3_a2.qb SQ-PG-01b, SQ-IP-05b) need a second boot of this world with qa offline; c3a2's
+# own run of them has no pairs to read (c3a1 placed none).
+pace 1
+
+## SQ-C3F-setup | area, gamerules, bots (not a test row)
+> forceload add 1000 1000 1480 1080
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule doFireTick false
+> gamerule randomTickSpeed 0
+> time set noon
+> weather clear
+> kill @e[type=minecraft:item]
+> pbot spawn G 1000 -60 1000 minecraft:overworld survival
+> pbot spawn pg 1300 -60 1030 minecraft:overworld survival
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 5
+> execute as pg at @s run tp @s ~ ~ ~ 33 0
+> zc3 bstate 1000 -61 1000
+expect \[c3\] bstate 1000 -61 1000 Block\{minecraft:grass_block\}
+reject \[c3\] error
+look setup; three bots spawned; the tp-with-rotation line answers without error (aim method for the rows below)
+
+## SQ-MG-22 | coffee bush on basalt breaks on its first random tick, wheat untouched, no Wither Roots
+> fill 1000 -61 1040 1004 -61 1040 minecraft:basalt
+> setblock 1002 -60 1040 farmersrespite:coffee_bush[half=lower]
+> setblock 1002 -59 1040 farmersrespite:coffee_bush[half=upper]
+> setblock 1004 -61 1041 minecraft:farmland[moisture=7]
+> setblock 1004 -60 1041 minecraft:wheat[age=3]
+> zc3 bstate 1002 -60 1040 1002 -59 1040
+> gamerule randomTickSpeed 300
+sleep 10
+> gamerule randomTickSpeed 0
+> zc3 bstate 1002 -60 1040 1002 -59 1040 1004 -60 1041
+> zc3 items 1002 -60 1040 4
+count bstate 1002 -60 1040 Block\{farmersrespite:coffee_bush\} >= 1
+count bstate 1002 -60 1040 Block\{minecraft:air\} >= 1
+expect bstate 1004 -60 1041 Block\{minecraft:wheat\}
+reject bstate .*wither
+look first bstate pair shows both halves of the bush, the second pair air; items: Rustic Delight coffee items or none
+
+## SQ-AZW-03 | azalea log on the cutting board strips to the stripped log plus Immersive Weathering azalea bark
+> zq rdetail azalea_log_to
+waitlog \[zq\] rdetail matching azalea_log_to: \d+ 30
+expect rdetail\+ [a-z_]+:[a-z_]+/azalea_log_to\S* results: .*immersive_weathering:quark/azalea_bark
+look the line for the quark:azalea_log input (not the hollow log) lists the stripped log and the bark (chance 0.5)
+
+## SQ-BOT-03 | bone meal on a growing pot is not taken and does not speed growth (pot fertilizer recipe gone)
+> zq recipes botanypots:minecraft/fertilizer/bonemeal
+waitlog \[zq\] recipes matching botanypots:minecraft/fertilizer/bonemeal: 0 30
+> setblock 1060 -60 1060 botanypots:terracotta_botany_pot
+> data merge block 1060 -60 1060 {Inventory:{Items:[{Slot:0b,id:"minecraft:dirt",Count:1b},{Slot:1b,id:"minecraft:wheat_seeds",Count:1b}]}}
+sleep 3
+> data get block 1060 -60 1060
+> pbot hold G minecraft:bone_meal 5
+> pbot use G 1060 -60 1060 up
+> data get entity G SelectedItem
+> data get block 1060 -60 1060
+expect has the following entity data: .*(Count: 5b.*minecraft:bone_meal|minecraft:bone_meal.*Count: 5b)
+expect block data: .*minecraft:wheat_seeds
+look both block reads hold dirt and wheat seeds with GrowthTime >= 0; the second GrowthTime is the first plus about 3 s of ticks (60), not a jump; if GrowthTime stays -1 the merge did not set the crop: note it (then a client row)
+
+## SQ-FCK-09 | each of the 21 A12 feast cans has one recipe: its feast block item plus an empty can
+shell grep -h "\[cans\] registered" logs/kubejs/startup.log | cut -c1-200
+> zq makes creativedelight:canned_pizza
+waitlog \[zq\] makes creativedelight:canned_pizza: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_pizza
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_pizza: \d+ 30
+> zq makes creativedelight:canned_cheese_pizza
+waitlog \[zq\] makes creativedelight:canned_cheese_pizza: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_cheese_pizza
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_cheese_pizza: \d+ 30
+> zq makes creativedelight:canned_meat_pizza
+waitlog \[zq\] makes creativedelight:canned_meat_pizza: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_meat_pizza
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_meat_pizza: \d+ 30
+> zq makes creativedelight:canned_vegan_pizza
+waitlog \[zq\] makes creativedelight:canned_vegan_pizza: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_vegan_pizza
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_vegan_pizza: \d+ 30
+> zq makes creativedelight:canned_stuffed_cantaloupe
+waitlog \[zq\] makes creativedelight:canned_stuffed_cantaloupe: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_stuffed_cantaloupe
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_cantaloupe: \d+ 30
+> zq makes creativedelight:canned_dragon_meat_stew
+waitlog \[zq\] makes creativedelight:canned_dragon_meat_stew: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_dragon_meat_stew
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_dragon_meat_stew: \d+ 30
+> zq makes creativedelight:canned_grilled_shulker
+waitlog \[zq\] makes creativedelight:canned_grilled_shulker: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_grilled_shulker
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_grilled_shulker: \d+ 30
+> zq makes creativedelight:canned_steamed_dragon_egg
+waitlog \[zq\] makes creativedelight:canned_steamed_dragon_egg: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_steamed_dragon_egg
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_steamed_dragon_egg: \d+ 30
+> zq makes creativedelight:canned_rice_roll_medley
+waitlog \[zq\] makes creativedelight:canned_rice_roll_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_rice_roll_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_rice_roll_medley: \d+ 30
+> zq makes creativedelight:canned_fake_meatloaf
+waitlog \[zq\] makes creativedelight:canned_fake_meatloaf: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_fake_meatloaf
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_fake_meatloaf: \d+ 30
+> zq makes creativedelight:canned_glazed_arachnid_limbs
+waitlog \[zq\] makes creativedelight:canned_glazed_arachnid_limbs: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_glazed_arachnid_limbs
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_glazed_arachnid_limbs: \d+ 30
+> zq makes creativedelight:canned_stuffed_squid
+waitlog \[zq\] makes creativedelight:canned_stuffed_squid: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_stuffed_squid
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_squid: \d+ 30
+> zq makes creativedelight:canned_guardian_soup
+waitlog \[zq\] makes creativedelight:canned_guardian_soup: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_guardian_soup
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_guardian_soup: \d+ 30
+> zq makes creativedelight:canned_legendary_roll_medley
+waitlog \[zq\] makes creativedelight:canned_legendary_roll_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_legendary_roll_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_legendary_roll_medley: \d+ 30
+> zq makes creativedelight:canned_mythical_roll_medley
+waitlog \[zq\] makes creativedelight:canned_mythical_roll_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_mythical_roll_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_mythical_roll_medley: \d+ 30
+> zq makes creativedelight:canned_bell_pepper_medley
+waitlog \[zq\] makes creativedelight:canned_bell_pepper_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_bell_pepper_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_bell_pepper_medley: \d+ 30
+> zq makes creativedelight:canned_pale_bell_pepper_medley
+waitlog \[zq\] makes creativedelight:canned_pale_bell_pepper_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_pale_bell_pepper_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_pale_bell_pepper_medley: \d+ 30
+> zq makes creativedelight:canned_dark_bell_pepper_medley
+waitlog \[zq\] makes creativedelight:canned_dark_bell_pepper_medley: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_dark_bell_pepper_medley
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_dark_bell_pepper_medley: \d+ 30
+> zq makes creativedelight:canned_rice_roll_royale
+waitlog \[zq\] makes creativedelight:canned_rice_roll_royale: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_rice_roll_royale
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_rice_roll_royale: \d+ 30
+> zq makes creativedelight:canned_lasagna
+waitlog \[zq\] makes creativedelight:canned_lasagna: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_lasagna
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_lasagna: \d+ 30
+> zq makes creativedelight:canned_stuffed_bell_peppers
+waitlog \[zq\] makes creativedelight:canned_stuffed_bell_peppers: \d+ 30
+> zq rdetail creativedelight:shapeless/canned_stuffed_bell_peppers
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_bell_peppers: \d+ 30
+count \[zq\] makes creativedelight:canned_[a-z_]+: 1$ >= 21
+count -> 1 canned_[a-z_]+ <- canned_goods:empty_can, [a-z_]+:[a-z_]+$ >= 21
+look 21 `makes ...: 1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 11-12 pack log
+
+## SQ-FCK-11 | Just a Well: a watering can fill drains the well, then it refills
+> setblock 1030 -60 1080 well:well
+> tp G 1030.5 -60 1078.5 0 30
+sleep 30
+> data get block 1030 -60 1080
+> pbot hold G hearthandharvest:iron_watering_can 1
+> data get entity G SelectedItem
+> pbot use G 1030 -60 1080 north
+> data get entity G SelectedItem
+> data get block 1030 -60 1080
+sleep 60
+> data get block 1030 -60 1080
+> tp G 1000 -60 1000
+expect has the following entity data: .*WaterLevel
+look Amount falls by 1000 after the use (FillTick not wrapped between the two reads), the second SelectedItem has WaterLevel at the tier capacity, then Amount rises again; WaterLevel set with Amount unchanged = FAIL (farming/crops #30); no WaterLevel and use PASS = the click missed, note it
+
+## SQ-FCK-13 | dispenser shears a full nest: 6 honeycomb, then 3 with the multiplier at 1 (read live)
+> setblock 1050 -60 1080 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:shears",Count:1b}]}
+> setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
+> setblock 1050 -60 1081 minecraft:redstone_block
+sleep 1
+> setblock 1050 -60 1081 minecraft:air
+sleep 1
+> zc3 items 1051 -60 1080 3
+expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x6\b
+shell sed 's/^\(\s*honeycombMultiplier = \)2/\11/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
+sleep 5
+shell grep -c "creativecommon-common.toml changed" logs/debug.log
+> setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
+> setblock 1050 -60 1081 minecraft:redstone_block
+sleep 1
+> setblock 1050 -60 1081 minecraft:air
+sleep 1
+> zc3 items 1051 -60 1080 3
+expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x3\b
+shell sed 's/^\(\s*honeycombMultiplier = \)1/\12/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
+look the debug.log count is >= 1 (the watcher saw the edit); x6 again with a count >= 1 means the value is not read live (FAIL); count 0 = the edit was still not seen (batch)
+
+## SQ-FCK-16 | sneaking bucket use: moisture unchanged by the click, water placed above as vanilla
+> fill 1028 -61 1032 1028 -61 1032 minecraft:farmland[moisture=0]
+> pbot spawn W 1028.5 -60 1032.5 minecraft:overworld survival
+sleep 2
+> pbot hold W minecraft:water_bucket 1
+> zp sneak W on
+> pbot use W 1028 -61 1032 up
+> zc3 bstate 1028 -61 1032
+> execute as W at @s run tp @s ~ ~ ~ 0 90
+> zq useitem W
+> zc3 bstate 1028 -61 1032 1028 -60 1032
+> zp sneak W off
+> pbot remove W
+count bstate 1028 -61 1032 Block\{minecraft:farmland\}\[moisture=0\] >= 2
+expect bstate 1028 -60 1032 Block\{minecraft:water\}
+look `pbot use` PASS, farmland moisture 0 both times, water source above after the item use
+
+## SQ-FCB-09 | survival break of cooking pot, copper pot, kettle keeps the contents in the item; leftover bottle drops loose (break half)
+> setblock 1060 -60 1050 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:6b,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+> zact break 1060 -60 1050 minecraft:iron_pickaxe keep
+waitlog \[zact\] done 20
+> execute positioned 1060.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"farmersdelight:cooking_pot"}},limit=1,sort=nearest,distance=..3] Item
+> setblock 1070 -60 1050 miners_delight:copper_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:bone",Count:1b},{Slot:1b,id:"minecraft:glow_lichen",Count:1b},{Slot:7b,id:"minecraft:glass_bottle",Count:1b}]}}
+> zact break 1070 -60 1050 minecraft:iron_pickaxe keep
+waitlog \[zact\] done 20
+> execute positioned 1070.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"miners_delight:copper_pot"}},limit=1,sort=nearest,distance=..3] Item
+> setblock 1080 -60 1050 farmersrespite:kettle{Inventory:{Items:[{Slot:0b,id:"farmersrespite:green_tea_leaves",Count:2b}]}}
+> zact break 1080 -60 1050 minecraft:iron_pickaxe keep
+waitlog \[zact\] done 20
+> execute positioned 1080.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"farmersrespite:kettle"}},limit=1,sort=nearest,distance=..3] Item
+> kill @e[type=minecraft:item,x=1070,y=-60,z=1050,distance=..15]
+expect break 1060 -60 1050 .*drops farmersdelight:cooking_pot x1$
+expect break 1070 -60 1050 .*drops .*miners_delight:copper_pot x1
+reject break 1070 -60 1050 .*minecraft:(bone|glow_lichen)
+expect has the following entity data: .*BlockEntityTag.*minecraft:carrot
+expect has the following entity data: .*BlockEntityTag.*minecraft:glow_lichen
+expect has the following entity data: .*BlockEntityTag.*farmersrespite:green_tea_leaves
+look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay for a client run
+
+## SQ-FCB-10 | removing the wall drops the hung skillet (wall-removal case only)
+> setblock 1074 -60 1031 minecraft:stone
+> fill 1074 -60 1030 1074 -58 1030 minecraft:air
+> item replace entity G weapon.mainhand with farmersdelight:skillet{display:{Name:'{"text":"PanC3"}'},Enchantments:[{id:"minecraft:sharpness",lvl:2s}]}
+> zp sneak G on
+> pbot use G 1074 -60 1031 north
+> zp sneak G off
+> zc3 bstate 1074 -60 1030
+expect bstate 1074 -60 1030 Block\{farmersdelight:hanging_skillet\}\[facing=north\]
+> setblock 1074 -60 1031 minecraft:air
+sleep 1
+> zc3 bstate 1074 -60 1030
+> execute positioned 1074.5 -60 1030.5 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+expect has the following entity data: .*farmersdelight:skillet.*PanC3|PanC3.*farmersdelight:skillet
+reject block entity.*(warn|error)|Skipping BlockEntity
+look the hung skillet goes (bstate air) and the dropped item is the named, enchanted skillet
+
+## SQ-IP-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
+> fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
+> fill 1201 -59 1000 1202 -57 1000 minecraft:air
+> fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
+> fill 1211 -59 1000 1212 -57 1000 minecraft:air
+> fill 1220 -60 1000 1223 -56 1000 minecraft:obsidian
+> fill 1221 -59 1000 1222 -57 1000 minecraft:air
+> fill 1230 -60 1000 1233 -56 1000 minecraft:obsidian
+> fill 1231 -59 1000 1232 -57 1000 minecraft:air
+> fill 1240 -60 1000 1242 -57 1000 minecraft:obsidian
+> fill 1241 -59 1000 1241 -58 1000 minecraft:air
+> clear qa
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1201 -60 1000 up
+sleep 2
+> setblock 1211 -59 1001 minecraft:stone
+> setblock 1211 -59 999 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:fire_charge",Count:1b}]}
+> setblock 1211 -59 998 minecraft:redstone_block
+sleep 3
+> gamerule doFireTick true
+> summon minecraft:lightning_bolt 1221 -59 1000
+sleep 3
+> gamerule doFireTick false
+> zp sneak qa on
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1231 -60 1000 up
+> zp sneak qa off
+sleep 2
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1241 -60 1000 up
+sleep 2
+> zc3 bstate 1201 -60 1000 1200 -58 1000 1211 -60 1000 1210 -58 1000 1221 -60 1000 1220 -58 1000 1231 -60 1000 1230 -58 1000 1241 -60 1000 1240 -58 1000
+> zc3 bstate 1201 -59 1000 1211 -59 1000 1221 -59 1000 1231 -59 1000 1241 -59 1000 1241 -58 1000
+> execute if entity @e[type=imm_ptl_core:nether_portal_new]
+reject Test passed
+reject bstate .*minecraft:nether_portal
+count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
+count bstate 12[0-4][01] -(60|58) 1000 Block\{minecraft:crying_obsidian\} >= 8
+look all ten edge-middle reads crying obsidian (corners stay obsidian: the converter takes only frame blocks beside the interior); soul fire inside each; small frame 1240 too (row: its portal blocks gone)
+
+## SQ-PG-01a | flag on gun portal pairs: false where the partner is on a wall, true where it is on the floor (boot 1 half)
+> fill 1290 -60 1040 1310 -50 1040 minecraft:stone
+> clear pg
+> give pg portalgun:portal_gun 1
+sleep 1
+> execute as pg at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot pg blue
+sleep 2
+> execute as pg at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 2
+look wall-to-wall pair: both portal lines show adjustPositionAfterTeleport false (the key name is printed as found)
+> execute as pg at @s run tp @s ~ ~ ~ 0 60
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+> save-all flush
+look wall-to-floor: the wall portal (partner on the floor) true, the floor portal (partner on a wall) false; normal on the floor portal is (0,1,0). The pair stays: c3_a2.qb reads it after the restart. If `shoot` fails (raytrace from the bot's eye misses), aim pitch/yaw is the batch fault
+
+## SQ-IP-04 | gun portals go on logout and on dimension change; a new shot places a fresh pair
+> fill 1340 -60 1040 1360 -50 1040 minecraft:stone
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> pbot remove qa
+sleep 3
+> zc3 portals
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> execute in minecraft:the_nether run tp qa 20 110 20
+sleep 4
+> zc3 portals
+> execute in minecraft:overworld run tp qa 1350 -60 1030 0 0
+sleep 4
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+look `portals:` sequence 4, 2 (after logout), 4, 2 (after the Nether tp), 4 (pg's pair from SQ-PG-01a is the steady 2). The death-and-respawn case is not driven (perfBot respawn untested): leave for a client or a later row
+
+## SQ-IP-05 | despawn at distance: stays at 120, gone within a beat at 140; 2 s beat; despawnDistance 0 never; offline owner at load (boot 2)
+> zc3 portals
+> tp qa 1470 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+shell sed 's/^\(\s*heartbeatSeconds = \)[0-9]*/\12/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 4
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+shell sed 's/^\(\s*despawnDistance = \)[0-9]*/\10/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> tp qa 1650 -60 1030
+sleep 12
+> zc3 portals
+shell sed 's/^\(\s*despawnDistance = \)[0-9]*/\1128/; s/^\(\s*heartbeatSeconds = \)[0-9]*/\110/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> fill -10 -60 10 10 -50 10 minecraft:stone
+> tp qa 0 -60 0 0 0
+sleep 3
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> save-all flush
+look portals: 4 at the start (qa + pg), 4 after 12 s at 120 blocks, 2 after 12 s at 140; with the 2 s beat 4 then 2 within 4 s; with despawnDistance 0, 4 after 12 s at 300 blocks; last line: qa's spawn-chunk pair (x 0, z 10) plus pg's pair. qa stays online to the stop; c3_a2.qb checks the offline-owner half. If the toml edits are not picked up live (Forge watcher), the 2 s and 0 cases read like the 10 s / 128 case: note it, not a mod FAIL

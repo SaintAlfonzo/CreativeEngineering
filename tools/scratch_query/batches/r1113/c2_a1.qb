@@ -1,0 +1,736 @@
+# r1113 chunk 2, boot c2a1: every group-A row of the chunk that needs no config edit (cooking stations, jams, Barbeque's
+# Delight, cutting boards, carve and dependency checks on the current jars, Large Meals / Roll / BBQ changes).
+# World group A (superflat creative; ground top y -61, stand at -60). Level name: c2a1.
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT c2a1 A spawn-animals=true
+#   cp $INST/tools/scratch_query/c2_probe.js  OUT/srv/kubejs/server_scripts/zz_c2_probe.js    (new, /zc2)
+#   cp $INST/tools/scratch_query/zp_probe.js  OUT/srv/kubejs/server_scripts/zz_zp_probe.js    (/zp sneak, eat, hunger, effects, inv)
+#   cp $INST/tools/scratch_query/zact_probe.js OUT/srv/kubejs/server_scripts/zz_zact_probe.js (/zact kill, break)
+#   (zq is copied by prep_srv.sh). No config edits. perfBot jar comes with prep_srv.sh (bot c2b).
+# Id fixes against the row text (namespaces moved 11-09/11-10; details in c2_triage.md): fdcooking/ -> farmersdelightcooking/,
+#   creativeengineering:oven -> creativedelight:oven, vintagedelight:mason_jar -> empty_mason_jar, creativeengineering:
+#   tags -> creativeequipment: / creativedelight:, flint_and_terrasteel -> creativemagic:, plate_block_iron ->
+#   aluminum_plate_block, shulker filet input ends_delight:shulker_meat.
+# Order: rows that read logs/kubejs/server.log come before SQ-BBQ2-01 (its /reload truncates that file).
+# Layout: bot c2b at 300 -60 296; CFS z 310, STN-01 z 320, STN-02 z 330, STN-03/-06/-07 z 340, BBQS z 350, CBW z 360,
+#   BBQW z 370, DEP-05 campfires x 330 z 300, kills / breaks x 340-350.
+# Not here (c2_triage.md): SQ-TSY-01/-02, SQ-CEQ-03, -06 (client), SQ-CMG-02, SQ-CEN-02, -05, SQ-CFR-03/-04 (legacy
+#   config boots c2_l1*.qb, c2_l2.qb), SQ-DEP-02 (c2_nobrew.qb).
+pace 1
+
+## SQ-C2-00 | setup: area, gamerules, bot (not a test row)
+> forceload add 296 290 360 380
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule doWeatherCycle false
+> gamerule randomTickSpeed 3
+> time set noon
+> weather clear
+> pbot spawn c2b 300 -60 296 minecraft:overworld survival
+sleep 3
+> clear c2b
+> zp inv c2b
+waitlog \[zp\] done 20
+reject \[zc2\] error|\[zp\] error
+
+## SQ-PJL-01 | pack jam line registered: 10 jam blocks, 10 jello blocks, 10 jellos, 30 cauldrons, 22 fd jam jars, fluids
+shell grep -niE "vintagedelight" logs/latest.log | grep -iE "error|exception|missing|unknown" | head -20 | cut -c1-260; true
+> zc2 reg block ^vintagedelight:[a-z_]+_jam_block$
+> zc2 reg block ^vintagedelight:[a-z_]+_jello_block$
+> zc2 reg item ^vintagedelight:[a-z_]+_jello$
+> zc2 reg block ^vintagedelight:[a-z_]+_cauldron$
+> zc2 reg block fd_[a-z_]+_jam_jar$
+> zc2 reg item _jam_jar$
+> zc2 reg fluid ^vintagedelight:
+waitlog \[zc2\] reg fluid 30
+expect \[zc2\] reg block \S+_jam_block\S*: 10\b
+expect \[zc2\] reg block \S+_jello_block\S*: 10\b
+expect \[zc2\] reg item \S+_jello\S*: 10\b
+expect \[zc2\] reg block \S+_cauldron\S*: 30\b
+expect \[zc2\] reg block fd_\S+: 22\b
+look shell output: no vintagedelight error / missing line (models are client-side, not checked here); fluid count = 19 sources (38 with flowing ids); "5 new jars" = the jam jars of the pack line beyond Vintage's own (item _jam_jar list: ancient_fruit, banana, mulberry, strawberry and the rest; note the count)
+
+## SQ-PJL-02 | pack jam jars cooked in the pot; no Upgrade Aquatic mulberry jam recipes; given UA jam items become Vintage's
+> zq recipes farmersdelightcooking/ancient_fruit_jam_jar
+> zq recipes farmersdelightcooking/banana_jam_jar
+> zq recipes farmersdelightcooking/mulberry_jam_jar
+> zq recipes farmersdelightcooking/strawberry_jam_jar
+> zq recipes upgrade_aquatic:mulberry_jam
+> zq recipes mulberry_jam
+> give c2b upgrade_aquatic:mulberry_jam_bottle 2
+> give c2b upgrade_aquatic:mulberry_jam_block 1
+sleep 3
+> zp inv c2b
+waitlog \[zp\] done 20
+expect creativedelight:farmersdelightcooking/ancient_fruit_jam_jar ->
+expect creativedelight:farmersdelightcooking/banana_jam_jar ->
+expect creativedelight:farmersdelightcooking/mulberry_jam_jar ->
+expect creativedelight:farmersdelightcooking/strawberry_jam_jar ->
+expect recipes matching upgrade_aquatic:mulberry_jam: 0
+expect \[zp\] inv c2b: .*vintagedelight:mulberry_jam_jar
+expect \[zp\] inv c2b: .*vintagedelight:mulberry_jam_block
+reject \[zp\] inv c2b: .*upgrade_aquatic:mulberry_jam
+look the mulberry_jam list has no Central Kitchen bottle or mixing id (create_central_kitchen:*mulberry_jam*). Row id fix: fdcooking/ is now farmersdelightcooking/ (NCH id naming)
+> clear c2b
+
+## SQ-PJL-03 | per jam shapeless jam block, jar from block, jello block, jello from block (40)
+> zq recipes _jam_jar_from_block
+> zq recipes _jello_from_block
+> zq recipes _jam_block
+> zq recipes _jello_block
+waitlog recipes matching _jello_block: 30
+expect recipes matching _jam_jar_from_block: 10$
+expect recipes matching _jello_from_block: 10$
+count creativedelight:shapeless/[a-z_]+_jam_block -> == 10
+count creativedelight:shapeless/[a-z_]+_jello_block -> == 10
+
+## SQ-PJL-04 | Create filling / emptying of jam jars and jellos, compacting to blocks, heated mixing
+> zq rdetail createfilling/
+> zq recipes createemptying/
+> zq recipes createcompacting/
+> zq rdetail createmixing/
+waitlog rdetail matching createmixing/: 60
+count creativedelight:createfilling/[a-z_]+_jam_jar \{ >= 9
+count creativedelight:createfilling/[a-z_]+_jello \{ >= 10
+count creativedelight:createemptying/[a-z_]+_jam_jar -> >= 9
+count creativedelight:createcompacting/[a-z_]+_jam_block -> >= 9
+count creativedelight:createcompacting/[a-z_]+_jello_block -> >= 10
+look rdetail lists only the first 40 of each prefix (zq limit): if a count is short, read the total line ("rdetail matching ...") and the shown ids; filling jam jars 9 without Central Kitchen, 10 with it (CK is in the pack: mulberry jam fluid exists, 10 expected now); mixing <n>_jam and <n>_jello lines show heated (rdetail+ fields heatRequirement or "heated")
+
+## SQ-PJL-05 | nut milk jar recipes and tags; jam / jello tags; soft fluid containers capacity 1
+> zq recipes nut_milk
+> zq tagsof vintagedelight:nut_milk_jar
+> zq itemtag forge:jams
+> zq itemtag fruitsdelight:jello
+waitlog itemtag fruitsdelight:jello 20
+shell python3 $INST/tools/scratch_query/c2_famcheck.py softfluids $(ls mods/creativedelight-*.jar | head -1) 2>&1 | cut -c1-300
+expect creativedelight:farmersdelightcooking/nut_milk_jar ->
+expect creativedelight:shapeless/nut_milk_jar_from_bottle ->
+expect creativedelight:shapeless/nut_milk_bottle_from_jar ->
+expect item tags of vintagedelight:nut_milk_jar: .*forge:milk
+look forge:jams holds the pack's new jam jars (ancient_fruit, banana, mulberry, strawberry ...), fruitsdelight:jello the new jellos; shell: every soft fluid container line is "capacity 1" (no other capacity line)
+
+## SQ-CFS-01 | CfB oven gets lit=false on a fresh oven and a full-height shape; oven mixins apply
+shell grep -nE "CfbOven(Lit|LitSync|Shape|Fuel|Smoking)Mixin|blockheads_additions.mixins|InvalidInjectionException" logs/latest.log | head -12 | cut -c1-260; true
+bootreject CfbOven\w*Mixin.*(rror|ailed|could not)
+> setblock 300 -60 310 cookingforblockheads:oven[facing=north]
+> zc2 state 300 -60 310
+waitlog \[zc2\] state 300 -60 310 20
+expect \[zc2\] state 300 -60 310: .*lit=false
+expect \[zc2\] state 300 -60 310: .*maxY=1\.0
+look shell lines: no InvalidInjectionException naming a CfbOven mixin (others in the log are third-party, note them only)
+
+## SQ-CFS-02 | a CfB oven is an FD heat source only while lit; the pot above cooks only then; oven slots kept through the toggles
+> zq blocktag farmersdelight:heat_sources
+> zq rdetail farmersdelight:cooking/tomato_sauce
+> setblock 304 -60 310 cookingforblockheads:oven[facing=north]{ItemHandler:{Items:[{Slot:0,id:"minecraft:potato",Count:3b}]}}
+> setblock 304 -59 310 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"farmersdelight:tomato",Count:1b},{Slot:1,id:"farmersdelight:tomato",Count:1b},{Slot:7,id:"minecraft:bowl",Count:4b}]}}
+> data get block 304 -60 310
+sleep 10
+> zc2 inv 304 -59 310
+> zc2 state 304 -60 310
+> data merge block 304 -60 310 {BurnTime:400,CurrentItemBurnTime:400}
+sleep 2
+> zc2 state 304 -60 310
+sleep 12
+> zc2 inv 304 -59 310
+sleep 10
+> zc2 state 304 -60 310
+> zc2 inv 304 -59 310
+sleep 4
+> zc2 inv 304 -59 310
+> zc2 inv 304 -60 310
+expect blocktag farmersdelight:heat_sources .*cookingforblockheads:oven
+expect \[zc2\] state 304 -60 310: .*lit=true
+expect \[zc2\] state 304 -60 310: .*lit=false
+look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoes the pot never starts: BATCH-FAULT, rerun with those inputs. (2) first pot inv (unlit, 10 s): CookTime=0. (3) after BurnTime 400 the oven reads lit=true; 12 s later the pot's CookTime > 0 or the sauce is in slot 6/8. (4) after the burn ran out (about 20 s) lit=false and the two last pot reads 4 s apart show the same CookTime (no progress). (5) last oven inv still holds 0:3 minecraft:potato. data get line: note the fuel slot index (ItemHandler) for the CQ / a rerun with real fuel
+
+## SQ-CFS-02b | real fuel: a hopper with coal into the oven's side lights it again
+> setblock 305 -60 310 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:coal",Count:1b}]}
+sleep 3
+> zc2 state 304 -60 310
+> zc2 inv 304 -60 310
+> zc2 inv 305 -60 310
+look oven lit=true and the coal in the oven's fuel slot (or burning: BurnTime > 0); if the hopper still holds the coal the side is not the fuel face (try the top: note it, not a FAIL of CFS-02)
+
+## SQ-CFS-03 | skillet cooks only while the oven under it is lit; a Brewin' keg's temperature rises while lit
+> setblock 308 -60 310 cookingforblockheads:oven[facing=north]
+> setblock 308 -59 310 farmersdelight:skillet[facing=north]
+> setblock 312 -60 310 cookingforblockheads:oven[facing=north]
+> setblock 312 -59 310 brewinandchewin:keg[facing=north]
+> pbot hold c2b minecraft:beef 1
+> pbot use c2b 308 -59 310
+sleep 6
+> zc2 inv 308 -59 310
+> zc2 inv 312 -59 310
+> data merge block 308 -60 310 {BurnTime:600,CurrentItemBurnTime:600}
+> data merge block 312 -60 310 {BurnTime:600,CurrentItemBurnTime:600}
+sleep 8
+> zc2 inv 308 -59 310
+> zc2 inv 312 -59 310
+sleep 25
+> zc2 inv 308 -59 310
+> zc2 state 312 -60 310
+> zc2 inv 312 -59 310
+look skillet: the beef placed by the bot ("use" line SUCCESS/CONSUME), cooking progress 0 in the unlit read, rising after BurnTime (cooked beef or progress > 0 after 8 s); keg: temperature tag (numeric list) higher while lit than before; after the burn ran out (33 s) the oven lit=false. If the keg has no temperature field in its NBT, mark not judged (client WTHIT)
+
+## SQ-STN-01 | each station takes containers only into its container slot and carrots only into ingredient slots, from the top and the side
+> zq recipes muffin
+> setblock 300 -60 320 minecraft:campfire[lit=true]
+> setblock 304 -60 320 minecraft:campfire[lit=true]
+> setblock 308 -60 320 minecraft:campfire[lit=true]
+> setblock 300 -59 320 farmersdelight:cooking_pot
+> setblock 304 -59 320 miners_delight:copper_pot
+> setblock 308 -59 320 farmersrespite:kettle
+> setblock 312 -59 320 creativedelight:oven[facing=north]
+> setblock 316 -59 320 vintagedelight:fermenting_jar
+> setblock 300 -58 320 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:bowl",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 304 -58 320 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:bowl",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 308 -58 320 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:glass_bottle",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 312 -58 320 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:paper",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 316 -58 320 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"vintagedelight:empty_mason_jar",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 301 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:bowl",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 305 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:bowl",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 309 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:glass_bottle",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 313 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:paper",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+> setblock 317 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"vintagedelight:empty_mason_jar",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
+sleep 8
+> zc2 inv 300 -59 320
+> zc2 inv 304 -59 320
+> zc2 inv 308 -59 320
+> zc2 inv 312 -59 320
+> zc2 inv 316 -59 320
+> zc2 inv 300 -58 320
+> zc2 inv 304 -58 320
+> zc2 inv 308 -58 320
+> zc2 inv 312 -58 320
+> zc2 inv 316 -58 320
+> zc2 inv 301 -59 320
+> zc2 inv 305 -59 320
+> zc2 inv 309 -59 320
+> zc2 inv 313 -59 320
+> zc2 inv 317 -59 320
+reject \[zc2\] error
+look stations (first five inv lines): containers only in pot slot 7, copper pot 5, kettle 3, oven 8, jar 6 (8 each where the slot takes 8; a full container slot leaves the rest in a hopper, note it); carrots only in ingredient slots (pot 0-5, copper pot 0-3, kettle 0-1, oven 0-5, jar 0-5), never in the container slot; the ten hoppers empty. Oven container: the muffin recipes take paper (muffin line: "one paper each"); if the zq muffin lines show another container, judge the oven with that (BATCH-FAULT if paper is wrong). A carrot the kettle or oven refuses in every ingredient slot stays in its hopper: note, judge only the container rule then
+
+## SQ-STN-02 | outputs then leftovers leave through a hopper below; the container stays; the jar's inputs are not pulled from below or the side
+> setblock 300 -59 330 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:7,id:"minecraft:bowl",Count:2b},{Slot:8,id:"farmersdelight:vegetable_soup",Count:2b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}}
+> setblock 304 -59 330 miners_delight:copper_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:5,id:"minecraft:bowl",Count:2b},{Slot:6,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7,id:"minecraft:bucket",Count:1b}]}}
+> setblock 312 -59 330 creativedelight:oven[facing=north]{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:8,id:"minecraft:paper",Count:2b},{Slot:9,id:"minecraft:bread",Count:2b}]},Remainders:{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}
+> setblock 316 -59 330 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:6,id:"vintagedelight:empty_mason_jar",Count:2b},{Slot:7,id:"vintagedelight:pickle",Count:2b},{Slot:9,id:"minecraft:bucket",Count:1b}]}}
+> setblock 308 -59 330 farmersrespite:kettle
+> data get block 308 -59 330
+> zc2 inv 300 -59 330
+> zc2 inv 304 -59 330
+> zc2 inv 312 -59 330
+> zc2 inv 316 -59 330
+> zc2 cap 316 -59 330 down
+> zc2 cap 316 -59 330 east
+> zc2 cap 316 -59 330 up
+> setblock 300 -60 330 minecraft:hopper[facing=down]
+> setblock 304 -60 330 minecraft:hopper[facing=down]
+> setblock 312 -60 330 minecraft:hopper[facing=down]
+> setblock 316 -60 330 minecraft:hopper[facing=down]
+sleep 12
+> zc2 inv 300 -59 330
+> zc2 inv 304 -59 330
+> zc2 inv 312 -59 330
+> zc2 inv 316 -59 330
+> zc2 inv 300 -60 330
+> zc2 inv 304 -60 330
+> zc2 inv 312 -60 330
+> zc2 inv 316 -60 330
+reject \[zc2\] error
+look first four inv lines: the merged items are where they were put (pot buffer under "cap creativedelight:remainder_buffer"; if the pot line shows no buffer the ForgeCaps merge did not take: judge the pot on outputs only). After 12 s: each hopper holds the 2 outputs and then the bucket (leftover), the station's container slot still holds its 2 containers and the carrot stays in slot 0; jar cap lines: down and east views offer slots 7 (pickle) and 9 (bucket) for extraction only (extract 0 on slots 0 and 6); up view extract 0 everywhere or no outputs. Kettle: data get line names its inventory key and slot layout; kettle not rigged here (third-party layout unverified): judge it in a rerun with that layout. Create funnel on the jar's side replaced by the east cap view (same item handler the funnel reads)
+
+## SQ-STN-03 | Pickling Jar progress restarts when the recipe changes; kimchi only after its full time
+> zq rdetail vintagedelight:fermenting/pickle
+> zq rdetail kimchi
+> setblock 300 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:cucumber",Count:1b},{Slot:1,id:"vintagedelight:cucumber",Count:1b},{Slot:2,id:"vintagedelight:cucumber",Count:1b},{Slot:3,id:"vintagedelight:cucumber",Count:1b},{Slot:4,id:"vintagedelight:cucumber",Count:1b},{Slot:5,id:"salt:salt",Count:1b}]}}
+sleep 70
+> zc2 inv 300 -60 340
+> data merge block 300 -60 340 {inventory:{Items:[{Slot:0,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:1,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:2,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:3,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:4,id:"salt:salt",Count:1b},{Slot:5,id:"farmersdelight:onion",Count:1b}]}}
+sleep 1
+> zc2 inv 300 -60 340
+sleep 100
+> zc2 inv 300 -60 340
+sleep 21
+> zc2 inv 300 -60 340
+reject \[zc2\] error
+look (1) the rdetail lines: pickle 5 cucumber + salt 2400; a kimchi recipe with an onion (if only the chili pepper one exists, the swap does not start a recipe: BATCH-FAULT, rerun with forge:chilipepper). (2) read at 70 s: fermenting_jar.progress about 1400. (3) 1 s after the swap: under 40. (4) at about 2000 ticks after the swap: no kimchi in slot 7. (5) at about 2420: 4 kimchi in slot 7 (secondary in 8). The jar must not need a container for these (no container in the recipes)
+
+## SQ-STN-06 | FD pot plates from the remainder buffer: one bowl, five bowls, a bottle that never moves
+> setblock 304 -60 340 minecraft:campfire[lit=true]
+> setblock 304 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:1b}]}}}
+> zc2 watch 304 -59 340 40 2
+waitlog \[zc2\] watch done 30
+> setblock 304 -59 340 minecraft:air
+> setblock 304 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:5b}]}}}
+> zc2 watch 304 -59 340 40 2
+waitlog \[zc2\] watch done 30
+> setblock 304 -59 340 minecraft:air
+> setblock 304 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:glass_bottle",Count:1b}]}}}
+> zc2 watch 304 -59 340 40 2
+waitlog \[zc2\] watch done 30
+reject \[zc2\] (watch )?error
+look three watch series (t=0..40): one bowl: in the buffer about 10 ticks, then slot 7 about 10 ticks, then slot 8 holds 1 soup (meal slot 6 down to 2). Five bowls: 3 reach slot 7, 2 stay in the buffer, 3 soups plated by t=40 or later (note how many). Bottle: never leaves the buffer, soup stays in slot 6. If t=0 shows no "cap creativedelight:remainder_buffer" list, the ForgeCaps NBT did not load: BATCH-FAULT (place the bowl through a real cook in a rerun)
+
+## SQ-STN-07 | Pickling Jar pulls the recipe's container from slot 9 to slot 6, then progress counts
+> zq rdetail overnight_oats
+> setblock 308 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:raw_oats",Count:1b},{Slot:1,id:"minecraft:sweet_berries",Count:1b},{Slot:2,id:"minecraft:sweet_berries",Count:1b},{Slot:3,id:"farmersdelight:pumpkin_slice",Count:1b},{Slot:4,id:"minecraft:melon_slice",Count:1b},{Slot:5,id:"minecraft:apple",Count:1b},{Slot:9,id:"minecraft:bowl",Count:1b}]}}
+> zc2 watch 308 -60 340 40 2
+waitlog \[zc2\] watch done 30
+reject \[zc2\] (watch )?error
+look rdetail: overnight_oats fermenting with container bowl and these six inputs (if the pack changed the inputs, BATCH-FAULT: rerun with them). Watch: the bowl moves from slot 9 to slot 6 after about 10 ticks and fermenting_jar.progress then rises
+
+## SQ-BBQS-01 | skewering inputs are skewering/* tags; kebab sandwich takes grilled_skewers; no item-input warnings
+kjsreject (bbqSkewering|bbqCombine).*(warn|WARN|unknown|Unknown)
+shell grep -nE "bbqSkewering|bbqCombine|skewering/" logs/kubejs/server.log | head -10 | cut -c1-240; true
+> zq rdetail creativedelight:skewering/raw_potato_skewer
+> zq rdetail creativedelight:skewering/raw_beef_skewer
+> zq rdetail kebab_sandwich
+> zq itemtag creativedelight:skewering/potato
+> zq itemtag creativedelight:skewering/bacon
+> zq itemtag creativedelight:skewering/beef
+> zq itemtag creativedelight:skewering/cabbage
+waitlog itemtag creativedelight:skewering/cabbage 20
+expect itemtag creativedelight:skewering/potato \(2\): .*minecraft:potato
+expect itemtag creativedelight:skewering/potato \(2\): .*veggiesdelight:sweet_potato
+look raw_potato_skewer inputs = the potato tag's items (potato/sweet_potato) and the bacon tag's items; beef = beef tag + cabbage tag items; kebab sandwich (shaped _manual_only and the sequenced assembly; row named shapeless/kebab_sandwich, id now shaped/kebab_sandwich_manual_only) has two inputs listing the grilled skewers. Ingredient count 2 on the potato: rdetail+ fields line if shown, else judge in JEI (CQ-BBQS-01)
+
+## SQ-BBQS-02 | basin well with 2 sweet potatoes, stick in hand, bacon in off hand: raw potato skewer
+> setblock 300 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"veggiesdelight:sweet_potato",Count:2b}]}}
+> zc2 inv 300 -60 350
+> pbot hold c2b minecraft:stick 1
+> item replace entity c2b weapon.offhand with farmersdelight:bacon 2
+> zc2 useat c2b 300 -60 350 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 300 -60 350
+> zp inv c2b
+waitlog \[zp\] done 20
+expect \[zp\] inv c2b: .*barbequesdelight:raw_potato_skewer
+look first basin inv shows 0:2 veggiesdelight:sweet_potato (else the Items NBT shape is wrong: BATCH-FAULT); after the use: well 0 empty, raw potato skewer in the inventory or main hand, stick gone (main now empty or the skewer), bacon in the off hand down by one (off now 1 farmersdelight:bacon). Hit x 0.75 is well 0 for facing=north (BlockSlot index = 1 - x)
+> clear c2b
+
+## SQ-BBQS-03 | sneaking use with a stick on a well of 4 cabbage takes one cabbage, keeps the stick
+> setblock 302 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"farmersdelight:cabbage",Count:4b}]}}
+> pbot hold c2b minecraft:stick 1
+> zp sneak c2b on
+> zc2 useat c2b 302 -60 350 0.75 0.2 0.5 up
+sleep 1
+> zp sneak c2b off
+> zc2 inv 302 -60 350
+> zp inv c2b
+waitlog \[zp\] done 20
+expect \[zc2\] inv 302 -60 350: .*0:3 farmersdelight:cabbage
+expect \[zp\] inv c2b: .*farmersdelight:cabbage
+expect \[zp\] inv c2b: .*minecraft:stick
+look the useat line: main stays 1 minecraft:stick; one cabbage in the inventory
+> clear c2b
+
+## SQ-CBW-01 | wood cutting board recipes on the plank tags; board tags
+bootreject could not add the stone and wood cutting boards|invalid for block
+> zq recipes _cutting_board
+> zq recipes farmersdelight:cutting_board
+> zq rdetail creativedelight:shaped/oak_cutting_board
+> zq rdetail creativedelight:shaped/cutting_board
+> zq itemtag creativedelight:cutting_board_planks
+> zq blocktag minecraft:mineable/axe
+> zq blocktag creativedelight:counter_toppers
+> zq blocktag creativedelight:hammer_no_rotate
+waitlog blocktag creativedelight:hammer_no_rotate 20
+count creativedelight:shaped/(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_cutting_board -> >= 8
+expect recipes matching farmersdelight:cutting_board: 0
+reject itemtag creativedelight:cutting_board_planks \(\d+\): .*minecraft:(oak|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_planks
+look oak board = 2 sticks + 4 oak planks (each wood's own planks); shaped/cutting_board (spruce board) on #creativedelight:cutting_board_planks, which holds spruce and modded / vertical / polished planks; the 8 wood boards in mineable/axe, counter_toppers and hammer_no_rotate (tags moved from creativeengineering: to creativedelight:). Spruce board's own id is the plain farmersdelight:cutting_board
+
+## SQ-CBW-02 | oak and crimson boards have FD's board entity, cut a carrot, drop themselves with or without an axe
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> zc2 state 300 -60 360
+> zc2 state 302 -60 360
+> pbot hold c2b minecraft:carrot 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b minecraft:carrot 1
+> pbot use c2b 302 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 302 -60 360
+sleep 2
+> zc2 inv 300 -60 360
+> kill @e[type=minecraft:item,x=296,y=-62,z=356,dx=10,dy=6,dz=8]
+> zact break 300 -60 360 none
+> zact break 302 -60 360 minecraft:iron_axe
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> zact break 300 -60 360 minecraft:iron_axe
+> zact break 302 -60 360 none
+expect \[zc2\] state 300 -60 360: .*be=farmersdelight:cutting_board
+expect \[zc2\] state 302 -60 360: .*be=farmersdelight:cutting_board
+look each "pbot use" with the knife says SUCCESS/CONSUME and the carrot became FD's cut result (items dropped near the board before the kill line); each of the four zact break lines sums 1 of its own board; chunk reload not done here (forceloaded): covered by the save in the next restart of any boot (note only)
+
+## SQ-CBW-03 | a pumpkin pie is not placed on a birch board sitting on a CfB counter
+> setblock 304 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 306 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 304 -59 360 farmersdelight:birch_cutting_board[facing=north]
+> setblock 306 -59 360 farmersdelight:granite_cutting_board[facing=north]
+> pbot hold c2b minecraft:pumpkin_pie 1
+> pbot use c2b 304 -59 360
+sleep 1
+> zc2 state 304 -59 360
+> zc2 state 304 -58 360
+> zp inv c2b
+waitlog \[zp\] done 20
+reject Exception|\[zc2\] error
+look the pie stays in hand (zp inv shows minecraft:pumpkin_pie) or sits on the board as FD's board allows (board inv / an entity), never as a placed pie block at 304 -58 360 (state there is air)
+> clear c2b
+
+## SQ-BBQW-01 | 18 stonecutter recipes for the wood basins and trays; log tags; block tags
+bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
+> zq rdetail _from_logs
+> zq itemtag creativedelight:bbq_oak_logs
+> zq blocktag minecraft:mineable/axe
+> zq blocktag blockrunner:surface/wood
+waitlog blocktag blockrunner:surface/wood 20
+count creativedelight:stonecutting/bbq_[a-z_]+_from_logs \{ == 18
+reject stonecutting/bbq_(basin|tray)_from_logs
+reject itemtag creativedelight:bbq_oak_logs \(\d+\): .*minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove)_log|minecraft:(crimson|warped)_stem
+look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #creativedelight:bbq_oak_logs (oak logs and modded logs); the 18 blocks in mineable/axe and blockrunner:surface/wood
+
+## SQ-BBQW-02 | one basin / tray block entity type on every wood; skewering on a warped basin; drops
+> setblock 300 -60 370 barbequesdelight:basin[facing=north]
+> setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]
+> setblock 304 -60 370 barbequesdelight:tray[facing=north]
+> setblock 306 -60 370 barbequesdelight:crimson_tray[facing=north]
+> zc2 state 300 -60 370
+> zc2 state 302 -60 370
+> zc2 state 304 -60 370
+> zc2 state 306 -60 370
+> pbot hold c2b minecraft:beef 1
+> zc2 useat c2b 302 -60 370 0.75 0.2 0.5 up
+> pbot hold c2b minecraft:stick 1
+> zc2 useat c2b 302 -60 370 0.75 0.2 0.5 up
+> zp inv c2b
+> zc2 inv 302 -60 370
+> zact break 300 -60 370 none
+> zact break 302 -60 370 minecraft:iron_axe
+> zact break 304 -60 370 none
+> zact break 306 -60 370 minecraft:iron_axe
+expect \[zc2\] state 300 -60 370: .*be=barbequesdelight:basin
+expect \[zc2\] state 302 -60 370: .*be=barbequesdelight:basin
+expect \[zc2\] state 304 -60 370: .*be=barbequesdelight:tray
+expect \[zc2\] state 306 -60 370: .*be=barbequesdelight:tray
+look beef into well 0 of the warped basin, then the stick use makes a raw beef skewer (zp inv) if beef alone is a skewering recipe; if no beef-only recipe exists (beef needs cabbage, SQ-BBQS-01) the second use PASSes: note it, the BE type lines are the row's main check. Each zact break sums 1 of its own block
+
+## SQ-BBQW-03 | mixed-wood trays stack (support=true on the upper two); removing the base block drops the whole stack
+> setblock 310 -60 370 minecraft:oak_planks
+> setblock 310 -59 370 barbequesdelight:spruce_tray[facing=north]
+> zp sneak c2b on
+> pbot hold c2b barbequesdelight:oak_tray 1
+> pbot use c2b 310 -59 370 up
+> pbot hold c2b barbequesdelight:birch_tray 1
+> pbot use c2b 310 -58 370 up
+> zp sneak c2b off
+sleep 1
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+> setblock 310 -60 370 minecraft:air
+sleep 2
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+expect \[zc2\] state 310 -58 370: .*oak_tray.*support=true
+expect \[zc2\] state 310 -57 370: .*birch_tray.*support=true
+look first three states: spruce support=false (base on the plank), oak and birch support=true (placed by sneak-use on the tray below, getStateForPlacement); after the plank goes all three are air and the last kill line says "Killed 3" (three tray items). If the sneak-use did not place (the use line PASS), BATCH-FAULT: place them by hand in a client
+> clear c2b
+
+## SQ-CMG-01 | Magic's and Equipment's mixins apply from their own jsons, none from creativeengineering.mixins.json
+bootreject (creativemagic|creativeequipment)\.mixins\.json.*(rror|ailed|could not)
+shell grep -cE "from (mixins\.)?creativemagic\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeequipment\.mixins\.json" logs/debug.log; grep -E "creativeengineering\.mixins\.json" logs/debug.log | grep -oE "Mixing \S+" | sort -u | head -30
+look Magic: up to 13 common mixins in its json, Equipment up to 23 (gated ones only with their mod; a mixin with several targets counts more than once); the creativeengineering list holds only Engineering's own mixins (17 common), none of Magic's or Equipment's class names
+
+## SQ-CMG-03 | Magic and Equipment startup packs load after the pack folder; no global missing, no NCH.cfg section miss
+shell grep -nE "startup script packs in order|creativemagic|creativeequipment|NCH.cfg|global\.(CMG|CEQ) missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -30 | cut -c1-260
+kjsreject global\.(CMG|CEQ) missing|section in any registered config
+look packs line lists creativemagic and creativeequipment after the pack folder; no script error lines for either
+
+## SQ-CEQ-02 | bone meal charm refund (dragon hoe in the off hand); bottled air underwater (shield block and air brake glide: client)
+shell grep -A5 "^\[bonemeal_charm\]" config/creativeequipment-common.toml | grep -vE "^\s*#"; grep -A6 "^\[bottled_air\]" config/creativeequipment-common.toml | grep -vE "^\s*#"
+> setblock 340 -61 320 minecraft:farmland
+> pbot hold c2b minecraft:bone_meal 64
+> item replace entity c2b weapon.offhand with dragonloot:dragon_hoe
+pace 0.3
+repeat 60
+> setblock 340 -60 320 minecraft:wheat[age=0]
+> pbot use c2b 340 -60 320
+end
+pace 1
+> zp inv c2b
+waitlog \[zp\] done 20
+look bone meal left = 4 + refunds of 60 uses: with chance 0.5 about 34 (24 to 44 is fine); the hoe in the off hand may have lost durability (damageChance)
+> clear c2b
+> fill 344 -61 318 348 -58 322 minecraft:glass hollow
+> fill 345 -60 319 347 -59 321 minecraft:water
+> tp c2b 346 -60 320
+> pbot hold c2b minecraft:glass_bottle 1
+> zc2 air c2b 30
+> zq useitem c2b
+sleep 1
+> zc2 air c2b -1
+> zp inv c2b
+waitlog \[zp\] done 20
+look the useitem result and what the bottle became (zp inv); air after the use above 30 if bottled air refills it (airPerBottle 150), or a bottle of air in the inventory to drink (noDrinkingUnderwater = true: drinking underwater refused). Not judged when the bot's view did not hit water (useitem PASS and nothing changed): client row then
+> tp c2b 300 -60 296
+> clear c2b
+
+## SQ-CEQ-04 | Equipment recipes under creativeequipment:, felsic assembly reads its potion mB from the Equipment toml
+> zq recipes creativeequipment:
+> zq rdetail felsic
+> zq recipes stepstool
+> zq recipes shield
+> zq recipes camera_bag
+waitlog recipes matching camera_bag 30
+shell grep -nE "felsic|potion" config/creativeequipment-common.toml | grep -vE "^\s*[0-9]+:\s*#" | head -8
+expect recipes matching creativeequipment:: \d{3}
+look count about 167 (r1106 SPF-50); felsic assembly (sequenced) has a create:filling step whose fluid amount equals the toml's felsic potion mB; end gear, shields, stepstools, archery, bullets, camera bag, backpack skin recipes present under creativeequipment:
+
+## SQ-CEQ-05 | needs_copper_tool tier tags; one harvest.js run; a copper pickaxe mines a copper-tier block
+> zq tagsof creativeengineering:aluminum_plate_block
+> zq tagsof creativeengineering:copper_dust_pile
+> zq blocktag creativeequipment:needs_copper_tool
+shell grep -cE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log; grep -nE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log | head -4 | cut -c1-200
+> setblock 342 -60 300 creativeengineering:aluminum_plate_block
+> zact break 342 -60 300 everythingcopper:copper_pickaxe
+> setblock 343 -60 300 creativeengineering:aluminum_plate_block
+> zact break 343 -60 300 minecraft:wooden_pickaxe
+expect blocktag creativeequipment:needs_copper_tool \(14\)
+look aluminum plate block: one tier tag (needs_copper_tool) and one tool tag (mineable/pickaxe); copper dust pile likewise (row's plate_block_iron does not exist: iron dust pile is the iron-tier member now); harvest.js line once; copper pickaxe break sums 1 aluminum_plate_block, wooden pickaxe sums 0
+
+## SQ-CEQ-08 | tune_tools / tune_armor attributes on echo, felsic, dragon gear and a wooden knife
+> zc2 attrs create_deep_dark:echo_sword
+> zc2 attrs creativeequipment:echo_pickaxe
+> zc2 attrs felsic_gear:felsic_pickaxe
+> zc2 attrs dragonloot:dragon_helmet
+> zc2 attrs moredelight:wooden_knife
+> zc2 reg item ^creativeequipment:(echo_(pickaxe|axe|shovel|hoe)|felsic_scrap)$
+waitlog reg item 20
+expect reg item \S+: 5\b
+look attack damage / speed / armor values against the boilerplate in Equipment's kubejs_startup func/tune_tools.js and tune_armor.js (development/creativeEquipment/src/main/resources/kubejs_startup/); same as before the carve (r1106 SPF-50 tags equal)
+
+## SQ-CEN-01 | Common 1.1.0 and Engineering 2.0.0 load; every jar finds creativecommon; mixins apply
+bootreject Missing or unsupported mandatory dependencies
+bootreject (creativecommon|creativeengineering)\.mixins\.json.*(rror|ailed|could not)
+bootreject in both module|split package
+shell grep -oE "creative[a-z]+-[0-9.]+\.jar" logs/latest.log | sort -u | tr '\n' ' '; echo; grep -cE "from (mixins\.)?creativecommon\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeengineering\.mixins\.json" logs/debug.log
+look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1.0.0: Common is 1.1.0 since 11-06); mixing counts: Common up to 46 common mixins, Engineering up to 17 (row's 74 / 29 predate later moves out); no apply error
+
+## SQ-CEN-03 | startup packs: creativecommon first, then the pack folder, then the jars; no global.CEN missing
+shell grep -nE "startup script packs in order|global\.CEN missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -10 | cut -c1-300
+> zc2 reg item ^creativeengineering:
+> zc2 reg block ^creativeengineering:
+waitlog reg block 20
+shell python3 -c "import json;print('exported creativeengineering items', len(json.load(open('$INST/kubejs/exported/items_by_mod/creativeengineering.json'))['items']))"
+kjsreject global\.CEN missing
+look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count equals the exported (11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
+
+## SQ-CEN-04 | sawmill recipe ids unchanged; no purged-wood outputs
+> zq recipes creativeengineering:sawmill/
+waitlog recipes matching creativeengineering:sawmill/ 30
+expect recipes matching creativeengineering:sawmill/: 216
+shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv
+look 216 = 211 jar + 5 pack (and = the 11-10 dump count from the shell line); removed-wood output check: no shown line outputs a removed wood item (global.removedWoods; judge only the first 80 shown)
+
+## SQ-CEN-08 | Creative Brewing armor effects read Common's config; mount effects tick
+shell grep -nE "ArmorFx|mountEffectInterval|CommonConfig" logs/kubejs/server.log | head -8 | cut -c1-240; grep -nE "mountEffectIntervalTicks" config/creativecommon-common.toml
+kjsreject NoClassDefFoundError.*CommonConfig|ClassNotFoundException.*CommonConfig
+look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the interval is read (horse with mount armor effect: client / CQ row)
+
+## SQ-CNS-04 | no Compat / CD / Common mixin failures; Curios hands, face, feet slots registered by Equipment
+bootreject (creativecompat|creativedelight|creativecommon)\.mixins\.json.*(rror|ailed|could not)
+> curios list c2b
+sleep 2
+> curios list
+expect (?i)hands
+expect (?i)face
+expect (?i)feet
+look the curios list output names the slot types hands, face and feet (registered by Equipment)
+
+## SQ-CNS-05 | Common's JFR events (creativecommon.ServerTick, LevelTick) are recorded
+shell for p in $(pgrep -x java); do [ "$(readlink /proc/$p/cwd)" = "$PWD" ] && jcmd $p JFR.dump name=ce filename=$PWD/perf/c2_cns05.jfr 2>&1 | tail -1; done; ls -la perf/c2_cns05.jfr 2>&1 | tail -1
+shell rm -rf perf/c2_cns05_parse; java $INST/tools/perf/PerfParse.java perf/c2_cns05_parse perf/c2_cns05.jfr 2>&1 | tail -3; grep -c '"creativecommon.ServerTick"' perf/c2_cns05_parse/events.jsonl; grep -c '"creativecommon.LevelTick"' perf/c2_cns05_parse/events.jsonl
+look both counts above 0 (event type names as written in events.jsonl; if both 0, grep the file for "creativecommon." to see the real names before calling FAIL). If no JFR (CE_PERF=0 at setup) the dump line says no recording: not judged
+
+## SQ-DEP-01 | coaster offset mixin (now in creativedelight.mixins.json, gated on Brewin'): no apply error or skip
+shell grep -niE "CoasterRendererOffset|blockheads_additions|creativedelight.mixins.json.*(error|fail|skip)" logs/latest.log logs/debug.log | head -6 | cut -c1-240; true
+bootreject creativedelight\.mixins\.json.*(rror|ailed)
+look no apply error or skip line; Blockheads Additions is a CD compartment since M8 (no blockheads_additions.mixins.json any more), and the coaster mixin is client-side, so on a server only the absence of errors is checked
+
+## SQ-DEP-03 | Vinery loads after Creative Calendar, no dependency error
+bootreject (?i)vinery.*creativecalendar.*(missing|requires|error)|Missing.*creativecalendar
+shell grep -niE "vinery.*creativecalendar|creativecalendar.*vinery" logs/latest.log | head -4 | cut -c1-200; true
+
+## SQ-DEP-04 | no missing dependency or class error naming one of our jars or packages
+shell grep -nE "Missing or unsupported mandatory|NoClassDefFoundError|ClassNotFoundException|was not found .*(creative|baby_mobs|more_mooblooms|exposure)" logs/latest.log | head -12 | cut -c1-260; true
+look no hit naming com.SaintAlfonzo, ce.shared or one of our mixin configs (third-party optional-class lines: note only)
+
+## SQ-DEP-05 | rain puts out an open-sky campfire on stone, not one on a coal block; the douse tag is present
+> setblock 330 -61 300 minecraft:stone
+> setblock 330 -60 300 minecraft:campfire[lit=true]
+> setblock 332 -61 300 minecraft:coal_block
+> setblock 332 -60 300 minecraft:campfire[lit=true]
+> weather thunder
+sleep 25
+> execute if block 330 -60 300 minecraft:campfire[lit=false]
+> execute if block 332 -60 300 minecraft:campfire[lit=true]
+> zq blocktag creativecommon:campfire/rain_douses
+> weather clear
+waitlog blocktag creativecommon:campfire/rain_douses 20
+count Test passed == 2
+expect blocktag creativecommon:campfire/rain_douses \([1-9]
+look the row's /dumpall grep is replaced by the live tag query (same tag)
+
+## SQ-DEP-07 | no Common mixin error; every gated mixin applies
+shell grep -nE "creativecommon.mixins.json.*(error|fail|not found)|Mixin apply.*creativecommon" logs/latest.log | head -6 | cut -c1-240; true
+bootreject creativecommon\.mixins\.json.*(rror|ail|not found)
+look the JEI and AE2 tooltip parts are client (CQ rows of those features)
+
+## SQ-DEP-08 | Storage Delight loads after Farmer's Delight (repackedStorage -02)
+shell ls mods | grep -i repackedStorage; grep -niE "storagedelight.*(missing|requires|error)" logs/latest.log | head -4 | cut -c1-200; true
+bootreject (?i)storagedelight.*(missing|requires)
+
+## SQ-LGM-11 | pufferfish broth gives Comfort 1200 and Nausea 100, no poison
+> zp hunger c2b 4
+> pbot hold c2b largemeals:pufferfish_broth 1
+> zp eat c2b
+> zp effects c2b
+waitlog \[zp\] effects 20
+expect \[zp\] effects c2b: .*farmersdelight:comfort amp 0 1[12]\d\dt
+expect \[zp\] effects c2b: .*minecraft:nausea amp 0 \d+t
+reject \[zp\] effects c2b: .*minecraft:poison
+look Nausea about 100 ticks
+> effect clear c2b
+
+## SQ-LGM-12 | feast can recipes for omurice, pot pie, mutton rack; no can takes a raw / cooked rack
+> zq rdetail canned_omurice
+> zq rdetail canned_mushroom_pot_pie
+> zq rdetail canned_roasted_mutton_rack
+> zq uses largemeals:raw_mutton_rack
+> zq uses largemeals:cooked_mutton_rack
+waitlog uses largemeals:cooked_mutton_rack 20
+reject (alone|shared) creativedelight:\S*canned_\S*
+look each can recipe takes the placed feast block (or its servings) and an empty can; uncanning (if listed) gives the serving; note: tools/gen_can_types.py AWAIT_DUMP still lists largemeals and roll_delight (the row's pre-run step was not done), so judge the live recipes as they are
+
+## SQ-LGM-13 | food families of Large Meals dishes (generated catalog)
+shell python3 $INST/tools/scratch_query/c2_famcheck.py families largemeals:mushroom_pot_pie largemeals:mushroom_pot_pie_block largemeals:omurice largemeals:omurice_block largemeals:tomato_egg_soup largemeals:cod_deluxe largemeals:hearty_lunch
+look pot pie block feast/whole, serving feast/serving; omurice feast/*; tomato egg soup soup/soup; cod deluxe and hearty lunch meal/plate (an id printed NONE that is not an item: ignore). Offline check of the 11-10 catalog (file time printed)
+
+## SQ-LGM-14 | every Large Meals food with an lm_ block is placeable
+shell python3 $INST/tools/scratch_query/c2_famcheck.py lmplaceable
+look "lm blocks 13, not placeable 0"
+
+## SQ-ROLL-10 | cooked nether wart is an ingredient, not a cooked veggie; its can recipe exists
+> zq itemtag creativedelight:food_type/cooked/veggie
+> zq itemtag creativedelight:food_type/ingredient
+> zq recipes canned_cooked_nether_wart
+waitlog recipes matching canned_cooked_nether_wart 20
+expect itemtag creativedelight:food_type/ingredient \(\d+\): .*roll_delight:cooked_nether_wart
+reject itemtag creativedelight:food_type/cooked/veggie \(\d+\): .*roll_delight:cooked_nether_wart
+expect creativedelight:shapeless/canned_cooked_nether_wart ->
+
+## SQ-ROLL-11 | golden roll +20, slice +10 hunger, no effects; not eaten at full hunger
+shell grep -nE "golden values" logs/kubejs/startup.log | head -3 | cut -c1-240
+> zq food roll_delight:golden_roll
+> zq food roll_delight:golden_roll_slice
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll 1
+> zp eat c2b
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll_slice 1
+> zp eat c2b
+> zp hunger c2b 20
+> pbot hold c2b roll_delight:golden_roll 1
+> zq useitem c2b
+waitlog useitem c2b 20
+expect food roll_delight:golden_roll: nutrition 20,.*effects \[\]
+expect food roll_delight:golden_roll_slice: nutrition 10,.*effects \[\]
+look eat lines: food 20 then 10 (from 0, row said from 4: same values); useitem at full hunger is FAIL/PASS (not eaten); golden values line counts one more food than before (compare with the previous run's number if known)
+> clear c2b
+
+## SQ-ROLL-12 | golden roll slice only from cutting; no gild / enchant recipe; no roll can
+> zq makes roll_delight:golden_roll_slice
+> zq recipes golden_roll
+> zq recipes canned_
+waitlog recipes matching canned_ 30
+reject canned_\S*roll\S* ->
+look golden_roll_slice made only by creativedelight:farmersdelightcutting/golden_roll_slice; no recipe id with gild or enchant on golden rolls (canned_ list is long: only the first 80 shown, the reject covers those; the count line is the total)
+
+## SQ-BBQ2-02 | every route of each pack skewer; Nether and Cave have no heatless craft; End raw and heatless shapeless
+> zq recipes barbecue_stick
+> zq recipes caveskewer
+> zq recipes nether_skewer
+> zq recipes crispy_skewer
+> zq recipes seafood_skewer
+> zq recipes turnip_mutton_skewer
+waitlog recipes matching turnip_mutton_skewer 20
+reject creativedelight:\S*(caveskewer|nether_skewer)_from_cooked_manual_only
+look per skewer: raw craft (shaped/raw_*), _from_smelting, _from_smoking, _from_campfire, grilling, _from_cooked_manual_only (not Nether, not Cave), assembly; End: raw and heatless shapeless with 1 result; no upstream craft ids (endersdelight: / hostiledelight: / nethersdelight: / ends_delight: crafting of the cooked skewer)
+
+## SQ-BBQ2-03 | the ten Barbeque's Delight lines keep their recipe ids
+> zq recipes barbequesdelight:
+> zq recipes _skewer
+waitlog recipes matching _skewer 30
+shell grep -oE "\[zq\] [a-z_]+:\S*skewer\S* ->" logs/latest.log | awk '{print $2}' | sort -u > c2_bbq2_live.txt; grep -oE "^[a-z_]+:[^,]*skewer[^,]*" $INST/kubejs/exported/recipes/all.csv | sort -u > c2_bbq2_dump.txt; echo "live $(wc -l < c2_bbq2_live.txt) dump $(wc -l < c2_bbq2_dump.txt)"; comm -13 c2_bbq2_live.txt c2_bbq2_dump.txt | head -15
+look the comm lines = dump ids not seen live (only the first 80 of each query are printed, so a missing id may just be past the cut: check it with zq recipes <id> by hand). Base is the 11-10 dump (the row's 11-03 dump is gone)
+
+## SQ-BBQ2-04 | 18 raw skewers in barbequesdelight:raw_skewers (seasoning craft: client)
+> zq itemtag barbequesdelight:raw_skewers
+waitlog itemtag barbequesdelight:raw_skewers 20
+expect itemtag barbequesdelight:raw_skewers \(18\)
+look the powder vs sauce craft needs a crafting grid (client part of the row, CQ)
+
+## SQ-BBQ2-05 | kebab wrap, kebab sandwich, bibimbap routes and hunger, no skewer effects
+> zq recipes kebab_wrap
+> zq recipes kebab_sandwich
+> zq recipes bibimbap
+> zq recipes barbequesdelight:combine
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_wrap 1
+> zp eat c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_sandwich 1
+> zp eat c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:bibimbap 1
+> zp eat c2b
+waitlog \[zp\] eat c2b 1 barbequesdelight:bibimbap 20
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_wrap: .*food 12,
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_sandwich: .*food 18,
+expect \[zp\] eat c2b 1 barbequesdelight:bibimbap: .*food 18,
+reject \[zp\] eat c2b .*effects (?!none)
+look wrap and sandwich: shaped + sequenced assembly; bibimbap shapeless _cooked_manual_only; no barbequesdelight:combine recipe for them
+> clear c2b
+> effect clear c2b
+
+## SQ-BBQ2-06 | a shulker killed with a knife drops a mollusk; mollusk cuts to 2 filets; stuffed shulker takes ends_delight:shulker_meat
+> zact kill 344 -60 300 minecraft:shulker 10 farmersdelight:iron_knife
+> zq rdetail shulker_mollusk
+> zq rdetail stuffed_shulker
+waitlog rdetail matching stuffed_shulker 30
+expect endersdelight:shulker_mollusk
+look kill line sums at least one endersdelight:shulker_mollusk over 10 kills; a cutting recipe on the mollusk gives 2 filets; stuffed shulker (endersdelight:cooking/stuffed_shulker and the CD _manual_only) lists ends_delight:shulker_meat
+
+## SQ-BBQ2-07 | all cooked skewers in family skewer; no skewer can (generated catalog)
+shell python3 $INST/tools/scratch_query/c2_famcheck.py skewers
+look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream or pack extras, check they are the incomplete or non-food ones) and "skewer cans 0"
+
+## SQ-BBQ2-01 | after /reload no skewer script error; the 8 pack raw skewers exist under their mods
+> zc2 reg item ^(farmersdelight:raw_barbecue_stick|hostiledelight:raw_caveskewer|endersdelight:raw_crispy_skewer|ends_delight:raw_end_barbecue_stick|miners_delight:raw_improvised_barbecue_stick|nethersdelight:raw_nether_skewer|oceanic_delight:raw_seafood_skewer|veggiesdelight:raw_turnip_mutton_skewer)$
+> reload
+sleep 25
+shell grep -nE "barbequesdelight|skewers\.js|F\.skewer" logs/kubejs/server.log | grep -iE "error|warn" | head -8 | cut -c1-240; true
+expect \[zc2\] reg item \S+: 8\b
+look no error / warn line from the shell grep (server.log restarted by the reload)

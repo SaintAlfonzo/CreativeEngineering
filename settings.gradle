@@ -75,3 +75,12 @@ project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
 // Tempad 3.0.4 port: its own jar (nested in Creative Compat until 2026-11-07; planned to fold into Creative Computing).
 include 'backportedTempad'
 project(':backportedTempad').projectDir = file('development/backportedTempad')
+
+// Spice of Life: Raspberry Pie Addition (feature_writeup/raspberry_pie.md): selectable diet bonuses on top of Apple Pie.
+include 'solRaspberryPie'
+project(':solRaspberryPie').projectDir = file('development/solRaspberryPie')
+
+// Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): its own jar, for evaluation on scratch servers only
+// during the port (not installed into mods/, plan E1).
+include 'backportedPowerGrid'
+project(':backportedPowerGrid').projectDir = file('development/backportedPowerGrid')

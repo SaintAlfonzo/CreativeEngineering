@@ -1,0 +1,19 @@
+# r1113 chunk 3, boot CH2 (then c3_ch2b.qb on the same OUT): SQ-CDFO-03 first half, Cooking for Blockheads without
+# Incubation. Group B (cpp_chain_srv.sh, prep_srv B, seed 8675309).
+# Server: EXTRA="cookingforblockheads-*.jar balm-forge-*.jar" bash tools/scratch_query/cpp_chain_srv.sh OUT_CH2 c3ch2 chain
+# Before boot: copy tools/scratch_query/c3_probe.js as OUT_CH2/srv/kubejs/server_scripts/zz_c3_probe.js. Config empty.
+pace 1
+
+## SQ-CDFO-03 | CfB present, Incubation absent: boots; rack half loads, nest half does not
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(incubation|cookingforblockheads|blay09)
+bootreject (Couldn't parse|Unknown item|Unknown tag|Failed to load).*(incubation|cookingforblockheads)
+> zq item creativedelight:oak_spice_rack
+waitlog \[zq\] item creativedelight:oak_spice_rack 20
+expect item creativedelight:oak_spice_rack: class (?!AirItem)
+> zq item creativedelight:duck_nest
+waitlog \[zq\] item creativedelight:duck_nest 20
+> zq recipes creativedelight:shaped/oak_spice_rack
+waitlog \[zq\] recipes matching creativedelight:shaped/oak_spice_rack: \d+ 30
+shell grep -A6 "^\[compartments\]" config/creativedelight-common.toml | grep -E "incubation|cookingforblockheads"
+look rack item registered (a CfB compartment class), nest item AirItem or inert; the oven / fridge mixins applied (grep `creativedelight` mixin lines naming cookingforblockheads in latest.log)

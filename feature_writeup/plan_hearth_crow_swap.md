@@ -212,7 +212,7 @@ jar in `downloads/` has no crow). Skill `port`. Ids: `hearthandharvest:crow`, `h
 | SQ-HCS-06 | A | A player-placed nest never spawns crows; `/summon hearthandharvest:crow` and the spawn egg work |
 | SQ-HCS-07 | A | Generated nests: first open rolls loot from the right table; reopen gives the same items; breaking drops them |
 | SQ-HCS-08 | B | 20 minutes in crow biomes: no `alexsmobs:crow` spawns; `/summon alexsmobs:crow` still works |
-| SQ-HCS-09 | A | 1.2.02 save with a tamed and a carrying AM crow and a ground nest: boots, both crows kept, the ground nest starts producing H&H crows |
+| SQ-HCS-09 | A | 1.2.02 save with a tamed and a carrying AM crow and a ground nest: boots, both crows kept, the ground nest starts producing H&H crows (PASS r1111 2026-11-11) |
 | SQ-HCS-10 | A | H&H crow mechanics: the rewritten SQ-HH-401 to -502 (tame, shoulder, fetch, theft, wariness, scarecrow, pecking, feather) |
 | CQ-HCS-01 | client | Crow renders and animates walking, idle, flying, gliding, sitting, on the shoulder; held item shows |
 

@@ -1,0 +1,11 @@
+# r1113 chunk 3, boot CC2: SQ-CIF-04 second half, Common + Compat + Equipment. Group B.
+# Server: bash tools/scratch_query/cpp_chain_srv.sh OUT_CC2 c3cc2 compat
+#   then: cp -l "$INST"/mods/creativeequipment-1.0.0.jar OUT_CC2/srv/mods/   (cpp_chain refuses Equipment in its own list;
+#   if the boot names a missing hard dependency of Equipment, link that jar from $INST/mods too and note it)
+pace 1
+
+## SQ-CIF-04b | Common + Compat + Equipment boot: no Equipment class asked for by Compat, none missing
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+shell ls mods
+look boots clean; a missing class names the leftover cross-jar reference

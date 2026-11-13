@@ -1,0 +1,15 @@
+SQ-DCM / SQ-CBS / SQ-CDFO Creative Brewing publish prep, Step 1 (dicts to Common, guards, 	SQ-DCM-01 SQ-DCM-02 SQ-DCM-03 SQ-CBS-02 SQ-CDFO-01 SQ-CDFO-02 SQ-CDFO-03
+SQ-PA Immersive Paintings built from the installed jars, 2026-11-05 ([writeup](../immersiv	SQ-PA-01 SQ-PA-02 SQ-PA-03 SQ-PA-04
+SQ-CMV Creative Common mixin version gates and manifest, 2026-11-05 ([creative_engineering	SQ-CMV-01 SQ-CMV-02 SQ-CMV-03
+SQ-CDW Creative Delight worldgen gated on its mods, 2026-11-06 ([creative_delight.md](../c	SQ-CDW-01 SQ-CDW-02 SQ-CDW-03 SQ-CDW-04
+SQ-MIN: Creative jars in a minimal instance (added 2026-11-06)	SQ-MIN-01 SQ-MIN-02 SQ-MIN-03 SQ-MIN-04 SQ-MIN-05 SQ-MIN-06 SQ-MIN-07
+SQ-BPT / CQ-TSL Creative Compat licence fixes, 2026-11-06 ([writeup](../creative_compat.md	SQ-BPT-01
+SQ-CBP Creative Brewing polish: absent-mods fixes, effects into Common, gear rows into Equ	SQ-CBP-11
+SQ-ENGM Creative Engineering content moved to its sibling jars, 2026-11-06 ([plan_cb_polis	SQ-ENGM-01 SQ-ENGM-02 SQ-ENGM-03 SQ-ENGM-04 SQ-ENGM-05
+SQ-PG Portal Gun fixes and dyeing, 2026-11-07 ([plan_portal_gun.md](../plan_portal_gun.md)	SQ-PG-01 SQ-PG-02
+SQ-HSC crow and salt lick answers, 2026-11-07 ([plan_hearth_crow_salt.md](../plan_hearth_c	SQ-HSC-89
+SQ-CIF Creative Common interface carve: JEI, WTHIT, tooltips to Compat; armor bar to Equip	SQ-CIF-01 SQ-CIF-02 SQ-CIF-03 SQ-CIF-04
+SQ-IDS / CQ-IDS ids that named the wrong owner jar, and `ce` names outside Engineering, 20	SQ-IDS-01 SQ-IDS-02 SQ-IDS-03
+SQ-IP Immersive Portals changes: Nether portal failure, Dark Fire, fog, opaque gun portals	SQ-IP-01 SQ-IP-02 SQ-IP-03 SQ-IP-04 SQ-IP-05
+SQ-CCB Common-alone boot fixes, 2026-11-07 20:00 builds of Common, Compat, Brewing ([creat	SQ-CCB-01
+SQ-FCK farming and cooking batch, 2026-11-07 ([plan_farming_cooking_batch.md](../plan_farm	SQ-FCK-01 SQ-FCK-02 SQ-FCK-03 SQ-FCK-04 SQ-FCK-05 SQ-FCK-06 SQ-FCK-07 SQ-FCK-08 SQ-FCK-09 SQ-FCK-10 SQ-FCK-11 SQ-FCK-12 SQ-FCK-13 SQ-FCK-14 SQ-FCK-15 SQ-FCK-16 SQ-FCK-17 SQ-FCK-18 SQ-AZW-01 SQ-AZW-02 SQ-AZW-03 SQ-MG-22 SQ-MG-23 SQ-MG-24 SQ-BOT-01 SQ-BOT-02 SQ-BOT-03 SQ-BOT-04 SQ-FCB-09 SQ-FCB-10 SQ-T1-01 SQ-T1-03 SQ-T1-04

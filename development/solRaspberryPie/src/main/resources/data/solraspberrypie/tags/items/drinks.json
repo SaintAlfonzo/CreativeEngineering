@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:potion",
+    "minecraft:milk_bucket",
+    { "id": "#creativedelight:food_type/drink", "required": false },
+    { "id": "#farmersdelight:drinks", "required": false },
+    { "id": "#brewinandchewin:fermented_drinks", "required": false },
+    { "id": "#forge:drinks", "required": false }
+  ]
+}

@@ -1,0 +1,38 @@
+# r1112 SQ-RP boot 1: fresh group A world, level rp (solRaspberryPie 11-12 20:47). Needs perfBot.
+pace 2
+
+## SQ-RP-01 | boot: ladder loaded, no mixin errors, no Apple Pie warnings
+bootexpect Diet ladder: 38 rungs, 5 slots, 14 pool effects
+bootreject InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
+bootreject Apple Pie still has its own benefits
+bootreject Apple Pie resetOnDeath is true
+shell grep -nE "solraspberrypie|Raspberry Pie" logs/latest.log | cut -c1-300 | head -40
+
+## SQ-RP-02 | ladder.json seeded from defaultconfigs
+bootexpect Seeded .*ladder\.json from .*defaultconfigs
+shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
+
+## SQ-RP-06 | Raspberry Pie recipes loaded (CD half waits for a Creative Delight rebuild)
+> zq bytype solraspberrypie:diet_book
+waitlog \[zq\] done 30
+> zq recipes diet_log
+waitlog \[zq\] done 30
+expect solraspberrypie:diet_log
+expect solraspberrypie:liquid_diet_log
+shell grep -n "solapplepie:food_book" logs/kubejs/server.log | head; grep -cE "NCH.*(error|fail)" logs/kubejs/server.log; true
+look both Raspberry Pie recipes listed; record whether solapplepie:food_book is still present (expected until the CD rebuild)
+
+## SQ-RP-05 | pause / resume commands
+> pbot spawn rpb 0 -60 0 minecraft:overworld survival
+sleep 3
+> solrp pause list
+> solrp pause rpb
+> solrp pause list
+> solrp resume rpb
+> solrp pause list
+> solrp pause rpb
+> solrp pause list
+expect No player has paused diet bonuses|solraspberrypie\.cmd\.none_paused
+expect Paused diet bonuses for 1 players|solraspberrypie\.cmd\.paused
+expect rpb
+look none -> paused 1 -> list names rpb -> resumed -> empty -> paused again (left paused to check it survives the restart in rp2)

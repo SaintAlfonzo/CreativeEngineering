@@ -1,0 +1,44 @@
+# r1113 chunk 1, old-save pair for SQ-GLD-16, boot 2 of 2: the c1g world (made by c1_g1.qb on the installed jars)
+# booted on the build/libs jars (CD 11-11 16:52 without the stews, Common 11-12 20:46).
+# Setup before boot (server stopped after c1_g1.qb):
+#   bash $INST/tools/scratch_query/oldsave_swap.sh OUT
+#   ls -l OUT/srv/mods | grep -E "creativedelight|creativecommon"     (CD must be the 11-11 copy)
+#   unzip -l OUT/srv/mods/creativedelight-1.1.0.jar | grep -c soft_fluids/golden_mushroom_stew   (must print 0)
+#   (zz_zp_probe.js stays in place from boot 1)
+# The JEI half of the row (no golden stew, soup, can or jar fill row) and a /dumpall stay for a client run.
+pace 1
+
+## SQ-GLD-16 | old golden stews, cans and the jar fluid gone without warnings; /give fails; other golden foods intact
+bootexpect Done \(
+bootreject (?i)(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+bootreject (?i)(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+> forceload add 1984 1984 2015 2015
+sleep 20
+> data get block 2000 -60 2000 Items
+reject has the following block data: .*golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+expect has the following block data: .*goldenfood:golden_bread
+expect has the following block data: .*creativedelight:canned_golden_bread
+expect has the following block data: .*minecraft:mushroom_stew
+> data get block 2003 -60 2000
+> pbot spawn c1gj 2002 -60 2002 minecraft:overworld survival
+sleep 3
+> zp inv c1gj
+waitlog \[zp\] done 20
+reject \[zp\] .*golden_(rabbit_stew|beetroot_soup)
+> give c1gj goldenfood:golden_mushroom_stew
+> give c1gj creativedelight:canned_golden_mushroom_stew
+count Unknown item == 2
+> zq food goldenfood:golden_bread
+> zq food goldenfood:enchanted_golden_cooked_beef
+> zq food minecraft:mushroom_stew
+> zq makes creativedelight:canned_golden_bread
+waitlog \[zq\] makes creativedelight:canned_golden_bread: \d+ 30
+expect \[zq\] food goldenfood:golden_bread: nutrition [1-9]
+> clear c1gj
+> pbot hold c1gj minecraft:mushroom_stew 3
+> zp hunger c1gj 0
+> zp eat c1gj
+> zp inv c1gj
+waitlog \[zp\] done 20
+shell grep -h -i -E "error|exception" logs/kubejs/startup.log logs/kubejs/server.log | grep -i -E "golden|goldenfood" | head -10 | cut -c1-300; echo "golden script errors listed above (none = pass)"
+look jar data: no golden_mushroom_stew fluid (empty or cleared); the canned_golden_bread makes count > 0 (other golden cans still made); the zp inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that

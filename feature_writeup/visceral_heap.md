@@ -50,6 +50,9 @@ hit the solver's penalty range (offset 0.6) and note as unreachable; SQ-VH-05 re
 
 ## 5. Tests
 
+**Run r1111 (2026-11-12):** SQ-VH-01 to -05, -07 to -09, -12 PASS; -06 batch fault (bedrock at 0 and 127 confirmed, floor/ceiling needs a per-column probe); -10 RECORD (a real TerraBlender 2.0.1.166 jar wins over the nested stub and boots; Quark then registers its own Overworld region); -11 not run. Heap result 5.0 % (target 5). Verdicts `perf/runs/r1111/verdicts/bw.md`, `vh10.md`, `wc.md`.
+**Run r1112 (2026-11-12):** SQ-VH-06 PASS with an owner look: per-surface probe `zq_heapcol.js` inside the Heap: flesh is the top floor (61.7 %) and ceiling (65 %) block, porous flesh +4 %, netherrack 10 % / 16 %, Better Fortresses bricks the rest; bedrock at 0 and 127 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8; TODO `largecontent/mod-additions #73` (8)).
+
 | ID | Check | Row |
 |---|---|---|
 | VH-01 | Server boot: no mixin errors or bad `biomesoplenty` tags | SQ-VH-01 |

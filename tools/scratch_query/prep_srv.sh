@@ -10,6 +10,9 @@
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
 #   - NOSWAP=1 in the environment: no dev-jar swaps (the installed mods/ jars only)
+#   - COPYDEV=1: swapped dev jars are COPIED, not hard-linked (use while other sessions run Gradle builds)
+#   - PGJAR=<path>: also copy that Power Grid jar (never in mods/; the orchestrator names it in jar_archive/pwg_gate/);
+#     PGJAR=1 takes the newest development/backportedPowerGrid build jar instead
 # Refuses while any game JVM is up (one game JVM at a time).
 set -euo pipefail
 INST="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -57,7 +60,8 @@ for s in "${SWAPS[@]+"${SWAPS[@]}"}"; do
   fi
   # unlink the target name too: srv/mods files are hard links to the instance's mods/, so a plain cp onto an existing
   # name writes THROUGH the link into the pack's jar (r1106cbb: the pack's creativecommon jar was overwritten that way)
-  rm -f mods/$g "mods/$(basename "$b")"; cp -l "$b" mods/ 2>/dev/null || cp "$b" mods/
+  rm -f mods/$g "mods/$(basename "$b")"
+  if [ "${COPYDEV:-0}" = 1 ]; then cp "$b" mods/; else cp -l "$b" mods/ 2>/dev/null || cp "$b" mods/; fi
   echo "swap: $(basename "${old:-none}") -> $(basename "$b") ($(date -r "$b" +%m-%d_%H:%M))"
 done
 # Creative Brewing nests the Vinery and Brewin' ports: their standalone jars (and what they replace) would win over it
@@ -72,6 +76,12 @@ for cd in mods/creativedelight-*.jar; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done
+if [ -f "${PGJAR:-}" ]; then
+  cp -p "$PGJAR" mods/; echo "power grid: $(basename "$PGJAR") ($(date -r "$PGJAR" +%m-%d_%H:%M:%S), sha1 $(sha1sum "$PGJAR" | cut -c1-12))"
+elif [ "${PGJAR:-0}" = 1 ]; then
+  pg=$(ls -t "$INST"/development/backportedPowerGrid/build/libs/*.jar 2>/dev/null | grep -vE -- '-(sources|own|dev|slim)\.jar$' | head -1)
+  if [ -n "$pg" ]; then cp -p "$pg" mods/; echo "power grid: $(basename "$pg") ($(date -r "$pg" +%m-%d_%H:%M))"; else echo "power grid: NO build jar"; fi
+fi
 PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar"
 [ -f "$PB" ] && { cp "$PB" mods/; echo "-Dcdevperfbot.out=perf/bot" >> user_jvm_args.txt; echo "perfBot added"; }
 cp "$INST/tools/scratch_query/zq_probe.js" kubejs/server_scripts/zz_zq_probe.js

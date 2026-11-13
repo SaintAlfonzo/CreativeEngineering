@@ -1,0 +1,26 @@
+# r1113 CQ-PWG-08 automatable part: throwaway client (eval_client.py setup, the -03 PG jar copied into GAME/mods only),
+# singleplayer copy of the pwg2 scratch world (sp_world.py), opened by hand clicks. Wire rendering at the P2 loops,
+# creative tab. Hand steps (placing, connecting, cutting, screens) stay for the owner.
+pace 2
+
+## CQ-PWG-08a | wires and P2 blocks render at the test loops; no client errors
+> time set noon
+> weather clear
+> tp @s 1004 -57 994 0 25
+sleep 4
+shot loop_z1000
+> tp @s 1012 -55 1000 0 30
+sleep 4
+shot loops_overview
+> tp @s 1015 -57 1004 180 20
+sleep 4
+shot loop_z1010_long
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet)
+look wires render (hanging sag between terminals), gauges/source/resistor models have no missing textures
+
+## CQ-PWG-08b | creative inventory: Power Grid tab
+key e
+sleep 2
+shot creative_inv
+look a Power Grid creative tab exists (may need page arrows)
+key Escape

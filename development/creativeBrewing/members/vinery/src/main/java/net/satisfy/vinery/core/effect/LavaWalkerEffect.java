@@ -6,6 +6,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -31,6 +33,12 @@ public class LavaWalkerEffect extends MobEffect {
                 }
                 pLivingEntity.setDeltaMovement(movement.x(), Math.max(movement.y(), 0D), movement.z());
                 pLivingEntity.setOnGround(true);
+                // Pack change (raspberry_pie.md 4): standing on lava burns like a magma block unless the walker has
+                // Fire Resistance (or is fire immune, or sneaks, as on magma). Falling into lava burns as usual.
+                if (!pLivingEntity.level.isClientSide && !pLivingEntity.fireImmune() && !pLivingEntity.isSteppingCarefully()
+                        && !pLivingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                    pLivingEntity.hurt(DamageSource.HOT_FLOOR, 1.0F);
+                }
             } else if (pLivingEntity.level.getFluidState(futureBlockPos).is(FluidTags.LAVA) && movement.y() > -0.8) {
                 if (pLivingEntity.level instanceof ServerLevel level) {
                     level.sendParticles(ParticleTypes.LAVA, pos.x(), pos.y() + 0.1D, pos.z(), 10, 0.2, 0.1, 0.2, 1.5);

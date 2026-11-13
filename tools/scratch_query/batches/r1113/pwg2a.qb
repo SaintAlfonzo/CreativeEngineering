@@ -1,0 +1,158 @@
+# r1113 Power Grid P2 (grid base) boot 1 of 3: SQ-PWG-12, -13, -14, -16, -18 (chance 0 half), -17, -21, -19, -23.
+# Jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-03.jar. Group A superflat, level pwg2 (Y -60 = one above grass).
+# Prep: COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-03.jar prep_srv.sh OUT pwg2 A
+#   cp pwg_probe.js, pwg_grid_probe.js into OUT/srv/kubejs/server_scripts/ as zz_*.js
+# Then pwg2b.qb (restart, overheatedDropChance 1) and pwg2c.qb (restart, clientMirror false) on the same OUT.
+pace 2
+
+## SQ-PWG-12 | P2 jar loads with the grid base registries, wire types, no mixin or data errors
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 2\)
+bootexpect Loaded 5 wire types
+bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
+bootreject ^(?!.*MinecraftServer/\]: Unknown item).*(Couldn't load tag|Failed to load|Couldn't parse|Unknown item|Unknown tag|Error loading registry data).*powergrid
+bootreject (ERROR|WARN).*[Ll]oot.*powergrid
+bootreject Exception loading blockstate definition.*powergrid
+bootreject NoClassDefFoundError.*net/minecraft/client
+> zpwg ns powergrid
+waitlog \[zpwg\] done 30
+> zpwg mods powergrid
+waitlog \[zpwg\] mod powergrid 30
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-03
+expect \[zpwg\] ns powergrid block: 13\b
+expect \[zpwg\] ns powergrid item: 21\b
+expect \[zpwg\] ns powergrid entity_type: 3\b
+expect \[zpwg\] ns powergrid block_entity_type: 11\b
+expect \[zpwg\] ns powergrid menu: 2\b
+expect \[zpwg\] ns powergrid recipe_type: 0\b
+expect \[zpwg\] ns powergrid recipe_serializer: 0\b
+expect \[zpwg\] ns powergrid fluid: 0\b
+expect \[zpwg\] ns powergrid sound_event: [1-9]
+> give @p powergrid:wire
+
+## SQ-PWG-13 | powergrid command, performance counter, reload re-reads wire types
+> powergrid debug problems
+> powergrid performance get NetSolve
+sleep 3
+reject Unknown or incomplete command
+reject Incorrect argument
+look the console replies of the two powergrid commands (counter prints three values)
+> reload
+waitlog (Reloaded|Loaded 5 wire types) 120
+sleep 10
+shell echo "wiretypes $(grep -c 'Loaded 5 wire types' logs/latest.log)"
+reject \[(Server thread|Worker-Main-\d+)/ERROR\]
+
+## SQ-PWG-SETUP | forceload the test area (not a row)
+> forceload add 990 990 1060 1090
+> time set noon
+sleep 5
+
+## SQ-PWG-14 | 12 V into 10 ohm loop reads V, I, Vr; 5 wires
+> zpwgg loop 1000 -60 1000 12 36
+waitlog \[zpwgg\] done 30
+sleep 3
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 30
+> zpwgg wires 1000 -60 1000 8
+waitlog \[zpwgg\] wires 30
+expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* 
+expect \[zpwgg\] wires 5$
+reject /ERROR\]
+look read line: I within 1 % of 12/(10+Rwires), Vr within 1 % of I x 10
+
+## SQ-PWG-16 | 1 ohm load on a 24-block copper wire: R=0.018 and drop = I x Rwires
+> zpwgg loop 1000 -60 1010 12 27 powergrid:wire 24
+waitlog \[zpwgg\] done 30
+sleep 3
+> zpwgg read 1000 -60 1010 24
+waitlog \[zpwgg\] done 30
+> zpwgg wires 1000 -60 1010 30
+waitlog \[zpwgg\] wires 30
+sleep 1
+look the 24-block wire line shows R=0.018; read drop (V - Vr) within 1 % of I x Rwires
+
+## SQ-PWG-18a | Overheated Component: both current gauges overheat and stay blocks (destroy halves in pwg2b / pwg2c; default chance is 0.25)
+> zpwgg loop 1000 -60 1030 12 18 powergrid:iron_wire
+waitlog \[zpwgg\] done 30
+> zpwgg loop 1000 -60 1040 12 18 powergrid:iron_wire
+waitlog \[zpwgg\] done 30
+sleep 22
+> zpwgg overheated 1003 -60 1030 1
+waitlog \[zpwgg\] overheated \d+ 30
+> zpwgg overheated 1003 -60 1040 1
+waitlog \[zpwgg\] done 30
+expect \[zpwgg\] overheated at 1003 -60 1030 original=.*current_gauge.*Temperature
+expect \[zpwgg\] overheated at 1003 -60 1040 original=.*current_gauge
+> give @p powergrid:overheated_component
+sleep 1
+expect Unknown item 'powergrid:overheated_component'
+reject (?i)explo
+
+## SQ-PWG-17 | overheat loop: a wire overheats, burnt wires removed, drop nothing
+> zpwgg overheat 1000 -60 1020
+waitlog \[zpwgg\] done 30
+repeat 10
+> zpwgg wires 1000 -60 1020 8
+sleep 1
+end
+> zpwgg items 1000 -60 1020 8
+waitlog \[zpwgg\] items \d+ 30
+> zpwgg read 1000 -60 1020
+waitlog \[zpwgg\] done 30
+expect overheated=true
+expect \[zpwgg\] items 0
+reject /ERROR\]
+look the wires count drops after overheated=true; read after shows I=0 or lower, no exception
+
+## SQ-PWG-21 | loop across two chunks; unload the resistor's chunk, reload it
+> zpwgg loop 1000 -60 1070 12 36 powergrid:wire 20
+waitlog \[zpwgg\] done 30
+sleep 3
+> zpwgg read 1000 -60 1070 20
+waitlog \[zpwgg\] done 30
+> forceload remove 1018 1070 1040 1080
+sleep 12
+> zpwgg read 1000 -60 1070 20
+waitlog \[zpwgg\] done 30
+> zpwgg net 1000 -60 1070
+waitlog \[zpwgg\] done 30
+> forceload add 1018 1070 1040 1080
+sleep 8
+> zpwgg read 1000 -60 1070 20
+waitlog \[zpwgg\] done 30
+expect \[zpwgg\] net paused=false
+reject (Exception|/ERROR\])
+look three reads: first ~1.19 A; second open-loop or last value (record which); third within 1 % of the first and wires=5
+
+## SQ-PWG-19 | insulated copper and golden wire loops read like copper
+> zpwgg loop 1000 -60 1050 12 36 powergrid:insulated_copper_wire
+waitlog \[zpwgg\] done 30
+> zpwgg loop 1000 -60 1060 12 36 powergrid:golden_wire
+waitlog \[zpwgg\] done 30
+sleep 3
+> zpwgg read 1000 -60 1050
+waitlog \[zpwgg\] done 30
+> zpwgg read 1000 -60 1060
+waitlog \[zpwgg\] read 30
+sleep 1
+count \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* .*wires=5 == 2
+reject (Exception|/ERROR\])
+
+## SQ-PWG-23 | P2 item ids exist
+> zpwg ns powergrid
+waitlog \[zpwg\] done 30
+expect \[zpwg\] ns powergrid item: .*powergrid:copper_cord
+expect \[zpwg\] ns powergrid item: .*powergrid:wire_cutter
+expect \[zpwg\] ns powergrid item: .*powergrid:multimeter
+expect \[zpwg\] ns powergrid item: .*powergrid:debug
+expect \[zpwg\] ns powergrid item: .*powergrid:electrical_gizmo
+shell echo "recipe errors naming powergrid: $(grep -iE 'Error parsing recipe|Parsing error loading recipe' logs/latest.log | grep -c powergrid)"
+
+## SQ-PWG-20a | before the stop: reads of the loops at Z 1000 and 1010
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 30
+> zpwgg read 1000 -60 1010 24
+waitlog \[zpwgg\] read 30
+> zpwgg wires 1000 -60 1000 8
+waitlog \[zpwgg\] wires 30
+sleep 1

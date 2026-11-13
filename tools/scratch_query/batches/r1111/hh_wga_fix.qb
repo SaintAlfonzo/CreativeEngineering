@@ -1,0 +1,10 @@
+pace 2
+## SQ-HH-324 | ages and the ground of corn in the SQ-HH-323 maze box (batch fault rerun)
+> zq ages 4130 -60 130 4230 -56 230 corn_delight:corn_crop
+> zq count 4130 -60 130 4230 -59 230 corn_delight:corn_crop
+look only age 7; on farmland
+## SQ-HH-325 | maze chests over a wider box (batch fault rerun)
+> zhh2 chests 4100 -62 100 4260 -50 260
+capture C chest (-?\d+) (-?\d+) (-?\d+) table hearthandharvest:chests/corn_maze_center
+> zhh2 unpack {C1} {C2} {C3}
+look one center chest; unpack items [1-9]

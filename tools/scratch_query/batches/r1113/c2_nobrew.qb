@@ -1,0 +1,17 @@
+# r1113 chunk 2, boot c2nb: SQ-DEP-02, a throwaway boot without Creative Brewing (so without Brewin' and Vinery, its
+# nested members). World group A (superflat creative). Level name: c2nb. New OUT folder.
+# Setup before boot (server stopped, never booted):
+#   prep_srv.sh OUT c2nb A
+#   rm OUT/srv/mods/creativebrewing-*.jar
+#   (zq is copied by prep_srv.sh; no other probe)
+# If FML refuses to load (a jar needs creativebrewing, brewinandchewin or vinery), the row is judged from logs/latest.log
+# of that attempt: name the jar that requires it (the row says "expected to stop if something else needs Brewing, then
+# note what"). Row-text update: Blockheads Additions is a Creative Delight compartment since M8 and its coaster offset
+# mixin is CD's (creativedelight.mixins.json, client list, gated on brewinandchewin by CDMixinPlugin).
+pace 1
+
+## SQ-DEP-02 | CD and its deps boot without Creative Brewing; no Brewin' class or mixin error from CD
+bootreject CoasterBlockEntityRenderer|CoasterRendererOffset.*(rror|ail)
+bootreject (?i)brewinandchewin.*(NoClassDefFoundError|ClassNotFoundException)
+shell grep -nE "Missing or unsupported mandatory|requires|Done \(" logs/latest.log | head -8 | cut -c1-260; grep -nE "NoClassDefFoundError|ClassNotFoundException" logs/latest.log | grep -iE "brewin|vinery|creativebrewing" | head -5 | cut -c1-260; grep -ciE "error" logs/kubejs/server.log 2>/dev/null; grep -iE "error" logs/kubejs/server.log 2>/dev/null | head -5 | cut -c1-240
+look "Done (" present and no missing-dependency line naming brewinandchewin / vinery / creativebrewing for a CD jar; script errors in server.log listed (an unguarded Brewin' or Vinery reference in a CD or Common script is a finding). If FML stopped, note the jar and the dependency it names

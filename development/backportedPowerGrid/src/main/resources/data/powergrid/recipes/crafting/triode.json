@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "I": {
+      "tag": "forge:plates/iron"
+    },
+    "Q": {
+      "item": "create:polished_rose_quartz"
+    }
+  },
+  "pattern": [
+    "Q",
+    "G",
+    "I"
+  ],
+  "result": {
+    "item": "powergrid:triode"
+  }
+}

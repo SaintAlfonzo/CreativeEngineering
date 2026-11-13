@@ -3,7 +3,7 @@
 //   /syt ids                                   block and item ids the SQ-SY rows need (from global.item / global.blocks)
 //   /syt roll <x> <y> <z> <n> <tool|none>       roll the block at x y z's loot table n times (Block.getDrops with the
 //                                              real level, so location_check sees the blocks below); prints the mean
-//                                              count per item and the largest single roll
+//                                              count per item, the largest single roll and the total over n rolls
 // Place the soil and the crop first with /setblock (or /fill), so block-state syntax is the vanilla parser's.
 // Output: "[syt] ..." lines in logs/latest.log.
 (() => {
@@ -37,7 +37,7 @@
                 max[id] = Math.max(max[id] || 0, one[id])
             })
         }
-        let parts = Object.keys(sum).sort().map(id => id + ' mean ' + (sum[id] / n).toFixed(2) + ' max ' + max[id])
+        let parts = Object.keys(sum).sort().map(id => id + ' mean ' + (sum[id] / n).toFixed(2) + ' max ' + max[id] + ' total ' + sum[id])
         out('roll ' + String(st) + ' over ' + below + ' tool ' + tool + ' n ' + n + ': ' + (parts.join(', ') || 'nothing'))
     }
     ServerEvents.commandRegistry(e => {

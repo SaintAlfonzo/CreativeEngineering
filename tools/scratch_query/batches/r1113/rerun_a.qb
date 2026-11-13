@@ -1,0 +1,249 @@
+# r1113 rerun boot A1: group A superflat (ground top y -61, stand at -60), level r1113ra (new world).
+# Rows: SQ-WO-03, -04, -06, -08, -09 (r1109wo FAIL, never rerun), SQ-WO-35t (tag half of the r1111 PARTIAL, by zq
+#   biometag instead of execute if biome, which is 1.19.3+), SQ-HCS-05 (r1111 PASS partial: cap of 3 not reached),
+#   SQ-HH-501 (r1111 FAIL untraced, TODO largecontent/mod-additions #68 "rerun with a watch first"), SQ-HH-1534
+#   (r1112 INCONCLUSIVE, rerun alone with the shift state printed), SQ-HH-1551 part 1 (never run; part 2 is
+#   rerun_a2.qb after a restart), SQ-WO-34 (BATCH-FAULT twice; see the inotify note on that row).
+# Prep: bash tools/scratch_query/prep_srv.sh OUT r1113ra A spawn-animals=true
+#   (spawn-animals=true: crows and summoned animals are discarded otherwise, r1111 gotcha)
+# Config edits in OUT/srv before boot (Boot F crow numbers, as r1112 hh_crow.qb; Loading Protection off for bots):
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/hearthandharvest-common.toml crow stealChance 1.0
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/hearthandharvest-common.toml crow carryTicks 200
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+#   Wise Oak config untouched (defaults: SQ-WO-01 values).
+# Probes to copy into OUT/srv/kubejs/server_scripts/ (zq_probe.js is copied by prep_srv.sh):
+#   cp tools/scratch_query/wo_probe.js        OUT/srv/kubejs/server_scripts/zz_wo_probe.js       (/zwo; also skip for SQ-HCS-05)
+#   cp tools/scratch_query/hh_crow_probe.js   OUT/srv/kubejs/server_scripts/zz_hh_crow_probe.js  (/zhh3)
+#   cp tools/scratch_query/hh_gear_probe.js   OUT/srv/kubejs/server_scripts/zz_hh_gear_probe.js  (/zhh5)
+#   cp tools/scratch_query/zsneak_probe.js    OUT/srv/kubejs/server_scripts/zz_zsneak_probe.js   (/zsneak, new r1113)
+# Coordinates: x 30000 to 31200, z 30000 to 30100 (clear of the chunk-4 batches). Keep the world for rerun_a2.qb.
+pace 1
+
+## SQ-RRA-00 | setup: forceload, bot G, gamerules (not a test row)
+bootexpect Done \(
+> forceload add 30000 29990 30200 30060
+> forceload add 30480 29980 30560 30060
+> forceload add 30980 29980 31080 30060
+sleep 10
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> time set noon
+> weather clear 100000
+> pbot spawn G 30010 -60 30010 minecraft:overworld survival
+sleep 3
+> pbot status
+expect cdevperfbot ok
+
+## SQ-WO-03 | trust command errors (r1109 fault: an offline server resolves any plain name; use a selector that matches nobody)
+> wiseoak trust 30030 -60 30020 G 50
+> setblock 30030 -60 30020 mysticaloaktree:wise_oak
+> wiseoak trust 30030 -60 30020 G 101
+> wiseoak trust 30030 -60 30020 G -1
+> wiseoak trust 30030 -60 30020 @a[name=Nobody123] 50
+> wiseoak trust 99999 -60 99999 G 50
+> setblock 30030 -60 30020 minecraft:stone
+> wiseoak trust 30030 -60 30020 G 50
+sleep 2
+count No Wise Oak at that position == 2
+expect (?i)integer must not be more than 100
+expect (?i)integer must not be less than 0
+expect No player was found|That player does not exist
+expect That position is not loaded
+reject Set trust of Nobody123
+reject Exception
+# row text: the queue's "That player does not exist" is for a name lookup; with the selector it is "No player was found"
+
+## SQ-WO-04 | stays awake by day at the default random tick speed (r1109 ran at 300: tired-roll suspicion)
+> gamerule randomTickSpeed 3
+> time set noon
+> weather clear 100000
+> setblock 30040 -60 30020 mysticaloaktree:wise_oak
+sleep 120
+> zwo state 30040 -60 30020
+waitlog \[zwo\] done 20
+> data get block 30040 -60 30020 creativeworldgen_sleep_until
+sleep 1
+expect \[zwo\] 30040 -60 30020 .*state=(none|blinking)
+reject \[zwo\] 30040 -60 30020 .*state=sleeping
+look if sleeping: does the data get show a sleep_until (tired sleep timer) or none (day sleep inject not active)?
+
+## SQ-WO-06 | sleeps in a storm by day, wakes after (default tick speed, timer read)
+> time set noon
+> setblock 30050 -60 30020 mysticaloaktree:wise_oak
+> weather thunder 600
+sleep 120
+> zwo state 30050 -60 30020
+waitlog \[zwo\] done 20
+> weather clear 100000
+sleep 120
+> zwo state 30050 -60 30020
+waitlog \[zwo\] done 20
+> data get block 30050 -60 30020 creativeworldgen_sleep_until
+sleep 1
+expect \[zwo\] 30050 -60 30020 .*state=sleeping
+expect \[zwo\] 30050 -60 30020 .*state=(none|blinking)
+look if the last state is sleeping: a sleep_until in the data get means a timed (tired) sleep, not the storm branch
+
+## SQ-WO-08 | right-click on a sleeper: angry, 600 tick timer (r1109: tree was awake at the click; state read at each step)
+> gamerule randomTickSpeed 0
+> time set noon
+> weather clear 100000
+> setblock 30060 -60 30020 mysticaloaktree:wise_oak[state=sleeping]
+> zwo state 30060 -60 30020
+> wiseoak trust 30060 -60 30020 G 50
+sleep 1
+> zwo state 30060 -60 30020
+> tp G 30060 -60 30017
+> pbot use G 30060 -60 30020 up
+> zwo state 30060 -60 30020
+> data get block 30060 -60 30020 creativeworldgen_angry_until
+sleep 1
+waitlog \[zwo\] done 20
+expect \[zwo\] 30060 -60 30020 .*state=angry
+expect has the following block data
+look angry_until = game + 600 within 5 ticks; if not angry, which zwo state line first reads awake (after setblock, after the trust command, or only after the use)
+
+## SQ-WO-08b | same at midnight (diagnostic: a placed sleeper by day may wake on its first block-entity tick)
+> time set midnight
+> setblock 30070 -60 30020 mysticaloaktree:wise_oak[state=sleeping]
+> wiseoak trust 30070 -60 30020 G 50
+sleep 1
+> zwo state 30070 -60 30020
+> tp G 30070 -60 30017
+> pbot use G 30070 -60 30020 up
+> zwo state 30070 -60 30020
+> data get block 30070 -60 30020 creativeworldgen_angry_until
+sleep 1
+waitlog \[zwo\] done 20
+look RECORD: state before and after the use at night; angry here but not in -08 means the noon setblock wakes it (row text, not the inject)
+> time set noon
+
+## SQ-WO-09 | anger ends in a timed sleep on the game-time basis (tree of SQ-WO-08; meaningful only if -08 read angry)
+> zwo skip 601
+sleep 3
+> zwo state 30060 -60 30020
+> data get block 30060 -60 30020 creativeworldgen_sleep_until
+> time add 12000
+> data get block 30060 -60 30020 creativeworldgen_sleep_until
+> time set noon
+> zwo skip 12000
+sleep 3
+> zwo state 30060 -60 30020
+sleep 1
+waitlog \[zwo\] done 20
+expect \[zwo\] 30060 -60 30020 .*state=sleeping
+expect \[zwo\] 30060 -60 30020 .*state=(none|blinking)
+look sleep_until = game + 12000 within 25 ticks, same value after time add; final state awake
+
+## SQ-WO-35t | Wise Oak biome tag holds plains and forest, not taiga, desert, snowy plains, ocean, river, dripstone caves
+> zq biometag creativeworldgen:wise_oak_biomes
+waitlog \[zq\] done 20
+expect \[zq\] biometag creativeworldgen:wise_oak_biomes \(\d+\):.* minecraft:plains\b
+expect \[zq\] biometag creativeworldgen:wise_oak_biomes \(\d+\):.* minecraft:forest\b
+reject \[zq\] biometag .* minecraft:(taiga|desert|snowy_plains|ocean|river|dripstone_caves)\b
+# placement half (131 Wise Oaks, 129 in tagged biomes) was judged PASS offline in r1111
+
+## SQ-HCS-05 | generated nest refills one crow per 5 game minutes up to 3, none with the player 60 away
+> gamerule randomTickSpeed 3
+> fill 30495 -61 29995 30525 -45 30025 minecraft:glass hollow
+> fill 30496 -60 29996 30524 -46 30024 minecraft:air
+> setblock 30510 -55 30010 minecraft:oak_log
+> setblock 30510 -54 30010 hearthandharvest:nest[generated=true]
+> kill @e[type=hearthandharvest:crow]
+> pbot spawn hcs5 30505 -60 30010 minecraft:overworld creative
+sleep 2
+> gamerule randomTickSpeed 300
+repeat 5
+> zwo skip 6100
+sleep 8
+> execute positioned 30510 -54 30010 if entity @e[type=hearthandharvest:crow,distance=..24]
+end
+> gamerule randomTickSpeed 3
+expect Test passed, count: 1\b
+expect Test passed, count: 3\b
+reject Test passed, count: [4-9]
+> kill @e[type=hearthandharvest:crow]
+> tp hcs5 30570 -60 30010
+> gamerule randomTickSpeed 300
+> zwo skip 6100
+sleep 10
+> gamerule randomTickSpeed 3
+> execute positioned 30510 -54 30010 if entity @e[type=hearthandharvest:crow,distance=..24]
+expect Test failed|Test passed, count: 0
+> pbot remove hcs5
+look the five counts rise one at a time (1, 2, 3, 3, 3) and never pass 3; last count 0 with the bot 60 blocks away
+
+## SQ-HH-501 | crow steals from a survival hotbar and stashes in the nest (watch the carry)
+> fill 30987 -61 29987 31013 -47 30013 minecraft:glass hollow
+> fill 30988 -60 29988 31012 -48 30012 minecraft:air
+> kill @e[type=!player,x=30987,y=-62,z=29987,dx=26,dy=17,dz=26]
+> pbot spawn b501 31000 -60 30000 minecraft:overworld survival
+sleep 2
+> clear b501
+> item replace entity b501 hotbar.2 with minecraft:gold_ingot 4
+> setblock 31009 -60 30008 hearthandharvest:nest
+> summon hearthandharvest:crow 31006 -60 30004
+> zhh3 watch crow 31000 -55 30000 14 30 20 w501 31009,-60,30008
+waitlog \[zhh3\] watch w501 done 60
+> zhh3 seen w501 CrowSeekShinyGoal
+> zhh3 seen w501 CrowFleeGoal
+> zhh3 log crow 31000 -55 30000 14 31009,-60,30008
+> data get block 31009 -60 30008 Inventory
+> data get block 31009 -60 30008 CrowStash
+> zhh3 inv b501 minecraft:gold_ingot
+sleep 1
+> pbot remove b501
+> kill @e[type=hearthandharvest:crow,x=30987,y=-61,z=29987,dx=26,dy=14,dz=26]
+expect \[zhh3\] invcount b501 minecraft:gold_ingot 3
+expect has the following block data: .*minecraft:gold_ingot
+expect has the following block data: 1b
+look if the nest is empty: which goal ran while the crow carried (watch lines, seen lines), its lastD to the nest and its height; feeds TODO #68
+
+## SQ-HH-1534 | tilling III spreads over 5x5 (sneak state printed before and after the use)
+> gamerule randomTickSpeed 0
+> fill 31060 -61 30036 31068 -61 30044 minecraft:grass_block
+> fill 31060 -60 30036 31068 -60 30044 minecraft:air
+> tp G 31064 -60 30032 -45 0
+sleep 1
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
+> zhh5 sneak G on
+> zsneak G
+> pbot use G 31064 -61 30040 up
+> zsneak G
+> zhh5 sneak G off
+> zq count 31060 -61 30036 31068 -61 30044 minecraft:farmland
+waitlog \[zq\] done 20
+> zhh5 hand G
+waitlog \[zhh5\] done 20
+expect \[zsneak\] G shift=true
+expect count minecraft:farmland: 25\b
+expect \[zhh5\] hand .*damage=25\b
+# r1112 order was sneak on, then tp: here the tp comes first, so a teleport that clears the flag cannot be the cause
+
+## SQ-HH-1551a | part 1: hops on dirt do not grow while hopsRequireFarmland is true (default)
+> setblock 31070 -61 30050 minecraft:dirt
+> setblock 31070 -60 30051 minecraft:stone
+> setblock 31070 -60 30050 hearthandharvest:hops[age=0,facing=north]
+> gamerule randomTickSpeed 3000
+sleep 10
+> gamerule randomTickSpeed 3
+> execute if block 31070 -60 30050 hearthandharvest:hops[age=0]
+sleep 1
+expect Test passed
+shell grep -nE "hopsRequireFarmland" config/hearthandharvest-common.toml
+# part 2 (growth with the key false) is rerun_a2.qb after the toml edit and a restart (live reload does not fire, see SQ-WO-34)
+
+## SQ-WO-34 | a gift list edit applies without a restart (needs a free inotify instance; see the shell line)
+shell echo "inotify instances: $(find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null | wc -l) of $(cat /proc/sys/fs/inotify/max_user_instances)"; grep -nE "WatchService|inotify|Too many open files|FileWatcher" logs/debug.log | head -5
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'
+sleep 15
+shell echo "reload lines: $(grep -E 'creativeworldgen-common.toml' logs/debug.log | grep -ciE 'changed|reload|notif')"
+> time set noon
+> setblock 30080 -60 30020 mysticaloaktree:wise_oak
+> wiseoak trust 30080 -60 30020 G 100
+> tp G 30080 -60 30017
+> pbot use G 30080 -60 30020 up
+> zwo drops 30080 -60 30020 3
+sleep 1
+expect \[zwo\] drops minecraft:oak_sapling x1
+look r1110 and r1111: no config-change line for any file. On 2026-11-13 the owner's session showed 128 inotify instances in use of max_user_instances 128: Forge's watcher cannot start. If the shell line still reads 128 of 128, record BLOCKED (environment), not a gift bug

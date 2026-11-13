@@ -1,7 +1,7 @@
 #!/bin/bash
 # r1109wo runner (SQ-WO Wise Oak, scratch_queue.md): wo_run.sh OUT RES STEP...   STEP = a1 a1b a2 a3 a4 a5 s (group A, same OUT) or b (OUT is group B).
 # Every boot: refuses with a game JVM up, sets the srv toml for the step, boots, waits for Done, runs the step's batch, stops.
-INST="$(cd "$(dirname "$0")/../.." && pwd)"; Q="$INST/tools/scratch_query"; B="$Q/batches/r1109wo"; SS="$INST/tools/creative_labels_test/scratch_server.sh"
+INST="$(cd "$(dirname "$0")/../.." && pwd)"; Q="$INST/tools/scratch_query"; B="${WO_BATCHES:-$Q/batches/r1109wo}"; SS="$INST/tools/creative_labels_test/scratch_server.sh"
 OUT=${1:?OUT}; RES=${2:?RES}; shift 2; T="$OUT/srv/config/creativeworldgen-common.toml"
 t() { python3 "$Q/qrun.py" toml "$T" "$1" "$2" "$3" >/dev/null; }
 up() { # up BATCH [strace]

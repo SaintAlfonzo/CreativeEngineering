@@ -1,0 +1,760 @@
+# r1113 Power Grid P6 gate boot (jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-08.jar): SQ-PWG-46 to -54,
+# then reruns on the rewritten row text: SQ-PWG-32, -37 (AC part), -43 (servo part, 40 V), -28, -30, -31, -36.
+# SQ-PWG-45 is superseded by SQ-PWG-47 (pwg_p5_probe.js carries the 55 structures of -08; the three r1113 quirks are in
+# -47's expected 15). Group A superflat, level pwg8, ground Y -61, blocks at Y -60.
+# Prep:
+#   COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-08.jar prep_srv.sh OUT pwg8 A
+#   ls OUT/srv/mods | grep -i powergrid        (only backportedPowerGrid-0.6.2-ce-19.2-08.jar; remove -07 and older)
+#   for p in pwg_probe pwg_grid_probe pwg_p3_probe pwg_p4_probe pwg_p5_probe pwg_p6_probe; do
+#     cp $INST/tools/scratch_query/$p.js OUT/srv/kubejs/server_scripts/zz_$p.js; done
+#   ponder datapack from the -08 jar (before boot):
+#   mkdir -p OUT/pwgp OUT/srv/pwg8/datapacks/pwgponder/data/pwgponder/structures \
+#     && unzip -o -q OUT/srv/mods/backportedPowerGrid-0.6.2-ce-19.2-08.jar 'assets/powergrid/ponder/*' -d OUT/pwgp \
+#     && cp -r OUT/pwgp/assets/powergrid/ponder/. OUT/srv/pwg8/datapacks/pwgponder/data/pwgponder/structures/ \
+#     && printf '{"pack":{"pack_format":10,"description":"PWG ponder structures, scratch only"}}' > OUT/srv/pwg8/datapacks/pwgponder/pack.mcmeta
+#   No srv config edits (SQ-PWG-46 checks the defaults). SQ-PWG-54 writes the pwgsolar datapack itself (shell) and /reloads.
+# Probe goggle reads log a RuntimeDistCleaner ERROR (client class): no blanket ERROR reject.
+# waitlog matches anywhere since the row start; real waits are sleeps (20 ticks = 1 s) plus pace (s after each command).
+# Batch deviations from the row text: SQ-PWG-48 sets the creative motors of the two Create fan lines to 64 RPM (the
+# 16 RPM default gives a reach of about 1.25 blocks: the stream would not reach the head / coil / apple); P6 lines that
+# only wait are built up front so their waits overlap (SQ-PWG-48 Z 1406 to 1414, SQ-PWG-49 skillet and basin heaters,
+# SQ-PWG-52 LV fixture and factory light); SQ-PWG-36 expects 56 recipes on -08 (the row's 47 is the P4 count).
+pace 1
+
+## SQ-PWG-46 | -08 loads (phase 6): registries, 56 recipes, fan types, solar contraption type, 0 overrides, config, six mixin targets
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 6\)
+bootexpect Loaded 0 solar biome overrides
+bootreject InvalidInjectionException|InjectionError|Critical injection failure
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg6 check
+waitlog \[zpwg6\] done 30
+sleep 1
+shell grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin' logs/latest.log | head -40; grep -n -E 'solar biome override' logs/latest.log | head
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-08
+expect \[zpwg\] ns powergrid block: 58\b
+expect \[zpwg\] ns powergrid item: 71\b
+expect \[zpwg\] ns powergrid entity_type: 3\b
+expect \[zpwg\] ns powergrid block_entity_type: 48\b
+expect \[zpwg\] ns powergrid menu: 2\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg3\] recipes 56$
+expect recipe powergrid:crafting/electric_fan type=
+expect recipe powergrid:crafting/electric_pump type=
+expect recipe powergrid:crafting/factory_light type=
+expect recipe powergrid:crafting/growth_lamp type=
+expect recipe powergrid:crafting/light_bulb type=
+expect recipe powergrid:crafting/lv_light_bulb type=
+expect recipe powergrid:crafting/neon_bulb type=
+expect recipe powergrid:mechanical_crafting/basin_heater type=
+expect recipe powergrid:sequenced_assembly/solar_panel type=
+reject recipe powergrid:crafting/heating_coil type=
+reject recipe powergrid:crafting/light_fixture type=
+reject recipe powergrid:crafting/solar_panel_bearing type=
+expect \[zpwg6\] fan types .*powergrid:heater_blasting\(150\)
+expect \[zpwg6\] fan types .*powergrid:heater_smoking\(250\)
+expect \[zpwg6\] fan types .*creativeengineering:dragon_breathing\(500\)
+count \[zpwg6\] fan type \S+ registered=true$ == 3
+expect \[zpwg6\] contraption type powergrid:solar_panel registered=true
+expect \[zpwg6\] solar biome overrides 0$
+expect \[zpwg6\] config heaterFanProcessingSpeedMultiplier=0\.75 growthLampRadius=2 growthLampChance=50 electricPumpRange=24 solarPanelMaxSize=25
+expect \[zpwg6\] config clientMirror=true
+count \[zpwg6\] mixin target \S+ loaded$ == 6
+reject \[zpwg6\] mixin target \S+ error
+reject InvalidInjectionException|InjectionError|Critical injection failure
+reject \[zpwg\w*\] (error|config error|contraption type error|solar overrides error)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look fan types line lists Create's own types too; shell output: mixin lines name no failure; the solar override log line says 0
+
+## SQ-PWG-47 | 55 ponder structures load on 1.19.2: summary clean=40 quirk=15 (or 39/16), bad=0, error=0
+> forceload add 1290 1290 1970 1320
+sleep 12
+> datapack list enabled
+> zpwg5 list
+waitlog \[zpwg5\] list 30
+> zpwg5 nbtall 1300 -60 1300
+waitlog \[zpwg5\] nbt summary 300
+sleep 1
+expect file/pwgponder
+expect \[zpwg5\] list 55\b
+count \[zpwg5\] nbt (?!summary) == 55
+expect \[zpwg5\] nbt summary files=55 (clean=40 quirk=15|clean=39 quirk=16) bad=0 error=0
+expect \[zpwg5\] nbt gauges quirk
+expect \[zpwg5\] nbt contactor quirk
+expect \[zpwg5\] nbt motor quirk
+expect \[zpwg5\] nbt rheostat quirk
+expect \[zpwg5\] nbt variac quirk
+expect \[zpwg5\] nbt wire/voltage_drop quirk
+expect \[zpwg5\] nbt device_connector quirk
+expect \[zpwg5\] nbt electromagnet quirk
+expect \[zpwg5\] nbt generator/parallel_windings quirk
+expect \[zpwg5\] nbt lightbulb quirk
+expect \[zpwg5\] nbt wire/simple quirk
+expect \[zpwg5\] nbt switch quirk
+expect \[zpwg5\] nbt solar_panel/solar_panel_conditions quirk
+expect \[zpwg5\] nbt solar_panel/solar_panel_power_creation quirk
+expect \[zpwg5\] nbt solar_panel_bearing quirk
+reject \[zpwg5\] nbt \S+ (bad|error|missing|unknown)
+reject size=WRONG
+reject \[zpwg5\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look entities= for electric_fan (4 in the file), factory_light/factory_light (2), factory_light/factory_light_tall (2), solar_panel/solar_panel_power_creation (4); generator/generator_3 clean or quirk (record); no Error / Exception line of any mod between nbtall and its done
+
+## SQ-PWG-SETUP8 | unload the ponder area; forceload the P6 area X 1090 to 1120, Z 1395 to 1520 (27 chunks); no fire spread (not a row)
+> forceload remove 1290 1290 1970 1320
+> forceload add 1090 1395 1120 1520
+> gamerule doFireTick false
+> weather clear
+sleep 6
+
+## SQ-PWG-48 | PWG-20 heater fan processing (blasting, smoking, cold), Dragon Breathing kept, Create fan through a coil, electric fan + dragon head
+shell grep -n -E 'fanProcessingTime|fanPushDistance' pwg8/serverconfig/create-server.toml | head
+> zpwg3 place 1100 -60 1400 powergrid:electric_fan facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1402 40
+> zpwg3 w 1100 -60 1402 0 1100 -60 1400 0
+> zpwg3 w 1100 -60 1400 1 1100 -60 1402 1
+> zpwg3 place 1102 -60 1400 powergrid:heating_coil facing=north
+> zpwg3 src 1102 -60 1403 34
+> zpwg3 w 1102 -60 1403 0 1102 -60 1400 0
+> zpwg3 w 1102 -60 1400 1 1102 -60 1403 1
+# Create fan through a coil (Z 1410), built now so its coil heats during the heater line's wait
+> zpwg3 place 1098 -60 1410 create:creative_motor facing=east
+> zpwg3 scroll 1098 -60 1410 64
+> zpwg3 place 1099 -60 1410 create:encased_fan facing=east
+> zpwg3 place 1101 -60 1410 powergrid:heating_coil facing=north
+> zpwg3 src 1101 -60 1413 34
+> zpwg3 w 1101 -60 1413 0 1101 -60 1410 0
+> zpwg3 w 1101 -60 1410 1 1101 -60 1413 1
+# dragon line (Z 1406) and electric fan with a dragon head (Z 1414)
+> zpwg3 place 1098 -60 1406 create:creative_motor facing=east
+> zpwg3 scroll 1098 -60 1406 64
+> zpwg3 place 1099 -60 1406 create:encased_fan facing=east
+> zpwg3 place 1100 -60 1406 minecraft:dragon_wall_head facing=east
+> zpwg3 place 1100 -60 1414 powergrid:electric_fan facing=east
+> zpwg3 src 1100 -60 1416 40
+> zpwg3 w 1100 -60 1416 0 1100 -60 1414 0
+> zpwg3 w 1100 -60 1414 1 1100 -60 1416 1
+> zpwg3 place 1101 -60 1414 minecraft:dragon_wall_head facing=east
+sleep 30
+> zpwg6 heater 1102 -60 1400
+> zpwg6 fan 1100 -60 1400
+> zpwg6 fantype 1102 -60 1400
+> zpwg3 drop 1104 -60 1400 minecraft:raw_iron 1
+pace 0
+repeat 6
+> zpwg6 items 1104 -60 1400 3
+sleep 0.25
+end
+repeat 6
+> zpwg6 items 1104 -60 1400 3
+sleep 2
+end
+pace 1
+> zpwg6 fan 1099 -60 1410
+> zpwg6 heater 1101 -60 1410
+> zpwg6 fan 1099 -60 1406
+> zpwg6 fantype 1100 -60 1406
+> zpwg3 drop 1103 -60 1406 minecraft:apple 1
+pace 0
+repeat 7
+> zpwg6 items 1103 -60 1406 3
+sleep 2
+end
+pace 1
+> zpwg6 fan 1100 -60 1414
+# smoking
+> zpwg3 src 1102 -60 1403 25
+sleep 30
+> zpwg6 heater 1102 -60 1400
+> zpwg6 fan 1100 -60 1400
+> zpwg3 drop 1104 -60 1400 minecraft:beef 1
+pace 0
+repeat 6
+> zpwg6 items 1104 -60 1400 3
+sleep 0.25
+end
+repeat 6
+> zpwg6 items 1104 -60 1400 3
+sleep 2
+end
+pace 1
+# cold
+> zpwg3 src 1102 -60 1403 0
+sleep 30
+> zpwg6 heater 1102 -60 1400
+> zpwg6 fan 1100 -60 1400
+expect \[zpwg6\] heater coil state=BLASTING
+expect \[zpwg6\] heater coil state=SMOKING
+expect \[zpwg6\] heater coil state=COLD
+expect \[zpwg6\] fan powergrid:electric_fan speed=128\b
+expect \[zpwg6\] fan stream .*powergrid:heater_blasting
+expect \[zpwg6\] fan stream .*powergrid:heater_smoking
+expect \[zpwg6\] fantype powergrid:heater_blasting
+expect \[zpwg6\] item minecraft:iron_ingot
+expect \[zpwg6\] item minecraft:cooked_beef
+expect \[zpwg6\] fan stream .*creativeengineering:dragon_breathing
+expect \[zpwg6\] fantype creativeengineering:dragon_breathing
+expect \[zpwg6\] item minecraft:chorus_fruit
+reject processing=powergrid:heater_\w+ time=(11[4-9]|1[2-9]\d|[2-9]\d\d|\d{4,})
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look coil thermal T about 470 to 500 at 34 V, about 270 at 25 V; heater-line flow=east (if west: rerun with -40 V); first processing time read at most 113; cold: stream none after the coil; Create fan through the coil (Z 1410): stream powergrid:heater_blasting after the coil; electric fan with a dragon head (Z 1414): record the stream (none expected); shell: fanProcessingTime (default 150)
+
+## SQ-PWG-49 | PWG-21 basin heater: FD cooking pot heat levels, skillet cooks, basin heated mixing and its 0 V control
+> zpwg3 place 1100 -60 1420 powergrid:basin_heater
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1423 0
+> zpwg3 w 1100 -60 1423 0 1100 -60 1420 0
+> zpwg3 w 1100 -60 1420 1 1100 -60 1423 1
+> zpwg3 place 1100 -59 1420 farmersdelight:cooking_pot
+# skillet and basin heaters built now (200 V) so they heat during the pot sequence
+> zpwg3 place 1103 -60 1420 powergrid:basin_heater
+> zpwg3 src 1103 -60 1423 200
+> zpwg3 w 1103 -60 1423 0 1103 -60 1420 0
+> zpwg3 w 1103 -60 1420 1 1103 -60 1423 1
+> zpwg3 place 1103 -59 1420 farmersdelight:skillet
+> zpwg3 place 1106 -60 1420 powergrid:basin_heater
+> zpwg3 src 1106 -60 1423 200
+> zpwg3 w 1106 -60 1423 0 1106 -60 1420 0
+> zpwg3 w 1106 -60 1420 1 1106 -60 1423 1
+> zpwg3 place 1106 -59 1420 create:basin
+> zpwg3 place 1106 -57 1420 create:mechanical_mixer
+> zpwg3 place 1106 -56 1420 create:creative_motor facing=down
+sleep 1
+> zpwg6 heater 1100 -60 1420
+> zpwg6 fd 1100 -59 1420
+> zpwg3 src 1100 -60 1423 140
+sleep 5
+> zpwg6 heater 1100 -60 1420
+> zpwg6 fd 1100 -59 1420
+> zpwg3 src 1100 -60 1423 200
+sleep 5
+> zpwg6 heater 1100 -60 1420
+> zpwg6 fd 1100 -59 1420
+> zpwg3 src 1100 -60 1423 250
+sleep 5
+> zpwg6 heater 1100 -60 1420
+> zpwg6 fd 1100 -59 1420
+# skillet
+> zpwg6 heater 1103 -60 1420
+> zpwg6 skillet 1103 -59 1420 minecraft:beef
+pace 0
+repeat 9
+> zpwg6 fd 1103 -59 1420
+sleep 5
+end
+pace 1
+> zpwg3 count 1103 -59 1420 2 minecraft:cooked_beef
+# basin at 200 V, then at 0 V
+> zpwg6 heater 1106 -60 1420
+> zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1
+> zpwg6 insert 1106 -59 1420 create:zinc_ingot 1
+pace 0
+repeat 10
+> zpwg6 inv 1106 -59 1420
+sleep 2
+end
+pace 1
+> zpwg3 src 1106 -60 1423 0
+sleep 5
+> zpwg6 heater 1106 -60 1420
+> zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1
+> zpwg6 insert 1106 -59 1420 create:zinc_ingot 1
+pace 0
+repeat 10
+> zpwg6 inv 1106 -59 1420
+sleep 2
+end
+pace 1
+expect \[zpwg6\] heater basin heat_level=none
+expect \[zpwg6\] fd pot isHeated=false
+expect \[zpwg6\] heater basin heat_level=fading
+expect \[zpwg6\] fd pot isHeated=true fdHeatSourceOnly=(false|unreadable)
+expect \[zpwg6\] heater basin heat_level=kindled boilerHeat=1 basinSees=KINDLED
+expect \[zpwg6\] heater basin heat_level=seething boilerHeat=2 basinSees=SEETHING
+expect \[zpwg6\] skillet added minecraft:beef rest=0
+expect \[zpwg6\] fd skillet isCooking=true isHeated=false
+expect \[zpwg6\] fd skillet .*stored=minecraft:cooked_beef|\[zpwg3\] count minecraft:cooked_beef [1-9]
+expect \[zpwg6\] inv \[.*create:brass_ingot x2
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look pot thermal T about 450 / 900 / 1400 at 140 / 200 / 250 V, light 12 at kindled and 15 at seething; basin at 0 V: no second brass (inv stays at the first brass count plus raw copper and zinc)
+
+## SQ-PWG-50 | PWG-33 electric fan speed by voltage, pushes an item; chute push and pull (ChuteBlockEntityMixin)
+> zpwg3 place 1100 -60 1440 powergrid:electric_fan facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1442 20
+> zpwg3 w 1100 -60 1442 0 1100 -60 1440 0
+> zpwg3 w 1100 -60 1440 1 1100 -60 1442 1
+sleep 1
+> zpwg6 fan 1100 -60 1440
+> zpwg3 src 1100 -60 1442 40
+sleep 1
+> zpwg6 fan 1100 -60 1440
+> zpwg3 src 1100 -60 1442 80
+sleep 1
+> zpwg6 fan 1100 -60 1440
+> zpwg3 drop 1103 -60 1440 minecraft:cobblestone 1
+> zpwg6 items 1103 -60 1440 12
+sleep 2
+> zpwg6 items 1103 -60 1440 12
+> zpwg3 place 1106 -60 1440 powergrid:electric_fan facing=up
+> zpwg3 place 1106 -59 1440 create:chute
+> zpwg3 src 1106 -60 1443 40
+> zpwg3 w 1106 -60 1443 0 1106 -60 1440 0
+> zpwg3 w 1106 -60 1440 1 1106 -60 1443 1
+sleep 1
+> zpwg6 chute 1106 -59 1440
+> zpwg3 src 1106 -60 1443 0
+sleep 1
+> zpwg6 chute 1106 -59 1440
+> zpwg3 place 1109 -59 1440 create:chute
+> zpwg3 place 1109 -58 1440 powergrid:electric_fan facing=down
+> zpwg3 src 1109 -60 1443 40
+> zpwg3 w 1109 -60 1443 0 1109 -58 1440 0
+> zpwg3 w 1109 -58 1440 1 1109 -60 1443 1
+sleep 1
+> zpwg6 chute 1109 -59 1440
+expect \[zpwg6\] fan powergrid:electric_fan speed=64\b
+expect \[zpwg6\] fan powergrid:electric_fan speed=128\b
+expect \[zpwg6\] fan powergrid:electric_fan speed=256\b
+count \[zpwg6\] chute motion=-?(0\.\d*[1-9]|[1-9]) >= 2
+expect \[zpwg6\] chute motion=0
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look flow=east (west: reversed polarity, record), reach grows with speed; the cobblestone x moves east between the two items reads; chute motion order: push powered non-zero up, push unpowered 0, pull non-zero
+
+## SQ-PWG-51 | PWG-33 electric pump: tank to tank, the pipe placed after the pump starts is picked up (FluidPropagatorMixin)
+> zpwg3 place 1100 -60 1450 create:fluid_tank
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1450 create:fluid_tank
+> zpwg6 fill 1100 -60 1450 minecraft:water 8000
+> zpwg3 place 1101 -60 1450 create:fluid_pipe
+> zpwg3 place 1102 -60 1450 powergrid:electric_pump facing=east
+> zpwg3 src 1102 -60 1453 120
+> zpwg3 w 1102 -60 1453 0 1102 -60 1450 0
+> zpwg3 w 1102 -60 1450 1 1102 -60 1453 1
+sleep 2
+> zpwg6 pump 1102 -60 1450
+> zpwg3 place 1103 -60 1450 create:fluid_pipe
+pace 0
+repeat 6
+> zpwg6 tank 1104 -60 1450
+> zpwg6 tank 1100 -60 1450
+sleep 2
+end
+pace 1
+> zpwg3 src 1102 -60 1453 240
+sleep 2
+> zpwg6 pump 1102 -60 1450
+> zpwg6 tank 1104 -60 1450
+sleep 2
+> zpwg6 tank 1104 -60 1450
+> zpwg3 src 1102 -60 1453 0
+sleep 2
+> zpwg6 pump 1102 -60 1450
+> zpwg6 tank 1104 -60 1450
+sleep 2
+> zpwg6 tank 1104 -60 1450
+expect \[zpwg6\] fill minecraft:water [1-9]
+count \[zpwg6\] pump speed=[1-9] >= 2
+expect \[zpwg6\] pump speed=0
+expect \[zpwg6\] tank 0:minecraft:water [1-9]\d*/\d+ at 1104 -60 1450
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look pump speed at 120 V vs 240 V (record both); the 1104 tank fills after the last pipe, faster at 240 V, flat at 0 V; no flow at all: pump facing or pipe connections (row's fallbacks, not run here)
+
+## SQ-PWG-52 | PWG-33 lights: fixture power and light by voltage, LV bulb burns out at 120 V, factory light 17 up lights 16 down
+> zpwg3 place 1100 -60 1460 powergrid:light_fixture
+waitlog \[zpwg3\] done 20
+> zpwg6 bulb 1100 -60 1460 powergrid:light_bulb
+> zpwg3 place 1103 -60 1460 powergrid:light_fixture
+> zpwg6 bulb 1103 -60 1460 powergrid:lv_light_bulb
+> zpwg3 src 1103 -60 1463 12
+> zpwg3 w 1103 -60 1463 0 1103 -60 1460 0
+> zpwg3 w 1103 -60 1460 1 1103 -60 1463 1
+> zpwg3 place 1106 -43 1466 powergrid:factory_light
+> zpwg6 bulb 1106 -43 1466 powergrid:light_bulb
+> zpwg3 src 1106 -60 1468 120
+> zpwg3 w 1106 -60 1468 0 1106 -43 1466 0
+> zpwg3 w 1106 -43 1466 1 1106 -60 1468 1
+> zpwg3 src 1100 -60 1463 120
+> zpwg3 w 1100 -60 1463 0 1100 -60 1460 0
+> zpwg3 w 1100 -60 1460 1 1100 -60 1463 1
+pace 0
+repeat 7
+> zpwg6 light 1100 -60 1460
+sleep 1
+end
+pace 1
+> zpwg3 src 1100 -60 1463 60
+sleep 10
+> zpwg6 light 1100 -60 1460
+> zpwg3 src 1100 -60 1463 0
+sleep 10
+> zpwg6 light 1100 -60 1460
+> zpwg6 light 1103 -60 1460
+> zpwg6 light 1106 -43 1466
+> zpwg3 src 1103 -60 1463 120
+pace 0
+repeat 7
+> zpwg6 light 1103 -60 1460
+sleep 0.5
+end
+pace 1
+> zpwgg overheated 1103 -60 1460 1
+waitlog \[zpwgg\] overheated \d+ 20
+count \[zpwg6\] bulb powergrid:(light_bulb|lv_light_bulb)$ == 3
+expect \[zpwg6\] light powergrid:light_fixture power=2 .*blockLight=15
+expect \[zpwg6\] light powergrid:light_fixture power=0 .*blockLight=0
+expect \[zpwg6\] light powergrid:light_fixture power=0 .*burned=true
+expect \[zpwg6\] light powergrid:factory_light power=2
+expect \[zpwg6\] factory light blocks below=\d+ deepest=\d+
+expect \[zpwgg\] overheated 0
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look fixture T about 1450 at 120 V; 60 V: power and blockLight lower (record); LV bulb power=2 at 12 V, burned within 60 ticks at 120 V; factory light: blocks below up to 16, deepest 16, blockLight16 above 0 (record fewer); the 17-block wire is made by the probe (no item length limit)
+
+## SQ-PWG-53 | PWG-22 growth lamp: lamp patch ripens before the open patch in summer and in winter (no season gate upstream)
+> fill 1098 -61 1478 1102 -61 1482 minecraft:farmland[moisture=7]
+> setblock 1100 -61 1480 minecraft:water
+> fill 1098 -60 1478 1102 -60 1482 minecraft:wheat
+> setblock 1100 -60 1480 minecraft:air
+> fill 1098 -61 1488 1102 -61 1492 minecraft:farmland[moisture=7]
+> setblock 1100 -61 1490 minecraft:water
+> fill 1098 -60 1488 1102 -60 1492 minecraft:wheat
+> setblock 1100 -60 1490 minecraft:air
+> zpwg3 place 1100 -58 1480 powergrid:light_fixture facing=down
+waitlog \[zpwg3\] done 20
+> zpwg6 bulb 1100 -58 1480 powergrid:growth_lamp
+> zpwg3 src 1103 -60 1476 240
+> zpwg3 w 1103 -60 1476 0 1100 -58 1480 0
+> zpwg3 w 1100 -58 1480 1 1103 -60 1476 1
+> season set mid_summer
+sleep 2
+> zpwg6 light 1100 -58 1480
+pace 0
+repeat 7
+> zpwg6 age 1100 -60 1480 2
+> zpwg6 age 1100 -60 1490 2
+sleep 10
+end
+pace 1
+> fill 1098 -60 1478 1102 -60 1482 minecraft:wheat
+> setblock 1100 -60 1480 minecraft:air
+> fill 1098 -60 1488 1102 -60 1492 minecraft:wheat
+> setblock 1100 -60 1490 minecraft:air
+> season set mid_winter
+pace 0
+repeat 7
+> zpwg6 age 1100 -60 1480 2
+> zpwg6 age 1100 -60 1490 2
+sleep 10
+end
+pace 1
+expect \[zpwg6\] bulb powergrid:growth_lamp$
+expect \[zpwg6\] light powergrid:light_fixture power=2
+count \[zpwg6\] age .* crops=24 >= 28
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look reads alternate lamp (Z 1480) / open (Z 1490); summer: lamp mean near 7 well before open; winter: lamp still ripens (record rate vs summer), open slower than summer; PWG-22 "no growth out of season" not met (upstream has no gate); season command output accepted
+
+## SQ-PWG-54 | PWG-23 solar panel at noon, 4-panel multiblock, biome overrides (fix B10), night, solar panel bearing
+> time set 6000
+> weather clear
+> zpwg3 place 1100 -60 1500 powergrid:solar_panel facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1100 -60 1503 powergrid:creative_resistor
+> zpwg3 res 1100 -60 1503 33
+> zpwg3 w 1100 -60 1500 0 1100 -60 1503 0
+> zpwg3 w 1100 -60 1503 1 1100 -60 1500 1
+sleep 5
+> zpwg6 solar 1100 -60 1500
+sleep 1
+> zpwg6 solar 1100 -60 1500
+sleep 1
+> zpwg6 solar 1100 -60 1500
+> zpwg3 place 1101 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1102 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1103 -60 1500 powergrid:solar_panel facing=down
+> zpwg6 solarjoin 1100 -60 1500 1101 -60 1500
+> zpwg6 solarjoin 1100 -60 1500 1102 -60 1500
+> zpwg6 solarjoin 1100 -60 1500 1103 -60 1500
+sleep 5
+> zpwg6 solar 1100 -60 1500
+shell d=pwg8/datapacks/pwgsolar; o=$d/data/pwgsolar/powergrid/solar_biome_override; mkdir -p $o && printf '{"pack":{"pack_format":10,"description":"PWG solar overrides, scratch only"}}' > $d/pack.mcmeta && printf '{"biome":"minecraft:plains","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/plains_hot.json && printf '{"biome":"minecraft:swamp","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/zz_swamp.json && find $d -type f
+> reload
+waitlog Loaded 2 solar biome overrides 180
+sleep 5
+> datapack list enabled
+> zpwg6 check
+waitlog \[zpwg6\] solar biome overrides 30
+> zpwg3 place 1110 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1110 -60 1503 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1503 33
+> zpwg3 w 1110 -60 1500 0 1110 -60 1503 0
+> zpwg3 w 1110 -60 1503 1 1110 -60 1500 1
+sleep 5
+> zpwg6 solar 1110 -60 1500
+sleep 1
+> zpwg6 solar 1110 -60 1500
+sleep 1
+> zpwg6 solar 1110 -60 1500
+> zpwg6 solar 1100 -60 1500
+> time set 18000
+sleep 2
+> zpwg6 solar 1110 -60 1500
+> time set 6000
+> zpwg3 place 1100 -60 1510 powergrid:solar_panel_bearing facing=up
+> zpwg3 place 1100 -59 1510 powergrid:solar_panel facing=down
+> zpwg3 place 1101 -59 1510 powergrid:solar_panel facing=down
+> zpwg6 solarjoin 1100 -59 1510 1101 -59 1510
+> zpwg3 place 1100 -60 1513 powergrid:creative_resistor
+> zpwg3 res 1100 -60 1513 33
+> zpwg3 w 1100 -60 1510 0 1100 -60 1513 0
+> zpwg3 w 1100 -60 1513 1 1100 -60 1510 1
+> zpwg6 assemble 1100 -60 1510
+sleep 5
+> zpwg6 contraption 1100 -59 1510 4
+> zpwg6 solar 1100 -60 1510
+sleep 10
+> zpwg6 solar 1100 -60 1510
+expect \[zpwg6\] solar powergrid:solar_panel biome=minecraft:plains override=none
+count \[zpwg6\] solarjoin ok == 4
+expect \[zpwg6\] solar biome overrides 2$
+expect pwgsolar
+expect \[zpwg6\] solar powergrid:solar_panel biome=minecraft:plains override=constant=1361(\.0)?/false temp=34\.4\d*/true
+expect \[zpwg6\] assemble called
+expect \[zpwg6\] contraption \S+ type=powergrid:solar_panel blocks=2
+expect \[zpwg6\] solar powergrid:solar_panel_bearing
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look panel A noon terminals about 18 to 21 V across 7 ohm (P = V^2 / 7, rated about 64 W), sky 15; multiblock about 4 x (record); panel B lower power than A's first reads (record both), panel A still override=none after reload (upstream-same); night: B terminals 0; bearing output non-zero at noon, second read after it turns (record)
+
+## SQ-PWG-SETUP8b | forceload the P3 and P4 rerun area X 1090 to 1120, Z 1030 to 1260 (45 chunks) (not a row)
+> forceload add 1090 1030 1120 1260
+sleep 6
+
+## SQ-PWG-32 | device connector on top of the IE LV capacitor (its UP input side): stays placed, FE rises
+> zpwg3 place 1106 -60 1090 immersiveengineering:capacitor_lv
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1090
+> zpwg3 place 1106 -59 1090 powergrid:device_connector facing=down
+> zpwg3 src 1100 -60 1090 120
+> zpwg3 w 1100 -60 1090 0 1106 -59 1090 0
+> zpwg3 w 1106 -59 1090 1 1100 -60 1090 1
+> zpwg3 feget 1106 -60 1090 up
+sleep 5
+> zpwg3 feget 1106 -60 1090 up
+> zpwg3 be 1106 -59 1090
+expect \[zpwg3\] be Block\{powergrid:device_connector\}
+count \[zpwg3\] fe stored \d+/\d+ == 2
+reject \[zpwg3\] fe none
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look the second fe stored above the first; record FE per tick (difference / 100) and the connector's current from the be lines
+
+## SQ-PWG-37 | PWG-06 AC part only: electric motor on 258 V AC (period 40 ticks), read every 5 ticks; press and shaft stay
+> zpwg3 src 1100 -60 1150 258
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1150 powergrid:current_gauge
+> zpwg3 place 1106 -60 1150 powergrid:electric_motor facing=east
+> zpwg3 place 1106 -60 1152 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1150 0 1103 -60 1150 0
+> zpwg3 w 1103 -60 1150 1 1106 -60 1150 0
+> zpwg3 w 1106 -60 1150 1 1100 -60 1150 1
+> zpwg3 w 1106 -60 1150 0 1106 -60 1152 0
+> zpwg3 w 1106 -60 1150 1 1106 -60 1152 1
+sleep 2
+> zpwg4 kin 1106 -60 1150
+> zpwg3 place 1107 -60 1150 create:shaft axis=x
+> zpwg3 place 1108 -60 1150 create:mechanical_press facing=east
+> zpwg3 src 1100 -60 1150 258 0.5
+pace 0
+repeat 16
+> zpwg4 kin 1106 -60 1150
+sleep 0.25
+end
+repeat 10
+> zpwg4 kin 1106 -60 1150
+sleep 2
+end
+pace 1
+> zpwg3 be 1107 -60 1150
+> zpwg3 be 1108 -60 1150
+expect \[zpwg4\] .*accessor=true
+expect \[zpwg4\] .*generated=[1-9]
+expect \[zpwg4\] .*generated=-[1-9]
+expect \[zpwg3\] be Block\{create:shaft\}
+expect \[zpwg3\] be Block\{create:mechanical_press\}
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look the 16 fast reads follow the AC wave (speed changes sign within one 40-tick period); press and shaft still placed
+
+## SQ-PWG-43 | servo part only at 40 V: 0.5 V step moves about 4 RPM then idle current 0.63 A; fix B9
+> zpwg3 place 1103 -60 1250 powergrid:servo facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1250 40
+> zpwg3 place 1100 -60 1253 powergrid:current_gauge
+> zpwg3 w 1100 -60 1250 0 1100 -60 1253 0
+> zpwg3 w 1100 -60 1253 1 1103 -60 1250 0
+> zpwg3 w 1103 -60 1250 1 1100 -60 1250 1
+> zpwg3 src 1106 -60 1253 0
+> zpwg3 w 1106 -60 1253 0 1103 -60 1250 2
+> zpwg3 w 1106 -60 1253 1 1103 -60 1250 1
+sleep 2
+> zpwg3 src 1106 -60 1253 0.5
+pace 0
+repeat 12
+> zpwg4 kin 1103 -60 1250
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1100 -60 1253
+> zpwg3 be 1103 -60 1250
+# fix B9: unpowered servo given a 1 V target (72 degrees), then powered again
+> zpwg3 src 1100 -60 1250 0
+sleep 1
+> zpwg3 src 1106 -60 1253 1
+sleep 2
+> zpwg4 kin 1103 -60 1250
+> zpwg3 src 1100 -60 1250 40
+pace 0
+repeat 20
+> zpwg4 kin 1103 -60 1250
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1100 -60 1253
+> zpwg3 be 1103 -60 1250
+expect \[zpwg4\] .*generated=-?[3-5](\.\d+)? overstressed
+expect \[zpwg4\] .*generated=0 overstressed
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look 0.5 V step: generated about +-4 within 10 ticks, 0 after about 35 ticks, then gauge about 0.63 A (idle coil); servo thermal not overheated; B9: unpowered read generated=0, powered again moves within 10 ticks for about 65 ticks, then idle current
+
+## SQ-PWG-28 | power resistor 1 ohm at 40 V (1.6 kW vs 1 kW) overheats into an Overheated Component; loop open after
+> zpwg3 src 1100 -60 1040 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1040 powergrid:power_resistor facing=down
+> zpwg3 scroll 1104 -60 1040 9
+> zpwg3 w 1100 -60 1040 0 1104 -60 1040 0
+> zpwg3 w 1104 -60 1040 1 1100 -60 1040 1
+pace 0
+repeat 20
+> zpwg3 be 1104 -60 1040
+sleep 1
+end
+pace 1
+> zpwgg overheated 1104 -60 1040 1
+waitlog \[zpwgg\] overheated \d+ 20
+> zpwg3 be 1100 -60 1040
+expect \[zpwgg\] overheated at 1104 -60 1040 original=Block\{powergrid:power_resistor\}
+expect \[zpwg3\] terminals T0=40 T1=0\b
+reject (?i)explo
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look thermal T rises over the 20 reads; last be: source T0 = 40 V, T1 = 0 V (wires to the component carry no current)
+
+## SQ-PWG-30 | fuse holder: 5 A blows at about 12 A; 20 A with reset passes about 9.47 A
+> zpwg3 place 1103 -60 1070 powergrid:fuse_holder facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 5
+> zpwg3 fuse 1103 -60 1070 reset
+> zpwg3 src 1100 -60 1070 12
+> zpwg3 place 1106 -60 1070 powergrid:current_gauge
+> zpwg3 place 1109 -60 1070 powergrid:creative_resistor
+> zpwg3 res 1109 -60 1070 27
+> zpwg3 w 1100 -60 1070 0 1103 -60 1070 0
+> zpwg3 w 1103 -60 1070 1 1106 -60 1070 0
+> zpwg3 w 1106 -60 1070 1 1109 -60 1070 0
+> zpwg3 w 1109 -60 1070 1 1100 -60 1070 1
+sleep 1
+> zpwg3 be 1103 -60 1070
+> zpwg3 be 1106 -60 1070
+> zpwg3 fuse 1103 -60 1070 20
+> zpwg3 fuse 1103 -60 1070 reset
+sleep 1
+> zpwg3 be 1103 -60 1070
+> zpwg3 be 1106 -60 1070
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look first: fuse state blown (rating 5), gauge 0 (abs below 1e-6); after 20 A + reset: closed, gauge within 5 % of 12 / (1 + 0.2 + 0.05 + Rwires), about 9.47 A
+
+## SQ-PWG-31 | battery into 1 ohm through an energy meter with T2 (voltage sense) wired to battery T1; then charge at 14 V
+> zpwg3 place 1103 -60 1080 powergrid:battery
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1103 -60 1080
+> zpwg3 place 1106 -60 1080 powergrid:energy_meter
+> zpwg3 place 1109 -60 1080 powergrid:current_gauge
+> zpwg3 place 1112 -60 1080 powergrid:creative_resistor
+> zpwg3 res 1112 -60 1080 27
+> zpwg3 place 1112 -60 1082 powergrid:voltage_gauge
+> zpwg3 w 1103 -60 1080 0 1106 -60 1080 0
+> zpwg3 w 1106 -60 1080 1 1109 -60 1080 0
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+> zpwg3 w 1106 -60 1080 2 1103 -60 1080 1
+> zpwg3 w 1112 -60 1080 0 1112 -60 1082 0
+> zpwg3 w 1112 -60 1080 1 1112 -60 1082 1
+sleep 1
+> zpwg3 be 1103 -60 1080
+> zpwg3 be 1106 -60 1080
+> zpwg3 be 1109 -60 1080
+> zpwg3 be 1112 -60 1082
+sleep 20
+> zpwg3 be 1103 -60 1080
+> zpwg3 be 1106 -60 1080
+> zpwg3 be 1109 -60 1080
+> zpwg3 be 1112 -60 1082
+> setblock 1112 -60 1080 air
+sleep 1
+> zpwg3 src 1112 -60 1080 14
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+sleep 1
+> zpwg3 be 1103 -60 1080
+sleep 20
+> zpwg3 be 1103 -60 1080
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look battery starts energy 388800 J, percent 90, OCV near 12.58 V; meter reads non-zero voltage and its energy rises by about the battery's loss (I x V x 20 s, 10 %; record the unit); charge at 14 V raises the battery energy
+
+## SQ-PWG-36 | recipes (56 on -08: the 47 of P4 plus the 9 of P6) and P4 config keys (generator, motor, stress values)
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+sleep 1
+shell s=pwg8/serverconfig/powergrid-server.toml; grep -n -A1 -E 'rotorKp|rotorKd|rotorRPMMax|rotorAssemblyMaxSize|dangerousGenerators|torqueForStress|motorDynamicResistance|motorMinimumLoad|windingCoilConstant|fieldSaturationCurrent' $s; grep -n -E '^\s*(electric_motor|constant_speed_motor|servo|generator_[a-z_]+|variac|rheostat) =' $s; m=0; for k in 'rotorKp = 0.85' 'rotorKd = 0.002' 'rotorRPMMax = 272' 'rotorAssemblyMaxSize = 8' 'dangerousGenerators = true' 'torqueForStress = 15.0' 'motorDynamicResistance = true' 'motorMinimumLoad = 0.05' 'windingCoilConstant = 5.0' 'fieldSaturationCurrent = 2.0' 'generator_clutch = 32.0' 'generator_induction_rotor = 32.0' 'generator_large_induction_rotor = 128.0' 'generator_commutator = 8.0' 'generator_vertical_commutator = 8.0' 'variac = 0.0' 'rheostat = 0.0' 'electric_motor = 64.0' 'constant_speed_motor = 64.0' 'servo = 32.0'; do grep -qF -- "$k" $s || { echo "MISSING $k"; m=1; }; done; exit $m
+expect \[zpwg3\] recipes 56$
+expect recipe powergrid:mechanical_crafting/electric_motor type=create:mechanical_crafting
+expect recipe powergrid:mechanical_crafting/generator_induction_rotor type=
+expect recipe powergrid:mechanical_crafting/generator_large_induction_rotor type=
+expect recipe powergrid:item_application/conductive_casing type=create:item_application
+expect recipe powergrid:crafting/constant_speed_motor type=
+expect recipe powergrid:crafting/generator_clutch type=
+expect recipe powergrid:crafting/generator_housing type=
+expect recipe powergrid:crafting/rheostat type=
+expect recipe powergrid:crafting/variac type=
+expect recipe powergrid:crafting/servo type=
+count recipe powergrid:\S*_from_conversion type= == 6
+expect recipe powergrid:\S*/contactor type=
+expect recipe powergrid:\S*/cord_junction type=
+expect recipe powergrid:\S*/electromagnet type=
+expect recipe powergrid:\S*/fuse_holder type=
+expect recipe powergrid:\S*/hv_breaker type=
+expect recipe powergrid:\S*/multimeter type=
+expect recipe powergrid:\S*/mv_switch type=
+expect recipe powergrid:\S*/power_resistor type=
+expect recipe powergrid:\S*/socket type=
+expect recipe powergrid:\S*/voltage_gauge type=
+expect recipe powergrid:mechanical_crafting/carbon_pile_coil type=
+reject recipe powergrid:mechanical_crafting/generator_commutator type=
+reject \[zpwg\w*\] error
+look shell output: config lines as listed (exit 0 = all 20 key = value pairs present)

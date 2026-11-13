@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "org.patryk3211.powergrid.mixin.forge",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8.3",
+  "mixins": [
+    "ArmInteractionPointMixin",
+    "BasinRecipeMixin",
+    "CookingPotBlockEntityMixin",
+    "EntityTrackerAccessor",
+    "PlayerDrillMixin",
+    "ItemAccessor",
+    "SkilletBlockEntityMixin",
+    "ThreadedAnvilChunkStorageAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

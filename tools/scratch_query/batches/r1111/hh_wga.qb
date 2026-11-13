@@ -1,0 +1,162 @@
+pace 1
+
+## SQ-HH-301 | boot has no `Couldn't parse element.*hearthandharvest` and no `Unknown
+# setup/shell: prep_srv.sh OUT hhw A
+> forceload add 4000 0 4319 191
+> forceload add 4320 0 4639 191
+> gamerule randomTickSpeed 0
+> gamerule doFireTick false
+shell grep -E "^\[worldgen\]|saltCaves|saltCaveRarity|saltCaveMinY|saltCaveMaxY|cornMaze" config/hearthandharvest-common.toml
+> zq biometag hearthandharvest:has_salt_caves
+> zq biometag creativedelight:wild_crops/wild_hops
+kjsreject \[wild-flowers\].*(mod not loaded|not in|could not).*(mums|four_leaf|clover_patches)
+look boot has no `Couldn't parse element.*hearthandharvest` and no `Unknown registry key.*hearthandharvest`; `kjsreject \[wild-flowers\].*(mod not loaded|not in|could not).*(mums|four_leaf|clover_patches)`; shell shows `[worldgen]`, `saltCaves = true`, `saltCaveRarity = 24`, `saltCaveMinY = -40`, `saltCaveMaxY = 30`, `cornMaze = true`; biometag lines non-empty
+
+## SQ-HH-302 | `biometag creativedelight:wild_crops/wild_hops \(18\):` listing `minec
+> zq biometag creativedelight:wild_crops/wild_hops
+look `biometag creativedelight:wild_crops/wild_hops \(18\):` listing `minecraft:forest`, `minecraft:flower_forest`, `minecraft:birch_forest`, `minecraft:dark_forest`, `terralith:moonlight_grove`, `terralith:sakura_grove`, `terralith:yosemite_lowlands` (J25: `temperate grassy forest`, the 18 in `biome_traits.json`)
+
+## SQ-HH-303 | `[Pp]laced feature` in the command output; `countset hearthandharvest:
+> place feature creativedelight:wild/wild_hops 4160 -60 32
+> zhh2 countset 4144 -60 16 4176 -58 48 hearthandharvest:wild_hops,minecraft:grass
+look `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_hops: [1-9]` (the configured feature parses and the wild crop places, J24)
+
+## SQ-HH-305 | `\(10\):` with `minecraft:plains`, `minecraft:sunflower_plains`, `mine
+> zq biometag creativeworldgen:wild_flowers/mums/r5
+look `\(10\):` with `minecraft:plains`, `minecraft:sunflower_plains`, `minecraft:flower_forest`, `minecraft:forest`, `minecraft:meadow`, `terralith:alpha_islands`, `terralith:steppe`, `terralith:temperate_highlands`, `terralith:valley_clearing`, `terralith:yosemite_lowlands` (J27); no others
+
+## SQ-HH-306 | `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines ab
+> place feature creativeworldgen:wild_flowers/mums/r5 4352 -60 32
+> place feature creativeworldgen:wild_flowers/mums/r5 4376 -60 32
+> place feature creativeworldgen:wild_flowers/mums/r5 4352 -60 56
+> zhh2 countset 4340 -60 20 4388 -56 68 hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum
+look `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed colour under 1 %)
+
+## SQ-HH-308 | 8 `Test passed` (HNH-06: every colour goes in a flower pot). `Stack` o
+> setblock 4482 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:white_mum
+> pbot use hb1 4482 -60 32 up
+> execute if block 4482 -60 32 hearthandharvest:potted_white_mum
+> setblock 4484 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:yellow_mum
+> pbot use hb1 4484 -60 32 up
+> execute if block 4484 -60 32 hearthandharvest:potted_yellow_mum
+> setblock 4486 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:orange_mum
+> pbot use hb1 4486 -60 32 up
+> execute if block 4486 -60 32 hearthandharvest:potted_orange_mum
+> setblock 4488 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:red_mum
+> pbot use hb1 4488 -60 32 up
+> execute if block 4488 -60 32 hearthandharvest:potted_red_mum
+> setblock 4490 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:pink_mum
+> pbot use hb1 4490 -60 32 up
+> execute if block 4490 -60 32 hearthandharvest:potted_pink_mum
+> setblock 4492 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:purple_mum
+> pbot use hb1 4492 -60 32 up
+> execute if block 4492 -60 32 hearthandharvest:potted_purple_mum
+> setblock 4494 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:blue_mum
+> pbot use hb1 4494 -60 32 up
+> execute if block 4494 -60 32 hearthandharvest:potted_blue_mum
+> setblock 4496 -60 32 minecraft:flower_pot
+> pbot hold hb1 hearthandharvest:light_blue_mum
+> pbot use hb1 4496 -60 32 up
+> execute if block 4496 -60 32 hearthandharvest:potted_light_blue_mum
+look 8 `Test passed` (HNH-06: every colour goes in a flower pot). `Stack` of the bot's mum consumed each time
+
+## SQ-HH-309 | `blocktag minecraft:small_flowers` holds `hearthandharvest:red_mum` et
+> zq blocktag minecraft:small_flowers
+> zq itemtag minecraft:small_flowers
+> zq rdetail red_dye_from_mum
+look `blocktag minecraft:small_flowers` holds `hearthandharvest:red_mum` etc. (all 8 colours, regex each) and `hearthandharvest:four_leaf_clover`; `itemtag minecraft:small_flowers` holds the 8 mum items; `rdetail` has `red_dye_from_mum {minecraft:crafting_shapeless} -> .*dye`
+
+## SQ-HH-310 | `\(10\):` exactly `minecraft:flower_forest`, `minecraft:meadow`, `mine
+> zq biometag creativeworldgen:wild_flowers/four_leaf_clover/r48
+look `\(10\):` exactly `minecraft:flower_forest`, `minecraft:meadow`, `minecraft:sunflower_plains`, `terralith:moonlight_grove`, `terralith:moonlight_valley`, `terralith:blooming_plateau`, `terralith:blooming_valley`, `terralith:lavender_forest`, `terralith:lavender_valley`, `terralith:lush_valley` (J28)
+
+## SQ-HH-311 | `\(10\):` same ten ids as SQ-HH-310 (J29)
+> zq biometag creativeworldgen:wild_flowers/clover_patches_rare/r48
+look `\(10\):` same ten ids as SQ-HH-310 (J29)
+
+## SQ-HH-312 | `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover
+> place feature creativeworldgen:wild_flowers/four_leaf_clover/r48 4096 -60 96
+> place feature creativeworldgen:wild_flowers/four_leaf_clover/r48 4104 -60 96
+> zhh2 countset 4088 -60 88 4112 -57 104 hearthandharvest:four_leaf_clover
+look `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover: [1-9]` (J28, tries 6, spread 3/2)
+
+## SQ-HH-313 | `[Pp]laced feature`; `countset buzzier_bees:white_clover: [1-9]` and `
+> place feature creativeworldgen:wild_flowers/clover_patches_rare/r48 4160 -60 96
+> zhh2 countset 4152 -60 88 4168 -57 104 buzzier_bees:white_clover,buzzier_bees:pink_clover
+look `[Pp]laced feature`; `countset buzzier_bees:white_clover: [1-9]` and `countset buzzier_bees:pink_clover: [1-9]` (J29, the rare clover patch is Buzzier Bees' flowers)
+
+## SQ-HH-315 | `Test passed` for `4288`, Count `: 7b`; `Test failed` on the chest (th
+> pbot hold hb1 buzzier_bees:four_leaf_clover 8
+> pbot use hb1 4288 -61 96 up
+> execute if block 4288 -60 96 hearthandharvest:four_leaf_clover
+> data get entity hb1 SelectedItem.Count
+> setblock 4290 -60 96 minecraft:chest
+> pbot use hb1 4290 -60 96 up
+> execute if block 4290 -59 96 hearthandharvest:four_leaf_clover
+> pbot use hb1 4292 -61 96 east
+> execute if block 4293 -60 96 hearthandharvest:four_leaf_clover
+> setblock 4294 -60 96 minecraft:grass
+> pbot use hb1 4294 -60 96 up
+> execute if block 4294 -60 96 hearthandharvest:four_leaf_clover
+> setblock 4296 -60 96 minecraft:sand
+> pbot use hb1 4296 -60 96 up
+> execute if block 4296 -59 96 hearthandharvest:four_leaf_clover
+> setblock 4298 -60 96 minecraft:water
+> pbot use hb1 4298 -61 96 up
+> execute if block 4298 -60 96 hearthandharvest:four_leaf_clover
+look `Test passed` for `4288`, Count `: 7b`; `Test failed` on the chest (the chest opens, no clover); `Test failed` for the side face; `Test passed` into the replaceable grass; `Test failed` on sand; `Test failed` in water (J30)
+
+## SQ-HH-316 | `buzzier_bees:four_leaf_clover` (J30: drops Buzzier Bees' item, the bl
+> pbot hold hb1 buzzier_bees:four_leaf_clover 1
+> pbot use hb1 4352 -61 96 up
+> setblock 4352 -60 96 air destroy
+> execute as @e[type=minecraft:item,limit=1,x=4352,y=-60,z=96,distance=..3,sort=nearest] run data get entity @s Item.id
+look `buzzier_bees:four_leaf_clover` (J30: drops Buzzier Bees' item, the block has no item of its own)
+
+## SQ-HH-317 | non-empty; contains `minecraft:desert`, `minecraft:badlands`, `minecra
+> zq biometag hearthandharvest:has_salt_caves
+look non-empty; contains `minecraft:desert`, `minecraft:badlands`, `minecraft:savanna`, `minecraft:beach` (J34: Forge is_desert / is_dry, vanilla is_badlands / is_savanna / is_beach)
+
+## SQ-HH-323 | `Placed structure` (flat ground is a valid site: `surface != floor` fa
+> place structure hearthandharvest:corn_maze 4160 -60 160
+> zhh2 countset 4158 -61 158 4196 -56 196 corn_delight:corn_crop,minecraft:oak_fence,minecraft:oak_log,minecraft:lantern,minecraft:chest,minecraft:farmland,minecraft:hay_block,hearthandharvest:scarecrow
+look `Placed structure` (flat ground is a valid site: `surface != floor` false, `surface <= seaLevel+2` false); `corn_crop` above 200; `oak_fence: 16`, `oak_log: 6`, `lantern: 2` (two gates, J38); `chest: [1-9]`; `farmland: [1-9]` (HNH-22 maze half: `/place structure` proves the piece; natural placement is SQ-HH-328)
+
+## SQ-HH-324 | `ages` shows only age 7 (J38 mature walls); `count ... on: minecraft:f
+> zq ages 4222 -60 158 4260 -56 196 corn_delight:corn_crop
+> zq count 4222 -60 158 4260 -59 196 corn_delight:corn_crop
+count ... on: minecraft:farmland
+look `ages` shows only age 7 (J38 mature walls); `count ... on: minecraft:farmland` on the lower halves (and corn on the upper halves)
+
+## SQ-HH-325 | one `chest ... table hearthandharvest:chests/corn_maze_center`; other
+> zhh2 chests 4286 -60 158 4324 -56 196
+capture C chest (-?\d+) (-?\d+) (-?\d+) table hearthandharvest:chests/corn_maze_center
+> zhh2 unpack {C1} {C2} {C3}
+look one `chest ... table hearthandharvest:chests/corn_maze_center`; other chests (when any) `table hearthandharvest:chests/corn_maze`; `unpack items: [1-9]`, no `unpack item .*minecraft:air` (J41)
+
+## SQ-HH-326 | boot `reject Couldn't parse element.*corn_maze`; both `lootroll ... id
+> zhh2 lootroll hearthandharvest:chests/corn_maze 200
+> zhh2 lootroll hearthandharvest:chests/corn_maze_center 200
+reject Couldn't parse element.*corn_maze
+reject lootroll minecraft:air
+look boot `reject Couldn't parse element.*corn_maze`; both `lootroll ... ids [1-9]\d*`; `reject lootroll minecraft:air`; center and normal lists contain `vinery:apple_cider`, `create_factory:caramel_apple` and the corn items; no `apple_jam` id anywhere in the row (J41)
+
+## SQ-HH-327 | has_structure list contains `minecraft:plains`, `minecraft:sunflower_p
+> zq biometag hearthandharvest:has_structure/corn_maze
+> zq biometag creativeengineering:land/plains
+> zq biometag creativeworldgen:land/plains
+look has_structure list contains `minecraft:plains`, `minecraft:sunflower_plains`, `minecraft:meadow`; `creativeengineering:land/plains` is a structure tag, not a biome tag: this row only checks has_structure. Rate and group: SQ-HH-328
+
+## SQ-HH-329 | `autumn_fruit` list contains `hearthandharvest:hops`; `warm_dry` list
+> zq blocktag creativecalendar:crop_seasons/autumn_fruit
+> zq blocktag creativecalendar:crop_seasons/warm_dry
+look `autumn_fruit` list contains `hearthandharvest:hops`; `warm_dry` list contains `hearthandharvest:sunflower_stem` (J31, J32)
+
+

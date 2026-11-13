@@ -1,0 +1,13 @@
+SQ-PJL pack jam line, 2026-11-03 ([recipes_cooking.md](../recipes_cooking.md) RC-180 to RC	SQ-PJL-01 SQ-PJL-02 SQ-PJL-03 SQ-PJL-04 SQ-PJL-05
+SQ-CFS Cooking for Blockheads oven as a stove, 2026-11-03 ([kitchen.md](../kitchen.md) 2.1	SQ-CFS-01 SQ-CFS-02 SQ-CFS-03
+SQ-STN Cooking stations: one leftover, container-slot and automation rule, 2026-11-03 ([re	SQ-STN-01 SQ-STN-02 SQ-STN-03 SQ-STN-06 SQ-STN-07
+SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons, 2026-11-03 ([trade_sync.md](.	SQ-TSY-01 SQ-TSY-02
+SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI, 2026-11-04 ([barbeques_de	SQ-BBQS-01 SQ-BBQS-02 SQ-BBQS-03
+SQ-CBW Wood cutting boards, 2026-11-04 ([kitchen.md](../kitchen.md) 2.11, TODO `cooking/ki	SQ-CBW-01 SQ-CBW-02 SQ-CBW-03
+SQ-BBQW Barbeque's Delight wood basins and trays, 2026-11-04 ([barbeques_delight.md](../ba	SQ-BBQW-01 SQ-BBQW-02 SQ-BBQW-03
+SQ-CFR Campfire and Ender's stove tag in Creative Delight, 2026-11-04 ([creative_split.md]	SQ-CFR-03 SQ-CFR-04
+SQ-CMG / SQ-CEQ Creative Magic and Creative Equipment carves, 2026-11-04 ([creative_magic.	SQ-CMG-01 SQ-CMG-02 SQ-CMG-03 SQ-CEQ-02 SQ-CEQ-03 SQ-CEQ-04 SQ-CEQ-05 SQ-CEQ-06 SQ-CEQ-08
+SQ-CEN Creative Engineering carve and the creativecommon swap, 2026-11-04 ([creative_engin	SQ-CEN-01 SQ-CEN-02 SQ-CEN-03 SQ-CEN-04 SQ-CEN-05 SQ-CEN-08
+SQ-CNS Creative Common namespace and moves out (wave 9), 2026-11-04 ([creative_split.md](.	SQ-CNS-04 SQ-CNS-05
+SQ-DEP Split dependency fixes, Common to Delight to Brewing and part 2 (all jars), 2026-11	SQ-DEP-01 SQ-DEP-02 SQ-DEP-03 SQ-DEP-04 SQ-DEP-05 SQ-DEP-07 SQ-DEP-08
+Large Meals, Roll Delight and Barbeque's Delight changes, 2026-11-04 ([plan_meals_rolls_bb	SQ-LGM-11 SQ-LGM-12 SQ-LGM-13 SQ-LGM-14 SQ-ROLL-10 SQ-ROLL-11 SQ-ROLL-12 SQ-BBQ2-01 SQ-BBQ2-02 SQ-BBQ2-03 SQ-BBQ2-04 SQ-BBQ2-05 SQ-BBQ2-06 SQ-BBQ2-07

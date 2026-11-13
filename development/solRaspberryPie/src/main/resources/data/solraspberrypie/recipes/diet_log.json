@@ -1,0 +1,9 @@
+{
+  "type": "solraspberrypie:diet_book",
+  "ingredients": [
+    { "item": "minecraft:book" },
+    { "tag": "solraspberrypie:diet_log_foods" }
+  ],
+  "exclude": "solraspberrypie:diet_log_excluded",
+  "result": { "item": "solapplepie:food_book" }
+}

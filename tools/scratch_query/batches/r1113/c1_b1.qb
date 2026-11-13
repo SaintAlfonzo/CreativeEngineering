@@ -1,0 +1,79 @@
+# r1113 chunk 1, boot B1: group B fresh normal world (prep_srv.sh group B: seed 8675309, structures on), level c1b1.
+# Only SQ-PST-12 needs terrain in this chunk; the row is self-contained (own locate, own forceloads, own bots), so it can
+# also be appended to any other group-B boot of r1113 that leaves randomTickSpeed, seasons and the clock as it found them.
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT c1b1 B spawn-animals=false
+#   (zq is copied by prep_srv.sh; s5_ratio.py is read from $INST in a shell step.) No config edits.
+# Pads at y 200 (open sky, above any tree): stone at 199, grass ring + 32x32 dirt at 200. Bots c1pj (jungle) and c1pp
+# (plains) stand on their pads all row long: chunks get random ticks only near a player.
+pace 1
+
+## SQ-PST-12 | grass in a tropical (jungle) column spreads at about half the temperate spring rate, wet and dry season
+bootexpect Done \(
+shell grep -n grassOffPenalty config/creativecalendar-common.toml
+> locate biome minecraft:jungle
+waitlog (is at \[|Could not find) 180
+capture J is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:plains
+waitlog The nearest minecraft:plains (is at \[|Could not find) 180
+capture P The nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {J1-24} {J3-24} {J1+24} {J3+24}
+> forceload add {P1-24} {P3-24} {P1+24} {P3+24}
+sleep 40
+> time set noon
+> weather clear 1000000
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> execute positioned {J1} 200 {J3} run locate biome minecraft:jungle
+> execute positioned {P1} 200 {P3} run locate biome minecraft:plains
+> fill {J1-18} 199 {J3-18} {J1+17} 199 {J3+17} minecraft:stone
+> fill {J1-18} 200 {J3-18} {J1+17} 204 {J3+17} minecraft:air
+> fill {J1-17} 200 {J3-17} {J1+16} 200 {J3+16} minecraft:grass_block
+> fill {J1-16} 200 {J3-16} {J1+15} 200 {J3+15} minecraft:dirt
+> fill {P1-18} 199 {P3-18} {P1+17} 199 {P3+17} minecraft:stone
+> fill {P1-18} 200 {P3-18} {P1+17} 204 {P3+17} minecraft:air
+> fill {P1-17} 200 {P3-17} {P1+16} 200 {P3+16} minecraft:grass_block
+> fill {P1-16} 200 {P3-16} {P1+15} 200 {P3+15} minecraft:dirt
+> pbot spawn c1pj {J1} 201 {J3} minecraft:overworld survival
+> pbot spawn c1pp {P1} 201 {P3} minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 100
+# reference: temperate plains pad in spring (each counting fill is marked for both jungle tags)
+> season set MID_SPRING
+sleep 2
+> fill {P1-16} 200 {P3-16} {P1+15} 200 {P3+15} minecraft:dirt replace minecraft:grass_block
+repeat 3
+sleep 10
+> say S5R PST12S spring
+> say S5R PST12W spring
+> fill {P1-16} 200 {P3-16} {P1+15} 200 {P3+15} minecraft:dirt replace minecraft:grass_block
+end
+# jungle pad, one tropical season
+> season set MID_SUMMER
+sleep 2
+> fill {J1-16} 200 {J3-16} {J1+15} 200 {J3+15} minecraft:dirt replace minecraft:grass_block
+repeat 3
+sleep 10
+> say S5R PST12S winter
+> fill {J1-16} 200 {J3-16} {J1+15} 200 {J3+15} minecraft:dirt replace minecraft:grass_block
+end
+# jungle pad, the opposite tropical season
+> season set MID_WINTER
+sleep 2
+> fill {J1-16} 200 {J3-16} {J1+15} 200 {J3+15} minecraft:dirt replace minecraft:grass_block
+repeat 3
+sleep 10
+> say S5R PST12W winter
+> fill {J1-16} 200 {J3-16} {J1+15} 200 {J3+15} minecraft:dirt replace minecraft:grass_block
+end
+> gamerule randomTickSpeed 3
+> season set MID_SPRING
+> pbot remove c1pj
+> pbot remove c1pp
+> forceload remove {J1-24} {J3-24} {J1+24} {J3+24}
+> forceload remove {P1-24} {P3-24} {P1+24} {P3+24}
+shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST12S 0.35 0.70; echo "exit=$?"
+shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST12W 0.35 0.70; echo "exit=$?"
+count S5R PST12[SW] (spring|winter) == 12
+reject (Unknown or incomplete command|Incorrect argument for command|Could not find)
+look grassOffPenalty = 0.5 in the toml; both pad locates report (0 blocks away) or a few blocks (the pad is in its biome at y 200); shell: PST12S (jungle mid summer) and PST12W (jungle mid winter) each "winter"/spring ratio 0.35 to 0.70 with exit=0 ("winter" in the output = the jungle runs, "spring" = the plains reference; both jungle seasons are tropical seasons, one wet and one dry in Serene Seasons' tropical mapping: if both fall in the same tropical season, note which). Plains spring mean 0 = no random ticks (bot missing)

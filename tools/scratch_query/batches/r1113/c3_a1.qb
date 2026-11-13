@@ -1,0 +1,910 @@
+# r1113 chunk 3, boot A1 of 3 on one server (then c3_a2.qb, c3_a3.qb on the same OUT). Group A superflat
+# (ground top y -61, stand at y -60), full pack.
+# Server: bash tools/scratch_query/prep_srv.sh OUT c3a1 A difficulty=normal
+#   prep_srv swaps in the build/libs jars newer than mods/ (on 2026-11-13: Common, Compat, Brewing, Calendar 11-12,
+#   Delight 11-11, Engineering, Devtools 11-10 late); NOSWAP=1 tests the installed jars instead. Every c3_* server
+#   (prep_srv, cc_only_srv, cpp_chain_srv) does the same swap. perfBot is added by prep_srv.
+# Before boot: copy tools/scratch_query/c3_probe.js, zp_probe.js, zact_probe.js into OUT/srv/kubejs/server_scripts/ as
+#   zz_c3_probe.js, zz_zp_probe.js, zz_zact_probe.js (zq is copied by prep_srv). No config edit for this boot.
+# Order matters: kjsexpect rows (SQ-BOT-01) before the first /reload; SQ-CCB-01 and SQ-DCM-02 (/reload) are last.
+# Rows written from feature_writeup/testing/scratch_queue.md 2026-11-13; ids moved since the rows were written are
+# fixed here (c3_triage.md lists them). Bots: G (farming, cooking), pg (Portal Gun flag pairs, stays online to the
+# stop: c3_a2.qb re-reads its portals), qa (gun despawn rows), qm (mirror walls), qn (Nether frame).
+# Not here: SQ-PG-01 old-jar portals (no pre-11-07 Compat jar kept), SQ-IP-04 death-and-respawn case (perfBot respawn
+#   untested), SQ-ENGM-04 Ore Excavation half (needs the client key).
+pace 1
+
+## SQ-C3A-setup | area, gamerules, bots (not a test row)
+> forceload add 1000 1000 1480 1080
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule doFireTick false
+> gamerule randomTickSpeed 0
+> time set noon
+> weather clear
+> kill @e[type=minecraft:item]
+> pbot spawn G 1000 -60 1000 minecraft:overworld survival
+> pbot spawn pg 1300 -60 1030 minecraft:overworld survival
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+> pbot spawn qm 1200 -60 1065 minecraft:overworld survival
+sleep 5
+> zc3 bstate 1000 -61 1000
+expect \[c3\] bstate 1000 -61 1000 Block\{minecraft:grass_block\}
+reject \[c3\] error
+look setup; four bots spawned; zc3 answers (probe loaded)
+
+## SQ-BOT-01 | [botany_pots] growthTicks scaled line, no scaleRecipeInt missing
+kjsexpect \[botany_pots\] growthTicks scaled on \d+ pot crops \(\d+ flowers x2, the rest x8\); pot fertilizers removed
+kjsreject scaleRecipeInt missing
+shell grep -h "\[botany_pots\]" logs/kubejs/server.log | cut -c1-200
+look count near 173 (the 11-12 pack log says 175 crops, 49 flowers)
+
+## SQ-DCM-01 | startup packs in order start with creativecommon, all Common files loaded, no ReferenceError
+shell grep -h "startup script packs in order" logs/kubejs/startup.log | cut -c1-300
+shell grep -qE "startup script packs in order: creativecommon," logs/kubejs/startup.log
+shell grep -qE "\[jar-startup\] creativecommon: ([0-9]+) of \1 files loaded" logs/kubejs/startup.log
+shell test "$(grep -cE "ReferenceError|is not defined" logs/kubejs/startup.log)" = 0
+# row text said "18 of 18": Common has 22 files since the 11-07 to 11-12 builds; the check is N of N
+
+## SQ-CMV-01 | no tested-range WARN, no Common mixin apply error, all Common startup files loaded
+bootreject outside the tested range
+bootreject Mixin apply.*creativecommon|creativecommon\.mixins\.json.*(fail|error)
+shell grep -qE "\[jar-startup\] creativecommon: ([0-9]+) of \1 files loaded" logs/kubejs/startup.log
+
+## SQ-PA-01 | [paintings] N of N modded variants built, no WARN, no Couldn't load painting
+bootexpect \[paintings\] (\d+) of \1 modded painting variants built from \d+ sources
+bootreject WARN.*\[paintings\]
+bootreject Couldn't load painting
+shell grep -h "\[paintings\]" logs/latest.log | cut -c1-250 | head -5
+look count was 445 when the row was written; another number is fine if it is N of N
+
+## SQ-BPT-01 | dedicated server: no [banner_patterns] line, no Compat mixin error
+bootreject \[banner_patterns\]
+bootreject creativecompat\.mixins\.json.*(fail|error)|Mixin apply failed.*creativecompat
+
+## SQ-T1-01 | no event errors; Gelatin and Empty Terrarium ids exist (names are a client check)
+bootreject Error occurred while handling event
+> zq item hostiledelight:refinedgelatin
+> zq item redeco:jar
+waitlog \[zq\] item redeco:jar 20
+reject \[zq\] error
+look names half (Gelatin, Empty Terrarium) needs the client lang dump: leave for a client run; this row only checks event errors and the ids
+
+## SQ-MG-22 | coffee bush on basalt removed by its tick, coffee items or nothing dropped, wheat untouched
+bootreject CoffeeBushRemovedMixin.*(fail|error|Exception)
+> fill 1000 -61 1040 1004 -61 1040 minecraft:basalt
+> setblock 1002 -60 1040 farmersrespite:coffee_bush[half=lower]
+> setblock 1002 -59 1040 farmersrespite:coffee_bush_top
+> setblock 1004 -61 1041 minecraft:farmland[moisture=7]
+> setblock 1004 -60 1041 minecraft:wheat[age=3]
+> zc3 bstate 1002 -60 1040 1002 -59 1040
+> gamerule randomTickSpeed 300
+sleep 10
+> gamerule randomTickSpeed 0
+> zc3 bstate 1002 -60 1040 1002 -59 1040 1004 -60 1041
+> zc3 items 1002 -60 1040 4
+expect bstate 1002 -60 1040 Block\{minecraft:air\}
+expect bstate 1004 -60 1041 Block\{minecraft:wheat\}
+reject bstate .*wither
+look first bstate shows the bush placed (if `coffee_bush_top` is not the upper block id, the upper half failed: the lower half is the test); items: Rustic Delight coffee items or none; no Wither Roots
+
+## SQ-MG-23 | 2 pack merges; Twigs azalea flowers turn into IW flowers; no recipe makes Twigs' item
+shell grep -qE "\[itemMerges\] 2 pack merges registered" logs/kubejs/startup.log
+bootreject IwAzaleaFlowersPlaceMixin.*(fail|error|Exception)
+> zq makes immersive_weathering:azalea_flowers
+waitlog \[zq\] makes immersive_weathering:azalea_flowers: \d+ 30
+> zq makes twigs:azalea_flowers
+waitlog \[zq\] makes twigs:azalea_flowers: 0 30
+> clear G
+> give G twigs:azalea_flowers 3
+sleep 3
+> zp inv G
+waitlog \[zp\] done 20
+expect immersive_weathering:azalea_flowers
+reject \[zp\].*twigs:azalea_flowers
+look the IW-flowers makes list holds Twigs' flowering-azalea recipes
+
+## SQ-AZW-01 | azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak
+shell grep -h "\[removedWoods\]" logs/kubejs/startup.log | cut -c1-200
+shell grep -qE "\[removedWoods\] 4 woods merged into oak" logs/kubejs/startup.log
+shell test "$(grep -c "\[item_dict\] Missing" logs/kubejs/startup.log)" = 0
+> place feature minecraft:azalea_tree 1010 -60 1060
+> place feature minecraft:azalea_tree 1020 -60 1060
+> place feature minecraft:azalea_tree 1030 -60 1060
+> setblock 1040 -61 1060 minecraft:moss_block
+> setblock 1040 -60 1060 minecraft:azalea
+> pbot hold G minecraft:bone_meal 32
+repeat 8
+> pbot use G 1040 -60 1060 up
+end
+> zq count 1005 -61 1055 1045 -40 1065 quark:azalea_log
+waitlog \[zq\] count quark:azalea_log: \d+ 60
+> zq count 1005 -61 1055 1045 -40 1065 minecraft:oak_log
+waitlog \[zq\] count minecraft:oak_log: \d+ 60
+expect \[zq\] count quark:azalea_log: [1-9]\d*
+expect \[zq\] count minecraft:oak_log: 0\b
+> clear G
+> give G quark:azalea_log 4
+sleep 2
+> zp inv G
+waitlog \[zp\] done 20
+expect quark:azalea_log
+look four trunks (three placed, one bone-mealed; the bone-meal tree may need more uses: azalea count still > 0 from the placed ones)
+
+## SQ-AZW-02 | each azalea output has a recipe; Azalea Spice Rack places and drops itself
+> zq makes quark:azalea_planks
+waitlog \[zq\] makes quark:azalea_planks: [1-9]\d* 30
+> zq makes quark:vertical_azalea_planks
+waitlog \[zq\] makes quark:vertical_azalea_planks: [1-9]\d* 30
+> zq makes everycomp:bd/quark/azalea_picture_frame
+waitlog \[zq\] makes everycomp:bd/quark/azalea_picture_frame: [1-9]\d* 30
+> zq makes creativedelight:azalea_spice_rack
+waitlog \[zq\] makes creativedelight:azalea_spice_rack: [1-9]\d* 30
+> zq makes creativedelight:azalea_tool_rack
+waitlog \[zq\] makes creativedelight:azalea_tool_rack: [1-9]\d* 30
+> zq makes creativedelight:azalea_fruit_basket
+waitlog \[zq\] makes creativedelight:azalea_fruit_basket: [1-9]\d* 30
+> zq makes railways:track_quark_azalea
+waitlog \[zq\] makes railways:track_quark_azalea: [1-9]\d* 30
+> setblock 1050 -60 1060 minecraft:stone
+> pbot hold G creativedelight:azalea_spice_rack 1
+> pbot use G 1050 -60 1060 north
+> zc3 bstate 1050 -60 1059
+> zact break 1050 -60 1059 none
+waitlog \[zact\] done 20
+expect bstate 1050 -60 1059 Block\{creativedelight:azalea_spice_rack\}
+expect \[zact\] break.*creativedelight:azalea_spice_rack x1
+look if the rack does not place on a wall face, retry is a batch fault (rack wants a floor or counter): judge from `use` result
+
+## SQ-AZW-03 | no swap oak/azalea; cutting-board strip of azalea log gives IW azalea bark
+> clear G
+> give G minecraft:oak_log 1
+> give G quark:azalea_log 1
+sleep 2
+> zp inv G
+waitlog \[zp\] done 20
+expect minecraft:oak_log
+expect quark:azalea_log
+> zq makes immersive_weathering:quark/azalea_bark
+waitlog \[zq\] makes immersive_weathering:quark/azalea_bark: \d+ 30
+expect farmersdelight:cutting.*azalea|azalea.*-> \d+ immersive_weathering:quark/azalea_bark
+look a cutting-board (farmersdelight:cutting) recipe of an azalea log lists the IW bark; bark id from item_dict (`i.bark_azalea`)
+
+## SQ-BOT-02 | pot crop growthTicks wheat 9600, poppy 2400, wild tomatoes 9600
+> zc3 pot botanypots:minecraft/crop/wheat
+> zc3 pot botanypots:minecraft/crop/poppy
+> zc3 pot botanypots:farmersdelight/crop/wild_tomatoes
+waitlog \[c3\] pot botanypots:farmersdelight/crop/wild_tomatoes 20
+expect pot botanypots:minecraft/crop/wheat: growthTicks 9600\b
+expect pot botanypots:minecraft/crop/poppy: growthTicks 2400\b
+expect pot botanypots:farmersdelight/crop/wild_tomatoes: growthTicks 9600\b
+
+## SQ-BOT-03 | bone meal fertilizer recipe gone; bone meal on a pot is not used
+> zq recipes botanypots:minecraft/fertilizer/bonemeal
+waitlog \[zq\] recipes matching botanypots:minecraft/fertilizer/bonemeal: 0 30
+> setblock 1060 -60 1060 botanypots:terracotta_botany_pot
+> pbot hold G minecraft:dirt 1
+> pbot use G 1060 -60 1060 up
+> pbot hold G minecraft:wheat_seeds 1
+> pbot use G 1060 -60 1060 up
+> data get block 1060 -60 1060
+> pbot hold G minecraft:bone_meal 5
+> pbot use G 1060 -60 1060 up
+> data get entity G SelectedItem
+expect has the following entity data: .*(Count: 5b.*minecraft:bone_meal|minecraft:bone_meal.*Count: 5b)
+> data get block 1060 -60 1060
+look pot holds dirt and wheat seeds (data get); bone-meal use did not take a bone meal (still 5) and growth time did not jump
+
+## SQ-BOT-04 | fruitsdelight:botanypots/lemon: every display phase half=lower, growthTicks 9600
+> zc3 pot fruitsdelight:botanypots/lemon
+waitlog \[c3\] pot fruitsdelight:botanypots/lemon 20
+expect pot fruitsdelight:botanypots/lemon: growthTicks 9600\b
+reject pot fruitsdelight:botanypots/lemon:.*half=upper
+look every state in display [...] carries half=lower
+
+## SQ-FCK-01 | weeds blacklisted, Rich Farmland fertile; clicks on weeds change nothing; weeds place on three soils
+> zq itemtag quark:simple_harvest_blacklisted
+> zq blocktag quark:simple_harvest_blacklisted
+> zq blocktag immersive_weathering:fertile_blocks
+waitlog \[zq\] blocktag immersive_weathering:fertile_blocks 30
+expect simple_harvest_blacklisted \(\d+\):.*immersive_weathering:weeds
+expect blocktag immersive_weathering:fertile_blocks \(\d+\):.*farmersdelight:rich_soil_farmland
+> setblock 1000 -61 1070 minecraft:farmland[moisture=7]
+> setblock 1000 -60 1070 immersive_weathering:weeds[age=7]
+> clear G
+> pbot use G 1000 -60 1070 up
+> pbot hold G minecraft:iron_hoe 1
+> pbot use G 1000 -60 1070 up
+> zc3 bstate 1000 -60 1070
+expect bstate 1000 -60 1070 Block\{immersive_weathering:weeds\}\[age=7\]
+> setblock 1002 -61 1070 farmersdelight:rich_soil_farmland
+> setblock 1004 -61 1070 farmersdelight:rich_soil
+> setblock 1006 -61 1070 immersive_weathering:mulch_block
+> pbot hold G immersive_weathering:weeds 3
+> pbot use G 1002 -61 1070 up
+> pbot use G 1004 -61 1070 up
+> pbot use G 1006 -61 1070 up
+> zc3 bstate 1002 -60 1070 1004 -60 1070 1006 -60 1070
+expect bstate 1002 -60 1070 Block\{immersive_weathering:weeds\}
+expect bstate 1004 -60 1070 Block\{immersive_weathering:weeds\}
+expect bstate 1006 -60 1070 Block\{immersive_weathering:weeds\}
+look the blacklist tag the row means may be the item or the block tag (both printed); weeds still age 7 after both clicks
+
+## SQ-FCK-02 | pack config: [dandelion_maturing] richSoilTicks = 10, fertileSoilTicks = 5 (fresh-config half: c3_ch1.qb)
+shell grep -A6 "dandelion_maturing" config/creativedelight-common.toml | grep -E "richSoilTicks|fertileSoilTicks"
+shell grep -qE "^\s*richSoilTicks = 10" config/creativedelight-common.toml && grep -qE "^\s*fertileSoilTicks = 5" config/creativedelight-common.toml
+
+## SQ-FCK-03 | copper pot on a lit campfire cooks bone broth from bone + glow lichen
+> setblock 1010 -60 1080 minecraft:campfire[lit=true]
+> setblock 1010 -59 1080 miners_delight:copper_pot
+> data merge block 1010 -59 1080 {Inventory:{Items:[{Slot:0b,id:"minecraft:bone",Count:1b},{Slot:1b,id:"minecraft:glow_lichen",Count:1b},{Slot:5b,id:"minecraft:bowl",Count:2b}]}}
+> data get block 1010 -59 1080
+sleep 20
+> data get block 1010 -59 1080
+expect farmersdelight:bone_broth
+look the second data get shows bone broth in the meal or output slot (row says x2: one bone and one lichen make one cook; judge the count against the recipe yield). If the first data get shows the items under another key than Inventory.Items, the merge missed: BATCH-FAULT
+
+## SQ-FCK-04 | canned oatmeal: two recipes (6 oatmeal; 3 oatmeal + sugar), none with salt or bone broth
+> zq rdetail canned_oatmeal
+waitlog \[zq\] rdetail matching canned_oatmeal: \d+ 30
+> zq makes creativedelight:canned_oatmeal
+waitlog \[zq\] makes creativedelight:canned_oatmeal: \d+ 30
+reject rdetail .*canned_oatmeal.*(salt|bone_broth)
+look two crafting recipes (plain and `_sugar`); id is creativedelight:canned_oatmeal since 11-09 (row said creativeengineering:)
+
+## SQ-FCK-05 | peanut crop age 7: magic peanut about 10 in 20000 rolls, never over 30
+> setblock 1012 -61 1070 minecraft:farmland[moisture=7]
+> setblock 1012 -60 1070 vintagedelight:peanut_crop[age=7]
+> zc3 loot 1012 -60 1070 none 20000
+waitlog \[c3\] loot .* rolls 20000: 300
+expect rolls 20000: .*vintagedelight:magic_peanut x([1-9]|[12]\d|30)\b
+look magic peanut about 10 (0.05 %)
+
+## SQ-FCK-06 | 3 rich soil -> 1 mulch block, id fertile_soil_from_rich_soil_manual_only
+> zq makes immersive_weathering:mulch_block
+waitlog \[zq\] makes immersive_weathering:mulch_block: \d+ 30
+expect fertile_soil_from_rich_soil_manual_only -> 1 immersive_weathering:mulch_block
+> zq rdetail fertile_soil_from_rich_soil_manual_only
+waitlog \[zq\] rdetail matching fertile_soil_from_rich_soil_manual_only: 1 30
+look the inputs are 3 farmersdelight:rich_soil, shapeless (id creativeengineering:shapeless/..., written by Engineering's sawdust.js)
+
+## SQ-FCK-09 | feast cans: each has one recipe (feast block item + empty can); [cans] registered N
+shell grep -h "\[cans\] registered" logs/kubejs/startup.log | cut -c1-200
+> zq makes creativedelight:canned_pizza
+waitlog \[zq\] makes creativedelight:canned_pizza: 1 30
+> zq makes creativedelight:canned_stuffed_bell_peppers
+waitlog \[zq\] makes creativedelight:canned_stuffed_bell_peppers: 1 30
+> zq rdetail creativedelight:shapeless/canned_
+waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_: \d+ 60
+look N (307 in the 11-12 pack log) up by 36 from the run before A12; in the rdetail list, each of the 21 feasts of plan A12 (briefs/cans_canning.md #17: Brewin' pizza, stuffed cantaloupe, dragon meat stew, grilled shulker, steamed dragon egg, rice roll medley, fake meatloaf, glazed arachnid limbs, stuffed squid, guardian soup, three bell pepper medleys, rice roll royale, lasagna pan, stuffed bell peppers, vegan pizza, cheese and meat pizza) has one recipe taking its feast block item + an empty can. Can ids are creativedelight: since 11-09
+
+## SQ-FCK-10 | #fruitsdelight:pineapple_grows_on holds the farmland soils; pineapple places on all three
+> zq blocktag fruitsdelight:pineapple_grows_on
+waitlog \[zq\] blocktag fruitsdelight:pineapple_grows_on 30
+expect pineapple_grows_on \(\d+\):.*minecraft:farmland
+expect pineapple_grows_on \(\d+\):.*farmersdelight:rich_soil_farmland
+expect pineapple_grows_on \(\d+\):.*immersive_weathering:mulch_block
+> setblock 1020 -61 1070 minecraft:farmland[moisture=7]
+> setblock 1022 -61 1070 farmersdelight:rich_soil_farmland[moisture=7]
+> setblock 1024 -61 1070 immersive_weathering:mulch_block
+> pbot hold G fruitsdelight:pineapple_sapling 3
+> pbot use G 1020 -61 1070 up
+> pbot use G 1022 -61 1070 up
+> pbot use G 1024 -61 1070 up
+> zc3 bstate 1020 -60 1070 1022 -60 1070 1024 -60 1070
+reject bstate 10(20|22|24) -60 1070 Block\{minecraft:air\}
+look each soil holds the pineapple plant (block id fruitsdelight:pineapple...)
+
+## SQ-FCK-11 | Just a Well: a watering can fill drains the well, then it refills
+> setblock 1030 -60 1080 well:well
+sleep 30
+> data get block 1030 -60 1080
+> pbot hold G hearthandharvest:iron_watering_can 1
+> pbot use G 1030 -60 1080 north
+> zc3 aim G 0 30
+> zq useitem G
+> data get block 1030 -60 1080
+> zp inv G
+sleep 60
+> data get block 1030 -60 1080
+look Amount (fluid tank) falls by what the can took after the use, then rises after 60 s; if the well starts empty (no rain, superflat) the row is BATCH-FAULT: fill it with `data merge` first (key shown by the first data get). Can id is hearthandharvest:iron_watering_can (H&H port)
+
+## SQ-FCK-12 | sheared full beehive drops 6 honeycomb; honeycombMultiplier = 2
+shell grep -A4 "^\[bees\]" config/creativecommon-common.toml | grep honeycombMultiplier
+shell grep -qE "^\s*honeycombMultiplier = 2" config/creativecommon-common.toml
+> setblock 1040 -60 1080 minecraft:beehive[honey_level=5,facing=north]
+> pbot hold G minecraft:shears 1
+> pbot use G 1040 -60 1080 north
+sleep 1
+> zc3 items 1040 -60 1080 3
+expect \[c3\] items 1040 -60 1080: .*minecraft:honeycomb x6\b
+
+## SQ-FCK-13 | dispenser shears a full nest: 6 honeycomb, then 3 with the multiplier at 1 (read live)
+> setblock 1050 -60 1080 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:shears",Count:1b}]}
+> setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
+> setblock 1050 -60 1081 minecraft:redstone_block
+sleep 1
+> setblock 1050 -60 1081 minecraft:air
+sleep 1
+> zc3 items 1051 -60 1080 3
+expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x6\b
+shell sed -i 's/^\(\s*honeycombMultiplier = \)2/\11/' config/creativecommon-common.toml && grep honeycombMultiplier config/creativecommon-common.toml
+sleep 5
+> setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
+> setblock 1050 -60 1081 minecraft:redstone_block
+sleep 1
+> setblock 1050 -60 1081 minecraft:air
+sleep 1
+> zc3 items 1051 -60 1080 3
+expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x3\b
+shell sed -i 's/^\(\s*honeycombMultiplier = \)1/\12/' config/creativecommon-common.toml && grep honeycombMultiplier config/creativecommon-common.toml
+look second pulse x3 after the toml edit (Forge's file watcher reloads it); x6 again means the value is not read live
+
+## SQ-FCK-14 | water bucket on dry soil soaks the 3x3 to 7, ring stays 0, bucket comes back empty
+> fill 1018 -61 1018 1022 -61 1022 minecraft:farmland[moisture=0]
+> pbot hold G minecraft:water_bucket 1
+> pbot use G 1020 -61 1020 up
+> zc3 bstate 1019 -61 1019 1021 -61 1021 1020 -61 1020 1018 -61 1018 1022 -61 1020
+expect bstate 1019 -61 1019 Block\{minecraft:farmland\}\[moisture=7\]
+expect bstate 1021 -61 1021 Block\{minecraft:farmland\}\[moisture=7\]
+expect bstate 1020 -61 1020 Block\{minecraft:farmland\}\[moisture=7\]
+expect bstate 1018 -61 1018 Block\{minecraft:farmland\}\[moisture=0\]
+expect bstate 1022 -61 1020 Block\{minecraft:farmland\}\[moisture=0\]
+> zp inv G
+waitlog \[zp\] done 20
+expect minecraft:bucket
+> fill 1028 -61 1018 1032 -61 1022 farmersdelight:rich_soil_farmland[moisture=0]
+> pbot hold G minecraft:water_bucket 1
+> pbot use G 1030 -61 1020 up
+> fill 1038 -61 1018 1042 -61 1022 immersive_weathering:mulch_block[moisture=0]
+> pbot hold G minecraft:water_bucket 1
+> pbot use G 1040 -61 1020 up
+> zc3 bstate 1029 -61 1019 1028 -61 1018 1039 -61 1019 1038 -61 1018
+expect bstate 1029 -61 1019 .*moisture=7
+expect bstate 1028 -61 1018 .*moisture=0
+expect bstate 1039 -61 1019 .*moisture=7
+expect bstate 1038 -61 1018 .*moisture=0
+
+## SQ-FCK-15 | water bottle soaks one dry block; no change on moist soil; bucket on ripe wheat soaks, wheat stays 7
+> fill 1018 -61 1028 1022 -61 1028 minecraft:farmland[moisture=0]
+> item replace entity G weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}
+> pbot use G 1020 -61 1028 up
+> zc3 bstate 1020 -61 1028 1019 -61 1028
+expect bstate 1020 -61 1028 Block\{minecraft:farmland\}\[moisture=7\]
+expect bstate 1019 -61 1028 Block\{minecraft:farmland\}\[moisture=0\]
+> zp inv G
+waitlog \[zp\] done 20
+expect minecraft:glass_bottle
+> setblock 1024 -61 1028 minecraft:farmland[moisture=7]
+> item replace entity G weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}
+> pbot use G 1024 -61 1028 up
+> zp inv G
+waitlog \[zp\] done 20
+> fill 1018 -61 1032 1022 -61 1036 minecraft:farmland[moisture=0]
+> setblock 1020 -60 1034 minecraft:wheat[age=7]
+> pbot hold G minecraft:water_bucket 1
+> pbot use G 1020 -60 1034 up
+> zc3 bstate 1020 -60 1034 1019 -61 1033 1021 -61 1035
+expect bstate 1020 -60 1034 Block\{minecraft:wheat\}\[age=7\]
+expect bstate 1019 -61 1033 .*moisture=7
+expect bstate 1021 -61 1035 .*moisture=7
+look moist-soil bottle: the bot still holds the water bottle (no soak; the drink would follow on a client)
+
+## SQ-FCK-16 | sneaking bucket use: moisture unchanged by the click, water placed above as vanilla
+> fill 1028 -61 1032 1028 -61 1032 minecraft:farmland[moisture=0]
+> pbot spawn W 1028.5 -60 1032.5 minecraft:overworld survival
+sleep 2
+> pbot hold W minecraft:water_bucket 1
+> zp sneak W on
+> pbot use W 1028 -61 1032 up
+> zc3 bstate 1028 -61 1032
+expect bstate 1028 -61 1032 Block\{minecraft:farmland\}\[moisture=0\]
+> zc3 aim W 0 90
+> zq useitem W
+> zc3 bstate 1028 -60 1032
+> zp sneak W off
+> pbot remove W
+look `pbot use` result PASS (no soak); after the air use the block above the soil is minecraft:water (vanilla bucket path). If useitem misses (bot looking elsewhere), only the first half is judged
+
+## SQ-FCK-17 | tea seeds place on farmland, rich farmland, mulch; a full tea bush on farmland stays
+> setblock 1040 -61 1030 minecraft:farmland[moisture=7]
+> setblock 1042 -61 1030 farmersdelight:rich_soil_farmland[moisture=7]
+> setblock 1044 -61 1030 immersive_weathering:mulch_block
+> pbot hold G farmersrespite:tea_seeds 3
+> pbot use G 1040 -61 1030 up
+> pbot use G 1042 -61 1030 up
+> pbot use G 1044 -61 1030 up
+> zc3 bstate 1040 -60 1030 1042 -60 1030 1044 -60 1030
+expect bstate 1040 -60 1030 Block\{farmersrespite:small_tea_bush\}
+expect bstate 1042 -60 1030 Block\{farmersrespite:small_tea_bush\}
+expect bstate 1044 -60 1030 Block\{farmersrespite:small_tea_bush\}
+> setblock 1046 -61 1030 minecraft:farmland[moisture=7]
+> setblock 1046 -60 1030 farmersrespite:tea_bush[half=lower,age=2]
+> setblock 1046 -59 1030 farmersrespite:tea_bush[half=upper,age=2]
+> setblock 1047 -60 1030 minecraft:stone
+> setblock 1047 -60 1030 minecraft:air
+> zc3 bstate 1046 -60 1030 1046 -59 1030
+expect bstate 1046 -60 1030 Block\{farmersrespite:tea_bush\}
+look if tea_bush has no age=2 the setblock fails (log says so): BATCH-FAULT, rerun with the default state
+
+## SQ-FCK-18 | corn top click harvests from the bottom; hoe harvests a 3x3 of ripe corn
+> setblock 1050 -61 1040 minecraft:farmland[moisture=7]
+> setblock 1050 -60 1040 corn_delight:corn_crop[age=7,upper=false]
+> setblock 1050 -59 1040 corn_delight:corn_crop[age=7,upper=true]
+> clear G
+> pbot use G 1050 -59 1040 north
+> zc3 bstate 1050 -60 1040 1050 -59 1040
+expect bstate 1050 -60 1040 Block\{corn_delight:corn_crop\}\[age=0,upper=false\]
+expect bstate 1050 -59 1040 Block\{minecraft:air\}
+> zc3 items 1050 -60 1040 3
+expect items 1050 -60 1040: .*corn_delight:corn
+> fill 1054 -61 1044 1056 -61 1046 minecraft:farmland[moisture=7]
+> fill 1054 -60 1044 1056 -60 1046 corn_delight:corn_crop[age=7,upper=false]
+> fill 1054 -59 1044 1056 -59 1046 corn_delight:corn_crop[age=7,upper=true]
+> pbot hold G minecraft:iron_hoe 1
+> pbot use G 1055 -59 1045 north
+> zq ages 1054 -60 1044 1056 -60 1046 corn_delight:corn_crop
+waitlog \[zq\] ages corn_delight:corn_crop: \d+ 30
+> zq count 1054 -59 1044 1056 -59 1046 corn_delight:corn_crop
+waitlog \[zq\] count corn_delight:corn_crop: \d+ 30
+expect ages corn_delight:corn_crop: 9 blocks, mean 0\.00
+expect count corn_delight:corn_crop: 0\b
+look the hoe click replants all nine (lower halves age 0, no top halves); tag is creativedelight:crops/harvest_from_bottom since 11-09 (row said creativeengineering:)
+
+## SQ-FCB-09 | broken stocked cookware keeps its contents in BlockEntityTag; only the bottle drops loose
+> setblock 1060 -60 1030 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:6b,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+> zact break 1060 -60 1030 none
+waitlog \[zact\] done 20
+> execute positioned 1060 -60 1030 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+> execute positioned 1060 -60 1030 run data get entity @e[type=minecraft:item,limit=1,sort=furthest,distance=..3] Item
+> setblock 1062 -60 1030 miners_delight:copper_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:bone",Count:1b},{Slot:5b,id:"minecraft:glass_bottle",Count:1b}]}}
+> zact break 1062 -60 1030 none
+waitlog \[zact\] done 20
+> setblock 1064 -60 1030 farmersrespite:kettle{Inventory:{Items:[{Slot:0b,id:"farmersrespite:green_tea_leaves",Count:2b}]}}
+> data get block 1064 -60 1030
+> zact break 1064 -60 1030 none
+waitlog \[zact\] done 20
+> execute positioned 1064 -60 1030 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+> zc3 items 1062 -60 1030 6
+shell grep -A3 "^\[qol\]" config/creativedelight-common.toml | head -5; grep -n "cookwareKeepContents" config/creativedelight-common.toml
+look each break drops one cookware item whose tag holds BlockEntityTag.Inventory with the stocked slots (pot 0-8, copper 0-6, kettle 0-4 plus CETankLevel when the tank had fluid); the bottle drops loose. The remainder-buffer bottle and the place-back, sneak pickup and creative-break halves are not driven here (no client placement of an NBT item by perfBot is checked): judge the break half only; `[qol] cookwareKeepContents = false` (upstream drops) is left to CQ-FCB-05 / a later row
+
+## SQ-FCB-10 | sneaking skillet use on a stone wall hangs it; stone above gives a standing skillet; drops keep NBT
+> fill 1070 -60 1030 1072 -58 1030 minecraft:air
+> setblock 1070 -60 1031 minecraft:stone
+> item replace entity G weapon.mainhand with farmersdelight:skillet{display:{Name:'{"text":"PanC3"}'},Enchantments:[{id:"minecraft:sharpness",lvl:2s}]}
+> zp sneak G on
+> pbot use G 1070 -60 1031 north
+> zc3 bstate 1070 -60 1030
+expect bstate 1070 -60 1030 Block\{farmersdelight:hanging_skillet\}\[facing=north\]
+> data get block 1070 -60 1030
+> setblock 1072 -60 1031 minecraft:stone
+> setblock 1072 -59 1030 minecraft:stone
+> item replace entity G weapon.mainhand with farmersdelight:skillet{display:{Name:'{"text":"PanC3"}'},Enchantments:[{id:"minecraft:sharpness",lvl:2s}]}
+> pbot use G 1072 -60 1031 north
+> zc3 bstate 1072 -60 1030
+> zp sneak G off
+> zact break 1070 -60 1030 none
+waitlog \[zact\] done 20
+expect break.*farmersdelight:skillet x1
+> setblock 1070 -60 1030 minecraft:air
+> setblock 1074 -60 1031 minecraft:stone
+> setblock 1074 -60 1030 farmersdelight:hanging_skillet[facing=north]
+> setblock 1074 -60 1031 minecraft:air
+sleep 1
+> zc3 items 1074 -60 1030 3
+expect items 1074 -60 1030: .*farmersdelight:skillet x1
+reject block entity.*(warn|error)|Skipping BlockEntity
+look the stone-above case (1072) holds a standing farmersdelight:skillet, not a hung one; the broken hung skillet keeps PanC3 and Sharpness II (zact break sums ids only: check with `data get entity` on the drop if it matters); hanging_skillet is registered under farmersdelight: by Creative Delight's FD member
+
+## SQ-T1-03 | create:cutting/diced_potatoes gone; no barrier input on any More Delight dish
+> zq recipes create:cutting/diced_potatoes
+waitlog \[zq\] recipes matching create:cutting/diced_potatoes: 0 30
+> zq uses creativedelight:sliced_sweet_potato
+waitlog \[zq\] uses creativedelight:sliced_sweet_potato: 30
+> zq rdetail moredelight:
+waitlog \[zq\] rdetail matching moredelight:: \d+ 60
+reject minecraft:barrier
+look `#forge:sliced_potatoes` = Creative Delight sliced sweet potato and Rustic potato slices; the uses list holds the dishes that took the merged diced potatoes
+
+## SQ-T1-04 | gold component recipes accept #forge:ingots/gold etc.; gold-only recipes keep the literal gold item
+> zq blocktag forge:plates/gold
+> zq itemtag forge:plates/gold
+> zq itemtag forge:wires/gold
+waitlog \[zq\] itemtag forge:wires/gold 30
+> zq uses mca:rose_gold_ingot
+waitlog \[zq\] uses mca:rose_gold_ingot: 60
+expect (shared|alone) minecraft:clock$
+expect (shared|alone) minecraft:powered_rail$
+expect (shared|alone) [a-z_]+:.*mechanical_crafter
+reject (shared|alone) minecraft:(gold_block|golden_pickaxe|golden_apple)$
+reject (shared|alone) .*gold_bars$
+> zq uses vintageimprovements:rose_gold_sheet
+waitlog \[zq\] uses vintageimprovements:rose_gold_sheet: 60
+expect (shared|alone) creativeengineering:shaped/component_gold$|component_gold
+look mechanical crafter is create:mechanical_crafter (row said creativeengineering:); the component_gold craft takes the gold plate or wire tag (rose gold sheet accepted)
+
+## SQ-MG-24 | flax items unused and unmade; rope only from 3 string, sack only wheat + string; no flax seeds in two chest tables
+> zq uses supplementaries:flax
+waitlog \[zq\] uses supplementaries:flax: 0 alone, 0 with other items 30
+> zq uses supplementaries:flax_seeds
+waitlog \[zq\] uses supplementaries:flax_seeds: 0 alone, 0 with other items 30
+> zq uses supplementaries:flax_block
+waitlog \[zq\] uses supplementaries:flax_block: 0 alone, 0 with other items 30
+> zq makes supplementaries:flax_block
+waitlog \[zq\] makes supplementaries:flax_block: 0 30
+> zq makes supplementaries:rope
+waitlog \[zq\] makes supplementaries:rope: \d+ 30
+> zq makes supplementaries:sack
+waitlog \[zq\] makes supplementaries:sack: \d+ 30
+> zq rdetail supplementaries:rope
+waitlog \[zq\] rdetail matching supplementaries:rope: \d+ 30
+> zq rdetail supplementaries:sack
+waitlog \[zq\] rdetail matching supplementaries:sack: \d+ 30
+repeat 20
+> loot spawn 1080 -60 1000 loot minecraft:chests/pillager_outpost
+> loot spawn 1080 -60 1000 loot underground_bunkers:chests/underground_bunker/underground_bunker_treasure
+end
+sleep 1
+> zc3 items 1080 -60 1000 3
+waitlog \[c3\] items 1080 -60 1000 20
+reject items 1080 -60 1000: .*supplementaries:flax
+look rope: one recipe, 3 string; sack: one recipe, wheat + string. If the bunker table id is unknown (`loot spawn` error), only the outpost half counts
+
+## SQ-PG-02 | Portal Gun dye recipe: columns, mixing, kept NBT, no output for the bad grids
+> zc3 craft G minecraft:blue_dye|portalgun:portal_gun|-|-|-|-|-|-|-
+waitlog \[c3\] craft 20
+expect craft: recipe .* -> 1 portalgun:portal_gun nbt .*CustomPortalColors:\{blue:
+> zc3 craft G -|portalgun:portal_gun|minecraft:red_dye|-|-|-|-|-|-
+expect craft: recipe .* -> 1 portalgun:portal_gun nbt .*CustomPortalColors:\{orange:
+> zc3 craft G -|portalgun:portal_gun|-|-|minecraft:lime_dye|-|-|-|-
+expect craft: recipe .* nbt .*CustomPortalColors:\{.*blue:.*orange:|CustomPortalColors:\{.*orange:.*blue:
+> zc3 craft G minecraft:red_dye|portalgun:portal_gun|-|minecraft:yellow_dye|-|-|-|-|-
+> zc3 craft G minecraft:white_dye|portalgun:portal_gun{CustomPortalColors:{blue:255}}|-|-|-|-|-|-|-
+> zc3 craft G minecraft:blue_dye|portalgun:portal_gun{Damage:5,display:{Name:'{"text":"GunC3"}'}}|-|-|-|-|-|-|-
+expect nbt .*GunC3
+> zc3 craft G portalgun:portal_gun|portalgun:portal_gun|minecraft:blue_dye|-|-|-|-|-|-
+> zc3 craft G portalgun:portal_gun|minecraft:blue_dye|minecraft:stick|-|-|-|-|-|-
+> zc3 craft G portalgun:portal_gun|-|-|-|-|-|-|-|-
+count craft: no recipe >= 3
+reject \[c3\] error
+look red+yellow left: blue = an orange-ish average, not either dye; white on a gun with blue 255: a mix with the old colour, not pure white; the renamed damaged gun keeps Name and Damage; the last three grids print `no recipe` (row cells: three trailing grids). Lime under the gun sets both
+
+## SQ-PG-01a | flag on gun portal pairs: false where the partner is on a wall, true where it is on the floor (boot 1 half)
+> fill 1290 -60 1040 1310 -50 1040 minecraft:stone
+> clear pg
+> give pg portalgun:portal_gun 1
+sleep 1
+> zc3 aim pg -20 0
+> zc3 shoot pg blue
+sleep 2
+> zc3 aim pg 20 0
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 2
+look wall-to-wall pair: both portal lines show adjustPositionAfterTeleport false (the key name is printed as found)
+> zc3 aim pg 0 60
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+> save-all flush
+look wall-to-floor: the wall portal (partner on the floor) true, the floor portal (partner on a wall) false; normal on the floor portal is (0,1,0). The pair stays: c3_a2.qb reads it after the restart. If `shoot` fails (raytrace from the bot's eye misses), aim pitch/yaw is the batch fault
+
+## SQ-IP-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
+bootreject (IPFireGateMixin|IPMirrorGlassMixin|IPPortalRenderLimitsMixin|IPPortalFogMixin|IPPortalRenderingAccessor|PortalGunHeartbeatMixin|PortalGunPortalInvoker|PortalGunRendererOpaqueMixin).*(fail|error|Exception)
+shell grep -nE "^\[immersive_portals\]|^\[portalgun\]" config/creativecompat-common.toml
+shell grep -qE "^\[portalgun\]" config/creativecompat-common.toml
+> fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
+> fill 1201 -59 1000 1202 -57 1000 minecraft:air
+> fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
+> fill 1211 -59 1000 1212 -57 1000 minecraft:air
+> fill 1220 -60 1000 1223 -56 1000 minecraft:obsidian
+> fill 1221 -59 1000 1222 -57 1000 minecraft:air
+> fill 1230 -60 1000 1233 -56 1000 minecraft:obsidian
+> fill 1231 -59 1000 1232 -57 1000 minecraft:air
+> fill 1240 -60 1000 1242 -57 1000 minecraft:obsidian
+> fill 1241 -59 1000 1241 -58 1000 minecraft:air
+> clear qa
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1201 -60 1000 up
+sleep 2
+> setblock 1211 -59 1001 minecraft:stone
+> setblock 1211 -59 999 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:fire_charge",Count:1b}]}
+> setblock 1211 -59 998 minecraft:redstone_block
+sleep 3
+> gamerule doFireTick true
+> summon minecraft:lightning_bolt 1221 -59 1000
+sleep 3
+> gamerule doFireTick false
+> zp sneak qa on
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1231 -60 1000 up
+> zp sneak qa off
+sleep 2
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1241 -60 1000 up
+sleep 2
+> zc3 bstate 1200 -60 1000 1201 -59 1000 1210 -60 1000 1211 -59 1000 1220 -60 1000 1221 -59 1000 1230 -60 1000 1231 -59 1000 1240 -60 1000 1241 -59 1000 1241 -58 1000
+> execute if entity @e[type=imm_ptl_core:nether_portal_new]
+reject Test passed
+reject bstate .*minecraft:nether_portal
+count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
+count bstate 12[0-4]0 -60 1000 Block\{minecraft:crying_obsidian\} >= 4
+look frames 1200 (flint), 1210 (dispenser fire charge), 1220 (lightning: may light nothing if the bolt's fire needs doFireTick and difficulty normal at that tick), 1230 (sneak flint), 1240 (small 1x2 frame: the row's "2x3 inside" is read as Smaller Nether Portals' smallest, inner 1x2): each frame corner crying obsidian with soul fire inside (bstate lines), no nether_portal blocks, no IP portal entity
+
+## SQ-IP-02 | Dark Fire: IP portal entity pair in a valid frame (Overworld and Nether), frame stays obsidian, L frame does not light
+> fill 1200 -60 1020 1203 -56 1020 minecraft:obsidian
+> fill 1201 -59 1020 1202 -57 1020 minecraft:air
+> fill 1210 -60 1020 1213 -60 1020 minecraft:obsidian
+> fill 1210 -59 1020 1210 -56 1020 minecraft:obsidian
+> pbot hold qa creativemagic:flint_and_terrasteel 1
+> pbot use qa 1201 -60 1020 up
+sleep 5
+> pbot hold qa creativemagic:flint_and_terrasteel 1
+> pbot use qa 1211 -60 1020 up
+sleep 2
+> execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1201,y=-58,z=1020,distance=..4]
+> execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1211,y=-58,z=1020,distance=..3]
+> execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new]
+> zc3 bstate 1200 -60 1020 1201 -59 1020
+expect bstate 1200 -60 1020 Block\{minecraft:obsidian\}
+reject bstate 1201 -59 1020 Block\{minecraft:nether_portal\}
+> execute in minecraft:the_nether run forceload add 0 0 32 32
+sleep 20
+> execute in minecraft:the_nether run fill -2 99 -3 6 99 3 minecraft:obsidian
+> execute in minecraft:the_nether run fill -2 100 -3 6 106 3 minecraft:air
+> execute in minecraft:the_nether run fill 0 100 0 3 104 0 minecraft:obsidian
+> execute in minecraft:the_nether run fill 1 101 0 2 103 0 minecraft:air
+> pbot spawn qn 1.5 100 -2.5 minecraft:the_nether survival
+sleep 3
+> pbot hold qn creativemagic:flint_and_terrasteel 1
+> pbot use qn 1 100 0 up
+sleep 5
+> execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new,x=1,y=102,z=0,distance=..4]
+> pbot remove qn
+look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-IP-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the bstate first
+
+## SQ-IP-03 | flint and steel on a 3x3 wall of each mirror-glass block and pane: a breakable mirror on each; breaking a block removes it
+> clear qm
+> pbot hold qm minecraft:flint_and_steel 1
+> fill 1200 -60 1075 1202 -58 1075 alexsmobs:rainbow_glass
+> pbot use qm 1201 -59 1075 north
+> fill 1205 -60 1075 1207 -58 1075 createframed:horizontal_tinted_framed_glass
+> pbot use qm 1206 -59 1075 north
+> fill 1210 -60 1075 1212 -58 1075 createframed:tinted_framed_glass
+> pbot use qm 1211 -59 1075 north
+> fill 1215 -60 1075 1217 -58 1075 createframed:tinted_tiled_glass
+> pbot use qm 1216 -59 1075 north
+> fill 1220 -60 1075 1222 -58 1075 createframed:vertical_tinted_framed_glass
+> pbot use qm 1221 -59 1075 north
+> fill 1225 -60 1075 1227 -58 1075 design_decor:horizontal_tinted_framed_glass
+> pbot use qm 1226 -59 1075 north
+> fill 1230 -60 1075 1232 -58 1075 design_decor:tinted_framed_glass
+> pbot use qm 1231 -59 1075 north
+> fill 1235 -60 1075 1237 -58 1075 design_decor:vertical_tinted_framed_glass
+> pbot use qm 1236 -59 1075 north
+> fill 1240 -60 1075 1242 -58 1075 immersive_weathering:frosty_glass
+> zp sneak qm on
+> pbot use qm 1241 -59 1075 north
+> zp sneak qm off
+> fill 1245 -60 1075 1247 -58 1075 minecraft:tinted_glass
+> pbot use qm 1246 -59 1075 north
+> fill 1250 -60 1075 1252 -58 1075 quark:black_framed_glass
+> pbot use qm 1251 -59 1075 north
+> fill 1255 -60 1075 1257 -58 1075 quark:blue_framed_glass
+> pbot use qm 1256 -59 1075 north
+> fill 1260 -60 1075 1262 -58 1075 quark:brown_framed_glass
+> pbot use qm 1261 -59 1075 north
+> fill 1265 -60 1075 1267 -58 1075 quark:cyan_framed_glass
+> pbot use qm 1266 -59 1075 north
+> fill 1270 -60 1075 1272 -58 1075 quark:dirty_glass
+> pbot use qm 1271 -59 1075 north
+> fill 1275 -60 1075 1277 -58 1075 quark:framed_glass
+> pbot use qm 1276 -59 1075 north
+> fill 1280 -60 1075 1282 -58 1075 quark:gray_framed_glass
+> pbot use qm 1281 -59 1075 north
+> fill 1285 -60 1075 1287 -58 1075 quark:green_framed_glass
+> pbot use qm 1286 -59 1075 north
+> fill 1290 -60 1075 1292 -58 1075 quark:light_blue_framed_glass
+> pbot use qm 1291 -59 1075 north
+> fill 1295 -60 1075 1297 -58 1075 quark:light_gray_framed_glass
+> pbot use qm 1296 -59 1075 north
+> fill 1300 -60 1075 1302 -58 1075 quark:lime_framed_glass
+> pbot use qm 1301 -59 1075 north
+> fill 1305 -60 1075 1307 -58 1075 quark:magenta_framed_glass
+> pbot use qm 1306 -59 1075 north
+> fill 1310 -60 1075 1312 -58 1075 quark:orange_framed_glass
+> pbot use qm 1311 -59 1075 north
+> fill 1315 -60 1075 1317 -58 1075 quark:pink_framed_glass
+> pbot use qm 1316 -59 1075 north
+> fill 1320 -60 1075 1322 -58 1075 quark:purple_framed_glass
+> pbot use qm 1321 -59 1075 north
+> fill 1325 -60 1075 1327 -58 1075 quark:red_framed_glass
+> pbot use qm 1326 -59 1075 north
+> fill 1330 -60 1075 1332 -58 1075 quark:white_framed_glass
+> pbot use qm 1331 -59 1075 north
+> fill 1335 -60 1075 1337 -58 1075 quark:yellow_framed_glass
+> pbot use qm 1336 -59 1075 north
+> fill 1340 -60 1075 1342 -58 1075 securitycraft:reinforced_tinted_glass
+> pbot use qm 1341 -59 1075 north
+> fill 1345 -60 1075 1347 -58 1075 createframed:horizontal_tinted_framed_glass_pane
+> pbot use qm 1346 -59 1075 north
+> fill 1350 -60 1075 1352 -58 1075 createframed:tinted_framed_glass_pane
+> pbot use qm 1351 -59 1075 north
+> fill 1355 -60 1075 1357 -58 1075 createframed:tinted_tiled_glass_pane
+> pbot use qm 1356 -59 1075 north
+> fill 1360 -60 1075 1362 -58 1075 createframed:vertical_tinted_framed_glass_pane
+> pbot use qm 1361 -59 1075 north
+> fill 1365 -60 1075 1367 -58 1075 immersive_weathering:frosty_glass_pane
+> zp sneak qm on
+> pbot use qm 1366 -59 1075 north
+> zp sneak qm off
+> fill 1370 -60 1075 1372 -58 1075 quark:black_framed_glass_pane
+> pbot use qm 1371 -59 1075 north
+> fill 1375 -60 1075 1377 -58 1075 quark:blue_framed_glass_pane
+> pbot use qm 1376 -59 1075 north
+> fill 1380 -60 1075 1382 -58 1075 quark:brown_framed_glass_pane
+> pbot use qm 1381 -59 1075 north
+> fill 1385 -60 1075 1387 -58 1075 quark:cyan_framed_glass_pane
+> pbot use qm 1386 -59 1075 north
+> fill 1390 -60 1075 1392 -58 1075 quark:dirty_glass_pane
+> pbot use qm 1391 -59 1075 north
+> fill 1395 -60 1075 1397 -58 1075 quark:framed_glass_pane
+> pbot use qm 1396 -59 1075 north
+> fill 1400 -60 1075 1402 -58 1075 quark:gray_framed_glass_pane
+> pbot use qm 1401 -59 1075 north
+> fill 1405 -60 1075 1407 -58 1075 quark:green_framed_glass_pane
+> pbot use qm 1406 -59 1075 north
+> fill 1410 -60 1075 1412 -58 1075 quark:light_blue_framed_glass_pane
+> pbot use qm 1411 -59 1075 north
+> fill 1415 -60 1075 1417 -58 1075 quark:light_gray_framed_glass_pane
+> pbot use qm 1416 -59 1075 north
+> fill 1420 -60 1075 1422 -58 1075 quark:lime_framed_glass_pane
+> pbot use qm 1421 -59 1075 north
+> fill 1425 -60 1075 1427 -58 1075 quark:magenta_framed_glass_pane
+> pbot use qm 1426 -59 1075 north
+> fill 1430 -60 1075 1432 -58 1075 quark:orange_framed_glass_pane
+> pbot use qm 1431 -59 1075 north
+> fill 1435 -60 1075 1437 -58 1075 quark:pink_framed_glass_pane
+> pbot use qm 1436 -59 1075 north
+> fill 1440 -60 1075 1442 -58 1075 quark:purple_framed_glass_pane
+> pbot use qm 1441 -59 1075 north
+> fill 1445 -60 1075 1447 -58 1075 quark:red_framed_glass_pane
+> pbot use qm 1446 -59 1075 north
+> fill 1450 -60 1075 1452 -58 1075 quark:white_framed_glass_pane
+> pbot use qm 1451 -59 1075 north
+> fill 1455 -60 1075 1457 -58 1075 quark:yellow_framed_glass_pane
+> pbot use qm 1456 -59 1075 north
+sleep 3
+> execute if entity @e[type=imm_ptl_core:breakable_mirror]
+expect Test passed, count: 52\b
+> setblock 1201 -60 1075 minecraft:air
+sleep 3
+> execute if entity @e[type=imm_ptl_core:breakable_mirror]
+expect Test passed, count: 51\b
+look 52 walls (29 #creativecompat:mirror_glass, 23 _panes, x 1200 to 1455 at z 1075, frosty glass and pane used sneaking); a count under 52: find which wall has none with `execute positioned <x+1> -59 1075 if entity @e[type=imm_ptl_core:breakable_mirror,distance=..3]`; flint and steel has 64 uses (52 needed)
+
+## SQ-IP-04 | gun portals go on logout and on dimension change; a new shot places a fresh pair
+> fill 1340 -60 1040 1360 -50 1040 minecraft:stone
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> pbot remove qa
+sleep 3
+> zc3 portals
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> execute in minecraft:the_nether run tp qa 20 110 20
+sleep 4
+> zc3 portals
+> execute in minecraft:overworld run tp qa 1350 -60 1030 0 0
+sleep 4
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+look `portals:` sequence 4, 2 (after logout), 4, 2 (after the Nether tp), 4 (pg's pair from SQ-PG-01a is the steady 2). The death-and-respawn case is not driven (perfBot respawn untested): leave for a client or a later row
+
+## SQ-IP-05 | despawn at distance: stays at 120, gone within a beat at 140; 2 s beat; despawnDistance 0 never; offline owner at load (boot 2)
+> zc3 portals
+> tp qa 1470 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+shell sed -i 's/^\(\s*heartbeatSeconds = \)[0-9]*/\12/' config/creativecompat-common.toml && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 4
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+shell sed -i 's/^\(\s*despawnDistance = \)[0-9]*/\10/' config/creativecompat-common.toml && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+> tp qa 1650 -60 1030
+sleep 12
+> zc3 portals
+shell sed -i 's/^\(\s*despawnDistance = \)[0-9]*/\1128/; s/^\(\s*heartbeatSeconds = \)[0-9]*/\110/' config/creativecompat-common.toml && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> fill -10 -60 10 10 -50 10 minecraft:stone
+> tp qa 0 -60 0 0 0
+sleep 3
+> zc3 aim qa -20 0
+> zc3 shoot qa blue
+sleep 2
+> zc3 aim qa 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> save-all flush
+look portals: 4 at the start (qa + pg), 4 after 12 s at 120 blocks, 2 after 12 s at 140; with the 2 s beat 4 then 2 within 4 s; with despawnDistance 0, 4 after 12 s at 300 blocks; last line: qa's spawn-chunk pair (x 0, z 10) plus pg's pair. qa stays online to the stop; c3_a2.qb checks the offline-owner half. If the toml edits are not picked up live (Forge watcher), the 2 s and 0 cases read like the 10 s / 128 case: note it, not a mod FAIL
+
+## SQ-PA-02 | 60 vanilla painting files in the scratch kubejs; no second built line and no painting error after /reload
+shell ls kubejs/data/creativecompat/paintings/minecraft | wc -l
+shell test "$(ls kubejs/data/creativecompat/paintings/minecraft | wc -l)" = 60
+> reload
+waitlog Reloading!|reload 60
+sleep 20
+reject \[paintings\] .*modded painting variants built
+reject Couldn't load painting
+look path moved: kubejs/data/creativecompat/paintings/minecraft (row said creativeengineering); no `[paintings] ... built` line in this row's segment (cached)
+
+## SQ-CCB-01 | [jeiOrder] defined once; jei tags as before; a node tag lists its members; no creativecommon:jei/ tag
+shell grep -nE "jeiOrder|jei_order|fluid_jei" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-200 | head -12
+shell test "$(grep -c "\[jeiOrder\] defined" logs/kubejs/startup.log)" = 1
+> zq itemtag creativecompat:jei/equipment/chainmail
+waitlog \[zq\] itemtag creativecompat:jei/equipment/chainmail \(\d+\) 30
+expect itemtag creativecompat:jei/equipment/chainmail \([1-9]\d*\)
+> zq itemtag creativecommon:jei/equipment/chainmail
+waitlog \[zq\] itemtag creativecommon:jei/equipment/chainmail \(\d+\) 30
+expect itemtag creativecommon:jei/equipment/chainmail \(0\)
+look `[jeiOrder] defined N nodes` once (43 in the 11-12 pack log); `item: N jei tags` (35). Tag copper had 0 members in the 11-10 dump, so the row uses chainmail (6). The /reload of SQ-PA-02 has run before this row
+
+## SQ-DCM-02 | after /reload: no new KubeJS errors, recipe count equal to the pack dump, [absent mods] only for mods not installed
+shell grep -cE "\[ERROR\]" logs/kubejs/server.log
+shell test "$(grep -cE "\[ERROR\]" logs/kubejs/server.log)" = 0
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort | uniq | cut -c1-120 | head -40
+> dumprecipes
+sleep 45
+shell wc -l < kubejs/exported/recipes/all.csv; wc -l < $INST/kubejs/exported/recipes/all.csv
+look recipe count of the scratch dump equals the pack's (32057 lines on 11-10; the pack dump may be older than the jars: a small difference with a newer jar is not a FAIL, list it). The row's "no [absent mods] line" no longer holds: since 11-08 the pack dropped structure and other mods, so each `[absent mods] ... absent <mod>` must name a mod not in srv/mods (check: `grep -l '"<mod>"' srv/mods/*` none); a mod that is installed is the G5 false skip

@@ -1,0 +1,8 @@
+# r1112 SQ-RP boot 3: world ladder.json broken (comma removed) before the boot.
+pace 2
+
+## SQ-RP-04 | broken ladder file: loud error, built-in ladder, server runs
+bootexpect DIET LADDER FILE IS BROKEN OR MISSING
+bootreject Diet ladder: 38 rungs
+> solrp pause list
+expect rpb|paused

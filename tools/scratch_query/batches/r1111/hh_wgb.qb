@@ -1,0 +1,49 @@
+pace 1
+
+## SQ-HH-304 | sum of the two `countset hearthandharvest:wild_hops` lines at least 1
+# setup/shell: prep_srv.sh OUT hhwb B
+> locate biome minecraft:forest
+waitlog (is at \[|Could not find) 300
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {P1-128} {P3-128} {P1+127} {P3+127}
+sleep 90
+> zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:wild_hops
+> execute positioned 2144 70 -2592 run locate biome minecraft:forest
+waitlog (is at \[|Could not find) 300
+capture Q is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}
+sleep 90
+> zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:wild_hops
+look sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
+
+## SQ-HH-307 | sum over the 8 colours at least 8 (rate 1/5 per chunk over 64 plains c
+> locate biome minecraft:plains
+waitlog (is at \[|Could not find) 300
+capture R is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {R1-64} {R3-64} {R1+63} {R3+63}
+sleep 90
+> zhh2 countset {R1-64} 50 {R3-64} {R1+63} 100 {R3+63} hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum
+look sum over the 8 colours at least 8 (rate 1/5 per chunk over 64 plains chunks, about 12 patches; HNH-06 first half)
+
+## SQ-HH-314 | `four_leaf_clover: [1-9]`, `white_clover: [1-9]`, `pink_clover: [1-9]`
+> locate biome minecraft:flower_forest
+waitlog (is at \[|Could not find) 300
+capture F is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {F1-128} {F3-128} {F1+127} {F3+127}
+sleep 90
+> zhh2 countset {F1-128} 40 {F3-128} {F1+127} 120 {F3+127} hearthandharvest:four_leaf_clover,buzzier_bees:white_clover,buzzier_bees:pink_clover
+look `four_leaf_clover: [1-9]`, `white_clover: [1-9]`, `pink_clover: [1-9]` (rate 1/48 each over 256 chunks, about 5 patches each; J28, J29)
+
+## SQ-HH-328 | `locate` line: the output names corn maze coordinates (J39 and J40: gr
+> locate structure hearthandharvest:corn_maze
+waitlog (is at \[|Could not find) 300
+> execute positioned 2144 70 -2592 run locate structure hearthandharvest:corn_maze
+waitlog (is at \[|Could not find) 300
+capture M is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+sleep 90
+> zq under {M1} {M3} 2 corn_maze
+> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest
+> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+look `locate` line: the output names corn maze coordinates (J39 and J40: group `remote`, about 1 per 72x72 chunks of plains, so a 100-chunk search may need the second origin); `corn_crop` above 100, `oak_fence: 16`, a chest with table `hearthandharvest:chests/corn_maze_center`; `under` reports no large air gaps under the built base. HNH-22 maze half; the Lilliput Lane half is not built (J43, needs a substitution table), no row
+

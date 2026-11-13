@@ -1,0 +1,29 @@
+# r1113 chunk 3, boot A2: the same OUT and level c3a1 as c3_a1.qb, restarted. Group A superflat, full pack.
+# Before boot (server stopped after c3_a1.qb, no game JVM up), from the instance root, OUT = c3_a1's OUT:
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml portalgun heartbeatSeconds 60
+#     (SQ-PG-01b must read the pair before the first beat removes the portals of the now-offline owners)
+#   python3 tools/scratch_query/painting_test_zip.py OUT/srv/pa_test.zip
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml paintings extraSources '["pa_test.zip", "no_such.zip"]'
+# Probes: as c3_a1 (already in OUT/srv/kubejs/server_scripts). No bots online at boot (pg and qa were online at the stop).
+pace 1
+
+## SQ-PG-01b | after the restart the saved gun portals keep the flag (read before the first beat)
+> forceload add 1000 1000 1480 1080
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: [1-9]
+look the pg pair at x 1290-1310 z 1040 shows the same adjust values as the last SQ-PG-01a read (wall portal true, floor portal false); qa's spawn pair near x 0 z 10 also listed. Old-jar portals: not available (no pre-11-07 Compat jar kept), not judged
+
+## SQ-IP-05b | portals whose owner is offline at load go on their first beat (heartbeatSeconds 60 for this boot)
+sleep 70
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 0\b
+look all saved pairs (pg's and qa's spawn-chunk pair) gone after one 60 s beat with both owners offline
+
+## SQ-PA-03 | extraSources: art for toomanypaintings:afternoon from pa_test.zip; WARN for no_such.zip; still N of N built
+shell grep -n "extraSources" config/creativecompat-common.toml; ls -l pa_test.zip
+bootexpect \[paintings\] art for toomanypaintings:afternoon from pa_test\.zip \(over toomanypaintings
+bootexpect \[paintings\] extraSources no_such\.zip: no such file or folder
+bootexpect \[paintings\] (\d+) of \1 modded painting variants built
+look WARN text is "extraSources no_such.zip: no such file or folder (<path>)" in the current jar (row text without the path)

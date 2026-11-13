@@ -1,0 +1,278 @@
+# r1113 chunk 2, rerun of boot c2a1's batch faults (verdicts: perf/runs/r1113/verdicts/c2a1.md). Fresh boot, same setup
+# as c2_a1.qb: World group A (superflat creative; ground top y -61, stand at -60). Level name: fixc2a1.
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT fixc2a1 A spawn-animals=true
+#   cp $INST/tools/scratch_query/c2_probe.js  OUT/srv/kubejs/server_scripts/zz_c2_probe.js    (/zc2)
+#   cp $INST/tools/scratch_query/zp_probe.js  OUT/srv/kubejs/server_scripts/zz_zp_probe.js    (/zp)
+#   cp $INST/tools/scratch_query/zact_probe.js OUT/srv/kubejs/server_scripts/zz_zact_probe.js (/zact)
+#   (zq is copied by prep_srv.sh). No config edits. perfBot jar comes with prep_srv.sh (bot c2b).
+# Fixes: PJL-04 per-jar queries (prefix query hit the 40/80 cut); CFS-02b oven gets a cookable input (CfB burns fuel
+#   only while shouldConsumeFuel(): processing slots hold something); STN-02k kettle rigged (FR slots: 0-1 ingredients,
+#   2 drink display, 3 container, 4 output); STN-03 salt is vintagedelight:salt_dust (#forge:salt has only it, salt:salt
+#   matched nothing) and the pickle recipe is creativedelight:pickling/pickle_from_fermenting; STN-06 pace 0 so the watch
+#   starts before the 10-tick pull, sleep instead of a waitlog that matched the previous run's "watch done"; CBW-02
+#   beef (carrot has no cutting recipe); BBQW-02 2 beef + cabbage off hand (raw_beef_skewer: 2x beef, side 2x cabbage);
+#   BBQW-03 oak tray id is barbequesdelight:tray; ROLL-11 / BBQ2-05 control eat (bread, nutrition 5) and effect clear
+#   before every eat (c2a1: every eat gave 4 more food than the item's nutrition, effects carried over, Raspberry Pie
+#   diet Speed 800t); ROLL-12b live check of the roll medley cans; BBQ2-03 exact ids past the 80 cut; BBQ2-06 filet cut.
+pace 1
+
+## SQ-C2-00 | setup: area, gamerules, bot (not a test row)
+> forceload add 296 290 360 380
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule doWeatherCycle false
+> gamerule randomTickSpeed 3
+> time set noon
+> weather clear
+> pbot spawn c2b 300 -60 296 minecraft:overworld survival
+sleep 3
+> clear c2b
+> zp inv c2b
+waitlog \[zp\] done 20
+reject \[zc2\] error|\[zp\] error
+
+## SQ-PJL-04 | Create filling / emptying of each jam jar and jello, one query per id
+> zq recipes createfilling/ancient_fruit_jam_jar
+> zq recipes createemptying/ancient_fruit_jam_jar
+> zq recipes createfilling/ancient_fruit_jello
+> zq recipes createfilling/banana_jam_jar
+> zq recipes createemptying/banana_jam_jar
+> zq recipes createfilling/banana_jello
+> zq recipes createfilling/cherry_jam_jar
+> zq recipes createemptying/cherry_jam_jar
+> zq recipes createfilling/cherry_jello
+> zq recipes createfilling/green_grape_jam_jar
+> zq recipes createemptying/green_grape_jam_jar
+> zq recipes createfilling/green_grape_jello
+> zq recipes createfilling/mulberry_jam_jar
+> zq recipes createemptying/mulberry_jam_jar
+> zq recipes createfilling/mulberry_jello
+> zq recipes createfilling/pepper_jam_jar
+> zq recipes createemptying/pepper_jam_jar
+> zq recipes createfilling/pepper_jello
+> zq recipes createfilling/raspberry_jam_jar
+> zq recipes createemptying/raspberry_jam_jar
+> zq recipes createfilling/raspberry_jello
+> zq recipes createfilling/red_grape_jam_jar
+> zq recipes createemptying/red_grape_jam_jar
+> zq recipes createfilling/red_grape_jello
+> zq recipes createfilling/salmonberry_jam_jar
+> zq recipes createemptying/salmonberry_jam_jar
+> zq recipes createfilling/salmonberry_jello
+> zq recipes createfilling/strawberry_jam_jar
+> zq recipes createemptying/strawberry_jam_jar
+> zq recipes createfilling/strawberry_jello
+waitlog recipes matching createfilling/strawberry_jello 30
+count creativedelight:createfilling/[a-z_]+_jam_jar -> >= 10
+count creativedelight:createemptying/[a-z_]+_jam_jar -> >= 10
+count creativedelight:createfilling/[a-z_]+_jello -> >= 10
+look one creativedelight: line per jar and per jello (sliceanddice: copies may add lines; count only creativedelight:). Compacting was judged in c2a1 (9 jam blocks, 10 jello blocks). Mixing heat: zq prints no heat field; jams.js 167-168 passes 'heated'
+
+## SQ-CFS-02b | real fuel: a hopper with coal into the side of an oven that has a raw potato to cook lights it
+> setblock 316 -60 310 cookingforblockheads:oven[facing=north]{ItemHandler:{Items:[{Slot:0,id:"minecraft:potato",Count:3b}]}}
+sleep 2
+> zc2 state 316 -60 310
+> setblock 317 -60 310 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:coal",Count:1b}]}
+sleep 3
+> zc2 state 316 -60 310
+> zc2 inv 316 -60 310
+> zc2 inv 317 -60 310
+waitlog \[zc2\] inv 317 -60 310 20
+expect \[zc2\] state 316 -60 310: .*lit=false
+expect \[zc2\] state 316 -60 310: .*lit=true
+look first state lit=false (potato, no fuel), second lit=true with BurnTime > 0 and the coal gone from the hopper; if the coal sits in slot 3 with BurnTime 0, read the potato's place (processing slots) before calling FAIL
+
+## SQ-STN-02k | kettle: output then leftover leave through a hopper below; container and ingredient stay
+> setblock 308 -59 330 farmersrespite:kettle{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:3,id:"minecraft:glass_bottle",Count:2b},{Slot:4,id:"farmersrespite:green_tea",Count:2b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}}
+> zc2 inv 308 -59 330
+> setblock 308 -60 330 minecraft:hopper[facing=down]
+sleep 12
+> zc2 inv 308 -59 330
+> zc2 inv 308 -60 330
+waitlog \[zc2\] inv 308 -60 330 20
+expect \[zc2\] inv 308 -60 330: .*farmersrespite:green_tea
+expect \[zc2\] inv 308 -60 330: .*minecraft:bucket
+look first kettle read shows the buffer bucket (else the ForgeCaps NBT did not load: judge outputs only); after 12 s the kettle still holds 0:2 carrot and 3:2 glass_bottle, slot 4 and the buffer empty
+
+## SQ-STN-03 | Pickling Jar progress restarts when the recipe changes; kimchi only after its full time
+> zq rdetail pickle_from_fermenting
+> zq rdetail kimchi_from_onion
+> setblock 300 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:cucumber",Count:1b},{Slot:1,id:"vintagedelight:cucumber",Count:1b},{Slot:2,id:"vintagedelight:cucumber",Count:1b},{Slot:3,id:"vintagedelight:cucumber",Count:1b},{Slot:4,id:"vintagedelight:cucumber",Count:1b},{Slot:5,id:"vintagedelight:salt_dust",Count:1b}]}}
+sleep 70
+> zc2 inv 300 -60 340
+> data merge block 300 -60 340 {inventory:{Items:[{Slot:0,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:1,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:2,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:3,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:4,id:"vintagedelight:salt_dust",Count:1b},{Slot:5,id:"farmersdelight:onion",Count:1b}]}}
+sleep 1
+> zc2 inv 300 -60 340
+sleep 100
+> zc2 inv 300 -60 340
+sleep 21
+> zc2 inv 300 -60 340
+reject \[zc2\] error
+look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if not, BATCH-FAULT again: rerun with them) and its time; kimchi_from_onion 4 cabbage leaves + salt + onion. (2) read at 70 s: progress about 1400 (not 0). (3) 1 s after the swap: under 40. (4) at about 2000 ticks after the swap: no kimchi in slot 7. (5) at about 2420: 4 kimchi in slot 7
+
+## SQ-STN-06 | FD pot plates from the remainder buffer: one bowl, five bowls, a bottle that never moves
+> setblock 304 -60 340 minecraft:campfire[lit=true]
+> setblock 306 -60 340 minecraft:campfire[lit=true]
+> setblock 308 -60 342 minecraft:campfire[lit=true]
+pace 0
+> setblock 304 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:1b}]}}}
+> zc2 watch 304 -59 340 40 2
+pace 1
+sleep 4
+pace 0
+> setblock 306 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:5b}]}}}
+> zc2 watch 306 -59 340 40 2
+pace 1
+sleep 4
+pace 0
+> setblock 308 -59 342 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:glass_bottle",Count:1b}]}}}
+> zc2 watch 308 -59 342 40 2
+pace 1
+sleep 4
+reject \[zc2\] (watch )?error
+look three watch series (t=0..40, the pots at x 304, 306, 308): one bowl: in the buffer about 10 ticks, then slot 7 about 10 ticks, then slot 8 holds 1 soup. Five bowls: 3 reach slot 7, 2 stay in the buffer, 3 soups plated. Bottle: never leaves the buffer, soup stays in slot 6. If t=0 already shows the end state, the console still lagged: judge on end states (c2a1 already showed them) and mark the timing half for a client CQ
+
+## SQ-CBW-02 | oak and crimson boards cut raw beef with a knife, drop themselves with or without an axe
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> pbot hold c2b minecraft:beef 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b minecraft:beef 1
+> pbot use c2b 302 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 302 -60 360
+sleep 2
+> zc2 inv 300 -60 360
+> zc2 inv 302 -60 360
+> kill @e[type=minecraft:item,x=296,y=-62,z=356,dx=10,dy=6,dz=8]
+> zact break 300 -60 360 none
+> zact break 302 -60 360 minecraft:iron_axe
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> zact break 300 -60 360 minecraft:iron_axe
+> zact break 302 -60 360 none
+expect \[zc2\] inv 300 -60 360: .*Inventory\[\]
+expect \[zc2\] inv 302 -60 360: .*Inventory\[\]
+look the beef left both boards after the knife use (Inventory[]), the kill line removed the cut result items (minced beef, farmersdelight:cutting/beef); each zact break sums 1 of its own board (c2a1 already passed the drops)
+> clear c2b
+
+## SQ-BBQW-02 | skewering on a warped basin (2 beef, stick, cabbage in the off hand)
+> setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
+> zc2 inv 302 -60 370
+> pbot hold c2b minecraft:stick 1
+> item replace entity c2b weapon.offhand with farmersdelight:cabbage 2
+> zc2 useat c2b 302 -60 370 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 302 -60 370
+> zp inv c2b
+waitlog \[zp\] done 20
+expect \[zp\] inv c2b: .*barbequesdelight:raw_beef_skewer
+look first basin inv shows 0:2 minecraft:beef; after the use the well is empty, the raw beef skewer in the inventory, cabbage off hand used
+> clear c2b
+
+## SQ-BBQW-02s | stick use on a basin well with one beef (no recipe): does the stick vanish (c2a1: main went empty, no skewer, no drop)
+> setblock 304 -60 372 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:1b}]}}
+> pbot hold c2b minecraft:stick 1
+> zc2 useat c2b 304 -60 372 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 304 -60 372
+> zp inv c2b
+waitlog \[zp\] done 20
+> zact break 304 -60 372 none
+look if the stick is neither in the bot's inventory, the basin (Items) nor the break drops, it is lost: report it as an item-loss finding (not part of BBQW-02's pass line)
+> clear c2b
+
+## SQ-BBQW-03 | mixed-wood trays stack (support=true on the upper two); removing the base block drops the whole stack
+> setblock 310 -60 370 minecraft:oak_planks
+> setblock 310 -59 370 barbequesdelight:spruce_tray[facing=north]
+> zp sneak c2b on
+> pbot hold c2b barbequesdelight:tray 1
+> pbot use c2b 310 -59 370 up
+> pbot hold c2b barbequesdelight:birch_tray 1
+> pbot use c2b 310 -58 370 up
+> zp sneak c2b off
+sleep 1
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+> setblock 310 -60 370 minecraft:air
+sleep 2
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+expect \[zc2\] state 310 -58 370: .*barbequesdelight:tray\}.*support=true
+expect \[zc2\] state 310 -57 370: .*birch_tray.*support=true
+look first three states: spruce support=false, oak (barbequesdelight:tray) and birch support=true; after the plank goes all three air and the last kill line says "Killed 3". If the birch use placed at -58 again (the oak use PASSed without placing), BATCH-FAULT: place by hand in a client
+> clear c2b
+
+## SQ-ROLL-11 | golden roll +20, slice +10 hunger; not eaten at full hunger; control eat measures any hunger offset
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b minecraft:bread 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll_slice 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 4
+> pbot hold c2b roll_delight:golden_roll 1
+> zp eat c2b
+> zp hunger c2b 20
+> pbot hold c2b roll_delight:golden_roll 1
+> zq useitem c2b
+waitlog useitem c2b 20
+expect \[zp\] eat c2b 1 minecraft:bread: .*food 5,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll_slice: .*food 10,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll: .*food 20,
+look bread from 0 must read food 5: if it reads 9, the +4 is a pack-wide eat bonus (find its source before judging the rolls) and the slice's 14 is that, not a roll value. Effects: Nourishment 2400t on both is the comfort_nourishment golden rule (120 s), not a fault; useitem at full hunger FAIL/PASS (not eaten)
+> effect clear c2b
+> clear c2b
+
+## SQ-ROLL-12b | live check of the roll medley cans (c2a1 list was cut at 80; 11-10 dump and can_types.json have them)
+> zq recipes canned_legendary_roll_medley
+> zq recipes canned_mythical_roll_medley
+> zq recipes canned_rice_roll
+waitlog recipes matching canned_rice_roll 20
+look a line for creativedelight:shapeless/canned_legendary_roll_medley or canned_mythical_roll_medley confirms the ROLL-12 FAIL (ROLL-27: no can for any roll, slice or medley); canned_rice_roll_medley / royale are FD's, note them
+
+## SQ-BBQ2-03 | the six dump skewer ids not seen live in c2a1 (past the 80 cut)
+> zq recipes creativedelight:campfirecooking/grilled_pork_sausage_skewer_from_campfire
+> zq recipes creativedelight:grilling/grilled_rabbit_skewer
+> zq recipes creativedelight:skewering/raw_chicken_skewer
+> zq recipes creativedelight:smelting/grilled_vegetable_skewer_from_smelting
+> zq recipes creativedelight:smoking/grilled_salmon_skewer_from_smoking
+> zq recipes creativedelight:smoking/grilled_vegetable_skewer_from_smoking
+waitlog recipes matching creativedelight:smoking/grilled_vegetable_skewer_from_smoking 20
+count recipes matching creativedelight:\S+: 1$ == 6
+
+## SQ-BBQ2-05 | kebab wrap, kebab sandwich, bibimbap hunger, no skewer effects (effects cleared before each eat)
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_wrap 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_sandwich 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:bibimbap 1
+> zp eat c2b
+waitlog \[zp\] eat c2b 1 barbequesdelight:bibimbap 20
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_wrap: .*food 12,
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_sandwich: .*food 18,
+expect \[zp\] eat c2b 1 barbequesdelight:bibimbap: .*food 18,
+look effects: only an ambient Raspberry Pie diet effect (800t, e.g. Speed after enough foods) may show; any other effect the food gave is a FAIL. Hunger: subtract the offset ROLL-11's bread showed (if any)
+> effect clear c2b
+> clear c2b
+
+## SQ-BBQ2-06 | the Shulker Mollusk cuts to 2 filets
+> zq rdetail shulker_filet
+waitlog rdetail matching shulker_filet 20
+look a cutting recipe (endersdelight:cutting/shulker_filet or a CD copy) with input endersdelight:shulker_mollusk and 2 endersdelight:shulker_filet (rdetail+ results)

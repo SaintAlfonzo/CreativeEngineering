@@ -1,0 +1,13 @@
+// solRaspberryPie: Spice of Life: Raspberry Pie Addition (mod id solraspberrypie), feature_writeup/raspberry_pie.md.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// libs/ (git-ignored): copy solapplepie-1.19.2-2.2.0.jar and jei-1.19.2-forge-11.8.1.1034.jar from the pack's mods/.
+plugins {
+    id 'ce.forge-mod-refmap'
+}
+
+dependencies {
+    // Spice of Life: Apple Pie Edition 2.2.0 exactly: accessors and mixins on its private members (section 13.5).
+    compileOnly fg.deobf('local:solapplepie-1.19.2:2.2.0')
+    // JEI: the inventory widget's exclusion area. Optional; the plugin class is only loaded by JEI.
+    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+}

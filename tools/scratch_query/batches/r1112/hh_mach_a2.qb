@@ -1,0 +1,32 @@
+# r1112 group A boot 2: restart of the hh_mach_a.qb world (same OUT, do not re-prep). Between boots (server stopped):
+#   qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaves false
+#   qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen cornMaze false
+#   cp $INST/tools/scratch_query/hh_mw_probe.js OUT/srv/kubejs/server_scripts/zz_hh2.js   (fresh copy, gotchas.md)
+# SQ-HH-320 needs saltCaves FALSE (the row tests the off switches; SaltCaveFeature.place returns false first when off).
+pace 1
+
+## SQ-HH-274 | basin group persists across a restart (SETUP-HH-274 built it in boot 1)
+sleep 30
+> pbot spawn hb1 8 -60 8 minecraft:overworld survival
+sleep 4
+> zhh2 basin 208 -60 208
+> zhh2 basin 209 -60 209
+> data get block 208 -60 208 MultiblockRole
+> data get block 208 -60 208 FluidCapacity
+expect basin 208 -60 208: role controller
+expect basin 209 -60 209: role member, controller 208 -60 208
+look MultiblockRole "controller"; FluidCapacity 32000 (restored in load())
+
+## SQ-HH-320 | salt cave and corn maze refused with their config switches off
+shell grep -E "saltCaves|cornMaze" config/hearthandharvest-common.toml
+> forceload add 4592 80 4624 112
+> forceload add 4352 4352 4447 4447
+sleep 20
+> fill 4592 -16 80 4624 0 112 minecraft:stone
+> fill 4592 1 80 4624 16 112 minecraft:stone
+> place feature hearthandharvest:salt_cave 4608 0 96
+> place structure hearthandharvest:corn_maze 4400 -60 4400
+> zhh2 countset 4592 -16 80 4624 16 112 minecraft:cave_air
+expect Failed to place feature
+reject [Pp]laced feature
+look shell shows saltCaves = false, cornMaze = false; `Failed to place structure` (or the generic failure) for the maze; cave_air 0 in the box

@@ -1,0 +1,106 @@
+# r1112 group B (prep with spawn-animals=true: false removes summoned animals, SQ-OB-09 r1112 first pass): corrected reruns of r1111 bw batch faults (verdicts bw.md). World: fresh NORMAL world, seed 8675309,
+# structures on (prep_srv.sh group B defaults), same world as r1111 bw, so the Heap is again at -10 108 -2 in the Nether.
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT bw12 B
+#   cp $INST/tools/scratch_query/zq_heapcol.js OUT/srv/kubejs/server_scripts/zz_zq_heapcol.js   (new probe, /zqh)
+#   (zq is copied by prep_srv.sh; no hh probe needed)
+# Left out: SQ-OB-06 (row-text fault: row says husk 75 %, -12 says 33 %; r1111 log already shows 6 kernels, cob 75 %,
+# husk 33 %: rejudge only), SQ-OB-02 (client row), SQ-OB-03 (row-text fault, tag is hearthandharvest:farmers_hats).
+pace 1
+
+## SQ-VH-06 | Heap floor and ceiling flesh per surface inside the Heap biome only; bedrock at 0 and 127
+> execute in minecraft:the_nether run locate biome biomesoplenty:visceral_heap
+waitlog (is at \[|Could not find) 120
+capture H is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {H1-48} {H3-48} {H1+48} {H3+48}
+sleep 60
+> execute in minecraft:the_nether if block {H1} 0 {H3} minecraft:bedrock
+> execute in minecraft:the_nether if block {H1} 127 {H3} minecraft:bedrock
+> zqh biomesoplenty:visceral_heap {H1-48} {H3-48} {H1+48} {H3+48} minecraft:the_nether
+waitlog \[zqh\] done 180
+> zqh minecraft:crimson_forest {H1-48} {H3-48} {H1+48} {H3+48} minecraft:the_nether 1 126 minecraft:crimson_nylium
+sleep 10
+> execute in minecraft:the_nether run forceload remove {H1-48} {H3-48} {H1+48} {H3+48}
+count Test passed >= 2
+reject \[zqh\] error
+look locate at -10 108 -2 (same seed); both bedrock Test passed; Heap floor and ceiling lines: flesh the top id of both, flesh (plus porous_flesh) at least 80 % of the Heap surfaces, the rest named; "on bedrock" floor count noted with the band line (judge against the band line: where on the floor the flesh sits on bedrock); "0 columns" = Heap not on any surface in the box: widen the box or move the centre. The crimson_forest line is a control (nylium expected on floors; if 0 surfaces, ignore)
+
+## SQ-OB-04 | fruit pies and a Rustic cheesecake take 3 fruit; filling cans unchanged (one narrow query per pie)
+> zq rdetail creativedelight:baking/apple_pie
+> zq rdetail creativedelight:baking/pumpkin_pie
+> zq rdetail creativedelight:baking/sweet_berry_cheesecake
+> zq rdetail creativedelight:baking/grape_pie
+> zq rdetail creativedelight:baking/syrup_cheesecake
+> zq rdetail canned_apple_pie_filling_pot
+> zq rdetail canned_pumpkin_pie_filling_pot
+> zq rdetail canned_sweet_berry_pie_filling_pot
+expect baking/apple_pie \{\S+\} -> 1 apple_pie <- farmersdelight:pie_crust
+expect baking/grape_pie \{\S+\} -> 1 grape_pie <- farmersdelight:pie_crust
+expect baking/syrup_cheesecake \{\S+\} -> 1 syrup_cheesecake <- farmersdelight:pie_crust
+look each pie and the cheesecake: crust + 3 of its fruit + 2 sweet (pumpkin_pie: 3 pumpkin slices, grape: 3 grapes, syrup cheesecake: 3 syrup); the _from_filling recipes are crust + can; the three canned_*_pie_filling_pot recipes keep 3 fruit + 2 sweet + empty can (unchanged)
+
+## SQ-OB-09 | no killer rabbit babies (25 pairs spaced 6 apart, cramming off, births counted by tag)
+shell grep chanceBabyRabbitIsKiller config/breedablekillerrabbit.json5; true
+> gamerule maxEntityCramming 0
+> gamerule doMobSpawning false
+> forceload add 31 31 61 61
+sleep 5
+> fill 31 120 31 61 124 61 minecraft:glass hollow
+> summon minecraft:rabbit 34 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+sleep 30
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,tag=r1112a]
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,tag=!r1112a]
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,nbt={RabbitType:99}]
+> kill @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30]
+> gamerule maxEntityCramming 24
+> forceload remove 31 31 61 61
+look config 0.0; first count 50 (no adult died); second (babies) Test passed with count at least 15; RabbitType 99 Test failed

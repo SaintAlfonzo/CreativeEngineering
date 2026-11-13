@@ -30,11 +30,17 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 
 ## Boot
 
+- Never pipe `scratch_server.sh boot` into `tail`/`head`: the server child keeps the pipe open and the command hangs
+  until the JVM exits (r1111, twice). Boot with `> OUT/boot.out 2>&1 < /dev/null &`, then `wait_boot.sh` under
+  `timeout 590`.
 - About 60 to 100 s to `Done (`. Wait on `[ -f logs/latest.log ] && grep 'Done (' logs/latest.log`; console.log still
   holds the previous boot until the JVM truncates it.
 - Known third-party boot flakes, just reboot: ConcurrentModificationException in Create's
   ArmInteractionPointType.register (Crafts & Additions), SecurityCraft ConfigHandler.loadEffects ArrayList race.
 - After an FML crash the JVM stays alive: kill its pid (yours only).
+- A new own jar's `versionRange` on a third-party mod must use that jar's reported version, often
+  `<mc>-<ver>` (`${file.jarVersion}` from the manifest): Raspberry Pie's `[2.2.0]` against Apple Pie's
+  `1.19.2-2.2.0` failed mod loading (r1112). Read the dependency's `Implementation-Version` before trusting a range.
 - "Address already in use": a previous scratch JVM still alive with cwd "srv (deleted)" after srv/ was rebuilt; match
   `readlink /proc/PID/cwd` against your scratchpad, kill -9.
 - Boot-to-boot time spread is about 9 s: compare means of 3+ boots for A/B timing (`bench_boot.sh`).
@@ -47,6 +53,12 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   reported as "startup script syntax errors"). Report both to the owner as found in the installed jars / pack.
 
 ## Driving the server
+
+- A fresh world can start in rain: rain-fed blocks (Hearth and Harvest troughs) fill with water and then refuse items.
+  `weather clear` does not stop it at once (the rain level fades over several seconds): wait about 20 s, then place
+  (r1112, SQ-HH-223, -233).
+- A bot within about 2 blocks picks up item entities and XP orbs, creative mode included: stand it 6+ blocks off when a
+  row counts items on the ground or orbs (r1112, SQ-HH-461, -1529).
 
 - Commands go through the stdin fifo (`scratch_server.sh cmd`); console is op, positioned at world spawn.
   `cmd`/`stop` time out after 10 s with "server not reading" when no JVM reads the fifo.
@@ -83,6 +95,14 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Forge FakePlayer from KubeJS: `FakePlayerFactory.get` + `p.gameMode.useItemOn(...)` / `destroyBlock` / `useItem`;
   menus open (check `containerMenu`). FakePlayer does not tick, so `startUsingItem` never completes: eat with
   `finishUsingItem` + `ForgeEventFactory.onItemUseFinish` (`tools/kitchen_probe/serve_items_probe.js`).
+- Loading Protection (`protectionDuration = 150` in the pack) cancels every `LivingAttackEvent` whose attacker is a
+  player in the first 150 s after that player logs in, bots included: a row that spawns a bot and hits with it does
+  nothing ("hit result false"). Set `qrun.py toml OUT/srv/config/loadingprotection-common.toml <section>
+  protectionDuration 1` before the boot, or hit with a non-player source (r1111 SQ-HH-424, -425, -453).
+- Rhino picks `Entity.distanceToSqr(Vec3)` (`m_20238_`) for a 3-number call and throws: compute the distance from
+  `getX/getY/getZ` (r1111 `hh_crow_probe.js`). A goal's `String(goal)` is `Class@hash`; use
+  `getClass().getSimpleName()`. A probe that samples running goals misses a flee that ends during a `sleep` before
+  the watch: start the watch right after the summon.
 - Client: `eval_client.py` hard-links the instance `mods/`, so a jar only in build/libs is not in the client. A
   scratch world goes into the client with `sp_world.py` (allowCommands on). `qrun.py client` types chat via xdotool.
 
@@ -325,3 +345,32 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - NBT dumps do not sort keys (`{id: ..., Count: 1b}`), and floats print in full (0.3 is 0.30000001192092896): write row regexes for both.
 - Create fluid tanks ignore bucket use from a bot, vanilla water included.
 
+## Old-save fixtures (r1111 NSM, 2026-11-11)
+
+- Build an old save from the release jars (`deploy/latest/mods/`) plus the config and kubejs trees of the release
+  commit (`git archive`); drop every jar not in `deploy/latest/verify/server.installed.sha1` (Biomes O' Plenty needs
+  the TerraBlender stub only the new Worldgen nests; Devtools is built against the new Common).
+  `tools/scratch_query/nsm_fixture.sh` does this.
+- perfBot cannot sneak: `pbot use` on a chest opens it. Place items onto interactive blocks by calling the item's
+  placement code from KubeJS, or write the block entity NBT.
+- Alex's Mobs crows pick up ground items and fly off with them; with `spawn-animals=true` a "missing" dropped item may
+  be in a crow's HandItems (find it with `region_ids.py` on `entities/`).
+- `pbot spawn` loads the saved player (dimension, inventory, respawn point) and then teleports to the given position;
+  read the login dimension with a `PlayerEvents.loggedIn` probe (`nsm_probe.js`). A killed bot respawns by logging in
+  again, so a bed-respawn walk cannot be judged with a bot.
+- Supplementaries jars refuse Forge water through the fluid handler; write `FluidHolder:{Fluid:"minecraft:water",Count:4}`.
+
+
+## Found in r1113 (2026-11-13)
+
+- Rhino: `const` declared inside a `try` block of a nested function throws `InternalError: TypeError: redeclaration
+  of var X` at call time (pg_solver_probe.js, pwg_probe.js). Use `let` inside functions.
+- `net.minecraftforge.fml.ModList` is blocked by the KubeJS class filter; use `Platform.getMods()` (map id -> mod
+  info with `getVersion()`).
+- `bootreject` matches the whole log, including the replies to the batch's own commands (a `give` of an unknown item
+  prints `Unknown item`): exclude the console reply with a lookahead, `^(?!.*MinecraftServer/\]: Unknown item 'x').*`.
+- `scratch_server.sh boot OUT | tail` never returns (the JVM keeps the pipe open): redirect boot output to a file,
+  `boot OUT > OUT/boot.txt 2>&1 < /dev/null`, then `wait_boot.sh`.
+- Block data in `data get block` prints `Slot: 7` for a byte in some containers, `Slot: 7b` in others: write `Slot: 7b?`.
+- A member config carry (SALT2-08, MemberConfigMove) skips keys the target file already has: the scratch srv copies
+  the instance's filled `creativedelight-common.toml`, so strip the target sections before a carry test.

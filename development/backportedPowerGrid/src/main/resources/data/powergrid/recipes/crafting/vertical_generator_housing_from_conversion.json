@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "powergrid:generator_housing"
+    }
+  ],
+  "result": {
+    "item": "powergrid:vertical_generator_housing"
+  }
+}

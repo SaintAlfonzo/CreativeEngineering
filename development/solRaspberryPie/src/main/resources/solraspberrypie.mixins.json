@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.solraspberrypie.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "solraspberrypie.refmap.json",
+  "plugin": "com.SaintAlfonzo.solraspberrypie.RpMixinPlugin",
+  "mixins": [
+    "FleetFootedMixin",
+    "FoodListAccessor",
+    "FoodListMixin",
+    "FoodTrackerMixin",
+    "MobEffectInstanceAccessor"
+  ],
+  "client": [
+    "client.EffectRenderingInventoryScreenMixin",
+    "client.FoodBookScreenAccessor",
+    "client.FoodBookScreenMixin",
+    "client.GuiAccessor",
+    "client.GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

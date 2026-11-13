@@ -1,0 +1,8 @@
+pace 2
+## SQ-VH-09 | Nether fortress (Better Fortresses replaces the vanilla one) and bastion
+> execute in minecraft:the_nether run locate structure betterfortresses:fortress
+waitlog (nearest betterfortresses:fortress is at|Could not find) 300
+> execute in minecraft:the_nether run locate structure minecraft:bastion_remnant
+waitlog (nearest minecraft:bastion_remnant is at|Could not find) 180
+shell grep -ciE "ModdedBiomeSource|blueprint.*error" logs/latest.log; true
+look both locate; grep 0

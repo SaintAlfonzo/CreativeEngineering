@@ -124,7 +124,7 @@
                 let base = $ZQPU.setPotion(Item.of('minecraft:potion'), $ZQReg.POTION.get(new $ZQRL(parts[0])))
                 parts[1].split(',').forEach(ing => {
                     let o = $ZQBR.getOutput(base, Item.of(ing))
-                    out('  ' + parts[0] + ' + ' + ing + ' -> ' + (o.isEmpty() ? 'nothing' : String($ZQReg.ITEM.getKey(o.getItem())) + ' ' + String($ZQPU.getPotion(o).getName('')) ))
+                    out('  ' + parts[0] + ' + ' + ing + ' -> ' + (o.isEmpty() ? 'nothing' : String($ZQReg.ITEM.getKey(o.getItem())) + ' ' + String($ZQReg.POTION.getKey($ZQPU.getPotion(o))) )) // r1112: registry id, getName('') drops long_/strong_
                 })
             } else if (what == 'season') {
                 // SeasonTypes.tagged (the cached season type) of each biome in a comma list

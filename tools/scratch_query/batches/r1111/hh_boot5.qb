@@ -1,0 +1,261 @@
+# r1111 hhm boot 5: Gear after the two seed pouch dispenser crashes (SQ-HH-1574, -1575 not rerun), hurt rerun
+pace 1
+
+## SQ-HH-1575x | clear the dispenser fixtures of -1574 and -1575 (setup, not a test row)
+> setblock 533 -58 551 minecraft:air
+> setblock 532 -58 551 minecraft:air
+> setblock 541 -58 551 minecraft:air
+> setblock 540 -58 551 minecraft:air
+> pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+look setup
+
+## SQ-HH-1505 | zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`
+> zhh5 hurt zh1 cactus
+> zhh5 hurt zh1 berry
+> zhh5 hurt zh2 cactus
+look zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`, health down 1
+
+## SQ-HH-1576 | one effect, duration 3600, amplifier 0
+> zhh5 potion hearthandharvest:pungent
+look one effect, duration 3600, amplifier 0
+
+## SQ-HH-1577 | one effect, duration 9600, amplifier 0
+> zhh5 potion hearthandharvest:long_pungent
+look one effect, duration 9600, amplifier 0
+
+## SQ-HH-1578 | one effect, duration 1800, amplifier 1
+> zhh5 potion hearthandharvest:strong_pungent
+look one effect, duration 1800, amplifier 1
+
+## SQ-HH-1579 | one effect, duration 3600, amplifier 0
+> zhh5 potion hearthandharvest:tempting
+look one effect, duration 3600, amplifier 0
+
+## SQ-HH-1580 | one effect, duration 9600, amplifier 0
+> zhh5 potion hearthandharvest:long_tempting
+look one effect, duration 9600, amplifier 0
+
+## SQ-HH-1581 | one effect, duration 1800, amplifier 1
+> zhh5 potion hearthandharvest:strong_tempting
+look one effect, duration 1800, amplifier 1
+
+## SQ-HH-1582 | one effect, duration 3600, amplifier 0
+> zhh5 potion hearthandharvest:bad_omen
+look one effect, duration 3600, amplifier 0
+
+## SQ-HH-1583 | one effect, duration 1800, amplifier 1
+> zhh5 potion hearthandharvest:strong_bad_omen
+look one effect, duration 1800, amplifier 1
+
+## SQ-HH-1584 | potion not registered (3.1)
+> zq potion hearthandharvest:long_bad_omen
+look potion not registered (3.1)
+
+## SQ-HH-1585 | potato to Pungent; redstone long, glowstone strong (pack rule, J row);
+> zq potion minecraft:awkward minecraft:poisonous_potato
+> zq potion hearthandharvest:pungent minecraft:redstone,minecraft:glowstone_dust,minecraft:fermented_spider_eye
+> zq potion hearthandharvest:tempting minecraft:redstone,minecraft:glowstone_dust
+> zq potion minecraft:awkward hearthandharvest:crow_feather,minecraft:feather
+> zq potion hearthandharvest:bad_omen minecraft:glowstone_dust,minecraft:redstone,minecraft:fermented_spider_eye
+> zq potion hearthandharvest:strong_bad_omen minecraft:fermented_spider_eye
+look potato to Pungent; redstone long, glowstone strong (pack rule, J row); spider eye Pungent to Tempting; crow feather to Bad Omen, vanilla feather nothing (HNH-65); Bad Omen glowstone strong, redstone nothing, spider eye `minecraft:luck`; strong to `buzzier_bees:strong_luck` (HNH-18, N23-8)
+
+## SQ-HH-1586 | 0 lines
+shell grep -cE "CE potions\] mix skipped.*(hearthandharvest|bad_omen)" logs/kubejs/startup.log; true
+kjsreject mix skipped.*hearthandharvest
+look 0 lines
+
+## SQ-HH-1587 | recipes for bottling and tipped arrows or potion buckets name the thre
+> zq recipes pungent
+> zq recipes tempting
+> zq recipes bad_omen
+shell grep -E "potion bottling done|tipped arrow tipping done" logs/kubejs/server.log
+look recipes for bottling and tipped arrows or potion buckets name the three potions; the log counts rose by the new potions over the last run (potions.md 7)
+
+## SQ-HH-1588 | no ActiveEffects on the cow (HNH-82); no brew of it
+> summon minecraft:cow 495 -60 480 {NoAI:1b,Tags:["zf1"]}
+> effect give @e[tag=zf1] alexsmobs:fear 30
+> data get entity @e[tag=zf1,limit=1] ActiveEffects
+> zq recipes fear
+look no ActiveEffects on the cow (HNH-82); no brew of it
+
+## SQ-HH-1589 | saturation modifier 0.75 on all three; hunger 11, 10, 10
+> zq food hearthandharvest:macaroni_and_cheese
+> zq food hearthandharvest:glazed_carrots
+> zq food hearthandharvest:biscuits_and_gravy
+look saturation modifier 0.75 on all three; hunger 11, 10, 10
+
+## SQ-HH-1590 | handheld holds hot_dog, street_corn, tamale; baked holds croissant, ra
+> zq itemtag creativeengineering:food_type/handheld
+> zq itemtag creativeengineering:food_type/baked
+> zq itemtag creativeengineering:food_type/dairy
+> zq itemtag creativeengineering:food_type/hazard
+> zq itemtag creativeengineering:food_type/drink/alcohol
+> zq itemtag creativeengineering:food_type/sweet/pancake
+> zq itemtag creativeengineering:food_type/raw/meat
+look handheld holds hot_dog, street_corn, tamale; baked holds croissant, raspberry_scone; dairy holds goat_cheese_slice; hazard holds charred_marshmallow_stick; drink/alcohol holds moonshine, melon_wine; sweet/pancake holds waffle; raw/meat holds raw_sausage (step 12)
+
+## SQ-HH-1591 | each juice has `createfilling/<id>_juice`, `createemptying/<id>_juice`
+> zq rdetail blueberry_juice
+> zq rdetail raspberry_juice
+> zq rdetail cherry_juice
+> zq rdetail sweet_berry_juice
+> zq rdetail glow_berry_juice
+look each juice has `createfilling/<id>_juice`, `createemptying/<id>_juice` (250 mB) and `<id>_juice_compacting` (4 fruit to 500 mB)
+
+## SQ-HH-1592 | each has a `createfilling` and a `createemptying` recipe; no Create mi
+> zq recipes blueberry_wine
+> zq recipes raspberry_wine
+> zq recipes sweet_berry_wine
+> zq recipes glow_berry_wine
+> zq recipes melon_wine
+> zq recipes lemon_wine
+> zq recipes root_beer
+> zq recipes moonshine
+> zq recipes goat_milk_bottle
+> zq recipes brine_bottle
+look each has a `createfilling` and a `createemptying` recipe; no Create mixing recipe for any wine (3.1)
+
+## SQ-HH-1593 | brine on `bncFermenting` from `#forge:salts` + water, `brine_mixing` 2
+> zq rdetail brine
+> zq rdetail syrup_from_sap
+> zq rdetail sugar_from_syrup
+look brine on `bncFermenting` from `#forge:salts` + water, `brine_mixing` 250 mB; syrup_from_sap `heated` from 1000 mB sap + a bottle; sugar 4 (HNH-92)
+
+## SQ-HH-1594 | an `iefertilizer/manure` line with growthModifier 1.25; compost 9 inpu
+> zq bytype immersiveengineering:fertilizer
+> zq rdetail organic_compost_from_manure
+look an `iefertilizer/manure` line with growthModifier 1.25; compost 9 inputs (dirt, 2 straw, 2 manure, 4 bark) (D26)
+
+## SQ-HH-1595 | axe: `vinery:cherry` about 100 (60 to 140); shears: no cherry from the
+> zhh5 loot vinery:cherry_leaves 5000 minecraft:iron_axe
+> zhh5 loot vinery:cherry_leaves 5000 minecraft:shears
+look axe: `vinery:cherry` about 100 (60 to 140); shears: no cherry from the modifier (N23-15). Leaves' own cherry drop would inflate this; compare with a control that has the entry removed if above 140
+
+## SQ-HH-1596 | `minecraft:farmer` level 1 buys hops 24, raspberry 24, sunflower seeds
+> dumptrades 200
+sleep 5
+shell grep -c "hearthandharvest:" kubejs/exported/villager_trades.json
+shell python3 -c 'import json;d=json.load(open("kubejs/exported/villager_trades.json"));p=d.get("professions",d);print("farmer1",[t for t in json.dumps(p.get("minecraft:farmer",{})).split("},") if "hearthandharvest" in t or "sunflower" in t][:8]);print("botanist",json.dumps(p.get("beautify:botanist",{})).count("_mum"));w=d.get("wandering_trader",{});print("wander",[x for x in json.dumps(w).split("},") if "hearthandharvest" in x or "sunflower" in x or "blueberr" in x][:8])'
+look `minecraft:farmer` level 1 buys hops 24, raspberry 24, sunflower seeds 32 for 1 emerald; `beautify:botanist` has 8 mums; wandering COMMON sells hops, raspberry pips, sunflower seeds, blueberry pips
+
+## SQ-HH-1601 | `WaterLevel:8` (copper cap; HNH-26 still says 16 from before the tiers
+> setblock 500 -61 560 minecraft:water
+> tp G 500.5 -60 559.5 0 60
+> item replace entity G weapon.mainhand with hearthandharvest:watering_can{WaterLevel:0}
+> zq useitem G
+> zhh5 hand G
+look `WaterLevel:8` (copper cap; HNH-26 still says 16 from before the tiers: the writeup line is stale)
+
+## SQ-HH-1602 | `WaterLevel:4`, `BonemealLevel:4`; mean age above 0 in a 3x3; the oute
+> fill 500 -61 563 504 -61 567 minecraft:farmland[moisture=7]
+> fill 500 -60 563 504 -60 567 minecraft:wheat[age=0]
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
+> pbot use G 502 -60 565 up
+> zhh5 hand G
+> zq ages 500 -60 563 504 -60 567 minecraft:wheat
+look `WaterLevel:4`, `BonemealLevel:4`; mean age above 0 in a 3x3; the outer ring still age 0 (HNH-28)
+
+## SQ-HH-1603 | `WaterLevel:5`, `BonemealLevel:5`: nothing spent on grown crops over w
+> fill 510 -61 563 514 -61 567 minecraft:farmland[moisture=7]
+> fill 510 -60 563 514 -60 567 minecraft:wheat[age=7]
+> pbot use G 512 -60 565 up
+> zhh5 hand G
+look `WaterLevel:5`, `BonemealLevel:5`: nothing spent on grown crops over wet soil (HNH-28)
+
+## SQ-HH-1604 | no `FertilizerItem` key left; levels 0 (HNH-30)
+> item replace entity G weapon.mainhand with hearthandharvest:watering_can{WaterLevel:1,BonemealLevel:1,FertilizerItem:"minecraft:bone_meal"}
+> pbot use G 520 -60 565 up
+> zhh5 hand G
+look no `FertilizerItem` key left; levels 0 (HNH-30)
+
+## SQ-HH-1605 | "Test passed" at centre and corners of the 3x3; `WaterLevel:4` (HNH-32
+> fill 530 -61 563 534 -61 567 immersive_weathering:mulch_block[moisture=0]
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5}
+> pbot use G 532 -61 565 up
+> zq count 531 -61 564 533 -61 566 immersive_weathering:mulch_block
+> execute if block 532 -61 565 immersive_weathering:mulch_block[moisture=7]
+> zhh5 hand G
+look "Test passed" at centre and corners of the 3x3; `WaterLevel:4` (HNH-32; a "soaked" look is the client half). `/data get block` the moisture property name if `moisture` is absent on this block
+
+## SQ-HH-1606 | soaked 3x3 and grown; `WaterLevel:4`, `BonemealLevel:4` (1 each, not 2
+> fill 540 -61 563 544 -61 567 minecraft:farmland[moisture=0]
+> fill 540 -60 563 544 -60 567 minecraft:wheat[age=0]
+> pbot use G 542 -60 565 up
+> execute if block 542 -61 565 minecraft:farmland[moisture=7]
+> zhh5 hand G
+look soaked 3x3 and grown; `WaterLevel:4`, `BonemealLevel:4` (1 each, not 2) (HNH-33)
+
+## SQ-HH-1607 | `WaterLevel:4`, `BonemealLevel:5` (HNH-33: soaks for water only)
+> fill 550 -61 563 554 -61 567 minecraft:farmland[moisture=0]
+> fill 550 -60 563 554 -60 567 minecraft:wheat[age=7]
+> pbot use G 552 -60 565 up
+> zhh5 hand G
+look `WaterLevel:4`, `BonemealLevel:5` (HNH-33: soaks for water only)
+
+## SQ-HH-1608 | three "Test passed": the 2x2 (4 blocks) reaches both corners toward +x
+> fill 556 -61 571 564 -61 579 minecraft:farmland[moisture=0]
+> fill 556 -60 571 564 -60 579 minecraft:wheat[age=7]
+> item replace entity G weapon.mainhand with hearthandharvest:iron_watering_can{WaterLevel:5}
+> tp G 560 -60 566 -45 0
+> pbot use G 560 -60 575 up
+> execute if block 561 -61 576 minecraft:farmland[moisture=7]
+> execute if block 560 -61 575 minecraft:farmland[moisture=7]
+> execute if block 562 -61 575 minecraft:farmland[moisture=0]
+> zhh5 hand G
+look three "Test passed": the 2x2 (4 blocks) reaches both corners toward +x +z and stops one past; `WaterLevel:4` (HNH-40)
+
+## SQ-HH-1609 | three "Test passed": the 3x3 (9 blocks) reaches both corners toward +x
+> fill 568 -61 571 576 -61 579 minecraft:farmland[moisture=0]
+> fill 568 -60 571 576 -60 579 minecraft:wheat[age=7]
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5}
+> tp G 572 -60 566 -45 0
+> pbot use G 572 -60 575 up
+> execute if block 573 -61 576 minecraft:farmland[moisture=7]
+> execute if block 571 -61 574 minecraft:farmland[moisture=7]
+> execute if block 574 -61 575 minecraft:farmland[moisture=0]
+> zhh5 hand G
+look three "Test passed": the 3x3 (9 blocks) reaches both corners toward +x +z and stops one past; `WaterLevel:4` (HNH-40)
+
+## SQ-HH-1610 | three "Test passed": the 4x4 (16 blocks) reaches both corners toward +
+> fill 580 -61 571 588 -61 579 minecraft:farmland[moisture=0]
+> fill 580 -60 571 588 -60 579 minecraft:wheat[age=7]
+> item replace entity G weapon.mainhand with hearthandharvest:diamond_watering_can{WaterLevel:5}
+> tp G 584 -60 566 -45 0
+> pbot use G 584 -60 575 up
+> execute if block 586 -61 577 minecraft:farmland[moisture=7]
+> execute if block 583 -61 574 minecraft:farmland[moisture=7]
+> execute if block 587 -61 575 minecraft:farmland[moisture=0]
+> zhh5 hand G
+look three "Test passed": the 4x4 (16 blocks) reaches both corners toward +x +z and stops one past; `WaterLevel:4` (HNH-40)
+
+## SQ-HH-1611 | three "Test passed": the 5x5 (25 blocks) reaches both corners toward +
+> fill 592 -61 571 600 -61 579 minecraft:farmland[moisture=0]
+> fill 592 -60 571 600 -60 579 minecraft:wheat[age=7]
+> item replace entity G weapon.mainhand with hearthandharvest:netherite_watering_can{WaterLevel:5}
+> tp G 596 -60 566 -45 0
+> pbot use G 596 -60 575 up
+> execute if block 598 -61 577 minecraft:farmland[moisture=7]
+> execute if block 594 -61 573 minecraft:farmland[moisture=7]
+> execute if block 599 -61 575 minecraft:farmland[moisture=0]
+> zhh5 hand G
+look three "Test passed": the 5x5 (25 blocks) reaches both corners toward +x +z and stops one past; `WaterLevel:4` (HNH-40)
+
+## SQ-HH-1612 | Health 10.0: never hurts (HNH-35)
+> setblock 500 -61 575 minecraft:grass_block
+> setblock 500 -60 575 hearthandharvest:raspberry_bush[age=1]
+> summon minecraft:pig 500.5 -60 575.5 {NoAI:1b,Tags:["zr1"]}
+sleep 5
+> data get entity @e[tag=zr1,limit=1] Health
+look Health 10.0: never hurts (HNH-35)
+
+
+
+## SQ-HH-319 | salt cave origin pulled into the band (rerun with the stone box)
+> forceload add 4528 80 4560 112
+> fill 4528 -16 80 4560 0 112 minecraft:stone
+> fill 4528 1 80 4560 16 112 minecraft:stone
+> place feature hearthandharvest:salt_cave 4544 40 96
+> zhh2 countset 4528 -16 80 4560 16 112 minecraft:cave_air
+look Placed feature; cave_air above 1000

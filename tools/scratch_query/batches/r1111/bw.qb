@@ -1,0 +1,140 @@
+# r1111 step 5, one fresh group B world (seed 8675309) for SQ-VH-01 to -09, SQ-OB server rows and the SQ-HH group B
+# rows (hh_wgb.qb, hh_crow_b.qb run after this file on the same boot). Probes in srv/kubejs/server_scripts before
+# boot: zq (prep_srv), zz_hh2.js (hh_mw_probe.js), zz_hh_crow_probe.js, zz_zact_probe.js. Commands written out from
+# the queue prose (scratch_queue.md SQ-VH, SQ-OB) by the r1111 runner.
+pace 1
+
+## SQ-VH-01 | Done, no Visceral Heap mixin or BOP load error
+bootexpect Done \(
+bootreject Mixin apply.*failed|Couldn't load tag.*biomesoplenty|Failed to load.*biomesoplenty|InvalidMixin|Critical injection failure
+> say vh01
+
+## SQ-VH-02 | Visceral Heap kept counts; BOP blocks in the registry
+shell grep "Visceral Heap: kept" logs/latest.log | cut -c1-400
+> zq blocktag minecraft:mineable/hoe
+shell grep -c "biomesoplenty" logs/latest.log
+look kept counts biome 1, block 8, item 9, fluid 2, fluid_type 1, feature 3, configured_feature 9, placed_feature 9, particle_type 4, sound_event 1; block_entity_type, entity_type, carver, painting_variant 0
+
+## SQ-VH-03 | TerraBlender stub listed, no BOP region class
+shell grep -iE "terrablender" logs/latest.log | head -5 | cut -c1-300
+shell grep -cE "BOPNetherRegion|BOPOverworldRegion" logs/latest.log; true
+look stub terrablender 2.0.1.128 in the mod list; region count 0
+
+## SQ-VH-04 | Heap located in the Nether
+> execute in minecraft:the_nether run locate biome biomesoplenty:visceral_heap
+waitlog (is at \[|Could not find) 120
+capture H is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+## SQ-VH-06 | Heap floor and ceiling flesh, bedrock at 0 and 127
+> execute in minecraft:the_nether run forceload add {H1-16} {H3-16} {H1+16} {H3+16}
+sleep 30
+> execute in minecraft:the_nether if block {H1} 0 {H3} minecraft:bedrock
+> execute in minecraft:the_nether if block {H1} 127 {H3} minecraft:bedrock
+> zq count {H1-16} 1 {H3-16} {H1+16} 40 {H3+16} biomesoplenty:flesh minecraft:the_nether
+> zq count {H1-16} 90 {H3-16} {H1+16} 126 {H3+16} biomesoplenty:flesh minecraft:the_nether
+> zq count {H1-16} 1 {H3-16} {H1+16} 126 {H3+16} minecraft:netherrack minecraft:the_nether
+look two Test passed (bedrock); flesh counts in both bands well above netherrack
+
+## SQ-VH-07 | 16 x 16 chunks of Heap generate without a feature error; flesh features present
+> execute in minecraft:the_nether run forceload add {H1-128} {H3-128} {H1+127} {H3+127}
+sleep 90
+shell grep -E "Feature placement|FleshTendon|Exception" logs/latest.log | grep -iE "bio|flesh" | head -5 | cut -c1-300; true
+> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:flesh_tendons minecraft:the_nether
+> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:eyebulb minecraft:the_nether
+> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:hair minecraft:the_nether
+> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:blood minecraft:the_nether
+> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} minecraft:bone_block minecraft:the_nether
+> execute in minecraft:the_nether run forceload remove {H1-128} {H3-128} {H1+127} {H3+127}
+look grep empty; all five counts above 0
+
+## SQ-VH-08 | is_nether tag, flesh drops flesh
+> zq biometag minecraft:is_nether
+> forceload add 0 0 15 15
+> setblock 3 200 3 biomesoplenty:flesh
+> loot spawn 3 202 3 mine 3 200 3 minecraft:stick
+> setblock 5 200 3 biomesoplenty:flesh
+> loot spawn 5 202 3 mine 5 200 3 minecraft:iron_axe
+> zq blocktag minecraft:mineable/hoe
+> zq blocktag minecraft:mineable/axe
+look tag holds 5 vanilla Nether biomes and the Heap; both loot lines drop flesh; flesh in a mineable tag that makes the axe faster than the hand (destroy speed itself: client)
+
+## SQ-VH-09 | fortress and bastion locate, no Blueprint error
+> execute in minecraft:the_nether run locate structure minecraft:fortress
+waitlog (is at \[|Could not find) 180
+> execute in minecraft:the_nether run locate structure minecraft:bastion_remnant
+waitlog bastion_remnant.*is at \[|Could not find.*bastion 180
+shell grep -ciE "ModdedBiomeSource|blueprint.*error" logs/latest.log; true
+look both locate; grep 0
+
+## SQ-OB-01 | no script error on the batch's food items
+shell grep -E "Error occurred while handling event|Exception" logs/kubejs/*.log logs/latest.log | grep -iE "corn|pie|patty|biscuit|glazed|salt|summerhat|farmers_hats" | head -5 | cut -c1-300; true
+look nothing printed
+
+## SQ-OB-03 | farmers hats tag
+> zq itemtag creativedelight:farmers_hats
+look H&H hat, Wardrobe hat, Vinery straw hat, Simple Hats farmerbrim; no simplehats:summerhat
+
+## SQ-OB-04 | fruit pies take 3 fruit
+> zq rdetail pie
+look apple, pumpkin, sweet berry, grape pie and a Rustic cheesecake each take 3 fruit; filling cans unchanged
+
+## SQ-OB-05 | cave carrot patties
+> zq rdetail patty
+look cutting and baked cutting of cave carrot: 2 raw / 2 cooked veggie patties
+
+## SQ-OB-06 | corn processing
+> zq uses corn_delight:corn
+> zq uses corn_delight:corn_cob
+> zq uses corn_delight:wild_corn
+look cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
+
+## SQ-OB-07 | biscuits and gravy, glazed carrots
+> zq rdetail biscuits
+> zq rdetail glazed_carrot
+look no shapeless biscuits recipe; pot recipe takes any dough, raw sausage, salt, milk; glazed carrots take cave carrot
+
+## SQ-OB-08 | Street Corn effects
+> zq food hearthandharvest:street_corn
+look Fire Resistance 30 s plus Nourishment and Haste
+
+## SQ-OB-09 | no killer rabbit babies
+shell grep chanceBabyRabbitIsKiller config/breedablekillerrabbit.json5
+> forceload add 32 32 47 47
+> fill 31 120 31 48 120 48 minecraft:glass
+repeat 50
+> summon minecraft:rabbit 40 121 40 {InLove:600,Age:0,RabbitType:0}
+end
+sleep 12
+> execute if entity @e[type=minecraft:rabbit,x=40,y=121,z=40,distance=..20,nbt={RabbitType:99}]
+> execute if entity @e[type=minecraft:rabbit,x=40,y=121,z=40,distance=..20]
+> kill @e[type=minecraft:rabbit,x=40,y=121,z=40,distance=..20]
+look config 0.0; RabbitType 99 Test failed; total above 50 (babies were born)
+
+## SQ-OB-10 | wooden buckets and tapper recipes
+> zq item creativedelight:wooden_bucket
+> zq item creativedelight:wooden_water_bucket
+> zq item creativedelight:wooden_sap_bucket
+> zq item creativedelight:wooden_milk_bucket
+> zq item creativedelight:wooden_honey_bucket
+> zq rdetail tapper
+> zq makes creativedelight:wooden_bucket
+shell grep -ciE "creativedelight.*(error|exception)" logs/latest.log; true
+look all five items exist; one tapper recipe accepts either bucket; wooden bucket from planks; 0 errors
+
+## SQ-OB-12 | corn cutting
+> zq rdetail cutting/corn
+look 6 kernels, cob 75%, husk 33%
+
+## SQ-OB-02 | display names after /dumpall
+> dumpall
+waitlog \[dumpall\].*(ok|done) 900
+shell python3 -c 'import json;d=json.load(open("kubejs/exported/display_names.json"));d=d.get("items",d) if isinstance(d,dict) else d;ids=["vintagedelight:salt_dust","corn_delight:corn"];print({k:(d.get(k) if isinstance(d,dict) else None) for k in ids});print([(k,v) for k,v in (d.items() if isinstance(d,dict) else []) if "spool" in k or "patty" in k][:10])'
+look salt dust Salt; corn Corn; spool Spool of String; veggie patties Veggie Patty
+
+## SQ-VH-05 | climate dump: Heap share
+> dumpclimate
+waitlog (climate|dumpclimate).*(done|wrote|written|ms|s\)) 600
+> reload
+sleep 20
+shell python3 -c 'import json;d=json.load(open("kubejs/generation_scripts/worldgen/biome_config.json"));b=d["dimensions"]["minecraft:the_nether"]["biomes"];[print(k,v.get("result_pct"),v.get("target_pct")) for k,v in b.items()]'
+look Heap result_pct 4 to 6; RECORD the others (Wastes 30, Soul Sand 20, Crimson 15, Warped 15, Basalt 15)

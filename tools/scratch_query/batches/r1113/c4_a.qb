@@ -1,0 +1,835 @@
+# r1113 chunk 4, boot A: ONE boot, group A superflat creative (ground: grass y -61, air from y -60), level r1113c4a.
+# Rows: SQ-FDI-01, -02, -03, -05 (static half), SQ-GAP-01, -02, -04 to -09, SQ-BREED-02 (server half), -03 (moved to A:
+# superflat has no wild flowers, so a bee can only find the placed one), SQ-NSM-01 (static half), SQ-CDNS-11 (dish half),
+# SQ-HCS-07, -12, SQ-FLR-03, -04, -05, SQ-RDB-03 (server parts of SQ-RD-08, -11, -22, -24, SQ-RDX-01, -03 to -12, -14),
+# SQ-RDB-02 (last: /dumpall).
+#
+# SQ-GAP is marked HOLD in the queue ("only after the Common suite is finished"): SQ-CGE ran 2026-11-08 with no FAIL
+# or PARTIAL left in any later run doc, so the hold condition is met. Skip the SQ-GAP rows (--rows) if the orchestrator
+# keeps the hold.
+#
+# Setup (OUT = scratch dir, srv = OUT/srv, INST = instance root):
+#   bash $INST/tools/scratch_query/prep_srv.sh OUT r1113c4a A spawn-animals=true
+#     (spawn-animals=true: summoned crows, squid and bees are discarded otherwise; dev jars swapped in by prep_srv:
+#      Common 11-12 20:46, Compat 11-12 20:46, Brewing 11-12 20:47, Delight 11-11 16:52, Engineering 11-10 23:06)
+#   cp ~/.local/share/atlauncher/downloads/SoL-Carrot-1.19.2-1.14.0.jar srv/mods/     (SQ-FDI: Carrot jar, srv only,
+#      never the instance mods/; srv/defaultconfigs/solcarrot-server.toml comes from the instance defaultconfigs/)
+#   python3 $INST/tools/scratch_query/qrun.py toml srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+#   probes into srv/kubejs/server_scripts/ (zz_zq_probe.js is copied by prep_srv.sh):
+#     cp $INST/tools/scratch_query/zc4_probe.js      zz_zc4_probe.js     (/zc4, new for r1113)
+#     cp $INST/tools/scratch_query/hh_crow_probe.js  zz_hh_crow_probe.js (/zhh3: tame, tally, items, inv, throw, sneak, block, nests)
+#     cp $INST/tools/scratch_query/zact_probe.js     zz_zact_probe.js    (/zact break)
+#     cp $INST/tools/fungi_probe/zcount.js           zz_count.js         (/zcount)
+#     cp $INST/tools/fungi_probe/ztrades.js          zz_trades.js        (/ztrades)
+# If the boot fails on the Carrot jar: remove it, reboot, and run with --rows excluding SQ-FDI-*.
+# FRESH boot: kjsexpect / kjsreject rows come before any /reload or /dumpall (SQ-RDB-02 is the last row).
+# Areas (z 40000 lane): nests 40000, crow box 40100, Create rigs 40200-40260, egg pools 40300, planting 40400,
+# dish 40500, cakes 40600, bees 40700, Rustic 40800-40900. Bots: one name per row.
+# Id fixes against the old rows (11-09/11-10 namespace moves): creativeengineering:glowing_calamari(_slice) and the
+# roasted_bell_pepper_slice tag -> creativedelight:; SQ-RDX-01's "Rustic Delight upstream data" line is gone since the
+# bake (SQ-RDB-01), so only the error rejects stay.
+pace 2
+
+## SQ-FDI-01 | Carrot Edition loads, no parse error, Food Dictionary item
+bootexpect Done \(
+bootreject (?i)Failed to parse.*solcarrot|solcarrot.*(exception|could not)
+shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -i carrot
+> zq item solcarrot:food_book
+waitlog \[zq\] done 30
+expect \[zq\] item solcarrot:food_book: class
+look item name "Food Dictionary" is a lang check (client); here: the item exists and the mod loaded without errors
+
+## SQ-RDX-01 | Rustic member (baked): no recipe or NCH error
+bootreject (?i)rusticdelight.*(parse error|exception)
+bootreject incomplete\(.*\) not registered
+kjsreject (?i)(rusticdelight|pizza|golden_coffee).*(error|warn)
+kjsreject (?i)\[NCH\].*warn
+
+## SQ-GAP-09 | command renames: new names registered, old names gone
+> zc4 cmd ccswap,ccaltime,cwglocate,cwgspawnbox,ceswap,cetime,celocate,cespawnbox
+waitlog \[zc4\] done 20
+expect \[zc4\] cmd ccswap registered
+expect \[zc4\] cmd ccaltime registered
+expect \[zc4\] cmd cwglocate registered
+expect \[zc4\] cmd cwgspawnbox registered
+count \[zc4\] cmd (ceswap|cetime|celocate|cespawnbox) missing == 4
+> ccaltime date
+look ccaltime date prints the date as SQ-TD-01 describes
+
+## SQ-GAP-06 | renames that need no client (lang sources)
+shell cd $INST && grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-220 | head -20; grep -rn '"Gelatin"' kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-200 | head -5
+look block.redeco.jar = Empty Terrarium; Supplementaries flower box = Large Flower Box; tinted framed glass = Smooth Tinted Glass (three variants); refined gelatin keeps its id with the name Gelatin (shell output)
+
+## SQ-GAP-08 | Vinery JEI description lines at most 220 characters
+shell cd $INST && grep -rn "where\.\|wine_aging\|support.taiga" development/creativeBrewing/members/vinery/src/main/resources/assets/*/lang/en_us.json | awk 'length>0' | awk '{ if (length($0) > 220) print "LONG", $0 }' | cut -c1-200; echo "long lines: $(grep -rn 'where\.\|wine_aging\|support.taiga' development/creativeBrewing/members/vinery/src/main/resources/assets/*/lang/en_us.json | awk 'length($0) > 220' | wc -l)"
+look "long lines: 0"; the Grape Planting box sizing is still open (CQ-GAP-02)
+
+## SQ-GAP-02 | Moobloom rules idempotent, checker clean (offline)
+shell cd $INST && python3 tools/gen_moobloom_rules.py --check; echo "gen exit=$?"; python3 tools/check_moobloom_data.py 2>&1 | tail -8; echo "check exit=$?"
+look gen --check prints no change and exit 0 (37 rules); checker prints no errors
+
+## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Fruits Delight jams, jars stack to 64
+> zq rdetail jam_jar
+waitlog \[zq\] done 30
+count \[zq\] \S+ \{farmersdelight:cooking\} -> 1 vintagedelight:\S*jam_jar >= 9
+reject \[zq\] \S+ \{farmersdelight:cooking\} -> ([2-9]|\d\d+) vintagedelight:\S*jam_jar
+> zc4 cooktime jam
+waitlog \[zc4\] done 30
+> zq item vintagedelight:cherry_jam_jar
+waitlog \[zq\] done 30
+expect \[zq\] item vintagedelight:cherry_jam_jar: .*max stack 64
+look every fruitsdelight jam in the zc4 cook lines has time=400 (if none is listed, Fruits Delight jams are not Cooking Pot recipes in this build: record which serializer makes them)
+
+## SQ-GAP-04 | rose gold in the gold tags; gold-input recipes take the tag; gold ingot, apple, tools, armor stay literal
+> zq itemtag forge:plates/gold
+> zq itemtag forge:wires/gold
+> zq blocktag forge:storage_blocks/gold
+> zq rdetail minecraft:clock
+> zq rdetail minecraft:powered_rail
+> zq rdetail mechanical_crafter
+> zq rdetail minecraft:golden_apple
+> zq rdetail minecraft:golden_pickaxe
+> zq rdetail minecraft:golden_chestplate
+> zq makes minecraft:gold_ingot
+waitlog \[zq\] makes minecraft:gold_ingot 30
+expect itemtag forge:plates/gold \(\d+\): .*rose_gold
+expect itemtag forge:wires/gold \(\d+\): .*rose_gold
+expect blocktag forge:storage_blocks/gold \(\d+\): .*rose_gold
+reject \[zq\] minecraft:golden_(apple|pickaxe|chestplate) \{.*rose_gold
+look clock, powered rail, mechanical crafter: the gold ingredient lists rose gold (or "/+N" for a tag); golden apple, pickaxe, chestplate list only minecraft:gold_ingot; no gold_ingot recipe takes rose gold
+
+## SQ-GAP-05 | golden egg: falls, sinks in water like an ordinary item, in no floating tag
+> forceload add 40290 39990 40330 40010
+sleep 3
+> fill 40300 -63 40000 40300 -61 40002 minecraft:water
+> fill 40310 -63 40000 40310 -61 40002 minecraft:lava
+> zq tagsof vintagedelight:golden_egg
+waitlog \[zq\] done 20
+reject item tags of vintagedelight:golden_egg: .*creativecompat:physics/floats
+> kill @e[type=minecraft:item,x=40290,y=-64,z=39990,dx=40,dy=20,dz=20]
+pace 0.05
+> summon minecraft:item 40300.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gew"]}
+> summon minecraft:item 40300.5 -55 40002.5 {Item:{id:"minecraft:egg",Count:1b},Tags:["cew"]}
+> summon minecraft:item 40310.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gel"]}
+> summon minecraft:item 40320.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["geg"]}
+sleep 0.5
+> data get entity @e[tag=gew,limit=1] Pos
+> data get entity @e[tag=geg,limit=1] Pos
+pace 2
+sleep 4
+> data get entity @e[tag=gew,limit=1] Pos
+> data get entity @e[tag=cew,limit=1] Pos
+> data get entity @e[tag=gel,limit=1] Pos
+> data get entity @e[tag=geg,limit=1] Pos
+look after 10 ticks both golden eggs are below y -55 (falling); after 4 s the water egg sits at the same depth as the plain egg (y -63 to -61), the ground egg at -60.0, the lava egg burns or floats per the lava rule; it is in no floating tag
+
+## SQ-GAP-07 | planting rules: pineapple and tea on farmland, rich soil farmland, fertile soil; grape seeds off farmland
+> forceload add 40390 39990 40420 40020
+sleep 3
+# three rows (pineapple z 40000, tea z 40004, grape z 40008); soils x 40400..40408; water under z-1 keeps farmland wet
+> fill 40400 -61 39999 40408 -61 39999 minecraft:water
+> fill 40400 -61 40003 40408 -61 40003 minecraft:water
+> fill 40400 -61 40007 40408 -61 40007 minecraft:water
+> fill 40400 -60 39999 40408 -55 40009 minecraft:air
+> setblock 40400 -61 40000 minecraft:farmland
+> setblock 40401 -61 40000 farmersdelight:rich_soil_farmland
+> setblock 40402 -61 40000 immersive_weathering:mulch_block
+> setblock 40403 -61 40000 minecraft:sand
+> setblock 40404 -61 40000 minecraft:red_sand
+> setblock 40405 -61 40000 minecraft:coarse_dirt
+> setblock 40406 -61 40000 minecraft:grass_block
+> setblock 40407 -61 40000 minecraft:dirt
+> setblock 40408 -61 40000 minecraft:stone
+> clone 40400 -61 40000 40408 -61 40000 40400 -61 40004
+> clone 40400 -61 40000 40408 -61 40000 40400 -61 40008
+> pbot spawn g7 40404.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear g7
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40400 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40401 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40402 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40403 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40404 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40405 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40406 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40407 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40408 -61 40000 up
+> pbot spawn g7 40404.5 -60 40006.5 minecraft:overworld survival
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40400 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40401 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40402 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40403 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40406 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40408 -61 40004 up
+> pbot spawn g7 40404.5 -60 40010.5 minecraft:overworld survival
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40400 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40401 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40406 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40407 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40408 -61 40008 up
+sleep 6
+> execute unless block 40400 -60 40000 minecraft:air run say G7 pine farmland
+> execute unless block 40401 -60 40000 minecraft:air run say G7 pine rich
+> execute unless block 40402 -60 40000 minecraft:air run say G7 pine fertile
+> execute unless block 40403 -60 40000 minecraft:air run say G7 pine sand
+> execute unless block 40404 -60 40000 minecraft:air run say G7 pine redsand
+> execute unless block 40405 -60 40000 minecraft:air run say G7 pine coarse
+> execute unless block 40406 -60 40000 minecraft:air run say G7 pine grass
+> execute unless block 40407 -60 40000 minecraft:air run say G7 pine dirt
+> execute unless block 40408 -60 40000 minecraft:air run say G7 pine stone
+> execute unless block 40400 -60 40004 minecraft:air run say G7 tea farmland
+> execute unless block 40401 -60 40004 minecraft:air run say G7 tea rich
+> execute unless block 40402 -60 40004 minecraft:air run say G7 tea fertile
+> execute unless block 40403 -60 40004 minecraft:air run say G7 tea sand
+> execute unless block 40406 -60 40004 minecraft:air run say G7 tea grass
+> execute unless block 40408 -60 40004 minecraft:air run say G7 tea stone
+> execute unless block 40400 -60 40008 minecraft:air run say G7 grape farmland
+> execute unless block 40401 -60 40008 minecraft:air run say G7 grape rich
+> execute unless block 40406 -60 40008 minecraft:air run say G7 grape grass
+> execute unless block 40407 -60 40008 minecraft:air run say G7 grape dirt
+> execute unless block 40408 -60 40008 minecraft:air run say G7 grape stone
+expect G7 pine farmland
+expect G7 pine rich
+expect G7 pine fertile
+expect G7 pine sand
+expect G7 pine redsand
+expect G7 pine coarse
+reject G7 pine stone
+expect G7 tea farmland
+expect G7 tea rich
+expect G7 tea fertile
+reject G7 tea stone
+reject G7 grape (farmland|rich)
+expect G7 grape grass
+expect G7 grape dirt
+> pbot remove g7
+look record the unlisted cells (pineapple on grass and dirt, tea on sand and grass, grape on stone) for the writeup
+
+## SQ-BREED-02 | flower and breeding tags (server half; JEI pages are client)
+> zq itemtag minecraft:flowers
+> zq blocktag minecraft:flowers
+> zq itemtag blueprint:pig_food
+> zq itemtag blueprint:cat_food
+> zq itemtag blueprint:ocelot_food
+> zq itemtag alexmobs:bison_breedables
+> zq itemtag botania:special_flowers
+waitlog \[zq\] itemtag botania:special_flowers 30
+reject \[zq\] itemtag minecraft:flowers \(\d+\): .*\b[a-z_]+:wild_
+reject \[zq\] itemtag minecraft:flowers \(\d+\): .*(flower_crown|leaf_pile)
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_onions
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_carrots
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_potatoes
+reject \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_rice
+expect \[zq\] itemtag blueprint:pig_food \(3\)
+expect \[zq\] itemtag blueprint:cat_food \(2\)
+expect \[zq\] itemtag blueprint:ocelot_food \(2\)
+reject \[zq\] itemtag alexmobs:bison_breedables \([1-9]
+look block flowers: no wild_ id other than wild_onions, wild_carrots, wild_potatoes; no botania:special_flowers member in the item flowers line (compare the two lines); JEI breeding pages and the "6 extra breeding page(s)" line are client (CQ)
+
+## SQ-BREED-03 | breeding foods; a bee pollinates a wild carrot (moved to group A: no natural flowers on superflat)
+> zc4 isfood minecraft:pig minecraft:carrot
+> zc4 isfood minecraft:cat minecraft:cod
+> zc4 isfood minecraft:ocelot minecraft:cod
+> zc4 isfood minecraft:bee farmersdelight:wild_carrots
+> zc4 isfood minecraft:bee minecraft:poppy
+waitlog \[zc4\] isfood minecraft:bee minecraft:poppy 20
+expect \[zc4\] isfood minecraft:pig minecraft:carrot true
+expect \[zc4\] isfood minecraft:cat minecraft:cod true
+expect \[zc4\] isfood minecraft:ocelot minecraft:cod true
+expect \[zc4\] isfood minecraft:bee farmersdelight:wild_carrots false
+expect \[zc4\] isfood minecraft:bee minecraft:poppy true
+> forceload add 40680 39980 40730 40020
+> time set 1000
+> weather clear 100000
+> gamerule doDaylightCycle false
+sleep 3
+> kill @e[type=minecraft:bee]
+> setblock 40700 -60 40000 minecraft:beehive[facing=south]
+> setblock 40706 -60 40000 farmersdelight:wild_carrots
+> summon minecraft:bee 40700.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40701.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40699.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+sleep 150
+> zc4 bees 40705 -58 40000 30
+waitlog \[zc4\] bees \d+ 20
+expect \[zc4\] bee .* flower=40706,-60,40000
+look pig, cat, ocelot accept their food; the bee refuses the wild carrot item and takes the poppy; a bee recorded the wild carrot block as its flower (wild rice is not a flower block: blocktag line of SQ-BREED-02; no live rice check)
+
+## SQ-NSM-01 | seasonings after the move (static half; crafting, overlay, eat bonus and JEI page are client)
+> zq bytype creativedelight:seasoning
+> zq itemtag creativedelight:seasonable/pepper
+> zq itemtag creativedelight:seasonable/chili
+> zq itemtag creativedelight:seasonable/cheese
+waitlog \[zq\] itemtag creativedelight:seasonable/cheese 30
+count bytype creativedelight:seasoning >= 1
+expect itemtag creativedelight:seasonable/pepper \([1-9]
+expect itemtag creativedelight:seasonable/chili \([1-9]
+expect itemtag creativedelight:seasonable/cheese \([1-9]
+reject seasonable.*creativeengineering:
+
+## SQ-CDNS-11 | Display Delight dish placement on the new namespace (sneak-use by a bot); food types resolve
+> forceload add 40490 39990 40510 40010
+sleep 3
+> fill 40495 -60 39995 40505 -55 40005 minecraft:air
+> setblock 40500 -61 40000 minecraft:stone
+> pbot spawn d11 40500.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear d11
+> zhh3 sneak d11 on
+> pbot hold d11 brewinandchewin:vegetable_omelet
+> pbot use d11 40500 -61 40000 up
+sleep 1
+> zhh3 block 40500 -60 40000
+waitlog \[zhh3\] block 40500 -60 40000 20
+expect \[zhh3\] block 40500 -60 40000 creativedelight:placed_vegetable_omelet
+> zq tagsof creativedelight:canned_corn
+waitlog \[zq\] done 20
+expect item tags of creativedelight:canned_corn: .*creativedelight:food_type/
+> zhh3 sneak d11 off
+> pbot remove d11
+look supplementaries jar and can pouring stay with CQ-CDNS-01 (client)
+
+## SQ-HCS-07 | nest loot: rolled on first touch, once; breaking drops the rolled items; roof table items
+> forceload add 39990 39990 40040 40020
+sleep 3
+> kill @e[type=hearthandharvest:crow]
+> place feature minecraft:oak 40005 -60 40005
+> place feature hearthandharvest:nest 40005 -53 40005
+> place feature hearthandharvest:nest 40005 -54 40005
+> place feature hearthandharvest:nest 40005 -55 40005
+sleep 2
+> zhh3 nests 40005 40005 8
+waitlog \[zhh3\] nests generated= 20
+# roof nests: the village table set by hand (a superflat has no village roofs); four seeds
+> setblock 40020 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:11L}
+> setblock 40022 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:12L}
+> setblock 40024 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:13L}
+> setblock 40026 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:14L}
+> setblock 40030 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest",LootTableSeed:21L}
+> data get block 40020 -60 40000 LootTable
+expect has the following block data: "hearthandharvest:chests/crow_nest_village"
+> pbot spawn n7 40021.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear n7
+# empty hand: each use takes the last stack; 6 uses empty a nest
+repeat 6
+> pbot use n7 40020 -60 40000 up
+end
+> data get block 40020 -60 40000 LootTable
+expect Found no elements matching LootTable
+> data get block 40020 -60 40000
+> zhh3 inv n7
+waitlog \[zhh3\] done 20
+> pbot use n7 40020 -60 40000 up
+> zhh3 inv n7
+waitlog \[zhh3\] done 20
+# second touch of an emptied nest: nothing new
+> pbot spawn n7 40023.5 -60 40002.5 minecraft:overworld survival
+> clear n7
+repeat 6
+> pbot use n7 40022 -60 40000 up
+end
+> zhh3 inv n7
+waitlog \[zhh3\] done 20
+> clear n7
+> pbot spawn n7 40025.5 -60 40002.5 minecraft:overworld survival
+repeat 6
+> pbot use n7 40024 -60 40000 up
+end
+> zhh3 inv n7
+waitlog \[zhh3\] done 20
+> kill @e[type=minecraft:item,x=40020,y=-62,z=39996,dx=14,dy=6,dz=8]
+> setblock 40026 -60 40000 minecraft:air destroy
+> setblock 40030 -60 40000 minecraft:air destroy
+sleep 2
+> zhh3 items 40026 -60 40000 2
+> zhh3 items 40030 -60 40000 2
+> pbot remove n7
+look the hand-touched village nests gave their items to n7 (inv lines: seeds, bread, book, lead, nuggets, shiny items), LootTable gone after the first touch, the extra use added nothing; the broken village nest dropped its rolled items plus the nest; the tree-table nest at 40030 dropped its roll or only the nest (about half are empty); the feature nest (zhh3 nests line) is on leaves
+
+## SQ-HCS-12 | tame crow on the shoulder hops off to fetch a dropped and a thrown item, then perches again
+> forceload add 40087 39987 40113 40013
+sleep 3
+> kill @e[type=!player,x=40087,y=-62,z=39987,dx=26,dy=17,dz=26]
+> fill 40087 -61 39987 40113 -47 40013 minecraft:glass hollow
+> pbot spawn c12 40100.5 -60 40000.5 minecraft:overworld survival
+sleep 2
+> clear c12
+> summon hearthandharvest:crow 40101 -59 40001
+sleep 1
+> zhh3 tame c12 40100 -59 40000 6
+sleep 45
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+expect \[zhh3\] tally crows=1 tamed=1 .*shoulder=1
+> summon minecraft:item 40106.5 -60 40000.5 {Item:{id:"minecraft:gold_nugget",Count:1b},PickupDelay:0s}
+sleep 30
+> zhh3 inv c12 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c12 20
+expect \[zhh3\] invcount c12 minecraft:gold_nugget 1
+sleep 30
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+> zhh3 throw c12 40106 -60 40000 minecraft:gold_nugget 1
+sleep 40
+> zhh3 inv c12 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c12 minecraft:gold_nugget 2 30
+> pbot remove c12
+> kill @e[type=hearthandharvest:crow,x=40087,y=-62,z=39987,dx=26,dy=18,dz=26]
+look the second tally shows shoulder=1 again (perched back after the first fetch); no NoSuchMethod / m_36362_ error in the log
+
+## SQ-FLR-03 | Millstone: 20 flesh give exactly 20 meat items
+> forceload add 40190 39990 40270 40010
+sleep 3
+> fill 40195 -60 39995 40265 -50 40005 minecraft:air
+> setblock 40200 -60 40000 create:creative_motor[facing=up]{ScrollValue:128}
+> setblock 40200 -59 40000 create:millstone
+sleep 3
+> data get block 40200 -60 40000
+> zc4 put 40200 -59 40000 biomesoplenty:flesh 20
+waitlog \[zc4\] done 20
+expect \[zc4\] put 40200 -59 40000 biomesoplenty:flesh inserted=20
+sleep 120
+> zc4 poolsinv 40200 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=20 bone=\d+ eye=\d+ misc=\d+ >= 1
+reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
+look the last pools line: meat=20 exactly, flesh used up; bone near 15, eye near 5, misc near 5
+
+## SQ-FLR-02b | crushing wheel rig: controller forms (setup for SQ-FLR-04; the 200-flesh counts are SQ-FLR-02, not in this chunk)
+> setblock 40220 -58 40000 create:crushing_wheel[axis=z]
+> setblock 40222 -58 40000 create:crushing_wheel[axis=z]
+> setblock 40220 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+> setblock 40222 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+sleep 5
+# wrong spin direction: swap both motors to the other side
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 39999 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 40001 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+sleep 5
+> execute if block 40221 -58 40000 create:crushing_wheel_controller run say FLR crusher controller ok
+expect FLR crusher controller ok
+> data get block 40220 -58 40000 Speed
+> data get block 40222 -58 40000 Speed
+
+## SQ-FLR-04 | Crushing wheels: 100 pus bubbles about 25 slimeballs, 100 hair about 50 string, nothing else
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:36b}}
+sleep 40
+> zc4 pools 40221 -62 40000 -3
+waitlog \[zc4\] done 20
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:36b}}
+sleep 40
+> zc4 pools 40221 -62 40000 -3
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=(1[5-9]|2\d|3[0-5]) string=0 other=0 >= 1
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=0 string=(3[5-9]|[4-5]\d|6[0-5]) other=0 >= 1
+reject \[zc4\] pools .*other=[1-9].*(pus_bubble|hair) x
+look first pools line ~25 slime only, second ~50 string only; any pus_bubble / hair left in "others" means the wheels did not take the stack (rerun with longer sleeps)
+
+## SQ-FLR-05 | Mixer and basin: blood renders (heated), flesh cultivation with each plant oil, porous cultivation
+# heated rig: burner 40240 -60, basin -59, mixer -57, motor -56 (facing down); unheated rig at x 40250 one lower
+> setblock 40240 -60 40000 create:blaze_burner
+> setblock 40240 -59 40000 create:basin
+> setblock 40240 -57 40000 create:mechanical_mixer
+> setblock 40240 -56 40000 create:creative_motor[facing=down]{ScrollValue:128}
+> setblock 40250 -60 40000 create:basin
+> setblock 40250 -58 40000 create:mechanical_mixer
+> setblock 40250 -57 40000 create:creative_motor[facing=down]{ScrollValue:128}
+sleep 3
+> zc4 fuel 40240 -60 40000 minecraft:coal_block
+waitlog \[zc4\] done 20
+expect \[zc4\] fuel 40240 -60 40000 .*blaze=kindled
+> zc4 put 40240 -59 40000 biomesoplenty:flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:porous_flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 500
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:flesh_tendons 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250 >= 2
+# unheated: items first, the fluid last (the recipe starts when the basin matches)
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 immersiveengineering:plantoil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+expect \[zc4\] inv 40250 -60 40000 total=5 biomesoplenty:flesh x3, biomesoplenty:porous_flesh x2
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 createaddition:seed_oil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 pneumaticcraft:vegetable_oil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+count \[zc4\] inv 40250 -60 40000 total=5 biomesoplenty:flesh x3, biomesoplenty:porous_flesh x2 == 3
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:flesh_tendons 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 1
+> zc4 fill 40250 -60 40000 biomesoplenty:blood 250
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+expect \[zc4\] inv 40250 -60 40000 total=1 biomesoplenty:porous_flesh x1
+reject \[zc4\] (fill|put) .* (filled|inserted)=0$
+look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB; each oil leaves 2 porous + 3 flesh and an empty tank; a fill line with filled=0 means that oil is not in #forge:plantoil (the row's failure note)
+
+## SQ-RD-08 | squid half: Calamari from a squid killed by a player (loot as the bot)
+> forceload add 40790 39990 40920 40100
+sleep 3
+> summon minecraft:squid 40860 -60 40008 {NoAI:1b,PersistenceRequired:1b,Tags:["rd8sq"]}
+> pbot spawn rd8 40856 -60 40008 minecraft:overworld survival
+sleep 2
+> clear rd8
+> kill @e[type=minecraft:item,x=40850,y=-62,z=39995,dx=20,dy=8,dz=20]
+pace 0.05
+repeat 10
+> execute as rd8 run loot spawn 40860 -60 40000 kill @e[type=minecraft:squid,tag=rd8sq,limit=1]
+end
+pace 2
+> zcount 40859 -61 39999 40861 -58 40001
+waitlog \[zcount\] entities 30
+reject No entity was found
+expect item:rusticdelight:calamari
+> kill @e[tag=rd8sq]
+> pbot remove rd8
+look 1-2 Calamari per kill (10 kills): about 10 to 20 in the merged zcount stacks, ink sacs beside them
+
+## SQ-RD-11 | farmer and fisherman novice trades
+> ztrades farmer 1 10
+> ztrades fisherman 1 20
+expect \[ztrades\] farmer L1 .*rusticdelight:cotton_boll
+expect \[ztrades\] farmer L1 .*rusticdelight:bell_pepper_red
+expect \[ztrades\] farmer L1 .*rusticdelight:coffee_beans
+expect \[ztrades\] fisherman L1 .*rusticdelight:calamari
+
+## SQ-RD-24 | /place feature: giant pepper patch on grass only; wild patches (configured feature ids)
+> fill 40800 -60 40060 40830 -54 40090 minecraft:air
+> fill 40800 -61 40060 40830 -61 40090 minecraft:grass_block
+> fill 40800 -61 40060 40804 -61 40090 minecraft:dirt
+> fill 40826 -61 40060 40830 -61 40090 minecraft:sand
+> place feature rusticdelight:bell_pepper_block_patch 40815 -60 40064
+> place feature rusticdelight:bell_pepper_block_patch 40815 -60 40070
+> place feature rusticdelight:bell_pepper_block_patch 40815 -60 40076
+> place feature rusticdelight:bell_pepper_block_patch 40815 -60 40082
+> place feature rusticdelight:bell_pepper_block_patch 40815 -60 40088
+> place feature rusticdelight:bell_pepper_block_patch 40802 -60 40066
+> place feature rusticdelight:bell_pepper_block_patch 40802 -60 40076
+> place feature rusticdelight:bell_pepper_block_patch 40802 -60 40086
+> place feature rusticdelight:bell_pepper_block_patch 40828 -60 40066
+> place feature rusticdelight:bell_pepper_block_patch 40828 -60 40076
+> place feature rusticdelight:bell_pepper_block_patch 40828 -60 40086
+> zcount 40800 -60 40060 40830 -58 40090
+waitlog \[zcount\] entities 60
+reject \[zcount\] blocks .*rusticdelight:bell_pepper_(white|pink|orange|blue|purple|black)_block
+expect \[zcount\] blocks .*rusticdelight:bell_pepper_(red|yellow|green)_block
+> zq count 40800 -60 40060 40830 -58 40090 rusticdelight:bell_pepper_red_block
+waitlog \[zq\] count rusticdelight:bell_pepper_red_block 120
+> zq count 40800 -60 40060 40830 -58 40090 rusticdelight:bell_pepper_yellow_block
+waitlog \[zq\] count rusticdelight:bell_pepper_yellow_block 120
+> zq count 40800 -60 40060 40830 -58 40090 rusticdelight:bell_pepper_green_block
+waitlog \[zq\] count rusticdelight:bell_pepper_green_block 120
+reject \[zq\] count rusticdelight:bell_pepper_\w+_block: \d+; on: .*minecraft:(dirt|sand)\b
+> fill 40800 -60 40060 40830 -54 40090 minecraft:air
+> place feature rusticdelight:wild_bell_peppers 40815 -60 40066
+> place feature rusticdelight:wild_coffee 40815 -60 40075
+> place feature rusticdelight:wild_cotton 40815 -60 40084
+> zcount 40800 -60 40060 40830 -58 40090
+waitlog \[zcount\] blocks .*wild 60
+expect \[zcount\] blocks .*rusticdelight:wild_bell_peppers=
+expect \[zcount\] blocks .*rusticdelight:wild_coffee=
+expect \[zcount\] blocks .*rusticdelight:wild_cotton=
+reject \[zcount\] blocks .*rusticdelight:wild_(pale|dark)_bell_peppers
+reject Failed to place feature|Unknown|ERROR
+
+## SQ-RDX-12b | knife on Glowing Calamari: 2 slices and a bone meal (board at 40850 40100)
+> setblock 40850 -60 40100 farmersdelight:cutting_board
+> pbot spawn rdx12 40850 -60 40104 minecraft:overworld survival
+sleep 2
+> clear rdx12
+> item replace entity rdx12 weapon.offhand with minecraft:air
+> kill @e[type=minecraft:item,x=40850,y=-60,z=40100,distance=..6]
+> pbot hold rdx12 creativedelight:glowing_calamari
+> pbot use rdx12 40850 -60 40100 up
+> pbot hold rdx12 farmersdelight:iron_knife
+> pbot use rdx12 40850 -60 40100 up
+sleep 2
+> zcount 40846 -61 40096 40854 -57 40108
+> clear rdx12 creativedelight:glowing_calamari_slice 0
+> clear rdx12 minecraft:bone_meal 0
+expect item:creativedelight:glowing_calamari_slice|Found 2 matching item
+> pbot remove rdx12
+look 2 Glowing Calamari Slices and 1 Bone Meal (zcount items plus the bot's "Found N")
+
+## SQ-RD-22 | fried foods read #rusticdelight:cooking_oil; Calamari Soup
+> zq rdetail fried_dough
+> zq rdetail fried_dumplings
+> zq rdetail fried_fish
+> zq rdetail calamari_soup
+> zq itemtag rusticdelight:cooking_oil
+> zq makes rusticdelight:cooking_oil
+> zq food rusticdelight:calamari_soup
+waitlog \[zq\] food rusticdelight:calamari_soup 30
+expect itemtag rusticdelight:cooking_oil \([1-9]\d*\)
+reject cooking_oil \{farmersdelight:cooking\}
+look Calamari Soup food line: Comfort 4:00 and no Nourishment is the current rule (queue rerun row of SQ-RD-22, TODO creativedelight/members #43); last result was FAIL, same result is not a regression
+
+## SQ-RDX-03 | Rustic pancakes recipes
+> zq rdetail pancakes_from_pancake
+> zq rdetail pancake_from_pancakes
+> zq rdetail cutting/pancakes
+waitlog \[zq\] done 30
+expect \[zq\] rusticdelight:pancakes_from_pancake \{.*supplementaries:pancake
+expect \[zq\] rusticdelight:pancake_from_pancakes \{.*-> 6 (supplementaries:)?pancake\b
+expect \[zq\] rusticdelight:cutting/pancakes \{.*-> 6 (supplementaries:)?pancake\b
+
+## SQ-RDX-03b | Pancakes plate serves Supplementaries pancakes
+> setblock 40838 -60 40100 rusticdelight:pancakes
+> pbot spawn rdx3 40838 -60 40103 minecraft:overworld survival
+repeat 2
+> pbot hold rdx3 minecraft:air
+> pbot use rdx3 40838 -60 40100 up
+> data get entity rdx3 SelectedItem
+> clear rdx3
+end
+count id: "supplementaries:pancake" == 2
+> zact break 40838 -60 40100 none
+expect \[zact\] break 40838 -60 40100 rusticdelight:pancakes held none: true, .*supplementaries:pancake x4
+> pbot remove rdx3
+
+## SQ-RDX-06 | Maple Glazed Bacon and Maple Cookie
+> zq makes maple_glazed_bacon
+> zq makes maple_cookie
+> zq rdetail maple_glazed_bacon
+> zq rdetail maple_cookie
+waitlog \[zq\] done 30
+count \[zq\] \S+ -> \d+ abnormals_delight:maple_glazed_bacon$ == 1
+look bacon: cooked bacon + syrup + honey bottle; cookie: one Oven recipe, cookie dough + syrup + honey bottle -> 12, no 2-syrup recipe
+
+## SQ-RDX-07 | Supreme Pizza recipes and roasted slice tag
+> zq makes brewinandchewin:pizza
+> zq rdetail pizza_manual_only
+> zq itemtag creativedelight:roasted_bell_pepper_slice
+> zq uses minecraft:cooked_cod
+waitlog \[zq\] done 30
+expect \[zq\] creativedelight:\S*pizza_manual_only \{
+expect itemtag creativedelight:roasted_bell_pepper_slice \(9\)
+look cooked cod not in the pizza meat slot (no pizza id in the minecraft:cooked_cod uses list, or only the fish slot)
+
+## SQ-RDX-08 | Glowing Calamari Crate recipes and tags
+> zq makes rusticdelight:glowing_calamari_crate
+> zq uses rusticdelight:glowing_calamari_crate
+> zq blocktag forge:storage_blocks/glowing_calamari
+> zq blocktag minecraft:mineable/axe
+waitlog \[zq\] blocktag minecraft:mineable/axe 30
+expect makes rusticdelight:glowing_calamari_crate: [1-9]
+expect uses rusticdelight:glowing_calamari_crate: [1-9]
+expect blocktag forge:storage_blocks/glowing_calamari \(\d+\): .*rusticdelight:glowing_calamari_crate
+expect blocktag minecraft:mineable/axe \(\d+\): .*rusticdelight:glowing_calamari_crate
+
+## SQ-RDX-08b | Glowing Calamari Crate places and drops itself
+> setblock 40844 -60 40100 rusticdelight:glowing_calamari_crate
+> zact break 40844 -60 40100 none
+> setblock 40844 -60 40100 rusticdelight:glowing_calamari_crate
+> zact break 40844 -60 40100 minecraft:iron_axe
+count \[zact\] break 40844 -60 40100 rusticdelight:glowing_calamari_crate held \S+: true, .*drops rusticdelight:glowing_calamari_crate x1$ == 2
+
+## SQ-RDX-09 | Rustic roll assemblies
+> zq recipes bell_pepper_roll
+> zq recipes cherry_blossom_roll
+> zq recipes calamari_roll
+> zq recipes rice_roll_royale
+waitlog \[zq\] done 30
+count \[zq\] \S*(bell_pepper_roll|cherry_blossom_roll|calamari_roll|glowing_calamari_roll|rice_roll_royale)\S*sequenced_assembly\S* -> >= 13
+expect \[zq\] \S*rice_roll_royale\S*sequenced_assembly\S* ->
+
+## SQ-RDX-10 | heatless Rustic soups and braised beef
+> zq rdetail bell_pepper_soup_cooked_manual_only
+> zq rdetail calamari_soup_cooked_manual_only
+> zq rdetail coffee_braised_beef_cooked_manual_only
+> zq uses rusticdelight:calamari
+waitlog \[zq\] done 30
+expect \[zq\] creativedelight:shapeless/bell_pepper_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/calamari_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/coffee_braised_beef_cooked_manual_only \{
+reject (alone|shared) \S*(createmixing|mixing)/\S*calamari_soup
+
+## SQ-RDX-11 | Golden Coffee Beans routes
+> zq makes rusticdelight:golden_coffee_beans
+> zq rdetail golden_coffee_beans
+waitlog \[zq\] done 30
+reject \[zq\] rusticdelight:golden_coffee_beans \{
+expect \{create:mixing\} -> \S* ?\S*golden_coffee_beans
+expect \{immersiveengineering:arc_furnace\}
+
+## SQ-RDX-12 | one cutting recipe for Glowing Calamari
+> zq makes creativedelight:glowing_calamari_slice
+> zq rdetail glowing_calamari_slice_from_glowing_calamari
+waitlog \[zq\] done 30
+count \[zq\] creativedelight:\S+ -> 2 creativedelight:glowing_calamari_slice == 1
+expect \[zq\] creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari
+reject \[zq\] \S*fdcutting\S*glowing_calamari
+
+## SQ-RDX-14 | Vintage pizzas unchanged
+> zq rdetail vintagedelight:cheese_pizza
+> zq rdetail vintagedelight:meat_pizza
+> zq item kubejs:incomplete_pizza
+waitlog \[zq\] item kubejs:incomplete_pizza 30
+expect item kubejs:incomplete_pizza: class
+look both Vintage pizza grids still dough, sauce, dough
+
+## SQ-RDX-04 | coffees: only Caffeinated, 900 ticks, amplifier 0 (food properties)
+> zq food rusticdelight:syrup_coffee
+> zq food rusticdelight:pumpkin_coffee
+> zq food rusticdelight:cherry_blossom_coffee
+waitlog \[zq\] food rusticdelight:cherry_blossom_coffee 30
+expect \[zq\] food rusticdelight:syrup_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:pumpkin_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:cherry_blossom_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+reject \[zq\] food rusticdelight:[a-z_]*coffee: .*minecraft:(speed|haste)
+
+## SQ-RDX-05 | coffee recipes merged
+> zq recipes farmersrespite:brewing/coffee
+> zq recipes create_central_kitchen:mixing/coffee
+> zq rdetail creativedelight:farmersrespitebrewing/gamblers_tea
+waitlog \[zq\] done 30
+expect \[zq\] recipes matching farmersrespite:brewing/coffee: 0
+expect \[zq\] recipes matching create_central_kitchen:mixing/coffee: 0
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*coffee_beans
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*minecraft:glow_berries
+
+## SQ-FDI-02 | 20 different foods: no Carrot hearts (max health stays 20)
+> pbot spawn fdi 40600.5 -60 40010.5 minecraft:overworld survival
+sleep 2
+> clear fdi
+> zc4 sol fdi
+waitlog \[zc4\] done 20
+> zc4 eat fdi minecraft:apple
+> zc4 eat fdi minecraft:bread
+> zc4 eat fdi minecraft:cooked_beef
+> zc4 eat fdi minecraft:baked_potato
+> zc4 eat fdi minecraft:carrot
+> zc4 eat fdi minecraft:cooked_chicken
+> zc4 eat fdi minecraft:cooked_porkchop
+> zc4 eat fdi minecraft:cooked_mutton
+> zc4 eat fdi minecraft:cooked_cod
+> zc4 eat fdi minecraft:cooked_salmon
+> zc4 eat fdi minecraft:cookie
+> zc4 eat fdi minecraft:melon_slice
+> zc4 eat fdi minecraft:pumpkin_pie
+> zc4 eat fdi minecraft:mushroom_stew
+> zc4 eat fdi minecraft:beetroot
+> zc4 eat fdi minecraft:sweet_berries
+> zc4 eat fdi minecraft:rabbit_stew
+> zc4 eat fdi minecraft:dried_kelp
+> zc4 eat fdi minecraft:golden_carrot
+> zc4 eat fdi minecraft:potato
+waitlog \[zc4\] eat fdi minecraft:potato 30
+> zc4 sol fdi
+sleep 2
+> attribute fdi minecraft:generic.max_health get
+reject \[zc4\] error eat
+expect \[zc4\] sol fdi carrot=20 .*maxhealth=20\.0
+expect Value of attribute .* is 20\.0
+look the first sol line shows carrot=0; the Diet Tracker side (applepie=) counted the 20 foods too
+
+## SQ-FDI-03 | placed pie and cake bites unlock their slice in both books; the knife cut unlocks nothing
+> forceload add 40590 39990 40620 40020
+sleep 3
+> fill 40595 -60 39995 40615 -55 40015 minecraft:air
+> setblock 40600 -60 40000 farmersdelight:apple_pie
+> setblock 40602 -60 40000 minecraft:cake
+> setblock 40604 -60 40000 minecraft:candle_cake
+> setblock 40606 -60 40000 neapolitan:vanilla_cake
+> setblock 40608 -60 40000 farmersdelight:sweet_berry_cheesecake
+> pbot spawn fdi 40603.5 -60 40002.5 minecraft:overworld survival
+> clear fdi
+> zc4 sol fdi minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdi 4
+> pbot hold fdi minecraft:air
+> pbot use fdi 40600 -60 40000 up
+> zc4 sol fdi farmersdelight:apple_pie_slice
+sleep 1
+> zc4 hunger fdi 4
+> pbot use fdi 40602 -60 40000 up
+> zc4 sol fdi farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fdi minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdi 4
+> pbot use fdi 40604 -60 40000 up
+> zc4 sol fdi minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdi 4
+> pbot use fdi 40606 -60 40000 up
+> zc4 sol fdi abnormals_delight:vanilla_cake_slice
+waitlog \[zc4\] done 20
+> pbot hold fdi farmersdelight:iron_knife
+> pbot use fdi 40608 -60 40000 up
+sleep 1
+> zc4 sol fdi farmersdelight:sweet_berry_cheesecake_slice
+waitlog \[zc4\] done 20
+> zc4 eat fdi farmersdelight:sweet_berry_cheesecake_slice
+> zc4 sol fdi farmersdelight:sweet_berry_cheesecake_slice
+waitlog \[zc4\] done 20
+count \[zc4\] sol fdi .*carrotHas=true applepie=.*applepieHas=true >= 3
+look per bite the slice item turns carrotHas=true and applepieHas=true (apple pie slice, cake slice, vanilla cake slice); after the vanilla cake bite the Diet Tracker has minecraft:cake once (applepieEntries rose by 1 for the cake bite, not 2); the candle cake bite counts as the cake; the cheesecake slice is false after the knife cut and true only after zc4 eat. The Food Dictionary screen (FDI-06) is client.
+
+## SQ-FDI-05 | lunchbox blacklist in the new world's server configs (static half)
+shell for f in r1113c4a/serverconfig/solcarrot-server.toml r1113c4a/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
+look both files list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book listing and the lunchbox tooltip are client (CQ)
+
+## SQ-RDB-02 | /dumpall: Rustic recipes, tags, loot and items equal the 11-10 baseline (kubejs/exported copied in by prep)
+shell rm -rf rdb_base && cp -r kubejs/exported rdb_base && echo "baseline copied: $(grep -c '^rusticdelight:' rdb_base/recipes/all.csv) rusticdelight recipes"
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 $INST/tools/scratch_query/rdb_compare.py rdb_base kubejs/exported rusticdelight
+look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake_manifest.json rule. items_by_mod on a dedicated server may lack client-only names (ids still compare)

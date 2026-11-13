@@ -1,0 +1,334 @@
+# r1113 Power Grid P7 gate boot (jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-09.jar): SQ-PWG-55, -58,
+# -60, -59, -56, -57, -61 (queue run order; CQ rows are client rows, not here). One boot covers all: SQ-PWG-61 needs
+# spawn-animals=true, so the whole boot has it (SETUP9 kills the generated animals and stops natural spawning).
+# Group A superflat, level pwg9, ground Y -61 (grass), blocks at Y -60.
+# Prep:
+#   COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-09.jar prep_srv.sh OUT pwg9 A spawn-animals=true
+#   ls OUT/srv/mods | grep -i powergrid        (only backportedPowerGrid-0.6.2-ce-19.2-09.jar; remove -08 and older)
+#   for p in pwg_probe pwg_grid_probe pwg_p3_probe pwg_p4_probe pwg_p5_probe pwg_p6_probe pwg_p7_probe; do
+#     cp $INST/tools/scratch_query/$p.js OUT/srv/kubejs/server_scripts/zz_$p.js; done
+#   ponder datapack from the -09 jar (before boot; as SQ-PWG-46):
+#   mkdir -p OUT/pwgp OUT/srv/pwg9/datapacks/pwgponder/data/pwgponder/structures \
+#     && unzip -o -q OUT/srv/mods/backportedPowerGrid-0.6.2-ce-19.2-09.jar 'assets/powergrid/ponder/*' -d OUT/pwgp \
+#     && cp -r OUT/pwgp/assets/powergrid/ponder/. OUT/srv/pwg9/datapacks/pwgponder/data/pwgponder/structures/ \
+#     && printf '{"pack":{"pack_format":10,"description":"PWG ponder structures, scratch only"}}' > OUT/srv/pwg9/datapacks/pwgponder/pack.mcmeta
+#   Loading Protection: the damage rows (SQ-PWG-60 zap; -59 slowness) hit villagers, so shorten the protection window:
+#   python3 $INST/tools/scratch_query/qrun.py toml OUT/srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+#   (section name checked in config/loadingprotection-common.toml: ["Loading Protection Configuration"], default 150)
+#   Difficulty stays peaceful: hostile mobs are removed, villagers, the iron golem and sheep are not.
+# Probe goggle reads log a RuntimeDistCleaner ERROR (client class): no blanket ERROR reject.
+# waitlog matches anywhere since the row start; real waits are sleeps (20 ticks = 1 s) plus pace (s after each command).
+# Batch deviations from the row text: SETUP9 (not a row) kills the animals generated in the forceloaded chunks and sets
+# doMobSpawning false, so the baton/zap "nearest living entity" is the summoned target; SQ-PWG-57 picks the worn-tick
+# item by capture (the first feitems entry with 0 stored), not by hand; SQ-PWG-61 reuses this boot and SQ-PWG-55's
+# forceload (it covers Z 1580 to 1590).
+pace 1
+
+## SQ-PWG-55 | -09 loads (phase 7): registries, 61 recipes, P7 glue (movement behaviour, zap source, Capacity, drill mixin), config
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 7\)
+bootreject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]).*(SheepMixin|PlayerDrillMixin|DrillBreakActionMixin)
+> forceload add 1095 1525 1115 1590
+sleep 6
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg6 check
+waitlog \[zpwg6\] done 30
+> zpwg7 check
+waitlog \[zpwg7\] done 30
+sleep 1
+shell grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log | head -40
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-09
+expect \[zpwg\] ns powergrid block: 59\b
+expect \[zpwg\] ns powergrid item: 77\b
+expect \[zpwg\] ns powergrid entity_type: 4\b
+expect \[zpwg\] ns powergrid block_entity_type: 49\b
+expect \[zpwg\] ns powergrid menu: 2\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg3\] recipes 61$
+expect recipe powergrid:crafting/portable_battery type=
+expect recipe powergrid:mechanical_crafting/electrobaton type=
+expect recipe powergrid:mechanical_crafting/electrozapper type=
+expect recipe powergrid:mechanical_crafting/portable_drill type=
+expect recipe powergrid:mechanical_crafting/portable_saw type=
+reject recipe powergrid:crafting/heating_coil type=
+reject recipe powergrid:crafting/light_fixture type=
+reject recipe powergrid:crafting/solar_panel_bearing type=
+expect \[zpwg6\] fan types .*powergrid:heater_blasting\(150\)
+expect \[zpwg6\] fan types .*powergrid:heater_smoking\(250\)
+expect \[zpwg6\] fan types .*creativeengineering:dragon_breathing\(500\)
+count \[zpwg6\] fan type \S+ registered=true$ == 3
+expect \[zpwg6\] contraption type powergrid:solar_panel registered=true
+expect \[zpwg6\] solar biome overrides 0$
+expect \[zpwg6\] config heaterFanProcessingSpeedMultiplier=0\.75 growthLampRadius=2 growthLampChance=50 electricPumpRange=24 solarPanelMaxSize=25
+count \[zpwg6\] mixin target \S+ loaded$ == 6
+reject \[zpwg6\] mixin target \S+ error
+count \[zpwg7\] item powergrid:\S+ registered=true$ == 6
+expect \[zpwg7\] block powergrid:portable_battery registered=true blockEntity=true entity zap_projectile=true
+expect \[zpwg7\] lightning_rod movement behaviour=org\.patryk3211\.powergrid\.equipment\.thunder\.LightningRodMovementBehaviour$
+expect \[zpwg7\] damage source zap msgId=zap$
+expect \[zpwg7\] capacity enchant canEnchant\(portable_battery\)=true max level=3$
+expect \[zpwg7\] battery maxCharge level0=20000 level1=40000 level3=80000$
+expect \[zpwg7\] fake player PlayerDrillExtensions=true$
+expect \[zpwg7\] config drillEnergyPerUse=25 drillMineSpeedBase=6 drillMineSpeedBulk=16 sawEnergyPerUse=100 sawMineSpeed=6 batonEnergy=250 zapperEnergy=500 batteryBase=20000 batteryEnchant=20000$
+expect \[zpwg7\] config forgeEnergyPerVolt=2$
+reject \[zpwg7\] item powergrid:\S+ registered=false
+reject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+reject \[zpwg\w*\] (error|config error|contraption type error|solar overrides error)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look shell output: mixin lines name no failure, none naming SheepMixin, PlayerDrillMixin or DrillBreakActionMixin; movement behaviour none or another class: record which (PowerGridImpl.commonSetup or a pack mod)
+
+## SQ-PWG-SETUP9 | clear the animals generated in the forceloaded chunks; no natural spawning, no fire spread (not a row)
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> weather clear
+> kill @e[type=!minecraft:player]
+sleep 2
+
+## SQ-PWG-58 | PWG-35 drill (speed climb, mining flag via DrillBreakActionMixin, wear without power) and saw (tree felling when sneaking)
+> fill 1100 -60 1550 1106 -60 1550 minecraft:stone
+> setblock 1100 -60 1552 minecraft:obsidian
+> setblock 1101 -60 1552 minecraft:dirt
+> setblock 1102 -60 1552 minecraft:oak_planks
+> zpwg7 fp 1100 -60 1547
+> zpwg7 wear 20000
+> zpwg7 hold powergrid:portable_drill
+> zpwg7 dig 1100 -60 1550
+> zpwg7 dig 1101 -60 1550
+> zpwg7 dig 1102 -60 1550
+> zpwg7 dig 1103 -60 1550
+> zpwg7 dig 1104 -60 1550
+> zpwg7 drops 1102 -60 1550 4
+> zpwg7 dig 1100 -60 1552
+> zpwg7 drops 1100 -60 1552 1
+> zpwg7 dig 1101 -60 1552
+> zpwg7 dig 1102 -60 1552
+> zpwg7 action 1105 -60 1550 start
+> zpwg7 action 1105 -60 1550 abort
+> zpwg7 action 1105 -60 1550 start
+> zpwg7 action 1105 -60 1550 stop
+> zpwg7 hold minecraft:stick
+> zpwg7 action 1105 -60 1550 start
+> zpwg7 hold powergrid:portable_drill
+> zpwg7 wear 0
+> zpwg7 dig 1105 -60 1550
+> zpwg7 fp 1100 -60 1547
+> zpwg7 hold powergrid:portable_drill
+> zpwg7 dig 1106 -60 1550
+> place feature minecraft:oak 1110 -60 1557
+sleep 1
+> zpwg7 fp 1110 -60 1553
+> zpwg7 wear 20000
+> zpwg7 hold powergrid:portable_saw
+> zpwg7 dig 1110 -60 1557
+> zpwg7 sneak on
+> zpwg7 dig 1110 -59 1557
+sleep 1
+> zpwg7 drops 1110 -56 1557 6
+> setblock 1112 -60 1557 minecraft:stone
+> zpwg7 dig 1112 -60 1557
+sleep 1
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=6 itemSpeed=\S+ correctTool=true
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=8\.5
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=11
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=13\.5
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=16
+expect \[zpwg7\] dig result=true after=minecraft:air charge=19975/20000 dur=250/250
+expect \[zpwg7\] dig result=true after=minecraft:air charge=19875/20000 dur=250/250 .*speedMult=1 digSpeedNow=16
+expect \[zpwg7\] drop minecraft:cobblestone x
+expect \[zpwg7\] dig minecraft:obsidian with powergrid:portable_drill .*correctTool=true
+expect \[zpwg7\] drop minecraft:obsidian x1
+expect \[zpwg7\] dig minecraft:dirt with powergrid:portable_drill .*itemSpeed=6
+expect \[zpwg7\] dig minecraft:oak_planks with powergrid:portable_drill .*itemSpeed=1 correctTool=false
+expect \[zpwg7\] action START_DESTROY_BLOCK held=powergrid:portable_drill mining=true
+expect \[zpwg7\] action ABORT_DESTROY_BLOCK held=powergrid:portable_drill mining=false
+expect \[zpwg7\] action STOP_DESTROY_BLOCK held=powergrid:portable_drill mining=false
+expect \[zpwg7\] action START_DESTROY_BLOCK held=minecraft:stick mining=false
+expect \[zpwg7\] dig result=true after=minecraft:air charge=0/20000 dur=249/250 mining=\S+ speedMult=0
+expect \[zpwg7\] dig result=true after=minecraft:air charge=none dur=249/250
+reject Failed to place feature|Unable to place feature
+expect \[zpwg7\] dig minecraft:oak_log with powergrid:portable_saw .*itemSpeed=6
+expect \[zpwg7\] drop minecraft:oak_log x
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_saw .*itemSpeed=1
+reject \[zpwg7\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look digSpeed / digSpeedNow climb 6, 8.5, 11, 13.5, 16 and stay 16; charge -25 per drill block (dirt, planks, obsidian too?); saw: first log -100, not sneaking only that log goes; sneaking: whole tree falls (several oak_log drops, leaf drops), -100 more; a /5 digSpeed means the fake player is not on ground
+
+## SQ-PWG-60 | PWG-36 Electro-Zapper: projectile, 8 damage, chain share above 0.6 power, 0.6 and empty (0.5 floor, wear)
+> summon minecraft:villager 1100 -60 1575 {NoAI:1b}
+> zpwg7 fp 1100 -60 1568
+> zpwg7 hold powergrid:electrozapper
+> zpwg7 wear 20000
+> zpwg7 zap 10
+sleep 1
+> zpwg7 hp 1100 -60 1575 2
+> summon minecraft:villager 1110 -60 1575 {NoAI:1b}
+> summon minecraft:villager 1111 -60 1575 {NoAI:1b}
+> summon minecraft:villager 1110 -60 1576 {NoAI:1b}
+> zpwg7 fp 1110 -60 1568
+> zpwg7 hold powergrid:electrozapper
+> zpwg7 wear 20000
+> zpwg7 zap 10
+sleep 1
+> zpwg7 hp 1110 -60 1575 3
+> zpwg7 wear 6000
+> zpwg7 zap 10
+sleep 1
+> zpwg7 hp 1110 -60 1575 3
+> kill @e[type=minecraft:villager]
+> summon minecraft:villager 1100 -60 1575 {NoAI:1b}
+> zpwg7 fp 1100 -60 1568
+> zpwg7 hold powergrid:electrozapper
+> zpwg7 wear 0
+> zpwg7 zap 10
+sleep 1
+> zpwg7 hp 1100 -60 1575 2
+expect \[zpwg7\] zap target=\S+ health=20/20 use=(SUCCESS|CONSUME) projectiles 0 -> 1 charge 20000/20000 -> 19500/20000 dur 50/50 -> 50/50 cooldown=true
+expect \[zpwg7\] zap projectile power=1 motion=
+expect \[zpwg7\] hp \S+villager\S* 12/20
+count \[zpwg7\] hp \S+villager\S* 17\.333/20 == 5
+expect \[zpwg7\] zap projectile power=0\.6 motion=
+expect \[zpwg7\] hp \S+villager\S* 15\.733/20
+expect \[zpwg7\] zap projectile power=0\.5 motion=
+expect \[zpwg7\] zap target=\S+ health=20/20 use=\S+ projectiles 0 -> 1 charge 0/20000 -> 0/20000 dur 50/50 -> 49/50
+expect \[zpwg7\] hp \S+villager\S* 16/20
+reject \[zpwg7\] zap: no target
+reject \[zpwg7\] (error|unknown subcommand)
+look motion length about 4 on each projectile line; each hp right after a zap: projectile gone (not a Living, check none listed); villager max health 20 (MCA villagers may differ: record); an error line after "projectiles ... -> 1" is the fake player's missing connection: record it, not a port fail; no damage at all: Loading Protection (protectionDuration 1 set?)
+
+## SQ-PWG-59 | PWG-36 Electro-Baton: modifiers, stun by output (10 / 8 / none), 250 FE per hit, wear only when empty, golem not stunned
+> summon minecraft:villager 1100 -60 1562 {NoAI:1b}
+> summon minecraft:iron_golem 1104 -60 1562 {NoAI:1b}
+> zpwg7 fp 1100 -60 1560
+> zpwg7 hold powergrid:electrobaton
+> zpwg7 wear 20000
+> zpwg7 baton 2
+> effect clear @e[type=minecraft:villager]
+> zpwg7 wear 8000
+> zpwg7 baton 2
+> effect clear @e[type=minecraft:villager]
+> zpwg7 wear 2000
+> zpwg7 baton 2
+> zpwg7 wear 0
+> zpwg7 baton 2
+> zpwg7 fp 1104 -60 1560
+> zpwg7 hold powergrid:electrobaton
+> zpwg7 wear 20000
+> zpwg7 baton 2
+sleep 1
+expect \[zpwg7\] baton powergrid:electrobaton modifiers .*generic\.attack_damage=0\.5\b
+expect \[zpwg7\] baton powergrid:electrobaton modifiers .*generic\.attack_speed=-2\.6\b
+expect \[zpwg7\] baton powergrid:electrobaton modifiers .*generic\.attack_knockback=1\b
+expect \[zpwg7\] baton target=\S*villager\S* maxHealth=20 result=\S+ slowness amp=10 dur=60 charge 20000/20000 -> 19750/20000 dur 20/20 -> 20/20
+expect \[zpwg7\] baton target=\S*villager\S* .*slowness amp=8 dur=\d+ charge 8000/20000 -> 7750/20000
+expect \[zpwg7\] baton target=\S*villager\S* .*slowness none charge 2000/20000 -> 1750/20000
+expect \[zpwg7\] baton target=\S*villager\S* .*slowness none charge 0/20000 -> 0/20000 dur 20/20 -> 19/20
+expect \[zpwg7\] baton target=minecraft:iron_golem maxHealth=100 result=\S+ slowness none charge 20000/20000 -> 19750/20000
+reject \[zpwg7\] baton: no target
+reject \[zpwg7\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look slowness at 2000 (output 0.25) and 0 is none (effect clear ran after the 20000 and 8000 hits); villager type and max health: record (MCA may differ); no slowness at full charge: BatteryUtils.drawEnergy or the max health
+
+## SQ-PWG-56 | PWG-34 portable battery block: place (charge and Capacity carried), charge at 40 V to max, comparator, drop keeps Charge
+> zpwg7 fp 1100 -60 1527
+> zpwg7 holdbat 0
+> zpwg7 place 1100 -60 1530
+> zpwg3 src 1100 -60 1533 40
+> zpwg3 w 1100 -60 1533 0 1100 -60 1530 0
+> zpwg3 w 1100 -60 1530 1 1100 -60 1533 1
+> zpwg7 pbat 1100 -60 1530
+> zpwg7 holdbat 30000 1
+> zpwg7 place 1104 -60 1530
+> zpwg3 src 1104 -60 1533 40
+> zpwg3 w 1104 -60 1533 0 1104 -60 1530 0
+> zpwg3 w 1104 -60 1530 1 1104 -60 1533 1
+> zpwg7 pbat 1104 -60 1530
+sleep 2
+> zpwg7 pbat 1100 -60 1530
+sleep 4
+> zpwg7 pbat 1104 -60 1530
+sleep 4
+> zpwg7 pbat 1100 -60 1530
+> zpwg7 pick 1100 -60 1530
+> zpwg7 hold minecraft:iron_pickaxe
+> zpwg7 dig 1100 -60 1530
+sleep 1
+> zpwg7 drops 1100 -60 1530 2
+expect \[zpwg7\] place powergrid:portable_battery result=(SUCCESS|CONSUME) block=powergrid:portable_battery heldNow=\S+x0
+expect \[zpwg7\] pbat charge=0 capacityLevel=0 comparator=0
+expect \[zpwg7\] pbat charge=([4-9]\d{3}|1\d{4}) capacityLevel=0
+expect \[zpwg7\] pbat charge=20000 capacityLevel=0 comparator=15 clone=powergrid:portable_battery cloneCharge=20000
+expect \[zpwg7\] pbat terminals T0=
+expect \[zpwg7\] pbat charge=30000 capacityLevel=1
+expect \[zpwg7\] pbat charge=40000 capacityLevel=1 comparator=15
+expect \[zpwg7\] pick result=PASS block=powergrid:portable_battery
+expect \[zpwg7\] dig result=true after=minecraft:air
+expect \[zpwg7\] drop powergrid:portable_battery x1 Charge=20000 capacityLevel=0
+reject \[zpwg7\] pbat none at
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look waits overlap: the first block's mid read is about 9 s (~180 ticks) after wiring, its last about 18 s; the Capacity block's second read about 8 s after wiring; record the mid charge and convert to FE per tick (row: about 80 at 40 V); no overheat; comparator = charge / max x 15
+
+## SQ-PWG-57 | PWG-34 worn battery: output fraction (0.25 floor, 0 below one use), Capacity max, worn tick moves FE to the held item
+> zpwg7 fp 1100 -60 1540
+> zpwg7 wear 20000
+> zpwg7 bat
+> zpwg7 wear 8000
+> zpwg7 bat
+> zpwg7 wear 2000
+> zpwg7 bat
+> zpwg7 wear 0
+> zpwg7 bat
+> zpwg7 wear 20000 2
+> zpwg7 bat
+> zpwg7 wear 40000 1
+> zpwg7 bat
+> zpwg7 feitems
+sleep 1
+expect \[zpwg7\] bat charge=20000/20000 output=1
+expect \[zpwg7\] bat charge=8000/20000 output=0\.8
+expect \[zpwg7\] bat charge=2000/20000 output=0\.25
+expect \[zpwg7\] bat charge=0/20000 output=0
+expect \[zpwg7\] bat charge=20000/60000 output=0\.667
+expect \[zpwg7\] bat charge=40000/40000 output=1
+expect \[zpwg7\] feitems [1-9]\d*:
+capture FE \[zpwg7\] feitems \d+: (?:.*? )?([a-z0-9_.-]+:[a-z0-9_/.-]+)\(0/[1-9]\d*\)
+> zpwg7 hold {FE}
+> zpwg7 wear 20000
+> zpwg7 worn 1
+> zpwg7 worn 20
+sleep 1
+expect \[zpwg7\] worn x1 held=\S+ fe 0/\d+ -> [1-9]\d*/\d+ charge 20000/20000 -> 1\d{4}/20000
+expect \[zpwg7\] worn x20 held=
+reject \[zpwg7\] worn: no battery worn
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look record the feitems list and the chosen {FE}; record FE gained and charge lost per tick (row: equal; one tick moves at most what the item accepts); capture FAIL = no empty FE item in the pack: then the worn tick is CQ-PWG-18 only
+
+## SQ-PWG-61 | PWG-37 wire cutters shear a sheep (SheepMixin): string not wool, 1 damage; second try CONSUME; saw does not cut; no advancement
+> summon minecraft:sheep 1100 -60 1585 {NoAI:1b}
+> zpwg7 fp 1100 -60 1583
+> zpwg7 hold powergrid:wire_cutter
+> zpwg7 shear 4
+sleep 1
+> zpwg7 shear 4
+> summon minecraft:sheep 1104 -60 1585 {NoAI:1b}
+> zpwg7 fp 1104 -60 1583
+> zpwg7 hold powergrid:portable_saw
+> zpwg7 shear 4
+sleep 1
+shell grep -n -i 'advancement' logs/latest.log | grep -i powergrid | head
+expect \[zpwg7\] hold powergrid:wire_cutter
+expect \[zpwg7\] shear with powergrid:wire_cutter result=SUCCESS sheared false -> true health 8 -> 7 strings 0 -> [0-2]
+expect \[zpwg7\] shear with powergrid:wire_cutter result=CONSUME sheared true -> true health 7 -> 7
+expect \[zpwg7\] shear with powergrid:portable_saw result=(?!SUCCESS)\S+ sheared false -> false
+reject \[zpwg7\] shear: no sheep
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look shell output empty (no advancement line naming powergrid); no wool item near the sheep; sheep gone before the shear = spawn-animals not true

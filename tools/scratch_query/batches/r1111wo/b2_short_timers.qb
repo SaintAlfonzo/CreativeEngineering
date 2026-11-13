@@ -1,0 +1,187 @@
+# r1111 rerun of b2_short_timers.qb rows SQ-WO-27 (BATCH-FAULT fixes, scratch_run_2026-11-11.md)
+# r1109wo boot A2: sleepDurationSeconds, angerDurationSeconds, angrySleepDurationSeconds = 5; chance 100, threshold 75.
+# randomTickSpeed 0 throughout, except the window in SQ-WO-14. Deviations from the queue text, scratch-only:
+# timer rows run at pace 0.2 (at 2 s per command the 5 s timers expire before they are read);
+# SQ-WO-14 opens a short random-tick window then reads at once (a 5 s tired sleep inside a 90 s wait is usually over);
+# SQ-WO-18 and the angry case of -28 make the tree angry by waking a sleeper, so it has a real timer (a bare [state=angry] has none and sleeps within 23 ticks);
+# SQ-WO-28 uses one Z per case (a fresh tree, no leftover blow or cooldown).
+pace 1
+
+## SETUP-A2 | forceload, bots
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+> pbot spawn H 276 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> weather clear
+> time set noon
+
+pace 0.5
+## SQ-WO-27 | forty rolls: one id per drop, all four lists, right counts
+# the tree sleeps after 2 gifts (r1110): a fresh tree every 2 rolls, 20 trees = 40 rolls
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+> setblock 570 -60 300 minecraft:air
+> setblock 570 -60 300 mysticaloaktree:wise_oak
+repeat 2
+> wiseoak trust 570 -60 300 G 100
+> pbot use G 570 -60 300 up
+> zwo drops 570 -60 300 3
+> zwo skip 60
+end
+sleep 1
+count \[zwo\] drops none == 0
+look wo_judge.py gifts on this row log: every drop one id, count matches its list, all four lists seen
+
+pace 0.2

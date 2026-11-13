@@ -1,0 +1,16 @@
+# r1113 chunk 2, boot c2l2: SQ-CFR-03, the [campfire] carry when the CD file does not exist yet.
+# World group A (superflat creative). Level name: c2l2. New OUT folder (not the c2l1 one).
+# Setup before boot (server stopped, never booted):
+#   prep_srv.sh OUT c2l2 A
+#   python3 $INST/tools/scratch_query/c2_legacy_cfg.py OUT/srv l2
+#     -> creativedelight-common.toml removed; creativecompat-common.toml gets [campfire] rainOutTicks = 100 (a 1.2.00 pack);
+#        creativeengineering-common.toml holds only CD's seven carve tables ([crop_growth] ... [cooking] [perf]).
+#   (zq is copied by prep_srv.sh; no other probe)
+pace 1
+
+## SQ-CFR-03 | [campfire] carried from Compat's file into a new CD file, then the CD carve tables merged from the old file
+bootexpect \[swaps\] config sections \[campfire\] carried over from creativecompat-common.toml to creativedelight-common.toml
+bootexpect \[swaps\] config sections \[crop_growth, dandelion_maturing, crop_drops, stem_fruit, canning, cooking, perf\] merged from creativeengineering-common.toml into creativedelight-common.toml
+bootreject could not (carry|merge) config sections
+shell grep -nE "^\[" config/creativedelight-common.toml | tr '\n' ' '; echo; grep -nE "rainOutTicks *=" config/creativedelight-common.toml; grep -cE "^\[campfire\]" config/creativecompat-common.toml
+look the carry line comes before the merge line in the log; the CD file has [members] (or [compartments], M8), [campfire] with rainOutTicks = 100 and every other section after Forge's correction; last number 0 = Forge dropped [campfire] from Compat's file

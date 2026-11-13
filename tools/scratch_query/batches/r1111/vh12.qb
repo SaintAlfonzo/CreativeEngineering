@@ -1,0 +1,9 @@
+# r1111: fresh group B world with the Biomes O' Plenty jar removed from srv/mods (SQ-VH-12); same boot carries the
+# salt cave rows SQ-HH-321, -322 (hh_wgc.qb, toml with saltCaveRarity 1, -40..30 copied in before first boot).
+pace 2
+## SQ-VH-12 | boots without BOP; biomesoplenty listed off; vanilla Nether layout
+bootexpect Done \(
+shell grep -iE "mod data packs on|biomesoplenty" logs/latest.log | grep -iE "off|absent|skip|data packs" | head -5 | cut -c1-300
+> zq biometag minecraft:is_nether
+> execute in minecraft:the_nether run locate biome minecraft:crimson_forest
+look boots; biomesoplenty under off; is_nether holds the 5 vanilla biomes only

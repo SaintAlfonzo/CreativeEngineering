@@ -58,7 +58,9 @@
     "SyncGlDebugOutputMixin",
     "SectionUpdateNullStateMixin",
     "BlockUpdateNullStateMixin",
-    "CreativePickBlockSyncMixin"
+    "CreativePickBlockSyncMixin",
+    "ChatOpenArmMixin",
+    "ChatOpenCharDropMixin"
   ],
   "server": []
 }

@@ -1,0 +1,506 @@
+# r1113 Power Grid P3 boot (jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-04.jar, sha1 74bb78effab4) with
+# the P2 reruns: SQ-PWG-24, -13, -21, -14 (setup for -15), -15, -16, -17, -25 to -34. Group A superflat, level pwg3.
+# Prep: COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-04.jar prep_srv.sh OUT pwg3 A
+#   cp pwg_probe.js, pwg_grid_probe.js, pwg_p3_probe.js into OUT/srv/kubejs/server_scripts/ as zz_*.js
+# Forceload order matters: SQ-PWG-21 runs before any other area is forced (its resistor chunk must reach level 34).
+pace 1
+
+## SQ-PWG-24 | P3 jar loads: registries, wire types, no mixin / data / recipe / client-class errors
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 3\)
+bootexpect Loaded 5 wire types
+bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
+bootreject ^(?!.*MinecraftServer/\]: Unknown item).*(Couldn't load tag|Failed to load|Couldn't parse|Unknown item|Unknown tag|Error loading registry data).*powergrid
+bootreject (ERROR|WARN).*[Ll]oot.*powergrid
+bootreject Exception loading blockstate definition.*powergrid
+bootreject Parsing error loading recipe powergrid:
+bootreject NoClassDefFoundError.*net/minecraft/client
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-04
+expect \[zpwg\] ns powergrid block: 36\b
+expect \[zpwg\] ns powergrid item: 45\b
+expect \[zpwg\] ns powergrid entity_type: 3\b
+expect \[zpwg\] ns powergrid block_entity_type: 31\b
+expect \[zpwg\] ns powergrid menu: 2\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg\] ns powergrid fluid: 0\b
+> give @p powergrid:battery
+sleep 1
+
+## SQ-PWG-13 | powergrid command; performance get before any solve says no measurement yet; reload re-reads wire types
+> powergrid debug problems
+> powergrid performance get NetSolve
+sleep 2
+expect Last measurement: no measurement yet
+reject An unexpected error occurred
+reject Unknown or incomplete command
+> reload
+waitlog Loaded 5 wire types 120
+sleep 8
+shell echo "wiretypes $(grep -c 'Loaded 5 wire types' logs/latest.log)"
+reject \[(Server thread|Worker-Main-\d+)/ERROR\].*(powergrid|patryk)
+
+## SQ-PWG-21 | H9: 40-block loop across chunks 62 to 65; unload the resistor's chunk; reload it
+> forceload add 1000 1070 1050 1075
+sleep 4
+> zpwgg loop 1000 -60 1070 12 36 powergrid:wire 40
+waitlog \[zpwgg\] done 20
+sleep 2
+> zpwgg read 1000 -60 1070 40
+waitlog \[zpwgg\] done 20
+> forceload remove 1016 1070 1050 1075
+sleep 15
+> zpwgg chunk 1043 0 1070
+waitlog \[zpwgg\] done 20
+> zpwgg chunk 1020 0 1070
+waitlog \[zpwgg\] done 20
+> zpwgg read 1000 -60 1070 40
+waitlog \[zpwgg\] done 20
+> zpwgg net 1000 -60 1070
+waitlog \[zpwgg\] done 20
+> forceload add 1016 1070 1050 1075
+sleep 5
+> zpwgg read 1000 -60 1070 40
+waitlog \[zpwgg\] done 20
+> zpwgg wires 1020 -60 1070 30
+waitlog \[zpwgg\] done 20
+expect \[zpwgg\] chunk 65 \S+ loaded=false
+expect \[zpwgg\] read unloaded .*resistor
+expect \[zpwgg\] net paused=false
+expect \[zpwgg\] wires 5$
+reject (Exception|/ERROR\])
+look first and last read within 1 %; record chunk 63 blockTicking
+
+## SQ-PWG-SETUP2 | forceload the P2 loop area Z 1000 to 1030 (not a row)
+> forceload add 990 990 1060 1030
+sleep 4
+
+## SQ-PWG-14r | 10 ohm loop for SQ-PWG-15 (rerun of SQ-PWG-14 on -04)
+> zpwgg loop 1000 -60 1000 12 36
+waitlog \[zpwgg\] done 20
+sleep 2
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 20
+expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* .*wires=5
+
+## SQ-PWG-15 | cut the gauge-to-resistor wire: cut 1, I=0, wires=4
+> zpwgg cut 1000 -60 1000
+waitlog \[zpwgg\] done 20
+sleep 1
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 20
+expect \[zpwgg\] cut 1$
+expect \[zpwgg\] read V=12(\.0)? I=(0|-?\d(\.\d+)?E-\d+)\S* .*wires=4
+reject (Exception|/ERROR\])
+
+## SQ-PWG-16 | 24-block wire R=0.018; drop within 1 % of I x (Rwires + Rgauge)
+> zpwgg loop 1000 -60 1010 12 27 powergrid:wire 24
+waitlog \[zpwgg\] done 20
+sleep 2
+> zpwgg read 1000 -60 1010 24
+waitlog \[zpwgg\] done 20
+> zpwgg wires 1000 -60 1010 30
+waitlog \[zpwgg\] done 20
+expect R=0\.01799|R=0\.018\b
+look read: drop within 1 % of I x (Rwires + Rgauge)
+
+## SQ-PWG-17 | overheat loop without a gauge: about 120 A, a wire overheats and is removed, drops nothing
+> zpwgg overheat 1000 -60 1020
+waitlog \[zpwgg\] done 20
+> zpwgg ohm 1003 -60 1020
+waitlog \[zpwgg\] done 20
+repeat 10
+> zpwgg ohm 1003 -60 1020
+> zpwgg wires 1000 -60 1020 8
+sleep 1
+end
+sleep 2
+> zpwgg items 1000 -60 1020 8
+waitlog \[zpwgg\] done 20
+> zpwgg ohm 1003 -60 1020
+waitlog \[zpwgg\] done 20
+expect overheated=true
+expect \[zpwgg\] items 0
+reject (Exception|/ERROR\])
+look first ohm about 120 A; wire count drops after overheated=true; last ohm I=0 or lower
+
+## SQ-PWG-SETUP3 | forceload the P3 area (not a row)
+> forceload add 1090 990 1130 1135
+> gamerule doFireTick false
+sleep 5
+
+## SQ-PWG-25 | P3 recipes and config keys
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] done 20
+shell s=pwg3/serverconfig/powergrid-server.toml; grep -n -B2 -A1 -E 'lightningMagnetizationChance|forgeEnergyPerWatt|forgeEnergyPerVolt|feInverterBufferSize|groundingMinimumBlocks|acidBatteryCapacity|transformerMutualInductanceMultiplier' $s; grep -n -A1 -E 'hv_switch|hv_breaker' $s
+expect \[zpwg3\] recipes 22$
+expect recipe powergrid:magnetization/andesite_alloy type=powergrid:magnetization output=.*magnet
+expect recipe powergrid:magnetization/crushed_raw_iron .*iron_nugget
+expect recipe powergrid:sequenced_assembly/transformer_core type=create:sequenced_assembly .*transformer_core
+expect recipe powergrid:pressing/zinc_sheet
+expect recipe powergrid:crafting/thermometer
+reject recipe powergrid:sequenced_assembly/battery
+look recipes list also has copper_coil, resistive_coil, grounding_rod, device_connector, hv_switch, potato_battery; shell: chance 0.05 with andesite alloy comment, 10.0, 2.0, 20000, 10, 120.0, hv_switch = 2.0, hv_breaker = 2.0
+
+## SQ-PWG-26 | small transformer 10:100, 10 V primary, 100 ohm load; then AC
+> zpwg3 src 1100 -60 1000 10
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1000 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1000 powergrid:transformer_small
+waitlog \[zpwg3\] done 20
+> zpwg3 xfmr 1106 -60 1000 10 100
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1000 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1000 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1112 -60 1000 45
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1002 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1000 0 1103 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1000 1 1106 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1000 1 1100 -60 1000 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1000 2 1109 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1000 1 1112 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 1 1106 -60 1000 3
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 0 1112 -60 1002 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 1 1112 -60 1002 1
+waitlog \[zpwg3\] done 20
+sleep 2
+> zpwg3 be 1103 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1002
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1000 10 0.5
+waitlog \[zpwg3\] done 20
+repeat 5
+> zpwg3 be 1112 -60 1002
+sleep 0.2
+end
+sleep 2
+expect coils primary=0-1x10 secondary=2-3x100
+reject /ERROR\]
+look secondary V (gauge 1112 1002) within 10 % of 100; secondary I (1109) within 10 % of 1 A; primary I (1103) within 15 % of 10 x secondary; AC reads change sign
+
+## SQ-PWG-27 | FE inverter: fill 20000 FE, measure N6 (FE per tick per watt) three times
+> zpwg3 place 1103 -60 1020 powergrid:fe_inverter facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1020 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1020 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1109 -60 1020 45
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1022 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1020 0 1106 -60 1020 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1020 1 1109 -60 1020 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 1 1103 -60 1020 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 0 1109 -60 1022 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 1 1109 -60 1022 1
+waitlog \[zpwg3\] done 20
+pace 0
+repeat 3
+> zpwg3 fe 1103 -60 1020 down 20000
+> zpwg3 be 1106 -60 1020
+> zpwg3 be 1109 -60 1022
+sleep 0.5
+> zpwg3 feget 1103 -60 1020 down
+> zpwg3 be 1106 -60 1020
+> zpwg3 be 1109 -60 1022
+sleep 3
+end
+pace 1
+sleep 1
+count \[zpwg3\] fe received 20000 >= 1
+reject /ERROR\]
+look compute N6 per window from fe stored / t and gauge I x V
+
+## SQ-PWG-28 | power resistor 1 ohm at 40 V (1.6 kW vs 1 kW) overheats into an Overheated Component
+> zpwg3 src 1100 -60 1040 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1040 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1040 9
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1040 0 1104 -60 1040 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1040 1 1100 -60 1040 1
+waitlog \[zpwg3\] done 20
+repeat 20
+> zpwg3 be 1104 -60 1040
+sleep 1
+end
+sleep 1
+> zpwgg overheated 1104 -60 1040 1
+waitlog \[zpwgg\] done 20
+> zpwg3 be 1100 -60 1040
+waitlog \[zpwg3\] done 20
+expect \[zpwgg\] overheated at 1104 -60 1040 original=Block\{powergrid:power_resistor\}
+reject (?i)explo
+reject /ERROR\]
+look thermal T rises; source terminals equal afterwards
+
+## SQ-PWG-29 | fan cooling: bare power resistor overheats, fan-cooled one stays lower
+> zpwg3 place 1102 -60 1060 create:encased_fan facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -60 1060 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1101 -60 1060 256
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 src 1100 -60 1050 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1050 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1050 9
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1060 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1060 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1060 9
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1050 0 1104 -60 1050 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1050 1 1100 -60 1050 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1060 0 1104 -60 1060 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1060 1 1100 -60 1060 1
+waitlog \[zpwg3\] done 20
+repeat 30
+> zpwg3 be 1104 -60 1050
+> zpwg3 be 1104 -60 1060
+sleep 1
+end
+sleep 1
+> zpwgg overheated 1104 -60 1050 1
+waitlog \[zpwgg\] done 20
+> zpwgg overheated 1104 -60 1060 1
+waitlog \[zpwgg\] done 20
+> zpwg3 be 1102 -60 1060
+waitlog \[zpwg3\] done 20
+expect \[zpwgg\] overheated at 1104 -60 1050
+reject \[zpwgg\] overheated at 1104 -60 1060
+reject /ERROR\]
+look cooled T below bare T at the same tick; fan running (be 1102)
+
+## SQ-PWG-33 | lightning magnetizes andesite alloy (not iron); electromagnet magnetizes when powered
+> zpwg3 drop 1100 -60 1100 create:andesite_alloy 64
+waitlog \[zpwg3\] done 20
+> zpwg3 drop 1100 -60 1104 minecraft:iron_ingot 64
+waitlog \[zpwg3\] done 20
+repeat 5
+> summon minecraft:lightning_bolt 1100.5 -60 1100.5
+> summon minecraft:lightning_bolt 1100.5 -60 1104.5
+sleep 1
+end
+sleep 2
+> zpwg3 count 1100 -60 1100 2 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1100 2 create:andesite_alloy
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1104 2 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1104 2 minecraft:iron_ingot
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1110 -59 1100 powergrid:electromagnet
+waitlog \[zpwg3\] done 20
+> zpwg3 drop 1110 -60 1100 create:andesite_alloy 1
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -59 1100 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -59 1100 0 1110 -59 1100 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1110 -59 1100 1 1114 -59 1100 1
+waitlog \[zpwg3\] done 20
+sleep 10
+> zpwg3 count 1110 -60 1100 1 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -59 1100 120
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1110 -59 1100
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 count 1110 -60 1100 1 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1110 -59 1100
+waitlog \[zpwg3\] done 20
+reject /ERROR\]
+look lightning: magnets > 0 and magnets + alloy = 64; iron gives 0 magnets; electromagnet: 0 magnets unpowered, field > 0.25 and 1 magnet powered
+
+## SQ-PWG-30 | fuse holder: 5 A blows at 12 A; 20 A with reset passes
+> zpwg3 place 1103 -60 1070 powergrid:fuse_holder facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 5
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 reset
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1070 12
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1070 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1070 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1109 -60 1070 27
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1070 0 1103 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1070 1 1106 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1070 1 1109 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1070 1 1100 -60 1070 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 20
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 reset
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1070
+waitlog \[zpwg3\] done 20
+reject /ERROR\]
+look first: fuse state blown, gauge 0; after 20 A + reset: closed, gauge within 5 % of 12/(1+Rwires)
+
+## SQ-PWG-31 | battery discharges into 1 ohm through an energy meter; then charges at 14 V
+> zpwg3 place 1103 -60 1080 powergrid:battery
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1080 powergrid:energy_meter
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1080 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1080 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1112 -60 1080 27
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1082 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1080 0 1106 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1080 1 1109 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 0 1112 -60 1082 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1112 -60 1082 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1082
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1082
+waitlog \[zpwg3\] done 20
+> setblock 1112 -60 1080 air
+sleep 1
+> zpwg3 src 1112 -60 1080 14
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+reject /ERROR\]
+look battery starts energy 388800 J percent 90, OCV near 12.58 V; discharge loss ~ I x V x 20 s (10 %), meter rises same; charge raises energy
+
+## SQ-PWG-32 | device connector into an IE LV capacitor: FE rises
+> zpwg3 place 1106 -60 1090 immersiveengineering:capacitor_lv
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1090
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1105 -60 1090 powergrid:device_connector facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1090 120
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1090 0 1105 -60 1090 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1105 -60 1090 1 1100 -60 1090 1
+waitlog \[zpwg3\] done 20
+> zpwg3 feget 1106 -60 1090 west
+waitlog \[zpwg3\] done 20
+sleep 5
+> zpwg3 feget 1106 -60 1090 west
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1105 -60 1090
+waitlog \[zpwg3\] done 20
+reject /ERROR\]
+look connector stays placed (be 1105 not air); capacitor FE rises between the feget reads; record FE/tick and connector current
+
+## SQ-PWG-34 | grounding rods: test rod on dirt vs reference in copper; then copper under the test rod
+> fill 1118 -63 1126 1122 -61 1130 minecraft:copper_block
+> zpwg3 place 1120 -60 1128 powergrid:grounding_rod
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1110 -60 1115 powergrid:grounding_rod
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -60 1120 10
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1114 -60 1123 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1120 0 1110 -60 1115 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1120 1 1114 -60 1123 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1123 1 1120 -60 1128 0
+waitlog \[zpwg3\] done 20
+sleep 4
+> zpwg3 be 1110 -60 1115
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1114 -60 1123
+waitlog \[zpwg3\] done 20
+> fill 1108 -63 1113 1112 -61 1117 minecraft:copper_block
+sleep 4
+> zpwg3 be 1110 -60 1115
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1114 -60 1123
+waitlog \[zpwg3\] done 20
+reject /ERROR\]
+look first current ~10/5001 A; after the copper fill current rises and test rod R (T0 V / I) falls; record both

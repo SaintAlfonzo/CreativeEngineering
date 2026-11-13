@@ -1,0 +1,142 @@
+# r1112 group A: corrected reruns of the r1111 Hearth and Harvest Machines batch faults (verdicts hhmach.md,
+# hh_boot23.md). Fresh superflat world, TWO boots of the same world (qrun cannot restart, and toml edits need a restart,
+# gotchas.md): boot 1 = this file, boot 2 = hh_mach_a2.qb (SQ-HH-274 restart persistence, SQ-HH-320 config off).
+# Setup before boot 1 (server stopped):
+#   prep_srv.sh OUT hhm12 A spawn-animals=true
+#   cp $INST/tools/scratch_query/hh_mw_probe.js OUT/srv/kubejs/server_scripts/zz_hh2.js
+#   qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveRarity 1
+#   qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveMinY 0
+#   qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveMaxY 0
+#   (saltCaves stays true; check the three lines with grep before boot: SQ-HH-319 proves nothing without them)
+# Left out (rejudge only, row text stale): SQ-HH-206 (all 8 listed members present, none of wine/moonshine/root_beer;
+# count 26 not 29 because 3 Neapolitan/soda ids merged out), SQ-HH-266 as written (juices have no bucket); 266 is
+# rerun below with water to reach the bucket branch.
+pace 1
+
+## SQ-HH-209 | jug full of water refuses lava (lava on a clean block 32 away from the water spot)
+> forceload add 0 0 319 127
+> gamerule randomTickSpeed 0
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> gamerule doDaylightCycle false
+> pbot spawn hb1 8 -60 8 minecraft:overworld survival
+sleep 6
+> clear hb1
+> setblock 272 -60 16 minecraft:water
+> tp hb1 272.5 -59 16.5 0 90
+> pbot hold hb1 hearthandharvest:jug
+> zq useitem hb1
+> data get entity hb1 SelectedItem.tag.HHJugFluid.Amount
+> setblock 272 -60 48 minecraft:lava
+> tp hb1 272.5 -59 48.5 0 90
+> zq useitem hb1
+> data get entity hb1 SelectedItem.tag.HHJugFluid.Amount
+> execute if block 272 -60 48 minecraft:lava
+count Test passed >= 1
+reject Test failed
+look first useitem CONSUME and Amount 1000; second useitem FAIL or PASS without a fill; Amount still 1000; lava Test passed
+
+## SQ-HH-223 | trough takes any animal food, modded animal food = alexsmobs:lobster_tail (Seal, Platypus isFood)
+# alexsmobs:banana is merged out and neapolitan:banana is not an isFood of any sampled animal (r1111). Seal and
+# Platypus isFood compare the item to LOBSTER_TAIL directly (breeding_audit.json); acacia_blossom (Elephant, isFood
+# also reads isTame) is a second, informational modded food.
+> clear hb1
+> weather clear 999999
+sleep 20
+> tp hb1 83.5 -59 78.5 0 60
+> setblock 80 -60 80 minecraft:air
+> setblock 80 -60 80 hearthandharvest:trough
+> setblock 82 -60 80 minecraft:air
+> setblock 82 -60 80 hearthandharvest:trough
+> setblock 84 -60 80 minecraft:air
+> setblock 84 -60 80 hearthandharvest:trough
+> setblock 86 -60 80 minecraft:air
+> setblock 86 -60 80 hearthandharvest:trough
+> setblock 88 -60 80 minecraft:air
+> setblock 88 -60 80 hearthandharvest:trough
+> pbot hold hb1 minecraft:wheat
+> pbot use hb1 80 -60 80 up
+> pbot hold hb1 minecraft:carrot
+> pbot use hb1 82 -60 80 up
+> pbot hold hb1 minecraft:seagrass
+> pbot use hb1 84 -60 80 up
+> pbot hold hb1 alexsmobs:lobster_tail
+> pbot use hb1 86 -60 80 up
+> pbot hold hb1 alexsmobs:acacia_blossom
+> pbot use hb1 88 -60 80 up
+> data get block 80 -60 80 Items
+> data get block 82 -60 80 Items
+> data get block 84 -60 80 Items
+> data get block 86 -60 80 Items
+> data get block 88 -60 80 Items
+expect 80, -60, 80 has the following block data: .*minecraft:wheat.*Count: 1b
+expect 82, -60, 80 has the following block data: .*minecraft:carrot.*Count: 1b
+expect 84, -60, 80 has the following block data: .*minecraft:seagrass.*Count: 1b
+expect 86, -60, 80 has the following block data: .*alexsmobs:lobster_tail.*Count: 1b
+reject Exception|Error occurred
+look 88 (acacia_blossom) recorded only: held 1b or empty; note which in the verdict (row text: replace alexsmobs:banana by alexsmobs:lobster_tail)
+
+## SQ-HH-233 | trough extract, sneak extract, drops (drop read filtered to wheat items)
+> weather clear 999999
+sleep 20
+> setblock 80 -60 112 minecraft:air
+> clear hb1
+> tp hb1 82.5 -59 110.5 0 60
+> setblock 80 -60 112 hearthandharvest:trough
+> pbot hold hb1 minecraft:wheat 8
+> pbot use hb1 80 -60 112 up
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> pbot use hb1 80 -60 112 up
+> data get block 80 -60 112 Items
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> zhh2 sneak hb1 true
+> pbot use hb1 80 -60 112 up
+> zhh2 sneak hb1 false
+> data get block 80 -60 112 Items
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> pbot hold hb1 minecraft:wheat 8
+> pbot use hb1 80 -60 112 up
+> data get block 80 -60 112 Items
+> kill @e[type=minecraft:item,x=80,y=-60,z=112,distance=..4]
+> setblock 80 -60 112 air destroy
+sleep 1
+> execute as @e[type=minecraft:item,x=80,y=-60,z=112,distance=..4,nbt={Item:{id:"minecraft:wheat"}}] run data get entity @s Item
+> execute if entity @e[type=minecraft:item,x=80,y=-60,z=112,distance=..4,nbt={Item:{id:"hearthandharvest:trough"}}]
+look after single extract Count 7b; after sneak extract Items [] (no id); refill Count 8b; wheat item entity Count 8b (one line, or lines summing to 8); the trough drop Test passed
+
+## SQ-HH-266 | basin bucket branch, rerun with water (juices have no bucket, so the row's juice cannot reach it)
+> clear hb1
+> tp hb1 178.5 -59 206.5 0 60
+> setblock 176 -60 208 hearthandharvest:stomping_basin[facing=north]
+> zhh2 fill 176 -60 208 minecraft:water 1000
+> zhh2 tank 176 -60 208
+> pbot hold hb1 minecraft:bucket
+> pbot use hb1 176 -60 208 up
+> data get entity hb1 SelectedItem.id
+> zhh2 tank 176 -60 208
+> zhh2 basin 176 -60 208
+look fill accepted 1000; hand minecraft:water_bucket; tank empty 0 / 8000; basin slots empty (the bucket not swallowed). If fill accepts 0 (tank refuses water) the bucket branch has no in-pack fluid to test: record, owner question (r1111: an empty bucket on a juice basin is inserted as an item)
+
+## SETUP-HH-274 | build the SQ-HH-267 group at 208 208 for the restart check in hh_mach_a2.qb
+> clear hb1
+> tp hb1 206.5 -59 206.5 0 60
+> pbot hold hb1 hearthandharvest:stomping_basin 4
+> pbot use hb1 208 -61 208 up
+> pbot use hb1 209 -61 208 up
+> pbot use hb1 208 -61 209 up
+> pbot use hb1 209 -61 209 up
+> zhh2 basin 208 -60 208
+> data get block 208 -60 208 FluidCapacity
+expect basin 208 -60 208: role controller
+look role controller, FluidCapacity 32000 before the restart
+
+## SQ-HH-319 | salt cave origin pulled into saltCaveMinY..MaxY (0..0), stone box and forceload
+shell grep -E "saltCaves|saltCaveRarity|saltCaveMinY|saltCaveMaxY" config/hearthandharvest-common.toml
+> forceload add 4528 80 4560 112
+sleep 5
+> fill 4528 -16 80 4560 0 112 minecraft:stone
+> fill 4528 1 80 4560 16 112 minecraft:stone
+> place feature hearthandharvest:salt_cave 4544 40 96
+> zhh2 countset 4528 -16 80 4560 16 112 minecraft:cave_air,salt:raw_rock_salt_block
+expect Placed "hearthandharvest:salt_cave"
+look shell shows saltCaves true, rarity 1, MinY 0, MaxY 0; cave_air above 1000 (a carve below y 17 means the origin was pulled down from y 40)

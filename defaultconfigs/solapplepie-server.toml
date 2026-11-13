@@ -4,7 +4,7 @@
 	# they will get the benefits associated with that threshold.
 	#
 	#
-	thresholds = [2.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0]
+	thresholds = []
 	# 
 	# Define custom benefits here. Each entry in the list corresponds to a benefit that will be obtained
 	# at the corresponding diversity threshold defined the list above. For example, the first entry in
@@ -32,7 +32,7 @@
 	# and Slowness I below the corresponding threshold.
 	#
 	#
-	benefitsUnparsed = ["effect,speed,0", "attribute,generic.max_health,1", "attribute,generic.max_health,1;effect,haste,0", "attribute,generic.max_health,1;effect,strength,0", "attribute,generic.max_health,1;attribute,generic.armor_toughness,2", "attribute,generic.max_health,1;effect,regeneration,0", "attribute,generic.max_health,1;effect,speed,1", "attribute,generic.max_health,1;effect,strength,0", "attribute,generic.max_health,1;effect,luck,0", "attribute,generic.max_health,1;attribute,generic.knockback_resistance,1", "attribute,generic.max_health,1;attribute,generic.movement_speed,0.01", "attribute,generic.max_health,1;attribute,generic.armor_toughness,2", "attribute,generic.max_health,1;effect,haste,1", "attribute,generic.max_health,1;effect,strength,1", "attribute,generic.max_health,1;attribute,generic.armor_toughness,2", "attribute,generic.max_health,1;effect,strength,2", "attribute,generic.max_health,1;effect,luck,1"]
+	benefitsUnparsed = []
 	# The minimum number of foods a player needs to eat before any benefits are applied.
 	#
 	#
@@ -43,7 +43,7 @@
 	# Foods in this list won't contribute to food diversity.
 	#
 	#
-	blacklist = ["solapplepie:lunchbox", "solapplepie:lunchbag", "solapplepie:golden_lunchbox", "creativedelight:netherite_lunchbox"]
+	blacklist = ["solapplepie:lunchbox", "solapplepie:lunchbag", "solapplepie:golden_lunchbox", "creativedelight:netherite_lunchbox", "brewinandchewin:beer", "brewinandchewin:bloody_mary", "brewinandchewin:dread_nog", "brewinandchewin:egg_grog", "brewinandchewin:glittering_grenadine", "brewinandchewin:kombucha", "brewinandchewin:mead", "brewinandchewin:pale_jane", "brewinandchewin:red_rum", "brewinandchewin:rice_wine", "brewinandchewin:saccharine_rum", "brewinandchewin:salty_folly", "brewinandchewin:steel_toe_stout", "brewinandchewin:strongroot_ale", "brewinandchewin:vodka", "brewinandchewin:withering_dross", "canned_goods:oculemonade", "canned_goods:reef_cola", "canned_goods:soda", "corn_delight:creamy_corn_drink", "create_confectionery:hot_chocolate_bottle", "create_confectionery:soothing_hot_chocolate", "creativedelight:bayberry_tea", "creativedelight:carrot_tea", "creativedelight:hamimelon_tea", "creativedelight:hawberry_juice", "creativedelight:kiwi_tea", "creativedelight:lemon_tea", "creativedelight:lychee_juice", "creativedelight:mango_juice", "creativedelight:mangosteen_juice", "creativedelight:melon_tea", "creativedelight:orange_tea", "creativedelight:peach_juice", "creativedelight:pear_tea", "creativedelight:turnip_tea", "delightful:azalea_tea", "delightful:berry_matcha_latte", "delightful:ender_nectar", "delightful:lavender_tea", "delightful:matcha_latte", "delightful:matcha_milkshake", "delightful:salmonberry_milkshake", "endersdelight:chorus_juice", "ends_delight:bubble_tea", "ends_delight:chorus_flower_tea", "ends_delight:chorus_fruit_milk_tea", "ends_delight:chorus_fruit_wine", "ends_delight:dragon_breath_soda", "farmersdelight:apple_cider", "farmersrespite:black_tea", "farmersrespite:dandelion_tea", "farmersrespite:green_tea", "farmersrespite:long_apple_cider", "farmersrespite:long_black_tea", "farmersrespite:long_dandelion_tea", "farmersrespite:long_green_tea", "farmersrespite:long_purulent_tea", "farmersrespite:long_rose_hip_tea", "farmersrespite:long_yellow_tea", "farmersrespite:purulent_tea", "farmersrespite:rose_hip_tea", "farmersrespite:strong_apple_cider", "farmersrespite:strong_black_tea", "farmersrespite:strong_green_tea", "farmersrespite:strong_purulent_tea", "farmersrespite:strong_rose_hip_tea", "farmersrespite:strong_yellow_tea", "farmersrespite:yellow_tea", "fruitsdelight:bayberry_soup", "fruitsdelight:bellini_cocktail", "fruitsdelight:hamimelon_juice", "fruitsdelight:hawberry_tea", "fruitsdelight:kiwi_juice", "fruitsdelight:lemon_juice", "fruitsdelight:lychee_cherry_tea", "fruitsdelight:mango_milkshake", "fruitsdelight:mango_tea", "fruitsdelight:mangosteen_tea", "fruitsdelight:orange_juice", "fruitsdelight:peach_tea", "fruitsdelight:pear_juice", "hearthandharvest:blueberry_juice", "hearthandharvest:blueberry_wine", "hearthandharvest:cherry_juice", "hearthandharvest:chocolate_milk_bottle", "hearthandharvest:glow_berry_juice", "hearthandharvest:glow_berry_wine", "hearthandharvest:goat_milk_bottle", "hearthandharvest:lemon_wine", "hearthandharvest:melon_wine", "hearthandharvest:moonshine", "hearthandharvest:raspberry_juice", "hearthandharvest:raspberry_wine", "hearthandharvest:root_beer", "hearthandharvest:sweet_berry_juice", "hearthandharvest:sweet_berry_wine", "hostiledelight:blazingale", "hostiledelight:dragontonic", "hostiledelight:ghastbrew", "hostiledelight:marinecocktale", "hostiledelight:seacucumbertea", "hostiledelight:soda", "hostiledelight:sunsetade", "minecraft:honey_bottle", "minecraft:milk_bucket", "minecraft:potion", "neapolitan:adzuki_milkshake", "neapolitan:banana_milkshake", "neapolitan:chocolate_milkshake", "neapolitan:mint_milkshake", "neapolitan:strawberry_milkshake", "neapolitan:vanilla_milkshake", "oceanic_delight:nautilus_juice", "oceanic_delight:sea_grape_juice", "quarkdelight:cloud_latte", "rusticdelight:cherry_blossom_coffee", "rusticdelight:chocolate_coffee", "rusticdelight:coffee", "rusticdelight:dark_coffee", "rusticdelight:honey_coffee", "rusticdelight:milk_coffee", "rusticdelight:pumpkin_coffee", "rusticdelight:syrup", "rusticdelight:syrup_coffee", "tmted:bottle_of_wodka", "veggiesdelight:carrot_juice", "veggiesdelight:dandelion_juice", "veggiesdelight:fermented_garlic_honey", "veggiesdelight:turnip_water", "vinery:aegis_wine", "vinery:apple_cider", "vinery:apple_wine", "vinery:bolvar_wine", "vinery:bottle_mojang_noir", "vinery:chenet_wine", "vinery:cherry_wine", "vinery:chorus_wine", "vinery:clark_wine", "vinery:creepers_crush", "vinery:cristel_wine", "vinery:eiswein", "vinery:glowing_wine", "vinery:jellie_wine", "vinery:jo_special_mixture", "vinery:kelp_cider", "vinery:lilitu_wine", "vinery:magnetic_wine", "vinery:mellohi_wine", "vinery:noir_wine", "vinery:praetorian_wine", "vinery:red_wine", "vinery:solaris_wine", "vinery:stal_wine", "vinery:strad_wine", "vinery:villagers_fright", "vintagedelight:honey_jar", "vintagedelight:nut_milk_bottle", "vintagedelight:nut_milk_jar"]
 	#
 	# When this list contains anything, the blacklist is ignored and instead only foods from here count.
 	#
@@ -54,7 +54,7 @@
 	# Whether or not to reset food diversity on death, effectively losing all benefits.
 	#
 	#
-	resetOnDeath = true
+	resetOnDeath = false
 	#
 	# If true, eating foods outside of survival mode (e.g. creative/adventure) is not tracked.
 	#

@@ -1,0 +1,28 @@
+# r1113 Power Grid P2 boot 3 of 3 (same OUT, restarted) with clientMirror = false and overheatedDropChance 1.0:
+#   python3 $INST/tools/scratch_query/qrun.py toml OUT/srv/pwg2/serverconfig/powergrid-server.toml electricity overheatedDropChance 1.0
+#   sed -i 's/clientMirror = true/clientMirror = false/' OUT/srv/config/powergrid-common.toml (restore afterwards)
+pace 2
+
+## SQ-PWG-22 | clientMirror false: the server runs the loop the same
+> forceload add 990 990 1060 1090
+sleep 6
+> zpwgg loop 1000 -60 1080 12 36
+waitlog \[zpwgg\] done 30
+sleep 3
+> zpwgg read 1000 -60 1080
+waitlog \[zpwgg\] read 30
+sleep 1
+expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* .*wires=5
+reject /ERROR\]
+shell grep -n -B3 'clientMirror' config/powergrid-common.toml
+look the config comment says the switch is read on the server
+
+## SQ-PWG-18c | chance 1: destroying the overheated gauge at Z 1030 drops a current gauge
+> zpwgg overheated 1003 -60 1030 1
+waitlog \[zpwgg\] overheated \d+ 30
+expect \[zpwgg\] overheated at 1003 -60 1030
+> setblock 1003 -60 1030 air destroy
+sleep 3
+> zpwgg items 1003 -60 1030 2
+waitlog \[zpwgg\] items \d+ 30
+expect \[zpwgg\] item .*current_gauge x1

@@ -1,0 +1,44 @@
+# Create: Power Grid 0.6.2 ported to Forge 1.19.2 and Create 0.5.1.i (feature_writeup/plan_power_grid.md). Keeps the
+# upstream mod id. Upstream: https://github.com/patryk3211/PowerGrid (Apache-2.0).
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="powergrid"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
+logoFile="assets/powergrid/icon.png"
+
+[[dependencies.powergrid]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.powergrid]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Architectury 6 (the pack has 6.6.92): events, networking and menu calls stay as upstream (D2).
+[[dependencies.powergrid]]
+modId="architectury"
+mandatory=true
+versionRange="[6.5,7)"
+ordering="AFTER"
+side="BOTH"
+
+# Create 0.5.1 (the pack has 0.5.1.i).
+[[dependencies.powergrid]]
+modId="create"
+mandatory=true
+versionRange="[0.5.1.f,0.5.2)"
+ordering="AFTER"
+side="BOTH"

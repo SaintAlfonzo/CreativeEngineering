@@ -1,0 +1,15 @@
+# r1113 chunk 2, boot c2l1b: the RESTART of the c2l1 server folder (same OUT, same level c2l1, no new prep). Run right
+# after c2_l1.qb's server has stopped. Setup: nothing (do not rerun prep_srv.sh or c2_legacy_cfg.py).
+# Second-boot halves of SQ-CMG-02 and SQ-CEN-02 (and SQ-CFR-04's no-repeat): no carry or merge lines, values kept.
+pace 1
+
+## SQ-CMG-02b | second boot: no carry, values kept; old file left as it is (no jar owns it now)
+bootreject \[swaps\] config sections .* (carried over|merged) from
+bootreject could not (carry|merge) config sections
+shell grep -nE "trinketCaseAnyItem" config/creativemagic-common.toml; grep -nE "wearThreshold *=" config/creativeequipment-common.toml; grep -cE "^\[" config/creativeengineering-common.toml; grep -nE "^\[(botania|shields|damage_tags)\]" config/creativeengineering-common.toml
+look trinketCaseAnyItem = false, wearThreshold = 4.5; creativeengineering-common.toml still holds all its tables (row expected Forge to drop the moved ones: superseded, Engineering 2.0.0 registers no config, so nothing corrects that file; it is inert)
+
+## SQ-CEN-02b | second boot: Compat and Common values kept; swaps file not carried again
+shell grep -nE "^\s*count *=" config/creativecompat-common.toml | head -1; grep -nE "^\s*format *=" config/creativecompat-common.toml | head -2; grep -nE "^\s*tutorial *=" config/creativecompat-common.toml; grep -nE "^\[campfire\]|rainOutTicks *=" config/creativedelight-common.toml; ls config | grep -E "swaps"
+bootreject \[swaps\] config creativeengineering-swaps.toml carried over
+look count = 12, format = "PERCENT", tutorial = true, CD rainOutTicks = 120; Compat's file has no [campfire]

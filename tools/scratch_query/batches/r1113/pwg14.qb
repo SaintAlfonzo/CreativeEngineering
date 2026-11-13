@@ -1,0 +1,301 @@
+# r1113 Power Grid boot on jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-14.jar (sha1 d80a8babfdc0, port
+# phase 9.2: P9b circuit design table, schematic item, editor packets; fixes B20 to B24). One boot, one batch, this order:
+#   1. SQ-PWG-72 boot check (version, phase 9.2, registries, menus, packets, 94 recipes, zpwg9 / zpwg9b check, reload)
+#   2. SQ-PWG-57 rerun for fix B20 (copy of pwg10b.qb's row; the -10 failure was
+#      `held=ae2:wireless_terminal fe 0/3200000 -> 0/3200000 charge 20000/20000 -> 0/20000`)
+#   3. P9b rows: SQ-PWG-73, -74, -75 (queue run order; CQ-PWG-24 / -25 are client rows, not here)
+# Group A superflat, level pwg14, spawn-animals=true, ground Y -61 (grass), blocks at Y -60. Each area's SETUP row kills
+# the animals generated in its chunks (box selector) and stops mob spawning.
+# Areas (no block overlap):
+#   P9b   X 1090 to 1130, Z 1805 to 1850 (SQ-PWG-72 forceload, kept; -73 Z 1810 to 1825, -74 / -75 Z 1820 to 1835)
+#   P7    X 1095 to 1115, Z 1535 to 1545 (SETUP14P7; SQ-PWG-57's fake player at 1100 -60 1540, no blocks)
+# Prep (INST = the instance root; all before the boot):
+#   COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-14.jar prep_srv.sh OUT pwg14 A spawn-animals=true
+#   ls OUT/srv/mods | grep -i -E 'powergrid|cc-tweaked'   (only backportedPowerGrid-0.6.2-ce-19.2-14.jar: remove -13 and
+#     older; cc-tweaked-1.19.2-1.101.4.jar present); sha1sum of the jar starts d80a8babfdc0
+#   for p in pwg_probe pwg_grid_probe pwg_p3_probe pwg_p4_probe pwg_p5_probe pwg_p6_probe pwg_p7_probe pwg_p8_probe pwg_p9a_probe pwg_p9b_probe; do
+#     cp $INST/tools/scratch_query/$p.js OUT/srv/kubejs/server_scripts/zz_$p.js; done      (ten probes, the CURRENT copies;
+#     p9b has the CircuitSchematicItem class check by instanceof)
+#   ponder datapack from the -14 jar (77 structure files; SQ-PWG-72 checks it is enabled, no row places from it):
+#   rm -rf OUT/pwgp; mkdir -p OUT/pwgp OUT/srv/pwg14/datapacks/pwgponder/data/pwgponder/structures \
+#     && unzip -o -q OUT/srv/mods/backportedPowerGrid-0.6.2-ce-19.2-14.jar 'assets/powergrid/ponder/*' -d OUT/pwgp \
+#     && cp -r OUT/pwgp/assets/powergrid/ponder/. OUT/srv/pwg14/datapacks/pwgponder/data/pwgponder/structures/ \
+#     && printf '{"pack":{"pack_format":10,"description":"PWG ponder structures, scratch only"}}' > OUT/srv/pwg14/datapacks/pwgponder/pack.mcmeta
+#   find OUT/srv/pwg14/datapacks/pwgponder -name '*.nbt' | wc -l      (77)
+#   Loading Protection (shorter protection window, as pwg10 / pwg12):
+#   python3 $INST/tools/scratch_query/qrun.py toml OUT/srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+#   Nothing else: no CC program, no other datapack, no config edit (the P9b rows use /give-free probe slots and packets).
+# Run: qrun.py run OUT tools/scratch_query/batches/r1113/pwg14.qb perf/runs/r1113/pwg14
+# Probe goggle reads log a RuntimeDistCleaner ERROR (client class): no blanket ERROR reject.
+# waitlog matches anywhere since the row start; real waits are sleeps (20 ticks = 1 s) plus pace (s after each command).
+# Batch deviations from the row text: tick waits are sleeps (pace 1 s after each command); SQ-PWG-57 adds its own
+# forceload (SETUP14P7) and, for B20, checks only that the held item gains FE and the charge falls (the -10 pattern
+# 0 -> 0 with the charge emptied is rejected); the wireless terminal may take the whole 20000 in one tick, so the old
+# `1\d{4}` charge bound is dropped (record FE gained = charge lost per tick); SQ-PWG-73's 100 V / 130 V reads use
+# 1 s sleeps after the source change.
+pace 1
+
+## SQ-PWG-72 | -14 loads (phase 9.2): version, registries (menus 7), packets, 94 recipes, zpwg9 check, zpwg9b check, ponder datapack, reload
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 9\.2\)
+bootexpect Done \(
+bootexpect Loaded 28 component items
+bootreject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
+bootreject Failed to parse component item
+> forceload add 1090 1805 1130 1850
+sleep 8
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg9 check
+waitlog \[zpwg9\] done 30
+> zpwg9b check
+waitlog \[zpwg9b\] done 30
+> datapack list enabled
+sleep 1
+shell grep -n -E 'component items|powergrid\.mixins\.json|Mixin apply failed|circuit_design|CircuitDesign' logs/latest.log | head -40
+> reload
+waitlog Loaded 28 component items 180
+sleep 5
+> zpwg9b check
+sleep 3
+shell grep -n -E 'component items|powergrid\.mixins\.json|Mixin apply failed|circuit_design|CircuitDesign' logs/latest.log | tail -20
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-14
+expect \[zpwg\] ns powergrid block: 68\b
+expect \[zpwg\] ns powergrid item: 107\b
+expect \[zpwg\] ns powergrid block_entity_type: 56\b
+expect \[zpwg\] ns powergrid menu: 7\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg3\] recipes 94$
+expect recipe powergrid:crafting/resistor type=
+expect recipe powergrid:crafting/diode type=
+expect recipe powergrid:crafting/pins type=
+expect recipe powergrid:crafting/relay type=
+expect recipe powergrid:crafting/relay_dpdt type=
+expect recipe powergrid:crafting/redstone_relay type=
+expect recipe powergrid:crafting/vfet type=
+expect recipe powergrid:crafting/capacitor type=
+expect recipe powergrid:crafting/potentiometer type=
+expect recipe powergrid:crafting/triode type=
+expect recipe powergrid:crafting/pentode type=
+expect recipe powergrid:crafting/thyratron type=
+expect recipe powergrid:crafting/regulator_tube type=
+expect recipe powergrid:crafting/barretter_tube type=
+expect recipe powergrid:crafting/varistor type=
+expect recipe powergrid:sequenced_assembly/bjt_npn type=
+expect recipe powergrid:sequenced_assembly/bjt_pnp type=
+expect recipe powergrid:crafting/energy_meter type=
+expect recipe powergrid:crafting/fe_inverter type=
+expect recipe powergrid:crafting/heating_coil type=
+expect recipe powergrid:crafting/light_fixture type=
+expect recipe powergrid:crafting/lv_button type=
+expect recipe powergrid:crafting/lv_switch type=
+expect recipe powergrid:crafting/modular_display type=
+expect recipe powergrid:crafting/redstone_converter type=
+expect recipe powergrid:crafting/spark_gap type=
+expect recipe powergrid:mechanical_crafting/generator_commutator type=
+expect recipe powergrid:mechanical_crafting/punch_card_reader type=
+reject recipe powergrid:(crafting/circuit_design_table|deploying/schematic_copy|sequenced_assembly/battery|sequenced_assembly/unetched_circuit_board|sequenced_assembly/electrical_gizmo|mixing/acid|deploying/\w+_boosting) type=
+expect \[zpwg9\] block powergrid:circuit_board registered=true item=true blockEntity=true
+expect \[zpwg9\] items p9a=19/19$
+expect \[zpwg9\] items of P9b to P9d registered=circuit_design_table,circuit_schematic \(expect none\)
+expect \[zpwg9\] components 28: barretter_tube bjt_npn bjt_pnp button capacitor connector current_gauge diode display_module fuse_holder inductor label light_bulb neon_bulb pentode potentiometer redstone_relay regulator_tube relay relay_dpdt resistor switch thyratron triode varistor vfet via voltage_gauge$
+expect \[zpwg9\] component_items 28: .*via->create:copper_nugget \[#forge:nuggets/copper\]
+expect \[zpwg9\] component_items item lookup mismatches=0$
+expect \[zpwg9\] tag powergrid:circuit_component size=28$
+expect \[zpwg9\] packets \d+:UPDATE_COMPONENT \d+:COMPONENT_ITEMS \d+:CHANGE_SCREEN \d+:SAVE_SCHEMATIC$
+expect \[zpwg9b\] block powergrid:circuit_design_table registered=true item=true blockEntity=true
+expect \[zpwg9b\] item powergrid:circuit_schematic registered=true class=CircuitSchematicItem maxStack=1$
+expect \[zpwg9b\] tag powergrid:circuit_schematic_holder has circuit_schematic=true circuit_board=true
+expect \[zpwg9b\] menus circuit_design_table=true circuit_design_table_edit=true circuit_design_table_load=true circuit_board_edit=true
+expect \[zpwg9b\] items of P9c and P9d registered= \(expect none\)
+expect \[zpwg9b\] packets \d+:UPDATE_COMPONENT \d+:COMPONENT_ITEMS \d+:CHANGE_SCREEN \d+:SAVE_SCHEMATIC$
+count \[zpwg9b\] menus circuit_design_table=true == 2
+expect file/pwgponder
+count Loaded 28 component items == 1
+reject Failed to parse component item
+reject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+reject StackOverflowError
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look ns entity_type as on -12 (record); both packets lines: ordinals consecutive (CHANGE_SCREEN = COMPONENT_ITEMS + 1, SAVE_SCHEMATIC + 2); shell 1: one `Loaded 28 component items` at boot, no mixin error, circuit_design lines are no errors; shell 2: a second `Loaded 28` after the reload; zpwg9b check identical after the reload
+
+## SQ-PWG-SETUP14A | P9b area (forceloaded in SQ-PWG-72): clear its generated animals; no mob spawning, no fire spread (not a row)
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> weather clear
+> kill @e[type=!minecraft:player,x=1090,y=-64,z=1805,dx=40,dy=40,dz=45]
+sleep 2
+
+## SQ-PWG-SETUP14P7 | forceload the P7 spot X 1095 to 1115, Z 1535 to 1545 for SQ-PWG-57's fake player (not a row)
+> forceload add 1095 1535 1115 1545
+sleep 5
+> kill @e[type=!minecraft:player,x=1095,y=-64,z=1535,dx=20,dy=40,dz=10]
+sleep 2
+
+## SQ-PWG-57 | PWG-34 worn battery: output fraction (0.25 floor, 0 below one use), Capacity max, worn tick moves FE to the held item
+> zpwg7 fp 1100 -60 1540
+> zpwg7 wear 20000
+> zpwg7 bat
+> zpwg7 wear 8000
+> zpwg7 bat
+> zpwg7 wear 2000
+> zpwg7 bat
+> zpwg7 wear 0
+> zpwg7 bat
+> zpwg7 wear 20000 2
+> zpwg7 bat
+> zpwg7 wear 40000 1
+> zpwg7 bat
+> zpwg7 feitems
+sleep 1
+expect \[zpwg7\] bat charge=20000/20000 output=1
+expect \[zpwg7\] bat charge=8000/20000 output=0\.8
+expect \[zpwg7\] bat charge=2000/20000 output=0\.25
+expect \[zpwg7\] bat charge=0/20000 output=0
+expect \[zpwg7\] bat charge=20000/60000 output=0\.667
+expect \[zpwg7\] bat charge=40000/40000 output=1
+expect \[zpwg7\] feitems [1-9]\d*:
+capture FE \[zpwg7\] feitems \d+: (?:.*? )?([a-z0-9_.-]+:[a-z0-9_/.-]+)\(0/[1-9]\d*\)
+> zpwg7 hold {FE}
+> zpwg7 wear 20000
+> zpwg7 worn 1
+> zpwg7 worn 20
+sleep 1
+expect \[zpwg7\] worn x1 held=\S+ fe 0/\d+ -> [1-9]\d*/\d+ charge 20000/20000 -> \d+/20000
+reject \[zpwg7\] worn x\d+ held=\S+ fe 0/\d+ -> 0/\d+ charge [1-9]\d*/\d+ -> 0/
+expect \[zpwg7\] worn x20 held=
+reject \[zpwg7\] worn: no battery worn
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look B20 rerun (-10 failed: held=ae2:wireless_terminal fe 0/3200000 -> 0/3200000 charge 20000/20000 -> 0/20000): FE gained must equal charge lost on the x1 line (all 20000 in one tick is a pass for a big buffer); record the feitems list and the chosen {FE}; record FE gained and charge lost per tick (row: equal; one tick moves at most what the item accepts); capture FAIL = no empty FE item in the pack: then the worn tick is CQ-PWG-18 only
+
+## SQ-PWG-73 | PWG-41 (P9b part): design table power by cord (100 / 130 V), menus, editor packets (fromboard, screen), B21 reach, item NBT round trip, write (B23) and load
+> zpwg3 place 1100 -60 1810 powergrid:circuit_design_table facing=north
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1100 -60 1813 powergrid:socket facing=down
+> zpwg3 src 1103 -60 1813 100
+> zpwg3 w 1103 -60 1813 0 1100 -60 1813 0
+> zpwg3 w 1103 -60 1813 1 1100 -60 1813 1
+> zpwg9b cord 1100 -60 1813 1100 -60 1810
+sleep 1
+> zpwg9b tbe 1100 -60 1810
+> zpwg3 src 1103 -60 1813 130
+sleep 1
+> zpwg9b tbe 1100 -60 1810
+> zpwg9b menus 1100 -60 1810
+# packets
+> zpwg9 board 1106 -60 1810 resistor
+waitlog \[zpwg9\] done 20
+> zpwg9b fp 1100 -60 1812
+> zpwg9b fromboard 1100 -60 1810 1106 -60 1810 Test Resistor
+> zpwg9b itemrt 1100 -60 1810
+> zpwg9b screen 1100 -60 1810 1
+> zpwg9b screen 1100 -60 1810 2
+> zpwg9b screen 1100 -60 1810 0
+# reach (B21): 15 blocks away
+> zpwg9b fp 1100 -60 1825
+> zpwg9b fromboard 1100 -60 1810 1106 -60 1810 Far Name
+> zpwg9b screen 1100 -60 1810 1
+> zpwg9b fp 1100 -60 1812
+# write and load (B23)
+> zpwg9b slot 1100 -60 1810 1 create:empty_schematic
+> zpwg9b write 1100 -60 1810
+> zpwg9b slot 1100 -60 1810 1 create:empty_schematic
+> zpwg9b write 1100 -60 1810
+> zpwg9b move 1100 -60 1810 2 0
+> zpwg9b load 1100 -60 1810
+sleep 1
+expect \[zpwg9b\] cord table .* result=true/true
+expect \[zpwg9b\] cord entities near: (?!none)
+expect \[zpwg9b\] table at 1100 -60 1810 state=.*powered=false.* light=0 isPowered=false power=2[01]\.\d
+expect \[zpwg9b\] table at 1100 -60 1810 state=.*powered=true.* light=7 isPowered=true power=3[45]\.\d
+expect \[zpwg9b\] menu 0 powergrid:circuit_design_table class=CircuitDesignTableMenu slots=39$
+expect \[zpwg9b\] menu 1 powergrid:circuit_design_table_edit .*slots=36$
+expect \[zpwg9b\] menu 2 powergrid:circuit_design_table_load .*slots=0$
+expect \[zpwg9b\] fromboard packet bytes=[1-9]\d{2,}
+expect \[zpwg9b\] fromboard applied menu=powergrid:circuit_design_table class
+expect \[zpwg9b\] fromboard table before: schematic name=null components=0 after: schematic name="Test Resistor" components=3$
+expect \[zpwg9b\] itemrt .*Schematic components=3 name="Test Resistor".* safeNbtEqual=true
+expect \[zpwg9b\] screen 1 applied menu=powergrid:circuit_design_table_edit
+expect \[zpwg9b\] screen 2 applied menu=powergrid:circuit_design_table_load
+expect \[zpwg9b\] screen 0 applied menu=powergrid:circuit_design_table class
+expect \[zpwg9b\] fromboard table before: schematic name="Test Resistor" components=3 after: schematic name="Test Resistor" components=3$
+expect \[zpwg9b\] screen 1 applied menu=inventory
+reject \[zpwg9b\] .*"Far Name"
+count \[zpwg9b\] slot 2 powergrid:circuit_schematic x1 Schematic components=3 name="Test Resistor"$ == 2
+count \[zpwg9b\] slot 1 create:empty_schematic x1$ == 2
+expect \[zpwg9b\] slot 0 powergrid:circuit_schematic x1 Schematic components=3 name="Test Resistor"$
+expect \[zpwg9b\] table schematic name=null components=0
+count \[zpwg9b\] table schematic name="Test Resistor" components=3 >= 1
+reject \[zpwg9b\] .*apply threw
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look cord socket line result=true/true (or a cord-next message; record); 100 V power about 20.8, 130 V about 35.2 (480 ohm); first write: slot 1 empty, slot 2 the schematic, table name=null components=0; second write (B23): slot 1 keeps the blank, slot 2 unchanged; load: slot 0 the schematic, slot 1 the blank, table "Test Resistor" components=3; packet sizes a few hundred bytes
+
+## SQ-PWG-74 | PWG-41: a design written on the table becomes a board (creative sneak-use, place) that solves like the source board
+> zpwg9b write 1100 -60 1810
+waitlog \[zpwg9b\] done 20
+> zpwg9b toboard 1100 -60 1810 1106 -60 1820
+> zpwg9 bmap 1106 -60 1820
+> zpwg3 place 1106 -60 1826 powergrid:current_gauge facing=north
+> zpwg3 src 1106 -60 1823 10
+> zpwg3 w 1106 -60 1823 0 1106 -60 1826 0
+> zpwg3 w 1106 -60 1826 1 1106 -60 1820 0
+> zpwg3 w 1106 -60 1823 1 1106 -60 1820 1
+sleep 1
+> zpwg3 be 1106 -60 1826
+> zpwg9 bcomp 1106 -60 1820
+> zpwg9 bmap 1106 -60 1810
+sleep 1
+expect \[zpwg9b\] slot 1 empty$
+expect \[zpwg9b\] slot 2 powergrid:circuit_schematic x1 Schematic components=3
+expect \[zpwg9b\] toboard use .* result=SUCCESS -> powergrid:circuit_board x1 Schematic components=3
+expect \[zpwg9b\] place .* result=(SUCCESS|CONSUME) -> Block\{powergrid:circuit_board\}
+expect \[zpwg9b\] toboard board schematic name="Test Resistor" components=3 terminals=2$
+expect \[zpwg9\] board at 1106 -60 1820 .*components=3 terminals=2
+count \[zpwg9\] bundle \d+: connector@0,6#0\* resistor@5,6#0$ >= 2
+count \[zpwg9\] bundle \d+: connector@11,6#0\* resistor@5,6#1$ >= 2
+expect \[zpwg9\] part resistor@5,6 destroyed=false props\[.*resistor_value=100(\.0)?\b
+reject \[zpwg9b\] toboard no board entity
+reject \[zpwg9\] .*NaN
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look gauge about 0.1 A (10 V / 100 ohm, 2 %; be line); toboard use item has no name (upstream resets it); record the placed board's facing / rotation; both bmaps list the same two bundles (if the gauge reads 0, rewire by bmap and record)
+
+## SQ-PWG-75 | board edit menu (creative only) and board editor save: B22 name kept, survival refused, B21 reach
+> zpwg9b fp 1106 -60 1822
+waitlog \[zpwg9b\] done 20
+> zpwg9b buse 1106 -60 1820
+> zpwg9b mode creative
+> zpwg9b buse 1106 -60 1820
+> zpwg9b menus 1100 -60 1810 1106 -60 1820
+> zpwg9b mode survival
+> zpwg9b bedit 1106 -60 1820 5 6 resistor_value 1000 Survival Edit
+> zpwg9b mode creative
+> zpwg9b bedit 1106 -60 1820 5 6 resistor_value 1000 Edited Board
+sleep 1
+> zpwg3 be 1106 -60 1826
+> zpwg9 bcomp 1106 -60 1820
+# far (15 blocks)
+> zpwg9b fp 1106 -60 1835
+> zpwg9b mode creative
+> zpwg9b bedit 1106 -60 1820 5 6 resistor_value 50 Far Edit
+sleep 1
+expect \[zpwg9b\] buse creative=false result=PASS menu=inventory
+expect \[zpwg9b\] buse creative=true result=(SUCCESS|CONSUME) menu=powergrid:circuit_board_edit class=CircuitBoardEditMenu slots=36$
+expect \[zpwg9b\] menu board powergrid:circuit_board_edit class=CircuitBoardEditMenu slots=36$
+expect \[zpwg9b\] bedit board schematic name="Test Resistor" components=3 resistor_value=100(\.0)?$
+count \[zpwg9b\] bedit board schematic name="Edited Board" components=3 resistor_value=1000(\.0)?$ == 2
+expect \[zpwg9\] part resistor@5,6 destroyed=false props\[.*resistor_value=1000(\.0)?\b
+reject \[zpwg9b\] bedit board .*"(Survival Edit|Far Edit)"
+reject \[zpwg9b\] bedit board .*resistor_value=50(\.0)?$
+reject \[zpwg9b\] .*apply threw
+reject \[zpwg9\] .*NaN
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look gauge about 0.01 A after the creative edit (be line); survival bedit left the board unchanged; far bedit (15 blocks) left "Edited Board" / 1000

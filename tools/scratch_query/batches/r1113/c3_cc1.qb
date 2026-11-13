@@ -1,0 +1,11 @@
+# r1113 chunk 3, boot CC1: SQ-CIF-04 first half, Common + Compat (+ Calendar, Serene Seasons: Compat's set in
+# cpp_chain_srv.sh "compat"; the row says CEPortTesting, which is left alone). Group B.
+# Server: bash tools/scratch_query/cpp_chain_srv.sh OUT_CC1 c3cc1 compat
+# Before boot: nothing (zq is there). Config empty.
+pace 1
+
+## SQ-CIF-04 | Common + Compat boot: no Compat class missing in Common
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+shell ls mods
+look mods list: Common, Compat, Calendar, Serene Seasons, the KubeJS stack, perfBot only

@@ -1,0 +1,333 @@
+# r1113 chunk 1, boot A1: group A superflat (prep_srv.sh defaults), level c1a1. Current jars (prep_srv.sh swaps the
+# newer build/libs jars in: Common 11-12 20:46, CD 11-11 16:52; the CD jar in mods/ (11-10 21:20) is older).
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT c1a1 A spawn-animals=false
+#   S=OUT/srv/kubejs/server_scripts
+#   cp $INST/tools/soil_yield_probe/sy_probe.js   $S/zz_sy_probe.js    # /syt roll (SQ-SY; now also prints "total N")
+#   cp $INST/tools/fungi_probe/zcount.js          $S/zz_count.js       # /zcount (salt cauldron drops)
+#   cp $INST/tools/scratch_query/sA_probe.js      $S/zz_sA_probe.js    # /sa offers (SQ-SALT2-07)
+#   (zq is copied by prep_srv.sh).
+# Config edit before boot (SQ-SALT2-08: an old salt-common.toml carried into creativedelight-common.toml at boot):
+#   cd OUT/srv && cp config/salt-common.toml.moved config/salt-common.toml
+#   python3 $INST/tools/scratch_query/qrun.py toml config/salt-common.toml Evaporation EvaporationChance 0.5
+#   grep -n EvaporationChance config/salt-common.toml      (must print 0.5)
+# (0.5 instead of the pack's 0.3 only speeds SQ-SALT2-02's evaporation up; nothing else reads it.)
+# Superflat: grass at y -61, air from y -60. Everything sits in x 990..1100, z 990..1100 (forceloaded by C1A-00), the
+# Nether cases at 0..15 y 140 (forceloaded in C1A-00). Bots (perfBot, survival, invulnerable): c1rt stands in the work
+# area all boot so its chunks get random ticks (no player = no random ticks); c1nb does the same in the Nether; c1sc
+# harvests. Every bot gets the starter kit 10 ticks after joining: rows clear it first.
+# Order: boot-log rows, setup row (starts the pickling jars: their check row SQ-VTD8-03 runs last, after 6+ min),
+# data rows, soil-yield rolls, block rows, jar checks. No /reload in this file.
+# Left out (c1_triage.md): client, old-save and recorded rows of chunk 1.
+pace 1
+
+## C1A-00 | setup: forceload, clock, bots, start the four pickling jars (not a queue row)
+bootexpect Done \(
+> forceload add 990 990 1100 1100
+> execute in minecraft:the_nether run forceload add 0 0 15 15
+> time set noon
+> weather clear 1000000
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+sleep 20
+> pbot spawn c1rt 1050 -60 1050 minecraft:overworld survival
+> execute in minecraft:the_nether run fill 0 140 0 15 140 15 minecraft:stone
+> execute in minecraft:the_nether run fill 0 141 0 15 145 15 minecraft:air
+> pbot spawn c1nb 8 141 8 minecraft:the_nether survival
+sleep 3
+> kill @e[type=minecraft:item]
+# SQ-VTD8-03 (a): slots 0-4 one cucumber each, slot 5 one salt (5 cucumbers + salt = one pickle batch)
+> setblock 1000 -60 1000 vintagedelight:fermenting_jar
+> data merge block 1000 -60 1000 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:1b},{Slot:1b,id:"vintagedelight:cucumber",Count:1b},{Slot:2b,id:"vintagedelight:cucumber",Count:1b},{Slot:3b,id:"vintagedelight:cucumber",Count:1b},{Slot:4b,id:"vintagedelight:cucumber",Count:1b},{Slot:5b,id:"vintagedelight:salt_dust",Count:1b}]}}
+# (b): 6 cucumbers in 3 slots + salt in slot 3: strict per slot means no batch
+> setblock 1000 -60 1003 vintagedelight:fermenting_jar
+> data merge block 1000 -60 1003 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:2b},{Slot:1b,id:"vintagedelight:cucumber",Count:2b},{Slot:2b,id:"vintagedelight:cucumber",Count:2b},{Slot:3b,id:"vintagedelight:salt_dust",Count:1b}]}}
+# (c): slots 0-4 three cucumbers each, slot 5 three salt: three batches, one item per slot each
+> setblock 1000 -60 1006 vintagedelight:fermenting_jar
+> data merge block 1000 -60 1006 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:3b},{Slot:1b,id:"vintagedelight:cucumber",Count:3b},{Slot:2b,id:"vintagedelight:cucumber",Count:3b},{Slot:3b,id:"vintagedelight:cucumber",Count:3b},{Slot:4b,id:"vintagedelight:cucumber",Count:3b},{Slot:5b,id:"vintagedelight:salt_dust",Count:3b}]}}
+# SQ-STK-06: 3 cucumbers + 2 zucchini + salt
+> setblock 1000 -60 1009 vintagedelight:fermenting_jar
+> data merge block 1000 -60 1009 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:1b},{Slot:1b,id:"vintagedelight:cucumber",Count:1b},{Slot:2b,id:"vintagedelight:cucumber",Count:1b},{Slot:3b,id:"veggiesdelight:zucchini",Count:1b},{Slot:4b,id:"veggiesdelight:zucchini",Count:1b},{Slot:5b,id:"vintagedelight:salt_dust",Count:1b}]}}
+expect ceperfbot|spawned|c1rt
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SALT2-08 | an edited salt-common.toml is carried into creativedelight-common.toml once, renamed .moved, not recreated
+bootexpect \[creativedelight\] config/salt-common.toml carried into config/creativedelight-common.toml \(\d+ values\)
+bootreject could not carry|could not rename
+shell grep -h "salt-common.toml carried" logs/latest.log | cut -c1-300
+shell ls config | grep -i "^salt-"; test -f config/salt-common.toml.moved && test ! -f config/salt-common.toml && echo SALT2-08-FILES-OK
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:space:]]*$/ && /EvaporationChance/' config/creativedelight-common.toml
+look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5. Not covered here (client / no probe): a SaltingFoodValues food value in AppleSkin, and a /reload after editing [salt] applying (CQ / client run)
+
+## SQ-SALT2-05 | Create salting log line; calamari roll mix present; three create__the_salt mixes absent, baconandeggs present
+kjsexpect \[salt\] Create salting: [1-9]\d{2,} mixes added, [1-9]\d*
+shell grep -h "\[salt\] Create salting" logs/kubejs/server.log logs/latest.log | head -3 | cut -c1-300
+> zq makes rusticdelight:calamari_roll
+waitlog \[zq\] makes rusticdelight:calamari_roll: \d+ 30
+> zq recipes create__the_salt:
+waitlog \[zq\] done 30
+expect create__the_salt:baconandeggs
+reject create__the_salt:[a-z_]*(bone_broth|cooked_rice|tomato_sauce)[a-z_]* ->
+look the makes list has a mixing id (create__the_salt: or the CD salting namespace) making rusticdelight:calamari_roll; the shell line shows N > 100 added and M > 0 removed
+
+## SQ-CM-33 | (server half) no tag error naming the Storage Delight JEI tag; the tag holds the 140 blocks
+# id fix: the tag is creativecompat:jei/storage_delight since the 11-09 namespace move (row says creativecommon:)
+bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
+> zq itemtag creativecompat:jei/storage_delight
+waitlog \[zq\] itemtag creativecompat:jei/storage_delight 30
+expect itemtag creativecompat:jei/storage_delight \(140\)
+look client half (JEI item list in wood order) stays open: CQ row / client run
+
+## SQ-SNF-02 | (recheck after the namespace move) the five season recipes, type creativedelight:seasoning
+# id fix: serializer creativeengineering:seasoning -> creativedelight:seasoning (row text predates 11-09)
+> zq bytype creativedelight:seasoning
+waitlog \[zq\] bytype creativedelight:seasoning: \d+ 30
+expect bytype creativedelight:seasoning creativedelight:shapeless/season/cheese ->
+expect bytype creativedelight:seasoning creativedelight:shapeless/season/onion ->
+expect bytype creativedelight:seasoning creativedelight:shapeless/season/garlic ->
+expect bytype creativedelight:seasoning creativedelight:shapeless/season/void_pepper ->
+expect bytype creativedelight:seasoning creativedelight:shapeless/season/garlic_onion ->
+reject _on_corn_delight_popcorn
+reject shapeless/season/[a-z_]*sugar
+look already PASS 2026-10-26 (queue Run log): this only rechecks it on the current jars
+
+## SQ-PS-02 | (recheck) powdered sugar is in #forge:sugar
+# id fix: creativeengineering:powdered_sugar -> creativedelight:powdered_sugar
+> zq itemtag forge:sugar
+waitlog \[zq\] itemtag forge:sugar 30
+expect itemtag forge:sugar \(\d+\): .*creativedelight:powdered_sugar
+
+## SQ-MG-16 | (server half) Old and Weathered Cardboard Box made only by washing; weathered box tags
+# ids: Old box = design_decor:cardboard_box, Weathered = creativecompat:weathered_cardboard_box (Common item_dict),
+# Dustrial box = dustrial_decor:cardboard_box
+> zq makes design_decor:cardboard_box
+waitlog \[zq\] makes design_decor:cardboard_box: \d+ 30
+> zq makes creativecompat:weathered_cardboard_box
+waitlog \[zq\] makes creativecompat:weathered_cardboard_box: \d+ 30
+> zq rdetail cardboard_box
+waitlog \[zq\] rdetail matching cardboard_box: \d+ 30
+> zq tagsof creativecompat:weathered_cardboard_box
+waitlog \[zq\] block tags of 30
+expect \[zq\] makes design_decor:cardboard_box: 1$
+expect \[zq\] makes creativecompat:weathered_cardboard_box: 1$
+expect \{create:splashing\} -> 1 cardboard_box <- dustrial_decor:cardboard_box
+expect \{create:splashing\} -> 1 weathered_cardboard_box <- design_decor:cardboard_box
+expect block tags of creativecompat:weathered_cardboard_box: .*minecraft:mineable/axe
+expect block tags of creativecompat:weathered_cardboard_box: .*blockrunner:surface/soft
+look client half (textures, names, JEI, walking feel, sinking) stays open; the two makes lines are the splashing recipes only
+
+## SQ-STK-06 | Syrup stacks to 64; 3 cucumbers + 2 zucchini + salt pickle; cabbage cutting gives 4 leaves
+> zq item rusticdelight:syrup
+waitlog \[zq\] item rusticdelight:syrup 30
+expect item rusticdelight:syrup: .*max stack 64
+> zq rdetail pickle_from_fermenting
+waitlog \[zq\] rdetail matching pickle_from_fermenting: \d+ 30
+expect pickle_from_fermenting \{vintagedelight:fermenting\} -> 5 pickle <- (vintagedelight:cucumber/veggiesdelight:zucchini|veggiesdelight:zucchini/vintagedelight:cucumber)
+> zq rdetail farmersdelightcutting/cabbage_leaves
+waitlog \[zq\] rdetail matching farmersdelightcutting/cabbage_leaves: \d+ 30
+expect cabbage_leaves \{farmersdelight:cutting\} -> 4 cabbage_leaf
+look the jar half (3 cucumbers + 2 zucchini + salt in the jar at 1000 -60 1009) is judged in SQ-VTD8-03's check row below
+
+## SQ-SY-09 | wheat on farmland / Rich Farmland / Fertile Soil: about 1.00 / 1.33 / 1.66 wheat, never above 2; seeds the same
+# soils: minecraft:farmland, farmersdelight:rich_soil_farmland, Fertile Soil = immersive_weathering:mulch_block (Common dicts)
+> setblock 1010 -61 1020 minecraft:farmland
+> setblock 1012 -61 1020 farmersdelight:rich_soil_farmland
+> setblock 1014 -61 1020 immersive_weathering:mulch_block
+> setblock 1010 -60 1020 minecraft:wheat[age=7]
+> setblock 1012 -60 1020 minecraft:wheat[age=7]
+> setblock 1014 -60 1020 minecraft:wheat[age=7]
+> syt roll 1010 -60 1020 2000 none
+> syt roll 1012 -60 1020 2000 none
+> syt roll 1014 -60 1020 2000 none
+sleep 3
+count \[syt\] roll Block\{minecraft:wheat\}\[age=7\] over .* n 2000: == 3
+reject \[syt\] .*minecraft:wheat mean \S+ max [3-9]
+reject \[syt\] error
+look wheat means about 1.00 / 1.33 / 1.66 (farmland, rich farmland, mulch_block), max 2; wheat_seeds mean the same on all three
+
+## SQ-SY-10 | carrots on the three soils: about 3.71 / 4.93 / 6.16 per plant
+> setblock 1016 -61 1020 minecraft:farmland
+> setblock 1018 -61 1020 farmersdelight:rich_soil_farmland
+> setblock 1020 -61 1020 immersive_weathering:mulch_block
+> setblock 1016 -60 1020 minecraft:carrots[age=7]
+> setblock 1018 -60 1020 minecraft:carrots[age=7]
+> setblock 1020 -60 1020 minecraft:carrots[age=7]
+> syt roll 1016 -60 1020 2000 none
+> syt roll 1018 -60 1020 2000 none
+> syt roll 1020 -60 1020 2000 none
+sleep 3
+count \[syt\] roll Block\{minecraft:carrots\}\[age=7\] over .* n 2000: == 3
+reject \[syt\] error
+look carrot means about 3.71 / 4.93 / 6.16 (farmland, rich farmland, mulch_block); same on every soil = base missing
+
+## SQ-SY-11 | tobacco and adzuki on the three soils, adzuki also on untilled Rich Soil
+# tobacco block = the_dirty_stuff:tobacco_seeds, ripe blockstate=7; adzuki = neapolitan:adzuki_sprouts, ripe age=6,
+# flowering=true (soil_yield.js ripe states, loot dump)
+> setblock 1022 -61 1020 minecraft:farmland
+> setblock 1024 -61 1020 farmersdelight:rich_soil_farmland
+> setblock 1026 -61 1020 immersive_weathering:mulch_block
+> setblock 1022 -60 1020 the_dirty_stuff:tobacco_seeds[blockstate=7]
+> setblock 1024 -60 1020 the_dirty_stuff:tobacco_seeds[blockstate=7]
+> setblock 1026 -60 1020 the_dirty_stuff:tobacco_seeds[blockstate=7]
+> setblock 1028 -61 1020 minecraft:farmland
+> setblock 1030 -61 1020 farmersdelight:rich_soil_farmland
+> setblock 1032 -61 1020 immersive_weathering:mulch_block
+> setblock 1034 -61 1020 farmersdelight:rich_soil
+> setblock 1028 -60 1020 neapolitan:adzuki_sprouts[age=6,flowering=true]
+> setblock 1030 -60 1020 neapolitan:adzuki_sprouts[age=6,flowering=true]
+> setblock 1032 -60 1020 neapolitan:adzuki_sprouts[age=6,flowering=true]
+> setblock 1034 -60 1020 neapolitan:adzuki_sprouts[age=6,flowering=true]
+> syt roll 1022 -60 1020 2000 none
+> syt roll 1024 -60 1020 2000 none
+> syt roll 1026 -60 1020 2000 none
+> syt roll 1028 -60 1020 2000 none
+> syt roll 1030 -60 1020 2000 none
+> syt roll 1032 -60 1020 2000 none
+> syt roll 1034 -60 1020 2000 none
+sleep 3
+count \[syt\] roll Block\{the_dirty_stuff:tobacco_seeds\}.* n 2000: == 3
+count \[syt\] roll Block\{neapolitan:adzuki_sprouts\}.* n 2000: == 4
+reject \[syt\] error
+look tobacco_leafs means about 6.71 / 8.92 / 11.14; adzuki_beans about 2.50 / 3.33 / 4.15 and 3.33 on rich_soil (the "over" field names the soil)
+
+## SQ-SY-12 | Ender Crop: same drops on farmland, Rich Farmland and Fertile Soil (not in the soil-yield list)
+> setblock 1036 -61 1020 minecraft:farmland
+> setblock 1038 -61 1020 farmersdelight:rich_soil_farmland
+> setblock 1040 -61 1020 immersive_weathering:mulch_block
+> setblock 1036 -60 1020 endercrop:ender_crop[age=7]
+> setblock 1038 -60 1020 endercrop:ender_crop[age=7]
+> setblock 1040 -60 1020 endercrop:ender_crop[age=7]
+> syt roll 1036 -60 1020 2000 none
+> syt roll 1038 -60 1020 2000 none
+> syt roll 1040 -60 1020 2000 none
+sleep 3
+count \[syt\] roll Block\{endercrop:ender_crop\}.* n 2000: == 3
+reject \[syt\] error
+shell grep -h "\[soil-yield\]" logs/kubejs/server.log logs/latest.log | head -3 | cut -c1-400
+look ender_pearl (and seed) means equal within noise on the three soils; the shell line's [soil-yield] crop list has no ender_crop
+
+## SQ-SY-13 | 20000 ripe peanut rolls on farmland: about 10 Magic Peanuts (0.05 %), not about 200
+> setblock 1042 -61 1020 minecraft:farmland
+> setblock 1042 -60 1020 vintagedelight:peanut_crop[age=7]
+> syt roll 1042 -60 1020 10000 none
+waitlog \[syt\] roll Block\{vintagedelight:peanut_crop\} 120
+> syt roll 1042 -60 1020 10000 none
+sleep 30
+count \[syt\] roll Block\{vintagedelight:peanut_crop\}.* n 10000: == 2
+reject \[syt\] error
+look sum the two "vintagedelight:magic_peanut ... total N" values: about 10 (3 to 20 is fine at this n); about 200 = Vintage's 1 % still in force
+
+## SQ-SALT2-02 | heated water cauldrons at 3, 2, 1 levels evaporate; harvests give 8, 5, 3 salt dust
+> setblock 1060 -60 1030 minecraft:campfire[lit=true]
+> setblock 1063 -60 1030 minecraft:campfire[lit=true]
+> setblock 1066 -60 1030 minecraft:campfire[lit=true]
+> setblock 1060 -59 1030 minecraft:water_cauldron[level=3]
+> setblock 1063 -59 1030 minecraft:water_cauldron[level=2]
+> setblock 1066 -59 1030 minecraft:water_cauldron[level=1]
+> gamerule randomTickSpeed 1000
+sleep 20
+> gamerule randomTickSpeed 3
+> execute if block 1060 -59 1030 salt:salt_cauldron[level=3]
+> execute if block 1063 -59 1030 salt:salt_cauldron[level=2]
+> execute if block 1066 -59 1030 salt:salt_cauldron[level=1]
+> pbot spawn c1sc 1063 -60 1033 minecraft:overworld survival
+sleep 3
+> clear c1sc
+> kill @e[type=minecraft:item]
+> pbot use c1sc 1060 -59 1030
+sleep 2
+> zcount 1058 -60 1028 1062 -57 1032
+> kill @e[type=minecraft:item]
+> pbot use c1sc 1063 -59 1030
+sleep 2
+> zcount 1061 -60 1028 1065 -57 1032
+> kill @e[type=minecraft:item]
+> pbot use c1sc 1066 -59 1030
+sleep 2
+> zcount 1064 -60 1028 1068 -57 1032
+waitlog \[zcount\] entities 20
+count Test passed == 3
+count \[zcount\] entities .*item:vintagedelight:salt_dust == 3
+look the three zcount lines: salt dust x8, x5, x3 in that order (split stacks add up); "Test failed" on a level = the water did not turn into a salt cauldron of the same level (rerun with a longer sleep before judging the loot)
+
+## SQ-SALT2-03 | water_salt mixing, raw rock salt crushing / milling / hammering, no knife cutting
+> zq rdetail water_salt
+waitlog \[zq\] rdetail matching water_salt: \d+ 30
+> zq rdetail raw_rock_salt_salt
+waitlog \[zq\] rdetail matching raw_rock_salt_salt: \d+ 30
+expect water_salt \{create:mixing\} -> 2 salt_dust
+expect farmersdelightcutting/raw_rock_salt_salt_hammering \{farmersdelight:cutting\}
+expect shapeless/raw_rock_salt_salt_hammering \{
+expect raw_rock_salt_salt\S* \{create:crushing\}
+expect raw_rock_salt_salt\S* \{create:milling\}
+look mixing: heated, 1000 mB water -> 2 salt dust; crushing and milling rdetail+ results 4 salt dust + 1 at 0.5; hammering 4 on the board (tool = Engineer's Hammer) and in the grid; no other farmersdelight:cutting recipe for raw rock salt (knife)
+
+## SQ-SALT2-04 | raw rock salt block in natural_rough, not soft; Salt Block in soft
+> zq tagsof salt:raw_rock_salt_block
+waitlog \[zq\] block tags of salt:raw_rock_salt_block 30
+> zq tagsof salt:salt_block
+waitlog \[zq\] block tags of salt:salt_block 30
+expect block tags of salt:raw_rock_salt_block: .*blockrunner:surface/natural_rough
+reject block tags of salt:raw_rock_salt_block: .*blockrunner:surface/soft\b
+expect block tags of salt:salt_block: .*blockrunner:surface/soft\b
+
+## SQ-SALT2-06 | Salt Block melts ice to a water source and snow to air in the overworld; both to air in the Nether
+# c1rt (overworld) and c1nb (Nether) keep both case sites random-ticking. Vanilla ice only melts by block light > 11
+# (none here), so a change is the salt's.
+> setblock 1080 -59 1040 minecraft:stone
+> setblock 1079 -60 1040 minecraft:stone
+> setblock 1080 -60 1039 minecraft:stone
+> setblock 1080 -60 1041 minecraft:stone
+> setblock 1080 -60 1040 minecraft:ice
+> setblock 1081 -60 1040 salt:salt_block
+> setblock 1080 -60 1060 minecraft:snow
+> setblock 1081 -60 1060 salt:salt_block
+> execute in minecraft:the_nether run setblock 4 141 4 minecraft:ice
+> execute in minecraft:the_nether run setblock 5 141 4 salt:salt_block
+> execute in minecraft:the_nether run setblock 4 141 12 minecraft:snow
+> execute in minecraft:the_nether run setblock 5 141 12 salt:salt_block
+> gamerule randomTickSpeed 1000
+sleep 30
+> gamerule randomTickSpeed 3
+> execute if block 1080 -60 1040 minecraft:water[level=0]
+> execute if block 1080 -60 1060 minecraft:air
+> execute in minecraft:the_nether if block 4 141 4 minecraft:air
+> execute in minecraft:the_nether if block 4 141 12 minecraft:air
+count Test passed == 4
+look a "Test failed": name which case (order: overworld ice -> water source, overworld snow -> air, Nether ice -> air, Nether snow -> air)
+
+## SQ-SALT2-07 | butchers: 12 emeralds -> 64 salt dust, 4 uses; never a salt:salt trade
+# MCA replaces minecraft:villager (r1103): summon both kinds; a level-1 butcher rolls 2 of its level-1 trades
+pace 0.3
+repeat 12
+> summon minecraft:villager 1090 -60 1080 {NoAI:1b,PersistenceRequired:1b,Tags:["c1salt"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+> summon mca:male_villager 1092 -60 1080 {NoAI:1b,PersistenceRequired:1b,Tags:["c1salt"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+end
+pace 1
+sleep 3
+> sa offers c1salt
+waitlog \[sa\] done 60
+count \[sa\] offer \d+: 12 minecraft:emerald -> 64 vintagedelight:salt_dust, maxUses 4 >= 1
+reject \[sa\] offer \d+: .* -> \d+ salt:salt\b
+reject \[sa\] error
+> kill @e[tag=c1salt]
+look every salt-dust offer reads 12 emerald -> 64 salt dust, maxUses 4; none at 0 is not a FAIL if few butchers rolled it (summon more)
+
+## SQ-VTD8-03 | Pickling Jar strict per slot (a) one batch (b) no batch (c) three batches; with SQ-STK-06's zucchini jar
+# The jars started in C1A-00; pickle time 2400 t: (c) needs 3 x 120 s. This row waits so that 6.5+ min have passed.
+sleep 240
+> data get block 1000 -60 1000 inventory
+> data get block 1000 -60 1003
+> data get block 1000 -60 1006 inventory
+> data get block 1000 -60 1009 inventory
+> data get block 1000 -60 1000 inventory.Items[{Slot:0b}]
+> data get block 1000 -60 1000 inventory.Items[{Slot:5b}]
+> data get block 1000 -60 1003 inventory.Items[{Slot:7b}]
+> data get block 1000 -60 1006 inventory.Items[{Slot:0b}]
+> data get block 1000 -60 1006 inventory.Items[{Slot:4b}]
+> data get block 1000 -60 1006 inventory.Items[{Slot:5b}]
+> data get block 1000 -60 1009 inventory.Items[{Slot:3b}]
+count Found no elements matching == 7
+expect has the following block data: \{(?=[^{}]*Slot: 7b)(?=[^{}]*"vintagedelight:pickle")(?=[^{}]*Count: 5b)[^{}]*\}
+expect has the following block data: \{(?=[^{}]*Slot: 7b)(?=[^{}]*"vintagedelight:pickle")(?=[^{}]*Count: 15b)[^{}]*\}
+look (a) 1000 -60 1000: 5 pickles in slot 7, slots 0-5 empty; (b) 1000 -60 1003: slots unchanged (2/2/2 cucumbers, salt), no slot 7, progress 0; (c) 1000 -60 1006: 15 pickles, slots 0-5 empty; STK-06 jar 1000 -60 1009: 5 pickles, zucchini slots empty. If (c) shows 10, the third batch was still running: rerun this row with --rows SQ-VTD8-03
