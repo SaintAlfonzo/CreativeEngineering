@@ -1,0 +1,156 @@
+/*
+ * Copyright 2025 patryk3211
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+// Modified for the Forge 1.19.2 / Create 0.5.1 port (backportedPowerGrid, 2026); changes listed in PORT_NOTES.md.
+package org.patryk3211.powergrid.kinetics.plotter;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import com.simibubi.create.foundation.render.CachedBufferer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import org.patryk3211.powergrid.collections.ModdedPartialModels;
+import org.patryk3211.powergrid.collections.ModdedRenderLayers;
+
+public class PlotterRenderer extends KineticBlockEntityRenderer<PlotterBlockEntity> {
+    private static final float TIME_SPAN = 9.5f / 16;
+    private static final float VOLTAGE_SPAN = 11.5f / 16;
+    private static final Vec3 GRAPH_ORIGIN = new Vec3(8.0 / 16.0, 16.2 / 16.0, 13.0 / 16.0);
+
+    // Port: joml Quaternionf -> 1.19.2 com.mojang.math.Quaternion (same rotation about X)
+    private static final float GRAPH_ANGLE = -112.5f / 180f * (float) Math.PI;
+    private static final Quaternion GRAPH_ROTATION = Vector3f.XP.rotation(GRAPH_ANGLE);
+
+    public PlotterRenderer(BlockEntityRendererProvider.Context context) {
+        super(context);
+    }
+
+    public static Vec3 graphPoint(float t, float v, BlockPos pos, Direction facing) {
+        // Port: the joml quaternion transform written out (rotation about X of (x, y, 0))
+        double gx = v * VOLTAGE_SPAN * 0.5f;
+        double gy = t * TIME_SPAN;
+        var out = new Vec3(
+                gx + GRAPH_ORIGIN.x,
+                gy * Math.cos(GRAPH_ANGLE) + GRAPH_ORIGIN.y,
+                gy * Math.sin(GRAPH_ANGLE) + GRAPH_ORIGIN.z);
+        out = switch(facing) {
+            case NORTH -> out;
+            case SOUTH -> new Vec3(1 - out.x, out.y, 1 - out.z);
+            case EAST -> new Vec3(1 - out.z, out.y, out.x);
+            case WEST -> new Vec3(out.z, out.y, 1 - out.x);
+            default -> Vec3.ZERO;
+        };
+        return out.add(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    @Override
+    protected void renderSafe(PlotterBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+        // Port: the shaft is drawn directly (the 0.5.1 super renderSafe skips it under Flywheel instancing; upstream's
+        // ShaftVisual is Flywheel 1.0 and not ported).
+        var state = be.getBlockState();
+        renderRotatingBuffer(be, getRotatedModel(be, state), ms, buffer.getBuffer(getRenderType(be, state)), light);
+
+        var facing = state.getValue(PlotterBlock.HORIZONTAL_FACING);
+        var pointer = CachedBufferer.partial(ModdedPartialModels.PLOTTER_POINTER, state);
+        var paper = CachedBufferer.partialFacing(ModdedPartialModels.PLOTTER_PAPER, state, facing.getOpposite());
+
+        pointer
+                .light(light)
+                .centre()
+                .rotateToFace(facing)
+                .unCentre()
+                .translate(Mth.lerp(partialTicks, be.prevHeadPosition, be.headPosition) * VOLTAGE_SPAN * 0.5f, 0, 0)
+                .renderInto(ms, buffer.getBuffer(RenderType.solid()));
+        var viewer = CachedBufferer.partial(ModdedPartialModels.PLOTTER_VIEWER, state);
+        viewer.light(light)
+                .centre()
+                .rotateToFace(facing)
+                .unCentre()
+                .renderInto(ms, buffer.getBuffer(RenderType.cutoutMipped()));
+        var sprite = ModdedPartialModels.PAPER_SHIFT;
+        float spriteWidth = sprite.getTarget().getU1() - sprite.getTarget().getU0();
+        double uScroll = be.getAnimationSpeed() * AnimationTickHolder.getRenderTime(be.getLevel()) / (256 * 20) * TIME_SPAN;
+        uScroll = uScroll - Math.floor(uScroll);
+        uScroll = uScroll * spriteWidth / 2;
+        paper
+                .light(light)
+                .translate(0, 1 / 64f, 0)
+                .shiftUVScrolling(sprite, (float) uScroll, 0)
+                .renderInto(ms, buffer.getBuffer(RenderType.solid()));
+
+        // Render the graph from samples
+        ms.pushPose();
+        // Port: 1.19.2 PoseStack has no rotateAround (translate, rotate, translate back)
+        rotateAround(ms, Vector3f.YP.rotation(0.5f * (float) Math.PI * (2 - facing.get2DDataValue())), 0.5f, 0.5f, 0.5f);
+        rotateAround(ms, GRAPH_ROTATION, (float) GRAPH_ORIGIN.x, (float) GRAPH_ORIGIN.y, (float) GRAPH_ORIGIN.z);
+        ms.translate(GRAPH_ORIGIN.x, GRAPH_ORIGIN.y, GRAPH_ORIGIN.z);
+        ms.scale(VOLTAGE_SPAN * 0.5f, TIME_SPAN, 1);
+        if(be.getAnimationSpeed() != 0) {
+            // This keeps the graph movement in sync with the paper scrolling.
+            ms.translate(0, -1.0f / be.sampleBuffer.length * partialTicks, 0);
+        }
+        float yPrev = 0;
+        var consumer = buffer.getBuffer(ModdedRenderLayers.getColor());
+
+        var color = be.color.getTextureDiffuseColors();
+        consumer.defaultColor((int) (color[0] * 160) + 16, (int) (color[1] * 160) + 16, (int) (color[2] * 160) + 16, 255);
+        var m4 = ms.last().pose();
+        for(int i = 0; i < be.sampleBuffer.length; ++i) {
+            float y = Mth.clamp(be.sampleBuffer[(be.head + i) % be.sampleBuffer.length], -1, 1);
+            if(i == 0) {
+                yPrev = y;
+                continue;
+            }
+            float height = Math.max(1.0f / be.sampleBuffer.length, 0.0025f);
+            float x2 = (float) i / be.sampleBuffer.length;
+            float x1 = x2 - height;
+
+            float thickness = 1 / 32f;
+            var diff = Math.abs(y - yPrev) * 0.5f;
+            thickness += diff;
+
+            float yMid = (yPrev + y) * 0.5f;
+            y = yPrev = yMid;
+            consumer.vertex(m4, yPrev - thickness, x1, 0).endVertex();
+            consumer.vertex(m4, yPrev + thickness, x1, 0).endVertex();
+            consumer.vertex(m4, y + thickness, x2, 0).endVertex();
+            consumer.vertex(m4, y - thickness, x2, 0).endVertex();
+
+            yPrev = y;
+        }
+        consumer.unsetDefaultColor();
+        ms.popPose();
+    }
+
+    private static void rotateAround(PoseStack ms, Quaternion rotation, float x, float y, float z) {
+        ms.translate(x, y, z);
+        ms.mulPose(rotation);
+        ms.translate(-x, -y, -z);
+    }
+
+    @Override
+    protected BlockState getRenderedBlockState(PlotterBlockEntity be) {
+        return shaft(be.getBlockState().getValue(PlotterBlock.HORIZONTAL_FACING).getClockWise().getAxis());
+    }
+}

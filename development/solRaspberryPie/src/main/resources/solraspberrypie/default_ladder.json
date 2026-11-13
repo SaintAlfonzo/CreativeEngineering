@@ -1,0 +1,40 @@
+{
+  "_comment": "Built-in default ladder of Spice of Life: Raspberry Pie Addition (vanilla effects only). Copied to <world>/serverconfig/solraspberrypie/ladder.json on first start unless defaultconfigs/solraspberrypie/ladder.json exists. Edits apply at the next server start. Rung types: health (amount in health points, 2 = one heart), attribute (attribute id, amount), flat (effect, level: always on while reached), slot (an effect slot), unlock (effect, level: pickable for slots, never lost). pool: the effects slots may hold, with their level cap.",
+  "pool": [
+    { "effect": "minecraft:speed", "max_level": 2 },
+    { "effect": "minecraft:haste", "max_level": 2 },
+    { "effect": "minecraft:strength", "max_level": 2 },
+    { "effect": "minecraft:jump_boost", "max_level": 2 },
+    { "effect": "minecraft:night_vision", "max_level": 1 },
+    { "effect": "minecraft:water_breathing", "max_level": 1 },
+    { "effect": "minecraft:luck", "max_level": 2 },
+    { "effect": "minecraft:regeneration", "max_level": 1 }
+  ],
+  "rungs": [
+    { "threshold": 1, "type": "slot" },
+    { "threshold": 1, "type": "unlock", "effect": "minecraft:speed", "level": 1 },
+    { "threshold": 2, "type": "health", "amount": 2 },
+    { "threshold": 2, "type": "unlock", "effect": "minecraft:haste", "level": 1 },
+    { "threshold": 3, "type": "unlock", "effect": "minecraft:jump_boost", "level": 1 },
+    { "threshold": 4, "type": "slot" },
+    { "threshold": 4, "type": "unlock", "effect": "minecraft:night_vision", "level": 1 },
+    { "threshold": 5, "type": "health", "amount": 2 },
+    { "threshold": 5, "type": "unlock", "effect": "minecraft:strength", "level": 1 },
+    { "threshold": 6, "type": "attribute", "attribute": "minecraft:generic.armor_toughness", "amount": 2 },
+    { "threshold": 6, "type": "unlock", "effect": "minecraft:water_breathing", "level": 1 },
+    { "threshold": 7, "type": "flat", "effect": "minecraft:speed", "level": 1 },
+    { "threshold": 8, "type": "health", "amount": 2 },
+    { "threshold": 8, "type": "unlock", "effect": "minecraft:luck", "level": 1 },
+    { "threshold": 9, "type": "slot" },
+    { "threshold": 9, "type": "unlock", "effect": "minecraft:regeneration", "level": 1 },
+    { "threshold": 10, "type": "attribute", "attribute": "minecraft:generic.knockback_resistance", "amount": 0.5 },
+    { "threshold": 11, "type": "health", "amount": 2 },
+    { "threshold": 11, "type": "unlock", "effect": "minecraft:speed", "level": 2 },
+    { "threshold": 12, "type": "unlock", "effect": "minecraft:haste", "level": 2 },
+    { "threshold": 13, "type": "slot" },
+    { "threshold": 13, "type": "unlock", "effect": "minecraft:strength", "level": 2 },
+    { "threshold": 14, "type": "health", "amount": 2 },
+    { "threshold": 14, "type": "unlock", "effect": "minecraft:jump_boost", "level": 2 },
+    { "threshold": 15, "type": "unlock", "effect": "minecraft:luck", "level": 2 }
+  ]
+}

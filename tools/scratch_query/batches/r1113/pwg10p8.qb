@@ -1,0 +1,367 @@
+# r1113 Power Grid P8 gate rows (jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-10.jar, sha1 c4624ce39cff,
+# port phase 8): SQ-PWG-62, -63, -65, -64, -66 (queue run order; CQ-PWG-19 to -21 are client rows, not here).
+# Runs on the SAME server as batch 3, after tools/scratch_query/batches/r1113/pwg10.qb and pwg10p6.qb (level pwg10,
+# group A superflat, spawn-animals=true, ground Y -61, blocks at Y -60). No boot, no prep of its own: pwg10.qb's header
+# lists every prep step (zz_pwg_p8_probe.js, the ponder datapack from the -10 jar, the CC startup program copied to
+# OUT/srv/pwg10/computercraft/computer/7/startup.lua). SQ-PWG-62's boot checks (bootexpect / bootreject) read the whole
+# log from the boot, so they hold on this third batch too.
+# Areas: X 1095 to 1160, Z 1595 to 1680 (SQ-PWG-62 forceload, kept to the end) and the ponder area X 1290 to 1970,
+# Z 1290 to 1320 (SQ-PWG-62 only, removed in SETUP10P8). pwg10.qb: X 1095 to 1115, Z 1525 to 1590 (shared chunk row
+# Z 1584 to 1599: its last blocks are SQ-PWG-61's sheep at Z 1585, these start at Z 1598); pwg10p6.qb: Z 1385 to 1520.
+# Probe goggle reads log a RuntimeDistCleaner ERROR (client class): no blanket ERROR reject.
+# waitlog matches anywhere since the row start; real waits are sleeps (20 ticks = 1 s) plus pace (s after each command).
+# Batch deviations from the row text: tick waits are sleeps (pace 1 s = 20 ticks after each command, so "wait 10" between
+# two commands is already covered); SQ-PWG-63 burnout reads and SQ-PWG-65 reader polls use a short pace for their
+# 2 / 8 / 16 tick spacing (approximate); SQ-PWG-65 hopper read is judged by look (its card has the same Data as the first
+# card); SQ-PWG-66 computer output is a shell cat (RES/rows/SQ-PWG-66.shell.txt), judged by look.
+pace 1
+
+## SQ-PWG-62 | -10 loads (phase 8): registries, 66 recipes, P8 blocks, items, block entities, menu, CRT encasing, CC bridge, module keys, ponder structures 55 + 5
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 8\)
+bootexpect Done \(
+bootreject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
+bootreject (?i)(CCBridge|powergrid\.compat\.cc).*(error|exception)
+> forceload add 1095 1595 1160 1680
+> forceload add 1290 1290 1970 1320
+sleep 12
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg8 check
+waitlog \[zpwg8\] done 30
+> datapack list enabled
+> zpwg5 nbtall 1300 -60 1300
+waitlog \[zpwg5\] nbt summary 300
+> zpwg8 nbtall 1100 -60 1675
+waitlog \[zpwg8\] nbt summary 120
+sleep 1
+shell grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log | head -40
+shell grep -n -i -E 'computercraft.*(error|exception)|CCBridge|compat\.cc' logs/latest.log | head -20
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-10
+expect \[zpwg\] ns powergrid block: 66\b
+expect \[zpwg\] ns powergrid item: 85\b
+expect \[zpwg\] ns powergrid entity_type: 4\b
+expect \[zpwg\] ns powergrid block_entity_type: 54\b
+expect \[zpwg\] ns powergrid menu: 3\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg3\] recipes 66$
+expect recipe powergrid:crafting/alarm_bell type=
+expect recipe powergrid:crafting/display_module type=
+expect recipe powergrid:crafting/plotter type=
+expect recipe powergrid:mechanical_crafting/crt type=
+expect recipe powergrid:sequenced_assembly/punch_card type=
+reject recipe powergrid:crafting/modular_display type=
+reject recipe powergrid:mechanical_crafting/punch_card_reader type=
+expect \[zpwg8\] block powergrid:plotter registered=true item=true$
+expect \[zpwg8\] block powergrid:alarm_bell registered=true item=true$
+expect \[zpwg8\] block powergrid:crt registered=true item=true$
+expect \[zpwg8\] block powergrid:andesite_encased_crt registered=true item=false$
+expect \[zpwg8\] block powergrid:brass_encased_crt registered=true item=false$
+expect \[zpwg8\] block powergrid:punch_card_reader registered=true item=true$
+expect \[zpwg8\] block powergrid:modular_display registered=true item=true$
+count \[zpwg8\] item powergrid:\S+ registered=true$ == 3
+count \[zpwg8\] block entity powergrid:\S+ registered=true$ == 5
+expect \[zpwg8\] menu powergrid:punch_card registered=true$
+expect \[zpwg8\] crt encased variants=(powergrid:andesite_encased_crt,powergrid:brass_encased_crt|powergrid:brass_encased_crt,powergrid:andesite_encased_crt)$
+expect \[zpwg8\] computercraft loaded=true$
+expect \[zpwg8\] display module types 0:powergrid\.gui\.modular_display\.0 - 9 \| .* \| 5:powergrid\.gui\.modular_display\.alphabet$
+expect file/pwgponder
+expect \[zpwg5\] nbt summary files=55 (clean=40 quirk=15|clean=39 quirk=16) bad=0 error=0
+reject \[zpwg5\] nbt \S+ (bad|error|missing|unknown)
+expect \[zpwg8\] nbt summary files=5 clean=5 bad=0 error=0
+count \[zpwg8\] nbt (?!summary)\S+ clean == 5
+reject \[zpwg8\] nbt \S+ (bad|error|missing)
+reject size=WRONG
+reject \[zpwg8\] (block|item|block entity|menu) powergrid:\S+ registered=false
+reject \[zpwg8\] computercraft loaded=false
+reject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look shell output 1: mixin lines name no failure; shell output 2: no CC error or exception line (a CCBridge / provider registration line is fine); zpwg5 summary: the same clean/quirk split as SQ-PWG-47 on -08 (record)
+
+## SQ-PWG-SETUP10P8 | unload the ponder area; clear the animals generated in the new P8 chunks (not a row)
+> forceload remove 1290 1290 1970 1320
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> weather clear
+> kill @e[type=!minecraft:player]
+sleep 2
+
+## SQ-PWG-63 | PWG-38 modular display: insert, flip coils, module type, dye and wrench on the slot centre, value box, removal, burnout, drops
+> zpwg3 place 1100 -60 1600 powergrid:modular_display facing=north
+> zpwg8 fp 1100 -60 1598
+> zpwg8 hold powergrid:display_module 4
+> zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0
+> zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0
+> zpwg8 md 1100 -60 1600
+> zpwg3 src 1100 -60 1603 0
+> zpwg3 w 1100 -60 1603 0 1100 -60 1600 0
+> zpwg3 w 1100 -60 1603 1 1100 -60 1600 8
+repeat 3
+> zpwg3 src 1100 -60 1603 20
+> zpwg8 md 1100 -60 1600
+> zpwg3 src 1100 -60 1603 0
+> zpwg8 md 1100 -60 1600
+end
+> zpwg8 mdtype 1100 -60 1600 0 5
+> zpwg8 hold minecraft:red_dye
+> zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0
+> zpwg8 md 1100 -60 1600
+> zpwg8 hold create:wrench
+> zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0
+> zpwg8 md 1100 -60 1600
+> zpwg8 hold minecraft:air
+> zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0
+> zpwg8 md 1100 -60 1600
+> zpwg8 sneak on
+> zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0
+> zpwg8 md 1100 -60 1600
+> zpwg8 sneak off
+# burnout, Z 1606
+> zpwg3 place 1100 -60 1606 powergrid:modular_display facing=north
+> zpwg8 fp 1100 -60 1604
+> zpwg8 hold powergrid:display_module 1
+> zpwg8 use 1100 -60 1606 north 0.25 0.75 0.0
+> zpwg3 src 1100 -60 1609 0
+> zpwg3 w 1100 -60 1609 0 1100 -60 1606 0
+> zpwg3 w 1100 -60 1609 1 1100 -60 1606 8
+pace 0.1
+> zpwg3 src 1100 -60 1609 40
+> zpwg8 md 1100 -60 1606
+sleep 0.3
+> zpwg8 md 1100 -60 1606
+sleep 1.4
+> zpwg8 md 1100 -60 1606
+pace 1
+> zpwg8 drops 1100 -60 1606 3
+> setblock 1100 -60 1600 minecraft:air destroy
+sleep 1
+> zpwg8 drops 1100 -60 1600 2
+expect \[zpwg8\] use powergrid:display_modulex4 on powergrid:modular_display face=north at 0\.25,0\.75,0 .*result=(SUCCESS|CONSUME) .*held after=powergrid:display_modulex3$
+expect \[zpwg8\] use powergrid:display_modulex3 on powergrid:modular_display face=north at 0\.75,0\.75,0 .*result=(SUCCESS|CONSUME) .*held after=powergrid:display_modulex2$
+expect \[zpwg8\] md slot 0 module=zerotonine:0:false:white\b
+expect \[zpwg8\] md slot 1 module=zerotonine:0:false:white\b
+expect \[zpwg8\] md slot 2 module=empty\b
+expect \[zpwg8\] md slot 3 module=empty\b
+expect \[zpwg8\] md slot 0 module=zerotonine:1:true:white\b
+expect \[zpwg8\] md slot 0 module=zerotonine:1:false:white\b
+expect \[zpwg8\] md slot 0 module=zerotonine:2:true:white\b
+expect \[zpwg8\] md slot 0 module=zerotonine:3:true:white\b
+expect \[zpwg8\] md slot 0 module=zerotonine:3:false:white\b
+expect \[zpwg8\] md slot 0 module=alphabet:0:false:white:0\b
+expect \[zpwg8\] md slot 0 module=alphabet:0:false:red:0\b
+expect \[zpwg8\] use minecraft:red_dyex1 on powergrid:modular_display .*held after=minecraft:red_dyex1$
+expect \[zpwg8\] md slot 0 module=alphabet:0:false:red:0 blankingRemoved=1\b
+expect \[zpwg8\] use \S+x0 on powergrid:modular_display face=north at 0\.75,0\.75,0 sneaking=true .*held after=powergrid:display_modulex1$
+expect \[zpwg8\] md slot 1 module=empty\b
+expect \[zpwg8\] md slot 0 module=empty blankingRemoved=\S+ temp=22\b
+expect \[zpwg8\] drops 0$
+expect \[zpwg8\] drop powergrid:modular_display x1
+expect \[zpwg8\] drop powergrid:display_module x1
+reject \[zpwg8\] md: no modular display
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look value box use (empty hand, not sneaking, slot centre): nothing in the md lines after it changes (record its result=); burnout: the 1606 md reads after about 2 and 10 ticks show temp rising past 125, then slot 0 empty and temp=22; insert / pulse: 20 V over the 25 ohm coil = 0.8 A, 16 W; md option= and lastHitSlot after mdtype (record)
+
+## SQ-PWG-65 | PWG-39 plotter (buffer by RPM, samples, 16 RPM floor, dye), punch card reader (angle, bits, comparator, side insert, hopper), alarm bell, B15 card dropped
+> zpwg3 place 1098 -60 1630 create:creative_motor facing=east
+> zpwg3 place 1099 -60 1630 create:shaft axis=x
+> zpwg3 place 1100 -60 1630 powergrid:plotter facing=north
+> zpwg3 scroll 1098 -60 1630 64
+> zpwg3 scroll 1100 -60 1630 1
+> zpwg3 src 1100 -60 1633 10
+> zpwg3 w 1100 -60 1633 0 1100 -60 1630 0
+> zpwg3 w 1100 -60 1633 1 1100 -60 1630 1
+sleep 5
+> zpwg8 plot 1100 -60 1630 10
+> zpwg3 src 1100 -60 1633 -10
+sleep 2
+> zpwg8 plot 1100 -60 1630 10
+> zpwg3 src 1100 -60 1633 30
+sleep 2
+> zpwg8 plot 1100 -60 1630 10
+> zpwg3 scroll 1098 -60 1630 32
+sleep 1
+> zpwg8 plot 1100 -60 1630 10
+> zpwg3 scroll 1098 -60 1630 8
+> zpwg8 plot 1100 -60 1630 10
+> zpwg8 plot 1100 -60 1630 10
+> zpwg8 fp 1100 -60 1628
+> zpwg8 hold minecraft:red_dye
+> zpwg8 use 1100 -60 1630 up 0.5 0.75 0.5
+> zpwg8 plot 1100 -60 1630 10
+# reader and bell, Z 1645
+> zpwg3 place 1098 -60 1645 create:creative_motor facing=east
+> zpwg3 place 1099 -60 1645 create:shaft axis=x
+> zpwg3 place 1100 -60 1645 powergrid:punch_card_reader facing=north
+> zpwg3 scroll 1098 -60 1645 -16
+> zpwg3 place 1103 -60 1645 powergrid:alarm_bell facing=north
+> zpwg3 src 1100 -60 1649 10
+> zpwg3 w 1100 -60 1649 0 1100 -60 1645 0
+> zpwg3 w 1100 -60 1649 1 1103 -60 1645 1
+> zpwg3 w 1103 -60 1645 0 1100 -60 1645 1
+> zpwg8 reader 1100 -60 1645
+> zpwg8 card 1100 -60 1645 01000100010001000100010001000100
+pace 0.2
+repeat 10
+> zpwg8 reader 1100 -60 1645
+> zpwg8 bell 1103 -60 1645
+end
+pace 1
+sleep 10
+> zpwg8 reader 1100 -60 1645
+> zpwg8 extract 1100 -60 1645
+# side insert, motor the other way
+> zpwg3 scroll 1098 -60 1645 16
+> zpwg8 card 1100 -60 1645 ff000000000000000000000000000080 side
+pace 0.2
+repeat 5
+> zpwg8 reader 1100 -60 1645
+sleep 0.6
+end
+pace 1
+# hopper
+> zpwg8 extract 1100 -60 1645
+> zpwg8 reader 1100 -60 1645
+> setblock 1100 -59 1645 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"powergrid:punch_card",Count:1b,tag:{Data:[B;1b,0b,1b,0b,1b,0b,1b,0b,1b,0b,1b,0b,1b,0b,1b,0b]}}]}
+sleep 1
+> zpwg8 reader 1100 -60 1645
+# B15: a card in a broken reader is dropped
+> setblock 1100 -59 1645 minecraft:air
+> setblock 1100 -60 1645 minecraft:air destroy
+sleep 1
+> zpwg8 drops 1100 -60 1645 2
+expect \[zpwg8\] plot speed=-?64 fulfilled=true range=1 buffer=80
+expect \[zpwg8\] plot speed=-?32 fulfilled=true range=1 buffer=160
+expect \[zpwg8\] plot speed=-?8 fulfilled=false
+expect \[zpwg8\] plot .* color=14
+expect \[zpwg8\] use minecraft:red_dyex1 on powergrid:plotter
+expect \[zpwg8\] reader class=(\S*\.)?PunchCardReaderBlockEntityImpl\S* card=none angle=0 redstone=0
+expect \[zpwg8\] card insert from up ok=true$
+expect \[zpwg8\] bell volume=1 pitch=0\.75
+expect \[zpwg8\] bell volume=0
+expect \[zpwg8\] reader class=\S+ card=powergrid:punch_card data=01000100010001000100010001000100 angle=16 redstone=15
+expect \[zpwg8\] extract powergrid:punch_card data=01000100010001000100010001000100$
+expect \[zpwg8\] card insert from north ok=true$
+expect \[zpwg8\] reader class=\S+ card=powergrid:punch_card data=ff000000000000000000000000000080
+expect \[zpwg8\] extract powergrid:punch_card data=ff000000000000000000000000000080$
+expect \[zpwg8\] drop powergrid:punch_card_reader x1
+expect \[zpwg8\] drop powergrid:punch_card x1 data=01000100010001000100010001000100$
+reject \[zpwg8\] (plot: no plotter|reader: none|card: no reader|extract: no reader|bell: none)
+reject \[zpwg8\] card insert from \S+ ok=false
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look plotter: head moves between the 64 RPM calls, samples about 0.5 at +10 V, about -0.5 at -10 V, 1 at 30 V; at 8 RPM head unchanged between the two calls; reader polls: angle rising about 1 per 16 ticks (stays 0: motor sign wrong for this facing, record), comparator and redstone = floor(angle), reader terminals T1 near T0 on even columns only, bell volume 1 on even columns and 0 on odd; side insert: angle 16 at once and falling; hopper: the last reader read before B15 shows card=powergrid:punch_card with angle near 0 (the read after the extract shows card=none)
+
+## SQ-PWG-64 | PWG-38 CRT electron gun (anode current by grid and heater), encasing with andesite and brass, dye, sneak-wrench back
+> zpwg3 place 1100 -60 1615 powergrid:crt facing=north
+> zpwg3 src 1103 -60 1615 12
+> zpwg3 w 1103 -60 1615 0 1100 -60 1615 1
+> zpwg3 w 1103 -60 1615 1 1100 -60 1615 0
+> zpwg3 place 1100 -60 1619 powergrid:current_gauge facing=north
+> zpwg3 src 1100 -60 1622 1000
+> zpwg3 w 1100 -60 1622 0 1100 -60 1619 0
+> zpwg3 w 1100 -60 1619 1 1100 -60 1615 3
+> zpwg3 w 1100 -60 1622 1 1100 -60 1615 0
+> zpwg3 src 1097 -60 1615 0
+> zpwg3 w 1097 -60 1615 0 1100 -60 1615 2
+> zpwg3 w 1097 -60 1615 1 1100 -60 1615 0
+sleep 2
+> zpwg8 crt 1100 -60 1615
+> zpwg3 be 1100 -60 1619
+> zpwg3 src 1097 -60 1615 -5
+sleep 2
+> zpwg8 crt 1100 -60 1615
+> zpwg3 be 1100 -60 1619
+> zpwg3 src 1097 -60 1615 -10
+sleep 2
+> zpwg8 crt 1100 -60 1615
+> zpwg3 be 1100 -60 1619
+> zpwg3 src 1097 -60 1615 0
+> zpwg3 src 1103 -60 1615 8
+sleep 2
+> zpwg8 crt 1100 -60 1615
+> zpwg3 be 1100 -60 1619
+> zpwg3 src 1103 -60 1615 13
+sleep 2
+> zpwg8 crt 1100 -60 1615
+> zpwg3 be 1100 -60 1619
+# encasing, Z 1625
+> zpwg3 place 1106 -60 1625 powergrid:crt facing=north
+> zpwg8 fp 1106 -60 1623
+> zpwg8 hold create:andesite_casing
+> zpwg8 use 1106 -60 1625 up 0.5 0.6875 0.5
+> zpwg8 hold minecraft:lime_dye
+> zpwg8 use 1106 -60 1625 north 0.5 0.5 0.0
+> zpwg8 crt 1106 -60 1625
+> zpwg8 hold create:wrench
+> zpwg8 sneak on
+> zpwg8 use 1106 -60 1625 north 0.5 0.5 0.0
+> zpwg8 sneak off
+> zpwg8 crt 1106 -60 1625
+> zpwg8 hold create:brass_casing
+> zpwg8 use 1106 -60 1625 up 0.5 0.6875 0.5
+> zpwg8 crt 1106 -60 1625
+sleep 1
+> zpwg8 drops 1106 -60 1625 2
+count \[zpwg8\] crt terminals T0= >= 5
+count \[zpwg3\] gauge -?\d == 5
+expect \[zpwg8\] use create:andesite_casingx1 on powergrid:andesite_encased_crt
+expect \[zpwg8\] crt block=Block\{powergrid:andesite_encased_crt\}\[.*facing=north.*\] color=5$
+expect \[zpwg8\] crt block=Block\{powergrid:crt\}\[.*facing=north.*\] color=
+expect \[zpwg8\] crt block=Block\{powergrid:brass_encased_crt\}\[.*facing=north.*\] color=5$
+reject \[zpwg8\] crt: none at
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look the five [zpwg3] gauge values in order (anode current): about 0.1 (grid 0, heater 12 V), about 0.05 (grid -5), about 0 (grid -10), about 0 (grid 0, heater 8 V), about 0.117 (heater 13 V); crt terminals T1 - T0 = the heater voltage, T3 - T0 about 1000 minus the gauge drop; sneak wrench: does the casing come back (drops line or the fake player's hand; upstream sets the block only: record)
+
+## SQ-PWG-66 | PWG-40 CC: Tweaked peripherals (probe side and a real computer, B17 main-thread setValue), display link to a display board
+> zpwg3 place 1100 -60 1660 powergrid:voltage_gauge facing=north
+> zpwg3 src 1100 -60 1657 12
+> zpwg3 w 1100 -60 1657 0 1100 -60 1660 0
+> zpwg3 w 1100 -60 1657 1 1100 -60 1660 1
+sleep 2
+> zpwg8 periph 1100 -60 1660
+> zpwg8 periph 1100 -60 1619
+> zpwg3 place 1101 -59 1660 powergrid:redstone_converter facing=north
+> zpwg8 periph 1101 -59 1660
+> zpwg8 conv 1101 -59 1660 7
+sleep 1
+> zpwg3 be 1101 -59 1660
+> zpwg8 conv 1101 -59 1660 clear
+sleep 1
+> zpwg3 be 1101 -59 1660
+# real computer: startup.lua was copied to pwg10/computercraft/computer/7/ before the boot (pwg10.qb prep)
+shell ls -la pwg10/computercraft/computer/7/
+> setblock 1101 -60 1660 computercraft:computer_advanced{ComputerId:7,On:1b}
+sleep 10
+> zpwg3 be 1101 -59 1660
+sleep 15
+shell cat pwg10/computercraft/computer/7/pwg_out.txt
+# display link
+> zpwg3 place 1100 -60 1666 create:display_board facing=north
+> zpwg3 place 1100 -59 1660 create:display_link facing=up
+sleep 1
+> zpwg8 dlink 1100 -59 1660 1100 -60 1666 2
+> zpwg3 src 1100 -60 1657 -5
+sleep 2
+> zpwg8 dlink 1100 -59 1660 1100 -60 1666 2
+expect \[zpwg8\] periph type=powergrid_voltage_gauge voltage=(11\.9\d*|12(\.0\d*)?)
+expect \[zpwg8\] periph type=powergrid_voltage_gauge .*getValue=(11\.9\d*|12(\.0\d*)?)
+expect \[zpwg8\] periph type=powergrid_current_gauge current=
+expect \[zpwg8\] periph type=powergrid_redstone_converter
+expect \[zpwg8\] conv override=7(\.0)?
+expect \[zpwg8\] conv override=null
+expect \[zpwg8\] dlink source pos=.*powergrid:voltage_gauge value=
+expect \[zpwg8\] board create:display_board nbt=
+reject \[zpwg8\] (periph|conv|dlink|board): no
+reject \[zpwg8\] periph: none for
+reject LuaException
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look periph maxRange / rangePercentage = 12 / range; current gauge current= the SQ-PWG-64 gauge value; converter terminal voltage in the be reads follows override 7 then clear (record both), and the be after the computer start shows the 7 override's voltage; shell 1: startup.lua present; shell 2 (computer file): start, three "sample N peripherals=2" blocks each with a powergrid_voltage_gauge line (voltage= about 12) and a powergrid_redstone_converter line, "<side> setValue(7) ok=true" and "<side> clearValue ok=true" (record the side names), end, no error text; dlink lines: activeTarget not none (none: the board is not its own controller yet, rerun dlink after a wait); board nbt text contains the gauge value with its unit (about 12 V, then about -5 V in polarized mode 2); no file: computer did not start (On:1b, computercraft/computer/7/), rerun by hand in CQ-PWG-21

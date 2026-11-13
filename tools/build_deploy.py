@@ -150,6 +150,9 @@ IN_TREE_MODS = [
     # Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar since 2026-11-07 (nested in Creative Compat
     # before, so Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
     ('backportedTempad', 'backportedTempad', True),
+    # Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): not required, and not in mods/ during the port
+    # (plan E1: scratch servers only); it ships once the basic/advanced energy switch exists (energy_advanced.md stage 5).
+    ('backportedPowerGrid', 'backportedPowerGrid', False),
     # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
     # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
     ('creativeWorldgen', 'creativeworldgen', True),

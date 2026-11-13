@@ -1,0 +1,27 @@
+# r1113 rerun, group B: SQ-HH-328 (r1111 OPEN: both corn maze locates ran out of the 120 s budget after 2 to 9
+#   candidates, the Async Locator thread was busy). One row; append it to any chunk-4 group B boot instead of booting
+#   for it alone (it only needs a fresh normal world with structures on).
+# Prep (if booted alone): bash tools/scratch_query/prep_srv.sh OUT r1113rb B spawn-animals=true
+# Config edits: none.
+# Probes to copy into OUT/srv/kubejs/server_scripts/ (zq_probe.js is copied by prep_srv.sh):
+#   cp tools/scratch_query/hh_mw_probe.js OUT/srv/kubejs/server_scripts/zz_hh_mw_probe.js   (/zhh2 countset, chests)
+# Run this row before any villager-heavy or map-trade row on the same boot (those queue Async Locator searches).
+pace 2
+
+## SQ-HH-328 | corn maze locates naturally and generates (longer budget, three origins)
+> locate structure hearthandharvest:corn_maze
+waitlog (is at \[|Could not find) 600
+> execute positioned 2144 70 -2592 run locate structure hearthandharvest:corn_maze
+waitlog (is at \[|Could not find) 600
+> execute positioned -3000 70 3000 run locate structure hearthandharvest:corn_maze
+waitlog (is at \[|Could not find) 600
+capture M is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+sleep 120
+> zq under {M1} {M3} 2 corn_maze
+waitlog \[zq\] done 60
+> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest
+> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+sleep 5
+expect is at \[
+look corn_crop above 100, oak_fence 16, a chest with table hearthandharvest:chests/corn_maze_center (Lootr chests: lootr:lootr_chest, as SQ-HH-323); under: no large air gaps. If all three locates fail, record OPEN with the candidate count from the log (structure group remote, about 1 per 72x72 plains chunks)

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:lever"
+    },
+    {
+      "item": "powergrid:pins"
+    },
+    {
+      "item": "powergrid:conductive_casing"
+    }
+  ],
+  "result": {
+    "item": "powergrid:lv_switch"
+  }
+}

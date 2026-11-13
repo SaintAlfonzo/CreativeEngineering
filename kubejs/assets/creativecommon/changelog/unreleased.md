@@ -1,5 +1,25 @@
 # Unreleased
 
+## Diet Bonuses <!-- icon: solapplepie:food_book -->
+
+- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor toughness, knockback resistance, permanent buffs, effect slots and effect unlocks. Applies to new worlds.
+- **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, a small speed bonus, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
+- **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
+- **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 8 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. A confirm panel shows the cost first.
+- **New:** Effect unlocks are kept for good. Slots below their diversity grey out and keep their choice.
+- **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
+- **New:** Diet bonus messages show on the action bar, one at a time.
+- **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it.
+- **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button.
+- **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
+- **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses.
+- **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
+- **New:** New players start with a Diet Log and a Liquid Diet Log.
+- **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
+- **Changed:** Diet bonuses start after 5 foods eaten [10]. Applies to new worlds.
+- **Changed:** Lava Walker burns like a magma block when standing on lava without Fire Resistance.
+- **Fixed:** Fleet-Footed stayed on for every player while one player sprint-jumped.
+
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
 
 - **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, with flesh, blood lakes, eyebulbs, hair and flesh tendons.
@@ -114,11 +134,13 @@
 
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
-- **Changed:** The Spice of Life Food Book is called Diet Tracker.
 - **Changed:** Lunchboxes show as not counting for food diversity; the food eaten out of them still counts.
-- **Changed:** Diet Tracker bonuses start after 5 foods eaten [10]. Applies to new worlds.
 - **Fixed:** Flavoured Rustic Delight pancakes placed on a coaster showed a missing model.
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **Changed:** Create Deco's Cast Iron Block is now called Cast Iron Plating (was Cast Iron Block).
+
+## Interface
+
+- **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).

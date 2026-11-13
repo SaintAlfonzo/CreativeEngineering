@@ -267,7 +267,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Sooty Chimneys | `sootychimneys` | `sootychimneys-1.19.2-1.2.1.jar` |  |
 | both | Sophisticated Backpacks | `sophisticatedbackpacks` | `sophisticatedbackpacks-1.19.2-3.20.2.1035.jar` |  |
 | both | Sophisticated Core | `sophisticatedcore` | `sophisticatedcore-1.19.2-0.6.4.730.jar` | Required by: Sophisticated Backpacks |
-| both | Spice of Life: Apple Pie Edition | `solapplepie` | `solapplepie-1.19.2-2.2.0.jar` | Its Food Book is shown as Diet Tracker |
+| both | Spice of Life: Apple Pie Edition | `solapplepie` | `solapplepie-1.19.2-2.2.0.jar` | Its Food Book is shown as Diet Log; its own benefits are configured off (Raspberry Pie applies the ladder) |
+| both | Spice of Life: Raspberry Pie Addition | `solraspberrypie` | `solRaspberryPie-1.0.0.jar` (own, GPLv3) | Diet bonus ladder, effect slots, Liquid Diet Log on top of Apple Pie 2.2.0 (feature_writeup/raspberry_pie.md); network packets and screens, so both sides |
 | both | Spice of Life: Carrot Edition | `solcarrot` | `SoL-Carrot-1.19.2-1.14.0.jar` (LGPL-2.1) | Only for its Food Dictionary book; hearts, tooltips and milestone effects configured off (feature_writeup/food_dictionary.md) |
 | both | Stardew Fishing | `stardew_fishing` | `stardew_fishing-1.19.2-1.3-all.jar` |  |
 | both | Storage Delight | `storagedelight` | `repackedStorage-25.12.09-1.19-forge-ce-19.2-02.jar` (installed by 2026-11-07, requires `farmersdelight`) | This pack's rebuild of Storage Delight 25.12.09 (development/repackedStorage), MIT; installed 2026-10-25 (feature_writeup/storage_delight.md) |

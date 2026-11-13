@@ -1,0 +1,9 @@
+pace 1
+
+## SQ-HH-320 | `Failed to place feature`; `Failed to place structure` or the command'
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaves false
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen cornMaze false
+> place feature hearthandharvest:salt_cave 4608 0 96
+> place structure hearthandharvest:corn_maze 4400 -60 4400
+look `Failed to place feature`; `Failed to place structure` or the command's generic failure on both (config off switches, J33 and J38 `cornMaze`)
+

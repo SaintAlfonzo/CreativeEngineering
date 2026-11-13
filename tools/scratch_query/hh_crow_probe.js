@@ -9,7 +9,7 @@
 //   assert TAG STAT OP V        compare a watch statistic: "[zhh3] assert TAG STAT=v OP V PASS|FAIL"
 //   seen TAG GOAL               did goal class GOAL run in any sample of TAG: "[zhh3] seen TAG GOAL yes|no"
 //   goals TYPE X Y Z R          the goal list of each entity with priorities (available goals, running ones marked)
-//   tally X Y Z R               "tally crows=N tamed=T carrying=C" for the crows in the box
+//   tally X Y Z R               "tally crows=N tamed=T carrying=C shoulder=S" for the crows in the box; crows on the shoulders of players in the box count too (S of them)
 //   target X Y Z R ITEM        CrowEntity.isFood(ITEM) for each crow (#creativedelight:crow_food): "[zhh3] isFood ITEM true|false wild=B"
 //   block X Y Z                 block id and properties
 //   poi X Y Z                   POI type at the position, or none
@@ -72,7 +72,7 @@
     function player(server, name) { return server.getPlayerList().getPlayerByName(name) }
     function itemId(st) { return String($HH3Reg.ITEM.getKey(st.getItem())) }
     function stackStr(st) { return st.isEmpty() ? 'empty' : itemId(st) + ' x' + st.getCount() }
-    function dist(a, x, y, z) { return Math.sqrt(a.distanceToSqr(x, y, z)) }
+    function dist(a, x, y, z) { let dx = a.getX() - x, dy = a.getY() - y, dz = a.getZ() - z; return Math.sqrt(dx * dx + dy * dy + dz * dz) } // r1111: Rhino picked the Vec3 overload of distanceToSqr
     // REF: @NAME (a player) or x,y,z. Returns [x, y, z] or null.
     function refPoint(server, ref) {
         if (!ref) return null
@@ -85,7 +85,7 @@
     }
     function goalsOf(m) {
         let o = []
-        m.goalSelector.getRunningGoals().collect($HH3Collectors.toList()).forEach(w => o.push(String(w.getGoal())))
+        m.goalSelector.getRunningGoals().collect($HH3Collectors.toList()).forEach(w => { let n = String(w.getGoal().getClass().getSimpleName()); o.push(n ? n : String(w.getGoal().getClass().getName())) })
         return o
     }
     // One entity's state: a JS object, plus a printable line
@@ -213,7 +213,18 @@
                 let list = ofType(level, 'crow', parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3])), tamed = 0, carrying = 0
                 crowCls()
                 list.forEach(e => { if (e.isTame()) tamed++; let w = e.getWariness(); if (w != null && w.isCarrying()) carrying++ })
-                out('tally crows=' + list.length + ' tamed=' + tamed + ' carrying=' + carrying)
+                // r1112: a crow on a player's shoulder is NBT on the player, not an entity; count those of players in the box
+                let shoulder = 0
+                level.getEntitiesOfClass($HH3Entity, box(parseFloat(a[0]), parseFloat(a[1]), parseFloat(a[2]), parseFloat(a[3]))).forEach(p => {
+                    if (entId(p) != 'player') return
+                    ;[p.getShoulderEntityLeft(), p.getShoulderEntityRight()].forEach(t => {
+                        if (t == null || t.isEmpty() || String(t.getString('id')) != HH3CROW) return
+                        shoulder++
+                        if (t.hasUUID('Owner')) tamed++
+                        if (t.getCompound('Wariness').getBoolean('Carrying')) carrying++
+                    })
+                })
+                out('tally crows=' + (list.length + shoulder) + ' tamed=' + tamed + ' carrying=' + carrying + ' shoulder=' + shoulder)
             } else if (what == 'assert') {
                 let st = hh3Stats[a[0]]
                 if (!st) { out('assert ' + a[0] + ' no such watch FAIL'); }

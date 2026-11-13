@@ -1,0 +1,31 @@
+# r1113 Power Grid port phase 0/1 gate (SQ-PWG-09, -10, -11) on jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-02.jar. Group A superflat, level pwg0.
+# Prep: COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/<jar> prep_srv.sh OUT pwg0 A ; cp $INST/tools/scratch_query/pwg_probe.js OUT/srv/kubejs/server_scripts/zz_pwg_probe.js ; cp $INST/tools/scratch_query/pg_solver_probe.js OUT/srv/kubejs/server_scripts/zz_pg_solver_probe.js
+pace 2
+
+## SQ-PWG-09 | Power Grid phase 1 jar loads, registers nothing, no command
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 1\)
+bootreject (WARN|ERROR).*(Mixin apply failed|mixin.*powergrid|powergrid\.mixins\.json)
+bootreject ^(?!.*MinecraftServer/\]: Unknown item 'powergrid:wire').*(Couldn't load tag|Failed to load|Unknown item|Unknown tag|Error loading registry data).*powergrid
+bootreject (WARN|ERROR).*(ejml|EJML)
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-02
+> zpwg ns powergrid
+waitlog \[zpwg\] done 30
+expect \[zpwg\] ns powergrid total: 0
+> give @p powergrid:wire
+> powergrid
+sleep 2
+expect Unknown item 'powergrid:wire'
+expect Unknown or incomplete command
+
+## SQ-PWG-10 | Power Grid config files and keys
+shell f=config/powergrid-common.toml; s=$(ls */serverconfig/powergrid-server.toml | head -1); echo "FILES $f $s"; grep -n -B3 -A2 -E 'clientMirror' $f; grep -n -B3 -A2 -E 'solverBackend|splittingsTransformers|generatorCommutatorInertia' $s; echo "TFMG $(grep -ci tfmg $f $s | paste -sd,)"; echo "COLDSWEAT $(grep -ci -E 'cold ?sweat' $f $s | paste -sd,)"; ls config/powergrid-client.toml 2>&1; true
+look shell output: clientMirror = true with a comment above; solverBackend = "JAVA"; splittingsTransformers key; comment above generatorCommutatorInertia; TFMG counts 0; Cold Sweat counts 0; powergrid-client.toml absent
+
+## SQ-PWG-11 | Power Grid solver runs in game (EJML from jar-in-jar)
+> pgsolve
+waitlog \[pgsolve\] done 60
+expect \[pgsolve\] divider V=(5\.0|4\.99999)\S* I=(5\.0|4\.99999)\S* converged=true
+reject \[pgsolve\] error
+reject (NoClassDefFoundError|ClassNotFoundException).*(org\.ejml|org\.patryk3211)

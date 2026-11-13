@@ -110,6 +110,18 @@ everything below is the default unless the prompt says otherwise.
   multi-step commands), srv toml edits, `scratch_server.sh boot OUT`, wait for `Done (` in `OUT/srv/logs/latest.log`
   (or a crash report) with a Monitor or background wait, not sleep loops. Then `qrun.py run OUT BATCH RES`.
 - `scratch_server.sh stop OUT`, then wait until `game_jvms.sh` is empty before the next boot.
+- **Stall watch.** Every foreground wait is capped at `timeout 590`; when one returns without its target line, do a
+  check instead of waiting blind, at 10-minute intervals (chain waits; no shorter: each poll re-reads the whole
+  context). Interaction = a newer mtime on `OUT/srv/logs/latest.log` or on the newest `RES/rows/*.log` within the
+  last 10 minutes. If the server was interacted with in the last 10 minutes, do not check at all: go back to waiting.
+  Otherwise, per check, in order: what the current row is doing (a rare-meta `/locate` or pregen can be quiet for
+  30+ minutes legitimately); `ls OUT/srv/crash-reports/` (move old ones out first); `game_jvms.sh` (never `ps -f` /
+  `pgrep -af`); `tail -n 5` of the log. Then: dead JVM or crash report = judge the row as a crash and move on; JVM
+  alive but still silent on the next check = one `jstack` of the scratch pid, record it in the run notes; still
+  silent after that (30 minutes of no interaction) = ask the user before `kill -9`, since a kill discards the row.
+  Do not run `jstack` as a routine check (it pauses the JVM). **Cap: stop polling after 12 hours** counted from the
+  first check of the run: stop waiting, leave the server as is, write the state to RUNNER.md and the run notes, and
+  report to the user.
 - Client block: `eval_client.py setup/launch`, `sp_world.py` to copy scratch worlds in, `qrun.py client`, xdotool for
   hand steps, screenshots to `RES/shots/`.
 - Redirects from the user or another session (defer a block, stop): stop at a row boundary, discard a half-run row,

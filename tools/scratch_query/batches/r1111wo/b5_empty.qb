@@ -1,0 +1,30 @@
+# r1111 rerun of b5_empty.qb (SQ-WO-34 debug.log reload check)
+# r1109wo boot A5: all four lists empty, chance 100, threshold 0. SQ-WO-34 edits the srv toml while up.
+pace 1
+## SQ-WO-33 | all lists empty: nothing, no exception
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> time set noon
+> setblock 630 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 630 -60 300 G 100
+> pbot use G 630 -60 300 up
+> zwo drops 630 -60 300 3
+sleep 1
+expect \[zwo\] drops none
+reject Exception
+
+## SQ-WO-34 | a list edit applies without a restart
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'
+sleep 15
+# Forge logs the config watcher at DEBUG: look in debug.log, not latest.log
+shell grep -nE "creativeworldgen-common.toml" logs/debug.log | grep -iE "changed|reload|notif" | tail -5; echo "reload lines: $(grep -E 'creativeworldgen-common.toml' logs/debug.log | grep -ciE 'changed|reload|notif')"
+> setblock 640 -60 300 minecraft:air
+> setblock 640 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 640 -60 300 G 100
+> pbot use G 640 -60 300 up
+> zwo drops 640 -60 300 3
+sleep 1
+expect \[zwo\] drops minecraft:oak_sapling x1

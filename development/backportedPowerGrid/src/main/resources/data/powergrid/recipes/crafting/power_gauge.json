@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "powergrid:voltage_gauge"
+    },
+    {
+      "item": "powergrid:current_gauge"
+    }
+  ],
+  "result": {
+    "item": "powergrid:power_gauge"
+  }
+}

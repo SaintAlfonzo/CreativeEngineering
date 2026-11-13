@@ -1,0 +1,92 @@
+# r1113 chunk 1, boot A1 rerun (fix_c1a1): group A superflat (prep_srv.sh defaults), level c1a1f. Current jars as c1_a1.qb.
+# Reruns SQ-SALT2-08 (batch fault: the copied instance config/creativedelight-common.toml already held every [salt]
+# key, so MemberConfigMove skipped all 19 ("0 values") and the 0.3 stayed) and SQ-SALT2-06 (2 of 4 cases failed, no
+# end-state probe; this run names each site's final block).
+# Setup before boot (server stopped):
+#   prep_srv.sh OUT c1a1f A spawn-animals=false
+#   (zq is copied by prep_srv.sh; no other probes needed).
+# Config edit before boot (SQ-SALT2-08: an old salt-common.toml carried into a creativedelight-common.toml that has no
+# [salt] section yet, as on a save from before the Salt fold-in):
+#   cd OUT/srv && cp config/salt-common.toml.moved config/salt-common.toml
+#   python3 $INST/tools/scratch_query/qrun.py toml config/salt-common.toml Evaporation EvaporationChance 0.5
+#   grep -n EvaporationChance config/salt-common.toml      (must print 0.5)
+#   python3 -I -c "import re,sys;p='config/creativedelight-common.toml';o=[];s=False
+#   for l in open(p):
+#    m=re.match(r'\s*\[([^\]]+)\]',l)
+#    if m: s=m.group(1).split('.')[0]=='salt'
+#    if not s: o.append(l)
+#   open(p,'w').writelines(o)"
+#   grep -c "^\s*\[salt" config/creativedelight-common.toml   (must print 0)
+# Superflat: grass at y -61, air from y -60. Overworld sites in x 1070..1090, z 1030..1070 (forceloaded), the Nether
+# cases at 0..15 y 141 (forceloaded). Bots: c1rt (overworld) and c1nb (Nether) keep the sites random-ticking.
+# No /reload in this file.
+pace 1
+
+## C1F-00 | setup: forceload, clock, bots (not a queue row)
+bootexpect Done \(
+> forceload add 990 990 1100 1100
+> execute in minecraft:the_nether run forceload add 0 0 15 15
+> time set noon
+> weather clear 1000000
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+sleep 20
+> pbot spawn c1rt 1050 -60 1050 minecraft:overworld survival
+> execute in minecraft:the_nether run fill 0 140 0 15 140 15 minecraft:stone
+> execute in minecraft:the_nether run fill 0 141 0 15 145 15 minecraft:air
+> pbot spawn c1nb 8 141 8 minecraft:the_nether survival
+sleep 3
+> kill @e[type=minecraft:item]
+expect ceperfbot|spawned|c1rt
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SALT2-08 | an edited salt-common.toml is carried into creativedelight-common.toml once, renamed .moved, not recreated
+bootexpect \[creativedelight\] config/salt-common.toml carried into config/creativedelight-common.toml \(19 values\)
+bootreject could not carry|could not rename
+shell grep -h "salt-common.toml carried" logs/latest.log | cut -c1-300
+shell ls config | grep -i "^salt-"; test -f config/salt-common.toml.moved && test ! -f config/salt-common.toml && echo SALT2-08-FILES-OK
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:space:]]*$/ && /EvaporationChance/' config/creativedelight-common.toml
+look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5
+
+## SQ-SALT2-06 | Salt Block melts ice to a water source and snow to air in the overworld; both to air in the Nether
+# Same sites as c1_a1.qb; afterwards each site and its salt block report their final block by name (say lines).
+> setblock 1080 -59 1040 minecraft:stone
+> setblock 1079 -60 1040 minecraft:stone
+> setblock 1080 -60 1039 minecraft:stone
+> setblock 1080 -60 1041 minecraft:stone
+> setblock 1080 -60 1040 minecraft:ice
+> setblock 1081 -60 1040 salt:salt_block
+> setblock 1080 -60 1060 minecraft:snow
+> setblock 1081 -60 1060 salt:salt_block
+> execute in minecraft:the_nether run setblock 4 141 4 minecraft:ice
+> execute in minecraft:the_nether run setblock 5 141 4 salt:salt_block
+> execute in minecraft:the_nether run setblock 4 141 12 minecraft:snow
+> execute in minecraft:the_nether run setblock 5 141 12 salt:salt_block
+> execute if block 1080 -60 1040 minecraft:ice run say S06-START-OWICE-ice
+> execute if block 1080 -60 1060 minecraft:snow run say S06-START-OWSNOW-snow
+> execute in minecraft:the_nether if block 4 141 4 minecraft:ice run say S06-START-NICE-ice
+> execute in minecraft:the_nether if block 4 141 12 minecraft:snow run say S06-START-NSNOW-snow
+> gamerule randomTickSpeed 1000
+sleep 45
+> gamerule randomTickSpeed 3
+> execute if block 1080 -60 1040 minecraft:water[level=0] run say S06-OWICE-water_source
+> execute if block 1080 -60 1040 minecraft:water run say S06-OWICE-water_any
+> execute if block 1080 -60 1040 minecraft:ice run say S06-OWICE-still_ice
+> execute if block 1080 -60 1040 minecraft:air run say S06-OWICE-air
+> execute if block 1081 -60 1040 salt:salt_block run say S06-OWICE-saltblock_kept
+> execute if block 1080 -60 1060 minecraft:air run say S06-OWSNOW-air
+> execute if block 1080 -60 1060 minecraft:snow run say S06-OWSNOW-still_snow
+> execute in minecraft:the_nether if block 4 141 4 minecraft:air run say S06-NICE-air
+> execute in minecraft:the_nether if block 4 141 4 minecraft:water run say S06-NICE-water
+> execute in minecraft:the_nether if block 4 141 4 minecraft:ice run say S06-NICE-still_ice
+> execute in minecraft:the_nether if block 4 141 12 minecraft:air run say S06-NSNOW-air
+> execute in minecraft:the_nether if block 4 141 12 minecraft:snow run say S06-NSNOW-still_snow
+> execute in minecraft:the_nether if block 5 141 12 salt:salt_block run say S06-NSNOW-saltblock_kept
+expect S06-START-OWICE-ice
+expect S06-START-NSNOW-snow
+expect S06-OWICE-water_source
+expect S06-OWSNOW-air
+expect S06-NICE-air
+expect S06-NSNOW-air
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+look the S06- say lines name each site's end block: OWICE still_ice = no melt at that site (salt block kept or not?), water_any without water_source = melted but the source flowed or was replaced; NSNOW still_snow with saltblock_kept = the Nether snow never melted

@@ -1,0 +1,69 @@
+# r1111 step 2, group B normal world (seed 8675309, structures on, spawn-animals on): Hearth crow swap rows that the
+# r1110 chunk generation crash blocked. Offline nest / entity census with region_blocks.py after a save.
+pace 1
+## SQ-HCS-01 | fresh normal world boots past spawn prep with no crow scan errors
+bootexpect Done \(
+shell for p in "out of bound" "Exception generating new chunk" "CrowEvents"; do echo "$p: $(grep -c "$p" logs/latest.log)"; done; ls crash-reports 2>/dev/null | head
+bootreject out of bound
+bootreject Exception generating new chunk
+bootreject CrowEvents
+## SQ-HCS-02 | 40 new chunks of forest and plains by bot, no long tick naming crow code
+> locate biome minecraft:forest
+waitlog (nearest minecraft:forest is at|Could not find) 600
+capture FO nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> pbot spawn hcs2 {FO1} 150 {FO3}
+> effect give hcs2 minecraft:slow_falling 600 0 true
+> effect give hcs2 minecraft:resistance 600 4 true
+repeat 20
+> execute as hcs2 at @s run tp @s ~128 150 ~
+sleep 3
+end
+> locate biome minecraft:plains
+waitlog (nearest minecraft:plains is at|Could not find) 600
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp hcs2 {PL1} 150 {PL3}
+repeat 20
+> execute as hcs2 at @s run tp @s ~ 150 ~128
+sleep 3
+end
+> pbot remove hcs2
+reject (?i)Exception.*(Crow|Nest|RoofNests)
+shell grep -nE "Can't keep up" logs/latest.log | tail -5; grep -nE "Exception|ERROR" logs/latest.log | grep -iE "crow|nest" | head -5
+look no Can't keep up during the walk worth attention; no crow / nest exception (JFR hot methods checked after the run)
+## SQ-HCS-03 | Chunky 30 x 30 chunks of forest: nests on leaves, about 1 in 6 chunks
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center {FO1} {FO3}
+> chunky radius 240
+> chunky start
+waitlog Task finished 1800
+> save-all flush
+sleep 10
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box $(( {FO1} - 240 )) $(( {FO3} - 240 )) $(( {FO1} + 240 )) $(( {FO3} + 240 )) --near 'leaves' 2>&1 | tail -40
+look nest count about 100 to 200 over the 900 chunks of the forest square, every nest with a leaves neighbour and depth 0 (top block), none on grass
+## SQ-HCS-08 | no natural Alex's Mobs crow; summon works
+shell python3 $INST/tools/scratch_query/region_blocks.py entities world 'alexsmobs:crow|hearthandharvest:crow' 2>&1 | tail -15
+> execute if entity @e[type=alexsmobs:crow]
+> summon alexsmobs:crow {FO1} 120 {FO3}
+> execute if entity @e[type=alexsmobs:crow]
+expect Test passed, count: [1-9]
+shell grep -nE "\[mob_spawns\].*(crow|no_alexsmobs_crow)" logs/latest.log | head -5
+look region census: alexsmobs:crow 0 saved in chunks, hearthandharvest:crow present near nests
+## SQ-HCS-04 | villages: a quarter of houses carry one roof nest
+> forceload add 6000 6000 6200 6200
+> place structure minecraft:village_plains 6100 64 6100
+> forceload add 7000 6000 7200 6200
+> place structure minecraft:village_plains 7100 64 6100
+> forceload add 8000 6000 8200 6200
+> place structure minecraft:village_desert 8100 64 6100
+> forceload add 9000 6000 9200 6200
+> place structure minecraft:village_savanna 9100 64 6100
+> forceload add 10000 6000 10200 6200
+> place structure minecraft:village_taiga 10100 64 6100
+> forceload add 11000 6000 11200 6200
+> place structure minecraft:village_snowy 11100 64 6100
+sleep 10
+> save-all flush
+sleep 10
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box 5900 5900 11300 6300 2>&1 | tail -25
+look nests on roofs (depth 0, above the ground band), never two per house, none in streets; if none: /place skips applyBiomeDecoration, use Chunky over villages (row note)

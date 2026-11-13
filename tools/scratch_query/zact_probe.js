@@ -3,9 +3,10 @@
 //   /zact kill X Y Z TYPE N HELD [fire]   summons N mobs of TYPE one at a time at X Y Z; a Forge fake player holding HELD
 //                                         ("none" = empty hand) hits each for 1000 (fire: set burning first); sums the
 //                                         item drops within 4 blocks
-//   /zact break X Y Z HELD                a fake player (survival) holding HELD breaks the block at X Y Z through
+//   /zact break X Y Z HELD [keep]         a fake player (survival) holding HELD breaks the block at X Y Z through
 //                                         ServerPlayerGameMode.destroyBlock (fires BreakEvent, harvest checks, tool
-//                                         damage); sums the item drops within 3 blocks
+//                                         damage); sums the item drops within 3 blocks (keep: leaves the drops in the
+//                                         world, for a `data get entity` on them)
 //   /zact useon X Y Z NAME HITY           player NAME (a perfBot bot) uses its main-hand item on the top face of X Y Z
 //                                         with the hit point at (X+0.5, Y+HITY, Z+0.5), e.g. HITY 0.9 for a block whose
 //                                         slot box sits below the top (perfBot's `pbot use` hits y+1.0); logs the result
@@ -66,7 +67,7 @@
                 }
                 zaOut('kill ' + type + ' x' + n + ' held ' + held + (fire ? ' fire' : '') + ' dead ' + dead + ': ' + zaShow(zaDrops(level, box, true)))
             } else if (a[0] == 'break') {
-                let held = a[4] || 'none', pos = new $ZAPos(x, y, z)
+                let held = a[4] || 'none', keep = a[5] == 'keep', pos = new $ZAPos(x, y, z)
                 let box = zaBox(x, y, z, 3)
                 zaDrops(level, box, true)
                 let before = String($ZAReg.BLOCKS.getKey(level.getBlockState(pos).getBlock()))
@@ -75,7 +76,7 @@
                 let after = String($ZAReg.BLOCKS.getKey(level.getBlockState(pos).getBlock()))
                 let tool = p.getMainHandItem()
                 zaOut('break ' + x + ' ' + y + ' ' + z + ' ' + before + ' held ' + held + ': ' + ok + ', now ' + after +
-                    (tool.isEmpty() ? '' : ', tool damage ' + tool.getDamageValue()) + ', drops ' + zaShow(zaDrops(level, box, true)))
+                    (tool.isEmpty() ? '' : ', tool damage ' + tool.getDamageValue()) + ', drops ' + zaShow(zaDrops(level, box, !keep)))
             } else if (a[0] == 'useon') {
                 let p = src.getServer().getPlayerList().getPlayerByName(a[4]), hy = parseFloat(a[5])
                 if (p == null) zaOut('useon: no player ' + a[4])

@@ -1,6 +1,6 @@
 # Namespace moves: what is left after the Creative Delight rename (2026-11-10)
 
-Status: INSTALLED 2026-11-10 21:20 (section 6: steps 0 to 7, every jar; boot and exit PASS b1110; SQ-NSM not run). Rule and method: [plan_cd_namespace.md](plan_cd_namespace.md) section 0
+Status: INSTALLED 2026-11-10 21:20 (section 6: steps 0 to 7, every jar; boot and exit PASS b1110; SQ-NSM old-save rows run r1111 2026-11-11: -02, -03, -09 PASS, -10 PASS server part, -05 and -07 PARTIAL; -01, -04, -08, CQ-NSM-01 not run). Rule and method: [plan_cd_namespace.md](plan_cd_namespace.md) section 0
 (content, tags and data ids use the namespace of the jar that owns them). TODO row `creativesplit/ids #25` covers the
 other jars; this file is its inventory and execution plan.
 
@@ -159,6 +159,13 @@ generates structures and dimensions under the new ids; -09 Creative Labels notes
 carry over; -10 exposure extras camera bag contents survive; CQ-NSM-01 client: lang, models and textures for every
 moved id, JEI, WTHIT.
 
+
+
+Results r1111 (2026-11-11, [scratch_run_2026-11-11.md](testing/scratch_run_2026-11-11.md) 8): SQ-NSM-02 PASS, -03 PASS,
+-05 PARTIAL (contents and recipes; eating, crafts, model need a client), -06 PASS (step 1), -07 PARTIAL (dimension move,
+player login and respawn point, level.dat PASS; old sky island, meta structure and waystone not in the superflat
+fixture), -09 PASS, -10 PASS (server part). Not run: -01, -04 (client), -08 (new normal world). Fixture builder
+`tools/scratch_query/nsm_fixture.sh`, world kept in `perf/runs/r1111/nsm/fixture_world`.
 
 ## 6. Execution (2026-11-10)
 

@@ -1,0 +1,29 @@
+# r1113 chunk 3, boot A3: the same OUT and level c3a1, restarted again. Group A superflat, full pack.
+# Before boot (server stopped after c3_a2.qb), from the instance root, OUT = c3_a1's OUT:
+#   SQ-CIF-01 config carry: put back the pre-carve configs from git (commit 85104427, 2026-11-06 00:04, before the 11-06
+#   and 11-07 moves) and drop the files that would already hold the sections:
+#     git show 85104427:config/creativecommon-common.toml > OUT/srv/config/creativecommon-common.toml
+#     git show 85104427:config/creativecompat-common.toml > OUT/srv/config/creativecompat-common.toml
+#     git show 85104427:config/creativeengineering-common.toml > OUT/srv/config/creativeengineering-common.toml
+#     rm -f OUT/srv/config/creativeequipment-common.toml
+#     cp OUT/srv/config/creativecommon-common.toml OUT/srv/cif_old_common.toml; cp OUT/srv/config/creativeengineering-common.toml OUT/srv/cif_old_eng.toml
+#   SQ-PA-04 (after the copies above, so the old Compat file gets it):
+#     python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml paintings enabled false
+# (The 11-06 Compat file has no [portalgun] / [immersive_portals] tables: Forge adds the defaults. Nothing else in this
+# boot depends on them.)
+pace 1
+
+## SQ-PA-04 | [paintings] enabled = false: no built line, boots clean
+bootreject \[paintings\] .*modded painting variants built
+bootexpect Done \(
+shell grep -n -A3 "^\[paintings\]" config/creativecompat-common.toml | head -4
+
+## SQ-CIF-01 | old configs carried: Compat has [jei] [gui_title] [toasts] [tooltips] [coaster] [wthit] with the old values, Equipment has [armor_overflow]; no moved-class errors
+bootreject Mixin apply failed|InvalidMixinException
+bootreject ClassNotFoundException.*creativecommon\.(compat|mixin)
+shell for s in jei gui_title toasts tooltips coaster wthit shrapnel surface vein_undo; do printf "%s compat=%s old=%s\n" $s "$(grep -c "^\[$s\]" config/creativecompat-common.toml)" "$(grep -c "^\[$s\]" cif_old_common.toml cif_old_eng.toml | awk -F: '{n+=$2} END {print n}')"; done
+shell for s in jei gui_title toasts tooltips coaster wthit; do grep -q "^\[$s\]" config/creativecompat-common.toml || { echo "missing [$s]"; exit 1; }; done
+shell grep -q "^\[armor_overflow\]" config/creativeequipment-common.toml
+shell python3 $INST/tools/scratch_query/cif_carry_check.py cif_old_common.toml config/creativecompat-common.toml config/creativeequipment-common.toml
+shell grep -cE "^\[(jei|gui_title|toasts|tooltips|coaster|wthit|armor_overflow)\]" config/creativecommon-common.toml
+look the carry log line (`[swaps] config sections ... carried` or similar) in latest.log; DIFF lines: every carried key keeps the old value (a DIFF on a key Forge renamed or re-ranged is judged by hand); the last count is 0 once Forge has corrected Common's file (may need the stop: Forge rewrites on load, so 0 expected). The Engineering sections [shrapnel] [surface] [vein_undo] also land in Compat (SQ-ENGM carry, same mechanism)

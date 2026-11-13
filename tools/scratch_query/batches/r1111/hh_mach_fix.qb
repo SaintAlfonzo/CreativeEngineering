@@ -1,0 +1,192 @@
+# r1111: reruns of the SQ-HH Machines batch faults on fresh spots (z 260 to 300 band), boot 3 of hhm.
+pace 1
+
+## SQ-HH-209 | jug full of water refuses lava (rerun, lava on a fresh block)
+> forceload add 0 256 319 319
+> pbot spawn hb1 8 -60 290 minecraft:overworld survival
+sleep 3
+sleep 3
+> clear hb1
+> setblock 16 -60 300 minecraft:water
+> tp hb1 16.5 -59 300.5 0 90
+> pbot hold hb1 hearthandharvest:jug
+> zq useitem hb1
+> setblock 20 -60 300 minecraft:lava
+> tp hb1 20.5 -59 300.5 0 90
+> zq useitem hb1
+> data get entity hb1 SelectedItem.tag.HHJugFluid.Amount
+> execute if block 20 -60 300 minecraft:lava
+look second useitem FAIL; Amount 1000; lava Test passed
+
+## SQ-HH-210 | jug caps at 8000 (rerun, 8 fills written out)
+> clear hb1
+> tp hb1 40.5 -59 300.5 0 90
+> pbot hold hb1 hearthandharvest:jug
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> data get entity hb1 SelectedItem.tag.HHJugFluid.Amount
+> setblock 40 -60 300 minecraft:water
+> zq useitem hb1
+> data get entity hb1 SelectedItem.tag.HHJugFluid.Amount
+> execute if block 40 -60 300 minecraft:water
+look : 8000 after the 8th; 9th useitem FAIL; still 8000; water Test passed
+
+## SQ-HH-212 | sneak-use picks up a placed 1000 mB jug (rerun, setup written out)
+> clear hb1
+> setblock 64 -60 296 minecraft:water
+> tp hb1 64.5 -59 296.5 0 90
+> pbot hold hb1 hearthandharvest:jug
+> zq useitem hb1
+> setblock 64 -60 296 minecraft:air
+> tp hb1 62.5 -59 300.5
+> pbot use hb1 64 -61 300 up
+> data get block 64 -60 300
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> zhh2 sneak hb1 true
+> pbot use hb1 64 -60 300 up
+> zhh2 sneak hb1 false
+> data get entity hb1 Inventory
+> execute if block 64 -60 300 minecraft:air
+look use SUCCESS or CONSUME; Inventory has hearthandharvest:jug with HHJugFluid Amount 1000; block gone
+
+## SQ-HH-223 | trough takes any food of an animal (rerun with neapolitan:banana)
+> clear hb1
+> setblock 80 -60 296 hearthandharvest:trough
+> pbot hold hb1 minecraft:wheat
+> pbot use hb1 80 -60 296 up
+> setblock 82 -60 296 hearthandharvest:trough
+> pbot hold hb1 minecraft:carrot
+> pbot use hb1 82 -60 296 up
+> setblock 84 -60 296 hearthandharvest:trough
+> pbot hold hb1 minecraft:seagrass
+> pbot use hb1 84 -60 296 up
+> setblock 86 -60 296 hearthandharvest:trough
+> pbot hold hb1 neapolitan:banana
+> pbot use hb1 86 -60 296 up
+> data get block 80 -60 296 Items
+> data get block 82 -60 296 Items
+> data get block 84 -60 296 Items
+> data get block 86 -60 296 Items
+look each trough holds its own item at 1b
+
+## SQ-HH-233 | trough extract, sneak extract, drops (rerun, hand emptied before the sneak use)
+> clear hb1
+> setblock 112 -60 296 hearthandharvest:trough
+> pbot hold hb1 minecraft:wheat 8
+> pbot use hb1 112 -60 296 up
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> pbot use hb1 112 -60 296 up
+> data get block 112 -60 296 Items
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> zhh2 sneak hb1 true
+> pbot use hb1 112 -60 296 up
+> zhh2 sneak hb1 false
+> data get block 112 -60 296 Items
+> pbot hold hb1 minecraft:wheat 8
+> pbot use hb1 112 -60 296 up
+> setblock 112 -60 296 air destroy
+> execute as @e[type=minecraft:item,limit=1,x=112,y=-60,z=296,distance=..3,sort=nearest] run data get entity @s Item
+look after single extract 7b; after sneak extract no id in Items; drop 8b
+
+## SQ-HH-237 | sprinkler wets y+1, leaves y+2 and y-2 (rerun, y-2 farmland not under the floor layer)
+> setblock 208 -60 296 hearthandharvest:sprinkler
+> zhh2 fill 208 -60 296 minecraft:water 2000
+> setblock 210 -59 296 minecraft:farmland[moisture=0]
+> setblock 211 -58 296 minecraft:farmland[moisture=0]
+> setblock 212 -61 296 minecraft:air
+> setblock 212 -62 296 minecraft:farmland[moisture=0]
+sleep 12
+> execute if block 210 -59 296 minecraft:farmland[moisture=7]
+> execute if block 211 -58 296 minecraft:farmland[moisture=0]
+> execute if block 212 -62 296 minecraft:farmland[moisture=0]
+look three Test passed
+
+## SQ-HH-246 | 25 sprinklers keep TPS (rerun, grid written out)
+> fill 174 -61 262 190 -61 278 minecraft:farmland[moisture=0]
+> setblock 176 -60 264 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 264 minecraft:water 5000
+> setblock 176 -60 267 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 267 minecraft:water 5000
+> setblock 176 -60 270 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 270 minecraft:water 5000
+> setblock 176 -60 273 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 273 minecraft:water 5000
+> setblock 176 -60 276 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 276 minecraft:water 5000
+> setblock 179 -60 264 hearthandharvest:sprinkler
+> zhh2 fill 179 -60 264 minecraft:water 5000
+> setblock 179 -60 267 hearthandharvest:sprinkler
+> zhh2 fill 179 -60 267 minecraft:water 5000
+> setblock 179 -60 270 hearthandharvest:sprinkler
+> zhh2 fill 179 -60 270 minecraft:water 5000
+> setblock 179 -60 273 hearthandharvest:sprinkler
+> zhh2 fill 179 -60 273 minecraft:water 5000
+> setblock 179 -60 276 hearthandharvest:sprinkler
+> zhh2 fill 179 -60 276 minecraft:water 5000
+> setblock 182 -60 264 hearthandharvest:sprinkler
+> zhh2 fill 182 -60 264 minecraft:water 5000
+> setblock 182 -60 267 hearthandharvest:sprinkler
+> zhh2 fill 182 -60 267 minecraft:water 5000
+> setblock 182 -60 270 hearthandharvest:sprinkler
+> zhh2 fill 182 -60 270 minecraft:water 5000
+> setblock 182 -60 273 hearthandharvest:sprinkler
+> zhh2 fill 182 -60 273 minecraft:water 5000
+> setblock 182 -60 276 hearthandharvest:sprinkler
+> zhh2 fill 182 -60 276 minecraft:water 5000
+> setblock 185 -60 264 hearthandharvest:sprinkler
+> zhh2 fill 185 -60 264 minecraft:water 5000
+> setblock 185 -60 267 hearthandharvest:sprinkler
+> zhh2 fill 185 -60 267 minecraft:water 5000
+> setblock 185 -60 270 hearthandharvest:sprinkler
+> zhh2 fill 185 -60 270 minecraft:water 5000
+> setblock 185 -60 273 hearthandharvest:sprinkler
+> zhh2 fill 185 -60 273 minecraft:water 5000
+> setblock 185 -60 276 hearthandharvest:sprinkler
+> zhh2 fill 185 -60 276 minecraft:water 5000
+> setblock 188 -60 264 hearthandharvest:sprinkler
+> zhh2 fill 188 -60 264 minecraft:water 5000
+> setblock 188 -60 267 hearthandharvest:sprinkler
+> zhh2 fill 188 -60 267 minecraft:water 5000
+> setblock 188 -60 270 hearthandharvest:sprinkler
+> zhh2 fill 188 -60 270 minecraft:water 5000
+> setblock 188 -60 273 hearthandharvest:sprinkler
+> zhh2 fill 188 -60 273 minecraft:water 5000
+> setblock 188 -60 276 hearthandharvest:sprinkler
+> zhh2 fill 188 -60 276 minecraft:water 5000
+sleep 60
+> forge tps minecraft:overworld
+look Mean TPS 19.5 to 20.0
+
+## SQ-HH-252 | sneak pick-up keeps contents (rerun, egg put in slot 4 first)
+> clear hb1
+> setblock 48 -60 296 hearthandharvest:crate[type=bottom,facing=north]
+> pbot hold hb1 minecraft:egg
+> zhh2 useat hb1 48 -60 296 up 0.47 0.3 0.47
+> item replace entity hb1 weapon.mainhand with minecraft:air
+> zhh2 sneak hb1 true
+> zhh2 useat hb1 48 -60 296 up 0.5 0.3 0.5
+> zhh2 sneak hb1 false
+> data get entity hb1 Inventory
+> execute if block 48 -60 296 minecraft:air
+look Test passed; Inventory has a crate with BlockEntityTag holding the egg
+
+## SQ-HH-313 | clover patches place both colours (rerun, 3 placements)
+> place feature creativeworldgen:wild_flowers/clover_patches_rare/r48 4160 -60 120
+> place feature creativeworldgen:wild_flowers/clover_patches_rare/r48 4184 -60 120
+> place feature creativeworldgen:wild_flowers/clover_patches_rare/r48 4160 -60 144
+> zhh2 countset 4150 -60 110 4194 -57 154 buzzier_bees:white_clover,buzzier_bees:pink_clover
+look Placed feature 3 times; white_clover and pink_clover both [1-9]

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:plates/iron"
+    },
+    "P": {
+      "item": "powergrid:pins"
+    },
+    "Z": {
+      "tag": "forge:plates/zinc"
+    }
+  },
+  "pattern": [
+    "I",
+    "Z",
+    "P"
+  ],
+  "result": {
+    "item": "powergrid:light_fixture"
+  }
+}

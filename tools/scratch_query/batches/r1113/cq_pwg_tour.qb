@@ -1,0 +1,97 @@
+# r1113 CQ-PWG-10 / -13 / -15 / -16 automatable part: tour of the pwg8 scratch world (blocks built by pwg8.qb) with
+# screenshots, Flywheel on and off. Client on -08 (client mods only), sp copy of pwg8. Hand steps stay for the owner.
+pace 2
+
+## CQ-PWG-10-tour-on | screenshots of the built P3/P4/P6 areas, Flywheel backend on
+> gamemode creative
+> time set noon
+> weather clear
+> gamerule doDaylightCycle false
+sleep 2
+> tp @s 1100 -55 1004 -45 30
+sleep 4
+shot p3_xfmr_fe
+> tp @s 1098 -55 1044 -45 30
+sleep 4
+shot p3_resistors
+> tp @s 1100 -55 1079 -45 30
+sleep 4
+shot p3_magnet_fuse_batt
+> tp @s 1108 -55 1114 -45 30
+sleep 4
+shot p3_ground
+> tp @s 1100 -55 1149 -45 30
+sleep 4
+shot p4_motors
+> tp @s 1098 -55 1179 -45 30
+sleep 4
+shot p4_gen
+> tp @s 1096 -55 1199 -45 30
+sleep 4
+shot p4_rotor
+> tp @s 1098 -55 1209 -45 30
+sleep 4
+shot p4_gen2
+> tp @s 1098 -55 1239 -45 30
+sleep 4
+shot p4_tuned
+> tp @s 1099 -55 1399 -45 30
+sleep 4
+shot p6_a
+> tp @s 1099 -55 1434 -45 30
+sleep 4
+shot p6_b
+> tp @s 1099 -55 1469 -45 30
+sleep 4
+shot p6_c
+> tp @s 1099 -55 1504 -45 30
+sleep 4
+shot p6_d
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*patryk3211)
+look every P3/P4/P6 block has a model (no purple/black), shafts and rotors drawn once, wires render; compare on vs off
+
+## CQ-PWG-10-tour-off | screenshots of the built P3/P4/P6 areas, Flywheel backend off
+> flywheel backend off
+sleep 2
+> tp @s 1100 -55 1004 -45 30
+sleep 4
+shot p3_xfmr_fe
+> tp @s 1098 -55 1044 -45 30
+sleep 4
+shot p3_resistors
+> tp @s 1100 -55 1079 -45 30
+sleep 4
+shot p3_magnet_fuse_batt
+> tp @s 1108 -55 1114 -45 30
+sleep 4
+shot p3_ground
+> tp @s 1100 -55 1149 -45 30
+sleep 4
+shot p4_motors
+> tp @s 1098 -55 1179 -45 30
+sleep 4
+shot p4_gen
+> tp @s 1096 -55 1199 -45 30
+sleep 4
+shot p4_rotor
+> tp @s 1098 -55 1209 -45 30
+sleep 4
+shot p4_gen2
+> tp @s 1098 -55 1239 -45 30
+sleep 4
+shot p4_tuned
+> tp @s 1099 -55 1399 -45 30
+sleep 4
+shot p6_a
+> tp @s 1099 -55 1434 -45 30
+sleep 4
+shot p6_b
+> tp @s 1099 -55 1469 -45 30
+sleep 4
+shot p6_c
+> tp @s 1099 -55 1504 -45 30
+sleep 4
+shot p6_d
+> flywheel backend instancing
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*patryk3211)
+look every P3/P4/P6 block has a model (no purple/black), shafts and rotors drawn once, wires render; compare on vs off

@@ -1,0 +1,305 @@
+# r1112 Hearth and Harvest Gear: batch-fault reruns from r1111 (verdicts perf/runs/r1111/verdicts/hh_gear.md, hh_boot45.md).
+# One boot, group A superflat (ground top y -61, stand at -60), spawn-animals=true (horses; as the r1111 hhm world).
+# Setup before boot: copy tools/scratch_query/zq_probe.js and hh_gear_probe.js to srv/kubejs/server_scripts/ as
+#   zz_zq_probe.js and zz_hh_gear_probe.js (both changed for r1112: zq potion prints the registry id; zhh5 hurt prints
+#   shod and the bare LivingAttackEvent result; zhh5 horse prints ground=).
+# Not here: SQ-HH-1500 (PASS r1111 boot 4); -1551 (toml read only at boot: needs a two-boot row); -1524, -1529, -1590
+#   (row-text faults, rejudge); -1607 to -1611 (Quark Simple Harvest takes the click, real-player rows); -1574, -1575
+#   (Quark seed pouch dispenser: crashes the server, known FAIL).
+# Hops rows: the farmland under a hops column dries and turns to dirt (HopsLatticeBlock is not IPlantable, so FarmBlock
+#   does not count it as a crop): possible mod gap, the rows keep it wet with a water source beside it. Lattices need a
+#   solid block behind them (facing north: z+1; facing east: x-1). Season set to autumn (hops are autumn_fruit).
+pace 1
+
+## SQ-HH-1505s | setup: area, bot, clear old horses and items (not a test row)
+> forceload add 470 460 620 620
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule randomTickSpeed 3
+> time set noon
+> kill @e[type=minecraft:horse]
+> kill @e[type=minecraft:item]
+> pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+> clear G
+> zhh5 hand G
+look setup; `[zhh5] hand id=minecraft:air`, no probe error
+
+## SQ-HH-1505 | zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`
+> summon minecraft:horse 480 -60 476 {Tame:1b,NoAI:1b,Tags:["r2h1"]}
+> summon minecraft:horse 484 -60 476 {Tame:1b,NoAI:1b,Tags:["r2h2"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r2h1
+> zhh5 horse r2h1
+> zhh5 horse r2h2
+> zhh5 hurt r2h1 cactus
+sleep 1
+> zhh5 hurt r2h1 berry
+sleep 1
+> zhh5 hurt r2h2 cactus
+reject error TypeError
+look r2h1 (shod, `shod=true` in the horse line) `accepted=false`, health unchanged both times, `attackEventPasses=false`; r2h2 (unshod control) `accepted=true`, health down 1, `attackEventPasses=true`. If r2h1 shows shod=true, attackEventPasses=false but accepted=true: the probe's attack path skips the Forge event (BATCH-FAULT, mod fine); attackEventPasses=true with shod=true: real FAIL (HorseshoeEvents.onAttack)
+
+## SQ-HH-1506 | on soul sand mods holds `Horseshoe grip`, value about 1.5 (1 / 0.4 - 1
+> summon minecraft:horse 488 -60 476 {Tame:1b,NoAI:1b,OnGround:1b,Tags:["r2h3"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r2h3
+> zhh5 horse r2h3
+> setblock 488 -61 476 minecraft:soul_sand
+sleep 2
+> zhh5 horse r2h3
+> setblock 488 -61 476 minecraft:grass_block
+sleep 2
+> zhh5 horse r2h3
+look first line `shod=true ground=true`; on soul sand mods holds `Horseshoe grip`, value about 1.5 (1 / 0.4 - 1); on grass it is gone, `Horseshoe=0.25` stays. If ground=false the OnGround tag did not hold on a NoAI horse (BATCH-FAULT again, not a mod FAIL)
+
+## SQ-HH-1509 | `items` holds `hearthandharvest:horseshoe`:1
+> summon minecraft:horse 492 -60 476 {Tame:1b,NoAI:1b,Tags:["r2h4"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r2h4
+> zhh5 horse r2h4
+> kill @e[tag=r2h4]
+sleep 1
+> zhh5 items 492 -60 476 3
+look `shod=true` before the kill; `items` holds `hearthandharvest:horseshoe`:1 (leather may drop too)
+
+## SQ-HH-1511 | first "Test passed" (ringer lit the touching lamp), second "Test passe
+> setblock 496 -60 476 minecraft:oak_fence
+> setblock 497 -60 476 minecraft:redstone_lamp
+sleep 1
+pace 0.25
+> summon hearthandharvest:thrown_horseshoe 496.5 -58.3 476.5 {Motion:[0.0,-1.0,0.0],HorseshoeItem:{id:"hearthandharvest:horseshoe",Count:1b}}
+repeat 3
+> execute if block 497 -60 476 minecraft:redstone_lamp[lit=true]
+end
+pace 1
+sleep 3
+> execute if block 497 -60 476 minecraft:redstone_lamp[lit=false]
+count Test passed >= 2
+look at least one of the three quick lit checks "Test passed" (the lamp is lit 20 ticks after the hit), and the last check "Test passed" (lamp went out)
+
+## SQ-HH-1516 | `speed` shows all three at once: `Horseshoe=0.25`, the boost modifier,
+> summon minecraft:horse 480 -60 470 {Tame:1b,NoAI:1b,Tags:["r2h5"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r2h5
+> pbot hold G hearthandharvest:sugar_horse_treat 1
+> zhh5 interact G r2h5
+> pbot hold G supplementaries:sugar_cube 1
+> zhh5 interact G r2h5
+> zhh5 horse r2h5
+look `speed` shows all three at once: `Horseshoe=0.25`, the boost modifier, and `effect.minecraft.speed`; `speed` above base x 1.25 x 1.25 (HNH-81)
+
+## SQ-HH-1522 | `damage=0`
+> setblock 508 -61 500 minecraft:dirt
+> setblock 508 -60 500 minecraft:air
+> pbot hold G hearthandharvest:fertilizer_bag 1
+> pbot use G 508 -61 500 up
+> zhh5 hand G
+look `damage=0` (plain dirt is not a bag target); dirt unchanged
+
+## SQ-HH-1559 | `age=-23600` (ageUp 20 s); `temper=3` (untamed foal)
+> summon minecraft:horse 486 -60 470 {NoAI:1b,Age:-24000,Tags:["r2h6"]}
+> pbot hold G hearthandharvest:hops 1
+> zhh5 interact G r2h6
+> zhh5 horse r2h6
+> zhh5 hand G
+look `age=-23600` (ageUp 20 s, give or take the ticks between summon and read); `temper=3` (untamed foal); hand empty
+
+## SQ-HH-1560 | count 1: a full-health tame adult does not eat (J row)
+> summon minecraft:horse 492 -60 470 {Tame:1b,NoAI:1b,Health:53f,Attributes:[{Name:"generic.max_health",Base:53d}],Tags:["r2h7"]}
+> pbot hold G hearthandharvest:hops 1
+> zhh5 interact G r2h7
+> zhh5 hand G
+look hand count 1: a full-health tame adult does not eat (J row)
+
+# Tilling rows: random ticks off so fresh dry farmland cannot revert to dirt before the count (r1111 -1534 counted 24)
+## SQ-HH-1534 | farmland count 25; `damage=25` (HNH-93)
+> gamerule randomTickSpeed 0
+> fill 560 -61 536 568 -61 544 minecraft:grass_block
+> fill 560 -60 536 568 -60 544 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
+> zhh5 sneak G on
+> tp G 564 -60 532 -45 0
+> pbot use G 564 -61 540 up
+> zhh5 sneak G off
+> zq count 560 -61 536 568 -61 544 minecraft:farmland
+> zhh5 hand G
+look farmland count 25; `damage=25` (HNH-93)
+
+## SQ-HH-1535 | count 9 (B9 fixed; modded soil tills through the tool action)
+> fill 576 -61 536 580 -61 544 farmersdelight:rich_soil
+> fill 576 -60 536 580 -60 544 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
+> zhh5 sneak G on
+> tp G 578 -60 532 -45 0
+> pbot use G 578 -61 540 up
+> zhh5 sneak G off
+> zq count 575 -61 537 581 -61 543 farmersdelight:rich_soil_farmland
+look count 9 (B9 fixed; modded soil tills through the tool action)
+
+## SQ-HH-1536 | count 9
+> fill 586 -61 536 590 -61 544 minecraft:end_stone
+> fill 586 -60 536 590 -60 544 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
+> zhh5 sneak G on
+> tp G 588 -60 532 -45 0
+> pbot use G 588 -61 540 up
+> zhh5 sneak G off
+> zq count 585 -61 537 591 -61 543 hearthandharvest:tilled_end_stone
+look count 9
+
+## SQ-HH-1537 | "Test passed": an unenchanted hoe does not till end stone (J row)
+> setblock 590 -61 548 minecraft:end_stone
+> setblock 590 -60 548 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe
+> zhh5 sneak G on
+> tp G 590 -60 546 0 0
+> pbot use G 590 -61 548 up
+> zhh5 sneak G off
+> execute if block 590 -61 548 minecraft:end_stone
+look "Test passed": an unenchanted hoe does not till end stone (J row)
+
+## SQ-HH-1539 | count 2 (each block needs air above)
+> fill 606 -61 536 610 -61 544 minecraft:grass_block
+> fill 606 -60 536 610 -60 544 minecraft:stone
+> setblock 608 -60 540 minecraft:air
+> setblock 609 -60 541 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
+> zhh5 sneak G on
+> tp G 608 -60 532 -45 0
+> pbot use G 608 -61 540 up
+> zhh5 sneak G off
+> zq count 605 -61 537 611 -61 543 minecraft:farmland
+look count 2 (each block needs air above)
+
+## SQ-HH-1540 | count 3 (250 max: 2 left plus the breaking one); hand empty; no error
+> fill 616 -61 538 620 -61 542 minecraft:grass_block
+> fill 616 -60 538 620 -60 542 minecraft:air
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Damage:248,Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
+> zhh5 sneak G on
+> tp G 618 -60 532 -45 0
+> pbot use G 618 -61 540 up
+> zhh5 sneak G off
+> zq count 615 -61 537 621 -61 543 minecraft:farmland
+> zhh5 hand G
+> gamerule randomTickSpeed 3
+reject Exception
+look count 3 (250 max: 2 left plus the breaking one); hand empty (`minecraft:air`); no error
+
+# Hops rows: wet farmland (water source beside it), stone behind every lattice, autumn, randomTickSpeed 1000 (3000 put
+# the r1111 server 22 s behind). Growth checks poll, since hops never lose age or height once grown.
+## SQ-HH-1550 | "Test passed" (HNH-76). In winter a Creative Calendar season may stop
+> season set MID_AUTUMN
+> setblock 505 -61 520 minecraft:water
+> setblock 506 -61 520 minecraft:farmland[moisture=7]
+> setblock 506 -60 521 minecraft:stone
+> setblock 506 -60 520 hearthandharvest:hops[age=0,facing=north]
+> gamerule randomTickSpeed 1000
+repeat 6
+sleep 3
+> execute if block 506 -60 520 hearthandharvest:hops[age=4,facing=north]
+end
+> gamerule randomTickSpeed 3
+> execute if block 506 -61 520 minecraft:farmland
+count Test passed >= 2
+look a poll "Test passed" (age 4, HNH-76) and the farmland still there at the end. All polls failing with the farmland still there: check the season line (`season set` output) before calling it a FAIL
+
+## SQ-HH-1553 | "Test passed"; items hops 1; shears `damage=1`
+> setblock 512 -61 520 minecraft:farmland[moisture=7]
+> setblock 511 -60 520 minecraft:stone
+> setblock 512 -60 520 hearthandharvest:hops[age=2,facing=east]
+> pbot hold G minecraft:shears 1
+> pbot use G 512 -60 520 east
+sleep 1
+> execute if block 512 -60 520 vinery:grapevine_lattice[age=0,facing=east]
+> zhh5 items 512 -60 520 3
+> zhh5 hand G
+look "Test passed" (empty lattice left, held by the stone at 511); items hops 1 and no `vinery:grapevine_lattice`; shears `damage=1`
+
+## SQ-HH-1555 | count 6 (height 0 to 5); "Test passed": the 7th lattice stays empty
+> setblock 517 -61 520 minecraft:water
+> setblock 516 -61 520 minecraft:farmland[moisture=7]
+> fill 516 -60 521 516 -54 521 minecraft:stone
+> fill 516 -60 520 516 -54 520 vinery:grapevine_lattice[facing=north]
+> setblock 516 -60 520 hearthandharvest:hops[age=4,facing=north]
+> gamerule randomTickSpeed 1000
+repeat 16
+sleep 5
+> zq count 516 -60 520 516 -54 520 hearthandharvest:hops
+end
+> gamerule randomTickSpeed 3
+sleep 2
+> zq count 516 -60 520 516 -54 520 hearthandharvest:hops
+> execute if block 516 -54 520 vinery:grapevine_lattice
+> execute if block 516 -61 520 minecraft:farmland
+look last count 6 (height 0 to 5; earlier polls show it climbing); "Test passed" twice: the 7th lattice stays empty, the farmland still there. A count under 6 that stopped climbing: read the polls (stalled growth, not a timeout) before calling it a FAIL
+
+## SQ-HH-1556 | "Test passed": spreads sideways along an empty lattice
+> setblock 518 -61 520 minecraft:water
+> setblock 519 -61 520 minecraft:farmland[moisture=7]
+> fill 519 -60 521 520 -60 521 minecraft:stone
+> setblock 519 -60 520 hearthandharvest:hops[age=4,facing=north]
+> setblock 520 -60 520 vinery:grapevine_lattice[facing=north]
+> gamerule randomTickSpeed 1000
+repeat 10
+sleep 3
+> execute if block 520 -60 520 hearthandharvest:hops
+end
+> gamerule randomTickSpeed 3
+count Test passed >= 1
+look at least one poll "Test passed": spreads sideways along an empty lattice (each spread tries a random side, 1 in 4 hits the lattice)
+
+## SQ-HH-1566 | age now 2, 3 or 4; `/execute unless block 511 -60 530 hearthandharvest
+> setblock 511 -61 530 minecraft:dirt
+> setblock 511 -60 530 hearthandharvest:sunflower_stem[age=0]
+> pbot hold G minecraft:bone_meal 1
+> pbot use G 511 -60 530 up
+> zq ages 511 -60 530 511 -60 530 hearthandharvest:sunflower_stem
+> execute unless block 511 -60 530 hearthandharvest:sunflower_stem[age=0]
+> execute if block 511 -60 530 hearthandharvest:sunflower_stem
+count Test passed >= 2
+look ages line shows one stem at age 2, 3 or 4; both executes "Test passed"
+
+## SQ-HH-1569 | "Test passed"; hand count unchanged
+> setblock 502 -61 535 minecraft:stone
+> setblock 502 -60 535 minecraft:air
+> pbot hold G hearthandharvest:blueberry_pips 2
+> pbot use G 502 -61 535 up
+> execute if block 502 -60 535 minecraft:air
+> zhh5 hand G
+look "Test passed"; hand `hearthandharvest:blueberry_pips` count 2 (unchanged)
+
+## SQ-HH-1585 | potato to Pungent; redstone long, glowstone strong (pack rule, J row);
+> zq potion minecraft:awkward minecraft:poisonous_potato
+> zq potion hearthandharvest:pungent minecraft:redstone,minecraft:glowstone_dust,minecraft:fermented_spider_eye
+> zq potion hearthandharvest:tempting minecraft:redstone,minecraft:glowstone_dust
+> zq potion minecraft:awkward hearthandharvest:crow_feather,minecraft:feather
+> zq potion hearthandharvest:bad_omen minecraft:glowstone_dust,minecraft:redstone,minecraft:fermented_spider_eye
+> zq potion hearthandharvest:strong_bad_omen minecraft:fermented_spider_eye
+look outputs are registry ids now: potato to `hearthandharvest:pungent`; redstone `long_pungent`, glowstone `strong_pungent` (pack rule, J row); spider eye Pungent to `tempting`; crow feather to `bad_omen`, vanilla feather nothing (HNH-65); Bad Omen glowstone `strong_bad_omen`, redstone nothing, spider eye `minecraft:luck`; strong to `buzzier_bees:strong_luck` (HNH-18, N23-8)
+
+## SQ-HH-1603 | `WaterLevel:5`, `BonemealLevel:5`: nothing spent on grown crops over w
+> fill 510 -61 563 514 -61 567 minecraft:farmland[moisture=7]
+> fill 510 -60 563 514 -60 567 minecraft:wheat[age=7]
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
+> pbot use G 512 -60 565 up
+> zhh5 hand G
+look `WaterLevel:5`, `BonemealLevel:5`: nothing spent on grown crops over wet soil (HNH-28)
+
+## SQ-HH-1604 | no `FertilizerItem` key left; levels 0 (HNH-30)
+> setblock 520 -61 565 minecraft:farmland[moisture=7]
+> setblock 520 -60 565 minecraft:wheat[age=0]
+> item replace entity G weapon.mainhand with hearthandharvest:watering_can{WaterLevel:1,BonemealLevel:1,FertilizerItem:"minecraft:bone_meal"}
+> pbot use G 520 -60 565 up
+> zhh5 hand G
+look no `FertilizerItem` key left; levels 0 (HNH-30)
+
+## SQ-HH-1606 | soaked 3x3 and grown; `WaterLevel:4`, `BonemealLevel:4` (1 each, not 2
+> fill 540 -61 563 544 -61 567 minecraft:farmland[moisture=0]
+> fill 540 -60 563 544 -60 567 minecraft:wheat[age=0]
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
+> pbot use G 542 -60 565 up
+> execute if block 542 -61 565 minecraft:farmland[moisture=7]
+> zq ages 540 -60 563 544 -60 567 minecraft:wheat
+> zhh5 hand G
+look soaked 3x3 ("Test passed") and grown (ages above 0 in the 3x3); `WaterLevel:4`, `BonemealLevel:4` (1 each, not 2) (HNH-33)

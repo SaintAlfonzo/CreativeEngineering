@@ -1,0 +1,42 @@
+# r1113 chunk 1, old-save pair for SQ-GLD-16, boot 1 of 2 (c1_g2.qb is boot 2): makes the old world. Group A superflat,
+# level c1g. INSTALLED jars only: the CD jar in mods/ (11-10 21:20) still registers the six golden and gilded stews
+# and their cans and jar fluids (it ships soft_fluids/golden_mushroom_stew.json; its swaps/removed.json has no stew);
+# the build/libs CD (11-11 16:52) has them removed.
+# Setup before boot (server stopped):
+#   NOSWAP=1 bash $INST/tools/scratch_query/prep_srv.sh OUT c1g A spawn-animals=false
+#   cp $INST/tools/scratch_query/zp_probe.js OUT/srv/kubejs/server_scripts/zz_zp_probe.js     # /zp inv
+#   ls OUT/srv/mods | grep creativedelight      (must be creativedelight-1.1.0.jar hard-linked from mods/, 11-10)
+# After this batch: stop the server (save-all is the last command), then before boot 2:
+#   bash $INST/tools/scratch_query/oldsave_swap.sh OUT        (Creative jars -> newest build/libs copies; same level)
+# No config edits. Work spot: chest 2000 -60 2000, jar 2003 -60 2000, bot c1gj (keeps two stews in its inventory).
+pace 1
+
+## C1G-00 | old world: stews, cans and keepers in a chest, a jar filled with golden mushroom stew, stews on a bot (not a queue row)
+bootexpect Done \(
+> forceload add 1984 1984 2015 2015
+> time set noon
+> gamerule doMobSpawning false
+sleep 20
+> setblock 2000 -60 2000 minecraft:chest
+> data merge block 2000 -60 2000 {Items:[{Slot:0b,id:"goldenfood:golden_mushroom_stew",Count:1b},{Slot:1b,id:"goldenfood:enchanted_golden_mushroom_stew",Count:1b},{Slot:2b,id:"goldenfood:golden_beetroot_soup",Count:1b},{Slot:3b,id:"goldenfood:enchanted_golden_beetroot_soup",Count:1b},{Slot:4b,id:"goldenfood:golden_rabbit_stew",Count:1b},{Slot:5b,id:"goldenfood:enchanted_golden_rabbit_stew",Count:1b},{Slot:6b,id:"creativedelight:canned_golden_mushroom_stew",Count:1b},{Slot:7b,id:"creativedelight:canned_enchanted_golden_mushroom_stew",Count:1b},{Slot:8b,id:"creativedelight:canned_golden_beetroot_soup",Count:1b},{Slot:9b,id:"creativedelight:canned_enchanted_golden_beetroot_soup",Count:1b},{Slot:10b,id:"creativedelight:canned_golden_rabbit_stew",Count:1b},{Slot:11b,id:"creativedelight:canned_enchanted_golden_rabbit_stew",Count:1b},{Slot:12b,id:"goldenfood:golden_bread",Count:1b},{Slot:13b,id:"goldenfood:enchanted_golden_cooked_beef",Count:1b},{Slot:14b,id:"creativedelight:canned_golden_bread",Count:1b},{Slot:15b,id:"minecraft:mushroom_stew",Count:1b}]}
+> data get block 2000 -60 2000 Items
+expect has the following block data: .*goldenfood:golden_mushroom_stew
+expect has the following block data: .*creativedelight:canned_enchanted_golden_rabbit_stew
+> pbot spawn c1gj 2002 -60 2002 minecraft:overworld survival
+sleep 3
+> clear c1gj
+> pbot hold c1gj goldenfood:golden_mushroom_stew 1
+> setblock 2003 -60 2000 supplementaries:jar
+> pbot use c1gj 2003 -60 2000
+sleep 2
+> data get block 2003 -60 2000
+> clear c1gj
+> item replace entity c1gj hotbar.1 with goldenfood:golden_rabbit_stew
+> item replace entity c1gj hotbar.2 with goldenfood:enchanted_golden_beetroot_soup
+> zp inv c1gj
+waitlog \[zp\] done 20
+expect \[zp\] .*goldenfood:golden_rabbit_stew
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+> save-all flush
+waitlog Saved the game 60
+look the jar's data shows the golden mushroom stew soft fluid (an empty jar = the bot's use did not fill it: then SQ-GLD-16's jar check is void, note it)

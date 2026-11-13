@@ -1,0 +1,15 @@
+pace 1
+
+## SQ-HH-464 | `expect \[zhh3\] nests generated=[1-9]`; `expect \[zhh3\] nest at .* g
+> locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 180
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {P1-96} {P3-96} {P1+96} {P3+96}
+sleep 45
+> zhh3 nests {P1} {P3} 96
+> zq count {P1-96} -64 {P3-96} {P1+96} 200 {P3+96} hearthandharvest:nest
+> forceload remove {P1-96} {P3-96} {P1+96} {P3+96}
+expect \[zhh3\] nests generated=[1-9]
+expect \[zhh3\] nest at .* generated=true biome=(minecraft|terralith):
+look UNPARSED CMD: zz_hh_crow_probe.js ;; rarity 1 in 32
+

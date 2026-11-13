@@ -118,8 +118,9 @@ ClientEvents.lang('en_us', e => {
   e.add('item.creativedelight.netherite_lunchbox', 'Netherite Lunchbox')
   e.add('item.solapplepie.container.netherite_lunchbox', 'Netherite Lunchbox')
 
-  // Two food books: Apple Pie's tracks diversity (Diet Tracker), Carrot's lists every food eaten or not (Food Dictionary).
-  if (global.has('solapplepie')) e.renameItem(global.item.diet_tracker, 'Diet Tracker')
-  e.add('key.solapplepie.open_food_book', 'Open Diet Tracker')
+  // Two food books: Apple Pie's tracks diversity (Diet Log; was Diet Tracker until Raspberry Pie, raspberry_pie.md 2),
+  // Carrot's lists every food eaten or not (Food Dictionary). Raspberry Pie's own Liquid Diet Log is named in its jar.
+  if (global.has('solapplepie')) e.renameItem(global.item.diet_log, 'Diet Log')
+  e.add('key.solapplepie.open_food_book', 'Open Diet Log')
   if (global.has('solcarrot')) e.renameItem(global.item.food_dictionary, 'Food Dictionary')
 })

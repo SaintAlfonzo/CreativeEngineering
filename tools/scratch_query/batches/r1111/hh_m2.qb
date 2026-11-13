@@ -1,0 +1,52 @@
+pace 1
+
+## SQ-HH-274 | `basin` line shows `role controller`; `data get` `"controller"`; the g
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml machines troughBreedingCap 2
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml machines stompingBasinSlotLimit 128
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml machines sprinklerRescanTicks 20
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveRarity 1
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveMinY 0
+# setup/shell: qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaveMaxY 0
+sleep 30
+> pbot spawn hb1 8 -60 8 minecraft:overworld survival
+> zhh2 basin <NW of SQ-HH-267's plot>
+> data get block <NW of SQ-HH-267's plot> MultiblockRole
+look `basin` line shows `role controller`; `data get` `"controller"`; the group persisted across a restart (`FluidCapacity 32000` restored in `load()`)
+
+## SQ-HH-275 | `remainder empty`; slot holds `100 minecraft:sweet_berries` (config `s
+> setblock 144 -60 240 hearthandharvest:stomping_basin[facing=north]
+> zhh2 insert 144 -60 240 minecraft:sweet_berries 100
+> zhh2 basin 144 -60 240
+look `remainder empty`; slot holds `100 minecraft:sweet_berries` (config `stompingBasinSlotLimit 128` past the default 64, J51)
+
+## SQ-HH-276 | `Test passed` within 8 s (first rescan still up to 127 ticks; config `
+> setblock 176 -60 240 hearthandharvest:sprinkler
+> zhh2 fill 176 -60 240 minecraft:water 1000
+> setblock 179 -61 240 minecraft:farmland[moisture=0]
+sleep 8
+> execute if block 179 -61 240 minecraft:farmland[moisture=7]
+look `Test passed` within 8 s (first rescan still up to 127 ticks; config `sprinklerRescanTicks 20`: one rescan a second, J47; the default row SQ-HH-236 needs up to 9 s)
+
+## SQ-HH-277 | `Test failed` (none in love: two animals already reach the config cap
+> setblock 208 -60 240 hearthandharvest:trough
+> summon minecraft:cow 209 -60 240 {NoAI:1b}
+> summon minecraft:cow 207 -60 240 {NoAI:1b}
+> pbot hold hb1 minecraft:wheat 4
+> pbot use hb1 208 -60 240 up
+sleep 5
+> execute if entity @e[type=minecraft:cow,x=208,y=-60,z=240,distance=..3,nbt=!{InLove:0}]
+look `Test failed` (none in love: two animals already reach the config cap of 2)
+
+## SQ-HH-318 | `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of th
+> fill 4464 -16 80 4496 0 112 minecraft:stone
+> fill 4464 1 80 4496 16 112 minecraft:stone
+> place feature hearthandharvest:salt_cave 4480 0 96
+> zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water
+look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY 0 ;; saltCaveMaxY 0
+look `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
+
+## SQ-HH-319 | `[Pp]laced feature`; `cave_air` above 1000 (origin pulled into saltCav
+> place feature hearthandharvest:salt_cave 4544 40 96
+> zhh2 countset 4528 -16 80 4560 16 112 minecraft:cave_air
+look `[Pp]laced feature`; `cave_air` above 1000 (origin pulled into saltCaveMinY..MaxY = 0..0; J33 config range, HHConfig `[worldgen]`)
+

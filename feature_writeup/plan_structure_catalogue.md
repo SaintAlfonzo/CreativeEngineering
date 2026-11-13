@@ -147,6 +147,8 @@ Biome type of a piece: the style folder in its path, such as `plains`, `desert`,
 
 ## 7. Tests
 
+**Run r1111 (2026-11-12):** SQ-SCAT-06, -07, -08 PASS: plan counts match the preview, build 281 s, 1619 of 1651 placed, 32 refused (27 creativeworldgen meta structures, monument, ocean village, witch village, way sign, small nether dungeon: all "did not generate on flat ground"), no watchdog. Client rows CQ-SCAT not run. Verdicts `perf/runs/r1111/verdicts/scat.md`.
+
 Logic, in the plain Java harness:
 
 - [x] **SCAT-01** (2026-11-09, `tools/test_worldgen_tools.sh` 2b): resolver gives the section 4 home for one id per rule, and multi-type ids land by priority.

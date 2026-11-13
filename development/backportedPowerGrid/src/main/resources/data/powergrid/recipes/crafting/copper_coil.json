@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:cardboard"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "forge:wires/copper"
+    }
+  },
+  "pattern": [
+    " WC",
+    "WSW",
+    "CW "
+  ],
+  "result": {
+    "item": "powergrid:copper_coil"
+  }
+}

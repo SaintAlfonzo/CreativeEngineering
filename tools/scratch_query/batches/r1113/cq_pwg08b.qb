@@ -1,0 +1,16 @@
+# r1113 CQ-PWG-08 creative tab check (follows cq_pwg08.qb; the scratch player was in survival)
+pace 2
+## CQ-PWG-08c | creative inventory pages, Power Grid tab
+> gamemode creative
+sleep 2
+key e
+sleep 2
+shot creative_p1
+click 600 8
+sleep 1
+shot creative_p2
+click 600 8
+sleep 1
+shot creative_p3
+look find a Power Grid tab among the pages
+key Escape

@@ -1,0 +1,26 @@
+# r1111 SQ-SCAT on a fresh level with level-type creativedevtools:structure_catalogue (first boot). scat2.qb = second boot.
+pace 2
+
+## SQ-SCAT-07 | preview counts while the build runs
+> cdevplace catalogue preview
+sleep 5
+look preview counts line (pieces, whole, unmapped, skipped biome markers, entity pieces, replaced, placed whole); compare with the report counts after SQ-SCAT-08
+
+## SQ-SCAT-06 | first boot: plan logged, gamerules, spawn
+bootexpect \[catalogue\] new Structure Catalogue world
+bootexpect \[catalogue\] plan:
+> gamerule doMobSpawning
+> gamerule doFireTick
+> gamerule doWeatherCycle
+shell grep -E "^(level-type|level-name)" server.properties
+> execute in minecraft:overworld run data get entity @r Pos
+look gamerules false; build started; spawn checked from level.dat after the stop (0 65 0)
+
+## SQ-SCAT-08 | build finishes; record time, refusals, heap
+> cdevplace catalogue status
+waitlog Structure Catalogue built 14400
+> cdevplace catalogue status
+reject Watchdog|OutOfMemoryError|\[catalogue\] build aborted
+shell python3 -c 'import json;d=json.load(open("kubejs/exported/structure_catalogue_report.json"));print({k:d[k] for k in d if k in ("counts","seconds","secs","refused_count")});r=d.get("refused",[]);print(len(r));[print(x) for x in (r[:60] if isinstance(r,list) else list(r.items())[:60])]' 2>&1 | cut -c1-300
+shell grep -cE "\[catalogue\] .* failed" logs/latest.log; true
+look build ended; RECORD seconds, refused count, ids and reasons

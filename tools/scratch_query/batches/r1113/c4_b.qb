@@ -1,0 +1,110 @@
+# r1113 chunk 4, boot B: ONE boot, group B fresh normal world (seed 8675309, structures on), level r1113c4b.
+# Rows: SQ-NSM-08 (new world on the moved Worldgen / Calendar namespaces), SQ-GAP-03 (Bushier Flowers worldgen off),
+# SQ-RD-10 (part of SQ-RDB-03: savanna village farm crops on the baked Rustic member).
+# SQ-GAP is marked HOLD in the queue (after the Common suite): the condition is met (SQ-CGE 2026-11-08, nothing open);
+# skip SQ-GAP-03 with --rows if the orchestrator keeps the hold.
+#
+# Setup (OUT = scratch dir, srv = OUT/srv, INST = instance root):
+#   bash $INST/tools/scratch_query/prep_srv.sh OUT r1113c4b B spawn-animals=true
+#   python3 $INST/tools/scratch_query/qrun.py toml srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+#   no srv config edits otherwise (SQ-NSM-08 wants the live creativeworldgen-common.toml as shipped)
+#   probes: zz_zq_probe.js from prep_srv.sh only.
+# Same boot afterwards: rerun_b.qb (SQ-HH-328, needs hh_mw_probe.js as zz_hh_mw_probe.js; it wants the Async Locator
+#   free, so run it BEFORE this batch's locate rows: qrun rerun_b.qb first, then c4_b.qb).
+# Id fixes: the queue's `[creativedelight] village farm crops added to 5 farm processor lists` line is now
+#   "added to N pool elements" (VillageFarmCrops.java); structure tags are #creativeworldgen:meta/* and group/* (the
+#   kubejs/exported structure dumps still show creativeengineering: names from before the 11-10 move).
+pace 2
+
+## SQ-NSM-08a | new world boots on the moved namespaces: no structure or dimension errors, summaries clean
+bootexpect Done \(
+bootreject (?i)Unknown structure start|Found reference to unknown structure|Unknown structure piece id
+bootreject (?i)WorldGenSettings.*(error|failed)
+bootreject (?i)creativeengineering:(yellowstone|hub|autumnsky|springsky|summersky|wintersky|desert|shield|flowergrove|flowerhills|flowerridge)
+shell grep -nE "\[mob-spawns\]|\[mob_spawns\]|\[bee-nests\]|\[bee_nests\]" logs/latest.log | cut -c1-260 | head -20; echo "idle mentions: $(grep -E '\[(mob-spawns|mob_spawns|bee-nests|bee_nests)\]' logs/latest.log | grep -ci idle)"
+look mob-spawns and bee-nests summaries present, no rule idle (shell output)
+
+## SQ-RD-10 | savanna village farms carry Rustic crops (log line and a census of one village)
+bootexpect \[creativedelight\] village farm crops added to \d+
+> locate structure minecraft:village_savanna
+waitlog (?:The nearest minecraft:village_savanna is at|Could not find) 300
+capture SV The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center {SV1} {SV3}
+> chunky radius 96
+> chunky start
+waitlog Task finished 900
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'rusticdelight:(cotton|bell_pepper|coffee)' --box $(( {SV1} - 96 )) $(( {SV3} - 96 )) $(( {SV1} + 96 )) $(( {SV3} + 96 )) 2>&1 | tail -25
+look some savanna farm crops are Rustic cotton (counts in the shell output); plains farms unchanged is not checked here
+
+## SQ-NSM-08 | the 11 creativeworldgen dimensions open; structures locate under creativeworldgen
+> pbot spawn n8 0 160 0 creativeworldgen:hub creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:hub
+> pbot spawn n8 0 160 0 creativeworldgen:yellowstone creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:yellowstone
+> pbot spawn n8 0 160 0 creativeworldgen:autumnsky creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:autumnsky
+> pbot spawn n8 0 160 0 creativeworldgen:springsky creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:springsky
+> pbot spawn n8 0 160 0 creativeworldgen:summersky creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:summersky
+> pbot spawn n8 0 160 0 creativeworldgen:wintersky creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:wintersky
+> pbot spawn n8 0 160 0 creativeworldgen:desert creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:desert
+> pbot spawn n8 0 160 0 creativeworldgen:shield creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:shield
+> pbot spawn n8 0 160 0 creativeworldgen:flowergrove creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:flowergrove
+> pbot spawn n8 0 160 0 creativeworldgen:flowerhills creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:flowerhills
+> pbot spawn n8 0 160 0 creativeworldgen:flowerridge creative
+sleep 8
+> zq chunk 0 0 creativeworldgen:flowerridge
+waitlog \[zq\] chunk 0 0 30
+> pbot spawn n8 0 160 0 minecraft:overworld creative
+count \[zq\] chunk 0 0 >= 11
+reject (?i)Unknown dimension|no such dimension|\[zq\] error
+> locate structure creativeworldgen:sky_island
+waitlog (?:The nearest creativeworldgen:sky_island is at|Could not find) 300
+> locate structure #creativeworldgen:meta/waystone_ruins
+waitlog (?:The nearest #?creativeworldgen:meta/waystone_ruins is at|Could not find) 300
+> locate structure #creativeworldgen:group/settlements
+waitlog (?:The nearest #?creativeworldgen:group/settlements is at|Could not find) 300
+reject Could not find|Unknown (structure|tag)|Invalid
+> cwglocate census
+sleep 30
+> dumptags
+waitlog \[dumptags\] wrote 600
+> save-all flush
+waitlog Saved the game 120
+shell ls r1113c4b/dimensions; echo "level.dat is gzip: $(python3 -c "import gzip,sys;d=gzip.open('r1113c4b/level.dat').read();print(d.count(b'creativeengineering:'), 'creativeengineering refs;', d.count(b'creativeworldgen:'), 'creativeworldgen refs')")"
+shell python3 -c "import json,glob,re;s=set();[s.update(re.findall(r'creativeengineering:[a-z_/]+', open(f).read())) for f in glob.glob('kubejs/exported/tags/*_tags.json')];w=[x for x in s if re.search(r'season|crop_season|worldgen|biome|structure|meta/|group/|spawn|bee_nest|wild_flower', x)];print(len(s),'creativeengineering tag ids;', len(w),'worldgen/calendar-like:', sorted(w)[:30])"
+look every zq chunk line shows a loaded full chunk (11 dimensions); ls dimensions shows only creativeworldgen; 0 creativeengineering refs in level.dat; the three locates found a target; census lists the groups; no worldgen or calendar tag left under creativeengineering. The Flower Test world preset needs a client (CQ)
+
+## SQ-GAP-03 | Bushier Flowers worldgen off: 5 forge:none modifiers, zero bushierflowers blocks after pregen
+shell cd $INST && for f in kubejs/data/bushierflowers/forge/biome_modifier/*.json; do printf "%s %s\n" "$(grep -c 'forge:none' "$f")" "$f"; done; ls kubejs/data/bushierflowers/forge/biome_modifier | wc -l
+bootreject (?i)bushierflowers.*(error|exception)
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center 0 0
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'bushierflowers:' --box -300 -300 300 300 2>&1 | tail -15
+look 5 files each with 1 forge:none; region census finds no bushierflowers: block

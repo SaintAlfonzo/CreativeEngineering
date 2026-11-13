@@ -1,0 +1,15 @@
+# r1113 chunk 3, boot CH3: SQ-CDFO-03 second half, Incubation without Alex's Mobs and Untitled Duck Mod. Group B.
+# Server: EXTRA="incubation-*.jar" bash tools/scratch_query/cpp_chain_srv.sh OUT_CH3 c3ch3 chain
+#   (if the boot names a missing dependency of Incubation, add its glob to EXTRA and rebuild)
+# Before boot: nothing beyond the script (zq is there). Config empty.
+pace 1
+
+## SQ-CDFO-03c | Incubation present without Alex's Mobs and Untitled Duck Mod: boots; only the present half's content loads
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(alexsmobs|untitledduckmod|cookingforblockheads|blay09)
+bootreject (Couldn't parse|Unknown item|Unknown tag|Failed to load).*(alexsmobs|untitledduckmod|cookingforblockheads)
+> zq item creativedelight:emu_nest
+> zq item creativedelight:duck_nest
+> zq item creativedelight:oak_spice_rack
+waitlog \[zq\] item creativedelight:oak_spice_rack 20
+look the Incubation compartment is on; emu nest (Alex's Mobs) and duck / goose nests (Untitled Duck Mod) absent or inert with their mod missing; racks absent (no CfB); no error naming the missing mods

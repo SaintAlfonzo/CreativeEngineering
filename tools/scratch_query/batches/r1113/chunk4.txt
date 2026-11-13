@@ -1,0 +1,10 @@
+SQ-GAP Recent features with no scratch row of their own, 2026-11-08 (gap sweep of the play	SQ-GAP-01 SQ-GAP-02 SQ-GAP-03 SQ-GAP-04 SQ-GAP-05 SQ-GAP-06 SQ-GAP-07 SQ-GAP-08 SQ-GAP-09
+Swap alias cycle fix, 2026-11-08 ([creative_split.md](../creative_split.md) 7.7, TODO `cre	SQ-SWL-01
+SQ-CDNS Creative Delight namespace move, 2026-11-10 ([plan_cd_namespace.md](../plan_cd_nam	SQ-CDNS-11
+SQ-NSM Namespace moves for the other jars, 2026-11-10 ([namespace_move.md](../namespace_mo	SQ-NSM-01 SQ-NSM-04 SQ-NSM-08
+SQ-HCS Hearth crow swap: spawn crash fix, H&H crow, nest spawning, tree and roof nests, 20	SQ-HCS-07 SQ-HCS-10 SQ-HCS-12
+SQ-RDB Rustic Delight baked into its member, 2026-11-10 ([plan_rustic_fold_in.md](../plan_	SQ-RDB-02 SQ-RDB-03 SQ-RDB-05
+SQ-BREED Animal breeding and bee flower audit, 2026-11-10 ([breeding_audit.md](../breeding	SQ-BREED-02 SQ-BREED-03
+SQ-FDI Food Dictionary and Diet Tracker, 2026-11-10 ([food_dictionary.md](../food_dictiona	SQ-FDI-01 SQ-FDI-02 SQ-FDI-03 SQ-FDI-04 SQ-FDI-05
+SQ-FLR Flesh recipes and Create result pools, 2026-11-10 ([plan_flesh_recipes.md](../plan_	SQ-FLR-03 SQ-FLR-04 SQ-FLR-05
+SQ-PWG Power Grid performance measuring, 2026-11-12 ([power_grid.md](../power_grid.md) 5.4	SQ-PWG-01 SQ-PWG-02 SQ-PWG-03 SQ-PWG-04 SQ-PWG-05 SQ-PWG-06 SQ-PWG-07 SQ-PWG-08

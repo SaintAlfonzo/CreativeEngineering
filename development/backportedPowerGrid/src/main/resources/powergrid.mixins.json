@@ -1,0 +1,43 @@
+{
+  "required": true,
+  "package": "org.patryk3211.powergrid.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8.5",
+  "refmap": "powergrid.refmap.json",
+  "mixins": [
+    "AirCurrentMixin",
+    "ArmBlockEntityMixin",
+    "BeltDeployerMixin",
+    "BlockStateBaseMixin",
+    "ChuteBlockEntityMixin",
+    "EntityMixin",
+    "FanProcessingMixin",
+    "FluidPropagatorMixin",
+    "KineticBlockEntityAccessor",
+    "LevelEntitiesAccessor",
+    "LightningAccessor",
+    "PlayerMixin",
+    "RecipeApplierMixin",
+    "SheepMixin",
+    "SoundEntryBuilderMixin",
+    "forge.ArmInteractionPointMixin",
+    "forge.BasinRecipeMixin",
+    "forge.CookingPotBlockEntityMixin",
+    "forge.DrillBreakActionMixin",
+    "forge.EntityTrackerAccessor",
+    "forge.ItemAccessor",
+    "forge.PlayerDrillMixin",
+    "forge.SkilletBlockEntityMixin",
+    "forge.ThreadedAnvilChunkStorageAccessor"
+  ],
+  "client": [
+    "client.BlueprintOverlayMixin",
+    "client.BlueprintOverlayRendererAccessor",
+    "client.ComplexEntityRaycastMixin",
+    "client.RenderBuffersAccessor",
+    "client.ValueSettingsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

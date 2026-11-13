@@ -1,0 +1,16 @@
+# r1113 chunk 3, boot CO2: SQ-CMV-03, same OUT_CO as c3_co.qb plus Armor Trims with its version rewritten above
+# Common's tested range ([1.3.3,1.4)). Group B.
+# Before boot (server stopped, run from the instance root; the copy lives in OUT_CO, the pack's jar is only read):
+#   cp "$INST"/mods/armortrims-1.19.2-1.3.3.jar OUT_CO/srv/mods/armortrims-1.4.0-c3.jar
+#   mkdir -p OUT_CO/at && cd OUT_CO/at && unzip -q -o "$INST"/mods/armortrims-1.19.2-1.3.3.jar META-INF/mods.toml
+#   sed -i 's/version="${file.jarVersion}"/version="1.4.0"/' META-INF/mods.toml
+#   zip -q ../srv/mods/armortrims-1.4.0-c3.jar META-INF/mods.toml   (updates the copy only), then cd back
+#   unzip -p OUT_CO/srv/mods/armortrims-1.4.0-c3.jar META-INF/mods.toml | grep '^version'   -> version="1.4.0"
+# (Armor Trims needs nothing beyond Forge; its JEI dependency is optional.)
+pace 1
+
+## SQ-CMV-03 | Armor Trims 1.4.0 outside [1.3.3,1.4): one WARN, its mixins off, boots clean
+bootexpect Done \(
+bootexpect \[creativecommon\] armor_trims 1\.4\.0 is outside the tested range \[1\.3\.3,1\.4\): its mixins are off
+shell grep -c "is outside the tested range" logs/latest.log; test "$(grep -c "armor_trims 1.4.0 is outside the tested range" logs/latest.log)" = 1
+bootreject Mixin apply failed|InvalidMixinException|ArmorTrimsLargeItemListsMixin.*(fail|error)

@@ -1,0 +1,53 @@
+# r1113 chunk 2, boot c2l1 (first of two boots on one server folder; c2_l1b.qb is the restart): config carry from a
+# pre-split patcherMod file, the state of a pack that skipped 1.2.00 and updates straight to the current jars.
+# Covers SQ-CMG-02, SQ-CEN-02, SQ-CFR-04 and the shrapnel half of SQ-CEN-05. The rows' "boot 1 on the 1.1.09 jars" is
+# replaced by a hand-built old config (no 1.1.08 / 1.1.09 jar is left in mods/, jar_archive/ or build/libs), so this
+# checks the carry code on the current jars, not a jar swap.
+# World group A (superflat creative). Level name: c2l1.
+# Setup before boot (server stopped, never booted):
+#   prep_srv.sh OUT c2l1 A
+#   python3 $INST/tools/scratch_query/c2_legacy_cfg.py OUT/srv l1
+#     -> config/creativeengineering-common.toml = old file with [botania] trinketCaseAnyItem = false, the nine Equipment
+#        tables ([shields] wearThreshold = 4.5), [shrapnel] count = 12, [surface.wthit] format = "PERCENT", [vein_undo],
+#        [jei] [gui_title] [toasts] tutorial = true [tooltips] [coaster] [wthit], Compat's first five tables, Common's six
+#        tables, [campfire] rainOutTicks = 120; config/creativeengineering-swaps.toml = copy of creativecommon-swaps.toml;
+#        creativecommon-common, creativecommon-swaps, creativemagic-common, creativeequipment-common, creativecompat-common
+#        removed; creativedelight-common.toml kept without [campfire]. Backups in config/c2_legacy_backup/.
+#   (zq is copied by prep_srv.sh; no other probe)
+# Expected carry order (constructors in dependency order): Common carries its six tables and the swaps file, Magic
+#   [botania], Equipment its nine, Compat its five then merges [shrapnel] [surface] [vein_undo] and the six interface
+#   tables, CD merges [campfire] from the old file (Compat had none).
+pace 1
+
+## SQ-CMG-02 | [botania] carried into Magic's new file, the nine Equipment tables into Equipment's, values kept
+bootexpect \[swaps\] config sections \[botania\] carried over from creativeengineering-common.toml to creativemagic-common.toml
+bootexpect \[swaps\] config sections \[dragon_gear, air_brake, stepstool, crafting, armor_enchantability, shields, bonemeal_charm, bottled_air, backpackSkins\] carried over from creativeengineering-common.toml to creativeequipment-common.toml
+bootreject could not (carry|merge) config sections
+shell grep -nE "trinketCaseAnyItem" config/creativemagic-common.toml; grep -nE "wearThreshold *=" config/creativeequipment-common.toml; grep -nE "^\[" config/creativeequipment-common.toml | tr '\n' ' '
+look trinketCaseAnyItem = false and wearThreshold = 4.5 in the new files (Forge's correction keeps them); Equipment's file also has its later tables ([tooltips], [copper_poisoning], [armor_overflow]) added at their defaults
+
+## SQ-CEN-02 | Common's tables and the swaps file carried; interface tables reach Compat; values kept
+bootexpect \[swaps\] config sections \[changelog, damage_tags, perf, wandering_trader, advancements, mod_names\] carried over from creativeengineering-common.toml to creativecommon-common.toml
+bootexpect \[swaps\] config creativeengineering-swaps.toml carried over to creativecommon-swaps.toml
+bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, monster_box, trash_slot\] carried over from creativeengineering-common.toml to creativecompat-common.toml
+bootexpect \[swaps\] config sections \[shrapnel, surface, vein_undo\] merged from creativeengineering-common.toml into creativecompat-common.toml
+bootexpect \[swaps\] config sections \[jei, gui_title, toasts, tooltips, coaster, wthit\] merged from creativeengineering-common.toml into creativecompat-common.toml
+shell ls config | grep -E "^creative"; grep -nE "^\s*count *=" config/creativecompat-common.toml | head -2; grep -nE "^\s*format *=" config/creativecompat-common.toml | head -3; grep -nE "^\s*tutorial *=" config/creativecompat-common.toml
+look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] tutorial = true in Compat's file; creativecommon-swaps.toml exists. Superseded parts of the row text: [toasts]/[jei] and [shrapnel]/[surface]/[vein_undo] now end in creativecompat-common.toml (moved 11-06 / 11-07), not in Common's or Engineering's file; Engineering 2.0.0 has no config of its own
+
+## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old patcherMod file into the existing CD file
+bootexpect \[swaps\] config sections \[campfire\] merged from creativeengineering-common.toml into creativedelight-common.toml
+bootreject \[campfire\] carried over from creativecompat-common.toml
+shell grep -nE "^\[campfire\]|rainOutTicks *=" config/creativedelight-common.toml
+look CD file [campfire] rainOutTicks = 120
+
+## SQ-CEN-05s | 12 shrapnel pieces per TNT after the carry (shrapnel half of SQ-CEN-05; the chest NBT half needs a 1.1.09 save)
+> forceload add 0 0 31 31
+> gamerule doMobSpawning false
+sleep 20
+> summon minecraft:tnt 16 -60 16 {Fuse:1}
+sleep 0.4
+> kill @e[type=creativecompat:shrapnel]
+waitlog Killed \d+ entit|No entity was found 20
+expect Killed 12 entit
+look one tick after the blast 12 shrapnel entities (config count 12 carried); if 0 or "No entity": the kill came too late or early, rerun with sleep 0.2 / 0.6 (BATCH-FAULT) before calling FAIL

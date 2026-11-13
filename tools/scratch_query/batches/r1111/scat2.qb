@@ -1,0 +1,6 @@
+pace 2
+## SQ-SCAT-06b | second boot of the same catalogue level: no new plan
+bootreject \[catalogue\] plan:
+bootreject \[catalogue\] new Structure Catalogue world
+> gamerule doMobSpawning
+look no plan line on the second boot

@@ -1,0 +1,920 @@
+# r1113 Power Grid P4 boot (jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-05.jar) with the P3 reruns on the
+# fixed probe: SQ-PWG-35, forceload, SQ-PWG-26 to -34 (copied from pwg3.qb; only the ERROR rejects narrowed), SQ-PWG-36 to
+# -44. Group A superflat, level pwg5, ground Y -61, blocks at Y -60.
+# Prep: COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-05.jar prep_srv.sh OUT pwg5 A
+#   cp pwg_probe.js, pwg_grid_probe.js, pwg_p3_probe.js, pwg_p4_probe.js into OUT/srv/kubejs/server_scripts/ as zz_*.js
+# Probe goggle reads on gauges log a RuntimeDistCleaner ERROR (client class) and print "goggles skipped"; so no blanket
+# /ERROR\] reject: rejects name powergrid/patryk and skip RuntimeDistCleaner lines.
+# waitlog matches anywhere since the row start (first "done" satisfies every later one); real waits are sleeps
+# (20 ticks = 1 s) plus pace (s after each command).
+# Split rows: SQ-PWG-37cs (constant speed motor part of -37), SQ-PWG-38B (part B of -38), SQ-PWG-42s (-42 with the
+# commutator wires swapped, always run: records both polarities), SQ-PWG-44pre (restores the -38 B line that -41
+# rebuilt: creative motor at 256 RPM, 10 ohm load, gauge wires).
+pace 1
+
+## SQ-PWG-35 | P4 jar loads: registries, wire types, stress provider, display source, redstone converter, damage source
+bootexpect Done \(
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 4\)
+bootexpect Loaded 5 wire types
+bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
+bootreject ^(?!.*MinecraftServer/\]: Unknown item).*(Couldn't load tag|Failed to load|Couldn't parse|Unknown item|Unknown tag|Error loading registry data).*powergrid
+bootreject (ERROR|WARN).*[Ll]oot.*powergrid
+bootreject Exception loading blockstate definition.*powergrid
+bootreject Parsing error loading recipe powergrid:
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg4 check
+sleep 2
+> give @p powergrid:electric_motor
+sleep 1
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-05
+expect \[zpwg\] ns powergrid block: 49\b
+expect \[zpwg\] ns powergrid item: 58\b
+expect \[zpwg\] ns powergrid entity_type: 3\b
+expect \[zpwg\] ns powergrid block_entity_type: 40\b
+expect \[zpwg\] ns powergrid menu: 2\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 1\b
+expect \[zpwg\] ns powergrid fluid: 0\b
+expect \[zpwg4\] stress electric_motor capacity=64(\.0)? .*rpm=0(\.0)?\.\.256(\.0)?$
+expect \[zpwg4\] stress constant_speed_motor capacity=64(\.0)? .*rpm=0(\.0)?\.\.256(\.0)?$
+expect \[zpwg4\] stress servo capacity=32(\.0)? .*rpm=0(\.0)?\.\.32(\.0)?$
+expect \[zpwg4\] stress generator_clutch capacity=\S+ impact=32(\.0)? hasCapacity
+expect \[zpwg4\] stress generator_induction_rotor capacity=\S+ impact=32(\.0)? hasCapacity
+expect \[zpwg4\] stress generator_large_induction_rotor capacity=\S+ impact=128(\.0)? hasCapacity
+count \[zpwg4\] stress generator_(vertical_)?commutator capacity=\S+ impact=8(\.0)? hasCapacity == 2
+count \[zpwg4\] stress (variac|rheostat) capacity=\S+ impact=0(\.0)? hasCapacity=\S+ hasImpact=true == 2
+expect \[zpwg4\] stress hv_switch capacity=\S+ impact=2(\.0)? .*rpm=none$
+expect \[zpwg4\] display clutch=true sources on generator_clutch=1$
+expect \[zpwg4\] redstone converter clutch=true$
+expect \[zpwg4\] damage spinning_rotor msgId=spinning_rotor bypassArmor=false$
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+
+## SQ-PWG-SETUP5 | forceload the P3 and P4 area X 1090 to 1130, Z 990 to 1260 (54 chunks); no fire spread (not a row)
+> forceload add 1090 990 1130 1260
+> gamerule doFireTick false
+sleep 5
+
+
+## SQ-PWG-26 | small transformer 10:100, 10 V primary, 100 ohm load; then AC
+> zpwg3 src 1100 -60 1000 10
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1000 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1000 powergrid:transformer_small
+waitlog \[zpwg3\] done 20
+> zpwg3 xfmr 1106 -60 1000 10 100
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1000 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1000 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1112 -60 1000 45
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1002 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1000 0 1103 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1000 1 1106 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1000 1 1100 -60 1000 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1000 2 1109 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1000 1 1112 -60 1000 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 1 1106 -60 1000 3
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 0 1112 -60 1002 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1000 1 1112 -60 1002 1
+waitlog \[zpwg3\] done 20
+sleep 2
+> zpwg3 be 1103 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1000
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1002
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1000 10 0.5
+waitlog \[zpwg3\] done 20
+repeat 5
+> zpwg3 be 1112 -60 1002
+sleep 0.2
+end
+sleep 2
+expect coils primary=0-1x10 secondary=2-3x100
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look secondary V (gauge 1112 1002) within 10 % of 100; secondary I (1109) within 10 % of 1 A; primary I (1103) within 15 % of 10 x secondary; AC reads change sign
+
+## SQ-PWG-27 | FE inverter: fill 20000 FE, measure N6 (FE per tick per watt) three times
+> zpwg3 place 1103 -60 1020 powergrid:fe_inverter facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1020 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1020 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1109 -60 1020 45
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1022 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1020 0 1106 -60 1020 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1020 1 1109 -60 1020 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 1 1103 -60 1020 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 0 1109 -60 1022 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1020 1 1109 -60 1022 1
+waitlog \[zpwg3\] done 20
+pace 0
+repeat 3
+> zpwg3 fe 1103 -60 1020 down 20000
+> zpwg3 be 1106 -60 1020
+> zpwg3 be 1109 -60 1022
+sleep 0.5
+> zpwg3 feget 1103 -60 1020 down
+> zpwg3 be 1106 -60 1020
+> zpwg3 be 1109 -60 1022
+sleep 3
+end
+pace 1
+sleep 1
+count \[zpwg3\] fe received 20000 >= 1
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look compute N6 per window from fe stored / t and gauge I x V
+
+## SQ-PWG-28 | power resistor 1 ohm at 40 V (1.6 kW vs 1 kW) overheats into an Overheated Component
+> zpwg3 src 1100 -60 1040 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1040 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1040 9
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1040 0 1104 -60 1040 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1040 1 1100 -60 1040 1
+waitlog \[zpwg3\] done 20
+repeat 20
+> zpwg3 be 1104 -60 1040
+sleep 1
+end
+sleep 1
+> zpwgg overheated 1104 -60 1040 1
+waitlog \[zpwgg\] done 20
+> zpwg3 be 1100 -60 1040
+waitlog \[zpwg3\] done 20
+expect \[zpwgg\] overheated at 1104 -60 1040 original=Block\{powergrid:power_resistor\}
+reject (?i)explo
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look thermal T rises; source terminals equal afterwards
+
+## SQ-PWG-29 | fan cooling: bare power resistor overheats, fan-cooled one stays lower
+> zpwg3 place 1102 -60 1060 create:encased_fan facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -60 1060 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1101 -60 1060 256
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 src 1100 -60 1050 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1050 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1050 9
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1060 40
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1104 -60 1060 powergrid:power_resistor facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1104 -60 1060 9
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1050 0 1104 -60 1050 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1050 1 1100 -60 1050 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1060 0 1104 -60 1060 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -60 1060 1 1100 -60 1060 1
+waitlog \[zpwg3\] done 20
+repeat 30
+> zpwg3 be 1104 -60 1050
+> zpwg3 be 1104 -60 1060
+sleep 1
+end
+sleep 1
+> zpwgg overheated 1104 -60 1050 1
+waitlog \[zpwgg\] done 20
+> zpwgg overheated 1104 -60 1060 1
+waitlog \[zpwgg\] done 20
+> zpwg3 be 1102 -60 1060
+waitlog \[zpwg3\] done 20
+expect \[zpwgg\] overheated at 1104 -60 1050
+reject \[zpwgg\] overheated at 1104 -60 1060
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look cooled T below bare T at the same tick; fan running (be 1102)
+
+## SQ-PWG-33 | lightning magnetizes andesite alloy (not iron); electromagnet magnetizes when powered
+> zpwg3 drop 1100 -60 1100 create:andesite_alloy 64
+waitlog \[zpwg3\] done 20
+> zpwg3 drop 1100 -60 1104 minecraft:iron_ingot 64
+waitlog \[zpwg3\] done 20
+repeat 5
+> summon minecraft:lightning_bolt 1100.5 -60 1100.5
+> summon minecraft:lightning_bolt 1100.5 -60 1104.5
+sleep 1
+end
+sleep 2
+> zpwg3 count 1100 -60 1100 2 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1100 2 create:andesite_alloy
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1104 2 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 count 1100 -60 1104 2 minecraft:iron_ingot
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1110 -59 1100 powergrid:electromagnet
+waitlog \[zpwg3\] done 20
+> zpwg3 drop 1110 -60 1100 create:andesite_alloy 1
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -59 1100 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -59 1100 0 1110 -59 1100 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1110 -59 1100 1 1114 -59 1100 1
+waitlog \[zpwg3\] done 20
+sleep 10
+> zpwg3 count 1110 -60 1100 1 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -59 1100 120
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1110 -59 1100
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 count 1110 -60 1100 1 powergrid:magnet
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1110 -59 1100
+waitlog \[zpwg3\] done 20
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look lightning: magnets > 0 and magnets + alloy = 64; iron gives 0 magnets; electromagnet: 0 magnets unpowered, field > 0.25 and 1 magnet powered
+
+## SQ-PWG-30 | fuse holder: 5 A blows at 12 A; 20 A with reset passes
+> zpwg3 place 1103 -60 1070 powergrid:fuse_holder facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 5
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 reset
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1070 12
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1070 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1070 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1109 -60 1070 27
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1070 0 1103 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1070 1 1106 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1070 1 1109 -60 1070 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1070 1 1100 -60 1070 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 20
+waitlog \[zpwg3\] done 20
+> zpwg3 fuse 1103 -60 1070 reset
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1070
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1070
+waitlog \[zpwg3\] done 20
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look first: fuse state blown, gauge 0; after 20 A + reset: closed, gauge within 5 % of 12/(1+Rwires)
+
+## SQ-PWG-31 | battery discharges into 1 ohm through an energy meter; then charges at 14 V
+> zpwg3 place 1103 -60 1080 powergrid:battery
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1080 powergrid:energy_meter
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1109 -60 1080 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1080 powergrid:creative_resistor
+waitlog \[zpwg3\] done 20
+> zpwg3 res 1112 -60 1080 27
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1112 -60 1082 powergrid:voltage_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1103 -60 1080 0 1106 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1106 -60 1080 1 1109 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 0 1112 -60 1082 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1112 -60 1082 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1082
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1109 -60 1080
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1112 -60 1082
+waitlog \[zpwg3\] done 20
+> setblock 1112 -60 1080 air
+sleep 1
+> zpwg3 src 1112 -60 1080 14
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1109 -60 1080 1 1112 -60 1080 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1112 -60 1080 1 1103 -60 1080 1
+waitlog \[zpwg3\] done 20
+sleep 1
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+sleep 20
+> zpwg3 be 1103 -60 1080
+waitlog \[zpwg3\] done 20
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look battery starts energy 388800 J percent 90, OCV near 12.58 V; discharge loss ~ I x V x 20 s (10 %), meter rises same; charge raises energy
+
+## SQ-PWG-32 | device connector into an IE LV capacitor: FE rises
+> zpwg3 place 1106 -60 1090 immersiveengineering:capacitor_lv
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1106 -60 1090
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1105 -60 1090 powergrid:device_connector facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1100 -60 1090 120
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1100 -60 1090 0 1105 -60 1090 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1105 -60 1090 1 1100 -60 1090 1
+waitlog \[zpwg3\] done 20
+> zpwg3 feget 1106 -60 1090 west
+waitlog \[zpwg3\] done 20
+sleep 5
+> zpwg3 feget 1106 -60 1090 west
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1105 -60 1090
+waitlog \[zpwg3\] done 20
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look connector stays placed (be 1105 not air); capacitor FE rises between the feget reads; record FE/tick and connector current
+
+## SQ-PWG-34 | grounding rods: test rod on dirt vs reference in copper; then copper under the test rod
+> fill 1118 -63 1126 1122 -61 1130 minecraft:copper_block
+> zpwg3 place 1120 -60 1128 powergrid:grounding_rod
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1110 -60 1115 powergrid:grounding_rod
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1114 -60 1120 10
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1114 -60 1123 powergrid:current_gauge
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1120 0 1110 -60 1115 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1120 1 1114 -60 1123 0
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1114 -60 1123 1 1120 -60 1128 0
+waitlog \[zpwg3\] done 20
+sleep 4
+> zpwg3 be 1110 -60 1115
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1114 -60 1123
+waitlog \[zpwg3\] done 20
+> fill 1108 -63 1113 1112 -61 1117 minecraft:copper_block
+sleep 4
+> zpwg3 be 1110 -60 1115
+waitlog \[zpwg3\] done 20
+> zpwg3 be 1114 -60 1123
+waitlog \[zpwg3\] done 20
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look first current ~10/5001 A; after the copper fill current rises and test rod R (T0 V / I) falls; record both
+
+## SQ-PWG-36 | P4 recipes (47) and config keys (generator, motor, stress values)
+pace 1
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] done 20
+shell s=pwg5/serverconfig/powergrid-server.toml; grep -n -A1 -E 'rotorKp|rotorKd|rotorRPMMax|rotorAssemblyMaxSize|dangerousGenerators|torqueForStress|motorDynamicResistance|motorMinimumLoad|windingCoilConstant|fieldSaturationCurrent' $s; grep -n -E '^\s*(electric_motor|constant_speed_motor|servo|generator_[a-z_]+|variac|rheostat) =' $s; m=0; for k in 'rotorKp = 0.85' 'rotorKd = 0.002' 'rotorRPMMax = 272' 'rotorAssemblyMaxSize = 8' 'dangerousGenerators = true' 'torqueForStress = 15.0' 'motorDynamicResistance = true' 'motorMinimumLoad = 0.05' 'windingCoilConstant = 5.0' 'fieldSaturationCurrent = 2.0' 'generator_clutch = 32.0' 'generator_induction_rotor = 32.0' 'generator_large_induction_rotor = 128.0' 'generator_commutator = 8.0' 'generator_vertical_commutator = 8.0' 'variac = 0.0' 'rheostat = 0.0' 'electric_motor = 64.0' 'constant_speed_motor = 64.0' 'servo = 32.0'; do grep -qF -- "$k" $s || { echo "MISSING $k"; m=1; }; done; exit $m
+expect \[zpwg3\] recipes 47$
+expect recipe powergrid:mechanical_crafting/electric_motor type=create:mechanical_crafting
+expect recipe powergrid:mechanical_crafting/generator_induction_rotor type=
+expect recipe powergrid:mechanical_crafting/generator_large_induction_rotor type=
+expect recipe powergrid:item_application/conductive_casing type=create:item_application
+expect recipe powergrid:crafting/constant_speed_motor type=
+expect recipe powergrid:crafting/generator_clutch type=
+expect recipe powergrid:crafting/generator_housing type=
+expect recipe powergrid:crafting/rheostat type=
+expect recipe powergrid:crafting/variac type=
+expect recipe powergrid:crafting/servo type=
+count recipe powergrid:\S*_from_conversion type= == 4
+expect recipe powergrid:\S*/contactor type=
+expect recipe powergrid:\S*/cord_junction type=
+expect recipe powergrid:\S*/electromagnet type=
+expect recipe powergrid:\S*/fuse_holder type=
+expect recipe powergrid:\S*/hv_breaker type=
+expect recipe powergrid:\S*/multimeter type=
+expect recipe powergrid:\S*/mv_switch type=
+expect recipe powergrid:\S*/power_resistor type=
+expect recipe powergrid:\S*/socket type=
+expect recipe powergrid:\S*/voltage_gauge type=
+expect recipe powergrid:mechanical_crafting/carbon_pile_coil type=
+reject recipe powergrid:mechanical_crafting/generator_commutator type=
+reject \[zpwg\w*\] error
+look shell output: config lines as listed (exit 0 = all 20 key = value pairs present)
+
+## SQ-PWG-37 | PWG-06 electric motor speed at 120, 182, 258 V; AC flicker with a press on the shaft
+> zpwg3 src 1100 -60 1150 120
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1150 powergrid:current_gauge
+> zpwg3 place 1106 -60 1150 powergrid:electric_motor facing=east
+> zpwg3 place 1106 -60 1152 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1150 0 1103 -60 1150 0
+> zpwg3 w 1103 -60 1150 1 1106 -60 1150 0
+> zpwg3 w 1106 -60 1150 1 1100 -60 1150 1
+> zpwg3 w 1106 -60 1150 0 1106 -60 1152 0
+> zpwg3 w 1106 -60 1150 1 1106 -60 1152 1
+sleep 2
+> zpwg4 kin 1106 -60 1150
+> zpwg3 be 1103 -60 1150
+> zpwg3 be 1106 -60 1152
+> zpwg3 src 1100 -60 1150 182
+sleep 2
+> zpwg4 kin 1106 -60 1150
+> zpwg3 be 1103 -60 1150
+> zpwg3 be 1106 -60 1152
+> zpwg3 src 1100 -60 1150 258
+sleep 2
+> zpwg4 kin 1106 -60 1150
+> zpwg3 be 1103 -60 1150
+> zpwg3 be 1106 -60 1152
+> zpwg3 place 1107 -60 1150 create:shaft axis=x
+> zpwg3 place 1108 -60 1150 create:mechanical_press facing=east
+> zpwg3 src 1100 -60 1150 258 0.5
+pace 0
+repeat 10
+> zpwg4 kin 1106 -60 1150
+sleep 2
+end
+pace 1
+> zpwg3 be 1107 -60 1150
+> zpwg3 be 1108 -60 1150
+expect \[zpwg4\] .*accessor=true
+expect \[zpwg3\] be Block\{create:shaft\}
+expect \[zpwg3\] be Block\{create:mechanical_press\}
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look generated= vs 0.003835 x Vm^2 (about 55 / 127 / 255 at 120 / 182 / 258 V); capacitySU = 64 x speed; current gauge about Vm / 512 (0.23 / 0.36 / 0.50 A within 10 %); AC reads: speed follows the source and changes sign; press and shaft still placed
+
+## SQ-PWG-37cs | PWG-06 constant speed motor at 258, 100, 10 V (part of SQ-PWG-37)
+> zpwg3 src 1100 -60 1155 258
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1106 -60 1155 powergrid:constant_speed_motor facing=east
+> zpwg3 w 1100 -60 1155 0 1106 -60 1155 0
+> zpwg3 w 1106 -60 1155 1 1100 -60 1155 1
+> zpwg3 scroll 1106 -60 1155 64
+sleep 2
+> zpwg4 kin 1106 -60 1155
+> zpwg3 src 1100 -60 1155 100
+sleep 2
+> zpwg4 kin 1106 -60 1155
+> zpwg3 src 1100 -60 1155 10
+sleep 2
+> zpwg4 kin 1106 -60 1155
+count \[zpwg4\] speed=64 .*generated=64 overstressed >= 2
+expect \[zpwg4\] speed=0 theoretical
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look capacityAdded about 255 at 258 V (network capacitySU about 16320), about 37 at 100 V (2368 SU); speed=0 at 10 V
+
+## SQ-PWG-38 | PWG-07 part A: motor at 258 V driving 0, 4 and 9 presses
+> zpwg3 src 1100 -60 1160 258
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1160 powergrid:current_gauge
+> zpwg3 place 1106 -60 1160 powergrid:electric_motor facing=east
+> zpwg3 place 1106 -60 1162 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1160 0 1103 -60 1160 0
+> zpwg3 w 1103 -60 1160 1 1106 -60 1160 0
+> zpwg3 w 1106 -60 1160 1 1100 -60 1160 1
+> zpwg3 w 1106 -60 1160 0 1106 -60 1162 0
+> zpwg3 w 1106 -60 1160 1 1106 -60 1162 1
+sleep 2
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+> zpwg3 place 1107 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1108 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1109 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1110 -60 1160 create:mechanical_press facing=east
+sleep 2
+> zpwg4 kin 1107 -60 1160
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+> zpwg3 place 1111 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1112 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1113 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1114 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1115 -60 1160 create:mechanical_press facing=east
+sleep 2
+> zpwg4 kin 1107 -60 1160
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+expect \[zpwg4\] speed=255 .*generated=255 overstressed
+expect \[zpwg4\] network capacitySU=16320 stressSU=0 members
+expect \[zpwg4\] .*overstressed=true
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look record RPM, SU, V, A per step: 0 presses about 0.50 A at 258 V; 4 presses stressSU = 4 x k x 255 (8160 at k = 8), current = Vm / (25.6 / (4k / 64)) (about 5.0 A, 10 %); 9 presses overstressed, current about Vm / 25.6 (about 10 A)
+
+## SQ-PWG-38B | PWG-08 part B: generator line fed by a creative motor at 64, 128, 256 RPM, 30 V excitation, 10 ohm load
+> zpwg3 place 1100 -58 1180 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -58 1180 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1103 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1104 -58 1180 powergrid:generator_commutator facing=east
+> zpwg4 wind 1102 -57 1180 1103 -57 1180 y
+> zpwg4 wind 1102 -59 1180 1103 -59 1180 y
+> zpwg3 place 1101 -57 1180 powergrid:device_connector facing=east
+> zpwg3 place 1101 -59 1180 powergrid:device_connector facing=east
+> zpwg3 be 1101 -57 1180
+> zpwg3 be 1101 -59 1180
+> zpwg3 src 1098 -58 1183 30
+> zpwg3 w 1098 -58 1183 0 1101 -57 1180 0
+> zpwg3 w 1101 -57 1180 1 1101 -59 1180 0
+> zpwg3 w 1101 -59 1180 1 1098 -58 1183 1
+> zpwg3 place 1107 -60 1180 powergrid:current_gauge
+> zpwg3 place 1110 -60 1180 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1180 36
+> zpwg3 place 1110 -60 1182 powergrid:voltage_gauge
+> zpwg3 w 1104 -58 1180 0 1107 -60 1180 0
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+> zpwg3 w 1110 -60 1180 0 1110 -60 1182 0
+> zpwg3 w 1110 -60 1180 1 1110 -60 1182 1
+sleep 2
+> zpwg4 kin 1102 -57 1180
+> zpwg3 scroll 1100 -58 1180 64
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 128
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 256
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+count \[zpwg4\] wind 2 blocks axis=x along=true magnetic=y$ == 2
+count \[zpwg3\] be Block\{powergrid:device_connector\} >= 2
+expect \[zpwg4\] .*impact=104 capacityAdded
+expect \[zpwg4\] network capacitySU=\S+ stressSU=6656 members
+expect \[zpwg4\] network capacitySU=\S+ stressSU=13312 members
+expect \[zpwg4\] network capacitySU=\S+ stressSU=26624 members
+reject \[zpwg4\] winding I=\S+ field=none
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look winding I about 1.0 A, field = f(I) (6.60 at 1.0 A, 5 %); rotor induction field = winding field / 2; rotor rpm within 5 % of clutch speed; commutator V 0.6 to 1.0 of 2 x field x RPM x pi / 30 (about 44 / 88 / 177 V at 1 A); gauge A = gauge V / 10 (5 %); V(128)/V(64) and V(256)/V(128) 1.7 to 2.3; record RPM, SU, V, A, rotor power vs V x A per speed
+
+## SQ-PWG-39 | PWG-10 generator load on the -38 B line at 256 RPM: 1 ohm, redstone 15 decouples, back to 10 ohm
+> zpwg3 res 1110 -60 1180 27
+waitlog \[zpwg3\] done 20
+sleep 3
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> setblock 1101 -58 1179 minecraft:redstone_block
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> setblock 1101 -58 1179 minecraft:air
+> zpwg3 res 1110 -60 1180 36
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+expect \[zpwg4\] network capacitySU=\S+ stressSU=26624 members
+expect \[zpwg4\] .*impact=0 capacityAdded
+expect \[zpwg4\] network capacitySU=\S+ stressSU=0 members
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look 1 ohm: current up (about EMF / 4, under 80 A), rotor rpm under 256 (record gap), clutch load toward 1 and redstoneOut up, stressSU stays 26624; redstone: clutch impact 0, stressSU 0, rotor rpm and commutator V fall; last reads: rotor within 5 % of 256, V back to the SQ-PWG-38B 256 RPM value
+
+## SQ-PWG-40 | spinning_rotor: large induction rotor at 256 RPM kills a husk in a glass pocket, control husk unhurt
+# peaceful (scratch default) discards a summoned husk at once: easy for this row only
+> difficulty easy
+> zpwg3 place 1100 -60 1200 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -60 1200 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -60 1200 powergrid:generator_large_induction_rotor axis=x
+> zpwg3 scroll 1100 -60 1200 256
+sleep 5
+> zpwg4 kin 1102 -60 1200
+> fill 1101 -60 1201 1103 -58 1202 minecraft:glass
+> fill 1102 -60 1201 1102 -59 1201 minecraft:air
+> summon minecraft:husk 1102.5 -60 1201.5 {NoAI:1b,PersistenceRequired:1b,CustomName:'"rotortest"'}
+> summon minecraft:husk 1102.5 -60 1204.5 {NoAI:1b,PersistenceRequired:1b,CustomName:'"rotorcontrol"'}
+pace 0
+repeat 10
+> zpwg4 hp rotortest
+> zpwg4 hp rotorcontrol
+sleep 1
+end
+pace 1
+> difficulty peaceful
+expect died: .*(rotortest was killed in a generator accident|death\.attack\.spinning_rotor)
+expect \[zpwg4\] hp count 0
+reject \[zpwg4\] hp rotorcontrol health=(?!20 )
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look rotor rpm near 256; rotortest health falls (about 4.7 a hit); rotorcontrol keeps 20
+
+## SQ-PWG-41 | clutch motor mode on the -38 B line: 60 V on the commutator turns the rotor and a press; back to generator
+> setblock 1100 -58 1180 minecraft:air
+> zpwg3 place 1100 -58 1180 create:shaft axis=x
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1099 -58 1180 create:mechanical_press facing=east
+> zpwg4 clutch 1101 -58 1180 motor
+> setblock 1110 -60 1180 minecraft:air
+> zpwg3 src 1110 -60 1180 60
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+sleep 10
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg4 kin 1099 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg4 clutch 1101 -58 1180 generator
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1099 -58 1180
+> zpwg3 be 1099 -58 1180
+> zpwg3 be 1100 -58 1180
+expect \[zpwg4\] clutch motor$
+expect \[zpwg4\] clutch generator$
+expect \[zpwg3\] be Block\{create:mechanical_press\}
+expect \[zpwg3\] be Block\{create:shaft\}
+expect \[zpwg4\] .*generated=0 overstressed
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look motor mode: rotor rpm settles (about 87 at 1 A field; record), clutch generated = rotor RPM (integer) = press speed, capacitySU = 104 x RPM, stressSU = k x RPM, current gauge non-zero; generator mode: clutch generated=0, press speed 0
+
+## SQ-PWG-42 | PWG-09 self-excited generator at Z 1210: field loop from the commutator through 100 ohm, 128 then 256 RPM
+> zpwg3 place 1100 -58 1210 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -58 1210 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -58 1210 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1103 -58 1210 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1104 -58 1210 powergrid:generator_commutator facing=east
+> zpwg4 wind 1102 -57 1210 1103 -57 1210 y
+> zpwg4 wind 1102 -59 1210 1103 -59 1210 y
+> zpwg3 place 1101 -57 1210 powergrid:device_connector facing=east
+> zpwg3 place 1101 -59 1210 powergrid:device_connector facing=east
+> zpwg3 place 1107 -60 1210 powergrid:creative_resistor
+> zpwg3 res 1107 -60 1210 45
+> zpwg3 w 1104 -58 1210 0 1101 -57 1210 0
+> zpwg3 w 1101 -57 1210 1 1101 -59 1210 0
+> zpwg3 w 1101 -59 1210 1 1107 -60 1210 0
+> zpwg3 w 1107 -60 1210 1 1104 -58 1210 1
+> zpwg3 scroll 1100 -58 1210 128
+sleep 10
+> zpwg4 kin 1102 -57 1210
+> zpwg4 kin 1102 -58 1210
+> zpwg4 kin 1104 -58 1210
+> zpwg3 scroll 1100 -58 1210 256
+sleep 10
+> zpwg4 kin 1102 -57 1210
+> zpwg4 kin 1102 -58 1210
+> zpwg4 kin 1104 -58 1210
+count \[zpwg4\] wind 2 blocks axis=x along=true magnetic=y$ == 2
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look 128 RPM: winding I near 0 (residual); 256 RPM: winding I settles near 2 A and commutator V near 250 V, or stays at residual (then SQ-PWG-42s decides); winding thermal well under overheat
+
+## SQ-PWG-42s | SQ-PWG-42 with the two commutator wires swapped (other polarity; always run, records both)
+# the commutator is replaced to drop its two wires (the rotor assembly re-forms), then rewired T1 -> field, resistor -> T0
+> setblock 1104 -58 1210 minecraft:air
+> zpwg3 place 1104 -58 1210 powergrid:generator_commutator facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 w 1104 -58 1210 1 1101 -57 1210 0
+> zpwg3 w 1107 -60 1210 1 1104 -58 1210 0
+sleep 10
+> zpwg4 kin 1102 -57 1210
+> zpwg4 kin 1102 -58 1210
+> zpwg4 kin 1104 -58 1210
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look 256 RPM, swapped polarity: winding I and commutator V; exactly one of SQ-PWG-42 / -42s should build (I near 2 A, V near 250 V); record which
+
+## SQ-PWG-43 | rheostat (DC 10 V), variac (AC 100 V, 100 ohm load), servo step and fix B9
+> zpwg3 place 1103 -60 1230 powergrid:rheostat facing=north
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -59 1230 create:creative_motor facing=down
+> zpwg3 src 1100 -60 1230 10
+> zpwg3 place 1106 -60 1232 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1230 0 1103 -60 1230 0
+> zpwg3 w 1103 -60 1230 2 1100 -60 1230 1
+> zpwg3 w 1103 -60 1230 1 1106 -60 1232 0
+> zpwg3 w 1103 -60 1230 2 1106 -60 1232 1
+sleep 1
+> zpwg4 kin 1103 -60 1230
+> zpwg3 be 1106 -60 1232
+> zpwg3 scroll 1103 -59 1230 8
+sleep 3
+> zpwg3 scroll 1103 -59 1230 0
+sleep 1
+> zpwg4 kin 1103 -60 1230
+> zpwg3 be 1106 -60 1232
+# the row's fallback (-8 if +8 did not move the arm), always run: record both
+> zpwg3 scroll 1103 -59 1230 -8
+sleep 3
+> zpwg3 scroll 1103 -59 1230 0
+sleep 1
+> zpwg4 kin 1103 -60 1230
+> zpwg3 be 1106 -60 1232
+> zpwg3 place 1103 -60 1240 powergrid:variac facing=north
+> zpwg3 place 1103 -59 1240 create:creative_motor facing=down
+> zpwg3 src 1100 -60 1240 100 0.5
+> zpwg3 place 1106 -60 1240 powergrid:creative_resistor
+> zpwg3 res 1106 -60 1240 45
+> zpwg3 place 1106 -60 1242 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1240 0 1103 -60 1240 0
+> zpwg3 w 1103 -60 1240 1 1100 -60 1240 1
+> zpwg3 w 1103 -60 1240 2 1106 -60 1240 0
+> zpwg3 w 1106 -60 1240 1 1103 -60 1240 1
+> zpwg3 w 1106 -60 1240 0 1106 -60 1242 0
+> zpwg3 w 1106 -60 1240 1 1106 -60 1242 1
+sleep 1
+> zpwg4 kin 1103 -60 1240
+pace 0
+repeat 5
+> zpwg3 be 1106 -60 1242
+sleep 0.2
+end
+pace 1
+> zpwg3 scroll 1103 -59 1240 8
+sleep 3
+> zpwg3 scroll 1103 -59 1240 0
+sleep 1
+> zpwg4 kin 1103 -60 1240
+pace 0
+repeat 5
+> zpwg3 be 1106 -60 1242
+sleep 0.2
+end
+pace 1
+> zpwg3 scroll 1103 -59 1240 -8
+sleep 3
+> zpwg3 scroll 1103 -59 1240 0
+sleep 1
+> zpwg4 kin 1103 -60 1240
+pace 0
+repeat 5
+> zpwg3 be 1106 -60 1242
+sleep 0.2
+end
+pace 1
+> zpwg3 place 1103 -60 1250 powergrid:servo facing=east
+> zpwg3 src 1100 -60 1250 120
+> zpwg3 place 1100 -60 1253 powergrid:current_gauge
+> zpwg3 w 1100 -60 1250 0 1100 -60 1253 0
+> zpwg3 w 1100 -60 1253 1 1103 -60 1250 0
+> zpwg3 w 1103 -60 1250 1 1100 -60 1250 1
+> zpwg3 src 1106 -60 1253 0
+> zpwg3 w 1106 -60 1253 0 1103 -60 1250 2
+> zpwg3 w 1106 -60 1253 1 1103 -60 1250 1
+sleep 2
+> zpwg3 src 1106 -60 1253 2.5
+pace 0
+repeat 8
+> zpwg4 kin 1103 -60 1250
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1100 -60 1253
+# fix B9: unpowered servo given a 5 V target, then powered again
+> zpwg3 src 1100 -60 1250 0
+sleep 1
+> zpwg3 src 1106 -60 1253 5
+sleep 2
+> zpwg4 kin 1103 -60 1250
+> zpwg3 src 1100 -60 1250 120
+pace 0
+repeat 12
+> zpwg4 kin 1103 -60 1250
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1100 -60 1253
+expect \[zpwg4\] tuned arm=1 ratio=0\.99
+expect \[zpwg4\] .*generated=-?(29|3[0-5])(\.\d+)? overstressed
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look rheostat: arm 0.2..0.9 after the turn that moved it, holds after the motor stops, gauge / 10 = ratio (0.02); variac: gauge peak about ratio x 100 V (10 %) before and after; servo: generated about +-32 within 10 ticks of the 2.5 V step, 0 after about 25 ticks, gauge then about 1.9 A; B9: unpowered generated=0, powered again moves within 10 ticks, then idle current
+
+## SQ-PWG-44pre | restore the -38 B line after -41: creative motor 256 RPM, 10 ohm load with its gauge (not a row)
+> setblock 1099 -58 1180 minecraft:air
+> setblock 1100 -58 1180 minecraft:air
+> zpwg3 place 1100 -58 1180 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 scroll 1100 -58 1180 256
+> zpwg4 clutch 1101 -58 1180 generator
+> setblock 1110 -60 1180 minecraft:air
+> zpwg3 place 1110 -60 1180 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1180 36
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+> zpwg3 w 1110 -60 1180 0 1110 -60 1182 0
+> zpwg3 w 1110 -60 1180 1 1110 -60 1182 1
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1110 -60 1182
+expect \[zpwg4\] network capacitySU=\S+ stressSU=26624 members
+reject \[zpwg\w*\] error
+look rotor near 256 and gauge near the SQ-PWG-38B 256 RPM value before SQ-PWG-44
+
+## SQ-PWG-44 | PWG-11 carbon pile regulator on the -38 B line at 256 RPM: 100 vs 10 ohm load without and with it
+> zpwg3 res 1110 -60 1180 45
+waitlog \[zpwg3\] done 20
+sleep 3
+> zpwg3 be 1110 -60 1182
+> zpwg3 res 1110 -60 1180 36
+sleep 3
+> zpwg3 be 1110 -60 1182
+> zpwg3 place 1097 -60 1186 powergrid:carbon_pile_coil
+> zpwg3 place 1097 -59 1186 minecraft:coal_block
+sleep 1
+> zpwg3 be 1097 -59 1186
+# the row's fallback, always run (a no-op if the coal already turned): record the be line above
+> zpwg3 place 1097 -59 1186 powergrid:carbon_pile
+> setblock 1098 -58 1183 minecraft:air
+> zpwg3 src 1098 -58 1183 60
+> zpwg3 w 1098 -58 1183 0 1097 -60 1186 2
+> zpwg3 w 1097 -60 1186 3 1101 -57 1180 0
+> zpwg3 w 1101 -59 1180 1 1098 -58 1183 1
+> zpwg3 place 1100 -60 1186 powergrid:creative_resistor
+> zpwg3 res 1100 -60 1186 54
+> zpwg3 w 1104 -58 1180 0 1100 -60 1186 0
+> zpwg3 w 1100 -60 1186 1 1097 -60 1186 0
+> zpwg3 w 1097 -60 1186 1 1104 -58 1180 1
+> zpwg3 res 1110 -60 1180 45
+sleep 5
+> zpwg3 be 1110 -60 1182
+> zpwg3 be 1097 -60 1186
+> zpwg3 res 1110 -60 1180 36
+sleep 5
+> zpwg3 be 1110 -60 1182
+> zpwg3 be 1097 -60 1186
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look load V at 100 and 10 ohm without (first two gauge reads) and with the regulator (last two); the with-regulator difference is smaller (a few volts); record both differences and the pile resistance from the coil's goggle lines

@@ -1,0 +1,22 @@
+pace 1
+
+## SQ-HH-321 | `raw_rock_salt_block: [1-9]\d{2,}` (at least 100 blocks over 144 deser
+# setup/shell: qrun.py toml
+> locate biome minecraft:desert
+waitlog nearest minecraft:desert is at 300
+capture D is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {D1-96} {D3-96} {D1+95} {D3+95}
+sleep 120
+> zhh2 countset {D1-96} -60 {D3-96} {D1+95} 60 {D3+95} salt:raw_rock_salt_block,salt:salt_cluster,minecraft:calcite
+look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY -40 ;; saltCaveMaxY 30 ;; cp ;; OUT/srv/config/
+look `raw_rock_salt_block: [1-9]\d{2,}` (at least 100 blocks over 144 desert chunks with rarity 1, J33 placed feature plus biome modifier; `canPlace` rejects some sites over water or lava, not most)
+
+## SQ-HH-322 | `raw_rock_salt_block: 0` (salt caves stay in their biomes; no `minecra
+> execute positioned {D1+2000} 70 {D3} run locate biome minecraft:forest
+waitlog nearest minecraft:forest is at 300
+capture G is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {G1-64} {G3-64} {G1+63} {G3+63}
+sleep 60
+> zhh2 countset {G1-64} -60 {G3-64} {G1+63} 60 {G3+63} salt:raw_rock_salt_block
+look `raw_rock_salt_block: 0` (salt caves stay in their biomes; no `minecraft:biome` filter in the placement, the biome modifier decides, J34, J35). Far enough that a desert cave's 16-block overhang cannot reach
+

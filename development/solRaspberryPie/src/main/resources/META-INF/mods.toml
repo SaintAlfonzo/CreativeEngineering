@@ -1,0 +1,44 @@
+# Spice of Life: Raspberry Pie Addition. The dollar-brace values come from gradle.properties (mod_*) and the root
+# gradle.properties (versions), expanded by build-logic's ce.forge-mod.
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+credits="Spice of Life: Apple Pie Edition by tarinoita, forked from the Potato Edition (Kevun1) and the Carrot Edition team. No code of theirs is copied."
+itemIcon="solraspberrypie:liquid_diet_log"
+description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Apple Pie 2.2.0 exactly (its jar reports version 1.19.2-2.2.0): mixins and accessors on its private members.
+[[dependencies.${mod_id}]]
+modId="solapplepie"
+mandatory=true
+versionRange="[1.19.2-2.2.0]"
+ordering="AFTER"
+side="BOTH"
+
+# JEI: keeps its overlay clear of the inventory widget.
+[[dependencies.${mod_id}]]
+modId="jei"
+mandatory=false
+versionRange="[11,)"
+ordering="NONE"
+side="CLIENT"

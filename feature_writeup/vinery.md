@@ -253,6 +253,10 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - dirt tier: Vinery dirt/grass slabs and loam
 - **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in patcherMod `StuckInBlock` (display only).
 - **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativecompat:flower_box_plants` and sits centred on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
+- **Lava Walker** (port, 2026-11-12, [raspberry_pie.md](raspberry_pie.md) 4): standing on lava burns like a magma block
+  (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
+  burns as usual. `LavaWalkerEffect.applyEffectTick`. Built in Creative Brewing source, jar not rebuilt yet; test
+  CQ-RP-27.
 - **Textures:** `vinery:item/mash` is the generic fallback texture for incomplete sequenced-assembly items ([transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js)).
 
 ## 4. Limits and decisions
@@ -330,3 +334,4 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
   behaviour is in [alcohol.md](alcohol.md) Part B. Kept as the reference for what changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
+- 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.

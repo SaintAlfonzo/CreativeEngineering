@@ -1,0 +1,260 @@
+# r1113 chunk 3, boot B1: group B fresh normal world, seed 8675309 (prep_srv default), full pack.
+# Server: bash tools/scratch_query/prep_srv.sh OUT c3b1 B difficulty=normal
+# Before boot: copy tools/scratch_query/c3_probe.js, zp_probe.js, zact_probe.js into OUT/srv/kubejs/server_scripts/ as
+#   zz_c3_probe.js, zz_zp_probe.js, zz_zact_probe.js. No config edit (c3_b2.qb is the control boot for SQ-FCK-07 / -08).
+# Rows: SQ-ENGM-01 to -04 (fresh world, full pack), SQ-CBP-11, SQ-CDW-02, SQ-IDS-01, -02, SQ-CIF-02 (after half),
+# SQ-CIF-03, SQ-MIN-07, SQ-FCK-07, SQ-FCK-08, SQ-HSC-89. The seed's spawn is ocean (r1106 note): every land row locates
+# its biome first (capture) and forceloads a box there; boxes are released after their count.
+# Not here: SQ-IDS-02 `/cdevgen run food_dict` (srv/ has no tools/: the generator would fail; never point it at the
+#   instance) and the perf suite smoke; SQ-ENGM-04 Ore Excavation undo (needs the client key); SQ-CIF-02 old chest.
+pace 1
+
+## SQ-C3B-setup | gamerules, spawn platform, bot (not a test row)
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> time set noon
+> weather clear
+> forceload add 0 0
+> setblock 0 199 0 minecraft:stone
+> setblock 0 199 2 minecraft:stone
+> pbot spawn cb 0.5 200 0.5 minecraft:overworld survival
+sleep 3
+> zc3 bstate 0 199 0
+expect bstate 0 199 0 Block\{minecraft:stone\}
+
+## SQ-ENGM-01 | Done; no mixin or moved-class error; Worldgen and Equipment mod data packs lines
+bootexpect Done \(
+bootreject Mixin apply failed|InvalidMixinException
+bootreject ClassNotFoundException.*com\.SaintAlfonzo
+bootreject CEConfig not on classpath|NCH.*not on classpath
+bootexpect \[creativeworldgen\] mod data packs on: \[(?=.*farmersdelight)(?=.*fungidelight)(?=.*miners_delight)(?=.*upgrade_aquatic)(?=.*vintagedelight)
+bootexpect \[creativeequipment\] mod data packs on: \[.*felsic_gear
+shell grep -hE "mod data packs|NCH.*not on classpath|CEConfig" logs/latest.log logs/kubejs/startup.log | cut -c1-250
+shell grep -cE "Mixing [A-Za-z_.]*(creativecompat|creativemagic|creativeengineering)" logs/latest.log
+look Worldgen's line also has biomesoplenty now (its pack folder exists since the row was written); the mixin count is for the record
+
+## SQ-CDW-02 | all mods present: wild crop packs line off none, no skip line; rubber trees near a jungle
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): none
+kjsreject \[wild-crops\].*mod not loaded, skipped
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell grep -h "\[wild-crops\]" logs/kubejs/server.log | cut -c1-200 | head -6
+> locate biome minecraft:jungle
+waitlog nearest minecraft:jungle is at|Could not find 300
+capture JG minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+> forceload add {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+sleep 90
+> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
+waitlog \[zq\] count myrtrees:rubberwood_log: \d+ 600
+expect \[zq\] count myrtrees:rubberwood_log: [1-9]
+> forceload remove {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
+
+## SQ-CBP-11 | transitions moved to Equipment (37); felsic_gear pack on; no incomplete or duplicate error; felsic ore in End highlands; block drops 2-4 scrap
+shell grep -hE "transition items|end gear transition|mod data packs" logs/kubejs/startup.log logs/latest.log | cut -c1-200
+shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log
+bootreject incomplete\('[^']*'\) not registered
+bootreject (Duplicate|duplicate).*kubejs:incomplete_
+> datapack list
+waitlog data packs? enabled 30
+expect felsic_gear
+> zq bytype create:sequenced_assembly
+waitlog \[zq\] bytype create:sequenced_assembly: \d+ 60
+> execute in minecraft:the_end run locate biome minecraft:end_highlands
+waitlog nearest minecraft:end_highlands is at|Could not find 300
+capture EH minecraft:end_highlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end run forceload add {EH1-40} {EH3-40} {EH1+39} {EH3+39}
+sleep 60
+> zq count {EH1-40} 0 {EH3-40} {EH1+39} 120 {EH3+39} felsic_gear:felsic_block minecraft:the_end
+waitlog \[zq\] count felsic_gear:felsic_block: \d+ 300
+expect \[zq\] count felsic_gear:felsic_block: [1-9]
+> execute in minecraft:the_end run forceload remove {EH1-40} {EH3-40} {EH1+39} {EH3+39}
+> setblock 0 200 2 felsic_gear:felsic_block
+> zact break 0 200 2 minecraft:netherite_pickaxe
+waitlog \[zact\] done 20
+expect \[zact\] break.*creativeequipment:felsic_scrap x[2-4]\b
+look Engineering's own transition count is 67 in the 11-12 pack log (37 lower than before the move); Equipment 37; data pack list shows the felsic_gear pack enabled; felsic scrap id is creativeequipment:felsic_scrap. If the ore is a different block than felsic_gear:felsic_block, count 0 is a batch fault: read the pack's placed feature
+
+## SQ-IDS-01 | owner-id lint 0 flagged; no duplicate WTHIT plugin or JEI uid line
+shell cd "$INST" && python3 tools/id_owner_lint.py | tail -1
+shell cd "$INST" && python3 tools/id_owner_lint.py | tail -1 | grep -q "^0 flagged"
+bootreject [Dd]uplicate (plugin|uid)|already registered
+look plugin_toggle.json5 half (client config) is CQ-IDS-01's
+
+## SQ-ENGM-02 | creativeworldgen packs listed; sky island locatable; driftwood, morels, cave carrots present near spawn
+> datapack list
+waitlog data packs? enabled 30
+expect creativeworldgen
+> locate structure creativeworldgen:sky_island
+waitlog (nearest creativeworldgen:sky_island|Could not find) 300
+> locate structure creativeworldgen:waystone_ruin_part
+waitlog (nearest creativeworldgen:waystone_ruin_part|Could not find|no structure|Unknown|Invalid) 300
+> locate biome terralith:scarlet_mountains
+waitlog (nearest terralith:scarlet_mountains|Could not find) 300
+> forceload add -80 -80 79 79
+sleep 60
+> zq count -80 50 -80 79 120 79 upgrade_aquatic:driftwood_log
+waitlog \[zq\] count upgrade_aquatic:driftwood_log: \d+ 300
+> zq count -80 -64 -80 79 120 79 fungidelight:morel_mushroom
+waitlog \[zq\] count fungidelight:morel_mushroom: \d+ 300
+> zq count -80 -64 -80 79 60 79 miners_delight:wild_cave_carrots
+waitlog \[zq\] count miners_delight:wild_cave_carrots: \d+ 300
+> forceload remove -80 -80 79 79
+look sky island located (ids are creativeworldgen: since the Worldgen carve; the row's creativeengineering: ids are gone); the waystone ruin is a meta structure (its part is the only registered structure: a "Could not find" is not a FAIL, use /cdevplace later); Scarlet Mountains is an Overworld Terralith biome (the row's Nether execute is wrong); the counts near spawn (mostly ocean) are for the record against SQ-WGE / SQ-CDW census numbers: driftwood > 0 expected on this ocean spawn
+
+## SQ-ENGM-03 | TNT shrapnel spawns (Compat); torch and seed milling recipes under creativedelight:; tags filled; wooden bucket recipe
+> setblock 0 210 0 minecraft:stone
+pace 0
+> summon minecraft:tnt 0 211 0 {Fuse:1}
+sleep 0.4
+> kill @e[type=creativecompat:shrapnel]
+pace 1
+expect Killed [1-9]\d* entit|Killed .*[Ss]hrapnel
+> zq recipes creativedelight:shaped/torch_crafting_animal_fat
+waitlog \[zq\] recipes matching creativedelight:shaped/torch_crafting_animal_fat: 1 30
+> zq recipes creativedelight:createmilling/seeds_bone_meal
+waitlog \[zq\] recipes matching creativedelight:createmilling/seeds_bone_meal: 1 30
+> zq itemtag creativedelight:millable_seeds
+waitlog \[zq\] itemtag creativedelight:millable_seeds \(\d+\) 30
+shell python3 -c "import json;d=json.load(open('$INST/kubejs/exported/tags/item_tags.json'));v=d.get('creativedelight:millable_seeds',[]);print('pack dump millable_seeds',len(v))"
+> zq itemtag vinery:barrel
+> zq itemtag forge:mulch/green
+waitlog \[zq\] itemtag forge:mulch/green \(\d+\) 30
+expect itemtag vinery:barrel \([1-9]
+expect itemtag forge:mulch/green \([1-9]
+> zq makes creativedelight:wooden_bucket
+waitlog \[zq\] makes creativedelight:wooden_bucket: [1-9] 30
+look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag creativedelight:millable_seeds (row: creativeengineering:), the wooden bucket creativedelight:wooden_bucket; millable_seeds count equals the pack dump's (11-10). If no shrapnel is killed, the 0.4 s window may have been too long (shrapnel lifetime): rerun with `sleep 0.1` before judging
+
+## SQ-ENGM-04 | [surface] [shrapnel] values in Compat's file as in the old Engineering file (excavation half: client)
+shell grep -nE "^\[(surface|shrapnel|vein_undo)\]" config/creativecompat-common.toml
+shell diff <(git -C "$INST" show 85104427:config/creativeengineering-common.toml | sed -n '/^\[surface\]/,/^\[vein_undo\]/p' | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') <(sed -n '/^\[surface\]/,/^\[vein_undo\]/p' config/creativecompat-common.toml | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') | head -20; echo "diff exit ${PIPESTATUS[0]}"
+look no diff lines (or only keys added since 11-06) between the old Engineering [surface] values and Compat's; the Ore Excavation undo / auto-pickup half needs the client excavation key (not driven by perfBot): left for CQ-ENGM-01
+
+## SQ-IDS-02 | new commands answer, old names unknown
+> ccswap items
+> ccaltime
+> cwglocate batch minecraft:village_plains
+> cwgspawnbox
+> cdevgen status
+> cdevplace preview structures minecraft:*
+> cdevperf
+> cdevdumpnames
+sleep 10
+> ceswap
+> cetime
+> celocate
+> cespawnbox
+> cegen
+> ceplace
+> ceperf
+> cedumpnames
+sleep 3
+count Unknown or incomplete command == 8
+look each new command printed usage or a result (no "Unknown or incomplete command" before the old names); exactly 8 unknowns = the 8 old names. /cdevgen run food_dict and the perf suite smoke are left out (srv/ has no tools/)
+
+## SQ-CIF-02 | Better Beacons potions under creativebrewing: mixes exist; drinking phantom_bane gives Better Beacons Phantom Bane
+> zq potion creativebrewing:long_long_reach
+waitlog \[zq\] potion creativebrewing:long_long_reach registered: 30
+expect potion creativebrewing:long_long_reach registered: true
+> zq potion creativebrewing:long_reach minecraft:redstone
+waitlog \[zq\] done 30
+expect creativebrewing:long_reach \+ minecraft:redstone -> minecraft:potion creativebrewing:long_long_reach
+> clear cb
+> item replace entity cb weapon.mainhand with minecraft:potion{Potion:"creativebrewing:phantom_bane"}
+> zp eat cb
+waitlog \[zp\] done 20
+> zp effects cb
+waitlog \[zp\] effects cb: 20
+expect effects cb: .*better_beacons:phantom_bane
+look old-world half (a chest with creativecommon:long_reach potions from an 11-06 save) not run: no 11-06 build kept to make the save
+
+## SQ-CIF-03 | Farmer's Respite coffee: Caffeinated plus a hidden Phantom Bane of the same length; rest stat not -24000; reset to 0 when it ends
+> effect clear cb
+> zc3 rest cb
+> clear cb
+> item replace entity cb weapon.mainhand with farmersrespite:coffee
+> zp eat cb
+waitlog \[zp\] done 20
+> zp effects cb
+waitlog \[zp\] effects cb: 20
+expect effects cb: .*farmersrespite:caffeinated
+expect effects cb: .*better_beacons:phantom_bane
+capture PB better_beacons:phantom_bane amp \d+ (\d+)t
+> zc3 rest cb
+shell sleep $(( {PB} / 20 + 4 ))
+> zp effects cb
+> zc3 rest cb
+waitlog \[c3\] done 20
+reject rest cb: -2\d{4}
+look Caffeinated and Phantom Bane durations equal; the rest stat after the drink is not near -24000; after Phantom Bane ends the stat reads near 0 (a few seconds of ticks, under about 200). If the coffee item id differs (farmersrespite:coffee is the cup), the eat line says so
+
+## SQ-MIN-07 | fishing-net loot in a river and an ocean: biome-tagged entries (condition registered by Delight, no duplicate-id crash)
+bootreject Duplicate.*biome_tag|already registered.*biome_tag
+> locate biome minecraft:river
+waitlog nearest minecraft:river is at|Could not find 300
+capture RV minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {RV1} {RV3}
+> locate biome minecraft:ocean
+waitlog nearest minecraft:ocean is at|Could not find 300
+capture OC minecraft:ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {OC1} {OC3}
+sleep 20
+repeat 20
+> loot spawn {RV1} 70 {RV3} loot creativedelight:gameplay/fishing_net/kelp
+> loot spawn {OC1} 70 {OC3} loot creativedelight:gameplay/fishing_net/kelp
+end
+sleep 2
+> execute positioned {RV1} 70 {RV3} run kill @e[type=minecraft:item,distance=..3]
+> execute positioned {OC1} 70 {OC3} run kill @e[type=minecraft:item,distance=..3]
+> forceload remove {RV1} {RV3}
+> forceload remove {OC1} {OC3}
+reject Couldn't parse loot table|Unknown loot table|biome_tag.*(not registered|Unknown)
+look the `loot spawn` reply lines ("Dropped N items" or the item list) differ between river and ocean per the table's biome_tag conditions (read the table creativedelight:gameplay/fishing_net/kelp.json for which tag gates which entry); in-game net fishing itself is a client check. Also check sea_grass if kelp has no biome entries
+
+## SQ-FCK-07 | glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
+bootreject glow_lichen.*([Cc]odec|[Ee]rror|Failed)|Failed to parse.*glow_lichen
+> locate biome minecraft:plains
+waitlog nearest minecraft:plains is at|Could not find 300
+capture PL minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PL1-72} {PL3-72} {PL1+71} {PL3+71}
+sleep 90
+> zq count {PL1-72} -64 {PL3-72} {PL1+71} 70 {PL3+71} minecraft:glow_lichen
+waitlog \[zq\] count minecraft:glow_lichen: \d+ 900
+> forceload remove {PL1-72} {PL3-72} {PL1+71} {PL3+71}
+look count here vs SQ-FCK-07c (same seed and box): about 3x or more. The plains spot is the same in both boots (same seed); note both counts
+
+## SQ-FCK-08 | hamimelon and Mini Cantaloupe in desert and badlands about 2.5x the control (c3_b2.qb, SQ-FCK-08c); rules list the _common features
+shell grep -hE "hamimelon_common|mini_cantaloupe_common" logs/kubejs/server.log logs/latest.log | cut -c1-200 | head -4
+> locate biome minecraft:desert
+waitlog nearest minecraft:desert is at|Could not find 300
+capture DS minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DS1-112} {DS3-112} {DS1+111} {DS3+111}
+sleep 150
+> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} fruitsdelight:hamimelon
+waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
+> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} delightful:cantaloupe_plant
+waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+look desert counts (15x15 chunks: the row's 25x25 is over the 256-chunk forceload cap; the same box in both boots)
+
+## SQ-HSC-89 | salt caves in the set biomes: raw rock salt shell (desert box of SQ-FCK-08)
+> zq count {DS1-112} -45 {DS3-112} {DS1+111} 40 {DS3+111} salt:raw_rock_salt_block
+waitlog \[zq\] count salt:raw_rock_salt_block: \d+ 900
+> zq count {DS1-112} -45 {DS3-112} {DS1+111} 40 {DS3+111} minecraft:cave_air
+waitlog \[zq\] count minecraft:cave_air: \d+ 900
+> forceload remove {DS1-112} {DS3-112} {DS1+111} {DS3+111}
+expect \[zq\] count salt:raw_rock_salt_block: [1-9]
+look the box is desert (in #hearthandharvest:has_salt_caves); rarity 24 gives about 9 attempts in 225 chunks; raw rock salt > 0 with cave air: caves generated; "dissolving shell" (water eating the salt) needs a look in game: for the further eval, record the counts. Row group was A; caves need a normal world, so it runs here
+
+## SQ-FCK-08b | badlands half of SQ-FCK-08
+> locate biome minecraft:badlands
+waitlog nearest minecraft:badlands is at|Could not find 300
+capture BD minecraft:badlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BD1-112} {BD3-112} {BD1+111} {BD3+111}
+sleep 150
+> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} fruitsdelight:hamimelon
+waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
+> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} delightful:cantaloupe_plant
+waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+> forceload remove {BD1-112} {BD3-112} {BD1+111} {BD3+111}
+look badlands counts vs SQ-FCK-08bc

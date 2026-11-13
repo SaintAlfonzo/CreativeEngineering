@@ -1,0 +1,87 @@
+# r1112 reruns of r1111 row-text faults with the corrected ids (same group A boot as hh_gear.qb; needs zz_zq_probe.js
+# and zz_hh_gear_probe.js). Summer hat left the farmers_hats tag on purpose (e09e4795); food_type tags are
+# creativedelight:food_type/* since the namespace move.
+pace 2
+
+## SQ-HH-412 | farmers_hats tag: 4 hats, every hat makes a scarecrow
+> zq itemtag hearthandharvest:farmers_hats
+waitlog \[zq\] done 20
+> zq uses hearthandharvest:farmers_hat
+waitlog \[zq\] done 20
+> zq uses wardrobe:farmers_hat_helmet
+waitlog \[zq\] done 20
+> zq uses vinery:straw_hat
+waitlog \[zq\] done 20
+> zq uses simplehats:farmerbrim
+waitlog \[zq\] done 20
+expect itemtag hearthandharvest:farmers_hats \(4\):
+expect farmers_hats .*hearthandharvest:farmers_hat
+expect farmers_hats .*wardrobe:farmers_hat_helmet
+expect farmers_hats .*vinery:straw_hat
+expect farmers_hats .*simplehats:farmerbrim
+reject farmers_hats .*simplehats:summerhat
+count scarecrow >= 4
+
+## SQ-HH-1524 | farmer's hat recipe, stack, tag (4 hats)
+> zq makes hearthandharvest:farmers_hat
+waitlog \[zq\] done 20
+> zq item hearthandharvest:farmers_hat
+waitlog \[zq\] done 20
+> zq itemtag hearthandharvest:farmers_hats
+waitlog \[zq\] done 20
+expect itemtag hearthandharvest:farmers_hats \(4\):
+reject farmers_hats .*summerhat
+look recipe wheat, hay block, wheat; max stack 1, max damage 0
+
+## SQ-HH-1529 | farmer's hat XP on a ripe crop, hat takes no damage (simplehats:farmerbrim)
+> forceload add 896 896 912 912
+> pbot spawn rj 900 -60 900 minecraft:overworld survival
+sleep 4
+> clear rj
+> setblock 902 -61 900 minecraft:farmland
+> setblock 902 -60 900 minecraft:wheat[age=7]
+> item replace entity rj armor.head with simplehats:farmerbrim
+> pbot hold rj minecraft:stick 1
+> zhh5 break rj 902 -60 900
+> zhh5 xp 902 -60 900 4
+> zhh5 hand rj
+> data get entity rj Inventory[{Slot:103b}]
+expect xp=[12]\b
+reject Damage: [1-9]
+> pbot remove rj
+
+## SQ-HH-1590 | food_type tags hold the H&H foods (creativedelight namespace)
+> zq itemtag creativedelight:food_type/handheld
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/baked
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/dairy
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/hazard
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/drink/alcohol
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/sweet/pancake
+waitlog \[zq\] done 20
+> zq itemtag creativedelight:food_type/raw/meat
+waitlog \[zq\] done 20
+expect food_type/handheld .*hot_dog
+expect food_type/handheld .*street_corn
+expect food_type/handheld .*tamale
+expect food_type/baked .*croissant
+expect food_type/baked .*raspberry_scone
+expect food_type/dairy .*goat_cheese_slice
+expect food_type/hazard .*charred_marshmallow_stick
+expect food_type/drink/alcohol .*moonshine
+expect food_type/drink/alcohol .*melon_wine
+expect food_type/sweet/pancake .*waffle
+expect food_type/raw/meat .*raw_sausage
+
+## SQ-OB-03 | farmers_hats tag (hearthandharvest namespace): no summer hat
+> zq itemtag hearthandharvest:farmers_hats
+waitlog \[zq\] done 20
+expect farmers_hats .*hearthandharvest:farmers_hat
+expect farmers_hats .*wardrobe:farmers_hat_helmet
+expect farmers_hats .*vinery:straw_hat
+expect farmers_hats .*simplehats:farmerbrim
+reject farmers_hats .*summerhat

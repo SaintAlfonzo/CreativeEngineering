@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:book" },
+    { "tag": "solraspberrypie:drinks" }
+  ],
+  "result": { "item": "solraspberrypie:liquid_diet_log" }
+}

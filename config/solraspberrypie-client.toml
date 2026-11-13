@@ -1,0 +1,13 @@
+
+[widget]
+	#Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.
+	enabled = true
+	#Locked: the bar stays put and a click opens the diet bonus screen. Toggle in game with Shift+T.
+	locked = true
+	#Bar position relative to the inventory's left edge.
+	#Range: -2000 ~ 2000
+	x = 0
+	#Bar position relative to the inventory's top edge.
+	#Range: -2000 ~ 2000
+	y = 166
+

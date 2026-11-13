@@ -379,6 +379,17 @@
       "apply": "reads the client dump: run /cdevdumpnames first (a client command, so /cdevgen can't run it); F3+T or restart the client"
     },
     {
+      "id": "sol_drink_blacklist",
+      "script": "tools/gen_sol_drink_blacklist.py",
+      "groups": ["food"],
+      "dumps": ["dumptags item"],
+      "outputs": [
+        "defaultconfigs/solapplepie-server.toml",
+        "configs_edited/server_config/solapplepie-server.toml"
+      ],
+      "apply": "new worlds only (defaultconfigs); existing worlds: run with --worlds by hand, then restart (raspberry_pie.md 7)"
+    },
+    {
       "id": "food_catalog",
       "script": "tools/food_catalog.py",
       "groups": ["food"],

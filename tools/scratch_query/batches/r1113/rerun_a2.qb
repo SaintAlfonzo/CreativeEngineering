@@ -1,0 +1,40 @@
+# r1113 rerun boot A2: the r1113ra world of rerun_a.qb restarted (same OUT, same level), group A superflat.
+# Rows: SQ-HH-1551 part 2 (growth with hopsRequireFarmland false; Forge does not live-reload on these scratch servers,
+#   so the key is set before this boot), SQ-HH-1555h (height cap of a hops column, the r1112 verdict's way round the
+#   farmland rule: hops placed first, lattices above; with the rule off the dried farmland does not matter).
+# Before the boot (server stopped after rerun_a.qb):
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/hearthandharvest-common.toml farming hopsRequireFarmland false
+#   (grep the key first: if it sits under another section name, edit that section; the loaded value is printed below)
+# Probes: as rerun_a.qb (already in OUT/srv/kubejs/server_scripts/). After this boot, reset the key to true.
+pace 1
+
+## SQ-HH-1551b | part 2: with hopsRequireFarmland false the same hops on dirt grow (HNH-76)
+bootexpect Done \(
+> forceload add 30980 29980 31080 30060
+sleep 10
+shell grep -nE "hopsRequireFarmland" config/hearthandharvest-common.toml
+> execute if block 31070 -60 30050 hearthandharvest:hops[age=0]
+> gamerule randomTickSpeed 3000
+sleep 12
+> gamerule randomTickSpeed 3
+> execute if block 31070 -60 30050 hearthandharvest:hops[age=4]
+sleep 1
+count Test passed >= 2
+reject Test failed
+
+## SQ-HH-1555h | hops column stops at height 5: a 7th lattice stays empty
+> setblock 31076 -61 30050 minecraft:dirt
+> fill 31076 -60 30051 31076 -53 30051 minecraft:stone
+> setblock 31076 -60 30050 hearthandharvest:hops[age=4,facing=north]
+> fill 31076 -59 30050 31076 -54 30050 vinery:grapevine_lattice[facing=north]
+> execute if block 31076 -59 30050 vinery:grapevine_lattice
+> gamerule randomTickSpeed 3000
+sleep 40
+> gamerule randomTickSpeed 3
+> zq count 31076 -60 30050 31076 -54 30050 hearthandharvest:hops
+waitlog \[zq\] done 20
+> execute if block 31076 -54 30050 vinery:grapevine_lattice
+sleep 1
+expect count hearthandharvest:hops: 6\b
+count Test passed >= 2
+look count 6 (hops at -60 to -55), the top lattice at -54 still empty; a count of 1 means the spread did not start at all (lattice support or the rule)

@@ -2,12 +2,12 @@
 // zz_hh_gear_probe.js, never into the pack. P = player or perfBot bot, TAG = an entity tag set with Tags:[...] at summon.
 //   /zhh5 sneak P on|off        shift key state (perfBot uses then act as shift-use)
 //   /zhh5 interact P TAG        P right-clicks the tagged entity with the main hand (Player.interactOn, fires Forge's EntityInteract)
-//   /zhh5 horse TAG             shoe, speed and jump totals, base, modifiers, effects, health, temper, age
+//   /zhh5 horse TAG             shoe, speed and jump totals, base, on-ground flag, modifiers, effects, health, temper, age
 //   /zhh5 hand P                P's main-hand id, count, damage, NBT
 //   /zhh5 offer P ITEM          total of ITEM in P's inventory
 //   /zhh5 break P X Y Z         survival block break by P (gameMode.destroyBlock)
 //   /zhh5 throw P TICKS         release of the main-hand item after TICKS of charge (Item.releaseUsing)
-//   /zhh5 hurt TAG cactus|berry 1 damage from that source; prints health before and after
+//   /zhh5 hurt TAG cactus|berry 1 damage from that source; prints shod, the bare LivingAttackEvent result, health before and after
 //   /zhh5 xp X Y Z R            total XP in orbs within R, then removes them
 //   /zhh5 items X Y Z R         per-item totals of item entities within R, then removes them
 //   /zhh5 potion ID             a potion's effects: id, duration, amplifier
@@ -18,6 +18,7 @@
     const $ZHand = Java.loadClass('net.minecraft.world.InteractionHand')
     const $ZAttr = Java.loadClass('net.minecraft.world.entity.ai.attributes.Attributes')
     const $ZDmg = Java.loadClass('net.minecraft.world.damagesource.DamageSource')
+    const $ZCTag = Java.loadClass('net.minecraft.nbt.CompoundTag')
     const $ZPos = Java.loadClass('net.minecraft.core.BlockPos')
     const $ZAABB = Java.loadClass('net.minecraft.world.phys.AABB')
     const $ZVec = Java.loadClass('net.minecraft.world.phys.Vec3')
@@ -28,6 +29,8 @@
     const $ZParams = Java.loadClass('net.minecraft.world.level.storage.loot.parameters.LootContextParams')
     const $ZItem = Java.loadClass('net.minecraft.world.entity.item.ItemEntity')
     const $ZOrb = Java.loadClass('net.minecraft.world.entity.ExperienceOrb')
+    let $ZHooks = null
+    try { $ZHooks = Java.loadClass('net.minecraftforge.common.ForgeHooks') } catch (err) { console.info('[zhh5] ForgeHooks not loadable: ' + err) }
     function out(s) { console.info('[zhh5] ' + s) }
     function player(server, name) { return server.getPlayerList().getPlayerByName(name) }
     function tagged(level, tag) {
@@ -59,11 +62,12 @@
             try { jump = h.getAttribute($ZAttr.JUMP_STRENGTH).getValue() } catch (err) { jump = 'none' }
             let temper = ''
             try { temper = h.getTemper() } catch (err) { temper = 'none' }
-            out('shod=' + h.getPersistentData().contains('hearthandharvest:horseshoe') + ' speedBase=' + sp.getBaseValue() + ' speed=' + sp.getValue()
-                + ' jump=' + jump + ' health=' + h.getHealth() + ' temper=' + temper + ' age=' + h.getAge() + ' mods=[' + mods.join(';') + '] effects=[' + eff.join(';') + ']')
+            let fd = h.saveWithoutId(new $ZCTag()).getCompound('ForgeData') // r1111: KubeJS getPersistentData is not Forge's tag
+            out('shod=' + fd.contains('hearthandharvest:horseshoe') + ' speedBase=' + sp.getBaseValue() + ' speed=' + sp.getValue()
+                + ' jump=' + jump + ' ground=' + h.isOnGround() + ' health=' + h.getHealth() + ' temper=' + temper + ' age=' + h.getAge() + ' mods=[' + mods.join(';') + '] effects=[' + eff.join(';') + ']')
         } else if (sub == 'hand') {
             let s = player(server, a[1]).getMainHandItem()
-            out('hand id=' + s.getId() + ' count=' + s.getCount() + ' damage=' + s.getDamageValue() + ' nbt=' + s.getTag())
+            out('hand id=' + s.getId() + ' count=' + s.getCount() + ' damage=' + s.getDamageValue() + ' nbt=' + s.nbt)
         } else if (sub == 'offer') {
             let inv = player(server, a[1]).getInventory(), n = 0
             for (let k = 0; k < inv.getContainerSize(); k++) if (String(inv.getItem(k).getId()) == a[2]) n += inv.getItem(k).getCount()
@@ -77,7 +81,13 @@
         } else if (sub == 'hurt') {
             let e = tagged(level, a[1])
             let before = e.getHealth()
-            let hit = e.hurt(a[2] == 'cactus' ? $ZDmg.CACTUS : $ZDmg.SWEET_BERRY_BUSH, 1)
+            let src = a[2] == 'cactus' ? $ZDmg.CACTUS : $ZDmg.SWEET_BERRY_BUSH, hit
+            // r1112: shod state and the bare Forge LivingAttackEvent result (false = a listener cancelled it), so a
+            // damage that lands can be told apart from a probe path that skips the event
+            let shodNow = e.saveWithoutId(new $ZCTag()).getCompound('ForgeData').contains('hearthandharvest:horseshoe'), ev
+            try { ev = $ZHooks == null ? 'n/a' : $ZHooks.onLivingAttack(e, src, 1) } catch (err) { ev = 'err ' + err }
+            out('hurt ' + a[2] + ' shod=' + shodNow + ' attackEventPasses=' + ev)
+            try { hit = e.attack(src, 1) } catch (err) { hit = 'err ' + err } // r1111: Rhino finds neither 'hurt' nor m_6469_; KubeJS attack(DamageSource, float)
             out('hurt ' + a[2] + ' accepted=' + hit + ' before=' + before + ' after=' + e.getHealth())
         } else if (sub == 'xp') {
             let total = 0

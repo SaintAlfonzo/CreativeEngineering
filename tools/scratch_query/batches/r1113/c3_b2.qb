@@ -1,0 +1,53 @@
+# r1113 chunk 3, boot B2: CONTROL boot for SQ-FCK-07 and SQ-FCK-08 (rows -07c, -08c, -08bc). Group B fresh normal
+# world, seed 8675309, the same boxes as c3_b1.qb (same seed, same locate results), full pack.
+# Server: bash tools/scratch_query/prep_srv.sh OUT2 c3b2 B difficulty=normal   (a new OUT, not c3_b1's)
+# Before boot (in OUT2/srv; the kubejs/ there is a copy, the pack is not touched):
+#   rm kubejs/data/minecraft/worldgen/configured_feature/glow_lichen.json kubejs/data/minecraft/worldgen/placed_feature/glow_lichen.json
+#   sed -i 's/, "creativedelight:wild\/mini_cantaloupe_common"//; s/, "creativedelight:wild\/hamimelon_common"//' kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json
+#   grep -c "_common\"" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json   (the two crop lines no longer list them)
+# Probes: zq only (prep_srv copies it).
+# Compare each count with c3_b1's row of the same name without the c suffix.
+pace 1
+
+## SQ-C3B2-setup | gamerules (not a test row)
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+shell ls kubejs/data/minecraft/worldgen/placed_feature/ | grep -c glow_lichen; grep -c "hamimelon_common\|mini_cantaloupe_common" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json
+look both counts 0 (lichen files moved out, _common features out of the two rules)
+
+## SQ-FCK-07c | control: glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
+> locate biome minecraft:plains
+waitlog nearest minecraft:plains is at|Could not find 300
+capture PL minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PL1-72} {PL3-72} {PL1+71} {PL3+71}
+sleep 90
+> zq count {PL1-72} -64 {PL3-72} {PL1+71} 70 {PL3+71} minecraft:glow_lichen
+waitlog \[zq\] count minecraft:glow_lichen: \d+ 900
+> forceload remove {PL1-72} {PL3-72} {PL1+71} {PL3+71}
+look control lichen count; c3_b1 SQ-FCK-07 should be about 3x this or more
+
+## SQ-FCK-08c | control: hamimelon and Mini Cantaloupe in desert and badlands about 2.5x the control (c3_b2.qb, SQ-FCK-08c); rules list the _common features
+> locate biome minecraft:desert
+waitlog nearest minecraft:desert is at|Could not find 300
+capture DS minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DS1-112} {DS3-112} {DS1+111} {DS3+111}
+sleep 150
+> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} fruitsdelight:hamimelon
+waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
+> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} delightful:cantaloupe_plant
+waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+> forceload remove {DS1-112} {DS3-112} {DS1+111} {DS3+111}
+look control desert counts; c3_b1 SQ-FCK-08 should be about 2.5x these
+
+## SQ-FCK-08bc | control: badlands half of SQ-FCK-08
+> locate biome minecraft:badlands
+waitlog nearest minecraft:badlands is at|Could not find 300
+capture BD minecraft:badlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {BD1-112} {BD3-112} {BD1+111} {BD3+111}
+sleep 150
+> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} fruitsdelight:hamimelon
+waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
+> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} delightful:cantaloupe_plant
+waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+> forceload remove {BD1-112} {BD3-112} {BD1+111} {BD3+111}
+look control badlands counts

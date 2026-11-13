@@ -328,6 +328,8 @@ Columns: mixin class | side | target mod | gate | target jar | reason | config k
 | `ToastFilterMixin` | client | minecraft | none; config | Common | toast filter (Interface) | `TOASTS.advancement`, `TOASTS.tutorial` | - |
 | `RenderSystemShaderTextureMixin` | client | minecraft | none | Common | GUI title plaque (Interface) | - | `compat.guititle.TitlePlaques` |
 | `CreativePickBlockSyncMixin` | client | minecraft | none | Common | engine fix: creative pick-block desync | - | - |
+| `ChatOpenArmMixin` | client | minecraft | none | Common | engine fix: chat key typed into chat (MC-122477), [fixes_compat.md](../fixes_compat.md) 2.33 | - | `util.ChatOpenKeyGuard` |
+| `ChatOpenCharDropMixin` | client | minecraft | none | Common | engine fix: chat key typed into chat (MC-122477), [fixes_compat.md](../fixes_compat.md) 2.33 | - | `util.ChatOpenKeyGuard` |
 | `CckCookingGuideMealTooltipMixin` | client | createcentralkitchen | hard createcentralkitchen | Common | tooltip mixin (stack for AppleSkin): Create Central Kitchen guides | - | `compat.MealSlotTooltip` |
 | `CckBrewingGuideMealTooltipMixin` | client | createcentralkitchen | hard createcentralkitchen | Common | tooltip mixin (stack for AppleSkin): Create Central Kitchen guides | - | `compat.MealSlotTooltip` |
 | `PrettyPipesTerminalTooltipMixin` | client | prettypipes | hard prettypipes | Common | tooltip mixin (stack for AppleSkin): Pretty Pipes terminal | - | - |

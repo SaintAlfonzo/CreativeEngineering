@@ -1,0 +1,64 @@
+pace 1
+
+## SQ-HH-1500 | `[zhh5] hand id=minecraft:air` and `[zhh5] done`; `[zq]` command regis
+> forceload add 470 470 620 620
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set noon
+> pbot spawn G 500 -60 490 minecraft:overworld survival
+> zhh5 hand G
+look UNPARSED CMD: tools/scratch_query/zq_probe.js ;; hh_gear_probe.js ;; srv/kubejs/server_scripts/ ;; zz_*
+look `[zhh5] hand id=minecraft:air` and `[zhh5] done`; `[zq]` command registered; no script error for either probe
+
+## SQ-HH-1501 | one shaped recipe, count 2, `minecraft:iron_nugget`; max stack 16, max
+> zq makes hearthandharvest:horseshoe
+> zq item hearthandharvest:horseshoe
+look one shaped recipe, count 2, `minecraft:iron_nugget`; max stack 16, max damage 0
+
+## SQ-HH-1502 | `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Ho
+> summon minecraft:horse 480 -60 480 {Tame:1b,NoAI:1b,Tags:["zh1"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G zh1
+> zhh5 horse zh1
+> zhh5 hand G
+look `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Horseshoe=0.25`; `effects` holds `effect.minecraft.fire_resistance`; hand empty (HNH-20)
+
+## SQ-HH-1503 | `shod=false`; hand count 1 (untamed refuses)
+> summon minecraft:horse 484 -60 480 {NoAI:1b,Tags:["zh2"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G zh2
+> zhh5 horse zh2
+> zhh5 hand G
+look `shod=false`; hand count 1 (untamed refuses)
+
+## SQ-HH-1504 | `effects` holds fire resistance both times with duration near 40 (re-a
+> zhh5 horse zh1
+sleep 5
+> zhh5 horse zh1
+look `effects` holds fire resistance both times with duration near 40 (re-applied, not running out)
+
+## SQ-HH-1505 | zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`
+> zhh5 hurt zh1 cactus
+> zhh5 hurt zh1 berry
+> zhh5 hurt zh2 cactus
+look zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`, health down 1
+
+## SQ-HH-1506 | on soul sand mods holds `Horseshoe grip`, value about 1.5 (1 / 0.4 - 1
+> setblock 480 -61 480 minecraft:soul_sand
+sleep 2
+> zhh5 horse zh1
+> setblock 480 -61 480 minecraft:grass_block
+sleep 2
+> zhh5 horse zh1
+look on soul sand mods holds `Horseshoe grip`, value about 1.5 (1 / 0.4 - 1); on grass it is gone, `Horseshoe=0.25` stays
+
+## SQ-HH-1507 | `shod=false`; mods empty; `speed` = `speedBase`; offer = 2 before re-s
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 sneak G on
+> zhh5 interact G zh1
+> zhh5 sneak G off
+> zhh5 horse zh1
+> zhh5 offer G hearthandharvest:horseshoe
+> zhh5 interact G zh1
+look `shod=false`; mods empty; `speed` = `speedBase`; offer = 2 before re-shoeing; `shod=true` after
+

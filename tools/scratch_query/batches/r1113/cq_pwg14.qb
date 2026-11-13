@@ -1,0 +1,363 @@
+# r1113 CQ-PWG-14 ponder pass (client, -06 jar in the client's mods only). Generated from the queue row's scene list.
+# Before: client in a world, chat closed, no screen open.
+pace 1
+
+## CQ-PWG-14-voltage_gauge | ponder powergrid:voltage_gauge: voltage_gauge
+> create ponder powergrid:voltage_gauge
+sleep 3
+shot voltage_gauge_a
+sleep 32
+shot voltage_gauge_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-energy_meter | ponder powergrid:energy_meter: energy_meter
+> create ponder powergrid:energy_meter
+sleep 3
+shot energy_meter_a
+sleep 38
+shot energy_meter_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-copper_coil | ponder powergrid:copper_coil: generator_winding, parallel_generator_winding, generator_1, generator_2
+> create ponder powergrid:copper_coil
+sleep 3
+shot generator_winding_a
+sleep 13
+shot generator_winding_b
+key d
+sleep 3
+shot parallel_generator_winding_a
+sleep 17
+shot parallel_generator_winding_b
+key d
+sleep 3
+shot generator_1_a
+sleep 42
+shot generator_1_b
+key d
+sleep 3
+shot generator_2_a
+sleep 58
+shot generator_2_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-generator_clutch | ponder powergrid:generator_clutch: generator_clutch
+> create ponder powergrid:generator_clutch
+sleep 3
+shot generator_clutch_a
+sleep 20
+shot generator_clutch_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-generator_housing | ponder powergrid:generator_housing: generator_housing
+> create ponder powergrid:generator_housing
+sleep 3
+shot generator_housing_a
+sleep 16
+shot generator_housing_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-generator_induction_rotor | ponder powergrid:generator_induction_rotor: generator_rotor
+> create ponder powergrid:generator_induction_rotor
+sleep 3
+shot generator_rotor_a
+sleep 16
+shot generator_rotor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-insulated_copper_wire | ponder powergrid:insulated_copper_wire: insulated_wire, wire_voltage_drop
+> create ponder powergrid:insulated_copper_wire
+sleep 3
+shot insulated_wire_a
+sleep 12
+shot insulated_wire_b
+key d
+sleep 3
+shot wire_voltage_drop_a
+sleep 23
+shot wire_voltage_drop_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-wire_connector | ponder powergrid:wire_connector: wire_connector
+> create ponder powergrid:wire_connector
+sleep 3
+shot wire_connector_a
+sleep 15
+shot wire_connector_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-grounding_rod | ponder powergrid:grounding_rod: grounding, improved_grounding
+> create ponder powergrid:grounding_rod
+sleep 3
+shot grounding_a
+sleep 18
+shot grounding_b
+key d
+sleep 3
+shot improved_grounding_a
+sleep 18
+shot improved_grounding_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-cord_junction | ponder powergrid:cord_junction: cord_junction
+> create ponder powergrid:cord_junction
+sleep 3
+shot cord_junction_a
+sleep 11
+shot cord_junction_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-socket | ponder powergrid:socket: cord_socket
+> create ponder powergrid:socket
+sleep 3
+shot cord_socket_a
+sleep 11
+shot cord_socket_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-transformer_core | ponder powergrid:transformer_core: transformer_sizes, transformer_winding, transformer_nether
+> create ponder powergrid:transformer_core
+sleep 3
+shot transformer_sizes_a
+sleep 16
+shot transformer_sizes_b
+key d
+sleep 3
+shot transformer_winding_a
+sleep 32
+shot transformer_winding_b
+key d
+sleep 3
+shot transformer_nether_a
+sleep 20
+shot transformer_nether_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-variac | ponder powergrid:variac: variac
+> create ponder powergrid:variac
+sleep 3
+shot variac_a
+sleep 13
+shot variac_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-rheostat | ponder powergrid:rheostat: rheostat
+> create ponder powergrid:rheostat
+sleep 3
+shot rheostat_a
+sleep 13
+shot rheostat_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-power_resistor | ponder powergrid:power_resistor: power_resistor
+> create ponder powergrid:power_resistor
+sleep 3
+shot power_resistor_a
+sleep 19
+shot power_resistor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-carbon_pile_coil | ponder powergrid:carbon_pile_coil: carbon_pile
+> create ponder powergrid:carbon_pile_coil
+sleep 3
+shot carbon_pile_a
+sleep 31
+shot carbon_pile_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-device_connector | ponder powergrid:device_connector: device_connector
+> create ponder powergrid:device_connector
+sleep 3
+shot device_connector_a
+sleep 19
+shot device_connector_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-hv_switch | ponder powergrid:hv_switch: hv_switch
+> create ponder powergrid:hv_switch
+sleep 3
+shot hv_switch_a
+sleep 11
+shot hv_switch_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-redstone_converter | ponder powergrid:redstone_converter: redstone_converter
+> create ponder powergrid:redstone_converter
+sleep 3
+shot redstone_converter_a
+sleep 38
+shot redstone_converter_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-contactor | ponder powergrid:contactor: contactor, contactor_stack
+> create ponder powergrid:contactor
+sleep 3
+shot contactor_a
+sleep 12
+shot contactor_b
+key d
+sleep 3
+shot contactor_stack_a
+sleep 14
+shot contactor_stack_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-fuse_holder | ponder powergrid:fuse_holder: fuse
+> create ponder powergrid:fuse_holder
+sleep 3
+shot fuse_a
+sleep 19
+shot fuse_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-electric_motor | ponder powergrid:electric_motor: electric_motor
+> create ponder powergrid:electric_motor
+sleep 3
+shot electric_motor_a
+sleep 16
+shot electric_motor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-constant_speed_motor | ponder powergrid:constant_speed_motor: constant_speed_motor
+> create ponder powergrid:constant_speed_motor
+sleep 3
+shot constant_speed_motor_a
+sleep 19
+shot constant_speed_motor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-servo | ponder powergrid:servo: servo
+> create ponder powergrid:servo
+sleep 3
+shot servo_a
+sleep 16
+shot servo_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-electromagnet | ponder powergrid:electromagnet: electromagnet
+> create ponder powergrid:electromagnet
+sleep 3
+shot electromagnet_a
+sleep 24
+shot electromagnet_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-battery | ponder powergrid:battery: battery
+> create ponder powergrid:battery
+sleep 3
+shot battery_a
+sleep 17
+shot battery_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-magnet | ponder powergrid:magnet: thunder_magnet, lightning_attractor
+> create ponder powergrid:magnet
+sleep 3
+shot thunder_magnet_a
+sleep 12
+shot thunder_magnet_b
+key d
+sleep 3
+shot lightning_attractor_a
+sleep 15
+shot lightning_attractor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-lightning_rod | ponder minecraft:lightning_rod: lightning_attractor
+> create ponder minecraft:lightning_rod
+sleep 3
+shot lightning_attractor_a
+sleep 15
+shot lightning_attractor_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look scene shots: English text, no raw powergrid.ponder. keys, no missing blocks, wires and values visible
+
+## CQ-PWG-14-index | ponder index and the three Power Grid tags
+> create ponder
+sleep 3
+shot index
+look index shows three Power Grid tags (induction rotor, MV switch, Electric Motor icons); tag pages clicked by hand if needed
+key Escape

@@ -1,0 +1,20 @@
+# r1113 chunk 3, boot CDW3: SQ-CDW-01 / -03 with endersdelight removed. Group B fresh normal world (new level c3cdw3),
+# seed 8675309, full pack minus one jar.
+# Server: bash tools/scratch_query/prep_srv.sh OUT_CDW3 c3cdw3 B   (a fresh OUT per CDW boot)
+# Before boot: rm OUT_CDW3/srv/mods/endersdelight-*.jar   (a hard link: the pack's mods/ keeps its jar)
+#   If the boot stops on a missing dependency, remove the dependent jar named in the error too and note it.
+# Probes: zq only (prep_srv). Rows of this boot carry the suffix "c" when it is not the first CDW boot.
+pace 1
+
+## SQ-CDW-01c | endersdelight removed: no datapack error, level created, wild crop packs line lists it under off
+bootexpect Done \(
+bootreject Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): none
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell test "$(ls mods | grep -c '^endersdelight-')" = 0
+look the level is created (Done); endersdelight's pack listed under off (endersdelight: no pack goes off, enders_additions registers the endersdelight: blocks itself)
+
+## SQ-CDW-03c | [wild-crops] skip lines name only the removed mod's rules
+shell grep -h "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log | cut -c1-200
+shell test "$(grep -c "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log)" = 0
+look no skip line; other [wild-flowers] / mob spawn skip lines naming endersdelight are not this row's (judge them: another rule naming the absent namespace without `requires`)

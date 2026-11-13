@@ -40,6 +40,12 @@ user asks for one, follow its skill.
   `kubejs_startup/creativecommon/_lib/`);
   scripts use those keys, not literal `namespace:id` strings.
 - No emoji in any file. Own work is GPLv3. Never publish claude.ai artifacts.
+- **Textures: human art or the owner's tools only.** Never draw, generate or pixel-edit a texture, pick its palette, or
+  transform it with an ad-hoc script. Allowed: copy human art (upstream, vanilla, owner's), or run
+  `textureswapper/palette_swap.py` / `combine_tex.py` / `scale_tex.py` / `upscale_sprites.py` on a source and palette
+  the owner picked (ask when not given). Every derived texture gets a row in
+  `feature_writeup/texture_sources/sources.tsv` (source, tool, use) in the same session; rerun
+  `python3 tools/texture_provenance.py`. Rule and audit: [texture_sources.md](feature_writeup/texture_sources.md).
 - Hand-edited config: also copy it to `configs_edited/root_config/<same path>` (or `server_config/`).
 - Backports and ports: no old-version or cross-mod conversions. Never use advancements (the pack
   drops them all at load) for rewards or unlocks.

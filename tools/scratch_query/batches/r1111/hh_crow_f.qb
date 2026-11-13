@@ -1,0 +1,731 @@
+pace 1
+
+## SQ-HH-466 | `expect \[zhh3\] cfg stealChance = 1\.0`; `expect \[zhh3\] cfg saltLic
+# setup/shell: python3 tools/scratch_query/qrun.py toml OUT/srv/config/hearthandharvest-common.toml crow stealChance 1.0
+# setup/shell: scratch_server.sh boot OUT
+> forceload add 15840 0 15856 16
+sleep 3
+> zhh3 cfg stealChance
+> zhh3 cfg saltLickInterval
+> data get entity @e[tag=c67,limit=1] Wariness
+> zhh3 log crow 15845 -60 5 3
+expect \[zhh3\] cfg stealChance = 1\.0
+expect \[zhh3\] cfg saltLickInterval = 200\b
+expect has the following entity data: \{.*Trust: [1-9]
+expect AlarmTicks: 1[4-9]\d\d
+expect \[zhh3\] log hearthandharvest:crow .*carry=true.* main=minecraft:emerald x1
+look UNPARSED CMD: ... crow carryTicks 200 ;; ... salt saltPlayerLickChance 1.0 ;; ... salt saltAnimalStageChance 1.0 ;; ... salt saltLickInterval 200 ;; ... salt saltSearchInterval 20
+
+## SQ-HH-467 | `expect \[zhh3\] block 15968 -60 3 hearthandharvest:lightly_licked_sal
+> forceload add 15960 0 15976 16
+sleep 3
+> pbot spawn b467 15965 -60 3 minecraft:overworld survival
+sleep 2
+> clear b467
+> setblock 15968 -60 3 salt:salt_block
+> pbot use b467 15968 -60 3 up
+> zhh3 block 15968 -60 3
+> pbot use b467 15968 -60 3 up
+> zhh3 block 15968 -60 3
+> pbot use b467 15968 -60 3 up
+> zhh3 block 15968 -60 3
+> pbot use b467 15968 -60 3 up
+> zhh3 block 15968 -60 3
+> zhh3 items 15968 -60 3 4
+> pbot remove b467
+> forceload remove 15960 0 15976 16
+expect \[zhh3\] block 15968 -60 3 hearthandharvest:lightly_licked_salt_block
+expect \[zhh3\] block 15968 -60 3 hearthandharvest:well_licked_salt_block
+expect \[zhh3\] block 15968 -60 3 hearthandharvest:heavily_licked_salt_block
+expect \[zhh3\] block 15968 -60 3 minecraft:air
+expect \[zhh3\] items total=1 (salt:salt|vintagedelight:salt_dust) x1
+
+## SQ-HH-468 | `expect \[zhh3\] block 16028 -60 3 salt:salt_block`
+> forceload add 16020 0 16036 16
+sleep 3
+> pbot spawn b468 16025 -60 3 minecraft:overworld survival
+sleep 2
+> clear b468
+> setblock 16028 -60 3 salt:salt_block
+> item replace entity b468 weapon.offhand with minecraft:stick
+> pbot use b468 16028 -60 3 up
+> zhh3 block 16028 -60 3
+> pbot remove b468
+> forceload remove 16020 0 16036 16
+expect \[zhh3\] block 16028 -60 3 salt:salt_block
+
+## SQ-HH-469 | `expect \[zhh3\] block 16088 -60 3 salt:salt_block`
+> forceload add 16080 0 16096 16
+sleep 3
+> pbot spawn b469 16085 -60 3 minecraft:overworld survival
+sleep 2
+> clear b469
+> setblock 16088 -60 3 salt:salt_block
+> pbot hold b469 minecraft:stick
+> pbot use b469 16088 -60 3 up
+> zhh3 block 16088 -60 3
+> pbot remove b469
+> forceload remove 16080 0 16096 16
+expect \[zhh3\] block 16088 -60 3 salt:salt_block
+
+## SQ-HH-470 | `expect \[zhh3\] block 16148 -60 3 salt:salt_block`
+> forceload add 16140 0 16156 16
+sleep 3
+> pbot spawn b470 16145 -60 3 minecraft:overworld survival
+sleep 2
+> clear b470
+> setblock 16148 -60 3 salt:salt_block
+> zhh3 cfg playerLicking false
+> pbot use b470 16148 -60 3 up
+> zhh3 block 16148 -60 3
+> zhh3 cfg playerLicking true
+> pbot remove b470
+> forceload remove 16140 0 16156 16
+expect \[zhh3\] block 16148 -60 3 salt:salt_block
+look UNPARSED CMD: salt.playerLicking
+
+## SQ-HH-471 | `expect \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block`;
+> forceload add 16200 0 16216 16
+sleep 3
+> pbot spawn b471 16205 -60 3 minecraft:overworld survival
+sleep 2
+> clear b471
+> setblock 16208 -60 3 salt:salt_block
+> pbot hold b471 minecraft:honeycomb 4
+> pbot use b471 16208 -60 3 up
+> zhh3 block 16208 -60 3
+> zhh3 inv b471 minecraft:honeycomb
+> clear b471
+> pbot use b471 16208 -60 3 up
+> zhh3 block 16208 -60 3
+> pbot hold b471 minecraft:iron_axe
+> pbot use b471 16208 -60 3 up
+> zhh3 block 16208 -60 3
+> data get entity b471 SelectedItem.tag.Damage
+> pbot remove b471
+> forceload remove 16200 0 16216 16
+expect \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block
+expect \[zhh3\] invcount b471 minecraft:honeycomb 3
+expect \[zhh3\] block 16208 -60 3 salt:salt_block
+count \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block >= 2
+expect has the following entity data: 1\b
+look `expect \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block`; `expect \[zhh3\] invcount b471 minecraft:honeycomb 3`; `expect \[zhh3\] block 16208 -60 3 salt:salt_block`; `count \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block >= 2` (still waxed after the empty-hand use); `expect has the following entity data: 1\b`
+
+## SQ-HH-472 | `expect \[zhh3\] block 16268 -60 3 hearthandharvest:waxed_well_licked_
+> forceload add 16260 0 16276 16
+sleep 3
+> pbot spawn b472 16265 -60 3 minecraft:overworld survival
+sleep 2
+> clear b472
+> setblock 16268 -60 3 hearthandharvest:well_licked_salt_block
+> pbot hold b472 minecraft:honeycomb 4
+> pbot use b472 16268 -60 3 up
+> zhh3 block 16268 -60 3
+> pbot hold b472 minecraft:iron_axe
+> pbot use b472 16268 -60 3 up
+> zhh3 block 16268 -60 3
+> pbot remove b472
+> forceload remove 16260 0 16276 16
+expect \[zhh3\] block 16268 -60 3 hearthandharvest:waxed_well_licked_salt_block
+expect \[zhh3\] block 16268 -60 3 hearthandharvest:well_licked_salt_block
+
+## SQ-HH-473 | `expect \[zact\] break .*hearthandharvest:waxed_salt_block x1`; `expec
+> forceload add 16320 0 16336 16
+sleep 3
+> setblock 16323 -60 3 hearthandharvest:waxed_salt_block
+> setblock 16325 -60 3 hearthandharvest:lightly_licked_salt_block
+sleep 1
+> zact break 16323 -60 3 minecraft:iron_pickaxe
+> zact break 16325 -60 3 minecraft:iron_pickaxe
+expect \[zact\] break .*hearthandharvest:waxed_salt_block x1
+expect \[zact\] break .*hearthandharvest:lightly_licked_salt_block x1
+
+## SQ-HH-474 | `expect \[zhh3\] block 16388 -60 3 hearthandharvest:well_licked_salt_b
+> forceload add 16380 0 16396 16
+sleep 3
+> pbot spawn b474 16385 -60 3 minecraft:overworld survival
+sleep 2
+> clear b474
+> setblock 16388 -60 3 hearthandharvest:heavily_licked_salt_block
+> setblock 16391 -60 3 hearthandharvest:waxed_well_licked_salt_block
+> pbot hold b474 vintagedelight:salt_dust 4
+> pbot use b474 16388 -60 3 up
+> zhh3 block 16388 -60 3
+> pbot use b474 16388 -60 3 up
+> zhh3 block 16388 -60 3
+> pbot use b474 16388 -60 3 up
+> zhh3 block 16388 -60 3
+> pbot use b474 16388 -60 3 up
+> zhh3 block 16388 -60 3
+> pbot use b474 16391 -60 3 up
+> zhh3 block 16391 -60 3
+> zhh3 inv b474 vintagedelight:salt_dust
+> pbot remove b474
+> forceload remove 16380 0 16396 16
+expect \[zhh3\] block 16388 -60 3 hearthandharvest:well_licked_salt_block
+expect \[zhh3\] block 16388 -60 3 hearthandharvest:lightly_licked_salt_block
+count \[zhh3\] block 16388 -60 3 salt:salt_block >= 2
+expect \[zhh3\] block 16391 -60 3 hearthandharvest:waxed_lightly_licked_salt_block
+expect \[zhh3\] invcount b474 vintagedelight:salt_dust 0
+look UNPARSED CMD: #forge:salt
+look `expect \[zhh3\] block 16388 -60 3 hearthandharvest:well_licked_salt_block`; `expect \[zhh3\] block 16388 -60 3 hearthandharvest:lightly_licked_salt_block`; `count \[zhh3\] block 16388 -60 3 salt:salt_block >= 2` (stage 0 stays and takes none); `expect \[zhh3\] block 16391 -60 3 hearthandharvest:waxed_lightly_licked_salt_block`; `expect \[zhh3\] invcount b474 vintagedelight:salt_dust 0`
+
+## SQ-HH-475 | `expect \[zhh3\] block 16443 -60 3 hearthandharvest:lightly_licked_sal
+> forceload add 16440 0 16456 16
+sleep 3
+> setblock 16443 -60 3 hearthandharvest:well_licked_salt_block
+> setblock 16442 -60 3 minecraft:dispenser[facing=east]
+> data merge block 16442 -60 3 {Items:[{Slot:0b,id:"salt:salt",Count:2b}]}
+> setblock 16442 -59 3 minecraft:redstone_block
+sleep 1
+> setblock 16442 -59 3 minecraft:air
+sleep 1
+> zhh3 block 16443 -60 3
+> data get block 16442 -60 3 Items
+expect \[zhh3\] block 16443 -60 3 hearthandharvest:lightly_licked_salt_block
+expect Items.*Count: 1b
+look UNPARSED CMD: salt:salt
+
+## SQ-HH-476 | `expect \[zhh3\] block 16503 -60 3 hearthandharvest:well_licked_salt_b
+> forceload add 16500 0 16516 16
+sleep 3
+> setblock 16503 -60 3 hearthandharvest:heavily_licked_salt_block
+> setblock 16502 -60 3 minecraft:dispenser[facing=east]
+> data merge block 16502 -60 3 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:2b}]}
+> setblock 16502 -59 3 minecraft:redstone_block
+sleep 1
+> setblock 16502 -59 3 minecraft:air
+sleep 1
+> zhh3 block 16503 -60 3
+> data get block 16502 -60 3 Items
+expect \[zhh3\] block 16503 -60 3 hearthandharvest:well_licked_salt_block
+expect Items.*Count: 1b
+look UNPARSED CMD: vintagedelight:salt_dust ;; salt:salt
+
+## SQ-HH-477 | `expect \[zhh3\] block 16563 -60 3 hearthandharvest:waxed_well_licked_
+> forceload add 16560 0 16576 16
+sleep 3
+> setblock 16563 -60 3 hearthandharvest:waxed_well_licked_salt_block
+> setblock 16562 -60 3 minecraft:dispenser[facing=east]
+> data merge block 16562 -60 3 {Items:[{Slot:0b,id:"salt:salt",Count:2b}]}
+> setblock 16562 -59 3 minecraft:redstone_block
+sleep 1
+> setblock 16562 -59 3 minecraft:air
+sleep 1
+> zhh3 block 16563 -60 3
+> data get block 16562 -60 3 Items
+expect \[zhh3\] block 16563 -60 3 hearthandharvest:waxed_well_licked_salt_block
+
+## SQ-HH-478 | `expect \[zhh3\] block 16623 -60 3 salt:salt_block`
+> forceload add 16620 0 16636 16
+sleep 3
+> setblock 16623 -60 3 salt:salt_block
+> setblock 16622 -60 3 minecraft:dispenser[facing=east]
+> data merge block 16622 -60 3 {Items:[{Slot:0b,id:"salt:salt",Count:2b}]}
+> setblock 16622 -59 3 minecraft:redstone_block
+sleep 1
+> setblock 16622 -59 3 minecraft:air
+sleep 1
+> zhh3 block 16623 -60 3
+> data get block 16622 -60 3 Items
+expect \[zhh3\] block 16623 -60 3 salt:salt_block
+
+## SQ-HH-479 | `expect \[zhh3\] seen a StayNearSaltGoal yes`; `expect \[zhh3\] assert
+> forceload add 16674 -6 16686 6
+sleep 3
+> fill 16674 -61 -6 16686 -56 6 minecraft:glass hollow
+> pbot spawn b479 16675 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 16680 -60 0 salt:salt_block
+> summon minecraft:cow 16683 -60 0
+sleep 1
+> zhh3 watch minecraft:cow 16680 -60 0 8 75 20 a 16680.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 90
+> zhh3 seen a StayNearSaltGoal
+> zhh3 assert a minD <= 3
+> zhh3 assert a maxD <= 7
+> zhh3 block 16680 -60 0
+> zhh3 items 16680 -60 0 4
+> pbot remove b479
+> forceload remove 16674 -6 16686 6
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] assert a minD=.* <= 3\.?0* PASS
+expect \[zhh3\] block 16680 -60 0 minecraft:air
+expect \[zhh3\] items total=1 
+
+## SQ-HH-480 | `expect \[zhh3\] block 16740 -60 0 minecraft:air`
+> forceload add 16733 -7 16747 7
+sleep 3
+> fill 16733 -61 -7 16747 -56 7 minecraft:glass hollow
+> pbot spawn b480 16734 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 16740 -60 0 salt:salt_block
+> summon minecraft:cow 16743 -60 0
+> summon minecraft:cow 16737 -60 0
+> summon minecraft:cow 16740 -60 3
+> summon minecraft:cow 16740 -60 -3
+> summon minecraft:cow 16743 -60 3
+sleep 35
+> zhh3 block 16740 -60 0
+> pbot remove b480
+> forceload remove 16733 -7 16747 7
+expect \[zhh3\] block 16740 -60 0 minecraft:air
+
+## SQ-HH-481 | `expect \[zhh3\] seen a StayNearSaltGoal yes`; `expect \[zhh3\] assert
+> forceload add 16793 -7 16807 7
+sleep 3
+> fill 16793 -61 -7 16807 -56 7 minecraft:glass hollow
+> pbot spawn b481 16794 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 16800 -60 0 salt:salt_block
+> zhh3 cfg saltAnimalStageChance 0
+> summon minecraft:cow 16803 -60 0
+> summon minecraft:cow 16797 -60 0
+sleep 1
+> zhh3 watch minecraft:cow 16800 -60 0 9 60 20 a 16800.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 70
+> zhh3 seen a StayNearSaltGoal
+> zhh3 assert a minD <= 3
+> zhh3 block 16800 -60 0
+> zhh3 cfg saltAnimalStageChance 1
+> pbot remove b481
+> forceload remove 16793 -7 16807 7
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] assert a minD=.* <= 3\.?0* PASS
+expect \[zhh3\] block 16800 -60 0 salt:salt_block
+
+## SQ-HH-482 | `expect \[zhh3\] seen a StayNearSaltGoal yes`; `expect \[zhh3\] seen b
+> forceload add 16830 -6 16890 6
+sleep 3
+> fill 16830 -61 -6 16890 -56 6 minecraft:glass hollow
+> pbot spawn b482 16831 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 16860 -60 0 salt:salt_block
+> summon minecraft:cow 16881 -60 0
+> summon minecraft:cow 16836 -60 0
+sleep 1
+> zhh3 watch minecraft:cow 16881 -60 0 3 40 20 a 16860.5,-59.5,0.5
+> zhh3 watch minecraft:cow 16836 -60 0 3 40 20 b 16860.5,-59.5,0.5
+waitlog \[zhh3\] watch b done 60
+> zhh3 seen a StayNearSaltGoal
+> zhh3 seen b StayNearSaltGoal
+> zhh3 assert a lastD <= 20.5
+> pbot remove b482
+> forceload remove 16830 -6 16890 6
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] seen b StayNearSaltGoal no
+expect \[zhh3\] assert a lastD=.* <= 20.5\.?0* PASS
+
+## SQ-HH-483 | `expect \[zhh3\] seen a StayNearSaltGoal no`; `expect \[zhh3\] block 1
+> forceload add 16913 -7 16927 7
+sleep 3
+> fill 16913 -61 -7 16927 -56 7 minecraft:glass hollow
+> pbot spawn b483 16914 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 16920 -60 0 hearthandharvest:waxed_salt_block
+> summon minecraft:cow 16924 -60 0
+sleep 1
+> zhh3 watch minecraft:cow 16920 -60 0 9 40 20 a 16920.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 45
+> zhh3 seen a StayNearSaltGoal
+> zhh3 block 16920 -60 0
+> pbot remove b483
+> forceload remove 16913 -7 16927 7
+expect \[zhh3\] seen a StayNearSaltGoal no
+expect \[zhh3\] block 16920 -60 0 hearthandharvest:waxed_salt_block
+
+## SQ-HH-484 | `expect \[zhh3\] seen a StayNearSaltGoal no`; `expect \[zhh3\] log min
+> zhh3 log
+> forceload add 16973 -7 16987 7
+sleep 3
+> fill 16973 -61 -7 16987 -56 7 minecraft:glass hollow
+> pbot spawn b484 16974 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 16980 -60 0 salt:salt_block
+> summon minecraft:cow 16984 -60 0
+sleep 8
+> setblock 16980 -60 0 minecraft:air
+sleep 3
+> zhh3 watch minecraft:cow 16980 -60 0 9 25 20 a 16980.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> zhh3 log minecraft:cow 16980 -60 0 9
+> pbot remove b484
+> forceload remove 16973 -7 16987 7
+expect \[zhh3\] seen a StayNearSaltGoal no
+expect \[zhh3\] log minecraft:cow .*restricted=false
+look UNPARSED CMD: restricted=
+
+## SQ-HH-485 | `reject \[zhh3\] block 17040 -60 0 salt:salt_block`
+> forceload add 17033 -7 17047 7
+sleep 3
+> fill 17033 -61 -7 17047 -56 7 minecraft:glass hollow
+> pbot spawn b485 17034 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 17040 -60 0 salt:salt_block
+> gamerule mobGriefing false
+> summon minecraft:cow 17043 -60 0
+sleep 35
+> zhh3 block 17040 -60 0
+> gamerule mobGriefing true
+> pbot remove b485
+> forceload remove 17033 -7 17047 7
+reject \[zhh3\] block 17040 -60 0 salt:salt_block
+
+## SQ-HH-486 | `expect \[zhh3\] seen a StayNearSaltGoal no`; `expect \[zhh3\] block 1
+> forceload add 17093 -7 17107 7
+sleep 3
+> fill 17093 -61 -7 17107 -56 7 minecraft:glass hollow
+> pbot spawn b486 17094 -60 -6 minecraft:overworld creative
+sleep 2
+> setblock 17100 -60 0 salt:salt_block
+> zhh3 cfg animalLicking false
+> summon minecraft:cow 17103 -60 0
+sleep 1
+> zhh3 watch minecraft:cow 17100 -60 0 9 30 20 a 17100.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 35
+> zhh3 seen a StayNearSaltGoal
+> zhh3 block 17100 -60 0
+> zhh3 cfg animalLicking true
+> pbot remove b486
+> forceload remove 17093 -7 17107 7
+expect \[zhh3\] seen a StayNearSaltGoal no
+expect \[zhh3\] block 17100 -60 0 salt:salt_block
+look UNPARSED CMD: salt.animalLicking
+
+## SQ-HH-487 | `expect \[zhh3\] seen a StayNearSaltGoal no`
+> forceload add 17154 -6 17166 6
+sleep 3
+> fill 17154 -61 -6 17166 -56 6 minecraft:glass hollow
+> pbot spawn b487 17155 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 17160 -60 0 salt:salt_block
+> summon minecraft:cow 17163 -60 0
+sleep 1
+> zhh3 leash b487 17163 -60 0 2 minecraft:cow
+> zhh3 watch minecraft:cow 17160 -60 0 8 25 20 a 17160.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> pbot remove b487
+> forceload remove 17154 -6 17166 6
+expect \[zhh3\] seen a StayNearSaltGoal no
+
+## SQ-HH-488 | `expect \[zhh3\] seen a StayNearSaltGoal no`
+> forceload add 17214 -6 17226 6
+sleep 3
+> fill 17214 -61 -6 17226 -56 6 minecraft:glass hollow
+> pbot spawn b488 17215 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 17220 -60 0 salt:salt_block
+> summon minecraft:horse 17223 -60 0 {Tame:1b}
+sleep 1
+> zhh3 watch minecraft:horse 17220 -60 0 8 25 20 a 17220.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> pbot remove b488
+> forceload remove 17214 -6 17226 6
+expect \[zhh3\] seen a StayNearSaltGoal no
+
+## SQ-HH-489 | `expect \[zhh3\] seen a StayNearSaltGoal no`
+> forceload add 17274 -6 17286 6
+sleep 3
+> fill 17274 -61 -6 17286 -56 6 minecraft:glass hollow
+> pbot spawn b489 17275 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 17280 -60 0 salt:salt_block
+> summon minecraft:wolf 17283 -60 0 {NoAI:1b}
+sleep 1
+> zhh3 watch minecraft:wolf 17280 -60 0 8 25 20 a 17280.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> pbot remove b489
+> forceload remove 17274 -6 17286 6
+expect \[zhh3\] seen a StayNearSaltGoal no
+
+## SQ-HH-490 | `expect \[zhh3\] seen a StayNearSaltGoal no`
+> forceload add 17334 -6 17346 6
+sleep 3
+> fill 17334 -61 -6 17346 -56 6 minecraft:glass hollow
+> pbot spawn b490 17335 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 17340 -60 0 salt:salt_block
+> summon minecraft:bee 17343 -60 0
+sleep 1
+> zhh3 watch minecraft:bee 17340 -60 0 8 25 20 a 17340.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> pbot remove b490
+> forceload remove 17334 -6 17346 6
+expect \[zhh3\] seen a StayNearSaltGoal no
+
+## SQ-HH-491 | `expect \[zhh3\] seen a StayNearSaltGoal no`
+> forceload add 17394 -6 17406 6
+sleep 3
+> fill 17394 -61 -6 17406 -56 6 minecraft:glass hollow
+> pbot spawn b491 17395 -60 -5 minecraft:overworld creative
+sleep 2
+> setblock 17400 -60 0 salt:salt_block
+> summon minecraft:parrot 17403 -60 0
+sleep 1
+> zhh3 watch minecraft:parrot 17400 -60 0 8 25 20 a 17400.5,-59.5,0.5
+waitlog \[zhh3\] watch a done 30
+> zhh3 seen a StayNearSaltGoal
+> pbot remove b491
+> forceload remove 17394 -6 17406 6
+expect \[zhh3\] seen a StayNearSaltGoal no
+
+## SQ-HH-492 | `count Mean TPS: (19|20) >= 3`; LOOK: the three `Mean tick time` value
+> forge tps
+> forceload add 17396 -64 17524 64
+sleep 3
+> pbot spawn b492 17460 -60 0 minecraft:overworld creative
+sleep 2
+> zhh3 spawn minecraft:cow 200 17460 -60 0 60
+> setblock 17460 -60 0 salt:salt_block
+> zhh3 cfg animalLicking false
+sleep 20
+> forge tps minecraft:overworld
+> zhh3 cfg animalLicking true
+sleep 20
+> forge tps minecraft:overworld
+> setblock 17460 -60 0 minecraft:air
+sleep 20
+> forge tps minecraft:overworld
+> kill @e[type=minecraft:cow,x=17396,y=-61,z=-64,dx=128,dy=20,dz=128]
+> pbot remove b492
+> forceload remove 17396 -64 17524 64
+count Mean TPS: (19|20) >= 3
+look `count Mean TPS: (19|20) >= 3`; LOOK: the three `Mean tick time` values are within noise of each other (with salt not noticeably above goal-off; with salt removed back to baseline). Group A superflat keeps this comparable.
+
+## SQ-HH-493 | `expect \[zhh3\] seen a CrowSeekShinyGoal yes`; `expect \[zhh3\] invco
+> forceload add 17507 -13 17533 13
+sleep 3
+> fill 17507 -61 -13 17533 -47 13 minecraft:glass hollow
+> pbot spawn b493 17520 -60 0 minecraft:overworld survival
+sleep 2
+> clear b493
+> item replace entity b493 hotbar.3 with minecraft:iron_nugget 64
+> item replace entity b493 inventory.0 with minecraft:diamond
+> summon minecraft:item 17521 -60 3 {Item:{id:"minecraft:diamond",Count:1b},PickupDelay:32767s}
+> summon hearthandharvest:crow 17528 -60 0
+sleep 1
+> zhh3 watch crow 17520 -55 0 14 20 10 a @b493
+waitlog \[zhh3\] watch a done 20
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 inv b493 minecraft:iron_nugget
+> zhh3 items 17521 -60 3 3
+> zhh3 log crow 17520 -55 0 14
+> data get entity b493 Inventory[{Slot:9b}]
+> pbot remove b493
+> kill @e[type=hearthandharvest:crow,x=17507,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17507 -13 17533 13
+expect \[zhh3\] seen a CrowSeekShinyGoal yes
+expect \[zhh3\] invcount b493 minecraft:iron_nugget 63
+expect \[zhh3\] item minecraft:diamond x1
+expect \[zhh3\] log hearthandharvest:crow .*carry=true.* main=minecraft:iron_nugget x1
+expect Slot: 9b.*minecraft:diamond
+
+## SQ-HH-494 | `expect \[zhh3\] seen a CrowSeekShinyGoal no`; `expect \[zhh3\] inv .*
+> forceload add 17567 -13 17593 13
+sleep 3
+> fill 17567 -61 -13 17593 -47 13 minecraft:glass hollow
+> pbot spawn b494 17580 -60 0 minecraft:overworld survival
+sleep 2
+> clear b494
+> item replace entity b494 hotbar.0 with minecraft:diamond{display:{Name:'"X"'}} 1
+> item replace entity b494 hotbar.1 with minecraft:gold_ingot{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]} 1
+> item replace entity b494 hotbar.2 with minecraft:netherite_ingot 1
+> item replace entity b494 hotbar.3 with minecraft:iron_pickaxe 1
+> summon hearthandharvest:crow 17588 -60 0
+sleep 1
+> zhh3 watch crow 17580 -55 0 14 40 10 a @b494
+waitlog \[zhh3\] watch a done 25
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 inv b494
+> zhh3 log crow 17580 -55 0 14
+> pbot remove b494
+> kill @e[type=hearthandharvest:crow,x=17567,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17567 -13 17593 13
+expect \[zhh3\] seen a CrowSeekShinyGoal no
+expect \[zhh3\] inv .*0:minecraft:diamond x1;.*1:minecraft:gold_ingot x1;.*2:minecraft:netherite_ingot x1;.*3:minecraft:iron_pickaxe x1
+expect \[zhh3\] log hearthandharvest:crow .*carry=false
+
+## SQ-HH-495 | `expect \[zhh3\] invcount b495 minecraft:iron_nugget 8`
+> forceload add 17627 -13 17653 13
+sleep 3
+> fill 17627 -61 -13 17653 -47 13 minecraft:glass hollow
+> pbot spawn b495 17640 -60 0 minecraft:overworld survival
+sleep 2
+> clear b495
+> item replace entity b495 hotbar.3 with minecraft:iron_nugget 8
+> zhh3 cfg stealShinyItems false
+> summon hearthandharvest:crow 17648 -60 0
+sleep 1
+> zhh3 watch crow 17640 -55 0 14 40 10 a @b495
+waitlog \[zhh3\] watch a done 25
+> zhh3 inv b495 minecraft:iron_nugget
+> zhh3 cfg stealShinyItems true
+> pbot remove b495
+> kill @e[type=hearthandharvest:crow,x=17627,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17627 -13 17653 13
+expect \[zhh3\] invcount b495 minecraft:iron_nugget 8
+look UNPARSED CMD: crow.stealShinyItems
+
+## SQ-HH-496 | `expect \[zhh3\] seen a CrowSeekShinyGoal no`; `expect \[zhh3\] invcou
+> forceload add 17687 -13 17713 13
+sleep 3
+> fill 17687 -61 -13 17713 -47 13 minecraft:glass hollow
+> pbot spawn b496 17700 -60 0 minecraft:overworld survival
+sleep 2
+> clear b496
+> item replace entity b496 hotbar.3 with minecraft:iron_nugget 8
+> summon hearthandharvest:crow 17706 -60 0
+sleep 1
+> zhh3 tame b496 17706 -60 0 3
+> zhh3 throw b496 17704 -60 2 minecraft:diamond 1
+> zhh3 watch crow 17700 -55 0 14 40 10 a @b496
+waitlog \[zhh3\] watch a done 25
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 inv b496 minecraft:iron_nugget
+> zhh3 log crow 17700 -55 0 14
+> pbot remove b496
+> kill @e[type=hearthandharvest:crow,x=17687,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17687 -13 17713 13
+expect \[zhh3\] seen a CrowSeekShinyGoal no
+expect \[zhh3\] invcount b496 minecraft:iron_nugget 8
+expect \[zhh3\] log hearthandharvest:crow .*tame=true.*carry=false
+look UNPARSED CMD: CrowRetrieveItemsGoal
+
+## SQ-HH-497 | `expect \[zhh3\] seen a CrowSeekShinyGoal no`; `expect \[zhh3\] invcou
+> forceload add 17744 -16 17776 16
+sleep 3
+> fill 17759 -61 -1 17761 -57 1 minecraft:glass hollow
+> summon hearthandharvest:crow 17760.5 -60 0.5
+> pbot spawn b497 17774 -60 0 minecraft:overworld survival
+sleep 2
+> clear b497
+> item replace entity b497 hotbar.3 with minecraft:iron_nugget 8
+sleep 1
+> zhh3 watch crow 17760 -59 0 3 30 10 a @b497
+waitlog \[zhh3\] watch a done 20
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 inv b497 minecraft:iron_nugget
+> pbot remove b497
+> forceload remove 17744 -16 17776 16
+expect \[zhh3\] seen a CrowSeekShinyGoal no
+expect \[zhh3\] invcount b497 minecraft:iron_nugget 8
+
+## SQ-HH-498 | `expect \[zhh3\] seen a CrowSeekShinyGoal no`; `expect \[zhh3\] invcou
+> forceload add 17807 -13 17833 13
+sleep 3
+> fill 17807 -61 -13 17833 -47 13 minecraft:glass hollow
+> pbot spawn b498 17820 -60 0 minecraft:overworld creative
+sleep 2
+> clear b498
+> item replace entity b498 hotbar.3 with minecraft:iron_nugget 8
+> summon hearthandharvest:crow 17825 -60 0
+sleep 1
+> zhh3 watch crow 17820 -55 0 14 30 10 a @b498
+waitlog \[zhh3\] watch a done 20
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 inv b498 minecraft:iron_nugget
+> pbot remove b498
+> kill @e[type=hearthandharvest:crow,x=17807,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17807 -13 17833 13
+expect \[zhh3\] seen a CrowSeekShinyGoal no
+expect \[zhh3\] invcount b498 minecraft:iron_nugget 8
+
+## SQ-HH-499 | `expect \[zhh3\] seen a CrowSeekShinyGoal yes`; `expect \[zhh3\] asser
+> forceload add 17855 -25 17905 25
+sleep 3
+> fill 17855 -61 -25 17905 -50 25 minecraft:glass hollow
+> pbot spawn b499 17880 -60 0 minecraft:overworld survival
+sleep 2
+> clear b499
+> summon hearthandharvest:crow 17883 -60 0
+sleep 1
+> zhh3 loot 17883 -60 0 3 minecraft:diamond
+> zhh3 watch crow 17880 -55 0 26 18 10 a @b499
+waitlog \[zhh3\] watch a done 25
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 assert a maxD >= 10
+sleep 6
+> zhh3 items 17880 -55 0 26
+> zhh3 log crow 17880 -55 0 26
+> pbot remove b499
+> kill @e[type=hearthandharvest:crow,x=17855,y=-61,z=-25,dx=50,dy=14,dz=50]
+> forceload remove 17855 -25 17905 25
+expect \[zhh3\] seen a CrowSeekShinyGoal yes
+expect \[zhh3\] assert a maxD=.* >= 10\.?0* PASS
+expect \[zhh3\] item minecraft:diamond x1 Age=-32768 Invulnerable=true
+expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty
+
+## SQ-HH-500 | `expect \[zhh3\] seen a CrowSeekShinyGoal yes`; `expect \[zhh3\] asser
+> forceload add 17927 -13 17953 13
+sleep 3
+> fill 17927 -61 -13 17953 -47 13 minecraft:glass hollow
+> pbot spawn b500 17940 -60 12 minecraft:overworld creative
+sleep 2
+> setblock 17932 -60 -4 hearthandharvest:nest
+> summon hearthandharvest:crow 17946 -60 4
+sleep 1
+> zhh3 loot 17946 -60 4 3 minecraft:gold_ingot
+> zhh3 watch crow 17940 -55 0 14 30 10 a 17932.5,-59.9,-3.5
+waitlog \[zhh3\] watch a done 25
+> zhh3 seen a CrowSeekShinyGoal
+> zhh3 assert a minD <= 2
+> data get block 17932 -60 -4 Inventory
+> data get block 17932 -60 -4 CrowStash
+> zhh3 log crow 17940 -55 0 14
+> pbot remove b500
+> kill @e[type=hearthandharvest:crow,x=17927,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17927 -13 17953 13
+expect \[zhh3\] seen a CrowSeekShinyGoal yes
+expect \[zhh3\] assert a minD=.* <= 2\.?0* PASS
+expect minecraft:gold_ingot
+expect has the following block data: 1b
+expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty
+look UNPARSED CMD: CrowStash
+
+## SQ-HH-501 | `expect minecraft:gold_ingot`; `expect has the following block data: 1
+> forceload add 17987 -13 18013 13
+sleep 3
+> fill 17987 -61 -13 18013 -47 13 minecraft:glass hollow
+> pbot spawn b501 18000 -60 0 minecraft:overworld survival
+sleep 2
+> clear b501
+> item replace entity b501 hotbar.2 with minecraft:gold_ingot 4
+> setblock 18009 -60 8 hearthandharvest:nest
+> summon hearthandharvest:crow 18006 -60 4
+sleep 30
+> data get block 18009 -60 8 Inventory
+> data get block 18009 -60 8 CrowStash
+> zhh3 inv b501 minecraft:gold_ingot
+> pbot remove b501
+> kill @e[type=hearthandharvest:crow,x=17987,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 17987 -13 18013 13
+expect minecraft:gold_ingot
+expect has the following block data: 1b
+expect \[zhh3\] invcount b501 minecraft:gold_ingot 3
+
+## SQ-HH-502 | `reject minecraft:gold_ingot`
+> forceload add 18047 -13 18073 13
+sleep 3
+> fill 18047 -61 -13 18073 -47 13 minecraft:glass hollow
+> pbot spawn b502 18060 -60 12 minecraft:overworld creative
+sleep 2
+> zhh3 cfg stashInNests false
+> setblock 18052 -60 -4 hearthandharvest:nest
+> summon hearthandharvest:crow 18055 -60 -4
+sleep 1
+> zhh3 loot 18055 -60 -4 3 minecraft:gold_ingot
+sleep 12
+> data get block 18052 -60 -4 Inventory
+> zhh3 cfg stashInNests true
+> pbot remove b502
+> kill @e[type=hearthandharvest:crow,x=18047,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 18047 -13 18073 13
+reject minecraft:gold_ingot
+look UNPARSED CMD: crow.stashInNests
+
+

@@ -1,0 +1,69 @@
+# r1109wo boot B: fresh normal world, seed 8675309, tree_rarity 1. SQ-WO-36 builds a sky platform at the taiga spot, because the terrain there is unknown and 1.19.2 has no execute positioned over.
+pace 3
+## SQ-WO-35 | biome tag and placement (region census judged after the stop)
+> locate biome minecraft:plains
+waitlog (?i)(nearest minecraft:plains|could not find) 240
+capture A at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:forest
+waitlog (?i)(nearest minecraft:forest|could not find) 240
+capture B at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:taiga
+waitlog (?i)(nearest minecraft:taiga|could not find) 240
+capture C at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:desert
+waitlog (?i)(nearest minecraft:desert|could not find) 240
+capture D at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:snowy_plains
+waitlog (?i)(nearest minecraft:snowy_plains|could not find) 240
+capture E at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:ocean
+waitlog (?i)(nearest minecraft:ocean|could not find) 240
+capture F at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:river
+waitlog (?i)(nearest minecraft:river|could not find) 240
+capture H at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate biome minecraft:dripstone_caves
+waitlog (?i)(nearest minecraft:dripstone_caves|could not find) 240
+capture I at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {A1} {A2} {A3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {B1} {B2} {B3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {C1} {C2} {C3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {D1} {D2} {D3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {E1} {E2} {E3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {F1} {F2} {F3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {H1} {H2} {H3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> execute positioned {I1} {I2} {I3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+sleep 2
+count Test passed == 2
+count Test failed == 6
+> forceload add {A1-32} {A3-32} {A1+32} {A3+32}
+sleep 20
+> forceload add {B1-32} {B3-32} {B1+32} {B3+32}
+sleep 20
+> forceload add {C1-32} {C3-32} {C1+32} {C3+32}
+sleep 20
+> forceload add {D1-32} {D3-32} {D1+32} {D3+32}
+sleep 20
+> forceload add {E1-32} {E3-32} {E1+32} {E3+32}
+sleep 20
+> forceload add {F1-32} {F3-32} {F1+32} {F3+32}
+sleep 20
+> forceload add {H1-32} {H3-32} {H1+32} {H3+32}
+sleep 20
+> forceload add {I1-32} {I3-32} {I1+32} {I3+32}
+sleep 20
+look positions and Test passed or failed: plains and forest pass, the other six fail; census by wo_judge.py region after the stop
+
+## SQ-WO-36 | lightning grows a Wise Oak outside the tag (taiga)
+> execute positioned {C1} 201 {C3} if biome ~ ~ ~ minecraft:taiga
+> fill {C1-8} 200 {C3-8} {C1+8} 200 {C3+8} minecraft:grass_block
+> setblock {C1} 201 {C3} minecraft:oak_sapling
+> summon minecraft:lightning_bolt {C1} 201 {C3}
+sleep 5
+> fill {C1-8} 201 {C3-8} {C1+8} 220 {C3+8} minecraft:air replace mysticaloaktree:wise_oak
+> fill {C1-8} 200 {C3-8} {C1+8} 200 {C3+8} minecraft:air
+sleep 1
+expect Test passed
+expect Successfully filled 1 block
+> save-all flush
+sleep 15

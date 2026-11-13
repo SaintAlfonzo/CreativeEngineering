@@ -1,0 +1,71 @@
+/*
+ * Copyright 2025 patryk3211
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+// Modified for the Forge 1.19.2 / Create 0.5.1 port (backportedPowerGrid, 2026); changes listed in PORT_NOTES.md.
+package org.patryk3211.powergrid.network.packets;
+
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import dev.architectury.networking.NetworkManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import org.patryk3211.powergrid.base.IMultiScreenHandlerFactory;
+import org.patryk3211.powergrid.network.SimplePacket;
+
+import java.util.function.Supplier;
+
+public class ChangeScreenC2SPacket implements SimplePacket {
+    private final BlockPos blockPos;
+    private final int screenIndex;
+
+    public <T extends SmartBlockEntity & IMultiScreenHandlerFactory> ChangeScreenC2SPacket(T be, int screenIndex) {
+        this.blockPos = be.getBlockPos();
+        this.screenIndex = screenIndex;
+    }
+
+    public ChangeScreenC2SPacket(FriendlyByteBuf buf) {
+        blockPos = buf.readBlockPos();
+        screenIndex = buf.readInt();
+    }
+
+    @Override
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeBlockPos(blockPos);
+        buf.writeInt(screenIndex);
+    }
+
+    @Override
+    public void handle(Supplier<NetworkManager.PacketContext> context) {
+        var ctx = context.get();
+        ctx.queue(() -> apply(ctx.getPlayer()));
+    }
+
+    /** The server side for a player (port: split out of {@code handle} for the scratch probe; upstream behaviour plus B21). */
+    public void apply(Player player) {
+        if(player == null)
+            return;
+        // Port fix B21 (power_grid.md 3.5): upstream opened the screen of any table, at any distance and in an
+        // unloaded chunk (which getBlockEntity loads); now only a loaded table within container reach (8 blocks).
+        if(!player.level.isLoaded(blockPos) || player.distanceToSqr(Vec3.atCenterOf(blockPos)) > 64)
+            return;
+        var genericBe = player.level.getBlockEntity(blockPos);
+        if(!(genericBe instanceof SmartBlockEntity) || !(genericBe instanceof IMultiScreenHandlerFactory))
+            return;
+        var be = (SmartBlockEntity & IMultiScreenHandlerFactory) genericBe;
+        IMultiScreenHandlerFactory.openScreen((ServerPlayer) player, be, be::sendToMenu, screenIndex);
+    }
+}

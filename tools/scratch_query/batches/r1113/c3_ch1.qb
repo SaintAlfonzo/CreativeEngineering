@@ -1,0 +1,51 @@
+# r1113 chunk 3, boot CH1: reduced set, Creative Brewing chain without Engineering plus Worldgen (stands in for the
+# SQ-MIN minimal instance and the SQ-ENGM-05 / SQ-CDFO-02 chain; CEPortTesting is left alone: its mods/ lacks 8 chain
+# jars on 2026-11-13, `port_chain.sh check`). Group B normal world (cpp_chain_srv.sh builds on prep_srv B, seed 8675309).
+# Server: bash tools/scratch_query/cpp_chain_srv.sh OUT_CH1 c3ch1 chain
+#   then: cp -l "$INST"/mods/creativeworldgen-1.0.0.jar OUT_CH1/srv/mods/   (cpp_chain refuses Worldgen in its own list)
+#   config/ and defaultconfigs/ start empty (every jar writes its defaults: SQ-FCK-02b reads Delight's fresh file);
+#   kubejs/ holds only the probes (no pack scripts), as the CEPortTesting instance.
+# Before boot: copy tools/scratch_query/c3_probe.js as OUT_CH1/srv/kubejs/server_scripts/zz_c3_probe.js (zq is there).
+# Set differs from the row's: the SQ-MIN list (Common, Calendar, Delight, Brewing, Worldgen + KubeJS Create, KubeJS
+# Delight, LootJS) plus Compat, Create, Immersive Engineering, Farmer's Delight, Fruits Delight, Serene Seasons, MoreJS.
+pace 1
+
+## SQ-ENGM-05 | chain boot as r1106cbp p1: CD transition items, failed recipes under 50, no new Compat / Delight script error
+bootexpect Done \(
+shell grep -h "transition items" logs/kubejs/startup.log | cut -c1-200
+shell grep -qE "\[creativedelight\] transition items \([0-9]+\)" logs/kubejs/startup.log
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not registered - add a row\|no incomplete item registered")" = 0
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log | tail -1; n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "failed=${n:-0}"; test "${n:-0}" -lt 50
+shell grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "creativecompat|creativedelight" | cut -c1-200 | head -10
+shell test "$(grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -ciE "creativecompat|creativedelight")" = 0
+bootreject Missing or unsupported mandatory
+look CD transition count (89 in the full pack); r1106cbp p1 is the reference (scratch_run_2026-11-06.md 5); a script error naming a moved file = its `// requires:` guard is missing
+
+## SQ-CDFO-02 | no Cooking for Blockheads, Balm or Incubation: no class load error, no recipe / tag / loot error naming them
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(cookingforblockheads|blay09|incubation|balm)
+bootreject (Couldn't parse|Unknown item|Unknown tag|Can't find|Failed to load).*(cookingforblockheads|incubation|_nest\b)
+shell grep -ciE "cookingforblockheads|incubation" logs/latest.log
+> zq item creativedelight:oak_spice_rack
+> zq item creativedelight:duck_nest
+waitlog \[zq\] item creativedelight:duck_nest 20
+look both compartment items absent or inert (class AirItem, or registered but no error); the grep count is for the record (a WARN that says a compartment is off is fine)
+
+## SQ-FCK-02b | fresh config dir: [dandelion_maturing] richSoilTicks = 10, fertileSoilTicks = 5 (jar defaults)
+shell grep -A6 "dandelion_maturing" config/creativedelight-common.toml | grep -E "richSoilTicks|fertileSoilTicks"
+shell grep -qE "^\s*richSoilTicks = 10" config/creativedelight-common.toml && grep -qE "^\s*fertileSoilTicks = 5" config/creativedelight-common.toml
+
+## SQ-MIN-01 | season-types, crop-seasons, food families read; arid tag has desert biomes
+kjsreject (season-types|crop-seasons|food families).*(could not read|not found)
+shell grep -hE "season-types|crop-seasons|food families" logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-200 | head -6
+> zq biometag creativecalendar:seasons/arid
+waitlog \[zq\] biometag creativecalendar:seasons/arid \(\d+\) 30
+expect biometag creativecalendar:seasons/arid \([1-9]\d*\):.*minecraft:desert
+look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 11-09 namespace move)
+
+## SQ-MIN-03 | no constructor, errored recipe, incomplete, ReferenceError or loot parse error
+bootreject Constructor for|errored recipe|incomplete failed|ReferenceError|Couldn't parse loot table
+shell grep -hcE "ReferenceError|errored recipe" logs/kubejs/startup.log logs/kubejs/server.log
+
+## SQ-MIN-06 | absent mods skip quietly: no DetailArmorBarCompat, Display Delight dish, chopstick lines
+bootreject DetailArmorBarCompat|Display Delight dish|chopstick foods not registered
+kjsreject DetailArmorBarCompat|Display Delight dish|chopstick foods not registered

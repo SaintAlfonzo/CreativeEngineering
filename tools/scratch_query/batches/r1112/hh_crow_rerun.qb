@@ -1,0 +1,71 @@
+# r1112 crow reruns: 461 bot moved 8 blocks off (a creative bot 2 off picked up the 5th diamond), 479 and 482 longer watches.
+pace 2
+
+## SQ-HH-461 | r1112: thrown diamonds fill 4 nest slots, the 5th stays on the ground (Slot is an int)
+> forceload add 20947 3987 20973 4013
+sleep 3
+> kill @e[type=!player,x=20947,y=-62,z=3987,dx=26,dy=17,dz=26]
+> fill 20947 -61 3987 20973 -47 4013 minecraft:glass hollow
+> pbot spawn c461 20960 -60 4008 minecraft:overworld creative
+sleep 2
+> setblock 20960 -60 4000 hearthandharvest:nest
+> zhh3 throw c461 20960.5 -59.7 4000.5 minecraft:diamond 5 0.1
+sleep 6
+> data get block 20960 -60 4000 Inventory
+> zhh3 items 20960 -60 4000 2
+> pbot remove c461
+> kill @e[type=hearthandharvest:crow,x=20947,y=-62,z=3987,dx=26,dy=18,dz=26]
+> forceload remove 20947 3987 20973 4013
+expect has the following block data: \{.*Slot: 3,
+reject Slot: [4-9],
+expect \[zhh3\] items total=1
+
+## SQ-HH-479 | r1112: one cow licks a salt block away (watch 75 s, then 20 s more before the block read)
+> forceload add 21254 3994 21266 4006
+sleep 3
+> kill @e[type=!player,x=21254,y=-62,z=3994,dx=12,dy=8,dz=12]
+> fill 21254 -61 3994 21266 -56 4006 minecraft:glass hollow
+> pbot spawn c479 21255 -60 3995 minecraft:overworld creative
+sleep 2
+> setblock 21260 -60 4000 salt:salt_block
+> summon minecraft:cow 21263 -60 4000
+sleep 1
+> zhh3 watch minecraft:cow 21260 -60 4000 8 150 20 a 21260.5,-59.5,4000.5
+waitlog \[zhh3\] watch a done 180
+sleep 20
+> zhh3 seen a StayNearSaltGoal
+> zhh3 assert a minD <= 3
+> zhh3 block 21260 -60 4000
+> zhh3 items 21260 -60 4000 4
+> pbot remove c479
+> kill @e[type=minecraft:cow,x=21254,y=-62,z=3994,dx=12,dy=8,dz=12]
+> forceload remove 21254 3994 21266 4006
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] assert a minD=.* <= 3\.?0* PASS
+expect \[zhh3\] block 21260 -60 4000 minecraft:air
+expect \[zhh3\] items total=1
+
+## SQ-HH-482 | r1112: cow at 21 is pulled back, cow at 24 is not (cows frozen until both watches run)
+> forceload add 21290 3994 21350 4006
+sleep 3
+> kill @e[type=!player,x=21290,y=-62,z=3994,dx=60,dy=8,dz=12]
+> fill 21290 -61 3994 21350 -56 4006 minecraft:glass hollow
+> pbot spawn c482 21291 -60 3995 minecraft:overworld creative
+sleep 2
+> setblock 21320 -60 4000 salt:salt_block
+> summon minecraft:cow 21341 -60 4000 {NoAI:1b,Tags:["r482"]}
+> summon minecraft:cow 21296 -60 4000 {NoAI:1b,Tags:["r482"]}
+> zhh3 watch minecraft:cow 21341 -60 4000 3 80 20 a 21320.5,-59.5,4000.5
+> zhh3 watch minecraft:cow 21296 -60 4000 3 80 20 b 21320.5,-59.5,4000.5
+> execute as @e[tag=r482] run data merge entity @s {NoAI:0b}
+waitlog \[zhh3\] watch b done 120
+> zhh3 seen a StayNearSaltGoal
+> zhh3 seen b StayNearSaltGoal
+> zhh3 assert a lastD <= 20.5
+> pbot remove c482
+> kill @e[type=minecraft:cow,x=21290,y=-62,z=3994,dx=60,dy=8,dz=12]
+> forceload remove 21290 3994 21350 4006
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] seen b StayNearSaltGoal no
+expect \[zhh3\] assert a lastD=.* <= 20.5\.?0* PASS
+

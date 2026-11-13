@@ -1004,6 +1004,10 @@ Nothing is built. Each answer is also written into the row it concerns.
 
 **Run r1108hh (2026-11-09, partial):** SQ-HH-1101 to -1328 judged, PASS 219, FAIL 8 (Nourishment stripped: -1106, -1109, -1110, -1111; Quark Pig Litters stacks: -1230, -1232, -1326; -1273 expected), OPEN 2 (-1267, -1307). Five juice compacting recipes fixed. Other blocks not done: [scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) section 8.
 
+**Run r1111 step 5 (2026-11-12):** the rest of the suite (SQ-HH-201 to -329, -401 to -502, -1500 to -1612): 317 rows, PASS 233, FAIL 15, BATCH-FAULT 67, open 2. FAILs: -262, -476 (expected); -304 (wild hops never generate naturally), -309 (mums not in the small_flowers item tag), -434, -440, -501 (crow feeding, breeding, stash), -1505, -1507 (horseshoe), -1546 (tilled end stone dict key), -1547, -1548 (hops on lattice), -1574, -1575 (seed pouch dispenser SERVER CRASH), -1593 (duplicate syrup sugar). TODO `largecontent/mod-additions #65` to `#73`. Per-row tables: `perf/runs/r1111/verdicts/`; [scratch_run_2026-11-11.md](testing/scratch_run_2026-11-11.md) 8.
+
+**Run r1112 (2026-11-12), batch-fault reruns:** 62 rows rerun or rejudged ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8): PASS 58 (Machines 209, 223, 233, 266, 274, 319, 320; Crow 418 to 466, 485, 496, 499, 502; Gear 1505 to 1606; row-text 206, 412, 1524, 1529, 1540, 1590), FAIL 3: -474 (salt dust places a Vintage Delight salt layer on an unworn block, owner question `largecontent/mod-additions #73` (7)), -482 (cow at the radius edge never makes a lick trip, `#76`), -1555 (lattice dries the farmland, hops never grow, `#75`); INCONCLUSIVE -1534 (rerun alone). Not run: -1551 (two-boot row), -1607 to -1611 (real player), -1574, -1575 (crash `#65`).
+
 Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch_queue.md). Numbers are `SQ-HH-` ids unless named. None has run.
 
 | Test | Rows |

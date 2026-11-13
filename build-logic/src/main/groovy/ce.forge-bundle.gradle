@@ -73,6 +73,9 @@ tasks.register('bundleJar', Jar) {
     dependsOn 'reobfJar', writeMetadata
     memberPaths.each { path ->
         dependsOn({ project(path).tasks.named(project(path).findProperty('shipped_jar_task')?.toString() ?: 'jar') })
+        // reobfJar rewrites the member's jar file in place after `jar` (a finalizer, not a dependency): without this
+        // the bundle could nest the un-reobfuscated jar (r1111: Roll's RollMedleyBlock NoSuchMethodError at boot)
+        dependsOn({ project(path).findProperty('shipped_jar_task') ? [] : (project(path).tasks.findByName('reobfJar') ?: []) })
     }
     archiveBaseName = jarName
     archiveClassifier = ''

@@ -1,0 +1,68 @@
+# r1111 step A1 boot 2: same superflat world restarted, spawn-animals=true, rustic_upstream folder linked back.
+# SQ-FLR-06 reads the saw (2300 -60 2) and crusher controller (2304 -60 2) set up before the stop with 16 flesh, Size 1.
+# SQ-HCS-05/-06 rerun: boot 1 had spawn-animals=false (summoned crows discarded) and /place used the placed feature id.
+pace 1
+## SQ-RDB-06 | old rustic_upstream folder beside mods/ is ignored
+bootexpect Done \(
+bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
+bootreject rustic_upstream_assets
+shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"; grep -ciE 'rustic_upstream' logs/latest.log
+## SQ-FLR-06 | processing inventories keep their items and Size 32 after a restart
+> forceload add 2300 0 2310 10
+sleep 2
+> data get block 2300 -60 2 Inventory
+> data get block 2304 -60 2 Inventory
+count Size: 32, Items: \[\{Slot: 0, id: "biomesoplenty:flesh", Count: 16b\}\] == 2
+## SQ-HCS-06 | hand-placed nest makes no crows; summon and egg do
+> forceload add 1300 -40 1400 40
+> kill @e[type=hearthandharvest:crow]
+> setblock 1350 -60 0 hearthandharvest:nest[generated=false]
+> pbot spawn hcs6 1355.5 -60 0.5
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if entity @e[type=hearthandharvest:crow]
+expect (Test failed|Test passed, count: 0)
+> summon hearthandharvest:crow 1352 -60 4
+sleep 1
+> execute if entity @e[type=hearthandharvest:crow]
+expect Test passed, count: 1
+> pbot hold hcs6 hearthandharvest:crow_spawn_egg
+> pbot use hcs6 1355 -61 3 up
+sleep 1
+> execute if entity @e[type=hearthandharvest:crow]
+expect Test passed, count: 2
+> pbot remove hcs6
+## SQ-HCS-05 | generated nest: crows at generation, refill one at a time, cap 3, none with the player 60 away
+> kill @e[type=hearthandharvest:crow]
+> forceload add 1500 -40 1600 40
+> place feature minecraft:oak 1550 -60 0
+> zq count 1546 -60 -4 1554 -45 4 minecraft:oak_leaves
+waitlog \[zq\] done 20
+# the configured feature hearthandharvest:nest, tried at the leaf crown heights
+> place feature hearthandharvest:nest 1550 -53 0
+> place feature hearthandharvest:nest 1550 -54 0
+> place feature hearthandharvest:nest 1550 -55 0
+sleep 2
+> zq count 1540 -60 -10 1560 -40 10 hearthandharvest:nest
+waitlog \[zq\] done 20
+> execute positioned 1550 -55 0 if entity @e[type=hearthandharvest:crow,distance=..24]
+look nest placed by the feature on the leaves (zq count >= 1) with 2 to 3 crows; else the manual generated nest below covers the refill part
+> setblock 1560 -50 0 hearthandharvest:nest[generated=true]
+> kill @e[type=hearthandharvest:crow]
+> pbot spawn hcs5 1555.5 -60 0.5
+> gamerule randomTickSpeed 300
+repeat 6
+sleep 10
+> execute positioned 1555 -55 0 if entity @e[type=hearthandharvest:crow,distance=..24]
+end
+> gamerule randomTickSpeed 3
+> kill @e[type=hearthandharvest:crow]
+> tp hcs5 1615.5 -60 0.5
+> gamerule randomTickSpeed 300
+sleep 40
+> gamerule randomTickSpeed 3
+> execute positioned 1555 -55 0 if entity @e[type=hearthandharvest:crow,distance=..24]
+expect (Test failed|Test passed, count: 0)
+> pbot remove hcs5
+look the 6 counts with the bot near rise one at a time and never pass 3; last count 0 (bot 60 blocks away)

@@ -1,0 +1,9 @@
+# Upstream solver tests (development/backportedPowerGrid/upstream/test) that fail at tag v0.6.2 for reasons in the tests
+# themselves, not the port. tools/test_power_grid_solver.sh lists them as KNOWN and does not fail on them.
+# Format: <Class>.<method> <reason>. Checked 2026-11-13 (plan_power_grid.md P1; PORT_NOTES.md section 10).
+SolverTests.testGenerator stale test: GeneratorCoupling now reads its field from setFieldStrengthProvider (never set by the test, NPE in preSolve); setField alone no longer works
+StructureChangeTests.testMerge test compares a float literal (4f / 20 = 0.20000000298) with the exact double 0.2 without a delta; JUnit fails it the same way
+CapacitorTest.testMultiTick 21 calls = 1.05 s of backward Euler: 0.6421 V is the correct discrete result; the test's 0.632 +- 0.01 band misses it by 0.00006 (before fix B5 it failed far worse: the capacitor to ground ignored the multi-tick conductance change)
+ElectronTubeTest.testSimpleTubeConduct tube current off by 2.5e-6 A of 1.6e-3 (0.15 %) against a 1e-6 delta; same numbers before and after the port's changes (tubes are P9 content)
+ElectronTubeTest.testTubeSaturation tube current off by 2.4e-6 A of 1.8e-2 against a 1e-6 delta; same numbers before and after the port's changes
+TransmissionLineTest.simpleLineTest split transmission-line ports (splittingTransmissionLines, experimental, default off) settle at 2.99 V of 3.33 V after the test's 20 iterations; same before and after the port's changes

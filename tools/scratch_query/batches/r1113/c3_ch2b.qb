@@ -1,0 +1,13 @@
+# r1113 chunk 3, boot CH2b: same OUT_CH2 and level as c3_ch2.qb, restarted with the CfB compartment switched off.
+# Before boot (server stopped): python3 tools/scratch_query/qrun.py toml OUT_CH2/srv/config/creativedelight-common.toml compartments cookingforblockheads false
+pace 1
+
+## SQ-CDFO-03b | CfB installed, [compartments] cookingforblockheads = false: no racks, no oven mixins, no rack merges
+bootexpect Done \(
+shell grep -A6 "^\[compartments\]" config/creativedelight-common.toml | grep -E "cookingforblockheads"
+> zq item creativedelight:oak_spice_rack
+waitlog \[zq\] item creativedelight:oak_spice_rack 20
+> zq recipes oak_spice_rack
+waitlog \[zq\] recipes matching oak_spice_rack: \d+ 30
+shell grep -ciE "Mixing .*(Oven|Fridge|Counter|Kitchen).*creativedelight|creativedelight.*cookingforblockheads" logs/latest.log
+look rack items absent (AirItem) or without recipes, no oven / fridge mixin applied (count 0 against c3_ch2's boot), no `[itemMerges]` rack merge line; boots clean

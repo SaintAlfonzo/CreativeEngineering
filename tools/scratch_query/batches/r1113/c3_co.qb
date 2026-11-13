@@ -1,0 +1,15 @@
+# r1113 chunk 3, boot CO1 (then c3_co2.qb on the same OUT): SQ-CMV-02, Creative Common alone. Group B (cc_only_srv.sh
+# builds on prep_srv B).
+# Server: bash tools/scratch_query/cc_only_srv.sh OUT_CO c3co alone
+#   (Common + KubeJS, Rhino, Architectury + perfBot; empty kubejs/ apart from zq, no config/ or defaultconfigs/)
+pace 1
+
+## SQ-CMV-02 | Common alone boots, reloads clean; no class or mixin error; no script error
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+> reload
+waitlog Reloading!|reload 60
+sleep 15
+shell cat logs/kubejs/startup.log logs/kubejs/server.log | grep -E "\[ERROR\]" | head -5; test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -cE "\[ERROR\]")" = 0
+reject NoClassDefFoundError|ClassNotFoundException
+look stop is clean (the runner's stop: no exception after "Stopping server" in latest.log). SQ-CCO-13 (r1107cco) passed the same set on the 11-07 jar; this is the 11-12 jar
