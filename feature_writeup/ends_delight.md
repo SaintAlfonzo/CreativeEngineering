@@ -438,3 +438,7 @@ Tests (scratch queue SQ-ENM-01 to -05; SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05
 | ENM-04 | `config/enders_additions-common.toml` still read; `[members] enders_additions = false` skips the 1.1.4 recipes and tags |
 | ENM-05 | Spice and soil tags present with and without Ender's 1.2.2 |
 
+
+## Owner note (scratchpad 2026-11-13, not built)
+
+TODO `gear/tuning #22`: rework the Dragon Tooth Knife and remove the Dragon Egg Shell Knife. This replaces the decision in `devmods_evaluation.md` 3.1 to smith the tooth knife from the egg shell knife.

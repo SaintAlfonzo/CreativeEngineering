@@ -13,6 +13,7 @@
   "solraspberrypie.msg.covered": "Your slotted %s is covered by a flat bonus and can be reslotted",
   "solraspberrypie.msg.sustained": "%s effect sustained by existing bonus",
   "solraspberrypie.msg.death": "You lost every diet bonus due to death",
+  "solraspberrypie.msg.reset": "Your diet was reset",
 
   "solraspberrypie.heart": "%s Heart",
   "solraspberrypie.hearts": "%s Hearts",
@@ -30,6 +31,7 @@
   "solraspberrypie.screen.waiting": "Waiting for the server...",
   "solraspberrypie.screen.diversity": "Diversity %s (highest %s)",
   "solraspberrypie.screen.gate": "Eat %s more foods to activate diet bonuses",
+  "solraspberrypie.screen.gate_unique": "Eat %s more different foods to activate diet bonuses",
   "solraspberrypie.screen.flat": "Permanent buffs",
   "solraspberrypie.screen.flat_tip": "Always on while your diversity stays high enough",
   "solraspberrypie.screen.none": "none yet",
@@ -61,6 +63,9 @@
   "solraspberrypie.dietlog.now": "Diversity now: %s",
   "solraspberrypie.dietlog.max": "Highest ever: %s",
   "solraspberrypie.dietlog.milestones": "Milestones",
+  "solraspberrypie.dietlog.window_in": "Counting foods (%s)",
+  "solraspberrypie.dietlog.window_out": "Older foods (%s)",
+  "solraspberrypie.dietlog.min_unique": "Need %s more different foods",
   "solraspberrypie.dietlog.unlock": "Unlock %s",
   "solraspberrypie.dietlog.legend.health": "Hearts",
   "solraspberrypie.dietlog.legend.attribute": "Toughness, knockback",
@@ -74,5 +79,6 @@
   "solraspberrypie.cmd.paused": "Paused diet bonuses for %s players",
   "solraspberrypie.cmd.resumed": "Resumed diet bonuses for %s players",
   "solraspberrypie.cmd.none_paused": "No player has paused diet bonuses",
-  "solraspberrypie.cmd.paused_list": "%s paused: %s"
+  "solraspberrypie.cmd.paused_list": "%s paused: %s",
+  "solraspberrypie.cmd.reset": "Reset the diet of %s players"
 }

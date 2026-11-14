@@ -188,3 +188,14 @@ redirect then takes over the same call; the outline is kept ([creative_engineeri
 - Whether Distant Horizons (in the pack) conflicts with Immersive Portals rendering; the resource pack bench notes say
   DH has crashed other things, so test the pair early.
 - Whether Smaller Nether Portals and NetherPortalFix stay once Immersive Portals handles Nether portals.
+
+## 6. Owner notes (scratchpad 2026-11-13, all planned, none built)
+
+TODO `gameplay/tnt-and-portal #27` to `#37`.
+
+- **Naming:** chronons become chronitons ([Futurama](https://futurama.fandom.com/wiki/Chronitons)); fix the projector line "hold {X} chronotons"; timesteel becomes temporal steel, recipe a felsic/steel alloy (ender pearl or ender grain additive?). Tempad recipes overall much more complex, with intermediate and unusual steps.
+- **Knowledge projector:** recipes follow the real recipes; no TVA lore; larger screen; a tooltip for every item from its entry; use the projector in the timedoor projector, and that in the Tempad. Categories basic vs advanced instead of iron vs steel (advanced harder, basic lower storage).
+- **Mechanics:** Tempad time in game time; several chronometers cancel each other's charging (bug); bracelet Curios slot; timedoor projector door angle 180 degrees (behind the station).
+- **Bugs to confirm:** marker name and colour fields not drawn until clicked, colour update inconsistent; default app, single macro option, locked workstation, empty or marked location card on the Tempad, card stuck in the wallet, timeline language entry, every app present in the Tempad, location broadcaster in multiplayer.
+- **Server:** chronomarker navigation of mining and resource dimensions; better dimensions need an own Tempad; location cards as unlocks (rare wandering trader, End chests).
+- **Portal Gun:** placement must not be blocked by the position of the colour being moved (a blue portal could not move up or down at the same spot).

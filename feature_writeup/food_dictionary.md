@@ -21,7 +21,7 @@ rename the two books.
   Files: `defaultconfigs/solcarrot-server.toml`, `config/solcarrot-client.toml` (copies under `configs_edited/`).
 - Names: `kubejs/assets/creativedelight/kubejs/creativedelight/names.js` (food code lives in the Creative Delight tree).
   No resource-pack zip sets either mod's lang.
-- Jar: `~/.local/share/atlauncher/downloads/SoL-Carrot-1.19.2-1.14.0.jar` -> `mods/` (game was running, not copied).
+- Jar: `~/.local/share/atlauncher/downloads/SoL-Carrot-1.19.2-1.14.0.jar` -> `mods/`: copied 2026-11-13 (it was never copied on 11-10, which caused the "carrot book not found" report, TODO `food/types-and-tuning #34`).
   `mod_sides.md` row added (both).
 - Placed pie and cake bites unlock their slice in both books (plan P1, `PlacedFoodSol$CarrotBridge`). Unlock ignores
   Apple Pie's complexity config.

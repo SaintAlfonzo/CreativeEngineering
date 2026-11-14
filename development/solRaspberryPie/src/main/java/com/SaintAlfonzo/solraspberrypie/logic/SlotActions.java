@@ -181,7 +181,7 @@ public final class SlotActions {
         if (change && (a.effect == null || a.effect.equals(current.effect()) || !pickable(ladder, d, s, a.effect, a.level, a.slot))) return null;
 
         FoodList fl = FoodList.get(player);
-        int eaten = fl.getFoodsEaten();
+        int eaten = com.SaintAlfonzo.solraspberrypie.data.GateFoods.count(fl);
         Map<FoodInstance, Integer> original = FoodWindow.copy(fl);
         List<FoodInstance> oldest = FoodWindow.windowOldestFirst(original);
         Sim sim = new Sim();

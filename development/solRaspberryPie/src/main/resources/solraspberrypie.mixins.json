@@ -6,6 +6,7 @@
   "refmap": "solraspberrypie.refmap.json",
   "plugin": "com.SaintAlfonzo.solraspberrypie.RpMixinPlugin",
   "mixins": [
+    "BenefitsHandlerMixin",
     "FleetFootedMixin",
     "FoodListAccessor",
     "FoodListMixin",
@@ -13,6 +14,7 @@
     "MobEffectInstanceAccessor"
   ],
   "client": [
+    "client.DiversityPageMixin",
     "client.EffectRenderingInventoryScreenMixin",
     "client.FoodBookScreenAccessor",
     "client.FoodBookScreenMixin",

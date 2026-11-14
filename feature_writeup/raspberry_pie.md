@@ -235,7 +235,8 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
 - Milestone page: Raspberry Pie's ladder instead of Apple Pie's config list (Apple's is empty).
 - **Progress line** (behaviour like Carrot's food book, own code): a bar across diversity with icons at each rung:
   heart (health), knockback resistance, armour toughness, slot, flat bonus (permanent buff), one-time unlock.
-  Reached rungs coloured, unreached grey, hover for the value.
+  Reached rungs coloured, unreached grey, hover for the value. Since 12.4 the bar covers a window (the last milestone
+  reached and the next few), icons as listed in 12.4 #37; Apple Pie's own benefit pages are removed.
 
 ## 7. Liquid Diet Log
 
@@ -608,7 +609,9 @@ Live rows are in [scratch_queue.md](testing/scratch_queue.md) section "SQ-RP" (f
 | RP-18 greyed slots read only | CQ-RP-17 | | RP-39 sustained line | CQ-RP-23 |
 | RP-19 Regeneration rhythm | CQ-RP-18 | | V13 broken ladder file | SQ-RP-04 |
 
-Extra rows: CQ-RP-27 Lava Walker burn (Vinery port), CQ-RP-28 Shrinking in a 1-block gap (9.2).
+Extra rows: CQ-RP-27 Lava Walker burn (Vinery port), CQ-RP-28 Shrinking in a 1-block gap (9.2). 12.4 rows: SQ-RP-07
+(reset), SQ-RP-08 (stale Apple Pie benefits inert), CQ-RP-29 to -40 (tooltip, Food Dictionary, unique gate, pages,
+icons, window, double page, health rule, backfill).
 
 Results: r1112 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8): SQ-RP-01 to -06 PASS. The 20:47
 jar did not load (`solapplepie` range `[2.2.0]` against Apple Pie's jar version `1.19.2-2.2.0`); fixed to
@@ -653,8 +656,59 @@ Choices made while building (owner may revisit):
 - **Pause list** is kept in world data (`data/solraspberrypie_paused.dat`) so offline paused players are listed.
 - **Fleet-Footed:** the shared state that matters is `removeEffectAfter` (`lastDuration` is written and read in the
   same per-entity call); the mixin keeps that countdown per entity. Applied only with Alex's Mobs.
-- **Diet Log pages:** markers are coloured squares with a legend (heart/toughness/slot/flat/unlock), not icons yet.
+- **Diet Log pages:** markers were coloured squares with a legend (and never drew: 12.4 #37); icons and a windowed
+  bar since 2026-11-13 (12.4).
 - **Widget:** vertical beside the inventory, horizontal above or below; JEI exclusion through a JEI plugin. The
   vanilla effect list was not moved (11.1 "to evaluate").
 - **Not built:** drag from the picker grid onto a slot (11.2 second option); drinks taken from placed blocks have no
   Liquid Diet Log hook (none found that are drinks).
+
+### 12.4 Owner notes (scratchpad 2026-11-13; built 2026-11-13 except the art)
+
+TODO `food/types-and-tuning #29` to `#38`. Built 2026-11-13 (owner "go", defaults below); jars installed: Raspberry
+Pie 17:57, Creative Delight 17:58, Carrot Edition 1.14.0. Tests: SQ-RP-07, -08, CQ-RP-29 to -40 (section 14).
+
+Done already: the book names (Diet Log, Food Dictionary; `food_dictionary.md`).
+
+Root cause of #33, #36 and #38: the local worlds (New World, Structures, Workspace) still had Apple Pie's old
+`serverconfig/solapplepie-server.toml` (17 benefit thresholds with max health, `minFoodsToActivate = 10`,
+`resetOnDeath = true`, no drink blacklist). Replaced with the pack default on 2026-11-13 (old copies kept in the
+session scratchpad only). Worlds elsewhere (the dedicated server, players' old worlds) keep their copy until it is
+replaced by hand; Raspberry Pie now makes Apple Pie's benefits inert whatever the file says.
+
+- **#29 tooltip (built):** Raspberry Pie and its slice show a grey italic "Doesn't run programs" (Creative Delight
+  `hearthandharvest/client.js`).
+- **#30 reset (built):** `/solrp reset <players>` (permission 2, like pause). Clears Apple Pie's food memory and
+  foods-eaten counter (and so the unique-food count), highest diversity (so every one-time unlock), slot choices and
+  the Liquid Diet Log. Keeps pause state and the books-given flag. Applies at once; the player gets "Your diet was
+  reset". There was no stored cost history to clear (costs come from `respecFoods`).
+- **#31 double page (built; default on 2026-11-13, owner):** client config `[dietLog] doublePage` (on). When on and the screen is at
+  least 380 px wide, the book moves left by half a page and a second book on the right shows the first page of foods
+  out of the decay window ("Older foods"); the left food pages become "Counting foods" (in the window) followed by the
+  older foods from page 2 on. Narrow screens fall back to one book.
+- **#32 windowed progress bar (built):** the bar covers a window of the ladder: from a little before the last milestone
+  reached (35 % of the gap to the one before it) to the Nth milestone ahead (client config `[dietLog] progressAhead`,
+  default 3). Values are printed under both ends, "..." when more lie ahead, "<" when earlier ones exist, ">" in purple
+  when the highest-ever mark lies past the window. Past the last milestone the window runs a little beyond it.
+- **#33 extra hearts (fixed):** Apple Pie's `BenefitsHandler.updateBenefits` and `tickBenefits` are cancelled
+  (`BenefitsHandlerMixin`); the server-start warning stays. Max-health rule as built: a drop takes away only health
+  above the new maximum (a full player stays full at the lower maximum, a hurt player below it keeps their health); a
+  rise heals nothing. No hurt animation (health is set, not damaged).
+- **#34 "carrot book not found" (fixed):** the Carrot Edition jar had never been copied to `mods/` (food_dictionary.md
+  setup); now installed.
+- **#35 art (placeholder accepted 2026-11-13, owner: the copy of the Diet Log book stays until a custom texture is made; all other 12.4 defaults kept: progressAhead 3, uniqueFoodsToActivate true, /solrp reset scope):** the Liquid Diet Log's item texture is still an exact copy of Apple Pie's Diet Log book. The
+  owner draws a liquid version, or picks a palette for `palette_swap.py` on the Diet Log book.
+- **#36 minimum foods (fixed, plus a switch):** stale world config (above). New server config
+  `uniqueFoodsToActivate` (default true): the gate counts **different** foods eaten since Apple Pie's counter last
+  reset (death, `/solrp reset`, `/foodlist clear`). Kept as a set on Apple Pie's FoodList (mixin, NBT key
+  `solrp_gateFoods` in Apple Pie's capability, so it syncs and is copied with it); a list saved before the key
+  existed is backfilled with the remembered foods whose meals-since count is below `foodsEaten`. The gate, the slot
+  preview, the P screen, the Diet Ladder page and Apple Pie's diversity page ("Need N more different foods") all read
+  it. Network protocol version 2.
+- **#37 icons and colours (fixed):** cause: the progress page's `render` never called `super.render`, so its child
+  markers (bar and legend) were never drawn. Icons now (vanilla sprites and models, no new texture): heart (health),
+  item model per attribute (netherite chestplate toughness, shield knockback resistance, feather movement speed, iron
+  sword attack damage, rabbit foot luck, else vanilla's armour point), slot box (with the chosen effect's sprite),
+  effect sprite (flat and unlock). Each has a frame in its kind colour when reached; unreached icons are greyed. The
+  Milestones list uses the same icons (rows 12 px).
+- **#38 Apple Pie pages (fixed):** every Apple Pie benefits page is removed from the Diet Log, whatever the config.

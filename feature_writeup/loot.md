@@ -837,3 +837,11 @@ Revert every temporary edit and `/reload` afterwards.
 ## Owner notes (scratchpad 2026-11-07)
 
 - Missing Lootr in the wooden Nether structures (owner): scan the Nether structure chests for tables Lootr does not convert. Row `loot/tables #16`.
+
+## 10. Owner notes (scratchpad 2026-11-13, not built)
+
+TODO `loot/tables #17` to `#19`.
+
+- Remove Exposure and Exposure Expanded filter sub-tables from chests except in named instances (GLM pulls them in, see the section 2 inventory).
+- Remove the Lexica Botania book from loot (Botania `inject/` pools).
+- Guns: lower the "gun note" rate, keep full gun rates, raise ammo rates. Wording unclear; confirm before building.

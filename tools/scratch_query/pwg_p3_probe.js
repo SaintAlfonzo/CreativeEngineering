@@ -158,7 +158,11 @@
                 let id = String(r.getId())
                 if (id.indexOf(a[1] + ':') != 0) return
                 n++
-                out('recipe ' + id + ' type=' + r.getType() + ' output=' + r.getResultItem())
+                // r1113 pwg17: no getType() on recipes (a foreign recipe's getType() threw AbstractMethodError, a Java Error
+                // Rhino's catch does not stop, and KubeJS remaps it to the serializer id anyway): the serializer's key
+                let ser = null
+                try { ser = $FR.RECIPE_SERIALIZERS.getKey(r.getSerializer()) } catch (err) { ser = '?' }
+                out('recipe ' + id + ' type=' + ser + ' output=' + r.getResultItem())
             })
             out('recipes ' + n)
         } else if (cmd == 'xfmr') {

@@ -403,3 +403,30 @@ Compat's `jei_order.js` has no header). Common and Compat rebuilt 15:08 (Common 
 `[low gravity] client biome list: ...`, for the join test). Tests: run r1108cge2 ([scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) 2): SQ-CGE-07 to -16 with -10b PASS;
 CQ-CGE-02a, -02, -02b, -04, -04b PASS on the jars before the ItemPhysic patch, -02c not judged; CQ-CGE-03a to -03c not run (owner), run by `tools/scratch_query/cge2_run.sh` (server: four boots; client: single player and a join
 to the scratch server), judged by `cge_judge.py`; queue section "SQ-CGE part 2".
+
+### 7.5 Re-check after 1.1.0 (2026-11-13)
+
+Tag `creativecommon-1.1.0` is at 40ed32be (2026-11-08). Changes in Common since then:
+
+| Change | Tested |
+|---|---|
+| Swap lists: permanent aliases for `replaces`, `capabilities` key renames (`SwapCapabilityKeysMixin` on `CapabilityDispatcher`), load report (`SwapReport`, chunk and ItemStack mixins) | SQ-CDNS-01 to -04, -06 PASS (scratch r1110) |
+| Chat key typed into the chat box (MC-122477): `ChatOpenArmMixin`, `ChatOpenCharDropMixin` | FX-50 / CQ-CHK-01 PASS (owner, 2026-11-13) |
+| `creativecommon:trimmable_armor` (was `creativeengineering:`), filled by Equipment | with SQ-CDNS-08 tag check |
+| NCH: `hhStomping`, `vineryFermenting`, `vineryPressing`, `ieFertilizer`, `createFluidTag`, Create crushing / milling `pools` (without Engineering Create ignores `result_pools` and gives every output); recipe types of Delight / Equipment / Labels named directly | the pack's recipe load |
+| Tag scripts `plantabletags.js` (from the plantable work) and `smokable_tags.js` (from Engineering); dict moves (`plan_cd_namespace.md`, flesh items) | the pack's tag load |
+
+All new mixins target vanilla or Forge, so no `MOD_RANGE` row is needed; the chat mixins only apply when the client
+classes load. `:creativeCommon:build --offline` clean 2026-11-13 22:35.
+
+Before the upload:
+1. Done 2026-11-13 (owner): `mod_version` 1.2.0 (new library API). `creativecommon-1.2.0.jar` built 22:40 in
+   build/libs, NOT installed (`mods/` still holds the 11-12 `creativecommon-1.1.0.jar`; `installToMods` displaces it).
+   On install, update the `mod_sides.md` row; `pack/MODLIST.md` and `pack/manifest.json` follow at the next deploy.
+2. Done 2026-11-13: project page ([project_pages/creative_common.md](project_pages/creative_common.md)) gained the swap
+   list additions (permanent aliases, capability keys, load report), the plantable tags and the chat-key fix (MC-122477).
+3. Deferred (owner 2026-11-13: no changelog yet): CurseForge changelog for the file. Common has no own release notes; the
+   pack's `unreleased.md` holds the chat bullet.
+4. Boot check of the 1.2.0 jar: queued as SQ-CC12-01 to -03 (Common alone, Common + Compat + Calendar, full pack); the 11-10 runs predate the chat
+   mixins and the 11-13 dict.
+5. Commit, then tag `creativecommon-1.2.0` on that commit.

@@ -25,6 +25,8 @@ public final class S2CState {
     public double maxDiversity;
     public int foodsEaten;
     public int minFoods;
+    /** The gate counts different foods (server config uniqueFoodsToActivate). */
+    public boolean uniqueGate;
     public boolean paused;
     public int duration;
     public int activeSlots;
@@ -42,7 +44,8 @@ public final class S2CState {
         S2CState m = new S2CState();
         m.diversity = s.diversity;
         m.maxDiversity = d.maxDiversity;
-        m.foodsEaten = FoodList.get(player).getFoodsEaten();
+        m.foodsEaten = com.SaintAlfonzo.solraspberrypie.data.GateFoods.count(FoodList.get(player));
+        m.uniqueGate = com.SaintAlfonzo.solraspberrypie.RpConfig.SERVER.uniqueFoodsToActivate.get();
         m.minFoods = SOLSweetPotatoConfig.minFoodsToActivate();
         m.paused = d.paused;
         m.duration = EffectApplier.duration();
@@ -60,6 +63,7 @@ public final class S2CState {
         buf.writeDouble(m.maxDiversity);
         buf.writeVarInt(m.foodsEaten);
         buf.writeVarInt(m.minFoods);
+        buf.writeBoolean(m.uniqueGate);
         buf.writeBoolean(m.paused);
         buf.writeVarInt(m.duration);
         buf.writeVarInt(m.activeSlots);
@@ -78,6 +82,7 @@ public final class S2CState {
         m.maxDiversity = buf.readDouble();
         m.foodsEaten = buf.readVarInt();
         m.minFoods = buf.readVarInt();
+        m.uniqueGate = buf.readBoolean();
         m.paused = buf.readBoolean();
         m.duration = buf.readVarInt();
         m.activeSlots = buf.readVarInt();

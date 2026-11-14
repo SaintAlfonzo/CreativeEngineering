@@ -24,17 +24,18 @@
 //                                 (ITEM "none": empty hand)
 //   line X Y Z unetched|battery   belt X..X+9 at Z (shafts, creative motor at X Y Z-1), end depot at X+10; machines
 //                                 two above the belt: unetched = deployers at X+2 (empty_circuit), X+4 (create:dough),
-//                                 X+6 (create:copper_sheet), press at X+8; battery = deployers at X+2
-//                                 (create:copper_sheet), X+4 (powergrid:zinc_sheet), spout at X+6 with 1000 mB acid
+//                                 X+6 (COPPER_PLATE: immersiveengineering:plate_copper), press at X+8; battery = deployers at X+2
+//                                 (COPPER_PLATE), X+4 (powergrid:zinc_sheet), spout at X+6 with 1000 mB acid
 //   lineck X Y Z                  speeds of the belt and machines, belt direction (flips the belt motor if it runs west)
 //   feed X Y Z ITEM [BX BY BZ]    puts ITEM (or, with a board, a circuit_schematic / incomplete_circuit of its design:
 //                                 ITEM "schem" / "inc") on the belt start at X Y Z
 //   loop X Y Z on|off             every 5 ticks: an item on the line's end depot (X+10) with a SequencedAssembly tag is
 //                                 put back on the belt start; any other item ends the loop ("loop done <item>")
-//   basin X Y Z                   creative blaze burner (kindled) at Y-1, basin at Y, mixer at Y+2, motor at Y+3
+//   basin X Y Z                   creative blaze burner (kindled) at Y-1, basin at Y, mixer at Y+2, cogwheel east of the
+//                                 mixer (X+1, Y+2) with a creative motor on it (X+1, Y+3) facing down
 //   bfill X Y Z FLUID MB          fills the fluid handler at X Y Z (basin, spout)
 //   take SX SY SZ TX TY TZ        moves every extractable stack from the handler at S into the handler at T
-//   arm AX AY AZ OX OY OZ IX IY IZ [JX JY JZ]   mechanical arm at A (motor under it, 64 RPM): DEPOSIT at O (depot
+//   arm AX AY AZ OX OY OZ IX IY IZ [JX JY JZ]   mechanical arm at A (cogwheel east of it, motor on the cog facing down, 64 RPM): DEPOSIT at O (depot
 //                                 or belt), TAKE at I (and J)
 //   arm2 AX AY AZ O1.. O2.. I.. J..   as arm with two DEPOSIT points in this order (B25: a depot first, then a belt)
 //   armunit X Y Z ITEM N          ArmInteractionPoint.create at the depot X Y Z, insert(ITEM x N, simulate): the
@@ -257,6 +258,22 @@
         let s = $BEB.get(level.getBlockEntity(P), $Scroll.TYPE)
         if (s != null) s.setValue(rpm)
     }
+    // r1113 pwg16 (and pwg9p6 SQ-PWG-49): a creative motor facing down onto a mixer, or up into an arm, left the machine
+    // at speed 0 (motor -64, mixer network none) while horizontal motors drive deployers and presses. Vertical drive is
+    // now a horizontal motor (north of M, facing south) into a gearbox at M (axis x: shafts north, south, up, down).
+    function vdrive(level, M, rpm) {
+        motor(level, M.north(), 'south', rpm)
+        place(level, M, 'create:gearbox', { axis: 'x' })
+    }
+    // r1113 pwg17: the gearbox route ran (gearbox 64) but the mixer and the arm stayed at 0. Both are small cogs with no
+    // shaft (Create 0.5.1 MechanicalMixerBlock.hasShaftTowards returns false; ArmBlock is an ICogWheel): they take
+    // rotation only from a meshing cog. So: a cogwheel (axis y) east of the machine M, a creative motor on top of it
+    // facing down into its shaft. Call after the machine is placed.
+    function cogdrive(level, M, rpm) {
+        let C = M.east()
+        place(level, C, 'create:cogwheel', { axis: 'y' })
+        motor(level, C.above(), 'down', rpm)
+    }
     // a kinetic block whose shaft faces NORTH: try each value of the given property until hasShaftTowards(NORTH)
     function placeShaftNorth(level, P, id, base, prop, values) {
         let last = null
@@ -280,6 +297,9 @@
         out('deployer ' + level.getBlockState(P) + (itemId == null ? '' : ' hand (next ticks) ' + itemId + ' x' + n))
     }
     // deployer fake players exist after their first tick: hand items are given by the tick handler
+    // r1113 pwg16: the pack's #forge:plates/copper holds only the IE plate (create:copper_sheet is not in it), so a
+    // deployer with Create's sheet never ran the plate steps of the unetched circuit and battery assemblies
+    const COPPER_PLATE = 'immersiveengineering:plate_copper'
     let HOLD = []
     let LOOPS = []
     let PENS = []
@@ -334,6 +354,8 @@
                 }
             }
             if (L.left <= 0) { out('loop timeout (end depot ' + stackLine(s) + ')'); return false }
+            // r1113 pwg16: an item stuck at one step cycled for 600 s into later rows; stop after 8 cycles
+            if (L.cycles >= 8) { out('loop timeout (cycles ' + L.cycles + ', end depot ' + stackLine(s) + ')'); return false }
             return true
         })
     }
@@ -473,11 +495,11 @@
         if (kind == 'unetched') {
             deployer(level, pos(X + 2, Y + 2, Z), 'powergrid:empty_circuit', 16)
             deployer(level, pos(X + 4, Y + 2, Z), 'create:dough', 16)
-            deployer(level, pos(X + 6, Y + 2, Z), 'create:copper_sheet', 16)
+            deployer(level, pos(X + 6, Y + 2, Z), COPPER_PLATE, 16)
             motor(level, pos(X + 8, Y + 2, Z - 1), 'south', 64)
             placeShaftNorth(level, pos(X + 8, Y + 2, Z), 'create:mechanical_press', {}, 'facing', ['north', 'south', 'east', 'west'])
         } else if (kind == 'battery') {
-            deployer(level, pos(X + 2, Y + 2, Z), 'create:copper_sheet', 16)
+            deployer(level, pos(X + 2, Y + 2, Z), COPPER_PLATE, 16)
             deployer(level, pos(X + 4, Y + 2, Z), 'powergrid:zinc_sheet', 16)
             place(level, pos(X + 6, Y + 2, Z), 'create:spout')
             fill(level, pos(X + 6, Y + 2, Z), 'powergrid:acid', 1000)
@@ -506,8 +528,8 @@
         t.putBoolean('isCreative', true)
         bb.load(t)
         place(level, pos(X, Y, Z), 'create:basin')
-        motor(level, pos(X, Y + 3, Z), 'down', 64)
         place(level, pos(X, Y + 2, Z), 'create:mechanical_mixer')
+        cogdrive(level, pos(X, Y + 2, Z), 64)
         out('basin at ' + X + ' ' + Y + ' ' + Z + ' burner ' + level.getBlockState(pos(X, Y - 1, Z)) + ' creative=' + bb.isCreative())
     }
     function take(level, S, T) {
@@ -524,8 +546,8 @@
         out('take moved ' + moved + ' stack(s)')
     }
     function arm(level, A, outs, ins) {
-        motor(level, A.below(), 'up', 64)
         place(level, A, 'create:mechanical_arm')
+        cogdrive(level, A, 64)
         let list = new $ListTag()
         let addPoint = (P, mode) => {
             let pt = $ArmPoint.create(level, P, level.getBlockState(P))

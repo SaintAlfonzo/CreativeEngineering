@@ -715,3 +715,5 @@ the blocks touching the entity's sides.
   collision, fluids, thin blocks and `auditSkip`. Watcher tooling: `/dumpsurface`, `blockrunner_scan.py --audit`
   (6). The friction/jump outlier pass (`#5`) waits for the first dump. BR-59..64 added. Jars built, not installed
   (game open): Common, Compat, Devtools.
+
+Scratchpad 2026-11-13: jello blocks are in the very sticky tier; they still bounce (SlimeBlock). Honey's jump factor for them is TODO `gameplay/blockrunner #9`.

@@ -47,6 +47,8 @@
     const $Applier = Java.loadClass('com.simibubi.create.foundation.recipe.RecipeApplier')
     const $RecipeWrapper = Java.loadClass('net.minecraftforge.items.wrapper.RecipeWrapper')
     const $ISH = Java.loadClass('net.minecraftforge.items.ItemStackHandler')
+    const $ListTag = Java.loadClass('net.minecraft.nbt.ListTag')
+    const $ART = Java.loadClass('com.simibubi.create.AllRecipeTypes')
     const PROFILE = new $Profile($UUID.fromString('5a7c0e57-0b0e-4a11-9d51-70e9a1c0f00d'), '[zpwg9d]')
     const PROFILE7 = new $Profile($UUID.fromString('5a7c0e57-0b0e-4a11-9d51-70e9a1c0ffee'), '[zpwg7]')
     const TOOLS = ['portable_drill', 'portable_saw', 'electrobaton', 'electrozapper']
@@ -118,9 +120,24 @@
         let s = new $ItemStack(item(id), 1)
         s.setDamageValue(damage)
         s.setHoverName($Comp.literal('zpwg9d'))
-        s.enchant($Ench.UNBREAKING, 1)
+        // KubeJS remaps ItemStack.enchant to its own copy-returning form (r1113 pwg16: unbreaking=0): write the NBT
+        let en = new $Compound()
+        en.putString('id', 'minecraft:unbreaking')
+        en.putShort('lvl', 1)
+        let el = new $ListTag()
+        el.add(en)
+        s.getOrCreateTag().put('Enchantments', el)
         s.getOrCreateTag().putInt('ProbeKeep', 1)
         return s
+    }
+    function recipeType(level, r) {
+        let rm = level.getRecipeManager()
+        let found = []
+        let names = { DEPLOYING: 'create:deploying', MECHANICAL_CRAFTING: 'create:mechanical_crafting', SEQUENCED_ASSEMBLY: 'create:sequenced_assembly' }
+        for (let k in names) {
+            try { if (rm.getAllRecipesFor($ART[k].getType()).contains(r)) found.push(names[k]) } catch (err) { found.push(k + '?' + err) }
+        }
+        return found.length ? found.join('+') : 'other'
     }
     function check(level) {
         let chip = item('integrated_circuit'), inc = item('incomplete_electrical_gizmo')
@@ -132,7 +149,8 @@
         P9D_RECIPES.forEach(id => {
             let r = recipe(level, id)
             if (r == null) { out('recipe ' + id + ' MISSING'); return }
-            out('recipe ' + id + ' class=' + recipeClass(r) + ' type=' + r.getType() + ' serializer='
+            // KubeJS remaps getType() to the serializer id (r1113 pwg16): name the type whose recipe list holds r
+            out('recipe ' + id + ' class=' + recipeClass(r) + ' type=' + recipeType(level, r) + ' serializer='
                 + $FR.RECIPE_SERIALIZERS.getKey(r.getSerializer()) + ' result=' + idOf(r.getResultItem()))
         })
         let chipStack = new $ItemStack(chip, 1)

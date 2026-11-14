@@ -131,6 +131,14 @@
         let decoded = new cls(buf)
         return [decoded, n]
     }
+    // r1113 pwg16: the menu stayed open after closeContainer (a far screen packet showed the table menu left from the
+    // last near one); close, fall back to doCloseContainer, and say so when a menu is still open
+    // r1113 pwg17: closeContainer is not visible on a FakePlayer from Rhino ("Cannot find function"); doCloseContainer
+    // (ServerPlayer: menu removed, inventoryMenu back, no packet) closed every menu. Only that call now.
+    function closeMenu(p) {
+        try { p.doCloseContainer() } catch (e3) { out('close: doCloseContainer threw ' + e3) }
+        if (p.containerMenu != null && p.containerMenu != p.inventoryMenu) out('close: ' + menuLine(p) + ' still open after doCloseContainer')
+    }
     function applyAs(level, decoded, what) {
         let p = fake(level)
         try {
@@ -139,7 +147,7 @@
         } catch (err) {
             out(what + ' apply threw ' + err + ' (after the schematic part; ' + menuLine(p) + ')')
         }
-        try { p.closeContainer() } catch (e2) { }
+        closeMenu(p)
     }
     function check(level) {
         out('block powergrid:circuit_design_table registered=' + $FR.BLOCKS.containsKey(rl('circuit_design_table'))
@@ -207,27 +215,42 @@
         let res = p.gameMode.useItemOn(p, level, stack, $Hand.MAIN_HAND, hit)
         out('place ' + stackLine(stack) + ' result=' + res + ' -> ' + level.getBlockState(B))
     }
-    function lookFrom(p, eye, hitVec) {
+    // r1113 pwg17: eye and hit are plain JS [x, y, z] arrays. Vec3.x / .y / .z are field-and-method pairs in Rhino: passed
+    // into a Java call they throw an NPE that escapes the try (the "unexpected error" after cord step 4 in pwg16 and pwg17)
+    function lookFrom(p, eye, hit) {
+        let hitVec = new $Vec3(hit[0], hit[1], hit[2])
         // absMoveTo takes the feet; the eye is 1.62 above them (standing)
-        try { p.absMoveTo(eye.x, eye.y - 1.62, eye.z, 0, 0) } catch (e1) { p.teleportTo(eye.x, eye.y - 1.62, eye.z) }
+        try { p.absMoveTo(eye[0], eye[1] - 1.62, eye[2], 0, 0) } catch (e1) { p.teleportTo(eye[0], eye[1] - 1.62, eye[2]) }
         p.setPose($Pose.STANDING)
         p.setShiftKeyDown(false)
         p.lookAt($Anchor.EYES, hitVec)
     }
     function cord(level, a) {
+        // r1113 pwg16: this command ended with "An unexpected error occurred" and no print; a step line before each call
+        // shows which one throws (the error escapes the script's catch)
         let S = pos(parseInt(a[1]), parseInt(a[2]), parseInt(a[3]))
         let T = pos(parseInt(a[4]), parseInt(a[5]), parseInt(a[6]))
+        out('cord step 1 load CordItem')
         let Cord = Java.loadClass('org.patryk3211.powergrid.electricity.wire.powercord.CordItem')
+        out('cord step 2 fake player')
         let p = fake(level)
+        out('cord step 3 hold copper_cord')
         p.setItemInHand($Hand.MAIN_HAND, new $ItemStack(item('copper_cord'), 4))
-        let sHit = new $Vec3(S.getX() + 0.5, S.getY() + 3 / 16, S.getZ() + 0.5)
-        lookFrom(p, new $Vec3(sHit.x, sHit.y + 1.5, sHit.z + 0.01), sHit)
-        let r1 = Cord.useOn(p, $Hand.MAIN_HAND, S, $Dir.UP)
-        out('cord socket ' + level.getBlockState(S) + ' result=' + r1.isPresent() + '/' + r1.value() + ' stack=' + stackLine(p.getMainHandItem()) + ' tag=' + p.getMainHandItem().getTag())
-        let tHit = new $Vec3(T.getX() + 0.5, T.getY() + 7 / 16, T.getZ() + 14 / 16)
-        lookFrom(p, new $Vec3(tHit.x, tHit.y, tHit.z + 2.0), tHit)
-        let r2 = Cord.useOn(p, $Hand.MAIN_HAND, T, $Dir.SOUTH)
-        out('cord table ' + level.getBlockState(T) + ' result=' + r2.isPresent() + '/' + r2.value() + ' stack=' + stackLine(p.getMainHandItem()))
+        let sHit = [S.getX() + 0.5, S.getY() + 3 / 16, S.getZ() + 0.5]
+        out('cord step 4 look at the socket')
+        lookFrom(p, [sHit[0], sHit[1] + 1.5, sHit[2] + 0.01], sHit)
+        out('cord step 5 CordItem.useOn socket')
+        let r1 = null
+        try { r1 = Cord.useOn(p, $Hand.MAIN_HAND, S, $Dir.UP) } catch (e1) { out('cord step 5 threw ' + e1) }
+        out('cord socket ' + level.getBlockState(S) + ' result=' + (r1 == null ? 'null' : r1.isPresent() + '/' + r1.value()) + ' stack=' + stackLine(p.getMainHandItem())
+            + ' tag=' + (function (t) { return t.contains('tag') ? String(t.getCompound('tag')) : 'none' })(p.getMainHandItem().save(new $Compound())))
+        let tHit = [T.getX() + 0.5, T.getY() + 7 / 16, T.getZ() + 14 / 16]
+        out('cord step 6 look at the table')
+        lookFrom(p, [tHit[0], tHit[1], tHit[2] + 2.0], tHit)
+        out('cord step 7 CordItem.useOn table')
+        let r2 = null
+        try { r2 = Cord.useOn(p, $Hand.MAIN_HAND, T, $Dir.SOUTH) } catch (e2) { out('cord step 7 threw ' + e2) }
+        out('cord table ' + level.getBlockState(T) + ' result=' + (r2 == null ? 'null' : r2.isPresent() + '/' + r2.value()) + ' stack=' + stackLine(p.getMainHandItem()))
         let box = new ($AABB)(Math.min(S.getX(), T.getX()) - 2, Math.min(S.getY(), T.getY()) - 2, Math.min(S.getZ(), T.getZ()) - 2,
             Math.max(S.getX(), T.getX()) + 3, Math.max(S.getY(), T.getY()) + 3, Math.max(S.getZ(), T.getZ()) + 3)
         let names = []
@@ -334,7 +357,7 @@
             let hit = new $BHR(hitVec, $Dir.UP, P, false)
             let res = level.getBlockState(P).use(level, p, $Hand.MAIN_HAND, hit)
             out('buse creative=' + p.isCreative() + ' result=' + res + ' ' + menuLine(p))
-            try { p.closeContainer() } catch (e2) { }
+            closeMenu(p)
         } else out('unknown subcommand ' + cmd)
     }
     ServerEvents.commandRegistry(e => {

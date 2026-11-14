@@ -1,0 +1,104 @@
+# r1113 rerun boot AR: the r1113ra world restarted again (same OUT as rerun_a / rerun_a2, level r1113ra, group A superflat).
+# Why (perf/runs/r1113/verdicts/rerun_a.md):
+#   SQ-HH-1551b, SQ-HH-1555h: rerun_a2 spawned no player, and forceloaded chunks with no player within 128 blocks get no
+#     random ticks (gotchas.md), so neither hops plant could grow. Same rows with a bot standing next to them.
+#   SQ-WO-06r: rerun_a saw the storm sleep, but the tree woke and fell asleep again on a tired roll (sleep_until 14027 =
+#     game 8027 + 300 s) before the single read 120 s after the clear. Polled every 5 s here.
+#   SQ-HH-501d: diagnostic only (the r1113 FAIL stands): same theft with the default carry time, to see whether the crow
+#     reaches the nest late once it lands within 3 blocks of the nest height (TODO largecontent/mod-additions #68).
+# Config in OUT/srv before the boot (server stopped):
+#   hearthandharvest-common.toml: hopsRequireFarmland = false (still false after rerun_a2; grep it), stealChance 1.0 (kept),
+#   carryTicks back to the default:
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/hearthandharvest-common.toml crow carryTicks 1200
+#   After this boot reset hopsRequireFarmland to true (and carryTicks to 200 if group A crow rows follow on this world).
+# Probes: already in OUT/srv/kubejs/server_scripts/ (zz_wo_probe.js, zz_hh_crow_probe.js, zz_zq_probe.js).
+pace 1
+
+## SQ-RAR-00 | setup: forceload, bots next to each fixture (not a test row)
+bootexpect Done \(
+> forceload add 30980 29980 31080 30060
+> forceload add 31100 30080 31140 30120
+> forceload add 30080 29990 30110 30030
+sleep 10
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> time set noon
+> weather clear 100000
+> pbot spawn H 31066 -60 30046 minecraft:overworld creative
+> pbot spawn W 30095 -60 30010 minecraft:overworld creative
+sleep 3
+> pbot status
+expect cdevperfbot ok
+
+## SQ-HH-1551b | part 2: with hopsRequireFarmland false, hops on dirt grow (fresh plant, bot H 5 blocks away)
+shell grep -nE "hopsRequireFarmland|carryTicks" config/hearthandharvest-common.toml
+> setblock 31072 -61 30050 minecraft:dirt
+> setblock 31072 -60 30051 minecraft:stone
+> setblock 31072 -60 30050 hearthandharvest:hops[age=0,facing=north]
+> execute if block 31072 -60 30050 hearthandharvest:hops[age=0]
+> gamerule randomTickSpeed 3000
+sleep 12
+> gamerule randomTickSpeed 3
+> execute if block 31072 -60 30050 hearthandharvest:hops[age=4]
+sleep 1
+count Test passed >= 2
+reject Test failed
+
+## SQ-HH-1555h | hops column stops at height 5: a 7th lattice stays empty (fresh column, bot H 10 blocks away)
+> setblock 31074 -61 30054 minecraft:dirt
+> fill 31074 -60 30055 31074 -53 30055 minecraft:stone
+> setblock 31074 -60 30054 hearthandharvest:hops[age=4,facing=north]
+> fill 31074 -59 30054 31074 -54 30054 vinery:grapevine_lattice[facing=north]
+> gamerule randomTickSpeed 3000
+sleep 40
+> gamerule randomTickSpeed 3
+> zq count 31074 -60 30054 31074 -54 30054 hearthandharvest:hops
+waitlog \[zq\] done 20
+> execute if block 31074 -54 30054 vinery:grapevine_lattice
+sleep 1
+expect count hearthandharvest:hops: 6\b
+expect Test passed
+look count 6 (hops at -60 to -55), the top lattice at -54 still empty; a count of 1 now (a player is near) means the spread itself does not start
+
+## SQ-WO-06r | sleeps in a storm by day (no timer), wakes after the storm (polled)
+> time set noon
+> setblock 30090 -60 30020 mysticaloaktree:wise_oak
+> weather thunder 600
+sleep 120
+> zwo state 30090 -60 30020
+waitlog \[zwo\] done 20
+> data get block 30090 -60 30020 creativeworldgen_sleep_until
+> weather clear 100000
+repeat 24
+sleep 5
+> zwo state 30090 -60 30020
+end
+waitlog \[zwo\] done 20
+> data get block 30090 -60 30020 creativeworldgen_sleep_until
+sleep 1
+expect \[zwo\] 30090 -60 30020 .*state=sleeping
+expect \[zwo\] 30090 -60 30020 .*state=(none|blinking)
+look the read before the clear: "Found no elements matching" = storm sleep (sleep_until 0), a number = it was a tired sleep that started before the sky darkened; first awake poll after the clear; a later sleeping poll with a sleep_until is a tired roll, not the storm
+
+## SQ-HH-501d | diagnostic: theft with the default carry (1200 ticks); does the crow reach the nest late (TODO #68)
+> fill 31107 -61 30087 31133 -47 30113 minecraft:glass hollow
+> fill 31108 -60 30088 31132 -48 30112 minecraft:air
+> kill @e[type=!player,x=31107,y=-62,z=30087,dx=26,dy=17,dz=26]
+> pbot spawn b501 31120 -60 30100 minecraft:overworld survival
+sleep 2
+> clear b501
+> item replace entity b501 hotbar.2 with minecraft:gold_ingot 4
+> setblock 31129 -60 30108 hearthandharvest:nest
+> summon hearthandharvest:crow 31126 -60 30104
+> zhh3 watch crow 31120 -55 30100 14 70 20 w501d 31129,-60,30108
+waitlog \[zhh3\] watch w501d done 90
+> zhh3 seen w501d CrowSeekShinyGoal
+> zhh3 seen w501d CrowFleeGoal
+> data get block 31129 -60 30108 Inventory
+> data get block 31129 -60 30108 CrowStash
+> zhh3 inv b501 minecraft:gold_ingot
+sleep 1
+> pbot remove b501
+> kill @e[type=hearthandharvest:crow,x=31107,y=-61,z=30087,dx=26,dy=14,dz=26]
+expect \[zhh3\] invcount b501 minecraft:gold_ingot 3
+look RECORD: nest Inventory and CrowStash; if stashed, the sample where goals shows CrowSeekShinyGoal again and the crow's y versus -60 (within 3 = nearbyNest finds it); if not, where the gold went (carry ends at 1200)

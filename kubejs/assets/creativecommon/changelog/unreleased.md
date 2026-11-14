@@ -11,12 +11,14 @@
 - **New:** Diet bonus messages show on the action bar, one at a time.
 - **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it.
 - **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button.
+- **New:** The Diet Log's progress bar shows the last milestone reached and the next 3, with an icon for each bonus. The Spice of Life bonus pages are gone.
+- **New:** The Diet Log can show foods in your diet and older foods on two pages side by side (client setting, on by default).
 - **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses.
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
 - **New:** New players start with a Diet Log and a Liquid Diet Log.
 - **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
-- **Changed:** Diet bonuses start after 5 foods eaten [10]. Applies to new worlds.
+- **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. Applies to new worlds.
 - **Changed:** Lava Walker burns like a magma block when standing on lava without Fire Resistance.
 - **Fixed:** Fleet-Footed stayed on for every player while one player sprint-jumped.
 
@@ -68,6 +70,7 @@
 - **Changed:** The Tree Tapper can be crafted with a wooden bucket.
 - **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles show their tooltip.
 - **Fixed:** Thrown cleavers and pitchforks have names.
+- **New:** Raspberry Pie and its slices have the tooltip "Doesn't run programs".
 
 ## Crows <!-- icon: hearthandharvest:crow_feather -->
 

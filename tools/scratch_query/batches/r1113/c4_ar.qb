@@ -1,0 +1,388 @@
+# r1113 chunk 4, boot A rerun (c4_ar): the c4_a rows that faulted, judged in perf/runs/r1113/verdicts/c4_a.md.
+# Rows: SQ-GAP-04 (golden apple, gold ingot and block recipes not covered in c4_a), SQ-BREED-03, SQ-HCS-07, SQ-HCS-12,
+# SQ-FLR-03, -02b (setup), -04, -05, SQ-RD-11, SQ-FDI-02, -03.
+#
+# Setup: NO fresh world. Reuse the c4_a scratch dir and world as they are (OUT = the c4_a scratch dir, srv = OUT/srv,
+# level r1113c4a, spawn-animals=true, SoL Carrot jar still in srv/mods, the same dev jars prep_srv swapped in for c4_a,
+# Loading Protection 1 s). Only the fixed /zc4 probe changes:
+#   cp $INST/tools/scratch_query/zc4_probe.js OUT/srv/kubejs/server_scripts/zz_zc4_probe.js
+# (the other probes, zz_zq_probe.js, zz_hh_crow_probe.js, zz_zact_probe.js, zz_count.js, zz_trades.js, are already in
+# srv/kubejs/server_scripts from c4_a and unchanged). No kjsexpect rows, no /reload, no /dumpall.
+#
+# Fixes against c4_a:
+#  - zc4_probe.js: arguments split as a JS string (String(argStr)); every multi-argument /zc4 call (put, fill, inv, pools,
+#    fuel, eat, hunger, sol ITEM, isfood, bees) got the whole argument string as a[0] in c4_a. fill uses
+#    Fluid.of(id, mB).getFluidStack(); fuel uses BlazeBurnerBlock.tryInsert (the block entity's tryUpdateFuel is
+#    protected) and prints the state in lower case (blaze=kindled).
+#  - SQ-HCS-07: an empty-hand use takes one item INTO the main hand, and the next use inserts that held item back
+#    (NestBlock.use), so c4_a's 6 plain uses netted nothing. Now: sneak + one use (takes everything), clear, reopen.
+#    The nests are set to air first (a setblock of the same state keeps the old block entity, no LootTable).
+#  - SQ-HCS-12: the wild crow flies off the bot before the tame (c4_a: "tamed 0" with a radius 6 box); tame at once,
+#    box over the whole glass cage.
+#  - SQ-BREED-03: a second bees reading (bees inside the hive are not entities).
+#  - SQ-FLR-05: each mixer driven through a cogwheel beside it (a motor facing down never turns a mixer).
+#  - SQ-RD-11: 60 novice farmers (13+ novice listings, 2 picked per villager; 10 villagers showed no cotton by chance).
+#  - SQ-FDI-02 / -03: new bot names fdj / fdk (the c4_a bot fdi already has player data in this world).
+# Areas as c4_a (z 40000 lane): nests 40000-40030, crow box 40100, Create rigs 40200-40260, cakes 40600, bees 40700.
+pace 2
+
+## SQ-GAP-04 | rose gold: golden apple, gold ingot, gold block and more golden gear recipes (supplement to c4_a)
+> zq makes minecraft:golden_apple
+> zq rdetail golden_apple_gilding
+> zq rdetail golden_apple_arc_gilding
+> zq rdetail minecraft:gold_ingot_from_nuggets
+> zq rdetail minecraft:gold_block
+> zq rdetail minecraft:golden_helmet
+> zq rdetail minecraft:golden_sword
+> zq rdetail minecraft:golden_shovel
+waitlog \[zq\] rdetail matching minecraft:golden_shovel 30
+reject \[zq\] minecraft:(gold_ingot_from_nuggets|gold_block) \{.*rose_gold
+look golden apple recipes (gilding, arc gilding, any crafting) list only minecraft:gold_ingot / gold_block / gold_nugget for the gold input; golden helmet, sword, shovel: c4_a found golden pickaxe and chestplate taking mca:rose_gold_ingot (FAIL), record whether the rest of the golden gear does too
+
+## SQ-BREED-03 | breeding foods; a bee pollinates a wild carrot
+> zc4 isfood minecraft:pig minecraft:carrot
+> zc4 isfood minecraft:cat minecraft:cod
+> zc4 isfood minecraft:ocelot minecraft:cod
+> zc4 isfood minecraft:bee farmersdelight:wild_carrots
+> zc4 isfood minecraft:bee minecraft:poppy
+waitlog \[zc4\] isfood minecraft:bee minecraft:poppy 20
+reject \[zc4\] error isfood
+expect \[zc4\] isfood minecraft:pig minecraft:carrot true
+expect \[zc4\] isfood minecraft:cat minecraft:cod true
+expect \[zc4\] isfood minecraft:ocelot minecraft:cod true
+expect \[zc4\] isfood minecraft:bee farmersdelight:wild_carrots false
+expect \[zc4\] isfood minecraft:bee minecraft:poppy true
+> forceload add 40680 39980 40730 40020
+> time set 1000
+> weather clear 100000
+> gamerule doDaylightCycle false
+sleep 3
+> kill @e[type=minecraft:bee]
+> setblock 40700 -60 40000 minecraft:air
+> setblock 40700 -60 40000 minecraft:beehive[facing=south]
+> setblock 40706 -60 40000 farmersdelight:wild_carrots
+> summon minecraft:bee 40700.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40701.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40699.5 -58 40002.5 {HivePos:{X:40700,Y:-60,Z:40000},PersistenceRequired:1b}
+sleep 150
+> zc4 bees 40705 -58 40000 30
+waitlog \[zc4\] bees \d+ 20
+sleep 60
+> zc4 bees 40705 -58 40000 30
+waitlog \[zc4\] done 20
+> data get block 40700 -60 40000 Bees
+count \[zc4\] bee .* flower=40706,-60,40000 >= 1
+look pig, cat, ocelot accept their food; the bee refuses the wild carrot item and takes the poppy; a bee recorded the wild carrot block as its flower (either reading, or a FlowerPos 40706 -60 40000 in the hive's Bees list); wild rice is not a flower block (SQ-BREED-02 block tag, c4_a PASS)
+
+## SQ-HCS-07 | nest loot: rolled on first touch, once; breaking drops the rolled items; roof table items
+> forceload add 39990 39990 40040 40020
+sleep 3
+# the feature nest placed in c4_a (40005 -55 40005, generated=true) is still there: is it on leaves?
+> execute if block 40005 -55 40005 hearthandharvest:nest run say HCS7 feature nest present
+> execute if block 40005 -56 40005 #minecraft:leaves run say HCS7 feature nest on leaves
+> execute if block 40005 -54 40005 #minecraft:leaves run say HCS7 feature nest under leaves
+> fill 40018 -60 39998 40032 -58 40004 minecraft:air
+> kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
+> setblock 40020 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:11L}
+> setblock 40022 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:12L}
+> setblock 40024 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:13L}
+> setblock 40026 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:14L}
+> setblock 40030 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest",LootTableSeed:21L}
+> data get block 40020 -60 40000 LootTable
+expect has the following block data: "hearthandharvest:chests/crow_nest_village"
+> pbot spawn n8 40021.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear n8
+# sneaking with an empty hand takes every stack in one use (NestBlock.use loops while shift is down)
+> zhh3 sneak n8 on
+> pbot use n8 40020 -60 40000 up
+sleep 1
+> data get block 40020 -60 40000 LootTable
+expect Found no elements matching LootTable
+> data get block 40020 -60 40000 Inventory
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+# reopen the emptied nest with an empty hand: nothing new
+> clear n8
+> pbot use n8 40020 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> data get block 40020 -60 40000 Inventory
+> clear n8
+> pbot spawn n8 40023.5 -60 40002.5 minecraft:overworld survival
+> zhh3 sneak n8 on
+> pbot use n8 40022 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> clear n8
+> pbot spawn n8 40025.5 -60 40002.5 minecraft:overworld survival
+> zhh3 sneak n8 on
+> pbot use n8 40024 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> zhh3 sneak n8 off
+> kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
+> setblock 40026 -60 40000 minecraft:air destroy
+> setblock 40030 -60 40000 minecraft:air destroy
+sleep 2
+> zhh3 items 40026 -60 40000 2
+> zhh3 items 40030 -60 40000 2
+> pbot remove n8
+expect HCS7 feature nest present
+look the first sneak-use moved the 40020 roll to n8 (inv line: seeds, bread, book, lead, nuggets or shiny items; c4_a showed iron ingot + constantan nugget for seed 11) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest; "feature nest on leaves" or "under leaves" says where the oak feature put it
+
+## SQ-HCS-12 | tame crow on the shoulder hops off to fetch a dropped and a thrown item, then perches again
+> forceload add 40087 39987 40113 40013
+sleep 3
+> kill @e[type=!player,x=40087,y=-62,z=39987,dx=26,dy=17,dz=26]
+> fill 40087 -61 39987 40113 -47 40013 minecraft:glass hollow
+> pbot spawn c13 40100.5 -60 40000.5 minecraft:overworld survival
+sleep 2
+> clear c13
+pace 0.1
+> summon hearthandharvest:crow 40101 -59 40001
+> zhh3 tame c13 40100 -54 40000 13
+pace 2
+waitlog \[zhh3\] tamed 20
+expect \[zhh3\] tamed 1
+sleep 45
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+expect \[zhh3\] tally crows=1 tamed=1 .*shoulder=1
+> summon minecraft:item 40106.5 -60 40000.5 {Item:{id:"minecraft:gold_nugget",Count:1b},PickupDelay:0s}
+sleep 30
+> zhh3 inv c13 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c13 20
+expect \[zhh3\] invcount c13 minecraft:gold_nugget 1
+sleep 30
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+> zhh3 throw c13 40106 -60 40000 minecraft:gold_nugget 1
+sleep 40
+> zhh3 inv c13 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c13 minecraft:gold_nugget 2 30
+> pbot remove c13
+> kill @e[type=hearthandharvest:crow,x=40087,y=-62,z=39987,dx=26,dy=18,dz=26]
+reject (?i)NoSuchMethod|m_36362_|m_36364_
+look the second tally shows shoulder=1 again (perched back after the first fetch)
+
+## SQ-FLR-03 | Millstone: 20 flesh give exactly 20 meat items
+> forceload add 40190 39990 40270 40010
+sleep 3
+> fill 40195 -60 39995 40265 -50 40005 minecraft:air
+> setblock 40200 -60 40000 create:creative_motor[facing=up]{ScrollValue:128}
+> setblock 40200 -59 40000 create:millstone
+sleep 3
+> data get block 40200 -60 40000
+> zc4 put 40200 -59 40000 biomesoplenty:flesh 20
+waitlog \[zc4\] done 20
+expect \[zc4\] put 40200 -59 40000 biomesoplenty:flesh inserted=20
+sleep 120
+> zc4 poolsinv 40200 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=20 bone=\d+ eye=\d+ misc=\d+ >= 1
+reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
+look the last pools line: meat=20 exactly, flesh used up; bone near 15, eye near 5, misc near 5
+
+## SQ-FLR-02b | crushing wheel rig: controller forms (setup for SQ-FLR-04; the 200-flesh counts are SQ-FLR-02, not in this chunk)
+> setblock 40220 -58 40000 create:crushing_wheel[axis=z]
+> setblock 40222 -58 40000 create:crushing_wheel[axis=z]
+> setblock 40220 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+> setblock 40222 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+sleep 5
+# wrong spin direction: swap both motors to the other side
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 39999 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 40001 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+sleep 5
+> execute if block 40221 -58 40000 create:crushing_wheel_controller run say FLR crusher controller ok
+expect FLR crusher controller ok
+> data get block 40220 -58 40000 Speed
+> data get block 40222 -58 40000 Speed
+
+## SQ-FLR-04 | Crushing wheels: 100 pus bubbles about 25 slimeballs, 100 hair about 50 string, nothing else
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:36b}}
+sleep 40
+> zc4 pools 40221 -62 40000 -3
+waitlog \[zc4\] done 20
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:36b}}
+sleep 40
+> zc4 pools 40221 -62 40000 -3
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=(1[5-9]|2\d|3[0-5]) string=0 other=0 >= 1
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=0 string=(3[5-9]|[4-5]\d|6[0-5]) other=0 >= 1
+reject \[zc4\] pools .*other=[1-9].*(pus_bubble|hair) x
+look first pools line ~25 slime only, second ~50 string only; any pus_bubble / hair left in "others" means the wheels did not take the stack (rerun with longer sleeps)
+
+## SQ-FLR-05 | Mixer and basin: blood renders (heated), flesh cultivation with each plant oil, porous cultivation
+# heated rig: burner 40240 -60, basin -59, mixer -57; unheated rig at x 40250 one lower. The mixer takes no shaft
+# (Create 0.5.1 MechanicalMixerBlock.hasShaftTowards is false; a motor facing down left it at speed 0 in pwg12/pwg17),
+# so each mixer is driven as a cog: a cogwheel (axis y) beside it, on a creative motor facing up
+> setblock 40240 -60 40000 create:blaze_burner
+> setblock 40240 -59 40000 create:basin
+> setblock 40240 -57 40000 create:mechanical_mixer
+> setblock 40241 -57 40000 create:cogwheel[axis=y]
+> setblock 40241 -58 40000 create:creative_motor[facing=up]{ScrollValue:128}
+> setblock 40250 -60 40000 create:basin
+> setblock 40250 -58 40000 create:mechanical_mixer
+> setblock 40251 -58 40000 create:cogwheel[axis=y]
+> setblock 40251 -59 40000 create:creative_motor[facing=up]{ScrollValue:128}
+sleep 3
+> data get block 40240 -57 40000 Speed
+> data get block 40250 -58 40000 Speed
+expect 40240, -57, 40000 has the following block data: -?[1-9][0-9]*\.0f
+expect 40250, -58, 40000 has the following block data: -?[1-9][0-9]*\.0f
+> zc4 fuel 40240 -60 40000 minecraft:coal_block
+waitlog \[zc4\] done 20
+expect \[zc4\] fuel 40240 -60 40000 .*blaze=kindled
+> zc4 put 40240 -59 40000 biomesoplenty:flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:porous_flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 500
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:flesh_tendons 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250 >= 2
+# unheated: items first, the fluid last (the recipe starts when the basin matches)
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 immersiveengineering:plantoil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+expect \[zc4\] inv 40250 -60 40000 total=5 biomesoplenty:flesh x3, biomesoplenty:porous_flesh x2
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 createaddition:seed_oil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:porous_flesh 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 2
+> zc4 fill 40250 -60 40000 pneumaticcraft:vegetable_oil 1000
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+count \[zc4\] inv 40250 -60 40000 total=5 biomesoplenty:flesh x3, biomesoplenty:porous_flesh x2 == 3
+> setblock 40250 -60 40000 minecraft:air
+> setblock 40250 -60 40000 create:basin
+> zc4 put 40250 -60 40000 biomesoplenty:flesh_tendons 2
+> zc4 put 40250 -60 40000 biomesoplenty:flesh 1
+> zc4 fill 40250 -60 40000 biomesoplenty:blood 250
+sleep 25
+> zc4 inv 40250 -60 40000
+waitlog \[zc4\] tanks 40250 20
+expect \[zc4\] inv 40250 -60 40000 total=1 biomesoplenty:porous_flesh x1
+reject \[zc4\] (fill|put) .* (filled|inserted)=0$
+look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB; each oil leaves 2 porous + 3 flesh and an empty tank; a fill line with filled=0 means that oil is not in #forge:plantoil (the row's failure note)
+
+## SQ-RD-11 | farmer and fisherman novice trades
+> ztrades farmer 1 60
+> ztrades fisherman 1 20
+expect \[ztrades\] farmer L1 .*rusticdelight:cotton_boll
+expect \[ztrades\] farmer L1 .*rusticdelight:bell_pepper_red
+expect \[ztrades\] farmer L1 .*rusticdelight:coffee_beans
+expect \[ztrades\] fisherman L1 .*rusticdelight:calamari
+
+## SQ-FDI-02 | 20 different foods: no Carrot hearts (max health stays 20)
+> pbot spawn fdj 40600.5 -60 40010.5 minecraft:overworld survival
+sleep 2
+> clear fdj
+> zc4 sol fdj
+waitlog \[zc4\] done 20
+> zc4 eat fdj minecraft:apple
+> zc4 eat fdj minecraft:bread
+> zc4 eat fdj minecraft:cooked_beef
+> zc4 eat fdj minecraft:baked_potato
+> zc4 eat fdj minecraft:carrot
+> zc4 eat fdj minecraft:cooked_chicken
+> zc4 eat fdj minecraft:cooked_porkchop
+> zc4 eat fdj minecraft:cooked_mutton
+> zc4 eat fdj minecraft:cooked_cod
+> zc4 eat fdj minecraft:cooked_salmon
+> zc4 eat fdj minecraft:cookie
+> zc4 eat fdj minecraft:melon_slice
+> zc4 eat fdj minecraft:pumpkin_pie
+> zc4 eat fdj minecraft:mushroom_stew
+> zc4 eat fdj minecraft:beetroot
+> zc4 eat fdj minecraft:sweet_berries
+> zc4 eat fdj minecraft:rabbit_stew
+> zc4 eat fdj minecraft:dried_kelp
+> zc4 eat fdj minecraft:golden_carrot
+> zc4 eat fdj minecraft:potato
+waitlog \[zc4\] eat fdj minecraft:potato 30
+> zc4 sol fdj
+sleep 2
+> attribute fdj minecraft:generic.max_health get
+reject \[zc4\] error eat
+expect \[zc4\] sol fdj carrot=20 .*maxhealth=20\.0
+expect Value of attribute .* is 20\.0
+look the first sol line shows carrot=0; the Diet Tracker side (applepie=) counted the 20 foods too
+
+## SQ-FDI-03 | placed pie and cake bites unlock their slice in both books; the knife cut unlocks nothing
+> forceload add 40590 39990 40620 40020
+sleep 3
+> fill 40595 -60 39995 40615 -55 40015 minecraft:air
+> setblock 40600 -60 40000 farmersdelight:apple_pie
+> setblock 40602 -60 40000 minecraft:cake
+> setblock 40604 -60 40000 minecraft:candle_cake
+> setblock 40606 -60 40000 neapolitan:vanilla_cake
+> setblock 40608 -60 40000 farmersdelight:sweet_berry_cheesecake
+> pbot spawn fdk 40603.5 -60 40002.5 minecraft:overworld survival
+> clear fdk
+> zc4 sol fdk minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdk 4
+> pbot hold fdk minecraft:air
+> pbot use fdk 40600 -60 40000 up
+> zc4 sol fdk farmersdelight:apple_pie_slice
+sleep 1
+> zc4 hunger fdk 4
+> pbot use fdk 40602 -60 40000 up
+> zc4 sol fdk farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fdk minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdk 4
+> pbot use fdk 40604 -60 40000 up
+> zc4 sol fdk minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdk 4
+> pbot use fdk 40606 -60 40000 up
+> zc4 sol fdk abnormals_delight:vanilla_cake_slice
+waitlog \[zc4\] done 20
+> pbot hold fdk farmersdelight:iron_knife
+> pbot use fdk 40608 -60 40000 up
+sleep 1
+> zc4 sol fdk farmersdelight:sweet_berry_cheesecake_slice
+waitlog \[zc4\] done 20
+> zc4 eat fdk farmersdelight:sweet_berry_cheesecake_slice
+> zc4 sol fdk farmersdelight:sweet_berry_cheesecake_slice
+waitlog \[zc4\] done 20
+count \[zc4\] sol fdk .*carrotHas=true applepie=.*applepieHas=true >= 3
+look per bite the slice item turns carrotHas=true and applepieHas=true (apple pie slice, cake slice, vanilla cake slice); after the vanilla cake bite the Diet Tracker has minecraft:cake once (applepieEntries rose by 1 for the cake bite, not 2); the candle cake bite counts as the cake; the cheesecake slice is false after the knife cut and true only after zc4 eat. The Food Dictionary screen (FDI-06) is client.
+

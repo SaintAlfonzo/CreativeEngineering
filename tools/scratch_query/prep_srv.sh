@@ -76,6 +76,9 @@ for cd in mods/creativedelight-*.jar; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done
+# Power Grid: only by PGJAR. The -17 jar sat in the instance mods/ on 2026-11-13 with no mod_sides.md row (r1113
+# section 11): drop any copy prep linked in, so queue servers never carry an unlisted port jar.
+rm -f mods/backportedPowerGrid-*.jar
 if [ -f "${PGJAR:-}" ]; then
   cp -p "$PGJAR" mods/; echo "power grid: $(basename "$PGJAR") ($(date -r "$PGJAR" +%m-%d_%H:%M:%S), sha1 $(sha1sum "$PGJAR" | cut -c1-12))"
 elif [ "${PGJAR:-0}" = 1 ]; then

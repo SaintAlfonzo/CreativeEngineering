@@ -1,0 +1,255 @@
+# r1113 client batch for the -17 jar (phase 10): throwaway client (eval_client.py setup, the -17 PG jar
+# jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-17.jar copied into GAME/mods only, never the instance's mods/),
+# singleplayer copy of the pwg17 scratch world (sp_world.py) after pwg17.qb has run (its SQ-PWG-SHOW17 step leaves lit
+# string lights, a plating wall and a lit ceiling at X 1100 to 1123, Z 2010 to 2084). Before: client in that world,
+# op (cheats on), chat closed, no screen open, window 854x480.
+# Covers what chat commands, keys and screenshots can do for CQ-PWG-22, -24, -26, -27, -28 and -29. Not possible here,
+# left as `look` steps for the owner: right-clicks (opening the design table and the editor, attaching to tiles, cords,
+# hand boost), mouse hover (tooltips), and JEI lookups (typing into JEI's search box needs a click on it; the box
+# position depends on the GUI scale, so it is not scripted). No probe commands: the client game dir has no zz_ probes.
+# Run: qrun.py client GAME tools/scratch_query/batches/r1113/cq_pwg17.qb perf/runs/r1113/cq_pwg17
+pace 2
+
+## CQ-PWG-28-tour | P10 blocks built by pwg17.qb: ceiling tiles and attachments, lamps, solar tiles, connector, deploying depots (day)
+> gamemode creative
+> time set noon
+> weather clear
+> gamerule doDaylightCycle false
+sleep 2
+> tp @s 1104 -60 2006 0 -35
+sleep 4
+shot sq91_tiles_from_below
+> tp @s 1102 -60 2017 0 -35
+sleep 4
+shot sq92_lamps_from_below
+> tp @s 1102 -55 2035 0 55
+sleep 4
+shot sq93_ceiling_solars
+> tp @s 1104 -60 2047 0 -20
+sleep 4
+shot sq94_connector_junction
+> tp @s 1103 -56 2066 0 40
+sleep 4
+shot sq96_depots
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look ceiling tiles are thin plates (no purple-black); the attachments show their models (lamp, connector post, junction, solar top); the lit lamp (1100 2020, 120 V) glows; four solar tiles at Z 2040 merged (connected texture); copper plating and string light cord items on the depots
+
+## CQ-PWG-28-showcase | the SHOW17 plating wall, lit ceiling and string lights, day then night
+> tp @s 1121 -59 2006 0 10
+sleep 4
+shot plating_wall
+> tp @s 1124 -59 2008 45 15
+sleep 3
+shot plating_slabs_stairs
+> tp @s 1121 -60 2012 0 -45
+sleep 4
+shot showcase_ceiling
+> tp @s 1104 -59 2077 0 -5
+sleep 4
+shot string_lights_day
+> time set 18000
+sleep 3
+shot string_lights_night
+> tp @s 1121 -60 2012 0 -45
+sleep 3
+shot showcase_ceiling_night
+> time set noon
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look plating: connected textures across the 3 x 3 wall and onto the full faces of the double slab and stairs; string lights: the patterned cord (Z 2080) has small bulbs red, green, blue repeating, the plain one (Z 2084) warm white, both glowing at night with light on the ground below (lit at 120 V); ceiling lamp glows (additive layer); by hand: F3 on a string_light_block position (block light about 5), pick-block and wrench each attachment, break the lit lamp in survival (tile, factory light and bulb drop, B32)
+
+## CQ-PWG-28-tab | creative inventory: P10 entries in the Power Grid tab
+key e
+sleep 2
+shot creative_inv
+look Power Grid tab (page arrows if needed): copper plating, slab, stairs, ceiling tile and the string light cord after the copper cord; no attachment blocks, no string_light_block; hover the plain and the patterned cord by hand ("Pattern:" with three coloured O, 120 V / 3 W lines). JEI (by hand, search box): copper_plating R deploying / U stonecutting, crafting, design table, solar panel bearing; string_light_cord R deploying; ceiling_tile R deploying with an empty cardboard slot (D13)
+key Escape
+sleep 1
+
+## CQ-PWG-26-acid | acid rendering: a source flowing out over the ground, a still pool, the view from inside (CQ-PWG-26 fluid part)
+> setblock 1190 -60 1866 powergrid:acid
+> fill 1180 -62 1860 1184 -61 1862 powergrid:acid
+sleep 6
+> tp @s 1186 -56 1858 45 40
+sleep 4
+shot acid_flow_and_pool
+> tp @s 1182 -62 1861 0 0
+sleep 3
+shot acid_inside
+> gamemode survival
+sleep 3
+shot acid_inside_survival
+> gamemode creative
+> tp @s 1182 -58 1856 0 30
+sleep 2
+> give @s powergrid:acid_bucket
+sleep 1
+shot acid_bucket_hotbar
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look still and flowing acid render translucent with the animated textures (no purple-black); inside: plain fog / overlay, no crash; survival inside: hurt (health drops, red flash); bucket icon in the hotbar. By hand: place and pick up the bucket. JEI (not scriptable: the search box needs a click): Circuit Designing and Circuit Assembly tabs (arm animation), incomplete_circuit R / U, unetched_circuit R, battery R, acid fluid R
+
+## CQ-PWG-24-table | design table: placed in front of the player, unpowered, items given for the hand test; the powered table of SQ-PWG-73
+> tp @s 1100 -60 2094 180 15
+sleep 2
+> setblock 1100 -60 2091 powergrid:circuit_design_table[facing=south]
+> give @s powergrid:circuit_design_table
+> give @s create:empty_schematic 4
+> give @s powergrid:wire_connector 4
+> give @s powergrid:resistor 4
+> give @s powergrid:diode 2
+> give @s powergrid:lv_switch 2
+> give @s powergrid:display_module
+> give @s powergrid:copper_cord 4
+> give @s powergrid:socket
+sleep 2
+shot table_unpowered
+> tp @s 1100 -59 1814 180 30
+sleep 4
+shot table_sq73
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look table model renders (no purple-black); the SQ-PWG-73 table (1100 -60 1810) glows when its cord fed it (130 V at the end of the row: if pwg17 SQ-PWG-73 made the cord). Opening needs a right-click, which this batch cannot do: by hand in survival, right-click the unpowered table (action bar "This device needs power", no screen), then the powered one at 1810 (Circuit Designer screen), and run the editor steps of CQ-PWG-24 (place parts, R, T traces, X, D, S properties, name, save to an Empty Schematic, load, folder screen cq24); screenshots of the three screens by hand
+
+## CQ-PWG-22-boards | circuit boards and the survival chain results built by pwg17.qb (board rendering)
+> tp @s 1103 -57 1806 0 45
+sleep 4
+shot sq73_board_1810
+> tp @s 1140 -57 1855 0 55
+sleep 4
+shot sq76_board_1858
+> tp @s 1146 -57 1894 0 50
+sleep 4
+shot sq81_depot_board
+> tp @s 1150 -57 1903 0 45
+sleep 4
+shot sq82_belt_end
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look boards: plate, copper traces and pads (not purple-black), the resistor part at its place; the chain's circuit board item on the SQ-PWG-81 depot and the SQ-PWG-82 end depot; client log `Received 28 component items from the server` (grep the client log by hand). Powered / overheated boards (triode glow, sparks) need `/zpwg9 board` on a server with probes: CQ-PWG-22's server part, by hand
+
+## CQ-PWG-27-chip | Integrated Circuit in hand (first and third person), a boosted drill in the hotbar
+> tp @s 1110 -60 1945 0 10
+sleep 2
+> item replace entity @s weapon.mainhand with powergrid:integrated_circuit 4
+> item replace entity @s weapon.offhand with powergrid:portable_drill
+sleep 2
+shot chip_first_person
+key F5
+sleep 2
+shot chip_third_person
+key F5 F5
+sleep 1
+> item replace entity @s weapon.mainhand with powergrid:portable_drill{Boosted:75}
+> item replace entity @s weapon.offhand with air
+sleep 2
+shot boosted_drill_hotbar
+reject (Mixin apply failed|InvalidInjectionException|Error receiving packet|Bad packet|Exception.*(patryk3211|powergrid)|Exception in thread)
+look chip renders flat in hand and in the hotbar (no purple-black); third person holds it. By hand (right-click hold, not scriptable): chip use with the drill in the other hand tilts the chip in first person, boosting sound about every 7 ticks, after 1.6 s one chip gone and the drill tooltip "Boosted" (blue italics); swap hands on a fresh drill; zapper + chip; JEI integrated_circuit U (Deploying boost page) and electrical_gizmo R
+
+## CQ-PWG-29-ceiling_tile | ponder powergrid:ceiling_tile: ceiling_tile
+> create ponder powergrid:ceiling_tile
+sleep 3
+shot ceiling_tile_a
+sleep 16
+shot ceiling_tile_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look the tile falls in, three texts (decorative block; attachments; "supports a variety of attachments"), the factory light right-click makes the lamp, the four attachments drop in at the end; Ceiling Tile Attachments tag icon at the top left; no missing block
+
+## CQ-PWG-29-string_light_cord | ponder powergrid:string_light_cord: wire/string_lights, wire/cord
+> create ponder powergrid:string_light_cord
+sleep 3
+shot string_lights_a
+sleep 12
+shot string_lights_b
+key d
+sleep 3
+shot cord_a
+sleep 17
+shot cord_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look string_lights: two cord junctions on girders, the cord appears, lights up warm after the source (120 V), then a red / green / blue cord replaces it and lights; texts match the lang (no raw powergrid.ponder. keys)
+
+## CQ-PWG-29-tagged | the Ceiling Tile Attachments tag on the factory light, solar panel, wire connector and cord junction scenes
+> create ponder powergrid:factory_light
+sleep 3
+shot factory_light_a
+key Escape
+sleep 1
+> create ponder powergrid:solar_panel
+sleep 3
+shot solar_panel_a
+key Escape
+sleep 1
+> create ponder powergrid:wire_connector
+sleep 3
+shot wire_connector_a
+key Escape
+sleep 1
+> create ponder powergrid:cord_junction
+sleep 3
+shot cord_junction_a
+key Escape
+sleep 1
+> create ponder
+sleep 3
+shot ponder_index
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look each scene shows the Ceiling Tile Attachments tag icon (ceiling tile) among its tags; index: the tag present; its page (ceiling tile, factory light, wire connector, cord junction, solar panel) needs a click on the tag: by hand
+
+## CQ-PWG-22-ponder | ponder of the P9a circuit components: resistor, triode, potentiometer, display_module, copper_nugget (via), encased_fan
+> create ponder powergrid:resistor
+sleep 3
+shot resistor_a
+sleep 10
+shot resistor_b
+key Escape
+sleep 1
+> create ponder powergrid:triode
+sleep 3
+shot triode_a
+sleep 18
+shot triode_b
+key Escape
+sleep 1
+> create ponder powergrid:potentiometer
+sleep 3
+shot potentiometer_a
+sleep 9
+shot potentiometer_b
+key Escape
+sleep 1
+> create ponder powergrid:display_module
+sleep 3
+shot display_module_a
+sleep 56
+shot display_module_b
+key Escape
+sleep 1
+> create ponder create:copper_nugget
+sleep 3
+shot via_a
+sleep 23
+shot via_b
+key Escape
+sleep 1
+> create ponder create:encased_fan
+sleep 3
+shot encased_fan_scene1_a
+key d
+sleep 3
+shot encased_fan_scene2_a
+key d
+sleep 3
+shot encased_fan_scene3_a
+key d
+sleep 3
+shot encased_fan_scene4_a
+sleep 6
+shot encased_fan_scene4_b
+key Escape
+sleep 1
+reject (Could not find|Failed to read ponder schematic|Exception.*(patryk3211|foundation\.ponder))
+look boards in the scenes show their parts and traces, the circuits run (gauges move, tubes glow, the display counts); encased_fan: the Power Grid scene (a circuit board in the fan's stream) is the last of Create's fan scenes (record which shot); the Circuit Components tag page needs a click: by hand

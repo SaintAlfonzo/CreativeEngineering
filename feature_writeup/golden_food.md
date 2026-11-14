@@ -235,3 +235,33 @@ Scratch queue section "SQ-GLD Golden Food donor rebuild": SQ-GLD-01 to -05, -07,
 and SQ-GLD-08 rewritten for the removal; SQ-GLD-11 to -14 the assemblies and the removed id.
 Scratch queue section SQ-CDJ7 (2026-11-03): SQ-GLD2-01 (nugget recipes), -02 (gilded assembly), -03 (values), -05
 (gilded cans, after `/dumpfood` and `gen_can_types.py`); CQ-GLD2-04 (gilded names, client).
+
+## 9. Buff family plan (owner draft, scratchpad 2026-11-13, NOT built)
+
+TODO `food/types-and-tuning #24`. Today's effects stay until the owner settles this table. Rule: all effects and
+hunger/saturation are identical inside a family. Sweets and meals gilded rows are still empty (owner has not filled them).
+
+| Family | Golden | Gilded |
+|---|---|---|
+| Fruit | Regeneration II 5 s, Speed II 30 s, Nourishment I 30 s | Regeneration III 20 s, Speed III 60 s, Nourishment I 60 s |
+| Veggie | Regeneration II 5 s, Jump Boost II 30 s, Nourishment I 30 s | Regeneration III 20 s, Jump Boost III 60 s, Nourishment I 60 s |
+| Meat and fish | Absorption II 60 s, Resistance II 15 s, Nourishment I 60 s | Absorption IV 120 s, Resistance IV 60 s, Nourishment I 120 s |
+| Sweets | Regeneration II 5 s, Speed II 15 s, Nourishment I 30 s | open |
+| Meals | Regeneration II 5 s, Speed II 15 s, Nourishment I 30 s | open |
+
+Exception: the golden carrot gives Night Vision instead of Jump Boost (60 s golden, 120 s gilded).
+
+## 10. Effects as of the 2026-11-07 dump (reference, may be stale)
+
+From `kubejs/exported/food/foods.json`, hunger shown golden / gilded. Taken before the 2026-11-10 stew removal (section 0)
+and not rechecked after the 2026-11-03 value rework (3.6): re-dump before using these numbers.
+
+- Standard golden: Regeneration II 5 s, Absorption I 120 s, Nourishment I 120 s. Standard gilded: Regeneration II 20 s, Resistance I 300 s, Fire Resistance I 300 s, Absorption IV 120 s, Nourishment I 240 s. Everything below has the standard set unless noted.
+- Fruit: apple (8 / 16), melon slice (4 / 8), sweet berries (4 / 8), glow berries (4 / 8), chorus fruit (8 / 16). Glistering melon slice (4): Nourishment I 120 s only, no gilded form.
+- Veggie: carrot (6 / 12), beetroot (2 / 4), baked potato (10 / 20), dried kelp (2 / 4). Golden moss clump (4): Regeneration II 10 s, Nourishment I 120 s, no absorption. Gilded moss clump (6): Absorption III 80 s, Regeneration II 15 s, Water Breathing III 80 s, Nourishment I 240 s.
+- Meat and fish: cooked beef and porkchop (16 / 20), mutton, salmon, chicken (12 / 20), rabbit and cod (10 / 20 each).
+- Sweets: cookie (4 / 8), honey bottle (12 / 20), pumpkin pie (4 / 8 in the dump; 3.6 expects 16 / 20: the dump is probably stale). Golden cake slice: 4 hunger, Regeneration II 5 s, Absorption II 120 s. Enchanted golden cake slice: 8 hunger, standard gilded set with Absorption IV. Golden roll and slice (Roll Delight): no effects.
+- Meals: bread (10 / 20). Golden nutritional bar (10, Miner's Delight): Nourishment I 120 s only, no gilded form.
+- Unsorted: golden coffee beans (Rustic Delight, no effects); golden and gilded milk bucket list the standard effects but never apply (milk clears effects).
+- Removed: golden and gilded beetroot soup, mushroom stew, rabbit stew (section 0).
+- Canned versions carry scaled-down effects: Regeneration II 1.25 s, Absorption I 30 s, Nourishment I 30 s (moss can: Regeneration II 2.5 s, Nourishment I 30 s; nutritional bar can: Nourishment I 30 s); canned golden apples has none.

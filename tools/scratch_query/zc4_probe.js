@@ -9,7 +9,7 @@
 //                             "[zc4] pools meat=N bone=N eye=N misc=N slime=N string=N other=N total=N"; R < 0 = clear
 //                             the counted entities after printing (radius |R|)
 //   poolsinv X Y Z            the same sums over the block's item handler
-//   fuel X Y Z ITEM           Create blaze burner tryUpdateFuel with ITEM (no overflow), then the block's blaze property
+//   fuel X Y Z ITEM           Create BlazeBurnerBlock.tryInsert with ITEM (no overflow), then the block's blaze property
 //   cooktime TEXT             Cooking Pot recipes whose id or result contains TEXT: "[zc4] cook ID -> N RESULT time=T"
 //   eat NAME ITEM             player NAME eats ITEM as a client use would finish it (finishUsingItem plus Forge's
 //                             LivingEntityUseItemEvent.Finish, which both Spice of Life books listen to)
@@ -72,7 +72,8 @@
         return counts
     }
     function run(server, what, argStr) {
-        let a = argStr.trim().length ? argStr.trim().split(/\s+/) : [], level = lvl(server)
+        // String(): argStr is a Java String, and Java's split("/\\s+/") never splits (r1113 c4_a: every multi-arg call failed)
+        let argS = String(argStr).trim(), a = argS.length ? argS.split(/\s+/) : [], level = lvl(server)
         try {
             if (what == 'cmd') {
                 let root = server.getCommands().getDispatcher().getRoot()
@@ -86,10 +87,10 @@
             } else if (what == 'fill') {
                 let h = cap(level.getBlockEntity(pos(a, 0)), $C4Caps.FLUID_HANDLER)
                 if (h == null) throw 'no fluid handler at ' + a.slice(0, 3).join(' ')
-                let $FS = Java.loadClass('net.minecraftforge.fluids.FluidStack')
                 let $FA = Java.loadClass('net.minecraftforge.fluids.capability.IFluidHandler$FluidAction')
-                let fl = $C4Reg.FLUIDS.getValue(rl(a[3]))
-                let n = h.fill(new $FS['(net.minecraft.world.level.material.Fluid,int)'](fl, parseInt(a[4])), $FA.EXECUTE)
+                // KubeJS FluidStackJS -> Forge FluidStack: a FluidStack built with new in Rhino can reach fill() as a
+                // non-matching stack (accepted 0), scratch-test gotchas
+                let n = h.fill(Fluid.of(a[3], parseInt(a[4])).getFluidStack(), $FA.EXECUTE)
                 out('fill ' + a.slice(0, 3).join(' ') + ' ' + a[3] + ' filled=' + n)
             } else if (what == 'inv' || what == 'poolsinv') {
                 let be = level.getBlockEntity(pos(a, 0))
@@ -113,15 +114,23 @@
                 })
                 poolLine(counts)
             } else if (what == 'fuel') {
-                let p = pos(a, 0), be = level.getBlockEntity(p), ok = 'n/a'
-                try { ok = be.tryUpdateFuel(stackOf(a[3], 1), false, false) } catch (err) { ok = 'error ' + err }
+                // BlazeBurnerBlockEntity.tryUpdateFuel is protected (Rhino cannot call it); the block's public static
+                // tryInsert(state, level, pos, stack, doNotConsume, forceOverflow, simulate) feeds the same path
+                let p = pos(a, 0), ok = 'n/a'
+                try {
+                    let $BBB = Java.loadClass('com.simibubi.create.content.processing.burner.BlazeBurnerBlock')
+                    ok = String($BBB.tryInsert(level.getBlockState(p), level, p, stackOf(a[3], 1), false, false, false).getResult())
+                } catch (err) { ok = 'error ' + err }
                 let st = level.getBlockState(p), props = []
-                st.getValues().forEach((k, v) => props.push(k.getName() + '=' + v))
+                st.getValues().forEach((k, v) => props.push(k.getName() + '=' + k.getName(v)))   // Property.getName(value): lower case, as in /setblock
                 out('fuel ' + a.slice(0, 3).join(' ') + ' ' + a[3] + ' result=' + ok + ' state ' + props.join(','))
             } else if (what == 'cooktime') {
                 let n = 0
                 server.getRecipeManager().getRecipes().forEach(r => {
-                    let id = String(r.getId()), t = String(r.getType())
+                    // serializer, not getType(): Mechanical Extruder's ExtrudingRecipe.getType() throws AbstractMethodError (a Java
+                    // Error Rhino cannot catch; it crashed the r1113 c4_a server in SQ-GAP-01)
+                    let id = String(r.getId()), t = '?'
+                    try { t = String($C4Reg.RECIPE_SERIALIZERS.getKey(r.getSerializer())) } catch (err) { }
                     if (t != 'farmersdelight:cooking') return
                     let res = r.getResultItem(), rid = itemId(res)
                     if (id.indexOf(a[0]) < 0 && rid.indexOf(a[0]) < 0) return

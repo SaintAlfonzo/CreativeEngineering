@@ -1,0 +1,298 @@
+# r1113 P11 regression, world pwgperf: the Power Grid performance rows SQ-PWG-01 to -05, -07 and -08 (queue section
+# "SQ-PWG Power Grid performance measuring"; D14 and H7 inputs, energy_advanced.md "P11 evaluation"). Target jar
+# jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-17.jar (sha1 cbc2ddee37ca; a later fix build replaces it).
+# PERF SESSION REQUIRED: open one (tools/perf/session/perf_session.sh) with JFR on before the boot; qrun marks each row
+# id in it, so the mean / p99 tick per row comes from the session report (no pass line reads JFR in-batch).
+# Fresh group A superflat, level pwgperf, spawn-animals=false. Nothing else runs on this server during the batch.
+# Areas (each row forceloads its own and removes the previous one, so earlier grids PAUSE and do not add to the next
+# row's cost; queue rows used one origin for all ladders, moved here so no grid is built over another):
+#   -02 ladder 25 at 1000 -60 1000 (X 1000-1040, Z 1000-1005) | -03 ladder 100 at 1000 -60 1100 (Z 1100-1115)
+#   -04 ladder 500 at 1000 -60 1200 (Z 1200-1275) | -05 20 grids of 25 at 1000 -60 1400 (X 1000-1990, Z 1400-1405)
+#   -07 generator and motor (SQ-PWG-38 A and B, P4 coordinates X 1090-1140, Z 1140-1260)
+# Prep: COPYDEV=1 PGJAR=$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-17.jar prep_srv.sh OUT pwgperf A
+#   for p in pwg_probe pwg_grid_probe pwg_p3_probe pwg_p4_probe; do cp $INST/tools/scratch_query/$p.js OUT/srv/kubejs/server_scripts/zz_$p.js; done
+#   Default powergrid configs. perfBot jar present in OUT/srv/mods (SQ-PWG-08).
+# Run: qrun.py run OUT tools/scratch_query/batches/r1113pwg/pwgperf.qb perf/runs/r1113/pwgperf
+# SQ-PWG-08 caveat: perfBot bots have no client, so they never send NegotiateSyncC2SPacket / EndpointTrackingC2SPacket;
+# the row gives the server tick with 40 players near the grid, not per-bot network use. Network numbers and the
+# syncWithDoubles / clientMirror comparison come from the owner rows CQ-PWG-01 to -04. If `pbot` exposes sent bytes,
+# record them; the two config reruns of the queue text are left out (they need real clients to mean anything).
+pace 2
+
+## SQ-PWG-01 | baseline: no grid, 5 min idle (perf segment)
+> forceload add 992 992 1100 1100
+> gamerule doMobSpawning false
+> weather clear
+sleep 30
+> forge tps
+sleep 300
+> forge tps
+> powergrid performance get minecraft:overworld
+sleep 3
+reject An unexpected error occurred
+look record mean / p99 tick of this segment from the perf session (baseline for -02 to -07); counter near 0 us or "no measurement"
+
+## SQ-PWG-02 | ladder 25 (about 50 nodes), 5 min
+> zpwgg ladder 1000 -60 1000 25
+waitlog \[zpwgg\] ladder built n=25 30
+sleep 10
+> zpwgg net 1002 -60 1000
+sleep 300
+> powergrid performance get NetSolve
+> powergrid performance get JavaMNA
+> powergrid performance get minecraft:overworld
+> forge tps
+sleep 3
+expect \[zpwgg\] net paused=false
+reject An unexpected error occurred
+reject Converged after
+look mean tick delta against SQ-PWG-01 under 0.1 ms; networkNodes about 50; record the three counters (min / max / avg us)
+
+## SQ-PWG-03 | ladder 100 (about 200 nodes), 5 min; -02's area unloaded first
+> forceload remove 992 992 1100 1100
+> forceload add 992 1095 1050 1120
+sleep 5
+> zpwgg ladder 1000 -60 1100 100
+waitlog \[zpwgg\] ladder built n=100 30
+sleep 10
+> zpwgg net 1002 -60 1100
+sleep 300
+> powergrid performance get NetSolve
+> powergrid performance get JavaMNA
+> powergrid performance get minecraft:overworld
+> forge tps
+sleep 3
+expect \[zpwgg\] net paused=false
+reject An unexpected error occurred
+look mean tick delta under 1 ms; about 200 nodes; record the counters
+
+## SQ-PWG-04 | ladder 500 (about 1000 nodes), 5 min
+> forceload remove 992 1095 1050 1120
+> forceload add 992 1195 1050 1280
+sleep 5
+> zpwgg ladder 1000 -60 1200 500
+waitlog \[zpwgg\] ladder built n=500 60
+sleep 10
+> zpwgg net 1002 -60 1200
+sleep 300
+> powergrid performance get NetSolve
+> powergrid performance get JavaMNA
+> powergrid performance get minecraft:overworld
+> forge tps
+sleep 3
+expect \[zpwgg\] net paused=false
+reject An unexpected error occurred
+look recorded (scaling curve, no pass line); compare with the offline harness (0.11 ms per changed solve, 9 ms first solve, 1000-node ladder)
+
+## SQ-PWG-05 | 20 separate 50-node grids, 5 min
+> forceload remove 992 1195 1050 1280
+> forceload add 992 1395 2000 1410
+sleep 10
+> zpwgg grids 1000 -60 1400 20 25
+waitlog \[zpwgg\] grids built count=20 60
+sleep 10
+> zpwgg net 1002 -60 1400
+sleep 300
+> powergrid performance get NetSolve
+> powergrid performance get minecraft:overworld
+> forge tps
+sleep 3
+reject An unexpected error occurred
+look total delta recorded; about 20 x SQ-PWG-02's delta (linear in grid count)
+
+## SQ-PWG-07pre | forceload P4 area; unload -05; build SQ-PWG-38 A (motor, 4 presses) (setup, from r1113/pwg5.qb SQ-PWG-38)
+> forceload remove 992 1395 2000 1410
+> forceload add 1090 1140 1140 1260
+sleep 10
+> zpwg3 src 1100 -60 1160 258
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1103 -60 1160 powergrid:current_gauge
+> zpwg3 place 1106 -60 1160 powergrid:electric_motor facing=east
+> zpwg3 place 1106 -60 1162 powergrid:voltage_gauge
+> zpwg3 w 1100 -60 1160 0 1103 -60 1160 0
+> zpwg3 w 1103 -60 1160 1 1106 -60 1160 0
+> zpwg3 w 1106 -60 1160 1 1100 -60 1160 1
+> zpwg3 w 1106 -60 1160 0 1106 -60 1162 0
+> zpwg3 w 1106 -60 1160 1 1106 -60 1162 1
+sleep 2
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+> zpwg3 place 1107 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1108 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1109 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1110 -60 1160 create:mechanical_press facing=east
+sleep 2
+> zpwg4 kin 1107 -60 1160
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+> zpwg3 place 1111 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1112 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1113 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1114 -60 1160 create:mechanical_press facing=east
+> zpwg3 place 1115 -60 1160 create:mechanical_press facing=east
+sleep 2
+> zpwg4 kin 1107 -60 1160
+> zpwg4 kin 1106 -60 1160
+> zpwg3 be 1103 -60 1160
+> zpwg3 be 1106 -60 1162
+expect \[zpwg4\] speed=255 .*generated=255 overstressed
+expect \[zpwg4\] network capacitySU=16320 stressSU=0 members
+expect \[zpwg4\] .*overstressed=true
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look record RPM, SU, V, A per step: 0 presses about 0.50 A at 258 V; 4 presses stressSU = 4 x k x 255 (8160 at k = 8), current = Vm / (25.6 / (4k / 64)) (about 5.0 A, 10 %); 9 presses overstressed, current about Vm / 25.6 (about 10 A)
+
+## SQ-PWG-SETUP12P4 | forceload the P4 area X 1090 to 1130, Z 1170 to 1220; clear its generated animals (not a row)
+> forceload add 1090 1170 1130 1220
+sleep 5
+> kill @e[type=!minecraft:player,x=1090,y=-64,z=1170,dx=40,dy=40,dz=50]
+sleep 2
+
+## SQ-PWG-38B | PWG-08 part B: generator line fed by a creative motor at 64, 128, 256 RPM, 30 V excitation, 10 ohm load
+> zpwg3 place 1100 -58 1180 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -58 1180 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1103 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1104 -58 1180 powergrid:generator_commutator facing=east
+> zpwg4 wind 1102 -57 1180 1103 -57 1180 y
+> zpwg4 wind 1102 -59 1180 1103 -59 1180 y
+> zpwg3 place 1101 -57 1180 powergrid:device_connector facing=east
+> zpwg3 place 1101 -59 1180 powergrid:device_connector facing=east
+> zpwg3 be 1101 -57 1180
+> zpwg3 be 1101 -59 1180
+> zpwg3 src 1098 -58 1183 30
+> zpwg3 w 1098 -58 1183 0 1101 -57 1180 0
+> zpwg3 w 1101 -57 1180 1 1101 -59 1180 0
+> zpwg3 w 1101 -59 1180 1 1098 -58 1183 1
+> zpwg3 place 1107 -60 1180 powergrid:current_gauge
+> zpwg3 place 1110 -60 1180 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1180 36
+> zpwg3 place 1110 -60 1182 powergrid:voltage_gauge
+> zpwg3 w 1104 -58 1180 0 1107 -60 1180 0
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+> zpwg3 w 1110 -60 1180 0 1110 -60 1182 0
+> zpwg3 w 1110 -60 1180 1 1110 -60 1182 1
+sleep 2
+> zpwg4 kin 1102 -57 1180
+> zpwg3 scroll 1100 -58 1180 64
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 128
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 256
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+count \[zpwg4\] wind 2 blocks axis=x along=true magnetic=y$ == 2
+count \[zpwg3\] be Block\{powergrid:device_connector\} >= 2
+expect \[zpwg4\] .*impact=104 capacityAdded
+expect \[zpwg4\] network capacitySU=\S+ stressSU=6656 members
+expect \[zpwg4\] network capacitySU=\S+ stressSU=13312 members
+expect \[zpwg4\] network capacitySU=\S+ stressSU=26624 members
+reject \[zpwg4\] winding I=\S+ field=none
+reject StackOverflowError
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look as on -06 (pwg6b): winding I about 1.0 A, field = f(I) (6.60 at 1.0 A, 5 %); rotor induction field = winding field / 2; rotor rpm within 5 % of clutch speed; commutator V 0.6 to 1.0 of 2 x field x RPM x pi / 30 (about 44 / 88 / 177 V at 1 A); gauge A = gauge V / 10 (5 %); compare with perf/runs/r1113/pwg6b
+
+## SQ-PWG-07 | generator set at 256 RPM with a 10 ohm load and the motor line: 5 min, rotor steadiness, load steps
+> zpwg3 res 1110 -60 1180 36
+sleep 10
+> forge tps
+repeat 10
+> zpwg4 kin 1102 -58 1180
+sleep 1
+end
+sleep 280
+> powergrid performance get NetSolve
+> powergrid performance get JavaMNA
+> powergrid performance get minecraft:overworld
+repeat 3
+> zpwg3 res 1110 -60 1180 27
+sleep 3
+> zpwg4 kin 1102 -58 1180
+sleep 7
+> zpwg3 res 1110 -60 1180 36
+sleep 3
+> zpwg4 kin 1102 -58 1180
+sleep 7
+end
+> forge tps
+sleep 3
+reject did not converge
+reject Converged after
+reject An unexpected error occurred
+reject \[zpwg\w*\] error
+look mean tick delta against SQ-PWG-01 under 0.2 ms; the 10 rpm= samples within 2 %; after each load step the rotor settles (kin 3 s later) and never passes 272 RPM; record the counters
+
+## SQ-PWG-08 | 40 perfBot bots within 32 blocks of the SQ-PWG-03 grid (server tick only; see header caveat)
+> forceload add 992 1095 1050 1120
+sleep 10
+> zpwgg net 1002 -60 1100
+> pbot spawn pwgb0 1000 -60 1090
+> pbot spawn pwgb1 1004 -60 1090
+> pbot spawn pwgb2 1008 -60 1090
+> pbot spawn pwgb3 1012 -60 1090
+> pbot spawn pwgb4 1016 -60 1090
+> pbot spawn pwgb5 1020 -60 1090
+> pbot spawn pwgb6 1024 -60 1090
+> pbot spawn pwgb7 1028 -60 1090
+> pbot spawn pwgb8 1032 -60 1090
+> pbot spawn pwgb9 1036 -60 1090
+> pbot spawn pwgb10 1000 -60 1094
+> pbot spawn pwgb11 1004 -60 1094
+> pbot spawn pwgb12 1008 -60 1094
+> pbot spawn pwgb13 1012 -60 1094
+> pbot spawn pwgb14 1016 -60 1094
+> pbot spawn pwgb15 1020 -60 1094
+> pbot spawn pwgb16 1024 -60 1094
+> pbot spawn pwgb17 1028 -60 1094
+> pbot spawn pwgb18 1032 -60 1094
+> pbot spawn pwgb19 1036 -60 1094
+> pbot spawn pwgb20 1000 -60 1098
+> pbot spawn pwgb21 1004 -60 1098
+> pbot spawn pwgb22 1008 -60 1098
+> pbot spawn pwgb23 1012 -60 1098
+> pbot spawn pwgb24 1016 -60 1098
+> pbot spawn pwgb25 1020 -60 1098
+> pbot spawn pwgb26 1024 -60 1098
+> pbot spawn pwgb27 1028 -60 1098
+> pbot spawn pwgb28 1032 -60 1098
+> pbot spawn pwgb29 1036 -60 1098
+> pbot spawn pwgb30 1000 -60 1102
+> pbot spawn pwgb31 1004 -60 1102
+> pbot spawn pwgb32 1008 -60 1102
+> pbot spawn pwgb33 1012 -60 1102
+> pbot spawn pwgb34 1016 -60 1102
+> pbot spawn pwgb35 1020 -60 1102
+> pbot spawn pwgb36 1024 -60 1102
+> pbot spawn pwgb37 1028 -60 1102
+> pbot spawn pwgb38 1032 -60 1102
+> pbot spawn pwgb39 1036 -60 1102
+sleep 20
+> forge tps
+sleep 300
+> powergrid performance get NetSolve
+> powergrid performance get minecraft:overworld
+> forge tps
+> pbot remove-all
+sleep 3
+expect \[zpwgg\] net paused=false
+reject An unexpected error occurred
+look server tick under 50 ms with 40 bots (perf segment mean / p99); record the counters; network part not measurable here (header)

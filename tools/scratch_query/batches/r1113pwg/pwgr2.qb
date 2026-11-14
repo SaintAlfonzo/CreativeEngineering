@@ -1,0 +1,45 @@
+# r1113 P11 regression, boot R2 of world pwgr: restart of the R1 server (same OUT, level pwgr) for the save/reload row
+# and the Overheated Component drop chance 0. Jar -17 (as pwgr1.qb). Rows copied from r1113/pwg2b.qb (-20, -18b) and
+# r1113/pwg3.qb (-15: cut runs after the reload reads, since -20 reads the Z 1000 loop).
+# Before the boot (server stopped):
+#   python3 $INST/tools/scratch_query/qrun.py toml OUT/srv/pwgr/serverconfig/powergrid-server.toml electricity overheatedDropChance 0.0
+# Run: qrun.py run OUT tools/scratch_query/batches/r1113pwg/pwgr2.qb perf/runs/r1113/pwgr
+pace 2
+
+# from r1113/pwg2b.qb
+## SQ-PWG-20 | after the restart: same reads, wire counts, no load errors
+> forceload add 990 990 1060 1090
+sleep 6
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 30
+> zpwgg read 1000 -60 1010 24
+waitlog \[zpwgg\] read 30
+> zpwgg wires 1000 -60 1000 8
+waitlog \[zpwgg\] wires 30
+sleep 1
+expect \[zpwgg\] wires 5$
+bootreject (Failed to|Exception).*(powergrid|TransmissionLine)
+look compare with SQ-PWG-20a.log: same V, I (1 %), R and wire counts
+
+# from r1113/pwg2b.qb
+## SQ-PWG-18b | chance 0: destroying the overheated gauge at Z 1040 drops nothing
+> zpwgg overheated 1003 -60 1040 1
+waitlog \[zpwgg\] overheated \d+ 30
+expect \[zpwgg\] overheated at 1003 -60 1040
+> setblock 1003 -60 1040 air destroy
+sleep 3
+> zpwgg items 1003 -60 1040 2
+waitlog \[zpwgg\] items \d+ 30
+expect \[zpwgg\] items 0
+
+# from r1113/pwg3.qb
+## SQ-PWG-15 | cut the gauge-to-resistor wire: cut 1, I=0, wires=4
+> zpwgg cut 1000 -60 1000
+waitlog \[zpwgg\] done 20
+sleep 1
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 20
+expect \[zpwgg\] cut 1$
+expect \[zpwgg\] read V=12(\.0)? I=(0|-?\d(\.\d+)?E-\d+)\S* .*wires=4
+reject (Exception|/ERROR\])
+

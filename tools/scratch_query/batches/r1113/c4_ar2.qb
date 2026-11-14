@@ -1,0 +1,215 @@
+# r1113 chunk 4, boot A second rerun (c4_ar2): fixture fixes for the c4_ar rows judged in perf/runs/r1113/verdicts/c4_a.md
+# (section c4_ar). Rows: SQ-FLR-03, -02b, -04, -05 (heated half), SQ-BREED-03, SQ-FDI-02 (which food did not count),
+# SQ-FDI-03 (vanilla cake and candle cake bites).
+#
+# Setup: NO fresh world, no new probe. Reuse the c4_a scratch dir and world exactly as c4_ar left them (OUT = the c4_a
+# scratch dir, srv = OUT/srv, level r1113c4a, the zc4 probe c4_ar copied in is unchanged). No /reload, no /dumpall.
+#
+# Fixes against c4_ar:
+#  - SQ-FLR-03: the millstone's 9 output slots filled with 9 different ids and Create voids what does not fit
+#    (MillstoneBlockEntity.process -> insertItemStacked; tick only halts on a FULL slot). Now a hopper under the millstone
+#    drains it into a chest, the millstone is driven by a cogwheel beside it (it is an ICogWheel) at 32 rpm, and the chest
+#    is counted.
+#  - SQ-FLR-02b / -04: the controller existed in c4_ar but VALID was never checked (wrong spin leaves valid=false and the
+#    items sit on top); the pools box only reached y -58, so items on the wheels were not even seen. Now the motors swap
+#    unless the controller is valid=true, and the box covers y -63..-54.
+#  - SQ-FLR-05: create:blaze_burner placed without a state is blaze=none = the EMPTY burner (no block entity, so tryInsert
+#    returned FAIL). Now placed as blaze=smouldering. Only the heated half reruns (the unheated half PASSed in c4_ar).
+#  - SQ-BREED-03: the three bees never moved in c4_ar (same block in both readings 60 s apart, hive Bees []). Now a fresh
+#    hive with the wild carrot 3 blocks away, a poppy control hive, and a bot standing between them.
+#  - SQ-FDI-02: carrot=19 applepie=19 after 20 foods; read every food's has-flag on fdj (data kept in this world).
+#  - SQ-FDI-03: the vanilla cake and candle cake uses returned CONSUME and recorded nothing; check whether a bite happened.
+# Areas: millstone 40200, crushers 40220, mixers 40240 (z 40000 lane, as c4_ar); bees 40720-40740; cakes 40610-40616.
+pace 2
+
+## SQ-FLR-03 | Millstone: 20 flesh give exactly 20 meat items (drained into a chest)
+> forceload add 40190 39990 40270 40010
+sleep 3
+> fill 40195 -60 39995 40205 -50 40005 minecraft:air
+> setblock 40200 -61 40000 minecraft:chest
+> setblock 40200 -60 40000 minecraft:hopper[facing=down]
+> setblock 40200 -59 40000 create:millstone
+> setblock 40201 -60 40000 create:creative_motor[facing=up]{ScrollValue:32}
+> setblock 40201 -59 40000 create:cogwheel[axis=y]
+sleep 3
+> data get block 40200 -59 40000 Speed
+expect 40200, -59, 40000 has the following block data: -?[1-9][0-9]*\.0f
+> zc4 put 40200 -59 40000 biomesoplenty:flesh 20
+waitlog \[zc4\] done 20
+expect \[zc4\] put 40200 -59 40000 biomesoplenty:flesh inserted=20
+sleep 150
+> zc4 inv 40200 -59 40000
+waitlog \[zc4\] done 20
+> zc4 poolsinv 40200 -61 40000
+waitlog \[zc4\] pools by id 20
+count \[zc4\] pools meat=20 bone=\d+ eye=\d+ misc=\d+ >= 1
+reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
+look the chest pools line: meat=20 exactly, flesh used up (millstone inv line empty or near empty); bone near 15, eye near 5, misc near 5; the hopper itself may still hold up to 5 stacks (zc4 inv 40200 -60 40000 by hand if meat is 15-19)
+
+## SQ-FLR-02b | crushing wheel rig: controller forms AND is valid (setup for SQ-FLR-04)
+> execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run say FLR crusher valid before swap
+> execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=false] run say FLR crusher invalid before swap
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 39999 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 40001 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+sleep 5
+> execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run say FLR crusher valid ok
+expect FLR crusher valid ok
+> data get block 40220 -58 40000 Speed
+> data get block 40222 -58 40000 Speed
+
+## SQ-FLR-04 | Crushing wheels: 100 pus bubbles about 25 slimeballs, 100 hair about 50 string, nothing else
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:36b}}
+sleep 40
+> zc4 pools 40221 -59 40000 -4
+waitlog \[zc4\] done 20
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:36b}}
+sleep 40
+> zc4 pools 40221 -59 40000 -4
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=(1[5-9]|2\d|3[0-5]) string=0 other=0 >= 1
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=0 string=(3[5-9]|[4-5]\d|6[0-5]) other=0 >= 1
+look first pools line ~25 slime only, second ~50 string only; pus_bubble / hair under "others" means the wheels did not take (or not all of) the stack
+
+## SQ-FLR-05 | Mixer and basin, heated half: blood renders (the unheated half PASSed in c4_ar)
+> setblock 40240 -60 40000 create:blaze_burner[blaze=smouldering]
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> setblock 40240 -57 40000 create:mechanical_mixer
+> setblock 40241 -57 40000 create:cogwheel[axis=y]
+> setblock 40241 -58 40000 create:creative_motor[facing=up]{ScrollValue:128}
+sleep 3
+> data get block 40240 -57 40000 Speed
+expect 40240, -57, 40000 has the following block data: -?[1-9][0-9]*\.0f
+> zc4 fuel 40240 -60 40000 minecraft:coal_block
+waitlog \[zc4\] done 20
+sleep 2
+> zc4 fuel 40240 -60 40000 minecraft:coal
+waitlog \[zc4\] done 20
+expect \[zc4\] fuel 40240 -60 40000 .*blaze=kindled
+> zc4 put 40240 -59 40000 biomesoplenty:flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:porous_flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 500
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:flesh_tendons 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250 >= 2
+look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB, the inv lines show the input used up; the first fuel line (coal block) should already say kindled
+
+## SQ-BREED-03 | a bee pollinates a wild carrot (poppy hive as control; isfood half PASSed in c4_ar)
+> forceload add 40705 39985 40750 40015
+> time set 1000
+> weather clear 100000
+sleep 3
+> fill 40710 -60 39990 40745 -50 40010 minecraft:air
+> kill @e[type=minecraft:bee,x=40705,y=-64,z=39985,dx=45,dy=20,dz=30]
+> setblock 40720 -60 40000 minecraft:beehive[facing=south]
+> setblock 40723 -60 40000 farmersdelight:wild_carrots
+> setblock 40736 -60 40000 minecraft:beehive[facing=south]
+> setblock 40739 -60 40000 minecraft:poppy
+> execute if block 40723 -60 40000 farmersdelight:wild_carrots run say BREED3 carrot placed
+> execute if block 40739 -60 40000 minecraft:poppy run say BREED3 poppy placed
+> pbot spawn b3 40728.5 -60 40006.5 minecraft:overworld survival
+> summon minecraft:bee 40720.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40721.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40719.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40736.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40737.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40735.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+sleep 30
+> zc4 bees 40721 -58 40000 6
+waitlog \[zc4\] done 20
+> zc4 bees 40737 -58 40000 6
+waitlog \[zc4\] done 20
+sleep 150
+> zc4 bees 40721 -58 40000 12
+waitlog \[zc4\] done 20
+> zc4 bees 40737 -58 40000 12
+waitlog \[zc4\] done 20
+> data get block 40720 -60 40000 Bees
+> data get block 40736 -60 40000 Bees
+> pbot remove b3
+expect BREED3 carrot placed
+expect BREED3 poppy placed
+count \[zc4\] bee .* flower=40723,-60,40000 >= 1
+look bee positions change between the readings (the bees move); a carrot-hive bee records flower=40723,-60,40000 (or FlowerPos 40723 -60 40000 in the first hive's Bees); the control hive's bees record the poppy 40739 -60 40000. Poppy found and carrot never = real (wild carrot not pollinable); neither found and the bees still frozen = environment (INCONCLUSIVE)
+
+## SQ-FDI-02 | which of the 20 foods fdj ate (c4_ar) did not count (carrot=19 applepie=19)
+> pbot spawn fdj 40600.5 -60 40010.5 minecraft:overworld survival
+sleep 3
+> zc4 sol fdj minecraft:apple
+> zc4 sol fdj minecraft:bread
+> zc4 sol fdj minecraft:cooked_beef
+> zc4 sol fdj minecraft:baked_potato
+> zc4 sol fdj minecraft:carrot
+> zc4 sol fdj minecraft:cooked_chicken
+> zc4 sol fdj minecraft:cooked_porkchop
+> zc4 sol fdj minecraft:cooked_mutton
+> zc4 sol fdj minecraft:cooked_cod
+> zc4 sol fdj minecraft:cooked_salmon
+> zc4 sol fdj minecraft:cookie
+> zc4 sol fdj minecraft:melon_slice
+> zc4 sol fdj minecraft:pumpkin_pie
+> zc4 sol fdj minecraft:mushroom_stew
+> zc4 sol fdj minecraft:beetroot
+> zc4 sol fdj minecraft:sweet_berries
+> zc4 sol fdj minecraft:rabbit_stew
+> zc4 sol fdj minecraft:dried_kelp
+> zc4 sol fdj minecraft:golden_carrot
+> zc4 sol fdj minecraft:potato
+waitlog \[zc4\] sol fdj .*maxhealth 20
+> pbot remove fdj
+count \[zc4\] sol fdj .*carrotHas=true >= 19
+look the one line with carrotHas=false (and applepieHas=false) names the food neither book counted; check that item for a food blacklist or a non-food override in the pack before calling it a bug. Max health 22 is Spice of Life: Raspberry Pie's health rung at 5 diet foods (ladder.json), not Carrot hearts
+
+## SQ-FDI-03 | vanilla cake and candle cake: did the bot's use bite the cake?
+> forceload add 40590 39990 40620 40020
+sleep 3
+> fill 40610 -60 39998 40616 -58 40004 minecraft:air
+> setblock 40612 -60 40000 minecraft:cake
+> setblock 40614 -60 40000 minecraft:candle_cake
+> pbot spawn fdm 40613.5 -60 40002.5 minecraft:overworld survival
+sleep 3
+> clear fdm
+> zc4 sol fdm farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fdm 4
+> pbot hold fdm minecraft:air
+> data get entity fdm SelectedItem
+> pbot use fdm 40612 -60 40000 up
+sleep 1
+> execute if block 40612 -60 40000 minecraft:cake[bites=0] run say FDI3 cake not bitten
+> execute if block 40612 -60 40000 minecraft:cake[bites=1] run say FDI3 cake bitten
+> data get entity fdm foodLevel
+> zc4 sol fdm farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fdm minecraft:cake
+waitlog \[zc4\] done 20
+> zc4 hunger fdm 4
+> pbot use fdm 40614 -60 40000 up
+sleep 1
+> execute if block 40614 -60 40000 minecraft:candle_cake run say FDI3 candle cake not bitten
+> execute if block 40614 -60 40000 minecraft:cake[bites=1] run say FDI3 candle cake bitten
+> data get entity fdm foodLevel
+> zc4 sol fdm farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> pbot remove fdm
+look "cake bitten" with foodLevel above 4 and carrotHas=false for cake_slice = real (PlacedFoodSol misses the vanilla cake; the Diet Tracker should have counted minecraft:cake itself, applepieEntries +1); "cake not bitten" with foodLevel 4 = the bot's use never reached CakeBlock (some other handler returned CONSUME): name it from the use line, INCONCLUSIVE for the slice rule
