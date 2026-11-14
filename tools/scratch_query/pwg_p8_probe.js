@@ -188,7 +188,13 @@
         // r1113 pwg12r SQ-PWG-63: every click landed in slot 3, the slot a block-centre hit gives; print what Java got
         let hl = hit.getLocation()
         out('use hit loc=' + fmt(hl.x() - P.getX()) + ',' + fmt(hl.y() - P.getY()) + ',' + fmt(hl.z() - P.getZ()) + ' dir=' + hit.getDirection() + ' pos=' + hit.getBlockPos().toShortString())
-        let res = p.gameMode.useItemOn(p, level, held, $Hand.MAIN_HAND, hit)
+        // r1113 pwg16 SQ-PWG-63: Create 0.5.1's ValueSettingsInputHandler takes EVERY right-click of a FakePlayer on a
+        // block with a value box (testHit is skipped for fake players) and ScrollValueBehaviour.onShortInteract replays it
+        // as BlockState.use with a block-CENTRE hit, so every click landed in slot 3. Real players are not affected. For
+        // the modular display the probe calls the block's use with its own hit (the value box path is a client check).
+        let direct = blockId(level.getBlockState(P)) == 'powergrid:modular_display'
+        if (direct) out('use direct BlockState.use (fake player bypasses Create value box handler)')
+        let res = direct ? level.getBlockState(P).use(level, p, $Hand.MAIN_HAND, hit) : p.gameMode.useItemOn(p, level, held, $Hand.MAIN_HAND, hit)
         let now = p.getMainHandItem()
         out('use ' + before + ' on ' + blockId(level.getBlockState(P)) + ' face=' + face + ' at ' + fmt(dx) + ',' + fmt(dy) + ',' + fmt(dz)
             + ' sneaking=' + p.isShiftKeyDown() + ' result=' + res + ' block after=' + level.getBlockState(P)

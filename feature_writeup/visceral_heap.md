@@ -94,3 +94,9 @@ Heated mixing renders flesh (250 mB blood, bone at 25 %), porous flesh (500 mB) 
 2 porous + 2 flesh + 1000 mB of any `#forge:plantoil` gives 2 porous + 3 flesh; 2 tendons + 1 flesh + 250 mB blood gives
 1 porous flesh. Tendons and the strand are climbable (not villager ladders). Item physics for the Heap items stays
 deferred (plan section 6).
+
+## 7. Owner notes (scratchpad 2026-11-13)
+
+Executed (section 6, TODO `worldgen/biomes #11`): crush pools, cultivation, blood rendering, spongy and very sticky walk tiers. Plan changes: oil cultivation gives 2 porous + 3 flesh; pus bubble and hair give slimeball and string, no organic waste.
+
+Open: eyebulb animation slower, held at the still frame, offset per placement (`#13`); do porous flesh and tendons grow tendons (`#14`); broken bone and bone chunk pressing, milling and crushing (`#15`); Slice & Dice heated mixing for meat cultures (`food/types-and-tuning #28`).

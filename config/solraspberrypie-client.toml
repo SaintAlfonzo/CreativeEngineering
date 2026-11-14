@@ -11,3 +11,11 @@
 	#Range: -2000 ~ 2000
 	y = 166
 
+[dietLog]
+	#Diet Log progress bar: how many milestones ahead of the last one reached it shows.
+	#Range: 1 ~ 50
+	progressAhead = 3
+	#The Diet Log opens as two pages, foods still in the window on the left and the first page of
+	#foods out of the window on the right. Needs a screen wide enough for both pages.
+	doublePage = true
+

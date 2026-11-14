@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /** Raspberry Pie's channel (13.3): ladder, player state, messages and previews to the client; slot actions to the server. */
 public final class RpNetwork {
-    private static final String VERSION = "1";
+    private static final String VERSION = "2";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(SolRaspberryPie.MOD_ID, "main"), () -> VERSION, VERSION::equals, VERSION::equals);
 

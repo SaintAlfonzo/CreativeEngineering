@@ -204,7 +204,7 @@ public class EffectScreen extends Screen {
         Component div = Component.translatable("solraspberrypie.screen.diversity", Icons.num(round(s.diversity)), Icons.num(round(s.maxDiversity)));
         drawString(pose, font, div, left + 8, top + 20, 0xAAAAAA);
         if (s.foodsEaten < s.minFoods) {
-            drawString(pose, font, Component.translatable("solraspberrypie.screen.gate", s.minFoods - s.foodsEaten), left + 8, top + 31, 0xFFAA55);
+            drawString(pose, font, Component.translatable(s.uniqueGate ? "solraspberrypie.screen.gate_unique" : "solraspberrypie.screen.gate", s.minFoods - s.foodsEaten), left + 8, top + 31, 0xFFAA55);
         }
         // Flat bonuses (read only).
         drawString(pose, font, Component.translatable("solraspberrypie.screen.flat"), left + 8, top + 44, 0xFFD27F);

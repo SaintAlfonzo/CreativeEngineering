@@ -15,6 +15,7 @@
 //   wrench X Y Z [FACE]      [zpwg10] (inventory emptied) uses a Create wrench on the block at X Y Z, clicked FACE
 //                            (default north): onWrenched; prints the block after and what the player got (B32)
 //   drops X Y Z              loot of the block at X Y Z with its block entity and an iron pickaxe (B32: the lamp's bulb)
+//   node X Y Z               terminal nodes of the electric block at X Y Z: voltage, saved value, index, network (SQ-PWG-94)
 //   lamp X Y Z               ceiling tile lamp: state, bulb, temperature, emission, block light, terminals
 //   solar X Y Z              ceiling tile solar: terminals, goggle lines, multiblock (controller, connected), sky light
 //   solarjoin X Y Z X2 Y2 Z2 merge the ceiling solar multiblock at 2 into the one at X Y Z (what the wrench does)
@@ -96,7 +97,8 @@
     }
     function prop(state, name) {
         let v = null
-        state.getProperties().forEach(p => { if (p.getName() == name) v = String(state.getValue(p)) })
+        // r1113 pwg17: an enum value prints its constant name (LAMP_ON); lower case as the blockstate shows it
+        state.getProperties().forEach(p => { if (p.getName() == name) v = String(state.getValue(p)).toLowerCase() })
         return v
     }
     function fake(level) {
@@ -130,6 +132,13 @@
     }
     // getClass() is filtered by KubeJS: a short class name from toString
     function simpleName(o) { let s = String(o); let m = s.match(/([A-Za-z0-9_$.]+)@[0-9a-f]+$/); return m ? m[1].replace(/^.*[.$]/, '') : s }
+    // BlockState.is / ItemStack.is(TagKey) are ambiguous in Rhino (r1113 pwg16): Forge's tag manager instead
+    function blockInTag(st, key) {
+        try { return $FR.BLOCKS.tags().getTag(key).contains(st.getBlock()) } catch (err) { return 'error ' + err }
+    }
+    // no BlockPos.relative / Direction.getStepX from Rhino (overloads, unreachable getters): offsets by name
+    const STEP = { north: [0, -1], south: [0, 1], east: [1, 0], west: [-1, 0] }
+    function beside(P, name) { let d = STEP[name]; return pos(P.getX() + d[0], P.getY(), P.getZ() + d[1]) }
     function check(level) {
         P10_BLOCKS.forEach(id => {
             let b = $FR.BLOCKS.getValue(rl(id))
@@ -152,8 +161,12 @@
             let r = recipe(level, id)
             if (r == null) { out('recipe ' + id + ' MISSING'); return }
             let empty = [], ings = r.getIngredients()
-            for (let i = 0; i < ings.size(); i++) { let ing = ings.get(i); if (!ing.isEmpty() && ing.getItems().length == 0) empty.push(i) }
-            out('recipe ' + id + ' class=' + simpleName(r) + ' type=' + r.getType() + ' result=' + stackLine(r.getResultItem())
+            // r1113 pwg17: Ingredient.getItems() is hidden in this Rhino build (getStacks), and no getType() on recipes
+            // (AbstractMethodError on a foreign recipe escapes the catch; KubeJS remaps it to the serializer id anyway)
+            for (let i = 0; i < ings.size(); i++) { let ing = ings.get(i); if (ing.getStacks().toList().size() == 0) empty.push(i) }
+            let ser = null
+            try { ser = $FR.RECIPE_SERIALIZERS.getKey(r.getSerializer()) } catch (err) { ser = '?' }
+            out('recipe ' + id + ' class=' + simpleName(r) + ' serializer=' + ser + ' result=' + stackLine(r.getResultItem())
                 + ' ingredients=' + r.getIngredients().size() + ' unresolved=[' + empty.join(',') + ']')
         })
         let n = 0
@@ -164,7 +177,7 @@
         let p = fake(level)
         for (let id of ['copper_plating', 'copper_plating_slab', 'copper_plating_stairs', 'ceiling_tile']) {
             let st = $FR.BLOCKS.getValue(rl(id)).defaultBlockState()
-            out('tool ' + id + ' pickaxeTag=' + st.is($BlockTags.MINEABLE_WITH_PICKAXE) + ' axeTag=' + st.is($BlockTags.MINEABLE_WITH_AXE)
+            out('tool ' + id + ' pickaxeTag=' + blockInTag(st, $BlockTags.MINEABLE_WITH_PICKAXE) + ' axeTag=' + blockInTag(st, $BlockTags.MINEABLE_WITH_AXE)
                 + ' needsTool=' + st.requiresCorrectToolForDrops() + ' ironPickaxeCorrect=' + pick.isCorrectToolForDrops(st))
         }
         let slab = $FR.BLOCKS.getValue(rl('copper_plating_slab')).defaultBlockState()
@@ -219,7 +232,7 @@
         let res
         try { res = level.getBlockState(P).use(level, p, $Hand.MAIN_HAND, hitAt(P, $Dir.DOWN, d[0], d[1])) } catch (err) { res = 'error ' + err }
         let around = []
-        for (let n of ['north', 'south', 'east', 'west']) around.push(n + '=' + blockId(level.getBlockState(P.relative($Dir.byName(n)))))
+        for (let n of ['north', 'south', 'east', 'west']) around.push(n + '=' + blockId(level.getBlockState(beside(P, n))))
         out('helper ' + dir + ' result=' + res + ' ' + around.join(' ') + ' hand=' + stackLine(p.getMainHandItem()))
     }
     function wrench(level, P, face) {
@@ -227,10 +240,13 @@
         p.getInventory().clearContent()
         p.setItemInHand($Hand.MAIN_HAND, new $ItemStack(item('create:wrench'), 1))
         let st = level.getBlockState(P)
-        let f = $Dir.byName(face || 'north')
-        let hit = new $BHR(new $Vec3(P.getX() + 0.5 + f.getStepX() * 0.5, P.getY() + 0.0625, P.getZ() + 0.5 + f.getStepZ() * 0.5), f, P, false)
+        let fname = STEP[face] ? face : 'north'
+        let f = $Dir.byName(fname)
+        let hit = new $BHR(new $Vec3(P.getX() + 0.5 + STEP[fname][0] * 0.5, P.getY() + 0.0625, P.getZ() + 0.5 + STEP[fname][1] * 0.5), f, P, false)
         let res
         try { res = st.getBlock().onWrenched(st, new $UseOn(p, $Hand.MAIN_HAND, hit)) } catch (err) { res = 'error ' + err }
+        // r1113 pwg17: the wrench itself is not part of "got" (inventoryLine listed create:wrench x1 first)
+        p.setItemInHand($Hand.MAIN_HAND, $ItemStack.EMPTY)
         out('wrench ' + blockId(st) + ' face=' + f + ' result=' + res + ' -> ' + blockId(level.getBlockState(P)) + ' got: ' + inventoryLine(p))
     }
     function lamp(level, P) {
@@ -242,6 +258,23 @@
             + ' T=' + fmt(tag.getFloat('Temperature')) + ' burned=' + tag.getBoolean('Burned') + ' emission=' + st.getLightEmission()
             + ' blockLight=' + level.getBrightness($LightLayer.BLOCK, P) + ' below=' + level.getBrightness($LightLayer.BLOCK, P.below()))
         terminals(be)
+    }
+    // SQ-PWG-94 (r1113 pwg17: the ceiling connector read T0=0 with 1.2 A through it): each terminal node's voltage, saved
+    // value, matrix index and network
+    function node(level, P) {
+        let be = level.getBlockEntity(P)
+        let eb = be == null ? null : $BEB.get(be, pg().Electric.TYPE)
+        if (eb == null) { out('node none at ' + P + ' (' + blockId(level.getBlockState(P)) + ')'); return }
+        for (let i = 0; i < 4; i++) {
+            if (!eb.hasTerminal(i)) continue
+            let n = eb.getTerminal(i)
+            let net = null, idx = '?', saved = '?'
+            try { net = n.getNetwork() } catch (err) { net = null }
+            try { idx = n.getIndex() } catch (err) { idx = 'error' }
+            try { saved = fmt(n.getSavedValue()) } catch (err) { saved = 'error' }
+            out('node ' + blockId(level.getBlockState(P)) + ' T' + i + ' V=' + fmt(n.getVoltage()) + ' saved=' + saved + ' index=' + idx
+                + ' network=' + (net == null ? 'none' : simpleName(net) + ' nodes=' + net.getNodes().size()) + ' paused=' + eb.isPaused())
+        }
     }
     function solar(level, P) {
         let be = level.getBlockEntity(P)
@@ -280,12 +313,14 @@
             let arr = new $List()
             bytes.forEach(b => arr.add($Byte.valueOf(String(b))))
             t.putByteArray('Pattern', arr)
-            stack.setTag(t)
+            // r1113 pwg17: ItemStack.setTag is not visible from Rhino; getOrCreateTag works
+            stack.getOrCreateTag().put('Pattern', t.get('Pattern'))
         }
         let e
         try { e = pg().Cord.create(level, endpoint(level, A), endpoint(level, B), stack, null) } catch (err) { out('cord create error ' + err); return }
         let ok = level.addFreshEntity(e)
-        out('cord added=' + ok + ' uuid=' + e.getUUID() + ' items=' + n + ' length=' + fmt(Math.sqrt(A.distSqr(B))) + ' pattern=' + (dyes || 'none'))
+        // r1113 pwg17: no getUUID() from Rhino on the entity (KubeJS wrapper): left out
+        out('cord added=' + ok + ' items=' + n + ' length=' + fmt(Math.sqrt(A.distSqr(B))) + ' pattern=' + (dyes || 'none'))
     }
     function cordsBetween(level, A, B) {
         let box = new $AABB(Math.min(A.getX(), B.getX()) - 1, Math.min(A.getY(), B.getY()) - 2, Math.min(A.getZ(), B.getZ()) - 1,
@@ -293,7 +328,8 @@
         return [level.getEntitiesOfClass(pg().Cord, box), box]
     }
     function lights(level, A, B) {
-        let [cords, box] = cordsBetween(level, A, B)
+        let cb = cordsBetween(level, A, B)
+        let cords = cb[0], box = cb[1]
         out('cords ' + cords.size())
         cords.forEach(c => {
             let t = c.saveWithoutId(new $Compound())
@@ -314,7 +350,7 @@
         }
     }
     function cut(level, A, B) {
-        let [cords] = cordsBetween(level, A, B)
+        let cords = cordsBetween(level, A, B)[0]
         let n = 0
         cords.forEach(c => { c.discard(); n++ })
         out('cut ' + n)
@@ -329,7 +365,8 @@
         else if (cmd == 'drops') {
             let st = level.getBlockState(P)
             out('drops ' + blockId(st) + ' -> ' + dropsLine(level, st, P, level.getBlockEntity(P), fake(level), new $ItemStack(item('minecraft:iron_pickaxe'), 1)))
-        } else if (cmd == 'lamp') lamp(level, P)
+        } else if (cmd == 'node') node(level, P)
+        else if (cmd == 'lamp') lamp(level, P)
         else if (cmd == 'solar') solar(level, P)
         else if (cmd == 'solarjoin') {
             let a1 = level.getBlockEntity(P), a2 = level.getBlockEntity(pos(parseInt(a[4]), parseInt(a[5]), parseInt(a[6])))
@@ -346,7 +383,7 @@
             else if (cmd == 'cut') cut(level, P, B)
             else if (cmd == 'rewire') {
                 // B30: makeWire again, as ElectricBehaviour does when an endpoint's connections are rebuilt
-                let [cords] = cordsBetween(level, P, B)
+                let cords = cordsBetween(level, P, B)[0]
                 let n = 0
                 cords.forEach(c => { c.makeWire(); c.makeWire(); n++ })
                 out('rewire ' + n + ' (makeWire twice each)')

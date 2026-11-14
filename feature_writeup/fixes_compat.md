@@ -38,7 +38,7 @@ feature are documented with that feature and only pointed to here.
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
 | 2.31 | Upgrade Aquatic coral grows like vanilla coral (Immersive Weathering growths) | [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py), `kubejs/data/immersive_weathering/block_growths/ua_*` | BUILT 2026-10-28; scratch r1031 (2026-10-31): growth files parse (SQ-UC-01), prismarine grows in a cold ocean (SQ-UC-03, weak PASS); acan growth unproven, the setup grew no vanilla coral either (SQ-UC-02 client check pending); FX-48 |
 | 2.32 | Falling blocks (anvil, sand, gravel) splash on entering water via Effective | `mixin/FallingBlockWaterSplashMixin` | BUILT 2026-10-28, untested (FX-49) |
-| 2.33 | Opening chat with / (or T) sometimes typed the key into the box ("//"), MC-122477 | `ChatOpenArmMixin`, `ChatOpenCharDropMixin`, `util.ChatOpenKeyGuard` | BUILT 2026-11-12, in `mods/`, untested (FX-50) |
+| 2.33 | Opening chat with / (or T) sometimes typed the key into the box ("//"), MC-122477 | `ChatOpenArmMixin`, `ChatOpenCharDropMixin`, `util.ChatOpenKeyGuard` | BUILT 2026-11-12, in `mods/`; FX-50 PASS (owner observed 2026-11-13) |
 
 - **Pending:** nothing built and unshipped (2.22 went out with 1.0.8, 2026-10-19). FX-01 to FX-20 are new (the entries pointing elsewhere keep their tests
   there). Findings F1 to F6 (section 4); none needs a decision.
@@ -556,7 +556,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   A dead acan coral block and an elder prismarine coral block grow nothing. After `/cdevgen run jei_world`, the Weathering and Growth tab has a row per UA
   kind.
 - [ ] **FX-49 Falling block splash** (in game, client): over a pool, drop an anvil from height (`/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`) and sand from 2 blocks up. Each splashes once on entering the water (Effective splash model, droplets, splash sound) and the high drop splashes larger. No splash when it lands on dry ground; the block is not pushed sideways by the water.
-- [ ] **FX-50 Chat key not typed** (in game, client): press `/` 30 times to open chat (Escape between), at normal
+- [x] **FX-50 Chat key not typed** (PASS, owner observed in play 2026-11-13: no doubled key; the hold and rebind sub-checks were not reported separately) (in game, client): press `/` 30 times to open chat (Escape between), at normal
   and fast tapping. Chat always opens with a single `/`. Same with T: always empty. Type `/` again in an open chat:
   a second `/` appears. Hold `/` in an open chat: it repeats. Rebind Command to `.` in Controls: `.` opens chat with
   `/` and no `.`. No error naming `ChatOpen` in `logs/latest.log`.
@@ -601,6 +601,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-28: 2.31 Upgrade Aquatic coral growth (`gameplay/misc #15`): 11 IW growth files from a `/cdevgen` generator; prismarine in every ocean, elder prismarine treated as dead. Data only, not run; FX-48.
 - 2026-10-28: 2.32 falling block water splash: client mixin calls `doWaterSplashEffect` once on entering water (Effective draws it); FallingBlockEntity only. Built, not run; FX-49.
 - 2026-11-12: 2.33 chat key typed into the chat box (scratchpad "annoying"): MC-122477, not WorldEdit. Client guard drops the stale opening-key character. Creative Common built and installed, not run; FX-50.
+- 2026-11-13: FX-50 / CQ-CHK-01 PASS, owner observed the fix in play.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

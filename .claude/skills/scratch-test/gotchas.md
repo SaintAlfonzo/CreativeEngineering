@@ -27,6 +27,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   wildcard AT crash at world creation (`MixinChunkMap_C ... cannot reduce visibility`). List the unlisted jars before
   booting (`for j in srv/mods/*.jar; do grep -qF $(basename $j) mod_sides.md || echo $j; done`) and leave them out.
 - `/` can be nearly full: check `df -h /`; JFR is capped per boot (`JFR_MAX`).
+- 2026-11-13: the Power Grid -17 jar sat in the instance `mods/` with no mod_sides.md row; prep_srv.sh now drops any
+  `backportedPowerGrid-*.jar` unless PGJAR names one.
+- Waiting on qrun: wait on its pid (`kill -0`), not `pgrep -f "qrun.py run"` inside `bash -c` (the wait's own command
+  line matches, so it never ends).
 
 ## Boot
 
@@ -87,6 +91,9 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   `kubejs/data/zz_test/forge/biome_modifier` forcing the mob. Adding a placed feature to another biome in the same step
   = feature order cycle crash at spawn.
 - Big `/forceload add` (100+ chunks) generates synchronously: `max-tick-time=-1` (set by scratch_server.sh).
+- A restart with no bot or player online gives forceloaded chunks no random ticks: crop/hops rows after a restart need a
+  bot beside the site (r1113 rerun_a2). A Create mixer or arm turns only from a meshing cogwheel, not a gearbox under it;
+  an undrained millstone deletes outputs once its slots fill (r1113 pwg17, c4_ar).
 
 ## Fake players and clients
 
@@ -129,6 +136,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - A `function f() {}` declared inside an `if` / `else if` block of a probe command is undefined inside the
   `forEach` closures of that block ("f is not a function, it is undefined"). Use `let f = function () {}` (`/zq under`
   `kind`, `idAt`, `top`, r1103w). A new probe command gets one live call before its batch relies on it.
+- Never call `r.getType()` while looping `getRecipeManager().getRecipes()`: Mechanical Extruder's `ExtrudingRecipe.getType()`
+  throws AbstractMethodError, a Java Error that Rhino's try/catch does not stop, and the server crashes (r1113 c4_a). Use
+  `ForgeRegistries.RECIPE_SERIALIZERS.getKey(r.getSerializer())`. A `/cmd` argument is a Java String: `String(arg)` before
+  a JS `split(/re/)`, or the regex never splits (r1113 zc4).
 
 ## Worldgen tests
 
@@ -374,3 +385,30 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Block data in `data get block` prints `Slot: 7` for a byte in some containers, `Slot: 7b` in others: write `Slot: 7b?`.
 - A member config carry (SALT2-08, MemberConfigMove) skips keys the target file already has: the scratch srv copies
   the instance's filled `creativedelight-common.toml`, so strip the target sections before a carry test.
+- `ForgeRegistries.ENTITY_TYPES.getKey(e.getType())` returned `minecraft:pig` for every entity from Rhino (r1113 pwg10b):
+  use `e.getEncodeId()`. A contraption scan built on it reported "contraptions 0" for a working bearing.
+- A Forge `FluidStack` built in a script arrives EMPTY in Java (KubeJS wraps it): fill tanks by writing their NBT
+  (`TankContent`, `InputTanks`, `Tanks`) instead. Static getters like `ModdedFluids.acid()` are often unreachable: look
+  fluids and items up by registry id.
+- KubeJS class filter blocks `io.netty.*` (no `Unpooled` buffers: packet round trips cannot run in a probe) and
+  `ModList` (use `Platform.isLoaded` / `Platform.getMods`), and `getClass()` (use `instanceof`).
+- Ambiguous overloads throw `The choice of Java method ... is ambiguous`: `Entity.setDeltaMovement(3 numbers)` (use the
+  8-argument ItemEntity constructor), `moveTo(5 numbers)` resolves to `teleportTo` (use `absMoveTo`), `setYRot` is not
+  found on a FakePlayer, `BlockPos.relative(dir, n)` and `Direction.getStepX` (step by axis by hand),
+  `ItemStack.is(TagKey)` (use `ForgeRegistries.ITEMS.tags().getTag(key).contains(item)`), `new ItemStack(item)` (use
+  `item.getDefaultInstance()`), `AllDisplayBehaviours.sourcesOf` (call by signature `obj['m(Type)'](x)`).
+  Also unreachable by name: `level.getGameTime` (use `getLevelData().getGameTime()`), `getStringUUID`,
+  `DamageSource.getMsgId` (read the field).
+- Create 0.5.1's value box input handler skips `testHit` for a FakePlayer and replays the click as `BlockState.use` at
+  the block centre: a probe clicking a value-box block (modular display slots) must call `BlockState.use` itself.
+- Goggle tooltips (`addToGoggleTooltip`) on gauges call `Minecraft.getInstance()`: on a dedicated server that is a
+  RuntimeDistCleaner ERROR and the probe command aborts. Wrap in try/catch; never use a blanket `/ERROR\]` reject
+  in batches that read gauges (`reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(mod)`).
+- A Forge config edited live with `sed -i` writes a new inode that Forge's watcher never sees: edit configs before the
+  boot, or rewrite the same file in place.
+- Peaceful difficulty removes summoned hostiles (witch, husk); MCA replaces summoned villagers, so `kill
+  @e[type=minecraft:villager]` misses them (kill by box) and they regenerate (compare health as deltas).
+- Create machines placed before their creative motor often stay at speed 0: place the motor (and shaft or gearbox)
+  first, then the machine, and read `speed` before relying on it. Creative motor default is 16 RPM.
+- `pkill -f <pattern>` can match your own shell when the pattern is in the command line: kill qrun by pid from
+  `/proc/PID/cmdline`.

@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.solraspberrypie.logic;
 
 import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
+import com.SaintAlfonzo.solraspberrypie.data.GateFoods;
 import com.SaintAlfonzo.solraspberrypie.data.RpData;
 import com.SaintAlfonzo.solraspberrypie.data.SlotChoice;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
@@ -77,7 +78,7 @@ public final class DietEngine {
 
     public static State current(ServerPlayer player) {
         FoodList fl = FoodList.get(player);
-        return compute(Ladder.current, fl.foodDiversity(), fl.getFoodsEaten(), RpData.get(player).slots);
+        return compute(Ladder.current, fl.foodDiversity(), GateFoods.count(fl), RpData.get(player).slots);
     }
 
     // ---------------------------------------------------------------------------------------------------------------
@@ -113,7 +114,7 @@ public final class DietEngine {
         double div = fl.foodDiversity();
         double oldMax = d.maxDiversity;
         if (div > d.maxDiversity) d.maxDiversity = div;
-        State s = compute(ladder, div, fl.getFoodsEaten(), d.slots);
+        State s = compute(ladder, div, GateFoods.count(fl), d.slots);
         if (announce && !d.paused) announce(player, ladder, d, s, oldMax);
         d.activeKeys = new HashSet<>(s.active.keySet());
         if (!d.paused) apply(player, d, s);
@@ -194,6 +195,8 @@ public final class DietEngine {
         }
         d.appliedAttrs.clear();
         d.appliedAttrs.addAll(s.attrs.keySet());
+        // 12.4 #33: a lower max health takes away only the health above it (a full player stays full at the new
+        // maximum, a hurt player below it keeps their health); a higher max health heals nothing.
         if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
 
         // Effects.

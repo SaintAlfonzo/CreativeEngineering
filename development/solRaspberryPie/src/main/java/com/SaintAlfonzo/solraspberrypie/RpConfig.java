@@ -24,9 +24,13 @@ public final class RpConfig {
         public final ForgeConfigSpec.IntValue refreshInterval;
         public final ForgeConfigSpec.BooleanValue pauseEndsOnRelog;
         public final ForgeConfigSpec.BooleanValue giveBooksOnFirstJoin;
+        public final ForgeConfigSpec.BooleanValue uniqueFoodsToActivate;
 
         Server(ForgeConfigSpec.Builder b) {
             b.push("diet");
+            uniqueFoodsToActivate = b.comment("If true, Apple Pie's minFoodsToActivate counts different foods eaten since the counter last reset",
+                            "(death, /solrp reset, /foodlist clear); a food eaten twice counts once. If false, every food eaten counts (Apple Pie's own rule).")
+                    .define("uniqueFoodsToActivate", true);
             respecFoods = b.comment("Foods aged out of the decay window (oldest first) when a slot is changed to a different effect.")
                     .defineInRange("respecFoods", 8, 1, 256);
             effectDuration = b.comment("Duration in ticks of every diet effect instance (flat bonuses and slots).")
@@ -47,8 +51,17 @@ public final class RpConfig {
         public final ForgeConfigSpec.BooleanValue widgetLocked;
         public final ForgeConfigSpec.IntValue widgetX;
         public final ForgeConfigSpec.IntValue widgetY;
+        public final ForgeConfigSpec.IntValue progressAhead;
+        public final ForgeConfigSpec.BooleanValue doublePage;
 
         Client(ForgeConfigSpec.Builder b) {
+            b.push("dietLog");
+            progressAhead = b.comment("Diet Log progress bar: how many milestones ahead of the last one reached it shows.")
+                    .defineInRange("progressAhead", 3, 1, 50);
+            doublePage = b.comment("The Diet Log opens as two pages, foods still in the window on the left and the first page of",
+                            "foods out of the window on the right. Needs a screen wide enough for both pages.")
+                    .define("doublePage", true);
+            b.pop();
             b.push("widget");
             widgetEnabled = b.comment("Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.")
                     .define("enabled", true);

@@ -1,6 +1,6 @@
 # Create: Power Grid backport: execution plan per phase
 
-Written 2026-11-13. **P0 to P5 done 2026-11-13 (P2 scratch-run r1113, its fixes in the P3 jar; P3 / P4 gate runs in progress; P5 gate rows queued). P2 to P4 complete D1's "phase 1" (first evaluation point); P5 added ponder for that content; P6 (heat, light, fluid, solar) done 2026-11-13 (jar `-08`); P7 (equipment) done 2026-11-13 (jar `-09`); P8 (display and control) done 2026-11-13 (jar `-10`); P9 (components and circuits) runs as four sub-steps P9a to P9d (phases 9.1 to 9.4): P9a (components on boards, non-linear models) done 2026-11-13 (jar `-12`, with fix B19 for the P4 winding crash), P9b (design table and editor) done 2026-11-13 (jar `-14`, with fix B20 for the P7 portable battery), P9c (etching, acid, assembly) done 2026-11-13 (jar `-15`), P9d (Integrated Circuit and boost) done 2026-11-13 (jar `-16`): **P9 complete**; P10 (decor) done 2026-11-13 (jar `-17`): **the port is complete**; P11 (evaluation) next. The port runs through P11 (E5).** Source report: [power_grid.md](power_grid.md) (inventory, overlap,
+Written 2026-11-13. **P0 to P5 done 2026-11-13 (P2 scratch-run r1113, its fixes in the P3 jar; P3 / P4 gate runs in progress; P5 gate rows queued). P2 to P4 complete D1's "phase 1" (first evaluation point); P5 added ponder for that content; P6 (heat, light, fluid, solar) done 2026-11-13 (jar `-08`); P7 (equipment) done 2026-11-13 (jar `-09`); P8 (display and control) done 2026-11-13 (jar `-10`); P9 (components and circuits) runs as four sub-steps P9a to P9d (phases 9.1 to 9.4): P9a (components on boards, non-linear models) done 2026-11-13 (jar `-12`, with fix B19 for the P4 winding crash), P9b (design table and editor) done 2026-11-13 (jar `-14`, with fix B20 for the P7 portable battery), P9c (etching, acid, assembly) done 2026-11-13 (jar `-15`), P9d (Integrated Circuit and boost) done 2026-11-13 (jar `-16`): **P9 complete**; P10 (decor) done 2026-11-13 (jar `-17`): **the port is complete**; P11 (evaluation) prepared 2026-11-13: regression plan, owner hand list and evaluation scaffolding written, runs pending. The port runs through P11 (E5).** Source report: [power_grid.md](power_grid.md) (inventory, overlap,
 decisions D1 to D14, holes H1 to H15, tests PWG-01 to PWG-44). Integration after the port: [energy_advanced.md](energy_advanced.md).
 Test prefix `PWG-`. PG is Power Grid.
 
@@ -362,6 +362,19 @@ Gate: PWG-44. Last priority (D11), but ported in full for evaluation; the non-ov
    is measured on the bare port (H7).
 5. Stage 5 (mode switch, converter layer) starts from energy_advanced.md.
 
+**P11 preparation done 2026-11-13** (no code change; target jar `-17`, sha1 cbc2ddee37ca):
+- Step 1: regression plan in [scratch_run_2026-11-13.md](testing/scratch_run_2026-11-13.md) section 9: 5 boots (world
+  `pwgr` R1 to R3, world `pwgperf` with a perf session) plus one client pass, 80 server rows plus the 6 P10 rows, about 3
+  hours with judging; batches `tools/scratch_query/batches/r1113pwg/` (`pwgr1.qb`, `pwgr2.qb`, `pwgr3.qb`,
+  `pwgperf.qb`); superseded boot and check rows listed there.
+- Step 2: D14 inputs listed in energy_advanced.md 8.3 (SQ-PWG-01 to -08, owner CQ-PWG-01 to -04, -03, -06, -16).
+- Step 3: owner hand list power_grid.md 8.1 (17 items, 25 CQ-PWG rows); keep / drop / merge table with our facts in
+  energy_advanced.md 8.1 (owner columns empty).
+- Step 4: bugs B5 to B34 in power_grid.md 3.5 are current; H7 method in energy_advanced.md 8.2.
+- Open: the runs themselves (runner), the owner session, and the pwg16 probe fault (P9b to P9d rows not yet judged on a
+  working probe). SQ-PWG-63 closed: Create 0.5.1's value box handler replays every fake-player click as a block-centre
+  hit (not a port fault; probe calls the block's `use` directly now; the hand check is owner item 12).
+
 ## 3. Open points
 
 | # | Point | Suggested answer |
@@ -374,6 +387,8 @@ Gate: PWG-44. Last priority (D11), but ported in full for evaluation; the non-ov
 
 ## 4. History
 
+- 2026-11-13: **P11 prepared** (regression plan, batches `r1113pwg/`, owner hand list, energy_advanced.md section 8
+  scaffolding; SQ-PWG-63 explained, probe change only). No code change; jar stays `-17`.
 - 2026-11-13: **P10 done; the port is complete.** Moved `general/ceilingtile` (13) and `electricity/light/string` (5);
   `ModdedBlocks` (9), `ModdedItems`, `ModdedEntities`, `ModdedBlockEntities` (4), `ModdedPartialModels` (copper plating
   CT, ceiling light), the `crafting_special_string_light_cord` serializer, the Carry On entity entry, the cord's

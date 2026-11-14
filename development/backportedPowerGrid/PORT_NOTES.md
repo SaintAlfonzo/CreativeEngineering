@@ -22,7 +22,7 @@ ponder scenes, 5 tags and 79 structures (sections 20, 24). P10 gate rows SQ-PWG-
 9.4, section 5); P9c is section 22, P9d (Integrated Circuit and boost) starts from section 22.4. P9c gate rows
 SQ-PWG-76 to -83, CQ-PWG-26 queued (probe `tools/scratch_query/pwg_p9c_probe.js`); P9b rows SQ-PWG-72 to -75, CQ-PWG-24,
 -25 (`pwg_p9b_probe.js`); P9a rows SQ-PWG-67 to -71, SQ-PWG-06, CQ-PWG-22, -23 (`pwg_p9a_probe.js`). The jar is not
-installed into `mods/` (plan E1).
+installed into `mods/` (plan E1). P11 (evaluation) prepared 2026-11-13: the regression run on `-17` and the owner session are pending (plan P11); no code change since `-17`, these notes are final unless a run finds a port fault.
 
 ## 2. Layout
 
@@ -1101,6 +1101,7 @@ order).
   SQ-PWG-90 `check`.
 - **B34** (fixed) crafting a string light cord with no dye (to clear a pattern) gave a cord with an empty `Pattern`
   tag, which shows no pattern but no longer stacks with plain cords. The port returns a plain cord. SQ-PWG-90 `check`.
+- **B35** (open, owner note 2026-11-13) a wire block does not drop when the block under it breaks, and cannot be broken by hand. Check upstream behaviour, then fix; TODO `largecontent/mod-additions #78`.
 
 ### 24.2 Rows
 

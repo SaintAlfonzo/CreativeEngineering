@@ -90,20 +90,20 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_desert` | 1 | 1.9% | 2 | 2.6% |  |
-| `minecraft:village/desert/streets/corner_01` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/corner_02` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_01` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_02` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/crossroad_03` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/square_01` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/square_02` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/straight_01` | 4 | 7.5% | 8 | 10.4% |  |
-| `minecraft:village/desert/streets/straight_02` | 4 | 7.5% | 8 | 10.4% |  |
-| `minecraft:village/desert/streets/straight_03` | 3 | 5.7% | 6 | 7.8% |  |
-| `minecraft:village/desert/streets/turn_01` | 3 | 5.7% | 6 | 7.8% |  |
-| `monobank:village/streets/desert_straight_fix_01` | 15 | 28.3% | 5 | 6.5% | monobank/vault_streets x0.16 |
-| `pneumaticcraft:villages/custom_street_desert` | 2 | 3.8% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `beautify:botanist_house_desert` | 2 | 3.7% | 4 | 5.1% |  |
+| `minecraft:village/desert/streets/corner_01` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/corner_02` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/crossroad_01` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/crossroad_02` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/crossroad_03` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/square_01` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/square_02` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/straight_01` | 4 | 7.4% | 8 | 10.1% |  |
+| `minecraft:village/desert/streets/straight_02` | 4 | 7.4% | 8 | 10.1% |  |
+| `minecraft:village/desert/streets/straight_03` | 3 | 5.6% | 6 | 7.6% |  |
+| `minecraft:village/desert/streets/turn_01` | 3 | 5.6% | 6 | 7.6% |  |
+| `monobank:village/streets/desert_straight_fix_01` | 15 | 27.8% | 5 | 6.3% | monobank/vault_streets x0.16 |
+| `pneumaticcraft:villages/custom_street_desert` | 2 | 3.7% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
 
 ### `minecraft:village/plains/houses`
 
@@ -176,24 +176,24 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_plains` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/plains/streets/corner_01` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/corner_02` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/corner_03` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_01` | 2 | 3.1% | 4 | 3.8% |  |
+| `beautify:botanist_house_plains` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/corner_01` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/corner_02` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/corner_03` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/crossroad_01` | 2 | 3.0% | 4 | 3.7% |  |
 | `minecraft:village/plains/streets/crossroad_02` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/plains/streets/crossroad_03` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_04` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_05` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/crossroad_06` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/plains/streets/straight_01` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/straight_02` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/straight_03` | 7 | 10.8% | 14 | 13.3% |  |
-| `minecraft:village/plains/streets/straight_04` | 7 | 10.8% | 14 | 13.3% |  |
-| `minecraft:village/plains/streets/straight_05` | 3 | 4.6% | 6 | 5.7% |  |
-| `minecraft:village/plains/streets/straight_06` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/plains/streets/turn_01` | 3 | 4.6% | 6 | 5.7% |  |
-| `monobank:village/streets/plains_straight_fix_01` | 15 | 23.1% | 5 | 4.8% | monobank/vault_streets x0.16 |
+| `minecraft:village/plains/streets/crossroad_03` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/crossroad_04` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/crossroad_05` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/crossroad_06` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/plains/streets/straight_01` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/plains/streets/straight_02` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/plains/streets/straight_03` | 7 | 10.6% | 14 | 13.1% |  |
+| `minecraft:village/plains/streets/straight_04` | 7 | 10.6% | 14 | 13.1% |  |
+| `minecraft:village/plains/streets/straight_05` | 3 | 4.5% | 6 | 5.6% |  |
+| `minecraft:village/plains/streets/straight_06` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/plains/streets/turn_01` | 3 | 4.5% | 6 | 5.6% |  |
+| `monobank:village/streets/plains_straight_fix_01` | 15 | 22.7% | 5 | 4.7% | monobank/vault_streets x0.16 |
 
 ### `minecraft:village/savanna/houses`
 
@@ -261,27 +261,27 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_savanna` | 1 | 1.4% | 2 | 1.7% |  |
-| `minecraft:village/savanna/streets/corner_01` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/corner_03` | 2 | 2.8% | 4 | 3.4% |  |
+| `beautify:botanist_house_savanna` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/corner_01` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/corner_03` | 2 | 2.7% | 4 | 3.3% |  |
 | `minecraft:village/savanna/streets/crossroad_02` | 1 | 1.4% | 2 | 1.7% |  |
-| `minecraft:village/savanna/streets/crossroad_03` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_04` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_05` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_06` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/crossroad_07` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/split_01` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/split_02` | 2 | 2.8% | 4 | 3.4% |  |
-| `minecraft:village/savanna/streets/straight_02` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_04` | 7 | 9.7% | 14 | 11.8% |  |
-| `minecraft:village/savanna/streets/straight_05` | 3 | 4.2% | 6 | 5.0% |  |
-| `minecraft:village/savanna/streets/straight_06` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_08` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_09` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_10` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/straight_11` | 4 | 5.6% | 8 | 6.7% |  |
-| `minecraft:village/savanna/streets/turn_01` | 3 | 4.2% | 6 | 5.0% |  |
-| `monobank:village/streets/savanna_straight_fix_01` | 15 | 20.8% | 5 | 4.2% | monobank/vault_streets x0.16 |
+| `minecraft:village/savanna/streets/crossroad_03` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/crossroad_04` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/crossroad_05` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/crossroad_06` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/crossroad_07` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/split_01` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/split_02` | 2 | 2.7% | 4 | 3.3% |  |
+| `minecraft:village/savanna/streets/straight_02` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/straight_04` | 7 | 9.6% | 14 | 11.6% |  |
+| `minecraft:village/savanna/streets/straight_05` | 3 | 4.1% | 6 | 5.0% |  |
+| `minecraft:village/savanna/streets/straight_06` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/straight_08` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/straight_09` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/straight_10` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/straight_11` | 4 | 5.5% | 8 | 6.6% |  |
+| `minecraft:village/savanna/streets/turn_01` | 3 | 4.1% | 6 | 5.0% |  |
+| `monobank:village/streets/savanna_straight_fix_01` | 15 | 20.5% | 5 | 4.1% | monobank/vault_streets x0.16 |
 
 ### `minecraft:village/snowy/houses`
 
@@ -346,25 +346,25 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_snowy` | 1 | 1.5% | 2 | 2.0% |  |
-| `minecraft:village/snowy/streets/corner_01` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/corner_02` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/corner_03` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_02` | 1 | 1.5% | 2 | 2.0% |  |
-| `minecraft:village/snowy/streets/crossroad_03` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_04` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_05` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/crossroad_06` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/square_01` | 2 | 3.1% | 4 | 4.0% |  |
-| `minecraft:village/snowy/streets/straight_01` | 4 | 6.2% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_02` | 4 | 6.2% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_03` | 4 | 6.2% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_04` | 7 | 10.8% | 14 | 13.9% |  |
-| `minecraft:village/snowy/streets/straight_06` | 4 | 6.2% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/straight_08` | 4 | 6.2% | 8 | 7.9% |  |
-| `minecraft:village/snowy/streets/turn_01` | 3 | 4.6% | 6 | 5.9% |  |
-| `monobank:village/streets/snowy_straight_fix_01` | 15 | 23.1% | 5 | 5.0% | monobank/vault_streets x0.16 |
-| `pneumaticcraft:villages/custom_street_snowy` | 2 | 3.1% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
+| `beautify:botanist_house_snowy` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/corner_01` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/corner_02` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/corner_03` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/crossroad_02` | 1 | 1.5% | 2 | 1.9% |  |
+| `minecraft:village/snowy/streets/crossroad_03` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/crossroad_04` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/crossroad_05` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/crossroad_06` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/square_01` | 2 | 3.0% | 4 | 3.9% |  |
+| `minecraft:village/snowy/streets/straight_01` | 4 | 6.1% | 8 | 7.8% |  |
+| `minecraft:village/snowy/streets/straight_02` | 4 | 6.1% | 8 | 7.8% |  |
+| `minecraft:village/snowy/streets/straight_03` | 4 | 6.1% | 8 | 7.8% |  |
+| `minecraft:village/snowy/streets/straight_04` | 7 | 10.6% | 14 | 13.6% |  |
+| `minecraft:village/snowy/streets/straight_06` | 4 | 6.1% | 8 | 7.8% |  |
+| `minecraft:village/snowy/streets/straight_08` | 4 | 6.1% | 8 | 7.8% |  |
+| `minecraft:village/snowy/streets/turn_01` | 3 | 4.5% | 6 | 5.8% |  |
+| `monobank:village/streets/snowy_straight_fix_01` | 15 | 22.7% | 5 | 4.9% | monobank/vault_streets x0.16 |
+| `pneumaticcraft:villages/custom_street_snowy` | 2 | 3.0% | **removed** | 0.0% | mod/pneumaticcraft x0, tech x0 |
 
 ### `minecraft:village/taiga/houses`
 
@@ -428,24 +428,24 @@ Pool scaled x2 to hold fractional weights.
 
 | piece | original | chance | final | chance | why |
 |---|---:|---:|---:|---:|---|
-| `beautify:botanist_house_taiga` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/taiga/streets/corner_01` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/corner_02` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/corner_03` | 2 | 3.1% | 4 | 3.8% |  |
+| `beautify:botanist_house_taiga` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/corner_01` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/corner_02` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/corner_03` | 2 | 3.0% | 4 | 3.7% |  |
 | `minecraft:village/taiga/streets/crossroad_01` | 1 | 1.5% | 2 | 1.9% |  |
 | `minecraft:village/taiga/streets/crossroad_02` | 1 | 1.5% | 2 | 1.9% |  |
-| `minecraft:village/taiga/streets/crossroad_03` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_04` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_05` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/crossroad_06` | 2 | 3.1% | 4 | 3.8% |  |
-| `minecraft:village/taiga/streets/straight_01` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_02` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_03` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/straight_04` | 7 | 10.8% | 14 | 13.3% |  |
-| `minecraft:village/taiga/streets/straight_05` | 7 | 10.8% | 14 | 13.3% |  |
-| `minecraft:village/taiga/streets/straight_06` | 4 | 6.2% | 8 | 7.6% |  |
-| `minecraft:village/taiga/streets/turn_01` | 3 | 4.6% | 6 | 5.7% |  |
-| `monobank:village/streets/taiga_straight_fix_01` | 15 | 23.1% | 5 | 4.8% | monobank/vault_streets x0.16 |
+| `minecraft:village/taiga/streets/crossroad_03` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/crossroad_04` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/crossroad_05` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/crossroad_06` | 2 | 3.0% | 4 | 3.7% |  |
+| `minecraft:village/taiga/streets/straight_01` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/taiga/streets/straight_02` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/taiga/streets/straight_03` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/taiga/streets/straight_04` | 7 | 10.6% | 14 | 13.1% |  |
+| `minecraft:village/taiga/streets/straight_05` | 7 | 10.6% | 14 | 13.1% |  |
+| `minecraft:village/taiga/streets/straight_06` | 4 | 6.1% | 8 | 7.5% |  |
+| `minecraft:village/taiga/streets/turn_01` | 3 | 4.5% | 6 | 5.6% |  |
+| `monobank:village/streets/taiga_straight_fix_01` | 15 | 22.7% | 5 | 4.7% | monobank/vault_streets x0.16 |
 
 ### `pneumaticcraft:village/desert/houses`
 
@@ -469,11 +469,11 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 
 ### beautify
 
-- `minecraft:village/desert/streets` (pool total weight 53): `beautify:botanist_house_desert` 1 -> 2
-- `minecraft:village/plains/streets` (pool total weight 65): `beautify:botanist_house_plains` 1 -> 2
-- `minecraft:village/savanna/streets` (pool total weight 72): `beautify:botanist_house_savanna` 1 -> 2
-- `minecraft:village/snowy/streets` (pool total weight 65): `beautify:botanist_house_snowy` 1 -> 2
-- `minecraft:village/taiga/streets` (pool total weight 65): `beautify:botanist_house_taiga` 1 -> 2
+- `minecraft:village/desert/streets` (pool total weight 54): `beautify:botanist_house_desert` 2 -> 4
+- `minecraft:village/plains/streets` (pool total weight 66): `beautify:botanist_house_plains` 2 -> 4
+- `minecraft:village/savanna/streets` (pool total weight 73): `beautify:botanist_house_savanna` 2 -> 4
+- `minecraft:village/snowy/streets` (pool total weight 66): `beautify:botanist_house_snowy` 2 -> 4
+- `minecraft:village/taiga/streets` (pool total weight 66): `beautify:botanist_house_taiga` 2 -> 4
 
 ### chefsdelight
 
@@ -617,22 +617,22 @@ Pieces whose namespace differs from their pool's, per pool. This is where mod vi
 ### monobank
 
 - `minecraft:village/desert/houses` (pool total weight 225): `monobank:village/houses/desert_vault` 15 -> 8
-- `minecraft:village/desert/streets` (pool total weight 53): `monobank:village/streets/desert_straight_fix_01` 15 -> 5
+- `minecraft:village/desert/streets` (pool total weight 54): `monobank:village/streets/desert_straight_fix_01` 15 -> 5
 - `minecraft:village/plains/houses` (pool total weight 248): `monobank:village/houses/plains_vault` 15 -> 8
-- `minecraft:village/plains/streets` (pool total weight 65): `monobank:village/streets/plains_straight_fix_01` 15 -> 5
+- `minecraft:village/plains/streets` (pool total weight 66): `monobank:village/streets/plains_straight_fix_01` 15 -> 5
 - `minecraft:village/savanna/houses` (pool total weight 245): `monobank:village/houses/savanna_vault` 15 -> 8
-- `minecraft:village/savanna/streets` (pool total weight 72): `monobank:village/streets/savanna_straight_fix_01` 15 -> 5
+- `minecraft:village/savanna/streets` (pool total weight 73): `monobank:village/streets/savanna_straight_fix_01` 15 -> 5
 - `minecraft:village/snowy/houses` (pool total weight 217): `monobank:village/houses/snowy_vault` 15 -> 8
-- `minecraft:village/snowy/streets` (pool total weight 65): `monobank:village/streets/snowy_straight_fix_01` 15 -> 5
+- `minecraft:village/snowy/streets` (pool total weight 66): `monobank:village/streets/snowy_straight_fix_01` 15 -> 5
 - `minecraft:village/taiga/houses` (pool total weight 239): `monobank:village/houses/taiga_vault` 15 -> 8
-- `minecraft:village/taiga/streets` (pool total weight 65): `monobank:village/streets/taiga_straight_fix_01` 15 -> 5
+- `minecraft:village/taiga/streets` (pool total weight 66): `monobank:village/streets/taiga_straight_fix_01` 15 -> 5
 
 ### pneumaticcraft
 
-- `minecraft:village/desert/streets` (pool total weight 53): `pneumaticcraft:villages/custom_street_desert` 2 -> 0
+- `minecraft:village/desert/streets` (pool total weight 54): `pneumaticcraft:villages/custom_street_desert` 2 -> 0
 - `minecraft:village/plains/houses` (pool total weight 248): `pneumaticcraft:villages/mechanic_house_plains` 8 -> 0
 - `minecraft:village/savanna/houses` (pool total weight 245): `pneumaticcraft:villages/mechanic_house_savanna` 8 -> 0
-- `minecraft:village/snowy/streets` (pool total weight 65): `pneumaticcraft:villages/custom_street_snowy` 2 -> 0
+- `minecraft:village/snowy/streets` (pool total weight 66): `pneumaticcraft:villages/custom_street_snowy` 2 -> 0
 - `minecraft:village/taiga/houses` (pool total weight 239): `pneumaticcraft:villages/mechanic_house_taiga` 8 -> 0
 
 ### sky_structures
