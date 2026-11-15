@@ -47,6 +47,13 @@ reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
 look the chest pools line: meat=20 exactly, flesh used up (millstone inv line empty or near empty); bone near 15, eye near 5, misc near 5; the hopper itself may still hold up to 5 stacks (zc4 inv 40200 -60 40000 by hand if meat is 15-19)
 
 ## SQ-FLR-02b | crushing wheel rig: controller forms AND is valid (setup for SQ-FLR-04)
+# r1114: on a fresh world the c4_ar rig is not there: build the wheels and first-try motors when absent (c4_ar's lines)
+> forceload add 40190 39990 40270 40010
+> execute unless block 40220 -58 40000 create:crushing_wheel run setblock 40220 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40222 -58 40000 create:crushing_wheel run setblock 40222 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+sleep 5
 > execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run say FLR crusher valid before swap
 > execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=false] run say FLR crusher invalid before swap
 > execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 39999 minecraft:air

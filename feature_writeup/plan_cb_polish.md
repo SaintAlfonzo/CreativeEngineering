@@ -227,6 +227,8 @@ them untextured. `creativeengineering:layered_obsidian` is registered from `kube
 
 ## 9. Engineering carve, done 2026-11-06 evening (owner decisions on section 8)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-ENGM-01 to -05 PASS (built, scratch server PASSED for the 9 carve rows); SQ-CBP-11 FAIL (owner value): felsic block drops 1-2 scrap, the table comment and the row say 2-4 (TODO `gear/tuning #23`).
+
 Built 18:51-18:54, not installed (TODO `creativeengineering/carve #1`, tests SQ-ENGM). Owner targets: XP to Magic;
 BlockRunner walk speeds, Ore Excavation, TNT shrapnel to Compat; wooden bucket, arrow fletching to Equipment; Vinery tags
 to Brewing; animal-fat torch, seed milling, mulch to Delight; prepared flesh and hemp-for-wool stay in Engineering;

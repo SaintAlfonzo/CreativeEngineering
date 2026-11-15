@@ -115,8 +115,14 @@ def recipe(name, kind):
         elif v == '#c:glass_panes':
             v = '#forge:glass_panes'
         key[k] = ing(v)
-    return {'type': 'minecraft:crafting_shaped', 'category': 'misc', 'pattern': r['pattern'], 'key': key,
-            'result': {'item': f'storagedelight:{name}'}}
+    out = {'type': 'minecraft:crafting_shaped'}
+    # Quark's slabs and trapdoors: Storage Delight does not require Quark, so the recipe is skipped without it
+    # (plan_bugfix_1114.md 5.2, tools/optional_ref_audit.py)
+    mods = sorted({v['item'].split(':')[0] for v in key.values() if 'item' in v} - {'minecraft', 'storagedelight'})
+    if mods:
+        out['conditions'] = [{'type': 'forge:mod_loaded', 'modid': m} for m in mods]
+    out.update({'category': 'misc', 'pattern': r['pattern'], 'key': key, 'result': {'item': f'storagedelight:{name}'}})
+    return out
 
 
 def loot(name):

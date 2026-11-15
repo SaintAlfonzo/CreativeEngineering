@@ -34,6 +34,8 @@ done
 rm -rf config defaultconfigs
 find kubejs -mindepth 1 -maxdepth 1 ! -name server_scripts ! -name data -exec rm -rf {} + 2>/dev/null || true
 find kubejs/server_scripts -type f ! -name 'zz_*_probe.js' -delete 2>/dev/null || true
+# the Creative Labels probe (scratch_server.sh setup) loads Labels classes: a KubeJS error in a set without Labels (r1114)
+ls mods | grep -qi '^creativeLabels-' || rm -f kubejs/server_scripts/zz_cl_probe.js
 find kubejs/data -mindepth 1 -maxdepth 1 ! -name zq -exec rm -rf {} + 2>/dev/null || true
 echo "cpp_chain done ($MODE): $(ls mods | wc -l) jars"; ls mods
 if ls mods | grep -qiE 'creative(engineering|equipment|magic|devtools|worldgen|labels)|create_crush_everything'; then

@@ -120,8 +120,17 @@ public class GrapePlantingCategory extends PortCategory<GrapePlantingCategory.Di
                 }
             }
             case VINE -> {
-                support.add(new ItemStack(Items.JUNGLE_LOG));
-                supportTip = LANG + ".support.vine";
+                if (type == GrapeTypeRegistry.HOPS) {
+                    // Pack: Hearth and Harvest's hops vine clings to any log face (plan_bugfix_1114 3.1)
+                    support.add(new ItemStack(Items.OAK_LOG));
+                    support.add(new ItemStack(Items.BIRCH_LOG));
+                    support.add(new ItemStack(Items.SPRUCE_LOG));
+                    support.add(new ItemStack(Items.JUNGLE_LOG));
+                    supportTip = LANG + ".support.vine";
+                } else {
+                    support.add(new ItemStack(Items.JUNGLE_LOG));
+                    supportTip = LANG + ".support.vine";
+                }
             }
             case STEM -> {
                 support.add(new ItemStack(ObjectRegistry.GRAPEVINE_STEM.get(), 2));

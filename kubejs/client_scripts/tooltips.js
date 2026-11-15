@@ -309,6 +309,12 @@ var i = global.item;
 	);
 	// Botany Pots growth is 8x slower for crops, 2x for flowers (server_scripts/other/botany_pots.js)
 	if (Platform.isLoaded('botanypots')) addTooltipPattern(e, 'botanypots:*botany_pot', ['Useful for flowers, not great for crops', col.norm]);
+	// Better soils speed pot growth, never pot yield (botany_pots.js BOTANY_SOIL_SPEED; tooltips.md TT-44)
+	if (Platform.isLoaded('botanypots')) addTooltips(e,
+		[i.rich_soil, ['Growth speed in Botany Pots +10%', col.norm], ['Does not change yield', col.norm]],
+		[i.rich_farmland, ['Growth speed in Botany Pots +10%', col.norm], ['Does not change yield', col.norm]],
+		[i.fertile_soil, ['Growth speed in Botany Pots +20%', col.norm], ['Does not change yield', col.norm]]
+	);
 		
 // ############################## Decor ##############################	
 

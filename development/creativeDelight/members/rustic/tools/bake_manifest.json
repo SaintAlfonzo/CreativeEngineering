@@ -5344,10 +5344,6 @@
    "upstream_sha1": "09de6d89412277b259d3662bb96ddd59466ff7df",
    "rules": []
   },
-  "data/rusticdelight/recipes/sugar_from_syrup.json": {
-   "upstream_sha1": "71fc6abe815fe6c988cd4645a6d9b14aa8c16ec6",
-   "rules": []
-  },
   "data/rusticdelight/recipes/sweet_salad.json": {
    "upstream_sha1": "2f98f36f101058f485228c7544e3fb7a02bcf0c0",
    "rules": []
@@ -7309,6 +7305,12 @@
    "upstream_sha1": "48e3c12e7340837036566138ef2454ba428ac935",
    "rules": [
     "names_removed"
+   ]
+  },
+  "data/rusticdelight/recipes/sugar_from_syrup.json": {
+   "upstream_sha1": "71fc6abe815fe6c988cd4645a6d9b14aa8c16ec6",
+   "rules": [
+    "dropped_file"
    ]
   }
  }

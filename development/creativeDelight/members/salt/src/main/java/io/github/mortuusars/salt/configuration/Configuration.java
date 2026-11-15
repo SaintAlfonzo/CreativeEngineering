@@ -130,9 +130,10 @@ public class Configuration {
         builder.push("Melting");
         MELTING_ITEM_ENABLED = builder.comment("Salt (item) will melt clicked blocks defined in tag 'salt/tags/blocks/meltables'.")
                 .define("SaltItemMeltingEnabled", true);
-        MELTING_BY_BLOCK_ENABLED = builder.comment("Salt blocks will melt adjacent blocks defined in tag 'salt/tags/blocks/meltables' on random tick.")
-                .define("SaltBlockMeltingEnabled", true);
-        MELTING_BLOCK_CHANCE = builder.comment("Chance of block melting on random tick. 1.0 = first random tick. 0.0 = never.")
+        MELTING_BY_BLOCK_ENABLED = builder.comment("Unused in this pack: salt blocks melting ice and snow is Creative Common's melting system,",
+                        "[melting] in creativecommon-common.toml. This switch and the chance below have no effect.")
+                .define("SaltBlockMeltingEnabled", false);
+        MELTING_BLOCK_CHANCE = builder.comment("Unused in this pack (see SaltBlockMeltingEnabled).")
                 .defineInRange("SaltBlockMeltingChance", 0.4, 0.0, 1.0);
         MELTING_PLACES_WATER = builder.comment("Melted ice is replaced with a water source block outside ultra-warm dimensions (the Nether).",
                         "Off: always air. Snow always leaves air.")

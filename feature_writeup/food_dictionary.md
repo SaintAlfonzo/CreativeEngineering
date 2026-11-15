@@ -28,6 +28,8 @@ rename the two books.
 
 ## Tests (prefix FDI)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-FDI-01, -02 PASS (no Carrot hearts; max health 22 is the Raspberry Pie rung; the batch's 20th food, pumpkin pie, is not edible in this pack: swap it); SQ-FDI-03 FAIL: bitten cakes become Supplementaries directional cakes and count in neither book (TODO `food/types-and-tuning #39`).
+
 | ID | Test | Pass |
 |---|---|---|
 | FDI-01 | Boot with the jar; `grep -n "solcarrot\|Failed to parse" logs/latest.log` | mod listed, no errors |
@@ -114,3 +116,4 @@ and make food eaten out of a lunchbox register as the food.
 - 2026-11-10: names, item_dict keys, configs, sides row, this file. Jar not yet in `mods/`; nothing run.
 - 2026-11-10: plan for world slices, lunchboxes and lunchbox eating (P1-P3, FDI-06..10); not built.
 - 2026-11-10: plan built with D1 and D2 defaults (P1 Java, P2 config, P3 no code). Creative Delight jar not installed.
+- 2026-11-14: bitten cakes (plan_bugfix_1114 4.3, TODO `food/types-and-tuning #39`): Supplementaries' `directional_cake` and `double_cake` map to the cake slice in `placed_food_slices.json`, and `PlacedFoodSol` records the first bite, when the cake turns into a directional cake. Built and installed; tests SQ-FDI-03 rerun, SQ-FDI-03b.

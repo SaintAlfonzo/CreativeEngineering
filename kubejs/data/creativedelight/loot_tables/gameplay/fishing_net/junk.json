@@ -55,8 +55,8 @@
           "weight": 10
         },
         {
-          "type": "minecraft:item",
-          "name": "upgrade_aquatic:driftwood_log",
+          "type": "minecraft:loot_table",
+          "name": "creativedelight:mod_items/upgrade_aquatic/driftwood_log",
           "weight": 10
         }
       ]

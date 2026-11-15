@@ -217,6 +217,8 @@ Engineering's own `ce_BladeProfile` / `ce_ResolvedRecipe` are correct. `CEI` (Cr
   lunchbox and backpack skin, and an in-progress sequenced assembly item.
 - CQ-IDS-06: `/cdevdumpicons` and the capture driver (`cdevcapture`) run on the client.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-IDS-01, -02 PASS (owner-id lint 0 flagged; new command names answer, old ones unknown).
+
 ## 7. Changelog
 
 One bullet, for the admin commands in released jars (G1: `/ceswap`, `/cetime`, `/celocate`, `/cespawnbox`), under a

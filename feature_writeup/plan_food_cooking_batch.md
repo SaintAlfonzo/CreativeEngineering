@@ -73,6 +73,8 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FCB-00, -01, -02, -03, -04, -04b, -04c, -04d, -04e, -05, -06, -08; rerun pending (batch fault) SQ-FCB-07, -08b.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FCB-07, -08b.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-FCB-09, -10 PASS. SQ-PST-12 PASS against the code (jungle summer 0.97, winter 0.76 of plains spring) but the row's 0.35 to 0.70 rule is stale: CropSeasons GRASS is neutral in wet/dry biomes (`farming/crops #28`); row marked for the owner.
+
 Waves A and B built in one session (Wave C and `food/drinks #15` by two forks of it: SQ-RB2, SQ-DRK). Nothing booted.
 Scratch rows: [scratch_queue.md](testing/scratch_queue.md) "SQ-FCB" (SQ-FCB-00 to -07, CQ-FCB-01 to -03). Changelog: families
 Jams, Gameplay, Cans, Cooking for Blockheads, Miner's Delight, Veggies Delight, Barbeque's Delight. Needs the Creative

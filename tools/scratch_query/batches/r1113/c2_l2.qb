@@ -12,5 +12,5 @@ pace 1
 bootexpect \[swaps\] config sections \[campfire\] carried over from creativecompat-common.toml to creativedelight-common.toml
 bootexpect \[swaps\] config sections \[crop_growth, dandelion_maturing, crop_drops, stem_fruit, canning, cooking, perf\] merged from creativeengineering-common.toml into creativedelight-common.toml
 bootreject could not (carry|merge) config sections
-shell grep -nE "^\[" config/creativedelight-common.toml | tr '\n' ' '; echo; grep -nE "rainOutTicks *=" config/creativedelight-common.toml; grep -cE "^\[campfire\]" config/creativecompat-common.toml
+shell grep -nE "^\[" config/creativedelight-common.toml | tr '\n' ' '; echo; grep -nE "rainOutTicks *=" config/creativedelight-common.toml; grep -cE "^\[campfire\]" config/creativecompat-common.toml; true
 look the carry line comes before the merge line in the log; the CD file has [members] (or [compartments], M8), [campfire] with rainOutTicks = 100 and every other section after Forge's correction; last number 0 = Forge dropped [campfire] from Compat's file

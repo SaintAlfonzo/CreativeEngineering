@@ -190,6 +190,8 @@ one heartbeat; the owner messages are immediate.
 8. Writeup: fold the result into [immersive_portals.md](immersive_portals.md) 2.3, 2.4 and
    [nether_portal.md](nether_portal.md) (IP interplay in section 3).
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-IP-01, -04, -05, -05b PASS (crying obsidian frames, logout dissolve, distance and heartbeat despawn).
+
 ## 8. As built (2026-11-07)
 
 | # | Code | Differs from the plan |

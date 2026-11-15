@@ -10,8 +10,8 @@ pace 1
 
 ## SQ-GLD-16 | old golden stews, cans and the jar fluid gone without warnings; /give fails; other golden foods intact
 bootexpect Done \(
-bootreject (?i)(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
-bootreject (?i)(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
 > forceload add 1984 1984 2015 2015
 sleep 20
 > data get block 2000 -60 2000 Items

@@ -2,7 +2,9 @@
 
 Owner request 2026-11-06: more loading screen tips about the pack's own behaviours, as a large multistep job
 documented here. Step 1: scan item tooltips, WTHIT lines and JEI info pages and draft tips from what the UI already
-documents. TODO row: `ui/loadingtips #3`. Mechanism and tip format: [loading_tips.md](loading_tips.md); current list:
+documents. TODO row: `ui/loadingtips #3`. Since 2026-11-14 Loading Tips is the unmodified upstream list and every
+change to it (the audit and owner edits below) lives in Creative Tips as `remove` entries and same-id replacements
+([plan_loading_tips_screens.md](plan_loading_tips_screens.md) section 8); new tips use `creative_tips:<slug>` ids. Mechanism and tip format: [loading_tips.md](loading_tips.md); current list:
 [loading_tips_list.md](loading_tips_list.md).
 
 Status: step 1 (harvest) DONE 2026-11-06, drafts in section 4. Step 2 (owner review) in progress: first pass of
@@ -28,11 +30,27 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
   enchantments and effects Title Case (Silk Touch, Fortune, Looting, Bad Omen, Night Vision); mobs, places,
   structures, dimensions, mod names, control keys (Shift, Sprint) and quoted UI labels keep their capitals.
   Applied to every tip in Loading Tips and Creative Tips and to section 4.
-- One sentence, at most about 110 characters (the bar wraps at 360 px; two lines read comfortably, three do not).
+- **Concise and informative** (owner 2026-11-14). Every tip tells the player something they can use: a mechanic, a
+  rule, a number, a recipe. No trivia, flavour, jokes, history or tips that only name a thing ("The Wither is a
+  powerful boss", "Dragon heads look cool on walls").
+- **The full picture of one feature** (owner 2026-11-14). A tip covers its feature whole: the counter cases, the
+  sister cases and the limits that go with it ("Ice melts near bright light, but packed and blue ice never do", not
+  "Ice blocks melt near light sources"). Several short facts about one feature belong in one tip; never split one
+  feature over several tips, and never leave out the half that changes what the player does. If the whole feature
+  does not fit, the tip names the rule, not one example of it.
+- One tip per feature: two tips on the same block, mob, enchantment family or mechanic are merged.
+- At most about 120 characters, 130 for a tip that groups several facts (the bar wraps at 360 px; two lines read
+  comfortably, three do not). Semicolons join the facts; no lists.
 - Plain English, what the player can do or what is different. No ids, file names, config keys, emoji.
+- Check every claim against the pack, not vanilla: Quark (game nerfs, tweaks), Allurement, MCA and the pack's own
+  systems change many vanilla facts. A vanilla tip that the pack makes wrong is rewritten or removed.
 - No "now", "new" or "changed": the player may not know the old behaviour. Say what is true in this pack.
 - Name items by their display name. Name a mod only when the player needs it to find the thing (JEI mod filter).
 - A tip must stay true when the optional mod it talks about is absent, or ship in that mod's jar (section 3, Q1).
+
+- **Pack pass over the existing tips** (owner 2026-11-14): after tip audit 2 ([loading_tips_audit.md](loading_tips_audit.md)),
+  a pass that describes the pack itself overrides more Loading Tips by id with pack facts, for example golden and
+  gilded foods and ice melting near light. Belongs with step 5 (write the tips).
 
 ## 3. Open questions (owner)
 

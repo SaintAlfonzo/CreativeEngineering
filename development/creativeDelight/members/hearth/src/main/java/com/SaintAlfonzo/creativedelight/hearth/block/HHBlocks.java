@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -50,18 +51,23 @@ public final class HHBlocks {
     public static final RegistryObject<Block> UNRIPE_GOAT_CHEESE_WHEEL = BLOCKS.register("unripe_goat_cheese_wheel",
             () -> new UnripeCheeseWheelBlock(GOAT_CHEESE_WHEEL, Properties.copy(Blocks.CAKE)));
 
-    // Hops on Vinery's lattice (N21), sunflower stem (N23-16), tilled end stone (N23-12)
-    public static final RegistryObject<Block> HOPS = BLOCKS.register("hops",
-            () -> new HopsLatticeBlock(Properties.of(Material.PLANT).strength(0.2F).noOcclusion().randomTicks().sound(SoundType.CROP)));
+    /**
+     * Hops exist only with Vinery (Creative Brewing) loaded (plan_bugfix_1114 3.1): the vine borrows Vinery's jungle grape
+     * models and the lattice form is Vinery's own grapevine_lattice with the hops grape type. Every hops block and item is
+     * null without it; callers check {@link #HOPS_ON}.
+     */
+    public static final boolean HOPS_ON = ModList.get().isLoaded("vinery");
+
+    // Hops vine (3.1; was hops on a lattice, N21), sunflower stem (N23-16). H&H tilled end stone removed 2026-11-14 (3.2).
+    public static final RegistryObject<Block> HOPS_VINE = hops("hops_vine",
+            () -> new HopsVineBlock(Properties.copy(Blocks.VINE).randomTicks().sound(SoundType.VINE)));
     public static final RegistryObject<Block> SUNFLOWER_STEM = BLOCKS.register("sunflower_stem",
             () -> new SunflowerStemBlock(Properties.of(Material.PLANT).noCollission().instabreak().randomTicks().sound(SoundType.STEM)));
-    public static final RegistryObject<Block> TILLED_END_STONE = BLOCKS.register("tilled_end_stone",
-            () -> new TilledEndStoneBlock(Properties.copy(Blocks.END_STONE).randomTicks().isViewBlocking((s, l, p) -> true).isSuffocating((s, l, p) -> true)));
 
     // Rugs, storage
     public static final RegistryObject<Block> HAY_RUG = rug("hay_rug");
     public static final RegistryObject<Block> STRAW_RUG = rug("straw_rug");
-    public static final RegistryObject<Block> HOPS_BAG = BLOCKS.register("hops_bag", () -> new Block(Properties.copy(Blocks.WHITE_WOOL)));
+    public static final RegistryObject<Block> HOPS_BAG = hops("hops_bag", () -> new Block(Properties.copy(Blocks.WHITE_WOOL)));
     public static final RegistryObject<Block> CORN_HUSK_BUNDLE = BLOCKS.register("corn_husk_bundle",
             () -> new Block(Properties.copy(Blocks.DRIED_KELP_BLOCK).strength(2.0F, 3.0F).sound(SoundType.CROP)));
     public static final RegistryObject<Block> ROPE_COIL = pillar("rope_coil");
@@ -88,7 +94,7 @@ public final class HHBlocks {
     public static final RegistryObject<Block> POLISHED_MANURE_WALL = BLOCKS.register("polished_manure_wall", () -> new WallBlock(brickProps()));
 
     // Plants
-    public static final RegistryObject<Block> WILD_HOPS = BLOCKS.register("wild_hops",
+    public static final RegistryObject<Block> WILD_HOPS = hops("wild_hops",
             () -> new WildCropBlock(MobEffects.MOVEMENT_SPEED, 10, Properties.copy(Blocks.TALL_GRASS)));
 
     public static final Map<String, RegistryObject<Block>> MUMS = new LinkedHashMap<>();
@@ -113,6 +119,10 @@ public final class HHBlocks {
     public static void registerPottedPlants() {
         FlowerPotBlock empty = (FlowerPotBlock) Blocks.FLOWER_POT;
         MUMS.forEach((id, mum) -> empty.addPlant(new ResourceLocation(HearthAndHarvestMod.MODID, id), POTTED_MUMS.get(id)));
+    }
+
+    private static RegistryObject<Block> hops(String id, java.util.function.Supplier<Block> block) {
+        return HOPS_ON ? BLOCKS.register(id, block) : null;
     }
 
     private static Properties brickProps() {

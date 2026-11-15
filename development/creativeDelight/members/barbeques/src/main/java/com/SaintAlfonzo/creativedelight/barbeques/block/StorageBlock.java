@@ -67,6 +67,15 @@ public abstract class StorageBlock extends BaseEntityBlock {
         }
         ItemStack held = player.getItemInHand(hand);
         if (!held.isEmpty()) {
+            // A skewer tool (the stick) only skewers: never stored, and with no recipe the click passes and the stick
+            // stays in the hand (plan_bugfix_1114 4.6, SQ-BBQW-02s: a one-beef basin used to eat it).
+            if (storage.isTool(held)) {
+                if (storage.specialClick(player, i, hand)) {
+                    level.playSound(player, pos, SoundEvents.BUNDLE_INSERT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                }
+                return InteractionResult.PASS;
+            }
             if (storage.insert(level, i, held, !player.isShiftKeyDown())) {
                 level.playSound(null, pos, SoundEvents.WOOD_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return InteractionResult.sidedSuccess(level.isClientSide);

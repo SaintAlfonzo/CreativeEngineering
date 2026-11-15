@@ -50,12 +50,16 @@
     "LivingEntityEffectRemapMixin",
     "LivingEntityUseItemIconMixin",
     "MobEffectCategoryMixin",
-    "PhantomSpawnerBaneSkipMixin"
+    "PhantomSpawnerBaneSkipMixin",
+    "MeltingBlockStateMixin",
+    "VanillaLightMeltMixin",
+    "RareIceLightMeltMixin"
   ],
   "client": [
     "KubeJSClientResourceScriptsMixin",
     "CreativeMenuDisableMixin",
     "SyncGlDebugOutputMixin",
+    "FdReleaseMixin",
     "SectionUpdateNullStateMixin",
     "BlockUpdateNullStateMixin",
     "CreativePickBlockSyncMixin",

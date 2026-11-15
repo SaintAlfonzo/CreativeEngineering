@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/template_farmland",
-  "textures": {
-    "dirt": "minecraft:block/end_stone",
-    "top": "hearthandharvest:block/tilled_end_stone"
-  }
-}

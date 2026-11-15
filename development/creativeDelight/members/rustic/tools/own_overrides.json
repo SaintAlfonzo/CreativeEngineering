@@ -1,11 +1,15 @@
 {
- "_comment": "Own files at baked paths; the bake never overwrites them. Pancake recolours: owner-accepted, rustic_delight.md 5.11 (moved from kubejs/assets 2026-11-10).",
+ "_comment": "Own files at baked paths; the bake never overwrites them. Pancake recolours: owner-accepted, rustic_delight.md 5.11 (moved from kubejs/assets 2026-11-10). loot_tables/blocks/pancakes.json: Supplementaries' pancake entries point to rusticdelight:mod_items/supplementaries/pancake (Creative Delight packs/mods/supplementaries), plan_bugfix_1114.md 5.2. The three Supplementaries pancake recipes carry a forge:mod_loaded supplementaries condition (same plan section).",
  "paths": [
   "assets/rusticdelight/textures/item/cherry_blossom_pancake.png",
   "assets/rusticdelight/textures/item/chocolate_pancake.png",
   "assets/rusticdelight/textures/item/coffee_pancake.png",
   "assets/rusticdelight/textures/item/honey_pancake.png",
   "assets/rusticdelight/textures/item/pumpkin_pancake.png",
-  "assets/rusticdelight/textures/item/vegetable_pancake.png"
+  "assets/rusticdelight/textures/item/vegetable_pancake.png",
+  "data/rusticdelight/loot_tables/blocks/pancakes.json",
+  "data/rusticdelight/recipes/cutting/pancakes.json",
+  "data/rusticdelight/recipes/pancake_from_pancakes.json",
+  "data/rusticdelight/recipes/pancakes_from_pancake.json"
  ]
 }

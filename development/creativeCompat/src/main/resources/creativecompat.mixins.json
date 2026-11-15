@@ -45,11 +45,11 @@
     "OreExcavationMiningAgentMixin",
     "OreExcavationSchedulerMixin",
     "BlockRunnerBlockStateMixin",
-    "WallSlideMixin",
+    "InsideBlocksMixin",
+    "MakeStuckInBlockMixin",
     "BlockRunnerSpeedConfigMixin",
     "FramedDoubleCamoOrderMixin",
     "CopycatMaterialOrderMixin",
-    "PortalGunExitLiftMixin",
     "PortalGunHeartbeatMixin",
     "PortalGunPortalInvoker",
     "IPMirrorGlassMixin",
@@ -107,11 +107,14 @@
     "JeedEffectInfoMixin",
     "JeedEffectRendererMixin",
     "GuiEffectIconMixin",
+    "IPExitLiftMixin",
     "IPPortalRenderingAccessor",
     "IPPortalRenderLimitsMixin",
     "IPPortalFogMixin",
     "PortalGunRendererOpaqueMixin",
-    "SignTextDistanceMixin"
+    "SignTextDistanceMixin",
+    "PassFovMixin",
+    "BlockRunnerFovMixin"
   ],
   "server": []
 }

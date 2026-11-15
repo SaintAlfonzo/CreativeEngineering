@@ -153,6 +153,8 @@ Default is A until item physics fluids are implemented; then pick again.
 
 ## 7. Tests (to add to the scratch queue)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-FLR-02b, -03, -04, -05 PASS (crusher rig valid after the motor swap; 100 pus bubbles 20 slime, 100 hair 42 string; heated flesh blood and tendons; millstone drained by a hopper).
+
 - Both tendon blocks climb up and down; a player can stand on a strand.
 - Crush 200 flesh and 200 porous flesh: per crush, meat is always 1 item (flesh) or 1 to 2 items (porous), never more than one
   item per pick, and each pool total and item split matches section 3 within sampling error.

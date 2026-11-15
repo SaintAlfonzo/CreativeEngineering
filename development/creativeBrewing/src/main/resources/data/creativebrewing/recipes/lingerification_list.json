@@ -1,1 +1,9 @@
-{"type":"immersiveengineering:generated_list"}
+{
+  "type": "immersiveengineering:generated_list",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ]
+}

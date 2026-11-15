@@ -84,6 +84,7 @@ the plant is caught by the area break when you break a plant with a hoe (breaks 
 | Ender Crop | `endercrop:ender_crop` | no | yes, dark only | no | yes, dark only | yes, dark only | Quark replant (auto-found) | replant | yes |
 | Tobacco | `the_dirty_stuff:tobacco_seeds` | no | yes | no | yes (pack, §2.6) | yes (pack, §2.6) | Quark replant (config list, pack) | replant | yes (pack, §2.6) |
 | Oats, Peanuts (Vintage port; plant Oat Seeds, a Peanut) | `vintagedelight:oat_crop`, `peanut_crop` | no | yes | no | yes | yes | Quark replant (auto-found) | replant | yes |
+| Cave Carrots (Miner's Delight member; plant a Cave Carrot) | `miners_delight:cave_carrots` | no | yes | no | yes | yes | Quark replant if listed (not checked) | not checked | not checked |
 
 - Ender Crop off end stone needs raw light 7 or less at the crop, so a roofed, unlit farm. On
   Ender Crop's Tilled End Stone it needs light 8 or more instead.

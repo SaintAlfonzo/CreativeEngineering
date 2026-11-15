@@ -1,7 +1,8 @@
 // requires: creativedelight
 // Food family tags and the seasonable tags built from them.
 //
-// #creativedelight:food_family/<path>: every edible member of each food family (feature_writeup/food_families.md),
+// #creativedelight:food_family/<path>: every member of each food family, edible items and whole food blocks (block
+// items; plan_bugfix_1114.md 7.4) (feature_writeup/food_families.md),
 // from kubejs/generation_scripts/food/food_families.json (written by python3 tools/food_families.py, or /cdevgen run
 // food_families, after /dumpall). A subfamily also lands in its parents: snack, fruit/whole -> fruit -> food_family.
 //

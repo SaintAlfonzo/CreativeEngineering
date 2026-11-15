@@ -124,10 +124,11 @@ public class GrapevinePotBlock extends BaseEntityBlock {
     }
 
         public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (stack.getItem() instanceof GrapeItem grape) {
+        // Pack: a type with no juice (hops, plan_bugfix_1114 3.1) is not pressed
+        if (stack.getItem() instanceof GrapeItem grape && GrapeTypeRegistry.hasJuice(grape.getType())) {
             return addGrape(stack, grape.getType(), state, level, pos, player);
         }
-        if (stack.is(ObjectRegistry.WINE_BOTTLE.get().asItem()) && canTakeJuice(state)) {
+        if (stack.is(ObjectRegistry.WINE_BOTTLE.get().asItem()) && canTakeJuice(state) && GrapeTypeRegistry.hasJuice(state.getValue(GRAPEVINE_TYPE))) {
             return takeJuice(stack, state, level, pos, player);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

@@ -2,9 +2,9 @@ Loading Tips (resource pack)
 
 The tip text in assets/loading_tips/loading_tips/tips.json is taken from Loading Tips 1.2.1+26.1
 by Naw7k (https://modrinth.com/mod/loading-tips, https://github.com/Naw7k/Loading-Tips), licensed
-under the MIT License. For Creative Engineering it was filtered to tips that hold in Minecraft 1.19.2:
-tips about later versions, duplicates and incorrect tips were removed and one tip was reworded.
-The full list of removals is in the pack's feature writeup (feature_writeup/loading_tips.md).
+under the MIT License, unmodified (all 532 tips, text verbatim); each tip was given an id. Creative
+Engineering's own Creative Tips pack overrides tips by id: it removes the tips about later versions,
+duplicates and incorrect tips, and rewrites others (feature_writeup/loading_tips.md).
 
 The tips are shown by Creative Common's loading screen tips feature, which follows the format of
 Loading Screen Tips by UltrusBot (https://github.com/UltrusBot/LoadingScreenTips, MIT License,

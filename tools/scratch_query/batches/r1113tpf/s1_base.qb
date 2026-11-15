@@ -1,0 +1,127 @@
+# r1113tpf server tranche s1 (feature_writeup/thirdparty_fixes.md, queue "SQ-TPF"): the commands of every row.
+# s1_base.qb (every Debugify fix off: the bug must reproduce) and s1_fix.qb (tranche @s1 on: the bug must be gone) are
+# generated from this file by s1_gen.py: lines "!base REGEX-DIRECTIVE" / "!fix REGEX-DIRECTIVE" go only into that file.
+# Server needs spawn-animals=true spawn-npcs=true (tpf_srv.sh ... -- spawn-animals=true spawn-npcs=true): with the
+# scratch default false, ServerLevel discards every Animal and Npc each tick (cows, wolves, chickens, striders) (r1114).
+pace 2
+
+## SQ-TPF-00 | setup and boot: both jars load, no mixin errors from them
+bootreject Mixin apply failed|InvalidMixinException|InvalidInjectionException|MixinTransformerError
+bootexpect (?i)debugify
+bootexpect (?i)packetfixer
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 6000
+> difficulty normal
+> forceload add 1000 1000 1599 1015
+sleep 8
+shell cat config/packetfixer.properties config/debugify.json | tr '\n' ' ' | head -c 600
+shell grep -ciE "debugify|packetfixer" logs/latest.log
+
+## SQ-TPF-10 | MC-206922 lightning kills three cows: their drops survive (fixed) or vanish (bug)
+# NoAI: a cow that wandered off the strike point survived (r1114)
+> summon minecraft:cow 1300 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+> summon minecraft:cow 1310 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+> summon minecraft:cow 1320 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+sleep 2
+> summon minecraft:lightning_bolt 1300 -60 1000
+> summon minecraft:lightning_bolt 1310 -60 1000
+> summon minecraft:lightning_bolt 1320 -60 1000
+sleep 5
+> execute unless entity @e[tag=l206922]
+> execute positioned 1310 -60 1000 if entity @e[type=item,distance=..20]
+expect Test passed$
+reject Test passed, count
+
+## SQ-TPF-11 | MC-84873 a dead cow with DeathTime 25 is removed (fixed) or stays forever (bug)
+# @e and @e[tag=] skip dead entities (EntitySelector adds Entity::isAlive): select the dead cow by UUID (r1114)
+> summon minecraft:cow 1400 -60 1000 {DeathTime:25s,Health:0f,UUID:[I;84873,1,2,3]}
+sleep 5
+> data get entity 00014b89-0000-0001-0000-000200000003 DeathTime
+expect entity data: (2[6-9]|[3-9][0-9]|[0-9]{3,})s
+
+## SQ-TPF-12 | MC-200418 a cured baby zombie villager on a chicken: the villager is not left riding (fixed)
+> fill 1198 -60 998 1202 -56 1002 minecraft:glass hollow
+> summon minecraft:chicken 1200 -59 1000 {Tags:["c200418"],Passengers:[{id:"mca:male_zombie_villager",IsBaby:1b,Age:-24000,ConversionTime:60,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}]}]}
+sleep 8
+# MCA (overwriteOriginalZombieVillagers) replaces a summoned minecraft:zombie_villager on join, dropping its vehicle and
+# ConversionTime: summon the MCA one, the pack's real path; it converts to mca:male_villager (#zq:villagers) (r1114)
+> execute positioned 1200 -59 1000 if entity @e[type=#zq:villagers,distance=..4]
+> data get entity @e[tag=c200418,limit=1] Passengers[0].id
+expect Test passed, count: 1
+expect entity data: "(mca:(male|female)_villager|minecraft:villager)"
+
+## SQ-TPF-13 | MC-214147 a skeleton in leather armor stays a skeleton in powder snow (fixed) or turns stray (bug)
+> fill 1099 -60 999 1101 -57 1001 minecraft:glass
+> fill 1100 -59 1000 1100 -58 1000 minecraft:powder_snow
+> summon minecraft:skeleton 1100 -59 1000 {PersistenceRequired:1b,ArmorItems:[{},{},{id:"minecraft:leather_chestplate",Count:1b},{id:"minecraft:leather_helmet",Count:1b}]}
+sleep 30
+> execute positioned 1100 -59 1000 if entity @e[type=stray,distance=..3]
+> execute positioned 1100 -59 1000 if entity @e[type=skeleton,distance=..3]
+expect ^.*Test passed, count: 1
+expect Test failed
+
+## SQ-TPF-14 | MC-72151 a snow golem's snowball does not hurt a wolf (fixed: 8.0 health) or takes 0.5 (bug: 7.5)
+> summon minecraft:snow_golem 1500 -60 1014 {NoAI:1b,UUID:[I;72151,1,2,3]}
+> summon minecraft:wolf 1500 -60 1010 {Health:8f,NoAI:1b,Tags:["w72151"]}
+sleep 1
+> summon minecraft:snowball 1500 -57 1010 {Motion:[0.0d,-1.0d,0.0d],Owner:[I;72151,1,2,3]}
+sleep 3
+> data get entity @e[tag=w72151,limit=1] Health
+expect entity data: 7\.5f
+
+## SQ-TPF-16 | MC-223153 Block of Raw Copper uses the copper sound type (fixed) or stone (bug)
+> ztpf sound
+expect \[ztpf\] raw_copper_block sound=stone
+
+## SQ-TPF-17 | MC-121903 a command block minecart saves its LastExecuted cooldown (fixed) or not (bug)
+> summon minecraft:command_block_minecart 1450 -60 1000 {Tags:["m121903"]}
+sleep 1
+> data get entity @e[tag=m121903,limit=1] LastExecuted
+expect (?i)no elements matching LastExecuted
+
+## SQ-TPF-15 | MC-232869 adult striders summoned in Peaceful never carry a saddle (fixed; bug: about 1 in 30)
+> difficulty peaceful
+pace 0
+repeat 150
+> summon minecraft:strider 1550 -60 1005
+end
+pace 2
+sleep 4
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30]
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30,nbt={Saddle:1b}]
+> kill @e[type=strider]
+> difficulty normal
+expect Test passed, count: 1[0-9][0-9]
+expect Test passed, count: [1-9]$
+
+## SQ-TPF-18 | MC-2025 25 cows in a fenced pen through 12 chunk unload and reload cycles: none outside (fixed)
+> forceload add 1990 1990 2010 2010
+sleep 4
+# 25 cows in 25 blocks die of cramming (maxEntityCramming 24) after a reload: the r1114 losses were deaths (beef and
+# leather by the pen), not escapes. Off for this row only.
+> gamerule maxEntityCramming 0
+> kill @e[tag=p2025]
+> fill 1995 -60 1995 2001 -60 2001 minecraft:oak_fence
+> fill 1996 -60 1996 2000 -60 2000 minecraft:air
+pace 0
+repeat 25
+> summon minecraft:cow 1998 -60 1998 {Tags:["p2025"],PersistenceRequired:1b}
+end
+pace 2
+sleep 10
+> data get entity @e[tag=p2025,limit=1] AABB
+repeat 12
+> forceload remove 1990 1990 2010 2010
+sleep 12
+> execute if entity @e[tag=p2025]
+> forceload add 1990 1990 2010 2010
+sleep 10
+> execute if entity @e[tag=p2025,x=1996,y=-61,z=1996,dx=4,dy=3,dz=4]
+> execute as @e[tag=p2025] unless entity @s[x=1996,y=-61,z=1996,dx=4,dy=3,dz=4] run say p2025-out
+end
+> execute if entity @e[tag=p2025]
+> gamerule maxEntityCramming 24
+look no "p2025-out" line in fix (an escape = MC-2025); base: any "p2025-out" = bug reproduced; a total below 25 with no "out" line is a death (r1114: cramming, suffocation), not the bug; the 12 "unloaded" checks print Test failed
+expect (?i)no elements matching AABB

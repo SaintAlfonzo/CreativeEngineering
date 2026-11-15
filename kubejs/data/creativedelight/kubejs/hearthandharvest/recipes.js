@@ -68,7 +68,9 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.t_food_cooked_meat, i.vegetables, i.any_cheese], i.tamale, e, 'tamale', 1.0, 200, i.corn_husk)
 
 		// By hand
-		F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
+		// Hops exist only with Vinery (Creative Brewing; plan_bugfix_1114 3.1)
+		var hopsOn = global.has.mod('vinery')
+		if (hopsOn) F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
 		R.shapeless(i.hot_dog, [i.cooked_sausage, i.bread], e, 'hot_dog')
 		R.shapeless(i.trail_mix, [i.roasted_peanut, i.raisins, i.cocoa_beans, i.t_seeds], e, 'trail_mix')
 		R.shapeless(n(i.paper, 3), [n(i.corn_husk, 3)], e, 'paper_from_corn_husks')
@@ -76,11 +78,12 @@ ServerEvents.recipes(e => {
 
 		// Storage: nine items to a block and back
 		var storage = [
-			[i.corn_husk, i.corn_husk_bundle], [i.hops, i.hops_bag], [i.manure, i.manure_bag], [i.fd_rope, i.rope_coil],
+			[i.corn_husk, i.corn_husk_bundle], [i.manure, i.manure_bag], [i.fd_rope, i.rope_coil],
 			[i.string, i.hh_spool], [i.crimson_fungus, i.crimson_fungus_crate], [i.warped_fungus, i.warped_fungus_crate],
 			[i.glistering_melon_slice, i.glistering_melon_crate], [i.poisonous_potato, i.poisonous_potato_crate],
 			[i.rotten_tomato, i.rotten_tomato_crate]
 		]
+		if (hopsOn) storage.push([i.hops, i.hops_bag])
 		storage.forEach(p => {
 			var name = p[1].split(':')[1]
 			R.shaped(p[1], ['###', '###', '###'], { '#': p[0] }, e, name)

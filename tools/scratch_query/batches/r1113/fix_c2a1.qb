@@ -22,6 +22,7 @@ pace 1
 > gamerule doMobSpawning false
 > gamerule doDaylightCycle false
 > gamerule doWeatherCycle false
+> gamerule naturalRegeneration false
 > gamerule randomTickSpeed 3
 > time set noon
 > weather clear

@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedelight.hearth.gear;
 
 import com.SaintAlfonzo.creativedelight.hearth.HHTags;
-import com.SaintAlfonzo.creativedelight.hearth.block.HopsLatticeBlock;
+import com.SaintAlfonzo.creativedelight.hearth.block.HopsVineBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,7 +23,7 @@ public final class FarmersHatEvents {
 
     public static boolean isRipe(BlockState state) {
         return state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state)
-                || state.getBlock() instanceof HopsLatticeBlock && state.getValue(HopsLatticeBlock.AGE) == HopsLatticeBlock.MAX_AGE;
+                || state.getBlock() instanceof HopsVineBlock && state.getValue(HopsVineBlock.AGE) == HopsVineBlock.MAX_AGE;
     }
 
     public static void reward(ServerLevel level, BlockPos pos) {

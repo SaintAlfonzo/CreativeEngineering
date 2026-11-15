@@ -87,6 +87,11 @@ elif [ "${PGJAR:-0}" = 1 ]; then
 fi
 PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar"
 [ -f "$PB" ] && { cp "$PB" mods/; echo "-Dcdevperfbot.out=perf/bot" >> user_jvm_args.txt; echo "perfBot added"; }
+# Creative Delight's wild crop worldgen source (kubejs/data/creativedelight/worldgen) is dev-only: the jar build splits it
+# into data/ and gated packs/worldgen/<mod>/ (framework #13), and build_deploy.py never ships it. The ungated copy here
+# would load beside the jar and fail a boot without the mod it names (framework #16, r1114 SQ-CDW-01), so drop it as
+# the deploy does. A worldgen JSON edit reaches a scratch server through a rebuilt Creative Delight jar.
+rm -rf kubejs/data/creativedelight/worldgen
 cp "$INST/tools/scratch_query/zq_probe.js" kubejs/server_scripts/zz_zq_probe.js
 # scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for selectors
 mkdir -p kubejs/data && cp -r "$INST/tools/scratch_query/datapack/zq" kubejs/data/

@@ -8,7 +8,8 @@ pace 1
 
 ## SQ-CDW-01 | myrtrees removed: no datapack error, level created, wild crop packs line lists it under off
 bootexpect Done \(
-bootreject Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks
+# r1114: corn_delight:village_house / shipwreck_loot GLM WARNs ("Unknown registry key") are in the full pack too
+bootreject ^(?!.*json id corn_delight:).*(Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks)
 bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[myrtrees\]
 shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
 shell test "$(ls mods | grep -c '^myrtrees-')" = 0

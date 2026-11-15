@@ -3,7 +3,9 @@
 
 Reads the built-in tip packs in Creative Common (resourcepacks/<folder>/: pack.mcmeta, CREDITS.txt if present,
 assets/<namespace>/loading_tips/*.json) and the pack-held tips in kubejs/assets/<namespace>/loading_tips/*.json (Creative
-Tips since 2026-11-07). Run from the instance root after editing any tips.json:
+Tips since 2026-11-07). Tips are {id, text} objects or plain strings (plan_loading_tips_screens.md section 2); an
+override file's replacements and removals are marked against the pack they change, and the effective list is
+computed with the loader's rules. Run from the instance root after editing any tips.json:
 
     python3 tools/loading_tips_md.py
 """
@@ -23,7 +25,27 @@ def pack_tips(pack):
     out = []
     for f in files:
         data = json.loads(f.read_text(encoding="utf-8"))
-        out.append((f.relative_to(pack).as_posix(), bool(data.get("replace", False)), data.get("tips", [])))
+        ns = f.relative_to(pack).parts[1]
+        fid = f"{ns}:{f.stem}"
+        tips = [(t["id"], t["text"]) if isinstance(t, dict) else (f"{fid}/{t.strip()}", t)
+                for t in data.get("tips", [])]
+        out.append((f.relative_to(pack).as_posix(), fid, data, tips))
+    return out
+
+
+def effective(all_files):
+    """The loader's rules (LoadingTips.apply): priority, then file id; override replaces, adds, removes."""
+    out = {}
+    for _, fid, data, tips in sorted(all_files, key=lambda f: (f[2].get("priority", 0), f[1])):
+        if data.get("replace"):
+            out.clear()
+        override = data.get("override", False)
+        if override:
+            for rid in data.get("remove", []):
+                out.pop(rid, None)
+        for tid, text in tips:
+            if text.strip() and (override or tid not in out):
+                out[tid] = text.strip()
     return out
 
 
@@ -31,6 +53,16 @@ def main():
     packs = [(p, json.loads((p / "pack.mcmeta").read_text(encoding="utf-8"))["pack"]["description"])
              for p in sorted(PACKS.iterdir()) if (p / "pack.mcmeta").is_file()]
     packs.append(PACK_HELD)
+    loaded = [(pack, desc, pack_tips(pack)) for pack, desc in packs]
+    all_files = [f for _, _, files in loaded for f in files]
+    final = effective(all_files)
+    replaced, removed = {}, {}
+    for _, fid, data, tips in all_files:
+        if data.get("override"):
+            for rid in data.get("remove", []):
+                removed[rid] = fid
+            for tid, _t in tips:
+                replaced.setdefault(tid, fid)
     lines = [
         "# Loading screen tips, by pack",
         "",
@@ -39,25 +71,43 @@ def main():
         "Do not edit by hand: edit the pack's",
         "`tips.json` and run the script again. How the tips are shown: [loading_tips.md](loading_tips.md).",
         "",
+        f"Effective list: **{len(final)} tips**. In a pack that others override, a tip marked *replaced* shows the",
+        "overriding text and *removed* does not show.",
+        "",
     ]
     summary, body = [], []
-    for pack, desc in packs:
-        files = pack_tips(pack)
-        count = sum(len(t) for _, _, t in files)
+    for pack, desc, files in loaded:
+        count = sum(len(t) for *_, t in files)
         name = desc.split(":")[0]
         folder = pack.relative_to(ROOT).as_posix() if pack == PACK_HELD[0] else pack.name
         summary.append(f"| {name} | `{folder}` | {count} |")
         body += [f"## {name}", "", desc, ""]
         if (pack / "CREDITS.txt").is_file():
             body += [f"Attribution: `resourcepacks/{pack.name}/CREDITS.txt`.", ""]
-        for path, replace, tips in files:
-            body += [f"`{path}`" + (" (replace: true)" if replace else "") + f", {len(tips)} tips", ""]
-            body += [f"{i}. {t}" for i, t in enumerate(tips, 1)] if tips else ["(no tips yet)"]
+        for path, fid, data, tips in files:
+            flags = [k for k in ("replace", "override") if data.get(k)]
+            head = f"`{path}`, priority {data.get('priority', 0)}" + "".join(f", {k}: true" for k in flags)
+            body += [head + f", {len(tips)} tips" + (f", removes {len(data.get('remove', []))}" if data.get("override") else ""), ""]
+            n = 0
+            for tid, text in tips:
+                n += 1
+                mark = ""
+                if tid in removed and removed[tid] != fid:
+                    mark = f" *(removed by {removed[tid]})*"
+                elif tid in replaced and replaced[tid] != fid:
+                    mark = f" *(replaced by {replaced[tid]})*"
+                elif data.get("override") and not tid.startswith(fid.split(":")[0] + ":"):
+                    mark = " *(replacement)*"
+                body.append(f"{n}. `{tid}` {text}{mark}")
+            if not tips:
+                body.append("(no tips yet)")
             body.append("")
-    lines += ["| Pack | Folder | Tips |", "|---|---|---|", *summary, ""]
+            if data.get("override") and data.get("remove"):
+                body += ["Removes:", ""] + [f"- `{r}`" for r in data["remove"]] + [""]
+    lines += ["| Pack | Folder | Tips in file |", "|---|---|---|", *summary, ""]
     lines += body
     OUT.write_text("\n".join(lines).rstrip("\n") + "\n", encoding="utf-8")
-    print(f"wrote {OUT.relative_to(ROOT)}: {len(packs)} packs")
+    print(f"wrote {OUT.relative_to(ROOT)}: {len(packs)} packs, {len(final)} effective tips")
 
 
 if __name__ == "__main__":

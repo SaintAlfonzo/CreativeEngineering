@@ -23,6 +23,7 @@ MOD = os.path.dirname(HERE)
 INSTANCE = os.path.abspath(os.path.join(MOD, '../../../..'))
 ART = os.path.join(INSTANCE, 'kubejs/assets/mason_jar_new')
 OWN = os.path.join(MOD, 'src/own')
+CD_FD_PACK = os.path.join(INSTANCE, 'development/creativeDelight/src/main/resources/packs/mods/fruitsdelight')
 NS = 'vintagedelight'
 
 # name, English stem, art stem, new jar registered by PackJams, own jam fluid
@@ -81,7 +82,18 @@ def colour(png):
     return '#%02x%02x%02x' % (r, g, b), (r << 16) | (g << 8) | b
 
 
-def jar_block(block, interior, drop, drop_block=None):
+def write_fd_pack(rel, data):
+    """A data file that names Fruits Delight: Creative Delight's packs/mods/fruitsdelight/ pack, loaded only with that
+    mod (CompartmentPacks.addModData; plan_bugfix_1114.md 5.2). The fd_* jar blocks register only with it, so their loot
+    tables would fail to parse without it."""
+    path = os.path.join(CD_FD_PACK, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2)
+        f.write('\n')
+
+
+def jar_block(block, interior, drop, drop_block=None, loot_write=None):
     """Blockstate, the four jar-count models and the loot table of a mason jar block (Vintage's layout)."""
     variants = {}
     for n, word in enumerate(COUNTS, 1):
@@ -96,7 +108,7 @@ def jar_block(block, interior, drop, drop_block=None):
     funcs = [{'function': 'set_count', 'count': n, 'conditions': [{
         'condition': 'minecraft:block_state_property', 'block': f'{NS}:{block}', 'properties': {'jars': str(n)}}]}
         for n in range(1, 5)]
-    write(f'data/{NS}/loot_tables/blocks/{block}.json', {'type': 'minecraft:block', 'pools': [{
+    (loot_write or write)(f'data/{NS}/loot_tables/blocks/{block}.json', {'type': 'minecraft:block', 'pools': [{
         'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': drop, 'functions': funcs}],
         'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
 
@@ -222,7 +234,7 @@ def main():
     for f in FD_JAMS:
         block = f'fd_{f}_jam_jar'
         art('new_mason_jar_interior', f'{f}_jam_interior_texture', f'block/fd_{f}_jam_interior_texture')
-        jar_block(block, f'fd_{f}_jam_interior_texture', f'fruitsdelight:{f}_jelly')
+        jar_block(block, f'fd_{f}_jam_interior_texture', f'fruitsdelight:{f}_jelly', loot_write=write_fd_pack)
         lang[f'block.{NS}.{block}'] = FD_NAMES.get(f, f.replace('_', ' ').title()) + ' Jam'
 
     lang[f'{NS}.tooltip.jam_block'] = 'Sticky. Sticks to the jello block of the same jam, not to other sticky blocks.'

@@ -8,6 +8,7 @@ var b = global.blocks;
 
 b.dark_fire = 'creativemagic:dark_fire';
 b.hh_four_leaf_clover = 'hearthandharvest:four_leaf_clover'; // placed Four-Leaf Clover (hearth/worldgen), no item of its own
+b.sunflower_stem = 'hearthandharvest:sunflower_stem'; // Sunflower Stem block (HHBlocks), no item; was in item_dict (SQ-AZW-01)
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 b.emu_nest = 'creativedelight:emu_nest';         // Creative Delight compat/incubation/nest/EmuNests.java
 b.emu_egg_nest = 'creativedelight:emu_egg_nest'; // the 1-6 egg state; no item
@@ -141,6 +142,12 @@ b.turnip_crop = 'veggiesdelight:turnip_crop';
 b.oat_crop = 'vintagedelight:oat_crop';
 b.peanut_crop = 'vintagedelight:peanut_crop';
 b.adzuki_sprouts = 'neapolitan:adzuki_sprouts';
+// Bushes and nether crops with a soil yield row (wave 2, plan_crop_yields_wave2.md 5.2 / 6)
+b.strawberry_bush = 'neapolitan:strawberry_bush'; // item is strawberry_pips
+b.blueberry_bush = 'fruitsdelight:blueberry_bush';
+b.cranberry_bush = 'fruitsdelight:cranberry_bush';
+b.lemon_tree = 'fruitsdelight:lemon_tree';
+b.nether_wart_crop = 'minecraft:nether_wart'; // the planted wart (same id as the item)
 b.monster_box = 'quark:monster_box';             // vault box (mob_block_tweaks.md 2.9): obsidian hardness, sneak to break
 // Barbeque's Delight port (Creative Delight member barbequesdelight, barbeques_delight.md 4)
 b.bbq_grill = 'barbequesdelight:grill';   // has_campfire / lit / waterlogged; in #creativecommon:campfire/rain_douses
@@ -195,6 +202,7 @@ b.t_end_plant_soil_fast = '#creativedelight:end_plant_soil_fast'; // same, grow 
 b.t_mineable_axe = '#minecraft:mineable/axe';
 b.t_mineable_pickaxe = '#minecraft:mineable/pickaxe';
 b.t_climbable = '#minecraft:climbable';
+b.t_nether_carver_replaceables = '#minecraft:nether_carver_replaceables'; // Nether caves carve these (Visceral Heap flesh, creativeworldgen tags/visceral_heap.js)
 
 // Visceral Heap blocks kept from Biomes O' Plenty (visceral_heap.md)
 b.flesh = 'biomesoplenty:flesh';
@@ -224,6 +232,72 @@ b.t_not_mirror_glass = '#creativecompat:not_mirror_glass';     // IPMirrorGlassM
 b.t_fishing_net_kelp = '#creativedelight:fishing_net/kelp';           // OceanicDelightFishingNetMixin: net uses the kelp table
 b.t_fishing_net_sea_grass = '#creativedelight:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
+
+// Melting (Creative Common melting/, feature_writeup/melting.md, plan_bugfix_1114.md 3.8). The tags are filled by
+// Creative Common's tags/melting_tags.js; the Java side reads them (melting/MeltTags.java). Mod globs match block ids.
+b.t_melt_salt = '#creativecommon:melting/salt';                 // salt sources: melt adjacent targets
+b.t_melt_fire = '#creativecommon:melting/fire';                 // fire sources; a block with a lit property counts only while lit
+b.t_melt_lava = '#creativecommon:melting/lava';                 // lava sources besides any block holding lava fluid
+b.t_meltable = '#creativecommon:melting/meltable';              // ice and frosted ice -> water (air when ultra-warm), snow -> air
+b.t_meltable_slow = '#creativecommon:melting/meltable_slow';    // packed and blue ice: one tier down, low chance
+b.t_melt_ultrawarm_instant = '#creativecommon:melting/ultrawarm_instant'; // air the moment it is placed in the Nether
+b.t_fire = '#minecraft:fire';                                   // fire, soul fire, modded fires
+b.t_campfires = '#minecraft:campfires';
+b.ice = 'minecraft:ice';
+b.frosted_ice = 'minecraft:frosted_ice';
+b.packed_ice = 'minecraft:packed_ice';
+b.blue_ice = 'minecraft:blue_ice';
+b.rare_ice = 'rare-ice:rare_ice';                               // Rare Ice: ice with an item inside (in #minecraft:ice)
+b.torch = 'minecraft:torch';
+b.wall_torch = 'minecraft:wall_torch';
+b.soul_torch = 'minecraft:soul_torch';
+b.soul_wall_torch = 'minecraft:soul_wall_torch';
+b.lantern = 'minecraft:lantern';
+b.soul_lantern = 'minecraft:soul_lantern';
+b.jack_o_lantern = 'minecraft:jack_o_lantern';
+b.glowstone = 'minecraft:glowstone';
+b.salt_salt_block = 'salt:salt_block';
+b.raw_rock_salt_block = 'salt:raw_rock_salt_block';
+b.vintage_salt_blocks = 'vintagedelight:*salt*';                // salt, salt block, bricks, pillar, smooth, lamps (SaltBlockTicks.MELTERS)
+b.vintage_evaporator = 'vintagedelight:evaporator';
+b.hh_salt_lick_stages = 'hearthandharvest:*licked_salt_block';  // lightly / well / heavily licked, waxed or not (HHSaltRegistry)
+b.hh_waxed_salt_block = 'hearthandharvest:waxed_salt_block';
+// Modded flame lights counted as fire (plan 3.8 table, 2026-11-13 dump); the non-flame ones of the same mods are left out
+b.melt_fire_supplementaries_sconces = 'supplementaries:sconce*';  // every sconce and wall sconce, the sconce lever
+b.melt_fire_supplementaries_lanterns = 'supplementaries:*lantern'; // brass, copper, crimson, lead, silver, wall lantern
+b.melt_fire_everythingcopper_lanterns = 'everythingcopper:*lantern'; // 16 copper and copper soul lanterns, all stages
+b.melt_fire_redeco_lanterns = 'redeco:*lantern';                // 16 paper lanterns, stone and deepslate lantern
+b.melt_fire_ua_tooth_lantern = 'upgrade_aquatic:tooth_lantern';
+b.melt_fire_framed_torch = 'framedblocks:framed_torch';
+b.melt_fire_framed_wall_torch = 'framedblocks:framed_wall_torch';
+b.melt_fire_framed_soul_torch = 'framedblocks:framed_soul_torch';
+b.melt_fire_framed_soul_wall_torch = 'framedblocks:framed_soul_wall_torch';
+b.melt_fire_fairylights_candle_lantern = 'fairylights:candle_lantern';
+b.melt_fire_fairylights_oil_lantern = 'fairylights:oil_lantern';
+b.melt_fire_fairylights_paper_lantern = 'fairylights:paper_lantern';
+b.melt_fire_fairylights_jack_o_lantern = 'fairylights:jack_o_lantern';
+b.melt_fire_ap_nether_brass_torch = 'architects_palette:nether_brass_torch';
+b.melt_fire_ap_nether_brass_wall_torch = 'architects_palette:nether_brass_wall_torch';
+b.melt_fire_ap_nether_brass_lantern = 'architects_palette:nether_brass_lantern';
+b.melt_fire_ap_glowstone_cage_lantern = 'architects_palette:glowstone_cage_lantern';
+b.melt_fire_twigs_paper_lanterns = 'twigs:*paper_lantern';       // all 5
+b.melt_fire_quark_paper_lantern = 'quark:paper_lantern';
+b.melt_fire_quark_paper_lantern_sakura = 'quark:paper_lantern_sakura';
+b.melt_fire_quark_duskbound_lantern = 'quark:duskbound_lantern';
+b.melt_fire_dd_large_lantern = 'dustrial_decor:large_lantern';
+b.melt_fire_dd_large_soul_lantern = 'dustrial_decor:large_soul_lantern';
+b.melt_fire_aa_tooth_lanterns = 'alexsabnormalities:*_tooth_lantern'; // bone serpent, cachalot whale, shark
+b.melt_fire_sc_reinforced_lantern = 'securitycraft:reinforced_lantern';
+b.melt_fire_sc_reinforced_soul_lantern = 'securitycraft:reinforced_soul_lantern';
+b.melt_fire_ie_lantern = 'immersiveengineering:lantern';
+b.melt_fire_db_brazier = 'decorative_blocks:brazier';
+b.melt_fire_db_soul_brazier = 'decorative_blocks:soul_brazier';
+b.melt_fire_bs_brazier_on = 'blocky_siege:brazier_on';
+b.melt_fire_nd_propelplant_torch = 'nethersdelight:propelplant_torch';
+b.melt_fire_nd_propelplant_wall_torch = 'nethersdelight:propelplant_wall_torch';
+b.melt_fire_ff_necrolord_candelabra = 'fantasyfurniture:decorations/necrolord_candelabra';
+b.melt_fire_ff_royal_candelabra = 'fantasyfurniture:decorations/royal_candelabra';
+b.melt_fire_di_wayward_lantern = 'domesticationinnovation:wayward_lantern';
 
 // ############################## Validation ##############################
 

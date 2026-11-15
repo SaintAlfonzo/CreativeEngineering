@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-/** Fits a tamed horse (sneak-use takes the shoe back), or charges and throws (hearth_and_harvest.md 3.1). */
+/** Fits a tamed horse, or charges and throws (hearth_and_harvest.md 3.1). Sneak-click unshoeing is in HorseshoeEvents. */
 public class HorseshoeItem extends Item {
     private static final int MIN_THROW_TICKS = 5;
 
@@ -31,16 +31,9 @@ public class HorseshoeItem extends Item {
         if (player.level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        boolean shod = HorseshoeEvents.isShod(horse);
-        if (shod && player.isCrouching()) {
-            ItemStack shoe = HorseshoeEvents.takeShoe(horse);
-            if (!player.getInventory().add(shoe)) {
-                player.drop(shoe, false);
-            }
-            horse.level.playSound(null, horse, SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 1.0F, 0.8F);
-            return InteractionResult.SUCCESS;
-        }
-        if (shod) {
+        // Sneak-unshoeing is HorseshoeEvents.onEntityInteract: a vanilla horse opens its inventory on a sneak click
+        // before this method runs (TODO #69).
+        if (HorseshoeEvents.isShod(horse)) {
             return InteractionResult.PASS;
         }
         ItemStack one = stack.copy();

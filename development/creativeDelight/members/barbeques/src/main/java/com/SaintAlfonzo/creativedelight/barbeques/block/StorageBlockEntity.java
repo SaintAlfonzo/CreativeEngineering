@@ -55,6 +55,11 @@ public abstract class StorageBlockEntity extends BlockEntity implements BlockSlo
     /** The basin's skewering click; the tray has none. */
     public abstract boolean specialClick(Player player, int slot, InteractionHand hand);
 
+    /** A skewer tool for this storage: never stored, only used for {@link #specialClick} (the basin's stick). */
+    public boolean isTool(ItemStack stack) {
+        return false;
+    }
+
     /** 1.3.0 StorageTile#insert: same item only, all of the hand or (sneaking) one. */
     public boolean insert(Level level, int i, ItemStack hand, boolean all) {
         if (hand.isEmpty()) {

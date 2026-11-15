@@ -19,7 +19,7 @@ public final class HorseFeedEvents {
             return;
         }
         ItemStack stack = event.getItemStack();
-        if (!stack.is(HHItems.HOPS.get())) {
+        if (HHItems.HOPS == null || !stack.is(HHItems.HOPS.get())) {
             return;
         }
         boolean wants = horse.getHealth() < horse.getMaxHealth() || horse.isBaby() || !horse.isTamed() && horse.getTemper() < horse.getMaxTemper();

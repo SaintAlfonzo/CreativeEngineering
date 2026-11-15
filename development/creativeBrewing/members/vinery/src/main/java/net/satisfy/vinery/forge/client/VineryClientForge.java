@@ -145,6 +145,12 @@ public final class VineryClientForge {
         event.registerBlockEntityRenderer(EntityTypeRegistry.FLOWER_POT.get(), LegacyFlowerPotBlockEntityRenderer::new);
     }
 
+    /** Pack: hops on a lattice borrow the white jungle grape models (plan_bugfix_1114 3.1, VineryHopsModels). */
+    @SubscribeEvent
+    public static void onBakingCompleted(ModelEvent.BakingCompleted event) {
+        VineryHopsModels.alias(event.getModels());
+    }
+
     @SubscribeEvent
     public static void onAdditionalModels(ModelEvent.RegisterAdditional event) {
         ExtraModels.all().forEach(event::register);

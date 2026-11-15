@@ -132,6 +132,7 @@ holds only the textures. Hand-made JSONs for these ids in the jar are ignored (t
 ## 5. Tests
 
 Scratch SQ-CEN-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)); SQ-CMG and SQ-CEQ run on the same jars.
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CEN-02, -02b, -05s PASS (legacy config carry and merge, shrapnel kill); SQ-CMV-02, -03 PASS (Common alone, Armor Trims outside the tested range warns once).
 Common with only its optional mods (no Compat, Calendar or other Creative jar): SQ-CCO-01 to -16, CQ-CCO-01 to -03 (server from `tools/scratch_query/cc_only_srv.sh`, batches `r1107cco/`); scratch r1107cco 2026-11-07: SQ-CCO-01..07, -09..16 PASS, SQ-CCO-08 PARTIAL (Create Gravity inert on the Common-only set, TODO `creativecommon/publish #3`), CQ-CCO-01..03 not run ([scratch_run_2026-11-07.md](testing/scratch_run_2026-11-07.md) 4).
 In game: the 37 KubeJS blocks (dust piles, plate blocks, coil blocks) show textures; CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other
 client rows (creative_split.md 7.8).
@@ -429,4 +430,8 @@ Before the upload:
    pack's `unreleased.md` holds the chat bullet.
 4. Boot check of the 1.2.0 jar: queued as SQ-CC12-01 to -03 (Common alone, Common + Compat + Calendar, full pack); the 11-10 runs predate the chat
    mixins and the 11-13 dict.
+   **Run r1114 2026-11-14 ([scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8, phase 4; build/libs jar of 11-13 23:12 in scratch srv only): SQ-CC12-01, -02, -03
+   PASS: built, scratch server PASSED.** No mixin or class error from our jars, 22 of 22 startup files, 0 startup
+   ERROR, swap summary with 739 permanent aliases and 4 capability keys on the full pack, "every listed id resolved" on
+   stop; Common 1.2.0 also ran under every other r1114 phase without a Common error.
 5. Commit, then tag `creativecommon-1.2.0` on that commit.

@@ -722,6 +722,8 @@ Left for the owner: the food and brewing WTHIT providers in Common (soft, but CD
 require Compat with no code or script using it. Install note: the swap's jars all require `creativecommon`, so
 Common, Engineering 2.0.0, Compat, Calendar, CD and CB go into `mods/` together. Scratch SQ-DEP-01 to -03, CQ-DEP-01.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CFR-03, -04 PASS (7.9); SQ-CIF-02, -03, -04, -04b PASS (7.19); SQ-DEP-02 FAIL (7.15): without Creative Brewing the datapack load fails on the Hearth and Harvest member loot modifier `cherries_from_cherry_leaves` naming Vinery blocks (TODO `creativedelight/members #57`); with it overridden the boot is clean.
+
 ### 7.16 Dependency trace part 2: every jar (2026-11-04; fixes built, NOT installed, not booted, not tested)
 
 Owner request: finish the trace for the jars 7.15 left out (Engineering, Equipment, Magic, Worldgen with Baby Mobs and
@@ -874,6 +876,71 @@ worlds moved; registered ids, NBT keys, capability ids and the stepstool keybind
 - Guard: `tools/id_owner_lint.py` (0 flagged).
 
 Build: the nine jars `:build` OK, MassPlacerTest 30/30. Tests: scratch section SQ-IDS (-01 to -03, CQ-IDS-01 to -06).
+
+### 7.21 Optional-mod references in data (2026-11-14; built and installed 23:30, not booted, not tested)
+
+[plan_bugfix_1114.md](plan_bugfix_1114.md) 5.2. Lint `tools/optional_ref_audit.py` (plain lint, reads the sources and
+`mods/`, not the dumps, so not in generators.json; usage in its docstring). Per jar: every data and asset JSON of
+`src/main/resources`, the bundle members, CD's generated `packs/worldgen/` and the instance trees the jar copies in
+(build.gradle `scriptTrees` / `dataTrees`); ids mapped to their mod through the installed jars and has.js `_modOf`;
+"always there" = the jar's own ids and members plus the transitive mandatory deps of the installed mods.toml (a
+required bundle brings its members). Guards it accepts: a `packs/<mod>[+<mod>]` split (and what that mod requires),
+`forge:mod_loaded` conditions, `requires` keys, tag entries with `required: false`, Moonlight `from_mod`, More
+Mooblooms `optional`, a data folder named after a mod (`data/x/moonlight/`). Soft (not flagged): tag keys outside tag
+files, template pool `location`, `loot_table_id`, `random_name`, loot_table entry names. Java: a lookup in a registry
+that answers null with no null check nearby is flagged; other foreign id literals count as `java-soft`. Exit 1 = a
+registry, loot or tag flag is left. Explicit allowlist (7 rows, reasons in the tool): swap lists, `village_farms.json`,
+`soil_yield.json`, `wild_crops.json`, `loot_index.json`, the CD worldgen split source, two null-checked effect lookups.
+
+First pass 1258 references in 736 files. Triage:
+
+| Kind | Real, fixed | False positive (rule or allowlist) | Deferred |
+|---|---|---|---|
+| registry | 0 | 10 (tag keys 2, template pool locations 2, Ender's Additions registers `endersdelight:` ids 4, member closure 2) | 0 |
+| loot | 31 files | 1 (`loot_table_id`) | 0 |
+| recipe | 238 files | the rest (member closure: Brewin' needs Farmer's through CD) | 0 |
+| data, script | 0 | all (Moonlight soft fluids, swap lists, script data read by namespace-checking scripts) | 0 |
+| Java | 0 | 2 risky lookups, both null-checked | 107 soft references in 53 files |
+| asset | 0 | closure | 131 references in 124 files (missing model or texture only) |
+
+After the fixes: 0 registry / loot / tag / recipe / data flags (exit 0 on the jars).
+
+Fixed (guard used):
+1. Vintage member: the 22 `fd_<fruit>_jam_jar` loot tables moved to CD `packs/mods/fruitsdelight/` (the blocks
+   register only with Fruits Delight); `members/vintage/tools/gen_pack_jams.py` now writes them there.
+2. Display Delight dishes: `placed_vegetable_omelet` (Brewin'), `placed_suspicious_bacon_and_eggs` (Hostile Delight),
+   `placed_diced_potatoes_with_egg_and_tomato` and `placed_omelette` (More Delight) get `requires` in
+   `displaydelight_dishes.json` (no block without the mod, as the corn popsicle) and their loot tables move to
+   `packs/mods/<mod>/`. (`tools/gen_dd_dishes.py` still names the old `creativeengineering/` paths: stale, not run.)
+3. Hearth and Harvest `four_leaf_clover` block loot (drops Buzzier Bees' clover) to `packs/mods/buzzier_bees/`.
+4. Items from an optional mod inside a shared loot table: the entry becomes a `minecraft:loot_table` reference (same
+   weight and functions) to a one-item table `<ns>:mod_items/<mod>/<item>` in `packs/mods/<mod>/`; without the mod it is
+   an unknown-table validation warning and rolls nothing, instead of the whole table failing. H&H `chests/corn_maze`
+   and `corn_maze_center` (Corn Delight, Create Factory, Vinery), Rustic `blocks/pancakes` (Supplementaries' pancake;
+   own override in `rustic/tools/own_overrides.json`), CD fishing net `gameplay/fishing_net/junk` (Upgrade Aquatic).
+   New packs/mods folders: brewinandchewin, buzzier_bees, create_factory, fruitsdelight, hostiledelight, moredelight,
+   supplementaries, upgrade_aquatic.
+5. `forge:mod_loaded` conditions on 238 recipes: Engineering's 211 sawmill recipes (IE, plus Quark, Immersive
+   Weathering, Architects' Palette, Every Compat where named), Storage Delight's 23 Quark-slab recipes
+   (`repackedStorage/tools/gen_overlay.py` writes them), Rustic's 3 pancake recipes (own overrides), CB's
+   `lingerification_list` (IE).
+
+Deferred (TODO `creativesplit/deps #27`): the 53 `java-soft` files (texture and JEI ids, NBT keys, translators,
+defaulted-registry lookups: none can fail a load), the 124 asset files, and the pack's own files that name an
+optional Creative jar (`--pack`: `kubejs/data/vinery/worldgen/configured_feature/*grape_bush.json` x6 name Vinery
+blocks, yet c2_nobrew booted with them; `kubejs/data/salt/loot_tables/cauldron_evaporation/*` x3 and
+`miners_delight/.../potted_gossypium` name CD items). `_biome_rules.js` checks `Platform.isLoaded(ns)`, not
+`global.has.mod`, so a namespace in `_modOf` would read as absent (none in the rules today).
+
+Optional mods behind a guard (the SQ-DEP-09 drop-one set, from `--guarded`): brewinandchewin (CB), buzzier_bees,
+corn_delight, create_factory, fruitsdelight, hostiledelight, moredelight, supplementaries, upgrade_aquatic, vinery (CB),
+quark, immersiveengineering (recipe conditions). Already covered by SQ-CDW-01 and the compartment rows: myrtrees,
+nullscape, fungidelight, incubation, cookingforblockheads and the other worldgen pack mods.
+
+Built and installed 2026-11-14 23:28 to 23:30: `creativedelight-1.1.0.jar`, `creativeengineering-2.0.0.jar`,
+`creativebrewing-1.0.0.jar`, `repackedStorage-...-ce-19.2-02.jar`. No player-visible change in the full pack (every
+guarded mod is installed), so no changelog bullet. Tests: SQ-DEP-09, reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01,
+SQ-CDW-03b (scratch queue section "SQ-DEP optional-mod guards").
 
 ## 8. History
 

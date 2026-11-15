@@ -33,6 +33,12 @@ public class SaltLayerBlock extends SnowLayerBlock {
       if (!state.is(oldState.getBlock())) {
          world.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
       }
+      // Tell the block below a layer arrived, also for flag-2 placements (salt dust, /setblock) that send no block
+      // update: a worn Hearth and Harvest salt lick takes the layers back in (plan_bugfix_1114 3.7). Any other block
+      // below sees an ordinary neighbour update.
+      if (!world.isClientSide && state != oldState) {
+         world.neighborChanged(pos.below(), this, pos);
+      }
    }
 
    // Place from inside (food/seasoning #7): a layer grown under an entity that already stands in this block would

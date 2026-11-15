@@ -1,0 +1,45 @@
+# r1114 phase 3 BATCH-FAULT rerun on the kept c4b world (r1113c4b, seed 8675309), one boot.
+# Setup: srv config [worldgen.locate] searchTimeoutSeconds 600 (scratch srv only; the server's 120 s search deadline cut
+#   rerun_b's waitlog 600 short), set before the boot with qrun.py toml. Probes already in srv: zq, hh_mw.
+# Rows:
+#   SQ-HH-328r  one corn maze locate from spawn with the 600 s deadline (rerun_b: three 120 s timeouts).
+#   SQ-RD-10r   census of the savanna village c4_b located at 272 -1312 (c4_b's waitlog caught rerun_b's pending
+#               corn maze "Could not find", so capture SV ran before the village answer).
+#   SQ-NSM-08r  meta/waystone_ruins is a structure id, not a tag (c4_b used #); /cwglocate census needs a radius.
+pace 2
+
+## SQ-RD-10r | savanna village farms carry Rustic crops (village at 272 -1312 from c4_b)
+bootexpect \[creativedelight\] village farm crops added to \d+
+shell grep -m2 -E "village farm crops added" logs/latest.log | cut -c1-260
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center 272 -1312
+> chunky radius 96
+> chunky start
+waitlog Task finished 900
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'rusticdelight:(cotton|bell_pepper|coffee)' --box 176 -1408 368 -1216 2>&1 | tail -25
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'minecraft:(wheat|carrots|potatoes|beetroots)' --box 176 -1408 368 -1216 2>&1 | head -3
+look some savanna farm crops are Rustic cotton (counts in the shell output)
+
+## SQ-NSM-08r | meta structure locate (structure id) and /cwglocate census
+> locate structure creativeworldgen:meta/waystone_ruins
+waitlog (?:The nearest creativeworldgen:meta/waystone_ruins is at|Could not find|There is no structure) 650
+> cwglocate census 32
+waitlog \[cwglocate\] census done 900
+sleep 10
+expect The nearest creativeworldgen:meta/waystone_ruins is at
+look waystone ruin meta locates; census lists the groups
+
+## SQ-HH-328r | corn maze locate from spawn with a 600 s search deadline
+> locate structure hearthandharvest:corn_maze
+waitlog (?:The nearest hearthandharvest:corn_maze is at|Could not find) 650
+capture M The nearest hearthandharvest:corn_maze is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+sleep 120
+> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
+> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+sleep 5
+expect The nearest hearthandharvest:corn_maze is at
+look corn_crop above 100, oak_fence 16, a chest with table hearthandharvest:chests/corn_maze_center

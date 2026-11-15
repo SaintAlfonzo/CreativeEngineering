@@ -3,7 +3,8 @@
 // Change against upstream 1.2.4.1 (meltBlock only, feature_writeup/salt.md 6 S8): upstream placed water only in
 // ultra-warm dimensions and air everywhere else (the dimension check was inverted). Now melted ice leaves water
 // outside ultra-warm dimensions (SaltMeltingPlaceWater still switches it off); snow, and anything melted in an
-// ultra-warm dimension (the Nether), leaves air.
+// ultra-warm dimension (the Nether), leaves air. Since 2026-11-14 tryMeltFromBlock is off: Creative Common's melting
+// system owns block melting (plan_bugfix_1114 3.8).
 package io.github.mortuusars.salt;
 
 import io.github.mortuusars.salt.configuration.Configuration;
@@ -28,10 +29,18 @@ import net.minecraft.world.phys.Vec3;
 public class Melting {
     public static final DispenseItemBehavior SALT_DISPENSER_BEHAVIOR = new SaltItemDispenseBehavior();
 
+    /**
+     * Creative Delight: with Creative Common the click is Common's melting system (plan_bugfix_1114 3.8): its targets
+     * (Melting.isTarget) and one stage per click (Melting.meltStep: packed and blue ice step down a tier, the rest melts),
+     * no roll. Called by reflection, so this repack does not need Common to compile. Without Common, upstream's rule.
+     */
     public static boolean tryMeltFromItem(BlockState targetState, BlockPos targetPos, Level level) {
-        if (!Configuration.MELTING_ITEM_ENABLED.get() || !targetState.is(Salt.BlockTags.MELTABLES)) return false;
+        if (!Configuration.MELTING_ITEM_ENABLED.get()) return false;
+        CommonMelting common = CommonMelting.get();
+        if (common != null ? !common.isTarget(targetState) : !targetState.is(Salt.BlockTags.MELTABLES)) return false;
 
         if (level instanceof ServerLevel serverLevel) {
+            if (common != null) return common.meltStep(serverLevel, targetPos);
             meltBlock(targetPos, serverLevel);
         } else {
             Vec3 center = Vec3.atCenterOf(targetPos);
@@ -47,13 +56,12 @@ public class Melting {
         return true;
     }
 
+    /**
+     * Creative Delight: switched off (plan_bugfix_1114 3.8). Salt blocks melting nearby ice and snow is Creative Common's
+     * melting system ([melting] in creativecommon-common.toml), so this never fires and nothing melts twice. The
+     * SaltBlockMeltingEnabled / Chance keys stay in the config, unused.
+     */
     public static boolean tryMeltFromBlock(BlockPos pos, ServerLevel level) {
-        if (Configuration.MELTING_BY_BLOCK_ENABLED.get()
-                && level.getBlockState(pos).is(Salt.BlockTags.MELTABLES)
-                && level.random.nextDouble() < Configuration.MELTING_BLOCK_CHANCE.get()) {
-            meltBlock(pos, level);
-            return true;
-        }
         return false;
     }
 
@@ -85,6 +93,55 @@ public class Melting {
                     center.y + random.nextGaussian() * 0.45F,
                     center.z + random.nextGaussian() * 0.45F,
                     1, 0.0, 0.0, 0.0, 0.0);
+        }
+    }
+
+    /** Creative Common's com.SaintAlfonzo.creativecommon.melting.Melting, looked up once; null without Common. */
+    private static final class CommonMelting {
+        private static volatile boolean looked;
+        private static CommonMelting instance;
+        private final java.lang.invoke.MethodHandle isTarget;
+        private final java.lang.invoke.MethodHandle meltStep;
+
+        private CommonMelting(java.lang.invoke.MethodHandle isTarget, java.lang.invoke.MethodHandle meltStep) {
+            this.isTarget = isTarget;
+            this.meltStep = meltStep;
+        }
+
+        static CommonMelting get() {
+            if (!looked) {
+                synchronized (CommonMelting.class) {
+                    if (!looked) {
+                        try {
+                            Class<?> c = Class.forName("com.SaintAlfonzo.creativecommon.melting.Melting");
+                            java.lang.invoke.MethodHandles.Lookup l = java.lang.invoke.MethodHandles.publicLookup();
+                            instance = new CommonMelting(
+                                    l.findStatic(c, "isTarget", java.lang.invoke.MethodType.methodType(boolean.class, BlockState.class)),
+                                    l.findStatic(c, "meltStep", java.lang.invoke.MethodType.methodType(boolean.class, ServerLevel.class, BlockPos.class)));
+                        } catch (ReflectiveOperationException | LinkageError e) {
+                            instance = null;
+                        }
+                        looked = true;
+                    }
+                }
+            }
+            return instance;
+        }
+
+        boolean isTarget(BlockState state) {
+            try {
+                return (boolean) isTarget.invokeExact(state);
+            } catch (Throwable t) {
+                throw new IllegalStateException("Creative Common Melting.isTarget failed", t);
+            }
+        }
+
+        boolean meltStep(ServerLevel level, BlockPos pos) {
+            try {
+                return (boolean) meltStep.invokeExact(level, pos);
+            } catch (Throwable t) {
+                throw new IllegalStateException("Creative Common Melting.meltStep failed", t);
+            }
         }
     }
 

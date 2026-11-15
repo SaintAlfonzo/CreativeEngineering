@@ -5,16 +5,15 @@
 	var i = global.item
 	var C = global.compost
 	var ON = { when: () => global.CD.qol('compost') && global.CD.on('hearthandharvest') }
+	var hops = global.has.mod('vinery')   // hops only with Vinery (plan_bugfix_1114 3.1)
 
 	C.values('crates', [
-		[i.hops_bag,         1.0],
 		[i.manure_bag,       1.0],
 		[i.corn_husk_bundle, 1.0],
-	], ON)
+	].concat(hops ? [[i.hops_bag, 1.0]] : []), ON)
 	C.values('other', [
 		[i.manure,          0.85],
-		[i.hops,            0.3],
 		[i.corn_husk,       0.3],
 		[i.sunflower_seeds, 0.3],
-	], ON)
+	].concat(hops ? [[i.hops, 0.3]] : []), ON)
 })()

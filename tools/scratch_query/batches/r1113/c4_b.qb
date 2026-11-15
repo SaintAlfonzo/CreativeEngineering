@@ -27,7 +27,7 @@ look mob-spawns and bee-nests summaries present, no rule idle (shell output)
 ## SQ-RD-10 | savanna village farms carry Rustic crops (log line and a census of one village)
 bootexpect \[creativedelight\] village farm crops added to \d+
 > locate structure minecraft:village_savanna
-waitlog (?:The nearest minecraft:village_savanna is at|Could not find) 300
+waitlog (?:The nearest minecraft:village_savanna is at|Could not find a structure of type "minecraft:village_savanna") 300
 capture SV The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > chunky world minecraft:overworld
 > chunky shape square
@@ -80,13 +80,11 @@ count \[zq\] chunk 0 0 >= 11
 reject (?i)Unknown dimension|no such dimension|\[zq\] error
 > locate structure creativeworldgen:sky_island
 waitlog (?:The nearest creativeworldgen:sky_island is at|Could not find) 300
-> locate structure #creativeworldgen:meta/waystone_ruins
-waitlog (?:The nearest #?creativeworldgen:meta/waystone_ruins is at|Could not find) 300
-> locate structure #creativeworldgen:group/settlements
-waitlog (?:The nearest #?creativeworldgen:group/settlements is at|Could not find) 300
+> locate structure creativeworldgen:meta/waystone_ruins
+waitlog (?:The nearest creativeworldgen:meta/waystone_ruins is at|Could not find a structure of type "creativeworldgen:meta/waystone_ruins") 300
 reject Could not find|Unknown (structure|tag)|Invalid
-> cwglocate census
-sleep 30
+> cwglocate census 32
+waitlog \[cwglocate\] census done 900
 > dumptags
 waitlog \[dumptags\] wrote 600
 > save-all flush

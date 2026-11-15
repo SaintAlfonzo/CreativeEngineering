@@ -128,6 +128,8 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   any recipe on `#forge:storage_blocks/gold` (IE's storage crusher recipe) also takes it; beacon bases go by the block
   tag `minecraft:beacon_base_blocks`, which this doesn't touch. Minecraft Comes Alive itself puts the rose gold ingot
   in `forge:ingots/gold` and the dust in `forge:dusts/gold` (MCA 7.5.20 jar). Check with RM-11.
+  Decided (2026-11-07, narrowed 2026-11-14 in `recipes/metal #7`): rose gold counts as gold in every recipe, golden
+  armor, tools and food included, except the ones that make raw gold forms (`metal/rose_gold_interchange.js`).
 - **F6. Dust → ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
   but uneven.
 - **F7.** PARTLY FIXED 2026-10-19: the two `EVENT:` lines are gone; the rest stays ([plan_1.0.9.md](plan_1.0.9.md)). **Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);

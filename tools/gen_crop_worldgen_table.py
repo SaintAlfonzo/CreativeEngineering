@@ -243,7 +243,7 @@ CROP_BLOCKS = {
     'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
     'ends_delight:chorus_succulent': 'Chorus Succulent',
     'hearthandharvest:raspberry_bush': 'Raspberry',
-    'hearthandharvest:wild_hops': 'Wild Hops',
+    'hearthandharvest:wild_hops': 'Wild Hops', 'hearthandharvest:hops_vine': 'Wild Hops',
     'vinery:red_grape_bush': 'Grapes: red', 'vinery:white_grape_bush': 'Grapes: white',
     'vinery:savanna_grape_bush_red': 'Grapes: savanna red', 'vinery:savanna_grape_bush_white': 'Grapes: savanna white',
     'vinery:taiga_grape_bush_red': 'Grapes: taiga red', 'vinery:taiga_grape_bush_white': 'Grapes: taiga white',
@@ -413,6 +413,10 @@ def crops_in_value(v, placed, configured, seen, configured_ref=False):
             out.add('Chorus Fruit')
         if v.get('type') == 'ends_delight:chorus_succulent':   # End's Delight's Java feature (count config)
             out.add('Chorus Succulent')
+        if v.get('type') == 'hearthandharvest:trunk_vine':   # H&H port's Java feature: hangs config.block on a tree trunk
+            b = (v.get('config') or {}).get('block')
+            if b in CROP_BLOCKS:
+                out.add(CROP_BLOCKS[b])
         if 'placement' in v and isinstance(v.get('feature'), str):   # inline placed feature: feature = configured id
             out |= crops_in(v['feature'], placed, configured, 'c', seen)
         for k, x in v.items():

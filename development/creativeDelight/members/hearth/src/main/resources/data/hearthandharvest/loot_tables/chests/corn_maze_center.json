@@ -8,13 +8,13 @@
       },
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "corn_delight:cornbread",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/corn_delight/cornbread",
           "weight": 10
         },
         {
-          "type": "minecraft:item",
-          "name": "corn_delight:popcorn",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/corn_delight/popcorn",
           "weight": 10
         },
         {
@@ -37,8 +37,8 @@
           "weight": 6
         },
         {
-          "type": "minecraft:item",
-          "name": "corn_delight:corn_soup",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/corn_delight/corn_soup",
           "weight": 6
         },
         {
@@ -52,8 +52,8 @@
           "weight": 7
         },
         {
-          "type": "minecraft:item",
-          "name": "create_factory:caramel_apple",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/create_factory/caramel_apple",
           "weight": 8
         },
         {
@@ -103,13 +103,13 @@
           "weight": 10
         },
         {
-          "type": "minecraft:item",
-          "name": "vinery:apple_cider",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/vinery/apple_cider",
           "weight": 12
         },
         {
-          "type": "minecraft:item",
-          "name": "corn_delight:corn_crate",
+          "type": "minecraft:loot_table",
+          "name": "hearthandharvest:mod_items/corn_delight/corn_crate",
           "weight": 10
         },
         {

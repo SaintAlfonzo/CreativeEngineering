@@ -1,0 +1,13 @@
+# r1114 phase 4 boot 2: SQ-CC12-02 = SQ-CC-03 on creativecommon-1.2.0: Common + Compat + Calendar (+ Serene Seasons,
+# Calendar's dependency; cpp_chain_srv.sh compat), empty kubejs/, no config/ (Common writes its toml), then /reload.
+# Server: cpp_chain_srv.sh OUT cc12b compat. Stop half (clean stop) checked by hand.
+pace 2
+
+## SQ-CC12-02 | Common + Compat + Calendar: boots, reloads, tag scripts skip absent mods
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+> reload
+sleep 25
+kjsreject (?i)error
+shell ls mods; test -f config/creativecommon-common.toml && echo "config written"; grep -ciE "error" logs/kubejs/server.log; grep -iE "plantabletags|smokable_tags" logs/kubejs/server.log | grep -iE "error|exception" | head -5; grep -ciE "\[ERROR\]" logs/kubejs/startup.log; true
+look config written; 0 KubeJS errors (server and startup), none from plantabletags.js or smokable_tags.js

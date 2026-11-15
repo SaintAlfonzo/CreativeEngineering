@@ -34,7 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import net.satisfy.vinery.core.item.GrapeBushSeedItem;
+import net.satisfy.vinery.core.registry.GrapeTypeRegistry;
 import net.satisfy.vinery.core.wine.GrapeType;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -77,6 +77,7 @@ public class LegacyLatticeStemBlock extends StemBlock {
          return super.use(state, world, pos, player, hand, hit);
       } else {
          ItemStack stack = player.getItemInHand(hand);
+         state = restoreHops(world, pos, state);
          int age = (Integer)state.getValue(AGE);
          if (age > 0 && stack.getItem() == Items.SHEARS) {
             stack.hurtAndBreak(1, player, player2 -> player2.broadcastBreakEvent(player.getUsedItemHand()));
@@ -89,8 +90,10 @@ public class LegacyLatticeStemBlock extends StemBlock {
             world.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_BREAK, SoundSource.AMBIENT, 1.0F, 1.0F);
             return InteractionResult.SUCCESS;
          } else {
-            if (stack.getItem() instanceof GrapeBushSeedItem seed && seed.getType().isLattice() && age == 0) {
-               world.setBlock(pos, this.withAge(state, 1, seed.getType()), 3);
+            // Pack (plan_bugfix_1114 3.1): any lattice seed, not only GrapeBushSeedItem, so Hearth and Harvest hops plant here
+            GrapeType seedType = GrapeTypeRegistry.forSeed(stack.getItem());
+            if (seedType != null && age == 0) {
+               world.setBlock(pos, this.withAge(state, 1, seedType), 3);
                if (!player.isCreative()) {
                   stack.shrink(1);
                }
@@ -112,8 +115,24 @@ public class LegacyLatticeStemBlock extends StemBlock {
       }
    }
 
+   /**
+    * Pack: a lattice planted with Hearth and Harvest hops before 2026-11-14 was its own block ({@code hearthandharvest:hops});
+    * the swap list loads it as this lattice with its age and facing but grape=none. Age above 0 with no grape only arises that
+    * way, so it becomes hops again here (on a random tick or a use).
+    */
+   private static BlockState restoreHops(Level world, BlockPos pos, BlockState state) {
+      if ((Integer)state.getValue(AGE) > 0 && state.getValue(GRAPE) == GrapeTypeRegistry.NONE && GrapeTypeRegistry.HOPS.getFruit() != Items.AIR) {
+         state = state.setValue(GRAPE, GrapeTypeRegistry.HOPS);
+         if (!world.isClientSide) {
+            world.setBlock(pos, state, 3);
+         }
+      }
+      return state;
+   }
+
    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
       int i;
+      state = restoreHops(world, pos, state);
       // Port: fire Forge's crop-grow event so the pack's crop seasons apply (crops.md 2.12.1)
       if (!this.isMature(state) && (Integer)state.getValue(AGE) > 0 && world.getRawBrightness(pos, 0) >= 9 && (i = (Integer)state.getValue(AGE)) < 4
               && ForgeHooks.onCropsGrowPre(world, pos, state, true)) {

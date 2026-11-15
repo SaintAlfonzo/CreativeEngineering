@@ -1,0 +1,50 @@
+# r1114 phase 5: rerun on the R3 boot of world pwgr (after pwgr3.qb). SQ-PWG-43 B9 stayed at generated=1 for 20 reads
+# in pwgr1 (pwg8 on -08: generated=2 for about 47 ticks, then 0): 60 reads tell a slow servo from a stuck one.
+# Run: qrun.py run OUT tools/scratch_query/batches/r1113pwg/pwgr3r.qb perf/runs/r1114/pwgr3r
+pace 1
+
+## SQ-PWG-43 | rerun at X 1340 Z 1700, B9 read for 60 x 5 ticks (pwgr1: generated=1 for all 20 reads): servo part only at 40 V: 0.5 V step moves about 4 RPM then idle current 0.63 A; fix B9
+> forceload add 1330 1690 1355 1710
+sleep 4
+> zpwg3 place 1343 -60 1700 powergrid:servo facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 src 1340 -60 1700 40
+> zpwg3 place 1340 -60 1703 powergrid:current_gauge
+> zpwg3 w 1340 -60 1700 0 1340 -60 1703 0
+> zpwg3 w 1340 -60 1703 1 1343 -60 1700 0
+> zpwg3 w 1343 -60 1700 1 1340 -60 1700 1
+> zpwg3 src 1346 -60 1703 0
+> zpwg3 w 1346 -60 1703 0 1343 -60 1700 2
+> zpwg3 w 1346 -60 1703 1 1343 -60 1700 1
+sleep 2
+> zpwg3 src 1346 -60 1703 0.5
+pace 0
+repeat 12
+> zpwg4 kin 1343 -60 1700
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1340 -60 1703
+> zpwg3 be 1343 -60 1700
+# fix B9: unpowered servo given a 1 V target (72 degrees), then powered again
+> zpwg3 src 1340 -60 1700 0
+sleep 1
+> zpwg3 src 1346 -60 1703 1
+sleep 2
+> zpwg4 kin 1343 -60 1700
+> zpwg3 src 1340 -60 1700 40
+pace 0
+repeat 60
+> zpwg4 kin 1343 -60 1700
+sleep 0.25
+end
+pace 1
+> zpwg3 be 1340 -60 1703
+> zpwg3 be 1343 -60 1700
+expect \[zpwg4\] .*generated=-?[3-5](\.\d+)? overstressed
+expect \[zpwg4\] .*generated=0 overstressed
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look 0.5 V step: generated about +-4 within 10 ticks, 0 after about 35 ticks, then gauge about 0.63 A (idle coil); servo thermal not overheated; B9: unpowered read generated=0, powered again moves within 10 ticks for about 65 ticks, then idle current
+
+# from r1113/pwg5.qb

@@ -60,6 +60,13 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
 
     private int movingTicks;
 
+    // Port fix B9 (extension, 2026-11-14): a move commits only after one full lazyTick averaging window in which every
+    // tick had coil power for 1 RPM or more and the coil sat at the idle resistance (no move running). Upstream fixed
+    // the speed from whatever window came first, so a window that was only partly powered gave a slow move.
+    // windowClean starts false: the first window after load has an unknown length.
+    private boolean windowClean = false;
+    private boolean fullWindowPowered = false;
+
     public ServoBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         setLazyTickRate(AVERAGING_TICKS - 1);
@@ -90,6 +97,8 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
 
         maxSpeed = Math.min(avgSpeed / AVERAGING_TICKS, MAX_SPEED);
         avgSpeed = 0;
+        fullWindowPowered = windowClean && maxSpeed >= 1;
+        windowClean = true;
         if(maxSpeed == 0 && generatedSpeed != 0) {
             generatedSpeed = 0;
             updateGeneratedRotation();
@@ -101,7 +110,10 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
     public void tick() {
         if(!level.isClientSide || isVirtual()) {
             applyPower(coil);
-            avgSpeed += (float) calculateSpeed(coil.power(), torque());
+            float tickSpeed = (float) calculateSpeed(coil.power(), torque());
+            avgSpeed += tickSpeed;
+            if(tickSpeed < 1 || movingTicks > 0)
+                windowClean = false;
             // 5V is 360 degrees clock-wise. Servo has a [-5V, 5V] range
             int ctrlTarget = Math.round(Mth.clamp((float) control.potentialDifference() / 5.0f * 360.0f, -360, 360));
             if(prevTarget == ctrlTarget) {
@@ -124,6 +136,9 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
                     // Port fix B9: back to the idle coil resistance once the move ends (upstream kept the moving
                     // resistance until the block entity was reloaded; read() picks idle when stopped).
                     coil.setResistance(resistance("idle"));
+                    // B9 extension: the next move waits for a full window at the idle resistance.
+                    fullWindowPowered = false;
+                    windowClean = false;
                     updateGeneratedRotation();
                     notifyUpdate();
                 }
@@ -132,7 +147,7 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
             // Port fix B9: with too little coil power for 1 RPM the speed rounds to 0; upstream still committed the
             // target (angle marked as reached without turning, and an overflowing tick count from rotation / 0).
             // Wait for power instead.
-            if(rotation != 0 && (int) Mth.clamp(rotation / 0.05f / 6, -maxSpeed, maxSpeed) != 0) {
+            if(rotation != 0 && fullWindowPowered && (int) Mth.clamp(rotation / 0.05f / 6, -maxSpeed, maxSpeed) != 0) {
                 generatedSpeed = (int) Mth.clamp(rotation / 0.05f / 6, -maxSpeed, maxSpeed);
                 sequenceContext = new SequencedGearshiftBlockEntity.SequenceContext(SequencerInstructions.TURN_ANGLE, rotation / generatedSpeed);
                 updateGeneratedRotation();

@@ -6,7 +6,16 @@
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- only netherite lunchbox is added, remove apple pie versions
+- only netherite lunchbox is added currently, remove apple pie versions
+    - add diamond?
+
+- leaf and snow layer slowdown based on height with granularity, configurable threshold where walkthrough turns off, default 1 stage below full
+
+- ensure all nether crops grow on nether soil
+- new adzuki rich soil, peanut soil?
+
+- magma blocks keep snow off of blocks above them, melt quickly
+
 
 ## Power grid notes, dont move
 

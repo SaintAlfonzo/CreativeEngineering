@@ -1,0 +1,7 @@
+{
+  "_comment": "Hearth and Harvest blocks removed 2026-11-14 (plan_bugfix_1114 3.1, 3.2). Hops on a lattice were their own block, hearthandharvest:hops (the hops ITEM keeps that id, so only the block registry remaps): it loads as Vinery's grapevine_lattice with its age and facing; the lattice turns its grape back to hops on the first random tick or use (LegacyLatticeStemBlock.restoreHops). H&H tilled end stone loads as Ender Crop's. Never prune.",
+  "replaces": {
+    "vinery:grapevine_lattice": ["hearthandharvest:hops"],
+    "endercrop:tilled_end_stone": ["hearthandharvest:tilled_end_stone"]
+  }
+}

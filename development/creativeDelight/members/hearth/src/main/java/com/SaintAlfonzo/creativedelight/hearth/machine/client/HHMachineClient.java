@@ -15,6 +15,9 @@ public final class HHMachineClient {
     public static void init(IEventBus bus) {
         bus.addListener(HHMachineClient::renderers);
         bus.addListener(HHMachineClient::models);
+        // the basin's valid-item list (3.10) follows the client's recipes
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.addListener(
+                (net.minecraftforge.client.event.RecipesUpdatedEvent event) -> com.SaintAlfonzo.creativedelight.hearth.machine.StompingInputs.clear());
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {

@@ -143,6 +143,8 @@ public class CreativeCommon
         // shield.ShieldCategory and Creative Brewing's Magic Resistance) + the optional "seen sources" discovery log.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.damage.DamageTagLoader.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.damage.DamageTagLogger.class);
+        // Melting: salt, fire and lava melt ice and snow (melting/, feature_writeup/melting.md)
+        MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.melting.Melting.class);
 
         // World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
         // sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the
@@ -165,6 +167,8 @@ public class CreativeCommon
 
 			// [mod_names]: mod display names in the pack's style, before JEI/WTHIT cache them
 			com.SaintAlfonzo.creativecommon.util.ModDisplayNames.apply();
+			// Before any chunk loads: sections count their random tickers on load
+			event.enqueueWork(com.SaintAlfonzo.creativecommon.melting.Melting::initRandomTicks);
 
 			// The sawmill classes pre-loaded here for SawmillProcessMixin: Creative Engineering (2026-11-04).
 

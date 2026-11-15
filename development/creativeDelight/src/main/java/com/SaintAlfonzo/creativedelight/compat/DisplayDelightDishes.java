@@ -65,6 +65,9 @@ public final class DisplayDelightDishes {
             JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
             for (JsonElement e : root.getAsJsonArray("dishes")) {
                 JsonObject o = e.getAsJsonObject();
+                // "requires": the dish's food only exists with that mod (corn popsicle: Corn Delight); no block then,
+                // and its loot table sits in packs/mods/<mod>/ (plan_bugfix_1114 5.1, TODO creativedelight/members #58)
+                if (o.has("requires") && !ModList.get().isLoaded(o.get("requires").getAsString())) continue;
                 out.add(new Dish(o.get("block").getAsString(), new ResourceLocation(o.get("item").getAsString())));
             }
         } catch (Exception e) {

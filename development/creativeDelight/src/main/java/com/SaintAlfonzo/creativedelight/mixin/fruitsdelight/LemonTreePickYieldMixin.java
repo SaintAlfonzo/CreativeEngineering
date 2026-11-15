@@ -2,8 +2,12 @@ package com.SaintAlfonzo.creativedelight.mixin.fruitsdelight;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.SaintAlfonzo.creativedelight.crops.SoilYieldPicks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +21,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
  * ({@code DoubleFruitBushBlock.use}, SRG {@code m_6227_}) drops {@code new ItemStack(item, 1 + random.nextInt(2))}
  * itself, so a pick gave 1 to 2. This sets that count to 2 to 5 for the lemon tree only; the other double fruit bushes
  * keep theirs. Keep the range in step with the loot table's set_count.
+ *
+ * <p>Soil yield (plan_crop_yields_wave2.md 5.2): the same pick's {@code popResource} ({@code m_49840_}) stack goes to
+ * {@link SoilYieldPicks#withSoilExtra}; the pick has already moved {@code pos} to the lower half, so the soil is the
+ * block under the tree. Base 3.5 (soil_yield.json), only the lemon tree has a row.
  */
 @Pseudo
 @Mixin(targets = "dev.xkmc.fruitsdelight.content.block.DoubleFruitBushBlock", remap = false)
@@ -36,5 +44,13 @@ public abstract class LemonTreePickYieldMixin {
 		Block self = (Block) (Object) this;
 		if (!creativedelight$LEMON_TREE.equals(ForgeRegistries.BLOCKS.getKey(self))) return count;
 		return creativedelight$MIN + ThreadLocalRandom.current().nextInt(creativedelight$MAX - creativedelight$MIN + 1);
+	}
+
+	@ModifyArg(method = "m_6227_", remap = false, require = 1,
+			at = @At(value = "INVOKE", ordinal = 0, remap = false,
+					target = "m_49840_(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/item/ItemStack;)V"),
+			index = 2)
+	private ItemStack creativedelight$lemonSoilExtra(Level level, BlockPos pos, ItemStack stack) {
+		return SoilYieldPicks.withSoilExtra(level, pos, stack);
 	}
 }

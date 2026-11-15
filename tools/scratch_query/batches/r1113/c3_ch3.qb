@@ -1,5 +1,5 @@
 # r1113 chunk 3, boot CH3: SQ-CDFO-03 second half, Incubation without Alex's Mobs and Untitled Duck Mod. Group B.
-# Server: EXTRA="incubation-*.jar" bash tools/scratch_query/cpp_chain_srv.sh OUT_CH3 c3ch3 chain
+# Server: EXTRA="incubation-*.jar blueprint-*.jar" bash tools/scratch_query/cpp_chain_srv.sh OUT_CH3 c3ch3 chain   (r1114: Incubation requires Blueprint)
 #   (if the boot names a missing dependency of Incubation, add its glob to EXTRA and rebuild)
 # Before boot: nothing beyond the script (zq is there). Config empty.
 pace 1

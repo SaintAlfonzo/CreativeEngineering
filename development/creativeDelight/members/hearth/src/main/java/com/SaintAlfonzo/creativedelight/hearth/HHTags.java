@@ -12,7 +12,6 @@ public final class HHTags {
     public static final TagKey<Item> RAW_MEAT = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("creativedelight", "food_type/raw/meat"));
     public static final TagKey<Item> CORN = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "crops/corn"));
     public static final TagKey<Item> FARMERS_HATS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(HearthAndHarvestMod.MODID, "farmers_hats"));
-    public static final TagKey<Block> GROWS_ON_TILLED_END_STONE = block("grows_on_tilled_end_stone");
     public static final TagKey<EntityType<?>> CAN_BE_BUTCHERED = entity("can_be_butchered");
     public static final TagKey<EntityType<?>> DOES_NOT_POOP = entity("does_not_poop");
     public static final TagKey<EntityType<?>> PINNED_IMMUNE = entity("pinned_immune");

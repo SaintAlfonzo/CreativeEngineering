@@ -7,12 +7,13 @@
 #   grep -c "_common\"" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json   (the two crop lines no longer list them)
 # Probes: zq only (prep_srv copies it).
 # Compare each count with c3_b1's row of the same name without the c suffix.
+# r1114: Mini Cantaloupe counts read delightful:cantaloupe (the patch block); cantaloupe_plant was a batch fault (c3_b1 verdict)
 pace 1
 
 ## SQ-C3B2-setup | gamerules (not a test row)
 > gamerule doDaylightCycle false
 > gamerule doMobSpawning false
-shell ls kubejs/data/minecraft/worldgen/placed_feature/ | grep -c glow_lichen; grep -c "hamimelon_common\|mini_cantaloupe_common" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json
+shell ls kubejs/data/minecraft/worldgen/placed_feature/ | grep -c glow_lichen; grep -c "hamimelon_common\|mini_cantaloupe_common" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json; true   # r1114: grep -c exits 1 on the expected 0
 look both counts 0 (lichen files moved out, _common features out of the two rules)
 
 ## SQ-FCK-07c | control: glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
@@ -34,8 +35,8 @@ capture DS minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 sleep 150
 > zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} fruitsdelight:hamimelon
 waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
-> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} delightful:cantaloupe_plant
-waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} delightful:cantaloupe
+waitlog \[zq\] count delightful:cantaloupe: \d+ 900
 > forceload remove {DS1-112} {DS3-112} {DS1+111} {DS3+111}
 look control desert counts; c3_b1 SQ-FCK-08 should be about 2.5x these
 
@@ -47,7 +48,7 @@ capture BD minecraft:badlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 sleep 150
 > zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} fruitsdelight:hamimelon
 waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
-> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} delightful:cantaloupe_plant
-waitlog \[zq\] count delightful:cantaloupe_plant: \d+ 900
+> zq count {BD1-112} 40 {BD3-112} {BD1+111} 160 {BD3+111} delightful:cantaloupe
+waitlog \[zq\] count delightful:cantaloupe: \d+ 900
 > forceload remove {BD1-112} {BD3-112} {BD1+111} {BD3+111}
 look control badlands counts

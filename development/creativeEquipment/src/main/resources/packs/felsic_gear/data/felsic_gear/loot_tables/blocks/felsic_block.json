@@ -1,5 +1,5 @@
 {
-  "__comment": "Overrides Felsic Gear's felsic_block (which ships NO loot table) so it behaves as an END ORE. Silk touch -> the block itself; otherwise -> 2-4 felsic_scrap, fortune-scaled. NOTE: FelsicBlockBlock hardcodes canHarvestBlock() to require a harvest-level-4 (netherite / Felsic) pickaxe, so nothing below that tier will ever trigger this table.",
+  "__comment": "Overrides Felsic Gear's felsic_block (which ships NO loot table) so it behaves as an END ORE. Silk touch -> the block itself; otherwise -> 1-2 felsic_scrap (owner value 2026-11-14), fortune-scaled (ore_drops). NOTE: FelsicBlockBlock hardcodes canHarvestBlock() to require a harvest-level-4 (netherite / Felsic) pickaxe, so nothing below that tier will ever trigger this table.",
   "type": "minecraft:block",
   "pools": [
     {

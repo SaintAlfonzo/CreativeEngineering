@@ -1,0 +1,17 @@
+# r1114 phase 4 boot 1: SQ-CC12-01 = SQ-CCO-01 on creativecommon-1.2.0 (build/libs 11-13 23:12).
+# Server: cc_only_srv.sh OUT cc12a full spawn-monsters=true (prep_srv.sh swaps the newer Common build in; check srv/mods).
+# The stop half ("[swaps] load report: every listed id resolved") is read from the log after the stop, by hand.
+pace 2
+
+## SQ-CC12-01 | Common 1.2.0 with its optional mods only: no mixin or class error, swap summary with capability keys
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing
+bootreject (?i)(ChatOpen|SwapReport|SwapCapabilityKeys).*(error|exception|fail)
+bootreject (?i)(m_188230_|m_41712_|m_91326_|m_90893_|m_90889_).*(error|fail|not found|could not)
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+bootexpect \[compat\] Immersive Portals overwrites conform to target visibility
+bootexpect \[swaps\] \d+ list file\(s\): .* \d+ capability key\(s\)
+kjsreject (?i)error
+shell ls mods | grep -i creative; grep -m1 -E "\[swaps\] [0-9]+ list file" logs/latest.log | cut -c1-260; grep -c "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -cE "\[ERROR\]" logs/kubejs/startup.log; true
+shell grep -iE "mixin.*(client|Minecraft|Screen|ChatScreen)" logs/latest.log | grep -iE "creativecommon" | grep -viE "skipp|not loaded|dist" | head -5; true
+look mods: creativecommon-1.2.0 only; swap summary with capability keys; Common startup files loaded, 0 startup errors; no client mixin applied on the server

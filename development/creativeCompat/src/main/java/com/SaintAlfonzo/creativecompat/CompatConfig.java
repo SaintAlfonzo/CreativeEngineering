@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import com.SaintAlfonzo.creativecompat.surface.PassTier;
 import com.SaintAlfonzo.creativecompat.surface.SurfaceTier;
 
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -459,6 +460,7 @@ public final class CompatConfig {
         public final Camouflage camouflage;
         public final Sinking sinking;
         public final Wthit wthit;
+        public final Passthrough passthrough;
 
         private Surface(ForgeConfigSpec.Builder b) {
             b.comment(
@@ -483,6 +485,7 @@ public final class CompatConfig {
             camouflage = new Camouflage(b);
             sinking = new Sinking(b);
             wthit = new Wthit(b);
+            passthrough = new Passthrough(b);
 
             b.pop(); // surface
         }
@@ -544,6 +547,111 @@ public final class CompatConfig {
                 ).define("copyCamo", true);
 
                 b.pop(); // sinking
+            }
+        }
+
+        /**
+         * Pass-through blocks ({@code surface.PassThrough}, feature_writeup/plan_passthrough.md): how fast you walk and
+         * fall through blocks you stand in (crops, grass, ropes, vines, cobwebs, leaf piles). One table per
+         * {@link PassTier}, generated from the enum, so a new tier shows up here with no edits to this class. The
+         * server sends its values to players ({@code surface.PassSync}); a client uses them while connected.
+         */
+        public static final class Passthrough {
+            public final ForgeConfigSpec.BooleanValue enabled;
+            public final ForgeConfigSpec.IntValue arrowLifeTicks;
+            public final ForgeConfigSpec.IntValue arrowLongLifeCap;
+            public final Map<PassTier, Tier> tiers = new EnumMap<>(PassTier.class);
+
+            private Passthrough(ForgeConfigSpec.Builder b) {
+                b.comment(
+                        "Walking and falling through blocks you stand in rather than on: crops, grass, ropes, vines,",
+                        "cobwebs, barbed wire, berry bushes, leaf piles. Tier contents are the",
+                        "creativecompat:passthrough/<tier> block tags (kubejs blocktags.js); a block slows you while your",
+                        "box touches its outline. Several at once: the lowest walk and the lowest fall win. Soil speed",
+                        "(the surface tiers) multiplies with the walk value. Spectators, flying players, elytra gliding",
+                        "and swimming are never slowed. The server's values are sent to players on join and on save."
+                ).push("passthrough");
+
+                enabled = b.comment("Master switch. false = every pass-through block behaves as before this system (its",
+                                "own vanilla or mod slowdown).")
+                        .define("enabled", true);
+                arrowLifeTicks = b.comment(
+                        "Ticks a pickable arrow stuck in a block or a web lasts before it despawns (vanilla 1200 = 1",
+                        "minute). Unpickable arrows (skeletons, Infinity, multishot) keep vanilla's minute.")
+                        .defineInRange("arrowLifeTicks", 12000, 1200, 1728000);
+                arrowLongLifeCap = b.comment(
+                        "Long-life arrows per chunk. When one more sticks, the oldest drops to vanilla's minute (and",
+                        "despawns at once if it is already past it).")
+                        .defineInRange("arrowLongLifeCap", 128, 0, 4096);
+
+                for (PassTier t : PassTier.values()) {
+                    tiers.put(t, new Tier(b, t));
+                }
+
+                b.pop(); // passthrough
+            }
+
+            /** One {@code [surface.passthrough.<tier>]} table. */
+            public static final class Tier {
+                public final ForgeConfigSpec.DoubleValue walk;
+                public final ForgeConfigSpec.DoubleValue fall;
+                public final ForgeConfigSpec.EnumValue<PassTier.Growth> growth;
+                public final ForgeConfigSpec.EnumValue<PassTier.Neighbours> neighbours;
+                public final ForgeConfigSpec.IntValue denseFrom;
+                public final ForgeConfigSpec.DoubleValue denseWalk;
+                public final ForgeConfigSpec.DoubleValue denseFall;
+                public final ForgeConfigSpec.BooleanValue denseResetsFall;
+                public final ForgeConfigSpec.EnumValue<PassTier.Surround> surrounded;
+                public final ForgeConfigSpec.IntValue minLayers;
+                public final ForgeConfigSpec.BooleanValue walkOnlyMoving;
+                public final ForgeConfigSpec.EnumValue<PassTier.ItemRule> items;
+                public final ForgeConfigSpec.DoubleValue itemStickChance;
+                public final ForgeConfigSpec.BooleanValue projectiles;
+                public final ForgeConfigSpec.BooleanValue depthStriderPasses;
+
+                private Tier(ForgeConfigSpec.Builder b, PassTier t) {
+                    PassTier.Values d = t.defaults();
+                    b.comment(t.description()).push(t.key());
+                    walk = b.comment("Horizontal speed multiplier while inside (1.0 = normal).")
+                            .defineInRange("walk", d.walk(), 0.05, 1.5);
+                    fall = b.comment("Multiplier on downward speed each tick, and on fall distance per block passed.")
+                            .defineInRange("fall", d.fall(), 0.0, 1.0);
+                    growth = b.comment("ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.")
+                            .defineEnum("growth", d.growth());
+                    neighbours = b.comment("Density count: NONE, RING (8 around, same layer) or CUBE (26 around, 3x3x3). Same-tier blocks count.")
+                            .defineEnum("neighbours", d.neighbours());
+                    denseFrom = b.comment("Neighbour count at which the dense values apply.")
+                            .defineInRange("denseFrom", d.denseFrom(), 1, 26);
+                    denseWalk = b.comment("Walk multiplier once dense.")
+                            .defineInRange("denseWalk", d.denseWalk(), 0.05, 1.5);
+                    denseFall = b.comment("Fall multiplier once dense.")
+                            .defineInRange("denseFall", d.denseFall(), 0.0, 1.0);
+                    denseResetsFall = b.comment("Fall damage resets every tick while dense.")
+                            .define("denseResetsFall", d.denseResetsFall());
+                    surrounded = b.comment("What a full neighbour count does: NONE, or WEB (falling stops; hang, climb and sink at web speed).")
+                            .defineEnum("surrounded", d.surrounded());
+                    minLayers = b.comment("Blocks with layers (leaf piles, bamboo leaves): fewer layers than this are ignored. 9 = never.")
+                            .defineInRange("minLayers", d.minLayers(), 1, 9);
+                    walkOnlyMoving = b.comment("Walk slowdown only while moving horizontally through the block (vines).")
+                            .define("walkOnlyMoving", d.walkOnlyMoving());
+                    items = b.comment("Dropped items and experience orbs: NONE, or STICK (they stop inside the block).")
+                            .defineEnum("items", d.items());
+                    itemStickChance = b.comment("With items = STICK: chance per tick that an item inside stops where it is.")
+                            .defineInRange("itemStickChance", d.itemStickChance(), 0.0, 1.0);
+                    projectiles = b.comment("Projectiles are slowed in every direction (modded bullets never are).")
+                            .define("projectiles", d.projectiles());
+                    depthStriderPasses = b.comment("Depth Strider boots walk through unslowed.")
+                            .define("depthStriderPasses", d.depthStriderPasses());
+                    b.pop();
+                }
+
+                /** The live values as one snapshot. */
+                public PassTier.Values values() {
+                    return new PassTier.Values(walk.get(), fall.get(), growth.get(), neighbours.get(), denseFrom.get(),
+                            denseWalk.get(), denseFall.get(), denseResetsFall.get(), surrounded.get(), minLayers.get(),
+                            walkOnlyMoving.get(), items.get(), itemStickChance.get(), projectiles.get(),
+                            depthStriderPasses.get());
+                }
             }
         }
 

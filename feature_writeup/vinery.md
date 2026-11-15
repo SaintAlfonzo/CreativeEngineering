@@ -257,6 +257,22 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
   burns as usual. `LavaWalkerEffect.applyEffectTick`. Built in Creative Brewing source, jar not rebuilt yet; test
   CQ-RP-27.
+- **Hops on the lattice** (port, 2026-11-14, [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.1; [hearth_and_harvest.md](hearth_and_harvest.md) 4.8):
+  `GrapeTypeRegistry.HOPS` (`hops`, lattice, white), registered statically so the `grape` state property holds it; fruit
+  and seeds are `hearthandharvest:hops` looked up by id (air without Hearth and Harvest: inert), no juice
+  (`hasJuice` false). `LegacyLatticeStemBlock.use` plants any lattice seed through `GrapeTypeRegistry.forSeed` (the
+  `GrapeBushSeedItem` path unchanged), and `restoreHops` turns an age > 0, grape none lattice (an old H&H hops block after
+  the swap) back to hops on a random tick or use. Pot: `addGrape` and `takeJuice` skip a type with no juice (hops are no
+  `GrapeItem` anyway). JEI: Grape Stomping already skipped types with no juice; Grape Planting shows hops on the lattice
+  and as a vine on logs. Foxes only eat from grape bushes, so hops on a lattice are never eaten (default kept, no code).
+  `/vinery dump grapes` lists hops with `bottle=minecraft:air`. Render: `forge/client/VineryHopsModels` on
+  `ModelEvent.BakingCompleted` points every Vinery block state with grape (or pot type) hops at the baked model of the
+  same state with `jungle_white`; the lattice blockstate (1.3.10, variants on age, facing, grape: every grape type at every
+  age) has no hops variants, so the loader logs them as missing once. No Vinery file is copied or edited. Lattice tooltip
+  "Plant jungle grape seeds or hops on it" (`kubejs/assets/creativebrewing/kubejs/vinery/tooltips.js`). Tests SQ-HOP-07 to
+  -11, CQ-HOP-01.
+- **Stomping Basin mirror** (2026-11-14, plan_bugfix_1114 3.10): Hearth and Harvest's basin presses every pot juice (3 grapes and
+  a wine bottle; 2x2 basin), `kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js`. SQ-HH-266b.
 - **Textures:** `vinery:item/mash` is the generic fallback texture for incomplete sequenced-assembly items ([transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js)).
 
 ## 4. Limits and decisions
@@ -335,3 +351,4 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.
+- 2026-11-14: hops grape type on the lattice, model alias, pot juice guard (section 3); Creative Brewing built and installed; not run.

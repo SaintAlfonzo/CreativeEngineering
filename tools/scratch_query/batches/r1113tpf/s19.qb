@@ -1,0 +1,18 @@
+# r1113tpf SQ-TPF-19 (MC-224729, P3b): on a fresh group B level, force a far chunk, let the neighbours generate as
+# proto chunks, then the runner stops the server WITHOUT save-all (stop_wait.sh) and reads the region files:
+#   python3 tools/scratch_query/tpf_chunkstatus.py OUT/srv/<level>/region 177 177 197 197
+# base (all off): proto=0; fix (@s1): proto above 0. Server: tpf_srv.sh OUT LEVEL B PF [@s1] -- spawn-animals=true spawn-npcs=true
+pace 2
+
+## SQ-TPF-19 | MC-224729 partially generated chunks are saved at shutdown (fixed) or lost (bug)
+> forceload add 3000 3000
+sleep 40
+> forceload query 3000 3000
+expect (?i)is marked for force loading
+
+# r1114: with sleep 40 the base saved 416 proto chunks (dependency chunks unload and save during the wait). Short
+# variant: stop 8 s after the ticket, while generation is still running; read with
+#   tpf_chunkstatus.py OUT/srv/<level>/region 365 365 385 385
+## SQ-TPF-19s8 | MC-224729 short wait: stop 8 s after forcing chunk 375,375
+> forceload add 6000 6000
+sleep 8

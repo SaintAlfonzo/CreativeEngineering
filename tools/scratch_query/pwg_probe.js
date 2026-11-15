@@ -1,6 +1,6 @@
 // Scratch-only probe for the Power Grid port rows (SQ-PWG, scratch_queue.md). Copy into a scratch server's
 // kubejs/server_scripts as zz_pwg_probe.js, never into the pack.
-//   /zpwg ns <namespace>     registry entries in that namespace for blocks, items, entity types, block entity types,
+//   /zpwg ns <namespace> [all]   (all: every id, not the first 20; r1114) registry entries in that namespace for blocks, items, entity types, block entity types,
 //                            menus, recipe types, recipe serializers, sound events, fluids (one line each, then total)
 //   /zpwg mods <text>        loaded mod ids containing text, with version
 // Output: "[zpwg] ..." lines in logs/latest.log, then "[zpwg] done".
@@ -20,7 +20,7 @@ ServerEvents.commandRegistry(e => {
                     let ids = []
                     regs[name].getKeys().forEach(k => { if (String(k.getNamespace()) == a[1]) ids.push(String(k)) })
                     total += ids.length
-                    out('ns ' + a[1] + ' ' + name + ': ' + ids.length + (ids.length ? ' (' + ids.slice(0, 20).join(' ') + ')' : ''))
+                    out('ns ' + a[1] + ' ' + name + ': ' + ids.length + (ids.length ? ' (' + ids.slice(0, a[2] == 'all' ? ids.length : 20).join(' ') + ')' : ''))
                 }
                 out('ns ' + a[1] + ' total: ' + total)
             } else if (a[0] == 'mods') {

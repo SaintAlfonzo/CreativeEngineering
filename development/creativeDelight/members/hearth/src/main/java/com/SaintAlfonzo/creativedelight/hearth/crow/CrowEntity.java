@@ -26,6 +26,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowMobGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
@@ -94,6 +95,8 @@ public class CrowEntity extends ShoulderRidingEntity implements FlyingAnimal {
         goalSelector.addGoal(1, new CrowFleeGoal(this));
         goalSelector.addGoal(1, new CrowAvoidRepellingBlocksGoal(this));
         goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        // Without it two crows in love never met (TODO #67); priority 2 as on vanilla farm animals.
+        goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         goalSelector.addGoal(3, new CrowSeekShinyGoal(this));
         goalSelector.addGoal(3, new CrowRetrieveItemsGoal(this, 1.2D));
         goalSelector.addGoal(3, new CrowEatDroppedFoodGoal(this));
@@ -202,7 +205,7 @@ public class CrowEntity extends ShoulderRidingEntity implements FlyingAnimal {
         active.start(tickCount);
     }
 
-    /** Wild hand feeding is {@link CrowEvents#onEntityInteract}; this keeps upstream's sit toggle and cookie poisoning. */
+    /** Wild hand feeding is {@link CrowEvents#onEntityInteract}; this keeps upstream's sit toggle and cookie poisoning, and owns crow food on a tame crow ({@link #feed}). */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -216,7 +219,10 @@ public class CrowEntity extends ShoulderRidingEntity implements FlyingAnimal {
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        if (!isTame() || !isOwnedBy(player) || isFood(stack)) {
+        if (isFood(stack)) {
+            return feed(player, stack);
+        }
+        if (!isTame() || !isOwnedBy(player)) {
             return super.mobInteract(player, hand);
         }
         if (hand != InteractionHand.MAIN_HAND) {
@@ -229,6 +235,45 @@ public class CrowEntity extends ShoulderRidingEntity implements FlyingAnimal {
             getNavigation().stop();
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /**
+     * Crow food (#creativedelight:crow_food) on a crow, after CrowEvents (plan_bugfix_1114 3.5, TODO #66, #67). Wild: hand
+     * feeding and its taming roll are CrowEvents' and only with handFeeding on; here a wild crow ignores the food (no
+     * eat, no love). Tame and owned: a hurt crow eats it to heal; otherwise breeding food starts love (corn and corn seeds
+     * while cornBreeding is on, any crow food with it off); a baby eats it to grow. Anyone else: ignored.
+     */
+    private InteractionResult feed(Player player, ItemStack stack) {
+        if (!isTame() || !isOwnedBy(player)) {
+            return InteractionResult.PASS;
+        }
+        boolean breedFood = !CrowConfig.CORN_BREEDING.get() || isCorn(stack);
+        boolean heal = getHealth() < getMaxHealth();
+        boolean love = !heal && breedFood && getAge() == 0 && canFallInLove();
+        boolean grow = !heal && isBaby();
+        if (!heal && !love && !grow) {
+            return InteractionResult.PASS;
+        }
+        if (!level.isClientSide) {
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+            }
+            if (heal) {
+                heal(2.0F);
+            } else if (love) {
+                setInLove(player);
+            } else {
+                ageUp(getSpeedUpSecondsWhenFeeding(-getAge()), true);
+            }
+            if (!isSilent()) {
+                playSound(HHSounds.CROW_EAT.get(), 1.0F, 1.0F + (getRandom().nextFloat() - getRandom().nextFloat()) * 0.2F);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    public static boolean isCorn(ItemStack stack) {
+        return stack.is(CrowTags.CORN) || stack.is(CrowTags.CORN_SEEDS);
     }
 
     @Override

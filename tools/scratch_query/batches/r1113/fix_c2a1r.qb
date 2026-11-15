@@ -1,0 +1,68 @@
+# r1114 rerun of fix_c2a1's batch faults ROLL-11, BBQ2-05 (verdicts: perf/runs/r1114/verdicts/fix_c2a1.md). Same world
+# as fix_c2a1 (scratch dir .../scratchpad/fixc2a1, level fixc2a1, probes zc2/zp/zact/zq still in srv/kubejs); a fresh
+# prep_srv.sh OUT fixc2a1 A spawn-animals=true with the fix_c2a1 probe copies works too.
+# Fix: the +4 food on every eat was peaceful-difficulty hunger regen (+1 food per 10 ticks while the player needs food,
+#   Player.aiStep), accrued over the 2 s (pace 1: hold, eat) between "zp hunger" and "zp eat". naturalRegeneration
+#   false stops it; the bread control stays to prove the offset is gone. ROLL-11's golden roll now eats from 0 (from 4
+#   any nutrition >= 16 capped at 20).
+pace 1
+
+## SQ-C2-00 | setup: gamerules, bot (not a test row)
+> forceload add 296 290 360 380
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule naturalRegeneration false
+> time set noon
+> weather clear
+> pbot spawn c2b 300 -60 296 minecraft:overworld survival
+sleep 3
+> clear c2b
+> zp inv c2b
+waitlog \[zp\] done 20
+reject \[zc2\] error|\[zp\] error
+
+## SQ-ROLL-11 | golden roll +20, slice +10 hunger; not eaten at full hunger; control eat (bread 5) shows no offset
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b minecraft:bread 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll_slice 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll 1
+> zp eat c2b
+> zp hunger c2b 20
+> pbot hold c2b roll_delight:golden_roll 1
+> zq useitem c2b
+waitlog useitem c2b 20
+expect \[zp\] eat c2b 1 minecraft:bread: .*food 5,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll_slice: .*food 10,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll: .*food 20,
+expect \[zq\] useitem c2b FAIL
+look bread reads food 5 (if 9 again, the offset is not peaceful regen: find it before judging); Nourishment 2400t on slice and roll is the comfort_nourishment golden rule, not a fault
+> effect clear c2b
+> clear c2b
+
+## SQ-BBQ2-05 | kebab wrap, kebab sandwich, bibimbap hunger, no skewer effects (effects cleared before each eat)
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_wrap 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_sandwich 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:bibimbap 1
+> zp eat c2b
+waitlog \[zp\] eat c2b 1 barbequesdelight:bibimbap 20
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_wrap: .*food 12,
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_sandwich: .*food 18,
+expect \[zp\] eat c2b 1 barbequesdelight:bibimbap: .*food 18,
+look effects: only an ambient Raspberry Pie diet effect (800t, e.g. Speed after enough foods) may show; any other effect the food gave is a FAIL
+> effect clear c2b
+> clear c2b

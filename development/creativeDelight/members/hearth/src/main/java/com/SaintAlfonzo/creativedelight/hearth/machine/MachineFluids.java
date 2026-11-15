@@ -81,6 +81,12 @@ public final class MachineFluids {
         return bottleToFluid.get(item);
     }
 
+    /** Anything {@link #useOnTank} may fill or empty: a fluid-handler item, a glass bottle, a water or a fluid bottle. */
+    public static boolean isFluidContainer(ItemStack stack) {
+        return stack.is(Items.GLASS_BOTTLE) || isWaterBottle(stack) || fluidForBottle(stack.getItem()) != null
+                || stack.getCapability(net.minecraftforge.common.capabilities.ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+    }
+
     public static boolean isWaterBottle(ItemStack stack) {
         return stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
     }

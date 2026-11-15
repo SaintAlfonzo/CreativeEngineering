@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.powergrid.collections.ModdedBlockEntities;
 import org.patryk3211.powergrid.electricity.base.DirectionalElectricBlock;
+import org.patryk3211.powergrid.electricity.base.ElectricBlock;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -46,6 +47,26 @@ public abstract class AbstractConnectorBlock extends DirectionalElectricBlock im
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return defaultBlockState().setValue(FACING, ctx.getClickedFace().getOpposite());
+    }
+
+    // Port B37 (deliberate deviation, upstream floats): the connector needs the block it is attached to (FACING points
+    // at it). A sturdy face centre, as upstream's own PotatoBatteryBlock checks, or any Power Grid electric block.
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        var facing = state.getValue(FACING);
+        var supportPos = pos.relative(facing);
+        if(world.getBlockState(supportPos).getBlock() instanceof ElectricBlock)
+            return true;
+        return canSupportCenter(world, supportPos, facing.getOpposite());
+    }
+
+    // Port B37: removing the support breaks the connector (dropped as a block); onRemove detaches and drops its wires
+    // as on a hand break.
+    @Override
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+        return direction == state.getValue(FACING) && !canSurvive(state, world, pos)
+                ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override

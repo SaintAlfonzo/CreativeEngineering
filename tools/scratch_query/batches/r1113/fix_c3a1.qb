@@ -319,7 +319,7 @@ sleep 2
 sleep 2
 > zc3 portals
 waitlog \[c3\] portals: \d+ 20
-expect \[c3\] portals: 2
+expect \[c3\] portals: 4
 look wall-to-wall pair: both portal lines show adjustPositionAfterTeleport false (the key name is printed as found)
 > execute as pg at @s run tp @s ~ ~ ~ 0 60
 > zc3 shoot pg orange

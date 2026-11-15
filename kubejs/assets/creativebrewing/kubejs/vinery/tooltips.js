@@ -21,7 +21,8 @@ ItemEvents.tooltip(e => {
 		// Growing
 		[i.grapevine_stem, ['Place two high and plant grape seeds on the top one; jungle grapes need a lattice', col.norm],
 			['Shears give the seed back; breaking a planted stem loses it', col.norm]],
-		[i.grapevine_lattice, ['Plant jungle grape seeds on it', col.norm],
+		// Hops plant on it too (plan_bugfix_1114 3.1; the hops grape type in the port)
+		[i.grapevine_lattice, [global.has.mod('hearthandharvest') ? 'Plant jungle grape seeds or hops on it' : 'Plant jungle grape seeds on it', col.norm],
 			['Shears give the seed back; breaking a planted lattice loses it', col.norm]],
 		// Ground grape bushes need a full solid block below (vinery.md 2.6), so farmland refuses them (farming/crops #2, Q13)
 		[[i.grape_seeds_red, i.grape_seeds_white, i.grape_seeds_red_savanna, i.grape_seeds_white_savanna,

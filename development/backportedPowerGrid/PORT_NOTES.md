@@ -1101,7 +1101,8 @@ order).
   SQ-PWG-90 `check`.
 - **B34** (fixed) crafting a string light cord with no dye (to clear a pattern) gave a cord with an empty `Pattern`
   tag, which shows no pattern but no longer stacks with plain cords. The port returns a plain cord. SQ-PWG-90 `check`.
-- **B35** (open, owner note 2026-11-13) a wire block does not drop when the block under it breaks, and cannot be broken by hand. Check upstream behaviour, then fix; TODO `largecontent/mod-additions #78`.
+- **B35** (fixed as B37 in `-18`, section 25) a wire connector does not drop when the block it hangs on breaks, and cannot
+  be broken by hand. Upstream is the same; TODO `largecontent/mod-additions #78`.
 
 ### 24.2 Rows
 
@@ -1147,3 +1148,29 @@ references.
 - Integration points found during the port and waiting for stage 5: `#forge:cardboard` (D13, four recipes), the via
   component's `create:copper_nugget` (removed by the pack; SQ-PWG-67), the PG zinc sheet next to the pack's (A3), the
   copper plate the copper plating deployer takes (`#forge:plates/copper` = the IE plate in the pack).
+
+## 25. P11 fixes: jar `-18` (2026-11-14, plan_bugfix_1114.md 8)
+
+Gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-18.jar` (`port_phase=10`). Upstream compared from
+source (`DecompiledMods/powergrid-0.6.2-source/`, tag v0.6.2).
+
+- **B36** (deliberate deviation, upstream drops one) the four ceiling tile attachment loot tables
+  (`ceiling_tile_{lamp,connector,junction,solar}`) have one pool, rolls 1, with two entries, so a break gave either the
+  tile or the attachment. Upstream datagen (`ModdedBlocks.java:618-623`, `:996-1001`) is the same. The port splits each
+  into two pools (tile; attachment), each rolls 1 with `survives_explosion`. B32's bulb (`CeilingTileLampBlock.getDrops`
+  appends to `super`) is unchanged. SQ-PWG-91.
+- **B37** (deliberate deviation, upstream floats; was B35) the wire connector and heavy connector had no `canSurvive` /
+  `updateShape`, so a connector whose support was removed stayed floating. `AbstractConnectorBlock` now survives while
+  the block it faces (`FACING`) has a sturdy face centre (upstream's own `PotatoBatteryBlock` check) or is any Power
+  Grid electric block; when the support goes, `updateShape` returns air, the connector drops itself through its loot
+  table and `onRemove` detaches and drops its wires as on a hand break. Placement on a face that cannot support it is
+  now refused (vanilla `BlockItem` checks `canSurvive`). Pickaxe-only is kept (stone). Not applied to the cord junction.
+  SQ-PWG-97.
+- **B38** (extends B9) the servo committed a move at the first lazyTick window averaging 1 RPM or more, often a window
+  only partly powered (or one holding the end of the previous move at the moving resistance), so the move ran slower
+  than the coil power allows. The move now commits only after one full averaging window in which every tick gave 1 RPM
+  or more at the idle resistance; the first window after load and the window in which a move ends never count. The
+  idle reset after a move is kept. SQ-PWG-43 against SQ-PWG-08.
+- Not port changes (8.3): #82 acid takes rotten flesh through the pack script `kubejs/server_scripts/other/power_grid.js`
+  (the jar keeps upstream's `mixing/acid`); #83, #84, #87 match upstream; #86 is Create's display board.
+

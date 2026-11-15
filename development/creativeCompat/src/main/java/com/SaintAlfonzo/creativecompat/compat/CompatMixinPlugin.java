@@ -79,17 +79,19 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             // BlockRunner surfaces (surface/)
             Map.entry("BlockRunnerBlockStateMixin", BLOCKRUNNER),
             Map.entry("BlockRunnerSpeedConfigMixin", BLOCKRUNNER),
+            // pass-through field of view: BlockRunner's own FOV recompute steps aside for surface.PassFov
+            Map.entry("BlockRunnerFovMixin", BLOCKRUNNER),
             // Camouflage order on Framed Blocks and Copycats+ (surface/LastInserted*)
             Map.entry("FramedDoubleCamoOrderMixin", List.of("framedblocks")),
             Map.entry("CopycatMaterialOrderMixin", List.of("copycats")),
-            // Portal Gun: lift after a teleport only on floor exits (portalgun/PortalGunExitLift, plan_portal_gun.md 3)
-            Map.entry("PortalGunExitLiftMixin", List.of("portalgun")),
             // Portal changes (plan_portal_changes.md): gun portal despawn, opaque gun portals, mirror glass, mirror
             // limits and portal fog
             Map.entry("PortalGunHeartbeatMixin", List.of("portalgun")),
             Map.entry("PortalGunPortalInvoker", List.of("portalgun")),
             Map.entry("PortalGunRendererOpaqueMixin", List.of("portalgun")),
             Map.entry("IPMirrorGlassMixin", IMM_PTL),
+            // Lift after any IP teleport only on floor exits (plan_portal_gun.md 3, plan_bugfix_1114.md 4.1)
+            Map.entry("IPExitLiftMixin", IMM_PTL),
             Map.entry("IPPortalRenderingAccessor", IMM_PTL),
             Map.entry("IPPortalRenderLimitsMixin", IMM_PTL),
             Map.entry("IPPortalFogMixin", IMM_PTL),
