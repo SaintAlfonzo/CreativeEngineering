@@ -7,6 +7,7 @@ import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +30,7 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -38,6 +40,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class SaltEvents {
     public static final TagKey<EntityType<?>> SALT_LICKERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("creativedelight", "salt_lickers"));
     private static final ResourceLocation SALT_ITEM_ID = new ResourceLocation("salt", "salt");
+    private static final ResourceLocation SALT_DUST_ID = new ResourceLocation("vintagedelight", "salt_dust");
 
     private SaltEvents() {
     }
@@ -104,12 +107,23 @@ public final class SaltEvents {
         }
     }
 
-    /** Salt in a dispenser facing a worn, unwaxed stage restores it; any other target falls through to a normal dispense. */
+    /**
+     * Salt (and, since plan_bugfix_1114 3.7, Vintage Delight salt dust) in a dispenser facing a worn, unwaxed stage
+     * restores it; any other target falls through to a normal dispense.
+     */
     public static void registerDispenser() {
-        Item salt = ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID);
+        registerDispenser(ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID));
+        registerDispenser(ForgeRegistries.ITEMS.getValue(SALT_DUST_ID));
+    }
+
+    private static void registerDispenser(Item salt) {
         if (salt == null || salt == Items.AIR) {
             return;
         }
+        // Wrap the behaviour already there (Salt's melting dispense for salt:salt), so a target that is not a lick
+        // still gets it instead of a plain drop.
+        java.util.Map<Item, DispenseItemBehavior> registry = ObfuscationReflectionHelper.getPrivateValue(DispenserBlock.class, null, "f_52661_");
+        DispenseItemBehavior previous = registry == null ? null : registry.get(salt);
         DispenserBlock.registerBehavior(salt, new DefaultDispenseItemBehavior() {
             @Override
             protected ItemStack execute(BlockSource source, ItemStack stack) {
@@ -124,7 +138,7 @@ public final class SaltEvents {
                     stack.shrink(1);
                     return stack;
                 }
-                return super.execute(source, stack);
+                return previous != null ? previous.dispense(source, stack) : super.execute(source, stack);
             }
         });
     }

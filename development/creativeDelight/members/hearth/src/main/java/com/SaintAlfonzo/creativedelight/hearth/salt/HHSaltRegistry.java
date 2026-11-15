@@ -34,13 +34,14 @@ public final class HHSaltRegistry {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
 
-    public static final RegistryObject<Block> LIGHTLY_LICKED = stage("lightly_licked_salt_block");
-    public static final RegistryObject<Block> WELL_LICKED = stage("well_licked_salt_block");
-    public static final RegistryObject<Block> HEAVILY_LICKED = stage("heavily_licked_salt_block");
-    public static final RegistryObject<Block> WAXED_SALT = stage("waxed_salt_block");
-    public static final RegistryObject<Block> WAXED_LIGHTLY_LICKED = stage("waxed_lightly_licked_salt_block");
-    public static final RegistryObject<Block> WAXED_WELL_LICKED = stage("waxed_well_licked_salt_block");
-    public static final RegistryObject<Block> WAXED_HEAVILY_LICKED = stage("waxed_heavily_licked_salt_block");
+    // Heights in px (plan_bugfix_1114 3.7): layered like snow, waxed stages as high as their unwaxed twin.
+    public static final RegistryObject<Block> LIGHTLY_LICKED = stage("lightly_licked_salt_block", 12);
+    public static final RegistryObject<Block> WELL_LICKED = stage("well_licked_salt_block", 8);
+    public static final RegistryObject<Block> HEAVILY_LICKED = stage("heavily_licked_salt_block", 4);
+    public static final RegistryObject<Block> WAXED_SALT = stage("waxed_salt_block", 16);
+    public static final RegistryObject<Block> WAXED_LIGHTLY_LICKED = stage("waxed_lightly_licked_salt_block", 12);
+    public static final RegistryObject<Block> WAXED_WELL_LICKED = stage("waxed_well_licked_salt_block", 8);
+    public static final RegistryObject<Block> WAXED_HEAVILY_LICKED = stage("waxed_heavily_licked_salt_block", 4);
 
     public static final RegistryObject<SoundEvent> LICK = SOUNDS.register("entities.lick",
             () -> new SoundEvent(new ResourceLocation(MODID, "entities.lick")));
@@ -51,8 +52,8 @@ public final class HHSaltRegistry {
     private HHSaltRegistry() {
     }
 
-    private static RegistryObject<Block> stage(String id) {
-        RegistryObject<Block> block = BLOCKS.register(id, () -> new LickableSaltBlock(Properties.copy(Blocks.GRAVEL).strength(2.0F, 3.0F).sound(SoundType.TUFF)));
+    private static RegistryObject<Block> stage(String id, int height) {
+        RegistryObject<Block> block = BLOCKS.register(id, () -> new LickableSaltBlock(Properties.copy(Blocks.GRAVEL).strength(2.0F, 3.0F).sound(SoundType.TUFF), height));
         ITEMS.register(id, () -> new BlockItem(block.get(), ModItems.basicItem()));
         return block;
     }
@@ -84,7 +85,8 @@ public final class HHSaltRegistry {
         ITEMS.register(bus);
         SOUNDS.register(bus);
         POI_TYPES.register(bus);
-        bus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(SaltEvents::registerDispenser));
+        // Load complete, after every mod's common setup: the lick restore wraps whatever Salt (or another mod) registered
+        bus.addListener((net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent event) -> event.enqueueWork(SaltEvents::registerDispenser));
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onRightClickBlock);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onEntityJoin);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onTooltip);

@@ -1,0 +1,27 @@
+# r1113 chunk 4, boot A third rerun (c4_ar3), judged in perf/runs/r1114/verdicts/c4_ar2.md. Same world as c4_ar2
+# (level r1114c4a, zc4 probe unchanged, no /reload). One row: SQ-FDI-02b, is minecraft:pumpkin_pie edible at all here.
+# c4_ar2 found pumpkin_pie the one food of 20 that neither book counted (has=false in both, no blacklist entry).
+# The world is peaceful: naturalRegeneration goes off for the row (peaceful regen adds 1 food per 10 ticks) and back on.
+pace 2
+
+## SQ-FDI-02b | pumpkin pie: does eating it feed the player, and does either book record it (bread as control)
+> gamerule naturalRegeneration false
+> pbot spawn fdq 40600.5 -60 40012.5 minecraft:overworld survival
+sleep 3
+> zc4 sol fdq minecraft:pumpkin_pie
+waitlog \[zc4\] done 20
+> zc4 hunger fdq 4
+> zc4 eat fdq minecraft:pumpkin_pie
+waitlog \[zc4\] done 20
+> zc4 sol fdq minecraft:pumpkin_pie
+waitlog \[zc4\] done 20
+> zc4 hunger fdq 4
+> zc4 eat fdq minecraft:bread
+waitlog \[zc4\] done 20
+> zc4 sol fdq minecraft:bread
+waitlog \[zc4\] done 20
+> pbot remove fdq
+> gamerule naturalRegeneration true
+expect \[zc4\] eat fdq minecraft:bread food=9
+expect \[zc4\] sol fdq .*carrotHas=true .*applepieHas=true
+look pumpkin pie eat line: food=12 (fed, +8) with the second pumpkin sol line still carrotHas=false applepieHas=false = both books skip an edible pumpkin pie (real, find the Finish listener that drops it); food=4 = the pack's pumpkin_pie is not edible by finishUsingItem (not a food here: FDI-02 batch fault, pick another 20th food)

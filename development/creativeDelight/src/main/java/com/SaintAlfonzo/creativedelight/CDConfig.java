@@ -436,46 +436,78 @@ public final class CDConfig {
      * feature_writeup/crop_yields.md.
      */
     public static final class SoilYield {
-        /** Crop keys of soil_yield.js's CROPS table, in the same order. */
+        /** Crop keys of soil_yield.js's crops() and soil_yield.json, overworld then nether. */
         public static final String[] CROPS = {
                 "wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
                 "bell_peppers", "coffee", "cotton", "tobacco", "flax", "hemp", "corn", "cave_carrots",
                 "broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
-                "peanuts", "adzuki"
+                "peanuts", "adzuki",
+                // nether (wave 2): Rich Soul Soil and Fertile Soul Soil (Nulch)
+                "nether_wart", "ghost_pepper", "propelplant", "crimson_fungus_colony", "warped_fungus_colony"
+        };
+        /** Bush keys (wave 2): picked bushes, own pick and break. */
+        public static final String[] BUSHES = {
+                "strawberry", "blueberry", "cranberry", "lemon", "sweet_berry", "salmonberry"
         };
 
         public final ForgeConfigSpec.DoubleValue farmlandBonus;
         public final ForgeConfigSpec.DoubleValue richFarmlandBonus;
         public final ForgeConfigSpec.DoubleValue fertileSoilBonus;
         public final ForgeConfigSpec.DoubleValue richSoilBonus;
+        public final ForgeConfigSpec.DoubleValue richSoulSoilBonus;
+        public final ForgeConfigSpec.DoubleValue fertileSoulSoilBonus;
         public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
+        public final Map<String, ForgeConfigSpec.BooleanValue> bush = new java.util.LinkedHashMap<>();
 
         private SoilYield(ForgeConfigSpec.Builder b) {
             b.comment(
                     "Extra produce on better soil. A ripe crop whose block below is the soil gets one extra pool sized",
                     "to 'bonus' x the crop's average produce (seeds are not included): 0.33 = about a third more.",
                     "A crop that drops one item gets a 'bonus' chance of one more; a crop with a variable count gets",
-                    "its average raised by the same share. The crop's own drops are unchanged. 0 = nothing for that soil.",
-                    "Each crop is switched on in [crop_drops.soil_yield.crops].",
+                    "its average raised by the same share (the average rounded to the nearest 0.5). The crop's own drops",
+                    "are unchanged. 0 = nothing for that soil. Own right-click picks (tomato vines, cucumber, bushes)",
+                    "and fungus colony shearing get the same extra. Fortune never changes a crop's yield.",
+                    "Each crop is switched on in [crop_drops.soil_yield.crops], each bush in [crop_drops.soil_yield.bushes].",
                     "feature_writeup/crop_yields.md lists every crop's drops."
             ).push("soil_yield");
 
             farmlandBonus = b.comment("Vanilla farmland: share of extra produce.").defineInRange("farmlandBonus", 0.0, 0.0, 4.0);
             richFarmlandBonus = b.comment("Rich Soil Farmland: share of extra produce.").defineInRange("richFarmlandBonus", 0.33, 0.0, 4.0);
             fertileSoilBonus = b.comment("Fertile Soil (Immersive Weathering mulch): share of extra produce.").defineInRange("fertileSoilBonus", 0.66, 0.0, 4.0);
-            richSoilBonus = b.comment("Untilled Rich Soil (only rice and adzuki grow on it): share of extra produce.").defineInRange("richSoilBonus", 0.33, 0.0, 4.0);
+            richSoilBonus = b.comment("Untilled Rich Soil (rice, adzuki and bushes grow on it): share of extra produce. Equal to Rich Soil Farmland on purpose.").defineInRange("richSoilBonus", 0.33, 0.0, 4.0);
+            richSoulSoilBonus = b.comment("Rich Soul Soil (nether crops): share of extra produce.").defineInRange("richSoulSoilBonus", 0.33, 0.0, 4.0);
+            fertileSoulSoilBonus = b.comment("Fertile Soul Soil (Immersive Weathering nulch, nether crops): share of extra produce.").defineInRange("fertileSoulSoilBonus", 0.66, 0.0, 4.0);
 
             b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
             for (String key : CROPS) {
                 crop.put(key, b.define(key, true));
             }
-            b.pop(2); // crops, soil_yield
+            b.pop(); // crops
+            b.comment("true: the bush gets the soil extra on its own pick and on breaking it. false: the same on every soil.").push("bushes");
+            for (String key : BUSHES) {
+                bush.put(key, b.define(key, true));
+            }
+            b.pop(2); // bushes, soil_yield
         }
 
-        /** The crop's switch, or null for a key the config does not have. */
+        /** The crop's or bush's switch, or null for a key the config does not have. */
         public Boolean cropOn(String key) {
             ForgeConfigSpec.BooleanValue v = crop.get(key);
+            if (v == null) v = bush.get(key);
             return v == null ? null : v.get();
+        }
+
+        /** A soil's bonus by its key name (soil_yield.json 'soils'); 0 for an unknown name. */
+        public double bonus(String name) {
+            return switch (name) {
+                case "farmlandBonus" -> farmlandBonus.get();
+                case "richFarmlandBonus" -> richFarmlandBonus.get();
+                case "fertileSoilBonus" -> fertileSoilBonus.get();
+                case "richSoilBonus" -> richSoilBonus.get();
+                case "richSoulSoilBonus" -> richSoulSoilBonus.get();
+                case "fertileSoulSoilBonus" -> fertileSoulSoilBonus.get();
+                default -> 0.0;
+            };
         }
     }
 

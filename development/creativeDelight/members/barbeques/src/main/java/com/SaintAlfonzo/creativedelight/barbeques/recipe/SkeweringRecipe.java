@@ -45,6 +45,11 @@ public class SkeweringRecipe implements Recipe<Container> {
                 && (sideCount == 0 || side.test(offhand) && offhand.getCount() >= sideCount);
     }
 
+    /** The held item is this recipe's skewer tool (a stick, or the blaze rod). */
+    public boolean isTool(ItemStack stack) {
+        return tool.test(stack);
+    }
+
     /** Uses up the stick, the basin items and the side items; returns the skewer. */
     public ItemStack craft(ItemStack stick, ItemStack basin, ItemStack offhand) {
         stick.shrink(1);

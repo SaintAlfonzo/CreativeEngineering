@@ -160,14 +160,23 @@
         P10_RECIPES.forEach(id => {
             let r = recipe(level, id)
             if (r == null) { out('recipe ' + id + ' MISSING'); return }
-            let empty = [], ings = r.getIngredients()
+            let empty = [], blank = [], ings = r.getIngredients()
             // r1113 pwg17: Ingredient.getItems() is hidden in this Rhino build (getStacks), and no getType() on recipes
             // (AbstractMethodError on a foreign recipe escapes the catch; KubeJS remaps it to the serializer id anyway)
-            for (let i = 0; i < ings.size(); i++) { let ing = ings.get(i); if (ing.getStacks().toList().size() == 0) empty.push(i) }
+            // r1114 pwg17r: a shaped pattern's empty cell is Ingredient.EMPTY (no stacks): blank, not unresolved. An empty
+            // tag is not stackless: Forge fills it with one minecraft:barrier ("Empty Tag: ..."), so unresolved = every
+            // stack a barrier
+            for (let i = 0; i < ings.size(); i++) {
+                let st = ings.get(i).getStacks().toList()
+                if (st.size() == 0) { blank.push(i); continue }
+                let real = 0
+                for (let k = 0; k < st.size(); k++) if (idOf(st.get(k)) != 'minecraft:barrier') real++
+                if (real == 0) empty.push(i)
+            }
             let ser = null
             try { ser = $FR.RECIPE_SERIALIZERS.getKey(r.getSerializer()) } catch (err) { ser = '?' }
             out('recipe ' + id + ' class=' + simpleName(r) + ' serializer=' + ser + ' result=' + stackLine(r.getResultItem())
-                + ' ingredients=' + r.getIngredients().size() + ' unresolved=[' + empty.join(',') + ']')
+                + ' ingredients=' + r.getIngredients().size() + ' blank=[' + blank.join(',') + '] unresolved=[' + empty.join(',') + ']')
         })
         let n = 0
         level.getRecipeManager().getRecipes().forEach(r => { if (String(r.getId().getNamespace()) == 'powergrid') n++ })

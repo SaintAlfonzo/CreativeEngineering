@@ -1,19 +1,1167 @@
 {
-  "replace": false,
+  "override": true,
+  "priority": 10,
+  "remove": [
+    "loading_tips:use_a_mace_with_the_wind_burst_enchantment_to",
+    "loading_tips:trial_chambers_are_found_deep_underground_in_the",
+    "loading_tips:copper_bulbs_have_different_light_levels_based",
+    "loading_tips:breeze_rods_can_be_crafted_into_wind_charges",
+    "loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults",
+    "loading_tips:crafters_require_a_redstone_signal_to_craft",
+    "loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires",
+    "loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor",
+    "loading_tips:vaults_can_be_opened_by_every_player_once_using",
+    "loading_tips:dont_dig_straight_down",
+    "loading_tips:riptide_tridents_only_work_in_rain",
+    "loading_tips:wearing_gold_prevents_piglin_attacks",
+    "loading_tips:barter_with_piglins_using_gold_ingots",
+    "loading_tips:ghasts_hate_their_own_fireballs",
+    "loading_tips:blue_ice_is_the_fastest_for_boat_travel",
+    "loading_tips:phantoms_spawn_if_you_dont_sleep_for_3_in_game",
+    "loading_tips:target_blocks_produce_redstone_signals",
+    "loading_tips:honey_blocks_prevent_sticking_to_walls",
+    "loading_tips:slime_blocks_make_you_bounce",
+    "loading_tips:observers_detect_block_updates",
+    "loading_tips:redstone_repeaters_delay_signals",
+    "loading_tips:dispensers_can_equip_armor_for_you",
+    "loading_tips:droppers_just_drop_items",
+    "loading_tips:note_blocks_play_music",
+    "loading_tips:conduits_help_you_breathe_underwater",
+    "loading_tips:dolphins_lead_you_to_shipwrecks",
+    "loading_tips:turtles_drop_scutes_when_they_grow",
+    "loading_tips:copper_oxidizes_over_time",
+    "loading_tips:lightning_rods_protect_wooden_roofs",
+    "loading_tips:allays_love_items_and_music",
+    "loading_tips:sniffers_find_ancient_seeds",
+    "loading_tips:camel_dashes_jump_over_ravines",
+    "loading_tips:bamboo_can_be_used_for_wood",
+    "loading_tips:armor_trims_are_found_in_structures",
+    "loading_tips:smithing_templates_are_required_for_upgrades",
+    "loading_tips:netherite_requires_a_smithing_template",
+    "loading_tips:trail_ruins_are_buried_underground",
+    "loading_tips:suspicious_gravel_can_be_brushed",
+    "loading_tips:trial_chambers_are_full_of_loot",
+    "loading_tips:trial_spawners_give_rewards",
+    "loading_tips:trial_keys_unlock_vaults",
+    "loading_tips:the_breeze_drops_breeze_rods",
+    "loading_tips:the_bogged_fires_poison_arrows",
+    "loading_tips:maces_do_more_damage_from_heights",
+    "loading_tips:wind_charges_launch_you_upward",
+    "loading_tips:crafters_automate_your_crafting",
+    "loading_tips:copper_bulbs_change_light_levels",
+    "loading_tips:heavy_cores_craft_the_mace",
+    "loading_tips:ominous_trials_are_harder_but_better",
+    "loading_tips:bad_omen_triggers_ominous_trials",
+    "loading_tips:drink_ominous_bottles_for_a_challenge",
+    "loading_tips:vaults_can_be_opened_by_everyone_but_not_twice",
+    "loading_tips:chiseled_tuff_looks_great_for_builds",
+    "loading_tips:copper_grates_allow_light_through",
+    "loading_tips:hardened_glass_wont_break_easily",
+    "loading_tips:sweet_berries_slow_you_down",
+    "loading_tips:ravagers_are_afraid_of_rabbits",
+    "loading_tips:evokers_turn_blue_sheep_red",
+    "loading_tips:punching_tnt_with_flint_and_steel_ignites_it",
+    "loading_tips:bows_with_power_v_deal_massive_damage",
+    "loading_tips:efficiency_v_mines_blocks_instantly",
+    "loading_tips:blast_protection_saves_you_from_creepers",
+    "loading_tips:swift_sneak_makes_you_crouch_walk_faster",
+    "loading_tips:soul_speed_is_faster_on_soul_sand",
+    "loading_tips:multishot_fires_three_arrows_for_one",
+    "loading_tips:piercing_arrows_go_through_multiple_mobs",
+    "loading_tips:quick_charge_makes_crossbows_fire_faster",
+    "loading_tips:channeling_strikes_lightning_during_storms",
+    "loading_tips:impaling_deals_extra_damage_to_sea_life",
+    "loading_tips:loyalty_tridents_fly_back_to_you",
+    "loading_tips:totems_of_undying_save_you_from_death",
+    "loading_tips:shields_block_100_of_melee_damage",
+    "loading_tips:potions_of_slow_falling_prevent_fall_death_and",
+    "loading_tips:arrows_can_be_tipped_with_potion_effects",
+    "loading_tips:fletching_tables_create_tipped_arrows",
+    "loading_tips:smite_deals_extra_damage_to_the_undead",
+    "loading_tips:bane_of_arthropods_kills_spiders_fast",
+    "loading_tips:knockback_pushes_enemies_far_away",
+    "loading_tips:packed_ice_never_melts_in_light",
+    "loading_tips:beacons_give_powerful_area_of_effect_buffs",
+    "loading_tips:ender_dragons_drop_dragon_breath",
+    "loading_tips:striders_can_walk_on_lava_with_saddles",
+    "loading_tips:warped_fungus_on_a_stick_guides_striders",
+    "loading_tips:vexes_can_fly_through_solid_blocks",
+    "loading_tips:raids_start_when_entering_a_village",
+    "loading_tips:iron_golems_protect_villages_from_sieges",
+    "loading_tips:dye_leather_armor_using_a_cauldron",
+    "loading_tips:brushes_are_used_for_archeology",
+    "loading_tips:pottery_sherds_make_decorated_pots",
+    "loading_tips:sniffer_eggs_hatch_on_moss_blocks",
+    "loading_tips:bows_can_be_repaired_with_string",
+    "loading_tips:lodestones_help_you_navigate",
+    "loading_tips:recovery_compasses_show_last_death",
+    "loading_tips:glass_bottles_collect_dragon_breath",
+    "loading_tips:dragon_breath_crafts_lingering_potions",
+    "loading_tips:arrows_fly_further_if_you_jump_shot",
+    "loading_tips:carpet_can_be_placed_over_string",
+    "loading_tips:wheat_heals_injured_cows",
+    "loading_tips:seeds_heal_injured_chickens",
+    "loading_tips:trident_drowned_only_spawn_in_oceans",
+    "loading_tips:vexes_are_summoned_by_evokers",
+    "loading_tips:wool_blocks_block_warden_vibrations",
+    "loading_tips:echo_shards_craft_recovery_compasses",
+    "loading_tips:swift_sneak_is_found_in_ancient_cities",
+    "loading_tips:silence_armor_trim_is_the_rarest",
+    "loading_tips:small_dripleaves_need_bone_meal",
+    "loading_tips:azalea_trees_mark_lush_caves",
+    "loading_tips:spies_can_see_through_tinted_glass",
+    "loading_tips:tinted_glass_blocks_light_completely",
+    "loading_tips:calibrated_sculks_sense_specific_sounds",
+    "loading_tips:crying_obsidian_sets_spawn_in_nether",
+    "loading_tips:warped_fungus_breeds_nothing",
+    "loading_tips:the_mace_deals_more_damage_the_further_you_fall",
+    "loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you",
+    "loading_tips:the_breach_enchantment_reduces_the_effectiveness",
+    "loading_tips:density_enchantment_increases_the_damage_dealt",
+    "loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you",
+    "loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft",
+    "loading_tips:heavy_cores_are_found_rarely_within_ominous",
+    "loading_tips:ominous_trials_are_started_by_drinking_a_trial",
+    "loading_tips:trial_omens_are_gained_by_defeating_raid",
+    "loading_tips:the_breeze_can_reflect_projectiles_back_at_you",
+    "loading_tips:breeze_rods_are_essential_for_crafting_the_new",
+    "loading_tips:wind_charges_allow_you_to_rocket_jump_like_a",
+    "loading_tips:vaults_in_trial_chambers_can_be_looted_by_every",
+    "loading_tips:ominous_vaults_have_better_loot_but_require",
+    "loading_tips:trial_spawners_adjust_their_difficulty_based_on",
+    "loading_tips:trial_spawners_eject_rewards_like_trial_keys",
+    "loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and",
+    "loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its",
+    "loading_tips:copper_bulbs_dont_give_off_light_when_fully",
+    "loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific",
+    "loading_tips:the_crafter_can_be_automated_with_hoppers_for",
+    "loading_tips:use_redstone_comparators_to_read_how_many_slots",
+    "loading_tips:chiseled_tuff_and_polished_tuff_are_great_new",
+    "loading_tips:trial_chambers_contain_hidden_chests_behind_some",
+    "loading_tips:flow_armor_trims_are_found_only_in_trial_chamber",
+    "loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look",
+    "loading_tips:guster_pottery_sherds_feature_the_breezes_iconic",
+    "loading_tips:trial_spawners_have_a_30_minute_cooldown_after",
+    "loading_tips:ominous_spawners_fire_projectiles_like_potions",
+    "loading_tips:silverfish_spawners_in_trial_chambers_can",
+    "loading_tips:sniffers_find_ancient_seeds_by_sniffing_the",
+    "loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers",
+    "loading_tips:pitcher_plants_are_tall_ancient_decorative",
+    "loading_tips:camel_saddles_allow_two_players_to_ride_at_once",
+    "loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs",
+    "loading_tips:zombies_cant_reach_you_while_you_are_riding_a",
+    "loading_tips:suspicious_sand_in_desert_temples_contains_rare",
+    "loading_tips:suspicious_gravel_is_often_found_in_trail_ruins",
+    "loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig",
+    "loading_tips:brush_suspicious_blocks_carefully_or_they_will",
+    "loading_tips:sculk_sensors_can_be_waterlogged_to_make_them",
+    "loading_tips:amethyst_resonators_can_pass_redstone_signals",
+    "loading_tips:copper_horns_were_a_prototype_but_goat_horns_are",
+    "loading_tips:use_a_glow_ink_sac_on_an_item_frame_to_make_it",
+    "loading_tips:looting_iii_increases_the_chance_of_rare_drops",
+    "loading_tips:redstone_comparators_can_subtract_signal",
+    "loading_tips:dispensers_can_shear_sheep_and_carve_pumpkins",
+    "loading_tips:tnt_minecarts_explode_instantly_if_they_hit_a",
+    "loading_tips:stray_cats_spawn_in_villages_and_can_bring_you",
+    "loading_tips:ravagers_are_afraid_of_rabbits_for_some_reason",
+    "loading_tips:fortune_enchantment_works_on_raw_ore_blocks",
+    "loading_tips:the_wither_is_much_harder_to_fight_on_bedrock",
+    "loading_tips:hoglins_are_afraid_of_warped_fungus_even_in",
+    "loading_tips:blaze_rods_are_the_best_fuel_for_brewing_stands",
+    "loading_tips:smithing_templates_are_required_to_upgrade_to",
+    "loading_tips:blue_ice_is_the_fastest_surface_for_boat_travel",
+    "loading_tips:armor_trims_allow_you_to_customize_the_look_of",
+    "loading_tips:netherite_templates_are_consumed_upon_use_make",
+    "loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the",
+    "loading_tips:trial_chambers_are_the_ultimate_test_of_your",
+    "loading_tips:you_are_now_a_minecraft_master_good_luck",
+    "loading_tips:the_chestplate_is_the_only_armor_piece_with_no",
+    "loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn",
+    "loading_tips:golden_dandelions_keep_baby_mobs_young_forever",
+    "loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden",
+    "loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let",
+    "loading_tips:golden_dandelions_dont_work_on_undead_baby_mobs",
+    "loading_tips:piglins_will_pick_up_golden_dandelions_off_the",
+    "loading_tips:golden_dandelions_can_be_placed_in_flower_pots",
+    "loading_tips:wandering_traders_may_randomly_sell_a_golden",
+    "loading_tips:golden_dandelions_used_in_suspicious_stew",
+    "loading_tips:plant_a_sapling_within_2_blocks_of_a_golden",
+    "loading_tips:name_tags_are_now_craftable_combine_any_metal",
+    "loading_tips:name_tags_no_longer_appear_in_ancient_city_or",
+    "loading_tips:master_level_librarians_no_longer_trade_name",
+    "loading_tips:wandering_traders_now_sell_name_tags_for_just_1",
+    "loading_tips:copper_blocks_under_note_blocks_now_produce",
+    "loading_tips:the_trumpet_pitch_changes_depending_on_the",
+    "loading_tips:wax_your_copper_block_under_a_note_block_to_lock",
+    "loading_tips:baby_mobs_now_have_their_own_dedicated_sounds",
+    "loading_tips:saddles_and_armor_no_longer_visually_render_on",
+    "loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny",
+    "loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long",
+    "loading_tips:deepslate_can_now_be_directly_crafted_into",
+    "loading_tips:stone_can_now_be_directly_crafted_into_cobbled",
+    "loading_tips:smelt_sand_to_get_glass",
+    "loading_tips:ancient_debris_is_found_deep_in_the_nether",
+    "loading_tips:blast_furnaces_smelt_ore_faster",
+    "loading_tips:jukeboxes_play_music_discs",
+    "loading_tips:guardians_and_elder_guardians_hate_being_out_of",
+    "loading_tips:honeycomb_prevents_copper_oxidation",
+    "loading_tips:amethyst_grows_on_budding_geodes",
+    "loading_tips:melons_need_space_to_grow",
+    "loading_tips:the_wither_is_a_powerful_boss",
+    "loading_tips:infinity_bows_dont_need_extra_arrows_but_cant",
+    "loading_tips:depth_strider_makes_you_swim_faster",
+    "loading_tips:frost_walker_turns_water_into_ice",
+    "loading_tips:projectile_protection_reduces_arrow_damage",
+    "loading_tips:fire_protection_is_essential_for_the_nether",
+    "loading_tips:aqua_affinity_speeds_up_underwater_mining",
+    "loading_tips:enchanted_apples_give_massive_buffs",
+    "loading_tips:golden_apples_help_cure_zombie_villagers",
+    "loading_tips:crouching_prevents_magma_block_damage",
+    "loading_tips:cauldrons_can_hold_water_in_the_nether",
+    "loading_tips:wet_sponges_can_be_dried_in_a_furnace_or_by",
+    "loading_tips:nether_stars_are_dropped_by_the_wither",
+    "loading_tips:wither_skeletons_drop_rare_skulls",
+    "loading_tips:shulker_shells_are_dropped_in_end_cities",
+    "loading_tips:dragon_heads_look_cool_on_walls",
+    "loading_tips:endermites_sometimes_spawn_from_pearls",
+    "loading_tips:carrot_on_a_stick_guides_pigs",
+    "loading_tips:hero_of_the_village_gives_discounts",
+    "loading_tips:pumpkin_masks_hide_you_from_endermen",
+    "loading_tips:pressure_plates_detect_items_or_players",
+    "loading_tips:slabs_prevent_mob_spawning",
+    "loading_tips:gates_can_be_opened_both_ways",
+    "loading_tips:anvils_fall_and_deal_damage",
+    "loading_tips:dripstone_can_kill_if_it_falls_on_you",
+    "loading_tips:powder_snow_can_freeze_you",
+    "loading_tips:strider_babies_can_ride_adults",
+    "loading_tips:zoglins_are_afraid_of_nothing",
+    "loading_tips:sweet_berry_bushes_damage_mobs",
+    "loading_tips:gravel_falls_if_there_is_no_block_below",
+    "loading_tips:wool_muffles_the_sound_of_footsteps",
+    "loading_tips:glow_ink_sacs_make_signs_glow",
+    "loading_tips:regular_ink_sacs_clear_sign_glow",
+    "loading_tips:rotten_flesh_heals_injured_wolves",
+    "loading_tips:illusioners_are_hidden_in_the_code",
+    "loading_tips:the_warden_reacts_to_vibrations",
+    "loading_tips:sneaking_hides_you_from_the_warden",
+    "loading_tips:spore_blossoms_create_green_particles",
+    "loading_tips:amethyst_clusters_drop_four_shards",
+    "loading_tips:sculk_shriekers_summon_the_warden",
+    "loading_tips:bells_can_be_rung_with_arrows",
+    "loading_tips:respawn_anchors_need_glowstone",
+    "loading_tips:gilded_blackstone_drops_gold_nuggets",
+    "loading_tips:nether_sprouts_are_just_for_looks",
+    "loading_tips:crimson_fungus_breeds_hoglins",
+    "loading_tips:weeping_vines_grow_downward",
+    "loading_tips:bedrock_is_unbreakable_in_survival",
+    "loading_tips:end_portal_frames_are_unbreakable",
+    "loading_tips:silverfish_hide_inside_stone_bricks",
+    "loading_tips:dragon_eggs_are_unique_trophies",
+    "loading_tips:beacons_can_be_colored_with_glass",
+    "loading_tips:sticky_pistons_pull_blocks_back",
+    "loading_tips:slime_and_honey_dont_stick_together",
+    "loading_tips:hardcore_mode_means_one_life_only",
+    "loading_tips:echo_shards_are_needed_to_craft_a_recovery",
+    "loading_tips:swift_sneak_allows_you_to_walk_faster_while",
+    "loading_tips:throw_projectiles_to_distract_the_warden_away",
+    "loading_tips:play_a_jukebox_near_an_allay_to_make_it_dance",
+    "loading_tips:give_a_dancing_allay_an_amethyst_shard_to",
+    "loading_tips:mangrove_swamps_are_home_to_mud_blocks_and_frogs",
+    "loading_tips:frogs_produce_froglight_when_they_eat_small",
+    "loading_tips:different_frog_colors_produce_different_colors",
+    "loading_tips:tadpoles_grow_into_different_frogs_depending_on",
+    "loading_tips:goat_horns_are_dropped_when_a_goat_rams_a_hard",
+    "loading_tips:piercing_crossbows_allow_one_arrow_to_hit",
+    "loading_tips:quick_charge_reduces_the_reload_time_of_your",
+    "loading_tips:shields_can_block_creeper_explosions_if_you_are",
+    "loading_tips:bane_of_arthropods_makes_spiders_much_easier_to",
+    "loading_tips:fire_aspect_is_great_for_combat_but_careful_with",
+    "loading_tips:channeling_tridents_summon_lightning_during",
+    "loading_tips:riptide_tridents_allow_you_to_fly_through_rain",
+    "loading_tips:punch_bows_increase_the_knockback_of_your_arrows",
+    "loading_tips:flame_bows_ignite_enemies_and_can_light_tnt_from",
+    "loading_tips:power_v_bows_can_one_shot_most_common_mobs",
+    "loading_tips:daylight_sensors_can_be_inverted_to_turn_on",
+    "loading_tips:lecterns_send_a_signal_when_a_page_is_turned",
+    "loading_tips:hoppers_can_be_disabled_by_a_redstone_signal",
+    "loading_tips:detector_rails_send_a_signal_when_a_minecart",
+    "loading_tips:activator_rails_can_eject_players_from_minecarts",
+    "loading_tips:sticky_pistons_can_pull_other_pistons_to_create",
+    "loading_tips:honey_blocks_prevent_jumping_but_allow_you_to",
+    "loading_tips:a_fox_holding_a_fire_aspect_sword_can_set_you_on",
+    "loading_tips:sneezing_baby_pandas_can_drop_slimeballs",
+    "loading_tips:dont_feed_chocolate_cookies_to_parrots_its",
+    "loading_tips:ocelots_no_longer_turn_into_cats_they_are",
+    "loading_tips:villager_gossip_determines_the_price_of_their",
+    "loading_tips:you_can_repair_an_iron_golem_with_iron_ingots",
+    "loading_tips:evokers_turn_blue_sheep_into_red_sheep_with_a",
+    "loading_tips:phantom_membranes_are_used_to_repair_elytra",
+    "loading_tips:conduits_protect_you_underwater_and_kill_nearby",
+    "loading_tips:turtle_shells_give_you_extra_breath_time",
+    "loading_tips:magma_blocks_underwater_create_bubble_columns",
+    "loading_tips:dried_kelp_blocks_are_a_very_efficient_fuel_for",
+    "loading_tips:axolotls_will_play_dead_to_regenerate_health",
+    "loading_tips:glow_squids_drop_glow_ink_sacs_for_glowing_signs",
+    "loading_tips:dripstone_caves_contain_sharp_stalactites_that",
+    "loading_tips:copper_blocks_turn_green_over_time_due_to",
+    "loading_tips:spyglasses_are_crafted_from_amethyst_and_copper",
+    "loading_tips:budding_amethyst_blocks_cannot_be_moved_even",
+    "loading_tips:raw_iron_copper_and_gold_can_be_smelted_faster",
+    "loading_tips:beacons_provide_buffs_like_haste_and",
+    "loading_tips:striders_can_walk_on_lava_and_be_ridden_with_a",
+    "loading_tips:warped_fungus_on_a_stick_is_used_to_control",
+    "loading_tips:soul_speed_enchantment_makes_you_run_faster_on",
+    "loading_tips:netherite_scrap_is_made_by_smelting_ancient",
+    "loading_tips:bastions_are_the_best_place_to_find_pigstep",
+    "loading_tips:crying_obsidian_can_be_used_to_craft_respawn",
+    "loading_tips:dont_use_a_respawn_anchor_in_the_overworld_it",
+    "loading_tips:gilded_blackstone_has_a_chance_to_drop_gold",
+    "loading_tips:packed_ice_doesnt_melt_even_near_light_sources",
+    "loading_tips:snow_golems_wear_pumpkins_that_can_be_sheared",
+    "loading_tips:leads_can_be_used_to_tie_mobs_to_fences",
+    "loading_tips:holding_f3_c_for_10_seconds_intentionally",
+    "loading_tips:bamboo_is_the_least_efficient_fuel_smelting_only"
+  ],
   "tips": [
-    "Glass breaks into glass shards unless mined with Silk Touch; shards craft back into glass",
-    "Composters turn plants, food, straw, bark and sawdust into bone meal",
-    "Kill a mob an Axolotl is fighting to gain Regeneration",
-    "Gilded apples give massive buffs",
-    "Some Pillager outposts hold caged Allays",
-    "Leather boots let you walk on powder snow",
-    "Compasses point to spawn in the Overworld, to the portal you came through in the Nether, and to the exit portal in the End",
-    "Lava flowing over soul soil next to blue ice turns into basalt",
-    "Water and lava make cobblestone, or other stones when the lava touches certain blocks",
-    "Every player can take an elytra from each End ship",
-    "Facing a Creeper blast with a shield cuts the damage; better shields block more",
-    "Sweet berry bushes slow you down and hurt you unless you wear leggings",
-    "A totem of undying saves you from your hand or your charm slot",
-    "Lava buckets are a great furnace fuel"
+    {
+      "id": "loading_tips:you_can_use_an_axe_to_scrape_oxidation_off",
+      "text": "Copper turns green over time; honeycomb wax stops it, and an axe scrapes off the wax or one stage of rust"
+    },
+    {
+      "id": "loading_tips:crouch_to_avoid_falling_off_ledges",
+      "text": "Crouch to avoid falling off ledges"
+    },
+    {
+      "id": "loading_tips:gold_tools_are_faster_but_break_easily",
+      "text": "Gold tools mine faster than diamond, enchant well and carry Fortune II or Looting II, but wear fast and mine only what iron can"
+    },
+    {
+      "id": "loading_tips:beds_explode_in_the_nether",
+      "text": "Beds set your spawn in the Overworld and explode in any other dimension"
+    },
+    {
+      "id": "loading_tips:endermen_hate_water",
+      "text": "Endermen are hurt by water, anger when looked at, ignore you behind a carved pumpkin and never pick up blocks"
+    },
+    {
+      "id": "loading_tips:use_a_silk_touch_pickaxe_for_glass",
+      "text": "Smelt sand into glass; glass breaks into shards unless mined with Silk Touch, and shards craft back into glass"
+    },
+    {
+      "id": "loading_tips:axes_disable_shields",
+      "text": "Shields cut damage from the front, Creeper blasts included, and better shields cut more; an axe hit disables one for 5 seconds"
+    },
+    {
+      "id": "loading_tips:fortune_works_on_coal_diamonds_lapis_copper_and",
+      "text": "Fortune works on coal, copper, iron, gold, redstone, lapis, diamond, emerald and quartz ores, and on ancient debris"
+    },
+    {
+      "id": "loading_tips:torches_prevent_monster_spawns",
+      "text": "Monsters cannot spawn on lit blocks, or on bottom slabs, glass, carpet or leaves"
+    },
+    {
+      "id": "loading_tips:sprinting_makes_you_hungrier",
+      "text": "Sprinting makes you hungrier"
+    },
+    {
+      "id": "loading_tips:villagers_love_emeralds",
+      "text": "Villagers trade for emeralds, and every trade gives them experience toward better trades"
+    },
+    {
+      "id": "loading_tips:zombies_burn_in_sunlight",
+      "text": "Zombies, Skeletons and Phantoms burn in sunlight; a helmet, water or shade saves them, and Husks never burn"
+    },
+    {
+      "id": "loading_tips:creepers_are_afraid_of_cats",
+      "text": "Creepers run from cats and Ocelots, and Phantoms keep away from cats"
+    },
+    {
+      "id": "loading_tips:water_buckets_negate_fall_damage",
+      "text": "Land in water, powder snow, cobwebs or on a slime block to take no fall damage; hay bales and honey blocks cut it by 80%"
+    },
+    {
+      "id": "loading_tips:pigs_love_carrots",
+      "text": "Pigs breed with carrots, potatoes, beetroot or golden carrots, and have litters of 2 to 3 piglets"
+    },
+    {
+      "id": "loading_tips:shear_sheep_for_more_wool",
+      "text": "Shear sheep for wool: a killed sheep drops none"
+    },
+    {
+      "id": "loading_tips:milk_removes_all_potion_effects",
+      "text": "Milk removes all potion effects"
+    },
+    {
+      "id": "loading_tips:looting_increases_mob_drops",
+      "text": "Looting increases mob drops"
+    },
+    {
+      "id": "loading_tips:fire_aspect_cooks_meat_instantly",
+      "text": "Animals that die on fire drop cooked meat, whether from Fire Aspect, Flame or lava"
+    },
+    {
+      "id": "loading_tips:blazes_are_weak_to_snowballs",
+      "text": "Blazes are weak to snowballs"
+    },
+    {
+      "id": "loading_tips:soul_sand_slows_you_down",
+      "text": "Soul sand slows you down unless your boots have Soul Speed, which makes you faster on soul sand and soul soil"
+    },
+    {
+      "id": "loading_tips:scaffolding_is_great_for_building",
+      "text": "Scaffolding can be climbed, reaches 6 blocks out from a support, and breaks all at once from the bottom"
+    },
+    {
+      "id": "loading_tips:composters_turn_food_into_bone_meal",
+      "text": "Composters turn plants, food, straw, bark and sawdust into bone meal"
+    },
+    {
+      "id": "loading_tips:barrels_are_cheaper_than_chests",
+      "text": "Barrels cost less than chests and open with a block on top, but cannot join into a double chest"
+    },
+    {
+      "id": "loading_tips:smokers_cook_food_twice_as_fast",
+      "text": "Smokers cook food and blast furnaces smelt ores and raw metal twice as fast as a furnace, but take only their own kind"
+    },
+    {
+      "id": "loading_tips:anvils_can_rename_your_items",
+      "text": "Anvils rename items cheaply and repair or combine them; costs rise with each use but never become 'Too Expensive'"
+    },
+    {
+      "id": "loading_tips:grindstones_remove_enchantments",
+      "text": "Grindstones remove every enchantment except curses and give back some XP"
+    },
+    {
+      "id": "loading_tips:lecterns_hold_books_for_reading",
+      "text": "A lectern holds a book anyone can read and sends a redstone pulse on each page turn"
+    },
+    {
+      "id": "loading_tips:stonecutters_save_stairs_and_slabs",
+      "text": "A stonecutter turns one block into stairs, walls or two slabs with no waste"
+    },
+    {
+      "id": "loading_tips:hoppers_move_items_between_containers",
+      "text": "Hoppers pull items from above, push into the container they face and stop while powered"
+    },
+    {
+      "id": "loading_tips:comparators_detect_container_fullness_compare",
+      "text": "Comparators detect container fullness, compare, and subtract redstone signals!"
+    },
+    {
+      "id": "loading_tips:axolotls_help_fight_guardians_and_grant",
+      "text": "Axolotls play dead to heal, and killing a mob one is fighting gives you Regeneration"
+    },
+    {
+      "id": "loading_tips:bees_produce_honey_and_wax",
+      "text": "Bees fill hives with honey; take it with a bottle, or honeycomb with shears, and keep a campfire below to calm them"
+    },
+    {
+      "id": "loading_tips:spyglasses_zoom_in_on_the_horizon",
+      "text": "Spyglasses, made from amethyst and copper, zoom in on distant things"
+    },
+    {
+      "id": "loading_tips:goats_can_ram_you_off_cliffs",
+      "text": "Goats can ram you off cliffs, and a Goat that rams a hard block drops a goat horn"
+    },
+    {
+      "id": "loading_tips:frogs_eat_small_slimes_and_magma_cubes",
+      "text": "Frogs eat small Slimes for slimeballs and small Magma Cubes for froglight in the Frog's colour, set by its biome"
+    },
+    {
+      "id": "loading_tips:mud_is_made_from_dirt_and_water",
+      "text": "Use a water bottle on dirt to make mud; mud above pointed dripstone dries into clay"
+    },
+    {
+      "id": "loading_tips:mangrove_trees_grow_in_water",
+      "text": "Mangrove trees grow in water"
+    },
+    {
+      "id": "loading_tips:sugar_cane_grows_on_sand_or_dirt",
+      "text": "Sugar cane grows on sand or dirt"
+    },
+    {
+      "id": "loading_tips:pumpkins_need_space_to_grow",
+      "text": "Pumpkins and melons need a free dirt, grass or farmland block beside the stem to grow"
+    },
+    {
+      "id": "loading_tips:campfires_can_cook_four_items",
+      "text": "Campfires place unlit and cook four items; rain puts one out unless a coal or charcoal block is under it"
+    },
+    {
+      "id": "loading_tips:bells_alert_villagers_to_raids",
+      "text": "Ring a bell, by hand or with an arrow, to send villagers indoors and make nearby raiders glow"
+    },
+    {
+      "id": "loading_tips:mending_repairs_gear_using_xp_orbs",
+      "text": "Mending repairs held and worn gear with the XP orbs you collect, before the XP reaches your level"
+    },
+    {
+      "id": "loading_tips:unbreaking_iii_makes_gear_last_longer",
+      "text": "Unbreaking III makes gear last longer"
+    },
+    {
+      "id": "loading_tips:silk_touch_collects_beehives_with_bees_inside",
+      "text": "Silk Touch collects beehives with bees inside"
+    },
+    {
+      "id": "loading_tips:feather_falling_iv_reduces_fall_damage",
+      "text": "Feather Falling cuts fall damage and stops you trampling farmland"
+    },
+    {
+      "id": "loading_tips:thorns_damage_enemies_who_hit_you",
+      "text": "Thorns damage enemies who hit you"
+    },
+    {
+      "id": "loading_tips:respiration_iii_lets_you_breathe_longer",
+      "text": "Underwater, Respiration and turtle shells add breath, Aqua Affinity restores mining speed and Depth Strider speeds you up"
+    },
+    {
+      "id": "loading_tips:ender_pearls_teleport_you_instantly",
+      "text": "A thrown ender pearl teleports you where it lands, costs a little health and sometimes spawns an Endermite"
+    },
+    {
+      "id": "loading_tips:chorus_fruit_teleports_you_randomly",
+      "text": "Chorus fruit teleports you randomly"
+    },
+    {
+      "id": "loading_tips:gold_apples_give_extra_health_hearts",
+      "text": "Golden foods give Regeneration and Absorption; gilded foods give more of both plus Resistance and Fire Resistance"
+    },
+    {
+      "id": "loading_tips:potions_of_speed_make_you_run_faster",
+      "text": "Potions of Speed make you run faster"
+    },
+    {
+      "id": "loading_tips:potions_of_strength_increase_melee_damage",
+      "text": "Potions of Strength increase melee damage"
+    },
+    {
+      "id": "loading_tips:potions_of_haste_speed_up_mining",
+      "text": "Potions of Haste speed up mining"
+    },
+    {
+      "id": "loading_tips:potions_of_night_vision_see_in_the_dark",
+      "text": "Potions of Night Vision let you see in the dark"
+    },
+    {
+      "id": "loading_tips:potions_of_fire_resistance_stop_lava_damage",
+      "text": "Potions of Fire Resistance stop lava damage"
+    },
+    {
+      "id": "loading_tips:potions_of_water_breathing_are_for_diving",
+      "text": "Potions of Water Breathing let you breathe underwater"
+    },
+    {
+      "id": "loading_tips:lingering_potions_create_effect_clouds",
+      "text": "Lingering potions create effect clouds"
+    },
+    {
+      "id": "loading_tips:splash_potions_affect_multiple_entities",
+      "text": "Splash potions affect multiple entities"
+    },
+    {
+      "id": "loading_tips:spectral_arrows_highlight_enemies",
+      "text": "Spectral arrows highlight enemies"
+    },
+    {
+      "id": "loading_tips:weakness_potions_help_cure_zombie_villagers",
+      "text": "Cure a Zombie Villager with a splash Potion of Weakness, then a golden apple"
+    },
+    {
+      "id": "loading_tips:cartography_tables_zoom_out_your_maps",
+      "text": "Cartography tables zoom out, copy and lock maps; a cauldron of water wipes one clean"
+    },
+    {
+      "id": "loading_tips:loom_tables_make_custom_banner_designs",
+      "text": "Looms put patterns on banners; banner pattern items unlock the rare ones"
+    },
+    {
+      "id": "loading_tips:fireballs_can_be_hit_back_at_ghasts",
+      "text": "Fireballs can be hit back at Ghasts"
+    },
+    {
+      "id": "loading_tips:magma_blocks_deal_damage_when_stepped_on",
+      "text": "Magma blocks hurt anything on them unless it crouches or wears Frost Walker boots"
+    },
+    {
+      "id": "loading_tips:ice_blocks_melt_near_light_sources",
+      "text": "Ice melts near bright light, but packed and blue ice never do"
+    },
+    {
+      "id": "loading_tips:blue_ice_is_the_slipperiest_block",
+      "text": "Blue ice is the slipperiest block to walk on; boats get no extra speed on any ice"
+    },
+    {
+      "id": "loading_tips:lava_flows_further_in_the_nether",
+      "text": "Lava flows further in the Nether"
+    },
+    {
+      "id": "loading_tips:water_cannot_be_placed_in_the_nether",
+      "text": "Water cannot be placed in the Nether, except in a cauldron"
+    },
+    {
+      "id": "loading_tips:sponge_blocks_soak_up_nearby_water",
+      "text": "A sponge soaks up to 256 water blocks; dry a wet one in a furnace or by placing it in the Nether"
+    },
+    {
+      "id": "loading_tips:conduits_require_a_prismarine_frame",
+      "text": "A conduit in a prismarine frame gives Conduit Power underwater, and a full frame makes it attack hostile mobs"
+    },
+    {
+      "id": "loading_tips:beacons_require_a_pyramid_base",
+      "text": "A beacon's pyramid size unlocks effects, a richer base block strengthens them, payment sets the range, glass colours the beam"
+    },
+    {
+      "id": "loading_tips:elytra_let_you_glide_through_the_sky",
+      "text": "Elytra let you glide from a height; repair them with phantom membrane"
+    },
+    {
+      "id": "loading_tips:fireworks_boost_your_elytra_flight",
+      "text": "Fireworks boost elytra flight; a campfire below lifts you and a soul campfire pulls you down"
+    },
+    {
+      "id": "loading_tips:shulker_boxes_are_portable_chests",
+      "text": "Shulker boxes keep their items when broken; craft them from shulker shells, dropped by Shulkers in End Cities"
+    },
+    {
+      "id": "loading_tips:end_crystals_respawn_the_ender_dragon",
+      "text": "End crystals respawn the Ender Dragon"
+    },
+    {
+      "id": "loading_tips:silverfish_spawn_from_infested_blocks_and",
+      "text": "Silverfish come from spawners and from infested blocks, which look like stone but break fast"
+    },
+    {
+      "id": "loading_tips:wandering_traders_offer_exotic_items",
+      "text": "Wandering Traders offer exotic items"
+    },
+    {
+      "id": "loading_tips:lead_animals_to_move_them_easily",
+      "text": "Leads let you walk animals and tie them to fences"
+    },
+    {
+      "id": "loading_tips:name_tags_prevent_mobs_from_despawning",
+      "text": "Name tags prevent mobs from despawning"
+    },
+    {
+      "id": "loading_tips:saddles_let_you_ride_horses_and_pigs",
+      "text": "Saddle a horse, pig or lava-walking Strider to ride it; steer pigs with a carrot on a stick, Striders with a warped fungus on one"
+    },
+    {
+      "id": "loading_tips:horse_armor_protects_your_mount",
+      "text": "Horse armor protects your mount"
+    },
+    {
+      "id": "loading_tips:llamas_can_carry_chests_for_storage",
+      "text": "Llamas can carry chests for storage"
+    },
+    {
+      "id": "loading_tips:mules_are_a_cross_between_horses_and_donkeys",
+      "text": "Mules are a cross between horses and donkeys"
+    },
+    {
+      "id": "loading_tips:ravagers_can_be_stunned_by_shields",
+      "text": "Blocking a Ravager's bite with a shield stuns it, and it roars to knock you back when it recovers"
+    },
+    {
+      "id": "loading_tips:vindicators_are_fast_and_dangerous",
+      "text": "Vindicators are fast and dangerous"
+    },
+    {
+      "id": "loading_tips:pillager_outposts_hold_trapped_allays",
+      "text": "Some Pillager outposts hold caged Allays"
+    },
+    {
+      "id": "loading_tips:villagers_change_jobs_based_on_blocks",
+      "text": "Villagers take the job of a free workstation nearby and keep it once you have traded with them"
+    },
+    {
+      "id": "loading_tips:snow_golems_leave_a_trail_of_snow",
+      "text": "Snow Golems leave snow trails and throw snowballs; shear off the pumpkin to see their face"
+    },
+    {
+      "id": "loading_tips:suspicious_stew_gives_random_effects",
+      "text": "Suspicious stew gives one effect, set by the flower it was made with"
+    },
+    {
+      "id": "loading_tips:lava_buckets_are_the_best_furnace_fuel",
+      "text": "Lava buckets are a great furnace fuel"
+    },
+    {
+      "id": "loading_tips:wooden_buttons_have_a_longer_signal",
+      "text": "Wooden buttons and pressure plates react to arrows and items, stone ones only to players and mobs"
+    },
+    {
+      "id": "loading_tips:iron_doors_require_a_redstone_signal",
+      "text": "Iron doors and iron trapdoors open only with redstone"
+    },
+    {
+      "id": "loading_tips:trapdoors_can_be_used_as_ladders",
+      "text": "An open trapdoor above a ladder can be climbed like one"
+    },
+    {
+      "id": "loading_tips:stairs_can_be_waterlogged",
+      "text": "Stairs, slabs, fences, walls, panes and many other partial blocks can hold water"
+    },
+    {
+      "id": "loading_tips:fences_connect_to_most_solid_blocks",
+      "text": "Fences connect to solid blocks and are too high to jump, and fence gates in them open either way"
+    },
+    {
+      "id": "loading_tips:pointed_dripstone_fills_cauldrons",
+      "text": "Pointed dripstone fills cauldrons"
+    },
+    {
+      "id": "loading_tips:leather_boots_let_you_walk_on_snow",
+      "text": "Powder snow freezes anyone who sinks into it; leather boots let you walk on top"
+    },
+    {
+      "id": "loading_tips:magma_cubes_are_immune_to_fire",
+      "text": "Magma cubes are immune to fire"
+    },
+    {
+      "id": "loading_tips:piglin_brutes_never_barter",
+      "text": "Piglin Brutes never barter"
+    },
+    {
+      "id": "loading_tips:hoglins_are_afraid_of_warped_fungus_nether",
+      "text": "Hoglins breed with crimson fungus and flee warped fungus, portals and respawn anchors; out of the Nether they become Zoglins"
+    },
+    {
+      "id": "loading_tips:bastions_are_full_of_gold_blocks",
+      "text": "Bastions hold gold blocks and rich loot, Pigstep disc included"
+    },
+    {
+      "id": "loading_tips:compasses_point_to_world_spawn",
+      "text": "Compasses point to spawn in the Overworld, to your entry portal in the Nether and to the exit portal in the End"
+    },
+    {
+      "id": "loading_tips:daylight_detectors_activate_when_exposed_to",
+      "text": "Daylight detectors give a signal in sunlight, or at night once clicked to invert them"
+    },
+    {
+      "id": "loading_tips:cactus_blocks_destroy_items",
+      "text": "Cactus blocks destroy items"
+    },
+    {
+      "id": "loading_tips:sand_falls_if_there_is_no_block_below",
+      "text": "Sand, gravel and concrete powder fall with nothing below; a falling anvil or pointed dripstone hurts what it hits"
+    },
+    {
+      "id": "loading_tips:concrete_is_made_by_wetting_powder",
+      "text": "Concrete powder hardens into concrete when it touches water"
+    },
+    {
+      "id": "loading_tips:item_frames_can_be_placed_on_floors",
+      "text": "Item frames go on any face, floors and ceilings included; a glass item frame hides its frame"
+    },
+    {
+      "id": "loading_tips:honey_bottles_remove_poison",
+      "text": "Honey bottles remove poison"
+    },
+    {
+      "id": "loading_tips:sugar_speeds_up_baby_horses",
+      "text": "Feed baby horses sugar, wheat, apples or hay to make them grow faster"
+    },
+    {
+      "id": "loading_tips:raw_fish_heals_injured_cats",
+      "text": "Raw fish heals injured cats"
+    },
+    {
+      "id": "loading_tips:zombies_can_break_wooden_doors",
+      "text": "Zombies break wooden doors on Hard difficulty"
+    },
+    {
+      "id": "loading_tips:skeleton_horses_spawn_during_storms",
+      "text": "Skeleton horses spawn during storms"
+    },
+    {
+      "id": "loading_tips:slimes_only_spawn_in_certain_chunks",
+      "text": "Slimes spawn in swamps at night and in certain chunks below y 40"
+    },
+    {
+      "id": "loading_tips:witches_use_potions_to_heal",
+      "text": "Witches use potions to heal"
+    },
+    {
+      "id": "loading_tips:big_dripleaves_collapse_under_weight",
+      "text": "Big dripleaves collapse under weight"
+    },
+    {
+      "id": "loading_tips:glow_berries_provide_light_and_food",
+      "text": "Glow berries provide light and food"
+    },
+    {
+      "id": "loading_tips:sculk_catalysts_create_sculk_blocks",
+      "text": "Sculk catalysts spread sculk where mobs die nearby"
+    },
+    {
+      "id": "loading_tips:soul_torches_give_off_low_light",
+      "text": "Soul torches give less light than torches but do not melt snow or ice"
+    },
+    {
+      "id": "loading_tips:nether_gold_ore_drops_nuggets",
+      "text": "Nether gold ore and gilded blackstone drop gold nuggets"
+    },
+    {
+      "id": "loading_tips:twisting_vines_grow_upward",
+      "text": "Twisting vines grow up and weeping vines grow down; both can be climbed"
+    },
+    {
+      "id": "loading_tips:basalt_forms_from_blue_ice_and_lava",
+      "text": "Lava flowing over soul soil next to blue ice turns into basalt"
+    },
+    {
+      "id": "loading_tips:cobblestone_forms_from_water_and_lava",
+      "text": "Water and lava make cobblestone, or other stones when the lava touches certain blocks"
+    },
+    {
+      "id": "loading_tips:obsidian_forms_when_water_hits_source_lava",
+      "text": "Obsidian forms when water hits source lava"
+    },
+    {
+      "id": "loading_tips:crying_obsidian_cannot_be_moved_by_pistons",
+      "text": "Obsidian and crying obsidian cannot be pushed by pistons"
+    },
+    {
+      "id": "loading_tips:strongholds_have_libraries_full_of_books",
+      "text": "Strongholds have libraries full of books"
+    },
+    {
+      "id": "loading_tips:eyes_of_ender_lead_to_the_portal",
+      "text": "Eyes of Ender lead to the portal"
+    },
+    {
+      "id": "loading_tips:shulkers_fire_levitation_bullets",
+      "text": "Shulkers fire levitation bullets"
+    },
+    {
+      "id": "loading_tips:end_ships_hold_the_elytra",
+      "text": "Every player can take an elytra from each End ship"
+    },
+    {
+      "id": "loading_tips:armor_stands_can_hold_any_item",
+      "text": "Armor stands have arms and can hold an item in each hand"
+    },
+    {
+      "id": "loading_tips:pistons_can_push_up_to_12_blocks",
+      "text": "Pistons push up to 12 blocks; sticky pistons also pull one back, even another piston"
+    },
+    {
+      "id": "loading_tips:redstone_torches_invert_signals",
+      "text": "Redstone torches invert signals"
+    },
+    {
+      "id": "loading_tips:tnt_can_be_lit_with_fire_charges",
+      "text": "TNT is lit by flint and steel, fire charges, fire, redstone or Flame arrows"
+    },
+    {
+      "id": "loading_tips:the_recovery_compass_points_to_where_you_last",
+      "text": "The recovery compass, crafted with echo shards, points to where you last died"
+    },
+    {
+      "id": "loading_tips:ancient_cities_are_the_only_place_to_find_swift",
+      "text": "Swift Sneak, found only in Ancient City chests, lets you walk faster while crouching"
+    },
+    {
+      "id": "loading_tips:the_warden_is_completely_blind_but_has",
+      "text": "The blind Warden, summoned by sculk shriekers, hunts by sound; sneak to stay quiet and throw items to lure it away"
+    },
+    {
+      "id": "loading_tips:wool_blocks_dampen_vibrations_making_you",
+      "text": "Wool and carpet hide vibrations from sculk, steps on them included, and a minecart over wool runs silently"
+    },
+    {
+      "id": "loading_tips:allay_mobs_will_collect_items_for_you_if_you",
+      "text": "Allays fetch items matching the one you give them, and one dancing to a jukebox duplicates when given an amethyst shard"
+    },
+    {
+      "id": "loading_tips:glow_ink_sacs_make_sign_text_glow_in_the_dark",
+      "text": "Glow ink sacs from Glow Squids make sign text glow and craft glowing wool and carpet; an ink sac clears sign glow"
+    },
+    {
+      "id": "loading_tips:firework_rockets_with_stars_deal_blast_damage",
+      "text": "Firework rockets with stars deal blast damage when fired from crossbows"
+    },
+    {
+      "id": "loading_tips:multishot_crossbows_fire_three_arrows_for_the",
+      "text": "Multishot fires three arrows and Piercing goes through mobs, but not both; Quick Charge reloads faster"
+    },
+    {
+      "id": "loading_tips:sweeping_edge_increases_the_damage_of_your",
+      "text": "Sweeping Edge increases the damage of your sword's sweep attack"
+    },
+    {
+      "id": "loading_tips:knockback_is_great_for_keeping_creepers_at_a",
+      "text": "Knockback is great for keeping Creepers at a distance"
+    },
+    {
+      "id": "loading_tips:smite_deals_massive_damage_to_undead_mobs_like",
+      "text": "Smite hits undead harder, Bane of Arthropods hits spiders harder and cuts cobwebs fast; neither combines with Sharpness"
+    },
+    {
+      "id": "loading_tips:impaling_tridents_deal_extra_damage_to_all",
+      "text": "Impaling tridents deal extra damage to all aquatic mobs"
+    },
+    {
+      "id": "loading_tips:loyalty_tridents_fly_back_to_your_hand_after",
+      "text": "Tridents: Loyalty returns them, Channeling calls lightning, Riptide launches you in rain, water or a cauldron but excludes both"
+    },
+    {
+      "id": "loading_tips:infinity_bows_never_run_out_of_arrows_as_long_as",
+      "text": "On bows, Power adds damage, Punch knockback, Flame fire, and Infinity spares arrows; Infinity and Mending exclude each other"
+    },
+    {
+      "id": "loading_tips:tipped_arrows_can_apply_potion_effects_from_a",
+      "text": "Tipped arrows can apply potion effects from a distance"
+    },
+    {
+      "id": "loading_tips:observers_detect_block_updates_in_front_of_them",
+      "text": "Observers detect block updates in front of them"
+    },
+    {
+      "id": "loading_tips:target_blocks_give_a_stronger_redstone_signal_if",
+      "text": "Target blocks give a stronger redstone signal if hit in the center"
+    },
+    {
+      "id": "loading_tips:note_blocks_play_different_sounds_depending_on",
+      "text": "Note blocks play different sounds depending on the block below"
+    },
+    {
+      "id": "loading_tips:trapped_chests_give_off_a_redstone_signal_when",
+      "text": "Trapped chests give off a redstone signal when opened"
+    },
+    {
+      "id": "loading_tips:redstone_repeaters_can_delay_signals_up_to_0_4",
+      "text": "Redstone repeaters can delay signals up to 0.4 seconds"
+    },
+    {
+      "id": "loading_tips:droppers_move_items_while_dispensers_use_them",
+      "text": "Droppers move items, while dispensers use them"
+    },
+    {
+      "id": "loading_tips:dispensers_can_equip_armor_onto_players_and",
+      "text": "Dispensers can equip armor onto players and armor stands"
+    },
+    {
+      "id": "loading_tips:powered_rails_can_be_used_to_launch_minecarts_up",
+      "text": "Powered rails speed carts up slopes, detector rails signal when a cart passes and activator rails eject riders"
+    },
+    {
+      "id": "loading_tips:redstone_dust_can_travel_up_transparent_blocks",
+      "text": "Redstone dust can travel up transparent blocks like glass"
+    },
+    {
+      "id": "loading_tips:slime_blocks_bounce_entities_high_into_the_air",
+      "text": "Slime blocks bounce you, honey blocks stop jumps and let you slide down walls, and the two never stick together"
+    },
+    {
+      "id": "loading_tips:sweet_berry_bushes_slow_you_down_and_deal_damage",
+      "text": "Sweet berry bushes slow you down and hurt you unless you wear leggings"
+    },
+    {
+      "id": "loading_tips:foxes_will_pick_up_and_use_any_item_you_drop",
+      "text": "Foxes pick up and use dropped items, so a Fox holding a Fire Aspect sword can set you alight"
+    },
+    {
+      "id": "loading_tips:polar_bears_are_peaceful_unless_you_get_near",
+      "text": "Polar Bears are peaceful unless you get near their cubs"
+    },
+    {
+      "id": "loading_tips:pandas_have_different_personalities_based_on",
+      "text": "Pandas have personalities set by their genes, and a sneezing baby Panda can drop slimeballs"
+    },
+    {
+      "id": "loading_tips:parrots_mimic_the_sounds_of_nearby_hostile_mobs",
+      "text": "Parrots imitate nearby hostile mobs, and cookies poison them"
+    },
+    {
+      "id": "loading_tips:curing_a_zombie_villager_gives_you_massive_trade",
+      "text": "Hero of the Village, good gossip and curing a Zombie Villager lower prices; a cure's discount is lost if it turns again"
+    },
+    {
+      "id": "loading_tips:iron_golems_spawn_in_villages_to_protect_against",
+      "text": "Iron Golems guard villages and drop no iron when killed; heal one with iron ingots"
+    },
+    {
+      "id": "loading_tips:vindicators_named_johnny_will_attack_every",
+      "text": "Vindicators named 'Johnny' will attack every nearby mob"
+    },
+    {
+      "id": "loading_tips:totems_of_undying_must_be_held_to_save_you_from",
+      "text": "A totem of undying saves you from your hand or your charm slot"
+    },
+    {
+      "id": "loading_tips:vexes_are_summoned_by_evokers_and_can_fly",
+      "text": "Vexes are summoned by Evokers and can fly through walls"
+    },
+    {
+      "id": "loading_tips:phantoms_spawn_if_you_havent_slept_for_three",
+      "text": "Phantoms spawn after three nights without sleep; wind chimes keep them away"
+    },
+    {
+      "id": "loading_tips:slow_falling_potions_are_made_using_phantom",
+      "text": "Slow Falling potions are made using phantom membranes"
+    },
+    {
+      "id": "loading_tips:drowned_mobs_can_spawn_with_tridents_and",
+      "text": "Drowned mobs can spawn with tridents and nautilus shells"
+    },
+    {
+      "id": "loading_tips:scutes_are_dropped_when_baby_turtles_grow_into",
+      "text": "Scutes are dropped when baby Turtles grow into adults"
+    },
+    {
+      "id": "loading_tips:dolphins_will_lead_you_to_shipwrecks_if_you_feed",
+      "text": "Dolphins will lead you to shipwrecks if you feed them fish"
+    },
+    {
+      "id": "loading_tips:soul_sand_underwater_creates_bubble_columns_that",
+      "text": "Underwater, soul sand makes bubble columns that push up and magma blocks make ones that pull down"
+    },
+    {
+      "id": "loading_tips:kelp_can_be_smelted_into_dried_kelp_for_a_quick",
+      "text": "Kelp can be smelted into dried kelp for a quick snack"
+    },
+    {
+      "id": "loading_tips:sea_pickles_provide_light_when_placed_underwater",
+      "text": "Sea pickles provide light when placed underwater"
+    },
+    {
+      "id": "loading_tips:coral_fans_must_stay_in_water_or_they_will_turn",
+      "text": "Coral fans must stay in water or they will turn gray"
+    },
+    {
+      "id": "loading_tips:tropical_fish_can_be_carried_in_buckets",
+      "text": "Fish, axolotls and tadpoles can be carried in water buckets"
+    },
+    {
+      "id": "loading_tips:pufferfish_deal_poison_damage_if_you_touch_them",
+      "text": "Pufferfish deal poison damage if you touch them"
+    },
+    {
+      "id": "loading_tips:lush_caves_are_filled_with_moss_glow_berries_and",
+      "text": "Lush Caves are filled with moss, glow berries, and spore blossoms"
+    },
+    {
+      "id": "loading_tips:pointed_dripstone_can_be_used_to_create_infinite",
+      "text": "Pointed dripstone can be used to create infinite lava or water"
+    },
+    {
+      "id": "loading_tips:azalea_trees_mark_the_location_of_a_lush_cave",
+      "text": "Azalea trees mark the location of a Lush Cave below"
+    },
+    {
+      "id": "loading_tips:lightning_rods_protect_your_wooden_roofs_from",
+      "text": "Lightning rods protect your wooden roofs from fire"
+    },
+    {
+      "id": "loading_tips:tinted_glass_blocks_light_but_is_still",
+      "text": "Tinted glass blocks light but is still transparent"
+    },
+    {
+      "id": "loading_tips:amethyst_geodes_are_found_deep_underground_in",
+      "text": "Budding amethyst in underground geodes grows clusters that drop four shards; it cannot be moved, even with Silk Touch"
+    },
+    {
+      "id": "loading_tips:deepslate_is_tougher_than_stone_and_takes_longer",
+      "text": "Deepslate is tougher than stone and takes longer to mine"
+    },
+    {
+      "id": "loading_tips:end_crystal_beams_can_be_blocked_with_blocks_to",
+      "text": "End crystal beams can be blocked with blocks to stop the Dragon's heal"
+    },
+    {
+      "id": "loading_tips:the_dragon_breath_can_be_collected_in_glass",
+      "text": "The dragon breath can be collected in glass bottles"
+    },
+    {
+      "id": "loading_tips:lingering_potions_are_made_using_dragon_breath",
+      "text": "Lingering potions are made using dragon breath"
+    },
+    {
+      "id": "loading_tips:wither_skeletons_only_spawn_in_nether_fortresses",
+      "text": "Wither Skeletons spawn only in Nether Fortresses and sometimes drop their skull"
+    },
+    {
+      "id": "loading_tips:wither_skulls_are_needed_to_summon_the_wither",
+      "text": "Three Wither Skeleton skulls on a T of soul sand or soul soil summon the Wither, which drops a Nether star"
+    },
+    {
+      "id": "loading_tips:netherite_armor_is_fireproof_and_wont_burn_in",
+      "text": "Netherite armor is fireproof and won't burn in lava"
+    },
+    {
+      "id": "loading_tips:ancient_debris_is_most_common_at_y_level_15_in",
+      "text": "Ancient debris is most common around y 15 in the Nether and smelts into netherite scrap"
+    },
+    {
+      "id": "loading_tips:lodestones_allow_compasses_to_point_to_a",
+      "text": "Lodestones allow compasses to point to a specific block"
+    },
+    {
+      "id": "loading_tips:piglins_love_gold_and_will_barter_with_you_for",
+      "text": "Piglins love gold and will barter with you for it"
+    },
+    {
+      "id": "loading_tips:wear_gold_armor_to_stop_piglins_from_attacking",
+      "text": "Wear gold armor to stop Piglins from attacking you"
+    },
+    {
+      "id": "loading_tips:piglin_brutes_protect_bastions_and_cannot_be",
+      "text": "Piglin Brutes protect Bastions and cannot be distracted by gold"
+    },
+    {
+      "id": "loading_tips:zombified_piglins_are_neutral_until_you_attack",
+      "text": "Zombified Piglins are neutral until you attack them"
+    },
+    {
+      "id": "loading_tips:ghast_tears_are_used_to_brew_regeneration",
+      "text": "Ghast tears are used to brew Regeneration potions"
+    },
+    {
+      "id": "loading_tips:magma_cream_is_used_for_fire_resistance_potions",
+      "text": "Magma cream is used for Fire Resistance potions"
+    },
+    {
+      "id": "loading_tips:ruined_portals_appear_in_both_the_overworld_and",
+      "text": "Ruined portals appear in both the Overworld and the Nether"
+    },
+    {
+      "id": "loading_tips:respawn_anchors_allow_you_to_set_your_spawn_in",
+      "text": "Respawn anchors, made from crying obsidian and charged with glowstone, set your spawn in the Nether and explode elsewhere"
+    },
+    {
+      "id": "loading_tips:blackstone_can_be_used_as_a_substitute_for",
+      "text": "Blackstone can be used as a substitute for cobblestone"
+    },
+    {
+      "id": "loading_tips:basalt_deltas_are_home_to_magma_cubes_and_ash",
+      "text": "Basalt Deltas are home to Magma Cubes and ash particles"
+    },
+    {
+      "id": "loading_tips:crafting_coal_into_a_block_of_coal_gives_you_8",
+      "text": "A coal block smelts 80 items, 8 more than its nine coal; a dried kelp block smelts 20 and bamboo only 0.25"
+    },
+    {
+      "id": "loading_tips:place_lava_or_water_above_pointed_dripstone_to",
+      "text": "Place lava or water above pointed dripstone to slowly drip it into a cauldron below!"
+    },
+    {
+      "id": "loading_tips:baby_mobs_now_have_unique_models_instead_of",
+      "text": "Baby mobs have their own models instead of being shrunken adults"
+    },
+    {
+      "id": "loading_tips:wolves_love_bones_to_tame_and_meat_to_heal",
+      "text": "Tame wolves with bones and heal them with any meat, rotten flesh included"
+    },
+    {
+      "id": "loading_tips:blast_protection_reduces_explosion_damage_and",
+      "text": "Protection, Fire, Blast and Projectile Protection exclude each other; each specific one guards best against its own damage"
+    },
+    {
+      "id": "loading_tips:frost_walker_boots_let_you_walk_on_water_and",
+      "text": "Frost Walker boots freeze the water under you so you can walk on it"
+    }
   ]
 }

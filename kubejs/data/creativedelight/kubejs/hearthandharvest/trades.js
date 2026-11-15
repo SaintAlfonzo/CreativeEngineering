@@ -9,7 +9,8 @@ MoreJSEvents.villagerTrades(e => {
 	var farmer = 'minecraft:farmer'
 
 	// Level 1 - Novice: buys the new crops
-	e.addTrade(farmer, 1, [Item.of(i.hops, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
+	// Hops only with Vinery (plan_bugfix_1114 3.1)
+	if (global.has.mod('vinery')) e.addTrade(farmer, 1, [Item.of(i.hops, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
 	e.addTrade(farmer, 1, [Item.of(i.raspberry, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
 	e.addTrade(farmer, 1, [Item.of(i.sunflower_seeds, 32)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
 
@@ -25,5 +26,7 @@ MoreJSEvents.wandererTrades(e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 	var i = global.item
 	var t = global.trades
-	t.sell(e, t.COMMON, [i.hops, i.raspberry_pips, i.sunflower_seeds, i.blueberry_pips], { emeralds: 1, maxUses: 12 })
+	var seeds = [i.raspberry_pips, i.sunflower_seeds, i.blueberry_pips]
+	if (global.has.mod('vinery')) seeds.unshift(i.hops)   // hops only with Vinery (plan_bugfix_1114 3.1)
+	t.sell(e, t.COMMON, seeds, { emeralds: 1, maxUses: 12 })
 })

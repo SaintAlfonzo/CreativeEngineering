@@ -24,7 +24,7 @@
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
 
-- **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, with flesh, blood lakes, eyebulbs, hair and flesh tendons.
+- **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, made entirely of flesh, with blood lakes, eyebulbs, hair and flesh tendons. Nether ores do not generate in it.
 - **New:** Flesh slows walking to 0.6x. Porous Flesh slows walking to 0.45x, halves jump height and slides you down its sides, like a Honey Block.
 - **New:** Flesh Tendons can be climbed like a ladder.
 - **New:** Crushing Wheels and the Millstone crush Flesh and Porous Flesh into drops from four groups. In JEI each group is one slot that cycles its items.
@@ -71,6 +71,41 @@
 - **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles show their tooltip.
 - **Fixed:** Thrown cleavers and pitchforks have names.
 - **New:** Raspberry Pie and its slices have the tooltip "Doesn't run programs".
+- **Changed:** Corn Mazes generate twice as often.
+- **Changed:** Mums go in flower pots, planter boxes and flower boxes, and spread with bone meal like other small flowers.
+- **Fixed:** Syrup had two crafting recipes into sugar; only the one giving 4 sugar is left.
+
+## Hops <!-- icon: hearthandharvest:hops -->
+
+- **Changed:** Hops grow as a vine: plant them on the side of a log or any solid block; they need no farmland.
+- **Changed:** Hops plant on a Grapevine Lattice like jungle grapes [own hops lattice, on farmland]; old hops lattices load as Grapevine Lattices with their hops.
+- **Changed:** Hops vines ripen over 4 stages; right-click a ripe vine for 1 to 2 hops; shears stop its growth.
+- **Changed:** Wild hops hang on tree trunks in temperate forests, 1 in 96 chunks [ground patches, 1 in 120 chunks].
+- **Changed:** Hops, Hops Salad, Bags of Hops and Wild Hops exist only with Creative Brewing installed.
+- **Fixed:** Hops never grew: the lattice dried the farmland under it.
+
+## Tilled End Stone <!-- icon: minecraft:end_stone -->
+
+- **Removed:** Hearth and Harvest's Tilled End Stone; end stone tills into Ender Crop's Tilled End Stone, and old blocks become it.
+- **Changed:** End stone tills only with a netherite or better hoe, also with the Tilling enchantment [any hoe with Unbreaking].
+- **New:** End stone and Tilled End Stone have the tooltip "Till end stone with a netherite hoe".
+
+## Stomping Basin <!-- icon: hearthandharvest:stomping_basin -->
+
+- **Changed:** The Stomping Basin takes only items used in a stomping recipe; other items keep their own use.
+- **Fixed:** The Stomping Basin swallowed empty buckets and any other item, also from hoppers.
+- **New:** 3 grapes and an empty wine bottle stomped in a 2x2 Stomping Basin give that grape's juice, for every grape the Grapevine Pot presses.
+
+## Seed Pouches and Bundles <!-- icon: quark:seed_pouch -->
+
+- **Fixed:** A Seed Pouch in a dispenser crashed the server.
+- **Changed:** A Seed Pouch in a dispenser plants up to 25 seeds in a 5x5 in front of it and stays in the dispenser.
+- **New:** A Bundle in a dispenser plants its first seed in front of it and stays in the dispenser.
+
+## Horseshoes <!-- icon: hearthandharvest:horseshoe -->
+
+- **Fixed:** Sneak-clicking a shod horse with an empty hand, shears or a horseshoe opened its inventory instead of taking the horseshoe off.
+- **Fixed:** Shod horses took damage from cactus and sweet berry bushes.
 
 ## Crows <!-- icon: hearthandharvest:crow_feather -->
 
@@ -83,6 +118,23 @@
 - **Changed:** Crow Nests no longer generate on the ground [grassy biomes].
 - **Removed:** Alex's Mobs' Crows no longer spawn; their spawn egg is removed.
 - **Fixed:** A crash when new chunks generated near crows.
+- **Fixed:** Tame crows never bred; corn and corn seeds start breeding.
+- **New:** A hurt tame crow eats crow food (seeds, pips and corn) to heal.
+- **Fixed:** With hand feeding switched off, wild crows still ate crow food and fell in love.
+
+## Crop Yields <!-- icon: farmersdelight:rich_soil_farmland -->
+
+- **Changed:** Fortune no longer changes the drops of any crop, berry bush or wild crop. Melons are unchanged.
+- **Changed:** The better-soil extra is sized on each crop's average harvest rounded to the nearest half. Carrots, Potatoes, Onions and Peanuts average 4.87 on Rich Soil Farmland and 6.02 on Fertile Soil [4.93 and 6.16]; Tobacco, Sweet Potato, Zucchini, Garlic, Hemp and Bell Peppers move by under 0.2.
+- **New:** Right-click picks get the better-soil extra: Tomatoes (the soil under the bottom vine, also on ropes and sticks), Cucumber, Ghost Pepper, Zucchini, Sweet Berries, Strawberries, Blueberries, Cranberries, Lemons and Salmonberries.
+- **New:** Breaking a ripe Sweet Berry Bush, Strawberry Bush, Blueberry Bush, Cranberry Bush or Lemon Tree gives the better-soil extra.
+- **New:** Nether crops give about a third more on Rich Soul Soil and two thirds more on Fertile Soul Soil:
+  - Nether Wart (Fertile Soul Soil only), Ghost Peppers.
+  - Picked Propelpearls (Rich Soul Soil under the lowest stem).
+  - Fungus Colonies, broken ripe or sheared.
+- **Fixed:** A ripe Cucumber or Ghost Pepper dropped no seeds when broken; it now drops 1 to 4.
+- **Changed:** In Botany Pots, Rich Soil and Rich Soil Farmland grow plants 10% faster [Rich Soil Farmland 25%] and Fertile Soil is a pot soil that grows them 20% faster. No soil changes pot yield.
+- **New:** Rich Soil, Rich Soil Farmland and Fertile Soil show their Botany Pots growth speed in the tooltip.
 
 ## Corn <!-- icon: corn_delight:corn -->
 
@@ -104,6 +156,21 @@
 ## Salt <!-- icon: salt:salt -->
 
 - **Changed:** Salt Dust is named Salt.
+- **Changed:** Licked salt blocks are rock salt layers 12, 8 and 4 pixels high [full blocks].
+- **New:** A salt layer placed on a licked salt block refills it one stage per layer; waxed blocks stay waxed.
+- **New:** Salt in a dispenser restores a licked salt block.
+- **Fixed:** Animals more than 16 blocks from a salt lick never walked to it.
+
+## Melting <!-- icon: minecraft:ice -->
+
+- **New:** Licked salt blocks melt touching ice and snow, like other salt blocks.
+- **New:** Fire, soul fire, lit campfires, magma, torches, lanterns, jack o'lanterns and glowstone melt ice and snow within 3 blocks. Modded torches, sconces, lanterns and lit braziers and candelabras count too.
+- **New:** Lava melts ice and snow within 4 blocks.
+- **New:** Ice and frosted ice melt into water, or into nothing in the Nether. Snow layers, Snow Blocks and Powder Snow melt into nothing.
+- **New:** Packed Ice and Blue Ice melt one tier at a time (Blue Ice to Packed Ice to Ice), slowly: touching salt or fire, or within 2 blocks of lava.
+- **New:** Snow, Snow Blocks and Powder Snow placed in the Nether melt at once.
+- **Changed:** Light alone no longer melts ice or snow: sea lanterns, shroomlights, redstone torches and lamps and other lights without a flame leave them [any light level 12 or more].
+- **Fixed:** The Salt Block and the Block of Raw Rock Salt melted no ice or snow.
 
 ## Bees <!-- icon: minecraft:honeycomb -->
 
@@ -132,6 +199,23 @@
 ## Portals <!-- icon: portalgun:portal_gun -->
 
 - **Fixed:** The Immersive Portals portal block has a name.
+- **Fixed:** Walking out of a Portal Gun portal on a wall still lifted the player one block, and Nether and End portals did the same. Only portals in a floor lift the player now.
+
+## Rose Gold <!-- icon: mca:rose_gold_ingot -->
+
+- **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
+
+## Vanilla Bug Fixes
+
+- **New:** Debugify Reforged, on clients and the server, with 9 of its vanilla bug fixes on.
+- **Fixed:** Mobs that stayed in their death animation never disappeared.
+- **Fixed:** A cured baby zombie villager stayed on the chicken it rode.
+- **Fixed:** Skeletons wearing leather armor still turned into strays in powder snow.
+- **Fixed:** Adult striders spawned with saddles in Peaceful.
+- **Fixed:** The Block of Raw Copper made stone sounds.
+- **Fixed:** Minecarts with Command Block forgot their cooldown when the world was saved.
+- **Fixed:** Snow golem snowballs hurt wolves.
+- **Fixed:** Lightning burned the items dropped by the mob it killed. Only items dropped in the last moment before the strike are spared.
 
 ## Food & Cooking
 
@@ -139,11 +223,37 @@
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
 - **Changed:** Lunchboxes show as not counting for food diversity; the food eaten out of them still counts.
 - **Fixed:** Flavoured Rustic Delight pancakes placed on a coaster showed a missing model.
+- **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
+- **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost.
+- **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **Changed:** Create Deco's Cast Iron Block is now called Cast Iron Plating (was Cast Iron Block).
 
+## Loading screen tips
+
+- **Changed:** The loading screen tip bar also shows while reading world data, creating a world, connecting to a server and joining [world loading and terrain screens only].
+- **Changed:** One tip stays through a whole load and changes only every 10 seconds [a new tip on each loading screen].
+- **Changed:** Tips rewritten against the pack: 213 tips [335]. Tips on one feature merged into one tip; trivia removed.
+- **Fixed:** Tips said anvils turn 'Too Expensive', Illusioners never spawn and Shulker shells drop from End Cities.
+
 ## Interface
 
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
+
+## Gameplay
+
+- **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
+- **Changed:** Elytra fly in every dimension [the End only].
+- **Fixed:** Rubber trees did not generate in jungles.
+
+## Performance & Stability
+
+- **Fixed:** Worlds did not load with Creative Delight but without Creative Brewing or Corn Delight.
+- **Fixed:** On Linux the game closed without a crash report while opening its window when 420 or more mods were installed.
+- **Fixed:** Tags, food types and recipes for Cozy's Improved Cats, Towns and Towers, Hopo Better Underwater Ruins, Unwrecked Ships and Yuushya were skipped as if those mods were not installed.
+
+## Mods Added & Removed
+
+- **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB], so crowded storage chunks and heavy items no longer kick players.

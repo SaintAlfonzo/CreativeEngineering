@@ -1,0 +1,87 @@
+# r1114 rerun of fix_c3a1's live-config batch faults (verdicts: perf/runs/r1114/verdicts/fix_c3a1.md). Live toml
+# edits are never seen on the scratch server (no "changed, sending notifies" in debug.log for in-place writes either),
+# so every config value is set before a boot. Same world as fix_c3a1 (level fixc3a1, scratch dir fixc3a1); no fresh
+# world needed (walls at x 1340-1360 z 1040 and x -10..10 z 10 are still there; all gun portals are gone).
+# Probes: as fix_c3a1 (zz_c3_probe.js with the getEncodeId fix, zz_zq, zz_zp, zz_zact already in srv/kubejs).
+#
+# Boot r1 (server stopped first):
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecommon-common.toml bees honeycombMultiplier 1
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml portalgun heartbeatSeconds 2
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml portalgun despawnDistance 128
+#   run rows SQ-C3R-setup, SQ-FCK-13r, SQ-IP-05r1
+# Boot r2 (stop, then before the boot):
+#   python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativecompat-common.toml portalgun despawnDistance 0
+#   (heartbeatSeconds stays 2, so 12 s is six beats); run --rows SQ-C3R-setup2,SQ-IP-05r2
+# After r2: restore honeycombMultiplier 2, heartbeatSeconds 10, despawnDistance 128 (the pack values).
+# Not covered: whether a value is read live (no working live edit); the PG-01a/01b flag rows wait for the Compat fix.
+pace 1
+
+## SQ-C3R-setup | area, gamerules, bot qa (boot r1; not a test row)
+> forceload add 1000 1000 1480 1080
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 0
+> time set noon
+> kill @e[type=minecraft:item]
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 5
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+shell grep -E "honeycombMultiplier|heartbeatSeconds|despawnDistance" config/creativecommon-common.toml config/creativecompat-common.toml
+look shell shows honeycombMultiplier = 1, heartbeatSeconds = 2, despawnDistance = 128; portals: 0 (none survived boot 2)
+
+## SQ-FCK-13r | dispenser shears a full nest with honeycombMultiplier 1 (set before the boot): 3 honeycomb
+# r1114: the fix_c3a1 dispenser was still there and setblock said "Could not set the block" (no shears): air first
+> fill 1050 -60 1080 1051 -60 1081 minecraft:air
+> kill @e[type=item,x=1048,y=-62,z=1078,dx=5,dy=4,dz=5]
+> setblock 1050 -60 1080 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:shears",Count:1b}]}
+> setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
+> setblock 1050 -60 1081 minecraft:redstone_block
+sleep 1
+> setblock 1050 -60 1081 minecraft:air
+sleep 1
+> zc3 items 1051 -60 1080 3
+expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x3\b
+look x3 (the x6 half passed in fix_c3a1 with the pack value 2); x6 here = the multiplier is not applied (FAIL)
+
+## SQ-IP-05r1 | 2 s heartbeat (set before the boot): a pair goes within 4 s once the owner is 140 blocks off
+> tp qa 1350 -60 1030 0 0
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 2
+> tp qa 1490 -60 1030
+sleep 4
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 0\b
+look 2 then 0 within 4 s (with the 10 s beat fix_c3a1 still read 4 after 4 s)
+
+## SQ-C3R-setup2 | boot r2: bot qa again (not a test row)
+> forceload add 1000 1000 1480 1080
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 5
+shell grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+look heartbeatSeconds = 2, despawnDistance = 0
+
+## SQ-IP-05r2 | despawnDistance 0 (set before the boot): the pair stays with the owner 300 blocks off
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 2
+> tp qa 1650 -60 1030
+sleep 12
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: 2
+look 2 both times (six 2 s beats with the owner 300 blocks off); 0 = despawnDistance 0 does not mean never (FAIL)

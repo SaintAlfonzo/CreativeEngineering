@@ -45,8 +45,10 @@ look CD file [campfire] rainOutTicks = 120
 > forceload add 0 0 31 31
 > gamerule doMobSpawning false
 sleep 20
-> summon minecraft:tnt 16 -60 16 {Fuse:1}
-sleep 0.4
+# r1114: pace 0 here (pace 1 put the kill 1.4 s after the summon; shrapnel is discarded on its first hit), TNT in the air
+pace 0
+> summon minecraft:tnt 16 -40 16 {Fuse:1}
+sleep 0.15
 > kill @e[type=creativecompat:shrapnel]
 waitlog Killed \d+ entit|No entity was found 20
 expect Killed 12 entit

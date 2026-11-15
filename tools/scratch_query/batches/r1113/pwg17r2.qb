@@ -1,0 +1,266 @@
+# r1114 Power Grid rerun 2 pwg17r2 on jar jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-17.jar (sha1 cbc2ddee37ca,
+# the same jar as pwg17 and pwg17r). Reruns the pwg17r BATCH-FAULT rows (verdicts: perf/runs/r1114/verdicts/pwg17r.md)
+# plus the chain setup they depend on (-76, SETUP15, -78, -79). Fixes against pwg17r:
+#   SQ-PWG-90  pwg_p10_probe.js recipe line prints blank=[..] (Ingredient.EMPTY pattern cells: stairs 1,2,5, design table 4)
+#              apart from unresolved=[..] (every stack a minecraft:barrier: Forge's "Empty Tag" filler; #forge:cardboard
+#              is empty in the pack, D13, so deploying/ceiling_tile keeps unresolved=[1])
+#   SQ-PWG-80  redstone and blaze powder go in before the water: with the water first the pack's creativedelight
+#              water_salt mixing (heated, 1000 mB -> 2 salt, fluid only) ran before the items arrived
+#   SQ-PWG-82  the part depots start empty and get their parts only after the circuit is fed and locked: in pwg17r the
+#              arm moved the whole wire_connector x8 stack onto the belt before the circuit reached the arm (no
+#              incomplete circuit centred, so the belt took it as a plain item), and the stack then filled the end depot
+# Not repeated: SQ-PWG-91 (FAIL, port bug: ceiling_tile_* loot tables), -94, -95, -73, -81 and the rest (PASS in pwg17r).
+# FRESH WORLD (level pwg17r2): the pwg17r world has the P9c chain built and used (salt in the acid basin, wire connectors
+# on the belt end depot) and the SQ-PWG-SHOW17 showcase on top (X 1100 to 1123, Z 2010 to 2084).
+# Group A superflat, level pwg17r2, spawn-animals=true, ground Y -61 (grass), blocks at Y -60. The world is peaceful.
+# Areas: P10 X 1095 to 1135, Z 1995 to 2085 (SQ-PWG-90 forceload, no blocks placed); P9c X 1135 to 1200, Z 1855 to 1915
+# (SQ-PWG-76 forceload; mixer cogs X+1 of each mixer at Y -58, motors on them at Y -57; arm cogs X+1 of each arm at
+# Y -60, motors on them at Y -59)
+# Prep: as pwg17r (scratch_run_2026-11-14.md, the 02:23 pwg17r line: tpf_srv.sh with COPYDEV=1 and PGJAR=the -17 jar),
+# level pwg17r2. Probes: copy the CURRENT tools/scratch_query/pwg_*.js as zz_*.js (thirteen); check
+#   grep -c "blank=" OUT/srv/kubejs/server_scripts/zz_pwg_p10_probe.js   (non-zero: the pwg17r2 p10)
+#   Loading Protection: qrun.py toml OUT/srv/config/loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+# Run: qrun.py run OUT tools/scratch_query/batches/r1113/pwg17r2.qb perf/runs/<run>/pwg17r2
+# Probe goggle reads log a RuntimeDistCleaner ERROR (client class): no blanket ERROR reject.
+# waitlog matches anywhere since the row start; real waits are sleeps (20 ticks = 1 s) plus pace (s after each command).
+pace 1
+
+## SQ-PWG-90 | rerun 2: -17 loads (phase 10.0), registries, 116 recipes, zpwg10 check; the recipe line now splits blank pattern cells from unresolved ingredients
+bootexpect Done \(
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 10(\.0)?\)
+bootexpect Loaded 28 component items
+bootreject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
+bootreject Failed to parse component item
+> forceload add 1095 1995 1135 2085
+sleep 10
+> zpwg mods powergrid
+waitlog \[zpwg\] done 30
+> zpwg ns powergrid
+waitlog \[zpwg\] ns powergrid total 30
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg10 check
+waitlog \[zpwg10\] done 30
+shell grep -n -E 'powergrid\.mixins\.json|Mixin apply failed|string_light|ceiling_tile|copper_plating' logs/latest.log | grep -v -E 'zpwg|KubeJS' | head -40
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-17
+expect \[zpwg\] ns powergrid block: 78\b
+expect \[zpwg\] ns powergrid item: 119\b
+expect \[zpwg\] ns powergrid fluid: 2\b
+expect \[zpwg\] ns powergrid block_entity_type: 60\b
+expect \[zpwg\] ns powergrid menu: 7\b
+expect \[zpwg\] ns powergrid recipe_type: 1\b
+expect \[zpwg\] ns powergrid recipe_serializer: 3\b
+expect \[zpwg\] ns powergrid entity_type: 5\b
+expect \[zpwg3\] recipes 116$
+expect recipe powergrid:crafting/circuit_design_table type=minecraft:crafting_shaped output=1 circuit_design_table
+expect recipe powergrid:crafting/solar_panel_bearing type=minecraft:crafting_shaped output=1 solar_panel_bearing
+count \[zpwg10\] block (copper_plating|copper_plating_slab|copper_plating_stairs|ceiling_tile) registered=true item=true == 4
+count \[zpwg10\] block (ceiling_tile_connector|ceiling_tile_junction|ceiling_tile_lamp|ceiling_tile_solar|string_light_block) registered=true item=false == 5
+expect \[zpwg10\] item string_light_cord cordItem=true$
+expect \[zpwg10\] entity string_light_cord registered=true$
+count \[zpwg10\] block entity ceiling_tile_(lamp|connector|junction|solar) registered=true$ == 4
+expect \[zpwg10\] serializer powergrid:crafting_special_string_light_cord ok true$
+expect \[zpwg10\] recipe copper_plating_slab_from_copper_plating_stonecutting .*result=powergrid:copper_plating_slab x2 .*unresolved=\[\]
+expect \[zpwg10\] recipe copper_plating_stairs_from_copper_plating_stonecutting .*result=powergrid:copper_plating_stairs x1 .*unresolved=\[\]
+expect \[zpwg10\] recipe crafting/copper_plating_slab .*result=powergrid:copper_plating_slab x6 .*unresolved=\[\]
+expect \[zpwg10\] recipe crafting/copper_plating_stairs .*result=powergrid:copper_plating_stairs x4 .*blank=\[1,2,5\] unresolved=\[\]
+expect \[zpwg10\] recipe crafting/string_light_cord_pattern class=StringLightCordRecipe .*ingredients=0 blank=\[\] unresolved=\[\]
+expect \[zpwg10\] recipe deploying/ceiling_tile .*result=powergrid:ceiling_tile x1 .*blank=\[\] unresolved=\[1\]
+expect \[zpwg10\] recipe deploying/copper_plating .*result=powergrid:copper_plating x1 .*unresolved=\[\]
+expect \[zpwg10\] recipe deploying/string_light_cord .*result=powergrid:string_light_cord x1 .*unresolved=\[\]
+expect \[zpwg10\] recipe crafting/circuit_design_table .*result=powergrid:circuit_design_table x1 .*blank=\[4\] unresolved=\[\]
+expect \[zpwg10\] recipe crafting/solar_panel_bearing .*result=powergrid:solar_panel_bearing x1 .*unresolved=\[\]
+expect \[zpwg10\] recipes powergrid 116$
+count \[zpwg10\] tool copper_plating(_slab|_stairs)? pickaxeTag=true .*needsTool=true ironPickaxeCorrect=true == 3
+expect \[zpwg10\] tool ceiling_tile pickaxeTag=true axeTag=true
+expect \[zpwg10\] loot copper_plating_slab type=bottom -> powergrid:copper_plating_slab x1$
+expect \[zpwg10\] loot copper_plating_slab type=top -> powergrid:copper_plating_slab x1$
+expect \[zpwg10\] loot copper_plating_slab type=double -> powergrid:copper_plating_slab x2$
+expect \[zpwg10\] grid \[string_light_cord minecraft:red_dye minecraft:green_dye minecraft:blue_dye\] matches=true result=powergrid:string_light_cord x1 tag=\{Pattern:\[B;14B,13B,11B\]\}$
+expect \[zpwg10\] grid \[string_light_cord\] matches=true result=powergrid:string_light_cord x1$
+expect \[zpwg10\] grid \[string_light_cord string_light_cord\] matches=false
+expect \[zpwg10\] grid \[string_light_cord minecraft:stick\] matches=false
+expect \[zpwg10\] grid \[minecraft:red_dye\] matches=false
+expect \[zpwg10\] grid \[string_light_cord minecraft:yellow_dye minecraft:yellow_dye minecraft:purple_dye\] matches=true result=powergrid:string_light_cord x1 tag=\{Pattern:\[B;4B,4B,10B\]\}$
+reject \[zpwg10\] .*MISSING
+reject \[zpwg10\] .*error
+reject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+reject StackOverflowError
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look ns entity_type and recipe_serializer lists (string_light_cord, crafting_special_string_light_cord new); every zpwg10 recipe class= and serializer= value; tool line of ceiling_tile (needsTool, ironPickaxeCorrect: record); shell: no mixin error and no ERROR line naming the P10 blocks
+
+## SQ-PWG-76 | setup again (passed in pwg17): P9c forceload, zpwg9c check, chain source board for SQ-PWG-78 to -82
+> forceload add 1135 1855 1200 1915
+sleep 8
+> zpwg9c check
+waitlog \[zpwg9c\] done 30
+shell grep -n -E 'powergrid\.mixins\.json|Mixin apply failed|InvalidInjection' logs/latest.log | head -20
+> zpwg9 board 1140 -60 1858 resistor
+waitlog \[zpwg9\] done 20
+> zpwg9 bmap 1140 -60 1858
+sleep 1
+expect \[zpwg9c\] fluids acid=true flowing_acid=true block acid=true fluid type=powergrid:acid description=fluid\.powergrid\.acid$
+expect \[zpwg9c\] acid source=powergrid:acid isSource=true flowing=powergrid:flowing_acid bucket=powergrid:acid_bucket block=powergrid:acid$
+expect \[zpwg9c\] item incomplete_circuit registered=true maxStack=1 incompleteCircuitItem=true
+expect \[zpwg9c\] acid_bucket contains powergrid:acid 1000$
+expect \[zpwg9c\] circuit_schematic_holder circuit_board=true circuit_schematic=true unetched_circuit=true incomplete_unetched_circuit=true incomplete_circuit=true$
+expect \[zpwg9c\] fluid tag powergrid:acid source=true flowing=true$
+expect \[zpwg9c\] recipes P9c mixing/acid=true mixing/etched_circuit_board=true sequenced_assembly/unetched_circuit_board=true cutting/empty_circuit_slabs=true deploying/schematic_copy=true sequenced_assembly/battery=true$
+expect \[zpwg9c\] recipes P9d \(absent\) sequenced_assembly/electrical_gizmo=true deploying/electrobaton_boosting=true deploying/portable_drill_boosting=true$
+expect \[zpwg9c\] mixin RecipeApplier powergrid:incomplete_circuit x1 Schematic components=0 schematicCopied=true$
+expect \[zpwg9c\] damage acid source=acid acidSource=true$
+expect \[zpwg9\] board at 1140 -60 1858 .*components=3 terminals=2
+expect \[zpwg9\] bundle \d+: connector@0,6#0\* resistor@5,6#0$
+expect \[zpwg9\] bundle \d+: connector@11,6#0\* resistor@5,6#1$
+reject \[zpwg9c\] mixin RecipeApplier error
+reject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look the "recipes P9d (absent)" label is P9c's, all three =true since -16; shell: no mixin error line
+
+## SQ-PWG-SETUP15 | P9c area (forceloaded in SQ-PWG-76): clear its generated animals (not a row)
+> kill @e[type=!minecraft:player,x=1135,y=-64,z=1855,dx=65,dy=40,dz=60]
+sleep 2
+
+## SQ-PWG-78 | survival chain 1 (passed in pwg16 and pwg17; run again: the chain below takes its schematic): deployer copies the held design onto a blank on a depot
+> zpwg9c depot 1142 -60 1866 create:empty_schematic 1
+waitlog \[zpwg9c\] done 20
+> zpwg9c deployer 1142 -58 1866 none
+sleep 1
+> zpwg9c schem 1142 -58 1866 1140 -60 1858 hand
+sleep 6
+> zpwg9c show 1142 -60 1866
+> zpwg9c same 1142 -60 1866 1140 -60 1858
+> zpwg9c show 1142 -58 1866
+sleep 1
+expect \[zpwg9c\] hold deployer 1142 -58 1866 hand powergrid:circuit_schematic x1 Schematic components=3$
+expect \[zpwg9c\] items 0:powergrid:circuit_schematic x1 Schematic components=3$
+expect \[zpwg9c\] same powergrid:circuit_schematic x1 Schematic components=3 design=true$
+expect \[zpwg9c\] deployer hand powergrid:circuit_schematic x1 Schematic components=3$
+reject \[zpwg9c\] (warn: no|hold: (no deployer|deployer player never appeared))
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+
+## SQ-PWG-79 | again (passed in pwg17; makes the unetched circuit SQ-PWG-80 etches): survival chain 2, unetched circuit sequenced assembly (deployers with the IE copper plate, press; RecipeApplierMixin keeps the design)
+> zpwg9c line 1142 -60 1874 unetched
+waitlog \[zpwg9c\] done 20
+sleep 1
+> zpwg9c lineck 1142 -60 1874
+sleep 1
+> zpwg9c lineck 1142 -60 1874
+> zpwg9c take 1142 -60 1866 1142 -60 1874
+> zpwg9c loop 1142 -60 1874 on
+waitlog \[zpwg9c\] loop (done|timeout) 150
+> zpwg9c show 1152 -60 1874
+> zpwg9c same 1152 -60 1874 1140 -60 1858
+> zpwg9c show 1144 -58 1874
+> zpwg9c show 1146 -58 1874
+> zpwg9c show 1148 -58 1874
+sleep 1
+expect \[zpwg9c\] line unetched belt Block\{create:belt\}
+expect \[zpwg9c\] hold deployer 1144 -58 1874 hand powergrid:empty_circuit x16$
+expect \[zpwg9c\] hold deployer 1146 -58 1874 hand create:dough x16$
+expect \[zpwg9c\] hold deployer 1148 -58 1874 hand immersiveengineering:plate_copper x16$
+count \[zpwg9c\] lineck belt facing=east speed=-?[1-9] >= 1
+reject \[zpwg9c\] lineck X\+\d+ .* speed=0$
+expect \[zpwg9c\] put powergrid:circuit_schematic x1 Schematic components=3 -> 1142 -60 1874 rest=empty$
+expect \[zpwg9c\] loop 1 back to start: powergrid:incomplete_unetched_circuit x1 Schematic components=3 SequencedAssembly step=4
+expect \[zpwg9c\] loop done powergrid:unetched_circuit x1 Schematic components=3 cycles=1
+expect \[zpwg9c\] same powergrid:unetched_circuit x1 Schematic components=3 design=true$
+expect \[zpwg9c\] deployer hand powergrid:empty_circuit x14$
+expect \[zpwg9c\] deployer hand create:dough x14$
+expect \[zpwg9c\] deployer hand immersiveengineering:plate_copper x14$
+reject \[zpwg9c\] loop timeout
+reject \[zpwg9c\] warn: no
+reject \[zpwg9c\] take: target refused
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look loop 1 progress about 0.5; stuck at one step: the deployer at that step kept its stack (show); a different item on the end depot: a pack recipe clash on create:dough (record)
+
+## SQ-PWG-80 | rerun 2: survival chain 3, acid by mixing (redstone and blaze powder in before the water) and etching in a heated basin
+> zpwg9c basin 1142 -60 1890
+waitlog \[zpwg9c\] done 20
+> zpwg9c put 1142 -60 1890 minecraft:redstone 1
+> zpwg9c put 1142 -60 1890 minecraft:blaze_powder 1
+> zpwg9c bfill 1142 -60 1890 minecraft:water 1000
+sleep 10
+> zpwg9c show 1142 -60 1890
+> zpwg9c show 1142 -58 1890
+> zpwg9c show 1143 -58 1890
+> zpwg9c show 1143 -57 1890
+# etch
+> zpwg9c basin 1146 -60 1890
+> zpwg9c bfill 1146 -60 1890 powergrid:acid 1000
+> zpwg9c take 1152 -60 1874 1146 -60 1890
+sleep 10
+> zpwg9c show 1146 -60 1890
+> zpwg9c show 1146 -58 1890
+sleep 1
+count \[zpwg9c\] basin at 114[26] -60 1890 burner Block\{create:blaze_burner\}\[blaze=kindled.* creative=true$ == 2
+expect \[zpwg9c\] fill minecraft:water 1000/1000 at 1142 -60 1890
+count \[zpwg9c\] speed=-?[1-9] >= 3
+expect \[zpwg9c\] tanks .*minecraft:water 750\b
+expect \[zpwg9c\] tanks .*powergrid:acid 250\b
+expect \[zpwg9c\] fill powergrid:acid 1000/1000 at 1146 -60 1890
+expect \[zpwg9c\] put powergrid:unetched_circuit x1 Schematic components=3 -> 1146 -60 1890 rest=empty$
+expect \[zpwg9c\] items .*powergrid:incomplete_circuit x1 Schematic components=3
+expect \[zpwg9c\] tanks .*powergrid:acid 750\b
+reject \[zpwg9c\] items .*vintagedelight:salt_dust
+reject \[zpwg9c\] (put|fill): no (item|fluid) handler
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look pack clash: creativedelight water_salt (heated, 1000 mB water -> 2 salt, fluid only) took the water in r1114 when the water went in first; salt dust in the basin again: record; speeds of mixer (1142 -58), cog (1143 -58) and motor (1143 -57): all non-zero means the cog route works; mixer 0 with the cog turning: record (Create, not Power Grid); no acid with the mixer running: another mixing recipe took the inputs (record the output); incomplete circuit without Schematic: BasinRecipeMixin
+
+## SQ-PWG-82 | rerun 2: arm on a belt: B25 (a depot output first, then the belt), the ArmBlockEntityMixin lock, parts given only after the circuit is locked; the circuit finishes on the belt
+> zpwg9c line 1142 -60 1906 plain
+waitlog \[zpwg9c\] done 20
+sleep 1
+> zpwg9c lineck 1142 -60 1906
+sleep 1
+> zpwg9c lineck 1142 -60 1906
+> zpwg9c depot 1145 -60 1910
+> zpwg9c depot 1147 -60 1910
+> zpwg9c depot 1148 -60 1909 minecraft:stone 64
+> zpwg9c arm2 1146 -60 1908 1148 -60 1909 1146 -60 1906 1145 -60 1910 1147 -60 1910
+sleep 1
+> zpwg9c feed 1142 -60 1906 inc 1140 -60 1858
+sleep 3
+> zpwg9c show 1146 -60 1906
+> zpwg9c put 1145 -60 1910 powergrid:wire_connector 8
+> zpwg9c put 1147 -60 1910 powergrid:resistor 8
+sleep 20
+> zpwg9c show 1146 -60 1906
+> zpwg9c show 1152 -60 1906
+> zpwg9c same 1152 -60 1906 1140 -60 1858
+> zpwg9c show 1148 -60 1909
+> zpwg9c show 1147 -60 1908
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1145 -60 1910
+> zpwg9c show 1147 -60 1910
+sleep 1
+expect \[zpwg9c\] line plain belt Block\{create:belt\}
+count \[zpwg9c\] lineck belt facing=east speed=-?[1-9] >= 1
+expect \[zpwg9c\] arm at 1146 -60 1908 points=4$
+count \[zpwg9c\] arm point .*Mode:"DEPOSIT" == 2
+expect \[zpwg9c\] feed powergrid:incomplete_circuit x1 Schematic components=3 inserted on the belt at 1142 -60 1906
+expect \[zpwg9c\] belt facing=\S+ speed=\S+ items powergrid:incomplete_circuit x1 Schematic components=3 @4\.\d+ lockedExternally$
+expect \[zpwg9c\] put powergrid:wire_connector x8 -> 1145 -60 1910 rest=empty$
+expect \[zpwg9c\] items 0:powergrid:wire_connector x6$
+expect \[zpwg9c\] items 0:powergrid:resistor x7$
+reject \[zpwg9c\] belt facing=.*items .*powergrid:(wire_connector|resistor)
+expect \[zpwg9c\] items 0:powergrid:circuit_board x1 Schematic components=3$
+expect \[zpwg9c\] same powergrid:circuit_board x1 Schematic components=3 design=true$
+expect \[zpwg9c\] items 0:minecraft:stone x64$
+expect \[zpwg9c\] speed=-?64$
+reject \[zpwg9c\] arm: no interaction point
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look first belt show (before the parts): only the circuit, about @4.5, locked; second belt show: empty or the circuit at the end (record); belt show: position about @4.5 and Assembly inserted 1 to 3 (record); rides past the arm: B25 or the lock window (slower belt motor, rerun); loose parts on the belt: powerGrid$handleBelt not reached; arm speed in the last show

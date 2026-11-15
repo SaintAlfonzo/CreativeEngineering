@@ -19,6 +19,8 @@ public final class SaltLick {
     public static final ResourceLocation SALT_BLOCK_ID = new ResourceLocation("salt", "salt_block");
     public static final TagKey<Item> SALT_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "salt"));
     private static final ResourceLocation SALT_ITEM_ID = new ResourceLocation("salt", "salt");
+    /** Vintage Delight's salt layer (block and its block item): refills a worn stage (plan_bugfix_1114 3.7). */
+    public static final ResourceLocation SALT_LAYER_ID = new ResourceLocation("vintagedelight", "salt");
 
     private static final Map<Block, Block> NEXT = new HashMap<>();
     private static final Map<Block, Block> PREV = new HashMap<>();
@@ -88,8 +90,9 @@ public final class SaltLick {
         return PREV.get(block);
     }
 
+    /** Restores one stage by hand: #forge:salt (salt, salt dust) or a salt layer block item. */
     public static boolean isSalt(ItemStack stack) {
-        return stack.is(SALT_TAG);
+        return stack.is(SALT_TAG) || SALT_LAYER_ID.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }
 
     /** Wears the block one stage; the last stage pops 1 salt and is gone. */

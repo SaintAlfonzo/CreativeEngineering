@@ -1,5 +1,7 @@
 # Salt and Create: The Salt (Creative Delight members)
 
+> **2026-11-14: block melting moved to Creative Common's melting system ([melting.md](melting.md)).** Salt blocks (The Salt's, Vintage Delight's, the Hearth and Harvest salt lick stages) are sources in `#creativecommon:melting/salt`; the salt member's own block melt (`[salt] SaltBlockMeltingEnabled`) is off. The item click stays here.
+
 Status: BUILT 2026-11-02, installed, not booted. `repackedSalt-1.2.4.1-ce-19.2-01` and `repackedCreateSalt-1.19.2-1.1.0-ce-19.2-01`
 are nested in `mods/creativedelight-1.0.0.jar` (installed 2026-11-02 23:16; the saltable tag of section 5 in the CD jar of
 2026-11-03 00:08). `salt-1.19.2-1.2.4.1.jar` and `create_salt 1.19.2-1.1.0.jar` displaced to `jar_archive/displaced/`.
@@ -143,3 +145,5 @@ on crushing wheels and the millstone (S6). A Salt Block unpacks to 9.
 | S11 | One JEI category per seasoning, salt first | patcherMod `SeasoningJEI` | Future (waits for seasonings to settle) | none |
 
 Not planned until a mod lands: Unusual Delight's salt from quartz and from smelting Soggy Flesh ([unusual_delight.md](unusual_delight.md)).
+
+2026-11-14 (plan_bugfix_1114 3.8): the member's block melt is off (`Melting.tryMeltFromBlock` returns false, also when CD's `SaltBlockTicks` calls it; `[salt.Melting] SaltBlockMeltingEnabled` defaults off and points at Creative Common's `[melting]`). The salt item click goes through Common's `Melting.isTarget` and `meltStep`, one stage per click. Rules: [melting.md](melting.md).

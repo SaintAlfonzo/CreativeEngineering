@@ -249,6 +249,8 @@ RB-16; scratch SQ-RB-21, SQ-RB-22.
 
 ### 3.8 One rule on all five stations (BUILT 2026-11-03, plan_scratch_bugfix_1103.md 2.3, TODO `creativedelight/members #37`)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-STN-02k, -03, -06 PASS (kettle buffer, pickle and kimchi progress restart on swap, plating one bowl at a time).
+
 Owner 2026-11-03: the FD cooking pot, the Miner's copper pot, the Farmer's Respite kettle, the oven and the Pickling
 Jar follow the same leftover, container-slot and automation rules, from shared code (`development/shared/stations`,
 compiled into Creative Delight and the Miner's and Vintage members under their own packages). Not included: the

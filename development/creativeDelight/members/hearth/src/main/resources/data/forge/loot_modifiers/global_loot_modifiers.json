@@ -2,7 +2,6 @@
   "replace": false,
   "entries": [
     "hearthandharvest:corn_husk",
-    "hearthandharvest:pitchfork_straw",
-    "hearthandharvest:cherries_from_cherry_leaves"
+    "hearthandharvest:pitchfork_straw"
   ]
 }

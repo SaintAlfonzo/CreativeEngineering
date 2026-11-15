@@ -7,6 +7,9 @@
 # left as `look` steps for the owner: right-clicks (opening the design table and the editor, attaching to tiles, cords,
 # hand boost), mouse hover (tooltips), and JEI lookups (typing into JEI's search box needs a click on it; the box
 # position depends on the GUI scale, so it is not scripted). No probe commands: the client game dir has no zz_ probes.
+# Before launch (r1114): rm GAME/kubejs/server_scripts/zz_perfeval_drive.js (eval_client.py setup copies it; it sets
+#   spectator and teleports the player every 30 s for 3 min after the join, which spoiled 6 shots in r1114), and keep the
+#   client at 419 jars or fewer (see gotchas: 420+ jars crash the client natively at window creation).
 # Run: qrun.py client GAME tools/scratch_query/batches/r1113/cq_pwg17.qb perf/runs/r1113/cq_pwg17
 pace 2
 

@@ -11,7 +11,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | `client` | Rendering, HUD, tooltips, menus, recipe viewers. The server never loads it | No |
 | `dev` | Dev instance only (Creative Devtools). `tools/dump_server_mods.py` and `tools/build_deploy.py` skip it; scratch servers load it | No |
 
-**Current count:** 365 both, 0 server, 43 client, 1 dev (409 rows; recounted 2026-11-03).
+**Current count:** 375 both, 0 server, 43 client, 2 dev (420 rows; recounted 2026-11-14 when Debugify Reforged was added).
 
 ## Keeping this up to date
 
@@ -114,7 +114,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Tweaked Controllers | `create_tweaked_controllers` | `create_tweaked_controllers-1.19.2-1.2.4.jar` |  |
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
-| both | Creative Common | `creativecommon` | `creativecommon-1.1.0.jar` | The pack's own core (development/creativeCommon; patcherMod until the Creative Split swap, 2026-11-04, creative_split.md 7.13): config framework, KubeJS startup loader and shared helpers, swap lists, damage tags, trades and trade sync, engine fixes and perf, the interface (JEI, WTHIT, tooltips, toasts, GUI title plaques, armor bar, changelog viewer); every Creative jar requires it; client-only parts are guarded. Displaces the old `creativeengineering-1.x` jars |
+| both | Creative Common | `creativecommon` | `creativecommon-1.2.0.jar` | The pack's own core (development/creativeCommon; patcherMod until the Creative Split swap, 2026-11-04, creative_split.md 7.13): config framework, KubeJS startup loader and shared helpers, swap lists, damage tags, trades and trade sync, engine fixes and perf, the interface (JEI, WTHIT, tooltips, toasts, GUI title plaques, armor bar, changelog viewer); every Creative jar requires it; client-only parts are guarded. Displaces the old `creativeengineering-1.x` jars |
 | both | Creative Labels | `creativelabels` (was `creative_labels` until 2026-11-10) | `creativeLabels-1.0.1.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
@@ -417,6 +417,8 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Lava Clear View | `clearview` | `LavaClearView-1.19.2-forge-5.0.0.jar` | Fog/overlay render mixins only. Added 2026-10-13 |
 | both | minecraft style paintings | `minecraft_style_paintings` | `MC style paintings 1.19.2 v2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | client | Neko's Enchanted Books | `nebs` | `NekosEnchantedBooks-1.19-2.0.3.jar` | Per-enchantment book textures (clientSideOnly). Added 2026-10-13 |
+| both | Packet Fixer | `packetfixer` | `packetfixer-3.3.2-1.18-1.20.4-merged.jar` | Raises the network size limits on both sides (item NBT, chunk packets, frames); one bounded config ships to both (`configs_edited/root_config/packetfixer.properties`); the SQ-TPF run measures each side and decides whether the server gets its own values (feature_writeup/thirdparty_fixes.md 4.2, 4.7). Added 2026-11-13 |
+| both | Debugify Reforged | `debugify` | `debugify-1.1.0-forge-1.19.2.jar` | Vanilla 1.19.2 bug fixes (Mojira mixins, server and client). Ships with `config/debugify.json` (`configs_edited/root_config/debugify.json`, written by `tools/scratch_query/tpf_debugify_cfg.py`): `default_disabled` true, 9 fixes on (the r1114 server set plus MC-237493); MC-121706 stays off because it crashes the boot. Client fixes are untested (CQ-TPF-31 to -91). [thirdparty_fixes.md](feature_writeup/thirdparty_fixes.md) |
 | both | Rebirth: Paintings | `rebirth_paintings` | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | both | Splash Milk | `splash_milk` | `splash_milk-1.19.2-1.4.0.jar` | Splash milk item + recipes. Added 2026-10-13 |
 | both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Art donor for Creative Labels, gameplay off (items hidden, recipes removed, tooltip handler cancelled; sticky_notes.md 3.13). Added 2026-10-13 |

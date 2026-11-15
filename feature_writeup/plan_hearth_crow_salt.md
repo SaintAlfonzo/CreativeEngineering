@@ -102,6 +102,8 @@ Order: 1 tags and config (small) -> 2 salt lick S1 to S7 (independent of the cro
 Salt and scarecrow can ship first. Build and install: `./gradlew :creativeDelight:build --offline`, then `:creativeDelight:installToMods` with the game closed.
 Logic tests in a javac harness for the wariness class and the lick goal's decisions; live checks are queued only (no scratch boot until the owner says so), rows `SQ-HSC-01 ...`.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-HSC-89 PASS (1304 raw rock salt in the desert box).
+
 | Area | Files |
 |---|---|
 | Member Java | `hearth/salt/*`, `hearth/crow/*` (goals, capability, loot modifier, brew), `hearth/nest/*`, `hearth/block/HHBlocks` (+ scarecrow), `hearth/item/HHItems` (+ crow feather) |

@@ -11,7 +11,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -73,10 +80,37 @@ public final class HorseshoeEvents {
     public static void onAttack(LivingAttackEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse && isShod(horse)) {
             DamageSource source = event.getSource();
-            if (source == DamageSource.CACTUS || source == DamageSource.SWEET_BERRY_BUSH) {
+            // By id, not identity: the source reaching here need not be the vanilla constant (SQ-HH-1505).
+            String id = source.getMsgId();
+            if (DamageSource.CACTUS.getMsgId().equals(id) || DamageSource.SWEET_BERRY_BUSH.getMsgId().equals(id)) {
                 event.setCanceled(true);
             }
         }
+    }
+
+    /**
+     * Sneak-click on a shod tamed horse with an empty hand, shears or a horseshoe takes the shoe back. Runs as an
+     * EntityInteract handler so it comes before the horse opens its inventory (plan_bugfix_1114 3.6, TODO #69).
+     */
+    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof AbstractHorse horse) || !horse.isTamed() || !isShod(horse)) {
+            return;
+        }
+        Player player = event.getEntity();
+        ItemStack held = event.getItemStack();
+        boolean tool = held.getItem() instanceof HorseshoeItem || held.getItem() instanceof ShearsItem;
+        if (!player.isShiftKeyDown() || !(tool || held.isEmpty() && event.getHand() == InteractionHand.MAIN_HAND)) {
+            return;
+        }
+        if (!horse.level.isClientSide) {
+            ItemStack shoe = takeShoe(horse);
+            if (!player.getInventory().add(shoe)) {
+                player.drop(shoe, false);
+            }
+            horse.level.playSound(null, horse, SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 1.0F, 0.8F);
+        }
+        event.setCancellationResult(InteractionResult.sidedSuccess(horse.level.isClientSide));
+        event.setCanceled(true);
     }
 
     public static void onDeath(LivingDeathEvent event) {

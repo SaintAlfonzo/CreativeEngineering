@@ -4,10 +4,13 @@
   "Farmer's Delight pies (PieBlock and its subclasses) need no entry: a bite counts as the pie's own slice item.",
   "A cake with its own slice item counts as that slice; a cake without one counts as Farmer's Delight's cake slice, like the vanilla cake.",
   "minecraft:cake is here only for its candle cakes (Spice of Life records bites of the plain cake itself). A candle cake counts as the cake it turns into.",
+  "Supplementaries swaps a bitten cake for its directional_cake (and a cake on a cake is its double_cake): both count as the cake slice, first bite included (plan_bugfix_1114 4.3).",
   "The item must be edible (Spice of Life drops non-food items). Read at server start; a restart applies changes."
  ],
  "blocks": {
   "minecraft:cake": "farmersdelight:cake_slice",
+  "supplementaries:directional_cake": "farmersdelight:cake_slice",
+  "supplementaries:double_cake": "farmersdelight:cake_slice",
   "goldenfood:golden_cake": "farmersdelight:cake_slice",
   "goldenfood:enchanted_golden_cake": "farmersdelight:cake_slice",
   "neapolitan:vanilla_cake": "abnormals_delight:vanilla_cake_slice",

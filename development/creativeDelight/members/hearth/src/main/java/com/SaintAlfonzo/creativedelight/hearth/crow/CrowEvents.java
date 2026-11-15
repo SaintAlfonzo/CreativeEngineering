@@ -107,13 +107,7 @@ public final class CrowEvents {
         InteractionHand hand = event.getHand();
         ItemStack stack = event.getItemStack();
         if (crow.isTame()) {
-            if (CrowConfig.CORN_BREEDING.get() && (stack.is(CrowTags.CORN) || stack.is(CrowTags.CORN_SEEDS)) && crow.isOwnedBy(player) && crow.getAge() == 0 && crow.canFallInLove()) {
-                if (!crow.level.isClientSide) {
-                    consume(player, stack);
-                    crow.setInLove(player);
-                }
-                succeed(event, crow);
-            }
+            // Healing, breeding and growing with crow food are CrowEntity.feed (plan_bugfix_1114 3.5).
             return;
         }
         CrowWariness wariness = CrowWariness.of(crow);

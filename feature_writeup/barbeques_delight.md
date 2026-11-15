@@ -409,6 +409,8 @@ warped. Built 2026-11-04 (Creative Delight jar, not installed yet).
 - **Tags.** All 18 in `mineable/axe` (member data) and `blockrunner:surface/wood` (`tags.js`).
 - Tests: SQ-BBQW-01 to -03, CQ-BBQW-01.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-BBQW-02, -03 PASS; SQ-BBQW-02s FAIL: a stick on a one-beef basin is consumed and lost (TODO `dishes/meals #67`).
+
 ### 3.10 Skewer inputs and basin handling (2026-11-04)
 
 **Skewer input tags.** Every basin and off-hand input of a skewering recipe is a pack tag
@@ -830,3 +832,4 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 - 2026-11-04: skewer input tags (3.10) with sweet potato in `potato`; fixed `Item.of(tag, n)` collapsing every skewering
   input and the sandwich / bibimbap skewer to one item; basin sneak grab with items in hand; JEI off-hand icon and
   grilled result. Built and installed in the CD jar 2026-11-04. Tests BBQ-30 to BBQ-33, scratch SQ-BBQS-01 to -03.
+- 2026-11-14: basin stick fix (plan_bugfix_1114 4.6, TODO `dishes/meals #67`): a skewering tool (the stick) is never stored in a basin slot; without a matching recipe the click passes and the stick stays in the hand. Built and installed; rerun SQ-BBQW-02s.

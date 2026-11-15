@@ -1,7 +1,9 @@
 # r1113 chunk 3, boot CH1: reduced set, Creative Brewing chain without Engineering plus Worldgen (stands in for the
 # SQ-MIN minimal instance and the SQ-ENGM-05 / SQ-CDFO-02 chain; CEPortTesting is left alone: its mods/ lacks 8 chain
 # jars on 2026-11-13, `port_chain.sh check`). Group B normal world (cpp_chain_srv.sh builds on prep_srv B, seed 8675309).
-# Server: bash tools/scratch_query/cpp_chain_srv.sh OUT_CH1 c3ch1 chain
+# Server: EXTRA="Yungs* HopoBetterUnderwaterRuins-* mes-1.3.1-* Nullscape_* PhilipsRuins* Towns-and-Towers-* tectonic-forge-*
+#   Terralith_* villagesandpillages-* volcanic_caverns-* GeophilicReforged-*" bash tools/scratch_query/cpp_chain_srv.sh OUT_CH1 c3ch1 chain
+#   (r1114: Worldgen declares 18 world generation mods mandatory since 11-06; without them FML stops)
 #   then: cp -l "$INST"/mods/creativeworldgen-1.0.0.jar OUT_CH1/srv/mods/   (cpp_chain refuses Worldgen in its own list)
 #   config/ and defaultconfigs/ start empty (every jar writes its defaults: SQ-FCK-02b reads Delight's fresh file);
 #   kubejs/ holds only the probes (no pack scripts), as the CEPortTesting instance.

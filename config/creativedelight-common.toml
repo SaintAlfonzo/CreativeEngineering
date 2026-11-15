@@ -138,6 +138,12 @@
 		#Untilled Rich Soil (only rice and adzuki grow on it): share of extra produce.
 		#Range: 0.0 ~ 4.0
 		richSoilBonus = 0.33
+		#Rich Soul Soil (nether crops): share of extra produce.
+		#Range: 0.0 ~ 4.0
+		richSoulSoilBonus = 0.33
+		#Fertile Soul Soil (Immersive Weathering nulch, nether crops): share of extra produce.
+		#Range: 0.0 ~ 4.0
+		fertileSoulSoilBonus = 0.66
 
 		#true: the crop gets the soil pools above. false: its drops are the same on every soil.
 		[crop_drops.soil_yield.crops]
@@ -167,6 +173,20 @@
 			oats = true
 			peanuts = true
 			adzuki = true
+			nether_wart = true
+			ghost_pepper = true
+			propelplant = true
+			crimson_fungus_colony = true
+			warped_fungus_colony = true
+
+		#true: the bush gets the soil extra on its own pick and on breaking it. false: the same on every soil.
+		[crop_drops.soil_yield.bushes]
+			strawberry = true
+			blueberry = true
+			cranberry = true
+			lemon = true
+			sweet_berry = true
+			salmonberry = true
 
 #A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free
 #sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and
@@ -300,9 +320,10 @@
 	[salt.Melting]
 		#Salt (item) will melt clicked blocks defined in tag 'salt/tags/blocks/meltables'.
 		SaltItemMeltingEnabled = true
-		#Salt blocks will melt adjacent blocks defined in tag 'salt/tags/blocks/meltables' on random tick.
-		SaltBlockMeltingEnabled = true
-		#Chance of block melting on random tick. 1.0 = first random tick. 0.0 = never.
+		#Unused in this pack: salt blocks melting ice and snow is Creative Common's melting system,
+		#[melting] in creativecommon-common.toml. This switch and the chance below have no effect.
+		SaltBlockMeltingEnabled = false
+		#Unused in this pack (see SaltBlockMeltingEnabled).
 		#Range: 0.0 ~ 1.0
 		SaltBlockMeltingChance = 0.4
 		#Melted ice is replaced with a water source block outside ultra-warm dimensions (the Nether).

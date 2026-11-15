@@ -137,9 +137,11 @@ public class StompingBasinBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack held = player.getItemInHand(hand);
+        // An item that is no stomping ingredient and holds no fluid passes through to its own use (3.10, SQ-HH-266)
+        if (!held.isEmpty() && !MachineFluids.isFluidContainer(held) && !StompingInputs.accepts(level, held)) return InteractionResult.PASS;
         if (level.isClientSide) return InteractionResult.SUCCESS;
         if (!(level.getBlockEntity(pos) instanceof StompingBasinBlockEntity basin)) return InteractionResult.PASS;
-        ItemStack held = player.getItemInHand(hand);
         if (held.isEmpty()) {
             if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
             if (player.isShiftKeyDown()) basin.extractAll(player);

@@ -60,6 +60,9 @@ RENAMED_MODEL_REFS = {'"farmersdelight:block/template_crop_cross"': '"farmersdel
 # FD 1.20 names item tooltips tooltip.farmersdelight.<item>; FD 1.19.2 reads farmersdelight.tooltip.<item>.
 OLD_TOOLTIP_PREFIX = 'tooltip.farmersdelight.'
 NEW_TOOLTIP_PREFIX = 'farmersdelight.tooltip.'
+# Single upstream files the pack drops. sugar_from_syrup: Creative Delight's own syrup-to-sugar recipe (4 sugar) is the only
+# one (plan_bugfix_1114 3.4, TODO #72).
+DROPPED_FILES = {'data/rusticdelight/recipes/sugar_from_syrup.json'}
 # Recipe types upstream uses that the pack registers but that may have no recipe in the last dump.
 KNOWN_SERIALIZERS = {'forge:conditional'}
 
@@ -351,6 +354,9 @@ def bake(reg):
             continue
         if path.startswith('data/') and dropped_folder(path):
             dropped[path] = (sha1(raw), ['dropped_folder'])
+            continue
+        if path in DROPPED_FILES:
+            dropped[path] = (sha1(raw), ['dropped_file'])
             continue
         out, rules = translate(path, raw, reg)
         if out is None:

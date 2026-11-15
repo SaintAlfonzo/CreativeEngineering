@@ -157,6 +157,8 @@ variants of vanilla flowers, Upgrade Aquatic pickerelweed (aquatic, leave out), 
 
 ## 7. Scratch row (queued, not run)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-BREED-03 PASS (a hive bee carries the wild carrot as FlowerPos with nectar; the batch's count line reads only bees outside a hive).
+
 SQ-BREED-01 (in [scratch_queue.md](testing/scratch_queue.md)): add `/dumpbreeding` to Creative Devtools (for each animal
 type, `isFood` for every registered item; for bees, block class and both flower tags), run, replace the **check in
 game** rows and the F-B7 candidates with measured data.

@@ -41,7 +41,7 @@ public final class CrowConfig {
         TEMPTING = b.comment("Wild crows come to a player holding crow food and slowly let them closer.").define("tempting", true);
         HAND_FEEDING = b.comment("Feeding crow food by hand can tame a wild crow, 1 in 5.").define("handFeeding", true);
         EAT_DROPPED_FOOD = b.comment("Wild crows eat crow food on the ground, 1 in 8 to tame the thrower.").define("eatDroppedFood", true);
-        CORN_BREEDING = b.comment("Tame crows also breed with corn and corn seeds.").define("cornBreeding", true);
+        CORN_BREEDING = b.comment("On: only corn and corn seeds start breeding in tame crows. Off: any crow food does. Any crow food heals a tame crow either way.").define("cornBreeding", true);
         EAT_CROPS = b.comment("Wild crows peck crops back to age 0. Also needs mobGriefing.").define("eatCrops", true);
         STEAL_SHINY_ITEMS = b.comment("Wild crows take one shiny item from a player's hotbar.").define("stealShinyItems", true);
         STEAL_CHANCE = b.comment("Chance per second that a wild crow within 10 blocks starts a theft.").defineInRange("stealChance", 0.1D, 0.0D, 1.0D);

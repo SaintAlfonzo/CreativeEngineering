@@ -261,6 +261,8 @@ water".
 
 ### 2.11 Wood cutting boards (built 2026-11-04; scratch SQ-CBW-01 to -03, CQ-CBW-01; TODO `cooking/kitchen #38`)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CFS-02b PASS (furnace stove lights from a hopper's coal), SQ-CBW-02 PASS (wood boards cut beef and drop themselves).
+
 - `farmersdelight:{oak,birch,jungle,acacia,dark_oak,mangrove,crimson,warped}_cutting_board`: FD's `CuttingBoardBlock`
   registered by the repackedFarmers member (`FDBackportRegistry.WOOD_CUTTING_BOARDS`), properties copied from the
   wood's planks (map colour; crimson and warped not flammable) with FD's strength 2.0 and wood sound. Common setup

@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Mechanical checks for the design rules in feature_writeup/design_rules.md (DR-* ids).
+
+Read-only. Prints one summary block per check: the rule id, a count, and the worst files. The judgement checks
+(layout, prose, code structure) are not here; their results are in design_rules.md sections 8 and 9.
+
+    python3 tools/design_rules_audit.py            # all checks, summary
+    python3 tools/design_rules_audit.py -v         # also list every hit (long)
+    python3 tools/design_rules_audit.py emoji ids  # only the named checks
+
+Scope: tracked files (git ls-files). Generated and upstream trees are skipped unless a check says otherwise:
+kubejs/exported/, kubejs/generation_scripts/, */build/, *_upstream/, moved_code_backup/, jar_archive/, deploy/.
+"""
+import re
+import subprocess
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+SKIP = re.compile(r'^(kubejs/exported/|kubejs/generation_scripts/|jar_archive/|deploy/)|(^|/)moved_code_backup/|/build/|_upstream/')
+TEXT_EXT = {'.md', '.java', '.js', '.py', '.json', '.json5', '.toml', '.txt', '.gradle', '.properties', '.cfg', '.tsv',
+            '.sh', '.mcmeta', '.yml', '.yaml', '.snbt', '.kts'}
+OWN_JAVA = 'src/main/java/com/SaintAlfonzo/'
+
+VERBOSE = '-v' in sys.argv
+ONLY = [a for a in sys.argv[1:] if not a.startswith('-')]
+
+
+def tracked():
+    out = subprocess.run(['git', 'ls-files', '-z'], cwd=ROOT, capture_output=True, check=True).stdout
+    return [p for p in out.decode().split('\0') if p and not SKIP.search(p)]
+
+
+FILES = tracked()
+
+
+def read(p):
+    try:
+        return (ROOT / p).read_text(encoding='utf-8')
+    except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
+        return None
+
+
+def report(rule, title, hits, unit='hits', top=8):
+    """hits: list of (path, line_no, text)."""
+    per_file = Counter(h[0] for h in hits)
+    print(f'## {rule} {title}: {len(hits)} {unit} in {len(per_file)} files')
+    for path, n in per_file.most_common(top):
+        print(f'   {n:6d}  {path}')
+    if VERBOSE:
+        for path, ln, text in hits:
+            print(f'      {path}:{ln}  {text[:140]}')
+    print()
+
+
+def lines_of(paths):
+    for p in paths:
+        s = read(p)
+        if s is None:
+            continue
+        for i, line in enumerate(s.splitlines(), 1):
+            yield p, i, line
+
+
+def wants(name):
+    return not ONLY or name in ONLY
+
+
+# DR-L1: emoji. Arrows, dashes and the multiplication sign are allowed; pictographs, dingbat check marks and
+# variation selectors are not.
+EMOJI = re.compile('[\U0001F000-\U0001FAFF☀-⛿✀-➿️⭐⭕✅❌]')
+if wants('emoji'):
+    paths = [p for p in FILES if Path(p).suffix in TEXT_EXT]
+    hits = [(p, i, l.strip()) for p, i, l in lines_of(paths) if EMOJI.search(l)]
+    own = [h for h in hits if '/src/main/java/' not in h[0] or OWN_JAVA in h[0]]
+    report('DR-L1', 'emoji in tracked text files (own files; upstream Java excluded)', own)
+
+DOCS = [p for p in FILES if p.endswith('.md') and (p.startswith('feature_writeup/') or p.startswith('.claude/')
+        or p in ('CLAUDE.md', 'mod_sides.md')) and '/archive/' not in p]
+
+# DR-L4: relative dates in docs.
+REL = re.compile(r'\b(yesterday|tomorrow|last (week|night|month)|next (week|month)|this (week|morning|evening)|'
+                 r'a few days ago|recently)\b', re.I)
+if wants('dates'):
+    report('DR-L4', 'relative date words in docs', [(p, i, l) for p, i, l in lines_of(DOCS) if REL.search(l)])
+
+# G1: spelling mix in docs (prose only, code spans removed).
+if wants('spelling'):
+    pairs = [('colour', 'color'), ('behaviour', 'behavior'), ('capitalis', 'capitaliz'), ('organis', 'organiz'),
+             ('customis', 'customiz'), ('recognis', 'recogniz'), ('licence', 'license'), ('grey', 'gray'),
+             ('centre', 'center'), ('flavour', 'flavor'), ('armour', 'armor')]
+    text = '\n'.join(re.sub(r'`[^`]*`', '', read(p) or '') for p in DOCS).lower()
+    print('## G1 British / American spelling in docs (code spans removed)')
+    for br, am in pairs:
+        nb, na = len(re.findall(r'\b' + br, text)), len(re.findall(r'\b' + am, text))
+        print(f'   {br:12s} {nb:5d}   {am:12s} {na:5d}')
+    print()
+
+# DR-L5: decision citations.
+if wants('citations'):
+    hits_user = [(p, i, l) for p, i, l in lines_of(DOCS) if re.search(r'\(user,? \d{4}-\d\d-\d\d', l)]
+    hits_owner = [(p, i, l) for p, i, l in lines_of(DOCS) if re.search(r'\(owner,? \d{4}-\d\d-\d\d', l)]
+    print(f'## DR-L5 decision citations: "(owner, date)" {len(hits_owner)}, "(user, date)" {len(hits_user)}')
+    print()
+    report('DR-L5', '"(user, date)" citations (older form)', hits_user)
+
+# DR-W9: file paths written as code spans in writeups where the file exists (a link would be clickable).
+if wants('paths'):
+    tracked_set = set(FILES)
+    span = re.compile(r'(?<!\[)`([\w./-]+/[\w.-]+\.(?:md|js|java|py|json|toml|png|tsv|txt))`')
+    hits = []
+    for p, i, l in lines_of([d for d in DOCS if d.startswith('feature_writeup/')]):
+        for m in span.finditer(l):
+            target = m.group(1)
+            if target in tracked_set or (Path(p).parent / target).as_posix() in tracked_set:
+                hits.append((p, i, target))
+    report('DR-W9', 'existing repo files named as `code spans` instead of links in writeups', hits)
+
+# DR-W16: configs_edited backups that no longer match the live config.
+if wants('configs'):
+    hits, missing = [], []
+    for sub, live in (('root_config', 'config'), ('server_config', None)):
+        base = ROOT / 'configs_edited' / sub
+        if not base.is_dir() or live is None:
+            continue
+        for f in base.rglob('*'):
+            if f.is_file():
+                rel = f.relative_to(base)
+                target = ROOT / live / rel
+                if not target.exists():
+                    missing.append((f'configs_edited/{sub}/{rel}', 0, f'no {live}/{rel}'))
+                elif target.read_bytes() != f.read_bytes():
+                    hits.append((f'{live}/{rel}', 0, 'differs from its backup'))
+    report('DR-W16', 'live configs that differ from their configs_edited backup', hits, 'files')
+    report('DR-W16', 'backups whose live config is gone', missing, 'files')
+    changed = subprocess.run(['git', 'status', '--porcelain', '--', 'config'], cwd=ROOT, capture_output=True,
+                             text=True).stdout.split('\n')
+    nobak = [(l[3:], 0, 'modified, no backup') for l in changed if l.strip()
+             and not (ROOT / 'configs_edited/root_config' / l[3:].removeprefix('config/')).exists()]
+    report('DR-W16', 'configs modified in the working tree with no backup', nobak, 'files')
+
+# DR-W16: mod_sides.md rows against mods/.
+if wants('sides'):
+    import zipfile
+    sides = read('mod_sides.md') or ''
+    ids = set(re.findall(r'^\|[^|]*\|[^|]*\| `([^`]+)` \|', sides, re.M))
+    jars_col = set(re.findall(r'\| `([^`]+\.jar)` \|', sides))
+    found, nomatch = set(), []
+    for jar in sorted((ROOT / 'mods').glob('*.jar')):
+        try:
+            with zipfile.ZipFile(jar) as z:
+                toml = z.read('META-INF/mods.toml').decode('utf-8', 'replace') if 'META-INF/mods.toml' in z.namelist() else ''
+        except zipfile.BadZipFile:
+            continue
+        # Only [[mods]] blocks; [[dependencies.*]] blocks name forge, minecraft and the like.
+        blocks = re.split(r'^\s*\[\[', toml, flags=re.M)
+        jar_ids = [m for blk in blocks if blk.startswith('mods]]')
+                   for m in re.findall(r'^\s*modId\s*=\s*"([^"]+)"', blk, re.M)]
+        if jar_ids:
+            found.update(jar_ids)
+            if not any(m in ids for m in jar_ids):
+                nomatch.append((f'mods/{jar.name}', 0, ','.join(jar_ids)))
+        elif jar.name not in jars_col:
+            nomatch.append((f'mods/{jar.name}', 0, 'no mods.toml and no Jar column row'))
+    report('DR-W16', 'jars in mods/ with no mod_sides.md row', nomatch, 'jars')
+
+# DR-C10: underscores in own mod ids, packages, config names, script folders.
+if wants('naming'):
+    hits = []
+    for p in FILES:
+        if p.endswith('gradle.properties') and p.startswith('development/'):
+            m = re.search(r'^mod_id=(\S+)', read(p) or '', re.M)
+            if m and '_' in m.group(1):
+                hits.append((p, 0, f'mod_id={m.group(1)}'))
+        if OWN_JAVA in p:
+            pkg = p.split(OWN_JAVA, 1)[1].rsplit('/', 1)[0]
+            if '_' in pkg:
+                hits.append((p, 0, f'package {pkg}'))
+        m = re.match(r'kubejs/(data|assets)/(creative[^/]*_[^/]*)/', p)
+        if m:
+            hits.append((p, 0, f'script folder {m.group(2)}'))
+    pkgs = {}
+    for h in hits:
+        pkgs.setdefault(h[2], h)
+    report('DR-C10', 'underscored own names (upstream ids kept by ports are listed too: check)', list(pkgs.values()),
+           'names', top=20)
+
+# DR-C19: licence fields of own mods.
+if wants('licence'):
+    hits = []
+    for p in FILES:
+        if p.endswith('gradle.properties') and p.startswith('development/'):
+            m = re.search(r'^mod_license=(.*)$', read(p) or '', re.M)
+            if m:
+                hits.append((p, 0, m.group(1).strip()))
+    vals = Counter(h[2] for h in hits)
+    print(f'## DR-C19 mod_license values in development/*/gradle.properties ({len(hits)} mods)')
+    for v, n in vals.most_common():
+        print(f'   {n:4d}  {v}')
+    roots = sorted({str(Path(h[0]).parent) for h in hits})
+    nolic = [r for r in roots if not any((ROOT / r).glob('LICENSE*'))]
+    print(f'   mod roots without a LICENSE file: {len(nolic)}' + (': ' + ', '.join(nolic) if nolic else ''))
+    print()
+
+# DR-C1, DR-C2: raw recipe calls and literal ids in scripts (judgement of each hit is in design_rules.md 10).
+SCRIPTS = [p for p in FILES if p.endswith('.js') and (p.startswith('kubejs/') or '/kubejs_startup/' in p)]
+DICTS = re.compile(r'_lib/(item|block|fluid|[a-z_]*)_dict\.js$|/_lib/[a-z_]*dict[a-z_]*\.js$')
+HELPERS = re.compile(r'neoCraftHelper\.js$|tag_helper\.js$|compost\.js$|trade_helper\.js$')
+if wants('recipes'):
+    raw = re.compile(r'\b(e|event)\.(shaped|shapeless|custom|smelting|blasting|smoking|campfireCooking|stonecutting|'
+                     r'smithing)\s*\(|\b(e|event)\.recipes\.\w+')
+    hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not HELPERS.search(s)])
+            if raw.search(l) and not l.strip().startswith('//')]
+    report('DR-C1', 'raw recipe calls outside the helpers', hits)
+    # Only files with a tag event; e.add elsewhere is lang, tiers or datapack writes.
+    tagadd = re.compile(r'\b(e|event)\.(add|remove|removeAll)\s*\(\s*[\'"]')
+    tag_files = [s for s in SCRIPTS if not HELPERS.search(s) and re.search(r'Events\.tags\s*\(', read(s) or '')]
+    hits = [(p, i, l.strip()) for p, i, l in lines_of(tag_files)
+            if tagadd.search(l) and not l.strip().startswith('//')]
+    report('DR-C1', 'raw tag event.add/remove calls outside the helpers', hits)
+if wants('ids'):
+    lit = re.compile(r'[\'"](#?[a-z0-9_.-]+:[a-z0-9_./-]+)[\'"]')
+    hits = []
+    for p, i, l in lines_of([s for s in SCRIPTS if not DICTS.search(s)]):
+        if l.strip().startswith('//'):
+            continue
+        for m in lit.finditer(l):
+            hits.append((p, i, m.group(1)))
+    report('DR-C2', 'literal namespace:id strings in scripts outside the dicts (includes legitimate uses)', hits,
+           top=15)
+    assign = re.compile(r'^\s*(i|global\.item)\.\w+\s*=')
+    hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not DICTS.search(s)]) if assign.search(l)]
+    report('DR-C2', 'dict keys assigned outside the dict files', hits)
+    adv = re.compile(r'advancement', re.I)
+    hits = [(p, i, l.strip()) for p, i, l in lines_of(SCRIPTS) if adv.search(l) and not l.strip().startswith('//')]
+    report('DR-C14', 'scripts mentioning advancements (check each)', hits)
+
+# DR-C21 to DR-C25: formatting facts.
+if wants('format'):
+    groups = {'own Java': [p for p in FILES if OWN_JAVA in p and p.endswith('.java')],
+              'KubeJS JS': SCRIPTS,
+              'tools Python': [p for p in FILES if p.startswith('tools/') and p.endswith('.py')]}
+    print('## DR-C21..C25 formatting (own code)')
+    print('   group           files   tab-indent  mixed-in-file  CRLF  no-final-newline  lines>120  trailing-space-lines')
+    for name, paths in groups.items():
+        tabs = mixed = crlf = nofinal = long_ = trail = 0
+        for p in paths:
+            raw_b = (ROOT / p).read_bytes() if (ROOT / p).exists() else b''
+            s = raw_b.decode('utf-8', 'replace')
+            if b'\r\n' in raw_b:
+                crlf += 1
+            if s and not s.endswith('\n'):
+                nofinal += 1
+            t = sp = 0
+            for line in s.splitlines():
+                if line.startswith('\t'):
+                    t += 1
+                elif line.startswith('    '):
+                    sp += 1
+                if len(line) > 120:
+                    long_ += 1
+                if line != line.rstrip():
+                    trail += 1
+            tabs += t > sp
+            mixed += t > 0 and sp > 0
+        print(f'   {name:14s} {len(paths):6d}   {tabs:10d}  {mixed:13d}  {crlf:4d}  {nofinal:16d}  {long_:9d}  {trail:20d}')
+    print()
+
+# DR-W11: doc file names.
+if wants('docnames'):
+    hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')
+            and not re.fullmatch(r'[a-z0-9_]+(_\d{4}-\d\d-\d\d[a-z]?)?(\.[0-9]+)*\.md|README\.md|TODO\.md|RUNNER\.md|[A-Z_]+\.md',
+                                 Path(p).name)
+            and not (p.startswith('feature_writeup/briefs/')        # briefs/<family>_<sub>.md, sub keeps its hyphens
+                     and re.fullmatch(r'[a-z0-9]+_[a-z0-9-]+\.md', Path(p).name))]
+    report('DR-W11', 'writeup file names that are not snake_case', hits, 'files', top=20)

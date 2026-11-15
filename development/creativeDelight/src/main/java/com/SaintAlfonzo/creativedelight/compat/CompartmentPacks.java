@@ -40,6 +40,7 @@ public final class CompartmentPacks {
 
 	public static void add(AddPackFindersEvent event) {
 		addWorldgen(event);
+		addModData(event);
 		List<Row> on = ROWS.stream().filter(Row::on).toList();
 		if (on.isEmpty()) return;
 		// Textures built from the installed mods' own art (compat/art/CompartmentArt): client resource pack only.
@@ -54,6 +55,28 @@ public final class CompartmentPacks {
 		for (Row row : on) {
 			BuiltInPacks.addFolder(event, root.resolve(row.folder()), CreativeDelight.MOD_ID + ":" + row.folder(), row.title(),
 					Pack.Position.BOTTOM, "Creative Delight");
+		}
+	}
+
+	/**
+	 * Data that names one other mod (plan_bugfix_1114 5.1, TODO creativedelight/members #57, #58): {@code packs/mods/<modid>/},
+	 * a data pack added only while that mod is loaded, for files Forge 1.19.2 cannot gate by condition (global loot
+	 * modifiers, loot tables naming an item a KubeJS script registers only with the mod). Members' files go here too.
+	 */
+	private static void addModData(AddPackFindersEvent event) {
+		if (event.getPackType() != PackType.SERVER_DATA) return;
+		Path root = ModList.get().getModFileById(CreativeDelight.MOD_ID).getFile().findResource("packs", "mods");
+		if (!Files.isDirectory(root)) return;
+		try (Stream<Path> dirs = Files.list(root)) {
+			for (Path dir : dirs.filter(Files::isDirectory).sorted().toList()) {
+				String mod = dir.getFileName().toString().replace("/", "");
+				if (Compartments.loaded(mod)) {
+					BuiltInPacks.addFolder(event, dir, CreativeDelight.MOD_ID + ":mods/" + mod, "Creative Delight: data for " + mod,
+							Pack.Position.BOTTOM, "Creative Delight");
+				}
+			}
+		} catch (IOException e) {
+			throw new IllegalStateException("Creative Delight: cannot list packs/mods", e);
 		}
 	}
 

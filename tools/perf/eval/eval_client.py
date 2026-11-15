@@ -4,9 +4,11 @@
     python3 eval_client.py setup GAME_DIR [WORLD_DIR]   mods hard-linked, kubejs/config/resourcepacks copied, the user's
                                                          options.txt windowed / uncapped / no pause on lost focus,
                                                          the two scratch scripts, WORLD_DIR copied to saves/PerfEval
-    python3 eval_client.py launch GAME_DIR [nodebuglog]  starts it with the user's -Xmx and a JFR recording from JVM start
+    python3 eval_client.py launch GAME_DIR [nodebuglog] [server=HOST:PORT]
+                                                         starts it with the user's -Xmx and a JFR recording from JVM start
                                                          (ce-server.jfc copied to GAME_DIR/perf/); refuses if a game JVM is up.
                                                          nodebuglog: drop ATLauncher's client-1.19-debug.xml log config
+                                                         server=HOST:PORT: join that server at start (--server/--port)
 
 The command line is never printed (it is built from ATLauncher's logged args, see tools/item_repro/launch_client.py).
 """
@@ -56,7 +58,7 @@ def setup(game, world=None):
     print("client dir ready:", len(os.listdir(mods)), "jars")
 
 
-def launch(game, nodebuglog=False, maxage="60m", maxsize="1g"):
+def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None):
     live = subprocess.run(["bash", os.path.join(INST, "tools/scratch_query/game_jvms.sh")],
                           capture_output=True, text=True).stdout.strip()
     if live:
@@ -65,7 +67,11 @@ def launch(game, nodebuglog=False, maxage="60m", maxsize="1g"):
     jvm = ["-XX:FlightRecorderOptions=stackdepth=256,repository=" + os.path.join(game, "perf/jfr-repo"),
            "-XX:StartFlightRecording=name=ce,settings=%s,disk=true,maxage=%s,maxsize=%s,dumponexit=true,filename=%s"
            % (jfc, maxage, maxsize, os.path.join(game, "perf/exit.jfr"))]
-    args = launch_client.build_args(game, jvm_extra=jvm, username="PerfEval")
+    extra = []
+    if server:
+        host, _, port = server.rpartition(":")
+        extra = ["--server", host, "--port", port]
+    args = launch_client.build_args(game, extra=extra, jvm_extra=jvm, username="PerfEval")
     args = [a if not a.startswith("-Xmx") else next(x for x in launch_client.logged_args() if x.startswith("-Xmx"))
             for a in args]
     if nodebuglog:
@@ -81,6 +87,8 @@ if __name__ == "__main__":
     if what == "setup":
         setup(game, sys.argv[3] if len(sys.argv) > 3 else None)
     elif what == "launch":
-        launch(game, len(sys.argv) > 3 and sys.argv[3] == "nodebuglog")
+        opts = sys.argv[3:]
+        srv = next((o.split("=", 1)[1] for o in opts if o.startswith("server=")), None)
+        launch(game, "nodebuglog" in opts, server=srv)
     else:
         sys.exit(__doc__)

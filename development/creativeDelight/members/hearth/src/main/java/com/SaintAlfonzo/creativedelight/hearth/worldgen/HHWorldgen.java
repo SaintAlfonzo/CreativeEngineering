@@ -32,6 +32,10 @@ public final class HHWorldgen {
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> SALT_CAVE =
             FEATURES.register("salt_cave", () -> new SaltCaveFeature(NoneFeatureConfiguration.CODEC));
 
+    /** Wild hops on tree trunks (plan_bugfix_1114 3.1); the configured feature names the vine state. */
+    public static final RegistryObject<Feature<TrunkVineFeature.Config>> TRUNK_VINE =
+            FEATURES.register("trunk_vine", () -> new TrunkVineFeature(TrunkVineFeature.Config.CODEC));
+
     public static final RegistryObject<StructureType<CornMazeStructure>> CORN_MAZE =
             STRUCTURE_TYPES.register("corn_maze", () -> () -> CornMazeStructure.CODEC);
 

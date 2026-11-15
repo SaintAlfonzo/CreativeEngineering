@@ -72,7 +72,7 @@
       "fruitsdelight:mangosteen_leaves", "fruitsdelight:durian_leaves"
     ],
     "autumn_fruit": [
-      "vinery:apple_leaves", "fruitsdelight:apple_leaves", "hearthandharvest:hops"
+      "vinery:apple_leaves", "fruitsdelight:apple_leaves", "hearthandharvest:hops", "hearthandharvest:hops_vine"
     ],
     "grass": [
       "minecraft:grass_block", "minecraft:grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:large_fern",

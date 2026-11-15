@@ -1189,6 +1189,8 @@ Rustic crops in village farms until the new CD jar is in.
 
 ### 24.4 Worldgen files gated on their mods (2026-11-06, framework #13)
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CDW-01b, -01c, -03, -03c PASS; SQ-CDW-01 FAIL: instance `kubejs/data` still holds ungated `wild/rubber_tree` copies (TODO `creativedelight/framework #16`); SQ-CDW-03b FAIL minor: 16 fruitsdelight rules without `requires` (`#17`); SQ-CDW-02 FAIL: the pack rubber tree never places in jungles (`farming/wild-crops #8`). SQ-MIN-01, -06, -07 PASS; SQ-MIN-03 FAIL: `placed_corn_popsicle` loot table not gated on Corn Delight (`creativedelight/members #58`).
+
 Seen in CEPortTesting (no Myrtrees): `Unknown registry key in minecraft:worldgen/trunk_placer_type:
 myrtrees:rubber_trunk_placer` from `wild/rubber_tree.json`, and the whole datapack failed on world select. Forge 1.19.2-43.3.9
 has no conditions for worldgen registries, so a file may only ship where every id it names exists.

@@ -1,0 +1,12 @@
+# r1114 phase 4 boot 3: SQ-CC12-03 = SQ-CC-02 on the full pack (group A) with creativecommon-1.2.0 in the scratch srv
+# (prep_srv.sh / tpf_srv.sh swap the 11-13 23:12 build in; the instance mods/ keeps 1.1.0).
+# Server: tpf_srv.sh OUT cc12c A shipped @s1.
+pace 2
+
+## SQ-CC12-03 | full pack on Common 1.2.0: no mixin or class error, startup files loaded, swap aliases installed
+bootexpect Done \(
+bootreject Mixin apply failed|InvalidMixinException
+bootexpect \[swaps\] \d+ permanent alias
+bootreject \[swaps\] .*unresolved|\[swaps\] .*had no survivor
+shell ls mods | grep -i creativecommon; grep -nE "Mixin apply failed|InvalidMixinException|outside the tested range|ClassNotFoundException|NoClassDefFoundError" logs/latest.log | cut -c1-220 | head -12; echo "---"; grep -m3 -E "\[swaps\] [0-9]+ permanent alias|\[swaps\] [0-9]+ list file" logs/latest.log | cut -c1-240; grep -n "creativecommon: .* files loaded" logs/kubejs/startup.log | cut -c1-200; echo "startup ERROR lines: $(grep -c ERROR logs/kubejs/startup.log)"; true
+look no mixin or class error from our jars (third-party optional-class lines named); no out-of-range WARN; Common files loaded; 0 startup ERROR; N permanent aliases N > 0

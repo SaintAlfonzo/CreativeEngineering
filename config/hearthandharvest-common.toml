@@ -83,7 +83,7 @@
 	handFeeding = true
 	#Wild crows eat crow food on the ground, 1 in 8 to tame the thrower.
 	eatDroppedFood = true
-	#Tame crows also breed with corn and corn seeds.
+	#On: only corn and corn seeds start breeding in tame crows. Off: any crow food does. Any crow food heals a tame crow either way.
 	cornBreeding = true
 	#Wild crows peck crops back to age 0. Also needs mobGriefing.
 	eatCrops = true

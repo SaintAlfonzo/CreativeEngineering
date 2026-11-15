@@ -300,6 +300,8 @@ paths; `split/A_java.md`, `split/B_mixins.md` and section 34.1 of creative_delig
 salt mixins; `gen_dd_dishes.py` full runs rewrite 9 older dish models onto the newer bowl (reverted; review). Server by
 hand: copy `goldenfood_upstream/` beside mods/, remove the four displaced jars, install the three jars.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-GLD-16 PASS for the stews and jar fluid (old-save items gone, gives Unknown item, golden bread 10); the cans half not covered: no stew-era jar with golden cans is left.
+
 Deploy tooling fixed in the same run: `build_deploy.py` `CATEGORIES` lacked `oceanic_upstream` and `enders_upstream`
 (KeyError on any deploy build) and now carries them plus `goldenfood_upstream`, with server and client copy steps;
 `gen_structure_config.py` reads the End House from `enders_upstream/` (it had dropped the set since the member began

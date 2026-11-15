@@ -61,7 +61,9 @@ hit the solver's penalty range (offset 0.6) and note as unreachable; SQ-VH-05 re
 | VH-03 | Stub loaded, no TerraBlender or region classes | SQ-VH-03 |
 | VH-04 | `/locate biome` finds the Heap | SQ-VH-04 |
 | VH-05 | `/dumpclimate` share near the target | SQ-VH-05 |
-| VH-06 | Flesh floor and ceiling, bedrock intact | SQ-VH-06 |
+| VH-06 | All flesh, no netherrack (cave walls included), bedrock intact | SQ-VH-06 |
+| VH-06b | Caves still carve inside the Heap | SQ-VH-06b |
+| VH-06c | Neighbouring Nether biomes unchanged | SQ-VH-06c |
 | VH-07 | Features generate over many chunks, no exception | SQ-VH-07 |
 | VH-08 | Textures, blood, particles, music | CQ-VH-02 |
 | VH-09 | Vanilla `is_nether` intact, flesh drops, axe speed | SQ-VH-08 |
@@ -79,6 +81,15 @@ hit the solver's penalty range (offset 0.6) and note as unreachable; SQ-VH-05 re
 | VH-21 | Eyebulb drop places | CQ-FLR-03 |
 
 ## 6. Still to do
+
+All flesh (2026-11-14, owner; [plan_bugfix_1114.md](plan_bugfix_1114.md) 6.4, was TODO `#73` item 8): BUILT, Creative
+Worldgen installed, untested. r1112 found netherrack on 10 % of floors and 16 % of ceilings and in every cave wall, because
+the rule set only the top layer. The Heap rule now ends with an unconditional flesh rule and sits ahead of vanilla's
+netherrack band under the roof, so every netherrack position of the Heap is flesh at any depth (`tools/gen_visceral_heap.py`).
+Flesh and porous flesh joined `#minecraft:nether_carver_replaceables` (`tags/visceral_heap.js`) so the carvers still cut
+caves. Flesh is not in `#minecraft:base_stone_nether`, so quartz, gold, ancient debris, magma, blackstone and gravel
+blobs no longer place inside the Heap (owner default). Structure bricks stay. New chunks only. Tests SQ-VH-06 (rewritten),
+-06b, -06c, CQ-VH-02.
 
 Needs the game: `/dumpall`, `/cdevgen run all dumps`, `/dumpclimate` (plan section 7 step 4), then the biome list readers
 `gen_spawn_table.py`, `gen_weather_table.py`, `gen_structure_groups.py`, `structure_biome_coverage.py` and the

@@ -1,5 +1,15 @@
 {
   "type": "immersiveengineering:sawmill",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "architects_palette"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
   "energy": 800,
   "input": {
     "item": "minecraft:jungle_planks"

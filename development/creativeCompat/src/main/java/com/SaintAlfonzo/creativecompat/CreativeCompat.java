@@ -21,6 +21,10 @@ import com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelSpawner;
 import com.SaintAlfonzo.creativecompat.shrapnel.TntShrapnelHandler;
 import com.SaintAlfonzo.creativecompat.surface.CamoSpeedTooltip;
 import com.SaintAlfonzo.creativecompat.surface.LeafPileSlow;
+import com.SaintAlfonzo.creativecompat.surface.PassSync;
+import com.SaintAlfonzo.creativecompat.surface.PassSyncClient;
+import com.SaintAlfonzo.creativecompat.surface.PassThrough;
+import com.SaintAlfonzo.creativecompat.surface.PassValues;
 import com.SaintAlfonzo.creativecompat.surface.SurfaceSpeeds;
 import com.SaintAlfonzo.creativecommon.util.BurnBursts;
 import com.SaintAlfonzo.creativecompat.compat.JarContents;
@@ -32,6 +36,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -134,6 +139,16 @@ public class CreativeCompat {
         modEventBus.addListener(SurfaceSpeeds::onConfigReload);
         MinecraftForge.EVENT_BUS.register(SurfaceSpeeds.class);
         LeafPileSlow.set(() -> CompatConfig.SPEC.isLoaded() ? CompatConfig.LEAF_PILES.slowFromLayers.get() : LeafPileSlow.DEFAULT);
+        // Pass-through blocks (surface/PassThrough, plan_passthrough.md): the block -> tier cache follows tag reloads; the
+        // value snapshot follows the toml, and the server sends its values to players on join and on save (PassSync).
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class,
+                event -> PassThrough.clearCache());
+        modEventBus.addListener(PassValues::onConfig);
+        PassSync.register();
+        MinecraftForge.EVENT_BUS.addListener(PassSync::onLogin);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.addListener(PassSyncClient::onLoggingOut);
+        }
 
         // What Creative Common's WTHIT and JEI code reads from here, through its own holders (no Common class loads this
         // jar's classes). Read live, so config reloads apply.

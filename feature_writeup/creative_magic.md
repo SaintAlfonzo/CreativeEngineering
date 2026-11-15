@@ -55,6 +55,8 @@ and `CMGConfig`.
 Scratch SQ-CMG-01 to -05 ([scratch_queue.md](testing/scratch_queue.md)); the older rows still apply: NP-01 to NP-12
 (portal), SQ-TC (Trinket Case probe), RA-01 to RA-08.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CMG-02, -02b PASS (carry lines and kept values; second boot carries nothing).
+
 ## 5. History
 
 - 2026-11-01: reserved from the split audit; same day the owner made it a carve of its own (7.6).

@@ -9,6 +9,8 @@ or bridge). Notes: A4 bone broth already fits the copper pot (no recipe added, S
 1.2.00 shipped (source regression from the split merge); A8 uses a 3-try random patch (1.19.2 multiface has no block
 count); A12 added 21 feasts (Gleaming Salad already had a can) and the generator also caught up 15 cans of newer foods.**
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-MG-22, SQ-AZW-03, SQ-BOT-03, SQ-FCK-02b, -07, -08, -09, -11, -13, -16 PASS (SQ-FCK-13 live toml read not testable on a scratch server); SQ-FCK-08b INCONCLUSIVE: badlands sample too small (TODO `tooling/generators-and-tests #15`).
+
 Source: owner message 2026-11-07 against [TODO.md](todo/TODO.md). Open questions are marked
 **Q1..Q29** and are answered in the owner's reply; each task says which Q blocks it. Effort: S under an hour, M a
 session, L several sessions.

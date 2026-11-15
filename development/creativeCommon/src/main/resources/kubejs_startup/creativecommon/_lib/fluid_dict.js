@@ -275,6 +275,7 @@ f.fertilizer = 'sliceanddice:fertilizer';
 f.sulfur_dioxide = 'vintageimprovements:sulfur_dioxide';
 f.sulfur_trioxide = 'vintageimprovements:sulfur_trioxide';
 f.sulfuric_acid = 'vintageimprovements:sulfuric_acid';
+f.acid = 'powergrid:acid';                              // Power Grid port (development/backportedPowerGrid); read by server_scripts/other/power_grid.js
 
 // ############################## Validation ##############################
 

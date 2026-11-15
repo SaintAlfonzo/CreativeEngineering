@@ -66,7 +66,8 @@
                 let n = 0
                 server.getAllLevels().forEach(level => {
                     level.getAllEntities().forEach(e => {
-                        let type = String($CReg.ENTITY_TYPE.getKey(e.getType()))
+                        // ENTITY_TYPE.getKey(e.getType()) misread every type in Rhino (KubeJS remaps getType to the id): getEncodeId (r1114)
+                        let type = String(e.getEncodeId())
                         if (type != 'portalgun:custom_portal') return
                         n++
                         let t = new $CCompound(), keys = []
@@ -75,7 +76,9 @@
                         let normal = '?'
                         try { normal = String(e.getNormal()) } catch (err) { }
                         let desc = t.contains('descriptor') ? String(t.get('descriptor')) : '-'
-                        out('portal ' + String(level.dimension().location()) + ' ' + Math.floor(e.getX()) + ' ' + Math.floor(e.getY()) + ' '
+                        let dim = '?'
+                        try { dim = String(level.dimension().location()) } catch (x) { dim = String(level.dimension) }
+                        out('portal ' + dim + ' ' + Math.floor(e.getX()) + ' ' + Math.floor(e.getY()) + ' '
                             + Math.floor(e.getZ()) + ' normal ' + normal + ' ' + (keys.length ? keys.join(' ') : 'no adjust key') + ' descriptor ' + desc)
                     })
                 })

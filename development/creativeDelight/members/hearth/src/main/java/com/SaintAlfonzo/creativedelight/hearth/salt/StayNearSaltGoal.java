@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
@@ -112,7 +113,18 @@ public class StayNearSaltGoal extends Goal {
             return false;
         }
         if (licking) {
-            return tripTicks < TRIP_TICKS && !mob.getNavigation().isDone() || closeEnough();
+            if (closeEnough()) {
+                return true;
+            }
+            if (tripTicks < TRIP_TICKS && mob.getNavigation().isDone()) {
+                // A partial leg toward far salt ended: plan the next leg from here (plan_bugfix_1114 3.7, TODO #76).
+                Path next = findTrip();
+                if (next != null) {
+                    trip = next;
+                    mob.getNavigation().moveTo(trip, 1.0D);
+                }
+            }
+            return tripTicks < TRIP_TICKS && !mob.getNavigation().isDone();
         }
         return beyondRadius() && !mob.getNavigation().isDone();
     }
@@ -177,7 +189,11 @@ public class StayNearSaltGoal extends Goal {
         return found.map(BlockPos::immutable).orElse(null);
     }
 
-    /** A complete path to a walkable spot beside the block, never into it; only the nearest few spots are path-checked. */
+    /**
+     * A complete path to a walkable spot beside the block, never into it; only the nearest few spots are path-checked. When
+     * the salt is beyond the mob's follow range minus 2 (cows: 16, under the 20-block animal radius), a complete path cannot
+     * be found from here, so a partial path that ends closer to the salt is taken as one leg and re-planned on arrival.
+     */
     @Nullable
     private Path findTrip() {
         Level level = mob.level;
@@ -193,13 +209,24 @@ public class StayNearSaltGoal extends Goal {
             }
         }
         spots.sort(Comparator.comparingDouble(spot -> mob.distanceToSqr(spot.getX() + 0.5D, spot.getY(), spot.getZ() + 0.5D)));
+        double here = mob.distanceToSqr(salt.getX() + 0.5D, salt.getY(), salt.getZ() + 0.5D);
+        double range = mob.getAttributeValue(Attributes.FOLLOW_RANGE) - 2.0D;
+        boolean far = here > range * range;
+        Path partial = null;
         for (int i = 0; i < Math.min(PATH_CANDIDATES, spots.size()); i++) {
             Path path = mob.getNavigation().createPath(spots.get(i), 0);
-            if (path != null && path.canReach()) {
+            if (path == null) {
+                continue;
+            }
+            if (path.canReach()) {
                 return path;
             }
+            if (far && partial == null && path.getEndNode() != null
+                    && path.getEndNode().asBlockPos().distSqr(salt) + 1.0D < here) {
+                partial = path;
+            }
         }
-        return null;
+        return partial;
     }
 
     private static boolean walkable(Level level, BlockPos spot) {

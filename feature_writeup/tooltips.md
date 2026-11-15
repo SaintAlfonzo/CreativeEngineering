@@ -136,9 +136,19 @@ Examples:
   - every framed `*double*` item: "Hybrid block: each part holds its own camo"
   - Their Speed Multiplier line reads "matches its camo (newest camo sets walk behaviors for hybrid blocks)" (your wording, 2026-09-27).
 
+**Added for Hearth and Harvest** (`kubejs/assets/creativedelight/kubejs/hearthandharvest/client.js`, gray; 2026-11-14,
+[plan_bugfix_1114.md](plan_bugfix_1114.md) 1.2)
+- Quark seed pouch: "Tops up from seeds picked up while on the hotbar", "In a dispenser: plants up to 25 seeds in a 5x5",
+  "Facing air: plants on the blocks below; facing soil: plants on top", "Stays in the dispenser" (was "Plants in a dispenser").
+- Bundle: "In a dispenser: plants its first seed; stays in the dispenser".
+- End stone and Ender Crop's Tilled End Stone (with Ender Crop): "Till end stone with a netherite hoe" (2026-11-14,
+  [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.2). A lower hoe on end stone shows "End stone needs a netherite hoe" on the
+  action bar (hearth member lang).
+
 **Added for Vinery** ("Vinery" section; text written 2026-10-19 for the 1.5.5 port, [alcohol.md](alcohol.md) 10.15)
 - `tooltips.js` (gray): Grapevine Pot, Apple Press, Cask (plus "Sneak right-click with an empty hand to pour the juice
-  out"), Grapevine Stem and Lattice (where seeds go; shears give the seed back, breaking a planted one loses it),
+  out"), Grapevine Stem and Lattice (where seeds go; shears give the seed back, breaking a planted one loses it; the
+  lattice says "Plant jungle grape seeds or hops on it" with Hearth and Harvest, 2026-11-14),
   apple / cherry leaves and saplings, Stackable Log. Chorus Wine: "Makes you wake up in strange places" (light purple).
 - In the port (its sizes live in its code): every wine's size, "N per placed block" and which storage takes it; each
   rack's and the Wine Box's capacity ("Holds 4 wines (small or medium)"); the Wine Box's sneak line; the aging hint.
@@ -308,6 +318,8 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
   placed blocks with WTHIT → the walk speed line is still there (`gameplay/blockrunner #6`).
 - [ ] **TT-43 Botany Pots:** hover a terracotta, a concrete and a hopper botany pot → "Useful for flowers, not great for
   crops" on each ([botany_pots.md](botany_pots.md)).
+- [ ] **TT-44 Pot soil speed:** hover Rich Soil and Rich Soil Farmland → "Growth speed in Botany Pots +10%" and "Does
+  not change yield"; Fertile Soil → "+20%" and the same second line (CQ-SY-22, [botany_pots.md](botany_pots.md) 3).
 
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. → Every line reports more than 0 matches.
 
@@ -373,3 +385,5 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
   with `farming/crops #5` on 2026-10-30. TT-39 to TT-41.
 - 2026-11-07: Botany Pots line on every botany pot (`addTooltipPattern 'botanypots:*botany_pot'` in
   `client_scripts/tooltips.js`), owner's note with the slower pot growth ([botany_pots.md](botany_pots.md)). TT-43.
+- 2026-11-14: Rich Soil, Rich Soil Farmland and Fertile Soil get their Botany Pots growth speed and "Does not change
+  yield" (crop yields wave 2). TT-44.

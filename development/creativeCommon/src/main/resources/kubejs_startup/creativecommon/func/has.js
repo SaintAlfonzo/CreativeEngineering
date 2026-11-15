@@ -35,12 +35,26 @@ global.has.namespace = function (a) {
 global.has._always = { c: true, forge: true, minecraft: true }
 global.has._cache = {}
 
-// Whether one mod id is loaded (cached: the mod list does not change after startup).
+// Data namespaces that differ from the owning mod's id (plan_bugfix_1114.md 5.1, SQ-DCM-02): without these the
+// worldgen datapack mods below read as absent and their tags and recipes were skipped. Namespace -> mod id, read from
+// each jar's mods.toml and data/assets folders (2026-11-14). Add a row when a jar's namespace is not its mod id.
+global.has._modOf = {
+	'towns_and_towers': 't_and_t',
+	'hopo': 'hopour',
+	'unwrecked_ships': 'unwrecked_ships_plus',
+	'yuushya': 'yuushya_modelling',
+	'cozys-improved-cats': 'cozys_improved_cats',
+	'rare-ice': 'rare_ice'
+}
+
+// Whether the mod owning one namespace is loaded (cached: the mod list does not change after startup). A namespace
+// that is itself a mod id needs no row in _modOf.
 global.has.mod = function (ns) {
 	if (global.has._always[ns]) return true
 	var hit = global.has._cache[ns]
 	if (hit === undefined) {
-		hit = !!Platform.isLoaded(ns)
+		var owner = global.has._modOf[ns]
+		hit = !!Platform.isLoaded(ns) || (owner !== undefined && !!Platform.isLoaded(owner))
 		global.has._cache[ns] = hit
 	}
 	return hit

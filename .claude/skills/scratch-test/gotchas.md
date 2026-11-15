@@ -85,8 +85,10 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   then air. After a restart wait about 30 s after `forceload add` before scheduling block ticks.
 - An entity summoned right after `forceload add` in an unloaded dimension is not found by the next command: wait a few
   seconds.
-- prep_srv servers run `spawn-animals=false`: vanilla discards every Animal / WaterAnimal on its next tick, so a
-  summoned pig or squid vanishes. Use iron golems, or set the prop.
+- prep_srv servers run `spawn-animals=false` (peaceful; set `spawn-npcs` too): ServerLevel DISCARDS every `Animal`,
+  `WaterAnimal` and `Npc` on its next tick, summoned and NoAI ones too (pigs, cows, wolves, striders, villagers gone a
+  tick later: "No entity was found"). Rows with animals or villagers need `prep_srv.sh OUT LEVEL A spawn-animals=true
+  spawn-npcs=true` (gamerule doMobSpawning false still stops natural spawns); iron golems survive either way (r1114).
 - Chunk-generation animal spawns are sparse in this pack: to test a spawn hook, a scratch-only
   `kubejs/data/zz_test/forge/biome_modifier` forcing the mob. Adding a placed feature to another biome in the same step
   = feature order cycle crash at spawn.
@@ -165,7 +167,9 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 ## Logs and results
 
 - The system grep is ugrep: long `{0,300}` regexes fail ("exceeds complexity limits"); parse big logs in python.
-- `qrun.py` shell steps: `grep -c` printing 0 exits 1 = a false FAIL; output is in `rows/ID.shell.txt`.
+- `qrun.py` shell steps: `grep -c` printing 0 exits 1 = a false FAIL (seen again in r1106spfx, r1113, r1114); end the
+  step with `; true`, wrap it (`echo "n $(grep -c ...)"`) or test the number (`test "$(grep -c ...)" = 0`). Output is in
+  `rows/ID.shell.txt`.
 - Not ours (ignore): optional-mixin "Error loading class" WARNs, advancement parse errors, the Discord bot JDA error,
   MoreJS "Sell item cannot be empty", `PoolElementStructurePiece ... minecraft:empty is not valid` at save, 7 Create
   Mechanical Extruder recipes with an abstract `getType()` in `dumprecipes`.
@@ -198,8 +202,7 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   with PRE after editing it.
 - `ServerEvents.loaded` lines print once per boot, not on /reload; check them with `bootexpect`, not after a reload.
 - KubeJS 1902.6.2-build.73 never posts `ServerEvents.afterRecipes`: a listener there never runs (no error either).
-- `shell grep -c ...` exits 1 when the count is 0, so a qrun shell step that only prints a count FAILs on 0: add `; true`
-  or test the number. qrun `kjsexpect` reads `server.log`; startup-script lines (`console.log` in startup scripts) are in
+- qrun `kjsexpect` reads `server.log`; startup-script lines (`console.log` in startup scripts) are in
   `startup.log`: use a `shell grep` on that file.
 - A server that refuses to boot (missing donor folder, missing dependency) writes its crash report and then hangs; 
   `stop_wait.sh` kills its own pid after 180 s. `wait_boot.sh` returns CRASH at once, so no time is lost waiting for Done.
@@ -247,8 +250,6 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 
 ## Probes and batches (r1106spfx)
 
-- `grep -c` exits 1 when the count is 0, so a `shell` step that ends on it FAILs on the pass case: end with `; true`
-  or test the number (`test "$(grep -c ...)" = 0`).
 - `zq count` takes an optional 8th argument, the dimension (`... <block> minecraft:the_end`); without it the overworld.
 - The full pack cannot boot without Creative Delight (Farmer's Delight is nested in it), so a jar-out row for CD,
   Calendar or Compat belongs on the port chain, not the full pack.
@@ -299,7 +300,6 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   `getNbt()`); KubeJS `stack.enchant(...)` returns a COPY. Create's `SequencedAssemblyRecipe.advance` is private: walk
   an assembly with the public `SequencedAssemblyRecipe.getRecipe(level, stack, type, ProcessingRecipe)` and the step's
   `rollResults()` (`/zsa <id>`).
-- `spawn-animals=false` (group A) discards every animal at once, summoned NoAI pigs too: use villagers for damage rows.
 - Phantoms (SQ-PSU-04, SQ-CC-10b): the group A superflat reports sea level 63 and the phantom spawner skips every
   player below sea level, so bots at y -60 never get one (r1102b's and r1107cc's first two tries). Put the bots on
   platforms at y 70, with `spawn-monsters=true`. `/zph N` (`cc_phantom_probe.js`) runs N fresh spawner passes at once.
@@ -385,7 +385,8 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Block data in `data get block` prints `Slot: 7` for a byte in some containers, `Slot: 7b` in others: write `Slot: 7b?`.
 - A member config carry (SALT2-08, MemberConfigMove) skips keys the target file already has: the scratch srv copies
   the instance's filled `creativedelight-common.toml`, so strip the target sections before a carry test.
-- `ForgeRegistries.ENTITY_TYPES.getKey(e.getType())` returned `minecraft:pig` for every entity from Rhino (r1113 pwg10b):
+- `ForgeRegistries.ENTITY_TYPES.getKey(e.getType())` (and `Registry.ENTITY_TYPE.getKey`, r1114 `zc3 portals` read 0)
+  returned `minecraft:pig` for every entity from Rhino (r1113 pwg10b):
   use `e.getEncodeId()`. A contraption scan built on it reported "contraptions 0" for a working bearing.
 - A Forge `FluidStack` built in a script arrives EMPTY in Java (KubeJS wraps it): fill tanks by writing their NBT
   (`TankContent`, `InputTanks`, `Tanks`) instead. Static getters like `ModdedFluids.acid()` are often unreachable: look
@@ -404,11 +405,62 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Goggle tooltips (`addToGoggleTooltip`) on gauges call `Minecraft.getInstance()`: on a dedicated server that is a
   RuntimeDistCleaner ERROR and the probe command aborts. Wrap in try/catch; never use a blanket `/ERROR\]` reject
   in batches that read gauges (`reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(mod)`).
-- A Forge config edited live with `sed -i` writes a new inode that Forge's watcher never sees: edit configs before the
-  boot, or rewrite the same file in place.
 - Peaceful difficulty removes summoned hostiles (witch, husk); MCA replaces summoned villagers, so `kill
   @e[type=minecraft:villager]` misses them (kill by box) and they regenerate (compare health as deltas).
 - Create machines placed before their creative motor often stay at speed 0: place the motor (and shaft or gearbox)
   first, then the machine, and read `speed` before relying on it. Creative motor default is 16 RPM.
 - `pkill -f <pattern>` can match your own shell when the pattern is in the command line: kill qrun by pid from
   `/proc/PID/cmdline`.
+
+## Found in r1114 (SQ-TPF, 2026-11-14)
+
+- `@e` (and `@e[tag=...]`) never matches a dead entity (the selector adds `Entity::isAlive`): select a dying mob by
+  UUID string (`data get entity 00014b89-0000-0001-0000-000200000003 DeathTime` for `UUID:[I;84873,1,2,3]`).
+- MCA (`overwriteOriginalZombieVillagers` true) replaces a summoned `minecraft:zombie_villager` on join with an MCA one
+  that has lost its vehicle and `ConversionTime` (-1). Summon `mca:male_zombie_villager` directly; it converts to
+  `mca:male_villager` (match `type=#zq:villagers`). Tags do not survive the conversion.
+- Third-party fix rows: `tools/scratch_query/tpf_srv.sh` builds the srv and writes the Packet Fixer and Debugify
+  configs (header there).
+- Eat rows on the scratch srv (peaceful): Peaceful refills 1 food per 10 ticks while the player is hungry, so a
+  `hunger 0` then an eat 2 s later reads +4 over the item's nutrition (r1113 c2a1 "every eat +4"). Set `gamerule
+  naturalRegeneration false` in the setup row of any row that reads foodLevel deltas.
+- Live Forge config edits do not work on the scratch srv at all: an in-place rewrite (`sed > tmp; cat tmp > file`) is
+  not seen either (no "changed" line in debug.log, the file is in the "Watching TOML" list; r1114 fix_c3a1 FCK-13,
+  IP-05; supersedes the r1113 note that an in-place rewrite works). Set every value with `qrun.py toml` before a boot
+  and split value cases across boots.
+- `level.dimension()` on a level from
+  `server.getAllLevels()` throws "not a function" in Rhino: read it in a try and fall back to `level.dimension`.
+- A gun portal heartbeat is phased per portal and the tick count restarts at load, so a long `heartbeatSeconds` beat can
+  fire seconds after Done: rows that read saved portals after a restart need a beat longer than the read (600).
+- CLIENT: 420 or more jars in the client's mods/ kill it natively at window creation (`*** stack smashing detected ***:
+  terminated` in launch.out, about 23 s after launch, right after KubeJS "Loaded client.properties"); 419 start. Any
+  jar tips it (Packet Fixer alone, Debugify alone, both swapped against Clear Void tested r1114). Count
+  `ls GAME/mods/*.jar | wc -l` before a client launch; the instance mods/ had 421 on 2026-11-14.
+- `eval_client.py setup` always copies `zz_perfeval_drive.js` into the client's server_scripts: it sets spectator and
+  teleports the player every 30 s for 3 min after the join. Delete it before any gate or queue client batch.
+- A throwaway client needs `config/debugify.json` (tpf_debugify_cfg.py): the instance has none, so Debugify would
+  run all 69 fixes, including MC-121706 that crashes the integrated server boot.
+- A `waitlog` for a `/locate` reply can match an EARLIER locate's late reply: a locate that outlived its batch (rerun_b's
+  third corn maze search) answered inside c4_b's savanna locate wait, so the capture ran on the wrong line. Make every
+  locate waitlog name its own target (`The nearest <id> is at|Could not find a structure of type "<id>"`).
+- Creative Worldgen ends every structure search after `[worldgen.locate] searchTimeoutSeconds` (120 s shipped) whatever
+  the batch's waitlog says: a row that needs a longer search sets that key in the srv toml before the boot (corn maze
+  from the c4b spawn took 424 s).
+- `creativeworldgen:meta/*` are structure ids and `creativeworldgen:group/*` structure sets, not structure tags:
+  `/locate structure creativeworldgen:meta/waystone_ruins` (no `#`); a group is checked through a member or
+  `/cwglocate census <radius>` (the radius is required).
+- `scratch_server.sh setup` copies the Creative Labels probe (`zz_cl_probe.js`); in a reduced set without Labels it is
+  a KubeJS load error that trips `kjsreject error`. cpp_chain_srv.sh removes it since r1114; other reduced-set builders
+  (cc_only_srv.sh deletes every script but zq) are fine.
+
+
+## Found in r1114 (P11 Power Grid, phase 5)
+
+- A regression batch that copies rows from many gate batches keeps their hidden dependencies: a "boot row" the plan
+  drops can be the one that builds a fixture (SQ-PWG-76 built the chain source board for -78 to -82). Grep the later
+  rows for coordinates no remaining row places before dropping a row.
+- A big up-front `forceload add` over every test area (SQ-PWG-P11A) breaks rows that unload a chunk on purpose
+  (SQ-PWG-21 "chunk 65 loaded=false"): rows that test unloading need an area outside the blanket forceload.
+- Moving a row to new coordinates with a regex shift: also shift the coordinates inside the expect regexes
+  (`basin at 114[26] -60 1890` kept the old X and failed a passing row).
+- `zpwg ns` printed only the first 20 ids per registry; `zpwg ns <ns> all` prints every id (pwg_probe.js).

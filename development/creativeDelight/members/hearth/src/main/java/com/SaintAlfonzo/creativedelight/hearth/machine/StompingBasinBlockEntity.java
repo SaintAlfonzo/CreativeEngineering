@@ -118,8 +118,10 @@ public class StompingBasinBlockEntity extends SyncedBlockEntity {
         return role == MultiblockPart.CONTROLLER ? 4 : 1;
     }
 
+    /** Only stomping ingredients go in (3.10); anything else comes back untouched. */
     public ItemStack insert(ItemStack toInsert) {
         if (toInsert.isEmpty()) return ItemStack.EMPTY;
+        if (!StompingInputs.accepts(level, toInsert)) return toInsert;
         if (role == MultiblockPart.MEMBER) {
             StompingBasinBlockEntity controller = controller();
             return controller != null ? controller.insert(toInsert) : toInsert;
@@ -349,7 +351,7 @@ public class StompingBasinBlockEntity extends SyncedBlockEntity {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            return slot < activeSlots();
+            return slot < activeSlots() && StompingInputs.accepts(level, stack);
         }
 
         @Override

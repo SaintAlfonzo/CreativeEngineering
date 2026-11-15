@@ -95,8 +95,8 @@ ServerEvents.recipes(e => {
 		F.veggieCook(fd.veggie_vegetarian_patty, fd.veggie_cooked_vegetarian_patty)
 		// Miner's Delight's cave carrot (dishes/ingredients #43): cut for 2 raw patties, the baked one for 2 cooked ones
 		if (Platform.isLoaded('miners_delight')) {
-			R.fdCutting(i.cave_carrot, i.any_knife, n(fd.veggie_vegetarian_patty, 2), e, 'raw_veggie_patty_from_cave_carrot')
-			R.fdCutting(i.baked_cave_carrot, i.any_knife, n(fd.veggie_cooked_vegetarian_patty, 2), e, 'cooked_veggie_patty_from_baked_cave_carrot')
+			R.fdCutting(i.cave_carrot, i.any_knife, Item.of(fd.veggie_vegetarian_patty, 2), e, 'raw_veggie_patty_from_cave_carrot')
+			R.fdCutting(i.baked_cave_carrot, i.any_knife, Item.of(fd.veggie_cooked_vegetarian_patty, 2), e, 'cooked_veggie_patty_from_baked_cave_carrot')
 		}
 		// Burger rule (creativedelight/recipes.js): shaped, toppings on top, patty in the middle, bread at the bottom,
 		// plus one assembly. Started on the patty, as the egg burger: assemblies on bread need a first step of their own.

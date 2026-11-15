@@ -73,6 +73,8 @@ a cooked item and are crafted shaped plus one sequenced assembly with cooked inp
 
 ## D. Testing and hand-over
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-BBQ2-03, -05, -06 PASS (skewer ids live; wrap +10, sandwich +16, bibimbap +16 with no food effect; shulker filet cutting).
+
 - Offline: `./gradlew :creativeDelight:build --offline`; `python3 tools/food_families.py --check`; `python3 tools/changelog_lint.py`;
   KubeJS recipe load is only proven in game (scratch queue rows written, run when the owner says so).
 - Scratch rows (S tier): SQ-LGM-11..14 (A), SQ-ROLL-xx (B), SQ-BBQ2-xx (C, recipes, family and can dumps). Client rows (C tier):

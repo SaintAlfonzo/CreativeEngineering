@@ -1,0 +1,335 @@
+1	LTn	loading_tips:you_can_use_an_axe_to_scrape_oxidation_off	You can use an axe to scrape oxidation off copper blocks
+2	LTn	loading_tips:crouch_to_avoid_falling_off_ledges	Crouch to avoid falling off ledges
+3	LT*	loading_tips:gold_tools_are_faster_but_break_easily	Gold tools mine faster than diamond, are easy to enchant, and naturally apply Fortune or Looting. Unfortunately they aren't very durable
+4	LT*	loading_tips:beds_explode_in_the_nether	Beds explode when used outside the Overworld
+5	LTn	loading_tips:endermen_hate_water	Endermen hate water
+6	LT*	loading_tips:use_a_silk_touch_pickaxe_for_glass	Glass breaks into glass shards unless mined with Silk Touch; shards craft back into glass
+7	LTn	loading_tips:axes_disable_shields	Axes disable shields
+8	LT*	loading_tips:fortune_works_on_coal_diamonds_lapis_copper_and	Fortune works on coal, copper, iron, gold, redstone, lapis, diamond, emerald and quartz ores, and on ancient debris
+9	LTn	loading_tips:torches_prevent_monster_spawns	Torches prevent monster spawns
+10	LTn	loading_tips:sprinting_makes_you_hungrier	Sprinting makes you hungrier
+11	LTn	loading_tips:smelt_sand_to_get_glass	Smelt sand to get glass
+12	LT*	loading_tips:villagers_love_emeralds	Villagers trade for emeralds, and every trade gives them experience toward better trades
+13	LTn	loading_tips:zombies_burn_in_sunlight	Zombies burn in sunlight
+14	LTn	loading_tips:creepers_are_afraid_of_cats	Creepers are afraid of cats
+15	LTn	loading_tips:water_buckets_negate_fall_damage	Water buckets negate fall damage
+16	LTn	loading_tips:pigs_love_carrots	Pigs love carrots
+17	LT	loading_tips:wolves_love_bones_to_tame_and_meat_to_heal	Wolves love bones to tame and meat to heal!
+18	LTn	loading_tips:shear_sheep_for_more_wool	Shear sheep for more wool
+19	LTn	loading_tips:milk_removes_all_potion_effects	Milk removes all potion effects
+20	LTn	loading_tips:looting_increases_mob_drops	Looting increases mob drops
+21	LTn	loading_tips:fire_aspect_cooks_meat_instantly	Fire Aspect cooks meat instantly
+22	LTn	loading_tips:ancient_debris_is_found_deep_in_the_nether	Ancient debris is found deep in the Nether
+23	LTn	loading_tips:blazes_are_weak_to_snowballs	Blazes are weak to snowballs
+24	LTn	loading_tips:soul_sand_slows_you_down	Soul sand slows you down
+25	LTn	loading_tips:scaffolding_is_great_for_building	Scaffolding is great for building
+26	LT*	loading_tips:composters_turn_food_into_bone_meal	Composters turn plants, food, straw, bark and sawdust into bone meal
+27	LTn	loading_tips:barrels_are_cheaper_than_chests	Barrels are cheaper than chests
+28	LTn	loading_tips:smokers_cook_food_twice_as_fast	Smokers cook food twice as fast
+29	LTn	loading_tips:blast_furnaces_smelt_ore_faster	Blast furnaces smelt ore faster
+30	LTn	loading_tips:anvils_can_rename_your_items	Anvils can rename your items
+31	LTn	loading_tips:grindstones_remove_enchantments	Grindstones remove enchantments
+32	LTn	loading_tips:lecterns_hold_books_for_reading	Lecterns hold books for reading
+33	LTn	loading_tips:stonecutters_save_stairs_and_slabs	Stonecutters save stairs and slabs
+34	LTn	loading_tips:hoppers_move_items_between_containers	Hoppers move items between containers
+35	LTn	loading_tips:comparators_detect_container_fullness_compare	Comparators detect container fullness, compare, and subtract redstone signals!
+36	LTn	loading_tips:jukeboxes_play_music_discs	Jukeboxes play music discs
+37	LT*	loading_tips:axolotls_help_fight_guardians_and_grant	Kill a mob an Axolotl is fighting to gain Regeneration
+38	LT	loading_tips:guardians_and_elder_guardians_hate_being_out_of	Guardians and Elder Guardians hate being out of water!
+39	LTn	loading_tips:bees_produce_honey_and_wax	Bees produce honey and wax
+40	LTn	loading_tips:honeycomb_prevents_copper_oxidation	Honeycomb prevents copper oxidation
+41	LTn	loading_tips:amethyst_grows_on_budding_geodes	Amethyst grows on budding geodes
+42	LTn	loading_tips:spyglasses_zoom_in_on_the_horizon	Spyglasses zoom in on the horizon
+43	LTn	loading_tips:goats_can_ram_you_off_cliffs	Goats can ram you off cliffs
+44	LTn	loading_tips:frogs_eat_small_slimes_and_magma_cubes	Frogs eat small slimes and magma cubes
+45	LTn	loading_tips:mud_is_made_from_dirt_and_water	Mud is made from dirt and water
+46	LTn	loading_tips:mangrove_trees_grow_in_water	Mangrove trees grow in water
+47	LTn	loading_tips:sugar_cane_grows_on_sand_or_dirt	Sugar cane grows on sand or dirt
+48	LTn	loading_tips:pumpkins_need_space_to_grow	Pumpkins need space to grow
+49	LTn	loading_tips:melons_need_space_to_grow	Melons need space to grow
+50	LTn	loading_tips:campfires_can_cook_four_items	Campfires can cook four items
+51	LTn	loading_tips:bells_alert_villagers_to_raids	Bells alert villagers to raids
+52	LTn	loading_tips:the_wither_is_a_powerful_boss	The Wither is a powerful boss
+53	LT	loading_tips:infinity_bows_dont_need_extra_arrows_but_cant	Infinity bows don't need extra arrows, but can't have Mending!
+54	LTn	loading_tips:mending_repairs_gear_using_xp_orbs	Mending repairs gear using XP orbs
+55	LTn	loading_tips:unbreaking_iii_makes_gear_last_longer	Unbreaking III makes gear last longer
+56	LTn	loading_tips:silk_touch_collects_beehives_with_bees_inside	Silk Touch collects beehives with bees inside
+57	LTn	loading_tips:depth_strider_makes_you_swim_faster	Depth Strider makes you swim faster
+58	LTn	loading_tips:frost_walker_turns_water_into_ice	Frost Walker turns water into ice
+59	LTn	loading_tips:feather_falling_iv_reduces_fall_damage	Feather Falling IV reduces fall damage
+60	LT	loading_tips:blast_protection_reduces_explosion_damage_and	Blast Protection reduces explosion damage and knockback!
+61	LTn	loading_tips:projectile_protection_reduces_arrow_damage	Projectile Protection reduces arrow damage
+62	LTn	loading_tips:fire_protection_is_essential_for_the_nether	Fire Protection is essential for the Nether
+63	LTn	loading_tips:thorns_damage_enemies_who_hit_you	Thorns damage enemies who hit you
+64	LTn	loading_tips:respiration_iii_lets_you_breathe_longer	Respiration III lets you breathe longer
+65	LTn	loading_tips:aqua_affinity_speeds_up_underwater_mining	Aqua Affinity speeds up underwater mining
+66	LTn	loading_tips:ender_pearls_teleport_you_instantly	Ender pearls teleport you instantly
+67	LTn	loading_tips:chorus_fruit_teleports_you_randomly	Chorus fruit teleports you randomly
+68	LTn	loading_tips:gold_apples_give_extra_health_hearts	Gold apples give extra health hearts
+69	LT*	loading_tips:enchanted_apples_give_massive_buffs	Gilded apples give massive buffs
+70	LTn	loading_tips:potions_of_speed_make_you_run_faster	Potions of Speed make you run faster
+71	LTn	loading_tips:potions_of_strength_increase_melee_damage	Potions of Strength increase melee damage
+72	LTn	loading_tips:potions_of_haste_speed_up_mining	Potions of Haste speed up mining
+73	LT	loading_tips:potions_of_invisibility_greatly_reduce_mob	Potions of Invisibility greatly reduce mob detection range, but remove armor for full effect!
+74	LTn	loading_tips:potions_of_night_vision_see_in_the_dark	Potions of Night Vision see in the dark
+75	LTn	loading_tips:potions_of_fire_resistance_stop_lava_damage	Potions of Fire Resistance stop lava damage
+76	LTn	loading_tips:potions_of_water_breathing_are_for_diving	Potions of Water Breathing are for diving
+77	LTn	loading_tips:lingering_potions_create_effect_clouds	Lingering potions create effect clouds
+78	LTn	loading_tips:splash_potions_affect_multiple_entities	Splash potions affect multiple entities
+79	LTn	loading_tips:spectral_arrows_highlight_enemies	Spectral arrows highlight enemies
+80	LTn	loading_tips:weakness_potions_help_cure_zombie_villagers	Weakness potions help cure Zombie Villagers
+81	LTn	loading_tips:golden_apples_help_cure_zombie_villagers	Golden apples help cure Zombie Villagers
+82	LTn	loading_tips:cartography_tables_zoom_out_your_maps	Cartography tables zoom out your maps
+83	LTn	loading_tips:loom_tables_make_custom_banner_designs	Loom tables make custom banner designs
+84	LTn	loading_tips:fireballs_can_be_hit_back_at_ghasts	Fireballs can be hit back at Ghasts
+85	LTn	loading_tips:magma_blocks_deal_damage_when_stepped_on	Magma blocks deal damage when stepped on
+86	LTn	loading_tips:crouching_prevents_magma_block_damage	Crouching prevents magma block damage
+87	LTn	loading_tips:ice_blocks_melt_near_light_sources	Ice blocks melt near light sources
+88	LTn	loading_tips:blue_ice_is_the_slipperiest_block	Blue ice is the slipperiest block
+89	LTn	loading_tips:lava_flows_further_in_the_nether	Lava flows further in the Nether
+90	LTn	loading_tips:water_cannot_be_placed_in_the_nether	Water cannot be placed in the Nether
+91	LTn	loading_tips:cauldrons_can_hold_water_in_the_nether	Cauldrons can hold water in the Nether
+92	LTn	loading_tips:sponge_blocks_soak_up_nearby_water	Sponge blocks soak up nearby water
+93	LT	loading_tips:wet_sponges_can_be_dried_in_a_furnace_or_by	Wet sponges can be dried in a furnace or by placing them in the Nether!
+94	LTn	loading_tips:conduits_require_a_prismarine_frame	Conduits require a prismarine frame
+95	LTn	loading_tips:beacons_require_a_pyramid_base	Beacons require a pyramid base
+96	LTn	loading_tips:nether_stars_are_dropped_by_the_wither	Nether stars are dropped by the Wither
+97	LTn	loading_tips:wither_skeletons_drop_rare_skulls	Wither Skeletons drop rare skulls
+98	LTn	loading_tips:elytra_let_you_glide_through_the_sky	Elytra let you glide through the sky
+99	LTn	loading_tips:fireworks_boost_your_elytra_flight	Fireworks boost your elytra flight
+100	LTn	loading_tips:shulker_boxes_are_portable_chests	Shulker boxes are portable chests
+101	LTn	loading_tips:shulker_shells_are_dropped_in_end_cities	Shulker shells are dropped in End Cities
+102	LTn	loading_tips:dragon_heads_look_cool_on_walls	Dragon heads look cool on walls
+103	LTn	loading_tips:end_crystals_respawn_the_ender_dragon	End crystals respawn the Ender Dragon
+104	LTn	loading_tips:silverfish_spawn_from_infested_blocks_and	Silverfish spawn from infested blocks and spawners
+105	LTn	loading_tips:endermites_sometimes_spawn_from_pearls	Endermites sometimes spawn from pearls
+106	LTn	loading_tips:wandering_traders_offer_exotic_items	Wandering Traders offer exotic items
+107	LTn	loading_tips:lead_animals_to_move_them_easily	Lead animals to move them easily
+108	LTn	loading_tips:name_tags_prevent_mobs_from_despawning	Name tags prevent mobs from despawning
+109	LTn	loading_tips:saddles_let_you_ride_horses_and_pigs	Saddles let you ride horses and pigs
+110	LTn	loading_tips:horse_armor_protects_your_mount	Horse armor protects your mount
+111	LTn	loading_tips:llamas_can_carry_chests_for_storage	Llamas can carry chests for storage
+112	LTn	loading_tips:mules_are_a_cross_between_horses_and_donkeys	Mules are a cross between horses and donkeys
+113	LTn	loading_tips:carrot_on_a_stick_guides_pigs	Carrot on a stick guides pigs
+114	LTn	loading_tips:ravagers_can_be_stunned_by_shields	Ravagers can be stunned by shields
+115	LTn	loading_tips:vindicators_are_fast_and_dangerous	Vindicators are fast and dangerous
+116	LT*	loading_tips:pillager_outposts_hold_trapped_allays	Some Pillager outposts hold caged Allays
+117	LTn	loading_tips:hero_of_the_village_gives_discounts	Hero of the Village gives discounts
+118	LTn	loading_tips:villagers_change_jobs_based_on_blocks	Villagers change jobs based on blocks
+119	LTn	loading_tips:snow_golems_leave_a_trail_of_snow	Snow Golems leave a trail of snow
+120	LTn	loading_tips:pumpkin_masks_hide_you_from_endermen	Pumpkin masks hide you from Endermen
+121	LTn	loading_tips:suspicious_stew_gives_random_effects	Suspicious stew gives random effects
+122	LT*	loading_tips:lava_buckets_are_the_best_furnace_fuel	Lava buckets are a great furnace fuel
+123	LTn	loading_tips:wooden_buttons_have_a_longer_signal	Wooden buttons have a longer signal
+124	LTn	loading_tips:pressure_plates_detect_items_or_players	Pressure plates detect items or players
+125	LTn	loading_tips:iron_doors_require_a_redstone_signal	Iron doors require a redstone signal
+126	LTn	loading_tips:trapdoors_can_be_used_as_ladders	Trapdoors can be used as ladders
+127	LTn	loading_tips:slabs_prevent_mob_spawning	Slabs prevent mob spawning
+128	LTn	loading_tips:stairs_can_be_waterlogged	Stairs can be waterlogged
+129	LTn	loading_tips:fences_connect_to_most_solid_blocks	Fences connect to most solid blocks
+130	LTn	loading_tips:gates_can_be_opened_both_ways	Gates can be opened both ways
+131	LTn	loading_tips:anvils_fall_and_deal_damage	Anvils fall and deal damage
+132	LTn	loading_tips:dripstone_can_kill_if_it_falls_on_you	Dripstone can kill if it falls on you
+133	LTn	loading_tips:pointed_dripstone_fills_cauldrons	Pointed dripstone fills cauldrons
+134	LTn	loading_tips:powder_snow_can_freeze_you	Powder snow can freeze you
+135	LT*	loading_tips:leather_boots_let_you_walk_on_snow	Leather boots let you walk on powder snow
+136	LTn	loading_tips:magma_cubes_are_immune_to_fire	Magma cubes are immune to fire
+137	LTn	loading_tips:strider_babies_can_ride_adults	Strider babies can ride adults
+138	LTn	loading_tips:piglin_brutes_never_barter	Piglin Brutes never barter
+139	LTn	loading_tips:hoglins_are_afraid_of_warped_fungus_nether	Hoglins are afraid of warped fungus, nether portals and respawn anchors
+140	LTn	loading_tips:zoglins_are_afraid_of_nothing	Zoglins are afraid of nothing
+141	LTn	loading_tips:bastions_are_full_of_gold_blocks	Bastions are full of gold blocks
+142	LT*	loading_tips:compasses_point_to_world_spawn	Compasses point to spawn in the Overworld, to the portal you came through in the Nether, and to the exit portal in the End
+143	LT	loading_tips:clocks_show_the_time_of_day_but_dont_work_in_the	Clocks show the time of day, but don't work in the Nether or End!
+144	LTn	loading_tips:daylight_detectors_activate_when_exposed_to	Daylight detectors activate when exposed to sunlight!
+145	LTn	loading_tips:sweet_berry_bushes_damage_mobs	Sweet berry bushes damage mobs
+146	LTn	loading_tips:cactus_blocks_destroy_items	Cactus blocks destroy items
+147	LTn	loading_tips:sand_falls_if_there_is_no_block_below	Sand falls if there is no block below
+148	LTn	loading_tips:gravel_falls_if_there_is_no_block_below	Gravel falls if there is no block below
+149	LTn	loading_tips:concrete_is_made_by_wetting_powder	Concrete is made by wetting powder
+150	LTn	loading_tips:wool_muffles_the_sound_of_footsteps	Wool muffles the sound of footsteps
+151	LTn	loading_tips:item_frames_can_be_placed_on_floors	Item frames can be placed on floors
+152	LTn	loading_tips:glow_ink_sacs_make_signs_glow	Glow ink sacs make signs glow
+153	LTn	loading_tips:regular_ink_sacs_clear_sign_glow	Regular ink sacs clear sign glow
+154	LTn	loading_tips:honey_bottles_remove_poison	Honey bottles remove poison
+155	LTn	loading_tips:sugar_speeds_up_baby_horses	Sugar speeds up baby horses
+156	LTn	loading_tips:raw_fish_heals_injured_cats	Raw fish heals injured cats
+157	LTn	loading_tips:rotten_flesh_heals_injured_wolves	Rotten flesh heals injured wolves
+158	LTn	loading_tips:zombies_can_break_wooden_doors	Zombies can break wooden doors
+159	LTn	loading_tips:skeleton_horses_spawn_during_storms	Skeleton horses spawn during storms
+160	LTn	loading_tips:slimes_only_spawn_in_certain_chunks	Slimes only spawn in certain chunks
+161	LTn	loading_tips:witches_use_potions_to_heal	Witches use potions to heal
+162	LTn	loading_tips:illusioners_are_hidden_in_the_code	Illusioners are hidden in the code
+163	LTn	loading_tips:the_warden_reacts_to_vibrations	The Warden reacts to vibrations
+164	LTn	loading_tips:sneaking_hides_you_from_the_warden	Sneaking hides you from the Warden
+165	LTn	loading_tips:spore_blossoms_create_green_particles	Spore blossoms create green particles
+166	LTn	loading_tips:big_dripleaves_collapse_under_weight	Big dripleaves collapse under weight
+167	LTn	loading_tips:glow_berries_provide_light_and_food	Glow berries provide light and food
+168	LTn	loading_tips:amethyst_clusters_drop_four_shards	Amethyst clusters drop four shards
+169	LTn	loading_tips:sculk_shriekers_summon_the_warden	Sculk shriekers summon the Warden
+170	LTn	loading_tips:sculk_catalysts_create_sculk_blocks	Sculk catalysts create sculk blocks
+171	LTn	loading_tips:bells_can_be_rung_with_arrows	Bells can be rung with arrows
+172	LTn	loading_tips:soul_torches_give_off_low_light	Soul torches give off low light
+173	LTn	loading_tips:respawn_anchors_need_glowstone	Respawn anchors need glowstone
+174	LTn	loading_tips:nether_gold_ore_drops_nuggets	Nether gold ore drops nuggets
+175	LTn	loading_tips:gilded_blackstone_drops_gold_nuggets	Gilded blackstone drops gold nuggets
+176	LTn	loading_tips:nether_sprouts_are_just_for_looks	Nether sprouts are just for looks
+177	LTn	loading_tips:crimson_fungus_breeds_hoglins	Crimson fungus breeds Hoglins
+178	LTn	loading_tips:twisting_vines_grow_upward	Twisting vines grow upward
+179	LTn	loading_tips:weeping_vines_grow_downward	Weeping vines grow downward
+180	LT*	loading_tips:basalt_forms_from_blue_ice_and_lava	Lava flowing over soul soil next to blue ice turns into basalt
+181	LT*	loading_tips:cobblestone_forms_from_water_and_lava	Water and lava make cobblestone, or other stones when the lava touches certain blocks
+182	LTn	loading_tips:obsidian_forms_when_water_hits_source_lava	Obsidian forms when water hits source lava
+183	LTn	loading_tips:crying_obsidian_cannot_be_moved_by_pistons	Crying obsidian cannot be moved by pistons
+184	LTn	loading_tips:bedrock_is_unbreakable_in_survival	Bedrock is unbreakable in survival
+185	LTn	loading_tips:end_portal_frames_are_unbreakable	End portal frames are unbreakable
+186	LTn	loading_tips:silverfish_hide_inside_stone_bricks	Silverfish hide inside stone bricks
+187	LTn	loading_tips:strongholds_have_libraries_full_of_books	Strongholds have libraries full of books
+188	LTn	loading_tips:eyes_of_ender_lead_to_the_portal	Eyes of Ender lead to the portal
+189	LTn	loading_tips:shulkers_fire_levitation_bullets	Shulkers fire levitation bullets
+190	LT*	loading_tips:end_ships_hold_the_elytra	Every player can take an elytra from each End ship
+191	LTn	loading_tips:dragon_eggs_are_unique_trophies	Dragon eggs are unique trophies
+192	LTn	loading_tips:beacons_can_be_colored_with_glass	Beacons can be colored with glass
+193	LTn	loading_tips:armor_stands_can_hold_any_item	Armor stands can hold any item
+194	LTn	loading_tips:pistons_can_push_up_to_12_blocks	Pistons can push up to 12 blocks
+195	LTn	loading_tips:sticky_pistons_pull_blocks_back	Sticky pistons pull blocks back
+196	LTn	loading_tips:slime_and_honey_dont_stick_together	Slime and honey don't stick together
+197	LTn	loading_tips:redstone_torches_invert_signals	Redstone torches invert signals
+198	LTn	loading_tips:tnt_can_be_lit_with_fire_charges	TNT can be lit with fire charges
+199	LTn	loading_tips:hardcore_mode_means_one_life_only	Hardcore mode means one life only
+200	LTn	loading_tips:the_recovery_compass_points_to_where_you_last	The recovery compass points to where you last died
+201	LTn	loading_tips:echo_shards_are_needed_to_craft_a_recovery	Echo shards are needed to craft a recovery compass
+202	LTn	loading_tips:ancient_cities_are_the_only_place_to_find_swift	Ancient Cities are the only place to find Swift Sneak books
+203	LTn	loading_tips:swift_sneak_allows_you_to_walk_faster_while	Swift Sneak allows you to walk faster while crouching
+204	LTn	loading_tips:the_warden_is_completely_blind_but_has	The Warden is completely blind but has incredible hearing
+205	LTn	loading_tips:throw_projectiles_to_distract_the_warden_away	Throw projectiles to distract the Warden away from you
+206	LTn	loading_tips:wool_blocks_dampen_vibrations_making_you	Wool blocks dampen vibrations, making you invisible to sculk
+207	LTn	loading_tips:allay_mobs_will_collect_items_for_you_if_you	Allay mobs will collect items for you if you give them one
+208	LTn	loading_tips:play_a_jukebox_near_an_allay_to_make_it_dance	Play a jukebox near an Allay to make it dance!
+209	LTn	loading_tips:give_a_dancing_allay_an_amethyst_shard_to	Give a dancing Allay an amethyst shard to duplicate it
+210	LTn	loading_tips:mangrove_swamps_are_home_to_mud_blocks_and_frogs	Mangrove Swamps are home to mud blocks and Frogs
+211	LTn	loading_tips:frogs_produce_froglight_when_they_eat_small	Frogs produce froglight when they eat small Magma Cubes
+212	LTn	loading_tips:different_frog_colors_produce_different_colors	Different Frog colors produce different colors of froglight
+213	LTn	loading_tips:tadpoles_grow_into_different_frogs_depending_on	Tadpoles grow into different Frogs depending on the biome
+214	LTn	loading_tips:goat_horns_are_dropped_when_a_goat_rams_a_hard	Goat horns are dropped when a Goat rams a hard block
+215	LTn	loading_tips:glow_ink_sacs_make_sign_text_glow_in_the_dark	Glow ink sacs make sign text glow in the dark
+216	LTn	loading_tips:firework_rockets_with_stars_deal_blast_damage	Firework rockets with stars deal blast damage when fired from crossbows
+217	LTn	loading_tips:piercing_crossbows_allow_one_arrow_to_hit	Piercing crossbows allow one arrow to hit multiple enemies
+218	LTn	loading_tips:multishot_crossbows_fire_three_arrows_for_the	Multishot crossbows fire three arrows for the price of one
+219	LTn	loading_tips:quick_charge_reduces_the_reload_time_of_your	Quick Charge reduces the reload time of your crossbow
+220	LT*	loading_tips:shields_can_block_creeper_explosions_if_you_are	Facing a Creeper blast with a shield cuts the damage; better shields block more
+221	LTn	loading_tips:sweeping_edge_increases_the_damage_of_your	Sweeping Edge increases the damage of your sword's sweep attack
+222	LTn	loading_tips:knockback_is_great_for_keeping_creepers_at_a	Knockback is great for keeping Creepers at a distance
+223	LTn	loading_tips:smite_deals_massive_damage_to_undead_mobs_like	Smite deals massive damage to Undead mobs like Withers
+224	LTn	loading_tips:bane_of_arthropods_makes_spiders_much_easier_to	Bane of Arthropods makes Spiders much easier to deal with
+225	LT	loading_tips:fire_aspect_is_great_for_combat_but_careful_with	Fire Aspect is great for combat, but careful with Endermen!
+226	LTn	loading_tips:impaling_tridents_deal_extra_damage_to_all	Impaling tridents deal extra damage to all aquatic mobs
+227	LTn	loading_tips:loyalty_tridents_fly_back_to_your_hand_after	Loyalty tridents fly back to your hand after being thrown
+228	LTn	loading_tips:channeling_tridents_summon_lightning_during	Channeling tridents summon lightning during thunderstorms
+229	LTn	loading_tips:riptide_tridents_allow_you_to_fly_through_rain	Riptide tridents allow you to fly through rain and water
+230	LTn	loading_tips:punch_bows_increase_the_knockback_of_your_arrows	Punch bows increase the knockback of your arrows
+231	LTn	loading_tips:flame_bows_ignite_enemies_and_can_light_tnt_from	Flame bows ignite enemies and can light TNT from afar
+232	LTn	loading_tips:infinity_bows_never_run_out_of_arrows_as_long_as	Infinity bows never run out of arrows, as long as you have one
+233	LTn	loading_tips:power_v_bows_can_one_shot_most_common_mobs	Power V bows can one-shot most common mobs
+234	LTn	loading_tips:tipped_arrows_can_apply_potion_effects_from_a	Tipped arrows can apply potion effects from a distance
+235	LTn	loading_tips:observers_detect_block_updates_in_front_of_them	Observers detect block updates in front of them
+236	LTn	loading_tips:target_blocks_give_a_stronger_redstone_signal_if	Target blocks give a stronger redstone signal if hit in the center
+237	LTn	loading_tips:note_blocks_play_different_sounds_depending_on	Note blocks play different sounds depending on the block below
+238	LTn	loading_tips:daylight_sensors_can_be_inverted_to_turn_on	Daylight sensors can be inverted to turn on lights at night
+239	LTn	loading_tips:trapped_chests_give_off_a_redstone_signal_when	Trapped chests give off a redstone signal when opened
+240	LTn	loading_tips:lecterns_send_a_signal_when_a_page_is_turned	Lecterns send a signal when a page is turned
+241	LTn	loading_tips:redstone_repeaters_can_delay_signals_up_to_0_4	Redstone repeaters can delay signals up to 0.4 seconds
+242	LTn	loading_tips:hoppers_can_be_disabled_by_a_redstone_signal	Hoppers can be disabled by a redstone signal
+243	LTn	loading_tips:droppers_move_items_while_dispensers_use_them	Droppers move items, while dispensers use them
+244	LTn	loading_tips:dispensers_can_equip_armor_onto_players_and	Dispensers can equip armor onto players and armor stands
+245	LTn	loading_tips:powered_rails_can_be_used_to_launch_minecarts_up	Powered rails can be used to launch minecarts up slopes
+246	LTn	loading_tips:detector_rails_send_a_signal_when_a_minecart	Detector rails send a signal when a minecart passes over
+247	LTn	loading_tips:activator_rails_can_eject_players_from_minecarts	Activator rails can eject players from minecarts
+248	LTn	loading_tips:redstone_dust_can_travel_up_transparent_blocks	Redstone dust can travel up transparent blocks like glass
+249	LTn	loading_tips:sticky_pistons_can_pull_other_pistons_to_create	Sticky pistons can pull other pistons to create complex doors
+250	LTn	loading_tips:slime_blocks_bounce_entities_high_into_the_air	Slime blocks bounce entities high into the air
+251	LTn	loading_tips:honey_blocks_prevent_jumping_but_allow_you_to	Honey blocks prevent jumping but allow you to slide down walls
+252	LT*	loading_tips:sweet_berry_bushes_slow_you_down_and_deal_damage	Sweet berry bushes slow you down and hurt you unless you wear leggings
+253	LTn	loading_tips:foxes_will_pick_up_and_use_any_item_you_drop	Foxes will pick up and use any item you drop
+254	LT	loading_tips:a_fox_holding_a_fire_aspect_sword_can_set_you_on	A Fox holding a Fire Aspect sword can set you on fire!
+255	LTn	loading_tips:polar_bears_are_peaceful_unless_you_get_near	Polar Bears are peaceful unless you get near their cubs
+256	LTn	loading_tips:pandas_have_different_personalities_based_on	Pandas have different personalities based on their genes
+257	LTn	loading_tips:sneezing_baby_pandas_can_drop_slimeballs	Sneezing baby Pandas can drop slimeballs
+258	LTn	loading_tips:parrots_mimic_the_sounds_of_nearby_hostile_mobs	Parrots mimic the sounds of nearby hostile mobs
+259	LT	loading_tips:dont_feed_chocolate_cookies_to_parrots_its	Don't feed chocolate cookies to Parrots; it's poisonous!
+260	LTn	loading_tips:ocelots_no_longer_turn_into_cats_they_are	Ocelots no longer turn into Cats; they are separate mobs
+261	LTn	loading_tips:villager_gossip_determines_the_price_of_their	Villager gossip determines the price of their trades
+262	LTn	loading_tips:curing_a_zombie_villager_gives_you_massive_trade	Curing a Zombie Villager gives you massive trade discounts
+263	LTn	loading_tips:iron_golems_spawn_in_villages_to_protect_against	Iron Golems spawn in villages to protect against raids
+264	LTn	loading_tips:you_can_repair_an_iron_golem_with_iron_ingots	You can repair an Iron Golem with iron ingots
+265	LTn	loading_tips:vindicators_named_johnny_will_attack_every	Vindicators named 'Johnny' will attack every nearby mob
+266	LTn	loading_tips:evokers_turn_blue_sheep_into_red_sheep_with_a	Evokers turn blue sheep into red sheep with a 'Wololo'
+267	LT*	loading_tips:totems_of_undying_must_be_held_to_save_you_from	A totem of undying saves you from your hand or your charm slot
+268	LTn	loading_tips:vexes_are_summoned_by_evokers_and_can_fly	Vexes are summoned by Evokers and can fly through walls
+269	LTn	loading_tips:phantoms_spawn_if_you_havent_slept_for_three	Phantoms spawn if you haven't slept for three days
+270	LTn	loading_tips:phantom_membranes_are_used_to_repair_elytra	Phantom membranes are used to repair elytra
+271	LTn	loading_tips:slow_falling_potions_are_made_using_phantom	Slow Falling potions are made using phantom membranes
+272	LTn	loading_tips:drowned_mobs_can_spawn_with_tridents_and	Drowned mobs can spawn with tridents and nautilus shells
+273	LTn	loading_tips:conduits_protect_you_underwater_and_kill_nearby	Conduits protect you underwater and kill nearby mobs
+274	LTn	loading_tips:turtle_shells_give_you_extra_breath_time	Turtle shells give you extra breath time underwater
+275	LTn	loading_tips:scutes_are_dropped_when_baby_turtles_grow_into	Scutes are dropped when baby Turtles grow into adults
+276	LTn	loading_tips:dolphins_will_lead_you_to_shipwrecks_if_you_feed	Dolphins will lead you to shipwrecks if you feed them fish
+277	LTn	loading_tips:magma_blocks_underwater_create_bubble_columns	Magma blocks underwater create bubble columns that pull you down
+278	LTn	loading_tips:soul_sand_underwater_creates_bubble_columns_that	Soul sand underwater creates bubble columns that push you up
+279	LTn	loading_tips:kelp_can_be_smelted_into_dried_kelp_for_a_quick	Kelp can be smelted into dried kelp for a quick snack
+280	LTn	loading_tips:dried_kelp_blocks_are_a_very_efficient_fuel_for	Dried kelp blocks are a very efficient fuel for furnaces
+281	LTn	loading_tips:sea_pickles_provide_light_when_placed_underwater	Sea pickles provide light when placed underwater
+282	LTn	loading_tips:coral_fans_must_stay_in_water_or_they_will_turn	Coral fans must stay in water or they will turn gray
+283	LTn	loading_tips:tropical_fish_can_be_carried_in_buckets	Tropical fish can be carried in buckets
+284	LTn	loading_tips:pufferfish_deal_poison_damage_if_you_touch_them	Pufferfish deal poison damage if you touch them
+285	LTn	loading_tips:axolotls_will_play_dead_to_regenerate_health	Axolotls will play dead to regenerate health
+286	LTn	loading_tips:glow_squids_drop_glow_ink_sacs_for_glowing_signs	Glow Squids drop glow ink sacs for glowing signs
+287	LTn	loading_tips:lush_caves_are_filled_with_moss_glow_berries_and	Lush Caves are filled with moss, glow berries, and spore blossoms
+288	LTn	loading_tips:dripstone_caves_contain_sharp_stalactites_that	Dripstone Caves contain sharp stalactites that can fall on you
+289	LTn	loading_tips:pointed_dripstone_can_be_used_to_create_infinite	Pointed dripstone can be used to create infinite lava or water
+290	LTn	loading_tips:azalea_trees_mark_the_location_of_a_lush_cave	Azalea trees mark the location of a Lush Cave below
+291	LTn	loading_tips:copper_blocks_turn_green_over_time_due_to	Copper blocks turn green over time due to oxidation
+292	LTn	loading_tips:lightning_rods_protect_your_wooden_roofs_from	Lightning rods protect your wooden roofs from fire
+293	LTn	loading_tips:spyglasses_are_crafted_from_amethyst_and_copper	Spyglasses are crafted from amethyst and copper
+294	LTn	loading_tips:tinted_glass_blocks_light_but_is_still	Tinted glass blocks light but is still transparent
+295	LTn	loading_tips:amethyst_geodes_are_found_deep_underground_in	Amethyst geodes are found deep underground in the Overworld
+296	LTn	loading_tips:budding_amethyst_blocks_cannot_be_moved_even	Budding amethyst blocks cannot be moved, even with Silk Touch
+297	LTn	loading_tips:deepslate_is_tougher_than_stone_and_takes_longer	Deepslate is tougher than stone and takes longer to mine
+298	LTn	loading_tips:raw_iron_copper_and_gold_can_be_smelted_faster	Raw iron, copper, and gold can be smelted faster in a blast furnace!
+299	LTn	loading_tips:end_crystal_beams_can_be_blocked_with_blocks_to	End crystal beams can be blocked with blocks to stop the Dragon's heal
+300	LTn	loading_tips:the_dragon_breath_can_be_collected_in_glass	The dragon breath can be collected in glass bottles
+301	LTn	loading_tips:lingering_potions_are_made_using_dragon_breath	Lingering potions are made using dragon breath
+302	LTn	loading_tips:wither_skeletons_only_spawn_in_nether_fortresses	Wither Skeletons only spawn in Nether Fortresses
+303	LTn	loading_tips:wither_skulls_are_needed_to_summon_the_wither	Wither skulls are needed to summon the Wither boss
+304	LTn	loading_tips:beacons_provide_buffs_like_haste_and	Beacons provide buffs like Haste and Regeneration
+305	LTn	loading_tips:netherite_armor_is_fireproof_and_wont_burn_in	Netherite armor is fireproof and won't burn in lava
+306	LTn	loading_tips:ancient_debris_is_most_common_at_y_level_15_in	Ancient debris is most common at Y-level 15 in the Nether
+307	LTn	loading_tips:lodestones_allow_compasses_to_point_to_a	Lodestones allow compasses to point to a specific block
+308	LTn	loading_tips:striders_can_walk_on_lava_and_be_ridden_with_a	Striders can walk on lava and be ridden with a saddle
+309	LTn	loading_tips:warped_fungus_on_a_stick_is_used_to_control	Warped fungus on a stick is used to control Striders
+310	LTn	loading_tips:piglins_love_gold_and_will_barter_with_you_for	Piglins love gold and will barter with you for it
+311	LTn	loading_tips:wear_gold_armor_to_stop_piglins_from_attacking	Wear gold armor to stop Piglins from attacking you
+312	LTn	loading_tips:piglin_brutes_protect_bastions_and_cannot_be	Piglin Brutes protect Bastions and cannot be distracted by gold
+313	LTn	loading_tips:zombified_piglins_are_neutral_until_you_attack	Zombified Piglins are neutral until you attack them
+314	LTn	loading_tips:ghast_tears_are_used_to_brew_regeneration	Ghast tears are used to brew Regeneration potions
+315	LTn	loading_tips:magma_cream_is_used_for_fire_resistance_potions	Magma cream is used for Fire Resistance potions
+316	LTn	loading_tips:soul_speed_enchantment_makes_you_run_faster_on	Soul Speed enchantment makes you run faster on soul sand
+317	LTn	loading_tips:netherite_scrap_is_made_by_smelting_ancient	Netherite scrap is made by smelting ancient debris
+318	LTn	loading_tips:bastions_are_the_best_place_to_find_pigstep	Bastions are the best place to find Pigstep music discs
+319	LTn	loading_tips:ruined_portals_appear_in_both_the_overworld_and	Ruined portals appear in both the Overworld and the Nether
+320	LTn	loading_tips:crying_obsidian_can_be_used_to_craft_respawn	Crying obsidian can be used to craft respawn anchors
+321	LTn	loading_tips:respawn_anchors_allow_you_to_set_your_spawn_in	Respawn anchors allow you to set your spawn in the Nether
+322	LTn	loading_tips:dont_use_a_respawn_anchor_in_the_overworld_it	Don't use a respawn anchor in the Overworld; it will explode!
+323	LTn	loading_tips:blackstone_can_be_used_as_a_substitute_for	Blackstone can be used as a substitute for cobblestone
+324	LTn	loading_tips:gilded_blackstone_has_a_chance_to_drop_gold	Gilded blackstone has a chance to drop gold nuggets
+325	LTn	loading_tips:basalt_deltas_are_home_to_magma_cubes_and_ash	Basalt Deltas are home to Magma Cubes and ash particles
+326	LTn	loading_tips:packed_ice_doesnt_melt_even_near_light_sources	Packed ice doesn't melt, even near light sources
+327	LTn	loading_tips:snow_golems_wear_pumpkins_that_can_be_sheared	Snow Golems wear pumpkins that can be sheared off
+328	LTn	loading_tips:leads_can_be_used_to_tie_mobs_to_fences	Leads can be used to tie mobs to fences
+329	LT	loading_tips:holding_f3_c_for_10_seconds_intentionally	Holding F3+C for 10 seconds intentionally crashes the game for debugging purposes!
+330	LT	loading_tips:bamboo_is_the_least_efficient_fuel_smelting_only	Bamboo is the least efficient fuel, smelting only 0.25 items each!
+331	LT	loading_tips:spiders_climb_walls_by_treating_block_sides_as	Spiders climb walls by treating block sides as ladders!
+332	LTn	loading_tips:crafting_coal_into_a_block_of_coal_gives_you_8	Crafting coal into a block of coal gives you 8 extra smeltings!
+333	LT	loading_tips:frost_walker_boots_let_you_walk_on_water_and	Frost Walker boots let you walk on water and also protect you from magma blocks!
+334	LTn	loading_tips:place_lava_or_water_above_pointed_dripstone_to	Place lava or water above pointed dripstone to slowly drip it into a cauldron below!
+335	LT*	loading_tips:baby_mobs_now_have_unique_models_instead_of	Baby mobs have their own models instead of being shrunken adults

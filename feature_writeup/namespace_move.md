@@ -159,6 +159,8 @@ generates structures and dimensions under the new ids; -09 Creative Labels notes
 carry over; -10 exposure extras camera bag contents survive; CQ-NSM-01 client: lang, models and textures for every
 moved id, JEI, WTHIT.
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-NSM-08, -08a PASS (11 dimensions, no creativeengineering dimension or worldgen tag; level.dat strings are registry aliases only; census 16 group sets).
+
 
 
 Results r1111 (2026-11-11, [scratch_run_2026-11-11.md](testing/scratch_run_2026-11-11.md) 8): SQ-NSM-02 PASS, -03 PASS,

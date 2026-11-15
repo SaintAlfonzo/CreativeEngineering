@@ -1,5 +1,15 @@
 {
   "type": "immersiveengineering:sawmill",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersive_weathering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
   "energy": 1600,
   "input": {
     "item": "minecraft:warped_stem"

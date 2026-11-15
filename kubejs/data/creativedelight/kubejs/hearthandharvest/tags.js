@@ -31,10 +31,17 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_milk_bottle, i.goat_milk_bottle)
 	t.add(e, i.t_cow_milk, [i.minecraft_milk_bucket, i.farmersdelight_milk_bottle, i.neapolitan_milk_bottle])
 
-	t.addTag(e, i.t_crops_hops, i.hops)
+	if (global.has.mod('vinery')) t.addTag(e, i.t_crops_hops, i.hops)   // hops only with Vinery (plan_bugfix_1114 3.1)
 	// Crow feather: arrows, brush and book and quill come through the tag (crow plan C8).
 	t.add(e, '#forge:feathers', i.crow_feather)
 	t.add(e, i.t_flowers, HH_MUMS.map(c => i[c + '_mum']))
+	// Mums go where other small flowers go: pots, planter boxes, flower boxes (plan_bugfix_1114 3.3, TODO #71).
+	var mums = HH_MUMS.map(c => i[c + '_mum'])
+	var has = global.has
+	t.add(e, '#minecraft:small_flowers', mums)
+	if (has.mod('vinery')) t.add(e, '#vinery:small_flower', mums)
+	if (has.mod('another_furniture')) t.add(e, '#another_furniture:planter_box_placeables', mums)
+	if (has.mod('creativecompat')) t.add(e, '#creativecompat:flower_box_plants', mums)
 	// Farmer's Hat XP and the scarecrow's hat slot (N21, N23-18): the four pack hats and H&H's.
 	t.add(e, i.t_farmers_hats, [i.farmers_hat, i.farmers_hat_helmet, i.straw_hat, i.farmerbrim])
 	t.addTag(e, i.t_seeds_blueberry, i.blueberry_pips)
@@ -46,7 +53,12 @@ ServerEvents.tags('block', e => {
 	var i = global.item
 	var b = global.blocks
 
-	t.add(e, '#minecraft:small_flowers', HH_MUMS.map(c => i[c + '_mum']))
+	var mums = HH_MUMS.map(c => i[c + '_mum'])
+	t.add(e, '#minecraft:small_flowers', mums)
+	// Bone meal spread, Terralith plant rules, and the c: ignore list other flowers carry (3.3).
+	if (global.has.mod('flowerpatch')) t.add(e, '#flowerpatch:bonemeal_able_flowers', mums)
+	if (global.has.mod('terralith')) t.add(e, '#terralith:plants', mums)
+	t.add(e, '#c:ignoredblocks', mums)
 	t.add(e, '#minecraft:mineable/axe', HH_WOODS.map(w => i[w + '_half_cabinet']).concat([
 		i.crimson_fungus_crate, i.warped_fungus_crate, i.glistering_melon_crate, i.poisonous_potato_crate, i.rotten_tomato_crate]))
 	t.add(e, '#minecraft:mineable/shovel', [i.manure_block])
@@ -57,8 +69,9 @@ ServerEvents.tags('block', e => {
 	t.add(e, '#minecraft:walls', [i.manure_brick_wall, i.polished_manure_wall])
 	t.add(e, '#minecraft:wooden_slabs', [i.crimson_fungus_crate, i.warped_fungus_crate])
 	t.add(e, '#minecraft:mineable/axe', [i.tree_tapper])
-	t.add(e, '#minecraft:mineable/pickaxe', [i.tilled_end_stone])
-	t.add(e, '#minecraft:mineable/axe', [i.hops_crop])
+	// Tilled end stone is Ender Crop's since 2026-11-14 (the H&H block is gone, plan_bugfix_1114 3.2); the hops lattice
+	// block is gone too (hops on Vinery's lattice, 3.1), and the hops vine breaks by hand like a vine.
+	if (global.has.mod('endercrop')) t.add(e, '#minecraft:mineable/pickaxe', [b.tilled_end_stone])
 
 	// Sap logs: 1.4.1's spruce and dark oak, plus birch (real-world syrup, 3.1).
 	t.add(e, i.t_tappable, [i.log_spruce, i.log_dark_oak, i.log_birch])

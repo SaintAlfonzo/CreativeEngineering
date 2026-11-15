@@ -72,12 +72,14 @@ public final class HHItems {
     public static final RegistryObject<Item> BISCUITS_AND_GRAVY = bowl("biscuits_and_gravy", HHFoods.BISCUITS_AND_GRAVY);
     public static final RegistryObject<Item> MACARONI_AND_CHEESE = bowl("macaroni_and_cheese", HHFoods.MACARONI_AND_CHEESE);
     public static final RegistryObject<Item> GLAZED_CARROTS = bowl("glazed_carrots", HHFoods.GLAZED_CARROTS);
-    public static final RegistryObject<Item> HOPS_SALAD = bowl("hops_salad", HHFoods.HOPS_SALAD);
+    public static final RegistryObject<Item> HOPS_SALAD = HHBlocks.HOPS_ON ? bowl("hops_salad", HHFoods.HOPS_SALAD) : null;
     public static final RegistryObject<Item> PICKLED_CARROTS = pickle("pickled_carrots", HHFoods.PICKLED_CARROTS);
     public static final RegistryObject<Item> PICKLED_POTATOES = pickle("pickled_potatoes", HHFoods.PICKLED_POTATOES);
 
     // Ingredients and crops
-    public static final RegistryObject<Item> HOPS = plain("hops");
+    /** Hops plant themselves: on a log face as a hops vine, or on a Vinery lattice (its hops grape type). Only with Vinery (3.1). */
+    public static final RegistryObject<Item> HOPS = HHBlocks.HOPS_ON
+            ? ITEMS.register("hops", () -> new ItemNameBlockItem(HHBlocks.HOPS_VINE.get(), ModItems.basicItem())) : null;
     public static final RegistryObject<Item> CORN_HUSK = plain("corn_husk");
     public static final RegistryObject<Item> CROW_FEATHER = plain("crow_feather");
     public static final RegistryObject<Item> BUTTER = plain("butter");
@@ -124,7 +126,7 @@ public final class HHItems {
     public static final RegistryObject<Item> UNRIPE_GOAT_CHEESE_WHEEL = block("unripe_goat_cheese_wheel", HHBlocks.UNRIPE_GOAT_CHEESE_WHEEL);
     public static final RegistryObject<Item> HAY_RUG = block("hay_rug", HHBlocks.HAY_RUG);
     public static final RegistryObject<Item> STRAW_RUG = block("straw_rug", HHBlocks.STRAW_RUG);
-    public static final RegistryObject<Item> HOPS_BAG = block("hops_bag", HHBlocks.HOPS_BAG);
+    public static final RegistryObject<Item> HOPS_BAG = HHBlocks.HOPS_ON ? block("hops_bag", HHBlocks.HOPS_BAG) : null;
     public static final RegistryObject<Item> MANURE_BAG = block("manure_bag", HHBlocks.MANURE_BAG);
     public static final RegistryObject<Item> MANURE_BLOCK = block("manure_block", HHBlocks.MANURE_BLOCK);
     public static final RegistryObject<Item> MANURE_BRICKS = block("manure_bricks", HHBlocks.MANURE_BRICKS);
@@ -144,7 +146,7 @@ public final class HHItems {
     public static final RegistryObject<Item> GLISTERING_MELON_CRATE = block("glistering_melon_crate", HHBlocks.GLISTERING_MELON_CRATE);
     public static final RegistryObject<Item> POISONOUS_POTATO_CRATE = block("poisonous_potato_crate", HHBlocks.POISONOUS_POTATO_CRATE);
     public static final RegistryObject<Item> ROTTEN_TOMATO_CRATE = block("rotten_tomato_crate", HHBlocks.ROTTEN_TOMATO_CRATE);
-    public static final RegistryObject<Item> WILD_HOPS = block("wild_hops", HHBlocks.WILD_HOPS);
+    public static final RegistryObject<Item> WILD_HOPS = HHBlocks.HOPS_ON ? block("wild_hops", HHBlocks.WILD_HOPS) : null;
     public static final RegistryObject<Item> TREE_TAPPER = block("tree_tapper", HHBlocks.TREE_TAPPER);
 
     // Tools (3.1). Cleavers are FD knives; the netherite one is a smithing upgrade.
@@ -171,7 +173,6 @@ public final class HHItems {
     public static final RegistryObject<Item> FERTILIZER_BAG = ITEMS.register("fertilizer_bag", () -> new FertilizerBagItem(ModItems.basicItem().durability(8)));
     public static final RegistryObject<Item> FARMERS_HAT = ITEMS.register("farmers_hat", () -> new FarmersHatItem(ModItems.basicItem()));
     public static final RegistryObject<Item> BLUEBERRY_PIPS = ITEMS.register("blueberry_pips", () -> new ForeignPlantItem(new net.minecraft.resources.ResourceLocation("fruitsdelight", "blueberry_bush"), ModItems.basicItem()));
-    public static final RegistryObject<Item> TILLED_END_STONE = block("tilled_end_stone", HHBlocks.TILLED_END_STONE);
 
     private static RegistryObject<Item> cleaver(String id, Tier tier, boolean fireResistant) {
         return ITEMS.register(id, () -> {

@@ -1,6 +1,17 @@
 package com.SaintAlfonzo.creativedelight.hearth.gear;
 
-import com.SaintAlfonzo.creativedelight.hearth.block.HHBlocks;
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.TierSortingRegistry;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -22,10 +33,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Sneak-use with a Tilling hoe. Goes through the hoe tool action, so modded soils work (B9 fixed), and end stone tills to
- * Tilled End Stone. One durability per block tilled. Even sizes reach one block toward the look direction, as Creative
+ * Ender Crop's Tilled End Stone with a netherite or better hoe (3.2; the H&H block is gone). One durability per block tilled. Even sizes reach one block toward the look direction, as Creative
  * Delight's hoe harvest area does.
  */
 public final class TillingEvents {
+    private static final ResourceLocation ENDERCROP_TILLED_END_STONE = new ResourceLocation("endercrop", "tilled_end_stone");
     private TillingEvents() {
     }
 
@@ -89,7 +101,12 @@ public final class TillingEvents {
         BlockState state = world.getBlockState(pos);
         BlockState result;
         if (state.is(Blocks.END_STONE)) {
-            result = HHBlocks.TILLED_END_STONE.get().defaultBlockState();
+            // End stone (plan_bugfix_1114 3.2): Ender Crop's tilled end stone, netherite or better hoe only; nothing without Ender Crop
+            Block tilled = endercropTilledEndStone();
+            if (tilled == null || !netheriteOrBetter(hoe)) {
+                return false;
+            }
+            result = tilled.defaultBlockState();
         } else {
             Vec3 hit = Vec3.atCenterOf(pos).add(0.0D, 0.5D, 0.0D);
             UseOnContext context = new UseOnContext(player, event.getHand(), new BlockHitResult(hit, Direction.UP, pos, false));
@@ -100,6 +117,57 @@ public final class TillingEvents {
         }
         world.setBlock(pos, result, 11);
         return true;
+    }
+
+    /**
+     * End stone tills only with a netherite or better hoe (owner 2026-11-14, plan_bugfix_1114 3.2): a TieredItem whose tier
+     * sorts at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count.
+     */
+    public static boolean netheriteOrBetter(ItemStack stack) {
+        if (!(stack.getItem() instanceof TieredItem tiered)) {
+            return false;
+        }
+        Tier tier = tiered.getTier();
+        if (tier == Tiers.NETHERITE) {
+            return true;
+        }
+        List<Tier> sorted = TierSortingRegistry.getSortedTiers();
+        int at = sorted.indexOf(tier);
+        int netherite = sorted.indexOf(Tiers.NETHERITE);
+        if (at < 0 || netherite < 0) {
+            // a tier outside the sorting registry: by harvest level, as Forge does for unsorted tiers
+            return tier.getLevel() >= Tiers.NETHERITE.getLevel();
+        }
+        return at > netherite;
+    }
+
+    @Nullable
+    private static Block endercropTilledEndStone() {
+        if (!ModList.get().isLoaded("endercrop")) {
+            return null;
+        }
+        Block block = ForgeRegistries.BLOCKS.getValue(ENDERCROP_TILLED_END_STONE);
+        return block == null || block == Blocks.AIR ? null : block;
+    }
+
+    /**
+     * Ender Crop tills end stone itself in this event (its ForgeEventHandlers.onUseHoe, HOE_TILL, any hoe with Unbreaking
+     * by its config). Cancelled first, at HIGHEST, for a hoe below netherite: Ender Crop skips cancelled events and the hoe
+     * does nothing. Same gate as the Tilling enchantment's area till.
+     */
+    public static void onToolModification(BlockEvent.BlockToolModificationEvent event) {
+        if (event.getToolAction() != ToolActions.HOE_TILL || !event.getState().is(Blocks.END_STONE)) {
+            return;
+        }
+        ItemStack held = event.getHeldItemStack();
+        if (netheriteOrBetter(held)) {
+            return;
+        }
+        event.setCanceled(true);
+        Player player = event.getPlayer();
+        if (!event.isSimulated() && player != null && !player.level.isClientSide && held.getItem() instanceof HoeItem) {
+            player.displayClientMessage(Component.translatable("message.hearthandharvest.end_stone_needs_netherite"), true);
+        }
     }
 
     static int clampLevel(int level) {

@@ -58,6 +58,8 @@ public final class PlacedFoodSol {
         slices = load();
     }
 
+    private static final ResourceLocation SUPP_DIRECTIONAL_CAKE = new ResourceLocation("supplementaries", "directional_cake");
+
     private static Map<Block, Item> load() {
         Map<Block, Item> out = new HashMap<>();
         try {
@@ -99,6 +101,10 @@ public final class PlacedFoodSol {
             slice = sliceFor(block);
         } else if (block instanceof AbstractCandleBlock) {
             slice = sliceFor(after.getBlock()); // candle cake bitten: it is now its cake with one bite
+        } else if (SUPP_DIRECTIONAL_CAKE.equals(ForgeRegistries.BLOCKS.getKey(after.getBlock()))) {
+            // Supplementaries swaps the cake (or a double cake's top) for its directional cake on the first bite, so the
+            // vanilla bite Spice of Life sees never runs (plan_bugfix_1114 4.3, TODO food/types-and-tuning #39)
+            slice = sliceFor(after.getBlock());
         } else {
             return;
         }

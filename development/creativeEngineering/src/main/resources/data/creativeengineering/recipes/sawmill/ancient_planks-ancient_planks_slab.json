@@ -1,5 +1,15 @@
 {
   "type": "immersiveengineering:sawmill",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "quark"
+    }
+  ],
   "energy": 800,
   "input": {
     "item": "quark:ancient_planks"

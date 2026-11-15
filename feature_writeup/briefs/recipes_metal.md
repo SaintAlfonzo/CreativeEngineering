@@ -182,6 +182,8 @@ Decide where rose gold may stand in for gold, and make the tags say exactly that
   VI does tag `forge:plates/rose_gold`, `rods/rose_gold`, `wires/rose_gold` (**jar**).
 - [dishes_meals.md](dishes_meals.md) `dishes/meals #9` wants rose gold out of the golden foods and recommends a local
   pure-gold tag there, "since rose gold rods in `forge:rods/gold` may be intended".
+  **Settled 2026-11-14 (`recipes/metal #7`, plan_bugfix_1114.md 4.2): golden armor, tools and food take rose gold; only
+  the recipes that make raw gold forms (ore to wire and their storage blocks) stay gold-only.**
 
 ### Build
 Recommended: rose gold is its own metal; only the rods stay interchangeable.

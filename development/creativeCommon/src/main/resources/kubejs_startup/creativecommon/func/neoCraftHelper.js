@@ -859,6 +859,20 @@ global.NCH = {
     return n
   },
 
+  // Sets a number field of every loaded recipe the filter matches (Botany Pots soil `growthModifier`), written as a
+  // parsed JSON number like scaleRecipeInt. Returns the number of recipes changed.
+  setRecipeNumber(filter, key, value, e) {
+    if (!e) throw new Error('setRecipeNumber called without event object!')
+    var num = Java.loadClass('com.google.gson.JsonParser').parseString(String(Number(value)))
+    var n = 0
+    e.forEachRecipe(filter, r => {
+      if (!r.json) return
+      r.json.add(key, num)
+      n++
+    })
+    return n
+  },
+
   // KubeJS 1902.6's e.replaceInput / e.replaceOutput / e.remove only walk the recipes loaded from data
   // (originalRecipes), never the ones scripts added (addedRecipes). With includeAdded, replaceInput /
   // replaceOutput repeat the swap on the added recipes for a plain { input: X } / { output: X } filter (item
@@ -1204,6 +1218,23 @@ global.NCH = {
 		e
 			.smithing(output, base, addition)
 			.id(`${global.NCH.ns()}:smithing/${idSuffix}`)
+	},
+
+	// Botany Pots soil (botanypots:soil): the item placed in a pot as soil. display = block shown in the pot (default the
+	// item's id), categories = which pot crops grow on it, growthModifier multiplies pot growth speed (1 = none).
+	botanySoil(input, categories, growthModifier, e, idOverride, display) {
+		if (!e) throw new Error('botanySoil called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(input, input, 'botany_soil')
+		var ctx = 'botanySoil ' + idSuffix
+		var id = global.NCH._resolveIdCount(input).id
+		global.NCH._checkItem(id, ctx + ' input')
+		e.custom({
+			type: 'botanypots:soil',
+			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			display: { block: display ?? id },
+			categories: categories,
+			growthModifier: growthModifier
+		}).id(`${global.NCH.ns()}:botany_soil/${idSuffix}`)
 	},
 
 	smelting(output, input, e, idOverride, xp, cookingtime, conditions) {

@@ -23,6 +23,19 @@ public class BasinBlockEntity extends StorageBlockEntity {
     }
 
     @Override
+    public boolean isTool(ItemStack stack) {
+        if (level == null || stack.isEmpty()) {
+            return false;
+        }
+        for (SkeweringRecipe r : level.getRecipeManager().getAllRecipesFor(BBQRecipes.SKEWERING.get())) {
+            if (r.isTool(stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean specialClick(Player user, int slot, InteractionHand hand) {
         if (level == null) {
             return false;
@@ -37,7 +50,7 @@ public class BasinBlockEntity extends StorageBlockEntity {
                 break;
             }
         }
-        if (recipe == null) {
+        if (recipe == null || recipe.getResultItem().isEmpty()) {
             return false;
         }
         if (level.isClientSide) {

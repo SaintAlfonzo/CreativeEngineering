@@ -429,7 +429,9 @@
         let tag = e.saveWithoutId(new $Compound())
         let c = tag.getCompound('Contraption')
         let ctl = tag.contains('Controller') ? tag.getCompound('Controller') : null
-        return 'id=' + e.getId() + ' uuid=' + String(e.getUUID()) + ' at ' + fmt(e.getX()) + ' ' + fmt(e.getY()) + ' ' + fmt(e.getZ())
+        let u = ''
+        try { u = ' uuid=' + String(e.getUUID()) } catch (x) { u = '' } // r1114: getUUID not found on ControlledContraptionEntity
+        return 'id=' + e.getId() + u + ' at ' + fmt(e.getX()) + ' ' + fmt(e.getY()) + ' ' + fmt(e.getZ())
             + ' removed=' + e.isRemoved() + ' alive=' + e.isAlive() + ' type=' + c.getString('Type')
             + ' blocks=' + c.getCompound('Blocks').getList('BlockList', 10).size()
             + ' controller=' + (ctl == null ? 'none' : ctl.getInt('X') + ',' + ctl.getInt('Y') + ',' + ctl.getInt('Z'))

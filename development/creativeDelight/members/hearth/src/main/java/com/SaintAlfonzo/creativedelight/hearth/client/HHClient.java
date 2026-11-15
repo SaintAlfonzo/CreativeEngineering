@@ -28,6 +28,10 @@ public final class HHClient {
     public static void init(IEventBus bus) {
         bus.addListener(HHClient::renderers);
         bus.addListener(HHClient::layers);
+        if (com.SaintAlfonzo.creativedelight.hearth.block.HHBlocks.HOPS_ON) {
+            bus.addListener(HHClient::hopsVineColors);
+            bus.addListener(HHClient::hopsVineLayer);
+        }
         com.SaintAlfonzo.creativedelight.hearth.machine.client.HHMachineClient.init(bus);
         com.SaintAlfonzo.creativedelight.hearth.client.crow.CrowClient.init(bus);
     }
@@ -37,6 +41,18 @@ public final class HHClient {
         event.registerEntityRenderer(HHEntities.THROWN_PITCHFORK.get(), PitchforkRenderer::new);
         event.registerEntityRenderer(HHEntities.MANURE_PROJECTILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(HHEntities.THROWN_HORSESHOE.get(), HorseshoeRenderer::new);
+    }
+
+    /** Hops vine (plan_bugfix_1114 3.1): Vinery's jungle grape models tint face 0 with the foliage colour and set no render type. */
+    private static void hopsVineColors(net.minecraftforge.client.event.RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tint) -> level == null || pos == null ? -1 : net.minecraft.client.renderer.BiomeColors.getAverageFoliageColor(level, pos),
+                com.SaintAlfonzo.creativedelight.hearth.block.HHBlocks.HOPS_VINE.get());
+    }
+
+    @SuppressWarnings("removal")
+    private static void hopsVineLayer(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent event) {
+        event.enqueueWork(() -> net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
+                com.SaintAlfonzo.creativedelight.hearth.block.HHBlocks.HOPS_VINE.get(), RenderType.cutout()));
     }
 
     private static void layers(EntityRenderersEvent.RegisterLayerDefinitions event) {

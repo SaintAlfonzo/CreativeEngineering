@@ -11,6 +11,7 @@ owner decisions Q15 to Q17 and Q24. TODO rows `largecontent/mod-additions #35`, 
 | Growth x8 crops, x2 flowers, fertilizers removed | BUILT 2026-11-07, not tested | `kubejs/server_scripts/other/botany_pots.js`, `global.NCH.scaleRecipeInt`, `i.t_wild_crops` (Creative Common) | `global.BOTANY_GROWTH_MULT` (8), `global.BOTANY_FLOWER_MULT` (2), top of the script |
 | Lemon tree shows the lower half | BUILT 2026-11-07, not tested | `kubejs/data/fruitsdelight/recipes/botanypots/lemon.json` | none |
 | Pot tooltip | BUILT 2026-11-07, not tested | `kubejs/client_scripts/tooltips.js` ([tooltips.md](tooltips.md) TT-43) | none |
+| Better soils: Rich Soil and Rich Farmland x1.10, Fertile Soil x1.20, no yield; soil tooltips | BUILT 2026-11-14, Creative Common jar built not installed; SQ-SY-21, CQ-SY-22 | `botany_pots.js`, `NCH.setRecipeNumber` / `NCH.botanySoil` (Creative Common), `tooltips.js` (TT-44) | `global.BOTANY_SOIL_SPEED` |
 
 Needs the Creative Common jar with `scaleRecipeInt` (built after 2026-11-07); with an older jar the script logs an
 error and leaves the mod's times. Measure: `logs/latest.log` line `[botany_pots] growthTicks scaled on N pot crops`.
@@ -38,7 +39,11 @@ jars are covered and JEI shows the new times.
   flowering azalea), unless it is also in `#farmersdelight:wild_crops` (wild tomatoes, wild coffee and the other
   wild crops drop produce, so they grow at crop speed). Everything else (crops, trees, mushrooms, coral, grass,
   vines) counts as a crop.
-- **Soils:** unchanged, so their modifiers stack on the slower base.
+- **Soils (wave 2, [plan_crop_yields_wave2.md](plan_crop_yields_wave2.md) 8):** Rich Soil (mod x1.10) and Rich Soil
+  Farmland (mod x1.25) set to x1.10, and Fertile Soil (`immersive_weathering:mulch_block`, no pot recipe in the mod)
+  added as a pot soil (categories dirt, farmland) at x1.20. Plain farmland (x1.05) and dirt keep the mod's values. The
+  modifier multiplies on top of the slowed base: wheat on Fertile Soil 9600 / 1.2 = 8000 ticks. Pots never get the
+  soil yield extra (it only fires on world blocks), and the soils' tooltips say so.
 - **Fertilizers:** every `botanypots:fertilizer` recipe removed (bone meal is the only one).
 - **Lemon tree:** the two-block tree only fits as one block; the pot shows the lower half of each growth stage
   (`half: lower` pinned in every display phase). Drops and time otherwise as the mod (time x8 by the script).
@@ -75,8 +80,12 @@ jars are covered and JEI shows the new times.
 - [ ] **BP-06 Lemon:** plant lemon seeds in a pot → the lower half of the lemon tree at every stage, nothing floating
   or cut mid-leaf; time 9600 ticks.
 - [ ] **BP-07 Tooltip:** TT-43.
+- [ ] **BP-09 Better soils:** SQ-SY-21: log `3 soils set (Rich x1.1, Fertile x1.2)`; JEI soil page: Rich Soil and Rich
+  Soil Farmland x1.10, Fertile Soil x1.20; a wheat pot on Fertile Soil takes about 8000 ticks. Tooltip TT-44.
 
 ## 8. History
 
+- 2026-11-14: better soils speed (Rich x1.10, Fertile Soil x1.20 as a new pot soil), soil tooltips, `NCH.setRecipeNumber`
+  and `NCH.botanySoil` (crop yields wave 2).
 - 2026-11-07: built (plan_farming_cooking_batch A15 / C5): growth pass, fertilizer removal, lemon display, tooltip,
   `NCH.scaleRecipeInt`.

@@ -375,6 +375,27 @@ Gate: PWG-44. Last priority (D11), but ported in full for evaluation; the non-ov
   working probe). SQ-PWG-63 closed: Create 0.5.1's value box handler replays every fake-player click as a block-centre
   hit (not a port fault; probe calls the block's `use` directly now; the hand check is owner item 12).
 
+**P11 step 1 run 2026-11-14 (scratch run r1114 phase 5, jar `-17`, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8):** R1 to R3 and the perf world, plus the
+reruns `pwgr1r.qb`, `pwgr3r.qb`; per-row table `perf/runs/r1114/verdicts/pwgr1.md`. 95 server rows: PASS 93, FAIL 1
+(SQ-PWG-91, B36, TODO `largecontent/mod-additions #79`), INCONCLUSIVE 1 (SQ-PWG-82, arm leaves part stacks loose on the
+belt, `#83`). Parts open: SQ-PWG-06 thyratron conducts at grid -30 V (`#84`), SQ-PWG-66 display board `Speed:0.0f`
+(`#86`), SQ-PWG-43 servo settles at about half the speed of -08 (`#85`), SQ-PWG-53 open patch and -51 240 V step need
+batch changes (`tooling/generators-and-tests #15`), the R1 solar contraption reads `attachedToBearing=false` after a
+restart (`#87`). SQ-PWG-49 basin, -51 and the -73 cord pass for the first time. Performance (SQ-PWG-01 to -08): 20 TPS
+throughout; solve avg 8.3 us (ladder 25) to 66 us (500), 219 us for 20 grids, 257 us with 40 perfBots; summary
+`perf/sessions/r1114/summary.md`. The -17 client pass ran in phase 2 (CQ-PWG-22, -24, -26 to -29, automatable parts PASS,
+owner hand steps in `perf/runs/r1114/verdicts/cq_pwg17.md`); plan C1 client not run. Pack clash found: Creative
+Delight's heated water-to-salt mixing takes the acid recipe's water when water goes in first (`#82`). Steps 2 to 5
+(owner session, keep / drop / merge) still open.
+
+**P11 fixes 2026-11-14 (jar `-18`, [plan_bugfix_1114.md](plan_bugfix_1114.md) 8, PORT_NOTES.md 25):** gate jar
+`jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-18.jar` (sha1 e2163c7f573f): B36 ceiling tile drops tile and
+attachment (`#79`), B37 wire / heavy connector breaks when its support goes (`#78`, was B35), B38 servo commits only after
+a full powered window (`#85`). `#83`, `#84`, `#87` match upstream (rows rewritten), `#86` is Create's display board
+(CQ-PWG-66). `#82` acid takes rotten flesh through the pack script `kubejs/server_scripts/other/power_grid.js` (jar
+unchanged). Queue: "SQ-PWG Power Grid P11 fixes" (SQ-PWG-97, -80b, -54r, CQ-PWG-66) plus SQ-PWG-06, -43, -80, -82, -91
+rewritten. Not run yet.
+
 ## 3. Open points
 
 | # | Point | Suggested answer |

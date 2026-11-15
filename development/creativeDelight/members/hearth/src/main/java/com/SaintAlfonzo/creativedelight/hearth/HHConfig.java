@@ -37,7 +37,7 @@ public final class HHConfig {
         b.push("farming");
         TAPPER_CHANCE = b.comment("Chance every 2 s that a tree tapper collects 10 mB of sap.").defineInRange("tapperChance", 0.5D, 0.0D, 1.0D);
         CORN_HUSK_HARVEST_CHANCE = b.comment("Chance of a Corn Husk when harvesting corn.").defineInRange("cornHuskHarvestChance", 0.25D, 0.0D, 1.0D);
-        HOPS_REQUIRE_FARMLAND = b.comment("Hops only grow when the bottom of their lattice column stands on farmland.").define("hopsRequireFarmland", true);
+        HOPS_REQUIRE_FARMLAND = b.comment("Ignored since 2026-11-14: hops grow as a vine on a wall or on Vinery's grapevine lattice, never on farmland. Kept so old files load.").define("hopsRequireFarmland", true);
         b.pop();
         b.push("machines");
         TROUGH_ANIMAL_CAP = b.comment("Water Trough stops breeding when this many animals stand within 20x8x20 blocks of it.").defineInRange("troughBreedingCap", 16, 1, 256);

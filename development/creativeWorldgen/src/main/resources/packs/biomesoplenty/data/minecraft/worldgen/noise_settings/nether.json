@@ -149,23 +149,6 @@
       {
         "type": "minecraft:condition",
         "if_true": {
-          "type": "minecraft:y_above",
-          "add_stone_depth": false,
-          "anchor": {
-            "below_top": 5
-          },
-          "surface_depth_multiplier": 0
-        },
-        "then_run": {
-          "type": "minecraft:block",
-          "result_state": {
-            "Name": "minecraft:netherrack"
-          }
-        }
-      },
-      {
-        "type": "minecraft:condition",
-        "if_true": {
           "type": "minecraft:biome",
           "biome_is": [
             "biomesoplenty:visceral_heap"
@@ -205,8 +188,31 @@
                   "Name": "biomesoplenty:flesh"
                 }
               }
+            },
+            {
+              "type": "minecraft:block",
+              "result_state": {
+                "Name": "biomesoplenty:flesh"
+              }
             }
           ]
+        }
+      },
+      {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:y_above",
+          "add_stone_depth": false,
+          "anchor": {
+            "below_top": 5
+          },
+          "surface_depth_multiplier": 0
+        },
+        "then_run": {
+          "type": "minecraft:block",
+          "result_state": {
+            "Name": "minecraft:netherrack"
+          }
         }
       },
       {

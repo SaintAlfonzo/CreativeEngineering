@@ -88,7 +88,8 @@ creative_split.md 7.8): CQ-CEQ-01 shields, stepstool, backpack skin and air brak
   2026-11-06 18:29: felsic transition items (11 rows) and the Felsic Scrap model and texture moved into Equipment
   (`items/end_gear.js`, `assets/creativeengineering/`); ids unchanged. Tests SQ-CBP-08b, -11, CQ-CBP-02.
   18:35: all end gear (echo, felsic, dragon) and air brake transition rows (37) in `items/end_gear.js`; felsic ore worldgen and
-  the felsic block loot table in `packs/felsic_gear/` (a data pack added only with Felsic Gear, `compat/ModDataPacks`);
+  the felsic block loot table in `packs/felsic_gear/` (a data pack added only with Felsic Gear, `compat/ModDataPacks`;
+  it drops 1-2 Felsic Scrap before Fortune, owner value 2026-11-14, `gear/tuning #23`; only its comment said 2-4);
   2026-11-06 night: the three Nullscape biome rows moved to `packs/felsic_gear+nullscape/` (a `+` folder needs every
   listed mod), and the felsic ingot assembly in `equipment/end_gear.js` runs only with Felsic Gear and Central Kitchen's
   dragon breath (`global.has`): without Nullscape the pack named its biomes and the world failed to load (r1106spf

@@ -157,11 +157,12 @@
       "where": ["temperate grassy forest"],
       "features": ["creativedelight:wild/wild_hops"],
       "requires": "hearthandharvest",
-      "notes": "Hearth and Harvest 1.4.1's patch (Farmer's Delight wild crop: wild hops on dirt with grass and coarse dirt, 1 in 120 chunks), as Creative Delight's copy. 1.4.1 placed it in #is_forest; here the temperate forests, Terralith's included (N10)."
+      "notes": "Hops vines hanging on one tree trunk per hit (hearthandharvest:trunk_vine, modelled on Vinery's jungle grape vines), 1 in 96 chunks, rarer than a typical wild crop (plan_bugfix_1114 3.1, owner 2026-11-14). Hops exist only with Vinery (Creative Brewing): the feature names the vine by id and places nothing without it. The rule stays gated on hearthandharvest, which owns the feature type (a vinery-gated pack would fail to load with the Hearth and Harvest member off). Was Hearth and Harvest 1.4.1's ground patch of wild hops, 1 in 120 chunks, which almost never placed under a forest canopy. 1.4.1 placed it in #is_forest; here the temperate forests, Terralith's included (N10)."
     },
     "blueberry": {
       "label": "Blueberry",
       "where": ["cold grassy snowy"],
+      "requires": "fruitsdelight",
       "features": ["fruitsdelight:blueberry_bush"],
       "disable_modifiers": ["fruitsdelight:blueberry"]
     },
@@ -284,12 +285,14 @@
     "lemon": {
       "label": "Lemon",
       "where": ["warm wet forest"],
+      "requires": "fruitsdelight",
       "features": ["fruitsdelight:lemon_tree"],
       "disable_modifiers": ["fruitsdelight:lemon"]
     },
     "cranberry": {
       "label": "Cranberry",
       "where": ["cold wet grassy"],
+      "requires": "fruitsdelight",
       "features": ["fruitsdelight:cranberry_bush"],
       "disable_modifiers": ["fruitsdelight:cranberry"],
       "notes": "Cold wet = Caldera, Cloud Forest, Ice Marsh, Siberian Taiga, Yellowstone (the cold biomes with 'wet')."
@@ -297,6 +300,7 @@
     "pineapple": {
       "label": "Pineapple",
       "where": ["warm beach", "warm wet coastal"],
+      "requires": "fruitsdelight",
       "features": ["fruitsdelight:pineapple"],
       "disable_modifiers": ["fruitsdelight:pineapple"],
       "notes": "Fruits Delight's feature needs sand below; outside beaches it only takes where the coast has sand."
@@ -309,15 +313,15 @@
       "disable_modifiers": ["fruitsdelight:hamimelon"],
       "notes": "Pack feature: Fruits Delight's own needs plain sand; this one takes sand, red sand and terracotta. Two patches: the rarity 64 one and the common one (rarity 24, plan_farming_cooking_batch A10)."
     },
-    "lychee": { "label": "Lychee (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/lychee_tree"], "disable_modifiers": ["fruitsdelight:lychee"] },
-    "mango": { "label": "Mango (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/mango_tree"], "disable_modifiers": ["fruitsdelight:mango"] },
-    "peach": { "label": "Peach (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/peach_tree"], "disable_modifiers": ["fruitsdelight:peach"] },
-    "orange": { "label": "Orange (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/orange_tree"], "disable_modifiers": ["fruitsdelight:orange"] },
-    "kiwi": { "label": "Kiwi (tree)", "where": ["jungle"], "features": ["fruitsdelight:tree/kiwi_tree"], "disable_modifiers": ["fruitsdelight:kiwi"] },
-    "bayberry": { "label": "Bayberry (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/bayberry_tree"], "disable_modifiers": ["fruitsdelight:bayberry"] },
-    "mangosteen": { "label": "Mangosteen (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/mangosteen_tree"], "disable_modifiers": ["fruitsdelight:mangosteen"] },
-    "durian": { "label": "Durian (tree)", "where": ["swamp !cold"], "features": ["fruitsdelight:tree/durian_tree"], "disable_modifiers": ["fruitsdelight:durian"] },
-    "pear": { "label": "Pear (tree)", "where": ["birch"], "features": ["fruitsdelight:tree/pear_tree"], "disable_modifiers": ["fruitsdelight:pear"] },
+    "lychee": { "label": "Lychee (tree)", "where": ["jungle"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/lychee_tree"], "disable_modifiers": ["fruitsdelight:lychee"] },
+    "mango": { "label": "Mango (tree)", "where": ["jungle"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/mango_tree"], "disable_modifiers": ["fruitsdelight:mango"] },
+    "peach": { "label": "Peach (tree)", "where": ["jungle"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/peach_tree"], "disable_modifiers": ["fruitsdelight:peach"] },
+    "orange": { "label": "Orange (tree)", "where": ["jungle"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/orange_tree"], "disable_modifiers": ["fruitsdelight:orange"] },
+    "kiwi": { "label": "Kiwi (tree)", "where": ["jungle"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/kiwi_tree"], "disable_modifiers": ["fruitsdelight:kiwi"] },
+    "bayberry": { "label": "Bayberry (tree)", "where": ["swamp !cold"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/bayberry_tree"], "disable_modifiers": ["fruitsdelight:bayberry"] },
+    "mangosteen": { "label": "Mangosteen (tree)", "where": ["swamp !cold"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/mangosteen_tree"], "disable_modifiers": ["fruitsdelight:mangosteen"] },
+    "durian": { "label": "Durian (tree)", "where": ["swamp !cold"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/durian_tree"], "disable_modifiers": ["fruitsdelight:durian"] },
+    "pear": { "label": "Pear (tree)", "where": ["birch"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/pear_tree"], "disable_modifiers": ["fruitsdelight:pear"] },
     "apple": { "label": "Apple (tree)", "where": ["oak forest"], "features": ["vinery:tree_apple"], "disable_modifiers": ["vinery:add_apple_tree", "fruitsdelight:apple"], 
       "notes": "Vinery apple tree. Oak/dark oak leaves no longer drop apples (loot/08_leaf_apples.js)."
     },
@@ -356,7 +360,7 @@
       "remove_features": ["minecraft:rubber_tree_placement"],
       "notes": "Myrtrees adds its tree from Java (Architectury biome modification, id minecraft:rubber_tree_placement; 1% of chunks x 5 trees, any forest/taiga/jungle). Removed everywhere, pack copy in 1 chunk of 4 in jungles."
     },
-    "fig": { "label": "Fig (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/fig_tree"], "disable_modifiers": ["fruitsdelight:fig"] },
+    "fig": { "label": "Fig (tree)", "where": ["cold forest !snowy"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/fig_tree"], "disable_modifiers": ["fruitsdelight:fig"] },
     "sea_grape": {
       "label": "Sea Grape",
       "where": [],
@@ -366,8 +370,8 @@
       "requires": "oceanic_delight",
       "notes": "Oceanic Delight (Creative Delight member); the sea floor of the mod's three warm oceans. Pack feature wild/sea_grape: the newer Oceanic jar's patch (64 tries, spread 6; was 32 / 5), 1 in 30 chunks as the mod's (starting density, farming/wild-crops #6); the mod's own modifier off. 'add' because ocean biomes never match a where clause."
     },
-    "hawberry": { "label": "Hawberry (tree)", "where": ["cold forest !snowy"], "features": ["fruitsdelight:tree/hawberry_tree"], "disable_modifiers": ["fruitsdelight:hawberry"] },
-    "persimmon": { "label": "Persimmon (tree)", "where": ["snowy forest"], "features": ["fruitsdelight:tree/persimmon_tree"], "disable_modifiers": ["fruitsdelight:persimmon"] },
+    "hawberry": { "label": "Hawberry (tree)", "where": ["cold forest !snowy"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/hawberry_tree"], "disable_modifiers": ["fruitsdelight:hawberry"] },
+    "persimmon": { "label": "Persimmon (tree)", "where": ["snowy forest"], "requires": "fruitsdelight", "features": ["fruitsdelight:tree/persimmon_tree"], "disable_modifiers": ["fruitsdelight:persimmon"] },
     "rooted_dirt": {
       "label": "Rooted Dirt and Truffle Dirt (truffle ground)",
       "step": "underground_ores",

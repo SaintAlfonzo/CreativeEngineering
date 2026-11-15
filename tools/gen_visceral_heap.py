@@ -17,8 +17,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'kubejs/generation_scripts/worldgen/vanilla_nether_noise_settings.json'
 OUT = ROOT / 'development/creativeWorldgen/src/main/resources/packs/biomesoplenty/data/minecraft/worldgen/noise_settings/nether.json'
 
-# After the two bedrock rules and the belowTop(5) netherrack rule, where BOP inserts its rules.
-INSERT_AT = 3
+# After the two bedrock rules, ahead of vanilla's belowTop(5) netherrack rule (index 2) so the band under the roof is flesh
+# too. BOP inserts its own rules one later (after that netherrack rule); the Heap goes first because it is flesh at every
+# depth (plan_bugfix_1114.md 6.4, owner 2026-11-14).
+INSERT_AT = 2
 FLESH = {'type': 'minecraft:block', 'result_state': {'Name': 'biomesoplenty:flesh'}}
 
 
@@ -31,17 +33,24 @@ def surface(kind):
     }
 
 
+# Floor and ceiling first (the top layer, as BOP), then flesh unconditionally: every default-block (netherrack) position in
+# the Heap becomes flesh at any depth, cave walls included. Porous flesh, tendons, eyebulbs and flesh balls are features
+# and still place on top. Carvers cut only #minecraft:nether_carver_replaceables, so flesh joins that tag
+# (kubejs/data/creativeworldgen/kubejs/tags/visceral_heap.js); it stays out of #minecraft:base_stone_nether, so Nether ores
+# do not place inside the Heap.
 HEAP_RULE = {
     'type': 'minecraft:condition',
     'if_true': {'type': 'minecraft:biome', 'biome_is': ['biomesoplenty:visceral_heap']},
-    'then_run': {'type': 'minecraft:sequence', 'sequence': [surface('ceiling'), surface('floor')]},
+    'then_run': {'type': 'minecraft:sequence', 'sequence': [surface('ceiling'), surface('floor'), FLESH]},
 }
 
 
 def main():
     settings = json.loads(SOURCE.read_text())
     sequence = settings['surface_rule']['sequence']
-    if sequence[INSERT_AT]['if_true'].get('biome_is') != ['minecraft:basalt_deltas']:
+    rule = sequence[INSERT_AT]
+    if (rule['if_true'].get('type') != 'minecraft:y_above'
+            or rule['then_run'].get('result_state', {}).get('Name') != 'minecraft:netherrack'):
         raise SystemExit('vanilla Nether surface rule has an unexpected shape at index %d' % INSERT_AT)
     sequence.insert(INSERT_AT, HEAP_RULE)
     OUT.parent.mkdir(parents=True, exist_ok=True)

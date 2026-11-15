@@ -91,19 +91,21 @@ directly and never sees the exclusion.
 **Fix (decided, D3): the lift runs only when the exit portal is on the floor** (it faces up). There it is what lifts
 the player clear of the floor block the portal sits on. Wall and ceiling exits get no lift.
 
-- Common (both sides) mixin on `tk.meowmc.portalgun.entities.CustomPortal`:
-  - in `updateState`, before the `reloadAndSyncToClient()` call in the branch that sets the destination, set
-    `PortalExtension.get(this).adjustPositionAfterTeleport = exitOut.y > 0.5`, where
-    `exitOut = transformLocalVecNonScale(getContentDirection())` (the direction the player leaves the exit portal);
-  - at the tail of `readAdditionalSaveData` (`m_7378_`), recompute the same value, so portals placed before the fix and
-    the client copy (which gets the entity through that path) agree.
-- The flag is saved and synced with the portal's NBT (`PortalExtension` writes `adjustPositionAfterTeleport`), so the
-  client check reads the server's value.
+- **Rewritten 2026-11-14 ([plan_bugfix_1114.md](plan_bugfix_1114.md) 4.1; built, untested).** The first fix (a common
+  mixin on Portal Gun's `CustomPortal` that set the saved `adjustPositionAfterTeleport` flag) failed in r1113: it
+  rotated the already rotated content direction a second time, and it missed portals linked in `PortalGunItem`.
+- Now one client mixin, `mixin/IPExitLiftMixin`, on Immersive Portals `ClientTeleportationManager.teleportPlayer`
+  (gated on `imm_ptl_core`): `@Inject` at HEAD remembers `teleportation.portal()`; a `@Redirect` of the
+  `adjustPositionAfterTeleport` GETFIELD returns `portal.getContentDirection().y > 0.5` (the direction the player
+  leaves the exit, already in destination space, points up). Plain Mixin, no MixinExtras.
+- It applies to every Immersive Portals portal: nether frames, Portal Gun, End, IP's own. The saved per-portal flag is
+  ignored (IP default on), so the wrong values saved on gun portals since 11-07 are harmless; nothing rewrites them.
 
 Not chosen: (a) the lift off for every gun portal (players may sink into the floor on floor exits); (c) keep the lift
 and filter out the exit wall: a `@Redirect` of `getBlockCollisions` in
 `adjustPlayerPosition` through the exit portal's `CollisionExcluder`. It is the most exact, but `adjustPlayerPosition`
-gets only the player, so the exit portal has to be found, which is more code and more risk.
+gets only the player, so the exit portal has to be found, which is more code and more risk. (d) The 11-07 flag on
+`CustomPortal` (replaced 2026-11-14, see above).
 
 ## 4. Dyeing the portal colours
 
@@ -154,7 +156,7 @@ its default. The command keeps working and edits the same data.
 |---|---|---|
 | D1 | Name more Immersive Portals entities? | No: only the gun portal and the two mirrors; the End Portal already shows a valid name |
 | D2 | What do the two dye parts colour? | The portal colours: left of the gun blue, right of the gun orange, written to `CustomPortalColors`; the item model is not changed |
-| D3 | Exit lift | Only when the exit portal is on the floor |
+| D3 | Exit lift | Only when the exit portal is on the floor; since 2026-11-14 for every Immersive Portals portal, by geometry (plan_bugfix_1114.md 4.1) |
 | D4 | Washing in a cauldron | No |
 | D5 | Desaturation fix | Compat mixin (`hud_batching` stays on) |
 
@@ -181,6 +183,8 @@ its default. The command keeps working and edits the same data.
 4. Changelog bullets when built, under a `## Portal Gun` family: names, the two fixes (past tense), dyeing (left of the
    gun sets the blue portal, right the orange; placed portals change when shot again).
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PG-01a, -01b FAIL: the exit-lift flag follows the portal colour, not the geometry, and recomputes wrong after a restart (Creative Compat `PortalGunExitLift` rotates an already rotated direction; `PortalGunExitLiftMixin` misses portals linked in PortalGunItem). TODO `gameplay/tnt-and-portal #15` back to Bug; fix waits for the owner.
+
 Out of scope here (still in the scratchpad): the extra mirror glass types (tinted, Quark framed, dirty, frosted), the
 Portal Gun as a computing endgame recipe.
 
@@ -193,7 +197,7 @@ into `development/creativeCommon/libs/` (git-ignored) to compile against. Immedi
 |---|---|---|
 | 1 | `kubejs/assets/creativecompat/kubejs/names.js` | 3-argument `e.add` under `portalgun` and `imm_ptl_core` |
 | 2 | `mixin/GeckoItemHudBatchMixin` (client), `compat/GeckoHudBatch` | `@Redirect` of `m_109911_` in `GeoItemRenderer#m_108829_`; skips the flush when the source is `BatchingBuffers.ITEM_MODEL_CONSUMER` (reflective; warns once if missing). Gated on `geckolib3` + `immediatelyfast` |
-| 3 | `mixin/PortalGunExitLiftMixin`, `portalgun/PortalGunExitLift` | Injects before every `reloadAndSyncToClient()` in `updateState` (both branches; the hidden-portal one is harmless) and at the tail of `m_7378_`. Gated on `portalgun` |
+| 3 | `mixin/IPExitLiftMixin` (client) | Since 2026-11-14 (replaced `PortalGunExitLiftMixin` and `portalgun/PortalGunExitLift`): HEAD inject on IP `ClientTeleportationManager.teleportPlayer` keeps the portal; `@Redirect` of the `PortalExtension.adjustPositionAfterTeleport` GETFIELD returns `getContentDirection().y > 0.5`. Gated on `imm_ptl_core`; every IP portal |
 | 4 | `portalgun/PortalGunDyeRecipe`, `PortalGunRecipes`, `PortalGunDyeJEI`, `data/creativecompat/recipes/portal_gun_dye.json` | Reads and writes `CustomPortalColors` NBT directly and names the gun only by id, so nothing loads Portal Gun classes and the serializer registers always; the JSON has a `forge:mod_loaded` condition. NCH has no generic special-recipe entry (only `creativeLabelsSpecial`), so the JSON is a jar data file. Dye averaging is the leather-armour formula on `DyeColor` diffuse colours. JEI: 16 blue + 16 orange one-dye pages, a both-sides page (light blue left, red right) and a same-column page (lime under the gun) |
 
 Still open from this plan: the `item_dict.js` keys (side finding above) wait for the next Creative Common build.

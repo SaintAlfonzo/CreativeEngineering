@@ -379,6 +379,8 @@ Scratch queue rows to add when the work is built (skill `scratch-test`; the owne
 | CQ-CDFO-01 | client: rack textures, raised oven and fridge-top fill render, duck egg models; mod list no longer shows the two members |
 | CQ-CBS-01 | client: mod list shows "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)"; buckets and the effect icon textured on the minimal-chain client |
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CDFO-02, -03, -03b, -03c PASS (spice rack and nests follow their compartments; CfB mixins only with CfB).
+
 ## 9. Order and installs
 
 1. M6 LICENSE files (no code; can go first, rides along with every later build).

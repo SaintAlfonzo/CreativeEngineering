@@ -12,7 +12,6 @@ import com.SaintAlfonzo.creativedelight.hearth.event.AnimalEvents;
 import com.SaintAlfonzo.creativedelight.hearth.event.CleaverEvents;
 import com.SaintAlfonzo.creativedelight.hearth.event.ManureDrops;
 import com.SaintAlfonzo.creativedelight.hearth.fluid.HHFluids;
-import com.SaintAlfonzo.creativedelight.hearth.block.HopsLatticeBlock;
 import com.SaintAlfonzo.creativedelight.hearth.gear.FarmersHatEvents;
 import com.SaintAlfonzo.creativedelight.hearth.gear.HHGearRegistry;
 import com.SaintAlfonzo.creativedelight.hearth.gear.HorseFeedEvents;
@@ -67,6 +66,7 @@ public class HearthAndHarvestMod {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> HHClient.init(bus));
         bus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
             HHBlocks.registerPottedPlants();
+            com.SaintAlfonzo.creativedelight.hearth.gear.SeedContainerDispense.registerBundle();
             if (ModList.get().isLoaded("quark")) {
                 QuarkCompat.registerDispenser();
             }
@@ -86,14 +86,15 @@ public class HearthAndHarvestMod {
         MinecraftForge.EVENT_BUS.addListener(CleaverEvents::onDeath);
         MinecraftForge.EVENT_BUS.addListener(CleaverEvents::onDrops);
         MinecraftForge.EVENT_BUS.addListener(SapCauldronBlock::onRightClickBlock);
-        MinecraftForge.EVENT_BUS.addListener(HopsLatticeBlock::onRightClickBlock);
         MinecraftForge.EVENT_BUS.addListener(HorseshoeEvents::onLivingTick);
+        MinecraftForge.EVENT_BUS.addListener(HorseshoeEvents::onEntityInteract);
         MinecraftForge.EVENT_BUS.addListener(HorseshoeEvents::onAttack);
         MinecraftForge.EVENT_BUS.addListener(HorseshoeEvents::onDeath);
         MinecraftForge.EVENT_BUS.addListener(HorseFeedEvents::onEntityInteract);
         MinecraftForge.EVENT_BUS.addListener(FarmersHatEvents::onBreak);
         MinecraftForge.EVENT_BUS.addListener(RoastingEvents::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, TillingEvents::onRightClickBlock);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, TillingEvents::onToolModification);
         if (ModList.get().isLoaded("quark")) {
             QuarkCompat.init();
         }

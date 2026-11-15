@@ -6,6 +6,9 @@
 // future jars) add are covered too, and JEI shows the new times.
 global.BOTANY_GROWTH_MULT = 8
 global.BOTANY_FLOWER_MULT = 2
+// Better soils speed pot growth only, never pot yield (plan_crop_yields_wave2.md 8): Rich Soil and Rich Soil Farmland
+// x1.10, Fertile Soil x1.20 (new pot soil, the mod has none for it). Plain farmland and dirt keep the mod's values.
+global.BOTANY_SOIL_SPEED = { rich: 1.10, fertile: 1.20 }
 
 ServerEvents.recipes(e => {
 	var i = global.item
@@ -45,6 +48,19 @@ ServerEvents.recipes(e => {
 		return global.BOTANY_GROWTH_MULT
 	}, e)
 	R.remove({ type: 'botanypots:fertilizer' }, e)
+
+	if (!R.setRecipeNumber || !R.botanySoil) {
+		console.error('[botany_pots] global.NCH.setRecipeNumber / botanySoil missing: Creative Common is older than this script; pot soils left at the mod\'s values')
+		return
+	}
+	var sp = global.BOTANY_SOIL_SPEED
+	var soils = R.setRecipeNumber({ id: 'botanypots:farmersdelight/soil/rich_soil' }, 'growthModifier', sp.rich, e) +
+		R.setRecipeNumber({ id: 'botanypots:farmersdelight/soil/rich_soil_farmland' }, 'growthModifier', sp.rich, e)
+	if (Platform.isLoaded('immersive_weathering')) {
+		R.botanySoil(i.fertile_soil, ['dirt', 'farmland'], sp.fertile, e, 'fertile_soil')
+		soils++
+	}
+	console.info('[botany_pots] ' + soils + ' soils set (Rich x' + sp.rich + ', Fertile x' + sp.fertile + ')')
 	console.info('[botany_pots] growthTicks scaled on ' + changed + ' pot crops (' + flowers + ' flowers x' +
 		global.BOTANY_FLOWER_MULT + ', the rest x' + global.BOTANY_GROWTH_MULT + '); pot fertilizers removed')
 })

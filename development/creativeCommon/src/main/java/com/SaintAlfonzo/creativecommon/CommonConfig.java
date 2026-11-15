@@ -39,6 +39,7 @@ public final class CommonConfig {
     public static final ModNames MOD_NAMES;
     public static final Effects EFFECTS;
     public static final MagicResistance MAGIC_RESISTANCE;
+    public static final MeltingConfig MELTING;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -64,6 +65,8 @@ public final class CommonConfig {
         // constructor carries the player's values over (EFFECT_SECTIONS)
         EFFECTS = new Effects(builder);
         MAGIC_RESISTANCE = new MagicResistance(builder);
+        // [melting]: new 2026-11-14 (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8)
+        MELTING = new MeltingConfig(builder);
         // [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm],
         // [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment, 2026-11-04)
         COMMON_SPEC = builder.build();
@@ -370,6 +373,91 @@ public final class CommonConfig {
             ).define("negatedEffectTicks", "minecraft:poison, minecraft:wither");
 
             b.pop(); // magic_resistance
+        }
+    }
+
+    /**
+     * Melting ({@code melting/} package, feature_writeup/melting.md): salt, fire and lava melt ice and snow; packed and
+     * blue ice step down one tier at a low chance. Sources and targets are the {@code creativecommon:melting/*} block
+     * tags. Every value but {@code extraRandomTickBlocks} is read live.
+     */
+    public static final class MeltingConfig {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue saltRange;
+        public final ForgeConfigSpec.IntValue fireRange;
+        public final ForgeConfigSpec.IntValue lavaRange;
+        public final ForgeConfigSpec.IntValue slowFireRange;
+        public final ForgeConfigSpec.IntValue slowLavaRange;
+        public final ForgeConfigSpec.DoubleValue meltChance;
+        public final ForgeConfigSpec.DoubleValue slowMeltChance;
+        public final ForgeConfigSpec.BooleanValue placeWater;
+        public final ForgeConfigSpec.BooleanValue vanillaLightMelting;
+        public final ForgeConfigSpec.BooleanValue ultraWarmInstantMelt;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> slowSteps;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> extraRandomTickBlocks;
+
+        private MeltingConfig(ForgeConfigSpec.Builder b) {
+            b.comment(
+                    "Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags",
+                    "creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any",
+                    "block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow becomes air) and",
+                    "/meltable_slow (packed and blue ice, one tier down). Each target rolls once per random tick. Ranges are",
+                    "spheres measured through any blocks: 1 = the 6 touching blocks, 0 = this source never melts that kind.",
+                    "A target looks past its 6 neighbours only when block light reaches it, so a fire or lava behind a sealed",
+                    "wall melts nothing; magma (light 3) melts from its own random tick instead. feature_writeup/melting.md."
+            ).push("melting");
+
+            enabled = b.comment("Master switch for salt, fire and lava melting. The Salt item click is The Salt's own and not covered.")
+                    .define("enabled", true);
+            saltRange = b.comment("Salt: reach for every target (meltable and meltable_slow). 1 = touching. Above 1 every",
+                            "target scans a sphere on each roll (salt gives no light to gate it), so keep it at 1 on big glaciers.")
+                    .defineInRange("saltRange", 1, 0, 4);
+            fireRange = b.comment("Fire, torches, lanterns, glowstone, magma: reach for meltable targets.")
+                    .defineInRange("fireRange", 3, 0, 8);
+            lavaRange = b.comment("Lava: reach for meltable targets.")
+                    .defineInRange("lavaRange", 4, 0, 8);
+            slowFireRange = b.comment("Fire: reach for packed and blue ice.")
+                    .defineInRange("slowFireRange", 1, 0, 8);
+            slowLavaRange = b.comment("Lava: reach for packed and blue ice.")
+                    .defineInRange("slowLavaRange", 2, 0, 8);
+            meltChance = b.comment(
+                    "Chance per random tick that a meltable target with a source in reach melts. A block random ticks about",
+                    "every 68 s at randomTickSpeed 3, so 0.4 melts it in about 3 minutes on average."
+            ).defineInRange("meltChance", 0.4, 0.0, 1.0);
+            slowMeltChance = b.comment("The same for packed and blue ice, one tier per success (about 23 minutes per tier at 0.05).")
+                    .defineInRange("slowMeltChance", 0.05, 0.0, 1.0);
+            placeWater = b.comment("Melted ice (#minecraft:ice) leaves a water source; false leaves air. Ultra-warm dimensions",
+                            "(the Nether) always leave air.")
+                    .define("placeWater", true);
+            vanillaLightMelting = b.comment(
+                    "Vanilla melts ice above block light 11 and snow layers above 11, from any light (sea lanterns,",
+                    "shroomlights, redstone lamps). false: only the sources above melt anything (torches, lanterns and",
+                    "glowstone through the fire rule). true: vanilla's light melting runs as well. Serene Seasons' seasonal",
+                    "melt and Immersive Weathering's ice melt are their own and not touched by this."
+            ).define("vanillaLightMelting", false);
+            ultraWarmInstantMelt = b.comment(
+                    "Blocks in creativecommon:melting/ultrawarm_instant (snow layers, snow blocks, powder snow) become air the",
+                    "moment they are placed in an ultra-warm dimension (the Nether): by hand, dispenser, /setblock or a mod."
+            ).define("ultraWarmInstantMelt", true);
+            slowSteps = b.comment(
+                    "\"from=to\" block ids: what a meltable_slow target becomes when it melts. A meltable_slow block with no",
+                    "row here melts fully, like a meltable one."
+            ).defineList("slowSteps", List.of(
+                    "minecraft:blue_ice=minecraft:packed_ice",
+                    "minecraft:packed_ice=minecraft:ice"
+            ), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+            extraRandomTickBlocks = b.comment(
+                    "Blocks that get random ticks so they can melt (vanilla gives none to these). Ice, frosted ice and snow",
+                    "layers tick already. A block left out of this list (or a modded target that does not tick) melts only",
+                    "from a source-driven tick. Read once at startup: a change needs a restart."
+            ).defineList("extraRandomTickBlocks", List.of(
+                    "minecraft:snow_block",
+                    "minecraft:powder_snow",
+                    "minecraft:packed_ice",
+                    "minecraft:blue_ice"
+            ), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+
+            b.pop(); // melting
         }
     }
 }

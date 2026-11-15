@@ -550,6 +550,8 @@ None.
   bottle + empty jar <-> jar + glass bottle 1 to 1; drinking it removes one curable effect and leaves the jar.
   Supplementaries jar: one Cherry Jam Jar fills one unit of the jar's contents [3].
 
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PJL-04 PASS (one Creative Delight filling and emptying recipe per jam jar and jello).
+
 ## 8. History
 
 - By 2026-09-27 (initial git commit): the folder, first on `global.CE`, then on `global.NCH`; shipped with 1.0.3.

@@ -42,18 +42,26 @@ public final class FDBackportEvents {
 	 * A vanilla Pumpkin Pie used on a block places the pie block chosen in {@code [pumpkin_pie] placeAs} (1.3.4
 	 * PlacePumpkinPieMixin, here an event so it also decides between Delightful's and Central Kitchen's pies: HIGHEST
 	 * runs before Delightful's NORMAL handler). Same rules as Delightful's: never on a Cutting Board, the block below
-	 * must be solid, and the pie needs room.
+	 * must be solid, and the pie needs room. On a Cutting Board the board's own use runs instead, sneaking or not.
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onPlacePumpkinPie(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack stack = event.getItemStack();
 		if (!stack.is(Items.PUMPKIN_PIE) || event.isCanceled()) return;
+		BlockState target = event.getLevel().getBlockState(event.getPos());
+		if (target.getBlock() instanceof CuttingBoardBlock) {
+			// Delightful's NORMAL handler would place its pie on the board (SQ-CBW-03): stop the event here and run the
+			// board's own use (put the pie on it, or cut it), so neither pie handler sees the click (plan_bugfix_1114 7.3)
+			InteractionResult board = target.use(event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
+			event.setCancellationResult(board);
+			event.setCanceled(true);
+			return;
+		}
 		ResourceLocation id = FDBackportConfig.pieBlock();
 		if (id == null || !ForgeRegistries.BLOCKS.containsKey(id)) return;
 		if (!(ForgeRegistries.BLOCKS.getValue(id) instanceof PieBlock pie)) return;
 		Player player = event.getEntity();
 		if (FDBackportConfig.pieSneakToPlace() && !player.isShiftKeyDown()) return;
-		if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof CuttingBoardBlock) return;
 
 		event.setUseItem(Event.Result.DENY);
 		event.setUseBlock(Event.Result.DENY);

@@ -9,6 +9,10 @@
     {
       "type": "rusticdelight:config_boolean",
       "settingId": "enable_syrup_foods"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "supplementaries"
     }
   ],
   "ingredients": [
