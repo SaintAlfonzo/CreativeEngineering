@@ -13,8 +13,7 @@
 @@text (ST-320 to ST-327). Group B (fresh normal world, difficulty Normal, `/gamerule doDaylightCycle false`, `/time set night`
 @@text unless a row says day); one world for all rows. Spawns need a player 24-128 blocks away: stand at the box edge.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-SB-01 | spawn boxes load
 @group B
 @commands boot; `grep -E '\[spawn-boxes\]\|\[spawner-filter\]' logs/latest.log`

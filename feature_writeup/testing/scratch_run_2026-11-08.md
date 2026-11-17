@@ -270,3 +270,10 @@ SQ-HH-1101 PASS after the fix (boot clean; the five juice compacting recipes fai
 | SQ-HH-1314 | PASS | 5 apples held, cabinet and apples dropped on first pass |
 | SQ-HH-1326 | FAIL | 148 extra with H&H litters off: Quark |
 | SQ-HH-1327 | PASS | slice in bot inventory |
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-08 targeted run r1108cge2 (SQ-CGE part 2, [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 2)
+- the 2026-11-08 targeted run r1108cge (Creative Common 2026-11-08: SQ-CGE + SQ-CPP / SQ-CMV-04 reruns, all server rows PASS after 4 fixes, [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 1)

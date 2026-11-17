@@ -10,8 +10,7 @@
 @@text Creative Common 1.1.03 with `ChunkGeneratorRingCacheMixin` and `worldgen/RingPositionCache` (TODO server #18, perf.md
 @@text 11.2 #2). Group A. Fresh world folder; any player with op.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-RING-01
 @group A
 @commands Boot a new world; grep latest.log for `[rings]` and `Mixin`; then `/locate structure minecraft:stronghold` and note the result

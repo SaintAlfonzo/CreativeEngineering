@@ -13,8 +13,7 @@
 @@text the first full run is the baseline. Never copy the jar into the instance's `mods/`. Offline self-test first:
 @@text `python3 tools/perf/suite/selftest/selftest.py` (12/12).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-PFS-01
 @group A, plus the jar in `srv/mods` and `-Dcdevperfbot.out=perf/bot` in `user_jvm_args.txt`
 @commands Boot; `pbot status`; `pbot spawn bot1 ~ ~ ~`; `pbot list`; `forge tps`; grep latest.log for `bot1` and `Exception`

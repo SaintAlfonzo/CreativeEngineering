@@ -11,8 +11,7 @@
 @@text Creative Common 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
 @@text Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineering-common.toml` (read live).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-MCL-01 | mob cap level mixins
 @group A
 @commands Boot; `grep -i -E "MobCap|Mixin.*(error|fail)" logs/latest.log`

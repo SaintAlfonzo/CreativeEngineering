@@ -8,8 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text | ID | Side | Check | Expect | Failure means |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-XAC-01
 @group client
 @commands Open a world, open the world map over grass, water, sand, leaves, a modded block area; F3+T, look again; `grep -c "Leaked resource.*Finalizer" logs/latest.log`; `grep -i "XaeroAtlasColour\|xaero.map.MapWriter" logs/latest.log`

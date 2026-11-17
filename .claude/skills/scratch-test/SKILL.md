@@ -46,7 +46,8 @@ date", "collect queued tests".
    `@@title <SQ-CODE> <Feature>, <date> ([writeup](../x.md) section N, TODO `family #n`)`, `@@date`, `@@jars` (own
    mod ids the rows test: they drive `qrun.py plan`), `@@sources` (the writeup and source paths the rows were written
    from: they drive the stale lint), `@@tier` (T2 default; T1 = a jar's smoke rows, T3 = release gate), one `@@text`
-   intro line naming the jar or config state it targets, then `@@table` and the rows. Format: `qrows.py` docstring.
+   intro line naming the jar or config state it targets, then `@@table` (or `@@table world` when the second column
+   names the world a row needs) and the rows. Format: `qrows.py` docstring.
    Then `python3 tools/status_index.py` renders the section into scratch_queue.md (never edit inside the queue's
    generated blocks). Rows the owner wants first: say so in the hand-over (`qrun.py plan --code CODE`).
 3. **Row format**: `## ID | short title`, then the table cells `@group`, `@commands`, `@pass`, `@fails` (one line

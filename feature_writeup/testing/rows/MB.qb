@@ -13,8 +13,7 @@
 @@text `quark-common.toml` with `Enable Extra Loot Table = false`. Group A (superflat), Normal difficulty, a bot player.
 @@text For SQ-MB-04 set `[monster_box] cooldownTicks = 200` in the scratch `creativeengineering-common.toml` before boot.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-MB-01 | monster box mixins and reward table
 @group A
 @commands Boot; grep latest.log for `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `monster box reward`

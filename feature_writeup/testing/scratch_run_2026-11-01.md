@@ -269,3 +269,9 @@ baby squid, sampling a cow. Install of wave 4 (game closed): `./gradlew :creativ
 :creativeCompat:installToMods :creativeCalendar:installToMods :creativeDelight:installToMods
 :creativeBrewing:installToMods --offline`; until then the instance's `kubejs/` (wave 4) does not match its `mods/`
 (wave 3): no CE potions in a game launched now.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- **RUN 2026-11-01 (r1101):** server rows, bug batch, deferred W2 / W3 rows and the client block ran; per-row results in [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) sections 1 to 5 (server rows all PASS apart from SQ-CDF-07's without-Brewin' half, SQ-CBJ-05, SQ-TL-09; client hand steps still OPEN).

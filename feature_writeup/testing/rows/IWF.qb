@@ -12,8 +12,7 @@
 @@text config plugin `perf/CommonMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
 @@text with op. The JVM switch `-Dcreativecommon.iwFastTick=false` turns all three parts off for the comparison boots.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-IWF-01 | Immersive Weathering fast tick handler
 @group B
 @commands Boot; grep latest.log for `[perf] Immersive Weathering`, `IwBlockGrowth`, `IwServerLevel`, `Mixin` errors

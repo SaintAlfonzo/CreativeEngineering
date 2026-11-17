@@ -12,8 +12,7 @@
 @@text `roll_upstream/roll_delight-1.3.1-forge-1.20.1.jar` next to `mods/`; full restart (new member, items, startup scripts).
 @@text Group A (superflat) and a bot player. ROLL- ids are the in-game list in roll_delight.md 8.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-ROLL-01 | Roll Delight member loads (ROLL-01)
 @group A
 @commands Boot; `grep -nE "roll_delight\|Roll Delight\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log`

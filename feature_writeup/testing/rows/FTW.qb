@@ -16,8 +16,7 @@
 @@text entities at spawn (299 moss carpet, 65 wheat seeds, 53 azalea, 42 hemp seeds, 16 torches) and 227 falling blocks.
 @@text The water still flows as in vanilla in both worlds; only the items differ.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-FTW-01
 @group B `ftw_on`
 @commands Boot; grep latest.log for `FlowingFluidSettleMixin`, `LevelChunkFirstTickWaterMixin`, `BlockPopResourceSettleMixin`, `m_152440_`, `m_62812_`; check `config/creativeengineering-common.toml` has `[worldgen.first_tick_water]` `windowTicks = 600`

@@ -14,8 +14,7 @@
 @@text built from the same tree (tags, loot and JEI scripts); the pack's `blocktags.js` and `stack_sizes.json` from this tree.
 @@text Full restart (new item, stack sizes are startup). Group A (superflat) and a bot player.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-MXS-01 | mixed seeds: no load error, tags
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Boot; `grep -nE "mixed_seeds\|Error occurred while handling event" logs/latest.log logs/kubejs/server.log \| head`; `/dumptags` or `/kubejs`: item tags `vintagedelight:mixed_seeds_plants`, `forge:seeds`

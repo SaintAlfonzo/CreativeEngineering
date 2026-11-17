@@ -8,8 +8,7 @@
 @@jars creativedelight
 @@sources feature_writeup/plan_hearth_crow_salt.md
 @@text
-@@text | ID | Side | Check | Expect | Failure means |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-HSC-87
 @group A
 @commands **SUPERSEDED 2026-11-10** by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap.md 8). Was HNH-87: wild crow near a player holding a stack of 16 diamonds in the hotbar and 16 in the main inventory

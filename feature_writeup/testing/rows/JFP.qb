@@ -11,8 +11,7 @@
 @@text Target: `creativecompat-1.0.0.jar` built 2026-11-02 (compat/JarFluidPipes), not yet in `mods/`. Needs Create and
 @@text Supplementaries. A player is needed for the soft-fluid map (see SQ-MJ run log).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-JFP-01 | pump water from a Create tank into a Supplementaries jar (both pump directions tried)
 @group A
 @commands Place `supplementaries:jar`; `/setblock` a `create:fluid_tank` beside it with `/data merge block` 4000 mB water (or a creative fluid tank), mechanical pump + pipe from the tank to the jar, creative motor 64 RPM; wait 20 s; `/data get block <jar>`

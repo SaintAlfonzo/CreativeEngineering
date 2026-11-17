@@ -13,8 +13,7 @@
 @@text
 @@text Targets the Creative Delight jar in `mods/` (`creativedelight/baking.js`, `bread_tags.js`); `/reload` is enough.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-FFB-02 | sponge cake: one baking recipe, nothing else makes it, no can takes it
 @group A
 @commands recipe probe (RecipeManager dump or `/zq`) for every recipe with output `oceanic_delight:sponge_cake`
@@ -68,8 +67,7 @@ reject verb=\S+ .*done=0
 @@text
 @@text Targets the Creative Delight jar (CD `minecraft/recipes.js`, `creativedelight/baking.js`).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-RCO-01 | no vanilla smoker recipe; Quark and Nether's Delight smokers only
 @group A
 @commands recipe probe: id `minecraft:smoker`, and every recipe with output `minecraft:smoker`
@@ -108,8 +106,7 @@ reject verb=\S+ .*done=0
 @@text
 @@text Targets Creative Common (NCH lives in its jar) plus the Creative Delight jar.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CNP-01 | can grid guard: crafting recipes taking a can are _manual_only, no automation recipe takes one
 @group A
 @commands recipe probe over every recipe with an ingredient that is a pack can (`can_types.json` ids plus the hand-written raw cans)
@@ -135,8 +132,7 @@ look the "cans by serializer" line; any create:mixing / mechanical_crafting / IE
 @@text
 @@text Targets the Creative Delight jar (2026-11-02 14:01 or later); restart.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-VNG-01 | vinegar can recipes use the jar, not the merged-away bottle
 @group A
 @commands `/zq uses vintagedelight:vinegar_jar`; `/zq uses vintagedelight:vinegar_bottle`; `/zq makes creativeengineering:canned_apple`; JEI on the Pickling Jar recipes for leather and the 3 froglights, run one leather batch; `grep -n "\[NCH\]" logs/latest.log \| grep -i vinegar`
@@ -173,8 +169,7 @@ reject \[zsb\] (error|unknown|rem \S+: no such recipe)
 @@text
 @@text Targets the Creative Delight jar (CD `creativedelight/powdered_sugar.js`).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-PS-06 | powdered sugar crushing and milling: second result at 0.5
 @group A
 @commands recipe probe on `creativedelight:createcrushing/sugar_powdered_sugar` and `createmilling/sugar_powdered_sugar`, printing every result with its chance
@@ -193,8 +188,7 @@ reject verb=\S+ .*done=0
 @@text
 @@text Targets the `mods/` creativedelight-1.0.0 jar (2026-11-02 14:01; type tags, canning and cooking scripts are in the CD tree) and creativeengineering-1.1.07.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-FO-01 | food types line, no food_types warning, no new item_dict Missing for a food key
 @group A
 @commands boot; `grep -nE "\[food types\]" logs/latest.log logs/kubejs/server.log \| head`; `grep -n "\[item_dict\] Missing" logs/kubejs/startup.log \| grep -vE "catfish_slice\|jei_bucket_\|tmted_\|rs_" \| head`
@@ -285,8 +279,7 @@ look the stack_sizes count is about 1341
 @@text
 @@text Targets `configs_edited/server_config/solapplepie-server.toml` (equal to the instance's `defaultconfigs/`, shipped 1.1.05).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CF-02 | Spice of Life world config from defaultconfigs: movement speed attribute (A, new level)
 @group A (new level)
 @commands copy `configs_edited/server_config/solapplepie-server.toml` into `OUT/srv/defaultconfigs/` before the first boot; boot; `grep -oE "generic\.(movement_)?speed,[0-9.]+" OUT/srv/world/serverconfig/solapplepie-server.toml`; `grep -nE "minFoodsToActivate\|resetOnDeath\|queueSize" OUT/srv/world/serverconfig/solapplepie-server.toml`; `grep -niE "solapplepie" logs/latest.log \| grep -iE "warn\|error" \| head`
@@ -312,8 +305,7 @@ look rows/SQ-CF-02.shell.txt: generic.movement_speed,0.01 and no generic.speed,2
 @@text
 @@text Targets the `mods/` creativedelight-1.0.0 jar (2026-11-02 14:01; can member scripts from the 2026-11-01 `gen_can_types.py` run). Rerun SQ-CNS-02 beside it with `farmersdelight:beef_stew` (its r1102b batch used a wrong id).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
 @group A
 @commands `/zq food farmersdelight:noodle_soup`; `/zq food creativeengineering:canned_noodle_soup`; `/zq food creativeengineering:canned_bone_broth`; `/zq food farmersdelight:beef_stew`; `/zq food creativeengineering:canned_beef_stew`
@@ -339,8 +331,7 @@ look the canned noodle soup's nourishment ticks equal the noodle soup's; the can
 @@text
 @@text Targets the `mods/` creativedelight-1.0.0 jar (2026-11-02 14:01) and the pack's `kubejs/` (`names.js`, soft fluid json).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-DRK-07 | Bayberry Juice: drink type, stack 32, canned, no soft fluid or recipe error
 @group A
 @commands `/zq tagsof fruitsdelight:bayberry_soup`; `/zq item fruitsdelight:bayberry_soup`; `/zq tagsof creativeengineering:canned_bayberry_soup`; `/zq recipes canned_bayberry`; `grep -niE "bayberry_soup" logs/latest.log \| grep -iE "error\|warn" \| head`
@@ -387,8 +378,7 @@ look JEI shows the Bayberry Juice fluid by that name; fill the jar with a juice 
 @@text
 @@text Client only; these ids were named only in prose under SQ-RB2 before. Targets the `mods/` creativedelight-1.0.0 jar (2026-11-02 14:01) and the pack's `kubejs/assets`.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## CQ-FO-60
 @group client
 @commands Popcorn + Cheese, + Onion, + Garlic, + Crushed Void Pepper; salted popcorn; salted cooked beef: look in hotbar, hand, dropped, JEI Seasoning page; F3+T
@@ -415,8 +405,7 @@ look WTHIT reads "Powdered Sugar" with mod Creative Delight (not "Snow Block" / 
 @@text
 @@text Client only. Targets Creative Common 1.1.07 and the creativedelight-1.0.0 jar in `mods/` (feature shipped 1.1.05).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## CQ-LB-01 | lunchbox names and looks (LB-01, LB-02 tooltip by hand)
 @group client
 @commands run LB-01, LB-02, LB-07 to LB-11: JEI "lunchbox"; hover each tier; smith an empty Copper Lunchbox onto an Iron one; Lunchbag + a berry basket; Copper + red dye, then + blue; dye a skinned box; Soap twice
@@ -440,8 +429,7 @@ look names Copper Lunchbox, Iron Lunchbox, Netherite Lunchbox with copper / iron
 @@text
 @@text Targets creativedelight-1.0.0.jar in `mods/` (2026-11-02 14:01, member `backportedHearth` with the tiered can). Needs a bot player.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-WCT-06 | netherite and dragon watering cans survive lava, golden burns (x 176)
 @group A
 @commands `/setblock ~3 ~-1 ~ minecraft:lava`; `/summon item ~3 ~ ~ {Item:{id:"hearthandharvest:netherite_watering_can",Count:1b},Tags:["wct6n"]}`, same with `dragon_watering_can` (tag `wct6d`) and `golden_watering_can` (tag `wct6g`); wait 5 s; `/execute if entity @e[tag=wct6n]`, `@e[tag=wct6d]`, `@e[tag=wct6g]`
@@ -543,8 +531,7 @@ look the two "[zq] useitem wct8" results: the first SUCCESS / CONSUME, the secon
 @@text
 @@text Targets creativecompat-1.0.0.jar in `mods/` (2026-11-02 18:41, `compat/SpoutGunFarmland`) with Create: Misc and Things 4.0A.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-SGF-01 | Spout Gun water shots wet farmland, wheat kept (x 148..152)
 @group A
 @commands `/fill ~2 ~-1 ~-1 ~4 ~-1 ~1 minecraft:farmland[moisture=0]`; `/setblock ~3 ~ ~ minecraft:wheat[age=2]`; `/summon create_things_and_misc:projectile_spout_gun_water ~2.5 ~3 ~-0.5 {Motion:[0.0d,-1.5d,0.0d]}` and one at `~3.5 ~3 ~0.5` (onto the wheat); wait 2 s; `/execute if block ~2 ~-1 ~-1 minecraft:farmland[moisture=7]` and `~3 ~-1 ~`
@@ -587,8 +574,7 @@ look valid only if SQ-SGF-01 wet its farmland (same summon path)
 @@text
 @@text Targets the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01, nested `backportedVintage-0.1.6-ce-19.2-13`; the `VineTrunkPlacer` fix has been in since port `-04`). Only the client row SQ-VTD4-09 covered this before.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-VTD9-01 | Magic Peanut trees grow without the golden egg (lane x 0..200 z 1000..1060)
 @group A
 @commands `/forceload add 0 0 200 60`; `/place feature vintagedelight:magic_vine_tree X -60 0` for X = 0, 20, ..., 180 (10 trees); `/setblock X -60 40 vintagedelight:magic_peanut` for X = 0, 40, 80, 120, 160 (5 saplings), `/gamerule randomTickSpeed 1000`, wait 60 s, `/gamerule randomTickSpeed 3`; per tree `/fill X-3 -60 Z-3 X+3 -30 Z+3 minecraft:air replace vintagedelight:golden_egg`, then the same with `replace vintagedelight:magic_vine`
@@ -659,8 +645,7 @@ look the 15 egg fills come first (all "No blocks were filled" = no golden egg); 
 @@text
 @@text Targets the Creative Delight jar in `mods/` (2026-11-02 14:01) unless a row says otherwise: Creative Common 1.1.07 for Farmer's Structures, `repackedStorage-25.12.09-1.19-forge-ce-19.2-01` (2026-10-29) for Storage Delight, instance `kubejs/` assets and data for the Farmer's Delight retextures and the sky village houses. Writeups: [fruits_delight.md](../fruits_delight.md) 6, [farmers_delight.md](../farmers_delight.md) 4.6, [delightful.md](../delightful.md) 4, [corn_delight.md](../corn_delight.md) 4, [more_delight.md](../more_delight.md) 4, [storage_delight.md](../storage_delight.md) 4, [nethers_delight.md](../nethers_delight.md) 4.7, [farmers_structures.md](../farmers_structures.md) 4, [abnormals_delight.md](../abnormals_delight.md) 4, [sky_village_addons.md](../sky_village_addons.md) 4.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CORN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
 @group A
 @commands `setblock` farmland + `corn_delight:corn_crop[age=7,upper=false]` / `[age=7,upper=true]`, and an age 3 crop beside it; `pbot spawn cn4 <2 blocks away> minecraft:overworld survival`; `pbot hold cn4 farmersdelight:iron_knife`; 40 times: re-set the age 7 crop, `execute as cn4 run loot spawn <pos> mine <crop pos> mainhand`; `zcount`; then 20 rolls with `pbot hold cn4 minecraft:air`, and 20 knife rolls on the age 3 crop

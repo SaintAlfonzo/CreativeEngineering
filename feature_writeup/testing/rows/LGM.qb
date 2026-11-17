@@ -12,8 +12,7 @@
 @@text `largemeals_upstream/largemeals-1.20.1-1.3.0.jar` next to `mods/`, and the rebuilt Display Delight jar (13 `lm_` blocks); full
 @@text restart (new member, items, startup scripts). Group A (superflat) and a bot player. LGM- ids are the in-game list in large_meals.md 8.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-LGM-01 | Large Meals member loads (LGM-01)
 @group A
 @commands Boot; `grep -nE "largemeals\|Large Meals\|Item is not food\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log`

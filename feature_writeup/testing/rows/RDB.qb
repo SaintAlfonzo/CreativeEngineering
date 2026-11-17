@@ -12,8 +12,7 @@
 @@text (superflat) unless noted. Baseline for -02: the pre-change dumps in `kubejs/exported/` (2026-11-09/10: 270 `rusticdelight`
 @@text recipes in `recipes/all.csv`, items in `items_by_mod/rusticdelight.json`); copy them aside before the run's `/dumpall`.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-RDB-01 | Rustic Delight with no rustic_upstream folder
 @group A
 @commands Boot with no `rustic_upstream/` folder (and no symlink) in the server dir; `grep -i "rustic\|Error occurred while handling event\|Couldn't parse\|Failed to load" logs/latest.log`

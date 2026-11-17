@@ -11,8 +11,7 @@
 @@text change (TODO server #19, perf.md 11.2 #3). Group A. Fresh world folder; the instance's
 @@text `kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz` copied into the scratch server.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-BLC-01
 @group A
 @commands Boot a new world; grep latest.log for `[biome-tuning]` and note the time from `biome_overrides.js` to the next KubeJS line

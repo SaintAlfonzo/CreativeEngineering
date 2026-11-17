@@ -30,8 +30,7 @@
 @@text `eval_server.sh wait OUT "Task finished" 900`; note Chunky's total time. Baseline (perf.md 10.2 #4, same seed and
 @@text square): 5:26, `Done` 119 s. Fill lines: `grep -E '\[(earth|water)-fill\]' logs/latest.log | sed 's/^.*\(\[\(earth\|water\)-fill\]\)/\1/' | sort -u > fill.txt`.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-WGP-01
 @group `wgp_new`
 @commands Boot; grep latest.log for `ChunkGeneratorStructureFrequencyMixin`, `density_function`, `cliffs`, `DimensionFilter`; check the toml has `dimensionFilter`, `sharedTerrainCache` and `sampleGrid = 4`

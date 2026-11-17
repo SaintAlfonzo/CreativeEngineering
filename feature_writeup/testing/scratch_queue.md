@@ -448,10 +448,6 @@
 </details>
 <!-- generated:status_index end queue -->
 
-> **Run the "Priority run" section below first.** Then the **next bulk run (built 2026-10-31, not run):** [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md): every row
-> queued since the 10-28 night run, 202 rows in `tools/scratch_query/batches/r1031/` (server with fake players, then
-> worldgen, then the client, then the longest operations).
-
 <!-- generated:status_index begin rows_PRI_1 sha1=42903a8743a8 -->
 ## Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
 

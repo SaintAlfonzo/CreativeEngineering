@@ -12,8 +12,7 @@
 @@text Full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.31 (ST-306 to ST-315). All in group B
 @@text (fresh normal world, toml `[worldgen.meta_structures] log = true`); one world for all rows.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-META31-01 | metas take slots, replacements, no part errors
 @group B
 @commands boot; `grep 'meta structure(s) take slots\|replacement(s)\|failed to generate as a part' logs/latest.log`

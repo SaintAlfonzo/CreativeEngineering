@@ -178,3 +178,9 @@ Findings (TODO `largecontent/mod-additions #65` to `#73`, `dishes/ingredients #4
 Tooling fixed on the way: `hh_crow_probe.js` (distance overload, goal names), `hh_gear_probe.js` (hand NBT, Forge persistent data, hurt via KubeJS attack); batches written out in `batches/r1111/` (`fix_hh_*.py`, `split_hh_m2wg.py`, hand-written `bw.qb`, `vh12.qb`, `scat*.qb`). Generator gaps for the next SQ-HH run: `hh_queue_to_qb.py` drops prose `capture` lines and prose fixture steps ("hold X", "sneak", "N times", placeholders); every Async Locator locate needs a waitlog before its capture. Queue rows with stale ids or text (batch faults above) are listed per row in the verdict files, not yet rewritten in the queue.
 
 Not run: every client row (CQ-); SQ-VH-11, SQ-OB-11 (no suitable old save); SQ-FDI (Spice of Life: Carrot Edition jar not in `mods/`); SQ-FLR-02 to -05 (Create rig); SQ-BREED-01 (`/dumpbreeding` not written); the SQ-HH batch-fault reruns listed in the verdict files.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- r1111 (steps 1 to 5 done, step 5 = SQ-HH rest, SQ-VH, SQ-OB, SQ-SCAT; [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md))

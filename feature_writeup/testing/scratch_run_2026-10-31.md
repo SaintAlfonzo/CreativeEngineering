@@ -451,3 +451,11 @@ Counts: BATCH-FAULT 5, FAIL 10, OPEN 18, PASS 134 (total 167 row results, reruns
 words (BROKEN where a FAIL applies) and TODO.md (8 new Bug rows). Open point for the owner: SQ-RW-23 recorded as
 Botania + driftwood wrongly smokable; whether crimson / warped should smoke is the owner's call (RW-23 expects crimson).
 All scratch servers stopped; scratch worlds stay in the session scratchpad until it is cleared.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-10-31 bulk run r1031 ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) sections 7-8; client block, L1-L4, W2 rest and W3 deferred)
+- Gap-fill rows (seed pouch, smoked wood) added 2026-10-30 at the bottom. Refreshed 2026-10-27 against the unreleased changelog: new section "Texture fixes, 2026-10-27" at the bottom (crop, platter and fridge missing textures), moreMooblooms 1.1.0 rebuilt 2026-10-27 00:14 (needed for CQ-JT-09). Earlier refresh 2026-10-25: new entries SQ-MDP-05 to -13, SQ-RM, SQ-SK, CQ-NEW-04 to -06; SQ-FN and the Round 0 / jar-state notes corrected. Every change a player can notice in `unreleased.md` now has a row.
+- **Run the "Priority run" section below first.** Then the **next bulk run (built 2026-10-31, not run):** [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md): every row queued since the 10-28 night run, 202 rows in `tools/scratch_query/batches/r1031/` (server with fake players, then worldgen, then the client, then the longest operations).

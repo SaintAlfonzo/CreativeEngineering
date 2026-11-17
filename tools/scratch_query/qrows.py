@@ -21,6 +21,7 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
                               (qrun.py plan still plans it when a jar or source changes)
     @@text LINE               one markdown line of the section, verbatim ('@@text' alone = blank line)
     @@table                   the standard table header: | ID | Group | Commands | Pass | If it fails | and |---|...
+    @@table world             the same with World in place of Group (rows that need a particular world; DR-W4)
     ## ID | title             a row (ID exactly as the queue shows it)
     @group / @commands / @pass / @fails TEXT     the table cells (columns 2 to 5; @c6, @c7 for wider tables)
     @jars / @sources / @tier  override the section defaults
@@ -55,6 +56,7 @@ RUNS = ROOT / 'perf/runs'
 FEATURES = ROOT / 'feature_writeup/status/features.csv'
 
 STD_HEAD = '| ID | Group | Commands | Pass | If it fails |'
+WORLD_HEAD = '| ID | World | Commands | Pass | If it fails |'
 STD_SEP = '|---|---|---|---|---|'
 CELL_KEYS = ['id', 'group', 'commands', 'pass', 'fails']
 ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
@@ -128,7 +130,9 @@ def load(path, errors=None):
 				sec['items'].append(('text', raw[7:] if raw.startswith('@@text ') else ''))
 			elif word == 'table':
 				row = None
-				sec['items'] += [('text', STD_HEAD), ('text', STD_SEP)]
+				if rest.strip() not in ('', 'world'):
+					bad(n, '@@table takes nothing or "world"')
+				sec['items'] += [('text', WORLD_HEAD if rest.strip() == 'world' else STD_HEAD), ('text', STD_SEP)]
 			elif word in SECTION_META:
 				sec['meta'][word] = rest
 			else:
@@ -226,8 +230,8 @@ def write_qb(path, code, sections, header=None):
 		while i < len(items):
 			kind, x = items[i]
 			if kind == 'text':
-				if x == STD_HEAD and i + 1 < len(items) and items[i + 1] == ('text', STD_SEP):
-					lines.append('@@table')
+				if x in (STD_HEAD, WORLD_HEAD) and i + 1 < len(items) and items[i + 1] == ('text', STD_SEP):
+					lines.append('@@table' if x == STD_HEAD else '@@table world')
 					i += 2
 					continue
 				lines.append(('@@text ' + x) if x else '@@text')

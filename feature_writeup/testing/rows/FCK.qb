@@ -10,8 +10,7 @@
 @@text
 @@text Double fridges (`kitchen #36`) not built, no row. Moobloom rules: no row (generator output identical). SQ-FCB-08 (cookware pickup) needs `[qol] cookwareKeepContents = false` now, or expect the stocked item.
 @@text
-@@text | ID | Side | Check | Expect | Failure means |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-FCK-01 | weeds blacklisted, Rich Farmland fertile; clicks on weeds change nothing; weeds place on three soils
 @group A
 @commands Tag probe `#quark:simple_harvest_blacklisted`, `#immersive_weathering:fertile_blocks`; fake player right-clicks `immersive_weathering:weeds[age=7]` on farmland (empty hand, then iron hoe); places the weeds item on `farmersdelight:rich_soil_farmland`, `farmersdelight:rich_soil`, `immersive_weathering:mulch_block`

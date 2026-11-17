@@ -10,8 +10,7 @@
 @@text
 @@text Targets the Creative Delight jar built 2026-11-02 21:10 (nests `backportedMiners-1.4.5-ce-19.2-05`, `repackedDelightful-3.4.1-ce-19.2-01`); not in `mods/` yet, install it first. Registry change: also boot once on a copy of a world that holds cups (old ids drop, no conversion).
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CUP-01 | Miner's Delight without the copper cup family: data loads, no cup id anywhere
 @group A
 @commands boot; `grep -nE "Cup conversions\|cup_conversion\|miners_delight:[a-z_]*cup\|cactus_soup_cup\|Error occurred while handling event" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log`

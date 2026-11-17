@@ -11,8 +11,7 @@
 @@text Creative Common 1.1.03 with `worldgen/TiedBiomes` (prediction only; generation unchanged). Group B. Fresh world on the
 @@text `wgp` seed (the perf.md 10.9 census worlds), census at the same center so the 10 known positions are inside.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-TIE-01 | census 96 at 4000 4000: falseNegatives 0, built equal to wgp_new, no reflection error
 @group B
 @commands Boot; `/cwglocate census 96` at the perf.md 10.9 center; read `kubejs/exported/worldgen/locate_census.json`; grep latest.log for `locate reflection` and `f_48435_`
@@ -33,8 +32,7 @@ look built per structure equal to wgp_new (generation unchanged; 6 structures di
 @@text
 @@text Creative Common 1.1.03 `AllurementItemCurses` (ItemPhysic + Allurement). Group A, any world with both mods.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-IP-15 | Allurement curses under ItemPhysic: Ascension item rises, Fleeting pushes a mob
 @group A
 @commands `/give` a sword with `allurement:ascension_curse` 1 and one with `allurement:fleeting_curse` 1; drop each (Q) near a mob

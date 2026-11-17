@@ -183,3 +183,9 @@ FAIL: SQ-VP-06, SQ-VTD6-01, SQ-FDB-04, SQ-RD-22, SQ-CDF-08, SQ-MRD-01, SQ-LEM-01
 SQ-LGM-10, SQ-POT-03, SQ-POT-04, SQ-FSD-02, SQ-PSU-06; owner decision SQ-PSU-09; boot crash in Creative Calendar
 (fixed, installed 18:41). Postponed by the user: worldgen slice (54 rows). Not run, stopped by the user 2026-11-02:
 s5_B2 (SQ-PSM-06, -06b, -07), reruns s1_R (9), r_A (28), r_B (6, with SQ-RD-22), r_B2 (1), s5_R_A / A2 / A3 (27).
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-02 evening bulk run r1102b (stopped by the owner; [scratch_run_2026-11-02b.md](scratch_run_2026-11-02b.md) section 8, handover perf/runs/r1102b/HANDOVER.md)

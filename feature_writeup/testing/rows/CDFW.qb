@@ -10,8 +10,7 @@
 @@text
 @@text Needs the Creative Delight jar built 2026-11-01 20:38 or later (cd_core genPut/genMerge, startup `<mod>/can_types.js` and `can_servings.js`, cans.js) and the pack's `kubejs/data/creativedelight/kubejs` tree: full restart. Group A (superflat). Offline already PASSED: CDT-08, CDT-10, CDT-13, CDT-14, FFH-03.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-CDFW-01 | CD framework counts at boot
 @group A
 @commands Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head`

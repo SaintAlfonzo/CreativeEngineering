@@ -13,8 +13,7 @@
 @@text `food_dict.js`, `food_types.json`: full restart. Group A (superflat). Client rows (BBQ-04 WTHIT, renderers, the flip
 @@text hint) are in the in-game suite, not here.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-BBQ-01 | Barbeque's Delight member loads, no recipe or compost warning
 @group A
 @commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|failed to parse\|missing" \| head`; `grep -n "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log \| grep -i "warn\|error" \| head`

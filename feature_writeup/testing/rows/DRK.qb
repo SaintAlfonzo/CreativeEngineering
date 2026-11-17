@@ -10,8 +10,7 @@
 @@text
 @@text Needs the Creative Delight jar rebuilt after 2026-11-02 (startup `creativedelight/drinks.js` and `fluids.js`) and the pack's `item_dict.js`, `fluid_dict.js`, `food_dict.js`: full restart. Group A (superflat). Recipe ids are `creativedelight:<type>/<suffix>`.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-DRK-01 | drink scripts load clean; 14 items and 17 fluids registered
 @group A
 @commands Boot; `grep -nE "Error occurred while handling event\|drinks.js\|drink_tags.js\|kettle.js" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log \| head -30`; `grep -n "\[NCH\]" logs/kubejs/server.log \| grep -iE "tea\|juice\|coffee\|latte\|nectar" \| head`
@@ -365,8 +364,7 @@ look first run (perf/runs/r1102b/s5/rows/SQ-DRK-06.log): azalea/pink/lavender/co
 @@date 2026-11-02
 @@jars creativedelight
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-DRK-01
 @group C
 @commands Client with the rebuilt CD jar; JEI the new teas and juices; hover the renamed drinks; drink one

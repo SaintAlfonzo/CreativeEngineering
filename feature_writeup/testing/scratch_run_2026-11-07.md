@@ -461,3 +461,12 @@ signal. No gameplay change, no changelog bullet (test-only).
 
 - CQ-CCO-02: PASS (creative inventory speed good, no Heartstone issue). CQ-CCO-03: WorldEdit worked; whistle arrow, Quark, player gravity PASS; **Create Gravity in the End: falling blocks do not get low gravity, owner expects every entity in the End to** (TODO `creativecommon/publish #3`, now also a possible real gap, not only a test-set difference).
 - CQ-SPFX-02 stays PARTIAL; open part = (a) launch with Immersive Portals (and Portal Gun) removed: no `Heartstone LevelRendererMixin` line, title screen reached; (b) two bonded players (server join): the partner keeps the Heartstone outline.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-07 targeted run r1107cco (Creative Common with its optional mods, SQ-CCO server rows, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 4)
+- r1107cc (Creative Common SQ-CC + SQ-CPP server rows, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 3)
+- r1107tp2 (SQ-TP-31..39 + reruns, all PASS, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 2)
+- r1107tp (SQ-TP server rows, same doc 1)

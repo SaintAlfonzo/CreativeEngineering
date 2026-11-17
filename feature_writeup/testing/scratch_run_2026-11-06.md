@@ -628,3 +628,12 @@ SQ-CBC-01 still has it). Tooling: `zq count` takes an optional dimension.
   it needs a deploy payload (skill `release`, `apply.sh client`), not loose jars.
 - Immersive Portals, Portal Gun, Portal Gels are still in `mods/`: with Serene Seasons a world still crashes at creation
   (SQ-SPFX-01).
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-06 night targeted run r1106spfx (SQ-SPFX, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 7)
+- r1106spf (same doc 6), r1106cbp (5), r1106cbo (SQ-CBC and SQ-CBO server rows, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 4)
+- the 2026-11-06 targeted run r1106cbb (SQ-CBB server rows, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 3)
+- the 2026-11-06 targeted run r1106cba (SQ-CBA server rows, same doc 1)

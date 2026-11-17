@@ -17,8 +17,7 @@
 @@text then `python3 tools/flower_pot_audit.py` (prints mismatches and exceptions; read the matrix's "Probe against
 @@text prediction" section).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-POT-01
 @group A or B
 @commands `/dumppots`

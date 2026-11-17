@@ -108,3 +108,9 @@ Boot 5 (group B cdj5b, seed 8675309, Chunky squares radius 300):
 | SQ-FGD-14 | FAIL | rooted dirt everywhere (DF 15587, TA 14519, BI 2343, SW 581), `fungidelight:truffle_dirt` 0 in all four squares; row: "modifiers ran truffle before blob" (placed_feature wild/truffle_dirt_ore, wild_crops.json) |
 | SQ-FGD-15 | not judged | 3 animals in five squares (3 morel cows in mangrove swamp); chunk-generation spawns sparse (gotchas) |
 - 02:35 Boot 5 done and stopped; verdicts above. Client block not run (queue pin). Run ends.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-02 targeted run r1102 (SQ-CDJ5, [scratch_run_2026-11-02.md](scratch_run_2026-11-02.md) section 8)

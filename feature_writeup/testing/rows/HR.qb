@@ -11,8 +11,7 @@
 @@text Needs the CD jar built 2026-10-31 (member `backportedHearth 1.4.1-ce-19.2-01`) installed; full restart (new member,
 @@text items, worldgen). Group A (superflat) and a bot player, except SQ-HR-05 (group B, new chunks).
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-HR-01 | raspberry member loads
 @group A
 @commands Boot; grep `latest.log` for `hearthandharvest`, `raspberr`, `Error occurred while handling event`
