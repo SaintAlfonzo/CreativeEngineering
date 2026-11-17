@@ -35,7 +35,7 @@ waitlog Reloading!|reload 60
 sleep 15
 shell cat logs/kubejs/startup.log logs/kubejs/server.log | grep -E "\[ERROR\]" | head -5; test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -cE "\[ERROR\]")" = 0
 reject NoClassDefFoundError|ClassNotFoundException
-look stop is clean (the runner's stop: no exception after "Stopping server" in latest.log). SQ-CCO-13 (r1107cco) passed the same set on the 11-07 jar; this is the 11-12 jar
+look stop is clean (the runner's stop: no exception after "Stopping server" in latest.log). SQ-CCO-13 (r1107cco) passed the same set on the 2026-11-07 jar; this is the 2026-11-12 jar
 
 ## SQ-CMV-03 | Armor Trims 1.4.0 outside [1.3.3,1.4): one WARN, its mixins off, boots clean
 @group B

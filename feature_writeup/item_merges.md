@@ -1,6 +1,6 @@
 # Item merges (total replacements)
 
-Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), shipped 1.1.01, not tested in game. Cantaloupe (2.10) built 2026-10-28, scratch PASSED (SQ-CM), shipped 1.1.04 / 1.1.05. Food merges 2.13 to 2.15 (2026-11-01 / 11-02): scratch PASSED r1102b, unreleased (deep scan 2026-11-02). KubeJS,
+Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), shipped 1.1.01, not tested in game. Cantaloupe (2.10) built 2026-10-28, scratch PASSED (SQ-CM), shipped 1.1.04 / 1.1.05. Food merges 2.13 to 2.15 (2026-11-01 / 2026-11-02): scratch PASSED r1102b, unreleased (deep scan 2026-11-02). KubeJS,
 plus patcherMod for 2.6 (fluid tooltips) and 2.7 (worldgen): a full restart is needed.
 Still in game: MG-01, MG-02, MG-04, MG-05, MG-07, MG-13 (2.1 to 2.5), MG-16, MG-17, MG-20 (JEI tooltips), the MG-21
 names, and the machine runs of MG-18 / MG-19. Coffee (2.8, built, scratch server PASSED 2026-10-22 for the recipe and effect parts: SQ-CO-01, SQ-CO-02, `tools/food_drinks_probe/food_drinks_probe.js` `/fdtest coffee`, after two fixes in 2.8); in game MG-23 (JEI), MG-24 (drinking), MG-25 (inventory swap, real player only), MG-26 (JEI), MG-27 (JEI), MG-28 (an old bush).
@@ -217,7 +217,7 @@ bricks and the 17 lamps stay.
 - Tags: salt dust joins `#forge:salts` (The Salt's Salting craft), `#forge:dusts`, `#supplementaries:hourglass_dusts`.
 - Loot: cauldron evaporation (`kubejs/data/salt/loot_tables/cauldron_evaporation/salt_{full,level_1,level_2}.json`)
   gives salt dust, same chances. Everything else (butcher trades, mod code) through the loot and inventory swaps.
-- Worldgen: Vintage's beach salt patch lays The Salt's raw rock salt block under its layers (owner 2026-10-26; was
+- Worldgen: Vintage's beach salt patch lays The Salt's raw rock salt block under its layers (owner, 2026-10-26; was
   The Salt's Salt Block, which dissolved by the sea) (`tools/gen_soil_compat.py` `STATE_SWAPS`,
   `kubejs/data/vintagedelight/worldgen/configured_feature/patch_salt.json`).
 - Large Salt Lamp: The Salt's lamp, renamed (`namechanges.js`). Recipe `large_salt_lamp` (CD `salt.js`): Vintage's
@@ -310,7 +310,7 @@ stay and keep fruiting; their leaves are typed `autumn_fruit` like Vinery's. The
 unchanged and its tooltip shows the Vinery apple tree's seasons. Apple jelly, jello and crates stay (made from apples).
 The Botany Pots apple recipe goes through the recipe swap onto the Vinery sapling.
 
-Q21 (owner 2026-11-07, "merge Fruits Delight's apple into Vinery's"): checked 2026-11-07, nothing is left to build.
+Q21 (owner, 2026-11-07, "merge Fruits Delight's apple into Vinery's"): checked 2026-11-07, nothing is left to build.
 Neither mod has its own apple item: both trees drop `minecraft:apple`, so the apple is already one item; the sapling and
 leaves are the two pairs above. Decision on what a Fruits Delight apple tree becomes: an existing one stays as it is
 (its trunk and Fruits Delight apple leaves, still fruiting vanilla apples, `autumn_fruit` season); it is not converted
@@ -349,7 +349,7 @@ Pair: Creative Delight `kubejs_startup/pneumaticcraft/item_merges.js`. Server ha
 sliced potatoes, in a bowl; was on a paper plate); the grid route (Fries + cooked fish + bowl) left with the Fries. Veggies Delight's two pot recipes (raw fish, potato, egg; its More Delight diced-potato version) are removed as
 duplicates. The survivor's food is Veggies Delight's (10, 12 saturation points, returns the bowl), not PneumaticCraft's
 (12, 24, no container). The "chips are fries" tooltip moved to the survivor. Fries (`pneumaticcraft:chips`) are
-removed outright (owner 2026-11-01, not a merge: no survivor): CD startup `pneumaticcraft/pneumatic_items.js`
+removed outright (owner, 2026-11-01, not a merge: no survivor): CD startup `pneumaticcraft/pneumatic_items.js`
 (removedItems), the pack's frying recipe gone, Canned Chips dropped from `gen_can_types.py`; `dishes/meals #34` closed.
 
 Tests: SQ-MG-21, SQ-VDF-07 (scratch); MG-48 (in game: JEI shows one Fish and Chips with the frying route, an old Cod 'n' Chips in an
@@ -360,8 +360,8 @@ inventory turns into Fish and Chips).
 **Undone 2026-11-04** (plan_meals_rolls_bbq.md C3, owner: the End Skewer takes Ender's Shulker Mollusk only): both pairs
 removed from `merges_endersdelight.json`, the chance-0 knife loot override deleted (Ender's knife drop is upstream's again)
 and the mollusk-to-filet cut restored. Every other recipe keeps End's meat: the stuffed shulker (pot and heatless) takes End's
-shulker meat. Canned Shulker Flesh stays on End's meat and slice. Stacks a world merged between 11-02 and 11-04 stay End's
-meat (no conversion back). Text below is the 11-02 state.
+shulker meat. Canned Shulker Flesh stays on End's meat and slice. Stacks a world merged between 2026-11-02 and 2026-11-04 stay End's
+meat (no conversion back). Text below is the 2026-11-02 state.
 
 | Purged | Survivor |
 |---|---|
@@ -712,7 +712,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
   `server_scripts/engineering/mob_resources.js` (creosote filling and bottling of rotten flesh and Architect's Palette's
   rotten flesh block, smoking to leather, 9 to 1 block). Why no custom texture showed: the pack sprite sat at
   `kubejs/assets/prepared_flesh.png` (no namespace, never loaded) while JRFTL's own model drew its own sprite; since
-  10-31 it is at `kubejs/assets/jrftl/textures/item/prepared_flesh.png` (`textures/merges #9`), and the stray root copy
+  2026-10-31 it is at `kubejs/assets/jrftl/textures/item/prepared_flesh.png` (`textures/merges #9`), and the stray root copy
   was deleted 2026-11-02. JRFTL question closed (jar removed). Unchecked in game: both textures after a full restart.
 
 ### 5.6 Mobs (`merges/mobs`)

@@ -1,7 +1,7 @@
 # Melting: salt, fire and lava melt ice and snow (Creative Common)
 
 Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/creativeCommon`), scratch rows queued
-(section 7), not run. Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner 2026-11-14). TODO
+(section 7), not run. Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner, 2026-11-14). TODO
 `creativedelight/members #56`. Related: [salt.md](salt.md) (The Salt's item click and the switched-off block melt).
 
 ## 0. At a glance

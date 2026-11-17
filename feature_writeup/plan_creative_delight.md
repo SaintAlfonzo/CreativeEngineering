@@ -1,6 +1,6 @@
 # Creative Delight execution plan (2026-11-02)
 
-Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; plan J and the remaining open rows built 2026-11-02 night (section K), not booted. **Deep scan 2026-11-02:** the installed CD jar (11-02 14:01) nests Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03` (later than the H and I progress lists); the 21:10 build (copper cup removal) is not installed. Rerun status (r1102b, judged): SQ-CDJ-12 (I8) and SQ-MDP-18 (I7) PASS, SQ-VTD8-02 (b) PASS; the other I reruns (SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-LOOT-FD1, SQ-VTD8-01 rewrite) were not in the r1102b scope, and SQ-FGD-14 / SQ-FGDC sit in its postponed worldgen slice. Only owner decisions already on record are listed as work; open questions are listed in
+Status: G steps 1 to 3 BUILT 2026-11-02 (see section H); fix plan I built 2026-11-02 afternoon (I progress), rerun queued; plan J and the remaining open rows built 2026-11-02 night (section K), not booted. **Deep scan 2026-11-02:** the installed CD jar (2026-11-02 14:01) nests Veggies `-05`, Vintage `-13`, Fungi `-02`, Miner's `-05`, Display `-03` (later than the H and I progress lists); the 21:10 build (copper cup removal) is not installed. Rerun status (r1102b, judged): SQ-CDJ-12 (I8) and SQ-MDP-18 (I7) PASS, SQ-VTD8-02 (b) PASS; the other I reruns (SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-LOOT-FD1, SQ-VTD8-01 rewrite) were not in the r1102b scope, and SQ-FGD-14 / SQ-FGDC sit in its postponed worldgen slice. Only owner decisions already on record are listed as work; open questions are listed in
 section F and not resolved here. Row ids refer to [todo/TODO.md](todo/TODO.md); background is
 [creative_delight.md](creative_delight.md) (sections 35 to 38). Every change that touches game data adds its live checks to
 [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch boot until the owner says so) and a bullet to
@@ -319,7 +319,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 Deploy tooling fixed in the same run: `build_deploy.py` `CATEGORIES` lacked `oceanic_upstream` and `enders_upstream`
 (KeyError on any deploy build) and now carries them plus `goldenfood_upstream`, with server and client copy steps;
 `gen_structure_config.py` reads the End House from `enders_upstream/` (it had dropped the set since the member began
-reading the donor on 11-01); `structure_config.json` regenerated, identical apart from that source line. The dry run's
+reading the donor on 2026-11-01); `structure_config.json` regenerated, identical apart from that source line. The dry run's
 only remaining preflight error is three FTB jars with no `mod_sides.md` row (not from this run).
 
 Later the same night (owner): Golden Food Q2, the enchantment, its anvil route and the village books removed; 23 enchanted

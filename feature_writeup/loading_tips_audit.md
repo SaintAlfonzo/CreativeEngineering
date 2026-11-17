@@ -48,7 +48,7 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
   files themselves.
 - Quark's Nerf Mending and Dimension Locked Elytra were turned off on 2026-11-14 (owner), after this audit first
   applied them; the Mending and elytra tips (54, 98) describe vanilla behaviour again.
-- **A later pass will change more tips** (owner 2026-11-14). This audit fixed tips the pack makes wrong; a second
+- **A later pass will change more tips** (owner, 2026-11-14). This audit fixed tips the pack makes wrong; a second
   pass, describing the pack itself, will override more of them with the pack's own facts, for example golden and
   gilded foods (tip 68) and ice melting near light (tip 87). Those tips are true but generic until then. That pass
   joins the Creative Tips content plan ([plan_creative_tips.md](plan_creative_tips.md)) and edits entries by id.

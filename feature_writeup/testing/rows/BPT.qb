@@ -9,7 +9,7 @@
 @@sources feature_writeup/creative_compat.md
 @@text
 @@text Not run. Built 2026-11-06 13:17 (`creativecompat-1.0.0.jar` in `development/creativeCompat/build/libs/`), NOT installed
-@@text (`mods/` has the 11-05 22:08 jar, which still carries the 98 banner textures and the TrashSlot overwrite). Offline: the
+@@text (`mods/` has the 2026-11-05 22:08 jar, which still carries the 98 banner textures and the TrashSlot overwrite). Offline: the
 @@text banner builder reproduces all 73 old textures from `mods/*.jar` pixel for pixel and adds Neapolitan's 2 patterns. The
 @@text banner pack and the TrashSlot mixin are client-only, so most rows need a client.
 @@text
@@ -36,7 +36,7 @@ look the shell output is empty (no TrashSlot mixin error)
 ## CQ-BPT-02
 @group client
 @commands Creative world: loom a bed-sized banner with a Botania pattern (Tiny Potato), an IE pattern (Hammer), Buzzier Bees (Honeycomb) and Neapolitan (Chimpanzee); apply each to a Bedspreads bed; apply to a Customizable Elytra and wear it (F5), video setting low and normal elytra quality if offered
-@pass LOOK: each pattern on the bed quilt and on both wings, placed like the mods' own patterns (as with the 11-05 jar); Neapolitan's Chimpanzee now shows (before: nothing)
+@pass LOOK: each pattern on the bed quilt and on both wings, placed like the mods' own patterns (as with the 2026-11-05 jar); Neapolitan's Chimpanzee now shows (before: nothing)
 @fails atlas: `BannerPatternAtlasCompat` (file check through the resource manager); paths must stay `creativeengineering:textures/entity/<ns>/<id>.png` and `elytra_banner[_low]/<ns>/<id>.png`
 @owner true
 @draft loom work, the Bedspreads quilt recipe and the elytra in third person are several GUI and crafting steps whose result is a placement judgement against the mods own patterns: owner playtest (the atlas side is CQ-BPT-01 and -03)
@@ -55,7 +55,7 @@ look the shell count is 1 before and after the reload (cached); patterns still d
 ## CQ-TSL-01
 @group client
 @commands Single player, survival: run [trashslot.md](../trashslot.md) 7 TS-01, TS-03, TS-04, TS-06, TS-11; then `/gamemode creative` and run TS-08, TS-09, TS-10, and open the survival inventory tab while creative
-@pass same as the 11-05 jar: slot on the inventory and workstations, off on shulker and hopper; creative screen has the slot and the delete key removes only the hovered item; LOOK: no slot left drawn from the previous screen
+@pass same as the 2026-11-05 jar: slot on the inventory and workstations, off on shulker and hopper; creative screen has the slot and the delete key removes only the hovered item; LOOK: no slot left drawn from the previous screen
 @fails the redirect targets in `TrashSlotGuiHandlerMixin` (TrashSlot 12.1.0 bytecode: `getScreen` ordinal 1, `Abilities.f_35937_`, `Player.m_5833_`, `TrashSlotSaveState.getSettings`)
 @owner true
 @draft TrashSlot tests TS-01 to TS-11 click the trash slot and drag items across screens (the slot is drawn by TrashSlot, not a container slot the driver can address): owner playtest

@@ -36,7 +36,7 @@ look [can servings] is 313 less cans of absent mods (rows/SQ-CDFW-01.shell.txt);
 > dumptags item
 waitlog \[dumptags\] wrote 600
 shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:food_type creativeengineering:canned_source creativeengineering:cans/servings
-look sizes equal to the 10-30 instance dump except items of absent mods and the 11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
+look sizes equal to the 2026-10-30 instance dump except items of absent mods and the 2026-11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
 
 ## SQ-CDFW-03 | placeable tags unchanged (tooltips: client)
 @group A

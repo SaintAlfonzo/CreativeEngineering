@@ -209,7 +209,7 @@ has its own. All four stack to 64 and have no durability.
 **Baking overhaul (2026-10-22, from the user's scratchpad notes).** Every recipe of every mod whose result is a
 cake, pie, cookie, pie crust or cake base is removed (baking.js `REMOVED_OUTPUTS`: KubeJS `remove({ output })`, except
 `*_from_slices` reassembly and the pack's own recipes). Each family is rebuilt on one shared base plus 2 of its flavour.
-The old mirrors of every mod's recipe (38, 2026-10-18 to 10-21) are gone. Muffins and tarts are unchanged.
+The old mirrors of every mod's recipe (38, 2026-10-18 to 2026-10-21) are gone. Muffins and tarts are unchanged.
 
 "Manual craft" is a shapeless craft with an id ending `_manual_only`, which Create's mixer and mechanical crafter skip.
 Every base is manual craft or oven only: no Create or IE machine recipe (the removal takes every other mod's, and the
@@ -374,7 +374,7 @@ Every baking recipe asks for bakeware (2.6). The tool is never used up. Filter: 
 
 - Insert: bakeware to the tool slot; a plating container (what the waiting result needs, or what any baking recipe
   is served in; since 2026-11-03 was only the last recipe's) to slot 8; anything else to the ingredient slots.
-- Extract: output slot, then the two leftover slots (handler slots 10-11).
+- Extract: output slot, then the two leftover slots (handler slots 2026-10-11).
 - Containers only in slot 8 (2026-11-03, [remainder_buffer.md](remainder_buffer.md) 3.8): the oven's inventory refuses a
   container in an ingredient slot by hand, shift-click and automation alike, unless a baking recipe also takes it as
   an ingredient (logged at load).
@@ -406,17 +406,17 @@ overrides the muffin recipe ids. If muffins still can't be cooked in game, the c
 
 ## 4. Limits and decisions
 
-- **Route:** Java in patcherMod (user, 2026-10-18). A KubeJS block entity was rejected: chest GUI only, no item
+- **Route:** Java in patcherMod (owner, 2026-10-18). A KubeJS block entity was rejected: chest GUI only, no item
   capability for hoppers, no recipe type.
-- **No durability** on bakeware (user, 2026-10-18).
-- **Recipes mirror the originals, originals stay** (user, 2026-10-18; SUPERSEDED 2026-10-22 by the baking overhaul,
+- **No durability** on bakeware (owner, 2026-10-18).
+- **Recipes mirror the originals, originals stay** (owner, 2026-10-18; SUPERSEDED 2026-10-22 by the baking overhaul,
   2.6): the mirrors are gone. Every cake, pie and cookie recipe is rebuilt on shared bases (cake base, pie crust,
   frosting, cookie dough), cookies are oven only, and the oven is the efficient route while the hand-craft route stays
   for cakes and pie fillings. Bakeware by kind and paper plating for muffins are unchanged. No shepherd's pie.
-- **Taking several items from one slot is opt-in** (user, 2026-10-18): `[cooking] ovenIngredientCounts`, default off.
+- **Taking several items from one slot is opt-in** (owner, 2026-10-18): `[cooking] ovenIngredientCounts`, default off.
   By default a repeated ingredient takes a slot per item (as in the FD pot). With the overhaul no recipe needs more
   than 6 slots, so nothing is trimmed (2.6.1); the option only changes how repeats are stored.
-- **Bakeware by hammering** (user, 2026-10-18): plate -> baking sheet -> muffin tin -> pie tin -> cake pan, cutting
+- **Bakeware by hammering** (owner, 2026-10-18): plate -> baking sheet -> muffin tin -> pie tin -> cake pan, cutting
   board or grid. The ids stay `pie_tin` / `muffin_tin` (the ask said "pie pan", "muffin pan").
 - **Heat conductors allowed** (as FD). **Furnaces aren't oven heat** (stoves-and-ovens group). Brewin's
   `heating_cask` isn't in the tag. It was written when the pack's Brewin 2.0 jar had no such block; the 4.5.0 port

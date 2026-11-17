@@ -106,7 +106,7 @@ look sky island located (ids are creativeworldgen: since the Worldgen carve; the
 ## SQ-ENGM-03 | TNT shrapnel spawns (Compat); torch and seed milling recipes under creativedelight:; tags filled; wooden bucket recipe
 @group B (same boot)
 @commands `> summon minecraft:tnt ~ ~ ~ {Fuse:1}` near a scratch area, `> kill @e[type=creativeengineering:shrapnel]` count; `/cdevtest recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `> forge tags minecraft:item get creativeengineering:millable_seeds`, `vinery` barrel tag, a mulch tag; `/zq recipes` of a wooden bucket recipe
-@pass shrapnel entities spawn (Compat); torch and seed milling recipes present under `creativedelight:`; millable seeds tag has the same members as `kubejs/exported/tags` (11-05 dump); barrel and mulch tags filled; wooden bucket item and its recipe present
+@pass shrapnel entities spawn (Compat); torch and seed milling recipes present under `creativedelight:`; millable seeds tag has the same members as `kubejs/exported/tags` (2026-11-05 dump); barrel and mulch tags filled; wooden bucket item and its recipe present
 @fails the tag ran before `#forge:seeds` was complete in Delight's script pack order
 @reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
@@ -129,7 +129,7 @@ expect verb=tag kind=item tag=forge:mulch/green n=[1-9]
 > cdevtest makes creativedelight:wooden_bucket
 expect verb=makes item=creativedelight:wooden_bucket n=[1-9]
 reject \[cdevtest\] .*done=0
-look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag creativedelight:millable_seeds (row: creativeengineering:), the wooden bucket creativedelight:wooden_bucket; millable_seeds count equals the pack dump's (11-10). If no shrapnel is killed, the 0.4 s window may have been too long (shrapnel lifetime): rerun with `sleep 0.1` before judging
+look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag creativedelight:millable_seeds (row: creativeengineering:), the wooden bucket creativedelight:wooden_bucket; millable_seeds count equals the pack dump's (2026-11-10). If no shrapnel is killed, the 0.4 s window may have been too long (shrapnel lifetime): rerun with `sleep 0.1` before judging
 
 ## SQ-ENGM-04 | [surface] [shrapnel] values in Compat's file as in the old Engineering file (excavation half: client)
 @group B (same boot)
@@ -139,7 +139,7 @@ look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag
 @from batches/r1113/c3_b1.qb
 shell grep -nE "^\[(surface|shrapnel|vein_undo)\]" config/creativecompat-common.toml
 shell diff <(git -C "$INST" show 85104427:config/creativeengineering-common.toml | sed -n '/^\[surface\]/,/^\[vein_undo\]/p' | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') <(sed -n '/^\[surface\]/,/^\[vein_undo\]/p' config/creativecompat-common.toml | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') | head -20; echo "diff exit ${PIPESTATUS[0]}"
-look no diff lines (or only keys added since 11-06) between the old Engineering [surface] values and Compat's; the Ore Excavation undo / auto-pickup half needs the client excavation key (not driven by perfBot): left for CQ-ENGM-01
+look no diff lines (or only keys added since 2026-11-06) between the old Engineering [surface] values and Compat's; the Ore Excavation undo / auto-pickup half needs the client excavation key (not driven by perfBot): left for CQ-ENGM-01
 
 ## SQ-ENGM-05 | chain boot as r1106cbp p1: CD transition items, failed recipes under 50, no new Compat / Delight script error
 @group A (chain, CEPortTesting)

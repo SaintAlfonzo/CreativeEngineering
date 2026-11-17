@@ -194,5 +194,5 @@ trees), own GPLv3 code plus the AFL 3.0 notice for upstream art and lang. Licenc
 ## 7. History
 
 - 2026-10-30: survey written from the jar (lang, recipes, `javap` of item, effect and procedure classes) and the pack
-  dumps (`display_names.json` of 10-20, `food/catalog.json` of 10-25, item tags, recipe ids) plus the Creative Delight
+  dumps (`display_names.json` of 2026-10-20, `food/catalog.json` of 2026-10-25, item tags, recipe ids) plus the Creative Delight
   member sources for items added after the dumps.

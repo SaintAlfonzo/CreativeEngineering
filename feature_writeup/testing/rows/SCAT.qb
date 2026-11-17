@@ -65,7 +65,7 @@ look build ended; RECORD seconds, refused count, ids and reasons
 @owner true
 ## CQ-SCAT-14
 @group client
-@commands In a world built with the 2026-11-15 rules (Devtools 11-15), walk Village > Villager Houses > Weaponsmith, then Ruins
+@commands In a world built with the 2026-11-15 rules (Devtools 2026-11-15), walk Village > Villager Houses > Weaponsmith, then Ruins
 @pass LOOK: one Savanna column holds the vanilla savanna, Iberian and Mediterranean smiths (no separate Iberian, Savanna zombie or Acacia column); no Terralith Desert or Badlands Pueblo columns anywhere; Ruins has a Village ruins subfamily with 3 columns of Forest Ruins pieces, and Village has none
 @fails `biomeFamilies` and `pieces.reroute` in `structure_world.json`, `CatalogueRules.fold`
 @draft walk a built Structure Catalogue world and judge the layout by eye (owner playtest)

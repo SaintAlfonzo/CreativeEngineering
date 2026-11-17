@@ -188,7 +188,7 @@ processor assigns it (MES, YUNG's) or when another mod's structure places it.
 | Botania | | 6 | `inject/` | | code pools (+ black lotus entries) |
 | Old Guns | | 6 | top level | | GLM sub-tables (shipwrecks, dungeon, weaponsmith) |
 | Chalk, Immersive Weathering, CC:Tweaked, the_dirty_stuff | | 3 / 3 / 1 / 1 | | | code pools / GLM |
-| Sky Villages | 12 | | `chests/`, `chests/supplementaries/` | 0 (assigned in code) | 1 untyped. Added since the 09-27 census |
+| Sky Villages | 12 | | `chests/`, `chests/supplementaries/` | 0 (assigned in code) | 1 untyped. Added since the 2026-09-27 census |
 | It Takes A Pillage | 5 | | `chests/bastille/` | 17 (own) | 1 untyped |
 | Villages & Pillages | 3 | | `village_witch/house/` | 21 (own) | |
 | Watchtower Building / Illager Viking Longship / Villager Gold Washing Facility / Rare Ice | 2 / 1 / 1 / 1 | | `chests/` | 0 | `rare-ice` untyped |
@@ -583,7 +583,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 - **`#tag` rules via a capture, not the registry.** Tags aren't bound while loot tables load, but the same reload's
   tag event has already run, so `95_tag_capture.js` copies the members there. Rejected: resolving tags offline in
   the generator from `/dumptags` (stale until the next dump); post-roll-only tag rules (empty-slot semantics).
-- **Packed food is a split of the loose entry (user, 2026-09-27).** A low roll within the entry gives loose food, a
+- **Packed food is a split of the loose entry (owner, 2026-09-27).** A low roll within the entry gives loose food, a
   high one crates, the highest the most crates; no other entry changes. This replaced the first version (an extra
   crate entry beside the loose one, which diluted the rest of the pool). A rate can't pass 0.9, so the village boost
   tops out there.
@@ -837,13 +837,13 @@ Revert every temporary edit and `/reload` afterwards.
   in the outpost's crossbow pool (`add` now picks the main pool) and a companion diluting the igloo's guaranteed
   golden apple (anchor-only pools skipped). Section 4.1 now spells out KubeJS vs LootJS strengths and weaknesses.
   Tests LT-21 to LT-27; LT-02/10/11/13/14/16/17/20 updated.
-- **2026-10-02** Refresh after the mods added since 09-27 (Exposure backport + Expanded, Corn Delight, Sky Villages, It
+- **2026-10-02** Refresh after the mods added since 2026-09-27 (Exposure backport + Expanded, Corn Delight, Sky Villages, It
   Takes A Pillage, Villages & Pillages, Unwrecked Ships, watchtowers, Improved Pillager Outpost and others; The
   Missing Villages removed). `/dumploot` re-run via `/dumpall`, `gen_loot_config.py` regenerated (383 tables, 659
   items; new: corn, Exposure films/filters/photographs, Upgrade Aquatic fish, Neapolitan treats), census and container
   audit re-run (3,874 template containers; the one new unconverted kind is Unwrecked Ships' trap dispensers). Sim and
   scratch server agree: `4 rules -> rewrote 184 tables`. Section 2.1 totals and the 2.3 table refreshed; 2.4 to 2.9
-  still read as of 09-27 (the census has the current lists).
+  still read as of 2026-09-27 (the census has the current lists).
 - **2026-10-03:** TODO 1: the Golden Food enchantment book is in no loot table (companion and village/camp `L.add` rules
   removed from `07_rules.js`; `tools/loot_tuning_sim.js` now fails if it shows up anywhere). Sim: `rewrote 128 tables`,
   all checks passed. TODO 4 list: [loot_islands.md](loot_islands.md), analysis only.

@@ -18,7 +18,7 @@
 @@table
 ## SQ-PG-01a | server side: no PortalGunExitLift class or mixin; gun portals carry portalgun's own flag, unchanged
 @group A
-@commands #15 server side (rewritten 2026-11-14, was SQ-PG-01): boot; `grep -E "IPExitLiftMixin|PortalGunExitLift" logs/latest.log`; load a world copy with gun portals saved by the 11-07 to 11-13 jars (`adjustPositionAfterTeleport` 0b on some); `/data get entity @e[type=portalgun:custom_portal,limit=1,sort=nearest]`
+@commands #15 server side (rewritten 2026-11-14, was SQ-PG-01): boot; `grep -E "IPExitLiftMixin|PortalGunExitLift" logs/latest.log`; load a world copy with gun portals saved by the 2026-11-07 to 2026-11-13 jars (`adjustPositionAfterTeleport` 0b on some); `/data get entity @e[type=portalgun:custom_portal,limit=1,sort=nearest]`
 @pass no mixin error; no `PortalGunExitLift` class or mixin named anywhere (the jar no longer has them; the client mixin is not applied on a dedicated server); old portals load without error, their saved flag unchanged and harmless
 @fails `creativecompat.mixins.json` still lists `PortalGunExitLiftMixin`, or `CompatMixinPlugin` gate wrong
 @from batches/r1115/p1_a1.qb

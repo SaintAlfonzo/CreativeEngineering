@@ -14,7 +14,7 @@
 | Part | Status |
 |---|---|
 | Design (this file) | DESIGNED 2026-10-24; items 2 and 4 of [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md) built 2026-11-15 |
-| Driver mod `development/creativeDevtools/members/capture` (mod id `cdevcapture`, dev-only, nested in Creative Devtools since 2026-11-01; inert without `-Dcdevcapture.plan`) | BUILT: capture steps (2.2) since 11-01; readback (TX-03), tick-exact movement (TX-04), widget actions (TX-05) and the file channel (TX-02, 2.11) 2026-11-15 in `development/creativeDevtools/build/libs/creativedevtools-1.0.0.jar`; not run in game |
+| Driver mod `development/creativeDevtools/members/capture` (mod id `cdevcapture`, dev-only, nested in Creative Devtools since 2026-11-01; inert without `-Dcdevcapture.plan`) | BUILT: capture steps (2.2) since 2026-11-01; readback (TX-03), tick-exact movement (TX-04), widget actions (TX-05) and the file channel (TX-02, 2.11) 2026-11-15 in `development/creativeDevtools/build/libs/creativedevtools-1.0.0.jar`; not run in game |
 | Runner `tools/client_capture/run_captures.py` (plan, launch through `eval_client.py`, relaunch on crash, `serve` / `stop`) | BUILT 2026-11-15, offline-tested (plan, `--list --check`); never launched |
 | Cropper `tools/client_capture/crop.py` + `crop_regions.json` | BUILT 2026-11-15, `--selftest` and a fake run pass |
 | Channel client `tools/client_capture/chan.py`; `qrun.py client` driver transport | BUILT 2026-11-15, tested against a fake driver |

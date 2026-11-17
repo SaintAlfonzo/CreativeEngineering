@@ -49,7 +49,7 @@ scripts call. P2 to P6 in any order. Every Java or startup change needs a full r
 | 8 | "fix the oversided breaking overlay on the straw rug and check sister blocks" | `largecontent/mod-additions #63` | clear | `models/block/straw_rug.json` has 4 extrude planes 8 px outside the block; the crack overlay draws every quad. Sisters: `hearthandharvest:hay_rug`, `farmersdelight:canvas_rug` (same model) |
 | 9 | food/types-and-tuning #27 | same | clear | `cd_food.js:56` `gold: { mixer: 6, arc: 5 }` |
 | 10 | items/jars #12 | same | clear | Mason jar: Vintage member `data/vintagedelight/recipes/mason_jar.json` count 3; glass bottle: vanilla, no override |
-| 11 | dishes/ingredients #38 | same | premise | Stack 64 already built (`tools/gen_stack_sizes.py:59`, owner 11-02). Sap recipe pinned by `creativedelight/members #16` |
+| 11 | dishes/ingredients #38 | same | premise | Stack 64 already built (`tools/gen_stack_sizes.py:59`, owner 2026-11-02). Sap recipe pinned by `creativedelight/members #16` |
 | 12 | mobs/tweaks #25 | same | premise | Endermen already in Quark's "Non Griefing Entities" (`quark-common.toml:1744`) but the "Game Nerfs" module is off (:1646) |
 | 13 | ui/misc #7 | same | clear | `kubejs/assets/minecraft/texts/splashes.txt`, no "Stience!" yet |
 | 14 | structures/contents #9 | same | clear | The glowstone is in Waystones' own `waystones:village/common/waystone` and `village/desert/waystone` (1 block each; Kaisyn's patch copies have none); Worldgen's `waystone_ruin_part` pool reuses the common one |

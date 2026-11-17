@@ -55,7 +55,7 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
 - The Fertile Soil ladder (what the review compares against): FD organic compost (pack recipe: dirt + rot / bone /
   brown mulch, `sawdust.js` 61-65) -> rich soil -> **Fertile Soil**: 3 rich soil + one of each of the six mulches -> 6, or
   3 rich soil + 3 of one mulch + green, fungus, fertilizer -> 3 (67-81). Mulch tags `forge:mulch/{brown,bone,waste,
-  green,fungus,fertilizer}` in [tags/wood_tags.js](../../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js) 11-16, already through
+  green,fungus,fertilizer}` in [tags/wood_tags.js](../../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js) 2026-11-16, already through
   `global.tags` (the 2026-10-21 optional step is done).
 - The Nether ladder today: Nether's Delight soul compost (its own two recipes, not touched by the pack, verified in
   `NethersDelight-1.19-3.1.jar`: soul soil + 2 twisting vines + 4 bone meal + 2 hoglin hide, or + 4 warped roots) matures
@@ -82,7 +82,7 @@ counterpart of Fertile Soil and a ghost pepper soil. Then it and the compost / f
    '#creativeengineering:nether_mulch/<slot>'`; `i.twisting_vines` (2835), `i.weeping_vines` (2867),
    `i.crimson_fungus` (2246), `i.warped_fungus` (2842), `i.crimson_roots` (2248), `i.warped_roots` (2845),
    `i.nether_wart_block` (2583), `i.warped_wart_block` (2846) exist.
-3. **Move** into `wood/compost.js`: the three removals (10-12) plus 84, the compost and fertile soil block (60-81) with
+3. **Move** into `wood/compost.js`: the three removals (2026-10-12) plus 84, the compost and fertile soil block (60-81) with
    every `idOverride` unchanged, and the new nulch recipes (ids `nulch_manual_only`, `nulch_mixing` kept for the main
    pair so JEI bookmarks survive; `nulch_<slot>_manual_only` etc. for the variants). Drop the note (83).
 4. Docs: composting.md F4 resolved, 3 and 5 (file map "Related recipes" -> `wood/compost.js`); recipes_wood.md 2.3 and

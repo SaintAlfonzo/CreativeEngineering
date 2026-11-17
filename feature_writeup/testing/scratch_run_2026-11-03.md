@@ -36,14 +36,14 @@ Checked 00:43. `prep_srv.sh` swaps in build jars newer than `mods/`; the srv jar
 
 | Jar | `mods/` | build/libs | Rows |
 |---|---|---|---|
-| creativeengineering-1.1.08 (patcherMod) | 11-02 23:20 | 11-03 00:08 | all |
-| creativedelight-1.0.0 | 11-03 00:08 | 11-03 00:48 (runner rebuild, LemonTreePickYieldMixin fix) | food, CD members |
-| creativebrewing-1.0.0 | 11-03 00:08 | 11-03 00:08 | brewing |
-| creativeworldgen-1.0.0 | 11-02 23:16 | 11-02 23:16 | SQ-CWG, loot |
-| creativecalendar-1.0.0 | 11-02 18:41 | 11-03 00:09 | seasons, time |
-| creativecompat-1.0.0 | 11-02 18:41 | 11-02 23:17 | compat |
-| creativedevtools-1.0.0 | 11-01 12:49 | 11-02 22:46 | dumps, cegen |
-| creativeLabels | 1.0.0 (10-27) | 1.0.1 (11-02 22:46) | SQ-LBS |
+| creativeengineering-1.1.08 (patcherMod) | 2026-11-02 23:20 | 2026-11-03 00:08 | all |
+| creativedelight-1.0.0 | 2026-11-03 00:08 | 2026-11-03 00:48 (runner rebuild, LemonTreePickYieldMixin fix) | food, CD members |
+| creativebrewing-1.0.0 | 2026-11-03 00:08 | 2026-11-03 00:08 | brewing |
+| creativeworldgen-1.0.0 | 2026-11-02 23:16 | 2026-11-02 23:16 | SQ-CWG, loot |
+| creativecalendar-1.0.0 | 2026-11-02 18:41 | 2026-11-03 00:09 | seasons, time |
+| creativecompat-1.0.0 | 2026-11-02 18:41 | 2026-11-02 23:17 | compat |
+| creativedevtools-1.0.0 | 2026-11-01 12:49 | 2026-11-02 22:46 | dumps, cegen |
+| creativeLabels | 1.0.0 (2026-10-27) | 1.0.1 (2026-11-02 22:46) | SQ-LBS |
 
 ## 4. Order
 
@@ -185,8 +185,8 @@ worldgen set. Disk: the owner OK'd clearing old session scratchpads (11 GB freed
   `tools/structure_tuning_sim.js`, the four `tools/test_*.sh` Rhino harness headers and `RhinoRun`, `RhinoBeeNests`,
   `RhinoMobSpawns`, `RhinoWildFlowers` read the scripts from `kubejs/data/creativeworldgen/kubejs/worldgen/`
   (they still read `kubejs/server_scripts/worldgen/`, removed by the carve). `test_worldgen_tools.sh` then passes all 12 groups.
-- Jars: patcherMod 1.1.08 build 11-03 01:30, CD build 01:31, Devtools build 11-02 22:46, Creative Labels 1.0.1
-  (prep_srv.sh swaps, newer than `mods/`); Creative Worldgen 11-02 23:16 (= `mods/`, source unchanged since).
+- Jars: patcherMod 1.1.08 build 2026-11-03 01:30, CD build 01:31, Devtools build 2026-11-02 22:46, Creative Labels 1.0.1
+  (prep_srv.sh swaps, newer than `mods/`); Creative Worldgen 2026-11-02 23:16 (= `mods/`, source unchanged since).
 - Perf session `r1103w`, JFR on with `JFR_MAX=200m` per boot (disk).
 
 ### 9.1 Run notes

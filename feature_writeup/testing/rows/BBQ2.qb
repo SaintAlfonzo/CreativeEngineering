@@ -180,7 +180,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ2-03 | the six dump skewer ids not seen live in c2a1 (past the 80 cut)
 @group A
-@commands Recipe ids of the ten BBQ lines against the 11-03 dump
+@commands Recipe ids of the ten BBQ lines against the 2026-11-03 dump
 @pass identical ids and results (BBQ-39)
 @fails helper id naming
 @from batches/r1113/fix_c2a1.qb passed

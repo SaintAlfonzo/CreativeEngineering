@@ -2,7 +2,7 @@
 
 Owner request (2026-11-01): execute the scratch queue; worldgen next to last, client tests last, after everything else.
 Scope taken: the queue's "Priority run" (boots 1 to 3 and its client session), the group A / B / C rows of "Bug batch,
-2026-11-01", the r1031 worldgen rows deferred on 10-31 (SQ-SB-04 to -08, SQ-SB-01e, W3a / W3b), then the client block
+2026-11-01", the r1031 worldgen rows deferred on 2026-10-31 (SQ-SB-04 to -08, SQ-SB-01e, W3a / W3b), then the client block
 (priority CQ rows + `r1031/c1_client.qb`). Not taken: L2 perf suite, L3 resource pack bench (owner to ask), the older
 pre-10-28 backlog.
 
@@ -10,7 +10,7 @@ Perf session `r1101` (JFR on, no prune). Batches `tools/scratch_query/batches/r1
 `perf/runs/r1101/` (`results.md`, `rows/`, `judged_p1.md`, log copies in `p1_logs/`).
 
 Jars: prep_srv.sh hard-linked the build jars of 2026-11-01 01:56 CDT (patcherMod 1.1.04, creative_delight 1.0.0;
-newer than `mods/`, so the bug batch's "needs the 01:35 / 01:23 jars" held), creative_brewing 10-31 16:55 (nests Vinery
+newer than `mods/`, so the bug batch's "needs the 01:35 / 01:23 jars" held), creative_brewing 2026-10-31 16:55 (nests Vinery
 -08, Brewin' -05), backportedVintage -09, backportedVeggies -03, repackedStorage. Note: the clock fell back (DST) during
 the run; log times are CST, an hour behind the debug.log CDT times.
 

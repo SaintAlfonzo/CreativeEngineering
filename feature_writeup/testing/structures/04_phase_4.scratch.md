@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only. Sleep an
+- Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only. Sleep an
   hour if the token limit gets close.
 - Milestone: M4. Tests: (1) ST-46, 37, 38, 55, 60, 65, 75, 83, 24; (2) ST-36, 109, 21, 23, 25, 13; (3) ST-35, 34.
   ST-76 skipped (no old jar in mods/).

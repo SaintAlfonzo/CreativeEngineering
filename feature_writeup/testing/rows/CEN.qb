@@ -30,7 +30,7 @@ bootreject Missing or unsupported mandatory dependencies
 bootreject (creativecommon|creativeengineering)\.mixins\.json.*(rror|ailed|could not)
 bootreject in both module|split package
 shell grep -oE "creative[a-z]+-[0-9.]+\.jar" logs/latest.log | sort -u | tr '\n' ' '; echo; grep -cE "from (mixins\.)?creativecommon\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeengineering\.mixins\.json" logs/debug.log; true
-look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1.0.0: Common is 1.1.0 since 11-06); mixing counts: Common up to 46 common mixins, Engineering up to 17 (row's 74 / 29 predate later moves out); no apply error
+look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1.0.0: Common is 1.1.0 since 2026-11-06); mixing counts: Common up to 46 common mixins, Engineering up to 17 (row's 74 / 29 predate later moves out); no apply error
 
 ## SQ-CEN-02 | Common's tables and the swaps file carried; interface tables reach Compat; values kept
 @group A
@@ -44,7 +44,7 @@ bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, monster_
 bootexpect \[swaps\] config sections \[shrapnel, surface, vein_undo\] merged from creativeengineering-common.toml into creativecompat-common.toml
 bootexpect \[swaps\] config sections \[jei, gui_title, toasts, tooltips, coaster, wthit\] merged from creativeengineering-common.toml into creativecompat-common.toml
 shell ls config | grep -E "^creative"; grep -nE "^\s*count *=" config/creativecompat-common.toml | head -2; grep -nE "^\s*format *=" config/creativecompat-common.toml | head -3; grep -nE "^\s*tutorial *=" config/creativecompat-common.toml
-look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] tutorial = true in Compat's file; creativecommon-swaps.toml exists. Superseded parts of the row text: [toasts]/[jei] and [shrapnel]/[surface]/[vein_undo] now end in creativecompat-common.toml (moved 11-06 / 11-07), not in Common's or Engineering's file; Engineering 2.0.0 has no config of its own
+look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] tutorial = true in Compat's file; creativecommon-swaps.toml exists. Superseded parts of the row text: [toasts]/[jei] and [shrapnel]/[surface]/[vein_undo] now end in creativecompat-common.toml (moved 2026-11-06 / 2026-11-07), not in Common's or Engineering's file; Engineering 2.0.0 has no config of its own
 
 ## SQ-CEN-03 | startup packs: creativecommon first, then the pack folder, then the jars; no global.CEN missing
 @group A
@@ -61,7 +61,7 @@ expect \[cdevtest\] verb=reg kind=item regex=\S+ n=[1-9]\d*
 reject \[cdevtest\] .*(done=0|error=)
 shell python3 -c "import json;print('exported creativeengineering items', len(json.load(open('$INST/kubejs/exported/items_by_mod/creativeengineering.json'))['items']))"
 kjsreject global\.CEN missing
-look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count (the `verb=reg kind=item ... n=` line) equals the exported (11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
+look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count (the `verb=reg kind=item ... n=` line) equals the exported (2026-11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
 
 ## SQ-CEN-04 | sawmill recipe ids unchanged; no purged-wood outputs
 @group A
@@ -75,7 +75,7 @@ waitlog \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n= 30
 expect \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n=216 
 reject \[cdevtest\] .*(done=0|error=)
 shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv; true
-look 216 = 211 jar + 5 pack (and = the 11-10 dump count from the shell line); removed-wood output check: no `verb=recipes` line outputs a removed wood item (global.removedWoods; max=500 lists them all)
+look 216 = 211 jar + 5 pack (and = the 2026-11-10 dump count from the shell line); removed-wood output check: no `verb=recipes` line outputs a removed wood item (global.removedWoods; max=500 lists them all)
 
 ## SQ-CEN-05
 @group A

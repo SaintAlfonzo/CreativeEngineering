@@ -14,7 +14,7 @@
 - Backups of the pre-7.4 configs: session scratchpad m1/backup/ (structure_tags/groups/meta/fits/config/estimates/report)
 - Config values changed: none
 - Running: nothing
-- CONSTRAINTS (user, 2026-10-14, after the offline checks): (1) ignore Nether/End spawning from now on (piglin
+- CONSTRAINTS (owner, 2026-10-14, after the offline checks): (1) ignore Nether/End spawning from now on (piglin
   camp, pig ranger, ST-186 and other Nether/End checks skipped); (2) ignore relative structure frequencies from now
   on (no more rate tuning, no estimates/rate tables, rate parts of tests skipped: ST-181 ratio, ST-185 harsh ratio,
   C/V/O); (3) sleep 30 minutes when the 7.4 changes are completed. Chat addition: if the token limit gets close,

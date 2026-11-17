@@ -628,7 +628,7 @@ numbers pending (SQ-PTH-25c, SQ-PTH-28c). Tools:
   (`log_timings.py` reads startup times only). The item benchmark case runs the real `PassItems.pathStop` (split out
   of `PassItems.afterInsideBlocks` for it).
 
-**Settled (owner 2026-11-15):** Delightful salmonberry bush and Fruits Delight cranberry bush in `bush`; IE razor wire
+**Settled (owner, 2026-11-15):** Delightful salmonberry bush and Fruits Delight cranberry bush in `bush`; IE razor wire
 in `cobweb` (its damage stays); Botania mystical, shiny and special flowers and mushrooms in `grass` (floating flowers
 are solid, out); Supplementaries wild flax stays out. Display only: the sticky basket, mulberry jam, guardian spine
 and powdered sugar got `StuckInBlock` lines.
@@ -925,7 +925,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
     Canned Goods' sealed canned dirt → metal. Opened canned dirt shows dirt on top and stays untiered (1.00, same as
     dirt); the hookah (furniture) and tobacco crops are left out like other thin/functional blocks. The house, boat and
     cannon mods add no blocks. 6129 ids, 0 overlaps. In game, the pre-change set loaded with 0 overlaps (BR-01 passed).
-- **2026-10-02** Re-check for the mods added since 09-27 (Fruits Delight, Farmer's Respite, Corn Delight, More
+- **2026-10-02** Re-check for the mods added since 2026-09-27 (Fruits Delight, Farmer's Respite, Corn Delight, More
   Delight, Well, Untitled Duck Mod, Blue Flame, plus redeco / Floral Enchantment / Upgrade Aquatic blocks the scan now
   sees), from the `/dumpall` tag export. Tiered by the existing precedents: `fruitsdelight:*_crate` + Corn Crate → wood
   (like FD crates); Farmer's Respite `*_sack` + Corn Kernel Bag → soft (sacks and bags); Hamimelon (a melon-like gourd),
@@ -965,7 +965,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
   collision, fluids, thin blocks and `auditSkip`. Watcher tooling: `/dumpsurface`, `blockrunner_scan.py --audit`
   (6). The friction/jump outlier pass (`#5`) waits for the first dump. BR-59..64 added. Jars built, not installed
   (game open): Common, Compat, Devtools.
-- **2026-11-14 to 11-15** Pass-through blocks (3.10, [plan_passthrough.md](plan_passthrough.md), TODO
+- **2026-11-14 to 2026-11-15** Pass-through blocks (3.10, [plan_passthrough.md](plan_passthrough.md), TODO
   `gameplay/blockrunner #10`): phases 0 to 7 built in Creative Compat (core, cobwebs, items, projectiles, arrow
   despawn, leaf piles and ropes, tags and tools, WTHIT lines, timing log) and Creative Devtools (`/cdevbench
   passthrough`); perf suite plan `passthrough.py`; `LeafPileSlowMixin` and `[leaf_piles]` replaced by the `leaf_pile`

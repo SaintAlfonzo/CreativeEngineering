@@ -34,7 +34,7 @@ jars as resource donors, 4.8)**
 | Migration issues (3) | 75 issues listed, grouped by kind |
 | License (3.6) | code MIT, resources All Rights Reserved (Vinery 2026-10-14, Foundation 2026-10-18: same split). Satisfy refused redistribution of assets and features (3.6) |
 | Upstream jars as resource donors (4.8) | CHOSEN 2026-10-18 (D13 B). Feasibility checked 2026-10-18: works; the port reads assets/data from the unmodified 1.5.5 and 1.3.10 jars at runtime. Delivery of the jars (D14) open |
-| Decisions (5) | DECIDED 2026-10-18: D3 keep `trippy` (section 10.1). DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (4.5). 2026-10-18: D13 option B (4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (user, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D4, D5 (non-aging numbers), D7 to D10, D12 |
+| Decisions (5) | DECIDED 2026-10-18: D3 keep `trippy` (section 10.1). DECIDED 2026-10-14: D1 keep `cherry_*`, D2 keep every 1.3.10 block and add the new ones, D6 WTHIT, D11 winemaker set damage by config. Aging revamped to a playtime clock (4.5). 2026-10-18: D13 option B (4.8). D14 decided 2026-10-18: payload now, download on publish. Worldgen (owner, 2026-10-18): 1.20+ worldgen types become the nearest 1.19.2 vanilla type, nothing backported. Still open, built with the recommendation: D4, D5 (non-aging numbers), D7 to D10, D12 |
 | Wine aging (4.5) | DESIGNED 2026-10-14: vintage clock on real playtime, lengths unchanged for now (16 days per year, 2 years per level). 2026-10-18: your 7 list changes this to months on the sun clock (sleep ages wine), x2.5 in the dark: [time.md](time.md) 3.7 |
 | Port (`development/backportedVinery`) | BUILT 2026-10-18. `-01` DEPLOYED with 1.0.7 (the first staging crashed the server on the grass slab, fixed under the same name, [fixes_compat.md](fixes_compat.md) 2.23); `-02` DEPLOYED with 1.0.8 (2026-10-19 10:20), loaded in single player 2026-10-19: Foundation subset, 1.5.5, 1.3.10 keepers, vintage clock, upstream-pack layer, WTHIT lines; status and gaps in 4.9. `-03` (7.14 and 10.9 to 10.14) in the local `mods/` since 2026-10-19 22:27; `-03` / `-04` shipped in 1.1.01, `-05` in 1.1.04 (client), `-06` installed 2026-10-31 00:41, not yet booted |
 | Pack-side changes (4.4) | DONE 2026-10-18 (jar swap shipped in 1.0.7) except the I25 tool reruns; per-item outcome under 4.4 |
@@ -816,7 +816,7 @@ read its assets and data from that jar. **Verdict: feasible.** Checked 2026-10-1
   the file, the folder and the download page (a client error screen, a server log line before the world loads). A
   silent start would leave a server with no Vinery recipes or loot. The pin also means the translation only ever sees
   one known input, so it doesn't need to handle any other upstream version.
-- **Worldgen stays inside 1.19.2's feature set (user, 2026-10-18):** no new worldgen code is backported. A 1.20+ type
+- **Worldgen stays inside 1.19.2's feature set (owner, 2026-10-18):** no new worldgen code is backported. A 1.20+ type
   in upstream worldgen data is rewritten to the nearest 1.19.2 vanilla type. The only one is
   `minecraft:cherry_foliage_placer` (dark cherry and apple trees) -> `minecraft:fancy_foliage_placer` with the same
   `radius`, `offset` and `height` (it pairs with their `fancy_trunk_placer`, like vanilla's big oak); the hole and

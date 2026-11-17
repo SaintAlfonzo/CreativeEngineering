@@ -266,7 +266,7 @@ waitlog verb=rdetail text=creativedelight:shapeless/canned_stuffed_bell_peppers 
 count verb=makes item=creativedelight:canned_[a-z_]+ n=1$ >= 21
 count verb=rdetail id=creativedelight:shapeless/canned_[a-z_]+ serializer=\S+ result=creativedelight:canned_[a-z_]+\*1 ingredients=\S*canned_goods:empty_can >= 21
 reject verb=(makes|rdetail) .*done=0
-look 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 11-12 pack log
+look 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 2026-11-12 pack log
 
 ## SQ-FCK-10 | #fruitsdelight:pineapple_grows_on holds the farmland soils; pineapple places on all three
 @group A
@@ -520,7 +520,7 @@ expect verb=items items=(\S*,)?corn_delight:corn:
 expect verb=ages block=corn_delight:corn_crop prop=age n=9 mean=0.000
 expect verb=count block=corn_delight:corn_crop n=0\b
 reject \[cdevtest\] .*done=0
-look the count box is the top layer only (y -59): n=0 means no top halves left; tag is creativedelight:crops/harvest_from_bottom since 11-09
+look the count box is the top layer only (y -59): n=0 means no top halves left; tag is creativedelight:crops/harvest_from_bottom since 2026-11-09
 
 ## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
 @group A
@@ -692,7 +692,7 @@ look sack: one recipe, wheat + string (rdetail ingredients line). If the bunker 
 kjsexpect \[botany_pots\] growthTicks scaled on \d+ pot crops \(\d+ flowers x2, the rest x8\); pot fertilizers removed
 kjsreject scaleRecipeInt missing
 shell grep -h "\[botany_pots\]" logs/kubejs/server.log | cut -c1-200
-look count near 173 (the 11-12 pack log says 175 crops, 49 flowers)
+look count near 173 (the 2026-11-12 pack log says 175 crops, 49 flowers)
 
 ## SQ-BOT-02 | pot crop growthTicks wheat 9600, poppy 2400, wild tomatoes 9600
 @group A

@@ -250,7 +250,7 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 |---|---|---|---|
 | Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 4 nuggets (5 before 2026-11-16) |
 | Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 4 ingots (5 before 2026-11-16) |
-| Enchanted golden (gilded) apple | | assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB liquid XP and pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB) | |
+| Enchanted golden (gilded) apple | | assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB liquid XP and pressing (owner, 2026-11-03; was 4 loops of a gold block and 250 mB) | |
 
 Since 2026-10-21 (TODO `dishes/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
 tuning (`food/types-and-tuning #1`, #3). Rose gold counts as gold in every golden food recipe (decided 2026-10-22: the

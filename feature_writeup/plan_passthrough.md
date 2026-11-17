@@ -686,7 +686,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
   - Thorns: IW's thorn damage sits in its own `entityInside` branch (`layers > 3` again now the mixin is gone,
     `leaf_piles_slow`); `MakeStuckInBlockMixin` cancels only `makeStuckInBlock`, so thorns keep working (SQ-PTH-18).
   - Deviations: (1) the `LeafPileSlow.set` call was in Creative Compat's `CreativeCompat`, not Creative Engineering
-    (surface/ moved 11-06); Engineering unchanged, not rebuilt; (2) which value wins: the old `slowFromLayers`, unless
+    (surface/ moved 2026-11-06); Engineering unchanged, not rebuilt; (2) which value wins: the old `slowFromLayers`, unless
     it is the old default 4 and `minLayers` already exists (a phase 1 jar edit is kept); an out-of-range or unreadable
     old value is dropped; with no pass-through table yet, the table is appended with `minLayers` only and Forge fills
     the rest on correction (tested).
@@ -711,7 +711,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
 - Phase 4 done 2026-11-15 (tags and tools; no jar built or installed by this phase: the tags ship in the Creative
   Compat jar, so they take effect with the Compat owner's next `:creativeCompat:build` and the install).
   - Tags: new `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js` (Compat's own script tree, copied into its
-    jar; Compat's tags have lived there since 11-01, and the `creativecompat:` namespace follows the owning mod),
+    jar; Compat's tags have lived there since 2026-11-01, and the `creativecompat:` namespace follows the owning mod),
     not `kubejs/server_scripts/tags/blocktags.js`. Block event: the eleven `creativecompat:passthrough/<tier>` tiers
     (specific tiers first, `crop`, `tall_plant` and `grass` take out every tier filled before them with `except`),
     `creativecompat:passthrough_growth_any` (FD, Supplementaries rope and stick, CD treated stick tomatoes; the five

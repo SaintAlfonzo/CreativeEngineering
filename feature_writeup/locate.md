@@ -266,7 +266,7 @@ what the census is for.
   Now each region's slots are grouped by chunk: every set that tries the chunk is predicted, then the chunk loads
   once, then every slot is scored. Chunks generated before the census still count "known", as designed. Retest:
   LO-03, LO-14.
-- **Biome ties (fixed 2026-10-27, DEPLOYED to the client with 1.1.04; TODO `structures/testing #4`).** The 10-27 census (perf.md 10.9) had
+- **Biome ties (fixed 2026-10-27, DEPLOYED to the client with 1.1.04; TODO `structures/testing #4`).** The 2026-10-27 census (perf.md 10.9) had
   5 / 10 false negatives, all `terralith:underground/old_refinery` and `mining_outpost` at stage biome. Vanilla's
   `Climate.RTree#search` starts from the calling thread's previous result and keeps it when another entry is equally
   near. Terralith's `cave/deep_caves` and vanilla's `deep_dark` overlap at offset 0 (depth 1.05 to 1.2, erosion below
@@ -384,7 +384,7 @@ never drawn, so a flat floor at 48 is invisible. But the DH toml is a player con
 - **Stage E stays switchable** until the census shows it saves more than it costs.
 - **Deep terrain:** measure, then A and B. C is documented here as the rejected-for-now design.
 
-**Decisions (user, 2026-10-12):**
+**Decisions (owner, 2026-10-12):**
 1. Fold the first three rules into the initial check: stage A (set frequency, exclusion zone) and stage B (biome,
    biome rules, fits, replacement narrowing). Stages C (group pick), D (surface check) and E (earth fill, priority)
    stay out for now; the census's saved-by-stage and miss-reason columns decide whether to revisit them.

@@ -1063,7 +1063,7 @@ Findings (2026-10-30):
   (Serene Seasons' list) is off.
 - **Greenhouse glass** (`greenhouse`, defined 2026-10-30): a seasonal crop (the four season types, autumn fruit, the
   grape types and mushroom colonies outside mushroom biomes) with a greenhouse glass block anywhere in the 16 blocks
-  straight above it has no season fertility (owner 2026-10-30): fertile and off both become neutral, so a greenhouse
+  straight above it has no season fertility (owner, 2026-10-30): fertile and off both become neutral, so a greenhouse
   trades the fertile bonus for safety from the off penalty. Only the crop's own column is checked (one block or pane is enough, a 3x3 field needs glass
   over every crop), blocks between the crop and the glass do not matter, and light is not checked. Nether, End and cave
   crops and `none` ignore it. Greenhouse glass is the block tag `#sereneseasons:greenhouse_glass`: Serene Seasons fills it

@@ -716,7 +716,7 @@ crop season types are checked for every plant that spreads.
   (the note says "spreading").
 - Tropical dry season: off or neutral? Recommendation: neutral (the note says winter only).
 - Mycelium and nylium spread through the same vanilla class: leave them out (recommended; the hook checks the type).
-- Modded grasses (owner 2026-11-02): slowed by winter too. Typed: IW rooted grass block, Vinery grass slab, Vintage
+- Modded grasses (owner, 2026-11-02): slowed by winter too. Typed: IW rooted grass block, Vinery grass slab, Vintage
   lush grass block, Botania dry / golden / vivid / scorched / infused / mutated grass; hooked by
   `ModdedGrassSpreadSeasonMixin` (IW `ModGrassBlock` extra spread, Botania `BotaniaGrassBlock.tick`, Vinery
   `SpreadableGrassSlabBlock`, Vintage `LushGrassBlock`). Left out: IW frosty grass / fern, Upgrade Aquatic beachgrass,

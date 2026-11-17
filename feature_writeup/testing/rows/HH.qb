@@ -471,7 +471,7 @@
 @@jars creativedelight powergrid
 @@sources feature_writeup/hearth_and_harvest.md
 @@text
-@@text Targets `mods/` of 11-08 22:02: Creative Common 22:02, Creative Delight 22:00 (nests `backportedHearth-1.4.1-ce-19.2-04`), Creative Brewing 21:56; all installed. Run `/dumpall` and `/cdevgen` before the worldgen block on a world that has booted these jars. Replaces the SQ-HH-01 to -15, -A, -B, -C and -D rows above, each marked with its replacement. **Nothing here has run, and the four probes have only passed `node --check`:** the first row of each block makes the probe's first live call, so run those first and fix the probe before trusting a batch. Tranche 3 has never booted: SQ-HH-401 (crow registration; the Alex's Mobs mixin is gone since the 2026-11-10 crow swap), SQ-HH-201, SQ-HH-301 and SQ-HH-1101 are the boot checks.
+@@text Targets `mods/` of 2026-11-08 22:02: Creative Common 22:02, Creative Delight 22:00 (nests `backportedHearth-1.4.1-ce-19.2-04`), Creative Brewing 21:56; all installed. Run `/dumpall` and `/cdevgen` before the worldgen block on a world that has booted these jars. Replaces the SQ-HH-01 to -15, -A, -B, -C and -D rows above, each marked with its replacement. **Nothing here has run, and the four probes have only passed `node --check`:** the first row of each block makes the probe's first live call, so run those first and fix the probe before trusting a batch. Tranche 3 has never booted: SQ-HH-401 (crow registration; the Alex's Mobs mixin is gone since the 2026-11-10 crow swap), SQ-HH-201, SQ-HH-301 and SQ-HH-1101 are the boot checks.
 @@text
 @@text | Block | Rows | Probe (copy as `zz_*` to `srv/kubejs/server_scripts`) | Boots |
 @@text |---|---|---|---|
@@ -5364,7 +5364,7 @@ look Mean TPS 19.5 to 20.0
 @group A
 @commands Plot 208 144. `/setblock 208 -60 144 hearthandharvest:crate[type=bottom,facing=north]`; `pbot hold hb1 minecraft:egg`; `/cdevtest use 208 -60 144 as=hb1 face=up hit=0.16,0.3,0.16`; `pbot hold hb1 hearthandharvest:blueberry_juice`; `/cdevtest use 208 -60 144 as=hb1 face=up hit=0.47,0.3,0.47`; `item replace entity hb1 weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}`; `/cdevtest use 208 -60 144 as=hb1 face=up hit=0.78,0.3,0.78`; `pbot hold hb1 minecraft:turtle_egg`; `/cdevtest use 208 -60 144 as=hb1 face=up hit=0.16,0.3,0.78`; `data get block 208 -60 144 Items`
 @pass four items in slots: `Slot: ?0b` egg, `Slot: ?4b` juice, `Slot: ?8b` potion, `Slot: ?6b` turtle_egg (`useat` each `CONSUME`) (J49, J50 the grid)
-@fails `CrateBlock.slotFromHit`, `coord` (pixels 1-4 / 6-9 / 11-14)
+@fails `CrateBlock.slotFromHit`, `coord` (pixels 1-4 / 6-9 / 2026-11-14)
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-16
 > setblock 208 -60 144 hearthandharvest:crate[type=bottom,facing=north]

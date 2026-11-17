@@ -33,11 +33,11 @@ perf_suite.py for SQ-PTH-28c. Batches `tools/scratch_query/batches/r1116/`, resu
 
 | Jar | `mods/` | build/libs | Rows |
 |---|---|---|---|
-| creativecommon-1.2.0 | 11-15 23:28 | 11-15 23:28 (same) | all |
-| creativecompat-1.0.0 | 11-14 23:54 | 11-15 23:28 (swapped in) | PS15B, PTH, PS15-10, TX-17/-18 |
-| creativedevtools-1.0.0 (bundle, with cdevperfbot) | 11-15 00:07 | 11-15 15:50 (swapped in; own jar 23:56 has the same classes) | TX, all bot rows |
-| creativedelight-1.1.0 | 11-15 15:34 | 11-15 15:34 (same; own 23:56 same classes) | PS15 salt, hops, lunchbox |
-| creativeworldgen-1.0.0 | 11-14 22:40 | 11-15 23:57 (swapped in) | PS15-16, -11 |
+| creativecommon-1.2.0 | 2026-11-15 23:28 | 2026-11-15 23:28 (same) | all |
+| creativecompat-1.0.0 | 2026-11-14 23:54 | 2026-11-15 23:28 (swapped in) | PS15B, PTH, PS15-10, TX-17/-18 |
+| creativedevtools-1.0.0 (bundle, with cdevperfbot) | 2026-11-15 00:07 | 2026-11-15 15:50 (swapped in; own jar 23:56 has the same classes) | TX, all bot rows |
+| creativedelight-1.1.0 | 2026-11-15 15:34 | 2026-11-15 15:34 (same; own 23:56 same classes) | PS15 salt, hops, lunchbox |
+| creativeworldgen-1.0.0 | 2026-11-14 22:40 | 2026-11-15 23:57 (swapped in) | PS15-16, -11 |
 | backportedPowerGrid | -18 | `jar_archive/pwg_gate/` -19 | PS15-14 (row names its jar) |
 
 Builds carry other sessions' uncommitted edits (Compat, Devtools, Delight).
@@ -89,7 +89,7 @@ Run log entry in the queue, writeup test lists, TODO rows for FAILs, gotchas, pe
 
 - 00:00 batches written in `tools/scratch_query/batches/r1116/`: `tx.qb` (SQ-TX-00 setup, -01 to -18), `tx18b.qb`
   (-18 second boot), `txq02.qb`, `txq03.qb`; all lint 0 E, 0 W. prep_srv `p1tx` (group A, level tx): swaps Brewing
-  11-14 23:29, Compat 11-15 23:56 (rebuilt after the 23:28 listed in 3; newest build), Devtools bundle 15:50,
+  2026-11-14 23:29, Compat 2026-11-15 23:56 (rebuilt after the 23:28 listed in 3; newest build), Devtools bundle 15:50,
   Worldgen 23:57; only cdevperfbot unlisted in mod_sides.md (expected). game_jvms.sh empty.
 - 00:00 boot 1 `p1tx`, pid 1277143; Done (10.2 s) 00:01. qrun `tx.qb` -> `perf/runs/r1116/p1/tx` started 00:01.
 - 00:07 `tx.qb` end: PASS 7, FAIL 8, LOOK 4. Judged: -01 BATCH-FAULT (my regex wanted `states` after `tickwarp`;
@@ -136,7 +136,7 @@ Run log entry in the queue, writeup test lists, TODO rows for FAILs, gotchas, pe
 
 ### Phase 2 (PS15B, runner-2)
 
-- 00:24 runner-2 preflight: game_jvms.sh empty, 67 GB free. Compat build/libs is now 11-16 00:08 (886838 bytes;
+- 00:24 runner-2 preflight: game_jvms.sh empty, 67 GB free. Compat build/libs is now 2026-11-16 00:08 (886838 bytes;
   rebuilt with the phase 1 Devtools build, not the 23:56 listed in 1), Devtools bundle 00:08 (505849). Probe
   `tools/scratch_query/zpth_probe.js` gets an `attrs NAME|TAG` verb (every movement-speed modifier; SQ-PS15B-11).
   Generator `tools/scratch_query/ps15b_gen.py` (from pth_gen_p12.py) writes `batches/r1116/ps15b_a.qb` (boot 1:
@@ -145,7 +145,7 @@ Run log entry in the queue, writeup test lists, TODO rows for FAILs, gotchas, pe
   (all `cfgedit`: the -12 rows edit the live toml on purpose). Live-toml saves by rename (`sed -i`, or a copy + `qrun.py
   toml` + `mv` for the section-scoped `surroundedAt`), the single in-place write with python `r+`.
 - 00:30 `COPYDEV=1 prep_srv.sh $S/p2a p2a A difficulty=normal spawn-animals=true spawn-npcs=true spawn-monsters=true`:
-  swaps Brewing 11-14 23:29, Compat 00:08, Devtools 00:08, Worldgen 23:57 (copies); only cdevperfbot unlisted.
+  swaps Brewing 2026-11-14 23:29, Compat 00:08, Devtools 00:08, Worldgen 23:57 (copies); only cdevperfbot unlisted.
   zz_zpth_probe.js copied in; srv toml `[debug.passthrough] timing = true` (qrun.py toml) before the boot; the toml is
   the instance's r1115-model file (RING, denseFrom 6, leaf_pile), so boot 1 is SQ-PS15B-09's first boot.
 - 00:30 boot 1 `p2a`, pid 1356825, Done 9.96 s 00:31:32; migration line once. qrun `ps15b_a.qb` -> `perf/runs/r1116/p2/a`.
@@ -217,7 +217,7 @@ Run log entry in the queue, writeup test lists, TODO rows for FAILs, gotchas, pe
   feature placed as `/place feature` at 5 x 5 points 16 apart, at a canopy column's ground, one above its leaves, or
   a fixed y, placed blocks counted per point). Batch `ps15_wg.qb` (one boot, lint 0 E; W only: synchronous waitlog
   repeats, locate origins unloaded by design). `COPYDEV=1 prep_srv.sh $S/p4b p4b B difficulty=normal` (seed 8675309):
-  swaps Common 00:08, CD 15:34, Brewing 11-14 23:29, Compat 00:08, Devtools 00:08, Worldgen 23:57 (copies); unlisted
+  swaps Common 00:08, CD 15:34, Brewing 2026-11-14 23:29, Compat 00:08, Devtools 00:08, Worldgen 23:57 (copies); unlisted
   only cdevperfbot; probe as `zz_zcen.js`. CD jar 15:34 holds C3 (`TrunkVineFeature` source 15:32).
 - Order choice: the hops census (-11) runs before the 25 hops placements of -11b in site 2, so placed vines never
   enter the census; -11b's census figure is -11's. Every `/zcen grid` runs after its box's census.
@@ -259,7 +259,7 @@ Counts: PASS 20, INCONCLUSIVE 1, FAIL 0 (first pass: 2 Devtools tool FAILs and 1
 ### Phase 2
 
 Results `perf/runs/r1116/p2/a` (boot 1), `b` (boot 2), `c` (boot 2 tail), `d` (boot 3). Server: group A,
-difficulty normal, Compat and Devtools 11-16 00:08 build jars (copies). Mob rows on base-speed-0, 100 hp zombies.
+difficulty normal, Compat and Devtools 2026-11-16 00:08 build jars (copies). Mob rows on base-speed-0, 100 hp zombies.
 
 | ID | Result | Evidence |
 |---|---|---|

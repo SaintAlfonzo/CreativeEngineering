@@ -24,7 +24,7 @@ Second wave (rounded bases, no Fortune, own picks, bushes, nether soils, Botany 
 | Part | Status | Where |
 |---|---|---|
 | Current drop yields, every overworld farmland crop | reference (loot dump 2026-10-26) | section 2.1 |
-| Soil yield, overworld crops (26) | BUILT 2026-10-28; reworked 2026-11-03 to Rich +33% / Fertile Soil +66% of each crop's average, every crop on, Ender Crop out; Creative Delight jar in `mods/` 2026-11-03; SQ-SY-08 to -13 queued (the 10-28 PASS covered the old values) | section 2.4, 3, `creativedelight/soil_yield.js` |
+| Soil yield, overworld crops (26) | BUILT 2026-10-28; reworked 2026-11-03 to Rich +33% / Fertile Soil +66% of each crop's average, every crop on, Ender Crop out; Creative Delight jar in `mods/` 2026-11-03; SQ-SY-08 to -13 queued (the 2026-10-28 PASS covered the old values) | section 2.4, 3, `creativedelight/soil_yield.js` |
 | Wave 2: rounded bases, Fortune stripped from 77 crop tables, ripe seeds on cucumber and ghost pepper | BUILT 2026-11-14, not installed; SQ-SY-14, -15, -18 | sections 2.4, 3, 4 |
 | Wave 2: own picks (tomato vines, cucumber, ghost pepper, zucchini, 6 bushes, propelplant, colony shearing) | BUILT 2026-11-14, not installed; SQ-SY-16, -17, -19 | section 4 |
 | Wave 2: bushes (6) and nether crops (5) on the soil list | BUILT 2026-11-14, not installed; SQ-SY-17, -19, -20 | sections 2.2, 2.5, 4 |
@@ -109,7 +109,7 @@ soil columns are that mean with the soil yield at the default values (section 2.
 | Rich Soul Soil | `nethersdelight:rich_soul_soil` | `richSoulSoilBonus` | 0.33 | ghost pepper, propelplant, fungus colonies (not nether wart) |
 | Fertile Soul Soil (Nulch) | `immersive_weathering:nulch_block` | `fertileSoulSoilBonus` | 0.66 | nether wart, ghost pepper (not propelplant, not colonies) |
 
-Rich Soil and Rich Farmland are equal on purpose (owner 2026-11-14); the two keys stay separate. The nether base soils
+Rich Soil and Rich Farmland are equal on purpose (owner, 2026-11-14); the two keys stay separate. The nether base soils
 (Soul Sand for wart, Soul Soil for ghost pepper, netherrack or nylium for propelplant) give no bonus.
 
 Bonus = extra produce as a share of the crop's average (0.33 = about a third more). Range 0 to 4; 0 adds no pool. Until
@@ -307,7 +307,7 @@ crop holds only on `#vintagedelight:ghost_pepper_soil`. What it lacked was the s
   calls are reobfuscated to SRG.
 - `node tools/soil_yield_check.js` (new; runs the real script against the loot dump with the real dicts, every switch
   on): all PASS. 36 crop rows resolve; every base within 0.5 of the dump mean; Fortune gone from 76 of the 77
-  `fortune_free` tables (`hearthandharvest:blocks/hops_vine` is newer than the 11-13 dump) with the same Fortune-0 mean
+  `fortune_free` tables (`hearthandharvest:blocks/hops_vine` is newer than the 2026-11-13 dump) with the same Fortune-0 mean
   per item and age; melon and hamimelon untouched; ripe cucumber and ghost pepper seeds 2.71. The 2.1 and 2.5 means are
   its output.
 - Not checked offline: the pick mixins apply (needs a boot; `require = 1` stops the game loading if a target method

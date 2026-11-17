@@ -11,7 +11,7 @@ matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) a
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=4934c721c310 -->
+<!-- generated:status_index begin open_work sha1=d85d26fc30d9 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 45 open TODO rows (Planned 7, In Progress 2, Testing 36), 4 Complete.
 
 | Id | Status | Tests | Change |
@@ -37,7 +37,7 @@ matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) a
 | `structures/earthfill #10` | Testing | S~ | Sunk starts over-estimate the beard fill |
 | `structures/earthfill #11` | Testing | S P | Desert structures spawn in water |
 | `structures/earthfill #12` | Testing | S P | More water-replace checks for lakes |
-| `structures/earthfill #13` | Testing | S P | Override and log-level fixes the 10-30 build missed |
+| `structures/earthfill #13` | Testing | S P | Override and log-level fixes the 2026-10-30 build missed |
 | `structures/earthfill #14` | Testing | S P T | Starts with no earth are never judged |
 | `structures/earthfill #15` | Testing | S P | Pruning and footprint robustness |
 | `structures/earthfill #16` | Testing | S P | Prune offending parts instead of cancelling |
@@ -203,7 +203,7 @@ still the migration fit, so each group's rate changed by (old spacing / new spac
 x0.25, boats x0.73, remote x1.13, surface dungeons x1.27, ruins x1.9, sky x2.9, the other two unchanged.
 Per-biome detail and holes: [structures_by_biome.md](structures_by_biome.md) (last regenerated 2026-10-12, before 7.4).
 Member counts and grids refreshed 2026-10-14 from the world-load report (counts include each group's meta structures;
-some grids were changed after the 09-27 hand pass, see the history).
+some grids were changed after the 2026-09-27 hand pass, see the history).
 
 Standalone (73 structures): nether, End, underground (dungeons, ancient city, mineshafts, Terralith and Philip's
 underground sets, buried treasure), strongholds, Hopo's fossils, way signs, ruined portals (all off),
@@ -652,7 +652,7 @@ dropped piece, so no beard bump is left at the street's end. The street leading 
 piece (the town centre) is never dropped. Then the rest is judged as a whole as usual, by its own size, and can still
 be cancelled. Its size is the pruned start's, so pruning can move a start down a size class and judge it by the
 smaller limits (a large savanna village that lost its pet shop was cancelled as medium on 40 mound columns, Phase 7
-3.3); that is accepted (user, 2026-10-19). The `type/*` tags of `structure_tags.json` are real structure tags since
+3.3); that is accepted (owner, 2026-10-19). The `type/*` tags of `structure_tags.json` are real structure tags since
 2026-10-19 (`structure_overrides.js` adds them with the `meta/*` tags); before that `earth_fill/prune` was empty in game
 and nothing was ever pruned (Phase 7 3.2). The log says `[earth-fill] <id> at chunk [x, z]: pruned K of N pieces; over the piece limits: <template>
 (W water, A air, M mound), ...`. Meta structures (village_towers and the fortified metas are in the type tag) are
@@ -1230,7 +1230,7 @@ as open land. From that:
 | cherry | none | sakura grove and valley |
 | sand (sandstone towers) | desert, beach, snowy beach | desert canyon, desert spires, desert oasis, sandstone valley, lush desert, ancient sands, red oasis |
 
-**Open land without an obvious tree goes to a wood by climate** (user, 2026-10-11; temperatures from the biome files,
+**Open land without an obvious tree goes to a wood by climate** (owner, 2026-10-11; temperatures from the biome files,
 "cold" = below 0.15 or snowy, vanilla's snow line):
 
 | Climate | Wood | Biomes |
@@ -2002,7 +2002,7 @@ after pruning (satellite dropped, anchor cancels the meta).
 
 Status: BUILT 2026-10-30, patcherMod installed 2026-10-30 17:06; BROKEN: scratch r1031 (2026-10-31) SQ-TER-01 FAILED (ancient_crypt sunk start refused), SQ-TER-05 PASSED; SQ-TER-02 to -04, -06 not run. FIXED 2026-11-01: the crypt is off `sunk_start` (`structures/earthfill #17`), `/reload`; rerun SQ-TER-01b. New chunks only.
 
-**Batch 4 (#1).** Scan re-run 2026-10-30 (`terrain_adaptation_scan.py --fresh`: nothing new since 10-26 apart from the
+**Batch 4 (#1).** Scan re-run 2026-10-30 (`terrain_adaptation_scan.py --fresh`: nothing new since 2026-10-26 apart from the
 grown Sky Villages and the seabed-clearance labels). Tagged in `terrain_adaptation.js`:
 - `soft` + `template_trim`: Farmer's Structures `aquacultures_common` and `aquacultures_carp`, the old swamp fisherman
   house (ponds: water is a built block for the trim, so the pond stays whole), Philip's `level_three_ruins` (its
@@ -2729,7 +2729,7 @@ Exempt from every rule: none since 2026-11-02 (the four `plan/move_to_nether` st
 swapped (none was hit). The Unwrecked Ships **Nether ship** is disabled (`enabled: false`): it is the only crimson/warped
 ship; Overworld ships never take those pieces (the pool walk overcounted them, their jigsaw names don't match, so the
 nether_blocks_scan report lists crimson/warped for `unwrecked_ships:ship` wrongly). Read for "ancient crypt and lv2
-ruins": they had no netherrack; their soul sand/soil goes to basalt (user, 2026-10-12, changed from magma). Fence-to-wall keeps the
+ruins": they had no netherrack; their soul sand/soil goes to basalt (owner, 2026-10-12, changed from magma). Fence-to-wall keeps the
 fence's connections (low where the fence connected).
 
 **Meat blocks swapped (2026-10-12; patcherMod 1.0.6 in `build/libs`, builds, not run in game; ST-149):**
@@ -2843,7 +2843,7 @@ and saved air and its batches 1 to 3 tagged.
 **2026-10-03** (3.12, 3.13): Monobank vault pieces about 5x rarer in villages; land driftwood about a tenth of the
 water rate (water keeps 0.25x); earth fill cancels structures that need too much earth over water or air.
 
-**2026-09-27 to 09-28:** structure groups (shared grids, weights, frequencies; 3.1); the sky village moved into
+**2026-09-27 to 2026-09-28:** structure groups (shared grids, weights, frequencies; 3.1); the sky village moved into
 `sky` (3.11); structure mods converted to datapack data.
 
 **2026-09-25:** every ruined portal removed (the set kept, 7 members off).
@@ -2870,7 +2870,7 @@ measure rates and the bugs would skew them. The third (the deep dungeons) waits 
 
 #### 7.3.1 Earth fill: limits by size, beard fill not counted
 
-**Goal (user, 2026-10-13):** the cap stops a structure from generating where it would leave a huge mound of dirt
+**Goal (owner, 2026-10-13):** the cap stops a structure from generating where it would leave a huge mound of dirt
 or a floating pad: places it just shouldn't be. It should not stop a structure whose ground the beard builds
 normally.
 
@@ -3011,7 +3011,7 @@ grouping and rates still wait for that pass (3.23, ST-196).
 
 ### 7.4 Plan: new structure mods, the `vehicles` group, fortified-town meta shares (2026-10-14, BUILT 2026-10-14)
 
-**Request (user, 2026-10-14):** migrate the newly added structure mods into structure tuning. Camps go into the
+**Request (owner, 2026-10-14):** migrate the newly added structure mods into structure tuning. Camps go into the
 passive or hostile camps. The undead castle becomes a new surface dungeon and the red castle a new city/fort, with
 the city/fort meta anchor share at 75% (settled the same day as 0.20 / 0.20 / 0.40, D1). Pillager carts, wagons, witch carts and the siege weapons already in the
 pack form a new **vehicle** category (hostile only; existing metas left alone). Vehicles are rarer than camps, more
@@ -3478,7 +3478,7 @@ testing/structures/06_phase_6.md.*
 **8.0.7 Phase 7: calibration runs** (heavy logging, density x4, new worlds):
 ST-52 (earth fill `log = ALL`, with ST-159, ST-160, ST-162, ST-167 and ST-168 from the same lines), ST-169, ST-57 (water fill `log = ALL`), ST-67, ST-53, ST-58, ST-54, ST-59.
 
-*Phase 7 run 2026-10-19 (scratch server rebuilt from the Minecraft1192withForge libraries; patcherMod 1.0.7 jar because 1.0.8 crashes a dedicated server at mod loading (Serene Seasons clock mixin references the client `Minecraft` class), worldgen byte-identical; density 4; main square Chunky r 800 at -1400 -2592 in two worlds plus switch boots): ST-162, 159, 169, 67, 54, 58, 59 passed; ST-53 passed except its "slot stays empty" clause (group slots fall through to the next member); ST-160 partly (small villages log `small`; overrides pass); ST-52 and ST-57 data in the log. ST-167 FAILED as shipped: `earth_fill/prune` is empty because `type/village` is not a real structure tag, so pruning never runs; with a scratch-only tag fix ST-167 and ST-168 pass (village cancels 4 -> 2). Also found: pruning can drop a start a size class and tighten its limits; `/dumpstructuregen` broken since 10-14..10-18. Log: testing/structures/07_phase_7.md.*
+*Phase 7 run 2026-10-19 (scratch server rebuilt from the Minecraft1192withForge libraries; patcherMod 1.0.7 jar because 1.0.8 crashes a dedicated server at mod loading (Serene Seasons clock mixin references the client `Minecraft` class), worldgen byte-identical; density 4; main square Chunky r 800 at -1400 -2592 in two worlds plus switch boots): ST-162, 159, 169, 67, 54, 58, 59 passed; ST-53 passed except its "slot stays empty" clause (group slots fall through to the next member); ST-160 partly (small villages log `small`; overrides pass); ST-52 and ST-57 data in the log. ST-167 FAILED as shipped: `earth_fill/prune` is empty because `type/village` is not a real structure tag, so pruning never runs; with a scratch-only tag fix ST-167 and ST-168 pass (village cancels 4 -> 2). Also found: pruning can drop a start a size class and tighten its limits; `/dumpstructuregen` broken since 2026-10-14..10-18. Log: testing/structures/07_phase_7.md.*
 
 **8.0.8 Phase 8: two-world comparisons** (same seed, two fresh worlds each, Chunky over the same square):
 ST-144 (approached from opposite sides), ST-148 (shaping on vs off), ST-157 (second half: peaceful on vs off),
@@ -3866,7 +3866,7 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - **2026-10-13: plan 7.3 built (7.3.1, 7.3.2).** User: "implement the 7.3 changes for structure tuning". Earth fill
   counts what the beard can't fill (reach measured with vanilla's Beardifier: 6, bury 10), mound columns, limits by
   the start's own size (no size tags or tool: the count at generation is exact), `maxOverAir` removed, water under the
-  beard treated like air (the 10-03 "0 over water" was unbound fluid tags in the simulation), mansion exempt.
+  beard treated like air (the 2026-10-03 "0 over water" was unbound fluid tags in the simulation), mansion exempt.
   `/locate` through metas: dimension check, per-slot target prediction (`meta_target`), `searchTimeoutSeconds` 120,
   `/cwglocate stop` and server stop end searches. patcherMod 1.0.6 rebuilt in `build/libs`; worldgen tests pass;
   ST-158 to ST-166.

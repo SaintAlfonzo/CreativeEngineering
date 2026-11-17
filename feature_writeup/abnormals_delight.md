@@ -49,8 +49,8 @@ smelting XP, and 4 Milk Bottles per bucket (all built). The rest is the 1.21 / F
 
 | Change | Host mod | Proposed |
 |---|---|---|
-| 8 Copper Knives (plain, exposed, weathered, oxidized, and waxed of each), `WeatheringKnifeItem`; Caverns and Chasms copper tier (Stone tier without it); crafted from a copper block and a stick; oxidise and wax via C&C data maps | Caverns and Chasms | **postponed** (owner 2026-10-25): part of the Caverns and Chasms port ([TODO.md](todo/TODO.md) ports #1); the copper tier and weathering belong to that port, the knives follow it |
-| Plum Cabinet | Environmental 1.21 (plum wood) | **no** (owner 2026-10-25): no new cabinets |
+| 8 Copper Knives (plain, exposed, weathered, oxidized, and waxed of each), `WeatheringKnifeItem`; Caverns and Chasms copper tier (Stone tier without it); crafted from a copper block and a stick; oxidise and wax via C&C data maps | Caverns and Chasms | **postponed** (owner, 2026-10-25): part of the Caverns and Chasms port ([TODO.md](todo/TODO.md) ports #1); the copper tier and weathering belong to that port, the knives follow it |
+| Plum Cabinet | Environmental 1.21 (plum wood) | **no** (owner, 2026-10-25): no new cabinets |
 | Cherry Cabinet removed (vanilla cherry has an FD cabinet in 1.20) | Environmental | no: no new cabinets, and not obtainable in the pack today |
 
 All 49 old ids still exist. Of them, only the Neapolitan cake slices, perch / pike lines, Pickerelweed Juice, the

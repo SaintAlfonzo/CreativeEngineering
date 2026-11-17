@@ -615,7 +615,7 @@ The 172 tables used by one or two structures ([loot_islands.md](../loot_islands.
 shared tables.
 
 ### Now
-Analysis only (2026-10-03, from the 10-02 index: the 21 unindexed tables aren't in it).
+Analysis only (2026-10-03, from the 2026-10-02 index: the 21 unindexed tables aren't in it).
 
 ### Build
 Part of #1: every island is mapped to a tree node (`map` in `loot_tree.json`) instead of being folded into another

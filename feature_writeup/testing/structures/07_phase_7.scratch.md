@@ -2,15 +2,15 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only.
+- Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only.
 - Milestone: M7. Tests: ST-52 (+159, 160, 162, 167, 168 from the same lines), ST-169, ST-57, ST-67, ST-53, ST-58,
   ST-54, ST-59. ST-52 and ST-57 are data for the user (numbers per size / limits), not pass/fail.
-- **Session 5 (2026-10-19, d2be77ec) restarts M7 from scratch.** The 10-14 attempt (session 4) died right after its
+- **Session 5 (2026-10-19, d2be77ec) restarts M7 from scratch.** The 2026-10-14 attempt (session 4) died right after its
   Chunky start; its server and world st_c are gone, no results were taken.
 - Server: session 5 scratchpad srv/. Libraries + run.sh from ~/.local/share/atlauncher/servers/Minecraft1192withForge
   (Forge 1.19.2-43.3.9; the Trash CreEngServer copy is gone). 374 server mods symlinked from mods/ by mod_sides.md
   (45 client skipped); srv/vinery_upstream -> instance vinery_upstream (the Vinery port reads it; boot fails without).
-  Jar: **patcherMod 1.0.7** (build/libs, md5 c0bdc0e1, 10-18 16:27), NOT the 1.0.8 in mods/: **1.0.8 crashes a
+  Jar: **patcherMod 1.0.7** (build/libs, md5 c0bdc0e1, 2026-10-18 16:27), NOT the 1.0.8 in mods/: **1.0.8 crashes a
   dedicated server at mod loading** (Open issues 1). The worldgen package is byte-identical in 1.0.7 and 1.0.8 (jar
   diff: only CEConfig, time/, advancements, oven, IECompat, RemainderBuffer, SeasonHud mixin), so Phase 7 results hold
   for 1.0.8. Over 1.0.6 (Phases 1-6): earth_fill/stone_base, census per-chunk fix, LocateLoads, GroundMatch, PoolTuner.
@@ -18,8 +18,8 @@
   CANCELLED -> ALL, water_fill log CANCELLED -> ALL, meta_structures log false -> true, placement_priority log
   false -> true. Restore = scratchpad toml_instance.toml (the instance's own copy is never edited).
 - server.properties: seed 8675309, max-tick-time -1, port 25599, offline. asyncLocatorThreads 4 in st_c/serverconfig.
-- World st_c. Main square Chunky r 800 at -1400 -2592 (68% land on 10-14). Switch squares (r 400, disjoint, land
-  shares from 10-14): 200 -2592 (66%), -1400 -4200 (84%), -1400 -1000 (36%, coast), -3000 -2592 (29%).
+- World st_c. Main square Chunky r 800 at -1400 -2592 (68% land on 2026-10-14). Switch squares (r 400, disjoint, land
+  shares from 2026-10-14): 200 -2592 (66%), -1400 -4200 (84%), -1400 -1000 (36%, coast), -3000 -2592 (29%).
 - Running: nothing. M7 tests all run 04:20; next: writeup 07_phase_7.md. Worlds st_c (base, tag empty), st_c2 (base +
   tag patch), st_c3 (boots 2-4) in srv/. Digest: scratchpad ef.py <log> [from] [to].
 
@@ -100,7 +100,7 @@
   the fit tags, way-sign destinations) of structure_tags.json into real structure tags; type/* tags exist only inside
   the script. earth_fill.js puts '#creativeengineering:type/village' in earth_fill/prune -> nested reference to a tag
   nobody fills -> empty -> EarthFill.filter never prunes (structure.is(PRUNE) false). Pruning has never run live
-  since it was built (10-13, sim-only). Same for the CEConfig overrides example "#creativeengineering:type/village=...".
+  since it was built (2026-10-13, sim-only). Same for the CEConfig overrides example "#creativeengineering:type/village=...".
   The only other "type/" user is MassPlacer (reads the JSON, fine).
 - SCRATCH PATCH 07 (srv copy only, instance untouched): structure_overrides.js meta-tag filter also takes
   'type/village' (`|| t === 'type/village'`). Toml back to base (pruneMax 8/4) = scratchpad toml_m7_base_107.toml.
@@ -186,8 +186,8 @@
 - 04:20 stopped; instance config/kubejs untouched (the patch and all toml changes were in srv/ only).
 - Side finding: /dumpstructuregen is broken: every set has _errors "Cannot find function locateOffset /
   frequencyReductionMethod / frequency / salt / spacing ..." and empty structure lists (214 with field errors). The
-  instance's own kubejs/exported/worldgen/structuregen.json of 10-18 18:31 (user's client) is the same; the 10-14
-  Phase 6 dump worked. dump_structuregen.js unchanged since 09-27 -> something else changed (mod/jar). Not chased.
+  instance's own kubejs/exported/worldgen/structuregen.json of 2026-10-18 18:31 (user's client) is the same; the 2026-10-14
+  Phase 6 dump worked. dump_structuregen.js unchanged since 2026-09-27 -> something else changed (mod/jar). Not chased.
 
 ## Results
 
@@ -214,7 +214,7 @@
    village ids itself. (a) also makes "#creativeengineering:type/village=..." overrides work. Tested on the scratch
    copy with (a) limited to type/village.
 3. **/dumpstructuregen broken** (every set: placement methods not found, structure lists empty; also in the
-   instance's 10-18 client dump). Not chased.
+   instance's 2026-10-18 client dump). Not chased.
 
 0. (Results so far) ST-162 PASSED, ST-59 PASSED, ST-159 PASSED, ST-160 PARTLY (small villages exist; overrides part
    in boot 2), ST-57 data taken, ST-52 data taken, ST-167/168 pending the prune diagnostic.

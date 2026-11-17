@@ -717,7 +717,7 @@ raw-skewer downsides (worse food, poison chance; "nasty" hazard downside for chi
   a restart" -> DEPLOYED.
 - food.md 3.2 and 3.7 headings "(built, restart pending)" -> "(DEPLOYED with 1.0.2)".
 - food.md 3.5: the "ambiguous overload, prove it first" risk replaced by: both forms are in use and confirmed by the
-  10-20 dump; the consumer form keeps old flags.
+  2026-10-20 dump; the consumer form keeps old flags.
 - food.md 3.8: `#forge:eggs` 10 -> 12 items (duck, goose), with a pointer to this brief's rescan (Brewin' port ids).
 - food.md 3.9: the egg rule covers 12 eggs, not 10.
 - food.md 4.2 finding 4: Farmer's Respite is installed now, its entries apply; only `largemeals` is dead; unknown

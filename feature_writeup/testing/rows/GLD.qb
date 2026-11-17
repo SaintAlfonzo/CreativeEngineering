@@ -57,7 +57,7 @@ expect \[salttest\] PASS leftover vintagedelight:salt_block by water dissolves
 reject \[salttest\] FAIL
 look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06, -08)
 
-## SQ-SLT-04 | Salt recipes and tags after the move (pre-move baseline: batches/r1103/sA_baseline, 10-30 dump)
+## SQ-SLT-04 | Salt recipes and tags after the move (pre-move baseline: batches/r1103/sA_baseline, 2026-10-30 dump)
 @group A
 @commands `/dumpall` (or the recipe and tag dumps), then grep the dumps: recipe type `salt:salting`; tag `#salt:can_be_salted`; recipe ids `create__the_salt:bread`, `create__the_salt:cooked_beef_salted`; the three ids `kubejs/data/creativedelight/kubejs/creativedelight/salt.js` removes (`create__the_salt:salt_create_crushing`, `create__the_salt:salt_create_milling`, `create__the_salt:salt_create_recipe`) and `salt:salt_from_raw_rock_salt`
 @pass `salt:salting` recipes and `#salt:can_be_salted` present with the same counts as the pre-move dump in `exported/` (`#salt:can_be_salted` holds 290 entries, salt.md 5); the two Create: The Salt mixing recipes present; the removed ids absent; the rebuilt raw rock salt to 4 salt dust recipe present
@@ -1113,7 +1113,7 @@ shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.j
 shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativeengineering:placed_sweet_potato_pancakes' else 1)"
 shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
 shell python3 -c "import json;d=json.load(open('${B0:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
-look placed-link count one higher than the 10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
+look placed-link count one higher than the 2026-10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
 
 ## SQ-PCK-05 | pancake recipes unchanged
 @group A
@@ -1168,7 +1168,7 @@ bootreject Error occurred while handling event
 shell grep -hE "\[swaps\]|item merge" logs/latest.log logs/kubejs/startup.log | head -20
 shell grep -hE "\[itemMerges\] creativedelight" logs/kubejs/server.log logs/latest.log | head -3
 shell ls config/creativeengineering-swaps.toml && grep -nE "^\[swappers\]|^\s*(onWorldLoad|onPlayerDataLoad|onContainerOpen|onCommand|onceWhenUpdated) =" config/creativeengineering-swaps.toml
-look record the logged merge count (43 pairs in the 11-03 swap lists; the row text says 38 / 40 / 43: take the number and put it in item_merges.md 6.1); the four counts agree; five keys under [swappers]
+look record the logged merge count (43 pairs in the 2026-11-03 swap lists; the row text says 38 / 40 / 43: take the number and put it in item_merges.md 6.1); the four counts agree; five keys under [swappers]
 
 ## SQ-SWP-02 | purged ids not hidden as JEI removals; long coffee becomes coffee
 @group A

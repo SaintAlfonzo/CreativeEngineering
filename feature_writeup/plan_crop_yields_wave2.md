@@ -335,7 +335,7 @@ Botany Pots keeps its own row (`mod-additions #35`) with a line pointing here.
 |---|---|---|
 | Q1 (DECIDED yes) | Rounding changes only the size of the soil extra (plain drops untouched)? | yes |
 | Q2 | Names | DECIDED: Rich Soul Soil, Fertile Soul Soil (no rename) |
-| Q3 | Fortune | DECIDED: strip Fortune from all crop drops (section 1); melon, hamimelon and cantaloupe drops left alone (owner 2026-11-14) |
+| Q3 | Fortune | DECIDED: strip Fortune from all crop drops (section 1); melon, hamimelon and cantaloupe drops left alone (owner, 2026-11-14) |
 | Q4 | Adzuki on Rich / Fertile Soil | DECIDED: existing soils only, no new blocks; confirm replant mixin vs keep as is (default mixin) |
 | Q5 | Bushes | DECIDED: strawberries, blueberries, cranberries, lemon, sweet berries, salmonberries (5.2) |
 | Q6 | Peanut soil | PINNED for later |

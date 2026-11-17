@@ -13,17 +13,17 @@ row says the failure was fixed. 13 of 14 are stale; 1 is a real open break.
 
 | Line | Feature | BROKEN came from | Now | Cause | Proposed |
 |---|---|---|---|---|---|
-| 26 | Can parity worksheet | r1103 SQ-VNG-01 FAILED | fixed 11-03 (`dishes/ingredients #6`, vinegar alias) | seed error; also a worksheet | `reference` (override, see below); its queue codes move to Cans |
-| 47 | Vintage Delight | r1103 SQ-VP-06 FAILED, SQ-VTD6-02 open | VP-06 fixed 11-03 (fork B); VTD6-02 is a hand-check | seed error (stale) | derived (BUILT) |
-| 49 | Creative Delight | r1114 SQ-CDW-01/-02/-03b, SQ-MIN-03; r1103 CDFW-07, WCD-02 | r1103 pair fixed 11-03; MIN-03 rerun PASS r1115; CDW fix built 11-14 23:30, not rerun | real at r1114, fix awaiting rerun | derived (BUILT) |
-| 56 | Creative Worldgen | r1103 SQ-CWG-06 FAILED | `punch` key fixed 11-03 (`structures/metas #12` Testing) | seed error (stale) | derived |
+| 26 | Can parity worksheet | r1103 SQ-VNG-01 FAILED | fixed 2026-11-03 (`dishes/ingredients #6`, vinegar alias) | seed error; also a worksheet | `reference` (override, see below); its queue codes move to Cans |
+| 47 | Vintage Delight | r1103 SQ-VP-06 FAILED, SQ-VTD6-02 open | VP-06 fixed 2026-11-03 (fork B); VTD6-02 is a hand-check | seed error (stale) | derived (BUILT) |
+| 49 | Creative Delight | r1114 SQ-CDW-01/-02/-03b, SQ-MIN-03; r1103 CDFW-07, WCD-02 | r1103 pair fixed 2026-11-03; MIN-03 rerun PASS r1115; CDW fix built 2026-11-14 23:30, not rerun | real at r1114, fix awaiting rerun | derived (BUILT) |
+| 56 | Creative Worldgen | r1103 SQ-CWG-06 FAILED | `punch` key fixed 2026-11-03 (`structures/metas #12` Testing) | seed error (stale) | derived |
 | 60 | Creative Split | r1114 SQ-DEP-02 | note itself says "fixed, see r1115"; r1115 rerun done | seed error | derived |
-| 61 | End's and Ender's Delight | r1103 SQ-ENM-03, -04b FAILED | both fixed and installed 11-03 (`creativedelight/members #46`) | seed error (stale) | derived |
-| 64 | Golden Food | r1103 SQ-GLD-03 FAILED | ruled environmental 11-03 (bundle not from the drinks); rerun on a fresh bot | seed error (stale) | derived |
+| 61 | End's and Ender's Delight | r1103 SQ-ENM-03, -04b FAILED | both fixed and installed 2026-11-03 (`creativedelight/members #46`) | seed error (stale) | derived |
+| 64 | Golden Food | r1103 SQ-GLD-03 FAILED | ruled environmental 2026-11-03 (bundle not from the drinks); rerun on a fresh bot | seed error (stale) | derived |
 | 70 | Barbeque's Delight | r1114 SQ-BBQW-02s | fixed r1115 (fix-2, CD 03:18; `dishes/meals #67` Testing) | real at r1114, fixed | derived |
 | 73 | Farmer's Delight 1.3.4 | r1103 SQ-FDB-05 FAILED | by design (`placeAs` needs a restart) | seed error | derived (DEPLOYED) |
 | 77 | Farmer's Respite 2.1.2 | r1103 SQ-RSP-06, -15 FAILED | batch fault, not a pack bug (plan_scratch_bugfix_1103 2.2) | seed error | derived (DEPLOYED) |
-| 114 | Time system | r1103 SQ-PST-08/-10/-11/-11b FAILED | rule changed and hooks rebuilt 11-03 (`farming/crops #28` Testing) | seed error (stale) | derived |
+| 114 | Time system | r1103 SQ-PST-08/-10/-11/-11b FAILED | rule changed and hooks rebuilt 2026-11-03 (`farming/crops #28` Testing) | seed error (stale) | derived |
 | 119 | Creative Labels | r1103 SQ-LBS-03, -04 FAILED | fixed in `creativeLabels-1.0.1` (`largecontent/stickynotes #7` Testing); jar not installed as of that note | seed error (stale); check `jarstamp.py pending` | derived (BUILT) |
 | 140 | Portals | r1115 SQ-PG-01c FAIL, -01b | URGENT Bug `gameplay/tnt-and-portal #38` open (client dies lighting a Flint and Terrasteel portal); `#15` Bug | **real break** | override `BROKEN` until #38 closes |
 | 169 | Third-party bug fixes | r1114 SQ-TPF-01 (Debugify all-on crash) | r1115 SQ-TPF-00, -01 PASS with the shipped debugify.json | seed error (stale) | derived |
@@ -172,7 +172,7 @@ Changes:
   [testing/test_prefix_index.md](../testing/test_prefix_index.md) (rules plan); not changed here.
 - Rows whose only jar is `kubejs` (88 Sky Village addons) have no jar stamp, so the DEPLOYED rule cannot fire for them;
   the rule needs a fallback (deploy version of the instance payload) or such rows keep an override.
-- Many DEPLOYED rows with "since 1.0.3" (Engineering, recipes, Shields, Archery) now map to jars carved on 11-01 to 11-04;
+- Many DEPLOYED rows with "since 1.0.3" (Engineering, recipes, Shields, Archery) now map to jars carved on 2026-11-01 to 2026-11-04;
   their derived status will read BUILT until the next deploy carries those jars, which is accurate for the code but not
   for the feature. Owner: accept, or override DEPLOYED until the next release.
 
@@ -191,5 +191,5 @@ Changes:
 |---|---|---|
 | 1 | Tooling rows (Resource pack bench, Deploy pipeline, Process review) have jar `tools`, a code location without a stamp | kept; `tools`, `kubejs` and `datapack` never make a feature DEPLOYED |
 | 2 | Rows whose only location is `kubejs` can never derive DEPLOYED (scripts carry no stamp) | kept; override where wanted |
-| 3 | Every own jar except Tempad differs in content from the 1.2.02 payload (reinstalled 2026-11-16, and most changed since 11-09), so the 62 features marked DEPLOYED derive BUILT until the next release | rule kept, no blanket override; `build_deploy.py --snapshot` now records stamp and content digest per own jar, so the next release sets DEPLOYED exactly |
+| 3 | Every own jar except Tempad differs in content from the 1.2.02 payload (reinstalled 2026-11-16, and most changed since 2026-11-09), so the 62 features marked DEPLOYED derive BUILT until the next release | rule kept, no blanket override; `build_deploy.py --snapshot` now records stamp and content digest per own jar, so the next release sets DEPLOYED exactly |
 | 4 | Holding row for 57 queue codes | reassign per section c |

@@ -9,7 +9,7 @@
 @@sources feature_writeup/immersive_paintings.md
 @@text
 @@text Not run. Built 2026-11-05 00:42 (`creativecompat-1.0.0.jar` in `development/creativeCompat/build/libs/`), NOT installed
-@@text (`mods/` still has the 11-04 19:05 jar with the 950 generated files). The vanilla 30 are in
+@@text (`mods/` still has the 2026-11-04 19:05 jar with the 950 generated files). The vanilla 30 are in
 @@text `kubejs/data/creativeengineering/paintings/minecraft/`. Offline check passed: the Java builder reproduces all 445 modded
 @@text entries from `mods/*.jar` with no pixel or json difference, and a test zip overrides one painting's art.
 @@text

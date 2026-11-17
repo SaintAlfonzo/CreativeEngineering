@@ -268,7 +268,7 @@ reads slots 0-1 only, one item each, and ignores the container and water, so two
 Planned: 6 slots like the pot and oven (patcherMod), then the recipes with `NCH.frBrewing`. Until then every drink
 below keeps its current recipes. Grid (manual) crafts stay either way.
 
-### Decided (user 2026-10-22)
+### Decided (owner, 2026-10-22)
 - **Move to the Kettle** (pot recipe removed when the Kettle one goes in): Coffee, Milk / Honey / Chocolate / Dark
   Coffee, Apple Cider, Hot Cocoa, Creamy Corn Drink, Ender Nectar, Pickerelweed Juice, Cloud Latte, Mango Milkshake,
   Hawberry / Lychee Cherry / Mango / Mangosteen / Peach Tea, Chorus Juice. Apple Cider and Hot Cocoa already have

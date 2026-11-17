@@ -155,7 +155,7 @@ liquid experience, press** (`global.CD.food` `goldenEnchant`; loops and mB in `g
 - The enchanted golden cake has no recipe, as upstream (it never had an anvil pair or a crafting recipe); creative only.
 - Without Create no enchanted golden food can be made (the helper skips the recipe).
 
-### 3.4a Golden foods: 8 gold nuggets (owner 2026-11-02, built 2026-11-03)
+### 3.4a Golden foods: 8 gold nuggets (owner, 2026-11-02, built 2026-11-03)
 Every goldenfood golden food, the golden cake included, is its input food in a ring of 8 gold nuggets
 (`#forge:nuggets/gold`, rose gold counts), through `goldenGild` in CD `goldenfood/golden.js` (23 calls). The helper
 removes upstream's shaped recipe (8 gold ingots around the food, served from the donor data) and adds the family's
@@ -175,7 +175,7 @@ overridden any more), so creativeworldgen loot `07_rules.js` `useVanilla(..., { 
 (plan_scratch_bugfix_1103 7.3): only Chalk's restore is kept; Botania's and CC:Tweaked's are gone, and their native
 injections are removed after the roll (`10_removals.js`, LootJS `@botania` / `@computercraft` in `minecraft:chests/village/*`).
 
-### 3.6 Values: multipliers of the input food (owner 2026-11-02, built 2026-11-03)
+### 3.6 Values: multipliers of the input food (owner, 2026-11-02, built 2026-11-03)
 CD startup `kubejs_startup/goldenfood/golden_values.js` (priority -50, `ItemEvents.modification`): a golden food's
 hunger = input hunger x 2, a gilded food's = input x 4, both capped at 20; the saturation modifier is the input's
 (so saturation points scale with hunger). Multipliers and cap: `kubejs/generation_scripts/food/food_tuning.json`
@@ -196,7 +196,7 @@ showed 5 other members' scripts pending from parallel work).
 If `food_tuning.json` is missing (an instance without the pack's `kubejs/generation_scripts/`, such as CEPortTesting)
 the script logs a warning and leaves the upstream values instead of a startup error (2026-11-06).
 
-### 3.7 Gilded names (owner 2026-11-02, built 2026-11-03)
+### 3.7 Gilded names (owner, 2026-11-02, built 2026-11-03)
 Client lang `kubejs/assets/creativedelight/kubejs/goldenfood/names.js`: every item_dict id with an
 `enchanted_golden_` path is "Gilded" + the rest in title case (Golden Food's 24, the apple, Immersive Weathering's
 moss clump), their cans "Canned Gilded ...", their incomplete items "Incomplete Gilded ...". Ids unchanged. Canned

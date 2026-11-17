@@ -21,7 +21,7 @@
 @from batches/r1031/a1_boot.qb
 bootexpect \[terrain-adaptation\] world load
 bootreject \[terrain-adaptation\].*ignored
-look the world-load line: trimmed up by 4, "1 air-trimmed", sunk starts up by 1 against the 10-30 run (ST-303)
+look the world-load line: trimmed up by 4, "1 air-trimmed", sunk starts up by 1 against the 2026-10-30 run (ST-303)
 
 ## SQ-TER-02 | ponds and the swamp fisherman house sit on a slope
 @group A

@@ -19,7 +19,7 @@ Taken, in order:
 2. r1113 resume steps 1 to 3 ([scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 12): fix_c2a1, fix_c3a1, c4_ar2,
    pwg17r, cq_pwg17.
 3. r1113 resume step 4: c2_l1 onward through group B (rerun_b + c4_b).
-4. SQ-CC12 Creative Common 1.2.0 publish re-check (build/libs 11-13 23:12, scratch mods only).
+4. SQ-CC12 Creative Common 1.2.0 publish re-check (build/libs 2026-11-13 23:12, scratch mods only).
 5. P11 Power Grid regression ([scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 9) with the pending batch fixes
    from its section 10.
 
@@ -32,8 +32,8 @@ As r1113 (section 2 there), plus the TPF scripts `tools/scratch_query/tpf_*.{py,
 ## 3. Jars
 
 `mods/` vs build/libs at 00:00: build newer than mods for creativecommon (1.2.0 23:12 vs 1.1.0), creativecompat
-(11-13 17:58), creativebrewing and creativecalendar (11-12 20:47), creativeengineering (11-10 23:06),
-creativeworldgen-own (11-10 22:38). prep_srv.sh swaps newer build jars into scratch srv only. Power Grid -17 in
+(2026-11-13 17:58), creativebrewing and creativecalendar (2026-11-12 20:47), creativeengineering (2026-11-10 23:06),
+creativeworldgen-own (2026-11-10 22:38). prep_srv.sh swaps newer build jars into scratch srv only. Power Grid -17 in
 `mods/` (dropped by prep_srv.sh unless PGJAR set).
 
 ## 4. Order
@@ -178,7 +178,7 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
   (c1+ are client rows), so every phase 2 server is `tpf_srv.sh OUT LEVEL A shipped @s1 -- spawn-animals=true
   spawn-npcs=true ...` (Packet Fixer = the instance file), COPYDEV=1. Results under `perf/runs/r1114/<batch>/`.
 - 01:16 fix_c2a1 boot (`tpf_srv.sh $S/fixc2a1 fixc2a1 A shipped @s1 -- spawn-animals=true spawn-npcs=true`, probes c2, zp,
-  zact): Debugify "Enabled 10/34", Packet Fixer applied, Done 10.0 s. SoL Carrot is now in the instance mods/ (11-13 17:57,
+  zact): Debugify "Enabled 10/34", Packet Fixer applied, Done 10.0 s. SoL Carrot is now in the instance mods/ (2026-11-13 17:57,
   has a mod_sides.md row), so every srv carries it. fix_c2a1.qb 01:17 to 01:24: PASS 2, FAIL 2, LOOK 11. Stopped.
 - 01:27 judged by a subagent (`perf/runs/r1114/verdicts/fix_c2a1.md`): PASS 11, FAIL 2 (BBQW-02s stick loss, ROLL-12b
   medley cans exist), BATCH-FAULT 2 (ROLL-11, BBQ2-05: the "+4 food per eat" of c2a1 is peaceful regen, 1 food per 10
@@ -271,18 +271,18 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
   Log `$S/c2nb/latest_try1.log`. 03:28 reboot with a scratch-only override of that file in srv/kubejs/data (impossible
   condition): Done 10.5 s, no other blocker; only Brewin' class miss is Create Central Kitchen's own optional mixin
   WARN (qrun's bootreject matched it); worldgen grape rules and the Raspberry Pie ladder skip vinery entries cleanly.
-- 03:30 c1_g1 old-save pair: the header's premise is stale (mods/ CD is now the 11-13 jar without the stews). Boot 1
+- 03:30 c1_g1 old-save pair: the header's premise is stale (mods/ CD is now the 2026-11-13 jar without the stews). Boot 1
   `NOSWAP=1 tpf_srv.sh $S/c1g c1g A shipped @s1 -- spawn-animals=false` with the CD jar swapped for
-  `jar_archive/cdns_full/creativedelight-1.1.0.jar` (11-10 01:04, has the stews and jar fluid but NOT the golden cans,
+  `jar_archive/cdns_full/creativedelight-1.1.0.jar` (2026-11-10 01:04, has the stews and jar fluid but NOT the golden cans,
   so the can expect FAILed: fixture has stews, keepers and a filled jar, no cans). 03:32 `oldsave_swap.sh`, boot 2 on
-  build jars (Common 1.2.0, CD 11-13): c1_g2 FAIL was the bootreject matching the batch's own `give` "Unknown item"
+  build jars (Common 1.2.0, CD 2026-11-13): c1_g2 FAIL was the bootreject matching the batch's own `give` "Unknown item"
   reply (BATCH-FAULT; regex now excludes console replies). Substance: chest keeps golden bread, beef, canned bread,
   mushroom stew only; jar `moonlight:empty`; bot inventory empty; both gives Unknown item; no missing-id lines.
 - 03:35 c3_co (`cc_only_srv.sh alone`, Common 1.2.0 + KubeJS stack), Done 24 s, reload clean, clean stop. 03:36 c3_co2
   (Armor Trims relabelled 1.4.0): one WARN, PASS. Reduced sets (cc_only, cpp_chain) carry no Debugify / Packet Fixer.
 - 03:37 c3_cc1 (Common + Compat + Calendar + Serene Seasons) Done 24 s clean; 03:38 c3_cc2 (+ Equipment, nothing else
   needed) Done 24 s clean.
-- 03:39 c3_ch1 FML stop: Creative Worldgen declares 18 worldgen mods mandatory (owner 11-06; Terralith, YUNG's,
+- 03:39 c3_ch1 FML stop: Creative Worldgen declares 18 worldgen mods mandatory (owner, 2026-11-06; Terralith, YUNG's,
   Towns and Towers ...). Rebuilt with them in EXTRA (header updated), Done 52 s. ENGM-05 shell FAIL was Worldgen's
   `[wild-crops] could not read ... or kubejs/generation_scripts/worldgen/biome...` (the biome list is an instance
   file, absent in a jar-only set; the line names the creativedelight path); transition items 86, failed recipes 1.
@@ -355,7 +355,7 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
 
 ### Phase 4 SQ-CC12
 
-- Jar: `development/creativeCommon/build/libs/creativecommon-1.2.0.jar` (11-13 23:12), in scratch srv only (instance
+- Jar: `development/creativeCommon/build/libs/creativecommon-1.2.0.jar` (2026-11-13 23:12), in scratch srv only (instance
   `mods/` keeps 1.1.0). Batches `batches/r1114cc12/cc12_01.qb` to `cc12_03.qb`, results `perf/runs/r1114/cc12_0N/`
   (`latest_stop.log` = the full log after the stop). Short targeted boots inside perf session r1114.
 - 09:57 cc12a (`cc_only_srv.sh $S/cc12a cc12a full spawn-monsters=true`), Done 27.4 s: SQ-CC12-01. Swap summary
@@ -573,7 +573,7 @@ cpp_chain: no Debugify / Packet Fixer). Common 1.2.0 (build/libs) on every set.
 | SQ-CEN-02b | PASS | c2_l1b: count 12, PERCENT, tutorial true, CD rainOutTicks 120, Compat has no [campfire] |
 | SQ-CFR-03 | PASS | c2_l2: carry line before merge; CD rainOutTicks = 100; Compat [campfire] 0 (qrun FAIL = grep -c exit 1, batch fixed) |
 | SQ-DEP-02 | FAIL | c2_nobrew: datapack load fails without Creative Brewing: CD Hearth and Harvest member loot modifier `hearthandharvest:cherries_from_cherry_leaves` names vinery:cherry_leaves / vinery:cherry unguarded. With that file overridden (scratch only) the boot is clean: no Brewin'/Vinery class error from our jars (CCK's own optional mixin WARN), grape rules and the Raspberry Pie ladder skip cleanly |
-| SQ-GLD-16 | PASS | c1_g1/g2: old stews and jar fluid gone (jar moonlight:empty, chest keeps golden bread, beef, canned bread, mushroom stew), both gives Unknown item, golden bread nutrition 10, canned bread made, stew eat leaves 2 + bowl, no script error. Cans half not covered: the only stew-era CD jar left (jar_archive/cdns_full, 11-10 01:04) predates the golden cans. qrun FAIL = bootreject matched the batch's own give reply (batch fixed) |
+| SQ-GLD-16 | PASS | c1_g1/g2: old stews and jar fluid gone (jar moonlight:empty, chest keeps golden bread, beef, canned bread, mushroom stew), both gives Unknown item, golden bread nutrition 10, canned bread made, stew eat leaves 2 + bowl, no script error. Cans half not covered: the only stew-era CD jar left (jar_archive/cdns_full, 2026-11-10 01:04) predates the golden cans. qrun FAIL = bootreject matched the batch's own give reply (batch fixed) |
 | SQ-CMV-02 | PASS | c3_co: Common alone Done 24 s, reload clean, 0 KubeJS errors, clean stop |
 | SQ-CMV-03 | PASS | c3_co2: one "armor_trims 1.4.0 is outside the tested range" WARN, no mixin error |
 | SQ-CIF-04 | PASS | c3_cc1: Common + Compat + Calendar + Serene Seasons + KubeJS stack, clean |
@@ -620,7 +620,7 @@ CDW-03b minor, CBP-11 owner call), INCONCLUSIVE 2 (SQ-FCK-08b, RD-10), BATCH-FAU
 
 ### Phase 4 SQ-CC12
 
-Common 1.2.0 (build/libs 11-13 23:12) in scratch srv only. Results `perf/runs/r1114/cc12_0N/`.
+Common 1.2.0 (build/libs 2026-11-13 23:12) in scratch srv only. Results `perf/runs/r1114/cc12_0N/`.
 
 | ID | Result | Evidence |
 |---|---|---|

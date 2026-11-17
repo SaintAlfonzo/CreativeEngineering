@@ -69,7 +69,7 @@ before the update is the only way back.
 | IE rare / masterwork shader grab bags; IP coker reward | IE / IP advancements | IE loot chests |
 | Lightman's Currency chocolate coins (event) | LC event advancements | none |
 
-Pack rule from now on (user, 2026-10-18): don't design features that grant items, unlock recipes or detect
+Pack rule from now on (owner, 2026-10-18): don't design features that grant items, unlock recipes or detect
 progress through advancements. Use FTB Quests, loot or code.
 
 ## 4. Limits and decisions

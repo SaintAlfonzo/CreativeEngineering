@@ -134,7 +134,7 @@ sleep 1
 @@sources feature_writeup/blockrunner.md
 @@text
 @@text Gap sweep of `unreleased.md` against the queue: every bullet already had a row except the Walk Speed values below and
-@@text the Cast Iron Plating rename. Same jars as SQ-BRA, newest 11-10 builds (Common 23:26, Compat 23:25, Devtools 22:38; none in `mods/`, which holds the 21:11-21:23 jars), `blocktags.js` of
+@@text the Cast Iron Plating rename. Same jars as SQ-BRA, newest 2026-11-10 builds (Common 23:26, Compat 23:25, Devtools 22:38; none in `mods/`, which holds the 21:11-21:23 jars), `blocktags.js` of
 @@text 2026-11-10 22:45); run in the SQ-BRA boot. Modifier = 0.1 x (factor - 1), read with the BlockRunner uuid
 @@text `23237052-61ad-11eb-ae93-0242ac130002` as in SQ-BRA-05. CQ-NCR-01 needs only `kubejs/client_scripts/namechanges.js` (any client).
 @@text

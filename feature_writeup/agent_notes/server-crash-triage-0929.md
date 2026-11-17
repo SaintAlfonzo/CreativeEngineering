@@ -1,15 +1,15 @@
 # server-crash-triage-0929
 
-> 2026-09-29 triage of external-server debug/ (7 crash reports 09-26..09-29, jar 1.0.1): campfire spawn-scan hang, DH CPU starvation, level.random race, loot-tuning/trades bugs; actions and the 1.0.2 fixes at the end
+> 2026-09-29 triage of external-server debug/ (7 crash reports 2026-09-26..2026-09-29, jar 1.0.1): campfire spawn-scan hang, DH CPU starvation, level.random race, loot-tuning/trades bugs; actions and the 1.0.2 fixes at the end
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-29). Repo status docs win over any status line here.
 
-Triage of `debug/` (external server, homeservera, i7-8565U 4c/8t, -Xmx6G, running 1.0.1). 7 reports = 6 incidents; 3 reports with NO "Server thread" in the dump are post-crash zombies (DH non-daemon threads keep the JVM up, watchdog kills it ~60 s later). The 09-29 11:12 one means a real crash ~11:11 whose report wasn't provided.
+Triage of `debug/` (external server, homeservera, i7-8565U 4c/8t, -Xmx6G, running 1.0.1). 7 reports = 6 incidents; 3 reports with NO "Server thread" in the dump are post-crash zombies (DH non-daemon threads keep the JVM up, watchdog kills it ~60 s later). The 2026-09-29 11:12 one means a real crash ~11:11 whose report wasn't provided.
 
 Open at triage time (2026-09-29; actions below):
-- **No Hostiles Around Campfire** (09-28 19:37 watchdog): Collective `FABFunctions.getBlockEntitiesAroundPosition` calls `Level.getChunk(x,z)` for chunks `c-n..c+n-1`, n=ceil(radius/16), on EVERY hostile CheckSpawn; config radius 48 -> n=3 forces sync chunk gen at the loaded edge. Radius 32 (n=2) stays inside chunks vanilla guarantees loaded around an entity-ticking chunk. Alternatively a patcherMod mixin to skip unloaded chunks.
+- **No Hostiles Around Campfire** (2026-09-28 19:37 watchdog): Collective `FABFunctions.getBlockEntitiesAroundPosition` calls `Level.getChunk(x,z)` for chunks `c-n..c+n-1`, n=ceil(radius/16), on EVERY hostile CheckSpawn; config radius 48 -> n=3 forces sync chunk gen at the loaded edge. Radius 32 (n=2) stays inside chunks vanilla guarantees loaded around an entity-ticking chunk. Alternatively a patcherMod mixin to skip unloaded chunks.
 - **Distant Horizons server gen** (config/DistantHorizons.toml: numberOfThreads=6, threadRunTimeRatio 1.0, distantGeneratorMode FEATURES): 5-8 DH threads RUNNABLE vs <=1 Worker-Main at every hang; FEATURES mode runs mod Feature.place on DH threads.
-- **level.random race** (09-27 22:10 "Accessing LegacyRandomSource from multiple threads"): victim Regrowth MoveEntityEvent line 430 = `entity.level.random.nextDouble()`; the off-thread user isn't recorded (1.19.2 CAS failure only dumps the loser). Candidate fix: mixin Level.<init> RandomSource.create() -> createThreadSafe(), and/or DH SURFACE mode.
+- **level.random race** (2026-09-27 22:10 "Accessing LegacyRandomSource from multiple threads"): victim Regrowth MoveEntityEvent line 430 = `entity.level.random.nextDouble()`; the off-thread user isn't recorded (1.19.2 CAS failure only dumps the loser). Candidate fix: mixin Level.<init> RandomSource.create() -> createThreadSafe(), and/or DH SURFACE mode.
 
 FIXED (in c6a3433, server has c566438/1.0.1): loot/05_tuning.js bare `for (k = ...)` (82 tables failed on server, 17 vs 176 rewritten); economy/trades.js top-level `i` clobbered -> "Sell item cannot be empty" after removeModdedTrades (Mechanical Engineer left with no trades). Both are memory `rhino-fieldandmethods-gotcha` shared-scope bugs.
 

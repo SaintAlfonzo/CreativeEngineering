@@ -27,10 +27,10 @@ batches written by subagents from the r1111 verdicts. Results `perf/runs/r1112/<
 
 | Jar | `mods/` | build/libs used | Rows |
 |---|---|---|---|
-| Spice of Life: Raspberry Pie Addition | 11-12 20:47, **did not boot** (section 7 21:20); 21:27 fixed build installed | 11-12 21:21 | SQ-RP |
-| Creative Common | 11-12 18:55 | 11-12 20:46 | all |
-| Creative Compat, Calendar, Brewing | 11-10 | 11-12 20:46 to 20:47 | all |
-| Creative Delight | 11-10 21:20 | 11-11 16:52 | SQ-HH, SQ-OB |
+| Spice of Life: Raspberry Pie Addition | 2026-11-12 20:47, **did not boot** (section 7 21:20); 21:27 fixed build installed | 2026-11-12 21:21 | SQ-RP |
+| Creative Common | 2026-11-12 18:55 | 2026-11-12 20:46 | all |
+| Creative Compat, Calendar, Brewing | 2026-11-10 | 2026-11-12 20:46 to 20:47 | all |
+| Creative Delight | 2026-11-10 21:20 | 2026-11-11 16:52 | SQ-HH, SQ-OB |
 
 Scratch servers get COPIES of the build jars.
 

@@ -728,7 +728,7 @@ Final lists (the open part of Q15, settled while building; change them in `food_
 
 Decisions for the owner (defaults taken; renaming is a find-and-replace while nothing reads `f`):
 
-- Juices are `fruit_juice_<name>` (owner 2026-11-01; were `drink_juice_<name>`), beside the jams (`fruit_jam_<name>`).
+- Juices are `fruit_juice_<name>` (owner, 2026-11-01; were `drink_juice_<name>`), beside the jams (`fruit_jam_<name>`).
   All 26 juice keys, carrot, dandelion and the grape wines included, are under `fruit` as the jams are.
 - `f` names items only. Tag values (`i.milk = '#forge:milk'`, `i.flour`) stay in `i` / `global.tags`.
 - Exotic mob ingredients from End's and Hostile Delight stay under their meat or fish family names (`meat_ghasttentacle`);
@@ -968,7 +968,7 @@ Not changed: `mod_sides.md` gets the `creativedelight` row now; the three member
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CDF-01, -02, -04, -05, SQ-CDFW-01, -02, -03, -04, -05, -08, -09, SQ-CDJ-07, -12, SQ-CDJ4-08b, SQ-CDQ-01, -02, -03, -05, -05b, -06, -06b, SQ-FFH-02, SQ-WCD-01, -03, -06; FAIL SQ-CDF-08: `gen_compost_values.py --check` found 21 compostables without a row; owner ran `--add-new` 19:50, rerun pending (waits for rebuilt CD / CB jars); FAIL SQ-LEM-01: right-click pick gives about 1.4 lemons, not 2 to 5 (the pick path ignores `lemon_tree.json`); FAIL SQ-LEM-02: knife and saw give 4 slices, not 8 (`fruitsdelight/recipes.js` 16-17 `replaceOutput` is a no-op); OPEN (no verdict, rerun row written) SQ-CDF-06, SQ-CDFW-07, SQ-WCD-02, -04; rerun pending (batch fault) SQ-CDFW-06, SQ-WCD-07.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-JSL-01, -02, SQ-CDF-06, SQ-CDFW-06, SQ-WCD-07; FAIL SQ-CDFW-07: a duck fillet cuts into 2 fillets, a dupe loop: `#forge:raw_duck` holds the fillet (`abnormals_delight/recipes.js` 20); FAIL SQ-WCD-02: no wild melons in 98 jungle chunks (`placed_feature/wild/melon.json`, `minecraft` `patch_melon.json` override); SQ-WCD-04 OPEN: 0 FD wild cabbages on one beach box with wildCrops false, weak evidence; needs a larger beach box on a B world.
-- r1103 boot fix (runner, 2026-11-03): boot crash in `LemonTreePickYieldMixin` fixed (the handler now takes `(ItemLike, int)`); in the CD build of 11-03 00:48, NOT installed to `mods/` (TODO `farming/trees #3`).
+- r1103 boot fix (runner, 2026-11-03): boot crash in `LemonTreePickYieldMixin` fixed (the handler now takes `(ItemLike, int)`); in the CD build of 2026-11-03 00:48, NOT installed to `mods/` (TODO `farming/trees #3`).
 
 Offline, run 2026-10-25: every new or moved script compiles in KubeJS's Rhino; NCH loads with no dicts and `ns()` /
 `withNamespace` scope, nest, restore after an error and reject a bad name (headless Rhino); patcherMod, the three repacks and
@@ -2001,7 +2001,7 @@ the first to decide.
 
 **Owner note 2026-11-06 (repack investigation, Fruits / Hostile / More):**
 - **More Delight: repack** (MIT; 6 classes, no mixins, Ocean's pattern). `TierRegistry` replaced for the knife stats (fixes SQ-MRD-01), `ItemRegistry` for fast toasts and the Cheese Toast. Do first.
-- **Hostile Delight: repack** (AFL 3.0, Canned Goods precedent: `replaced_classes`, AFL section 6 marks, overlay GPL-3.0-only). Needed for `mod-additions #43` (native tooltips, effects as food properties) and B4/B11; the rest of the 11-04 plan stays KubeJS/data. Upstream `mods.toml` says 1.0.0, so the repack version must sort above it.
+- **Hostile Delight: repack** (AFL 3.0, Canned Goods precedent: `replaced_classes`, AFL section 6 marks, overlay GPL-3.0-only). Needed for `mod-additions #43` (native tooltips, effects as food properties) and B4/B11; the rest of the 2026-11-04 plan stays KubeJS/data. Upstream `mods.toml` says 1.0.0, so the repack version must sort above it.
 - **Fruits Delight: status quo.** Standalone ARR jar plus the CD fix mixins (version-gated to 0.5.11). Revisit only if its Java behaviour must change; then prefer an LGPL-2.1 port of 1.1.3 (Barbeque's precedent; 1.20.1, bundles Registrate/MixinExtras/l2serial) over the donor route.
 
 

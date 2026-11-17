@@ -477,7 +477,7 @@ the same effect from armor stays hidden; pack-owned foods use the six-argument c
 | Builder's Tea Haste (Create), Canned Pufferfish (Canned Goods), Farmer's Respite foods, Immersive Weathering foods | third-party | 5- or 6-arg, hidden | **shown** (`forceHudIconItems`, 2026-10-31); Builder's Tea from an open-ended pipe: `mixin/CreateTeaPipeIconMixin` |
 | Anti-Fire (Immersive Petroleum) | `isVisibleInGui` / `isVisibleInInventory` false | client extension | hidden: internal marker |
 
-Open (owner 2026-10-31, not built): the open-ended pipe's Builder's Tea Haste lasts 21 ticks, refreshed every 5; make it
+Open (owner, 2026-10-31, not built): the open-ended pipe's Builder's Tea Haste lasts 21 ticks, refreshed every 5; make it
 20 s from a CEConfig value (TODO `potions/effects #15`). More fluids drinkable from an open-ended pipe (the pack's drink
 fluids, `OpenEndedPipe.registerEffectHandler`; TODO `potions/effects #16`).
 

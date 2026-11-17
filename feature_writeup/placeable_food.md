@@ -93,7 +93,7 @@ Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools
   `fruitsdelight.tooltip.place` from every item except line 0, so the Food Plate items keep their names. DD's config is unchanged.
 - Gives two items their first item_dict keys: `i.golden_cake`, `i.enchanted_golden_cake`, plus the tag keys `i.t_placeable*`.
   They sit in the generated "Placeable food" block.
-- **Coaster: only items with a coaster model** (owner 2026-10-25, [food_families.md](food_families.md) 4.4). Every food of
+- **Coaster: only items with a coaster model** (owner, 2026-10-25, [food_families.md](food_families.md) 4.4). Every food of
   the `raw/*`, `cooked/*`, `egg` and `dairy` food types had joined `#creativedelight:placeable_on_coaster` and the ones
   without a coaster model lay flat on the tray; that step was cut from `tools/placeable_catalog.py` the same day, so the
   tag holds the Brewin' port's and the pack's coaster models only (152). Adding models for the produce stays open.

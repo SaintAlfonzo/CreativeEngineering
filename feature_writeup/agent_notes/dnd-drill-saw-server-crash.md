@@ -12,4 +12,4 @@ Fix: `mixin/ExcavationDrillItemMixin` (onBlockDestroyed+destroyVein, require=2) 
 
 Related: [patchermod-coremod](patchermod-coremod.md), [creengserver-dedicated-server](creengserver-dedicated-server.md), memory `debugging-with-latest-log`.
 
-2026-09-29: the external server ran jar 1.0.1 (with these mixins) from 09-27 with players breaking blocks and never hit this crash again, so the fix works in practice. See [server-crash-triage-0929](server-crash-triage-0929.md).
+2026-09-29: the external server ran jar 1.0.1 (with these mixins) from 2026-09-27 with players breaking blocks and never hit this crash again, so the fix works in practice. See [server-crash-triage-0929](server-crash-triage-0929.md).

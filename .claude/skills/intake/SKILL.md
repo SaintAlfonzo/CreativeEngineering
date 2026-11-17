@@ -6,7 +6,7 @@ description: Turn owner notes (todo/scratchpad.md blocks, "owner notes" sections
 # Design intake
 
 Why: owner decisions are collected before an agent builds, not after (plan_process_overhaul.md P1.3; review finding 6:
-about 6 owner reversals in the 11-10 to 11-16 week). Measure: owner reversals per plan.
+about 6 owner reversals in the 2026-11-10 to 2026-11-16 week). Measure: owner reversals per plan.
 
 ## 1. Split
 

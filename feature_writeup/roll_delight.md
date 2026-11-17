@@ -66,7 +66,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Overlap | 2 | Salmon Maki Roll (upstream "Amazing Salmon Roll") vs FD Salmon Roll (committed, D12); medleys vs FD Rice Roll Medley; Tobiko vs Oceanic Delight Fish Egg Roll. Rice Roll and slice are **not** an overlap (owner, 2026-10-31) |
 | Fold-in | 4 | 19 steps planned |
 | Decisions | 5 | D1-D17, all settled, D6 values confirmed (2026-11-01) |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator and `/cdevgen` wait on the game |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts); in `mods/` since the CD jar of 2026-11-02 14:01, not played; `/dumpall`, can generator and `/cdevgen` wait on the game |
 | Tests | 8 | ROLL-01..27 in game: none run. Scratch r1102b (2026-11-02): SQ-ROLL-01, -02, -05 to -09 PASS; SQ-ROLL-03, -04 OPEN (probe eats from the main hand only); CQ-ROLL-10 waits for the client round |
 
 - **Jar:** 178 files; bundles `mixinextras-forge-0.5.0` (jarjar), unused by the code.
@@ -74,7 +74,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 - **Dependencies:** declares only Minecraft 1.20.1. Needs Farmer's Delight at runtime (recipes use `farmersdelight:cooking`,
   `cutting`, `cooked_rice`, `salmon_slice`, `brown_mushroom_colony`; chopsticks code names 6 FD ids) but does not declare it.
 - **Pack references:** none. No script, tag, dict or Display Delight entry names `roll_delight`. The dumps in
-  `kubejs/exported/` (items 2026-10-24, names 10-20) cannot contain it; `/dumpall` is step 0 of the fold-in.
+  `kubejs/exported/` (items 2026-10-24, names 2026-10-20) cannot contain it; `/dumpall` is step 0 of the fold-in.
 
 ## 1. Overview
 
@@ -230,7 +230,7 @@ cooked = 1.0) stands unchanged.
 
 A medley returns exactly what went in (no food gained); it is storage and display.
 
-**Build (owner 2026-10-31, D8 settled).** The Roll medleys are written as the FD Rice Roll Medley is: a `FeastBlock`
+**Build (owner, 2026-10-31, D8 settled).** The Roll medleys are written as the FD Rice Roll Medley is: a `FeastBlock`
 subclass with an 8-entry serving list (`riceRollServings` pattern: the serving item is picked by the remaining-servings
 index) and an `IntegerProperty` of servings. FD's block takes its servings with an empty hand (its servings have no
 container), which is the behaviour the owner wants kept, and being a `FeastBlock` it shows in the Feast Plating tab and
@@ -438,7 +438,7 @@ Code goes into a Creative Delight member (memory `creative-delight-routing`, Rus
 19. **Release:** `mod_sides.md` row (both sides), player changelog bullets under a "Roll Delight" family, TODO row,
     plan row.
 
-### 4.1 Families and pattern check (owner 2026-10-31)
+### 4.1 Families and pattern check (owner, 2026-10-31)
 
 Each new food is folded in as the family it fits ([food_families.md](food_families.md) 3.1), then compared with the foods
 already in that family. "Different" below means a pattern the family does not yet have, not just a different number.
@@ -565,7 +565,7 @@ so nothing was eaten; rerun after the off-hand fallback in the probe.
 ## 9. History
 
 - 2026-11-04 (plan_meals_rolls_bbq.md B): Cooked Nether Wart to type `ingredient`; slice renamed Salmon Maki Roll Slice; Golden Roll 20 / 0.6 and slice 10 / 0.5 by the golden rule (kelp copy dropped); slice-gild and no-can checks; ROLL-23..27.
-- 2026-10-30: investigation written (jar inventory, decompiled code, overlap against the 10-24 item dump), nothing built.
+- 2026-10-30: investigation written (jar inventory, decompiled code, overlap against the 2026-10-24 item dump), nothing built.
 - 2026-10-31: owner rulings recorded: Rice Roll kept (not an overlap), Amazing Salmon Roll held for evaluation, Mushroom, Golden (golden food system) and Tobiko added; frogspawn source defined (shears plus Carnivore Frog Roe).
 - 2026-10-31: D9 settled (shears kept, Carnivore source optional, no work); Golden Roll handled like Golden Food's added foods (`goldenGild`).
 - 2026-10-31 (second round): plans written in: Ancient Roll on Ancient Fruit + Chorus Flower (B2, D2 closed); Nether Roll meat tag; Cooked Nether Wart, both medleys (FeastBlock subclasses, D8) and redesigned chopsticks (3.3, D5) added; B1-B9 fixes recorded; families and pattern check (4.1); D11-D16 opened; tests ROLL-15..20 drafted.
@@ -575,4 +575,4 @@ so nothing was eaten; rerun after the off-hand fallback in the probe.
 - 2026-11-01 (sixth round): chopstick tag now takes the fish family tags (raw, raw_cut, cooked_cut) plus 22 ids (3.3.3); `_wood` Ender Paella / Pearl Pasta ids dropped (the pack removes them); End's Delight removal flagged for 7 listed ids.
 - 2026-11-01 (seventh round): cooked whole fish (family tag `fish/cooked`) and Pufferfish added to the chopstick tag (3.3.3); Kippers and Surstromming come in through the cooked tag.
 - 2026-11-01: BUILT (4.2): `backportedRoll` member nested in CD, CD scripts, donor folder in build_deploy; Golden Roll on the golden tier, slice 2 / 1.2 without effects; lengthen factor in `roll_delight-common.toml`. Not installed; SQ-ROLL queued. Open: Display Delight plates, wrapped chopsticks Item Physic / BlockRunner, dump-driven generators.
-- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 11-02 14:01; scratch r1102b: SQ-ROLL-01, -02, -05 to -09 PASS, -03 / -04 OPEN (probe fault).
+- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 2026-11-02 14:01; scratch r1102b: SQ-ROLL-01, -02, -05 to -09 PASS, -03 / -04 OPEN (probe fault).

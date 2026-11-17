@@ -20,7 +20,7 @@
 | 12 `kubejs:*` potions from vanilla effects (resistance, health boost, absorption, glowing, saturation, wither, levitation, mining fatigue, hunger, nausea, blindness, darkness) with base / long / strong brews | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |
 | Java-registered potions for modded effects: Long Reach, Phantom Bane (Better Beacons), Magic Resistance (pack) | DEPLOYED; Magic Resistance reagent is a placeholder |
 | Brewing mixes as item-agnostic `PotionBrewing.Mix` (MoreJS): one list drives the brewing stand, Create Automatic Brewing, the Create mixer and the IE Mixer | DEPLOYED |
-| Alex's Mobs fixes (modifier steps on splash/lingering, poison resistance re-based, lava vision base on both mixers) and Rustic Delight haste made item-agnostic; duplicate-recipe trim (`PotionMixDedup`) | DEPLOYED (built 2026-09-06 to 09-08), in-game check never recorded |
+| Alex's Mobs fixes (modifier steps on splash/lingering, poison resistance re-based, lava vision base on both mixers) and Rustic Delight haste made item-agnostic; duplicate-recipe trim (`PotionMixDedup`) | DEPLOYED (built 2026-09-06 to 2026-09-08), in-game check never recorded |
 | Create Automatic Brewing rebuilt at load so the pack's potions are in it; item dragon's breath removed; dragon's breath **fluid** turns splash into lingering (heated mixer) | DEPLOYED |
 | IE Mixer on Create's `create:potion` fluid (1500 mB), with splash and lingering parity, thick/mundane bases allowed | DEPLOYED |
 | IE Refinery "Lingerification": regular or splash + 250 mB dragon's breath fluid → lingering | DEPLOYED |
@@ -294,7 +294,7 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 
 ## 8. History
 
-- 2026-09-06 to 09-08: potion fluid rework: IE Mixer, Bottler and Refinery on `create:potion`, splash/lingering parity,
+- 2026-09-06 to 2026-09-08: potion fluid rework: IE Mixer, Bottler and Refinery on `create:potion`, splash/lingering parity,
   Lingerification, dedicated JEI pages, IE fluid tooltips, AM brewing fixes. Built and deployed; the in-game checklist
   was never recorded.
 - By 2026-09-27 (initial git commit): all of the above plus the `kubejs:*` potions, Better Beacons and Magic Resistance

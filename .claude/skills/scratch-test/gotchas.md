@@ -17,14 +17,14 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   rewrote a hard-linked jar in place), `NoSuchMethodError` on a Mojang name or ClassNotFoundException mid-load (Gradle's
   `jar` step leaves an un-reobfuscated file), a boot-crashing mixin installed mid-run, Immersive Portals 2.3.7 + Serene
   Seasons' ChunkMap wildcard AT crash at world creation (`MixinChunkMap_C ... cannot reduce visibility`) from an
-  unlisted jar (10-21, 10-25, 10-27, 11-01, 11-06, r1102b, r1108hh). Earlier workarounds, now covered by the pin:
+  unlisted jar (2026-10-21, 2026-10-25, 2026-10-27, 2026-11-01, 2026-11-06, r1102b, r1108hh). Earlier workarounds, now covered by the pin:
   copying dev jars (`COPYDEV=1`, `split_w234.sh`, `drive.sh` decouple), checking jar times before each boot or rerun.
 - Never `cp` onto a name that already exists in `srv/mods/` before the pin: those files are hard links to the
   instance's `mods/`, so the copy writes THROUGH into the pack's jar (r1106cbb: prep_srv's swap, stale SWAPS row, `cp -l`
   failed on the existing name, plain `cp` fallback, overwrote `mods/creativecommon-1.1.0.jar`). prep_srv and port_chain
   now `rm -f` the target name first (partly checked: qpin.py pin replaces links with copies after the swaps).
 - Server base: libraries + run.sh from `~/.local/share/atlauncher/servers/Minecraft1192withForge` (Forge 43.3.9);
-  scratch_server.sh / prep_srv.sh handle it. The old Trash CreEngServer is gone (10-19).
+  scratch_server.sh / prep_srv.sh handle it. The old Trash CreEngServer is gone (2026-10-19).
 - Mods for the server: every `mods/*.jar` except `client` rows in mod_sides.md; never `server_mods/` (stale).
 - Every `*_upstream/` donor folder in the instance root (`ls -d *_upstream`) must be linked into srv/ BEFORE the boot;
   ports that refuse to load without theirs (Vinery, Tempad) fail mod construction. A bundle loads every nested member,
@@ -33,7 +33,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - prep_srv's SWAPS table has to follow jar renames: after the 2026-11-04 Common swap the `creativeengineering-*` glob is
   the Engineering jar. Rows pick the newest build jar per project (`newest()`); read the `swap:` lines before booting
   (r1106cbb).
-- Power Grid: prep_srv.sh drops any `backportedPowerGrid-*.jar` unless PGJAR names one (11-13: the -17 jar sat in the
+- Power Grid: prep_srv.sh drops any `backportedPowerGrid-*.jar` unless PGJAR names one (2026-11-13: the -17 jar sat in the
   instance `mods/` with no mod_sides.md row). PGJAR before r1115 needed an absolute path; a relative one silently booted
   without Power Grid (a client with Power Grid then crashes on join). prep_srv.sh now resolves it and prints "PGJAR NOT
   FOUND".
@@ -67,7 +67,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 ## Boot and shutdown
 
 - One game JVM at a time: `game_jvms.sh` empty before every boot. `scratch_server.sh stop` and `stop_wait.sh` can return
-  while the JVM is still saving, and a boot then starts a second JVM that hangs in mod loading (10-25, r1108cge2)
+  while the JVM is still saving, and a boot then starts a second JVM that hangs in mod loading (2026-10-25, r1108cge2)
   (partly checked: prep_srv.sh and `qrun.py drive` refuse while a game JVM is up; a reboot of an existing OUT through
   `scratch_server.sh boot` does not check).
 - Never pipe `scratch_server.sh boot` into `tail`/`head`: the server child keeps the pipe open and the command hangs
@@ -434,7 +434,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   value box input handler skips `testHit` for a FakePlayer and replays the click as `BlockState.use` at the block
   centre: a probe clicking a value-box block (modular display slots) must call `BlockState.use` itself (r1113).
 - Create Gravity 1.2.0 on a dedicated server was inert until a `/reload` (its biome list is built only on
-  TagsUpdatedEvent after its server config loads); Common 11-08 00:49 builds it at server start, so with an older Common
+  TagsUpdatedEvent after its server config loads); Common 2026-11-08 00:49 builds it at server start, so with an older Common
   a gravity row needs a `/reload` first (r1108cge). The low-gravity modifier is added only while an entity falls (on the
   Common-only set it was never added at all, TODO `creativecommon/publish #3`; r1107cco) and is transient: `data get
   entity ... Attributes` never shows it; read it with `attribute <target> forge:entity_gravity get` (0.016 = factor

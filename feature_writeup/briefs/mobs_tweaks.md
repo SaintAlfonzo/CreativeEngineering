@@ -19,7 +19,7 @@ Jars checked (decompiled with vineflower, under `scratchpad/decomp/`): `alexsmob
 | #8 | Merge monkeys | Planned | small once decided: config / data, + JEI hide |
 | #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional patcherMod |
 | #5 | Quark monster boxes | Built | vault rework built 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9); MT-34 to MT-37, MT-47 to MT-50 |
-| #2 | MCA villagers glitch while sleeping | Bug | reported on adults (user, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
+| #2 | MCA villagers glitch while sleeping | Bug | reported on adults (owner, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
 | #12 | MCA villager eye colour | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
 
 Build order:
@@ -610,7 +610,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
   `LivingEntityRendererMixin` (empty). None of them touch a sleeping villager. MCA's panic arm wave can't show in
   bed: panic replaces the REST activity, and `WakeUp` (in `getImportantCorePackage`) then wakes the villager. Sleep
   itself is vanilla `SleepInBed` (`getRestPackage`). If adults show the symptom, the cause is (b) or (c) below.
-- **Adults confirmed (user, 2026-10-22).** The report was about adults, so the baby wobble is a side bug (still worth
+- **Adults confirmed (owner, 2026-10-22).** The report was about adults, so the baby wobble is a side bug (still worth
   the same mixin, low priority). Also checked in code 2026-10-22, nothing found: MCA's rest package matches vanilla's
   (`ExtendedWalkTowardsTask` to HOME stops within 1 block, which a sleeper always is; the RunOne wander needs HOME
   absent); no mod in `mods/` mixes into villager sleep or `SleepInBed` (Bedspreads only registers its beds as POI;

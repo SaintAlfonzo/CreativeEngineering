@@ -65,7 +65,7 @@ shell grep -c "not registered - add a row\|no incomplete item registered" logs/k
 > cdevtest bytype create:sequenced_assembly max=1
 expect verb=bytype serializer=create:sequenced_assembly n=296$
 reject \[cdevtest\] verb=\S+ done=0
-look sequenced assembly count against 296 (11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
+look sequenced assembly count against 296 (2026-11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
 
 ## SQ-CBC-05
 @group A (chain)

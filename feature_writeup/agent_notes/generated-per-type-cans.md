@@ -1,6 +1,6 @@
 # generated-per-type-cans
 
-> tools/gen_can_types.py -> can_types.json drives EVERY can (hand-written raw cans migrated 10-21), Canned Goods orphan values (norecipe), family sprites per section, pot (Cooking Pot) sections
+> tools/gen_can_types.py -> can_types.json drives EVERY can (hand-written raw cans migrated 2026-10-21), Canned Goods orphan values (norecipe), family sprites per section, pot (Cooking Pot) sections
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

@@ -169,7 +169,7 @@ Changelog: no bullet yet (plans only). The bullets come with the build.
 | Overlap survey (section 1) | Written 2026-10-23 |
 | Integration | Partly started (fishing net, item dictionary); rest is `largecontent/mod-additions #5` and `dishes/ocean` |
 | Fishing net, caviar names, squid chain (section 5) | DEPLOYED 1.1.03 (server and players, 2026-10-26); SQ-FN-01, SQ-FN-04 and the squid half SQ-CDB-03, -04 PASSED 2026-10-25; SQ-CDB-05 (glowing calamari recipes, server half) PASSED r1102b; SQ-FN-03 LOOK in r1102b (junk share to judge), SQ-FN-02 (biome loot, group B) not run (deep scan 2026-11-02) |
-| Oceanic donor route (section 5.6) | BUILT 2026-11-01 (`portedOceanic` -02 in the CD jar; in `mods/` since the CD jar of 11-02 14:01, not played); needs `oceanic_upstream/` on server and clients; SQ-DNR-O-01 to -05 queued, not run (not in r1102b's scope) |
+| Oceanic donor route (section 5.6) | BUILT 2026-11-01 (`portedOceanic` -02 in the CD jar; in `mods/` since the CD jar of 2026-11-02 14:01, not played); needs `oceanic_upstream/` on server and clients; SQ-DNR-O-01 to -05 queued, not run (not in r1102b's scope) |
 | Tentacles removed, seagrass salad (section 5.5) | Shipped 1.1.05; SQ-CM-31 PASSED r1031; SQ-CM-32 FAILED r1031 (calamari dishes missing), fix PASSED r1101 (SQ-CM-32, SQ-CM-35), unreleased |
 | Test list | Section 6 (DA-01 to DA-03, DA-08 to DA-11); `DA-04` to `DA-07` stay proposed in the dishes_ocean brief; boot check `SQ-AD-00` |
 
@@ -363,7 +363,7 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
   in code, so the dump showed no container and the rule never ruled them. Built: the nine Comfort / Nourishment bonuses removed
   from `OceanicItems` (Instant Breath kept); `tools/gen_comfort_nourishment.py` treats the 13 Oceanic bowl foods as bowls
   (`CODE_CONTAINERS`) and the paella and stuffed pufferfish servings as feast servings (`CODE_FEASTS`). The effects are now
-  FoodProperties, so JEED lists them by itself (no `jeed_providers.js` row needed). Result (dump of 10-30):
+  FoodProperties, so JEED lists them by itself (no `jeed_providers.js` row needed). Result (dump of 2026-10-30):
 
 | Food | Was (code) | Now (rule) |
 |---|---|---|

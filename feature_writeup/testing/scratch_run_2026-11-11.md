@@ -28,11 +28,11 @@ Not taken: client rows (owner list in section 8); SQ-FDI (Spice of Life: Carrot 
 
 | Jar | `mods/` | build/libs used | Rows |
 |---|---|---|---|
-| Creative Common | 11-10 21:20 | 11-10 23:26 | all |
-| Creative Compat | 11-10 21:11 | 11-10 23:25 | SQ-BRA |
-| Creative Devtools | 11-10 21:23 | 11-10 22:38 | SQ-BRA-02 (`/dumpsurface`) |
-| Creative Engineering | 11-10 21:11 | 11-10 23:06 | SQ-FLR |
-| Creative Delight | 11-10 21:20 | **11-11 16:52 rebuild** (the 11-10 23:24 jar does not boot, section 7 17:00) | SQ-HCS, SQ-RDB, SQ-NSM |
+| Creative Common | 2026-11-10 21:20 | 2026-11-10 23:26 | all |
+| Creative Compat | 2026-11-10 21:11 | 2026-11-10 23:25 | SQ-BRA |
+| Creative Devtools | 2026-11-10 21:23 | 2026-11-10 22:38 | SQ-BRA-02 (`/dumpsurface`) |
+| Creative Engineering | 2026-11-10 21:11 | 2026-11-10 23:06 | SQ-FLR |
+| Creative Delight | 2026-11-10 21:20 | **2026-11-11 16:52 rebuild** (the 2026-11-10 23:24 jar does not boot, section 7 17:00) | SQ-HCS, SQ-RDB, SQ-NSM |
 
 Scratch servers get COPIES of the build jars.
 
@@ -42,12 +42,12 @@ Scratch servers get COPIES of the build jars.
 - 02:06 A1 boot 1 CRASHED in mod loading: `NoSuchMethodError IntegerProperty.create(String,int,int)` in
   `roll_delight` `RollMedleyBlock.<clinit>`. The FML crash left the JVM up and the runner did not notice until 16:48
   (the boot was started in the background and nothing waited on it): 14 h lost.
-- 16:50 Cause: the Creative Delight 11-10 23:24 jar nests `backportedRoll` before its reobf (55737 bytes, Mojmap names;
+- 16:50 Cause: the Creative Delight 2026-11-10 23:24 jar nests `backportedRoll` before its reobf (55737 bytes, Mojmap names;
   the reobfed member jar is 56265 bytes, 23:25). `ce.forge-bundle.gradle` `bundleJar` depended on each member's `jar`
   task only; ForgeGradle's `reobfJar` rewrites that same file afterwards as a finalizer, so a bundle can pack the
   un-reobfed file. Fix (build logic only): `bundleJar` also depends on each member's `reobfJar`. Delight rebuilt 16:52,
   Roll nested at 56265. The `mods/` Delight (21:20) is not affected. Other bundles (Brewing, Worldgen) have the same
-  race in their 11-10 builds unless rebuilt: check with the nested jar sizes before installing.
+  race in their 2026-11-10 builds unless rebuilt: check with the nested jar sizes before installing.
 - 16:53 A1 boot 1 again: Done 10.7 s. `a1.qb`.
 - 17:00 SQ-BRA-05 to -07: full-height blocks read "no modifier", short ones the exact value. Probes: the perfBot does
   not collide with blocks (stops at the superflat floor y -60, inside a block placed at -60); with the block as the
@@ -86,7 +86,7 @@ Scratch servers get COPIES of the build jars.
   fixture: backpack skins and `creativeengineering:iron_camera_bag` (not in 1.2.02), sky island / meta structure /
   waystone (superflat has no Overworld structures; a 1.2.02 normal world risks the r1110 crow chunk crash), seasoned
   food and paintings (client rows). Fixture world, manifest, old configs and both logs: `perf/runs/r1111/nsm/`.
-- 21:08 New jars (prep_srv swaps: Common 11-11 16:50, Compat 16:51, Delight 16:52, Engineering 11-10 23:06, Brewing,
+- 21:08 New jars (prep_srv swaps: Common 2026-11-11 16:50, Compat 16:51, Delight 16:52, Engineering 2026-11-10 23:06, Brewing,
   Worldgen, Devtools; the rest `mods/`) on a copy of the fixture, old-named Labels / Exposure configs only. Done 4.3 s.
   Probe `tools/scratch_query/nsm_probe.js` (login dimension, shrapnel spawns, `/nsmprobe recipes`). Reads in
   `perf/runs/r1111/nsm/nsm02_reads.txt`.

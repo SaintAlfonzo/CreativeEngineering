@@ -151,7 +151,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `bushierflowers` | 5 | grown flower biome modifiers | Worldgen |
 | `fireflybushport` | 1 | firefly bush biome modifier | Worldgen |
 | `immersive_weathering` | 11 | Upgrade Aquatic coral block growths | Worldgen ? (IW soil/plant growth is a worldgen-side system in note [iw-soil-wild-plants](../agent_notes/iw-soil-wild-plants.md); Compat if read as an IW tweak) |
-| `fruitsdelight`, `vinery`, `rusticdelight`, `neapolitan` | 4 + 6 + 3 + 2 | wild crop configured features and biome modifiers | CD (wild crops system lives in Creative Delight since 10-25; creative_delight.md 1100 to 1108) |
+| `fruitsdelight`, `vinery`, `rusticdelight`, `neapolitan` | 4 + 6 + 3 + 2 | wild crop configured features and biome modifiers | CD (wild crops system lives in Creative Delight since 2026-10-25; creative_delight.md 1100 to 1108) |
 | `creativedelight/worldgen/` | 29 | wild crop configured/placed features | CD |
 | `more_mooblooms/moobloom_spawns/creativeengineering.json` | 1 | moobloom spawn rules | CD (moreMooblooms member) |
 | `felsic_gear/loot_tables/blocks/felsic_block.json` | 1 | felsic block drop | Equipment |

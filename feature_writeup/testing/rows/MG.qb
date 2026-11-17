@@ -48,7 +48,7 @@ waitlog verb=tickwarp end=done 240
 > execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
 expect No entity was found
 look the chimp kill finds nothing; the alexsmobs banana check fails and the neapolitan one passes (if neither, gorillas did not forage in the 2400 warped ticks: count leaves near qa, warp longer); spreadplayers moves the bot across the canopy
-# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+# `if entity ...nbt` and `place feature` left no log line on 2026-10-31 B1: data get probes instead
 > execute at qa run tp qa ~ ~ ~
 sleep 1
 capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
@@ -76,7 +76,7 @@ waitlog verb=tickwarp end=done 240
 > execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
 > execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
 look first check fails, second passes
-# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+# `if entity ...nbt` and `place feature` left no log line on 2026-10-31 B1: data get probes instead
 > execute at qa run tp qa ~ ~ ~
 sleep 1
 capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)

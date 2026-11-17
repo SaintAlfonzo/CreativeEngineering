@@ -954,7 +954,7 @@ look a 0 in one biome is not a fail by itself if the biome tag holds it (the row
 @draft no batch holds this row yet
 ## CQ-PSD-09
 @group client
-@commands LOOK (owner 2026-11-02, `farming/crops #35`): `/fill` a 5x3 farmland bed, plant `vintagedelight:oat_seeds`, step each third with `/setblock ... vintagedelight:oat_crop[age=N]` for every age 0 to 7 (several ripe ones), screenshot side on and from above; compare with a wheat bed beside it
+@commands LOOK (owner, 2026-11-02, `farming/crops #35`): `/fill` a 5x3 farmland bed, plant `vintagedelight:oat_seeds`, step each third with `/setblock ... vintagedelight:oat_crop[age=N]` for every age 0 to 7 (several ripe ones), screenshot side on and from above; compare with a wheat bed beside it
 @pass every stage reads as a recoloured, bushier wheat; ripe oats two blocks tall with visibly varied heights and shapes across the bed; no missing-texture cube; owner signs off on the look
 @fails `kubejs/assets/vintagedelight/blockstates/oat_crop.json` and the `oat_stage7` / `7a` / `7b` models (vintage_delight.md 4.0c)
 @jars creativecalendar creativedelight

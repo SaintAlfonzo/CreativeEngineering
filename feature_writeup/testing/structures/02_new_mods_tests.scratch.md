@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End (ST-186, Nether/End part of ST-171 skipped); ignore
+- Constraints (owner, 2026-10-14): ignore Nether/End (ST-186, Nether/End part of ST-171 skipped); ignore
   structure-to-structure rates (ST-181 split + --check, ST-185 ratio skipped); correctness only. Sleep an hour if
   the token limit gets close.
 - Milestone: M2 DONE 10:45 (writeup 02_new_mods_tests.md, inline results in structure_tuning.md). Next: M3.

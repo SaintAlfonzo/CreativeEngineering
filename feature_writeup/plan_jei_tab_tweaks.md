@@ -26,7 +26,7 @@ plus `mobs/mooblooms #6` and `ui/effects #9`. Rows that add new coverage (`jei/j
 `#15`) are out of scope. Per-row detail (file and line references, gotchas) is in
 [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md); this file is the execution order and the decisions.
 
-Decisions (owner 2026-10-26):
+Decisions (owner, 2026-10-26):
 - `#28` Survivality row: **keep** (accurate while the jar is in `mods/`, drops out by `requires` if it goes). Close `#28` as not needed.
 - `#7` fluid amounts: **configurable, log or square root, log by default**.
 - `#22` mobs: **render mobs in every world tab** that shows a spawn egg, falling back to the egg when a mob can't render safely.

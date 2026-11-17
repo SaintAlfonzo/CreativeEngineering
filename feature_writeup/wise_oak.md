@@ -282,7 +282,7 @@ One of the four lists is picked evenly, then one item in it. Config: `[wise_oak.
   - Fruits Delight's apple sapling and leaves: the pack's only fruit tree overlap, merged into Vinery's.
   - Lemon and pineapple: crops.md has them as a bush and a plant, not among the 13 fruit trees.
   - Twisted and Magic Peanut saplings: not Overworld trees.
-- `quark:ancient_sapling` is in the sapling list at the same odds as the others, and its leaves stay off the leaves list (owner 2026-11-09).
+- `quark:ancient_sapling` is in the sapling list at the same odds as the others, and its leaves stay off the leaves list (owner, 2026-11-09).
 
 ### 4.8 Trust command
 

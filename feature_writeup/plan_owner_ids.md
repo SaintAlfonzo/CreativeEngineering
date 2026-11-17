@@ -208,7 +208,7 @@ Engineering's own `ce_BladeProfile` / `ce_ResolvedRecipe` are correct. `CEI` (Cr
 5. Add `tools/id_owner_lint.py` so this does not come back: for each in-tree jar, flag any `@Mod.EventBusSubscriber`
    modid, `waila_plugins.json` key, `getPluginUid` / `RecipeType.create` namespace or channel name that is not the
    jar's own mod id (resolving `X.NS` / `X.MOD_ID` constants), and any `literal("ce...")` command, `CE*` / `Ce*` class
-   or `CE_` constant outside Engineering. Allow-list the section 4 rows and the G kept NBT keys. The 11-07 audit
+   or `CE_` constant outside Engineering. Allow-list the section 4 rows and the G kept NBT keys. The 2026-11-07 audit
    script is the starting point.
 6. Build `:creativeCommon:`, `:creativeCompat:`, `:creativeCalendar:`, `:creativeDelight:`, `:creativeEquipment:`,
    `:creativeWorldgen:`, `:creativeMagic:` (comments only), `:creativeBrewing:` (CEPotions import), `:creativeDevtools:`

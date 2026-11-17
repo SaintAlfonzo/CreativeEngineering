@@ -1,6 +1,6 @@
 # missing-names-catalog
 
-> Names writeup (feature_writeup/names.md, NM-): Display Delight lang, RD crops, and the 10-20 display-name audit (client /cdevdumpnames -> tools/name_audit.py -> name_fixes.json -> client_scripts/name_fixes.js, 436 fixes); lang merges PER NAMESPACE
+> Names writeup (feature_writeup/names.md, NM-): Display Delight lang, RD crops, and the 2026-10-20 display-name audit (client /cdevdumpnames -> tools/name_audit.py -> name_fixes.json -> client_scripts/name_fixes.js, 436 fixes); lang merges PER NAMESPACE
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-02). Repo status docs win over any status line here.
 
@@ -15,7 +15,7 @@ Started 2026-10-02. Details live in `feature_writeup/names.md`.
 - Dump: patcherMod `devtools/DisplayNameDump` (client command `/cdevdumpnames`, or `[debug.names] dumpAtTitle` at the title screen for a scratch client). Writes `kubejs/exported/display_names.json` (every entry's key, shown text, winning pack + namespace) and a `/dumpnames`-format names.json. Pack ids: `Mod Resources`, `Default`, `KubeJS Resource Pack [assets]`, zips as `Name.zip`.
 - **Lang merges per namespace, not per pack** (ClientLanguage walks getNamespaces() then each stack): KubeJS's 2-arg `e.add(key, v)` files under `minecraft`; overrides must use `e.add(ns, key, v)` with the namespace that set the key. name_fixes.js does that.
 - "Raw" = shown text is a key/bare id; a missing key alone isn't (IE cartridges, armor trims, Everything Copper build names in code).
-- name_fixes.json keeps an `audit` section so a dump taken WITH fixes loaded carries them forward (else a rerun would empty it). Proven stable 10-20.
+- name_fixes.json keeps an `audit` section so a dump taken WITH fixes loaded carries them forward (else a rerun would empty it). Proven stable 2026-10-20.
 - Rules/keep decisions live in `kubejs/generation_scripts/names/name_rules.json` (Blocky Siege "a cannon" entities stay lowercase: death messages).
 - Mod display names: CEConfig `[mod_names]` default list (116 entries, the one place it lives) + `util/ModDisplayNames` writes FML ModInfo.displayName via sun.misc.Unsafe (service layer: no mixin, no reflection access). names.md section 12.
 - User's mod-name style (2026-10-20): spaces between words, possessive apostrophes, "&" for and / 'n, Create addons as "Create: xyz" (incl. GBD, "Create: CC Bridge"), no author handles (NoCube, SuperMartijn642), dummmmmmy = "Target Dummy", the user's own mods (patcherMod, backports, Exposure x5, incubation_additions, more_mooblooms, baby_mobs) end in " (Alfonzo)" as their only bracket ("Brewin' & Chewin' Backport (Alfonzo)"). Pretty Pipes keeps its mod name + creative tab (items stay "Item Pipe ..."). I kept *JS names and -Craft brands whole.

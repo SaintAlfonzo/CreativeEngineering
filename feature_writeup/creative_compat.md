@@ -110,7 +110,7 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colours a
 - 2026-11-04 (creative_split.md 7.14): from Creative Common, the Create: Dreams & Desires jetpack tooltip null-level
   guard (`JetpackItemTooltipMixin`) and the falling-block water splash (`FallingBlockWaterSplashMixin`): third-party
   and vanilla behaviour fixes, not interface or perf. Common keeps its interface, API and engine/perf rows (2.4).
-- 2026-11-14 to 11-15: pass-through blocks (blockrunner.md 3.10): `surface/Pass*`, 13 new mixins (`WallSlideMixin`
+- 2026-11-14 to 2026-11-15: pass-through blocks (blockrunner.md 3.10): `surface/Pass*`, 13 new mixins (`WallSlideMixin`
   renamed `InsideBlocksMixin`), `[surface.passthrough]`, `[surface.wthit] passThrough`, `[debug.passthrough]`; the
   tier tags `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js` ship in the jar from the 2026-11-15 00:40
   build; `[leaf_piles]` and `LeafPileSlowMixin` removed (migration above). Built, not installed.

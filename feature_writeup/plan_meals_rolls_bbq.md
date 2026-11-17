@@ -101,7 +101,7 @@ Answered: all eight pack skewers get raws; End Barbecue Stick makes 1 skewer, en
 
 Assumptions I made, tell me if wrong:
 1. "All 10 skewers in the merge" is read as the 10 Barbeque's Delight lines joining every change in part C.
-2. Shulker meat in the End Skewer craft is Ender's Delight's Shulker Mollusk only (updated 2026-11-04). This needs the 11-02 shulker merge undone for the mollusk. Scope assumed: only the mollusk (and filet if needed) leave the merge, and every other recipe keeps End's Delight meat. If you want the whole merge reversed or the mollusk used in other recipes too, say so; that is a separate change to `dishes/ingredients #32`.
+2. Shulker meat in the End Skewer craft is Ender's Delight's Shulker Mollusk only (updated 2026-11-04). This needs the 2026-11-02 shulker merge undone for the mollusk. Scope assumed: only the mollusk (and filet if needed) leave the merge, and every other recipe keeps End's Delight meat. If you want the whole merge reversed or the mollusk used in other recipes too, say so; that is a separate change to `dishes/ingredients #32`.
 3. Golden Roll slice is 10 / 0.5 and the roll loses its always-edible flag with the kelp copy.
 4. Kebab ceiling of 16 hunger is mine (upstream's largest); change if you want the full 0.8 x input.
 

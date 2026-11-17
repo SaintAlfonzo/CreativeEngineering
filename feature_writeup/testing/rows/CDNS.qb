@@ -8,7 +8,7 @@
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/plan_cd_namespace.md
 @@text
-@@text Fixture: a save built on the jars in `mods/` before the move (Common 11-09 23:00, Compat 17:28, Delight 11-09 00:08, Equipment 17:29), content per plan 5.1, kept untouched; every row boots its own copy. Forceload the fixture area and run `/save-all flush` before stopping, so decoded stacks are rewritten. Baseline: `python3 tools/scratch_query/cdns_probe.py scan <world> base.json` on the untouched copy. After each boot: `cdns_probe.py scan <world> now.json`, then `cdns_probe.py compare base.json now.json`. Swapper rows (01, 02, 04, 05, 06) run on `jar_archive/cdns_step2/` (Common 11-10 00:12 with the swapper; Delight, Equipment, Compat 11-09 23:39 with the bucket move) and the kubejs/ tree of that state. SQ-CDNS-03 and the move rows wait for the full build.
+@@text Fixture: a save built on the jars in `mods/` before the move (Common 2026-11-09 23:00, Compat 17:28, Delight 2026-11-09 00:08, Equipment 17:29), content per plan 5.1, kept untouched; every row boots its own copy. Forceload the fixture area and run `/save-all flush` before stopping, so decoded stacks are rewritten. Baseline: `python3 tools/scratch_query/cdns_probe.py scan <world> base.json` on the untouched copy. After each boot: `cdns_probe.py scan <world> now.json`, then `cdns_probe.py compare base.json now.json`. Swapper rows (01, 02, 04, 05, 06) run on `jar_archive/cdns_step2/` (Common 2026-11-10 00:12 with the swapper; Delight, Equipment, Compat 2026-11-09 23:39 with the bucket move) and the kubejs/ tree of that state. SQ-CDNS-03 and the move rows wait for the full build.
 @@text
 @@table
 ## SQ-CDNS-01

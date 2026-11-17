@@ -121,7 +121,7 @@ look rows/<ID>.shell.txt: undead_castle True for land/plains and land/taiga, Fal
 @fails a `--fit-rates` or `--refit` rerun overwrote the weights
 @reviewed 2026-11-16
 shell cd $INST && python3 tools/gen_structure_groups.py --check 2>&1 | tail -8
-shell cd $INST && python3 -c "import json; g=json.dumps(json.load(open('kubejs/generation_scripts/worldgen/structure_groups.json'))); print(g.count('weight x3 by hand (user, 2026-11-01)'))"
+shell cd $INST && python3 -c "import json; g=json.dumps(json.load(open('kubejs/generation_scripts/worldgen/structure_groups.json'))); print(g.count('weight x3 by hand (owner, 2026-11-01)'))"
 shell cd $INST && grep -nE '(acacia|birch|cherry|desert|end|jungle|mangrove|oak)_pillager_tower' feature_writeup/structure_group_estimates.md | head -10
 look rows/<ID>.shell.txt: 8 `weight x3 by hand` strings; weights acacia 30, birch 24, cherry 51, desert 3, end 3, jungle 30, mangrove 15, oak 15; estimates acacia 115, birch 169, cherry 137, desert 355, jungle 91, mangrove 765, oak 190, end 232 chunks per start
 ## SQ-WGE-04b (A4)

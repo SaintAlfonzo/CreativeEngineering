@@ -313,7 +313,7 @@ None.
   vanilla / forge wood tags minus exclusions; Botania, driftwood, Quark and every other modded wood and crimson / warped
   no longer smoke. RW-23 rewritten. `/reload`; not run in game.
 - 2026-11-02: `farming/trees #5`: Quark azalea wood removed (module off, 100 ids merged into oak, 6 tracks hidden, azalea racks pulled
-  from Creative Delight); the azalea tree has an oak trunk again, its leaves and flowers stay (owner 2026-11-02). `farming/trees #4`: Separated Leaves rule for Mulberry Leaves also accepts oak logs
+  from Creative Delight); the azalea tree has an oak trunk again, its leaves and flowers stay (owner, 2026-11-02). `farming/trees #4`: Separated Leaves rule for Mulberry Leaves also accepts oak logs
   (`kubejs/data/upgrade_aquatic/separated_leaves/river.json`). RW-29, RW-30; not run in game.
 - 2026-11-07: `farming/trees #7`: azalea wood restored (reverses `farming/trees #5`; Quark module on, `removedWoods.azalea`
   and the six tracks dropped, rows back in the wood scripts, azalea racks back in Creative Delight). Items already turned

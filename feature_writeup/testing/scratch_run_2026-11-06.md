@@ -18,12 +18,12 @@ CEPortTesting through ATLauncher). Targeted run: no perf session.
 - 10:12 boot 1 (chain, A, `o1`) Done in 5.6 s. b1: PASS 6, FAIL 4 (02, 07, 09, 10).
 - 10:16 SQ-CBA-07 BATCH-FAULT: no player, so entities stop ticking 300 ticks after start (golems stayed 100.0). Added
   `forceload add 0 0` to the row; rerun PASS (95.2 / 94.0 / 95.2).
-- 10:18-10:21 SQ-CBA-09: KubeJS "removed 3823 recipes" on the chain (full pack 11-05: 1329). Turned on
+- 10:18-10:21 SQ-CBA-09: KubeJS "removed 3823 recipes" on the chain (full pack 2026-11-05: 1329). Turned on
   `local/kubejs/dev.properties` `logRemovedRecipes=true` (read at startup only, /reload does not pick it up) and the
   srv-only wrapper `tools/scratch_query/nch_remove_diag.js` (logs every `global.NCH.remove` filter). One call,
   `{output: undefined}`, matched everything: `kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js:110`
   `R.remove({ output: fd.dish_stuffed_bellpepper }, e)`; `fd.dish_stuffed_bellpepper` is not in food_dict.js. New in the
-  11-06 split commit, inside the CD jar installed in the pack 01:30; the pack has not booted since (last KubeJS log 11-05
+  2026-11-06 split commit, inside the CD jar installed in the pack 01:30; the pack has not booted since (last KubeJS log 2026-11-05
   22:39), so the full pack is hit too. Not fixed (behaviour change, owner).
 - 10:23 decision: the wrapper now SKIPS top-level undefined/null filter values (srv-only shim) so the CB rows test the
   rest: removed 3823 -> 312. SQ-CBA-09 rerun: keg pouring 24, wine fermentation 26, apple mashing 2 (pack 24/27/2);
@@ -189,7 +189,7 @@ stay with the owner (CEPortTesting through ATLauncher). Targeted run: no perf se
   (Revamped Shipwrecks empties it). Same world either way (the mod's own empty set applies); gate now keeps sets that are
   empty in the config. Worldgen rebuilt 12:47.
 - 12:50 boot 4 third time Done 95.2 s: SQ-CBB-12 PASS (removed 1328, no gate line, 0 refused). Full-pack tags vs the
-  11-05 log: item tag adds 13035 -> 14133, block 7781 -> 7742 (the `_ents` fix and today's tag moves; not attributed yet:
+  2026-11-05 log: item tag adds 13035 -> 14133, block 7781 -> 7742 (the `_ents` fix and today's tag moves; not attributed yet:
   TODO `creativebrewing/publish #7`).
 - 12:52 all JVMs stopped, OUT dirs deleted.
 
@@ -258,7 +258,7 @@ the owner (CEPortTesting through ATLauncher). Targeted run: no perf session (als
   `creativeworldgen`; nothing for creativebrewing.
 - 14:46 c4 full pack (prep_srv, B, swaps Common, Engineering, CD, CB, Compat, Calendar; Worldgen kept at the 01:30
   install) Done 94.0 s. Pack `mods/` times unchanged after prep. CD transition items 89, Engineering 104 (its row list
-  145 -> 65 in git), removed 1328, 36 failed, 296 `create:sequenced_assembly` (= 11-05 dump). CBC-04 shell FAILs were
+  145 -> 65 in git), removed 1328, 36 failed, 296 `create:sequenced_assembly` (= 2026-11-05 dump). CBC-04 shell FAILs were
   batch faults (`grep -c` exits 1 on 0; CD line is in startup.log, the kjsexpect reads server.log).
 - 14:50 c3d: cooking boot with `nch_remove_diag.js` (srv only): the 77 `Empty array?` filters, list
   `perf/runs/r1106cbo/c3d/empty_array_filters.txt` (TODO `creativebrewing/publish #15`).
@@ -275,7 +275,7 @@ CQ-CBO-01 to -04.
 | SQ-CBC-01 | PASS | `transition items (89)` = the rows in `cd_transition_items.js` (row said 80); 0 incomplete-item errors |
 | SQ-CBC-02 | FAIL | 77 `Empty array?` left (r1106cbb 81), 82 in all (target under 40); no `grown_` / `twig_nest` lines; no `[absent mods]` line (`#11`, `#15`) |
 | SQ-CBC-03 | PASS | `with 1 failed recipes` (r1106cbb 204): horror lasagna filling with `minecraft:empty` (`#14`) |
-| SQ-CBC-04 | PASS | CD 89, Engineering 104, removed 1328, 296 sequenced assemblies (11-05 dump 296); `[absent mods]` absent (`#11`) |
+| SQ-CBC-04 | PASS | CD 89, Engineering 104, removed 1328, 296 sequenced assemblies (2026-11-05 dump 296); `[absent mods]` absent (`#11`) |
 | SQ-CBC-05 | PASS | `Vinery (Creative Brewing) reads its textures...`, no `Backport` |
 | SQ-CBC-06 | PASS | `Mod ID: 'geophilic_reforged', Requested by: 'creativeworldgen'` |
 | SQ-CBC-07 | PASS | no dependency, cycle or ordering error on the chain or the full pack |
@@ -380,7 +380,7 @@ rows. Targeted run: no perf session (11 GB free on `/`). Client rows (CQ-CBP-01,
   4000 and `egg_solution` 500, a Create potion fluid `creativebrewing:resistance`, a chest (two potions, a potion
   bucket, `kubejs:long_wither`), two dispensers with `creativebrewing:` splash potions, a golem with
   `creativebrewing:magic_resistance`; saved, stopped. `oldsave_swap.sh` put in the 16:51-16:54 builds (Engineering
-  13:17, Magic 11-05).
+  13:17, Magic 2026-11-05).
 - 17:47 p8 same world, new jars, Done 4.3 s. `[swaps] minecraft:fluid: 66`, `mob_effect: 1`, `potion: 38 id(s) remapped`;
   config sections `[effects, magic_resistance]` merged CB -> Common, `[copper_poisoning]` CB -> Equipment (values equal
   to `configs_edited/root_config/creativebrewing-common.toml`, key order changed; CB file keeps `[members] [alcohol]`).
@@ -429,9 +429,9 @@ Owner request 2026-11-06 19:30: "execute the latest creative split feature assur
 SQ-SPF (SQ-SPF-00 to -111; CQ-SPF-01, -02 stay with the owner: pinned bulk client session). Targeted run, no perf
 session (13 GB free on `/` after deleting the finished r1106cbp scratchpad, owner OK).
 
-- Jars: baseline = installed `mods/` (Common 11-06 12:35, Compat / Engineering / Equipment / Magic 11-05 22:09,
-  Calendar / Delight / Brewing / Worldgen 11-06 01:30, Devtools 11-04 23:35, Labels 11-03 20:36). New = build/libs
-  of 11-06 18:51-18:54 (Common 1.1.0, Compat, Calendar, Magic, Equipment, Engineering 2.0.0, Worldgen, Delight 1.1.0,
+- Jars: baseline = installed `mods/` (Common 2026-11-06 12:35, Compat / Engineering / Equipment / Magic 2026-11-05 22:09,
+  Calendar / Delight / Brewing / Worldgen 2026-11-06 01:30, Devtools 2026-11-04 23:35, Labels 2026-11-03 20:36). New = build/libs
+  of 2026-11-06 18:51-18:54 (Common 1.1.0, Compat, Calendar, Magic, Equipment, Engineering 2.0.0, Worldgen, Delight 1.1.0,
   Brewing 1.0.0) via `oldsave_swap.sh` (Worldgen added to it this run). Devtools and Labels: installed jars (no newer
   build).
 - Batches `tools/scratch_query/batches/r1106spf/` composed by `gen.sh` from `b0_fixture.qb`, `_probes.qb` (run on
@@ -454,7 +454,7 @@ session (13 GB free on `/` after deleting the finished r1106cbp scratchpad, owne
   placed features now live only in the 18:52 Worldgen build's gated packs (`packs/miners_delight/...`); an installed
   01:30 jar still names them. **Finding: the installed `mods/` set does not boot with the current `kubejs/` tree**
   (the owner's game too, until the 18:5x jars are installed). Decision: no installed-jar baseline; baseline = the
-  instance's `kubejs/exported/` dumps (11-05 22:41) and earlier run counts; b0 and b1 both on the 18:5x builds, so
+  instance's `kubejs/exported/` dumps (2026-11-05 22:41) and earlier run counts; b0 and b1 both on the 18:5x builds, so
   the "same save" rows check a restart, not the jar swap (old-id remaps were SQ-CBP-06 / SQ-CDFL-03).
 - 19:52-19:58 b0 on the 18:5x builds crashed three times at world creation: `imm_ptl.mixins.json:
   common.chunk_sync.MixinChunkMap_C ... PRIVATE @Overwrite method m_183760_ cannot reduce visibility of PUBLIC target
@@ -464,7 +464,7 @@ session (13 GB free on `/` after deleting the finished r1106cbp scratchpad, owne
   config ruled out). **Finding for the IP integration: IP 2.3.7 cannot load on a server with Serene Seasons 8.1.0.24.**
   Run decision: Immersive Portals, Portal Gun (needs IP) and Portal Gels (unlisted) left out of every scratch srv.
 - 19:59 b0 Done 9.0 s; b0.qb running (fixture, /dumpall).
-- 20:04 b0 rows: fixture built; /dumpall 24/25 (dumpclimatecaves failed on superflat), batch regex expected the old 'all 25 dumps done' text (BATCH-FAULT, fixed). compare.py vs kubejs/exported (11-05): recipes 31138 -> 31145, food_family tags grew (generator), fluid tags renamed to creativedelight:, counter_toppers lost 44 displaydelight:ctd_plated_* and registry blocks 15694 -> 14812 with identical item lists (SQ-SPF-80c added). 20:18 b1 Done 4.4 s.
+- 20:04 b0 rows: fixture built; /dumpall 24/25 (dumpclimatecaves failed on superflat), batch regex expected the old 'all 25 dumps done' text (BATCH-FAULT, fixed). compare.py vs kubejs/exported (2026-11-05): recipes 31138 -> 31145, food_family tags grew (generator), fluid tags renamed to creativedelight:, counter_toppers lost 44 displaydelight:ctd_plated_* and registry blocks 15694 -> 14812 with identical item lists (SQ-SPF-80c added). 20:18 b1 Done 4.4 s.
 - 20:45 b1 done (PASS 11, FAIL 17, LOOK 31): bot not respawned after the restart and gen.sh's '^#' filter dropped the row headers of _b1_rerun_extra / _probes (both BATCH-FAULT, fixed); b1r (47 rows) reruns them on the same boot.
 - 21:00 b1c (CD campfire toml off switches + fresh-block reruns) PASS 6 LOOK 5; 21:05 b1n (no Devtools) boots clean, shrapnel 24; 21:08 SQ-SPF-111 jar-out loop (jx_run.sh).
 - 21:12 SQ-SPF-111: Compat out -> FML refuses (8 jars declare creativecompat, by design 7.6; row text wrong); Calendar out -> Vinery, CD, CB refuse (expected); Magic / Equipment / Worldgen out boot, one script error each (progression.js, archery.js unguarded; Devtools dump_bee_nests.js loads a Worldgen class). 21:14 b2 prep (B, seed 8675309, IP jars left out, [named_mobs] chance 1.0).
@@ -474,7 +474,7 @@ session (13 GB free on `/` after deleting the finished r1106cbp scratchpad, owne
 
 Boots: b0 fixture + /dumpall, b1 (59 rows), b1r (bot respawned, 47 rows), b1s, b1c (CD campfire off switches), b1n (no
 Devtools), jx_* (one jar out), b2 / b2r / b2s (B world). Results `perf/runs/r1106spf/<boot>/`; tag/recipe diff
-`perf/runs/r1106spf/compare_b0.md` (base = `kubejs/exported/` of 11-05 22:41).
+`perf/runs/r1106spf/compare_b0.md` (base = `kubejs/exported/` of 2026-11-05 22:41).
 
 | ID | Result | Evidence |
 |---|---|---|
@@ -560,7 +560,7 @@ Owner request 2026-11-06 22:14: "run the latest scratch queue, then apply the ja
 (dev/client, + those needed in port test)". Latest queue section = SQ-SPFX-01 to -07 (CQ-SPFX-01 is the owner's,
 client). Targeted run, no perf session (13 GB free).
 
-- Jars: all ten Creative builds of 11-06 22:07-22:09 (prep_srv.sh swaps), Labels 1.0.1 of 11-04 21:53. CEPortTesting/mods
+- Jars: all ten Creative builds of 2026-11-06 22:07-22:09 (prep_srv.sh swaps), Labels 1.0.1 of 2026-11-04 21:53. CEPortTesting/mods
   got the 22:07-22:09 Common, Compat, Calendar, Delight, Brewing at 22:16 (port chain rows; also the owner's install).
 - Batches `tools/scratch_query/batches/r1106spfx/` (a1, a2, jx + jx_run.sh, b1, chain_boots.sh); results
   `perf/runs/r1106spfx/<boot>/`. `zq count` takes an optional dimension (8th argument) since this run.
@@ -624,7 +624,7 @@ SQ-CBC-01 still has it). Tooling: `zq count` takes an optional dimension.
   Equipment, Engineering 22:43 rebuilds of the same sources, only Common's `unreleased.md` changed since 22:09;
   Devtools 22:07, Delight, Brewing 22:08, Worldgen 22:09). Old jars in `jar_archive/displaced/`.
 - 22:44 CEPortTesting/mods: Common, Compat, Calendar, Delight, Brewing replaced with the installed copies.
-- CreativeEngineeringClient not touched: it is on the 11-04 payload (`creativeengineering-1.1.08` core, 11-03 kubejs);
+- CreativeEngineeringClient not touched: it is on the 2026-11-04 payload (`creativeengineering-1.1.08` core, 2026-11-03 kubejs);
   it needs a deploy payload (skill `release`, `apply.sh client`), not loose jars.
 - Immersive Portals, Portal Gun, Portal Gels are still in `mods/`: with Serene Seasons a world still crashes at creation
   (SQ-SPFX-01).

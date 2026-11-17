@@ -58,7 +58,7 @@ This file has three parts, as asked:
   `cooked_rice`, `cabbage`.
 - **Pack references (2026-11-02):** CD `kubejs_startup/hostiledelight/hostile_items.js`, `data/creativedelight/kubejs/hostiledelight/` (`recipes.js`, `food_types.js`), item and food dict keys. Earlier (2026-10-23): no KubeJS script, tag or dict named `hostiledelight`. No Display
   Delight compat (Display Delight has Ocean's Delight placeables, not Hostile's). The dumps in `kubejs/exported/`
-  (2026-10-20 to 10-22) predate the jar, so `/dumpall` is step 0.
+  (2026-10-20 to 2026-10-22) predate the jar, so `/dumpall` is step 0.
 - **Already live in play:** the game has run with it (`logs/latest.log`). Its three loot table overrides are active
   now (2.6), and `SQ-AD-00` ("no `Failed to parse`") will see Hostile's two known roll recipe warnings (2.8 B1).
 

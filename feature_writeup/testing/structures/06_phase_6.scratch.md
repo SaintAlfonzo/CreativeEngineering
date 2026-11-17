@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End; ignore structure-to-structure rates (so ST-72, 91, 98, 101 and
+- Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates (so ST-72, 91, 98, 101 and
   the ST-106 split are skipped); correctness only.
 - Milestone: M6. Tests: LO-03, LO-14, LO-04 (census), ST-141, ST-154, ST-114 (pregen log / census reasons), ST-107,
   ST-20, ST-74, ST-142, LO-12. Point 4 (census shares -> weight-stripping Todo) = hand the shares over, no tuning.
@@ -58,7 +58,7 @@
   so every later set at that chunk finds it loaded (StructureCheck loadedChunks) = "known". Prediction, misses, miss
   reasons and false negatives only cover the first set per chunk. "built" and set shares come from the real starts,
   so they are fine. Fix idea: group a region's slots by chunk, predict every set's members at that chunk, then load
-  once and score them all. Older code (locate 3.6, 10-12); recorded, not fixed.
+  once and score them all. Older code (locate 3.6, 2026-10-12); recorded, not fixed.
 - 17:40 stop; console_p2.log, latest_p_census.log kept.
 
 ## Results
