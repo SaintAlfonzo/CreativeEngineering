@@ -2,12 +2,13 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=3d47ec4533f0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (In Progress 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=1796d5070e78 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (In Progress 1, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `tooling/generators-and-tests #6` | In Progress | C | Client capture for Round 2 visual tests |
+| `generators-and-tests #18` | Testing | CQ-TXP-01, CQ-TXP-02, CQ-TXC-11, TXQ-OFF-01 to -05 | Paired client + own server runs and mismatch matrix finished; experimental Xvfb display (scratch testing expansion item 5, TX-31, TX-07) |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
@@ -288,6 +289,9 @@ python3 tools/client_capture/run_captures.py CQ-NEW --plan-only             # ru
 python3 tools/client_capture/run_captures.py --resume <run dir>             # continue after the runner stopped
 python3 tools/client_capture/run_captures.py --recrop <run dir>             # specs re-read, crop.py, no game
 python3 tools/client_capture/run_captures.py serve [--join HOST:PORT --ownsrv PID]   # driver serves the channel
+python3 tools/client_capture/run_captures.py serve ... --drop 'creativeLabels-*.jar' --config 'config/x-client.toml:general:a=5'
+                                                 # per launch: unlink jars from GAME/mods, set a toml key (raw value)
+python3 tools/client_capture/run_captures.py CQ-NEW --display xvfb         # EXPERIMENTAL own Xvfb (TX-07), not colour rows
 python3 tools/client_capture/run_captures.py stop                           # serving client quits
 ```
 
@@ -388,8 +392,10 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 - D1 (closed 2026-11-01): the driver is a member of Creative Devtools (`members/capture`, mod id `cdevcapture`),
   inert without the system property.
 - D2 (closed 2026-11-15): real 1280 x 720 window on `:1` by default (capture reads the framebuffer, so windows on top
-  don't matter, but the window must not be minimised). Xvfb is installed; an experimental `--display xvfb` is TX-07 of
-  the plan (low priority, not built), never for colour rows.
+  don't matter, but the window must not be minimised). Xvfb is installed; the experimental `--display xvfb` (TX-07,
+  built 2026-11-16, not run in game: CQ-TXC-11) starts an own Xvfb per launch through `eval_client.start_xvfb`
+  (`GAME/xvfb.pid`, a detached reaper stops it when the client pid is gone) and records `display` in `run.json`. Only
+  for tests that cannot run otherwise (unattended blocks); never for colour rows.
 - D3 (default taken): copy of the instance's `config/`; `--fresh-config` for pack-default checks.
 - D4 (open, owner): test IDs for queue rows that have no writeup test ID. The first spec set uses the queue ID with a
   letter (`CQ-NEW-04a`); alternative: give each such row a writeup test ID first.
