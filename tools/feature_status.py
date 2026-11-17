@@ -13,7 +13,7 @@
   BUILT      anything else
 
 Jars: mod ids of features.csv `jars`. `kubejs`, `datapack` and `tools` are code locations without a stamp: they never
-make a feature DEPLOYED on their own. Linked TODO rows: the `todo ids` cell (P3.5 replaces it with the rows' `feature`).
+make a feature DEPLOYED on their own. Linked TODO rows: the rows whose `feature` field is the feature's key (P3.5).
 
 Library: derive(feats, todo) -> {key: (word, why)}. CLI: python3 tools/feature_status.py [KEY ...] prints the
 derivation for the named features (all when none).
@@ -116,13 +116,12 @@ def failing_stamps():
     return out
 
 
-def derive_one(f, todo_status, todo_text):
+def derive_one(f, todo_status, todo_text, linked=()):
     if f.get('override', '').strip():
         return f['override'].strip(), 'override: %s' % (f.get('override_reason') or 'no reason given')
     jars = [j.lower() for j in split_list(f.get('jars'))]
     real = [j for j in jars if j not in PSEUDO_JARS]
-    rows = split_list(f.get('todo ids'))
-    known = [r for r in rows if r in todo_status]
+    known = [r for r in linked if r in todo_status]
     if not jars and not known:
         return 'reference', 'no jars, no TODO rows'
     for r in known:
@@ -151,7 +150,11 @@ def derive(feats, todo):
     for r in todo['open']:
         status[r['id']] = r['status']
         text[r['id']] = r.get('text', '')
-    return {f['key']: derive_one(f, status, text) for f in feats}
+    linked = {}
+    for r in todo.get('rows', []):
+        if r.get('feature'):
+            linked.setdefault(r['feature'], []).append(r['id'])
+    return {f['key']: derive_one(f, status, text, linked.get(f['key'], ())) for f in feats}
 
 
 def main(argv):

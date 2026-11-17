@@ -131,10 +131,14 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
   whether a bullet was added (or why not).
 - Status lives in the repo docs, not memory or agent notes: [feature_writeup/README.md](feature_writeup/README.md)
   (index + status legend), [todo/TODO.md](feature_writeup/todo/TODO.md) (open work),
-  `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases). A change updates its writeup, its TODO row and its
-  row in `feature_writeup/status/features.csv` (jars, queue codes; the status word is derived, `override` only with a
-  dated reason), then runs `python3 tools/status_index.py`. The README index
-  status, the feature status words, the TODO snapshot counts and the queue coverage block are generated: never hand-edit inside
+  `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases). **A TODO row is the only place a task's status is
+  written**: rows live in `feature_writeup/todo/rows/<category>.csv` and change only through `tools/todo.py`
+  (`add --family`, `set ID status=...`, `log ID "built ..."`, `move`); TODO.md is generated from them and
+  `todo/layout.md`. Plans hold design, order and rulings and cite row ids (`plan` field); writeups describe the feature
+  (their Open work block is generated); install state is generated, never typed. A change also updates its row in
+  `feature_writeup/status/features.csv` when jars or queue codes change (the status word is derived, `override` only
+  with a dated reason), then runs `python3 tools/status_index.py`. TODO.md, the README index status, the feature
+  status words, the Open work blocks and the queue coverage block are generated: never hand-edit them or inside
   `generated:status_index` markers, and never paste run results into README cells.
 - New tests and queue rows take their prefix from [test_prefix_index.md](feature_writeup/testing/test_prefix_index.md)
   (a new feature adds its row first).
