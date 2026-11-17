@@ -652,20 +652,26 @@ No ids. Config keys verified in the installed toml; the client reads its own cop
 ---
 
 ## tuning #15: Dragon hoe doesn't consume tree fertilizer
-Status **Bug** · Work: KubeJS / patcherMod · id `gear/tuning #15`
+Status **Built 2026-11-16** · Work: Creative Equipment mixin · id `gear/tuning #15`
 
 ### Goal
 Settle what the owner's note means, then make the dragon hoe treat Create's tree fertilizer the way it treats bone
 meal.
 
 ### Now
+- **Built 2026-11-16 (owner ruling R7, [plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P4; Creative Equipment
+  installed, not run; no test).** Reading A is retired: the charm keeps its refund for vanilla bone meal only.
+  `BonemealCharmMixin` (Creative Equipment) refunds only when the used item is `minecraft:bone_meal`, so a
+  `BoneMealItem` subclass from another mod is never refunded; tree fertilizer, manure, IE and Botania fertilizer and
+  organic mash were already always consumed (not `BoneMealItem`). The Build and Decisions below are the old proposal,
+  not built. The points that follow describe the state before the change, with the ids corrected.
 - Source: gear_tuning.md "Owner ideas (scratchpad 2026-10-26)": "The dragon hoe does not consume tree fertilizer
   either".
-- The dragon hoe's only fertilizer link is the bone meal charm: `#creativeengineering:bonemeal_charms` = `[i.dragon_hoe]`
-  ([equipmenttags.js](../../kubejs/server_scripts/tags/equipmenttags.js) 32).
-  [BonemealCharmMixin](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/BonemealCharmMixin.java)
+- The dragon hoe's only fertilizer link is the bone meal charm: `#creativeequipment:bonemeal_charms` = `[i.dragon_hoe]`
+  ([equipmenttags.js](../../kubejs/data/creativeequipment/kubejs/tags/equipmenttags.js) 48, Creative Equipment).
+  [BonemealCharmMixin](../../development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/mixin/BonemealCharmMixin.java)
   injects at `RETURN` of `BoneMealItem#useOn` (`m_6225_`): with a charm in the other hand, `chance` 0.5 refunds the
-  bone meal, `damageChance` 0.1 costs the charm 1 durability (`[bonemeal_charm]` in the instance toml, line 1023). So
+  bone meal, `damageChance` 0.1 costs the charm 1 durability (`CEQConfig`, Creative Equipment config). So
   with the dragon hoe held, bone meal is often "not consumed".
 - Create's `create:tree_fertilizer` (`i.tree_fertilizer`, item_dict.js 5082) is `TreeFertilizerItem extends Item`, not
   `BoneMealItem` (bytecode, Create 0.5.1.i): its own `useOn` grows the sapling, calls `shrink(1)` and returns `SUCCESS`
@@ -673,11 +679,11 @@ meal.
 - The hoe's area use ([hoe area](../crops.md), `crops.HoeHarvestArea`) harvests and replants; it does not use
   fertilizer items.
 
-### Build (reading A, recommended)
+### Build (reading A; retired 2026-11-16, not built)
 1. `BonemealCharms`: move the refund / damage logic out of the mixin into `static void afterUse(UseOnContext ctx)`.
 2. New `mixin/TreeFertilizerCharmMixin`: `@Mixin(value = TreeFertilizerItem.class, remap = false)`, `@Inject(method =
    "m_6225_", at = @At("RETURN"))`; when the result is `SUCCESS` and `!level.isClientSide`, call
-   `BonemealCharms.afterUse`. Register in `creativeengineering.mixins.json`; the class is Create's (hard dependency is
+   `BonemealCharms.afterUse`. Register in the Creative Equipment mixins json; the class is Create's (hard dependency is
    fine, Create is always present).
 3. Tooltip / JEED wording of the charm: "bone meal and tree fertilizer". gear_tuning.md and [fixes_compat.md](../fixes_compat.md) FX-12.
 4. Changelog bullet: the Dragon Hoe also saves Tree Fertilizer.
@@ -694,7 +700,7 @@ meal.
 - Keep the catch-all `try` as in `BonemealCharmMixin`.
 
 ### Tests
-- **GR-new1** (proposed, numbered when queued): dragon hoe in the off hand, 20 tree fertilizer on saplings -> about 10
+- **GR-new1** (dropped 2026-11-16 with reading A; R7 asks for no test): dragon hoe in the off hand, 20 tree fertilizer on saplings -> about 10
   left; the hoe loses about 2 durability. Without the hoe: all 20 used.
 
 ---

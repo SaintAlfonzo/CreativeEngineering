@@ -383,13 +383,19 @@ Equipment family (12.5):
 
 - **JO-13** The item list opens with Equipment: wood, leather, stone, copper, ... in the 12.5 family order; inside a
   family the tools come first (sword, pickaxe, axe, shovel, hoe, knife, machete), then armor (helmet to boots, then
-  goggle helmet, diving helmet, backtank, diving boots), then the family's shield, shears, horse armor, fishing rod
-  and backpack.
+  goggle helmet, diving helmet, backtank, diving boots), then the family's shield, shears and horse armor (fishing
+  rods and backpacks moved to their own groups 2026-11-16, JO-17).
 - **JO-14** After the families: misc vanilla (bow, crossbow, trident, ...), misc modded, knives (the leftover
   Delightful knives by name, none of the six placed in a family), arrows (Nock Enough Arrows included), guns (Old
-  Guns first, then IE, then PneumaticCraft), then tech, magic and hats (every Simple Hats item) last.
+  Guns first, then IE, then PneumaticCraft), then tech, magic and hats last (Simple Hats items unsorted since
+  2026-11-16, JO-17).
 - **JO-15** `jei_order_catalog.md` section 2 lists no conflicts and no unknown list ids for `equipment/...`.
 - **JO-16** None of the mechanisms or repair parts of Old Guns sit under `equipment/misc/guns` (`except`).
+- **JO-17** (12.5a, CQ-JO-02) After the material families: Fishing Rods (vanilla, iron, gold, diamond, netherite rod,
+  then the three rod upgrades), then Backpacks (Quark's, Sophisticated Backpacks' basic, copper, iron, gold, diamond,
+  netherite), then misc; no rod, rod upgrade or backpack inside a material family or misc. Wardrobe's backpack, large
+  and travel backpacks and the Simple Hats items sit after every category (unsorted); `jei_order_catalog.md` reports
+  no conflict and no unknown id.
 
 Open points for the build:
 
@@ -493,6 +499,16 @@ From the 2026-10-26 scratchpad layout. KubeJS only (no patcherMod change): `/kub
 - Not placed yet (on purpose): Sophisticated Backpacks upgrades, Old Guns parts and materials, Create toolboxes,
   IE `toolbox` and `turret_gun`, `physics_gun_mod` mode variants.
 
+### 12.5a Fishing rods and backpacks (2026-11-16)
+
+`jei/jei-ordering #7`, R10, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P7; `kubejs/startup_scripts/jei/order.js`
+(startup script: restart). Two new `equipment` groups after the material families and before `misc`:
+`fishing_rods` (vanilla rod, the iron, gold, diamond and netherite rods, the three rod upgrades) and `backpacks`
+(Quark backpack, Sophisticated Backpacks' backpack and its copper, iron, gold, diamond, netherite tiers). The rods, rod
+upgrades and backpacks left the material families and `misc`. Wardrobe's backpack, large and travel backpacks and the
+`@simplehats` `from` of `hats` are removed, so those items are left unsorted (after every category) until a cosmetic
+family exists. JO-17.
+
 ## 13. History
 
 - 2026-10-18: goals, investigation, design, build plan; steps 1 to 3 built (12).
@@ -503,6 +519,8 @@ From the 2026-10-26 scratchpad layout. KubeJS only (no patcherMod change): `/kub
   Fixed in `jei_order.js`; proven on a scratch client (latest.log `[jei order] definition: 4 types, 10 nodes`). JO-01 to
   JO-12 still need a world.
 - 2026-10-26: Equipment family built (12.5), replacing Equipment > Tools > copper / iron. JO-13 to JO-16 added.
+- 2026-11-16: fishing rod and backpack groups; Wardrobe backpacks and Simple Hats out of the ordering (12.5a,
+  `jei/jei-ordering #7`). JO-13, JO-14 updated, JO-17; queue CQ-JO-02 (plan_small_fixes_1116.md). Not run.
 
 ### 12.6 Equipment not yet in the family (generated 2026-10-26, moved from the scratchpad 2026-10-27)
 

@@ -1,0 +1,19 @@
+# Scratch queue rows JO (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/JO.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-JO fishing rod and backpack groups, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7 R10; [jei_ordering.md](../jei_ordering.md) 12.5a, JO-17; TODO `jei/jei-ordering #7`)
+@@date 2026-11-16
+@@jars creativecommon
+@@sources feature_writeup/jei_ordering.md kubejs/startup_scripts/jei/order.js
+@@text
+@@text Targets the instance's `kubejs/startup_scripts/jei/order.js` (startup script: full client restart). Client with JEI.
+@@text
+@@table
+## CQ-JO-02 | JEI: Fishing Rods and Backpacks groups after the material families; Wardrobe backpacks and Simple Hats unsorted
+@group client
+@commands set `orderReport = true` under `[jei]`; restart the client; latest.log `[jeiOrder]` lines; JEI item list from the start; the order report's conflicts and unknown ids
+@pass after the last material family: the vanilla, iron, gold, diamond and netherite fishing rods and the three rod upgrades, then Quark's and Sophisticated Backpacks' backpacks (basic to netherite), then misc; no rod or backpack inside a family; Wardrobe's three backpacks and the Simple Hats items after every category; no conflict or unknown id for `equipment/fishing_rods` or `equipment/backpacks`; no `[item_dict]` missing key for the `jeiI` entries
+@fails `order.js` group ids or `jeiI` keys missing from the dicts; an item still listed in a family `list`
+@draft client JEI check

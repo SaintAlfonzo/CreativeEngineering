@@ -39,9 +39,10 @@ look the creativedelight merge count line (rows/SQ-FCB-00.shell.txt) is 6 pairs 
 ## SQ-FCB-01 | recipe set: new recipes present, removed upstream recipes gone
 @group A
 @commands Recipe probe (RecipeManager id dump)
-@pass Present: `fdcutting`/`createmixing` `cabbage_leaves` (4 leaves), `shapeless/cabbage_from_leaves` (4 leaves), `shapeless/taco` (onion or `#creativeengineering:roasted_bell_pepper`), `farmersdelightcooking/cornbread_stuffing` (baked potato or baked sweet potato), `farmersdelightcooking/kelp_encrusted_cod` (0.35 xp), `pickling/vinegar_from_jam` (jam jars or `#forge:jams`, 3 organic mash), `farmersdelightcooking/{salmonberry,raspberry}_jam_jar` and the grape and cherry ones each giving 1 jar, `shaped/{granite,andesite,diorite}_cutting_board`, `combine/kebab_wrap` on `#forge:tortilla`, `shapeless/cesar_salad_manual_only` (cabbage, tomato, cheese, bread, bowl). Absent: `farmersdelightcooking/lemon_jam_from_slices` and `createmixing/lemon_jam_from_slices` (removed 2026-11-02, SQ-JSL-01), `farmersdelight:cutting/cabbage`, `farmersdelight:cabbage_from_leaves`, `corn_delight:taco`, `veggiesdelight:compat/corndelight/taco`, `corn_delight:cooking/cornbread_stuffing`, `veggiesdelight:compat/corndelight/cooking/cornbread_stuffing`, `vintagedelight:fermenting/vinegar_from_jam_bottles`, `oceanic_delight:caesar_salad`, `endersdelight:cutting/shulker_filet`, `hostiledelight:ppicklerecp`, `creativedelight:fdcutting/prepared_sea_pickle`, both tempura recipes, CfB's `spice_rack`, `tool_rack`, `fruit_basket` recipes; no recipe outputs a removed item (`/recipescan`)
+@pass Present: `fdcutting`/`createmixing` `cabbage_leaves` (4 leaves), `shapeless/cabbage_from_leaves` (4 leaves), `shapeless/taco` (onion or `#creativeengineering:roasted_bell_pepper`), `farmersdelightcooking/cornbread_stuffing` (baked potato or baked sweet potato), `farmersdelightcooking/kelp_encrusted_cod` (0.35 xp), `pickling/vinegar_from_apple_mash` (3 `vinery:apple_mash` + `#forge:mushrooms`, 3 organic mash; since 2026-11-16, R9), `farmersdelightcooking/{salmonberry,raspberry}_jam_jar` and the grape and cherry ones each giving 1 jar, `shaped/{granite,andesite,diorite}_cutting_board`, `combine/kebab_wrap` on `#forge:tortilla`, `shapeless/cesar_salad_manual_only` (cabbage, tomato, cheese, bread, bowl). Absent: `farmersdelightcooking/lemon_jam_from_slices` and `createmixing/lemon_jam_from_slices` (removed 2026-11-02, SQ-JSL-01), `farmersdelight:cutting/cabbage`, `farmersdelight:cabbage_from_leaves`, `corn_delight:taco`, `veggiesdelight:compat/corndelight/taco`, `corn_delight:cooking/cornbread_stuffing`, `veggiesdelight:compat/corndelight/cooking/cornbread_stuffing`, `vintagedelight:fermenting/vinegar_from_jam_bottles`, `creativedelight:pickling/vinegar_from_jam` (removed 2026-11-16), `oceanic_delight:caesar_salad`, `endersdelight:cutting/shulker_filet`, `hostiledelight:ppicklerecp`, `creativedelight:fdcutting/prepared_sea_pickle`, both tempura recipes, CfB's `spice_rack`, `tool_rack`, `fruit_basket` recipes; no recipe outputs a removed item (`/recipescan`)
 @fails removal id differs upstream; Slice & Dice copy of a removed pot recipe left over
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1102b/s5_A.qb
 > zq recipes cabbage_leaves
 expect \[zq\] creativedelight:[a-z_]+/cabbage_leaves -> 
@@ -55,8 +56,9 @@ expect \[zq\] creativedelight:[a-z_]+/cornbread_stuffing ->
 expect \[zq\] creativedelight:[a-z_]+/kelp_encrusted_cod -> 
 > zq recipes lemon_jam_from_slices
 expect \[zq\] creativedelight:[a-z_]+/lemon_jam_from_slices -> 
-> zq recipes vinegar_from_jam
-expect \[zq\] creativedelight:[a-z_]+/vinegar_from_jam -> 
+> zq recipes vinegar_from
+expect \[zq\] creativedelight:pickling/vinegar_from_apple_mash -> 
+reject \[zq\] creativedelight:[a-z_]+/vinegar_from_jam -> 
 > zq recipes kebab_wrap
 expect \[zq\] creativedelight:[a-z_]+/kebab_wrap -> 
 > zq recipes cesar_salad_manual_only
@@ -110,7 +112,7 @@ reject \[zq\] creativedelight:[a-z_]+/prepared_sea_pickle ->
 sleep 1
 > zq rdetail cornbread_stuffing
 sleep 1
-> zq rdetail vinegar_from_jam
+> zq rdetail vinegar_from_apple_mash
 sleep 1
 > zq rdetail cesar_salad_manual_only
 sleep 1
@@ -119,7 +121,7 @@ sleep 1
 > recipescan
 waitlog \[recipe_scan\] Scan complete 120
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
-look rdetail inputs (taco onion or roasted bell pepper; stuffing baked potato or sweet potato; vinegar jam jars + 3 organic mash; Caesar cabbage, tomato, cheese, bread, bowl; wrap on a tortilla); recipescan lists no recipe outputting a removed item; kelp cod xp 0.35 is not printed by zq (data only)
+look rdetail inputs (taco onion or roasted bell pepper; stuffing baked potato or sweet potato; vinegar 3 apple mash + a mushroom, 3 organic mash, 2400 t; Caesar cabbage, tomato, cheese, bread, bowl; wrap on a tortilla); recipescan lists no recipe outputting a removed item; kelp cod xp 0.35 is not printed by zq (data only)
 
 ## SQ-FCB-02 | beef patty slots take #creativeengineering:patty
 @group A

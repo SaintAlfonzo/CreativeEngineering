@@ -2876,6 +2876,25 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:iebottling/${idSuffix}`)
 	},
 
+	// IE's workbench (BlueprintCraftingRecipe.getMaxCrafted) lets each ingredient in order take every matching stack, so
+	// a second identical ingredient finds nothing and the recipe makes 0 (tooling/conventions #7, briefs/gear_archery.md).
+	// Identical emitted ingredients (same item or tag and NBT) merge into one { base_ingredient, count }. The merge works
+	// on the emitted JSON, never by rebuilding Item.of(tag, n) (that collapses a tag to its first item). The recipe id is
+	// computed from the call's own inputs before this, so no id changes. Two different tags that overlap (a tag and one
+	// of its items) are not merged and can still starve each other.
+	_mergeBlueprintInputs(jsonInputs) {
+	  var merged = [], byKey = {}
+	  jsonInputs.forEach(j => {
+	    var wrapped = j != null && j.base_ingredient !== undefined
+	    var ing = wrapped ? j.base_ingredient : j
+	    var cnt = wrapped ? (j.count || 1) : 1
+	    var key = JSON.stringify(ing)
+	    if (Object.prototype.hasOwnProperty.call(byKey, key)) merged[byKey[key]].count += cnt
+	    else { byKey[key] = merged.length; merged.push({ base_ingredient: ing, count: cnt }) }
+	  })
+	  return merged.map(m => m.count > 1 ? m : m.base_ingredient)
+	},
+
 	ieBlueprint(outputs, inputs, category, e, idOverride) {
 		if (!global.has('immersiveengineering')) return global.NCH._skip('immersiveengineering')
 	  if (!e) throw new Error('ieBlueprint called without event object!')
@@ -2893,9 +2912,9 @@ global.NCH = {
 	      // { item, nbt } shorthand, or a raw { type:'forge:partial_nbt'|'forge:nbt', ... }
 	      // ingredient. Plain items/tags are unchanged. IE's IngredientWithSize honours
 	      // forge:partial_nbt/forge:nbt natively and the workbench matches NBT-aware.
-	      inputs: inputs.map((i, idx) => {
+	      inputs: global.NCH._mergeBlueprintInputs(inputs.map((i, idx) => {
 	          return global.NCH._nbtItemJson(i, { countMode: 'base_ingredient', role: 'input', context: ctx + ' input[' + idx + ']' })
-	      }),
+	      })),
 	      result: global.NCH._nbtItemJson(outputs, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' output' })
 	  }
 

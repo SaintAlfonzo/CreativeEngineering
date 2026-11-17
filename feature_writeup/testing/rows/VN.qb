@@ -1,0 +1,19 @@
+# Scratch queue rows VN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/VN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-VN jungle grape lattice bone meal, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P3 R6; [vinery.md](../vinery.md) 2.5, VN-13, VN-21; TODO `farming/crops #52`)
+@@date 2026-11-16
+@@jars creativebrewing
+@@sources feature_writeup/vinery.md development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/legacy/block/LegacyLatticeStemBlock.java
+@@text
+@@text Targets the Creative Brewing jar installed 2026-11-16. Group A superflat; lattices on the south face of a stone column, nothing below them.
+@@text
+@@table
+## SQ-VN-01 | a single planted lattice takes bone meal at stages 1 and 2; an empty lattice takes none; stage 3 click harvests
+@group A
+@commands stone at 640 -60 520 and 641 -60 520, 642 -60 520; place `vinery:grapevine_lattice` on their south faces (y -59, glass under nothing: the lattice at y -59 has air below); plant jungle white seeds in the first two; `/cdevtest use` with `minecraft:bone_meal*4` on the stage 1 lattice, the empty one, and a stage 3 one
+@pass planted stage 1: bone meal used and the lattice at stage 2 or more; empty lattice: bone meal kept (`main=minecraft:bone_meal*4`); stage 3: the click harvests (2 jungle grapes on the ground, back to stage 1, bone meal kept)
+@fails `LegacyLatticeStemBlock.isValidBonemealTarget` (age > 0 and not mature, no lattice-below check); the grapevine stem's own trunk rule is separate (2.4)
+@draft the lattice state names (age, grape, facing) and the planting item id must be read from a dump before the steps can be written

@@ -11,8 +11,9 @@ import net.mehvahdjukaar.supplementaries.common.block.tiles.FlowerBoxBlockTile;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Supplementaries' flower box refuses {@code #creativecompat:not_in_flower_boxes} (azalea and flowering azalea,
- * which it takes through its special model list). Boxes already holding one keep it and still draw it.
+ * Supplementaries' flower box refuses {@code #creativecompat:not_in_flower_boxes} (azalea, flowering azalea, melon,
+ * pumpkins, jack o'lantern, moss block and carpet; the azaleas come through its special model list). Boxes already
+ * holding one keep it and still draw it.
  * flower_pots.md 3.2.
  */
 @Mixin(value = FlowerBoxBlockTile.class, remap = false)

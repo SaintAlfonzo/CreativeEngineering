@@ -131,3 +131,47 @@ look zcount: does each pot hold the plant (a potted_* id) or stay minecraft:flow
 @@text not expand the nested AF tag in `addMatching` (list members instead).
 @@text
 @@text Results 2026-10-27 evening run (Run log): SQ-POT-01 PASS after two dump fixes (121 potted, 101 pot-like, 543 plants); SQ-POT-02 to -04 ran, audit regenerated `flower_pots_matrix.md` (427 probe mismatches, 6 probe exceptions): framed pot 5 and Supplementaries hanging pot 0 accepted (probe face, see "If it fails"), `minecraft:hanging_roots` throws `Cannot set property DirectionProperty` in 6 holders, the expected F1 `ClassCastException` on the planter box did not show. For the flower-pot owner to read; SQ-POT-05 analysis not done.
+
+@@section 2
+@@title SQ-POT whole blocks out of flower boxes, wall-hung Rich Hanging Pot column, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P6, P7 R11, R12; [flower_pots.md](../flower_pots.md) 3.3, POT-18, POT-19; TODO `blocks/flower-pots #9`, `#10`)
+@@date 2026-11-16
+@@jars creativecompat creativebrewing creativedevtools
+@@sources feature_writeup/flower_pots.md kubejs/data/creativecompat/kubejs/tags/misctags.js kubejs/data/creativedevtools/kubejs/flowerworld/flower_world.js
+@@text
+@@text Targets the Creative Compat jar and the instance scripts as of 2026-11-16. Group A for SQ-POT-09; CQ-POT-03 needs a
+@@text fresh Flower Test world (dev instance with Creative Devtools).
+@@text
+@@table
+## SQ-POT-09 | melon, pumpkin, carved pumpkin, jack o'lantern, moss block and moss carpet are in the box ban tags and out of the box plant lists; the boxes refuse them
+@group A
+@commands `/cdevtest tag item creativecompat:not_in_flower_boxes`; `/cdevtest tag item another_furniture:planter_box_banned`; `/cdevtest tag item creativecompat:flower_box_plants`; a `supplementaries:flower_box`, an `another_furniture:oak_planter_box` and a `vinery:flower_box` at 860 -60 700 / 862 / 864; `/cdevtest use` each with `minecraft:melon` and `minecraft:poppy`, `/cdevtest be` each
+@pass ban tag n=8 with the six new ids and both azaleas; planter_box_banned holds them; flower_box_plants holds none of them; after the melon clicks no box's block entity lists `minecraft:melon` (a melon block may be placed next to it by the item's own use); the poppy goes into each
+@fails `misctags.js` `not_in_flower_boxes`; `SuppFlowerBoxPlantsMixin`; Vinery `LegacyFlowerBoxBlock` reading `flower_box_plants`
+> forceload add 840 680 880 720
+> cdevtest tag item creativecompat:not_in_flower_boxes
+> cdevtest tag item another_furniture:planter_box_banned
+> cdevtest tag item creativecompat:flower_box_plants
+expect verb=tag kind=item tag=creativecompat:not_in_flower_boxes n=8 ids=(?=.*minecraft:melon\b)(?=.*minecraft:pumpkin\b)(?=.*minecraft:carved_pumpkin)(?=.*minecraft:jack_o_lantern)(?=.*minecraft:moss_block)(?=.*minecraft:moss_carpet)
+expect verb=tag kind=item tag=another_furniture:planter_box_banned n=\d+ ids=.*minecraft:moss_carpet
+reject verb=tag kind=item tag=creativecompat:flower_box_plants .*minecraft:(melon|pumpkin|carved_pumpkin|jack_o_lantern|moss_block|moss_carpet)\b
+> setblock 860 -60 700 supplementaries:flower_box
+> setblock 862 -60 700 another_furniture:oak_planter_box
+> setblock 864 -60 700 vinery:flower_box
+> cdevtest use 860 -60 700 held=minecraft:melon face=up
+> cdevtest use 862 -60 700 held=minecraft:melon face=up
+> cdevtest use 864 -60 700 held=minecraft:melon face=up
+> cdevtest be 860 -60 700
+> cdevtest be 862 -60 700
+> cdevtest be 864 -60 700
+> cdevtest use 860 -60 700 held=minecraft:poppy face=up
+> cdevtest use 862 -60 700 held=minecraft:poppy face=up
+> cdevtest use 864 -60 700 held=minecraft:poppy face=up
+reject verb=be .*minecraft:melon
+look the three tag lines; no melon in any box BE; the poppy uses end with main=empty (taken) on each box
+
+## CQ-POT-03 | Flower Test world: the wall lantern column after the Rich Hanging Pot holds the same plants (owner review)
+@group client
+@commands dev instance with Creative Devtools; Create New World, World Type "Flower Test"; walk the row after `beautify:hanging_pot`
+@pass each row where the Rich Hanging Pot took a plant has a wall lantern on glass holding the same plant; latest.log has no `wall lantern did not place` or `wall lantern refused`; the owner rules keep (a wall placement for the pot) or remove (POT-19)
+@fails `flower_world.js` `wallOf` column (`setHeldBlock` on Supplementaries' wall lantern block entity)
+@owner true

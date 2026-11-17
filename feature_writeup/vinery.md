@@ -104,7 +104,7 @@ was waiting finishes on its next tick.
 | Growth | Same as the stem: every random tick, raw light 9 or more, stage 1 → 4. |
 | Harvest | Main-hand right-click with an empty hand or any non-shears, non-seed item at stage 3 or more. Stage 3 drops 2, stage 4 drops 3-4. Resets to **stage 1**. The held item loses 1 durability if it has any. |
 | Shears | Drop the grapes (if 3+) and the seed, empty the lattice, and cost 1 durability. |
-| Bone meal | Only works when **another lattice sits directly below** (the stem's "trunk" check is reused). A single lattice can't be bone-mealed. |
+| Bone meal | Since 2026-11-16 (Creative Brewing `LegacyLatticeStemBlock.isValidBonemealTarget`: stage above 0 and not ripe; `farming/crops #52`, R6) any planted lattice takes bone meal, alone or stacked; the stem's "trunk" check (another lattice below) is gone from the lattice and stays on the stem (2.4). A right-click at stage 3 harvests before bone meal is used, so by hand bone meal grows stages 1 and 2; a dispenser also grows stage 3. Before: only with another lattice directly below. |
 | Breaking | Same as the stem (seed lost on a player break). |
 
 ### 2.6 Wild grape bushes (seeds planted on the ground)
@@ -331,7 +331,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - [ ] **VN-10 Stem harvest:** grow to stage 4 → right-click drops 3-4 grapes and the stem shows the stage-2 model. Shears on a planted stem drop the seed back and keep full durability.
 - [ ] **VN-11 Stem seed loss:** break a planted stem by hand → no seed drops.
 - [ ] **VN-12 Taiga seed on stem:** taiga seeds on an upper stem with no podzol, coarse dirt or grass nearby → plants and grows.
-- [ ] **VN-13 Lattice bone meal:** jungle seeds on a single lattice → bone meal does nothing. On a lattice with another lattice below → it grows.
+- [ ] **VN-13 Lattice bone meal** (rewritten 2026-11-16): jungle seeds on a single lattice → bone meal grows it (stage 1 → 2 → 3); a stacked lattice the same; an empty lattice takes none. Bone meal on an upper stem with no stem below still does nothing.
 - [ ] **VN-14 Taiga bush grass:** taiga seeds on dirt with only grass blocks nearby (no podzol or coarse dirt) → it can be planted.
 - [ ] **VN-15 Savanna light:** savanna seeds under a 1-block roof at night with no torches → can't be planted.
 - [ ] **VN-16 Bush seed drop:** break a stage-1 bush → nothing. Break a stage-3 bush → 1 seed.
@@ -341,6 +341,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 **Aging and utility**
 - [ ] **VN-19 Aging:** take a fresh wine and note its potency, then `/time add 1536000` (64 days) → its tooltip potency is one level higher.
 - [ ] **VN-20 Sink:** place a Kitchen Sink (creative) → an empty-hand click fills it. A bucket gives a water bucket. An empty hand refills it, so it's endless.
+- [ ] **VN-21 Lattice bone meal, server** (2026-11-16, SQ-VN-01): a planted jungle lattice on a wall with nothing below grows one or more stages per bone meal at stages 1 and 2; at stage 3 the click harvests (2 grapes, back to stage 1).
 
 ## 8. History
 
@@ -354,3 +355,4 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.
 - 2026-11-14: hops grape type on the lattice, model alias, pot juice guard (section 3); Creative Brewing built and installed; not run.
+- 2026-11-16: the jungle grape lattice takes bone meal without a lattice below (2.5; `farming/crops #52`); the stem keeps the trunk rule. VN-13 rewritten, VN-21; queue SQ-VN-01 (plan_small_fixes_1116.md). Creative Brewing built and installed; not run.

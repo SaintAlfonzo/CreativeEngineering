@@ -20,6 +20,8 @@ ServerEvents.tags('item', e => {
 
 	// Watering can fertiliser, loaded from the off hand (4.0). 1.4.1 also lists its Manure (not ported yet).
 	t.add(e, i.t_bonemeal_substitutes, [i.bonemeal, i.manure])
+	// Hops vine (R5, plan_small_fixes_1116.md): these grow it one age like bone meal; absent mods are skipped by the helper
+	t.add(e, i.t_bonemeal_like, [i.tree_fertilizer, i.botania_fertilizer, i.fertilizer, i.fertilizer_bag, i.organic_mash])
 	var cleavers = [i.flint_cleaver, i.iron_cleaver, i.golden_cleaver, i.diamond_cleaver, i.netherite_cleaver]
 	t.add(e, i.t_cleavers, cleavers)
 	t.add(e, i.any_knife, cleavers)

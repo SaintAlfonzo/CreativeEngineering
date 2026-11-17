@@ -33,7 +33,9 @@ ServerEvents.recipes(e => {
     ])
 
 	R.createCompacting(i.diamond_shard, [Item.of(i.coal_block, 9), Fluid.of(f.lava, 250)], e, 'coal_compressing', 'superheated')
-	R.pcPressureChamber(i.diamond, Item.of(i.coal_block, 9), 8, e)
+	// 8 blocks per diamond, 4 per shard (2 shards = 1 diamond): PNC runs the first recipe whose inputs are present, so both
+	// routes give the same value (recipes/engineering #3 F4; was 9 blocks)
+	R.pcPressureChamber(i.diamond, Item.of(i.coal_block, 8), 8, e)
 	R.pcPressureChamber(i.diamond_shard, Item.of(i.coal_block, 4), 8, e)
 
 	// ############################## Echo shard ###########################

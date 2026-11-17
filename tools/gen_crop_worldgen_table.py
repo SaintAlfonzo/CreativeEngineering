@@ -167,16 +167,6 @@ JAVA_PLACED = {
     # Corn Delight 1.0.3 WildCornGeneration (rarity hard-coded)
     'corn_delight:patch_wild_corn': dict(crop='Corn', mods=[rarity(30), HM_MOTION],
         ground='#minecraft:dirt', notes='companion: Grass; Coarse Dirt floor like wild carrots'),
-    # Rustic Delight 1.3.0 (Feature.FLOWER patches: bone meal on grass in these biomes can also grow them)
-    'rusticdelight:wild_cotton_placed': dict(crop='Cotton', mods=[rarity(toml_int('rusticdelight-common.toml', 'wild_cotton_chance', 96)), HM_MOTION],
-        ground='#minecraft:dirt', notes='32 tries within 6; flower-type feature, so bone meal on grass here can grow it'),
-    'rusticdelight:wild_bell_peppers_placed': dict(crop='Bell Pepper', mods=[rarity(toml_int('rusticdelight-common.toml', 'wild_bell_peppers_chance', 15)), HM_MOTION],
-        ground='#minecraft:dirt', notes='48 tries within 4; flower-type feature (bone meal on grass)'),
-    'rusticdelight:wild_coffee_placed': dict(crop='Coffee (Rustic Delight)', mods=[rarity(toml_int('rusticdelight-common.toml', 'wild_coffee_chance', 15)), HM_MOTION],
-        ground='#minecraft:dirt', notes='48 tries within 6; flower-type feature (bone meal on grass)'),
-    # Rustic Delight 1.7.0 (Creative Delight port; json baked into members/rustic, rarity from the port's ChanceFilter)
-    'rusticdelight:bell_pepper_block_patch_placed': dict(crop='Giant Bell Peppers', mods=[rarity(64), HM_MOTION],
-        ground='grass block', notes='48 tries within 7; red, yellow, green giant pepper blocks (needs Creative Delight)'),
     # Nether's Delight 3.1 NDGeneration + PropelplantFeature (CD repackedNethers; 4.0 renamed it propelplant_patch, the pack
     # keeps the 3.1 id, nethers_delight.md 4.5)
     'nethersdelight:patch_propelplant': dict(crop='Propelplant', mods=[{'type': 'minecraft:count', 'count': 8}, FULL_RANGE],
@@ -231,6 +221,10 @@ JAVA_CONFIGURED = {
     'fungidelight:rooted_dirt_blob': ['Rooted Dirt (truffle ground)'],
 }
 
+# Rustic Delight port's rusticdelight:configurable_rarity_filter options (CD members/rustic logic/ChanceFilter DEFAULTS)
+RUSTIC_CHANCE = {'wild_cotton_chance': 96, 'wild_bell_peppers_chance': 15, 'wild_coffee_chance': 15,
+                 'bell_pepper_block_patch_chance': 64}
+
 # Blocks found in json features that count as a crop, and the label they get.
 CROP_BLOCKS = {
     'minecraft:sweet_berry_bush': 'Sweet Berries', 'minecraft:pumpkin': 'Pumpkin', 'minecraft:melon': 'Melon',
@@ -258,6 +252,11 @@ CROP_BLOCKS = {
     'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
     'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
     'veggiesdelight:wild_turnips': 'Turnip', 'veggiesdelight:wild_zucchinis': 'Zucchini',
+    # Rustic Delight port (CD members/rustic, json baked since 11-10; farming/wild-crops #11): its placed features are json
+    'rusticdelight:wild_cotton': 'Cotton', 'rusticdelight:wild_bell_peppers': 'Bell Pepper',
+    'rusticdelight:wild_coffee': 'Coffee (Rustic Delight)',
+    'rusticdelight:bell_pepper_red_block': 'Giant Bell Peppers', 'rusticdelight:bell_pepper_yellow_block': 'Giant Bell Peppers',
+    'rusticdelight:bell_pepper_green_block': 'Giant Bell Peppers',
     # Vintage Delight backport (development/creativeDelight/members/vintage); wild ghost peppers are Nether-only
     'vintagedelight:wild_oats': 'Oats', 'vintagedelight:wild_peanuts': 'Peanuts',
     'vintagedelight:wild_cucumbers': 'Cucumbers',
@@ -466,7 +465,13 @@ def placement_info(mods):
         elif t == 'minecraft:rarity_filter':
             rate = None if rate is None else rate / m['chance']
         elif t == 'rusticdelight:configurable_rarity_filter':
-            notes.append('config rarity')
+            # one chunk in N; the CD port's ChanceFilter hard-codes N per option (it reads no config)
+            n = RUSTIC_CHANCE.get(m.get('option'))
+            if n is None:
+                notes.append('config rarity')
+                rate = None
+            elif rate is not None:
+                rate = rate / n
         elif t in ('minecraft:noise_based_count', 'minecraft:noise_threshold_count', 'minecraft:count_on_every_layer'):
             if 'noise-based count' not in notes:
                 notes.append('noise-based count')

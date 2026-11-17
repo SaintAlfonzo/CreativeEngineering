@@ -460,6 +460,16 @@ Slice & Dice builds its mixing copies at the end of KubeJS's recipe event (a mix
 so the pot recipe is removed and re-added under that suffix, and the mixer recipe is written by hand. The other
 oil recipes keep their Slice & Dice copies.
 
+**2026-11-16 (`dishes/meals #23`, R13, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P2).** Rustic Delight's
+`rusticdelight:fried_egg_from_cooking_oil` is removed (its Slice & Dice mixer copy goes with it). New Cooking Pot recipes
+(Creative Delight, through `R.fdCooking`, 0.35 xp, 200 ticks): `creativedelight:farmersdelightcooking/fried_eggs_from_cooking_oil`
+(cooking oil + 3 eggs -> 3 fried eggs; `rusticdelight/recipes.js`) and
+`creativedelight:farmersdelightcooking/omelettes_from_fried_eggs` (4 `#forge:cooked_eggs` -> 4 More Delight omelettes;
+`moredelight/recipes.js`). No egg dish cooks in a furnace any more: the CD egg cook family has furnace 0 (no
+`creativedelight:smelting/fried_egg_from_egg`, no `..._friedturtleegg_from_turtle_egg`), and
+`moredelight:omelette_smelting`, `ends_delight:food_smelting/fried_dragon_egg`, `ends_delight:food_smelting/shulker_omelette`
+and Alex's Mobs' `alexsmobs:boiled_emu_egg` are removed. Smoker and campfire forms stay. FO-62 (FO-23 rewritten).
+
 ### 3.8 Vanilla egg -> `#forge:eggs` migration (TODO, not built)
 
 Recipes that take `minecraft:egg` as an item don't accept the other eggs. `#forge:eggs` holds 12 items: vanilla,
@@ -944,8 +954,8 @@ FO-14 to FO-22 cans ran as SQ-OF-00 to -03 (PASS 2026-10-22); FO-23 to FO-27 fri
   cooked beef and the rolled return in the grid. No `[NCH] ... KubeJSCanAction not available` warning in the log.
 
 Cooking oil and fried eggs (3.7), after a restart:
-- [ ] **FO-23 fried egg:** JEI uses of Egg show Fried Egg in the furnace (10 s), smoker (5 s) and campfire (30 s);
-  cook one in each. JEI shows no Incubation fried egg recipe.
+- [ ] **FO-23 fried egg:** JEI uses of Egg show Fried Egg in the smoker (5 s) and campfire (30 s), not the furnace
+  (removed 2026-11-16, FO-62); cook one in each. JEI shows no Incubation fried egg recipe.
 - [ ] **FO-24 seeds tag:** hold Pumpkin Seeds, `/kubejs hand` -> tags include `rusticdelight:cooking_oil_ingredients`.
 - [ ] **FO-25 cooking pot:** 3 cotton seeds + 3 pumpkin seeds in a heated Cooking Pot -> 2 Cooking Oil, one bottle
   per oil. JEI lists one Cooking Pot recipe for Cooking Oil (`cooking_oil_manual_only`).
@@ -1047,6 +1057,10 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-61 Powdered sugar in WTHIT** (client, CQ-FO-61; fix in the `mods/` Creative Delight jar of 2026-11-02 14:01): place powdered sugar from its bucket and look at it: WTHIT reads
   "Powdered Sugar" with the mod Creative Engineering (or Creative Delight), not "Snow Block" / Minecraft. Real powder
   snow still reads as WTHIT shows it by default (Snow Block unless `override_powder_snow` is off).
+- [ ] **FO-62 Eggs without a furnace (3.7, 2026-11-16):** a heated Cooking Pot with cooking oil + 3 eggs -> 3 fried eggs (the
+  bottle comes back as Rustic's recipes do); 4 fried eggs -> 4 omelettes. JEI: no furnace recipe makes a fried egg,
+  fried turtle egg, omelette, fried dragon egg, shulker omelette or boiled emu egg; the smoker and campfire forms are
+  there. No `rusticdelight:fried_egg_from_cooking_oil` (or its Slice & Dice copy). Queue SQ-FO-06, SQ-FO-07.
 
 ## 8. History
 
@@ -1142,6 +1156,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   passion fruit glazed duck, Canned Food, Hot Hot Hotpot (types-and-tuning #10 built, [food_families.md](food_families.md) 4.4).
   `gen_can_types.py` rerun: the 20 configured Vintage and Fungi cans built (`AWAIT_DUMP` emptied); the five new mods are
   held out of the type loops (`UNDECIDED_MODS`) until their cans are decided.
+- **2026-11-16** Eggs (`dishes/meals #23`): oil + 3 eggs -> 3 fried eggs and 4 fried eggs -> 4 omelettes in the Cooking Pot; Rustic's oil fried egg and every furnace egg recipe removed (3.7); FO-62, FO-23 rewritten; queue SQ-FO-06, -07 (plan_small_fixes_1116.md). Not run.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

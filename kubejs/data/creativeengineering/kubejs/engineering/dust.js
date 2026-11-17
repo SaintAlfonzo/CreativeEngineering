@@ -25,18 +25,21 @@ ServerEvents.recipes(e => {
     // Redstone <- Strength
     R.shapeless(Item.of(i.redstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:strength"}' }], e, 'cinder_redstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
     R.ieBottling(i.redstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:strength"}' },i.cinder_flour,e, 'redstone_from_cinder_flour_potion')
+    R.createFilling(i.redstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:strength"}'), i.cinder_flour], e, 'cinder_redstone_filling')
     R.createFilling(Item.of(i.redstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:strength"}'), i.cinder_flour_pile], e, 'cinder_pile_redstone_filling')
     R.ieBottling(Item.of(i.redstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:strength"}' },i.cinder_flour_pile,e, 'redstone_from_cinder_flour_pile_potion')
 
     // Glowstone <- Night Vision
     R.shapeless(Item.of(i.glowstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:night_vision"}' }], e, 'cinder_glowstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
     R.ieBottling(i.glowstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}' },i.cinder_flour,e, 'glowstone_from_cinder_flour_potion')
+    R.createFilling(i.glowstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}'), i.cinder_flour], e, 'cinder_glowstone_filling')
     R.createFilling(Item.of(i.glowstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}'), i.cinder_flour_pile], e, 'cinder_pile_glowstone_filling')
     R.ieBottling(Item.of(i.glowstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}' },i.cinder_flour_pile,e, 'glowstone_from_cinder_flour_pile_potion')
 
     // Gunpowder <- Harming
     R.shapeless(Item.of(i.gunpowder, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:harming"}' }], e, 'cinder_gunpowder_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
     R.ieBottling(i.gunpowder,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:harming"}' },i.cinder_flour,e, 'gunpowder_from_cinder_flour_potion')
+    R.createFilling(i.gunpowder, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:harming"}'), i.cinder_flour], e, 'cinder_gunpowder_filling')
     R.createFilling(Item.of(i.gunpowder, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:harming"}'), i.cinder_flour_pile], e, 'cinder_pile_gunpowder_filling')
     R.ieBottling(Item.of(i.gunpowder, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:harming"}' },i.cinder_flour_pile,e, 'gunpowder_from_cinder_flour_pile_potion')
 

@@ -187,17 +187,21 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   glowstone block crushing). Verify with RE-16.
 - **F4. Coal blocks in the pressure chamber:** 9 blocks → diamond and 4 blocks → diamond shard at the same pressure.
   With 9 or more in the chamber which one runs depends on PNC's recipe order (not checked). Check with RE-12.
+  **Fixed 2026-11-16:** the diamond takes 8 coal blocks (`crystal.js`), the same rate as the shard (4 blocks); RE-31.
 - **F5. Cinder flour routes don't line up.** Redstone, glowstone and gunpowder have no single-flour Create filling (only
   the pile; `dust.js` lines 23-39, rechecked 2026-10-21); the other seven have both. Shapeless gives 1 per flour, the machines 1 per flour too, so the machines only save the
-  bottle.
+  bottle. **Fixed 2026-11-16:** `dust.js` adds the single-flour Create filling recipes at 25 mB, as the other seven
+  (`cinder_redstone_filling`, `cinder_glowstone_filling`, `cinder_gunpowder_filling`); RE-32.
 - **F6. Define-once:** `end.js` sets `i.ender_shard` and `dust.js` `i.matcha`, `redstone.js` `i.mundane_potion`; all
   three are already in `item_dict.js` with the same value. Delete the lines.
 - **F7. Raw recipe code:** `mechanisms.js` builds its vibrating step with `e.custom(...)` and uses the shared
   `i.incomplete` instead of `R.incomplete(key)`; an `R.viVibrating` step form would fit the helper rule.
 - **F8. Comments that no longer match:** the mechanical press comment says "replace brass with gold" (it uses stiff
-  springs and an iron block); the vehicle link step ids say `step2_ingot` for a nugget step.
+  springs and an iron block); the vehicle link step ids say `step2_ingot` for a nugget step. **Fixed 2026-11-16:**
+  the `process.js` comments rewritten, the `transport.js` step ids removed (no behaviour change).
 - **F9. Thunder detector filling NBT** omits `Bottle:"REGULAR"`, so splash and lingering mundane potion fluid probably
-  match too (Create's fluid NBT match is partial; not checked).
+  match too (Create's fluid NBT match is partial; not checked). **Fixed 2026-11-16:** the filling NBT is
+  `{Bottle:"REGULAR",Potion:"minecraft:mundane"}` (`redstone.js`); RE-33.
 - **F10. Old code:** the commented-out `global.CE` copy in `resource_blocks.js` (230 lines) was deleted 2026-10-22.
 - **F11. Create add-on machines on components (scratchpad 2026-10-21).** Wanted: mechanical arm on zinc components and
   springs; helve hammer on a netherite block and mechanical components; centrifuge, curving press and coiler on zinc
@@ -251,7 +255,7 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   mechanism with a vibrating step completes on a vibrating table.
 - [ ] **RE-10 Transmitter and links:** craft a transmitter, then 2 redstone links; Etched radio and display link use it.
 - [ ] **RE-11 Rails:** 6 iron rods + stick → 12 rails; workbench `railtransport` blueprint → 12.
-- [ ] **RE-12 Coal (F4):** 9 coal blocks in a pressure chamber at 8 bar → note diamond or shard.
+- [ ] **RE-12 Coal (F4):** 9 coal blocks in a pressure chamber at 8 bar → note diamond or shard. Since 2026-11-16 see RE-31.
 - [ ] **RE-13 Stone generator:** mixer with water + lava, unheated / heated / superheated → 1 / 5 / 10 cobblestone per
   batch.
 - [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava → 1 obsidian, both fluids used up;
@@ -261,6 +265,12 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   placing returns the wooden bucket; texture and names show.
 - [ ] **RE-30 Wooden bucket in machines [scratch]:** Create spout / basin / FD cooking pot drain the wooden water bucket
   and return the empty one; it fills from water only.
+- [ ] **RE-31 Coal blocks (F4 fixed, brief RE-24) [scratch]:** 9 coal blocks in a pressure chamber at 8 bar → a diamond
+  (1 block left) or 2 shards (1 left); either is one diamond's worth. JEI shows 8 blocks for the diamond. Queue SQ-RE-31.
+- [ ] **RE-32 Cinder singles (F5 fixed, brief RE-25) [scratch]:** a spout pours 25 mB strength / night vision / harming
+  potion onto one cinder flour → 1 redstone / glowstone dust / gunpowder. Queue SQ-RE-32.
+- [ ] **RE-33 Thunder detector NBT (F9 fixed, brief RE-26) [scratch]:** the assembly's filling step lists the regular
+  mundane potion only; a spout with splash mundane potion fluid does not advance it, regular mundane does. Queue SQ-RE-33.
 - [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava → crimsite; IE crush → 5 iron nuggets.
 - [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion → 8 redstone and a glass bottle; a pile in the Bottler
   with 180 mB strength → 9 redstone.
@@ -287,3 +297,6 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   recipe in CD `creativedelight/recipes.js`; old ids remapped). It now also holds sap, milk and honey. See
   [hearth_and_harvest.md](hearth_and_harvest.md) owner notes and TODO `largecontent/mod-additions #58`.
 - 2026-10-31: scratchpad notes translated into TODO rows (`engineering/dreams-and-desires #9`, `recipes/engineering #7`). No code changed.
+- 2026-11-16: F4 (8 coal blocks per diamond), F5 (single cinder flour fillings at 25 mB), F8 (comments, step ids), F9
+  (thunder detector filling needs the regular mundane potion) fixed (`recipes/engineering #3`, plan_small_fixes_1116.md).
+  RE-31 to RE-33 (the brief's RE-24 to RE-26, renumbered after RE-30); queue SQ-RE-31 to -33. Not run.

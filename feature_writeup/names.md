@@ -125,6 +125,12 @@ the member's own lang file, not in namechanges.js. Registry ids are kept, so the
 | `item.roll_delight.amazing_salmon_roll` | Salmon Maki Roll | upstream "Amazing Salmon Roll"; renamed next to FD's Salmon Roll (D4) |
 | `item.roll_delight.amazing_salmon_roll_slice` | Salmon Maki Roll Slice | the slice (D4; "Salmon Maki" until 2026-11-04, plan_meals_rolls_bbq.md B2) |
 
+### 3.4 Title screen splash texts
+
+`kubejs/assets/minecraft/texts/splashes.txt`
+(the pack's list, about 200 lines, replacing vanilla's file through the KubeJS resource pack) holds the title screen splashes. 2026-11-16: `Stience!` added at the end (`ui/misc #7`,
+[plan_small_fixes_1116.md](plan_small_fixes_1116.md) P7). NM-14.
+
 ## 4. Limits and decisions
 
 - **The offline scan over-reports.** `missing_names.py` without a dump can't see three things:
@@ -205,6 +211,8 @@ Restart the game, or reload resources with F3+T (lang only).
 - [x] **NM-08 Catalog from the dump:** `python3 tools/missing_names.py` prints `source: dump`, and section 9 says "from
   the `/dumpnames` export". Tell Claude, so the triage in section 9 can be redone from real data. PASSED 2026-10-02
   22:11; triage redone the same day.
+- [ ] **NM-14 Splash:** open the title screen repeatedly (or F3+T to reload) → `Stience!` shows among the splashes;
+  the rest of the list still shows. Queue CQ-NM-01.
 
 ## 8. History
 
@@ -222,6 +230,7 @@ Restart the game, or reload resources with F3+T (lang only).
   Target Dummy, your mods marked "(Alfonzo)").
   NM-09, NM-10 PASSED.
 - 2026-10-24: planned from the scratchpad: rename of Ocean's Delight's elder guardian roll (`ui/names #8`). No code changed.
+- 2026-11-16: splash text `Stience!` (3.4, `ui/misc #7`); NM-14, queue CQ-NM-01 (plan_small_fixes_1116.md). Not run.
 
 ## 9. Catalog part 1: partial blocks
 

@@ -210,8 +210,8 @@ Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, ca
 
 | Output | Grid | Heated mixing | Arc furnace |
 |---|---|---|---|
-| Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 5 nuggets |
-| Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 5 ingots |
+| Golden carrot | carrot in 8 gold nuggets | carrot + 6 nuggets | carrot + 4 nuggets (5 before 2026-11-16) |
+| Golden apple | vanilla's 8 ingots | apple + 6 gold ingots | apple + 4 ingots (5 before 2026-11-16) |
 | Enchanted golden (gilded) apple | | assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB liquid XP and pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB) | |
 
 Since 2026-10-21 (TODO `dishes/meals #9`) the machine discount went from 3 and 5 (of 8) to 2 and 3; revisit with food
@@ -233,6 +233,20 @@ reverted.
   recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
   marked for Creative Brewing ([creative_delight.md](creative_delight.md) 29.5). Items and blocks:
   CD `kubejs_startup/creativeengineering/cultures.js`; tags: `creativedelight/cultivated_meat_tags.js`.
+
+### 2.6 Small fixes 2026-11-16
+
+[plan_small_fixes_1116.md](plan_small_fixes_1116.md) P2; Creative Delight jar, built and installed, not run.
+
+- **Arc Furnace gilding 4** (`food/types-and-tuning #27`): every `goldenGild` food (2.4 and Golden Food's 23) takes the food
+  + 4 gold in the Arc Furnace (was 5); CD `cd_food.js` `gold: { mixer: 6, arc: 4 }`. RC-186.
+- **Jars and bottles 4 per craft** (`items/jars #12`): Vintage Delight's mason jar recipe gives 4 (was 3; the vintage
+  member's `mason_jar.json`); the glass bottle gives 4 (was 3): `minecraft:glass_bottle` removed, replaced by
+  `creativedelight:shaped/glass_bottle` (CD `minecraft/recipes.js`). RC-187.
+- **Banana bunch** (`dishes/ingredients #18`): knife on the Cutting Board, 1 Neapolitan banana bunch -> 6 bananas
+  (`creativedelight:fdcutting/banana_bunch`, CD `neapolitan/recipes.js`). Neapolitan's own right-click opening of the bunch
+  is unchanged. RC-188.
+- Egg recipes of the same batch: [food.md](food.md) 3.7. Vinegar: [vintage_delight.md](vintage_delight.md).
 
 ## 3. What the pack changes
 
@@ -460,8 +474,8 @@ None.
   tempura -> Fish Tempura; cooking oil + 2 potato slices (Rustic) -> 2 Fries, also with diced potatoes; cooking oil +
   a raw cod + 2 slices with paper in the plate slot -> Fish and Chips; fries + cooked fish +
   paper in the grid -> Fish and Chips; its tooltip reads "The chips are fries. Don't tell the British."
-- [ ] **RC-70 Gold food in machines:** golden carrot (grid, mixer with 6 nuggets, arc with 5) and golden apple (mixer 6,
-  arc 5 ingots) accept rose gold nuggets / MCA rose gold ingots as well as gold; enchanted golden apple assembly accepts
+- [ ] **RC-70 Gold food in machines:** golden carrot (grid, mixer with 6 nuggets, arc with 4) and golden apple (mixer 6,
+  arc 4 ingots; both 5 before 2026-11-16) accept rose gold nuggets / MCA rose gold ingots as well as gold; enchanted golden apple assembly accepts
   a rose gold block. (Scratch server 2026-10-22, `tools/golden_food_probe.js`: every gold input of these recipes
   accepts its rose gold twin, 16 of 16; the crafting itself in game.)
 - [ ] **RC-71 Chorus juice fluid** (recipe ids: scratch server PASSED 2026-10-22, SQ-DR-01; client: JEI, the basin and spout runs): JEI shows the Chorus Juice fluid with an Absorption line. Heated basin: chorus
@@ -551,6 +565,12 @@ None.
 - [ ] **RC-185 Nut milk jar and one-bottle jars:** (SQ-PJL-05) pot 2 peanuts + sugar in an Empty Mason Jar -> Nut Milk Jar;
   bottle + empty jar <-> jar + glass bottle 1 to 1; drinking it removes one curable effect and leaves the jar.
   Supplementaries jar: one Cherry Jam Jar fills one unit of the jar's contents [3].
+- [ ] **RC-186 Arc gilding 4** (SQ-RC-01): Arc Furnace, a carrot + 4 gold nuggets -> golden carrot, an apple + 4 gold
+  ingots -> golden apple; a goldenfood food the same with 4 nuggets; JEI shows 4, not 5.
+- [ ] **RC-187 Jars and bottles 4** (SQ-RC-02): crafting a mason jar gives 4 Empty Mason Jars, 3 glass in a V gives 4
+  Glass Bottles; JEI shows one glass bottle recipe (Creative Delight's), not vanilla's 3.
+- [ ] **RC-188 Banana bunch** (SQ-RC-03): a knife on a Cutting Board holding a Banana Bunch gives 6 bananas; right-clicking
+  a bunch in hand still opens it as Neapolitan does.
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PJL-04 PASS (one Creative Delight filling and emptying recipe per jam jar and jello).
 
@@ -629,3 +649,5 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 - 2026-11-02: deep scan 2026-11-02: RC-176 to RC-179 annotated with the r1102b results (SQ-PSU-06 FAIL: lemon and
   orange jam from slices still bottle; SQ-PSU-07, -08 PASS; SQ-PSU-09 open); RC-01, RC-02 given scratch rows
   SQ-RCO-01, -02.
+- 2026-11-16: Arc Furnace gilding takes 4 gold (was 5); mason jar and glass bottle crafts give 4 (were 3); banana bunch on the
+  Cutting Board -> 6 bananas (2.6). RC-186 to RC-188; queue SQ-RC-01 to -03 (plan_small_fixes_1116.md). Not run.

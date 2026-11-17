@@ -180,6 +180,9 @@ SQ-BREED-01 (in [scratch_queue.md](testing/scratch_queue.md)): add `/dumpbreedin
 type, `isFood` for every registered item; for bees, block class and both flower tags), run, replace the **check in
 game** rows and the F-B7 candidates with measured data.
 
+SQ-BREED-04 (2026-11-16, `mobs/bees #4`): after the cascade fix, the nesting tags hold the removed entries again while the
+flower tags stay without them (section 8 last row).
+
 ## 8. Owner decisions applied 2026-11-10
 
 | Decision | Done |
@@ -191,6 +194,7 @@ game** rows and the F-B7 candidates with measured data.
 | Flower crown and leaf piles out (F-B4, F-B5) | Removed from the item flower tags, so bees and hummingbirds ignore them. |
 | Botania special flowers and shiny flowers do not breed bees | `#botania:special_flowers` removed from the item flower tags; shiny flowers were never in a tag. Botania's mixin still lets bees pollinate special flowers. |
 | F-B7 blocks need no flower tag | Nothing to do; F-B7 closed. |
+| Flower tag cascade fixed 2026-11-16 (`mobs/bees #4`, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P7) | Found by SQ-RDB-02 (r1113, `perf/runs/r1113/verdicts/c4_a.md:46`): tags that nest the flower tags for another reason lost the removed entries. [animal_tags.js](../kubejs/server_scripts/tags/animal_tags.js) keeps the breeding removals and adds what it removes straight back to them, computed before the removal (the Worldgen and Compat jar scripts that own those tags cannot see it): items `creativecompat:physics/floats` (every removed item: wild plants, Botania special flowers, flower crown, azalea leaf piles), `another_furniture:planter_box_placeables` and `creativecompat:flower_box_plants` (only the wild plants that were small flowers); blocks `creativeworldgen:ground_match/plants` (`template_trim/plants` nests it) and `chalk:chalk_cannot_draw_on` (the removed wild blocks). Rows SQ-BREED-04, SQ-RDB-02 (rerun). |
 
 ### Just Enough Breeding (JEBr 1.4.0)
 

@@ -67,12 +67,10 @@ R.shapeless(Item.of(i.ll_spring, 2), [i.chain], e)
 //vehicle link sequence assembly
 const incLlSpring = R.incomplete('ll_spring')
 R.createSequencedAssembly(Item.of(i.ll_spring, 6), i.nugget_iron, [
+	// steps: iron wire, iron nugget, iron wire on an iron nugget base (sub-recipes are inline, so no step ids)
+	e.recipes.create.deploying(incLlSpring, [incLlSpring, i.any_wire_iron]),
+	e.recipes.create.deploying(incLlSpring, [incLlSpring, i.nugget_iron]),
 	e.recipes.create.deploying(incLlSpring, [incLlSpring, i.any_wire_iron])
-		.id(`createdeploying/vehicle_link_step1_nugget`),
-	e.recipes.create.deploying(incLlSpring, [incLlSpring, i.nugget_iron])
-		.id(`createdeploying/vehicle_link_step2_ingot`),
-	e.recipes.create.deploying(incLlSpring, [incLlSpring, i.any_wire_iron])
-		.id(`createdeploying/vehicle_link_step3_nugget`)
 ], ['ll_spring'], e, 'vehicle_link_sequenced_assembly', 1)
 //workbench recipe for vehicle links
 R.ieBlueprint(Item.of(i.ll_spring, 6), [{ id: i.any_wire_iron, count: 2 }, Item.of(i.nugget_iron, 2)], 'railtransport', e, '2_iron_wire_to_6_spring_by_railtransport')

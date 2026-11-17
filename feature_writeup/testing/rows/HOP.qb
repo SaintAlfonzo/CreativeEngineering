@@ -69,11 +69,12 @@ sleep 10
 expect HOP03-age3$
 look "Test passed" (watch shows age 0 -> 1 -> 2 -> 3)
 
-## SQ-HOP-04 | stick pick: age 3 gives 1 or 2 hops and goes to age 1 (x3); age 2 gives 0 or 1; age 1 is not picked
+## SQ-HOP-04 | stick pick: age 3 gives 1 or 2 hops and goes to age 1 (x3); ages 2 and 1 are not picked (rewritten 2026-11-16, R5)
 @group A
-@commands `/setblock 604 -60 520 minecraft:oak_log`; `/setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=3]`; `/pbot hold G minecraft:stick 1`; `/pbot use G 604 -60 521 north`; `/execute if block 604 -60 521 hearthandharvest:hops_vine[age=1]`; `/zhh5 items 604 -60 521 3`; repeat 3 times; then `age=2` once; then `age=1`: use does nothing
-@pass "Test passed"; age 3 gives 1 or 2 `hearthandharvest:hops`, age 2 gives 0 or 1, age 1 is not picked
-@fails `HopsVineBlock.use`
+@commands `/setblock 604 -60 520 minecraft:oak_log`; `/setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=3]`; `/pbot hold G minecraft:stick 1`; `/pbot use G 604 -60 521 north`; `/execute if block 604 -60 521 hearthandharvest:hops_vine[age=1]`; `/zhh5 items 604 -60 521 3`; repeat 3 times; then `age=2` once: stays age 2, no hops; then `age=1`: use does nothing
+@pass "Test passed"; age 3 gives 1 or 2 `hearthandharvest:hops`; age 2 and age 1 are not picked (stay, no item; since 2026-11-16 a vine is picked only at age 3)
+@fails `HopsVineBlock.use` (age < 3 must pass for a non-fertilizer item)
+@reviewed 2026-11-16
 @from batches/r1115/p5_a1.qb
 > setblock 604 -60 520 minecraft:oak_log
 > kill @e[type=minecraft:item]
@@ -88,14 +89,16 @@ sleep 1
 end
 > setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=2]
 > pbot use G 604 -60 521 north
-> execute if block 604 -60 521 hearthandharvest:hops_vine[age=1] run say HOP04-age2-to-1
+> execute if block 604 -60 521 hearthandharvest:hops_vine[age=2] run say HOP04-age2-stays
 > zhh5 items 604 -60 521 3
 > setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=1]
 > pbot use G 604 -60 521 north
 > execute if block 604 -60 521 hearthandharvest:hops_vine[age=1] run say HOP04-age1-stays
 > zhh5 items 604 -60 521 3
 count HOP04-age3-to-1$ == 3
-look per use: "use SUCCESS/CONSUME" lines; age 3 items lines 1 or 2 hearthandharvest:hops each; age 2 line 0 or 1 hops (age 1 after); age 1 use PASS/FAIL and no items
+expect HOP04-age2-stays$
+expect HOP04-age1-stays$
+look per use: "use SUCCESS/CONSUME" lines; age 3 items lines 1 or 2 hearthandharvest:hops each; age 2 and age 1 uses PASS and no hops item
 
 ## SQ-HOP-05 | shears sterilize: no growth while sterilized; second shears use clears it (rerun on Compat 11:31)
 @group A
@@ -365,3 +368,88 @@ look group formed (controller 304 -60 208); ids exist; lone basin: wine bottle r
 > data get entity hb1 SelectedItem
 > zhh2 basin 176 -60 208
 look `remainder 3`; basin slots empty both times; use PASS (or not SUCCESS) and hand still 3 hops
+
+@@section 2
+@@title SQ-HOP hops harvest and fertilizer, rug crack overlay, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P2 R4, R5; [hearth_and_harvest.md](../hearth_and_harvest.md) 4.9, HNH-101, HNH-102; TODO `largecontent/mod-additions #89`, `#63`)
+@@date 2026-11-16
+@@jars creativebrewing creativecommon creativedelight
+@@sources feature_writeup/hearth_and_harvest.md development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/block/HopsVineBlock.java kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js kubejs/data/creativedelight/kubejs/hearthandharvest/machine_tags.js
+@@text
+@@text Targets the Creative Delight and Creative Brewing jars installed 2026-11-16 (hops need Brewing). Group A, a fresh superflat;
+@@text `/cdevtest` (Creative Devtools). The vines hang on the south face of an oak log (`north=true`), x 660 to 668, z 520 / 521.
+@@text SQ-HOP-04 (section 1) was rewritten for the same change: run it beside these.
+@@text
+@@table
+## SQ-HOP-12 | hops vine ages 0 to 2: tree fertilizer, IE and Botania fertilizer, organic mash, manure grow it one age and are used up; a feather passes
+@group A
+@commands per item a log at x -60 520 and `hearthandharvest:hops_vine[north=true,age=1]` at x -60 521; `/cdevtest use x -60 521 held=ITEM*2 face=north`; feather on an age 1 vine
+@pass each fertilizer: `main=ITEM*1`, state `age=2`; the feather: `main=minecraft:feather*2`, state still `age=1`; no hops item dropped
+@fails `HopsVineBlock.use` (`isFertilizer`, `#creativedelight:bonemeal_like`, `#hearthandharvest:bonemeal_substitutes`); tags not loaded: SQ-HOP-14
+> forceload add 650 500 680 540
+> setblock 660 -60 520 minecraft:oak_log
+> setblock 661 -60 520 minecraft:oak_log
+> setblock 662 -60 520 minecraft:oak_log
+> setblock 663 -60 520 minecraft:oak_log
+> setblock 664 -60 520 minecraft:oak_log
+> setblock 665 -60 520 minecraft:oak_log
+> cdevtest place 660 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 661 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 662 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 663 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 664 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 665 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest use 660 -60 521 held=create:tree_fertilizer*2 face=north
+> cdevtest use 661 -60 521 held=immersiveengineering:fertilizer*2 face=north
+> cdevtest use 662 -60 521 held=botania:fertilizer*2 face=north
+> cdevtest use 663 -60 521 held=vintagedelight:organic_mash*2 face=north
+> cdevtest use 664 -60 521 held=hearthandharvest:manure*2 face=north
+> cdevtest use 665 -60 521 held=minecraft:feather*2 face=north
+> cdevtest items 662 -60 521 6
+expect verb=use main=create:tree_fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=immersiveengineering:fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=botania:fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=vintagedelight:organic_mash\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=hearthandharvest:manure\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=minecraft:feather\*2 off=empty state="?hearthandharvest:hops_vine\[age=1,
+reject verb=items .*hearthandharvest:hops:
+look five fertilizers each used once and the vine one age up; the feather kept and the vine unchanged; no hops on the ground
+
+## SQ-HOP-13 | bone meal (vanilla path) grows an age 0 vine; the fertilizer bag grows it and loses 1 durability; age 3 with fertilizer harvests and keeps the fertilizer
+@group A
+@commands log + vine age 0 at 666, age 1 at 667, age 3 at 668; `/cdevtest use` with `minecraft:bone_meal*2`, `hearthandharvest:fertilizer_bag`, `create:tree_fertilizer*2`; `/cdevtest items 668 -60 521 2`
+@pass bone meal: `main=minecraft:bone_meal*1`, age 1 or more; bag: `main=hearthandharvest:fertilizer_bag*1{Damage:1}`, age 2; age 3: state `age=1`, `main=create:tree_fertilizer*2`, 1 or 2 `hearthandharvest:hops` on the ground
+@fails bone meal unchanged: the `BoneMealItem` pass (`held.getItem() instanceof BoneMealItem`) or `isValidBonemealTarget`; bag shrunk instead of damaged: `isDamageableItem` branch
+> setblock 666 -60 520 minecraft:oak_log
+> setblock 667 -60 520 minecraft:oak_log
+> setblock 668 -60 520 minecraft:oak_log
+> cdevtest place 666 -60 521 hearthandharvest:hops_vine[north=true,age=0]
+> cdevtest place 667 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 668 -60 521 hearthandharvest:hops_vine[north=true,age=3]
+> kill @e[type=minecraft:item]
+> cdevtest use 666 -60 521 held=minecraft:bone_meal*2 face=north
+> cdevtest use 667 -60 521 held=hearthandharvest:fertilizer_bag face=north
+> cdevtest use 668 -60 521 held=create:tree_fertilizer*2 face=north
+> cdevtest items 668 -60 521 2
+expect verb=use main=minecraft:bone_meal\*1 off=empty state="?hearthandharvest:hops_vine\[age=[123],
+expect verb=use main=hearthandharvest:fertilizer_bag\*1\{Damage:1\} off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=create:tree_fertilizer\*2 off=empty state="?hearthandharvest:hops_vine\[age=1,
+expect verb=items .*hearthandharvest:hops:[12]\b
+look bone meal used once and the vine grown; the bag damaged, not used up; the ripe vine picked with the fertilizer kept
+
+## SQ-HOP-14 | tags: #creativedelight:bonemeal_like holds the five fertilizers; block tag #creativedelight:clip_break_overlay holds the three rugs
+@group A
+@commands `/cdevtest tag item creativedelight:bonemeal_like`; `/cdevtest tag block creativedelight:clip_break_overlay`
+@pass item tag n=5 (`create:tree_fertilizer`, `botania:fertilizer`, `immersiveengineering:fertilizer`, `hearthandharvest:fertilizer_bag`, `vintagedelight:organic_mash`); block tag n=3 (`hearthandharvest:straw_rug`, `hearthandharvest:hay_rug`, `farmersdelight:canvas_rug`)
+@fails `hearthandharvest/tags.js` (`i.t_bonemeal_like`), `hearthandharvest/machine_tags.js` (`i.t_clip_break_overlay`); a missing mod drops its entry
+> cdevtest tag item creativedelight:bonemeal_like
+> cdevtest tag block creativedelight:clip_break_overlay
+expect verb=tag kind=item tag=creativedelight:bonemeal_like n=5\b
+expect verb=tag kind=block tag=creativedelight:clip_break_overlay n=3\b
+look the item tag lists the five fertilizers, the block tag the three rugs
+
+## CQ-HOP-02 | rug crack overlay stays on the block; the rug still draws its fringe
+@group client
+@commands survival; place a straw rug, a hay rug and a canvas rug on grass, and a stone block; mine each slowly (no efficiency) and watch the crack, then look at each placed rug from the side
+@pass the crack shows only within the block's 0 to 1 box on all three rugs, nothing on the fringe that hangs past the edge; the rugs still draw their fringe when not being mined; the stone's crack is unchanged; no `BreakOverlayClipMixin` error in latest.log
+@fails `BreakOverlayClipMixin` not applied (Forge `BlockRenderDispatcher.renderBreakingTexture` signature), `client/BreakOverlayClip` quad filter, block tag missing (SQ-HOP-14)
+@draft visual: a runner client takes a screenshot mid-break of each rug, the owner judges

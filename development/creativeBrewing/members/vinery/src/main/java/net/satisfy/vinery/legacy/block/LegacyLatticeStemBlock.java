@@ -130,6 +130,15 @@ public class LegacyLatticeStemBlock extends StemBlock {
       return state;
    }
 
+   /**
+    * Pack (R6, plan_small_fixes_1116.md, farming/crops #52): a planted lattice takes bone meal on its own, with no lattice
+    * below. The trunk rule (same block below) stays on the grapevine stem (StemBlock), so a lone jungle grape lattice grows.
+    */
+   @Override
+   public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient) {
+      return (Integer)state.getValue(AGE) > 0 && !this.isMature(state);
+   }
+
    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
       int i;
       state = restoreHops(world, pos, state);

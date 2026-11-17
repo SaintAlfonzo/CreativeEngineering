@@ -87,3 +87,32 @@ expect BREED3 carrot placed
 expect BREED3 poppy placed
 count \[zc4\] bee .* flower=40723,-60,40000 >= 1
 look bee positions change between the readings (the bees move); a carrot-hive bee records flower=40723,-60,40000 (or FlowerPos 40723 -60 40000 in the first hive's Bees); the control hive's bees record the poppy 40739 -60 40000. Poppy found and carrot never = real (wild carrot not pollinable); neither found and the bees still frozen = environment (INCONCLUSIVE)
+
+@@section 2
+@@title SQ-BREED flower tag cascade fix, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7; [breeding_audit.md](../breeding_audit.md) section 8 last row; TODO `mobs/bees #4`)
+@@date 2026-11-16
+@@sources feature_writeup/breeding_audit.md kubejs/server_scripts/tags/animal_tags.js
+@@text
+@@text Targets the instance's `kubejs/server_scripts/tags/animal_tags.js` as of 2026-11-16 (`/reload`). Group A. Rerun SQ-RDB-02 beside it.
+@@text
+@@table
+## SQ-BREED-04 | the tags nesting the flower tags keep the removed entries; the flower tags stay without them
+@group A
+@commands `/cdevtest tag item minecraft:flowers`; `/cdevtest tag item creativecompat:physics/floats`; `/cdevtest tag item another_furniture:planter_box_placeables`; `/cdevtest tag item creativecompat:flower_box_plants`; `/cdevtest tag block creativeworldgen:ground_match/plants`; `/cdevtest tag block creativeworldgen:template_trim/plants`; `/cdevtest tag block chalk:chalk_cannot_draw_on`
+@pass `minecraft:flowers` items: no `wild_` id, no flower crown or leaf pile; physics/floats: wild plants, `botania:` special flowers, the flower crown and both azalea leaf piles; planter_box_placeables and flower_box_plants: the small-flower wild plants (for example `rusticdelight:wild_cotton` if it was a small flower); ground_match/plants, template_trim/plants and chalk_cannot_draw_on: the wild crop blocks (Farmer's Delight, Corn, Delightful, Miner's, Rustic)
+@fails `animal_tags.js` `keep(...)` runs after `t.remove` or a tag owner script replaces the tag later (priority)
+> cdevtest tag item minecraft:flowers
+> cdevtest tag item creativecompat:physics/floats
+> cdevtest tag item another_furniture:planter_box_placeables
+> cdevtest tag item creativecompat:flower_box_plants
+> cdevtest tag block creativeworldgen:ground_match/plants
+> cdevtest tag block creativeworldgen:template_trim/plants
+> cdevtest tag block chalk:chalk_cannot_draw_on
+reject verb=tag kind=item tag=minecraft:flowers .*ids=.*\b[a-z_]+:wild_
+expect verb=tag kind=item tag=creativecompat:physics/floats .*ids=(?=.*\b[a-z_]+:wild_)(?=.*flower_crown)(?=.*botania:)
+expect verb=tag kind=item tag=another_furniture:planter_box_placeables .*ids=.*\b[a-z_]+:wild_
+expect verb=tag kind=item tag=creativecompat:flower_box_plants .*ids=.*\b[a-z_]+:wild_
+expect verb=tag kind=block tag=creativeworldgen:ground_match/plants .*ids=.*rusticdelight:wild_
+expect verb=tag kind=block tag=creativeworldgen:template_trim/plants .*ids=.*rusticdelight:wild_
+expect verb=tag kind=block tag=chalk:chalk_cannot_draw_on .*ids=.*\b[a-z_]+:wild_
+look counts close to the 11-10 dump (ground_match/plants and template_trim back by about 19 wild crop blocks, physics/floats by about 78, flower_box_plants by the small-flower wild plants)

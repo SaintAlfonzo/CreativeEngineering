@@ -2,8 +2,8 @@
 
 Source: owner chat 2026-11-16 (a pick from the "simplest bugs and tweaks" breakdown of [TODO.md](todo/TODO.md)), taken in
 with the `intake` skill. Premise checks were read from the code the same day; file:line references are from that read.
-Status: **planned, not built**. Test rows are written with the build (writeup prefixes, then `SQ-`/`CQ-` queue rows), not
-now.
+Status: **built 2026-11-16, all phases; 8 jars installed (Common, Creative Delight, Brewing, Equipment, Worldgen, Compat,
+Engineering, Devtools); nothing tested in game yet.** Build notes and deviations: section "Build notes" below.
 
 Order: by jar, so each jar is rebuilt once. P1 (Common) first because the blueprint fix changes recipes other jars'
 scripts call. P2 to P6 in any order. Every Java or startup change needs a full restart; P7 is script and config only.
@@ -131,7 +131,7 @@ scripts call. P2 to P6 in any order. Every Java or startup change needs a full r
   rebuilds.
 - **Wild crops generator** (`farming/wild-crops #11`): add wild_cotton, wild_bell_peppers, wild_coffee and
   bell_pepper_{red,yellow,green}_block to `CROP_BLOCKS`, rerun, drop the dead Rustic `JAVA_PLACED` rows and their
-  `tools/check_known.tsv` entries; `check_all.py --fast` passes. If the table feeds a dict, Common rebuilds.
+  `tools/check_known.csv` entries; `check_all.py --fast` passes. If the table feeds a dict, Common rebuilds.
 - **Engineering findings** (`recipes/engineering #3`): F4 `crystal.js:36` 9 -> 8 coal blocks; F5 single cinder flour
   filling recipes at 25 mB beside `dust.js:28/34/40`; F9 `redstone.js:228` NBT gains `Bottle:"REGULAR"`; F8 stale
   comments at `process.js:18, :55`, step ids at `transport.js:71-75`.
@@ -143,12 +143,41 @@ scripts call. P2 to P6 in any order. Every Java or startup change needs a full r
 
 ## Done when
 
-Per phase: build, `check_all.py --fast --changed`, install, writeup and TODO row updated, `features.tsv` +
+Per phase: build, `check_all.py --fast --changed`, install, writeup and TODO row updated, `features.csv` +
 `status_index.py`, changelog bullets (player-visible: hops, grapes, rug, gilding, jars, banana, vinegar, eggs, waystone,
 golems, ice boats, Quark nerfs, flower boxes, splash, engineering recipes, JEI ordering, the 9 blueprint recipes now
 craftable; none for: generator, loot sim, blueprint test, dragon hoe guard), queue rows with the writeup's prefix, commit and push to
 `agent_staging`.
 
+## Build notes (2026-11-16)
+
+- **P1:** `_mergeBlueprintInputs` merges on the emitted JSON; `tools/test_nch_blueprint.sh` (runner `tools/nch_test/`) loads the
+  real `neoCraftHelper.js` and `has.js`; 9 checks pass, 4 fail against the old helper.
+- **P2 hops:** a real `BoneMealItem` passes to its own `useOn`; the substitutes tag and new `#creativedelight:bonemeal_like`
+  (dict `i.t_bonemeal_like`) grow the vine in `use()`; the fertilizer bag loses 1 durability instead of shrinking.
+- **P2 rug:** `@ModifyVariable` on the first `BakedModel` local of Forge's `renderBreakingTexture` (Forge method, no remap);
+  block tag `#creativedelight:clip_break_overlay` (dict `i.t_clip_break_overlay`).
+- **P2 eggs:** the egg cook family has `furnace: 0` (`_cook` skips the smelting recipe); plain `minecraft:egg` for the batch
+  (`#forge:eggs` holds crocodile, turtle and parrot eggs). Also removed: `ends_delight` fried dragon egg and shulker omelette
+  smelting, `alexsmobs:boiled_emu_egg` (all keep smoking and campfire forms).
+- **P3:** the lattice's own right-click harvests at age 3, so bone meal acts at ages 1-2.
+- **P4:** the guard gates only the refund roll; charm damage is unchanged.
+- **P5:** positions [2, 0, 3] read from the Waystones 11.4.2 nbt; the file is hand-written, no generator.
+- **P6 golems:** village = nearest meeting point POI within 64 blocks; state is a per-level SavedData. **Ice boats:** config
+  `[boat_friction]` (both sides: the rider's client moves the boat).
+- **P6 flower boxes:** no holder tag lists the six blocks, so the box that took them does it in code; the ban tag covers
+  all three boxes.
+- **P7 flower tags (deviation):** the re-adds are in `animal_tags.js`, not the Worldgen / Compat trees: only the script that
+  removes the entries knows them, and jar scripts have their own scope. Planter and flower box tags get back only wild
+  plants that were small flowers (no Botania functional flowers).
+- **P7 generator:** the port's `ChanceFilter` hard-codes its rarities (reads no config); `RUSTIC_CHANCE` mirrors them.
+  `test_mushroom_spawns`' known row (same gap) was removed too.
+- **P7 engineering:** these scripts ship in the Engineering jar, so Engineering was rebuilt and installed. The Flower Test
+  world script ships in Devtools, likewise.
+- **P7 Quark:** no server copy needed (common config, shipped from `config/`).
+- **TODO rows:** golems `mobs/tweaks #27`, ice boats `gameplay/blockrunner #12` (added at intake).
+
 ## History
 
 - 2026-11-16: written from the owner's pick and 13 AskUserQuestion rulings (R1 to R13); R14 and R16 agent defaults.
+- 2026-11-16 night: built, all phases (build notes above); coordinated with the process overhaul Phase 3 session.

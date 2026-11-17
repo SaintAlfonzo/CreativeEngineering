@@ -47,13 +47,14 @@ global.CD.FOOD = {
 		veggie: { xp: 0.35, furnace: 200, smoker: 100, campfire: 600 },
 		meat: { xp: 0.35, furnace: 200, smoker: 100, campfire: 600 },
 		fish: { xp: 0.35, furnace: 200, smoker: 100, campfire: 600 },
-		egg: { xp: 0.35, furnace: 200, smoker: 100, campfire: 600 },
+		// eggs: no furnace (R13, plan_small_fixes_1116.md): the smoker and the campfire (so the skillet) cook them
+		egg: { xp: 0.35, furnace: 0, smoker: 100, campfire: 600 },
 	},
 	// Oven: xp and ticks for every baked family; output counts
 	bake: { exp: 0.1, time: 200 },
 	cookies: 12, muffinsOven: 4, tarts: 2,
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
-	gold: { mixer: 6, arc: 5 },
+	gold: { mixer: 6, arc: 4 },
 	// Gilded (enchanted golden) food: sequenced assembly loops, each 1 gold ingot + this much liquid XP and a press
 	// (owner 2026-11-03, food.md 3.16; was a gold block + 250 mB, 4 loops)
 	gilded: { loops: 8, xp: 125 },
@@ -124,7 +125,7 @@ global.CD.food = function (e) {
 			;['minecraft:smelting', 'minecraft:smoking', 'minecraft:campfire_cooking'].forEach(t =>
 				R.remove({ type: t, input: input, output: output, not: OURS }, e))
 			var s = suffix(output, '_from_' + pathOf(input))
-			R.smelting(output, input, e, s, c.xp, c.furnace)
+			if (c.furnace) R.smelting(output, input, e, s, c.xp, c.furnace) // furnace 0 = smoker and campfire only (eggs)
 			R.smoking(output, input, e, s, c.xp, c.smoker)
 			R.campfireCooking(output, input, e, s, c.xp, c.campfire)
 		},

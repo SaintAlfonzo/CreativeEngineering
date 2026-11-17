@@ -457,6 +457,13 @@ companion plant within 6, y ±3. Chances are in `farmersdelight-common.toml` `[w
 Rustic Delight's three patches are flower-type features. Bone meal on grass in those forests and
 jungles picks from the biome's flower features, so it can also grow wild cotton, peppers and coffee.
 
+**Table generator, Rustic rows (2026-11-16, `farming/wild-crops #11`, [plan_small_fixes_1116.md](plan_small_fixes_1116.md)
+P7).** Rustic Delight is a Creative Delight port, so `tools/gen_crop_worldgen_table.py` no longer lists the dead upstream
+Java placed features (`JAVA_PLACED` rows dropped); the Rustic blocks (wild cotton, wild bell peppers, wild coffee and
+the red, yellow and green bell pepper blocks) are in `CROP_BLOCKS`, and `RUSTIC_CHANCE` mirrors the port's
+`ChanceFilter`: cotton 1/96, peppers 1/15, coffee 1/15, giant peppers 1/64. [crops_by_biome.md](crops_by_biome.md)
+regenerated; `test_wild_crops` and `test_mushroom_spawns` pass. Generator and doc only: no worldgen change, no live test.
+
 **Neapolitan** (biome tags `#neapolitan:has_feature/*`)
 
 | Crop | What generates | Biomes | Rate | Ground | Also placed |
@@ -1762,3 +1769,4 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   on Rich Farmland (Q1); G15 pineapple on the farmland soils; a common Cantaloupe and Mini Cantaloupe wild patch
   (rarity 1/24) beside the 1/64 ones (`farming/wild-crops #5`); Mini melon (`farming/crops #25`) stays a note: its plant
   growth and seed shape will mirror the Mini Cantaloupe. CD tag script and worldgen data. CR-108 to CR-111.
+- 2026-11-16: crop table generator: Rustic Delight port rows (CROP_BLOCKS, RUSTIC_CHANCE from the port's ChanceFilter), dead JAVA_PLACED rows dropped, crops_by_biome.md regenerated (2.7; `farming/wild-crops #11`, plan_small_fixes_1116.md). Headless tests pass; no live test.

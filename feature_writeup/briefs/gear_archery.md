@@ -24,6 +24,10 @@ A blueprint recipe that lists the same ingredient more than once must be craftab
 once in the helper, not at the call sites.
 
 ### Now
+- **Built 2026-11-16** ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P1): `ieBlueprint` merges identical
+  inputs through `_mergeBlueprintInputs` (neoCraftHelper.js ~2885); headless test `tools/test_nch_blueprint.sh` passes
+  (fails 4/9 on the old helper). Tests: [archery.md](../archery.md) AR-19, queue SQ-AR-01, CQ-AR-01. Not run in game.
+  The points below describe the state before the fix.
 - Helper: [neoCraftHelper.js:2277-2300](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
   `ieBlueprint(outputs, inputs, category, e, idOverride)`. It maps each input through `_nbtItemJson(..., { countMode:
   'base_ingredient' })` (line 541-600; plain inputs fall through to `_itemJson`, line 479) and emits one JSON input per
@@ -86,7 +90,7 @@ No new ids. IE `immersiveengineering:blueprint` recipe type, `IngredientWithSize
   observer, piston, thunder detector, note block, jukebox)").
 
 ### Tests
-- **AR-new1** (proposed, numbered when queued) Duplicate blueprint inputs: workbench, archery blueprint, 2 glowstone
+- **AR-new1** (numbered AR-19 2026-11-16, with AR-new2) Duplicate blueprint inputs: workbench, archery blueprint, 2 glowstone
   dust + 1 arrow -> 2 spectral arrows; 4 arrows + electrum wire -> 2 split arrows (fails before the fix).
 - **AR-new2** Redstone blueprint: 4 of one stone kind + quartz + redstone -> observer; 3 oak planks + amethyst shard +
   redstone -> note block.

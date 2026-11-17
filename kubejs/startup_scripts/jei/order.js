@@ -61,7 +61,6 @@ global.jeiOrder.define({
 					jeiI.delightful_copper_knife, jeiI.copper_helmet, jeiI.copper_chestplate, jeiI.copper_leggings,
 					jeiI.copper_boots, jeiI.goggle_diving_helmet, jeiI.copper_diving_helmet, jeiI.copper_backtank,
 					jeiI.copper_diving_boots, jeiI.ce_copper_shield, jeiI.copper_shears, jeiI.copper_horse_armor,
-					jeiI.copper_backpack,
 				] },
 				{ id: 'chainmail', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.chainmail_helmet, jeiI.chainmail_chestplate, jeiI.chainmail_leggings, jeiI.chainmail_boots,
@@ -70,28 +69,26 @@ global.jeiOrder.define({
 				{ id: 'iron', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.iron_sword, jeiI.iron_pickaxe, jeiI.iron_axe, jeiI.iron_shovel, jeiI.iron_hoe, jeiI.iron_knife,
 					jeiI.iron_machete, jeiI.iron_helmet, jeiI.iron_chestplate, jeiI.iron_leggings, jeiI.iron_boots,
-					jeiI.goggle_iron_helmet, jeiI.iron_backtank, jeiI.shears, jeiI.iron_horse_armor, jeiI.iron_fishing_rod,
-					jeiI.iron_fishing_rod_upgrade, jeiI.iron_backpack,
+					jeiI.goggle_iron_helmet, jeiI.iron_backtank, jeiI.shears, jeiI.iron_horse_armor,
 				] },
 				{ id: 'gold', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.golden_sword, jeiI.golden_pickaxe, jeiI.golden_axe, jeiI.golden_shovel, jeiI.golden_hoe, jeiI.golden_knife,
 					jeiI.golden_machete, jeiI.scythe, jeiI.golden_helmet, jeiI.golden_chestplate, jeiI.golden_leggings,
 					jeiI.golden_boots, jeiI.goggle_golden_helmet, jeiI.golden_backtank, jeiI.golden_horse_armor,
-					jeiI.ce_gold_shield, jeiI.gold_fishing_rod, jeiI.gold_fishing_rod_upgrade, jeiI.gold_backpack,
+					jeiI.ce_gold_shield,
 				] },
 				{ id: 'diamond', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.diamond_sword, jeiI.diamond_pickaxe, jeiI.diamond_axe, jeiI.diamond_shovel, jeiI.diamond_hoe,
 					jeiI.diamond_knife, jeiI.diamond_machete, jeiI.diamond_helmet, jeiI.diamond_chestplate, jeiI.diamond_leggings,
 					jeiI.diamond_boots, jeiI.goggle_diamond_helmet, jeiI.diamond_backtank, jeiI.diamond_horse_armor,
-					jeiI.ce_diamond_shield, jeiI.diamond_fishing_rod, jeiI.diamond_fishing_rod_upgrade, jeiI.diamond_backpack,
+					jeiI.ce_diamond_shield,
 				] },
 				{ id: 'netherite', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.netherite_sword, jeiI.netherite_pickaxe, jeiI.netherite_axe, jeiI.netherite_shovel, jeiI.netherite_hoe,
 					jeiI.netherite_knife, jeiI.netherite_machete, jeiI.netherite_helmet, jeiI.netherite_chestplate,
 					jeiI.netherite_leggings, jeiI.netherite_boots, jeiI.goggle_netherite_helmet,
 					jeiI.goggle_netherite_diving_helmet, jeiI.netherite_diving_helmet, jeiI.netherite_backtank,
-					jeiI.netherite_diving_boots, jeiI.netherite_horse_armor, jeiI.ce_netherite_shield, jeiI.netherite_fishing_rod,
-					jeiI.netherite_backpack,
+					jeiI.netherite_diving_boots, jeiI.netherite_horse_armor, jeiI.ce_netherite_shield,
 				] },
 				{ id: 'echo', sort: ['list', 'mod', 'creative'], list: [
 					jeiI.echo_sword, jeiI.echo_pickaxe, jeiI.echo_axe, jeiI.echo_shovel, jeiI.echo_hoe, jeiI.echo_helmet,
@@ -164,7 +161,7 @@ global.jeiOrder.define({
 					jeiI.fletchers_hat_helmet, jeiI.fox_hat_helmet, jeiI.snow_fox_hat_helmet, jeiI.cake_hat_helmet, jeiI.book_hat,
 					jeiI.book_hat_2, jeiI.book_hat_3, jeiI.wool_vest_chestplate, jeiI.broken_barrel_chestplate, jeiI.chiton,
 					jeiI.leather_apron, jeiI.brewing_apron, jeiI.fishing_apron, jeiI.breathing_reed, jeiI.lantern_on_a_stick,
-					jeiI.soul_lantern_on_a_stick, jeiI.wardrobe_backpack, jeiI.large_backpack, jeiI.travel_backpack,
+					jeiI.soul_lantern_on_a_stick,
 					jeiI.white_scarf, jeiI.light_gray_scarf, jeiI.gray_scarf, jeiI.black_scarf, jeiI.brown_scarf, jeiI.red_scarf,
 					jeiI.orange_scarf, jeiI.yellow_scarf, jeiI.lime_scarf, jeiI.green_scarf, jeiI.cyan_scarf, jeiI.light_blue_scarf,
 					jeiI.blue_scarf, jeiI.purple_scarf, jeiI.magenta_scarf, jeiI.pink_scarf,
@@ -188,18 +185,28 @@ global.jeiOrder.define({
 					jeiI.falconry_glove, jeiI.blood_sprayer, jeiI.hemolymph_blaster, jeiI.stink_ray, jeiI.pocket_sand,
 					jeiI.ancient_dart, jeiI.shattered_dimensional_carver,
 				] },
+				// R10 (jei/jei-ordering #7, plan_small_fixes_1116.md): fishing rods and backpacks are their own groups, not
+				// per material; Wardrobe's backpacks left the ordering (a cosmetic family later)
+				{ id: 'fishing_rods', sort: ['list', 'mod', 'creative'], list: [
+					jeiI.fishing_rod, jeiI.iron_fishing_rod, jeiI.gold_fishing_rod, jeiI.diamond_fishing_rod,
+					jeiI.netherite_fishing_rod, jeiI.iron_fishing_rod_upgrade, jeiI.gold_fishing_rod_upgrade,
+					jeiI.diamond_fishing_rod_upgrade,
+				] },
+				{ id: 'backpacks', sort: ['list', 'mod', 'creative'], list: [
+					jeiI.backpack, jeiI.sophisticatedbackpacks_backpack, jeiI.copper_backpack, jeiI.iron_backpack,
+					jeiI.gold_backpack, jeiI.diamond_backpack, jeiI.netherite_backpack,
+				] },
 				{ id: 'misc', children: [
 					{ id: 'vanilla', sort: ['list', 'mod', 'creative'], list: [
-						jeiI.bow, jeiI.crossbow, jeiI.trident, jeiI.shield, jeiI.fishing_rod, jeiI.carrot_on_a_stick,
+						jeiI.bow, jeiI.crossbow, jeiI.trident, jeiI.shield, jeiI.carrot_on_a_stick,
 						jeiI.warped_fungus_on_a_stick, jeiI.flint_and_steel, jeiI.compass, jeiI.recovery_compass, jeiI.clock,
 						jeiI.spyglass, jeiI.bundle, jeiI.lead, jeiI.saddle, jeiI.elytra, jeiI.totem_of_undying,
 					] },
 					{ id: 'modded', sort: ['list', 'mod', 'creative'], list: [
-						jeiI.hammer, jeiI.pickarang, jeiI.trowel, jeiI.abacus, jeiI.backpack, jeiI.forgotten_hat, jeiI.quiver,
+						jeiI.hammer, jeiI.pickarang, jeiI.trowel, jeiI.abacus, jeiI.forgotten_hat, jeiI.quiver,
 						jeiI.slingshot, jeiI.bomb, jeiI.blue_bomb, jeiI.spiky_bomb, jeiI.spring_launcher, jeiI.bubble_blower,
 						jeiI.flute, jeiI.altimeter, jeiI.key, jeiI.sup_wrench, jeiI.custom_elytra, jeiI.elytra_wing,
 						jeiI.deflection_shield, jeiI.domesticationinnovation_magnet, jeiI.ice_sickle,
-						jeiI.sophisticatedbackpacks_backpack,
 					] },
 					{ id: 'knives', sort: ['list', 'mod', 'name'],
 						from: ['delightful:*_knife'],
@@ -263,8 +270,8 @@ global.jeiOrder.define({
 						jeiI.snowair_broom_item, jeiI.blue_bottle_broom_item, jeiI.firebolt_broom_item, jeiI.wings_broom_item,
 						jeiI.silver_arrow_broom_item,
 					] },
-					{ id: 'hats', sort: ['list', 'mod', 'creative'],
-						from: ['@simplehats'], list: [
+					// Simple Hats left the ordering (R10, plan_small_fixes_1116.md); a cosmetic family later
+					{ id: 'hats', sort: ['list', 'mod', 'creative'], list: [
 						jeiI.flower_crown, jeiI.durian_helmet, jeiI.propeller_hat, jeiI.mysterious_beanie_helmet,
 						jeiI.white_conductor_cap, jeiI.light_gray_conductor_cap, jeiI.gray_conductor_cap, jeiI.black_conductor_cap,
 						jeiI.brown_conductor_cap, jeiI.red_conductor_cap, jeiI.orange_conductor_cap, jeiI.yellow_conductor_cap,

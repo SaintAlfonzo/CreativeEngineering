@@ -128,6 +128,8 @@ public class CreativeCompat {
         // Common's util.BurnBursts. Tuning: [shrapnel].
         ShrapnelEntities.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
+        // golem farm cooldown (plan_small_fixes_1116.md R2)
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.GolemCooldown::onDeath);
         BurnBursts.register(ShrapnelSpawner::burst);
 
         // Portal Gun dyeing (portalgun/, plan_portal_gun.md 4): the serializer names the gun only by id, so it registers

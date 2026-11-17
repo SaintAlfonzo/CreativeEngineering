@@ -1,0 +1,38 @@
+# Scratch queue rows ST (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/ST.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-ST waystone glowstone swap, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P5 R16; [structure_tuning.md](../structure_tuning.md) ST-336; TODO `structures/contents #9`)
+@@date 2026-11-16
+@@jars creativeworldgen
+@@sources feature_writeup/structure_tuning.md kubejs/generation_scripts/worldgen/misc_block_swaps.json development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/TemplateBlockSwaps.java
+@@text
+@@text Targets the Creative Worldgen jar installed 2026-11-16 and the instance's `kubejs/generation_scripts/worldgen/misc_block_swaps.json`.
+@@text Group A; `/place template` goes through `StructureTemplateManager#get`, so it shows the swap without finding a village.
+@@text
+@@table
+## SQ-ST-01 | swap files load: the load line counts the two waystone swaps, no bad entry
+@group A
+@commands boot; grep `[template-swaps]` in latest.log
+@pass `[template-swaps] N block swap(s) in M template(s)` with N and M each 2 above the last run's line (1412 in 105 on 2026-10-30, before later swap changes); no `bad entry`, no `could not read`
+@fails `TemplateBlockSwaps.CONFIGS` lacks `misc_block_swaps.json`; the file not in the server's `kubejs/generation_scripts/worldgen/`
+bootexpect \[template-swaps\] \d+ block swap\(s\) in \d+ template\(s\)
+bootreject \[template-swaps\] .*(bad entry|could not read)
+
+## SQ-ST-02 | the placed village waystones (common and desert) have yellow corundum at [2, 0, 3], not glowstone
+@group A
+@commands `forceload add 700 700 740 740`; `/place template waystones:village/common/waystone 700 -60 700`; `/place template waystones:village/desert/waystone 720 -60 700`; `execute if block 702 -60 703 quark:yellow_corundum`; the same at 722 -60 703; grep the log for `no longer hold`
+@pass both positions hold `quark:yellow_corundum`; no glowstone in either piece; no `no longer hold` warning naming a waystones template
+@fails position or `from` wrong in `misc_block_swaps.json` (template changed in Waystones 11.4.2): warning `marked position(s) no longer hold their block`
+> forceload add 700 700 740 740
+> place template waystones:village/common/waystone 700 -60 700
+> place template waystones:village/desert/waystone 720 -60 700
+> execute if block 702 -60 703 quark:yellow_corundum run say ST02-common
+> execute if block 722 -60 703 quark:yellow_corundum run say ST02-desert
+> cdevtest count 700 -60 700 712 -50 712 minecraft:glowstone
+> cdevtest count 720 -60 700 732 -50 712 minecraft:glowstone
+expect ST02-common$
+expect ST02-desert$
+reject \[template-swaps\] waystones:\S+: \d+ marked position
+look both say lines; glowstone count n=0 in both boxes

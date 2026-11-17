@@ -133,6 +133,13 @@ ServerEvents.recipes(e => {
 				i.t_cooking_oil_ingredients, i.glass_bottle], e, 'cooking_oil_heated_mixing', 'heated')
 		}
 
+		//######################### Fried eggs #########################
+		// R13 (dishes/meals #23, plan_small_fixes_1116.md): Rustic's 1:1 oil fried egg becomes a batch, oil + 3 eggs -> 3
+		// fried eggs. Slice & Dice copies the pot recipes left after KubeJS, so its mirror of the old one goes too and the
+		// new one gets its own. Omelettes: moredelight/recipes.js.
+		R.remove({ id: 'rusticdelight:fried_egg_from_cooking_oil' }, e)
+		R.fdCooking([i.cooking_oil, i.minecraft_egg, i.minecraft_egg, i.minecraft_egg], Item.of(i.farmersdelight_fried_egg, 3), e, 'fried_eggs_from_cooking_oil', 0.35, 200)
+
 		//######################### Potato slices #########################
 		// A potato cuts into 3 slices (upstream 2; TODO dishes/ingredients #26), as a sweet potato into 3 sliced sweet
 		// potatoes (veggiesdelight/recipes.js). Slice & Dice's slicer copies every cutting board recipe after KubeJS

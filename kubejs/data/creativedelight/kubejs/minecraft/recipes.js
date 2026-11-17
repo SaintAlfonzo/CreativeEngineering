@@ -16,6 +16,9 @@ ServerEvents.recipes(e => {
 		// Bamboo bowl: the vanilla bowl shape in bamboo, 1 bowl (planks give 4, so bamboo isn't the cheap route).
 		// TODO cooking/kitchen #10
 		R.shaped(i.bowl, ['B B', ' B '], { B: i.bamboo }, e, 'bowl_from_bamboo')
+		// Glass bottle: 3 glass give 4 bottles [3], as the mason jar (items/jars #12, plan_small_fixes_1116.md P2)
+		R.remove({ id: 'minecraft:glass_bottle' }, e)
+		R.shaped(Item.of(i.glass_bottle, 4), ['G G', ' G '], { G: i.glass }, e, 'glass_bottle')
 
 		//######################### Sugar #########################
 		// Every sugar slot takes a sweetener tag by kind of recipe (TODO dishes/ingredients #3; tags in creativedelight/tags.js):

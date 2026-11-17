@@ -11,6 +11,11 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Eggs #########################
+		// No furnace egg dishes (R13, plan_small_fixes_1116.md): the smoker and campfire forms stay
+		R.remove({ id: 'ends_delight:food_smelting/fried_dragon_egg' }, e)
+		R.remove({ id: 'ends_delight:food_smelting/shulker_omelette' }, e)
+
 		//######################### Gear #########################
 		// Dragon Tooth Knife: smithed from the Dragon Egg Shell Knife and a Dragon Tooth (End's 2.6.1; 1.19.2 smithing has
 		// no template), replacing 2.1's shapeless craft. Future: the End gear recipes and their CEConfig values (gear #12).

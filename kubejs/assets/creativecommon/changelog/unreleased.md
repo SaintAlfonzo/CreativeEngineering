@@ -108,7 +108,8 @@
 
 - **Changed:** Hops grow as a vine: plant them on the side of a log or any solid block; they need no farmland.
 - **Changed:** Hops plant on a Grapevine Lattice like jungle grapes [own hops lattice, on farmland]; old hops lattices load as Grapevine Lattices with their hops.
-- **Changed:** Hops vines ripen over 4 stages; right-click a ripe vine for 1 to 2 hops; shears stop its growth.
+- **Changed:** Hops vines ripen over 4 stages; right-click a ripe vine for 1 to 2 hops; younger vines cannot be picked; shears stop its growth.
+- **Changed:** Bone meal, Manure, Tree Fertilizer, Fertilizer, Floral Fertilizer, the Fertilizer Bag and Organic Mash grow a hops vine one stage.
 - **Changed:** Wild hops hang on tree trunks in temperate forests, 1 in 96 chunks [ground patches, 1 in 120 chunks].
 - **Changed:** Hops, Hops Salad, Bags of Hops and Wild Hops exist only with Creative Brewing installed.
 - **Fixed:** Hops never grew: the lattice dried the farmland under it.
@@ -210,6 +211,7 @@
 
 - **Changed:** Wild plants (wild carrots, beetroots, rice, tomatoes and the rest) no longer breed bees or feed hummingbirds; bees still pollinate wild onions, carrots and potatoes and no other wild plant.
 - **Changed:** Botania special flowers, the flower crown and azalea leaf and flower piles no longer breed bees or feed hummingbirds.
+- **Changed:** Wild plants still float in water and go in planter and flower boxes, and structures still clear them as plants.
 - **New:** Just Enough Breeding pages for ducks, geese, grizzly bears (Buzzier Bees), Fungi Delight mooshrooms and Cozy cats.
 
 ## Rabbits <!-- icon: minecraft:rabbit_foot -->
@@ -240,6 +242,36 @@
 
 - **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
 
+## Eggs <!-- icon: farmersdelight:fried_egg -->
+
+- **Changed:** Cooking Oil and 3 eggs make 3 Fried Eggs in the Cooking Pot [1 egg, 1 Fried Egg].
+- **New:** 4 Fried Eggs make 4 Omelettes in the Cooking Pot.
+- **Removed:** Furnace recipes for Fried Eggs, Fried Turtle Eggs, Omelettes, Fried Dragon Eggs, Shulker Omelettes and Boiled Emu Eggs. The Smoker, campfires and the Skillet still cook them.
+
+## Engineering Recipes <!-- icon: immersiveengineering:workbench -->
+
+- **Fixed:** Engineer's Workbench recipes that list an input twice could not be crafted (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox).
+- **Changed:** 8 Blocks of Coal make a Diamond in the Pressure Chamber [9].
+- **New:** One Cinder Flour filled with 25 mB of Strength, Night Vision or Harming potion makes Redstone Dust, Glowstone Dust or Gunpowder.
+- **Fixed:** Splash and lingering Mundane Potion fluid worked in the Thunder Detector assembly.
+
+## Farms and Exploits <!-- icon: minecraft:iron_ingot -->
+
+- **New:** A village that loses 5 iron golems within 10 minutes summons no golems for one in-game day. Golems built by players do not count.
+- **Changed:** Boats on ice: Blue Ice 0.98 [0.989], Packed Ice 0.96 [0.98], Ice 0.94 [0.98] slipperiness. Players, mobs and items slide as before.
+- **Changed:** Endermen no longer pick up blocks.
+- **Changed:** Curing a zombie villager resets its trade discounts.
+- **Changed:** Sheep drop no wool when killed.
+- **Fixed:** Falling blocks could be duplicated through portals.
+- **Fixed:** Pistons could duplicate TNT and other blocks.
+- **Fixed:** Growing mushrooms replaced blocks.
+- **Fixed:** Tripwire hooks could be duplicated.
+
+## Jars <!-- icon: vintagedelight:empty_mason_jar -->
+
+- **Changed:** 4 Mason Jars per craft [3].
+- **Changed:** 4 Glass Bottles per craft [3].
+
 ## Vanilla Bug Fixes
 
 - **New:** Debugify Reforged, on clients and the server, with 9 of its vanilla bug fixes on.
@@ -261,6 +293,9 @@
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
 - **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
+- **Changed:** Golden food in the Arc Furnace takes 4 gold [5].
+- **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
+- **Changed:** Vinegar ferments from 3 Apple Mash and any mushroom in the Pickling Jar [any jam and a mushroom].
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -271,6 +306,9 @@
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **Changed:** Create Deco's Cast Iron Block is now called Cast Iron Plating (was Cast Iron Block).
+- **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
+- **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
+- **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
 
 ## Loading screen tips
 
@@ -282,6 +320,8 @@
 ## Interface
 
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
+- **Changed:** In JEI, fishing rods and backpacks each have their own group after the equipment materials [with each material]; Simple Hats and Wardrobe backpacks are not sorted.
+- **New:** Title screen splash: Stience!
 
 ## Gameplay
 
@@ -289,6 +329,7 @@
 - **Changed:** Elytra fly in every dimension [the End only].
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
+- **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 
 ## Performance & Stability
 

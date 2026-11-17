@@ -225,7 +225,7 @@ R.shaped(Item.of(i.thunder_detector), ['ggg', 'ppp', ' r '], {
 }, e, 'thunder_detector')
 const incThunderDetector = R.incomplete('thunder_detector')
 R.createSequencedAssembly(Item.of(i.thunder_detector, 1), i.rain_detector, [
-	e.recipes.create.filling(incThunderDetector, [incThunderDetector, Fluid.of(f.create_potion, 250, '{Potion:"minecraft:mundane"}')]),
+	e.recipes.create.filling(incThunderDetector, [incThunderDetector, Fluid.of(f.create_potion, 250, '{Bottle:"REGULAR",Potion:"minecraft:mundane"}')]),
 	e.recipes.create.deploying(incThunderDetector, [incThunderDetector, i.glass])
 ], ['thunder_detector'], e, 'thunder_detector_sequenced_assembly', 2)
 R.ieBlueprint(Item.of(i.thunder_detector, 1), [i.rain_detector, i.mundane_potion, i.mundane_potion, Item.of(i.glass, 2)], 'redstonecomponents', e, 'thunder_detector_ie_workbench')
