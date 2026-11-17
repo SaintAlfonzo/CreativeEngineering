@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Runs a scratch-queue batch file against a scratch server or a throwaway client and records a result per row.
 
-    qrun.py run OUT BATCH RES [--rows ID,ID,...] [--from ID] [watch options]   server: OUT = scratch_server.sh dir
+    qrun.py run OUT BATCH RES [--rows ID,ID,...] [--from ID] [--section K,..] [--tier T1,..] [watch options]
+                                                                server: OUT = scratch_server.sh dir; BATCH may be a
+                                                                queue row file (feature_writeup/testing/rows/*.qb,
+                                                                qrows.py): --section / --tier select from it, rows
+                                                                without steps (@draft) are listed and not run
     qrun.py client GAME BATCH RES [--rows ...] [--from ID] [watch options] [--xdotool]   client: GAME = eval_client.py
                                                                 or run_captures.py serve game dir
     qrun.py list BATCH                                          row ids, titles and kinds
@@ -76,7 +80,7 @@ def parse(path, errors=None):
     """Rows of the batch. Each row: id, title, line (of its ## header), steps [(word, arg, pace)] and lines (the
     batch line of each step, parallel to steps; repeat copies keep the line of their source). errors: a list to
     collect format errors into instead of exiting (lint and dry)."""
-    rows, pace, cur, rep = [], 2.0, None, None
+    rows, pace, cur, rep, section = [], 2.0, None, None, None
 
     def bad(n, msg):
         if errors is None:
@@ -89,9 +93,21 @@ def parse(path, errors=None):
             s = line.strip()
             if not s or (s.startswith("#") and not s.startswith("## ")):
                 continue
+            if s.startswith("@@"):
+                # queue row file (feature_writeup/testing/rows/*.qb, qrows.py): section start and section text
+                word, _, rest = s[2:].partition(" ")
+                if word == "section":
+                    section, cur = rest.strip(), None
+                continue
+            if s.startswith("@"):
+                if cur is not None:
+                    word, _, rest = s[1:].partition(" ")
+                    cur["meta"][word] = rest.strip()
+                continue
             if s.startswith("## "):
                 rid, _, title = s[3:].partition("|")
-                cur = {"id": rid.strip(), "title": title.strip(), "line": n, "steps": [], "lines": []}
+                cur = {"id": rid.strip(), "title": title.strip(), "line": n, "steps": [], "lines": [], "meta": {},
+                       "section": section}
                 rows.append(cur)
                 continue
             if s.startswith("pace "):
@@ -554,6 +570,12 @@ def run_batch(a, mode, t=None):
     opt = lambda k, d=None: a[a.index(k) + 1] if k in a else d  # noqa: E731
     only = set(opt("--rows").split(",")) if "--rows" in a else None
     start = opt("--from")
+    sections = set(opt("--section").split(",")) if "--section" in a else None
+    tiers = set(opt("--tier").split(",")) if "--tier" in a else None
+    tier_of = {}
+    if tiers:
+        import qrows
+        tier_of = qrows.tiers_of(batch)
     os.makedirs(res, exist_ok=True)
     if "--no-lint" not in a:
         import qlint
@@ -594,6 +616,14 @@ def run_batch(a, mode, t=None):
             if not started:
                 continue
         if only and row["id"] not in only:
+            continue
+        if sections and row["section"] not in sections:
+            continue
+        if tiers and tier_of.get(row["id"], "T2") not in tiers:
+            continue
+        if not row["steps"]:
+            # a queue row with no steps yet (@draft): the runner writes them into the .qb first
+            print(f"{row['id']} DRAFT (no steps: {row['meta'].get('draft', 'empty row')}); not run")
             continue
         print(f"{row['id']} ...", end=" ", flush=True)
         checks, t0, crash = [], time.time(), None

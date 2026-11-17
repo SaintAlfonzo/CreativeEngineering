@@ -62,6 +62,7 @@ LINTS = {
     'changelog_lint': (['python3', 'tools/changelog_lint.py'], ['kubejs/assets/creativecommon/changelog/',
                                                                'tools/changelog_lint.py'], 1, False),
     'status_index': (['python3', 'tools/status_index.py', '--check'], ['feature_writeup/', 'tools/status_index.py',
+                                                                      'tools/scratch_query/qrows.py',
                                                                       'jar_archive/installed.tsv'], 2, False),
     'texture_provenance': (['python3', 'tools/texture_provenance.py'], ['feature_writeup/texture_sources/',
                                                                        'textureswapper/'], 70, True),
