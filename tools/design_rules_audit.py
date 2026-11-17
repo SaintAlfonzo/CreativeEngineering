@@ -85,6 +85,19 @@ REL = re.compile(r'\b(yesterday|tomorrow|last (week|night|month)|next (week|mont
 if wants('dates'):
     report('DR-L4', 'relative date words in docs', [(p, i, l) for p, i, l in lines_of(DOCS) if REL.search(l)])
 
+# DR-L4b, DR-L5: non-ISO dates and the old citation form in the doc scope of tools/iso_dates.py (docs, memory, skills,
+# TODO rows, queue rows). Report mode until the P1 sweep ends (plan_rules_fixes.md section 15).
+if wants('dates'):
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import iso_dates
+    hits, unresolved = [], []
+    for path in iso_dates.doc_scope():
+        c, u, _ = iso_dates.process(path, apply=False, lint=True)
+        hits += [(iso_dates.rel(path), ln, f'{old} -> {new}') for ln, old, new, _ in c]
+        unresolved += [(iso_dates.rel(path), ln, f'{old}: {why}') for ln, old, why in u]
+    report('DR-L4b', 'year-less, month-name or dotted dates and "(user, date)" citations (iso_dates.py fixes them)', hits)
+    report('DR-L4b', 'year-less dates the tool cannot resolve (owner list or number ranges)', unresolved)
+
 # G1: spelling mix in docs (prose only, code spans removed).
 if wants('spelling'):
     pairs = [('colour', 'color'), ('behaviour', 'behavior'), ('capitalis', 'capitaliz'), ('organis', 'organiz'),
