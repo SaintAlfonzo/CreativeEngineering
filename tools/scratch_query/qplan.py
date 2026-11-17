@@ -7,19 +7,25 @@ Row state (every row of feature_writeup/testing/rows/*.qb, metadata after sectio
   jar-changed  last PASS, but a jar of the row changed since
   stale        last PASS, jars unchanged, but a source changed after the row was reviewed (qrowlint.py): the row text
                is rewritten before it runs again
+  rewritten    last PASS, jars and sources unchanged, but the row text was rewritten (@reviewed after the PASS day):
+               it needs a rerun, the old PASS is history; low priority (owner ruling 2026-11-16), left out of the
+               default plan, added by --rewritten or --all
   failed       last result not PASS (FAIL, BATCH-FAULT, CRASH, LOOK, ...)
   never        no result in any run doc or verdict file
   draft        no runnable steps yet (@draft); owner rows (@owner true) go to the playtest list instead
-A PASSed row whose text was rewritten later (@reviewed after the PASS day) is stale too: the PASS was for the old text.
+A PASSed row whose text was rewritten later (@reviewed after the PASS day) is rewritten, not stale: the PASS was for the
+old text, but nothing it tests changed, so it waits for --rewritten. A source change after the review still makes it stale.
 
 Jar change: the jar in mods/ (client_mods/ for client rows) has a different build stamp than the run recorded, or,
 without a recorded stamp, its last jar_archive/installed.csv row (else its file time) is after the PASS day.
 
-    qrun.py plan [--jars a,b] [--all] [--never] [--failed] [--tier T1,T2] [--code MELT,..] [--client] [--json]
+    qrun.py plan [--jars a,b] [--all] [--never] [--failed] [--rewritten] [--tier T1,T2] [--code MELT,..] [--client]
+                 [--json]
         default: T1 rows of every changed own jar plus the T2 rows whose jars or sources changed (jar-changed, stale);
-        --jars: treat these jars as changed (a planned rebuild); --never / --failed add those rows; --all: every
-        runnable row (only when the owner asks). Prints one qrun command per rows file and section, the drafts that
-        need steps first, the stale rows that need rewriting first, and a time estimate.
+        rewritten rows are left out; --jars: treat these jars as changed (a planned rebuild); --never / --failed /
+        --rewritten add those rows; --all: every runnable row, rewritten ones included (only when the owner asks).
+        Prints one qrun command per rows file and section, the drafts that need steps first, the stale rows that need
+        rewriting first, a count of the rewritten rows left out, and a time estimate.
     qrun.py plan --release        T3: T3 rows, T1 of every own jar, the owner playtest list (see playtest)
     qrun.py playtest [--out FILE] the owner playtest checklist: @owner rows and client rows nobody automates
     qrun.py states [--code C]     per rows file: counts by state
@@ -150,7 +156,7 @@ def row_states(changed_jars=()):
                                 moved.append('%s %s -> %s' % (j, last[3].get(j), js['id']))
                         elif js['changed'] > _day_end(last[0]):
                             moved.append('%s installed %s' % (j, time.strftime('%Y-%m-%d', time.localtime(js['changed']))))
-                    stale = []
+                    stale, rewritten = [], ''
                     day = qrowlint.reviewed(sec, r)
                     for src in (m.get('sources') or '').split():
                         hit = qrowlint.changed_after(src, max(day, last[0]))
@@ -158,11 +164,13 @@ def row_states(changed_jars=()):
                             stale.append(hit[1])
                     if day and day > last[0]:
                         # the row text was rewritten (@reviewed) after its last PASS: that PASS was for the old text
-                        stale.append('row rewritten %s, after its last PASS (%s)' % (day, last[0]))
+                        rewritten = 'row rewritten %s, after its last PASS (%s)' % (day, last[0])
                     if moved:
                         x['state'], x['why'] = 'jar-changed', ', '.join(moved)
                     elif stale:
-                        x['state'], x['why'] = 'stale', 'source changed: ' + ', '.join(stale)
+                        x['state'], x['why'] = 'stale', 'source changed: ' + ', '.join(stale + ([rewritten] if rewritten else []))
+                    elif rewritten:
+                        x['state'], x['why'] = 'rewritten', rewritten
                     else:
                         x['state'] = 'current'
                     x['stale'] = stale
@@ -217,12 +225,14 @@ def plan(argv):
             want = m['tier'] in ('T1', 'T3')
         else:
             if m['tier'] == 'T1':
-                want = bool(set(jars_of(m)) & changed) and st != 'current'
+                want = bool(set(jars_of(m)) & changed) and st not in ('current', 'rewritten')
             elif st in ('jar-changed', 'stale'):
                 want = True
             if '--never' in argv and (st == 'never' or st == 'draft' and not x['last']):
                 want = True
             if '--failed' in argv and st == 'failed':
+                want = True
+            if '--rewritten' in argv and st == 'rewritten':
                 want = True
         if st == 'owner':
             owner.append(x)
@@ -271,6 +281,9 @@ def plan(argv):
             print('  %s (%s section %d)' % (x['row']['id'], x['file'].name, x['sec']['key']))
         if len(drafts) > 40:
             print('  ... %d more (--json for all)' % (len(drafts) - 40))
+    left = [x for x in states if x['state'] == 'rewritten' and x not in sel and (not codes or x['code'] in codes)]
+    if left:
+        print('%d rewritten rows left out (passed before the rewrite; low priority): --rewritten adds them' % len(left))
     if release:
         print('owner playtest list: qrun.py playtest')
     return 0
@@ -310,7 +323,7 @@ def states_cmd(argv):
         if codes and x['code'] not in codes:
             continue
         per[x['code']][x['state']] += 1
-    cols = ('current', 'jar-changed', 'stale', 'failed', 'never', 'draft', 'owner', 'superseded')
+    cols = ('current', 'jar-changed', 'stale', 'rewritten', 'failed', 'never', 'draft', 'owner', 'superseded')
     print('%-10s ' % 'code' + ' '.join('%11s' % c for c in cols))
     tot = collections.Counter()
     for code in sorted(per):

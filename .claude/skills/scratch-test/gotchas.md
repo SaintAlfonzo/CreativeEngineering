@@ -43,7 +43,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - `port_chain.sh` boots without Creative Delight must also DROP `kubejsdelight-*.jar` (r1106cbp).
 - `cc_only_srv.sh` must keep the dev perfBot jar (bots) and drop the pack's `kubejs/data/`: that folder holds Terralith
   noise overrides and crashes world creation without Terralith ("unbound value ... density_function") (r1107cco).
-  cc_only_srv.sh deletes every script but zq.
+  cc_only_srv.sh deletes every server script (it still spares a `zz_zq_probe.js`, which prep_srv.sh no longer copies).
 - `scratch_server.sh setup` copies the Creative Labels probe (`zz_cl_probe.js`); in a reduced set without Labels it is a
   KubeJS load error that trips `kjsreject error`. cpp_chain_srv.sh removes it since r1114.
 - Third-party fix rows: `tools/scratch_query/tpf_srv.sh` builds the srv and writes the Packet Fixer and Debugify configs
@@ -179,7 +179,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Enforced: forceload box over 256 chunks (an unaligned 256-block box spans 17 chunks per axis, "Too many chunks 289";
   r1115): `qrun.py lint` E forceload. Use 240-block boxes.
 - Enforced: `execute if biome` (1.19.3+; r1108cge): `qrun.py lint` E cmd119. Read the biome with a probe (`/zgv cfg`,
-  `/zq`). Not covered by the lint: 1.19.2 also has no `contents` slot for item entities (`item replace ... from entity
+  `/cdevtest state X Y Z`). Not covered by the lint: 1.19.2 also has no `contents` slot for item entities (`item replace ... from entity
   @e[type=item] contents` = "Unknown slot") and no `execute if loaded` (r1107tp2).
 - A big up-front `forceload add` over every test area (SQ-PWG-P11A) breaks rows that unload a chunk on purpose
   (SQ-PWG-21 "chunk 65 loaded=false"): rows that test unloading need an area outside the blanket forceload (r1114 P11).
@@ -227,7 +227,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   MoreJS "Sell item cannot be empty", `PoolElementStructurePiece ... minecraft:empty is not valid` at save, 7 Create
   Mechanical Extruder recipes with an abstract `getType()` in `dumprecipes`.
 - Dedicated-server dumps: recipes, tags, loot, structures, biomes, spawns, trades are good; names, stacks, effects, gear,
-  food, crops, compost, paintings need the client. The /dumpall recipe dump has only id + type: use `/zq`.
+  food, crops, compost, paintings need the client. The /dumpall recipe dump has only id + type: use `/cdevtest rdetail`.
 
 ## World, chunks and ticking
 
@@ -349,8 +349,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   thread holds Rhino's lock while waiting for generation and a worldgen worker needs it = deadlock, kill -9. `forceload
   add` first (vanilla, no Rhino), probe, `forceload remove`. Biome without chunk loads:
   `getChunkSource().getGenerator().getBiomeSource().getNoiseBiome(qx, 16, qz, randomState().sampler())`.
-- Ready probes: `/cdevtest` first (Java, cannot crash the server or deadlock; creative_devtools.md), then `/zq` (recipes,
-  tags, foods: `zq_probe.js`, `zq_batch.sh`), `tools/creative_labels_test/server_probe.js`, `tools/leaf_path_probe.js`
+- Ready probes: `/cdevtest` first (Java, cannot crash the server or deadlock; creative_devtools.md), then
+  `tools/creative_labels_test/server_probe.js`, `tools/leaf_path_probe.js`
   (place a ConfiguredFeature).
 - Never call `r.getType()` while looping `getRecipeManager().getRecipes()`: Mechanical Extruder's
   `ExtrudingRecipe.getType()` throws AbstractMethodError, a Java Error that Rhino's try/catch does not stop, and the
@@ -360,7 +360,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   registers): `net.minecraftforge.fml.ModList` (use `Platform.isLoaded(modid)` / `Platform.getMods()`, a map id -> mod
   info with `getVersion()`), `io.netty.*` (no `Unpooled` buffers: packet round trips cannot run in a probe),
   `getClass()` (use `instanceof`), `java.nio.file` (write files with `JsonIO.write`) (r1106cbo, r1113, r1115).
-- Any probe class import from an optional Creative jar must be lazy (`/zq` loads the Calendar class lazily), or the probe
+- Any probe class import from an optional Creative jar must be lazy (the retired `/zq` loaded the Calendar class lazily; `/cdevtest season` reads it reflectively), or the probe
   fails to register in boots without that jar (r1106cbp).
 - Shared script scope: unique local names; find a level by iterating `server.getAllLevels()` (getLevel overloads are
   ambiguous); a dimension string argument stops at `:`.
@@ -419,8 +419,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   (r1106cbo).
 - A probe that samples running goals misses a flee that ends during a `sleep` before the watch: start the watch right
   after the summon (r1111).
-- Probe command arguments: `zq count` takes an optional 8th argument, the dimension (`... <block> minecraft:the_end`),
-  default overworld (r1106spfx). `zpwg ns` prints only the first 20 ids per registry; `zpwg ns <ns> all` prints every id
+- Probe command arguments: `/cdevtest` box verbs take `dim=` (the retired `zq count` took an 8th argument, the
+  dimension), default the caller's level, overworld from the console (r1106spfx). `zpwg ns` prints only the first 20 ids per registry; `zpwg ns <ns> all` prints every id
   (r1114). `/syt` with a tool string carrying NBT (`id{...}`) throws "An unexpected error occurred": use
   `<id>@fortune=N` (r1115). `/cbo effects` counts ITEM namespaces of the Armor / Tool Effects rows; a mod that only
   contributes effect ids never appears there (r1106cbo).
@@ -487,9 +487,9 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Checks: `[structure-tuning]`, `[structure-frequency]`, `[pool-tuning]`, `[biome-merges]` lines; `dumpstructuregen` then
   `tools/check_structure_live.py`; `/cdevplace structures @ns ...` proves templates load.
 - Earth fill judges (`efb_judge.py --except`): a bare `mine` in the regex matches every `minecraft:` id and hides all
-  vanilla structures; write `:mines?\b|_mine\b` (r1103w). `[zq] under` lines carry no dimension: keep Nether and End
+  vanilla structures; write `:mines?\b|_mine\b` (r1103w). `/cdevtest under` lines (and the retired `[zq] under` lines) carry no dimension: keep Nether and End
   probes out of an Overworld judge's log window. `/place structure` stores no start and runs no earth fill, so a placed
-  structure is invisible to `/zq under`; earth fill rows need natural starts.
+  structure is invisible to `/cdevtest under`; earth fill rows need natural starts.
 
 ## Clients
 

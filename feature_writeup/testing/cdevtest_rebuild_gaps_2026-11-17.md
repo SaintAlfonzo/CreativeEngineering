@@ -1,0 +1,298 @@
+# /cdevtest queue rebuild, 2026-11-17: what is left
+
+Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/cdevtest`, `/pbot` and the client capture driver; plan item 3 in [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md), TODO `tooling/generators-and-tests #17`. Done: 602 probe rows converted, 199 server and 88 client drafts given steps (`@reviewed 2026-11-16`), `/zq` retired. This file lists what the rebuild could not do, for the next pass.
+
+## 1. Readbacks no verb has yet (candidates for new /cdevtest or /pbot verbs)
+
+- A box reader that prints every block id with its count and the item entities per stack in one call (what zcount does; 40 RD rows still use it)
+- A reader for a player's action-bar or overlay message (SQ-FDB-08 'Can't cook underwater')
+- rain at a position (Level.isRainingAt): SQ-MIN-02, SQ-SALT-06 rain cases, CQ-CAL-08 desert rain
+- capture-driver step that runs a client-side command (/cdevreloadclient compat): CQ-PS15B-02
+- an equality check between two captured numbers (qrun substitutes {VAR} in commands and waitlog but not in expect), so before/after counts stay look lines: SQ-SALT-04 raw rock salt count, SQ-PS15B-12 mod values, SQ-MELT-P1/P1b tick times
+- insert into a block's item handler from a face, returning the remainder (zhh2 insert; a hopper's insert)
+- fill a block's fluid tank with N mB (zhh2 fill, zpwg6 fill)
+- count several block ids in one box scan, with per-id chunk counts (zhh2 countset)
+- per-column block census of a box by biome (zqh heap column reader)
+- client driver: a capture while keys are held, for a mid-break crack overlay (CQ-HOP-02)
+- fluid tank fill (zhh2 fill: 14 rows); cdevtest tank only reads a tank
+- active effects of a non-player entity (13 rows)
+- game-time skip without running ticks (zhh1 skip, 10 rows)
+- release a throwable after N ticks of charge (zhh1 throw, 13 rows), unless pbot useitem NAME main TICKS is confirmed to do the same
+- composter chance, burn time, enchanting-table check, crafting remainder, Cooking Pot container (one row each or a few)
+- count of a mob's AI goals of a given class (4 rows)
+- fluid fill and item insert through a capability (zhh2 fill / insert, about 60 steps): /cdevtest has tank and inv reads but no write
+- comparator output of a block (zhh2 cmp)
+- a potion's effect list with duration and amplifier (zhh5 potion; /cdevtest potion prints only registered and brew outputs)
+- an inventory total for one item across slots (zhh5 offer, the old zhh3 invcount): pbot inv get prints only per slot
+- item entities spawned with a thrower and no pickup delay (zhh3 throw)
+- entity attribute modifiers and attributes of a non-player entity (zhh5 horse)
+- pbot step-up / client key packet for a bot (SQ-CEQ-03 stepstool)
+- a network-joined bot or handshake check (SQ-CEQ-06, SQ-CDNS-12)
+- cooking-pot recipe NBT reader (zsb potnbt: cook time, container) and crafting remainder reader (zsb rem/remitem)
+- Tempad readers (ztp doors/chr/open/apps) stay a probe; no generic verb
+- count over a box larger than 262144 blocks: TER-06, SVA-03, CBP-11, IWF-03 now tile it in several calls
+- The kill/break/items drops lines do not repeat the call's position or held item, so rows with several kills (LGM-05, MDL-03, MDP-18) attribute drops by line order and count lines
+- The pbot useitem end=finish line has no effects, so every eat that checks effects needs a /cdevtest player read after it
+- tickwarp N cannot take a product of a captured var (RB-22 needed 3 x jar time; done as three warps of {S5JT+100..102})
+- No tag reader exists in a boot without Devtools (SPF-31 dropped its zq tagsof; zq_probe is retired)
+- A loot-table roller (roll a chest or entity loot table N times, summed like the loot verb): DEP-02 and -09a still need zhh2 lootroll. DNR-O-04 uses repeated vanilla /loot spawn plus cdevtest items instead.
+- A game-time skip (add N to the level game time without ticking): WO's 33 zwo skip steps.
+- A LivingEntity jump-boost or attribute readback beyond attrs (getJumpBoostPower): SQ-EFX-12.
+- pbot verbs print error=... with no done=0, so rows reject verb=pbot\.\S+ .*error= separately.
+- Biome share sampler: an N-point getNoiseBiome sample over a dimension. Needed by SQ-WGE-01b and SQ-WG30-E03; the retired zq_probe End climate dump did this.
+- Structure start box vs surface height, and per-start biome. Needed by SQ-WGE-13 (meteorite heights), SQ-WGE-03b (no castle starts in highlands), SQ-WG30-D02.
+- Jigsaw pool sampler: N generations of a pool, giving piece proportions. Needed by SQ-WGE-06b.
+- Per-call unique end marker for async verbs (tickwarp, watch, pbot useitem). waitlog matches the whole row segment, so a second tickwarp in a row is satisfied by the first end line. Worked around with distinct tick counts (1800, 1801, ...).
+
+## 2. KubeJS probe verbs kept (one-off feature readers, or no verb yet)
+
+- zcount (tools/fungi_probe/zcount.js): 40 rows. No MIGRATED header, and its output (a full block histogram of a box plus item entities per stack size) has no single /cdevtest equivalent: count takes one block per call and items sums by id within a radius
+- vtdtest (tools/vintage_probe): 12 rows, a feature reader; new steps for VP-02, VP-08 and VP-12 also use it
+- ztrades: 7 rows, a trade feature reader
+- syt roll (tools/soil_yield_probe): 5 rows, a feature reader
+- loottuning: 3 rows, a worldgen loot feature reader
+- zloot: 2 rows, a loot feature reader
+- kttest (tools/kitchen_probe/cfb_kitchen_probe.js): 2 rows (new SQ-KT-01 copies it in and runs /reload), a feature reader
+- zti: 1 row, a feature reader
+- fgdtest: 1 row, a feature reader
+- zpth mod/player/watch/watchnew/attrs/count/use/input jump (PS15B, about 117 steps): pass-through modifier and entity-watch reader; the header keeps those verbs (only input sneak and states moved, and neither is used here)
+- zmelt w/show (MELT, 29 steps): per-tick change log for watched positions across commands; cdevtest watch blocks for a fixed window and does not log every change
+- zc4 cooktime, zc4 cmd (GAP, 2 steps); zc4 bees (BREED-03, 4 steps): the header keeps them (only inv, eat and hunger moved)
+- zp9 breed (BREED-01, 1 step): breeding dump; the header keeps it (a planned /dumpbreeding replaces it)
+- Feature readers kept as they were: salttest (SALT-05/06/07/08), cbo (CBO), mgcore and fdtest (IMS-03), recipescan (IMS-04)
+- zpwg3/zpwg4/zpwg6 (fan, heater, light, solar, fill...)/zpwg7 (wear, bat, worn, baton, zap, hp, shear, pick, pbat, action, dig)/zpwg8 (use with hit and held-after, md, crt, plot, reader, card, bell, extract)/zpwg9/9c/9d/10/zpwgg: about 100 PWG rows. These are Power Grid feature readers. zpwg7 fp/hold and zpwg8 fp/hold/sneak stay where they set up the probe's own fake player for those readers (dig prints digSpeed; cdevtest break does not)
+- zmelt w/light/show/clear: HOP-03, -08, -11. Not migrated (MELT watcher)
+- zhh2 basin/insert/countset/fill: HOP HH-266 rerun, -266b, -266c, -1546c, -304 rewritten. Only tank, sneak and useat were migrated
+- zqh: VH-06, -06c. Heap column census, a feature reader
+- zp9 skin/dye: NSM-05. Lunchbox skin recipe reader
+- zlbs: LBS-01 to -05. Creative Labels suite
+- atctest: ATC-02 to -04. Armor Trims cache test command
+- nsm_probe.js: NSM-03 and -07, for login and shrapnel lines
+- zhh1 ids: 2 rows (1102, 1328); a checker for the pack's own kept/dropped id lists
+- zhh1 compost: 1 row (1130); no verb reads the composter chance
+- zhh1 burn: 1 row (1131); no verb reads the burn time
+- zhh1 container: 4 rows (1153-1156); reads the Cooking Pot output container
+- zhh1 pluck / litter / ate: 6 rows (1229, 1230-1233, 1326, 1237); feature readers
+- zhh1 throw: 13 rows (1250, 1251, 1257, 1259-1268); not on the MIGRATED list (pbot useitem with TICKS might replace it, but that is unverified)
+- zhh1 fx on tagged mobs: 13 rows (1241, 1257, 1258, 1260-1268); no verb reads a non-player's active effects ('cdevtest player' covers bots and was used for them)
+- zhh1 skip: 10 rows (1225, 1234-1239, 1285, 1286, 1326); moves game time forward without running ticks, which is not what tickwarp does
+- zhh1 ench / remain / dspeed / jump: 4 rows (1254, 1255, 1275, 1297)
+- zhh1 goals / dist: 4 rows (1298-1301); count EffectAuras goals
+- zhh2 stomping: 2 rows (201, 204); zhh2 fill / cmp / insert: 15 rows (211, 213, 214, 216, 219-222, 229, 232, 236-240); the hh_mw MIGRATED header says these stay
+- zhh3 watch: 43, crow and cow goal sampling, no Java verb
+- zhh3 seen: 40, reads the watch samples
+- zhh3 spawn: 35, crows with spread and noai
+- zhh2 fill: 35, FLUID_HANDLER fill (pipe insert), no fill verb
+- zhh3 cfg: 28, live-sets H&H [crow]/[salt] config keys
+- zhh3 assert: 27, watch statistics
+- zhh2 insert: 27, ITEM_HANDLER insert (hopper insert) with remainder, no insert verb
+- zhh5 horse: 21, horseshoe speed/jump modifiers, shod flag, temper
+- zhh3 log: 21, crow wariness and carry state
+- zhh5 interact: 20, Player.interactOn by entity tag (pbot interact needs a selector and was not swapped)
+- zhh2 basin: 18, stomping basin role, controller and slots
+- zhh3 goals: 16, goal list with priorities
+- zhh2 countset: 15, many block ids in one scan with chunk counts
+- zhh3 loot: 14, CrowLogic.holdLoot
+- zhh2 stomp: 10, basin.tryProcess
+- zhh3 tally: 9, crows, tamed, carrying, shoulder
+- zhh5 potion: 8, effect list (cdevtest potion prints no effects)
+- zhh3 poi: 8, POI type at a position
+- zhh3 throw / zhh5 throw: 9, item entities with a thrower, horseshoe release
+- zhh3 tame / feed / interact / target / leash / nests / sprint / cfgdump: 22, crow feature readers and actions
+- zhh5 offer: 4, inventory total of one item
+- zhh5 hurt: 3, cactus and berry damage on a horse
+- zc4 sol: 4, Spice of Life food history (SQ-FDI-03b)
+- zhh2 lootroll / chests / unpack / cmp: 7, chest loot tables and comparator output
+- ztp (ztp_probe.js): 9 rows (SQ-TP-03,-04,-05,-06,-07,-22,-27,-28,-30); Tempad packets, apps, doors and chronons stay KubeJS per its MIGRATED header
+- zpwg9c / zpwg3 (pwg_p9c, pwg_p3 probes): 2 rows (SQ-PS15-14, -15); no MIGRATED header, feature readers
+- zp9 lbfill: 1 row (SQ-PS15-13); lunchbox item handler, not migrated
+- zmelt: 1 row (SQ-PS15-05); salt melt watcher, no MIGRATED header
+- zsb potnbt / cans / rem / remitem: 4 rows (SQ-CUP-03, SQ-JSL-02, SQ-CNP-01, SQ-VNG-02); cooking-pot NBT, can guard and crafting remainders have no verb
+- zloot packs: 1 row (SQ-CWG-04); reads the loot tuning registrations
+- zc2 air: 1 row (SQ-CEQ-02); the c2 header says air stays
+- zpth (PTH, about 100 lines: mod, watch, watchnew, launch, motion, reel, near, count, player, input jump): pass-through entity readers that the header keeps. face became pbot look, use/release became pbot useitem, input sneak became pbot sneak
+- zc3 pot (FCK SQ-BOT-02/04, 4 lines) and zc3 craft/shoot/portals (PG, 15 lines): one-offs that the c3 header keeps
+- zhh3 tame/tally/throw (HCS-12, 4 lines): crow readers. The hh_crow header keeps tally; tame and throw are feature verbs
+- zwo skip (HCS-05, 2 lines): the wo header keeps skip
+- s5 rest (CCO-10, 2), s5 potrecipe/jarrecipe (RB-21/22, 2): the s5 header keeps these
+- zph (CCO-10, 2): phantom spawner probe, cc_phantom_probe.js
+- sa canuse/cd/anvil/enchtable/enchreg (GLD, 18 lines): sA_probe.js has no MIGRATED line (feature readers)
+- zgv (cge_probe.js): 25 step lines in CGE. Feature reader (tick-exact fall distance per entity type, Create Gravity config lookup). Not migrated.
+- zsa (cc_seqasm_probe.js): 5 step lines in CPP. Feature reader (sequenced assembly result NBT, IE bottling and refinery lookups).
+- zhh2 lootroll (hh_mw_probe.js): 3 lines in DEP-02 and DEP-09a. Rolls a chest loot table. /cdevtest loot only rolls block drops (Block.getDrops).
+- ztpf sound (tpf_probe.js): 1 line in SQ-TPF-16. One-off feature reader (block sound type).
+- zwo skip (wo_probe.js): 33 lines in WO. Game-time skip for the timers. Its header says skip stays, and tickwarp would run 1200+ real ticks per call.
+- zwo drops (wo_probe.js): 20 lines in SQ-WO-27. wo_judge.py gifts parses its per-drop lines.
+- s5 (spout, trim, rest, containers, selfloop, remainder, lclick): 14 steps in PSU and DRK. Not migrated; s5 header moves only sneak, break and eat.
+- zc4 sol / put / pools / poolsinv / fuel: about 55 steps in FDI, RP, FLR. Feature readers (Spice of Life books, capability insert, result-pool sums, blaze fuel); the header keeps them.
+- zp9 lbfill: 4 steps in FDI. Lunchbox fill stays in the probe.
+- zc3 rest: 3 steps in CIF. time_since_rest stat; the c3 header says no stat in /cdevtest player.
+- zc3 portals / shoot: 24 steps in IP. Header says these stay as one-offs.
+- zqn fly: 1 step in QN. Quark canEntityUseElytra plus tryToStartFallFlying is a feature reader. zqn hand and flying were moved to /cdevtest player.
+- wgp cliffs / dims: WGP-02. Worldgen perf probe reader.
+- pottest / dumppots: POT. Flower-pot audit probe and dump command.
+
+## 3. Defects the verifiers found and left
+
+- HOP SQ-HOP-09: 'expect items=hops:[34]' and 'expect items=hops:3' can both be satisfied by the first (ripe) items line, so the shears=3 check is not isolated; the look still asks the owner, left as is (fix would be capture + shell test)
+- CBO SQ-CBO-22: the '> cbo potions' probe expects 'potion creativecommon:long_reach / phantom_bane registered: true' (probe output, pre-existing, not a /cdevtest line); Better Beacons potions are creativebrewing: since 11-07, so these two expects likely fail; probe source not checked
+- SPF.qb (not in my file list) still runs 'cdevtest potion creativecommon:long_reach' / 'creativecommon:phantom_bane' (should be creativebrewing:)
+- PWG SQ-PWG-48: the old 'reject processing=\?' (unknown processing type) has no equivalent in the entities-NBT rewrite
+- ROLL SQ-ROLL-03: 'cdevtest useair as=rl3 hand=both' stops after the main hand if the chopsticks use consumes the action, so the expected 'hand=off result=(CONSUME|SUCCESS)' line may not print; the old probe targeted the offhand; needs a judgement on chopsticks behaviour
+- Old /pbot verbs (spawn, hold, use, path, mark) reply only through sendSuccess, not the log, so under RCON their replies are not in latest.log; looks such as MELT SQ-MELT-08 'the use replies' cannot be judged from the log
+- Not verified: exact tag member counts (n=10, n=18) in the HH lookahead biome-tag rows, rdetail ingredient strings in the HH pie/cabinet rows, and the probe-based (ztp, zhh*, zpwg*) lines; mechanical scan found every /cdevtest verb, positional count, option and every regex key valid across all 80 files
+- feature_writeup/creative_devtools.md does not mention the 262144-block box limit of count/ages/randomtick (the cause of the 12 oversized rows). It needs a line, or a Java change (raise MAX_BOX or tile inside the verb). Not my files
+- SQ-HSC-89 uses SQ-FCK-08's {DS} capture and forceload, but FCK-08 removes its forceload at its end. The salt box is then unloaded and the new skipped_columns reject fails. This was already broken before the rewrite (old expect skipped_columns=0); it needs its own forceload add and sleep
+- SQ-WO-04 (and the other 30040-area WO rows): tickwarp runs real ticks, but random ticks only happen within 128 blocks of a player. Unless the batch has a bot there, the tree gets no random ticks (same exposure as the old real-time sleep)
+- SQ-SPF-70: the first locate waitlog `(nearest|Could not find).*` does not name its target (lint warning); left as is
+- SQ-FCK-13 edits a config while the server runs (lint cfgedit warning, pre-existing); the row already treats a missed reload as BATCH
+- SQ-RP-06 @commands still names a 'solraspberrypie:liquid_diet_log' recipe type; only the steps were fixed
+- SQ-PSW-02 @pass also asks for structure y levels (5/12/33); the steps check only the biome at y 40
+- CQ-TX-01 waits 60/120/300 ticks (24 s at randomTickSpeed 200). The shot names t60/t180/t480 are ticks, not seconds; crops may not reach their last stage
+
+## 4. Drafts not written (per agent; client drafts were low priority)
+
+- RD.qb priority 2: 30 server @draft rows still say only 'no batch holds this row yet' and have no steps: SQ-VP-00, SQ-VP-01, SQ-VP-14, SQ-FN-02, SQ-AD-01, SQ-SN-00, SQ-SN-01, SQ-SNF-01, SQ-SNF-03, SQ-PS-00, SQ-PS-01, SQ-LE-02, SQ-CDT-01 to SQ-CDT-06, SQ-VTD4-02, SQ-RD-01, SQ-RD-09, SQ-INV-01, SQ-INV-08, SQ-INV-09, SQ-INV-13, SQ-INV-15, SQ-INV-16, SQ-INV-18, SQ-FF-01, SQ-FFB-01, SQ-RSP-08, SQ-CDF-03. Many pass texts still use creativeengineering: ids from before 11-09, so each row needs its current ids checked first.
+- RD.qb priority 3: none of the 58 CQ- @draft client rows has capture-driver steps yet. The 14 SQ rows newly marked @client true (listed under left_draft) are also still waiting for driver steps.
+- Client drafts not written (low priority, left @draft 'no batch holds this row yet'): CQ-CBO-01..04 (CEPortTesting port_chain setup around the client), CQ-OB-02, CQ-OB-04, CQ-GAP-01, CQ-GAP-03, CQ-ROLL-10, CQ-PJL-06, CQ-PJL-07, CQ-PNE-02..06, CQ-PNE-08, CQ-PNE-09, CQ-CAL-08, SQ-SV-02 (client group). Item and tab ids for most of these are not in the dumps (rotten ham, fertile soil, Quark and Every Compat blocks, creative tab ids), so I did not guess them.
+- PWG client drafts CQ-PWG-01 to -29 and CQ-PWG-66: not touched (low priority). Most target old gate jars (-04 to -18), dedicated-server joins or hand work. The ponder-shot rows (CQ-PWG-14, -15, -20, -29) could become /create ponder + shot driver steps
+- Client drafts left as @draft (low priority, no driver steps yet): FO CQ-CNP-01, CQ-FO-60, CQ-FR-01, CQ-DF-01, CQ-CN-01, CQ-STD-01, CQ-NDM-01; SCAT CQ-SCAT-05; TP CQ-TP-01 to -16
+- Server drafts left @draft with a reason (see left_draft): TP -08,-09,-11 to -17,-19 to -21,-23 to -26,-29,-32 to -39; PS15 -04,-08,-11,-11b,-12,-12b,-12c; CDNS -01 to -04,-06,-09,-12; CEQ-03, CEQ-06; CBP-10; CUP-05; EF-07; IWF-05; GFB HRU-02, STC-01, STC-02; EFB -02 to -16, -18 to -22
+- Priority 2, server @draft rows not written (they can be automated, but there was no context left for them): GLD SQ-GLD-10, SQ-GLD-15; PTH SQ-PTH-28, -03b, -11c, -25b, -28b; SPF SQ-SPF-30, -81, -92, -111; CDJ SQ-MDP-14, SQ-MDP-16, SQ-VTD8-01 (rewritten, I2), SQ-VTD8-02, SQ-FGD-14 (worldgen judgement); CCO SQ-CCO-13; HCS SQ-HCS-09, -10; EN SQ-EN-05, -07, -08, SQ-LR-01; PROC SQ-PROC-01, -13, -15; FSD SQ-FSD-01, -03, -04, -05, -06; BBQ SQ-BBQ-08; SWL SQ-SWL-01; PG SQ-PG-01c
+- Priority 3, client CQ- @draft rows: none written (FCK 8, GLD 9, PTH 6, SPF 2, CDJ 1, CCO 3, HCS 1, KT 1, PROC 1, PG 5, TXC 11, CMV 3, SWL 2, CLOG 2, FDR 4, AR 1, CDTX 1, JO 1, LGM 1, BBQ2 1)
+- Client rows (priority 3) in every file: none written. Open CQ drafts: TPF CQ-TPF-31 to -91 (about 45), WO CQ-WO-01 to -07, BBQF CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01, CC CQ-CC-01 to -06, CGE CQ-CGE-01, CDB SQ-CDB-14 (group client), DEP CQ-DEP-01, SPFX CQ-SPFX-01, -02, BM CQ-BM-01 to -07, PF SQ-PF-06 (group client), EFX/ENGM/NDM/CFR/PT/CPP client rows (CQ-ENGM-01, CQ-CFR-01, CQ-PT-01, CQ-CPP-01), NM CQ-NM-01 (its draft reason left as it was). No xdotool or eval_client steps were converted to driver steps.
+- WO: its server rows were converted in the earlier run and checked here; nothing else was changed.
+- Client drafts (priority 3) with no driver steps yet. RP: CQ-RP-01..03 in section 1 and CQ-RP-01..40 in section 2
+- LT: CQ-LT-01..15
+- JT: CQ-JT-01..10
+- PSU: CQ-PST-04, -05, CQ-PSD-08, -09, CQ-PSF-01, CQ-PSU-01..05
+- WGE: CQ-WGE-07a/b/c, -17, -18
+- IP: CQ-IP-01..04
+- FLR: CQ-FLR-01..03
+- BRA: CQ-BRA-01, CQ-NCR-01
+- TX: CQ-TX-04, CQ-TXR-01
+- CEN: CQ-CEN-01
+- CL: CQ-CL-13
+- WG30: CQ-WG30-A04
+
+## 5. Drafts left with a reason (cannot be automated as written)
+
+- SQ-PR-01: needs a client (rain particles); now @client true
+- SQ-CDJ-03: needs a client (mod list screen); now @client true
+- SQ-CDJ-08: needs a client (mod list, config screen, JEI); now @client true
+- SQ-CDT-07: needs a client (tooltip, client.log after F3+T); now @client true
+- SQ-VTD4-09: needs a client (JEI text, slice model, tree look); now @client true
+- SQ-FDB-12: needs a client (particles, models, tooltips); now @client true
+- SQ-RD-12: needs a client (tab, textures, names, JEI); now @client true
+- SQ-RD-29: needs a client (models, tooltips, WTHIT); now @client true
+- SQ-RD-30: needs a client (AppleSkin/JEI); the food values are already machine-checked in SQ-RD-21/-17; now @client true
+- SQ-RD-32: needs a client (crop and medley textures; CQ-TX-01/-02 cover it); now @client true
+- SQ-CDQ-04: needs a client (tooltips, toggle, F3+T); now @client true
+- SQ-CDQ-07: needs a client (WTHIT, toggle, restart); now @client true
+- SQ-CDQ-08: needs a client (JEI info pages, toggle); now @client true
+- SQ-SK-03: needs a single-player client creating a new world; now @client true
+- SQ-FDB-08: the result is an action-bar message the server never logs and no verb reads
+- SQ-OPEN-LO, SQ-OPEN-FP, SQ-OPEN-ST1, SQ-OPEN-ST2, SQ-OPEN-ST3: pointer rows; their steps belong in the named docs' own rows
+- SQ-SY-01 to SQ-SY-07: each needs its own boot with a soil-yield config change before start (qrun cannot restart mid-batch); best written as a separate boot batch using qrun.py toml
+- SQ-CDT-08, SQ-CDT-09, SQ-CDT-10: need their own boot with a config change, folder path or jar swap
+- SQ-KS-01 to SQ-KS-04: need a boot with a test datapack in place before start
+- SQ-CDJ-01, SQ-CDJ-02, SQ-CDJ-04, SQ-CDJ-06: need special CD or overlay jars in their own boot
+- SQ-WCD-05: needs a boot with the old creativedelight-1.0.0 jar swapped in
+- SQ-RS-01: needs two boots with different configs
+- SQ-VP-13: needs a boot with goldenEggChance = 1 set before start
+- SQ-MDP-02, SQ-MDP-04, SQ-MDP-08, SQ-KS-05: @draft replaced with @superseded naming the replacing rows (SQ-MDP-17, SQ-MDL-02/-03, SQ-CDT-01/-02), as the rows' own text already said
+- SALT section 1 'Run log', 111 entries (SQ-CM-01 to -09, SQ-SALT-01 to -04 old, SQ-PB-01 to -05 old and others): past-run verdict entries, not test rows; reason changed to say so
+- SQ-PTH-28c (PS15B): perf suite P row (PERF_JARS, JFR on minus off), not a qrun batch
+- SQ-CDW-04 (MIN): needs a client joining the dedicated server (datapack-validation screen)
+- SQ-MIN-02 (MIN): WTHIT crop line plus rain at a desert; no verb reads isRainingAt
+- SQ-MIN-05 (MIN): missing-texture lines and models load only on a client
+- SQ-CBB-04 (CBB): rerun of SQ-CBA-01 to -08 and -10; run those rows on the chain boot
+- SQ-PB-04 (PB): kill -9 of the scratch JVM ends any batch; run it by hand after the last row
+- SQ-PB-05 (PB): perf suite run (about 2 h 15 min), not a qrun batch
+- SQ-PERFCFG-03 (PERFCFG): two boots compared with the ModernFix jar moved between them
+- SQ-MCL-06 (MCL): perf suite G04 rows at three forced levels
+- CQ-TXP-01, CQ-TXP-02 (TXQ): they run qrun.py pair / matrix themselves, not steps inside a batch
+- CQ-PS15B-02 (PS15B): /cdevreloadclient is a client command; the driver's cmd step only runs integrated-server commands
+- CQ-PNE-07 (PNE): sp.sh perf recording over 10 minutes of real play
+- SQ-AZW-01 (rerun) and SQ-DCM-02 (rerun) (MELT): set @superseded, not drafts; the rewritten SQ-AZW-01 (FCK.qb) and SQ-DCM-02 (DCM.qb) already carry the rerun checks
+- SQ-NSM-04: the NSM fixture has no paintings or banner; the picture and Datapacks page are client looks (reason updated)
+- SQ-DCM-03: needs an old-id fixture save on the pre-11-04 jars, and no builder exists (reason updated)
+- SQ-CDFO-01: needs a pre-M8 old-id fixture save with racks, fridge, oven and nests, and no builder exists (reason updated)
+- SQ-IDS-03: needs a fixture world saved on the 11-06 builds; the cdevtest be/inv reads and expected NBT keys are named in the reason
+- SQ-RDB-03: a rerun list of RD rows, not a row; the reason gives the qrun --rows command
+- SQ-MT-03: villager golem summoning over game time; kept the existing reason
+- SQ-PWG-18: two boots with different overheatedDropChance; reason written by the earlier run, kept
+- CQ-LBS-01: needs zlbs_probe.js copied into the client and its host positions (reason updated)
+- CQ-HOP-02: mid-break crack shot; the driver releases held keys before a capture (reason updated)
+- Owner rows (@owner true, @draft gives the reason): CQ-TTP-01, CQ-CHK-01, CQ-BPT-02, CQ-TSL-01, CQ-MT-01, CQ-CBA-02, CQ-CBA-03, CQ-IDS-05, CQ-VH-03, CQ-VH-05
+- SQ-CBS-01, CQ-CBS-01: already @superseded, left as they were
+- SQ-HH-01 to -15, -A01 to -A18, -B01 to -B09, -C01 to -C07, -D01 to -D14 (63 rows): replaced by the SQ-HH-11xx/12xx/13xx/15xx rows, as their @fails text already said. Each still has its @draft line and now also has '@superseded Superseded by <ids> (2026-11-17, from the row text)', the same pattern DCM.qb uses, so the planner never plans them
+- CQ-HH-207: @owner true. The slime squish needs a real entity landing on the basin, and the formed-group model is judged while stomping and breaking
+- CQ-HH-303: @owner true. The capture driver has no middle-click pick-block step, and the pick result is what the row tests
+- CQ-HH-403: @owner true. Needs a real survival player near a wild crow over time; the theft action bar shows only to that player
+- CQ-HH-404: @owner true. Taming hearts, smoke, crumb particles and the squawk are feel and sound
+- CQ-HH-501: @owner true. Throw charge, spin, the anvil sound and riding over soul sand are feel and sound
+- CQ-HH-505: @owner true. Charring by a campfire over about 10 s in each hand and while on fire
+- CQ-HH-506: @owner true. Pouch pickup while walking and sneak-planting are movement feel
+- SQ-TP-08/-09/-11/-12/-13/-14/-15/-16/-19/-20/-21/-23/-24/-25/-26: Tempad block and menu flows through ztp_probe.js; block ids, menu slots and door positions are not recorded anywhere, the first TP runner writes them after one live look
+- SQ-TP-32 to -39: same, marker/anchor/workstation flows (section 3)
+- SQ-TP-17, SQ-TP-29: dedicated server plus real joined clients
+- SQ-PS15-04: not built, waits on the owner (plan B4)
+- SQ-PS15-08: waits on the frozen decor report (no block list yet)
+- SQ-PS15-11/-11b/-12/-12b/-12c: fresh group B census; site boxes and the 25 points are not recorded in the plan
+- SQ-CDNS-01/-02/-03/-04/-06/-09: run through cdns_step2_run.sh / cdns_full_run.sh (fixture copies, stop between boots, offline scan and compare)
+- SQ-CDNS-12: dedicated server and two real clients (handshake mismatch)
+- SQ-CEQ-03: step-up comes from the client key packet; no bot verb sends it
+- SQ-CEQ-06: readerIndex kick needs a real network join
+- SQ-CBP-10: no own steps, a rerun of SQ-CBO-12/-13/-15 by id
+- SQ-CUP-05: needs a pre-removal world with cups; none kept
+- SQ-EF-07: perf pregen timing (SQ-WGP-07 square on a B-perf world)
+- SQ-IWF-05: perf suite run, not a scratch row
+- SQ-HRU-02: perf session with JFR
+- SQ-STC-01/-02: need /cdevtest season (being moved)
+- SQ-EFB-02 to -16, -18 to -22: need /cdevtest under (being moved) plus a fresh Chunky world
+- SQ-FFH-01: retired 2026-10-27 (global.foodFamily deleted), so there is nothing to run. Its dump diff is SQ-FFH-02. Reason line updated.
+- SQ-TPF-30: P4 setup. The three packetfixer.properties files are composed by hand from the thirdparty_fixes.md 4.2 candidates. They serve the client-joined P4 rows, which need the owner.
+- SQ-GLD2-05: gen_can_types.py has no --dump option and reads only the instance's exported/food, so it runs in the owner's game.
+- SQ-CC-09: needs a world saved on the 11-06 builds that holds the old long_reach potion.
+- SQ-CC-12: needs the owner's client joined to a dedicated scratch server.
+- SQ-DEP-09b: needs 10 boots, each with one jar removed. That takes a runner loop, not one batch.
+- SQ-CDW-01 (rerun 5.2) in DEP: one boot per removed optional mod (runner loop).
+- SQ-DNR-O-01, SQ-DNR-E-01: need a copy of a 1.1.03+ world with the placed blocks. No such save exists.
+- SQ-DNR-O-03: reruns the DA rows. It points at them instead of copying their steps.
+- SQ-SPFX-04: three boots of different jar sets (chain p6, p6f, B world).
+- SQ-SPFX-05: eight jar-out restarts (jx_run.sh).
+- SQ-NDM-08: needs a world saved with the Nether's Delight 3.1 jar.
+- SQ-STK-05: stack_sizes.py reads only the instance dump and writes a repo doc, so it runs in the owner's game.
+- SQ-EFX-12: no verb reads getJumpBoostPower, and a new probe is not wanted.
+- SQ-EFX-14: needs a powered Create fluid line that has never been scripted. The first runner builds it by hand once.
+- SQ-PF-04: two Chunky pregens around a jfc edit, timed by wall clock (runner script).
+- SQ-BLC-03: three boots around a biome_config.json edit and its restore (runner loop).
+- SQ-WGE-02c: needs its own boot with searchTimeoutSeconds = 5 preset. A row cannot reboot the server.
+- SQ-WGE-03b: judging castles on slopes is a worldgen call. No verb reads the biome of each structure start.
+- SQ-WGE-05c: crowding and lava/void placement in Nether and End areas is a judgement.
+- SQ-WGE-06b: the 300-generation bridge-pool sample needs a jigsaw sampler. No verb or probe has one.
+- SQ-WGE-06c: needs reboots with pool_config.json edited between them.
+- SQ-WGE-06d: needs a stop and reboot of the same world, then a piece-list compare.
+- SQ-WGE-08: regression compare against the last clean boot, across two run docs.
+- SQ-WGE-10: per-piece block reads at placed templates need positions picked on site.
+- SQ-WGE-12: set @owner true. Pass is a look at placed meteorite pyramids.
+- SQ-WGE-13: needs sky stone height vs WORLD_SURFACE for each meteorite start. No verb reads that.
+- SQ-WGE-15: runs SQ-PSM-02 and -03, which already hold the steps.
+- SQ-WG30-A02: compares against a 1.1.04 jar run that no longer exists. Needs an owner ruling.
+- SQ-WG30-B02, -B03, -B04: placed-template boxes are unknown until placed. Block-offset reads must be picked on site.
+- SQ-WG30-C02: evenness at density 1 needs a bigger census. Owner ruling on the radius.
+- SQ-WG30-C04: needs a mid-run override edit and a reboot.
+- SQ-WG30-C05: in practice superseded by SQ-WGE-02b.
+- SQ-WG30-E01: judging cancels that are share-only needs a teleport look at each start.
+- SQ-WG30-E02: the meta log format must be checked against MetaStructure before writing regexes.
+- SQ-WG30-D02: island height readback needs a box/top-block reader. Also needs a server stop.
+- SQ-WG30-D03: the r1030 FAIL is a design question (aquifer water). Rewrite after the fix.
+- SQ-CEN-06: needs the carried save's machines at positions only the save prep knows.
+- SQ-CEN-07: Ore Excavation vein mining needs a keybind held by a real client.
+- SQ-TSY-02: needs the scratch client joined to a dedicated server during /reload.
+- SQ-PF16-04: a perf-suite JFR measurement, not a qrun row.
+- SQ-WGP-03 to -06: compare two levels with different toml presets plus JFR, so several boots.
+- SQ-WGP-08: needs a stop and reboot with files copied between two pregens.
+- CQ-SINK-01: set @owner true (walking feel).
+- CQ-CIF-01: set @owner true (broad playtest sweep; split into capture rows before automating).

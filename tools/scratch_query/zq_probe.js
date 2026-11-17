@@ -1,4 +1,12 @@
-// Scratch-only query command for bulk queue runs (feature_writeup/testing/scratch_queue.md). Copy into a scratch
+// RETIRED 2026-11-16: prep_srv.sh no longer copies this file into scratch servers; every reusable verb is a Java
+// /cdevtest verb in Creative Devtools (feature_writeup/creative_devtools.md, /cdevtest; plan_scratch_testing_expansion.md
+// item 3). Kept so old run docs, batches and the one-off scripts that copy it themselves still make sense. Replacements:
+//   recipes, rdetail, bytype, uses, makes, food, item, potion, count, ages, chunk, tagsof, states -> same verb name
+//   items / blocks -> reg item|block;  biometag / itemtag / blocktag -> tag biome|item|block
+//   useitem P -> useair as=P hand=both
+//   season, floating, under, nbt -> same verb name (moved 2026-11-16; same arguments, [cdevtest] key=value output;
+//   nbt prints the stack's tag as the game holds it, not Rhino's typeof view; efb_judge.py reads both under forms)
+// (original header) Scratch-only query command for bulk queue runs (feature_writeup/testing/scratch_queue.md). Copy into a scratch
 // server's kubejs/server_scripts as zz_zq_probe.js, never into the pack.
 //   /zq recipes <text>       recipe ids containing text, with their result
 //   /zq rdetail <text>       same ids with serializer, result and inputs (first 3 items of each); "rdetail+" lines add
@@ -29,8 +37,7 @@
 // MIGRATED 2026-11-15 to Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
 // those verbs, old batches keep /zq: recipes, rdetail, bytype, uses, makes, food, item, items/blocks -> reg item|block,
 // potion, count, ages, chunk, biometag/itemtag/blocktag -> tag biome|item|block, tagsof, useitem -> useair as=NAME
-// hand=both, states. Left here only (one-off or KubeJS-specific): season (Creative Calendar), floating, under (SQ-EFB
-// judges), nbt (how KubeJS scripts see NBT).
+// hand=both, states. season, floating, under and nbt followed on 2026-11-16 (header above).
 (() => {
     const $ZQArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $ZQReg = Java.loadClass('net.minecraft.core.Registry')

@@ -15,7 +15,7 @@
     qrun.py judge RES [...]                                     open LOOKs; fill one (qverdict.py docstring)
     qrun.py table RES [RES ...] [--ids ..] [--open]             run-doc verdict table from RES/verdicts/
     qrun.py toml FILE SECTION KEY VALUE                         set KEY under [SECTION] (added if absent)
-    qrun.py plan [--jars a,b] [--never] [--failed] [--all] [--release] ...   rows a run needs from changed jar stamps
+    qrun.py plan [--jars a,b] [--never] [--failed] [--rewritten] [--all] [--release] ...   rows a run needs from jar stamps
                                                                 and sources (qplan.py docstring)
     qrun.py playtest [--out FILE] / qrun.py states              owner playtest checklist / row states per code
     qrun.py drive start|resume|status|stop RUN [plan options]   resumable run driver (qdrive.py docstring)

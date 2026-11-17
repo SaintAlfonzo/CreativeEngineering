@@ -42,6 +42,7 @@ public final class TestCommand {
         TestData.register();
         TestTicks.register();
         TestLayers.register();
+        TestJudges.register();
         add("help", c -> {
             c.args.end();
             c.emit(c.line().kv("verbs", String.join(",", VERBS.keySet())));

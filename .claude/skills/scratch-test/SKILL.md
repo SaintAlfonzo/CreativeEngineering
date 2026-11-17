@@ -8,10 +8,10 @@ description: Scratch server and client testing - write or refresh scratch queue 
 Files: queue [scratch_queue.md](../../../feature_writeup/testing/scratch_queue.md), run docs
 `feature_writeup/testing/scratch_run_<date>.md`, runner claim [RUNNER.md](../../../feature_writeup/testing/RUNNER.md),
 gotchas [gotchas.md](gotchas.md) (read its "Before the first boot" section before booting, and the rest when anything
-odd happens). Tools: `tools/scratch_query/` (prep_srv.sh, qrun.py, game_jvms.sh, zq_probe.js, sp_world.py),
+odd happens). Tools: `tools/scratch_query/` (prep_srv.sh, qrun.py, game_jvms.sh, sp_world.py; `zq_probe.js` is retired since 2026-11-16 and no longer copied, its verbs are `/cdevtest` verbs),
 **`/cdevtest` and the `/pbot` test verbs** (Creative Devtools, in every prep_srv server: block, inventory, tank, box
 count and ages, use / break / kill / loot as a player or fake player, entity and player reads, recipe and tag data,
-`tickwarp`, `randomtick`, `watch`, `layerdump`; `/cdevreload compat` re-reads Compat's toml; bots attack, interact, eat with a real ticked use, sneak, look, walk with physics,
+`tickwarp`, `randomtick`, `watch`, `layerdump`, season types, floating sand, the earth fill `under` judge, item NBT; `/cdevreload compat` re-reads Compat's toml; bots attack, interact, eat with a real ticked use, sneak, look, walk with physics,
 inventory, vulnerable, pickup; verb table in [creative_devtools.md](../../../feature_writeup/creative_devtools.md)
 "/cdevtest and the perfBot test verbs"). New rows use them before writing a KubeJS probe; a probe is for a one-off
 feature reader only. Output `[cdevtest] verb=<verb> key=value ...`, every call ends `done=1` or `error=... done=0`.

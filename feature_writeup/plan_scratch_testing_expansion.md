@@ -192,9 +192,15 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 - D2. Paired client + own scratch server as one "game run" under the one-JVM rule (TX-30)?
 - D3. Install `xvfb` for unattended client runs (TX-07)?
 - D4. Devtools test command in Java (TX-20) vs keep growing KubeJS probes.
+- Queue rebuild 2026-11-17 (owner request): rows converted onto /cdevtest, /pbot and the capture driver; leftovers (missing verbs, kept probes, unwritten drafts) in [cdevtest_rebuild_gaps_2026-11-17.md](testing/cdevtest_rebuild_gaps_2026-11-17.md).
 - Item 3 CLOSED 2026-11-16 (owner: "move everything to cdevtest once the tests pass"): (a), (b) and (c) below all answered
   yes, gated on SQ-TX-01 to -16 passing in game; the migration step is then built (retire the `/zq` verbs and the
-  `prep_srv.sh` copy, `zq season` into `/cdevtest`, install the Devtools jar). Original questions:
+  `prep_srv.sh` copy, `zq season` into `/cdevtest`, install the Devtools jar). Gate met 2026-11-16 (SQ-TX-01 to -16
+  PASS, scratch_run_2026-11-16.md 8). Migration step BUILT 2026-11-16: `season`, `floating`, `under`, `nbt` are
+  `/cdevtest` verbs (`TestJudges.java`, pure parts in `GroundJudge.java`, cdevtest_harness cases), `zq_probe.js` retired
+  (header maps every verb, prep_srv.sh no longer copies it; `efb_judge.py under` reads both line forms), qplan state
+  `rewritten` (PASSed rows rewritten later: left out of the default plan, `--rewritten` / `--all` add them), Devtools
+  jar installed; live rows SQ-TX-19 onward. Original questions:
 - Item 3 open (2026-11-15, after the build): (a) retire the migrated `/zq` verbs and stop copying `zq_probe.js` in
   `prep_srv.sh` once SQ-TX passes, or keep both while old batches exist? (b) `zq season` (Creative Calendar) into
   `/cdevtest` through an optional reflective read, or keep it KubeJS? (c) install the Devtools jar into dev `mods/`

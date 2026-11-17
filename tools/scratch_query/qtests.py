@@ -133,8 +133,9 @@ def t22():
     write_rows('SMKZ.qb', SECTION % ('jara', 'T1') + row('SQ-SMKZ-01', '> say a1') + row('SQ-SMKZ-02', '> say a2')
                + SECTION.replace('@@section 1', '@@section 2') % ('jarb', 'T1') + row('SQ-SMKZ-03', '> say b1'))
     write_rows('ZA.qb', SECTION % ('jara', 'T2') + row('SQ-ZA-01', '> say za1') + row('SQ-ZA-02', '> say za2'))
-    write_rows('ZB.qb', SECTION % ('jarb', 'T2') + row('SQ-ZB-01', '> say zb1'))
-    ids = ['SQ-SMKZ-01', 'SQ-SMKZ-02', 'SQ-SMKZ-03', 'SQ-ZA-01', 'SQ-ZA-02', 'SQ-ZB-01']
+    write_rows('ZB.qb', SECTION % ('jarb', 'T2') + row('SQ-ZB-01', '> say zb1')
+               + row('SQ-ZB-02', '> say zb2', '@reviewed 2026-11-17\n'))
+    ids = ['SQ-SMKZ-01', 'SQ-SMKZ-02', 'SQ-SMKZ-03', 'SQ-ZA-01', 'SQ-ZA-02', 'SQ-ZB-01', 'SQ-ZB-02']
     old_js, old_hist = qplan.jar_state, qplan.history
     qplan.jar_state = lambda: {'jara': {'id': 'A2', 'changed': time.time(), 'name': 'a.jar', 'side': 'server'},
                                'jarb': {'id': 'B1', 'changed': time.time(), 'name': 'b.jar', 'side': 'server'}}
@@ -152,6 +153,13 @@ def t22():
         assert got == ['SQ-SMKZ-01', 'SQ-SMKZ-02', 'SQ-ZA-01', 'SQ-ZA-02'], got
         st = {x['row']['id']: x['state'] for x in qplan.row_states()}
         assert st['SQ-ZB-01'] == 'current' and st['SQ-ZA-01'] == 'jar-changed', st
+        # a PASSed row rewritten later (@reviewed after the PASS), jar unchanged: rewritten, only with --rewritten
+        assert st['SQ-ZB-02'] == 'rewritten', st
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            qplan.plan(['--json', '--rewritten'])
+        got_rw = sorted(x['id'] for x in json.loads(buf.getvalue()))
+        assert got_rw == sorted(got + ['SQ-ZB-02']), got_rw
         lo, hi = qplan.estimate([x for x in qplan.row_states() if x['row']['id'] in got])
         assert hi < 3600, 'estimate %d s' % hi
     finally:
