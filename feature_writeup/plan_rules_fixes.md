@@ -604,6 +604,7 @@ TODO row: `tooling/design-rules #2` "History audit". Scope: 5 writeups with Hist
 this plan. Marker: design_rules.md V-50 and V-51 status becomes "Deferred (low), tracked as TODO tooling/design-rules #2";
 `tools/design_rules_audit.py` keeps counting writeups without History so the number is visible. The section 17 extraction fills part
 of it for free. Add History to the integration-report and jar-upgrade layouts when the audit runs.
+- 2026-11-17: P6 section 19b built (P6 agent), docs only: V-53 (duplicate 3 in ends_delight.md and ocean_delight.md made 2.1, out-of-order blocks moved, gaps closed with History "(was N)" lines; no section quoted by a test line changed number); V-54 `tools/test_line_fix.py` (843 lines in 109 docs, 13 `| ID | Test | Pass |`/`Expected` tables converted; a line with no short name before its first colon gets `**ID:**`, no name invented; 39 ambiguous lines listed, owner list item 12; lint `test_lines` in check_all, audit check `testlines`); V-56 README "Plans and reference docs" table (28 docs; rows in features.csv would have pulled the feature's Open work block into each), two notes cut, audit check `index`; V-57 already true since the rows CSVs, `todo.py lint` now fails a rows file out of order; V-58 DR-W4 names `@@table world` (qrows.py), 70 queue tables normalized, the run banner keeps the 5 newest runs and 29 older dated lines moved to 13 run docs. Owner list item 1: rerun copies no longer count, 7 whole-copy duplicates left; items 10 to 12 added.
 
 ## 19b. Docs and writeup form (V-53, V-54, V-56, V-57, V-58), last
 
