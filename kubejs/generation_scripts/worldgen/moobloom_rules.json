@@ -2,7 +2,7 @@
   "_readme": [
     "Input of tools/gen_moobloom_rules.py (mooblooms.md 4.9). The generator reads the wild flowers (wild_flowers.json",
     "through tools/gen_wild_flowers.py's inventory), the moobloom variant pools and the cow spawners from",
-    "kubejs/exported/spawns.json, and writes kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json",
+    "kubejs/exported/spawns.json, and writes kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json",
     "plus the generated tables in feature_writeup/mooblooms.md (2.8 and 4.9).",
     "tiers: a biome with cows and at least 'min' pool-flower patches per chunk gets 'percent' of its cows as mooblooms,",
     "  split by its variant mix (shares under drop_under_pct dropped, the rest rescaled and rounded to 'decimals' so",
