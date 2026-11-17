@@ -14,7 +14,7 @@ import java.util.Set;
  * and vanish with the jars in phase 5.
  * <p>
  * Only resource locations are held here: the registry is read when a check is made, never at class
- * initialisation, so this class is safe to touch from a mixin before the donors have registered anything.
+ * initialization, so this class is safe to touch from a mixin before the donors have registered anything.
  */
 public final class DonorItems {
 

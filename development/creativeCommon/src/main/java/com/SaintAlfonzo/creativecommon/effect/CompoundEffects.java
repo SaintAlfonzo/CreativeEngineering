@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * listed under "When Applied:" in item tooltips ({@code potion/CompoundEffectTooltip}), the JEI effect hover and the JEED
  * description ({@code mixin/JeedEffectRendererMixin}, {@code mixin/JeedEffectInfoMixin}). Text only, except Caffeinated's
  * Phantom Bane, which {@link PhantomBaneRules} really applies. A part is another effect (named, with the compound's level
- * when {@code levelled}) or a lang key for behaviour no effect covers.
+ * when {@code levelled}) or a lang key for behavior no effect covers.
  */
 public final class CompoundEffects {
 
@@ -63,7 +63,7 @@ public final class CompoundEffects {
         return parts == null ? List.of() : parts;
     }
 
-    /** One tooltip line per part of {@code instance}'s effect, coloured by the part's category (blue for text parts). */
+    /** One tooltip line per part of {@code instance}'s effect, colored by the part's category (blue for text parts). */
     public static List<Component> partLines(MobEffectInstance instance) {
         List<Component> lines = new ArrayList<>();
         for (Part part : parts(instance.getEffect())) {

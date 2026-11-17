@@ -104,7 +104,7 @@ public final class WthitRunSpeed implements IWailaClientPlugin, IBlockComponentP
     /**
      * Pass-through lines (plan_passthrough.md 6, {@link PassThroughFormat}) for a block in a non-inert tier, with the
      * server's values. True when the block is in such a tier: it then gets these lines or none (below its growth rule,
-     * the viewer exempt or the owner of a SecurityCraft web), never the Run Speed line. Counts neighbours once per
+     * the viewer exempt or the owner of a SecurityCraft web), never the Run Speed line. Counts neighbors once per
      * overlay refresh, against the looked-at block.
      */
     private static boolean passThrough(ITooltip tooltip, IBlockAccessor accessor, CompatConfig.Surface.Wthit cfg) {

@@ -29,13 +29,13 @@ import net.minecraftforge.event.ForgeEventFactory;
  * {@link PassGroup} (entity-type tags {@code creativecompat:passthrough/projectile/<group>}, else the base-class
  * default):
  * <ul>
- *   <li>{@code break}: in a surrounded web, moved to that cell's centre and its impact run as a block hit there
+ *   <li>{@code break}: in a surrounded web, moved to that cell's center and its impact run as a block hit there
  *       (Forge's impact event first), then discarded on the server; stalled in any web (below
  *       {@link #BREAK_STALL_SPEED} for {@code breakStallTicks} ticks in a row, plan_post_scratch_1115b.md B) the same
  *       impact runs where it stopped (an ender pearl teleports there);</li>
- *   <li>{@code settle}: in a surrounded web, no horizontal motion and on the cell's centre line; the dense fall drag
+ *   <li>{@code settle}: in a surrounded web, no horizontal motion and on the cell's center line; the dense fall drag
  *       makes it sink slowly until it lands below the webs and breaks there;</li>
- *   <li>{@code snag}: in any web, held at the centre of the web cell; a fishing bobber or feather is reeled in as
+ *   <li>{@code snag}: in any web, held at the center of the web cell; a fishing bobber or feather is reeled in as
  *       usual, a pickarang or chakram ({@link PassSnagItem}) is picked up by touch and drops as an item when the web
  *       breaks; a bobber just falls again;</li>
  *   <li>{@code linger}: in a surrounded web, held where it entered until the web breaks or its flight ends
@@ -299,7 +299,7 @@ public final class PassProjectiles {
     }
 
     /**
-     * Runs the projectile's impact as a block hit on the web at {@code cell}: at the cell's centre (moved there;
+     * Runs the projectile's impact as a block hit on the web at {@code cell}: at the cell's center (moved there;
      * surrounded), or where it is ({@code atCentre} false: stalled), then discards it on the server.
      */
     private static void breakIn(Entity p, PassState st, long cell, boolean atCentre) {

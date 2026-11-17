@@ -20,12 +20,12 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Dyes the Portal Gun's two portal colours (feature_writeup/plan_portal_gun.md 4), with Sophisticated Backpacks' column
- * rule: any grid, one gun plus dyes anywhere. A dye in a column left of the gun or in its column colours the blue portal
+ * Dyes the Portal Gun's two portal colors (feature_writeup/plan_portal_gun.md 4), with Sophisticated Backpacks' column
+ * rule: any grid, one gun plus dyes anywhere. A dye in a column left of the gun or in its column colors the blue portal
  * (left click); right of it or in its column, the orange portal (right click). Several dyes on one side average like
- * leather armour; the side's current colour joins the average only when it already has a custom colour.
+ * leather armor; the side's current color joins the average only when it already has a custom colour.
  *
- * <p>Writes the gun's own colour data, stack NBT {@code CustomPortalColors {blue:int, orange:int}} (the data the
+ * <p>Writes the gun's own color data, stack NBT {@code CustomPortalColors {blue:int, orange:int}} (the data the
  * {@code /customportalcolors} command sets; {@code me.Thelnfamous1.portalgun.ColoredPortalGun}), so the gun names no
  * Portal Gun class. All other NBT is kept. No washing (decision D4).
  */
@@ -111,7 +111,7 @@ public class PortalGunDyeRecipe extends CustomRecipe {
         gun.getOrCreateTagElement(COLORS_TAG).putInt(side, mix(current, dyes));
     }
 
-    /** Leather-armour averaging (DyeableLeatherItem.dyeArmor) of the dyes, plus the current colour when there is one. */
+    /** Leather-armor averaging (DyeableLeatherItem.dyeArmor) of the dyes, plus the current color when there is one. */
     static int mix(@Nullable Integer current, List<DyeColor> dyes) {
         int r = 0, g = 0, b = 0, maxSum = 0, count = 0;
         if (current != null) {

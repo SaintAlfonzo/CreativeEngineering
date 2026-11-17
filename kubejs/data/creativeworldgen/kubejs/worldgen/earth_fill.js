@@ -43,7 +43,7 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// creativeworldgen:earth_fill/stone_base, blocktags.js) count as earth, for their size and their overhang.
 	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2). The
 	// End House (Ender's Delight) stands on a purpur and end stone floor (layer 0: 101 of its 144 columns). Counted
-	// as earth, a start over the void hangs that whole floor in air and is cancelled (the mod's own structure type
+	// as earth, a start over the void hangs that whole floor in air and is canceled (the mod's own structure type
 	// skipped chunks whose surface was below y 50, i.e. no island; the pack uses plain jigsaw).
 	global.tags.add(e, 'creativeworldgen:earth_fill/stone_base', [
 		'eugene:ruined_drum_tower', 'endersdelight:end_house',

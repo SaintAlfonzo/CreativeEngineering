@@ -17,10 +17,10 @@ import java.util.Set;
  * art instead of shipping modified copies (plan_cb_publish.md 10, TODO licence/cd #1, mobs/nests #2). Plain java.awt, no
  * Minecraft classes, so the logic can be checked against the hand-made art outside the game.
  * <ul>
- *     <li>{@link #paletteSwap}: textureswapper/palette_swap.py's default mode. The source's opaque colours are placed by
- *     brightness (R+G+B) between its darkest and brightest; each takes the palette colour at the same relative position
+ *     <li>{@link #paletteSwap}: textureswapper/palette_swap.py's default mode. The source's opaque colors are placed by
+ *     brightness (R+G+B) between its darkest and brightest; each takes the palette color at the same relative position
  *     (palette ordered dark to bright, ties by {@link #ORDER}; rounding half to even like Python's round).</li>
- *     <li>{@link #recolour}: a fixed colour-for-colour map, every other pixel unchanged.</li>
+ *     <li>{@link #recolour}: a fixed color-for-color map, every other pixel unchanged.</li>
  * </ul>
  */
 public final class Recolour {
@@ -33,7 +33,7 @@ public final class Recolour {
 
 	/**
 	 * Palette order: brightness, then alpha, blue, green, red. The tool breaks brightness ties in Python set order; this
-	 * rule matches the owner's rack art for 20 of its 21 woods (the 21st differs only between equally bright colours).
+	 * rule matches the owner's rack art for 20 of its 21 woods (the 21st differs only between equally bright colors).
 	 */
 	static final Comparator<Integer> ORDER = Comparator.<Integer>comparingInt(Recolour::brightness)
 			.thenComparingInt(c -> (c >>> 24) & 0xFF)
@@ -60,7 +60,7 @@ public final class Recolour {
 		return (argb >>> 24) != 0;
 	}
 
-	/** The image's distinct opaque colours, dark to bright. */
+	/** The image's distinct opaque colors, dark to bright. */
 	public static List<Integer> palette(BufferedImage image) {
 		Set<Integer> colours = new LinkedHashSet<>();
 		for (int y = 0; y < image.getHeight(); y++)
@@ -108,7 +108,7 @@ public final class Recolour {
 		return keep != null && y < keep.length && x < keep[y].length && keep[y][x];
 	}
 
-	/** {@code image} with every colour in {@code map} (ARGB to ARGB) replaced. */
+	/** {@code image} with every color in {@code map} (ARGB to ARGB) replaced. */
 	public static BufferedImage recolour(BufferedImage image, Map<Integer, Integer> map) {
 		BufferedImage out = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		for (int y = 0; y < image.getHeight(); y++)

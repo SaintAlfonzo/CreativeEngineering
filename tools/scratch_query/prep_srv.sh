@@ -75,7 +75,7 @@ if ls mods/creativebrewing-*.jar >/dev/null 2>&1; then
   rm -f mods/backportedVinery-*.jar mods/backportedBrewin-*.jar mods/letsdo-vinery-forge-1.3.10.jar mods/doapi-*.jar mods/BrewinAndChewin-1.19-*.jar
 fi
 # Creative Delight nests Baby Mobs and Incubation Additions since wave 4 (creative_split.md 7.8) and the five ports
-# (Veggies, Vintage, Fungi, Miner's, Display) since 2026-11-02: a standalone jar would win over the nested one
+# (Veggies, Vintage, Fungi, Miner's, Display): a standalone jar would win over the nested one
 for cd in mods/creativedelight-*.jar; do
   [ -f "$cd" ] || continue
   for m in babyMobs incubationAdditions backportedVeggies backportedVintage backportedFungi backportedMiners backportedDisplay; do

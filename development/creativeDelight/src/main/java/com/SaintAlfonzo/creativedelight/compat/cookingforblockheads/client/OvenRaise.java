@@ -184,7 +184,7 @@ public final class OvenRaise {
         return s;
     }
 
-    /** Index of U within a vertex of the block format: position (3 ints), colour (1), then UV0. */
+    /** Index of U within a vertex of the block format: position (3 ints), color (1), then UV0. */
     private static int uvOffset() {
         return 4;
     }

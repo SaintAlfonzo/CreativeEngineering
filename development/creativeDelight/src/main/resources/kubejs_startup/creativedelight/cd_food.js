@@ -16,10 +16,10 @@
 //                   pieSlice (whole, slice, count): board cut plus slices -> whole by hand (`<whole>_from_slices`)
 //                   cultureCut (culture, meat, count): a meat culture is its own family; raw meat or fish, no bone meal
 //   cooking trio    fruitCook, veggieCook, meatCook, fishCook, eggCook (input, output): furnace, smoker and campfire
-//   oven            cakeBake (flavour, cake, second)  baked base + frosting + 2 flavour (or flavour + second) by hand; raw base in the oven
-//                   pieBake (flavour, pie, can)       crust + 3 flavour + 2 sweet; with a filling can key also the pot
+//   oven            cakeBake (flavor, cake, second)  baked base + frosting + 2 flavor (or flavor + second) by hand; raw base in the oven
+//                   pieBake (flavor, pie, can)       crust + 3 flavor + 2 sweet; with a filling can key also the pot
 //                                                     filling and crust + full can
-//                   cookieBake (flavour, cookie, second)  cookie dough + 2 flavour (or flavour + second) -> 12
+//                   cookieBake (flavor, cookie, second)  cookie dough + 2 flavor (or flavor + second) -> 12
 //                   muffinBake (fruit, muffin)        oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
 //                   tartBake (fruit, tart)            crust + fruit + egg + sugar + milk -> 2, baking sheet
 //                   handPieBake (fillings, pie)       crust + fillings -> 1, baking sheet, oven only

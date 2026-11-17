@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Note colours (sticky_notes.md 3.6, BRIEF 5): leather-style dye mixing and the four special looks. Pure maths, used
+ * Note colors (sticky_notes.md 3.6, BRIEF 5): leather-style dye mixing and the four special looks. Pure maths, used
  * by both sides; the special ingredients are looked up by id when asked, never at class init.
  */
 public final class NoteColours {
@@ -65,7 +65,7 @@ public final class NoteColours {
         return null;
     }
 
-    /** The item-model look value of a note with this colour and special. */
+    /** The item-model look value of a note with this color and special. */
     public static int look(int color, @Nullable String special) {
         Special s = special(special);
         if (s != null) return s.look;
@@ -73,7 +73,7 @@ public final class NoteColours {
     }
 
     /**
-     * Vanilla's {@code DyeableLeatherItem.dyeArmor} maths: the old colour (if any) and each dye are averaged per
+     * Vanilla's {@code DyeableLeatherItem.dyeArmor} maths: the old color (if any) and each dye are averaged per
      * channel, then scaled so the result is as bright as the brightest input. {@code oldColor} =
      * {@link NoteData#NO_COLOR} for an undyed note.
      */
@@ -118,12 +118,12 @@ public final class NoteColours {
         return (r << 16) | (g << 8) | b;
     }
 
-    /** The single-dye colour of a DyeColor (what one dye on a plain note gives). */
+    /** The single-dye color of a DyeColor (what one dye on a plain note gives). */
     public static int of(DyeColor dye) {
         return mix(NoteData.NO_COLOR, dye);
     }
 
-    /** The DyeColor whose single-dye colour is nearest (redmean distance) to an RGB; for names in WTHIT. */
+    /** The DyeColor whose single-dye color is nearest (redmean distance) to an RGB; for names in WTHIT. */
     public static DyeColor nearestDye(int rgb) {
         DyeColor best = DyeColor.WHITE;
         double bestDist = Double.MAX_VALUE;
@@ -137,7 +137,7 @@ public final class NoteColours {
         return best;
     }
 
-    /** Redmean colour distance. */
+    /** Redmean color distance. */
     public static double distance(int a, int b) {
         int r1 = a >> 16 & 255, g1 = a >> 8 & 255, b1 = a & 255;
         int r2 = b >> 16 & 255, g2 = b >> 8 & 255, b2 = b & 255;

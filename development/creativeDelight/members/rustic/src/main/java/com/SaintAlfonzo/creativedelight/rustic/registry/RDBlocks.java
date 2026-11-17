@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 public final class RDBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, RusticDelightMod.MODID);
 
-    /** Bell pepper colours, base three first; Pale seeds grow orange, white, pink; Dark seeds blue, purple, black. */
+    /** Bell pepper colors, base three first; Pale seeds grow orange, white, pink; Dark seeds blue, purple, black. */
     public static final List<String> COLOURS = List.of("green", "yellow", "red", "orange", "white", "pink", "blue", "purple", "black");
 
     public static final RegistryObject<Block> COTTON_SEEDS_BAG = bag("cotton_seeds_bag");
@@ -121,7 +121,7 @@ public final class RDBlocks {
     }
 
     private static RegistryObject<Block> medley(String name, String... colours) {
-        // RDItems is read inside the suppliers only: it is initialised after this class.
+        // RDItems is read inside the suppliers only: it is initialized after this class.
         List<Supplier<Item>> peppers = Arrays.stream(colours).<Supplier<Item>>map(colour -> () -> RDItems.STUFFED_PEPPERS.get(colour).get()).toList();
         return BLOCKS.register(name, () -> new PepperMedleyBlock(Properties.copy(Blocks.CAKE), peppers));
     }

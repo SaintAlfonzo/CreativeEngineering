@@ -69,7 +69,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("CozyMessageGenderMixin", COZY),
             // Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
             Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")),
-            // From Creative Engineering 2026-11-06: Ore Excavation undo rules (excavation/)
+            // From Creative Engineering: Ore Excavation undo rules (excavation/)
             Map.entry("OreExcavationBlockHistoryMixin", ORE_EXCAVATION),
             Map.entry("OreExcavationCommandUndoMixin", ORE_EXCAVATION),
             Map.entry("OreExcavationHistoryMixin", ORE_EXCAVATION),

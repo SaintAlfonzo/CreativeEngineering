@@ -6,14 +6,14 @@
 // The exempt tags ship in this same file as the cobweb tier: without them spiders and modded bullets get web slowdown.
 
 var PASS = {
-	dense_crop: 'creativecompat:passthrough/dense_crop', // 0.75, 3+ of the 4 side neighbours 0.50, tall_half
+	dense_crop: 'creativecompat:passthrough/dense_crop', // 0.75, 3+ of the 4 side neighbors 0.50, tall_half
 	crop:       'creativecompat:passthrough/crop',       // 0.75 from half grown
 	wild_crop:  'creativecompat:passthrough/wild_crop',  // 0.75
 	vine:       'creativecompat:passthrough/vine',       // 0.75 while moving through
 	tall_plant: 'creativecompat:passthrough/tall_plant', // 0.75
 	cane:       'creativecompat:passthrough/cane',       // 0.50
 	rope:       'creativecompat:passthrough/rope',       // 0.75, not while climbing
-	cobweb:     'creativecompat:passthrough/cobweb',     // 0.50 / fall 0.85, 3+ of the 6 face neighbours 0.35 / 0.20, 6 of 6 surrounded
+	cobweb:     'creativecompat:passthrough/cobweb',     // 0.50 / fall 0.85, 3+ of the 6 face neighbors 0.35 / 0.20, 6 of 6 surrounded
 	bush:       'creativecompat:passthrough/bush',       // 0.36
 	layers:     'creativecompat:passthrough_layers',     // by height: 0.5 at the highest walk-through layer (5 of 8)
 	grass:      'creativecompat:passthrough/grass',      // 1.00 (listed so it can be tuned)

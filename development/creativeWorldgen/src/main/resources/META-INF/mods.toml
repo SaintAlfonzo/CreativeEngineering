@@ -208,7 +208,7 @@ mandatory=true
 versionRange="*"
 ordering="NONE"
 side="BOTH"
-# Geophilic Reforged (owner 2026-11-06: required with the other world generation mods)
+# Geophilic Reforged (owner: required with the other world generation mods)
 [[dependencies.creativeworldgen]]
 modId="geophilic_reforged"
 mandatory=true

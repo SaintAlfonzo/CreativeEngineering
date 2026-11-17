@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * {@code LeavesBlock.randomTick} (m_213898_) is where a decaying leaf (m_221385_: not persistent, distance 7) is
  * dropped; the pack's fruit leaves (Fruits Delight, Vinery) call super. {@code LeavesBlock.tick} (m_213897_) is the
- * scheduled tick a neighbour change (or {@code block.FastLeafDecayPort}) queues; it stores the recomputed distance,
+ * scheduled tick a neighbor change (or {@code block.FastLeafDecayPort}) queues; it stores the recomputed distance,
  * and {@link LeafDecayRange#afterTick} decides at its end. With CWGConfig [leaf_decay] onlyWhenDisturbed the
- * random-tick decay is cancelled; without it the random-tick decay only goes ahead past maxDistance
+ * random-tick decay is canceled; without it the random-tick decay only goes ahead past maxDistance
  * ({@link LeafDecayRange#keep}).
  */
 @Mixin(value = LeavesBlock.class, remap = false)

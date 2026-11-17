@@ -115,7 +115,7 @@ public final class ServerEvents {
         RpData d = RpData.get(player);
         DietEngine.forgetApplied(d);
         if (!e.isEndConquered()) {
-            // 8: death ages the whole window out and resets the foods-eaten counter; slots grey, choices and unlocks stay.
+            // 8: death ages the whole window out and resets the foods-eaten counter; slots gray, choices and unlocks stay.
             FoodList fl = FoodList.get(player);
             Map<com.tarinoita.solsweetpotato.tracking.FoodInstance, Integer> memory = FoodWindow.memory(fl);
             FoodWindow.moveOut(memory, FoodWindow.windowOldestFirst(memory));
@@ -156,7 +156,7 @@ public final class ServerEvents {
         }
     }
 
-    /** 9.3: nothing is cancelled; a removed diet instance comes back on the next tick. */
+    /** 9.3: nothing is canceled; a removed diet instance comes back on the next tick. */
     @SubscribeEvent
     public static void effectRemoved(MobEffectEvent.Remove e) {
         if (!(e.getEntity() instanceof ServerPlayer player)) return;

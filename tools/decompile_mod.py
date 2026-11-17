@@ -4,7 +4,7 @@
     python3 tools/decompile_mod.py mods/letsdo-vinery-forge-1.3.10.jar /tmp/vinery_src
 
 Runs Vineflower on the jar, then rewrites every m_NNNN_ / f_NNNN_ in the output .java files to its
-official name using ForgeGradle's cached srg_to_official mapping. Used to read mod behaviour
+official name using ForgeGradle's cached srg_to_official mapping. Used to read mod behavior
 (timings, slot rules, growth checks) for the feature writeups, e.g. feature_writeup/vinery.md.
 Class names in a reobfuscated mod jar are already official, so only members need renaming.
 """

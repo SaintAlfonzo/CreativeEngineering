@@ -26,13 +26,13 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 
 /**
- * Neighbour counts baked into the chunk (plan_post_scratch_1115b.md C2). A counted block's count is computed once on
+ * Neighbor counts baked into the chunk (plan_post_scratch_1115b.md C2). A counted block's count is computed once on
  * first use ({@link #count}) and kept in its chunk's {@link PassCountData}; it is not recounted per tick.
  *
  * <ul>
  *   <li><b>Invalidation</b>: {@code mixin/LevelChunkPassMixin} at RETURN of {@code LevelChunk#setBlockState} calls
  *       {@link #blockChanged} with the old and new state; when their tiers differ (a block broken or planted / placed,
- *       an explosion, a piston, a fluid replacing a crop) the entries of that block and its 6 face neighbours are
+ *       an explosion, a piston, a fluid replacing a crop) the entries of that block and its 6 face neighbors are
  *       dropped (6 faces cover the 4 sides too). A state change of the same tier (harvest to age 0, replant, growth)
  *       keeps them: tier membership, not growth, is what counts. Both sides: the client's block update packets set
  *       blocks through the same method.</li>
@@ -41,7 +41,7 @@ import net.minecraftforge.event.level.ChunkEvent;
  *       NBT on the server (entries for blocks that are gone left out), not saved on the client. The data also hangs
  *       on the chunk itself ({@link PassChunkHolder}) so a lookup is a field read.</li>
  *   <li><b>Chunk borders</b>: a chunk that loads drops its own edge entries and the facing edge entries of its loaded
- *       neighbours (a neighbour may have changed while it was away; the client fills chunks from packets without
+ *       neighbors (a neighbor may have changed while it was away; the client fills chunks from packets without
  *       {@code setBlockState}); the client also drops the loaded chunk's whole set.</li>
  * </ul>
  */
@@ -119,7 +119,7 @@ public final class PassCounts {
         }
     }
 
-    /** The block is in a tier that counts neighbours (with this side's values). */
+    /** The block is in a tier that counts neighbors (with this side's values). */
     private static boolean counted(BlockState state) {
         PassTier t = PassThrough.tierOf(state);
         return t != null && PassRule.needsCount(PassValues.local().tier(t));
@@ -139,7 +139,7 @@ public final class PassCounts {
     }
 
     /**
-     * The same-tier neighbour count of the block at {@code pos} with shape {@code mode}: the baked one, else counted
+     * The same-tier neighbor count of the block at {@code pos} with shape {@code mode}: the baked one, else counted
      * now ({@link PassThrough#neighbours}) and baked. A plain {@link BlockGetter} (the harness, a render region) is
      * always counted.
      */
@@ -181,7 +181,7 @@ public final class PassCounts {
 
     /**
      * RETURN of {@code LevelChunk#setBlockState} ({@code old} null: nothing changed). Drops the counts of the block
-     * and its 6 face neighbours when the tier at {@code pos} changed.
+     * and its 6 face neighbors when the tier at {@code pos} changed.
      */
     public static void blockChanged(LevelChunk chunk, BlockPos pos, @Nullable BlockState old, BlockState now) {
         if (!changesCounts(old, now)) return;
@@ -197,7 +197,7 @@ public final class PassCounts {
     }
 
     /**
-     * The change from {@code old} to {@code now} at one position can change neighbour counts: the tier there changed
+     * The change from {@code old} to {@code now} at one position can change neighbor counts: the tier there changed
      * (broken, planted, placed, replaced). A state change of the same block (harvest to age 0, replant, growth) or a
      * change between blocks of the same tier does not.
      */

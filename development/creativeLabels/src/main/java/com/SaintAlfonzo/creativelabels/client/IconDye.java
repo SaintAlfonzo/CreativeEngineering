@@ -7,9 +7,9 @@ import net.minecraft.world.item.DyeColor;
 
 /**
  * The dyed-icon ramp (sticky_notes.md 3.11, BRIEF 4 "IconDye ramp"): every opaque pixel of a rendered item icon is
- * replaced by a colour between the dye's dark and light tones chosen by the pixel's luminance, so the icon keeps
+ * replaced by a color between the dye's dark and light tones chosen by the pixel's luminance, so the icon keeps
  * its shading but reads in one colour. Light = {@link DyeColor#getFireworkColor()}, dark =
- * {@link DyeColor#getTextColor()}; when the text colour is not meaningfully darker than the firework colour (white,
+ * {@link DyeColor#getTextColor()}; when the text color is not meaningfully darker than the firework color (white,
  * and any dye where the two are equal) the dark end is the light one scaled by {@link #DARKEN}.
  *
  * <p>The pixel maths works on {@link NativeImage}'s packed ABGR ints (R in the low byte) through plain bit ops, so
@@ -18,19 +18,19 @@ import net.minecraft.world.item.DyeColor;
  */
 public final class IconDye {
 
-    /** Dark end = light * DARKEN when the dye's text colour gives no usable dark tone. */
+    /** Dark end = light * DARKEN when the dye's text color gives no usable dark tone. */
     public static final float DARKEN = 0.6f;
-    /** The text colour counts as "dark" only when its luminance is under this share of the light tone's. */
+    /** The text color counts as "dark" only when its luminance is under this share of the light tone's. */
     public static final float DARK_RATIO = 0.85f;
 
     private IconDye() {}
 
-    /** The light end of the ramp: the dye's firework colour (RGB). */
+    /** The light end of the ramp: the dye's firework color (RGB). */
     public static int light(DyeColor dye) {
         return dye.getFireworkColor() & 0xFFFFFF;
     }
 
-    /** The dark end of the ramp: the dye's text colour when it is darker, else the light end scaled by {@link #DARKEN}. */
+    /** The dark end of the ramp: the dye's text color when it is darker, else the light end scaled by {@link #DARKEN}. */
     public static int dark(DyeColor dye) {
         int light = light(dye);
         int text = dye.getTextColor() & 0xFFFFFF;
@@ -46,7 +46,7 @@ public final class IconDye {
         return r << 16 | g << 8 | b;
     }
 
-    /** The ramp colour for an RGB pixel: lerp(dark, light) by the pixel's luminance (0 = dark, 1 = light). */
+    /** The ramp color for an RGB pixel: lerp(dark, light) by the pixel's luminance (0 = dark, 1 = light). */
     public static int ramp(int rgb, int dark, int light) {
         float t = Mth.clamp(NoteColours.luminance(rgb), 0f, 1f);
         int r = Math.round(Mth.lerp(t, dark >> 16 & 0xFF, light >> 16 & 0xFF));

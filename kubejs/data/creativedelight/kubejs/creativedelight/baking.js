@@ -6,18 +6,18 @@
 // Block, GUI and recipe type: patcherMod oven/ package. Design and tests: feature_writeup/oven.md.
 //
 // Baking overhaul (oven.md 2.6): every cake, pie and cookie recipe of every mod is removed (slice -> whole recipes
-// stay) and each family is rebuilt on one shared base, flavoured by 2 of its fruit or flavour item:
+// stay) and each family is rebuilt on one shared base, flavored by 2 of its fruit or flavor item:
 //   cake base    raw: 3 flour/cornmeal + 2 egg + 2 sugar, or 3 dough + egg + 2 sugar (manual craft)
 //                baked: 2 flour/cornmeal + 2 egg + 2 sugar, or 2 dough + egg + 2 sugar, or a raw base (oven)
 //   pie crust    3 flour/cornmeal + egg + milk, or 3 dough + milk -> 3 (manual craft)
 //   frosting     sugar + 2 milk -> 2 (manual craft), or the frosting fluid (mixer, compactor, spout)
 //   cookie dough dough + 2 sugar (manual craft)
-//   cake         baked base + frosting + 2 flavour (manual craft), or raw base + frosting + 2 flavour (oven).
+//   cake         baked base + frosting + 2 flavor (manual craft), or raw base + frosting + 2 flavor (oven).
 //                Plain cake: 3 frosting, or 2 frosting + a red berry.
 //   pie          oven: crust + 3 fruit + 2 sugar (honey bottles count as sugar), or crust + a full can of that
 //                pie's filling. Filling: 3 fruit + 2 sugar in the cooking pot, an empty can in the container slot.
 //                Filling + crust also crafts by hand (creativedelight/canning.js, from the can json's "pie" field).
-//   cookie       oven only: cookie dough + 2 flavour -> 12
+//   cookie       oven only: cookie dough + 2 flavor -> 12
 //   hand pie     oven only: pie crust + the mod's filling -> 1 (baking sheet)
 // "Manual craft" = an NCH id ending in _manual_only, which Create's mixer and mechanical crafter skip. The bases have
 // no Create or IE machine recipe (every other mod's is removed below), except frosting through its fluid.
@@ -45,7 +45,7 @@ ServerEvents.recipes(e => {
 
 		var CAKE = { exp: 0.1, time: 200, tool: i.t_bakeware_cake_pan }
 
-		// [result key, flavour (2 per cake / pie / batch of cookies), pie filling can key (null: none) or a second cake / cookie flavour]
+		// [result key, flavor (2 per cake / pie / batch of cookies), pie filling can key (null: none) or a second cake / cookie flavor]
 		// G5 begin: CAKES, PIES and COOKIES only reach the global.CD.food family calls below, which skip absent mods' ids
 		var CAKES = [
 			['adzuki_cake', i.roasted_adzuki_beans], ['banana_cake', i.t_fruits_banana],

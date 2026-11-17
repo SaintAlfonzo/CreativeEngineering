@@ -15,8 +15,8 @@ import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackBlockEntity;
 import net.p3pp3rf1y.sophisticatedbackpacks.init.ModBlocks;
 
 /**
- * Replaces Sophisticated Backpacks' block colour handler (registered last, so it wins) with one that gives a
- * skinned backpack the skin block's colours and otherwise colours cloth and border exactly as SB does.
+ * Replaces Sophisticated Backpacks' block color handler (registered last, so it wins) with one that gives a
+ * skinned backpack the skin block's colors and otherwise colors cloth and border exactly as SB does.
  */
 @Mod.EventBusSubscriber(modid = CreativeEquipment.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class BackpackSkinColors {

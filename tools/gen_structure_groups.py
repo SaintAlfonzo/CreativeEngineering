@@ -1216,7 +1216,7 @@ def groups_readme():
                           'structure is the only member that fits the biome, it gets every slot x its frequency. '
                           'fit_base: written by --fit-rates for structures in a biome fit (biome_fits.json) = the '
                           'weight and frequency it had on its mod\'s own biome list; --fit-rates solves from it. '
-                          'fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbours crowd '
+                          'fit_keep: true lets --fit-rates raise the weight above fit_base when new neighbors crowd '
                           'the structure\'s biomes, so it keeps its density (the towers); others are capped instead; '
                           'fit_keep: false = --fit-rates never touches it (set by --strip-weights). '
                           'tuned: "<what, when, who decided>" marks a weight or frequency a person chose; '
@@ -1380,7 +1380,7 @@ def fit_rates(pack, doc, passes=4):
                                {max(1, js_round(wb * x / 24)) for x in range(1, 25)})
                 feasible = [w for w in cands if mean_at(sid, w, 1.0) >= T]
                 if not feasible and v.get('fit_keep'):
-                    # fit_keep: new neighbours crowd its biomes; take the smallest weight above the base that
+                    # fit_keep: new neighbors crowd its biomes; take the smallest weight above the base that
                     # still reaches the density (frequency stays near 1, so few slots are won and left empty)
                     w = wb
                     while mean_at(sid, w, 1.0) < T and w < wb * KEEP_MAX:
@@ -1421,7 +1421,7 @@ def fit_rates(pack, doc, passes=4):
 
 
 def strip_weights(pack, doc, only=()):
-    """--strip-weights: weights nobody chose go back to MEDIAN_WEIGHT (user 2026-10-19: "strip all structure weights
+    """--strip-weights: weights nobody chose go back to MEDIAN_WEIGHT (owner, 2026-10-19: "strip all structure weights
     unless an explicit increase or decrease note"). Skipped: members with "tuned", metas and replacements (weight 1 by
     design). Frequencies stay (they hold the migration's rarity; a later pass may reset them after a census).
     Returns (changed lines, [(sid, group, old weight, new weight, frequency)])."""

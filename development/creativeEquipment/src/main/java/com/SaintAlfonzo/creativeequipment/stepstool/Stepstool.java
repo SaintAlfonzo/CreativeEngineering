@@ -67,7 +67,7 @@ public final class Stepstool {
             new ResourceLocation(com.SaintAlfonzo.creativeequipment.CreativeEquipment.MOD_ID, "stepstool"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
-    /** Where a player's stool stands: its bottom centre (the player's feet when they stepped up) and the stool item. */
+    /** Where a player's stool stands: its bottom center (the player's feet when they stepped up) and the stool item. */
     public record Anchor(double x, double y, double z, ItemStack stool) {
         /** The whole block the stool fills: what its owner stands on, and what is drawn. */
         public AABB box() {

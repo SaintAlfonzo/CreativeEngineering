@@ -24,7 +24,7 @@ import java.util.Map;
  * KubeJS startup scripts shipped in mod jars (creative_delight.md 10.5, 10.6). A jar puts them under
  * {@code kubejs_startup/} at its root (not a resource path, so no resource or data pack sees them); each such jar
  * becomes one script pack named after its first mod id. Files inside a pack sort by their {@code // priority:}
- * header and honour {@code // requires:} and {@code // packmode:}, exactly as in the pack folder (the files go
+ * header and honor {@code // requires:} and {@code // packmode:}, exactly as in the pack folder (the files go
  * through KubeJS's own {@code loadFile}).
  *
  * Pack order (the map KubeJS runs in insertion order):

@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  *   <li>{@code # title} -> TITLE, and a {@code Released yyyy-mm-dd} paragraph right after it -> DATE</li>
  *   <li>{@code ## family} -> HEADING, with the item of an {@code <!-- icon: ns:id -->} comment as its icon</li>
  *   <li>bullets -> BULLET with a depth (0, or 1 for an indented sub-bullet); a leading {@code **New:**},
- *       {@code **Changed:**}, {@code **Fixed:**} or {@code **Removed:**} is coloured</li>
+ *       {@code **Changed:**}, {@code **Fixed:**} or {@code **Removed:**} is colored</li>
  *   <li>other paragraphs -> PARAGRAPH, {@code ---} -> RULE</li>
  *   <li>inline: bold, italic, {@code `code`} in gold, links blue and underlined (http/https open on click)</li>
  * </ul>
@@ -115,7 +115,7 @@ public final class ChangelogMarkdown {
         }
     }
 
-    /** A bullet's first paragraph, with its {@code **Label:**} coloured when it starts with one. */
+    /** A bullet's first paragraph, with its {@code **Label:**} colored when it starts with one. */
     private static MutableComponent labelled(Node paragraph) {
         Node first = paragraph.getFirstChild();
         if (first instanceof StrongEmphasis strong) {

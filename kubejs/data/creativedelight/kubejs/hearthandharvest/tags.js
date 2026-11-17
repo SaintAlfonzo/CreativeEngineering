@@ -18,7 +18,7 @@ ServerEvents.tags('item', e => {
 	t.addTag(e, i.t_seeds_raspberry, i.raspberry_pips)
 	t.add(e, [i.t_berries, i.t_fruits_berries, i.t_fox_food], i.raspberry)
 
-	// Watering can fertiliser, loaded from the off hand (4.0). 1.4.1 also lists its Manure (not ported yet).
+	// Watering can fertilizer, loaded from the off hand (4.0). 1.4.1 also lists its Manure (not ported yet).
 	t.add(e, i.t_bonemeal_substitutes, [i.bonemeal, i.manure])
 	// Hops vine (R5, plan_small_fixes_1116.md): these grow it one age like bone meal; absent mods are skipped by the helper
 	t.add(e, i.t_bonemeal_like, [i.tree_fertilizer, i.botania_fertilizer, i.fertilizer, i.fertilizer_bag, i.organic_mash])

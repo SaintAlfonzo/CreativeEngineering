@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 
 /**
- * {@code creativelabels:note_copy} (sticky_notes.md 3.6): one written note + exactly eight blank notes (any colour
- * or special) -> nine copies of the written one (its text, colour and special look).
+ * {@code creativelabels:note_copy} (sticky_notes.md 3.6): one written note + exactly eight blank notes (any color
+ * or special) -> nine copies of the written one (its text, color and special look).
  */
 public class NoteCopyRecipe extends CustomRecipe {
 

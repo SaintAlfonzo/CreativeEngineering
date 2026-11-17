@@ -368,14 +368,14 @@ KUBEJS_CLASSES = [
 # a changed default). Unmatched files are functional. A player file never becomes a removal: whatever the
 # player has stays in place even when the pack stops shipping it.
 CONFIG_CLASSES = [
-    ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behaviour; pushed once with 1.0.3
+    ('trashslot-common.toml', 'player', '1.0.3'),   # TrashSlot deletion behavior; pushed once with 1.0.3
     ('creativecommon/changelog_seen.txt', 'player'),  # changelog read marker (also git-ignored)
     ('DistantHorizons.toml', 'player', '1.1.04'),    # LOD distance/quality + DH threads and server request distances; pushed once with 1.0.4 and again with 1.1.04
     ('jei/blacklist.cfg', 'functional'),            # hidden ingredients (pack-defined)
     ('jei/recipe-category-sort-order.ini', 'functional'),   # pack's recipe tab order
     ('jei/ingredient-list-mod-sort-order.ini', 'functional'),  # pack's ingredient list order by mod
     ('jei/ingredient-list-type-sort-order.ini', 'functional'), # ... and by ingredient type
-    ('jei/*', 'player'),                            # JEI client options, colours, per-world bookmarks
+    ('jei/*', 'player'),                            # JEI client options, colors, per-world bookmarks
     ('*-client.*', 'player'),                       # every mod's client config (HUD, rendering, keys, sounds)
     ('*_client.*', 'player'),
     ('xaero/*/common.cfg', 'functional'),           # Xaero server rules (what maps/radar may show) ...
@@ -390,7 +390,7 @@ CONFIG_CLASSES = [
     ('spyglass-improvements/*', 'player'),
     ('betterf3.toml', 'player'),                    # F3 screen layout
     ('betterthirdperson-common.toml', 'player'),    # camera
-    ('detailarmorbar.json', 'player'),              # armor bar look (the pack's colours are set in code)
+    ('detailarmorbar.json', 'player'),              # armor bar look (the pack's colors are set in code)
     ('enchdesc.json', 'player'),                    # enchantment tooltips
     ('MouseTweaks.cfg', 'player'),
     ('notenoughanimations.json', 'player'),

@@ -237,7 +237,7 @@ function zfwLoot(level) {
 	var r = zfwRoll(level, ripe, N), col = { red: 0, green: 0, yellow: 0 }
 	Object.keys(r).forEach(id => Object.keys(col).forEach(c => { if (id.indexOf('pepper') >= 0 && id.indexOf(c) >= 0 && id.indexOf('seed') < 0) col[c] += r[id] }))
 	var per = Object.keys(col).map(c => c + ' ' + (col[c] / N).toFixed(3))
-	zfwCheck('SQ-CD-01 bell peppers about 0.48 of each colour per ripe harvest',
+	zfwCheck('SQ-CD-01 bell peppers about 0.48 of each color per ripe harvest',
 		Object.keys(col).every(c => col[c] / N > 0.40 && col[c] / N < 0.56), per.join(', ') + ' ' + JSON.stringify(r))
 	var unripe = zfwRoll(level, zfwStateAt(level, 'rusticdelight:bell_peppers', { age: '3' }), 100)
 	zfwCheck('SQ-CD-01 unripe bell peppers drop no pepper',

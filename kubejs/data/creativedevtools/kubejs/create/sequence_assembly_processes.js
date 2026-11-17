@@ -87,7 +87,7 @@ ServerEvents.recipes(e => {
 		e.custom({ type: 'vintageimprovements:curving', mode: 1, ingredients: [{ item: inc }], results: [{ item: inc }] }),
 		// hammerBlows is required (how many Helve Hammer hits) - 1 is the minimum.
 		e.custom({ type: 'vintageimprovements:hammering', hammerBlows: 1, ingredients: [{ item: inc }], results: [{ item: inc }] }),
-		// springColor is required - reuse the incomplete item's own default grey tint.
+		// springColor is required - reuse the incomplete item's own default gray tint.
 		e.custom({ type: 'vintageimprovements:coiling', springColor: '808080', ingredients: [{ item: inc }], results: [{ item: inc }] }),
 		e.custom({ type: 'vintageimprovements:centrifugation', ingredients: [{ item: inc }], results: [{ item: inc }] })
 

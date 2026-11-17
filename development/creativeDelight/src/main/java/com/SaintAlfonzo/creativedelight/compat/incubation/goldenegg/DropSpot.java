@@ -11,7 +11,7 @@ import java.util.List;
  * {@link GoldenGooseEgg} answers the {@link Probe} questions from the level.
  *
  * Candidates are the spots within {@link #RANGE} blocks horizontally, one block up or down, nearest first.
- * A spot's score is the number of solid blocks among its 8 horizontal neighbours at foot and head height
+ * A spot's score is the number of solid blocks among its 8 horizontal neighbors at foot and head height
  * (0..16). The first candidate scoring 0 wins, else the lowest score; a candidate must beat the goose's own
  * spot, otherwise the egg lands where the goose stands.
  */
@@ -47,7 +47,7 @@ public final class DropSpot {
 
     private DropSpot() {}
 
-    /** Solid blocks among the 8 horizontal neighbours of the spot, at foot and head height. */
+    /** Solid blocks among the 8 horizontal neighbors of the spot, at foot and head height. */
     public static int score(Probe probe, int dx, int dy, int dz) {
         int walls = 0;
         for (int y = dy; y <= dy + 1; y++)

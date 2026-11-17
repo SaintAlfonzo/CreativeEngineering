@@ -57,7 +57,7 @@ import java.util.concurrent.atomic.LongAdder;
  * <p>Extra bee-nest trees (bee_nests.json {@code trees}) are plain placed features + forge:add_features written by
  * bee_nests.js; they need nothing here.
  *
- * <p>Counters (trees and nests per biome of the tree's origin, chunks per biome at the chunk's centre surface) run
+ * <p>Counters (trees and nests per biome of the tree's origin, chunks per biome at the chunk's center surface) run
  * whether or not rules exist; /dumpbeenests writes them with the rules to kubejs/exported/bee_nests.json. They only
  * see chunks generated since the server started (or since {@code /dumpbeenests reset}).
  */
@@ -236,7 +236,7 @@ public record BeeNests(List<Rule> rules) implements BiomeModifier {
 		if (t != null) counts(t.biome).nests.increment();
 	}
 
-	/** ChunkGenerator.applyBiomeDecoration HEAD: the chunk counts for the biome at its centre surface. */
+	/** ChunkGenerator.applyBiomeDecoration HEAD: the chunk counts for the biome at its center surface. */
 	public static void chunkDecorated(WorldGenLevel level, ChunkAccess chunk) {
 		int x = chunk.getPos().getMinBlockX() + 8, z = chunk.getPos().getMinBlockZ() + 8;
 		int y = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x & 15, z & 15);

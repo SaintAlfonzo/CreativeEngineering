@@ -19,7 +19,7 @@ import java.util.List;
  * mirror): clear up to {@code start} blocks past the portal plane, full fog at {@code end}. Fog is measured from the
  * camera, so both are offset by the camera's distance to that portal; for an unscaled portal the drawing camera is
  * that far from the far-side plane too. Never pushes fog farther out than vanilla set it (water, blindness, the
- * render distance stay). The fog colour is the drawn dimension's own (IP swaps it per dimension).
+ * render distance stay). The fog color is the drawn dimension's own (IP swaps it per dimension).
  */
 public final class PortalFog {
 

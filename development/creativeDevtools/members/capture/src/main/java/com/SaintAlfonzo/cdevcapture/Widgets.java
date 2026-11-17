@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * Widget actions (TX-05, client_capture.md 2.2), resolved from the open screen, not from screen pixels. Clicks go
- * through the screen's own {@code mouseClicked} / {@code mouseReleased} at the widget's or slot's centre, so focus,
+ * through the screen's own {@code mouseClicked} / {@code mouseReleased} at the widget's or slot's center, so focus,
  * shift-click and creative-tab handling are the screen's own; the virtual mouse is parked there too (hover state).
  *
  * <pre>
@@ -34,7 +34,7 @@ import java.util.Set;
  * {"type_into": REF | null, "text": "...", "clear": true, "enter": false}
  *                                                        clicks REF (null = keep the focused one), clears an EditBox,
  *                                                        types each character through the screen's charTyped
- * {"scroll": delta, "at": REF} or {"scroll": d, "x": gx, "y": gy}   mouseScrolled there (default screen centre)
+ * {"scroll": delta, "at": REF} or {"scroll": d, "x": gx, "y": gy}   mouseScrolled there (default screen center)
  * {"click": {"x": gx, "y": gy} | {"px": wx, "py": wy}, "button": 0}  raw click, GUI or window pixels
  * {"press": "escape" | "e" | "enter" | "key.inventory" ..., "shift": false}
  *                                                        a key: to the open screen (keyPressed / keyReleased), or with
@@ -105,7 +105,7 @@ final class Widgets {
         String want = ref.getAsString().trim().toLowerCase(Locale.ROOT);
         for (Entry e : ws) if (label(e).equals(want)) return e;
         for (Entry e : ws) if (!want.isEmpty() && label(e).contains(want)) return e;
-        throw new Steps.StepFailed("no widget labelled \"" + ref.getAsString() + "\"");
+        throw new Steps.StepFailed("no widget labeled \"" + ref.getAsString() + "\"");
     }
 
     private static boolean isA(Class<?> c, String simple) {

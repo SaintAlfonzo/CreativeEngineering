@@ -158,7 +158,7 @@ public final class MonsterBoxVault {
 		List<UUID> wave = box.creativeengineering$wave();
 		wave.clear();
 		long claim = pos.asLong();
-		// Quark pushes each mob a little from the box centre; they are in the level already.
+		// Quark pushes each mob a little from the box center; they are in the level already.
 		for (Mob mob : level.getEntitiesOfClass(Mob.class, new AABB(pos).inflate(4),
 				m -> m.getPersistentData().getBoolean(QUARK_SPAWNED) && !m.getPersistentData().contains(CLAIM_KEY))) {
 			mob.getPersistentData().putLong(CLAIM_KEY, claim);

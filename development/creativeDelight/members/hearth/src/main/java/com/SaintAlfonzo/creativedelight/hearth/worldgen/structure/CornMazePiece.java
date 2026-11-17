@@ -31,8 +31,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * The maze: walls of mature Corn Delight corn on farmland (a dirt floor would break the corn on the next neighbour
- * update), 1.4.1's hay, pumpkin and scarecrow decor, chests in dead ends and in the centre, a gate at each end.
+ * The maze: walls of mature Corn Delight corn on farmland (a dirt floor would break the corn on the next neighbor
+ * update), 1.4.1's hay, pumpkin and scarecrow decor, chests in dead ends and in the center, a gate at each end.
  * Corn Delight's corn is two blocks high (1.4.1's stalk three) and has no collision.
  */
 public class CornMazePiece extends StructurePiece {

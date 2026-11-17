@@ -98,7 +98,7 @@ public class CreativeCompat {
             ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.COMMON_SECTIONS);
         // [leaf_piles] slowFromLayers -> [surface.passthrough.leaf_pile] minLayers (plan_passthrough.md 3.1), then the
-        // neighbour model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
+        // neighbor model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
         migrateLeafPiles();
         migratePassThrough();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
@@ -116,7 +116,7 @@ public class CreativeCompat {
         if (FMLEnvironment.dist == Dist.CLIENT && ModList.get().isLoaded("distanthorizons")) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.DhDimensionView.class);
         }
-        // One deep red fog colour for the whole Nether (compat/NetherFogColour, perf.md 19.3)
+        // One deep red fog color for the whole Nether (compat/NetherFogColour, perf.md 19.3)
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.NetherFogColour.class);
         }
@@ -151,7 +151,7 @@ public class CreativeCompat {
             PassThrough.clearCache();
             com.SaintAlfonzo.creativecompat.surface.PassCounts.onTagsUpdated();
         });
-        // neighbour counts baked into the chunk (surface/PassCounts, plan_post_scratch_1115b.md C2): a chunk capability,
+        // neighbor counts baked into the chunk (surface/PassCounts, plan_post_scratch_1115b.md C2): a chunk capability,
         // saved on the server; block changes drop them through mixin/LevelChunkPassMixin
         modEventBus.addListener(com.SaintAlfonzo.creativecompat.surface.PassCounts::registerCaps);
         MinecraftForge.EVENT_BUS.addGenericListener(net.minecraft.world.level.chunk.LevelChunk.class,
@@ -273,7 +273,7 @@ public class CreativeCompat {
     }
 
     /**
-     * RING / CUBE neighbours become SIDES / FACES, the old denseFrom default 6 becomes 3, and the leaf_pile table moves
+     * RING / CUBE neighbors become SIDES / FACES, the old denseFrom default 6 becomes 3, and the leaf_pile table moves
      * into [surface.passthrough.layers] (surface/PassConfigMigration). Before Forge loads the file.
      */
     private static void migratePassThrough() {

@@ -21,7 +21,7 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 /**
  * Pungent (mobs flee the holder) and Tempting (animals walk to it). Fix B10: upstream gives every mob two goals that each
- * scan a 17-block box every second; here each holder looks for its neighbours once a second, and a mob only gets a goal
+ * scan a 17-block box every second; here each holder looks for its neighbors once a second, and a mob only gets a goal
  * the first time a holder is near it. With no holder in the world this costs nothing.
  */
 public final class EffectAuras {

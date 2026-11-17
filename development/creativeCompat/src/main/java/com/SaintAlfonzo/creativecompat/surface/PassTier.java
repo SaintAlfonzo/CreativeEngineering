@@ -55,7 +55,7 @@ public enum PassTier {
     }
 
     /**
-     * Which neighbours count toward density (plan_post_scratch_1115b.md C1): none, the 4 side-adjacent cells on the
+     * Which neighbors count toward density (plan_post_scratch_1115b.md C1): none, the 4 side-adjacent cells on the
      * same layer, or the 6 face-adjacent cells. {@code RING} and {@code CUBE} are the pre-2026-11-15 names, kept only
      * as aliases for code that still names them ({@link #canonical()}); the config accepts the three new names, and
      * {@link PassConfigMigration} rewrites an old file.
@@ -73,7 +73,7 @@ public enum PassTier {
             this.max = max;
         }
 
-        /** A full count: every neighbour cell is in the tier. */
+        /** A full count: every neighbor cell is in the tier. */
         public int max() {
             return max;
         }
@@ -93,7 +93,7 @@ public enum PassTier {
         public static final java.util.List<Neighbours> CONFIG = java.util.List.of(NONE, SIDES, FACES);
     }
 
-    /** What a full neighbour count does (plan 4.3). */
+    /** What a full neighbor count does (plan 4.3). */
     public enum Surround { NONE, WEB }
 
     /** What happens to dropped items and orbs inside the tier (plan 4.2). */

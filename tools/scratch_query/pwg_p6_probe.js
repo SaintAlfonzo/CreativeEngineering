@@ -15,7 +15,7 @@
 //                             (type and remaining time) when the item is being processed (read from the saved entity:
 //                             ForgeData/CreateData; KubeJS's getPersistentData is its own tag, r1113 pwg10)
 //   chute X Y Z               Create chute item motion (pull / push from a fan below / above)
-//   light X Y Z               light fixture or factory light: power level, bulb (item, temperature, burned, colour),
+//   light X Y Z               light fixture or factory light: power level, bulb (item, temperature, burned, color),
 //                             the fixture's own light emission (block state), block light at the fixture and, for a
 //                             factory light, the light blocks below it
 //   bulb X Y Z ITEM           put bulb ITEM into the fixture at X Y Z (through the block entity's saved data, as a

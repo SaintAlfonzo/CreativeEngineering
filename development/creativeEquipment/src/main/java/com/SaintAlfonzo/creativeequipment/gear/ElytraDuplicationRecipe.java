@@ -18,13 +18,13 @@ import net.minecraft.world.level.Level;
  * untouched - enchantments and durability intact - while the catalyst is consumed and a
  * brand-new item (recipe-defined, normally a plain vanilla Elytra) is produced as output.
  *
- * <p>Modelled on Quark's own Dragon Scales module - see
+ * <p>Modeled on Quark's own Dragon Scales module - see
  * {@code DecompiledMods/Quark-3.4-418/vazkii/quark/content/tweaks/recipe/ElytraDuplicationRecipe.class}.
  * That recipe hardcodes both {@code quark:dragon_scale} as the catalyst and vanilla
- * {@code minecraft:elytra} as the output in Java, so it can't recognise this pack's own
+ * {@code minecraft:elytra} as the output in Java, so it can't recognize this pack's own
  * {@code dragonloot:dragon_scale} (Quark's own dragon scale item is unobtainable here -
  * see creativecommon/_lib/removed_items.js). This class re-implements the same
- * matches()/assemble()/getRemainingItems() behaviour, but reads the catalyst ingredient
+ * matches()/assemble()/getRemainingItems() behavior, but reads the catalyst ingredient
  * and the result item from the recipe JSON instead of naming either in Java, so it isn't
  * tied to one mod's items. Datapack / KubeJS type id: {@code creativeequipment:elytra_duplication}
  * (see NCH.elytraDuplication in kubejs/startup_scripts/func/neoCraftHelper.js).

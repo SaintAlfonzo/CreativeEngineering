@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Supplementaries' "dye blocks" tweak ({@code [tweaks.dye_blocks]}) swaps any block in a Moonlight
- * 16-colour set for its dyed sibling with {@code setBlockAndUpdate}, without carrying the block entity
+ * 16-color set for its dyed sibling with {@code setBlockAndUpdate}, without carrying the block entity
  * over (its soap twin does). So dyeing a Supp Squared sack deleted its contents, shulker boxes and
  * presents would too, banners lose their patterns, a bed changes one half, and Farmer's Delight canvas
- * signs (a colour set) turned into another colour and lost their text before vanilla's sign code could
+ * signs (a color set) turned into another color and lost their text before vanilla's sign code could
  * dye the text.
  *
  * <p>Here the tweak passes on every block with a block entity and on {@code #creativecompat:no_world_dye},

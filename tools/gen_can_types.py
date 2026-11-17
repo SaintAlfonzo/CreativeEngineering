@@ -349,7 +349,7 @@ EXPLICIT = [
     ('meal', 'canned_cheese_pasta', 'Canned Cheese Pasta', ['cheese_pasta'], False),
     ('meal', 'canned_pad_thai', 'Canned Pad Thai', ['pad_thai'], False),
     ('meal', 'canned_truffle_pasta', 'Canned Truffle Pasta', ['truffle_pasta'], False),   # Fungi Delight
-    # mashed potatoes, split (merges/dishes #2, owner 2026-11-01: both cannable and saltable)
+    # mashed potatoes, split (merges/dishes #2, owner: both cannable and saltable)
     ('meal', 'canned_mashed_potatoes', 'Canned Mashed Potatoes', ['mashed_potatoes'], False),
     ('meal', 'canned_mashed_sweet_potatoes', 'Canned Mashed Sweet Potatoes', ['veggiesdelight_mashed_potatoes'], False),
 

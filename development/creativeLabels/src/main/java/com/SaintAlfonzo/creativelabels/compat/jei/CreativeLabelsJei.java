@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * JEI (sticky_notes.md 3.6, BRIEF 5): the plain note and the four specials are separate entries (subtype on
- * {@code CreativeLabels.Special}; dyed notes are not, like leather armour), and the special recipes, which JEI
+ * {@code CreativeLabels.Special}; dyed notes are not, like leather armor), and the special recipes, which JEI
  * can't show from their {@code CustomRecipe} matchers, get example {@link ShapelessRecipe}s under
  * {@code creativelabels:jei/...}: one per dye (plain note + dye), one per special (plain note + ingredient), the
  * copy (one written + eight blank -> nine) and the erase (written note + eraser -> blank note).

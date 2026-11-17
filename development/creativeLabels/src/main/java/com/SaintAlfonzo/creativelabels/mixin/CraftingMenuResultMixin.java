@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Labelled items can't be crafted with (sticky_notes.md 3.8, Q6): while {@code blockLabelledCrafting} is on, a grid
+ * Labeled items can't be crafted with (sticky_notes.md 3.8, Q6): while {@code blockLabelledCrafting} is on, a grid
  * holding any stack with {@code CreativeLabels.Lines} gives no result. {@code slotChangedCraftingGrid} is the shared
  * result update of the crafting table and the inventory grid (both menus call this static); it only does work on
  * the server, so the head injection cancels there and clears the result slot the way vanilla does when nothing

@@ -13,7 +13,7 @@ import java.util.List;
  * dark outline), and a 1px drop shadow above and below the fill. The detector looks for that shape
  * on the row through the middle of the title text; nothing here knows any texture's coordinates, so
  * a pack update or a different plaque pack still works as long as the fill is a light, warm, low
- * saturation band. Vanilla's neutral grey panels never match.
+ * saturation band. Vanilla's neutral gray panels never match.
  *
  * <p>Stretching never scales anything. The plaque's plain middle is tiled over the gap, then the end
  * piece (last two fill columns plus the cap) is copied to the new end. Only the side(s) the text

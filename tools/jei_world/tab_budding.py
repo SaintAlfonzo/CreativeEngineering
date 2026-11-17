@@ -117,7 +117,7 @@ def _drop_ing(d):
 
 
 def _harvest_row(ctx, cache, block_ids, requires, extra_notes=()):
-    """Cluster (or any stage) -> its drops, labelled by the tool each needs."""
+    """Cluster (or any stage) -> its drops, labeled by the tool each needs."""
     table = _loot(ctx, block_ids[0], cache)
     found = drops(table)
     if not found:

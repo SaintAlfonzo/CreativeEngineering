@@ -51,7 +51,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 
 /**
  * {@link WorldJeiDump} part {@code tool_pairs}: what an axe strips / scrapes / un-waxes, what honeycomb waxes, and
- * Supplementaries' in-world dye and soap colour changes. Read by tools/jei_world/tab_tools.py.
+ * Supplementaries' in-world dye and soap color changes. Read by tools/jei_world/tab_tools.py.
  *
  * <p>Axe actions go through {@code BlockState#getToolModifiedState(ctx, action, simulate=true)}, so vanilla tables,
  * block overrides (Immersive Weathering's Rustable mixin, Create, Quark...) and {@code BlockToolModificationEvent}
@@ -62,7 +62,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
  * <p>Output: {@code strip/scrape/wax_off/honeycomb: [{from, to, age?, bark?}]}, {@code color_sets: {key: {colors:
  * {dye: id}, base: id?}}}, {@code dye_blocked: [id]} (block entity or {@code #creativeengineering:no_world_dye}, see
  * SupplementariesDyeBlocksMixin), {@code soap: [{from, to, how}]}, {@code soap_washable: [id]} (blocks with their own
- * soap behaviour), {@code config: {...}} (live Supplementaries / Immersive Weathering switches).
+ * soap behavior), {@code config: {...}} (live Supplementaries / Immersive Weathering switches).
  */
 final class WorldJeiToolPairs {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -222,7 +222,7 @@ final class WorldJeiToolPairs {
         out.add("color_sets", sets);
         out.add("dye_blocked", dyeBlocked);
 
-        // Soap: SoapWashableHelper.tryWash order is IWashable, then colour (blacklist, no beds), then un-oxidise.
+        // Soap: SoapWashableHelper.tryWash order is IWashable, then color (blacklist, no beds), then un-oxidise.
         Class<?> washable = classOrNull("net.mehvahdjukaar.moonlight.api.block.IWashable");
         Method tryParse = method(classOrNull("net.mehvahdjukaar.supplementaries.common.misc.SoapWashableHelper"),
                 "tryParse", BlockState.class);

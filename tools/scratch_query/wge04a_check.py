@@ -13,7 +13,7 @@ import sys
 
 WEIGHT = {'acacia': 30, 'birch': 24, 'cherry': 51, 'desert': 3, 'end': 3, 'jungle': 30, 'mangrove': 15, 'oak_wood': 15}
 NEW_PER = {'acacia': 115, 'birch': 169, 'cherry': 137, 'desert': 355, 'jungle': 91, 'mangrove': 765, 'oak_wood': 190, 'end': 232}
-NOTE = 'weight x3 by hand (user, 2026-11-01)'
+NOTE = 'weight x3 by hand (owner, 2026-11-01)'
 
 
 def walk(x):

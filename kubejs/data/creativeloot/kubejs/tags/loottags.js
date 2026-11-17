@@ -8,7 +8,7 @@ var i = global.item
 var b = global.blocks
 
 ServerEvents.tags('item', e => {
-	// every chalk stick (nested #chalk:chalks, so new colours follow) + the chalk box
+	// every chalk stick (nested #chalk:chalks, so new colors follow) + the chalk box
 	t.add(e, i.t_loot_chalk, [i.t_chalks, i.chalk_box])
 
 	// golden food: golden apple / carrot + Golden Food's plain golden foods (the enchanted ones and

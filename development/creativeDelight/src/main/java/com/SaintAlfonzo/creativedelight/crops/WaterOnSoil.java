@@ -31,7 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * <p>Taken: a click on the soil's top face, or on a plant without collision (a crop) standing on it, while not sneaking
  * and only when something in reach is still dry. Otherwise the click is left alone, so a sneak click, a side-face click
  * (placing water in a channel) or a click on wet soil keeps the vanilla bucket and bottle. Runs at HIGH so the
- * soaking wins over Quark's right-click harvest (which skips cancelled clicks) and Immersive Weathering's own
+ * soaking wins over Quark's right-click harvest (which skips canceled clicks) and Immersive Weathering's own
  * single-block bucket on Fertile Soil. Both sides decide the same from the block states; only the server changes them.
  * Creative mode keeps the full bucket or bottle.
  */

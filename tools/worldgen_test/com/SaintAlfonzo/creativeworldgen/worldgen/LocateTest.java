@@ -34,7 +34,7 @@ public class LocateTest {
 		public StructureType<?> type() { return null; }
 	}
 
-	/** Its name is what DistantClip recognises Distant Horizons' WorldGenRegion by. */
+	/** Its name is what DistantClip recognizes Distant Horizons' WorldGenRegion by. */
 	static class DhLitWorldGenRegionLike {}
 	static class SubRegion extends DhLitWorldGenRegionLike {}
 
@@ -79,7 +79,7 @@ public class LocateTest {
 		check(s != null && s.loads == 3, "3 loads counted");
 		check(s != null && s.misses == 2, "2 misses before the hit (the hit's own load is not a miss)");
 		check(s != null && s.saved[LocateStats.Stage.BIOME.ordinal()] == 1, "the biome stage's \"no\" counted");
-		check(s != null && "ns:tower".equals(s.label), "labelled by the structure id");
+		check(s != null && "ns:tower".equals(s.label), "labeled by the structure id");
 		check(s != null && s.found != null && s.found.getX() == 500 && "ns:tower".equals(s.foundId), "the hit's position and id kept");
 		LocateStats.release(set);
 
@@ -163,8 +163,8 @@ public class LocateTest {
 		check(DistantClip.roll(new XoroshiroRandomSource(1L).forkPositional(), 37, 41, 24) != DistantClip.roll(random, 37, 41, 24),
 				"another seed gives another floor");
 
-		// 7. DistantClip: Distant Horizons' region is recognised by class name, subclasses too; others are not
-		check(DistantClip.isDistantLevel(new DhLitWorldGenRegionLike()), "a DhLitWorldGenRegion is recognised");
+		// 7. DistantClip: Distant Horizons' region is recognized by class name, subclasses too; others are not
+		check(DistantClip.isDistantLevel(new DhLitWorldGenRegionLike()), "a DhLitWorldGenRegion is recognized");
 		check(DistantClip.isDistantLevel(new SubRegion()), "a subclass of it too");
 		check(!DistantClip.isDistantLevel(new Object()) && !DistantClip.isDistantLevel(null), "anything else is not");
 

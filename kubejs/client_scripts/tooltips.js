@@ -380,7 +380,7 @@ var i = global.item;
 // ############################## Food / Farmers Delight ##############################
     
 	// Bowl, basket and soil lines: Creative Delight (assets/creativedelight/kubejs/farmersdelight/client.js). Food
-	// tooltips (Farmer's Delight villager soil line, foods, kitchen blocks) moved to Creative Delight 2026-10-27:
+	// tooltips (Farmer's Delight villager soil line, foods, kitchen blocks) moved to Creative Delight:
 	// kubejs/assets/creativedelight/kubejs/<mod>/client.js
 
 	// Fantasy Furniture's seven ovens run smoking recipes with normal fuel (their OvenBlockEntity); expect 7 matches.

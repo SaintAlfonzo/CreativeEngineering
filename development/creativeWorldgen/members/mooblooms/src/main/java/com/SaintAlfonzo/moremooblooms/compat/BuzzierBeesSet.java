@@ -112,7 +112,7 @@ public final class BuzzierBeesSet {
         if (event.getLevel().isClientSide) return;
         if (!MOOBLOOM.equals(ForgeRegistries.ENTITY_TYPES.getKey(event.getEntity().getType()))) return;
         if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_MOOBLOOMS)) return;
-        // Cancelling keeps it out of the world: a new one is never added, and one loaded from disk isn't added
+        // Canceling keeps it out of the world: a new one is never added, and one loaded from disk isn't added
         // to its chunk, so it is gone the next time the chunk saves.
         event.setCanceled(true);
         int n = removedMooblooms.incrementAndGet();

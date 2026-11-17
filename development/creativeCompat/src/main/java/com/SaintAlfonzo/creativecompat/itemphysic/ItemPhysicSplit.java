@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * Central registry + query surface for the fire/lava burning split and per-item float
- * behaviour that {@code mixin/ItemPhysicServerMixin} layers on top of ItemPhysic.
+ * behavior that {@code mixin/ItemPhysicServerMixin} layers on top of ItemPhysic.
  *
  * <h3>Canonical item tags (the normal way to drive this)</h3>
  * Resolved live via {@link ItemStack#is(TagKey)}, so membership changes take effect on the
@@ -134,7 +134,7 @@ public final class ItemPhysicSplit {
         return null;   // BURN
     }
 
-    /** Programmatic burn behaviour for this stack; {@link Burn#BURN} if no rule matches. */
+    /** Programmatic burn behavior for this stack; {@link Burn#BURN} if no rule matches. */
     public static Burn burnBehavior(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return Burn.BURN;
         if (!BURN_BY_ID.isEmpty()) {

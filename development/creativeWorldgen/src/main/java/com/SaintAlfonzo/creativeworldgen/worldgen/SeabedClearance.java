@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.LongAdder;
  * cabin under an ocean).
  *
  * A structure in the structure tag {@code creativeworldgen:seabed_clearance} (kubejs/server_scripts/worldgen/
- * terrain_adaptation.js) is dropped when, at the centre or a corner of its box widened by {@link #REACH}, the ground
+ * terrain_adaptation.js) is dropped when, at the center or a corner of its box widened by {@link #REACH}, the ground
  * (OCEAN_FLOOR_WG) is no more than {@link #CLEARANCE} blocks above the box top and a fluid lies on that ground
  * (WORLD_SURFACE_WG above OCEAN_FLOOR_WG). Starts deeper under the seabed, and every start under dry land, are kept.
  *

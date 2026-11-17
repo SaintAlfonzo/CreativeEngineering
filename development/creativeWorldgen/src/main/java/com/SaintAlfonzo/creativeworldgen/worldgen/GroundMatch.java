@@ -52,7 +52,7 @@ import java.util.function.Predicate;
  * on Forge's processBlockInfos, the same hook as {@link LootContainerSwaps}; mixin/StructureStartGroundMatchMixin
  * records which structure start is placing): world generation and /place structure. Structure blocks and
  * /place template are left alone. For the chunk being placed it samples the natural ground: the top solid block and the three below it, on a grid over
- * this chunk and its 8 neighbours, skipping every column where a structure piece reaches the sampled ground's
+ * this chunk and its 8 neighbors, skipping every column where a structure piece reaches the sampled ground's
  * height (a piece deep below or high above that ground leaves it natural). A base family (a block
  * tag, default {@code creativeworldgen:ground_match/grass}) is native when enough of those tops belong
  * to it; otherwise its blocks in the template's bottom layers are replaced (CWGConfig [worldgen.ground_match]):

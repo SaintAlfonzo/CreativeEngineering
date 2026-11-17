@@ -86,7 +86,7 @@ if wants('dates'):
     report('DR-L4', 'relative date words in docs', [(p, i, l) for p, i, l in lines_of(DOCS) if REL.search(l)])
 
 # DR-L4b, DR-L5: non-ISO dates and the old citation form in the doc scope of tools/iso_dates.py (docs, memory, skills,
-# TODO rows, queue rows). Report mode until the P1 sweep ends (plan_rules_fixes.md section 15).
+# TODO rows, queue rows). check_all fails on them (iso_dates_docs, iso_dates_code); this lists them.
 if wants('dates'):
     sys.path.insert(0, str(ROOT / 'tools'))
     import iso_dates
@@ -117,7 +117,8 @@ if wants('spelling'):
         print(f'   {br:12s} {nb:5d}   {am:12s} {na:5d}')
     print()
 
-# DR-L7: British spellings and arrows left in the doc and own-lang scope of tools/us_spelling.py (which fixes them).
+# DR-L7: British spellings and arrows left in the doc and own-lang scope of tools/us_spelling.py (which fixes them);
+# check_all fails on them (spelling_docs, spelling_code).
 if wants('spelling'):
     out = subprocess.run([sys.executable, str(ROOT / 'tools/us_spelling.py'), '--lint'], cwd=ROOT, capture_output=True,
                          text=True).stdout.rstrip().split('\n')

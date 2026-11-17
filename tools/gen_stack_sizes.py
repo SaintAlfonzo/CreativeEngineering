@@ -61,7 +61,7 @@ FOOD_OVERRIDES = {
     'rusticdelight:honey_pancakes': 32,
     'rusticdelight:vegetable_pancakes': 32,
     'fruitsdelight:fig_pudding': 8,       # a placed pudding block: counts as a placeable cake
-    'fruitsdelight:pear_with_rock_sugar': 32,   # bowl food (owner 2026-11-01: must be 32)
+    'fruitsdelight:pear_with_rock_sugar': 32,   # bowl food (owner: must be 32)
 }
 # Sweets sized by name: ice cream, pudding, custard, jello, shaved ice (the catalog's `sweet` type holds 185 items).
 SWEET_32 = re.compile(r'(ice_cream|pudding|custard|jello|shaved_ice)$')

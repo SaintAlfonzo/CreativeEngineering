@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * with every dirt in {@code #minecraft:animals_spawnable_on} (mob_spawns.json spawn_ground) an animal on podzol
  * would pass the rule and then fail at night. Reading the tag makes the two agree: ground + light, any time.
  * Vanilla's tag is grass_block alone, so with the mob spawn system off nothing changes. Wandering AI uses the same
- * value, so animals favour every spawnable dirt the way they favour grass.
+ * value, so animals favor every spawnable dirt the way they favor grass.
  */
 @Mixin(value = Animal.class, remap = false)
 public abstract class AnimalWalkTargetMixin {

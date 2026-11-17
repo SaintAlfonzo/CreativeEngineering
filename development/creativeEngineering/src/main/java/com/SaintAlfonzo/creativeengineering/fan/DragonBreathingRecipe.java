@@ -19,12 +19,12 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
  * A single-input Create processing recipe consumed by {@link DragonBreathingFanProcessingType}
  * (the dragon-head fan catalyst). Datapack / KubeJS type id: {@code creativeengineering:dragon_breathing}.
  *
- * <p>Modelled on Create's own {@code SplashingRecipe}. Create's {@code ProcessingRecipe}
+ * <p>Modeled on Create's own {@code SplashingRecipe}. Create's {@code ProcessingRecipe}
  * already implements every {@code Recipe} method, but this project compiles against the
  * reobfuscated (SRG) Create jar, so javac cannot see those inherited implementations as
  * satisfying the Mojmap {@code Recipe} interface. The thin overrides below re-declare them
  * under their Mojmap names purely so the class compiles; {@code reobfJar} renames them back
- * onto {@code ProcessingRecipe}'s slots and behaviour is unchanged. Fan processing itself
+ * onto {@code ProcessingRecipe}'s slots and behavior is unchanged. Fan processing itself
  * only uses {@code getRollableResults()} (inherited, Create-named, unaffected).
  */
 public class DragonBreathingRecipe extends ProcessingRecipe<DragonBreathingRecipe.Wrapper> {
@@ -72,7 +72,7 @@ public class DragonBreathingRecipe extends ProcessingRecipe<DragonBreathingRecip
 
     @Override
     public ItemStack getResultItem() {
-        // Mirror ProcessingRecipe's own behaviour (first rollable result) without
+        // Mirror ProcessingRecipe's own behavior (first rollable result) without
         // naming its reobfuscated m_8043_(); getRollableResultsAsItemStacks() is
         // Create's own, un-obfuscated method.
         List<ItemStack> results = getRollableResultsAsItemStacks();

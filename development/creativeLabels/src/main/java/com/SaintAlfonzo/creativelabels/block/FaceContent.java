@@ -14,7 +14,7 @@ import java.util.List;
  * What one face of a {@code face_paper} cell holds: nothing, up to five notes (one per {@link Spots} spot) or one
  * label; exclusive (sticky_notes.md 3.2). Plus the face rotation (floors and ceilings only, 3.5) and the host
  * inset (how far into the host cell the paper surface sits, 0 to 0.5 blocks; BRIEF 3), the pieces' shift in the face
- * frame (centred notes, fitted labels) and the label's edge ({@link Spots.Place}).
+ * frame (centered notes, fitted labels) and the label's edge ({@link Spots.Place}).
  */
 public final class FaceContent {
 
@@ -40,7 +40,7 @@ public final class FaceContent {
     public Direction rotation;
     /** Blocks into the host cell (0 = at the cell boundary, 1/16 chests, 0.5 slab halves). */
     public float inset;
-    /** Shift of the pieces in the face frame, px (notes: every spot; label: its centre off (8, 8)). */
+    /** Shift of the pieces in the face frame, px (notes: every spot; label: its center off (8, 8)). */
     public float offX, offY;
     /** The label's edge, px. */
     public float labelSize = Spots.LABEL_SIZE;
@@ -137,7 +137,7 @@ public final class FaceContent {
         setPlace(Spots.Place.ZERO);
     }
 
-    /** Every piece as an item: notes with colour, special and text; a label blank (spec 3.2). */
+    /** Every piece as an item: notes with color, special and text; a label blank (spec 3.2). */
     public List<ItemStack> drops() {
         List<ItemStack> out = new ArrayList<>();
         if (kind == Kind.NOTES) {

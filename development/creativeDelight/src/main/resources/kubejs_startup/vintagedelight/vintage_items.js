@@ -27,7 +27,7 @@ global.foodValueCopies.ghost_charcoal = { absolute: { nutrition: 0, saturationMo
 // Pickled Sea Pickle (TODO dishes/pickles-and-ferments #1): sea pickles from the Pickling Jar, no honey (recipe in
 // data/creativedelight/kubejs/vintagedelight/recipes.js). It replaces Brewin' and Chewin's Pickled Pickles, which merge
 // into it (the pair is in item_merges.js here; recipes, loot and inventories swap). Values: the Pickled
-// Pickles' 4 hunger, modifier 0.3, eaten fast like a Pickle. Art: Vintage's pickle (GPL) in the sea pickle's colours
+// Pickles' 4 hunger, modifier 0.3, eaten fast like a Pickle. Art: Vintage's pickle (GPL) in the sea pickle's colors
 // (textureswapper/palette_swap.py), kubejs/assets/creativeengineering/textures/item/pickled_sea_pickle.png (the owner's pick).
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
@@ -37,7 +37,7 @@ StartupEvents.registry('item', e => {
 })
 
 // One salt (TODO food/seasoning #6): Vintage's pink salt dust is the pack's salt, so The Salt's salt merges into it;
-// The Salt's Salt Block stays (its shape in Vintage's colours, textureswapper/salt/make_salt.py) and Vintage's merges
+// The Salt's Salt Block stays (its shape in Vintage's colors, textureswapper/salt/make_salt.py) and Vintage's merges
 // into it. The salt bucket is gone (no water bucket -> salt bucket smelt). The pairs: item_merges.js here; server
 // half: data/creativedelight/kubejs/vintagedelight/recipes.js.
 global.removedItems.push(global.item.salt_bucket)

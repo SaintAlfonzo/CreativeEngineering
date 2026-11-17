@@ -21,7 +21,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Pickerelweed Juice, Pike with Beetroot #########################
 		// 4.1.2 needs one blue and one purple pickerelweed; 6.0.3 takes two of its single pickerelweed. Here two of
-		// either colour (upgrade_aquatic/tags.js). Results, 1.0 xp and 200 ticks as 4.1.2.
+		// either color (upgrade_aquatic/tags.js). Results, 1.0 xp and 200 ticks as 4.1.2.
 		R.remove({ id: 'abnormals_delight:pickerelweed_juice' }, e)
 		R.remove({ id: 'abnormals_delight:pike_with_beetroot' }, e)
 		// Pickerelweed Juice: pot and Kettle by the drink rules (creativedelight/drinks.js, food/drinks #15)

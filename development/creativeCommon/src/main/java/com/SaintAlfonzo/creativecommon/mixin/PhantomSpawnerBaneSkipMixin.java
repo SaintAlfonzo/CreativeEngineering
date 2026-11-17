@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.PhantomSpawner;
 /**
  * Better Beacons 1.0.2's {@code PhantomSpawnerMixin} injects at {@code Player.isSpectator()} inside the per-player loop of
  * {@code PhantomSpawner.tick} ({@code m_7995_}) and returns 0 from the whole method when that player has Phantom Bane, so
- * one player with Phantom Bane (beacon, echo armor set, Caffeinated's hidden part) cancelled the spawn pass for every
+ * one player with Phantom Bane (beacon, echo armor set, Caffeinated's hidden part) canceled the spawn pass for every
  * player after them in the list ({@code potions/effects #13}, effects.md 2.7). Here the loop's
  * {@code level.players()} ({@code m_6907_}, called once in the method) is handed a copy without the Phantom Bane
  * players, so Better Beacons' check never meets one and only those players are skipped. In the better_beacons

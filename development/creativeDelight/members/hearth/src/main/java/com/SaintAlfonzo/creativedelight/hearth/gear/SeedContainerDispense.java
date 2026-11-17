@@ -43,12 +43,12 @@ public final class SeedContainerDispense {
     private SeedContainerDispense() {
     }
 
-    /** Container-specific part: plant from {@code container} at this soil centre, return whether anything planted. */
+    /** Container-specific part: plant from {@code container} at this soil center, return whether anything planted. */
     public interface Planter {
         boolean plant(ServerLevel level, BlockPos soilCentre, ItemStack container);
     }
 
-    /** Registers the container behaviour; it never ejects the container. */
+    /** Registers the container behavior; it never ejects the container. */
     public static void register(net.minecraft.world.level.ItemLike item, Planter planter) {
         DispenserBlock.registerBehavior(item, new OptionalDispenseItemBehavior() {
             @Override
@@ -98,7 +98,7 @@ public final class SeedContainerDispense {
         }
     }
 
-    /** Plants up to {@code count} seeds over the 5x5 centred on {@code centre}; returns how many planted. */
+    /** Plants up to {@code count} seeds over the 5x5 centered on {@code centre}; returns how many planted. */
     public static int plantPattern(ServerLevel level, BlockPos centre, ItemStack seed, int count) {
         int planted = 0;
         for (int dx = -POUCH_RADIUS; dx <= POUCH_RADIUS && planted < count; dx++) {

@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Farmer's Respite's Caffeinated is a compound with Phantom Bane as a part ({@code potions/effects #10}): adding
  * Caffeinated adds a hidden Better Beacons Phantom Bane for the same time, so the phantom spawner skips the player
  * (Common's {@code effect.PhantomBaneRules} and {@code PhantomSpawnerBaneSkipMixin}). Caffeinated's own tick, which
- * pushed Time Since Rest to -24000 every tick, is cancelled by {@code mixin.farmersrespite.CaffeinatedEffectMixin}.
+ * pushed Time Since Rest to -24000 every tick, is canceled by {@code mixin.farmersrespite.CaffeinatedEffectMixin}.
  * Registered only with Farmer's Respite loaded; with Better Beacons absent it does nothing (both effects are looked up
  * lazily by id).
  */

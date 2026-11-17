@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * one is kept anyway in case some other mod ever registers a plain, un-subclassed
  * {@code ShieldItem} of its own.
  *
- * <p><b>Deliberate behaviour change:</b> the real iron shield no longer repairs with planks once
+ * <p><b>Deliberate behavior change:</b> the real iron shield no longer repairs with planks once
  * this is active - only with whatever {@code [shields.iron].repairItem} names (an iron ingot by
  * default), matching every other tier shield's repair rule instead of vanilla's own.
  */

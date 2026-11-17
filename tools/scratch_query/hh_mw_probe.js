@@ -11,7 +11,7 @@
 //   /zhh2 stomping                        every hearthandharvest:stomping recipe: id, fluid, amount, ingredient count, inputs
 //   /zhh2 stomp x y z                     basin.tryProcess with the nearest living entity within 3 blocks (cooldown 5 ticks per entity)
 //   /zhh2 sneak name true|false           setShiftKeyDown on a bot or player
-//   /zhh2 useat name x y z face hx hy hz  block use with the hit at x+hx y+hy z+hz (pbot use always hits the face centre)
+//   /zhh2 useat name x y z face hx hy hz  block use with the hit at x+hx y+hy z+hz (pbot use always hits the face center)
 //   /zhh2 countset x1 y1 z1 x2 y2 z2 a,b,c    how many of each block id in the box, one scan (loaded chunks only), and in how many chunks
 //   /zhh2 chests x1 y1 z1 x2 y2 z2        every chest in the box: position and LootTable
 //   /zhh2 unpack x y z                    rolls a chest's loot table now and lists its items

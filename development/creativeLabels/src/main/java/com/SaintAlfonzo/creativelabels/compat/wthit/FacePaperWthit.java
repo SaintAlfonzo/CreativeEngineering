@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  * WTHIT plugin (sticky_notes.md 3.15, BRIEF 5): the piece under the crosshair.
  * <ul>
  * <li>A note: the name line becomes the note item's name ("Sticky Note", "Gold Sticky Note"), the icon the note
- * item with its colour, and the body its colour (the nearest dye's name when close, else the hex), its text in
+ * item with its color, and the body its color (the nearest dye's name when close, else the hex), its text in
  * quotes and "Day N, placer". Body lines obey {@code [wthit] lines}.</li>
  * <li>A label: {@link #getOverride} swaps the shown state for the host's, so WTHIT shows the host's name and icon
  * (and other plugins see the host's state; the position stays ours), plus a body line "Label: item".</li>
@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 public final class FacePaperWthit implements IWailaClientPlugin, IBlockComponentProvider {
 
     private static final String LANG = "creativelabels.wthit.";
-    /** Redmean distance under which a colour is called by the nearest dye's name. */
+    /** Redmean distance under which a color is called by the nearest dye's name. */
     private static final double DYE_NAME_DISTANCE = 60;
 
     @Override
@@ -127,7 +127,7 @@ public final class FacePaperWthit implements IWailaClientPlugin, IBlockComponent
         }
     }
 
-    /** The nearest dye's name when the colour is close to a single-dye result, else the hex value. */
+    /** The nearest dye's name when the color is close to a single-dye result, else the hex value. */
     static MutableComponent colourName(int rgb) {
         DyeColor dye = NoteColours.nearestDye(rgb);
         if (NoteColours.distance(rgb, NoteColours.of(dye)) <= DYE_NAME_DISTANCE) {

@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
  */
 public class StageScreen extends Screen {
 
-    /** 0xAARRGGBB; crop.py's auto crop trims this colour (#202020). */
+    /** 0xAARRGGBB; crop.py's auto crop trims this color (#202020). */
     public static final int BACKGROUND = 0xFF202020;
 
     private final ItemStack stack;

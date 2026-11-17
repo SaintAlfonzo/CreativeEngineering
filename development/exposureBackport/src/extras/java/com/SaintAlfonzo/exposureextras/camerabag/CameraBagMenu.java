@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
  * SimpleContainer and written back to the bag after every change, and the bag's own inventory slot
  * is locked (hidden, can't be picked up or number-key swapped) so it can't move while open.
  *
- * <p>Slot layout: up to 9 per row, rows balanced (14 = 7 + 7), centred in the top panel. The slot
+ * <p>Slot layout: up to 9 per row, rows balanced (14 = 7 + 7), centered in the top panel. The slot
  * count comes from the server (exposureextras-common.toml [camera_bag]) in the open packet, so the client agrees.
  */
 public class CameraBagMenu extends AbstractContainerMenu {

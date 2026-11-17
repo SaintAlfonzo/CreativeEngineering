@@ -41,7 +41,7 @@ import vectorwing.farmersdelight.common.registry.ModItems;
 
 /**
  * The backported blocks, items, particle and sounds, in FD's namespace ({@code farmersdelight:<id>}). Ids, block
- * properties, food values and the stack sizes are 1.3.4's, rebuilt with 1.19.2 calls (material and colour for
+ * properties, food values and the stack sizes are 1.3.4's, rebuilt with 1.19.2 calls (material and color for
  * 1.20's MapColor, Blocks.CAKE's sound for the feast).
  */
 public final class FDBackportRegistry {
@@ -119,7 +119,7 @@ public final class FDBackportRegistry {
 
 	/**
 	 * Wood cutting boards (TODO cooking/kitchen #38, pack addition): FD's board in the other vanilla woods (FD's own board
-	 * is the spruce one). Same block class and block entity as FD's; properties copied from the wood's planks (map colour,
+	 * is the spruce one). Same block class and block entity as FD's; properties copied from the wood's planks (map color,
 	 * nether woods not flammable) with FD's board strength 2.0. Axe-mineable through the pack tag.
 	 */
 	public static final List<RegistryObject<Block>> WOOD_CUTTING_BOARDS = List.of(

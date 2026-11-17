@@ -1,12 +1,12 @@
 // requires: creativebrewing
 // Vanilla-style potion tooltip for the potion buckets - same layout/wording/colour as
 // minecraft:potion/splash_potion/lingering_potion bottles (PotionUtils.addPotionTooltip): one line per
-// effect, "Name II (0:30)", coloured blue (beneficial/neutral) or red (harmful), plus a grey "No Effects"
+// effect, "Name II (0:30)", colored blue (beneficial/neutral) or red (harmful), plus a gray "No Effects"
 // line for a blank bucket. Items: CB startup creativebrewing/potion_buckets.js Durations are the applied
 // ones: the potion's own x the bucket's effectMult (global.potionArea.scaled, CB startup
 // creativeengineering/potion_area.js), so a lingering bucket of a 3:00 potion reads 3:36.
 //
-// Colouring uses KubeJS's own MutableComponent.blue()/red()/gray() extension methods
+// Coloring uses KubeJS's own MutableComponent.blue()/red()/gray() extension methods
 // (dev.latvian.mods.kubejs.core.ComponentKJS - unprefixed per the @RemapPrefixForJS('kjs$')
 // pattern, same as jeichanges.js's Text.red(...).bold()) instead of calling
 // Component.withStyle(ChatFormatting) directly: that has 3 same-arity overloads
@@ -14,13 +14,13 @@
 // build (rhino-forge 1902.2.3-build.284) - see memory rhino-fieldandmethods-gotcha, and the
 // note this exact file used to carry about dropping styling entirely for that reason.
 // (armor_effects.js/echo_tools.js sidestep the same wall with raw "section-sign" strings, but
-// that produces a visually different "grey dash + coloured name + grey duration" line, not
-// vanilla's single-colour whole-line look - not used here since matching bottles is the point.)
+// that produces a visually different "gray dash + colored name + gray duration" line, not
+// vanilla's single-color whole-line look - not used here since matching bottles is the point.)
 //
 // NOT reproduced: vanilla's extra "attribute modifier" lines for effects like Strength/
 // Weakness/Speed/Slowness/Luck (the "+130% Attack Damage" etc. appendix, built from
 // MobEffect#getAttributeModifiers()) - a further pile of untested Java calls
-// (Attribute/AttributeModifier/Operation/DecimalFormat) for a rarely-scrutinised detail.
+// (Attribute/AttributeModifier/Operation/DecimalFormat) for a rarely-scrutinized detail.
 // Revisit if it turns out to matter.
 
 const $PB_PotionUtils     = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')

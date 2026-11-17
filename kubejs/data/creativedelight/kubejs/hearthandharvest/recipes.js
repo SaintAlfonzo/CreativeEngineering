@@ -13,7 +13,7 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.raspberry_pips, [i.raspberry], e, 'raspberry_pips_from_raspberry')
 
 		// Watering cans (4.0): copper is 1.4.1's recipe (5 copper ingots around a bucket). The tiers are smithing upgrades,
-		// which keep the can's water and fertiliser (vanilla smithing copies the base's NBT).
+		// which keep the can's water and fertilizer (vanilla smithing copies the base's NBT).
 		R.shaped(Item.of(i.watering_can), ['C  ', 'CBC', 'CC '], {C: i.ingot_copper, B: i.bucket}, e, 'watering_can')
 		R.smithing(i.iron_watering_can, i.watering_can, i.block_iron, e, 'iron_watering_can')
 		R.smithing(i.golden_watering_can, i.iron_watering_can, i.block_gold, e, 'golden_watering_can')

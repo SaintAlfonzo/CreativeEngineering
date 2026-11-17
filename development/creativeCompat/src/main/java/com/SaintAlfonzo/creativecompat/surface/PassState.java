@@ -27,7 +27,7 @@ public final class PassState {
     PassValues stuckValues;
 
     // ---- projectiles (plan 5.1) ----
-    /** Snag group: held at the centre of {@link #snagCell}. */
+    /** Snag group: held at the center of {@link #snagCell}. */
     boolean snagged;
     long snagCell;
     /** Linger group: held at the linger point while {@link #lingerCell} stays a web. */

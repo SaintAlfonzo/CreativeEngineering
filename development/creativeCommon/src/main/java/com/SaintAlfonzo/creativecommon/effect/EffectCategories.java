@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * CommonConfig {@code [effects] categoryOverrides}: a different {@link MobEffectCategory} for some effects, so a debuff
- * shows red and a buff blue wherever the category picks the colour (feature_writeup/effects.md 2.4). Read by
+ * shows red and a buff blue wherever the category picks the color (feature_writeup/effects.md 2.4). Read by
  * {@code mixin/MobEffectCategoryMixin} on every {@code getCategory()} / {@code isBeneficial()} call, so the lookup
  * is one map hit per effect; the parsed list is rebuilt when the config list changes (Create's Configs screen or a
  * hand edit), with no restart.

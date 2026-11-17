@@ -10,7 +10,7 @@ public abstract class HeapModBiomesMixin {
 
     /**
      * @author SaintAlfonzo
-     * @reason Cancelling is not enough: the original body names TerraBlender and BOP's region classes, and the bytecode
+     * @reason Canceling is not enough: the original body names TerraBlender and BOP's region classes, and the bytecode
      * verifier would load them.
      */
     @Overwrite

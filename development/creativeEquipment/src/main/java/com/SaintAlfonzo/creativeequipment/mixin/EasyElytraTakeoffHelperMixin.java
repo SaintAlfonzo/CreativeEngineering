@@ -11,14 +11,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Easy Elytra Takeoff decides whether to run its firework-rocket takeoff with
- * {@code ForgeElytraEventHelper.isWearingAnElytra(player)}, which only recognises a
- * literal {@code instanceof ElytraItem} in an armour slot (plus a Curios "flight modifier"
+ * {@code ForgeElytraEventHelper.isWearingAnElytra(player)}, which only recognizes a
+ * literal {@code instanceof ElytraItem} in an armor slot (plus a Curios "flight modifier"
  * attribute). DragonLoot's {@code upgraded_dragon_chestplate} glides via its own
  * {@code LivingEntity#updateFallFlying} / {@code Player#tryToStartFallFlying} mixins — it is
  * a plain {@code ArmorItem}, not an {@code ElytraItem} — so EET never fires for it and you
  * can only take off by jump-in-air, not with a rocket.
  *
- * <p>This widens the check: any armour-slot stack that Forge already considers elytra-capable
+ * <p>This widens the check: any armor-slot stack that Forge already considers elytra-capable
  * ({@code ItemStack#canElytraFly}) OR that is in {@code #creativeequipment:elytra_chestplates}
  * (populated in KubeJS, reload-able) counts as "wearing an elytra". Once this returns true
  * EET force-sets the fall-flying flag for a few ticks and DragonLoot's own tick mixin keeps

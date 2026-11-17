@@ -31,7 +31,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
- * Hops vine (plan_bugfix_1114 3.1): the behaviour of Vinery's jungle grape vine (GrapeVineBlock), written here so Creative
+ * Hops vine (plan_bugfix_1114 3.1): the behavior of Vinery's jungle grape vine (GrapeVineBlock), written here so Creative
  * Delight needs no Creative Brewing class at load. A vine on a wall face (any full face, as vanilla vines), age 0 to 3; it
  * grows 1 in 5 random ticks at light 9 or more (through Forge's crop events, so crop seasons apply) and spreads like a vine.
  * Right-click at age 3 picks 1 to 2 hops and goes back to age 1; younger vines are not picked (R5, plan_small_fixes_1116.md).
@@ -96,7 +96,7 @@ public class HopsVineBlock extends VineBlock implements BonemealableBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** H&H's watering-can fertilisers and {@code #creativedelight:bonemeal_like} (tree fertilizer, IE and Botania fertilizer, fertilizer bag, organic mash). */
+    /** H&H's watering-can fertilizers and {@code #creativedelight:bonemeal_like} (tree fertilizer, IE and Botania fertilizer, fertilizer bag, organic mash). */
     public static final TagKey<Item> BONEMEAL_SUBSTITUTES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("hearthandharvest", "bonemeal_substitutes"));
     public static final TagKey<Item> BONEMEAL_LIKE = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("creativedelight", "bonemeal_like"));
 

@@ -16,7 +16,7 @@ Reads (kubejs/exported/, refresh with /dumpall):
 
 Writes:
   feature_writeup/item_physics_audit.md                       the report (design: item_physics.md section 9)
-  kubejs/generation_scripts/physics/item_physics_families.json  item -> family, rung, current and family behaviour
+  kubejs/generation_scripts/physics/item_physics_families.json  item -> family, rung, current and family behavior
 
 Every item resolves to exactly one family by the first rung that matches (see RUNGS). An item reaching only
 the mod-default rung, or none ('unclassified'), is listed so nothing new slips through when a mod is added.
@@ -411,7 +411,7 @@ def main():
 
 def write_json(results, survivors, have_dump):
     """One line per item: family, rung, evidence, today's water/fire, the physics tags it is in now.
-    The family's own behaviour is in 'families'."""
+    The family's own behavior is in 'families'."""
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
     head = {'_note': 'Written by tools/item_physics_audit.py. items: id -> [family, rung, evidence, now water/fire, '
                      'physics tags now]. Family behaviour: families.',
@@ -434,7 +434,7 @@ def fmt_beh(b):
 
 
 def differs(r):
-    """Family behaviour is not today's. skim counts as float: the game has no skim yet (section 10)."""
+    """Family behavior is not today's. skim counts as float: the game has no skim yet (section 10)."""
     if r['family'] in ('technical', 'unclassified'):
         return False
     want = dict(r['family_behaviour'], water='float' if r['family_behaviour']['water'] == 'skim' else r['family_behaviour']['water'])
@@ -457,7 +457,7 @@ def write_md(results, survivors, surv_src, have_dump, limit):
     w('Rungs, first match wins: `tag` (a vanilla/forge/pack tag) > `fire_resistant` (the item\'s own flag) >')
     w('`material` (block Material, refined by SoundType) > `gear` (tool tier / armor material) > `edible` > `name`')
     w('(a token in the id) > `mod_default` > `none` (unclassified). "Manual" = already in one of the four physics')
-    w('tags. "Differs" = the family\'s behaviour is not what the item does now.')
+    w('tags. "Differs" = the family\'s behavior is not what the item does now.')
     w('')
     total = len(results)
     rung_c = collections.Counter(r['rung'] for r in results.values())
@@ -543,7 +543,7 @@ def write_md(results, survivors, surv_src, have_dump, limit):
         w('')
     w('## 6. Differs from family, by mod')
     w('')
-    w('Items whose current behaviour (water/fire) is not their family\'s. Manual tag choices show here too: either')
+    w('Items whose current behavior (water/fire) is not their family\'s. Manual tag choices show here too: either')
     w('the family is wrong for the item or the tag is. At most %d per mod.' % limit)
     w('')
     for _, mod, n, man, unc, dflt, dif, top in rows:

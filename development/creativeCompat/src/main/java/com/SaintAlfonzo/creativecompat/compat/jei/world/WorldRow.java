@@ -54,7 +54,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *      {"effect": mob_effect_id} {"stacks": [{"item": id, "nbt": SNBT}, ...]} (each stack its own NBT)
  *      plus optional "count", "nbt" (SNBT, items or the fluid), "chance" (0..1), "label" (extra tooltip line)
  * </pre>
- * Blocks with no item (fire, water, lava) fall back to the fluid's bucket or a labelled stand-in, drawn as the block's
+ * Blocks with no item (fire, water, lava) fall back to the fluid's bucket or a labeled stand-in, drawn as the block's
  * model where it has one; air is an empty "Nothing" slot; an effect is its icon; entities are their spawn egg (or a
  * name tag named after the mob), drawn as the mob ({@link WorldSlotRenderer}).
  * Nothing and effect slots are drawn by the category, not JEI, so they can't be looked up.

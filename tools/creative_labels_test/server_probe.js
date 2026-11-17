@@ -207,7 +207,7 @@
         set(level, h2, 'minecraft:stone')
         click(p, level, h2, 'north', 0.5, 0.5, note({ count: 1 }), false)
         click(p, level, h2, 'north', 0.5, 0.5, note({ count: 1 }), false)
-        check('SN-02', 'nearest free spot', notesOn(level, h2, 'north') == 2, notesOn(level, h2, 'north') + ' notes after two clicks on the centre')
+        check('SN-02', 'nearest free spot', notesOn(level, h2, 'north') == 2, notesOn(level, h2, 'north') + ' notes after two clicks on the center')
 
         // SN-03 chest: plain click opens, sneak places, five fit
         let hc = pos(X + 4, Y, 2)
@@ -328,7 +328,7 @@
         let red = stack('minecraft:red_dye', 4)
         clickPaper(p, level, cellOf(h, 'north'), 'south', 0.2, 0.2, red, false)
         let usedRed = 4 - p.getMainHandItem().getCount()
-        // the dyed note is the one under the click; find it by colour
+        // the dyed note is the one under the click; find it by color
         let c = faceOf(level, h, 'north')
         let spotA = -1, spotB = -1
         for (let i = 0; i < 5; i++) { if (c.hasNote(i)) { if (c.note(i).color >= 0) spotA = i; else spotB = i } }
@@ -360,7 +360,7 @@
         check('SN-13', 'remove', got != null && $CLNoteData.readColor(got) == want && notesOn(level, h, 'north') == 1,
             got == null ? 'no note in inventory' : 'got ' + got.getOrCreateTag() + ', ' + notesOn(level, h, 'north') + ' left')
 
-        // SN-14 eraser on a placed written red note: text first, then colour
+        // SN-14 eraser on a placed written red note: text first, then color
         let he = pos(X + 4, Y, 2)
         set(level, he, 'minecraft:stone')
         click(p, level, he, 'north', 0.5, 0.5, note({ count: 1, text: 'Iron', color: wantRed }), false)
@@ -388,7 +388,7 @@
         let m1 = menuName(p)
         closeMenu(p)
         clickPaper(p, level, tcell, 'south', 0.5, 0.5, $CLItemStack.EMPTY, true)
-        // the freed centre has no paper under it, so the ray reaches the table itself
+        // the freed center has no paper under it, so the ray reaches the table itself
         let rc2 = click(p, level, ht, 'north', 0.5, 0.5, stack('minecraft:stick'), false)
         let m2 = menuName(p)
         closeMenu(p)
@@ -526,7 +526,7 @@
         check('SN-25', 'stacking', $CLItemStack.isSameItemSameTags(a, b) && $CLItemStack.isSameItemSameTags(ra, rb) && !$CLItemStack.isSameItemSameTags(a, w) && a.getMaxStackSize() == 64,
             'plain/plain, red/red, plain/written, max ' + a.getMaxStackSize())
 
-        // SN-26 colour in the grid
+        // SN-26 color in the grid
         let g = []
         for (let i = 0; i < 8; i++) g.push(note({ count: 1 }))
         g.push(stack('minecraft:red_dye'))
@@ -544,12 +544,12 @@
             r2.out != null && r2.out.getCount() == 8 && $CLNoteData.readColor(r2.out) == redBlue &&
             r3.out != null && String($CLNoteData.readText(r3.out)) == 'Iron' &&
             r4.out != null && r4.out.getCount() == 8 && String($CLNoteData.readSpecial(r4.out)) == 'creeper'
-        check('SN-26', 'colour in the grid', ok26,
+        check('SN-26', 'color in the grid', ok26,
             '8+red ' + r1.id + ' -> ' + (r1.out ? r1.out.getCount() + ' ' + hex($CLNoteData.readColor(r1.out)) : 'none') + ' (leather ' + hex(red) + '); ' +
             '8 red+blue -> ' + (r2.out ? r2.out.getCount() + ' ' + hex($CLNoteData.readColor(r2.out)) : 'none') + ' (leather ' + hex(redBlue) + '); ' +
             'written+red -> ' + (r3.out ? '"' + $CLNoteData.readText(r3.out) + '"' : 'none') + '; 8+gunpowder ' + r4.id + ' -> ' + (r4.out ? r4.out.getCount() + ' ' + $CLNoteData.readSpecial(r4.out) : 'none'))
 
-        // SN-26b specials refuse dye, also through vanilla's armour-dye recipe (ArmorDyeRecipeMixin)
+        // SN-26b specials refuse dye, also through vanilla's armor-dye recipe (ArmorDyeRecipeMixin)
         let r5 = craft(level, p, [note({ count: 1, special: 'creeper' }), stack('minecraft:red_dye')])
         check('SN-26', 'special + dye gives nothing', r5.out == null || r5.out.isEmpty(), 'creeper + red -> ' + r5.id)
 
@@ -564,7 +564,7 @@
             e1.id + ' -> ' + (e1.out ? '"' + $CLNoteData.readText(e1.out) + '" ' + hex($CLNoteData.readColor(e1.out)) : 'none') + ', remainder ' + rem +
             '; again -> ' + (e2 && e2.out ? hex($CLNoteData.readColor(e2.out)) : 'none') + '; damageable ' + eraser.isDamageableItem())
 
-        // SN-53 copy: 1 written red + 8 blank mixed colours -> 9 red written
+        // SN-53 copy: 1 written red + 8 blank mixed colors -> 9 red written
         let gc = [note({ count: 1, text: 'Iron', color: red })]
         for (let i = 0; i < 8; i++) gc.push(note({ count: 1, color: i % 2 == 0 ? -1 : redBlue }))
         let rc = craft(level, p, gc)
@@ -581,7 +581,7 @@
         check('SN-30', 'inventory', handled && String(lines) == '[Iron]' && slot.getItem().getCount() == 32 && wn.getCount() == 2,
             'handled ' + handled + ', lines ' + lines + ' on ' + slot.getItem().getCount() + ', notes left ' + wn.getCount())
 
-        // SN-54 drag: a second labelling in the same tick is swallowed (5-tick gate)
+        // SN-54 drag: a second labeling in the same tick is swallowed (5-tick gate)
         p30.getInventory().setItem(10, stack('minecraft:cobblestone', 5))
         let slot2 = p30.inventoryMenu.getSlot(10)
         let handled2 = wn.getItem().overrideStackedOnOther(wn, slot2, $CLClickAction.SECONDARY, p30)
@@ -639,7 +639,7 @@
         check('SN-34', 'eraser on items', !$CLItemLabels.has(target) && $CLItemStack.isSameItemSameTags(target, stack('minecraft:cobblestone')),
             'after 3 erasings: ' + target + ' tag ' + (tagOf(target) != null ? tagOf(target) : 'none'))
 
-        // SN-55 labelled items give no crafting result (blockLabelledCrafting on). FastWorkbench queues the result
+        // SN-55 labeled items give no crafting result (blockLabelledCrafting on). FastWorkbench queues the result
         // update to the end of the tick, so the result is read a few ticks later.
         let p55 = fake(level, 'craft')
         let plank = stack('minecraft:oak_planks', 1)
@@ -655,7 +655,7 @@
             p55.inventoryMenu.slotsChanged(craftSlots)
             server.scheduleInTicks(3, () => {
                 let res2 = p55.inventoryMenu.getSlot(0).getItem()
-                check('SN-55', 'crafting blocked', res.indexOf('air') >= 0 && !res2.isEmpty(), 'labelled plank + plank -> ' + res + '; clean planks -> ' + res2)
+                check('SN-55', 'crafting blocked', res.indexOf('air') >= 0 && !res2.isEmpty(), 'labeled plank + plank -> ' + res + '; clean planks -> ' + res2)
                 p55.discard()
             })
         })

@@ -46,17 +46,17 @@ import net.minecraftforge.fml.common.Mod;
  * the current bake, so another mod's pot entry or a resource pack's potted model shows as it does on a vanilla pot;
  * the per-plant quad cache lives in the wrapper and goes with it on the next resource reload.
  *
- * <p>Plant tint indices are moved up by {@link #TINT_OFFSET} and the colour handler hands them to the potted block's
- * own colour handler (potted fern, grass).
+ * <p>Plant tint indices are moved up by {@link #TINT_OFFSET} and the color handler hands them to the potted block's
+ * own color handler (potted fern, grass).
  */
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class BotanistPotClient {
 
     static final int TINT_OFFSET = 1000;
 
-    /** Plant base in the vanilla potted model (pot centre, dirt surface), in block units. */
+    /** Plant base in the vanilla potted model (pot center, dirt surface), in block units. */
     private static final Vector3f POT_BASE = new Vector3f(8 / 16f, 4 / 16f, 8 / 16f);
-    /** The workbench pot's centre and dirt surface in its north-facing model. */
+    /** The workbench pot's center and dirt surface in its north-facing model. */
     private static final Vector3f BENCH_BASE = new Vector3f(11.5f / 16f, 15 / 16f, 10.5f / 16f);
     /** Workbench pot width over vanilla pot width (4 px over 6 px). */
     private static final float SCALE = 2 / 3f;

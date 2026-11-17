@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * {@code gen_bedspreads_pattern_compat.py} and {@code gen_elytra_pattern_compat.py}): the pattern's first glyph (the
  * leftmost connected run of columns) is cropped and placed on the mod's canvas. Bedspreads: wide glyphs (24 px or more)
  * stretched to fill (2,14)-(38,44), others fit into 14x20 and stood on x 14, y 42, on a 64x64 canvas. Elytra: fit into
- * 20x40 and centred at (81,23) on 128x64, and the half-size set (10x20 at (40,11) on 64x32). Resampling is Lanczos over
+ * 20x40 and centered at (81,23) on 128x64, and the half-size set (10x20 at (40,11) on 64x32). Resampling is Lanczos over
  * premultiplied alpha with the same fixed-point rounding as the generators' image library, so the output equals the
  * files the jar used to carry.
  */
@@ -276,7 +276,7 @@ public final class BannerPatternArt {
 
     // ---- PNG in and out ----
 
-    /** The PNG as 64x64 RGBA (nearest-neighbour when another size), or null when unreadable. */
+    /** The PNG as 64x64 RGBA (nearest-neighbor when another size), or null when unreadable. */
     private static int[] rgba64(byte[] raw) throws IOException {
         BufferedImage img = ImageIO.read(new ByteArrayInputStream(raw));
         if (img == null) return null;
@@ -284,7 +284,7 @@ public final class BannerPatternArt {
         int[] px = new int[w * h * 4];
         Raster r = img.getRaster();
         int bands = r.getNumBands();
-        // Grey PNGs: read the samples, as getRGB would convert through the linear grey colour space.
+        // Gray PNGs: read the samples, as getRGB would convert through the linear gray color space.
         boolean grey = img.getColorModel() instanceof ComponentColorModel && bands <= 2;
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {

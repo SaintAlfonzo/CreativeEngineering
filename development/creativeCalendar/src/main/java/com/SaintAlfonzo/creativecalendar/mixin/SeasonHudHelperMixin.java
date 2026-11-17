@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * SeasonHUD under the season types ({@link SeasonTypes}):
  * - on a river or beach it shows the season of the land around it;
- * - in an arid or frozen biome there is one season all year: the Dry icon and colour for arid, Winter's for
+ * - in an arid or frozen biome there is one season all year: the Dry icon and color for arid, Winter's for
  *   frozen (the name is swapped in {@link SeasonHudCurrentSeasonMixin}), and the day counts through the whole
  *   year (day N of 12 sub-seasons) whatever the HUD's day setting;
  * - a permanent season shows its own season with SeasonHUD's normal name: permanent summer and winter as

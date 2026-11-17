@@ -1,7 +1,7 @@
 // Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
 // global.potionArea — spawns the expanding lingering-potion dome for the
 // creativeengineering potion buckets (potion_buckets.js (this folder)).
-// The right-click behaviour that calls this lives in
+// The right-click behavior that calls this lives in
 // CB server creativebrewing/potion_buckets.js.
 //
 // A potion bucket spawns a STACK of vanilla AreaEffectClouds - one "ring" per level, up to
@@ -33,7 +33,7 @@ console.log('potion_area func loading')
     //   radius         starting radius of the bottom ring (blocks)
     //   growthPerTick  expansion speed - radius added every tick to the bottom ring (0 = constant size)
     //   lingerTicks    total lifetime of every ring, in ticks (20 = 1s) - "linger time"
-    //   waitTicks      short windup before the rings start growing/dosing (vanilla flavour)
+    //   waitTicks      short windup before the rings start growing/dosing (vanilla flavor)
     //   effectMult     multiplies the carried potion's own effect durations
     //   rings          ring limit - how many stacked clouds make up the dome (1 = old flat disc)
     const BUCKETS = {
@@ -66,7 +66,7 @@ console.log('potion_area func loading')
     // NOTE: deliberately NOT calling PotionUtils.getColor(...) here - this Rhino build
     // (rhino-forge 1902.2.3-build.284) cannot disambiguate it: getColor has 3 same-arity
     // overloads (Potion / ItemStack / Collection) and Rhino throws "ambiguous" no matter
-    // which one actually matches the argument's runtime type. Blend the colour ourselves
+    // which one actually matches the argument's runtime type. Blend the color ourselves
     // from MobEffect.getColor() (a single, unambiguous no-arg method) instead. See memory
     // note rhino-fieldandmethods-gotcha for the wider pattern (same-arity overloads of
     // unrelated types are unsafe to call directly from KubeJS scripts here).

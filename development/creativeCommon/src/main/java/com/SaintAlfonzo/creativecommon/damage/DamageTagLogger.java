@@ -31,7 +31,7 @@ import org.slf4j.Logger;
  * classify it - which is exactly the list of sources still worth a tag file. Grep the log for
  * {@code [damage-tags] seen}. The "already seen" memory is per session, so a restart logs
  * everything again. {@link LivingAttackEvent} fires at the very start of {@code hurt()}, before
- * shields or armour touch the hit, and {@code receiveCanceled} keeps this listener running even
+ * shields or armor touch the hit, and {@code receiveCanceled} keeps this listener running even
  * when another mod (Immersive Engineering's shield upgrades) cancels the event first.
  */
 public final class DamageTagLogger {

@@ -33,7 +33,7 @@ TITLES = {
 
 
 def collapse(name):
-    """Fold numbered / colour variants so a family prints once."""
+    """Fold numbered / color variants so a family prints once."""
     name = re.sub(r"_\d+$", "", name)
     return name
 

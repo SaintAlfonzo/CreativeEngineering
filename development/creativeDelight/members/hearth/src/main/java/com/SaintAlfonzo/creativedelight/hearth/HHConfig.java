@@ -47,8 +47,8 @@ public final class HHConfig {
         b.push("worldgen");
         SALT_CAVES_ENABLED = b.comment("Generate salt caves.").define("saltCaves", true);
         SALT_CAVE_RARITY = b.comment("One salt cave attempt in this many chunks of a salt cave biome.").defineInRange("saltCaveRarity", 24, 1, 100000);
-        SALT_CAVE_MIN_Y = b.comment("Lowest centre height of a salt cave.").defineInRange("saltCaveMinY", -40, -64, 300);
-        SALT_CAVE_MAX_Y = b.comment("Highest centre height of a salt cave.").defineInRange("saltCaveMaxY", 30, -64, 300);
+        SALT_CAVE_MIN_Y = b.comment("Lowest center height of a salt cave.").defineInRange("saltCaveMinY", -40, -64, 300);
+        SALT_CAVE_MAX_Y = b.comment("Highest center height of a salt cave.").defineInRange("saltCaveMaxY", 30, -64, 300);
         CORN_MAZE_ENABLED = b.comment("Generate corn mazes (their rate is in the pack's structure tables).").define("cornMaze", true);
         b.pop();
         com.SaintAlfonzo.creativedelight.hearth.salt.SaltConfig.define(b);

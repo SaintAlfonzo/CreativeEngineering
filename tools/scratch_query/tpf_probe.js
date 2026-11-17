@@ -11,7 +11,7 @@
 //   /ztpf chunksize X Z               "[ztpf] chunksize cx,cz sectionBytes=N blockEntities=N" (the read buffer the
 //                                     client checks against 2 MiB in ClientboundLevelChunkPacketData)
 //   /ztpf worstchunk X Z              fills the chunk at block X Z with as many distinct block states as fit (no block
-//                                     entities, no neighbour updates), then prints chunksize: the upper bound of a
+//                                     entities, no neighbor updates), then prints chunksize: the upper bound of a
 //                                     chunk's section buffer with this pack's block state count
 //   /ztpf heavychunk X Z COUNT KB     places COUNT campfires in the chunk at block X Z (rows of 16 at y=-60 upward),
 //                                     each holding 4 papers of KB kilobytes of incompressible NBT. A campfire's sync

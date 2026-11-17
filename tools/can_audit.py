@@ -218,7 +218,7 @@ def fill_sheet(text, a, rows_by_key):
         m = re.search(r'`([^`]+)`', cells[1])
         want = cells[0].lower().startswith('x')
         iid = m.group(1) if m else None
-        if iid and iid.endswith('*'):   # one row for several ids (bell pepper colours, hoglin plates)
+        if iid and iid.endswith('*'):   # one row for several ids (bell pepper colors, hoglin plates)
             iid = next((x for x in sorted(item_can) if x.startswith(iid[:-1])), iid)
         key = item_can.get(iid) if iid else None
         if want and key and key in rows_by_key:

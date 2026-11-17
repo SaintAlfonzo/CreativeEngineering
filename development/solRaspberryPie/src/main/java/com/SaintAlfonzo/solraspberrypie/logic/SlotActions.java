@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Player slot actions (5). Free: fill an empty active slot (lands in the lowest empty active slot) and change a slot's
  * level. Paid, through a confirm panel: change a slot's effect (ages out the oldest foods of the decay window) and drop
- * a slot (ages out oldest foods until the highest active slot is lost; active choices above shift down). Greyed slots
+ * a slot (ages out oldest foods until the highest active slot is lost; active choices above shift down). Grayed slots
  * are read only. Everything is refused while the player is paused (12.3).
  */
 public final class SlotActions {

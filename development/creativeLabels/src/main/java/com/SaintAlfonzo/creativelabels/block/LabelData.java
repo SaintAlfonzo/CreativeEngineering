@@ -15,10 +15,10 @@ import java.util.Objects;
 
 /**
  * One placed label (sticky_notes.md 3.10, BRIEF 3). The picture is a stripped one-count copy of the shown item
- * (C2 / Q5): id + count 1 + only {@code Enchantments} (presence = glint), {@code Potion} (+ custom potion colour /
- * effects, which decide the potion colour), {@code display.color} and
+ * (C2 / Q5): id + count 1 + only {@code Enchantments} (presence = glint), {@code Potion} (+ custom potion color /
+ * effects, which decide the potion color), {@code display.color} and
  * {@code CustomModelData}. A stripped tag over {@link #MAX_PICTURE_TAG_BYTES} is dropped: id only.
- * The dye colours the icon, not the paper. Labels always drop blank ({@link #toItem()}).
+ * The dye colors the icon, not the paper. Labels always drop blank ({@link #toItem()}).
  */
 public final class LabelData {
 

@@ -1227,11 +1227,11 @@ Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
 - 2026-11-14: Stomping Basin mirrors of every Vinery Grapevine Pot pressing (plan_bugfix_1114 3.10, owner 2026-11-14) (kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js)
-- 2026-11-14: End stone tills only with a netherite or better hoe (owner 2026-11-14, plan_bugfix_1114 3.2): a TieredItem whose tier sorts at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/gear/TillingEvents.java)
+- 2026-11-14: End stone tills only with a netherite or better hoe (owner, 2026-11-14, plan_bugfix_1114 3.2): a TieredItem whose tier sorts at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/gear/TillingEvents.java)
 - 2026-11-14: Tilled end stone is Ender Crop's since 2026-11-14 (the H&H block is gone, plan_bugfix_1114 3.2); the hops lattice block is gone too (hops on Vinery's lattice, 3.1), and the hops vine breaks by hand like a vine (kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js)
 - 2026-11-14: The list is Vinery's GrapeTypeRegistry with a fruit and a bottle (read 2026-11-14): red, white, savanna, taiga and jungle, red and white each (kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js)
 - 2026-11-14: H&H tilled end stone removed 2026-11-14 (3.2) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/block/HHBlocks.java)
-- 2026-11-14: The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner 2026-11-14, plan_bugfix_1114 3.10) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/machine/StompingInputs.java)
+- 2026-11-14: The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner, 2026-11-14, plan_bugfix_1114 3.10) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/machine/StompingInputs.java)
 - 2026-11-15: Salt on a full lick (B7, owner 2026-11-15): one salt layer on top of it, or one more on a layer already there (below 8) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/salt/SaltLick.java)
 
 

@@ -2,14 +2,14 @@
 // server's kubejs/server_scripts as zz_zcen.js, never into the pack. Loaded chunks only (forceload the box first):
 // nothing here loads or generates a chunk (gotchas.md, Rhino / KubeJS probes).
 //   /zcen scan X1 Z1 X2 Z2 ID@KEY,ID@KEY,... [ylo]
-//       Every chunk whose centre lies in the box: surface biome at the chunk centre (WORLD_SURFACE height), whether
+//       Every chunk whose center lies in the box: surface biome at the chunk center (WORLD_SURFACE height), whether
 //       that biome is in each crop rule tag creativedelight:wild_crops/KEY, and every block ID from ylo (default 40)
 //       up to the column's WORLD_SURFACE height. Lines:
 //       "[zcen] box ... chunks=N skipped=S", "[zcen] biomes ...", "[zcen] tag KEY size=Z tagchunks=T",
 //       "[zcen] id ID key=KEY blocks=B chunks=C patches=P intag_chunks=I intag_patches=J" (patch = blocks joined
 //       when within 6 blocks horizontally; '-' over 3000 blocks), then "[zcen] scan done".
 //   /zcen grid FEATURE ID,ID X Z N STEP MODE
-//       N x N points STEP apart centred on X Z. At each point a column within 6 blocks is chosen; MODE ground or canopy
+//       N x N points STEP apart centered on X Z. At each point a column within 6 blocks is chosen; MODE ground or canopy
 //       needs a canopy column (top MOTION_BLOCKING block is leaves, at least 3 above the NO_LEAVES top, ground in
 //       #minecraft:dirt); ground = origin at the NO_LEAVES height (air above the ground), canopy = origin one above the
 //       leaves. MODE yNN = origin at that y on the grid point itself (no column search). The configured FEATURE is

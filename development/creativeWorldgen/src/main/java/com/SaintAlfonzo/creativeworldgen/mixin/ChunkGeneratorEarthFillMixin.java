@@ -39,7 +39,7 @@ public class ChunkGeneratorEarthFillMixin {
 			StructureTemplateManager templateManager, long seed, ChunkAccess chunk, ChunkPos chunkPos) {
 		StructureStart out = EarthFill.filter(start, entry, (ChunkGenerator) (Object) this, randomState, templateManager, seed, chunk, chunkPos);
 		if (out != start && start.isValid() && !out.isValid()) LocateStats.reject(entry.structure().value(), chunkPos, LocateStats.Reason.EARTH_FILL);
-		// placement priority after earth fill, in this one injector: its predictions of neighbours are only worth running
+		// placement priority after earth fill, in this one injector: its predictions of neighbors are only worth running
 		// for a start earth fill kept, and the order no longer rests on two injectors' order in mixins.json (E11)
 		StructureStart ranked = PlacementPriority.filter(out, entry, (ChunkGenerator) (Object) this, structureManager, registryAccess, randomState,
 				templateManager, seed, chunk, chunkPos);

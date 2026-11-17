@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * Turns off Bushier Flowers' bone-meal growth; Flower Patch handles bone meal on flowers instead.
  *
  * <p>Both of the mod's growth paths (its {@code BoneMealItem.useOn} HEAD inject and its bone-meal
- * dispenser behaviour) only act when the target block is in {@code validFlowers} (vanilla flower
+ * dispenser behavior) only act when the target block is in {@code validFlowers} (vanilla flower
  * -> grown bush) or {@code grownFlowers} (grown bush -> pops a loose flower). Emptying both lists
  * makes every check miss, so both paths fall through to vanilla bone meal untouched. The grown
  * blocks stay registered (existing bushes, dye recipes, pots); they are crafted from 4 loose

@@ -33,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Draws a sheared modded vine ({@link VineShearing}) like Quark's cut vine: Quark's texture is the vanilla vine with
  * every pixel below row 11 cleared. Here the vine's own model is used and its wall quads are cut short instead, so
  * the bottom {@link #CUT} of each wall face shows nothing; ceiling faces stay whole, as the cut is where the vine
- * hangs. No texture is copied or derived, so it works for any vine, coloured or tinted (Floral Enchantment's art is
+ * hangs. No texture is copied or derived, so it works for any vine, colored or tinted (Floral Enchantment's art is
  * All Rights Reserved). The blockstate files need no change: their variant keys do not name {@code fertile}, so both
  * values already get the vine's model, and the sheared ones are wrapped here. Off with
  * {@code [vine_shearing] trimmedLook}.
@@ -79,7 +79,7 @@ public final class VineShearingClient {
         int[] src = quad.getVertices();
         for (int i = 0; i < 4; i++) {
             if (y(src, i) > cutY) continue;
-            // The other end of this vertex's vertical edge is the neighbour (in quad order) that sits higher.
+            // The other end of this vertex's vertical edge is the neighbor (in quad order) that sits higher.
             int prev = (i + 3) % 4, next = (i + 1) % 4;
             int top = y(src, prev) > y(src, next) ? prev : next;
             float t = (cutY - y(src, i)) / (y(src, top) - y(src, i));

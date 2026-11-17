@@ -93,7 +93,7 @@ public class EarthFillTest {
 		EarthFill.Terrain lake = (x, y, z) -> y < 10 ? EarthFill.Kind.WATER : y > 12 ? EarthFill.Kind.AIR : EarthFill.Kind.SOLID;
 		long[] pad = longs(new int[]{0, 5, 0}, new int[]{1, 5, 0}, new int[]{2, 11, 0}, new int[]{3, 14, 0}, new int[]{4, 15, 0});
 		EarthFill.Result r = EarthFill.count(List.of(pad), lake, earthLimits(-1, -1), false);
-		check(r.blocks() == 5 && r.water() == 2 && r.air() == 2 && !r.cancelled() && r.complete(), "counts 5 earth: 2 water, 2 air, 1 solid; no limits, not cancelled");
+		check(r.blocks() == 5 && r.water() == 2 && r.air() == 2 && !r.cancelled() && r.complete(), "counts 5 earth: 2 water, 2 air, 1 solid; no limits, not canceled");
 		check(!EarthFill.count(List.of(pad), lake, earthLimits(2, 2), false).cancelled(), "at the limit is allowed");
 		check(EarthFill.count(List.of(pad), lake, earthLimits(1, -1), false).cancelled(), "water 2 > limit 1 cancels");
 		check(EarthFill.count(List.of(pad), lake, earthLimits(-1, 1), false).cancelled(), "air 2 > limit 1 cancels");
@@ -177,13 +177,13 @@ public class EarthFillTest {
 		check(both.equals(List.of(earthTag, EarthFill.STONE_BLOCKS, EarthFill.SAND_BLOCKS)) && EarthFill.withBases(earth, true, true) == both,
 				"stone + sand: both tags, cached per earth list");
 
-		// earthfill #9: an override with every limit -1 is never cancelled, also when log = ALL measures it
+		// earthfill #9: an override with every limit -1 is never canceled, also when log = ALL measures it
 		EarthFill.EarthResult over = new EarthFill.EarthResult(10, 5, 5, 3, true, true), under = new EarthFill.EarthResult(10, 0, 0, 0, false, true);
 		EarthFill.Footprint wetFp = new EarthFill.Footprint(10, 2);
 		check(!EarthFill.earthCancelled(true, under, wetFp, 0.5), "unlimited override + log ALL + wet footprint: kept");
 		check(!EarthFill.earthCancelled(true, over, null, 0.5), "unlimited override + over a size limit (mound unset): kept");
-		check(EarthFill.earthCancelled(false, under, wetFp, 0.5), "limited structure + wet footprint: cancelled");
-		check(EarthFill.earthCancelled(false, over, null, -1), "limited structure over its limits: cancelled");
+		check(EarthFill.earthCancelled(false, under, wetFp, 0.5), "limited structure + wet footprint: canceled");
+		check(EarthFill.earthCancelled(false, over, null, -1), "limited structure over its limits: canceled");
 		check(!EarthFill.earthCancelled(false, under, wetFp, -1), "surplus -1: footprint never cancels");
 		// a river, water up to y 62 over its bed at y 55 (x < 5) or 49; a house floor set into the top water layer (y 62), bottom 62
 		EarthFill.Terrain river = (x, y, z) -> y <= (x >= 5 ? 49 : 55) ? EarthFill.Kind.SEABED : y <= 62 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;

@@ -15,12 +15,12 @@ import sereneseasons.config.BiomeConfig;
  * Serene Seasons' "is this biome tropical" answers from the pack's season tags first: tropical- or
  * dry-tagged yes, arid-, frozen- or temperate-tagged no (so deserts leave the wet/dry cycle). Untagged biomes
  * keep the mod's rule (config list, or warmer than 0.8). Every Serene Seasons consumer goes through here:
- * weather, temperature, grass colours, crop fertility, SeasonHUD.
+ * weather, temperature, grass colors, crop fertility, SeasonHUD.
  *
  * "Does this biome have seasons" answers yes for every tagged biome, so the season tags win over the
  * blacklist (Serene Seasons' default list names the oceans and minecraft:river). See {@link SeasonTypes}.
  *
- * All three answers (and "less colour change") are remembered per biome in {@link SeasonAnswers} until a tag or
+ * All three answers (and "less color change") are remembered per biome in {@link SeasonAnswers} until a tag or
  * config reload: the HEAD handler returns a remembered answer, the RETURN handler stores Serene Seasons' own one
  * (perf.md 19).
  */

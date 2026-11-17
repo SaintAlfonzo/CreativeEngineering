@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Crop seasons for Botania's six coloured grasses (BotaniaGrassBlock) (farming/crops #28, feature_writeup/crops.md 2.12.1). Its tick is only the spread onto dirt.
+ * Crop seasons for Botania's six colored grasses (BotaniaGrassBlock) (farming/crops #28, feature_writeup/crops.md 2.12.1). Its tick is only the spread onto dirt.
  * Gated on its mod by CalendarMixinPlugin; require = 1 so a missed target fails the boot instead of silently doing nothing
  * (the old four-target mixin with require = 0 never applied to IW, Botania or Vintage, r1103 SQ-PST-08, -10, -11, -11b).
  */

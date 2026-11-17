@@ -19,7 +19,7 @@ Inputs:
 - kubejs/generation_scripts/worldgen/biome_config.json: post-tuning share of each dimension per biome.
 - kubejs/generation_scripts/worldgen/climate/minecraft__overworld.json.gz (/dumpclimate): surface climate
   samples with the live biome, used for "which temperature band does this biome actually sit in", the
-  neighbour check and what rivers/beaches resolve to.
+  neighbor check and what rivers/beaches resolve to.
 - configs_edited/server_config/sereneseasons-server.toml (the pack's server copy) and Serene Seasons' built-in
   defaults (what single-player worlds get: the pack ships no defaultconfigs/ copy), config/sereneseasons/
   seasons.toml, config/betterdays-common.toml, saves/*/serverconfig and saves/*/data/seasons.dat.
@@ -349,7 +349,7 @@ def neighbour_check(biomes, cls_of, samples):
     "Land in the band" is every surface sample of a biome that is not ocean, river or beach, weighted by how
     often it was sampled; dry biomes (declared none) count as not snowing. It stands in for "the biomes around
     it". Each band the biome was sampled in is judged on its own, if it holds at least 3 samples and 10% of the
-    biome's. Adaptive biomes are left out: they take the land's behaviour by construction.
+    biome's. Adaptive biomes are left out: they take the land's behavior by construction.
     Returns [(biome, samples, {band: [(sub, 'snows'|'rains', share of band land that does not)]})].
     """
     land = band_land(biomes, samples)

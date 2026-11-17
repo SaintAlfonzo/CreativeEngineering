@@ -1,12 +1,12 @@
 // Scratch-only probe for run r1113 chunk 3 (tools/scratch_query/batches/r1113/c3_*.qb: SQ-PG, SQ-IP, SQ-BOT, SQ-FCK and
-// neighbours). Copy into a scratch server's kubejs/server_scripts as zz_c3_probe.js, never into the pack. NAME = a perfBot
+// neighbors). Copy into a scratch server's kubejs/server_scripts as zz_c3_probe.js, never into the pack. NAME = a perfBot
 // bot (`pbot spawn`). Coordinates are integers in the overworld unless a command says otherwise; load the chunk first
 // (forceload): nothing here loads chunks.
 //   /zc3 aim NAME YAW PITCH           sets the bot's body, head and view rotation (server side; no teleport packet)
 //   /zc3 shoot NAME blue|orange       the bot's main-hand Portal Gun fires that side (PortalGunItem.interact, what the
 //                                     client's left / right click packet runs on the server); prints the result
 //   /zc3 portals                      every portalgun:custom_portal in every level: dim, pos, normal, NBT keys with
-//                                     "adjust" in their name (adjustPositionAfterTeleport), owner descriptor, colour
+//                                     "adjust" in their name (adjustPositionAfterTeleport), owner descriptor, color
 //   /zc3 craft NAME C1|C2|...|C9      a 3x3 crafting grid (a CraftingMenu on the bot's inventory) filled row by row with
 //                                     the cells ("-" = empty, "id" or "id{snbt}"); prints the matching recipe id and the
 //                                     assembled result with its NBT, or "no recipe"

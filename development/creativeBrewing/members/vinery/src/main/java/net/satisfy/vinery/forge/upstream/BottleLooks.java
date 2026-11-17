@@ -45,15 +45,15 @@ import java.util.stream.Collectors;
 public final class BottleLooks {
     private static final String NS = "vinerybackport";
     private static final String KIND = "wine_box";
-    /** Mediums that keep their own model everywhere (user, 2026-10-19: Praetorian is fine as is). */
+    /** Mediums that keep their own model everywhere (owner: Praetorian is fine as is). */
     private static final Set<String> SKIP = Set.of("praetorian_wine");
-    /** Mediums whose own model is the box shape already (user, scratchpad). */
+    /** Mediums whose own model is the box shape already (owner, scratchpad). */
     private static final Set<String> OWN_SHAPE = Set.of("stal_wine", "strad_wine");
     /** The wine whose model every other medium takes, recoloured. */
     private static final String BOX_SHAPE = "strad_wine";
-    /** Wines recoloured with the swap tool's --invert mapping (user, scratchpad 2026-10-19: Magnetic; 10-20: Glowing, Aegis). */
+    /** Wines recoloured with the swap tool's --invert mapping (owner, scratchpad: Magnetic; Glowing, Aegis). */
     private static final Set<String> INVERT = Set.of("magnetic_wine", "glowing_wine", "aegis_wine");
-    /** Colours left out of a wine's palette before the swap (user, scratchpad). */
+    /** Colours left out of a wine's palette before the swap (owner, scratchpad). */
     private static final Map<String, Set<Drop>> DROPS = Map.of(
             "magnetic_wine", EnumSet.of(Drop.WHITE),
             "mellohi_wine", EnumSet.of(Drop.BROWN),

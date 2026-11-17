@@ -14,9 +14,9 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 
 		//######################### Baking (oven.md 2.6) ######################### The new cookies and cheesecakes join
-		// the pack's baking overhaul: upstream's grid recipes out, oven only. Cookies: cookie dough + 2 flavour -> 12.
+		// the pack's baking overhaul: upstream's grid recipes out, oven only. Cookies: cookie dough + 2 flavor -> 12.
 		// Maple Cookie (Abnormals Delight, its Autumnity syrup is not in the pack): maple foods take half Rustic's
-		// syrup, half honey as their main flavour (owner, TODO creativedelight/members #16), so one syrup and one honey;
+		// syrup, half honey as their main flavor (owner, TODO creativedelight/members #16), so one syrup and one honey;
 		// it does not clash with the Syrup Cookie. Each family call sweeps the cookie's and cheesecake's other recipes.
 		var COOKIES = [ // G5 begin (family calls only)
 			[i.syrup_cookie, i.syrup],
@@ -25,7 +25,7 @@ ServerEvents.recipes(e => {
 			[i.maple_cookie, i.syrup, i.honey_bottle],
 		] // G5 end
 		COOKIES.forEach(c => F.cookieBake(c[1], c[0], c[2]))
-		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 3 flavour + 2 sweet. Slices back to a
+		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 3 flavor + 2 sweet. Slices back to a
 		// whole cheesecake stay.
 		var CHEESECAKES = [
 			[i.syrup_cheesecake, i.syrup],
@@ -83,7 +83,7 @@ ServerEvents.recipes(e => {
 		//######################### Heatless meals #########################
 		// Heatless meal rule: farmersdelight/recipes.js "Meals" (CD.food mealCraft / soupCraft: ids end _cooked_manual_only).
 		// Pastas take no broth: the pot's bowl.
-		// Bell pepper pasta: any 3 roasted peppers, as Rustic Delight 1.7.0's pot recipe takes any 3 peppers (was one of each colour)
+		// Bell pepper pasta: any 3 roasted peppers, as Rustic Delight 1.7.0's pot recipe takes any 3 peppers (was one of each color)
 		F.mealCraft([i.pasta, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper, i.t_soup_veggie_cooked,
 			i.bowl], i.bell_pepper_pasta)
 		// The other Rustic pot meals (creativedelight/members #26, "heated manual recipes"): the cooked form of each raw part,

@@ -48,7 +48,7 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Hearth and Harvest 1.4.1's crow ({@code hearthandharvest:crow}), ported to 1.19.2 (plan_hearth_crow_swap.md 6.1). The wild
- * behaviour is the member's own goal set (flee, scarecrows, theft, dropped food, tempting, crops); wild hand feeding, corn
+ * behavior is the member's own goal set (flee, scarecrows, theft, dropped food, tempting, crops); wild hand feeding, corn
  * breeding, the flock alarm and loot handling stay in {@link CrowEvents}. Wariness was a capability on Alex's Mobs' crow and is a
  * field here, saved under "Wariness" with the old key names.
  */

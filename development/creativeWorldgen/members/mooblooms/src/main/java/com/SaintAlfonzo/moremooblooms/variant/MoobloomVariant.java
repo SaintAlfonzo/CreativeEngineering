@@ -80,7 +80,7 @@ public record MoobloomVariant(
         }
     }
 
-    /** Cow egg colours, for a variant without {@code egg_colors}. */
+    /** Cow egg colors, for a variant without {@code egg_colors}. */
     private static final int DEFAULT_EGG_BASE = 0x443626, DEFAULT_EGG_SPOTS = 0xA1A1A1;
 
     /** A pool entry picked by weight (one position's flower, or one bare-shear drop). */
@@ -213,9 +213,9 @@ public record MoobloomVariant(
         int eggBase = DEFAULT_EGG_BASE, eggSpots = DEFAULT_EGG_SPOTS;
         if (root.has("egg_colors")) {
             JsonArray colors = GsonHelper.getAsJsonArray(root, "egg_colors");
-            if (colors.size() != 2) throw new JsonParseException("egg_colors needs two colours");
-            eggBase = parseColor(GsonHelper.convertToString(colors.get(0), "egg colour"));
-            eggSpots = parseColor(GsonHelper.convertToString(colors.get(1), "egg colour"));
+            if (colors.size() != 2) throw new JsonParseException("egg_colors needs two colors");
+            eggBase = parseColor(GsonHelper.convertToString(colors.get(0), "egg color"));
+            eggSpots = parseColor(GsonHelper.convertToString(colors.get(1), "egg color"));
         }
 
         return new MoobloomVariant(id, List.copyOf(pool), poolWeight, scale, Set.copyOf(flowerItems),
@@ -284,7 +284,7 @@ public record MoobloomVariant(
         try {
             return Integer.parseInt(hex, 16) & 0xFFFFFF;
         } catch (NumberFormatException e) {
-            throw new JsonParseException("bad colour " + s);
+            throw new JsonParseException("bad color " + s);
         }
     }
 }

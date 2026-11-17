@@ -43,7 +43,7 @@ public final class HHClient {
         event.registerEntityRenderer(HHEntities.THROWN_HORSESHOE.get(), HorseshoeRenderer::new);
     }
 
-    /** Hops vine (plan_bugfix_1114 3.1): Vinery's jungle grape models tint face 0 with the foliage colour and set no render type. */
+    /** Hops vine (plan_bugfix_1114 3.1): Vinery's jungle grape models tint face 0 with the foliage color and set no render type. */
     private static void hopsVineColors(net.minecraftforge.client.event.RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tint) -> level == null || pos == null ? -1 : net.minecraft.client.renderer.BiomeColors.getAverageFoliageColor(level, pos),
                 com.SaintAlfonzo.creativedelight.hearth.block.HHBlocks.HOPS_VINE.get());

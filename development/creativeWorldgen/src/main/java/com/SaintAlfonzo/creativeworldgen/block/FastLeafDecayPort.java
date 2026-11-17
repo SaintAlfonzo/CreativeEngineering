@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * Fast Leaf Decay (Olafski, FastLeafDecay-30), ported into the pack's leaf decay (CWGConfig [leaf_decay],
  * {@link LeafDecayRange}). The mod listened for a block turning to air and, 4-10 ticks later, ran {@code tick}
  * then {@code randomTick} on the leaves next to it from its own unbounded server-tick list. Here the same event
- * queues a vanilla scheduled tick on each neighbouring leaf ({@code decayMinTicks} to {@code decayMaxTicks}),
+ * queues a vanilla scheduled tick on each neighboring leaf ({@code decayMinTicks} to {@code decayMaxTicks}),
  * which recomputes the distance; {@link LeafDecayRange#afterTick} then drops the leaf if no log is in range.
  * Vanilla already queues that tick from {@code updateShape}, so this mainly covers removals that skip shape
  * updates (flag 16: pistons, some machines) and spreads the timing. A tick already queued for the leaf wins.

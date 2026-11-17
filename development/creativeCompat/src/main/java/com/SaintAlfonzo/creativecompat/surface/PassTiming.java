@@ -17,7 +17,7 @@ import net.minecraftforge.event.TickEvent;
  *
  * {@code calls}: hook runs (every entity that moved, every tick); {@code total_us} / {@code max_us}: their summed and
  * longest time; {@code inside}: entity-ticks spent in a tier block (or stuck in a web), {@code inside_peak} the most in
- * one tick; {@code counts}: neighbour counts run (ring or cube) by any pass-through code on that side; {@code tick_us}:
+ * one tick; {@code counts}: neighbor counts run (ring or cube) by any pass-through code on that side; {@code tick_us}:
  * the summed tick time (START to END of the server tick, or of the client tick, which excludes rendering), so
  * {@code total_us / tick_us} is the hook's share. {@code tools/perf/passthrough_timing.py} reads the lines.
  *
@@ -76,7 +76,7 @@ public final class PassTiming {
         }
     }
 
-    /** One neighbour count ({@link PassThrough#neighbours}). Only levels know their side; others are not counted. */
+    /** One neighbor count ({@link PassThrough#neighbours}). Only levels know their side; others are not counted. */
     static void count(BlockGetter level) {
         if (level instanceof Level l) side(l.isClientSide).counts++;
     }

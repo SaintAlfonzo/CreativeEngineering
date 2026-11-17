@@ -15,7 +15,7 @@ import java.util.List;
  * Switches Sticky It's tooltip handler off (sticky_notes.md 3.13): its {@code ItemTooltipEvent} listener wrote
  * "Label:" lines from the old {@code LabelName1..3} tags, created an empty {@code {}} tag on every hovered item
  * (the bowl stacking bug) and added "[Shift]" text to its own note and eraser. Both of its {@code execute}
- * overloads end in the private static {@code execute(Event, ItemStack, List)}, cancelled here at its head; the
+ * overloads end in the private static {@code execute(Event, ItemStack, List)}, canceled here at its head; the
  * public two-argument overload is left alone so other callers still link. Items already carrying the old tags
  * keep them.
  * <p>

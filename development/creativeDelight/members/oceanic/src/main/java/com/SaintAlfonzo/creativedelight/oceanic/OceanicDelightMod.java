@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Oceanic Delight 1.0.1 rebuilt as a Creative Delight member (feature_writeup/ocean_delight.md 5.6). All code here is our
- * own, written from the mod's behaviour; art and data come from the unmodified upstream jar in {@code oceanic_upstream/}
+ * own, written from the mod's behavior; art and data come from the unmodified upstream jar in {@code oceanic_upstream/}
  * at runtime (OceanicTranslator). Same mod id, item, block, effect and potion ids as upstream, so old worlds load as
  * they are. The pack's fishing net rules (tags, tables) are Creative Delight data.
  */

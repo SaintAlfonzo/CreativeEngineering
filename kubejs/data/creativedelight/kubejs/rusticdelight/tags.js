@@ -1,6 +1,6 @@
 // requires: creativedelight
 // requires: rusticdelight
-// Rustic Delight 1.7.0 tag rows (feature_writeup/rustic_delight.md 5): the six new pepper colours join the pack's
+// Rustic Delight 1.7.0 tag rows (feature_writeup/rustic_delight.md 5): the six new pepper colors join the pack's
 // roasted pepper and cooked veggie tags beside the three base colours. Shared tags are split by the mod owning each
 // entry.
 ServerEvents.tags('item', e => {

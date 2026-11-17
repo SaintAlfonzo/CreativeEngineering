@@ -2,7 +2,8 @@
 # Offline checks for the WTHIT crop growth rules (feature_writeup/crops.md 2.9):
 #   1. CropGrowth maths + rule parsing, against the shipped crop_growth.json (javac/java, only needs gson)
 #   2. tools/crop_growth_coverage.py: every growing block in the /dumpcropgrowth audit is ruled, fallback or skipped
-# CropGrowth lives in Creative Delight since 10-25: build first with ./gradlew :creativeCommon:compileJava :creativeDelight:compileJava --offline
+# CropGrowth lives in Creative Delight: build first with ./gradlew :creativeCommon:compileJava
+# :creativeDelight:compileJava --offline
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT

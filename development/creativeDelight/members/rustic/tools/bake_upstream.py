@@ -69,7 +69,7 @@ KNOWN_SERIALIZERS = {'forge:conditional'}
 
 # ----------------------------------------------------------------------------------------------------------- rules
 
-# Files named like a removed id that other kept files need: the coaster pancake model is the parent of the six flavoured
+# Files named like a removed id that other kept files need: the coaster pancake model is the parent of the six flavored
 # pancake coaster models, and its texture is their particle (the runtime translator dropped both).
 KEPT_SHARED = {'assets/rusticdelight/models/coaster/pancake.json', 'assets/rusticdelight/textures/block/coaster/pancake.png'}
 
@@ -150,7 +150,7 @@ def cherry_blossoms(tag):
 
 
 def base_patch(e):
-    """Keep the base-colour entries of a patch's weighted state provider."""
+    """Keep the base-color entries of a patch's weighted state provider."""
     if isinstance(e, list):
         out = []
         for x in e:

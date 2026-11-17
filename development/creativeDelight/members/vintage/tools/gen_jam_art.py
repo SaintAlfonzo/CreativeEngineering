@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# Jam line art from colour samples (CreativeEngineering2, TODO dishes/jams #8, textures/food #9). Own work, GPLv3.
+# Jam line art from color samples (CreativeEngineering2, TODO dishes/jams #8, textures/food #9). Own work, GPLv3.
 #
-# Every jar sprite, jar interior, jam block, jello block and bowl of jello is one colour sample palette-swapped
-# (textureswapper/palette_swap.py, brightness rank) onto a fixed base, so a new colour gives the whole set:
+# Every jar sprite, jar interior, jam block, jello block and bowl of jello is one color sample palette-swapped
+# (textureswapper/palette_swap.py, brightness rank) onto a fixed base, so a new color gives the whole set:
 #   jar item       recoloured Fruits Delight item/jelly_content, under Fruits Delight item/jam_bottle
 #   jar interior   recoloured textureswapper/mason_jar/interior_jam_base (jams) or interior_jar_base (smooth fills)
 #   jam block      recoloured Fruits Delight block/jelly (Fruits Delight's jam block and jam fluid texture; tiles)
@@ -31,8 +31,8 @@ from palette_swap import get_colors_by_brightness, lerp_palette, palette_swap  #
 MJ = os.path.join(INSTANCE, 'textureswapper/mason_jar')
 OUT = os.path.join(INSTANCE, 'kubejs/assets/mason_jar_new')
 
-# art stem (gen_pack_jams.py JAMS / RETEXTURE naming), colour sample in new_color_jam or new_color_jar, fruit sample
-# in fruit/jello (None: no fruit colour), interior base. Jams make all five pieces; smooth jars only jar + interior.
+# art stem (gen_pack_jams.py JAMS / RETEXTURE naming), color sample in new_color_jam or new_color_jar, fruit sample
+# in fruit/jello (None: no fruit color), interior base. Jams make all five pieces; smooth jars only jar + interior.
 JAMS = [
     ('ancient_fruit', 'new_color_jam/ancient_fruit', 'ancient_fruit'),
     ('banana', 'new_color_jam/banana', 'banana'),
@@ -45,9 +45,9 @@ JAMS = [
     ('salmonberry', 'new_color_jam/salmonberry_jam', 'salmonberries'),
     ('strawberries', 'new_color_jam/strawberries', 'strawberries'),
 ]
-# jams that keep their older colour sample under --source fruit (owner 2026-11-03: pepper)
+# jams that keep their older color sample under --source fruit (owner: pepper)
 KEEP_CURRENT = {'pepper'}
-# smooth jars: art name in new_jar, interior name in new_mason_jar_interior, colour sample
+# smooth jars: art name in new_jar, interior name in new_mason_jar_interior, color sample
 JARS = [
     ('honey_jar', 'honey_jar_interior_texture', 'honey'),
 ]
@@ -78,7 +78,7 @@ def bases():
 
 
 def palette_of(colour_png, drop_darkest=0):
-    """Brightness-ordered palette of a colour sample, semi-transparent pixels left out (they would come out as
+    """Brightness-ordered palette of a color sample, semi-transparent pixels left out (they would come out as
     see-through pixels in the recoloured texture: white_grape.png has some)."""
     arr = np.array(Image.open(colour_png).convert('RGBA'))
     arr[arr[:, :, 3] < 255] = 0
@@ -141,7 +141,7 @@ def save(im, sub, name):
 
 # Owner picks (apply): jar, jam block, jello block and bowl are interpolated for these jams; pepper is left alone (its
 # art is the committed original: jar, interior, jam, jello, bowl); the interiors listed in INTERIOR_DROP_DARKEST are
-# swapped without the sample's darkest colour; the other interiors are the plain swap.
+# swapped without the sample's darkest color; the other interiors are the plain swap.
 INTERPOLATE = {'ancient_fruit', 'banana', 'raspberry', 'green_grape', 'mulberry', 'red_grape', 'salmonberry',
                'strawberries', 'pepper'}
 # SKIP: art kept as it is on disk. Pepper: committed originals, except its jam and jello block (plain swap of the older
@@ -151,11 +151,11 @@ INTERIOR_DROP_DARKEST = {'banana', 'cherry', 'green_grape', 'mulberry', 'raspber
 
 # FROZEN: pieces of a jam kept as they are on disk (red grape's blocks and bowl were accepted with the first six)
 FROZEN = {'red_grape': {'jam_block', 'jello_block', 'bowl'},
-          'pepper': {'interior', 'jello_block', 'bowl'}}  # pepper: only the jar and jam block come from the colour sample
+          'pepper': {'interior', 'jello_block', 'bowl'}}  # pepper: only the jar and jam block come from the color sample
 
-# Accepted 2026-11-03: these (otherwise frozen) jams get their interior from the forced-gradient swap, darkest colour dropped
+# Accepted: these (otherwise frozen) jams get their interior from the forced-gradient swap, darkest color dropped
 GRADIENT_INTERIORS = {'banana', 'raspberry', 'mulberry'}
-# Accepted 2026-11-03: jar interior from even_swap (forced even gradient), with this many darkest colours dropped
+# Accepted: jar interior from even_swap (forced even gradient), with this many darkest colors dropped
 EVEN_INTERIORS = {'red_grape': 0, 'green_grape': 1, 'cherry': 1, 'salmonberry': 2}
 
 # Pieces made with even_swap (forced even gradient) instead of the plain swap, which skips non-monotonic palette entries
@@ -210,11 +210,11 @@ def apply(source, pieces, only=None):
             save(s['jar'], 'new_jar', art)
             save(s['interior'], 'new_mason_jar_interior', interior)
             n += 2
-    print(f'{n} files ({source} colours) written to {OUT}')
+    print(f'{n} files ({source} colors) written to {OUT}')
 
 
 def preview(path):
-    """Per fruit: the set from today's colour sample, then the set from the fruit/jello sample. Blocks are shown
+    """Per fruit: the set from today's color sample, then the set from the fruit/jello sample. Blocks are shown
     tiled 2x2 so a seam shows."""
     z, pad, label_w = 5, 6, 150
     cols = ['jar', 'interior', 'jam_block', 'jello_block', 'bowl']
@@ -235,8 +235,8 @@ def preview(path):
     except OSError:
         font = bold = ImageFont.load_default()
     x0, x1 = label_w, label_w + set_w + 2 * pad + 20
-    d.text((x0, 6), 'Current colour sample (blocks fixed)', fill='white', font=bold)
-    d.text((x1, 6), 'New fruit/jello colour sample', fill=(255, 220, 120), font=bold)
+    d.text((x0, 6), 'Current color sample (blocks fixed)', fill='white', font=bold)
+    d.text((x1, 6), 'New fruit/jello color sample', fill=(255, 220, 120), font=bold)
     d.text((x0, 24), '   jar      interior        jam block                 jello block              bowl',
            fill=(170, 170, 170), font=font)
     d.text((x1, 24), '   jar      interior        jam block                 jello block              bowl',
@@ -281,7 +281,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true', help='write the art into kubejs/assets/mason_jar_new/')
     ap.add_argument('--source', choices=('current', 'fruit'), default='fruit',
-                    help='colour samples for --apply: fruit/jello (fruit, owner pick 2026-11-03) or the older new_color_jam (current)')
+                    help='color samples for --apply: fruit/jello (fruit, owner pick 2026-11-03) or the older new_color_jam (current)')
     ap.add_argument('--pieces', default=','.join(PIECES), help='comma list of ' + ', '.join(PIECES))
     ap.add_argument('--only', help='comma list of jam stems (default all)')
     ap.add_argument('--preview', metavar='PNG')

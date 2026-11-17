@@ -20,8 +20,8 @@ public final class ClientSetup {
                 e.registerLayerDefinition(MoobloomRenderer.LAYER, CowModel::createBodyLayer));
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) ->
                 e.registerEntityRenderer(MMEntities.MOOBLOOM.get(), MoobloomRenderer::new));
-        // Forge registers every ForgeSpawnEggItem's fixed colours at HIGHEST; this one, later, takes over with
-        // the colours of the stack's variant.
+        // Forge registers every ForgeSpawnEggItem's fixed colors at HIGHEST; this one, later, takes over with
+        // the colors of the stack's variant.
         modBus.addListener((RegisterColorHandlersEvent.Item e) -> e.register((stack, layer) -> {
             MoobloomVariant v = MoobloomSpawnEggItem.clientVariant(stack);
             if (v == null) return MoobloomSpawnEggItem.MOOBLOOM_SPAWN_EGG.get().getColor(layer);

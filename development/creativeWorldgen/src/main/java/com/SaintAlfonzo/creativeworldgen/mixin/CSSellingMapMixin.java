@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Sends Cloud Storage's Balloon Salesman maps (big balloon, sky temple) through Async Locator instead of a
- * structure search on the server thread. See {@link AsyncMapTrades}. The prices, map colours and offer
+ * structure search on the server thread. See {@link AsyncMapTrades}. The prices, map colors and offer
  * numbers are copied from SellingMap#getOffer (Cloud Storage 1.3.4). getOffer implements
  * VillagerTrades.ItemListing#getOffer, so in the shipped jar it carries the SRG name m_213663_.
  */

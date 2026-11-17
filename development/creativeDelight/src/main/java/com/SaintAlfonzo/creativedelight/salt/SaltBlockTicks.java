@@ -103,7 +103,7 @@ public final class SaltBlockTicks {
         for (int k = 0; k < DIRECTIONS.length; k++) {
             Direction dir = DIRECTIONS[(start + k) % DIRECTIONS.length];
             BlockPos next = pos.relative(dir);
-            // Always false since 2026-11-14: Creative Common's melting system melts ice and snow (plan_bugfix_1114 3.8)
+            // Always false: Creative Common's melting system melts ice and snow (plan_bugfix_1114 3.8)
             if (Melting.tryMeltFromBlock(next, level)) break;
             if (dissolves && dir != Direction.DOWN
                     && Dissolving.maybeDissolve(state, pos, level.getBlockState(next), next, level)) {

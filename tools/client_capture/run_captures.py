@@ -23,7 +23,7 @@ scratch_testing_expansion 0). Game dir default ~/.cache/ce_capture/game (eval_cl
 from development/creativeDevtools/build/libs swapped in, the perf-eval scripts removed, options.txt for captures).
 
 --display xvfb is EXPERIMENTAL (TX-07, owner D3): an own Xvfb per launch, stopped with the client. Only for tests
-that cannot run otherwise (unattended blocks); the real window stays the default and is required for colour rows.
+that cannot run otherwise (unattended blocks); the real window stays the default and is required for color rows.
 run.json records the display, so the owner sees it when judging.
 
 One-JVM rule: refuses to start while any game JVM is up (prints pid and cwd only). Only ever kills the pid it

@@ -3,7 +3,7 @@
 
 A run tests the jars it was prepared with, and records which ones. prep_srv.sh calls `pin` after its swaps:
   - every own jar in OUT/srv/mods becomes a real copy (a symlink or hard link is replaced by a copy), so a parallel
-    session's installToMods or Gradle build cannot change it under the run (scratch-test gotchas, 10-21 to 11-01);
+    session's installToMods or Gradle build cannot change it under the run (scratch-test gotchas, 10-21 to 2026-11-01);
   - OUT/pinned.json records each own jar's identity: its build stamp, or sha1 for a jar built before stamping.
 `qrun.py run` calls verify before the first row and refuses to start when:
   - OUT/pinned.json is missing (the server was not prepared by prep_srv.sh / pin);

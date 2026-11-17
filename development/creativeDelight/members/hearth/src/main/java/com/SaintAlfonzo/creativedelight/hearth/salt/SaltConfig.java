@@ -23,7 +23,7 @@ public final class SaltConfig {
         ANIMAL_STAGE_CHANCE = b.comment("Chance that an animal's lick wears the block one stage.").defineInRange("saltAnimalStageChance", 0.125D, 0.0D, 1.0D);
         ANIMAL_RADIUS = b.comment("Blocks an animal keeps within of a salt block. The search reaches 2 further.").defineInRange("saltAnimalRadius", 20, 1, 64);
         SEARCH_INTERVAL = b.comment("Ticks between searches for a salt block.").defineInRange("saltSearchInterval", 200, 20, 6000);
-        LICK_INTERVAL = b.comment("Average ticks between an animal's licks, randomised by a quarter either way. The first lick comes after half to one and a half intervals.")
+        LICK_INTERVAL = b.comment("Average ticks between an animal's licks, randomized by a quarter either way. The first lick comes after half to one and a half intervals.")
                 .defineInRange("saltLickInterval", 1200, 200, 72000);
         b.pop();
     }

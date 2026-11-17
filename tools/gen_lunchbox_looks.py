@@ -12,7 +12,7 @@ For each look this writes
   textures/items/lunchbox_dye/<look>_overlay.png  outline and latches as drawn (layer 1, never tinted)
   models/item/lunchbox_look/<look>.json, <look>_dyed.json
 and one item model per box with the overrides for its skins and dye. The outline is the mask in
-iron_lunchbox_outline.png (netherite_lunchbox_outline.png must match it); the latches are LATCH colours; the
+iron_lunchbox_outline.png (netherite_lunchbox_outline.png must match it); the latches are LATCH colors; the
 lunchbag has no outline file, so its darkest browns (every channel under BAG_OUTLINE_MAX) are its outline.
 
 Override numbers: the item property creativedelight:lunchbox_skin is the position in SKINS + 1, which must
@@ -54,7 +54,7 @@ LATCH = {
     'netherite': {(32, 197, 181)},
 }
 BAG_OUTLINE_MAX = 70
-# greyscale range of the dyeable base (light, like vanilla's leather armour, so a dye reads true)
+# greyscale range of the dyeable base (light, like vanilla's leather armor, so a dye reads true)
 BASE_LO, BASE_HI = 110, 240
 
 # box item -> (tier, own look). Tier order = Lunchboxes.TIERS.

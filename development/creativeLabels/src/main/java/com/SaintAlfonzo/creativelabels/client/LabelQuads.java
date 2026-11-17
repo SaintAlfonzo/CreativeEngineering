@@ -21,7 +21,7 @@ import java.util.List;
  * (UP faces) so the mapping stays a proper rotation. Normals go through the same linear map and the winding is
  * checked ({@link NoteShape#orient}).
  *
- * <p>Vertex data layout (DefaultVertexFormat.BLOCK): 8 ints per vertex: x y z, colour, u v, light, normal.
+ * <p>Vertex data layout (DefaultVertexFormat.BLOCK): 8 ints per vertex: x y z, color, u v, light, normal.
  */
 public final class LabelQuads {
 
@@ -84,7 +84,7 @@ public final class LabelQuads {
     }
 
     /**
-     * Emits a placed quad (already oriented) as a baked quad: white vertex colour, the given sprite's UVs (texture
+     * Emits a placed quad (already oriented) as a baked quad: white vertex color, the given sprite's UVs (texture
      * coordinates in 0..1 of the whole sprite image), the quad's normal, shade by its nearest direction.
      */
     public static void bake(QuadBakingVertexConsumer baker, NoteShape.PlacedQuad quad, TextureAtlasSprite sprite, int tintIndex,

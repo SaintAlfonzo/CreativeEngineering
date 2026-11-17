@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * <li>B3: when a salt layer (a {@link SnowLayerBlock} in the melting salt tag: Vintage Delight's salt layer) melts ice or
  * snow by its random tick, it loses one layer with {@code [salt.Melting] SaltLayerVanishChance} (default 0.05); the last
  * layer leaves air. Full salt blocks are not layers and never vanish.</li>
- * <li>B2: The Salt's dispenser behaviour (melt one stage, or place a layer on air) is also registered on the pack's real
+ * <li>B2: The Salt's dispenser behavior (melt one stage, or place a layer on air) is also registered on the pack's real
  * salt, Vintage Delight's salt dust. Hearth and Harvest wraps it at load complete for salt licks.</li>
  * </ul>
  * Runs from {@link SaltBlockTicks#init} (common setup, main thread).

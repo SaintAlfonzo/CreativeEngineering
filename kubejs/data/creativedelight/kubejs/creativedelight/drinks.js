@@ -13,7 +13,7 @@
 //    tea, chorus fruit milk tea, chorus fruit bubble tea, Builder's Tea). Heated mixing: the tea's cost + one more tea
 //    leaf + one sugar-like (2.2), or + one more of its own ingredient where 2.3 says so.
 // 3  Lattes: cloud latte, matcha latte, ice berry matcha.
-// 4  Coffee: roasted beans only; Kettle flavours straight from the plain coffee tank; heated mixing for every coffee.
+// 4  Coffee: roasted beans only; Kettle flavors straight from the plain coffee tank; heated mixing for every coffee.
 // Tags the rules read: creativedelight/drink_tags.js.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
@@ -201,7 +201,7 @@ ServerEvents.recipes(e => {
 
 		//######################### 4. Coffee #########################
 		if (on('rusticdelight')) {
-			// Pot: Rustic's own recipes, already the rule's counts (3 beans, 6 for dark; + milk; + flavour), on roasted
+			// Pot: Rustic's own recipes, already the rule's counts (3 beans, 6 for dark; + milk; + flavor), on roasted
 			// beans only; chocolate takes cocoa or a chocolate bar, pumpkin a pumpkin or a slice
 			var COFFEE_POTS = ['rusticdelight:coffee', 'rusticdelight:dark_coffee', 'rusticdelight:milk_coffee',
 				'rusticdelight:honey_coffee', 'rusticdelight:chocolate_coffee', 'rusticdelight:syrup_coffee',
@@ -222,7 +222,7 @@ ServerEvents.recipes(e => {
 			]
 			var beans = i.roasted_coffee_beans
 			// Heated mixing (4.2): coffee and dark coffee are the Kettle cost + 3 roasted beans; milk coffee is coffee +
-			// milk; a flavour branches off milk coffee or straight off coffee (+ milk), never off another flavour
+			// milk; a flavor branches off milk coffee or straight off coffee (+ milk), never off another flavor
 			mixHot(mb(f.coffee), x(beans, 5).concat([mb(f.water)]), 'coffee')
 			mixHot(mb(f.dark_coffee), x(beans, 5).concat([mb(f.coffee)]), 'dark_coffee')
 			mixHot(mb(f.milk_coffee), [mb(f.coffee), mb(f.milk)], 'milk_coffee')

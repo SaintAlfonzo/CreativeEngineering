@@ -6,8 +6,8 @@ import it.unimi.dsi.fastutil.ints.Int2ByteMap;
 import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
 
 /**
- * The neighbour counts of one chunk (plan_post_scratch_1115b.md C2): each counted block's same-tier neighbour count,
- * computed once on first use and kept until a neighbour is broken or placed ({@link PassCounts} drops it). Sparse: one
+ * The neighbor counts of one chunk (plan_post_scratch_1115b.md C2): each counted block's same-tier neighbor count,
+ * computed once on first use and kept until a neighbor is broken or placed ({@link PassCounts} drops it). Sparse: one
  * entry per counted block of a tier with density, keyed by its chunk-local position.
  *
  * <p>Entry value: the count (bits 0-2, 0 to 6) and the shape it was counted with (bit 3: faces). A lookup with the other
@@ -89,7 +89,7 @@ public final class PassCountData {
         map.put(key, (byte) ((count & 7) | (faces ? 8 : 0)));
     }
 
-    /** Drops one block's entry (it or a neighbour was broken or placed). */
+    /** Drops one block's entry (it or a neighbor was broken or placed). */
     public void remove(int key) {
         map.remove(key);
     }
@@ -104,7 +104,7 @@ public final class PassCountData {
         });
     }
 
-    /** Drops the entries on all four edges (the chunk was loaded: a neighbour may have changed meanwhile). */
+    /** Drops the entries on all four edges (the chunk was loaded: a neighbor may have changed meanwhile). */
     public void dropEdges() {
         map.keySet().removeIf((int k) -> {
             int x = keyX(k), z = keyZ(k);

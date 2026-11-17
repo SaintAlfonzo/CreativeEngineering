@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Undyed ceiling Hanging Canvas Sign, reduced from 1.3.4's CeilingHangingCanvasSignBlock (which extends 1.20's
  * hanging sign): same block state ({@code rotation} 0-15, {@code attached}, {@code waterlogged}), but no text,
  * block entity or renderer; the board and chains are a JSON model. Attached signs (placed sneaking under a block
- * that supports the centre) pop off when that block goes.
+ * that supports the center) pop off when that block goes.
  */
 public class HangingCanvasSignBlock extends Block implements SimpleWaterloggedBlock {
 

@@ -5,7 +5,7 @@ in the templates of Overworld structures, and the marks that swap them for Archi
 
     python3 tools/meat_block_scan.py
 
-A red block is LONE when none of its 6 neighbours in the template is the same block (a red glazed terracotta floor
+A red block is LONE when none of its 6 neighbors in the template is the same block (a red glazed terracotta floor
 or a wool wall is not meat). RED (below) is every red block scanned; MARK is the subset marked for replacement when
 lone in a structure of a settlement family (villages, houses, camps, forts and outposts) or in a template whose path
 names food (butcher, kitchen, tavern, market...). Everything else lone and red is listed for review only.
@@ -112,7 +112,7 @@ def main():
     doc = {'_readme': {
         'what': 'Lone "meat" blocks in structure templates, marked to be swapped for Architect\'s Palette fish blocks standing '
                 'upright when the structure is placed. Written by python3 tools/meat_block_scan.py (do not edit by hand: rerun '
-                'it). A lone block has no neighbour of the same block in the template.',
+                'it). A lone block has no neighbor of the same block in the template.',
         'entries': 'template id -> [{pos: [x, y, z] in the template, from: block id there, to: {Name, Properties}}]. A swap '
                    'applies only when the template still has `from` at `pos` (a mod update that moves things skips it).',
         'applied by': 'patcherMod worldgen/TemplateBlockSwaps: each marked template is patched once when it loads (every '
@@ -128,7 +128,7 @@ def main():
 def write(owners, family_of, marks, review, red_in):
     L = ['# Meat blocks: lone red blocks in structure templates', '',
          'Written by `python3 tools/meat_block_scan.py`. Do not edit. Every red block (' + ', '.join(f'`{b.split(":")[1]}`' for b in RED)
-         + ') in the templates of live Overworld structures. **Lone** = no neighbour of the same block. **Marked**: lone '
+         + ') in the templates of live Overworld structures. **Lone** = no neighbor of the same block. **Marked**: lone '
          '`red_glazed_terracotta` in a settlement-family structure (village, house, camp, fort, pillager) or a food-named '
          'template, to become `architects_palette:salmon_log[axis=y]` (marks in '
          '`kubejs/generation_scripts/worldgen/meat_block_swaps.json`). **Review**: every other lone red block.', '']

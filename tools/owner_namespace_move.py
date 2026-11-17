@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """feature_writeup/namespace_move.md: rewrite of references to the ids in tools/owner_namespace_ids.json, and the
-resource folder moves. Generalises tools/cd_namespace_move.py (one-off for Creative Delight).
+resource folder moves. Generalizes tools/cd_namespace_move.py (one-off for Creative Delight).
 
 Default is a dry run with per-root counts; --apply writes and moves files (git mv). Rewrites:
   'creativeengineering:path' and '#creativeengineering:path' strings (also solapplepie: for the lunchbox),

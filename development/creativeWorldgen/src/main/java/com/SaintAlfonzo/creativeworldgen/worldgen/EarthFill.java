@@ -917,7 +917,7 @@ public final class EarthFill {
 				earthUnlimited(structure), structure.value().step() == GenerationStep.Decoration.SURFACE_STRUCTURES, pieces);
 	}
 
-	/** " (predicted)" on a line logged while PlacementPriority replays a neighbour on a scratch chunk (E10). */
+	/** " (predicted)" on a line logged while PlacementPriority replays a neighbor on a scratch chunk (E10). */
 	private static String predictedTag() {
 		return PlacementPriority.predicting() ? " (predicted)" : "";
 	}
@@ -1015,7 +1015,7 @@ public final class EarthFill {
 			r = withBaseMound(r, baseMound, limits);
 			// the water share: only when the limits kept it (or everything is logged)
 			Footprint f = surplus >= 0 && (!r.cancelled() || log == EarthFillLog.ALL) ? footprint(layers, spans, terrain, WorldgenConfig.earthBaseLayers()) : null;
-			// an all-off override is only measured under log = ALL, never cancelled (as at log = CANCELLED, where it is skipped)
+			// an all-off override is only measured under log = ALL, never canceled (as at log = CANCELLED, where it is skipped)
 			boolean unlimited = earthUnlimited(structure);
 			int minWater = WorldgenConfig.earthFootprintMinWater();
 			boolean wet = !unlimited && f != null && f.tooWet(surplus, minWater);
@@ -1053,7 +1053,7 @@ public final class EarthFill {
 
 		/**
 		 * The start without its offending pieces and everything attached below them, or the start itself when none
-		 * offends. The first piece (the town centre) is never dropped: the whole-start check judges it.
+		 * offends. The first piece (the town center) is never dropped: the whole-start check judges it.
 		 */
 		StructureStart prune(StructureStart start, Holder<Structure> structure, Terrain terrain, ChunkPos chunkPos) {
 			List<StructurePiece> pieces = start.getPieces();

@@ -7,7 +7,7 @@
 // - A head slot that already holds something (a raid captain's banner) is kept.
 // - Drop chance 0 for the three pieces: box mobs respawn forever, a free backtank per kill would skip Create's
 //   progression.
-// - Client side: vanilla illager and witch renderers have no armour layer, so the gear does not show on the model
+// - Client side: vanilla illager and witch renderers have no armor layer, so the gear does not show on the model
 //   (feature_writeup/mob_spawns.md). It still counts as armour.
 // /reload applies.
 

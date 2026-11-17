@@ -517,9 +517,9 @@ def write(rows, live_tags, pad, plants):
              'add every reachable variant once, so a jigsaw structure with many alternatives counts each of them.')
     L.append('')
     L.append('**Choosing tags** (add ids to `kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js`, then rejoin; new chunks only):')
-    L.append('- `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is levelled only under '
+    L.append('- `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is leveled only under '
              'the building and blends out in 4 blocks (+ `skirtBump`).')
-    L.append('- `soft` alone: keeps the template\'s pad and courtyards (they are levelled too) but rounds and shortens the '
+    L.append('- `soft` alone: keeps the template\'s pad and courtyards (they are leveled too) but rounds and shortens the '
              'skirt. For walled compounds and forts whose yards should stay flat.')
     L.append('- `template_trim` alone: for `none` structures (and YUNG\'s, which ignore the mode tags): no more air notches '
              'or floating pad, nothing else changes.')

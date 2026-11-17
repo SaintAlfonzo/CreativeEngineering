@@ -1,5 +1,5 @@
 // Creative Equipment. Echo-tier tools — pickaxe / axe / shovel / hoe at the same tier as Create: Deep Dark's echo sword
-// + armour (that mod only ships a sword).
+// + armor (that mod only ships a sword).
 //
 // Tier numbers lifted straight from create_deep_dark EchoSwordItem's anonymous Tier:
 //   uses 2124 | speed 9.0 | attackDamageBonus 6.0 | enchantmentValue 16

@@ -83,7 +83,7 @@ public final class PoolTuner {
 	static final String TAGS = BiomeLayoutTuner.WORLDGEN_DIR + "pool_tags.json";
 	static final String REPORT = BiomeLayoutTuner.WORLDGEN_DIR + "pool_tag_report.md";
 
-	// Fractional weights are realised by scaling the whole pool by up to CWGConfig [worldgen.pools]
+	// Fractional weights are realized by scaling the whole pool by up to CWGConfig [worldgen.pools]
 	// maxFractionScale. Jigsaw tries every copy of a piece in a pool's list, so a bigger list is slower to fail.
 	private static final int SIZE_UNSET = Integer.MIN_VALUE;
 

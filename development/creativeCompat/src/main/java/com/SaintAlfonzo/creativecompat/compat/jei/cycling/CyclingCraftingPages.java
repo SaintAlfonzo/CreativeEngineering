@@ -197,7 +197,7 @@ final class CyclingCraftingPages {
             emit(r.getId().toString(), probe.page("all", true));
         });
 
-        // Fireworks: every star shape x effect x colour, fades, then rockets of each flight with and without stars.
+        // Fireworks: every star shape x effect x color, fades, then rockets of each flight with and without stars.
         List<ItemStack> stars = new ArrayList<>();
         withRecipe("minecraft:firework_star", (r, probe) -> {
             List<ItemStack> shapes = new ArrayList<>();
@@ -254,7 +254,7 @@ final class CyclingCraftingPages {
 
     // ------------------------------------------------------------------ dyeing
 
-    /** Dye recipes on whole families of items: one page per item, every colour (and dye mixes where allowed). */
+    /** Dye recipes on whole families of items: one page per item, every color (and dye mixes where allowed). */
     private void dyeing() {
         Set<Item> done = new HashSet<>();
         dyePages("minecraft:armor_dye", i -> true, done);
@@ -295,7 +295,7 @@ final class CyclingCraftingPages {
         });
     }
 
-    /** Each colour alone, then two- and three-dye mixes (kept only when the recipe takes them). */
+    /** Each color alone, then two- and three-dye mixes (kept only when the recipe takes them). */
     private void addDyeVariants(CraftingProbe probe, ItemStack base) {
         List<ItemStack> d = dyes();
         for (ItemStack dye : d) {
@@ -467,7 +467,7 @@ final class CyclingCraftingPages {
         });
     }
 
-    /** Glass wind bell: dye above sets the base colour, dye below the trim. */
+    /** Glass wind bell: dye above sets the base color, dye below the trim. */
     private void chimes() {
         withRecipe("chimes:glass_bells_custom", (r, probe) -> {
             ItemStack bell = stack("chimes:glass_bells");
@@ -485,7 +485,7 @@ final class CyclingCraftingPages {
         });
     }
 
-    /** Balloon arrows: eight arrows around a balloon of each colour (balloons dyed by the armor-dye recipe). */
+    /** Balloon arrows: eight arrows around a balloon of each color (balloons dyed by the armor-dye recipe). */
     private void cloudstorage() {
         ItemStack balloon = stack("cloudstorage:balloon");
         if (balloon.isEmpty()) {
@@ -525,7 +525,7 @@ final class CyclingCraftingPages {
                 }
                 variants += emitCounted(one.page(id, true));
             }
-            // Sponge washes the colour off.
+            // Sponge washes the color off.
             CraftingProbe wash = new CraftingProbe(r, level);
             coloured.forEach(s -> wash.add(CraftingProbe.cells(s, new ItemStack(Items.SPONGE))));
             variants += emitCounted(wash.page("sponge", true));
@@ -633,7 +633,7 @@ final class CyclingCraftingPages {
         }
     }
 
-    /** Copy colour: a coloured fairy-light item and another one, which takes the colour. */
+    /** Copy colour: a colored fairy-light item and another one, which takes the colour. */
     private void fairylights() {
         withRecipe("fairylights:copy_color", (r, probe) -> {
             List<ItemStack> dyeable = new ArrayList<>();
@@ -1003,7 +1003,7 @@ final class CyclingCraftingPages {
         return java.util.Arrays.asList(g);
     }
 
-    /** The item's creative-search variants (NBT subtypes such as brews, potions, colours). */
+    /** The item's creative-search variants (NBT subtypes such as brews, potions, colors). */
     private static List<ItemStack> subtypes(Item item) {
         NonNullList<ItemStack> list = NonNullList.create();
         try {

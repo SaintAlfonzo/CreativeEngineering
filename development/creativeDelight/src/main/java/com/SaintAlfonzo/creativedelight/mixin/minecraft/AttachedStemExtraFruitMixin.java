@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *
  * <p>Own fruit connections (farming/crops #20): {@code createBlockStateDefinition} (m_7926_) adds the
  * {@code north/east/south/west} booleans ({@link StemSides}); the constructor then re-registers the default
- * state with all four false. These two handlers run while vanilla's Blocks class initialises, so they touch only
+ * state with all four false. These two handlers run while vanilla's Blocks class initializes, so they touch only
  * {@code BlockStateProperties} and {@link StemSides}.
  */
 @Mixin(value = AttachedStemBlock.class, remap = false)

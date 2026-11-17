@@ -13,7 +13,7 @@ global.LOOT.rules(function (L) {
     if (!global.CD || !global.CD.on('rusticdelight')) return
     var i = global.item
 
-    // crates and bags of the new colours, like the three base crates (veggiesdelight/loot.js)
+    // crates and bags of the new colors, like the three base crates (veggiesdelight/loot.js)
     ;['orange', 'white', 'pink', 'blue', 'purple', 'black'].forEach(function (c) {
         L.pack(i['bell_pepper_' + c + '_crate'], i['bell_pepper_' + c])
     })

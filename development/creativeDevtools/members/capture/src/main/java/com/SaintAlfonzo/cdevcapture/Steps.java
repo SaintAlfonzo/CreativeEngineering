@@ -205,7 +205,7 @@ final class Steps {
 
     /**
      * {@code {"from": "x y z", "at": "x y z"}} or {@code {"from": ..., "yaw": a, "pitch": b}}. {@code from} is the
-     * camera (eye) position; {@code at} aims at the centre of that block. Flies, so the player doesn't fall.
+     * camera (eye) position; {@code at} aims at the center of that block. Flies, so the player doesn't fall.
      * {@code {"yaw": a, "pitch": b}} without {@code from} only turns the player where it stands (no teleport).
      */
     static class Look extends Step {

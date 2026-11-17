@@ -245,7 +245,7 @@ global.NCH = {
     return undefined
   },
 
-  // Recognises a KubeJS Ingredient (incl. compound "match any" ingredients from
+  // Recognizes a KubeJS Ingredient (incl. compound "match any" ingredients from
   // Ingredient.of(['#a','#b']) / .or() chains) or an InputItem (an Ingredient + a count, from
   // Ingredient.of(...).withCount(n)). Returns the KubeJS Ingredient, or null if v isn't one.
   _ingredientLike(v) {
@@ -631,7 +631,7 @@ global.NCH = {
 
     // Carry an inline output chance through from a KubeJS OutputItem (Item.of(x).withChance(n))
     // or a hand-written { chance: n } object. Coerce to a primitive JS number - Rhino hands back
-    // OutputItem.chance as a boxed java.lang.Double, which KubeJS's JSON serialiser drops on the
+    // OutputItem.chance as a boxed java.lang.Double, which KubeJS's JSON serializer drops on the
     // floor, leaving the result at an implicit 100%.
     if (opts.includeChance && v && typeof v === 'object') {
       var ch
@@ -651,7 +651,7 @@ global.NCH = {
   // NBT-aware ingredient / result JSON. Used by ieBlueprint (the Engineer's Workbench) and the
   // vdPickling results — every other ie* / create* helper still goes through plain _itemJson.
   //
-  // Recognises, in addition to everything _itemJson handles:
+  // Recognizes, in addition to everything _itemJson handles:
   //   - a hand-written ingredient object: { type: 'forge:partial_nbt'|'forge:nbt', item, nbt }
   //     (or a full { base_ingredient: {...}, count } ) -> used verbatim
   //   - the shorthand { item: 'id', nbt: '{...}' [, count] } -> forge:partial_nbt ingredient
@@ -2446,7 +2446,7 @@ global.NCH = {
 
 	// Register the incomplete/transition item for one sequenced assembly under an arbitrary
 	// key (unrelated to any recipe id). Call from StartupEvents.registry('item').
-	// texture: omit to auto-derive a grey-tinted copy of the output item's sprite - it looks
+	// texture: omit to auto-derive a gray-tinted copy of the output item's sprite - it looks
 	//   up global.item[key] (or falls back to minecraft:<key>) and uses '<ns>:item/<path>'.
 	//   Pass an explicit string when that guess is wrong (block items, mods using items/, ...).
 	registerIncomplete(event, key, texture, colorHex) {
@@ -3021,7 +3021,7 @@ global.NCH = {
 	      category: category,
 	      // NBT-aware: an input/result may be a KubeJS Item.of('id','{nbt}'), a
 	      // { item, nbt } shorthand, or a raw { type:'forge:partial_nbt'|'forge:nbt', ... }
-	      // ingredient. Plain items/tags are unchanged. IE's IngredientWithSize honours
+	      // ingredient. Plain items/tags are unchanged. IE's IngredientWithSize honors
 	      // forge:partial_nbt/forge:nbt natively and the workbench matches NBT-aware.
 	      inputs: global.NCH._mergeBlueprintInputs(inputs.map((i, idx) => {
 	          return global.NCH._nbtItemJson(i, { countMode: 'base_ingredient', role: 'input', context: ctx + ' input[' + idx + ']' })
@@ -3039,7 +3039,7 @@ global.NCH = {
 	//
 	// LIMITATION: this only does the main result. Secondary outputs (sawdust / bark) and
 	// the "stripped" result CANNOT be added here - kubejs-immersive-engineering's
-	// SawmillRecipeSchema serialises the `secondaries` array in a shape IE's own serializer
+	// SawmillRecipeSchema serializes the `secondaries` array in a shape IE's own serializer
 	// rejects ("Missing stripping, expected to find a Boolean"). For those, write a datapack
 	// json (see development/patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/*.json
 	// or kubejs/data/creativeengineering/recipes/sawmill/<id>.json), which loads through IE

@@ -9,8 +9,8 @@ LEVEL is the world folder (OUT/srv/<level-name>). Only chunks with Status full a
 blocks: every block whose id matches REGEX (Python, searched in the palette name), counted by id and
   - Y band (BAND layers per band, default 8), by biome (the section's 4x4x4 biome cell),
   - depth = blocks below the chunk's WORLD_SURFACE heightmap top (0 = the top block itself; < 13 = "near the surface"),
-  - chunks holding at least one match by the chunk's surface biome (centre column), against all chunks of that biome,
-  - --near REGEX2: how many matches have one of their 6 neighbours matching REGEX2 (same chunk only).
+  - chunks holding at least one match by the chunk's surface biome (center column), against all chunks of that biome,
+  - --near REGEX2: how many matches have one of their 6 neighbors matching REGEX2 (same chunk only).
   --fail-above Y: exit 1 when a match sits above Y.  --fail-depth-below N: exit 1 when a match has depth < N.
 entities: entities in LEVEL/entities whose id matches REGEX, by id, biome (from the region chunk under them) and the
   value of NBT field --field (e.g. Type for mooshrooms).

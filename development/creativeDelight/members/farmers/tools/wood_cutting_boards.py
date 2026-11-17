@@ -1,12 +1,12 @@
 # Usage: python3 tools/wood_cutting_boards.py <FD cutting_board.png> <dir with vanilla *_planks.png> src/main/resources/assets/farmersdelight/textures/block [preview.png]
 # Wood cutting boards (TODO cooking/kitchen #38): Farmer's Delight's board texture (a spruce ramp of 5 shades) recoloured
 # per wood. Each board shade is replaced by the wood's plank palette (sorted by brightness) sampled at the same rank, so
-# the board's seams, rim and handle hole stay and the colours are the plank's own.
+# the board's seams, rim and handle hole stay and the colors are the plank's own.
 import sys
 from PIL import Image
 
 WOODS = ['oak', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'crimson', 'warped']
-# Where each of the board's 5 shades (darkest first) samples the plank palette (0 = darkest plank colour, 1 = brightest).
+# Where each of the board's 5 shades (darkest first) samples the plank palette (0 = darkest plank color, 1 = brightest).
 # The board is drawn a little lighter than spruce planks, so its shades sit in the upper part of the ramp.
 POS = [0.2, 0.42, 0.6, 0.8, 1.0]
 

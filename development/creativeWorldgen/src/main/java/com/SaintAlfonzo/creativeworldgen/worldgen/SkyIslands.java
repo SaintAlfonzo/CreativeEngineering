@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.LongAdder;
  * mixin/ConfiguredFeatureSkyIslandsMixin answers ConfiguredFeature#place for any feature registered under
  * {@code sky_structures} with {@link #place}: the same roll, dimension check (Overworld only), template, mirror,
  * rotation and processor as the mod, but one island per hit, and its height measured from the highest of the ground and
- * any water under its footprint (centre and corners), never below sea level. The height band (16 + 0..63 above that)
+ * any water under its footprint (center and corners), never below sea level. The height band (16 + 0..63 above that)
  * is the mod's; TODO structures/sky #3 is where it changes.
  *
  * {@code /place feature sky_structures:<island>} skips the 150-in-a-million roll (the level is not a WorldGenRegion

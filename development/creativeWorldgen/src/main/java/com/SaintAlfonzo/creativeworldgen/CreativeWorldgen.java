@@ -95,7 +95,7 @@ public class CreativeWorldgen {
         // structures themselves are kubejs meta_structures.json).
         MetaStructure.register(modEventBus);
 
-        // Leaf decay ([leaf_decay]): Fast Leaf Decay's air-neighbour trigger, ported in; the range and timing rules are
+        // Leaf decay ([leaf_decay]): Fast Leaf Decay's air-neighbor trigger, ported in; the range and timing rules are
         // mixin.LeavesDecayRangeMixin + block.LeafDecayRange.
         MinecraftForge.EVENT_BUS.register(FastLeafDecayPort.class);
 

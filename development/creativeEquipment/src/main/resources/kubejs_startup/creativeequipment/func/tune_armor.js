@@ -15,7 +15,7 @@
 //      toughness:           3,      // armor toughness
 //      knockbackResistance: 0.1,    // 0..1  (0.1 ≈ ignore 10% of knockback)
 //      durability:          592,    // max uses
-//      rarity:              'epic', // common | uncommon | rare | epic (name colour)
+//      rarity:              'epic', // common | uncommon | rare | epic (name color)
 //      fireproof:           true,   // survives fire/lava as a dropped item
 //      stackSize:           1,
 //    },
@@ -24,7 +24,7 @@
 //
 //  Notes / limits:
 //   • armor / toughness / knockbackResistance go through KubeJS's setArmorProtection/
-//     Toughness/KnockbackResistance, which reuse the vanilla per-slot modifier UUID →
+//     Toughness/KnockbackResistance, which reuse the vanilla per-slot modifier UUID ->
 //     they REPLACE the piece's built-in value rather than stacking with it.
 //     ArmorItem (+ subclasses) only.
 //   • enchantability / repairWith are NOT reachable on armor from KubeJS (armor

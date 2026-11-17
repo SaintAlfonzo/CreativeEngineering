@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Overrides the enchanting "enchantment value" (enchantability) of whole armour materials
- * that KubeJS can't reach. Armour reads it off {@code ArmorMaterial#getEnchantmentValue()},
+ * Overrides the enchanting "enchantment value" (enchantability) of whole armor materials
+ * that KubeJS can't reach. Armor reads it off {@code ArmorMaterial#getEnchantmentValue()},
  * which has no {@code kjs$} accessor, so {@code kubejs/startup_scripts/func/tune_armor.js}
  * can only warn-and-skip the {@code enchantability} key.
  *

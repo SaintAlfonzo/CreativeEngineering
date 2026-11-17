@@ -69,7 +69,7 @@ README = OrderedDict([
     ('multiplier', '1.0 = untouched. 0 = removed (its climate space goes to whichever biomes border it). '
                    '0.5 = half as common, 2.0 = twice as common, measured against share_pct. The solver '
                    'hits these by raising/lowering one offset penalty per biome, so a boosted biome grows '
-                   'outward from its existing patches into its climate neighbours, never appears somewhere '
+                   'outward from its existing patches into its climate neighbors, never appears somewhere '
                    'climatically unrelated.'),
     ('replace_with', 'A biome id, or null. Relabels every entry of this biome to that one -- an exact swap of '
                      'the same climate space. Overrides multiplier.'),

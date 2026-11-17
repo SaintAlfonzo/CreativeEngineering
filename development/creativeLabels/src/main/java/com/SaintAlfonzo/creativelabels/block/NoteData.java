@@ -12,7 +12,7 @@ import java.util.Objects;
  * One placed sticky note (sticky_notes.md 3.4, BRIEF 3). Also the home of the item-NBT helpers for notes, so a
  * placed note and a note item share one NBT shape:
  * <pre>
- *   display: { color: int }                 vanilla DyeableLeatherItem colour (absent = plain yellow)
+ *   display: { color: int }                 vanilla DyeableLeatherItem color (absent = plain yellow)
  *   CreativeLabels: { Text: str, Special: str }   written only when non-empty (C5)
  * </pre>
  * The block entity stores the same compound plus {@code Day} and {@code Placer}, so {@link #toItem()} and
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public final class NoteData {
 
-    /** Item compound shared with {@code ItemLabels} (labelled items keep their lines under the same compound). */
+    /** Item compound shared with {@code ItemLabels} (labeled items keep their lines under the same compound). */
     public static final String TAG = "CreativeLabels";
     public static final String KEY_TEXT = "Text";
     public static final String KEY_SPECIAL = "Special";
@@ -97,14 +97,14 @@ public final class NoteData {
 
     // ----- items -----
 
-    /** A sticky note item carrying this note's colour, special and text (not the day or placer). */
+    /** A sticky note item carrying this note's color, special and text (not the day or placer). */
     public ItemStack toItem() {
         ItemStack stack = new ItemStack(CLRegistry.STICKY_NOTE.get());
         writeTo(stack);
         return stack;
     }
 
-    /** Writes colour, special and text onto any stack (the stack's other NBT is kept). */
+    /** Writes color, special and text onto any stack (the stack's other NBT is kept). */
     public void writeTo(ItemStack stack) {
         writeColor(stack, color);
         writeSpecial(stack, special);
@@ -127,7 +127,7 @@ public final class NoteData {
         return display.contains(KEY_COLOR, Tag.TAG_ANY_NUMERIC) ? display.getInt(KEY_COLOR) : NO_COLOR;
     }
 
-    /** {@link #NO_COLOR} removes the colour (and an emptied display compound). */
+    /** {@link #NO_COLOR} removes the color (and an emptied display compound). */
     public static void writeColor(ItemStack stack, int color) {
         if (color == NO_COLOR) {
             CompoundTag tag = stack.getTag();

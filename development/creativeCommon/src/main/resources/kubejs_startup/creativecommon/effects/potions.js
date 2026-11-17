@@ -1,8 +1,8 @@
-// The creativecommon: potions of vanilla effects (plan_cb_polish.md 2, 2026-11-06: every potion and effect the Creative
-// mods own is registered from Creative Common; these were creativebrewing:*, before that kubejs:*, all remapped by
-// data/creativecommon/swaps/effects_potions.json and, for ids saved in item NBT, PotionByNameRemapMixin).
-// Brewing mixes stay with Creative Brewing (its potions.js reads global.creativePotions for which steps exist).
-// Potions of modded effects (Better Beacons, Magic Resistance) are Java: effect/CommonPotions.java.
+// The creativecommon: potions of vanilla effects (plan_cb_polish.md 2, every potion and effect the Creative mods own is
+// registered from Creative Common; these were creativebrewing:*, before that kubejs:*, all remapped by
+// data/creativecommon/swaps/effects_potions.json and, for ids saved in item NBT, PotionByNameRemapMixin). Brewing mixes
+// stay with Creative Brewing (its potions.js reads global.creativePotions for which steps exist). Potions of modded
+// effects (Better Beacons, Magic Resistance) are Java: effect/CommonPotions.java.
 //
 // Vanilla effects only: KubeJS evaluates this callback in one early pass, before any other mod's
 // DeferredRegister<MobEffect> fires, so a modded effect id resolves to null here whatever registry API is used.

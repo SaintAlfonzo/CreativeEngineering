@@ -1,7 +1,7 @@
 // requires: creativeequipment
 // Creative Equipment. Recipe ids are creativeequipment:<type>/<suffix> (global.CEQ.recipes). Stepstools (items:
 // startup_scripts/items/stepstools.js; feature_writeup/stepstool.md): a Create seat on top of an oak fence, the seat's
-// colour giving the stool's.
+// color giving the stool's.
 
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {

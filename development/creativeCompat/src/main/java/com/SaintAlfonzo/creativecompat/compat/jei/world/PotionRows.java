@@ -24,8 +24,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * <ul>
  *   <li>a slot of potion bottles ({@code minecraft:potion}, splash, lingering) becomes those bottles holding the potion;</li>
  *   <li>a jar slot holding {@code moonlight:potion} becomes one jar per bottle kind in the row, in the same order, with
- *       Moonlight's {@code NBT:{Potion, Bottle}} and the potion's colour as {@code CachedColor} (the jar item renderer
- *       draws that colour);</li>
+ *       Moonlight's {@code NBT:{Potion, Bottle}} and the potion's color as {@code CachedColor} (the jar item renderer
+ *       draws that color);</li>
  *   <li>a {@code create:potion} fluid gets the potion's {@code Potion} / {@code Bottle} tag.</li>
  * </ul>
  * The row is linked, so the bottle kind and the jar cycle together. Water and the base potions (awkward, thick,

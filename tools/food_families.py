@@ -83,7 +83,7 @@ FAMILIES = OrderedDict([
     ('egg/cooked', ('Cooked egg', 'One egg fried, boiled or scrambled, nothing else.')),
     ('egg/dish', ('Egg dish', 'Eggs with other parts on a plate or bowl (omelet, shakshouka).')),
     ('dairy', ('Dairy', 'Cheese and yogurt eaten on their own.')),
-    ('bread', ('Bread', 'Baked plain or lightly flavoured dough with no filling.')),
+    ('bread', ('Bread', 'Baked plain or lightly flavored dough with no filling.')),
     ('bread/loaf', ('Loaf', 'A whole loaf or round bread.')),
     ('bread/slice', ('Bread slice', 'A slice of a loaf, toasted or not.')),
     ('bread/flat', ('Flatbread', 'Tortillas and flatbreads baked as one piece (sweet buns are desserts).')),
@@ -110,7 +110,7 @@ FAMILIES = OrderedDict([
     ('dessert/brownie', ('Brownie', 'A brownie, or the tray of brownies it is cut from.')),
     ('dessert/pudding', ('Pudding', 'Soft set desserts in a bowl (custard, pudding, yogurt desserts) and steamed puddings cut in slices.')),
     ('dessert/pancake', ('Pancake', 'Pancakes from every mod: single pancakes, pancake dishes and the pancake stack blocks. '
-                                    'No base item: each pancake keeps its own recipes (owner 2026-11-02).')),
+                                    'No base item: each pancake keeps its own recipes (owner, 2026-11-02).')),
     ('dessert/pastry', ('Pastry', 'Scones, eclairs, beignets and sweet buns.')),
     ('dessert/waffle', ('Waffle', 'A waffle, plain or topped.')),
     ('dessert/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
@@ -122,7 +122,7 @@ FAMILIES = OrderedDict([
     ('candy/marshmallow', ('Marshmallow', 'Marshmallows, on a stick or in a s\'more.')),
     ('frozen', ('Frozen dessert', 'Served frozen.')),
     ('frozen/ice_cream', ('Ice cream', 'Churned ice cream in a bowl.')),
-    ('frozen/popsicle', ('Popsicle', 'Frozen juice, fruit or flavour on a stick (every popsicle, melon and cantaloupe to corn and ender).')),
+    ('frozen/popsicle', ('Popsicle', 'Frozen juice, fruit or flavor on a stick (every popsicle, melon and cantaloupe to corn and ender).')),
     ('frozen/shaved_ice', ('Shaved ice', 'Shaved ice with a fruit flavour.')),
     ('sandwich', ('Sandwich', 'Fillings held in bread or a wrap, eaten by hand.')),
     ('sandwich/square', ('Square sandwich', 'Square bread slices around a filling (the sprite shows slices).')),
@@ -909,16 +909,16 @@ RULES = {
         recipe=[D('see subfamilies')]),
     'cake/whole': dict(
         place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[R('Cakes: Crafting (manual): baked cake base + frosting + 2 flavour', OV,
+        recipe=[R('Cakes: Crafting (manual): baked cake base + frosting + 2 flavor', OV,
                   only_if(is_cake, lambda m: m.at('Crafting', ['frosting'], ['cake_base']))),
-                R('Cakes: Oven (cake pan): raw cake base + frosting + 2 flavour', OV,
+                R('Cakes: Oven (cake pan): raw cake base + frosting + 2 flavor', OV,
                   only_if(is_cake, lambda m: m.at('Oven', ['frosting']))),
                 R('Cakes: no other recipe (every other mod\'s cake recipe removed; `_from_slices` reassembly kept; plain and '
                   'chocolate cake also spout onto a baked base)', OV,
                   only_if(is_cake, lambda m: m.only('Oven', 'Crafting', 'Spout'))),
-                P('Every cake becomes a sequenced assembly (baked base, frosting, flavour), not only a grid or oven recipe; the existing '
+                P('Every cake becomes a sequenced assembly (baked base, frosting, flavor), not only a grid or oven recipe; the existing '
                   'spouts (plain, chocolate) need more steps', T('baking/baked-goods #28')),
-                R('Honey cake: 1 honey bottle + 1 honeycomb as its 2 flavour', T('baking/baked-goods #26')),
+                R('Honey cake: 1 honey bottle + 1 honeycomb as its 2 flavor', T('baking/baked-goods #26')),
                 P('Mangosteen cake renamed (not a cake); a dragon egg cake', T('baking/baked-goods #5')),
                 P('Cake paste goes into the Cooking Pot', T('baking/baked-goods #6'))]),
     'cake/slice': dict(
@@ -937,7 +937,7 @@ RULES = {
     'cookie': dict(
         can=[R('x2 x 5 fast servings, 8 cookies or 6 + sugar (can parity 2.5)', CP, CAN)],
         place=[D('Supplementaries jar (`#supplementaries:cookies`)', placed_on('jar'))],
-        recipe=[R('Oven only (baking sheet): cookie dough + 2 flavour -> 12', OV,
+        recipe=[R('Oven only (baking sheet): cookie dough + 2 flavor -> 12', OV,
                   lambda m: m.at('Oven', ['cookie_dough'])),
                 R('No other recipe', OV, lambda m: m.only('Oven')),
                 P('Oatmeal cookie takes oat dough; oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape',
@@ -949,7 +949,7 @@ RULES = {
         place=[D('Food Plate', placed_on('plate'))],
         recipe=[D('Oven for the plain bake; toppings by Spout', lambda m: m.at('Spout') or m.at('Oven')),
                 P('More waffle recipes and uses', T('baking/baked-goods #6')),
-                D('A dessert can get its own cookware or recipe treatment (a mould, a griddle, a press), not the cookie, cake or '
+                D('A dessert can get its own cookware or recipe treatment (a mold, a griddle, a press), not the cookie, cake or '
                   'pie shape; Gingerbread is the first (Create Confectionery\'s gingerdough: furnace, smoker); the Gingerbread Man stays a cookie')]),
     'candy': dict(
         can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
@@ -963,8 +963,8 @@ RULES = {
         can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
         place=[D('Display Delight placed (ice cream), Food Plate (popsicles)', placed_on('placed', 'plate'))],
         recipe=[R('Every ice food takes `#forge:ice_cubes`', RCK + ' 2.1', lambda m: m.at({r['st'] for r in m.recs}, ['#forge:ice_cubes', 'ice_cubes'])),
-                P('Ice cream: unified recipes, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per '
-                  'flavour (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavour', T('baking/sweets #4')),
+                P('Ice cream: unified recipes, a fluid per flavor with mixing recipes, bowl spouting, an ice cream block per '
+                  'flavor (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavor', T('baking/sweets #4')),
                 P('More custard, shaved ice and popsicle variants', T('baking/sweets #3'))]),
     'dessert/pancake': dict(
         place=[R('Every pancake can be put down: Rustic\'s plates and Supplementaries\' Pancake are their own stack blocks '
@@ -975,7 +975,7 @@ RULES = {
                   'Supplementaries\' Pancake: by hand and the heated Mixer; Sweet Potato Pancakes: Cooking Pot)', PANCAKE_SRC),
                 R('Food type `sweet/pancake` for every pancake eaten as an item (food.md 2.1)', PANCAKE_SRC),
                 P('Cooking Pot for the Supplementaries Pancake (3 batter + 2 sugar + 1 egg -> 4)', T('merges/baking #1')),
-                P('Coverings recoloured to the jam colour', T('dishes/meals #37'))]),
+                P('Coverings recoloured to the jam color', T('dishes/meals #37'))]),
     'dessert/brownie': dict(
         place=[D('Tray: own block (cut into brownies)', only_if(lambda m: m.row['whole'], placed_on('block', 'sneak')))],
         recipe=[D('Oven: the tray (cake pan); Cutting Board: tray -> brownies',
@@ -1029,7 +1029,7 @@ RULES = {
                   'heatless craft from cooked ingredients where they have a cooked form; one sequenced assembly where '
                   'one existed', 'barbequesdelight/skewers.js', lambda m: m.at(('Smoker', 'Campfire / Skillet'))),
                 D('Shaped only + one sequenced assembly (as Crispy Skewer, ' + RCK + ' 2.1); the End Skewer is shapeless '
-                  '(owner 2026-11-04)', lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
+                  '(owner, 2026-11-04)', lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
                 P('Skewers become their own food type (recipes, which foods open)', T('dishes/meals #13'))]),
     'roll': dict(
         can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
@@ -1179,7 +1179,7 @@ RULES = {
         can=[R('2 golden + honey -> 10 servings at x0.25 (effects x0.333 decided, not built; can parity 2.17)', CP, CAN)],
         place=[D('none required')],
         recipe=[R('Crafting: the food in 8 gold (real gold only, rose gold counts); every golden food but the apple takes '
-                  '8 gold nuggets (owner 2026-11-02, [food.md](food.md) 3.16; was 8 gold ingots)', RCK + ' 2.4',
+                  '8 gold nuggets (owner, 2026-11-02, [food.md](food.md) 3.16; was 8 gold ingots)', RCK + ' 2.4',
                   lambda m: m.at('Crafting', ['gold'])),
                 D('Heated Mixer: the food + 6 gold, and Arc Furnace: the food + 5 gold, for every golden food (stated '
                   'only for carrot and apple, ' + RCK + ' 2.4; TODO dishes/meals #9 built it on every gold tag)',
@@ -1189,7 +1189,7 @@ RULES = {
                   '[golden_food.md](golden_food.md) 3.6)')]),
     'golden/enchanted': dict(
         recipe=[R('Gilded (enchanted golden) apple: sequenced assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB '
-                  'liquid XP, pressing (owner 2026-11-03; was 4 loops of a gold block and 250 mB)', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
+                  'liquid XP, pressing (owner, 2026-11-03; was 4 loops of a gold block and 250 mB)', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
                                                        lambda m: m.at('Sequenced assembly'))),
                 R('Every other enchanted golden food but the cake: the same assembly on its golden form; the anvil and '
                   'the Golden Food Enchantment are removed', 'owner 2026-11-02 ([golden_food.md](golden_food.md) 3.4)', only_if(

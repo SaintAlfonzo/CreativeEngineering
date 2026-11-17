@@ -77,7 +77,7 @@ def fnum(v, d=1):
 
 
 def short(cls):
-    """a.b.c.Foo$Bar#m -> Foo$Bar#m, keeping enough to recognise the mod's class."""
+    """a.b.c.Foo$Bar#m -> Foo$Bar#m, keeping enough to recognize the mod's class."""
     c, _, m = cls.partition('#')
     base = c.rsplit('.', 1)[-1]
     return base + ('#' + m if m else '')

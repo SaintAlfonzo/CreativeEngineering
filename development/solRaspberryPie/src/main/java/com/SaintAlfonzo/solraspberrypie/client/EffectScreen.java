@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * The effect screen (11.2): flat bonuses (read only), then the slots in order. Active slots: fill (free, lands in the
- * lowest empty active slot), level change (free), change effect and drop (paid, through the confirm panel). Greyed
+ * lowest empty active slot), level change (free), change effect and drop (paid, through the confirm panel). Grayed
  * slots show their stored choice and are read only. While paused, every action is disabled and PAUSED shows.
  */
 public class EffectScreen extends Screen {

@@ -211,8 +211,8 @@ public final class CWGConfig {
             onlyWhenDisturbed = b.comment(
                     "true: random ticks never decay a natural leaf. A leaf only decays after a block next to it",
                     "changes: when its log is cut it rechecks 4-11 ticks later, and a far-out leaf rechecks when a",
-                    "neighbour changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and",
-                    "saplings are placed without neighbour updates, so an untouched tree keeps every leaf, even ones",
+                    "neighbor changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and",
+                    "saplings are placed without neighbor updates, so an untouched tree keeps every leaf, even ones",
                     "past maxDistance or touching only diagonally. Cheaper than false: the range search runs only on",
                     "a change. false: vanilla timing (random ticks), with the maxDistance range."
             ).define("onlyWhenDisturbed", true);
@@ -531,7 +531,7 @@ public final class CWGConfig {
      * Knobs for {@code worldgen/GroundMatch}: a structure template's base blocks (grass, dirt...) are
      * swapped for the ground actually around it when that ground isn't grass/dirt (a grassy ruin in
      * volcanic peaks sits on basalt instead). Which blocks count is block-tag driven (KubeJS
-     * blocktags.js), so only the behaviour lives here. Read while chunks generate: already-generated
+     * blocktags.js), so only the behavior lives here. Read while chunks generate: already-generated
      * chunks never change. On/off: [worldgen.systems] groundMatch.
      */
     public static final class GroundMatch {
@@ -575,7 +575,7 @@ public final class CWGConfig {
 
             minSamples = b.comment(
                     "Fewest natural ground columns needed to decide (columns under structures are skipped). With",
-                    "fewer, even after also sampling the 8 neighbouring chunks, the base is left as it is."
+                    "fewer, even after also sampling the 8 neighboring chunks, the base is left as it is."
             ).defineInRange("minSamples", 16, 1, 1024);
 
             families = b.comment(
@@ -590,7 +590,7 @@ public final class CWGConfig {
             b.comment("How the natural ground is sampled.").push("sampling");
             centerStride = b.comment("Every Nth column of the chunk being placed is sampled (2 = 64 columns).")
                     .defineInRange("centerStride", 2, 1, 16);
-            neighbourStride = b.comment("Every Nth column of each of the 8 neighbouring chunks (4 = 16 each).")
+            neighbourStride = b.comment("Every Nth column of each of the 8 neighboring chunks (4 = 16 each).")
                     .defineInRange("neighbourStride", 4, 1, 16);
             subDepth = b.comment("Blocks sampled under each column's top block (the under-block palette).")
                     .defineInRange("subDepth", 3, 1, 16);
@@ -605,7 +605,7 @@ public final class CWGConfig {
     }
 
     /**
-     * Knobs for {@code worldgen/EarthFill}: a structure is cancelled before it is stored when the earth
+     * Knobs for {@code worldgen/EarthFill}: a structure is canceled before it is stored when the earth
      * blocks in the bottom layers of its templates would sit on water or in air, judged against the
      * terrain the generator predicts there. Which blocks are earth is a block tag (kubejs blocktags.js);
      * structures that float on purpose are in the structure tag creativeworldgen:earth_fill/exempt
@@ -641,7 +641,7 @@ public final class CWGConfig {
                     "toward the size's air limit, but only where the structure's beard (its terrain adaptation) won't",
                     "fill under it: ground deeper than beardReach (buryReach for bury), or always with no adaptation.",
                     "Columns whose ground lies more than maxMoundHeight below a piece count toward the size's mound",
-                    "limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared",
+                    "limit. Past any limit the whole structure is canceled and its slot stays empty (a slot shared",
                     "with other structures tries the next pick). The limits scale with the structure's size (its earth",
                     "base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never",
                     "counted. Exempt a structure with the structure tag creativeworldgen:earth_fill/exempt. New",
@@ -658,7 +658,7 @@ public final class CWGConfig {
                     "The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the",
                     "layer the structure was set onto the surface with, and (footprintAllPieces) every other piece's box where",
                     "the surface lies within its height. Water there (filled by its earth or the beard, or left",
-                    "standing) against dry ground there (replaced or left alone): the structure is cancelled when the water",
+                    "standing) against dry ground there (replaced or left alone): the structure is canceled when the water",
                     "outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39",
                     "doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,",
                     "whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers",
@@ -754,7 +754,7 @@ public final class CWGConfig {
                     "coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too."
             ).defineInRange("sampleGrid", 4, 1, 8);
             log = b.comment(
-                    "CANCELLED: log each structure that is cancelled, and each pruned village or meta part dropped (id, chunk,",
+                    "CANCELLED: log each structure that is canceled, and each pruned village or meta part dropped (id, chunk,",
                     "counts, limits). ALL: log every checked structure that has earth in its base or (footprintAllPieces) a",
                     "surface piece. For tuning the limits."
             ).defineEnum("log", EarthFillLog.CANCELLED);
@@ -797,7 +797,7 @@ public final class CWGConfig {
 
     /**
      * Knobs for the water half of {@code worldgen/EarthFill}: a structure in the structure tag
-     * creativeworldgen:water_fill/structures (kubejs worldgen/water_fill.js) is cancelled before it is
+     * creativeworldgen:water_fill/structures (kubejs worldgen/water_fill.js) is canceled before it is
      * stored when the water its templates carry would replace too much dry ground or air, judged against
      * the same predicted terrain as earth fill (and its sampleGrid). On/off: [worldgen.systems] waterFill.
      */
@@ -814,7 +814,7 @@ public final class CWGConfig {
                     "waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts",
                     "at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water",
                     "replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)",
-                    "toward maxIntoAir; past either limit the whole structure is cancelled and its slot stays empty.",
+                    "toward maxIntoAir; past either limit the whole structure is canceled and its slot stays empty.",
                     "Uses [worldgen.earth_fill] sampleGrid. New chunks only; /place structure is not checked."
             ).push("water_fill");
 
@@ -833,7 +833,7 @@ public final class CWGConfig {
                     "Only structures in creativeworldgen:water_fill/structures are checked at all."
             ).defineList("overrides", List.of("#creativeworldgen:water_fill/ponds=-1,16"), o -> o instanceof String str && str.contains("="));
             log = b.comment(
-                    "CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked",
+                    "CANCELLED: log each structure that is canceled (id, chunk, counts, limits). ALL: log every checked",
                     "structure that carries any water. For tuning the limits."
             ).defineEnum("log", EarthFillLog.CANCELLED);
             b.pop(); // water_fill
@@ -970,7 +970,7 @@ public final class CWGConfig {
             batchRadius = b.comment("Default search radius of /cwglocate batch, in chunks (/locate uses 100).")
                     .defineInRange("batchRadius", 100, 1, 1000);
             batchTimeoutSeconds = b.comment(
-                    "A /cwglocate batch search still running after this long is reported as timed out and cancelled (Async",
+                    "A /cwglocate batch search still running after this long is reported as timed out and canceled (Async",
                     "Locator never completes a search that threw).")
                     .defineInRange("batchTimeoutSeconds", 120, 5, 3600);
             censusRegionChunks = b.comment(
@@ -1066,14 +1066,14 @@ public final class CWGConfig {
             avoidCoasts = b.comment(
                     "Keep meta structures out of coasts and rivers (the biome tag creativeworldgen:coast_river: beaches,",
                     "shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box",
-                    "(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,",
+                    "(center or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,",
                     "which still spawns as it would alone. Metas in the structure tag creativeworldgen:meta/coast_ok (fleets,",
                     "flotillas, wrecks, sunken ruins) are not affected. New chunks only."
             ).define("avoidCoasts", true);
             keepShortParts = b.comment(
                     "A part that fits fewer times than its minimum count (a satellite near a coast, on a cliff) is kept with",
                     "what fitted instead of failing the whole meta; earth fill likewise drops an offending satellite and",
-                    "prunes village parts instead of cancelling the meta. The meta only fails when no structure besides the",
+                    "prunes village parts instead of canceling the meta. The meta only fails when no structure besides the",
                     "anchor is left (the slot is then the plain anchor). Off: a short part fails the meta (before 2026-10-30)."
             ).define("keepShortParts", true);
             b.pop(); // meta_structures

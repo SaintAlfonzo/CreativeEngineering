@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * {@code creativelabels:eraser} (sticky_notes.md 3.6 / 3.8, BRIEF 5): stack 1, unbreakable, stays in the grid as
- * the crafting remainder. On the cursor, a right-click onto a labelled slot removes that stack's last line
+ * the crafting remainder. On the cursor, a right-click onto a labeled slot removes that stack's last line
  * ({@link #overrideStackedOnOther}); on placed notes and in the grid it wipes a note (FacePaperInteractions,
  * NoteEraseRecipe).
  */
@@ -47,7 +47,7 @@ public class EraserItem extends Item {
         return false;
     }
 
-    /** The eraser on the cursor, right-clicked onto a labelled stack: its last line goes (gated like labelling). */
+    /** The eraser on the cursor, right-clicked onto a labeled stack: its last line goes (gated like labeling). */
     @Override
     public boolean overrideStackedOnOther(ItemStack eraser, Slot slot, ClickAction action, Player player) {
         if (action != ClickAction.SECONDARY) return false;
@@ -59,7 +59,7 @@ public class EraserItem extends Item {
         return true;
     }
 
-    /** Spec 3.9: four grey lines, one per lang key. */
+    /** Spec 3.9: four gray lines, one per lang key. */
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         for (int i = 1; i <= TOOLTIP_LINES; i++) {

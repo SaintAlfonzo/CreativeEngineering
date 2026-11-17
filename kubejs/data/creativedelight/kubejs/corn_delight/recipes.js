@@ -13,7 +13,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Taco #########################
 		// One taco recipe (TODO dishes/meals #51): Corn Delight's took an onion, Veggies Delight's a roasted red, green or
-		// yellow bell pepper; the one recipe takes an onion or any roasted bell pepper (9 colours). No roasted onion
+		// yellow bell pepper; the one recipe takes an onion or any roasted bell pepper (9 colors). No roasted onion
 		// item exists in the pack.
 		R.remove({ id: 'corn_delight:taco' }, e)
 		R.remove({ id: 'veggiesdelight:compat/corndelight/taco' }, e)

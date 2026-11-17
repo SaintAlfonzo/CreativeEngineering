@@ -33,7 +33,7 @@ tweaked --remap table can be rerun), and the source is never moved. Wire the tem
   "blocks": {from: {"to": id or null (air), "keep": "all" | "none" | [names], "set": {name: value},
              "rename": {old: new}, "strip_be": bool, "attach": "horizontal", "why": text}}
   attach horizontal: facing is set per block so the block faces away from a horizontally adjacent full block (a
-  wall-mounted block like the Vinery lattice); two neighbours of the same rule with no wall lean on each other;
+  wall-mounted block like the Vinery lattice); two neighbors of the same rule with no wall lean on each other;
   the rest face the nearest full block within 8 and are reported as unsupported ("unsupported": "air" removes them)
   "items":  {from: to}   item stacks inside block entities (wine racks, shelves), renamed before the unknown check
   "verified_blocks": [ids] registered blocks with no item and no blockstate in mods/ (the unknown check skips them)

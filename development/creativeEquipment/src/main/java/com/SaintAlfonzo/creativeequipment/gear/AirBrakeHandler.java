@@ -131,7 +131,7 @@ public final class AirBrakeHandler {
         } else {
             // Falling: only slowed slightly, and multiplicatively (a fraction of current
             // speed per tick) rather than a flat subtraction, so it trims a dive instead of
-            // cancelling it outright. terminalDownwardSpeed (if set) caps speed first.
+            // canceling it outright. terminalDownwardSpeed (if set) caps speed first.
             double terminal = CEQConfig.AIR_BRAKE.terminalDownwardSpeed.get();
             double capped = terminal > 0.0 ? Math.max(v.y, -terminal) : v.y;
             newY = capped * (1.0 - CEQConfig.AIR_BRAKE.downwardSlowFactorPerTick.get());

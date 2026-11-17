@@ -11,7 +11,7 @@ ItemEvents.modification(e => {
 	e.modify(i.coleslaw, it => it.setFoodProperties(fb => fb.hunger(12)))
 
 	// Fermented Garlic Honey: Regeneration II 5 s and Health Boost II 30 s (were Regeneration I 5 s, Health Boost I
-	// 5 s; TODO dishes/pickles-and-ferments #10, owner 2026-10-27: Health Boost II)
+	// 5 s; TODO dishes/pickles-and-ferments #10, owner: Health Boost II)
 	e.modify(i.fermented_garlic_honey, it => it.setFoodProperties(fb => {
 		fb.removeEffect(effect(global.effect.regeneration))
 		fb.removeEffect(effect(global.effect.health_boost))

@@ -5,7 +5,7 @@
 // x z at y 64, then finds the square of half-width <win> blocks (default 150) holding the most matching points.
 // Pure noise evaluation (getNoiseBiome with the chunk source's sampler): no chunk is loaded or generated, so it is safe
 // on ungenerated land (gotchas.md, Rhino / KubeJS probes).
-// Output: "[zqb] grid <biome>: H of N points match; best centre X Z with K of W points (S %)" then "[zqb] done".
+// Output: "[zqb] grid <biome>: H of N points match; best center X Z with K of W points (S %)" then "[zqb] done".
 (() => {
     const $ZQBArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     function out(s) { console.info('[zqb] ' + s) }
@@ -40,7 +40,7 @@
                 if (k > best) { best = k; bi = i; bj = j }
             }
             let cells = (2 * w + 1) * (2 * w + 1)
-            out('grid ' + want + ': ' + hits + ' of ' + side * side + ' points match; best centre ' + (x0 + (bi - n) * step) + ' '
+            out('grid ' + want + ': ' + hits + ' of ' + side * side + ' points match; best center ' + (x0 + (bi - n) * step) + ' '
                 + (z0 + (bj - n) * step) + ' with ' + Math.max(best, 0) + ' of ' + cells + ' points (' + Math.round(100 * Math.max(best, 0) / cells) + ' %)')
         } catch (err) { out('error: ' + err) }
         finally { out('done') }

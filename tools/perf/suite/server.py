@@ -138,7 +138,7 @@ class Server:
             fh.write(password)
         os.chmod(os.path.join(self.out, "rcon.secret"), 0o600)
         # which build of our own jars this run measured (results are only comparable at the same builds)
-        ours = {f: time.strftime("%m-%d %H:%M", time.localtime(os.path.getmtime(os.path.join(self.srv, "mods", f))))
+        ours = {f: time.strftime("%Y-%m-%d %H:%M", time.localtime(os.path.getmtime(os.path.join(self.srv, "mods", f))))
                 for f in os.listdir(os.path.join(self.srv, "mods"))
                 if f.startswith(("creativeengineering", "creativedelight", "creativecompat", "creativedevtools", "cdevperfbot"))}
         return {"jars": len(os.listdir(os.path.join(self.srv, "mods"))), "bot_jar": os.path.basename(jars[-1]),

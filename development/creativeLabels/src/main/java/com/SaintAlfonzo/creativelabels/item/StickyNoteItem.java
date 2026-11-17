@@ -32,7 +32,7 @@ import java.util.List;
  * {@code creativelabels:sticky_note} (sticky_notes.md 3.6 to 3.8, BRIEF 5). Colour = vanilla {@code display.color}
  * ({@link DyeableLeatherItem}); text and special under {@code CreativeLabels} ({@link NoteData}). Stack 64; notes
  * stack only with identical NBT, so plain notes stack and written ones stack with identical copies. Specials are
- * never dyed: {@link NoteDyeRecipe} refuses them and {@code ArmorDyeRecipeMixin} keeps vanilla's armour-dye recipe
+ * never dyed: {@link NoteDyeRecipe} refuses them and {@code ArmorDyeRecipeMixin} keeps vanilla's armor-dye recipe
  * (which accepts any {@link DyeableLeatherItem}) off them too.
  *
  * <ul>
@@ -58,7 +58,7 @@ public class StickyNoteItem extends Item implements DyeableLeatherItem {
         return s == null ? super.getName(stack) : Component.translatable(s.nameKey());
     }
 
-    /** Vanilla's leather colour read, but {@link NoteData#NO_COLOR} (not leather brown) when undyed. */
+    /** Vanilla's leather color read, but {@link NoteData#NO_COLOR} (not leather brown) when undyed. */
     @Override
     public int getColor(ItemStack stack) {
         return NoteData.readColor(stack);
@@ -125,8 +125,8 @@ public class StickyNoteItem extends Item implements DyeableLeatherItem {
     /**
      * A written note on the cursor, right-clicked onto a slot (3.8): the line goes on the whole stack there, one
      * note used. Works in every container, including the creative inventory tab; a backpack or shulker slot is
-     * labelled, not opened (Q4: the carried stack's override runs before the slot item's). Blank notes, note slots
-     * and slots that can't be modified fall through to vanilla. Server side one labelling per 5 ticks
+     * labeled, not opened (Q4: the carried stack's override runs before the slot item's). Blank notes, note slots
+     * and slots that can't be modified fall through to vanilla. Server side one labeling per 5 ticks
      * ({@link LabelGate}): later drag clicks are swallowed and the slot correction resyncs the client.
      */
     @Override
@@ -140,13 +140,13 @@ public class StickyNoteItem extends Item implements DyeableLeatherItem {
         return true;
     }
 
-    /** The colour a tooltip or tint should show: the note's RGB or plain yellow. */
+    /** The color a tooltip or tint should show: the note's RGB or plain yellow. */
     public static int displayColor(ItemStack stack) {
         int c = NoteData.readColor(stack);
         return c == NoteData.NO_COLOR ? NoteColours.PLAIN_YELLOW : c;
     }
 
-    /** Spec 3.9: the text in the note's colour (if written), then four grey lines, one per lang key. */
+    /** Spec 3.9: the text in the note's color (if written), then four gray lines, one per lang key. */
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         String text = NoteData.readText(stack);

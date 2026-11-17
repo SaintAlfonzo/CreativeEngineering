@@ -77,7 +77,7 @@ public final class FacePaperInteractions {
     /**
      * Re-checks a face against its host's current fit: every note whose spot no longer fits and a label that no
      * longer fits are removed and returned (as a FaceContent, so {@link FaceContent#drops()} gives their items);
-     * the placement (inset, centred-note shift, label square) follows the host. An emptied face is cleared.
+     * the placement (inset, centered-note shift, label square) follows the host. An emptied face is cleared.
      */
     public static FaceContent refit(FaceContent c, Spots.Fit fit) {
         FaceContent removed = new FaceContent();
@@ -404,7 +404,7 @@ public final class FacePaperInteractions {
 
     // ------------------------------------------------------------------------------------------- breaking
 
-    /** Where the player's current pick lands (both sides; the centre of the cell when the pick gives nothing). */
+    /** Where the player's current pick lands (both sides; the center of the cell when the pick gives nothing). */
     public static Vec3 pickLocation(Player player, BlockPos pos) {
         HitResult pick = player.pick(player.getReachDistance(), 1.0f, false);
         return pick == null ? Vec3.atCenterOf(pos) : pick.getLocation();

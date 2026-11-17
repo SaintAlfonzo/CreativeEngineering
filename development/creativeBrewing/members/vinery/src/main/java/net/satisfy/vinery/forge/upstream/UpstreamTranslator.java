@@ -421,7 +421,7 @@ public final class UpstreamTranslator {
             return null; // the village house NBTs aren't json; VillageHouses serves them with rewritten palettes
         }
         if (rest.equals("advancements/main/vintage_perfection.json")) {
-            return null; // alcohol.md B7: it checks 1.3.10's Year NBT, which the port's wines never carry (user: drop it)
+            return null; // alcohol.md B7: it checks 1.3.10's Year NBT, which the port's wines never carry (owner: drop it)
         }
         if (parts[1].equals("vinery") && rest.startsWith("loot_tables/blocks/")) {
             String name = fileName(rest);

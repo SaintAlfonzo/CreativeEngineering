@@ -313,7 +313,7 @@
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
 - **Changed:** In JEI, fishing rods and backpacks each have their own group after the equipment materials [with each material]; Simple Hats and Wardrobe backpacks are not sorted.
 - **New:** Title screen splash: Stience!
-- **Changed:** Tooltips and screen text use American spelling: color, gray, labeled, fueled.
+- **Changed:** Tooltips, screen text and config file comments use American spelling: color, gray, labeled, fueled.
 - **Changed:** Recipes are no longer unlocked in the recipe book by crafting or cooking.
 - **Changed:** Fertile Soil's farmer villager tooltip line is green, as on Rich Farmland [dark blue].
 

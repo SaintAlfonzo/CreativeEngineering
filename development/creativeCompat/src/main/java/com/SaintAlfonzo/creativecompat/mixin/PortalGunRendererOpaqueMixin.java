@@ -13,7 +13,7 @@ import tk.meowmc.portalgun.entities.CustomPortal;
 
 /**
  * Opaque gun portals ({@code [portalgun] opaquePortals}; feature_writeup/plan_portal_changes.md 3, G5). Portal Gun 5.0.0
- * draws its filled disc, tinted in the portal colour, for a portal that is not linked yet; with the option on every gun
+ * draws its filled disc, tinted in the portal color, for a portal that is not linked yet; with the option on every gun
  * portal draws it, while portals/PortalLimits keeps Immersive Portals from rendering through.
  */
 @Mixin(value = CustomPortalEntityRenderer.class, remap = false)

@@ -313,7 +313,7 @@ final class TestWorld {
                 .map("hist", hist).kv("skipped_columns", skipped));
     }
 
-    /** place X Y Z STATE [flags=3]: setBlock with those flags (18 = no neighbour or shape updates). */
+    /** place X Y Z STATE [flags=3]: setBlock with those flags (18 = no neighbor or shape updates). */
     private static void place(TestCtx c) throws Exception {
         ServerLevel level = c.level();
         BlockPos pos = c.pos("pos");

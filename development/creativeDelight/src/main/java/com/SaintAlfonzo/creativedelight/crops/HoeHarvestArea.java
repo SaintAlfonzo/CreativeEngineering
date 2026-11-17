@@ -18,7 +18,7 @@ import vazkii.quark.content.tweaks.module.HoeHarvestingModule;
  * (kubejs equipmenttags.js "Hoe harvest area"); when a hoe is in several, the largest wins. A hoe in
  * none keeps Quark's own size (its {@code Regular / High Tier Hoe Radius} config).
  *
- * <p>An odd area is centred on the block. An even area can't be, so it reaches one block further
+ * <p>An odd area is centered on the block. An even area can't be, so it reaches one block further
  * on the side the player is looking toward, on each axis (a 2x2 is the block plus the ones ahead).
  *
  * <p>Used by {@code mixin/QuarkHoeAreaBreakMixin}, {@code mixin/QuarkHoeAreaHarvestMixin} and the
@@ -67,7 +67,7 @@ public final class HoeHarvestArea {
         return new Area(size, x[0], x[1], z[0], z[1]);
     }
 
-    /** {min, max} along one axis: centred when odd, the extra block on the {@code look} side when even. */
+    /** {min, max} along one axis: centered when odd, the extra block on the {@code look} side when even. */
     private static int[] span(int size, double look) {
         int back = (size - 1) / 2;
         int ahead = size - 1 - back;

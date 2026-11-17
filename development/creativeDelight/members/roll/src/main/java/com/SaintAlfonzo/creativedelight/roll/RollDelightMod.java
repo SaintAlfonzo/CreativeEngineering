@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Roll Delight 1.3.1 ported to Forge 1.19.2, a Creative Delight member (feature_writeup/roll_delight.md). All code here
- * is our own, written from the mod's behaviour; art comes from the unmodified upstream jar in {@code roll_upstream/} at
+ * is our own, written from the mod's behavior; art comes from the unmodified upstream jar in {@code roll_upstream/} at
  * runtime. Recipes, tags, food types and compost are pack scripts (CD {@code roll_delight} script folders); upstream's
  * recipes are not loaded.
  */

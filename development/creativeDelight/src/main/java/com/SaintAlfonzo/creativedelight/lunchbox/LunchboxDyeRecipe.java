@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 /**
- * Crafting grid: one lunchbox + any number of dyes. Colours mix exactly like leather armour (vanilla
+ * Crafting grid: one lunchbox + any number of dyes. Colors mix exactly like leather armor (vanilla
  * {@code DyeableLeatherItem.dyeArmor}, which only takes leather items, so it is repeated here). Only the base
  * is recoloured; the outline and latches keep theirs (the dyed models). Refused while the box wears a basket,
  * which has no dyeable base. Type {@code creativedelight:lunchbox_dye}.

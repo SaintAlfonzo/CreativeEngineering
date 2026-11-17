@@ -174,7 +174,7 @@ public final class PassValues {
     // ---- wire format (PassSync) ----
 
     /**
-     * Wire format version, written first (plan_post_scratch_1115b.md C1: the layout changed with the neighbour model
+     * Wire format version, written first (plan_post_scratch_1115b.md C1: the layout changed with the neighbor model
      * and the layer rule). A client that reads another version uses the system switched off ({@link #mismatch()})
      * rather than misreading the table.
      */
@@ -249,7 +249,7 @@ public final class PassValues {
         return new PassValues(enabled, life, cap, stall, overrides, m);
     }
 
-    /** What a client uses when the server's values came in another format: the system off (vanilla behaviour). */
+    /** What a client uses when the server's values came in another format: the system off (vanilla behavior). */
     public static PassValues mismatch() {
         Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
         for (PassTier t : PassTier.values()) m.put(t, t.defaults());

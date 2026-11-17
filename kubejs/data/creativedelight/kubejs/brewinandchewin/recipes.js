@@ -1,9 +1,9 @@
 // requires: creativedelight
 // requires: brewinandchewin
-// Brewin' and Chewin' dishes (owner, 2026-10-31: the dishes stay in Creative Delight, added only while Brewin' is
-// loaded; Brewin' itself is a Creative Brewing member, feature_writeup/creative_brewing.md 4.4 Q1). Non-member file:
-// recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes; were creativeengineering:). The egg solution fluid
-// is CD's (create/recipes.js); the heatless meal rule is farmersdelight/recipes.js "Meals".
+// Brewin' and Chewin' dishes (owner: the dishes stay in Creative Delight, added only while Brewin' is loaded; Brewin'
+// itself is a Creative Brewing member, feature_writeup/creative_brewing.md 4.4 Q1). Non-member file: recipe ids are
+// creativedelight:<type>/<suffix> (global.CD.recipes; were creativeengineering:). The egg solution fluid is CD's
+// (create/recipes.js); the heatless meal rule is farmersdelight/recipes.js "Meals".
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -25,7 +25,7 @@ ServerEvents.recipes(e => {
 		// Supreme Pizza (owner, rustic_delight.md 5.5; slots owner, creativedelight/members #20, merges/dishes #8). Pizza
 		// family rule (food_families.md `pizza/whole`): bottom row any dough, tomato sauce, any dough; one topping slot each
 		// above: cheese, cooked meat (not fish), cooked fish, any mushroom, a bell pepper (raw, sliced or roasted, any
-		// colour), onion. One shaped recipe (manual only) plus one assembly on the dough, as the Vegan Pizza. Was: bell
+		// color), onion. One shaped recipe (manual only) plus one assembly on the dough, as the Vegan Pizza. Was: bell
 		// pepper, cheese wedge, onion, mushroom, tomato sauce, cooked meat (fish counted) on one wheat dough. Vintage
 		// Delight's cheese and meat pizzas already sit on dough, sauce, dough (any dough).
 		var PIZZA_PEPPER = [i.t_vegetables_bell_pepper, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper_slice]

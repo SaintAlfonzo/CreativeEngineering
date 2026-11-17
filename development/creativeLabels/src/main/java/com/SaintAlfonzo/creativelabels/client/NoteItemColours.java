@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 
 /**
  * Note item icons (sticky_notes.md 3.6, BRIEF 4): the {@code creativelabels:look} item property picks the model
- * override (0 plain donor icon, 1 the greyscale icon tinted by the colour handler, 2..5 the recoloured special
+ * override (0 plain donor icon, 1 the greyscale icon tinted by the color handler, 2..5 the recoloured special
  * icons); the {@link net.minecraft.client.color.item.ItemColor} tints layer 0 with {@code display.color} only when
  * the note is dyed and not special (plain and special icons stay untinted).
  */

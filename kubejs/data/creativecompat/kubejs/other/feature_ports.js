@@ -6,7 +6,7 @@
 //   Name Tag Crafting Recipe       1 shaped recipe
 //   Create: Copper Splashing        33 create:splashing recipes (copper weathering, 11 shapes x 3 stages)
 //   Furnace Recycle                 26 smelting recipes (iron / gold blocks and tools back to ingots or nuggets)
-//   AE2 QoL Recipes                 311 cable recipes (16 colours x 5 cable kinds + 7 fluix), generated from the
+//   AE2 QoL Recipes                 311 cable recipes (16 colors x 5 cable kinds + 7 fluix), generated from the
 //                                   mod's 19 templates; its two tags are in tags/feature_port_tags.js
 //
 // Create Waystone Recipes is NOT rebuilt: its one recipe overrode waystones:warp_stone with createcasing:chorium_ingot
@@ -66,7 +66,7 @@ ServerEvents.recipes(e => {
 	bulk('smelting', smelting)
 
 	// ============================================================
-	// AE2 QoL Recipes (ae2qolrecipes): the mod's 19 templates x 16 colours + 7 fluix recipes = 311
+	// AE2 QoL Recipes (ae2qolrecipes): the mod's 19 templates x 16 colors + 7 fluix recipes = 311
 	// ============================================================
 	var shaped = [], shapeless = []
 	if (global.has('ae2')) {
@@ -78,7 +78,7 @@ ServerEvents.recipes(e => {
 		var REDSTONE = '#forge:dusts/redstone', GLOWSTONE = '#forge:dusts/glowstone'
 		colors.forEach(c => {
 			var wool = i[c + '_wool']
-			// ring of 8 same-kind cables around a dye -> 8 coloured (every kind)
+			// ring of 8 same-kind cables around a dye -> 8 colored (every kind)
 			;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
 				shaped.push([Item.of(cable(c, kind), 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: dye(c) }, e, 'ae2_' + c + '_' + kind + '_cable_ring'])
 				shapeless.push([Item.of(cable(c, kind)), [tag(kind), dye(c)], e, 'ae2_' + c + '_' + kind + '_cable_dye'])
@@ -96,7 +96,7 @@ ServerEvents.recipes(e => {
 			shaped.push([Item.of(cable(c, 'smart_dense')), ['CC', 'CC'], { C: cable(c, 'smart') }, e, 'ae2_' + c + '_smart_dense_cable_pack'])
 			shapeless.push([Item.of(cable(c, 'smart_dense')), [cable(c, 'covered_dense'), REDSTONE, GLOWSTONE], e, 'ae2_' + c + '_smart_dense_cable_dusts'])
 		})
-		// fluix (uncoloured): ring of 8 coloured cables around a water bucket (#ae2:can_remove_color) -> 8 fluix; dense -> 4
+		// fluix (uncoloured): ring of 8 colored cables around a water bucket (#ae2:can_remove_color) -> 8 fluix; dense -> 4
 		;['glass', 'covered', 'smart', 'covered_dense', 'smart_dense'].forEach(kind => {
 			shaped.push([Item.of(i['fluix_' + kind + '_cable'], 8), ['CCC', 'CDC', 'CCC'], { C: tag(kind), D: '#ae2:can_remove_color' }, e, 'ae2_fluix_' + kind + '_cable_ring'])
 		})

@@ -37,7 +37,7 @@ public class GoldenChorusFruitItem extends ChorusFruitItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity eater) {
         ItemStack left = super.finishUsingItem(stack, level, eater);
-        // a cancelled teleport event ends it there, keeping the chorus fruit's own cooldown
+        // a canceled teleport event ends it there, keeping the chorus fruit's own cooldown
         if (level instanceof ServerLevel server && farTeleport(server, eater)) {
             if (eater instanceof Player player) {
                 player.getCooldowns().addCooldown(this, cooldown);

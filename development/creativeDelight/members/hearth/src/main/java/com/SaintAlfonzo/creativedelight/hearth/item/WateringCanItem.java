@@ -1,7 +1,7 @@
 /*
  * Ported from Hearth and Harvest 1.4.1 (NeoForge 1.21.1) by AlabasterLeking, MIT License:
  * alabaster.hearthandharvest.common.item.WateringCanItem. Ported to Forge 1.19.2 for Creative Engineering:
- * data components became stack NBT, and the client claims a charged click on a crop so the server fertilises once per
+ * data components became stack NBT, and the client claims a charged click on a crop so the server fertilizes once per
  * click (upstream also sent the use packet, a second application). Pack additions: soil watering, tiers
  * (WateringCanTier), filling from a water cauldron or a well.
  */
@@ -60,11 +60,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * {@code hearthandharvest:watering_can} (copper) and the higher tiers ({@link WateringCanTier}). Holds water and
- * fertiliser up to the tier's capacity (one item of {@code #hearthandharvest:bonemeal_substitutes} per click from the
+ * fertilizer up to the tier's capacity (one item of {@code #hearthandharvest:bonemeal_substitutes} per click from the
  * off hand, one kind at a time). Filled to full from a water source (free), a water cauldron (the tier's levels) or a
  * well / other water tank (one bucket). A click on a bonemealable block spends one of each and applies bone meal to the
  * tier's area around it; a click on fire or a lit campfire-like block spends one water and puts it out. A click on a
- * plant or soil also soaks the soil in the area (farmland moisture to full); with no fertiliser, or nothing to grow,
+ * plant or soil also soaks the soil in the area (farmland moisture to full); with no fertilizer, or nothing to grow,
  * that alone spends one water. Every block bone meal grew gets splash particles (soil the click soaked already has its
  * own). Tree growers ({@link #isTreeGrower}) are left alone: no bone meal, and a click on one does nothing.
  */
@@ -115,7 +115,7 @@ public class WateringCanItem extends Item {
         ItemStack can = player.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) return InteractionResultHolder.pass(can);
 
-        // Load fertiliser from the off hand, one item per click.
+        // Load fertilizer from the off hand, one item per click.
         ItemStack offhand = player.getOffhandItem();
         if (offhand.is(BONEMEAL_SUBSTITUTES)) {
             Item offItem = offhand.getItem();
@@ -168,7 +168,7 @@ public class WateringCanItem extends Item {
             return InteractionResultHolder.sidedSuccess(can, level.isClientSide());
         }
 
-        // Fertilising a looked-at block is useOn's job: a block in reach always reaches useOn first.
+        // Fertilizing a looked-at block is useOn's job: a block in reach always reaches useOn first.
         return InteractionResultHolder.pass(can);
     }
 
@@ -385,7 +385,7 @@ public class WateringCanItem extends Item {
         setFertilizer(stack, getFertilizer(stack) - 1);
     }
 
-    // ---- stack state (NBT; a key at 0 is removed, and the fertiliser kind goes with the last charge) ----
+    // ---- stack state (NBT; a key at 0 is removed, and the fertilizer kind goes with the last charge) ----
     // Reads clamp to the tier's capacity (a can from before the tiers may hold 16 in a lower tier).
 
     public int getWater(ItemStack stack) {

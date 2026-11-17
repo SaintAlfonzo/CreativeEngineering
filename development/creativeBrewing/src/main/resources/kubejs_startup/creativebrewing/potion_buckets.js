@@ -6,7 +6,7 @@
 //   lingering -> creativebrewing:lingering_potion_bucket    (bigger still)
 //   (the swap list carries old creativeengineering:* buckets over, plan_cb_publish.md M4)
 //
-// Right-click behaviour + cloud spawning:
+// Right-click behavior + cloud spawning:
 //   CB server creativebrewing/potion_buckets.js
 //   potion_area.js (this folder)   (global.potionArea — all the tuning)
 //
@@ -56,7 +56,7 @@ StartupEvents.registry('item', e => {
         .unstackable() // like vanilla buckets - each one carries its own potion contents
         .group('brewing')
         .displayName(name)
-        // layer0 = bucket body (untinted, white = no-op), layer1 = liquid (potion colour)
+        // layer0 = bucket body (untinted, white = no-op), layer1 = liquid (potion color)
         .color((stack, layer) => layer === 0 ? SimpleColor.WHITE : potionTint(stack))
         // crafting remainder for the potion_bucket_drain shapeless recipes
         // (CB server creativebrewing/potion_bottling.js) - same idiom as

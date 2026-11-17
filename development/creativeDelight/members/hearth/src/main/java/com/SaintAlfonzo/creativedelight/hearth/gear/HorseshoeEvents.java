@@ -23,7 +23,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
 /**
- * Shod horses (3.1, N22): Fire Resistance, cactus and berry bush immunity, slowing blocks cancelled, and +25 % speed, which
+ * Shod horses (3.1, N22): Fire Resistance, cactus and berry bush immunity, slowing blocks canceled, and +25 % speed, which
  * upstream does not have. The shoe lives in the horse's persistent data. Speed modifiers are transient and re-applied, so
  * they are never written to a save.
  */

@@ -431,5 +431,7 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
+- 2026-10-27: Food tooltips (Farmer's Delight villager soil line, foods, kitchen blocks) moved to Creative Delight 2026-10-27: kubejs/assets/creativedelight/kubejs/<mod>/client.js (kubejs/client_scripts/tooltips.js)
+- 2026-10-27: Food and Delight-member names (Rustic Delight, Canned Goods, Neapolitan, Delightful, Farmer's Delight, PneumaticCraft fried food) moved to Creative Delight 2026-10-27: kubejs/assets/creativedelight/kubejs/<mod>/client.js Brewin' and Chewin' pizza: the many-topping recipe in cooking/cooking.js (kubejs/client_scripts/namechanges.js)
 - 2026-11-01: Bowl, basket and soil lines: Creative Delight (assets/creativedelight/kubejs/farmersdelight/client.js, 2026-11-01) (kubejs/client_scripts/tooltips.js)
 - 2026-11-01: Delight dish, crop and fluid names (Oceanic, Fruits, Veggies, Vintage, Ender's, Rustic, Delightful, The Dirty Stuff, dish renames) and the lunchbox tier names: Creative Delight (assets/creativedelight/kubejs/creativedelight/names.js, moved 2026-11-01) (kubejs/client_scripts/namechanges.js)

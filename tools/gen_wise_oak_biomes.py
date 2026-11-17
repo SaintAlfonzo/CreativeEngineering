@@ -22,7 +22,7 @@ import gen_wild_flowers as gw  # noqa: E402
 
 OUT = g.INSTANCE / 'kubejs/data/creativeworldgen/tags/worldgen/biome/wise_oak_biomes.json'
 ALLOW = set()
-# Owner decision 2026-11-09: these list an oak tree only on a technicality (island oaks, river banks, rare surface spots).
+# owner decision: these list an oak tree only on a technicality (island oaks, river banks, rare surface spots).
 DENY = {
     'minecraft:cold_ocean', 'minecraft:deep_cold_ocean', 'minecraft:deep_frozen_ocean', 'minecraft:deep_lukewarm_ocean',
     'minecraft:deep_ocean', 'minecraft:frozen_ocean', 'minecraft:lukewarm_ocean', 'minecraft:ocean', 'minecraft:warm_ocean',

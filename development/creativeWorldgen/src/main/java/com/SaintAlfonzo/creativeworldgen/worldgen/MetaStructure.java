@@ -60,7 +60,7 @@ import java.util.function.Predicate;
 /**
  * Meta structures: one structure made of other structures and placed features. An optional anchor (a village)
  * spawns at the start chunk exactly as it would on its own; each part then places 'count' copies of a structure
- * or feature at 'distance' blocks from the anchor's centre (towers around the village, driftwood on the sea).
+ * or feature at 'distance' blocks from the anchor's center (towers around the village, driftwood on the sea).
  *
  * WHY ONE START: every chunk only looks 8 chunks around itself for structure starts that reach into it, so a
  * start's pieces must stay within 8 chunks of its start chunk. Satellites in starts of their own would need
@@ -92,7 +92,7 @@ import java.util.function.Predicate;
  * pyramid). Earth fill drops a satellite over its limits and prunes village parts the same way.
  *
  * COASTS AND RIVERS (CWGConfig [worldgen.meta_structures] avoidCoasts, on by default): no part may start in, or reach
- * with its box (centre and corners) into, a biome of creativeworldgen:coast_river. A satellite there is tried
+ * with its box (center and corners) into, a biome of creativeworldgen:coast_river. A satellite there is tried
  * elsewhere, an anchor there fails the meta (the slot is then the plain anchor). Metas in the structure tag
  * creativeworldgen:meta/coast_ok (fleets, flotillas, wrecks, sunken ruins) and feature parts are not checked.
  *
@@ -181,7 +181,7 @@ public final class MetaStructure extends Structure {
 
 	/**
 	 * One part: 'structures' or 'features' (placed features), placed 'count' times at 'distance' blocks from the
-	 * centre, with 'chance' of being tried at all (a part skipped by chance never fails the meta). 'overlap' lets its
+	 * center, with 'chance' of being tried at all (a part skipped by chance never fails the meta). 'overlap' lets its
 	 * copies stand on the pieces placed before (a meteorite striking the anchor): no margin check against them.
 	 * 'cluster' (structures, blocks, 0 = off) groups the copies: the first lands in the distance ring, every later
 	 * copy within 'cluster' blocks of the first (at least 'spacing' from it), not around the anchor.
@@ -433,7 +433,7 @@ public final class MetaStructure extends Structure {
 	/**
 	 * The structure's own start at that chunk, or null when it can't: its own refusal, or a biome its list, its
 	 * biome rules (the water rule) or the meta's rejects. So a part only stands where it could stand alone. With
-	 * {@code avoid} (avoidCoasts), also null when its start or its box's centre or a corner is in an avoided biome.
+	 * {@code avoid} (avoidCoasts), also null when its start or its box's center or a corner is in an avoided biome.
 	 */
 	private static Placed generate(Structure s, GenerationContext ctx, ChunkPos at, Predicate<Holder<Biome>> avoid) {
 		Predicate<Holder<Biome>> biomes = StructureBiomeRules.filter(s, b -> ctx.validBiome().test(b) && s.biomes().contains(b) && (avoid == null || !avoid.test(b)));
@@ -465,7 +465,7 @@ public final class MetaStructure extends Structure {
 	 * A 'punch' part: every AE2 meteorite piece in it is rebuilt with crater type NONE (no crater, no fallout, no
 	 * crater lake; the sphere replaces whatever it overlaps), followed by a column of air from the sphere's top up to
 	 * the highest box of the pieces placed before that the column crosses. Rebuilt through the piece's own save tag
-	 * (keys of AE2 12.9: c centre, r radius, t crater type ordinal, p pure crater, l lake), so no AE2 class is linked.
+	 * (keys of AE2 12.9: c center, r radius, t crater type ordinal, p pure crater, l lake), so no AE2 class is linked.
 	 */
 	static Placed punch(Placed p, Layout layout, GenerationContext ctx, List<String> log) {
 		List<StructurePiece> out = new ArrayList<>(p.pieces().size() + 1);
@@ -495,7 +495,7 @@ public final class MetaStructure extends Structure {
 		return changed ? new Placed(p.structure(), p.position(), out, StructurePiece.createBoundingBox(out.stream())) : p;
 	}
 
-	/** Whether the box's centre or one of its corners, at height y, is in a biome the predicate matches. */
+	/** Whether the box's center or one of its corners, at height y, is in a biome the predicate matches. */
 	private static boolean reaches(BoundingBox box, int y, GenerationContext ctx, Predicate<Holder<Biome>> biomes) {
 		int[] xs = {box.minX(), box.maxX(), (box.minX() + box.maxX()) / 2}, zs = {box.minZ(), box.maxZ(), (box.minZ() + box.maxZ()) / 2};
 		for (int i = 0; i < 5; i++) {

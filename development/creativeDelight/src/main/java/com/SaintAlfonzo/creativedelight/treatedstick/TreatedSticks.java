@@ -36,7 +36,7 @@ import vectorwing.farmersdelight.common.registry.ModBlocks;
  * {@code creativedelight:treated_stick}, and Farmer's Delight tomatoes climb it as
  * {@code creativedelight:treated_stick_tomatoes}, the same way they climb Supplementaries' sticks.
  *
- * Own code (Supplementaries is ARR): the blocks re-implement the behaviour of Supplementaries' StickBlock and
+ * Own code (Supplementaries is ARR): the blocks re-implement the behavior of Supplementaries' StickBlock and
  * TomatoStickBlock; the block models name Supplementaries' models as parents. Hooks:
  *  - placement: {@code mixin.immersiveengineering.TreatedStickPlaceMixin} (Item#useOn, so the clicked block's own
  *    use runs first, as for Supplementaries' sticks) calls {@link #useOn};

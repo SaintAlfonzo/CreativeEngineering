@@ -26,7 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 /**
- * Corn Delight 1.2.11 behaviour on the installed 1.0.3 (feature_writeup/corn_delight.md 2.3, 2.6). The items are KubeJS
+ * Corn Delight 1.2.11 behavior on the installed 1.0.3 (feature_writeup/corn_delight.md 2.3, 2.6). The items are KubeJS
  * ({@code creativedelight:cob_pipe}, Creative Delight startup corn_delight/corn_items.js); this is the code they
  * need.
  * <ul>

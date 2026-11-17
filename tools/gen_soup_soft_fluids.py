@@ -12,7 +12,7 @@ bowl when it has none), capacity 2 for a bowl and 1 for a bottle, the same both 
 out move the same amount). Items in removed_items.js are left out (Ender's Delight's wooden-bowl stews), so
 the shulker bowl is the only container for the Chorus and Endermite Stew fluids.
 
-The colour is the average of the item texture's pixels that are not the empty container's own colours,
+The color is the average of the item texture's pixels that are not the empty container's own colors,
 so the bowl drops out and the soup is left. COLOR_OVERRIDE wins over that. The output folder belongs to
 this tool: a json there that no longer matches a soup is deleted, except the hand-written drink fluids in
 HAND_WRITTEN.
@@ -137,8 +137,8 @@ def soup_colour(jars, item, empty):
     soup = [p for p in px if not is_container(p)] or px
     if not soup:
         return None
-    # the broth is the largest patch of one colour; garnish is many small ones, so take the pixels near the
-    # commonest colour (counting each pixel's neighbours within 48) and average those
+    # the broth is the largest patch of one color; garnish is many small ones, so take the pixels near the
+    # commonest color (counting each pixel's neighbors within 48) and average those
     def close(p, q):
         return sum(abs(a - b) for a, b in zip(p, q)) <= 48
     seed = max(soup, key=lambda p: sum(close(p, q) for q in soup))
@@ -187,7 +187,7 @@ def main():
             containers.append({'filled': [it], 'empty': empty, 'capacity': CAPACITY.get(empty, 2)})
         colour = COLOR_OVERRIDE.get(first) or soup_colour(jars, first, containers[0]['empty'])
         if not colour:
-            problems.append(f'{base}: no texture for {first}, colour left grey')
+            problems.append(f'{base}: no texture for {first}, color left gray')
             colour = '#a08060'
         d = {
             'color': colour,

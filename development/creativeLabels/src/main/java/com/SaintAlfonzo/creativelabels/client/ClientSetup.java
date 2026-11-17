@@ -19,8 +19,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 /**
  * Client-only registration (C4): only reached through DistExecutor, so nothing here loads on a dedicated server.
  * Phase 1: the geometry loader, Labels' paper model as an additional model, the donor art pack and atlas sprites
- * ({@link DonorArt}), the note shape cache reset on reload ({@link NoteShape}), the block colour handler and the
- * piece highlight ({@link FacePaperHighlight}). Phase 2: the note item colour handler and the
+ * ({@link DonorArt}), the note shape cache reset on reload ({@link NoteShape}), the block color handler and the
+ * piece highlight ({@link FacePaperHighlight}). Phase 2: the note item color handler and the
  * {@code creativelabels:look} item property ({@link NoteItemColours}). Phase 3: the label picture and name renderer
  * ({@link FacePaperRenderer}, registered on EntityRenderersEvent.RegisterRenderers).
  */

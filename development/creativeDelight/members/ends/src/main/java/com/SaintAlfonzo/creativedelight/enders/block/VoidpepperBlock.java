@@ -64,7 +64,7 @@ public class VoidpepperBlock extends Block {
         builder.add(SPREADING, EAST, WEST, NORTH, SOUTH, UP, DOWN, PEPPER);
     }
 
-    /** A new sprout's state at {@code pos}: one face on each neighbouring soil block. */
+    /** A new sprout's state at {@code pos}: one face on each neighboring soil block. */
     private BlockState withFaces(BlockGetter level, BlockPos pos) {
         BlockState state = defaultBlockState();
         for (Face f : FACES) {

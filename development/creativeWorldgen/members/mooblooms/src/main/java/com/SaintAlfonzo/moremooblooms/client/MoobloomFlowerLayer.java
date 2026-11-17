@@ -72,7 +72,7 @@ public class MoobloomFlowerLayer extends RenderLayer<Moobloom, MoobloomModel> {
         pose.mulPose(Vector3f.YP.rotationDegrees(slot.yaw()));
         // the sunflower head is one-sided and showed its back on the JEI pages: turn it round (mobs/mooblooms #6)
         if (state.is(Blocks.SUNFLOWER)) pose.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-        // flip to block space (the entity model is upside down), grow up from the base, centred on x/z
+        // flip to block space (the entity model is upside down), grow up from the base, centered on x/z
         pose.scale(-scale, -scale, scale);
         pose.translate(-0.5, 0.0, -0.5);
         if (outlineOnly) {

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Bee nest counters (see worldgen/BeeNests): one chunk per ChunkGenerator#applyBiomeDecoration (m_213609_), for
- * the biome at its centre surface, so /dumpbeenests can report nests per chunk.
+ * the biome at its center surface, so /dumpbeenests can report nests per chunk.
  */
 @Mixin(value = ChunkGenerator.class, remap = false)
 public class ChunkGeneratorBeeNestsMixin {

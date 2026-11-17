@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Golden Food 2.0.0 rebuilt as a Creative Delight member (feature_writeup/golden_food.md). All code here is our own,
- * written from the mod's behaviour; art and data come from the unmodified upstream jar in {@code goldenfood_upstream/} at
+ * written from the mod's behavior; art and data come from the unmodified upstream jar in {@code goldenfood_upstream/} at
  * runtime (GoldenTranslator). Same mod id, item and block ids as upstream (including its three replacements of vanilla
  * items), so old worlds load as they are. Upstream's Golden Food Enchantment and its anvil recipe are removed (owner,
  * 2026-11-02): enchanted golden foods are made by the Creative Delight sequenced assembly (kubejs goldenfood/golden.js),

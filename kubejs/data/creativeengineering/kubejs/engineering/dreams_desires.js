@@ -7,9 +7,9 @@ ServerEvents.recipes(e => {
 	var i = global.item
 
 	// ── Painted Asphalt (TODO engineering/dreams-and-desires #6) ──
-	// D&D's coloured asphalt is painted Immersive Petroleum asphalt: 8 asphalt + 1 dye -> 8. Painted asphalt takes
+	// D&D's colored asphalt is painted Immersive Petroleum asphalt: 8 asphalt + 1 dye -> 8. Painted asphalt takes
 	// the dye as well (repaint), and 8 painted + 1 soap washes it back to plain asphalt. Right-clicking painted
-	// asphalt with soap still gives white painted asphalt (Supplementaries' colour set). Run speed is the
+	// asphalt with soap still gives white painted asphalt (Supplementaries' color set). Run speed is the
 	// BlockRunner asphalt tier (tags/blocktags.js).
 	var colors = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan',
 		'purple', 'blue', 'brown', 'green', 'red', 'black']

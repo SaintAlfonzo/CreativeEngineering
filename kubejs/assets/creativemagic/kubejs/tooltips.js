@@ -1,5 +1,5 @@
 // requires: creativemagic
-// Creative Magic: Botania tooltips. The helpers and the colour palette stay in the pack's tooltips.js and are read here
+// Creative Magic: Botania tooltips. The helpers and the color palette stay in the pack's tooltips.js and are read here
 // through global.tooltips at event time (each script pack has its own scope).
 ItemEvents.tooltip(e => {
 	var T = global.tooltips

@@ -21,9 +21,9 @@ import java.util.List;
  * {@code CreativeLabels.Lines} (a list of strings). Written only when a line exists; removing the last line removes
  * the key, the compound if it is then empty, and the tag if that is then empty.
  *
- * <p>Also the shared labelling action of the three ways (inventory cursor, anvil, off hand): {@link #labelWith}
+ * <p>Also the shared labeling action of the three ways (inventory cursor, anvil, off hand): {@link #labelWith}
  * puts a written note's text on a whole stack and uses the note up (one per line), {@link #refuse} is the "no room"
- * answer, and {@link #onTooltip} shows a labelled item's lines in grey under its name.
+ * answer, and {@link #onTooltip} shows a labeled item's lines in gray under its name.
  */
 public final class ItemLabels {
 
@@ -109,7 +109,7 @@ public final class ItemLabels {
             return false;
         }
         add(target, NoteData.readText(note));
-        note.shrink(1); // 4.1 / Q3: labelling always uses up the note, creative included
+        note.shrink(1); // 4.1 / Q3: labeling always uses up the note, creative included
         player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.0f);
         return true;
     }
@@ -120,7 +120,7 @@ public final class ItemLabels {
         if (!player.level.isClientSide) player.displayClientMessage(Component.translatable(FULL_KEY), true);
     }
 
-    /** The eraser on a labelled stack: the last line goes. Returns true when a line was removed. */
+    /** The eraser on a labeled stack: the last line goes. Returns true when a line was removed. */
     public static boolean eraseLast(Player player, ItemStack target) {
         if (!removeLast(target)) return false;
         player.playSound(SoundEvents.WOOL_HIT, 0.8f, 1.0f);
@@ -129,7 +129,7 @@ public final class ItemLabels {
 
     // ------------------------------------------------------------------------------------------- tooltip
 
-    /** A labelled item's lines in grey right under its name (3.8: no header, no [Shift]). Forge bus. */
+    /** A labeled item's lines in gray right under its name (3.8: no header, no [Shift]). Forge bus. */
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
         List<String> lines = read(event.getItemStack());

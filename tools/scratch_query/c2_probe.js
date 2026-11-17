@@ -8,7 +8,7 @@
 //                                        (CookTime, BurnTime, fermenting_jar.progress, ...)
 //   /zc2 watch x y z ticks every         /zc2 inv every <every> server ticks until <ticks>, lines "[zc2] t=N ..."
 //   /zc2 useat NAME x y z hx hy hz [face] [both]   NAME uses the main-hand item on the block at x y z with the hit
-//                                        point at x+hx y+hy z+hz (perfBot's /pbot use always hits the face centre);
+//                                        point at x+hx y+hy z+hz (perfBot's /pbot use always hits the face center);
 //                                        "both" then tries the off hand when the main hand did not consume the click
 //                                        (what the client does); prints the results and both hands after
 //   /zc2 attrs <item id>                 attribute modifiers of a fresh stack per equipment slot (tune_tools / tune_armor)

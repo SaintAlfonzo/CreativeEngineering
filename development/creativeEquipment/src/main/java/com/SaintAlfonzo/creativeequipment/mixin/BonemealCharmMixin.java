@@ -59,7 +59,7 @@ public abstract class BonemealCharmMixin {
             RandomSource random = context.getLevel().getRandom();
 
             // Only bone meal itself is refunded (R7, plan_small_fixes_1116.md): a BoneMealItem subclass from another mod
-            // (fertilisers) is always consumed, even if a future one reaches this injection
+            // (fertilizers) is always consumed, even if a future one reaches this injection
             if (context.getItemInHand().is(Items.BONE_MEAL) && random.nextFloat() < CEQConfig.BONEMEAL_CHARM.chance.get()) {
                 context.getItemInHand().grow(1);
             }

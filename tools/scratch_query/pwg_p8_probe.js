@@ -15,7 +15,7 @@
 //                                 event, so Create's value box handler and ForgeEvents.recordInteractingItem run as for a
 //                                 player); result, block after, held item after
 //   plot X Y Z [N]                plotter: speed, speed requirement, voltage range index, sample buffer size, head,
-//                                 colour, the N samples before the head (NBT, as saved), terminal voltages
+//                                 color, the N samples before the head (NBT, as saved), terminal voltages
 //   md X Y Z                      modular display: per slot the module (serialized: type:index:halfClick:colour), the
 //                                 blanking page flag, the slot temperature; the module type option value; terminals
 //   mdtype X Y Z SLOT TYPE        module type option (0 0-9, 1 9-0, 2 1-0, 3 hex, 4 symbols, 5 alphabet) on SLOT, the
@@ -141,7 +141,7 @@
     }
     function terminals(be, n) {
         let eb = $BEB.get(be, pg().Electric.TYPE)
-        if (eb == null) return 'no electric behaviour'
+        if (eb == null) return 'no electric behavior'
         let vs = []
         for (let i = 0; i < n; i++) if (eb.hasTerminal(i)) vs.push('T' + i + '=' + fmt(eb.getTerminal(i).getVoltage()))
         return vs.join(' ')
@@ -187,7 +187,7 @@
         // Create's value box handler ray-traces from the player's eyes (RaycastHelper), so the player looks at the point
         p.lookAt($Anchor.EYES, hitVec)
         let hit = new $BHR(hitVec, $Dir.byName(face), P, false)
-        // r1113 pwg12r SQ-PWG-63: every click landed in slot 3, the slot a block-centre hit gives; print what Java got
+        // r1113 pwg12r SQ-PWG-63: every click landed in slot 3, the slot a block-center hit gives; print what Java got
         let hl = hit.getLocation()
         out('use hit loc=' + fmt(hl.x() - P.getX()) + ',' + fmt(hl.y() - P.getY()) + ',' + fmt(hl.z() - P.getZ()) + ' dir=' + hit.getDirection() + ' pos=' + hit.getBlockPos().toShortString())
         // r1113 pwg16 SQ-PWG-63: Create 0.5.1's ValueSettingsInputHandler takes EVERY right-click of a FakePlayer on a

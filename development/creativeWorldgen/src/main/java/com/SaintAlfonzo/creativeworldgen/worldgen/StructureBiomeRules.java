@@ -61,7 +61,7 @@ import java.util.function.Predicate;
  * SURFACE CHECK: a rule's optional surface_check list names structures that start below ground but reach the
  * surface (YUNG's crypt staircase, the spider cave). Their start biome is read at the start's own height, so a
  * crypt at y 50 under a beach passes the biome check while its staircase comes up in the sea. For those, the
- * noise surface above the start's box (centre and corners) must be outside the rule's biomes and not under a fluid
+ * noise surface above the start's box (center and corners) must be outside the rule's biomes and not under a fluid
  * (WORLD_SURFACE_WG above OCEAN_FLOOR_WG), or the start is dropped (mixin/ChunkGeneratorStructureBiomeRulesMixin).
  */
 public final class StructureBiomeRules {
@@ -219,7 +219,7 @@ public final class StructureBiomeRules {
 
 	/**
 	 * ChunkGenerator#tryGenerateStructure, the generated start: INVALID_START when the structure has a surface check
-	 * and the noise surface above its box's centre or a corner is in a rule's biomes or under a fluid.
+	 * and the noise surface above its box's center or a corner is in a rule's biomes or under a fluid.
 	 */
 	public static StructureStart surfaceCheck(StructureStart start, Structure structure, ChunkGenerator generator, RandomState random,
 			LevelHeightAccessor height) {

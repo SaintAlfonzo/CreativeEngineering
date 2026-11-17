@@ -1,7 +1,7 @@
 # Rules violation fix plan (design_rules.md section 9, V-01 to V-62)
 
 Owner brief 2026-11-16 applied to the 2026-11-14 compliance audit in [design_rules.md](design_rules.md) section 9.
-Status: P0 and P1 built 2026-11-17 (rule text, prefix lint and renames, docs moves, licence names, mod sides, date and
+Status: P0 and P1 built 2026-11-17 (rule text, prefix lint and renames, docs moves, license names, mod sides, date and
 spelling sweeps of the docs; owner list below); P2 (Creative Common) built 2026-11-17; P2b to P7 planned. Code facts below were read
 2026-11-16 (paths and lines drift; re-read before editing).
 
@@ -652,11 +652,12 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
 3. **V-61 "Create Confectionery"**: the jar's own display name is "Create Confectionery", so `unreleased.md` was not
    changed; confirm, or name the pack form if there is one.
 4. **V-60 "JEI" in `unreleased.md`**: left as is until G17 (JEI and WTHIT in player text) is decided.
-5. **NOTICE name for files that credit several licences**: `NOTICE-thirdparty-various.txt` (Common, Compat, Delight);
+5. **NOTICE name for files that credit several licenses**: `NOTICE-thirdparty-various.txt` (Common, Compat, Delight);
    Equipment's credits only MIT (`NOTICE-thirdparty-MIT.txt`). Rename if another word is wanted.
 6. **Generated docs and the date rule**: the date sweep converted dates in generated docs (for example
    `item_physics_audit.md`, `stack_sizes.md`); their generators still print year-less dates and will write them back on
-   the next run. The generators are code: P5 section 15 code pass. The spelling sweep skipped generated docs.
+   the next run. The generators are code: P5 section 15 code pass. The spelling sweep skipped generated docs. P5 (2026-11-17):
+   no generator of a doc prints a year-less date; the perf suite's two `%m-%d` timestamps now carry the year.
 7. **Rows files keep their names**: `EN.qb` holds `SQ-EDL-` rows, `LT.qb` `CQ-LTP-`, `PB.qb` `SQ-PFS-`, `RP.qb` `CQ-RPB-` and
    the Raspberry Pie `SQ-RPI-` / `CQ-RPI-`, `IP.qb` section 2 `SQ-PRT-` / `CQ-PRT-`. Renaming a rows file renames its
    generated queue blocks; left for the scratch-test owner.

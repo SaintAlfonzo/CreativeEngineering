@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Pass-through rework (feature_writeup/plan_post_scratch_1115b.md): A fall distance in lone, stacked and dense webs;
- * B the stall break; C the 4 / 6 neighbour model, the baked chunk counts and what invalidates them, the growth rule
- * against neighbours, the config migration and the sync format; D the layer height rule. Called from
+ * B the stall break; C the 4 / 6 neighbor model, the baked chunk counts and what invalidates them, the growth rule
+ * against neighbors, the config migration and the sync format; D the layer height rule. Called from
  * {@link PassThroughTest#main}.
  */
 final class PassRework1115bTest {
@@ -65,13 +65,13 @@ final class PassRework1115bTest {
         check("A: lone web scales the fall distance x0.85, no reset", near(fallThrough(lone, 10), 0.85)
                 && !PassThrough.cellAt(lone, new BlockPos(0, 10, 0), WEB, PassValues.defaults()).resetFall());
         World stack = new World().put(0, 10, 0, WEB).put(0, 9, 0, WEB).put(0, 8, 0, WEB);
-        check("A: 3 stacked webs compound to x0.614 (1 or 2 face neighbours each: not dense)",
+        check("A: 3 stacked webs compound to x0.614 (1 or 2 face neighbors each: not dense)",
                 near(fallThrough(stack, 10, 9, 8), 0.614125)
                         && !PassThrough.cellAt(stack, new BlockPos(0, 9, 0), WEB, PassValues.defaults()).resetFall());
         check("A: stacked webs left out of vanilla's fast-fall reset", !PassFixesTest.fixedHit(stack, 11.2, 7.5));
         World dense = new World().put(0, 10, 0, WEB).put(1, 10, 0, WEB).put(-1, 10, 0, WEB).put(0, 9, 0, WEB);
         PassRule.Cell d = PassThrough.cellAt(dense, new BlockPos(0, 10, 0), WEB, PassValues.defaults());
-        check("A: a web with 3 of 6 face neighbours is dense and resets (denseResetsFall)", d.dense() && d.resetFall()
+        check("A: a web with 3 of 6 face neighbors is dense and resets (denseResetsFall)", d.dense() && d.resetFall()
                 && d.neighbours() == 3 && PassFixesTest.fixedHit(dense, 11.2, 9.9));
         World two = new World().put(0, 10, 0, WEB).put(1, 10, 0, WEB).put(-1, 10, 0, WEB);
         PassRule.Cell t = PassThrough.cellAt(two, new BlockPos(0, 10, 0), WEB, PassValues.defaults());
@@ -170,7 +170,7 @@ final class PassRework1115bTest {
                 !PassCounts.changesCounts(Blocks.STONE.defaultBlockState(), Blocks.DIRT.defaultBlockState()));
         check("C2: nothing changed (null old) keeps them", !PassCounts.changesCounts(null, young));
         World w = new World().put(0, 0, 0, grown).put(1, 0, 0, grown).put(-1, 0, 0, grown).put(0, 0, 1, grown);
-        check("C2: a plain BlockGetter counts directly (= neighbours)",
+        check("C2: a plain BlockGetter counts directly (= neighbors)",
                 PassCounts.count(w, BlockPos.ZERO, PassTier.DENSE_CROP, PassTier.Neighbours.SIDES) == 3);
     }
 
@@ -180,9 +180,9 @@ final class PassRework1115bTest {
         BlockState young = Blocks.WHEAT.defaultBlockState();
         World w = new World().put(0, 0, 0, grown).put(1, 0, 0, young).put(-1, 0, 0, young).put(0, 0, 1, young);
         PassRule.Cell g = PassThrough.cellAt(w, BlockPos.ZERO, grown, PassValues.defaults());
-        check("C2 growth: a grown crop with 3 freshly planted neighbours is dense (0.50)",
+        check("C2 growth: a grown crop with 3 freshly planted neighbors is dense (0.50)",
                 g != null && g.dense() && near(g.walk(), 0.50) && g.neighbours() == 3);
-        check("C2 growth: the young neighbour itself is not slowed",
+        check("C2 growth: the young neighbor itself is not slowed",
                 PassThrough.cellAt(w, new BlockPos(1, 0, 0), young, PassValues.defaults()) == null);
         World two = new World().put(0, 0, 0, grown).put(1, 0, 0, grown).put(-1, 0, 0, grown);
         PassRule.Cell t = PassThrough.cellAt(two, BlockPos.ZERO, grown, PassValues.defaults());

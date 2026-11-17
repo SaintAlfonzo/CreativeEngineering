@@ -1,6 +1,6 @@
 // requires: creativecompat
 // Creative Compat: item tooltips for the mod tweaks (misc mods, Quark, Supplementaries, Framed and copycat blocks,
-// flower pots). The helpers and the colour palette stay in the pack's tooltips.js and are read here through
+// flower pots). The helpers and the color palette stay in the pack's tooltips.js and are read here through
 // global.tooltips at event time (each script pack has its own scope).
 ItemEvents.tooltip(e => {
 	var T = global.tooltips

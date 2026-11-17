@@ -35,7 +35,7 @@ final class PassFixesTest {
         return s.is(Blocks.COBWEB) || s.is(Blocks.SWEET_BERRY_BUSH) || s.is(Blocks.LADDER);
     }
 
-    /** A falling entity's per-tick path (centre column x 0.5, z 0.5), as Entity#move clips it. */
+    /** A falling entity's per-tick path (center column x 0.5, z 0.5), as Entity#move clips it. */
     static boolean vanillaHit(World w, double fromY, double toY) {
         BlockHitResult r = PassThrough.clipFallReset(w, new Vec3(0.5, fromY, 0.5), new Vec3(0.5, toY, 0.5),
                 PassFixesTest::resets, (p, s) -> false);
@@ -58,7 +58,7 @@ final class PassFixesTest {
         check("SQ-PTH-03 repro: vanilla fast-fall clip hits a lone web (resets fall distance)", vanillaHit(lone, 11.2, 9.7));
         check("fixed: a lone web is left out of the clip (fall distance x0.85 instead)", !fixedHit(lone, 11.2, 9.7));
         World stack = new World().put(0, 10, 0, web).put(0, 9, 0, web).put(0, 8, 0, web);
-        check("fixed: 3 stacked webs (2 neighbours each) left out", !fixedHit(stack, 11.2, 7.5));
+        check("fixed: 3 stacked webs (2 neighbors each) left out", !fixedHit(stack, 11.2, 7.5));
         World cube = new World();
         for (int x = -1; x <= 1; x++) for (int y = 9; y <= 11; y++) for (int z = -1; z <= 1; z++) cube.put(x, y, z, web);
         check("fixed: a dense web (cube) still resets (denseResetsFall)", fixedHit(cube, 12.4, 10.2));

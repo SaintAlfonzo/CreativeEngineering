@@ -10,7 +10,7 @@ since those are usually drawn by code-built models.
 
 What is left is a candidate list, not proof: code that builds paths by string
 concatenation (fluid "_flow", connected "_connected", IE shader layers, belt
-scroll colours) still shows up. See feature_writeup/unused_textures.md.
+scroll colors) still shows up. See feature_writeup/unused_textures.md.
 
 Usage:
     python3 tools/texture_audit.py                  # writes feature_writeup/unused_textures/all_unused.tsv

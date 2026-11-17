@@ -101,7 +101,7 @@ public class StructureCatalogueTest {
 		piece("minecraft:village/plains/houses/plains_small_house_1", "Villager Houses", "Small homes", "Plains");
 		piece("minecraft:village/plains/houses/plains_butcher_shop_1", "Villager Houses", "Butcher", "Plains");
 		piece("minecraft:village/desert/houses/desert_temple_1", "Villager Structures", "Temples", "Desert");
-		piece("minecraft:village/desert/town_centers/desert_fountain_01", "Villager Structures", "Town centres", "Desert");
+		piece("minecraft:village/desert/town_centers/desert_fountain_01", "Villager Structures", "Town centers", "Desert");
 		piece("kaisyn:village/exclusives/iberian/houses/iberian_temple_1", "Villager Structures", "Temples", "Savanna");
 		piece("kaisyn:village/flower_forest_japanese/houses/flower_forest_stable_1", "Villager Structures", "Animal pens", "Flower Forest");
 		piece("wares:village/houses/plains_warehouse", "Villager Structures", "Workplaces", "Plains");

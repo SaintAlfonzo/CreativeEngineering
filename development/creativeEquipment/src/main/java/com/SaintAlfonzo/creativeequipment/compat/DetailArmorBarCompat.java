@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 /**
  * Registers custom Detail Armor Bar (modid "detailab") icons/colors for modded armor sets that
- * ship with no built-in entry there, so they render as plain grey icons on the vanilla armor
+ * ship with no built-in entry there, so they render as plain gray icons on the vanilla armor
  * bar otherwise. DetailArmorBarAPI is that mod's own public, intentional extension point (see
  * its "For Developer (API Document)" page) - this is a plain client-setup registration call,
  * not a mixin.
@@ -29,7 +29,7 @@ import java.util.Arrays;
  * RGBA tint ({@code RenderSystem#setShaderColor} under the icon draw call), not a fixed
  * palette - any {@link Color} works. Vanilla leather armor already proves this: DetailArmorBar's
  * own {@code ClientInitializer} reads the dye color off the leather ItemStack and tints its
- * neutral grey icon with it. {@link #recolor} uses the same technique on the plain iron icon
+ * neutral gray icon with it. {@link #recolor} uses the same technique on the plain iron icon
  * instead (sheet coords x=63 full / x=54 half - the same offset {@code CustomArmorBar.DEFAULT}
  * itself falls back to for unregistered armor), since it's equally unpatterned/tint-friendly and
  * reads as a more neutral "unranked" base than leather's own icon. One quirk carried over from

@@ -19,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * MCA Comb: eye colour and eye shape controls on its hairstyle page, for the player's own look and for a combed villager.
- * MCA paints the eyes into 22 face textures (2 shapes x 11 colours, same colour order for both genders) and picks one from the
+ * MCA Comb: eye color and eye shape controls on its hairstyle page, for the player's own look and for a combed villager.
+ * MCA paints the eyes into 22 face textures (2 shapes x 11 colors, same color order for both genders) and picks one from the
  * FACE gene, n = (int) clamp(FACE * 22, 0, 21) in FaceLayer.getSkin. The buttons set FACE to the middle of the chosen slot on
  * the editor's villager copy; the hair previews copy that villager every frame, so they show the new eyes. MCA's own save
  * (syncVillagerData, from Done or a hairstyle pick) sends it; the server's "sync" command saves the whole tag, so no server

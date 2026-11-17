@@ -38,8 +38,8 @@ import java.util.Map;
  * <p><b>Generated</b> into an in-memory resource pack ({@link BuiltInPacks#addMemory}, added on
  * {@link AddPackFindersEvent} at the bottom so real packs override it), built lazily from the donor PNG bytes:
  * <ul>
- * <li>{@code creativelabels:generated/note_grey}: {@code sticky.png} greyscale, brightened so its dominant colour
- * maps to white and a tint shows the true dye colour (the dyed-note base; tint index = face * 5 + spot);</li>
+ * <li>{@code creativelabels:generated/note_grey}: {@code sticky.png} greyscale, brightened so its dominant color
+ * maps to white and a tint shows the true dye color (the dyed-note base; tint index = face * 5 + spot);</li>
  * <li>{@code note_written}, {@code note_grey_written}, {@code note_<special>_written}: the same images with pen
  * strokes (darkened pixels on the flat face and the first fold) marking a note that carries text;</li>
  * <li>{@code note_item_grey}: {@code item/stickyitem.png} greyscale for the dyed item icon (tinted by ItemColors in
@@ -188,7 +188,7 @@ public final class DonorArt {
 
     // ----------------------------------------------------------------------------------------------- pixel maths
 
-    /** The most common opaque colour (RGB) of an image; the paper colour of a note texture. */
+    /** The most common opaque color (RGB) of an image; the paper color of a note texture. */
     static int dominant(BufferedImage image) {
         Map<Integer, Integer> counts = new HashMap<>();
         for (int y = 0; y < image.getHeight(); y++) {
@@ -209,8 +209,8 @@ public final class DonorArt {
     }
 
     /**
-     * Greyscale, brightened so the dominant colour's luminance becomes white: multiplied by a dye colour, the paper
-     * shows that colour exactly; highlights clamp, the scribbles stay darker.
+     * Greyscale, brightened so the dominant color's luminance becomes white: multiplied by a dye color, the paper
+     * shows that color exactly; highlights clamp, the scribbles stay darker.
      */
     static BufferedImage greyscale(BufferedImage src) {
         float ref = Math.max(0.05f, NoteColours.luminance(dominant(src)));
