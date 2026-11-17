@@ -14,7 +14,7 @@ runs too often or too rarely. The fixes are planned in [plan_process_overhaul.md
 | 4 | Rules are enforced by memory, not by checks that run by themselves; most lints never run on their own | Bugs found by 12 h scratch runs that a 6 s lint catches | Phase 1, P1.1 |
 | 5 | A build cannot be identified: every build of a jar has the same name | Mid-run jar swaps, staged payload mismatches, "built, not installed" sprawl | Phase 1, P1.2 |
 | 6 | Design intent reaches the agent as bundled notes; gaps are filled by assumption and reversed after the build | Rework (salt, Diet Log, leaf layers, crow, pass-through) | Phase 1, P1.3 |
-| 7 | Commits are week-sized (600 to 2,100 files) | Cannot bisect or revert one feature | Not planned (section 9) |
+| 7 | Commits are week-sized (600 to 2,100 files) | Cannot bisect or revert one feature | Phase 1, P1.5 (rule in place) |
 
 Method: counts from the repo on 2026-11-16, every `tools/test_*.sh` and the six lints run once, and two read-only
 agent passes: one classified every FAIL / INCONCLUSIVE across the scratch run files, the other mined the plans, deploy.md,
@@ -182,10 +182,14 @@ Planned in [plan_process_overhaul.md](plan_process_overhaul.md):
   - P1.4 status as data, docs as generated views.
 - **Phase 2:** a tiered scratch queue with expiry, harness fault classes and pinned jars.
 
-Not planned (left to the owner):
-- Commit per plan phase, with generated output in separate commits (finding 7).
-- A weekly consolidation pass over gotchas, memory and deploy history. Phase 2 does the gotchas part once.
+Added after the owner's rulings (2026-11-16 evening):
+- P1.5 commit per plan phase, pushed to `agent_staging` (finding 7). The rule is in CLAUDE.md.
+- P1.6 project memories moved to [agent_notes/](agent_notes/README.md) (done).
+- P1.2 item 7 install dialog.
+
+Not planned: a recurring weekly consolidation pass. P1.6 and P2.5 do one-time clean-ups.
 
 ## History
 
 - 2026-11-16: written (review session; read-only apart from this file, the plan and their index rows).
+- 2026-11-16 evening: owner rulings recorded in the plan; finding 7 now planned (P1.5); memory move done (P1.6).
