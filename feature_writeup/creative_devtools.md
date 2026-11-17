@@ -12,12 +12,13 @@ Written for: the owner and the split agents, as the execution record of the Devt
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=f67e1cf5c955 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c97c0e9fb78d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creativesplit/devtools #4` | Testing | none | Carve Creative Devtools |
+| `generators-and-tests #18` | Testing | CQ-TXP-01, CQ-TXP-02, CQ-TXC-11, TXQ-OFF-01 to -05 | Paired client + own server runs and mismatch matrix finished; experimental Xvfb display (scratch testing expansion item 5, TX-31, TX-07) |
 | `tooling/generators-and-tests #17` | Testing | SQ-TX-01 to -16, CDV-07 | `/cdevtest` probe verbs, tick warp, random ticks and perfBot test verbs (scratch testing expansion item 3) |
 <!-- generated:status_index end open_work -->
 

@@ -12,36 +12,36 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=44d92f053859 -->
+<!-- generated:status_index begin open_work sha1=b50a8e13db13 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 26), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #2` | Planned | none | Two documents in one file |
-| `conventions #3` | Planned | none | Tilled end stone and sea pickles |
-| `conventions #4` | Planned | none | Global loot modifiers |
-| `conventions #5` | Planned | none | Split Creative Loot out of Creative Worldgen |
-| `conventions #6` | Planned | none | Registration and namespace |
-| `conventions #7` | Planned | none | Dict keys for literals and the lints |
-| `conventions #8` | Planned | none | Licence string |
-| `conventions #9` | Planned | none | Test-item palette switch |
-| `conventions #10` | Planned | none | Mod sides |
-| `conventions #11` | Planned | none | Brewin' advancement scan |
-| `conventions #12` | Planned | none | Member checks, remaps, helper copies |
-| `conventions #13` | Planned | none | Small fixes (added 2026-11-16) |
-| `conventions #14` | Planned | none | Villager trade helper |
-| `conventions #15` | Planned | none | Delight loot through Creative Loot |
-| `conventions #16` | Planned | none | No recipe unlocks |
-| `conventions #17` | Planned | none | Sideways edges and what the dependencies simplify |
-| `conventions #18` | Planned | none | patcherMod to Creative Common in text |
-| `conventions #19` | Planned | none | Underscores in own names, touches saves |
-| `conventions #20` | Planned | none | ISO 8601 dates only |
-| `conventions #21` | Planned | none | American spelling and arrows |
-| `conventions #22` | Planned | none | Tab indent only and the rule |
-| `conventions #23` | Planned | none | Dated history out of code |
-| `conventions #24` | Planned | none | Memory cleanup todo |
-| `conventions #25` | Planned | none | History audit, low priority, marked |
-| `conventions #26` | Planned | none | Docs and writeup form, last |
+| `conventions #13` | Planned | none | Two documents in one file |
+| `conventions #14` | Planned | none | Tilled end stone and sea pickles |
+| `conventions #15` | Planned | none | Global loot modifiers |
+| `conventions #16` | Planned | none | Split Creative Loot out of Creative Worldgen |
+| `conventions #17` | Planned | none | Registration and namespace |
+| `conventions #18` | Planned | none | Dict keys for literals and the lints |
+| `conventions #19` | Planned | none | Licence string |
+| `conventions #20` | Planned | none | Test-item palette switch |
+| `conventions #21` | Planned | none | Mod sides |
+| `conventions #22` | Planned | none | Brewin' advancement scan |
+| `conventions #23` | Planned | none | Member checks, remaps, helper copies |
+| `conventions #24` | Planned | none | Small fixes (added 2026-11-16) |
+| `conventions #25` | Planned | none | Villager trade helper |
+| `conventions #26` | Planned | none | Delight loot through Creative Loot |
+| `conventions #27` | Planned | none | No recipe unlocks |
+| `conventions #28` | Planned | none | Sideways edges and what the dependencies simplify |
+| `conventions #29` | Planned | none | patcherMod to Creative Common in text |
+| `conventions #30` | Planned | none | Underscores in own names, touches saves |
+| `conventions #31` | Planned | none | ISO 8601 dates only |
+| `conventions #32` | Planned | none | American spelling and arrows |
+| `conventions #33` | Planned | none | Tab indent only and the rule |
+| `conventions #34` | Planned | none | Dated history out of code |
+| `conventions #35` | Planned | none | Memory cleanup todo |
+| `conventions #36` | Planned | none | History audit, low priority, marked |
+| `conventions #37` | Planned | none | Docs and writeup form, last |
 | `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
 <!-- generated:status_index end open_work -->
 
