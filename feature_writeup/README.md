@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=52349604d8b9 -->
+<!-- generated:status_index begin readme sha1=a400fb0b5f2d -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | DEPLOYED | SQ-PTH r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED; SQ-BRA r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL | creativedevtools in mods/ | DEPLOYED, in-game test pending |
@@ -199,7 +199,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Recipe progression hub | [recipe_progression.md](recipe_progression.md) | `RP-` | DEPLOYED | none |  | DEPLOYED (since 1.0.3), RP-01 to RP-08 pending |
 | Bugfix run from the 2026-11-11 to 11-14 scratch runs | [plan_bugfix_1114.md](plan_bugfix_1114.md) | `rows named in the plan` | planned | SQ-T1 r1115 2026-11-15: 1 PASS; SQ-SPD r1115 2026-11-15: 8 PASS, 1 FAIL; SQ-PG r1115 2026-11-15: 2 PASS, 1 FAIL; +6 codes | creativedelight in mods/, powergrid in mods/ | planned 2026-11-14 |
 | Rules violation fix plan | [plan_rules_fixes.md](plan_rules_fixes.md), [test_prefix_index.md](testing/test_prefix_index.md) | none | planned | SQ-TXQ r1116 2026-11-16: 2 PASS, 2 CRASH; SQ-PS15B r1116 2026-11-16: 7 PASS, 4 FAIL, 19 LOOK; CQ-PS15B r1116 2026-11-16: 2 DEFERRED; +18 codes |  | planned (2026-11-16) |
-| Process review and overhaul plan | [process_review.md](process_review.md), [plan_process_overhaul.md](plan_process_overhaul.md) | `PROC-` | reference | none |  | review written 2026-11-16 |
+| Process review and overhaul plan | [process_review.md](process_review.md), [plan_process_overhaul.md](plan_process_overhaul.md) | `PROC-` | reference | none |  | Phases 1 and 2 built 2026-11-16; Phase 3 planned 2026-11-16 |
 <!-- generated:status_index end readme -->
 
 ## Release plans
