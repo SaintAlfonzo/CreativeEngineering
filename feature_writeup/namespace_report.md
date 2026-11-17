@@ -8,7 +8,7 @@ allowlist (`tools/namespace_allowlist.csv`) and rerun. This is the "no jar regis
 
 None.
 
-## Recipe helper not bound to the folder namespace (outside the pack folder) (139)
+## Recipe helper not bound to the folder namespace (outside the pack folder) (82)
 
 | File | Line | Hit |
 |---|---|---|
@@ -19,11 +19,6 @@ None.
 | `kubejs/data/creativebrewing/kubejs/creativebrewing/potion_bottling.js` | 24 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
 | `kubejs/data/creativebrewing/kubejs/creativebrewing/tipped_arrows.js` | 11 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
 | `kubejs/data/creativebrewing/kubejs/vinery/alcohol.js` | 10 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
-| `kubejs/data/creativecompat/kubejs/economy/coin.js` | 6 | R = global.NCH (use global.NCH.forPack('creativecompat')) |
-| `kubejs/data/creativecompat/kubejs/other/dead_recipe_removal.js` | 10 | R = global.NCH (use global.NCH.forPack('creativecompat')) |
-| `kubejs/data/creativecompat/kubejs/other/feature_ports.js` | 24 | R = global.NCH (use global.NCH.forPack('creativecompat')) |
-| `kubejs/data/creativecompat/kubejs/other/flowers.js` | 6 | R = global.NCH (use global.NCH.forPack('creativecompat')) |
-| `kubejs/data/creativecompat/kubejs/other/misc_mods.js` | 9 | R = global.NCH (use global.NCH.forPack('creativecompat')) |
 | `kubejs/data/creativedelight/kubejs/abnormals_delight/neapolitan.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 | `kubejs/data/creativedelight/kubejs/abnormals_delight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 | `kubejs/data/creativedelight/kubejs/abnormals_delight/upgrade_aquatic.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
@@ -97,62 +92,10 @@ None.
 | `kubejs/data/creativedelight/kubejs/vintagedelight/cooking.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 | `kubejs/data/creativedelight/kubejs/vintagedelight/jams.js` | 66 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 | `kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedevtools/kubejs/create/metal_test_recipes.js` | 5 | R = global.NCH (use global.NCH.forPack('creativedevtools')) |
-| `kubejs/data/creativedevtools/kubejs/create/sequence_assembly_processes.js` | 45 | R = global.NCH (use global.NCH.forPack('creativedevtools')) |
-| `kubejs/data/creativedevtools/kubejs/create/wood_test_recipes.js` | 5 | R = global.NCH (use global.NCH.forPack('creativedevtools')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/blueprints.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/components.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/computing.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/create_utilities.js` | 5 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/crystal.js` | 9 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/dreams_desires.js` | 6 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/dust.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/end.js` | 6 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/fabric.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/health.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/laser_cutting.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/mechanisms.js` | 5 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/mob_resources.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/music.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/oil.js` | 9 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/pneumatic.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/power.js` | 6 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/process.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/redstone.js` | 9 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/resource_blocks.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/transport.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/engineering/vibrating.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js` | 35 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/metal/metal_building.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/metal/misc_metal_crafts.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/metal/rose_gold_interchange.js` | 11 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/wood/ash.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/wood/bark.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/wood/sawdust.js` | 6 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/wood/smoked_wood.js` | 6 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeengineering/kubejs/wood/wood_types.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/archery.js` | 10 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/bullets.js` | 7 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/camera_bag.js` | 13 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/end_gear.js` | 10 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/gear_jeed.js` | 10 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/shield.js` | 10 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/equipment/stepstool.js` | 9 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `kubejs/data/creativeequipment/kubejs/other/backpack_skins.js` | 16 | global.NCH.backpackSkin( direct call (namespace creativeengineering) |
-| `kubejs/data/creativeequipment/kubejs/other/backpack_skins.js` | 17 | global.NCH.backpackSkinClear( direct call (namespace creativeengineering) |
-| `kubejs/data/creativemagic/kubejs/magic/progression.js` | 10 | R = global.NCH (use global.NCH.forPack('creativemagic')) |
-| `kubejs/data/creativemagic/kubejs/magic/sculk.js` | 8 | R = global.NCH (use global.NCH.forPack('creativemagic')) |
-| `kubejs/data/creativemagic/kubejs/magic/storage.js` | 8 | R = global.NCH (use global.NCH.forPack('creativemagic')) |
-| `kubejs/data/creativemagic/kubejs/magic/xp.js` | 8 | R = global.NCH (use global.NCH.forPack('creativemagic')) |
-| `kubejs/data/creativeworldgen/kubejs/recipes/visceral_heap.js` | 8 | R = global.NCH (use global.NCH.forPack('creativeworldgen')) |
-| `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_merges.js` | 57 | global.NCH.replaceItems( direct call (namespace creativeengineering) |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js` | 64 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 | `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_transition_items.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js` | 22 | R = global.NCH (use global.NCH.forPack('creativeengineering')) |
-| `development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/func/tune_tools.js` | 47 | R = global.NCH (use global.NCH.forPack('creativeequipment')) |
-| `development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/end_gear.js` | 56 | global.NCH.registerIncomplete( direct call (namespace creativeengineering) |
 
-## LootJS log names with another prefix (10)
+## LootJS log names with another prefix (7)
 
 | File | Line | Hit |
 |---|---|---|
@@ -163,9 +106,6 @@ None.
 | `kubejs/data/creativedelight/kubejs/farmersdelight/loot.js` | 25 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
 | `kubejs/data/creativedelight/kubejs/miners_delight/loot.js` | 22 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
 | `kubejs/data/creativedelight/kubejs/vintagedelight/loot.js` | 55 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativeworldgen/kubejs/loot/05_tuning.js` | 1332 | logName('CE/...') in the creativeworldgen pack (tag CWG, use R.logName) |
-| `kubejs/data/creativeworldgen/kubejs/loot/10_removals.js` | 27 | logName('CE/...') in the creativeworldgen pack (tag CWG, use R.logName) |
-| `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_merges.js` | 67 | logName('CE/...') in the creativecommon pack (tag CCM, use R.logName) |
 
 ## Java DeferredRegister for a mod id the jar does not declare (0)
 
