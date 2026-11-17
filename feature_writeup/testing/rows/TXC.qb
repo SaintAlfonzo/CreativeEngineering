@@ -5,6 +5,7 @@
 @@section 1
 @@title CQ-TXC Client capture runner and in-process client driving, 2026-11-15 ([client_capture.md](../client_capture.md) sections 2, 6, 7; [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) items 2 and 4, TX-01 to TX-05; TODO `tooling/generators-and-tests #6`)
 @@date 2026-11-15
+@@jars creativedevtools
 @@sources feature_writeup/client_capture.md feature_writeup/plan_scratch_testing_expansion.md
 @@text
 @@text Creative Devtools 1.0.0 from `development/creativeDevtools/build/libs` (built 2026-11-15; the runner copies it into

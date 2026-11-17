@@ -5,6 +5,7 @@
 @@section 1
 @@title Performance defaults: Distant Horizons and ModernFix, 2026-10-27 ([perf.md](../perf.md) 10.2 #2, 11.2 #9, TODO `perf #11`, `perf #22`)
 @@date 2026-10-27
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text Config `DistantHorizons.toml` (threads 1, both request distances 256) and ModernFix 5.18.1 in `mods/` (mod_sides row

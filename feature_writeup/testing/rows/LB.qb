@@ -5,6 +5,7 @@
 @@section 1
 @@title Lunchboxes, 2026-10-29 ([lunchboxes.md](../lunchboxes.md), TODO `storage-and-item-loss #9`)
 @@date 2026-10-29
+@@jars creativedelight
 @@sources feature_writeup/lunchboxes.md
 @@text
 @@text Server half only: the item, the recipes and the mixins loading. Looks, tooltip, dye colors and seagulls need the

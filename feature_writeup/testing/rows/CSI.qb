@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CSI Curios slots by IMC, 2026-11-01 ([curios_slots.md](../curios_slots.md) 0)
 @@date 2026-11-01
-@@jars creativecommon
+@@jars creativecompat creativeequipment
 @@sources feature_writeup/curios_slots.md
 @@text
 @@text Needs the patcherMod jar with `compat/CuriosSlots` (built 2026-11-01). The slots were datapack JSON in the 1.20 format, which

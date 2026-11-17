@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-HOP / Hearth and Harvest hops, tilled end stone, stomping basin, 2026-11-14 ([plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.1, 3.2, 3.10; [hearth_and_harvest.md](../hearth_and_harvest.md) J75, J76; TODO `largecontent/mod-additions #70`, `#71`, `#73`, `#75`)
 @@date 2026-11-14
-@@jars creativedelight
+@@jars creativedelight powergrid
 @@sources feature_writeup/plan_bugfix_1114.md feature_writeup/hearth_and_harvest.md
 @@text
 @@text Targets `creativedelight-1.1.0.jar` and `creativebrewing-1.0.0.jar` installed 2026-11-14 23:03 (cd-b), with Ender Crop's

@@ -5,6 +5,7 @@
 @@section 1
 @@title Gap fill, 2026-10-30: changelog bullets that had no row (oldest to newest)
 @@date 2026-10-30
+@@jars creativebrewing creativecommon creativedelight creativeengineering
 @@text
 @@text Added by the 2026-10-30 coverage pass over `unreleased.md`: seed pouch tags and smoked wood (the Autumn painting rename was dropped, TODO `#7` closed as not implemented). Both are
 @@text script or data only; a full restart with the current kubejs and the installed patcherMod 1.1.04 covers them.

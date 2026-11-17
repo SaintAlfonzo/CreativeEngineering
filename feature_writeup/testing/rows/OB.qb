@@ -5,7 +5,6 @@
 @@section 1
 @@title SQ-OB Owner batch of easy rows, 2026-11-09 (TODO `food/seasoning #24`, `largecontent/mod-additions #54`, `#56`, `#62`, `gameplay/tnt-and-portal #26`, `ui/tooltips #15`, `farming/crops #47`, `#48`, `baking/baked-goods #41`, `dishes/ingredients #43`, `dishes/meals #63`, `#64`, `mobs/tweaks #24`)
 @@date 2026-11-09
-@@jars creativedelight
 @@text
 @@text Targets the rebuilt Creative Common, Creative Delight and Creative Compat jars (built 2026-11-09, not installed because the game was running) and the edited `breedablekillerrabbit.json5`.
 @@text

@@ -5,7 +5,7 @@
 @@section 1
 @@title Vine shearing, 2026-10-31 ([vine_shearing.md](../vine_shearing.md), TODO `potions/enchanting #5`)
 @@date 2026-10-31
-@@jars creativecommon
+@@jars creativecompat creativeengineering
 @@sources feature_writeup/vine_shearing.md
 @@text
 @@text patcherMod 1.1.04 build of 2026-10-31 (`VineShearing`, `VineBlockShearMixin`). Group A (superflat). Shearing needs a

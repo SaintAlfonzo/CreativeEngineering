@@ -5,7 +5,7 @@
 @@section 1
 @@title Admin date commands, 2026-10-30 ([time.md](../time.md) 3.11, TI-32 to TI-37)
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativecalendar
 @@sources feature_writeup/time.md
 @@text
 @@text Needs patcherMod built after 2026-10-30 21:45 (`time/TimeDate`) installed and a full restart. Fresh normal world with

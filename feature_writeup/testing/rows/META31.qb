@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-META31 meta batch: sky, caravans, meteorite strikes, temples with ruins, 2026-10-30
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativeworldgen
 @@text
 @@text patcherMod 1.1.04 (new part field `overlap`) installed in `mods/` 2026-10-30 17:06; data in `meta_structures.json`,
 @@text `structure_tags.json`, `structure_groups.json`, `kubejs/data/creativeengineering/worldgen/{structure,template_pool}/sky_island.json`.

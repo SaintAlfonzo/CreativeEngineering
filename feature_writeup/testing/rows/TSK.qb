@@ -5,7 +5,7 @@
 @@section 1
 @@title Small changes batch, 2026-10-31 (watering can, spout gun, nightstands, sky village herbs, oats, treated sticks, seasoning names, JEI berries, dandelion odds)
 @@date 2026-10-31
-@@jars creativedelight
+@@jars creativecompat creativedelight
 @@text
 @@text Jars: patcherMod and Creative Delight, built 2026-10-31, installed together (see the session hand-over). Writeups:
 @@text [hearth_and_harvest.md](../hearth_and_harvest.md) HNH-45 to -47, [furniture_storage.md](../furniture_storage.md) NS-01 to -05,

@@ -8183,14 +8183,14 @@ memory note not written yet) and Creative Devtools with the capture driver in th
 | CQ-TXP-02 | client | `qrun.py matrix SPEC RES --plan`, then without `--plan`; SPEC: case M01 = Power Grid gate jar on the client only (`cli_jars`), server without it (no PGJAR), `"expect": "refuse"`; case M02 = Power Grid on both (`srv_env` PGJAR, `cli_jars`), `"expect": "join"` | M01 outcome REFUSED with the Forge refusal text in the evidence (not CRASH-CLIENT; the phase 10 crash was the reference bug), M02 JOINED; `RES/matrix.md` written; no JVM left | refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (owner to confirm the real text); a stale `GAME/cdev_channel/pid` or `state.json` from an earlier launch can misread the outcome (open, see the plan) |
 <!-- generated:status_index end rows_TXQ_1 -->
 
-<!-- generated:status_index begin rows_PROC_1 sha1=d7675c9010be -->
+<!-- generated:status_index begin rows_PROC_1 sha1=fbcd3f04a886 -->
 ## SQ-PROC Build stamps boot line, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P1.2; TODO `tooling/process #2`)
 
 Needs a Creative Common jar built after 2026-11-16 21:30 (BuildStamps); any scratch run with it covers the row.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-PROC-01 | A | Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods` | one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.tsv` row of that jar | `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build |
+| SQ-PROC-01 | A | Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods` | one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.csv` row of that jar | `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build |
 <!-- generated:status_index end rows_PROC_1 -->
 
 <!-- generated:status_index begin rows_PROC_2 sha1=ad628344c4a9 -->

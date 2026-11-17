@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-EFB Earth fill on the placed blocks: water, air and earth replaced, 2026-11-02 ([structure_tuning.md](../structure_tuning.md) 3.8, 3.13, 3.28 to 3.30, 7.3.1, 7.5; TODO `structures/earthfill`, `structures/terrain #2`)
 @@date 2026-11-02
-@@jars creativecommon
+@@jars creativeworldgen
 @@sources feature_writeup/structure_tuning.md
 @@text
 @@text Targets patcherMod 1.1.07 **build/libs 2026-11-02 00:42** (not in `mods/` yet; prep_srv.sh swaps it in) with `waterReach` (new,

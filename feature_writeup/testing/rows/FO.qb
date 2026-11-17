@@ -5,7 +5,7 @@
 @@section 1
 @@title Deep scan 2026-11-02: food, cooking and farming rows with no test
 @@date 2026-11-02
-@@jars creativecommon creativedelight
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
 @@text
 @@text Written by the 2026-11-02 night docs deep scan of the cooking, food and farming TODO rows and writeups: every built feature in that scope whose S (or C) tier was open and that had no queue row. Each subsection names its writeup, TODO row and target jar; the IDs are already in the writeups and the TODO Writeup cells. Server rows (SQ-) fit group A unless the row says otherwise; client rows (CQ-) wait for the client round (owner pin at the top). Not in the r1102b scope.
 @@text

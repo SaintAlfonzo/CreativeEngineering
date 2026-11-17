@@ -5,7 +5,7 @@
 @@section 1
 @@title Flower potting audit, 2026-10-27 ([flower_pots.md](../flower_pots.md), TODO `blocks/framed-and-decor #6`)
 @@date 2026-10-27
-@@jars creativecommon
+@@jars creativebrewing creativecompat
 @@sources feature_writeup/flower_pots.md
 @@text
 @@text Audit tooling only, no pack behaviour change; none of these blocks another feature. Target: the instance's

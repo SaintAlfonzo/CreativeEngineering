@@ -125,7 +125,7 @@ bootreject (?i)storagedelight.*(missing|requires)
 @@section 2
 @@title SQ-DEP optional-mod guards, 2026-11-14 ([creative_split.md](../creative_split.md) 7.21, [plan_bugfix_1114.md](../plan_bugfix_1114.md) 5.2, TODO `creativesplit/deps #26`)
 @@date 2026-11-14
-@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic powergrid
 @@sources feature_writeup/creative_split.md feature_writeup/plan_bugfix_1114.md
 @@text
 @@text Targets `creativedelight-1.1.0.jar`, `creativeengineering-2.0.0.jar`, `creativebrewing-1.0.0.jar` and

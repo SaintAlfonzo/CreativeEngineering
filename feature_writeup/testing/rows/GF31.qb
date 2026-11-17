@@ -5,7 +5,7 @@
 @@section 1
 @@title Gap fill, 2026-10-31: changelog bullets that had no row
 @@date 2026-10-31
-@@jars creativecommon
+@@jars creativecommon creativedevtools creativeengineering
 @@text
 @@text Added with the 2026-10-31 run plan ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md)); the batch files hold the
 @@text exact commands and checks.

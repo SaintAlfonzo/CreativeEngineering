@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-PS15B / CQ-PS15B Pass-through rework, 2026-11-15 ([plan_post_scratch_1115b.md](../plan_post_scratch_1115b.md) A to E; [plan_passthrough.md](../plan_passthrough.md) 1, 2.1, 4, 5.1; TODO `tooling/scratch-1115-follow-ups-2`)
 @@date 2026-11-15
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_post_scratch_1115b.md feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 15:42 (build/libs, not installed; carries another session's uncommitted Compat

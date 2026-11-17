@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-EFX effect changes, 2026-10-31 ([effects.md](../effects.md) 2.6 to 2.9, [armor_effects.md](../armor_effects.md) 2.2, 2.5, TODO `potions/effects #3, #4, #8, #9, #10, #11`)
 @@date 2026-10-31
+@@jars creativecommon creativeequipment
 @@sources feature_writeup/effects.md feature_writeup/armor_effects.md
 @@text
 @@text Jars built 2026-10-31 00:28-00:30: patcherMod 1.1.04 (`MagicResistanceEffect`, `CopperPoisoningHandler`, `EffectRules`,

@@ -5,6 +5,7 @@
 @@section 1
 @@title Upgrade Aquatic coral growth, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.31, TODO `gameplay/misc #15`)
 @@date 2026-10-28
+@@jars creativecommon creativecompat creativeequipment creativeworldgen
 @@sources feature_writeup/fixes_compat.md
 @@text
 @@text Data only: `kubejs/data/immersive_weathering/block_growths/ua_*_coral.json` (11 files from `tools/gen_ua_coral_growths.py`).

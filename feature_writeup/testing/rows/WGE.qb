@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-WGE Worldgen edit plan, built part, 2026-11-02 ([plan_worldgen_edit.md](../plan_worldgen_edit.md) A1 to A5, B1, B5; TODO `worldgen/biomes #9`, `locate #5`, `earthfill #4`, `rates-and-groups #6 #9 #11 #12`, `seasons #2`)
 @@date 2026-11-02
+@@jars creativeworldgen
 @@sources feature_writeup/plan_worldgen_edit.md
 @@text
 @@text Rewritten in depth 2026-11-02 (one row per changed value, each with a before/after number to compare). Targets: patcherMod

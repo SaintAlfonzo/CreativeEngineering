@@ -5,7 +5,7 @@
 @@section 1
 @@title Baby Mobs milestone 2: 26.1 remodels, 2026-11-01 ([baby_mobs.md](../baby_mobs.md) 3a and 7, TODO `ports/babymobport #1`)
 @@date 2026-11-01
-@@jars creativedelight
+@@jars creativeworldgen
 @@sources feature_writeup/baby_mobs.md
 @@text
 @@text Needs the Creative Delight jar nesting babyMobs 1.1.0 (built 2026-11-01, not yet installed). The remodels are client

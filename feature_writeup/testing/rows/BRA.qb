@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-BRA BlockRunner audit, 2026-11-10 ([blockrunner.md](../blockrunner.md) sections 2, 6, 7; TODO `gameplay/blockrunner #2`, `#5`)
 @@date 2026-11-10
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/blockrunner.md
 @@text
 @@text Targets `creativecommon-1.1.0.jar` (22:43, `has.js` fix), `creativecompat-1.0.0.jar` and `creativedevtools-1.0.0.jar`
@@ -128,7 +128,7 @@ sleep 1
 @@section 2
 @@title SQ-BRA part 2 and CQ-NCR, gap sweep 2026-11-11 (unreleased changelog against the queue; [blockrunner.md](../blockrunner.md) BR-63, BR-65, BR-66; TODO `gameplay/blockrunner #2`, `#5`)
 @@date 2026-11-11
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/blockrunner.md
 @@text
 @@text Gap sweep of `unreleased.md` against the queue: every bullet already had a row except the Walk Speed values below and

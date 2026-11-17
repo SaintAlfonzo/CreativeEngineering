@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-WG30 worldgen batch 2026-10-30
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativeworldgen
 @@text
 @@text Worldgen TODO rows built in parallel on 2026-10-30, tested together on one scratch run. patcherMod build of 2026-10-30.
 @@text

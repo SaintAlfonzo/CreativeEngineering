@@ -5,7 +5,7 @@
 @@section 1
 @@title Terrain batch 4, beard footprint, geode floor (structures/terrain #1, #2, #6), 2026-10-30
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativeworldgen
 @@text
 @@text patcherMod built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
 @@text `beardFootprint` (default off), `OceanGeodes` `floorPatch` (OFF / CUT / SWAP, default SWAP). Data: `kubejs/server_scripts/worldgen/terrain_adaptation.js`

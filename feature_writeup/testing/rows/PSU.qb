@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-FCB Food and cooking batch, waves A and B, 2026-11-02 ([plan_food_cooking_batch.md](../plan_food_cooking_batch.md) "Built"; drinks are SQ-DRK, wave C is SQ-RB2)
 @@date 2026-11-02
+@@jars creativecalendar creativecommon creativedelight creativeworldgen
 @@sources feature_writeup/plan_food_cooking_batch.md
 @@text
 @@text Target: `creativedelight-1.0.0.jar` rebuilt after 2026-11-02 13:32 (members repackedFarmers -03, backportedVintage -13,

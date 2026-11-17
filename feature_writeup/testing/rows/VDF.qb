@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-VDF Veggies Delight merges and family folds, 2026-11-01 ([veggies_delight.md](../veggies_delight.md) 3.3, 5.1, 8; TODO `merges/dishes #1` to `#3`, `creativedelight/members #30`)
 @@date 2026-11-01
-@@jars creativedelight
+@@jars creativecommon creativedelight
 @@sources feature_writeup/veggies_delight.md
 @@text
 @@text Needs the Creative Delight jar rebuilt after 2026-11-01 (scripts `veggiesdelight/`, `moredelight/recipes.js`,

@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-MB monster box vaults, 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9, TODO `mobs/tweaks #5`, MT-34 to MT-37, MT-47 to MT-50)
 @@date 2026-10-30
+@@jars creativecompat creativeworldgen
 @@sources feature_writeup/mob_block_tweaks.md
 @@text
 @@text Needs patcherMod 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,

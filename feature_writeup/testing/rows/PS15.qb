@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-PS15 / CQ-PS15 Post-scratch r1115 follow-ups, 2026-11-15 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md); TODO `tooling/scratch-1115-follow-ups`)
 @@date 2026-11-15
+@@jars creativedelight
 @@sources feature_writeup/plan_post_scratch_1115.md
 @@text
 @@text Only CQ-PS15-01 to -03 have code or a question today (Compat built, not installed). The SQ rows are written ahead of the builds; each is run when its step ships. SQ-PS15-01 to -03, -05 to -07, -09 to -11b (salt, vine crops, wild hops) have code since 2026-11-15 (Common 1.2.0, Creative Delight 1.1.0 build/libs; -04 waits on the owner). SQ-PS15-13 to -16 (D1 lunchbox half, D3, D4, D5) have code since 2026-11-15: Creative Delight and Creative Worldgen build/libs, Power Grid `jar_archive/pwg_gate/` -19, acid script-only.

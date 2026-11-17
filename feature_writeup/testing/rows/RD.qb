@@ -4,7 +4,7 @@
 
 @@section 1
 @@title Queue
-@@jars creativedelight
+@@jars creativebrewing creativecalendar creativecommon creativecompat creativedelight creativedevtools creativeengineering creativemagic creativeworldgen
 @@text
 @@text ### Round 0: Fungi Delight port (added 2026-10-23, run first)
 @@text

@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-PTH Pass-through blocks, phase 1 core, 2026-11-14 ([plan_passthrough.md](../plan_passthrough.md) 1, 2, 8; TODO `gameplay/blockrunner #10`)
 @@date 2026-11-14
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-14 (build/libs, not installed). The tier tags come in phase 4: until then a row
@@ -122,7 +122,7 @@ look bP: mod=none in the web cell (z 1100..1101); bQ: mod=-0.500 there; owner fi
 @@section 2
 @@title SQ-PTH Pass-through blocks, phase 2 (cobwebs, items, projectiles, arrow despawn), 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) 4, 5)
 @@date 2026-11-15
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 (build/libs, not installed). Same scratch datapack as phase 1 until phase 4:
@@ -465,7 +465,7 @@ look m15 passes x 1013 at mot x about 1.5; c15 slows under the web at x 1012 but
 @@section 3
 @@title SQ-PTH Pass-through blocks, phases 3 and 5 (leaf piles, ropes, WTHIT), 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) 3, 6)
 @@date 2026-11-15
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 (build/libs, not installed). Same scratch datapack as phase 1 until phase 4, plus
@@ -557,7 +557,7 @@ look z18a hp 20 -> lower (0.5 per hit), z18b (1.0 per hit), z18c/z18d 20; all mo
 @@section 4
 @@title SQ-PTH Pass-through blocks, phase 4 (tags and tools), 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) 2, 5.1, 8)
 @@date 2026-11-15
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Needs a Creative Compat jar built after 2026-11-15 that carries `data/creativecompat/kubejs/tags/passthrough_tags.js`
@@ -1198,7 +1198,7 @@ look m24a / m24b: x passes 1013 with mot x about 1.5 (ng off: gravity drop allow
 @@section 5
 @@title SQ-PTH Pass-through blocks, phase 6 (benchmark, perf suite, timing log), 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) 7)
 @@date 2026-11-15
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 and Creative Devtools 1.0.0 built 2026-11-15 00:40 (build/libs, not installed); both jars in
@@ -1314,7 +1314,7 @@ look parser server block; lines after the key went false: none later than 10 s a
 @@section 6
 @@title SQ-PTH Pass-through scratch fixes, 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) "Scratch fixes 2026-11-15"; TODO `gameplay/blockrunner #10`)
 @@date 2026-11-15
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 14:59 and Creative Devtools 1.0.0 14:39 (build/libs, not installed; both builds also

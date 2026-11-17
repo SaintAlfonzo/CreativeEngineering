@@ -5,6 +5,7 @@
 @@section 1
 @@title Jar fluid pipes, 2026-11-02 ([mixed_jars.md](../mixed_jars.md) 10, TODO `items/jars #7`)
 @@date 2026-11-02
+@@jars creativecompat creativedelight
 @@sources feature_writeup/mixed_jars.md
 @@text
 @@text Target: `creativecompat-1.0.0.jar` built 2026-11-02 (compat/JarFluidPipes), not yet in `mods/`. Needs Create and

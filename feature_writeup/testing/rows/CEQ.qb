@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CMG / SQ-CEQ Creative Magic and Creative Equipment carves, 2026-11-04 ([creative_magic.md](../creative_magic.md) 4, [creative_equipment.md](../creative_equipment.md) 4, TODO `creativesplit/magic #12`, `creativesplit/equipment #9`)
 @@date 2026-11-04
-@@jars creativecommon creativeequipment
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativeequipment creativemagic
 @@sources feature_writeup/creative_magic.md feature_writeup/creative_equipment.md
 @@text
 @@text Not run. Targets the jars installed 2026-11-04 19:17: `creativeengineering-1.1.09.jar`, `creativemagic-1.0.0.jar`,

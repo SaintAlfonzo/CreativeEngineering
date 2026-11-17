@@ -5,7 +5,6 @@
 @@section 1
 @@title Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
 @@date 2026-10-31
-@@jars creativebrewing creativecommon creativedelight
 @@text
 @@text > **PINNED (owner, 2026-11-01):** client rows from the creative split (waves 2 to 7) are not run until wave 8+; they run as one bulk client session. Server rows still run per carve.
 @@text > **RUN 2026-11-01 (r1101):** server rows, bug batch, deferred W2 / W3 rows and the client block ran; per-row results in

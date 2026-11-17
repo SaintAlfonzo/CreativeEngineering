@@ -5,7 +5,7 @@
 @@section 1
 @@title CQ-SINK Visual sinking: no bump between sunken blocks, even depth, items on top, 2026-11-10 ([blockrunner.md](../blockrunner.md) 3.4, TODO `gameplay/blockrunner #7`)
 @@date 2026-11-10
-@@jars creativedevtools
+@@jars creativecompat creativedevtools
 @@sources feature_writeup/blockrunner.md
 @@text
 @@text Needs the 2026-11-10 Creative Compat jar in `mods/`. Client only (rendering); default `[surface.sinking] depthPixels = 2`, raise to 8 to see it easily.

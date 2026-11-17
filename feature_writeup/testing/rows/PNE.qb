@@ -5,6 +5,7 @@
 @@section 1
 @@title CQ-PNE Nether Distant Horizons, season colour answers, log filter, 2026-11-07 ([perf.md](../perf.md) section 19; Compat + Calendar built, not installed)
 @@date 2026-11-07
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text | ID | Side | Check | Expect | Failure means |

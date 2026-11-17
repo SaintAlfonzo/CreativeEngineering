@@ -5,6 +5,7 @@
 @@section 1
 @@title Immersive Posts materials cut, 2026-10-27 ([perf.md](../perf.md) 11.3, TODO `perf #21`)
 @@date 2026-10-27
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text patcherMod 1.1.03 with `ImmersivePostsRegistrationMixin` and `ImmersivePostsValidItemMixin`. Group A. Any player
