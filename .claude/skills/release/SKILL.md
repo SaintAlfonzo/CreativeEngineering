@@ -5,8 +5,11 @@ description: Stage, deploy and snapshot a pack release (build_deploy.py payload,
 
 # Release
 
-Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and the step you are on), memory
+Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and the step you are on), agent note
 `deploy-pipeline`, [changelog.md](../../../feature_writeup/changelog.md) 3.5-3.6.
+
+Owner rules (deploy.md section 4): **no content test before a deploy** (the scratch queue tests content, not the
+release); **Distant Horizons settings are player config**, never pushed after 1.0.4 (`CONFIG_CLASSES` keeps it `player`).
 
 1. **Version.** Ask if not given; the owner sets numbers (format `1.1.NN`). Omitting `--version` bumps the
    patch. Never rebuild a deployed version (`deploy/DEPLOYED.json`).
@@ -27,5 +30,6 @@ Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and t
    `changelog/<ver>.md` and restarts `unreleased.md`.
 5b. **New server world only** (not an update): the pregen in `deploy/RUNBOOK.md` section 7 (Chunky, then
    `dh pregen`), before anyone joins. Remind the user when a release says the server starts a new world.
-6. **Docs**: release row in the plan / [README.md](../../../feature_writeup/README.md) release table; features
-   shipped move to DEPLOYED. Never edit a deployed version's changelog file.
+6. **Docs**: release row in the plan / [README.md](../../../feature_writeup/README.md) release table; run
+   `python3 tools/status_index.py`: the snapshot records each own jar's stamp, so the shipped features derive DEPLOYED
+   by themselves (no hand edit). Never edit a deployed version's changelog file.

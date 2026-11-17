@@ -444,6 +444,17 @@ perf tools' own outputs and `texture_audit.py`'s unused-texture list (generated,
 | k | An out-of-date generated block is only a WARN, and nothing reminds an implementing session to regenerate | The Stop hook (`impl` role) prints one line when `status_index.py --check` reports an out-of-date block |
 | l | Intake: the first scratchpad write-up after P1.3 (plan_post_scratch_1115.md G) has rulings but no rulings table, and the scratchpad block was deleted instead of marked `(intake ... -> plan)`. plan_small_fixes_1116.md followed the skill | `check_all` warning: a `plan_*.md` created after 2026-11-16 with no "Owner rulings" table |
 
+**Done 2026-11-16:** a (P3.1); b `CE_INSTALL_PROJECT` from the gate, the installing project is never "stale", SKIP lines
+shown by the gate; c `--fast --changed` runs a slow check whose own inputs changed; d stable tie-break and `--write`
+(P3.3 commit) and `check_all` reports tracked files changed during a run (`dirty_tree`: FAIL under `--full`, WARN
+otherwise, since a parallel session's edit shows the same way); passing checks now show their WARN lines; e as
+planned; h `qrowlint` compares markdown sources without generated blocks and section 0 paragraphs (PROC-23 extended;
+the 3,225 warnings stay: they come from real edits, mostly the 85be1e12 "Meta design planning" commit); i backfill
+1.1.01 to 1.1.06, deploy.md header is a generated `deploy` block from DEPLOYED.json, duplicate 1.2.00 client mark
+removed from DEPLOYED.json and DEPLOY_LOG; `pack/release #7` waits for P3.5 (TODO.md has another session's
+uncommitted edits); j deploy.md section 4 and the release skill; k Stop hook line; l `tools/plan_lint.py`
+(check `plan_lint`). f goes to the first clean-up pass (P3.6).
+
 ### P3.5 TODO as the single source of truth (D13, D16, D17)
 
 Principle: a **TODO row is the only unit of work and the only place its status is written**. Plans hold design, order

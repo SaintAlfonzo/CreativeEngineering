@@ -21,8 +21,9 @@ check_known.csv or java_test_cp.sh selects every check.
 
 Class-based tests read development/<mod>/build/classes. A mod whose sources are newer than its classes is compiled
 first, in one `./gradlew :<mod>:compileJava ... --offline` call; inside Gradle (CE_IN_GRADLE=1, the install gate) a nested
-Gradle run would deadlock on the build lock, so those tests SKIP with "stale classes" instead (the gate compiles the
-installing project before it runs the checks). --no-compile does the same outside Gradle.
+Gradle run would deadlock on the build lock, so those tests SKIP with "stale classes (<project>)" instead; the gate
+compiles the installing project before it runs the checks and names it in CE_INSTALL_PROJECT, so only another
+project's stale classes cause a SKIP. --fast with --changed still runs a slow check whose own inputs changed. --no-compile does the same outside Gradle.
 
 KNOWN failures: tools/check_known.csv (columns check, regex, reason, date yyyy-mm-dd). A FAILed check whose output
 matches the regex counts as KNOWN. Entries older than 30 days print a warning, so accepted failures get revisited.
@@ -33,6 +34,7 @@ Stop hook (--fast --changed, report only).
 import argparse
 import concurrent.futures as cf
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -70,6 +72,7 @@ LINTS = {
     'texture_provenance': (['python3', 'tools/texture_provenance.py'], ['feature_writeup/texture_sources/',
                                                                        'textureswapper/'], 70, True),
     'design_rules_audit': (['python3', 'tools/design_rules_audit.py'], SCRIPT_TREES + ['feature_writeup/'], 30, True),
+    'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),
 }
 PATH_RE = re.compile(r'\b((?:development|kubejs|tools|data|config|configs_edited|generation_scripts)/[A-Za-z0-9_.\-/]+)')
 
@@ -117,6 +120,20 @@ def stale_mods(mods):
             continue
         if newest(d / 'src', '*.java') > newest(d / 'build' / 'classes', '*.class'):
             out.append(m)
+    return out
+
+
+def tracked_dirty():
+    """{path: sha1} of tracked files that differ from HEAD."""
+    r = subprocess.run(['git', 'diff', '--name-only', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
+    out = {}
+    for p in r.stdout.split('\n'):
+        f = ROOT / p
+        if p and f.is_file():
+            try:
+                out[p] = hashlib.sha1(f.read_bytes()).hexdigest()
+            except OSError:
+                pass
     return out
 
 
@@ -219,7 +236,10 @@ def main():
             continue
         if c['full'] and not a.full and only is None:
             continue
-        if a.fast and c['est'] > FAST_LIMIT:
+        # --fast skips slow checks, except under --changed when the check's own inputs changed (P3.4 c): a worldgen
+        # tool change still runs test_worldgen_tools at install. A change to the global inputs alone does not.
+        own_change = changed is not None and touches(c['inputs'], changed)
+        if a.fast and c['est'] > FAST_LIMIT and not own_change:
             skipped.append((n, 'slow (about %d s)' % c['est']))
             continue
         if changed is not None and not all_changed and not touches(c['inputs'], changed):
@@ -228,6 +248,11 @@ def main():
 
     need = sorted({m for c in selected.values() for m in c['classes']})
     stale = stale_mods(need)
+    inst = os.environ.get('CE_INSTALL_PROJECT')
+    if os.environ.get('CE_IN_GRADLE') and inst:
+        # the gate's `classes` dependency just compiled the installing project: its classes are current even when a
+        # touched-but-unchanged source left them older (Gradle UP-TO-DATE keeps the old class files) (P3.4 b)
+        stale = [m for m in stale if m != inst]
     if stale and not (a.no_compile or os.environ.get('CE_IN_GRADLE')):
         tasks = [':%s:compileJava' % m for m in stale]
         print('compiling stale classes: ' + ', '.join(stale))
@@ -251,6 +276,7 @@ def main():
             print('WARN KNOWN entry for %s is %d days old (%s): revisit it' % (k['check'], age, k['reason']))
 
     t0 = time.time()
+    before = tracked_dirty()
     results = []
     with cf.ThreadPoolExecutor(max_workers=a.j) as ex:
         futs = [ex.submit(run_one, n, c, a.timeout) for n, c in selected.items()]
@@ -261,6 +287,8 @@ def main():
         times[name] = round(secs, 1)
         if rc == 0:
             print('PASS  %-24s %5.1f' % (name, secs))
+            for line in [l for l in out.splitlines() if l.startswith('WARN')][:5]:
+                print('WARN  %-24s %s' % (name, line[5:].strip()[:160]))
             continue
         k = next((k for k in known if k['check'] == name and k['pattern'].search(out)), None)
         if k:
@@ -273,6 +301,13 @@ def main():
                 print('      | ' + line[:200])
     for n, why in skipped:
         print('SKIP  %-24s   -    %s' % (n, why))
+    dirtied = sorted(p for p, h in tracked_dirty().items() if before.get(p) != h)
+    if dirtied:
+        # P3.4 d: a check must not write tracked files (a parallel session's edit during the run shows here too)
+        word = 'FAIL ' if a.full else 'WARN '
+        failed += a.full
+        print('%s %-24s tracked file(s) changed during the run: %s' % (word, 'dirty_tree', ', '.join(dirtied[:5])
+                                                                         + (' ...' if len(dirtied) > 5 else '')))
     try:
         TIMES_FILE.parent.mkdir(exist_ok=True)
         TIMES_FILE.write_text(json.dumps(times, indent=1, sort_keys=True))

@@ -175,6 +175,13 @@ def t23():
         assert [x[2] for x in dead] == ['SQ-ZS-01'] and dead[0][0] == 'E', dead
         fs = qrowlint.lint_file(p, changed=['feature_writeup/zz_fake.md'])
         assert any(x[0] == 'E' and 'stale' in x[3] for x in fs), 'stale not an error when the source changed in session'
+        # P3.4 h: a change confined to a generated block or a section 0 status paragraph is not a source change
+        base = '# T\n\n## 0. At a glance\n\nText.\n'
+        gen = base + '<!-- generated:status_index begin x sha1=1 -->\n| a |\n<!-- generated:status_index end x -->\n'
+        sec0 = base.replace('Text.', '**README index entry, moved here 2026-11-16 (owner ruling D6).** Status: X\nmore\n\nText.')
+        assert qrowlint._status_free(gen) == qrowlint._status_free(base), 'generated block counted'
+        assert qrowlint._status_free(sec0) == qrowlint._status_free(base), 'section 0 paragraph counted'
+        assert qrowlint._status_free(base + 'New line.\n') != qrowlint._status_free(base), 'real change ignored'
     finally:
         qrowlint.git_times = old_git
         qrowlint.newest_change.cache_clear()

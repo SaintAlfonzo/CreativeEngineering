@@ -4,7 +4,8 @@
 Behaviour follows the role the session declared with tools/session_role.py (undeclared = impl, plus a hint):
   plan  nothing.
   impl  runs tools/check_all.py --fast --changed on this session's own uncommitted code files and shows its FAIL/WARN
-        lines, plus a count of those files. Docs (*.md, feature_writeup/, todo/, .claude/) never count, and nor do
+        lines, plus a count of those files; when the session touched feature_writeup/, tools/ or jar_archive/, one line
+        if `status_index.py --check` finds a generated block or a derived status word out of date (P3.4 k). Docs (*.md, feature_writeup/, todo/, .claude/) never count, and nor do
         other sessions' files, so plan files from a parallel planning session are not pushed along with a build.
   test  no checks; a count of this session's own uncommitted run docs and queue rows (feature_writeup/testing/).
 
@@ -120,6 +121,18 @@ def run_checks(files):
     return lines
 
 
+def status_blocks_stale():
+    """One line when a generated status block or a derived feature status is out of date (P3.4 k), else ''."""
+    try:
+        r = subprocess.run(['python3', 'tools/status_index.py', '--check'], cwd=ROOT, capture_output=True, text=True,
+                           timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return ''
+    n = sum(1 for l in r.stdout.splitlines() if l.startswith('WARN') and 'out of date' in l)
+    return ('%d generated status block(s) or feature status word(s) out of date: python3 tools/status_index.py' % n
+            if n else '')
+
+
 def main():
     try:
         data = json.loads(sys.stdin.read() or '{}')
@@ -146,6 +159,10 @@ def main():
                 msg.append('check_all --fast --changed (own files):\n' + '\n'.join(lines))
             msg.append('%d own code file(s) uncommitted: commit finished plan phases (CLAUDE.md "Commits").'
                        % len(code))
+        if any(f.startswith(('feature_writeup/', 'tools/', 'jar_archive/')) for f in own):
+            stale = status_blocks_stale()
+            if stale:
+                msg.append(stale)
         if role is None and code:
             msg.append('Session role undeclared (treated as impl): python3 tools/session_role.py plan|impl|test')
     if msg:
