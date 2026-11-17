@@ -139,7 +139,7 @@ same pass as the renames.
 | `LT-` | [loot.md](../loot.md) |  | briefs/loot_lootjs-layer.md, briefs/loot_lootr.md, briefs/loot_tables.md |  |
 | `LTP-` | [loading_tips.md](../loading_tips.md) | CQ-LTP (15) | loading_tips_audit.md, plan_loading_tips_screens.md | new 2026-11-16, was LT- (collided with loot.md); also loading_tips_audit.md and plan_loading_tips_screens.md |
 | `LW-` | [log_warnings.md](../log_warnings.md) |  |  |  |
-| `MB-` | [mooblooms.md](../mooblooms.md) | CQ-MB (1), SQ-MB (8) | briefs/mobs_mooblooms.md |  |
+| `MB-` | [mooblooms.md](../mooblooms.md) |  | briefs/mobs_mooblooms.md | `SQ-MB-` / `CQ-MB-` are not this feature's rows: see section 4 |
 | `MC-` | [thirdparty_fixes.md](../thirdparty_fixes.md) |  |  | not in the README index yet |
 | `MG-` | [item_merges.md](../item_merges.md) | CQ-MG (1), SQ-MG (10) |  |  |
 | `MIN-` | [archive/mineral_delight.md](../archive/mineral_delight.md) | SQ-MIN (9) |  |  |
@@ -287,6 +287,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `CQ-LBS-` | 1 | [sticky_notes.md](../sticky_notes.md) |  |
 | `CQ-LCA-` | 5 | [nests.md](../nests.md) |  |
 | `CQ-LTC-` | 1 | none found | no doc names it: the first lint run assigns an owner |
+| `CQ-MB-` | 1 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box (CQ-MB-08); same collision as `SQ-MB-` |
 | `CQ-MRGT-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `CQ-MXS-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `CQ-NCR-` | 1 | none found | no doc names it: the first lint run assigns an owner |
@@ -436,6 +437,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-LEM-` | 2 | [plan_scratch_bugfix_1103.md](../plan_scratch_bugfix_1103.md) |  |
 | `SQ-LP-` | 1 | [mob_block_tweaks.md](../mob_block_tweaks.md) |  |
 | `SQ-LR-` | 1 | [fixes_compat.md](../fixes_compat.md) |  |
+| `SQ-MB-` | 8 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box vaults (2026-10-30, `MB.qb`); the 2026-10-22 run used `SQ-MB-00` to `-04` for the Mulberry tree ([recipes_wood.md](../recipes_wood.md), results in `SALT.qb`); the code collides with the writeup prefix `MB-` (mooblooms): rename left to the owner |
 | `SQ-MCL-` | 7 | [perf.md](../perf.md) |  |
 | `SQ-MD-` | 1 | [plan_creative_delight.md](../plan_creative_delight.md) |  |
 | `SQ-MDL-` | 5 | [miners_delight.md](../miners_delight.md) |  |

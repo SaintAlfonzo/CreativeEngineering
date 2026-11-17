@@ -6,7 +6,8 @@ Reads feature_writeup/testing/test_prefix_index.md (section 3 writeup prefixes, 
   b. a writeup id is defined only in its owner doc; quoting docs may define it too: the queue rows, run docs,
      briefs, plans, the seed docs named on the row, archive/ and status/;
   c. no prefix has two rows;
-  d. no queue id is defined twice in testing/rows/*.qb (an id ending in "(rerun)" or a letter suffix is its own id).
+  d. no queue id is defined twice in testing/rows/*.qb (a letter suffix is its own id; an id cell that says "rerun" or
+     "(rewritten" is a rerun copy, not a second definition).
 A defining line is a test line `- [ ] **PREFIX-NN` (or `- [x]`, or a bare `**PREFIX-NN` line start) or a table row whose
 first cell is the id. Exit 1 on any failure.
 
@@ -24,6 +25,9 @@ FW = 'feature_writeup/'
 INDEX = FW + 'testing/test_prefix_index.md'
 ROWS = FW + 'testing/rows/'
 DEF_MD = re.compile(r'^\s*(?:[-*] \[[ xX]\] )?\*\*~*([A-Z][A-Z0-9]{1,7})-(\d+[a-z]?)\b|^\|\s*\**~*([A-Z][A-Z0-9]{1,7})-(\d+[a-z]?)\**~*\s*\|')
+# a rerun or rewritten copy of a row: the id cell says so (`## SQ-X-01 (rerun 5.2)`, `## SQ-X-01 rerun (I3)`,
+# `## SQ-X-01 (rewritten, I2)`); it reuses the id on purpose, so it is not a second definition
+RERUN = re.compile(r'\brerun\b|\(rewritten\b')
 DEF_QB = re.compile(r'^## ((?:SQ|CQ)-([A-Z][A-Z0-9-]*?)-(\d+[a-z0-9]*))\b')
 QUOTING = re.compile(r'^feature_writeup/(testing/|briefs/|plan_[^/]*\.md$|archive/|status/|todo/|agent_notes/|README\.md$|'
 					 r'design_rules\.md$|reports?/)')
@@ -111,7 +115,7 @@ def main():
 			if not m or results:
 				continue
 			rid, series = m.group(1), m.group(2)
-			if line.rstrip().endswith('(rerun)') or '(rerun)' in line.split('|')[0]:
+			if line.rstrip().endswith('(rerun)') or RERUN.search(line.split('|')[0]):
 				continue
 			if series not in queue_series and series not in rows:
 				fails['a queue series with no index row'].append(f'{path}:{i}: {rid}')

@@ -642,6 +642,11 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
    20 ids have two `## ID` rows in `testing/rows/*.qb`, each in a different section (a rerun or a second batch that reused
    the id): `SQ-VTD8-01` (CDJ.qb:385, CDJ.qb:205), `SQ-DEP-02` (DEP.qb:201, DEP.qb:25), `SQ-CNS-03` (FO.qb:317, CNS.qb:55), `SQ-HH-304` (HOP.qb:306, HH.qb:6012), `SQ-HH-1546` (HOP.qb:329, HH.qb:10265), `SQ-CDW-01` (MIN.qb:18, DEP.qb:233), `SQ-CDW-02` (MIN.qb:33, HH.qb:11825), `SQ-CDW-03b` (MIN.qb:72, DEP.qb:240), `SQ-MIN-03` (MIN.qb:122, DEP.qb:225), `SQ-PWG-07` (PWG.qb:1725, PWG.qb:313), `SQ-PWG-06` (PWG.qb:3456, PWG.qb:132), `SQ-FGD-14` (RD.qb:226, CDJ.qb:425), `SQ-MDP-13` (RD.qb:870, CDJ.qb:318), `SQ-MDP-14` (RD.qb:900, CDJ.qb:332), `SQ-MDP-16` (RD.qb:962, CDJ.qb:339), `SQ-CNS-01` (RD.qb:1712, CNS.qb:16), `SQ-CNS-02` (RD.qb:1725, CNS.qb:28), `SQ-CDJ-05` (RD.qb:2071, CDJ.qb:305), `SQ-DM-03` (TSK.qb:110, SB.qb:233), `SQ-RW-28` (VS.qb:74, GF31.qb:72). Proposal: the later row gets a letter suffix (`SQ-CNS-01b`) or `(rerun)`; the
    scratch-test owner session decides, since the rows and their verdict history are theirs.
+   P6 (2026-11-17): 13 of the 20 are rerun copies whose id cell already says so (`(rerun 5.2)`, `rerun (I3)`,
+   `(rewritten)`); the lint now reads those as reruns. The 7 left are whole copies of one row in two sections (same id
+   and title): `SQ-CNS-01`, `-02` (RD.qb and CNS.qb), `SQ-CNS-03` (FO.qb, CNS.qb), `SQ-PWG-06`, `-07` (two PWG.qb sections),
+   `SQ-DM-03` (TSK.qb, SB.qb), `SQ-RW-28` (VS.qb, GF31.qb). Which copy stays is still the scratch-test owner's call
+   (`tools/check_known.csv` now expects 7).
 2. **Number ranges the date tool reports** (not dates, left as written): `briefs/recipes_cooking.md` "cooking.js 12-13",
    `plan_1.0.3.md` "12-16 rounds", `split/F_pack_scripts.md` "- 12-18:" (line numbers), `testing/structures/02_new_mods_tests.md`
    "30 and 12-15", `todo/rows/kitchen_and_cooking.csv` "12-14 (moved from cooking...)" (line numbers). No impossible
@@ -667,6 +672,18 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
    [history_extract_review.md](history_extract_review.md) (file, line, was, now) for a read: is the rule still wanted,
    does it read right. The same file lists 136 undated comment lines that read as history ("moved from", "used to",
    "no longer") and were left in code, since there is no date to file them under.
+10. **`SQ-MB-` means three things** (P6, 2026-11-17): the writeup prefix `MB-` is mooblooms; the queue code `SQ-MB-` holds
+   the monster box rows (2026-10-30, `MB.qb`, mob_block_tweaks.md) and was used by the 2026-10-22 run for the Mulberry tree
+   (`SQ-MB-00` to `-04`, results in `SALT.qb`, recipes_wood.md). Not mechanical (three owners, verdict history in two
+   sections), so not renamed: the index now lists `SQ-MB-` / `CQ-MB-` in section 4 under mob_block_tweaks.md with the
+   collision noted. Rename (for example monster box to a new code) is the scratch-test owner's call.
+11. **Queue tables left in their own headers** (V-58): 25 tables in `rows/*.qb` whose columns mean something else
+   (`Action / Expect / Depends on` x10, `What to do and look at / Existing test` x7, `Setup / Steps`, `Where / Test`,
+   `Commands / Pass / After`, `Tests / Notes`). Say if they should become the standard table anyway.
+12. **Test lines the fixer did not change** (V-54): 39 lines (`python3 tools/design_rules_audit.py testlines`), mostly
+   brief prose that starts with an id ("PO-25 stays valid") and 8 bold names whose bracket note runs onto the next line
+   (`archery.md:244`, `food.md:1032`). Two `| ID | Test | Where |` table families (creative_delight.md, fruits_delight.md)
+   and the H&H `| ID | Test | Pass |` table with uneven rows (hearth_and_harvest.md) stay tables.
 
 ## 21. Done means for this plan
 
