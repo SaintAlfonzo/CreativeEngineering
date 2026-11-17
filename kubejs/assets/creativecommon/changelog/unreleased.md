@@ -323,6 +323,7 @@
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
 - **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
+- **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
 
 ## Performance & Stability
 

@@ -177,6 +177,7 @@ same pass as the renames.
 | `RC-` | [recipes_cooking.md](../recipes_cooking.md) |  | briefs/recipes_cooking.md |  |
 | `RD-` | [rustic_delight.md](../rustic_delight.md) | SQ-RD (34) | plan_1.0.3.md |  |
 | `RE-` | [recipes_engineering.md](../recipes_engineering.md) | SQ-RE (1) | briefs/recipes_engineering.md |  |
+| `RFX-` | [plan_rules_fixes.md](../plan_rules_fixes.md) | SQ-RFX (0) |  | new 2026-11-17: dump diffs and checks of the rules fixes (namespace binding, dict keys, moved tags and trades, names, tooltip roles) |
 | `RM-` | [recipes_metal.md](../recipes_metal.md) | SQ-RM (4) | briefs/recipes_metal.md |  |
 | `ROLL-` | [roll_delight.md](../roll_delight.md) | CQ-ROLL (1), SQ-ROLL (12) | plan_meals_rolls_bbq.md |  |
 | `RP-` | [recipe_progression.md](../recipe_progression.md) |  | briefs/recipes_progression.md | queue CQ-RP splits: the bench rows (CQ-RP-01 to -03) to CQ-RPB, the Raspberry Pie rows to CQ-RPI |
@@ -522,4 +523,5 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 
 - 2026-11-16: index built from a scan of the docs, the README prefix column and the scratch queue (plan_rules_fixes.md section 2); 10 renames proposed (section 2), none applied yet.
 - 2026-11-17: the 10 renames applied by `tools/test_prefix_rename.py` (591 ids; 9 by hand after the report); queue columns updated; `tools/test_prefix_lint.py` built (fails on 20 queue ids defined twice, listed in plan_rules_fixes.md "Owner list (P1)").
+- 2026-11-17: `RFX-` added for [plan_rules_fixes.md](../plan_rules_fixes.md) (P3 dump diffs and checks).
 - 2026-11-17: `LOOT-` added for [creative_loot.md](../creative_loot.md) (Creative Loot jar, plan_rules_fixes.md section 5b).
