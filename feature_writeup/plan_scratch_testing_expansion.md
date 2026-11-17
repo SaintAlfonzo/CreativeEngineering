@@ -116,7 +116,7 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 | TX-04 | **Tick-exact movement steps**: `walk <ticks> <keys>`, `jump`, `sneak <ticks>`, `fly`, `look yaw pitch`, with position sampled per tick into the log | H2: CQ-PTH speeds, elytra, ropes, portal exits | S after TX-02 |
 | TX-05 | **Widget actions**: `click_slot <i>`, `click_widget <label or index>`, `type_into <field>`, `scroll` resolved from the open screen's widget list, not screen pixels | H3: editor GUIs, anvils, sticky notes, JEI search, creative tabs | M |
 | TX-06 | **Client crash watch** in qrun / the runner: dead pid, `hs_err_pid*.log`, `crash-reports/` = row CRASH, copy evidence, relaunch | H11 | S |
-| TX-07 | **(experimental, low priority) Xvfb display** (client_capture D2): runs unattended off the owner's desktop; software rendering is slower and colours may differ, so keep the real window for colour rows | runs at night without stealing the desktop | S (owner installs `xvfb`) |
+| TX-07 | **BUILT 2026-11-16** (`--display xvfb` on `run_captures.py` / `eval_client.py`, CQ-TXC-11). **(experimental, low priority) Xvfb display** (client_capture D2): runs unattended off the owner's desktop; software rendering is slower and colours may differ, so keep the real window for colour rows | runs at night without stealing the desktop | S (owner installs `xvfb`) |
 | TX-08 | `sp_world.py --no-cheats` and a client config profile switch (`--fresh-config`) | CQ-TPF-46, pack-default checks | S |
 | TX-09 | **Client data dump** through the capture driver: names, tooltips (shift and plain), stack sizes, effect text for every item into `kubejs/exported/`, diffed between runs | H4 at scale; feeds the names/tooltip catalogs | M |
 
@@ -164,7 +164,9 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
   may turn a row whose check FAILed into BATCH-FAULT. A non-empty recorded cause is required (who, when, why); the original
   failed check stays in `checks` with `ok: false`, and the row records `reclassified: {from, to, cause, by, at}` so tables
   show both. The tool refuses without a cause and never edits `checks`.
-- **Refusal text for the mismatch matrix (TX-31).** Planned, not built: replace the guessed `CLI_REFUSAL` / `SRV_REFUSAL` in
+- **Refusal text for the mismatch matrix (TX-31).** Built 2026-11-16 (strings checked in the Forge 43.3.9 jar; also a
+  post-join `hold_secs` watch, the stale channel guard, client `serve --drop / --config`, spec
+  `testing/matrix_specs/txp.json`, offline tests TXQ-OFF-01 to -05 in `qtests.py`; live CQ-TXP-02): replace the guessed `CLI_REFUSAL` / `SRV_REFUSAL` in
   `tools/scratch_query/qpair.py` with Forge 1.19.2 (43.3.9) strings found in the Forge jar (`HandshakeHandler`,
   `assets/forge/lang/en_us.json`): log lines "Terminating connection with server, mismatched mod list" and
   "Connection closed - mismatched mod channel list"; screen texts "Incompatible FML modded server", "Your client is missing

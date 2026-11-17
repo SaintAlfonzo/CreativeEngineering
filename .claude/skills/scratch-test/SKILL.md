@@ -166,6 +166,12 @@ everything below is the default unless the prompt says otherwise.
   RES`: when `GAME/cdev_channel/` exists qrun drives the driver (commands, `key`, `click`, `shot`, `do JSON` run
   in-process, tick-exact, no focus or typing loss; shots go to `test_captures/judgement/` for the owner); `--xdotool`
   forces the old window mode (`eval_client.py setup/launch`, `sp_world.py`, xdotool hand steps, `RES/shots/`).
+  `serve --drop GLOB` / `--config FILE:SECTION:KEY=VALUE` change the client per launch; `--display xvfb` is
+  experimental (TX-07), only for blocks that cannot run on the real window, never colour rows.
+- Client + own server: `qrun.py pair OUT GAME BATCH RES [--drop ...] [--config ...]` (`srv>` / `cli>` lines) and
+  `qrun.py matrix SPEC RES [--plan]` (specs in `feature_writeup/testing/matrix_specs/`; outcomes JOINED / REFUSED /
+  CRASH-* / HANG, a join is held 30 s, `hold_secs`, so a crash after joining is not a PASS). Refusal regexes are the
+  Forge 43.3.9 strings; a refusal read as HANG means a missing string: add it to `qpair.py` from the case's logs.
 - Redirects from the user or another session (defer a block, stop): stop at a row boundary, discard a half-run row,
   mark unrun rows "deferred" in the run notes, update RUNNER.md.
 

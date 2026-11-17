@@ -1,0 +1,15 @@
+{"_doc": "Mismatch matrix for CQ-TXP-02 (qpair.py docstring; plan_scratch_testing_expansion.md TX-31). Run: python3 tools/scratch_query/qrun.py matrix feature_writeup/testing/matrix_specs/txp.json RES [--plan]. Power Grid jar: newest in jar_archive/pwg_gate/ (never mods/); bump the name when a newer gate jar exists.",
+ "hold_secs": 60,
+ "cases": [
+  {"id": "M01", "title": "Power Grid on the client only: joins, must not crash (TODO #90 crash in ShootableGadgetRenderHandler until fixed)",
+   "cli_jars": ["jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar"], "expect": "join"},
+  {"id": "M02", "title": "Power Grid on both sides: joins",
+   "srv_env": {"PGJAR": "jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar"},
+   "cli_jars": ["jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar"], "expect": "join"},
+  {"id": "M03", "title": "Creative Labels missing on the client: Forge refuses the join",
+   "cli_drop": ["creativeLabels-*.jar"], "expect": "refuse",
+   "refusal": "missing the following mods|mismatched mod (list|channel list)"},
+  {"id": "M04", "title": "Creative Labels missing on the server: Forge refuses the join",
+   "srv_drop": ["creativeLabels-*.jar"], "expect": "refuse",
+   "refusal": "server is missing the following mods|mismatched mod (list|channel list)"}
+ ]}

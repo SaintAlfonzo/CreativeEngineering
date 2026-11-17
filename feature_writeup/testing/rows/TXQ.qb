@@ -8,8 +8,9 @@
 @@sources feature_writeup/plan_scratch_testing_expansion.md
 @@text
 @@text Tooling only, no jar: `tools/scratch_query/qrun.py` with `qlint.py`, `qwatch.py`, `qverdict.py`, `qpair.py` (2026-11-15,
-@@text offline-tested with fake JVMs). CQ-TXP rows need the owner's go for the one-JVM carve-out (D2 wording in the skill and
-@@text memory note not written yet) and Creative Devtools with the capture driver in the client game dir.
+@@text offline-tested with fake JVMs; 2026-11-16: Forge refusal strings, stale channel guard, post-join hold, client
+@@text `--drop` / `--config`, offline tests TXQ-OFF-01 to -05 in `qtests.py`). The one-JVM carve-out (D2) is in the skill and
+@@text the memory note. CQ-TXP rows need Creative Devtools with the capture driver in the client game dir.
 @@text
 @@table
 ## SQ-TXQ-01
@@ -44,7 +45,7 @@ sleep 60
 @draft no batch holds this row yet
 ## CQ-TXP-02
 @group client
-@commands `qrun.py matrix SPEC RES --plan`, then without `--plan`; SPEC: case M01 = Power Grid gate jar on the client only (`cli_jars`), server without it (no PGJAR), `"expect": "refuse"`; case M02 = Power Grid on both (`srv_env` PGJAR, `cli_jars`), `"expect": "join"`
-@pass M01 outcome REFUSED with the Forge refusal text in the evidence (not CRASH-CLIENT; the phase 10 crash was the reference bug), M02 JOINED; `RES/matrix.md` written; no JVM left
-@fails refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (owner to confirm the real text); a stale `GAME/cdev_channel/pid` or `state.json` from an earlier launch can misread the outcome (open, see the plan)
+@commands `qrun.py matrix feature_writeup/testing/matrix_specs/txp.json RES --plan`, then without `--plan` (cases M01 to M04; bump the Power Grid gate jar name in the spec first if a newer one exists)
+@pass `--plan` prints 4 cases and launches nothing; M02 JOINED and both JVMs alive 60 s; M03 and M04 REFUSED with a Forge line in the evidence ("Terminating connection with server/client, mismatched mod list" or "Connection closed - mismatched mod channel list"); M01 JOINED and alive 60 s once TODO #90 is fixed (until then CRASH-CLIENT in `ShootableGadgetRenderHandler.onRenderPlayerHand` is the expected FAIL, the bug reproduced); `RES/matrix.md` written; `game_jvms.sh` empty after
+@fails refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (if a refusal shows as HANG, copy the real line from `RES/<case>/cli_latest.log` into the row); `Pair.hold`; `run_captures.apply_client_changes` (M03)
 @draft no batch holds this row yet
