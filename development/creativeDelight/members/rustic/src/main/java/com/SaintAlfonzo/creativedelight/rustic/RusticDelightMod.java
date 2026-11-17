@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Rustic Delight 1.7.0 ported to Forge 1.19.2, a Creative Delight member (feature_writeup/rustic_delight.md 5). All code
- * here is our own, written from the mod's behaviour (GPL-3.0-only); upstream's art and data are baked into this jar's
+ * here is our own, written from the mod's behavior (GPL-3.0-only); upstream's art and data are baked into this jar's
  * resources by tools/bake_upstream.py (MIT, PhantomWing; NOTICE-upstream-MIT.txt).
  */
 @Mod(RusticDelightMod.MODID)

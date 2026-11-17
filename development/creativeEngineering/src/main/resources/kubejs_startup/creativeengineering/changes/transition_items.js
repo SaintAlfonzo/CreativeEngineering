@@ -10,7 +10,7 @@
 //   ], ['rose_gold_rod'], e, 'any_recipe_id_you_want')
 //
 // Row: [key, texture?, colorHex?]
-//   texture  - OMIT to auto-derive a grey-tinted copy of the output item's sprite
+//   texture  - OMIT to auto-derive a gray-tinted copy of the output item's sprite
 //              (global.item[key] -> '<ns>:item/<path>'). Pass a string when that guess is wrong:
 //              block items (-> '<ns>:block/<name>'), mods using 'items/', a stand-in sprite, etc.
 //   colorHex - tint applied to layer 0, defaults to '#808080'.
@@ -74,7 +74,7 @@ StartupEvents.registry('item', e => {
 
 	// ---- wire coils + coil blocks + pack components ----------------------------------------
 	// Keep COIL_METALS in sync with server_scripts/metal/metal_base_materials.js.
-	//   coil_<m>       : wire-coil-in-progress  — grey-tint of the wire coil's item sprite, taken
+	//   coil_<m>       : wire-coil-in-progress  — gray-tint of the wire coil's item sprite, taken
 	//                    from i.wire_coil_<m> (the dict has one key per id, so
 	//                    there is no i.coil_<m> to auto-derive from; the incomplete id stays
 	//                    kubejs:incomplete_coil_<m>). creativeengineering:* for the 9 pack coils,
@@ -103,7 +103,7 @@ StartupEvents.registry('item', e => {
 	SEQUENCED_ASSEMBLIES.push(['coil_block_hv', 'immersiveengineering:block/metal_decoration/coil_hv_side'])
 
 	// The 13 creativeengineering:component_<m> items (startup_scripts/items/components.js).
-	// Each has its own creativeengineering:item/component_<m> sprite → auto-derive is correct.
+	// Each has its own creativeengineering:item/component_<m> sprite -> auto-derive is correct.
 	// (iron + steel are IE items, handled as explicit rows above.)
 	const COMPONENT_METALS = ['copper', 'gold', 'diamond', 'zinc', 'netherite', 'aluminum',
 		'lead', 'silver', 'nickel', 'uranium', 'brass', 'electrum', 'constantan']

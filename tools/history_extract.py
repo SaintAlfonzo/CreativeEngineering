@@ -39,6 +39,8 @@ sys.path.insert(0, str(ROOT / 'tools'))
 import iso_dates  # noqa: E402
 
 OWNER_FILE = ROOT / 'tools/writeup_owner.json'
+# The date tools document their patterns with example dates.
+SELF = {'tools/history_extract.py', 'tools/iso_dates.py', 'tools/us_spelling.py'}
 SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog|generation_scripts|moved_code_backup)/|'
 				  r'_upstream/|^(config|configs_edited|defaultconfigs|server)/')
 ISO = re.compile(r'(?<![\w/.\-])(20\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(?:[a-d]\b)?(?: \d\d:\d\d)?(?![\w/\-])')
@@ -65,7 +67,7 @@ def git(*a):
 
 def code_scope():
 	files = git('ls-files', '*.java', '*.js', '*.py', '*.gradle', '*.kts', '*.sh', '*mods.toml').split('\n')
-	return [ROOT / f for f in files if f and not SKIP.search(f)]
+	return [ROOT / f for f in files if f and not SKIP.search(f) and f not in SELF]
 
 
 def owners():
@@ -201,7 +203,7 @@ def mask(text):
 	def blank(m):
 		return ' ' * len(m.group(0))
 	t = re.sub(r'`[^`]*`|\{@\w+ [^}]*\}', blank, text)
-	return re.sub(r'[\w.\-]*[/\\_:][\w./\\:\-]*', lambda m: blank(m) if not ISO.fullmatch(m.group(0)) else m.group(0), t)
+	return re.sub(r'[\w.\-]*[/\\_:][\w./\\:\-]*[\w/]', lambda m: blank(m) if not ISO.fullmatch(m.group(0)) else m.group(0), t)
 
 
 def dates_in(text):
@@ -223,6 +225,8 @@ STRIP = [
 	(r',? (decided|dated|confirmed|agreed|ruled|answered|requested|asked|set|chosen|picked) (on )?DATE', ''),
 	(r'(,?\s+|(?<=\())(since|as of|from|on|in|at|after|before|by|of|until|till) DATE', ''),
 	(r'DATE (scratch )?(run|session|audit|scan|batch|pass|review)\b(?![-/])', ''),
+	(r'(?<=[\w\]]) DATE:', ':'),
+	(r'(?<=[\w\]]) DATE([,;])', r'\1'),
 	(r'DATE[,;:]? ', ''),
 	(r',? DATE', ''),
 	(r'DATE', ''),
@@ -239,7 +243,7 @@ def strip_dates_inline(s):
 	s = re.sub(r'\s*[,;]\s*\)', ')', s)
 	s = re.sub(r'\(\s*(since|before|after|until|on|from|by|of|in)?\s*\)', '()', s)
 	s = re.sub(r' ?\(\s*\)', '', s)
-	return re.sub(r'(?<=\S) ([,.;:])', r'\1', s)
+	return re.sub(r'(?<=\S) ([,.;:])(?=\s|$)', r'\1', s)
 
 
 def strip_dates(s):
@@ -252,7 +256,7 @@ def strip_dates(s):
 	s = re.sub(r'\(\s*(since|before|after|until|on|from|by|of|in)?\s*\)', '()', s)
 	s = re.sub(r'\s*\(\s*\)', '', s)
 	s = re.sub(r'  +', ' ', s)
-	s = re.sub(r' ([,.;:])', r'\1', s)
+	s = re.sub(r' ([,.;:])(?=\s|$)', r'\1', s)
 	return s.strip()
 
 
@@ -288,7 +292,7 @@ def fix_parens(s):
 	new = re.sub(r'\(([^()]*)\)', fix, s)
 	new = re.sub(r'\s*\(\s*\)', '', new)
 	new = re.sub(r'  +', ' ', new)
-	return re.sub(r' ([,.;:])', r'\1', new).strip()
+	return re.sub(r' ([,.;:])(?=\s|$)', r'\1', new).strip()
 
 
 def handle_part(p):
@@ -467,6 +471,20 @@ def append_history(doc, lines, today):
 	text = path.read_text(encoding='utf-8')
 	block = [HIST_INTRO.format(today=today), ''] + sorted(set(lines), key=lambda l: l[2:12]) + ['']
 	rows = text.split('\n')
+	intro = HIST_INTRO.format(today=today)
+	if intro in rows:
+		# same day: merge into the block already written
+		i = rows.index(intro) + 2
+		j = i
+		while j < len(rows) and rows[j].startswith('- '):
+			j += 1
+		block = rows[i:j]
+		for new in sorted(set(lines) - set(block), key=lambda l: l[2:12]):
+			k = next((n for n, old in enumerate(block) if old[2:12] > new[2:12]), len(block))
+			block.insert(k, new)
+		rows[i:j] = block
+		path.write_text('\n'.join(rows).rstrip('\n') + '\n', encoding='utf-8')
+		return
 	h = next((i for i, l in enumerate(rows) if re.match(r'^##\s+(\d+\.\s*)?History\b', l)), None)
 	if h is None:
 		while rows and not rows[-1].strip():

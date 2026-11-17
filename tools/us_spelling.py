@@ -67,7 +67,7 @@ DOUBLE_L = {'travelled': 'traveled', 'travelling': 'traveling', 'traveller': 'tr
 # Proper names that keep their spelling (upstream mods, items and people's names as the game or the author writes them)
 PROTECT = re.compile(r"Colourful Azaleas|Colorful Azaleas|Better Armour|Armourer'?s Workshop|Armour ?Bar|Grey Goo|"
 					 r"Greyhound|Colour ?Wheel|Licence to|Centre Pompidou|Mouldy|Defence Tower|Colourful Mobs|"
-					 r"Neighbourhood|grey_|Grey Elf", re.I)
+					 r"Neighbourhood|grey_|Grey Elf|cdevplace catalogue|\[catalogue\]|Structure Catalogue|neighbours keys?", re.I)
 
 TOKEN_SKIP = re.compile(r'[A-Za-z0-9]*[_./:#\\][\w./:#\\-]*|[a-z]+[A-Z]\w*|[A-Z][a-z]+[A-Z]\w*')
 
@@ -102,14 +102,19 @@ def blank_spans(line):
 	m = re.sub(r'\]\([^)]*\)', blank, m)
 	m = re.sub(r'<[^>]+>', blank, m)
 	m = re.sub(r'"[A-Za-z]+"', blank, m)   # a single quoted word is a mention ("colour" 608 times)
-	m = TOKEN_SKIP.sub(blank, m)
+	m = re.sub(r'\$?\{[^{}]*\}', blank, m)   # format fields, template slots, {@code ...}
+	m = re.sub(r'\b[A-Za-z]+(?=\s*=(?!=))', blank, m)   # a key being assigned (config key = value)
+	m = re.sub(r'\b[A-Z][A-Z0-9]*_?[A-Z0-9_]*[A-Z]\b', blank, m)   # ALL-CAPS: enum constants, config values, log keys
 	m = PROTECT.sub(blank, m)
+	m = TOKEN_SKIP.sub(blank, m)
 	return m
 
 
-def convert(text, arrows=True):
-	"""(new_text, [(old, new)]) for one line or one lang value."""
+def convert(text, arrows=True, keep=()):
+	"""(new_text, [(old, new)]) for one line or one lang value; words in `keep` stay."""
 	masked = blank_spans(text)
+	for w in keep:
+		masked = re.sub(r'\b' + w + r'\w*', lambda m: ' ' * len(m.group(0)), masked, flags=re.I)
 	edits = []
 	for rx, br, am in PATS:
 		for m in rx.finditer(masked):
@@ -206,6 +211,95 @@ def process(path, apply):
 	return changes
 
 
+CODE_SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog|generation_scripts|moved_code_backup)/|'
+					   r'_upstream/|^(config|configs_edited|defaultconfigs|server)/|/upstream/')
+# The spelling and date tools quote British forms in their word lists and docs.
+CODE_SELF = {'tools/us_spelling.py', 'tools/iso_dates.py', 'tools/history_extract.py', 'tools/design_rules_audit.py'}
+
+
+def code_scope():
+	files = git('ls-files', '*.java', '*.js', '*.py', '*.gradle', '*.kts', '*.sh', '*mods.toml')
+	# Java: own packages only (ports keep upstream's comments and strings)
+	return [ROOT / f for f in files if f and not CODE_SKIP.search(f) and f not in CODE_SELF
+			and (not f.endswith('.java') or '/com/SaintAlfonzo/' in f)]
+
+
+def code_spans(path, text):
+	"""(start, end, kind) offsets of comments and string literals; kind is 'comment' or 'string'."""
+	spans = []
+	if path.suffix == '.py':
+		import io as _io
+		import tokenize
+		starts = [0]
+		for line in text.split('\n'):
+			starts.append(starts[-1] + len(line) + 1)
+		try:
+			for tok in tokenize.generate_tokens(_io.StringIO(text).readline):
+				if tok.type in (tokenize.COMMENT, tokenize.STRING):
+					a = starts[tok.start[0] - 1] + tok.start[1]
+					b = starts[tok.end[0] - 1] + tok.end[1]
+					spans.append((a, b, 'comment' if tok.type == tokenize.COMMENT else 'string'))
+		except (tokenize.TokenError, IndentationError, SyntaxError):
+			pass
+		return spans
+	c_like = path.suffix in ('.java', '.js', '.gradle', '.kts')
+	i, n = 0, len(text)
+	while i < n:
+		ch = text[i]
+		if c_like and text.startswith('//', i) and text[i - 1:i] != ':':
+			j = text.find('\n', i)
+			j = n if j < 0 else j
+			spans.append((i, j, 'comment'))
+			i = j
+		elif c_like and text.startswith('/*', i):
+			j = text.find('*/', i + 2)
+			j = n if j < 0 else j + 2
+			spans.append((i, j, 'comment'))
+			i = j
+		elif not c_like and ch == '#' and (i == 0 or text[i - 1] in ' \t\n') and not text.startswith('#!', i):
+			j = text.find('\n', i)
+			j = n if j < 0 else j
+			spans.append((i, j, 'comment'))
+			i = j
+		elif ch in '"\'' or (ch == '`' and path.suffix == '.js'):
+			j = i + 1
+			while j < n and text[j] != ch and (text[j] != '\n' or ch == '`'):
+				j += 2 if text[j] == '\\' else 1
+			spans.append((i, min(j + 1, n), 'string'))
+			i = j + 1
+		else:
+			i += 1
+	return spans
+
+
+def process_code(path, apply):
+	"""Comments, and string literals that read as prose (two or more words), in a code file."""
+	text = path.read_text(encoding='utf-8')
+	edits, changes = [], []
+	keep_lines = {i for i, l in enumerate(text.split('\n'), 1) if 'spelling: keep' in l}
+	for a, b, kind in code_spans(path, text):
+		span = text[a:b]
+		if text.count('\n', 0, a) + 1 in keep_lines:
+			continue
+		if kind == 'string':
+			body = span.strip('"\'`rbfRBF')
+			if not re.search(r'[A-Za-z]{2,} +[A-Za-z]{2,}', body) or re.fullmatch(r'[\w.:/\-]+', body):
+				continue
+		# `catalogue` names the /cdevplace verb and the Structure Catalogue world type in code
+		new, c = convert(span, arrows=kind == 'comment' or path.suffix == '.py', keep=('catalogue',))
+		if c:
+			ln = text.count('\n', 0, a) + 1
+			line = text.split('\n')[ln - 1]
+			changes += [(ln, o, nw, line) for o, nw in c]
+			edits.append((a, b, new))
+	if apply and edits:
+		out = text
+		for a, b, new in sorted(edits, reverse=True):
+			out = out[:a] + new + out[b:]
+		path.write_text(out, encoding='utf-8')
+	return changes
+
+
 def rel(p):
 	try:
 		return p.relative_to(ROOT).as_posix()
@@ -218,12 +312,13 @@ def main():
 	ap.add_argument('--apply', action='store_true')
 	ap.add_argument('--lint', action='store_true')
 	ap.add_argument('--report', default=str(Path(tempfile.gettempdir()) / 'us_spelling_report.txt'))
+	ap.add_argument('--scope', choices=['docs', 'code'], default='docs')
 	ap.add_argument('files', nargs='*')
 	a = ap.parse_args()
-	paths = [Path(f).resolve() for f in a.files] or doc_scope()
+	paths = [Path(f).resolve() for f in a.files] or (doc_scope() if a.scope == 'docs' else code_scope())
 	rep, total, words = [], 0, {}
 	for p in paths:
-		c = process(p, a.apply and not a.lint)
+		c = (process_code if a.scope == 'code' else process)(p, a.apply and not a.lint)
 		if not c:
 			continue
 		total += len(c)
@@ -239,6 +334,8 @@ def main():
 			i = ctx.find(o)
 			rep.append(f'  {ln}: {o} -> {n}    | {ctx[max(0, i - 40):i + len(o) + 30].strip()}')
 	print(f'total: {total} {"changed" if a.apply else "to change"}')
+	if a.lint and total:
+		return 1
 	if not a.lint:
 		rep.append('## word counts')
 		rep += [f'  {n:5d} {o} -> {w}' for (o, w), n in sorted(words.items(), key=lambda kv: -kv[1])]

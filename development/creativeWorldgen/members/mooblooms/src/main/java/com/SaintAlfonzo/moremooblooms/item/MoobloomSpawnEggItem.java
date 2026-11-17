@@ -31,7 +31,7 @@ import java.util.Optional;
  * One spawn egg item for every variant (D14): variants are data, so they can't each have an item. The variant
  * rides in {@code EntityTag.Variant}, which vanilla applies to the spawned moobloom; a plain egg spawns a random
  * variant. Creative tabs and JEI list one stack per synced variant (D14: all eggs visible in JEI), the name
- * and colours follow the variant ({@link #getName}, client/ClientSetup's colour handler).
+ * and colors follow the variant ({@link #getName}, client/ClientSetup's color handler).
  */
 public class MoobloomSpawnEggItem extends ForgeSpawnEggItem {
 

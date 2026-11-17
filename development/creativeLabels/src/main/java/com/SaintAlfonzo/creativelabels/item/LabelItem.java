@@ -31,7 +31,7 @@ public class LabelItem extends Item {
         return FacePaperInteractions.placeFromContext(context);
     }
 
-    /** Spec 3.9: eight grey lines, one per lang key. */
+    /** Spec 3.9: eight gray lines, one per lang key. */
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         for (int i = 1; i <= TOOLTIP_LINES; i++) {

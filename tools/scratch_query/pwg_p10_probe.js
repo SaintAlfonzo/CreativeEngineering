@@ -21,7 +21,7 @@
 //   solarjoin X Y Z X2 Y2 Z2 merge the ceiling solar multiblock at 2 into the one at X Y Z (what the wrench does)
 //   cord X1 Y1 Z1 X2 Y2 Z2 N [DYE,DYE,...]   string light cord of N items (pattern from the dye names) between the
 //                            blocks' terminals 0 and 1 (AutoCordEndpoint; a block that accepts cords gives its own end
-//                            point, as a player's click at its centre)
+//                            point, as a player's click at its center)
 //   lights X1 Y1 Z1 X2 Y2 Z2 string light cords between the two blocks: items, filament temperature, glow (x^2),
 //                            pattern, overheated, the end voltages and the expected power per item, the light blocks
 //                            on the line and in the box

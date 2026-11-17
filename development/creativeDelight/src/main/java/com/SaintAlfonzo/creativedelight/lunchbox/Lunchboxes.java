@@ -127,7 +127,7 @@ public final class Lunchboxes {
         return display != null && display.contains("color", 99);
     }
 
-    /** The dye colour as 0xRRGGBB, or -1. */
+    /** The dye color as 0xRRGGBB, or -1. */
     public static int getColor(ItemStack box) {
         CompoundTag display = box.getTagElement("display");
         return display != null && display.contains("color", 99) ? display.getInt("color") : -1;

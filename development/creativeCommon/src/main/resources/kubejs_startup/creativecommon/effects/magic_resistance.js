@@ -32,5 +32,5 @@ StartupEvents.registry('mob_effect', event => {
 	event.create('creativecommon:magic_resistance', 'basic')
 		.displayName(Text.of('Magic Resistance'))
 		.beneficial()
-		.color(new SimpleColor(0x8a2be2)) // blueviolet - arcane-coded, distinct from vanilla Resistance's grey
+		.color(new SimpleColor(0x8a2be2)) // blueviolet - arcane-coded, distinct from vanilla Resistance's gray
 })

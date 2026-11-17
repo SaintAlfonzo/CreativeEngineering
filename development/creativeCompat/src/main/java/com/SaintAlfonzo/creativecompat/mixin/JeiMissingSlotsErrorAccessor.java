@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Collection;
 
 /**
- * The missing input slots behind a greyed-out JEI + button, for
+ * The missing input slots behind a grayed-out JEI + button, for
  * {@code compat.jei.CraftableFirstRecipeLayoutList}'s most-complete-first ordering
  * (JEI 19 exposes the count as {@code IRecipeTransferError.getMissingCountHint()}; 11.8.1 doesn't).
  */

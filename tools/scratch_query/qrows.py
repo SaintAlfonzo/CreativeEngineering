@@ -435,7 +435,7 @@ def migrate(argv):
                     row['meta']['owner'] = 'true'
                     stats['owner'] += 1
                 if row_line(row) != l.rstrip():
-                    stats['row line normalised'] += 1
+                    stats['row line normalized'] += 1
                 stats['rows'] += 1
                 items.append(('row', row))
             else:

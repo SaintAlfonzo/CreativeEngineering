@@ -31,8 +31,8 @@ import java.util.TreeSet;
 
 /**
  * Raspberry Pie's pages in Apple Pie's Diet Log (6.3, 12.4): a progress bar over a window of the ladder (the last
- * milestone reached, a short stretch before it and the next few milestones) with an icon per rung (reached in colour,
- * unreached greyed, hover for the value), then the milestone list. Inserted after the diversity page; Apple Pie's own
+ * milestone reached, a short stretch before it and the next few milestones) with an icon per rung (reached in color,
+ * unreached grayed, hover for the value), then the milestone list. Inserted after the diversity page; Apple Pie's own
  * benefit pages are removed. With the experimental double page view the food pages split into foods in the window and
  * foods out of it, and the first page out of the window is drawn on a second book page to the right.
  */
@@ -177,7 +177,7 @@ public final class DietLogPages {
         return ItemStack.EMPTY;
     }
 
-    /** The rung's icon at {@code (x, y)}, {@link #ICON} pixels: kind-coloured frame, greyed when not reached. */
+    /** The rung's icon at {@code (x, y)}, {@link #ICON} pixels: kind-colored frame, grayed when not reached. */
     static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
         switch (r.kind) {
             case HEALTH -> Icons.heart(pose, x, y);

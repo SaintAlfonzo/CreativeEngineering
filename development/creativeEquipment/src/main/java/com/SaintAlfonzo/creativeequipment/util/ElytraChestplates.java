@@ -26,7 +26,7 @@ public final class ElytraChestplates {
 
     private ElytraChestplates() {}
 
-    /** True if the player has a {@link #TAG}ged chestplate in any armour slot. */
+    /** True if the player has a {@link #TAG}ged chestplate in any armor slot. */
     public static boolean isWorn(Player player) {
         for (ItemStack stack : player.getArmorSlots()) {
             if (!stack.isEmpty() && stack.is(TAG)) {

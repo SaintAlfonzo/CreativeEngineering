@@ -69,7 +69,7 @@ public final class ShieldBlocking {
             return false;
         }
         if (gate != null) {
-            return true; // an allowed tick: no direction, and armour-piercing (barbed pane) doesn't matter
+            return true; // an allowed tick: no direction, and armor-piercing (barbed pane) doesn't matter
         }
         ShieldGroup group = category.group();
         if (group.honorsArmorBypass() && DamageTags.is(source, DamageFlag.ARMOR_PIERCING.tag())) {

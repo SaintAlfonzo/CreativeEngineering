@@ -16,8 +16,8 @@ import net.minecraft.world.damagesource.DamageSource;
  * ({@code [shields.<tier>].<configKey>}, defaults in {@link ShieldTier#defaultBlocksTicks}).
  *
  * <p>A tier the gate is off for doesn't attempt the block (no shield sound, full damage). A tier it is
- * on for blocks the hit from any direction and ignores the armour-piercing rule - these sources have no
- * position and several are armour-piercing - at the hit's normal group percentage, which the
+ * on for blocks the hit from any direction and ignores the armor-piercing rule - these sources have no
+ * position and several are armor-piercing - at the hit's normal group percentage, which the
  * round-down rule turns into a full block for 1-damage ticks.
  *
  * <p>Projectiles never count: an ownerless fireball reuses the {@code onFire} id.

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Baked pass-through neighbour counts (surface/PassCounts, plan_post_scratch_1115b.md C2): the chunk holds its count
+ * Baked pass-through neighbor counts (surface/PassCounts, plan_post_scratch_1115b.md C2): the chunk holds its count
  * data, and every block change in it ({@code LevelChunk#setBlockState}, both sides; it returns the old state, or null
  * when nothing changed) tells {@link PassCounts#blockChanged}, which drops the counts around a block whose tier changed.
  */

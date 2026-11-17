@@ -115,13 +115,13 @@ public class EarthFillSim {
 			System.exit(0);
 		}
 
-		System.out.printf("%-28s %5s %6s | %-27s | %-27s | cancelled %% at (water,air) limits %s | after beard: water %-19s | air %-19s | mound %-13s | sizes s/m/l/h | cancelled %% (by water/air/mound) | pruned starts %% / pieces dropped / cancelled after %% / unlinked pieces%n",
+		System.out.printf("%-28s %5s %6s | %-27s | %-27s | canceled %% at (water,air) limits %s | after beard: water %-19s | air %-19s | mound %-13s | sizes s/m/l/h | canceled %% (by water/air/mound) | pruned starts %% / pieces dropped / canceled after %% / unlinked pieces%n",
 				"structure", "n", "earth", "over water p50/p90/p99/max", "over air p50/p90/p99/max", Arrays.deepToString(LIMITS), "p50/p90/p99/max", "p50/p90/p99/max", "p50/p90/p99/max");
 		Random rnd = new Random(seed);
 		for (Map.Entry<String, Set<String>> e : SITES.entrySet()) {
 			Structure structure = structures.get(new ResourceLocation(e.getKey()));
 			if (structure == null) { System.out.println(e.getKey() + ": not in the builtin registry"); continue; }
-			List<int[]> res = new ArrayList<>();   // earth, water, air, then after the beard: air, mound, size, cancelled at the default sizes
+			List<int[]> res = new ArrayList<>();   // earth, water, air, then after the beard: air, mound, size, canceled at the default sizes
 			int tries = 0, noStart = 0;
 			while (res.size() < sites && tries++ < sites * 400) {
 				int cx = rnd.nextInt(8000) - 4000, cz = rnd.nextInt(8000) - 4000;

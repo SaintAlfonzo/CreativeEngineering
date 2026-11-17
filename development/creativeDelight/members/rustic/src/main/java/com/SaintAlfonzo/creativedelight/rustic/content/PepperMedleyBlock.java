@@ -17,7 +17,7 @@ import vectorwing.farmersdelight.common.block.FeastBlock;
 import java.util.List;
 import java.util.function.Supplier;
 
-/** A medley: three stuffed peppers on a bowl, one colour per serving (the last pepper in the list is served first). */
+/** A medley: three stuffed peppers on a bowl, one color per serving (the last pepper in the list is served first). */
 public class PepperMedleyBlock extends FeastBlock {
     public static final int MAX = 3;
     public static final IntegerProperty SERVINGS = IntegerProperty.create("servings", 0, MAX);

@@ -28,7 +28,7 @@ public final class BackpackSkinsClient {
     /** Carries the skin block from the backpack block entity to the baked model. */
     public static final ModelProperty<Block> SKIN = new ModelProperty<>();
 
-    /** Worn skin: size relative to the block, and where its centre sits in SB's back-pack model space (y points down). Tune in game. */
+    /** Worn skin: size relative to the block, and where its center sits in SB's back-pack model space (y points down). Tune in game. */
     private static final float WORN_SCALE = 0.6F;
     private static final double WORN_CENTRE_Y = 0.4;
     private static final double WORN_CENTRE_Z = 0.0;

@@ -77,7 +77,7 @@ public class PortalFailureHandler {
 
         // PortalSpawnEvent fires from BaseFireBlock#onPlace (or Dark Fire's
         // own reimplementation of that flow), which runs AFTER the fire
-        // block has already been placed in the world. Cancelling the event
+        // block has already been placed in the world. Canceling the event
         // only stops the portal - the fire itself is still sitting there,
         // so we replace it ourselves below.
         BlockPos firePos = event.getPos();
@@ -178,7 +178,7 @@ public class PortalFailureHandler {
         // uniformly without needing per-block identity checks.
         // Nether portal blocks count too: Smaller Nether Portals fills the frame with portal blocks before it posts
         // the event (and ignores the cancel), so the fill met portal blocks and gave up on the frame. Once the frame
-        // turns to crying obsidian those portal blocks lose their frame and break on the neighbour update.
+        // turns to crying obsidian those portal blocks lose their frame and break on the neighbor update.
         return state.isAir() || state.is(BlockTags.FIRE) || state.is(Blocks.NETHER_PORTAL);
     }
 }

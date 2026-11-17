@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 
 /**
  * Supplementaries faucet model moved toward the block it drains ({@link FaucetFit#shift}, TODO cooking/kitchen #26):
- * a wrapper on every faucet block-state model that works out the shift from the neighbours when the chunk is built
+ * a wrapper on every faucet block-state model that works out the shift from the neighbors when the chunk is built
  * ({@code getModelData}) and moves the quads by it. Supplementaries' own models are not touched. Client only,
  * registered on {@link ModelEvent.BakingCompleted} at the lowest priority when Supplementaries is loaded.
  */

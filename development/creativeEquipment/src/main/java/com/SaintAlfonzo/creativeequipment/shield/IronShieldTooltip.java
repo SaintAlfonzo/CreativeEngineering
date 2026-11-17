@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * {@link ShieldTier#IRON}) the same reduction / wear / on-block-effect tooltip lines the seven
  * dedicated tier shields get from {@code TierShieldItem#appendHoverText}. Vanilla's
  * {@code ShieldItem} has no such override for a subclass to extend - it only overrides
- * {@code appendHoverText} to add the banner-colour line, and we don't own that class - so this
+ * {@code appendHoverText} to add the banner-color line, and we don't own that class - so this
  * goes through {@link ItemTooltipEvent} instead of a vanilla-class mixin. Registered on the Forge
  * bus in {@code CreativeEngineering}; fires client-side only (tooltips are never built on a
  * dedicated server), same as every other tooltip-line source in the game.

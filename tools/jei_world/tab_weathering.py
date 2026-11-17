@@ -5,7 +5,7 @@ Sources (jar data with kubejs/data on top, so datapack overrides count):
   - data/*/fluid_generators/*.json -> lava_generation.
   - IW "builtin" growths whose pairs come from block tags (sandy / snowy stones, sand pile seeping, leaf piles,
     lightning vitrify / crack) and the builtin burn_moss fluid generator; pairs from kubejs/exported/tags.
-Hardcoded behaviour with no pairing data (soot, icicles, ice melting, vanilla / Create / DnD lava, copper and
+Hardcoded behavior with no pairing data (soot, icicles, ice melting, vanilla / Create / DnD lava, copper and
 lightning, IE concrete, Salt) is in each tab's manual.json.
 
 Semantics read from the IW 1.2.10 jar (javap, 2026-10-22):

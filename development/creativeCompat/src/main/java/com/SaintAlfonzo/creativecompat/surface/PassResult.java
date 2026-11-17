@@ -20,7 +20,7 @@ public final class PassResult {
     public PassTier walkTier, fallTier;
     /** Density lowered the deciding block's value. */
     public boolean walkDense, fallDense;
-    /** Neighbour count of the block that set {@link #walk} / {@link #fall} (0 for tiers that count none). */
+    /** Neighbor count of the block that set {@link #walk} / {@link #fall} (0 for tiers that count none). */
     public int walkNeighbours, fallNeighbours;
     /** Some counted block is surrounded (plan 4.3: any web cell the entity overlaps). */
     public boolean surrounded;

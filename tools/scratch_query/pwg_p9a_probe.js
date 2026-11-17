@@ -161,7 +161,7 @@
     }
     function terminals(be) {
         let eb = $BEB.get(be, pg().Electric.TYPE)
-        if (eb == null) return 'no electric behaviour'
+        if (eb == null) return 'no electric behavior'
         let vs = []
         for (let i = 0; i < be.terminalCount(); i++) if (eb.hasTerminal(i)) vs.push('T' + i + '=' + fmt(eb.getTerminal(i).getVoltage()))
         return vs.join(' ')

@@ -60,7 +60,7 @@ class Run:
         os.replace(tmp, self.state_path)
 
     def log(self, text):
-        line = time.strftime("%m-%d %H:%M:%S ") + text
+        line = time.strftime("%Y-%m-%d %H:%M:%S ") + text
         with open(os.path.join(self.dir, "runner.log"), "a") as fh:
             fh.write(line + "\n")
 

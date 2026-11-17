@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 /**
- * {@code creativelabels:note_special} (sticky_notes.md 3.6): any number of plain notes (no colour, no special; text
+ * {@code creativelabels:note_special} (sticky_notes.md 3.6): any number of plain notes (no color, no special; text
  * allowed and kept) + exactly one special ingredient (ink sac, glow berries, gunpowder, gold nugget) -> that many
  * notes with the matching look.
  */

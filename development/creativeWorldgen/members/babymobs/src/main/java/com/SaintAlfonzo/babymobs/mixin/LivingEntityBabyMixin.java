@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Baby behaviour for the mobs {@link BabyAges} handles, at the LivingEntity level because Squid and Dolphin don't
+ * Baby behavior for the mobs {@link BabyAges} handles, at the LivingEntity level because Squid and Dolphin don't
  * override these: m_6162_ isBaby, m_6134_ getScale, m_8107_ aiStep (age tick), m_6779_ canAttack (baby dolphins are
  * passive), m_7350_ onSyncedDataUpdated (hitbox refresh on the client when the flag flips). Vanilla's own checks of
  * isBaby() then do the rest: voice pitch 1.5, no loot, no experience, dimensions x getScale.

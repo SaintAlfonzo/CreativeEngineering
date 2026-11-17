@@ -120,7 +120,7 @@ public class ItemPhysicServerMixin {
         if (list == cfg.burningItems) {
             Boolean decision = ItemPhysicSplit.burnDecision(stack, ItemPhysicSplit.touchingLava(item));
             return (decision != null) ? decision.booleanValue()
-                                      : list.canPass(stack);          // BURN — honour ItemPhysic's list
+                                      : list.canPass(stack);          // BURN — honor ItemPhysic's list
         }
 
         if (list == cfg.swimmingItems) {

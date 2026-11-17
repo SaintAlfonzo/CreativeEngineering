@@ -1,11 +1,11 @@
 // requires: creativecompat
-// Creative Compat. Item-physics behaviour tags (Creative Compat ItemPhysicSplit). Runs on /reload —
+// Creative Compat. Item-physics behavior tags (Creative Compat ItemPhysicSplit). Runs on /reload —
 // dropped items pick up membership changes on the next tick, no restart.
 //
-//   creativecompat:physics/floats      → floats in water
-//   creativecompat:physics/sinks       → force-sink (wins over floats)
-//   creativecompat:physics/fireproof   → survives open fire, still burns/melts in lava
-//   creativecompat:physics/lavaproof   → immune to BOTH open fire and lava (wins over fireproof)
+//   creativecompat:physics/floats      -> floats in water
+//   creativecompat:physics/sinks       -> force-sink (wins over floats)
+//   creativecompat:physics/fireproof   -> survives open fire, still burns/melts in lava
+//   creativecompat:physics/lavaproof   -> immune to BOTH open fire and lava (wins over fireproof)
 //
 // floats vs sinks is the WATER axis; fireproof vs lavaproof is the FIRE axis — an item can be
 // on both (e.g. a wooden boat floats AND nether wood is fireproof). Default for anything
@@ -18,22 +18,22 @@
 //     deepslate/blackstone shapes below follow that. If you'd rather reserve lavaproof for
 //     obsidian + deepslate + blackstone + nether + end and drop plain stone to fireproof,
 //     move the STONE_LAVA block down into fireproof.
-//   • quartz → lavaproof (you asked: yes, real quartz melts ~1670 °C vs lava ~1200 °C).
-//   • ice / packed ice / snow → fireproof (melt, don't vanish, under open flame).
-//   • sculk family → fireproof (alien growth, non-flammable in MC; not lava-tough).
-//   • sugar → sinks with the other powders; bone_meal → floats (you listed it as a floating
+//   • quartz -> lavaproof (you asked: yes, real quartz melts ~1670 °C vs lava ~1200 °C).
+//   • ice / packed ice / snow -> fireproof (melt, don't vanish, under open flame).
+//   • sculk family -> fireproof (alien growth, non-flammable in MC; not lava-tough).
+//   • sugar -> sinks with the other powders; bone_meal -> floats (you listed it as a floating
 //     crafting ingredient). Flip sugar to floats if you want parity.
-//   • honey_bottle → fireproof (bottled, glass rule), NOT float. Raw honey/comb float.
-//   • hay_block, shield, wooden tools, turtle_helmet, armor_stand → float (organic/wood wins).
-//   • nether_bricks / basalt / magma_block / glowstone-less nether blocks → lavaproof.
-//   • sea_lantern → fireproof only ("prismarine building, NOT lanterns").
+//   • honey_bottle -> fireproof (bottled, glass rule), NOT float. Raw honey/comb float.
+//   • hay_block, shield, wooden tools, turtle_helmet, armor_stand -> float (organic/wood wins).
+//   • nether_bricks / basalt / magma_block / glowstone-less nether blocks -> lavaproof.
+//   • sea_lantern -> fireproof only ("prismarine building, NOT lanterns").
 //   • tnt / tnt_minecart / torches / campfires / coal / redstone_torch / redstone_lamp
-//     / target / nether_wart → left DEFAULT (burn). Say the word to reclassify.
+//     / target / nether_wart -> left DEFAULT (burn). Say the word to reclassify.
 
 console.log('item physics tags starting')
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  physicsFromTag(event, behaviour, sourceTags[, opts])   — behaviour to every item in
+//  physicsFromTag(event, behavior, sourceTags[, opts])   — behavior to every item in
 //  another tag, as a NESTED #tag ref (transitive, order-safe). opts.except expands the tags
 //  to their current ids minus the exceptions. Alias over global.tags.addMatching.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -52,7 +52,7 @@ function physicsFromTag(event, behaviour, sourceTags, opts) {
 	const t = global.tags
 	const target = PHYSICS_TAG[String(behaviour).toLowerCase()]
 	if (!target) {
-		console.warn('[item_physics] physicsFromTag: unknown behaviour "' + behaviour + '"')
+		console.warn('[item_physics] physicsFromTag: unknown behavior "' + behaviour + '"')
 		return
 	}
 	t.addMatching(event, target, t._arr(sourceTags).map(s => '#' + t._clean(s)), { except: (opts || {}).except })
@@ -204,7 +204,7 @@ ServerEvents.tags('item', e => {
 		'brewing_stand', 'lantern', 'soul_lantern', 'sea_lantern', 'flower_pot',
 		// minecarts (NOT tnt_minecart)
 		'minecart', 'chest_minecart', 'furnace_minecart', 'hopper_minecart',
-		// stone / iron / gold tools & armour
+		// stone / iron / gold tools & armor
 		'stone_sword', 'stone_pickaxe', 'stone_axe', 'stone_shovel', 'stone_hoe',
 		'iron_sword', 'iron_pickaxe', 'iron_axe', 'iron_shovel', 'iron_hoe',
 		'golden_sword', 'golden_pickaxe', 'golden_axe', 'golden_shovel', 'golden_hoe',
@@ -384,10 +384,10 @@ ServerEvents.tags('item', e => {
 	// Consumed by Creative Compat ItemBurnTransform when fire/lava destroys a dropped item.
 	// Membership is reload-able here; the OUTCOME (result item / chance / blast power)
 	// is wired in the Compat startup script creativecompat/item_physics.js and needs a restart to change.
-	//   burn/to_ash     → chance to leave supplementaries:ash (rolled per item in the stack)
-	//   burn/explosive  → non-block-breaking explosion (spare bucket; tnt/gunpowder/tnt_minecart
+	//   burn/to_ash     -> chance to leave supplementaries:ash (rolled per item in the stack)
+	//   burn/explosive  -> non-block-breaking explosion (spare bucket; tnt/gunpowder/tnt_minecart
 	//                     already have their own per-id rules with tuned power)
-	// Glass → quark:dirty_glass is driven straight off #forge:glass / #forge:glass_panes
+	// Glass -> quark:dirty_glass is driven straight off #forge:glass / #forge:glass_panes
 	// in the startup script, so it needs no bucket here.
 	t.add(e, 'creativecompat:burn/to_ash', [
 		i.planks, i.any_log,

@@ -35,7 +35,7 @@ function zlpCfg() {
 	return JSON.stringify(out)
 }
 
-// Stone at y-2, grass at y-1, air from y up; flags 2 | 16: no neighbour or shape updates, nothing queues a tick.
+// Stone at y-2, grass at y-1, air from y up; flags 2 | 16: no neighbor or shape updates, nothing queues a tick.
 function zlpFloor(level, x0, x1, z0, z1, y, top) {
 	var air = ZLP_Blocks.AIR.defaultBlockState()
 	for (var ax = x0; ax <= x1; ax++) for (var az = z0; az <= z1; az++) for (var ay = y - 2; ay <= y + top; ay++) {

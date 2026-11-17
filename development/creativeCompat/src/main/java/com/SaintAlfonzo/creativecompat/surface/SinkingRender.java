@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * by partial tick, just like the rendered position itself. A real sink is part of the position, so
  * landing on, stepping onto or stepping off a sinking block eases in over one tick the same way.
  *
- * <p>The block that actually holds the feet decides, not just the one under the centre, and a
+ * <p>The block that actually holds the feet decides, not just the one under the center, and a
  * sinking block with a real sink of its own (honey, mud) only adds what is left of the depth, so
  * walking from one sunken block to another keeps a steady eye height. Dropped items lie on top
  * at their real height unless the block is in {@link #HIDES_ITEMS}.
@@ -74,8 +74,8 @@ public final class SinkingRender {
     }
 
     /**
-     * Visual depth for feet at (x, y, z). The block under the centre decides when it is the one
-     * holding the feet. When it isn't (the centre is already over a lower block, a real-sink block
+     * Visual depth for feet at (x, y, z). The block under the center decides when it is the one
+     * holding the feet. When it isn't (the center is already over a lower block, a real-sink block
      * like honey or mud the feet haven't dropped onto yet, or a gap), the blocks under the hitbox
      * corners that do hold the feet decide instead. So the depth only changes once the next block
      * really carries the entity, and crossing from one sunken block to another doesn't pop the

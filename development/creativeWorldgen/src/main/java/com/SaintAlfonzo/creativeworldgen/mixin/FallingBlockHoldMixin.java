@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * {@code FallingBlock.updateShape} (m_7417_) schedules the fall after a neighbour change. Skipped while a chunk's
+ * {@code FallingBlock.updateShape} (m_7417_) schedules the fall after a neighbor change. Skipped while a chunk's
  * generation leftovers run ({@link GeneratedFallingBlocks}); the state is returned unchanged, as vanilla's own return.
  * Subclasses that override it and call super (concrete powder) are covered.
  */

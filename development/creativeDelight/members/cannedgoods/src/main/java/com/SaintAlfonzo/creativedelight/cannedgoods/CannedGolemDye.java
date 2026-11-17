@@ -15,10 +15,10 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * The dyeable canned golem (feature_writeup/cans.md 2.3). Right-click a canned golem with any dye (vanilla or
- * #forge:dyes/<color>) to recolour it; the dye is used up unless in creative. The colour is synced entity data on
+ * #forge:dyes/<color>) to recolour it; the dye is used up unless in creative. The color is synced entity data on
  * the modified upstream CannedGolemEntity, saved as NBT "Color" (DyeColor id), default red. Red keeps the mod's own
  * big_canned_boy texture; the other 15 render from creativedelight:textures/entity/canned_golem/<color>.png
- * (the modified CannedGolemRenderer). Same behaviour, NBT and textures as the CD mixins it replaces.
+ * (the modified CannedGolemRenderer). Same behavior, NBT and textures as the CD mixins it replaces.
  */
 public final class CannedGolemDye {
 
@@ -36,7 +36,7 @@ public final class CannedGolemDye {
     private CannedGolemDye() {
     }
 
-    /** Texture for a colour, or null for the default colour (use the mod's own texture). */
+    /** Texture for a color, or null for the default color (use the mod's own texture). */
     public static ResourceLocation texture(DyeColor color) {
         return color == DEFAULT_COLOR ? null : TEXTURES[color.getId()];
     }

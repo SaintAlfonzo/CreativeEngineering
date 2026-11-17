@@ -3,7 +3,7 @@
 
 The Salt's raw rock salt block texture carries the wear of Hearth and Harvest 1.4.1's own stages: each upstream stage is
 divided per pixel by the upstream unworn block, and that brightness ratio is applied to the rock salt, plus a pull toward the
-texture's mean colour (the licked-smooth look) and a slight darkening. The waxed forms use the same files.
+texture's mean color (the licked-smooth look) and a slight darkening. The waxed forms use the same files.
 
 Not a /cdevgen generator. Output goes into the backportedHearth member. Needs Pillow.
 """

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 /**
  * Wraps the single call site of every effect's periodic tick - {@code MobEffectInstance#applyEffect}
  * ({@code m_19550_}) calling {@code MobEffect#applyEffectTick} ({@code m_6742_}), bytecode-checked on
- * the Forge 43.3.9 client jar - in {@link EffectTickContext}, so shield code can recognise damage
+ * the Forge 43.3.9 client jar - in {@link EffectTickContext}, so shield code can recognize damage
  * that comes from a ticking effect (see {@code ShieldBlocking}, {@code [shields].unblockableEffectTicks}).
  * Covers modded effects too, since they override {@code applyEffectTick} but are still called from here.
  *

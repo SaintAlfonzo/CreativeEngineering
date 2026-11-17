@@ -4,7 +4,7 @@
 #      half, slabs, double slab, posts, deny/posts predicates), face frames, floor rotation, piece boxes, hit
 #      resolution, the covered-face rule
 #   2. NbtTest: note item NBT, item label lines, label picture stripping (C2), face / note / label round trips,
-#      the Mask remap (C7), colour mixing against vanilla's dyeArmor, the note text sanitiser (C6), the four
+#      the Mask remap (C7), color mixing against vanilla's dyeArmor, the note text sanitizer (C6), the four
 #      recipe matchers on a 3x3 grid
 #   3. NoteShapeTest: the fallback note shape and its placement on every face (paper plane, curl direction, winding),
 #      the label model mapping, DonorArt's image maths on the decompiled donor PNGs

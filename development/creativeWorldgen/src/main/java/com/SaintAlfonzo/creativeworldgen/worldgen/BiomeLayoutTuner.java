@@ -41,7 +41,7 @@ import net.minecraftforge.fml.ModList;
  * biome makes it lose exactly the samples where it was winning by less than P, and a negative P
  * lets it win samples where it was losing by less than |P|. One scalar per tuned biome; the
  * solver picks each one against the /dumpclimate sample set so the biome's share of its layer
- * lands on multiplier x original share. Negative penalties are realised by adding the same
+ * lands on multiplier x original share. Negative penalties are realized by adding the same
  * constant to every entry in the dimension (argmin-invariant), so every written offset is a real
  * non-negative number.
  *

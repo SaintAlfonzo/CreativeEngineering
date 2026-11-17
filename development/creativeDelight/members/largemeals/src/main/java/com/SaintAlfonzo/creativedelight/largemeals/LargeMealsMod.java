@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Large Meals 1.3.0 ported to Forge 1.19.2, a Creative Delight member (feature_writeup/large_meals.md). All code here
- * is our own, written from the mod's behaviour; art, block loot tables and the two sheep drop modifiers come from the
+ * is our own, written from the mod's behavior; art, block loot tables and the two sheep drop modifiers come from the
  * unmodified upstream jar in {@code largemeals_upstream/} at runtime. Recipes, tags, food types and compost are pack
  * scripts (CD {@code largemeals} script folders); upstream's recipes are not loaded.
  */

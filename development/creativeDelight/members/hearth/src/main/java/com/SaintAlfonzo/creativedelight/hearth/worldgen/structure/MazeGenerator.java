@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedelight.hearth.worldgen.structure;
 
 import net.minecraft.util.RandomSource;
 
-/** The corn maze's layout: true is a wall. Depth-first carve on the odd cells with a bias to keep straight on, a few extra openings, a 3x3 centre room and the two entrances. */
+/** The corn maze's layout: true is a wall. Depth-first carve on the odd cells with a bias to keep straight on, a few extra openings, a 3x3 center room and the two entrances. */
 final class MazeGenerator {
     private MazeGenerator() {
     }

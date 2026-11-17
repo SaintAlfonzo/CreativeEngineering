@@ -8,7 +8,7 @@
 //   #creativedelight:placeable_on_coaster      Brewin' and Chewin' coaster ("Placeable on a coaster", alcohol.md 8.3)
 //
 // #creativedelight:placeable_on_coaster also goes into #brewinandchewin:placeable_on_coaster, the tag the coaster
-// checks ([coaster] taggedItemsOnly): the port fills it with its own modelled items, this adds the foods that
+// checks ([coaster] taggedItemsOnly): the port fills it with its own modeled items, this adds the foods that
 // tools/gen_coaster_models.py gives a coaster model from a block model (Display Delight, Vinery bottles, Vintage
 // Delight jars, same-sprite borrows; alcohol.md 12, kitchen.md 2.3).
 //

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Parses the optional {@code "blade"} string field out of {@code immersiveengineering:sawmill}
  * recipe JSON and stashes it on the deserialized {@link SawmillRecipe} (via
- * {@link SawmillRecipeExt}). Absent / empty → the profile-less default recipe for that input.
+ * {@link SawmillRecipeExt}). Absent / empty -> the profile-less default recipe for that input.
  *
  * <p>Only the JSON read path is touched — the network path is deliberately left alone; the
  * client re-derives the chosen recipe from the id persisted on the {@code SawmillProcess}.

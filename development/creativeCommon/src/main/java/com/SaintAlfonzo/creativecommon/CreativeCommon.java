@@ -166,8 +166,8 @@ public class CreativeCommon
 
 			// The sawmill classes pre-loaded here for SawmillProcessMixin: Creative Engineering.
 
-			// The shield block handler reaches the damage-tag classes only on the first block
-			// (crash 2026-09-24: NoClassDefFoundError on DamageFlag); pre-load them too.
+			// The shield block handler reaches the damage-tag classes only on the first block (crash:
+			// NoClassDefFoundError on DamageFlag); pre-load them too.
 			forceLoad("com.SaintAlfonzo.creativecommon.damage.DamageFlag");
 			forceLoad("com.SaintAlfonzo.creativecommon.damage.DamageTags");
 			forceLoad("com.SaintAlfonzo.creativecommon.damage.DamageTagSnapshot");
@@ -212,7 +212,7 @@ public class CreativeCommon
 
         // Stepstool key, tier shield item properties: Creative Equipment.
 
-        // Lunchbox colours (onItemColors): Creative Delight.
+        // Lunchbox colors (onItemColors): Creative Delight.
 
         // Shrapnel renderer: Creative Engineering.
     }

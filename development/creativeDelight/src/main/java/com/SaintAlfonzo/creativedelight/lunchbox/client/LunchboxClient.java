@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * kubejs/assets/solapplepie/models/item/ (written by tools/gen_lunchbox_looks.py):
  * {@code creativedelight:lunchbox_skin} (position in {@link Lunchboxes#SKINS} + 1, 0 = own look) and
  * {@code creativedelight:lunchbox_dyed} (1 when dyed). A dyed look's layer 0 is the greyscale base and
- * gets the dye colour; layer 1 (outline and latches) is left as drawn. Called from
+ * gets the dye color; layer 1 (outline and latches) is left as drawn. Called from
  * {@code CreativeEngineering.ClientModEvents} when Spice of Life is loaded.
  */
 public final class LunchboxClient {

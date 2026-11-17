@@ -3,7 +3,7 @@
 #
 # Writes pack-owned files into src/own/ (tools/port_resources.py lays them over its output, so a rerun keeps them),
 # from the owner's art in kubejs/assets/mason_jar_new/ (new_jar, new_mason_jar_interior, new_jam_block,
-# new_jello_block, new_jello_bowl; tools/gen_jam_art.py makes them from colour samples). Java side: src/main/java/net/ribs/vintagedelight/jam/.
+# new_jello_block, new_jello_bowl; tools/gen_jam_art.py makes them from color samples). Java side: src/main/java/net/ribs/vintagedelight/jam/.
 #
 #   python3 development/creativeDelight/members/vintage/tools/gen_pack_jams.py
 # then python3 development/creativeDelight/members/vintage/tools/port_resources.py, then build :creativeDelight:.
@@ -75,7 +75,7 @@ def art(sub, name, rel):
 
 
 def colour(png):
-    """Mean colour of the opaque pixels, as #rrggbb (soft fluid colour)."""
+    """Mean color of the opaque pixels, as #rrggbb (soft fluid color)."""
     im = Image.open(png).convert('RGBA')
     px = [p for p in im.getdata() if p[3] > 128]
     r, g, b = (sum(p[i] for p in px) // len(px) for i in range(3))
@@ -189,7 +189,7 @@ def main():
             lang[f'fluid_type.{NS}.{name}_jam'] = f'{english} Jam'
         lang[f'fluid_type.{NS}.{name}_jello'] = f'Melted {english} Jello'
 
-        # Cauldrons: the fruit stage is water tinted by the jam's colour (JamCauldronColors), as Fruits Delight's;
+        # Cauldrons: the fruit stage is water tinted by the jam's color (JamCauldronColors), as Fruits Delight's;
         # the jam and jello stages show their block's texture at levels 1 to 3
         fruit = f'{name}_cauldron'
         cauldron_model(fruit, 'template_cauldron_full', 'minecraft:block/water_still', tinted=True)

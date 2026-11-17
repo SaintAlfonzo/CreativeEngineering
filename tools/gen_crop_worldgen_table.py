@@ -216,7 +216,7 @@ JAVA_CONFIGURED = {
     # Fungi Delight huge mushrooms: Java features with an empty config
     'fungidelight:huge_inky_cap_mushroom': ['Huge Inky Cap'],
     'fungidelight:huge_morel_mushroom': ['Huge Morel'],
-    # Fungi Delight's rooted dirt blob (an ore feature on vanilla rooted dirt: labelled here, not via CROP_BLOCKS,
+    # Fungi Delight's rooted dirt blob (an ore feature on vanilla rooted dirt: labeled here, not via CROP_BLOCKS,
     # which would also catch azalea trees)
     'fungidelight:rooted_dirt_blob': ['Rooted Dirt (truffle ground)'],
 }

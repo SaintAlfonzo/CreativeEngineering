@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Special notes are not dyeable (sticky_notes.md 3.6). {@code NoteDyeRecipe} refuses them, but vanilla's
- * armour-dye recipe matches any {@link net.minecraft.world.item.DyeableLeatherItem} plus dyes, and the sticky note
+ * armor-dye recipe matches any {@link net.minecraft.world.item.DyeableLeatherItem} plus dyes, and the sticky note
  * is one so plain notes take {@code display.color}. This keeps that recipe off a grid holding a special note; the
- * grid then falls through to no result instead of storing a hidden colour on the special.
+ * grid then falls through to no result instead of storing a hidden color on the special.
  */
 @Mixin(ArmorDyeRecipe.class)
 public abstract class ArmorDyeRecipeMixin {

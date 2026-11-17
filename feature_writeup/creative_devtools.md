@@ -227,6 +227,7 @@ loses the tools, Devtools without the new patcherMod fails on the missing hooks.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
+- 2026-10-19: 3000 until 2026-10-19: too coarse for rare biomes (1 sample = 0.033 %) (kubejs/data/creativedevtools/kubejs/dump/dump_climate.js)
 - 2026-11-07: interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07 (development/creativeDevtools/build.gradle)
 - 2026-11-09: /zq under's default earth tag, under its owning jar's namespace since 2026-11-09 (development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/test/TestJudges.java)
 - 2026-11-15: D1 rows marked out (owner, 2026-11-15): Create Deco coin stacks, Control Engineering logic cabinet, Copycats (development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/test/TestLayers.java)

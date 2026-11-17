@@ -51,7 +51,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
  * the kettle's {@code lid}, the pots' handle ({@code support=handle} against the tray state upstream would give).
  * The skillet has no toggle and breaks as normal. Holding the button counts as one punch (see {@link #HELD_GAP}).</li>
  * </ul>
- * Upstream's sneak right-click toggles are never reached: the right-click event is cancelled before the block's use.
+ * Upstream's sneak right-click toggles are never reached: the right-click event is canceled before the block's use.
  * Placing a pot or kettle against the bottom face of a block still gives the handle (upstream placement).
  * WTHIT line: {@code compat/wthit/WthitCookwareToggle}.
  */
@@ -198,7 +198,7 @@ public final class CookwareHandling {
 		if (!emptyHanded(player) || !enabled(state)) return;
 		Toggle toggle = toggleOf(state);
 		if (toggle == null) return;
-		// Cancelled on both sides: no break progress on the client, and the server ignores the start of the break
+		// Canceled on both sides: no break progress on the client, and the server ignores the start of the break
 		event.setCanceled(true);
 		if (level.isClientSide || !level.mayInteract(player, pos)) return;
 		long now = level.getGameTime();

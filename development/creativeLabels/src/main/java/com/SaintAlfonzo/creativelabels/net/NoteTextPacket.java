@@ -35,9 +35,9 @@ public record NoteTextPacket(Mode mode, InteractionHand hand, BlockPos pos, Dire
 
     public enum Mode { HAND, PLACED }
 
-    /** Vanilla's block interaction reach check (squared): the cell centre must be within 8 blocks. */
+    /** Vanilla's block interaction reach check (squared): the cell center must be within 8 blocks. */
     public static final double REACH_SQ = 64.0;
-    /** Longest raw text accepted off the wire before sanitising (the config cap is far lower). */
+    /** Longest raw text accepted off the wire before sanitizing (the config cap is far lower). */
     public static final int WIRE_LIMIT = 1024;
 
     public static NoteTextPacket forHand(InteractionHand hand, String text) {

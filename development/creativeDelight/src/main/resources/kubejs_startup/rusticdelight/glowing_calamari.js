@@ -5,7 +5,7 @@
 // data/creativedelight/kubejs/rusticdelight/recipes.js.
 //
 // Art: kubejs/assets/creativeengineering/textures/item/glowing_calamari*.png, Rustic's calamari sprites palette-swapped to
-// the glow ink sac (notice beside them; Rustic's licence still to confirm).
+// the glow ink sac (notice beside them; Rustic's license still to confirm).
 // Values: the plain calamari line's (hunger, saturation modifier), plus Glowing for 30 s as Miner's Delight's glow squid gives.
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {

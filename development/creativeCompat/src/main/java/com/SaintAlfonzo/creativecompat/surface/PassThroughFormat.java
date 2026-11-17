@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  *       {@code hideNormal}.</li>
  *   <li>{@code Fall Through: 0.20× (Dense neighbors)}, or {@code Fall Through: stopped} in a surrounded web. Hidden at
  *       1.00 with {@code hideNormal}.</li>
- *   <li>{@code Neighbors: 3 of 4} for tiers that count neighbours (of the shape's 4 side or 6 face cells).</li>
+ *   <li>{@code Neighbors: 3 of 4} for tiers that count neighbors (of the shape's 4 side or 6 face cells).</li>
  * </ul>
  *
  * <p>Plain Java (no game classes) so the headless harness can test it.
@@ -34,7 +34,7 @@ public final class PassThroughFormat {
     /**
      * One overlay line.
      *
-     * @param value       the combined walk, the fall multiplier, or the neighbour count
+     * @param value       the combined walk, the fall multiplier, or the neighbor count
      * @param stopped     fall only: a surrounded web stops falling
      * @param dense       density lowered this value
      * @param whileMoving walk only: the tier slows only while moving horizontally (vines)

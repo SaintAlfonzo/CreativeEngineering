@@ -110,7 +110,7 @@ public final class SaltEvents {
     /**
      * Salt (and, since plan_bugfix_1114 3.7, Vintage Delight salt dust) in a dispenser facing a salt lick: a worn stage is
      * restored one stage (waxed or not, the same refill as by hand), a full one gets a salt layer on top (B7,
-     * plan_post_scratch_1115). Any other target falls through to the behaviour already registered (The Salt's: melt a
+     * plan_post_scratch_1115). Any other target falls through to the behavior already registered (The Salt's: melt a
      * frozen block, a layer on air, else drop).
      */
     public static void registerDispenser() {
@@ -122,7 +122,7 @@ public final class SaltEvents {
         if (salt == null || salt == Items.AIR) {
             return;
         }
-        // Wrap the behaviour already there (Salt's melting dispense for salt:salt), so a target that is not a lick
+        // Wrap the behavior already there (Salt's melting dispense for salt:salt), so a target that is not a lick
         // still gets it instead of a plain drop.
         java.util.Map<Item, DispenseItemBehavior> registry = ObfuscationReflectionHelper.getPrivateValue(DispenserBlock.class, null, "f_52661_");
         DispenseItemBehavior previous = registry == null ? null : registry.get(salt);

@@ -3,7 +3,7 @@
 // need the Tempad screens run without a client. P = player name. Output: "[ztp] ..." lines in logs/latest.log, then
 // "[ztp] done".
 //   /ztp ctx P                     the Tempad context the macro key would use (type, slot)
-//   /ztp save P NAME               New Location app Done (CreateLocationPacket) at P's position, default colour
+//   /ztp save P NAME               New Location app Done (CreateLocationPacket) at P's position, default color
 //   /ztp locs P                    every location P's Tempad lists: provider, uuid, name, dimension, x y z, angle
 //   /ztp open P PROVIDER NAME      Teleport app: open a timedoor to the location named NAME (openTimedoor, message logged)
 //   /ztp pin P PROVIDER NAME       Teleport app pin (SetFavoritePacket); "/ztp pin P none" clears it
@@ -19,7 +19,7 @@
 //   /ztp blocks X1 Y1 Z1 X2 Y2 Z2  every tempad: block state in an overworld box (loaded chunks only)
 //   /ztp break P X Y Z             survival block break by P (gameMode.destroyBlock, drops as a player break)
 //   /ztp pickup P [R=24]           move every item entity within R blocks into P's inventory (bots pick nothing up)
-//   /ztp markerui P X Y Z ACCESS LOCKED NAME   Timedoor Marker screen close (UpdateAnchorPacket), default colour
+//   /ztp markerui P X Y Z ACCESS LOCKED NAME   Timedoor Marker screen close (UpdateAnchorPacket), default color
 //   /ztp chronoui P X Y Z ACCESS LOCKED YOFF ANGLE NAME   Chronomark screen close (UpdateChronomarkPacket)
 //   /ztp hand P                    P's main-hand item and its NBT
 //   /ztp bchr X Y Z [N]            chronons of an overworld block entity (projector, metronome, workstation); N sets them

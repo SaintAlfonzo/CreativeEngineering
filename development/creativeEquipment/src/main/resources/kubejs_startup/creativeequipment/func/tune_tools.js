@@ -19,7 +19,7 @@
 //      enchantability: 18,      // higher = better enchants per level — TIERED items only
 //      miningLevel:    4,       // 0 wood/gold · 1 stone · 2 iron · 3 diamond · 4 netherite — TIERED only
 //      repairWith:     'minecraft:netherite_ingot',   // anvil repair material — TIERED only
-//      rarity:         'epic',  // common | uncommon | rare | epic (name colour)
+//      rarity:         'epic',  // common | uncommon | rare | epic (name color)
 //      fireproof:      true,    // survives fire/lava as a dropped item
 //      stackSize:      1,
 //    },
@@ -92,7 +92,7 @@ var i = global.item;
 	//   damage / attackSpeed = tooltip numbers (bare fist = 1.0 dmg / 4.0 speed)
 	//   miningSpeed           = diggers only (swords have none — omitted there)
 	//   miningLevel           = 0 wood/gold · 1 stone · 2 iron · 3 diamond · 4 netherite
-	//   enchantability        = higher → better enchants per level
+	//   enchantability        = higher -> better enchants per level
 	//
 	// Rhino here has no computed-key syntax, so specs are added via tune(id, {…})
 	// with global.item keys rather than a big object literal.

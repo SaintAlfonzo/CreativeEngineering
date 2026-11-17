@@ -152,7 +152,7 @@ public final class TillingEvents {
 
     /**
      * Ender Crop tills end stone itself in this event (its ForgeEventHandlers.onUseHoe, HOE_TILL, any hoe with Unbreaking
-     * by its config). Cancelled first, at HIGHEST, for a hoe below netherite: Ender Crop skips cancelled events and the hoe
+     * by its config). Canceled first, at HIGHEST, for a hoe below netherite: Ender Crop skips canceled events and the hoe
      * does nothing. Same gate as the Tilling enchantment's area till.
      */
     public static void onToolModification(BlockEvent.BlockToolModificationEvent event) {

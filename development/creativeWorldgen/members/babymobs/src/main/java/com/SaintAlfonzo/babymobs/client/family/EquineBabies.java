@@ -28,7 +28,7 @@ import net.minecraft.world.entity.animal.horse.Markings;
  * <p>1.19.2 differences handled here: the horse renderers scale the whole model (horse 1.1, donkey 0.87, mule 0.92);
  * 26.1 bakes those into the adult meshes only, so the baby pose undoes them. 1.19.2's {@code HorseModel} hides the
  * real legs of a baby and positions parts absolutely in {@code prepareMobModel}; the baby models below replace that
- * with the 26.1 {@code AbstractEquineModel.setupAnim} plus the baby overrides. Babies show no saddle, armour, chests
+ * with the 26.1 {@code AbstractEquineModel.setupAnim} plus the baby overrides. Babies show no saddle, armor, chests
  * or carpets (26.1 draws none on a baby); the trader llama baby wears 26.1's baby trader decor (EquineLlamaDecorMixin).
  * Horse markings use the baby marking textures (EquineHorseMarkingMixin, 1.19.2's marking layer draws directly).
  */

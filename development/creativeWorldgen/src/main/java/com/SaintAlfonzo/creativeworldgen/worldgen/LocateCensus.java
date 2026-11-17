@@ -302,7 +302,7 @@ final class LocateCensus {
 			}
 			if (built != null && !built.getPieces().isEmpty()) {
 				BoundingBox box = built.getPieces().get(0).getBoundingBox();
-				out.append("; start piece centre ").append((box.minX() + box.maxX()) / 2).append(' ').append(box.minY()).append(' ')
+				out.append("; start piece center ").append((box.minX() + box.maxX()) / 2).append(' ').append(box.minY()).append(' ')
 						.append((box.minZ() + box.maxZ()) / 2);
 			}
 			return out.toString();

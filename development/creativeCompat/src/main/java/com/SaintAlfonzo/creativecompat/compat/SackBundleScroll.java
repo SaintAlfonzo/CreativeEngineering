@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 
 /**
  * Scroll over a sack holding 2+ stacks in any inventory screen: rotates its contents ({@link SackBundle}).
- * Cancelling the Pre event also skips Mouse Tweaks' wheel tweak, which runs on Post.
+ * Canceling the Pre event also skips Mouse Tweaks' wheel tweak, which runs on Post.
  */
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, value = Dist.CLIENT)
 public final class SackBundleScroll {

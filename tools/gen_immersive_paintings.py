@@ -14,7 +14,7 @@ from assets/minecraft/textures/painting/<id>.png, lowest priority first: the van
 mods/*.jar, kubejs/assets, then the resource-pack zips enabled in options.txt - so a pack that
 retextures a vanilla painting is what Immersive shows too.
 
-Paintings smaller than 32 px per block are scaled up (nearest neighbour, whole-number factor) to 32:
+Paintings smaller than 32 px per block are scaled up (nearest neighbor, whole-number factor) to 32:
 the Datapacks page opens filtered to resolution 32, and a 16 px painting would be hidden until the
 player changes the filter. Pixel art stays sharp. Larger ones keep their own resolution.
 

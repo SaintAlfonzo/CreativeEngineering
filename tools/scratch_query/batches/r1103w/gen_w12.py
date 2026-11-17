@@ -81,14 +81,14 @@ for i in range(len(ids)):
     w('> forceload remove %d -6128 %d -5873' % (x - 128, x + 127))
 w('')
 
-# SQ-WGE-11: metas vs anchors from the census 128 pair of w_1_B.qb, plus one census on the r1031 / r1101 centre
+# SQ-WGE-11: metas vs anchors from the census 128 pair of w_1_B.qb, plus one census on the r1031 / r1101 center
 w('## SQ-WGE-11 | C4, C5: camp ruin metas x1.7, tower siege x0.6, meteor shower x0.66; anchors unchanged (census)')
 w('> celocate census 96 2144 -2592')
 w(r'waitlog \[celocate\] census done 3600')
 w('shell cp kubejs/exported/worldgen/locate_census.json $INST/%s/w12_census_r1031centre.json && echo copied' % R)
 w("shell for f in $INST/%s/w1_census_0_0.json $INST/%s/w1_census_4k.json $INST/%s/w12_census_r1031centre.json $INST/perf/runs/r1031/w1b_locate_census.json $INST/perf/runs/r1101/w2_locate_census.json; do python3 -c \"import json,sys; d=json.load(open(sys.argv[1])); print(sys.argv[1].split('/')[-1], d['centerChunk'], 'r', d['radiusChunks']); [print('  ', s['structure'], 'slots', s['slots'], 'built', s['built'], 'known', s['known']) for s in d['structures'] if any(k in s['structure'] for k in ('pillager_camp_ruin', 'great_tower', 'meteor_shower', 'ae2:meteorite', 'eugene:pillager_camp', 'pillager_great_tower'))]\" $f; done" % (R, R, R))
 w('look known/slots of meta/pillager_camp_ruin(s) about 1.7x the r1031 / r1101 share; great_tower_siege about 0.6x; '
-  'meteor_shower about 0.66x; eugene:pillager_camp, the great tower and ae2:meteorite counts within 15 % (same centre file)')
+  'meteor_shower about 0.66x; eugene:pillager_camp, the great tower and ae2:meteorite counts within 15 % (same center file)')
 w('')
 
 # SQ-WGE-12: punch meta (expected FAIL with SQ-CWG-06: META_PART_KEYS lacks punch)
@@ -120,7 +120,7 @@ w('look shares within about 10 points of 40 / 30 / 30; air bottoms 16 to 96; no 
 w('')
 
 # SQ-WGE-14: waystone ruins
-w('## SQ-WGE-14 | A6: meta/waystone_ruins found 4 times, one waystone 4 to 12 blocks from the centre on the ground')
+w('## SQ-WGE-14 | A6: meta/waystone_ruins found 4 times, one waystone 4 to 12 blocks from the center on the ground')
 for k, o in enumerate(((0, 0), (3000, 0), (0, 3000), (-3000, -3000))):
     cap = 'WR%d' % k
     locate(cap, 'creativeengineering:meta/waystone_ruins', origin=o)

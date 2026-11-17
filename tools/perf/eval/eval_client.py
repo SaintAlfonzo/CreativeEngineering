@@ -62,7 +62,7 @@ def setup(game, world=None):
 
 def start_xvfb(game):
     """EXPERIMENTAL (plan_scratch_testing_expansion TX-07, owner D3): an own Xvfb display for an unattended client.
-    Software rendering (llvmpipe): slower, colours may differ; never for colour rows. Returns the DISPLAY string.
+    Software rendering (llvmpipe): slower, colors may differ; never for color rows. Returns the DISPLAY string.
     The display's pid goes to GAME/xvfb.pid; a detached reaper stops it once the client pid is gone."""
     r, w = os.pipe()
     x = subprocess.Popen(["Xvfb", "-displayfd", str(w), "-screen", "0", "1280x720x24", "-nolisten", "tcp"],

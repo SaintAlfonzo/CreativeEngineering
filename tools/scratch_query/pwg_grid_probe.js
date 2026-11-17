@@ -24,7 +24,7 @@
 //                                   80 A), no gauge in the loop; read it with `ohm X+3 Y Z`
 //   ohm X Y Z                       current through the creative resistor at X Y Z from its terminal voltages
 //   overheated X Y Z R              overheated components in a box with their stored block and data keys
-//   net X Y Z                       the electric behaviour at X Y Z: paused, node count, network size
+//   net X Y Z                       the electric behavior at X Y Z: paused, node count, network size
 //   watch X Y Z R [T]               arm a server tick watcher on the wires in a box for T ticks (300): first tick each
 //                                   wire shows overheated=true (the flag lives about 5 ticks, sampling misses it)
 //   watched                         the watcher's result: overheatedWires, firstOverheatedTick, pass (at least one)
@@ -67,10 +67,10 @@
     function setResistor(level, p, idx) {
         let be = level.getBlockEntity(p)
         let s = $BEB.get(be, $Scroll.TYPE)
-        if (s == null) throw 'no scroll behaviour at ' + p
+        if (s == null) throw 'no scroll behavior at ' + p
         s.setValue(idx)
     }
-    // A hanging wire between two block terminals, sized as the wire item sizes it (0.5 items per metre, at least 1).
+    // A hanging wire between two block terminals, sized as the wire item sizes it (0.5 items per meter, at least 1).
     function wire(level, p1, t1, p2, t2, wireId) {
         let dx = p1.getX() - p2.getX(), dy = p1.getY() - p2.getY(), dz = p1.getZ() - p2.getZ()
         let count = Math.max(1, Math.round(Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5))

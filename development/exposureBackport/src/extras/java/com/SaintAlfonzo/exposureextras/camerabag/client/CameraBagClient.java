@@ -19,7 +19,7 @@ public final class CameraBagClient {
 
     private CameraBagClient() {}
 
-    /** Layer 0 (camera_bag_dyable) takes the dye colour; layer 1 is the untinted outline. */
+    /** Layer 0 (camera_bag_dyable) takes the dye color; layer 1 is the untinted outline. */
     @SubscribeEvent
     public static void registerColors(RegisterColorHandlersEvent.Item event) {
         event.register((stack, layer) -> layer == 0 && stack.getItem() instanceof DyeableLeatherItem dyeable

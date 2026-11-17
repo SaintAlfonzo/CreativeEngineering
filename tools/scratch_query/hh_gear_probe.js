@@ -84,7 +84,7 @@
             let e = tagged(level, a[1])
             let before = e.getHealth()
             let src = a[2] == 'cactus' ? $ZDmg.CACTUS : $ZDmg.SWEET_BERRY_BUSH, hit
-            // r1112: shod state and the bare Forge LivingAttackEvent result (false = a listener cancelled it), so a
+            // r1112: shod state and the bare Forge LivingAttackEvent result (false = a listener canceled it), so a
             // damage that lands can be told apart from a probe path that skips the event
             let shodNow = e.saveWithoutId(new $ZCTag()).getCompound('ForgeData').contains('hearthandharvest:horseshoe'), ev
             try { ev = $ZHooks == null ? 'n/a' : $ZHooks.onLivingAttack(e, src, 1) } catch (err) { ev = 'err ' + err }

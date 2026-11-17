@@ -23,7 +23,7 @@ ServerEvents.tags('block', e => {
 		item.t_flowers, item.t_saplings, item.grass, item.fern, item.tall_grass, item.large_fern,
 		item.dead_bush, item.brown_mushroom, item.red_mushroom, b.sweet_berry_bush,
 	])
-	// Never sampled as ground: tree and crop parts that neighbouring chunks' features spill onto the surface.
+	// Never sampled as ground: tree and crop parts that neighboring chunks' features spill onto the surface.
 	t.add(e, 'creativeworldgen:ground_match/not_ground', [
 		item.t_leaves, item.any_log, item.brown_mushroom_block, item.red_mushroom_block,
 		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,

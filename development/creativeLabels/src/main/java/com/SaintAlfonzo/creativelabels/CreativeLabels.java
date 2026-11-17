@@ -31,7 +31,7 @@ import java.nio.file.Path;
  * <p>Registration order: configs, {@link CLRegistry} (block, block entity, items, recipe serializers), the network
  * channel on common setup, client-only setup through {@link DistExecutor} ({@link ClientSetup}: never loaded on a
  * dedicated server, C4). Forge-bus handlers: {@link FacePaperInteractions} (sneak clicks), {@link AnvilLabels}
- * (anvil labelling), {@link ItemLabels} (labelled-item tooltip lines).
+ * (anvil labeling), {@link ItemLabels} (labeled-item tooltip lines).
  */
 @Mod(CreativeLabels.ID)
 public class CreativeLabels {

@@ -357,7 +357,7 @@
             tagList(I, 'forge:seeds/' + n).join(', ')))
         note('peanut seeds', 'the peanut plants itself (no seed item); #forge:seeds/peanut = ' + (tagList(I, 'forge:seeds/peanut').join(', ') || 'empty'))
         let rp = tagList(I, 'creativedelight:roasted_bell_pepper')
-        // all nine colours since the Rustic Delight 1.7.0 port (creativedelight rusticdelight/tags.js)
+        // all nine colors since the Rustic Delight 1.7.0 port (creativedelight rusticdelight/tags.js)
         check('#creativedelight:roasted_bell_pepper', sameSet(rp, ['green', 'red', 'yellow', 'orange', 'white', 'pink', 'blue', 'purple', 'black']
             .map(c => 'rusticdelight:roasted_bell_pepper_' + c)), rp.join(', '))
         check('burrito takes every roasted pepper', rp.length > 0 && rp.every(x => takes(server, C + 'shapeless/stuffed_burrito_manual_only', x)), '')

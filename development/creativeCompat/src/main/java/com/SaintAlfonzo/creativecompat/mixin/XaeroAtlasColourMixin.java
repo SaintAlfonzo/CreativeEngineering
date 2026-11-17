@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * Xaero's World Map 1.40.11, accurate block colours ({@code block_colors = 0}): {@code MapWriter.loadBlockColourFromTexture}
- * caches one average colour per texture name ({@code textureColours}), but fills a miss by opening the PNG through the
+ * Xaero's World Map 1.40.11, accurate block colors ({@code block_colors = 0}): {@code MapWriter.loadBlockColourFromTexture}
+ * caches one average color per texture name ({@code textureColours}), but fills a miss by opening the PNG through the
  * resource manager and decoding it with ImageIO on the render thread. It never closes the resource stream (the
  * "Leaked resource ... Finalizer" warnings), and the cache is cleared on every resource reload, so every texture is
  * read from disk again after each reload.
@@ -24,9 +24,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * The same texture is already decoded in memory, stitched into the block atlas. On a cache miss this samples the atlas
  * sprite exactly as Xaero samples the PNG (first frame, square side min(w, h), step max(1, min(4, side / 8)), pixels
  * with alpha 0 or value 0 skipped, plain average of A, R, G, B) and stores it in Xaero's cache, so Xaero takes its
- * cached-colour branch and opens no file. A sprite that is not on the block atlas, or an all-black result (Xaero
- * throws on it and uses the material colour), returns null, and Xaero's own PNG path runs unchanged.
- * Pseudo: client-only mod, may be removed. feature_writeup/perf.md (Xaero colours).
+ * cached-color branch and opens no file. A sprite that is not on the block atlas, or an all-black result (Xaero
+ * throws on it and uses the material color), returns null, and Xaero's own PNG path runs unchanged.
+ * Pseudo: client-only mod, may be removed. feature_writeup/perf.md (Xaero colors).
  */
 @Pseudo
 @Mixin(targets = "xaero.map.MapWriter", remap = false)

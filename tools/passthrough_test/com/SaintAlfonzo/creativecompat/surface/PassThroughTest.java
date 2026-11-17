@@ -177,7 +177,7 @@ public final class PassThroughTest {
                             && c.surrounded() == (n == 6));
         }
         PassRule.Cell crop = PassRule.cell(PassTier.CROP, PassTier.CROP.defaults(), 4);
-        check("crop ignores neighbours", near(crop.walk(), 0.75) && crop.neighbours() == 0 && !crop.dense());
+        check("crop ignores neighbors", near(crop.walk(), 0.75) && crop.neighbours() == 0 && !crop.dense());
         check("needsCount", PassRule.needsCount(dc) && !PassRule.needsCount(PassTier.CROP.defaults()));
 
         // the lowest walk and the lowest fall win, each with its own density
@@ -221,7 +221,7 @@ public final class PassThroughTest {
         World cube = new World();
         BlockState web = Blocks.COBWEB.defaultBlockState();
         for (int x = 0; x < 3; x++) for (int y = 0; y < 3; y++) for (int z = 0; z < 3; z++) cube.put(x, y, z, web);
-        check("faces: centre of 3x3x3 = 6", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 6);
+        check("faces: center of 3x3x3 = 6", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 6);
         check("faces: corner = 3", PassThrough.neighbours(cube, new BlockPos(0, 0, 0), PassTier.COBWEB, FACES) == 3);
         cube.blocks.remove(new BlockPos(0, 0, 0));
         check("faces: a missing corner does not count (still 6)", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 6);
@@ -230,7 +230,7 @@ public final class PassThroughTest {
         check("none = 0", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, PassTier.Neighbours.NONE) == 0);
         World lone = new World().put(0, 0, 0, web);
         PassRule.Cell c = PassThrough.cellAt(lone, BlockPos.ZERO, web, PassValues.defaults());
-        check("cellAt: lone web 0.50 / 0.85, 0 neighbours", c != null && near(c.walk(), 0.50) && near(c.fall(), 0.85) && c.neighbours() == 0);
+        check("cellAt: lone web 0.50 / 0.85, 0 neighbors", c != null && near(c.walk(), 0.50) && near(c.fall(), 0.85) && c.neighbours() == 0);
         check("cellAt: untiered block = null", PassThrough.cellAt(lone, BlockPos.ZERO, Blocks.STONE.defaultBlockState(), PassValues.defaults()) == null);
     }
 
@@ -480,7 +480,7 @@ public final class PassThroughTest {
         PassResult r = new PassResult();
         PassTier.Values web = PassTier.COBWEB.defaults();
         r.add(5L, PassRule.cell(PassTier.COBWEB, web, 5), true, true);
-        check("not surrounded at 5 neighbours", !r.surrounded && r.surroundedTier == null);
+        check("not surrounded at 5 neighbors", !r.surrounded && r.surroundedTier == null);
         r.add(9L, PassRule.cell(PassTier.COBWEB, web, 26), true, true);
         check("surrounded cell carries its tier", r.surrounded && r.surroundedCell == 9L && r.surroundedTier == PassTier.COBWEB);
         r.reset();

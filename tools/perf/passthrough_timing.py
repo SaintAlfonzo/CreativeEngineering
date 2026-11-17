@@ -7,7 +7,7 @@ Reads the '[passthrough-timing]' lines Creative Compat writes every 200 ticks wh
 [debug.passthrough] timing = true (config/creativecompat-common.toml), from latest.log or *.log.gz (default
 logs/latest.log), and reports per side (server, client): windows, ticks, hook calls, the hook's share of tick time
 (total and the worst window), mean and longest single call, entity-ticks inside a pass-through block (mean per tick and
-peak in one tick) and neighbour counts per tick. Pair it with a JFR recording of the same session (perf.md).
+peak in one tick) and neighbor counts per tick. Pair it with a JFR recording of the same session (perf.md).
 """
 import gzip
 import json
@@ -85,7 +85,7 @@ def main():
               f"{v['hook_ms_per_tick']} ms per tick of {v['tick_ms_mean']} ms")
         print(f"  per call: mean {v['mean_call_ns']} ns, longest {v['max_call_us']} us")
         print(f"  inside a pass-through block: {v['inside_per_tick']} entities per tick (peak {v['inside_peak']}); "
-              f"neighbour counts {v['counts_per_tick']} per tick")
+              f"neighbor counts {v['counts_per_tick']} per tick")
     if out_json:
         with open(out_json, "w") as f:
             json.dump({"files": paths, "sides": s}, f, indent=2)

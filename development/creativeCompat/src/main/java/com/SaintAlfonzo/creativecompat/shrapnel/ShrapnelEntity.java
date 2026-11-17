@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * One flying piece of TNT shrapnel - a plain, no-gravity {@link ThrowableItemProjectile} that
- * deals a flat hit of damage to whatever it touches and despawns once it has travelled far
+ * deals a flat hit of damage to whatever it touches and despawns once it has traveled far
  * enough from where it was fired. Spawned in bursts by {@link ShrapnelSpawner}; never placed
  * directly.
  *

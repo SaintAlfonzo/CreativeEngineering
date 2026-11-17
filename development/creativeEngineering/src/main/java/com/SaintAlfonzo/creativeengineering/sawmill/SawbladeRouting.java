@@ -41,9 +41,9 @@ public final class SawbladeRouting {
      * Pick the sawmill recipe for {@code input} given the installed blade's {@code profile}.
      *
      * <ol>
-     *   <li>if {@code profile} is set and a matching recipe has {@code blade == profile} → that one;</li>
+     *   <li>if {@code profile} is set and a matching recipe has {@code blade == profile} -> that one;</li>
      *   <li>otherwise the first input-matching recipe with no blade profile (the default);</li>
-     *   <li>otherwise {@code null} → IE passes the item through unchanged (no crash, no loss).</li>
+     *   <li>otherwise {@code null} -> IE passes the item through unchanged (no crash, no loss).</li>
      * </ol>
      */
     public static SawmillRecipe route(Level level, ItemStack input, String profile) {

@@ -27,7 +27,7 @@ import net.minecraftforge.registries.RegistryObject;
  * oceans, rivers) would otherwise be long alternative lists that miss modded biomes.
  * <pre>{"condition": "creativedelight:biome_tag", "tag": "creativedelight:fishing_net/river"}</pre>
  * Used by the fishing net tables (kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/). Moved from Creative
- * Worldgen on 2026-11-06: Creative Delight does not need Worldgen, and the tables failed to parse without it.
+ * Worldgen: Creative Delight does not need Worldgen, and the tables failed to parse without it.
  */
 public class BiomeTagCondition implements LootItemCondition {
 

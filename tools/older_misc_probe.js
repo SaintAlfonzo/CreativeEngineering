@@ -526,7 +526,7 @@
         let left = pl.getInventory().getItem(10)
         check(left.isEmpty() || idOf(left) != 'minecraft:potion', 'lava bucket in the off hand: the water bottle in slot 10 is gone (' + idOf(left) + ')')
         let ev = post(water.copy())
-        check(!pl.isUnderWater() || ev.isCanceled(), 'water bottle under water: drinking cancelled (' + ev.isCanceled() + ')')
+        check(!pl.isUnderWater() || ev.isCanceled(), 'water bottle under water: drinking canceled (' + ev.isCanceled() + ')')
         cmd('fill ' + (x - 1) + ' ' + Y + ' ' + (Z - 1) + ' ' + (x + 1) + ' ' + (Y + 3) + ' ' + (Z + 1) + ' minecraft:air')
     }
 

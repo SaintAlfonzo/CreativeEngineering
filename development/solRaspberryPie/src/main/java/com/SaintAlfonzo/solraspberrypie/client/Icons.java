@@ -38,7 +38,7 @@ public final class Icons {
         GuiComponent.blit(pose, x, y, 52, 0, 9, 9, 256, 256);
     }
 
-    /** Vanilla's full armour point (gui/icons.png), 9x9. */
+    /** Vanilla's full armor point (gui/icons.png), 9x9. */
     public static void armor(PoseStack pose, int x, int y) {
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
@@ -65,7 +65,7 @@ public final class Icons {
         GuiComponent.fill(pose, x + size, y, x + size + 1, y + size, color);
     }
 
-    /** Greys out whatever is drawn under a {@code size} square (above item models too). */
+    /** Grays out whatever is drawn under a {@code size} square (above item models too). */
     public static void dim(PoseStack pose, int x, int y, int size) {
         pose.pushPose();
         pose.translate(0, 0, 300);

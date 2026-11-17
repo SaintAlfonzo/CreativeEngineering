@@ -32,9 +32,9 @@ import net.minecraftforge.registries.ForgeRegistries;
  * requires a real Forge listener. Two rules:
  * <ul>
  *   <li>Periodic damage from an effect in {@code [magic_resistance].negatedEffectTicks} (Poison,
- *       Wither) is cancelled in {@code LivingAttackEvent}, before the hurt sound and flash, when the
+ *       Wither) is canceled in {@code LivingAttackEvent}, before the hurt sound and flash, when the
  *       ticking effect's level is at most the Magic Resistance level. Shields never block these
- *       ticks ({@code [shields].unblockableEffectTicks}), so this is the cover for them. Recognised
+ *       ticks ({@code [shields].unblockableEffectTicks}), so this is the cover for them. Recognized
  *       through {@link EffectTickContext}, since poison ticks share Instant Damage's source.</li>
  *   <li>Everything else in the {@code creativecommon:magic} damage tag ({@link DamageTags}, the
  *       same tag the shields' MAGIC column reads: vanilla-flagged magic plus thorns, sonic boom,

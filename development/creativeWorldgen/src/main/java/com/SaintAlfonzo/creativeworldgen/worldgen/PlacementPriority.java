@@ -52,7 +52,7 @@ import java.util.WeakHashMap;
  * ruins; at sea monuments > ocean ruins > boats > flotsam; fortified towns above villages), staged by
  * structure_overrides.js.
  *
- * DETERMINISTIC: chunks generate in any order, so a start never looks at what its neighbours already built. When a
+ * DETERMINISTIC: chunks generate in any order, so a start never looks at what its neighbors already built. When a
  * ranked start is generated (tryGenerateStructure, after its own biome / earth-fill / surface checks, if it keeps its
  * frequency roll), every higher-ranked structure set's grid slots whose start could reach it (8 chunks, the vanilla
  * reference radius) are PREDICTED: the set's weighted pick is replayed on a scratch chunk with every pack mixin applied
@@ -280,7 +280,7 @@ public final class PlacementPriority {
 
 	public static boolean companionMode() { return COMPANION.get() != null; }
 
-	/** True while this thread replays generation on a scratch chunk to predict a neighbour (not real generation). */
+	/** True while this thread replays generation on a scratch chunk to predict a neighbor (not real generation). */
 	public static boolean predicting() { return DEPTH.get()[0] > 0; }
 
 	private static final ThreadLocal<int[]> DEPTH = ThreadLocal.withInitial(() -> new int[1]);

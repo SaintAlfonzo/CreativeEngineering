@@ -49,7 +49,7 @@ i.component_diamond = 'creativeengineering:component_diamond';
 // Air Brake — hold-to-use elytra brake. Item: startup_scripts/items/air_brake.js |
 // deceleration physics: patcherMod gear/AirBrakeHandler.java | knobs: CEConfig.AirBrake
 i.air_brake = 'creativeequipment:air_brake';
-// Stepstools — one per Another Furniture tall stool colour, worn in the Curios feet slot to stand a block higher.
+// Stepstools — one per Another Furniture tall stool color, worn in the Curios feet slot to stand a block higher.
 // Items: startup_scripts/items/stepstools.js | logic: patcherMod stepstool/ | knobs: CEConfig.Stepstool | feature_writeup/stepstool.md
 i.white_stepstool = 'creativeequipment:white_stepstool';
 i.orange_stepstool = 'creativeequipment:orange_stepstool';
@@ -93,7 +93,7 @@ i.wooden_sap_bucket = 'creativedelight:wooden_sap_bucket';
 i.wooden_milk_bucket = 'creativedelight:wooden_milk_bucket';
 i.wooden_honey_bucket = 'creativedelight:wooden_honey_bucket';
 // Watering cans - Hearth and Harvest's (copper keeps the upstream id; iron to dragon are pack tiers), Creative Delight
-// member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertiliser tag: kubejs/data/creativedelight/kubejs/hearthandharvest/
+// member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertilizer tag: kubejs/data/creativedelight/kubejs/hearthandharvest/
 i.watering_can = 'hearthandharvest:watering_can';
 i.iron_watering_can = 'hearthandharvest:iron_watering_can';
 i.golden_watering_can = 'hearthandharvest:golden_watering_can';
@@ -101,7 +101,7 @@ i.diamond_watering_can = 'hearthandharvest:diamond_watering_can';
 i.netherite_watering_can = 'hearthandharvest:netherite_watering_can';
 i.dragon_watering_can = 'hearthandharvest:dragon_watering_can';
 i.t_bonemeal_substitutes = '#hearthandharvest:bonemeal_substitutes';
-i.t_bonemeal_like = '#creativedelight:bonemeal_like'; // hops vine fertilisers besides bone meal and the substitutes (plan_small_fixes_1116.md R5)
+i.t_bonemeal_like = '#creativedelight:bonemeal_like'; // hops vine fertilizers besides bone meal and the substitutes (plan_small_fixes_1116.md R5)
 // Hearth and Harvest block machines (hearth_and_harvest.md 3.1, 3.2)
 i.fluid_jug = 'hearthandharvest:jug';
 i.water_trough = 'hearthandharvest:trough';
@@ -2246,7 +2246,7 @@ i.t_vegetables_sweet_potato = '#forge:vegetables/sweet_potato';  // Veggies Deli
 // pack tags for meals (cookingtags.js, TODO dishes/meals #1, #2)
 i.t_soup_veggie_cooked = '#creativedelight:soup_veggie_cooked';
 i.t_patty = '#creativedelight:patty';   // any cooked patty: Farmer's beef, Veggies' vegetarian, Miner's vegan (CD creativeengineering/patties.js)
-i.t_roasted_bell_pepper = '#creativedelight:roasted_bell_pepper';   // Rustic's 9 colours with Creative Delight (3 before) (Veggies Delight's smoked pepper inputs)
+i.t_roasted_bell_pepper = '#creativedelight:roasted_bell_pepper';   // Rustic's 9 colors with Creative Delight (3 before) (Veggies Delight's smoked pepper inputs)
 // Rustic Delight 1.7.0 ids (Creative Delight member, feature_writeup/rustic_delight.md 5): only registered once the
 // Creative Delight jar replaces the 1.3.0 jar, so only Creative Delight's scripts use them.
 i.syrup                        = 'rusticdelight:syrup';
@@ -2309,8 +2309,8 @@ i.rice_roll_royale             = 'rusticdelight:rice_roll_royale';
 i.glowing_calamari_crate       = 'rusticdelight:glowing_calamari_crate';   // the port's own block, not upstream's
 i.t_coffee_ingredients         = '#rusticdelight:coffee_ingredients';      // coffee beans, roasted coffee beans
 i.t_coffee_food_ingredients    = '#rusticdelight:coffee_food_ingredients'; // Coffee-Braised Beef's coffee slot
-i.t_vegetables_bell_pepper     = '#forge:vegetables/bell_pepper';          // raw bell peppers and slices, 9 colours
-i.t_roasted_bell_pepper_slice  = '#creativedelight:roasted_bell_pepper_slice';   // 9 colours (CD rusticdelight/tags.js)
+i.t_vegetables_bell_pepper     = '#forge:vegetables/bell_pepper';          // raw bell peppers and slices, 9 colors
+i.t_roasted_bell_pepper_slice  = '#creativedelight:roasted_bell_pepper_slice';   // 9 colors (CD rusticdelight/tags.js)
 i.bell_pepper_slice_green      = 'rusticdelight:bell_pepper_slice_green';
 i.bell_pepper_slice_red        = 'rusticdelight:bell_pepper_slice_red';
 i.bell_pepper_slice_yellow     = 'rusticdelight:bell_pepper_slice_yellow';
@@ -2329,7 +2329,7 @@ i.roasted_bell_pepper_slice_pink   = 'rusticdelight:roasted_bell_pepper_slice_pi
 i.roasted_bell_pepper_slice_blue   = 'rusticdelight:roasted_bell_pepper_slice_blue';
 i.roasted_bell_pepper_slice_purple = 'rusticdelight:roasted_bell_pepper_slice_purple';
 i.roasted_bell_pepper_slice_black  = 'rusticdelight:roasted_bell_pepper_slice_black';
-// Rustic Delight pancakes, (pancake family, food_families.md 4.7, TODO dishes/meals #12): the six flavoured single
+// Rustic Delight pancakes, (pancake family, food_families.md 4.7, TODO dishes/meals #12): the six flavored single
 // pancakes (food type sweet/pancake) and the seven placed plates (block items, PancakeStackBlock). The plain plate
 // serves Supplementaries' pancake (i.pancakes); Rustic's plain single is not registered.
 i.honey_pancake                = 'rusticdelight:honey_pancake';
@@ -4627,7 +4627,7 @@ i.postbase = 'immersiveposts:postbase';
 i.asphalt = 'immersivepetroleum:asphalt';
 i.asphalt_slab = 'immersivepetroleum:asphalt_slab';
 i.asphalt_stair = 'immersivepetroleum:asphalt_stair';
-i.t_painted_asphalt = '#create_dd:asphalt_blocks';   // Create D&D's 16 coloured asphalt blocks, shown as Painted Asphalt
+i.t_painted_asphalt = '#create_dd:asphalt_blocks';   // Create D&D's 16 colored asphalt blocks, shown as Painted Asphalt
 i.auto_lubricator = 'immersivepetroleum:auto_lubricator';
 i.benzene_bucket = 'immersivepetroleum:benzene_bucket';
 i.bitumen = 'immersivepetroleum:bitumen';

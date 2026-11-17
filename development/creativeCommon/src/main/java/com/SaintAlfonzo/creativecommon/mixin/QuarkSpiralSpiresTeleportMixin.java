@@ -28,7 +28,7 @@ public abstract class QuarkSpiralSpiresTeleportMixin {
             ci.cancel();
             return;
         }
-        // Quark reads the target, the block below and their neighbours
+        // Quark reads the target, the block below and their neighbors
         BlockPos target = new BlockPos(event.getTargetX(), event.getTargetY(), event.getTargetZ());
         if (!entity.level.hasChunksAt(target.offset(-1, 0, -1), target.offset(1, 0, 1))) ci.cancel();
     }

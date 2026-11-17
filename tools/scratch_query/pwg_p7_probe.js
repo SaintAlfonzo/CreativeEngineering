@@ -4,7 +4,7 @@
 // ticks (FakePlayer.tick is empty): the worn-battery tick and the drill's speed decay are called or read directly here,
 // and their live hooks are client rows. No chunk loads here: `forceload add` the area first (Rhino deadlock).
 //   check                     registries and glue: P7 blocks, items, entity, block entity; the lightning rod's Create
-//                             movement behaviour; the zap damage source; Capacity on the battery; the fake player is a
+//                             movement behavior; the zap damage source; Capacity on the battery; the fake player is a
 //                             PlayerDrillExtensions (mixin applied); equipment config values
 //   fp X Y Z [YAW PITCH]      put the fake player at X Y Z (survival, on ground, empty hands and chest)
 //   hold ITEM                 main hand = 1 ITEM (fresh stack)

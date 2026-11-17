@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 
 /**
- * The shared half of {@code blockLabelledCrafting} (sticky_notes.md 3.8, Q6): whether a grid holds a labelled stack,
+ * The shared half of {@code blockLabelledCrafting} (sticky_notes.md 3.8, Q6): whether a grid holds a labeled stack,
  * and the "no result" answer both result-update paths give then (vanilla's {@code CraftingMenu.slotChangedCraftingGrid}
  * in {@code CraftingMenuResultMixin}, FastWorkbench's own copy in {@code FastBenchResultMixin}). Outside the mixin
  * package: Mixin refuses to load ordinary classes from there (a crash on the first craft, scratch server).

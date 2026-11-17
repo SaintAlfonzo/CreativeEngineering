@@ -58,7 +58,7 @@ public final class PassConfigMigration {
         List<String> notes = new ArrayList<>();
         boolean changed = false;
 
-        // C1: neighbour names and the denseFrom default, per tier table without surroundedAt
+        // C1: neighbor names and the denseFrom default, per tier table without surroundedAt
         for (int h = 0; h < lines.size(); h++) {
             String header = header(lines.get(h));
             if (header == null || !header.startsWith(PREFIX) || header.equals(LEAF) || header.equals(LAYERS)) continue;

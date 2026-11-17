@@ -23,7 +23,7 @@ global.CEN = {
 	},
 }
 
-// No config of its own since 2026-11-06: [shrapnel], [surface] and [vein_undo] moved to Creative Compat's CompatConfig
+// No config of its own: [shrapnel], [surface] and [vein_undo] moved to Creative Compat's CompatConfig
 // (creativecompat-common.toml); every table NCH.cfg reads is Common's CommonConfig or another carved jar's class.
 
 console.info('[creativeengineering] core finished')

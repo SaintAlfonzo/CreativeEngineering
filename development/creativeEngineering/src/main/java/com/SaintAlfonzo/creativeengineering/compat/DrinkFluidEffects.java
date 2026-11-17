@@ -31,7 +31,7 @@ import java.util.Set;
  * sync. A fluid two items empty into with different effects is left out rather than guessed.
  *
  * <p>Lines match vanilla's potion tooltip ({@code PotionUtils.addPotionTooltip}): "Absorption II (0:30)",
- * coloured by the effect's category. Used by {@code JeiFluidHelperTooltipMixin}, so every JEI fluid tooltip
+ * colored by the effect's category. Used by {@code JeiFluidHelperTooltipMixin}, so every JEI fluid tooltip
  * (ingredient list, Create, IE and the other categories) shows them under the fluid's name. Create potion
  * fluids are skipped: Create's own categories already list their effects.
  *

@@ -50,7 +50,7 @@ import java.util.Map;
  * direction ({@link PipeBlock#PROPERTY_BY_DIRECTION}; face d = paper on the host at pos.relative(d)) + WATERLOGGED.
  * No item. The content is in {@link FacePaperBlockEntity}.
  *
- * <p>Scaffold stage: properties, state, shapes, drops, rotation and the clone stack are in; the behaviour methods
+ * <p>Scaffold stage: properties, state, shapes, drops, rotation and the clone stack are in; the behavior methods
  * ({@link #use}, breaking one piece, host-gone checks, the gold spark) are stubs for phase 1.
  */
 public class FacePaperBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
@@ -226,7 +226,7 @@ public class FacePaperBlock extends Block implements EntityBlock, SimpleWaterlog
         return n == null ? ItemStack.EMPTY : n.toItem();
     }
 
-    // ----- behaviour -----
+    // ----- behavior -----
 
     /** Per-piece actions (table 3.4 for notes, 3.10 for labels), see {@link FacePaperInteractions#use}. */
     @Override

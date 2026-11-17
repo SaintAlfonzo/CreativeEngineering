@@ -1,5 +1,5 @@
 // requires: creativeequipment
-// Creative Equipment: gear tooltips (stepstools, felsic, elytra, air brake, dragon gear). The helpers and the colour
+// Creative Equipment: gear tooltips (stepstools, felsic, elytra, air brake, dragon gear). The helpers and the color
 // palette stay in the pack's tooltips.js and are read here through global.tooltips at event time (each script pack has
 // its own scope).
 ItemEvents.tooltip(e => {

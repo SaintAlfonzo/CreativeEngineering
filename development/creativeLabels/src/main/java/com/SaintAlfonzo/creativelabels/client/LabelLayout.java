@@ -18,14 +18,14 @@ import javax.annotation.Nullable;
  * still their right; the view frame therefore flips y there ({@link #viewY}). Notes and the label paper mirror x
  * instead (a square and a curl do not care); the icon and the name follow the viewer.
  *
- * <p>Layout (Labels' numbers): paper 3..13; without a name the icon is 8 px centred; with a name the icon is 6 px
+ * <p>Layout (Labels' numbers): paper 3..13; without a name the icon is 8 px centered; with a name the icon is 6 px
  * moved up and the name sits under it, fitted into {@link #TEXT_WIDTH} x {@link #TEXT_HEIGHT}.
  */
 public final class LabelLayout {
 
     /** Icon edge without / with the name shown (px). */
     public static final float ICON_FULL = 8f, ICON_SMALL = 6f;
-    /** Centre of the small icon (view y, px) when the name is shown. */
+    /** Center of the small icon (view y, px) when the name is shown. */
     public static final float ICON_SMALL_CENTRE_Y = 9.2f;
     /** The icon sits this far (px) in front of the label paper; the name a little more (no z-fighting). */
     public static final float ICON_LIFT = 0.03f, TEXT_LIFT = 0.06f;
@@ -113,7 +113,7 @@ public final class LabelLayout {
                 at(face, rotation, place, r[2], r[3], d), at(face, rotation, place, r[0], r[3], d)};
     }
 
-    /** Where the name's box starts: its top centre, in cell-local coordinates. */
+    /** Where the name's box starts: its top center, in cell-local coordinates. */
     public static Vec3 textAnchor(Direction face, @Nullable Direction rotation, float inset) {
         return textAnchor(face, rotation, Spots.Place.at(inset));
     }
@@ -172,7 +172,7 @@ public final class LabelLayout {
             qy = (m12 + m21) / s;
             qz = 0.25 * s;
         }
-        // Normalised here in double precision: Mojang's Quaternion.normalize() uses the fast inverse square root
+        // Normalized here in double precision: Mojang's Quaternion.normalize() uses the fast inverse square root
         // and leaves the length about 0.3 % short, which would scale everything drawn through the rotation.
         double len = Math.sqrt(qx * qx + qy * qy + qz * qz + qw * qw);
         return new Quaternion((float) (qx / len), (float) (qy / len), (float) (qz / len), (float) (qw / len));

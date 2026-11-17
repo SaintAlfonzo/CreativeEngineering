@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * A remodelled baby horse draws no horse armour (26.1 has no baby armour model; 1.19.2 would draw the adult armour at
- * full size, since the young flag stays false). Babies cannot be given armour in survival; this covers summoned ones.
+ * A remodelled baby horse draws no horse armor (26.1 has no baby armor model; 1.19.2 would draw the adult armor at
+ * full size, since the young flag stays false). Babies cannot be given armor in survival; this covers summoned ones.
  * m_6494_ render.
  */
 @Mixin(HorseArmorLayer.class)

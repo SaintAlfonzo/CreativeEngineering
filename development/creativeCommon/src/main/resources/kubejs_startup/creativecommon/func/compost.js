@@ -341,7 +341,7 @@ global.compost = {
 		return sets
 	},
 
-	// COMPOSTABLES -> { id: chance }. Keys are ItemLike; a mod that put a Block in is normalised to its item.
+	// COMPOSTABLES -> { id: chance }. Keys are ItemLike; a mod that put a Block in is normalized to its item.
 	_snapshot(table) {
 		var out = {}
 		var it = table.object2FloatEntrySet().iterator()

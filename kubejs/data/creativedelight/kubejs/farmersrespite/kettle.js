@@ -93,7 +93,7 @@ ServerEvents.recipes(e => {
 			kettle(null, [i.t_cherry_blossom], i.cherry_blossom_coffee, 'cherry_blossom_coffee', f.milk_coffee)
 		}
 
-		//######################### 2. The same file adds the flavoured coffees straight from the plain coffee tank
+		//######################### 2. The same file adds the flavored coffees straight from the plain coffee tank
 		// (milk + additive in one brew).
 
 		//######################### 3. Spout and Item Drain pairs #########################

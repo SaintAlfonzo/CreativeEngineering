@@ -14,10 +14,10 @@
 //  Membership updates on /reload (no restart). Populate them in
 //  kubejs/data/creativecompat/kubejs/tags/item_physics_tags.js (or any datapack):
 //
-//    creativecompat:physics/floats     → floats in water
-//    creativecompat:physics/sinks      → force-sink (wins over floats)
-//    creativecompat:physics/fireproof  → survives open fire, still burns in lava
-//    creativecompat:physics/lavaproof  → immune to BOTH fire and lava (wins over fireproof)
+//    creativecompat:physics/floats     -> floats in water
+//    creativecompat:physics/sinks      -> force-sink (wins over floats)
+//    creativecompat:physics/fireproof  -> survives open fire, still burns in lava
+//    creativecompat:physics/lavaproof  -> immune to BOTH fire and lava (wins over fireproof)
 //
 //  Creative Compat ships starter contents for these tags (netherite, boats, …).
 //
@@ -89,7 +89,7 @@ console.log('Item Physics (fire/lava split) starting')
 		//
 		//   burnReplace(idOrTag, resultId [, chance=1] [, perItem=true])
 		//     Drop resultId instead of vanishing. perItem=true rolls `chance` once for each
-		//     item in the stack (a stack of 8 → up to 8 results); false rolls once total.
+		//     item in the stack (a stack of 8 -> up to 8 results); false rolls once total.
 		//   burnExplode(idOrTag [, power=3] [, chance=1] [, shrapnel=false])
 		//     Non-block-breaking explosion at the item (still hurts entities). power 4 ≈ TNT.
 		//     shrapnel=true also fires a CEConfig.Shrapnel burst (shared with primed-TNT-entity

@@ -1,5 +1,5 @@
 // requires: creativedevtools
-// /dumpall  ->  runs every dump command in turn, each with its default (no-argument) behaviour,
+// /dumpall  ->  runs every dump command in turn, each with its default (no-argument) behavior,
 // through the real command dispatcher - so each one keeps its own defaults and chat feedback, and a
 // dump that throws is reported and skipped rather than stopping the rest.
 //

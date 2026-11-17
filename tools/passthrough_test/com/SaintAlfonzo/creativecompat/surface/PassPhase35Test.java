@@ -73,7 +73,7 @@ final class PassPhase35Test {
                         && Integer.valueOf(4).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers"))
                         && r.carried() == null && Integer.valueOf(4).equals(r.oldValue()));
         check("migrate: the next section keeps its comment and keys",
-                r.text().contains("#Moss block and moss carpet colour") && Boolean.TRUE.equals(at(r.text(), "moss", "biomeTint"))
+                r.text().contains("#Moss block and moss carpet colour") /* spelling: keep (old config text) */ && Boolean.TRUE.equals(at(r.text(), "moss", "biomeTint"))
                         && !r.text().startsWith("\n\n"));
         r = LeafPileMigration.migrate(OLD.formatted("6") + NEW_TABLE.formatted("4"));
         check("migrate: old 6 -> minLayers 6, indentation kept",
@@ -149,10 +149,10 @@ final class PassPhase35Test {
                 && PassThroughFormat.number(0.4, false).equals("0.40×") && PassThroughFormat.number(0.88, true).equals("-12%")
                 && PassThroughFormat.number(1.5, true).equals("+50%") && PassThroughFormat.number(1.0, true).equals("0%"));
         List<String> t = texts(PassRule.cell(PassTier.DENSE_CROP, dc, 3), dc, 0.8, true);
-        check("dense crop, 3 of 4 neighbours, on tilled 0.8: " + t, t.equals(List.of(
+        check("dense crop, 3 of 4 neighbors, on tilled 0.8: " + t, t.equals(List.of(
                 "Walk Through: 0.40× (Dense neighbors) on Farmland (Tilled)", "Neighbors: 3 of 4")));
         t = texts(PassRule.cell(PassTier.DENSE_CROP, dc, 2), dc, 1.0, true);
-        check("dense crop, 2 of 4 neighbours, on dirt: " + t, t.equals(List.of("Walk Through: 0.75×", "Neighbors: 2 of 4")));
+        check("dense crop, 2 of 4 neighbors, on dirt: " + t, t.equals(List.of("Walk Through: 0.75×", "Neighbors: 2 of 4")));
         t = texts(PassRule.cell(PassTier.CROP, crop, 0), crop, 1.0, true);
         check("crop on dirt: one line, no soil: " + t, t.equals(List.of("Walk Through: 0.75×")));
         t = texts(PassRule.cell(PassTier.CROP, crop, 0), crop, 1.0, false);
@@ -185,7 +185,7 @@ final class PassPhase35Test {
         BlockState webState = Blocks.COBWEB.defaultBlockState();
         for (int x = 0; x < 3; x++) for (int y = 0; y < 3; y++) for (int z = 0; z < 3; z++) cube.put(x, y, z, webState);
         PassRule.Cell centre = PassThrough.cellAt(cube, new BlockPos(1, 1, 1), webState, PassValues.defaults());
-        check("cellAt cube centre -> 'Fall Through: stopped'", centre != null && texts(centre, web, 1.0, true).contains("Fall Through: stopped"));
+        check("cellAt cube center -> 'Fall Through: stopped'", centre != null && texts(centre, web, 1.0, true).contains("Fall Through: stopped"));
         PassRule.Cell corner = PassThrough.cellAt(cube, BlockPos.ZERO, webState, PassValues.defaults());
         check("cellAt cube corner (3 of 6 faces) -> dense 0.35 / 0.20", corner != null && near(corner.walk(), 0.35)
                 && texts(corner, web, 1.0, true).contains("Neighbors: 3 of 6"));

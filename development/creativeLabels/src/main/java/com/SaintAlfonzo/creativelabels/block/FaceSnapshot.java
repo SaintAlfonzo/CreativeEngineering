@@ -25,7 +25,7 @@ public record FaceSnapshot(FaceContent.Kind kind, @Nullable Direction rotation, 
 
     public static final FaceSnapshot EMPTY = new FaceSnapshot(FaceContent.Kind.NONE, null, Spots.Place.ZERO, new NoteLook[Spots.COUNT], null);
 
-    /** What a note looks like: its colour ({@link NoteData#NO_COLOR} = plain yellow), special look, pen strokes. */
+    /** What a note looks like: its color ({@link NoteData#NO_COLOR} = plain yellow), special look, pen strokes. */
     public record NoteLook(int color, @Nullable String special, boolean written) {}
 
     /** What the label paper looks like in the chunk mesh (the icon is the block entity renderer's job). */

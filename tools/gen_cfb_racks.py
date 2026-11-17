@@ -8,7 +8,7 @@ Writes into the compartment's built-in pack, development/creativeDelight/src/mai
 creativedelight namespace (plan D6); CfB's namespace is only named as model parents and the fridge texture:
   - no textures: the rack and fruit basket textures (creativedelight:block/rack/<wood>_<rack>, block/fruit_basket/<wood>)
     are built on the client from the installed mods' planks and CfB's own rack art (compat/art/CompartmentArt.java,
-    recipes in compat/art/ArtRecipes.java; licence audit 2026-11-04). textureswapper/rack/ keeps the owner's reference
+    recipes in compat/art/ArtRecipes.java; license audit 2026-11-04). textureswapper/rack/ keeps the owner's reference
     art those recipes reproduce;
   - per rack: blockstate, block model (parent = CfB's spice_rack / tool_rack model, only the texture swapped; CfB's
     models are named, never copied), item model, loot table (drops itself, keeps a custom name like CfB's);

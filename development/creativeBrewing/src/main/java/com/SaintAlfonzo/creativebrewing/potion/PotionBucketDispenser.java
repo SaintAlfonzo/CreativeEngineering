@@ -39,7 +39,7 @@ import com.mojang.logging.LogUtils;
  * This class registers a real dispense behavior for each bucket id, but does NOT duplicate
  * potionArea's dome logic in Java: it forwards to whatever {@link SpawnHandler} KubeJS installs
  * via {@link #setHandler(SpawnHandler)}, so global.potionArea.spawn stays the single source of
- * truth for ring counts / radii / colours / effects. potion_area.js calls setHandler(...) once
+ * truth for ring counts / radii / colors / effects. potion_area.js calls setHandler(...) once
  * at startup, passing a JS lambda that just calls back into global.potionArea.spawn.
  *
  * Owner (potion_buckets.md F6, {@code potions/potion-buckets #3}): a dispenser placed by a player keeps that player's
@@ -66,7 +66,7 @@ public final class PotionBucketDispenser {
     /** Forge persistent-data key on the dispenser block entity: the UUID of the player who placed it. */
     static final String OWNER_KEY = CreativeBrewing.NS + ":DispenserOwner";
 
-    /** Forge bus: remember who placed a dispenser (droppers too, harmless: they never use dispense behaviours). */
+    /** Forge bus: remember who placed a dispenser (droppers too, harmless: they never use dispense behaviors). */
     @SubscribeEvent
     public static void onPlace(BlockEvent.EntityPlaceEvent event) {
         if (!(event.getEntity() instanceof Player player) || event.getLevel().isClientSide()) return;

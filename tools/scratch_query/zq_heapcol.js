@@ -45,7 +45,7 @@
             // r1115: every block of the scan whose own cell is in <biome id> (SQ-VH-06 "every non-air block", -06b
             // cave_air, -06c ores), not only the surfaces
             let blocks = {}, nb = 0, airIds = {}, inner = {}, ni = 0
-            // interior: the block's quart cell and all 26 neighbour cells are <biome id>, so the surface rule's fuzzed
+            // interior: the block's quart cell and all 26 neighbor cells are <biome id>, so the surface rule's fuzzed
             // biome lookup (BiomeManager zoom, up to about 2 blocks off the quart grid) cannot read another biome there
             let interior = function (x, y, z) {
                 for (let dx = -4; dx <= 4; dx += 4) for (let dy = -4; dy <= 4; dy += 4) for (let dz = -4; dz <= 4; dz += 4)

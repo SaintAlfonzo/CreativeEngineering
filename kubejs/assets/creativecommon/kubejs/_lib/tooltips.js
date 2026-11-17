@@ -96,7 +96,7 @@ function removeTooltips(e) {
     }
 }
 
-// Strip only the lines built from one translation key (a mod's own flavour text), leaving the name
+// Strip only the lines built from one translation key (a mod's own flavor text), leaving the name
 // and every other line alone - unlike removeTooltips, BlockRunner's "Speed Multiplier" line survives.
 // A key ending in '*' matches every key with that prefix (mods that build the key from the item id).
 //   removeTooltipKey(e, 'desc.somemod.flavour.thing', i.thing, i.thing_slab)

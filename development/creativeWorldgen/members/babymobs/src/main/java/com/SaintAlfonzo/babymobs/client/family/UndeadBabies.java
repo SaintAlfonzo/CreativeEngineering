@@ -46,7 +46,7 @@ import java.util.Map;
 
 /**
  * 26.1 baby zombie, husk, drowned (and its outer layer), zombie villager, villager, piglin and zombified piglin, with
- * 26.1's baby armour (own mesh and textures, mixin/client/UndeadArmorLayerMixin), baby held-item offset
+ * 26.1's baby armor (own mesh and textures, mixin/client/UndeadArmorLayerMixin), baby held-item offset
  * (UndeadItemInHandMixin) and full-size head items (UndeadCustomHeadMixin).
  *
  * <p>1.19.2's {@code HumanoidModel.setupAnim} writes absolute adult part positions (arms at x 5, legs at y 12, crouch
@@ -58,7 +58,7 @@ public final class UndeadBabies {
 
     private static final String[] VILLAGER_TYPES = {"desert", "jungle", "plains", "savanna", "snow", "swamp", "taiga"};
 
-    /** Kits of this family (item-in-hand offset) and their armour sets. */
+    /** Kits of this family (item-in-hand offset) and their armor sets. */
     private static final Map<BabyKit<?>, ArmorSet> ARMOR = new IdentityHashMap<>();
 
     public static void register() {
@@ -241,9 +241,9 @@ public final class UndeadBabies {
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    // ------------------------------------------------------------------------------------------------ armour
+    // ------------------------------------------------------------------------------------------------ armor
 
-    /** 26.1 LayerDefinitions: humanoid baby armour deformations; piglins use 0.7 all round and arms 0.5 out, 0.5 up. */
+    /** 26.1 LayerDefinitions: humanoid baby armor deformations; piglins use 0.7 all round and arms 0.5 out, 0.5 up. */
     private static final CubeDeformation BABY_OUTER = new CubeDeformation(-0.1F, 0.5F, 0.3F);
     private static final CubeDeformation BABY_INNER = new CubeDeformation(-0.1F, 0.3F, 0.3F);
     private static final CubeDeformation BABY_PIGLIN = new CubeDeformation(0.7F);
@@ -299,7 +299,7 @@ public final class UndeadBabies {
         return keep ? cubes : CubeListBuilder.create();
     }
 
-    /** The baby armour models of one kit, baked on first use. */
+    /** The baby armor models of one kit, baked on first use. */
     public static final class ArmorSet {
         static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
         final BabyKit<?> kit;
@@ -314,7 +314,7 @@ public final class UndeadBabies {
         }
     }
 
-    /** The armour set of the baby rendering right now, or null (not one of this family, or not a remodelled baby). */
+    /** The armor set of the baby rendering right now, or null (not one of this family, or not a remodelled baby). */
     @Nullable
     public static ArmorSet activeArmor() {
         BabyRender.Frame f = BabyRender.current();
@@ -328,8 +328,8 @@ public final class UndeadBabies {
     }
 
     /**
-     * 26.1 baby armour texture ({@code equipment/humanoid_baby/<material>.png}) for a vanilla armour piece, or null for
-     * modded armour (no baby texture: it keeps 1.19.2's old half-size baby armour, see UndeadArmorLayerMixin).
+     * 26.1 baby armor texture ({@code equipment/humanoid_baby/<material>.png}) for a vanilla armor piece, or null for
+     * modded armor (no baby texture: it keeps 1.19.2's old half-size baby armor, see UndeadArmorLayerMixin).
      */
     @Nullable
     public static ResourceLocation babyArmorTexture(ItemStack stack, boolean overlay) {
@@ -340,7 +340,7 @@ public final class UndeadBabies {
     }
 
     /**
-     * 26.1 baby armour piece: a HumanoidModel whose parts carry only one slot's cubes, plus the 26.1 waist (leggings).
+     * 26.1 baby armor piece: a HumanoidModel whose parts carry only one slot's cubes, plus the 26.1 waist (leggings).
      * Posed from the baby body model by {@link #follow}.
      */
     public static class BabyArmorModel extends HumanoidModel<LivingEntity> {
@@ -436,7 +436,7 @@ public final class UndeadBabies {
             m.hat.copyFrom(m.head);
         }
 
-        /** The other way, for modded armour drawn with 1.19.2's adult armour model at young = true. */
+        /** The other way, for modded armor drawn with 1.19.2's adult armor model at young = true. */
         public void copyAsAdult(HumanoidModel<?> from, HumanoidModel<?> to) {
             ModelPart[] s = parts(from), t = parts(to);
             for (int i = 0; i < t.length; i++) {

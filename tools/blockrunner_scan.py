@@ -10,7 +10,7 @@ also ship blockstates for optional-compat blocks that never get registered.
   python3 tools/blockrunner_scan.py
       writes tools/blockrunner_untagged_blocks.json (read by blockrunner_tag_sim.js)
   node tools/blockrunner_tag_sim.js /tmp/tiers.json && python3 tools/blockrunner_scan.py /tmp/tiers.json
-      also prints every untiered block that could register, grouped by mod, colours and wood
+      also prints every untiered block that could register, grouped by mod, colors and wood
       types collapsed ({c}, {w}); '*' marks blocks with no tags at all
   python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json
       the watcher, from the in-game /dumpsurface (Creative Devtools): every walkable block (collision

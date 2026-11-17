@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 
 /**
  * The note screen (sticky_notes.md 3.7, BRIEF 4): Sticky It's two screen textures by resource location, the text
- * bar ({@code stickygui.png}, 352 x 16) centred a little above the screen centre with the date bar
- * ({@code stickyguidatee.png}, 70 x 16) above it, an {@link EditBox} on the text bar in Sticky It's dark grey,
+ * bar ({@code stickygui.png}, 352 x 16) centered a little above the screen center with the date bar
+ * ({@code stickyguidatee.png}, 70 x 16) above it, an {@link EditBox} on the text bar in Sticky It's dark gray,
  * capped at {@code noteLength}, and a Done button. Done (or Enter) sends {@link NoteTextPacket}; Escape closes
  * without writing. Two modes: a note in hand ({@link #forHand}) and a placed note ({@link #forPlaced}); the placed
  * mode closes by itself when its note is gone (C6).
@@ -37,9 +37,9 @@ public class NoteScreen extends Screen {
     public static final ResourceLocation TEXT_BAR = new ResourceLocation("sticky_it", "textures/screens/stickygui.png");
     public static final ResourceLocation DATE_BAR = new ResourceLocation("sticky_it", "textures/screens/stickyguidatee.png");
     public static final int BAR_W = 352, BAR_H = 16, DATE_W = 70;
-    /** Sticky It's text colour on the bars. */
+    /** Sticky It's text color on the bars. */
     public static final int TEXT_COLOR = 0x3C3C3C;
-    /** Sticky It drew the text bar 7 px above the screen centre and the date bar 16 px above that. */
+    /** Sticky It drew the text bar 7 px above the screen center and the date bar 16 px above that. */
     public static final int BAR_UP = 7, DATE_UP = 16, TEXT_INSET = 4;
 
     private final NoteTextPacket.Mode mode;

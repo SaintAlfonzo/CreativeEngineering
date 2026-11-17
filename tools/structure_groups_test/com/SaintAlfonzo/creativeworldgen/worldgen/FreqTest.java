@@ -80,7 +80,7 @@ public class FreqTest {
 			if ((StructureFrequencies.roll(seed, i, 0, 1) < 0.5) == (StructureFrequencies.roll(seed, i + 1, 0, 1) < 0.5)) corr++;
 		}
 		check(Math.abs(same / 10000.0 - 0.5) < 0.03, "two structures' rolls independent (" + same + "/10000 agree)");
-		check(Math.abs(corr / 10000.0 - 0.5) < 0.03, "neighbouring chunks independent (" + corr + "/10000 agree)");
+		check(Math.abs(corr / 10000.0 - 0.5) < 0.03, "neighboring chunks independent (" + corr + "/10000 agree)");
 
 		// 2. resolving a staged table against loaded sets
 		Fake a = new Fake("ns:a"), b = new Fake("ns:b"), c = new Fake("ns:c"), x = new Fake("ns:x");

@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * the chunk holding its spot is decorated, through the placed feature's own modifiers (heightmap, block
  * filters) but without a biome filter: the "biome" modifier only works for features a biome lists, so a placed
  * feature used here must not have one. The box (spot +- radius) only decides which chunks call postProcess;
- * the feature may write into the neighbouring chunks like any feature. No beard (Forge's PieceBeardifierModifier).
+ * the feature may write into the neighboring chunks like any feature. No beard (Forge's PieceBeardifierModifier).
  */
 public final class MetaFeaturePiece extends StructurePiece implements PieceBeardifierModifier {
 

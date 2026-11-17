@@ -64,12 +64,12 @@ ServerEvents.tags('block', e => {
 
 	// ── BlockRunner walk speed ──────────────────────────────────────────────
 	// Multipliers live in config/creativeengineering-common.toml [surface.speed], one key per tier
-	// (the numbers below are the defaults, fastest → slowest). patcherMod's SurfaceTier enum lists the
+	// (the numbers below are the defaults, fastest -> slowest). patcherMod's SurfaceTier enum lists the
 	// tiers for that config, so a new tier needs an entry there too; blockrunner.json only keeps one-offs.
 	// BlockRunner reads the block ~0.2 below your feet (vanilla getOnPos), so carpets, 1–2 layer
 	// snow, pressure plates and IW leaf piles never register (the block under them does).
 	// A tiered block's native speed factor is replaced (IP asphalt's 1.2, honey's 0.4); soul sand/soil
-	// are left out on purpose: tiering them would stop Soul Speed from cancelling the slowdown.
+	// are left out on purpose: tiering them would stop Soul Speed from canceling the slowdown.
 	// One tier per block — BlockRunner picks a random one on each reload otherwise (see overlaps below).
 	var runner = {
 		asphalt:            'blockrunner:surface/asphalt',            // 1.50

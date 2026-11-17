@@ -11,7 +11,7 @@ What it does, for every PNG under development/**/textures and kubejs/assets/**/t
      jar_archive/, DecompiledMods/, *_upstream/, development/**/libs, vanilla 1.19.2, resourcepacks/*.zip;
      the pack's own jars are skipped). Exact RGBA match = copy.
   2. Otherwise the same alpha silhouette as a third-party sprite (or, for opaque squares, a third-party texture
-     sharing a name word): colour-map test. Each source colour going to exactly one output colour = recolour;
+     sharing a name word): color-map test. Each source color going to exactly one output colour = recolour;
      pixels off that map = edited (painted by someone). Nothing similar = unmatched.
   3. Transcript evidence (optional, --transcripts DIR, Claude Code session logs, which start 2026-10-14):
      calls that named the file and ran the owner's tools (owned), ran ad-hoc pixel code (paint), or a script.
@@ -121,7 +121,7 @@ def build_index():
 
 
 def colour_map(src, out):
-    """(consistency, off-map pixels, share of pixels unchanged) of out read as a per-colour recolour of src."""
+    """(consistency, off-map pixels, share of pixels unchanged) of out read as a per-color recolour of src."""
     if out.size != src.size:
         out = out.crop((0, 0) + src.size)
     m, same, tot = {}, 0, 0

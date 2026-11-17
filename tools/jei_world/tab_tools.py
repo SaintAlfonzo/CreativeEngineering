@@ -4,17 +4,17 @@ Source: kubejs/exported/world_jei/tool_pairs.json (patcherMod devtools/WorldJeiT
 Hand-written rows (Create sail / seat / valve handle dyeing, Supplementaries soap on globes, spikes, signs, mobs,
 the blackboard) are in kubejs/assets/creativecommon/jei_world/<tab>/manual.json.
 
-Mod behaviour this follows, read from the jars:
+Mod behavior this follows, read from the jars:
 - Immersive Weathering (ModEvents): an axe strip also pops 1 bark of the log's wood type ([item_interaction]
   axe_stripping). An axe on unaffected or exposed iron only scrapes when the rust level is weathered or rusted (the
   click is eaten otherwise); steel wool scrapes any rust stage, takes wax off its waxed blocks and scrapes one stage off
   the copper in #immersive_weathering:copper. Both need axe_rusting.
-- Supplementaries: dye on a block of a Moonlight colour set swaps it for that colour and uses one dye ([tweaks]
+- Supplementaries: dye on a block of a Moonlight color set swaps it for that color and uses one dye ([tweaks]
   dye_blocks); patcherMod's SupplementariesDyeBlocksMixin stops it on blocks with a block entity and
-  #creativecompat:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a coloured
+  #creativecompat:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a colored
   block back to its plain one (not beds, not [functional.soap] clean_blacklist), then a sticky piston into a piston,
   then strips wax and all oxidation at once. Each wash uses one soap.
-- Create sails, seats and valve handles dye through their own code (manual rows), so their colour sets are left out of
+- Create sails, seats and valve handles dye through their own code (manual rows), so their color sets are left out of
   the generated dye rows.
 """
 import re
@@ -28,7 +28,7 @@ SOAP = item('supplementaries:soap')
 STEEL_WOOL = item('immersive_weathering:steel_wool')
 COLORS = ['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan',
           'purple', 'blue', 'brown', 'green', 'red', 'black']
-# Create dyes these itself (manual.json); Moonlight may also list them as colour sets.
+# Create dyes these itself (manual.json); Moonlight may also list them as color sets.
 CREATE_SELF_DYED = re.compile(r'^create:([a-z_]+_)?(sail|seat|valve_handle)$|^create:sail_frame$')
 
 
@@ -137,7 +137,7 @@ def _dyeing(dump):
             sources = [m for m in members if m != target]
             if not sources:
                 continue
-            rows.append(row([blocks(sources, label='Any other colour')], [block(target)],
+            rows.append(row([blocks(sources, label='Any other color')], [block(target)],
                             action=tag(f'forge:dyes/{color}'),
                             notes=['Right-click the placed block.', 'Uses one dye.'],
                             requires=['supplementaries']))

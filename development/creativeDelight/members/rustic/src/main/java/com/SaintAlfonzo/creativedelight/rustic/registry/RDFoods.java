@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  * Food values: Rustic Delight 1.7.0's, apart from two kept at 1.3.0 (feature_writeup/rustic_delight.md 5.3): Bell
  * Pepper Soup gives Comfort (the pack keeps Comfort on soups) and Honey and Chocolate Coffee last 900 ticks (the pack's
- * Caffeinated swap reads these durations). Syrup, Pumpkin and Cherry Blossom Coffee (3 beans, milk and a flavour, as
+ * Caffeinated swap reads these durations). Syrup, Pumpkin and Cherry Blossom Coffee (3 beans, milk and a flavor, as
  * Honey and Chocolate) last the same 900 ticks at level I (owner, TODO creativedelight/members #11; 1.7.0: Syrup 1800,
  * Pumpkin and Cherry Blossom 1200 with one of the two effects at level II).
  */

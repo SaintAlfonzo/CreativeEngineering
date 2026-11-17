@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 
 /**
  * Stretches a GUI resource pack's title plaque to fit long container titles (renamed chests, Quark wood
- * chests, shulker box colours, modded minecarts, horse names) and logs every title that needed it.
+ * chests, shulker box colors, modded minecarts, horse names) and logs every title that needed it.
  *
  * <p>Flow, per frame, driven by {@code mixin/ContainerTitlePlaqueMixin}:
  * <ol>

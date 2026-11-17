@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * One cursor labelling per player per {@link #TICKS} ticks, server side (sticky_notes.md 3.8, Q3): a right-click
+ * One cursor labeling per player per {@link #TICKS} ticks, server side (sticky_notes.md 3.8, Q3): a right-click
  * drag with a note on the cursor (Mouse Tweaks) sends one click per slot within a tick or two, so only the first
  * one labels; the later ones are dropped silently and the server's slot correction resyncs the client. The client
  * is never gated (its prediction is overwritten by the server anyway).

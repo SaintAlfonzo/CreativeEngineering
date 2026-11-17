@@ -37,7 +37,7 @@ BlockEvents.rightClicked(global.blocks.hemp, e => {
 	var centre = e.block.getPos()
 	if (!ripeTop(centre)) return
 
-	// The clicked plant's bottom block is the area's centre row
+	// The clicked plant's bottom block is the area's center row
 	var base = String(e.block.properties.get('growth')) === 'top0' ? centre.below() : centre
 	var area = null
 	if (isHoe) {

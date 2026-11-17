@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * SeasonHUD's season name reads "Arid" or "Frozen" in those biomes (lang desc.seasonhud.season.arid /
  * .frozen). The fertility warning, when SeasonHUD shows one in place of the name, still wins.
- * Icon, colour and day count: {@link SeasonHudHelperMixin}. With {@code [time] hudTimeOfDay} the HUD line ends with
+ * Icon, color and day count: {@link SeasonHudHelperMixin}. With {@code [time] hudTimeOfDay} the HUD line ends with
  * the time of day, "Mid Spring (Day 3/24) 7:30 pm" (feature_writeup/time.md 3.7, decision T6), where the sky has a
  * day at all.
  */

@@ -19,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  *
  * The far-fog distances are fractions of the LOD radius, so the shorter radius pulls the fog in by itself; the fog is
  * also pinned on (DH fog enabled, end 1.0 = the LOD edge, max thickness 1.0) so the cutoff is never a hard edge, whatever
- * the player set. Fog start, falloff, density and colour stay as configured.
+ * the player set. Fog start, falloff, density and color stay as configured.
  */
 public final class DhDimensionView {
 

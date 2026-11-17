@@ -34,7 +34,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MEMORY = Path.home() / '.claude/projects/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/memory'
 YEAR = 2026
-SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog)/|_upstream/|kubejs/assets/creativecommon/changelog/(?!unreleased\.md)')
+SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog|moved_code_backup)/|_upstream/|kubejs/assets/creativecommon/changelog/(?!unreleased\.md)')
 # Generated from other files (rows, .qb): converting the source is enough.
 GENERATED = {'feature_writeup/todo/TODO.md', 'feature_writeup/testing/scratch_queue.md'}
 MONTHS = {m: i for i, m in enumerate(['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], 1)}
@@ -60,6 +60,9 @@ DOTTED = re.compile(r'(?<![\w.])(20\d\d)[./](0[1-9]|1[0-2])[./](0[1-9]|[12]\d|3[
 CITE = re.compile(r'\((user|owner|User|Owner),?\s+((?:20\d\d-)?(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))([a-d])?(\)|[,;])')
 
 
+ANY = re.compile('|'.join(r.pattern for r in (MMDD, MONTH_D, D_MONTH, DOTTED, CITE)))
+
+
 def git(*a):
 	return subprocess.run(['git', *a], cwd=ROOT, capture_output=True, text=True).stdout
 
@@ -76,7 +79,10 @@ def doc_scope():
 
 def code_scope():
 	files = git('ls-files', '*.java', '*.js', '*.py', '*.gradle', '*.kts', '*.sh').split('\n')
-	return [ROOT / f for f in files if f and not SKIP.search(f) and '/kubejs/generation_scripts/' not in '/' + f]
+	# the date tools quote example dates in their own docs and patterns
+	own = {'tools/iso_dates.py', 'tools/history_extract.py', 'tools/us_spelling.py'}
+	return [ROOT / f for f in files if f and not SKIP.search(f) and '/kubejs/generation_scripts/' not in '/' + f
+			and f not in own]
 
 
 def last_change(path):
@@ -189,6 +195,8 @@ def process(path, apply, lint=False):
 		text = path.read_text(encoding='utf-8')
 	except (UnicodeDecodeError, FileNotFoundError):
 		return [], [], []
+	if not ANY.search(text):
+		return [], [], []
 	limit = last_change(path)
 	if path.suffix == '.csv':
 		return process_csv(path, text, limit, apply, lint)
@@ -273,6 +281,8 @@ def main():
 		lines += [f'  {ln}: AMBIGUOUS {old}: {ctx}' for ln, old, ctx in amb]
 	verb = 'changed' if a.apply else 'would change'
 	print(f'total: {tot[0]} {verb}, {tot[1]} unresolved (owner list), {tot[2]} ambiguous (left as is)')
+	if a.lint and tot[0]:
+		return 1
 	if not a.lint:
 		Path(a.report).parent.mkdir(parents=True, exist_ok=True)
 		Path(a.report).write_text('\n'.join(lines) + '\n', encoding='utf-8')

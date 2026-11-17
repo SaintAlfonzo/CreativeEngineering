@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Create's JEI crushing page for a recipe with result pools (plan_flesh_recipes.md 5.3): one slot per pool, then
- * the outputs in no pool, centred in a row as Create lays them out (wrapping past 9). Recipes without pools keep
+ * the outputs in no pool, centered in a row as Create lays them out (wrapping past 9). Recipes without pools keep
  * Create's layout. See {@link ResultPoolsJei}.
  */
 @Mixin(value = CrushingCategory.class, remap = false)

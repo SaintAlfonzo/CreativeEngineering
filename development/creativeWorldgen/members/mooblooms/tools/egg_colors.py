@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Spawn egg colours for each moobloom variant, from its coat (feature_writeup/mooblooms.md 4.4).
+"""Spawn egg colors for each moobloom variant, from its coat (feature_writeup/mooblooms.md 4.4).
 
 For every data/<ns>/moobloom_variants/<path>.json in src/main/resources with a coat at
 assets/<ns>/textures/entity/moobloom/<path>.png:
-  base  = the commonest opaque colour of the coat
+  base  = the commonest opaque color of the coat
   (pixels that are identical on every coat, like the udder and eyes, are skipped)
-  spots = the commonest colour that is clearly different from the base (RGB distance >= MIN_DISTANCE)
+  spots = the commonest color that is clearly different from the base (RGB distance >= MIN_DISTANCE)
 and writes them as "egg_colors": ["#base", "#spots"] into the variant JSON (other keys untouched).
 
     python3 tools/egg_colors.py           # write

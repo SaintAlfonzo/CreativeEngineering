@@ -14,14 +14,14 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 /**
- * Height of a free-standing AE2 meteorite (plan_worldgen_edit C6, owner 2026-11-02: free-standing meteorites only;
- * the meteorite metas keep surface or anchor placement). AE2 sets the sphere just under the surface and carves a
- * crater. Here a start keeps that with {@link #SURFACE}; otherwise it is moved underground (anywhere between the
- * world floor and {@link #CLEAR} blocks under the ground) or into the air ({@link #AIR_MIN} to {@link #AIR_MAX} blocks
- * over the ground). A moved meteorite gets crater type NONE (no crater, fallout or crater lake: the sphere replaces
- * what it overlaps), since AE2's crater clears everything above its bowl up to y 255.
+ * Height of a free-standing AE2 meteorite (plan_worldgen_edit C6, owner: free-standing meteorites only; the meteorite
+ * metas keep surface or anchor placement). AE2 sets the sphere just under the surface and carves a crater. Here a
+ * start keeps that with {@link #SURFACE}; otherwise it is moved underground (anywhere between the world floor and
+ * {@link #CLEAR} blocks under the ground) or into the air ({@link #AIR_MIN} to {@link #AIR_MAX} blocks over the
+ * ground). A moved meteorite gets crater type NONE (no crater, fallout or crater lake: the sphere replaces what it
+ * overlaps), since AE2's crater clears everything above its bowl up to y 255.
  *
- * The piece is rebuilt through its own save tag (AE2 12.9 keys: c centre, r radius, t crater type ordinal, p pure
+ * The piece is rebuilt through its own save tag (AE2 12.9 keys: c center, r radius, t crater type ordinal, p pure
  * crater, l lake), so no AE2 class is linked here. The roll is seeded by the world seed and the start's chunk.
  */
 public final class MeteoriteHeights {
@@ -66,7 +66,7 @@ public final class MeteoriteHeights {
 				tag.putBoolean("p", false);
 				tag.putBoolean("l", false);
 				StructurePiece moved = piece.getType().load(sctx, tag);
-				moved.move(0, y - c.getY(), 0);   // the box sits at the centre's height
+				moved.move(0, y - c.getY(), 0);   // the box sits at the center's height
 				builder.addPiece(moved);
 			}
 		} catch (RuntimeException e) {

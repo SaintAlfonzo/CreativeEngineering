@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """r1111: splits hh_m2wg_raw.qb (SQ-HH-274 to -329, from hh_queue_to_qb.py) into per-boot batches and applies the
-batch fixes: tag and feature namespaces moved 11-09 (wild_flowers -> creativeworldgen, crop_seasons ->
+batch fixes: tag and feature namespaces moved 2026-11-09 (wild_flowers -> creativeworldgen, crop_seasons ->
 creativecalendar, land/plains read in both), SQ-HH-308 expanded from prose.
   hh_wga.qb   group A rows on Machines boot 1 (same server as SQ-HH-201)
   hh_m2.qb    boot 2 (SQ-HH-274 toml edits): 274 to 277, 318, 319

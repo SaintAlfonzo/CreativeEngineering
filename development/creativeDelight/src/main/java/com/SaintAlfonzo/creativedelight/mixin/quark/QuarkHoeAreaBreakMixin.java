@@ -20,7 +20,7 @@ import vazkii.quark.content.tweaks.module.HoeHarvestingModule;
 
 /**
  * Quark's hoe area break (break a plant with a hoe, the plants around it break too) over the
- * per-hoe {@link HoeHarvestArea} instead of Quark's centred radius. Takes over where Quark asks for
+ * per-hoe {@link HoeHarvestArea} instead of Quark's centered radius. Takes over where Quark asks for
  * the range, so Quark's own checks (a hoe, a plant at the broken block) have already passed; the
  * loop body is Quark 3.4-418's, unchanged.
  */

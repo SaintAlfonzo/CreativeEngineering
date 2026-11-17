@@ -13,7 +13,7 @@ ServerEvents.tags('block', e => {
 	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
 	t.add(e, b.t_create_non_movable, b.monster_box)
 
-	// Rubidium blends the vanilla grass block's tint per vertex across neighbours (biome blend > 0) but colours
+	// Rubidium blends the vanilla grass block's tint per vertex across neighbors (biome blend > 0) but colors
 	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
 	t.add(e, b.t_blendable_blocks, i.grass_slab)
 

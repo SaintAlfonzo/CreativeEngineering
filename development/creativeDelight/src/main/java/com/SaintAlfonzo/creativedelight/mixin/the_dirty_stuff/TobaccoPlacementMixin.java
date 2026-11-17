@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * The Dirty Stuff's tobacco ({@code the_dirty_stuff:tobacco_seeds}, a plain MCreator block) only
  * survives on {@code block below == Blocks.FARMLAND}, an identity check that refuses Rich Farmland
  * and Fertile Soil. TobaccoSeedsBlock.canSurvive is this procedure's only caller, so replacing its
- * answer covers placement, survival and neighbour updates. Soils come from
+ * answer covers placement, survival and neighbor updates. Soils come from
  * {@link CropParity#FARMLAND_SOILS} (vanilla farmland always counts).
  */
 @Mixin(value = TobaccoSeedsBlockValidPlacementConditionProcedure.class, remap = false)

@@ -126,7 +126,7 @@ for name, eid, g in ents:
     w(f"> kill @e[tag=e21_{name}]")
 
 # ---- SQ-PTH-02 cobweb tier on zombies
-w("\n## SQ-PTH-02 | cobweb tier: lone web -0.5, cube centre -0.65, keeps moving, barbed wire hurts (razor wire added)")
+w("\n## SQ-PTH-02 | cobweb tier: lone web -0.5, cube center -0.65, keeps moving, barbed wire hurts (razor wire added)")
 w("> setblock 1000 -60 1070 minecraft:cobweb")
 w("> fill 1004 -60 1069 1006 -58 1071 minecraft:cobweb")
 w("> setblock 1010 -60 1070 immersiveengineering:razor_wire")
@@ -170,7 +170,7 @@ w("sleep 8")
 for t in ("z03p", "z03w", "z03s", "z03c"):
     w(f"> zpth mod {t}")
 w("expect \\[zpth\\] mod z03p .* hp=")
-w("look damage (100 - hp): web about 0.85x and stack about 0.61x of plain; cube 0 and the zombie hangs in the centre (y about -59)")
+w("look damage (100 - hp): web about 0.85x and stack about 0.61x of plain; cube 0 and the zombie hangs in the center (y about -59)")
 
 # ---- SQ-PTH-04 SecurityCraft reinforced cobweb owner
 w("\n## SQ-PTH-04 | reinforced cobweb: owner bot P walks through unslowed, bot Q at 0.50x")
@@ -296,7 +296,7 @@ w("> zpth mod z18")
 w("look z18a hp 20 -> lower (0.5 per hit), z18b (1.0 per hit), z18c/z18d 20; all mod=-0.550")
 
 # ---- SQ-PTH-22 growth_any and grape bush
-w("\n## SQ-PTH-22 | rope tomatoes 3x3 age 0 centre -0.5; budding age 1 none, age 2 -0.25; coffee stem age 0 -0.25; taiga grape bush -0.64")
+w("\n## SQ-PTH-22 | rope tomatoes 3x3 age 0 center -0.5; budding age 1 none, age 2 -0.25; coffee stem age 0 -0.25; taiga grape bush -0.64")
 w("> fill 999 -61 1159 1020 -61 1161 minecraft:farmland")
 w("> fill 1000 -60 1159 1002 -60 1161 supplementaries:rope_tomatoes[age=0]")
 w("> setblock 1006 -60 1160 farmersdelight:budding_tomatoes[age=1]")
@@ -355,7 +355,7 @@ w("expect \\[zpth\\] mod z23c .* mod=none")
 w("look s23b hp drops (barbed wire still hurts a spider); z23m slows hard in the poppy bush (vanilla stuck)")
 
 # ---- SQ-PTH-24 munitions exempt
-w("\n## SQ-PTH-24 | IE revolver shot and Blocky Siege cannon ball pass a cube at full speed; snowball breaks in the centre")
+w("\n## SQ-PTH-24 | IE revolver shot and Blocky Siege cannon ball pass a cube at full speed; snowball breaks in the center")
 w("> fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb")
 for t, eid in (("m24a", "immersiveengineering:revolver_shot"),
                ("m24b", "blocky_siege:projectile_cannon_ball_projectile_projectile"),

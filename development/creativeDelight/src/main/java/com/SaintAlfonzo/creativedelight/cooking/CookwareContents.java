@@ -71,7 +71,7 @@ public final class CookwareContents {
 	}
 
 	/**
-	 * A survival player's break of a station that drops its item: mark it. Lowest priority and not for cancelled
+	 * A survival player's break of a station that drops its item: mark it. Lowest priority and not for canceled
 	 * events, so claims and protection have had their say.
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)

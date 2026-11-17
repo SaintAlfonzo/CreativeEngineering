@@ -17,7 +17,7 @@ import vazkii.quark.content.tweaks.module.SimpleHarvestModule;
 
 /**
  * Quark's hoe right-click (harvest and replant every ripe crop, click every berry bush) over the
- * per-hoe {@link HoeHarvestArea} instead of Quark's centred radius. Takes over where Quark asks for
+ * per-hoe {@link HoeHarvestArea} instead of Quark's centered radius. Takes over where Quark asks for
  * the range, after its claim, till and "is there a crop here" checks; only for hoes, so the empty
  * hand path stays Quark's. The loop is Quark 3.4-418's; an area hoe always costs 1 durability per use (crops.md 2.3). Runs on
  * both sides like Quark's, and both compute the same area from the player's look.

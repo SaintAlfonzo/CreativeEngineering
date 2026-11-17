@@ -291,7 +291,7 @@ public final class TerrainAdaptation {
 	// ── distance fields ──────────────────────────────────────────────────────
 
 	/**
-	 * Distance (blocks, column centre to column centre) from each column to the nearest footprint column, over the
+	 * Distance (blocks, column center to column center) from each column to the nearest footprint column, over the
 	 * footprint's bounds plus {@link #REACH}; coordinates relative to the piece's placement origin.
 	 */
 	record DistanceField(int x0, int z0, int w, int d, float[] dist) {

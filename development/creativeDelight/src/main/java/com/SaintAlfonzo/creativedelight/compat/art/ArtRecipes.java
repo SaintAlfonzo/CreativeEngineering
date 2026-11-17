@@ -53,7 +53,7 @@ public final class ArtRecipes {
 
 	// ------------------------------------------------------------------ Incubation nests, eggs and crates
 
-	/** One Incubation-based texture: output, source, and a colour map (empty = the source as it is). */
+	/** One Incubation-based texture: output, source, and a color map (empty = the source as it is). */
 	public record Derived(String out, String source, String mod, Map<Integer, Integer> colours) {}
 
 	private static Map<Integer, Integer> map(int... pairs) {
@@ -62,7 +62,7 @@ public final class ArtRecipes {
 		return m;
 	}
 
-	/** Colours as ARGB. Duck shades and goose shades are the owner's picks (nests.md 4). */
+	/** Colors as ARGB. Duck shades and goose shades are the owner's picks (nests.md 4). */
 	public static final List<Derived> INCUBATION = List.of(
 			new Derived("creativedelight:block/emu_eggs", "incubation:block/turkey_eggs", "alexsmobs",
 					map(0xFFFFEFF3, 0xFF1DB2B8, 0xFFE8DAD0, 0xFF108E9C, 0xFFCCBBA7, 0xFF077082)),

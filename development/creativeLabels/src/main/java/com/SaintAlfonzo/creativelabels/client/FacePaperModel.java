@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>Quads for one piece depend only on (face, rotation, spot, inset, sprite, tinted), so they are cached per such
  * key: a face full of notes costs five map lookups per rebuild. A dyed note's quads carry tint index
- * {@code face.ordinal() * 5 + spot} and the greyscale sprite; the block colour handler turns the index into the
+ * {@code face.ordinal() * 5 + spot} and the greyscale sprite; the block color handler turns the index into the
  * note's RGB. Everything else is untinted (-1).
  */
 public class FacePaperModel implements IDynamicBakedModel {

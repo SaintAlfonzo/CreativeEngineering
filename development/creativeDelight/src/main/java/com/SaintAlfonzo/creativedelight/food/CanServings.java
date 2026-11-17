@@ -198,7 +198,7 @@ public final class CanServings {
         return afterServing(stack, RandomSource.create(), EffectiveSide.get().isClient());
     }
 
-    // ---- durability-style bar (vanilla's width and green-to-red colour) ----
+    // ---- durability-style bar (vanilla's width and green-to-red color) ----
 
     public static int barWidth(ItemStack stack) {
         return Math.round(13.0F * servingsLeft(stack) / Math.max(1, maxServings(stack)));

@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * Age for mobs that aren't {@link AgeableMob}s in 1.19.2 but became ageable later: squid and glow squid (1.21.2's
  * {@code AgeableWaterCreature}) and dolphins. The server keeps {@code age} (negative = baby, counts up to 0 as
  * vanilla's {@link AgeableMob}); clients get a synced baby flag per class. Everything else (sounds pitch, no loot or
- * experience for babies, half-size hitbox through {@code getScale}) is vanilla behaviour keyed off {@code isBaby()}.
+ * experience for babies, half-size hitbox through {@code getScale}) is vanilla behavior keyed off {@code isBaby()}.
  */
 public final class BabyAges {
     public static final int BABY_START_AGE = -24000;

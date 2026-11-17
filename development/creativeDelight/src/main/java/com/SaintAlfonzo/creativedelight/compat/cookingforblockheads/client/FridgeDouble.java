@@ -39,7 +39,7 @@ import org.slf4j.Logger;
  * Double fridges drawn joined (TODO cooking/kitchen #36; pairing rules in {@code kitchen/FridgePairs}). On the joined
  * side of each fridge:
  * <ul>
- * <li>the body reaches the block edge (a 1 px side strip) and the grey door seal on that side is replaced by a white lip,
+ * <li>the body reaches the block edge (a 1 px side strip) and the gray door seal on that side is replaced by a white lip,
  * so no gap or seal shows between the two fridges;</li>
  * <li>the door reaches the block edge (a 1 px strip), which swings with the door.</li>
  * </ul>

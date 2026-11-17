@@ -9,7 +9,7 @@
 // hunger and flags stay.
 // Rustic Delight's coffees: Speed + Haste -> Caffeinated (Farmer's Respite's), the pack's only coffee family since
 //   Respite's coffee merged into it (item_merges.js). Coffee 1:30, milk 1:00, honey / chocolate 0:45, dark II 0:45;
-//   syrup / pumpkin / cherry blossom 0:45 like the other bean + milk + flavour coffees (owner, TODO
+//   syrup / pumpkin / cherry blossom 0:45 like the other bean + milk + flavor coffees (owner, TODO
 //   creativedelight/members #11; the durations are set in the CD Rustic member's RDFoods). Neapolitan's Agility ->
 //   Vinery's Climbing, same durations (potions/effects #9). The banana cake blocks and anything else that gives Agility
 //   are swapped when applied by Creative Brewing ([effects] remap); this fixes the tooltips.

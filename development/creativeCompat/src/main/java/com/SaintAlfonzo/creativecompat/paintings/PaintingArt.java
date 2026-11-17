@@ -30,12 +30,12 @@ import java.util.regex.Pattern;
  *
  * <p>Immersive reads {@code data/<ns>/paintings/**.png} plus a sibling json {name, author, width, height (blocks),
  * resolution (px per block)}. Each variant {@code ns:path} becomes
- * {@code data/creativecompat/paintings/<ns>/<path>.png} +.json (mixin/ImmersivePaintingMotiveAliasMixin moves placed
+ * {@code data/creativecompat/paintings/<ns>/<path>.png} + .json (mixin/ImmersivePaintingMotiveAliasMixin moves placed
  * paintings that still name the old id). Same rules as the old generator (tools/gen_immersive_paintings.py, which now
  * writes only the vanilla ones): <ul>
  *   <li>texture {@code assets/<ns>/textures/painting/<path>.png}, the last source that has it wins;</li>
  *   <li>an animated strip keeps its first frame; art off the block grid is stretched to 16 px per block like vanilla;</li>
- *   <li>under 32 px per block it is scaled up (nearest neighbour, whole factor) to 32, the page's default filter;</li>
+ *   <li>under 32 px per block it is scaled up (nearest neighbor, whole factor) to 32, the page's default filter;</li>
  *   <li>name: lang {@code painting.<ns>.<path>.title}, else the path in title case; author: lang {@code .author} /
  *       {@code .artist}, then DarkPaintings-style section credits ({@code <ns>.author.<x>} followed by that artist's titles
  *       in file order), then the mod's display name. "Unknown" and "-" count as missing.</li>
@@ -242,7 +242,7 @@ public final class PaintingArt {
         return out;
     }
 
-    /** Nearest-neighbour resize sampling pixel centres, as PIL's Image.NEAREST does. */
+    /** Nearest-neighbor resize sampling pixel centers, as PIL's Image.NEAREST does. */
     private static BufferedImage nearest(BufferedImage in, int w, int h) {
         BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         int sw = in.getWidth(), sh = in.getHeight();

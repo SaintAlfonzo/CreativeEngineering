@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wild hops (plan_bugfix_1114 3.1; modelled on Vinery's JungleGrapeFeature): around the placement origin, finds the tree
+ * Wild hops (plan_bugfix_1114 3.1; modeled on Vinery's JungleGrapeFeature): around the placement origin, finds the tree
  * trunks and hangs a vine of the configured state down one face of one of them, 2 to 5 blocks long, ending above the
  * ground. One tree per placement; nothing when no trunk is found. The vine's {@code age} (if any) is random 1 to 3. The
  * block is named by id and looked up when placing, so the configured feature parses without it: the hops vine exists

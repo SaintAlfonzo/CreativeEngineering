@@ -24,7 +24,7 @@ import java.util.TreeMap;
  * table per load (Vintage's Fruits Delight jam jars, placed foods of More Delight, the fishing net's driftwood). Before
  * the tables are parsed (m_5787_ = apply):
  * <ul>
- *   <li>a top-level {@code "forge:conditions"} array is honoured like a recipe's: false drops the table;</li>
+ *   <li>a top-level {@code "forge:conditions"} array is honored like a recipe's: false drops the table;</li>
  *   <li>an item entry whose item is not registered and whose mod is not loaded is dropped (alternatives, groups and
  *       sequences are walked). A missing item of a loaded mod still fails as before, so pack bugs stay visible.</li>
  * </ul>

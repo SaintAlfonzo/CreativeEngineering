@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
  *
  * capture(event) takes the resource manager KubeJS built for this load (DataPackEventJS#wrappedManager: every mod
  * jar, kubejs/data, the donor packs). It has no getter, so it is read by reflection; when that fails (a KubeJS
- * update renamed it) every structure counts as present, which is the old behaviour, and one WARN says so.
+ * update renamed it) every structure counts as present, which is the old behavior, and one WARN says so.
  */
 public final class StructurePresence {
 	private static final Logger LOGGER = LogUtils.getLogger();

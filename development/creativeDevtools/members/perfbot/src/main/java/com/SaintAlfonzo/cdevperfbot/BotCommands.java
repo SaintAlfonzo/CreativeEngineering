@@ -75,7 +75,7 @@ import java.util.TreeMap;
  *                                 when blocked); end line "verb=pbot.moveto ... end=reached|stuck|timeout|stopped"
  *                                 with ticks, distance and speed; moveto-stop NAME
  *   inv NAME get | set SLOT ITEM [COUNT] | clear | select SLOT   inventory slots (0-8 hotbar, 9-35 main,
- *                                 36-39 armour feet to head, 40 off hand)
+ *                                 36-39 armor feet to head, 40 off hand)
  *   vulnerable NAME on|off        takes damage (default off: invulnerable); kept across a respawn
  *   pickup NAME on|off            picks up items and XP orbs (default on); kept across a respawn
  * Every bot is exempt from Loading Protection one tick after it spawns (Bots.onLogin).

@@ -76,7 +76,7 @@ public final class NoteGrid {
         return g;
     }
 
-    /** True when every note stack has the same NBT as the first (colour, special and text alike). */
+    /** True when every note stack has the same NBT as the first (color, special and text alike). */
     public boolean notesIdentical() {
         for (int i = 1; i < notes.size(); i++) {
             if (!ItemStack.isSameItemSameTags(notes.get(0), notes.get(i))) return false;

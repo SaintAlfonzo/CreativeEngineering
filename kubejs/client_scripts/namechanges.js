@@ -12,7 +12,7 @@ ClientEvents.lang('en_us', e => {
   
 
   // Food and Delight-member names (Rustic Delight, Canned Goods, Neapolitan, Delightful, Farmer's Delight, PneumaticCraft
-  // fried food) moved to Creative Delight 2026-10-27: kubejs/assets/creativedelight/kubejs/<mod>/client.js
+  // fried food) moved to Creative Delight: kubejs/assets/creativedelight/kubejs/<mod>/client.js
   // Brewin' and Chewin' pizza: the many-topping recipe in cooking/cooking.js
   e.add('block.brewinandchewin.pizza', 'Supreme Pizza')
   e.add('item.brewinandchewin.pizza_slice', 'Supreme Pizza Slice')

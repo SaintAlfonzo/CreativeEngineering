@@ -7,7 +7,7 @@ package com.SaintAlfonzo.creativecompat.surface;
  * kubejs blocktags.js ({@code var runner}) - a new tier needs an entry in both places.
  */
 public enum SurfaceTier {
-    ASPHALT("asphalt", 1.50, "Asphalt: Immersive Petroleum asphalt, Create D&D coloured asphalt."),
+    ASPHALT("asphalt", 1.50, "Asphalt: Immersive Petroleum asphalt, Create D&D colored asphalt."),
     CONCRETE("concrete", 1.40, "Concrete: vanilla concrete, IE concrete and hempcrete, Engineer's Decor rebar concrete, cinder blocks."),
     GRATING("grating", 1.30, "See-through walkway floors: catwalks, floor grating, Quark grate, metal scaffolding."),
     METAL("metal", 1.25, "Solid metal: storage blocks, copper, sheet metal and plating, metal fences, gates and trapdoors."),

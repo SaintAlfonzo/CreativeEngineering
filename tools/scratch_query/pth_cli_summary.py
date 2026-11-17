@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarises a scratch server log for pth_client_drive.py runs: per "PTHCLI <label>" marker, the player's watch
+"""Summarizes a scratch server log for pth_client_drive.py runs: per "PTHCLI <label>" marker, the player's watch
 lines condensed to one entry per change of pass-through modifier (pos, motion, modifier, speed attribute, hp).
     pth_cli_summary.py LOG [LABEL_PREFIX]"""
 import re

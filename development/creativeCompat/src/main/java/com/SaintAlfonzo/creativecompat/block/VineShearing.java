@@ -33,7 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  *       vine hanging below the cut is removed ({@code [vine_shearing] cutBelow}). {@code block.VineShearingClient}
  *       draws it with the bottom trimmed, like Quark's cut vine.</li>
  *   <li>Tips of weeping, twisting and cave vines and kelp (any {@link GrowingPlantHeadBlock}): shears set the tip to
- *       its maximum age, which never random-ticks. This is 1.20's shears behaviour; no new state. A cave vine tip with
+ *       its maximum age, which never random-ticks. This is 1.20's shears behavior; no new state. A cave vine tip with
  *       glow berries is left to its own berry picking, as 1.20 does.</li>
  * </ul>
  * Left alone: vanilla vine (Quark), Quark's own vines (never grow), Vinery's jungle grape vine (shears already toggle

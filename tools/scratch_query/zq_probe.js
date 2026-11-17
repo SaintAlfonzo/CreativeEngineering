@@ -1,4 +1,4 @@
-// RETIRED 2026-11-16: prep_srv.sh no longer copies this file into scratch servers; every reusable verb is a Java
+// RETIRED: prep_srv.sh no longer copies this file into scratch servers; every reusable verb is a Java
 // /cdevtest verb in Creative Devtools (feature_writeup/creative_devtools.md, /cdevtest; plan_scratch_testing_expansion.md
 // item 3). Kept so old run docs, batches and the one-off scripts that copy it themselves still make sense. Replacements:
 //   recipes, rdetail, bytype, uses, makes, food, item, potion, count, ages, chunk, tagsof, states -> same verb name

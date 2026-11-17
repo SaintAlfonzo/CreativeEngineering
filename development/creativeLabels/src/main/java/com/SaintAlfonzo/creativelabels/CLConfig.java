@@ -40,7 +40,7 @@ public final class CLConfig {
         b.push("item_labels");
         ANVIL_COST = b.comment("Level cost of adding a note's text to an item in the anvil (0 can't be taken by vanilla).")
                 .defineInRange("anvilCost", 1, 0, 39);
-        BLOCK_LABELLED_CRAFTING = b.comment("A crafting grid holding any labelled item gives no result (erase the labels first).")
+        BLOCK_LABELLED_CRAFTING = b.comment("A crafting grid holding any labeled item gives no result (erase the labels first).")
                 .define("blockLabelledCrafting", true);
         b.pop();
 

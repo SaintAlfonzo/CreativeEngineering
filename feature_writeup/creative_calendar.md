@@ -210,7 +210,7 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
-- 2026-10-30: Greenhouse rule (owner 2026-10-30): a greenhouse removes season fertility (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/CropSeasons.java)
+- 2026-10-30: Greenhouse rule (owner, 2026-10-30): a greenhouse removes season fertility (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/CropSeasons.java)
 - 2026-11-01: Every section moved from creativeengineering-common.toml on 2026-11-01 with its keys and comments unchanged (rule 3.3 of creative_split.md): {@code [seasons]}, {@code [crop_seasons]}, {@code [time]} (with {@code .day}, {@code .seasons}, {@code .wine}, {@code .wine.boosts}), and the two keys of other sections that only Calendar reads, kept under their old section names: {@code [perf] seasonsMeltIntervalTicks} and {@code [wthit] cropSeasons} / {@code cropOutOfSeason} (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java)
 - 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js)
 - 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js)

@@ -12,7 +12,7 @@
 // hanging roots, every #minecraft:flowers item, grass, fern, tall grass, large fern, vine; never melon, pumpkin or
 // moss blocks. A row stays only when some
 // holder other than the two Supplementaries planters took the plant (#minecraft:flowers and the grass row always
-// stay). Columns: one block per holder type (variants that only differ by wood, colour or material are left out; Floral
+// stay). Columns: one block per holder type (variants that only differ by wood, color or material are left out; Floral
 // Enchantment's large pot is hidden in the pack and left out).
 // Each cell is a fresh holder clicked by a survival fake player with the plant, so a cell is full only when the live
 // game accepts that plant there; anything a refused click places next to the holder is removed again. Hanging
@@ -82,7 +82,7 @@
         if (i >= 0) spec.substring(i + 1, spec.length - 1).split(',').forEach(kv => { let a = kv.split('='); props[a[0]] = a[1] })
         level.getBlock(p).set(baseId(spec), props)
     }
-    function setState(level, p, st) { level.setBlock(p, st, 18) }   // clients + known shape: no neighbour checks
+    function setState(level, p, st) { level.setBlock(p, st, 18) }   // clients + known shape: no neighbor checks
     function sig(level, p) {
         let st = String(level.getBlockState(p))
         let be = level.getBlockEntity(p)

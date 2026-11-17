@@ -133,7 +133,7 @@ public final class BabyKit<T extends LivingEntity> {
         return this;
     }
 
-    /** An extra layer definition the family's own code bakes through {@link #bake} (e.g. baby armour). */
+    /** An extra layer definition the family's own code bakes through {@link #bake} (e.g. baby armor). */
     public ModelLayerLocation extraLayer(String layerName, Supplier<LayerDefinition> definition) {
         ModelLayerLocation loc = location(name, layerName);
         extraDefinitions.put(loc, definition);

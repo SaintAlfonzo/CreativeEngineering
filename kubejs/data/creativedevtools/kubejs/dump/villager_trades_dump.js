@@ -6,7 +6,7 @@
 //
 // Trades are ItemListing factories, not static data: each builds a MerchantOffer from an
 // entity + RNG. So this makes a throwaway villager per profession and samples each listing
-// a number of times, de-duping the offers. Random listings (enchanted books, dyed armour,
+// a number of times, de-duping the offers. Random listings (enchanted books, dyed armor,
 // treasure maps, and "gatherer" trades that vary by villager biome type) only show the
 // variants that happened to roll - raise <samples> to catch more.
 // Also dumps Vinery's Wandering Winemaker pool (its own static map, not part of the wanderer pools).

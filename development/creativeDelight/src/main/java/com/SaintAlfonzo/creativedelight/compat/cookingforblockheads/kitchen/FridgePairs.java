@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * {@code facing.getClockWise()} in the world) an unflipped door has its handle at -x and its hinge at +x; a flipped door
  * the other way round. Two fridges are a pair when they face the same way, have the same height (1-tall, or both 2-tall)
  * and each one's handle side points at the other, so the hinges sit on the outer edges. A fridge's handle side holds one
- * neighbour only, so the pairing needs no scan along a row. A 2-tall fridge's door side comes from its lower block, as
+ * neighbor only, so the pairing needs no scan along a row. A 2-tall fridge's door side comes from its lower block, as
  * CfB's renderer draws both door halves from it.
  * <p>
  * Placement: a fridge placed next to an unpaired fridge whose handle points at it takes the mirrored door side, as
@@ -65,8 +65,8 @@ public final class FridgePairs {
     }
 
     /**
-     * The placement state with its door side mirrored to a neighbouring fridge whose handle points at {@code pos}; CfB's
-     * own choice (from where the player stands) wins when both neighbours qualify or neither does.
+     * The placement state with its door side mirrored to a neighboring fridge whose handle points at {@code pos}; CfB's
+     * own choice (from where the player stands) wins when both neighbors qualify or neither does.
      */
     public static BlockState mirrorOnPlace(BlockState placed, BlockGetter level, BlockPos pos) {
         if (placed == null || !placed.is(ModBlocks.fridge)) return placed;

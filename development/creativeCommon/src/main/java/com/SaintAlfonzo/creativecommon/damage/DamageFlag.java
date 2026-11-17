@@ -20,7 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
  * the attacker - so a message id alone can't key the cache).
  */
 public enum DamageFlag {
-    /** Skips armour and toughness - and, as in vanilla, shield blocking. */
+    /** Skips armor and toughness - and, as in vanilla, shield blocking. */
     ARMOR_PIERCING("armor_piercing", s -> s.isBypassArmor()),
     FIRE("fire", s -> s.isFire()),
     MAGIC("magic", s -> s.isMagic()),
@@ -45,7 +45,7 @@ public enum DamageFlag {
     private final Predicate<DamageSource> matcher;
 
     DamageFlag(String path, Predicate<DamageSource> matcher) {
-        // NAMESPACE is a compile-time constant, so this doesn't initialise DamageTags (which
+        // NAMESPACE is a compile-time constant, so this doesn't initialize DamageTags (which
         // itself reads DamageFlag) and can't form a class-init cycle.
         this.tag = new ResourceLocation(DamageTags.NAMESPACE, path);
         this.matcher = matcher;

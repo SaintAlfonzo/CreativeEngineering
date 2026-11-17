@@ -11,9 +11,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 /**
- * {@code creativelabels:note_dye} (sticky_notes.md 3.6): any number of identical notes (same colour, special-free,
+ * {@code creativelabels:note_dye} (sticky_notes.md 3.6): any number of identical notes (same color, special-free,
  * same text) + exactly one dye -> that many notes with the dye mixed in like leather, text kept. One note + several
- * dyes is vanilla's own armour-dye recipe (notes are {@code DyeableLeatherItem}s). Special notes don't take dye.
+ * dyes is vanilla's own armor-dye recipe (notes are {@code DyeableLeatherItem}s). Special notes don't take dye.
  */
 public class NoteDyeRecipe extends CustomRecipe {
 

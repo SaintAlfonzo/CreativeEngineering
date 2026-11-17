@@ -8,7 +8,7 @@
 // "[fdtest] done <part>: N pass, M fail".
 //
 // Player clicks go through ServerPlayerGameMode.useItemOn on a Forge fake player (tools/jar_mixing_test/probe.js
-// pattern). Not covered (client or a real player): JEI, names, colours, sounds, the Spice of Life bite itself
+// pattern). Not covered (client or a real player): JEI, names, colors, sounds, the Spice of Life bite itself
 // (PlacedFoodSol skips fake players on purpose), the kettle and oven screens.
 (() => {
     const $FDFake = Java.loadClass('net.minecraftforge.common.util.FakePlayerFactory')

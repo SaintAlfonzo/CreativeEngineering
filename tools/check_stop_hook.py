@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Claude Code Stop hook (plan_process_overhaul.md P1.1 and P1.5). Report only: it never blocks.
 
-Behaviour follows the role the session declared with tools/session_role.py (undeclared = impl, plus a hint):
+Behavior follows the role the session declared with tools/session_role.py (undeclared = impl, plus a hint):
   plan  nothing.
   impl  runs tools/check_all.py --fast --changed on this session's own uncommitted code files and shows its FAIL/WARN
         lines, plus a count of those files; when the session touched feature_writeup/, tools/ or jar_archive/, one line

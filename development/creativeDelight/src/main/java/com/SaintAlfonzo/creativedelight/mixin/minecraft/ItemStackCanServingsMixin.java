@@ -33,7 +33,7 @@ public abstract class ItemStackCanServingsMixin {
         try {
             can = entity instanceof Player && CanServings.isCan(self);
         } catch (Throwable t) {
-            return; // plain Canned Goods behaviour
+            return; // plain Canned Goods behavior
         }
         if (can) cir.setReturnValue(CanServings.finishServing(self, level, (Player) entity));
     }

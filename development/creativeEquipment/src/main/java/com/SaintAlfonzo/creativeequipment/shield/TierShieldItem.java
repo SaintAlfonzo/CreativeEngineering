@@ -63,7 +63,7 @@ public class TierShieldItem extends ShieldItem {
     }
 
     /**
-     * Vanilla's shield appends the banner colour ({@code item.minecraft.shield.white}); there is no
+     * Vanilla's shield appends the banner color ({@code item.minecraft.shield.white}); there is no
      * such lang key for these, so a bannered tier shield (crafting grid, via
      * {@code mixin/ShieldDecorationRecipeMixin}) keeps its plain tier name.
      */

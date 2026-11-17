@@ -149,7 +149,7 @@ if (prop('disable_target_validator') == 'true') {
     }
 }
 
-// resource_guard_jars: the jar must not carry upstream resources (licence and port guard: miners_delight.md D2, alcohol.md
+// resource_guard_jars: the jar must not carry upstream resources (license and port guard: miners_delight.md D2, alcohol.md
 // B4.8, rustic, Ender's ARR). Fail the build if a file under src/main/resources has the same path as a file in one
 // of the jars, except resource_guard_own_files.
 def upstreamJars = csv('resource_guard_jars').collect { String path ->
@@ -299,7 +299,7 @@ tasks.withType(AbstractArchiveTask).configureEach {
 
 // License files in the mod's folder (GPLv3 LICENSE / LICENSE.txt, upstream NOTICE-*) go into its jar.
 // A mod whose mod_license names the GPL and whose folder has no LICENSE file stops the build, so no jar ships
-// without the licence text (plan_cb_publish.md M6).
+// without the license text (plan_cb_publish.md M6).
 def checkLicenseFile = tasks.register('checkLicenseFile') {
     def license = prop('mod_license', '')
     def hasFile = ['LICENSE', 'LICENSE.txt'].any { new File(projectDir, it).isFile() }

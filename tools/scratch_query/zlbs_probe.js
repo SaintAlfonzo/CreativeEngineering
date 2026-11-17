@@ -1,12 +1,12 @@
 // Scratch-only Creative Labels probe for the SQ-LBS rows (feature_writeup/testing/scratch_queue.md, "SQ-LBS Creative
-// Labels: labels by surface, centred notes"; run r1103 batches/r1103/sB_*.qb). Copy into a scratch server's
+// Labels: labels by surface, centered notes"; run r1103 batches/r1103/sB_*.qb). Copy into a scratch server's
 // kubejs/server_scripts as zz_zlbs_probe.js, never into the pack. Needs creativeLabels 1.0.1 (FaceContent offX / offY /
 // labelSize) for the parts; `dump` also runs on 1.0.0.
 //   /zlbs labels    a label (sneak + right-click, the usable-host path) on the north side of each surface host;
 //                   checks the face Place (inset / offX / offY / size) against the SQ-LBS-01 table
 //   /zlbs refused   a label on door, trapdoor, bottom slab top, stairs side / front / top, cauldron top, pressure
 //                   plate top, poppy: no face_paper in the cell and the held label count unchanged (SQ-LBS-02)
-//   /zlbs centre    a written sticky note on the north side of each centre-note host (spot C only, offY per the
+//   /zlbs center    a written sticky note on the north side of each center-note host (spot C only, offY per the
 //                   SQ-LBS-03 table), then a second note on the same side and a note on top, both refused
 //   /zlbs refit     after labels and centre: each host set to air (setBlockAndUpdate = flag 3, as a survival break); the
 //                   blank label / written note drop at the cell and the cell is air (SQ-LBS-04). First a control: a wall
@@ -16,7 +16,7 @@
 //   /zlbs dump x0 z0 x1 z1   every face_paper block entity in the box (y -62..-50): "[zlbs] be x y z <saved NBT>"
 //                   (SQ-LBS-05: compare the lines of the 1.0.0 boot with the 1.0.1 boot)
 // Output: "[zlbs] PASS|FAIL|INFO <part> <host>: <detail>", then "[zlbs] DONE <part>: N pass, M fail".
-// Layout: superflat, hosts float at y -58 in x 300..360; labels z 20, refused z 26 (doors and stairs), centre z 32.
+// Layout: superflat, hosts float at y -58 in x 300..360; labels z 20, refused z 26 (doors and stairs), center z 32.
 (() => {
     const $ZLFake = Java.loadClass('net.minecraftforge.common.util.FakePlayerFactory')
     const $ZLProfile = Java.loadClass('com.mojang.authlib.GameProfile')
@@ -45,13 +45,13 @@
         ['minecraft:cauldron', 0, 0, 0, 10], ['minecraft:composter', 0, 0, 0, 10], ['minecraft:stone', 0, 0, 0, 10],
         ['minecraft:chest', 0.0625, 0, 0, 10]
     ]
-    // SQ-LBS-03 table: host, offY of the centre note
+    // SQ-LBS-03 table: host, offY of the center note
     const CENTRE_HOSTS = [
         ['supplementaries:jar', -1], ['supplementaries:sack', -2], ['trashcans:item_trash_can', -1.25],
         ['trashcans:liquid_trash_can', -1.25], ['trashcans:energy_trash_can', -1.25], ['trashcans:ultimate_trash_can', -1.25],
         ['vintagedelight:fermenting_jar', -1.25], ['botanypots:terracotta_botany_pot', -4]
     ]
-    // centre-note hosts whose top takes one note (creativelabels:paper/note_on_top, plan_scratch_bugfix_1103 4.4)
+    // center-note hosts whose top takes one note (creativelabels:paper/note_on_top, plan_scratch_bugfix_1103 4.4)
     const TOP_OK = ['supplementaries:jar', 'vintagedelight:fermenting_jar']
     const TOL = 0.002
     let results = { pass: 0, fail: 0 }
@@ -273,7 +273,7 @@
             else if (a[0] == 'centre') partCentre(level)
             else if (a[0] == 'refit') partRefit(level)
             else if (a[0] == 'dump') dump(level, a)
-            else log('INFO', 'unknown', a[0], 'parts: labels refused centre refit dump')
+            else log('INFO', 'unknown', a[0], 'parts: labels refused center refit dump')
         } catch (e) {
             log('FAIL', a[0], 'ERR', 'exception: ' + e + (e.javaException ? ' / ' + e.javaException : ''))
         }

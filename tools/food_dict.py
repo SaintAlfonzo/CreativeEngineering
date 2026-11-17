@@ -46,8 +46,8 @@ NOT_FOOD = {'minecraft:potion', 'minecraft:splash_potion', 'minecraft:lingering_
             'botania:brew_vial', 'potionbundles:potion_bundle', 'potionbundles:splash_potion_bundle',
             'potionbundles:lingering_potion_bundle'}
 
-# Kitchen ingredients that are not edible themselves (audit 2026-10-25: inputs of food recipes and the food mods'
-# item lists). id -> key.
+# Kitchen ingredients that are not edible themselves (audit: inputs of food recipes and the food mods' item
+# lists). id -> key.
 INGREDIENTS = {
     # grain and flour
     'minecraft:wheat': 'grain_wheat', 'farmersdelight:rice': 'grain_rice', 'farmersdelight:rice_panicle': 'grain_rice_panicle',

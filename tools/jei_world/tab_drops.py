@@ -10,7 +10,7 @@ config/supplementaries-common.toml [functional.jar]. Cookies: the pack's jar fam
 Faucet sources, fish buckets: hand-written in jar_*/manual.json (verified in the Supplementaries jar).
 
 knife_drops / grass_drops: the global loot modifiers listed in an active data/forge/loot_modifiers/
-global_loot_modifiers.json (merged over every jar and kubejs/data, `replace` honoured). A modifier file present in
+global_loot_modifiers.json (merged over every jar and kubejs/data, `replace` honored). A modifier file present in
 several jars resolves to the one from a jar that does not own its namespace (Abnormals Delight overrides Farmer's
 Delight's scavenging_feather / scavenging_leather). knife_drops: modifiers that need a knife, machete or other
 scavenging tool. grass_drops: the dumped block loot tables (kubejs/exported/loot_tables) of grass-like plants, per
@@ -170,8 +170,8 @@ def soft_fluids(ctx, pack):
 
 
 def jar_color(data):
-    """The soft fluid's colour as a signed ARGB int. The jar item renderer reads it from CachedColor (missing: 0,
-    drawn black); no colour or no_tint means untinted (-1)."""
+    """The soft fluid's color as a signed ARGB int. The jar item renderer reads it from CachedColor (missing: 0,
+    drawn black); no color or no_tint means untinted (-1)."""
     color = data.get('color')
     if not color or data.get('tint_method') == 'no_tint':
         return -1
@@ -197,7 +197,7 @@ def filled_ing(ids, fluid_id):
 
 def is_potion_row(ids, fluid_id):
     """Potion bottles into a jar: the row is written once and marked per_potion; patcherMod's PotionRows makes one row
-    per potion (bottles with the potion, jars with its NBT and colour)."""
+    per potion (bottles with the potion, jars with its NBT and color)."""
     return not fluid_id.endswith(':water') and any(i in POTION_BOTTLES for i in ids)
 
 

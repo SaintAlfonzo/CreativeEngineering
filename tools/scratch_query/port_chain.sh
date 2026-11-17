@@ -23,8 +23,8 @@ INST="$(cd "$(dirname "$0")/../.." && pwd)"
 PORT="$INST/../CEPortTesting"
 PARK="$PORT/disabledmods/cba_parked"
 # Hard dependencies of Creative Brewing, all the way down (plan_cb_publish.md 1.2 and 14; nested members' mods.toml
-# checked 2026-11-06: Vinery needs creativecalendar + foundation, Brewin' farmersdelight, both nested; MoreJS required
-# by Creative Brewing).
+# checked: Vinery needs creativecalendar + foundation, Brewin' farmersdelight, both nested; MoreJS required by
+# Creative Brewing).
 CHAIN=(
   "rhino-forge-*.jar" "architectury-*-forge.jar" "kubejs-forge-*.jar"
   "create-1.19.2-*.jar" "kubejs-create-forge-*.jar" "kubejsdelight-*.jar" "lootjs-forge-*.jar" "morejs-forge-*.jar"

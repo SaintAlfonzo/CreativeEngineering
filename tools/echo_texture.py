@@ -16,7 +16,7 @@ This script reproduces that. Two modes:
 
   python3 tools/echo_texture.py animate <frame0.png> [more.png ...]
       <frame0.png> is a single 16x16 sprite you drew. Glow parts must use the
-      exact RAMP colours below; everything else (handle, outline) is left static.
+      exact RAMP colors below; everything else (handle, outline) is left static.
       Writes  <name>.png  (16x192)  +  <name>.png.mcmeta  next to the input,
       overwriting the 16x16 source. Re-run any time you edit the art.
 
@@ -39,9 +39,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 INSTANCE = os.path.dirname(HERE)
 ASSET_DIR = os.path.join(INSTANCE, "kubejs", "assets", "creativeengineering", "textures", "item")
 
-# ── the echo glow ramp, dark → bright (index 0 → 11) ────────────────────────
+# ── the echo glow ramp, dark -> bright (index 0 -> 11) ────────────────────────
 # Painted from Create: Deep Dark's echo_sword.png frame 0. Use these EXACT
-# colours for anything that should pulse.
+# colors for anything that should pulse.
 RAMP = [
     (5, 16, 16), (9, 28, 28), (11, 34, 34), (14, 43, 43),
     (21, 64, 64), (27, 82, 82), (28, 85, 85), (32, 97, 97),
@@ -51,7 +51,7 @@ RAMP_IDX = {c: i for i, c in enumerate(RAMP)}
 
 # static echo palette (never animated)
 OUTLINE   = [(11, 32, 32), (33, 33, 33), (45, 45, 45)]   # dark fill / edges
-HANDLE    = [(53, 26, 12), (84, 42, 20), (134, 72, 41)]   # stick / grip, dark→light
+HANDLE    = [(53, 26, 12), (84, 42, 20), (134, 72, 41)]   # stick / grip, dark->light
 
 MCMETA = {"animation": {"frametime": 2, "frames": list(range(11, -1, -1))}}
 FRAMES = 12
@@ -81,7 +81,7 @@ def animate(paths):
                 if p[3] == 0:
                     fpx.append(p); continue
                 key = (p[0], p[1], p[2])
-                if key in RAMP_IDX:                       # a glow pixel → rotate
+                if key in RAMP_IDX:                       # a glow pixel -> rotate
                     fpx.append((*RAMP[(RAMP_IDX[key] + f) % FRAMES], p[3]))
                 else:                                    # static
                     fpx.append(p)
@@ -100,8 +100,8 @@ def animate(paths):
 
 
 def _recolor_diamond(tool_img):
-    """Rough diamond-shape → echo-palette conversion for a frame-0 starter.
-       Diamond's gem head is teal → head, brown stick → handle. Clean split."""
+    """Rough diamond-shape -> echo-palette conversion for a frame-0 starter.
+       Diamond's gem head is teal -> head, brown stick -> handle. Clean split."""
     out = []
     for c in tool_img.convert("RGBA").getdata():
         if c[3] == 0:
@@ -111,7 +111,7 @@ def _recolor_diamond(tool_img):
             t = max(0.0, min(1.0, (_lum(c) - 24) / (180 - 24)))
             out.append((*RAMP[round(t * (FRAMES - 1))], c[3]))
         elif _lum(c) < 22:
-            out.append((*OUTLINE[1], c[3]))                     # near-black → edge
+            out.append((*OUTLINE[1], c[3]))                     # near-black -> edge
         else:
             out.append((*_nearest(c, HANDLE), c[3]))            # brown stick
     img = Image.new("RGBA", tool_img.size); img.putdata(out)

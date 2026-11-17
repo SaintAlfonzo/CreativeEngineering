@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * {@code blockLabelledCrafting} under FastWorkbench: FastWorkbench 7.1.4 overwrites {@code slotsChanged} of both
  * the inventory menu and the crafting table menu to queue its own {@code FastBenchUtil.slotChangedCraftingGrid},
  * so vanilla's {@code CraftingMenu.slotChangedCraftingGrid} (where {@link CraftingMenuResultMixin} sits) never
- * runs and labelled items crafted freely. Same check at the head of FastWorkbench's copy. Its grid parameter is
+ * runs and labeled items crafted freely. Same check at the head of FastWorkbench's copy. Its grid parameter is
  * FastWorkbench's {@code CraftingInventoryExt}, taken here as its vanilla supertype (@Coerce; no compile
  * dependency).
  * <p>

@@ -13,7 +13,7 @@ coaster JSON would lie flat as its item sprite, so only items with a real block 
     Which block, best first: the food set down on its own (placed), then on a Small Food Plate, then on a Food Plate.
   * Other mods' placed drinks and jars (OWN_BLOCKS): the edible block items whose block class is listed there
     (Vinery's wine bottles, Vintage Delight's mason jars), pointing at their own block's default-state model.
-  * BORROW: a food whose item sprite is the same picture as a modelled food's (tools: feature_writeup/
+  * BORROW: a food whose item sprite is the same picture as a modeled food's (tools: feature_writeup/
     coaster_model_candidates.md) takes that food's coaster models, optionally with the enchantment glint.
 
 Block models are full-size blocks (a DD plate is 14 px across), so each entry gets a "scale" that brings its widest
@@ -49,8 +49,8 @@ OWN_BLOCKS = {
     'MasonJarBlock': ('mods/backportedVintage-*.jar',),
 }
 
-# Item -> (modelled item whose coaster models it takes, add the glint). Only foods whose item sprite is the same
-# picture as the reference's (coaster_model_candidates.md, score 1.00, same colours).
+# Item -> (modeled item whose coaster models it takes, add the glint). Only foods whose item sprite is the same
+# picture as the reference's (coaster_model_candidates.md, score 1.00, same colors).
 BORROW = {
     'farmersrespite:long_apple_cider': ('farmersdelight:apple_cider', False),
     'farmersrespite:strong_apple_cider': ('farmersdelight:apple_cider', False),
@@ -232,7 +232,7 @@ def build():
             out[file_name(item_id)] = entry
             counts['own'] += 1
 
-    # Same picture as a modelled food
+    # Same picture as a modeled food
     for item_id, (ref, glint) in sorted(BORROW.items()):
         if not wanted(item_id):
             continue

@@ -32,7 +32,7 @@ anchor and the structure parts they can't do without, which tools/gen_structure_
 Every placement field is kept, not just the tunable ones: exclusion_zone, spread_type,
 preferred_biomes and mod-specific fields (MES min_distance_from_world_origin, YUNG's
 enhanced_exclusion_zone / ring fields) all have to survive into an override, or the override
-silently changes behaviour (or fails to load, for required fields).
+silently changes behavior (or fails to load, for required fields).
 
 Run: python3 tools/gen_structure_config.py, then python3 tools/gen_structure_groups.py.
 kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js reads this baseline + structure_groups.json at
@@ -194,7 +194,7 @@ CODE_REGISTERED_SETS = {
 # Structures another mod stops in code, so tuning their set does nothing while the block is on.
 # Written into each structure entry as a read-only "blocked" note (and shown in the report).
 # (structure, jar glob, config file under config/, key, value that blocks it or None = always, who)
-# All javap-checked 2026-09-27: YUNG's Disable*Mixin cancel ChunkGenerator.tryGenerateStructure by
+# All javap-checked: YUNG's Disable*Mixin cancel ChunkGenerator.tryGenerateStructure by
 # StructureType; SmallNetherDungeonStructure.findGenerationPoint returns empty when disabled.
 CODE_BLOCKS = [
     ('minecraft:desert_pyramid', 'YungsBetterDesertTemples-*.jar', 'betterdeserttemples-forge-1_19.toml',

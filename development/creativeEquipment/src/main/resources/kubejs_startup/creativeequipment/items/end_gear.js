@@ -5,7 +5,7 @@ StartupEvents.registry('item', e => {
 
     // End gear and air brake sequenced assembly incomplete items ('kubejs:incomplete_<key>', ids unchanged; recipes in
     // kubejs/data/creativeequipment/kubejs/equipment/end_gear.js: echoAssembly, felsicAssembly, dragonAssembly). Row:
-    // [key, texture?, colorHex?]; texture omitted = grey copy of global.item[key]'s sprite. Create: Deep Dark and
+    // [key, texture?, colorHex?]; texture omitted = gray copy of global.item[key]'s sprite. Create: Deep Dark and
     // Felsic Gear keep their sprites under 'items/' (not 'item/'), so those rows name the texture; the four
     // creativeengineering:echo_* tools and every dragonloot item auto-derive.
     const END_GEAR_ASSEMBLIES = [

@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedelight.hearth.item;
 
 /**
  * Watering can tiers (pack addition; Hearth and Harvest 1.4.1 has one can, 16 / 16 on a 3x3, which is the gold tier
- * here). {@code size} is the side of the square area a use works on, {@code capacity} holds for water and fertiliser
+ * here). {@code size} is the side of the square area a use works on, {@code capacity} holds for water and fertilizer
  * each, {@code cauldronLevels} is what one fill takes from a water cauldron (a fill from a well or other water tank is
  * always one bucket, from a water source block free).
  */
@@ -25,7 +25,7 @@ public enum WateringCanTier {
     }
 
     /**
-     * Offsets {lo, hi} from the clicked block along one axis. Odd sizes are centred; even sizes take the extra row
+     * Offsets {lo, hi} from the clicked block along one axis. Odd sizes are centered; even sizes take the extra row
      * on the side of the block that was clicked ({@code frac} = hit position within the block, 0..1).
      */
     public int[] span(double frac) {

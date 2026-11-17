@@ -259,7 +259,7 @@ public final class PassBenchCommand {
         return Double.doubleToRawLongBits(e.getDeltaMovement().x) & 1L;
     }
 
-    /** The tick of the first entity in its cells this tick: the per-tick neighbour count cache emptied first. */
+    /** The tick of the first entity in its cells this tick: the per-tick neighbor count cache emptied first. */
     private static long cold(Entity e) {
         PassCountCache.get().clear();
         return tick(e);

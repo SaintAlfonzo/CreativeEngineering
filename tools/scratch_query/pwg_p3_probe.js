@@ -18,7 +18,7 @@
 //   fuse X Y Z AMPS|reset               fuse holder: set the rating (A) or reset a blown fuse
 //   fe X Y Z SIDE AMOUNT                receiveEnergy(AMOUNT) on the Forge Energy capability of the block at X Y Z from SIDE
 //   feget X Y Z SIDE                    stored FE and capacity on that side, with the game time
-//   drop X Y Z ITEM N                   N item entities of ITEM at the block centre of X Y Z (one entity each)
+//   drop X Y Z ITEM N                   N item entities of ITEM at the block center of X Y Z (one entity each)
 //   count X Y Z R ITEM                  item entities of ITEM (sum of counts) in a box of radius R
 // Output: "[zpwg3] ..." lines in logs/latest.log, then "[zpwg3] done".
 (() => {
@@ -144,12 +144,12 @@
             out('src ' + be.getValue())
         } else if (cmd == 'res') {
             let s = $BEB.get(level.getBlockEntity(P), $Scroll.TYPE)
-            if (s == null) throw 'no scroll behaviour at ' + P
+            if (s == null) throw 'no scroll behavior at ' + P
             s.setValue(parseInt(a[4]))
             out('res idx=' + a[4] + ' ohms=' + ohms(parseInt(a[4])))
         } else if (cmd == 'scroll') {
             let s = $BEB.get(level.getBlockEntity(P), $Scroll.TYPE)
-            if (s == null) throw 'no scroll behaviour at ' + P
+            if (s == null) throw 'no scroll behavior at ' + P
             s.setValue(parseInt(a[4]))
             out('scroll ' + s.getValue())
         } else if (cmd == 'recipes') {

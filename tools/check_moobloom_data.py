@@ -8,7 +8,7 @@ Reads the variants, breeding rules and spawn rules the game would load: the mod'
 kubejs/data on top (same path wins), and checks:
 - every variant (mooblooms.md 4.4): only known keys; a non-empty flower pool of block states (or {state,
   weight >= 1, chance 0-1, drop, optional, feed_weight >= 1}); feed and spawns_in_dark_on ids/#tags; any_weight and breed_weight >= 0;
-  egg_colors are two hex colours
+  egg_colors are two hex colors
 - a flower (item) in several variants' food is listed with each variant's share when a cow is fed it (by
   feed_weight)
 - every variant has a texture (mod resources or kubejs/assets) and an en_us name
@@ -136,7 +136,7 @@ def check_variant(vid, path, names):
             problem(vid, f'{key} below 0')
     colors = v.get('egg_colors')
     if colors is not None and (len(colors) != 2 or not all(COLOR.match(c) for c in colors)):
-        problem(vid, 'egg_colors needs two #RRGGBB colours')
+        problem(vid, 'egg_colors needs two #RRGGBB colors')
 
     ns, p = vid.split(':', 1)
     tex = os.path.join('assets', ns, 'textures', 'entity', 'moobloom', p + '.png')

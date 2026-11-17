@@ -332,7 +332,7 @@ def main():
 
     L += ['## Per namespace', '',
           'Every namespace with a loot table. "source" is the jar whose copy wins (`kubejs/data` and '
-          'vanilla are labelled as such); a namespace can be shipped by several jars.', '']
+          'vanilla are labeled as such); a namespace can be shipped by several jars.', '']
     header = ['namespace', 'total'] + [CAT_LABEL[c] for c in CATEGORIES] + ['live-only', 'source']
     rows = []
     for ns in sorted(by_ns, key=lambda n: (-sum(by_ns[n].values()), n)):

@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * WTHIT plugin: "Silk Touch Required: True / Drops Differently / False" in three colours (green, yellow, red).
+ * WTHIT plugin: "Silk Touch Required: True / Drops Differently / False" in three colors (green, yellow, red).
  * True = the block tag {@code creativecommon:wthit/needs_silk_touch} (nothing drops without Silk Touch),
  * Drops Differently = {@code wthit/silk_touch_differs} (something else drops, Silk Touch gives the block itself),
  * False = any other block, shown only with {@code [wthit] silkTouchShowFalse}. Both tags are generated from the loot

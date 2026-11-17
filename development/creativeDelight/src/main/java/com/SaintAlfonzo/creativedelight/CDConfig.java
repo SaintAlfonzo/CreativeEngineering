@@ -408,11 +408,11 @@ public final class CDConfig {
 
             b.comment(
                     "Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each",
-                    "colour has its own bonus chance for one extra. Each colour's share of the picked pepper is",
-                    "weight / (sum of weights). Per harvest, colour X averages",
+                    "color has its own bonus chance for one extra. Each color's share of the picked pepper is",
+                    "weight / (sum of weights). Per harvest, color X averages",
                     "  weightX / (sum of weights) + bonusChanceX",
                     "Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red",
-                    "bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll."
+                    "bonus (red about 58% of peppers). A weight of 0 takes the color out of the main roll."
             ).push("bell_peppers");
 
             bellPeppers = b.comment("true: use the values below. false: the mod's own table, untouched.")
@@ -695,7 +695,7 @@ public final class CDConfig {
                     "Quark feeding trough: after an animal's trough search finds nothing, it does not search again for",
                     "this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a",
                     "hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or",
-                    "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour)."
+                    "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behavior)."
             ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
 
             b.pop(); // perf

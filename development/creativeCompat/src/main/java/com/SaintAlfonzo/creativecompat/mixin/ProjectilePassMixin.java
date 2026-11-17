@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 /**
  * {@code Projectile#onHit} ({@code m_6532_}, protected) as {@link PassImpact} for the {@code break} group
- * (plan_passthrough.md 5.1): a projectile in a surrounded web has its impact run as a block hit at the cell centre
+ * (plan_passthrough.md 5.1): a projectile in a surrounded web has its impact run as a block hit at the cell center
  * ({@code surface.PassProjectiles}). The shadow call is virtual, so every subclass's own {@code onHit} runs. A duck
  * interface instead of an {@code @Invoker}: the annotation processor checks invokers against the Mojmap compile jar.
  */

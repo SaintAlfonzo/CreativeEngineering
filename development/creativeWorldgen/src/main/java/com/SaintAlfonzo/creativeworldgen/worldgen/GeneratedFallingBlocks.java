@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.FallingBlock;
  *
  * <p>Generation never makes sand or gravel fall itself; they fall when the chunk first ticks, for three reasons:
  * {@code LevelChunk.postProcessGeneration} re-runs {@code updateShape} on every marked position (blocks above
- * carvers and lakes), generated water flows for the first time ({@link FirstTickWater}) and updates its neighbours,
+ * carvers and lakes), generated water flows for the first time ({@link FirstTickWater}) and updates its neighbors,
  * and ticks a feature scheduled during generation fire. In the outer ring of loaded chunks (block ticks run, entities
  * do not) the falling entity never lands and is saved as is: 193 of 339 entities around spawn in the overall run.
  *
- * <p>{@code FallingBlock.updateShape} is where a neighbour change schedules the fall. While post-processing or a
+ * <p>{@code FallingBlock.updateShape} is where a neighbor change schedules the fall. While post-processing or a
  * settling fluid tick runs it returns the state without scheduling ({@code FallingBlockHoldMixin}), and generation's
  * own scheduled ticks for falling blocks are dropped ({@code ProtoChunkTicksFallingMixin}). Any later update next to
  * the block (a player digging, water outside the window, a piston) calls {@code updateShape} again and it falls as in

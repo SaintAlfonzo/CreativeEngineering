@@ -11,6 +11,6 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_soup_veggie_cooked, [i.boiled_blue_pickerelweed, i.boiled_purple_pickerelweed])
 
 	// Abnormals Delight's two pickerelweed pot recipes take any two (abnormals_delight.md 3.3; 1.21 Upgrade Aquatic
-	// merged the colours)
+	// merged the colors)
 	t.add(e, i.t_pickerelweed, [i.blue_pickerelweed, i.purple_pickerelweed])
 })

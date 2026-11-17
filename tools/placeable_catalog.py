@@ -10,7 +10,7 @@ Three ways to place food in this pack:
   * Crops and bushes that are edible (carrot, sweet berries...) plant rather than place. They are listed
     in the catalog but get no tag.
   * Brewin' and Chewin' coasters (backport) take up to 4 items, and with [coaster] taggedItemsOnly only the ones
-    with a coaster model: the port's own (COASTER_DIR) and the block-modelled foods tools/gen_coaster_models.py
+    with a coaster model: the port's own (COASTER_DIR) and the block-modeled foods tools/gen_coaster_models.py
     writes (PACK_COASTER_DIR, run it first). Those get "Placeable on a coaster" (alcohol.md 8.3, 12).
 
 Outputs:
@@ -67,8 +67,8 @@ COASTER_DIR = INSTANCE / 'development/creativeBrewing/members/brewin/src/main/re
 # The pack's coaster models (Display Delight's placed models, other mods' wine bottles and jars, borrowed models),
 # from tools/gen_coaster_models.py, shipped in the Creative Brewing jar.
 PACK_COASTER_DIR = INSTANCE / 'development/creativeBrewing/src/main/resources/assets/creativebrewing/brewinandchewin/coaster'
-# Only items with a coaster model go on a coaster (owner 2026-10-25: the produce of every raw, cooked, egg and dairy
-# food type had joined the tag and lay flat without a model; those were cut, food_families.md 4.4).
+# Only items with a coaster model go on a coaster (owner: the produce of every raw, cooked, egg and dairy food type
+# had joined the tag and lay flat without a model; those were cut, food_families.md 4.4).
 
 # Block classes that make a non-edible block item a placed food (same words as dump_food.js FOOD_BLOCK).
 FOOD_BLOCK = re.compile(r'(Cake|Feast|Pie|Pizza|Pudding|Sandwich|Roast|Platter|Food)')

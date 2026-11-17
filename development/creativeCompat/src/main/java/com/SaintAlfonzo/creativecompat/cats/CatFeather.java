@@ -84,7 +84,7 @@ public final class CatFeather {
             return CompatConfig.CATS.hookPlayers.get();
         }
         if (!(entity instanceof Mob)) {
-            return false; // armour stands and other non-mob living things
+            return false; // armor stands and other non-mob living things
         }
         boolean hostile = entity instanceof Enemy && !(entity instanceof NeutralMob);
         return hostile ? CompatConfig.CATS.hookHostile.get() : CompatConfig.CATS.hookNeutralAndPassive.get();

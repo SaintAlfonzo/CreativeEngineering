@@ -207,8 +207,8 @@ public final class PassThrough {
 
     /**
      * The block's tier scales the fall distance itself (fall below 1.0) and the block is not dense with
-     * {@code denseResetsFall} (that one resets anyway), or it is a bush (owner ruling 2026-11-15: no reset, sweet
-     * berry bush included): vanilla's fast-fall reset must not fire on it. Other tiers without a fall rule (ropes, as
+     * {@code denseResetsFall} (that one resets anyway), or it is a bush (owner ruling: no reset, sweet berry bush
+     * included): vanilla's fast-fall reset must not fire on it. Other tiers without a fall rule (ropes, as
      * climbables) keep vanilla's reset. No entity: the headless harness tests it.
      */
     static boolean ownsFallReset(BlockGetter level, BlockPos pos, BlockState state, PassValues values) {
@@ -218,7 +218,7 @@ public final class PassThrough {
         if (v.inert()) return false;
         PassRule.Cell c = rule(level, pos, state, tier, v, values);
         if (c == null) return false;
-        if (tier == PassTier.BUSH) return true; // owner ruling 2026-11-15: bushes never cancel fall damage
+        if (tier == PassTier.BUSH) return true; // owner ruling: bushes never cancel fall damage
         return c.fall() < 1.0 && !c.resetFall();
     }
 
@@ -253,8 +253,8 @@ public final class PassThrough {
     }
 
     /**
-     * Same-tier neighbours of {@code pos}, counted now: the 4 side-adjacent cells on its layer ({@code SIDES}) or the 6
-     * face-adjacent cells ({@code FACES}). A neighbour counts whatever its growth (a freshly planted crop adds density).
+     * Same-tier neighbors of {@code pos}, counted now: the 4 side-adjacent cells on its layer ({@code SIDES}) or the 6
+     * face-adjacent cells ({@code FACES}). A neighbor counts whatever its growth (a freshly planted crop adds density).
      * Movement reads the baked count instead ({@link PassCounts#count}).
      */
     public static int neighbours(BlockGetter level, BlockPos pos, PassTier tier, PassTier.Neighbours mode) {
@@ -293,7 +293,7 @@ public final class PassThrough {
 
     /**
      * The rule of one tiered block: null below its growth or layers rule, or a layer block high enough to act whole.
-     * Neighbour counts come baked ({@link PassCounts}).
+     * Neighbor counts come baked ({@link PassCounts}).
      */
     @Nullable
     static PassRule.Cell rule(BlockGetter level, BlockPos pos, BlockState state, PassTier tier, PassTier.Values v,
@@ -353,8 +353,8 @@ public final class PassThrough {
      * Every counted block for {@code e} this tick, into {@code out} (reset first). Does not change the entity.
      * Inert tiers (all values 1.0, e.g. grass by default) are skipped.
      *
-     * <p>Neighbour counts (plan_post_scratch_1115b.md C2): baked into the chunk ({@link PassCounts}), so a counted
-     * block is read once until a neighbour is broken or placed; the first counts of an entity are done together from
+     * <p>Neighbor counts (plan_post_scratch_1115b.md C2): baked into the chunk ({@link PassCounts}), so a counted
+     * block is read once until a neighbor is broken or placed; the first counts of an entity are done together from
      * one read of the blocks around them ({@link #countRegion}).
      */
     public static PassResult evaluate(Entity e, PassValues values, PassResult out) {
@@ -425,7 +425,7 @@ public final class PassThrough {
         PassTier[] tier = new PassTier[8];
         PassTier.Values[] values = new PassTier.Values[8];
         boolean[] walk = new boolean[8];
-        /** Neighbour count, -1 = still to count. */
+        /** Neighbor count, -1 = still to count. */
         int[] count = new int[8];
         PassTier.Neighbours[] mode = new PassTier.Neighbours[8];
         /** Layer tier: the height-derived walk value; NaN otherwise. */

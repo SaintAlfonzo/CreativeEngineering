@@ -14,11 +14,11 @@ import java.util.Map;
  * <p>Plain Java (no game classes) so the headless harness can test the defaults.
  */
 public enum PassGroup {
-    /** Surrounded web: the impact runs as a block hit at the cell centre, then the projectile is gone. */
+    /** Surrounded web: the impact runs as a block hit at the cell center, then the projectile is gone. */
     BREAK,
-    /** Surrounded web: no horizontal motion, on the cell's centre line, sinks at the dense fall speed. */
+    /** Surrounded web: no horizontal motion, on the cell's center line, sinks at the dense fall speed. */
     SETTLE,
-    /** Any web: held at the centre of the web cell until reeled in, picked up or the web breaks. */
+    /** Any web: held at the center of the web cell until reeled in, picked up or the web breaks. */
     SNAG,
     /** Surrounded web: held where it entered until its flight time ends (fireworks). */
     LINGER,

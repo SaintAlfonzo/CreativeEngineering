@@ -288,7 +288,7 @@ def transform(src):
     # ItemPredicate.test (1.20.5+) -> matches, for the predicate() accessors of Lens/Filter and Optional<ItemPredicate>
     src = re.sub(r'\.predicate\(\)\.test\(', '.predicate().matches(', src)
 
-    # 1.19.3+ ItemStack/vanilla API -> backport.util.Backport statics (same behaviour)
+    # 1.19.3+ ItemStack/vanilla API -> backport.util.Backport statics (same behavior)
     for name in ('isSameItemSameComponents', 'hashItemAndComponents', 'listMatches', 'hashStackList'):
         src = re.sub(rf'\bItemStack\.{name}\(', f'Backport.{name}(', src)
     src = re.sub(r'\bItemStack\.isSameItem\(', 'ItemStack.isSame(', src)

@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativecompat.surface;
 
 /**
- * The pass-through rule for one block (plan sections 1 and 2): given its tier's values and how many neighbours of the
+ * The pass-through rule for one block (plan sections 1 and 2): given its tier's values and how many neighbors of the
  * same tier it has, the walk and fall multipliers that apply inside it, whether density lowered them, and whether the
  * block is surrounded (a full count in a {@code surrounded = web} tier). Shared by movement ({@link PassThrough}),
  * items and projectiles (phase 2) and the WTHIT line (phase 5), so they always agree.
@@ -15,7 +15,7 @@ public final class PassRule {
     /**
      * One counted block.
      *
-     * @param neighbours same-tier neighbours counted (0 when the tier counts none)
+     * @param neighbors same-tier neighbors counted (0 when the tier counts none)
      * @param walk       horizontal multiplier inside (dense value when dense)
      * @param fall       downward multiplier inside, and the fall-distance factor per block passed
      * @param dense      the count reached {@code denseFrom}
@@ -68,7 +68,7 @@ public final class PassRule {
         return 1.0 - (1.0 - layerMaxSlow) * (layers - 1) / (double) (h - 1);
     }
 
-    /** The neighbour count only matters for a tier that counts them; skip the block lookups otherwise. */
+    /** The neighbor count only matters for a tier that counts them; skip the block lookups otherwise. */
     public static boolean needsCount(PassTier.Values v) {
         return v.neighbours() != PassTier.Neighbours.NONE;
     }

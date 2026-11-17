@@ -3,7 +3,7 @@
 ServerEvents.recipes(e => {
 
 /*
-Combed the whole file. It's thorough on ore→crushed→dust→ingot for the base 9 (copper, iron, gold, zinc, aluminum, lead, silver, nickel, uranium) — crushing, IE crusher, arc furnace, dust blocks are all complete and consistent. The gaps are all in plate / rod / dust-recycle, where you standardized some metals and left the rest on a foreign recipe.
+Combed the whole file. It's thorough on ore->crushed->dust->ingot for the base 9 (copper, iron, gold, zinc, aluminum, lead, silver, nickel, uranium) — crushing, IE crusher, arc furnace, dust blocks are all complete and consistent. The gaps are all in plate / rod / dust-recycle, where you standardized some metals and left the rest on a foreign recipe.
 
 Standardization gaps
 1. Plate is a mess — 3 partial coverage sets
@@ -14,17 +14,17 @@ Hand hammering (hammer + ingot)	gold, zinc	immersiveengineering:crafting/plate_{
 (Rod-press and wire-press you did standardize across all 9/8 — plate is the odd one out.)
 
 2. Manual rod (crafting table) — zinc only
-R.shaped(rod_zinc …) at line 558 is the only one. immersiveengineering:crafting/stick_iron + crafting/stick_aluminum still fill iron/aluminum (2 ingot → 1 rod); copper/gold/lead/silver/nickel/uranium have no bench rod recipe.
+R.shaped(rod_zinc …) at line 558 is the only one. immersiveengineering:crafting/stick_iron + crafting/stick_aluminum still fill iron/aluminum (2 ingot -> 1 rod); copper/gold/lead/silver/nickel/uranium have no bench rod recipe.
 
-3. Dust → ingot recycle — zinc only
-Lines 458/471/476 do dust_zinc → ingot_zinc (smelt/blast/arc). The other 8 fall back to immersiveengineering:arcfurnace/dust_{copper,iron,gold,aluminum,lead,silver,nickel,uranium} (all 8 exist, unremoved) + IE's smelting/ingot_*_from_dust for aluminum/lead/nickel/silver.
+3. Dust -> ingot recycle — zinc only
+Lines 458/471/476 do dust_zinc -> ingot_zinc (smelt/blast/arc). The other 8 fall back to immersiveengineering:arcfurnace/dust_{copper,iron,gold,aluminum,lead,silver,nickel,uranium} (all 8 exist, unremoved) + IE's smelting/ingot_*_from_dust for aluminum/lead/nickel/silver.
 
 4. hammercrushing_zinc / raw_hammercrushing_zinc — removed with the other metals'.
 
-5. Plate-block ↔ plate: copper's 9 plate_copper → plate_block_copper added.
+5. Plate-block ↔ plate: copper's 9 plate_copper -> plate_block_copper added.
 
 Minor / probably intentional
-Raw block → storage block smelt/blast: zinc only (with the quark flag). aluminum/lead/silver/nickel/uranium raw blocks have no "smelt to block" path.
+Raw block -> storage block smelt/blast: zinc only (with the quark flag). aluminum/lead/silver/nickel/uranium raw blocks have no "smelt to block" path.
 brass / steel / constantan / electrum: only wire-coil/coil-block recipes — no plate/rod/wire standardization (they're alloys, no ore, so maybe fine).
 Uranium wire is deliberately absent (i.wire_uranium = i.none) — not a gap.
 Want me to fill these in? I'd need your call on: plate — keep IE press for the 8 + add pack Create pressing for the missing 5, or fully replace with one standardized method? And ratios for manual rod / dust-recycle.

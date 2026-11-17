@@ -146,7 +146,7 @@ public final class CEQConfig {
                     .define("sprintJump", true);
             holdTicks = b.comment("Client: ticks the step-up keys must be held before stepping up (20 = 1 second).")
                     .defineInRange("holdTicks", 5, 0, 100);
-            maxDrift = b.comment("Blocks the player may drift sideways from the stool's centre (knockback, pistons) before stepping off.")
+            maxDrift = b.comment("Blocks the player may drift sideways from the stool's center (knockback, pistons) before stepping off.")
                     .defineInRange("maxDrift", 0.3, 0.05, 0.5);
             stepOffWhenHurt = b.comment("Taking damage knocks the player off the stool.")
                     .define("stepOffWhenHurt", true);
@@ -214,7 +214,7 @@ public final class CEQConfig {
                     "Fraction of downward (falling) speed removed each tick the brake is held - e.g. 0.02",
                     "removes 2% of the current fall speed per tick. Deliberately gentle and multiplicative",
                     "(not the flat per-tick subtraction used above) so the brake trims a dive instead of",
-                    "cancelling it outright."
+                    "canceling it outright."
             ).defineInRange("downwardSlowFactorPerTick", 0.02, 0.0, 1.0);
 
             terminalDownwardSpeed = b.comment(

@@ -33,12 +33,12 @@ import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * Field Sprinkler: 10 000 mB of water, soaks farmland to moisture 7 within 7 blocks, puts out fires, spends one
- * fertiliser on a crop every 5 s, stops on a redstone signal. Fills by itself in rain (20 mB/s) and beside a water
+ * fertilizer on a crop every 5 s, stops on a redstone signal. Fills by itself in rain (20 mB/s) and beside a water
  * source (100 mB / 2 s, so effectively infinite).
  * <p>
  * Scan cost (row note: upstream scans 675 + 1125 blocks every 2 s per sprinkler): one pass over the 15x5x15 volume runs
  * every {@code sprinklerRescanTicks} (5 s by default, staggered per block) and caches the farmland and crop positions;
- * the 2 s watering and the 5 s fertilising use the cached positions only. Fire is also handled in that pass.
+ * the 2 s watering and the 5 s fertilizing use the cached positions only. Fire is also handled in that pass.
  */
 public class SprinklerBlockEntity extends SyncedBlockEntity {
     public static final int CAPACITY = 10000;

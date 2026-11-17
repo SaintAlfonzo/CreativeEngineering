@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-time normalisation of off-legend TODO statuses (plan_process_overhaul.md P1.4 item 3, 2026-11-16).
+"""One-time normalization of off-legend TODO statuses (plan_process_overhaul.md P1.4 item 3, 2026-11-16).
 
 Mapping (no judgment beyond it):
   Built...            -> Testing (In Progress when the old status text says FAIL or "not built")
@@ -81,7 +81,7 @@ def main(dry):
             continue
         cells[2] = ns
         if extra:
-            cells[5] = '**Status was "%s" (normalised 2026-11-16).** %s' % (extra, cells[5])
+            cells[5] = '**Status was "%s" (normalized 2026-11-16).** %s' % (extra, cells[5])
         changed.append((cells[0], old, ns))
         out.append('| ' + ' | '.join(cells) + ' |')
     # append moved rows at the end of the archive table (the file ends with it)
@@ -100,7 +100,7 @@ def main(dry):
         return 0
     TODO.write_text('\n'.join(out))
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    rep = ['# TODO status normalisation, 2026-11-16', '',
+    rep = ['# TODO status normalization, 2026-11-16', '',
            'One-time pass by `tools/status_normalise_todo.py` (plan_process_overhaul.md P1.4 item 3). Mapping: "Built" to',
            'Testing (In Progress when the old text says FAIL or "not built"); "Installed ..." and "Tested" to Testing; "Done" /',
            '"Complete" outside the archive moved to the archive table (Status and Tests kept in Details); "Open" and "Idea" to',

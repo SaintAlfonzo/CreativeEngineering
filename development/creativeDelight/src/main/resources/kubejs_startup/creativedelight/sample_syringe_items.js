@@ -13,7 +13,7 @@
 // Written out one item per line on purpose (no shared helper/array loop) so each animal
 // can be added, removed, or debugged independently.
 //
-// Behaviour + the sampleable-mob list: sample_syringe.js (CD startup tree) (global.sampleSyringe)
+// Behavior + the sampleable-mob list: sample_syringe.js (CD startup tree) (global.sampleSyringe)
 // Interact/attack handlers:            CD server creativedelight/sample_syringe.js
 //
 // All variants share the one empty-syringe texture (assets/creativeengineering/textures/item/

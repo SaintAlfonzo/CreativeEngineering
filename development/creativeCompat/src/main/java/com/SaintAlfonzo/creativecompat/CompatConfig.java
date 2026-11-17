@@ -52,7 +52,7 @@ public final class CompatConfig {
      * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]}
      * and {@code [giant_squid]} are new in this file and are not carried. {@code [campfire]}
      * moved on to Creative Delight's file (creative_split.md 7.9 step 1), which carries it from here.
-     * {@code [leaf_piles]} has no spec since 2026-11-15: carried from an old file, {@code surface.LeafPileMigration}
+     * {@code [leaf_piles]} has no spec: carried from an old file, {@code surface.LeafPileMigration}
      * then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it.
      */
     public static final List<String> SECTIONS =
@@ -99,10 +99,10 @@ public final class CompatConfig {
         public final ForgeConfigSpec.DoubleValue tintStrength;
 
         private Moss(ForgeConfigSpec.Builder b) {
-            b.comment("Moss block and moss carpet colour (client only; the server ignores this section).").push("moss");
+            b.comment("Moss block and moss carpet color (client only; the server ignores this section).").push("moss");
 
             biomeTint = b.comment(
-                    "On: moss block and moss carpet take the biome's grass colour, like grass blocks.",
+                    "On: moss block and moss carpet take the biome's grass color, like grass blocks.",
                     "Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it."
             ).define("biomeTint", true);
 
@@ -129,7 +129,7 @@ public final class CompatConfig {
             b.comment(
                     "Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,",
                     "as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave",
-                    "vine or kelp stop it growing longer (1.20's behaviour)."
+                    "vine or kelp stop it growing longer (1.20's behavior)."
             ).push("vine_shearing");
 
             enabled = b.comment("Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).")
@@ -245,7 +245,7 @@ public final class CompatConfig {
 
             positions = b.comment(
                     "Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.",
-                    "The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are",
+                    "The anchor is a fraction of the panel (0.5 = center, 1.0 = right/bottom edge) and x/y are",
                     "pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the",
                     "panel's bottom-right corner. Dragging the slot in game overrides this."
             ).defineList("positions", DEFAULT_POSITIONS, o -> o instanceof String);
@@ -278,7 +278,7 @@ public final class CompatConfig {
                     "true: a cast Feather on a Stick sticks to a mob it hits, like a fishing hook (reeling in lets go, no",
                     "pull), and the caster's tamed cats nearby attack the hooked mob while it stays hooked. Sitting cats and",
                     "Cozy's Improved Cats cats in Stay mode do not join. false: the feather passes through mobs (Domestication",
-                    "Innovation's own behaviour)."
+                    "Innovation's own behavior)."
             ).define("featherHooksMobs", true);
             hookHostile = b.comment("Hostile mobs (monsters that are not neutral) can be hooked.")
                     .define("hookHostile", true);
@@ -445,7 +445,7 @@ public final class CompatConfig {
             b.comment(
                     "TNT shrapnel: when a primed TNT entity or a burning TNT item explodes, it also",
                     "flings out a burst of fast, gravity-immune projectiles mostly along the horizontal",
-                    "plane (with some vertical variation) that despawn once they've travelled far enough."
+                    "plane (with some vertical variation) that despawn once they've traveled far enough."
             ).push("shrapnel");
 
             enabled = b.comment("Master on/off switch for TNT shrapnel.")
@@ -718,7 +718,7 @@ public final class CompatConfig {
                                     "Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6",
                                     "face-adjacent blocks). Same-tier blocks count, grown or not.")
                             .defineEnum("neighbours", d.neighbours(), PassTier.Neighbours.CONFIG);
-                    denseFrom = b.comment("Neighbour count at which the dense values apply (above the shape's max: never).")
+                    denseFrom = b.comment("Neighbor count at which the dense values apply (above the shape's max: never).")
                             .defineInRange("denseFrom", d.denseFrom(), 1, 6);
                     denseWalk = b.comment("Walk multiplier once dense.")
                             .defineInRange("denseWalk", d.denseWalk(), 0.05, 1.5);
@@ -728,7 +728,7 @@ public final class CompatConfig {
                             .define("denseResetsFall", d.denseResetsFall());
                     surrounded = b.comment("What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).")
                             .defineEnum("surrounded", d.surrounded());
-                    surroundedAt = b.comment("Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).")
+                    surroundedAt = b.comment("Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).")
                             .defineInRange("surroundedAt", d.surroundedAt(), 1, 6);
                     walkOnlyMoving = b.comment("Walk slowdown only while moving horizontally through the block (vines).")
                             .define("walkOnlyMoving", d.walkOnlyMoving());
@@ -1301,7 +1301,7 @@ public final class CompatConfig {
             passthroughTiming = b.comment(
                     "true: time the pass-through hook and log one '[passthrough-timing]' line every 200 ticks, for",
                     "the server and the client separately: hook calls, total and longest time, entity-ticks inside a",
-                    "pass-through block, neighbour counts, and the tick time they share. Read them with",
+                    "pass-through block, neighbor counts, and the tick time they share. Read them with",
                     "python3 tools/perf/passthrough_timing.py logs/latest.log. Read every tick, so it applies as soon",
                     "as the file is reloaded (an editor that saves by replacing the file is missed by Forge's watcher:",
                     "run /cdevreload compat or restart)."

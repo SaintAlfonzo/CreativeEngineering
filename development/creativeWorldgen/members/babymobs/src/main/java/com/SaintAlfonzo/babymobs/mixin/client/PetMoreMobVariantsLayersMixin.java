@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * More Mob Variants' pig mud, sheep horns and sheared-wool colour layers are drawn for the adult (or old half-size baby)
+ * More Mob Variants' pig mud, sheep horns and sheared-wool color layers are drawn for the adult (or old half-size baby)
  * geometry; on a remodelled baby (variantBabies = NEW_MODELS, pig / sheep remodelled) they are skipped. Optional
  * targets: absent mod = no-op (require = 0). m_6494_ = RenderLayer.render (the bridge every call goes through).
  */

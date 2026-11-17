@@ -44,8 +44,8 @@ import java.util.function.Predicate;
  * in creativecommon-common.toml.
  *
  * <p>Target-driven: every random tick of a target ({@code mixin.MeltingBlockStateMixin}, BlockStateBase.randomTick)
- * rolls its chance first, then looks at its 6 neighbours (salt, fire, lava within 1), then, only when block light
- * reaches it or a neighbour, scans a sphere (nearest first, through any blocks) for fire and lava in reach. Dark
+ * rolls its chance first, then looks at its 6 neighbors (salt, fire, lava within 1), then, only when block light
+ * reaches it or a neighbor, scans a sphere (nearest first, through any blocks) for fire and lava in reach. Dark
  * glaciers cost one roll and, on success, 6 block reads. Source-driven: a fire source whose light is below
  * {@link #DIM_LIGHT} (magma, 3) would hide in the dark at range, so its own random tick melts the targets in its sphere
  * (each with its own roll) and the target side ignores it; the chunk sections in reach are checked for targets by
@@ -66,7 +66,7 @@ public final class Melting {
 
     private static final byte MELTABLE = 1, SLOW = 2, SALT = 4, FIRE = 8, LAVA = 16, DRIVEN = 32, INSTANT = 64;
     private static final Direction[] DIRECTIONS = Direction.values();
-    /** {dx, dy, dz, d2} for every offset within MAX_RANGE except the centre, nearest first. */
+    /** {dx, dy, dz, d2} for every offset within MAX_RANGE except the center, nearest first. */
     private static final int[][] OFFSETS = buildOffsets();
 
     private static volatile Reference2ByteOpenHashMap<Block> flags = new Reference2ByteOpenHashMap<>();
@@ -270,7 +270,7 @@ public final class Melting {
         int fireR = slow ? c.slowFireRange() : c.fireRange();
         int lavaR = slow ? c.slowLavaRange() : c.lavaRange();
 
-        // 1. the 6 neighbours (loaded: they border a ticking chunk at most)
+        // 1. the 6 neighbors (loaded: they border a ticking chunk at most)
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
         for (Direction d : DIRECTIONS) {
             m.setWithOffset(pos, d);
@@ -353,7 +353,7 @@ public final class Melting {
         return !s.hasProperty(BlockStateProperties.LIT) || s.getValue(BlockStateProperties.LIT);
     }
 
-    /** Block light at the target or a neighbour (an opaque target such as a snow block holds none itself). */
+    /** Block light at the target or a neighbor (an opaque target such as a snow block holds none itself). */
     private static boolean blockLit(ServerLevel level, BlockPos pos, BlockPos.MutableBlockPos m) {
         if (level.getBrightness(LightLayer.BLOCK, pos) > 0) return true;
         for (Direction d : DIRECTIONS) {

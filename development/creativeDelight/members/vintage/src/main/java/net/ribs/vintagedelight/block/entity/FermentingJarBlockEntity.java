@@ -252,7 +252,7 @@ public class FermentingJarBlockEntity extends BlockEntity implements MenuProvide
             ItemStack secondaryResult = recipe.getSecondaryResultItem();
             this.maxProgress = recipe.getProcessingTime();
             // Port fix: progress belongs to one recipe. Upstream kept it when the inputs turned into another recipe, so
-            // the new batch finished at once (scratchpad 2026-11-02: kimchi finished instantly).
+            // the new batch finished at once (scratchpad: kimchi finished instantly).
             if (!recipe.getId().equals(this.progressRecipe)) {
                 this.progress = 0;
                 this.progressRecipe = recipe.getId();

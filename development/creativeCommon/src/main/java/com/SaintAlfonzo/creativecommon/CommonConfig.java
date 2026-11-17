@@ -154,7 +154,7 @@ public final class CommonConfig {
 
         private DamageTagConfig(ForgeConfigSpec.Builder b) {
             b.comment(
-                    "Damage tags classify every hit (fire, magic, electric, ...) so shields - and later armour -",
+                    "Damage tags classify every hit (fire, magic, electric, ...) so shields - and later armor -",
                     "can treat kinds of damage differently. Every tag is a data/creativecommon/damage_tags/",
                     "<name>.json file, merged across datapacks and reloaded by /reload: most list message ids",
                     "directly (fire.json, magic.json, ... - these mirror vanilla's own damage flags, but as a",
@@ -309,9 +309,9 @@ public final class CommonConfig {
             b.comment("Mob effects (client and server).").push("effects");
             categoryOverrides = b.comment(
                     "Category overrides, \"namespace:effect=CATEGORY\" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.",
-                    "The category colours the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
+                    "The category colors the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
                     "two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the",
-                    "effects whose own category showed the wrong colour (feature_writeup/effects.md 2.4). Read live."
+                    "effects whose own category showed the wrong color (feature_writeup/effects.md 2.4). Read live."
             ).defineList("categoryOverrides", List.of(
                     "create_confectionery:rest=BENEFICIAL",
                     "alexsmobs:debilitating_sting=HARMFUL",
@@ -417,7 +417,7 @@ public final class CommonConfig {
                     "block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow becomes air) and",
                     "/meltable_slow (packed and blue ice, one tier down). Each target rolls once per random tick. Ranges are",
                     "spheres measured through any blocks: 1 = the 6 touching blocks, 0 = this source never melts that kind.",
-                    "A target looks past its 6 neighbours only when block light reaches it, so a fire or lava behind a sealed",
+                    "A target looks past its 6 neighbors only when block light reaches it, so a fire or lava behind a sealed",
                     "wall melts nothing; magma (light 3) melts from its own random tick instead. feature_writeup/melting.md."
             ).push("melting");
 

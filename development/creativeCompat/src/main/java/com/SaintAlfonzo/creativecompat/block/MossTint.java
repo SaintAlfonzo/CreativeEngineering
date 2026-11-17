@@ -25,13 +25,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Biome-tinted moss block and moss carpet (CompatConfig [moss]).
  *
- * <p>Vanilla moss has no tint index, so a colour handler alone does nothing. With {@code biomeTint} on, every
+ * <p>Vanilla moss has no tint index, so a color handler alone does nothing. With {@code biomeTint} on, every
  * moss block / carpet state and item model is swapped at bake time for a copy with tint index 0 on a grayscale
  * texture ({@code moss_block_tinted.png}, the vanilla texture's luminance). With it off nothing is swapped and
  * moss is the untouched vanilla model.
  *
- * <p>The tint is {@link #MOSS_BASE} (the colour that turns the grayscale texture back into vanilla moss) shifted
- * per channel by the biome's grass colour relative to Lush Caves grass, so moss in Lush Caves stays vanilla green
+ * <p>The tint is {@link #MOSS_BASE} (the color that turns the grayscale texture back into vanilla moss) shifted
+ * per channel by the biome's grass color relative to Lush Caves grass, so moss in Lush Caves stays vanilla green
  * and elsewhere moves as far as grass does. Items have no biome and get the base colour.
  */
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

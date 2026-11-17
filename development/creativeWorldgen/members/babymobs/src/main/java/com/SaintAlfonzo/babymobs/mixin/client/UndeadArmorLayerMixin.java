@@ -22,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 26.1 baby armour for the humanoid babies (client/family/UndeadBabies): vanilla armour is drawn with the baked baby
- * armour piece for the slot and the 26.1 {@code equipment/humanoid_baby} texture (no trims, as 26.1). Modded armour has
- * no baby texture: it keeps 1.19.2's armour model, posed in the adult frame and drawn at young = true (the old
- * half-size baby armour). SRG names, remap = false: m_117118_ renderArmorPiece, m_117125_ setPartVisibility.
+ * 26.1 baby armor for the humanoid babies (client/family/UndeadBabies): vanilla armor is drawn with the baked baby
+ * armor piece for the slot and the 26.1 {@code equipment/humanoid_baby} texture (no trims, as 26.1). Modded armor has
+ * no baby texture: it keeps 1.19.2's armor model, posed in the adult frame and drawn at young = true (the old
+ * half-size baby armor). SRG names, remap = false: m_117118_ renderArmorPiece, m_117125_ setPartVisibility.
  */
 @Mixin(HumanoidArmorLayer.class)
 public abstract class UndeadArmorLayerMixin {
@@ -61,7 +61,7 @@ public abstract class UndeadArmorLayerMixin {
         model.renderToBuffer(pose, vc, light, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
     }
 
-    /** Modded armour on a remodelled baby: back to the adult frame and the 1.19.2 young flag. */
+    /** Modded armor on a remodelled baby: back to the adult frame and the 1.19.2 young flag. */
     @Inject(method = PIECE, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/entity/layers/HumanoidArmorLayer;m_117125_(Lnet/minecraft/client/model/HumanoidModel;Lnet/minecraft/world/entity/EquipmentSlot;)V"),
             remap = false)

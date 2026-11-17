@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 
 /**
  * {@code creativelabels:note_erase} (sticky_notes.md 3.6): one note + the eraser -> the note with its text wiped,
- * or, when it was blank, with its colour and special look removed (back to plain yellow). The eraser stays in the
+ * or, when it was blank, with its color and special look removed (back to plain yellow). The eraser stays in the
  * grid as its own crafting remainder. A plain blank note has nothing to erase and doesn't match.
  */
 public class NoteEraseRecipe extends CustomRecipe {

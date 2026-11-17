@@ -44,7 +44,7 @@ import java.util.List;
  * factor outliers.
  *
  * <p>Shapes are asked of an empty world at the origin with an empty collision context, so blocks whose shape depends on
- * neighbours, a block entity or the entity may differ in game; a block that throws is listed with {@code error}.
+ * neighbors, a block entity or the entity may differ in game; a block that throws is listed with {@code error}.
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class SurfaceAudit {

@@ -1,9 +1,9 @@
-// Salt merge block-behaviour probe (scratch queue SQ-SALT-05 to -08, feature_writeup/item_merges.md 2.9). Scratch-only:
+// Salt merge block-behavior probe (scratch queue SQ-SALT-05 to -08, feature_writeup/item_merges.md 2.9). Scratch-only:
 // copy into a scratch server's kubejs/server_scripts as zz_salt_probe.js, never into the pack. Run /salttest; results are
 // "[salttest] PASS|FAIL|NOTE ..." lines in logs/latest.log, then "[salttest] done N pass, M fail".
 // A dedicated server with no player gives forceloaded chunks no random ticks, so the probe calls each block's
 // randomTick itself (the same entry the patcherMod salt mixins hook), up to TRIES times, stopping once the block or
-// its neighbour changes. Cases sit 10 below the build limit at x 300.., z 60 (open sky in any world type; rain
+// its neighbor changes. Cases sit 10 below the build limit at x 300.., z 60 (open sky in any world type; rain
 // needs a biome that rains at that height, the NOTE line names it).
 (() => {
     const $STReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')

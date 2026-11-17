@@ -297,7 +297,7 @@ public class SaltCaveFeature extends Feature<NoneFeatureConfiguration> {
         return run;
     }
 
-    /** 1.4.1 rolled salt 70 % (its licked stages among them), then calcite and tuff; deep caves favour tuff. */
+    /** 1.4.1 rolled salt 70 % (its licked stages among them), then calcite and tuff; deep caves favor tuff. */
     private static BlockState pickWallBlock(RandomSource random, boolean deep, BlockState rock) {
         int roll = random.nextInt(100);
         if (roll < 70) {

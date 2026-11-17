@@ -12,7 +12,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 
-/** Shared movement, threat and taming rules of the crow goals (H&H 1.4.1 behaviour). */
+/** Shared movement, threat and taming rules of the crow goals (H&H 1.4.1 behavior). */
 public final class CrowLogic {
     public static final double ALARM_RANGE = 16.0D;
     /** On loot a crow let go of, so tame crows do not fetch it back (upstream checks the item's owner, which 1.19.2 does not keep). */

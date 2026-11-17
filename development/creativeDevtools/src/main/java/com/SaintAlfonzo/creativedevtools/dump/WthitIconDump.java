@@ -48,7 +48,7 @@ import java.util.Map;
  * JEI and inventories). Writes {@code kubejs/exported/wthit_icons.json}; tools/wthit_icon_audit.py reads it.
  *
  * <p>The clone stack is asked of an empty world ({@code EmptyBlockGetter}, origin), so a block whose pick item
- * depends on its block entity or neighbours may differ in game; those that throw are listed with {@code error}.
+ * depends on its block entity or neighbors may differ in game; those that throw are listed with {@code error}.
  * Triggers: the client command {@code /cdevdumpicons}, or {@code [debug.wthit] dumpIconsAtTitle} (once, when the title
  * screen first opens).
  */

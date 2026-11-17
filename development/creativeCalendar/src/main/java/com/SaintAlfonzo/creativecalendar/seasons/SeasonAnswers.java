@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Remembered answers to Serene Seasons' per-biome and per-dimension questions (perf.md 19). Its grass and foliage
- * colour resolver asks them on every call: is the biome seasonal (blacklist scan), tropical (tropical list scan),
- * "less colour change" (list scan), is the dimension whitelisted (list scan), and reads changeGrassColor /
+ * color resolver asks them on every call: is the biome seasonal (blacklist scan), tropical (tropical list scan),
+ * "less color change" (list scan), is the dimension whitelisted (list scan), and reads changeGrassColor /
  * changeFoliageColor, each a ForgeConfigSpec lookup. Xaero's World Map calls the resolver up to 9 times per map pixel
  * and chunk meshing once per tinted block.
  *

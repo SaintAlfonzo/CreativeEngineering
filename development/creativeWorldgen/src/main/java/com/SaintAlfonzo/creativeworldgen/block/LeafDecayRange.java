@@ -31,10 +31,10 @@ import org.slf4j.Logger;
  * stays (vanilla keeps paths up to 6, so maxDistance 6 = vanilla). Only distance-7 leaves are walked (the region past vanilla's reach), so the walk is small.
  *
  * <p>Timing: decay happens in {@code LeavesBlock#tick}, the scheduled tick vanilla queues from {@code updateShape}
- * when a neighbour changes (and {@link FastLeafDecayPort} queues when a neighbour turns to air). {@link #afterTick}:
+ * when a neighbor changes (and {@link FastLeafDecayPort} queues when a neighbor turns to air). {@link #afterTick}:
  * a leaf that this tick took from a real distance to 7 (its log is gone) is checked again decayMinTicks to
  * decayMaxTicks later, which staggers the fall; a leaf that was
- * already at 7 is checked now ({@link #keep}) and dropped if no log is in range. Its removal updates its neighbours,
+ * already at 7 is checked now ({@link #keep}) and dropped if no log is in range. Its removal updates its neighbors,
  * so a cut tree's canopy cascades away. Worldgen and sapling trees set their leaves' distances directly with no
  * shape updates, so their far leaves are never ticked and stay until something next to them changes. With
  * {@code onlyWhenDisturbed} (default) random ticks never decay a natural leaf; without it they also drop leaves past
@@ -116,7 +116,7 @@ public final class LeafDecayRange {
                         if (step + d <= max) return true;
                     } else if (step + 2 <= max) {
                         // A distance-7 leaf is worth walking past only if one more step and a d=1
-                        // neighbour could still land inside the range.
+                        // neighbor could still land inside the range.
                         queue.enqueue(key);
                     }
                     if (seen.size() > budget) return false;
