@@ -10,33 +10,33 @@ w = out.append
 
 
 def locate(cap, sid, origin=None, dim=None, biome=False, secs=300):
-    kind = 'biome' if biome else 'structure'
-    pre = ''
-    if dim:
-        pre += ' in %s' % dim
-    if origin:
-        pre += ' positioned %d 70 %d' % origin
-    cmd = ('execute%s run locate %s %s' % (pre, kind, sid)) if pre else ('locate %s %s' % (kind, sid))
-    w('> ' + cmd)
-    esc = sid.replace('.', r'\.')
-    w(r'waitlog (nearest %s.* is at|type "?%s|%s.*timed out|Could not find|There is no) %d' % (esc, esc, esc, secs))
-    if cap:
-        w(r'capture %s nearest %s.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]' % (cap, esc))
+	kind = 'biome' if biome else 'structure'
+	pre = ''
+	if dim:
+		pre += ' in %s' % dim
+	if origin:
+		pre += ' positioned %d 70 %d' % origin
+	cmd = ('execute%s run locate %s %s' % (pre, kind, sid)) if pre else ('locate %s %s' % (kind, sid))
+	w('> ' + cmd)
+	esc = sid.replace('.', r'\.')
+	w(r'waitlog (nearest %s.* is at|type "?%s|%s.*timed out|Could not find|There is no) %d' % (esc, esc, esc, secs))
+	if cap:
+		w(r'capture %s nearest %s.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]' % (cap, esc))
 
 
 def ground(tag, x, z):
-    """armor stand + spreadplayers: {G<tag>2} = ground y at x z (gotcha: grid points can stay at 300)."""
-    w('> summon minecraft:armor_stand %s 300 %s {Tags:["w12g"],NoGravity:1b,Invisible:1b}' % (x, z))
-    w('> spreadplayers %s %s 0 1 false @e[tag=w12g,limit=1]' % (x, z))
-    w('sleep 1')
-    w('> data get entity @e[tag=w12g,limit=1] Pos')
-    w(r'capture G%s entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]' % tag)
-    w('> kill @e[tag=w12g]')
+	"""armor stand + spreadplayers: {G<tag>2} = ground y at x z (gotcha: grid points can stay at 300)."""
+	w('> summon minecraft:armor_stand %s 300 %s {Tags:["w12g"],NoGravity:1b,Invisible:1b}' % (x, z))
+	w('> spreadplayers %s %s 0 1 false @e[tag=w12g,limit=1]' % (x, z))
+	w('sleep 1')
+	w('> data get entity @e[tag=w12g,limit=1] Pos')
+	w(r'capture G%s entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]' % tag)
+	w('> kill @e[tag=w12g]')
 
 
 def save():
-    w('> save-all flush')
-    w('waitlog Saved the game 300')
+	w('> save-all flush')
+	w('waitlog Saved the game 300')
 
 
 w('# Run r1103w, boot W1c: W1 world "wge" (group B, seed 8675309) after w_2_B.qb. Rows SQ-WGE-09 to -16, SQ-MOB-N5,')
@@ -50,25 +50,25 @@ w('## SQ-WGE-09 | A7: Philip ruins only in the Nether (SQ-PSW-02 rows), soul fir
 save()
 w("shell grep -E 'SQ-PSW-0[23]' $INST/%s/results.md | cut -c1-200" % R)
 for c in ('NC', 'ND', 'NR', 'NS'):
-    w("shell echo '%s {%s1} {%s3}'; %s blocks wge/DIM-1 'minecraft:soul_(fire|campfire|lantern|torch|wall_torch)$' --box {%s1-48} {%s3-48} {%s1+48} {%s3+48} | head -3"
-      % (c, c, c, RB, c, c, c, c))
+	w("shell echo '%s {%s1} {%s3}'; %s blocks wge/DIM-1 'minecraft:soul_(fire|campfire|lantern|torch|wall_torch)$' --box {%s1-48} {%s3-48} {%s1+48} {%s3+48} | head -3"
+	  % (c, c, c, RB, c, c, c, c))
 w('look SQ-PSW-02-o1 to -o4 PASS (none in the Overworld), SQ-PSW-02 and -b to -d found in the Nether at y 5 / 12 / 33; soul '
   'fire, lanterns or torches counted in at least one ruin (no swap for Nether-owned templates); SQ-PSW-03 PASS')
 w('')
 
 # SQ-WGE-10: place the 9 structures of nether_swaps.md rules 26 to 32 on fresh chunks, count old and new blocks
 ids = ['terralith:fortified_desert_village', 'betterdeserttemples:desert_temple', 'betterstrongholds:stronghold',
-       'towns_and_towers:pillager_outpost_jungle', 'terralith:spire', 'betterdungeons:zombie_dungeon',
-       'philipsruins:ocean_ruins', 'betterwitchhuts:witch_hut', 'simply_houses:taiga_forge']
+	   'towns_and_towers:pillager_outpost_jungle', 'terralith:spire', 'betterdungeons:zombie_dungeon',
+	   'philipsruins:ocean_ruins', 'betterwitchhuts:witch_hut', 'simply_houses:taiga_forge']
 for i, sid in enumerate(ids):
-    x = -6000 + 400 * i
-    w('## SQ-WGE-10-%d | C3: place %s on fresh chunks at %d -6000' % (i + 1, sid, x))
-    w('> forceload add %d -6128 %d -5873' % (x - 128, x + 127))
-    w('sleep 45')
-    w('> place structure %s %d 64 -6000' % (sid, x))
-    w(r'waitlog (Generated structure|Failed to place|not loaded|[Ii]nvalid|Unknown|Incorrect) 300')
-    w('expect Generated structure')
-    w('sleep 5')
+	x = -6000 + 400 * i
+	w('## SQ-WGE-10-%d | C3: place %s on fresh chunks at %d -6000' % (i + 1, sid, x))
+	w('> forceload add %d -6128 %d -5873' % (x - 128, x + 127))
+	w('sleep 45')
+	w('> place structure %s %d 64 -6000' % (sid, x))
+	w(r'waitlog (Generated structure|Failed to place|not loaded|[Ii]nvalid|Unknown|Incorrect) 300')
+	w('expect Generated structure')
+	w('sleep 5')
 w('## SQ-WGE-10 | C3: no crimson / warped trapdoor, button, slab, plate, stairs, stripped hyphae in the 9 placed structures')
 save()
 w("shell %s blocks wge 'minecraft:(crimson|warped)_(trapdoor|button|slab|pressure_plate|stairs)$|minecraft:stripped_warped_hyphae$' --box -6128 -6128 -2673 -5873 | head -4" % RB)
@@ -77,8 +77,8 @@ w("shell n=$(%s blocks wge 'minecraft:(crimson|warped)_(trapdoor|button|slab|pre
 w('look mangrove / dark oak replacements counted above 0; facing, half, open and axis as before and the desert temple 24-plate '
   'puzzle: client look at -5600 -6000 (temple) and the other placed spots (x -6000 + 400 n, z -6000)')
 for i in range(len(ids)):
-    x = -6000 + 400 * i
-    w('> forceload remove %d -6128 %d -5873' % (x - 128, x + 127))
+	x = -6000 + 400 * i
+	w('> forceload remove %d -6128 %d -5873' % (x - 128, x + 127))
 w('')
 
 # SQ-WGE-11: metas vs anchors from the census 128 pair of w_1_B.qb, plus one census on the r1031 / r1101 center
@@ -94,17 +94,17 @@ w('')
 # SQ-WGE-12: punch meta (expected FAIL with SQ-CWG-06: META_PART_KEYS lacks punch)
 w('## SQ-WGE-12 | B2: meteorite desert pyramid with a punch shaft (SQ-CWG-06 FAIL says the meta is dropped)')
 for k, dx in enumerate((-150, 0, 150)):
-    w('> forceload add {DE1%+d} {DE3-96} {DE1%+d} {DE3+95}' % (dx - 96, dx + 95))
-    w('sleep 30')
-    w('> place structure creativeengineering:meta/meteorite_desert_pyramid {DE1%+d} 64 {DE3}' % dx)
-    w(r'waitlog (Generated structure|Failed to place|not loaded|[Ii]nvalid|Unknown|Incorrect) 300')
+	w('> forceload add {DE1%+d} {DE3-96} {DE1%+d} {DE3+95}' % (dx - 96, dx + 95))
+	w('sleep 30')
+	w('> place structure creativeengineering:meta/meteorite_desert_pyramid {DE1%+d} 64 {DE3}' % dx)
+	w(r'waitlog (Generated structure|Failed to place|not loaded|[Ii]nvalid|Unknown|Incorrect) 300')
 locate('PYR', 'creativeengineering:meta/meteorite_desert_pyramid')
 w("shell grep -aE 'meta-structures\\].*meteorite_desert_pyramid' logs/latest.log | cut -c1-300 | tail -6")
 w(r'expect meteorite_desert_pyramid.*punch r \d+ column')
 w('reject could not rebuild an AE2 meteorite piece')
 w('look from the ground and the side: pyramid stands except a round shaft over the meteorite, no crater or cleared sand')
 for dx in (-150, 0, 150):
-    w('> forceload remove {DE1%+d} {DE3-96} {DE1%+d} {DE3+95}' % (dx - 96, dx + 95))
+	w('> forceload remove {DE1%+d} {DE3-96} {DE1%+d} {DE3+95}' % (dx - 96, dx + 95))
 w('')
 
 # SQ-WGE-13: meteorite heights over the spawn square r 1000 (pregenerated in w_1_B.qb)
@@ -122,10 +122,10 @@ w('')
 # SQ-WGE-14: waystone ruins
 w('## SQ-WGE-14 | A6: meta/waystone_ruins found 4 times, one waystone 4 to 12 blocks from the center on the ground')
 for k, o in enumerate(((0, 0), (3000, 0), (0, 3000), (-3000, -3000))):
-    cap = 'WR%d' % k
-    locate(cap, 'creativeengineering:meta/waystone_ruins', origin=o)
-    w('> forceload add {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
-    w('sleep 20')
+	cap = 'WR%d' % k
+	locate(cap, 'creativeengineering:meta/waystone_ruins', origin=o)
+	w('> forceload add {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
+	w('sleep 20')
 save()
 w("shell for k in 0 1 2 3; do :; done; for v in \"{WR01} {WR03}\" \"{WR11} {WR13}\" \"{WR21} {WR23}\" \"{WR31} {WR33}\"; do set -- $v; echo \"ruin $1 $2\"; %s blocks wge 'waystones:.*waystone$' --box $(($1-24)) $(($2-24)) $(($1+24)) $(($2+24)) | head -3; done" % RB)
 w("shell grep -aE 'meta-structures\\].*waystone_ruins|no satellite fitted' logs/latest.log | cut -c1-260 | tail -8")
@@ -135,8 +135,8 @@ w(r'expect nearest creativeengineering:meta/ruin_scatter.* is at')
 w('look one waystone per ruin (count 1 each), stone waystone; ruin_part alone gives no hit outside metas; registration '
   '(name screen) needs a player: client')
 for k in range(4):
-    cap = 'WR%d' % k
-    w('> forceload remove {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
+	cap = 'WR%d' % k
+	w('> forceload remove {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
 w('')
 
 # SQ-WGE-15: SQ-PSM-02 rerun with the part line printed (r1102b BATCH-FAULT); SQ-PSM-03 PASSED in r1102b
@@ -148,12 +148,12 @@ w("shell grep -aE 'meta-structures\\].*pillager_tower_siege' logs/latest.log | c
 w('> kill @e[type=!player,x={TS1-64},y=-64,z={TS3-64},dx=128,dy=384,dz=128]')
 n = 0
 for dx in (-48, -24, 0, 24, 48):
-    for dz in (-48, -24, 0, 24, 48):
-        n += 1
-        x, z = '{TS1%+d}' % dx, '{TS3%+d}' % dz
-        ground('T%d' % n, x, z)
-        w('> cespawnbox %s {GT%d2} %s' % (x, n, z))
-        w('sleep 1')
+	for dz in (-48, -24, 0, 24, 48):
+		n += 1
+		x, z = '{TS1%+d}' % dx, '{TS3%+d}' % dz
+		ground('T%d' % n, x, z)
+		w('> cespawnbox %s {GT%d2} %s' % (x, n, z))
+		w('sleep 1')
 w(r'expect box meta_tower_siege \(part box towers\)')
 w(r'expect box meta_tower_siege \(part box camps\)')
 w('look a part box vehicles line too (the weapon part: chunk from the [meta-structures] line); no-box only between parts')
@@ -177,10 +177,10 @@ locate('GROVE', 'terralith:moonlight_grove', biome=True)
 w('> forceload add {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}')
 w('sleep 60')
 for k, o in enumerate(((0, 0), (3000, 0), (0, -3000))):
-    cap = 'PO%d' % k
-    locate(cap, 'minecraft:pillager_outpost', origin=o)
-    w('> forceload add {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
-    w('sleep 20')
+	cap = 'PO%d' % k
+	locate(cap, 'minecraft:pillager_outpost', origin=o)
+	w('> forceload add {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
+	w('sleep 20')
 locate('AT', 'ancient_enchantment_temple:temple', secs=600)
 w('> forceload add {AT1-32} {AT3-32} {AT1+32} {AT3+32}')
 w('sleep 20')
@@ -196,8 +196,8 @@ w('look grove creature list has minecraft:allay 3 (1-2); allays counted in the g
   'allays appear in the temple (5 min wait needs a player: client)')
 w('> forceload remove {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}')
 for k in range(3):
-    cap = 'PO%d' % k
-    w('> forceload remove {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
+	cap = 'PO%d' % k
+	w('> forceload remove {%s1-48} {%s3-48} {%s1+48} {%s3+48}' % (cap, cap, cap, cap))
 w('> forceload remove {AT1-32} {AT3-32} {AT1+32} {AT3+32}')
 w('')
 
@@ -227,19 +227,19 @@ w('')
 # SQ-WGE-16: skylands cows and mooblooms
 w('## SQ-WGE-16 | N9: skylands seasons: cows and moobloom variants per biome')
 for b in ('spring', 'summer', 'autumn', 'winter'):
-    cap = 'SK' + b[:2].upper()
-    locate(cap, 'terralith:skylands_' + b, biome=True, secs=600)
-    w('> forceload add {%s1-120} {%s3-120} {%s1+119} {%s3+119}' % (cap, cap, cap, cap))
-    w('sleep 60')
+	cap = 'SK' + b[:2].upper()
+	locate(cap, 'terralith:skylands_' + b, biome=True, secs=600)
+	w('> forceload add {%s1-120} {%s3-120} {%s1+119} {%s3+119}' % (cap, cap, cap, cap))
+	w('sleep 60')
 save()
 for b in ('spring', 'summer', 'autumn', 'winter'):
-    cap = 'SK' + b[:2].upper()
-    w("shell echo '%s'; %s entities wge 'minecraft:(cow|goat|sheep)$|more_mooblooms:moobloom' --field Variant --box {%s1-120} {%s3-120} {%s1+119} {%s3+119} | grep -E 'entities|skylands' | head -20"
-      % (b, RB, cap, cap, cap, cap))
+	cap = 'SK' + b[:2].upper()
+	w("shell echo '%s'; %s entities wge 'minecraft:(cow|goat|sheep)$|more_mooblooms:moobloom' --field Variant --box {%s1-120} {%s3-120} {%s1+119} {%s3+119} | grep -E 'entities|skylands' | head -20"
+	  % (b, RB, cap, cap, cap, cap))
 w('look spring: no plain cows, the 7 spring variants about even; summer: sunbloom / moobloom / oxeyebloom about even; '
   'autumn: moobloom / sunbloom / rosebloom about even; winter: plain cows with goats and sheep (only skylands_* lines count)')
 for b in ('spring', 'summer', 'autumn', 'winter'):
-    cap = 'SK' + b[:2].upper()
-    w('> forceload remove {%s1-120} {%s3-120} {%s1+119} {%s3+119}' % (cap, cap, cap, cap))
+	cap = 'SK' + b[:2].upper()
+	w('> forceload remove {%s1-120} {%s3-120} {%s1+119} {%s3+119}' % (cap, cap, cap, cap))
 
 print('\n'.join(out))

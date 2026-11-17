@@ -12,31 +12,31 @@ JAR = re.compile(r'new Jar\(\s*"([^"]+)",\s*"([0-9a-f]{40})"(?:,\s*"((?:[^"\\]|\
 
 
 def rows():
-    out = []
-    for f in sorted(glob.glob(os.path.join(ROOT, 'development', '**', 'UpstreamJars.java'), recursive=True)):
-        rel = os.path.relpath(f, ROOT)
-        if 'moved_code_backup' in rel or os.sep + 'build' + os.sep in rel:
-            continue
-        s = open(f, encoding='utf-8').read()
-        m = re.search(r'FOLDER\s*=\s*"([^"]+)"', s)
-        folder = m.group(1) if m else 'farmers_upstream'  # Worldgen's donor names its folder elsewhere
-        owner = OWNER.get(rel.split(os.sep)[1], rel.split(os.sep)[1])
-        for j in JAR.finditer(s):
-            out.append((owner, folder, j.group(1), j.group(2), (j.group(3) or '').strip()))
-    return out
+	out = []
+	for f in sorted(glob.glob(os.path.join(ROOT, 'development', '**', 'UpstreamJars.java'), recursive=True)):
+		rel = os.path.relpath(f, ROOT)
+		if 'moved_code_backup' in rel or os.sep + 'build' + os.sep in rel:
+			continue
+		s = open(f, encoding='utf-8').read()
+		m = re.search(r'FOLDER\s*=\s*"([^"]+)"', s)
+		folder = m.group(1) if m else 'farmers_upstream'  # Worldgen's donor names its folder elsewhere
+		owner = OWNER.get(rel.split(os.sep)[1], rel.split(os.sep)[1])
+		for j in JAR.finditer(s):
+			out.append((owner, folder, j.group(1), j.group(2), (j.group(3) or '').strip()))
+	return out
 
 
 def main():
-    want = None
-    if '--mods' in sys.argv:
-        want = set(sys.argv[sys.argv.index('--mods') + 1].split(','))
-    print('| Needed by | Folder (in the game directory) | File | sha1 | Where to get it |')
-    print('|---|---|---|---|---|')
-    for owner, folder, name, sha1, src in rows():
-        if want and owner not in want:
-            continue
-        print(f'| {owner} | `{folder}/` | `{name}` | `{sha1}` | {src.replace(chr(92) + chr(34), chr(34)).replace("|", "/")} |')
+	want = None
+	if '--mods' in sys.argv:
+		want = set(sys.argv[sys.argv.index('--mods') + 1].split(','))
+	print('| Needed by | Folder (in the game directory) | File | sha1 | Where to get it |')
+	print('|---|---|---|---|---|')
+	for owner, folder, name, sha1, src in rows():
+		if want and owner not in want:
+			continue
+		print(f'| {owner} | `{folder}/` | `{name}` | `{sha1}` | {src.replace(chr(92) + chr(34), chr(34)).replace("|", "/")} |')
 
 
 if __name__ == '__main__':
-    main()
+	main()

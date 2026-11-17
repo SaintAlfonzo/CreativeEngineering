@@ -46,7 +46,7 @@ sys.path.insert(0, str(ROOT / 'tools'))
 import table_io  # noqa: E402
 
 TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 'note', 'override',
-            'override_reason', 'override_date']
+			'override_reason', 'override_date']
 FEATURE_LEGEND = ('VERIFIED', 'DEPLOYED', 'BUILT', 'BROKEN', 'reference', 'planned')
 TODO_LEGEND = ('Bug', 'Planned', 'Pinned', 'In Progress', 'Testing', 'Complete')
 TIERS = 'SCPT'
@@ -55,362 +55,362 @@ BLOCKS = {'readme': README, 'queue': QUEUE, 'deploy': DEPLOY_DOC}   # TODO.md is
 BEGIN = re.compile(r'^<!-- generated:status_index begin (\w+) sha1=([0-9a-f]+) -->$')
 CODE_RE = re.compile(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-([A-Za-z0-9.]+)')
 RESULT_RE = re.compile(r'^[*~ ]*(PASS|FAIL|INCONCLUSIVE|BATCH[- ]FAULT|OPEN|SKIP\w*|CRASH|LOOK|OWNER|BLOCKED|'
-                       r'NOT RUN|DEFERRED|N/A|PARTIAL)', re.I)
+					   r'NOT RUN|DEFERRED|N/A|PARTIAL)', re.I)
 
 
 def sha(lines):
-    return hashlib.sha1('\n'.join(lines).encode()).hexdigest()[:12]
+	return hashlib.sha1('\n'.join(lines).encode()).hexdigest()[:12]
 
 
 def empty_block(name, content=()):
-    content = list(content)
-    return ['<!-- generated:status_index begin %s sha1=%s -->' % (name, sha(content))] + content + \
-        ['<!-- generated:status_index end %s -->' % name]
+	content = list(content)
+	return ['<!-- generated:status_index begin %s sha1=%s -->' % (name, sha(content))] + content + \
+		['<!-- generated:status_index end %s -->' % name]
 
 
 def cells_of(line):
-    return [c.strip() for c in re.split(r'(?<!\\)\|', line.strip())[1:-1]]
+	return [c.strip() for c in re.split(r'(?<!\\)\|', line.strip())[1:-1]]
 
 
 def block_spans(lines):
-    """{name: (begin index, end index, stored sha)}"""
-    out = {}
-    for i, l in enumerate(lines):
-        m = BEGIN.match(l)
-        if m:
-            end = next((j for j in range(i + 1, len(lines))
-                        if lines[j] == '<!-- generated:status_index end %s -->' % m.group(1)), None)
-            out[m.group(1)] = (i, end, m.group(2))
-    return out
+	"""{name: (begin index, end index, stored sha)}"""
+	out = {}
+	for i, l in enumerate(lines):
+		m = BEGIN.match(l)
+		if m:
+			end = next((j for j in range(i + 1, len(lines))
+						if lines[j] == '<!-- generated:status_index end %s -->' % m.group(1)), None)
+			out[m.group(1)] = (i, end, m.group(2))
+	return out
 
 
 def strip_blocks(lines, keep=None):
-    """Blank every generated block (blocks whose name keep(name) accepts stay)."""
-    spans = block_spans(lines)
-    skip = set()
-    for name, (b, e, _) in spans.items():
-        if e is not None and not (keep and keep(name)):
-            skip.update(range(b, e + 1))
-    return [l if i not in skip else '' for i, l in enumerate(lines)]
+	"""Blank every generated block (blocks whose name keep(name) accepts stay)."""
+	spans = block_spans(lines)
+	skip = set()
+	for name, (b, e, _) in spans.items():
+		if e is not None and not (keep and keep(name)):
+			skip.update(range(b, e + 1))
+	return [l if i not in skip else '' for i, l in enumerate(lines)]
 
 
 # ---------------------------------------------------------------- inputs
 
 def read_features():
-    rows = []
-    if not TSV.exists():
-        return rows
-    for d in table_io.read_dicts(TSV):
-        n = d.pop('_line')
-        rows.append(dict({k: d.get(k, '') for k in TSV_COLS}, line=n))
-    return rows
+	rows = []
+	if not TSV.exists():
+		return rows
+	for d in table_io.read_dicts(TSV):
+		n = d.pop('_line')
+		rows.append(dict({k: d.get(k, '') for k in TSV_COLS}, line=n))
+	return rows
 
 
 def split_list(s):
-    return [x.strip() for x in s.split(',') if x.strip()]
+	return [x.strip() for x in s.split(',') if x.strip()]
 
 
 def read_todo():
-    """TODO rows from feature_writeup/todo/rows/*.csv (P3.5). open: every row not Complete; archive: Complete ids;
+	"""TODO rows from feature_writeup/todo/rows/*.csv (P3.5). open: every row not Complete; archive: Complete ids;
     odd_archive: open rows without a family; ids: every id."""
-    import todo_rows
-    rows = todo_rows.load()
-    open_rows, arch_rows, odd_arch = [], [], []
-    for r in rows:
-        text = ' '.join(r.get(k, '') for k in ('change', 'details', 'decisions', 'log'))
-        if r['status'] == 'Complete':
-            arch_rows.append(r['id'])
-            continue
-        open_rows.append({'id': r['id'], 'status': r['status'], 'tests': r.get('tests', ''), 'line': r['_line'],
-                          'file': r['_file'], 'text': text, 'priority': r.get('priority', '')})
-        if not r.get('family'):
-            odd_arch.append((r['id'], r['status']))
-    return {'open': open_rows, 'archive': arch_rows, 'odd_archive': odd_arch, 'ids': {r['id'] for r in rows},
-            'rows': rows}
+	import todo_rows
+	rows = todo_rows.load()
+	open_rows, arch_rows, odd_arch = [], [], []
+	for r in rows:
+		text = ' '.join(r.get(k, '') for k in ('change', 'details', 'decisions', 'log'))
+		if r['status'] == 'Complete':
+			arch_rows.append(r['id'])
+			continue
+		open_rows.append({'id': r['id'], 'status': r['status'], 'tests': r.get('tests', ''), 'line': r['_line'],
+						  'file': r['_file'], 'text': text, 'priority': r.get('priority', '')})
+		if not r.get('family'):
+			odd_arch.append((r['id'], r['status']))
+	return {'open': open_rows, 'archive': arch_rows, 'odd_archive': odd_arch, 'ids': {r['id'] for r in rows},
+			'rows': rows}
 
 
 def read_queue():
-    # rows blocks are the queue sections rendered from feature_writeup/testing/rows/*.qb (qrows.py): their row lines
-    # count like hand-written ones
-    lines = strip_blocks(QUEUE.read_text().split('\n'), keep=lambda n: n.startswith('rows_'))
-    rows, codes = [], Counter()
-    code_sections = defaultdict(set)
-    section_text, sec = [[]], 0
-    for l in lines:
-        if l.startswith('## '):
-            sec += 1
-            section_text.append([])
-        section_text[sec].append(l)
-        m = re.match(r'\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-(\S+?)\s*\|', l)
-        if m:
-            rid = '%s-%s' % (m.group(1), m.group(2))
-            inline = bool(re.search(r'\(r\d{4}\w*[^)]*?\b(PASS|FAIL)', l))
-            rows.append({'id': rid, 'code': m.group(1), 'inline_run': inline})
-            codes[m.group(1)] += 1
-            code_sections[m.group(1)].add(sec)
-    return {'rows': rows, 'codes': codes, 'code_sections': code_sections,
-            'section_text': ['\n'.join(s) for s in section_text]}
+	# rows blocks are the queue sections rendered from feature_writeup/testing/rows/*.qb (qrows.py): their row lines
+	# count like hand-written ones
+	lines = strip_blocks(QUEUE.read_text().split('\n'), keep=lambda n: n.startswith('rows_'))
+	rows, codes = [], Counter()
+	code_sections = defaultdict(set)
+	section_text, sec = [[]], 0
+	for l in lines:
+		if l.startswith('## '):
+			sec += 1
+			section_text.append([])
+		section_text[sec].append(l)
+		m = re.match(r'\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-(\S+?)\s*\|', l)
+		if m:
+			rid = '%s-%s' % (m.group(1), m.group(2))
+			inline = bool(re.search(r'\(r\d{4}\w*[^)]*?\b(PASS|FAIL)', l))
+			rows.append({'id': rid, 'code': m.group(1), 'inline_run': inline})
+			codes[m.group(1)] += 1
+			code_sections[m.group(1)].add(sec)
+	return {'rows': rows, 'codes': codes, 'code_sections': code_sections,
+			'section_text': ['\n'.join(s) for s in section_text]}
 
 
 def expand_ids(cell):
-    """'SQ-PWG-14, -16, -26 to -34' -> ids. Plain ids anywhere in the cell, '-NN' continuations use the last code."""
-    out = []
-    code = None
-    for part in re.split(r',|/|;| and ', cell.replace('**', '').replace('~~', '')):
-        part = part.strip()
-        m = re.match(r'((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-([A-Za-z0-9.]+)(?:\s+to\s+-?([A-Za-z0-9.]+))?', part)
-        if m:
-            code = m.group(1)
-            out.extend(_range(code, m.group(2), m.group(3)))
-            continue
-        m = re.match(r'-([A-Za-z0-9.]+)(?:\s+to\s+-?([A-Za-z0-9.]+))?$', part)
-        if m and code:
-            out.extend(_range(code, m.group(1), m.group(2)))
-    return out
+	"""'SQ-PWG-14, -16, -26 to -34' -> ids. Plain ids anywhere in the cell, '-NN' continuations use the last code."""
+	out = []
+	code = None
+	for part in re.split(r',|/|;| and ', cell.replace('**', '').replace('~~', '')):
+		part = part.strip()
+		m = re.match(r'((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-([A-Za-z0-9.]+)(?:\s+to\s+-?([A-Za-z0-9.]+))?', part)
+		if m:
+			code = m.group(1)
+			out.extend(_range(code, m.group(2), m.group(3)))
+			continue
+		m = re.match(r'-([A-Za-z0-9.]+)(?:\s+to\s+-?([A-Za-z0-9.]+))?$', part)
+		if m and code:
+			out.extend(_range(code, m.group(1), m.group(2)))
+	return out
 
 
 def _range(code, a, b):
-    if b and a.isdigit() and b.isdigit() and int(b) >= int(a) and int(b) - int(a) < 200:
-        w = len(a)
-        return ['%s-%0*d' % (code, w, n) for n in range(int(a), int(b) + 1)]
-    return ['%s-%s' % (code, a)] + (['%s-%s' % (code, b)] if b else [])
+	if b and a.isdigit() and b.isdigit() and int(b) >= int(a) and int(b) - int(a) < 200:
+		w = len(a)
+		return ['%s-%0*d' % (code, w, n) for n in range(int(a), int(b) + 1)]
+	return ['%s-%s' % (code, a)] + (['%s-%s' % (code, b)] if b else [])
 
 
 def result_word(cell):
-    m = RESULT_RE.match(cell)
-    if not m:
-        return 'OTHER'
-    w = m.group(1).upper().replace(' ', '-')
-    return 'BATCH-FAULT' if w.startswith('BATCH') else w
+	m = RESULT_RE.match(cell)
+	if not m:
+		return 'OTHER'
+	w = m.group(1).upper().replace(' ', '-')
+	return 'BATCH-FAULT' if w.startswith('BATCH') else w
 
 
 def read_runs():
-    """{run id: {'date': 'YYYY-MM-DD', 'results': {row id: word}, 'src': ...}}"""
-    runs = {}
-    for p in sorted(RUNDOCS.glob('scratch*_run_*.md')):
-        m = re.search(r'_run_(\d{4})-(\d{2})-(\d{2})(\w*)\.md$', p.name)
-        if not m:
-            continue
-        rid = 'r%s%s%s' % (m.group(2), m.group(3), m.group(4))
-        run = runs.setdefault(rid, {'date': '%s-%s-%s' % m.group(1, 2, 3), 'results': {}, 'src': p.name})
-        in_table = None
-        for l in p.read_text(errors='replace').split('\n'):
-            if l.startswith('|'):
-                c = cells_of(l)
-                if len(c) >= 2 and c[0] in ('ID', 'Id', 'Row') and c[1].startswith('Result'):
-                    in_table = 'rows'          # | ID | Result | Evidence |
-                    continue
-                if len(c) >= 2 and c[0] == 'Verdict' and c[1] == 'Rows':
-                    in_table = 'verdicts'      # | Verdict | Rows | Note | (r1031)
-                    continue
-                if not in_table or len(c) < 2 or set(c[0]) <= set('-: '):
-                    continue
-                idcell, word = (c[0], result_word(c[1])) if in_table == 'rows' else (c[1], result_word(c[0]))
-                for i in expand_ids(idcell):
-                    run['results'][i] = word
-            else:
-                in_table = None
-    for dirpath, dirnames, filenames in os.walk(VERDICT_ROOT):
-        if os.path.basename(dirpath) != 'verdicts':
-            continue
-        rel = Path(dirpath).relative_to(VERDICT_ROOT).parts
-        rid = rel[0]
-        for fn in filenames:
-            if not fn.endswith('.json'):
-                continue
-            try:
-                d = json.load(open(os.path.join(dirpath, fn)))
-            except (OSError, ValueError):
-                continue
-            date = (d.get('started') or d.get('ended') or '')[:10]
-            run = runs.setdefault(rid, {'date': date, 'results': {}, 'src': 'perf/runs/%s' % rid})
-            if date and (not run['date'] or date > run['date']):
-                run['date'] = date
-            row = d.get('id') or fn[:-5]
-            run['results'][row] = (d.get('verdict') or d.get('result') or 'OTHER').upper()
-    return runs
+	"""{run id: {'date': 'YYYY-MM-DD', 'results': {row id: word}, 'src': ...}}"""
+	runs = {}
+	for p in sorted(RUNDOCS.glob('scratch*_run_*.md')):
+		m = re.search(r'_run_(\d{4})-(\d{2})-(\d{2})(\w*)\.md$', p.name)
+		if not m:
+			continue
+		rid = 'r%s%s%s' % (m.group(2), m.group(3), m.group(4))
+		run = runs.setdefault(rid, {'date': '%s-%s-%s' % m.group(1, 2, 3), 'results': {}, 'src': p.name})
+		in_table = None
+		for l in p.read_text(errors='replace').split('\n'):
+			if l.startswith('|'):
+				c = cells_of(l)
+				if len(c) >= 2 and c[0] in ('ID', 'Id', 'Row') and c[1].startswith('Result'):
+					in_table = 'rows'          # | ID | Result | Evidence |
+					continue
+				if len(c) >= 2 and c[0] == 'Verdict' and c[1] == 'Rows':
+					in_table = 'verdicts'      # | Verdict | Rows | Note | (r1031)
+					continue
+				if not in_table or len(c) < 2 or set(c[0]) <= set('-: '):
+					continue
+				idcell, word = (c[0], result_word(c[1])) if in_table == 'rows' else (c[1], result_word(c[0]))
+				for i in expand_ids(idcell):
+					run['results'][i] = word
+			else:
+				in_table = None
+	for dirpath, dirnames, filenames in os.walk(VERDICT_ROOT):
+		if os.path.basename(dirpath) != 'verdicts':
+			continue
+		rel = Path(dirpath).relative_to(VERDICT_ROOT).parts
+		rid = rel[0]
+		for fn in filenames:
+			if not fn.endswith('.json'):
+				continue
+			try:
+				d = json.load(open(os.path.join(dirpath, fn)))
+			except (OSError, ValueError):
+				continue
+			date = (d.get('started') or d.get('ended') or '')[:10]
+			run = runs.setdefault(rid, {'date': date, 'results': {}, 'src': 'perf/runs/%s' % rid})
+			if date and (not run['date'] or date > run['date']):
+				run['date'] = date
+			row = d.get('id') or fn[:-5]
+			run['results'][row] = (d.get('verdict') or d.get('result') or 'OTHER').upper()
+	return runs
 
 
 def run_index(runs):
-    """code -> [(date, run id, Counter of words)] newest first; set of row ids with any result."""
-    per = defaultdict(dict)
-    seen = set()
-    for rid, run in runs.items():
-        for row, word in run['results'].items():
-            m = CODE_RE.match(row)
-            if not m:
-                continue
-            seen.add(row)
-            per[m.group(1)].setdefault(rid, Counter())[word] += 1
-    out = {}
-    for code, d in per.items():
-        out[code] = sorted(((runs[r]['date'], r, c) for r, c in d.items()), reverse=True)
-    return out, seen
+	"""code -> [(date, run id, Counter of words)] newest first; set of row ids with any result."""
+	per = defaultdict(dict)
+	seen = set()
+	for rid, run in runs.items():
+		for row, word in run['results'].items():
+			m = CODE_RE.match(row)
+			if not m:
+				continue
+			seen.add(row)
+			per[m.group(1)].setdefault(rid, Counter())[word] += 1
+	out = {}
+	for code, d in per.items():
+		out[code] = sorted(((runs[r]['date'], r, c) for r, c in d.items()), reverse=True)
+	return out, seen
 
 
 def ran(row_id, seen):
-    return row_id in seen or row_id + 'r' in seen
+	return row_id in seen or row_id + 'r' in seen
 
 
 def counts_text(c):
-    parts = ['%d PASS' % c['PASS']] if c['PASS'] else []
-    if c['FAIL']:
-        parts.append('%d FAIL' % c['FAIL'])
-    for k in sorted(c):
-        if k not in ('PASS', 'FAIL') and c[k]:
-            parts.append('%d %s' % (c[k], k))
-    return ', '.join(parts) or '0'
+	parts = ['%d PASS' % c['PASS']] if c['PASS'] else []
+	if c['FAIL']:
+		parts.append('%d FAIL' % c['FAIL'])
+	for k in sorted(c):
+		if k not in ('PASS', 'FAIL') and c[k]:
+			parts.append('%d %s' % (c[k], k))
+	return ', '.join(parts) or '0'
 
 
 def jar_states():
-    """{mod_id: 'pending' | 'installed YYYY-MM-DD' | 'not built' ...}"""
-    import jarstamp
-    out = {}
-    pend = {p for p, *_ in jarstamp.pending()}
-    names = {}
-    for gp in sorted(jarstamp.DEV.glob('*/gradle.properties')):
-        pr = jarstamp._props(gp)
-        if 'mod_id' in pr and not pr.get('bundled_in'):
-            names[pr['mod_id']] = (gp.parent.name, pr.get('jar_name', pr['mod_id']))
-    ledger = {}
-    if LEDGER.exists():
-        for c in table_io.read(LEDGER)[2]:
-            if len(c) >= 6 and c[5].startswith('installed'):
-                ledger[re.sub(r'-[0-9][^-]*\.jar$', '', c[1])] = c[0][:10]
-    for mod, (proj, jar_name) in names.items():
-        if proj in pend:
-            out[mod] = 'pending'
-        elif jar_name in ledger:
-            out[mod] = 'installed %s' % ledger[jar_name]
-        elif jarstamp.installed_by_name(jar_name):
-            out[mod] = 'in mods/'
-        else:
-            out[mod] = 'not in mods/'
-    return out
+	"""{mod_id: 'pending' | 'installed YYYY-MM-DD' | 'not built' ...}"""
+	import jarstamp
+	out = {}
+	pend = {p for p, *_ in jarstamp.pending()}
+	names = {}
+	for gp in sorted(jarstamp.DEV.glob('*/gradle.properties')):
+		pr = jarstamp._props(gp)
+		if 'mod_id' in pr and not pr.get('bundled_in'):
+			names[pr['mod_id']] = (gp.parent.name, pr.get('jar_name', pr['mod_id']))
+	ledger = {}
+	if LEDGER.exists():
+		for c in table_io.read(LEDGER)[2]:
+			if len(c) >= 6 and c[5].startswith('installed'):
+				ledger[re.sub(r'-[0-9][^-]*\.jar$', '', c[1])] = c[0][:10]
+	for mod, (proj, jar_name) in names.items():
+		if proj in pend:
+			out[mod] = 'pending'
+		elif jar_name in ledger:
+			out[mod] = 'installed %s' % ledger[jar_name]
+		elif jarstamp.installed_by_name(jar_name):
+			out[mod] = 'in mods/'
+		else:
+			out[mod] = 'not in mods/'
+	return out
 
 
 # ---------------------------------------------------------------- views
 
 def md_links(files, base):
-    out = []
-    for f in split_list(files):
-        rel = os.path.relpath(FW / f, base).replace(os.sep, '/')
-        out.append('[%s](%s)' % (os.path.basename(f) if not f.endswith('README.md') else f, rel))
-    return ', '.join(out)
+	out = []
+	for f in split_list(files):
+		rel = os.path.relpath(FW / f, base).replace(os.sep, '/')
+		out.append('[%s](%s)' % (os.path.basename(f) if not f.endswith('README.md') else f, rel))
+	return ', '.join(out)
 
 
 def view_readme(feats, rindex, jars):
-    out = ['| Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |',
-           '|---|---|---|---|---|---|---|']
-    for f in feats:
-        runs = []
-        for code in split_list(f['queue codes']):
-            if code in rindex:
-                d, r, c = rindex[code][0]
-                runs.append((d, r, code, c))
-        runs.sort(reverse=True)
-        cell = '; '.join('%s %s %s: %s' % (code, r, d, counts_text(c)) for d, r, code, c in runs[:3])
-        if len(runs) > 3:
-            cell += '; +%d codes' % (len(runs) - 3)
-        jcell = ', '.join(('%s %s' % (j, jars.get(j, ''))).strip() for j in split_list(f['jars']))
-        prefix = ', '.join('`%s`' % p for p in split_list(f['test prefix']))
-        out.append('| %s | %s | %s | %s | %s | %s | %s |' % (f['key'], md_links(f['file'], FW), prefix or 'none',
-                                                          f['status word'], cell or 'none', jcell, f['note']))
-    return out
+	out = ['| Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |',
+		   '|---|---|---|---|---|---|---|']
+	for f in feats:
+		runs = []
+		for code in split_list(f['queue codes']):
+			if code in rindex:
+				d, r, c = rindex[code][0]
+				runs.append((d, r, code, c))
+		runs.sort(reverse=True)
+		cell = '; '.join('%s %s %s: %s' % (code, r, d, counts_text(c)) for d, r, code, c in runs[:3])
+		if len(runs) > 3:
+			cell += '; +%d codes' % (len(runs) - 3)
+		jcell = ', '.join(('%s %s' % (j, jars.get(j, ''))).strip() for j in split_list(f['jars']))
+		prefix = ', '.join('`%s`' % p for p in split_list(f['test prefix']))
+		out.append('| %s | %s | %s | %s | %s | %s | %s |' % (f['key'], md_links(f['file'], FW), prefix or 'none',
+														  f['status word'], cell or 'none', jcell, f['note']))
+	return out
 
 
 def view_todo_md(todo, feats, jars):
-    """The whole TODO.md (P3.5): layout.md plus the rows. A row's jar install state comes from its feature's jars."""
-    import todo_rows
-    fjars = {f['key']: split_list(f['jars']) for f in feats}
+	"""The whole TODO.md (P3.5): layout.md plus the rows. A row's jar install state comes from its feature's jars."""
+	import todo_rows
+	fjars = {f['key']: split_list(f['jars']) for f in feats}
 
-    def install_of(r):
-        pend = [j for j in fjars.get(r.get('feature'), []) if jars.get(j) == 'pending']
-        return ('%s built, not installed' % ', '.join(pend)) if pend else ''
-    if not todo_rows.LAYOUT.exists():
-        return None
-    return todo_rows.render(todo['rows'], todo_rows.LAYOUT.read_text(), install_of)
+	def install_of(r):
+		pend = [j for j in fjars.get(r.get('feature'), []) if jars.get(j) == 'pending']
+		return ('%s built, not installed' % ', '.join(pend)) if pend else ''
+	if not todo_rows.LAYOUT.exists():
+		return None
+	return todo_rows.render(todo['rows'], todo_rows.LAYOUT.read_text(), install_of)
 
 
 def view_queue(queue, rindex, seen):
-    never = Counter()
-    for r in queue['rows']:
-        if not r['inline_run'] and not ran(r['id'], seen):
-            never[r['code']] += 1
-    allruns = [x for v in rindex.values() for x in v]
-    last = max(allruns)[:2] if allruns else None
-    total = sum(queue['codes'].values())
-    out = ['**Queue coverage** (generated by `python3 tools/status_index.py` from the rows below, the run docs\' '
-           'verdict tables and qrun verdict files; never hand-edited): %d rows in %d codes, %d never run; latest run '
-           '%s. The old "added at the end" and run banners are in [../status/history.md](../status/history.md).' % (
-               total, len(queue['codes']), sum(never.values()), '%s (%s)' % (last[1], last[0]) if last else 'none'),
-           '', '<details><summary>Rows per code</summary>', '',
-           '| Code | Rows | Never run | Last run |', '|---|---|---|---|']
-    for code in sorted(queue['codes']):
-        lr = rindex.get(code)
-        cell = '%s %s: %s' % (lr[0][1], lr[0][0], counts_text(lr[0][2])) if lr else 'never'
-        out.append('| %s | %d | %d | %s |' % (code, queue['codes'][code], never[code], cell))
-    out += ['', '</details>']
-    return out
+	never = Counter()
+	for r in queue['rows']:
+		if not r['inline_run'] and not ran(r['id'], seen):
+			never[r['code']] += 1
+	allruns = [x for v in rindex.values() for x in v]
+	last = max(allruns)[:2] if allruns else None
+	total = sum(queue['codes'].values())
+	out = ['**Queue coverage** (generated by `python3 tools/status_index.py` from the rows below, the run docs\' '
+		   'verdict tables and qrun verdict files; never hand-edited): %d rows in %d codes, %d never run; latest run '
+		   '%s. The old "added at the end" and run banners are in [../status/history.md](../status/history.md).' % (
+			   total, len(queue['codes']), sum(never.values()), '%s (%s)' % (last[1], last[0]) if last else 'none'),
+		   '', '<details><summary>Rows per code</summary>', '',
+		   '| Code | Rows | Never run | Last run |', '|---|---|---|---|']
+	for code in sorted(queue['codes']):
+		lr = rindex.get(code)
+		cell = '%s %s: %s' % (lr[0][1], lr[0][0], counts_text(lr[0][2])) if lr else 'never'
+		out.append('| %s | %d | %d | %s |' % (code, queue['codes'][code], never[code], cell))
+	out += ['', '</details>']
+	return out
 
 
 # ---------------------------------------------------------------- rows sections (plan P2.1, P2.5)
 
 ARCHIVE = FW / 'testing' / 'scratch_queue_archive.md'
 ARCHIVE_HEAD = ['# Scratch queue archive', '',
-                'Queue sections whose rows all PASSed on the jars still installed (`qrun.py archive`, plan_process_overhaul.md '
-                'P2.5), with their verdict history. Generated from `feature_writeup/testing/rows/*.qb` (`@@archived`) by '
-                '`python3 tools/status_index.py`; never hand-edited. The rows stay data: `qrun.py plan` plans them again when '
-                'a jar or source changes.', '']
+				'Queue sections whose rows all PASSed on the jars still installed (`qrun.py archive`, plan_process_overhaul.md '
+				'P2.5), with their verdict history. Generated from `feature_writeup/testing/rows/*.qb` (`@@archived`) by '
+				'`python3 tools/status_index.py`; never hand-edited. The rows stay data: `qrun.py plan` plans them again when '
+				'a jar or source changes.', '']
 
 
 def rows_views(runs):
-    """({block name: lines}, {block name: QUEUE or ARCHIVE})"""
-    hist = defaultdict(list)
-    for rid, run in runs.items():
-        for row, word in run['results'].items():
-            hist[row].append((run['date'], rid, word))
-    views, where = {}, {}
-    for name, (_, sec) in qrows.sections_by_block().items():
-        lines = qrows.render(sec)
-        if sec['meta'].get('archived'):
-            lines += ['', '**Verdict history** (archived %s):' % sec['meta']['archived'], '']
-            for kind, r in sec['items']:
-                if kind == 'row':
-                    h = sorted(hist.get(r['id'], ()), reverse=True)[:5]
-                    lines.append('- %s: %s' % (r['id'], '; '.join('%s %s (%s)' % (w, run, d) for d, run, w in h) or 'none'))
-            where[name] = ARCHIVE
-        else:
-            where[name] = QUEUE
-        views[name] = lines
-    return views, where
+	"""({block name: lines}, {block name: QUEUE or ARCHIVE})"""
+	hist = defaultdict(list)
+	for rid, run in runs.items():
+		for row, word in run['results'].items():
+			hist[row].append((run['date'], rid, word))
+	views, where = {}, {}
+	for name, (_, sec) in qrows.sections_by_block().items():
+		lines = qrows.render(sec)
+		if sec['meta'].get('archived'):
+			lines += ['', '**Verdict history** (archived %s):' % sec['meta']['archived'], '']
+			for kind, r in sec['items']:
+				if kind == 'row':
+					h = sorted(hist.get(r['id'], ()), reverse=True)[:5]
+					lines.append('- %s: %s' % (r['id'], '; '.join('%s %s (%s)' % (w, run, d) for d, run, w in h) or 'none'))
+			where[name] = ARCHIVE
+		else:
+			where[name] = QUEUE
+		views[name] = lines
+	return views, where
 
 
 def rows_spans(path):
-    if not path.exists():
-        return [], {}
-    lines = path.read_text().split('\n')
-    return lines, {n: v for n, v in block_spans(lines).items() if n.startswith('rows_')}
+	if not path.exists():
+		return [], {}
+	lines = path.read_text().split('\n')
+	return lines, {n: v for n, v in block_spans(lines).items() if n.startswith('rows_')}
 
 
 # ---------------------------------------------------------------- main
 
 def apply_derived(feats, todo):
-    """Set each feature's status word from tools/feature_status.py (P3.3 item 3); returns the keys that changed."""
-    import feature_status
-    der = feature_status.derive(feats, todo)
-    changed = []
-    for f in feats:
-        w = der[f['key']][0]
-        if f['status word'] != w:
-            changed.append((f['key'], f['status word'], w))
-        f['status word'] = w
-    return changed
+	"""Set each feature's status word from tools/feature_status.py (P3.3 item 3); returns the keys that changed."""
+	import feature_status
+	der = feature_status.derive(feats, todo)
+	changed = []
+	for f in feats:
+		w = der[f['key']][0]
+		if f['status word'] != w:
+			changed.append((f['key'], f['status word'], w))
+		f['status word'] = w
+	return changed
 
 
 def write_features(feats):
-    comments = table_io.read(TSV)[0]
-    table_io.write(TSV, TSV_COLS, [[f.get(k, '') for k in TSV_COLS] for f in feats], comments)
+	comments = table_io.read(TSV)[0]
+	table_io.write(TSV, TSV_COLS, [[f.get(k, '') for k in TSV_COLS] for f in feats], comments)
 
 
 SECTION0_RE = re.compile(r'^\*\*README index entry, moved here 2026-11-16[^\n]*(?:\n(?!\s*\n)[^\n]*)*', re.M)
@@ -419,285 +419,285 @@ GEN_DOC_RE = re.compile(r'generated by|do not edit|regenerate|written by `?tools
 
 
 def doc_generated(path):
-    """A writeup a generator rewrites (its open_work block would be dropped): skipped (P3.5 item 5)."""
-    try:
-        head = '\n'.join(path.read_text(errors='replace').split('\n')[:6])
-    except OSError:
-        return True
-    return bool(GEN_DOC_RE.search(head))
+	"""A writeup a generator rewrites (its open_work block would be dropped): skipped (P3.5 item 5)."""
+	try:
+		head = '\n'.join(path.read_text(errors='replace').split('\n')[:6])
+	except OSError:
+		return True
+	return bool(GEN_DOC_RE.search(head))
 
 
 def doc_views(todo, feats):
-    """{path: block lines} of the `open_work` block of every writeup (rows whose feature is the writeup's feature,
+	"""{path: block lines} of the `open_work` block of every writeup (rows whose feature is the writeup's feature,
     or whose Writeup cell links it) and every plan with rows (`plan` field) (P3.5 items 3 and 5)."""
-    import todo_rows
-    rows = todo['rows']
-    by_doc = defaultdict(dict)
-    files_of = {f['key']: [x.strip() for x in f['file'].split(',') if x.strip().endswith('.md')] for f in feats}
-    for r in rows:
-        docs = set(files_of.get(r.get('feature'), []))
-        docs |= {d for d in DOC_LINK_RE.findall(r.get('writeup', '')) if not d.startswith(('plan_', 'briefs/'))}
-        for p in (x.strip().split()[0] for x in r.get('plan', '').split(',') if x.strip()):
-            docs.add(p)
-        for d in docs:
-            by_doc[d][r['id']] = r
-    for fl in files_of.values():
-        for d in fl:
-            by_doc.setdefault(d, {})
-    writeups = {d for fl in files_of.values() for d in fl}
-    out = {}
-    for d, rs in sorted(by_doc.items()):
-        path = FW / d
-        if '/' in d or d == 'README.md' or not (d in writeups or d.startswith('plan_')):
-            continue   # only feature writeups (features.csv `file`) and plans, directly in feature_writeup/
-        if not path.is_file() or doc_generated(path):
-            continue
-        open_rs = sorted((r for r in rs.values() if r['status'] != 'Complete'), key=todo_rows.row_key)
-        done = sum(1 for r in rs.values() if r['status'] == 'Complete')
-        c = Counter(r['status'] for r in open_rs)
-        head = ('Status: %d open TODO row%s (%s), %d Complete.' % (
-            len(open_rs), '' if len(open_rs) == 1 else 's',
-            ', '.join('%s %d' % (s, c[s]) for s in todo_rows.STATUS_ORDER if c.get(s)) or 'none', done))
-        lines = ['**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with '
-                 '`tools/todo.py`). ' + head]
-        if open_rs:
-            lines += ['', '| Id | Status | Tests | Change |', '|---|---|---|---|']
-            lines += ['| `%s` | %s | %s | %s |' % (r['id'], r['status'], todo_rows.cell(r.get('tests')),
-                                                todo_rows.cell(r.get('change'))) for r in open_rs]
-        out[path] = lines
-    return out
+	import todo_rows
+	rows = todo['rows']
+	by_doc = defaultdict(dict)
+	files_of = {f['key']: [x.strip() for x in f['file'].split(',') if x.strip().endswith('.md')] for f in feats}
+	for r in rows:
+		docs = set(files_of.get(r.get('feature'), []))
+		docs |= {d for d in DOC_LINK_RE.findall(r.get('writeup', '')) if not d.startswith(('plan_', 'briefs/'))}
+		for p in (x.strip().split()[0] for x in r.get('plan', '').split(',') if x.strip()):
+			docs.add(p)
+		for d in docs:
+			by_doc[d][r['id']] = r
+	for fl in files_of.values():
+		for d in fl:
+			by_doc.setdefault(d, {})
+	writeups = {d for fl in files_of.values() for d in fl}
+	out = {}
+	for d, rs in sorted(by_doc.items()):
+		path = FW / d
+		if '/' in d or d == 'README.md' or not (d in writeups or d.startswith('plan_')):
+			continue   # only feature writeups (features.csv `file`) and plans, directly in feature_writeup/
+		if not path.is_file() or doc_generated(path):
+			continue
+		open_rs = sorted((r for r in rs.values() if r['status'] != 'Complete'), key=todo_rows.row_key)
+		done = sum(1 for r in rs.values() if r['status'] == 'Complete')
+		c = Counter(r['status'] for r in open_rs)
+		head = ('Status: %d open TODO row%s (%s), %d Complete.' % (
+			len(open_rs), '' if len(open_rs) == 1 else 's',
+			', '.join('%s %d' % (s, c[s]) for s in todo_rows.STATUS_ORDER if c.get(s)) or 'none', done))
+		lines = ['**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with '
+				 '`tools/todo.py`). ' + head]
+		if open_rs:
+			lines += ['', '| Id | Status | Tests | Change |', '|---|---|---|---|']
+			lines += ['| `%s` | %s | %s | %s |' % (r['id'], r['status'], todo_rows.cell(r.get('tests')),
+												todo_rows.cell(r.get('change'))) for r in open_rs]
+		out[path] = lines
+	return out
 
 
 def place_doc_block(path, content):
-    """Insert or refresh the open_work block: in place of the D6 section 0 paragraph, else after a `## 0.` heading,
+	"""Insert or refresh the open_work block: in place of the D6 section 0 paragraph, else after a `## 0.` heading,
     else after the title (plans). Returns True when the file changed."""
-    text = path.read_text()
-    lines = text.split('\n')
-    span = block_spans(lines).get('open_work')
-    new_block = empty_block('open_work', content)
-    if span and span[1] is not None:
-        b, e, _ = span
-        if lines[b:e + 1] == new_block:
-            return False
-        lines[b:e + 1] = new_block
-        path.write_text('\n'.join(lines))
-        return True
-    blk = '\n'.join(new_block)
-    if SECTION0_RE.search(text):
-        text = SECTION0_RE.sub(lambda m: blk, text, count=1)
-    else:
-        m = re.search(r'^## 0\.[^\n]*\n', text, re.M) or (re.search(r'^# [^\n]*\n', text, re.M)
-                                                             if path.name.startswith('plan_') else None)
-        if not m:
-            return False
-        text = text[:m.end()] + '\n' + blk + '\n' + text[m.end():]
-    path.write_text(text)
-    return True
+	text = path.read_text()
+	lines = text.split('\n')
+	span = block_spans(lines).get('open_work')
+	new_block = empty_block('open_work', content)
+	if span and span[1] is not None:
+		b, e, _ = span
+		if lines[b:e + 1] == new_block:
+			return False
+		lines[b:e + 1] = new_block
+		path.write_text('\n'.join(lines))
+		return True
+	blk = '\n'.join(new_block)
+	if SECTION0_RE.search(text):
+		text = SECTION0_RE.sub(lambda m: blk, text, count=1)
+	else:
+		m = re.search(r'^## 0\.[^\n]*\n', text, re.M) or (re.search(r'^# [^\n]*\n', text, re.M)
+															 if path.name.startswith('plan_') else None)
+		if not m:
+			return False
+		text = text[:m.end()] + '\n' + blk + '\n' + text[m.end():]
+	path.write_text(text)
+	return True
 
 
 def view_deploy():
-    """deploy.md header: the deployed version per side and the last five marks, from deploy/DEPLOYED.json (P3.4 i)."""
-    try:
-        d = json.load(open(ROOT / 'deploy' / 'DEPLOYED.json'))
-    except (OSError, ValueError):
-        return ['deploy/DEPLOYED.json missing or unreadable']
-    out = ['| Side | Version | Since |', '|---|---|---|']
-    for side in ('server', 'client'):
-        e = d.get(side) or {}
-        out.append('| %s | %s | %s |' % (side, e.get('version', '?'), (e.get('date') or '').replace('T', ' ')))
-    out += ['', 'Last marks: ' + '; '.join('%s %s (%s)' % (e.get('version'), (e.get('date') or '').replace('T', ' '),
-                                                        ', '.join(e.get('targets') or []))
-                                       for e in (d.get('log') or [])[-5:][::-1])]
-    return out
+	"""deploy.md header: the deployed version per side and the last five marks, from deploy/DEPLOYED.json (P3.4 i)."""
+	try:
+		d = json.load(open(ROOT / 'deploy' / 'DEPLOYED.json'))
+	except (OSError, ValueError):
+		return ['deploy/DEPLOYED.json missing or unreadable']
+	out = ['| Side | Version | Since |', '|---|---|---|']
+	for side in ('server', 'client'):
+		e = d.get(side) or {}
+		out.append('| %s | %s | %s |' % (side, e.get('version', '?'), (e.get('date') or '').replace('T', ' ')))
+	out += ['', 'Last marks: ' + '; '.join('%s %s (%s)' % (e.get('version'), (e.get('date') or '').replace('T', ' '),
+														', '.join(e.get('targets') or []))
+									   for e in (d.get('log') or [])[-5:][::-1])]
+	return out
 
 
 def build():
-    feats = read_features()
-    todo = read_todo()
-    feats_changed = apply_derived(feats, todo)
-    queue = read_queue()
-    runs = read_runs()
-    rindex, seen = run_index(runs)
-    jars = jar_states()
-    views = {'readme': view_readme(feats, rindex, jars), 'todo_md': view_todo_md(todo, feats, jars), 'deploy': view_deploy(),
-             'queue': view_queue(queue, rindex, seen)}
-    views['rows'], views['rows_where'] = rows_views(runs)
-    views['features_changed'] = feats_changed
-    views['docs'] = doc_views(todo, feats)
-    return feats, todo, queue, views
+	feats = read_features()
+	todo = read_todo()
+	feats_changed = apply_derived(feats, todo)
+	queue = read_queue()
+	runs = read_runs()
+	rindex, seen = run_index(runs)
+	jars = jar_states()
+	views = {'readme': view_readme(feats, rindex, jars), 'todo_md': view_todo_md(todo, feats, jars), 'deploy': view_deploy(),
+			 'queue': view_queue(queue, rindex, seen)}
+	views['rows'], views['rows_where'] = rows_views(runs)
+	views['features_changed'] = feats_changed
+	views['docs'] = doc_views(todo, feats)
+	return feats, todo, queue, views
 
 
 def check(feats, todo, queue, views):
-    fails, warns = [], []
-    if not feats:
-        fails.append('features.csv missing or empty')
-    hdr = table_io.read(TSV)[1]
-    if hdr and hdr != TSV_COLS:
-        fails.append('features.csv header is not %s' % ','.join(TSV_COLS))
-    keys = Counter(f['key'] for f in feats)
-    for k, n in keys.items():
-        if n > 1:
-            fails.append('features.csv: key %r on %d rows' % (k, n))
-    for k, old, new in views.get('features_changed', ()):
-        warns.append('features.csv (%s): status word %s is out of date, the rule gives %s; run python3 '
-                      'tools/status_index.py' % (k, old or '(empty)', new))
-    for f in feats:
-        if f.get('override') and not re.match(r'\d{4}-\d{2}-\d{2}$', f.get('override_date', '')):
-            fails.append('features.csv line %d (%s): override without an override_date' % (f['line'], f['key']))
-        if f['status word'] not in FEATURE_LEGEND:
-            fails.append('features.csv line %d (%s): status word %r not in the legend' % (
-                f['line'], f['key'], f['status word']))
-        for p in split_list(f['file']):
-            if not (FW / p).exists():
-                fails.append('features.csv line %d (%s): file %s does not exist' % (f['line'], f['key'], p))
-    import todo_rows
-    layout_text = todo_rows.LAYOUT.read_text() if todo_rows.LAYOUT.exists() else None
-    for f, line, rid, msg in todo_rows.validate(todo['rows'], layout_text):
-        fails.append('todo/rows/%s line %s %s: %s' % (f, line, rid, msg))
-    fkeys = {f['key'] for f in feats}
-    for r in todo['rows']:
-        if r.get('feature') and r['feature'] not in fkeys:
-            fails.append('todo/rows/%s line %s %s: feature %r is not a features.csv key' % (
-                r['_file'], r['_line'], r['id'], r['feature']))
-    stale_docs = []
-    for p, content in views.get('docs', {}).items():
-        lines = p.read_text().split('\n')
-        span = block_spans(lines).get('open_work')
-        if not span or span[1] is None:
-            if SECTION0_RE.search('\n'.join(lines)):
-                stale_docs.append(p.name)
-            continue
-        b, e, stored = span
-        if sha(lines[b + 1:e]) != stored:
-            fails.append('%s: hand edit inside the open_work block; change the rows with tools/todo.py' %
-                         p.relative_to(ROOT))
-        elif lines[b + 1:e] != content:
-            stale_docs.append(p.name)
-    if stale_docs:
-        warns.append('%d open_work block(s) out of date or missing (%s); run python3 tools/status_index.py' % (
-            len(stale_docs), ', '.join(stale_docs[:4]) + (' ...' if len(stale_docs) > 4 else '')))
-    if views.get('todo_md') is not None:
-        have = TODO.read_text() if TODO.exists() else ''
-        rec_sha, body = todo_rows.split_generated(have)
-        if rec_sha is None or todo_rows.body_sha(body) != rec_sha:
-            fails.append('TODO.md: hand edit (or not generated yet); change rows with tools/todo.py, prose in '
-                         'todo/layout.md, then run python3 tools/status_index.py')
-        elif have != views['todo_md']:
-            warns.append('TODO.md is out of date; run python3 tools/status_index.py')
-    owned = {c for f in feats for c in split_list(f['queue codes'])}
-    for code in sorted(set(queue['codes']) - owned):
-        fails.append('scratch_queue.md: queue code %s (%d rows) has no feature in features.csv' % (
-            code, queue['codes'][code]))
-    for name, path in BLOCKS.items():
-        lines = path.read_text().split('\n')
-        span = block_spans(lines).get(name)
-        rel = path.relative_to(ROOT)
-        if not span or span[1] is None:
-            fails.append('%s: generated block %s missing or unterminated' % (rel, name))
-            continue
-        b, e, stored = span
-        content = lines[b + 1:e]
-        if sha(content) != stored:
-            fails.append('%s: hand edit inside generated block %s (lines %d-%d); move the change to features.csv or '
-                         'TODO.md and rerun tools/status_index.py' % (rel, name, b + 2, e))
-        elif content != views[name]:
-            warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
-    # queue sections rendered from rows/*.qb (plan P2.1); archived ones live in the archive file (P2.5)
-    qfails, _ = qrows.check()
-    fails += qfails
-    present = {}
-    for path in (QUEUE, ARCHIVE):
-        lines, spans = rows_spans(path)
-        rel = path.relative_to(ROOT)
-        for name, (b0, e, stored) in sorted(spans.items(), key=lambda kv: kv[1][0]):
-            present[name] = path
-            if e is None:
-                fails.append('%s: generated block %s unterminated' % (rel, name))
-                continue
-            content = lines[b0 + 1:e]
-            if sha(content) != stored:
-                fails.append('%s: hand edit inside generated block %s (lines %d-%d); edit the .qb in '
-                             'feature_writeup/testing/rows/ and rerun tools/status_index.py' % (rel, name, b0 + 2, e))
-            elif name not in views['rows']:
-                fails.append('%s: block %s has no section in feature_writeup/testing/rows/' % (rel, name))
-            elif content != views['rows'][name] or views['rows_where'][name] != path:
-                warns.append('%s: block %s is out of date or in the wrong file; run python3 tools/status_index.py' % (
-                    rel, name))
-    for name in sorted(set(views['rows']) - set(present)):
-        warns.append('rows section %s not in the queue yet; run python3 tools/status_index.py' % name)
-    return fails, warns
+	fails, warns = [], []
+	if not feats:
+		fails.append('features.csv missing or empty')
+	hdr = table_io.read(TSV)[1]
+	if hdr and hdr != TSV_COLS:
+		fails.append('features.csv header is not %s' % ','.join(TSV_COLS))
+	keys = Counter(f['key'] for f in feats)
+	for k, n in keys.items():
+		if n > 1:
+			fails.append('features.csv: key %r on %d rows' % (k, n))
+	for k, old, new in views.get('features_changed', ()):
+		warns.append('features.csv (%s): status word %s is out of date, the rule gives %s; run python3 '
+					  'tools/status_index.py' % (k, old or '(empty)', new))
+	for f in feats:
+		if f.get('override') and not re.match(r'\d{4}-\d{2}-\d{2}$', f.get('override_date', '')):
+			fails.append('features.csv line %d (%s): override without an override_date' % (f['line'], f['key']))
+		if f['status word'] not in FEATURE_LEGEND:
+			fails.append('features.csv line %d (%s): status word %r not in the legend' % (
+				f['line'], f['key'], f['status word']))
+		for p in split_list(f['file']):
+			if not (FW / p).exists():
+				fails.append('features.csv line %d (%s): file %s does not exist' % (f['line'], f['key'], p))
+	import todo_rows
+	layout_text = todo_rows.LAYOUT.read_text() if todo_rows.LAYOUT.exists() else None
+	for f, line, rid, msg in todo_rows.validate(todo['rows'], layout_text):
+		fails.append('todo/rows/%s line %s %s: %s' % (f, line, rid, msg))
+	fkeys = {f['key'] for f in feats}
+	for r in todo['rows']:
+		if r.get('feature') and r['feature'] not in fkeys:
+			fails.append('todo/rows/%s line %s %s: feature %r is not a features.csv key' % (
+				r['_file'], r['_line'], r['id'], r['feature']))
+	stale_docs = []
+	for p, content in views.get('docs', {}).items():
+		lines = p.read_text().split('\n')
+		span = block_spans(lines).get('open_work')
+		if not span or span[1] is None:
+			if SECTION0_RE.search('\n'.join(lines)):
+				stale_docs.append(p.name)
+			continue
+		b, e, stored = span
+		if sha(lines[b + 1:e]) != stored:
+			fails.append('%s: hand edit inside the open_work block; change the rows with tools/todo.py' %
+						 p.relative_to(ROOT))
+		elif lines[b + 1:e] != content:
+			stale_docs.append(p.name)
+	if stale_docs:
+		warns.append('%d open_work block(s) out of date or missing (%s); run python3 tools/status_index.py' % (
+			len(stale_docs), ', '.join(stale_docs[:4]) + (' ...' if len(stale_docs) > 4 else '')))
+	if views.get('todo_md') is not None:
+		have = TODO.read_text() if TODO.exists() else ''
+		rec_sha, body = todo_rows.split_generated(have)
+		if rec_sha is None or todo_rows.body_sha(body) != rec_sha:
+			fails.append('TODO.md: hand edit (or not generated yet); change rows with tools/todo.py, prose in '
+						 'todo/layout.md, then run python3 tools/status_index.py')
+		elif have != views['todo_md']:
+			warns.append('TODO.md is out of date; run python3 tools/status_index.py')
+	owned = {c for f in feats for c in split_list(f['queue codes'])}
+	for code in sorted(set(queue['codes']) - owned):
+		fails.append('scratch_queue.md: queue code %s (%d rows) has no feature in features.csv' % (
+			code, queue['codes'][code]))
+	for name, path in BLOCKS.items():
+		lines = path.read_text().split('\n')
+		span = block_spans(lines).get(name)
+		rel = path.relative_to(ROOT)
+		if not span or span[1] is None:
+			fails.append('%s: generated block %s missing or unterminated' % (rel, name))
+			continue
+		b, e, stored = span
+		content = lines[b + 1:e]
+		if sha(content) != stored:
+			fails.append('%s: hand edit inside generated block %s (lines %d-%d); move the change to features.csv or '
+						 'TODO.md and rerun tools/status_index.py' % (rel, name, b + 2, e))
+		elif content != views[name]:
+			warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
+	# queue sections rendered from rows/*.qb (plan P2.1); archived ones live in the archive file (P2.5)
+	qfails, _ = qrows.check()
+	fails += qfails
+	present = {}
+	for path in (QUEUE, ARCHIVE):
+		lines, spans = rows_spans(path)
+		rel = path.relative_to(ROOT)
+		for name, (b0, e, stored) in sorted(spans.items(), key=lambda kv: kv[1][0]):
+			present[name] = path
+			if e is None:
+				fails.append('%s: generated block %s unterminated' % (rel, name))
+				continue
+			content = lines[b0 + 1:e]
+			if sha(content) != stored:
+				fails.append('%s: hand edit inside generated block %s (lines %d-%d); edit the .qb in '
+							 'feature_writeup/testing/rows/ and rerun tools/status_index.py' % (rel, name, b0 + 2, e))
+			elif name not in views['rows']:
+				fails.append('%s: block %s has no section in feature_writeup/testing/rows/' % (rel, name))
+			elif content != views['rows'][name] or views['rows_where'][name] != path:
+				warns.append('%s: block %s is out of date or in the wrong file; run python3 tools/status_index.py' % (
+					rel, name))
+	for name in sorted(set(views['rows']) - set(present)):
+		warns.append('rows section %s not in the queue yet; run python3 tools/status_index.py' % name)
+	return fails, warns
 
 
 def write(views):
-    changed = []
-    for name, path in BLOCKS.items():
-        lines = path.read_text().split('\n')
-        span = block_spans(lines).get(name)
-        if not span or span[1] is None:
-            print('%s: no generated block %s; place the markers first' % (path.relative_to(ROOT), name))
-            continue
-        b, e, _ = span
-        new = empty_block(name, views[name])
-        if lines[b:e + 1] != new:
-            lines[b:e + 1] = new
-            path.write_text('\n'.join(lines))
-            changed.append(name)
-    # rows sections: regenerate each block in its file (queue, or the archive for @@archived sections); a block in the
-    # wrong file is removed there and appended to the right one; a section without a block is appended at the end
-    n = 0
-    for path in (QUEUE, ARCHIVE):
-        lines, spans = rows_spans(path)
-        if not lines and path == ARCHIVE:
-            if not any(w == ARCHIVE for w in views['rows_where'].values()):
-                continue
-            lines = list(ARCHIVE_HEAD)
-        orig = list(lines)
-        for name, (b0, e, _) in sorted(((k, v) for k, v in spans.items() if v[1] is not None), key=lambda kv: -kv[1][0]):
-            if views['rows_where'].get(name) != path:
-                del lines[b0:e + 2 if e + 1 < len(lines) and not lines[e + 1].strip() else e + 1]
-            elif lines[b0:e + 1] != empty_block(name, views['rows'][name]):
-                lines[b0:e + 1] = empty_block(name, views['rows'][name])
-        have = set(rows_spans(path)[1]) if path.exists() else set()
-        for name in sorted((k for k, w in views['rows_where'].items() if w == path and k not in have),
-                           key=lambda k: (k.rsplit('_', 1)[0], int(k.rsplit('_', 1)[1]))):
-            while lines and not lines[-1].strip():
-                lines.pop()
-            lines += [''] + empty_block(name, views['rows'][name]) + ['']
-        if lines != orig:
-            path.write_text('\n'.join(lines))
-            n += 1
-    if n:
-        changed.append('rows sections (%d file%s)' % (n, 's' if n > 1 else ''))
-    return changed
+	changed = []
+	for name, path in BLOCKS.items():
+		lines = path.read_text().split('\n')
+		span = block_spans(lines).get(name)
+		if not span or span[1] is None:
+			print('%s: no generated block %s; place the markers first' % (path.relative_to(ROOT), name))
+			continue
+		b, e, _ = span
+		new = empty_block(name, views[name])
+		if lines[b:e + 1] != new:
+			lines[b:e + 1] = new
+			path.write_text('\n'.join(lines))
+			changed.append(name)
+	# rows sections: regenerate each block in its file (queue, or the archive for @@archived sections); a block in the
+	# wrong file is removed there and appended to the right one; a section without a block is appended at the end
+	n = 0
+	for path in (QUEUE, ARCHIVE):
+		lines, spans = rows_spans(path)
+		if not lines and path == ARCHIVE:
+			if not any(w == ARCHIVE for w in views['rows_where'].values()):
+				continue
+			lines = list(ARCHIVE_HEAD)
+		orig = list(lines)
+		for name, (b0, e, _) in sorted(((k, v) for k, v in spans.items() if v[1] is not None), key=lambda kv: -kv[1][0]):
+			if views['rows_where'].get(name) != path:
+				del lines[b0:e + 2 if e + 1 < len(lines) and not lines[e + 1].strip() else e + 1]
+			elif lines[b0:e + 1] != empty_block(name, views['rows'][name]):
+				lines[b0:e + 1] = empty_block(name, views['rows'][name])
+		have = set(rows_spans(path)[1]) if path.exists() else set()
+		for name in sorted((k for k, w in views['rows_where'].items() if w == path and k not in have),
+						   key=lambda k: (k.rsplit('_', 1)[0], int(k.rsplit('_', 1)[1]))):
+			while lines and not lines[-1].strip():
+				lines.pop()
+			lines += [''] + empty_block(name, views['rows'][name]) + ['']
+		if lines != orig:
+			path.write_text('\n'.join(lines))
+			n += 1
+	if n:
+		changed.append('rows sections (%d file%s)' % (n, 's' if n > 1 else ''))
+	return changed
 
 
 def main(argv):
-    feats, todo, queue, views = build()
-    if '--check' in argv:
-        fails, warns = check(feats, todo, queue, views)
-        for w in warns:
-            print('WARN ' + w)
-        for f in fails:
-            print('FAIL ' + f)
-        print('status_index: %s (%d features, %d TODO rows, %d queue codes)' % (
-            'FAIL %d' % len(fails) if fails else 'OK', len(feats), len(todo['open']), len(queue['codes'])))
-        return 1 if fails else 0
-    changed = write(views)
-    nd = sum(place_doc_block(p, c) for p, c in views['docs'].items())
-    if nd:
-        changed.append('open_work blocks (%d docs)' % nd)
-    if views.get('todo_md') is not None and (not TODO.exists() or TODO.read_text() != views['todo_md']):
-        TODO.write_text(views['todo_md'])
-        changed.append('TODO.md')
-    if views['features_changed']:
-        write_features(feats)
-        changed.append('features.csv status (%d)' % len(views['features_changed']))
-    if any(c.startswith('rows') for c in changed):
-        # new or moved rows sections change the queue's row counts: rebuild once so the coverage block agrees
-        changed += [c for c in write(build()[3]) if c not in changed]
-    print('status_index: %s' % ('updated ' + ', '.join(changed) if changed else 'no change'))
-    return 0
+	feats, todo, queue, views = build()
+	if '--check' in argv:
+		fails, warns = check(feats, todo, queue, views)
+		for w in warns:
+			print('WARN ' + w)
+		for f in fails:
+			print('FAIL ' + f)
+		print('status_index: %s (%d features, %d TODO rows, %d queue codes)' % (
+			'FAIL %d' % len(fails) if fails else 'OK', len(feats), len(todo['open']), len(queue['codes'])))
+		return 1 if fails else 0
+	changed = write(views)
+	nd = sum(place_doc_block(p, c) for p, c in views['docs'].items())
+	if nd:
+		changed.append('open_work blocks (%d docs)' % nd)
+	if views.get('todo_md') is not None and (not TODO.exists() or TODO.read_text() != views['todo_md']):
+		TODO.write_text(views['todo_md'])
+		changed.append('TODO.md')
+	if views['features_changed']:
+		write_features(feats)
+		changed.append('features.csv status (%d)' % len(views['features_changed']))
+	if any(c.startswith('rows') for c in changed):
+		# new or moved rows sections change the queue's row counts: rebuild once so the coverage block agrees
+		changed += [c for c in write(build()[3]) if c not in changed]
+	print('status_index: %s' % ('updated ' + ', '.join(changed) if changed else 'no change'))
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+	sys.exit(main(sys.argv[1:]))

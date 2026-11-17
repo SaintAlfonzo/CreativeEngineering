@@ -22,40 +22,40 @@ ROLES = ('plan', 'impl', 'test')
 
 
 def marker(sid):
-    return DIR / ('%s.json' % sid)
+	return DIR / ('%s.json' % sid)
 
 
 def read_role(sid):
-    try:
-        return json.loads(marker(sid).read_text()).get('role')
-    except (OSError, ValueError):
-        return None
+	try:
+		return json.loads(marker(sid).read_text()).get('role')
+	except (OSError, ValueError):
+		return None
 
 
 def main(argv):
-    if len(argv) != 2 or argv[1] not in ROLES + ('show', 'clear'):
-        print(__doc__.strip())
-        return 2
-    sid = os.environ.get('CLAUDE_CODE_SESSION_ID')
-    if not sid:
-        print('session_role: CLAUDE_CODE_SESSION_ID not set (run this from a Claude Code session)')
-        return 1
-    cmd = argv[1]
-    if cmd == 'show':
-        print(read_role(sid) or 'undeclared (treated as impl)')
-        return 0
-    if cmd == 'clear':
-        try:
-            marker(sid).unlink()
-        except OSError:
-            pass
-        print('session_role: cleared')
-        return 0
-    DIR.mkdir(parents=True, exist_ok=True)
-    marker(sid).write_text(json.dumps({'role': cmd, 'set': time.strftime('%Y-%m-%d %H:%M:%S')}))
-    print('session_role: %s' % cmd)
-    return 0
+	if len(argv) != 2 or argv[1] not in ROLES + ('show', 'clear'):
+		print(__doc__.strip())
+		return 2
+	sid = os.environ.get('CLAUDE_CODE_SESSION_ID')
+	if not sid:
+		print('session_role: CLAUDE_CODE_SESSION_ID not set (run this from a Claude Code session)')
+		return 1
+	cmd = argv[1]
+	if cmd == 'show':
+		print(read_role(sid) or 'undeclared (treated as impl)')
+		return 0
+	if cmd == 'clear':
+		try:
+			marker(sid).unlink()
+		except OSError:
+			pass
+		print('session_role: cleared')
+		return 0
+	DIR.mkdir(parents=True, exist_ok=True)
+	marker(sid).write_text(json.dumps({'role': cmd, 'set': time.strftime('%Y-%m-%d %H:%M:%S')}))
+	print('session_role: %s' % cmd)
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv))
+	sys.exit(main(sys.argv))

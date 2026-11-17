@@ -58,11 +58,11 @@ PLACEHOLDER_MARKER = "TODO: write a description"
 # (display name set directly via .displayName(Text.of(...)) or a Java Component).
 # key: "mod:path" -> display name to use when generating the placeholder text.
 EXTRA_EFFECTS = {
-    # Creative Brewing's own effect: name and description ship in the CB jar (assets/creativebrewing/lang, plan_cb_publish
-    # M3), which lang_index reads from mods/, so this row only matters before that jar is installed.
-    "creativebrewing:magic_resistance": "Magic Resistance",
-    # Everything Copper ships no name for it (effects.md F1); the placeholder still needs a key to sit on.
-    "everythingcopper:copper_poisoning": "Copper Poisoning",
+	# Creative Brewing's own effect: name and description ship in the CB jar (assets/creativebrewing/lang, plan_cb_publish
+	# M3), which lang_index reads from mods/, so this row only matters before that jar is installed.
+	"creativebrewing:magic_resistance": "Magic Resistance",
+	# Everything Copper ships no name for it (effects.md F1); the placeholder still needs a key to sit on.
+	"everythingcopper:copper_poisoning": "Copper Poisoning",
 }
 
 # Effects the dumped registry (mob_effects.json) doesn't have yet: the Vinery port's trippy stays registered.
@@ -70,139 +70,139 @@ EXTRA_REGISTERED = {"vinery:trippy"}
 
 # "mod:path" -> (source, text): a description from another effect-description mod, used instead of a placeholder.
 PORTED = {
-    "via_romana:travellers_fatigue": ("Effect Insights 26.3.1", "Prevents fast travel."),
+	"via_romana:travellers_fatigue": ("Effect Insights 26.3.1", "Prevents fast travel."),
 }
 SOURCE_DESC_RE = re.compile(r"^effect\.([a-z0-9_]+)\.([a-z0-9_]+)\.(?:description|desc)$")
 
 
 def scan():
-    names, descs = {}, {}
-    table, _ = lang_index.build(skip_kubejs_ns=("creativeengineering",))  # not our own output (OUT_FILE)
-    for k, v in table.items():
-        m = NAME_RE.match(k)
-        if m:
-            names[(m.group(1), m.group(2))] = v
-            continue
-        m = DESC_RE.match(k)
-        if m:
-            descs[(m.group(1), m.group(2))] = v
+	names, descs = {}, {}
+	table, _ = lang_index.build(skip_kubejs_ns=("creativeengineering",))  # not our own output (OUT_FILE)
+	for k, v in table.items():
+		m = NAME_RE.match(k)
+		if m:
+			names[(m.group(1), m.group(2))] = v
+			continue
+		m = DESC_RE.match(k)
+		if m:
+			descs[(m.group(1), m.group(2))] = v
 
-    for eid, display in EXTRA_EFFECTS.items():
-        mod, path = eid.split(":", 1)
-        names.setdefault((mod, path), display)
+	for eid, display in EXTRA_EFFECTS.items():
+		mod, path = eid.split(":", 1)
+		names.setdefault((mod, path), display)
 
-    return names, descs
+	return names, descs
 
 
 def registered():
-    """(mod, path) of every registered effect, or None when there's no /dumppotions export to go by."""
-    if not os.path.exists(MOB_EFFECTS):
-        return None
-    with open(MOB_EFFECTS, "r", encoding="utf-8") as f:
-        ids = {eid for ns in json.load(f).values() for eid in ns}
-    ids |= EXTRA_REGISTERED | set(EXTRA_EFFECTS)
-    return {tuple(eid.split(":", 1)) for eid in ids}
+	"""(mod, path) of every registered effect, or None when there's no /dumppotions export to go by."""
+	if not os.path.exists(MOB_EFFECTS):
+		return None
+	with open(MOB_EFFECTS, "r", encoding="utf-8") as f:
+		ids = {eid for ns in json.load(f).values() for eid in ns}
+	ids |= EXTRA_REGISTERED | set(EXTRA_EFFECTS)
+	return {tuple(eid.split(":", 1)) for eid in ids}
 
 
 def source_jars(args):
-    if args:
-        return args
-    return sorted(j for d in SOURCE_DIRS for j in glob.glob(os.path.join(d, "*.jar")))
+	if args:
+		return args
+	return sorted(j for d in SOURCE_DIRS for j in glob.glob(os.path.join(d, "*.jar")))
 
 
 def report_sources(jars, wanted):
-    found = {}
-    for path in jars:
-        try:
-            with zipfile.ZipFile(path) as z:
-                for name in z.namelist():
-                    if not re.match(r"assets/[^/]+/lang/en_us\.json$", name):
-                        continue
-                    try:
-                        obj = json.loads(z.read(name).decode("utf-8", "ignore"))
-                    except ValueError:
-                        continue
-                    for k, v in obj.items():
-                        m = SOURCE_DESC_RE.match(k)
-                        if m and (m.group(1), m.group(2)) in wanted:
-                            found.setdefault((m.group(1), m.group(2)), []).append((os.path.basename(path), v))
-        except (zipfile.BadZipFile, FileNotFoundError):
-            print(f"[gen_effect_descriptions] can't read {path}", file=sys.stderr)
-    for mod, path in sorted(wanted):
-        hits = found.get((mod, path), [])
-        print(f"{mod}:{path}: " + ("none" if not hits else ""))
-        for src, text in hits:
-            print(f"    {src}: {text}")
+	found = {}
+	for path in jars:
+		try:
+			with zipfile.ZipFile(path) as z:
+				for name in z.namelist():
+					if not re.match(r"assets/[^/]+/lang/en_us\.json$", name):
+						continue
+					try:
+						obj = json.loads(z.read(name).decode("utf-8", "ignore"))
+					except ValueError:
+						continue
+					for k, v in obj.items():
+						m = SOURCE_DESC_RE.match(k)
+						if m and (m.group(1), m.group(2)) in wanted:
+							found.setdefault((m.group(1), m.group(2)), []).append((os.path.basename(path), v))
+		except (zipfile.BadZipFile, FileNotFoundError):
+			print(f"[gen_effect_descriptions] can't read {path}", file=sys.stderr)
+	for mod, path in sorted(wanted):
+		hits = found.get((mod, path), [])
+		print(f"{mod}:{path}: " + ("none" if not hits else ""))
+		for src, text in hits:
+			print(f"    {src}: {text}")
 
 
 def main():
-    names, descs = scan()
-    live = registered()
+	names, descs = scan()
+	live = registered()
 
-    missing = sorted(k for k in names if k not in descs and (live is None or k in live))
+	missing = sorted(k for k in names if k not in descs and (live is None or k in live))
 
-    if "--sources" in sys.argv:
-        with open(OUT_FILE, "r", encoding="utf-8") as f:
-            overlay = json.load(f)
-        wanted = {k for k in missing
-                  if overlay.get(f"effect.{k[0]}.{k[1]}.description", PLACEHOLDER_MARKER).startswith(PLACEHOLDER_MARKER)}
-        report_sources(source_jars(sys.argv[sys.argv.index("--sources") + 1:]), wanted)
-        return
+	if "--sources" in sys.argv:
+		with open(OUT_FILE, "r", encoding="utf-8") as f:
+			overlay = json.load(f)
+		wanted = {k for k in missing
+				  if overlay.get(f"effect.{k[0]}.{k[1]}.description", PLACEHOLDER_MARKER).startswith(PLACEHOLDER_MARKER)}
+		report_sources(source_jars(sys.argv[sys.argv.index("--sources") + 1:]), wanted)
+		return
 
-    existing = {}
-    if os.path.exists(OUT_FILE):
-        with open(OUT_FILE, "r", encoding="utf-8") as f:
-            existing = json.load(f)
+	existing = {}
+	if os.path.exists(OUT_FILE):
+		with open(OUT_FILE, "r", encoding="utf-8") as f:
+			existing = json.load(f)
 
-    added, kept_placeholder, skipped_curated = 0, 0, 0
-    for mod, path in missing:
-        key = f"effect.{mod}.{path}.description"
-        display = names[(mod, path)] or f"{mod}:{path}"
-        current = existing.get(key)
-        ported = PORTED.get(f"{mod}:{path}")
-        if ported and (current is None or current.startswith(PLACEHOLDER_MARKER)):
-            existing[key] = ported[1]
-            added += 1
-        elif current is None:
-            existing[key] = f"{PLACEHOLDER_MARKER} for {display}."
-            added += 1
-        elif current.startswith(PLACEHOLDER_MARKER):
-            kept_placeholder += 1
-        else:
-            skipped_curated += 1  # hand-written description already present, don't touch
+	added, kept_placeholder, skipped_curated = 0, 0, 0
+	for mod, path in missing:
+		key = f"effect.{mod}.{path}.description"
+		display = names[(mod, path)] or f"{mod}:{path}"
+		current = existing.get(key)
+		ported = PORTED.get(f"{mod}:{path}")
+		if ported and (current is None or current.startswith(PLACEHOLDER_MARKER)):
+			existing[key] = ported[1]
+			added += 1
+		elif current is None:
+			existing[key] = f"{PLACEHOLDER_MARKER} for {display}."
+			added += 1
+		elif current.startswith(PLACEHOLDER_MARKER):
+			kept_placeholder += 1
+		else:
+			skipped_curated += 1  # hand-written description already present, don't touch
 
-    # Drop stale placeholder keys for effects that now have a real description
-    # elsewhere (e.g. JEED shipped an update) so the overlay doesn't fight it.
-    stale = [
-        k for k in list(existing.keys())
-        if (m := DESC_RE.match(k))
-        and (m.group(1), m.group(2)) in descs
-        and existing[k].startswith(PLACEHOLDER_MARKER)
-    ]
-    # ...and placeholders for effects no installed mod names or registers any more (removed mods, dropped effects).
-    stale += [
-        k for k in list(existing.keys())
-        if k not in stale
-        and (m := DESC_RE.match(k))
-        and ((m.group(1), m.group(2)) not in names or (live is not None and (m.group(1), m.group(2)) not in live))
-        and existing[k].startswith(PLACEHOLDER_MARKER)
-    ]
-    for k in stale:
-        del existing[k]
+	# Drop stale placeholder keys for effects that now have a real description
+	# elsewhere (e.g. JEED shipped an update) so the overlay doesn't fight it.
+	stale = [
+		k for k in list(existing.keys())
+		if (m := DESC_RE.match(k))
+		and (m.group(1), m.group(2)) in descs
+		and existing[k].startswith(PLACEHOLDER_MARKER)
+	]
+	# ...and placeholders for effects no installed mod names or registers any more (removed mods, dropped effects).
+	stale += [
+		k for k in list(existing.keys())
+		if k not in stale
+		and (m := DESC_RE.match(k))
+		and ((m.group(1), m.group(2)) not in names or (live is not None and (m.group(1), m.group(2)) not in live))
+		and existing[k].startswith(PLACEHOLDER_MARKER)
+	]
+	for k in stale:
+		del existing[k]
 
-    os.makedirs(os.path.dirname(OUT_FILE), exist_ok=True)
-    with open(OUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(dict(sorted(existing.items())), f, indent=2, ensure_ascii=False)
-        f.write("\n")
+	os.makedirs(os.path.dirname(OUT_FILE), exist_ok=True)
+	with open(OUT_FILE, "w", encoding="utf-8") as f:
+		json.dump(dict(sorted(existing.items())), f, indent=2, ensure_ascii=False)
+		f.write("\n")
 
-    print(f"[gen_effect_descriptions] effects with a name: {len(names)}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] missing descriptions found: {len(missing)}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] new placeholders / ported texts written: {added}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] placeholders already present: {kept_placeholder}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] real descriptions left untouched: {skipped_curated}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] stale placeholders removed: {len(stale)}", file=sys.stderr)
-    print(f"[gen_effect_descriptions] -> {os.path.relpath(OUT_FILE, ROOT)}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] effects with a name: {len(names)}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] missing descriptions found: {len(missing)}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] new placeholders / ported texts written: {added}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] placeholders already present: {kept_placeholder}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] real descriptions left untouched: {skipped_curated}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] stale placeholders removed: {len(stale)}", file=sys.stderr)
+	print(f"[gen_effect_descriptions] -> {os.path.relpath(OUT_FILE, ROOT)}", file=sys.stderr)
 
 
 if __name__ == "__main__":
-    main()
+	main()

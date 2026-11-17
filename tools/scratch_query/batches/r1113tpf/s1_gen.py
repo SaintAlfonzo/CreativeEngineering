@@ -6,13 +6,13 @@ inc = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, "s1_common.inc")
 stem = os.path.basename(inc).replace("_common.inc", "")
 src = open(inc).read().splitlines()
 for kind in ("base", "fix"):
-    out = []
-    for line in src:
-        if line.startswith("!"):
-            tag, _, rest = line[1:].partition(" ")
-            if tag == kind:
-                out.append(rest)
-            continue
-        out.append(line)
-    open(os.path.join(here, "%s_%s.qb" % (stem, kind)), "w").write("\n".join(out) + "\n")
-    print("wrote", "%s_%s.qb" % (stem, kind))
+	out = []
+	for line in src:
+		if line.startswith("!"):
+			tag, _, rest = line[1:].partition(" ")
+			if tag == kind:
+				out.append(rest)
+			continue
+		out.append(line)
+	open(os.path.join(here, "%s_%s.qb" % (stem, kind)), "w").write("\n".join(out) + "\n")
+	print("wrote", "%s_%s.qb" % (stem, kind))

@@ -12,49 +12,49 @@ diff = False
 
 
 def report(kind, a, b):
-    global diff
-    same = a == b
-    diff |= not same
-    print(f"[rdb] {kind} base={len(a)} now={len(b)} {'SAME' if same else 'DIFF'}")
-    if not same:
-        for x in sorted(a - b)[:15]:
-            print(f"[rdb]   only base: {x}")
-        for x in sorted(b - a)[:15]:
-            print(f"[rdb]   only now: {x}")
+	global diff
+	same = a == b
+	diff |= not same
+	print(f"[rdb] {kind} base={len(a)} now={len(b)} {'SAME' if same else 'DIFF'}")
+	if not same:
+		for x in sorted(a - b)[:15]:
+			print(f"[rdb]   only base: {x}")
+		for x in sorted(b - a)[:15]:
+			print(f"[rdb]   only now: {x}")
 
 
 def recipes(d):
-    p = os.path.join(d, "recipes", "all.csv")
-    with open(p, newline="") as f:
-        return {r[0] for r in csv.reader(f) if r and r[0].startswith(ns + ":")}
+	p = os.path.join(d, "recipes", "all.csv")
+	with open(p, newline="") as f:
+		return {r[0] for r in csv.reader(f) if r and r[0].startswith(ns + ":")}
 
 
 def tags(d, kind):
-    data = json.load(open(os.path.join(d, "tags", f"{kind}_tags.json")))
-    out = set()
-    for k, v in data.items():
-        vals = v.get("values", v.get("entries", [])) if isinstance(v, dict) else v
-        vals = [x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in vals]
-        if k.startswith(ns + ":"):
-            out |= {f"{k} <- {x}" for x in vals}
-        else:
-            out |= {f"{k} <- {x}" for x in vals if ns + ":" in x}
-    return out
+	data = json.load(open(os.path.join(d, "tags", f"{kind}_tags.json")))
+	out = set()
+	for k, v in data.items():
+		vals = v.get("values", v.get("entries", [])) if isinstance(v, dict) else v
+		vals = [x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in vals]
+		if k.startswith(ns + ":"):
+			out |= {f"{k} <- {x}" for x in vals}
+		else:
+			out |= {f"{k} <- {x}" for x in vals if ns + ":" in x}
+	return out
 
 
 def keyset(path):
-    if not os.path.exists(path):
-        return set()
-    data = json.load(open(path))
-    if isinstance(data, dict):
-        out = set()
-        for k, v in data.items():
-            if isinstance(v, list):
-                out |= {x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in v}
-            else:
-                out.add(f"{k} md5:{hashlib.md5(json.dumps(v, sort_keys=True).encode()).hexdigest()[:10]}")
-        return out
-    return {x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in data}
+	if not os.path.exists(path):
+		return set()
+	data = json.load(open(path))
+	if isinstance(data, dict):
+		out = set()
+		for k, v in data.items():
+			if isinstance(v, list):
+				out |= {x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in v}
+			else:
+				out.add(f"{k} md5:{hashlib.md5(json.dumps(v, sort_keys=True).encode()).hexdigest()[:10]}")
+		return out
+	return {x if isinstance(x, str) else json.dumps(x, sort_keys=True) for x in data}
 
 
 report("recipes", recipes(base), recipes(now))

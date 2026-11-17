@@ -6,51 +6,51 @@ OUT = os.path.join(os.path.dirname(__file__), "a1.qb")
 UUID = "23237052-61ad-11eb-ae93-0242ac130002"
 
 def val_re(v):
-    # accepts v printed exactly or as a float a hair either side (e.g. -0.012000000000000002 / -0.011999999999999997)
-    if v is None:
-        return r"has no modifier"
-    s = f"{v:.3f}"
-    lo = f"{(v - 0.001) if v > 0 else (v + 0.001):.3f}"   # toward zero by 0.001, then 999..
-    # value is between lo and s with many 9s, or s followed by zeros/digits
-    sign = "-" if v < 0 else ""
-    a = s.replace(".", r"\.")
-    b = lo.replace(".", r"\.")
-    return rf"is ({a}\d*|{b}99999\d*)\b"
+	# accepts v printed exactly or as a float a hair either side (e.g. -0.012000000000000002 / -0.011999999999999997)
+	if v is None:
+		return r"has no modifier"
+	s = f"{v:.3f}"
+	lo = f"{(v - 0.001) if v > 0 else (v + 0.001):.3f}"   # toward zero by 0.001, then 999..
+	# value is between lo and s with many 9s, or s followed by zeros/digits
+	sign = "-" if v < 0 else ""
+	a = s.replace(".", r"\.")
+	b = lo.replace(".", r"\.")
+	return rf"is ({a}\d*|{b}99999\d*)\b"
 
 SPEED = [
-    # (row, block, expected modifier or None)
-    ("SQ-BRA-05", "neapolitan:chocolate_bricks", -0.015),
-    ("SQ-BRA-05", "upgrade_aquatic:kelpy_stone_bricks", 0.025),
-    ("SQ-BRA-05", "vintagedelight:strawberry_jam_block", -0.055),
-    ("SQ-BRA-05", "minecraft:crafting_table", None),
-    ("SQ-BRA-06", "comforts:sleeping_bag_white", -0.012),
-    ("SQ-BRA-06", "comforts:hammock_white", -0.012),
-    ("SQ-BRA-06", "domesticationinnovation:pet_bed_white", -0.012),
-    ("SQ-BRA-06", "quark:thatch", -0.012),
-    ("SQ-BRA-06", "dustrial_decor:cardboard_box", -0.012),
-    ("SQ-BRA-06", "minecraft:cake", -0.015),
-    ("SQ-BRA-06", "farmersdelight:roast_chicken_block", -0.015),
-    ("SQ-BRA-06", "minecraft:tube_coral_block", -0.008),
-    ("SQ-BRA-06", "upgrade_aquatic:kelpy_cobblestone", 0.015),
-    ("SQ-BRA-06", "upgrade_aquatic:scute_pavement", 0.025),
-    ("SQ-BRA-06", "hearthandharvest:polished_manure", 0.025),
-    ("SQ-BRA-06", "hearthandharvest:manure_bricks", 0.025),
-    ("SQ-BRA-06", "farmersdelight:carrot_crate", 0.01),
-    ("SQ-BRA-06", "minecraft:beehive", 0.01),
-    ("SQ-BRA-06", "vintagedelight:ancient_fruit_jello_block", -0.055),
-    ("SQ-BRA-07", "mosaic_masonry:common_bond", 0.025),
-    ("SQ-BRA-07", "mosaic_masonry:english_bond", 0.025),
-    ("SQ-BRA-07", "metalfences:copper_fence", 0.025),
-    ("SQ-BRA-07", "metalfences:copper_fence_gate", 0.025),
+	# (row, block, expected modifier or None)
+	("SQ-BRA-05", "neapolitan:chocolate_bricks", -0.015),
+	("SQ-BRA-05", "upgrade_aquatic:kelpy_stone_bricks", 0.025),
+	("SQ-BRA-05", "vintagedelight:strawberry_jam_block", -0.055),
+	("SQ-BRA-05", "minecraft:crafting_table", None),
+	("SQ-BRA-06", "comforts:sleeping_bag_white", -0.012),
+	("SQ-BRA-06", "comforts:hammock_white", -0.012),
+	("SQ-BRA-06", "domesticationinnovation:pet_bed_white", -0.012),
+	("SQ-BRA-06", "quark:thatch", -0.012),
+	("SQ-BRA-06", "dustrial_decor:cardboard_box", -0.012),
+	("SQ-BRA-06", "minecraft:cake", -0.015),
+	("SQ-BRA-06", "farmersdelight:roast_chicken_block", -0.015),
+	("SQ-BRA-06", "minecraft:tube_coral_block", -0.008),
+	("SQ-BRA-06", "upgrade_aquatic:kelpy_cobblestone", 0.015),
+	("SQ-BRA-06", "upgrade_aquatic:scute_pavement", 0.025),
+	("SQ-BRA-06", "hearthandharvest:polished_manure", 0.025),
+	("SQ-BRA-06", "hearthandharvest:manure_bricks", 0.025),
+	("SQ-BRA-06", "farmersdelight:carrot_crate", 0.01),
+	("SQ-BRA-06", "minecraft:beehive", 0.01),
+	("SQ-BRA-06", "vintagedelight:ancient_fruit_jello_block", -0.055),
+	("SQ-BRA-07", "mosaic_masonry:common_bond", 0.025),
+	("SQ-BRA-07", "mosaic_masonry:english_bond", 0.025),
+	("SQ-BRA-07", "metalfences:copper_fence", 0.025),
+	("SQ-BRA-07", "metalfences:copper_fence_gate", 0.025),
 ]
 
 # collisionTop 1.0 in surface_audit.json: the perfBot does not collide with blocks and stops at the superflat floor
 # (y -60), so a full block must BE the floor (y -61) to be under its feet; shorter blocks sit at -60 and hold the bot
 FULL = {"neapolitan:chocolate_bricks", "upgrade_aquatic:kelpy_stone_bricks", "minecraft:crafting_table", "quark:thatch",
-        "dustrial_decor:cardboard_box", "minecraft:tube_coral_block", "upgrade_aquatic:kelpy_cobblestone",
-        "upgrade_aquatic:scute_pavement", "hearthandharvest:polished_manure", "hearthandharvest:manure_bricks",
-        "farmersdelight:carrot_crate", "minecraft:beehive", "vintagedelight:ancient_fruit_jello_block",
-        "mosaic_masonry:common_bond", "mosaic_masonry:english_bond"}
+		"dustrial_decor:cardboard_box", "minecraft:tube_coral_block", "upgrade_aquatic:kelpy_cobblestone",
+		"upgrade_aquatic:scute_pavement", "hearthandharvest:polished_manure", "hearthandharvest:manure_bricks",
+		"farmersdelight:carrot_crate", "minecraft:beehive", "vintagedelight:ancient_fruit_jello_block",
+		"mosaic_masonry:common_bond", "mosaic_masonry:english_bond"}
 L = []
 w = L.append
 w("# r1111 step A1, group A superflat. Generated by gen_a1.py; edit there. Needs zq_probe.js (prep_srv.sh copies it).")
@@ -69,12 +69,12 @@ w(r"""shell python3 $INST/tools/blockrunner_scan.py --audit kubejs/exported/surf
 w("look untiered list only minecraft:magma_block (exit 3) or empty")
 w("## SQ-BRA-04 | tier tag members")
 for blk, tag in [("framedblocks:framed_cube", "blockrunner:surface/camouflage"), ("copycats:copycat_block", "blockrunner:surface/camouflage"),
-                 ("create_confectionery:chocolate_bricks", "blockrunner:surface/confectionery"),
-                 ("create:mechanical_press", "blockrunner:surface/machinery"), ("handcrafted:oak_counter_1", "blockrunner:surface/furniture"),
-                 ("vintagedelight:strawberry_jam_block", "blockrunner:surface/very_sticky"), ("upgrade_aquatic:coralstone", "blockrunner:surface/natural_smooth")]:
-    w(f"> zq tagsof {blk}")
-    w(r"waitlog \[zq\] done 20")
-    w(f"expect {tag.replace('/', '/')}")
+				 ("create_confectionery:chocolate_bricks", "blockrunner:surface/confectionery"),
+				 ("create:mechanical_press", "blockrunner:surface/machinery"), ("handcrafted:oak_counter_1", "blockrunner:surface/furniture"),
+				 ("vintagedelight:strawberry_jam_block", "blockrunner:surface/very_sticky"), ("upgrade_aquatic:coralstone", "blockrunner:surface/natural_smooth")]:
+	w(f"> zq tagsof {blk}")
+	w(r"waitlog \[zq\] done 20")
+	w(f"expect {tag.replace('/', '/')}")
 w("> zq blocktag blockrunner:surface/metal")
 w(r"waitlog \[zq\] done 20")
 w("expect metalfences:")
@@ -88,21 +88,21 @@ w("sleep 2")
 x = 900
 cur = "SQ-BRA-05"
 for row, blk, v in SPEED:
-    if row != cur:
-        w(f"## {row} | speed modifiers, {row[-2:]}")
-        cur = row
-    tag = f"br{x}"
-    w(f"> fill {x-1} -60 -1 {x+1} -60 1 minecraft:air")
-    extra = "[open=false]" if blk.endswith("fence_gate") else ""
-    y = -61 if blk in FULL else -60
-    w(f"> setblock {x} {y} 0 {blk}{extra}")
-    w(f"> pbot spawn {tag} {x}.5 -57 0.5")
-    w("sleep 3")
-    w(f"> say BRA {blk}")
-    w(f"> attribute {tag} minecraft:generic.movement_speed modifier value get {UUID}")
-    w("sleep 1")
-    w(f"> pbot remove {tag}")
-    x += 6
+	if row != cur:
+		w(f"## {row} | speed modifiers, {row[-2:]}")
+		cur = row
+	tag = f"br{x}"
+	w(f"> fill {x-1} -60 -1 {x+1} -60 1 minecraft:air")
+	extra = "[open=false]" if blk.endswith("fence_gate") else ""
+	y = -61 if blk in FULL else -60
+	w(f"> setblock {x} {y} 0 {blk}{extra}")
+	w(f"> pbot spawn {tag} {x}.5 -57 0.5")
+	w("sleep 3")
+	w(f"> say BRA {blk}")
+	w(f"> attribute {tag} minecraft:generic.movement_speed modifier value get {UUID}")
+	w("sleep 1")
+	w(f"> pbot remove {tag}")
+	x += 6
 w("look per block: the line after 'BRA <block>' (value or 'has no modifier') against the row's Pass list (judge_bra.py)")
 
 w("## SQ-RDB-01 | Rustic Delight with no rustic_upstream folder")
@@ -115,8 +115,8 @@ w(r"""shell grep -nE "result-pools|has more outputs|visceral_heap|\[NCH\].*(fles
 w(r"bootreject \[result-pools\].*(?i)error")
 w(r"bootreject has more outputs")
 for t in ["create:crushing", "create:milling", "create:mixing"]:
-    w(f"> zq bytype {t}")
-    w(r"waitlog \[zq\] done 30")
+	w(f"> zq bytype {t}")
+	w(r"waitlog \[zq\] done 30")
 w(r"count creativeworldgen:create\w*/visceral_heap/ >= 9")
 w("look 4 crush/mill + 5 mixing creativeworldgen visceral_heap recipes listed")
 

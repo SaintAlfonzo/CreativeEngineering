@@ -34,84 +34,84 @@ BLANK = ('NOT_MODEL', 'MISSING_MODEL')
 
 
 def ns(block_id):
-    return block_id.split(':', 1)[0]
+	return block_id.split(':', 1)[0]
 
 
 def main(argv):
-    md = '--md' in argv
-    show_all = '--all' in argv
-    paths = [a for a in argv if not a.startswith('--')]
-    data = json.load(open(paths[0] if paths else DUMP, encoding='utf8'))
-    blocks = data['blocks']
+	md = '--md' in argv
+	show_all = '--all' in argv
+	paths = [a for a in argv if not a.startswith('--')]
+	data = json.load(open(paths[0] if paths else DUMP, encoding='utf8'))
+	blocks = data['blocks']
 
-    by_verdict = collections.defaultdict(list)
-    for b in blocks:
-        by_verdict[b.get('verdict', 'ERROR')].append(b)
+	by_verdict = collections.defaultdict(list)
+	for b in blocks:
+		by_verdict[b.get('verdict', 'ERROR')].append(b)
 
-    print(f"wthit_icons.json from {data.get('generated')}: {len(blocks)} blocks")
-    for v in ('ITEM', 'MODEL', 'EXCLUDED', 'SUBSTITUTE', 'NOT_MODEL', 'MISSING_MODEL', 'ERROR'):
-        print(f'  {v:14} {len(by_verdict.get(v, []))}')
-    print(f"  items with a missing model: {len(data.get('missingItemModels', []))}")
+	print(f"wthit_icons.json from {data.get('generated')}: {len(blocks)} blocks")
+	for v in ('ITEM', 'MODEL', 'EXCLUDED', 'SUBSTITUTE', 'NOT_MODEL', 'MISSING_MODEL', 'ERROR'):
+		print(f'  {v:14} {len(by_verdict.get(v, []))}')
+	print(f"  items with a missing model: {len(data.get('missingItemModels', []))}")
 
-    def per_ns(rows):
-        c = collections.Counter(ns(r['id']) for r in rows)
-        return sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))
+	def per_ns(rows):
+		c = collections.Counter(ns(r['id']) for r in rows)
+		return sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))
 
-    def table(title, rows, detail):
-        print()
-        if md:
-            print(f'**{title}** ({len(rows)})\n')
-            print('| Namespace | Blocks | Examples |')
-            print('|---|---|---|')
-        else:
-            print(f'{title} ({len(rows)}):')
-        groups = collections.defaultdict(list)
-        for r in rows:
-            groups[ns(r['id'])].append(r)
-        for name, n in per_ns(rows):
-            ids = [detail(r) for r in groups[name]]
-            shown = ids if show_all else ids[:4]
-            more = '' if len(shown) == len(ids) else f', +{len(ids) - len(shown)}'
-            if md:
-                print(f"| {name} | {n} | {', '.join(shown)}{more} |")
-            else:
-                print(f"  {name:28} {n:4}  {', '.join(shown)}{more}")
+	def table(title, rows, detail):
+		print()
+		if md:
+			print(f'**{title}** ({len(rows)})\n')
+			print('| Namespace | Blocks | Examples |')
+			print('|---|---|---|')
+		else:
+			print(f'{title} ({len(rows)}):')
+		groups = collections.defaultdict(list)
+		for r in rows:
+			groups[ns(r['id'])].append(r)
+		for name, n in per_ns(rows):
+			ids = [detail(r) for r in groups[name]]
+			shown = ids if show_all else ids[:4]
+			more = '' if len(shown) == len(ids) else f', +{len(ids) - len(shown)}'
+			if md:
+				print(f"| {name} | {n} | {', '.join(shown)}{more} |")
+			else:
+				print(f"  {name:28} {n:4}  {', '.join(shown)}{more}")
 
-    def why(r):
-        path = r['id'].split(':', 1)[1]
-        if r.get('clone') and r.get('cloneModelMissing'):
-            return f'{path} (item model missing)'
-        return path
+	def why(r):
+		path = r['id'].split(':', 1)[1]
+		if r.get('clone') and r.get('cloneModelMissing'):
+			return f'{path} (item model missing)'
+		return path
 
-    table('MODEL: the plugin draws the block', by_verdict.get('MODEL', []), why)
-    if by_verdict.get('EXCLUDED'):
-        table('EXCLUDED by [wthit] iconExclude', by_verdict['EXCLUDED'], why)
-    blank = [r for v in BLANK for r in by_verdict.get(v, [])]
-    table('Still blank (no item icon, not drawable)', blank,
-          lambda r: f"{r['id'].split(':', 1)[1]} [{r['shape'] if r['verdict'] == 'NOT_MODEL' else 'no model'}]")
-    if by_verdict.get('ERROR'):
-        table('ERROR (pick item needs a real world; check in game)', by_verdict['ERROR'],
-              lambda r: r['id'].split(':', 1)[1])
+	table('MODEL: the plugin draws the block', by_verdict.get('MODEL', []), why)
+	if by_verdict.get('EXCLUDED'):
+		table('EXCLUDED by [wthit] iconExclude', by_verdict['EXCLUDED'], why)
+	blank = [r for v in BLANK for r in by_verdict.get(v, [])]
+	table('Still blank (no item icon, not drawable)', blank,
+		  lambda r: f"{r['id'].split(':', 1)[1]} [{r['shape'] if r['verdict'] == 'NOT_MODEL' else 'no model'}]")
+	if by_verdict.get('ERROR'):
+		table('ERROR (pick item needs a real world; check in game)', by_verdict['ERROR'],
+			  lambda r: r['id'].split(':', 1)[1])
 
-    missing = data.get('missingItemModels', [])
-    if missing:
-        print()
-        c = collections.Counter(ns(i) for i in missing)
-        if md:
-            print(f'**Items with a missing model** ({len(missing)})\n')
-            print('| Namespace | Items | Examples |')
-            print('|---|---|---|')
-        else:
-            print(f'Items with a missing model ({len(missing)}):')
-        groups = collections.defaultdict(list)
-        for i in missing:
-            groups[ns(i)].append(i.split(':', 1)[1])
-        for name, n in sorted(c.items(), key=lambda kv: (-kv[1], kv[0])):
-            ids = groups[name] if show_all else groups[name][:4]
-            more = '' if len(ids) == n else f', +{n - len(ids)}'
-            print(f"| {name} | {n} | {', '.join(ids)}{more} |" if md else f"  {name:28} {n:4}  {', '.join(ids)}{more}")
-    return 0
+	missing = data.get('missingItemModels', [])
+	if missing:
+		print()
+		c = collections.Counter(ns(i) for i in missing)
+		if md:
+			print(f'**Items with a missing model** ({len(missing)})\n')
+			print('| Namespace | Items | Examples |')
+			print('|---|---|---|')
+		else:
+			print(f'Items with a missing model ({len(missing)}):')
+		groups = collections.defaultdict(list)
+		for i in missing:
+			groups[ns(i)].append(i.split(':', 1)[1])
+		for name, n in sorted(c.items(), key=lambda kv: (-kv[1], kv[0])):
+			ids = groups[name] if show_all else groups[name][:4]
+			more = '' if len(ids) == n else f', +{n - len(ids)}'
+			print(f"| {name} | {n} | {', '.join(ids)}{more} |" if md else f"  {name:28} {n:4}  {', '.join(ids)}{more}")
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+	sys.exit(main(sys.argv[1:]))

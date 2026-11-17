@@ -24,48 +24,48 @@ from jei_world.common import OUT, Context  # noqa: E402
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--dry-run', action='store_true')
-    ap.add_argument('--only', help='run one module, e.g. tab_weathering (others keep their files)')
-    args = ap.parse_args()
+	ap = argparse.ArgumentParser()
+	ap.add_argument('--dry-run', action='store_true')
+	ap.add_argument('--only', help='run one module, e.g. tab_weathering (others keep their files)')
+	args = ap.parse_args()
 
-    modules = sorted(p.stem for p in (Path(__file__).parent / 'jei_world').glob('tab_*.py'))
-    if args.only:
-        modules = [m for m in modules if m == args.only]
-    ctx = Context()
-    by_tab = {}
-    failed = False
-    for name in modules:
-        try:
-            mod = importlib.import_module(f'jei_world.{name}')
-            result = mod.build(ctx)
-        except Exception:
-            print(f'! {name} failed:')
-            traceback.print_exc()
-            failed = True
-            continue
-        for tab, rows in result.items():
-            by_tab.setdefault(tab, []).extend(rows)
-            print(f'{name}: {tab} {len(rows)} rows')
+	modules = sorted(p.stem for p in (Path(__file__).parent / 'jei_world').glob('tab_*.py'))
+	if args.only:
+		modules = [m for m in modules if m == args.only]
+	ctx = Context()
+	by_tab = {}
+	failed = False
+	for name in modules:
+		try:
+			mod = importlib.import_module(f'jei_world.{name}')
+			result = mod.build(ctx)
+		except Exception:
+			print(f'! {name} failed:')
+			traceback.print_exc()
+			failed = True
+			continue
+		for tab, rows in result.items():
+			by_tab.setdefault(tab, []).extend(rows)
+			print(f'{name}: {tab} {len(rows)} rows')
 
-    if not args.dry_run:
-        for tab, rows in sorted(by_tab.items()):
-            d = OUT / tab
-            d.mkdir(parents=True, exist_ok=True)
-            text = json.dumps({'_generated_by': 'tools/gen_jei_world.py', 'rows': rows}, indent=1, ensure_ascii=False) + '\n'
-            (d / 'generated.json').write_text(text, encoding='utf-8')
-        if not args.only:
-            for old in OUT.glob('*/generated.json'):
-                if old.parent.name not in by_tab:
-                    old.unlink()
-                    print(f'removed {old.relative_to(OUT)}')
+	if not args.dry_run:
+		for tab, rows in sorted(by_tab.items()):
+			d = OUT / tab
+			d.mkdir(parents=True, exist_ok=True)
+			text = json.dumps({'_generated_by': 'tools/gen_jei_world.py', 'rows': rows}, indent=1, ensure_ascii=False) + '\n'
+			(d / 'generated.json').write_text(text, encoding='utf-8')
+		if not args.only:
+			for old in OUT.glob('*/generated.json'):
+				if old.parent.name not in by_tab:
+					old.unlink()
+					print(f'removed {old.relative_to(OUT)}')
 
-    for w in ctx.warnings:
-        print(f'WARNING {w}')
-    total = sum(len(r) for r in by_tab.values())
-    print(f'[gen_jei_world] {total} rows in {len(by_tab)} tabs' + (' (dry run)' if args.dry_run else ''))
-    return 1 if (ctx.warnings or failed) else 0
+	for w in ctx.warnings:
+		print(f'WARNING {w}')
+	total = sum(len(r) for r in by_tab.values())
+	print(f'[gen_jei_world] {total} rows in {len(by_tab)} tabs' + (' (dry run)' if args.dry_run else ''))
+	return 1 if (ctx.warnings or failed) else 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+	sys.exit(main())

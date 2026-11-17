@@ -17,11 +17,11 @@ import build_deploy as bd  # noqa: E402
 s = os.path.abspath(sys.argv[1])
 os.makedirs(s, exist_ok=True)
 if os.path.isdir(bd.HISTORY):
-    shutil.copytree(bd.HISTORY, os.path.join(s, 'history'), dirs_exist_ok=True)
+	shutil.copytree(bd.HISTORY, os.path.join(s, 'history'), dirs_exist_ok=True)
 if os.path.isfile(bd.DEPLOYED):
-    shutil.copy2(bd.DEPLOYED, os.path.join(s, 'DEPLOYED.json'))
+	shutil.copy2(bd.DEPLOYED, os.path.join(s, 'DEPLOYED.json'))
 if os.path.isfile(bd.LOG):
-    shutil.copy2(bd.LOG, os.path.join(s, 'DEPLOY_LOG.md'))
+	shutil.copy2(bd.LOG, os.path.join(s, 'DEPLOY_LOG.md'))
 bd.OUT, bd.HISTORY = os.path.join(s, 'latest'), os.path.join(s, 'history')
 bd.LOG, bd.DEPLOYED = os.path.join(s, 'DEPLOY_LOG.md'), os.path.join(s, 'DEPLOYED.json')
 bd.archive_in_tree_mods = lambda files: None

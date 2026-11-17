@@ -34,54 +34,54 @@ IDS = ["potion_bucket", "splash_potion_bucket", "lingering_potion_bucket"]
 
 
 def load_vanilla(name):
-    with zipfile.ZipFile(CLIENT_EXTRA) as z:
-        data = z.read(f"assets/minecraft/textures/item/{name}")
-    return Image.open(io.BytesIO(data)).convert("RGBA")
+	with zipfile.ZipFile(CLIENT_EXTRA) as z:
+		data = z.read(f"assets/minecraft/textures/item/{name}")
+	return Image.open(io.BytesIO(data)).convert("RGBA")
 
 
 def is_liquid(r, g, b):
-    # vanilla water_bucket liquid is distinctly blue; the steel body is gray (r~=g~=b)
-    return b > r + 10 and b > g + 5
+	# vanilla water_bucket liquid is distinctly blue; the steel body is gray (r~=g~=b)
+	return b > r + 10 and b > g + 5
 
 
 def split(base):
-    w, h = base.size
-    body = Image.new("RGBA", (w, h))
-    liquid = Image.new("RGBA", (w, h))
-    px = base.load()
-    bp = body.load()
-    lp = liquid.load()
-    for y in range(h):
-        for x in range(w):
-            r, g, b, a = px[x, y]
-            if a == 0:
-                bp[x, y] = (0, 0, 0, 0)
-                lp[x, y] = (0, 0, 0, 0)
-                continue
-            if is_liquid(r, g, b):
-                bp[x, y] = (0, 0, 0, 0)
-                # neutral gray at the source pixel's luminance, so a white (no-op) tint
-                # reproduces the original shading and a colored tint multiplies cleanly
-                lum = min(255, int((0.299 * r + 0.587 * g + 0.114 * b) * 1.6))
-                lp[x, y] = (lum, lum, lum, a)
-            else:
-                bp[x, y] = (r, g, b, a)
-                lp[x, y] = (0, 0, 0, 0)
-    return body, liquid
+	w, h = base.size
+	body = Image.new("RGBA", (w, h))
+	liquid = Image.new("RGBA", (w, h))
+	px = base.load()
+	bp = body.load()
+	lp = liquid.load()
+	for y in range(h):
+		for x in range(w):
+			r, g, b, a = px[x, y]
+			if a == 0:
+				bp[x, y] = (0, 0, 0, 0)
+				lp[x, y] = (0, 0, 0, 0)
+				continue
+			if is_liquid(r, g, b):
+				bp[x, y] = (0, 0, 0, 0)
+				# neutral gray at the source pixel's luminance, so a white (no-op) tint
+				# reproduces the original shading and a colored tint multiplies cleanly
+				lum = min(255, int((0.299 * r + 0.587 * g + 0.114 * b) * 1.6))
+				lp[x, y] = (lum, lum, lum, a)
+			else:
+				bp[x, y] = (r, g, b, a)
+				lp[x, y] = (0, 0, 0, 0)
+	return body, liquid
 
 
 def main():
-    base = load_vanilla("water_bucket.png")
-    body, liquid = split(base)
-    OUT.mkdir(parents=True, exist_ok=True)
-    for name in IDS:
-        body_dst = OUT / f"{name}.png"
-        liquid_dst = OUT / f"{name}_liquid.png"
-        body.save(body_dst)
-        liquid.save(liquid_dst)
-        print("wrote", body_dst)
-        print("wrote", liquid_dst)
+	base = load_vanilla("water_bucket.png")
+	body, liquid = split(base)
+	OUT.mkdir(parents=True, exist_ok=True)
+	for name in IDS:
+		body_dst = OUT / f"{name}.png"
+		liquid_dst = OUT / f"{name}_liquid.png"
+		body.save(body_dst)
+		liquid.save(liquid_dst)
+		print("wrote", body_dst)
+		print("wrote", liquid_dst)
 
 
 if __name__ == "__main__":
-    main()
+	main()

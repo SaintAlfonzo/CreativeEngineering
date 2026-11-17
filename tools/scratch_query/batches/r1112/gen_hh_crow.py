@@ -28,14 +28,14 @@ pace 1
 
 
 def box(r=13, top=-47):
-    return f"""> forceload add <x-{r}> <z-{r}> <x+{r}> <z+{r}>
+	return f"""> forceload add <x-{r}> <z-{r}> <x+{r}> <z+{r}>
 sleep 3
 > kill @e[type=!player,x=<x-{r}>,y=-62,z=<z-{r}>,dx={2*r},dy={top + 64},dz={2*r}]
 > fill <x-{r}> -61 <z-{r}> <x+{r}> {top} <z+{r}> minecraft:glass hollow"""
 
 
 def close(r=13):
-    return f"""> kill @e[type={CROW},x=<x-{r}>,y=-62,z=<z-{r}>,dx={2*r},dy=18,dz={2*r}]
+	return f"""> kill @e[type={CROW},x=<x-{r}>,y=-62,z=<z-{r}>,dx={2*r},dy=18,dz={2*r}]
 > forceload remove <x-{r}> <z-{r}> <x+{r}> <z+{r}>"""
 
 
@@ -43,7 +43,7 @@ ROWS = []
 
 
 def row(rid, x, text):
-    ROWS.append((rid, x, text.strip('\n')))
+	ROWS.append((rid, x, text.strip('\n')))
 
 
 X = iter(range(20000, 30000, 60))
@@ -164,7 +164,7 @@ expect \\[zhh3\\] items total=1 corn_delight:corn x1
 """)
 
 for rid, block in ((441, 'hearthandharvest:scarecrow'), (442, 'minecraft:jack_o_lantern'), (443, 'minecraft:carved_pumpkin')):
-    row(rid, next(X), f"""
+	row(rid, next(X), f"""
 ## SQ-HH-{rid} | r1112: crow avoids {block} (crow frozen until the watch runs, starts 4 out)
 {box()}
 > pbot spawn c{rid} <x+10> -60 <z+8> minecraft:overworld creative
@@ -598,10 +598,10 @@ reject has the following block data: .*minecraft:gold_ingot
 
 
 def coords(text, x):
-    def one(m):
-        base = x if m.group(1) == 'x' else Z
-        return str(base + int(m.group(2) or 0))
-    return re.sub(r'<([xz])([+-]\d+)?>', one, text)
+	def one(m):
+		base = x if m.group(1) == 'x' else Z
+		return str(base + int(m.group(2) or 0))
+	return re.sub(r'<([xz])([+-]\d+)?>', one, text)
 
 
 out = HEADER + '\n' + '\n\n'.join(coords(t, x) for _, x, t in ROWS) + '\n'

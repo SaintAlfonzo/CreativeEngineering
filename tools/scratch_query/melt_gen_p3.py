@@ -6,11 +6,11 @@ L = []
 def c(s): L.append("> " + s)
 def w(label, x, y, z, dim=OW): c(f"zmelt w {label} {dim} {x} {y} {z}")
 def pit(x, z, block, under=None):
-    if under: c(f"setblock {x} {G-1} {z} {under}")
-    c(f"setblock {x} {G} {z} {block}")
+	if under: c(f"setblock {x} {G-1} {z} {under}")
+	c(f"setblock {x} {G} {z} {block}")
 def ifb(label, x, y, z, block, dim=None):
-    pre = f"execute in minecraft:{dim} " if dim else "execute "
-    c(f"{pre}if block {x} {y} {z} {block} run say {label}")
+	pre = f"execute in minecraft:{dim} " if dim else "execute "
+	c(f"{pre}if block {x} {y} {z} {block} run say {label}")
 def row(i, title): L.append(""); L.append(f"## {i} | {title}")
 
 L.append("""# r1115 phase 3 (runner-3), boot A1: SQ-MELT Melting system on the installed jars (NOSWAP=1), superflat level p3a1.
@@ -24,11 +24,11 @@ pace 0.5""")
 
 row("P3-00", "setup (not a queue row): forceload, rules, bots, Nether platform")
 for s in ["forceload add 1984 1984 2143 2143", "execute in minecraft:the_nether run forceload add 0 0 31 31",
-          "gamerule doFireTick false", "gamerule doMobSpawning false", "gamerule doDaylightCycle false",
-          "time set 18000", "weather clear 1000000", "gamerule randomTickSpeed 3",
-          "execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone",
-          "execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air"]:
-    c(s)
+		  "gamerule doFireTick false", "gamerule doMobSpawning false", "gamerule doDaylightCycle false",
+		  "time set 18000", "weather clear 1000000", "gamerule randomTickSpeed 3",
+		  "execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone",
+		  "execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air"]:
+	c(s)
 L.append("sleep 5")
 c("pbot spawn m3 2060 -60 2060 minecraft:overworld survival")
 c("pbot spawn m3n 8 129 8 minecraft:the_nether survival")
@@ -55,21 +55,21 @@ X, Z = 2000, 2000
 pit(X+1, Z, "minecraft:ice"); pit(X-1, Z, "minecraft:snow_block"); pit(X, Z+1, "minecraft:powder_snow"); pit(X, Z-1, "minecraft:snow[layers=3]")
 pit(X, Z, "salt:salt_block")
 for lab, dx, dz in [("m01_ice", 1, 0), ("m01_snowblock", -1, 0), ("m01_powder", 0, 1), ("m01_layer", 0, -1), ("m01_salt", 0, 0)]:
-    w(lab, X+dx, G, Z+dz)
+	w(lab, X+dx, G, Z+dz)
 # SALT2-06 overworld: 2000 2024
 X, Z = 2000, 2024
 pit(X+1, Z, "minecraft:ice"); pit(X, Z+1, "minecraft:snow"); pit(X, Z, "salt:salt_block")
 w("s06_ow_ice", X+1, G, Z); w("s06_ow_snow", X, G, Z+1); w("s06_ow_salt", X, G, Z)
 # MELT-02: x 2030, z 2000 + 12k
 cases02 = [("fire", "minecraft:fire", "minecraft:netherrack"), ("soulfire", "minecraft:soul_fire", "minecraft:soul_soil"),
-           ("campfire", "minecraft:campfire[lit=true]", None), ("soulcampfire", "minecraft:soul_campfire[lit=true]", None),
-           ("magma", "minecraft:magma_block", None)]
+		   ("campfire", "minecraft:campfire[lit=true]", None), ("soulcampfire", "minecraft:soul_campfire[lit=true]", None),
+		   ("magma", "minecraft:magma_block", None)]
 X = 2030
 for k, (n, blk, under) in enumerate(cases02):
-    Z = 2000 + 12*k
-    pit(X+3, Z, "minecraft:ice"); pit(X-4, Z, "minecraft:ice"); pit(X, Z+3, "minecraft:snow"); pit(X, Z-4, "minecraft:snow")
-    pit(X, Z, blk, under)
-    w(f"m02_{n}_ice3", X+3, G, Z); w(f"m02_{n}_ice4", X-4, G, Z); w(f"m02_{n}_snow3", X, G, Z+3); w(f"m02_{n}_snow4", X, G, Z-4); w(f"m02_{n}_src", X, G, Z)
+	Z = 2000 + 12*k
+	pit(X+3, Z, "minecraft:ice"); pit(X-4, Z, "minecraft:ice"); pit(X, Z+3, "minecraft:snow"); pit(X, Z-4, "minecraft:snow")
+	pit(X, Z, blk, under)
+	w(f"m02_{n}_ice3", X+3, G, Z); w(f"m02_{n}_ice4", X-4, G, Z); w(f"m02_{n}_snow3", X, G, Z+3); w(f"m02_{n}_snow4", X, G, Z-4); w(f"m02_{n}_src", X, G, Z)
 Z = 2060
 pit(X+1, Z, "minecraft:ice"); pit(X, Z, "minecraft:campfire[lit=false]")
 w("m02_unlit_ice1", X+1, G, Z); w("m02_unlit_src", X, G, Z)
@@ -87,17 +87,17 @@ w("m03_cauldron_ice4", X+4, G, Z)
 # MELT-06 part 1: x 2090
 X = 2090
 cases06 = [("torch", "minecraft:torch"), ("soultorch", "minecraft:soul_torch"), ("lantern", "minecraft:lantern"),
-           ("sconce", "supplementaries:sconce"), ("copperlantern", "everythingcopper:copper_lantern"), ("glowstone", "minecraft:glowstone")]
+		   ("sconce", "supplementaries:sconce"), ("copperlantern", "everythingcopper:copper_lantern"), ("glowstone", "minecraft:glowstone")]
 for k, (n, blk) in enumerate(cases06):
-    Z = 2000 + 12*k
-    pit(X+3, Z, "minecraft:ice"); pit(X-4, Z, "minecraft:ice"); pit(X, Z+3, "minecraft:snow"); pit(X, Z-4, "minecraft:snow")
-    pit(X, Z, blk)
-    w(f"m06_{n}_ice3", X+3, G, Z); w(f"m06_{n}_ice4", X-4, G, Z); w(f"m06_{n}_snow3", X, G, Z+3); w(f"m06_{n}_snow4", X, G, Z-4); w(f"m06_{n}_src", X, G, Z)
+	Z = 2000 + 12*k
+	pit(X+3, Z, "minecraft:ice"); pit(X-4, Z, "minecraft:ice"); pit(X, Z+3, "minecraft:snow"); pit(X, Z-4, "minecraft:snow")
+	pit(X, Z, blk)
+	w(f"m06_{n}_ice3", X+3, G, Z); w(f"m06_{n}_ice4", X-4, G, Z); w(f"m06_{n}_snow3", X, G, Z+3); w(f"m06_{n}_snow4", X, G, Z-4); w(f"m06_{n}_src", X, G, Z)
 for k, (n, blk) in enumerate([("sealantern", "minecraft:sea_lantern"), ("redstonetorch", "minecraft:redstone_torch"),
-                              ("jellytorch", "upgrade_aquatic:blue_jelly_torch"), ("brazierunlit", "decorative_blocks:brazier[lit=false]")]):
-    Z = 2072 + 12*k
-    pit(X+1, Z, "minecraft:ice"); pit(X, Z, blk)
-    w(f"m06_{n}_ice1", X+1, G, Z); w(f"m06_{n}_src", X, G, Z)
+							  ("jellytorch", "upgrade_aquatic:blue_jelly_torch"), ("brazierunlit", "decorative_blocks:brazier[lit=false]")]):
+	Z = 2072 + 12*k
+	pit(X+1, Z, "minecraft:ice"); pit(X, Z, blk)
+	w(f"m06_{n}_ice1", X+1, G, Z); w(f"m06_{n}_src", X, G, Z)
 # MELT-07 sealed dark room
 c("fill 1999 -60 2059 2004 -56 2061 minecraft:stone hollow")
 c("setblock 2000 -59 2060 minecraft:magma_block"); c("setblock 2003 -59 2060 minecraft:ice")
@@ -124,70 +124,70 @@ L.append(r"waitlog \[zmelt\] show done 30")
 L.append("look every watch's start state is the placed block; the show after 120 s is judged per row below")
 
 def judge(rid, title, checks, lk):
-    row(rid, title)
-    for (lab, x, y, z, blk, dim) in checks:
-        ifb(f"{rid}-{lab}", x, y, z, blk, dim)
-    for (lab, *_ ) in checks:
-        L.append(f"expect {rid}-{lab}$")
-    L.append("look " + lk)
+	row(rid, title)
+	for (lab, x, y, z, blk, dim) in checks:
+		ifb(f"{rid}-{lab}", x, y, z, blk, dim)
+	for (lab, *_ ) in checks:
+		L.append(f"expect {rid}-{lab}$")
+	L.append("look " + lk)
 
 judge("SQ-MELT-01", "salt melts touching ice to a water source, snow block / powder snow / layer to air; salt stays", [
-    ("ice_water", 2001, G, 2000, "minecraft:water[level=0]", None), ("snowblock_air", 1999, G, 2000, "minecraft:air", None),
-    ("powder_air", 2000, G, 2001, "minecraft:air", None), ("layer_air", 2000, G, 1999, "minecraft:air", None),
-    ("salt_kept", 2000, G, 2000, "salt:salt_block", None)], "and the m01_ changes in P3-01's log (one step each); [melting] tags salt >= 2")
+	("ice_water", 2001, G, 2000, "minecraft:water[level=0]", None), ("snowblock_air", 1999, G, 2000, "minecraft:air", None),
+	("powder_air", 2000, G, 2001, "minecraft:air", None), ("layer_air", 2000, G, 1999, "minecraft:air", None),
+	("salt_kept", 2000, G, 2000, "salt:salt_block", None)], "and the m01_ changes in P3-01's log (one step each); [melting] tags salt >= 2")
 L[-1:-1] = [r"bootexpect \[melting\] tags: \d+ meltable, \d+ slow, ([2-9]|\d\d+) salt"]
 L.append("""shell grep -hE "\\[zmelt\\] change m01_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 ch = []
 for n, *_ in cases02:
-    k = [c_[0] for c_ in cases02].index(n); Z = 2000 + 12*k
-    ch += [(f"{n}_ice3_water", 2033, G, Z, "minecraft:water", None), (f"{n}_ice4_ice", 2026, G, Z, "minecraft:ice", None),
-           (f"{n}_snow3_air", 2030, G, Z+3, "minecraft:air", None), (f"{n}_snow4_snow", 2030, G, Z-4, "minecraft:snow", None)]
+	k = [c_[0] for c_ in cases02].index(n); Z = 2000 + 12*k
+	ch += [(f"{n}_ice3_water", 2033, G, Z, "minecraft:water", None), (f"{n}_ice4_ice", 2026, G, Z, "minecraft:ice", None),
+		   (f"{n}_snow3_air", 2030, G, Z+3, "minecraft:air", None), (f"{n}_snow4_snow", 2030, G, Z-4, "minecraft:snow", None)]
 ch += [("unlit_ice1_ice", 2031, G, 2060, "minecraft:ice", None)]
 judge("SQ-MELT-02", "fire, soul fire, lit campfire, lit soul campfire, magma: ice and snow at 3 melt, at 4 not; unlit campfire nothing", ch,
-      "every pair: 3 melted, 4 kept; the unlit campfire's ice kept")
+	  "every pair: 3 melted, 4 kept; the unlit campfire's ice kept")
 L.append("""shell grep -hE "\\[zmelt\\] change m02_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 judge("SQ-MELT-03", "lava source, flowing lava, lava cauldron melt ice at 4; source at 5 not", [
-    ("src_ice4_water", 2064, G, 2000, "minecraft:water", None), ("src_ice5_ice", 2055, G, 2000, "minecraft:ice", None),
-    ("flow_cell_lava", 2062, G, 2012, "minecraft:lava", None), ("flow_ice4_water", 2066, G, 2012, "minecraft:water", None),
-    ("cauldron_ice4_water", 2064, G, 2024, "minecraft:water", None)], "flowing lava cell at 2062 present (fed by the source 6 away from the ice)")
+	("src_ice4_water", 2064, G, 2000, "minecraft:water", None), ("src_ice5_ice", 2055, G, 2000, "minecraft:ice", None),
+	("flow_cell_lava", 2062, G, 2012, "minecraft:lava", None), ("flow_ice4_water", 2066, G, 2012, "minecraft:water", None),
+	("cauldron_ice4_water", 2064, G, 2024, "minecraft:water", None)], "flowing lava cell at 2062 present (fed by the source 6 away from the ice)")
 L.append("""shell grep -hE "\\[zmelt\\] change m03_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 judge("SQ-MELT-05", "Nether: ice beside a Salt Block -> air, never water", [
-    ("ice_air", 5, 129, 4, "minecraft:air", "the_nether")], "m05_nether_ice change goes to air without a water step; n_control_ice (no salt) recorded (Immersive Weathering)")
+	("ice_air", 5, 129, 4, "minecraft:air", "the_nether")], "m05_nether_ice change goes to air without a water step; n_control_ice (no salt) recorded (Immersive Weathering)")
 L.append("reject change m05_nether_ice .*-> minecraft:water")
 L.append("""shell grep -hE "\\[zmelt\\] change (m05_|n_control)" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 ch = []
 for k, (n, blk) in enumerate(cases06):
-    Z = 2000 + 12*k
-    ch += [(f"{n}_ice3_water", 2093, G, Z, "minecraft:water", None), (f"{n}_ice4_ice", 2086, G, Z, "minecraft:ice", None),
-           (f"{n}_snow3_air", 2090, G, Z+3, "minecraft:air", None), (f"{n}_snow4_snow", 2090, G, Z-4, "minecraft:snow", None)]
+	Z = 2000 + 12*k
+	ch += [(f"{n}_ice3_water", 2093, G, Z, "minecraft:water", None), (f"{n}_ice4_ice", 2086, G, Z, "minecraft:ice", None),
+		   (f"{n}_snow3_air", 2090, G, Z+3, "minecraft:air", None), (f"{n}_snow4_snow", 2090, G, Z-4, "minecraft:snow", None)]
 for k, n in enumerate(["sealantern", "redstonetorch", "jellytorch", "brazierunlit"]):
-    ch += [(f"{n}_ice1_ice", 2091, G, 2072 + 12*k, "minecraft:ice", None)]
+	ch += [(f"{n}_ice1_ice", 2091, G, 2072 + 12*k, "minecraft:ice", None)]
 judge("SQ-MELT-06", "part 1 (switch off): torch, soul torch, lantern, sconce, copper lantern, glowstone melt at 3, not 4; sea lantern, redstone torch, jelly torch, unlit brazier nothing", ch,
-      "part 2 (vanillaLightMelting true) runs on the restart batch p3_a2.qb")
+	  "part 2 (vanillaLightMelting true) runs on the restart batch p3_a2.qb")
 L.append("""shell grep -hE "\\[zmelt\\] change m06_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 judge("SQ-MELT-07", "sealed dark room: magma 3 blocks from ice melts it (source-driven)", [
-    ("ice_water", 2003, -59, 2060, "minecraft:water", None)], "light line shows block 0 at the ice; boot source-driven line names magma_block (light 3)")
+	("ice_water", 2003, -59, 2060, "minecraft:water", None)], "light line shows block 0 at the ice; boot source-driven line names magma_block (light 3)")
 L.append(r"bootexpect \[melting\] source-driven fire \(light below 4, random ticks\): \[minecraft:magma_block \(light 3\)")
 L.append("""shell grep -hE "\\[zmelt\\] (change m07_|light)" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 
 judge("SQ-SALT2-06", "overworld ice -> water source, snow -> air (no double melt: salt member melt off); Nether ice and snow -> air", [
-    ("ow_ice_water", 2001, G, 2024, "minecraft:water[level=0]", None), ("ow_snow_air", 2000, G, 2025, "minecraft:air", None),
-    ("ow_salt_kept", 2000, G, 2024, "salt:salt_block", None),
-    ("n_ice_air", 5, 129, 12, "minecraft:air", "the_nether"), ("n_snow_air", 4, 129, 13, "minecraft:air", "the_nether")],
-    "s06_ changes one step each; [melting] tags salt > 0")
+	("ow_ice_water", 2001, G, 2024, "minecraft:water[level=0]", None), ("ow_snow_air", 2000, G, 2025, "minecraft:air", None),
+	("ow_salt_kept", 2000, G, 2024, "salt:salt_block", None),
+	("n_ice_air", 5, 129, 12, "minecraft:air", "the_nether"), ("n_snow_air", 4, 129, 13, "minecraft:air", "the_nether")],
+	"s06_ changes one step each; [melting] tags salt > 0")
 L.append("""shell grep -hE "\\[zmelt\\] change s06_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
 L.append("""shell unzip -p mods/creativedelight-1.1.0.jar META-INF/jarjar/repackedSalt-1.2.4.1-ce-19.2-03.jar > /tmp/zsalt$$.jar && unzip -p /tmp/zsalt$$.jar io/github/mortuusars/salt/Melting.class | strings | grep -c "switched off" ; grep -nE "SaltBlockMeltingEnabled" config/*.toml | head -3; rm -f /tmp/zsalt$$.jar; true""")
 
 # MELT-04 at randomTickSpeed 100
 row("SQ-MELT-04", "blue ice beside salt steps blue -> packed -> ice -> water at the slow rate; packed by fire / lava ranges (randomTickSpeed 100, 5 min)")
 for k in range(4):
-    x = 2000 + 6*k
-    pit(x+1, 2084, "minecraft:blue_ice"); pit(x, 2084, "salt:salt_block"); w(f"m04_blue{k}", x+1, G, 2084)
+	x = 2000 + 6*k
+	pit(x+1, 2084, "minecraft:blue_ice"); pit(x, 2084, "salt:salt_block"); w(f"m04_blue{k}", x+1, G, 2084)
 pit(2025, 2084, "minecraft:ice"); pit(2024, 2084, "salt:salt_block"); w("m04_plainice", 2025, G, 2084)
 pit(2001, 2096, "minecraft:packed_ice"); pit(2000, 2096, "minecraft:fire", "minecraft:netherrack"); w("m04_packed_fire1", 2001, G, 2096)
 pit(2014, 2096, "minecraft:packed_ice"); pit(2012, 2096, "minecraft:fire", "minecraft:netherrack"); w("m04_packed_fire2", 2014, G, 2096)
@@ -214,9 +214,9 @@ pit(2048, 2072, "minecraft:blue_ice"); w("m08_blue", 2048, G, 2072)
 c("clear m3")
 c("pbot hold m3 salt:salt 3")
 for i, blk in enumerate(["minecraft:packed_ice", "minecraft:ice", "minecraft:water"], 1):
-    c(f"pbot use m3 2048 {G} 2072 up")
-    ifb(f"SQ-MELT-08-click{i}", 2048, G, 2072, blk)
-    L.append(f"expect SQ-MELT-08-click{i}$")
+	c(f"pbot use m3 2048 {G} 2072 up")
+	ifb(f"SQ-MELT-08-click{i}", 2048, G, 2072, blk)
+	L.append(f"expect SQ-MELT-08-click{i}$")
 c("zp inv m3")
 L.append(r"waitlog \[zp\] done 20")
 L.append("""shell grep -hE "\\[zmelt\\] change m08_" logs/latest.log | sed -E 's/^.*\\[zmelt\\]/[zmelt]/'""")
@@ -225,7 +225,7 @@ L.append("look one change per click (three changes); the use replies")
 row("SQ-SALT2-06b", "Nether: snow layer and snow block placed by a survival bot, setblock powder snow, dispenser of snow blocks: air at once")
 c("execute in minecraft:the_nether run clear m3n")
 for lab, x in [("n_layer", 16), ("n_block", 18), ("n_powder", 20), ("n_disp_out", 23)]:
-    w(lab, x, 129, 16, "the_nether")
+	w(lab, x, 129, 16, "the_nether")
 c("pbot hold m3n minecraft:snow 4")
 c("pbot use m3n 16 128 16 up")
 ifb("SQ-SALT2-06b-layer_air", 16, 129, 16, "minecraft:air", "the_nether")
@@ -244,11 +244,11 @@ c("execute in minecraft:the_nether positioned 23 129 16 if entity @e[type=item,d
 c("execute in minecraft:the_nether run data get block 22 129 16 Items")
 L.append(r"waitlog \[zp\] done 20")
 for s in ["layer_air", "block_air", "powder_air", "disp_air"]:
-    L.append(f"expect SQ-SALT2-06b-{s}$")
+	L.append(f"expect SQ-SALT2-06b-{s}$")
 L.append("reject change n_(layer|block|powder|disp_out) .*-> minecraft:(snow|snow_block|powder_snow)")
 L.append("""shell grep -hE "\\[zmelt\\] change n_|\\[zp\\]" logs/latest.log | sed -E 's/^.*\\[(zmelt|zp)\\]/[\\1]/' | tail -12""")
 L.append("look bot inventory shrinks (snow 4 -> 3, snow_block 4 -> 3); dispenser: placed-and-melted (no item entity, Items shrinks) or dropped as an item (vanilla dispense; record which)")
 
 with open(sys.argv[1], "w") as f:
-    f.write("\n".join(L) + "\n")
+	f.write("\n".join(L) + "\n")
 print(len(L), "lines")

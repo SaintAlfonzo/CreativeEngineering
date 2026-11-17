@@ -41,115 +41,115 @@ PLATED_GUI = {'rotation': [37, 44, 0], 'translation': [0, 4, 0], 'scale': [0.8, 
 
 
 def read_jar():
-    jars = next((j for j in (lang_index.pack_paths.mod_jars(g) for g in JAR_GLOBS) if j), None)
-    if not jars:
-        sys.exit('no %s in mods/' % ' or '.join(JAR_GLOBS))
-    files = {}
-    with zipfile.ZipFile(jars[-1]) as z:
-        for name in z.namelist():
-            if name.startswith(ASSETS) and name.endswith('.json') and '/lang/' not in name:
-                files[name[len(ASSETS):-len('.json')]] = json.loads(z.read(name))
-    return jars[-1].name, files
+	jars = next((j for j in (lang_index.pack_paths.mod_jars(g) for g in JAR_GLOBS) if j), None)
+	if not jars:
+		sys.exit('no %s in mods/' % ' or '.join(JAR_GLOBS))
+	files = {}
+	with zipfile.ZipFile(jars[-1]) as z:
+		for name in z.namelist():
+			if name.startswith(ASSETS) and name.endswith('.json') and '/lang/' not in name:
+				files[name[len(ASSETS):-len('.json')]] = json.loads(z.read(name))
+	return jars[-1].name, files
 
 
 def default_model(blockstate):
-    """Model of the facing=north, stacks=1 state (variant keys may leave stacks out)."""
-    for key, variant in blockstate.get('variants', {}).items():
-        props = dict(p.split('=') for p in key.split(',') if p)
-        if props.get('facing', 'north') == 'north' and props.get('stacks', '1') == '1':
-            v = variant[0] if isinstance(variant, list) else variant
-            return v['model']
-    return None
+	"""Model of the facing=north, stacks=1 state (variant keys may leave stacks out)."""
+	for key, variant in blockstate.get('variants', {}).items():
+		props = dict(p.split('=') for p in key.split(',') if p)
+		if props.get('facing', 'north') == 'north' and props.get('stacks', '1') == '1':
+			v = variant[0] if isinstance(variant, list) else variant
+			return v['model']
+	return None
 
 
 def has_gui(files, model):
-    while model and model.startswith('displaydelight:'):
-        m = files.get('models/' + model.split(':', 1)[1])
-        if m is None:
-            return False
-        if 'gui' in m.get('display', {}):
-            return True
-        model = m.get('parent')
-    # A vanilla parent (block/block, item/generated) brings its own gui transform.
-    return model is not None
+	while model and model.startswith('displaydelight:'):
+		m = files.get('models/' + model.split(':', 1)[1])
+		if m is None:
+			return False
+		if 'gui' in m.get('display', {}):
+			return True
+		model = m.get('parent')
+	# A vanilla parent (block/block, item/generated) brings its own gui transform.
+	return model is not None
 
 
 def fix_missing_faces(model):
-    """Copy of a block model with every '#missing' face retextured from its element's top face."""
-    fixed, changed = json.loads(json.dumps(model)), False
-    for element in fixed.get('elements', []):
-        faces = element.get('faces', {})
-        donor = faces.get('up', {}).get('texture')
-        if donor in (None, '#missing'):
-            donor = next((f['texture'] for f in faces.values() if f.get('texture') not in (None, '#missing')), None)
-        for face in faces.values():
-            if face.get('texture') == '#missing' and donor:
-                face['texture'] = donor
-                changed = True
-    return fixed if changed else None
+	"""Copy of a block model with every '#missing' face retextured from its element's top face."""
+	fixed, changed = json.loads(json.dumps(model)), False
+	for element in fixed.get('elements', []):
+		faces = element.get('faces', {})
+		donor = faces.get('up', {}).get('texture')
+		if donor in (None, '#missing'):
+			donor = next((f['texture'] for f in faces.values() if f.get('texture') not in (None, '#missing')), None)
+		for face in faces.values():
+			if face.get('texture') == '#missing' and donor:
+				face['texture'] = donor
+				changed = True
+	return fixed if changed else None
 
 
 def build():
-    jar, files = read_jar()
-    if not ITEMS.exists():
-        sys.exit('%s missing, run /dumpitemsbymod displaydelight in game' % ITEMS.relative_to(lang_index.INSTANCE))
-    items = [i.split(':', 1)[1] for i in json.loads(ITEMS.read_text())['items']]
-    out, problems = {}, []
-    for item in items:
-        if 'models/item/' + item in files:
-            continue
-        blockstate = files.get('blockstates/' + item)
-        model = default_model(blockstate) if blockstate else None
-        if model is None:
-            problems.append('%s: no blockstate default model' % item)
-            continue
-        if 'models/' + model.split(':', 1)[1] not in files:
-            problems.append('%s: block model %s not in the jar' % (item, model))
-            continue
-        entry = {'parent': model}
-        if not has_gui(files, model):
-            entry['display'] = {'gui': PLATED_GUI}
-        out['item/' + item] = entry
-    for path, model in files.items():
-        if path.startswith('models/block/') and '"#missing"' in json.dumps(model):
-            fixed = fix_missing_faces(model)
-            if fixed:
-                out[path[len('models/'):]] = fixed
-    return jar, out, problems
+	jar, files = read_jar()
+	if not ITEMS.exists():
+		sys.exit('%s missing, run /dumpitemsbymod displaydelight in game' % ITEMS.relative_to(lang_index.INSTANCE))
+	items = [i.split(':', 1)[1] for i in json.loads(ITEMS.read_text())['items']]
+	out, problems = {}, []
+	for item in items:
+		if 'models/item/' + item in files:
+			continue
+		blockstate = files.get('blockstates/' + item)
+		model = default_model(blockstate) if blockstate else None
+		if model is None:
+			problems.append('%s: no blockstate default model' % item)
+			continue
+		if 'models/' + model.split(':', 1)[1] not in files:
+			problems.append('%s: block model %s not in the jar' % (item, model))
+			continue
+		entry = {'parent': model}
+		if not has_gui(files, model):
+			entry['display'] = {'gui': PLATED_GUI}
+		out['item/' + item] = entry
+	for path, model in files.items():
+		if path.startswith('models/block/') and '"#missing"' in json.dumps(model):
+			fixed = fix_missing_faces(model)
+			if fixed:
+				out[path[len('models/'):]] = fixed
+	return jar, out, problems
 
 
 def render(model):
-    return json.dumps(model, indent=1) + '\n'
+	return json.dumps(model, indent=1) + '\n'
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--check', action='store_true')
-    args = ap.parse_args()
-    jar, out, problems = build()
-    stale = [p for p, m in out.items() if not (OUT / (p + '.json')).exists()
-             or (OUT / (p + '.json')).read_text() != render(m)]
-    extra = sorted(f for f in OUT.rglob('*.json') if f.relative_to(OUT).with_suffix('').as_posix() not in out)
-    for p in problems:
-        print('WARNING ' + p)
-    if args.check:
-        if stale or extra:
-            print('%d model(s) missing or out of date, %d no longer needed, run python3 tools/gen_display_delight_models.py'
-                  % (len(stale), len(extra)))
-            return 1
-        print('up to date (%d models)' % len(out))
-        return 0
-    for p in stale:
-        f = OUT / (p + '.json')
-        f.parent.mkdir(parents=True, exist_ok=True)
-        f.write_text(render(out[p]))
-    for f in extra:
-        f.unlink()
-    items = sum(1 for p in out if p.startswith('item/'))
-    print('%s: %d item models, %d block models with #missing faces fixed; wrote %d file(s), deleted %d under %s'
-          % (jar, items, len(out) - items, len(stale), len(extra), OUT.relative_to(lang_index.INSTANCE)))
-    return 0
+	ap = argparse.ArgumentParser()
+	ap.add_argument('--check', action='store_true')
+	args = ap.parse_args()
+	jar, out, problems = build()
+	stale = [p for p, m in out.items() if not (OUT / (p + '.json')).exists()
+			 or (OUT / (p + '.json')).read_text() != render(m)]
+	extra = sorted(f for f in OUT.rglob('*.json') if f.relative_to(OUT).with_suffix('').as_posix() not in out)
+	for p in problems:
+		print('WARNING ' + p)
+	if args.check:
+		if stale or extra:
+			print('%d model(s) missing or out of date, %d no longer needed, run python3 tools/gen_display_delight_models.py'
+				  % (len(stale), len(extra)))
+			return 1
+		print('up to date (%d models)' % len(out))
+		return 0
+	for p in stale:
+		f = OUT / (p + '.json')
+		f.parent.mkdir(parents=True, exist_ok=True)
+		f.write_text(render(out[p]))
+	for f in extra:
+		f.unlink()
+	items = sum(1 for p in out if p.startswith('item/'))
+	print('%s: %d item models, %d block models with #missing faces fixed; wrote %d file(s), deleted %d under %s'
+		  % (jar, items, len(out) - items, len(stale), len(extra), OUT.relative_to(lang_index.INSTANCE)))
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+	sys.exit(main())
