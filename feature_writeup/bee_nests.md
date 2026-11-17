@@ -205,6 +205,10 @@ Install the jar first (section 0). Use a new world or unexplored terrain.
 
 ## 8. History
 
+- 2026-11-16: `test_bee_nests.sh` repaired after the split (`creativeworldgen` ids, `global.genText`, `global.has`
+  stubs) and its old-jar section removed (retired 2026-10-27 here; the test still ran it); the missing-mod check is now
+  section 5.
+
 - 2026-10-10: user tuning: Blooming Valley/Plateau, Skylands Spring and Sunflower Plains raised to ~1 nest in 10
   chunks (bloom_woods, bloom_bee_trees); jungles taken out of warm_woods (no nests in any surface jungle).
 - 2026-10-10: scratch-server run with the starter rules crashed worldgen: Terralith places leaf-only "trees"

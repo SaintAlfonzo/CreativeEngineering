@@ -12,9 +12,11 @@ ServerEvents.tags('item', e => {
 	t.add(e, 'creativedelight:crow_food', ['#forge:seeds', i.t_crops_corn, i.t_seeds_corn])
 
 	// N24-8 list. Bricks sit in #forge:ingots in this pack and are not shiny; netherite and the end-tier metals are cut.
+	// G5 begin: the except list of the tags helper
 	var cut = [i.ingot_netherite, 'minecraft:netherite_scrap', 'create_crush_everything:netherite_shard', 'botania:terrasteel_ingot', 'botania:terrasteel_nugget',
 		'create:refined_radiance', 'create:shadow_steel', 'create:experience_nugget',
 		'*:*brick*']
+	// G5 end
 	t.addMatching(e, 'creativedelight:crow_shiny_items', ['#forge:gems', '#forge:ingots', '#forge:nuggets', '#forge:raw_materials'], { except: cut })
 	t.add(e, 'creativedelight:crow_shiny_items', ['minecraft:glowstone_dust', 'minecraft:ender_pearl', 'minecraft:ender_eye'])
 })

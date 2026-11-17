@@ -8,6 +8,7 @@
 
 StartupEvents.registry('item', e => {
 	const R = global.NCH
+	// G5 begin: texture paths only, handed to R.registerIncomplete (an absent mod leaves a missing texture, no error)
 	const SEQUENCED_ASSEMBLIES = [
 		// cooking
 		['crab_bars',                'quarkdelight:items/crab_bars'],
@@ -94,6 +95,7 @@ StartupEvents.registry('item', e => {
 		['crawling_sandwich'],
 		['steak_and_potatoes']
 	]
+	// G5 end
 	SEQUENCED_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))
 	console.log(`[creativedelight] transition items (${SEQUENCED_ASSEMBLIES.length})`)
 })

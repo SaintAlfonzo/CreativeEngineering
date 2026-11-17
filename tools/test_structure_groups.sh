@@ -2,9 +2,8 @@
 # Offline checks for the structure groups (feature_writeup/structure_tuning.md section 6):
 #   1. node: tools/structure_tuning_sim.js on the real configs (errors -> exit 1)
 #   2. Rhino: the same script in the pack's own Rhino fork; its output must be byte-identical to node's
-#      ... also at debug density x4 and x0.3, with structure groups off and with test overrides on (CEConfig [worldgen])
-#   3. Rhino with no StructureFrequencies class (an old patcherMod jar): must apply nothing
-#      ... and node without MetaStructure: meta structures left out of every set, nothing else changes
+#      ... also at debug density x4 and x0.3, with structure groups off and with test overrides on (WorldgenConfig [worldgen])
+#   3. node with metaStructures switched off: meta structures left out of every set, with a warning
 #   4. Java: tools/structure_groups_test/FreqTest against development/creativeCommon/build/classes (run ./gradlew build first)
 # Needs the ATLauncher library folder (Rhino's gson, Forge's bootstrap deps). No game needed.
 set -euo pipefail
@@ -49,14 +48,14 @@ for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups
     && echo "$1: node and Rhino identical ($(find "$T/rhino_$1" -name '*.json' -path '*structure_set*' | wc -l) sets)" || { echo "$1: node and Rhino DIFFER"; exit 1; }
 done
 
-echo "== 3. old patcherMod jar"
-java -cp "$T/rhino_cls:$RHINO:$GSON" RhinoRun "$ROOT" "$T/rhino_old" nopatcher | tail -1 | grep -q '^0 files, staged nothing' \
-  && echo "applies nothing without StructureFrequencies"
+# The old-jar cases (no StructureFrequencies, no MetaStructure class) were removed 2026-11-16: structure_overrides.js
+# loads its classes at the top since 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as them.
+echo "== 3. meta structures off"
 node tools/structure_tuning_sim.js "$T/nometa.md" "$T/nometa" --no-meta > "$T/nometa.log"
-if find "$T/nometa" -path '*worldgen/structure/*' | grep -q . || grep -rq 'creativeengineering:meta/' "$T/nometa/creativeengineering/worldgen/structure_set"; then
-  echo "no MetaStructure: a meta structure was still staged or listed in a set"; exit 1
+if find "$T/nometa" -path '*worldgen/structure/*' | grep -q . || grep -rq 'creativeworldgen:meta/' "$T/nometa/creativeworldgen/worldgen/structure_set"; then
+  echo "metaStructures off: a meta structure was still staged or listed in a set"; exit 1
 fi
-grep -q 'meta structures not built' "$T/nometa.log" && echo "no MetaStructure: meta structures left out of every set, with a warning"
+grep -q 'meta structures not built' "$T/nometa.log" && echo "metaStructures off: meta structures left out of every set, with a warning"
 
 echo "== 4. StructureFrequencies logic"
 source "$ROOT/tools/java_test_cp.sh"

@@ -32,7 +32,7 @@ java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.Ground
 echo "== 2. /cdevplace + WorldgenConfig"
 java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.cdevplace.MassPlacerTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED| +T&T)|Exception|Error' || status=1
 echo "== 2b. Structure Catalogue rules and layout"
-java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.cdevplace.StructureCatalogueTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+java -cp "$T/stub:$T/test:$DT:$CP" com.SaintAlfonzo.creativedevtools.cdevplace.StructureCatalogueTest "$ROOT" 2>&1 | grep -E '^(ok|note|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 3. earth fill"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.EarthFillTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 4. debug structure density"
@@ -51,7 +51,10 @@ python3 tools/check_worldgen_json.py || status=1
 echo "== 10. pool order + processor rebind"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.PoolTunerTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 11. biome tuner disk cache"
-java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
+# BiomeLayoutTuner asks ModList which optional biome mods are loaded; without FML that is null, so a stub goes first
+mkdir -p "$T/modlist"
+javac -proc:none -nowarn -d "$T/modlist" tools/worldgen_test/modlist_stub/net/minecraftforge/fml/ModList.java
+java -cp "$T/modlist:$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.BiomeLayoutCacheTest "$ROOT" 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 echo "== 12. ocean geode floor patch"
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.creativeworldgen.worldgen.OceanGeodesTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error' || status=1
 exit $status

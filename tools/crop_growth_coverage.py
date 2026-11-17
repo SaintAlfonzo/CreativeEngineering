@@ -41,8 +41,10 @@ def skip_reason(row):
         return 'leaf pile / layer count'
     if 'bites' in props:
         return 'sliced food (bites left)'
-    if props & {'flowers', 'mushrooms', 'potflower', 'pickles'}:
-        return 'decoration or item count (flowers, pots, pickles)'
+    if props & {'flowers', 'mushrooms', 'potflower', 'pickles', 'succulent'}:
+        return 'decoration or item count (flowers, pots, pickles, chorus succulents)'
+    if 'position' in props and 'SeaGrapePlantBlock' in classes:
+        return 'two-block shape state (top / joined), not a growth stage'
     if props & {'sand_age', 'weathering', 'mossing', 'sandiness'}:
         return 'weathering state'
     if props & {'fill_stage', 'storage'} or row['id'] in ('vinery:basket',):

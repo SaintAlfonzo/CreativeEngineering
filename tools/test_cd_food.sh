@@ -12,7 +12,7 @@ L="$HOME/.local/share/atlauncher/libraries"
 cd "$ROOT"
 RHINO="$(ls mods/rhino-forge-*.jar | head -1)"; GSON="$L/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar"
 javac -proc:none -cp "$RHINO:$GSON" -d "$T" tools/cd_food_test/FfhRun.java
-if [ $# -eq 0 ]; then set -- creativeengineering/baking.js rusticdelight/recipes.js creativeengineering/cultivated_meat.js; fi
+if [ $# -eq 0 ]; then set -- creativedelight/baking.js rusticdelight/recipes.js creativedelight/cultivated_meat.js; fi
 java -cp "$T:$RHINO:$GSON" FfhRun "$ROOT" tools/cd_food_test/prelude.js "$@" | tee "$T/out.txt"
 python3 - "$T/out.txt" <<'PY'
 import sys, re, csv

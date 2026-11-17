@@ -33,7 +33,7 @@ function ceCanTypes() {
 function ceCanFood(f, c) {
     // flags set both ways: a Canned Goods can's builder starts from its own properties (cookies and golden apple cans are meat)
     f.hunger(c.hunger).saturation(c.modifier).meat(!!c.meat).fastToEat(!!c.fast).alwaysEdible(!!c.always)
-    c.effects.forEach(fx => f.effect(fx.effect, fx.ticks, fx.amp, fx.chance))
+    c.effects.forEach(fx => { if (global.has(fx.effect)) f.effect(fx.effect, fx.ticks, fx.amp, fx.chance) })  // optional mods' effects
     if (c.clear_effects) f.eaten(ev => ev.entity.removeAllEffects())   // Canned Powdered Milk
 }
 

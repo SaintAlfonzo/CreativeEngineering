@@ -2125,8 +2125,8 @@ the three camp metas 50% + `pillager_camp_meteorite` 10%; large underwater ruins
 `underwater_meteorite` 10%; villages: `meteorite_village` 5% + `village_siege_camp` 4% + `village_siege_ring` 4% + `village_towers` 33%; AE2 meteorite (deserts): `meteor_shower` 50%; C.C.C. trader camp: `trader_caravan`
 25% + `waysign_camps` 25%; YUNG's desert temple: `desert_temple_ruins` 35% + struck pyramid 8% + plain pyramid 5%.
 
-Known: `tools/test_structure_groups.sh` step 3 (old patcherMod jar, `--no-meta`) fails before reaching these: the
-script loads `MetaSlots` at its top since an earlier change, so the simulated jar without it throws. Not from this batch.
+Fixed 2026-11-16: `tools/test_structure_groups.sh` step 3 now runs `--no-meta` as the metaStructures switch off; the
+old-jar check is gone (the script loads its classes at its top since 2026-10-28).
 
 Tests (rates in 3.16; `[worldgen.meta_structures] log = true` shows anchor and part positions):
 
@@ -2411,7 +2411,7 @@ ground remain. No toggle. Test: ST-335.
 ## 6. Offline checks
 
 - **`tools/test_structure_groups.sh`** (about 20 s): the node simulation; the same script in the pack's own Rhino, whose
-  96 set files, frequency table and report must match node's byte for byte; the old-jar path (must apply nothing); and
+  96 set files, frequency table and report must match node's byte for byte; metaStructures off; and
   13 headless Java checks of `StructureFrequencies` (roll uniform and independent, a 0.25 member keeps 25% of its slots,
   the veto stops only the rest of its own set in its own chunk, `/locate`'s prediction matches the roll 2000/2000). All
   passed 2026-09-27. Run `./gradlew build` in `patcherMod` first.
@@ -2462,8 +2462,9 @@ ground remain. No toggle. Test: ST-335.
   definitions parse with the game's codec, bad input is rejected (both or neither of structures/features, distance past
   the reach, count [3, 1], a bad tag, chance 1.5), the anchor roll equals the anchor's own roll 20000/20000 and a miss
   vetoes the slot, reach and per-piece clearance. `test_structure_groups.sh` compares the staged meta structure files and
-  the `creativeengineering:meta/*` tags between node and Rhino, and checks that without MetaStructure no meta is staged
-  or listed in a set. The node sim prints `meta structure file:` and `structure tag` lines (`--no-meta` = an old jar).
+  the `creativeworldgen:meta/*` tags between node and Rhino, and checks that with metaStructures off no meta is staged
+  or listed in a set. The node sim prints `meta structure file:` and `structure tag` lines (`--no-meta` = metaStructures
+  off).
 - `test_structure_groups.sh` step 2 also compares node and Rhino at density x4 and x0.3 and with groups off (identical).
   The sim takes `--density=X` and `--groups-off`.
 - **Biome fits** (2026-10-11, `land/*` 2026-10-12): `tools/test_worldgen_tools.sh` step 7 runs the node sim and feeds its staged `fits.json`
@@ -3758,6 +3759,12 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - [x] **ST-55 Switch:** `[worldgen.systems] earthFill = false` → no `[earth-fill]` lines, nothing cancelled. A world with the switch on at the default limits still has villages (simulated with the 7.3.1 rules: 22 to 40% cancelled, nearly all over water deeper than 6; see 3.13). *2026-10-14 scratch phase 4 (seed 8675309, 1.0.6 jar of 01:28, density 1, world st_d unless noted; log feature_writeup/testing/structures/04_phase_4.md): PASSED: no `[earth-fill]` line over 18 new starts that earth fill normally logs; villages exist with it on (Phase 3).*
 
 ## 9. History
+
+- **2026-11-16: headless tests repaired (process overhaul P1.1).** `test_structure_groups.sh`: the old-jar check
+  (no `StructureFrequencies`) removed, since `structure_overrides.js` loads its classes at its top since 2026-10-28 and
+  ships in the same jar; `--no-meta` now means metaStructures off; the sims stub `StructurePresence` and `global.genText`.
+  `test_worldgen_tools.sh`: fit count 190 (the corn maze), a ModList stub for the biome tuner cache test, and the
+  catalogue snapshot reads a pre-11-10 dump's `creativeengineering` structures as `creativeworldgen`.
 
 - **2026-11-02 late: worldgen edit plan steps 3 to 5 ([plan_worldgen_edit.md](plan_worldgen_edit.md)).** Meta part flag `punch` (3.16): an AE2 meteorite part gets crater type NONE plus a `MetaPunchPiece` shaft up through the pieces placed before; the struck desert pyramid uses it at distance [0, 4] (`metas #12`). Free-standing `ae2:meteorite` starts: 40 % surface, 30 % underground, 30 % 16 to 96 blocks up, moved ones without a crater (`AeMeteoriteHeightMixin`, `MeteoriteHeights`; metas keep the surface). Meta `meta/waystone_ruins` (share 0.2 on small ruins) with part `creativeengineering:waystone_ruin_part` (no structure set). Shares: camp ruin metas 0.25 [0.15], great tower siege 0.30 [0.50], meteor shower 0.33 [0.50]. Spawn box `end_tower`; probes: the lone birch tower and every siege part already resolve to the right box (`contents #6`, `pillagers #6`). This code moved to Creative Worldgen in the wave 5 carve the same evening. Tests SQ-WGE-09 to -15.
 - **2026-10-19:** the 3.23 fixes went out in pack 1.0.7 (DEPLOYED 2026-10-18 19:43; [plan_1.0.7.md](plan_1.0.7.md) SF):

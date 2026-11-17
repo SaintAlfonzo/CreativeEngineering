@@ -219,7 +219,15 @@ public class StructureCatalogueTest {
 		Path dump = root.resolve("kubejs/exported/structures.json");
 		if (!Files.isRegularFile(dump)) { System.out.println("ok   snapshot skipped: no dump"); return; }
 		JsonObject d = CatalogueRules.parseLenient(Files.readString(dump));
-		List<String> structures = ids(d.getAsJsonObject("worldgen")), templates = ids(d.getAsJsonObject("templates"));
+		// A dump from before the 2026-11-10 namespace move (e09e4795) lists the pack's own structures (meta/*, sky_island)
+		// under creativeengineering; structure_tags.json names them creativeworldgen. Read them under the new namespace
+		// until a /dumpall refreshes the dump, or 35 of them fall into unmapped.
+		JsonObject wg = d.getAsJsonObject("worldgen");
+		if (wg.has("creativeengineering") && !wg.has("creativeworldgen")) {
+			System.out.println("note snapshot: dump " + d.get("generated") + " predates the creativeworldgen namespace, read as creativeworldgen (/dumpall refreshes it)");
+			wg.add("creativeworldgen", wg.remove("creativeengineering"));
+		}
+		List<String> structures = ids(wg), templates = ids(d.getAsJsonObject("templates"));
 		JsonObject tagFile = CatalogueRules.parseLenient(Files.readString(root.resolve("kubejs/generation_scripts/worldgen/structure_tags.json")));
 		Plan p = rules.build(structures, templates, CatalogueRules.resolveTags(tagFile.getAsJsonObject("tags"), structures));
 		eq(p.mapped().stream().filter(c -> "Village ruins".equals(c.path().get(1))).mapToInt(c -> c.items().size()).sum(), 52, "SCAT-13 snapshot Forest Ruins pieces in Ruins");

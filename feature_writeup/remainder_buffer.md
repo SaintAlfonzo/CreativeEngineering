@@ -35,7 +35,8 @@ Files to open first:
 - `oven/OvenBlockEntity`, `OvenMenu`, `client/OvenScreen` (native buffer)
 - `compat/WthitRemainderBuffer` (the WTHIT "Holding" / "Waiting" lines, 3.3)
 - `CEConfig.Cooking`; `config/creativeengineering-common.toml` `[cooking]`
-- `tools/test_remainder_buffer.sh` + `tools/remainder_buffer_test/` (GameTests, 6)
+- `tools/test_remainder_buffer.sh` (headless `LeftoverPlan` / `OverflowPull`, 6); `tools/gametest_remainder_buffer.sh` +
+  `tools/remainder_buffer_test/` (GameTests, stale since the carve, 6)
 
 Config knobs (`creativeengineering-common.toml`, `[cooking]`): `remainderBuffer` (default true; off = thrown as in
 the original mods), `stallWhenFull` (default true; off = craft anyway and throw what doesn't fit), `recycleShowTicks`
@@ -446,6 +447,10 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   automation face layout, Pickling Jar progress per recipe. Headless check of `LeftoverPlan` 10 of 10 (the SQ-RB-21b
   case included). The GameTest harness (`tools/remainder_buffer_test`) still compiles patcherMod's pre-carve copies
   of `cooking/` and `oven/`, not Creative Delight's: not run.
+- 2026-11-16: `tools/test_remainder_buffer.sh` is now a headless check of `LeftoverPlan` and `OverflowPull` against
+  Creative Delight's build/classes (15 checks, `tools/remainder_buffer_test/headless/`, about 3 s), so the install gate
+  can run it. The GameTest runner moved to `tools/gametest_remainder_buffer.sh`; it boots a server and still needs
+  retargeting from patcherMod's copies to Creative Delight before it is trusted.
 
 > **Superseded copy below (noted 2026-10-21):** everything from here on is the 2026-10-18 feasibility draft, left in
 > the file by mistake. Sections 0-8 above are current; delete the copy once checked.

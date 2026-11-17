@@ -5,12 +5,14 @@ an id of an optional mod must be guarded, so the jars boot with an empty pack fo
 A jar's required mods: its own mod ids and nested members', every mandatory dependency in those mods.toml files, and the
 same for each Creative jar it depends on. Any other namespace is optional. A row naming an optional id is guarded by:
   G1  a `// requires: <mod>` header of the file (KubeJS and Creative Common's jar loader skip the file without it)
-  G2  an enclosing block opened by a line with `global.has(...)` / `Platform.isLoaded(...)` naming that mod, an
-      early `if (!global.has(...)) return` in the enclosing block, or the same check on the row's own line
+  G2  an enclosing block opened by a line with `global.has(...)` / `global.has.mod(...)` / `Platform.isLoaded(...)`
+      naming that mod, an early `if (!global.has(...)) return` in the enclosing block, or the same check on the row's
+      own line. A check on a bare variable on the row's own line (`forEach(id => { if (global.has(id)) ... })`) guards
+      every id on that line: each element is checked at run time.
   G3  dict keys (i.x, f.x, global.item.x ...) are resolved through the dicts themselves (Rhino, tools/dict_baseline)
 G5  rows inside a call to global.NCH, global.tags or global.tooltips (or their aliases R, t, T, addTooltips ...) need
-    no guard: the helpers skip ids of absent mods. A table that a loop later hands to them is marked `// G5` per row
-    or `// G5 begin` / `// G5 end` around it.
+    no guard: the helpers skip ids of absent mods. A table that a loop later hands to them, or to local code that skips
+    unregistered ids itself, is marked `// G5` per row or `// G5 begin` / `// G5 end` around it, with the reason.
 Tags ('#mod:x') are not flagged: an empty tag of an absent mod is harmless, and NCH / tag_helper skip such rows (G5).
 Own namespaces (creativeengineering, kubejs, ...) are not flagged either: several jars register under them, so the
 dump cannot tell which jar an id comes from; NCH's absent-mod skip and the minimal-chain boot (SQ-CBS-01) cover them.
@@ -56,7 +58,8 @@ TOOLTIP_FUNCS = ['addTooltips', 'addTooltipPattern', 'removeTooltips', 'removeTo
 ID_RE = re.compile(r"""['"`]([a-z0-9_.\-]+):([a-z0-9_/.\-]+)['"`]""")
 REQUIRES_RE = re.compile(r'^//\s*requires:\s*([a-z0-9_\-]+)', re.M)
 ALIAS_RE = re.compile(r'\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*global\.(\w+)\s*[;\n,]')
-GUARD_CALL_RE = re.compile(r'(?:global\.has|Platform\.isLoaded|has)\(([^()]*)\)')
+GUARD_CALL_RE = re.compile(r'(?:global\.has\.mod|global\.has|Platform\.isLoaded|has)\(([^()]*)\)')
+BARE_VAR_RE = re.compile(r'^\s*[A-Za-z_$][\w$]*\s*$')
 EARLY_RETURN_RE = re.compile(r'if\s*\(\s*!\s*(?:global\.has|Platform\.isLoaded)\(([^()]*)\)\s*\)\s*return\b')
 
 
@@ -248,7 +251,10 @@ def check_file(path, required, dicts, known_ids):
         if not line.strip():
             continue
         line_guards = set()
+        any_guard = False  # a run-time check on a bare variable: every id on this line is checked element by element
         for g in GUARD_CALL_RE.finditer(line):
+            if BARE_VAR_RE.match(g.group(1)):
+                any_guard = True
             line_guards |= namespaces_in(g.group(1), aliases, dicts) | set(re.findall(r"""['"]([a-z0-9_\-]+)['"]""", g.group(1)))
         early = EARLY_RETURN_RE.search(line)
         if early:
@@ -269,7 +275,7 @@ def check_file(path, required, dicts, known_ids):
                 in_helper = in_helper or is_helper
             elif ch == ')' and parens:
                 parens.pop()
-        if in_helper or g5_row:
+        if in_helper or g5_row or any_guard:
             continue
         for ns in sorted(namespaces_in(line, aliases, dicts)):
             if ns in OWN_NAMESPACES or ns in required or ns in active:
@@ -284,7 +290,8 @@ def check_file(path, required, dicts, known_ids):
 
 
 # Data files that only list ids as strings (resolved by nothing at load): the dicts and the removed / merge lists.
-DATA_ONLY = re.compile(r'kubejs_startup/creativecommon/_lib/')
+# Generated can parts (tools/gen_can_types.py): their effect ids are filtered by global.has in CD's cans.js.
+DATA_ONLY = re.compile(r'kubejs_startup/creativecommon/_lib/|kubejs_startup/[a-z0-9_]+/can_types\.js$')
 
 
 def script_files(jar):

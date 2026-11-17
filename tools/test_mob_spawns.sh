@@ -5,8 +5,8 @@
 #   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/mob_spawns.js in the pack's Rhino fork with tools/mob_spawns_test/
 #      rules_fixture.json; every tag must equal the generator's selection, and the one tune_spawns modifier + the
 #      forge:none files must be what the rules say
-#   3. Rhino: bad rules are reported and left out; CEConfig mobSpawns off, an old jar (no SpawnTuning) and a missing
-#      mod write nothing for what they cover
+#   3. Rhino: bad rules are reported and left out; WorldgenConfig mobSpawns off and a missing mod write nothing for
+#      what they cover
 #   4. generator on a fixture dump: runs, warns that the dump predates the rules, and stops warning once the dump
 #      shows them; --mob prints a table
 # Needs a built patcherMod (./gradlew :creativeCommon:compileJava) and the ATLauncher library folder. No game needed.
@@ -74,16 +74,16 @@ for r in rules:
         bad += 1; print('MISMATCH', r['id'], sorted(set(ids + tg) ^ set(got)))
 files = {os.path.relpath(p, os.path.join(sys.argv[1], 'data')): json.load(open(p))
          for p in glob.glob(os.path.join(sys.argv[1], 'data/**/*.json'), recursive=True)}
-mod = files.get('creativeengineering/forge/biome_modifier/mob_spawns.json')
+mod = files.get('creativeworldgen/forge/biome_modifier/mob_spawns.json')
 nones = sorted(p for p, d in files.items() if d['type'] == 'forge:none')
-ok = mod is not None and mod['type'] == 'creativeengineering:tune_spawns' and [x['id'] for x in mod['rules']] == [r['id'] for r in rules]
+ok = mod is not None and mod['type'] == 'creativeworldgen:tune_spawns' and [x['id'] for x in mod['rules']] == [r['id'] for r in rules]
 for x, r in zip(mod['rules'] if mod else [], rules):
     ok &= x['biomes'] == '#' + g.TAG_PREFIX + r['id'] and x['mob'] == r['mob'] and x['action'] == r['action']
     ok &= all(x.get(k) == r.get(k) for k in ('weight', 'min', 'max', 'category') if r['action'] == 'set')
     ok &= r['action'] != 'scale' or x['factor'] == r['factor']
 want_nones = sorted(m.replace(':', '/forge/biome_modifier/') + '.json' for r in rules for m in r.get('disable_modifiers', []))
 ok &= nones == want_nones
-raw = open(os.path.join(sys.argv[1], 'data/creativeengineering/forge/biome_modifier/mob_spawns.json')).read()
+raw = open(os.path.join(sys.argv[1], 'data/creativeworldgen/forge/biome_modifier/mob_spawns.json')).read()
 ok &= '.0,' not in raw and '.0}' not in raw      # JS-style numbers, not Gson's 2.0
 # spawn conditions: tags = the generator's selection, modifier entries in order, everywhere = no biomes field
 cfg = json.load(open(sys.argv[2]))
@@ -114,18 +114,18 @@ print(f"modifier with {len(mod['rules']) if mod else 0} rules, {len(nones)} forg
 sys.exit(1 if bad or not ok else 0)
 PY
 
-echo "== 3. bad rules, switch off, old jar, missing mod"
+echo "== 3. bad rules, switch off, missing mod"
 run "$T/bad" "$D/bad_rules_fixture.json" > "$T/bad.log" || true
 for want in 'Bad Id): id must be' 'no_action): action must be' 'set_no_weight): set needs a weight' 'dup): duplicate id' \
             'typo_trait: trait "forrest"' 'tag_except: except takes biome ids' 'bad_category): unknown category' \
             'bad_kind): condition must be' 'no_mobs): mobs must be' 'bad_ref): rules: no usable rule set_no_weight'; do
   grep -qF "$want" "$T/bad.log" || { echo "bad rules: no '$want' in the log"; status=1; }
 done
-python3 -c "import json,sys; d=json.load(open('$T/bad/data/creativeengineering/forge/biome_modifier/mob_spawns.json')); ids=[r['id'] for r in d['rules']]+[c['id'] for c in d['conditions']]; sys.exit(0 if ids==['dup','typo_trait','tag_except','good_cond'] else print('bad rules kept:', ids) or 1)" \
+python3 -c "import json,sys; d=json.load(open('$T/bad/data/creativeworldgen/forge/biome_modifier/mob_spawns.json')); ids=[r['id'] for r in d['rules']]+[c['id'] for c in d['conditions']]; sys.exit(0 if ids==['dup','typo_trait','tag_except','good_cond'] else print('bad rules kept:', ids) or 1)" \
   && echo "bad rules: reported and left out" || status=1
 run "$T/off" "$D/rules_fixture.json" off | tail -1 | grep -q '^0 tags, 0 data files' && echo "off: nothing applied" || status=1
-run "$T/old" "$D/rules_fixture.json" notuning > "$T/old.log"
-tail -1 "$T/old.log" | grep -q '^0 tags, 0 data files' && grep -q 'NOT applied' "$T/old.log" && echo "old jar: nothing written, error logged" || status=1
+# The old-jar case (no SpawnTuning class) was removed 2026-11-16: mob_spawns.js loads the class at the top since
+# 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as the class, so the case cannot happen.
 run "$T/miss" "$D/rules_fixture.json" missing=untitledduckmod > "$T/miss.log"
 grep -q 'ducks: mod not loaded' "$T/miss.log" && ! grep -rq 'untitledduckmod' "$T/miss/data" && ! grep -q 'untitledduckmod' "$T/miss/tags.json" \
   && echo "missing mod: its rule, condition mobs, ground blocks and modifiers skipped" || status=1

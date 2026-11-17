@@ -334,6 +334,10 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
 
 ## 8. History
 
+- 2026-11-16: `test_mob_spawns.sh` repaired after the split (`creativeworldgen` ids, `global.genText`, `global.has`
+  stubs); its old-jar check (no `SpawnTuning`) removed, since `mob_spawns.js` loads the class at its top since
+  2026-10-28 and ships in the same jar.
+
 - 2026-10-06: planned.
 - 2026-10-09: built. `/dumpspawns` reads in Java (patcherMod `SpawnDump`), with biome tags, spawn costs, placement
   sources, class chains and the tuning record; `gen_spawn_table.py` with the biome-type table, vanilla rule names

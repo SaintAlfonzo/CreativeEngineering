@@ -59,7 +59,8 @@ public class FitTest {
 		String real = Files.readString(Path.of(args[0]));
 		StructureBiomeFits.stage(real);
 		var st = StructureBiomeFits.stagedForTest();
-		check(st.structures().size() == 189 && st.fits().size() == 34, "real fits staged: " + st.structures().size() + " structures, " + st.fits().size() + " fits");
+		// 190 (was 189): Hearth and Harvest's corn maze joined a fit tag in structure_tags.json (e0694ae1, 1.2.02)
+		check(st.structures().size() == 190 && st.fits().size() == 34, "real fits staged: " + st.structures().size() + " structures, " + st.fits().size() + " fits");
 		check(st.structures().get("towns_and_towers:village_mushroom_fields").equals(List.of("land/mushroom", "land")),
 				"mushroom village -> land/mushroom + land (was biome_merges.json)");
 		check(st.fits().get("land").isEmpty(), "land lists no biome (parent of the land/* families)");

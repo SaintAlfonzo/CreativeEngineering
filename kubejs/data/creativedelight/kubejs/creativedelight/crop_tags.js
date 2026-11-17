@@ -34,8 +34,10 @@ ServerEvents.tags('block', e => {
 	if (!global.CD) return
 	var t = global.tags
 	var b = global.blocks
+	// G5 begin: filtered by global.has, then only handed to the tags helper
 	var vines = [b.hops_vine, b.jungle_grape_bush_red, b.jungle_grape_bush_white, b.vanilla_vine, b.vanilla_vine_plant,
 		b.mulberry_vine].filter(id => global.has(id))
+	// G5 end
 	if (vines.length) t.add(e, b.t_vine_crops, vines)
 })
 
