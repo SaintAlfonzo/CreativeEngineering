@@ -19,6 +19,6 @@ instead: swap the base for the natural ground wherever it doesn't match.
   is in kubejs/server_scripts/worldgen/ground_match.js.
 - Test: GroundMatchTest in tools/test_worldgen_tools.sh (37 checks, pure `rewrite()` split out for it). Java test cp is shared in tools/java_test_cp.sh.
 - Config moved to [worldgen.ground_match] (+ .sampling); on/off is [worldgen.systems] groundMatch (see [worldgen-config-cdevplace](worldgen-config-cdevplace.md)).
-- Deployed 2026-09-27 in jar c9740038; rollback copy pre-groundmatch.e58b6e57 is in build/rollback. Writeup: feature_writeup/structure_tuning.md 3.8, ST-27..32.
+- Writeup (status): feature_writeup/structure_tuning.md 3.8, ST-27..32.
 
 Related: [structure-groups](structure-groups.md), [jigsaw-pool-tuning](jigsaw-pool-tuning.md), [patchermod-coremod](patchermod-coremod.md), memory `patchermod-headless-smoke-test`.

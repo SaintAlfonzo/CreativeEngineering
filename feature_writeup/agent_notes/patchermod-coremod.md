@@ -59,5 +59,5 @@ threw `InvalidInjectionException: 'static' modifier ... does not match target` a
 time (game boot crash). Fix: `javap -p` the real target class to check the enclosing method's
 modifier, and match the handler to that. See [banner-pattern-compat-fix](banner-pattern-compat-fix.md) for the full incident,
 including the follow-up deploy-step miss above.
-- 2026-10-11: shipped 1.0.5 = md5 68509043 (archived); `mod_version` bumped to 1.0.6 right after staging (not built). On first 1.0.6 install, run the version-bump checklist above.
-- 2026-10-18: bumped to 1.0.8 after the 1.0.7 deploy and installed in mods/ (time master, [time-master](time-master.md)). instance.json userAdded entry NOT updated (ATLauncher was running; it already said 1.0.6). mod_sides.md row says 1.0.8.
+- Shipped jar versions: [deploy.md](../deploy.md) section 8 and `deploy/DEPLOY_LOG.md` (status pass 2026-11-16 removed the 1.0.5 to 1.0.8 bump diary here).
+- Gotcha: ATLauncher rewrites `instance.json` while it runs, so its userAdded jar entry cannot be updated then; check it after a version bump.

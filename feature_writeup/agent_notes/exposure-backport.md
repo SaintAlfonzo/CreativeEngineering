@@ -47,7 +47,7 @@ Scaffold built 2026-10-01; **base mod (`exposure`) ported the same day** (2nd se
 - Upstream doesn't use MixinExtras (it is only bundled as a nested jar); the pack has 0.5.4 via other mods.
 - Conventions and the redo-decompile command are in exposureBackport/README.md.
 
-**Installed 2026-10-01** (user: "put the jar in the server mods and update server side, docs"): installToMods moved exposure-1.19.2-1.6.0-forge.jar + the 1.6.0 config/exposure-*.toml (replaced by 1.9.19 defaults from the dev run) + an instance.json backup to development/exposureBackport/jar_archive/displaced/. mod_sides row = mod id exposure (first memory `mods` id; tools match on it), instance.json userAdded entry, pack/ regenerated, IN_TREE_MODS marks it required. Deploy 1.0.3 staged (update from 1.0.2, also ships patcherMod 1.0.3); full-pack scratch server booted it clean. Exposure-Create Compatibility resource pack is off (it overrides 1.6.0 camera models; would break 1.9.19's).
+**Installed 2026-10-01** (user: "put the jar in the server mods and update server side, docs"): installToMods moved exposure-1.19.2-1.6.0-forge.jar + the 1.6.0 config/exposure-*.toml (replaced by 1.9.19 defaults from the dev run) + an instance.json backup to development/exposureBackport/jar_archive/displaced/. mod_sides row = mod id exposure (first memory `mods` id; tools match on it), instance.json userAdded entry, pack/ regenerated, IN_TREE_MODS marks it required. Exposure-Create Compatibility resource pack is off (it overrides 1.6.0 camera models; would break 1.9.19's).
 
 **License:**
 - GPLv3 (`mod_license=GNU GPL3`, LICENSE = GPL-3 text).
@@ -58,7 +58,7 @@ Feature verdicts and 1.21 -> 1.19 gaps: [exposure-backport](exposure-backport.md
 
 Writeup: feature_writeup/exposure.md (EX- tests; EX-11/EX-17 passed; EX-50 old-world check before deploying 1.0.3). Jar checks: `python3 development/exposureBackport/tools/check_jar.py`. Open pack decision: the bumpy filter is unobtainable (its only loot chest, trial chambers, isn't in 1.19.2).
 
-2026-10-02: `-01` shipped in pack 1.0.3; `-02` (pack 1.0.4) adds the null-kick + refmap fixes and the fifth mod `exposure_extras` (camera bags, [camera-bag-design](camera-bag-design.md)); display name "Exposure (Backport & Extras)".
+`-02` added the null-kick + refmap fixes and the fifth mod `exposure_extras` (camera bags, [camera-bag-design](camera-bag-design.md)); display name "Exposure (Backport & Extras)". Which jar shipped in which pack: README index Exposure row and [exposure.md](../exposure.md).
 
 **2026-10-05: album text boxes couldn't be typed in (fixed, `-03`, in mods/).**
 - Cause: 1.19.2's `AbstractContainerEventHandler.setFocused(listener)` only stores the field. 1.20+ also calls `widget.setFocused(true/false)`. Upstream `TextBox` gates `keyPressed`/`charTyped` on `isFocused()`, so the album note boxes and the signing title box dropped every key.
@@ -147,13 +147,11 @@ On 2026-10-02, after the 1.0.3 deploy, every player was kicked when joining CreE
 - Single player and the scratch-server boot never encode that packet, which is why only a real client joining a dedicated server hit it.
 
 **Fix (2026-10-02):** `jsonBacked` now runs `BackportCodecs.withoutNulls` on the encoded JSON, and a whole-value null becomes `{}`. A headless test (scratchpad PredTest, mapped classpath via tools/java_test_cp.sh plus exposureBackport build/classes) showed the old path throwing the NPE and the new path round-tripping through NBT bytes.
-- When this was written, the fix had not been version-bumped, installed to mods/ or deployed. Shipping it needs a new jar version (e.g. -02) on both the server and the clients.
+- Shipped as `-02` (pack 1.0.4).
 
 **How to apply:** any Codec built on vanilla 1.19.2 `serializeToJson` output (predicates, MinMaxBounds) that ends up in a synced registry or packet must strip JSON nulls. To test a networked change, have a real client join a dedicated server.
 
 Related: [exposure-backport](exposure-backport.md), [recipe-book-type-desync](recipe-book-type-desync.md), [deploy-pipeline](deploy-pipeline.md).
-
-2026-10-02: version-bumped to exposureBackport `1.9.19-ce-19.2-02` (pack 1.0.4), installed to mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).
 
 ## exposure-addon-refmap-missing
 
@@ -178,5 +176,3 @@ Related: [exposure-backport](exposure-backport.md), [recipe-book-type-desync](re
 **How to apply:** when a client says "mixin could not find any targets" for an in-tree mod, first check that the jar actually contains the refmap named in the mixin config.
 
 Related: [exposure-backport](exposure-backport.md), [root-gradle-build](root-gradle-build.md).
-
-2026-10-02: version-bumped to exposureBackport `1.9.19-ce-19.2-02` (pack 1.0.4), installed to mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).

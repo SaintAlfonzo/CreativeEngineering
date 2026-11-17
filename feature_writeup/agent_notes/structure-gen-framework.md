@@ -57,7 +57,7 @@ structure_dump.js`) already existed — names-only listing (.nbt templates + wor
 ids), unrelated to this framework's `/dumpstructuregen`.
 
 **Related:** [dump-tags-script](dump-tags-script.md) for the `/dumpX` command convention this
-follows; [loot-overhaul-lootjs](loot-overhaul-lootjs.md) for the README/workflow style this
+follows; [loot-system](loot-system.md) for the README/workflow style this
 mirrors, and its "NOT LootJS" table noting YUNG's/Philip's Ruins/Towns & Towers/Wares already
 have their own structure frequency/enable config toggles as an alternative to this framework.
 
@@ -145,7 +145,7 @@ User didn't want to run a script after every edit, so all three worldgen applier
   returned every `worldgen/structure_set/*` added through highPriorityData/lowPriorityData. Fixed by
   patcherMod `KubeJSVirtualDataPackListMixin` (@Redirect of startsWith in the static lambda
   `lambda$getResources$1`, require=1). That also required adding `kubejs-forge-1902.6.2-build.73.jar`
-  to `patcherMod/libs/`. Built and deployed; NOT yet re-tested in game. KubeJS's GeneratedResourcePack
+  to `patcherMod/libs/`. VERIFIED 2026-09-26 (structure_tuning.md section 0). KubeJS's GeneratedResourcePack
   (the kubejs/data folder) already appends "/", so only the virtual pack was affected.
 - **biome_merges "0 added, 237 skipped" was a false report.** `ServerEvents.tags` handlers run first in a
   PreTagEventJS pre-pass (add() only queues an action, totalAdded stays 0, getElementIds() is empty) and are

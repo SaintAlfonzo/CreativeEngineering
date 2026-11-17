@@ -10,5 +10,5 @@ Done (table in feature_writeup/plan_1.0.9.md 1; TODO.md 3 has a "Fixed 2026-10-1
 
 Skipped as decisions: Spice of Life speed benefit (per-world mod default, value unclear), felsic potionMb, AP bullet category, engineering comments/recipes, Terralith caves, recipe scan rework.
 
-**How to apply:** DEPLOYED 2026-10-19 15:54 (server + clients); nothing run in game yet (TODO `pack/release #4`); tests listed in plan_1.0.9.md 2. Related: [plan-1-0-8](plan-1-0-8.md), [deploy-pipeline](deploy-pipeline.md).
-- 2026-10-19 15:50: rows QS (Quark spire tp mixin, scratch-tested) and EF (earth fill footprint share, campsite sunk starts, avoidCoasts) added to plan_1.0.9.md 0; mods/ jar now b82483aa (replaced the 13:50 5b7bb926). See [earth-fill-system](earth-fill-system.md), [meta-structures](meta-structures.md).
+**How to apply:** deploy state and tests: [plan_1.0.9.md](../plan_1.0.9.md) (header, section 2); in-game checks are TODO `pack/release #4`. Related: [plan-1-0-8](plan-1-0-8.md), [deploy-pipeline](deploy-pipeline.md).
+- 2026-10-19 15:50: rows QS (Quark spire tp mixin, scratch-tested) and EF (earth fill footprint share, campsite sunk starts, avoidCoasts) added to plan_1.0.9.md 0. See [earth-fill-system](earth-fill-system.md), [meta-structures](meta-structures.md).

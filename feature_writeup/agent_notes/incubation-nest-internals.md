@@ -16,7 +16,7 @@ Investigated 2026-09-29 (javap on incubation-1.19.2-3.0.1.jar; no decompiler on 
 - Alex's Mobs `EntityEmu.timeUntilNextEgg` (public int, 6000+rand(6000), NBT EggLayTime) mirrors the chicken 1:1, so an EntityEmu mixin implementing EggLayer is all it needs.
 - Hay/twig nests map chicken+duck+turkey only, so ANY new egg type NPEs on them (and chickens NPE on a nest that maps only a new egg). Fixed by mixin/LayEggInNestGoalMixin (isValidTarget m_6465_ rejects empty nests with no variant for the bird's egg).
 
-**Built 2026-09-29; jar copied to mods/ and shipped in the 1.0.2 restage 2026-09-30 (server boot clean, not content-tested):**
+**Built 2026-09-29 (status: nests.md):**
 - patcherMod `nest/EmuNests.java`: `creativeengineering:emu_nest` (EmptyNestBlock + item, Incubation twig-nest properties + twig model/item sprite) and `emu_egg_nest` (BirdNestBlock, no item, turkey egg geometry + recoloured `emu_eggs.png`). Flammable 60/20 via Blueprint DataUtil (FireBlock.setFlammable is private at compile; Blueprint ATs it). Loot: shears keep the nest, else 1-3 oak bark (mirrors twig nest -> sticks).
 - `mixin/EntityEmuEggLayerMixin` + `LayEggInNestGoalMixin`; mods.toml incubation ordering AFTER (optional). libs/: incubation, alexsmobs, citadel, blueprint.
 - KubeJS: i.emu_nest, b.emu_nest/b.emu_egg_nest, `incubation:bird_nests` tag (blocktags.js), compost 0.65, recipes in other/misc_mods.js (twig nest from [twig, #forge:rods/wooden], emu nest from #immersive_weathering:bark, both hay-nest U shape; no U-shape conflicts across 8490 jar recipes).
@@ -29,6 +29,6 @@ Investigated 2026-09-29 (javap on incubation-1.19.2-3.0.1.jar; no decompiler on 
 
 **2026-10-05:** writeup is feature_writeup/nests.md (NE-01..10), incl. per-nest texture paths and the kubejs/assets hotswap route. Duck+goose nests are now in mods/ (patcherMod 1.0.5 jar), staged for 1.0.5.
 
-**Textures 2026-10-05:** duck/goose assets (blockstates, models, nest/item/egg PNGs) now live ONLY in kubejs/assets/creativeengineering/ (removed from patcherMod source; installed 1.0.5 jar still has shadowed placeholder copies). Duck eggs on Incubation duck-egg geometry, goose on turkey geometry (matches how the user painted them). Emu assets still in the jar.
+**Textures 2026-10-05:** duck/goose assets (blockstates, models, nest/item/egg PNGs) now live ONLY in kubejs/assets/creativeengineering/ (removed from patcherMod source). Duck eggs on Incubation duck-egg geometry, goose on turkey geometry (matches how the user painted them). Emu assets still in the jar.
 
 **2026-10-05 (later):** all of this moved to its own mod, see [incubation-additions-mod](incubation-additions-mod.md). Ids are now incubation_additions:*, package com.SaintAlfonzo.incubation_additions.

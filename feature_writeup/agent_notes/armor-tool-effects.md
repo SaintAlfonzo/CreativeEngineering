@@ -206,4 +206,4 @@ roll damages the "responsible" item as the cost (Vinery: all 4 armor pieces; our
 **How to extend:** to add the charm effect to another item, just add it to the
 `bonemeal_charms` tag call above — no rebuild needed (tag is data-driven, reload-able).
 
-**Verified:** `./gradlew compileJava` passes clean. NOT yet smoke-tested in-game.
+Status and in-game tests: [armor_effects.md](../armor_effects.md) section 0.

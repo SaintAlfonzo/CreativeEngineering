@@ -158,7 +158,7 @@ TODO / follow-ups:
   in-game.
 - No public setter for `AreaEffectCloud.reapplicationDelay` (dose-repeat interval) - not exposed
   as a dial; would need a patcherMod `@Accessor` if wanted later.
-- Ring stack not yet in-game tested at time of writing (just built) - confirm dome shape/feel
+- Ring stack in-game check: PB-04 in potion_buckets.md (dome shape/feel)
   and retune `rings` per bucket once seen.
 
 ## potion-bucket-dispenser

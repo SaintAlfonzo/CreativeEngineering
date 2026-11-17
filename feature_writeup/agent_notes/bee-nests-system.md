@@ -23,7 +23,7 @@ feature_writeup/bee_nests.md (BN-01..10), generated bee_nests_by_biome.md.
 
 - Crash found on scratch server: Terralith leaf-only "trees" (birch/trees_forest_negative) + vanilla BeehiveDecorator
   logs().get(0) -> worldgen crash; AddedBeehiveDecorator now needs logs AND leaves. Fixed jar (13:52) verified on a
-  9-square check (4,301 chunks, no crash). 6 starter rules in bee_nests.json (land 1/785 -> 1/134), awaiting user review.
+  9-square check (4,301 chunks, no crash). 6 starter rules in bee_nests.json (land 1/785 -> 1/134); review state: bee_nests.md section 0.
 
 **How to apply:** tune bee_nests.json, rerun the generator; refresh the baseline only with rules emptied.
 Related: [mob-spawns-system](mob-spawns-system.md), [vegetation-worldgen-system](vegetation-worldgen-system.md), memory `scratch-server-verify`, memory `feature-writeup-pattern`.
