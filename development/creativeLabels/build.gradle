@@ -2,28 +2,28 @@
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
 // Build from the instance root (`./gradlew :creativeLabels:build`) or from here (`./gradlew build`).
 plugins {
-    id 'ce.forge-mod-refmap'
+	id 'ce.forge-mod-refmap'
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    // Optional integrations; every entry point checks the mod is loaded first.
-    // flatDir notation: 'local:<file name without -version>:<version>'
-    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
-    // Moonlight (required): rendered item textures for label pictures.
-    compileOnly fg.deobf('local:moonlight-1.19.2:2.3.7-forge')
-    // WTHIT lines; the pack's jar, shared with Creative Common
-    compileOnly files('../creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar')
-    // No compile dependency on sticky_it, labels or Create: they are referred to by resource location / mixin
-    // target name only (their art is read from the installed jars at runtime).
+	// Optional integrations; every entry point checks the mod is loaded first.
+	// flatDir notation: 'local:<file name without -version>:<version>'
+	compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+	// Moonlight (required): rendered item textures for label pictures.
+	compileOnly fg.deobf('local:moonlight-1.19.2:2.3.7-forge')
+	// WTHIT lines; the pack's jar, shared with Creative Common
+	compileOnly files('../creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar')
+	// No compile dependency on sticky_it, labels or Create: they are referred to by resource location / mixin
+	// target name only (their art is read from the installed jars at runtime).
 }
 
 // Port in progress: report every compile error, not javac's default first 100.
 tasks.named('compileJava', JavaCompile).configure {
-    options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
+	options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
 }
 
 // The Labels server scripts, authored in the pack folder so /reload picks them up without a rebuild, copied into the

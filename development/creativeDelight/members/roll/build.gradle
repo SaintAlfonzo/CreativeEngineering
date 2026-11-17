@@ -2,10 +2,10 @@
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
 // Build from the instance root (`./gradlew :backportedRoll:build`); it ships through `:creativeDelight:installToMods`.
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }
 
 dependencies {
-    // Farmer's Delight: the medleys are FeastBlocks, the Cooked Nether Wart and rolls are its kind of food.
-    compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
+	// Farmer's Delight: the medleys are FeastBlocks, the Cooked Nether Wart and rolls are its kind of food.
+	compileOnly fg.deobf('local:FarmersDelight-1.19.2:1.2.4')
 }

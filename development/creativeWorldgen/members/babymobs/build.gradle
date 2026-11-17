@@ -2,5 +2,5 @@
 // build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to babyMobs.
 // Build from the instance root (`./gradlew :babyMobs:build`) or from here (`./gradlew build`).
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }

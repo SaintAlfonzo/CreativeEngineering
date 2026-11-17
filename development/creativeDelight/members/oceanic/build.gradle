@@ -3,10 +3,10 @@
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
 // Build from the instance root (`./gradlew :creativeDelight:build`); it ships only nested in the Creative Delight jar.
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }
 
 dependencies {
-    // JEI: the six information pages upstream had (compat/OceanicJei); optional at runtime.
-    compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+	// JEI: the six information pages upstream had (compat/OceanicJei); optional at runtime.
+	compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
 }

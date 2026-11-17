@@ -9,40 +9,40 @@
 //     by Creative Common's startup loader.
 // Build: ./gradlew :creativeDevtools:build --offline   Install (dev mods/ only): ./gradlew :creativeDevtools:installToMods
 plugins {
-    id 'ce.forge-bundle'
+	id 'ce.forge-bundle'
 }
 
 dependencies {
-    // Creative Common: the hooks the probes subscribe to, WorldgenFiles (/cdevplace), PerfEvents (/cdevperf),
-    // BlockModelIcons (/cdevdumpicons). A hard dependency.
-    compileOnly project(':creativeCommon')
-    compileOnly project(':creativeCompat')
-    // Creative Worldgen: BiomeLayoutTuner and PoolTuner (/cdevplace), SpawnTuning (/dumpspawns), MobCapLevels (/cdevperf).
-    // An optional dependency: each reader checks ModList first.
-    compileOnly project(':creativeWorldgen')
-    // Creative Common's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
-    compileOnly fileTree(dir: '../creativeCommon/libs', include: '*.jar')
+	// Creative Common: the hooks the probes subscribe to, WorldgenFiles (/cdevplace), PerfEvents (/cdevperf),
+	// BlockModelIcons (/cdevdumpicons). A hard dependency.
+	compileOnly project(':creativeCommon')
+	compileOnly project(':creativeCompat')
+	// Creative Worldgen: BiomeLayoutTuner and PoolTuner (/cdevplace), SpawnTuning (/dumpspawns), MobCapLevels (/cdevperf).
+	// An optional dependency: each reader checks ModList first.
+	compileOnly project(':creativeWorldgen')
+	// Creative Common's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
+	compileOnly fileTree(dir: '../creativeCommon/libs', include: '*.jar')
 }
 
 def scriptTrees = ['data/creativedevtools/kubejs', 'assets/creativedevtools/kubejs']
 
 tasks.named('processResources', ProcessResources).configure {
-    scriptTrees.each { tree ->
-        from(rootProject.file("kubejs/${tree}")) {
-            into tree
-            exclude '**/*.md'
-        }
-    }
+	scriptTrees.each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
 }
 
 // The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
 tasks.named('jar', Jar).configure {
-    doLast {
-        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creativedevtools/', 'data/creativedevtools/kubejs/', 'assets/creativedevtools/kubejs/'].each { dir ->
-            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creativedevtools jar has no scripts under ${dir}")
-            }
-        }
-    }
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		['kubejs_startup/creativedevtools/', 'data/creativedevtools/kubejs/', 'assets/creativedevtools/kubejs/'].each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativedevtools jar has no scripts under ${dir}")
+			}
+		}
+	}
 }
