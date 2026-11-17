@@ -1,10 +1,10 @@
-# Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers)
+# Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers, TODO as the source of truth)
 
 Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
 P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). P1.1 to P1.3 BUILT 2026-11-16 night
 (offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). P1.4
 BUILT the same night. Phase 2 (P2.1 to P2.5) BUILT 2026-11-16 late night, offline tests PROC-20 to -28 pass; live rows
-SQ-PROC-10 to -15, CQ-PROC-01 queued; the never-run pass (P2.5 item 3) waits for the owner (Phase 2 build notes). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
+SQ-PROC-10 to -15, CQ-PROC-01 queued; the never-run pass (P2.5 item 3) waits for the owner (Phase 2 build notes). Phase 3 Planned 2026-11-16 (rulings D10 to D17; P3.2 done). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
 `tooling/process #1` to `#5`. Code owner: `tools/` and `build-logic/`. Jar changes are limited to a build stamp
 added by the shared Gradle plugin; no gameplay change, so no changelog bullet. Phase 2 continues
 [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md): TX-40, TX-41 and TX-45 were built 2026-11-15;
@@ -320,6 +320,227 @@ Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's
 - A seeded stale row (source changed) and a seeded dead id are flagged by lint.
 - A run with an unlisted jar refuses to start.
 
+## Phase 3: clean-up passes, install baseline, features audit, TODO as the source of truth
+
+Planned 2026-11-16 from the owner's notes (intake below; rulings D10 to D17). Why: after Phases 1 and 2, task state is
+still written in five places (TODO rows, plan phases, briefs, the writeups' section 0, features.tsv). The generated
+views are only as good as their seed data, and some Phase 1 and 2 gaps showed up in use (P3.4). TODO row
+`tooling/process #8`. Code owner: `tools/` and `build-logic/`, as before. No gameplay change, so no changelog bullet.
+
+Order: P3.1 first (needs a commit so the stamps are clean). P3.2 is done. P3.3 before P3.5, because P3.5 writes CSV and
+derives feature status. P3.4 items are small and independent. P3.6 last, because it reads the TODO CSV.
+
+### Intake (2026-11-16)
+
+| # | Item (owner's words) | Class | Ruling |
+|---|---|---|---|
+| 1 | "creates clean up passes" | open | D10 |
+| 2 | "installing all the pending jars" | premise, open | D11. Premise checked: `jarstamp.py pending` says 0, but it sees stamped jars only. Common and Compat in `build/libs` (built 21:19, unstamped) differ from `mods/`; Power Grid -19 is newer than the -18 in `mods/`, and -18 differs from its own build output. The bundles in `mods/` (Delight, Worldgen, Brewing) match their build output |
+| 3 | "relayouts were my personal choice, not an issue now" | clear | D12 |
+| 4 | "mark the lint issues found as high priority todo rows" | premise, open | D13. Premise checked: the design-rules findings are already classified (design_rules.md section 9) and planned (plan_rules_fixes.md), but have no open TODO rows; texture redo/swap rows exist (`textures/tools #2`, `#3`) |
+| 5 | "power grid tech level wont be changable in world, its a world creation value, admins can force switch with destruction" | conflict (resolved) | D15. energy_advanced.md 5 said worlds "can be upgraded or downgraded"; the plan_power_grid E1 / agent note said Power Grid never goes into `mods/` before stage 5, but -18 is in `mods/` |
+| 6 | "schedule an audit and repair of the features.tsv" | clear | P3.3 |
+| 7 | "switch the system to use csv instead, csv is default and preferred" | open (scope) | D14 |
+| 8 | "add the other obvious fixes i missed from phase 1" | clear | P3.4 |
+| 9 | "document the rest" | clear | P3.7 |
+| 10 | "build the plan to make todo the source of truth" | open (format, ids) | D16, D17; P3.5 |
+
+### P3.1 Install baseline (D11)
+
+1. Commit the open work of the finished phases, so the stamps are clean (`dirty` only where another session's work is
+   uncommitted; acceptable, the stamp names it).
+2. Rebuild every own jar with the stamp plugin (`./gradlew build --offline` over all projects), then `installToMods`
+   per project (the gate and the dialog apply). Power Grid -19 goes into `mods/`; correct
+   [agent_notes/power-grid-port.md](agent_notes/power-grid-port.md) ("never in `mods/`"), plan_power_grid.md E1 and add
+   its `mod_sides.md` row.
+3. Close the `pending` blind spot: `jarstamp.py pending` also compares unstamped build outputs with `mods/` by sha1 and
+   lists the differing ones as `unstamped, differs`.
+4. Prune stale outputs: older versioned jars in `build/libs` (Power Grid -14 to -18, Common 1.0.0 and 1.1.0, Vintage
+   -11 to -17 and the like) move to `jar_archive/displaced/` by a `jarstamp.py prune` command, so `build/libs` holds only
+   the newest build per jar.
+5. After the install: SQ-PROC-01 (boot line) and the T1 smoke rows (`rows/SMK.qb`) are the first pinned run; queued,
+   run when the owner says so. PROC-16 and -17 (dialog) get done by the owner as the installs happen.
+6. The 91 "not installed" phrases in TODO Details cells are stale after this; P3.5 removes the class of phrase.
+
+**Done when:** `jarstamp.py pending` prints nothing, including unstamped differences; `jarstamp.py diff mods/
+<build outputs>` is clean; every own jar has a ledger row with a stamp.
+
+### P3.2 Lint findings as high-priority TODO rows (D13; done 2026-11-16)
+
+Rows marked **High priority** in their Details cell until P3.5 adds the Priority column (the migration turns the
+marker into `priority=high`):
+- `textures/tools #2` (4 `swap` echo tools) and `#3` (27 `redo` textures), from `texture_provenance.py`.
+- `tooling/conventions #10`: `id_owner_lint` 8 unresolved (7 JEI plugin uids, 1 network channel).
+- `tooling/conventions #11`: the `design_rules_audit` findings through plan_rules_fixes.md (V-01 to V-62).
+- `tooling/process #9`: DR-W11, 155 file names not snake_case (mostly the moved agent notes).
+- `tooling/process #10`: 77 dead ids in queue rows (Phase 2 `qrowlint.py` baseline).
+
+### P3.3 Features table: audit, repair, CSV (D14)
+
+1. **CSV switch.** Every status and process table moves from TSV to CSV (header row, UTF-8, Python `csv` module, `\n`):
+   `status/features.tsv`, `jar_archive/installed.tsv`, `tools/check_known.tsv`, `texture_sources/sources.tsv`,
+   `texture_sources/ledger.tsv`, `testing/rows/_lint_baseline.tsv`. One migration script with a round-trip check; the
+   files move with `git mv` so history follows.
+   - Readers and writers: `status_index.py`, `status_seed.py`, `jarstamp.py`, `install_jar.py`, `check_all.py`,
+     `texture_provenance.py`, `scratch_query/qrows.py`, `qplan.py`, `qrowlint.py`, `build_deploy.py`.
+   - Text that names the files: CLAUDE.md (texture rule, install line, checks line; backup first, D3),
+     texture_sources.md, the skills, agent notes. A grep for `\.tsv` in tools and docs must come back empty for these.
+   - New tables are CSV from now on (memory `csv-default-format`; CLAUDE.md Preferences gets one line).
+2. **Audit**, every one of the 183 rows, by an agent with a list for the owner (`status/features_audit_<date>.md`):
+   - The 14 BROKEN rows first. Most are seed errors (Time system "DEPLOYED with 1.0.8", Creative Labels "DEPLOYED with
+     1.1.01", Can parity is a worksheet).
+   - `jars`: 96 rows are empty. Fill them from where the code lives (`development/<project>`, script namespace,
+     data pack folder).
+   - `queue codes`: check the 399 heuristic links against the queue sections' own feature.
+   - `todo ids`: dropped as a column. P3.5 links each TODO row to its feature instead (the `feature` field), and the
+     view is generated.
+3. **Derived status.** The status word becomes computed, with a hand override column (`override`, `override_reason`,
+   dated; P3.6 warns on an override older than 30 days):
+   - **planned**: every linked TODO row is Planned or Pinned, nothing built.
+   - **BUILT**: a linked row is In Progress or Testing, and its jar stamp is not in the last DEPLOYED.json.
+   - **DEPLOYED**: the jar stamp is in the last deploy.
+   - **VERIFIED**: every linked row is Complete.
+   - **BROKEN**: an open Bug row marked as a blocker, or a FAIL verdict on the currently installed stamp.
+   - **reference**: no jars and no rows (audits, surveys, worksheets).
+4. Rerun the Phase 2 section-jar pass (`qrows.py`), so the queue sections take the repaired jars. The 539 jar-changed
+   rows are recounted after P3.1.
+
+**Done when:** no `.tsv` file is left among the tables above; the audit list is handed to the owner; every feature row
+has jars or is `reference`; the status words come from the rule (overrides listed).
+
+### P3.4 Phase 1 and 2 fixes
+
+| # | Gap found | Fix |
+|---|---|---|
+| a | `jarstamp.py pending` is blind to unstamped builds | P3.1 item 3 |
+| b | The install gate skips the class-based tests: inside Gradle they report SKIP (a nested Gradle would deadlock), so a Java change is gated only by script tests and lints until `--full` at deploy | The gate runs the class-based tests on the installing project's already compiled `build/classes` (no nested Gradle); a test SKIPs only when another project's classes it needs are older than their sources, and the SKIP line names that project |
+| c | `test_worldgen_tools` (75 s) never runs under `--fast`, so never at install | `--changed` runs it whenever its inputs changed, even with `--fast` |
+| d | `texture_provenance.py` picks a different source on ties: a read-only run rewrote 22 ledger rows (2026-11-16, reverted) | Stable tie-break (shortest path, then name); a check writes tracked files only with `--write`; `check_all` fails if a check dirtied a tracked file |
+| e | Stale overhaul rows: `tooling/process #4` Complete but in the open table; `#6`, `#7` described as left to do | `#6`, `#7` text fixed 2026-11-16; `#4` leaves with the P3.5 migration (archive becomes a view) |
+| f | 14 archive rows with an open status, among them the 4 `tooling/design-rules` rows marked Open | Owner list in the first clean-up pass; each goes back to its family or to Complete |
+| g | D6 copied 166 README status paragraphs into the writeups' section 0: a new hand-written status copy. The 17 generated writeups were skipped | P3.5 item 5 |
+| h | Phase 2 stale-row lint: the P1.4 writeup edits made 3,200+ rows stale. P3.5 edits every writeup again, which would cause the same flood | `qrowlint.py` ignores source changes confined to generated blocks and to the removed section 0 paragraphs (diff-level check), so a status-only edit does not stale a row |
+| i | deploy.md disagrees with DEPLOY_LOG ([status pass](agent_notes/status_pass_2026-11-16.md) "Repo docs that disagree"): section 0 snapshot (1.1.03), header ends at 1.1.05, missing bullets 1.1.01 to 1.1.06, TODO `pack/release #7` stale, the 1.2.00 client snapshot recorded twice | `build_deploy.py --backfill-history` for the missing versions, section 0 and header from DEPLOYED.json (generated block), duplicate mark removed, `pack/release #7` rewritten |
+| j | Two owner rules live only in agent notes: no content test before a deploy; Distant Horizons settings are player config, never pushed after 1.0.4 | Into deploy.md (rules section) and the `release` skill |
+| k | An out-of-date generated block is only a WARN, and nothing reminds an implementing session to regenerate | The Stop hook (`impl` role) prints one line when `status_index.py --check` reports an out-of-date block |
+| l | Intake: the first scratchpad write-up after P1.3 (plan_post_scratch_1115.md G) has rulings but no rulings table, and the scratchpad block was deleted instead of marked `(intake ... -> plan)`. plan_small_fixes_1116.md followed the skill | `check_all` warning: a `plan_*.md` created after 2026-11-16 with no "Owner rulings" table |
+
+### P3.5 TODO as the single source of truth (D13, D16, D17)
+
+Principle: a **TODO row is the only unit of work and the only place its status is written**. Plans hold design, order
+and rulings and cite row ids. Writeups describe the feature. Briefs are design notes for rows. Everything else that
+shows status is generated.
+
+1. **Rows as CSV**, one file per `#` category: `feature_writeup/todo/rows/<category>.csv` (22 files). Columns:
+
+   | Column | Content |
+   |---|---|
+   | id | permanent id (D17) |
+   | family, table | the `##` family, and the split table name where a family has several |
+   | status | Bug / Planned / Pinned / In Progress / Testing / Complete |
+   | priority | high / normal / low (empty = normal; D13) |
+   | tests | tier marks, as today (`S+ C P`) |
+   | work | where the work lands |
+   | change | one line |
+   | details | how it is built and what is left: no status or install words (item 6) |
+   | decisions | open decisions, or the ruling cited |
+   | writeup | link and section |
+   | feature | features.csv key (replaces the feature table's `todo ids`) |
+   | plan | `plan_x.md` and phase, empty when none |
+   | source | where the row came from: `scratchpad 2026-11-16`, a run id, a lint |
+   | queue | the queue row ids that verify it (the `tests` S tier is checked against their verdicts) |
+   | log | short dated entries: `2026-11-15 built; 2026-11-16 SQ-PS15-02 FAIL` |
+   | updated | date of the last change, written by the tool |
+
+   Complete rows stay in their category file. The archive becomes a generated view, so no row ever "moves".
+2. **`tools/todo.py`** does every edit, so nobody hand-quotes CSV: `add` (next id per D17), `set <id> field=value`,
+   `log <id> text`, `move <id> --family`, `show`, `find`. It validates the status legend, the priority words and the
+   links, and writes stable order (status rank, then id). `check_all` gets a `todo_rows` check: every file parses and
+   matches the schema. An Edit on the CSV is allowed, but the check catches a broken row.
+3. **Generated views** (`status_index.py`, between markers; a hand edit fails `--check`):
+   - `TODO.md`: the same layout as today (categories, families, split tables, how-to-read, legend), with the snapshot,
+     a **High priority** list at the top and the archive at the bottom. Installed / pending state is shown per row from
+     the stamps and the ledger, never typed.
+   - Each open `plan_*.md`: a block listing its rows with status, plus the generated `Status:` line.
+   - Each writeup: an **Open work** block (rows whose `writeup` or `feature` points at it), replacing section 0 status.
+   - features.csv status (P3.3 item 3).
+4. **Migration**, by script, one commit for the data, one for the generated output:
+   - Parse every TODO.md table (`status_index.py` already does), write the CSVs, regenerate TODO.md, and check the round
+     trip: the same rows, cells and order; differences only in the generated parts.
+   - The interim `**High priority ...**` markers become `priority=high`.
+   - Leading bold status prose in Details (`**BUILT 2026-11-15** ...`, 125 rows; "not installed", 91) moves into `log`.
+     Install words are dropped, because they are now generated.
+   - The plan-named tables ("Scratch 1115 Follow-ups" 1 and 2, 40 rows under Tooling) are refiled into their feature
+     families, with `plan` set. Their ids stay.
+   - Stale head prose is removed: the 2026-10-21 priorities paragraph (now the High priority list), the run list ending
+     2026-10-28 (now the queue coverage block), "patcherMod" in the Work legend.
+5. **Plans, writeups and briefs:**
+   - Plans: the open task lists (7 plans with `- [ ]` lists, 19 with a `Status:` header) become rows once. A plan keeps
+     design, order, rulings and History, and gets the generated row block. Closed plans stay as history.
+   - plan_rules_fixes.md: each section (V-groups) becomes a row under `tooling/conventions #11`'s family, with
+     `plan=plan_rules_fixes.md`.
+   - Writeups: the section 0 status paragraphs from D6 are removed (the old table is kept verbatim in
+     `status/readme_index_2026-11-16.md`) and replaced by the Open work block. Generators of the 17 generated writeups
+     keep the block markers, so a regeneration does not drop it.
+   - Briefs: status words are a lint warning.
+6. **Lint for prose status** (`todo_rows` check, `--changed` only, so old History lines are untouched): new text in
+   `details` that matches `not installed`, `installed`, `**BUILT`, `Status was` is a FAIL with a pointer to `log` and
+   the generated state.
+7. **Ids (D17):** existing ids never change. A new row takes the slug of its current `##` family (`salt #1`,
+   `process #11`), numbered per family. `todo.py add` assigns it.
+8. **Process text:** CLAUDE.md "Done means" (backup first, D3): "a change updates its TODO row with `tools/todo.py`;
+   plans cite row ids; writeups describe". The intake skill writes rows with `todo.py add --source --plan`. The
+   [todo-layout note](agent_notes/todo-layout.md) is rewritten to the CSV layout.
+
+**Done when:** TODO.md, the plan row blocks, the writeup Open work blocks and the feature status are all generated
+from the CSVs; `status_index.py --check` and `todo_rows` pass; a status change made with `todo.py set` shows in TODO,
+the plan, the writeup and the README after one `status_index.py` run.
+
+### P3.6 Clean-up passes (D10)
+
+1. **Threshold warnings**: `tools/cleanup_check.py`, a WARN-only `cleanup` check in `check_all.py`. Limits in
+   `tools/cleanup_thresholds.csv` (check, limit, reason):
+   - TODO: In Progress rows not updated in 30 days; Testing rows whose tiers all passed but status not Complete;
+     prose-status lint hits.
+   - Queue: stale rows, dead ids above the baseline, sections eligible for `qrun.py archive`, never-run share.
+   - `gotchas.md`: any per-run "Found in rXXXX" section.
+   - Agent notes: status words; notes not linked from any doc.
+   - Memory: more than 60 files, or any `project`-typed memory.
+   - `check_known.csv` entries older than 30 days (exists today).
+   - Build outputs: more than one versioned jar per project in `build/libs`; `jar_archive/displaced/` over 2 GB.
+   - deploy.md: a DEPLOY_LOG snapshot with no history bullet.
+   - Plans: every row Complete but the plan not closed.
+   - features.csv: overrides older than 30 days.
+2. **Full pass at each release**: a step in the `release` skill before staging, which runs the fixers and writes
+   `status/cleanup_<date>.md` with what changed and a list for the owner:
+   - `qrun.py archive --apply` and the superseded sweep;
+   - `build_deploy.py --backfill-history`;
+   - `jarstamp.py prune`;
+   - the gotchas merge;
+   - the notes status lint;
+   - notes that repeat a writeup merged into it (P1.6 follow-up);
+   - closed plans marked;
+   - the threshold list brought to zero, or each remaining warning listed with a reason.
+
+**Done when:** `check_all` shows the cleanup warnings; one release ran the pass and wrote its doc.
+
+### P3.7 Documented, not planned
+
+- **Power Grid mode (D15)** is a world creation value; no in-world switching; an admin can force a switch, which is the
+  destructive clean-up with a backup first. Recorded in [energy_advanced.md](energy_advanced.md) section 5. The
+  command belongs to the energy plan (A9), not here.
+- **TODO re-layouts (D12)** are the owner's choice. Review section 7's "TODO re-layouts" cadence row is withdrawn.
+  After P3.5 a re-layout is a change of the generator's grouping, not of the data.
+- **Cross-jar id moves** (Creative Computers and Creative Economy carving): the swap-list route of memory
+  `ids-follow-owning-mod` and `id_owner_lint` cover them. A per-carve checklist lint is possible later; not planned.
+- **Release hotfix classes** (client-only code on the server, data format errors, mismatched payloads): covered by the
+  Phase 2 T3 release-gate rows and the P1.2 stamp check. No extra lint.
+- **Never-run rows** (about 60 %, 877 drafts): the owner decides from [status/never_run_2026-11-16.md](status/never_run_2026-11-16.md).
+- **Intake measure** (owner reversals per plan): read from the rulings tables (a changed ruling keeps a History line).
+  No tool.
+- **Spelling mix, code-span file names (1,930), literal ids (4,079)**: plan_rules_fixes.md (sections 15b, 19b, 7) owns them.
+- Still non-goals: GameTests (TX-23), client automation (TX-01 to TX-05).
+
 ## Owner decisions
 
 Settled 2026-11-16:
@@ -337,6 +558,14 @@ Settled 2026-11-16:
 | D10 | 2026-11-16: an agent runs rows that need a client and a dedicated server together (its own server plus its own client, `eval_client.py ... ownsrv=PID` / `qrun.py pair`); the playtest list holds `@owner` rows only. Recorded in the scratch-test skill, gotchas.md and memory `one-game-instance-at-a-time` |
 | D11 | 2026-11-16: new data files are CSV, not TSV; only `rows/_lint_baseline.csv` converted (the older TSVs stay) |
 | D4 | Queue row data: one `.qb` file per feature section in `feature_writeup/testing/rows/`, queue tables generated from them (option B below) |
+| D10 | Clean-up passes: threshold warnings in `check_all` plus a full pass as a step of each release (AskUserQuestion 2026-11-16; P3.6) |
+| D11 | Install all pending jars: rebuild every own jar once with a stamp and install them all through `installToMods`; Power Grid -19 goes into `mods/`, superseding plan_power_grid.md E1 and the power-grid-port note (AskUserQuestion 2026-11-16; P3.1) |
+| D12 | TODO re-layouts were the owner's choice, not a process issue (chat 2026-11-16) |
+| D13 | Lint findings become high-priority TODO rows; priority is a Priority column (high / normal / low), interim marker in Details until P3.5 (AskUserQuestion 2026-11-16; P3.2) |
+| D14 | CSV is the default and preferred table format; every status and process TSV moves to CSV (AskUserQuestion 2026-11-16; P3.3) |
+| D15 | Power Grid tech level is a world creation value, not changeable in world; admins can force a switch with the destructive clean-up (chat 2026-11-16; energy_advanced.md 5) |
+| D16 | TODO rows live in CSV, one file per category; TODO.md and the plan, writeup and priority views are generated; edits through `tools/todo.py` (AskUserQuestion 2026-11-16; P3.5) |
+| D17 | Row ids: existing ids never change; new rows take the current `##` family slug (AskUserQuestion 2026-11-16; P3.5 item 7) |
 
 Background for D4 (settled as option B):
 
@@ -410,6 +639,21 @@ Phase 2 offline (`tools/test_queue_rows.sh`, run by `check_all.py`; fake scratch
 - [x] **PROC-27 reclassify:** `judge --reclassify` refused without a cause; with one the verdict changes, checks stay.
 - [x] **PROC-28 drive:** state file, two steps done, RUNNER.md claimed and released; a step killed after its first row
   resumes from its second.
+
+Phase 3 (offline, written when built):
+- [ ] **PROC-30 pending sees unstamped:** an unstamped `build/libs` jar that differs from `mods/` -> listed as `unstamped, differs`.
+- [ ] **PROC-31 baseline:** after P3.1 -> `jarstamp.py pending` empty, every own jar in `mods/` stamped with a ledger row.
+- [ ] **PROC-32 prune:** `jarstamp.py prune` leaves one jar per project in `build/libs`, the rest in `jar_archive/displaced/`.
+- [ ] **PROC-33 CSV round trip:** each migrated TSV -> CSV -> same rows; no `.tsv` named by the tools or docs listed in P3.3.
+- [ ] **PROC-34 derived feature status:** flip a feature's only row Planned -> Testing -> BUILT; its override wins and is listed.
+- [ ] **PROC-35 gate runs class tests:** a seeded break in a class-based test's subject -> `installToMods` refuses (no SKIP).
+- [ ] **PROC-36 no dirtying check:** `check_all.py --full` on a clean tree leaves `git status` clean; a check that writes a tracked file -> FAIL.
+- [ ] **PROC-37 TODO round trip:** the migration regenerates TODO.md with the same rows, cells and order.
+- [ ] **PROC-38 one edit, all views:** `todo.py set <id> status=Testing` -> TODO, the plan block, the writeup Open work block and the feature status change after one `status_index.py`.
+- [ ] **PROC-39 prose status lint:** new Details text with "not installed" -> `todo_rows` FAIL under `--changed`; old text untouched.
+- [ ] **PROC-40 new id:** `todo.py add` under family Salt -> `salt #1` (then `#2`); an old id is never renumbered.
+- [ ] **PROC-41 stale lint ignores generated edits:** an edit only inside a writeup's generated block does not stale its queue rows.
+- [ ] **PROC-42 cleanup thresholds:** a seeded "Found in rXXXX" gotchas section and a 31-day override -> two WARN lines.
 
 Live (queued when built, per skill `scratch-test`):
 - SQ-PROC-01: scratch boot shows the `[creativecommon] builds:` line, and its stamps match `jar_archive/installed.tsv`.
@@ -507,3 +751,4 @@ Phase 2 "done when" against the build:
 - 2026-11-16 night: P1.4 items 5 and 6 (agent notes status pass, deploy.md history from `--snapshot`) done; P1.6 follow-up 1 closed.
 - 2026-11-16 night: P1.4 items 1 to 3 built (Build notes above); PROC-10 to PROC-14 passed offline.
 - 2026-11-16 late night: Phase 2 (P2.1 to P2.5) built (Phase 2 build notes above); PROC-20 to PROC-28 passed offline. CLAUDE.md backed up to `CLAUDE.md.bak-2026-11-16-p2`, then: the queue line names the rows files and `qrun.py plan`. Subagents wrote rows/SMK.qb (T1 smoke rows) and consolidated the scratch-test gotchas.
+- 2026-11-16 late night: Phase 3 planned from the owner's notes (intake table, rulings D10 to D17): install baseline, lint rows (P3.2 done: high-priority marks and rows in TODO), features audit and CSV, Phase 1 and 2 fixes, TODO rows as CSV with generated views, clean-up passes. Power Grid mode ruling recorded in energy_advanced.md 5. Memory `csv-default-format` added.
