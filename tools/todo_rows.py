@@ -90,7 +90,8 @@ def save_all(rows):
 def next_id(rows, family_heading):
     """D17: a new row takes the slug of its current `##` family, numbered per family."""
     s = re.sub(r'[^a-z0-9]+', '-', family_heading.lower()).strip('-')
-    n = max([id_parts(r['id'])[1] for r in rows if id_parts(r['id'])[0] == s] + [0])
+    # numbers continue the family's old ids too: `tooling/process #10` -> the next Process row is `process #11`
+    n = max([id_parts(r['id'])[1] for r in rows if id_parts(r['id'])[0].split('/')[-1] == s] + [0])
     return '%s #%d' % (s, n + 1)
 
 
@@ -220,8 +221,12 @@ def validate(rows, layout_text=None):
     errs = []
     ids = Counter(r['id'] for r in rows)
     fams = set(families_in_layout(layout_text)) if layout_text else None
+    old_nums = Counter((id_parts(r['id'])[0].split('/')[-1], id_parts(r['id'])[1]) for r in rows)
     for r in rows:
         where = (r.get('_file', '?'), r.get('_line', 0), r.get('id', ''))
+        pre, num, _ = id_parts(r.get('id'))
+        if '/' not in pre and old_nums[(pre, num)] > 1:
+            errs.append(where + ('number %d is already used by an old `.../%s` id (D17: numbers continue)' % (num, pre),))
         if not ID_RE.match(r.get('id', '')):
             errs.append(where + ('id is not `family #n`',))
         if ids[r['id']] > 1:

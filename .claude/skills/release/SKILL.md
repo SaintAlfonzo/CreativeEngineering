@@ -22,6 +22,15 @@ release); **Distant Horizons settings are player config**, never pushed after 1.
    - Release plan `feature_writeup/plan_<ver>.md` (if one exists) and README statuses current.
    - No open TODO row says "Blocks the next release" (`grep -n "Blocks the next release" feature_writeup/todo/TODO.md`);
      report any to the owner before staging.
+2b. **Clean-up pass** (plan_process_overhaul.md P3.6, D10), before staging. Run the fixers, then the report:
+   - `python3 tools/scratch_query/qrun.py archive --apply` (and the superseded sweep), then `python3 tools/status_index.py`;
+   - `python3 tools/build_deploy.py --backfill-history <versions>` for any `deploy_missing_bullets`;
+   - `python3 tools/jarstamp.py prune`;
+   - merge any "Found in rXXXX" section of the scratch-test gotchas into its topic; strip status words from agent
+     notes (pointers to the owning doc); merge a note that repeats its writeup into the writeup;
+   - mark plans whose rows are all Complete as closed;
+   - `python3 tools/cleanup_check.py --report feature_writeup/status/cleanup_<date>.md`: every remaining warning is
+     listed there with a reason; hand the list to the owner.
 3. **Stage**: `python3 tools/build_deploy.py --notes "..."` (add `--version X`, `--config full`, `--mode install`
    only when asked). Report the preflight warnings and the `- Payload:` line of `deploy/DEPLOY_LOG.md`.
 4. **Optional scratch boot** of `deploy/latest/` only if the user asks (memory `scratch-server-verify`).

@@ -1,0 +1,20 @@
+check,limit,reason
+todo_in_progress_days,30,an In Progress row untouched this long has stalled or is done
+todo_testing_passed,0,Testing rows whose tiers all passed should be Complete
+todo_details_status_words,0,status and install words belong in the row log (P3.5 item 6)
+queue_stale_rows,3300,stale rows above the 2026-11-16 level (3225) mean sources changed without a row rewrite
+queue_dead_ids_errors,127,dead ids above the qrowlint baseline
+queue_archive_eligible,0,sections whose rows all passed on the installed jars go to the archive (qrun.py archive --apply)
+queue_never_share,0.6,share of never-run rows; above it the queue grows faster than it is run
+gotchas_found_in_sections,0,per-run "Found in rXXXX" sections are merged into the topic sections
+agent_notes_status_words,0,status lives in the repo docs; a note with status words is stale
+agent_notes_unlinked,0,a note no doc links is lost
+memory_files,60,memory keeps only owner rules and references
+memory_project_typed,0,project memories belong in the repo (agent notes)
+check_known_days,30,an accepted failure is revisited after 30 days
+build_libs_extra_jars,0,one versioned jar per project in build/libs (jarstamp.py prune)
+displaced_gb,2,jar_archive/displaced/ size
+deploy_missing_bullets,0,every DEPLOYED.json mark has a deploy.md History bullet (build_deploy.py --backfill-history)
+plans_all_complete_open,0,a plan whose rows are all Complete is closed
+feature_override_days,30,a hand status override is revisited after 30 days
+todo_unfiled_rows,0,open rows without a family go back to their family or to Complete
