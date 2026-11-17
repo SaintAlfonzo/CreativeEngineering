@@ -266,7 +266,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - **Lava Walker** (port, 2026-11-12, [raspberry_pie.md](raspberry_pie.md) 4): standing on lava burns like a magma block
   (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
   burns as usual. `LavaWalkerEffect.applyEffectTick`. Built in Creative Brewing source, jar not rebuilt yet; test
-  CQ-RP-27.
+  CQ-RPI-27.
 - **Hops on the lattice** (port, 2026-11-14, [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.1; [hearth_and_harvest.md](hearth_and_harvest.md) 4.8):
   `GrapeTypeRegistry.HOPS` (`hops`, lattice, white), registered statically so the `grape` state property holds it; fruit
   and seeds are `hearthandharvest:hops` looked up by id (air without Hearth and Harvest: inert), no juice

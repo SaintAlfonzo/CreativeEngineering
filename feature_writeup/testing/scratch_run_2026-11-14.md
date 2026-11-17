@@ -54,7 +54,7 @@ Per phase, written by its runner.
   `s19.qb` (P3b, two group B levels); results `perf/runs/r1114/tpf/{p1_base,p2_fix,p3_all,p3b_base,p3b_fix}`.
 - Phase 2: r1113 resume steps 1 to 3, batches in `batches/r1113/`: `fix_c2a1.qb` + `fix_c2a1r.qb` (SQ-PJL-04, CFS-02b,
   STN-02k, -03, -06, CBW-02, BBQW-02, -02s, -03, ROLL-11, -12b, BBQ2-03, -05, -06), `fix_c3a1.qb` + `c3_a2.qb --rows
-  SQ-PG-01b,SQ-IP-05b` + `fix_c3a1r.qb` (SQ-MG-22, AZW-03, BOT-03, FCK-09, -11, -13, -16, FCB-09, -10, IP-01, -04, -05,
+  SQ-PG-01b,SQ-IP-05b (now SQ-PRT-05b)` + `fix_c3a1r.qb` (SQ-MG-22, AZW-03, BOT-03, FCK-09, -11, -13, -16, FCB-09, -10, IP-01, -04, -05,
   -05b, PG-01a, -01b), `c4_a.qb --rows SQ-FDI-01` + `c4_ar.qb --rows SQ-FDI-02` (setup) + `c4_ar2.qb` + `c4_ar3.qb`
   (SQ-FLR-02b to -05, BREED-03, FDI-02, -03), `pwg17r.qb` + `pwg17r2.qb` + `pwg17.qb --rows SQ-PWG-SHOW17` (SQ-PWG-73,
   -76, -78 to -82, -90, -91, -94, -95), `cq_pwg17.qb` (CQ-PWG-22, -24, -26 to -29); results
@@ -185,7 +185,7 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
   ticks during the 2 s pace; fix: `gamerule naturalRegeneration false`, rerun batch `fix_c2a1r.qb`, same world).
 - 01:25 fix_c3a1 boot (`tpf_srv.sh $S/fixc3a1 fixc3a1 A shipped @s1 -- difficulty=normal`, probes c3, zp, zact with keep),
   Done 10.0 s; fix_c3a1.qb from 01:27.
-- 01:35 fix_c3a1.qb done: FAIL 2 (FCK-13, PG-01a), LOOK 12. PG-01a/IP-04/IP-05 read "portals: 0" while the console
+- 01:35 fix_c3a1.qb done: FAIL 2 (FCK-13, PG-01a), LOOK 12. PG-01a/IP-04 (now PRT-04)/IP-05 (now PRT-05) read "portals: 0" while the console
   counted 4 `portalgun:custom_portal`: c3_probe.js matched the type with `Registry.ENTITY_TYPE.getKey(e.getType())`
   (KubeJS remaps getType: r1113 gotcha) and then threw on `level.dimension()`. Probe fixed (getEncodeId, dimension
   fallback), /reload, `zc3 portals` lists 4. First try kept in `perf/runs/r1114/fix_c3a1_try1/`; rerun 01:39 of
@@ -521,11 +521,11 @@ Detail per row: `perf/runs/r1114/verdicts/fix_c2a1.md`, `fix_c3a1.md`; reruns ju
 | SQ-FCK-16 | PASS | sneaking use: moisture 0 both reads; water placed above after the item use |
 | SQ-FCB-09 | PASS | cooking pot, copper pot, kettle items keep their contents (carrot, bowls, soup; bone, lichen; tea) |
 | SQ-FCB-10 | PASS | hung skillet (named, Sharpness II) drops when the wall goes |
-| SQ-IP-01 | PASS | five frames: crying obsidian edges, soul fire, no portal entity, no vanilla portal blocks |
+| SQ-IP-01 (now SQ-PRT-01) | PASS | five frames: crying obsidian edges, soul fire, no portal entity, no vanilla portal blocks |
 | SQ-PG-01a | FAIL | flag reads by colour, not geometry: wall-to-wall blue 0b / orange 1b (both should be false); wall portal with floor partner 0b (should be true). Creative Compat `portalgun/PortalGunExitLift.java` rotates the already rotated content direction; `mixin/PortalGunExitLiftMixin.java` misses portals linked in PortalGunItem (default 1b) |
 | SQ-PG-01b | FAIL | after the restart pg's blue wall portal (floor partner) recomputes to 0b (should be true): same cause. qa's pair went at the stop (logout dissolve) |
-| SQ-IP-04 | PASS | 4 -> 2 on qa's logout, new pair 4, 2 after the Nether tp, 4 after a new pair |
-| SQ-IP-05 | PASS | distance half (fix_c3a1): 4 at 120 blocks, 2 at 140 after 12 s; `fix_c3a1r` boot r1 heartbeat 2: 2 then 0 five s after the move to 140; boot r2 despawnDistance 0: 2 after 14 s at 300 blocks |
+| SQ-IP-04 (now SQ-PRT-04) | PASS | 4 -> 2 on qa's logout, new pair 4, 2 after the Nether tp, 4 after a new pair |
+| SQ-IP-05 (now SQ-PRT-05) | PASS | distance half (fix_c3a1): 4 at 120 blocks, 2 at 140 after 12 s; `fix_c3a1r` boot r1 heartbeat 2: 2 then 0 five s after the move to 140; boot r2 despawnDistance 0: 2 after 14 s at 300 blocks |
 | SQ-IP-05b | PASS | pg's saved blue portal present 17.5 s after Done, 0 at 91 s with the owner offline (60 s beat) |
 | SQ-FLR-03 | PASS | millstone drained by a hopper: chest meat=20 bone=15 eye=8 misc=8 other=0, millstone empty |
 | SQ-FLR-02b | PASS | rig built by the batch on the fresh world; invalid before the motor swap, valid ok after |

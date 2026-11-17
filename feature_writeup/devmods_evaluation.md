@@ -285,7 +285,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | Dragon meat, leg and tooth drop with no tool; knife kill adds extra meat and tooth | data (loot modifiers) | decided in 3.1: adopt, tooltip and JEI page |
 | 7 `nd_add_*` machete modifiers removed | data | decided in 3.1: keep them (2.1), machete review later |
 | Dragon Tooth Knife smithed from the Egg Shell Knife | data | decided in 3.1: two-input 1.19.2 smithing via `global.NCH`, then `gear #12` |
-| Chorus Succulent configured / placed feature and biome modifier (2.1's file is in an unread folder) | worldgen (data) | decided in 3.1: `wild_crops.json` rule; check whether 2.1 generates any (EN-10) |
+| Chorus Succulent configured / placed feature and biome modifier (2.1's file is in an unread folder) | worldgen (data) | decided in 3.1: `wild_crops.json` rule; check whether 2.1 generates any (EDL-10) |
 | `forge:storage_blocks/chorus_fruit` on the chorus crate | data | decided in 3.1: tag both crates |
 | Respite brewing of the 3 teas removed; the pot recipes were already in 2.1, unchanged | data | 3.1 stands (Respite keeps them); pricier pot recipes are a change to live recipes |
 | Dragon Tooth Knife repair Bone Block -> Dragon Tooth; Dragon Tooth and Egg Shell knives faster, higher enchantability, Dragon Tooth harvest level 2 -> 3 | value change (Java tier) | proposed: carry the repair fix; tier values to `gear #12` |

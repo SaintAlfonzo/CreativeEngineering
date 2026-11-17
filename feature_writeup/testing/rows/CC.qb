@@ -279,7 +279,7 @@ reject (Unknown or incomplete command|Incorrect argument for command|No player w
 @draft no batch holds this row yet
 ## CQ-CC-03
 @group client
-@commands rerun CQ-LT-04 to -06 (wrap at GUI scale 4, `enabled = false`) and CQ-CMV-03 (panorama, creative E, no toasts)
+@commands rerun CQ-LTP-04 to -06 (wrap at GUI scale 4, `enabled = false`) and CQ-CMV-03 (panorama, creative E, no toasts)
 @pass all as written there
 @fails config keys moved, `CreativeMenuDisableMixin`
 @draft no batch holds this row yet

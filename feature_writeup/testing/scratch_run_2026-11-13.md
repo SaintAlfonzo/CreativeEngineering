@@ -132,7 +132,7 @@ Write-back per skill part B5; client rows and hand steps listed in section 8 for
 - 03:34 pwg6/pwg6b judged (`verdicts/pwg6.md`): every row PASS except SQ-PWG-43 servo (batch ran the old 120 V text),
   SQ-PWG-45 PASS with the expected table wrong (3 upstream-same files). Reported to main 03:40.
 - 03:45 c3a1 restarted for c3_a2.qb, then c3_a3.qb (configs from git 85104427, paintings off): SQ-PA-03, -04,
-  SQ-CIF-01 PASS (CIF-01's last grep exits 1 on the expected 0: batch), SQ-PG-01b, SQ-IP-05b BATCH-FAULT (no pair from
+  SQ-CIF-01 PASS (CIF-01's last grep exits 1 on the expected 0: batch), SQ-PG-01b, SQ-IP-05b (now SQ-PRT-05b) BATCH-FAULT (no pair from
   c3_a1). An API outage stopped this session 03:48 to about 08:50; the batch had finished on its own.
 - 08:50 orchestrator: -08 (sha1 08533f728ab4, P6, zap.json added). 09:04 pwg8 boot (pwg8.qb by a subagent: SQ-PWG-46 to
   -54, reruns -32, -37 AC, -43 servo 40 V, -28, -30, -31, -36; -45 superseded by -47).

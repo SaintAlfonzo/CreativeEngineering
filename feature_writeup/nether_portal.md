@@ -180,4 +180,4 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
 - 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next patcherMod build).
 - 2026-11-04: Dark Fire, Flint and Terrasteel and `PortalFailureHandler` moved to Creative Magic ([creative_magic.md](creative_magic.md)); ids unchanged. Same behaviour.
 - 2026-11-07: Immersive Portals interplay fixed (section 3): ordinary fire fails again with IP loaded, Dark Fire builds the IP
-  portal. Built and installed 16:44; scratch SQ-IP-01, -02 queued.
+  portal. Built and installed 16:44; scratch SQ-PRT-01, -02 queued.

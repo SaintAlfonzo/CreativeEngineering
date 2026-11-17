@@ -661,7 +661,7 @@ look the 15 egg fills come first (all "No blocks were filled" = no golden egg); 
 @@text
 @@text | ID | Group | Commands | Pass | If it fails |
 @@text | --- | --- | --- | --- | --- |
-## SQ-CN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
+## SQ-CORN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
 @group A
 @commands `setblock` farmland + `corn_delight:corn_crop[age=7,upper=false]` / `[age=7,upper=true]`, and an age 3 crop beside it; `pbot spawn cn4 <2 blocks away> minecraft:overworld survival`; `pbot hold cn4 farmersdelight:iron_knife`; 40 times: re-set the age 7 crop, `execute as cn4 run loot spawn <pos> mine <crop pos> mainhand`; `zcount`; then 20 rolls with `pbot hold cn4 minecraft:air`, and 20 knife rolls on the age 3 crop
 @pass about 10 `creativeengineering:corncob` from 40 knife rolls (accept 4 to 18); 0 with an empty hand; 0 from age 3
@@ -787,7 +787,7 @@ look the ten 1.3.4 icons, no purple squares; a Display Delight plate of Vegetabl
 @fails `tools/port_resources.py` missed a model, texture or lang key; stale CD jar
 @jars creativedelight
 @draft client row, low priority: driver steps (give, use, screen, tooltip_text, shot) not written in the 2026-11-16 pass
-## CQ-CN-01
+## CQ-CORN-01
 @group client
 @commands sneak right-click a Corn Popsicle on a block top, then take it with an empty hand; right-click a Cob Pipe with no helmet, again with the Face slot full, again with a helmet on; F5
 @pass LOOK: "Placed Corn Popsicle" on the tray and taken back; pipe goes Face, then head, then a Curios Head slot; 3D on the head from each slot, flat in the GUI; Corncob / Popsicle / Pipe icons in JEI

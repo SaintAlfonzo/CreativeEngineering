@@ -294,7 +294,7 @@ therefore evaluated at exactly those moments. There is **no periodic loss check 
 
 | Event | What happens |
 |---|---|
-| Food eaten | every rung re-evaluated at once: gains and losses both apply immediately (flicker accepted for now, to be judged in play: Q-A, RP-23) |
+| Food eaten | every rung re-evaluated at once: gains and losses both apply immediately (flicker accepted for now, to be judged in play: Q-A, RPI-23) |
 | Paid action confirmed | everything listed on the confirm panel applies at once (5.4) |
 | Death | Apple Pie's `resetOnDeath` set to false; Raspberry Pie ages the whole window out (6.1) **and resets the foods-eaten counter** (the gate of `minFoodsToActivate`; decided 2026-11-12), after Apple Pie's `onClone` copy (event priority, or on respawn). On respawn every rung except one-time unlocks is off, every slot greyed with its choice kept, max diversity unchanged, and **one** message (10) |
 | Login | rungs re-evaluated and re-applied from current state; transient modifiers mean logout leaves nothing behind |
@@ -536,7 +536,7 @@ hand-built widgets grow too large (check its licence first). LDLib is not worth 
 | new | All drinks (juice, tea, wine, alcohol, potions) have 0 diversity and no effect on food diversity (7). |
 | Q11 | The foods-eaten counter resets on death (8). |
 | Q12 | 9.4 case B loss of up to 40 s is acceptable. |
-| Q-A | Accept the flicker for now; **needs in-game testing** to see whether it is a problem (test RP-23). Fallback if it is: the margin option (a rung lost only when diversity is about 0.5 below its threshold). |
+| Q-A | Accept the flicker for now; **needs in-game testing** to see whether it is a problem (test RPI-23). Fallback if it is: the margin option (a rung lost only when diversity is about 0.5 below its threshold). |
 | Q-B | Option b: only active choices shift on a drop; greyed slots keep theirs (5.1, 5.2). |
 | Q-C | Allow the change and store the choice greyed (5.3). |
 | Q-D | An effect already slotted is not offered for another slot (5.1). |
@@ -585,7 +585,7 @@ effect object (the "last duration" it saw), and removes its speed modifier when 
 expected. With several players the fields overwrite each other (flicker or a stuck bonus), and Raspberry Pie's periodic
 refresh makes the duration jump, so the modifier would be dropped or never dropped even for one player.
 Fix: a mixin on the effect's tick/removal code that keeps the "last duration" per entity (a map keyed by entity, or a
-tag on the effect instance) and treats a refresh as a normal step, so state is no longer shared. Tested by RP-33. It
+tag on the effect instance) and treats a refresh as a normal step, so state is no longer shared. Tested by RPI-33. It
 is in the default pool once the mixin is in.
 
 ## 13. Implementation hurdles (largest first)
@@ -605,39 +605,39 @@ Not decisions; effort notes for planning.
 
 ## 14. Tests
 
-Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RP-07 PASS (diet reset clears the Apple Pie food list), SQ-RP-08 PASS (boot WARN about Apple Pie's own benefits; max health 20, only Carrot's modifier).
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RPI-07 PASS (diet reset clears the Apple Pie food list), SQ-RPI-08 PASS (boot WARN about Apple Pie's own benefits; max health 20, only Carrot's modifier).
 
 Live rows are in [scratch_queue.md](testing/scratch_queue.md) section "SQ-RP" (fresh world). Map:
 
 | Test | Queue row | | Test | Queue row |
 |---|---|---|---|---|
-| RP-01 boot, no Apple Pie benefits | SQ-RP-01, -02 | | RP-21 stale preview | CQ-RP-19 |
-| RP-02, RP-03 gain and loss lines | CQ-RP-03, -23 | | RP-22 Apple Pie leftovers stripped | CQ-RP-20 |
-| RP-04 fill lands lowest | CQ-RP-04 | | RP-23 flicker (Q-A, owner judges) | CQ-RP-21 |
-| RP-05 free level change | CQ-RP-05 | | RP-24 drinks leave diversity alone | CQ-RP-15 |
-| RP-06 change ages out 8, preview matches | CQ-RP-06 | | RP-25 books on first join | CQ-RP-01 |
-| RP-07 drop shifts down | CQ-RP-07 | | RP-26 flat never on HUD | CQ-RP-12 |
-| RP-08 milk, totem, /effect clear | CQ-RP-08 | | RP-27 waits for another overlay line | CQ-RP-22 |
-| RP-09 aged food counts in full again | CQ-RP-09 | | RP-28 flat hides from picker | CQ-RP-23 |
-| RP-10, RP-31 death | CQ-RP-10 | | RP-29 respec greys its own slot | CQ-RP-24 |
-| RP-11 widget | CQ-RP-11 | | RP-30 panel lists losses | CQ-RP-06 |
-| RP-12 effect display | CQ-RP-04, -12 | | RP-32 paid-action red lines | CQ-RP-07 |
-| RP-13 potion of the same effect | CQ-RP-13 | | RP-33 Fleet-Footed two players | CQ-RP-26 |
-| RP-14 message queue | CQ-RP-03 | | RP-34, RP-38 covered slot line | CQ-RP-23 |
-| RP-15 Diet Log pages | CQ-RP-14 | | RP-35, RP-20 missing-mod entry | SQ-RP-03 |
-| RP-16 Liquid Diet Log | CQ-RP-15 | | RP-36 book recipes | CQ-RP-02, SQ-RP-06 |
-| RP-17 dedicated server | CQ-RP-16 | | RP-37 pause | SQ-RP-05, CQ-RP-25 |
-| RP-18 greyed slots read only | CQ-RP-17 | | RP-39 sustained line | CQ-RP-23 |
-| RP-19 Regeneration rhythm | CQ-RP-18 | | V13 broken ladder file | SQ-RP-04 |
+| RPI-01 boot, no Apple Pie benefits | SQ-RPI-01, -02 | | RPI-21 stale preview | CQ-RPI-19 |
+| RPI-02, RPI-03 gain and loss lines | CQ-RPI-03, -23 | | RPI-22 Apple Pie leftovers stripped | CQ-RPI-20 |
+| RPI-04 fill lands lowest | CQ-RPI-04 | | RPI-23 flicker (Q-A, owner judges) | CQ-RPI-21 |
+| RPI-05 free level change | CQ-RPI-05 | | RPI-24 drinks leave diversity alone | CQ-RPI-15 |
+| RPI-06 change ages out 8, preview matches | CQ-RPI-06 | | RPI-25 books on first join | CQ-RPI-01 |
+| RPI-07 drop shifts down | CQ-RPI-07 | | RPI-26 flat never on HUD | CQ-RPI-12 |
+| RPI-08 milk, totem, /effect clear | CQ-RPI-08 | | RPI-27 waits for another overlay line | CQ-RPI-22 |
+| RPI-09 aged food counts in full again | CQ-RPI-09 | | RPI-28 flat hides from picker | CQ-RPI-23 |
+| RPI-10, RPI-31 death | CQ-RPI-10 | | RPI-29 respec greys its own slot | CQ-RPI-24 |
+| RPI-11 widget | CQ-RPI-11 | | RPI-30 panel lists losses | CQ-RPI-06 |
+| RPI-12 effect display | CQ-RPI-04, -12 | | RPI-32 paid-action red lines | CQ-RPI-07 |
+| RPI-13 potion of the same effect | CQ-RPI-13 | | RPI-33 Fleet-Footed two players | CQ-RPI-26 |
+| RPI-14 message queue | CQ-RPI-03 | | RPI-34, RPI-38 covered slot line | CQ-RPI-23 |
+| RPI-15 Diet Log pages | CQ-RPI-14 | | RPI-35, RPI-20 missing-mod entry | SQ-RPI-03 |
+| RPI-16 Liquid Diet Log | CQ-RPI-15 | | RPI-36 book recipes | CQ-RPI-02, SQ-RPI-06 |
+| RPI-17 dedicated server | CQ-RPI-16 | | RPI-37 pause | SQ-RPI-05, CQ-RPI-25 |
+| RPI-18 greyed slots read only | CQ-RPI-17 | | RPI-39 sustained line | CQ-RPI-23 |
+| RPI-19 Regeneration rhythm | CQ-RPI-18 | | V13 broken ladder file | SQ-RPI-04 |
 
-Extra rows: CQ-RP-27 Lava Walker burn (Vinery port), CQ-RP-28 Shrinking in a 1-block gap (9.2). 12.4 rows: SQ-RP-07
-(reset), SQ-RP-08 (stale Apple Pie benefits inert), CQ-RP-29 to -40 (tooltip, Food Dictionary, unique gate, pages,
+Extra rows: CQ-RPI-27 Lava Walker burn (Vinery port), CQ-RPI-28 Shrinking in a 1-block gap (9.2). 12.4 rows: SQ-RPI-07
+(reset), SQ-RPI-08 (stale Apple Pie benefits inert), CQ-RPI-29 to -40 (tooltip, Food Dictionary, unique gate, pages,
 icons, window, double page, health rule, backfill).
 
-Results: r1112 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8): SQ-RP-01 to -06 PASS. The 20:47
+Results: r1112 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8): SQ-RPI-01 to -06 PASS. The 20:47
 jar did not load (`solapplepie` range `[2.2.0]` against Apple Pie's jar version `1.19.2-2.2.0`); fixed to
-`[1.19.2-2.2.0]` in `mods.toml`, jar of 21:27 installed. SQ-RP-06 needs no Creative Delight rebuild: `diet_log.js`
-loads from the pack's `kubejs/data` folder. Client rows CQ-RP-01 to -28 not run.
+`[1.19.2-2.2.0]` in `mods.toml`, jar of 21:27 installed. SQ-RPI-06 needs no Creative Delight rebuild: `diet_log.js`
+loads from the pack's `kubejs/data` folder. Client rows CQ-RPI-01 to -28 not run.
 
 ## 15. Build notes (2026-11-12)
 
@@ -687,7 +687,7 @@ Choices made while building (owner may revisit):
 ### 12.4 Owner notes (scratchpad 2026-11-13; built 2026-11-13 except the art)
 
 TODO `food/types-and-tuning #29` to `#38`. Built 2026-11-13 (owner "go", defaults below); jars installed: Raspberry
-Pie 17:57, Creative Delight 17:58, Carrot Edition 1.14.0. Tests: SQ-RP-07, -08, CQ-RP-29 to -40 (section 14).
+Pie 17:57, Creative Delight 17:58, Carrot Edition 1.14.0. Tests: SQ-RPI-07, -08, CQ-RPI-29 to -40 (section 14).
 
 Done already: the book names (Diet Log, Food Dictionary; `food_dictionary.md`).
 

@@ -4817,10 +4817,10 @@ look compost check exits 0 (shell step PASS); the mirror's stale report is expec
 @@text
 @@text Feature: [../corn_delight.md](../corn_delight.md) 5 (CN-), TODO `largecontent/mod-additions #24`. Needs the patcherMod 1.1.03
 @@text and Creative Delight jars from this session in the scratch `mods/`. Client halves (models, Curios render, right click, JEI):
-@@text CN-05, CN-06 in game.
+@@text CORN-05, CORN-06 in game.
 @@text
 @@table
-## SQ-CN-00
+## SQ-CORN-00
 @group A
 @commands boot, grep `latest.log`
 @pass `Done (`; no `Error occurred while handling event` from `corn_delight/*.js`; no `[block_dict] Missing` line for `corn_crop`; `[corn-delight] corn is villager food` once; no mixin error for `MobCobPipeSlotMixin`
@@ -4832,7 +4832,7 @@ bootreject Error occurred while handling event.*corn_delight/
 bootreject \[block_dict\] Missing.*corn_crop
 bootreject (?i)MobCobPipeSlotMixin.*(error|fail|exception)
 bootreject (?i)corn_delight/[a-z_]+\.js.*(error|exception)
-## SQ-CN-01 | corncob, corn popsicle, cob pipe exist; pipe stacks to 1
+## SQ-CORN-01 | corncob, corn popsicle, cob pipe exist; pipe stacks to 1
 @group A
 @commands `/kubejs hand` with each, or `/give`
 @pass `creativeengineering:corncob`, `corn_popsicle`, `cob_pipe` exist; the pipe stacks to 1
@@ -4848,7 +4848,7 @@ expect verb=item item=creativedelight:corn_popsicle class=
 expect verb=item item=creativedelight:cob_pipe class=\S+ .*max_stack=1
 reject verb=item done=0
 
-## SQ-CN-02 | corn recipes and the 0.1 corncob byproducts
+## SQ-CORN-02 | corn recipes and the 0.1 corncob byproducts
 @group A
 @commands recipe dump grep `creativedelight:`
 @pass `cutting/corncob_kernels` (2 kernels), `createcrushing`/`createmilling`/IE crusher `corncob_kernels` (4 kernels + 0.5 cornmeal), `mortar/corncob_kernels` (3 kernels), `crafting_shaped/corn_popsicle` (ice cubes tag), `crafting_shapeless/cob_pipe`, `crafting_shapeless/classic_corn_dog_from_corn_dog`; `createcrushing` and `createmilling` `corn_cornmeal` / `wild_corn_cornmeal` list a 0.1 corncob; IE crusher `corn_cornmeal` lists a 0.1 corncob; mortar `corn_cornmeal` gives 3 cornmeal only
@@ -4869,7 +4869,7 @@ expect verb=rdetail id=\S*createmilling/(wild_)?corn_cornmeal
 expect verb=rdetail id=\S*create(crushing|milling)/(wild_)?corn_cornmeal part=results value=\S*corncob\*1@0\.1
 look cutting gives 6 kernels; popsicle uses the ice cubes tag; the Create crushing / milling part=results lines carry the 0.1 corncob (checked above); the IE crusher's second output is not a rolled result rdetail reads (JEI or the recipe JSON); the mortar corn_cornmeal gives 3 cornmeal only
 
-## SQ-CN-03 | corncob compost chance 0.3
+## SQ-CORN-03 | corncob compost chance 0.3
 @group A
 @commands `ComposterBlock.COMPOSTABLES` probe
 @pass corncob 0.3
@@ -4880,7 +4880,7 @@ sleep 5
 shell python3 -I -c "import json;d=json.load(open('kubejs/exported/compost/compost.json'));print('corncob', d['now'].get('creativeengineering:corncob'))"
 shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/compost.json'));sys.exit(0 if (d['now'].get('creativeengineering:corncob') or {}).get('chance')==0.3 else 1)"
 
-## SQ-CN-04 | knife on mature corn: about 10 cobs in 40; hand and age 3 none (loot run as a bot: LootJS matchMainHand)
+## SQ-CORN-04 | knife on mature corn: about 10 cobs in 40; hand and age 3 none (loot run as a bot: LootJS matchMainHand)
 @group A
 @commands `/loot spawn ~ ~ ~ mine <pos of age 7 corn_crop> <knife>` x40, then with an empty hand x20, then on age 3 x20
 @pass knife: about 10 cobs in 40; hand and age 3: none
@@ -4918,7 +4918,7 @@ expect CN04 no cob by hand or on age 3
 > pbot remove cn4
 look first zcount: about 10 corncobs from the 40 knife rolls (merged stacks: add the counts); second zcount (hand on age 7, knife on age 3) has corn / seeds only
 
-## SQ-CN-05 | cob pipe in the curios tags
+## SQ-CORN-05 | cob pipe in the curios tags
 @group A
 @commands tag dump
 @pass `#curios:head`, `#curios:mouth`, `#curios:face` hold `creativeengineering:cob_pipe`
@@ -4931,7 +4931,7 @@ expect verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:head
 reject verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:mouth
 expect verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:face
 
-## SQ-CN-06 | corn in villager wanted / food items
+## SQ-CORN-06 | corn in villager wanted / food items
 @group A
 @commands probe `Villager.WANTED_ITEMS`, `Villager.FOOD_POINTS`
 @pass both hold `corn_delight:corn` (points 1), Veggies items still there
@@ -4940,7 +4940,7 @@ expect verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:face
 bootexpect \[corn-delight\] corn is villager food \(\d+ wanted items, \d+ food items\)
 look the counts in the log line include corn (CornDelightCompat now lives in Creative Delight, compat/CornDelightCompat); Veggies items: compare the counts with the last run's line
 
-## SQ-CN-07 | corn trades: farmer L1 and L2, wandering trader
+## SQ-CORN-07 | corn trades: farmer L1 and L2, wandering trader
 @group A
 @commands summon a farmer, check its offers at levels 1 and 2; MoreJS wanderer dump
 @pass level 1: 24 corn -> 1 emerald; level 2: 8 emeralds -> 8 cornbread, 8 tortillas; wanderer COMMON has corn, RARE has the popcorn box

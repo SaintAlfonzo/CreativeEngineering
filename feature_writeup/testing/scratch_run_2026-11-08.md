@@ -212,11 +212,11 @@ CEPortTesting config set for the next launch: `[mod_names] overrides = ["create=
 
 ## 6. Owner client, CEPortTesting, third launch (18:48 on)
 
-CQ-CC-05 PASS (framed panes and bars make no mirror). CQ-CC-04 first half PASS (Create items read "Create Test" in all three screens). Owner saw the tips roll faster at the small GUI scale: not the scale, CEPortTesting had `cycleSeconds = 2` set for CQ-LT-04. Owner: default 10 s, per client; moved to `creativecommon-client.toml` (CQ-LTC-01). CQ-LT-04's wrap result not reported. Test tips for CQ-CC-02 added to CEPortTesting only (`creative_tips/.../tips.json` line and `kubejs/assets/zz_tip_test/`); remove after the check.
+CQ-CC-05 PASS (framed panes and bars make no mirror). CQ-CC-04 first half PASS (Create items read "Create Test" in all three screens). Owner saw the tips roll faster at the small GUI scale: not the scale, CEPortTesting had `cycleSeconds = 2` set for CQ-LT-04 (now CQ-LTP-04). Owner: default 10 s, per client; moved to `creativecommon-client.toml` (CQ-LTC-01). CQ-LT-04's wrap result not reported. Test tips for CQ-CC-02 added to CEPortTesting only (`creative_tips/.../tips.json` line and `kubejs/assets/zz_tip_test/`); remove after the check.
 
 ## 7. Last launch (19:09 to 19:2x)
 
-CQ-LTC-01, CQ-CC-04 (second half), CQ-SPFX-02 PASS (log: no Heartstone line, no mixin failure). CQ-LT-06 PASS (owner: no tip bar with `enabled = false` in `creativecommon-client.toml`). Panorama: the six jar images are a terrain-free sky capture (contact sheet: flat blue, hazy ground, sun), hence blank; removed from Common's jar, vanilla by default.
+CQ-LTC-01, CQ-CC-04 (second half), CQ-SPFX-02 PASS (log: no Heartstone line, no mixin failure). CQ-LT-06 (now CQ-LTP-06) PASS (owner: no tip bar with `enabled = false` in `creativecommon-client.toml`). Panorama: the six jar images are a terrain-free sky capture (contact sheet: flat blue, hazy ground, sun), hence blank; removed from Common's jar, vanilla by default.
 
 ## 8. r1108hh: Hearth and Harvest full suite (SQ-HH-201 to -1612)
 

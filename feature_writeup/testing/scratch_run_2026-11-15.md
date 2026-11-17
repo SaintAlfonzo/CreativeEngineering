@@ -31,7 +31,7 @@ Taken, in queue order (everything added or rewritten since r1114 ended, 11-14 12
 6. SQ-SY wave 2 (SQ-SY-14 to -22).
 7. SQ-DEP optional-mod guards (SQ-DEP-09a, -09b drop-one boots; reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01, -03b).
 8. SQ-QN Quark Mending and elytra nerfs off.
-9. Older server rows not yet run (audit list): SQ-RP-07, -08, SQ-VH-02 to -11 (rest), SQ-FLR-02, SQ-WO-15 to -25,
+9. Older server rows not yet run (audit list): SQ-RP-07 (now SQ-RPI-07), -08, SQ-VH-02 to -11 (rest), SQ-FLR-02, SQ-WO-15 to -25,
    -31, -33, SQ-OB-02, -07, -08, -10, -11, SQ-HCS-10, SQ-BREED-01, SQ-FDI-04, SQ-CDNS-05, -10, -12, SQ-NSM-04, -05,
    SQ-RDB-03, -05.
 10. Client: CQ-FDR (jar handle leak gate; the 420+ jar client crash). If it passes, the client rows of phases 1 to 8.
@@ -431,7 +431,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   Breeding dump copied to `perf/runs/r1115_p9_a1/breeding_dump.json` (104 Animal types x 20477 items, 190 flower blocks).
 - 06:46 A1 stopped. World `serverconfig/solapplepie-server.toml` thresholds [0.0], benefitsUnparsed max_health 4,
   minFoodsToActivate 0; Wise Oak gifts chance 0, threshold 0. A1b Done 4.2 s 06:47:42 (pid 4031314): `p9_a1b.qb`
-  (SQ-RP-08; count regex missed "for entity rp8": BATCH-FAULT, fixed), `p9_wo_a3.qb` (SQ-WO-31 PASS). Stopped 06:48;
+  (SQ-RP-08 (now SQ-RPI-08); count regex missed "for entity rp8": BATCH-FAULT, fixed), `p9_wo_a3.qb` (SQ-WO-31 PASS). Stopped 06:48;
   gift lists all [] with chance 100, threshold 0; A1c Done 3.8 s 06:50:11 (pid 4036762): `p9_wo_a5.qb` SQ-WO-33 PASS.
   Stopped 06:50:49.
 - 06:51 O1 `nsm_fixture.sh $S/p9o1` (1.2.02 jars, commit 40ed32be trees) with the r1111 fixture world copied in as

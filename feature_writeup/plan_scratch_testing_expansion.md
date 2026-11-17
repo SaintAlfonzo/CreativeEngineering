@@ -88,7 +88,7 @@ Counts from the queue (2026-11-15): 2607 `SQ-` rows, 511 `CQ-` rows, 160 rows wi
 | H9 | **Old-save / migration** | fixtures hand-written per feature, incomplete | SQ-NSM-04 not run (no painting or banner step) |
 | H10 | **Live config reload** | config watcher parked on scratch servers | SQ-MELT-P1b clause not judgeable |
 | H11 | **Client crashes** | qrun client mode does not watch for a dead JVM or `hs_err` (2026-11-15: crash watch TX-06 built, live check SQ-TXQ-02 queued) | SQ-PG-01c SIGSEGV found by watching |
-| H12 | **Design-feel questions** ("is the flicker acceptable") | not automatable; owner judgment | CQ-RP-21, SQ-QN-02 |
+| H12 | **Design-feel questions** ("is the flicker acceptable") | not automatable; owner judgment | CQ-RPI-21, SQ-QN-02 |
 
 Cross-cutting costs (not a test kind, but where the time goes):
 

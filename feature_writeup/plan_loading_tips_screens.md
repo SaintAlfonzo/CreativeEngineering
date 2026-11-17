@@ -16,7 +16,7 @@ Owner request 2026-11-14: show the tip bar on every loading screen between world
 data, connecting, joining, receiving the level), give every tip in the Loading Tips pack an id, and make Creative Tips an
 override pack in the same format that replaces individual tips by id. Lives in Creative Common (`loadingtips/`).
 Mechanism: [loading_tips.md](loading_tips.md); TODO row `ui/loadingtips #5`. Built 2026-11-14 (steps 2 to 6; step 1
-from sources, its in-game half is LT-07 to LT-09), installed in `mods/creativecommon-1.2.0.jar` 23:22, not seen in game.
+from sources, its in-game half is LTP-07 to LTP-09), installed in `mods/creativecommon-1.2.0.jar` 23:22, not seen in game.
 
 ## 1. Decisions (owner, 2026-11-14)
 
@@ -107,25 +107,25 @@ the removals drop out of Creative Tips.
 
 | # | Step | Status |
 |---|---|---|
-| 1 | Screen inventory (section 3.1), list and log in game | Sources DONE 2026-11-14 (section 8); the bar logs each screen it draws on, in-game check LT-07 to LT-09 |
+| 1 | Screen inventory (section 3.1), list and log in game | Sources DONE 2026-11-14 (section 8); the bar logs each screen it draws on, in-game check LTP-07 to LTP-09 |
 | 2 | Loader: ids, file-level `override`, `remove`, `priority`, log lines | DONE 2026-11-14 |
 | 3 | Migration script, owner review of the 14 matches, acceptance check, replace the two files | DONE 2026-11-14: all 14 matched (section 8), acceptance PASS (335 = 335); owner review after the fact |
 | 4 | Bar: allowlist, tip carried across screens | DONE 2026-11-14 |
 | 5 | `loading_tips_md.py`, loading_tips.md sections 2, 5, 7 and appendix notes, TODO and README rows | DONE 2026-11-14 |
-| 6 | Build `:creativeCommon:`, install, scratch queue rows, changelog bullet (Loading screen tips) | DONE 2026-11-14: installed 23:22, CQ-LT-07 to CQ-LT-14, two bullets under Interface (the bar's only family so far) |
+| 6 | Build `:creativeCommon:`, install, scratch queue rows, changelog bullet (Loading screen tips) | DONE 2026-11-14: installed 23:22, CQ-LTP-07 to CQ-LTP-14, two bullets under Interface (the bar's only family so far) |
 
 ## 7. Tests (rows go into loading_tips.md section 7 when built)
 
 | ID | Check | Expected |
 |---|---|---|
-| LT-07 | client, start a singleplayer world | a tip shows on "Reading data" and on the chunk screen; the same tip, rolled only by the timer |
-| LT-08 | client, join a server | tip on the connecting and receiving screens, same tip until the timer rolls it |
-| LT-09 | client, change dimension | tip on the transition screen |
-| LT-10 | client | `latest.log`: tips kept equals the effective count, replaced about 300+, removed about 216, no id clash, no unmatched id |
-| LT-11 | client, a test pack without `override` that repeats an id | the first tip stays, a clash line in the log |
-| LT-12 | client, a test pack with `override: true` and one tip | that tip replaces the same-id tip, no per-tip flag needed |
-| LT-13 | client | a plain-string tip from a third-party pack still shows |
-| LT-14 | client, small window, GUI scale 4 | the bar does not cover a screen's buttons |
+| LTP-07 | client, start a singleplayer world | a tip shows on "Reading data" and on the chunk screen; the same tip, rolled only by the timer |
+| LTP-08 | client, join a server | tip on the connecting and receiving screens, same tip until the timer rolls it |
+| LTP-09 | client, change dimension | tip on the transition screen |
+| LTP-10 | client | `latest.log`: tips kept equals the effective count, replaced about 300+, removed about 216, no id clash, no unmatched id |
+| LTP-11 | client, a test pack without `override` that repeats an id | the first tip stays, a clash line in the log |
+| LTP-12 | client, a test pack with `override: true` and one tip | that tip replaces the same-id tip, no per-tip flag needed |
+| LTP-13 | client | a plain-string tip from a third-party pack still shows |
+| LTP-14 | client, small window, GUI scale 4 | the bar does not cover a screen's buttons |
 
 ## 8. Results (2026-11-14)
 
@@ -137,7 +137,7 @@ screen shown less than 5 s ago), because these also show when leaving or deletin
 ("Joining world" in `Minecraft.setLevel`, server resource pack download) and any other dirt screen (`multiplayer.applyingPack`).
 Never: the dirt screen `menu.savingLevel`. `DatapackLoadFailureScreen` is a prompt, not a loading screen. The bar logs
 `Loading tips: bar on <class> (<title key>)` once per screen change, so the in-game half of step 1 is a grep
-(LT-07 to LT-09); a modded screen between them shows up as a gap in that list. The bar moves below the lowest
+(LTP-07 to LTP-09); a modded screen between them shows up as a gap in that list. The bar moves below the lowest
 visible widget when it would cover one and skips the frame when that runs off screen (connect screen at GUI scale 4).
 
 **Migration** (`tools/loading_tips_migrate.py`, dry run without `--write`; refuses to run again on migrated files):

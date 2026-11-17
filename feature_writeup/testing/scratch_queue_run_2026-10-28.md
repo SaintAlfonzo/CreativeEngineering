@@ -1,7 +1,7 @@
 # Scratch queue run 2026-10-28: recent feature block, then bot players and the perf suite
 
 Owner request (2026-10-28 01:10): run the performance stress-test queue. Block 1 is the recent feature checks
-from [scratch_queue.md](scratch_queue.md). Block 2 is the perfBot rows (SQ-PB-01 to -05) and the perf suite. Capture
+from [scratch_queue.md](scratch_queue.md). Block 2 is the perfBot rows (SQ-PB-01 (now SQ-PFS-01) to -05) and the perf suite. Capture
 performance the whole way through. Summaries are saved regularly and never truncated (raw recordings may be capped).
 When a bug blocks a test, debug it. When the only fix would change a feature's behaviour, record it here for review
 and leave the feature as it is. This file is updated after every step, so it survives a machine crash.
@@ -20,16 +20,16 @@ and leave the feature as it is. This file is updated after every step, so it sur
   feature_porting.md FP-10, item_merges.md 2.9, perf_suite.md, perf.md 14, TODO (server #15, #28, crops #23,
   seasoning #6, starter-kit #2).
 - 02:55 Block 1 done. Group B rows: SQ-SALT-04, SQ-GFB-03, SQ-FTW-03, SQ-GFB-04 PASS; SQ-WGP-08 deferred. Session
-  report refreshed (`perf/sessions/q1028/summary.md`, 8 boots). Next: block 2, perf suite `g1` (SQ-PB-05).
+  report refreshed (`perf/sessions/q1028/summary.md`, 8 boots). Next: block 2, perf suite `g1` (SQ-PB-05 (now SQ-PFS-05)).
 - 02:28 Group B `fq_b_on` (eval seed, FTW on): GFB/FTW census baseline at Done + 2 min, SQ-CM-09 PASS. Found and
   fixed a perfBot bug that would have spoiled the suite: a bot spawned away from its login spot never loaded its own
   chunks (fix verified live; jar rebuilt 02:24). Server restarted with the new jar.
 - 02:12 Group A finished (boot 3: animals on, `richFarmlandTries = 0`): SQ-SY-07, SQ-HT-03, SQ-SALT-03 (give half),
   SQ-CM-08 PASS; SQ-HT-02 Regeneration PASS, repair half impossible (finding 4). Session report run between boots 2
   and 3 (`perf/sessions/q1028/summary.md`). Next: group B worlds.
-- 02:01 SQ-PB-02 (wheat half) and SQ-PB-03 PASS. SQ-HT-02 not possible on this boot: the scratch setup has
+- 02:01 SQ-PB-02 (now SQ-PFS-02) (wheat half) and SQ-PB-03 (now SQ-PFS-03) PASS. SQ-HT-02 not possible on this boot: the scratch setup has
   `spawn-animals=false`, which makes vanilla discard every animal each tick (a summoned horse is gone within 2 s).
-  Next: SQ-PB-04 (kill -9), then a reboot with `spawn-animals=true` and `richFarmlandTries = 0` for SQ-SY-07, SQ-HT-02/-03.
+  Next: SQ-PB-04 (now SQ-PFS-04) (kill -9), then a reboot with `spawn-animals=true` and `richFarmlandTries = 0` for SQ-SY-07, SQ-HT-02/-03.
 - 01:55 SQ-STC-01/-02 PASS, SQ-PB-01 PASS. The bot's join exposed `starter_kit.js` failing on every login (no kit for
   anyone since the 1.1.01 port): fixed (three Rhino/KubeJS API calls, logic unchanged), FP-10 PASS on bots. Changelog
   bullet added (Gear & Combat), lint 0 errors.
@@ -131,7 +131,7 @@ as block 1, perfBot 02:24. No CONTENDED rows. Baseline for later runs (perf_suit
 | G01-N | boot, new normal world | | | | | | | 128.4 s to Done, `Done (76.7s)` |
 | G02 | idle, no player | 5.55 | 6.17 | 8.1 | 0 | 20.0 | 288 | matches perf.md 12.1 (5-6 ms) |
 | G03a | one bot at spawn, day | 18.54 | 24.9 | 131 | 2 | 20.0 | 401 | |
-| G03b | one bot at spawn, night | 16.29 | 21.08 | 126 | 4 | 20.0 | 357 | census: 75 hostiles around the bot (PB-02 night half PASS) |
+| G03b | one bot at spawn, night | 16.29 | 21.08 | 126 | 4 | 20.0 | 357 | census: 75 hostiles around the bot (PB-02 (now PFS-02) night half PASS) |
 | G04 | four bots 600 apart | 50.10 | 61.16 | 1837 | 2428 | 19.9 | 1098 | 7938 chunks loaded; at the tick budget |
 | G06 | save-all flush, four bots | 49.91 | 62.28 | 123 | 456 | 18.4 | 1046 | flush 4.95 s |
 | G05a | travel 30 b/s, pregenerated | 29.02 | 51.77 | 220 | 112 | 17.6 | 362 | |

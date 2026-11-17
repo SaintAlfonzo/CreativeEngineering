@@ -79,7 +79,7 @@ No decision is open on these; each needs a jar copied to `mods/` or a test run (
 | D3 | `members #11` | Coffee merge: CD and CB jars built, not installed; SQ-RDX-01 and following |
 | D4 | `members #23`, `#24`, `#28`, `#29` | Open client / server checks SQ-CM-32, -33, -34, -35, CQ-UI-02 |
 | D5 | `members #14`-`#17`, `#19`-`#22`, `#25`, `#26` | Rustic: SQ-RD, SQ-RDX-01 to -14 |
-| D6 | `members #7`, `#9`, `#6` | End's SQ-EN-05, -08 and the earth-fill half of -07; Oceanic donor checks SQ-DNR |
+| D6 | `members #7`, `#9`, `#6` | End's SQ-EDL-05, -08 and the earth-fill half of -07; Oceanic donor checks SQ-DNR |
 | D7 | `members #2`-`#5`, `#12`, `#13` | Moved rows: SQ-CDM queued runs |
 | D8 | `qol #1`-`#6`, `framework #5`, `#8` | SQ-CDQ-03 (boot without Farmer's Respite) and -04, per-key switch checks (SQ-CDQ); headless check that CD boots with each optional mod absent |
 | D9 | `framework #1` | SQ-CDT-07, SQ-CDJ-03, -04, SQ-FN-02, -03; SQ-CDJ-02 rewritten, not rerun |

@@ -124,7 +124,7 @@ with `[worldgen.debug] testOverrides = true` (share 1 for the meta), as the META
 |---|---|---|
 | L1 | SQ-WGP-07 pregen recipe (2601 chunks) on the current jar, JFR on: pregen time against 3:50, `[earth-fill]` CANCELLED count against SQ-WG30-E01 (15 inland) | SQ-EF-07 |
 | L2 | Perf suite on the current jars: `python3 tools/perf/suite/perf_suite.py selftest` style check first (`tools/perf/suite/selftest/selftest.py`, 12/12), then `setsid nohup python3 tools/perf/suite/perf_suite.py run general g2 > /dev/null 2>&1 &` (about 2 h 15), `perf_suite.py report g2`, compare with `g1`. The G04 four-bot scenario covers SQ-PF16-04 and SQ-MCL-06 (run G04 again with `mobCapForceLevel` 1 and 2 for MCL-06's per-level numbers), G03a / G04 / G12 cover SQ-IWF-05 | SQ-PF16-04, SQ-MCL-06, SQ-IWF-05 |
-| L3 | Resource pack bench (client, about 1 h): `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4), then CQ-RP-01 to -03 as queued | CQ-RP-01 to -03 |
+| L3 | Resource pack bench (client, about 1 h): `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4), then CQ-RP-01 (now CQ-RPB-01) to -03 as queued | CQ-RP-01 to -03 |
 | L4 | DH flight in the Nether and the End with DH generating (client) | CQ-WG30-A04 |
 
 ## 5. Row map

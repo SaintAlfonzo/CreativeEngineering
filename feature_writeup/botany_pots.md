@@ -74,17 +74,17 @@ jars are covered and JEI shows the new times.
 
 ## 7. In-game test suite
 
-- [ ] **BP-01 Log:** start the game → `logs/latest.log` has `[botany_pots] growthTicks scaled on` with about 173 crops and
+- [ ] **BOT-01 Log:** start the game → `logs/latest.log` has `[botany_pots] growthTicks scaled on` with about 173 crops and
   about 49 flowers; no `scaleRecipeInt missing` error.
-- [ ] **BP-08 Wild crop:** JEI on wild tomatoes in a pot → 9600 ticks (crop speed, not flower speed).
-- [ ] **BP-02 Crop time:** JEI on wheat seeds in a pot → 9600 ticks (8:00) [1200]; a pot of wheat on dirt grows in about 8 minutes.
-- [ ] **BP-03 Flower time:** JEI on a poppy in a pot → 2400 ticks [1200].
-- [ ] **BP-04 Soil stacks:** the same crop on a faster soil (JEI soil page modifier above 1) grows faster than on dirt.
-- [ ] **BP-05 No bone meal:** right-click a growing pot with bone meal → nothing happens, no bone meal used.
-- [ ] **BP-06 Lemon:** plant lemon seeds in a pot → the lower half of the lemon tree at every stage, nothing floating
+- [ ] **BOT-08 Wild crop:** JEI on wild tomatoes in a pot → 9600 ticks (crop speed, not flower speed).
+- [ ] **BOT-02 Crop time:** JEI on wheat seeds in a pot → 9600 ticks (8:00) [1200]; a pot of wheat on dirt grows in about 8 minutes.
+- [ ] **BOT-03 Flower time:** JEI on a poppy in a pot → 2400 ticks [1200].
+- [ ] **BOT-04 Soil stacks:** the same crop on a faster soil (JEI soil page modifier above 1) grows faster than on dirt.
+- [ ] **BOT-05 No bone meal:** right-click a growing pot with bone meal → nothing happens, no bone meal used.
+- [ ] **BOT-06 Lemon:** plant lemon seeds in a pot → the lower half of the lemon tree at every stage, nothing floating
   or cut mid-leaf; time 9600 ticks.
-- [ ] **BP-07 Tooltip:** TT-43.
-- [ ] **BP-09 Better soils:** SQ-SY-21: log `3 soils set (Rich x1.1, Fertile x1.2)`; JEI soil page: Rich Soil and Rich
+- [ ] **BOT-07 Tooltip:** TT-43.
+- [ ] **BOT-09 Better soils:** SQ-SY-21: log `3 soils set (Rich x1.1, Fertile x1.2)`; JEI soil page: Rich Soil and Rich
   Soil Farmland x1.10, Fertile Soil x1.20; a wheat pot on Fertile Soil takes about 8000 ticks. Tooltip TT-44.
 
 ## 8. History

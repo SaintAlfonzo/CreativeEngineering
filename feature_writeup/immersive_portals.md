@@ -151,7 +151,7 @@ out whether they are stable and how they perform. Everything else Immersive Port
 
 Plan of 2026-11-07 for the failure mechanic with IP (found broken: IP's fire hook skipped `PortalSpawnEvent`), view
 distance, tint, fog, and the mirror changes: [plan_portal_changes.md](plan_portal_changes.md), TODO #17..#24.
-BUILT and installed 2026-11-07 16:44 (Magic, Compat, Common), scratch rows SQ-IP-01..05, CQ-IP-01..04 queued:
+BUILT and installed 2026-11-07 16:44 (Magic, Compat, Common), scratch rows SQ-PRT-01..05, CQ-PRT-01..04 queued:
 
 - Nether portal: `indirectLoadingRadiusCap` 2 (was 8; 4 until 17:18), view cut `netherViewDistance` 32, `netherPortalOverlay` on (portals made before keep no tint).
 - Fog through a portal per type, Creative Compat `[immersive_portals.fog]` (`portals/PortalFog`, client mixin on

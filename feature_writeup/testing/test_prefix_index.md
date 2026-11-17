@@ -16,7 +16,7 @@ Plan: [plan_rules_fixes.md](../plan_rules_fixes.md) section 2.
    new ones under it. A plan that drafts tests for a writeup uses the writeup's prefix and the tests move into the
    writeup when it is built.
 4. Never reuse a retired prefix (section 2) for another feature.
-5. `python3 tools/test_prefix_lint.py` (plan section 2, to build) must pass after the edit.
+5. `python3 tools/test_prefix_lint.py` must pass after the edit (DR-W3b).
 
 ## 1. Prefix types
 
@@ -37,8 +37,9 @@ Plan: [plan_rules_fixes.md](../plan_rules_fixes.md) section 2.
 ## 2. Renamed prefixes (collisions found 2026-11-16)
 
 Each pair below defined tests under one prefix in two docs. The older doc (first git commit) keeps the prefix; the
-newer gets a new one. `tools/test_prefix_rename.py` (plan section 2) applies these with a dry run; until it runs, the old ids
-are still in the docs. Queue rows are renamed by section heading, because the same queue prefix covers two features.
+newer gets a new one. `tools/test_prefix_rename.py` (plan section 2) applied these on 2026-11-17 (writeups,
+plans, TODO rows, README, briefs, skills, queue rows; run docs keep the old id with "(now X)" at the first quote).
+The rows files keep their names (`EN.qb` holds `SQ-EDL-` rows). Queue rows are renamed by section heading, because the same queue prefix covers two features.
 
 | Old | Doc (first commit) | New | Kept by | Queue rows renamed |
 |---|---|---|---|---|
@@ -90,7 +91,7 @@ same pass as the renames.
 | `CMP-` | [creative_compat.md](../creative_compat.md) | SQ-CMP (8) |  |  |
 | `CN-` | [cans.md](../cans.md) |  |  |  |
 | `CNS-` | [comfort_nourishment.md](../comfort_nourishment.md) | CQ-CNS (1), SQ-CNS (8) |  |  |
-| `CORN-` | [corn_delight.md](../corn_delight.md) | CQ-CN (1), SQ-CN (9) |  | new 2026-11-16, was CN- (README only; cans.md owns CN-); queue SQ-CN and CQ-CN become SQ-CORN, CQ-CORN |
+| `CORN-` | [corn_delight.md](../corn_delight.md) | CQ-CORN (1), SQ-CORN (9) |  | new 2026-11-16, was CN- (README only; cans.md owns CN-); queue SQ-CN and CQ-CN become SQ-CORN, CQ-CORN |
 | `CP-` | [can_parity.md](../can_parity.md) | SQ-CP (1) |  |  |
 | `CR-` | [crops.md](../crops.md) |  | briefs/farming_crops.md, briefs/farming_wild-crops.md |  |
 | `CRN-` | [archive/carnivore.md](../archive/carnivore.md) |  |  |  |
@@ -103,10 +104,10 @@ same pass as the renames.
 | `DP-` | [deploy.md](../deploy.md) |  | briefs/alcohol_vineryport.md, plan_1.0.3.md |  |
 | `DR-` | [design_rules.md](../design_rules.md) | SQ-DR (1) |  |  |
 | `DY-` | [dyeing.md](../dyeing.md) |  |  |  |
-| `EDL-` | [ends_delight.md](../ends_delight.md) |  |  | new 2026-11-16, was EN- (collided with engineering.md) |
+| `EDL-` | [ends_delight.md](../ends_delight.md) | SQ-EDL (10) |  | new 2026-11-16, was EN- (collided with engineering.md) |
 | `EF-` | [effects.md](../effects.md) | SQ-EF (12) |  |  |
-| `EN-` | [engineering.md](../engineering.md) | SQ-EN (12) |  | Ends Delight rows SQ-EN-01 to -08 (and the 2026-10-26 run results) become SQ-EDL |
-| `ENC-` | [briefs/potions_enchanting.md](../briefs/potions_enchanting.md) |  |  | new 2026-11-16, was EN-; queue SQ-EN-01, -02 in the 2026-11-01 bug batch become SQ-ENC |
+| `EN-` | [engineering.md](../engineering.md) |  |  | Ends Delight rows SQ-EN-01 to -08 (and the 2026-10-26 run results) become SQ-EDL |
+| `ENC-` | [briefs/potions_enchanting.md](../briefs/potions_enchanting.md) | SQ-ENC (2) |  | new 2026-11-16, was EN-; queue SQ-EN-01, -02 in the 2026-11-01 bug batch become SQ-ENC |
 | `ENM-` | [ends_delight.md](../ends_delight.md) | SQ-ENM (7) |  | not in the README index yet |
 | `EP-` | [enchant_power.md](../enchant_power.md) |  |  |  |
 | `EX-` | [exposure.md](../exposure.md) |  |  |  |
@@ -126,7 +127,7 @@ same pass as the renames.
 | `HNH-` | [hearth_and_harvest.md](../hearth_and_harvest.md) |  | plan_hearth_crow_salt.md |  |
 | `HTD-` | [hostile_delight.md](../hostile_delight.md) |  |  |  |
 | `IM-` | [plan_1.0.3.md](../plan_1.0.3.md) |  |  | not in the README index yet |
-| `IP-` | [item_physics.md](../item_physics.md) | SQ-IP (7) |  | queue SQ-IP-15, -16 stay (item physics) |
+| `IP-` | [item_physics.md](../item_physics.md) | SQ-IP (2) |  | queue SQ-IP-15, -16 stay (item physics) |
 | `JC-` | [jei_coverage.md](../jei_coverage.md) |  |  |  |
 | `JO-` | [jei_ordering.md](../jei_ordering.md) | CQ-JO (1) |  |  |
 | `JW-` | [jei_world_tabs.md](../jei_world_tabs.md) |  | briefs/alcohol_vineryport.md |  |
@@ -135,7 +136,7 @@ same pass as the renames.
 | `LGM-` | [large_meals.md](../large_meals.md) | CQ-LGM (1), SQ-LGM (14) | plan_meals_rolls_bbq.md |  |
 | `LO-` | [locate.md](../locate.md) |  | testing/structures/, briefs/worldgen_locate.md |  |
 | `LT-` | [loot.md](../loot.md) |  | briefs/loot_lootjs-layer.md, briefs/loot_lootr.md, briefs/loot_tables.md |  |
-| `LTP-` | [loading_tips.md](../loading_tips.md) | CQ-LT (15) |  | new 2026-11-16, was LT- (collided with loot.md); also loading_tips_audit.md and plan_loading_tips_screens.md |
+| `LTP-` | [loading_tips.md](../loading_tips.md) | CQ-LTP (15) | loading_tips_audit.md, plan_loading_tips_screens.md | new 2026-11-16, was LT- (collided with loot.md); also loading_tips_audit.md and plan_loading_tips_screens.md |
 | `LW-` | [log_warnings.md](../log_warnings.md) |  |  |  |
 | `MB-` | [mooblooms.md](../mooblooms.md) | CQ-MB (1), SQ-MB (8) | briefs/mobs_mooblooms.md |  |
 | `MC-` | [thirdparty_fixes.md](../thirdparty_fixes.md) |  |  | not in the README index yet |
@@ -159,13 +160,13 @@ same pass as the renames.
 | `PA-` | [immersive_paintings.md](../immersive_paintings.md) | CQ-PA (2), SQ-PA (4) |  |  |
 | `PB-` | [potion_buckets.md](../potion_buckets.md) |  | briefs/potions_potion-buckets.md |  |
 | `PF-` | [perf.md](../perf.md) | SQ-PF (13) | plan_1.0.3.md |  |
-| `PFS-` | [perf_suite.md](../perf_suite.md) | SQ-PB (7) |  | new 2026-11-16, was PB- (collided with potion_buckets.md); queue SQ-PB becomes SQ-PFS |
+| `PFS-` | [perf_suite.md](../perf_suite.md) | SQ-PFS (7) |  | new 2026-11-16, was PB- (collided with potion_buckets.md); queue SQ-PB becomes SQ-PFS |
 | `PH-` | [pack_hygiene.md](../pack_hygiene.md) |  |  | PH-01 to PH-04 are mirrored as queue rows (allowed: the queue may restate an owner test) |
 | `PL-` | [placeable_food.md](../placeable_food.md) |  |  |  |
 | `PO-` | [potions.md](../potions.md) |  | briefs/potions_potions.md |  |
 | `POT-` | [flower_pots.md](../flower_pots.md) | SQ-POT (8) |  |  |
 | `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (7), CQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup; offline tests PROC-20 to -28 (`tools/test_queue_rows.sh`) |
-| `PRT-` | [immersive_portals.md](../immersive_portals.md) | CQ-IP (4) |  | new 2026-11-16, was IP- (README only; item_physics.md owns IP-); queue SQ-IP-01 to -05 and CQ-IP in the Immersive Portals section become SQ-PRT, CQ-PRT |
+| `PRT-` | [immersive_portals.md](../immersive_portals.md) | CQ-PRT (4), SQ-PRT (5) |  | new 2026-11-16, was IP- (README only; item_physics.md owns IP-); queue SQ-IP-01 to -05 and CQ-IP in the Immersive Portals section become SQ-PRT, CQ-PRT |
 | `PS-` | [perf.md](../perf.md) | SQ-PS (7) |  | not in the README index yet |
 | `PT-` | [plantable.md](../plantable.md) | CQ-PT (1), SQ-PT (1) |  |  |
 | `PWG-` | [power_grid.md](../power_grid.md) | CQ-PWG (30), SQ-PWG (101) | energy_advanced.md | energy_advanced.md has no tests of its own; its SQ-PWG-01 to -08 perf rows are in the same series |
@@ -177,9 +178,9 @@ same pass as the renames.
 | `RE-` | [recipes_engineering.md](../recipes_engineering.md) | SQ-RE (1) | briefs/recipes_engineering.md |  |
 | `RM-` | [recipes_metal.md](../recipes_metal.md) | SQ-RM (4) | briefs/recipes_metal.md |  |
 | `ROLL-` | [roll_delight.md](../roll_delight.md) | CQ-ROLL (1), SQ-ROLL (12) | plan_meals_rolls_bbq.md |  |
-| `RP-` | [recipe_progression.md](../recipe_progression.md) | CQ-RP (43) | briefs/recipes_progression.md | queue CQ-RP splits: the bench rows (CQ-RP-01 to -03) to CQ-RPB, the Raspberry Pie rows to CQ-RPI |
-| `RPB-` | [perf_rpack.md](../perf_rpack.md) |  |  | new 2026-11-16, was RP- (collided with recipe_progression.md); queue CQ-RP-01 to -03 in the bench section become CQ-RPB |
-| `RPI-` | [raspberry_pie.md](../raspberry_pie.md) | SQ-RP (8) |  | new 2026-11-16, was RP- (README only); queue SQ-RP and the Raspberry Pie CQ-RP rows become SQ-RPI, CQ-RPI |
+| `RP-` | [recipe_progression.md](../recipe_progression.md) |  | briefs/recipes_progression.md | queue CQ-RP splits: the bench rows (CQ-RP-01 to -03) to CQ-RPB, the Raspberry Pie rows to CQ-RPI |
+| `RPB-` | [perf_rpack.md](../perf_rpack.md) | CQ-RPB (3) |  | new 2026-11-16, was RP- (collided with recipe_progression.md); queue CQ-RP-01 to -03 in the bench section become CQ-RPB |
+| `RPI-` | [raspberry_pie.md](../raspberry_pie.md) | CQ-RPI (40), SQ-RPI (8) |  | new 2026-11-16, was RP- (README only); queue SQ-RP and the Raspberry Pie CQ-RP rows become SQ-RPI, CQ-RPI |
 | `RSP-` | [farmers_respite.md](../farmers_respite.md) | CQ-RSP (1), SQ-RSP (15) |  |  |
 | `RW-` | [recipes_wood.md](../recipes_wood.md) | CQ-RW (1), SQ-RW (9) | briefs/recipes_wood.md |  |
 | `SB-` | [storage_audit.md](../storage_audit.md) | SQ-SB (10) |  | not in the README index yet |
@@ -519,3 +520,4 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 ## History
 
 - 2026-11-16: index built from a scan of the docs, the README prefix column and the scratch queue (plan_rules_fixes.md section 2); 10 renames proposed (section 2), none applied yet.
+- 2026-11-17: the 10 renames applied by `tools/test_prefix_rename.py` (591 ids; 9 by hand after the report); queue columns updated; `tools/test_prefix_lint.py` built (fails on 20 queue ids defined twice, listed in plan_rules_fixes.md "Owner list (P1)").
