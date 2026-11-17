@@ -5,7 +5,7 @@
 Moved from agent memory 2026-11-16 (last edited there 2026-10-03). Repo status docs win over any status line here.
 
 Built 2026-10-03 (two rounds, second on request): CEConfig `[wandering_trader]` traderIntervalTicks / winemakerIntervalTicks 96000, commonTrades 25, rareTrades 5.
-patcherMod `trader/`: WanderingTraderTweaks + 2 mixins, WinemakerSpawner (own spawner, SavedData), TradeListings / TagItemListing / WinemakerTrades (Java bridge).
+Creative Common `trader/`: WanderingTraderTweaks + 2 mixins, WinemakerSpawner (own spawner, SavedData), TradeListings / TagItemListing / WinemakerTrades (Java bridge).
 KubeJS: `global.trades` (startup func/trade_helper.js) used in MoreJSEvents.wandererTrades (server economy/wandering_trades.js); tags in tags/tradetags.js.
 Vinery `wine_trader_chance` set to 0 (backed up). Jar md5 37ce1023 in mods/; scratch server checked, WT tests pending.
 

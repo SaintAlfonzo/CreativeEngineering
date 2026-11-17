@@ -10,9 +10,9 @@ Feature writeup: [tooltips.md](../tooltips.md) (test prefix `TT-`, last id TT-30
 |---|---|---|---|
 | A | `tooltips #2` parts a (straw / knives), d (chalk), e (Pretty Pipes cover), f (lunchboxes); `tooltips #3` (Botania, Cloud Storage) | KubeJS: `client_scripts/tooltips.js`, new item_dict keys | All plain text lines in one file, F3+T to reload; one helper extension (`addTooltipTags`) |
 | B | `tooltips #2` part b (food type line) | KubeJS: new `client_scripts/food_type_tooltip.js` | Reads `food_types.json`, its own file like the other framework tooltips (tooltips.md 4 "One file per framework") |
-| C | `tooltips #2` part c (can AppleSkin "x N"), `tooltips #5` (tall tooltips run off the bottom) | patcherMod: two client mixins, CEConfig keys | Both client render mixins; one patcherMod version bump and one deploy |
+| C | `tooltips #2` part c (can AppleSkin "x N"), `tooltips #5` (tall tooltips run off the bottom) | Creative Common: two client mixins, CEConfig keys | Both client render mixins; one Creative Common version bump and one deploy |
 
-Build order: A (needs the user's OK on the text, `tooltips #3` decision "the text"), then B, then C with the next patcherMod
+Build order: A (needs the user's OK on the text, `tooltips #3` decision "the text"), then B, then C with the next Creative Common
 build. A and B are client-only KubeJS (no restart, F3+T); C needs a client restart.
 
 Cross-family links:
@@ -28,7 +28,7 @@ Cross-family links:
 ---
 
 ## tooltips #2: Tooltips to add (items)
-Status **Planned** · Work: KubeJS / patcherMod · id `ui/tooltips #2`
+Status **Planned** · Work: KubeJS / Creative Common · id `ui/tooltips #2`
 
 ### Goal
 Six item families get lines that say what is not obvious in game: (a) straw and knives, (b) a food type line on every
@@ -49,7 +49,7 @@ the wrench, (f) lunchbox slot count.
   `#creativeengineering:food_type/<type>` (nested types also land in their parents) by
   [foodtypetags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/food_type_tags.js). Type list and meaning: [food.md](../food.md) 2.1.
   Spice of Life: Apple Pie Edition 2.2.0 already adds its own diversity line (`tooltip.solapplepie.*`).
-- **(c) Cans.** Each serving is the full food value, so AppleSkin already draws one serving's bars. patcherMod
+- **(c) Cans.** Each serving is the full food value, so AppleSkin already draws one serving's bars. Creative Common
   `food/CanServingsTooltip` inserts "Servings: x / y" at line 1; `food/CanServings.servingsLeft(stack)` /
   `maxServings(stack)` give the counts (max from `#creativeengineering:cans/servings/<n>`, cached, cleared on
   `TagsUpdatedEvent`). AppleSkin 2.4.2 (verified, decompiled): `squeek.appleskin.client.TooltipOverlayHandler$FoodTooltip`
@@ -124,7 +124,7 @@ the wrench, (f) lunchbox slot count.
      one handler, one map lookup per tooltip. For cans, optionally add the source's type from `canned`
      ("Canned: Soup"), decision D2.
    - Log `[food type tooltip] N foods, M types`.
-7. **(c) Can "x N" (patcherMod):**
+7. **(c) Can "x N" (Creative Common):**
    - `mixin/AppleSkinFoodTooltipAccessor` (client, `@Mixin(targets = "squeek.appleskin.client.TooltipOverlayHandler$FoodTooltip", remap = false)`,
      `@Accessor("itemStack") ItemStack creativeengineering$getItemStack();`).
    - `mixin/AppleSkinCanServingsMixin` on `...TooltipOverlayHandler$FoodTooltipRenderer` (`remap = false`, SRG names as
@@ -250,7 +250,7 @@ lang and Lexicon (general knowledge, unverified against 440.2 code for the Pure 
 ---
 
 ## tooltips #5: Large tooltips run off the bottom
-Status **Testing** (BUILT 2026-11-02 as below with `index = 9`, the javap check: int locals x 3, y 4, width 6, height 7, tooltipX 8, tooltipY 9; [tooltips.md](../tooltips.md) 3 "Fixed") · Work: patcherMod · id `ui/tooltips #5`
+Status **Testing** (BUILT 2026-11-02 as below with `index = 9`, the javap check: int locals x 3, y 4, width 6, height 7, tooltipX 8, tooltipY 9; [tooltips.md](../tooltips.md) 3 "Fixed") · Work: Creative Common · id `ui/tooltips #5`
 
 ### Goal
 A tooltip taller than the screen keeps its top (name and first lines) on screen and runs off the bottom, instead of the
@@ -275,7 +275,7 @@ other way round.
    (with the two int parameters at 0 and 1 and the width at 2, as LT's ordinal shows, `y` is probably 5): **verify it
    first** with `javap -c -l -p` on `net/minecraft/client/gui/screens/Screen.class` from the Forge client jar
    (`~/.local/share/atlauncher/libraries/net/minecraftforge/forge/1.19.2-43.3.9/forge-1.19.2-43.3.9-client.jar`, the path
-   tools/lang_index.py uses) or from patcherMod's ForgeGradle cache. Use `require = 1` so a wrong target fails loudly.
+   tools/lang_index.py uses) or from Creative Common's ForgeGradle cache. Use `require = 1` so a wrong target fails loudly.
 2. Iceberg's `Tooltips.calculateRect` (`remap = false`, `@ModifyVariable` on its `tooltipY` before the `new Rect2i`) with
    the same rule, only if a test shows a tall tooltip going through that path (equipment comparison).
 3. CEConfig: new `Tooltips` section `[tooltips]` (client side, like `[toasts]`), `keepTopOnScreen = true`, comment
@@ -309,7 +309,7 @@ exact Forge 43.3.9 statement order (read from memory of Forge 43 sources).
 | Row | Change | Status | Notes |
 |---|---|---|---|
 | tooltips #1 | Tooltip framework and lines | Complete | TT-01 to TT-18 still unticked. tooltips.md had two stale "not in `mods/`" notes (Brewin' lines, shield Shift lines), fixed below |
-| tooltips #4 | AppleSkin bars in more screens | Testing | Matches tooltips.md 3 "Fixed" (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`); TT-19 to TT-30 open. Not deployed yet (1.0.9 was deployed 2026-10-19, before the 2026-10-20 build) |
+| tooltips #4 | AppleSkin bars in more screens | Testing | Matches tooltips.md 3 "Fixed" (Creative Common 1.1.01, Brewin' `-03`, Vinery `-04`); TT-19 to TT-30 open. Not deployed yet (1.0.9 was deployed 2026-10-19, before the 2026-10-20 build) |
 
 ## Writeup corrections made
 

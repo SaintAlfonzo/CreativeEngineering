@@ -258,7 +258,7 @@ item point at the pack survivor or a tag. If D1 picks the native 1.3.3 jar inste
 
 | ED system | Pack system | Overlap | Proposal |
 |---|---|---|---|
-| Oven + pans (525 recipes) | patcherMod oven, `creativeengineering:baking`, bakeware, baking overhaul (oven.md 2.6: cake base, pie crust, frosting, cookie dough) | **same system** | D3: rebuild on the pack oven with pack bases |
+| Oven + pans (525 recipes) | Creative Common oven, `creativeengineering:baking`, bakeware, baking overhaul (oven.md 2.6: cake base, pie crust, frosting, cookie dough) | **same system** | D3: rebuild on the pack oven with pack bases |
 | ED turns off 13 FD recipes (pies, crust, cookies, stews, cheesecake, roast chicken, shepherd's pie...) | the pack's baking overhaul already replaced most of these | conflict | don't carry over the `neoforge:false` overrides; the pack's own removals stand |
 | Mixing bowl (108, stirring with a spoon) | crafting grid, Cooking Pot `_manual_only` rule, Create mixer (ED itself ships 209 Create mixing mirrors) | partly | D3 |
 | Mortar and pestle (35) | NCH `foodGrinding` (crushing wheels, Millstone, pack mortar) | **same** | through `foodGrinding` |
@@ -553,7 +553,7 @@ that were dropped (ED corn, ED coffee beans, ED lemon...) are retargeted to the 
 
 | ED station | Recipes | Pack station that also gets the recipes | Notes |
 |---|---|---|---|
-| Oven + 8 pans (pie dish, loaf pan, square pan, tray, sheet, muffin tray, baking stone, bar mold) | 525 | pack oven (`creativeengineering:baking`, patcherMod oven): pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold -> new bakeware or the cake pan / baking sheet | ED copy uses ED pans; pack copy uses mapped bakeware |
+| Oven + 8 pans (pie dish, loaf pan, square pan, tray, sheet, muffin tray, baking stone, bar mold) | 525 | pack oven (`creativeengineering:baking`, Creative Common oven): pie dish -> pie tin, muffin tray -> muffin tin, sheet and tray -> baking sheet, square pan -> cake pan; loaf pan, baking stone, bar mold -> new bakeware or the cake pan / baking sheet | ED copy uses ED pans; pack copy uses mapped bakeware |
 | Mixing bowl + spoons (wooden to netherite) | 108 | none (crafting grid / Cooking Pot `_manual_only` rule has no stirring); ED's 209 Create mixing mirrors stay as upstream ships them | nothing to duplicate |
 | Mortar and pestle (10 stones) | 35 | NCH `foodGrinding` (crushing wheels, Millstone, pack mortar) | |
 | Chiller | 75 | none (Neapolitan ice cream is by crafting) | nothing to duplicate |

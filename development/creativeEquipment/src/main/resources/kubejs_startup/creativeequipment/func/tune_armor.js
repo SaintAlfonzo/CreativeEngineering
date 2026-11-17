@@ -30,7 +30,7 @@
 //   • enchantability / repairWith are NOT reachable on armor from KubeJS (armor
 //     reads them off its ArmorMaterial, which has no kjs$ accessor). Passing them
 //     logs a [tuneArmor] warning and is otherwise ignored. To change them you need
-//     a patcherMod mixin — echo (18) and felsic (21) are already done there in
+//     a Creative Common mixin — echo (18) and felsic (21) are already done there in
 //     ArmorMaterialEnchantabilityMixin (keyed by ArmorMaterial name); add a row for more.
 //   • Anything not applicable to an item is skipped with a warning; the rest of
 //     the spec still applies.
@@ -82,14 +82,14 @@ var i = global.item;
 	}
 
 	// ───────────────────────────── Deep Dark · echo ─────────────────────────────
-	// ench forced to 18 by patcherMod ArmorMaterialEnchantabilityMixin (mat "echo_armor")
+	// ench forced to 18 by Creative Common ArmorMaterialEnchantabilityMixin (mat "echo_armor")
 	tune(i.echo_helmet,     { armor: 3.5,  toughness: 3.5,   knockbackResistance: 0.2, durability: 429,  rarity: 'epic', fireproof: true }) // create_deep_dark:echo_armor_helmet
 	tune(i.echo_chestplate, { armor: 8.5,  toughness: 3.5,   knockbackResistance: 0.2, durability: 624,  rarity: 'epic', fireproof: true }) // create_deep_dark:echo_armor_chestplate
 	tune(i.echo_leggings,   { armor: 6.5,  toughness: 3.5,   knockbackResistance: 0.2, durability: 585,  rarity: 'epic', fireproof: true }) // create_deep_dark:echo_armor_leggings
 	tune(i.echo_boots,      { armor: 3.5,  toughness: 3.5,   knockbackResistance: 0.2, durability: 507,  rarity: 'epic', fireproof: true }) // create_deep_dark:echo_armor_boots
 
 	// ─────────────────────────────────── Felsic ────────────────────────────────
-	// ench forced to 21 by patcherMod ArmorMaterialEnchantabilityMixin (mat "felsic")
+	// ench forced to 21 by Creative Common ArmorMaterialEnchantabilityMixin (mat "felsic")
 	tune(i.felsic_helmet,     { armor: 4, toughness: 4, knockbackResistance: 0.25, durability: 572,  rarity: 'epic', fireproof: true })
 	tune(i.felsic_chestplate, { armor: 9, toughness: 4, knockbackResistance: 0.25, durability: 832,  rarity: 'epic', fireproof: true })
 	tune(i.felsic_leggings,   { armor: 7, toughness: 4, knockbackResistance: 0.25, durability: 780,  rarity: 'epic', fireproof: true })
@@ -103,7 +103,7 @@ var i = global.item;
 	tune(i.dragon_boots,               { armor: 7,  toughness: 4.5, knockbackResistance: 0.3, durability: 1400, rarity: 'epic', fireproof: true }) // ench 25
 
 	// dragon_horse_armor is not an ArmorItem (HorseArmorItem) — kjs$setArmor* won't
-	// take. Tune its protection via a datapack attribute or patcherMod if needed.
+	// take. Tune its protection via a datapack attribute or Creative Common if needed.
 
 	global.tuneArmor(armorSpecs)
 })()

@@ -15,5 +15,5 @@ collision shape is at the feet), so mobs can only climb up; and GroundPathNaviga
 ground, so a descending mob skips every rung node at once.
 
 **Why:** Any mod that teaches villagers a block via WalkNodeEvaluator (Dramatic Doors did) silently misses MCA villagers.
-**How to apply:** for villager pathing changes, patch `VillagerLandPathNodeMaker` (see patcherMod
+**How to apply:** for villager pathing changes, patch `VillagerLandPathNodeMaker` (see Creative Common
 `McaVillagerPathGatesMixin`, mob_block_tweaks.md 2.7) and keep a WalkNodeEvaluator twin only for unconverted villagers.

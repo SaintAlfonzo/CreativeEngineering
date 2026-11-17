@@ -158,9 +158,9 @@ def render(folder, groups, order):
         '// there; that file loads after this one, so its row wins meanwhile).',
         f'// Compost values for {folder}: {total} items. Row: [i.<item_dict key>, chance]; chance 0-1 or a tier name from',
         '// creativedelight/compost_rules.js; 0 = not compostable. A row beats the rules; the exclusions there beat a',
-        '// row. Engine: global.compost (patcherMod\'s func/compost.js). Startup script in the CD jar: CD rebuild + restart.'
+        '// row. Engine: global.compost (Creative Common\'s func/compost.js). Startup script in the CD jar: CD rebuild + restart.'
         if folder not in CB_NAMESPACES else
-        '// row. Engine: global.compost (patcherMod\'s func/compost.js). Startup script in the CB jar (the rules file above\n'
+        '// row. Engine: global.compost (Creative Common\'s func/compost.js). Startup script in the CB jar (the rules file above\n'
         '// is in CD\'s tree): CB rebuild + restart.',
     ]
     for ns in namespaces:

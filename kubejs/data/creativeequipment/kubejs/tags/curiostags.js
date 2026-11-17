@@ -1,5 +1,5 @@
 // requires: creativeequipment
-// Creative Equipment. Curios slot membership: the feet slot (registered by IMC in patcherMod compat/CuriosSlots;
+// Creative Equipment. Curios slot membership: the feet slot (registered by IMC in Creative Common compat/CuriosSlots;
 // feature_writeup/curios_slots.md) takes the stepstools.
 ServerEvents.tags('item', e => {
 	var t = global.tags

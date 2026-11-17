@@ -25,8 +25,8 @@ file pins the technical decisions so every stage agrees. Dated 2026-10-20.
 - Reference mods in tree: `development/moreMooblooms` (small in-tree mod: main class, config, mixin plugin,
   built-in packs, JEI plugin, client setup through DistExecutor), `development/backportedVinery`
   (`forge/upstream/MemoryPackResources` + `UpstreamPacks`: in-memory resource pack; `forge/compat/wthit/`: a WTHIT
-  plugin outside patcherMod; `build.gradle`: `ce.forge-mod-refmap` with a real refmap, `fg.deobf('local:...')` for
-  jars in `libs/`), `development/patcherMod` (`waila_plugins.json`, mixins into other mods by name).
+  plugin outside Creative Common; `build.gradle`: `ce.forge-mod-refmap` with a real refmap, `fg.deobf('local:...')` for
+  jars in `libs/`), `development/creativeCommon` (`waila_plugins.json`, mixins into other mods by name).
 
 ## 1. Identity and build
 
@@ -38,7 +38,7 @@ file pins the technical decisions so every stage agrees. Dated 2026-10-20.
 | group / package | `com.SaintAlfonzo.creative_labels` |
 | licence | `mod_license=GNU GPL3`, LICENSE.txt in the folder |
 | build plugin | `ce.forge-mod-refmap` (mixins in Mojang names, refmap `creative_labels.refmap.json`, config `creative_labels.mixins.json`, `mixin_configs=creative_labels.mixins.json` in gradle.properties); copy the refmap-output and refmap-backstop task blocks from backportedVinery's build.gradle; no access transformer unless needed |
-| libs (git-ignored `libs/`, copied from `mods/`) | `jei-1.19.2-forge-11.8.1.1034.jar` (compileOnly fg.deobf, flatDir `local:jei-1.19.2-forge:11.8.1.1034`), `moonlight-1.19.2-2.3.7-forge.jar` (compileOnly fg.deobf, `local:moonlight-1.19.2:2.3.7-forge`), WTHIT via `files('../patcherMod/libs/wthit-1.19.2-forge-5.36.1.jar')`. No compile dependency on sticky_it, labels or Create |
+| libs (git-ignored `libs/`, copied from `mods/`) | `jei-1.19.2-forge-11.8.1.1034.jar` (compileOnly fg.deobf, flatDir `local:jei-1.19.2-forge:11.8.1.1034`), `moonlight-1.19.2-2.3.7-forge.jar` (compileOnly fg.deobf, `local:moonlight-1.19.2:2.3.7-forge`), WTHIT via `files('../creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar')`. No compile dependency on sticky_it, labels or Create |
 | mods.toml dependencies | forge, minecraft (as moreMooblooms); `moonlight` mandatory `[1.19.2-2.3.0,)` (Moonlight versions start with the MC version; a bare `[2.3,)` never matches `1.19.2-2.3.7`); `sticky_it` mandatory `*` and `labels` mandatory `*` (art donors until phase 5); `jei`, `wthit` optional. ordering NONE, side BOTH |
 | Forge APIs available (verified) | `IDynamicBakedModel`, `ModelData`/`ModelProperty`, `QuadBakingVertexConsumer`, `TextureStitchEvent.Pre`, `RenderHighlightEvent.Block`, `ModelEvent.RegisterAdditional`, `RegisterClientReloadListenersEvent` |
 
@@ -243,7 +243,7 @@ Resources: `META-INF/mods.toml`, `pack.mcmeta`, `creative_labels.mixins.json`, `
   "Creeper Sticky Note", "Gold Sticky Note"; the item's `getName` uses them when `Special` is set).
 - Headless tests `tools/creative_labels_test/`: `SpotsTest.java` + `NbtTest.java` + `run.sh` (classpath from
   `tools/java_test_cp.sh` with `development/creativeLabels/build/classes/java/main` added; `javac -proc:none`; the
-  `FMLEnvironment` stub trick from patcherMod's tests if config values are touched). Cover: the host table (full,
+  `FMLEnvironment` stub trick from Creative Common's tests if config values are touched). Cover: the host table (full,
   1/16 inset, stairs per facing and half, slabs top/bottom/sides, double slab, posts, deny tag path by a fake
   predicate), floor rotation of spots, covered-face rule, NBT round trips (display.color, CreativeLabels.Text /
   Special / Lines, tag removed when empty), colour mixing against vanilla's formula, the four recipe matchers if
@@ -251,7 +251,7 @@ Resources: `META-INF/mods.toml`, `pack.mcmeta`, `creative_labels.mixins.json`, `
 - Pack chores (phase 4 agent): root `settings.gradle` include (scaffold does this); `tools/build_deploy.py`
   `IN_TREE_MODS` row `('creativeLabels', 'creativeLabels', True)`; `mod_sides.md` row (`both`, "Creative Labels",
   `creative_labels`, jar, note) + update the two donor rows' notes ("art donor for Creative Labels, gameplay off")
-  + the "Current count" line; `development/patcherMod/.../CEConfig.java` `[mod_names]` default list entry
+  + the "Current count" line; `development/creativeCommon/.../CEConfig.java` `[mod_names]` default list entry
   `creative_labels=Creative Labels (Alfonzo)` (alphabetical place); `instance.json` user-added mods entry (copy the
   moreMooblooms block shape, name/file = `creativeLabels-1.0.0.jar`); `python3 tools/gen_pack_manifest.py` AFTER
   the jar is in `mods/` (the orchestrator runs it; do not run it before). KubeJS: `kubejs/startup_scripts/_lib/item_dict.js`

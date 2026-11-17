@@ -14,7 +14,7 @@
 
 | Part | Status |
 |---|---|
-| Spawn timers in server ticks, Wandering Trader and Winemaker independent (`traderIntervalTicks`, `winemakerIntervalTicks`, both 96000) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03, patcherMod 1.0.4 (md5 37ce1023). Scratch dedicated server: level.dat `WanderingTraderSpawnDelay 96000`; the Winemaker spawner's saved wait counted 96000 to 94800 after one step. A natural spawn with a player present is not tested yet (WT-16) |
+| Spawn timers in server ticks, Wandering Trader and Winemaker independent (`traderIntervalTicks`, `winemakerIntervalTicks`, both 96000) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03, Creative Common 1.0.4 (md5 37ce1023). Scratch dedicated server: level.dat `WanderingTraderSpawnDelay 96000`; the Winemaker spawner's saved wait counted 96000 to 94800 after one step. A natural spawn with a player present is not tested yet (WT-16) |
 | 25 common + 5 rare offers (`commonTrades`, `rareTrades`; vanilla 5 + 1) | BUILT, same jar; 24 summoned traders all had 31 offers (quill + 25 + 5), no rare item twice |
 | Stock (removals, Wares agreements x20, golden food listings, new saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03: KubeJS [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js) through the new `global.trades` helper. Scratch server: common 205 entries, rare 39, Winemaker 35, same after `/reload` |
 | Vinery's own Winemaker swap off (`wine_trader_chance` 0) | config edited + backed up in `configs_edited/` (instance and CreEngServer) |
@@ -142,13 +142,13 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 - **Trader wait:** `WanderingTraderSpawnerMixin` swaps the `sipush 24000` in `tick` (`m_7995_`) and in the
   constructor (a new world's first wait) for `traderIntervalTicks`. Bytecode-checked: those are the only two.
-- **Winemaker spawner** (in the Vinery port since 2026-10-27, `forge/WinemakerSpawner`; before that patcherMod
+- **Winemaker spawner** (in the Vinery port since 2026-10-27, `forge/WinemakerSpawner`; before that Creative Common
   `trader/WinemakerSpawner`): copies vanilla's spawner on `LevelTickEvent` (overworld, `doMobSpawning`, `doTraderSpawning`): 1200-tick step,
   25/50/75%, 1 in 10, spot near a random player or meeting point, two leashed `vinery:mule`s like Vinery's own code,
   48000-tick stay (`spawnWithMules`, `spawnDelay`). Its wait and chance are saved per world in
   `data/vinery_winemaker_spawner.dat` (was `creativeengineering_winemaker_spawner.dat`; not carried over, so an
   existing world waits one full interval first). `[trader] spawnChance` above 0 still adds 1.5.5's swap on top; the
-  patcherMod start-up warning for that is gone.
+  Creative Common start-up warning for that is gone.
 - **Offer counts:** `WanderingTraderTradesMixin` swaps the `iconst_5` in `updateTrades` (`m_7604_`) for
   `commonTrades`, and at TAIL adds `rareTrades - 1` rare offers after vanilla's one, in random order, skipping any
   item already on the trader.
@@ -197,7 +197,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 |---|---|
 | [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) | `[wandering_trader]` |
 | [trader/WanderingTraderTweaks.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WanderingTraderTweaks.java) | trader wait, common count, extra rare offers |
-| [backportedVinery forge/WinemakerSpawner.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/forge/WinemakerSpawner.java) | Winemaker spawner + saved data (moved from patcherMod 2026-10-27) |
+| [backportedVinery forge/WinemakerSpawner.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/forge/WinemakerSpawner.java) | Winemaker spawner + saved data (moved from Creative Common 2026-10-27) |
 | [trader/TradeListings.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TradeListings.java) | listing builders, find-by-result |
 | [trader/TagItemListing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TagItemListing.java) | random tag member listing |
 | [trader/WinemakerTrades.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WinemakerTrades.java) | Winemaker pool extras (reflection, no Vinery compile dependency) |
@@ -259,7 +259,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 ## 8. History
 
-- 2026-10-03: written. Spawn rate multiplier (0.25) and offer counts (20 common, 1 rare) added to patcherMod 1.0.4;
+- 2026-10-03: written. Spawn rate multiplier (0.25) and offer counts (20 common, 1 rare) added to Creative Common 1.0.4;
   catalog and gap analysis from the 2026-10-02 dumps.
 - 2026-10-03 (later): rework on request. Spawning set in server ticks (`traderIntervalTicks` replaces
   `spawnRateMultiplier`, same 96000); the Winemaker gets its own spawner (`winemakerIntervalTicks` 96000) and
@@ -270,7 +270,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   now dumps the Winemaker pool; the report shows weights and counts both traders. Jar md5 37ce1023, checked on a
   scratch dedicated server. WT-06 retired, WT-09 to WT-16 added.
 - 2026-10-22: Fruits Delight's apple sapling removed from the Winemaker (Vinery's apple tree is the pack's); WT-17.
-- 2026-10-27: the Winemaker spawner moved from patcherMod into the Vinery port (pack_hygiene.md finding 39). Same
+- 2026-10-27: the Winemaker spawner moved from Creative Common into the Vinery port (pack_hygiene.md finding 39). Same
   rolls, interval, mules and stay; keys now `vinery-common.toml` `[trader] ownSpawner` / `ownSpawnerInterval`; CEConfig
   `winemakerEnabled` / `winemakerIntervalTicks` and the regex check of the Vinery toml removed. New saved-data name.
 - 2026-11-17: `global.trades.villager(e, profession, level, { buy, buy2, sell, uses, xp, priceMultiplier })` added to the same helper for villager trades, with item_dict and `global.profession` keys ([plan_rules_fixes.md](plan_rules_fixes.md) 12c); the raw `e.addTrade` calls convert in P3.

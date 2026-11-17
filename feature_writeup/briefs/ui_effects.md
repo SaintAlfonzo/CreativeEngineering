@@ -166,7 +166,7 @@ JEED toml take raw ids anyway, so no dict key is needed.
 ---
 
 ## effects #9: Potion bundles do not render in the effect provider
-Status **Bug** / Work patcherMod / TODO `ui/effects #9`
+Status **Bug** / Work Creative Common / TODO `ui/effects #9`
 
 ### Goal
 JEI effect pages (JEED's provider page) show the three potion bundle items with their potion, like the potion buckets.
@@ -183,7 +183,7 @@ JEI effect pages (JEED's provider page) show the three potion bundle items with 
    for JEED warnings.
 2. Read `PotionBundleUtils` for the NBT the bundle needs (decompile or `javap -p -c`).
 3. Fix by giving JEED fully formed stacks: either extend `NCH.jeedPotionProvider` (neoCraftHelper.js 1872) to accept
-   `{item, nbt}` templates with a placeholder, or a patcherMod hook that completes the stack (like the
+   `{item, nbt}` templates with a placeholder, or a Creative Common hook that completes the stack (like the
    `CraftableFirstRecipeLayoutList` style patches).
 
 ### Ids and data
@@ -198,7 +198,7 @@ The potion buckets use the same list and work (EF-16); change only the bundle en
 ---
 
 ## effects #10: Hostile Mobs effect provider
-Status **Planned** / Work patcherMod / KubeJS / TODO `ui/effects #10`
+Status **Planned** / Work Creative Common / KubeJS / TODO `ui/effects #10`
 
 ### Goal
 The "Hostile Mobs" effect's provider page shows one grouped entry (a cycling slot or tag) instead of a long item list,
@@ -228,7 +228,7 @@ Collapse by tag (one slot that cycles) or by a single stand-in item. Recommend t
 ---
 
 ## effects #11: Weak Stomach effect provider
-Status **Planned** / Work patcherMod / KubeJS / TODO `ui/effects #11`
+Status **Planned** / Work Creative Common / KubeJS / TODO `ui/effects #11`
 
 ### Goal
 Weak Stomach (`fungidelight:weak_stomach`, Backported Fungi Delight) has an effect provider page, and its text no longer

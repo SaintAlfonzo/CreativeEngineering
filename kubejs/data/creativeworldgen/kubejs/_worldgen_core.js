@@ -11,5 +11,5 @@
 // crops).
 ServerEvents.loaded(e => {
 	if (!global.CWG) console.error('[creativeworldgen] global.CWG missing: the Worldgen jar\'s startup scripts did not ' +
-		'run (patcherMod without the startup loader, or no creativeworldgen jar in mods/)')
+		'run (Creative Common without the startup loader, or no creativeworldgen jar in mods/)')
 })

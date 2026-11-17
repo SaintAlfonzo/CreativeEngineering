@@ -5,7 +5,7 @@
 
 ## 1. Setup
 
-- **Server and world:** the same scratch server (patcherMod 1.0.7 jar, whose worldgen equals 1.0.8's). It ran the
+- **Server and world:** the same scratch server (Creative Common 1.0.7 jar, whose worldgen equals 1.0.8's). It ran the
   instance's own toml (density 1, logs at their defaults), so the times are the pack's own. Seed 8675309, a fresh
   world.
 - **JFR:** set up as in `server/LaunchServer.sh` (stackdepth 256, `perf/ce-server.jfc`), with `maxsize` cut to 2 GB

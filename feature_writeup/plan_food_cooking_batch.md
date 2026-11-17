@@ -50,12 +50,12 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 | `food/drinks #15` | Build the drink rules exactly as decided in [creative_delight_drinks.md](creative_delight_drinks.md): new teas and juices on reserved ids, kettle flavored coffees, heated mixing, renames, matcha +1 powder, cloud latte; folds `food/drinks #8`, `#10`, `merges/drinks #1`, `flowers #5`. Largest row; do last in the wave. |
 | `cooking/kitchen #25` | Stone cutting boards: granite, andesite, diorite. Textures are the polished granite/andesite/diorite textures painted onto the cutting board model (not swapped in as the whole texture), without the block edge texture. Recipes via `global.NCH`. |
 
-## Wave C: patcherMod (one rebuild, install, restart; never while the game runs)
+## Wave C: Creative Common (one rebuild, install, restart; never while the game runs)
 
 | Row | Approach |
 |---|---|
 | `food/seasoning #14` (Bug) | Powdered Sugar block named Snow Block in WTHIT: override the name and mod in the WTHIT plugin or the block's name. |
-| `food/seasoning #15` | Seasoned icon moved to the top right (overlay position; resource pack plus patcherMod). |
+| `food/seasoning #15` | Seasoned icon moved to the top right (overlay position; resource pack plus Creative Common). |
 | `cooking/kitchen #27` | Sneak right-click picks up cooking pot, copper pot, kettle, cooking pan. |
 | `food/drinks #17` | Bottling returns go to the plating slot automatically. Scope set 2026-11-02: ensure overflow (extra output spills to the player/world, nothing lost), a plate queue, and every other Farmer's Delight workstation tweak, applied to the cooking pot and oven, and extended to the copper pot, kettle and fermenting jar. |
 

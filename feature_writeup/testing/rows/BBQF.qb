@@ -188,7 +188,7 @@ reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @group A
 @commands Give a nut butter bottle and a Delightful sandwich, relog
 @pass They become Nut Mash and `pb_j`; log shows the merge count (43 per the Vintage agent; recount with the potato salad pairs) and no `merged twice`
-@fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; patcherMod `swap/ItemMerges.java`; TODO `#7`
+@fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; Creative Common `swap/ItemMerges.java`; TODO `#7`
 @reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb

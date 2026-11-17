@@ -1,6 +1,6 @@
 # itemphysic-fire-lava-split
 
-> patcherMod mixin splitting ItemPhysic's single burn bucket into fire-vs-lava + additive float list, driven by a KubeJS startup script
+> Creative Common mixin splitting ItemPhysic's single burn bucket into fire-vs-lava + additive float list, driven by a KubeJS startup script
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-10). Repo status docs win over any status line here.
 
@@ -8,7 +8,7 @@ ItemPhysic 1.6.7 (`config/itemphysic.json`, CreativeCore `SortingList`s) has **o
 `burningItems` bucket — IN_FIRE / ON_FIRE / LAVA are indistinguishable — and one
 `swimmingItems` bucket. `canPass(stack)==true` means "this hazard may destroy it".
 
-**patcherMod** ([patchermod-coremod](patchermod-coremod.md)) splits this:
+**Creative Common** ([patchermod-coremod](patchermod-coremod.md)) splits this:
 
 - `mixin/ItemPhysicServerMixin` — `@Redirect`s every `SortingList.canPass(ItemStack)` call in
   `ItemPhysicServer.{fireImmune,hurt,updatePre,updateFluidHeightAndDoFluidPushing}`
@@ -36,7 +36,7 @@ So defaults = sink + burn; the KubeJS rules carve out exceptions.
 - `creativeengineering:physics/fireproof` -> survives open fire, still burns/melts in lava
 - `creativeengineering:physics/lavaproof` -> immune to BOTH fire and lava (wins over fireproof)
 `burnDecision(stack,lava)` order: LAVAPROOF->FALSE, then FIREPROOF->`lava?TRUE:FALSE`, then the
-programmatic `Burn` enum (BURN/FIRE_ONLY/LAVA_ONLY/NEVER, KubeJS-startup only). patcherMod jar
+programmatic `Burn` enum (BURN/FIRE_ONLY/LAVA_ONLY/NEVER, KubeJS-startup only). Creative Common jar
 seeds the tags: `src/main/resources/data/creativeengineering/tags/items/physics/*.json`
 (netherite via `#forge:` tags, boats, feathers, …). Pack rules in
 `kubejs/server_scripts/tags/item_physics_tags.js` (`ServerEvents.tags('item')`): direct
@@ -101,7 +101,7 @@ Bucket membership (`creativeengineering:burn/to_ash` = planks/logs/wood shapes,
 `burn/explosive` empty) is reload-able in `server_scripts/tags/item_physics_tags.js`; rule
 params are startup-only.
 
-Build/deploy: `cd patcherMod && ./gradlew build --offline` -> copy jar to `mods/`.
+Build/deploy: `cd Creative Common && ./gradlew build --offline` -> copy jar to `mods/`.
 
 **Mechanics read from ItemPhysic 1.6.7 source (2026-10-28):**
 - `ItemPhysicServer.hurt` returns early on `!item.canBeHurtBy(source)`: vanilla fire-resistant items survive fire AND

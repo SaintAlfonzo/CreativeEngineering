@@ -11,10 +11,10 @@
 @@text **RERUN (nested jar 2026-11-02):** Fungi `-02` is nested in `mods/creativedelight-1.0.0.jar`; no standalone `backportedFungi` jar any more. SQ-FGD-00 to -11 rerun in SQ-CDJ5 Boot 1 (`/fgdtest all`), -12 to -15 in its group B boot.
 @@text
 @@text Feature: [../fungi_delight.md](../fungi_delight.md) §4.0 / §8 (FGD-), [../potions.md](../potions.md) PO-27, TODO
-@@text `ports/fungiport #1`. Target: `backportedFungi-1.3-ce-19.2-01` and patcherMod `creativeengineering-1.1.01` md5 378f7897
+@@text `ports/fungiport #1`. Target: `backportedFungi-1.3-ce-19.2-01` and Creative Common `creativeengineering-1.1.01` md5 378f7897
 @@text (mooshroom family, `brown_chance`, CEConfig `mushroomSpawns`). **Refreshed 2026-10-26:** `backportedFungi-...-01` is in
 @@text `mods/` and booted in the 2026-10-26 scratch run (`/fgdtest all` 135/136, the failure is the known truffle pie, TODO `fungiport #3`);
-@@text `mods/` holds patcherMod 1.1.03 (built and installed 2026-10-26 14:32), which supersedes `creativeengineering-1.1.01` and 1.1.02 in every row. KubeJS tree as of 2026-10-25 (mushroom_spawns, `_biome_rules.js`, wild_crops `step`, mob_spawns rules, cooking.js Fungi block,
+@@text `mods/` holds Creative Common 1.1.03 (built and installed 2026-10-26 14:32), which supersedes `creativeengineering-1.1.01` and 1.1.02 in every row. KubeJS tree as of 2026-10-25 (mushroom_spawns, `_biome_rules.js`, wild_crops `step`, mob_spawns rules, cooking.js Fungi block,
 @@text baking.js truffle pie, compost rows, jei_info.js).
 @@text
 @@text Before the run (game closed, `pgrep -c java` is 0): `./gradlew :creativeCommon:installToMods --offline` (the Fungi jar is
@@ -30,7 +30,7 @@
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) boot
 @pass `Done (`; `fungidelight` in the mod list; no mixin error naming `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`, `HoglinMixin`; no `Unknown item`/`Unknown tag` naming `fungidelight`; `[item_dict]` missing list has no Fungi key; `[mob-spawns]` summary shows `mooshroom_mushroom_fields` matched with 0 changes and the 4 Fungi cow rules matched, none idle; `[mushroom-spawns]` and `[wild-crops]` load lines list the 8 mushroom rules and `rooted_dirt`, `truffle_dirt` (FGD-01, FGD-26 server half)
-@fails port README; SRG names in the patcherMod mixins (m_28928_, m_142606_, m_7848_); `_biome_rules.js` priority
+@fails port README; SRG names in the Creative Common mixins (m_28928_, m_142606_, m_7848_); `_biome_rules.js` priority
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
 bootreject (?i)(error|fail|warn).*(MushroomCowBreedingMixin|AnimalCanMateMooshroomMixin|HoglinMixin)
@@ -161,7 +161,7 @@ look pen A: coarse dirt count and the item ids on the items line (truffles from 
 @group A
 @commands summon `fungidelight:inky_cap_cow` and `morel_cow`, `/summon lightning_bolt` on each; same on a red and a brown `minecraft:mooshroom`
 @pass Fungi cows unchanged (type and NBT); red becomes brown, brown becomes red (FGD-27)
-@fails `FDMCow.thunderHit`; patcherMod mixins must not touch `thunderHit`
+@fails `FDMCow.thunderHit`; Creative Common mixins must not touch `thunderHit`
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
 look rows/SQ-FGD-01.log, part cows: all PASS
@@ -989,7 +989,7 @@ look /loottuning lists packs only as a count (no names): the crate showing up in
 @group A
 @commands boot with `Pretty Rain-1.19.2-Forge-1.1.1.jar` in `mods/`
 @pass `particlerain` in the mod list; `Done (`; no class-loading or mixin error naming `particlerain` or `PrettyRainSeasonMixin`
-@fails Keep it client-only and guard `WeatherParticleSpawner` with a patcherMod mixin instead
+@fails Keep it client-only and guard `WeatherParticleSpawner` with a Creative Common mixin instead
 @from batches/r1102b/s1_A.qb
 bootexpect Done \(
 bootreject (?i)(particlerain|PrettyRainSeason).*(error|exception|failed)
@@ -1046,8 +1046,8 @@ look Hostile Delight's grollrecp / grolllrecp parse error is the known upstream 
 @@text #### SQ-FN: Oceanic Delight fishing net (added 2026-10-25)
 @@text
 @@text Feature: [../ocean_delight.md](../ocean_delight.md) 5.1, TODO `dishes/ocean #1`. **Setup changed 2026-10-25:** the fishing net mixin
-@@text moved from patcherMod into the Oceanic Delight repack inside Creative Delight (creative_delight.md 14.3 B7). Run with the current
-@@text patcherMod and `creativedelight-1.0.0.jar` from `development/*/build/libs/`, `oceanic_delight-*.jar` removed (same run as SQ-CDJ-04).
+@@text moved from Creative Common into the Oceanic Delight repack inside Creative Delight (creative_delight.md 14.3 B7). Run with the current
+@@text Creative Common and `creativedelight-1.0.0.jar` from `development/*/build/libs/`, `oceanic_delight-*.jar` removed (same run as SQ-CDJ-04).
 @@text `/loot spawn` gives the table the spawn position as origin, so the biome rules can be checked without a player.
 @@text
 @@table
@@ -1279,7 +1279,7 @@ look skbot gets no kit on either rejoin (tag kept in its playerdata); the new bo
 @@text
 @@text #### SQ-RS: removed-item recipe scan (redesigned 2026-10-23)
 @@text
-@@text Features: [../recipe_progression.md](../recipe_progression.md) F2, RP-01; TODO `recipes/progression #2`. patcherMod jar
+@@text Features: [../recipe_progression.md](../recipe_progression.md) F2, RP-01; TODO `recipes/progression #2`. Creative Common jar
 @@text (new CEConfig key) is in `mods/`.
 @@text
 @@table
@@ -1292,7 +1292,7 @@ look skbot gets no kit on either rejoin (tag kept in its playerdata); the new bo
 @@text
 @@text #### SQ-NM: named mobs (added 2026-10-30)
 @@text
-@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; TODO `mobs/tweaks #6`. Needs patcherMod 1.1.04 of
+@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; TODO `mobs/tweaks #6`. Needs Creative Common 1.1.04 of
 @@text 2026-10-30 21:12 or later (in `mods/`). Set `[named_mobs] chance = 1.0` in `OUT/srv/config/creativeengineering-common.toml`
 @@text before boot (the key may be absent until the first boot, see setup notes).
 @@text
@@ -1343,7 +1343,7 @@ expect (?i)named entity|died|was killed
 @@text
 @@text #### SQ-VG: villager gates and Dramatic Doors (added 2026-10-30)
 @@text
-@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.7; TODO `mobs/tweaks #15`. Needs patcherMod 1.1.04 of
+@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.7; TODO `mobs/tweaks #15`. Needs Creative Common 1.1.04 of
 @@text 2026-10-30 (after the villager gate mixins; in `mods/`).
 @@text
 @@table
@@ -1429,7 +1429,7 @@ expect Test failed
 @@text
 @@text #### SQ-VL: villager ladders (added 2026-10-30)
 @@text
-@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.8; TODO `mobs/tweaks #15`. Needs patcherMod 1.1.04 of
+@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.8; TODO `mobs/tweaks #15`. Needs Creative Common 1.1.04 of
 @@text 2026-10-30 21:50 or later (in `mods/`). Run with SQ-VG (same boot).
 @@text
 @@table
@@ -1487,7 +1487,7 @@ look Y falls step by step in the ladder column, then it walks off at the bottom
 @@text
 @@text #### SQ-WT: WTHIT Silk Touch tag on the server (added 2026-10-28)
 @@text
-@@text Feature: [../wthit_lines.md](../wthit_lines.md) 2.11 (WL-37); TODO `ui/wthit #11`. Needs patcherMod 1.1.03 of
+@@text Feature: [../wthit_lines.md](../wthit_lines.md) 2.11 (WL-37); TODO `ui/wthit #11`. Needs Creative Common 1.1.03 of
 @@text 2026-10-28 22:59 or later (built, not yet in `mods/`) for the client half only; the tag is KubeJS (`/reload`).
 @@text
 @@table
@@ -1643,7 +1643,7 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @@text
 @@text #### Pack seasonings framework (added 2026-10-23)
 @@text
-@@text Feature: [../food.md](../food.md) 3.12, FO-45 to FO-48; TODO `food/seasoning #3`. patcherMod 1.1.02 jar (installed
+@@text Feature: [../food.md](../food.md) 3.12, FO-45 to FO-48; TODO `food/seasoning #3`. Creative Common 1.1.02 jar (installed
 @@text 2026-10-23 23:46, md5 57feef44) + startup / server scripts: restart.
 @@text
 @@table
@@ -1664,7 +1664,7 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @@text
 @@text #### SQ-SNF: seasonings by food family (added 2026-10-26)
 @@text
-@@text Feature: [../food.md](../food.md) 3.12, FO-53 to FO-56; TODO `food/seasoning #3`, `#8`, `#9`. Needs patcherMod 1.1.03 and
+@@text Feature: [../food.md](../food.md) 3.12, FO-53 to FO-56; TODO `food/seasoning #3`, `#8`, `#9`. Needs Creative Common 1.1.03 and
 @@text Creative Delight rebuilt 2026-10-26 in `mods/` (not installed yet). Supersedes SQ-SN-01's recipe ids.
 @@text
 @@table
@@ -1752,7 +1752,7 @@ reject verb=food .*food=false|verb=food done=0
 @@text
 @@text #### SQ-PS: powdered sugar (added 2026-10-25)
 @@text
-@@text Feature: [../food.md](../food.md) 3.13, FO-50 to FO-53; TODO `dishes/ingredients #16`, `food/seasoning #5`. patcherMod
+@@text Feature: [../food.md](../food.md) 3.13, FO-50 to FO-53; TODO `dishes/ingredients #16`, `food/seasoning #5`. Creative Common
 @@text jar built 2026-10-25 (not in `mods/`; `food/PowderedSugarRegistry`, NCH `viVacuumizing`) + startup / server scripts.
 @@text
 @@table
@@ -1893,7 +1893,7 @@ count verb=tagsof id=creativedelight:[a-z_]+dough_block .*item_tags=\S*forge:sto
 @@text #### SQ-TI: pack clock helpers and 1.1.02 client-class boot (added 2026-10-24)
 @@text
 @@text Features: [../time.md](../time.md) 3.10 (TI-30), [../fixes_compat.md](../fixes_compat.md) 2.30 (FX-43 to FX-45).
-@@text patcherMod 1.1.02 (in `mods/`) added `XaeroTimeInfoMixin` (client only, `@Pseudo`, `require = 0`), `TimeSettings.clock24` /
+@@text Creative Common 1.1.02 (in `mods/`) added `XaeroTimeInfoMixin` (client only, `@Pseudo`, `require = 0`), `TimeSettings.clock24` /
 @@text `dayNumber` and the client-only `[moss]` config section (`block/MossTint`). The rendering is client work (round 2,
 @@text CQ-NEW); the server only has to boot with them and the clock math can be probed.
 @@text
@@ -1934,7 +1934,7 @@ look "dayStart 22300" is the pack value (if the scratch toml differs, recompute)
 @@text
 @@text #### SQ-KT: plates and coasters on the Blockhead counter (added 2026-10-24)
 @@text
-@@text Features: [../kitchen.md](../kitchen.md) 2.3 (KT-15, KT-16), TODO `cooking/kitchen #20`. patcherMod 1.1.02 (in `mods/`)
+@@text Features: [../kitchen.md](../kitchen.md) 2.3 (KT-15, KT-16), TODO `cooking/kitchen #20`. Creative Common 1.1.02 (in `mods/`)
 @@text replaced `CuttingBoardSupportMixin` / `BlockStateCuttingBoardOffsetMixin` with `BlockStateCounterTopperMixin` (support +
 @@text model offset for every `#creativeengineering:counter_toppers` block) and added the client `CoasterRendererOffsetMixin`.
 @@text The tag was renamed `cutting_board_supports` -> `counter_supports`, so the board's own checks (KT-03, KT-05) rerun too.
@@ -2009,7 +2009,7 @@ look other [kttest] FAILs (KT-01 to KT-16) belong to SQ-KT-01 / -25: list them i
 ## SQ-KS-03
 @group A
 @commands Both copies present (datapack and `kubejs/data`), different log text
-@pass Exactly one `[sqks]` line; record which pack won. Repeat with the jar copy once a CD or patcherMod dev build carries `data/sqks/kubejs/test.js`
+@pass Exactly one `[sqks]` line; record which pack won. Repeat with the jar copy once a CD or Creative Common dev build carries `data/sqks/kubejs/test.js`
 @fails Two lines: same-path override does not hold, so 10.4 needs a guard or a different dev path
 @jars creativecommon creativedelight
 @draft follows SQ-KS-01's boot (both copies present): written with that boot batch
@@ -2064,7 +2064,7 @@ look other [kttest] FAILs (KT-01 to KT-16) belong to SQ-KT-01 / -25: list them i
 ## SQ-CDJ-04
 @group A
 @commands Add the Oceanic repack with the B7 overlay; use a fishing net in a tagged biome
-@pass Mixin config `oceanic_delight.ce.mixins.json` applied (no mixin error in the log); the net loot follows the biome tags as with the patcherMod mixin
+@pass Mixin config `oceanic_delight.ce.mixins.json` applied (no mixin error in the log); the net loot follows the biome tags as with the Creative Common mixin
 @fails Refmap or target name; check the overlay was reobfed
 @jars creativecommon creativedelight
 @draft needs its own boot with the Oceanic repack and the B7 overlay jar: a separate boot batch
@@ -2117,7 +2117,7 @@ look the jar, pot and basket block data lines still hold the Boot 0 contents (or
 ## SQ-CDJ-07 | FD repack nested: mod file, mixins, dependents, FD blocks of the old world, rich soil under a tree
 @group A
 @commands Same boot as SQ-CDJ-01, with `FarmersDelight-1.19.2-1.2.4.jar` also moved out of the scratch `mods/` (the built CD jar nests the FD repack, creative_delight.md 21)
-@pass Debug log `Found valid mod file repackedFarmers-...`; no `farmersdelight` missing-dependency error for any of the 24 jars that need it; `farmersdelight.mixins.json` applied (no mixin error; rich soil under a sapling stays rich soil after it grows); patcherMod's FD mixins (remainder buffer) apply; a world with FD blocks (stove, cooking pot with contents, skillet, cutting board) loads with them; `config/farmersdelight-common.toml` still read; `/give @p farmersdelight:cooking_pot`
+@pass Debug log `Found valid mod file repackedFarmers-...`; no `farmersdelight` missing-dependency error for any of the 24 jars that need it; `farmersdelight.mixins.json` applied (no mixin error; rich soil under a sapling stays rich soil after it grows); Creative Common's FD mixins (remainder buffer) apply; a world with FD blocks (stove, cooking pot with contents, skillet, cutting board) loads with them; `config/farmersdelight-common.toml` still read; `/give @p farmersdelight:cooking_pot`
 @fails Mixin missing: the manifest lost `MixinConfigs` (`mixin_configs` in the member's `gradle.properties`); a dependent refuses the version: re-run the range check in creative_delight.md 21.1
 @jars creativecommon creativedelight
 @from batches/r1102b/s1_A.qb
@@ -2252,7 +2252,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 @@text
 @@text #### SQ-CDT: Creative Delight framework suite (added 2026-10-25)
 @@text
-@@text Feature: [../creative_delight.md](../creative_delight.md) 10 (startup loader, helpers in patcherMod's jar, NCH namespace, CD
+@@text Feature: [../creative_delight.md](../creative_delight.md) 10 (startup loader, helpers in Creative Common's jar, NCH namespace, CD
 @@text script trees), tests CDT- in its section 19. Suite and how to load it: [tools/creative_delight_test/README.md](../../tools/creative_delight_test/README.md).
 @@text Build `./gradlew :creativeCommon:build :creativeDelight:build -Pcd_test_suite --offline`; scratch `mods/`: the patcherMod jar and
 @@text `creativedelight-1.0.0-cdtest.jar`, the three upstream member jars removed. Boot once for SQ-CDT-01 to -07, then the rows say what
@@ -2263,7 +2263,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 @group A
 @commands Boot; `grep "jar-startup\|creativedelight\]\|cdtest\]" logs/kubejs/startup.log`
 @pass `[jar-startup] creativeengineering: 3 of 3 files`, `[jar-startup] creativedelight: 2 of 3 files` (the `requires: cdtest_not_a_mod` file skipped), `startup script packs in order: creativeengineering, startup_scripts, ..., creativedelight`; `Neo Craft Helper finished` once; `[creativedelight] core finished, members: oceansdelight, oceanic_delight, ends_delight`; no startup script errors
-@fails No `[jar-startup]` line: mixin not applied (`KubeJSStartupJarScriptsMixin`, require = 1 should have stopped boot); folder scripts erroring on `global.NCH` / `global.compost` undefined: patcherMod's pack not at the head
+@fails No `[jar-startup]` line: mixin not applied (`KubeJSStartupJarScriptsMixin`, require = 1 should have stopped boot); folder scripts erroring on `global.NCH` / `global.compost` undefined: Creative Common's pack not at the head
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## SQ-CDT-02
@@ -2326,7 +2326,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 ## SQ-CDT-10
 @group A
 @commands Stop; replace the patcherMod jar with the released `creativeengineering-1.1.02.jar` (no loader), keep the CD test jar; boot
-@pass `latest.log`: `[creativedelight] this patcherMod (creativeengineering) has no startup script loader`; the pack's own startup scripts fail on missing `global.NCH` (expected: that jar predates the move, so the two jars must ship together)
+@pass `latest.log`: `[creativedelight] this Creative Common (creativeengineering) has no startup script loader`; the pack's own startup scripts fail on missing `global.NCH` (expected: that jar predates the move, so the two jars must ship together)
 @fails No CD error line: the class check in `CreativeDelight`
 @jars creativecommon creativedelight
 @draft needs its own boot with the released creativeengineering-1.1.02 jar swapped in: a jar-swap boot, owner call whether it is still worth running
@@ -2396,7 +2396,7 @@ look a fifth entities line with grass / dirt only (blast); 4 slices x 3 breaks a
 @@text #### SQ-VTD6: Vintage port -06 ghost pepper soil, Quark own-pick crops (added 2026-10-25)
 @@text
 @@text Feature: [../vintage_delight.md](../vintage_delight.md) 4.0b, [../crops.md](../crops.md) 2.2. Scratch `mods/`: Vintage port
-@@text `-06`, patcherMod 1.1.03 from `build/libs` and the Creative Delight jar of the same tree (the own-pick tag is filled by CD
+@@text `-06`, Creative Common 1.1.03 from `build/libs` and the Creative Delight jar of the same tree (the own-pick tag is filled by CD
 @@text scripts), Veggies `-03`.
 @@text
 @@text | ID | World | Steps | Pass | Fail means |
@@ -2510,7 +2510,7 @@ look fruit counts: one use each, so about 1 to 3 of each fruit; "use" replies PA
 @@text
 @@text **RERUN (nested jar 2026-11-02):** Vintage `-11` and Veggies `-05` are nested in the CD jar; no standalone port jar goes into the scratch `mods/` (prep_srv.sh drops one). SQ-VTD4-04 (VTD-70) and -06 (VTD-54) rerun in SQ-CDJ5; the jar list below is the 2026-10-25 state.
 @@text
-@@text Scratch `mods/`: `backportedVintage-0.1.6-ce-19.2-04.jar`, `backportedVeggies-1.9.2-ce-19.2-03.jar`, the patcherMod build
+@@text Scratch `mods/`: `backportedVintage-0.1.6-ce-19.2-04.jar`, `backportedVeggies-1.9.2-ce-19.2-03.jar`, the Creative Common build
 @@text with the startup loader and `creativedelight-1.0.0.jar` (rebuilt after this change, so it holds the new trees and
 @@text `kubejs_startup/vintagedelight/`). Not run yet (owner: queue only).
 @@text
@@ -2668,7 +2668,7 @@ reject \[vtdtest\] NOTE fluids soft fluid vintagedelight:honey_vd: not loaded
 @@text #### SQ-FDB: Farmer's Delight 1.3.4 backports in the FD repack (added 2026-10-25)
 @@text
 @@text Feature: [../farmers_delight.md](../farmers_delight.md) 4. Scratch `mods/`: `creativedelight-1.0.0.jar` (rebuilt
-@@text 2026-10-25 after the `farmersdelight/` scripts; nests `repackedFarmers-1.19.2-1.2.4-ce-19.2-02`), the patcherMod build with the startup loader, and
+@@text 2026-10-25 after the `farmersdelight/` scripts; nests `repackedFarmers-1.19.2-1.2.4-ce-19.2-02`), the Creative Common build with the startup loader, and
 @@text `FarmersDelight-1.19.2-1.2.4.jar` moved out (as SQ-CDJ-07). Not run yet (owner: queue only).
 @@text
 @@table
@@ -3155,7 +3155,7 @@ look the log slots accept several woods; JEI page, icon, name and the Farmer's S
 @@text #### SQ-FR: Fruits Delight 0.5.11 fixes in Creative Delight (added 2026-10-25)
 @@text
 @@text Feature: [../fruits_delight.md](../fruits_delight.md) 5 (FR-01 to FR-06). Scratch `mods/`: a `creativedelight-1.0.0.jar`
-@@text built after 2026-10-25 18:30 (first CD mixin config) with `fruitsdelight-0.5.11.jar` beside it, plus the patcherMod build with
+@@text built after 2026-10-25 18:30 (first CD mixin config) with `fruitsdelight-0.5.11.jar` beside it, plus the Creative Common build with
 @@text the startup loader; restart (new item_dict keys, startup script). Not run yet (owner: queue only).
 @@text
 @@table
@@ -3241,7 +3241,7 @@ look the kubejs lines show the Fruits Delight scripts skipped by their "// requi
 @@text
 @@text Feature: [../rustic_delight.md](../rustic_delight.md) 5 (RD-01 to RD-12). Scratch `mods/`: a `creativedelight-1.0.0.jar`
 @@text built after 2026-10-25 (nests `backportedRustic-1.7.0-ce-19.2-01`) with `rusticdelight-forge-1.19.2-1.3.0.jar` moved out,
-@@text the patcherMod build with the startup loader, and `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar` copied into the
+@@text the Creative Common build with the startup loader, and `rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar` copied into the
 @@text scratch game dir. Group A: RD-01 to RD-08, RD-13 to RD-25; group B (new level-name): RD-09 to RD-11, RD-26 to RD-28;
 @@text client: RD-12, RD-29, RD-30; RD-31 is the instance cutover, last. RD-13 to RD-31 added 2026-10-25 (every test the port
 @@text needs). Not run yet (owner: queue only).
@@ -4331,7 +4331,7 @@ expect has the following block data: .*minecraft:apple
 @@text #### SQ-FF: produce family rules applied (added 2026-10-25)
 @@text
 @@text Feature: [../food_families.md](../food_families.md) 4.4 (FF-01 to FF-08), [../placeable_food.md](../placeable_food.md) 3.
-@@text Jar state: the patcherMod jar built 2026-10-25 (Display Delight dishes) and a Creative Delight jar (the recipes are in
+@@text Jar state: the Creative Common jar built 2026-10-25 (Display Delight dishes) and a Creative Delight jar (the recipes are in
 @@text its script tree) both in the scratch `mods/`; restart (new item_dict keys, 20 new cans, removed items). Client half
 @@text (models, tooltips) is FF-06 to FF-08 in game; the flat coaster items were cut 2026-10-25 (placeable_food.md 3), so FF-0x coaster checks expect only items with a coaster model.
 @@text
@@ -4397,9 +4397,9 @@ kjsreject (?i)\[NCH\].*error
 @@text
 @@text #### SQ-CDQ: Creative Delight QoL moves (added 2026-10-25)
 @@text
-@@text Feature: [../creative_delight.md](../creative_delight.md) 22 (CDQ-01 to CDQ-08). Jar state: patcherMod and
+@@text Feature: [../creative_delight.md](../creative_delight.md) 22 (CDQ-01 to CDQ-08). Jar state: Creative Common and
 @@text `creativedelight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after 2026-10-25 (the pot and kettle hooks,
-@@text the WTHIT line and the compost rows left patcherMod for CD); never one without the other. Config switches are in the
+@@text the WTHIT line and the compost rows left Creative Common for CD); never one without the other. Config switches are in the
 @@text scratch server's `config/creativedelight-common.toml [qol]`. Rows marked client run in Round 2.
 @@text
 @@table
@@ -4418,7 +4418,7 @@ bootreject (?i)(/cooking|/compost)\.js.*(error|exception)
 @group A, client
 @commands remainder_buffer.md RB-01 to RB-11 on a cooking pot and a kettle (bottle, bowl, bucket leftovers, full buffer stalls, hopper pulls)
 @pass as RB-
-@fails patcherMod's old pot mixins still present (two jars mismatched)
+@fails Creative Common's old pot mixins still present (two jars mismatched)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -4441,7 +4441,7 @@ look the glass bottle is in the pot's block data (container slot 7 or the buffer
 @group A
 @commands `[qol] remainderBuffer = false`, restart; cook a milk-bottle recipe in a pot and in an oven
 @pass pot throws the bottle, oven keeps it
-@fails the gate is `RemainderBufferQol` (pot, kettle) and patcherMod `[cooking] remainderBuffer` (oven)
+@fails the gate is `RemainderBufferQol` (pot, kettle) and Creative Common `[cooking] remainderBuffer` (oven)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_Coff.qb
 > execute unless entity @e[type=minecraft:marker,tag=s2chome] run summon minecraft:marker ~ 201 ~ {Tags:["s2chome"]}
@@ -4815,7 +4815,7 @@ look compost check exits 0 (shell step PASS); the mirror's stale report is expec
 @@text
 @@text #### SQ-CN: Corn Delight 1.2.11 items and rules (added 2026-10-25)
 @@text
-@@text Feature: [../corn_delight.md](../corn_delight.md) 5 (CN-), TODO `largecontent/mod-additions #24`. Needs the patcherMod 1.1.03
+@@text Feature: [../corn_delight.md](../corn_delight.md) 5 (CN-), TODO `largecontent/mod-additions #24`. Needs the Creative Common 1.1.03
 @@text and Creative Delight jars from this session in the scratch `mods/`. Client halves (models, Curios render, right click, JEI):
 @@text CORN-05, CORN-06 in game.
 @@text
@@ -4935,7 +4935,7 @@ expect verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:face
 @group A
 @commands probe `Villager.WANTED_ITEMS`, `Villager.FOOD_POINTS`
 @pass both hold `corn_delight:corn` (points 1), Veggies items still there
-@fails patcherMod `compat/CornDelightCompat`
+@fails Creative Common `compat/CornDelightCompat`
 @from batches/r1102b/s2_A.qb
 bootexpect \[corn-delight\] corn is villager food \(\d+ wanted items, \d+ food items\)
 look the counts in the log line include corn (CornDelightCompat now lives in Creative Delight, compat/CornDelightCompat); Veggies items: compare the counts with the last run's line
@@ -5057,7 +5057,7 @@ expect \[zcount\] entities .*item:farmersdelight:beef_stew x1
 @@text
 @@text #### SQ-WCD: wild crops in Creative Delight (added 2026-10-25)
 @@text
-@@text Feature: [../creative_delight.md](../creative_delight.md) 24 (WCD-01 to WCD-06). Jar state: patcherMod and
+@@text Feature: [../creative_delight.md](../creative_delight.md) 24 (WCD-01 to WCD-06). Jar state: Creative Common and
 @@text `creativedelight-1.0.0.jar` both rebuilt from `development/*/build/libs/` after the move (the `wildCrops` switch left
 @@text CEConfig for CDConfig `[worldgen]`). WCD-05 runs before the CD install, on the jars in `mods/` at the time. Biome tags
 @@text and modifiers need a new level-name per boot.
@@ -5251,7 +5251,7 @@ look both found near their biome; the logs counted are the patch's own wood (tre
 @@text #### SQ-RSP: Farmer's Respite Kettle tank (added 2026-10-25)
 @@text
 @@text Feature: [../farmers_respite.md](../farmers_respite.md) 2 (RSP-01 to RSP-16). Creative Delight `1.0.0` (compartment
-@@text `mixin.farmersrespite`) and patcherMod `1.1.03` built 2026-10-25 and installed in `mods/`; copy both to the scratch
+@@text `mixin.farmersrespite`) and Creative Common `1.1.03` built 2026-10-25 and installed in `mods/`; copy both to the scratch
 @@text server. Full restart (mixins, startup fluids, NCH).
 @@text
 @@table
@@ -5485,7 +5485,7 @@ look the dropped Kettle item NBT carries the tank (BlockEntityTag / CETank*); if
 @group A
 @commands place a Flower Pot, right-click with a Wild Tea Bush; break it
 @pass pot holds the bush; breaking drops pot + bush
-@fails patcherMod `RespitePottedTeaBush` log warning
+@fails Creative Common `RespitePottedTeaBush` log warning
 @jars creativecommon creativedelight
 @from batches/r1103/p2_R.qb passed
 @reviewed 2026-11-16
@@ -5544,7 +5544,7 @@ look the data get line shows the brewed Green Tea in slot 4 (or 2 waiting); if G
 @group A
 @commands heated Kettle with water: 1 black tea leaf in each of slots 0 and 1 + glass bottle; `/data get block ~ ~ ~ BrewTimeTotal` after 1 s, then check at 8 s and 12 s
 @pass `BrewTimeTotal` 200 (not 0); no tea at 8 s, one Black Tea by 12 s
-@fails NCH `frBrewing` `_or` default (patcherMod 1.1.06+; 1.1.04's `opts.time ?? 200` gave 0, a 1-tick brew), `KettleRecipeSerializerMixin` reading `cookingtime`
+@fails NCH `frBrewing` `_or` default (Creative Common 1.1.06+; 1.1.04's `opts.time ?? 200` gave 0, a 1-tick brew), `KettleRecipeSerializerMixin` reading `cookingtime`
 @jars creativecommon creativedelight
 @from batches/r1103/p2_R.qb
 > setblock {R1+10} {R2} {R3+106} minecraft:campfire[lit=true]
@@ -5747,7 +5747,7 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 @@text
 @@text #### SQ-SY: soil yield (added 2026-10-28)
 @@text
-@@text Feature: [../crop_yields.md](../crop_yields.md) (SY-n = SQ-SY-n). Scratch `mods/`: patcherMod built 2026-10-28 or later
+@@text Feature: [../crop_yields.md](../crop_yields.md) (SY-n = SQ-SY-n). Scratch `mods/`: Creative Common built 2026-10-28 or later
 @@text (has `[crop_drops.soil_yield]`) and the Creative Delight scripts. Group A. Switch crops on in
 @@text `OUT/srv/config/creativeengineering-common.toml` `[crop_drops.soil_yield.crops]` and restart (a running server does
 @@text not reread the toml; `/reload` alone keeps the old switches, 2026-10-28). `tools/soil_yield_probe/sy_probe.js`
@@ -5760,7 +5760,7 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 @group A
 @commands Boot with every crop `false` (then `/reload` once: still off)
 @pass `latest.log`: `[soil-yield] no crop switched on`; no `Error occurred` for `soil_yield.js`; a ripe wheat on Rich Farmland drops 1 wheat, 1 to 4 seeds
-@fails Error: script order or `CEConfig.CROP_DROPS.SOIL_YIELD` missing (old patcherMod)
+@fails Error: script order or `CEConfig.CROP_DROPS.SOIL_YIELD` missing (old Creative Common)
 @jars creativecommon
 @draft needs its own boot with every soil-yield crop switched off in the config before start (qrun cannot restart mid-batch): write it as a separate boot batch with qrun.py toml
 ## SQ-SY-02
@@ -6149,7 +6149,7 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text
 @@text #### CQ-WT: WTHIT Silk Touch, crop seasons, operator blocks (added 2026-10-28)
 @@text
-@@text Needs patcherMod 1.1.03 of 2026-10-28 22:59 or later in `mods/` (and `server_mods/` for the server rows).
+@@text Needs Creative Common 1.1.03 of 2026-10-28 22:59 or later in `mods/` (and `server_mods/` for the server rows).
 @@text
 @@text | ID | Existing test | What to do and look at |
 @@text |---|---|---|

@@ -72,7 +72,7 @@
 		const out = { placement_type: className }
 
 		// locateOffset/frequencyReductionMethod/frequency/salt/exclusionZone are protected: Rhino can't call them,
-		// so patcherMod's worldgen.PlacementInfo reads the fields.
+		// so Creative Common's worldgen.PlacementInfo reads the fields.
 		const P = $PlacementInfo
 
 		out.locate_offset = safe(() => {

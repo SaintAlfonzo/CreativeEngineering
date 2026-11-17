@@ -306,7 +306,7 @@ look error count not above the r1102 Boot 1 (run doc); a newer nested member bui
 @group A, the SQ-CDJ-11 Boot 0 world
 @commands as SQ-CDJ-05 (patcherMod 13:04 in `OUT/srv/mods/`); `grep -nE "\[swaps\]\|Unidentified\|od_plated_baked_tentacle" logs/latest.log`
 @pass `[swaps] 3 list file(s): ... 1 removed id(s)` (CD `creative_split.json`, `removed.json`, CB `creative_split.json`); `[swaps] minecraft:block: 1 removed id(s) dropped` and the same for `minecraft:item`; no `Unidentified mapping` and no missing-registry screen line; the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate)
-@fails swap line missing: the server runs the old patcherMod (no `removed` key; the line would end at "single id(s)")
+@fails swap line missing: the server runs the old Creative Common (no `removed` key; the line would end at "single id(s)")
 @reviewed 2026-11-16
 bootexpect \[swaps\] 3 list file\(s\): .*1 removed id\(s\)
 bootexpect \[swaps\] minecraft:block: 1 removed id\(s\) dropped

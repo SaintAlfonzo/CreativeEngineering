@@ -7,7 +7,7 @@ installed into `mods/`, deployed or committed.
 
 ## 1. Outcome
 
-All of 7.4.1 to 7.4.7 is built and every offline check passes. patcherMod 1.0.6 was rebuilt in `build/libs`
+All of 7.4.1 to 7.4.7 is built and every offline check passes. Creative Common 1.0.6 was rebuilt in `build/libs`
 (2026-10-14 01:28) for the `biome_frequency` code; it is not in `mods/`. Next: M2, tests ST-170 to ST-190 on a scratch
 server.
 
@@ -27,7 +27,7 @@ server.
 | 7.4.2 | Camps. Castles. Carriages. 2.3.4 ported to `kubejs/data/eugene` (64 files); the 1.1.1 jar moved to `disabledmods/archive/` | `tools/port_structure_jars.py`, `kubejs/data/eugene/`, `kubejs/data/minecraft/structures/pillager_outpost/` |
 | 7.4.3 | `eugene:camp` split: trader camp + lost llama (passive), new `eugene:pillager_camp` (hostile, `meta/pillager_camps` anchor), new `eugene:fake_trader_camp` (hostile, no meta tag) | eugene worldgen, `structure_tags.json` |
 | 7.4.4 | `eugene:castle` split: `undead_castle` (surface dungeon), `red_roof_castle` (big settlement, `meta/fortified_towns`), `ruined_drum_tower` (ruin); fortified-town shares 0.20 / 0.20 / 0.40 | eugene worldgen, `meta_structures.json` |
-| 7.4.5 | New `group/vehicles` (6 siege weapons, loot carriage, witch wagon): hostile, rank 76, 4-chunk settlements exclusion, 52 / 16 grid; new group knob `biome_frequency` (harsh 1.0 / default 0.5) in Java (`StructureFrequencies`, `/locate` prediction), JS (validator, staging, report), the node sim / Rhino parity and the python estimator | patcherMod, `structure_overrides.js`, `structure_groups.json`, `biome_fits.json` (`harsh` tag), tools |
+| 7.4.5 | New `group/vehicles` (6 siege weapons, loot carriage, witch wagon): hostile, rank 76, 4-chunk settlements exclusion, 52 / 16 grid; new group knob `biome_frequency` (harsh 1.0 / default 0.5) in Java (`StructureFrequencies`, `/locate` prediction), JS (validator, staging, report), the node sim / Rhino parity and the python estimator | Creative Common, `structure_overrides.js`, `structure_groups.json`, `biome_fits.json` (`harsh` tag), tools |
 | 7.4.6 | Piglin camp: no code change (see 4.3) | none |
 | 7.4.7 | Rescan, tags, sync, fits; FitTest count 167 -> 181; loot catalog regenerated; 2.2, 3.16, 3.22, 7.4 and 8.0 of structure_tuning.md updated | as listed |
 

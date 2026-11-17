@@ -1,7 +1,7 @@
 """Shared helpers for tools/gen_jei_world.py modules (the world-interaction JEI tabs).
 
 A module is tools/jei_world/tab_<name>.py with a `build(ctx)` that returns {tab_id: [row, ...]}. Rows use the
-format documented in patcherMod compat/jei/world/WorldRow.java; build them with the small helpers below so the
+format documented in Creative Common compat/jei/world/WorldRow.java; build them with the small helpers below so the
 JSON stays uniform. Tab ids are the ones in compat/jei/world/WorldTab.java.
 """
 import json

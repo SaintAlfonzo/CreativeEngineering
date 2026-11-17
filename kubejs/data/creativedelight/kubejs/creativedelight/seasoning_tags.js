@@ -11,7 +11,7 @@
 //   1. families: every member of each listed family and its subfamilies (expanded to item ids here)
 //   2. add:      single items or tags, after the families
 //   3. remove:   single items, last. An item that only comes in through a tag in `add` can't be removed (nested tag).
-// The seasoning craft (patcherMod food/SeasoningRecipe) refuses a food outside the tag, and seasoning.js makes one
+// The seasoning craft (Creative Common food/SeasoningRecipe) refuses a food outside the tag, and seasoning.js makes one
 // craft per seasoning with the tag as its food. Salt keeps its own #salt:can_be_salted.
 
 ServerEvents.tags('item', e => {

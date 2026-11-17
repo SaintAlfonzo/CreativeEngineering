@@ -64,7 +64,7 @@ import java.util.regex.Pattern;
 
 /**
  * Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system
- * of their own. Every other Creative jar requires it; it requires patcherMod ({@code creativeengineering}, later
+ * of their own. Every other Creative jar requires it; it requires Creative Common ({@code creativeengineering}, later
  * Creative Common). Each tweak applies only when its mod is loaded: mixins through compat/CompatMixinPlugin, listeners
  * through the {@link ModList} checks below.
  *
@@ -84,7 +84,7 @@ public class CreativeCompat {
     private static final String FILE = MOD_ID + "-common.toml";
 
     public CreativeCompat() {
-        // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
+        // The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.SECTIONS);
         // [shrapnel], [surface] and [vein_undo] came from Creative Engineering's file of the same name, after this
@@ -293,8 +293,8 @@ public class CreativeCompat {
             "^\\s*(\\[(?:leaf_piles|moss|vine_shearing|monster_box|trash_slot)\\])", Pattern.MULTILINE);
 
     /**
-     * The sections moved out of patcherMod's file. When this file already existed the carry-over did not run, and
-     * Forge drops the old sections from patcherMod's file on its next correction, so an edited value left there is
+     * The sections moved out of Creative Common's file. When this file already existed the carry-over did not run, and
+     * Forge drops the old sections from Creative Common's file on its next correction, so an edited value left there is
      * lost: say which ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
      */
     private static void warnOldKeys() {
@@ -311,7 +311,7 @@ public class CreativeCompat {
         while (m.find()) found.add(m.group(1));
         if (found.isEmpty()) return;
         LOGGER.warn("[creativecompat] config/{} still has sections that moved to config/{}: {}. "
-                + "Creative Compat reads only its own file; copy any edited value over (patcherMod drops these from its file).",
+                + "Creative Compat reads only its own file; copy any edited value over (Creative Common drops these from its file).",
                 OLD_FILE, FILE, found);
     }
 

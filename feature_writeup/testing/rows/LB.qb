@@ -9,7 +9,7 @@
 @@sources feature_writeup/lunchboxes.md
 @@text
 @@text Server half only: the item, the recipes and the mixins loading. Looks, tooltip, dye colors and seagulls need the
-@@text client (LB-01 to LB-13). Jars: patcherMod 1.1.04 and Creative Delight 1.0.0 from `mods/` (both 2026-10-29).
+@@text client (LB-01 to LB-13). Jars: Creative Common 1.1.04 and Creative Delight 1.0.0 from `mods/` (both 2026-10-29).
 @@text
 @@table
 ## SQ-LB-01 | netherite lunchbox resolves as an item entity

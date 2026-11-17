@@ -65,7 +65,7 @@ public final class CDConfig {
 	/** Worldgen switch ids (creative_delight.md 24). */
 	public static final String WILD_CROPS = "wildCrops";
 
-	/** This config's file, and patcherMod's, which held the sections moved here at the CD carve. */
+	/** This config's file, and Creative Common's, which held the sections moved here at the CD carve. */
 	public static final String FILE = "creativedelight-common.toml";
 	public static final String OLD_FILE = "creativeengineering-common.toml";
 
@@ -174,8 +174,8 @@ public final class CDConfig {
 			Pattern.MULTILINE);
 
 	/**
-	 * When no carry-over ran (this file already had the sections, or patcherMod's file had none), Forge drops the old
-	 * sections from patcherMod's file on its next correction, so an edited value left there is lost: say which ones were
+	 * When no carry-over ran (this file already had the sections, or Creative Common's file had none), Forge drops the old
+	 * sections from Creative Common's file on its next correction, so an edited value left there is lost: say which ones were
 	 * still there. Runs at construction, before Forge loads and corrects the COMMON configs.
 	 */
 	public static void warnOldKeys() {
@@ -192,7 +192,7 @@ public final class CDConfig {
 		while (m.find()) found.add(m.group(1).trim());
 		if (found.isEmpty()) return;
 		LogUtils.getLogger().warn("[creativedelight] config/{} still has entries that moved to config/{}: {}. "
-				+ "Creative Delight reads only its own file; copy any edited value over (patcherMod drops these from its file).",
+				+ "Creative Delight reads only its own file; copy any edited value over (Creative Common drops these from its file).",
 				OLD_FILE, FILE, found);
 	}
 

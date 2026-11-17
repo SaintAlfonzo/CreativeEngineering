@@ -320,7 +320,7 @@ its flowers, better (short, human) info text.
 ---
 
 ## mooblooms #6: Sunflowers face backwards on the Moobloom JEI tab
-Status Testing (built 2026-10-26, deployed to the client with 1.1.04) / Work patcherMod (the More Mooblooms mod) / TODO `mobs/mooblooms #6`
+Status Testing (built 2026-10-26, deployed to the client with 1.1.04) / Work Creative Common (the More Mooblooms mod) / TODO `mobs/mooblooms #6`
 
 ### Goal
 The sunflower on a sunbloom shown in the Moobloom Conversion tab faces the viewer.

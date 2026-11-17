@@ -54,7 +54,7 @@ about 20 mod configs with their own loot knobs.
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
 | `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-11-05 22:44 via `/dumpall` (12,931 live tables). Two tables can't be serialized and are skipped with a warning: `farmersrespite:blocks/kettle` (custom copy function with no serializer), `myrtrees:blocks/wooden_bucket` (block-state condition on a missing property). The Brewin' port's keg serializes since the port |
 | Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-26 (TODO `loot/lootjs-layer #3`, done): 12,342 distinct tables, 472 chest tables; the section 2 numbers below are still the 2026-10-02 run. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
-| Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
+| Lootr container swaps | Creative Common | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 | Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
 
 **Findings** (details in 4.2). Fixed 2026-09-27: 1 stale index, 2 scope missed 39 container tables, 3 injected
@@ -588,7 +588,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
   tops out there.
 - **goldenfood: revert and restore rather than edit the jar.** Deleting its tables from the jar would bring
   back every injection automatically, but the pack manifest rebuilds mods from their download source, so a
-  modified jar wouldn't survive a rebuild. A patcherMod mixin that makes Forge fire the event anyway was the other
+  modified jar wouldn't survive a rebuild. A Creative Common mixin that makes Forge fire the event anyway was the other
   option. It would also restore injectors nobody knows about, but the bytecode audit found only three, so data
   rules cover it without a Java change.
 - **Bans live in script, next to the config check.** The mod's own switch is the real removal; the ban is the
@@ -656,7 +656,7 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 ## 6. Offline checks
 
 - In game, `/cdevgen run loot dumps` runs `/dumploot` + `/dumptags item`, then `gen_loot_config.py`, the audit and the
-  census, and says in chat which files changed (patcherMod `/cdevgen`, list in `tools/generators.json`). `/cdevgen run
+  census, and says in chat which files changed (Creative Common `/cdevgen`, list in `tools/generators.json`). `/cdevgen run
   loot_config` alone is about 2 s. Full output lands in `logs/cdevgen/<id>.log`.
 - `python3 tools/gen_loot_config.py` prints scope / GLM / item counts. On 2026-09-27 (evening): `scope: 376 tables
   (309 roots, 237 placed by templates, 2 code-rolled orphans, 19 with code-added pools, 10 with code-injected
@@ -807,7 +807,7 @@ Revert every temporary edit and `/reload` afterwards.
   `tools/loot_census.py` added, this writeup written. Found the 8 items in 4.2. Confirmed in bytecode that LootJS
   types rolls by caller, that Forge skips `LootTableLoadEvent` for overridden vanilla tables, and that KubeJS's
   pre-roll edit doesn't trigger that.
-- **2026-09-27:** `/cdevgen` (patcherMod `devtools/GeneratorRunner`) runs the loot generators from in game or at
+- **2026-09-27:** `/cdevgen` (Creative Common `devtools/GeneratorRunner`) runs the loot generators from in game or at
   startup (`[debug.generators] runAtStartup`). BUILT, not in mods/ yet. Its first scratch run showed `loot_config.json`
   and `loot_index.json` are behind SimplyHouses.
 - **2026-09-27:** `06_dead_maps.js` strips Monobank's ruined-portal explorer map from its 5 vault tables (ruined

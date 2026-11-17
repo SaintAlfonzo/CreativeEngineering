@@ -77,7 +77,7 @@ global.CD.recipes(() => {
 	// Other Changes TODO
 	// ============================================================
 
-	// BUILT (patcherMod food.CanServings, feature_writeup/food.md 3.6):
+	// BUILT (Creative Common food.CanServings, feature_writeup/food.md 3.6):
 	// - Cans hold several servings: per can in generation_scripts/food/can_servings.json -> #creativedelight:cans/servings/<n>
 	//   (tags/cantags.js). Servings left are NBT, not durability, so full cans still stack to 64 and can't be enchanted;
 	//   a partly eaten can shows a durability-style bar and "Servings: x / y".

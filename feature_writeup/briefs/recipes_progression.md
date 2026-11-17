@@ -183,7 +183,7 @@ No dead recipe JSONs in the tree: each is ported to a load path or deleted.
   plus a shapeless version, which already accept bone meal.
 - `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json`: IE sawmill, `#minecraft:wooden_slabs` -> 2 sticks,
   `#minecraft:wooden_stairs` -> 3 sticks, `#minecraft:wooden_doors` -> 4 sticks, each + `#forge:dusts/wood`.
-- The pack's sawmill makes a door and a stair from **one** plank each (patcherMod
+- The pack's sawmill makes a door and a stair from **one** plank each (Creative Common
   `data/creativeengineering/recipes/sawmill/oak_planks-oak_door.json`, `oak_planks-oak_stairs.json`: 1 plank -> 1 + wood
   dust), and the Create saw does the same (`wood/wood_types.js` lines 23-33). Ported as written, the recycle files would
   turn 1 plank into 4 sticks + 2 sawdust (door) or 3 sticks + 2 sawdust (stairs), against 2 sticks by crafting.
@@ -221,7 +221,7 @@ for `tooling/conventions #2`).
 - A tag input such as `#minecraft:wooden_doors` also matches modded doors whose plank cost differs (Dramatic Doors'
   tall doors, Quark's); if porting, check JEI for an exploit with the tall doors.
 - IE's sawmill takes the first matching recipe; no other sawmill recipe takes a slab, stair or door today (checked the
-  211 patcherMod files and IE's own), so a port would not clash.
+  211 Creative Common files and IE's own), so a port would not clash.
 
 ### Tests
 - **RP-13 Dead folder:** `kubejs/recipes/` is gone; `/reload` logs nothing about it; JEI bone broth shows the two

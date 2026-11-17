@@ -8,7 +8,7 @@
 @@jars creativecommon creativedelight
 @@sources feature_writeup/item_merges.md
 @@text
-@@text Install the patcherMod 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Creative Delight must be rebuilt and installed again first: `pneumaticcraft/recipes.js` (sourdough cut to 3 Bread, 18:03) is newer than the installed jar (18:01). Server checks; the
+@@text Install the Creative Common 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Creative Delight must be rebuilt and installed again first: `pneumaticcraft/recipes.js` (sourdough cut to 3 Bread, 18:03) is newer than the installed jar (18:01). Server checks; the
 @@text names, JEI and wild-patch looks are MG-39 to MG-44 in game.
 @@text
 @@text | ID | World | What to do and look at | Existing test |
@@ -190,7 +190,7 @@ look the reg line names the Mini Cantaloupe block; if it is not fruitsdelight:ha
 @@jars creativecommon creativedelight
 @@sources feature_writeup/food.md feature_writeup/briefs/dishes_meals.md feature_writeup/kitchen.md
 @@text
-@@text Jars: Creative Delight and patcherMod rebuilt 2026-10-29 (see the session hand-over for install state).
+@@text Jars: Creative Delight and Creative Common rebuilt 2026-10-29 (see the session hand-over for install state).
 @@text
 @@table
 ## SQ-PS-05 | powdered sugar and batter recipes

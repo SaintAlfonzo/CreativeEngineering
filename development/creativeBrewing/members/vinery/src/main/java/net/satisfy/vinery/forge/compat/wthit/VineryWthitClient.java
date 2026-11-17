@@ -90,7 +90,7 @@ public final class VineryWthitClient implements IWailaClientPlugin, IBlockCompon
 
     /**
      * Grapevine stems and lattices (all lattice woods, 1.3.10's too): which grape grows there, ripe when it can be picked,
-     * and the grapevine leaves still to come. Growth % is patcherMod's crop line (crop_growth.json), so not repeated.
+     * and the grapevine leaves still to come. Growth % is Creative Common's crop line (crop_growth.json), so not repeated.
      * Block state only, so no server data.
      */
     private static void stem(ITooltip tooltip, BlockState state) {

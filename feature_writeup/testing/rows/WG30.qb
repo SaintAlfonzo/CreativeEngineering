@@ -7,7 +7,7 @@
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
-@@text Worldgen TODO rows built in parallel on 2026-10-30, tested together on one scratch run. patcherMod build of 2026-10-30.
+@@text Worldgen TODO rows built in parallel on 2026-10-30, tested together on one scratch run. Creative Common build of 2026-10-30.
 @@text
 @@text **Run 2026-10-30 (afternoon, `creativeengineering-1.1.04.jar` of 13:38, seed 8675309, RCON driven):** worlds `wg30a`
 @@text (density 4, `log = ALL`, A01 + A03 overrides; A, B, D02), `wg30e` (density 4, no overrides; E, D03), `wg30c1` (density 1,
@@ -120,9 +120,9 @@ look the swap count line: 1412 in 105 on 2026-10-30; later swap rules raised it 
 @@text
 @@text ### C. Weight strip, test overrides, fortified metas vs `/locate` (TODO `structures/rates-and-groups #3`, `#5`, `#6`; [structure_tuning.md](../structure_tuning.md) 3.27, ST-217, ST-218, ST-221 to ST-223, ST-135)
 @@text
-@@text Data + patcherMod (CEConfig `[worldgen.debug] testOverrides`, `[worldgen.locate] searchTimeoutSeconds` default 300).
+@@text Data + Creative Common (CEConfig `[worldgen.debug] testOverrides`, `[worldgen.locate] searchTimeoutSeconds` default 300).
 @@text `structure_groups.json` weights stripped (204 members to 100, `tuned` ones kept), `meta_structures.json` fortified shares
-@@text 0.25, new `structure_test_overrides.json`. Needs the 2026-10-30 patcherMod jar (without it the switch reads off and
+@@text 0.25, new `structure_test_overrides.json`. Needs the 2026-10-30 Creative Common jar (without it the switch reads off and
 @@text the timeout stays at the toml value). C01, C02, C05 run at density 1 with the switch **off**; C03 and C04 in a second
 @@text fresh world with it **on**. Seed 8675309.
 @@text
@@ -148,7 +148,7 @@ look structure_tag_report.md: stripped members at weight 100 (swamp outpost, flo
 @group B
 @commands stop; scratch toml `[worldgen.debug] testOverrides = true`; new world; boot; `grep 'TEST OVERRIDES' latest.log`
 @pass exactly one `TEST OVERRIDES ACTIVE` warning listing 33 changes (towers weight 100, rare ruin frequency 0.25, fortified shares 0.45, town villages 0.1...); summary starts `TEST OVERRIDES (33)`; report has `## Test overrides`; no `REFUSED` line; for ST-221 the C01 boot is the switch-off half
-@fails no line: the jar lacks `WorldgenConfig.testOverrides` (old patcherMod) or the toml key did not reach the server copy
+@fails no line: the jar lacks `WorldgenConfig.testOverrides` (old Creative Common) or the toml key did not reach the server copy
 @reviewed 2026-11-16
 bootexpect TEST OVERRIDES ACTIVE
 bootexpect TEST OVERRIDES \(\d+\)
@@ -170,7 +170,7 @@ look preset `[worldgen.debug] testOverrides = true` and a new world; the ACTIVE 
 @@text
 @@text ### E. Water share 0, metas off coasts, Nullscape biomes (TODO `structures/earthfill #2`, `structures/metas #5`, `worldgen/biomes #8`)
 @@text
-@@text New defaults (patcherMod CEConfig and the instance toml): `[worldgen.earth_fill] maxWaterSurplus` 0.5 -> 0.0,
+@@text New defaults (Creative Common CEConfig and the instance toml): `[worldgen.earth_fill] maxWaterSurplus` 0.5 -> 0.0,
 @@text `[worldgen.meta_structures] avoidCoasts` false -> true (restart only, not reloaded live). `biome_config.json` End:
 @@text `nullscape:crystal_peaks` x0.25 -> x3 (model 0.61 % -> 3.95 % of the End surface), `nullscape:void_barrens` x0.75 -> x2
 @@text (1.825 % -> 5.41 %). All three are new-chunk or new-world changes. E01 and E02 use the A world recipe (group B, seed
@@ -212,7 +212,7 @@ look no solver `note` for crystal peaks or void barrens; distances against 1,064
 @@text
 @@text ### D. Floating islands and seabed clearance (TODO `structures/terrain #5`, `#7`; [structure_tuning.md](../structure_tuning.md) 3.26, ST-233, ST-234)
 @@text
-@@text patcherMod `SkyIslands` (Sky Structures' 9 island features: one island per hit, based on the higher of ground and sea)
+@@text Creative Common `SkyIslands` (Sky Structures' 9 island features: one island per hit, based on the higher of ground and sea)
 @@text and `SeabedClearance` (structure tag `creativeengineering:seabed_clearance`: 7 Terralith `underground/*`, 6
 @@text Subterrestrial land cabins). New chunks only. D01 and D03 can share the A / E world (group B); D02 needs any Overworld.
 @@text

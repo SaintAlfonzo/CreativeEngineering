@@ -9,7 +9,7 @@
 ServerEvents.loaded(e => {
 	if (!global.CAL) {
 		console.error('[creativecalendar] global.CAL missing: the Calendar jar\'s startup scripts did not run ' +
-			'(patcherMod without the startup loader, or no creativecalendar jar in mods/)')
+			'(Creative Common without the startup loader, or no creativecalendar jar in mods/)')
 		return
 	}
 	console.info('[creativecalendar] server scripts ready, features on: ' +

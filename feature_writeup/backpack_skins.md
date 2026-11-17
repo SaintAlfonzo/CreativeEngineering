@@ -90,7 +90,7 @@ type only).
 
 ## 5. File map
 
-patcherMod `com.SaintAlfonzo.creativeengineering.backpackskin`: `BackpackSkins` (stack tag `CESkin`, skin state),
+Creative Common `com.SaintAlfonzo.creativeengineering.backpackskin`: `BackpackSkins` (stack tag `CESkin`, skin state),
 `BackpackSkinRecipe` + `BackpackSkinClearRecipe` + `BackpackSkinSerializers`, `BackpackSkinCurios` (denies
 `CurioEquipEvent`, registered only with Curios), `BackpackSkinsClient` (model data, quads, worn draw),
 `BackpackSkinColors` (replaces SB's block color handler, lowest priority). Mixins in `mixin/`:

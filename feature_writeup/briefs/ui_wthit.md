@@ -2,7 +2,7 @@
 
 Written 2026-10-24 from [TODO.md](../todo/TODO.md) `# ui`, Sub `wthit` (row 11 from the scratchpad of 2026-10-24; rows 1 to
 10 predate this brief). Layout per [README.md](README.md). Feature writeup: [wthit_lines.md](../wthit_lines.md) (test
-prefix `WL-`, last id WL-33). The pack's WTHIT code is patcherMod `compat/Wthit*.java`, registered in
+prefix `WL-`, last id WL-33). The pack's WTHIT code is Creative Common `compat/Wthit*.java`, registered in
 `waila_plugins.json`.
 
 ## Scope and order
@@ -13,7 +13,7 @@ One new row, `wthit #11`.
 
 ## wthit #11: Silk Touch required icon
 Status **Testing** (built 2026-10-28, [wthit_lines.md](../wthit_lines.md) 2.11; rows #9 and #10 built the same day,
-sections 2.13 and 2.12) / Work patcherMod / TODO `ui/wthit #11`
+sections 2.13 and 2.12) / Work Creative Common / TODO `ui/wthit #11`
 
 Outcome: option (b), the generated tag. The goal's "ore blocks that drop other items" wins over the proposed test below:
 iron ore needs Silk Touch to drop itself, so it shows the line. The tests are WL-37 and WL-38 (WL-34 went to the

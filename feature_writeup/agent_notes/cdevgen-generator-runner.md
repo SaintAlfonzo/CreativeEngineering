@@ -1,6 +1,6 @@
 # cdevgen-generator-runner
 
-> /cdevgen runs the tools/*.py generators in game (patcherMod devtools/GeneratorRunner + GeneratorCommand) from the tools/generators.json manifest; optional startup run via CEConfig [debug.generators]
+> /cdevgen runs the tools/*.py generators in game (Creative Common devtools/GeneratorRunner + GeneratorCommand) from the tools/generators.json manifest; optional startup run via CEConfig [debug.generators]
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-27). Repo status docs win over any status line here.
 

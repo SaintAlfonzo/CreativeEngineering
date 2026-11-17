@@ -9,7 +9,7 @@ Code: [components.js](../../kubejs/data/creativeengineering/kubejs/engineering/c
 [blueprints.js](../../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js), [mechanisms.js](../../kubejs/data/creativeengineering/kubejs/engineering/mechanisms.js),
 [redstone.js](../../kubejs/data/creativeengineering/kubejs/engineering/redstone.js), [metaltags.js](../../kubejs/data/creativeengineering/kubejs/tags/metaltags.js),
 [generation_scripts/sawmill.js](../../kubejs/generation_scripts/sawmill.js), [wood_types.js](../../kubejs/data/creativeengineering/kubejs/wood/wood_types.js),
-patcherMod `sawmill/`, `mixin/Sawmill*Mixin.java`.
+Creative Common `sawmill/`, `mixin/Sawmill*Mixin.java`.
 
 Jars checked (scratchpad cache): ImmersiveEngineering 9.2.4-170, kubejs-forge 1902.6.2-build.73,
 kubejs-immersive-engineering 1902.2.3, create 0.5.1.i, vintageimprovements 0.2.0.3, JEI 11.8.1.1034, gates 1.8.0,
@@ -31,14 +31,14 @@ removed.
 1. **Cleanups, one sitting (KubeJS, `/reload`):** #6 tier comments, #5 disassembly comments / tool, #4 one center per
    component. All in `components.js` and `metal_base_materials.js`. If #8 is
    built right after, #4 and #5 become columns of its table; they are small enough to do first anyway.
-2. **Sawmill:** #2 (move the 211 recipes into a KubeJS data helper), then #3 (JEI shows the blade; patcherMod). #3 does
+2. **Sawmill:** #2 (move the 211 recipes into a KubeJS data helper), then #3 (JEI shows the blade; Creative Common). #3 does
    not need #2, but #2 settles the recipe ids #3 tests against.
 3. **Metal chain generator:** #8, then #9 (conductivity alternatives read #8's table). #8 also closes
    `recipes/metal #1` (plates), `#2` (hand rods), `#4` (gaps) and the lead-spring dict duplicate in
    `tooling/conventions #2`; decide those rows' questions as #8's table rows.
 4. **Redstone tier:** #11 (tube tag) -> #12 (redstone mechanism uses the tag) -> #13 (gates use the mechanism).
 5. **#10 last:** the row doesn't say what the cover is; needs your answer first (options below).
-6. **#14 any time:** smaller structural-rope connectors are a patcherMod block plus a model and texture; independent of
+6. **#14 any time:** smaller structural-rope connectors are a Creative Common block plus a model and texture; independent of
    the rest (the model / texture decision first).
 
 Related rows elsewhere: `recipes/engineering #6` (Create add-on machines on components, after #8),
@@ -108,16 +108,16 @@ Option B (the tool really is spent):
 ---
 
 ## sawmill-and-components #2: Sawmill recipes off the manual pipeline
-Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #2` (re-checked 2026-10-31: 211 files,
+Status Planned / Work KubeJS / Creative Common / `engineering/sawmill-and-components #2` (re-checked 2026-10-31: 211 files,
 generation copy and jar copy still identical)
 
 ### Goal
 The 211 profiled sawmill recipes are built at load time from one species table of dict keys; no node script, no copies
-in the patcherMod jar.
+in the Creative Common jar.
 
 ### Now
 - `kubejs/generation_scripts/sawmill.js` (358 lines; TODO plan at lines 1-8) writes JSONs to
-  `generation_scripts/recipes/sawmill/` (211 files, identical to patcherMod's
+  `generation_scripts/recipes/sawmill/` (211 files, identical to Creative Common's
   `src/main/resources/data/creativeengineering/recipes/sawmill/`, checked with `diff -rq` 2026-10-21). Literal ids
   throughout. File name = recipe id: `<input path>-<output path, '/' -> '_'>`, e.g.
   `creativeengineering:sawmill/oak_planks-oak_stairs`, `twisted_planks-q_architects_palette_vertical_twisted_planks`.
@@ -133,7 +133,7 @@ in the patcherMod jar.
 - `wood_types.js` 8-22 already has the species table (planks + 13 shape keys per species, from `item_dict.js`), but as a
   local `var` inside `ServerEvents.recipes`; it also removes IE's door / stairs recycling (41-44) and Quark
   Engineering's sawmill recipes (47-52; the comment at 51 is a leftover). `bark.js` 90-95 removes IE's log recipes.
-- Why JSON: `NCH.ieSawmill` (neoCraftHelper.js 2302-2330; the helper now ships in patcherMod's jar,
+- Why JSON: `NCH.ieSawmill` (neoCraftHelper.js 2302-2330; the helper now ships in Creative Common's jar,
   `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/`, and its error already points at
   a sawmill JSON) goes through kubejs-immersive-engineering's
   `SawmillRecipeSchema`, which re-serializes secondaries in a shape IE rejects. Verified in kubejs 1902.6.2
@@ -149,7 +149,7 @@ in the patcherMod jar.
    `bark_oak`, lines 380-450 all exist), `byproduct` (`i.sawdust`; `i.crimson_roots` / `i.warped_roots` for the stems),
    and flags `ieSlabDefault: true` (the 9 vanilla), `removeIeRecycling` (today's `sawmill: true`), `quarkSawmill`.
    `wood_types.js` then reads `global.woodSpecies` instead of its local table.
-2. **NCH helper for data events.** Add to neoCraftHelper.js, next to `ieSawmill` (a patcherMod resource: rebuild,
+2. **NCH helper for data events.** Add to neoCraftHelper.js, next to `ieSawmill` (a Creative Common resource: rebuild,
    install, restart; the `kubejs/startup_scripts/` copy no longer exists):
    ```js
    // ServerEvents.highPriorityData only: writes an immersiveengineering:sawmill JSON, secondaries and "blade" intact.
@@ -181,7 +181,7 @@ in the patcherMod jar.
    (`engineeringtags.js` 21-35, literal ids) from `global.woodSpecies` (`vplanks`, `railing`) through `global.tags.add`.
    (The 12 blueprint JSONs are DONE: `blueprints.js` 200-218 loop, 2026-10-27, `tooling/conventions #1`.)
 6. Check, then delete: `generation_scripts/sawmill.js`, `generation_scripts/recipes/sawmill/`, the 211 jar copies
-   (patcherMod rebuild + `mods/` swap); fix the comments that name the generator (`blueprints.js` 201,
+   (Creative Common rebuild + `mods/` swap); fix the comments that name the generator (`blueprints.js` 201,
    `engineeringtags.js` 20); update engineering.md 2.1 / 3 / 5 / 6.
 
 ### Ids and data
@@ -212,7 +212,7 @@ in the patcherMod jar.
 ---
 
 ## sawmill-and-components #3: JEI doesn't show the sawmill blade
-Status Planned / Work patcherMod / KubeJS / `engineering/sawmill-and-components #3` (re-checked 2026-10-31: no blade
+Status Planned / Work Creative Common / KubeJS / `engineering/sawmill-and-components #3` (re-checked 2026-10-31: no blade
 sync or JEI slot added yet)
 
 ### Goal
@@ -249,14 +249,14 @@ sawblade for a profiled recipe; U on a stairs blade lists the stairs recipes.
    blade empty -> `new ItemStack(IE sawblade)`; else a `PRECISION_SAWBLADE` stack with `Profile` set; add
    `builder.addSlot(RecipeIngredientRole.CATALYST, 3, 29).addItemStack(stack)` (`CATALYST` exists in JEI 11.8.1,
    verified). The slot tooltip then carries the KubeJS "Sawmill profile" line.
-3. **Subtype** in a patcherMod JEI plugin (`compat/DragonBreathingJEI.java` is an `@JeiPlugin`; the newer ones sit in
+3. **Subtype** in a Creative Common JEI plugin (`compat/DragonBreathingJEI.java` is an `@JeiPlugin`; the newer ones sit in
    `compat/jei/`, e.g. `SmithingTemplateJEI.java`):
    `registerItemSubtypes(r -> r.registerSubtypeInterpreter(CreativeEngineeringItems.PRECISION_SAWBLADE.get(), (stack, ctx) -> SawbladeRouting.profileOf(stack)))`,
    so focus on a stairs blade finds only `blade == "stairs"` recipes.
-4. Rebuild patcherMod; it changes the recipe packet, so server and every client need the same jar (they always do).
+4. Rebuild Creative Common; it changes the recipe packet, so server and every client need the same jar (they always do).
 
 ### Ids and data
-`creativeengineering:precision_sawblade` (patcherMod `item/CreativeEngineeringItems.java` 15), `{Profile:"<shape>"}`,
+`creativeengineering:precision_sawblade` (Creative Common `item/CreativeEngineeringItems.java` 15), `{Profile:"<shape>"}`,
 `SawbladeRouting.PROFILE_KEY`; IE `immersiveengineering:sawblade`.
 
 ### Decisions
@@ -510,7 +510,7 @@ class, so the 9 pack coils and 10 coil blocks have uses.
 ---
 
 ## sawmill-and-components #10: IE wire connector cover
-Status Planned / Work KubeJS / patcherMod / `engineering/sawmill-and-components #10` (still undecided 2026-10-31)
+Status Planned / Work KubeJS / Creative Common / `engineering/sawmill-and-components #10` (still undecided 2026-10-31)
 
 ### Goal
 Unknown: the row says "a cover for IE wire connectors", decision "what it is". Ask before building.
@@ -522,13 +522,13 @@ Unknown: the row says "a cover for IE wire connectors", decision "what it is". A
   the connectors in `client_scripts/tooltips.js`, IE section from line 442).
 - **Cosmetic cover block** (KubeJS startup block, thin plate with a hole): can't share the block space with the
   connector, so it only frames it from a neighboring block. Low value.
-- **Camouflage on the connector** (patcherMod): right-click a connector with a block to store a `BlockState` in the
+- **Camouflage on the connector** (Creative Common): right-click a connector with a block to store a `BlockState` in the
   connector's block entity and render it as a casing. Needs mixins on IE's connector block entity (NBT, sync) and its
   model / renderer; large and fragile. Framed Blocks / Create copycats can't hold a connector.
 
 ### Decisions
 - **Recommend:** confirm whether the feedthrough is what you mean; if yes, add a connector tooltip and close. If you
-  want connectors hidden inside walls or casings, say so and this becomes a patcherMod feature with its own writeup.
+  want connectors hidden inside walls or casings, say so and this becomes a Creative Common feature with its own writeup.
 
 ### Tests
 - EN-new7 Feedthrough: two LV connectors on either side of a stone block, hammer one -> a feedthrough; power passes.
@@ -687,7 +687,7 @@ but much cheaper at scale, for real computing.
 ---
 
 ## sawmill-and-components #14: Smaller hemp coil connectors
-Status Planned / Work KubeJS / new jar (recommended: patcherMod) / `engineering/sawmill-and-components #14` (scratchpad
+Status Planned / Work KubeJS / new jar (recommended: Creative Common) / `engineering/sawmill-and-components #14` (scratchpad
 2026-10-22; decision: model and texture)
 
 ### Goal
@@ -709,7 +709,7 @@ from a hook-sized fitting instead of IE's chunky Structural Connector.
 - KubeJS 6 cannot register a block entity that joins IE's wire network, so "KubeJS" in the row can only mean the recipe.
 
 ### Build
-1. **patcherMod** (recommended over a new jar: patcherMod already compiles against IE for the sawmill mixins). New
+1. **Creative Common** (recommended over a new jar: Creative Common already compiles against IE for the sawmill mixins). New
    `ie/RopeHookBlock` (a thin directional block, `Properties.copy(Blocks.IRON_BARS)`, no collision box beyond the
    hook) and `ie/RopeHookBlockEntity extends ConnectorStructuralBlockEntity` using the 3-arg constructor with its own
    `BlockEntityType`. Override `getConnectionOffset` (wire end about 0.15 out from the face instead of 0.5) and
@@ -733,7 +733,7 @@ New `creativeengineering:rope_hook` (block, item, BE type; name proposed). IE id
 ### Decisions
 - Model: **recommend one iron eye hook** first (reads as "small connector", tints well); wooden peg later if wanted.
 - Steel rope too, or hemp only? **Recommend both** (inherited; no reason to forbid it).
-- New jar vs patcherMod: **patcherMod** (one less jar, IE already on its compile path).
+- New jar vs Creative Common: **Creative Common** (one less jar, IE already on its compile path).
 
 ### Gotchas
 - Wire sag and length come from the wire type, not the connector: a smaller connector does not shorten max length.

@@ -23,7 +23,7 @@ and `global.itemMergeRun.recipes / loot / inventory`. The CD group's pairs come 
 `data/creativedelight/swaps/<name>.json`: `{"replaces": {"creativedelight:thing": ["oldmod:thing"]}}`, namespace kept
 since the old mod may be gone, never pruned. Seed from the CD merge pairs (`global.itemMergeGroups.creativedelight`)
 and members' `removed_items` entries that have a survivor. `addItemMerges` runs at **startup**, so the reader must deliver
-the lists before CD's startup merge scripts: a Java reader in patcherMod (its jar startup loader already reads
+the lists before CD's startup merge scripts: a Java reader in Creative Common (its jar startup loader already reads
 CD's `kubejs_startup/`) exposed as a global, or the lists written as a CD startup script. Decision (Q19): recommend the CD startup script form (no Java,
 same place as today's pairs), with the JSON generated from it for row 3's Java side. Test CDS-01: reader returns every
 list; malformed file logs and is skipped.
@@ -35,6 +35,6 @@ Test CDS-02: harness (framework #6) shows recipes using the old id now use the s
 
 ## swappers #3: World half and triggers
 Player inventories are already swapped on `PlayerEvents.inventoryChanged` (both groups). Left: containers, dropped
-items, unloaded chunks: Java (CD jar or patcherMod) reading the same lists. Triggers are config booleans:
+items, unloaded chunks: Java (CD jar or Creative Common) reading the same lists. Triggers are config booleans:
 `onWorldLoad`, `onPlayerDataLoad`, `onContainerOpen`, `onCommand`, `onceWhenUpdated`. Block and entity swaps later.
 Tests CDS-03 (item in chest swapped on open), CDS-04 (once-when-updated runs once per list change).

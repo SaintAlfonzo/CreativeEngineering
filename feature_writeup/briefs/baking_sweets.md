@@ -417,7 +417,7 @@ g. **Bowl spouting:** done by CCK for the Neapolitan six; steps c and f add it f
   set, since it covers all six Neapolitan flavors).
 - **D4 New flavours.** Recommend 3 to start: sweet berry, lemon, mango (distinct colors, existing fruit effects).
 - **D5 BlockRunner tier.** `very_sticky` (recommended) or a new "ice cream" tier, which would mean a new `[surface.speed]`
-  entry and patcherMod `SurfaceTier` change.
+  entry and Creative Common `SurfaceTier` change.
 
 ### Gotchas
 - `setFoodProperties` has two one-argument overloads. cans.js shows the consumer form working; still check the log for

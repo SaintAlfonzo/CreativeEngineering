@@ -14,18 +14,18 @@ and the summary.
 |---|---|---|---|---|
 | XK | Join kick on the dedicated server ("input is null", login packet) | fix, 1.0.3 bug | BUILT, exposureBackport `-02` in `mods/`; needs a real client joining a dedicated server | [exposure.md](exposure.md), this file 1.1 |
 | RF | Client startup crash (polaroid refmap missing from the jar) | fix, 1.0.3 bug | BUILT, `-02` in `mods/`; a throwaway client reached the main menu | [exposure.md](exposure.md), this file 1.2 |
-| CB | Camera bags moved from patcherMod to Exposure Extras (`exposure_extras`), now dyeable | migration + feature | BUILT, exposureBackport `-02` in `mods/` (md5 e54032b6); not boot-tested since the move, remap untested | none yet; this file 2 |
-| CP | Crop parity layer: tobacco on Rich Farmland / Fertile Soil, Quark replant and hoe harvesting | feature | BUILT, patcherMod 1.0.4 in `mods/`, not boot-tested; CR-01/02/21-25 pending | [crops.md](crops.md) 2.6 (`CR-`) |
-| HA | Harvest area per hoe (1x1 to 9x9) + tooltip | feature | BUILT, patcherMod 1.0.4 in `mods/`; scratch boots clean before the bump; CR-26..30 pending | [crops.md](crops.md) 2.3 (`CR-`) |
+| CB | Camera bags moved from Creative Common to Exposure Extras (`exposure_extras`), now dyeable | migration + feature | BUILT, exposureBackport `-02` in `mods/` (md5 e54032b6); not boot-tested since the move, remap untested | none yet; this file 2 |
+| CP | Crop parity layer: tobacco on Rich Farmland / Fertile Soil, Quark replant and hoe harvesting | feature | BUILT, Creative Common 1.0.4 in `mods/`, not boot-tested; CR-01/02/21-25 pending | [crops.md](crops.md) 2.6 (`CR-`) |
+| HA | Harvest area per hoe (1x1 to 9x9) + tooltip | feature | BUILT, Creative Common 1.0.4 in `mods/`; scratch boots clean before the bump; CR-26..30 pending | [crops.md](crops.md) 2.3 (`CR-`) |
 | GL | WTHIT growth line for the plants WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all), `[crop_growth]` config, `/dumpcropgrowth` audit | feature | BUILT 2026-10-04, headless-tested; jar built in `build/libs`, not installed; CR-59..66 pending | [crops.md](crops.md) 2.9 (`CR-`) |
-| CG | Canned golem can be dyed (16 colors) | feature | BUILT, patcherMod 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
-| DD | Display Delight: missing-texture icons in WTHIT and JEI, empty WTHIT icon for item-less plates | fix | BUILT: kubejs models + patcherMod 1.0.4 in `mods/`; R4-08..10 pending | this file 4b |
+| CG | Canned golem can be dyed (16 colors) | feature | BUILT, Creative Common 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
+| DD | Display Delight: missing-texture icons in WTHIT and JEI, empty WTHIT icon for item-less plates | fix | BUILT: kubejs models + Creative Common 1.0.4 in `mods/`; R4-08..10 pending | this file 4b |
 | NM | New mods: Blue Flame Burning, Fruits Delight, Improved Pillager Outpost, Well | mods | in `mods/`; `mod_sides.md` rows added 2026-10-02 (all `both`), in the payload | this file 5 |
 | DR | Data refresh for every mod added since the last dumps: `/dumpall` + `/dumpfood`, all generators, food types, compost, item_dict, BlockRunner tiers, JEI coverage, writeups | data + scripts | BUILT 2026-10-02; scratch server loads it clean; your client needs a restart (new item_dict keys) | this file 5b |
 | WG | Worldgen: Improved Pillager Outpost as a 1-in-8 tower (not a replacement), IPO template-name fix, only water structures in oceans/rivers (biome rules), driftwood x0.25 | feature + fix | BUILT 2026-10-03, scratch dedicated server applied it; ST-44..48 pending | [structure_tuning.md](structure_tuning.md) 3.12 (`ST-`) |
 | EF | Earth fill: cancel structures whose foundation needs too much earth over water or air; Monobank banks about 5x rarer in villages; driftwood only in water, land driftwood at 1/10 | feature + tuning | BUILT 2026-10-03, in the 1.0.4 jar; limits come from an offline simulation, never run in a game; ST-49..55 pending | [structure_tuning.md](structure_tuning.md) 3.12, 3.13 (`ST-`), this file 3b |
 | CF | Config: Quark tobacco line, Every Compat fruit leaves, JEI sort order, T&T waystones patch zip gone | config | live | this file 5 |
-| WT | Wandering Trader + Winemaker: independent spawn timers in ticks (96000 each), 25 + 5 offers, stock rework in KubeJS (`global.trades`), Vinery `wine_trader_chance` 0; catalog | feature + config | BUILT 2026-10-03, patcherMod 1.0.4 in `mods/` (md5 37ce1023) + KubeJS; scratch dedicated server checked it; WT-01..16 pending | [wandering_trader.md](wandering_trader.md) (`WT-`) |
+| WT | Wandering Trader + Winemaker: independent spawn timers in ticks (96000 each), 25 + 5 offers, stock rework in KubeJS (`global.trades`), Vinery `wine_trader_chance` 0; catalog | feature + config | BUILT 2026-10-03, Creative Common 1.0.4 in `mods/` (md5 37ce1023) + KubeJS; scratch dedicated server checked it; WT-01..16 pending | [wandering_trader.md](wandering_trader.md) (`WT-`) |
 | WC | Wild crops: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), oak/dark oak leaves drop no apples, Alex's Mobs leaf bananas off, Farmer's Respite Nether coffee off, Myrtrees rubber trees only in jungles, cherry and the Fruits Delight apple moved; CEConfig `wildCrops` switch | feature + config | BUILT 2026-10-03/04, offline-tested; in the 1.0.4 jar (md5 55a2e65a); CR-47..58 pending | [crops.md](crops.md) 2.8 (`CR-`) |
 | PF | Performance: the five known third-party hot spots from the first server profile (horse armor pass, Quark feeding trough, Create: Gravity, Serene Seasons melt, Fruits Delight leaves), a `[perf]` config section, and a wrong horse-armor effect id | fix | BUILT 2026-10-03, scratch dedicated server checked that every mixin applies; none of it measured under load | [perf.md](perf.md) 7, this file 3c |
 | VB | Vinery Aging Barrel stacks its output while the wine in the slot has the same year; Vinery `years_per_effect_level` 4 to 2 | feature + config | BUILT 2026-10-03 22:50, in the 1.0.4 jar; VN-07 pending | [vinery.md](vinery.md) (`VN-`), this file 3d |
@@ -33,7 +33,7 @@ and the summary.
 | VR | Version records: in-tree jars bumped, jar archive, 1.0.3 snapshot | bookkeeping | DONE 2026-10-02 | [deploy.md](deploy.md), this file 6 |
 
 **Payload as of 2026-10-04** (staged, `deploy/latest/`): update from 1.0.3, 398 files, 12.8 MB (mods 6, kubejs
-377, config 15). Jars: the four new mods plus the rebuilt patcherMod and exposureBackport. Each side
+377, config 15). Jars: the four new mods plus the rebuilt Creative Common and exposureBackport. Each side
 deletes `creativeengineering-1.0.3.jar`, `exposureBackport-...-01.jar` and `Dimensional Gravity 1.0.1 - 1.19.2.jar`
 (a mod you removed from `mods/` since 1.0.3; Create: Gravity stays). The only preflight warning is uncommitted
 changes.
@@ -76,7 +76,7 @@ which has to go to the server and every client together, because the version is 
 
 ## 2. CB: camera bags move to Exposure Extras (in progress)
 
-**Why:** the bags are Exposure content, so they now live with Exposure instead of in patcherMod. The
+**Why:** the bags are Exposure content, so they now live with Exposure instead of in Creative Common. The
 exposureBackport jar gained a fifth mod: `exposure_extras` ("Exposure Extras"). It is the pack's own code, not
 an upstream addon. The base mod's display name is now **Exposure (Backport & Extras)**. New Exposure
 content of our own goes in `src/extras` from now on, while the upstream source sets stay a faithful port.
@@ -86,10 +86,10 @@ content of our own goes in `src/extras` from now on, while the upstream source s
 | Piece | 1.0.3 (shipped) | 1.0.4 |
 |---|---|---|
 | Item ids | `creativeengineering:{leather,iron,netherite}_camera_bag` | `exposure_extras:{leather,iron,netherite}_camera_bag` |
-| Java | patcherMod `camerabag/` | exposureBackport [src/extras](../development/exposureBackport/src/extras/) (`com.SaintAlfonzo.exposure_extras`) |
+| Java | Creative Common `camerabag/` | exposureBackport [src/extras](../development/exposureBackport/src/extras/) (`com.SaintAlfonzo.exposure_extras`) |
 | Slot counts | `creativeengineering-common.toml` `[camera_bag]` | `exposure_extras-common.toml` `[camera_bag]` (same 5 / 9 / 14, range 1-27) |
 | Accepted items | `#creativeengineering:camera_equipment`, all in kubejs | `#exposure_extras:camera_equipment`: defaults in the jar's [camera_equipment.json](../development/exposureBackport/src/extras/resources/data/exposure_extras/tags/items/camera_equipment.json), pack add/remove lists in [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) |
-| Lang, item models | patcherMod assets | `assets/exposure_extras/` (models still point at Spice of Life textures) |
+| Lang, item models | Creative Common assets | `assets/exposure_extras/` (models still point at Spice of Life textures) |
 | Recipes | [equipment/camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) | unchanged; item_dict keys `i.*_camera_bag` now point at the new ids |
 
 **Existing worlds:** the live server ran 1.0.3, so players may already own `creativeengineering:` bags. A
@@ -102,7 +102,7 @@ correction). Anyone who changed slot counts on the server sets them again in the
 **Done:**
 - The source move: the six classes, three models, lang and the tag, plus `ExtrasConfig`, the remap and the
   new mods.toml entry with its dependencies on exposure, polaroid and expanded.
-- patcherMod no longer registers the bags. The CEConfig `[camera_bag]` section and the patcherMod lang
+- Creative Common no longer registers the bags. The CEConfig `[camera_bag]` section and the Creative Common lang
   keys are gone.
 - kubejs: item_dict ids, the tag's add/remove lists and the recipe comments are updated.
 - `mod_sides.md`, the exposureBackport README and the JEI mod sort order are updated.
@@ -139,7 +139,7 @@ The pieces are generic, so the next crop only needs tags and config:
 - block tags `creativeengineering:crops/farmland_soils` and `crops/farmland_crops`, in
   [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
 - one Quark "Harvestable Blocks" line, backed up in `configs_edited/`
-- patcherMod `crops/CropParity` and four mixins: `FarmBlockUnderCrops`, `MulchBlockCropGrowth`,
+- Creative Common `crops/CropParity` and four mixins: `FarmBlockUnderCrops`, `MulchBlockCropGrowth`,
   `QuarkHoeHarvest`, plus `TobaccoPlacement` (the only per-crop one)
 
 Details and the checklist for further crops: [crops.md](crops.md) 2.6. Gaps G1-G3 are fixed, G4-G11 are open.
@@ -157,7 +157,7 @@ tag wins) set the square that Quark's hoe right-click and area break cover:
 
 An even size reaches one block further toward where the player looks. A hoe with no tag keeps Quark's
 configured radius. The tooltip line ("Harvest area: 3x3") is generated from the tags. The tags are in
-[equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js); the code is patcherMod `crops/HoeHarvestArea`
+[equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js); the code is Creative Common `crops/HoeHarvestArea`
 and `HoeHarvestTooltip` plus two Quark mixins. To change a size, edit the tags, not Java. Details:
 [crops.md](crops.md) 2.3.
 
@@ -167,8 +167,8 @@ it at world load: the mods' own biome modifiers become `forge:none` and the pack
 cover the cases where a mod's ground test would block the biome (cabbages on cliffs, colonies in dark forests,
 hamimelons on terracotta, cocoa trees in swamps). Side changes: oak/dark oak leaves drop no apples
 (`loot/08_leaf_apples.js`), `config/alexsmobs.toml` `bananasDropFromLeaves = false` (backed up), no Farmer's Respite
-coffee in Basalt Deltas. The CEConfig switch needs the rebuilt patcherMod jar in `mods/` (install with
-`./gradlew :patcherMod:installToMods` once the game is closed); without it the scripts default to on. Open: densities
+coffee in Basalt Deltas. The CEConfig switch needs the rebuilt Creative Common jar in `mods/` (install with
+`./gradlew :creativeCommon:installToMods` once the game is closed); without it the scripts default to on. Open: densities
 moved a lot (V13), FR coffee has no source now (V18). Details: [crops.md](crops.md) 2.8.
 
 ## 3b. EF: earth fill, banks and driftwood
@@ -205,7 +205,7 @@ under the new `[perf]` section, read live (details and the mixin-into-a-mixin le
 
 The horse armor script also had a wrong effect id (`strong_regeneration` is a potion, so the horse never got anything);
 it is `minecraft:regeneration` now. This adds a mixin config plugin (`creativeengineering.mixins.json` `"plugin"`),
-six mixins and a `compat` hook class to the patcherMod jar. **Why it matters for staging:** the first in-game profile
+six mixins and a `compat` hook class to the Creative Common jar. **Why it matters for staging:** the first in-game profile
 ran against a jar without these, and the new script threw `CEConfig has no public ... PERF` on every level tick
 until the jar was installed. The payload's KubeJS scripts and the 1.0.4 jar have to go out together.
 
@@ -235,7 +235,7 @@ another year still blocks it. Also `config/vinery/config.json5` `years_per_effec
 
 Right-clicking Canned Goods' canned golem with any dye (including `#forge:dyes/*`) recolours it. It uses one
 dye unless you're in creative. The default is red, the mod's own texture.
-- The color is synced entity data, saved as NBT `Color`: patcherMod `mixin/CannedGolemColorMixin`.
+- The color is synced entity data, saved as NBT `Color`: Creative Common `mixin/CannedGolemColorMixin`.
 - The client texture is swapped by `CannedGolemRendererMixin`.
 - The other 15 textures are in `kubejs/assets/creativeengineering/textures/entity/canned_golem/`.
 
@@ -265,12 +265,12 @@ block's max stacks).
   whose models have no gui transform get the usual plated one. It also writes the 3 soup models with each
   `#missing` face retextured from its element's top face. Item ids come from `/dumpitemsbymod displaydelight`.
   `--check` exits 1 when anything is stale (e.g. after a DD update).
-- patcherMod `compat/WthitBlockModelIcon` (a WTHIT plugin in `waila_plugins.json`, required mod
+- Creative Common `compat/WthitBlockModelIcon` (a WTHIT plugin in `waila_plugins.json`, required mod
   `displaydelight`): for a `displaydelight` block whose clone stack is empty or has the missing model, the icon
   is the block's own model, facing north, with the real stack count. Priority 1000 runs before WTHIT's core
   icon (1100); it returns null otherwise.
 
-The models ship with the kubejs payload and the plugin ships with the patcherMod jar.
+The models ship with the kubejs payload and the plugin ships with the Creative Common jar.
 
 ## 5. New mods and config
 
@@ -344,7 +344,7 @@ Config changes after the first draft (2026-10-03/04), all in the payload unless 
 
 | What | Before | After |
 |---|---|---|
-| patcherMod `mod_version` | 1.0.3 (the post-deploy work was rebuilt under that name) | **1.0.4** |
+| Creative Common `mod_version` | 1.0.3 (the post-deploy work was rebuilt under that name) | **1.0.4** |
 | exposureBackport `mod_version` | `1.9.19-ce-19.2-01` (same) | **`1.9.19-ce-19.2-02`** |
 | `mods/` | `creativeengineering-1.0.3.jar`, `exposureBackport-...-01.jar` (both post-deploy rebuilds) | `creativeengineering-1.0.4.jar`, `exposureBackport-...-02.jar` (via `installToMods`) |
 | `jar_archive/` | 1.0.3 and `-01` = the shipped jars (sha1 matches `history/1.0.3.json`) | unchanged, plus the 1.0.4 and `-02` builds (the next staging refreshes them if the jars change) |
@@ -352,14 +352,14 @@ Config changes after the first draft (2026-10-03/04), all in the payload unless 
 | `deploy/DEPLOYED.json` | server 1.0.1, client 1.0.2 (the 1.0.3 deploy was never snapshotted) | server and client **1.0.3**, 2026-10-02 15:55 (taken from the commit time) |
 | `mod_sides.md` | the old jar names | the new jar names |
 
-Version rule from here: bump patcherMod's patch version and exposureBackport's port build once per pack
+Version rule from here: bump Creative Common's patch version and exposureBackport's port build once per pack
 release. Rebuilds before a release keep the number.
 
 ## 7. Staging 1.0.4
 
 1. DONE 2026-10-02: `mod_sides.md` rows for the four new mods.
 2. DONE 2026-10-04: T&T waystones zip (regenerated by the game, no removal).
-3. DONE 2026-10-04: jars current. exposureBackport `-02` in `mods/` matches the build (md5 e54032b6). The patcherMod
+3. DONE 2026-10-04: jars current. exposureBackport `-02` in `mods/` matches the build (md5 e54032b6). The Creative Common
    1.0.4 jar in `mods/` was the 19:36 build on 2026-10-03, older than 22:51 (it lacked the perf, earth fill, barrel and wild
    crop switch classes); it was replaced by the 22:51 build (md5 55a2e65a, 323 classes) via a copy and an atomic rename, because
    the game was running and `installToMods` would have rewritten a loaded jar in place. The running game keeps the old
@@ -413,7 +413,7 @@ release. Rebuilds before a release keep the number.
 
 ## 9. History
 
-- 2026-10-02: file written. Everything after the 1.0.3 deploy (commit `d791885`) is 1.0.4. Bumped patcherMod
+- 2026-10-02: file written. Everything after the 1.0.3 deploy (commit `d791885`) is 1.0.4. Bumped Creative Common
   to 1.0.4 and exposureBackport to `-02`, rebuilt both, installed them to `mods/` and set the jar archive
   straight (above). Recorded the 1.0.3 deploy with `--snapshot`. Moved the post-deploy items (CP and the
   camera bag move) out of [plan_1.0.3.md](plan_1.0.3.md); that plan is now marked DEPLOYED.
@@ -421,19 +421,19 @@ release. Rebuilds before a release keep the number.
   is no longer blocked; `/dumpfood` added to `/dumpall`; every generator re-run and the writeups brought up to date.
 - 2026-10-03: WG worldgen changes: IPO is a 1-in-8 tower, IPO template-name fix, a water biome rule, and driftwood
   at x0.25 (see the table). patcherMod was rebuilt at 1.0.4 (a pre-release rebuild, so the number stays).
-- 2026-10-03: WT Wandering Trader spawn rate and offer counts (`[wandering_trader]`), patcherMod rebuilt at 1.0.4 and
+- 2026-10-03: WT Wandering Trader spawn rate and offer counts (`[wandering_trader]`), Creative Common rebuilt at 1.0.4 and
   installed (md5 37f69263); catalog and gap analysis in [wandering_trader.md](wandering_trader.md).
 - 2026-10-03 (later): WT rework: tick-based independent trader/Winemaker spawners, 25 + 5 offers, stock edited in
   KubeJS (`economy/wandering_trades.js`, `global.trades`), Vinery `wine_trader_chance` 0 (configs_edited backed up).
-  patcherMod rebuilt at 1.0.4 and installed (md5 37ce1023).
-- 2026-10-03: WC wild crop placement built from the user's spec (see the table). patcherMod rebuilt at 1.0.4 for the
+  Creative Common rebuilt at 1.0.4 and installed (md5 37ce1023).
+- 2026-10-03: WC wild crop placement built from the user's spec (see the table). Creative Common rebuilt at 1.0.4 for the
   `wildCrops` switch (md5 09733ca8), not installed: a game process was running.
 - 2026-10-03 (evening): EF earth fill, Monobank banks, land driftwood (3b); PF five perf hot spots and the `[perf]` config
   (3c); VB barrel output stacking (3d); LC Golden Food book removed, loot catalog, Lootr fixed containers (3e); camera
-  bags made dyeable (2); wild crops got rubber, cherry and the Fruits Delight apple rules. patcherMod rebuilt at 1.0.4
+  bags made dyeable (2); wild crops got rubber, cherry and the Fruits Delight apple rules. Creative Common rebuilt at 1.0.4
   (22:51, md5 55a2e65a).
-- 2026-10-04: this file brought up to date with everything since 1.0.3. Jars refreshed in `mods/` (patcherMod 22:51 build in
+- 2026-10-04: this file brought up to date with everything since 1.0.3. Jars refreshed in `mods/` (Creative Common 22:51 build in
   place of the 19:36 one), pack manifest regenerated, `build_deploy.py` fixed for `wild_crops.json` and the lag bundles, and
   1.0.4 staged in `deploy/latest/` (update from 1.0.3).
 - 2026-10-04 (later): `mod_sides.md` row for Dimensional Gravity dropped; `DistantHorizons.toml` classed as a player config shipped through 1.0.4 only; 1.0.4 re-staged and recorded with `--snapshot 1.0.4` (server and clients, 13:54). R4 checks still open.
-- 2026-10-04: GL WTHIT growth line (see the table). patcherMod rebuilt at 1.0.4 (md5 23df38e7) into `build/libs` only: the working tree also holds the unfinished Breezy and block-state-overflow work, so the jar was not installed to `mods/`.
+- 2026-10-04: GL WTHIT growth line (see the table). Creative Common rebuilt at 1.0.4 (md5 23df38e7) into `build/libs` only: the working tree also holds the unfinished Breezy and block-state-overflow work, so the jar was not installed to `mods/`.

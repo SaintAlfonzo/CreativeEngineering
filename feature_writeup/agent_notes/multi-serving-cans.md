@@ -1,6 +1,6 @@
 # multi-serving-cans
 
-> patcherMod food/CanServings - cans hold n servings (NBT, not durability), bar+tooltip, empty/crushed/nothing roll, NCH `cans` arg for shaped/shapeless via KubeJS custom ingredient action
+> Creative Common food/CanServings - cans hold n servings (NBT, not durability), bar+tooltip, empty/crushed/nothing roll, NCH `cans` arg for shaped/shapeless via KubeJS custom ingredient action
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

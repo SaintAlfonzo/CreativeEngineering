@@ -39,7 +39,7 @@ session, L several sessions.
 | A10 | `farming/wild-crops #5` | Third, most common cantaloupe patch (normal and mini) | data (`wild_crops.json`) | S-M | Copy the existing cantaloupe rules, higher rate; scratch-queue a density check. Q8 |
 | A11 | `farming/crops #25` | Mini melon: note only | docs | S | Record: plant growth and seed shape mirror the Mini Cantaloupe. Row stays Planned, no build |
 | A12 | `cans/canning #17` | All current feasts cannable | tools + KubeJS | M | 20 missing feast blocks listed in [briefs/cans_canning.md](briefs/cans_canning.md): add one row each to `gen_can_types.py`, `/cdevgen`, restart. Sprites are a separate art task. Q9 |
-| A13 | `farming/crops #17` | Water bucket / bottle wets farmland, Rich Farmland, Fertile Soil | patcherMod or CD | M | Use on the block: bucket returns an empty bucket (water consumed), bottle returns a glass bottle. Same wetness mechanic as the watering can. Q10 |
+| A13 | `farming/crops #17` | Water bucket / bottle wets farmland, Rich Farmland, Fertile Soil | Creative Common or CD | M | Use on the block: bucket returns an empty bucket (water consumed), bottle returns a glass bottle. Same wetness mechanic as the watering can. Q10 |
 | A14 | `farming/crops #30` | Well vs watering can bug | none | S | Investigated, see Part D |
 | A15 | Botany Pots growth 8x slower | all Botany Pots crops | KubeJS recipes event | S-M | Details in Part C. Q15 to Q17 |
 

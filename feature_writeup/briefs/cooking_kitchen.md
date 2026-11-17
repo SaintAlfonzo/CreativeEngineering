@@ -16,13 +16,13 @@ the same facts.
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `kitchen #16` scythe | patcherMod (one item class) + KubeJS tags and recipes | Mostly data: Quark's hoe harvesting and the pack's `hoe_harvest/NxN` tags already do area harvest up to 9x9 |
+| 1 | `kitchen #16` scythe | Creative Common (one item class) + KubeJS tags and recipes | Mostly data: Quark's hoe harvesting and the pack's `hoe_harvest/NxN` tags already do area harvest up to 9x9 |
 | 2 | `kitchen #11` decor | art + KubeJS blocks | Needs a source decision and owner art; no jar in the pack has a grinder, cutlery or baking-sheet block |
 
 ---
 
 ## kitchen #16: Scythe
-Status Planned / Work patcherMod / TODO `cooking/kitchen #16` (split from #10, 2026-10-21)
+Status Planned / Work Creative Common / TODO `cooking/kitchen #16` (split from #10, 2026-10-21)
 
 ### Goal
 A scythe per tier that only harvests: right-click ripe crops in an N x N square and replant them, with a bigger

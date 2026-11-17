@@ -1,19 +1,19 @@
 # Sweep G: external edges
 
 Audit run 2026-11-01, read-only, for [creative_split.md](../creative_split.md) section 4 row G. Targets use the
-vocabulary of [README.md](README.md). `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`;
+vocabulary of [README.md](README.md). `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/`;
 `CDS` = `development/creativeDelight/src/main/resources/kubejs_startup/`; `CBS` = the same under `creativeBrewing`.
 Method: `grep -rn` over the CD and CB Java, Gradle files, `mods.toml`, and every `global.*` read in the CD/CB script
 trees (jar `kubejs_startup/**`, `kubejs/data/creative_*/kubejs/**`, `kubejs/assets/creative_*/kubejs/**`), then the
 own jars, `tools/generators.json`, `tools/build_deploy.py`, `mod_sides.md`, `settings.gradle` and `build-logic/`.
-`moved_code_backup/2026-10-25/` under creativeDelight is a dead copy of pre-move patcherMod files and is ignored.
+`moved_code_backup/2026-10-25/` under creativeDelight is a dead copy of pre-move Creative Common files and is ignored.
 
 Fix vocabulary in the tables: **Common API** (the class or global lands in, or moves to, Common), **Calendar
 dependency** (CD/CB soft-depend on `creativecalendar`), **soft dependency** (`ModList`/`global.X` guard on a content
 jar), **stays** (the target is Common; nothing to do but the mod-id swap of Q1), **moves with CD/CB** (the referenced
 class lands in the referencing bundle, so the edge becomes internal), **pack** (a pack-folder file; nothing moves).
 
-## 1. Creative Delight and Creative Brewing into patcherMod
+## 1. Creative Delight and Creative Brewing into Creative Common
 
 ### 1.1 Gradle
 
@@ -21,9 +21,9 @@ class lands in the referencing bundle, so the edge becomes internal), **pack** (
 |---|---|---|---|
 | `development/creativeDelight/build.gradle:25` `compileOnly project(':patcherMod')` | patcherMod classes (1.3) | Common + CD + Calendar (per class) | After the carve: `compileOnly project(':creativeCommon')` for `CEConfig`/`MealSlotTooltip` if those stay Common; drop once cooking and crops Java are inside CD. |
 | `development/creativeBrewing/build.gradle:18` `compileOnly project(':patcherMod')` | none today (CB Java has no `creativeengineering` import; the comment names CEConfig and the remainder buffer for future compartments) | Common | stays as `project(':creativeCommon')` once Q1 renames; CB's brewing move (creative_brewing.md 4.2) adds the real users. |
-| `development/creativeBrewing/members/vinery/build.gradle:22` `compileOnly project(':patcherMod')` | `PM/time/WineTime` via `PackTime` | Calendar | Calendar dependency: `compileOnly project(':creativeCalendar')`. |
+| `development/creativeBrewing/members/vinery/build.gradle:22` `compileOnly project(':creativeCommon')` | `PM/time/WineTime` via `PackTime` | Calendar | Calendar dependency: `compileOnly project(':creativeCalendar')`. |
 
-No CD member (`members/*/build.gradle`) depends on patcherMod; `members/blockheads` depends on `:backportedBrewin`
+No CD member (`members/*/build.gradle`) depends on Creative Common; `members/blockheads` depends on `:backportedBrewin`
 (CB member), a CD-to-CB compile edge outside this split's scope but worth a line in the graph.
 
 ### 1.2 mods.toml
@@ -63,7 +63,7 @@ CB's own sources (`development/creativeBrewing/src/main/java`) have no `creative
 
 ### 1.4 KubeJS globals read by the CD and CB script trees
 
-Definers: `global.NCH`, `global.tags`, `global.compost` (and `compostOriginal`, `compostListening`) are patcherMod's
+Definers: `global.NCH`, `global.tags`, `global.compost` (and `compostOriginal`, `compostListening`) are Creative Common's
 jar `kubejs_startup/creativeengineering/func/`. `global.item`, `global.blocks`, `global.fluid`, `global.effect`,
 `global.removedItems`, `global.addItemMerges`, `global.itemMergeRun` are `kubejs/startup_scripts/_lib/`
 (`item_dict.js`, `block_dict.js`, `fluid_dict.js`, `effect_dict.js`, `removed_items.js`, `item_merges.js`).
@@ -110,7 +110,7 @@ Reads of every other pack global, one row per file:
 | `kubejs/data/creativedelight/kubejs/vintagedelight/loot.js` | `global.lootTuning` (guarded) | Worldgen | soft dependency, as above |
 | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js` | `global.biomeRules.system(...)` (2 sites, unguarded) | Worldgen (`server_scripts/worldgen/_biome_rules.js`) | soft dependency needs a guard added, or `_biome_rules.js` (the rule engine, not the rules) becomes Common API. CD's wild crops are a worldgen feature living in CD (creative_delight.md 24): the owner may prefer `biomeRules` in Common. |
 
-KubeJS load order (`PM/compat/kubejs/JarStartupScripts.java` javadoc): 1. patcherMod's own jar pack (NCH, tags,
+KubeJS load order (`PM/compat/kubejs/JarStartupScripts.java` javadoc): 1. Creative Common's own jar pack (NCH, tags,
 compost); 2. the pack folder `kubejs/startup_scripts/` (dicts, items, rules); 3. every other mod jar's pack in
 mod-list order (CD, CB, ...), "so they can read the dicts". CD's top-level `var i = global.item` reads depend on
 step 2 preceding step 3. Moving the dicts into Common's jar `kubejs_startup` (Q4) puts them in step 1 (same pack as
@@ -127,7 +127,7 @@ only if that jar sorts before them in the mod list (CB already relies on an AFTE
 | `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.js`, `wild_crops.json` | `kubejs/generation_scripts/worldgen/biome_traits.json` | pack (Worldgen data) | pack |
 
 The CD folders named `creativeengineering/` (10 startup, 20 server, 1 client file: cans, baking, seasonings, salt,
-cultivated meat, mortar, soil yield) are rows that touch patcherMod's own items. Rule 3.9 names a folder per mod the
+cultivated meat, mortar, soil yield) are rows that touch Creative Common's own items. Rule 3.9 names a folder per mod the
 rows touch; after the Q1 swap these items are registered by whichever jar owns them (Common or Engineering), so the
 folder name needs a decision (keep `creativeengineering/` since the item namespace stays, which is this sweep's
 recommendation; ids do not change).
@@ -135,9 +135,9 @@ recommendation; ids do not change).
 ### 1.6 PackTime
 
 `development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/forge/PackTime.java` is the only
-WineTime user outside patcherMod. Its single caller is `VineryConfig.java` in the same package. It is already a soft
+WineTime user outside Creative Common. Its single caller is `VineryConfig.java` in the same package. It is already a soft
 dependency (`ModList.get().isLoaded("creativeengineering") && WineTime.active()`), with `compileOnly
-project(':patcherMod')` for the type. `WineTime` is in `PM/time/` and already headed "Reserved for Creative Calendar";
+project(':creativeCommon')` for the type. `WineTime` is in `PM/time/` and already headed "Reserved for Creative Calendar";
 its PM readers are `CreativeEngineering.java`, `CEConfig.java`, `time/TimePush.java`. Fix: the Calendar carve changes
 the `isLoaded` id to `creativecalendar`, the vinery `build.gradle` line to `project(':creativeCalendar')`, the import
 to the Calendar package, and adds a `mandatory=false` `creativecalendar` AFTER dependency to CB's `mods.toml`
@@ -148,13 +148,13 @@ to the Calendar package, and adds a `mandatory=false` `creativecalendar` AFTER d
 
 ### 2.1 Going into Creative Delight (owner, 2026-11-01)
 
-| Project | mod id | version | plugin | mods.toml dependencies | patcherMod reference | mixins | kubejs_startup | config toml |
+| Project | mod id | version | plugin | mods.toml dependencies | Creative Common reference | mixins | kubejs_startup | config toml |
 |---|---|---|---|---|---|---|---|---|
 | `development/babyMobs` | `babymobs` | 1.0.0 | `ce.forge-mod` | forge, minecraft (BOTH) | none | `babymobs.mixins.json` (12 Java files) | none | none |
 | `development/moreMooblooms` | `moremooblooms` | 1.1.0 | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei) | forge, minecraft; optional buzzier_bees (AFTER), jei, blueprint, alexsmobs, supplementaries, abnormals_delight, botania, delightful | none | `moremooblooms.mixins.json` (24 Java files); `data/`, `assets/`, `packs/` resources | none | none |
 | `development/incubationAdditions` | `incubation_additions` | 1.1.0 | `ce.forge-mod`, `compileOnly fileTree('libs')` (incubation, alexsmobs, untitledduckmod, blueprint, citadel, geckolib) | forge, minecraft, incubation (mandatory AFTER); optional alexsmobs, untitledduckmod | string only: `OLD_NAMESPACE = "creativeengineering"` in `IncubationAdditions.java` remaps nests saved under the old `creativeengineering:` ids (data fix-up, no class dependency) | `incubation_additions.mixins.json` (14 Java files); `packs/` | none | none |
 
-Reverse edges from patcherMod and the pack to these three: `CEConfig.java` lines 3354, 3419, 3429 list their mod ids
+Reverse edges from Creative Common and the pack to these three: `CEConfig.java` lines 3354, 3419, 3429 list their mod ids
 in a display-name table (`"babymobs=Baby Mobs (Alfonzo)"` and so on; changelog or mod-name map, no code
 dependency); `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js`, `func/sample_syringe.js` use their item
 ids; `CDS/incubation_additions/compost_values.js` already exists as a CD per-mod folder. `PM/mooshroom/`
@@ -192,13 +192,13 @@ Nesting each as a CD member (compare `development/creativeDelight/members/rustic
 
 ### 2.2 Not touched by the split
 
-| Project | mod id | plugin | patcherMod reference | split |
+| Project | mod id | plugin | Creative Common reference | split |
 |---|---|---|---|---|
 | `development/creativeLabels` | `creative_labels` | `ce.forge-mod-refmap` (jei, moonlight, wthit compile deps) | none (`waila_plugins.json` is its own) | no |
-| `development/exposureBackport` | `exposure` (+ `exposure_expanded`, `exposure_polaroid`, `exposure_catalog`, `exposure_extras`) | `ce.forge-mod-refmap` | string only: `OLD_NAMESPACE = "creativeengineering"` in `src/extras/.../ExposureExtras.java` remaps camera bags saved under `creativeengineering:<tier>_camera_bag` (patcherMod 1.0.3) | no. Note: 2.1 lists "camera bags" under Equipment; the bags are already in `exposure_extras`, so Equipment holds at most the `backpackskin/` and bag-related mixins, not the items. |
+| `development/exposureBackport` | `exposure` (+ `exposure_expanded`, `exposure_polaroid`, `exposure_catalog`, `exposure_extras`) | `ce.forge-mod-refmap` | string only: `OLD_NAMESPACE = "creativeengineering"` in `src/extras/.../ExposureExtras.java` remaps camera bags saved under `creativeengineering:<tier>_camera_bag` (Creative Common 1.0.3) | no. Note: 2.1 lists "camera bags" under Equipment; the bags are already in `exposure_extras`, so Equipment holds at most the `backpackskin/` and bag-related mixins, not the items. |
 
 Also untouched: `backportedVeggies`, `backportedVintage`, `backportedFungi`, `backportedDisplay`, `backportedMiners`,
-`repackedStorage` (standalone in-tree jars; `patcherMod/build.gradle` has `compileOnly project(':backportedBrewin')`
+`repackedStorage` (standalone in-tree jars; `creativeCommon/build.gradle` has `compileOnly project(':backportedBrewin')`
 and `project(':backportedDisplay')`, reverse edges for sweep A).
 
 ## 3. tools/generators.json: output roots after the split
@@ -242,7 +242,7 @@ Rows today (matched by mod id; `tools/dump_server_mods.py` refuses to run if a j
 perfBot (`cdevperfbot`) and clientCapture (`cdevcapture`) have no row: neither jar is ever in `mods/`.
 
 Rows each new jar needs (side from this sweep; every carve jar has both server logic and client guards today, as
-patcherMod's row says "client-only parts are guarded", so `both` unless sweep B finds a jar whose mixins are all one
+Creative Common's row says "client-only parts are guarded", so `both` unless sweep B finds a jar whose mixins are all one
 side):
 
 | Side | Mod | mod id | Note |
@@ -278,7 +278,7 @@ supplies the convention plugins:
   the `-own` classifier, `bundleJar` ships. Needed only by Devtools if it nests perfBot and clientCapture (6).
 
 A new carve jar therefore needs: a folder `development/<name>/` with `build.gradle` (`plugins { id 'ce.forge-mod' }`
-plus `compileOnly project(':patcherMod')` and the `libs/` jars its mixins target), `gradle.properties` (the keys
+plus `compileOnly project(':creativeCommon')` and the `libs/` jars its mixins target), `gradle.properties` (the keys
 above, `mod_id` without underscore, `shared_sources=mixinplugin` and `shared_base=com.SaintAlfonzo.<modid>` for the
 gated mixin plugin, `disable_target_validator=true`), `src/main/resources/META-INF/mods.toml` (dependency on
 `creativeengineering` now, `creativecommon` after Q1, mandatory AFTER BOTH; KubeJS comes through Common),
@@ -292,7 +292,7 @@ gated mixin plugin, `disable_target_validator=true`), `src/main/resources/META-I
 | `development/perfBot` | `cdevperfbot` | Server-side fake players for the perf suite (`tools/perf/suite/perf_suite.py`, `feature_writeup/perf_suite.md`): `DevPerfBot`, `Bots`, `BotPlayer`, `BotConnection`, `BotCommands`, `TickLog` (6 files, no mixins, `mods.toml` side SERVER) | `ce.forge-mod`; `installToMods` throws (dev-only); `perf_suite.py` copies `build/libs/cdevperfbot-*.jar` into its scratch server | `bundled_in=creativeDevtools`, Devtools as `ce.forge-bundle` with `bundle_members=:perfBot,:clientCapture`; `perf_suite.py` then copies the Devtools bundle (or keeps reading the member's own `build/libs` jar, which the bundle plugin still builds); `settings.gradle` entry moves to a Devtools members map |
 | `development/clientCapture` | `cdevcapture` | Client-side driver for queued visual tests in a throwaway client (`feature_writeup/client_capture.md`: designed 2026-10-24, "not started" in its status table, though 11 Java files and `cdevcapture.mixins.json` exist: `DevCapture`, `CaptureDriver`, `CapturePlan`, `Steps`, `VirtualInput`, `StageScreen`, `TestWorld`, two mixins, a JEI plugin); `mods.toml` side CLIENT, optional jei | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei); `installToMods` throws; the jar goes to `tools/client_capture`'s own game dir (that folder does not exist yet) | same as perfBot; because it is CLIENT-only and perfBot SERVER-only, a Devtools bundle carrying both is loaded on both sides, each member no-op on the wrong side (Forge honors per-mod `side` for dependencies, not for loading); the `mod_sides.md` row (4) must say dev-only |
 
-Neither references patcherMod. Both keep their current ids (existing ids, as the CD-bound jars do); Devtools itself
+Neither references Creative Common. Both keep their current ids (existing ids, as the CD-bound jars do); Devtools itself
 is `creativedevtools`.
 
 ## 7. Summary
@@ -300,7 +300,7 @@ is `creativedevtools`.
 ### 7.1 Edge list by fix type
 
 **Stays (target is Common):** CD and CB `mods.toml` dependency on `creativeengineering` (becomes `creativecommon` at
-Q1); CB `build.gradle` `project(':patcherMod')`; every CD/CB script read of `global.NCH`, `global.tags`,
+Q1); CB `build.gradle` `project(':creativeCommon')`; every CD/CB script read of `global.NCH`, `global.tags`,
 `global.compost`, `global.item`, `global.blocks`, `global.fluid`, `global.effect`, `global.removedItems` (about 350
 of the 382 read sites); probably `global.addItemMerges`/`itemMergeRun` (7 files) and `global.trades` (3 files),
 pending sweep F.
@@ -325,7 +325,7 @@ import, Gradle line and a `mandatory=false` CB `mods.toml` entry change to `crea
 **Pack files:** CD reads 9 `generation_scripts/food/*.json`, `worldgen/crop_seasons.json`, `worldgen/biome_traits.json`
 (pack folder stays; generator owners in 3).
 
-**Own jars:** babyMobs, moreMooblooms, incubationAdditions have no patcherMod code edge (incubationAdditions and
+**Own jars:** babyMobs, moreMooblooms, incubationAdditions have no Creative Common code edge (incubationAdditions and
 exposureBackport carry the string `"creativeengineering"` as an old-id remap only); creativeLabels and
 exposureBackport are not touched.
 
@@ -334,9 +334,9 @@ exposureBackport are not touched.
 For each of Engineering, Equipment, Worldgen, Compat, Calendar, Devtools (and Common at the Q1 swap):
 
 1. `settings.gradle`: name in the include list (Devtools: plus a members map for perfBot and clientCapture).
-2. `development/<name>/build.gradle`: `ce.forge-mod` (Devtools: `ce.forge-bundle`), `compileOnly project(':patcherMod')`
+2. `development/<name>/build.gradle`: `ce.forge-mod` (Devtools: `ce.forge-bundle`), `compileOnly project(':creativeCommon')`
    (`:creativeCommon` after Q1), the `libs/` jars its mixins and compat code compile against (copied from `mods/`,
-   git-ignored, as patcherMod/libs).
+   git-ignored, as creativeCommon/libs).
 3. `development/<name>/gradle.properties`: `mod_id` (no underscore), `mod_name`, `mod_license=GNU GPL3`, `mod_version`,
    `mod_group_id=com.SaintAlfonzo.<modid>`, `mod_authors`, `mod_description`, `jar_name`, `mixin_configs`,
    `shared_sources=mixinplugin`, `shared_base`, `disable_target_validator=true`; `replaces_jars` only if it displaces

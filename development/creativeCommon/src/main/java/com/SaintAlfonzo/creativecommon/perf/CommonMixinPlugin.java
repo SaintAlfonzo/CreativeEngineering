@@ -26,7 +26,7 @@ import java.util.Set;
  * Mixin config plugin for creativecommon.mixins.json. A {@link GatedMixinPlugin} (creative_split.md 7.3 step 0):
  * a mixin named in {@link #NEEDS_MOD} applies only when one of its mods is loaded and inside its tested range in
  * {@link #MOD_RANGE}; every other mixin (vanilla and Forge targets) applies as listed.
- * Each jar carved out of patcherMod takes its mixins' rows with it into its own plugin. Its other job is perf.md 15
+ * Each jar carved out of Creative Common takes its mixins' rows with it into its own plugin. Its other job is perf.md 15
  * candidate C: after {@code IwServerLevelTickMixin} (priority 1500, so after Immersive Weathering's own
  * {@code ServerLevelMixin} at 1000) it rewrites IW's merged {@code callTick} handler in ServerLevel to call
  * {@link IwGrowthFast#blockTick}. Mixin will not inject into another mixin's merged method, hence the ASM.

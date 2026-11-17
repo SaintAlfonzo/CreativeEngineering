@@ -22,7 +22,7 @@ StartupEvents.registry('item', e => {
         })
     })
 
-    // Cob Pipe (2.3): cosmetic, no stats. Head slot and Curios: patcherMod compat/CobPipe; 3D model through Forge's
+    // Cob Pipe (2.3): cosmetic, no stats. Head slot and Curios: Creative Common compat/CobPipe; 3D model through Forge's
     // separate_transforms, the flat sprite in the GUI, on the ground and in frames. The model is set here with modelJson:
     // KubeJS otherwise generates a flat item/generated model that outranks the jar's models/item/cob_pipe.json (which stays
     // as the reference copy, and its cob_pipe_3d.json is the base model)

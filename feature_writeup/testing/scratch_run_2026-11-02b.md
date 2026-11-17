@@ -36,7 +36,7 @@ All checked 14:33 against build/libs: `mods/` holds the newest builds.
 
 | Jar | mods/ | build/libs | Rows |
 |---|---|---|---|
-| creativeengineering-1.1.07.jar (patcherMod) | 2026-11-02 14:08 | 2026-11-02 14:08 | all |
+| creativeengineering-1.1.07.jar (Creative Common) | 2026-11-02 14:08 | 2026-11-02 14:08 | all |
 | creativedelight-1.0.0.jar | 2026-11-02 14:01 | 2026-11-02 14:01 | food, CD members |
 | creativebrewing-1.0.0.jar | 2026-11-02 13:52 | 2026-11-02 13:52 | brewing, drinks |
 | creativecalendar-1.0.0.jar | 2026-11-02 14:08 | 2026-11-02 14:08 | SQ-PST, seasons |
@@ -124,10 +124,10 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
   fishs_stew, ...]` instead of loading on Farmer's Structures 1.0.0 data (log s3/srvlogs/bootA2_fsd02.log); JVM hung,
   own pid killed, driver aborted at s3A2 (expected).
 - 18:44 SQ-WE-04b reboot of s3a crashed: `NoSuchFieldError: ENTITY_TYPE_REGISTRY`. A parallel session built and
-  installed patcherMod 1.1.07 and creativecalendar into mods/ at 18:37-18:41 (hard-linked srv jars rewritten). Boots on
+  installed Creative Common 1.1.07 and creativecalendar into mods/ at 18:37-18:41 (hard-linked srv jars rewritten). Boots on
   hold; asked that session (creativeengineering2-7e) what it installed and when it is done. Later boots copy jars.
 - 18:48 Peer session says it built nothing; most likely the owner installed the fixed creativecalendar (installToMods
-  also rebuilt patcherMod and creativecompat): mods/ 18:41 creativecalendar (has the LoadingModList fix),
+  also rebuilt Creative Common and creativecompat): mods/ 18:41 creativecalendar (has the LoadingModList fix),
   creativeengineering-1.1.07, creativecompat. s1 to s3 ran on the 14:08 / 13:52 builds plus the 15:04 calendar fix;
   s5 and worldgen run on the 18:41 builds. drive.sh now copies every jar into srv (decouple after prep).
 - 18:50 s3 judged (s3/judged.md): FAIL SQ-MRD-01 (More Delight knives mine at 8, tune_tools.js), SQ-LEM-02 (lemon
@@ -137,7 +137,7 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
   break), SQ-POT-03 (hanging_roots throws on 6 holders; old F1 not reproduced), SQ-FSD-02; 30 batch faults (19 proven
   PASS), 4 OPEN. SQ-WE-04b rerun on a clean restart: /wetest timeout (to judge).
 - 18:52 drive.sh restarted from s5A (log perf/runs/r1102b/drive.log; first part drive_1.log).
-- 19:05 Owner (relayed): worldgen slice w postponed (not run in r1102b); the owner installed patcherMod and
+- 19:05 Owner (relayed): worldgen slice w postponed (not run in r1102b); the owner installed Creative Common and
   creativecalendar at 18:37-18:41 themselves, no more installs planned; the owner reruns gen_comfort_nourishment.py and
   gen_compost_values.py (SQ-RD-22, SQ-CDF-08) during the run (told: done before 20:15 or after the s5B boot).
   stop_after.sh kills drive.sh at "STEP s5B2 end". Next: s1_R and s2 reruns, then judging and write-back.

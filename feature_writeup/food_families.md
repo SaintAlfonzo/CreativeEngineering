@@ -228,7 +228,7 @@ One row per family and subfamily. A field a subfamily does not set is its parent
 | **Cooked cut fish** `fish/cooked_cut` | fish | A cut piece cooked. | as fish | as fish | **Rule:** Smoker + Furnace + Campfire: the raw slice (owner 2026-10-25 (4.2 D1)) | Now: hunger 2 to 8 (median 3); saturation 1.8 to 11.2 (median 3.3); stack 64 x8<br>Used in: pizza 8; meal 5; nofamily 5; soup 5; unsorted 4; skewer 3; can 2; roll 1; sandwich 1 |
 | **Egg** `egg` | - | Eggs as the main part of the food. | **Rule:** Never canned (precedent); per item, can parity 2.20 ([can_parity.md](can_parity.md)) | **Rule:** Placeable: at least on a coaster (every raw or cooked produce food, egg and cheese is in the coaster tag; one without its own coaster model is drawn flat) (owner 2026-10-25 (4.2 D1)) | **Rule:** Campfire / Skillet + Smoker + Furnace: one egg; scrambled eggs in the Cooking Pot; a cured egg (century egg) its own station (owner 2026-10-25 (4.2 D1))<br>**Planned:** Cooking oil + 3 eggs -> 3 fried eggs; Cooking Pot 4 fried eggs -> 4 omelettes ([TODO](todo/TODO.md) dishes/meals #23)<br>**Planned:** Any egg (`#forge:eggs`) in egg recipes via `R.replaceInput`; turtle and parrot eggs open ([TODO](todo/TODO.md) food/types-and-tuning #6) | Now: hunger 4 to 20 (median 10); saturation 3.2 to 20 (median 14.6); stack 32 x10, 64 x6; returns bowl 8<br>Used in: egg 3; sandwich 2; dessert 1; feast 1; meal 1; roll 1; soup 1 |
 | **Cooked egg** `egg/cooked` | egg | One egg fried, boiled or scrambled, nothing else. | as egg | as egg | as egg | Now: hunger 4 to 20 (median 5.5); saturation 3.2 to 20 (median 7.6); stack 64 x5, 32 x1; returns bowl 1<br>Used in: egg 2; sandwich 2; dessert 1; feast 1; meal 1; roll 1; soup 1 |
-| **Egg dish** `egg/dish` | egg | Eggs with other parts on a plate or bowl (omelet, shakshouka). | as egg | **Rule:** Display Delight placed (patcherMod adds a placed block for each dish Display Delight has none for) (owner 2026-10-25 (4.2 D1)) | **Rule:** Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms (one more main ingredient) ([recipes_cooking.md](recipes_cooking.md) heatless meal rule)<br>**Planned:** Veggie omelette: the omelette ingredient swapped for tomato, beetroot, any bell pepper or ghost pepper (exact recipe open) ([TODO](todo/TODO.md) dishes/meals #24) | Now: hunger 6 to 12 (median 10); saturation 7.2 to 19.2 (median 16); stack 32 x9, 64 x1; returns bowl 7<br>Used in: egg 1 |
+| **Egg dish** `egg/dish` | egg | Eggs with other parts on a plate or bowl (omelet, shakshouka). | as egg | **Rule:** Display Delight placed (Creative Common adds a placed block for each dish Display Delight has none for) (owner 2026-10-25 (4.2 D1)) | **Rule:** Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms (one more main ingredient) ([recipes_cooking.md](recipes_cooking.md) heatless meal rule)<br>**Planned:** Veggie omelette: the omelette ingredient swapped for tomato, beetroot, any bell pepper or ghost pepper (exact recipe open) ([TODO](todo/TODO.md) dishes/meals #24) | Now: hunger 6 to 12 (median 10); saturation 7.2 to 19.2 (median 16); stack 32 x9, 64 x1; returns bowl 7<br>Used in: egg 1 |
 | **Dairy** `dairy` | - | Cheese and yogurt eaten on their own. | **Rule:** Cheese wedges, 4 per can in the Cooking Pot, x1.25 x 4 servings (can parity 2.20) ([can_parity.md](can_parity.md)) | **Rule:** Placeable: at least on a coaster (every raw or cooked produce food, egg and cheese is in the coaster tag; one without its own coaster model is drawn flat) (owner 2026-10-25 (4.2 D1)) | **Rule:** none: cut from a cheese wheel (owner 2026-10-25 (4.2 D1))<br>**Planned:** 9 cheese wedges craft back to the cheese block, for each cheese; more cheese types ([TODO](todo/TODO.md) dishes/ingredients #9) | **Planned:** Stack: cheese wheel 32 ([TODO](todo/TODO.md) food/stack-sizes #1)<br>Now: hunger 4; saturation 6.4 to 8 (median 7.2); stack 64 x4<br>Used in: egg 4; roll 4; soup 4; feast 3; meal 3; pizza 3; salad 3; sandwich 3; stuffed 3; unsorted 3; 2 more |
 | **Bread** `bread` | - | Baked plain or lightly flavored dough with no filling. | **Rule:** x2 x 4 servings, 6 bread; slices, toast, tortilla and scones not canned (can parity 2.9) ([can_parity.md](can_parity.md)) | **Decision:** none required | **Rule:** Bread only: dough block smoked into a bread block, sawed or knifed into 16 bread ([recipes_cooking.md](recipes_cooking.md) 2.1)<br>**Decision:** Smoker + Furnace + Campfire: the dough<br>**Planned:** Bread block cut to a crustless bread block (standard slab recipe) ([TODO](todo/TODO.md) baking/baked-goods #10) | Now: hunger 2 to 9 (median 4.5); saturation 1.6 to 14 (median 4); stack 64 x12<br>Used in: sandwich 10; bread 9; dessert 9; feast 9; preserve 9; salad 9; soup 9; unsorted 9; meal 2; can 1; 3 more |
 | **Loaf** `bread/loaf` | bread | A whole loaf or round bread. | as bread | as bread | as bread | Now: hunger 4 to 9 (median 5); saturation 1.6 to 14 (median 6); stack 64 x9<br>Used in: unsorted 8; bread 7; dessert 7; feast 7; preserve 7; salad 7; sandwich 7; soup 7; meal 2; can 1; 1 more |
@@ -1337,7 +1337,7 @@ No direct members; see the subfamilies.
 #### Egg dish (`egg/dish`)
 
 - R1 (Cannable): **Rule:** Never canned (precedent); per item, can parity 2.20 ([can_parity.md](can_parity.md))
-- R2 (Placeable): **Rule:** Display Delight placed (patcherMod adds a placed block for each dish Display Delight has none for) (owner 2026-10-25 (4.2 D1))
+- R2 (Placeable): **Rule:** Display Delight placed (Creative Common adds a placed block for each dish Display Delight has none for) (owner 2026-10-25 (4.2 D1))
 - R3 (Recipe shape by station): **Rule:** Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms (one more main ingredient) ([recipes_cooking.md](recipes_cooking.md) heatless meal rule)
 
 | Member | Id | R1 | R2 | R3 | Can | Placeable | Stations |
@@ -3193,7 +3193,7 @@ member's own criteria made the proposal wrong:
 - **Dropped cuts.** Hoglin ear, strider slice, guardian fillet and the Oceanic squid tentacles are mob drops, not board
   cuts. A seasoned raw cut (mint chops) is crafted from its raw meat. A cooked cut vegetable can be cut from the
   cooked whole (vegan patty from a baked cave carrot).
-- **Placeable:** egg dishes get a Display Delight placed block (patcherMod `compat/DisplayDelightDishes`, 9 new
+- **Placeable:** egg dishes get a Display Delight placed block (Creative Common `compat/DisplayDelightDishes`, 9 new
   blocks). The produce briefly joined the coaster tag and lay flat without a model; owner 2026-10-25: cut every coaster
   item without its own model (done, placeable_food.md 3), or add a model for each (open).
 
@@ -3215,7 +3215,7 @@ Changes made to bring members in line (Creative Delight script tree, so they loa
 | Diced Potatoes with Egg and Tomato | heatless meal rule | `_manual_only` craft (`moredelight/recipes.js`) |
 | Venison, chevon | meat planned row | removed items, Delightful venison off in its config (types-and-tuning #10) |
 | Truffle, Truffle Slice, Cooked Inky Cap, the Vintage cans | cannable | can parity rows added for Fungi; `gen_can_types.py` run (20 Vintage and Fungi cans) |
-| 9 egg dishes | DD placed | Display Delight blocks (patcherMod) |
+| 9 egg dishes | DD placed | Display Delight blocks (Creative Common) |
 
 **Still open after the change:** Maple Glazed Bacon and Maple Cookie: owner 2026-10-25, they stay and take Rustic
 Delight's Syrup (cooked bacon + syrup; oven cookie dough + syrup + honey), [rustic_delight.md](rustic_delight.md) 5.2.
@@ -3363,7 +3363,7 @@ models onto the Display Delight 1.7.0 port's bowl (`salad_bowl` texture, new geo
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-FF-00, -02, SQ-FFB-00, SQ-RM-02, -03.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-PCK-01, -02, -03, -04, -05.
 
-Needs the patcherMod and Creative Delight jars from this change installed and a restart. Then `/dumpall` and
+Needs the Creative Common and Creative Delight jars from this change installed and a restart. Then `/dumpall` and
 `python3 tools/food_families.py`: the produce rows of 3.2 read full, except Maple Glazed Bacon (4.4).
 
 - [ ] **FF-01 Furnace fruit:** a pear, a persimmon and durian flesh in a furnace -> Baked Pear, Dried Persimmon, Baked Durian

@@ -20,7 +20,7 @@ Written 2026-10-05. Test prefix `NE-`.
 | Per-mod gating | BUILT 2026-10-05, scratch servers: Incubation only -> nothing registered, no extra packs; + duck mod -> duck/goose nests + crates + duck pack only; + Alex's Mobs -> emu nest + emu pack only; full pack -> both packs, all 7 recipes |
 | Duck and goose egg crates (`WaterfowlEggCrates`) | BUILT 2026-10-05, scratch-server verified (blocks, loot, axe tag, recipes load); not seen in game |
 | New sprites for the duck mod's duck/goose egg items (`client/DuckModEggModels`) | BUILT 2026-10-05, client side NOT run yet (NE-13) |
-| Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in patcherMod 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
+| Emu nest (`EmuNests`, Alex's Mobs emus) | DEPLOYED in Creative Common 1.0.2 (old id `creativeengineering:emu_nest`), never tested in game |
 | Duck and goose nests (`WaterfowlNests`, Untitled Duck Mod) | moved to Incubation Additions (`creativedelight:duck_nest` / `goose_nest`); DEPLOYED with pack 1.0.6 (2026-10-14) (the 2026-10-05 staging that had them under the old patcherMod ids was rebuilt before it went out, so the old duck/goose ids never reached a player); scratch-server verified 2026-10-05 |
 | Foreign-nest NPE guard (`LayEggInNestGoalMixin`) | DEPLOYED with the emu nest (1.0.2) |
 | Goose golden egg (`goldenegg/`, 3.11; [vintage_delight.md](vintage_delight.md) §2.5) | BUILT 2026-10-23 in 1.1.0 (`DropSpot` logic test 9/9 in plain Java), `incubationAdditions-1.1.0.jar` in `mods/`, DEPLOYED with 1.1.02 (1.1.02 changelog Mobs & Animals); scratch SQ-VP-13 PASSED (NE-15, NE-16 logic); NE-15 to NE-17 in game |
@@ -210,7 +210,7 @@ and snow get none. New chunks only. Quick look: `/place feature creativedelight:
    when the nest has no variant for the bird's egg. [LayEggInNestGoalMixin](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/incubation/LayEggInNestGoalMixin.java)
    rejects those nests in `isValidTarget`, which also gives the "each bird only uses its own nest"
    rule in 2.2.
-5. **Own mod since 2026-10-05.** Everything above lived in patcherMod (`creativeengineering:` ids) up
+5. **Own mod since 2026-10-05.** Everything above lived in Creative Common (`creativeengineering:` ids) up
    to 1.0.5. `IncubationAdditions.remapOldIds` (a `MissingMappingsEvent` handler, same as Exposure
    Extras does for the camera bags) loads nests and nest items saved under the old ids as the
    `creativedelight:` ones, egg counts included.
@@ -274,7 +274,7 @@ and snow get none. New chunks only. Quick look: `/place feature creativedelight:
 - **Egg geometry follows the painted layout.** The duck sheet is painted to Incubation's duck-egg
   UVs, so duck nests use the `*_duck_eggs` models; the goose sheet fits the turkey UVs, so geese get
   the larger turkey eggs (same as emus).
-- **Own mod rather than patcherMod,** like Exposure Extras: the nests are a self-contained addon to
+- **Own mod rather than Creative Common,** like Exposure Extras: the nests are a self-contained addon to
   one mod, with their own deps and mixins. The cost is one more jar to ship, and the id change,
   which the remap covers.
 - **Assets live in the jar, overrides in `kubejs/assets/`.** One definition for every model and
@@ -325,10 +325,10 @@ Since M8 (2026-11-04, plan_cb_publish.md 3b) the code is Creative Delight's Incu
 
 - `unzip -l development/incubationAdditions/build/libs/incubationAdditions-1.0.0.jar`: no root
   `assets/` or `data/`, everything under `packs/alexsmobs/` and `packs/untitledduckmod/`; the rebuilt
-  patcherMod jar has no nest or EggLayer entries (2026-10-05).
-- Scratch server, move check 2026-10-05: world saved with the old patcherMod 1.0.5 (an emu nest, a
+  Creative Common jar has no nest or EggLayer entries (2026-10-05).
+- Scratch server, move check 2026-10-05: world saved with the old Creative Common 1.0.5 (an emu nest, a
   duck nest with 3 eggs, a goose nest with 5, a chest of all three nest items), then booted with the
-  new patcherMod + Incubation Additions: all came back as `incubation_additions:` with the same egg
+  new Creative Common + Incubation Additions: all came back as `incubation_additions:` with the same egg
   counts and item counts. In the same world a duck and a goose laid into their nests (3 -> 4, 5 -> 6)
   and an emu alone laid into a fresh emu nest. (With a goose in the pen, a dropped emu egg gets
   picked up by the goose.)
@@ -374,13 +374,13 @@ Since M8 (2026-11-04, plan_cb_publish.md 3b) the code is Creative Delight's Incu
 - 2026-09-29: emu nest built (EmuNests, emu EggLayer mixin, foreign-nest guard). Shipped in the
   1.0.2 restage 2026-09-30.
 - 2026-10-05: duck and goose nests built (WaterfowlNests, two EggLayer mixins), scratch-server
-  verified, in `mods/` as patcherMod 1.0.5, staged for 1.0.5.
+  verified, in `mods/` as Creative Common 1.0.5, staged for 1.0.5.
 - 2026-10-05: this writeup, including the per-nest texture locations and the hotswap route.
 - 2026-10-05: duck and goose egg textures wired up (duck on Incubation duck-egg geometry, goose on
   turkey geometry); duck/goose nest base and item textures duplicated from the hay nest; all duck/goose
-  assets moved to `kubejs/assets/creativeengineering/` and removed from the patcherMod source. NE-11 added.
+  assets moved to `kubejs/assets/creativeengineering/` and removed from the Creative Common source. NE-11 added.
 - 2026-10-05: moved everything to its own mod, Incubation Additions (`development/incubationAdditions`,
-  `incubation_additions`, 1.0.0) with an old-id remap; assets back in the jar. patcherMod lost the nest
+  `incubation_additions`, 1.0.0) with an old-id remap; assets back in the jar. Creative Common lost the nest
   package, the 4 mixins, their mods.toml dependencies and lang. Built, scratch-server verified, not in
   `mods/`. NE-12 added.
 - 2026-10-05: per-mod gating (content sets + built-in packs per bird mod, mixin plugin covers all 4
@@ -389,7 +389,7 @@ Since M8 (2026-11-04, plan_cb_publish.md 3b) the code is Creative Delight's Incu
   identical to the ones already in place. Scratch-server verified; NE-13, NE-14 added.
 - 2026-10-05: license note added (section 4): the hay-nest texture copies, and possibly the twig-nest model geometry, in the Incubation Additions jar conflict with the Abnormals License; repaint or reference instead. Not changed yet.
 - 2026-10-11: ships in pack 1.0.5 (staged, not deployed): `incubationAdditions-1.0.0.jar` is new in the payload next to
-  patcherMod 1.0.5 (which no longer has the nests), so both machines get the pair together. Only the emu nest was
+  Creative Common 1.0.5 (which no longer has the nests), so both machines get the pair together. Only the emu nest was
   ever deployed under its old id (1.0.2), so the remap matters for emu nests already placed in the world (NE-12).
   Both jars booted in single player 2026-10-11 without errors.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED

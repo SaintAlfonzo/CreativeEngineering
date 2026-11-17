@@ -1,6 +1,6 @@
 # terrain-adaptation-soft-beard
 
-> Structure tags terrain_adaptation/{none,bury,beard_thin,beard_box,soft} + template_trim (patcherMod TerrainAdaptation/TemplateTrim); soft beard = footprint + 4-block skirt + skirtBump; status in feature_writeup/structure_tuning.md
+> Structure tags terrain_adaptation/{none,bury,beard_thin,beard_box,soft} + template_trim (Creative Common TerrainAdaptation/TemplateTrim); soft beard = footprint + 4-block skirt + skirtBump; status in feature_writeup/structure_tuning.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
@@ -12,7 +12,7 @@ Built 2026-10-09 on request: user saw square flat pads around small structures (
 - Math: vanilla getBeardContribution with horizontal distance = Euclidean to footprint columns x (8 / skirt); skirt = 4 + skirtBump (0..8, default 0). Bump 4 on a box footprint == vanilla (test).
 - Trim: column with a BUILT block kept whole; other columns drop air/pad/plants (block tags template_trim/pad, /plants; dirt_path and farmland count as built). Templates with no built column (foundation plates) untouched. Runs before GroundMatch in StructureTemplateGroundMatchMixin. EarthFill counts only placed earth for trimmed structures.
 - Tagged (kubejs/server_scripts/worldgen/terrain_adaptation.js, named groups so a group can be soft without trim): 6 siege weapons -> none, 53 other ported MCreator structures -> soft, those 59 trimmed; plus scan batches below.
-- Not done: game was running (no RAM for a scratch server), so the mixins were never applied; targets checked against the Forge-patched SRG jar. Jar only in patcherMod/build/libs (1.0.5).
+- Not done: game was running (no RAM for a scratch server), so the mixins were never applied; targets checked against the Forge-patched SRG jar. Jar only in creativeCommon/build/libs (1.0.5).
 - Scan (2026-10-09): `tools/terrain_adaptation_scan.py` (/cdevgen terrain_adaptation_scan) -> feature_writeup/terrain_adaptation_scan.md: 383 structures, 29 strong / 17 mild / 31 settlements; batches 1-3 TAGGED same day (12 pad houses + 24 pillager outposts soft+trim; bastille + pillager camp soft only); batch 4 (spire, ponds, Philip's padded ruins, villages) open. 97 tagged: none 6, soft 91, trim 95. Gotchas: gen_loot_config.iter_data_sources lists only kubejs/data JSON (add .nbt yourself); village farm water must not mark villages as water structures; all-air templates (vanilla outpost base/feature plate) are never trimmed.
 
 Related: [structure-ground-match](structure-ground-match.md), [earth-fill-system](earth-fill-system.md), [mcreator-house-mods-datapack](mcreator-house-mods-datapack.md), memory `scratch-server-verify`.

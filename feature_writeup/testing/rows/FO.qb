@@ -106,7 +106,7 @@ reject verb=\S+ .*done=0
 @@text
 @@text ### SQ-CNP can grid guard, 2026-11-02 ([can_parity.md](../can_parity.md) section 7, TODO `cans/canning #6`, `#9`)
 @@text
-@@text Targets patcherMod (NCH lives in its jar) plus the Creative Delight jar.
+@@text Targets Creative Common (NCH lives in its jar) plus the Creative Delight jar.
 @@text
 @@text | ID | Group | Commands | Pass | If it fails |
 @@text | --- | --- | --- | --- | --- |
@@ -413,7 +413,7 @@ look WTHIT reads "Powdered Sugar" with mod Creative Delight (not "Snow Block" / 
 @@text
 @@text ### CQ-LB lunchboxes client half, 2026-11-02 ([lunchboxes.md](../lunchboxes.md) section 7, TODO `items/storage-and-item-loss #9`)
 @@text
-@@text Client only. Targets patcherMod 1.1.07 and the creativedelight-1.0.0 jar in `mods/` (feature shipped 1.1.05).
+@@text Client only. Targets Creative Common 1.1.07 and the creativedelight-1.0.0 jar in `mods/` (feature shipped 1.1.05).
 @@text
 @@text | ID | Group | Commands | Pass | If it fails |
 @@text | --- | --- | --- | --- | --- |
@@ -657,7 +657,7 @@ look the 15 egg fills come first (all "No blocks were filled" = no golden egg); 
 @@text
 @@text ### Food mod reports: client halves and reruns, 2026-11-02 (TODO `largecontent/mod-additions #16`, `#18`, `#20`, `#23` to `#27`, `#33`, `skyvillages #1`)
 @@text
-@@text Targets the Creative Delight jar in `mods/` (2026-11-02 14:01) unless a row says otherwise: patcherMod 1.1.07 for Farmer's Structures, `repackedStorage-25.12.09-1.19-forge-ce-19.2-01` (2026-10-29) for Storage Delight, instance `kubejs/` assets and data for the Farmer's Delight retextures and the sky village houses. Writeups: [fruits_delight.md](../fruits_delight.md) 6, [farmers_delight.md](../farmers_delight.md) 4.6, [delightful.md](../delightful.md) 4, [corn_delight.md](../corn_delight.md) 4, [more_delight.md](../more_delight.md) 4, [storage_delight.md](../storage_delight.md) 4, [nethers_delight.md](../nethers_delight.md) 4.7, [farmers_structures.md](../farmers_structures.md) 4, [abnormals_delight.md](../abnormals_delight.md) 4, [sky_village_addons.md](../sky_village_addons.md) 4.
+@@text Targets the Creative Delight jar in `mods/` (2026-11-02 14:01) unless a row says otherwise: Creative Common 1.1.07 for Farmer's Structures, `repackedStorage-25.12.09-1.19-forge-ce-19.2-01` (2026-10-29) for Storage Delight, instance `kubejs/` assets and data for the Farmer's Delight retextures and the sky village houses. Writeups: [fruits_delight.md](../fruits_delight.md) 6, [farmers_delight.md](../farmers_delight.md) 4.6, [delightful.md](../delightful.md) 4, [corn_delight.md](../corn_delight.md) 4, [more_delight.md](../more_delight.md) 4, [storage_delight.md](../storage_delight.md) 4, [nethers_delight.md](../nethers_delight.md) 4.7, [farmers_structures.md](../farmers_structures.md) 4, [abnormals_delight.md](../abnormals_delight.md) 4, [sky_village_addons.md](../sky_village_addons.md) 4.
 @@text
 @@text | ID | Group | Commands | Pass | If it fails |
 @@text | --- | --- | --- | --- | --- |

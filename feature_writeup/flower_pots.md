@@ -37,8 +37,8 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | `/dumppots` (`kubejs/server_scripts/_lib/dump_flower_pots.js`, in `/dumpall`) | BUILT 2026-10-27; SQ-POT-01 PASS 2026-10-27 evening (after two fixes: 121 potted, 101 pot-like, 543 plants) | none |
 | Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27; SQ-POT-02 to -04 ran 2026-10-27 evening (427 probe mismatches, 6 probe exceptions: `minecraft:hanging_roots` in 6 holders; the F1 `ClassCastException` did not show) | read the mismatches (SQ-POT-05) |
 | Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | stale since the 3.2 tweaks (2026-10-31, 1.1.06 changed planter box, Vinery box / pot and silt pot lists): rerun `/dumppots`, `/pottest all`, the audit (deep scan 2026-11-02) |
-| Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
-| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centered on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
+| Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (Creative Common 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
+| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centered on floors) | BUILT 2026-10-31 (Creative Common 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
 | Bugs found (section 3) | F12 and F13 fixed 2026-11-03 (plan_scratch_bugfix_1103 2.4, 2.5; CD jar 19:43 and pack loot tables, not installed); F14 was a probe fault, not a bug; F1 struck (did not reproduce in r1102b) | rerun SQ-POT-03, -04, -04v; decisions D1 to D5 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
@@ -93,7 +93,7 @@ Not plant holders: Handcrafted's 16 `*_pot` (decorative, no `use`), Botania apot
 
 Vanilla map contents (static count): 33 vanilla + Quark 35 (`MorePottedPlantsModule` plus Chorus Vegetation, Glimmering
 Weald, Ancient Wood, Blossom Trees) + Fruits Delight 13 saplings + Bushier Flowers 13 + Upgrade Aquatic 5 + Buzzier
-Bees 3 + Neapolitan 3 + Rustic (CD) 5 + Respite wild tea bush (patcherMod `RespitePottedTeaBush`) + Supplementaries
+Bees 3 + Neapolitan 3 + Rustic (CD) 5 + Respite wild tea bush (Creative Common `RespitePottedTeaBush`) + Supplementaries
 flax + Twigs azalea flowers + IE hemp + Architects' twisted sapling + Nether's Delight mimicarnation + Miner's
 gossypium. `/dumppots` replaces this count with the live map.
 
@@ -198,14 +198,14 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
-  F3/F5/F7/F11 plants in a new patcherMod or CD registration pass (Botania alone is 170 blocks plus models), (b) only
+  F3/F5/F7/F11 plants in a new Creative Common or CD registration pass (Botania alone is 170 blocks plus models), (b) only
   small flowers and saplings (mystical 16, shiny 16, special flowers, wild crops), (c) leave it to the flower box.
 - **D2 tooltip label on every pot:** one line per holder naming what it takes (for example "Holds 1 flower or sapling",
   "Holds 3 plants", "Tall flowers only"), through the tooltip system (`tooltips.md`). Needs the wording per holder.
 - **D3 buttercup tag:** add `buzzier_bees:buttercup` to `#minecraft:small_flowers` (via `global.tags`)? It would then
   enter the boxes, the silt pot, bee breeding and anything else that reads the tag.
 - **D4 Floral tall-flower pots:** disable the 4 tall-flower variants or the whole large pot (enchanting #7).
-- **D5 soul planter:** register it ourselves (patcherMod mixin on Supplementaries' compat check) or drop it.
+- **D5 soul planter:** register it ourselves (Creative Common mixin on Supplementaries' compat check) or drop it.
 - **D6 F1 fix:** add the four Fungi Delight items to `#another_furniture:planter_box_banned` (smallest), or take them
   out of `#forge:mushrooms` (affects recipes).
 - **Botanist workbench (`#5`):** decided 2026-10-29 and built (section 3.1): the plant model only (Beautify's pot
@@ -219,7 +219,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
   world builder (every plant some holder takes x one block per holder type, one table along +z, axis of plants on
   grass, hanging holders one block up under glass). Runs by itself on the first start of a world made with the
   "Flower Test" world type; `/flowerworld` (op) rebuilds it in any world
-- patcherMod `compat/PlantBoxModels`, `PlantBoxModelsClient`, `SuppFlowerBox`, `WthitPotContents`; mixins
+- Creative Common `compat/PlantBoxModels`, `PlantBoxModelsClient`, `SuppFlowerBox`, `WthitPotContents`; mixins
   `FramedFlowerPotUnframedMixin`, `SuppFlowerBoxPlantsMixin`, `SiltPotSoilMixin`, `AnotherFurniturePlanterRenderMixin`
   (client); models `assets/creativeengineering/models/block/flower_box/` (section 3.2)
 - backportedVinery `legacy/block/LegacyFlowerBoxBlock`, `LegacyFlowerPotBlock`, `legacy/client/PlantRenderer`,
@@ -233,9 +233,9 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
   the builder checks for), listed in the World Type button through `#minecraft:normal`
 - [../tools/flower_pot_audit.py](../tools/flower_pot_audit.py): matrix generator, holder rules as data
 - [flower_pots_matrix.md](flower_pots_matrix.md): generated matrix
-- Botanist workbench pot: patcherMod `compat/BotanistPot.java`, `BotanistPotBlockEntity.java`, `BotanistPotClient.java`,
+- Botanist workbench pot: Creative Common `compat/BotanistPot.java`, `BotanistPotBlockEntity.java`, `BotanistPotClient.java`,
   `mixin/BotanistWorkbenchPotMixin.java`, `mixin/StructureTemplateBotanistPotMixin.java`
-- Pack code touching pots: patcherMod `compat/RespitePottedTeaBush.java`, CD rustic `logic/RDEvents.java`, backportedMiners
+- Pack code touching pots: Creative Common `compat/RespitePottedTeaBush.java`, CD rustic `logic/RDEvents.java`, backportedMiners
   `logic/MDSetup.java`, backportedVinery `core/registry/ObjectRegistry.java` (F2), `legacy/block/LegacyFlowerPotBlock.java`
 
 ## 6. Offline checks
@@ -307,7 +307,7 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 
 ## 8. History
 
-- 2026-10-29: botanist workbench made a flower pot (section 3.1), patcherMod 1.1.04 built and installed. POT-08,
+- 2026-10-29: botanist workbench made a flower pot (section 3.1), Creative Common 1.1.04 built and installed. POT-08,
   SQ-POT-06, CQ-POT-02 added.
 
 - 2026-10-27: audit. Holder rules read from bytecode (Supplementaries, FramedBlocks, Beautify, Another Furniture, Floral
@@ -324,18 +324,18 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   hanging pot takes the vanilla map (115) once its block entity holds an empty pot (the probe's 0 was its setup)
   and the botanist workbench takes the same 115.
 - 2026-10-31: scratchpad notes translated into TODO rows (`blocks/framed-and-decor #11`). No code changed.
-- 2026-10-31: Flower Test world type (patcherMod preset, builds on first start), builder moved from
+- 2026-10-31: Flower Test world type (Creative Common preset, builds on first start), builder moved from
   `tools/flower_pot_test/` into `kubejs/server_scripts/_lib/` so it ships. Table is one line along +z (was 6 sections
   of 48 rows along +x); hanging holders and their glass one block up; rows no longer need the dev-only
   `pot_probe.json` (bush-type block items, cactus, bamboo, hanging roots added as candidates, a candidate no
-  non-planter holder takes is cleared); generated mobs killed at the end. patcherMod 1.1.04 built, not installed
+  non-planter holder takes is cleared); generated mobs killed at the end. Creative Common 1.1.04 built, not installed
   (game was running). POT-09, SQ-POT-07 added.
-- 2026-10-31 (later): flower pot tweaks from the scratchpad (section 3.2) built: patcherMod 1.1.04 and backportedVinery
+- 2026-10-31 (later): flower pot tweaks from the scratchpad (section 3.2) built: Creative Common 1.1.04 and backportedVinery
   `-07`, neither installed (game running). Flower Test world: Handcrafted pots out, melon / pumpkin / moss blocks out
   (13 holders). Candle-like pot placement skipped (user). POT-10 to POT-16, SQ-POT-08 added.
 - 2026-10-31 (later): Flower Test silt pot filled by a rooted dirt click before planting; Floral large pots hidden and
   out of the Flower Test world (12 holders); sunflower in the planter box list; silt pot tooltip and WTHIT
-  "Rooted Dirt" line. patcherMod 1.1.04 rebuilt, not installed. POT-17 added.
+  "Rooted Dirt" line. Creative Common 1.1.04 rebuilt, not installed. POT-17 added.
 - 2026-11-01: the Flower Test world builder, its preset and lang key moved to Creative Devtools (dev only,
   creative_devtools.md 2); players no longer get the world type.
 - 2026-11-16: melon, pumpkin, carved pumpkin, jack o'lantern, moss block and moss carpet refused by every box (`#creativecompat:not_in_flower_boxes`); Flower Test world column of wall-hung Rich Hanging Pots for the owner (3.3; `blocks/flower-pots #9`, `#10`, `#14` closed as built). POT-18, POT-19; queue SQ-POT-09, CQ-POT-03 (plan_small_fixes_1116.md). Not run.

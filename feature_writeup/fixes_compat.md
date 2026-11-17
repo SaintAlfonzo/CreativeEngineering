@@ -51,7 +51,7 @@ feature are documented with that feature and only pointed to here.
 | 2.23 | Server crash: bonemealing a Vinery grass slab with Immersive Weathering (`fertile` property) | Vinery port `SpreadableGrassSlabBlock` | DEPLOYED with 1.0.7 (hotfix), see [alcohol_part_b.md](alcohol_part_b.md) |
 | 2.24 | AppleSkin bars missing in cooking/meal slots, keg tank, recipe books, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2 | `MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + client mixins; Brewin' and Vinery ports | BUILT 2026-10-20, not tested, see [tooltips.md](tooltips.md) (TT-19 to TT-30) |
 | 2.25 | Botania Trinket Case holds any item; Quark sort, transfer and search in its screen | `TrinketCaseRules`, 3 `TrinketCase*Mixin`s, `ItemBackedInventoryAccessor`, `[botania]`, Quark `Allowed Screens` | built, scratch server PASSED 2026-10-22 (rules, slots, shift-click, sort, config off); FX-21 to FX-23 client halves in game |
-| 2.26 | Ore Excavation undo: cooldown, denied blocks, drops into the inventory, XP taken once | `excavation/VeinUndo`, 5 `OreExcavation*Mixin`s, `#creativecompat:vein_undo_denied`, `[vein_undo]`, OE `Auto Pickup = true` | built 2026-10-22, patcherMod 1.1.01 in `mods/`, built, scratch server PASSED 2026-10-22 for the refusal rules, cooldown, Auto Pickup, the offline guard and both config keys (SQ-GM-08, SQ-GM-05); FX-29 to FX-33 in game |
+| 2.26 | Ore Excavation undo: cooldown, denied blocks, drops into the inventory, XP taken once | `excavation/VeinUndo`, 5 `OreExcavation*Mixin`s, `#creativecompat:vein_undo_denied`, `[vein_undo]`, OE `Auto Pickup = true` | built 2026-10-22, Creative Common 1.1.01 in `mods/`, built, scratch server PASSED 2026-10-22 for the refusal rules, cooldown, Auto Pickup, the offline guard and both config keys (SQ-GM-08, SQ-GM-05); FX-29 to FX-33 in game |
 | 2.27 | Config-only (2026-10-22): JEI tooltip search behind `$`, Breezy wind particles x3, every Chalk symbol unlocked; Cosmetic Armor keep-on-death checked, unchanged | `jei-client.ini`, `breezy-client.toml`, `chalk-common.toml` (all in `configs_edited/root_config/`) | done, not deployed, untested: FX-25, FX-26 client only; FX-27 server half scratch server PASSED 2026-10-22 (SQ-GM-06); FX-28 in game |
 | 2.28 | Polymorph recipe choice in the Sophisticated Backpacks crafting upgrade | `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `SophisticatedCraftingPolymorphMixin`, `SophisticatedUpgradeOpenMixin`, `PolymorphRecipeSelectionPacketMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-35 to FX-38 in game |
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
@@ -409,7 +409,7 @@ works). Every other character types normally; holding `/` still repeats as in va
 
 ## 3. What the pack changes
 
-Every entry above is a patcherMod mixin or class except 2.6 (KubeJS tag script), 2.14 (exposureBackport) and 2.27 (config only). Mixins on
+Every entry above is a Creative Common mixin or class except 2.6 (KubeJS tag script), 2.14 (exposureBackport) and 2.27 (config only). Mixins on
 mod classes use `remap = false` with the mod's own names; mixins on vanilla classes use SRG names (the pack runs
 reobfuscated with no refmap).
 
@@ -433,7 +433,7 @@ reobfuscated with no refmap).
   `debug.level_random.probe` (default off) swaps in `LevelRandomProbe`, which logs `[LevelRandomProbe]` stack traces of
   off-thread callers (max 20 distinct). Test SQ-LR-01 in [scratch_queue.md](testing/scratch_queue.md). Close F4 once a
   caller is named and fixed, or a long probe session logs none.
-- **F5. Banner compat textures need a jar rebuild** for a new pattern mod: both generators write patcherMod resources,
+- **F5. Banner compat textures need a jar rebuild** for a new pattern mod: both generators write Creative Common resources,
   so they're deliberately not in `/cdevgen` (`generators.json` `_readme`).
 - **F6.** FIXED 2026-10-19 (javadoc added). **`CopperPickaxeItemMixin` had no javadoc**, unlike every other mixin.
 
@@ -449,7 +449,7 @@ reobfuscated with no refmap).
 
 ## 5. File map
 
-All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless noted:
+All in Creative Common `src/main/java/com/SaintAlfonzo/creativeengineering/` unless noted:
 - 2.32 `mixin/FallingBlockWaterSplashMixin`
 - 2.1 `mixin/ForgivingVoidMixin`, `forgivingvoid/ForgivingVoidBridge`; 2.2 `mixin/BedspreadsBannerPatternMixin`, `mixin/CustomizableElytraBannerPatternMixin`, `compat/BannerPatternAtlasCompat`, [tools/gen_bedspreads_pattern_compat.py](../tools/gen_bedspreads_pattern_compat.py), [tools/gen_elytra_pattern_compat.py](../tools/gen_elytra_pattern_compat.py); 2.3 `mixin/ExcavationDrillItemMixin`, `mixin/DeforesterSawItemMixin`; 2.4 `mixin/SyncGlDebugOutputMixin`.
 - 2.6 [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) lines 6-16; 2.7 `compat/DetailArmorBarCompat`, `compat/ArmorOverflowRenderer`, `mixin/ArmorBarRendererAccessor`, `mixin/ArmorBarRendererOverflowTickMixin`; 2.8 `mixin/SubMenuConfigScreenMixin`, `compat/StringEntry`; 2.9 `mixin/BonemealCharmMixin`, `util/BonemealCharms`, [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js).
@@ -590,11 +590,11 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-18: this writeup; findings F1 to F6; tests FX-01 to FX-20. No code changed.
 - 2026-10-19: catalog entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.
-- 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next patcherMod build).
+- 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next Creative Common build).
 - 2026-10-22: 2.25 Trinket Case any item plus Quark sort / search (`recipes/magic #3`); tests FX-21 to FX-24.
 - 2026-10-22: 2.25 scratch server run (`tools/trinket_case_probe.js`): shulker boxes were accepted even with the
   exclusion, through Botania's curio check. User decision: any item, shulker boxes and other cases included. The open
-  case's own stack is refused instead (hotbar-swap loss). patcherMod 1.1.01 md5 37bb7049, all checks PASS, config
+  case's own stack is refused instead (hotbar-swap loss). Creative Common 1.1.01 md5 37bb7049, all checks PASS, config
   on and off.
 - 2026-10-22: chalk symbols always unlocked (`gameplay/misc #8`): Chalk's unlock advancements never fire because the
   pack drops every advancement, so Skull, Heart, Pickaxe and House could not be unlocked. Config only; FX-27.
@@ -612,10 +612,10 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-22: 2.28 Polymorph in the Sophisticated crafting upgrade; tests FX-35 to FX-38. Built, not run in game.
 - 2026-10-22: 2.29 Polymorph in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal, after an audit of
   crafting screens Polymorph misses (gaps listed in 2.29); tests FX-39 to FX-42. Built, not run in game.
-- 2026-10-23: 2.30 biome-tinted moss (patcherMod 1.1.02, in `mods/`); tests FX-43 to FX-45. Built, not run in game.
+- 2026-10-23: 2.30 biome-tinted moss (Creative Common 1.1.02, in `mods/`); tests FX-43 to FX-45. Built, not run in game.
 - 2026-10-24: planned from the scratchpad: IW growths for Upgrade Aquatic coral (`gameplay/misc #15`). No code changed.
 - 2026-10-26: F2 fixed (TODO `server #6`): `SectionUpdateEncodeFixMixin` writes the multi-block packet with a long
-  shift instead of masking, no 2^20 ceiling. patcherMod 1.1.03 in `mods/`, not run; FX-47.
+  shift instead of masking, no 2^20 ceiling. Creative Common 1.1.03 in `mods/`, not run; FX-47.
 - 2026-10-26: F3 closed: version-pinned fixes tracked in [deploy.md](deploy.md) "Mod updates" plus a staging warning; 2.8 corrected (the text-field mixin is silent on a renamed lambda, not loud).
 - 2026-10-28: 2.31 Upgrade Aquatic coral growth (`gameplay/misc #15`): 11 IW growth files from a `/cdevgen` generator; prismarine in every ocean, elder prismarine treated as dead. Data only, not run; FX-48.
 - 2026-10-28: 2.32 falling block water splash: client mixin calls `doWaterSplashEffect` once on entering water (Effective draws it); FallingBlockEntity only. Built, not run; FX-49.

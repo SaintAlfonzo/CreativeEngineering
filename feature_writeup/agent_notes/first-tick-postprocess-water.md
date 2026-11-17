@@ -7,7 +7,7 @@ Moved from agent memory 2026-11-16 (last edited there 2026-10-27). Repo status d
 - `ChunkMap.prepareTickingChunk` -> `LevelChunk.postProcessGeneration` (SRG m_62812_): ticks each fluid in `PostProcessing`
   (about 900 marks per chunk, mostly aquifer / carver water) plus saved spring `fluid_ticks`. Pregen (Chunky) leaves them
   pending, so all the flooding happens when a player first comes near. Flowing water washes cave plants out with drops.
-- Fix built 2026-10-27: patcherMod `worldgen/FirstTickWater`: during a configurable settling window
+- Fix built 2026-10-27: Creative Common `worldgen/FirstTickWater`: during a configurable settling window
   (`[worldgen.first_tick_water] windowTicks`) the water flows as in vanilla but `Block.popResource` (private Supplier
   overload, SRG m_152440_, every block drop) is skipped. The owner rejected the first version (water flowing around
   plants): **why:** they want vanilla water movement, only no item litter. Status: perf.md 10.6, TODO `perf #14`.

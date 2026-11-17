@@ -31,7 +31,7 @@ ServerEvents.recipes(e => {
 	R.shapeless(Item.of(i.twigs_rocky_dirt, 4), [i.dirt, i.dirt, i.cobblestone, i.cobblestone], e, 'rocky_dirt')
 	R.shapeless(Item.of(i.twigs_rocky_dirt, 8), [i.coarse_dirt, i.coarse_dirt, i.cobblestone, i.cobblestone], e, 'rocky_dirt_from_coarse_dirt')
 
-	// Permafrost. Immersive Weathering's is the only one in the world (patcherMod QuarkPermafrostStyleMixin);
+	// Permafrost. Immersive Weathering's is the only one in the world (Creative Common QuarkPermafrostStyleMixin);
 	// Quark's is Froststone and gets IW's craft with stone for dirt. Its bricks, slabs, stairs and walls keep Quark's.
 	R.shapeless(Item.of(i.froststone, 2), [i.packed_ice, i.packed_ice, i.stone, i.stone], e, 'froststone')
 })

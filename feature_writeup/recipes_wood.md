@@ -29,7 +29,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
 | Create saw: planks -> every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
-| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
+| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; Creative Common `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
   SQ-RW-23 FAILED: the `#creativecommon:smokable/*` shape tags included Botania, driftwood, crimson and warped.
@@ -135,7 +135,7 @@ leaf pile are renamed Mulberry (`namechanges.js`; the potted sapling in `name_ru
 `development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/placed_feature/trees_river.json`: 8 tries per chunk (UA: 1, plus 2 in half the
 chunks, about 2), same filters (dry column, OCEAN_FLOOR heightmap, biome), and its feature still hangs mulberry vines under 1 leaf in 6
 (they need leaves or logs above, so oak is fine). The sapling: UA's `RiverTreeGrower` returns the built-in holder, which
-the datapack doesn't reach in 1.19.2, so patcherMod `MulberrySapling` swaps it on Forge's `SaplingGrowTreeEvent` for
+the datapack doesn't reach in 1.19.2, so Creative Common `MulberrySapling` swaps it on Forge's `SaplingGrowTreeEvent` for
 the datapack copy. Switch `[worldgen.systems] mulberrySapling` (off: UA's tree with river logs, which drop oak). The
 mulberry hedge's recipe read `#upgrade_aquatic:river_logs` (empty now) and is re-added with an oak log (x2).
 Leaf support (2026-11-02, `farming/trees #4`): Separated Leaves ships a rule for the river leaves that counts only
@@ -230,7 +230,7 @@ are NCH's generated ones, so they ignore counts (F1).
   `removed_woods.js`.
 - Removed woods: [startup_scripts/_lib/removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (lists; keys in
   `item_dict.js` section "removed woods"), `development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,
-  patcherMod `worldgen/MulberrySapling.java` (+ `CEConfig` / `WorldgenConfig` `mulberrySapling`), names in
+  Creative Common `worldgen/MulberrySapling.java` (+ `CEConfig` / `WorldgenConfig` `mulberrySapling`), names in
   `client_scripts/namechanges.js`.
 - Related: [engineering.md](engineering.md) (sawmill), [composting.md](composting.md) (composter, mulch in the table).
 
@@ -258,7 +258,7 @@ None.
 - [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass -> oak trunk, mulberry leaves, some
   mulberry vines; new chunks along a river show the same trees, about 4x as many as before on river banks (8 tries per
   chunk); `zfw rivertrees R` on a river with dry banks places some.
-- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling -> the oak-trunk tree (patcherMod `MulberrySapling`).
+- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling -> the oak-trunk tree (Creative Common `MulberrySapling`).
 - [ ] **RW-18 Old river items [block drops: scratch server PASSED 2026-10-22, SQ-MB-03, x5 each / game for the inventory swap]:** `/setblock ~ ~ ~ upgrade_aquatic:river_log` and break it -> an oak log;
   `/give @s upgrade_aquatic:river_planks 4` -> 4 oak planks in the inventory; same for an Every Compat one
   (`everycomp:hc/upgrade_aquatic/river_chair` -> Handcrafted oak chair).
@@ -292,7 +292,7 @@ None.
 - 2026-10-18: this writeup; findings F1 to F6; tests RW-01 to RW-10. No code changed.
 - 2026-10-19: F1 fixed, `sawdust.js` crushes `i.any_planks` in the IE crusher ([plan_1.0.9.md](plan_1.0.9.md)). RW-03 checks it.
 - 2026-10-22: removed woods (2.6), river wood merged into oak, the river tree renamed Mulberry with an oak trunk
-  (datapack + patcherMod `MulberrySapling`). Tests RW-15 to RW-18.
+  (datapack + Creative Common `MulberrySapling`). Tests RW-15 to RW-18.
 - 2026-10-22 (doc audit): jar state corrected (`MulberrySapling` is in the `mods/` jar since 11:06); all 92 river ids
   in `item_dict.js` are in the removed list (checked); tests tagged scratch / game; RW-19, RW-20 added; scratch
   probe `tools/farm_worldgen_probe.js` (`zfw mulberry`, `zfw loot`, `zfw count`).

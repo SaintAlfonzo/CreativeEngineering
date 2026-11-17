@@ -19,7 +19,7 @@
 | Fletching from feathers (knife), emu feather -> feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
 | `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs the trader-only Ethereal Arrow, kept on purpose (F3) |
-| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`); trade leak (F9) FIXED 2026-11-01 (`isTradeable` override, patcherMod built, not installed; `loot/tables #10`) |
+| NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`); trade leak (F9) FIXED 2026-11-01 (`isTradeable` override, Creative Common built, not installed; `loot/tables #10`) |
 | IE armor-piercing bullets from a dragon scale (64 per scale) | DEPLOYED unreachable; moved to the `bullet` blueprint (F1), BUILT 2026-10-22, not run |
 | Dedicated-server join kick from NEA's fletching recipe book (`NockRecipeBookSync`) | DEPLOYED; belongs to fixes and compat (backlog row 10), noted here because it's NEA |
 
@@ -125,7 +125,7 @@ IE's own cartridge recipes are untouched.
   quiver and Quark's torch arrow are used instead). Supplementaries quiver recipe: `TCT / TCT / _T_`, T = leather,
   hemp fabric or canvas, C = copper ingot.
 - Enchantments: Stockpile, Recovery, Cycle.
-  - patcherMod mixins make each one not discoverable, not appliable at the enchanting table and not allowed on books.
+  - Creative Common mixins make each one not discoverable, not appliable at the enchanting table and not allowed on books.
   - MoreJS filters drop them from the enchanting table's offers and from librarian book trades
     ([enchants.js](../kubejs/server_scripts/magic/enchants.js)). The trade filter only reaches vanilla's
     `EnchantBookForEmeralds`; Dynamic Villager Trades builds librarian book offers itself from every enchantment
@@ -177,13 +177,13 @@ IE's own cartridge recipes are untouched.
   recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
 - **F9. The books came from trades, not loot.** FIXED 2026-11-01 (`loot/tables #10`).
   No loot table in the dumps or `kubejs/data` names Stockpile, Recovery or Cycle; the random-enchant functions
-  (`enchant_randomly`, `enchant_with_levels`) honor the F6 override (present in the installed patcherMod jar). The
+  (`enchant_randomly`, `enchant_with_levels`) honor the F6 override (present in the installed Creative Common jar). The
   `/dumptrades` dump (2026-10-30) had NEA books in two trade paths the MoreJS filter in `enchants.js` never sees:
   Dynamic Villager Trades librarians (one offer per enchantment whose `isTradeable()` is true, built from vanilla's
   `EnchantBookForEmeralds` listing) and Lightman's Currency cashiers (`enchanted_book_for_coins`, levels 1 to 4, which
   filters the registry on `Enchantment::isTradeable`, javap). Fix at the source: the three NEA mixins also override
   `isTradeable` (SRG `m_6594_`) to false. Every other book trade stays. Villagers that already rolled an NEA book keep
-  that offer (saved in their NBT). Built in patcherMod (`creativeengineering-1.1.04.jar` in `build/libs`), not installed.
+  that offer (saved in their NBT). Built in Creative Common (`creativeengineering-1.1.04.jar` in `build/libs`), not installed.
 
 ### Known limits
 
@@ -265,12 +265,12 @@ replacement or a hidden item.
   bullets; shipped with 1.0.3. `NockRecipeBookSync` was first committed 2026-10-02; when it was first built isn't
   recorded.
 - 2026-10-18: this writeup; findings F1 to F8; tests AR-01 to AR-18. No code changed.
-- 2026-10-19: F6 confirmed with `javap` and fixed in patcherMod 1.0.9 (SRG name `m_6592_` in the three NEA mixins, [plan_1.0.9.md](plan_1.0.9.md)). Not run in game.
+- 2026-10-19: F6 confirmed with `javap` and fixed in Creative Common 1.0.9 (SRG name `m_6592_` in the three NEA mixins, [plan_1.0.9.md](plan_1.0.9.md)). Not run in game.
 - 2026-10-22: F1 (`bullet` category), F5 (blazing shaft tag on the explosive arrow) and F7 (`bullets.js` cleanup)
   fixed; F3 kept (Ethereal Arrow stays in the archery blueprint); AR-07, AR-13 updated.
 - 2026-10-22 (second bulk run): SQ-GM-04 PASS on the scratch server; JEI and the workbench screen stay in game.
 - 2026-11-01: F9 found and fixed (`loot/tables #10`): loot already clean; the three NEA mixins now also override
-  `isTradeable` (`m_6594_`), so no librarian (vanilla or DVT) or LC cashier offers them. AR-14 updated. patcherMod built,
+  `isTradeable` (`m_6594_`), so no librarian (vanilla or DVT) or LC cashier offers them. AR-14 updated. Creative Common built,
   not installed; needs install + restart. Not run in game.
 - 2026-11-04: archery recipes and shaft / fletching tags moved to Creative Equipment (`kubejs/data/creativeequipment/kubejs/equipment/archery.js`, `tags/equipmenttags.js`); `NockRecipeBookSync` too. The NEA enchantment mixins and filters moved to Creative Magic ([creative_magic.md](creative_magic.md)). Same behaviour.
 - 2026-11-16: `NCH.ieBlueprint` merges repeated inputs into one counted ingredient (`tooling/conventions #7`); 9 recipes

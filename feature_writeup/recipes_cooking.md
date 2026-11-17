@@ -228,7 +228,7 @@ A sequenced assembly's first step is checked before plain spout and deployer rec
 with a step that is also an ordinary recipe on its base (the horror lasagna does not start by spouting tomato sauce into
 a bowl, which would take over the bowl-filling recipe).
 
-**Feast Plating JEI tab** (patcherMod `compat/jei/FeastPlatingJEI`, `FeastPlatingCategory`). Plating a placed feast
+**Feast Plating JEI tab** (Creative Common `compat/jei/FeastPlatingJEI`, `FeastPlatingCategory`). Plating a placed feast
 is a block interaction, not a recipe, so JEI showed nothing. The tab has one page per feast: feast item, what to hold
 (the container, one per serving and consumed; a knife, kept; or nothing), the servings with counts, and the leftovers.
 - Every Farmer's Delight `FeastBlock` in any mod (FD, Corn Delight nachos, Fruits Delight pineapple rice, KubeJS
@@ -437,7 +437,7 @@ until a row is built.
   (`/fdtest fluids|recipes|ice|milkjar|soupjar|sol|coffee|all`), scratch-only.
 - NCH `foodGrinding` / `mortar` / `frBrewing` in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
 - Tags: `tags/cookingtags.js` (food tags these recipes read; [food.md](food.md)).
-- patcherMod `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java` (Feast Plating tab; lang keys
+- Creative Common `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java` (Feast Plating tab; lang keys
   `creativeengineering.jei.feast_plating*`).
 
 ## 6. Offline checks
@@ -633,7 +633,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 - 2026-10-21: meals (TODO `dishes/meals` #1 to #3, [brief](briefs/dishes_meals.md)): heatless meal rule and `_manual_only`
   ids, four new heatless meals, per-meal fixes, shaped burgers, merged quiche, 16 new assemblies (2.3); tags
   `soup_veggie_cooked`, `exotic_fruit`, `fruit_salad_slice`. RC-55 to RC-64. Not shipped.
-- 2026-10-21: Feast Plating JEI tab (TODO `dishes/meals #5` part a; patcherMod 1.1.01, not deployed): every FD
+- 2026-10-21: Feast Plating JEI tab (TODO `dishes/meals #5` part a; Creative Common 1.1.01, not deployed): every FD
   feast block plus popcorn box, pizza and stuffed hoglin, leftovers from the loot table (2.3). Loot evaluation
   checked headless (roast chicken -> bowl + bone meal, hoglin -> 2 bones). RC-65.
 - 2026-10-21: meals #4, #7, #8, #9 ([brief](briefs/dishes_meals.md)): grid routes for 8 pot meals and dog food, squid

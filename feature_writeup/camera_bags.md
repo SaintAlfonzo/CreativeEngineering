@@ -14,7 +14,7 @@
 
 | Part | Status |
 |---|---|
-| Three bags `exposureextras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposureextras:camera_equipment` | DEPLOYED (patcherMod in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |
+| Three bags `exposureextras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposureextras:camera_equipment` | DEPLOYED (Creative Common in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |
 | Contents in the bag's NBT (tooltip shows them, smithing upgrades keep them, destroyed bags drop them) | DEPLOYED |
 | Dyeable like leather armor, color kept through upgrades | DEPLOYED with 1.0.4 |
 | Old `creativeengineering:*_camera_bag` items remapped to the new ids | DEPLOYED with 1.0.4; R4-04 never run |
@@ -76,7 +76,7 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
   client sees them for the tooltip and a smithing upgrade (which copies the base's NBT) keeps them. An empty bag has no
   tag, like a new one. `CameraBagMenu` copies them into a container and writes back after every change.
 - **Slot count from the server:** the open packet carries the size, so the client agrees with the server's config.
-- **Move from patcherMod (1.0.4):** ids `creativeengineering:*_camera_bag` -> `exposure_extras:*_camera_bag`, remapped
+- **Move from Creative Common (1.0.4):** ids `creativeengineering:*_camera_bag` -> `exposure_extras:*_camera_bag`, remapped
   by a `MissingMappingsEvent` handler in `ExposureExtras`; contents come along in the NBT. The old `[camera_bag]`
   section in `creativeengineering-common.toml` was dropped (not carried over). Details: [plan_1.0.4.md](plan_1.0.4.md) 2.
 - **Mod id rename (2026-11-10, namespace_move.md D-EXPO):** `exposure_extras` became `exposureextras` (naming rule).
@@ -148,7 +148,7 @@ Also R4-04 (remap), R4-05 (basics), R4-06 (slot count), R4-11 (dye) in [plan_1.0
 
 ## 8. History
 
-- By 2026-10-02: camera bags in patcherMod (1.0.3, boot-tested only).
+- By 2026-10-02: camera bags in Creative Common (1.0.3, boot-tested only).
 - 2026-10-03: moved to Exposure Extras, made dyeable, old ids remapped (exposureBackport `-02`, 1.0.4).
 - 2026-10-18: this writeup; findings F1 to F4; tests CB-01 to CB-10. No code changed.
 - 2026-10-22: F4, flashes added to the bag tag; CB-11.

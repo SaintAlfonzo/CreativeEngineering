@@ -4,7 +4,7 @@ Audit of `CEConfig.java` (`PM/CEConfig.java`, 3639 lines) for [creative_split.md
 Read-only, 2026-11-01. Targets use the vocabulary of [README.md](README.md).
 
 Method: sections are the 50 top-level tables of `config/creativeengineering-common.toml` (one `public static final class`
-each; `[worldgen]` is 17 classes, `[crop_drops]` 2). Readers: `grep CEConfig.<FIELD>` over patcherMod Java, Creative
+each; `[worldgen]` is 17 classes, `[crop_drops]` 2). Readers: `grep CEConfig.<FIELD>` over Creative Common Java, Creative
 Delight, Creative Brewing, `kubejs/`, the jar `kubejs_startup/` folders and `tools/`; indirect readers through
 `WorldgenConfig`, `ShieldConfig`, `SurfaceSpeeds`, `MobCapLevels`, `EffectRules`, `TimeSettings`, `ModDisplayNames`
 were followed one hop. Key counts are keys in the toml (394 define calls in the class). Edited values: a script
@@ -22,7 +22,7 @@ Facts that frame every row:
   identical (2654 lines). The working tree has an uncommitted edit to both that only adds the new `reachPotionMb`
   keys at their defaults (`[crafting]`).
 - CD and CB already depend on the class: `creativeDelight/build.gradle:23`, `creativeBrewing/build.gradle:17`
-  ("patcherMod is a hard dependency"). `CDConfig.java:72,79` and `BAConfig.java:7` point players at
+  ("Creative Common is a hard dependency"). `CDConfig.java:72,79` and `BAConfig.java:7` point players at
   `creativeengineering-common.toml [cooking]`, `[crop_growth]` and the already-moved `[kitchen]`.
 
 ## 1. Section table

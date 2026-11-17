@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Creative Equipment's COMMON config, {@code config/creativeequipment-common.toml}. The sections moved out of
- * patcherMod's creativeengineering-common.toml (creative_split.md 7.6, wave 7) with keys, comments,
+ * Creative Common's creativeengineering-common.toml (creative_split.md 7.6, wave 7) with keys, comments,
  * defaults and field names unchanged: {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]},
  * {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]},
  * {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]}. The first boot with Equipment copies a

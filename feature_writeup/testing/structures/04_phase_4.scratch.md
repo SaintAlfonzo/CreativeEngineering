@@ -6,7 +6,7 @@
   hour if the token limit gets close.
 - Milestone: M4. Tests: (1) ST-46, 37, 38, 55, 60, 65, 75, 83, 24; (2) ST-36, 109, 21, 23, 25, 13; (3) ST-35, 34.
   ST-76 skipped (no old jar in mods/).
-- Server: session 54725a7d scratchpad srv/ (373 mods, patcherMod build/libs 1.0.6 of 01:28).
+- Server: session 54725a7d scratchpad srv/ (373 mods, Creative Common build/libs 1.0.6 of 01:28).
 - Baseline srv toml for Phase 4 (scratchpad toml_m4_defaults.toml) = instance defaults + earth_fill log ALL, meta log
   true, placement log true; structureDensity back to 1.0 (was 4.0 in M2/M3). Every test switch goes back to this.
 - Batching: the log-only switches that don't interact are run together in one boot (boot A) instead of one reboot each.

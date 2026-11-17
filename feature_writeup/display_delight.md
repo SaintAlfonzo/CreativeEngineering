@@ -94,7 +94,7 @@ Kept although nothing links to them today: 5 Ender's and 8 Delightful blocks for
 
 Pack interactions checked:
 
-- patcherMod `compat/DisplayDelightDishes` (9 egg dishes) calls `FoodBlock(Properties)` and
+- Creative Common `compat/DisplayDelightDishes` (9 egg dishes) calls `FoodBlock(Properties)` and
   `BlockAssociations.addToMap(Item, Block, boolean)`: both kept with the same signatures. The dishes ship loot tables;
   the port drops only the loot table's items when a block has one, so they do not drop twice.
 - Those dishes' models use three 1.2.0 textures 1.7.0 dropped (`displaydelight:block/bowl`,
@@ -116,7 +116,7 @@ Pack interactions checked:
 | Part | Where | Notes |
 |---|---|---|
 | Gradle project | `development/backportedDisplay` (root `settings.gradle`) | `ce.forge-mod`; `replaces_jars=displaydelight-*.jar`; no compile dependency (DD has no FD code link) |
-| Java | `src/main/java/com/jkvin114/displaydelight/` | 1.7.0's classes, upstream package kept (patcherMod links against it). 1.19.2 API: `Material.WOOD` properties, piston override, `CreativeModeTab` subclass and `itemGroup.displaydelight` lang key, `LootContext.Builder` drops, `ModelEvent.BakingCompleted` for the plate-hiding model wrapper, `ForgeRegistries`, `ToolActions.AXE_DIG`. One block register (1.7.0 had three). Config built after its keys (the decompiled 1.7.0 builds the spec first). Dropped: trades, `DisplayVillagerEvents`, Expanded Delight compat class, `RegisterHelper`, "HELLO" log lines |
+| Java | `src/main/java/com/jkvin114/displaydelight/` | 1.7.0's classes, upstream package kept (Creative Common links against it). 1.19.2 API: `Material.WOOD` properties, piston override, `CreativeModeTab` subclass and `itemGroup.displaydelight` lang key, `LootContext.Builder` drops, `ModelEvent.BakingCompleted` for the plate-hiding model wrapper, `ForgeRegistries`, `ToolActions.AXE_DIG`. One block register (1.7.0 had three). Config built after its keys (the decompiled 1.7.0 builds the spec first). Dropped: trades, `DisplayVillagerEvents`, Expanded Delight compat class, `RegisterHelper`, "HELLO" log lines |
 | Block table | `tools/display_blocks.json` (380 rows, 1.7.0's item order) -> generated `init/DisplayFoods.java` | Type per block: food, wide, drink, hot drink, fiery x4, plated, stackable (with max stacks), small plated |
 | Resources | `python3 development/backportedDisplay/tools/port_resources.py` rewrites `src/main/resources/{assets,data}` and `DisplayFoods.java` | Upstream jar sha1-pinned in `gradle.properties`. Only the blockstates, item models, block models (followed through parents) and textures the kept blocks use: 212 blockstates, 302 block models, 203 textures. 19 model faces on the undefined `#missing` texture take the element's top texture. Tags: `minersdelight:` -> `miners_delight:`, entries of the section 4 mods dropped. Recipes / loot lose 1.20 fields. Lang keys of left-out blocks dropped |
 | Pack names | `tools/gen_display_delight_names.py` | Names every food block after its food in game ("Placed Beef Stew", "Plated Slice of Sweet Berry Pie"; 1.7.0's own lang says "Beef Stew Block"): 210 names, 14 from the block id (foods not in the pack) |
@@ -203,7 +203,7 @@ queue section SQ-CDJ5.
 - [ ] **DDP-07 Particles:** place Blazing Chili and Hot Cocoa. -> Flames above the chili, steam above the cocoa.
 - [ ] **DDP-08 Legs:** place a stew on a fence and on a slab. -> Wooden leg under it. On a Kitchen Counter. -> No leg,
   sits on the worktop.
-- [ ] **DDP-09 Pack dishes:** place Shakshouka and Omelette (patcherMod dishes), break each. -> Bowl and tray textures
+- [ ] **DDP-09 Pack dishes:** place Shakshouka and Omelette (Creative Common dishes), break each. -> Bowl and tray textures
   (no purple / black), one food each.
 - [ ] **DDP-10 Pistons:** push a plated food with a piston. -> It breaks and drops.
 - [ ] **DDP-11 Names and icons:** JEI and WTHIT on 5 new blocks. -> "Placed ..." / "Plated ..." names, 3D icons (no
@@ -218,9 +218,9 @@ queue section SQ-CDJ5.
   CD's `[display]`.
 - **2026-11-02 (afternoon):** `-03`. The baked tentacle on a stick plate stays dropped (owner, plan_creative_delight.md I1):
   `od_plated_baked_tentacle_on_a_stick` is listed in CD `data/creativedelight/swaps/removed.json`, a new swap-list key
-  (patcherMod `SwapLists`) that makes Forge ignore the old id, so an old world loads without the missing-registry warning
+  (Creative Common `SwapLists`) that makes Forge ignore the old id, so an old world loads without the missing-registry warning
   and the placed plates are gone; its `plate_displayable.json` entry removed. Rerun SQ-CDJ-05 / SQ-DDP-01 with the new
-  patcherMod.
+  Creative Common.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 

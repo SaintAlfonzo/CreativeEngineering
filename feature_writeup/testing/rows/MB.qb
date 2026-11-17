@@ -8,7 +8,7 @@
 @@jars creativecompat creativeworldgen
 @@sources feature_writeup/mob_block_tweaks.md
 @@text
-@@text Needs patcherMod 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,
+@@text Needs Creative Common 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,
 @@text `CreateBreakerMonsterBoxMixin`), the KubeJS block properties, block tags and reward table, and
 @@text `quark-common.toml` with `Enable Extra Loot Table = false`. Group A (superflat), Normal difficulty, a bot player.
 @@text For SQ-MB-04 set `[monster_box] cooldownTicks = 200` in the scratch `creativeengineering-common.toml` before boot.

@@ -8,7 +8,7 @@
 @@jars creativecommon creativedelight creativeworldgen
 @@sources feature_writeup/changelog.md
 @@text
-@@text patcherMod 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creative superflat, any world).
+@@text Creative Common 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creative superflat, any world).
 @@text
 @@text | ID | World | Commands | Expected | If it fails |
 @@text |---|---|---|---|---|
@@ -42,6 +42,6 @@ expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_
 reject \[cdevtest\] .*(done=0|error=)
 look client half (textures, names, JEI, walking feel, sinking) stays open; the two makes lines are the splashing recipes only
 
-@@text | BR-01 | A | Give honey bread, toast, bread slice, banana bread; craft a hamburger (burger, patty, tomato, onion, salad), a chicken sandwich and a pb_j with each; `/reload` first | Each bread works in each recipe; JEI shows #forge:bread listing all of them | bread_tags.js not loaded (CD jar/patcherMod stale) or tag add rejected: grep latest.log for `bread_tags` |
+@@text | BR-01 | A | Give honey bread, toast, bread slice, banana bread; craft a hamburger (burger, patty, tomato, onion, salad), a chicken sandwich and a pb_j with each; `/reload` first | Each bread works in each recipe; JEI shows #forge:bread listing all of them | bread_tags.js not loaded (CD jar/creativeCommon stale) or tag add rejected: grep latest.log for `bread_tags` |
 @@text | BR-02 | A | Craft garlic bread with a garlic bread + 4 roasted garlic cloves; cut a bread slice with a knife; look both up in JEI | No recipe from garlic bread or a slice; plain bread, cornbread, sourdough and cauliflower bread still work | replaceInput missed: check ids veggiesdelight:garlic_bread and veggiesdelight:compat/moredelight/cutting/bread_slice |
 @@text | BR-03 | A | Caviar toast in JEI; roast chicken, caesar salad, guardian sandwich, crawling sandwich and a sweet roll filling with toast | Caviar toast needs toast (not bread); the others accept any bread | replaceInput id wrong for that recipe |

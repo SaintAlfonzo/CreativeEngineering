@@ -13,7 +13,7 @@
 @@text ### Salt and Create: The Salt as Creative Delight members (added 2026-11-02, plan_creative_delight.md J2, salt.md)
 @@text
 @@text Needs the Creative Delight jar built with `:repackedSalt` and `:repackedCreateSalt` in `bundle_members` (and the
-@@text mixin removal in CD), patcherMod with the new `create__the_salt` name default; `salt-1.19.2-1.2.4.1.jar` and
+@@text mixin removal in CD), Creative Common with the new `create__the_salt` name default; `salt-1.19.2-1.2.4.1.jar` and
 @@text `create_salt 1.19.2-1.1.0.jar` gone from `srv/mods/`. Earlier rows SQ-SALT-01 to -07 still apply and should pass
 @@text unchanged on this build.
 @@text
@@ -102,7 +102,7 @@ reject (Unknown or incomplete command)
 @group client
 @commands Throwaway client with the same mods. Mods screen; JEI: hover `salt:salt_block` and a `create__the_salt:` mixing recipe output; WTHIT on a placed `salt:salt_block`
 @pass LOOK: mod list shows "Salt (Creative Delight)" and "Create: The Salt (Creative Delight)" under Creative Delight's nested mods; JEI mod line and WTHIT say "Salt (Creative Delight)" and, for the mixing recipe's source, "Create: The Salt (Creative Delight)"
-@fails Old "Create: The Salt" name: the live `config/creativeengineering-common.toml` `[mod_names] overrides` still has the old value (patcherMod default changed only)
+@fails Old "Create: The Salt" name: the live `config/creativeengineering-common.toml` `[mod_names] overrides` still has the old value (Creative Common default changed only)
 @draft no batch holds this row yet
 ## CQ-SLT-02
 @group client
@@ -377,14 +377,14 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@text
 @@text ### SQ-GLD Golden Food donor rebuild, 2026-11-02 ([golden_food.md](../golden_food.md) sections 3 and 6, TODO `creativedelight/members #50`)
 @@text
-@@text Needs the CD jar built after the second pass (enchantment and anvil removed, village tables not served; nests `portedGolden-2.0.0-ce-19.2-01`), the patcherMod with swap-list `removed` support (plan I1), the donor folder `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar` beside `mods/` (sha1 4109e4d6...), and `mods/goldenfood-1.19.2-2.0.0.jar` displaced (same mod id: both present = duplicate mod crash). Full restart. For SQ-GLD-01, a world saved with the upstream jar (the live pack before this change).
+@@text Needs the CD jar built after the second pass (enchantment and anvil removed, village tables not served; nests `portedGolden-2.0.0-ce-19.2-01`), the Creative Common with swap-list `removed` support (plan I1), the donor folder `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar` beside `mods/` (sha1 4109e4d6...), and `mods/goldenfood-1.19.2-2.0.0.jar` displaced (same mod id: both present = duplicate mod crash). Full restart. For SQ-GLD-01, a world saved with the upstream jar (the live pack before this change).
 @@text
 @@table
 ## SQ-GLD-01 | old world: Golden Food upstream data, removed enchantment dropped, cakes and chests intact
 @group old world
 @commands Before the swap, on the old jars: place a golden cake (2 bites eaten) and an enchanted golden cake (uneaten), put one of every goldenfood item, a stack of `minecraft:golden_carrot`, an `enchanted_golden_apple` and a Golden Food Enchantment book in a chest, save. Swap to the new CD jar, load the copy; `grep -iE "goldenfood_upstream\|Golden Food upstream\|Missing\|remap\|swaps\|goldenfood" logs/latest.log`; check the cakes with `/execute if block <x y z> goldenfood:golden_cake[bites=2]` and `.. goldenfood:enchanted_golden_cake[bites=0]`
 @pass Boots; "Golden Food upstream data: 24 files" (recipes only) logged (the assets line is client-only, absent on a dedicated server); "[swaps] minecraft:enchantment: 1 removed id(s) dropped" logged, no other missing-id or remap lines for goldenfood; both `execute if block` succeed; chest keeps every item (`/data get block <chest> Items` lists all ids); the book is still an enchanted book (its unknown StoredEnchantments id kept, no tooltip line)
-@fails A reset or missing cake: block ids in `GoldenBlocks`; missing items: `check_donor.py`; missing-registry warning for gf_enchantment: CD `swaps/removed.json` or an old patcherMod without `removed` support
+@fails A reset or missing cake: block ids in `GoldenBlocks`; missing items: `check_donor.py`; missing-registry warning for gf_enchantment: CD `swaps/removed.json` or an old Creative Common without `removed` support
 @from batches/r1103/sA_2.qb
 bootexpect Golden Food upstream assets: \d+ files
 bootexpect data: 24 files
@@ -1150,7 +1150,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@text
 @@text ### Swappers: merges from swap lists and the world half, 2026-11-02 ([item_merges.md](../item_merges.md) section 6, TODO `creativedelight/swappers #2`, `#3`)
 @@text
-@@text Not run. Needs patcherMod rebuilt after 2026-11-02 23:10 (`creativeengineering-1.1.08.jar` with `swap/ItemMerges`,
+@@text Not run. Needs Creative Common rebuilt after 2026-11-02 23:10 (`creativeengineering-1.1.08.jar` with `swap/ItemMerges`,
 @@text `swap/SwapConfig`) and Creative Delight rebuilt with `data/creativedelight/swaps/merges_*.json` and
 @@text `kubejs_startup/creativedelight/swap_merges.js` (the ten old `<mod>/item_merges.js` startup files gone). Instance
 @@text config; `config/creativeengineering-swaps.toml` is created on first boot (defaults: onWorldLoad false, the other four true).

@@ -1,7 +1,7 @@
 # CreativeEngineering2 — damage type findings
 
 Scope: every damage source registered by vanilla 1.19.2, the ~330 jars in `mods/`, and the pack's own
-code (`patcherMod`, `kubejs`). Generated 2026-09-20.
+code (Creative Common, `kubejs`). Generated 2026-09-20.
 
 ## 1. Method and caveats
 
@@ -169,7 +169,7 @@ Legend: **A** bypassArmor, **Fi** fire, **Mg** magic, **Ex** explosion, **Pr** p
 | `entity.minecolonies.*` | - | Plain mob-named melee, never scaled | Minecolonies raiders (`NamedDamageSource`) |
 | `despawn`, `Console`, `nether`, `Stuck-damage`, `Default` | - | Internal colony kills and pathing | Minecolonies |
 
-### 4.5 Pack's own code (patcherMod and kubejs)
+### 4.5 Pack's own code (Creative Common and kubejs)
 | Source | Flags | Notes |
 |---|---|---|
 | `explosion` from `BurnBlastDamage` | Ex (**no Df**) | Deliberately unscaled so Peaceful players still take ItemPhysic burn-blast damage |
@@ -205,7 +205,7 @@ Legend: **A** bypassArmor, **Fi** fire, **Mg** magic, **Ex** explosion, **Pr** p
 
 ## 7. Damage tags (implemented 2026-09-20, comprehensive pass 2026-09-24)
 
-Built in patcherMod, package `damage/`. Built and smoke-tested headlessly (93 checks); **not yet deployed to
+Built in Creative Common, package `damage/`. Built and smoke-tested headlessly (93 checks); **not yet deployed to
 `mods/` or tried in game** (the game was running when this pass finished).
 
 **What it is.** 1.19.2 has no damage-type registry, so this adds one layer of tags on top of `DamageSource`.

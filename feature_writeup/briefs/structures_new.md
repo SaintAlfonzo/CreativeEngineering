@@ -166,7 +166,7 @@ frames, Polaroid instant camera, Expanded lenses and filters).
    entries (ids from item_dict; check the backport's registry names in `development/exposureBackport` before
    writing). Then add the table to the loot catalog (`tools/gen_loot_config.py`, loot.md).
 4. Optional later: a village version (a house piece in the vanilla village pools) needs a pool injection, which
-   PoolTuner can't do today (it only reweights); a small patcherMod addition "inject" in `pool_config.json`, or the
+   PoolTuner can't do today (it only reweights); a small Creative Common addition "inject" in `pool_config.json`, or the
    Waystones approach. Not recommended for the first build.
 
 ### Ids and data

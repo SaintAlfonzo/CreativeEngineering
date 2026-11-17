@@ -34,7 +34,7 @@ public class MassPlacerTest {
 
 	public static void main(String[] args) throws Exception {
 		Path root = Path.of(args[0]);
-		// WorldgenFiles.rootOverride is a package-private test seam in patcherMod's worldgen package; this test lives in
+		// WorldgenFiles.rootOverride is a package-private test seam in Creative Common's worldgen package; this test lives in
 		// Devtools' cdevplace package since the Creative Split, so set it by reflection.
 		java.lang.reflect.Field rootOverride = WorldgenFiles.class.getDeclaredField("rootOverride");
 		rootOverride.setAccessible(true);

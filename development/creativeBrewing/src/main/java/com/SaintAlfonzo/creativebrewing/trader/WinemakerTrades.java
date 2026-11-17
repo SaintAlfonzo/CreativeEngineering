@@ -16,7 +16,7 @@ import org.slf4j.Logger;
  * {@code WanderingWinemakerEntity.TRADES} (key 1, read by its own {@code updateTrades}, which picks
  * 8); this keeps Vinery's original array and puts back original + extras on every change, so a
  * /reload that re-runs the KubeJS script (reset, then add) never stacks copies. Reflection keeps
- * patcherMod free of a compile dependency on Vinery; without Vinery every call is a no-op.
+ * Creative Common free of a compile dependency on Vinery; without Vinery every call is a no-op.
  */
 public final class WinemakerTrades {
 

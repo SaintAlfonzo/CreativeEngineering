@@ -20,7 +20,7 @@ Test prefix **VN-** · Last updated **2026-10-01** · Overall status **reference
 | Wine aging and wine effects | §2.10, §2.11 | reference |
 | Grape and grape seed flavor lines removed | [tooltips.js](../kubejs/client_scripts/tooltips.js) Vinery section, see [tooltips.md](tooltips.md) | DEPLOYED (client script), TT-14 pending |
 | Tooltip lines for the main Vinery blocks | same section, `TODO` placeholders | placeholders only, text not written yet |
-| JEI pages (fermentation, press, stomping, aging) | patcherMod, see [vinery_jei.md](vinery_jei.md) | REMOVED 2026-10-27 (the port ships its own) |
+| JEI pages (fermentation, press, stomping, aging) | Creative Common, see [vinery_jei.md](vinery_jei.md) | REMOVED 2026-10-27 (the port ships its own) |
 | Other pack changes (oil, compost, crates, recipes, tags) | §3 | DEPLOYED |
 
 - **Open first:** this file's §2 for any "how does X work" question. Then [vinery_jei.md](vinery_jei.md) for the JEI pages.
@@ -79,7 +79,7 @@ The Vinery port calls this block the **Cask** (alcohol_part_b.md 7.9). This sect
 |---|---|
 | Slots (GUI) | 0: only `vinery:wine_bottle`. 1-4: only items that appear in some `vinery:wine_fermentation` recipe. 5: output, nothing can be placed. |
 | Recipe match | The number of **filled** slots among 1-4 must equal the recipe's ingredient count exactly (recipes have 1-4 ingredients). A stray extra item stops it. Order doesn't matter. |
-| Craft | Uses 1 wine bottle and 1 from each ingredient slot. Stock it only ran when slot 5 was empty (one wine at a time). **Patched (patcherMod `FermentationBarrelStackOutputMixin`):** it also runs while slot 5 holds the same wine (same item, same `Year` tag) with room left, so the output stacks. A wine from a different year blocks it until taken out, because the two would not stack. |
+| Craft | Uses 1 wine bottle and 1 from each ingredient slot. Stock it only ran when slot 5 was empty (one wine at a time). **Patched (Creative Common `FermentationBarrelStackOutputMixin`):** it also runs while slot 5 holds the same wine (same item, same `Year` tag) with room left, so the output stacks. A wine from a different year blocks it until taken out, because the two would not stack. |
 | Time | **About 50 ticks (2.5 s)**, not 1800. See below. |
 | Output | Gets an NBT `Year` tag (the current wine year, §2.10). |
 | Hoppers | The barrel is a plain container with no side rules: hoppers can put **any item into any slot** (the first empty one is the bottle slot) and pull from any slot, including the ingredient slots. |
@@ -239,7 +239,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - **Tooltips** ([tooltips.js](../kubejs/client_scripts/tooltips.js), Vinery section; recorded in [tooltips.md](tooltips.md)):
   - Removed Vinery's per-variant grape and grape seed lines (`item.vinery.grape.tooltip.*`, `item.vinery.grapeseed.tooltip.*`). `removeTooltipKey` now accepts a key ending in `*` as a prefix, because Vinery builds the key from the item id.
   - Added `TODO` placeholder lines for the pot, press, barrel, stem, lattice, apple/cherry leaves and saplings, kitchen sink, stackable log and the wine storage blocks. **The placeholders show in game until written.** Vinery's own gray lines on those blocks are kept.
-- **JEI:** patcherMod's four 1.3.10 pages were removed 2026-10-27 ([vinery_jei.md](vinery_jei.md)); the port ships its own.
+- **JEI:** Creative Common's four 1.3.10 pages were removed 2026-10-27 ([vinery_jei.md](vinery_jei.md)); the port ships its own.
 - **Plant oil:** every grape seed squeezes into 50 mB of plant oil in the IE Squeezer at 6400 energy ([oil.js](../kubejs/data/creativeengineering/kubejs/engineering/oil.js)).
 - **Composting:**
   - grapes and seeds 0.4
@@ -261,7 +261,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - **BlockRunner surfaces** ([blocktags.js](../kubejs/server_scripts/tags/blocktags.js), [blockrunner.md](blockrunner.md)):
   - wood tier: cherry fence gate, cherry beams and floorboards, stackable log, crates
   - dirt tier: Vinery dirt/grass slabs and loam
-- **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in patcherMod `StuckInBlock` (display only).
+- **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in Creative Common `StuckInBlock` (display only).
 - **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativecompat:flower_box_plants` and sits centered on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
 - **Lava Walker** (port, 2026-11-12, [raspberry_pie.md](raspberry_pie.md) 4): standing on lava burns like a magma block
   (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
@@ -301,7 +301,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 
 - Mod jar: `mods/letsdo-vinery-forge-1.3.10.jar`; config `config/vinery/config.json5`
 - Pack tooltips: [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) (Vinery section, `removeTooltipKey`)
-- JEI pages: none in patcherMod since 2026-10-27 ([vinery_jei.md](vinery_jei.md))
+- JEI pages: none in Creative Common since 2026-10-27 ([vinery_jei.md](vinery_jei.md))
 - Item keys: Vinery block of `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.grapevine_pot`, `i.wine_press`, `i.fermentation_barrel`, `i.grape_seeds_*`, ...)
 - Pack scripts touching Vinery: [oil.js](../kubejs/data/creativeengineering/kubejs/engineering/oil.js), [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js), [cantags.js](../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js), [misc_mods.js](../kubejs/server_scripts/other/misc_mods.js), [fabric.js](../kubejs/data/creativeengineering/kubejs/engineering/fabric.js), [wood_tags.js](../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js), [blocktags.js](../kubejs/server_scripts/tags/blocktags.js)
 - Decompile helper: [tools/decompile_mod.py](../tools/decompile_mod.py)

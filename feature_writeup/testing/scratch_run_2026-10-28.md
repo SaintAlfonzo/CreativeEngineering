@@ -55,7 +55,7 @@ Between boots, with no server up: `perf_session.sh report` (summary.md, summary.
 
 ## Jars
 
-- patcherMod `creativeengineering-1.1.03.jar`: `mods/` held the 00:01 build, which has no `soil_yield`. Installed the
+- Creative Common `creativeengineering-1.1.03.jar`: `mods/` held the 00:01 build, which has no `soil_yield`. Installed the
   00:16 build (`installToMods`, 01:19), so the sources and the jar match.
 - Creative Delight 00:16 (same as build/libs). perfBot `cdevperfbot-0.1.0.jar` 00:50 (scratch `mods/` only).
 

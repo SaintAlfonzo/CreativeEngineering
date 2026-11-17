@@ -53,7 +53,7 @@ extensions" below): `L.define` (a new table from pools), `L.addRef` (a `loot_tab
    session; they share the "define a small sub-table, `addRef` it into a table group" pattern.
 4. **#10:** FIXED 2026-11-01 ([archery.md](../archery.md) F9): no table names the three enchantments and the random
    functions honor the 1.0.9 override; the books came from Dynamic Villager Trades librarians and Lightman's Currency
-   cashiers. The NEA mixins now also make the three enchantments non-tradeable (`isTradeable`, patcherMod built, not
+   cashiers. The NEA mixins now also make the three enchantments non-tradeable (`isTradeable`, Creative Common built, not
    installed); other book trades stay. In-game check AR-14 left; #11 stays the durable loot-side guard.
 5. **#1 comprehensive tree + #2 island folding:** last, a project of its own. #2 is a subset of #1 (recommend
    merging the rows). Groups 1 to 3 are written so they survive #1: their sub-tables become tree nodes.
@@ -140,7 +140,7 @@ Status Bug / Work KubeJS / data / `loot/tables #10`
 No Stockpile, Recovery or Cycle book from any container, and know which path still produced them.
 
 ### Now
-- patcherMod 1.0.9 (DEPLOYED 2026-10-19) overrides three methods on each NEA enchantment class
+- Creative Common 1.0.9 (DEPLOYED 2026-10-19) overrides three methods on each NEA enchantment class
   ([StockpileEnchantmentMixin.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StockpileEnchantmentMixin.java),
   same for Cycle / Recovery): `m_6592_` (vanilla `isDiscoverable`, SRG name since 1.0.9), `canApplyAtEnchantingTable`
   and `isAllowedOnBooks` (Forge), all `false`. MoreJS removes them from librarian trades and the enchanting table

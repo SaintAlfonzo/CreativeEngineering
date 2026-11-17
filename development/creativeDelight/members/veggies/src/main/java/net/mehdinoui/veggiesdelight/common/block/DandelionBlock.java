@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 // Mature Dandelion: a flower (Luck in suspicious stew) that pops another Mature Dandelion item on every bone meal.
 // Shears or a knife used on it turn it back into a plain Dandelion (50% to drop a Dandelion, 2-3 Dandelion Leaves).
-// The plain Dandelion matures on Rich Soil / Fertile Soil through patcherMod (crops/DandelionMaturing).
+// The plain Dandelion matures on Rich Soil / Fertile Soil through Creative Common (crops/DandelionMaturing).
 public class DandelionBlock extends FlowerBlock implements BonemealableBlock {
     private static final TagKey<Item> SHEARS = ItemTags.create(new ResourceLocation("forge", "shears"));
     private static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("forge", "tools/knives"));

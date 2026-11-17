@@ -12,7 +12,7 @@ by decompiling `create-1.19.2-0.5.1.i.jar` with ForgeFlower (cached at
 `~/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/forgeflower/1.5.605.9/forgeflower-1.5.605.9.jar`
 - genuinely useful for reading any mod jar's real logic instead of guessing from javap signatures alone).
 
-**The fix** (2 new files in patcherMod, both client-only):
+**The fix** (2 new files in Creative Common, both client-only):
 - `mixin/SubMenuConfigScreenMixin.java` - `@Inject`s into `SubMenuConfigScreen`'s private
   `lambda$init$12(String, Object)` (the `configGroup.valueMap().forEach` dispatch lambda), right
   before its fallback `NEW ConfigScreenList$LabeledEntry` (`@At("NEW")`, `cancellable = true`).

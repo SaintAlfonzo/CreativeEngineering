@@ -6,13 +6,13 @@
 // did MORE work to hide it), its rate is that mod's own config (shared with any real reforming book a player
 // finds/crafts, so retuning one retunes both), and it stops working the moment Allurement isn't installed. ItemStack's
 // damage is a plain public field via getDamageValue()/setDamageValue() - no read-only-event problem like
-// magic_resistance's damage reduction had, so this needs no patcherMod/Java at all.
+// magic_resistance's damage reduction had, so this needs no creativeCommon/Java at all.
 //
 // dragon_horse_armor is not repaired: as in vanilla, HorseArmorItem has no durability
 // (max damage 0). Its Regeneration comes from armor_effects.js mount().
 //
 // Knobs live in config/creativeengineering-common.toml under [dragon_gear.autorepair],
-// via patcherMod's CEConfig (Forge's native config format - editable live through
+// via Creative Common's CEConfig (Forge's native config format - editable live through
 // Create's in-game Configs screen, no restart needed).
 
 // Rhino gotcha (documented elsewhere in this pack): ALL server_scripts share one

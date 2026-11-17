@@ -1,6 +1,6 @@
 """World-interaction tabs for tools used on placed blocks: stripping, waxing and scraping, block dyeing, soap washing.
 
-Source: kubejs/exported/world_jei/tool_pairs.json (patcherMod devtools/WorldJeiToolPairs.java, run /dumpworldjei).
+Source: kubejs/exported/world_jei/tool_pairs.json (Creative Common devtools/WorldJeiToolPairs.java, run /dumpworldjei).
 Hand-written rows (Create sail / seat / valve handle dyeing, Supplementaries soap on globes, spikes, signs, mobs,
 the blackboard) are in kubejs/assets/creativecommon/jei_world/<tab>/manual.json.
 
@@ -10,7 +10,7 @@ Mod behavior this follows, read from the jars:
   click is eaten otherwise); steel wool scrapes any rust stage, takes wax off its waxed blocks and scrapes one stage off
   the copper in #immersive_weathering:copper. Both need axe_rusting.
 - Supplementaries: dye on a block of a Moonlight color set swaps it for that color and uses one dye ([tweaks]
-  dye_blocks); patcherMod's SupplementariesDyeBlocksMixin stops it on blocks with a block entity and
+  dye_blocks); Creative Common's SupplementariesDyeBlocksMixin stops it on blocks with a block entity and
   #creativecompat:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a colored
   block back to its plain one (not beds, not [functional.soap] clean_blacklist), then a sticky piston into a piston,
   then strips wax and all oxidation at once. Each wash uses one soap.

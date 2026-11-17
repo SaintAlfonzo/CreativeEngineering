@@ -29,21 +29,21 @@ keeps its own writeup.
 | Remove Create Compressed crushed-pile compatibility line | tooltips.js `removeTooltips` | VERIFIED (long-standing) |
 | Framed / copycat lines: schematics save the block or not, and hybrid blocks | tooltips.js "Framed / Copycat Blocks" section | DEPLOYED 2026-09-27 |
 | FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
-| BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + patcherMod `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
+| BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + Creative Common `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
 | Stepstools: "Stand still and hold Sprint + Jump to step up", "Move, crouch or jump to step off" (the slot is Curios' "Slot: Feet"; the pack's "Worn in the Feet slot" line dropped 2026-11-02) | tooltips.js Tools section ([stepstool.md](stepstool.md)) | BUILT 2026-10-29; STL-02 |
-| Tall tooltips keep their top on screen and run off the bottom (`[tooltips] keepTopOnScreen`) | patcherMod client mixin `ScreenTooltipTopMixin` | BUILT 2026-11-02 (patcherMod 1.1.07 installed), TT-39 |
-| Curios "Slot: ..." line on every item that fits a Curios slot, also where the item's mod hides it (`[tooltips] curiosSlotLine`) | patcherMod `compat/CuriosSlotTooltip` | BUILT 2026-11-02 (patcherMod 1.1.07 installed), TT-40 |
+| Tall tooltips keep their top on screen and run off the bottom (`[tooltips] keepTopOnScreen`) | Creative Common client mixin `ScreenTooltipTopMixin` | BUILT 2026-11-02 (Creative Common 1.1.07 installed), TT-39 |
+| Curios "Slot: ..." line on every item that fits a Curios slot, also where the item's mod hides it (`[tooltips] curiosSlotLine`) | Creative Common `compat/CuriosSlotTooltip` | BUILT 2026-11-02 (Creative Common 1.1.07 installed), TT-40 |
 | PneumaticCraft "Hold Shift" hint replaced by the item's description, wrapped, plain gray, on every PneumaticCraft item | [pnc_tooltips.js](../kubejs/startup_scripts/changes/pnc_tooltips.js) (startup, LOW-priority Forge listener) | BUILT 2026-11-02 (glycerol only since 2026-10-23), TT-41 |
 | Placeable food lines ("Placeable", "(while sneaking)", "Placeable on plate", "Placeable on small plate"); DD + Fruits Delight placement lines removed | [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js), tags from [placeable_food.md](placeable_food.md) | DEPLOYED with 1.0.6 (2026-10-14), PL-01 to PL-08 |
 | Plantable lines ("Seed Item", "Plantable Crop", "Sapling", "Fungi Sapling", "Water Plant", "Vine", "Vertical Crop") | [plantable_tooltip.js](../kubejs/client_scripts/plantable_tooltip.js), tags from [plantable.md](plantable.md) | BUILT 2026-11-01, PT-01 to PT-06 |
-| Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | patcherMod client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-16 |
-| AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | patcherMod `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in patcherMod 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
-| AppleSkin food bars in the rest of the food screens: FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and the Oven (finished-meal slot); Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli books; AE2 crafting tables, pattern encoding amount slots and guidebook | patcherMod `compat/MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + 17 client mixins (list in section 3); the Brewin' and Vinery ports | BUILT 2026-10-20 (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`), in `mods/`, not tested in game; TT-19 to TT-30 |
+| Legendary Tooltips name underline no longer crosses the spinning item model (Iceberg's title break moved after LT's model spacer) | Creative Common client mixin `IcebergTitleBreakMixin` | BUILT 2026-10-05, in Creative Common 1.0.5, DEPLOYED with 1.0.6; TT-16 |
+| AppleSkin food bars in JEI recipe slots + catalysts and in Lightman's Currency trade buttons / storage tabs (those screens drew tooltips without the item stack) | Creative Common `JeiRecipeLayoutTooltipMixin`, `JeiRecipesGuiTooltipMixin`, `LCEasyScreenHelperMixin`, `LCEasyGuiGraphicsMixin`, `compat/LightmansTooltipStacks` | BUILT 2026-10-05, in Creative Common 1.0.5, DEPLOYED with 1.0.6; TT-17, TT-18. The other screens: next row |
+| AppleSkin food bars in the rest of the food screens: FD cooking pot, Farmer's Respite kettle, Central Kitchen cooking/brewing guides and the Oven (finished-meal slot); Brewin' keg tank (GUI, recipe book, JEI tank over the tankard); Vinery recipe book; TrashSlot; Pretty Pipes terminal; FTB Quests task/reward/description items; Wares agreement; Patchouli books; AE2 crafting tables, pattern encoding amount slots and guidebook | Creative Common `compat/MealSlotTooltip`, `FtbTooltipStacks`, `AeTooltipStacks` + 17 client mixins (list in section 3); the Brewin' and Vinery ports | BUILT 2026-10-20 (Creative Common 1.1.01, Brewin' `-03`, Vinery `-04`), in `mods/`, not tested in game; TT-19 to TT-30 |
 | Brewin' & Chewin' (backport): Heating Cask / Ice Crate keg-source lines; "Placeable on a coaster"; keg drink effect lines and the pipe-rule line ("Pipes can only drain it while it isn't fermenting", only while `pipeDrainOnlyWhenIdle` is on) on the keg item, the keg GUI's tank and the JEI Fermenting result tank | tooltips.js "Food / Farmers Delight"; placeable_tooltip.js; the port (`KegItem`, `KegScreen`, JEI `FermentingRecipeCategory`) | BUILT 2026-10-18, DEPLOYED with 1.0.8 (Brewin' `-02`, [plan_1.0.8.md](plan_1.0.8.md) AL); [alcohol.md](alcohol.md) 8.2, 8.3, 8.7, AL-49 to AL-52, AL-64 |
-| Alcoholic drinks: Quark's saturation word reads "Intoxicating Drink" instead of "Disgusting Snack" on every food with the Intoxication food effect; Vinery wines list their food effects | patcherMod `food/IntoxicatingDrinkTooltip` (`[alcohol] quarkLine`); the Vinery port (`DrinkBlockItem`) | BUILT 2026-10-20 (patcherMod 1.1.01), not tested; [alcohol.md](alcohol.md) 11, AL-88. The 2026-10-20 KubeJS effect-line rename (`alcohol_tooltip.js`) was retired the same day |
-| Shield Shift view "Blocks burning" / "Blocks thorns" lines | patcherMod `ShieldTooltip` ([shields.md](shields.md)) | DEPLOYED with 1.0.6; SH-04 |
-| patcherMod tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | patcherMod | VERIFIED / see memories |
+| Alcoholic drinks: Quark's saturation word reads "Intoxicating Drink" instead of "Disgusting Snack" on every food with the Intoxication food effect; Vinery wines list their food effects | Creative Common `food/IntoxicatingDrinkTooltip` (`[alcohol] quarkLine`); the Vinery port (`DrinkBlockItem`) | BUILT 2026-10-20 (Creative Common 1.1.01), not tested; [alcohol.md](alcohol.md) 11, AL-88. The 2026-10-20 KubeJS effect-line rename (`alcohol_tooltip.js`) was retired the same day |
+| Shield Shift view "Blocks burning" / "Blocks thorns" lines | Creative Common `ShieldTooltip` ([shields.md](shields.md)) | DEPLOYED with 1.0.6; SH-04 |
+| Creative Common tooltips: tier shields, vanilla shield, echo armor set bonus, D&D jetpack crash fix | Creative Common | VERIFIED / see memories |
 | Creative Labels: sticky note (its text in the note's color, then four gray use lines), label (eight gray lines), eraser (four); labeled items' lines in gray under the name (`CreativeLabels.Lines`); Sticky It's tooltip handler canceled (its "[Shift]" / "Label:" lines, and the empty `{}` tag it put on every hovered item) | the mod: `appendHoverText` on the three items, `item/ItemLabels` (ItemTooltipEvent), `mixin/StickyItTooltipMixin` | BUILT 2026-10-20 (creativeLabels 1.0.0), not in `mods/` yet; lines in [sticky_notes.md](sticky_notes.md) 3.9 |
 
 **Open first:** [tooltips.js](../kubejs/client_scripts/tooltips.js) (helpers L1-86, color legend L91-125, then sections).
@@ -56,7 +56,7 @@ keeps its own writeup.
 2. Forge fires `ItemTooltipEvent`, and every listener can add, edit or remove lines:
    - BlockRunner (Speed Multiplier)
    - KubeJS `ItemEvents.tooltip` handlers (all the pack's scripts)
-   - patcherMod's `CamoSpeedTooltip` (LOW priority, so it runs after BlockRunner)
+   - Creative Common's `CamoSpeedTooltip` (LOW priority, so it runs after BlockRunner)
    - `IronShieldTooltip`
 3. In KubeJS, `e.add(id, lines)` appends lines, and `e.addAdvanced(id, fn)` gets the whole list to edit.
    Order between listeners at the same priority isn't guaranteed. That's why removals target a specific line.
@@ -142,7 +142,7 @@ Examples:
   ("Copycat Hammer" etc.) because nothing duplicates them.
 
 **Rewritten**
-- **BlockRunner's line on framed/copycat blocks:** patcherMod `CamoSpeedTooltip` swaps it for
+- **BlockRunner's line on framed/copycat blocks:** Creative Common `CamoSpeedTooltip` swaps it for
   "matches its camo", "matches its camo (newest camo sets walk behaviors for hybrid blocks)" on hybrid-capable items, or "1.0, no matter its camo", depending on
   `[surface.camouflage] copyCamo` ([blockrunner.md §3.3](blockrunner.md)).
 - **PneumaticCraft "Hold Shift for info" (2026-11-02, `ui/tooltips #9`; glycerol only since 2026-10-23, `#6`):** PNC's
@@ -152,7 +152,7 @@ Examples:
   `PneumaticCraftUtils.splitString` (which turns `${br}` into line breaks), color codes stripped, gray. Holding Shift
   still shows PNC's own aqua text. Pack wording goes in `kubejs/assets/pneumaticcraft/lang/en_us.json` (glycerol:
   "Tastes sweet!").
-- **Create: Deep Dark echo armor set bonus:** patcherMod `EchoArmorTooltipMixin` shows the pack's
+- **Create: Deep Dark echo armor set bonus:** Creative Common `EchoArmorTooltipMixin` shows the pack's
   replacement bonus (Night Vision + Phantom Bane). See memory `echo-armor-set-bonus`.
 
 **Added for framed / copycat blocks** ("Framed / Copycat Blocks" section)
@@ -220,8 +220,8 @@ Examples:
   draws the same lines with Forge's overload that takes the stack:
   - finished-meal slot ("Served on"): FD `CookingPotScreen`, Farmer's Respite `KettleScreen`, Central Kitchen
     `CookingGuideScreen` / `BrewingGuideScreen` (mixins Creative Delight `farmersdelight.CookingPotMealTooltipMixin` and `farmersrespite.KettleMealTooltipMixin`
-    (moved from patcherMod 2026-10-27), patcherMod `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`,
-    helper patcherMod `compat/MealSlotTooltip`); the Oven
+    (moved from Creative Common 2026-10-27), Creative Common `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`,
+    helper Creative Common `compat/MealSlotTooltip`); the Oven
     (`OvenScreen`, direct edit).
   - Brewin' port: the keg tank tooltip (keg GUI and its recipe book) carries the item the drink pours into
     (`BnCFluidItemDisplays`). In JEI the fermenting result tank sits over the tankard icon and JEI shows the first
@@ -277,9 +277,9 @@ Examples:
 
 - [kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js): helpers, color legend, all hand-written lines, removals
 - [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js): placeable food lines + DD / Fruits Delight removals (tests in [placeable_food.md](placeable_food.md), PL-)
-- patcherMod `food/IntoxicatingDrinkTooltip`: Quark's saturation word -> "Intoxicating Drink" on every food with the Intoxication effect (drinks listed in `global.alcohol`, [alcohol.md](alcohol.md) 11)
+- Creative Common `food/IntoxicatingDrinkTooltip`: Quark's saturation word -> "Intoxicating Drink" on every food with the Intoxication effect (drinks listed in `global.alcohol`, [alcohol.md](alcohol.md) 11)
 - [armor_effects_tooltip.js](../kubejs/client_scripts/armor_effects_tooltip.js), [tool_effects_tooltip.js](../kubejs/client_scripts/tool_effects_tooltip.js), [potion_buckets.js](../kubejs/client_scripts/potion_buckets.js)
-- patcherMod: [surface/CamoSpeedTooltip.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
+- Creative Common: [surface/CamoSpeedTooltip.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java), `shield/ShieldTooltip.java`, `shield/IronShieldTooltip.java`, `mixin/EchoArmorTooltipMixin.java`, `mixin/JetpackItemTooltipMixin.java`
 - Lang: [patcherMod lang en_us.json](../development/creativeCommon/src/main/resources/assets/creativecommon/lang/en_us.json) (`creativeengineering.tooltip.*`)
 - Item keys: `global.item` in [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js)
 - Renames: `resourcepacks/Copycat Framed Block.zip` -> `assets/framedblocks/lang/en_us.json` (backups in `configs_edited/resourcepacks/`)
@@ -300,8 +300,8 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
 
 **BlockRunner line** (moved here from the BlockRunner suite)
 - ~~**TT-03 Speed values:**~~ retired 2026-11-02 (line off). asphalt (IP and D&D) -> "Speed Multiplier: 1.5"; glass -> "Speed Multiplier: 1.0"; stone -> "Speed Multiplier: 1.05". *(was BR-06)*
-- ~~**TT-04 Camo lines**~~ retired 2026-11-02 (line off). (needs the rebuilt patcherMod jar): framed cube -> "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel -> "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
-- ~~**TT-05 Camo off**~~ retired 2026-11-02 (line off). (needs the rebuilt patcherMod jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube -> "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
+- ~~**TT-04 Camo lines**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): framed cube -> "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel -> "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
+- ~~**TT-05 Camo off**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube -> "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
 
 **Pack lines (samples)**
 - [ ] **TT-06 Patterns:** a Quark hollow log -> "Can be crawled through"; any Create/Quark ladder -> the ladder line.
@@ -367,7 +367,7 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
 - [] Cans- Needs appleskin mixin. (shanks, saturation, of single meal, standard appleskin render) x(number of meals in can)
 - [] Chalk- Right click to mark block w/ arrow, hold right click to change mark (Chalk 1.6.4 code: it is sneak + right-click that opens the symbol picker; plan in [briefs/ui_tooltips.md](briefs/ui_tooltips.md))
 - [] Pretty Pipes- Use pipe wrench w/ block in off-hand to add cover
-- [x] Lunchboxes- number of slots: `Slots: N` under the name, BUILT 2026-10-29 (patcherMod `lunchbox/LunchboxTooltip`, [lunchboxes.md](lunchboxes.md) LB-02; scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
+- [x] Lunchboxes- number of slots: `Slots: N` under the name, BUILT 2026-10-29 (Creative Common `lunchbox/LunchboxTooltip`, [lunchboxes.md](lunchboxes.md) LB-02; scratchpad 2026-10-21, [TODO](todo/TODO.md) `ui/tooltips #2`)
 - [] AE2 cables- how to make covers, once the covers are hidden from JEI (scratchpad 2026-10-21, `jei/jei-coverage #3`)
 - [] Flower pots- a label on every pot, every pot distinct (scratchpad 2026-10-21, `blocks/framed-and-decor #6`)
 
@@ -392,7 +392,7 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - **2026-10-01:** Vinery grape and grape seed flavor lines removed (`removeTooltipKey` prefix keys); Vinery `TODO` placeholders added. TT-14, TT-15 added. See [vinery.md](vinery.md).
 - **2026-10-05:** Placeable food lines added and DD / Fruits Delight placement lines removed ([placeable_food.md](placeable_food.md), tests PL-01 to PL-08).
 - **2026-10-05:** Shield Shift view adds "Blocks burning" and "Blocks thorns" Yes/No lines ([shields.md](shields.md), SH-04). Built, not in `mods/`.
-- **2026-10-11:** rows for the tooltip fixes in the patcherMod 1.0.5 jar (Legendary Tooltips underline, AppleSkin bars in JEI
+- **2026-10-11:** rows for the tooltip fixes in the Creative Common 1.0.5 jar (Legendary Tooltips underline, AppleSkin bars in JEI
   and Lightman's Currency) with TT-16 to TT-18; placeable lines and the shield Shift lines marked STAGED for 1.0.6
   (not deployed). The camo-speed wording row was stale: it shipped long ago.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
@@ -407,7 +407,7 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - 2026-10-20: "Intoxicating Drink" replaces the Intoxication line on every alcoholic drink; Vinery wines list their food
   effects ([alcohol.md](alcohol.md) 11, AL-88).
 - 2026-10-20 (later): AppleSkin food bars added to the remaining food screens and JEI's keg tank (section 3 "Fixed",
-  TT-19 to TT-30). Built into patcherMod 1.1.01, Brewin' `-03` and Vinery `-04`, installed in `mods/`, not tested in game.
+  TT-19 to TT-30). Built into Creative Common 1.1.01, Brewin' `-03` and Vinery `-04`, installed in `mods/`, not tested in game.
 - 2026-10-20: test round: the Vinery fit lines were clunky, so they now name the racks, renamed Single / Small / Big
   Wine Rack; the Brewin' heat / cold line puts "Useful for keg brewing and wine casking" on its own line
   ([alcohol.md](alcohol.md) 10.18; VB-84, VB-92, AL-77).
@@ -415,7 +415,7 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - 2026-11-02: `ui/tooltips #5` tall tooltips keep their top (`ScreenTooltipTopMixin`), `#8` Curios "Slot:" line on
   every curio item (`CuriosSlotTooltip`), both CEConfig `[tooltips]`; `#9` every PneumaticCraft "Hold Shift" hint
   replaced by the description in plain gray (`pnc_tooltips.js`, was glycerol only, in aqua); stepstools' "Worn in the
-  Feet slot" line dropped. patcherMod 1.1.07 built and installed. `#12` (tree fruit season lines) was already built
+  Feet slot" line dropped. Creative Common 1.1.07 built and installed. `#12` (tree fruit season lines) was already built
   with `farming/crops #5` on 2026-10-30. TT-39 to TT-41.
 - 2026-11-07: Botany Pots line on every botany pot (`addTooltipPattern 'botanypots:*botany_pot'` in
   `client_scripts/tooltips.js`), owner's note with the slower pot growth ([botany_pots.md](botany_pots.md)). TT-43.

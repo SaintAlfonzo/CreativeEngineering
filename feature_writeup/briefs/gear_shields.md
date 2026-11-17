@@ -9,11 +9,11 @@ Complete); line refs re-checked 2026-10-31 (brief sweep). Feature writeup: [shie
 | Step | Row | Work | Notes |
 |---|---|---|---|
 | 1 | `shields #4` damage-type sanity check | tool (`tools/shield_check.py`), then data | Do it first: it prints the per-source table the other rows tune against, and it may move ids between tags |
-| 2 | `shields #3` 1-damage ticks | patcherMod + data | Most of the row is already done (see below); only powder snow is left, plus the acid decision |
-| 3 | `shields #2` knockback thresholds + per-tier disable cooldown | patcherMod + config | The only real Java work: new per-tier keys, both disable mixins, tooltip, `ShieldConfigTest` |
+| 2 | `shields #3` 1-damage ticks | Creative Common + data | Most of the row is already done (see below); only powder snow is left, plus the acid decision |
+| 3 | `shields #2` knockback thresholds + per-tier disable cooldown | Creative Common + config | The only real Java work: new per-tier keys, both disable mixins, tooltip, `ShieldConfigTest` |
 | - | `shields #5` Resistance while blocking | Testing | Built 2026-10-22 (see Built, needs play) |
 
-Steps 2 and 3 go into one patcherMod build together with `potions/effects #3` and the F7 mixin change
+Steps 2 and 3 go into one Creative Common build together with `potions/effects #3` and the F7 mixin change
 ([potions_effects.md](potions_effects.md), group B). Run `tools/test_shields.sh` (needs `./gradlew build`) after each.
 
 Related rows: `gear/tuning #4` (assemblies drop the shield's banner, shields.md F5, SH-27). It touches
@@ -29,7 +29,7 @@ Conventions that matter here:
 ---
 
 ## shields #4: Shield damage-type sanity check
-Status **Planned** · Work: none / patcherMod (really: tool + possibly data) · id `gear/shields #4`
+Status **Planned** · Work: none / Creative Common (really: tool + possibly data) · id `gear/shields #4`
 
 ### Goal
 For every damage type in the pack, check what each tier blocks (and what it doesn't) against the intended ladder,
@@ -104,7 +104,7 @@ No new ids. Output only, unless the review moves tag entries.
 ---
 
 ## shields #3: 1-damage ticks fully blocked
-Status **Planned** · Work: patcherMod / data · id `gear/shields #3`
+Status **Planned** · Work: Creative Common / data · id `gear/shields #3`
 
 ### Goal
 Under the round-down rule (under 1 damage left = full block), any tier with a non-zero percentage blocks a 1-damage tick
@@ -171,7 +171,7 @@ Damage tag `creativeengineering:freeze_tick` (new). Config `[shields.<tier>] blo
 ---
 
 ## shields #2: Knockback thresholds and per-tier disable cooldown
-Status **Planned** · Work: patcherMod · id `gear/shields #2`
+Status **Planned** · Work: Creative Common · id `gear/shields #2`
 
 ### Goal
 The `TODO` at [ShieldTier.java:46](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTier.java):

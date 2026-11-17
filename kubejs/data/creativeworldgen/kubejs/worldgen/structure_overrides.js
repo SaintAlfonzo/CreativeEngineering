@@ -18,19 +18,19 @@
 //
 // BIOME RULES (biome_rules in structure_groups.json): a rule names biomes and a structure tag; only the
 // tag's structures may start in those biomes (water: ships, wrecks, ocean ruins...), every other structure
-// loses those biomes from its own list. Handed to patcherMod (worldgen/StructureBiomeRules), which also
+// loses those biomes from its own list. Handed to Creative Common (worldgen/StructureBiomeRules), which also
 // covers structures in no config yet; its log line lists what each rule kept out. Independent of the groups.
 // A rule's optional surface_check tag: those structures (dungeons with a staircase to the surface) also may not start
-// where the surface above them is one of the rule's biomes or under water (patcherMod checks the noise surface).
+// where the surface above them is one of the rule's biomes or under water (Creative Common checks the noise surface).
 //
 // BIOME FITS (biome_fits.json): a fit is a biome list and the structure tag of the same name (land/oak). A structure
 // in the tag spawns in its fit's biomes plus every parent fit's (land/oak: land/oak + land), never a sibling's, in
 // place of its mod's own list. Each fit is also added as the real biome tag and structure tag creativeworldgen:<fit>
-// (ServerEvents.tags below). Handed to patcherMod (worldgen/StructureBiomeFits), which answers Structure#biomes().
+// (ServerEvents.tags below). Handed to Creative Common (worldgen/StructureBiomeFits), which answers Structure#biomes().
 //
 // META STRUCTURES (meta_structures.json): our structures built from other structures and features (a village with
 // peaceful towers, a driftwood flotilla). Each definition is added as data/<ns>/worldgen/structure/<path>.json, but only
-// when patcherMod has worldgen/MetaStructure (its structure type) and [worldgen.systems] metaStructures is on; otherwise
+// when Creative Common has worldgen/MetaStructure (its structure type) and [worldgen.systems] metaStructures is on; otherwise
 // it stays out of every group set (an unknown structure type, or a set naming a missing structure, fails the world load).
 // They live only in groups. The meta/* tags of structure_tags.json are also added as real structure tags
 // creativeworldgen:meta/<name> (the anchors and parts the definitions name), from ServerEvents.tags below.
@@ -39,22 +39,22 @@
 // structure whose pieces would overlap a higher-ranked structure's never starts. A meta structure's "companions" are
 // structures started in chunks of their own around it (villages around a fortified town). priority.peaceful: a radius
 // (chunks) around big settlements, villages and remote camps/houses where no hostile structure may start. Staged to
-// patcherMod (worldgen/PlacementPriority).
+// Creative Common (worldgen/PlacementPriority).
 //
 // REPLACEMENTS: a group member with "replaces": "<member id>" and "share": 0..1 never wins a slot by its own weight; it
 // takes that share of the slots the named member wins and keeps (the vanilla swamp hut in YUNG's witch hut slots), so the
 // two together spawn exactly as often as the named member alone did. A meta structure without an anchor may be a
-// replacement too: its parts then build in the named member's slot (meta/meteorite_desert_pyramid in YUNG's temple slots). Staged to patcherMod (worldgen/MetaSlots). With
+// replacement too: its parts then build in the named member's slot (meta/meteorite_desert_pyramid in YUNG's temple slots). Staged to Creative Common (worldgen/MetaSlots). With
 // [worldgen.systems] structureReplacements off, replacements are left out of their group set and the named member keeps
 // every slot.
 //
 // BIOME FREQUENCY (a group's "biome_frequency"): {"#biome tag" | "biome id": factor 0..1,..., "default": factor}.
 // Every member's frequency is multiplied by the factor of the biome at its generation point (the first rule the biome
-// matches, else default); patcherMod rolls it in generation and in /locate's prediction alike. The vehicles use it to be
+// matches, else default); Creative Common rolls it in generation and in /locate's prediction alike. The vehicles use it to be
 // twice as common in #creativeworldgen:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",
 // added as real tags creativeworldgen:<name> below.
 //
-// frequency < 1 is not a vanilla feature: the table is handed to patcherMod
+// frequency < 1 is not a vanilla feature: the table is handed to Creative Common
 // (worldgen/StructureFrequencies), which rolls it when a structure is about to be placed.
 // Without that class nothing is applied at all (a group without its frequencies would spawn
 // every member at full rate).
@@ -67,7 +67,7 @@
 // errors land in the log + the report. structure_tag_report.md (same folder as the configs) is
 // rewritten on every load.
 //
-// creativeworldgen-common.toml [worldgen] (config/creativeworldgen-common.toml, read through patcherMod's WorldgenConfig):
+// creativeworldgen-common.toml [worldgen] (config/creativeworldgen-common.toml, read through Creative Common's WorldgenConfig):
 //   systems.structureGroups = false  -> groups and standalone edits are ignored: every set as its mod ships it.
 //   debug.structureDensity = x       -> every set's rate times x (see scalePlacement), grouped or not.
 //   debug.testOverrides = true       -> structure_test_overrides.json loosens soft rules for scratch tests (see
@@ -114,9 +114,9 @@
 	var WAY_SIGN_GROUP = 'settlements'
 	var WAY_SIGN_DESTINATIONS = 'supplementaries:way_sign_destinations'
 
-	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
+	// KubeJS's class filter blocks java.io, so the markdown report goes through Creative Common.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativecommon.util.WorldgenFiles')
-	// patcherMod's worldgen side: switches, and the stages the plan is handed to
+	// Creative Common's worldgen side: switches, and the stages the plan is handed to
 	var WorldgenConfig = global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig')
 	var StructureFrequencies = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureFrequencies')
 	var StructureBiomeRules = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeRules')
@@ -132,7 +132,7 @@
 	function worldgenSettings() {
 		var s = { groups: WorldgenConfig.structureGroupsEnabled() == true, density: Number(WorldgenConfig.structureDensity()), test: false }
 		if (!(s.density > 0) || !isFinite(s.density)) s.density = 1
-		try { s.test = WorldgenConfig.testOverrides() == true } catch (err) { s.test = false }   // older patcherMod jar: no switch
+		try { s.test = WorldgenConfig.testOverrides() == true } catch (err) { s.test = false }   // older Creative Common jar: no switch
 		return s
 	}
 
@@ -960,7 +960,7 @@
 		if (settings.groups) allIds.forEach(function (id) {
 			if (!setOf[id] && !owner[id]) warnings.push(id + ' (meta structure) is in no group, so it never generates')
 		})
-		// a meta with an anchor only takes slots its anchors win in its own group (patcherMod MetaSlots)
+		// a meta with an anchor only takes slots its anchors win in its own group (Creative Common MetaSlots)
 		var shareSum = {}
 		if (settings.groups) metaPlans.forEach(function (mp) {
 			if (mp.off || !('anchor' in mp.def) || !owner[mp.id]) return
@@ -1295,7 +1295,7 @@
 		out('')
 		out('Members of a group share one grid: at most one structure per grid slot, and no two members start closer '
 			+ 'than separation + 1 chunks. "Alone: 1 per N" = one per N x N chunks where it is the only member that fits the biome '
-			+ '(sharing a biome splits the slots by weight). ' + freqCount + ' frequencies below 1 are rolled by patcherMod.')
+			+ '(sharing a biome splits the slots by weight). ' + freqCount + ' frequencies below 1 are rolled by Creative Common.')
 		out('')
 		groupPlans.forEach(function (gp) {
 			var p = gp.placement
@@ -1332,7 +1332,7 @@
 
 		out('## Meta structures')
 		out('')
-		out('Our structures built from other structures and features (`meta_structures.json`, patcherMod MetaStructure). '
+		out('Our structures built from other structures and features (`meta_structures.json`, Creative Common MetaStructure). '
 			+ 'They generate only through their group. `#creativeworldgen:meta/*` = the `meta/*` tags below.')
 		out('')
 		if (!metaPlans.length) out('None defined.')
@@ -1469,7 +1469,7 @@
 	})
 
 	// The meta/* tags of structure_tags.json as real structure tags creativeworldgen:meta/<name>: the anchors
-	// and parts meta_structures.json names (patcherMod MetaStructure reads them when it generates). The type/* tags
+	// and parts meta_structures.json names (Creative Common MetaStructure reads them when it generates). The type/* tags
 	// too (creativeworldgen:type/<name>): earth_fill.js prunes #type/village, and [earth_fill] overrides may name
 	// them. Also every biome fit's structure tag as creativeworldgen:<fit> (for /locate and other datapacks; the fit
 	// itself is staged).

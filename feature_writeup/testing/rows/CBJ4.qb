@@ -21,7 +21,7 @@
 @group A
 @commands `grep -E "creativebrewing.mixins.json\|Mixin apply.*creativebrewing\|\[creativebrewing\]" logs/latest.log`; `grep -c "from creativebrewing.mixins.json" logs/debug.log`
 @pass No mixin apply error; the 14 common mixins apply on a server (the 11 client ones do not load); none listed twice
-@fails A compartment name not a mod id, or patcherMod still listing a moved mixin
+@fails A compartment name not a mod id, or Creative Common still listing a moved mixin
 @from batches/r1101/cs4_boot3.qb
 bootreject creativebrewing\.mixins\.json.*(Error|error|failed)
 shell grep -c "from creativebrewing.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativebrewing.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cb_mx.txt; wc -l < cb_mx.txt; cat cb_mx.txt | tr '\n' ' '; echo; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cb_mx.txt; rm -f cb_mx.txt
@@ -112,4 +112,4 @@ expect 95\.8f
 @@text In game after install (client): CBJ4-C1 JEI shows the Automated Potion Mixing and Lingerification pages (IE Mixer and
 @@text Refinery catalysts), Tipped Arrows and Potion Buckets pages, and IE's own Mixer page has no potion rows; CBJ4-C2 a
 @@text Brewin' drink tooltip reads "Intoxicating Drink"; a JEED page on a compound effect shows "Compound of"; a Builder's Tea
-@@text gives its HUD icon; CBJ4-C3 a WTHIT coaster line still shows (WthitCoaster stays in patcherMod).
+@@text gives its HUD icon; CBJ4-C3 a WTHIT coaster line still shows (WthitCoaster stays in Creative Common).

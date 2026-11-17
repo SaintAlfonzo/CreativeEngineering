@@ -3,7 +3,7 @@
 
 Every tools/jei_world/tab_*.py module returns rows per tab; this writes them, merged per tab, to
 kubejs/assets/creativecommon/jei_world/<tab>/generated.json. Hand-written rows sit next to it in manual.json
-and are never touched here. patcherMod's WorldInteractionJEI reads both on the client (row format in
+and are never touched here. Creative Common's WorldInteractionJEI reads both on the client (row format in
 compat/jei/world/WorldRow.java). A generated.json whose tab got no rows is deleted.
 
 Inputs: mod jars' data/ (kubejs/data on top) and kubejs/exported/ (run /dumpworldjei and /dumploot first).

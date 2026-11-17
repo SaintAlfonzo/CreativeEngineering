@@ -1,5 +1,5 @@
 // Creative Engineering. Plate storage blocks (creativeengineering:<metal>_plate_block) - fully migrated from Java
-// (patcherMod CreativeEngineeringItems used to register these as plain solid Blocks) into KubeJS. Same stats as the old
+// (Creative Common CreativeEngineeringItems used to register these as plain solid Blocks) into KubeJS. Same stats as the old
 // Java blocks (Material.METAL, strength 5.0/5.0, metal sound,
 // requires a tool). Note: the copper plate block is create_compressed:copper_sheet_block,
 // not part of this creativeengineering family.

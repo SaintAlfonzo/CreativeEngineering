@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text Target: patcherMod 1.1.03 built 2026-10-27 13:08 (in `mods/` since 13:22, rebuilt with the first-tick water fix below); copy it
+@@text Target: Creative Common 1.1.03 built 2026-10-27 13:08 (in `mods/` since 13:22, rebuilt with the first-tick water fix below); copy it
 @@text into the scratch `mods/` over the 2026-10-26 jar. Probe: copy `tools/armor_trims_cache_test/atc_probe.js` into
 @@text `srv/kubejs/server_scripts/zz_atc_probe.js` before boot. Output `[atctest] PASS|FAIL|INFO ATC-nn ...` in
 @@text `logs/latest.log`. Optional baseline for SQ-ATC-03: boot once with the 2026-10-26 jar from `mods/`; the probe then

@@ -1,6 +1,6 @@
 // priority: 1000
 // Creative Brewing core: global.CB (feature_writeup/creative_brewing.md 2.4). Startup script in the CB jar, loaded by
-// patcherMod's startup loader after the pack's startup_scripts folder and after Creative Delight's pack (CB's mods.toml
+// Creative Common's startup loader after the pack's startup_scripts folder and after Creative Delight's pack (CB's mods.toml
 // orders it AFTER creativedelight), so global.NCH, global.tags, the dicts and global.CD already exist here. Every
 // other CB script reads global.CB.
 //

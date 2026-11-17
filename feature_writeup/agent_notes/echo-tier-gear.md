@@ -55,7 +55,7 @@ config**: `create_deep_dark.procedures.EchoArmorEffectProcedure.execute(Event, E
 `ECHO_ARMOR_*` items, then every tick calls `LivingEntity.addEffect` twice:
 `MobEffects.DAMAGE_RESISTANCE` (f_19606_) and `DAMAGE_BOOST` (f_19600_), both `60,1,false,false`.
 
-**Patch:** `patcherMod/.../mixin/EchoArmorEffectProcedureMixin.java` — one `@ModifyArg`
+**Patch:** `creativeCommon/.../mixin/EchoArmorEffectProcedureMixin.java` — one `@ModifyArg`
 on the `m_7292_(MobEffectInstance)Z` call inside `execute(...Event;...Entity;)V`
 (`remap=false`, SRG target, Mojmap body reobf'd). Only fires after the set check, so it
 just rewrites the arg: DAMAGE_RESISTANCE -> `MobEffects.NIGHT_VISION` (duration bumped to
@@ -66,7 +66,7 @@ under ~200), DAMAGE_BOOST -> `ForgeRegistries.MOB_EFFECTS.getValue(better_beacon
 
 Wiring: added to `creativeengineering.mixins.json` `"mixins"` array; optional
 `create_deep_dark` dep (`mandatory=false`, `ordering="AFTER"`) in mods.toml; **added
-`create_deep_dark-1.7.0-forge-1.19.2.jar` to `patcherMod/libs/`** (the Mixin AP validates
+`create_deep_dark-1.7.0-forge-1.19.2.jar` to `creativeCommon/libs/`** (the Mixin AP validates
 `@Mixin(value=X.class)` targets at compile — same reason ItemPhysic/Create jars are in
 libs). Build/deploy per [patchermod-coremod](patchermod-coremod.md): `./gradlew build --offline` -> copy jar to
 `mods/`. To change the effects, edit the two branches in the mixin.

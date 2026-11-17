@@ -31,7 +31,7 @@ i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
 i.weathered_cardboard_box = 'creativecompat:weathered_cardboard_box';
-// Oven — FD cooking-pot style baking block. Java: patcherMod oven/ package (block, GUI, JEI, the
+// Oven — FD cooking-pot style baking block. Java: Creative Common oven/ package (block, GUI, JEI, the
 // creativedelight:baking recipe type) | recipes: kubejs/data/creativedelight/kubejs/creativedelight/baking.js (NCH.ceBaking) |
 // bakeware items: Creative Delight kubejs_startup/creativedelight/bakeware.js | feature_writeup/oven.md
 i.oven = 'creativedelight:oven';
@@ -47,10 +47,10 @@ i.t_bakeware_muffin_tin = '#creativedelight:bakeware/muffin_tin';
 i.catfish = 'alexsmobs:raw_catfish';
 i.component_diamond = 'creativeengineering:component_diamond';
 // Air Brake — hold-to-use elytra brake. Item: startup_scripts/items/air_brake.js |
-// deceleration physics: patcherMod gear/AirBrakeHandler.java | knobs: CEConfig.AirBrake
+// deceleration physics: Creative Common gear/AirBrakeHandler.java | knobs: CEConfig.AirBrake
 i.air_brake = 'creativeequipment:air_brake';
 // Stepstools — one per Another Furniture tall stool color, worn in the Curios feet slot to stand a block higher.
-// Items: startup_scripts/items/stepstools.js | logic: patcherMod stepstool/ | knobs: CEConfig.Stepstool | feature_writeup/stepstool.md
+// Items: startup_scripts/items/stepstools.js | logic: Creative Common stepstool/ | knobs: CEConfig.Stepstool | feature_writeup/stepstool.md
 i.white_stepstool = 'creativeequipment:white_stepstool';
 i.orange_stepstool = 'creativeequipment:orange_stepstool';
 i.magenta_stepstool = 'creativeequipment:magenta_stepstool';
@@ -70,7 +70,7 @@ i.black_stepstool = 'creativeequipment:black_stepstool';
 i.t_stepstools = '#creativeequipment:stepstools';
 // Tier shields — copper..dragon (iron = minecraft:shield), vanilla's shield model with a texture
 // per tier (kubejs/assets/creativeengineering/textures/entity/shield/). Java items:
-// patcherMod shield/ package | every tunable (reduction per damage type, wear, effects,
+// Creative Common shield/ package | every tunable (reduction per damage type, wear, effects,
 // durability): CEConfig.SHIELDS = [shields] in config/creativeengineering-common.toml.
 // ce_-prefixed on purpose: i.copper_shield (below) is everythingcopper's removed shield.
 i.ce_copper_shield = 'creativeequipment:copper_shield';
@@ -85,7 +85,7 @@ i.ce_dragon_shield = 'creativeequipment:dragon_shield';
 i.ce_potion_bucket = 'creativebrewing:potion_bucket';
 i.ce_splash_potion_bucket = 'creativebrewing:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativebrewing:lingering_potion_bucket';
-// Wooden buckets - water-only, early game. Java items: patcherMod bucket/ package | recipe: server_scripts/engineering/process.js
+// Wooden buckets - water-only, early game. Java items: Creative Common bucket/ package | recipe: server_scripts/engineering/process.js
 // (not the Myrtrees latex block myrtrees:wooden_bucket)
 i.wooden_bucket = 'creativedelight:wooden_bucket';
 i.wooden_water_bucket = 'creativedelight:wooden_water_bucket';
@@ -1705,7 +1705,7 @@ i.spiky_bomb = 'supplementaries:bomb_spiky';
 i.antique_ink = 'supplementaries:antique_ink';
 i.candy = 'supplementaries:candy';
 i.t_jar_cookies = '#supplementaries:cookies';    // what a Supplementaries jar takes at all (kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js)
-// What may share one jar (patcherMod compat/JarMixing): two items mix when one jar_family tag holds both.
+// What may share one jar (Creative Common compat/JarMixing): two items mix when one jar_family tag holds both.
 i.t_jar_family_cookies = '#creativedelight:jar_family/cookies';
 i.t_jar_family_candied_apples = '#creativedelight:jar_family/candied_apples';
 i.t_jar_family_candied_berries = '#creativedelight:jar_family/candied_berries';
@@ -2082,7 +2082,7 @@ i.cornmeal = 'creativedelight:cornmeal';          // CD creativedelight/cornmeal
 // Corn Delight 1.2.11 items on 1.0.3 (feature_writeup/corn_delight.md 2). Items: CD corn_delight/corn_items.js
 i.corncob = 'creativedelight:corncob';
 i.corn_popsicle = 'creativedelight:corn_popsicle';
-i.cob_pipe = 'creativedelight:cob_pipe';          // head slot: patcherMod mixin/MobCobPipeSlotMixin, compat/CornDelightCompat
+i.cob_pipe = 'creativedelight:cob_pipe';          // head slot: Creative Common mixin/MobCobPipeSlotMixin, compat/CornDelightCompat
 i.cheese_toast = 'creativedelight:cheese_toast';          // CD moredelight/cheese_toast.js
 // Glowing calamari line (TODO dishes/ocean #3); it cooks into Rustic's cooked calamari. Items: CD rusticdelight/glowing_calamari.js
 i.glowing_calamari = 'creativedelight:glowing_calamari';
@@ -2097,14 +2097,14 @@ i.t_squid_tentacles = '#forge:squid_tentacles';     // Oceanic Delight's dish sl
 i.t_pickled_veg = '#creativedelight:pickled_veg';  // pickle soup's pickle slot (TODO dishes/pickles-and-ferments #3)
 i.t_mixed_seeds_plants = '#vintagedelight:mixed_seeds_plants';  // what Mixed Seeds plant, one picked per use (vintage_delight.md 2.3a)
 i.t_curios_head = '#curios:head';
-i.t_curios_face = '#curios:face';                     // pack slot: patcherMod compat/CuriosSlots (IMC)
-i.t_curios_hands = '#curios:hands';                   // pack slot: patcherMod compat/CuriosSlots (IMC)
-i.t_curios_feet = '#curios:feet';                     // pack slot: patcherMod compat/CuriosSlots (IMC)
-i.t_trimmable_armor = '#creativecommon:trimmable_armor';  // Armor Trims allowlist, patcherMod compat/ArmorTrimsItemCache (gear/tuning #14)
+i.t_curios_face = '#curios:face';                     // pack slot: Creative Common compat/CuriosSlots (IMC)
+i.t_curios_hands = '#curios:hands';                   // pack slot: Creative Common compat/CuriosSlots (IMC)
+i.t_curios_feet = '#curios:feet';                     // pack slot: Creative Common compat/CuriosSlots (IMC)
+i.t_trimmable_armor = '#creativecommon:trimmable_armor';  // Armor Trims allowlist, Creative Common compat/ArmorTrimsItemCache (gear/tuning #14)
 i.frosting = 'creativedelight:frosting';          // CD creativedelight/baking_ingredients.js
 i.cookie_dough = 'creativedelight:cookie_dough';  // CD creativedelight/baking_ingredients.js
 i.powdered_sugar = 'creativedelight:powdered_sugar';  // CD creativedelight/baking_ingredients.js
-i.powdered_sugar_bucket = 'creativedelight:powdered_sugar_bucket';  // patcherMod food/PowderedSugarRegistry.java
+i.powdered_sugar_bucket = 'creativedelight:powdered_sugar_bucket';  // Creative Common food/PowderedSugarRegistry.java
 // Dough blocks (9 dough each; Create's is i.dough_block). Blocks: CD creativedelight/baking_ingredients.js
 i.gingerdough_block = 'creativedelight:gingerdough_block';
 i.cookie_dough_block = 'creativedelight:cookie_dough_block';
@@ -13168,7 +13168,7 @@ i.diet_log           = 'solapplepie:food_book';  // renamed Food Book -> Diet Lo
 i.golden_lunchbox    = 'solapplepie:golden_lunchbox';
 i.lunchbag           = 'solapplepie:lunchbag';
 i.lunchbox           = 'solapplepie:lunchbox';
-i.netherite_lunchbox = 'creativedelight:netherite_lunchbox';  // registered by patcherMod lunchbox/
+i.netherite_lunchbox = 'creativedelight:netherite_lunchbox';  // registered by Creative Common lunchbox/
 
 // ===== solraspberrypie (1) =====
 i.liquid_diet_log    = 'solraspberrypie:liquid_diet_log';  // Spice of Life: Raspberry Pie Addition (raspberry_pie.md 7)
@@ -13238,7 +13238,7 @@ i.t_canned_source             = '#creativedelight:canned_source';
 i.copper_lunchbox = i.lunchbox;         // renamed Copper Lunchbox (feature_writeup/lunchboxes.md)
 i.iron_lunchbox   = i.golden_lunchbox;  // renamed Iron Lunchbox
 
-// ===== can tags (kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js, patcherMod food.CanServings) =====
+// ===== can tags (kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js, Creative Common food.CanServings) =====
 i.t_cans                        = '#creativedelight:cans';
 i.t_can_servings                = '#creativedelight:cans/servings'; // + '/<n>' = cans holding n servings
 
@@ -13943,7 +13943,7 @@ i.white_searocket                  = 'upgrade_aquatic:white_searocket';
 
 // ===== end compost items (generated) =====
 
-// ===== bushierflowers (13) - craft-only, growth/worldgen disabled (patcherMod BushierFlowersDisableMixin) =====
+// ===== bushierflowers (13) - craft-only, growth/worldgen disabled (Creative Common BushierFlowersDisableMixin) =====
 i.grown_allium       = 'bushierflowers:grown_allium';
 i.grown_azure_bluet  = 'bushierflowers:grown_azure_bluet';
 i.grown_blue_orchid  = 'bushierflowers:grown_blue_orchid';

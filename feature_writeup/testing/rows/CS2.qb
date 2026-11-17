@@ -10,8 +10,8 @@
 @@text Run 2026-11-01 (rcs234 / rcs234r, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CS2-01, -04 to -08 PASS (-07 server half); -02 / -03 FAILED on 1.1.06 (`SwapRemapper` looked in Forge's staging registry), fixed in 1.1.07, PASS on rcs234r. The old CD had no items, only the two stick blocks and the processor type: the item parts of -01 / -03 do not apply.
 @@text
 @@text Two boots of one group A world. Boot 1 runs the OLD jars (`creative_delight-1.0.0.jar`, `creative_brewing-1.0.0.jar`,
-@@text patcherMod 1.1.05, from `development/*/jar_archive/` or the current `mods/`) to make the save; boot 2 swaps in
-@@text patcherMod 1.1.06, `creativedelight-1.0.0.jar`, `creativebrewing-1.0.0.jar` (and `creativecompat`, wave 3) with the old
+@@text Creative Common 1.1.05, from `development/*/jar_archive/` or the current `mods/`) to make the save; boot 2 swaps in
+@@text Creative Common 1.1.06, `creativedelight-1.0.0.jar`, `creativebrewing-1.0.0.jar` (and `creativecompat`, wave 3) with the old
 @@text underscore jars removed and the old `config/creative_delight-common.toml` / `creative_brewing-common.toml` left in place
 @@text with one edited value each.
 @@text

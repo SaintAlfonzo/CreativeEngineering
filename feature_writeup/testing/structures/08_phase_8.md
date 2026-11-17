@@ -5,7 +5,7 @@
 
 ## 1. Setup
 
-- **Server:** the M7 scratch server (patcherMod 1.0.7 jar, whose worldgen is byte-identical to 1.0.8), seed 8675309,
+- **Server:** the M7 scratch server (Creative Common 1.0.7 jar, whose worldgen is byte-identical to 1.0.8), seed 8675309,
   `structureDensity` 4, placement-priority and meta logs on, 4 locator threads.
 - **As shipped:** M7's scratch-only `type/village` patch was reverted, so pruning is dead here, as in the release.
 - **Switches:** every switch was set in the scratch copy only and put back afterwards. The instance's files were

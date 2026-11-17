@@ -20,7 +20,7 @@ dependencies {
     compileOnly project(':creativeCompat')
     // The mods the mixins target (Sophisticated Backpacks, Easy Elytra Takeoff, Everything Copper, Curios, Nock Enough
     // Arrows): the pack's jars, shared with
-    // patcherMod (git-ignored libs/, SRG-named).
+    // Creative Common (git-ignored libs/, SRG-named).
     compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 

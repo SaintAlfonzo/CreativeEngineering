@@ -41,7 +41,7 @@
 	var MAX_SPACING = 4096
 	var MAX_COUNT = 4095
 
-	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
+	// KubeJS's class filter blocks java.io, so the markdown report goes through Creative Common.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativeengineering.worldgen.WorldgenFiles')
 
 	// ── small helpers (Rhino: no Object.assign / Set / spread / ** here) ──────

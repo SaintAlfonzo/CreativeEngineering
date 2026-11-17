@@ -51,9 +51,9 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 | Item / block | 1.3.4 detail | Pack overlap | Decision (proposed) |
 |---|---|---|---|
 | Onion Soup | 2 onion + bread + milk in the pot, 12 / 0.8, Nourishment 3600 | Brewin' Creamy Onion Soup (`i.creamy_onion_soup`), Miner's Delight Onion Soup cup | **TODO: evaluate adding** (owner, 2026-10-25): compare against Brewin's Creamy Onion Soup and Miner's Delight's cup (effect, value, role) and decide whether it stays alongside, merges, or is dropped |
-| Gleaming Salad (feast, 4 bowls) | 2 glow berries, honey bottle, tomato, golden carrot, beetroot, 2 cabbage, bowl; serving 14 / 0.75, Nourishment 6000 | none (Display Delight has placed salads only) | optional: a pack item would need a new feast block (patcherMod or KubeJS block + loot); owner's call |
+| Gleaming Salad (feast, 4 bowls) | 2 glow berries, honey bottle, tomato, golden carrot, beetroot, 2 cabbage, bowl; serving 14 / 0.75, Nourishment 6000 | none (Display Delight has placed salads only) | optional: a pack item would need a new feast block (Creative Common or KubeJS block + loot); owner's call |
 | Placeable vanilla Pumpkin Pie + Slice of Pumpkin Pie (`PlacePumpkinPieMixin`, knife slicing loot modifier, 4 slices) | | Create Central Kitchen placed pie and slice (`i.pumpkin_pie_slice`), Delightful pie and slice (`i.delightful_pumpkin_pie_slice`) | skip (already twice) |
-| Rope Fence (4 rope + 2 sticks -> 3), Rope Fence Gate (2 rope + 4 sticks); fences connect to rope (`RopeFenceConnectionMixin`) | | none | optional; owner's call. Ties to `materials #2` (rope merge). Fence and gate are plain blocks (KubeJS block types); the rope connection needs a patcherMod mixin |
+| Rope Fence (4 rope + 2 sticks -> 3), Rope Fence Gate (2 rope + 4 sticks); fences connect to rope (`RopeFenceConnectionMixin`) | | none | optional; owner's call. Ties to `materials #2` (rope merge). Fence and gate are plain blocks (KubeJS block types); the rope connection needs a Creative Common mixin |
 | Tomatoes on Rope (`HangingTomatoBlock`) | split out of the tomato block | 1.2.4 tomatoes already climb rope | skip (same behavior) |
 | Basket renamed `wooden_basket`, new Bamboo Basket | | `farmersdelight:basket` | skip (id rename only; bamboo variant needs 1.20 bamboo) |
 | Bamboo and Cherry Cabinets | | Every Compat `i.bamboo_cabinet` (Quark), `i.cherry_cabinet` (Vinery) | skip (covered) |
@@ -81,8 +81,8 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 | New loot modifier: breaking a pumpkin with a knife (no Silk Touch) gives 4 pumpkin slices | optional, data-only |
 | Block and chest loot tables: shears matched by tool action, explosion decay added; no item, count or weight change | skip |
 | Wild crop and mushroom colony features moved to data (`patch_*`), biome modifiers on biome tags | skip: the pack's wild crop system (`worldgen/wild_crops.js`) replaces FD's modifiers |
-| `KeepRichSoilUntrampledMixin`: rich soil farmland is not trampled | optional, patcherMod mixin; owner's call |
-| `VillagersTargetRichSoilMixin`: farmer villagers work rich soil farmland | optional, patcherMod mixin; owner's call |
+| `KeepRichSoilUntrampledMixin`: rich soil farmland is not trampled | optional, Creative Common mixin; owner's call |
+| `VillagersTargetRichSoilMixin`: farmer villagers work rich soil farmland | optional, Creative Common mixin; owner's call |
 | New tags (`feasts`, `pies`, `meals`, `drinks`, `snacks`, `sweets`, `serving_containers`, `straw_harvesters`, `mushroom_colony_growable_on`, `unaffected_by_rich_soil`, `planted_from_below`, `cabinets`, storage block tags) | skip: FD 1.2.4 reads none of them. `feasts` / `pies` / `meals` could be filled as pack tags later if a feature needs them |
 | Feedback lines: "You need a %s to eat this", skillet "Can't cook underwater", rice "must be planted in shallow water", cooking pot "Served on: %s", cutting board "This doesn't seem cuttable..." | skip (code, UI feedback only) |
 | Retextures: 31 item and 24 block textures (soups, stuffed pumpkin, shepherd's pie, rice crops, rope, safety net, canvas signs, straw, raw pasta, cutting board) | optional, visual; a resource-pack override (`kubejs/assets/farmersdelight/`). `mods.toml` declares MIT for both versions; owner's call |
@@ -152,12 +152,12 @@ item and is meant to accept a modded one is the only place it would matter. **De
 | Comfort vs Nourishment | **A: keep Comfort** on all 10 FD soups and stews, at 1.2.4 values; Comfort stays in Creative Delight | nothing |
 | Veggies 9 foods | stay Comfort (they already are) | nothing |
 | Salvaging (cutting board recycling) | **BUILT** **carry over, with the 75% chance**: every wood's furniture recipe (door, trapdoor, sign, fence, gate, pressure plate, button, boat, cabinet) returns 1 plank at 75%, replacing the 1.2.4 guaranteed plank on doors, signs and trapdoors; chest boats -> boat + chest; chest / furnace / hopper / TNT minecarts -> minecart + part; 4 leather armor pieces -> leather by shears | `NCH.fdCutting`, vanilla 1.19.2 items and the cabinets the pack has; player-visible: changelog bullet. Also (2026-10-25, decided, not built): Boatload furnace boats and the driftwood set from Abnormals Delight 6.0.3 ([abnormals_delight.md](abnormals_delight.md) 3.1); milk bucket <-> 4 bottles (3.4) |
-| Gleaming Salad feast | **BUILT** **add** (recipe in 2.2, 14 / 0.75, Nourishment 6000, 4 servings) | new feast block: patcherMod or KubeJS block, loot, tag, cans and food type tag |
-| Rope Fence and Gate | **BUILT** **add** (4 rope + 2 sticks -> 3; 2 rope + 4 sticks) | fence and gate blocks; rope connection by a patcherMod mixin; `fences` / `fence_gates` tags; ties to `materials #2` (rope merge: use the surviving rope) |
+| Gleaming Salad feast | **BUILT** **add** (recipe in 2.2, 14 / 0.75, Nourishment 6000, 4 servings) | new feast block: Creative Common or KubeJS block, loot, tag, cans and food type tag |
+| Rope Fence and Gate | **BUILT** **add** (4 rope + 2 sticks -> 3; 2 rope + 4 sticks) | fence and gate blocks; rope connection by a Creative Common mixin; `fences` / `fence_gates` tags; ties to `materials #2` (rope merge: use the surviving rope) |
 | Onion drops | **BUILT** **add** (2%, +1% per Looting level, player kill: zombie, husk, zombie villager, pillager, evoker, vindicator) | KubeJS loot rule in `loot/07_rules.js`; check against the pack's loot config |
 | Pumpkin with a knife | **BUILT** **add** (4 pumpkin slices, no Silk Touch) | loot rule |
-| Rich soil not trampled | **BUILT** **add** | patcherMod mixin |
-| Villagers work rich soil | **BUILT** **add** (and Fertile Soil, configurable) | patcherMod mixin + `villager_plantable_seeds` tag |
+| Rich soil not trampled | **BUILT** **add** | Creative Common mixin |
+| Villagers work rich soil | **BUILT** **add** (and Fertile Soil, configurable) | Creative Common mixin + `villager_plantable_seeds` tag |
 | Vegetable Noodles: any mushroom | **BUILT** carry over | change the recipe's mushroom input to `#forge:mushrooms` (`NCH` override of `farmersdelight:vegetable_noodles`) |
 | Onion Soup | **LEFT OUT (owner, 2026-11-02)** | overlap check with Creamy Onion Soup (now Nourishment in the pack, food.md 2026-10-20) and the Onion Soup cup; then add as a pot recipe plus item, or skip |
 | Dog Food: any raw meat | **BUILT** carry over (pack raw meat food type, see 4.3) | change the `wolf_prey` input to `#forge:raw_meat` (override of `farmersdelight:dog_food`) |
@@ -167,7 +167,7 @@ Creative Delight member, `repackedFarmers` (`development/creativeDelight/members
 overlay. 1.3.4 is MIT like 1.2.4, and its jar is the donor (`development/creativeDelight/upstream/donors/`, sha1 in the
 member's `gradle.properties`), so a 1.3.4 class may be decompiled into the overlay (Q6 hybrid). New blocks and items
 (Gleaming Salad, Rope Fence and Gate) and the two rich soil mixins go in the overlay, under the `farmersdelight:` namespace
-and FD's own registries pattern, instead of patcherMod; edited FD files (lang, tags) use `replaced_resources`, an edited
+and FD's own registries pattern, instead of Creative Common; edited FD files (lang, tags) use `replaced_resources`, an edited
 class `replaced_classes`. Recipe and loot rows stay KubeJS through the helpers.
 
 Added by the owner 2026-10-25 and built the same day: the placeable vanilla Pumpkin Pie (third pie, with a switch to compare

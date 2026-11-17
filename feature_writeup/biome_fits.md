@@ -282,7 +282,7 @@ the group's spacing. Only the split between members changes.
 - **Checks:** `test_structure_groups.sh` (node/Rhino parity incl. fits) passed. `test_worldgen_tools.sh` passed, all
   7 suites; FitTest is now 27 checks (15 structures and 13 fits staged, `land/mushroom`). `structures_by_biome.md` and
   `structure_group_estimates.md` were regenerated.
-- **Not done:** the rebuilt patcherMod 1.0.6 jar (switch removed) is in `build/libs` only. The game was running, so it
+- **Not done:** the rebuilt Creative Common 1.0.6 jar (switch removed) is in `build/libs` only. The game was running, so it
   is not in `mods/`. The old jar still has the switch, which now does nothing.
 
 **Building it** (once the choices above are settled):

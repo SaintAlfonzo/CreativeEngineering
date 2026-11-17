@@ -147,7 +147,7 @@ No soul fire or soul lanterns generated in Terralith's frostfire caves (or an ex
 
 ## biomes/netherblocks #4: No glowstone in the Overworld
 
-Status Testing (Build 1 and 2 done 2026-11-02, step 3 is NW-21; nothing found, so step 4 not needed; step 5 in [nether_worldgen.md](../nether_worldgen.md) 0, 1.1, 6, 7) · Work data / patcherMod · TODO `worldgen / biomes/netherblocks #4`
+Status Testing (Build 1 and 2 done 2026-11-02, step 3 is NW-21; nothing found, so step 4 not needed; step 5 in [nether_worldgen.md](../nether_worldgen.md) 0, 1.1, 6, 7) · Work data / Creative Common · TODO `worldgen / biomes/netherblocks #4`
 
 ### Goal
 
@@ -190,14 +190,14 @@ Nothing generates glowstone in the Overworld, checked by a scan that covers ever
    would hide; with structure density raised (`[worldgen.debug] structureDensity`, soft rule only, structure_tuning.md
    7.4.8) the same area holds more of them.
 4. **If something turns up**: a feature -> a `features` / `literal` rule in `nether_worldgen_rules.json`; a template ->
-   a swap rule; a processor -> an override of its processor list json in `kubejs/data`. A patcherMod guard (replace
+   a swap rule; a processor -> an override of its processor list json in `kubejs/data`. A Creative Common guard (replace
    glowstone in `WorldGenRegion#setBlock` for the Overworld) is the last resort only: it hides the source and costs a
    check on every worldgen block write.
 5. Close the row in nether_worldgen.md (a short "Glowstone" line in section 1.1 Findings and the census result in 6).
 
 ### Decisions
 
-- None needed up front (the row says none). If the census finds nothing, recommendation: no patcherMod guard.
+- None needed up front (the row says none). If the census finds nothing, recommendation: no Creative Common guard.
 
 ### Gotchas
 

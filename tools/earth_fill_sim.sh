@@ -3,7 +3,7 @@
 # vanilla structures on vanilla overworld terrain at random sites in their biomes (no mods, builtin registries, the
 # real template and terrain code), counts earth over water / air the way EarthFill does, and prints the distribution
 # plus the share each candidate limit pair would cancel. About 7 minutes for 60 sites each; ~1.2 GB heap.
-# Usage: [GRID=n] tools/earth_fill_sim.sh [seed] [sites per structure] [beard]    (run ./gradlew build in patcherMod first)
+# Usage: [GRID=n] tools/earth_fill_sim.sh [seed] [sites per structure] [beard]    (run ./gradlew build in Creative Common first)
 # "beard": measure how deep under a piece the beard still fills the ground ([worldgen.earth_fill] beardReach)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

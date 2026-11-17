@@ -3,7 +3,7 @@
 **Status 2026-11-02 evening: executed.** Every row is fixed, built, or investigated with a probe/test row; TODO rows moved
 to Testing (except `gameplay/time #4`, still Bug pending CQ-NEW-01, and `biomes/netherblocks #3`, not needed: no flower
 edit). Queue: "Pre-scratch fix pass" at the end of [scratch_queue.md](testing/scratch_queue.md) (SQ-PST, SQ-PSD, SQ-PSM,
-SQ-PSF, SQ-PSW, SQ-PSU, 52 rows), not run. Jars built and installed 2026-11-02: patcherMod, Creative Compat, Creative
+SQ-PSF, SQ-PSW, SQ-PSU, 52 rows), not run. Jars built and installed 2026-11-02: Creative Common, Creative Compat, Creative
 Calendar, Creative Delight, Creative Brewing. After the first boot: `/cegen` for the item physics and WTHIT silk-touch
 generators (azalea wood ids).
 Premises that were wrong: crops #31, #32, #34, #38 and item-physics #4 were already built (2026-10-28 / 2026-10-31); oats #35 shipped
@@ -14,7 +14,7 @@ become oak logs, leaves and trees stay (as built); azalea racks pulled from Crea
 winter too (SQ-PST-06 to -11); no cap change for the birch tower, box spawn attempts now start within the box height
 instead (`NaturalSpawnerBoxHeightMixin`, SQ-PSM-03); baby rates unchanged; air under a spire cancels it (as built);
 Vintage sweet berry and glow berry jams removed (as built); the vinegar and apple sauce jar food values reverted.
-Jars reinstalled 14:08: patcherMod, Creative Calendar, Creative Delight.
+Jars reinstalled 14:08: Creative Common, Creative Calendar, Creative Delight.
 
 Goal: fix or build the rows below before the next scratch run. Each row gets a scratch queue row (not run), a writeup
 update, a changelog bullet where a player can notice it, and a TODO status change to Testing.
@@ -22,7 +22,7 @@ Rows are TODO ids; briefs are in `feature_writeup/briefs/`.
 
 ## Working rules for this pass
 - Reproduce or locate first (grep `logs/latest.log`, the row's run log), then change code. No guessing from the row text.
-- Batch by build target so there are few restarts: **A** patcherMod (one rebuild/install), **B** KubeJS/data/lang
+- Batch by build target so there are few restarts: **A** Creative Common (one rebuild/install), **B** KubeJS/data/lang
   (`/reload` or restart), **C** Creative Delight / other jars, **D** tools/queue only.
 - Never install a jar while the game runs. Hand-edited configs are copied to `configs_edited/`.
 

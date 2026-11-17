@@ -29,7 +29,7 @@ The paths and ids in the history below are the pre-move ones.
   on sand|terracotta, cocoa = vanilla `minecraft:jungle_tree` 1 in 3 chunks.
 - Side changes: `loot/08_leaf_apples.js` (oak + dark oak, pre-roll genericLootTables, generic event uses full
   table ids), AM `bananasDropFromLeaves = false` (configs_edited backed up), FR Basalt Deltas coffee off.
-- CEConfig `[worldgen.systems] wildCrops` + `WorldgenConfig.wildCropsEnabled()`: patcherMod 1.0.4 rebuilt
+- CEConfig `[worldgen.systems] wildCrops` + `WorldgenConfig.wildCropsEnabled()`: Creative Common 1.0.4 rebuilt
   (md5 09733ca8); scripts default to on without it.
 - Generator evaluates the same rules, prints before/after density (crops_by_biome.md §1) and coverage;
   `tools/test_wild_crops.sh` runs the real script in Rhino (tags must equal the generator's) - passes.

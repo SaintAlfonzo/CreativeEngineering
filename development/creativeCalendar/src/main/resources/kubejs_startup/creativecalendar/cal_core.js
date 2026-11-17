@@ -1,6 +1,6 @@
 // priority: 1000
 // Creative Calendar core: global.CAL (feature_writeup/creative_calendar.md 4.4). Startup script in the Calendar jar,
-// loaded by patcherMod's startup loader after the pack's startup_scripts folder and before Creative Delight's and
+// loaded by Creative Common's startup loader after the pack's startup_scripts folder and before Creative Delight's and
 // Creative Brewing's packs (both order AFTER creativecalendar), so global.NCH, global.tags and the dicts exist here, and
 // CD and CB scripts can read global.CAL. Calendar has no nested members.
 //

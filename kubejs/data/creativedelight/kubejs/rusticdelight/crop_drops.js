@@ -6,7 +6,7 @@
 // Bell peppers (Rustic Delight 1.3.0): the ripe roll was red 6 : green 1 : yellow 1 plus a 15% bonus green and a
 // 15% bonus yellow, so red was about 58% of all peppers. The roll is now 1 : 1 : 1 and red gets the same 15% bonus
 // pool, so each color averages 0.483 per ripe harvest. Weights and bonus chances are CEConfig
-// [crop_drops.bell_peppers] (defaults below if patcherMod is missing); enabled = false leaves the mod's table.
+// [crop_drops.bell_peppers] (defaults below if Creative Common is missing); enabled = false leaves the mod's table.
 // Wild bell peppers stay red-only (a forage hint; seeds are the real drop). feature_writeup/crops.md section 3,
 // TODO farming/crops #9.
 //

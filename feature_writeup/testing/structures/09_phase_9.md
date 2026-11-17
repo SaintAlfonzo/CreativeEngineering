@@ -5,7 +5,7 @@
 
 ## 1. Setup
 
-- **Server:** the same scratch server (patcherMod 1.0.7 jar, the same `MassPlacer` as 1.0.8), seed 8675309,
+- **Server:** the same scratch server (Creative Common 1.0.7 jar, the same `MassPlacer` as 1.0.8), seed 8675309,
   `generate-structures=false`.
 - **The flat world took four tries** (3.2):
 
@@ -63,7 +63,7 @@ ST-40 details:
 - **Symptom:** with `level-type=minecraft:flat`, with explicit flat settings, or with a world datapack defining a
   flat overworld, the overworld is created as `minecraft:noise`. `/cdevplace` says so ("Not a flat world: everything
   is built at this spot's height"), so the rows climb over hills.
-- **Cause 1:** patcherMod's `BiomeLayoutTuner` (`biome_overrides.js`, `[worldgen.systems] biomeLayout`) puts a full
+- **Cause 1:** Creative Common's `BiomeLayoutTuner` (`biome_overrides.js`, `[worldgen.systems] biomeLayout`) puts a full
   `minecraft:dimension/overworld.json` into KubeJS's top-priority virtual datapack. That ranks above every world
   datapack and every preset.
 - **Cause 2:** Terralith and Tectonic each ship their own `data/minecraft/dimension/overworld.json`. These are mod

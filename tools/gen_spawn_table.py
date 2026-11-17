@@ -10,7 +10,7 @@ Inputs:
   biome modifier, the pack's tune_spawns record (each changed biome's spawners before the rules), each mob's spawn
   placement, and each biome's tags.
 - kubejs/generation_scripts/worldgen/mob_spawns.json: the pack's tuning rules. They are applied here to the
-  untuned spawners with the same semantics as patcherMod worldgen/SpawnTuning, so the tables show the file as it
+  untuned spawners with the same semantics as Creative Common worldgen/SpawnTuning, so the tables show the file as it
   is now, before a restart. When that differs from what the dump recorded, a WARNING says so (rejoin + /dumpspawns).
 - kubejs/generation_scripts/worldgen/biome_traits.json: the biome trait table the rules' 'where' clauses use.
 - kubejs/generation_scripts/worldgen/biome_config.json: post-tuning biome areas (share of each dimension).
@@ -185,7 +185,7 @@ def refresh_vanilla_rules():
     invokedynamic whose bootstrap names the rule method, then register(...)."""
     jar = pack_paths.forge_mapped_jar()
     if not jar:
-        sys.exit('no ForgeGradle mapped Forge jar under ~/.gradle/caches/forge_gradle (build patcherMod once)')
+        sys.exit('no ForgeGradle mapped Forge jar under ~/.gradle/caches/forge_gradle (build Creative Common once)')
     text = subprocess.run(['javap', '-cp', str(jar), '-p', '-c', '-v', 'net.minecraft.world.entity.SpawnPlacements'],
                           capture_output=True, text=True, check=True).stdout
     clinit = text[text.index('  static {};'):]

@@ -13,7 +13,7 @@ when queued).
 |---|---|---|---|
 | #2 | Fertile Soul Soil (nulch) recipe: review, then move into the compost file | Planned | small, KubeJS only; needs the owner's pick of inputs |
 | #5 | Expand organic compost (more rot items, more dirt blocks) | Planned | small, KubeJS only (tags + 4 recipe edits) |
-| #3 | Composters in more wood types | Planned | medium: new blocks in patcherMod + textures + KubeJS recipes |
+| #3 | Composters in more wood types | Planned | medium: new blocks in Creative Common + textures + KubeJS recipes |
 | #4 | Seed milling to bone meal | Testing | built 2026-10-30, shipped in 1.1.05 (Built, needs play) |
 
 Build order:
@@ -22,8 +22,8 @@ Build order:
    compost, fertile soil and nulch recipes into it from `sawdust.js`; #5 edits the compost recipes on the way. One
    `/reload` for both. #5 does not wait for #2's recipe review: move the compost block first, nulch when its inputs are
    picked.
-2. **#3 on its own.** It needs a patcherMod build (new blocks), textures and a restart, so it rides with the next
-   patcherMod release.
+2. **#3 on its own.** It needs a Creative Common build (new blocks), textures and a restart, so it rides with the next
+   Creative Common release.
 
 Nothing here depends on other families. Related rows: `recipes/wood #2` (leftover comments; the `sawdust.js` note goes
 away with #2), `recipes/wood #3` (mulberry wood removal; mulberry isn't in #3's species list).
@@ -177,7 +177,7 @@ in the jar).
 ---
 
 ## composting #3: Composters in more wood types
-Status Planned / Work patcherMod / resource pack / KubeJS / TODO `farming/composting #3` (scratchpad 2026-10-19; refs
+Status Planned / Work Creative Common / resource pack / KubeJS / TODO `farming/composting #3` (scratchpad 2026-10-19; refs
 re-checked 2026-10-31, still no composter variant in any jar in `mods/`)
 
 ### Goal
@@ -191,7 +191,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
   composter class or asset in `everycomp-1.19.2-2.5.36.jar`; its module list is furniture, doors, Quark, Create and
   others). Quark 3.4-418 and Supplementaries 2.4.20 have none either (verified). The repo has no `*_composter` id.
 - KubeJS 6 (1.19.2) block types (`basic`, `slab`, `stairs`, `crop`, `cardinal`, ...) have no composter type. A KubeJS
-  block wouldn't be a `ComposterBlock`, so it wouldn't take items, levels or hoppers. The blocks therefore go in patcherMod,
+  block wouldn't be a `ComposterBlock`, so it wouldn't take items, levels or hoppers. The blocks therefore go in Creative Common,
   and only the recipes are KubeJS.
 - patcherMod pattern to copy: [oven/OvenRegistry.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/oven/OvenRegistry.java)
   (own `DeferredRegister<Block>` / `<Item>`, `BlockItem` in `CreativeModeTab.TAB_DECORATIONS`, `register(modEventBus)`
@@ -208,7 +208,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
   composter level line, probably by `ComposterBlock` class, unverified).
 
 ### Build
-1. **patcherMod `block/WoodComposters.java`** (new, registered like the oven):
+1. **Creative Common `block/WoodComposters.java`** (new, registered like the oven):
    ```java
    public final class WoodComposters {
        // species with a composter of their own; oak stays minecraft:composter
@@ -224,7 +224,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
      composter in `FireBlock.bootStrap`, which won't cover new blocks) and 0 for crimson / warped.
    - `WoodComposterItem extends BlockItem`, overriding `getBurnTime(ItemStack, RecipeType)` -> 300 (vanilla
      composter fuel) or 0 for the nether woods.
-2. **Assets** (patcherMod resources):
+2. **Assets** (Creative Common resources):
    - `blockstates/<wood>_composter.json`: copy vanilla's multipart `composter.json` from the client jar. Change only the
      base model to `creativeengineering:block/<wood>_composter` and keep `minecraft:block/composter_contents1..7` /
      `composter_contents_ready` for the fill.
@@ -262,7 +262,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
    composter + slab of a wood -> that wood's composter" re-skin. Not needed.
 
 ### Ids and data
-- New blocks and items (patcherMod, namespace `creativeengineering`): `spruce_composter`, `birch_composter`,
+- New blocks and items (Creative Common, namespace `creativeengineering`): `spruce_composter`, `birch_composter`,
   `dark_oak_composter`, `jungle_composter`, `acacia_composter`, `mangrove_composter`, `crimson_composter`,
   `warped_composter`, `twisted_composter`, `ancient_composter`, `blossom_composter`, `azalea_composter`.
 - Recipes `creativeengineering:shaped/<wood>_composter` (13, oak gives `minecraft:composter`),
@@ -279,7 +279,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 - **Farmer job site:** vanilla ties the farmer's job site to `Blocks.COMPOSTER` (the `PoiTypes.FARMER` states), and
   the farmer's `WorkAtComposter` behavior checks `is(Blocks.COMPOSTER)` (from vanilla source, not checked against a
   mapped jar). So variants would **not** be job sites, and farmers wouldn't compost into them. Recommend shipping them
-  as non-job-site blocks first and noting it in the tooltip or the writeup. If wanted later, it takes a patcherMod
+  as non-job-site blocks first and noting it in the tooltip or the writeup. If wanted later, it takes a Creative Common
   mixin on how the FARMER POI matches states (Forge 1.19.2 builds `PoiTypes` state lookups from each `PoiType`'s
   `matchingStates`) plus one on `WorkAtComposter`. Decompile Forge's `PoiTypes` / `GameData` POI callback first. MCA
   Reborn villagers may have their own checks.
@@ -317,4 +317,4 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
 - 2026-10-21: [composting.md](../composting.md) 0 and 2.3 value counts 684 -> 688 (Brewin' port rows), 8 history line,
   [README.md](../README.md) composting row. Not edited by the 2026-10-31 sweep (reported instead): composting.md 0 and 3
   still say seed milling is unreleased, though it shipped in 1.1.05; 5 still links `startup_scripts/func/compost.js`,
-  which now ships in patcherMod's jar (`kubejs_startup/creativeengineering/func/compost.js`).
+  which now ships in Creative Common's jar (`kubejs_startup/creativeengineering/func/compost.js`).

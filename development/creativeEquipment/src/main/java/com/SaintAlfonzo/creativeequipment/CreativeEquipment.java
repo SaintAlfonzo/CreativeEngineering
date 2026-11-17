@@ -37,13 +37,13 @@ import java.util.List;
  * Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear. Tier shields, stepstools, backpack
  * skins, the air brake, Bottled Air, elytra duplication and elytra chestplates, the copper tool tier, armor caps and
  * enchantability, the bone meal charm, the Nock Enough Arrows recipe book fix, and the gear scripts (tool and armor
- * tuning, archery, End gear, dragon autorepair, harvest tiers). Requires patcherMod ({@code creativeengineering}, later
+ * tuning, archery, End gear, dragon autorepair, harvest tiers). Requires Creative Common ({@code creativeengineering}, later
  * Creative Common: the damage tag framework and {@code shield.EffectTickContext} stay there as Common APIs) and
  * Creative Compat.
  *
  * Ids follow the owner (feature_writeup/namespace_move.md): the shields, the recipe serializers, the copper tier, the
  * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}). The registrations below are the ones
- * patcherMod's constructor made, in the same order.
+ * Creative Common's constructor made, in the same order.
  */
 @Mod(CreativeEquipment.MOD_ID)
 public class CreativeEquipment {
@@ -57,14 +57,14 @@ public class CreativeEquipment {
     private static final String FILE = MOD_ID + "-common.toml";
 
     public CreativeEquipment() {
-        // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
+        // The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         ConfigRename.carrySections(OLD_FILE, FILE, CEQConfig.SECTIONS);
         if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
             ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
         // [armor_overflow] came from Creative Common's file with the Detail Armor Bar code, before the swap from
-        // patcherMod's creativeengineering-common.toml.
+        // Creative Common's creativeengineering-common.toml.
         if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
             ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.COMMON_SECTIONS);

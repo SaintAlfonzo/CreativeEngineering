@@ -7,10 +7,10 @@ of 2026-10-24; rows 1 to 13 predate this brief). Layout per [README.md](README.m
 
 ## Shared findings (read once, the sections below refer to them)
 
-- **Machinery.** One category class draws every world tab: patcherMod `compat/jei/world/WorldInteractionCategory`
+- **Machinery.** One category class draws every world tab: Creative Common `compat/jei/world/WorldInteractionCategory`
   (3 note lines, 160 px wide, hover shows the cut text; arrow is Feast Plating's `GUI` sprite 82,128,24x17). Tabs are
   the `WorldTab` enum (id, icon candidates, catalysts); the title is lang key `creativeengineering.jei.world.<id>`
-  in patcherMod `lang/en_us.json` lines 8-26. Rows are JSON in `kubejs/assets/creativeengineering/jei_world/<tab>/`:
+  in Creative Common `lang/en_us.json` lines 8-26. Rows are JSON in `kubejs/assets/creativeengineering/jei_world/<tab>/`:
   `generated.json` (written by `tools/gen_jei_world.py`, modules in `tools/jei_world/tab_*.py`, run in game with
   `/cdevgen run jei_world`) and hand-written `manual.json`; Java providers `BurnRows` and `CampfireRows` add rows at JEI
   start. Row format is documented in `WorldRow.java`. Apply: generator or json edit -> F3+T and rejoin; Java -> restart.
@@ -25,7 +25,7 @@ of 2026-10-24; rows 1 to 13 predate this brief). Layout per [README.md](README.m
 ---
 
 ## jei-coverage #2: Part 2, rest of part 3
-Status **Planned** / Work tool (really: patcherMod dump + tool, then world-tab json) / TODO `jei/jei-coverage #2`
+Status **Planned** / Work tool (really: Creative Common dump + tool, then world-tab json) / TODO `jei/jei-coverage #2`
 (section added 2026-10-31, brief sweep)
 
 ### Goal
@@ -34,7 +34,7 @@ Part 2: every recipe type with no JEI category, and every category that drops so
 
 ### Now
 - Part 2 is "not started" (jei_coverage.md 0 and 3). Input exists: `kubejs/exported/recipes/recipe_types.json`
-  (2026-10-30 00:41, 117 types, each with count, classes, serializers). Nothing dumps JEI's side: no patcherMod code
+  (2026-10-30 00:41, 117 types, each with count, classes, serializers). Nothing dumps JEI's side: no Creative Common code
   calls `createRecipeCategoryLookup`, and `tools/jei_coverage.py` has no part-2 mode (grep 2026-10-31).
 - Part 2 candidates already found: jei_coverage.md 4.9 (IE fertilizer, thermoelectric, windmill biome, generator fuel,
   mineral mix; Immersive Petroleum reservoir; Botania flower fuels; Dirty Stuff workstation; PneumaticCraft fuel
@@ -49,7 +49,7 @@ Part 2: every recipe type with no JEI category, and every category that drops so
   found under `core/block` (kitchen sink id unverified).
 
 ### Build
-1. **JEI dump** (patcherMod, client): in the pack's JEI plugin `onRuntimeAvailable`, behind a new `[jei]
+1. **JEI dump** (Creative Common, client): in the pack's JEI plugin `onRuntimeAvailable`, behind a new `[jei]
    categoryReport` flag (default off, like `orderReport`), write `kubejs/exported/jei/categories.json`: per category its
    `RecipeType` uid, recipe class and recipe count (`createRecipeLookup(type).includeHidden()`), plus, per vanilla
    `RecipeType` in the client `RecipeManager`, how many of its recipe objects appear in some category (identity set).
@@ -58,7 +58,7 @@ Part 2: every recipe type with no JEI category, and every category that drops so
 2. **Tool**: `tools/jei_coverage.py --part2` reads both files and renders jei_coverage.md 3 (types with no category,
    types with dropped recipes, counts). Add it to `tools/generators.json` only if it should run from `/cdevgen`.
 3. Review the list with the user; per type pick a fix kind from jei_coverage.md 0 (stand-in, info, none). Java
-   categories go in patcherMod `compat/jei/` (`RowPagesCategory` for simple input -> output pages).
+   categories go in Creative Common `compat/jei/` (`RowPagesCategory` for simple input -> output pages).
 4. **Part 3 rows**: read each mechanic in its jar first, then add `manual.json` rows to an existing world tab with
    `requires` (Vinery leaves -> a harvesting row; paint arrow -> Block Dyeing if it dyes blocks; balloon arrow by what it
    does), or a `JEIEvents.information` page in the owning tree (Creative Delight / Creative Brewing by mod) for one-off
@@ -118,7 +118,7 @@ Do not add recipes that Miner's Delight does not have: a fake JEI category must 
 ---
 
 ## jei-coverage #15: Better JEI screens for Vintage Delight
-Status **Planned** / Work patcherMod / KubeJS / TODO `jei/jei-coverage #15`
+Status **Planned** / Work Creative Common / KubeJS / TODO `jei/jei-coverage #15`
 
 ### Goal
 List what JEI shows for Vintage Delight's machines and jar recipes today, then give each recipe type a usable page.
@@ -149,7 +149,7 @@ the fermenting category already exists.
 ---
 
 ## jei-coverage #16: Stripping tab cycles through logs
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / tool / TODO `jei/jei-coverage #16`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / tool / TODO `jei/jei-coverage #16`
 
 ### Goal
 The Stripping tab shows its rows the way the user wants (see Decisions) instead of cycling through log types in one row.
@@ -178,7 +178,7 @@ each page also shows its own bark drop and the page count is how the tab already
 ---
 
 ## jei-coverage #17: Soap Washing tab cycles dyed glass and all copper
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / tool / TODO `jei/jei-coverage #17`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / tool / TODO `jei/jei-coverage #17`
 
 ### Goal
 Settle how the Soap Washing tab groups its rows and whether soap removes copper oxidation.
@@ -209,7 +209,7 @@ close the oxidation question as "already true".
 ---
 
 ## jei-coverage #18: Block Dyeing tab cycles every dye input
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / tool / TODO `jei/jei-coverage #18`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / tool / TODO `jei/jei-coverage #18`
 
 ### Goal
 Every dye input cycles in the Block Dyeing tab (not a subset); Create sails show up. Performance checked first.
@@ -240,7 +240,7 @@ Whether the cost is acceptable. Recommend measure after the regenerate; fall bac
 ---
 
 ## jei-coverage #19: World tab blocks render as barriers
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / TODO `jei/jei-coverage #19`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / TODO `jei/jei-coverage #19`
 
 ### Goal
 No world tab shows a Barrier: each block gets a displayable stand-in, or its row is dropped.
@@ -275,7 +275,7 @@ unless it teaches something not on the item's own page.
 ---
 
 ## jei-coverage #20: Burning tab text is cut off
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / TODO `jei/jei-coverage #20`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / TODO `jei/jei-coverage #20`
 
 ### Goal
 Burning rows show their notes on whole lines, nothing cut.
@@ -298,7 +298,7 @@ Java provider: needs a restart, not F3+T.
 ---
 
 ## jei-coverage #21: Lava Generation tab becomes Lava Interactions
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / data / TODO `jei/jei-coverage #21`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / data / TODO `jei/jei-coverage #21`
 
 ### Goal
 The tab is called Lava Interactions; the basalt generation row shows its water interaction.
@@ -327,7 +327,7 @@ mod rule exists (unverified that water + lava ever makes basalt without blue ice
 ---
 
 ## jei-coverage #22: Mob eggs render as mobs in JEI screens?
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / TODO `jei/jei-coverage #22`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / TODO `jei/jei-coverage #22`
 
 ### Goal
 Where a world tab shows a mob as its spawn egg, draw the mob instead (if wanted).
@@ -358,7 +358,7 @@ Creating client entities in `ClientLevel` for modded mobs can throw; wrap in try
 ---
 
 ## jei-coverage #23: Jar Storage tab shows potion fluid as an uncraftable potion
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / TODO `jei/jei-coverage #23`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / TODO `jei/jei-coverage #23`
 
 ### Goal
 Jar Storage shows one row per potion type with a real potion fluid and bottle, not "uncraftable".
@@ -387,7 +387,7 @@ All potions or only those a jar can hold (`preserved_tags_from_item` means one p
 ---
 
 ## jei-coverage #24: Update the JEI arrow in potion tipping, seasoning and potion buckets
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / data / TODO `jei/jei-coverage #24`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / data / TODO `jei/jei-coverage #24`
 
 ### Goal
 Potion Tipped Arrows, Potion Buckets and Seasoning pages use the same arrow as Feast Plating and the world tabs.
@@ -408,7 +408,7 @@ Potion Tipped Arrows, Potion Buckets and Seasoning pages use the same arrow as F
 ---
 
 ## jei-coverage #25: Empty jar JEI icon becomes jar with spout
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / resource pack / TODO `jei/jei-coverage #25`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / resource pack / TODO `jei/jei-coverage #25`
 
 ### Goal
 The empty jar icon in the jar JEI categories is replaced by a jar with a spout.
@@ -433,7 +433,7 @@ What "jar with spout" is. Recommend (a): no new assets, uses two real items.
 ---
 
 ## jei-coverage #26: Knife and Machete Drops: "cut", not "broken"
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work patcherMod / lang / TODO `jei/jei-coverage #26`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work Creative Common / lang / TODO `jei/jei-coverage #26`
 
 ### Goal
 The Knife and Machete Drops tab reads "Cut with a knife", not "Broken"; the cheese note is short.
@@ -455,7 +455,7 @@ The Knife and Machete Drops tab reads "Cut with a knife", not "Broken"; the chee
 ---
 
 ## jei-coverage #27: Concrete hardening 30 s, not 31
-Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work config / patcherMod / TODO `jei/jei-coverage #27`
+Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_tweaks.md)) / Work config / Creative Common / TODO `jei/jei-coverage #27`
 
 ### Goal
 Liquid concrete sets in 30 s and the tab says 30 s.
@@ -466,7 +466,7 @@ Liquid concrete sets in 30 s and the tab says 30 s.
   config/immersiveengineering-common.toml` finds no setting, so the value is hardcoded.
 
 ### Build
-1. A patcherMod mixin on `ConcreteFluid` changing the timer limit (31 -> 30). `javap` the target method first.
+1. A Creative Common mixin on `ConcreteFluid` changing the timer limit (31 -> 30). `javap` the target method first.
 2. Edit the `manual.json` note to "Sets after about 30 s" (one row has it, the thin-flow row may too).
 3. Changing only the note would make the tab lie (the fluid still sets at 31), so the mixin is the real fix.
 
@@ -479,7 +479,7 @@ Mixin targets an IE class by name: `require = 0` and guard with the mod id (the 
 ---
 
 ## jei-coverage #28: Remove Survivality from Mob Transformations
-Status **Complete** (kept, owner 2026-10-26) / Work patcherMod / TODO `jei/jei-coverage #28`
+Status **Complete** (kept, owner 2026-10-26) / Work Creative Common / TODO `jei/jei-coverage #28`
 
 ### Goal
 Mob Transformations lists no Survivality rows.

@@ -34,7 +34,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 
 // Port change: upstream's canMate and getBreedOffspring overrides are gone. Mooshroom breeding (every mooshroom type with
-// every other, calf type 50 % each parent) is patcherMod's mixin on MushroomCow, which this class inherits. Kept: Fungi
+// every other, calf type 50 % each parent) is Creative Common's mixin on MushroomCow, which this class inherits. Kept: Fungi
 // cows ignore lightning, shear into a cow and 5 of their mushroom, render their own mushroom.
 public class FDMCow extends MushroomCow {
    private final Supplier<Block> mushroom;

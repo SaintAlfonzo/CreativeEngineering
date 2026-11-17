@@ -1,6 +1,6 @@
 # plan-1-0-8
 
-> 1.0.8 release contents: server crash fix (patcherMod d60b5a99) + worldgen fixes (11_fixes_1_0_8.md); plan in feature_writeup/plan_1.0.8.md, deploy state in deploy.md
+> 1.0.8 release contents: server crash fix (Creative Common d60b5a99) + worldgen fixes (11_fixes_1_0_8.md); plan in feature_writeup/plan_1.0.8.md, deploy state in deploy.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

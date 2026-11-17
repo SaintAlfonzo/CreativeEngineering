@@ -6,11 +6,11 @@ creative_split.md section 7.
 
 | Sweep | File | Covers |
 |---|---|---|
-| A | [A_java.md](A_java.md) | every non-mixin class in patcherMod |
+| A | [A_java.md](A_java.md) | every non-mixin class in Creative Common |
 | B | [B_mixins.md](B_mixins.md) | every entry in `creativeengineering.mixins.json` |
 | C | [C_config.md](C_config.md) | every `CEConfig` section and its readers |
 | D | [D_registration.md](D_registration.md) | `CreativeEngineering.java`, `DeferredRegister` holders, event subscribers, JEI and WTHIT entry points |
-| E | [E_resources.md](E_resources.md) | patcherMod resources, `kubejs/data`, `kubejs/assets` |
+| E | [E_resources.md](E_resources.md) | Creative Common resources, `kubejs/data`, `kubejs/assets` |
 | F | [F_pack_scripts.md](F_pack_scripts.md) | `kubejs/startup_scripts`, `server_scripts`, `client_scripts` and the globals that cross |
 | G | [G_external_edges.md](G_external_edges.md) | CD, CB, own jars, generators, `mod_sides.md` |
 

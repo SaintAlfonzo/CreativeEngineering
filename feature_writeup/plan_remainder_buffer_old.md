@@ -6,7 +6,7 @@
 
 When a Farmer's Delight style station finishes a recipe, it throws each ingredient's leftover container (glass
 bottle, bowl, bucket) out of the block as an item. This writeup looks at whether those leftovers can go into a
-buffer slot on the station instead. Java in patcherMod (and in our own `oven/` and `backportedBrewin` source).
+buffer slot on the station instead. Java in Creative Common (and in our own `oven/` and `backportedBrewin` source).
 Test prefix `RB-`.
 
 From cooking.md (the cooking plans, folded into [todo/TODO.md](todo/TODO.md) and removed 2026-10-19): kitchen > stove "bottle/bucket output slot for ingredient inputs in upgraded
@@ -51,7 +51,7 @@ bottle, stews and soups -> bowl, buckets -> bucket).
 | Kettle | Farmer's Respite 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KettleBlockEntity.processBrewing`, ingredient slots 0-1 | `@Redirect` on that call | none |
 | Keg (current jar) | Brewin' & Chewin' 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KegBlockEntity.processFermenting`, ingredient slots 0-3 | `@Redirect` on that call | slot 8 already holds the **fluid-item** slot's (4) leftovers, but ingredient leftovers still fly out |
 | Keg (port) | `development/backportedBrewin` (4.5.0 port, in progress) | `KegBlockEntity.ejectIngredientRemainder(ItemStack)`, line ~757 | edit our own source | none |
-| Oven | patcherMod `oven/` | `OvenBlockEntity.ejectIngredientRemainder(ItemStack)` (private) | edit our own source | none |
+| Oven | Creative Common `oven/` | `OvenBlockEntity.ejectIngredientRemainder(ItemStack)` (private) | edit our own source | none |
 
 Not in scope, checked: the FD skillet and stove grill (they pop the **finished food**, not leftovers), the
 Nether's / Ender's Delight stoves (subclasses of the grill), Create Central Kitchen's blaze stove, Cooking for
@@ -68,7 +68,7 @@ Create Central Kitchen 1.3.11.c (`create_central_kitchen.mixins.json`) is the on
 - `KegBlockEntityMixin`: `@ModifyExpressionValue` in `updateTemperature`. Unrelated.
 
 No conflict. MixinExtras 0.2.0 is in the pack (CCK jar-in-jar), but plain `@Inject` / `@Redirect` is enough here
-and patcherMod doesn't use MixinExtras yet.
+and Creative Common doesn't use MixinExtras yet.
 
 ### 1.2 How often it happens (recipe scan of the jars)
 
@@ -107,7 +107,7 @@ they often land on the counter or roll off it.
 
 ### 3.1 The buffer
 
-A small shared class in patcherMod (`cooking/RemainderBuffer`): an `ItemStackHandler` with **2 slots** at
+A small shared class in Creative Common (`cooking/RemainderBuffer`): an `ItemStackHandler` with **2 slots** at
 normal stack limits (buckets 16), saved under its own NBT key
 (`CERemainders`). Two slots cover the mixed cases (a milk bucket and a honey bottle in one pot recipe).
 
@@ -146,7 +146,7 @@ problem back once the buffer fills.
   `invalidateCaps`). A hopper under a pot then pulls meals and bottles alike, so filter it if needed.
 - **Breaking**: inject at RETURN of `getDroppableInventory` so the buffer drops with the rest. The pot's item form
   only keeps the meal, as now.
-- **Optional**: a WTHIT/Jade line "Holding: 3 Glass Bottle" (patcherMod already has `waila_plugins.json`).
+- **Optional**: a WTHIT/Jade line "Holding: 3 Glass Bottle" (Creative Common already has `waila_plugins.json`).
 
 ### 3.4 Size of the job
 
@@ -163,7 +163,7 @@ milk bottle, check the bottle is in the buffer, fill the buffer, check the stati
 
 ## 4. Risks
 
-- **Menu sync**: the extra slots exist only where patcherMod is loaded. It is `both` in
+- **Menu sync**: the extra slots exist only where Creative Common is loaded. It is `both` in
   [mod_sides.md](../mod_sides.md) and required on both sides, so this is fine.
 - **Removing the mod** drops nothing: items in the buffer are lost with the NBT key. Same as any modded
   inventory.

@@ -5,12 +5,12 @@
 Moved from agent memory 2026-11-16 (last edited there 2026-10-26). Repo status docs win over any status line here.
 
 Since 2026-10-25 the pack runs its own port of Display Delight 1.7.0 (`development/creativeDelight/members/display`, a CD member since 2026-11-02, mod id
-`displaydelight`, upstream package `com.jkvin114.displaydelight` kept because patcherMod's DisplayDelightDishes links
+`displaydelight`, upstream package `com.jkvin114.displaydelight` kept because Creative Common's DisplayDelightDishes links
 against `FoodBlock` and `BlockAssociations.addToMap`). Status and tests (DDP-): feature_writeup/display_delight.md.
 
 Gotchas:
 - 1.7.0 links a display block to its food by block NAME (prefix -> mod, then plated_/small_plated_), not by loot table.
-  `md_` is remapped to `miners_delight`. Food blocks have no loot tables; a block that has one (patcherMod dishes) drops
+  `md_` is remapped to `miners_delight`. Food blocks have no loot tables; a block that has one (Creative Common dishes) drops
   only that (port guard against double drops).
 - Resources come from `tools/port_resources.py` in the mod folder (also writes `DisplayFoods.java` from
   `tools/display_blocks.json`); it leaves out blocks for absent mods (EXCLUDED_PREFIXES) and for foods in

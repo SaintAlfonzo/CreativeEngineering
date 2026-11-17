@@ -10,7 +10,7 @@
 @@text
 @@text Not run. Targets the jars installed 2026-11-04 19:17: `creativeengineering-1.1.09.jar`, `creativemagic-1.0.0.jar`,
 @@text `creativeequipment-1.0.0.jar`, `creativedelight-1.0.0.jar` (clean build, no `creativeengineering/harvest.js`). One save
-@@text carried across: boot 1 on the 1.2.01 jars (patcherMod 1.1.08, no Magic or Equipment jar), a world with a lit Nether
+@@text carried across: boot 1 on the 1.2.01 jars (Creative Common 1.1.08, no Magic or Equipment jar), a world with a lit Nether
 @@text portal frame, a tier shield, a stepstool and a skinned backpack in a chest, `/save-all`; boot 2 on the new jars. Instance
 @@text config with `[botania]` and the nine Equipment tables still in `creativeengineering-common.toml` and no
 @@text `creativemagic-common.toml` / `creativeequipment-common.toml` (delete them in the scratch copy); before boot 1 set

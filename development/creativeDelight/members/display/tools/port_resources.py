@@ -18,7 +18,7 @@ What changes on the way (feature_writeup/display_delight.md section 5):
     the `md_` prefix the same way)
   * block models: a face on the undefined texture '#missing' takes its element's top face texture
   * three 1.2.0 textures 1.7.0 dropped ship again from tools/legacy_1.2.0/: block/bowl (still the particle of
-    1.7.0's parent_bowl) and minecraft:farmers3d/tray_top and tray_bottom, which the pack's patcherMod dish models
+    1.7.0's parent_bowl) and minecraft:farmers3d/tray_top and tray_bottom, which the pack's Creative Common dish models
     (tools/gen_dd_dishes.py) copied from 1.2.0's bowl and plate
   * item models: a registered block item with no item model gets one parented on its default-state block model
   * `displaydelight:support_exceptions` also holds the pack's Cooking for Blockheads counters

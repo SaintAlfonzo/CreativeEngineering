@@ -1,6 +1,6 @@
 """mob_bottling tab, generated part: every Bucketable mob and the bucket it becomes.
 
-Source: kubejs/exported/world_jei/mob_buckets.json (/dumpworldjei, patcherMod devtools/WorldJeiMobBuckets.java).
+Source: kubejs/exported/world_jei/mob_buckets.json (/dumpworldjei, Creative Common devtools/WorldJeiMobBuckets.java).
 Mobs picked up some other way (Buzzier Bees bottles, the duck sack, Quark slime, Upgrade Aquatic squid) are
 hand-written in kubejs/assets/creativecommon/jei_world/mob_bottling/manual.json. The mob_transformation tab is
 manual only.

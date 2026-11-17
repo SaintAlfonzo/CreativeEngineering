@@ -113,7 +113,7 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text flower, flower box with a sunflower, Floral large pot with a lilac: both halves drawn, no render crash, note how much
 @@text the Floral pot blocks the view (F8, F9).
 @@text
-@@text **SQ-POT-06** (patcherMod 1.1.04 built 2026-10-29, copy into the scratch `mods/`; [flower_pots.md](../flower_pots.md) 3.1):
+@@text **SQ-POT-06** (Creative Common 1.1.04 built 2026-10-29, copy into the scratch `mods/`; [flower_pots.md](../flower_pots.md) 3.1):
 @@text boot, grep latest.log for `BotanistWorkbenchPotMixin` / `StructureTemplateBotanistPotMixin` warnings; then
 @@text `/place structure beautify:botanist_house_plains ~ ~ ~` (and `_desert`), find the workbench and
 @@text `/data get block <pos>` -> `Plant: "minecraft:<flower>"` with a vanilla flower (no wither rose), different ones across
@@ -123,7 +123,7 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text
 @@text Client check **CQ-POT-02**: test POT-08 in [flower_pots.md](../flower_pots.md) 7 (render, facing, tint, F3+T).
 @@text
-@@text **SQ-POT-07** (patcherMod 1.1.04 built 2026-10-31 with the Flower Test preset; [flower_pots.md](../flower_pots.md) 5):
+@@text **SQ-POT-07** (Creative Common 1.1.04 built 2026-10-31 with the Flower Test preset; [flower_pots.md](../flower_pots.md) 5):
 @@text in the scratch `server.properties` set `level-type=creativeengineering\:flower_test` and a fresh `level-name`; boot;
 @@text grep `[flowerworld]` in latest.log -> `Flower Test world without a table: building`, then one `holder ... of N` line per
 @@text holder, `rows N (...)`, `DONE`; no `Error occurred while handling event` naming `flower_world.js`. Restart -> no
@@ -135,7 +135,7 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text `building` line = layer signature (`isPresetWorld`; log the generator class and layers), `settings()` / `getLayersInfo()`
 @@text not resolved by Rhino; `holder did not place` for a hanging holder = glass at y+2 not under it.
 @@text
-@@text **SQ-POT-08** (patcherMod 1.1.04 and backportedVinery `-07` built 2026-10-31; [flower_pots.md](../flower_pots.md) 3.2):
+@@text **SQ-POT-08** (Creative Common 1.1.04 and backportedVinery `-07` built 2026-10-31; [flower_pots.md](../flower_pots.md) 3.2):
 @@text boot; grep latest.log: the four mixins `FramedFlowerPotUnframedMixin`, `SuppFlowerBoxPlantsMixin`, `SiltPotSoilMixin`
 @@text applied (and `AnotherFurniturePlanterRenderMixin` on a client), no `Failed to load model` for
 @@text `creativeengineering:block/flower_box/*` or `vinery:block/flower_box_centered`, no blockstate error for

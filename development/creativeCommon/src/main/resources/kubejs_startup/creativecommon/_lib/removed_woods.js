@@ -11,7 +11,7 @@ var i = global.item;
 
 global.removedWoods = {
 	// Upgrade Aquatic's river wood (recipes/wood #3). Its tree is the Mulberry tree now: oak trunk, mulberry leaves
-	// and vines (kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json, patcherMod
+	// and vines (kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json, Creative Common
 	// MulberrySapling). Leaves, sapling, leaf pile, carpet and hedge stay.
 	river: [
 		[i.large_river_boat,                  i.large_oak_boat],

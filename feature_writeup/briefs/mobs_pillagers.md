@@ -86,13 +86,13 @@ Traits (wild_crops.json): `dark_oak` = dark_forest, temperate_highlands; `swamp`
 orchid_swamp; `icy` = ice_spikes, frozen_peaks, frozen_cliffs, glacial_chasm; `badlands` = 8 biomes. Drop
 `temperate_highlands` with `"except"` if only real dark forests are wanted.
 Then decide daylight (Decisions). If "night only": either
-- **(recommended) a `dark_only` spawn condition** in patcherMod `worldgen/SpawnConditions`: add `DARK_ONLY` to `Kind`
+- **(recommended) a `dark_only` spawn condition** in Creative Common `worldgen/SpawnConditions`: add `DARK_ONLY` to `Kind`
   (SpawnConditions.java 49-57, also the error text), a `case DARK_ONLY -> { if (!Monster.isDarkEnoughToSpawn(level,
   pos, level.getRandom())) return Boolean.FALSE; }` in `check` (108-127; returns FALSE or keeps `verdict`, so the
   pillager's own rule still runs), `CONDITIONS` in `mob_spawns.js` 41 and the message at 201, `CONDITIONS` in
   `tools/gen_spawn_table.py` 50 and its message at 422, a case in `tools/mob_spawns_test/rules_fixture.json`; then
   `{ "id": "lone_pillagers_dark", "condition": "dark_only", "mobs": ["minecraft:pillager"], "rules": ["lone_pillagers"] }`.
-  Needs a patcherMod build.
+  Needs a Creative Common build.
 - or, KubeJS only, `kubejs/server_scripts/mobs/pillagers.js`:
   `EntityEvents.checkSpawn('minecraft:pillager', e => { if (e.type == 'NATURAL' && e.level.isDay() && e.level.canSeeSky(e.block.pos)) e.cancel() })`
   (`EntityEvents.checkSpawn` and its `type` / `level` / `block` getters verified in `kubejs-forge-1902.6.2-build.73`
@@ -115,7 +115,7 @@ byte-exact round trips): a table of edits `{template path: [ops]}`, ops `swap_en
 templates for new pools: `--make-entity creativeengineering:pillagers/evoker minecraft:evoker` writes a 1x3x1 copy of
 T&T's `vindicator.nbt` with the id swapped and `HandItems` cleared.
 
-**Alternative to template copies (not recommended now):** a patcherMod structure processor
+**Alternative to template copies (not recommended now):** a Creative Common structure processor
 `creativeengineering:entity_swap` (`{from, to: weighted list, chance}`) using Forge's `StructureProcessor#processEntity`
 hook (exists in Forge 1.19.2 as far as I know; unverified), added to the pool elements' `processors`. Random per
 placement, no NBT editing, but can't do "at most one vindicator" and needs Java.

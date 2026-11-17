@@ -8,8 +8,8 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/creative_worldgen.md
 @@text
-@@text Not run. One save carried across: boot 1 on the installed jars (patcherMod 1.1.07, standalone `moreMooblooms-1.1.0.jar`,
-@@text Baby Mobs inside Creative Delight), generate a world, `/save-all`; boot 2 on patcherMod 1.1.08, `creativeworldgen-1.0.0.jar`,
+@@text Not run. One save carried across: boot 1 on the installed jars (Creative Common 1.1.07, standalone `moreMooblooms-1.1.0.jar`,
+@@text Baby Mobs inside Creative Delight), generate a world, `/save-all`; boot 2 on Creative Common 1.1.08, `creativeworldgen-1.0.0.jar`,
 @@text the rebuilt Creative Delight (no Baby Mobs) and Devtools, standalone More Mooblooms removed. Instance config with the six
 @@text sections still in `creativeengineering-common.toml` and no `creativeworldgen-common.toml` (delete it in the scratch copy;
 @@text edit one value, `[named_mobs]` or `[worldgen.earth_fill]`, before boot 1). Fresh world for -06 and -07.
@@ -18,8 +18,8 @@
 ## SQ-CWG-01 | Creative Worldgen mixins apply once, More Mooblooms and Baby Mobs nested once
 @group A
 @commands Boot 2: `grep -E "creativeworldgen.mixins.json\|creativeengineering.mixins.json" logs/latest.log`; `grep -c "from creativeworldgen.mixins.json" logs/debug.log`; mod list
-@pass No mixin apply error; the 60 common mixins apply (minus gated ones whose mod is absent: AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers); no worldgen mixin from patcherMod (double apply); one `moremooblooms` and one `babymobs`, nested
-@fails Gate id wrong in `WorldgenMixinPlugin`, a moved mixin still in patcherMod's json, or the old standalone jar left in `mods/`
+@pass No mixin apply error; the 60 common mixins apply (minus gated ones whose mod is absent: AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers); no worldgen mixin from Creative Common (double apply); one `moremooblooms` and one `babymobs`, nested
+@fails Gate id wrong in `WorldgenMixinPlugin`, a moved mixin still in Creative Common's json, or the old standalone jar left in `mods/`
 @from batches/r1103/sA_2.qb
 bootreject (Mixin apply failed|InvalidMixinException|MixinApplyError).*(creativeworldgen|creativeengineering)
 bootreject DuplicateModsFound|Found duplicate mods

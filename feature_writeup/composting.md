@@ -28,7 +28,7 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 - **Files to open:** [compost_rules.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/compost_rules.js) (categories, exclusions),
   [compost_values.js](../kubejs/startup_scripts/compost/compost_values.js) (per-item chances),
   Creative Delight's `kubejs_startup/<mod>/compost.js` (the Farmer's, Fungi, Veggies and Vintage Delight rows, QoL-4
-  since 2026-10-25, switch `[qol] compost`; `values(..., { when })`), patcherMod
+  since 2026-10-25, switch `[qol] compost`; `values(..., { when })`), Creative Common
   [func/compost.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/compost.js) (engine).
 - **Knobs:** the two data files. After editing: `/kubejs reload startup_scripts`, then `/reload`.
 

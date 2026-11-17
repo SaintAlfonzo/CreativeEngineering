@@ -3,7 +3,7 @@
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, rows `structures/terrain` #1, #2, #3 (all
 Planned). Reference: [structure_tuning.md](../structure_tuning.md) 3.13 (earth fill), 3.15 (terrain adaptation by tag,
 soft beard, template trim, sunk starts), [terrain_adaptation_scan.md](../terrain_adaptation_scan.md) (the scan),
-[locate.md](../locate.md) 3.7 (the bottom band). Code: patcherMod
+[locate.md](../locate.md) 3.7 (the bottom band). Code: Creative Common
 `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/TerrainAdaptation.java`,
 `TemplateTrim.java`, `EarthFill.java`, `DistantClip.java`; tags `kubejs/server_scripts/worldgen/terrain_adaptation.js`
 (through `global.tags.add`); scan `tools/terrain_adaptation_scan.py`.
@@ -24,7 +24,7 @@ ST-300 to ST-305.
 |---|---|---|---|
 | 1 | #3 skip the bottom band | none left | Already built and shipped (DH clip, 1.0.6). Only LO-11 [game] is open: move the row to Testing |
 | 2 | #1 batch 4 | data, after a re-scan and a look | Re-run the scan first (it predates the 2026-10-14 mods); pilot the fish ponds, then the spire and Philip's level-three ruins; villages last, one family at a time |
-| 3 | #2 Beardifier fill estimate | tool, then maybe patcherMod | Independent; the tool part answers whether the patcherMod part is needed |
+| 3 | #2 Beardifier fill estimate | tool, then maybe Creative Common | Independent; the tool part answers whether the Creative Common part is needed |
 
 #1's carp-pond change uses the sunk-start tag, so read the earth-fill brief's bug B
 ([structures_earthfill.md](structures_earthfill.md)) first: the earth-fill reach of sunk starts is
@@ -163,7 +163,7 @@ it out of terrain, which earth fill never counts: a tower on a cliff edge can st
    Run it on the vanilla structures the sim knows (5 villages, outpost, igloo); modded structures can't run there, so
    add a scratch-server variant: a temporary `log = ALL` line field "beard columns" (step 2 behind a switch) and read it
    in a Chunky run.
-2. **Count it (patcherMod), only if step 1 shows missed mounds on more than a few % of starts:** in `EarthCheck.cancels`
+2. **Count it (Creative Common), only if step 1 shows missed mounds on more than a few % of starts:** in `EarthCheck.cancels`
    also collect each bearded piece's footprint columns (not just earth columns) and count a column toward `mound` when
    its ground lies more than `maxMoundHeight` below the piece bottom (+ sink). Gate it with a new
    `[worldgen.earth_fill] beardFootprint` (default false until calibrated) and give pieces without earth a size from
@@ -194,7 +194,7 @@ Config: new `beardFootprint` (boolean) in `CEConfig.EarthFill` (class at `CEConf
 ---
 
 ## structures/terrain #3: Skip the bottom 64-96 blocks
-Status Testing · Work patcherMod · TODO `structures/terrain #3`
+Status Testing · Work Creative Common · TODO `structures/terrain #3`
 
 ### Goal
 Cut the cost of generating the bottom of the world.

@@ -1,7 +1,7 @@
 # Creative Worldgen
 
 Written 2026-11-02 (Creative Split wave 5, [creative_split.md](creative_split.md) 7.6 and 7.10; TODO `creativesplit/worldgen #8`).
-Status: **carved 2026-11-02, built, installed 2026-11-02 23:16 (`mods/creativeworldgen-1.0.0.jar`, with patcherMod 1.1.08 and the CD jar; moreMooblooms 1.1.0 displaced); scratch SQ-CWG queued, nothing booted.** Creative Delight's Miner's drops need this jar (`loot/09_drops.js`, miners_delight.md 8.1).
+Status: **carved 2026-11-02, built, installed 2026-11-02 23:16 (`mods/creativeworldgen-1.0.0.jar`, with Creative Common 1.1.08 and the CD jar; moreMooblooms 1.1.0 displaced); scratch SQ-CWG queued, nothing booted.** Creative Delight's Miner's drops need this jar (`loot/09_drops.js`, miners_delight.md 8.1).
 
 Written for: the owner and agents working on the split. Own mod `creativeworldgen` (development/creativeWorldgen,
 `creativeworldgen-1.0.0.jar`, side both): the pack's world generation and fauna. A bundle like Creative Delight: its
@@ -20,7 +20,7 @@ own Java plus two nested members. Same behavior as before the carve; every regis
 
 ## 1. What it holds
 
-- **Java** (`com.SaintAlfonzo.creativeworldgen`, same subpackages as in patcherMod; 59 classes plus 4 new):
+- **Java** (`com.SaintAlfonzo.creativeworldgen`, same subpackages as in Creative Common; 59 classes plus 4 new):
   - `worldgen/` whole (structures, meta structures with the punch piece and meteorite heights, locate, earth and
     water fill, terrain adaptation, ground match, sky islands, bee nests, biome layout tuner, pool tuner, spawn
     tuning and conditions, spawn boxes, ocean geodes, distant clip, `donor/` Farmer's Structures donor).
@@ -81,7 +81,7 @@ own Java plus two nested members. Same behavior as before the carve; every regis
 ## 4. Known effects of the move
 
 - The biome layout disk cache rebuilds once (the solver class bytes changed).
-- Event listener order shifts a little: Worldgen's registrations run in its constructor, after patcherMod and Compat.
+- Event listener order shifts a little: Worldgen's registrations run in its constructor, after Creative Common and Compat.
 - LootJS modifier order: Worldgen's post-roll modifier now registers after the pack's and CD's item-merge modifiers.
 - `95_tag_capture` sees tag additions from packs that load before Worldgen (more than before, not less).
 
@@ -133,7 +133,7 @@ config defaults. How old worlds carry over:
   `tags/loottags.js`, `CWGResources` (now `CLResources`) and `global.CWG.lootRules` (now `global.LOOT.rules`); the LootJS
   dependency went with it, Worldgen requires `creativeloot`. Rebuilt and installed with `creativeloot-1.0.0.jar`.
 
-- 2026-11-02: carved (wave 5). patcherMod 1.1.08 loses the classes, 60 mixins, 6 sections and the resources; More
+- 2026-11-02: carved (wave 5). Creative Common 1.1.08 loses the classes, 60 mixins, 6 sections and the resources; More
   Mooblooms and Baby Mobs nested; Devtools gains the optional dependency. Edits that the worldgen edit pass
   ([plan_worldgen_edit.md](plan_worldgen_edit.md), same day) made to `MetaStructure` and its new classes moved with it.
 - 2026-11-03 (plan_scratch_bugfix_1103 4.1, 4.5, 7.3): `structure_overrides.js` accepts and checks the meta part key
@@ -150,28 +150,28 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-10-11: The cache is also kept on disk (biome_layout_cache.json.gz, ships with the pack), so the first datapack load of a new JVM reads it back instead of re-solving (2026-10-11 s) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/BiomeLayoutTuner.java)
 - 2026-10-14: BIOME FACTORS (a group's "biome_frequency", 2026-10-14, plan 7.4.5 D4): every member of the set rolls frequency x the factor of the biome at its generation point (the first rule the biome matches, else "default"), the point and biome Structure#generate tests (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/StructureFrequencies.java)
 - 2026-10-14: BIOME FREQUENCY (a group's "biome_frequency", 2026-10-14): {"#biome tag" | "biome id": factor 0..1, ..., "default": factor} (kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js)
-- 2026-10-19: Sunk starts (2026-10-19): start_height below 0 sinks these templates into the ground on purpose, and the beard levels the ground at the surface they were projected to instead of at their sunk bottom layer (patcherMod TerrainAdaptation#sink) (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
+- 2026-10-19: Sunk starts (2026-10-19): start_height below 0 sinks these templates into the ground on purpose, and the beard levels the ground at the surface they were projected to instead of at their sunk bottom layer (Creative Common TerrainAdaptation#sink) (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
 - 2026-10-20: Glowing Illagers port (feature_writeup/feature_porting.md 2.1, jar retired 2026-10-20): every raider a raid adds to a wave ({@code Raid#addWaveMob}, {@code m_37718_}) glows for good, so a raid can be followed through walls (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/mixin/RaidGlowingMixin.java)
 - 2026-10-25: The End House (Ender's Delight, 2026-10-25) stands on a purpur and end stone floor (layer 0: 101 of its 144 columns) (kubejs/data/creativeworldgen/kubejs/worldgen/earth_fill.js)
 - 2026-10-25: End builds (2026-10-25): Ender's Delight's End House (9x16 purpur and end stone floor, shipped by Creative Delight's enders member) (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
 - 2026-10-30: Batch 4 (2026-10-30, TODO structures/terrain #1) (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
-- 2026-10-30: Seabed clearance (2026-10-30, TODO structures/terrain #7; patcherMod SeabedClearance): underground structures at a fixed height (Terralith's caves y -40..40, Subterrestrial's land cabins y 6..48) whose box top comes within 8 blocks of a floor with water on it are dropped; their beard carved the seabed open and the sea flooded them (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
+- 2026-10-30: Seabed clearance (2026-10-30, TODO structures/terrain #7; Creative Common SeabedClearance): underground structures at a fixed height (Terralith's caves y -40..40, Subterrestrial's land cabins y 6..48) whose box top comes within 8 blocks of a floor with water on it are dropped; their beard carved the seabed open and the sea flooded them (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
 - 2026-10-30: COASTS AND RIVERS (CWGConfig [worldgen.meta_structures] avoidCoasts, on by default since 2026-10-30): no part may start in, or reach with its box (center and corners) into, a biome of creativeworldgen:coast_river (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/MetaStructure.java)
 - 2026-10-30: Structures that stand in water on purpose (stilts in a swamp or mangrove): no footprint water share, their other earth-fill limits as usual (2026-10-30, TODO structures/earthfill #14: every surface piece now joins the footprint, not only pieces with earth) (kubejs/data/creativeworldgen/kubejs/worldgen/earth_fill.js)
 - 2026-10-30: A part short of its minimum count keeps what fitted (CWGConfig [worldgen.meta_structures] keepShortParts, since 2026-10-30); the meta fails only when no satellite fitted at all (without the switch: whenever a part is short), and the group's weighted pick falls through to its next member, as for a wrong biome (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/MetaStructure.java)
 - 2026-10-30: Every other surface jigsaw structure drops only its too-wet pieces (creativeworldgen-common.toml pruneWetJigsaws, 2026-10-30); meta structure parts and anchors are pruned the same way, part by part (kubejs/data/creativeworldgen/kubejs/worldgen/earth_fill.js)
-- 2026-11-01: Their start element is terrain matching (patcherMod refuses them), so they keep their own placement (owner call 2026-11-01, TODO structures/earthfill #17). the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4 (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
+- 2026-11-01: Their start element is terrain matching (Creative Common refuses them), so they keep their own placement (owner call 2026-11-01, TODO structures/earthfill #17). the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4 (kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js)
 - 2026-11-02: Before 2026-11-02 the stored current always won, so 223 duplicates in 27 pools played another piece's weight (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/PoolTuner.java)
 - 2026-11-02: Moved from kubejs/server_scripts/ on 2026-11-02; priorities unchanged, and they order only within this tree (kubejs/data/creativeworldgen/kubejs/_worldgen_core.js)
 - 2026-11-02: Sandstone and terracotta floors, counted as earth only for structures in the structure tag of the same name (worldgen/earth_fill.js): desert and badlands builds that stand on them instead of sand (2026-11-02, tools/earth_base_scan.py: Towns and Towers badlands villages 0 % earth, Better Desert Temples 0 %) (kubejs/data/creativeworldgen/kubejs/tags/blocktags.js)
 - 2026-11-02: Desert and badlands structures on sandstone or terracotta floors: those blocks count as earth too (2026-11-02) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/EarthFill.java)
 - 2026-11-02: Creative Worldgen: block tags of the worldgen and fauna systems; moved from kubejs/server_scripts/tags/blocktags.js on 2026-11-02 (villager ladders, structure ground match, earth fill, template trim, wild plant soils) (kubejs/data/creativeworldgen/kubejs/tags/blocktags.js)
-- 2026-11-02: The sections moved out of patcherMod's creativeengineering-common.toml on 2026-11-02 (creative_split.md 7.6, wave 5) with keys, comments and defaults unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]} (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CWGConfig.java)
-- 2026-11-02: creativeWorldgen: Creative Worldgen (mod id creativeworldgen, feature_writeup/creative_worldgen.md), carved out of patcherMod on 2026-11-02 (creative_split.md 7.6, wave 5) (development/creativeWorldgen/build.gradle)
+- 2026-11-02: The sections moved out of Creative Common's creativeengineering-common.toml on 2026-11-02 (creative_split.md 7.6, wave 5) with keys, comments and defaults unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]} (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CWGConfig.java)
+- 2026-11-02: creativeWorldgen: Creative Worldgen (mod id creativeworldgen, feature_writeup/creative_worldgen.md), carved out of Creative Common on 2026-11-02 (creative_split.md 7.6, wave 5) (development/creativeWorldgen/build.gradle)
 - 2026-11-02: open down to the piece's bottom (y - bottom of its own layers), then more than 'fills' below it; water by its own, shorter reach (waterReach, 2026-11-02) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/EarthFill.java)
-- 2026-11-02: Moved from patcherMod's [perf] on 2026-11-02 with keys, comments and defaults unchanged; the table keeps patcherMod's comment (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CWGConfig.java)
-- 2026-11-02: The mixins moved from patcherMod on 2026-11-02 unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/WorldgenMixinPlugin.java)
-- 2026-11-02: Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna, carved out of patcherMod on 2026-11-02 (creative_split.md 7.6, wave 5) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CreativeWorldgen.java)
+- 2026-11-02: Moved from Creative Common's [perf] on 2026-11-02 with keys, comments and defaults unchanged; the table keeps Creative Common's comment (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CWGConfig.java)
+- 2026-11-02: The mixins moved from Creative Common on 2026-11-02 unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/WorldgenMixinPlugin.java)
+- 2026-11-02: Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna, carved out of Creative Common on 2026-11-02 (creative_split.md 7.6, wave 5) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CreativeWorldgen.java)
 - 2026-11-02: a stone base counts too: its size and its overhang (02_new_mods_tests.md 4.2: the drum tower's 49x45 andesite plate was "small, 10 earth" and could hang over a cliff unchecked) and a sandstone or terracotta floor in the desert and badlands (2026-11-02, earth_base_scan.py) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/EarthFill.java)
 - 2026-11-02: Desert and badlands structures on sandstone or terracotta floors: those blocks (block tag creativeworldgen:earth_fill/sand_base) count as earth, so a house floor over a river or a cliff is seen (2026-11-02, tools/earth_base_scan.py, bottom 3 layers): T&T badlands village 0 % earth (red sandstone 56 %, terracotta 14 %), wooded badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %, vanilla desert village 24 % (sandstone 54 %), fortified desert village 43 % (37 %), T&T desert outpost 49 %, desert village temple 22 %, Philip's desert ruins 42 % (kubejs/data/creativeworldgen/kubejs/worldgen/earth_fill.js)
 - 2026-11-02: Height of a free-standing AE2 meteorite (plan_worldgen_edit C6, owner 2026-11-02: free-standing meteorites only; the meteorite metas keep surface or anchor placement) (development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/MeteoriteHeights.java)

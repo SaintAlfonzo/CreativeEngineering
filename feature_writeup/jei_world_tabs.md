@@ -30,9 +30,9 @@ is the build.
 
 | Part | Status |
 |---|---|
-| Framework: one generic category, rows from resource files, KubeJS and Java providers (patcherMod `compat/jei/world/`) | BUILT 2026-10-22, seen in game. Text pass, arrow, effect and Nothing slots, jar colours: BUILT 2026-10-22 (patcherMod 1.1.01 rebuilt in place), not in `mods/` |
+| Framework: one generic category, rows from resource files, KubeJS and Java providers (Creative Common `compat/jei/world/`) | BUILT 2026-10-22, seen in game. Text pass, arrow, effect and Nothing slots, jar colours: BUILT 2026-10-22 (Creative Common 1.1.01 rebuilt in place), not in `mods/` |
 | 19 tabs (section 2) | BUILT 2026-10-22, rows generated or hand-written; not seen in game |
-| `/dumpworldjei` (patcherMod `devtools/WorldJeiDump`, in `/dumpall`) | BUILT; run 2026-10-26 (`tool_pairs.json` and `mob_buckets.json` are real dumps, no `_fixture`), tool tabs regenerated from it the same day |
+| `/dumpworldjei` (Creative Common `devtools/WorldJeiDump`, in `/dumpall`) | BUILT; run 2026-10-26 (`tool_pairs.json` and `mob_buckets.json` are real dumps, no `_fixture`), tool tabs regenerated from it the same day |
 | Moobloom Conversion category (More Mooblooms 1.1.0, rebuilt in place) | BUILT 2026-10-22, in `mods/` (`moreMooblooms-1.1.0`, 2026-10-27 22:50), not seen in game |
 | Tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md)): blocks and mobs drawn in slots, notes as one paragraph, one Jar Storage / Jar Fluids row per potion, jar + faucet icon, regenerated tool tabs, "Cut" wording, Lava Interactions, concrete 30 s | BUILT 2026-10-26, shipped in 1.1.04 (client 2026-10-29; server still 1.1.03), not seen in game. Tests JW-19 to JW-27 |
 | Grape Planting category (Backported Vinery 1.5.5-ce-19.2-04, rebuilt in place) | BUILT 2026-10-22, seen in game; slow/fast text rebuilt 2026-10-22, in `mods/` since (Vinery `-06` installed 2026-10-31 00:41). TODO `alcohol/vineryport #23` |
@@ -147,7 +147,7 @@ Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). TODO rows `jei
 
 ## 4. Tests
 
-Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.2-04 (all rebuilt 2026-10-22) first.
+Install Creative Common 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.2-04 (all rebuilt 2026-10-22) first.
 
 - [ ] **JW-01 Dump:** `/dumpworldjei` -> "2/2 parts"; `kubejs/exported/world_jei/tool_pairs.json` has no `_fixture` and
   `"errors": 0`; no door or block appeared at the world bottom under spawn. Then `/cdevgen run jei_world`: no WARNING
@@ -190,7 +190,7 @@ Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.
   If one does, hovering the notes shows the whole text.
 - [ ] **JW-17 Dedicated server:** join CreEngServer: the tabs show the same rows as single player.
 
-Tab tweaks (2026-10-26; install the patcherMod jar built 2026-10-26 first):
+Tab tweaks (2026-10-26; install the Creative Common jar built 2026-10-26 first):
 
 - [ ] **JW-19 Stripping:** uses of Oak Log -> Stripping: Oak Log -> Stripped Oak Log + Oak Bark on its own page; paging
   shows one log type per page, nothing cycles.

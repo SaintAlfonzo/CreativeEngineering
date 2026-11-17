@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Offline checks for the mob spawn tuning (feature_writeup/mob_spawns.md section 6):
-#   1. Java/Python parity: tools/mob_spawns_test/cases.json through patcherMod SpawnTuning.apply on real vanilla spawn
+#   1. Java/Python parity: tools/mob_spawns_test/cases.json through Creative Common SpawnTuning.apply on real vanilla spawn
 #      lists (Bootstrap) and through gen_spawn_table.apply_rule; spawners after and change lines must be identical
 #   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/mob_spawns.js in the pack's Rhino fork with tools/mob_spawns_test/
 #      rules_fixture.json; every tag must equal the generator's selection, and the one tune_spawns modifier + the

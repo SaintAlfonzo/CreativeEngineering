@@ -5,7 +5,7 @@
 
 ## 1. Setup
 
-- Same scratch server as M2: session 54725a7d scratchpad; patcherMod `build/libs/creativeengineering-1.0.6.jar` of
+- Same scratch server as M2: session 54725a7d scratchpad; Creative Common `build/libs/creativeengineering-1.0.6.jar` of
   2026-10-14 01:28; seed 8675309; 4 locator threads.
 - World `st_d` (structure density 4, from M2). Two Chunky squares of radius 800 serve as test land:
   - around 0 0: 76% ocean, used for the geodes and driftwood;
@@ -62,7 +62,7 @@
    spots at density 4; at density 1 it is rarer but real, since mineshafts are common. Fix idea: skip a column only
    when a piece's box overlaps the sampled ground's height range, and log a line when matching is skipped for lack
    of samples.
-   **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): that fix idea, plus the log line. [structure_tuning.md](../../structure_tuning.md) 3.23 item 3, ST-193.
+   **Fixed in source 2026-10-18** (Creative Common 1.0.7, not built or shipped): that fix idea, plus the log line. [structure_tuning.md](../../structure_tuning.md) 3.23 item 3, ST-193.
 2. **Beach, river and swamp driftwood water versions never place (bug, 2026-10-03 tuning).** Upgrade Aquatic
    5.1.0's `DriftwoodFeature`, outside `#is_ocean`, only places a log when the block directly under its origin is
    dirt (and water is near) or sand. Our overrides for beach/river/swamp/extra require water under the origin, so they

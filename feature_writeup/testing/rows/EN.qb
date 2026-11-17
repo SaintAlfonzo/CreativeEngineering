@@ -8,7 +8,7 @@
 @@jars creativecommon creativecompat creativedelight creativeequipment creativeworldgen
 @@sources feature_writeup/ends_delight.md
 @@text
-@@text Needs the CD jar built 2026-10-25 (`repackedEnds -02`, `endersAdditions -01`) and the patcherMod it needs, installed; full
+@@text Needs the CD jar built 2026-10-25 (`repackedEnds -02`, `endersAdditions -01`) and the Creative Common it needs, installed; full
 @@text restart (new items, member, worldgen). New End chunks for EDL-02, EDL-06, EDL-10. Then `/dumpall` and `/cdevgen run worldgen`.
 @@text
 @@text > Since 2026-11-02 the `enders_additions` mod is inside `repackedEnds-...-ce-19.2-03` (ends_delight.md 5.9). Rerun SQ-EDL-01 (boot: both `ends_delight` and `enders_additions` listed, from the one jar), SQ-EDL-03 (soils now tagged from `endersdelight/additions.js`), SQ-EDL-05 (the 5 dishes and Crushed Void Pepper in JEI; meal rows now gated on `endersdelight`) and SQ-EDL-07 (End House from the merged jar's donor pack) on that jar. SQ-EDL-02, -04, -06, -08 are End's or 1.2.2 content and unaffected.

@@ -24,7 +24,7 @@ ordering="NONE"
 side="BOTH"
 # patcherMod: KubeJS, the shared helpers, the startup script loader and the Common API this jar calls
 # (swap/ConfigRename). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude every
-# patcherMod that still carries the Magic classes and mixins (1.1.08 and older: they would register twice).
+# Creative Common that still carries the Magic classes and mixins (1.1.08 and older: they would register twice).
 [[dependencies.creativemagic]]
 modId="creativecommon"
 mandatory=true
@@ -39,7 +39,7 @@ versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
 # The mods the gated mixins target: optional, each mixin is gated on its mod (MagicMixinPlugin). No ordering:
-# patcherMod never declared them either, so the load order stays as it was before the carve.
+# Creative Common never declared them either, so the load order stays as it was before the carve.
 [[dependencies.creativemagic]]
 modId="nock_enough_arrows"
 mandatory=false

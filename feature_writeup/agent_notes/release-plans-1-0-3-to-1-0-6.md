@@ -21,7 +21,7 @@ RD client side investigated 2026-09-30 (plan 3.5a, static only): client packet p
 
 DP and PR status: [plan_1.0.3.md](../plan_1.0.3.md), [deploy.md](../deploy.md), [perf.md](../perf.md).
 
-2026-10-02: the plan doc now covers planned AND done work for the version (user's convention). Section 0.1 "Also in 1.0.3" lists unplanned changes (EX, CB, VJ, CU, CN, NM, FM, WG, CF, DV), found by diffing against deploy/history/1.0.2.json + development/patcherMod/jar_archive/creativeengineering-1.0.2.jar. Keep 0.1 current as more lands.
+2026-10-02: the plan doc now covers planned AND done work for the version (user's convention). Section 0.1 "Also in 1.0.3" lists unplanned changes (EX, CB, VJ, CU, CN, NM, FM, WG, CF, DV), found by diffing against deploy/history/1.0.2.json + development/creativeCommon/jar_archive/creativeengineering-1.0.2.jar. Keep 0.1 current as more lands.
 
 Status of each release (staged, deployed, dates): the header of its `feature_writeup/plan_1.0.x.md`, [deploy.md](../deploy.md) section 8 and `deploy/DEPLOY_LOG.md`. Status pass 2026-11-16 removed the per-release staging and deploy diary from this note; rules and gotchas stay.
 

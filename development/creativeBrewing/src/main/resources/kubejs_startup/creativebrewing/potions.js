@@ -8,7 +8,7 @@
 //        the Create Mechanical Mixer, and the IE Mixer multiblock — none of those
 //        need their own recipes)
 //   3. StartupEvents.postInit              — drop Create's dragon's-breath
-//        Automatic-Brewing recipe (patcherMod does that conversion as a fluid brew)
+//        Automatic-Brewing recipe (Creative Common does that conversion as a fluid brew)
 //
 //  Machine coverage (nothing else to write anywhere):
 //   • Brewing stand       — the Mix entries below.
@@ -16,11 +16,11 @@
 //        .POTION_MIXES after common setup (1000 mB, automatic, shows in JEI).
 //   • Create Mechanical Mixer — same list.
 //   • IE Mixer multiblock — IE's mixer_potion_list is generated from the same
-//        PotionBrewing.POTION_MIXES; patcherMod PotionRecipeGeneratorsMixin
+//        PotionBrewing.POTION_MIXES; Creative Common PotionRecipeGeneratorsMixin
 //        redirects its fluid in/out to create:potion @ 1000 mB, and
 //        PotionHelperMixin un-skips the thick / mundane base potions so brews
 //        from those bases are craftable on the multiblock too.
-//   • Splash / lingering  — vanilla CONTAINER_MIXES (universal) + patcherMod's
+//   • Splash / lingering  — vanilla CONTAINER_MIXES (universal) + Creative Common's
 //        dragon-breath fluid brew. Nothing to add.
 //
 //  Not here (separate machines, separate files / memory):
@@ -148,7 +148,7 @@ if (global.has('alexsmobs')) {
 	[global.item.gazelle_horn,   'minecraft:strong_swiftness',     'alexsmobs:speed_iii'],
 
 	// AM brews poison_resistance from an alexsmobs:poison_bottle item — the mixers can't see a
-	// non-potion base (patcherMod cancels the broken auto-generated {Potion:empty} recipe).
+	// non-potion base (Creative Common cancels the broken auto-generated {Potion:empty} recipe).
 	// Re-base it onto Potion of Poison II so it brews everywhere (stand + both mixers) and
 	// picks up splash/lingering parity for free. AM's poison-bottle stand recipe still works.
 	[global.item.centipede_leg,  'minecraft:strong_poison',        'alexsmobs:poison_resistance'])
@@ -209,7 +209,7 @@ MoreJSEvents.registerPotionBrewing(event => {
 	// Alex's Mobs modifier steps
 	AM_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
 
-	// patcherMod-registered potions (modded effect, can't go through CUSTOM_POTIONS — see above)
+	// Creative Common-registered potions (modded effect, can't go through CUSTOM_POTIONS — see above)
 	CB_POTION_MIXES.forEach(row => mix(row[0], row[1], row[2]))
 
 	// Luck / Unluck — Buzzier Bees' own mixes out (MoreJS fires in client / dedicated-server setup, after
@@ -257,7 +257,7 @@ MoreJSEvents.registerPotionBrewing(event => {
 // postInit (FMLLoadComplete) is always after common setup, so here we reflectively
 // re-run PotionMixingRecipes.createRecipes() / sortRecipesByItem() against the now-
 // complete PotionBrewing state and swap the results in. Then apply the dragon's-breath
-// blacklist (lingering conversion — patcherMod does that as a fluid brew instead).
+// blacklist (lingering conversion — Creative Common does that as a fluid brew instead).
 // Create supplies PotionMixingRecipes; without it (minimal instances) there is nothing to rebuild.
 if (!Platform.isLoaded('create')) console.warn('[CE potions] create not present - skipping the Automatic Brewing rebuild')
 else StartupEvents.postInit(() => {
@@ -288,7 +288,7 @@ else StartupEvents.postInit(() => {
 		PMR.BY_ITEM.putAll(freshByItem)
 		console.log(`[CE potions] Automatic Brewing: rebuilt ${PMR.ALL.size()} recipes from PotionBrewing`)
 
-		// patcherMod's DragonBreathBrewing appended its splash-fluid + dragon's-breath-fluid
+		// Creative Common's DragonBreathBrewing appended its splash-fluid + dragon's-breath-fluid
 		// -> lingering-fluid recipes to PMR.ALL during commonSetup — the clear() above (postInit,
 		// runs later) just wiped them, so the dragon-breath lingering brews vanished from the
 		// JEI "Automatic Brewing" category. FLUID_BREWING still holds them; re-append so JEI
@@ -306,7 +306,7 @@ else StartupEvents.postInit(() => {
 	}
 
 	// reagent ids whose Automatic-Brewing recipes should be removed
-	const BLACKLIST = [global.item.dragon_breath] // lingering — replaced by patcherMod's fluid brew
+	const BLACKLIST = [global.item.dragon_breath] // lingering — replaced by Creative Common's fluid brew
 
 	const stacks = BLACKLIST.map(id => Item.of(id))
 

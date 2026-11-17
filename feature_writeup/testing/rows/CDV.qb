@@ -10,7 +10,7 @@
 @@text
 @@text Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CDV-01 to -04 PASS. SQ-CAL-06's locate and
 @@text `/dumpclimatecaves` need a group B world (superflat has no arid biome and no multi_noise overworld).
-@@text Needs `creativedevtools-1.0.0.jar` (`development/creativeDevtools/build/libs/`, `prep_srv.sh` adds it) and the patcherMod
+@@text Needs `creativedevtools-1.0.0.jar` (`development/creativeDevtools/build/libs/`, `prep_srv.sh` adds it) and the Creative Common
 @@text jar built in the same pass (no `devtools/`, with `util/BlockStateLookupHook` and `util/LevelRandomHook`). Same behavior
 @@text as before the carve: every row checks that the moved tools still run from the new jar. Group A.
 @@text
@@ -19,7 +19,7 @@
 @group A
 @commands Boot; `grep -E "\[creativedevtools\]\|creativedevtools" logs/latest.log \| head`; `grep -E "\[creativedevtools\]" logs/kubejs/server.log logs/kubejs/startup.log`
 @pass `[creativedevtools] loaded, members: [cdevperfbot, cdevcapture]` with no `NOT loaded`; startup log `[creativedevtools] core finished`; server log `[creativedevtools] server scripts ready`; no ERROR naming creativedevtools; `config/creativedevtools-common.toml` has `[debug.*]`, `[worldgen.mass_place]`, `[features]`, and the CE toml lost `[debug]` and `[worldgen.mass_place]` after Forge's correction
-@fails patcherMod jar older than the hooks (NoClassDefFoundError `BlockStateLookupHook`), or the script trees missing from the jar
+@fails Creative Common jar older than the hooks (NoClassDefFoundError `BlockStateLookupHook`), or the script trees missing from the jar
 @from batches/r1106spf/b1.qb
 bootexpect \[creativedevtools\] loaded, members: \[ceperfbot, cecapture\]
 bootreject \[creativedevtools\].*NOT loaded

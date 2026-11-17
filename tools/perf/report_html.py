@@ -211,7 +211,7 @@ def delta(cur, base):
 
 def render_ce(c, out):
     """The pack's own measured events (patcherMod creativecommon.*, perf.md 3.6)."""
-    out.append('<h2>Measured by the pack\'s hooks</h2><p class="note">Exact times from patcherMod\'s own JFR events, '
+    out.append('<h2>Measured by the pack\'s hooks</h2><p class="note">Exact times from Creative Common\'s own JFR events, '
                'not samples: every tick, every dimension, every chunk wait, every KubeJS handler call, every entity and '
                'block entity tick. Shares below are of the total server tick time.</p>')
     t = c.get('ticks')

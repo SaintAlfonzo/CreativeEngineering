@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text Target: patcherMod 1.1.03 installed in `mods/` 2026-10-27 13:22 (also carries the Armor Trims cache above); copy it into
+@@text Target: Creative Common 1.1.03 installed in `mods/` 2026-10-27 13:22 (also carries the Armor Trims cache above); copy it into
 @@text the scratch `mods/`. Two fresh group B worlds on the eval seed -8188900049893920259 (`tools/perf/eval/eval_server.sh setup`
 @@text works, JFR optional): `ftw_on` as shipped, `ftw_off` with `[worldgen.systems] firstTickWater = false` in
 @@text `config/creativeengineering-common.toml` before boot. Run the same commands in both, one server at a time. Count with

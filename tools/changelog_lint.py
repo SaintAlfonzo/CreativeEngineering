@@ -15,7 +15,7 @@ Errors (stop the deploy build):
   - nesting deeper than one sub-bullet level (sub-bullets are `  - ` exactly); `*` or `+` bullets; numbered lists
   - icon comments that don't name a well-formed `namespace:id`; any other HTML
   - tables, images, code blocks, quotes, `---` right under a text line (that makes a heading)
-  - emoji; dev words: patcherMod, KubeJS, mixin, CEConfig, .js / .java / .json, TODO, test ids (AB-12),
+  - emoji; dev words: Creative Common, KubeJS, mixin, CEConfig, .js / .java / .json, TODO, test ids (AB-12),
     TODO ids (family/sub #3), registry ids (namespace:id) outside icon comments
 Warnings: a bullet (with its continuation lines) over 300 characters; an intro over three sentences.
 

@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  * Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna. Structure placement,
  * frequencies, biome rules and fits, locate, earth and water fill, terrain adaptation, meta structures, sky islands,
  * bee nests, mob spawns and caps, named mobs, mooshrooms, leaf decay, raids glowing, Forgiving Void, the Farmer's
- * Structures donor. Nests More Mooblooms and Baby Mobs. Requires patcherMod ({@code creativeengineering}, later
+ * Structures donor. Nests More Mooblooms and Baby Mobs. Requires Creative Common ({@code creativeengineering}, later
  * Creative Common) and Creative Compat.
  *
  * Ids: the biome modifier codecs, the meta structure and piece types, the data (structures, dimensions, noise settings,
@@ -58,7 +58,7 @@ import java.util.regex.Pattern;
  * step 6). Old saves keep loading through the swap list (data/creativeworldgen/swaps),
  * {@link com.SaintAlfonzo.creativeworldgen.worldgen.LegacyIds} (structure starts, pieces, dimension keys) and
  * {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders). The registrations below are the
- * ones patcherMod's constructor made, in the same order.
+ * ones Creative Common's constructor made, in the same order.
  */
 @Mod(CreativeWorldgen.MOD_ID)
 public class CreativeWorldgen {
@@ -72,7 +72,7 @@ public class CreativeWorldgen {
     private static final String FILE = MOD_ID + "-common.toml";
 
     public CreativeWorldgen() {
-        // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
+        // The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
         // drops them from its file when Forge corrects it, and this file drops the [perf] keys that stayed there).
         // Must run before Forge reads the COMMON configs.
         boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CWGConfig.SECTIONS);
@@ -173,8 +173,8 @@ public class CreativeWorldgen {
                     + "|(?:mobCap[A-Za-z0-9]*|spawnChunksLevel[12]|spawnBand[A-Za-z0-9]*)(?=\\s*=))", Pattern.MULTILINE);
 
     /**
-     * The sections moved out of patcherMod's file. When this file already existed the carry-over did not run, and Forge
-     * drops the old sections from patcherMod's file on its next correction, so an edited value left there is lost: say
+     * The sections moved out of Creative Common's file. When this file already existed the carry-over did not run, and Forge
+     * drops the old sections from Creative Common's file on its next correction, so an edited value left there is lost: say
      * which ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
      */
     private static void warnOldKeys() {
@@ -191,7 +191,7 @@ public class CreativeWorldgen {
         while (m.find()) found.add(m.group(1));
         if (found.isEmpty()) return;
         LOGGER.warn("[creativeworldgen] config/{} still has sections and keys that moved to config/{}: {}. "
-                + "Creative Worldgen reads only its own file; copy any edited value over (patcherMod drops these from its file).",
+                + "Creative Worldgen reads only its own file; copy any edited value over (Creative Common drops these from its file).",
                 OLD_FILE, FILE, found);
     }
 }

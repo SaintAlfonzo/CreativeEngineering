@@ -28,7 +28,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * {@code mixin.cookingforblockheads} name CfB's types, so without CfB the JVM never loads one. The mixins
  * ({@code mixin.cookingforblockheads}, the cutting board and coaster offsets) are gated by {@code CDMixinPlugin}; the
  * assets and loot tables are the built-in pack {@code packs/cookingforblockheads/} ({@code compat.CompartmentPacks}).
- * The kitchen code lived in patcherMod; its saved data and tag ids keep their creativeengineering names.
+ * The kitchen code lived in Creative Common; its saved data and tag ids keep their creativeengineering names.
  */
 public final class CfbCompartment {
     /** Log tag of this compartment. */

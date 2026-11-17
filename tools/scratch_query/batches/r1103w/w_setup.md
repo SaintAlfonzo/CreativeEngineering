@@ -6,7 +6,7 @@ Batch writer: worldgen slice of run r1102b (scope.txt lines 46, 48, 67, 68, 70, 
 in `RES/vars.json` from W1 into W1b, W2, W3. Cross-boot files (census jsons, W1 log and world path, entity censuses)
 go to `$INST/perf/runs/r1103w/w/`. All shell steps run in `OUT/srv`.
 
-Jars: the instance `mods/` holds patcherMod 1.1.07 and Creative Calendar 1.0.0 of 2026-11-02 14:08 (same files as
+Jars: the instance `mods/` holds Creative Common 1.1.07 and Creative Calendar 1.0.0 of 2026-11-02 14:08 (same files as
 build/libs), CD 14:01; prep_srv.sh swaps nothing then. Check the times again right before each boot (gotchas: parallel
 installs). JFR: set `CE_PERF=0` on every prep (or `JFR_MAX=200m`); a 1 GB recording per boot is most of the disk.
 

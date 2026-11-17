@@ -17,7 +17,7 @@ Nothing here needs code, recipes, tags or dictionary ids. "L" in the test texts 
 3. **#2** (Open ST- tests) stays at Testing: it is the umbrella for the rest of section 8; tick what #1 covers.
 
 Setup for every group (from 8.0.0, adapted to a client):
-- The deployed instance (1.0.9, patcherMod `mods/creativeengineering-1.0.9.jar`), single player, a **new world** (every
+- The deployed instance (1.0.9, Creative Common `mods/creativeengineering-1.0.9.jar`), single player, a **new world** (every
   structure change is new-chunks-only). Seed 8675309 gives the scratch logs' coordinates as hints, but the scratch runs
   were mostly at `structureDensity` 4 and on older jars (1.0.6 / 1.0.7), so positions differ: use `/locate`.
 - Creative mode, `/gamerule doDaylightCycle false`, Distant Horizons on for LO-11 only (it slows flying tests).
@@ -35,7 +35,7 @@ Status Planned · Work none · TODO `structures/testing #3`
 Run the two 1.0.8 fixes that only a client can exercise.
 
 ### Now
-- **Superflat:** `mixin/RegistryLoaderPresetOverworldMixin.java` (patcherMod, 1.0.8+) keeps a non-multi-noise preset
+- **Superflat:** `mixin/RegistryLoaderPresetOverworldMixin.java` (Creative Common, 1.0.8+) keeps a non-multi-noise preset
   overworld (flat, debug, single biome) after the data pack `dimension/overworld.json` overrides (ours from
   `biomeLayout`, Terralith's, Tectonic's). Log line (`RegistryLoaderPresetOverworldMixin.java:60`): `[worldgen] kept
   the world's own overworld generator (...): data pack dimension/overworld.json overrides skipped`. Passed on a

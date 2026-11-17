@@ -8,7 +8,7 @@ AppleSkin 2.4.2 adds food bars only in RenderTooltipEvent.GatherComponents and n
 
 Audit 2026-10-05 (bytecode call-graph scan of mods/, then decompiled each hit). Unsupported, food-relevant: JEI 11.8.1 recipe slots + catalyst column; Lightman's Currency trade buttons/storage tabs; doapi recipe book (Let's Do: ghost slots + results); FTB Quests task/reward/description item hovers (FTB TooltipList draws text itself); Wares AgreementScreen; Pretty Pipes ItemTerminalWidget; AE2 crafting status/plan tables + pattern-encoding amount slots + guidebook; Patchouli GuiBook; PNC Amadron offers; TrashSlot slot. Not food-relevant: Etched album jukebox, ProjectRed RedUI ItemStackNode, CreativeCore config GUIs, Sophisticated stonecutter/chipped upgrade lists, AE2 stonecutting panel, exposureBackport ItemListScreen (our code).
 
-**Fixed 2026-10-05** (patcherMod 1.0.5 build/libs):
+**Fixed 2026-10-05** (Creative Common 1.0.5 build/libs):
 - JEI: `JeiRecipeLayoutTooltipMixin` (RecipeLayout.drawOverlays) + `JeiRecipesGuiTooltipMixin` (static `lambda$render$6` = catalysts). Redirect slot.getTooltip() to stash getDisplayedIngredient(), redirect JeiTooltip.draw to setIngredient first. Side effect: recipe slots now also show tooltip images (bundles etc.), like the item list.
 - LC: `LCEasyScreenHelperMixin` tags each line from EasyScreenHelper.getTooltipFromItem in `compat/LightmansTooltipStacks` (Guava weak identity map); `LCEasyGuiGraphicsMixin` HEAD-cancels EasyGuiGraphics.renderComponentTooltip(List,II) when a tagged line is present and uses Forge's overload with the stack. Known gap: a custom-named sale whose item tooltip is one line (name replaced) has no tagged line left.
 
@@ -25,7 +25,7 @@ Checked fine: vanilla recipe book (Forge passes stack), Polymorph, Sol food book
 - TrashSlotGuiHandlerMixin redirect; PrettyPipesTerminalTooltipMixin; WaresAgreementTooltipMixin; PatchouliBookTooltipMixin (ordinal 0).
 - FTB: `FtbTooltipStacks` remembered from GuiHelper.addStackTooltip / ItemTask.addMouseOverHeader / QuestDescriptionField.addMouseOverText (ItemStack.m_41651_ redirect); ScreenWrapper.m_6305_ + MenuScreenWrapper.m_7027_ redirect TooltipList.render -> Forge renderComponentTooltip(..., font, stack); forget at HEAD.
 - AE2: `AeTooltipStacks` pending set before AbstractTableRenderer.render's drawTooltipWithHeader and PatternEncodingTermScreen.m_7025_'s drawTooltip; AEBaseScreen.drawTooltip HEAD draws with stack. Guidebook ItemTooltip.getLines returns ForgeHooksClient.gatherTooltipComponents.
-- New compile libs in patcherMod/libs: CCK, PrettyPipes, FTB library + quests, Wares, Patchouli, AE2.
+- New compile libs in creativeCommon/libs: CCK, PrettyPipes, FTB library + quests, Wares, Patchouli, AE2.
 
 **Why:** user asked for the audit, then for JEI + LC fixes. Fix pattern for the others: same idea, see [patchermod-coremod](patchermod-coremod.md).
 **How to apply:** if the JEI jar changes from 11.8.1, re-check the lambda name `lambda$render$6`.

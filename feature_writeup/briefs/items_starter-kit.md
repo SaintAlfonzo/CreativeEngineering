@@ -9,7 +9,7 @@ New tests here are placeholders `FP-newN`, numbered when queued.
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `starter-kit #1` kit contents | KubeJS (+ patcherMod or KubeJS for consumable MCA tools) | Needs the "which books" answer first |
+| 1 | `starter-kit #1` kit contents | KubeJS (+ Creative Common or KubeJS for consumable MCA tools) | Needs the "which books" answer first |
 | - | `starter-kit #2` kit never given | Testing | Built, needs play (below) |
 
 ---
@@ -50,7 +50,7 @@ comb and needle and thread in the kit too, and made single-use.
 4. Consumable comb and needle: a KubeJS `ItemEvents.rightClicked` on `i.comb` / `i.needle_and_thread` (and
    `ItemEvents.entityInteracted` for the villager path) that shrinks the held stack by 1 on the server after MCA opens
    its screen (`e.item.count--`, not canceled). If KubeJS sees the event before MCA's `use` and the order matters,
-   move it to a patcherMod mixin on `NeedleAndThreadItem#use` / `CombItem#use` RETURN (and `interactLivingEntity`).
+   move it to a Creative Common mixin on `NeedleAndThreadItem#use` / `CombItem#use` RETURN (and `interactLivingEntity`).
 5. Tooltips: one lang line each ("Single use") through the pack's tooltip route (`ui/tooltips`), so players know.
 6. Writeup: feature_porting.md 1.1 (kit contents), the starter_kit.js header comment line 13.
 

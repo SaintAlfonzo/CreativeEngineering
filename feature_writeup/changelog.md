@@ -18,9 +18,9 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 | Part | Status | Where it will live |
 |---|---|---|
 | Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativecommon/changelog/` (`1.1.01.md` to `1.1.04.md` frozen, `unreleased.md` working list) |
-| Book button on the title screen and the pause menu, with an update popup | BUILT | patcherMod `changelog/ChangelogButtons.java` (`ScreenEvent.Init.Post`, `ScreenEvent.Render.Post`) |
-| Changelog screen (version list left, scrolling text right, Forge Mods-screen layout) | BUILT | patcherMod `changelog/ChangelogScreen.java`, `ChangelogPanel.java` |
-| Markdown -> vanilla text (commonmark-java 0.21.0, relocated into the jar) | BUILT | patcherMod `changelog/ChangelogMarkdown.java` |
+| Book button on the title screen and the pause menu, with an update popup | BUILT | Creative Common `changelog/ChangelogButtons.java` (`ScreenEvent.Init.Post`, `ScreenEvent.Render.Post`) |
+| Changelog screen (version list left, scrolling text right, Forge Mods-screen layout) | BUILT | Creative Common `changelog/ChangelogScreen.java`, `ChangelogPanel.java` |
+| Markdown -> vanilla text (commonmark-java 0.21.0, relocated into the jar) | BUILT | Creative Common `changelog/ChangelogMarkdown.java` |
 | Version list + read marker (newest version the player has opened) | BUILT | `changelog/ChangelogStore.java`; `config/creativecommon/changelog_seen.txt` (player config, git-ignored) |
 | Deploy integration (ship `unreleased.md` as `<version>.md`, rename on snapshot, deployed files frozen, lint) | BUILT | `tools/build_deploy.py` (`check_changelog`, `freeze_changelog`), `tools/changelog_lint.py` |
 | Writing rules for entries | DESIGN | section 3.6 of this file |
@@ -57,14 +57,14 @@ changes again.
 
 | Need | Existing piece | Why it fits |
 |---|---|---|
-| Add a button to the title screen and pause menu | Forge `ScreenEvent.Init.Post` + `event.addListener(...)` | patcherMod already listens to client screen events (`devtools/DisplayNameDump.java`); no FancyMenu needed |
+| Add a button to the title screen and pause menu | Forge `ScreenEvent.Init.Post` + `event.addListener(...)` | Creative Common already listens to client screen events (`devtools/DisplayNameDump.java`); no FancyMenu needed |
 | Draw the popup over the menu | Forge `ScreenEvent.Render.Post` | draws after the screen, like Quark's bubble |
 | Screen layout | Forge `net.minecraftforge.client.gui.ModListScreen` | a list on the left and an `InfoPanel` on the right that wraps text and opens clicked links; we copy its shape |
 | Scrolling text area | Forge `net.minecraftforge.client.gui.widget.ScrollPanel` | scrollbar, mouse wheel and clipping done; `ModListScreen.InfoPanel` extends it |
 | Version list | vanilla `ObjectSelectionList` | same as the Forge mod list |
 | Styling | vanilla `Component` + `Style` (bold, italic, color, `ClickEvent.OPEN_URL`), `Font.split` for wrapping | links get vanilla's "open this link?" confirm screen through `Screen.handleComponentClicked` |
 | Book icon | vanilla's written book item (`ItemRenderer.renderGuiItem`, 1.19.2 has no `GuiGraphics`) | no new texture; the same call JEI and WTHIT use |
-| Markdown parsing | **commonmark-java** (BSD-2-Clause, about 200 KB, no dependencies), shaded into the patcherMod jar | the reference CommonMark parser; handles nesting, escapes and emphasis edge cases a hand parser gets wrong |
+| Markdown parsing | **commonmark-java** (BSD-2-Clause, about 200 KB, no dependencies), shaded into the Creative Common jar | the reference CommonMark parser; handles nesting, escapes and emphasis edge cases a hand parser gets wrong |
 | Text files players get without a restart | KubeJS's `kubejs/assets/` resource pack | loaded before the title screen, reloaded by F3+T, already shipped by build_deploy (`KUBEJS_CLASSES`) |
 
 ### 2.2 Checked in the jars (2026-10-21)
@@ -246,12 +246,12 @@ moved to `com.SaintAlfonzo.creativeengineering.shadow.commonmark`. The source co
 (`compileOnly`) and imports the relocated package; the `jar` task copies its classes in. So `jar -> reobfJar ->
 archiveJar / installToMods` is unchanged (reobf leaves the library classes alone), and nothing in build-logic
 changed. The jar gains 170 classes (about 370 KB) and `creativeengineering-NOTICE-commonmark.txt` (BSD-2-Clause).
-Rebuilds stay byte-identical. Dev runs (`runClient`) would not see the library (not on the run classpath); patcherMod
+Rebuilds stay byte-identical. Dev runs (`runClient`) would not see the library (not on the run classpath); Creative Common
 is not run in dev.
 
 ## 4. Limits and decisions
 
-- **Text lives in `kubejs/assets`, not in the patcherMod jar.** Rejected: text in the jar (a rebuild for every
+- **Text lives in `kubejs/assets`, not in the Creative Common jar.** Rejected: text in the jar (a rebuild for every
   bullet, and the jar version would gate the text). Rejected: a new top-level `changelog/` folder in the instance
   (a new build_deploy category, and no F3+T reload).
 - **Own screen, not Patchouli.** Patchouli is installed and has formatted books, but entries are JSON page by
@@ -282,7 +282,7 @@ is not run in dev.
 
 - [../kubejs/assets/creativecommon/changelog/](../kubejs/assets/creativecommon/changelog/)
 - [../development/patcherMod/src/main/java/com/SaintAlfonzo/creativecommon/changelog/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativecommon/changelog/)
-- [../development/patcherMod/build.gradle](../development/patcherMod/build.gradle) (`shade`, `relocateCommonmark`), [../development/patcherMod/NOTICE-commonmark.txt](../development/patcherMod/NOTICE-commonmark.txt)
+- [../development/creativeCommon/build.gradle](../development/creativeCommon/build.gradle) (`shade`, `relocateCommonmark`), [../development/creativeCommon/NOTICE-commonmark.txt](../development/creativeCommon/NOTICE-commonmark.txt)
 - [../tools/build_deploy.py](../tools/build_deploy.py) (`KUBEJS_CLASSES`, `CONFIG_CLASSES`, `check_changelog`, `freeze_changelog`)
 - [../tools/changelog_lint.py](../tools/changelog_lint.py)
 - [../tools/test_changelog.sh](../tools/test_changelog.sh), [../tools/changelog_test/](../tools/changelog_test/)
@@ -291,8 +291,8 @@ is not run in dev.
 
 ## 6. Offline checks (2026-10-21, all pass)
 
-`bash tools/test_changelog.sh` (build the patcherMod classes first) runs:
-- `ChangelogTest.java` (headless, real patcherMod classes + the relocated commonmark): version ordering (`1.0.10`
+`bash tools/test_changelog.sh` (build the Creative Common classes first) runs:
+- `ChangelogTest.java` (headless, real Creative Common classes + the relocated commonmark): version ordering (`1.0.10`
   after `1.0.9`, `1.1.01` after `1.0.10`, `1.1.01` equal to `1.1.1`), bullet detection, and Markdown -> blocks on
   the 2.3 example: kinds, title / date, label colors, bold label, italic, gold backticks, link click action
   (http/https only), sub-bullet depth, icon id, hidden HTML comment. Then every file in the changelog folder
@@ -343,7 +343,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   documents everything since 1.0.9, brief historic changelogs planned, families per changelog with an optional
   icon comment, book icon, Quark-style update popup acknowledged on first read, pause-menu button on by default.
   Nothing built.
-- 2026-10-21: built. patcherMod `changelog/` (5 classes), CEConfig `[changelog]`, 5 lang keys, commonmark 0.21.0
+- 2026-10-21: built. Creative Common `changelog/` (5 classes), CEConfig `[changelog]`, 5 lang keys, commonmark 0.21.0
   relocated into the jar, `changelog_lint.py`, build_deploy staging / snapshot / frozen check, `test_changelog.sh`.
   Working list started with this feature's own bullet. Changes from the design: the bob is Quark's one-pixel
   step (the design said sine), changelog files are KUBEJS class `client` (said runtime), the library is
@@ -381,7 +381,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
   the 3.6 brevity rule for this one file): everything the pack adds, changes or removes against vanilla 1.19.2 and the
   stock mods, 424 bullets in 57 families. Sources: the deploy record `deploy/history/1.0.0.json` (mod list, file
   hashes), the initial commit 609cd21 (657 of 687 kubejs files and every config byte-identical to the record), and the
-  deployed jar `development/patcherMod/jar_archive/creativeengineering-1.0.0.jar` as the truth for Java (the 609cd21
+  deployed jar `development/creativeCommon/jar_archive/creativeengineering-1.0.0.jar` as the truth for Java (the 609cd21
   source is newer). Left out as post-deploy: everything dated 2026-09-27 in the 1.0.0-era writeups and every class
   missing from the jar (surface sticky facing, camo speed, sinking, WTHIT Run Speed, Lootr container swaps, pool
   tuner, Jetpack tooltip freeze fix, NVIDIA exit fix, Framed Copycat rename, D&D asphalt friction). Not shipped in

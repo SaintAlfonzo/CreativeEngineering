@@ -7,7 +7,7 @@ Feature writeup: [archery.md](../archery.md) (test prefix `AR-`, last id AR-18).
 
 | Order | Row | Status | Work |
 |---|---|---|---|
-| 1 | `tooling/conventions #7` NCH `ieBlueprint` repeated inputs | Bug | patcherMod jar helper (`neoCraftHelper.js`), rebuild + restart |
+| 1 | `tooling/conventions #7` NCH `ieBlueprint` repeated inputs | Bug | Creative Common jar helper (`neoCraftHelper.js`), rebuild + restart |
 | - | `gear/archery #2`, `#5` | Testing | built 2026-10-22, see Built, needs play |
 | - | `gear/archery #1`, `#3`, `#4` | Complete | see Built, needs play |
 
@@ -17,7 +17,7 @@ blocks two archery blueprint recipes (spectral, split arrow); it fixes 7 recipes
 ---
 
 ## tooling/conventions #7: `NCH.ieBlueprint`: repeated inputs never match
-Status **Bug** · Work: KubeJS (helper in the patcherMod jar) · id `tooling/conventions #7`
+Status **Bug** · Work: KubeJS (helper in the Creative Common jar) · id `tooling/conventions #7`
 
 ### Goal
 A blueprint recipe that lists the same ingredient more than once must be craftable in the Engineer's Workbench. Fix it
@@ -70,7 +70,7 @@ once in the helper, not at the call sites.
    recipe id changes.
 2. Leave the call sites as they are (the merge covers them). Optional: write `{ id: i.arrow, count: 4 }` in archery.js
    275-276 for readability (the `{ id, count }` form, as in blueprints.js and transport.js:76).
-3. Rebuild and install patcherMod, full restart (the helper is in the jar's `kubejs_startup/`).
+3. Rebuild and install Creative Common, full restart (the helper is in the jar's `kubejs_startup/`).
 4. archery.md 5 (file map line for `NCH.ieBlueprint`) and the AR tests below; pack_hygiene.md if it lists helper bugs.
 
 ### Ids and data

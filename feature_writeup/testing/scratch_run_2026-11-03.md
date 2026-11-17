@@ -10,7 +10,7 @@ Perf session `r1103` (`perf/sessions/r1103/`), opened 00:43, JFR on, `JFR_MAX=20
 ## 1. Scope
 
 Taken:
-- Boot 0: smoke boot of the never-booted jars (wave 5 Creative Worldgen, patcherMod 1.1.08, CD and CB 00:08), dumps.
+- Boot 0: smoke boot of the never-booted jars (wave 5 Creative Worldgen, Creative Common 1.1.08, CD and CB 00:08), dumps.
 - Slice A: the 78 never-run server rows of SQ-CWG, SQ-CDJ6 (Salt, SQ-CNG, End's member, SQ-GLD, SQ-MDL, Pancake,
   Swappers) and SQ-CDJ7 (`tools/scratch_query/batches/r1103/sliceA_sections.txt`).
 - Slice B: the 96 other never-run server rows (`sliceB_sections.txt`); 38 batched, 58 skipped (`sB_skip.md`).
@@ -36,7 +36,7 @@ Checked 00:43. `prep_srv.sh` swaps in build jars newer than `mods/`; the srv jar
 
 | Jar | `mods/` | build/libs | Rows |
 |---|---|---|---|
-| creativeengineering-1.1.08 (patcherMod) | 2026-11-02 23:20 | 2026-11-03 00:08 | all |
+| creativeengineering-1.1.08 (Creative Common) | 2026-11-02 23:20 | 2026-11-03 00:08 | all |
 | creativedelight-1.0.0 | 2026-11-03 00:08 | 2026-11-03 00:48 (runner rebuild, LemonTreePickYieldMixin fix) | food, CD members |
 | creativebrewing-1.0.0 | 2026-11-03 00:08 | 2026-11-03 00:08 | brewing |
 | creativeworldgen-1.0.0 | 2026-11-02 23:16 | 2026-11-02 23:16 | SQ-CWG, loot |
@@ -185,7 +185,7 @@ worldgen set. Disk: the owner OK'd clearing old session scratchpads (11 GB freed
   `tools/structure_tuning_sim.js`, the four `tools/test_*.sh` Rhino harness headers and `RhinoRun`, `RhinoBeeNests`,
   `RhinoMobSpawns`, `RhinoWildFlowers` read the scripts from `kubejs/data/creativeworldgen/kubejs/worldgen/`
   (they still read `kubejs/server_scripts/worldgen/`, removed by the carve). `test_worldgen_tools.sh` then passes all 12 groups.
-- Jars: patcherMod 1.1.08 build 2026-11-03 01:30, CD build 01:31, Devtools build 2026-11-02 22:46, Creative Labels 1.0.1
+- Jars: Creative Common 1.1.08 build 2026-11-03 01:30, CD build 01:31, Devtools build 2026-11-02 22:46, Creative Labels 1.0.1
   (prep_srv.sh swaps, newer than `mods/`); Creative Worldgen 2026-11-02 23:16 (= `mods/`, source unchanged since).
 - Perf session `r1103w`, JFR on with `JFR_MAX=200m` per boot (disk).
 

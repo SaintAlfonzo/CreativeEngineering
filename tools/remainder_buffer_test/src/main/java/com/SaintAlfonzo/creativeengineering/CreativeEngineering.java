@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-/** Test stand-in for patcherMod's main class: only what the remainder buffer and the oven need. */
+/** Test stand-in for Creative Common's main class: only what the remainder buffer and the oven need. */
 @Mod(CreativeEngineering.MODID)
 public class CreativeEngineering {
     public static final String MODID = "creativeengineering";

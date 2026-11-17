@@ -20,14 +20,14 @@
 | Part | Status | Where |
 |---|---|---|
 | Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |
-| Mixing in a placed jar (one item per slot, filled bottom to top) | BUILT 2026-10-21 | patcherMod `mixin/SupplementariesJarTileMixin`, `mixin/ItemDisplayTileAccessor`, rules in `compat/JarMixing` |
+| Mixing in a placed jar (one item per slot, filled bottom to top) | BUILT 2026-10-21 | Creative Common `mixin/SupplementariesJarTileMixin`, `mixin/ItemDisplayTileAccessor`, rules in `compat/JarMixing` |
 | Layers drawn per item (placed jar, jar item) | BUILT 2026-10-21 | `mixin/SupplementariesJarRendererMixin`, `mixin/SupplementariesJarItemRendererMixin` (client) |
 | Jar item tooltip, one line per kind | BUILT 2026-10-21 | `mixin/SupplementariesJarItemTooltipMixin` |
 | WTHIT "Contents" line lists kinds | BUILT 2026-10-21 | `compat/WthitHolderContents` ([wthit_lines.md](wthit_lines.md) 2.3) |
 | Every soup and stew as a jar soft fluid (section 9) | built, scratch server PASSED 2026-10-22 (SQ-MJ-01, SQ-MJ-02: registry, pour in and out, containers; data, KubeJS tree); in game: colors and WTHIT (MJ-11, MJ-12) | `kubejs/data/creativeengineering/moonlight/soft_fluids/`, `tools/gen_soup_soft_fluids.py` |
 
 Scratch server 2026-10-21: `/jartest` 18 pass, 0 fail (server side: tags, storage, item handler, comparator, old jars,
-jar item). patcherMod jar installed in `mods/` 2026-10-21. In game: MJ-01 to MJ-10 pending (rendering, tooltip, WTHIT are
+jar item). Creative Common jar installed in `mods/` 2026-10-21. In game: MJ-01 to MJ-10 pending (rendering, tooltip, WTHIT are
 client-only and untested).
 TODO `baking/baked-goods #11`. Knobs: Supplementaries `[functional.jar]` capacity (12) and jar_cookies; which items
 mix = the family tags.

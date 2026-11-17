@@ -17,7 +17,7 @@ import umpaz.farmersrespite.common.block.entity.KettleBlockEntity;
 
 /**
  * WTHIT plugin: the Farmer's Respite Kettle's tank, "Tank: Black Tea 3 / 4" (farmers_respite.md K11), beside the brew
- * progress and patcherMod's "Holding" leftover line. Client side: the tank's fluid and level reach the client with
+ * progress and Creative Common's "Holding" leftover line. Client side: the tank's fluid and level reach the client with
  * the block (block entity sync and {@code water_level}). Declared in CD's {@code waila_plugins.json} with Farmer's
  * Respite required.
  */

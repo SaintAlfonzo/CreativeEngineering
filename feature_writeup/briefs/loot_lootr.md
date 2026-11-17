@@ -6,7 +6,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# loot`, Sub `lootr`. Refere
 (container swaps). Code / data: [config/lootr-common.toml](../../config/lootr-common.toml),
 [loot_container_swaps.json](../../kubejs/generation_scripts/worldgen/loot_container_swaps.json),
 [loot_container_audit.md](../../kubejs/generation_scripts/worldgen/loot_container_audit.md),
-patcherMod `worldgen/LootContainerSwaps.java` + `mixin/StructureTemplateLootSwapMixin.java`,
+Creative Common `worldgen/LootContainerSwaps.java` + `mixin/StructureTemplateLootSwapMixin.java`,
 [tools/lootr_fixed_containers.py](../../tools/lootr_fixed_containers.py), [tools/port_structure_jars.py](../../tools/port_structure_jars.py),
 [config/quark-common.toml](../../config/quark-common.toml) `[building.variant_chests]`.
 
@@ -18,7 +18,7 @@ Open rows: #1, #2 (both Planned). No Testing / Complete rows in this sub.
 
 - **Lootr 0.4.29.76 has no item frames** (verified: no frame entity or class in the jar; only chests, trapped
   chests, barrels, shulkers, the inventory block and the chest minecart). `convert_elytras = true` only turns the End
-  ship's elytra frame into a chest. "Item frame integration" is therefore new patcherMod code, not a config switch.
+  ship's elytra frame into a chest. "Item frame integration" is therefore new Creative Common code, not a config switch.
 - **The resource pack already skins most Lootr textures** (verified, `LootrChestRetexture_v1.1_1.19.zip`, load order 22):
   `chest`, `chest_opened`, `shulker`, `shulker_opened` and the barrel set. It does **not** cover the trapped chest
   (`lootr:chest_trapped`, `chest_trapped_opened`, which `LootrChestBlockRenderer` uses for every Lootr trapped chest),
@@ -38,11 +38,11 @@ Open rows: #1, #2 (both Planned). No Testing / Complete rows in this sub.
 **Build groups and order:**
 
 1. **#1 step 1** (eugene, one tool run) any time; then `loot/lootjs-layer #3` regenerates the catalog.
-2. **#2a textures** (Quark override + trapped chest + barrel typo): client-only, small; do with the next patcherMod
+2. **#2a textures** (Quark override + trapped chest + barrel typo): client-only, small; do with the next Creative Common
    or kubejs/assets change.
 3. **#1 steps 2-4** (jar templates with fixed contents, the verse chest): after `loot/lootjs-layer #3` (fresh audit),
    alongside `loot/tables #1 / #2` (which may replace some fixed chests with themed tables instead).
-4. **#2b item frames:** last; its own patcherMod feature with a decision first.
+4. **#2b item frames:** last; its own Creative Common feature with a decision first.
 
 ---
 
@@ -56,7 +56,7 @@ becomes per-player.
 
 ### Now
 - Lootr converts natively: chest, trapped chest, barrel, shulker boxes, Quark chests (`convert_quark`), the
-  `forge:chests/wooden` and `forge:chests/trapped` tags. Swaps (patcherMod, `processBlockInfos` RETURN) turn IE
+  `forge:chests/wooden` and `forge:chests/trapped` tags. Swaps (Creative Common, `processBlockInfos` RETURN) turn IE
   crates, FD cabinets / baskets into barrels and PNC reinforced chests into chests.
 - [loot_container_audit.md](../../kubejs/generation_scripts/worldgen/loot_container_audit.md) (2026-10-04) "NOT
   converted" with a table: 12 `minecraft:dispenser` (Unwrecked Ships, `jungle_temple_dispenser` arrows and
@@ -128,7 +128,7 @@ becomes per-player.
 ---
 
 ## lootr #2: Lootr item frames and textures
-Status Planned / Work resource pack / patcherMod / `loot/lootr #2`
+Status Planned / Work resource pack / Creative Common / `loot/lootr #2`
 
 ### Goal
 Every Lootr container shows the resource pack's Create-style skin (including Quark's variants and trapped chests),
@@ -150,7 +150,7 @@ and (separately) item frames that structures place with an item give each player
 
 ### Build
 **2a, textures (client side; kubejs/assets is shipped to clients):**
-1. Quark variants, pick D1. Recommended: a patcherMod client mixin, no copied art:
+1. Quark variants, pick D1. Recommended: a Creative Common client mixin, no copied art:
    ```java
    @Pseudo @Mixin(targets = "vazkii.quark.integration.lootr.client.LootrVariantChestRenderer", remap = false)
    abstract class QuarkLootrChestSkinMixin {
@@ -174,7 +174,7 @@ and (separately) item frames that structures place with an item give each player
 4. Check the Lootr chest minecart and the held item (`LootrChestItemRenderer`) pick up the same sprites (unverified;
    look in game).
 
-**2b, item frames (patcherMod, after D3):**
+**2b, item frames (Creative Common, after D3):**
 1. Mark structure frames: mixin into `StructureTemplate` entity placement (Mojang `placeEntities`; take the SRG name
    from the mapped jar, the pack's mixins use SRG names with `remap = false`) and tag every `ItemFrame` / glow frame
    that is created with an item: `persistentData.putBoolean("creativeengineering:loot_frame", true)` and an empty
@@ -192,14 +192,14 @@ and (separately) item frames that structures place with an item give each player
 - Structure tags that make Quark swap chests: `quark:<type>_chest_structures` (16 files in the jar; the pack adds none).
 
 ### Decisions
-- **D1 Quark chests:** (a) patcherMod mixin, as above (recommended: no copied third-party art, follows Lootr's own
+- **D1 Quark chests:** (a) Creative Common mixin, as above (recommended: no copied third-party art, follows Lootr's own
   texture switches); (b) copy the pack's two chest PNGs over the 64 Quark `lootr_*` sprites in `kubejs/assets/quark/`
   (no code, but redistributes the pack's art 32 times and ignores `vanilla_textures`); (c) `"Replace Worldgen Chests"
   = false` in quark-common.toml (structures then place vanilla chests, which Lootr skins via the pack; loses Quark's
   wood-matched chests after looting; Quark chests placed directly by templates still convert to Quark variants).
 - **D2 trapped-chest art:** new texture (recommended) or point Lootr's trapped sprite at the plain chest (no visual
   warning that it is trapped; not recommended).
-- **D3 item frames:** worth a patcherMod feature? Recommend yes but small: only frames placed by structure templates,
+- **D3 item frames:** worth a Creative Common feature? Recommend yes but small: only frames placed by structure templates,
   take-once per player, no GUI. Confirm with the user which frames matter (YUNG's stronghold / fortress / desert
   temple frames are the main source).
 

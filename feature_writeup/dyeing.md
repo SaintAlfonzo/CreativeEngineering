@@ -159,11 +159,11 @@ Not soap cases: Botania mossy apothecary (its own block), sandy waystone (a styl
 | # | Proposal | Work | Size |
 |---|---|---|---|
 | P1 | Add the 2.5.1 tag-joined members to `#creativecompat:no_world_dye` | KubeJS tag via `global.tags` | small |
-| P2 | Soap on unclean blocks (2.7): mossy, overgrown, rusty, dirty, sandy, ashen, rusted IW iron; a pair list generated from the dump and applied by the same soap hook | patcherMod (soap mixin on `SoapWashableHelper`), generator | medium |
-| P3 | Fix soap targets: valve handle to copper, toolbox to brown, chalk mark removed | patcherMod (same hook) | small |
-| P4 | Soap clears block-entity colours: CfB units, Create belts / nixie / flap displays, Steam Rails, PneumaticCraft, framed target, cat collars | patcherMod, one adapter per mod | medium |
-| P5 | Infix color families (2.6) as color sets (Moonlight lets addons register sets) | patcherMod | medium |
-| P6 | In-world dye for block-entity sets (2.3) with block-entity carry-over, at least banners, shulker boxes, presents, flags | patcherMod (replace the skip with a copying swap) | medium, needs a dupe check |
+| P2 | Soap on unclean blocks (2.7): mossy, overgrown, rusty, dirty, sandy, ashen, rusted IW iron; a pair list generated from the dump and applied by the same soap hook | Creative Common (soap mixin on `SoapWashableHelper`), generator | medium |
+| P3 | Fix soap targets: valve handle to copper, toolbox to brown, chalk mark removed | Creative Common (same hook) | small |
+| P4 | Soap clears block-entity colours: CfB units, Create belts / nixie / flap displays, Steam Rails, PneumaticCraft, framed target, cat collars | Creative Common, one adapter per mod | medium |
+| P5 | Infix color families (2.6) as color sets (Moonlight lets addons register sets) | Creative Common | medium |
+| P6 | In-world dye for block-entity sets (2.3) with block-entity carry-over, at least banners, shulker boxes, presents, flags | Creative Common (replace the skip with a copying swap) | medium, needs a dupe check |
 
 ### 2.9 In-game checks
 
@@ -233,7 +233,7 @@ Add soap to every block in 2.4 "Dye works, soap does not", except sign text:
 | Glazed terracotta | No (no undyed target), unchanged |
 | Sign text | Excluded: soap keeps wiping the whole text |
 
-One adapter per mod in patcherMod, on the same soap hook as S1 (`SoapWashableHelper`).
+One adapter per mod in Creative Common, on the same soap hook as S1 (`SoapWashableHelper`).
 
 ### 3.5 New dye and soap families (P5)
 
@@ -285,19 +285,19 @@ Floral and Botania mossy apothecary: the apothecary is its own block and is not 
 | Hoe, right-click | Muddy mangrove roots | Mangrove roots; hoe takes durability (like tilling) |
 | Shears | Floral blocks (Floral Enchantment 34) | Mossy cobblestone / stone bricks, flowers off; nothing drops |
 
-Overgrown and floral shears reuse IW's `moss_shearing` approach where it fits (W3), as a tool-action hook in patcherMod.
+Overgrown and floral shears reuse IW's `moss_shearing` approach where it fits (W3), as a tool-action hook in Creative Common.
 
 ### 3.8 Plan
 
 | Step | Work | Where |
 |---|---|---|
-| 1 | Disables (3.1) and the Botania tag entries | KubeJS tag via `global.tags`; patcherMod for colored water, turtle, banner pattern checks |
-| 2 | Soap targets (3.3) | patcherMod soap hook |
-| 3 | Dye with block-entity carry-over (3.2) | patcherMod, `SupplementariesDyeBlocksMixin` |
-| 4 | Soap adapters (3.4) | patcherMod, one per mod |
-| 5 | New families (3.5), glow two-step, glow ink (1 per block) | patcherMod |
-| 5b | Crushed glow ink dye, chalk dyeing wool / carpet, glow chalk (3.8a) | KubeJS / patcherMod items, `global.item` keys |
-| 6 | Unclean pairs and tool interactions (3.6, 3.7) | patcherMod hook plus generator `tools/*.py` |
+| 1 | Disables (3.1) and the Botania tag entries | KubeJS tag via `global.tags`; Creative Common for colored water, turtle, banner pattern checks |
+| 2 | Soap targets (3.3) | Creative Common soap hook |
+| 3 | Dye with block-entity carry-over (3.2) | Creative Common, `SupplementariesDyeBlocksMixin` |
+| 4 | Soap adapters (3.4) | Creative Common, one per mod |
+| 5 | New families (3.5), glow two-step, glow ink (1 per block) | Creative Common |
+| 5b | Crushed glow ink dye, chalk dyeing wool / carpet, glow chalk (3.8a) | KubeJS / Creative Common items, `global.item` keys |
+| 6 | Unclean pairs and tool interactions (3.6, 3.7) | Creative Common hook plus generator `tools/*.py` |
 | 7 | Regenerate the JEI world tabs (`/dumpworldjei`, `/cdevgen run jei_world`); rows for the new pairs | tools |
 
 Player changelog: add bullets under the dyeing family when each step is built (none yet: nothing built). Banner and glass

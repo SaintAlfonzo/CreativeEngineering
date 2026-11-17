@@ -49,7 +49,7 @@ public abstract class AbstractItemBlock extends HorizontalDirectionalBlock {
    @Override
    public List<ItemStack> getDrops(BlockState state, LootContext.Builder params) {
       List<ItemStack> droppedStacks = super.getDrops(state, params);
-      // Port: a block with its own loot table (1.2.0's way, still used by the pack's patcherMod dishes) drops only
+      // Port: a block with its own loot table (1.2.0's way, still used by the pack's Creative Common dishes) drops only
       // that; 1.7.0 ships none for its food blocks, so their drops come from the code below.
       if (!droppedStacks.isEmpty()) {
          return droppedStacks;

@@ -8,9 +8,9 @@
 @@jars creativedelight
 @@sources feature_writeup/hearth_and_harvest.md
 @@text
-@@text Needs patcherMod and Creative Delight both built 2026-10-31 after 14:45 (can moved into `backportedHearth`
-@@text 1.4.1-ce-19.2-02; patcherMod without `wateringcan/`) and CD `hearthandharvest/recipes.js`, `tags.js`. Supersedes the
-@@text patcherMod build note of SQ-WC (the SQ-WC checks still apply, on `golden_watering_can` for the 16 / 3x3 numbers).
+@@text Needs Creative Common and Creative Delight both built 2026-10-31 after 14:45 (can moved into `backportedHearth`
+@@text 1.4.1-ce-19.2-02; Creative Common without `wateringcan/`) and CD `hearthandharvest/recipes.js`, `tags.js`. Supersedes the
+@@text Creative Common build note of SQ-WC (the SQ-WC checks still apply, on `golden_watering_can` for the 16 / 3x3 numbers).
 @@text Group A (superflat), a bot player.
 @@text
 @@text | ID | Group | Commands | Expected | If it fails |
@@ -19,7 +19,7 @@
 @group A
 @commands Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Error occurred while handling event`, `duplicate`
 @pass six can ids registered once; recipes `creativedelight:...watering_can` and the five `smithing/..._watering_can` loaded; no error
-@fails stale patcherMod still registering the id; NCH key missing in item_dict
+@fails stale Creative Common still registering the id; NCH key missing in item_dict
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 bootreject (?i)duplicate.*watering_can

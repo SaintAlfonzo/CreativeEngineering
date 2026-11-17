@@ -12,7 +12,7 @@ The bundle itself: [creativebrewing_bundle.md](creativebrewing_bundle.md).
 |---|---|---|---|
 | 0 | `bundle #2` boot | scratch | SQ-CBJ-01 to -05 first: nothing moves into a jar that has not booted |
 | 1 | `move #1` phase 1 | KubeJS into the CB jar trees | Whole files, then splits; CB rebuild + restart |
-| 2 | `move #1` phase 2 | patcherMod Java into CB | patcherMod and CB built and installed together |
+| 2 | `move #1` phase 2 | Creative Common Java into CB | Creative Common and CB built and installed together |
 | 3 | `move #1` phase 3 | config | `[effects]`, `[magic_resistance]`, `[alcohol]`, `[coaster]`, `[copper_poisoning]` |
 
 Not this row: the wine clock (`time/WineTime`, `[time.wine]`) goes to Creative Calendar
@@ -25,7 +25,7 @@ Status Planned / Work KubeJS / new jar / TODO `creativebrewing/move #1` (Tests S
 
 ### Goal
 Everything about potion brewing, alcohol, the Vinery and Brewin' integrations, effect text, effect changes and swaps,
-and gear effects lives in Creative Brewing, so patcherMod and the pack folder keep only shared systems.
+and gear effects lives in Creative Brewing, so Creative Common and the pack folder keep only shared systems.
 
 ### Now
 - Framework built 2026-10-31 and installed (16:55), not booted: `global.CB` (`on`, `feature`, `members`, `recipes`) in
@@ -63,11 +63,11 @@ and gear effects lives in Creative Brewing, so patcherMod and the pack folder ke
    e. Generators `gen_effect_descriptions.py`, `gen_coaster_models.py`: an `outRoot` in `tools/generators.json`
       (`tools/gen_out.py` must allow the CB trees; today it allows only CD's, creative_delight.md 28.2).
    After each group: `./gradlew :creativeBrewing:build --offline`, install with the game closed, restart; SQ-CB rows.
-3. **Phase 2** (patcherMod + CB together): `potion/`, `fluidbrewing/`, the potion compat and JEI classes, the effect,
+3. **Phase 2** (Creative Common + CB together): `potion/`, `fluidbrewing/`, the potion compat and JEI classes, the effect,
    machine and JEI mixins into CB compartments (`mixin.minecraft.`, `mixin.create.`, `mixin.immersiveengineering.`,
    `mixin.jei.`, `mixin.jeed.`); registrations into `CreativeBrewing`; CB gets its own `@JeiPlugin` and
    `waila_plugins.json`. Ids stay `creativeengineering:*` (a `DeferredRegister` for that namespace, as Ender's
-   Additions does). A class another patcherMod class calls stays, or leaves an interface in patcherMod.
+   Additions does). A class another Creative Common class calls stays, or leaves an interface in Creative Common.
 4. **Phase 3** (config): the five sections into `CBConfig` with the same keys and comments; copy edited values from
    `config/creativeengineering-common.toml` and `configs_edited/` by hand; a CB startup WARN while old keys remain.
 5. creative_brewing.md 4.5 log and the moved features' writeups (file maps) updated per group; mod_sides unchanged.
@@ -92,7 +92,7 @@ Dict keys stay in the pack dicts (rule 4.1.2). Lang keys keep their names (rule 
 - `jeed_providers.js` writes JSON the client reads: keep its output path.
 - Startup changes need a CB rebuild and restart; server and client scripts in the CB trees load from the pack folder on
   `/reload` / F3+T during development.
-- patcherMod must never depend on CB (CB is optional to it).
+- Creative Common must never depend on CB (CB is optional to it).
 - Dev-only `_lib/dump_potions.js` and the shared `effect_dict.js`, `EffectTickContext`, trader system, Dragon Breathing
   fan stay (creative_brewing.md 4.2 "Stays").
 

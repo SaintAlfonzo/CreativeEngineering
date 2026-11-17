@@ -1,6 +1,6 @@
 # Stepstools
 
-Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 2026-10-29 (patcherMod 1.1.04 installed 2026-10-31 00:44), scratch server PASSED r1031 (2026-10-31: SQ-STL-01 boot, SQ-STL-02 recipes and tags); STL-01 to STL-16 in game pending** · TODO `cooking/kitchen #17`
+Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 2026-10-29 (Creative Common 1.1.04 installed 2026-10-31 00:44), scratch server PASSED r1031 (2026-10-31: SQ-STL-01 boot, SQ-STL-02 recipes and tags); STL-01 to STL-16 in game pending** · TODO `cooking/kitchen #17`
 
 ## 0. At a glance
 
@@ -17,9 +17,9 @@ Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 20
 | 16 items `creativeengineering:<colour>_stepstool`, Another Furniture tall stool models | [stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `item_dict.js` | BUILT, needs restart |
 | Recipe: Create seat of the color on top of an oak fence | [stepstool.js](../kubejs/server_scripts/equipment/stepstool.js) | BUILT |
 | Tags `#creativeequipment:stepstools`, `#curios:feet` | [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) | BUILT |
-| Curios Feet slot (vanilla boots icon) | patcherMod `compat/CuriosSlots.java` (IMC; the old feet.json was never read by Curios 5.1.x), [curios_slots.md](curios_slots.md) | BUILT 2026-11-01, jar not installed |
-| Step up / step off, collision, server checks, sync | patcherMod `stepstool/Stepstool.java` | BUILT |
-| Keys, stepping off on input, stool drawn under players | patcherMod `stepstool/client/StepstoolClient.java` | BUILT |
+| Curios Feet slot (vanilla boots icon) | Creative Common `compat/CuriosSlots.java` (IMC; the old feet.json was never read by Curios 5.1.x), [curios_slots.md](curios_slots.md) | BUILT 2026-11-01, jar not installed |
+| Step up / step off, collision, server checks, sync | Creative Common `stepstool/Stepstool.java` | BUILT |
+| Keys, stepping off on input, stool drawn under players | Creative Common `stepstool/client/StepstoolClient.java` | BUILT |
 | Stool collision for its owner; no flying kick | `mixin/EntityStepstoolCollisionMixin`, `mixin/ServerGamePacketListenerStepstoolMixin` | BUILT |
 | Tooltip (3 lines) | [tooltips.js](../kubejs/client_scripts/tooltips.js) Tools section; [tooltips.md](tooltips.md) | BUILT |
 
@@ -76,9 +76,9 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 
 - [kubejs/startup_scripts/items/stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `kubejs/startup_scripts/_lib/item_dict.js` (`i.<colour>_stepstool`, `i.t_stepstools`, `i.t_curios_feet`)
 - [kubejs/server_scripts/equipment/stepstool.js](../kubejs/server_scripts/equipment/stepstool.js), [kubejs/server_scripts/tags/curiostags.js](../kubejs/server_scripts/tags/curiostags.js)
-- patcherMod `compat/CuriosSlots.java` (feet slot IMC); lang `curios.identifier.feet` in `kubejs/assets/creativeengineering/lang/en_us.json`
+- Creative Common `compat/CuriosSlots.java` (feet slot IMC); lang `curios.identifier.feet` in `kubejs/assets/creativeengineering/lang/en_us.json`
 - [development/creativeCommon/.../stepstool/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/stepstool/) `Stepstool`, `StepstoolCurios`, `client/StepstoolClient`
-- patcherMod `mixin/EntityStepstoolCollisionMixin` (`m_20272_`), `mixin/ServerGamePacketListenerStepstoolMixin` (`m_9793_`); `CEConfig.Stepstool`; key lang in patcherMod `assets/creativeengineering/lang/en_us.json`
+- Creative Common `mixin/EntityStepstoolCollisionMixin` (`m_20272_`), `mixin/ServerGamePacketListenerStepstoolMixin` (`m_9793_`); `CEConfig.Stepstool`; key lang in Creative Common `assets/creativeengineering/lang/en_us.json`
 
 ## 6. Offline checks
 
@@ -106,6 +106,6 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 ## 8. History
 
 - 2026-10-29: Investigated (Another Furniture tall stools are one block tall; no Feet slot existed) and built: items,
-  recipe, Feet slot, patcherMod stepstool package and two mixins. patcherMod 1.1.04 built, not installed (game running).
-- 2026-10-31: patcherMod 1.1.04 installed in `mods/` at 00:44 (stepstool classes in the jar); not yet booted.
+  recipe, Feet slot, Creative Common stepstool package and two mixins. Creative Common 1.1.04 built, not installed (game running).
+- 2026-10-31: Creative Common 1.1.04 installed in `mods/` at 00:44 (stepstool classes in the jar); not yet booted.
 - 2026-11-04: moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)): `stepstool/` Java, the two mixins, `[stepstool]` (now `config/creativeequipment-common.toml`), items `kubejs_startup/creativeequipment/items/stepstools.js`, recipe and feet tag in `kubejs/data/creativeequipment/kubejs/`. Channel id unchanged. Same behaviour.

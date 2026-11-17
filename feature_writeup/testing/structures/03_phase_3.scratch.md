@@ -5,7 +5,7 @@
 - Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only. Sleep an
   hour if the token limit gets close.
 - Milestone: M3. Tests: ST-14, 47, 92, 130, 28, 30, 32, 31, 12, 149 (block part), 133 (geodes), 48, 50.
-- Server: session 54725a7d scratchpad srv/ (same as M2 session 2; 373 mods; patcherMod build/libs 1.0.6 of 01:28).
+- Server: session 54725a7d scratchpad srv/ (same as M2 session 2; 373 mods; Creative Common build/libs 1.0.6 of 01:28).
 - World st_d, seed 8675309, max-tick-time=-1, asyncLocatorThreads 4. Pregenerated: Chunky radius 800 around 0 0
   (76% ocean: geodes/driftwood) and around 2144 -2592 (92% land: villages).
 - Scratch toml (srv copy only): earth_fill log ALL, meta log true, placement log true, structureDensity 4.0 (M2,

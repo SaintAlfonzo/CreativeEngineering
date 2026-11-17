@@ -1,4 +1,4 @@
-// Creative Engineering. Plain items and the prepared flesh block, migrated from Java (patcherMod
+// Creative Engineering. Plain items and the prepared flesh block, migrated from Java (Creative Common
 // CreativeEngineeringItems used to register these as bare Item/Block with no custom behavior) into KubeJS.
 //
 // Item models are KubeJS's own auto-generated item/generated + layer0 (same as

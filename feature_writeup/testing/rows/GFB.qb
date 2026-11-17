@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text patcherMod 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`
+@@text Creative Common 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`
 @@text and the `SeasonTypes` cache. Group A, fresh world on the overall-run seed (-8188900049893920259) unless stated.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |

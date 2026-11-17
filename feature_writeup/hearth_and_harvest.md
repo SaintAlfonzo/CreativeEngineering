@@ -426,21 +426,21 @@ Order: 4.0 and 4.1 are built. 4.2 lists the remaining fold-in steps with the pac
 
 ### 4.0 Watering can, ahead of the port (built 2026-10-30; moved into the member with tiers 2026-10-31)
 
-Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest waits for the full port. Settles TODO
+Owner, 2026-10-30: the watering can only, now, through Creative Common; the rest waits for the full port. Settles TODO
 `farming/crops #8` (Extra Delight has none, [extra_delight.md](extra_delight.md) 2.5).
 
 - **Route:** MIT, so code and texture are carried over (not the ARR donor-jar route). The texture is copied unchanged
-  from the H&H jar; notice in patcherMod `credit.txt` and `META-INF/licenses/hearthandharvest-MIT.txt`, and in the
+  from the H&H jar; notice in Creative Common `credit.txt` and `META-INF/licenses/hearthandharvest-MIT.txt`, and in the
   item class header.
-- **Id:** `hearthandharvest:watering_can` (upstream id, registered from patcherMod under H&H's namespace like the
+- **Id:** `hearthandharvest:watering_can` (upstream id, registered from Creative Common under H&H's namespace like the
   Netherite Lunchbox under `solapplepie:`). Creative tab: Tools. `global.item` keys `watering_can`, `t_bonemeal_substitutes`.
 - **Moved and tiered (owner, 2026-10-31):** the can now lives in the CD member `backportedHearth` (4.1), version
-  `1.4.1-ce-19.2-02`; patcherMod's `wateringcan/`, `assets/hearthandharvest/`, the `credit.txt` line and
+  `1.4.1-ce-19.2-02`; Creative Common's `wateringcan/`, `assets/hearthandharvest/`, the `credit.txt` line and
   `META-INF/licenses/hearthandharvest-MIT.txt` are gone (the member's `NOTICE-upstream-MIT.txt` lists the texture and
   strings). Code: `item/WateringCanItem`, `item/WateringCanTier`, registered in `item/HHItems`; JEI info page per tier in
   `compat/HHJeiPlugin` (JEI compileOnly). Recipe and fertilizer tag moved to CD `kubejs/data/creativedelight/kubejs/
   hearthandharvest/recipes.js` and `tags.js` (recipe ids `creativedelight:...`); `server_scripts/equipment/watering_can.js`
-  deleted. patcherMod and CD must be installed together (old patcherMod + new CD registers the id twice).
+  deleted. Creative Common and CD must be installed together (old Creative Common + new CD registers the id twice).
 - **Tiers (pack addition, owner 2026-10-31):** one class, `WateringCanTier` holds the numbers. Capacity is for water
   and fertilizer each. Fills from a water source stay free; a well or any block entity with a water fluid handler costs
   exactly 1000 mB per fill (the well's roof half routes to the block below); a water cauldron costs the tier's levels.
@@ -464,7 +464,7 @@ Owner, 2026-10-30: the watering can only, now, through patcherMod; the rest wait
   Old cans holding more than a tier's capacity read as the capacity (clamped on read). The copper tier is now
   "Copper Watering Can". All tiers use the copper (1.4.1) texture for now. Not in `#creativeequipment:dragon_gear`
   (no durability).
-- **Code (before 2026-10-31):** patcherMod `wateringcan/` (`WateringCanItem`, `WateringCanItems`, `WateringCanJeiPlugin`). Data components
+- **Code (before 2026-10-31):** Creative Common `wateringcan/` (`WateringCanItem`, `WateringCanItems`, `WateringCanJeiPlugin`). Data components
   became stack NBT (`WaterLevel`, `BonemealLevel`, `FertilizerItem`; keys removed at 0, so a used-up can is a plain
   stack again).
 - **Mechanics (same as upstream):** 16 water, filled to full by using it on a water source. 16 fertilizer, loaded one
@@ -1192,18 +1192,18 @@ Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch
   decompiled to `DecompiledMods/`. New content detail deferred to the combined pass with Extra Delight.
 - 2026-10-30: combined pass written in [extra_delight.md](extra_delight.md) 2.5: placeholders settled, D4 / D7 / D12
   answered there (5.1); H&H port first in stage 2 (ED D16).
-- 2026-10-30: watering can built ahead of the port in patcherMod 1.1.04 (4.0), installed to `mods/`; tests HNH-25 to
+- 2026-10-30: watering can built ahead of the port in Creative Common 1.1.04 (4.0), installed to `mods/`; tests HNH-25 to
   HNH-30, scratch SQ-WC-01 to CQ-WC-04 queued.
 - 2026-10-30: soil watering added (4.0): a use on a plant or soil soaks the 3x3 soil, also without fertilizer;
   tests HNH-31 to HNH-33, scratch SQ-WC-05.
 - 2026-10-31: scratchpad notes translated into TODO rows (`gameplay/misc #17`, `#18`, `ui/names #11`). No code changed.
 - 2026-10-31: raspberries built as the first piece of the port (4.1), in the new CD member `backportedHearth`; CD jar
   built, not installed (game running). Tests HNH-03, HNH-04, HNH-34 to HNH-37; scratch SQ-HR-01 to CQ-HR-06.
-- 2026-10-31: watering can moved from patcherMod into `backportedHearth` (4.0) with six tiers (copper to dragon), well and
-  cauldron filling, smithing upgrades. patcherMod and CD built, not installed (game running). Tests HNH-38 to HNH-44;
+- 2026-10-31: watering can moved from Creative Common into `backportedHearth` (4.0) with six tiers (copper to dragon), well and
+  cauldron filling, smithing upgrades. Creative Common and CD built, not installed (game running). Tests HNH-38 to HNH-44;
   scratch SQ-WCT-01 to -05.
 - 2026-10-31: splash particles on every plant the can grows; tree growers (saplings, propagules, fungi, azaleas,
-  mushrooms) excluded; the water Spout Gun (Create: Misc and Things) soaks farmland it hits (patcherMod
+  mushrooms) excluded; the water Spout Gun (Create: Misc and Things) soaks farmland it hits (Creative Common
   `compat/SpoutGunFarmland`, `ProjectileImpactEvent`). Tests HNH-45 to HNH-47.
 - 2026-11-05: owner directed the crow mechanics (on AM's crow), nest stash, scarecrow and salt lick to be implemented; plan written in [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) (tests HNH-48 to HNH-68), nothing built.
 - 2026-11-06: full content scan (H&H only, Extra Delight later) (now merged into sections 2 and 3): food and drink values, non-food behavior, N18 overlap refresh, N5 / N6 / N7 / N8 / N9 / N16 answered (5.6); horse boost corrected (Sugar Cubes, not the horseshoe); B6 to B12, D15 to D26, tests HNH-69 to HNH-80. Nothing built.

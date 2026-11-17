@@ -6,7 +6,7 @@ ServerEvents.tags('block', e => {
 	var b = global.blocks
 	var item = global.item
 
-	// Villager ladders (patcherMod McaVillagerPathLaddersMixin, feature_writeup/mob_block_tweaks.md 2.8): every block named
+	// Villager ladders (Creative Common McaVillagerPathLaddersMixin, feature_writeup/mob_block_tweaks.md 2.8): every block named
 	// *ladder*; the mixin also requires minecraft:climbable, so a non-climbable match does nothing. Vines, ropes, chains,
 	// scaffolding and grab rails stay out on purpose.
 	t.addMatching(e, b.t_villager_ladders, '*:*ladder*')

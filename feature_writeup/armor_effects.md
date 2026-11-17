@@ -20,7 +20,7 @@
 | Dragon horse armor (`mount()`): Regeneration II, Health Boost II, Resistance II, horse walk once per `mountEffectIntervalTicks` | Regeneration I DEPLOYED with 1.0.4; the three level II effects BUILT 2026-10-31 (`potions/effects #4`, startup: restart), scratch server PASSED r1031 (2026-10-31, SQ-EFX-04) |
 | Tool effects framework `global.toolEffects`: `onHit()` (to the target) and `held()` (to the wielder) | DEPLOYED, in-game test pending |
 | Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow swapped 2026-10-22 (F4); on-hit never applied until F10 (fixed 2026-10-22); built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02); held effects in game (AE-19, AE-20) |
-| Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (patcherMod), in-game test pending |
+| Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (Creative Common), in-game test pending |
 | `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativecommon:magic` tag; Poison / Wither ticks at or below its level canceled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
 | Magic Resistance potions (base, long, strong) and their brewing | DEPLOYED; brewing and reagent belong to the potions writeup (backlog row 4); reagent is a placeholder |
 | Tooltip lines for all of the above (`armor_effects_tooltip.js`, `tool_effects_tooltip.js`) | DEPLOYED |
@@ -213,7 +213,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   Checked 2026-10-21 (Better Beacons 1.0.2 jar): its only consumer, `PhantomSpawnerMixin`, tests `hasEffect`, so the
   level does nothing; amplifier 0 is cosmetic ([briefs/potions_effects.md](briefs/potions_effects.md)).
   FIXED 2026-10-28 (owner: Phantom Bane is levelless, like Night Vision): the mixin gives both echo effects amplifier 0,
-  and patcherMod `CommonPotions` registers no strong Phantom Bane potion (the glowstone mix is gone from `potions.js`).
+  and Creative Common `CommonPotions` registers no strong Phantom Bane potion (the glowstone mix is gone from `potions.js`).
   Scratch SQ-CM-07, SQ-CM-08.
 - **F8. One effect packet per effect per tick, unmeasured.** Re-adding an effect with a longer duration fires
   `onEffectUpdated`, which syncs the effect to the client. A dragon set plus a held dragon tool is 8 updates a

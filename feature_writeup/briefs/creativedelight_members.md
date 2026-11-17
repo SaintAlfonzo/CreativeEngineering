@@ -28,7 +28,7 @@ Effect swaps, potions and alcohol belong to Creative Brewing ([creative_brewing.
 | 7 | `members #14`, `#15`, `#17`, `#19`, `#20`, `#21` | none (play tests) | Built by the port; TODO should move them to Testing or close #15 into `merges/baking #1` |
 | 8 | `members #1` freeze and bundle | build | Blockers listed in the section |
 | 9 | `members #6` Ocean's and Oceanic | KubeJS / overlay data | After #29 tests pass |
-| 10 | `members #8` mooshroom family | patcherMod + moreMooblooms | Independent |
+| 10 | `members #8` mooshroom family | Creative Common + moreMooblooms | Independent |
 | 11 | `members #10` cutover release | build / docs | After #1 |
 | - | `members #9` Ender's rebuild | pinned | License answer first |
 
@@ -106,7 +106,7 @@ Status Planned / KubeJS / data / `creativedelight/members #6`
   `fishing_net/kelp`, `sea_grass`; item tag `fishing_net/coral` from Upgrade Aquatic; biome tags `fishing_net/warm_ocean`, `shrimp_ocean`,
   `ocean`, `river`), and the two tables `kubejs/data/oceanic_delight/loot_tables/gameplay/fishing_net_on_kelp.json`, `fishing_net_on_sea_grass.json`.
   The mixin is in the CD Oceanic member (`members/oceanic/.../mixin/OceanicDelightFishingNetMixin.java`); the loot condition
-  `creativeengineering:biome_tag` stays in patcherMod.
+  `creativeengineering:biome_tag` stays in Creative Common.
 - No `oceanic_delight/` folder in the CD trees yet (only `oceansdelight/`).
 ### Build
 1. New CD `kubejs/data/creativedelight/kubejs/oceanic_delight/tags.js` with the fill (via `global.tags`, ids from the dicts);
@@ -123,20 +123,20 @@ Status Planned / KubeJS / data / `creativedelight/members #6`
 Proposed CDM-08: SQ-CDJ-04 and SQ-FN-01 still pass after the move; CDM-09: merged items show one id in JEI and every recipe that took the dropped id takes the survivor.
 
 ## members #8: Mooshroom family into moreMooblooms
-Status Planned / new jar / patcherMod / `creativedelight/members #8`
+Status Planned / new jar / Creative Common / `creativedelight/members #8`
 ### Now (checked 2026-10-31)
-patcherMod: `mooshroom/MooshroomFamily.java` (`MEMBERS` line 40 names `fungidelight:inky_cap_cow`, `morel_cow`), `mooshroom/MushroomTypeSetter.java`,
+Creative Common: `mooshroom/MooshroomFamily.java` (`MEMBERS` line 40 names `fungidelight:inky_cap_cow`, `morel_cow`), `mooshroom/MushroomTypeSetter.java`,
 mixins `MushroomCowWalkTargetMixin`, `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin` (`creativeengineering.mixins.json` lines 178-180);
 registered in `CreativeEngineering.java:261-262`; brown chance in `worldgen/SpawnTuning.java:130-196`. moreMooblooms 1.1.0 soft-depends on
-Buzzier Bees, JEI, Blueprint, Alex's Mobs and Supplementaries; nothing of patcherMod. The Fungi cow spawn rows are in the pack's
-`kubejs/generation_scripts/worldgen/mob_spawns.json` (read by `SpawnTuning`), not in patcherMod.
+Buzzier Bees, JEI, Blueprint, Alex's Mobs and Supplementaries; nothing of Creative Common. The Fungi cow spawn rows are in the pack's
+`kubejs/generation_scripts/worldgen/mob_spawns.json` (read by `SpawnTuning`), not in Creative Common.
 ### Build
 1. moreMooblooms `mods.toml`: mandatory `creativeengineering` dependency (version range).
 2. Move the five classes (packages renamed), mixin json of moreMooblooms, refmap. 3. Gate registration on `fungidelight` loaded.
 4. Fungi cow rows: stay in `mob_spawns.json` (pack data, works with either jar) unless moreMooblooms gets its own spawn data.
-5. Remove patcherMod's copies and mixin entries in the same release (Q22 hard cut). 6. Build and install patcherMod and moreMooblooms together.
+5. Remove Creative Common's copies and mixin entries in the same release (Q22 hard cut). 6. Build and install Creative Common and moreMooblooms together.
 ### Gotchas
-`SpawnTuning` and `CEConfig` stay in patcherMod and must be public API for the move; `brown_chance` and the `mushroomSpawns` switch are patcherMod config.
+`SpawnTuning` and `CEConfig` stay in Creative Common and must be public API for the move; `brown_chance` and the `mushroomSpawns` switch are Creative Common config.
 ### Tests
 Proposed CDM-11: breeding any two of red, brown, inky, morel; brown chance per biome; inky / morel cows spawn; a world without `fungidelight` boots with moreMooblooms.
 
@@ -155,7 +155,7 @@ names (changelog.md 3.6, `tools/changelog_lint.py`); writeups' status lines; REA
 ### Decisions
 Release number: the first release after #1 lands (deployed now: client 1.1.06, server 1.1.05, `deploy/DEPLOYED.json`).
 ### Gotchas
-Never replace jars while the game runs. The hard cut means worlds from before need patcherMod and CD in the same update.
+Never replace jars while the game runs. The hard cut means worlds from before need Creative Common and CD in the same update.
 
 ## members #11: Coffee unification in Creative Delight
 Status Planned / KubeJS / data / `creativedelight/members #11`

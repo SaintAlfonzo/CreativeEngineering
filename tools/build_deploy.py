@@ -81,7 +81,7 @@ Preflight (errors stop the build unless --force; warnings go into the log entry)
   - unreleased.md has no bullets: this version ships without player notes          (warning)
   - structure_config.json regenerated from the installed jars + kubejs/data matches the file, and
     gen_structure_groups.py sync would change nothing (both run on a scratch copy)   (error)
-  - the shipped patcherMod jar can read the gzipped climate samples              (error)
+  - the shipped Creative Common jar can read the gzipped climate samples              (error)
   - the version being built isn't already deployed; the from-version's history json is unchanged
     since its --snapshot                                                         (error)
   - in-tree mods (IN_TREE_MODS): jar in mods/ equals the gradle build, no source newer (warning)
@@ -191,7 +191,7 @@ IN_TREE_EXTRA_SRC = {
                           'development/shared'],
     'creativeEngineering': ['kubejs/data/creativeengineering/kubejs', 'development/shared'],
 }
-# Third-party jars that patcherMod fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
+# Third-party jars that Creative Common fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.
 PINNED_MODS = [
     ('Create-DnDesire-', 'Create-DnDesire-1.19.2-1.2c.Beta Mid-Dev.jar'),
@@ -225,7 +225,7 @@ CATEGORIES = {
     # the unmodified Large Meals 1.3.0 jar the Creative Delight port reads its art from (large_meals.md 4), as for
     # Roll Delight. Never in mods/.
     'largemeals_upstream': (('server', 'client'), 'largemeals_upstream'),
-    # the unmodified Farmer's Structures 1.0.6 jar the patcherMod worldgen donor reads (farmers_structures.md 5).
+    # the unmodified Farmer's Structures 1.0.6 jar the Creative Common worldgen donor reads (farmers_structures.md 5).
     # Never in mods/: it is a NeoForge jar.
     'farmers_upstream': (('server', 'client'), 'farmers_upstream'),
     # the unmodified donor jars of the Creative Delight members Oceanic Delight (creative_delight.md 36), Ender's
@@ -306,7 +306,7 @@ KUBEJS_CLASSES = [
     ('config/*', 'runtime'),
     ('client_scripts/*', 'client'),
     ('assets/*', 'client'),
-    # generation_scripts/: only what patcherMod or a script reads in-game; the rest is generator input/output
+    # generation_scripts/: only what Creative Common or a script reads in-game; the rest is generator input/output
     ('generation_scripts/worldgen/climate/*.json.gz', 'runtime'),      # BiomeLayoutTuner (/dumpclimate samples)
     ('generation_scripts/worldgen/biome_baselines/*.json', 'runtime'),  # BiomeLayoutTuner
     ('generation_scripts/worldgen/biome_config.json', 'runtime'),       # BiomeLayoutTuner
@@ -507,7 +507,7 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
             print(f'not staged: mods/{jar} (in-tree mod marked not required in IN_TREE_MODS: development testing only)')
             continue
         entry = by_file.get(('mods', jar))
-        # hand-added jars (patcherMod) get an entry named after the file, version "Unknown"
+        # hand-added jars (Creative Common) get an entry named after the file, version "Unknown"
         name = entry['name'] if entry and not entry['name'].endswith('.jar') else modid or os.path.splitext(jar)[0]
         version = version_of(entry) if entry else ''
         mods[jar] = {'modId': modid, 'side': side, 'name': name, 'version': '' if version == 'Unknown' else version}
@@ -604,7 +604,7 @@ UPSTREAM_DONORS = {
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
     'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
                         ('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
-    # in the Creative Worldgen jar since the wave 5 carve (patcherMod before)
+    # in the Creative Worldgen jar since the wave 5 carve (Creative Common before)
     'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
                          ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
     'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
@@ -741,7 +741,7 @@ def check_pinned_mods(pre):
 
 
 def check_climate_reader(pre, files):
-    """The gzipped climate samples need patcherMod 1.0.3+ (WorldgenFiles.readGzipText); an older jar
+    """The gzipped climate samples need Creative Common 1.0.3+ (WorldgenFiles.readGzipText); an older jar
     falls back to kubejs/exported/, which no longer ships, so biome tuning would be skipped."""
     if not any(p.startswith('generation_scripts/worldgen/climate/') for p in files['kubejs']):
         return
@@ -1734,7 +1734,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
          'and stops the game with a message if it is missing.') if has('roll_upstream') else None,
         ("`largemeals_upstream/` goes next to `mods/`, never inside it: Creative Delight's Large Meals port reads that jar "
          'and stops the game with a message if it is missing.') if has('largemeals_upstream') else None,
-        ("`farmers_upstream/` goes next to `mods/`, never inside it: patcherMod reads Farmer's Structures 1.0.6 from it for the "
+        ("`farmers_upstream/` goes next to `mods/`, never inside it: Creative Common reads Farmer's Structures 1.0.6 from it for the "
          'new farm structures and house pieces. Without it the old 1.0.0 structures run alone.') if has('farmers_upstream') else None,
         *[(f"`{d}/` goes next to `mods/`, never inside it: Creative Delight's {n} member reads that jar "
            'and stops the game with a message if it is missing.') if has(d) else None

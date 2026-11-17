@@ -252,7 +252,7 @@ Non-Vinery ingredients by family, with the audit question each raises:
    `!global.CB || !global.CB.on('vinery')`, rows inside `global.CB.recipes`).
 2. For each accepted change: `R.remove({ id: 'vinery:<id>' }, e)` and rebuild with the matching `global.NCH` helper
    (`R.shaped`, `R.shapeless`; the wine fermentation and apple press types need a `vineryFermenting` / `vineryPress` helper
-   in neoCraftHelper.js if any of those change: patcherMod rebuild). Tags (cherry) through `global.tags`.
+   in neoCraftHelper.js if any of those change: Creative Common rebuild). Tags (cherry) through `global.tags`.
 3. Record the outcome in alcohol_part_b.md 3.4 (pack integration).
 
 ### Decisions
@@ -309,7 +309,7 @@ Audit how the Vinery cellar works and write it up somewhere players see it.
 Status **Planned** / Work: docs / id `alcohol/vineryport #8`
 
 ### Goal
-Settle VN-01 to VN-20 (1.3.10) and VJ-01 to VJ-10 (patcherMod's deleted Vinery pages).
+Settle VN-01 to VN-20 (1.3.10) and VJ-01 to VJ-10 (Creative Common's deleted Vinery pages).
 
 ### Now
 - [vinery.md](../vinery.md) 7 still lists VN-01 to VN-20 as open; [vinery_jei.md](../vinery_jei.md) is marked history

@@ -4,7 +4,7 @@
 //   node tools/structure_tuning_sim.js                  summary + warnings + coverage
 //   node tools/structure_tuning_sim.js report.md        also write the report there (never over the real one)
 //   node tools/structure_tuning_sim.js report.md out/   also write every structure_set json it would add,
-//                                                       plus out/frequencies.json (what patcherMod would roll)
+//                                                       plus out/frequencies.json (what Creative Common would roll)
 //                                                       and out/rules.json + out/fits.json (the biome rules and fits it would get)
 //   --density=X                                         WorldgenConfig [worldgen.debug] structureDensity
 //   --groups-off                                        WorldgenConfig [worldgen.systems] structureGroups = false

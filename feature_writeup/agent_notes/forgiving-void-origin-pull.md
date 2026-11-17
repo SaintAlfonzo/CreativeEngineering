@@ -1,6 +1,6 @@
 # forgiving-void-origin-pull
 
-> patcherMod mixin that pulls Forgiving Void's void-fall respawn 20-25 blocks (CEConfig default, raised from 10-20 on 2026-09-26) toward dimension origin each fall
+> Creative Common mixin that pulls Forgiving Void's void-fall respawn 20-25 blocks (CEConfig default, raised from 10-20 on 2026-09-26) toward dimension origin each fall
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-07). Repo status docs win over any status line here.
 
@@ -19,6 +19,6 @@ Fix: [patchermod-coremod](patchermod-coremod.md) mixin `mixin/ForgivingVoidMixin
 maps back to `m_6021_`). Handler pulls the landing X/Z 20-25 blocks (random) toward
 (0,0), snapping to origin if already within one step. Fires once per void fall.
 
-Build deps added to `patcherMod/libs/`: `forgivingvoid-forge-1.19-7.0.0.jar` +
+Build deps added to `creativeCommon/libs/`: `forgivingvoid-forge-1.19-7.0.0.jar` +
 `balm-forge-1.19.2-4.6.0.jar` (the `@Mixin(value = ForgivingVoid.class)` target must be
 on the AP classpath even when referenced only by name).

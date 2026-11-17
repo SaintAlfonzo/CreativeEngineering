@@ -182,13 +182,13 @@ vinegar recipe.
 ---
 
 ## pickles-and-ferments #7: Foul Taste on foods with vinegar added
-Status: In Progress / Work: KubeJS / patcherMod / TODO `dishes/pickles-and-ferments #7`
+Status: In Progress / Work: KubeJS / Creative Common / TODO `dishes/pickles-and-ferments #7`
 
 ### Goal
 Foods that get vinegar added carry a Foul Taste effect, on more foods than today.
 
 ### Now (2026-10-31)
-- No Foul Taste effect anywhere (`effect_dict.js`, `kubejs/exported/mob_effects.json`, patcherMod `potion/`). Candidates
+- No Foul Taste effect anywhere (`effect_dict.js`, `kubejs/exported/mob_effects.json`, Creative Common `potion/`). Candidates
   that exist: Fruits Delight `fruitsdelight:disgusted` (Disgusted), vanilla Nausea.
 - Vinegar as an addition: 80 cans in `kubejs/generation_scripts/food/can_types.json` have a `_vinegar` recipe
   (`tools/gen_can_types.py` lines 71-84: raw veggie, raw fruit, raw fish and more; salads 5 + vinegar). The `_vinegar` recipe
@@ -196,7 +196,7 @@ Foods that get vinegar added carry a Foul Taste effect, on more foods than today
 - Foods with vinegar as an ingredient: only Vintage's cheese curds (and the leather / froglight jar crafts, not food).
 
 ### Build
-1. Effect: per Decisions. A new one is a patcherMod `MobEffect` (pattern `potion/MagicResistanceEffect.java`), id
+1. Effect: per Decisions. A new one is a Creative Common `MobEffect` (pattern `potion/MagicResistanceEffect.java`), id
    `creativeengineering:foul_taste`, JEED text per [effects.md](../effects.md).
 2. Marking "vinegar added": the can item cannot tell, so either (a) the `_vinegar` recipes output the can with an NBT flag and a
    KubeJS `ItemEvents.foodEaten` handler (CD `creativedelight/canning.js` area) applies the effect, or (b) the effect goes on

@@ -2,7 +2,7 @@
 
 Written 2026-11-01 by the Creative Split audit (creative_split.md section 4, sweep F). Read-only: no script was changed.
 
-Covers `kubejs/startup_scripts/`, `kubejs/server_scripts/`, `kubejs/client_scripts/` and the jar startup scripts in `development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/`. One row per file; a file whose rows belong to two or more targets is `mixed? yes` and lists its row ranges under the table (rule 3.7). Targets use the split README vocabulary; `?` marks a doubtful row with a note in the reason column.
+Covers `kubejs/startup_scripts/`, `kubejs/server_scripts/`, `kubejs/client_scripts/` and the jar startup scripts in `development/creativeCommon/src/main/resources/kubejs_startup/creativeengineering/func/`. One row per file; a file whose rows belong to two or more targets is `mixed? yes` and lists its row ranges under the table (rule 3.7). Targets use the split README vocabulary; `?` marks a doubtful row with a note in the reason column.
 
 Scope applied (brief): `_lib` dicts and func helpers are `Common`; `engineering`, `metal`, `wood` are `Engineering` except the computing and circuit rows (`Computers (Engineering)`); `equipment` is `Equipment`; `magic` is `Magic (Equipment)` minus what CB takes (creative_brewing.md 4.2 phase 1: potions, effects, alcohol, gear effects); `loot` and `worldgen` are `Worldgen`; `cooking` is `CD` or `CB`; `tags`, `other`, `economy` per row; client tooltips, names and JEI order `Common` unless a row shows one content jar's data.
 
@@ -187,7 +187,7 @@ Row ranges of the mixed files:
 | `server_scripts/_lib/dump_structuregen.js` | 202 | Devtools | /dump* command (2.1 Devtools) | - | - | commandRegistry; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/_lib/dump_tags.js` | 132 | Devtools | /dump* command (2.1 Devtools) | - ; top: dumpRegistryTags, dumpTags | - | commandRegistry; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/_lib/export_io.js` | 26 | Devtools | writeExportJson helper for the dumps | - ; top: writeExportJson | - | none; NCH 0, tags 0; no wrapper | no |
-| `server_scripts/_lib/flower_world.js` | 288 | Devtools? | Flower Test world builder and /flowerworld; a test tool, but its world preset ships in patcherMod data and the header says it ships with the pack | - | - | commandRegistry, loaded; NCH 0, tags 0; no wrapper | no |
+| `server_scripts/_lib/flower_world.js` | 288 | Devtools? | Flower Test world builder and /flowerworld; a test tool, but its world preset ships in Creative Common data and the header says it ships with the pack | - | - | commandRegistry, loaded; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/_lib/java_guard.js` | 28 | Devtools | guardThrowable helper for the dumps | - ; top: guardThrowable | - | none; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/_lib/loot_dump.js` | 190 | Devtools | /dump* command (2.1 Devtools) | - | - | commandRegistry; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/_lib/metal_test_recipes.js` | 108 | Devtools? | live mechanical-crafting test recipes, ungated; Devtools if dev-only is accepted, else Engineering | - ; top: R, alphabet, buildGrid, i, seqForms, seqMetals | NCH, item | recipes; NCH 1, tags 0; no wrapper | no |
@@ -359,7 +359,7 @@ Row ranges of the mixed files:
   - 808-814: Magic (Equipment) (Botania)
   - 815-853: Equipment (End gear)
 
-## 10. Jar startup scripts (patcherMod `kubejs_startup/creativeengineering/func/`)
+## 10. Jar startup scripts (Creative Common `kubejs_startup/creativeengineering/func/`)
 
 | file | lines | target | reason | defines | reads | events; NCH/tags; wrapper | mixed? |
 |---|---|---|---|---|---|---|---|
@@ -456,7 +456,7 @@ Readers per global (pack files), for the carve docs:
 - **CD reads the trader helper:** `global.trades` (CD `*/trades.js` for Veggies, Corn and Rustic Delight stock) is defined in `func/trade_helper.js` (`Common?`). Resolves itself if the helper is Common.
 - **CD reads Common runtime pieces:** `compost` (80 uses), `removedItems` (11), `blocks` (10), `fluid` (27), `effect`, `addItemMerges` (6), `itemMergeRun` (3), `stripRemovedItemTags` (2, defined in `server_scripts/_lib/recipe_scan.js`, hence that file is Common, not Devtools). All downward once those files are Common.
 - **Pack reads CD:** `cooking/food_values.js` reads `global.foodValueCopies` (defined in the CD jar) and `neoCraftHelper.js` (Common) reads `global.seasoning` (CD jar). The NCH one is an upward edge Common -> CD; fix: NCH takes seasoning through a registration hook (`global.NCH.seasonings = ...` set by CD) or a soft check. `food_values.js` goes to CB, which depends on CD already.
-- **Load order:** the pack `startup_scripts` load after patcherMod's jar pack and before CD and CB (creative_brewing.md 70). `func/armor_effects.js`, `tool_effects.js`, `tune_*.js` carry `// priority: -100` to load after `item_dict.js`; `jei_order.js` 900, `food_grammar.js` 990, `_lib` dicts 1000 / -10000..-10002. Any file moved into a jar pack keeps its priority but the cross-pack order becomes mod-list order, so `global.item` readers in a jar must only read at event time, not at top level.
+- **Load order:** the pack `startup_scripts` load after Creative Common's jar pack and before CD and CB (creative_brewing.md 70). `func/armor_effects.js`, `tool_effects.js`, `tune_*.js` carry `// priority: -100` to load after `item_dict.js`; `jei_order.js` 900, `food_grammar.js` 990, `_lib` dicts 1000 / -10000..-10002. Any file moved into a jar pack keeps its priority but the cross-pack order becomes mod-list order, so `global.item` readers in a jar must only read at event time, not at top level.
 
 ## 12. Lines per target
 

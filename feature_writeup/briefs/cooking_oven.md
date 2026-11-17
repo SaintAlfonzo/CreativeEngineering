@@ -10,7 +10,7 @@ cookie / muffin / tart / hand-pie tables, oven and bakeware recipes),
 the family calls in [cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
 (Creative Delight jar), `global.NCH.ceBaking` (line 1161), `fdCooking` (1074), `hammering` (1142) in
 [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
-(patcherMod jar), patcherMod `oven/` (`OvenBlockEntity`, `BakingRecipe`, `jei/OvenJeiPlugin`).
+(Creative Common jar), Creative Common `oven/` (`OvenBlockEntity`, `BakingRecipe`, `jei/OvenJeiPlugin`).
 
 ## Scope and order
 
@@ -135,7 +135,7 @@ the dishes above from the dump (verified by name, not by dict key; check each ke
 ### Decisions
 - Smoking route: **KubeJS mirror** (no Java, JEI pages for free, `/reload`) over a Java fallback in
   `OvenBlockEntity.getMatchingRecipe` (needs a BakingRecipe wrapper, a JEI catalyst for the smoking category and a
-  patcherMod rebuild). The CfB oven already smokes through `CfbOvenSmokingMixin` (oven.md 2.8).
+  Creative Common rebuild). The CfB oven already smokes through `CfbOvenSmokingMixin` (oven.md 2.8).
 - Move or mirror pot dishes: **move** (family call removes the pot recipe) for stuffed dishes and baked stews;
   **keep** pot-only for soups, mashes, pancakes.
 - Bakeware for stuffed dishes: **baking sheet**; stews and casseroles: **baking dish** (`#30`).

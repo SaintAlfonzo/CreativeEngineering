@@ -71,7 +71,7 @@ for jar in glob.glob('mods/*.jar'):
 
 ### Decisions
 
-- **Check, or remove the features at runtime?** The only fully automatic alternative is runtime: a patcherMod hook
+- **Check, or remove the features at runtime?** The only fully automatic alternative is runtime: a Creative Common hook
   that drops every `forge:add_features` modifier from namespace `bushierflowers` when Forge runs biome modifiers
   (`ServerLifecycleHooks` / `ModifiableBiomeInfo` in Forge 43). That is more code and a mixin into Forge for a pinned
   0.0.2 mod. Recommend the offline check.

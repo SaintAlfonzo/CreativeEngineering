@@ -16,19 +16,19 @@ the Vinery port in `development/creativeBrewing/members/vinery`. Bytecode read w
 |---|---|---|---|
 | 1 | `framed-and-decor #6` fixes D3, D6 | KubeJS tags | Smallest open fixes of the audit; the rest wait on owner decisions |
 | 2 | `framed-and-decor #2` Copycat pack names | resource pack edit | Client only, no code |
-| 3 | `framed-and-decor #1` Flowers on framed / copycat dirt | patcherMod | One mixin per mod family, reuses `CamoSpeed.camo` |
-| 4 | `framed-and-decor #8`, `#10` vines | patcherMod + tags | Same `VineBlock` neighbor hook; build together |
-| 5 | `framed-and-decor #7` Fairy lights | patcherMod + tags | Independent |
-| 6 | `framed-and-decor #11` Random flower offset | patcherMod | Needs a dump first |
+| 3 | `framed-and-decor #1` Flowers on framed / copycat dirt | Creative Common | One mixin per mod family, reuses `CamoSpeed.camo` |
+| 4 | `framed-and-decor #8`, `#10` vines | Creative Common + tags | Same `VineBlock` neighbor hook; build together |
+| 5 | `framed-and-decor #7` Fairy lights | Creative Common + tags | Independent |
+| 6 | `framed-and-decor #11` Random flower offset | Creative Common | Needs a dump first |
 | 7 | `framed-and-decor #3` Trapdoor / shutter variants | KubeJS / data | Waits on "which" |
 
-All patcherMod rows can go in one build (patcherMod is at 1.1.04 with 2026-10-31 work not installed yet, flower_pots.md 0).
+All Creative Common rows can go in one build (Creative Common is at 1.1.04 with 2026-10-31 work not installed yet, flower_pots.md 0).
 
 ## Built, needs play
 
 - `framed-and-decor #4` Canvas sign dyeing: `SupplementariesDyeBlocksMixin` skips blocks with a block entity
-  (patcherMod 1.1.01, shipped 2026-10-22); [dyeing.md](../dyeing.md) 2.1 D1 / D4 and DY-04. Tiers S C P open.
-- `framed-and-decor #5` Botanist workbench as a flower pot (built 2026-10-29, patcherMod 1.1.04);
+  (Creative Common 1.1.01, shipped 2026-10-22); [dyeing.md](../dyeing.md) 2.1 D1 / D4 and DY-04. Tiers S C P open.
+- `framed-and-decor #5` Botanist workbench as a flower pot (built 2026-10-29, Creative Common 1.1.04);
   [flower_pots.md](../flower_pots.md) 3.1; POT-08, SQ-POT-06 (SQ-POT-06b passed r1031), CQ-POT-02. Tiers S C P open
   (S partly).
 - `framed-and-decor #9` Design Decor golden apple craft removed (built 2026-10-23, shipped 1.1.03;
@@ -39,7 +39,7 @@ All patcherMod rows can go in one build (patcherMod is at 1.1.04 with 2026-10-31
 ---
 
 ## framed-and-decor #1: Flowers on framed / copycat dirt
-Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #1`
+Status **Planned** · Work: Creative Common · id `blocks/framed-and-decor #1`
 
 ### Goal
 A flower (and other plants that take dirt or grass) can be planted on a FramedBlocks block, a Create copycat or a
@@ -49,7 +49,7 @@ Copycats+ copycat whose camo on the top face is dirt, grass or another soil.
 - Neither mod lets a camo sustain plants: no `canSustainPlant` in any FramedBlocks 6.8.6 class nor in Copycats+ 2.2.2 /
   Create's `CopycatBlock` (checked by grepping the extracted classes). Forge's default `IForgeBlock.canSustainPlant`
   looks at the framed block itself, which is not in `#minecraft:dirt`, so `BushBlock.canSurvive` fails.
-- Camo lookup already exists in patcherMod:
+- Camo lookup already exists in Creative Common:
   [CamoSpeed.camo(BlockEntity)](../../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeed.java#L84-L104)
   (FramedBlocks via `FramedCamo`, Copycats+ via `CopycatsPlusCamo`, Create's `CopycatBlockEntity.getMaterial()`).
   FramedBlocks' `FramedBlockEntity.getCamo(Direction)` gives the camo of one face (double blocks).
@@ -138,9 +138,9 @@ More shapes and wood variants of trapdoors and Another Furniture shutters.
 
 ### Build (once D1 is answered)
 1. Wood gaps: KubeJS `StartupEvents.registry('block')` trapdoors are not a KubeJS 1902 block type; register them in
-   patcherMod (`TrapDoorBlock` with the wood's sound and `BlockSetType`-less 1.19.2 ctor), items, models from the
+   Creative Common (`TrapDoorBlock` with the wood's sound and `BlockSetType`-less 1.19.2 ctor), items, models from the
    planks texture, loot, `#minecraft:wooden_trapdoors`, recipes `R.shaped(Item.of(id, 2), ['ppp','ppp'], { p: planks })`.
-2. Shutters for the three missing woods: Another Furniture's `ShutterBlock` registered by patcherMod under
+2. Shutters for the three missing woods: Another Furniture's `ShutterBlock` registered by Creative Common under
    `creativeengineering:<wood>_shutter` with AF's model parents, tag `#another_furniture:shutters`, AF-style recipe.
 3. Shapes (D2): only after the owner names them.
 
@@ -170,7 +170,7 @@ flower, and fix the audit's bugs.
   `/dumppots`, `tools/flower_pot_audit.py`); SQ-POT-01 to -04 ran; SQ-POT-05 (read the 427 mismatches) and CQ-POT-01 open.
 - Since then (not in the TODO row's text): flower pot tweaks **built 2026-10-31** (flower_pots.md 3.2: framed pot
   before framing, box plant models, plant lists in `misctags.js:47-56`, Rich Hanging Pot, Large Flower Box, WTHIT
-  "Contains", silt pot as soil, Vinery box centered), patcherMod 1.1.04 + Vinery port `-07`, not installed;
+  "Contains", silt pot as soil, Vinery box centered), Creative Common 1.1.04 + Vinery port `-07`, not installed;
   POT-09 to POT-17, SQ-POT-07, SQ-POT-08. Floral large pots hidden 2026-10-31 (3.2.9; D4 decided, replacement in
   `potions/enchanting #7`).
 - Bugs still open: F1 (planter box `ClassCastException` on 4 Fungi Delight items: nothing in
@@ -187,7 +187,7 @@ flower, and fix the audit's bugs.
 4. **D5:** recommend drop the soul planter (no Nether's Delight soul soil route worth a mixin).
 5. **D2 labels:** one tooltip line per holder in `kubejs/client_scripts/tooltips.js` "Flower Pots" (wording list in
    flower_pots.md 4 D2).
-6. **D1:** recommend option (b), small flowers and saplings first (Botania mystical / shiny, wild crops): a patcherMod
+6. **D1:** recommend option (b), small flowers and saplings first (Botania mystical / shiny, wild crops): a Creative Common
    or CD registration of `potted_*` blocks with generated models. Large; split into its own row when decided.
 7. Rerun `/dumppots` + `tools/flower_pot_audit.py`; flower_pots.md findings marked fixed.
 
@@ -204,7 +204,7 @@ Existing: POT-01 to POT-17 (flower_pots.md 7), SQ-POT-05, -07, -08, CQ-POT-01. P
 ---
 
 ## framed-and-decor #7: Fairy lights on non-full blocks
-Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #7`
+Status **Planned** · Work: Creative Common · id `blocks/framed-and-decor #7`
 
 ### Goal
 Fairy light fasteners attach to some non-full blocks (fence tops and similar).
@@ -240,7 +240,7 @@ Fairy light fasteners attach to some non-full blocks (fence tops and similar).
 ---
 
 ## framed-and-decor #8: Vines under non-full blocks
-Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #8`
+Status **Planned** · Work: Creative Common · id `blocks/framed-and-decor #8`
 
 ### Goal
 Vines can grow on and under non-full blocks such as stacked logs.
@@ -272,7 +272,7 @@ Vines can grow on and under non-full blocks such as stacked logs.
 ---
 
 ## framed-and-decor #10: All vines in lattices
-Status **Planned** · Work: patcherMod / data · id `blocks/framed-and-decor #10`
+Status **Planned** · Work: Creative Common / data · id `blocks/framed-and-decor #10`
 
 ### Goal
 Every vine type can grow on or through lattices. Related: #8 and the Decorative Blocks lattice overlap.
@@ -304,7 +304,7 @@ Every vine type can grow on or through lattices. Related: #8 and the Decorative 
 ---
 
 ## framed-and-decor #11: Random flower block position
-Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #11`
+Status **Planned** · Work: Creative Common · id `blocks/framed-and-decor #11`
 
 ### Goal
 Flower blocks that sit dead center get the random XZ offset vanilla flowers have; the trowel may change it.

@@ -1,6 +1,6 @@
 # air-brake-item
 
-> creativeengineering:air_brake - hold-to-use elytra brake item + why its physics live in patcherMod, not KubeJS
+> creativeengineering:air_brake - hold-to-use elytra brake item + why its physics live in Creative Common, not KubeJS
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-13). Repo status docs win over any status line here.
 
@@ -9,7 +9,7 @@ bow while gliding to bleed off speed. Horizontal + upward motion decelerate at a
 flat rate; downward (falling) motion is only slowed slightly, multiplicatively, with an
 optional terminal-speed cap applied first.
 
-**Why the physics are in patcherMod, not KubeJS:** elytra flight is client-predicted;
+**Why the physics are in Creative Common, not KubeJS:** elytra flight is client-predicted;
 vanilla is deliberately lenient about a gliding player's reported position (see
 `isFallFlying()`'s carve-out in `ServerGamePacketListenerImpl`'s movement checks). KubeJS
 `server_scripts` only ever run on the logical server, so a `PlayerEvents.tick`-based
@@ -23,7 +23,7 @@ player - so a `@SubscribeEvent` handler registered on `MinecraftForge.EVENT_BUS`
 common code runs deterministically on both, no Mixin needed.
 
 **How to apply:**
-- `patcherMod/src/main/java/.../gear/AirBrakeHandler.java` - the `TickEvent.PlayerTickEvent`
+- `creativeCommon/src/main/java/.../gear/AirBrakeHandler.java` - the `TickEvent.PlayerTickEvent`
   listener (END phase). Looks up the KubeJS-registered item lazily by ResourceLocation
   (same lazy-cache pattern as [magic-resistance-effect](magic-resistance-effect.md)'s `effect()`), checks
   `isUsingItem() + getUseItem().getItem() == brake` and (config-gated) `isFallFlying()`,
@@ -69,7 +69,7 @@ is `protected`, and `AirBrakeHandler` isn't a subclass, so `stopFallFlying()` re
 one `Method` reflectively once (cached, `setAccessible(true)`) rather than adding a mixin for
 it. Flag bit index (7) confirmed by javap-ing `LivingEntity#isFallFlying()`'s bytecode.
 
-Compiles clean with `cd patcherMod && ./gradlew build --offline`; jar copied over
+Compiles clean with `cd Creative Common && ./gradlew build --offline`; jar copied over
 `mods/creativeengineering-1.0.0.jar`. The `.use()` fix above was confirmed working
 in-game (slowdown works); the stall effect was not, at first - see next entry.
 
@@ -84,7 +84,7 @@ pool entries behind ordinary compiled calls like `isFallFlying()`/`getDeltaMovem
 this same class, which line up fine) **- it cannot touch a plain String argument handed to
 reflection** (`Class#getDeclaredMethod("setSharedFlag", ...)`). This runtime is SRG-
 obfuscated underneath despite the dev-time jar being named `..._mapped_official_...`, so the
-real member is `m_20115_`, found by grepping `patcherMod/build/reobfJar/mappings.tsrg` for
+real member is `m_20115_`, found by grepping `creativeCommon/build/reobfJar/mappings.tsrg` for
 the Mojmap name. Fixed by reflecting on `"m_20115_"` instead, with a comment recording the
 general rule: **any reflection by name against a vanilla MC class in this codebase must use
 the SRG name from mappings.tsrg, never the Mojmap/source name** - ordinary compiled calls

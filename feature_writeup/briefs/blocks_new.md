@@ -15,21 +15,21 @@ placeholders `BL-new1` to `BL-new9`, numbered when queued) until one exists; rar
 | 2 | `new #5` lit fel pumpkin | KubeJS | One `cardinal` block in decor_blocks.js, one texture |
 | 3 | `new #11` flower bale | KubeJS + texture | One block, recipe, compost entry (Creative Delight tree) |
 | 4 | `new #9` more seashells | KubeJS + textures | Twigs is ARR: own blocks and own drawings, not recolours of its pngs |
-| 5 | `new #10` wet sponge | patcherMod | Two small mixins (vanilla farmland, Farmer's Delight rich farmland) |
-| 6 | `new #6` wall mushrooms | mods/ or KubeJS + patcherMod | Search first; no wall mushroom exists in the pack's 415 jars |
-| 7 | `new #1` 3-long curtains | patcherMod | Subclass of Another Furniture's curtain (MIT) |
-| 8 | `new #2` collapsible ladders | patcherMod | Own blocks; climbable only when extended |
-| 9 | `new #8` scarecrow | patcherMod (entity) | From the dummy mod's public-domain code, own model; Alex's Mobs crow tags |
-| 10 | `new #3` chiseled bookshelf | patcherMod (port skill) | Block + block entity; framed / copycat later |
-| 11 | `new #4` sculk sensor | patcherMod (port skill) | Calibrated sensor only; 1.19.2 already has the plain sensor |
+| 5 | `new #10` wet sponge | Creative Common | Two small mixins (vanilla farmland, Farmer's Delight rich farmland) |
+| 6 | `new #6` wall mushrooms | mods/ or KubeJS + Creative Common | Search first; no wall mushroom exists in the pack's 415 jars |
+| 7 | `new #1` 3-long curtains | Creative Common | Subclass of Another Furniture's curtain (MIT) |
+| 8 | `new #2` collapsible ladders | Creative Common | Own blocks; climbable only when extended |
+| 9 | `new #8` scarecrow | Creative Common (entity) | From the dummy mod's public-domain code, own model; Alex's Mobs crow tags |
+| 10 | `new #3` chiseled bookshelf | Creative Common (port skill) | Block + block entity; framed / copycat later |
+| 11 | `new #4` sculk sensor | Creative Common (port skill) | Calibrated sensor only; 1.19.2 already has the plain sensor |
 
-Steps 5, 7 to 11 are patcherMod and can share one build. Every new player-visible block needs a changelog bullet, a
+Steps 5, 7 to 11 are Creative Common and can share one build. Every new player-visible block needs a changelog bullet, a
 `mod_sides.md` row only if a new jar is added (#6), and its WTHIT name check.
 
 ---
 
 ## new #1: 3-long curtain blocks
-Status **Planned** / Work patcherMod / TODO `blocks/new #1`
+Status **Planned** / Work Creative Common / TODO `blocks/new #1`
 
 ### Goal
 Curtains that hang three blocks tall (top with the rod, middle, bottom), opening and closing as one.
@@ -51,14 +51,14 @@ Curtains that hang three blocks tall (top with the rod, middle, bottom), opening
 
 ### Build
 1. Copy the jar to `development/creativeCommon/libs/` (compileOnly `fileTree`, build.gradle line 22).
-2. patcherMod `block/curtain/LongCurtainBlock extends CurtainBlock`: an own `EnumProperty<Part>` `part` = top /
+2. Creative Common `block/curtain/LongCurtainBlock extends CurtainBlock`: an own `EnumProperty<Part>` `part` = top /
    middle / bottom (keep `facing_vertical` fixed, it is shared through Another Furniture's `ModBlockStateProperties`).
    Override placement (needs two free blocks below), `setPlacedBy` (place middle and bottom), `updateShape` (survive
    only with the partner above / below), `playerWillDestroy` (break all three, drop once from the top), and
    `toggleVertical` (open or close all three).
 3. Register 16 `creativeengineering:<colour>_long_curtain` blocks and block items (`CreativeEngineering.BLOCKS`, as
-   `CreativeEngineeringBlocks` does). Blockstates and models in patcherMod resources reuse Another Furniture's
-   curtain textures by id (MIT: add its notice to patcherMod's NOTICE); the middle piece uses the bottom textures.
+   `CreativeEngineeringBlocks` does). Blockstates and models in Creative Common resources reuse Another Furniture's
+   curtain textures by id (MIT: add its notice to Creative Common's NOTICE); the middle piece uses the bottom textures.
 4. KubeJS: `i.<colour>_long_curtain` keys in item_dict (and the 16 Another Furniture curtains as `i.<colour>_curtain`),
    recipe through `global.NCH` (`R.shapeless`: 3 curtains of a color -> 2 long curtains, same cloth), tags through
    `global.tags` (`another_furniture:curtains` block and item, `minecraft:mineable/axe` like the source), lang names
@@ -69,7 +69,7 @@ Curtains that hang three blocks tall (top with the rod, middle, bottom), opening
 New: 16 `creativeengineering:<colour>_long_curtain`. Uses `another_furniture:<colour>_curtain` (verified in the jar).
 
 ### Decisions
-- Source mod: Another Furniture (the only curtains in the pack, MIT). **Recommend a subclass in patcherMod**, not a
+- Source mod: Another Furniture (the only curtains in the pack, MIT). **Recommend a subclass in Creative Common**, not a
   mixin that turns every curtain into three blocks (the property cannot gain a value, and old two-block curtains would
   break).
 - Fixed three tall, or "as tall as the space" (2 to 4)? **Recommend fixed three** (one item = one shape).
@@ -86,7 +86,7 @@ New: 16 `creativeengineering:<colour>_long_curtain`. Uses `another_furniture:<co
 ---
 
 ## new #2: Collapsible ladders
-Status **Planned** / Work patcherMod / TODO `blocks/new #2`
+Status **Planned** / Work Creative Common / TODO `blocks/new #2`
 
 ### Goal
 A ladder that is placed folded at the top and unrolls downward (like a curtain opening); climbable only when
@@ -100,7 +100,7 @@ extended. The iron one extends and retracts by redstone.
   the row means.
 
 ### Build
-1. patcherMod `block/ladder/CollapsibleLadderBlock` (ladder shape, `facing`, `extended`, `head` booleans). The head is
+1. Creative Common `block/ladder/CollapsibleLadderBlock` (ladder shape, `facing`, `extended`, `head` booleans). The head is
    the placed block; extending places segment blocks downward until a non-replaceable block or the length limit;
    retracting removes them back to the head.
 2. Wooden `creativeengineering:collapsible_ladder`: right-click the head toggles. Iron
@@ -133,7 +133,7 @@ folded-ladder head, segments reuse the ladder look).
 ---
 
 ## new #3: Chiseled bookshelf backport
-Status **Planned** / Work patcherMod / TODO `blocks/new #3`
+Status **Planned** / Work Creative Common / TODO `blocks/new #3`
 
 ### Goal
 The 1.20 chiseled bookshelf on 1.19.2: six book slots, picked by where you click, comparator output for the last
@@ -144,12 +144,12 @@ slot used. Decide whether framed and copycat versions come too.
   Quark's wood bookshelves (`i.acacia_bookshelf` ... item_dict line 2911 on).
 - FramedBlocks 6.8.6 (LGPL v3) has no framed bookshelf of either kind; Copycats+ 2.2.2 is all rights reserved (own
   code only, on Create's MIT copycat base).
-- patcherMod precedent for a block with a block entity: `oven/OvenBlock.java`, `oven/OvenRegistry.java`.
+- Creative Common precedent for a block with a block entity: `oven/OvenBlock.java`, `oven/OvenRegistry.java`.
 
 ### Build
 Follow the `port` skill (license route: Mojang's 1.20 code and textures are not copied; own code, own or user-drawn
 textures).
-1. patcherMod `block/bookshelf/ChiseledBookshelfBlock` + block entity (6-slot `NonNullList`, one book each), the
+1. Creative Common `block/bookshelf/ChiseledBookshelfBlock` + block entity (6-slot `NonNullList`, one book each), the
    1.20 slot-from-hit-position rule (2 rows x 3 columns on the front face), `facing`, six `slot_N_occupied` booleans,
    comparator = last slot touched + 1.
 2. Multipart blockstate (one model per slot, occupied / empty), so no block entity renderer.
@@ -165,7 +165,7 @@ New: `creativeengineering:chiseled_bookshelf` (not the `minecraft` namespace).
 
 ### Decisions
 - Framed / copycat versions: **recommend not in the first pass**; a framed one later is a FramedBlocks-style block in
-  patcherMod (LGPL upstream code may be ported with notice), a copycat one is own code on Create's copycat base.
+  Creative Common (LGPL upstream code may be ported with notice), a copycat one is own code on Create's copycat base.
 - Enchanting power: vanilla gives none; recommend none.
 - Per-wood variants (Quark woods): recommend oak only first.
 - Hopper access: recommend yes (matches vanilla 1.20).
@@ -182,7 +182,7 @@ New: `creativeengineering:chiseled_bookshelf` (not the `minecraft` namespace).
 ---
 
 ## new #4: Sculk sensor backport
-Status **Planned** / Work patcherMod / TODO `blocks/new #4`
+Status **Planned** / Work Creative Common / TODO `blocks/new #4`
 
 ### Goal
 The 1.20 calibrated sculk sensor (listens only to the frequency set by a redstone signal on its back), if the scope
@@ -195,7 +195,7 @@ decision keeps it.
 
 ### Build
 Follow the `port` skill (own code, no Mojang 1.20 code or textures copied).
-1. patcherMod `block/sculk/CalibratedSculkSensorBlock` (+ block entity whose vibration listener config rejects events
+1. Creative Common `block/sculk/CalibratedSculkSensorBlock` (+ block entity whose vibration listener config rejects events
    whose frequency differs from the input strength on the back face; 0 = listen to all), `facing`, the sensor's own
    phase / power properties.
 2. Own textures (amethyst-topped sensor), blockstates, models.
@@ -264,7 +264,7 @@ Mushrooms that grow off the sides of blocks (logs, cave walls), with slightly al
 ### Now
 - No wall or shelf mushroom in any of the pack's 415 jars (searched block states for wall / shelf mushroom and fungus).
 - Mushrooms in worldgen: the pack's mushroom spawn system
-  ([mushroom_spawns.json](../../kubejs/generation_scripts/worldgen/mushroom_spawns.json), `rules`, read by patcherMod
+  ([mushroom_spawns.json](../../kubejs/generation_scripts/worldgen/mushroom_spawns.json), `rules`, read by Creative Common
   `CEConfig`; `tools/test_mushroom_spawns.sh`), Fungi Delight's inky cap and morel (`backportedFungi`).
 - Web leads (2026-10-31, unverified): Mushroom Quest (Forge, a 1.19.2 build "v4.1.0", MCreator, adds bracket and shelf
   fungi, each edible with effects); Extended Mushrooms 1.19.2-3.0.3.0 (behavior changes, no wall mushrooms).
@@ -274,7 +274,7 @@ Mushrooms that grow off the sides of blocks (logs, cave walls), with slightly al
    go through the `integration-report` skill (food overlap, Spice of Life).
 2. If no mod fits (recommend own blocks): KubeJS `cardinal` blocks `creativeengineering:wall_brown_mushroom` and
    `wall_red_mushroom` in decor_blocks.js (no collision, a thin box per facing, light like vanilla mushrooms, drop the
-   vanilla mushroom); patcherMod survival rule (attached face solid, light 12 or less, as vanilla mushrooms) and
+   vanilla mushroom); Creative Common survival rule (attached face solid, light 12 or less, as vanilla mushrooms) and
    placement (a mushroom item used on a block side places the wall form).
 3. Worldgen: a rule beside the mushroom spawn rules (cave walls, dark forest and swamp logs), so the counts stay in one
    file.
@@ -294,7 +294,7 @@ A wall form must not count as the mushroom for recipes or compost (it drops the 
 ---
 
 ## new #8: Scarecrow
-Status **Planned** / Work new jar / patcherMod / TODO `blocks/new #8`
+Status **Planned** / Work new jar / Creative Common / TODO `blocks/new #8`
 
 ### Goal
 An armor-stand-like scarecrow for fields: placed from an item, dressable with armor and a pumpkin head, with a default
@@ -310,7 +310,7 @@ clothes look.
 - Rebirth Paintings has a "Scarecrow" painting; some Kaisyn village farms have scarecrow decorations (pool_config.json).
 
 ### Build
-1. patcherMod `entity/scarecrow/Scarecrow extends ArmorStand` (or the dummy's approach): placed by
+1. Creative Common `entity/scarecrow/Scarecrow extends ArmorStand` (or the dummy's approach): placed by
    `creativeengineering:scarecrow` item on farmland or a fence post, holds armor slots and a head slot, no gravity
    when on a fence.
 2. Default clothes: an own model layer (straw body, burlap shirt, hat) drawn when the slots are empty; armor renders
@@ -327,7 +327,7 @@ New: entity `creativeengineering:scarecrow`, item `creativeengineering:scarecrow
 - Function beyond decor: crows scatter (recommend, one tag line); no mob spawn blocking.
 
 ### Gotchas
-- A new entity needs a renderer registration on the client side only (patcherMod client class), and a WTHIT name.
+- A new entity needs a renderer registration on the client side only (Creative Common client class), and a WTHIT name.
 - If it is an `ArmorStand` subclass, other mods' armor-stand handling (Quark's armor stand arms, MCA) may apply.
 
 ### Tests (BL-, proposed)
@@ -373,7 +373,7 @@ Overriding Twigs' `patch_seashell` changes its weights for every beach; a separa
 ---
 
 ## new #10: Wet sponge
-Status **Planned** / Work patcherMod / TODO `blocks/new #10`
+Status **Planned** / Work Creative Common / TODO `blocks/new #10`
 
 ### Goal
 A wet sponge keeps the farmland above it moist, permanently.
@@ -387,7 +387,7 @@ A wet sponge keeps the farmland above it moist, permanently.
 - `i.wet_sponge` = `minecraft:wet_sponge` (item_dict line 2868).
 
 ### Build
-1. patcherMod `FarmBlockWetSpongeMixin`: inject at HEAD of `isNearWater` (SRG name to check, likely `m_53258_`),
+1. Creative Common `FarmBlockWetSpongeMixin`: inject at HEAD of `isNearWater` (SRG name to check, likely `m_53258_`),
    return true when the block below is in a new block tag `creativeengineering:moistens_soil_above` (holds
    `minecraft:wet_sponge`).
 2. Same for `RichSoilFarmlandBlock.hasWater` (string target, `remap = false`). Check the other soils in

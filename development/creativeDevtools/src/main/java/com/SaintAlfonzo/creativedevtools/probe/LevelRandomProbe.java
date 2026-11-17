@@ -27,7 +27,7 @@ public final class LevelRandomProbe extends ThreadSafeLegacyRandomSource {
 		super(RandomSupport.generateUniqueSeed());
 	}
 
-	/** Registers {@link #create} on patcherMod's util/LevelRandomHook; called from the CreativeDevtools constructor. */
+	/** Registers {@link #create} on Creative Common's util/LevelRandomHook; called from the CreativeDevtools constructor. */
 	public static void register() {
 		LevelRandomHook.register(LevelRandomProbe::create);
 	}

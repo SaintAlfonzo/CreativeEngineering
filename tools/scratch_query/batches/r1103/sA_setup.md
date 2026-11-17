@@ -14,7 +14,7 @@ all files: captures `SAH` / `SBH` carry from boot to boot through RES/vars.json)
   `goldenfood_upstream/` and `enders_upstream/` are in place; `endersdelight-1.19-1.2.2.jar` is still in `mods/`.
 - So the queue's "boot 1 on the old jars" (SQ-CWG, SQ-CNG) and "old world" (SQ-GLD-01, SQ-ENM-02) cannot use the
   instance's mods/. Boot 1 runs the **last release as a whole**: `deploy/latest/` (1.1.06 full install, 10-31:
-  patcherMod 1.1.04, standalone More Mooblooms, Baby Mobs, Canned Goods, Golden Food, Salt, Create: The Salt, Creative
+  Creative Common 1.1.04, standalone More Mooblooms, Baby Mobs, Canned Goods, Golden Food, Salt, Create: The Salt, Creative
   Delight under its old id `creative_delight`) with its own kubejs/config/defaultconfigs. That is the real upgrade
   path of a player world (1.1.06 to now), so boot 2 also crosses the creative_delight -> creativedelight rename and
   every other change since 1.1.06: judge old-world rows only on their own ids.

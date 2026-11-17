@@ -7,7 +7,7 @@
 @@date 2026-10-28
 @@sources feature_writeup/fixes_compat.md
 @@text
-@@text patcherMod 1.1.03 (`FallingBlockWaterSplashMixin`, client list). Client only: a dedicated server cannot show it. Needs the
+@@text Creative Common 1.1.03 (`FallingBlockWaterSplashMixin`, client list). Client only: a dedicated server cannot show it. Needs the
 @@text real client with a creative world; Effective installed.
 @@text
 @@table

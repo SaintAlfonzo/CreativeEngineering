@@ -370,3 +370,24 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass every line shows text, none shows a raw key (`tooltip.vinerybackport.*`, `jei.vinerybackport.*`, `command.vinerybackport.*`, `label.vinerybackport.*`, `wthit.vinerybackport.*`); the wine box shows the recolored bottle (no missing-texture checker); the moobloom reads `Sunbloom`, the egg `Sunbloom Spawn Egg`; the baby squid has its 26.1 baby texture
 @fails a raw key: the lang file is not at `assets/vinerybackport/lang/en_us.json` in the Vinery member, or a key kept the old prefix; a checker on the baby squid: `assets/babymobs/textures` missing from the babyMobs member
 @draft hover, JEI and look steps need the capture driver session (qrun.py client: shot per step); the owner can LOOK by hand
+
+@@section 8
+@@title SQ-RFX Rules fixes P5 on a boot: Creative Common text and American spelling in log and config text, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 13 and 15b; TODO `conventions #29`, `conventions #32`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon creativecompat creativedelight creativeworldgen creativeequipment creativelabels creativebrewing creativecalendar
+@@sources tools/rename_patchermod.py tools/us_spelling.py development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CWGConfig.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java
+@@text
+@@text P5 text sweeps: `patcherMod` in log, chat and config comment text reads Creative Common (identifiers and strings read by code unchanged, D18), and our config comments use American spelling. Config keys keep their names (`neighbours`, `neighbourStride`). Text only: nothing else should change at boot.
+@@table
+## SQ-RFX-28 | boot log and freshly written config files carry no patcherMod text (old name) and no British spelling from our jars
+@group A (fresh server, no config/ files of the Creative jars, so each is written new)
+@commands Boot to the world; `shell` checks of `logs/latest.log` and the written `config/creative*-common.toml` comment lines; `/reload` once and check the log again
+@pass no log line names patcherMod; the Creative jars' config comment lines read color, center, behavior, neighbor (keys stay `neighbours` and `neighbourStride`); the boot has no new ERROR from our jars; a config carried from an old file logs "(Creative Common drops these from its file)" text where it used to say patcherMod
+@fails a patcherMod (old name) log line: a string the sweep left (see feature_writeup/patchermod_left.csv kinds); a key renamed to `neighbors`: a config key was changed (D18), the player's value is lost
+shell ! grep -n "patcherMod" logs/latest.log
+shell ! grep -hnE "^\s*#.*\b(colour|centre|behaviour|neighbour)" config/creativecommon-common.toml config/creativecompat-common.toml config/creativedelight-common.toml config/creativeworldgen-common.toml config/creativeequipment-common.toml config/creativelabels-common.toml
+shell grep -q "neighbours = " config/creativecompat-common.toml
+> reload
+shell ! grep -n "patcherMod" logs/latest.log
+look the config comments read naturally (no "Creative Common Creative Common" or broken sentence where a date or old name was taken out)

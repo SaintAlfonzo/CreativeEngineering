@@ -11,7 +11,7 @@
 
 	// Echo armor (create_deep_dark:echo_armor_*) is DELIBERATELY NOT registered here,
 	// even though it's the exact case this framework was modeled on. It already has a
-	// working Night Vision + Phantom Bane bonus via patcherMod's
+	// working Night Vision + Phantom Bane bonus via Creative Common's
 	// EchoArmorEffectProcedureMixin + EchoArmorTooltipMixin (see [[echo-armor-set-bonus]]),
 	// and this framework can't cleanly take over: EchoArmorEffectProcedure is Create:
 	// Deep Dark's own hardcoded MCreator event listener that unconditionally applies

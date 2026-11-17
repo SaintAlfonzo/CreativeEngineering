@@ -1,10 +1,10 @@
 # time-master
 
-> CEConfig [time] master (patcherMod time/ package) drives Better Days, Serene Seasons, SeasonHUD and the Vinery port; feature_writeup/time.md (TI-)
+> CEConfig [time] master (Creative Common time/ package) drives Better Days, Serene Seasons, SeasonHUD and the Vinery port; feature_writeup/time.md (TI-)
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-10-18: `[time]` in creativeengineering-common.toml is the only place day length, seasons and wine aging are set. Design + build status: feature_writeup/time.md (3.8 lists every change from the design). Pack values: 45 min day + 15 min night, 8-day sub-seasons, wine month = sub-season, +1 level per 1 month (SINGLEPLAYER preset, default) or 3 (SERVER preset), cellar x2.0, cold x2.0, warm x0.75 (2026-10-19; patcherMod 1.0.10), sun clock for seasons and wine, clock reads sunrise (dayStart 22300) as 6:00 am.
+Built 2026-10-18: `[time]` in creativeengineering-common.toml is the only place day length, seasons and wine aging are set. Design + build status: feature_writeup/time.md (3.8 lists every change from the design). Pack values: 45 min day + 15 min night, 8-day sub-seasons, wine month = sub-season, +1 level per 1 month (SINGLEPLAYER preset, default) or 3 (SERVER preset), cellar x2.0, cold x2.0, warm x0.75 (2026-10-19; Creative Common 1.0.10), sun clock for seasons and wine, clock reads sunrise (dayStart 22300) as 6:00 am.
 
 How it plugs in: Better Days via `@Pseudo` getter mixin (its WhiteNoise config can't be set); Serene Seasons + SeasonHUD SERVER configs `.set()` + `SPEC.save()` at ServerAboutToStartEvent (Forge loads SERVER configs just before that event) and on every toml save; Vinery port by reflection on `net.satisfy.vinery.forge.VineryConfig`.
 

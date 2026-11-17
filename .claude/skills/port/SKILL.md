@@ -7,7 +7,7 @@ description: Port or backport a mod (or a feature of one) to the pack's Forge 1.
 
 Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (fork of a permissive mod),
 [miners_delight.md](../../../feature_writeup/miners_delight.md) (ARR donor-jar backport),
-[feature_porting.md](../../../feature_writeup/feature_porting.md) (small mods absorbed into KubeJS / patcherMod),
+[feature_porting.md](../../../feature_writeup/feature_porting.md) (small mods absorbed into KubeJS / Creative Common),
 [devmods_evaluation.md](../../../feature_writeup/devmods_evaluation.md) section 1 (newer upstream against ours).
 
 1. **Survey first.** Run the `integration-report` skill (or extend the mod's writeup) so overlaps and decisions
@@ -21,7 +21,7 @@ Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (f
      Donor jars go unmodified to local dev instances only; at publish the pack links official sources and Creative
      Common files the detected jars into the upstream folder (note [upstream-jar-distribution-policy](../../../feature_writeup/agent_notes/upstream-jar-distribution-policy.md)). Do not
      raise rehosting as a blocker.
-   - Small feature: tier it as in feature_porting.md (KubeJS / data, or one patcherMod handler or mixin).
+   - Small feature: tier it as in feature_porting.md (KubeJS / data, or one Creative Common handler or mixin).
 3. **Home.** Food content: Creative Delight member or CD tree (memory `creative-delight-routing`); else its own
    in-tree mod. New project: root `settings.gradle`, `installToMods`, `IN_TREE_MODS` in `tools/build_deploy.py`,
    `mod_sides.md` row.

@@ -36,7 +36,7 @@ public final class CounterToppers {
             BlockTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "counter_toppers"));
     private static final String BOARD_CLASS = "vectorwing.farmersdelight.common.block.CuttingBoardBlock";
     private static final String DISPLAY_DELIGHT = "displaydelight";
-    /** Display Delight's (and its port's) block classes; patcherMod's own dish blocks are of these too. */
+    /** Display Delight's (and its port's) block classes; Creative Common's own dish blocks are of these too. */
     private static final String DISPLAY_DELIGHT_PACKAGE = "com.jkvin114.displaydelight.";
 
     /** Bumped on every tag (re)load; the per-state topper cache in the mixin is valid for one generation. Starts at 1. */

@@ -17,11 +17,11 @@ selection deterministic.
 - Recipe JSON gains an optional `"blade": "<profile>"` field. Absent/`""` = the profile-less
   default for that input (what a plain `immersiveengineering:sawblade` produces).
 - Precision sawblade (`creativeengineering:precision_sawblade`) carries NBT `{Profile:"<shape>"}`.
-- `patcherMod` [patchermod-coremod](patchermod-coremod.md) routes: among input-matching recipes, prefer the one
+- Creative Common [patchermod-coremod](patchermod-coremod.md) routes: among input-matching recipes, prefer the one
   whose `blade` == the installed blade's `Profile`; else the `blade==""` default; else null
   (IE passes the item through unchanged — safe, `getCurrentStack` null-guards).
 
-## patcherMod pieces (`com.SaintAlfonzo.creativeengineering.sawmill.*` + `.mixin.*`)
+## Creative Common pieces (`com.SaintAlfonzo.creativeengineering.sawmill.*` + `.mixin.*`)
 
 - `SawbladeRouting` — `profileOf(ItemStack)`, `route(Level, input, profile)`. Pure logic + the
   `((Recipe<?>)r).getId()` cast (IE's SRG jar hides the Mojmap `Recipe` methods; cast to the
@@ -39,7 +39,7 @@ selection deterministic.
 
 - `kubejs/generation_scripts/sawmill.js` — `profileFor(outputId)` regex classifies the output
   shape; `createSawmillSimpleRecipeFile` auto-derives `blade` from the output. Regenerate with
-  `node sawmill.js`, then copy `recipes/sawmill/*.json` -> `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/`.
+  `node sawmill.js`, then copy `recipes/sawmill/*.json` -> `creativeCommon/src/main/resources/data/creativeengineering/recipes/sawmill/`.
 - Default per planks input: IE's own `immersiveengineering:sawmill/<species>_slab` (9 vanilla/nether,
   still live) or the generated `*_slab` (4 modded woods). `wood_types.js` unchanged.
 - Blueprint recipes: `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`
@@ -64,15 +64,15 @@ Inserting any precision sawblade crashed: `ClassMetadataNotFoundException:
 com.SaintAlfonzo.creativeengineering.sawmill.SawbladeRouting` (also `duck.SawmillProcessExt`)
 while `SawmillProcessMixin` applied. `SawmillProcess` is transformed lazily on the first
 sawmill tick, minutes after mod load; ModLauncher's Mixin bytecode provider can't locate a
-class from patcherMod's own jar that has never been loaded during a *late* transform ("Error
-loading class ... ClassNotFoundException"). Other patcherMod helper classes (`DragonBreathBrewing`,
+class from Creative Common's own jar that has never been loaded during a *late* transform ("Error
+loading class ... ClassNotFoundException"). Other Creative Common helper classes (`DragonBreathBrewing`,
 `fan.*`) dodge this only because `commonSetup` already referenced them.
 Fix: `CreativeEngineering.commonSetup` now `Class.forName`s `SawbladeRouting` +
 both `duck` interfaces up front (`forceLoad(...)`), so they're defined before the lazy apply.
-Any future mixin that's applied lazily and references a patcherMod class needs the same treatment.
+Any future mixin that's applied lazily and references a Creative Common class needs the same treatment.
 
 Status: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
 
 ## TODO (earmarked 2026-09-26): make the sawmill recipes dynamic
 
-The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` -> `recipes/sawmill/*.json` -> hand-copied into `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) -> jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.
+The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` -> `recipes/sawmill/*.json` -> hand-copied into `creativeCommon/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) -> jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.

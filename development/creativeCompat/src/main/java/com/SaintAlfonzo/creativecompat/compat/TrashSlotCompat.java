@@ -148,7 +148,7 @@ public final class TrashSlotCompat {
 
     private static void saveApplied() {
         JsonObject json = new JsonObject();
-        json.addProperty("_comment", "Screens the pack has switched the trash slot on for once (patcherMod TrashSlotCompat).");
+        json.addProperty("_comment", "Screens the pack has switched the trash slot on for once (Creative Common TrashSlotCompat).");
         json.add("switchedOn", GSON.toJsonTree(List.copyOf(applied())));
         try (FileWriter writer = new FileWriter(appliedFile())) {
             GSON.toJson(json, writer);

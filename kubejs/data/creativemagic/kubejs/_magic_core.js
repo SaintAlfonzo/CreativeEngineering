@@ -8,5 +8,5 @@
 // Each script pack has its own scope: these scripts read only global.* (NCH, tags, item, fluid) at event time.
 ServerEvents.loaded(e => {
 	if (!global.CMG) console.error('[creativemagic] global.CMG missing: the Magic jar\'s startup script did not run ' +
-		'(patcherMod without the startup loader, or no creativemagic jar in mods/)')
+		'(Creative Common without the startup loader, or no creativemagic jar in mods/)')
 })

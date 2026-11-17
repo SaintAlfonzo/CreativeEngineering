@@ -3,7 +3,7 @@
 # GameTest server with Farmer's Delight 1.2.4 and Farmer's Respite 2.0. Fetches the two jars from the URLs in
 # pack/manifest.json the first time. Needs Java 17 (JAVA_HOME or the root gradle.properties' org.gradle.java.home).
 # The first run sets up ForgeGradle (several minutes); a run takes about 1-3 minutes after that.
-# STALE since the Creative Delight carve (build.gradle syncs the removed development/patcherMod cooking/ and oven/):
+# STALE since the Creative Delight carve (build.gradle syncs the removed development/creativeCommon cooking/ and oven/):
 # retarget to Creative Delight before trusting it. Boots a GameTest server, so it is not a tools/test_*.sh check;
 # the headless routing logic is tools/test_remainder_buffer.sh.
 set -euo pipefail

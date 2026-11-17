@@ -9,7 +9,7 @@
 // Per rule in the config:
 //   - biome tag creativeworldgen:mob_spawns/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
 //   - every rule goes into ONE biome modifier, creativeworldgen:forge/biome_modifier/mob_spawns.json, of
-//     patcherMod's type creativeworldgen:tune_spawns (worldgen/SpawnTuning), which runs the rules in file order
+//     Creative Common's type creativeworldgen:tune_spawns (worldgen/SpawnTuning), which runs the rules in file order
 //     after every mod's modifiers (Forge phase AFTER_EVERYTHING). One modifier keeps the order deterministic;
 //   - disable_modifiers: the mods' own biome modifiers, each replaced by forge:none.
 // Per spawn condition (conditions list: light_only, water_only; Creative Worldgen worldgen/SpawnConditions):
@@ -284,7 +284,7 @@
 		})
 	})
 
-	// Ground blocks for spawn rules. Plain block tags, but patcherMod's walk-value mixins (same jar as SpawnTuning)
+	// Ground blocks for spawn rules. Plain block tags, but Creative Common's walk-value mixins (same jar as SpawnTuning)
 	// must read them too, or night spawns on the new blocks fail.
 	ServerEvents.tags('block', function (event) {
 		var cfg = readConfig()

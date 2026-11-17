@@ -7,7 +7,7 @@
 @@date 2026-10-26
 @@jars creativecommon creativeworldgen
 @@text
-@@text Needs patcherMod 1.1.03 rebuilt 2026-10-26 (the perf mixins) and the server booted with the recording, which
+@@text Needs Creative Common 1.1.03 rebuilt 2026-10-26 (the perf mixins) and the server booted with the recording, which
 @@text `scratch_server.sh setup` now adds by itself (2026-10-28; `/cdevperf dump` still works, its window is the whole boot). Grep `latest.log` for
 @@text `Perf` / `KubeJSEventHandler` mixin warnings first.
 @@text

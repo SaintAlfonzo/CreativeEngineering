@@ -1,7 +1,7 @@
 # Vinery JEI pages
 
-**Code removed 2026-10-27** ([pack_hygiene.md](pack_hygiene.md) finding 6): patcherMod's `compat/vinery/` plugin, its
-lang keys and the 1.3.10 jar in `patcherMod/libs/` are gone. The Vinery port's own JEI pages are the only ones. This
+**Code removed 2026-10-27** ([pack_hygiene.md](pack_hygiene.md) finding 6): Creative Common's `compat/vinery/` plugin, its
+lang keys and the 1.3.10 jar in `creativeCommon/libs/` are gone. The Vinery port's own JEI pages are the only ones. This
 file is kept as history; VJ-01 to VJ-10 can no longer run.
 
 ## 0. At a glance
@@ -21,7 +21,7 @@ file is kept as history; VJ-01 to VJ-10 can no longer run.
 
 | Part | Status |
 |---|---|
-| Aging Barrel fermentation page | BUILT, in `mods/` (patcherMod 1.0.3); **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
+| Aging Barrel fermentation page | BUILT, in `mods/` (Creative Common 1.0.3); **arrow time wrong** (1800 ticks shown, real is about 50, §4) |
 | Apple Press page | BUILT, in `mods/` |
 | Grape Stomping page | BUILT, in `mods/` |
 | Wine Aging page | BUILT, in `mods/` |
@@ -33,7 +33,7 @@ file is kept as history; VJ-01 to VJ-10 can no longer run.
 ## 1. Overview
 
 Vinery 1.3.10 (the 1.19.2 line) ships an REI plugin only; Vinery's JEI support starts at 1.4.2,
-which is 1.20.1-only. With JEI and no REI, none of Vinery's machine recipes were visible. patcherMod
+which is 1.20.1-only. With JEI and no REI, none of Vinery's machine recipes were visible. Creative Common
 now adds a `@JeiPlugin` (`VineryJEI`) with four pages:
 
 | Page | Source of the recipes | Catalyst |
@@ -115,7 +115,7 @@ Brief: [briefs/alcohol_vineryport.md](briefs/alcohol_vineryport.md). Nothing her
 
 ## 8. History
 
-- 2026-10-01: built (patcherMod 1.0.3). Not copied to `mods/` because a game instance was running.
+- 2026-10-01: built (Creative Common 1.0.3). Not copied to `mods/` because a game instance was running.
 - 2026-10-01: the real barrel time is about 50 ticks, not 1800 (from the decompiled jar); fix open. Full Vinery behavior reference: [vinery.md](vinery.md).
-- 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
+- 2026-10-02: in `mods/` (Creative Common 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-24: planned from the scratchpad: shorter Vinery port JEI descriptions (`alcohol/vineryport #26`). No code changed.

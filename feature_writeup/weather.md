@@ -18,24 +18,24 @@ the decisions and the tests.
 
 | Part | Status |
 |---|---|
-| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), DEPLOYED with pack 1.0.6 (2026-10-14). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
+| Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in Creative Common 1.0.5 (in `mods/`, md5 68509043), DEPLOYED with pack 1.0.6 (2026-10-14). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |
 | Biome lists | `kubejs/generation_scripts/worldgen/season_types.json` -> tags `creativeengineering:seasons/<type>` (`kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js`, Creative Calendar) |
 | Arid | 15 sand/terracotta biomes: no rain all year, no seasonal temperature or tint, summer crops all year. HUD: "Arid", day N of the year |
 | Frozen | 24 cold land biomes plus frozen and deep frozen ocean: snow all year (held at 0.1 or colder), no melting, no seasonal tint, winter crops only. HUD: "Frozen", day N of the year |
 | Dry | 11 savannas, shrublands and hot grasslands (arid_highlands, savanna_badlands): Serene Seasons' wet/dry cycle, rain in Mid Wet only (Late Winter + Early Spring), as the mod does for a savanna |
 | Tropical | 11 jungles and swamps plus the warm and lukewarm oceans: wet/dry cycle, rain in every season but Mid Dry |
 | Temperate | ocean, deep ocean, temperate_highlands: Serene Seasons' temperate seasons, also above 0.8 |
-| Cold (3.4) | BUILT 2026-10-11, patcherMod 1.0.6. 22 biomes (taiga x4, windswept x4, highlands, forested_highlands, alpine_highlands, shield, shield_clearing, steppe, caldera, haze_mountain, yellowstone, yosemite cliffs/lowlands, cloud_forest, cold and deep cold ocean): temperate seasons, snow exactly Late Autumn to Early Spring, rain otherwise |
+| Cold (3.4) | BUILT 2026-10-11, Creative Common 1.0.6. 22 biomes (taiga x4, windswept x4, highlands, forested_highlands, alpine_highlands, shield, shield_clearing, steppe, caldera, haze_mountain, yellowstone, yosemite cliffs/lowlands, cloud_forest, cold and deep cold ocean): temperate seasons, snow exactly Late Autumn to Early Spring, rain otherwise |
 | Permanent seasons (3.4) | BUILT 2026-10-11, same jar. The four Terralith skylands: one season all year. Winter = frozen shown as "Winter"; summer never snows; spring/autumn split the year Early 1/4, Mid 1/2, Late 1/4 on the HUD and snow only in their Early Spring / Late Autumn (the world's winter) |
 | Adaptive | 7 rivers/beaches: each column takes the nearest land biome's type and temperature |
 | Untagged | Serene Seasons' own rules (tropical when on its list or warmer than 0.8, temperate otherwise; blacklisted = vanilla). Tagged biomes ignore the blacklist |
-| Snow line (3.4) | BUILT 2026-10-11, patcherMod 1.0.6 in `mods/`, not run in game. `snowLineY` 320 (build height): below it height alone never turns rain into snow; at and above it temperate and cold biomes always snow (a height gauge for flyers). Frozen and permanent seasons unaffected |
+| Snow line (3.4) | BUILT 2026-10-11, Creative Common 1.0.6 in `mods/`, not run in game. `snowLineY` 320 (build height): below it height alone never turns rain into snow; at and above it temperate and cold biomes always snow (a height gauge for flyers). Frozen and permanent seasons unaffected |
 | Snow seasons (3.4) | BUILT 2026-10-11, same jar. `season_types.json` `snow_seasons`: ocean, deep_ocean, meadow, basalt_cliffs, blooming_plateau, granite_cliffs, lush_valley, valley_clearing, white_cliffs snow in winter only |
 | Rain and cloud height (3.4) | 2026-10-11: Pretty Rain `cloudHeight` 191 -> 350 (`config/prettyrain.json5`); Rubidium Extra `cloud_height` 192 -> 350 (`config/sodium-extra-options.json`, vanilla clouds, which are off; Distant Horizons' clouds follow the same value via `DhCloudHeightMixin`). Both client, backed up in `configs_edited/root_config/` |
 
 **Files to open first:** `development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonTypes.java`
 (everything shared, with the design comment), then the mixins `Season*Mixin.java` in `mixin/` (Creative Calendar since
-2026-11-01, [creative_calendar.md](creative_calendar.md); before that patcherMod).
+2026-11-01, [creative_calendar.md](creative_calendar.md); before that Creative Common).
 
 **Knobs:** `season_types.json` (which biome is which, and `snow_seasons`, `/reload`); `config/creativecalendar-common.toml`
 `[seasons]`: `enabled` (false = Serene Seasons alone), `adaptiveRadius` (how far rivers/beaches look for land, default 64),
@@ -321,7 +321,7 @@ Distant Horizons' `overrideVanillaGraphicsSettings`). The clouds on screen are D
 on every frame, ignoring the vanilla value. `DhCloudHeightMixin` (client, @Pseudo, require 1) redirects that
 `ILevelWrapper.getMaxHeight()` read in `CloudRenderHandler.preRender` to the vanilla cloud height - 200, so DH's clouds
 sit at the vanilla height (350, Rubidium Extra) and the one setting moves both layers. The same local drives DH's
-culling. Dimensions whose vanilla cloud height is NaN keep DH's own. DH's jar is in `patcherMod/libs/` for compiling;
+culling. Dimensions whose vanilla cloud height is NaN keep DH's own. DH's jar is in `creativeCommon/libs/` for compiling;
 a DH update that renames `preRender` will fail the mixin at startup (require 1), which is the signal to recheck.
 
 ## 4. Limits and decisions
@@ -549,7 +549,7 @@ Ice, same day after the ocean-ice change, at real ocean positions from the grid 
 
 Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-season names: `EARLY_SPRING` ...
 `LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. The deployed pack
-(patcherMod 1.0.6 or later, live since pack 1.0.6) has everything below; no jar to install.
+(Creative Common 1.0.6 or later, live since pack 1.0.6) has everything below; no jar to install.
 
 - [ ] **WE-01 boot:** start the game and join a world -> no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
 - [ ] **WE-02 desert dry:** desert, rain, any season -> no rain drawn, no rain sound, a fire on sand keeps burning
@@ -605,7 +605,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
   Then: cold and plain oceans no longer ice over (snow only); frozen oceans still freeze. Probe in 6.3, jar reinstalled.
 - 2026-10-09: "arid warm river rains" traced to Pretty Rain replacing the vanilla weather renderer (section 7).
   `PrettyRainSeasonMixin` + `SeasonTypes.precipitationAt`; jar built, not installed.
-- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): patcherMod 1.0.5 in `mods/` holds the season types and
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): Creative Common 1.0.5 in `mods/` holds the season types and
   `PrettyRainSeasonMixin`; Pretty Rain and Cool Rain are new mods in the same payload. Cool Rain's rain sounds come
   from its own client mixin that reads the biome's precipitation directly, so they may ignore the season types
   (WE-25 added, not fixed).
@@ -613,7 +613,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
   CEConfig `[seasons] snowLineMinY` (500), `season_types.json` `snow_seasons` -> tags `creativeengineering:snow/no_*`
   (seasontags.js, checked in the pack's Rhino). ocean and deep_ocean snow in winter only, skylands_summer never.
   Generator models both and lists the rest in weather_by_biome.md 2.8. Pretty Rain `cloudHeight` 191 -> 500.
-  patcherMod 1.0.6 built and installed in `mods/` (1.0.5 moved to jar_archive/displaced); not run in game
+  Creative Common 1.0.6 built and installed in `mods/` (1.0.5 moved to jar_archive/displaced); not run in game
   (WE-26..31).
 - 2026-10-11 (later still): user's picks from the 2.8 list. New type **cold** (21 biomes: snow Late Autumn to Early
   Spring only, `seasonTemperature` cap/floor); the rest of the list winter only via `snow_seasons`; skylands_summer
@@ -627,4 +627,4 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
   not run in game.
 - 2026-10-14: ships in pack **1.0.6** (DEPLOYED 2026-10-14, update from 1.0.4; 1.0.5 was never deployed): the season types
   and Pretty Rain mixin from 1.0.5 plus the 2026-10-11 snow line, snow seasons, cold type, permanent skylands seasons
-  and `DhCloudHeightMixin`, all in patcherMod 1.0.6. Not run in game (WE-26 to WE-36). [plan_1.0.6.md](plan_1.0.6.md).
+  and `DhCloudHeightMixin`, all in Creative Common 1.0.6. Not run in game (WE-26 to WE-36). [plan_1.0.6.md](plan_1.0.6.md).

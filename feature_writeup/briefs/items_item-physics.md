@@ -27,7 +27,7 @@ Build order:
 
 1. **#2 first**: it decides which items skim (foliage, fibre, light_powder) and which float on lava (refractory), so #6
    reads its tags. #5 rides along (one manual override or the `organic` family).
-2. **#6** in one patcherMod build; **#7** can share that build if its investigation is done by then.
+2. **#6** in one Creative Common build; **#7** can share that build if its investigation is done by then.
 
 Related rows: `farming/composting` ([farming_composting.md](farming_composting.md): `#creativeengineering:composters` in
 the floats list), `baking/baked-goods` ([baking_baked-goods.md](baking_baked-goods.md): sugar may move to floats),
@@ -105,7 +105,7 @@ fixes its water and fire behavior through the existing four physics tags. Nothin
 ---
 
 ## item-physics #6: Light items skim on water; lavaproof items float on lava
-Status **Planned** / Work patcherMod / TODO `items/item-physics #6` (item_physics.md 10)
+Status **Planned** / Work Creative Common / TODO `items/item-physics #6` (item_physics.md 10)
 
 ### Goal
 Light items (foliage, fibre, light powder) land on water and stay on the surface (dip about 0.1 block, no bob); the
@@ -169,7 +169,7 @@ other floaters settle without bobbing forever; items that survive lava float on 
 ---
 
 ## item-physics #7: Player speed in lava; Lava Vision gives water-like lava speed
-Status **Planned** / Work patcherMod / TODO `items/item-physics #7` (item_physics.md 10.4)
+Status **Planned** / Work Creative Common / TODO `items/item-physics #7` (item_physics.md 10.4)
 
 ### Goal
 Investigate, then possibly: players move slower in lava than today, and Lava Vision (`alexsmobs:lava_vision`) lets them
@@ -185,7 +185,7 @@ move through lava about as fast as through water.
   0.5 (0.5 / 0.8 / 0.5 when shallow); in water by 0.8 (0.9 sprinting) plus Depth Strider and Forge's `SWIM_SPEED`
   attribute on the water branch. Whether Forge 1.19.2 also applies `SWIM_SPEED` in lava, or routes lava through
   `FluidType#move`, is unverified.
-- Nothing in patcherMod touches player fluid movement (grep `SWIM_SPEED`, `isInLava` in mixins: none).
+- Nothing in Creative Common touches player fluid movement (grep `SWIM_SPEED`, `isInLava` in mixins: none).
 
 ### Build
 1. **Read** the Forge-patched `LivingEntity#travel` (SRG `m_7023_`) in the 1.19.2 Forge jar: the lava branch, whether
@@ -224,7 +224,7 @@ move through lava about as fast as through water.
 ---
 
 ## item-physics #5: Golden egg gets gravity
-Status **Planned** / Work patcherMod / tags / TODO `items/item-physics #5`
+Status **Planned** / Work Creative Common / tags / TODO `items/item-physics #5`
 
 ### Goal
 The goose's golden egg item (`vintagedelight:golden_egg`, `i.golden_egg`) behaves as an ordinary dropped item: it falls

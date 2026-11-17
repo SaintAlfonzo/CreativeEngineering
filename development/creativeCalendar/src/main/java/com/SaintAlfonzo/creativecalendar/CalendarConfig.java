@@ -250,7 +250,7 @@ public final class CalendarConfig {
         }
     }
 
-    /** The crop season WTHIT lines ({@code compat/WthitCropSeasons}); the rest of {@code [wthit]} stays patcherMod's. */
+    /** The crop season WTHIT lines ({@code compat/WthitCropSeasons}); the rest of {@code [wthit]} stays Creative Common's. */
     public static final class Wthit {
         public final ForgeConfigSpec.BooleanValue cropSeasons;
         public final ForgeConfigSpec.BooleanValue cropOutOfSeason;

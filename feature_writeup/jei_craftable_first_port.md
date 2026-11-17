@@ -2,7 +2,7 @@
 
 Source: DecompiledMods/jei-1.21.1-neoforge-19.39.0.371 (class files only; no Java source).
 `javap -p -c` dumps of every relevant class are in `_PORT_craftable_first/` inside that folder.
-Target: JEI 1.19.2-forge-11.8.1.1034 (patcherMod client mixin).
+Target: JEI 1.19.2-forge-11.8.1.1034 (Creative Common client mixin).
 
 ## 0. At a glance
 
@@ -64,7 +64,7 @@ change while the screen stays open. If live re-sorting is wanted, it is an addit
 | `tick()` builds the next layout | 11.8.1 `UnsortedRecipeLayoutList.tick()` is where layouts tick; the old button's `update` runs from `RecipeLayoutWithButtons.tick(menu, player)` |
 | cache invalidation on stages/category/containerId | 11.8.1 `RecipeGuiLogic` caches `cachedRecipeLayoutsWithButtons` and `cachedRecipeCategory`; add the container id check or the list will be stale across menus |
 
-## Implementation (built 2026-10-05; in the patcherMod 1.0.5 jar, DEPLOYED with pack 1.0.6 (2026-10-14); the jar booted in single player without mixin errors; JEI-01..06 not run)
+## Implementation (built 2026-10-05; in the Creative Common 1.0.5 jar, DEPLOYED with pack 1.0.6 (2026-10-14); the jar booted in single player without mixin errors; JEI-01..06 not run)
 
 - `compat/jei/CraftableFirstRecipeLayoutList.java`: the sorted list. Applies only when the menu has a
   transfer handler for the category. Group 0 = + button enabled (`error == null || getType().allowsTransfer`,
@@ -97,7 +97,7 @@ every Mojang/NeoForge name differs from the 1.19.2 mappings the mixin will use.
 
 ## History
 
-- 2026-10-05: port built into patcherMod 1.0.5 (`JeiRecipeGuiLogicMixin`, `JeiMissingSlotsErrorAccessor`,
+- 2026-10-05: port built into Creative Common 1.0.5 (`JeiRecipeGuiLogicMixin`, `JeiMissingSlotsErrorAccessor`,
   `CraftableFirstRecipeLayoutList`, `[jei] craftableFirst`).
 - 2026-10-11: ships in pack 1.0.5 (staged, not deployed). The shipped config has `craftableFirst = true`.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED

@@ -23,7 +23,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 
 ## 1. What it holds
 
-- **Java** (`com.SaintAlfonzo.creativecompat`, same subpackages as in patcherMod): `compat/` (banner pattern atlas,
+- **Java** (`com.SaintAlfonzo.creativecompat`, same subpackages as in Creative Common): `compat/` (banner pattern atlas,
   botanist pot, Polymorph in Sophisticated / vanilla crafting, Supplementaries jar mixing, jar fluid pipes (JarFluidPipes, 2026-11-02), Handcrafted nightstands,
   plant box models, Quark safe sort, sack bundle and scroll, spout gun farmland, Supplementaries flower box, TrashSlot),
   `banners/` (Bedspreads and Customizable Elytra pattern textures built at load, 6.3), `itemphysic/` (split, burn transform, burn blast damage, Allurement curses),
@@ -43,7 +43,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 - **Config:** `config/creativecompat-common.toml` (`CompatConfig`): `[leaf_piles]` (until 2026-11-15, see below), `[moss]`, `[vine_shearing]`,
   `[monster_box]`, `[trash_slot]`, keys, comments and defaults unchanged. On the first boot after the
   carve, Common's `ConfigRename.carrySections` copies those tables with their values from
-  `creativeengineering-common.toml` into the new file (only when the new file does not exist yet); patcherMod's own
+  `creativeengineering-common.toml` into the new file (only when the new file does not exist yet); Creative Common's own
   config correction then drops them from its file. If nothing could be carried, Compat warns about the leftover
   section headers (Calendar's pattern).
 - **Leaf piles (2026-11-15, pass-through phase 3, [plan_passthrough.md](plan_passthrough.md) 3.1):** `LeafPileSlowMixin`
@@ -102,7 +102,7 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors an
 
 ## 5. History
 
-- 2026-11-01: carved (wave 3). patcherMod 1.1.06 loses the classes, mixins, sections and resources; Calendar,
+- 2026-11-01: carved (wave 3). Creative Common 1.1.06 loses the classes, mixins, sections and resources; Calendar,
   Devtools, Creative Delight and Creative Brewing require `creativecompat`. Added ModList gates that were missing for
   the spout gun farmland, nightstands, sack scroll, banner atlas and monster box listeners.
 - 2026-11-04: campfire rain, Comfort, the Campfire Rules JEI rows and `[campfire]` moved to Creative Delight
@@ -125,7 +125,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-10-20: The jars are in disabledmods/ (2026-10-20) (kubejs/data/creativecompat/kubejs/other/feature_ports.js)
 - 2026-10-20: A block with no pick item (the 2026-10-20 audit found 272: 70 Display Delight plates, Colored Water's 64 cauldrons, Immersive Posts' 30 post parts, Delightful's and Central Kitchen's pies, Create belt funnels...) leaves the icon empty, and an item whose model is missing shows the purple/black cube (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/WthitBlockModelIcon.java)
 - 2026-11-01: Creative Compat: item tags for the flower box, planter box, chalk and microblock tweaks; moved from kubejs/server_scripts/tags/misctags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/misctags.js)
-- 2026-11-01: Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system of their own, carved out of patcherMod on 2026-11-01 (creative_split.md 7.5, 7.6) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CreativeCompat.java)
+- 2026-11-01: Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system of their own, carved out of Creative Common on 2026-11-01 (creative_split.md 7.5, 7.6) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CreativeCompat.java)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/starter_kit.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/starter_kit.js)
 - 2026-11-01: Creative Compat: tags of the ported tier-1 mods (feature_writeup/feature_porting.md 1; recipes in other/feature_ports.js); moved from kubejs/server_scripts/tags/feature_port_tags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/feature_port_tags.js)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/tags/item_physics_tags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/item_physics_tags.js)
@@ -136,11 +136,11 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar, 2026-11-01) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/economy/coin.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/economy/coin.js)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/dead_recipe_removal.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/dead_recipe_removal.js)
-- 2026-11-01: The sections moved out of patcherMod's creativeengineering-common.toml on 2026-11-01 with keys, comments and defaults unchanged; the first boot with Compat copies a player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}). {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} came from Creative Engineering's file (same name, creativeengineering-common.toml) on 2026-11-06 with the TNT shrapnel, walk speed and Ore Excavation undo code; keys, comments and defaults unchanged, carried or merged the same way ({@link #ENGINEERING_SECTIONS}) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)
+- 2026-11-01: The sections moved out of Creative Common's creativeengineering-common.toml on 2026-11-01 with keys, comments and defaults unchanged; the first boot with Compat copies a player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}). {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} came from Creative Engineering's file (same name, creativeengineering-common.toml) on 2026-11-06 with the TNT shrapnel, walk speed and Ore Excavation undo code; keys, comments and defaults unchanged, carried or merged the same way ({@link #ENGINEERING_SECTIONS}) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)
 - 2026-11-01: Creative Compat: display names; moved from kubejs/client_scripts/namechanges.js on 2026-11-01 (kubejs/assets/creativecompat/kubejs/names.js)
 - 2026-11-01: Creative Compat: block tags for the mod tweaks; moved from kubejs/server_scripts/tags/blocktags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/blocktags.js)
 - 2026-11-01: Creative Compat startup script (loaded from the Compat jar by the startup loader); moved from kubejs/startup_scripts/func/item_physics.js on 2026-11-01 (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/item_physics.js)
-- 2026-11-01: creativeCompat: Creative Compat (mod id creativecompat, feature_writeup/creative_compat.md), carved out of patcherMod on 2026-11-01 (creative_split.md 7.5, 7.6) (development/creativeCompat/build.gradle)
+- 2026-11-01: creativeCompat: Creative Compat (mod id creativecompat, feature_writeup/creative_compat.md), carved out of Creative Common on 2026-11-01 (creative_split.md 7.5, 7.6) (development/creativeCompat/build.gradle)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/misc_mods.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/misc_mods.js)
 - 2026-11-01: Creative Compat: item tooltips for the mod tweaks (misc mods, Quark, Supplementaries, Framed and copycat blocks, flower pots); moved from kubejs/client_scripts/tooltips.js on 2026-11-01, rows unchanged (kubejs/assets/creativecompat/kubejs/tooltips.js)
 - 2026-11-01: The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]} (added 2026-11-01, after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried. {@code [campfire]} moved on to Creative Delight's file on 2026-11-04 (creative_split.md 7.9 step 1), which carries it from here. {@code [leaf_piles]} has no spec since 2026-11-15: carried from an old file, {@code surface.LeafPileMigration} then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)

@@ -9,7 +9,7 @@
 @@jars exposure creativecommon
 @@sources development/exposureBackport/src/extras
 @@text
-@@text The hand `MissingMappingsEvent` in `ExposureExtras` is gone: `creativeengineering:<tier>_camera_bag` (before patcherMod 1.0.3) and `exposure_extras:*` are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`. Runs in boot 2 of SQ-RFX-25 (rows/RFX.qb section 6); the NBT alias half is SQ-RFX-27.
+@@text The hand `MissingMappingsEvent` in `ExposureExtras` is gone: `creativeengineering:<tier>_camera_bag` (before Creative Common 1.0.3) and `exposure_extras:*` are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`. Runs in boot 2 of SQ-RFX-25 (rows/RFX.qb section 6); the NBT alias half is SQ-RFX-27.
 @@table
 ## SQ-EX-01 | camera bags load under exposureextras ids; no hand remap left
 @group A (old save, boot 2 of SQ-RFX-25)

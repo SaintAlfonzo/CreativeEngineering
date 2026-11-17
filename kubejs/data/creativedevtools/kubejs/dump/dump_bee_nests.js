@@ -7,7 +7,7 @@
 //
 // Measure: /dumpbeenests reset, generate fresh terrain (fly, or Chunky in an unexplored area), then /dumpbeenests.
 // Not in /dumpall: a session that generated nothing would overwrite a measurement with zeros.
-// The counting is patcherMod's worldgen/BeeNests (mixins on TreeFeature, BeehiveDecorator, ChunkGenerator).
+// The counting is Creative Common's worldgen/BeeNests (mixins on TreeFeature, BeehiveDecorator, ChunkGenerator).
 
 ServerEvents.commandRegistry(event => {
 	const { commands: Commands } = event

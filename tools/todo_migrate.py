@@ -11,7 +11,7 @@ P3.5 item 4). Run on a committed TODO.md.
     rNNNN, Done, Closed, PASS, FAIL, installed, not built) -> `log`; plan_*.md named in that prose -> `plan`;
   - feature (from the first writeup link, via features.csv `file`), queue (SQ-/CQ- row ids in the row), source
     (first "scratchpad DATE" or run id), updated (newest date in the row);
-  - stale head prose removed (2026-10-21 priorities, the run list), Work legend's patcherMod updated, the snapshot
+  - stale head prose removed (2026-10-21 priorities, the run list), Work legend's Creative Common updated, the snapshot
     block and a High priority section become placeholders.
 Checks the round trip: the same ids; change, status, tests, work, decisions and writeup cells equal; every word of
 the old Details cell still in the rendered one. Usage: python3 tools/todo_migrate.py [--dry] [--report FILE]
@@ -202,7 +202,7 @@ HEAD_EDITS = [
      '**Scratch test queue:** [testing/scratch_queue.md](../testing/scratch_queue.md), rendered from '
      '`testing/rows/*.qb`; its coverage block is generated. A row\'s `Tests` cell (see [Test tiers](#test-tiers)) says '
      'which tiers are still open; its `queue` field names the queue rows that verify it.'),
-    (re.compile(r'\*\*patcherMod\*\* \(the in-tree Forge mod\)'),
+    (re.compile(r'\*\*Creative Common\*\* \(the in-tree Forge mod\)'),
      '**Creative Common** (the core jar; patcherMod before 2026-11-04)'),
 ]
 

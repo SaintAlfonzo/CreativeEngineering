@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Creative Split waves 2, 3 and 4 scratch run (feature_writeup/testing/scratch_run_2026-11-01.md 7).
 # One group B world upgraded across three jar sets, the way a player's save goes:
-#   [LEVEL=name] split_w234.sh prep1 OUT   old set: patcherMod 1.1.05, creative_delight / creative_brewing (underscore ids), the
+#   [LEVEL=name] split_w234.sh prep1 OUT   old set: Creative Common 1.1.05, creative_delight / creative_brewing (underscore ids), the
 #                             committed (HEAD) kubejs/, config/ and defaultconfigs/, one edited value per moved config
 #   split_w234.sh prep2 OUT   waves 2 and 3: the installed mods/ jars (1.1.06, creativedelight, creativebrewing,
 #                             creativecompat), the instance's current kubejs/; srv config kept (upgrade path)

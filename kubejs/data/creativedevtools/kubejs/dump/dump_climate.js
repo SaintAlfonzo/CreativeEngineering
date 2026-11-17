@@ -8,12 +8,12 @@
 // The samples ship with the pack (BiomeLayoutTuner reads them whenever a world is created), so they're
 // stored small: compact JSON, one point per line, integer climate values (the game quantizes to x10000
 // longs anyway), gzipped. About 0.2 MB for all three dimensions instead of 3 MB pretty-printed.
-// Read one with `zcat <file> | less`. With a pre-1.0.3 patcherMod jar (no WorldgenFiles.writeGzipText)
+// Read one with `zcat <file> | less`. With a pre-1.0.3 Creative Common jar (no WorldgenFiles.writeGzipText)
 // it falls back to the old uncompressed kubejs/exported/worldgen/climate/<ns>__<dim>.json, which that
 // jar's tuner reads.
 //
 // Climate-noise sample set for every multi_noise dimension, the data source for the biome
-// frequency tuner (patcherMod BiomeLayoutTuner via kubejs/server_scripts/worldgen/biome_overrides.js,
+// frequency tuner (Creative Common BiomeLayoutTuner via kubejs/server_scripts/worldgen/biome_overrides.js,
 // which picks up a new dump on the next /reload or world load). The tuner needs
 // to know how often each climate value actually occurs to turn "make X twice as common" into
 // offset numbers, and those noise distributions come from the noise router (Terralith +

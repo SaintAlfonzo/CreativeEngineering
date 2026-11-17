@@ -18,7 +18,7 @@ b.goose_nest = 'creativedelight:goose_nest';
 b.goose_egg_nest = 'creativedelight:goose_egg_nest';
 b.duck_egg_crate = 'creativedelight:duck_egg_crate';   // Creative Delight compat/incubation/crate/WaterfowlEggCrates.java
 b.goose_egg_crate = 'creativedelight:goose_egg_crate';
-b.oven = 'creativedelight:oven';                 // patcherMod oven/OvenBlock.java
+b.oven = 'creativedelight:oven';                 // Creative Common oven/OvenBlock.java
 // Oven heat (feature_writeup/oven.md 2.4): non-stove sources below the oven
 b.magma_block = 'minecraft:magma_block';
 b.lava_cauldron = 'minecraft:lava_cauldron';
@@ -35,7 +35,7 @@ b.stone_cutting_boards = ['farmersdelight:granite_cutting_board', 'farmersdeligh
 b.wood_cutting_boards = ['farmersdelight:oak_cutting_board', 'farmersdelight:birch_cutting_board', 'farmersdelight:jungle_cutting_board', 'farmersdelight:acacia_cutting_board', 'farmersdelight:dark_oak_cutting_board', 'farmersdelight:mangrove_cutting_board', 'farmersdelight:crimson_cutting_board', 'farmersdelight:warped_cutting_board'];  // cooking/kitchen #38
 b.cfb_counter = 'cookingforblockheads:counter';   // 15 px worktops: cutting board support (TODO cooking/kitchen #8)
 b.cfb_corner = 'cookingforblockheads:corner';
-// Counter toppers (patcherMod CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
+// Counter toppers (Creative Common CounterToppers, TODO cooking/kitchen #20): plates, plated foods, coaster on a counter
 b.dd_food_plate = 'displaydelight:food_plate';
 // FD 1.3.4 backports in the Creative Delight repack (farmers_delight.md 3); unresolved until CD is installed
 b.fd_pumpkin_pie = 'farmersdelight:pumpkin_pie';        // placed vanilla pie; no item ([pumpkin_pie] placeAs)
@@ -86,7 +86,7 @@ b.botania_blaze_block = 'botania:blaze_block';       // Blaze Mesh fuel block, a
 b.snow = 'minecraft:snow';                             // snow layers
 b.snow_block = 'minecraft:snow_block';
 b.powder_snow = 'minecraft:powder_snow';
-b.powdered_sugar_block = 'creativedelight:powdered_sugar_block'; // patcherMod food/PowderedSugarBlock.java
+b.powdered_sugar_block = 'creativedelight:powdered_sugar_block'; // Creative Common food/PowderedSugarBlock.java
 b.thin_ice = 'immersive_weathering:thin_ice';
 b.iw_permafrost = 'immersive_weathering:permafrost';
 b.iw_cryosol = 'immersive_weathering:cryosol';
@@ -107,7 +107,7 @@ b.tongue_kelp_plant = 'upgrade_aquatic:tongue_kelp_plant';
 b.corn_crop = 'corn_delight:corn_crop';            // knife harvest Corncob (CD corn_delight/loot.js)
 b.tall_blue_pickerelweed ='upgrade_aquatic:tall_blue_pickerelweed';
 b.tall_purple_pickerelweed = 'upgrade_aquatic:tall_purple_pickerelweed';
-// Crops with their own ripe right-click pick (crops.md 2.2, patcherMod QuarkOwnPickMixin)
+// Crops with their own ripe right-click pick (crops.md 2.2, Creative Common QuarkOwnPickMixin)
 b.cucumber_crop = 'vintagedelight:cucumber_crop';
 b.ghost_pepper_crop = 'vintagedelight:ghost_pepper_crop';
 b.zucchini_crop = 'veggiesdelight:zucchini_crop';

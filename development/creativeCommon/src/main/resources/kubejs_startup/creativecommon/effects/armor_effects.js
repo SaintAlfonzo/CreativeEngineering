@@ -8,7 +8,7 @@
 //   (same gotcha as tune_tools.js / tune_armor.js — see [[tune-tools-func]]).
 // ─────────────────────────────────────────────────────────────────────────────
 //  Armor Effects — generic "grant potion effects while worn" framework, styled
-//  after Create: Deep Dark's echo-armor set-bonus tooltip (see patcherMod's
+//  after Create: Deep Dark's echo-armor set-bonus tooltip (see Creative Common's
 //  EchoArmorTooltipMixin / EchoArmorEffectProcedureMixin — CDD's own version is
 //  hardcoded Java against ITS OWN items; this is the from-scratch KubeJS
 //  equivalent for OUR OWN and/or vanilla/modded armor).

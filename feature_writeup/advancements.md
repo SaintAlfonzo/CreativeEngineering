@@ -17,7 +17,7 @@ this file is the reference for the switch.
 
 | Part | Status |
 |---|---|
-| `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in patcherMod 1.0.8; DEPLOYED with 1.0.8 (2026-10-19 10:20). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |
+| `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in Creative Common 1.0.8; DEPLOYED with 1.0.8 (2026-10-19 10:20). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |
 | Vinery `vintage_perfection` left out of the upstream layer | BUILT in the Vinery port `-02` ([alcohol.md](alcohol.md) 10.2) |
 | Replacement sources for lost rewards | Vinery banner: crafting recipe ([alcohol.md](alcohol.md) 10.5). The rest have none (3.2) |
 | No recipe unlocks: `NoRecipeUnlockMixin` (3.3) | BUILT 2026-11-17 in Creative Common ([plan_rules_fixes.md](plan_rules_fixes.md) 12e, D23); queue SQ-AV-01, CQ-AV-01, CQ-AV-02 |
@@ -133,7 +133,7 @@ entries and no "New Recipes Unlocked" toast shows. JEI is the pack's recipe view
 
 ## 8. History
 
-- 2026-10-18: built in patcherMod (1.0.8 source) at the user's request, with the Vinery `vintage_perfection` drop and
+- 2026-10-18: built in Creative Common (1.0.8 source) at the user's request, with the Vinery `vintage_perfection` drop and
   the banner crafting recipe ([alcohol.md](alcohol.md) 10.2, 10.5).
 - 2026-10-19: this writeup. Single-player evidence from the 00:57 session added (6). STAGED in pack 1.0.8. AV-01 to
   AV-05 added.

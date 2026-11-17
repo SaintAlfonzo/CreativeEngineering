@@ -61,7 +61,7 @@ reference.
 - **Bugs**: a bug in the new 7.4 work gets fixed and the test rerun, both logged. A bug in an older system is
   recorded, the independent tests carry on, and it comes to you at the end of the milestone (as in Phase 2).
 - **Scratch server safety** (from earlier runs): server built in this session's scratchpad per 8.0.0 (seed 8675309,
-  `max-tick-time=-1`, `asyncLocatorThreads = 4`, the build/libs patcherMod jar, not the one in `mods/`); `forceload`
+  `max-tick-time=-1`, `asyncLocatorThreads = 4`, the build/libs Creative Common jar, not the one in `mods/`); `forceload`
   before any KubeJS probe of new chunks (Rhino deadlock); kill the java pid after "All dimensions are saved" when an
   Async Locator search is still running; exact-match process kills only (`pkill -fx 'sleep infinity'`, never
   `pkill -f` on a string in my own command line); never list the game's processes with args (access token).
@@ -81,8 +81,8 @@ reference.
   bugs (ground match over deep structures, driftwood water versions) + geode-drop tuning for the user. Next: M4 (Phase 4).
 - 2026-10-14 12:40: M4 (Phase 4) done, writeup 04_phase_4.md: all passed except ST-65 partly (trim half -> [game]),
   ST-76 skipped; no bugs. Next: M5 (Phase 5, batch searches).
-- 2026-10-14 12:52: the structure work as of now (patcherMod 1.0.6, 12:44 rebuild of the 01:28 source, plus all worldgen
-  data) ships in pack 1.0.6, marked INCOMPLETE (user). Fixes from Phase 5 onward go into 1.0.7 (patcherMod `mod_version`
+- 2026-10-14 12:52: the structure work as of now (Creative Common 1.0.6, 12:44 rebuild of the 01:28 source, plus all worldgen
+  data) ships in pack 1.0.6, marked INCOMPLETE (user). Fixes from Phase 5 onward go into 1.0.7 (Creative Common `mod_version`
   1.0.7); open bugs at staging are listed in [plan_1.0.6.md](../../plan_1.0.6.md) 2.1.
 - 2026-10-14 16:10: M5 (Phase 5) done, writeup 05_phase_5.md: LO-02, 06 (adapted), 08, 15 passed, LO-01 partly, LO-05
   FAILED (non-blocking locate loads still block the server thread, LocateLoads.java:82; older code, fix for 1.0.7 is
@@ -93,7 +93,7 @@ reference.
   the first set loads the chunk, later sets count as "known"). Older locate code, with the Phase 5 load bug: fix for
   1.0.7 is the user's call. Next: M7 (Phase 7, calibration runs).
 - 2026-10-19 04:30: M7 (Phase 7) done, writeup 07_phase_7.md (session 5 restarted it: the 2026-10-14 server was gone; new
-  scratch server from the Minecraft1192withForge libraries, patcherMod 1.0.7 because the staged 1.0.8 crashes a
+  scratch server from the Minecraft1192withForge libraries, Creative Common 1.0.7 because the staged 1.0.8 crashes a
   dedicated server, worldgen identical). Passed ST-162, 159, 169, 67, 54, 58, 59; ST-53 passed but for its "slot stays
   empty" clause; ST-160 partly; ST-52 / ST-57 data. ST-167 FAILED as shipped (prune tag empty: type/village is not a
   real tag), ST-167/168 pass with a scratch-only tag fix. For the user: 1.0.8 server crash (plan_1.0.8.md blocker),

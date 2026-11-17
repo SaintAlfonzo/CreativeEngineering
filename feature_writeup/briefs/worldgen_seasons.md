@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `seasons`. Feature writeup:
 [weather.md](../weather.md) (prefix `WE-`). Code: `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`
-(paths below are relative to it). Both rows are client-side patcherMod work, so test them in a client, not on a
+(paths below are relative to it). Both rows are client-side Creative Common work, so test them in a client, not on a
 scratch server.
 
 ## Scope and order
@@ -17,7 +17,7 @@ scratch server.
 
 ## seasons #2: Cool Rain may ignore season types
 
-Status Bug · Work patcherMod · TODO `worldgen / seasons #2` (WE-25)
+Status Bug · Work Creative Common · TODO `worldgen / seasons #2` (WE-25)
 
 ### Goal
 
@@ -168,7 +168,7 @@ WE-25 stays, with its second half reworded to the outcome of step 0. New:
 
 ## seasons #3: Adaptive tint per position
 
-Status Planned · Work patcherMod · TODO `worldgen / seasons #3`
+Status Planned · Work Creative Common · TODO `worldgen / seasons #3`
 
 ### Goal
 
@@ -297,10 +297,10 @@ Every hook is on a named method.
 
 ## Writeup corrections made
 
-- `feature_writeup/weather.md` 8 intro: "Install the current patcherMod jar from `build/libs` first" -> the deployed
-  pack (patcherMod 1.0.6 or later, live since 1.0.6) has everything.
+- `feature_writeup/weather.md` 8 intro: "Install the current Creative Common jar from `build/libs` first" -> the deployed
+  pack (Creative Common 1.0.6 or later, live since 1.0.6) has everything.
 - `feature_writeup/weather.md`: the second "## 7. History" heading -> "## 9. History" (two sections were numbered 7).
 - `feature_writeup/weather.md` History 2026-10-14: "STAGED 2026-10-14" -> "DEPLOYED 2026-10-14", the date in
   `deploy/DEPLOYED.json`.
-- `feature_writeup/README.md` weather row: "patcherMod 1.0.5 code ... WE-01 to WE-25 pending" -> 1.0.5 + 1.0.6 code,
+- `feature_writeup/README.md` weather row: "Creative Common 1.0.5 code ... WE-01 to WE-25 pending" -> 1.0.5 + 1.0.6 code,
   WE-01 to WE-36 pending.

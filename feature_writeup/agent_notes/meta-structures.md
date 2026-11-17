@@ -1,6 +1,6 @@
 # meta-structures
 
-> patcherMod structure type creativeengineering:meta; 39 metas (2026-10-30), part fields overlap + cluster; anchored metas take a SHARE of slots their anchors won (MetaSlots), /locate finds parts inside metas; status in feature_writeup/structure_tuning.md
+> Creative Common structure type creativeengineering:meta; 39 metas (2026-10-30), part fields overlap + cluster; anchored metas take a SHARE of slots their anchors won (MetaSlots), /locate finds parts inside metas; status in feature_writeup/structure_tuning.md
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-11). Repo status docs win over any status line here.
 
@@ -17,7 +17,7 @@ Built 2026-10-11. First batch (village_towers, driftwood_flotilla), then the sam
 - Gotcha: the conversion runs before the anchor's own biome check, so failed picks tried a meta first; the forced-anchor miss is not logged.
 - Gotcha: `until ! pgrep -f "<pattern>"` loops forever: pgrep matches its own shell's command line.
 - Tests: MetaTest 48 checks (tools/test_worldgen_tools.sh step 6); test_structure_groups.sh parity. Scratch server seed 8675309: all 13 locatable metas found, part locates land on parts inside metas.
-- Status: patcherMod 1.0.5 build in development/patcherMod/build/libs.
+- Status: Creative Common 1.0.5 build in development/creativeCommon/build/libs.
 
 Related: [structure-groups](structure-groups.md), [biome-fits-towers](biome-fits-towers.md), [terrain-adaptation-soft-beard](terrain-adaptation-soft-beard.md), [earth-fill-system](earth-fill-system.md), memory `scratch-server-verify`, memory `rhino-fieldandmethods-gotcha`.
 - 2026-10-12: MetaSlots generalised: Conversion.target (any Structure), Decision.targetEntry; plain-structure "replacements" staged via MetaSlots.stageReplacements; replacement biomes narrowed to the replaced member's. See [plan-7-1-execution](plan-7-1-execution.md).

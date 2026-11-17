@@ -8,7 +8,7 @@
 @@jars creativecompat creativeworldgen tempad
 @@sources feature_writeup/locate.md
 @@text
-@@text patcherMod 1.1.03 with `worldgen/TiedBiomes` (prediction only; generation unchanged). Group B. Fresh world on the
+@@text Creative Common 1.1.03 with `worldgen/TiedBiomes` (prediction only; generation unchanged). Group B. Fresh world on the
 @@text `wgp` seed (the perf.md 10.9 census worlds), census at the same center so the 10 known positions are inside.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |
@@ -31,7 +31,7 @@ look built per structure equal to wgp_new (generation unchanged; 6 structures di
 @@text
 @@text Results: not run yet.
 @@text
-@@text patcherMod 1.1.03 `AllurementItemCurses` (ItemPhysic + Allurement). Group A, any world with both mods.
+@@text Creative Common 1.1.03 `AllurementItemCurses` (ItemPhysic + Allurement). Group A, any world with both mods.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |
 @@text |---|---|---|---|---|

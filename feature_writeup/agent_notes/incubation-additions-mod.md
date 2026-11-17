@@ -1,6 +1,6 @@
 # incubation-additions-mod
 
-> development/incubationAdditions in-tree mod (incubation_additions) - emu/duck/goose nests moved out of patcherMod with old-id remap; install both jars together; status in feature_writeup/nests.md
+> development/incubationAdditions in-tree mod (incubation_additions) - emu/duck/goose nests moved out of Creative Common with old-id remap; install both jars together; status in feature_writeup/nests.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
@@ -9,12 +9,12 @@ Created 2026-10-05 at the user's request ("just like the camera backport"). Thir
 - Holds everything nest-related that was in patcherMod: nest/EmuNests, nest/WaterfowlNests, the 4 mixins (Emu/Duck/Goose EggLayer + LayEggInNestGoal), blockstates/models/textures/lang, 6 loot tables. All assets are in the jar (the duck/goose files that were briefly in kubejs/assets/creativeengineering moved in too); hotswap = same-path PNG under kubejs/assets/incubation_additions/ + F3+T.
 - Incubation is the only mandatory dep. IncubationAdditionsMixinPlugin skips a bird's EggLayer mixin, and IncubationAdditions skips its registration, when alexsmobs / untitledduckmod is absent.
 - `remapOldIds` (MissingMappingsEvent, same pattern as ExposureExtras for the camera bags) maps creativeengineering:{emu,duck,goose}_nest + *_egg_nest blocks and the 3 items to incubation_additions:.
-- No refmap, SRG names + remap=false, -AdisableTargetValidator (same as patcherMod).
+- No refmap, SRG names + remap=false, -AdisableTargetValidator (same as Creative Common).
 - KubeJS item_dict/block_dict now point at incubation_additions: ids.
 
 **Verified on a scratch server 2026-10-05:** a world saved with the old jar keeps its nests after the swap (egg counts and chest items intact). Duck 3->4 and goose 5->6 laid into their nests. An emu alone laid into a fresh emu nest. Geese pick up loose eggs, so test emus without a goose present.
 
-**Install rule:** install BOTH jars together (`./gradlew :patcherMod:installToMods :incubationAdditions:installToMods`); one without the other loses or duplicates nests. NE-12 is the old-world check. Current state: feature_writeup/nests.md.
+**Install rule:** install BOTH jars together (`./gradlew :creativeCommon:installToMods :incubationAdditions:installToMods`); one without the other loses or duplicates nests. NE-12 is the old-world check. Current state: feature_writeup/nests.md.
 
 Writeup: feature_writeup/nests.md. Related: [incubation-nest-internals](incubation-nest-internals.md), [root-gradle-build](root-gradle-build.md), [exposure-backport](exposure-backport.md), memory `scratch-server-verify`.
 

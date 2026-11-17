@@ -8,7 +8,7 @@
 @@jars creativeworldgen
 @@text
 @@text TODO `structures/earthfill #13`, `#14`, `#16`, `#3`, `#4`; [structure_tuning.md](../structure_tuning.md) 3.28, ST-235 to
-@@text ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). patcherMod `creativeengineering-1.1.04.jar`
+@@text ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). Creative Common `creativeengineering-1.1.04.jar`
 @@text rebuilt 2026-10-30 16:2x (in `mods/`). Group B, the recipe of [structures/12_earth_fill_camps.md](structures/12_earth_fill_camps.md) 2
 @@text (seed 8675309, `structureDensity` 4, scratch toml `[worldgen.earth_fill] log = "ALL"`, Chunky r 400 at 2144 -2592), plus
 @@text a desert square and a swamp square found with `/locate biome`. Fill lines: `grep -E '\[earth-fill\]' logs/latest.log`.

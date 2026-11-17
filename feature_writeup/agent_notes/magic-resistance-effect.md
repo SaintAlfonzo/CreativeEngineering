@@ -1,6 +1,6 @@
 # magic-resistance-effect
 
-> creativeengineering:magic_resistance — pack-original MobEffect (KubeJS) + patcherMod LivingHurtEvent listener reducing damage from DamageSource#isMagic() sources, 20%/amplifier level
+> creativeengineering:magic_resistance — pack-original MobEffect (KubeJS) + Creative Common LivingHurtEvent listener reducing damage from DamageSource#isMagic() sources, 20%/amplifier level
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-13). Repo status docs win over any status line here.
 
@@ -14,13 +14,13 @@ partly because CoFH's version is all-or-nothing immunity rather than tunable per
 (`kubejs/startup_scripts/magic/magic_resistance.js`, `StartupEvents.registry('mob_effect', ...)`
 -> KubeJS's `BasicMobEffect`/`MobEffectBuilder`, builder type string `'basic'`) — this is a
 pack-ORIGINAL effect with no cross-mod registry-timing problem (unlike `better_beacons:
-long_reach`/`phantom_bane`, which needed patcherMod specifically because KubeJS's early registry
+long_reach`/`phantom_bane`, which needed Creative Common specifically because KubeJS's early registry
 pass can't see another mod's not-yet-fired MobEffect registration — see [echo-tier-gear](echo-tier-gear.md)
-/ potions.js's header comment). But the actual DAMAGE REDUCTION needed patcherMod
+/ potions.js's header comment). But the actual DAMAGE REDUCTION needed Creative Common
 (`potion/MagicResistanceEffect.java`, `@SubscribeEvent` on `LivingHurtEvent`), because this
 build's KubeJS wraps that event read-only: decompiled `LivingEntityHurtEventJS` (the class
 backing `EntityEvents.hurt`) and confirmed it exposes only `getDamage()` — no `setAmount()`, no
-cancel. This is the same category of constraint that already forced patcherMod for the potion
+cancel. This is the same category of constraint that already forced Creative Common for the potion
 bucket dispenser and the echo-armor tooltip earlier this session — **KubeJS mutation of event
 data is real but inconsistent per-event; always check the actual event-wrapper class in the jar
 before assuming a KubeJS event can be used to modify (not just observe) something.**

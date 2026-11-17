@@ -16,7 +16,7 @@ echo tools human generated textures (only non human textures in pack)". The memo
 
 | Order | Row | Status | Work |
 |---|---|---|---|
-| 1 | `gear/echo #1` Echo tool buffs | Planned | KubeJS (four pack tools), small patcherMod mixin if the CDD echo sword joins; restart |
+| 1 | `gear/echo #1` Echo tool buffs | Planned | KubeJS (four pack tools), small Creative Common mixin if the CDD echo sword joins; restart |
 | any | `textures/art #3` Human-made echo textures (was `gear/echo #2`) | Planned | art in `kubejs/assets`, pipeline exists; independent of #1 |
 
 No Testing / Complete rows here.
@@ -67,7 +67,7 @@ five echo tools including the sword.
    specs (`{ effect: 'minecraft:slowness', amplifier: 1, duration: 60 }` etc.), add
    `global.toolEffects.held(i.echo_pickaxe, { effect: 'minecraft:haste', amplifier: 0, duration: 50 })`.
 3. Echo sword into the framework (D2):
-   - patcherMod mixin `EchoSwordEffectProcedureMixin`, `@Mixin(value = EchoSwordEffectProcedure.class, remap = false)`,
+   - Creative Common mixin `EchoSwordEffectProcedureMixin`, `@Mixin(value = EchoSwordEffectProcedure.class, remap = false)`,
      `@Inject(method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)` -> `ci.cancel()`.
    - Tooltip: `@Redirect` the three `List.add` calls in `EchoSwordItem#m_7373_` (`remap = false` for the class,
      the method is SRG `m_7373_`) to no-ops, so the framework's tooltip (client_scripts/tool_effects_tooltip.js) is

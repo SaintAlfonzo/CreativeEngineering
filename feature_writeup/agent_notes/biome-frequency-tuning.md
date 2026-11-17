@@ -1,6 +1,6 @@
 # biome-frequency-tuning
 
-> Biome frequency tuner (2026-09-25) — per-biome multiplier/replace_with in biome_config.json, solved as offset penalties against /dumpclimate samples, applied at world load by patcherMod BiomeLayoutTuner (Java) via KubeJS highPriorityData; new worlds only
+> Biome frequency tuner (2026-09-25) — per-biome multiplier/replace_with in biome_config.json, solved as offset penalties against /dumpclimate samples, applied at world load by Creative Common BiomeLayoutTuner (Java) via KubeJS highPriorityData; new worlds only
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-26). Repo status docs win over any status line here.
 

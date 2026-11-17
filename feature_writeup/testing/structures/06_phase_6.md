@@ -6,7 +6,7 @@ summary above "8.0.7 Phase 7".
 
 ## 1. Setup
 
-- Same scratch server as M5 (patcherMod `build/libs` 1.0.6 of 12:44, seed 8675309, density 1, baseline toml with
+- Same scratch server as M5 (Creative Common `build/libs` 1.0.6 of 12:44, seed 8675309, density 1, baseline toml with
   the three log switches). A new world, `st_p`, with 4 locator threads.
 - **Area:** Chunky square, radius 96 chunks, centered on 2144 -2592 (92% land) instead of spawn (76% ocean). That's
   37,249 chunks in 64 min.
@@ -60,7 +60,7 @@ Notes:
   per chunk. The reported "0 false negatives" proves little beyond buried treasure.
 - **Fix (not made):** group a region's slots by chunk; predict every member of every set that tries the chunk; then
   load once and score them all. Chunks generated before the census stay "known" as designed.
-- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): exactly that: per chunk, every set predicted, then one load, then all scored.
+- **Fixed in source 2026-10-18** (Creative Common 1.0.7, not built or shipped): exactly that: per chunk, every set predicted, then one load, then all scored.
   [locate.md](../../locate.md) 3.6. Retest LO-03, LO-14.
 - **Related:** the Phase 5 bug (locate loads block the server thread) also applies here. The census still ran at
   ~160 slots/s, because most loads are quick STRUCTURE_STARTS-only generations.

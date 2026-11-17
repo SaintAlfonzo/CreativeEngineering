@@ -20,7 +20,7 @@ baselines + entry counts are refreshed, new biomes appear with multiplier 1.0, b
 vanished are dropped (with a warning if you had edited them).
 
 Run: python3 tools/gen_biome_config.py
-Then edit biome_config.json; kubejs/data/creativeworldgen/kubejs/worldgen/biome_overrides.js (patcherMod's
+Then edit biome_config.json; kubejs/data/creativeworldgen/kubejs/worldgen/biome_overrides.js (Creative Common's
 BiomeLayoutTuner) solves and applies it at every world load, so the next NEW world gets it.
 """
 import json

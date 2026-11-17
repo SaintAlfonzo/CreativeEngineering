@@ -7,7 +7,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# structures`, rows `st
 Facts checked against jars (2026-10-21): Waystones 11.4.2 worldgen (`WaystonePlacement`, `ModWorldGen`,
 `SinglePoolElementMixin`, `WaystoneBlockEntityBase`), MES 1.3.1 `end_biomes` tag, YUNG's Better Nether Fortresses
 1.0.6 `fortress_avoid` tag, Towns & Towers 1.10 wreckage (for the metas brief). Everything else is from the repo
-(configs, `structure_groups.json`, `structure_config.json`, patcherMod source, the game-written reports).
+(configs, `structure_groups.json`, `structure_config.json`, Creative Common source, the game-written reports).
 
 Proposed test ids: **ST-210 to ST-239** for this brief (other worldgen briefs propose ST- ids too; renumber at build
 time so they stay unique; the last id in use is ST-205).
@@ -16,7 +16,7 @@ time so they stay unique; the last id in use is ST-205).
 
 | Step | Rows | Kind | Why this order |
 |---|---|---|---|
-| 0 | **#9 bug** (found 2026-10-21, see "Built, needs play") | patcherMod + data | 27 pools have permuted weights since 1.0.7; small fix, affects every new chunk now |
+| 0 | **#9 bug** (found 2026-10-21, see "Built, needs play") | Creative Common + data | 27 pools have permuted weights since 1.0.7; small fix, affects every new chunk now |
 | 1 | #8, #11 (lower the rate), #2a (shipwreck 40 %, fresh watchtower `--fit-rates`) | data / config | one-line changes, no design open |
 | 2 | #5 test overrides | KubeJS + config | makes #6 and every later rate test cheap |
 | 3 | #10 + #2b (jungle temple distance) | data | the same change: split `surface_dungeons` into temple groups |
@@ -24,7 +24,7 @@ time so they stay unique; the last id in use is ST-205).
 | 5 | #1 Nether / End / underground grouping | data | with `structures/contents #1` (move soul dungeons to the Nether) and the cave pass (7.3.3) |
 | 6 | #3 strip weights + #2c (sky village, settlements over water) | data + tool | one rate pass once every group exists; needs a census after |
 | 7 | #6 fortified metas vs `/locate` | config | uses #5; rate side waits for #3 |
-| any | #7 ocean geodes | patcherMod | independent |
+| any | #7 ocean geodes | Creative Common | independent |
 | later | #11 (waystones inside structures) | data | optional second half of #11; uses the metas brief |
 
 Every step: edit, then `python3 tools/gen_structure_groups.py` (sync) when tags changed, `--check` (rewrites
@@ -186,7 +186,7 @@ the sky village (lower it if common; maybe more settlements over water), and the
    over water": the existing group-level `biome_frequency` would scale the meteorite and balloons too, so either
    - move the sky village into its own group `sky_villages` (tag + sync; give it the `sky` rank 50), then
      `"biome_frequency": {"#minecraft:is_ocean": 1.0, "default": 0.5}` on it (data only), or
-   - make `biome_frequency` per member (patcherMod `StructureFrequencies` stages factors per set today:
+   - make `biome_frequency` per member (Creative Common `StructureFrequencies` stages factors per set today:
      `stageBiomeFactors`, `Member.factors`; the JS `planBiomeFrequency` (`structure_overrides.js` ~633) and the
      estimator would need a member-level key). More work for the same result.
    Recommend the own group.
@@ -274,7 +274,7 @@ No ids beyond `structure_groups.json`. Code: `tools/gen_structure_groups.py` (`f
 ---
 
 ## structures/rates-and-groups #4: Placement priority by importance
-Status Planned · Work patcherMod / data · TODO `structures/rates-and-groups #4`
+Status Planned · Work Creative Common / data · TODO `structures/rates-and-groups #4`
 
 ### Goal
 User (2026-10-19): "placement order doesnt work how i thought, amend placement order for importance and hard to place
@@ -367,7 +367,7 @@ copy and remembering to put it back.
 2. Applier: after building `groupPlans` and `metaPlans`, apply the overrides; refuse any other key with an error
    that names the 7.4.8 rule (so `biomes`, `biome_rules`, `peaceful`, `priority`, earth fill keys can never sneak
    in). Log one loud warning per world load (`TEST OVERRIDES ACTIVE: ...`) and add a report section.
-3. CEConfig + `WorldgenConfig.testOverrides()` getter (patcherMod), `defineInRange`-style comment that it is for
+3. CEConfig + `WorldgenConfig.testOverrides()` getter (Creative Common), `defineInRange`-style comment that it is for
    scratch servers.
 4. Writeup: 7.4.8 points at the file; each test result line names the overrides it used.
 
@@ -427,7 +427,7 @@ the peaceful radius ([plan_1.0.6.md](../plan_1.0.6.md) 2.1, [structure_tuning.md
 ---
 
 ## structures/rates-and-groups #7: Ocean geodes drop does little
-Status Testing (built 2026-10-22) · Work patcherMod · TODO `structures/rates-and-groups #7`
+Status Testing (built 2026-10-22) · Work Creative Common · TODO `structures/rates-and-groups #7`
 
 **Built 2026-10-22 (user decision), not as planned below:** no FLOOR/FIXED mode and no cancel. A moved geode's
 origin goes to `lowestFloorY - clearance - maxGenOffset` (-8, 2, the config's own placement bound; amethyst 16), then
@@ -460,7 +460,7 @@ floors sit near y 0 (ST-133 partly, [testing/structures/03_phase_3.md](../testin
    canceled).
 
 ### Ids and data
-`minecraft:budding_amethyst`, `geode:budding_prismarine` (Geode Plus, untouched list). patcherMod files:
+`minecraft:budding_amethyst`, `geode:budding_prismarine` (Geode Plus, untouched list). Creative Common files:
 `worldgen/OceanGeodes.java`, `mixin/GeodeFeatureOceanDepthMixin.java`, `CEConfig.java` (`OceanGeodes`),
 `worldgen/WorldgenConfig.java`.
 
@@ -666,6 +666,6 @@ Fix:
 - [structure_tuning.md](../structure_tuning.md) 2.4: "57 tech pieces ... Advanced Peripherals 5" -> 52, AP off by its
   config (matches `pool_tag_report.md`: `tech x0 (52 pieces)`).
 - [structure_tuning.md](../structure_tuning.md) 3.23 intro: "None is in `mods/` or a deploy yet" contradicted its own
-  heading (DEPLOYED with 1.0.7); now says shipped in patcherMod 1.0.7 / pack 1.0.7.
+  heading (DEPLOYED with 1.0.7); now says shipped in Creative Common 1.0.7 / pack 1.0.7.
 - [structure_tuning.md](../structure_tuning.md) 7 Todo, fresh watchtower: "from 1 per 75" -> 1 per 83 (the 2026-10-14
   estimates; 75 at the 3.20 fold).

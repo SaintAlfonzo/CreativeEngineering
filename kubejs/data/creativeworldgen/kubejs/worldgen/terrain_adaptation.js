@@ -107,14 +107,14 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	global.tags.add(e, 'creativeworldgen:template_trim', ponds)
 	global.tags.add(e, 'creativeworldgen:template_trim', paddedRuins)
 
-	// Air-only trim (patcherMod TemplateTrim#trimAir): only air in columns with nothing solid is dropped. Terralith's
+	// Air-only trim (Creative Common TemplateTrim#trimAir): only air in columns with nothing solid is dropped. Terralith's
 	// spire (adaptation none) saves a 94x98 air box around its base layer that cut a square notch into the hills; the
 	// full trim would also drop the snow on its upper layers (110 to 273 snow-only columns per layer, resting on the
 	// layer below), so it gets this one and keeps its own adaptation.
 	global.tags.add(e, 'creativeworldgen:template_trim/air', ['terralith:spire'])
 
 	// Sunk starts: start_height below 0 sinks these templates into the ground on purpose, and the beard levels the ground
-	// at the surface they were projected to instead of at their sunk bottom layer (patcherMod TerrainAdaptation#sink).
+	// at the surface they were projected to instead of at their sunk bottom layer (Creative Common TerrainAdaptation#sink).
 	// Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start height -4: the grass layer
 	// replaces the surface block; their old features used -5, a 1-block dip); with the plain beard_thin the ground around
 	// them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
@@ -122,12 +122,12 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
 		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
 		// Not here: Philip's ancient_crypt and antiquus_crypta, T&T's nilotic village. Their start element is terrain
-		// matching (patcherMod refuses them), so they keep their own placement (owner call TODO structures/earthfill
+		// matching (Creative Common refuses them), so they keep their own placement (owner call TODO structures/earthfill
 		// #17). the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4
 		'farmers_structures:aquacultures_carp',
 	])
 
-	// Seabed clearance (TODO structures/terrain #7; patcherMod SeabedClearance): underground structures at a fixed
+	// Seabed clearance (TODO structures/terrain #7; Creative Common SeabedClearance): underground structures at a fixed
 	// height (Terralith's caves y -40..40, Subterrestrial's land cabins y 6..48) whose box top comes within 8 blocks of
 	// a floor with water on it are dropped. Not here: the ocean cabin (made for the seabed: y 24..44 in oceans only, it
 	// would almost never start), the deepslate cabin (y -56..-6), Philip's y -40 ruins, and buried treasure (its box

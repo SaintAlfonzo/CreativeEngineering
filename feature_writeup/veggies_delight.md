@@ -48,7 +48,7 @@ This file has four parts:
 | Port jar `backportedVeggies-1.9.2-ce-19.2-05.jar` | §4.1 | `-01` BUILT 2026-10-22, live since 1.1.01; `-03` (carrot cake cut face) live since 1.1.03 (still in `server_mods/`). `-04` BUILT 2026-11-01 (the mature dandelion revert, §2.2). **Deep scan 2026-11-02:** `-05` is a nested Creative Delight member (`development/creativeDelight/members/veggies`), in the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 14:01); not deployed |
 | Implementation description (port, wild plants, mature dandelion, seasons, food, cooking rules, baking, drinks, jars, mob food, loot, houses, trades, compost, UI) | §4 | BUILT 2026-10-22 except the dump-driven steps (§4.0) |
 | Marked merges and pins (Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; Cultural Delight; Vintage and Cultural recipes; doughs; mob food; seasons; tea audit) | §5 | marked 2026-10-22; M1 to M3 BUILT 2026-11-01 (§5.1); §3.3 folds R4 to R8, R10, R11 BUILT 2026-11-01, R2 closed (three flowers, no fold), R3 open (§3.3) |
-| Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: patcherMod part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part in `-05`, nested in the installed CD jar (deep scan 2026-11-02); SQ-DM-01 to -03 PASS r1031 |
+| Mature dandelion maturing on rich / fertile soil and shear / knife revert (TODO `ports/veggiesport #4`) | §2.2 | BUILT 2026-10-30: Creative Common part in 1.1.04 (installed 2026-10-31 00:44, not yet booted); port part in `-05`, nested in the installed CD jar (deep scan 2026-11-02); SQ-DM-01 to -03 PASS r1031 |
 | Tests | §8 | VD-01 to VD-54 drafted (not all numbers used). Deep scan 2026-11-02: SQ-VP-00 to -12 PASS (2026-10-23 / 2026-10-25); r1102b s1 (judged) SQ-VP-03, -05, -05b, -09, -10, -11, -16 PASS, SQ-VP-06 FAIL (pepper jam and relish soft fluids in `kubejs/data/vintagedelight/`), -04, -07 batch faults, -15 LOOK; SQ-DM-01 to -03 PASS r1031; SQ-VDF r1102b s3 mostly PASS (-04 open); SQ-VP-14 and the CQ-VP client rows not run |
 
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
@@ -110,7 +110,7 @@ Eight wild plants. Seven `wild_*` blocks are `FlowerBlock`s; the mature dandelio
 | Wild Zucchinis | `#forge:is_hot/overworld` | seeds; knife: seeds |
 | Mature Dandelion | `#forge:is_plains` | dandelion leaf; knife: leaves; yellow dye by hand |
 
-**Mature dandelion maturing and reverting (2026-10-30).** Plain dandelion -> mature: patcherMod `crops/DandelionMaturing`,
+**Mature dandelion maturing and reverting (2026-10-30).** Plain dandelion -> mature: Creative Common `crops/DandelionMaturing`,
 called from the random tick of Rich Soil, Rich Soil Farmland and Fertile Soil (`mixin/Dandelion*Mixin`); odds are
 `[dandelion_maturing] richSoilTicks / fertileSoilTicks` in creativeengineering-common.toml (average soil random ticks per
 conversion, default 10 / 5 since 2026-11-07 (plan_farming_cooking_batch.md Q3; was 20 / 10 from 2026-10-31, 10 / 20 before; Fertile Soil is the faster one), 0 = off; the setting now lives in creativedelight-common.toml). Mature -> plain: `DandelionBlock.use` with `#forge:shears` or `#forge:tools/knives`
@@ -686,7 +686,7 @@ UI
 - 2026-10-25: carrot cake cut face carried over from 1.9.3 (§2.7, port `-03`, VD-41).
 - 2026-10-29: coleslaw 12 hunger / 0.6 (14.4 saturation), above its inputs' 9 / 8.2 (CD `veggies_foods.js`;
   briefs/dishes_meals.md meals #42, RC-161).
-- 2026-10-30: mature dandelion maturing (patcherMod `crops/DandelionMaturing`, soil mixins, `[dandelion_maturing]`) and
+- 2026-10-30: mature dandelion maturing (Creative Common `crops/DandelionMaturing`, soil mixins, `[dandelion_maturing]`) and
   shear / knife revert (`DandelionBlock.use`, port rebuilt as `-03` in `build/libs/`, not installed); VD-42, VD-43;
   TODO `ports/veggiesport #4` (scan 2026-10-31).
 - 2026-11-01: Sliced Sweet Potato (5.6): sweet potato -> 3 on the board and the slicer, potato -> 3 Rustic slices [2]; sliced
@@ -705,7 +705,7 @@ UI
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
 - 2026-10-25: Veggies Delight trades (Creative Delight members #2, moved from the pack's economy/trades.js and economy/wandering_trades.js 2026-10-25, rows unchanged): feature_writeup/veggies_delight.md 4.13 (kubejs/data/creativedelight/kubejs/veggiesdelight/trades.js)
-- 2026-10-25: Moved 2026-10-25 from the pack's startup_scripts/compost/compost_values.js, same rows and chances (12 items); the engine is patcherMod's (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here (development/creativeDelight/src/main/resources/kubejs_startup/veggiesdelight/compost.js)
+- 2026-10-25: Moved 2026-10-25 from the pack's startup_scripts/compost/compost_values.js, same rows and chances (12 items); the engine is Creative Common's (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here (development/creativeDelight/src/main/resources/kubejs_startup/veggiesdelight/compost.js)
 - 2026-10-25: Veggies Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js)
 - 2026-10-25: Veggies Delight recipe rows (Creative Delight members #2, creative_delight.md 27; moved from the pack's server_scripts/cooking/cooking.js and baking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js)
 - 2026-10-25: Veggies Delight loot rows: its crop crates and 9 chest entries (Creative Delight members #2, moved from the pack's loot/07_rules.js 2026-10-25, rows unchanged), and Rustic Delight's bell pepper crates (vintageport #5): its bell pepper is Rustic's, whose crates and seed bag had no pack rule (kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js)

@@ -80,7 +80,7 @@ change) -> **E** (new blocks and art) -> **F** when their blockers land -> **G**
 Status: In Progress (JEI "Feast Plating" tab shipped 1.1.01, RC-65; assemblies and pizza servings open) / Work: KubeJS + Creative Brewing jar (pizza) / id `dishes/meals #5`
 
 ### Goal
-(a) JEI plating tab: **done** (patcherMod `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java`; every FD
+(a) JEI plating tab: **done** (Creative Common `compat/jei/FeastPlatingJEI.java`, `FeastPlatingCategory.java`; every FD
 feast block, popcorn box, pizza, stuffed hoglin, leftovers from the loot table). (b) Sequenced assembly for roast chicken,
 honey glazed ham, pizza, popcorn (popcorn box also shaped); shepherd's pie is done (row 3). (c) Pizza: 8 slices to match
 its texture, dearer dough and cheese.
@@ -456,7 +456,7 @@ Feasts cooked in the oven, starting with the hoglin feast; then every feast in t
   `farmersdelight:stuffed_pumpkin_block` and `corn_delight:cooking/nachos_block` are pot recipes;
   `nethersdelight:raw_stuffed_hoglin` is shaped and `nethersdelight:cooking/stuffed_hoglin` cooks it in the pot
   (`i.raw_stuffed_hoglin` -> `i.stuffed_hoglin`). Rustic's medleys and Rice Roll Royale are shapeless (Rustic member).
-- Oven helper (patcherMod `neoCraftHelper.js` line 1161): `R.ceBaking(input, output, e, idOverride, { exp, time, container, tool })`,
+- Oven helper (Creative Common `neoCraftHelper.js` line 1161): `R.ceBaking(input, output, e, idOverride, { exp, time, container, tool })`,
   1-6 slots, tool = bakeware kept in the tool slot. Bakeware keys: `i.t_bakeware_baking_sheet`, `_cake_pan`, `_pie_tin`,
   `_muffin_tin` (item_dict lines 43-46); no roasting pan.
 - Feast list for a loop: the feast blocks of `blocktags.js` lines 384-390 and the `feast/whole` family (food_families.md 3.1).
@@ -944,7 +944,7 @@ RC-136 Heatless cacciatore with cooked cuts.
 ---
 
 ## meals #37: Pancake coverings review
-Status: In Progress (review not started) / Work: KubeJS / patcherMod / id `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); after `dishes/jams #1`
+Status: In Progress (review not started) / Work: KubeJS / Creative Common / id `dishes/meals #37` ([recipes_cooking.md](../recipes_cooking.md)); after `dishes/jams #1`
 
 ### Goal
 Review the Supplementaries pancake covering options, the JEI screen and the tooltip; recolour the jam covering to each
@@ -961,7 +961,7 @@ jam's colour.
 ### Build
 1. Audit in game: which items apply which covering (Supplementaries code: `PancakeBlock` topping by item / tag), what JEI
    and the tooltip say; write the list here.
-2. Jam colour: per-jam tint of `pancake_top_jam` / `pancake_side_jam` by a patcherMod `BlockColor` on
+2. Jam colour: per-jam tint of `pancake_top_jam` / `pancake_side_jam` by a Creative Common `BlockColor` on
    `supplementaries:pancake` keyed on the stored topping item (the block entity holds it: check), colors from
    `dishes/jams #1`. Or one texture per jam if jams stay a handful (resource pack).
 3. A JEI information page on `i.pancakes` listing the coverings (`JEIEvents.information`, CD `supplementaries/client.js`).
@@ -1025,7 +1025,7 @@ the bell pepper rolls.
    ones). Models: recolours of `rice_roll_medley_block` stages; loot tables (full drops itself, as the Royale).
 2. Dict keys for the 4 medleys and the Rustic rolls; recipes in the CD tree of the namespace: shapeless rolls + bowl
    (as FD's medley), plus one assembly each on `i.bowl` with a unique first roll.
-3. JEI plating: the `FeastPlatingCategory` (patcherMod) picks up any `FeastBlock` subclass from the registry: check it
+3. JEI plating: the `FeastPlatingCategory` (Creative Common) picks up any `FeastBlock` subclass from the registry: check it
    lists the new ones. Food families `feast/whole`, placeable own block, compost, names.
 
 ### Ids and data

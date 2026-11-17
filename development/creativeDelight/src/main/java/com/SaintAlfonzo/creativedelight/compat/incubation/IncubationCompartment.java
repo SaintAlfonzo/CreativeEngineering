@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  * name Incubation's types. A set's assets, recipes, loot tables, tags and worldgen are the built-in packs
  * {@code packs/incubation/<bird mod>/} ({@code compat.CompartmentPacks}), added only with Incubation and that bird mod.
  * Ids are {@code creativedelight:*} since M8 (plan D6): data/creativedelight/swaps/compartments.json carries the
- * {@code incubation_additions:*} ids and the older {@code creativeengineering:*} ones (patcherMod up to 1.0.5) over.
+ * {@code incubation_additions:*} ids and the older {@code creativeengineering:*} ones (Creative Common up to 1.0.5) over.
  */
 public final class IncubationCompartment {
 

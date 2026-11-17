@@ -7,7 +7,7 @@
 // /reload (or rejoin) so the solver sees it before you create the world. Refresh the baseline
 // after mod updates with `python3 tools/gen_biome_config.py` (keeps your edits).
 //
-// The solver is patcherMod's BiomeLayoutTuner (Java: it brute-forces ~1700 climate entries against
+// The solver is Creative Common's BiomeLayoutTuner (Java: it brute-forces ~1700 climate entries against
 // every sample, too slow for Rhino). It runs here, in ServerEvents.highPriorityData, which KubeJS
 // fires while the world's datapacks load (world creation included), and the edited dimension
 // layouts go into KubeJS's top-priority virtual datapack. Results are cached in memory and on disk

@@ -1,7 +1,7 @@
 # Sweep D: registration hub
 
 Audit run 2026-11-01, read-only, for [creative_split.md](../creative_split.md) section 4. Targets use the words of
-[README.md](README.md). `PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`; line numbers
+[README.md](README.md). `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/`; line numbers
 are those of `PM/CreativeEngineering.java` (576 lines) on 2026-11-01. `?` = doubtful, note on the row.
 **Mixed** in the note column = the block wires classes of two or more targets and must be split by row.
 
@@ -125,7 +125,7 @@ are those of `PM/CreativeEngineering.java` (576 lines) on 2026-11-01. `?` = doub
 | `creativeengineering:stepstool` (`Stepstool.CHANNEL`) | `stepstool/Stepstool` (`register()` at line 124) | Equipment | Same |
 | no own channel | `mixin/ExcavationDrillItemMixin`, `mixin/DeforesterSawItemMixin` redirect PneumaticCraft's `SimpleChannel#sendToServer` on the server | Engineering | Sweep B rows; listed here because they reference `SimpleChannel` |
 
-No other `NetworkRegistry` use in patcherMod. KubeJS startup scripts are loaded from the jar by
+No other `NetworkRegistry` use in Creative Common. KubeJS startup scripts are loaded from the jar by
 `compat/kubejs/JarStartupScripts` + `mixin/KubeJSStartupJarScriptsMixin` (Common), not by the main class.
 
 ## D.2 `DeferredRegister` holders (21 classes, 22 files incl. the main class)

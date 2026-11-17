@@ -70,7 +70,7 @@ warnings). No potion server scripts remain.
   and `createRecipes()` reads `PotionBrewing.POTION_MIXES` (`f_43494_`) — the same list MoreJS
   `getMixes()` appends to — so a postInit rebuild picks everything up. Log line:
   `[CE potions] Automatic Brewing: rebuilt N recipes`. If it ever logs `rebuild FAILED`
-  (reflective access blocked), fall back to a patcherMod `@Invoker` on those two methods.
+  (reflective access blocked), fall back to a Creative Common `@Invoker` on those two methods.
 
 **Machine coverage — nothing else needed:**
 - Brewing stand: the Mix entries.
@@ -80,14 +80,14 @@ warnings). No potion server scripts remain.
   work-around for this and showed as a separate JEI "Mixing" entry, not Automatic Brewing.
 - IE Mixer multiblock: IE's `mixer_potion_list` (`PotionRecipeGenerators` /
   `PotionHelper.applyToAllPotionRecipes`) is generated from the same `PotionBrewing.POTION_MIXES`.
-  patcherMod redirects it — see below. **1500 mB batches** for regular + splash (deliberately
+  Creative Common redirects it — see below. **1500 mB batches** for regular + splash (deliberately
   larger than the 1000 mB brewing-stand / Create), **but lingering-output recipes run at 1000 mB**
   (`CREATIVEENGINEERING$LINGERING_AMOUNT`, keyed on `toType == LINGERING` in
   `PotionRecipeGeneratorsMixin.creativeengineering$addMixer`) — one dragon's-breath bottle
   converts a bucket of splash potion; Create/IE in step for lingering.
-- Splash / lingering: vanilla `CONTAINER_MIXES` + patcherMod dragon-breath fluid brew.
+- Splash / lingering: vanilla `CONTAINER_MIXES` + Creative Common dragon-breath fluid brew.
 
-## patcherMod mixins (2026-09-07; status: potions.md section 0)
+## Creative Common mixins (2026-09-07; status: potions.md section 0)
 - **`PotionRecipeGeneratorsMixin`** (existing) — `CREATIVEENGINEERING$AMOUNT` = **1500 mB**
   (pack design; IE stock + Create Automatic Brewing are 1000). Briefly set to 1000 then reverted
   2026-09-07 — user wants the IE-Mixer multiblock to brew in 1500 mB batches specifically.
@@ -205,7 +205,7 @@ needs its own `item.minecraft.{potion,splash_potion,lingering_potion,tipped_arro
 key (KubeJS uses the registry PATH as the potion name; vanilla shares the base name).
 `dump_potions.js` (`/dumppotions`) -> `kubejs/exported/{mob_effects,potions}.json`.
 
-## Note: needs a restart (patcherMod jar changed -> full restart, not just /reload).
+## Note: needs a restart (Creative Common jar changed -> full restart, not just /reload).
 In-game verify:
 - Brewing stand brews awkward+iron_block -> Potion of Resistance, thick+golden_apple -> Health Boost,
   levitation via awkward + shulker filet.

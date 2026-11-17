@@ -11,7 +11,7 @@ import umpaz.farmersrespite.client.gui.KettleScreen;
 import java.util.List;
 
 /**
- * Farmer's Respite kettle: the finished-meal slot's tooltip gets its stack, see {@link MealSlotTooltip} (patcherMod, shared with the
+ * Farmer's Respite kettle: the finished-meal slot's tooltip gets its stack, see {@link MealSlotTooltip} (Creative Common, shared with the
  * Create Central Kitchen guide mixins there). Client only.
  */
 @Mixin(value = KettleScreen.class, remap = false)

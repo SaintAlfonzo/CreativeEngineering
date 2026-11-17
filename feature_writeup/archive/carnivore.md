@@ -234,7 +234,7 @@ Route (D1, recommended): no Java. The items are plain foods plus one on-eat tele
 as loot, so the port is the feature_porting tier "KubeJS / data" inside the Creative Delight tree (memory
 `creative-delight-routing`): items under the `carnivore` namespace in `development/creativeDelight/src/main/resources/kubejs_startup/carnivore/`,
 server scripts in `kubejs/data/creativedelight/kubejs/carnivore/`. Textures and lang come from the donor jar in
-`carnivore_upstream/` through patcherMod's donor reader (as Farmer's Structures, note [farmers-structures-donor](../agent_notes/farmers-structures-donor.md)).
+`carnivore_upstream/` through Creative Common's donor reader (as Farmer's Structures, note [farmers-structures-donor](../agent_notes/farmers-structures-donor.md)).
 If that reader cannot serve item textures, the fallback is a CD Java member with the Miner's donor setup (D1).
 
 | # | Step | Pack system and doc | Files |
@@ -242,7 +242,7 @@ If that reader cannot serve item textures, the fallback is a CD Java member with
 | F0 | `/dumpall`, then `/cdevgen` after F1 (dumps predate Miner's / Hostile) | note [dumpall-refresh-workflow](../agent_notes/dumpall-refresh-workflow.md) | `kubejs/exported/` |
 | F1 | Register the kept items (19 under the recommended answers to D2-D8) under `carnivore:`; mite teleport only if D5 keeps it | CD startup scripts | `kubejs_startup/carnivore/carnivore_items.js` |
 | F2 | Ids in `item_dict.js` / `food_dict.js` under meat family names (`f` names, creative_delight.md 13: exotic mob meats keep their family name) | memory `item-dict-mechanics` | `_lib/item_dict.js`, `_lib/food_dict.js` |
-| F3 | Tags via `global.tags`: `forge:raw_meats` / `food_type/raw/meat` / `food_type/cooked/meat` (not `forge:raw_meat`, note [forge-raw-meat-tag-gotcha](../agent_notes/forge-raw-meat-tag-gotcha.md)), bird and fish tags where they apply | [tag_helper.js](../../development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js) | `kubejs_startup/carnivore/` |
+| F3 | Tags via `global.tags`: `forge:raw_meats` / `food_type/raw/meat` / `food_type/cooked/meat` (not `forge:raw_meat`, note [forge-raw-meat-tag-gotcha](../agent_notes/forge-raw-meat-tag-gotcha.md)), bird and fish tags where they apply | [tag_helper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js) | `kubejs_startup/carnivore/` |
 | F4 | Mob drops as LootJS entity modifiers, adult only, fire -> cooked, gate per D10 with `i.any_knife`; mooshroom swaps beef and cooked beef (B6); add the rows to the loot census | [loot.md](../loot.md), CD `miners_delight/loot.js` as the model | `kubejs/data/creativedelight/kubejs/carnivore/loot.js` |
 | F5 | Item merges: none needed if D3-D7 hold (the duplicates are never registered). If the owner keeps any, add them to [item_merges.md](../item_merges.md) and `_core/item_merges.js` | item_merges.md | |
 | F6 | Recipes through `global.NCH`: full cook set for every kept raw item (fixes B5); cooking pot Horse Mince and Insect Powder (input `arthropod` per D7) with S&D / Central Kitchen mirrors unless `_manual_only`; cutting board frogspawn; bowl remainders | [recipes_cooking.md](../recipes_cooking.md) | `kubejs/data/creativedelight/kubejs/carnivore/recipes.js` |

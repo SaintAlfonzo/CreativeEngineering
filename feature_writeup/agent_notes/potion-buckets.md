@@ -14,7 +14,7 @@ Since the entry below was written: `engineering/potion_bottling.js` now generate
 fill/bottle/empty recipes (create:filling, IE bottling_machine, create:emptying — one per potion
 x REGULAR/SPLASH/LINGERING, 1000 mB/bucket) — the "TODO: survival recipe" note further down is
 stale, ignore it. Three more pieces landed the same session, all client-side/KubeJS-only (no
-patcherMod rebuild needed) — see memory `kubejs-api-notes` for the underlying API
+Creative Common rebuild needed) — see memory `kubejs-api-notes` for the underlying API
 details:
 
 - **Per-potion dynamic tint** — `startup_scripts/items/potion_buckets.js` now calls
@@ -37,7 +37,7 @@ details:
   there's no existing precedent anywhere in the pack for stripping something from the creative
   tab too, so didn't invent one). Its supply chain was already fully cut before this session:
   IE's own `potion_bottling_list` was removed (see below), the IE Mixer's potion recipes were
-  already redirected to `create:potion` by patcherMod's `PotionRecipeGeneratorsMixin` (mixer
+  already redirected to `create:potion` by Creative Common's `PotionRecipeGeneratorsMixin` (mixer
   never produces `immersiveengineering:potion` fluid anymore), and `forge:fluid/potion` had
   `f.ie_potion` stripped from it in `tags/fluidtags.js` — so the item was already unreachable in
   survival, this just hides/flags it like the rest of the dead list.
@@ -78,7 +78,7 @@ RadiusPerTick, RadiusOnUse 0) on right-click: `creativeengineering:potion_bucket
 `splash_potion_bucket` / `lingering_potion_bucket`. splash & lingering scale area + effect
 durations (effectMult) and use more rings (taller/rounder dome).
 
-Pure KubeJS, **no patcherMod involved** (a Mixin-based true-sphere approach was tried and
+Pure KubeJS, **no Creative Common involved** (a Mixin-based true-sphere approach was tried and
 ripped back out — see "Abandoned" below):
 - `startup_scripts/items/potion_buckets.js` — `e.create` items, `.unstackable()`, group
   'brewing', displayName.
@@ -117,7 +117,7 @@ uses `DEFAULT_EFFECTS`. `/give @s creativeengineering:lingering_potion_bucket{Po
    reflection on a `Direction` enum instance entirely — dropped the face-normal offset for
    bucket placement, used a flat `+0.1` Y nudge instead.
 
-## Abandoned: patcherMod Mixin for a true sphere (2026-09-10, several rounds)
+## Abandoned: Creative Common Mixin for a true sphere (2026-09-10, several rounds)
 
 Tried making a single `AreaEffectCloud` a real sphere (hit-test + particles) via
 `AreaEffectCloudSphereMixin`, opt-in through a `CESphere` persistent-data tag. Went through
@@ -134,7 +134,7 @@ stacked-ring approach above, which needs no Java at all and is trivially verifia
 at the particles / test hit range directly, no decompiling required).
 
 TODO / follow-ups:
-- ~~**Dispenser support**~~ — done, 2026-09-12: patcherMod `PotionBucketDispenser`
+- ~~**Dispenser support**~~ — done, 2026-09-12: Creative Common `PotionBucketDispenser`
   (`DispenserBlock.registerBehavior` in commonSetup) forwards to a `setHandler` callback that
   `potion_area.js` installs, which just calls `global.potionArea.spawn(...)` — no dome-logic
   duplication in Java. See [potion-buckets](potion-buckets.md).
@@ -157,7 +157,7 @@ TODO / follow-ups:
   try/catch as a matter of habit, but this version should actually work — not yet confirmed
   in-game.
 - No public setter for `AreaEffectCloud.reapplicationDelay` (dose-repeat interval) - not exposed
-  as a dial; would need a patcherMod `@Accessor` if wanted later.
+  as a dial; would need a Creative Common `@Accessor` if wanted later.
 - Ring stack in-game check: PB-04 in potion_buckets.md (dome shape/feel)
   and retune `rings` per bucket once seen.
 
@@ -165,9 +165,9 @@ TODO / follow-ups:
 
 Dispenser support for the creativeengineering potion buckets ([potion-buckets](potion-buckets.md)) is implemented via a Java->KubeJS callback bridge, not a Java reimplementation of the dome logic.
 
-- `patcherMod/.../potion/PotionBucketDispenser.java` — registers a `DefaultDispenseItemBehavior` for each of the 3 bucket ids (via `DispenserBlock.registerBehavior`, called from `CreativeEngineering#commonSetup` through `event.enqueueWork`, since it needs the item registry fully populated). On dispense it computes the position one block in front of the dispenser's facing, then calls a static `SpawnHandler` interface (`spawn(ServerLevel, x, y, z, itemId, ItemStack)`) if one has been installed — falls back to vanilla eject-as-item behavior with a warning log if not. Returns `new ItemStack(Items.BUCKET)` to replace the dispensed bucket in the slot (buckets are `.unstackable()`, so the slot always holds exactly 1).
+- `creativeCommon/.../potion/PotionBucketDispenser.java` — registers a `DefaultDispenseItemBehavior` for each of the 3 bucket ids (via `DispenserBlock.registerBehavior`, called from `CreativeEngineering#commonSetup` through `event.enqueueWork`, since it needs the item registry fully populated). On dispense it computes the position one block in front of the dispenser's facing, then calls a static `SpawnHandler` interface (`spawn(ServerLevel, x, y, z, itemId, ItemStack)`) if one has been installed — falls back to vanilla eject-as-item behavior with a warning log if not. Returns `new ItemStack(Items.BUCKET)` to replace the dispensed bucket in the slot (buckets are `.unstackable()`, so the slot always holds exactly 1).
 - `kubejs/startup_scripts/func/potion_area.js` calls `PotionBucketDispenser.setHandler(...)` once at startup with a JS lambda that just calls `global.potionArea.spawn(level, x, y, z, itemId, stack, null)` — the SAME function the right-click path (`server_scripts/engineering/potion_buckets.js`) uses. This keeps ring count/radius/color/effect tuning in exactly one place (potion_area.js), matching the pack's "centralize" preference — Java never duplicates the dome logic.
 
 **Why this shape:** KubeJS has no API surface for `DispenserBlock.registerBehavior` (it's not something StartupEvents/ItemEvents expose), so the registration itself HAD to be Java. But the actual cloud-spawning logic was already correct and tuned in KubeJS (potion_area.js) — duplicating it in Java would let the two copies drift. Solved by making Java a thin shim: register the behavior, then call back into whatever handler KubeJS installs, via a method call (`setHandler(handler)`) rather than a static field assignment — Rhino's JS-function-to-Java-functional-interface coercion is reliably supported for method-call arguments (this is how every existing `ItemEvents.foo(id, callback)` in the pack works), but was not worth risking on a raw static-field set.
 
-**How to apply:** if another feature needs a game hook that KubeJS can't register directly (another dispenser/dropper behavior, a block-entity capability, etc.), follow the same shape — patcherMod does ONLY the registration + the Java-only plumbing (facing, position math, stack mechanics), and forwards into a callback that KubeJS installs at startup via a `setHandler`-style method, keeping the actual game-content logic (tuning, effects, recipes) in KubeJS as the single source of truth. Verified compiling with `./gradlew compileJava --offline` in `patcherMod/`.
+**How to apply:** if another feature needs a game hook that KubeJS can't register directly (another dispenser/dropper behavior, a block-entity capability, etc.), follow the same shape — Creative Common does ONLY the registration + the Java-only plumbing (facing, position math, stack mechanics), and forwards into a callback that KubeJS installs at startup via a `setHandler`-style method, keeping the actual game-content logic (tuning, effects, recipes) in KubeJS as the single source of truth. Verified compiling with `./gradlew compileJava --offline` in `creativeCommon/`.

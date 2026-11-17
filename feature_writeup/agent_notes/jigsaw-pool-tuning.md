@@ -1,6 +1,6 @@
 # jigsaw-pool-tuning
 
-> Village-house (jigsaw pool piece) remove/weight system — pool_config.json + pool_tags.json applied by patcherMod PoolTuner at ServerAboutToStart LOWEST; plus loot_container_swaps.json so Lootr converts modded structure containers
+> Village-house (jigsaw pool piece) remove/weight system — pool_config.json + pool_tags.json applied by Creative Common PoolTuner at ServerAboutToStart LOWEST; plus loot_container_swaps.json so Lootr converts modded structure containers
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-27). Repo status docs win over any status line here.
 
@@ -8,7 +8,7 @@ Built 2026-09-26 because mod village houses (IE, Create: Dynamic Village, PNC, A
 structures. They're weighted pieces that mods inject in code into vanilla pools like
 `minecraft:village/plains/houses`, so structure_config.json can't see them.
 
-- `patcherMod worldgen/PoolTuner`: `ServerAboutToStartEvent` at LOWEST priority, after all injectors, which run at NORMAL
+- `Creative Common worldgen/PoolTuner`: `ServerAboutToStartEvent` at LOWEST priority, after all injectors, which run at NORMAL
   priority or at mod init / through a Pools.register mixin. It reads live pools, merges `kubejs/generation_scripts/worldgen/pool_config.json`
   (game-written, keeps current/enabled edits, keeps edited-but-missing entries as `"missing": true`), resolves
   `pool_tags.json` (structure_tags syntax + optional `"pools"` glob filter), rebuilds changed pools

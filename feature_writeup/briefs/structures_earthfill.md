@@ -15,13 +15,13 @@ Proposed test ids ST-206 to ST-214 are provisional: other structure briefs writt
 numbers, so renumber against structure_tuning.md 8 (highest today: ST-205) when adding them.
 
 None of these rows touches recipes, items or the `global.NCH` / `_lib/*_dict.js` dictionaries: they are worldgen data
-(structure tags, which go through `global.tags.add` as today), CEConfig values and patcherMod Java.
+(structure tags, which go through `global.tags.add` as today), CEConfig values and Creative Common Java.
 
 ## Build plan (2026-10-30)
 
 **Executed 2026-10-30 (phases 0 to 3, plus D3 / D4).** Owner decisions: D1 cover all structures (not only earth
 bases), D2 close #1, #2, #6, D3 and D4 prune instead of cancel, including metas near coasts (only the offending part
-goes). Built into patcherMod 1.1.04 (installed in `mods/`), EarthFillTest 91 and MetaTest 76 green; nothing run in
+goes). Built into Creative Common 1.1.04 (installed in `mods/`), EarthFillTest 91 and MetaTest 76 green; nothing run in
 game yet (queue SQ-EF-01 to -08). Feature writeup: [structure_tuning.md](../structure_tuning.md) 3.28 (ST-235 to
 ST-242). TODO rows: #13 (phase 1), #14 (phase 2), #16 (D3, D4), #3, #4 built; #1, #2 archived; #15 (phase 4) built later the same day (3.29).
 Differences from the plan below:
@@ -66,7 +66,7 @@ the value 0.
 Close #1, #2, #6 (tick ST-52), tick ST-57 for #8 if its 07_phase_7.md data has no wrong cancel. Update #9 and #10
 to point at E2 and E3.
 
-### Phase 1: correctness fixes (patcherMod, one build, all offline-testable)
+### Phase 1: correctness fixes (Creative Common, one build, all offline-testable)
 
 | Id | Defect (verified by reading) | Fix | EarthFillTest case |
 |---|---|---|---|
@@ -94,10 +94,10 @@ So #11's recommendation (raise `maxOverWater` on the desert group) would keep *m
 is to judge these structures, not to relax a limit.
 
 1. **Measure first** (scratch, `log = ALL`): reproduce a flooded pyramid and a floating camp / ruin; for each, log
-   whether earth fill saw it at all. Small patcherMod help: under `log = ALL`, one line per start with zero counted
+   whether earth fill saw it at all. Small Creative Common help: under `log = ALL`, one line per start with zero counted
    earth (`no earth: N pieces, legacy L`), so the log shows what is invisible. This also answers whether the
    2026-10-28 client-scratch result is representative (#12's decision).
-2. **Base footprint for earthless starts** (patcherMod, decision D1): for a start with no counted earth, take each
+2. **Base footprint for earthless starts** (Creative Common, decision D1): for a start with no counted earth, take each
    non-terrain-matching piece's bounding box at its bottom layer (legacy pieces: `getBoundingBox().minY()`), read the
    predicted terrain there, and apply the same `tooWet` share. Air is not judged (pads that hang are a beard /
    terrain question, and legacy pieces often fill down themselves, like the mansion). Exempt and `water_fill`
@@ -221,7 +221,7 @@ cancels, and decide what happens to a village on a lake (today it goes as a whol
 
 ### Decision and value (2026-10-30)
 User: "set aggressive cancel value". BUILT: `maxWaterSurplus` 0.5 -> **0.0** (instance toml, CEConfig default
-`defineInRange("maxWaterSurplus", 0.0, ...)`, `WorldgenConfig.earthMaxWaterSurplus()` fallback 0.0; patcherMod built,
+`defineInRange("maxWaterSurplus", 0.0, ...)`, `WorldgenConfig.earthMaxWaterSurplus()` fallback 0.0; Creative Common built,
 not installed). Why 0:
 - The rule is `water > ground x (1 + surplus)` and only runs for surplus >= 0 (`tooWet`), so 0 is the strictest value
   the code allows: any footprint with more water than dry ground cancels. A value under 0 turns the check off; a
@@ -300,7 +300,7 @@ none is overridden in `kubejs/data`):
 | `towns_and_towers:exclusives/village_nilotic` | -1 / WORLD_SURFACE_WG | beard_thin | `kaisyn:village/exclusives/nilotic/base_plate`, legacy, **terrain_matching** | - | no | **don't tag** (houses are surface-projected children; tagging buries every house floor 1 block) |
 
 ### Build
-1. Optional hardening (patcherMod, recommended so a wrong tag can't bury houses): in `sinkOf`, read the start pool's
+1. Optional hardening (Creative Common, recommended so a wrong tag can't bury houses): in `sinkOf`, read the start pool's
    elements (`JigsawStructure` field `startPool`, SRG `f_227607_`; read it the same way `START_HEIGHT` is read at 230)
    and return 0 with a warning when any element's `getProjection()` is `TERRAIN_MATCHING`. Further option: apply the
    sink only to pieces whose jigsaw chain to the start is rigid-to-rigid (EarthFill already builds the tree with
@@ -380,7 +380,7 @@ Option set (pick in Decisions):
 4. Before choosing, measure: scratch run with `log = ALL` at density 4 over two r 400 squares in plains/taiga/highlands,
    `grep 'eugene:undead_castle' latest.log`. The log line has no biome, and chunks stopped at `structure_starts` hold
    placeholder biomes, so read the biome source at each chunk with a scratch KubeJS probe calling `getNoiseBiome` (the
-   trick from 02_new_mods_tests.md 6), and tabulate cancels per fit. Optional small patcherMod help: add the start's
+   trick from 02_new_mods_tests.md 6), and tabulate cancels per fit. Optional small Creative Common help: add the start's
    biome to the `[earth-fill]` log line under `log = ALL` (`EarthFill.java:734-742`).
 
 ### Ids and data
@@ -437,7 +437,7 @@ because `none` counts every earth block of its sunk dirt bowl; the terrain brief
 ---
 
 ## structures/earthfill #7: Worldgen hot spots
-Status Testing (A and B built 2026-10-27, perf.md 10.8; SQ-WGP-03, -04 PASSED 2026-10-27) · Work patcherMod · TODO `structures/earthfill #7`
+Status Testing (A and B built 2026-10-27, perf.md 10.8; SQ-WGP-03, -04 PASSED 2026-10-27) · Work Creative Common · TODO `structures/earthfill #7`
 
 ### Goal
 Remove the two pack-side worldgen costs Phase 10 found: twigs' obelisk check (3.1% of worldgen CPU) and the repeated
@@ -586,7 +586,7 @@ New chunks only. `/place structure` is not checked by earth fill. Related: `stru
 - [structure_tuning.md](../structure_tuning.md) 7.5 heading: added "DEPLOYED with 1.0.9 2026-10-19".
 - [structure_tuning.md](../structure_tuning.md) 7 Todo, "Terrain adaptation leftovers": the modded earth-fill
   calibration ran as ST-52 in Phase 7; only the 1.0.9 footprint share needs its own run.
-- [testing/structures/02_new_mods_tests.md](../testing/structures/02_new_mods_tests.md) 4 item 2: "(patcherMod 1.0.7,
-  not built or shipped)" -> "(patcherMod 1.0.7, DEPLOYED 2026-10-18)".
+- [testing/structures/02_new_mods_tests.md](../testing/structures/02_new_mods_tests.md) 4 item 2: "(Creative Common 1.0.7,
+  not built or shipped)" -> "(Creative Common 1.0.7, DEPLOYED 2026-10-18)".
 - (structure_tuning.md 3.23's "None is in `mods/`" and 12_earth_fill_camps.md 3's "Not deployed" were stale too; another
   pass corrected both the same day before this one got to them.)

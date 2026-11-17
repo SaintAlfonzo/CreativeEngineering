@@ -69,7 +69,7 @@ Status: Planned / Work: KubeJS / TODO `largecontent/mod-additions #2` (source: s
 Item tags that group the items of a mod family: every Create add-on, every Farmer's Delight add-on.
 
 ### Now (checked 2026-10-31)
-- No such tag exists (grep for `mod_family`, `create_addons`, `delight_addons` in `kubejs/` and the patcherMod
+- No such tag exists (grep for `mod_family`, `create_addons`, `delight_addons` in `kubejs/` and the Creative Common
   `kubejs_startup/` finds nothing).
 - `global.tags.addMatching` (`development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js`
   lines 38-54) takes `@modid` entries and globs that may sit in the namespace half (`*_delight:*` becomes the regex
@@ -128,7 +128,7 @@ truffle pie art.
 1. Decide port vs jar (below). For a jar: get Environmental for 1.19.2 on Blueprint 6.2.0 (the 4.x line), then the
    `add-mod` skill (sides row, `/dumpall`, generators), and turn off what is not wanted through its config and KubeJS
    (remove items, recipes, spawns, worldgen biome modifiers).
-2. For a port: the `port` skill; a Creative Delight member only for the food parts (truffle pie), other parts in patcherMod
+2. For a port: the `port` skill; a Creative Delight member only for the food parts (truffle pie), other parts in Creative Common
    or a new in-tree mod. License check first (Team Abnormals mods: read the jar's license).
 3. Pieces: cattail (block + worldgen through the wild-flowers / wild-plants rules), mud ball (projectile, sets a pig muddy
    state), muddy pig (entity data on vanilla pig, dries over time, flower placement), koi (fish entity, spawn rules, its
@@ -180,7 +180,7 @@ survivors the writeup's open decisions asked for (one tentacle tag: calamari).
 ---
 
 ## mod-additions #6: Integrate Hostile Delight
-Status: Planned / Work: KubeJS / data / patcherMod / TODO `largecontent/mod-additions #6` ([hostile_delight.md](../hostile_delight.md))
+Status: Planned / Work: KubeJS / data / Creative Common / TODO `largecontent/mod-additions #6` ([hostile_delight.md](../hostile_delight.md))
 
 Base work is in the writeup. Folded scope (scratchpad 2026-10-24), two items:
 - Hostile Delight's prepared sea pickle (`hostiledelight:preapredseapickle`, the id has the typo; verified in the jar): made by

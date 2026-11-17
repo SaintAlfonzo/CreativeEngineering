@@ -1,7 +1,7 @@
 // Trade helper — global.trades. Edits the Wandering Trader's two pools, and adds villager trades (villager(), at the
 // end). Call it inside MoreJSEvents.wandererTrades: MoreJS fires that at server start (after every mod has added its
 // listings) and again on /reload, each time from the untouched pools, so edits never stack. Listings are built in
-// patcherMod (trader.TradeListings); counts and spawn timers are CEConfig [wandering_trader]. Reference:
+// Creative Common (trader.TradeListings); counts and spawn timers are CEConfig [wandering_trader]. Reference:
 // feature_writeup/wandering_trader.md
 console.log('Trade Helper starting')
 

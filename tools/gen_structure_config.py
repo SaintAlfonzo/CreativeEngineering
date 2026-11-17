@@ -317,7 +317,7 @@ def scan_mod_jars():
                     structure_biomes[sid] = data.get('biomes')
                 except (json.JSONDecodeError, UnicodeDecodeError):
                     pass
-    # Donor jars (farmers_upstream/, patcherMod worldgen/donor): data the game serves in memory above the installed
+    # Donor jars (farmers_upstream/, Creative Common worldgen/donor): data the game serves in memory above the installed
     # mod's own. Their sets and structures replace the installed jar's, except the foreign-dimension ones the
     # translator leaves out; sets the donor empties are dropped (the carp pond is gone from 1.0.6).
     for jar in sorted((MODS_DIR.parent / 'farmers_upstream').glob('*.jar')):

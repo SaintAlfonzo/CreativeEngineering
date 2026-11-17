@@ -98,7 +98,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   invoked method's arguments, not the enclosing method's params ("targets a method with an invalid signature"); and
   KubeJS refuses an upper-case file name anywhere under `kubejs/data/*/kubejs/` ("Invalid file name: Uppercase",
   reported as "startup script syntax errors"). Report both to the owner as found in the installed jars / pack.
-- Mixins: a patcherMod mixin with a wrong target applies silently (no defaultRequire); Creative Delight / Creative
+- Mixins: a Creative Common mixin with a wrong target applies silently (no defaultRequire); Creative Delight / Creative
   Brewing set `defaultRequire: 1`, so the same mixin crashes them. A mixin config plugin's `preApply` runs after Mixin
   conforms visibility (`MixinPreProcessorStandard.attach`): it cannot rescue another mod's `@Overwrite` from an
   access-transformer clash (r1106spfx).

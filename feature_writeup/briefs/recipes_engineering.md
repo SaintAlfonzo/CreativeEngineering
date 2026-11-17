@@ -21,12 +21,12 @@ else is marked unverified.
 | engineering #1 | Blast furnace and dispenser recipes | KubeJS | A: quick fixes |
 | engineering #2 | Amethyst crushing clash (Bug) | KubeJS | A |
 | engineering #3 | Smaller findings (coal blocks, cinder flour, thunder detector NBT, stale comments) | KubeJS | A |
-| engineering #5 | Bucket recipes (iron plates; wooden water bucket) | KubeJS + patcherMod or mods/ | B: new crafts |
+| engineering #5 | Bucket recipes (iron plates; wooden water bucket) | KubeJS + Creative Common or mods/ | B: new crafts |
 | engineering #4 | Horse cart recipes | KubeJS | B |
 | engineering #6 | Create add-on machine recipes on components; laser cutting blocks into plates | KubeJS | C: big table |
 
 Suggested order: **A** in one `/reload` (all edits in `engineering/` scripts, nothing new registered). Then **B**: the
-plate bucket and the carts are small KubeJS edits; the wooden bucket needs a decision (mod or patcherMod item, both
+plate bucket and the carts are small KubeJS edits; the wooden bucket needs a decision (mod or Creative Common item, both
 need a restart / jar). **C** last and in one pass, after `engineering/sawmill-and-components #8` (generated component
 chains) if that lands first, since #6 consumes components; its laser-cut plates share the metal list with
 `recipes/metal #1` ([recipes_metal.md](recipes_metal.md)), build them together. `recipes/progression #1` closes when
@@ -280,9 +280,9 @@ Fold AstikorCarts' four recipes into the pack's progression (iron plates, the th
 
 ## engineering #5: Bucket recipes
 
-Status Built 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44, not yet booted; untested) · Work KubeJS + patcherMod `bucket/` · TODO `recipes/engineering #5`
+Status Built 2026-10-29 (Creative Common 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44, not yet booted; untested) · Work KubeJS + Creative Common `bucket/` · TODO `recipes/engineering #5`
 
-**Done:** `process.js` Buckets section removes `minecraft:bucket` and adds `shaped/bucket_from_plates` (2 plates + 1 plate, `P P / _P_`) and `shaped/wooden_bucket` (3 planks, same shape). patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`: `creativeengineering:wooden_bucket` (stacks to 16) and `wooden_water_bucket` (stacks to 1). Chose patcherMod over cech12's Wooden Bucket (MIT, needs BucketLib, takes lava/milk/fish): it cannot be limited to water. Texture is cech12's `wooden_bucket.png` (MIT) with a painted water surface for the full one. Keys `i.wooden_bucket`, `i.wooden_water_bucket`. Empty bucket scoops only water sources (also waterlogged blocks); full one places water via vanilla and returns the wooden bucket; the fluid-handler wrapper swaps wooden items and accepts only water. Not done: dispenser behavior, cauldron interactions, use as `minecraft:water_bucket` in recipes.
+**Done:** `process.js` Buckets section removes `minecraft:bucket` and adds `shaped/bucket_from_plates` (2 plates + 1 plate, `P P / _P_`) and `shaped/wooden_bucket` (3 planks, same shape). Creative Common `bucket/WoodenBucketItems` + `WoodenBucketItem`: `creativeengineering:wooden_bucket` (stacks to 16) and `wooden_water_bucket` (stacks to 1). Chose Creative Common over cech12's Wooden Bucket (MIT, needs BucketLib, takes lava/milk/fish): it cannot be limited to water. Texture is cech12's `wooden_bucket.png` (MIT) with a painted water surface for the full one. Keys `i.wooden_bucket`, `i.wooden_water_bucket`. Empty bucket scoops only water sources (also waterlogged blocks); full one places water via vanilla and returns the wooden bucket; the fluid-handler wrapper swaps wooden items and accepts only water. Not done: dispenser behavior, cauldron interactions, use as `minecraft:water_bucket` in recipes.
 (scratchpad 2026-10-19)
 
 ### Goal
@@ -296,7 +296,7 @@ Buckets made from iron plates; an early wooden bucket that carries water.
 - No wooden fluid bucket exists in the pack. `myrtrees:wooden_bucket` is a **block** that collects latex under a tree
   tap (**decompiled** `WoodenBucketBlock.use`: only `latex`), not a fluid container. The mod list has no bucket mod.
 - KubeJS 6 can't register a custom-behavior bucket item (only its own fluids' buckets), so a water-only wooden bucket
-  needs Java (patcherMod) or a mod.
+  needs Java (Creative Common) or a mod.
 
 ### Build
 1. Plate bucket, in `engineering/process.js` (or `transport.js`, wherever "iron parts" live; recommend `process.js`):
@@ -310,24 +310,24 @@ Buckets made from iron plates; an early wooden bucket that carries water.
      "Wooden Bucket" or "Ceramic Bucket"; **unverified**: check CurseForge / Modrinth for a 1.19.2 Forge file, its
      config for a fluid allow-list (water only), and that it breaks on hot fluids). Add it to `pack/manifest.json` /
      MODLIST through the usual tooling, then give its recipe planks / logs via `R.replaceInput` if needed.
-   - **patcherMod**: a small `bucket/` package with `WoodenBucketItems` (a `DeferredRegister<Item>` like
+   - **Creative Common**: a small `bucket/` package with `WoodenBucketItems` (a `DeferredRegister<Item>` like
      `shield/ShieldItems.java`): `wooden_bucket` (empty) and `wooden_water_bucket`, both `BucketItem` subclasses; the
      empty one only picks up water sources (override `use` to refuse other fluids); the full one returns
      `wooden_bucket` on empty. Override `initCapabilities` with a `FluidBucketWrapper` subclass whose
      `setFluid` returns the wooden items, because Forge's wrapper fills to `fluid.getBucket()` (the iron water bucket).
      Models / textures / lang in the jar; recipe in KubeJS (`R.shaped(i.wooden_bucket, ['P P', ' P '], { P: i.planks })`).
-3. Writeup: recipes_engineering.md 2.1 (bucket row) and, for the patcherMod route, a short section in the patcherMod
+3. Writeup: recipes_engineering.md 2.1 (bucket row) and, for the Creative Common route, a short section in the Creative Common
    writeup the item lands in.
 
 ### Ids and data
-`i.bucket`, `i.any_plate_iron`, `i.planks`. New keys for the wooden bucket (patcherMod route):
+`i.bucket`, `i.any_plate_iron`, `i.planks`. New keys for the wooden bucket (Creative Common route):
 `i.wooden_bucket = 'creativeengineering:wooden_bucket'`, `i.wooden_water_bucket = 'creativeengineering:wooden_water_bucket'`
 (do not reuse a `wooden_bucket` key name that suggests the Myrtrees block; that one, if ever added, would be
 `i.myrtrees_wooden_bucket`).
 
 ### Decisions
-- **Mod or patcherMod for the wooden bucket?** Recommend a mod if a 1.19.2 Forge build with a fluid allow-list exists
-  (no Java to maintain); otherwise patcherMod.
+- **Mod or Creative Common for the wooden bucket?** Recommend a mod if a 1.19.2 Forge build with a fluid allow-list exists
+  (no Java to maintain); otherwise Creative Common.
 - **Should the wooden water bucket work in recipes that take `minecraft:water_bucket`?** Recommend no at first (Create
   and FD mostly take water as a fluid, which the capability covers); revisit if a crafting recipe is a pain point.
 

@@ -196,7 +196,7 @@ def filled_ing(ids, fluid_id):
 
 
 def is_potion_row(ids, fluid_id):
-    """Potion bottles into a jar: the row is written once and marked per_potion; patcherMod's PotionRows makes one row
+    """Potion bottles into a jar: the row is written once and marked per_potion; Creative Common's PotionRows makes one row
     per potion (bottles with the potion, jars with its NBT and color)."""
     return not fluid_id.endswith(':water') and any(i in POTION_BOTTLES for i in ids)
 

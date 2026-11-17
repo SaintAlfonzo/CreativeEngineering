@@ -20,27 +20,27 @@ is marked unverified.
 |---|---|---|---|
 | crops #27 | Sea grape plant mineable with a hoe | KubeJS tag, 1 line | A: quick wins |
 | crops #3 | Harvest / replant audit for every crop | KubeJS dump + tool | B: audit first |
-| crops #1 | G8, G9/G13, G12, G15 (G14 reject) | data + patcherMod | C: one patcherMod build |
-| crops #2 | Parity for hemp, grapes, flax, corn, tea, pineapple, weeds, coffee | data + patcherMod + Vinery port | C |
-| crops #4 | Weeds behavior, none on rich soil | data + patcherMod | C |
-| crops #29 | Tomato ropes and sticks in the hoe area harvest | tag (+ patcherMod for tall vines) | C |
-| crops #17 | Wet farmland from buckets and water bottles | KubeJS (or patcherMod) | C |
-| crops #21 | Melon stems and fertile soil (question first) | data / patcherMod | D: owner answers first |
+| crops #1 | G8, G9/G13, G12, G15 (G14 reject) | data + Creative Common | C: one Creative Common build |
+| crops #2 | Parity for hemp, grapes, flax, corn, tea, pineapple, weeds, coffee | data + Creative Common + Vinery port | C |
+| crops #4 | Weeds behavior, none on rich soil | data + Creative Common | C |
+| crops #29 | Tomato ropes and sticks in the hoe area harvest | tag (+ Creative Common for tall vines) | C |
+| crops #17 | Wet farmland from buckets and water bottles | KubeJS (or Creative Common) | C |
+| crops #21 | Melon stems and fertile soil (question first) | data / Creative Common | D: owner answers first |
 | crops #15 | Other plants in random growth? | KubeJS / data | D |
-| crops #14 | Bone meal in planters | patcherMod / none | D |
+| crops #14 | Bone meal in planters | Creative Common / none | D |
 | crops #28 | Grasses: winter offseason only (Built 2026-11-02) | Creative Calendar + data | E: seasons follow-up |
 | crops #19 | Village farms: Rustic crops by the wild-crop rules | CD data | E |
 | crops #24 | Better soils raise nether crop yield | CD KubeJS + CEConfig | E: soil yield follow-up |
 | crops #26 | Soul soil upgrade chain | KubeJS + texture | E (with `farming/composting #2`) |
-| crops #10 | Melon and pumpkin growth stages | patcherMod blocks + models | F: stem work, one build |
-| crops #20 | Stems connect to every fruit they grew | patcherMod + blockstates | F |
+| crops #10 | Melon and pumpkin growth stages | Creative Common blocks + models | F: stem work, one build |
+| crops #20 | Stems connect to every fruit they grew | Creative Common + blockstates | F |
 | crops #22 | More seed bags | CD blocks + data + textures | G: new content |
 | crops #25 | Mini melon crop | CD blocks + data + textures | G |
 
 Suggested order: **A** (a `/reload`), then **B** (the audit gives #1/#2/#4/#29 their checklist and catches crops this
-brief misses), then **C** in one patcherMod build (#1, #2, #4 and #29 share `CropParity`, the Quark mixins and the
+brief misses), then **C** in one Creative Common build (#1, #2, #4 and #29 share `CropParity`, the Quark mixins and the
 "Crop parity" tag section; G8 is also #4's main fix), **D** after the owner answers the open questions, **E** as data
-follow-ups of built systems (crop seasons, village farms, soil yield), **F** in one patcherMod build (both change the
+follow-ups of built systems (crop seasons, village farms, soil yield), **F** in one Creative Common build (both change the
 attached stem), **G** last (new ids, art). The scythe (`cooking/kitchen #10`) already uses `crops/HoeHarvestArea`; keep
 it out of C.
 
@@ -127,7 +127,7 @@ after each mod change (add to the crops.md §6 checklist).
 
 ## crops #1: Crop findings G8 to G15
 
-Status Planned · Work data / patcherMod · TODO `farming/crops #1`
+Status Planned · Work data / Creative Common · TODO `farming/crops #1`
 
 ### Goal
 Decide and apply each open G finding in crops.md §4 (lines 1126-1145). G4, G6, G7, G10, G11 stay as mod design.
@@ -147,7 +147,7 @@ checked 2026-10-31). Data only,
 doRightClick, isHoe)`: the clicked block passes `cropBlocks.contains(block)` (flax and corn are in it), but
 `getAction` only matches the exact ripe lower state, so the top gives `NONE`. Quark posts `SimpleHarvestEvent` with a
 settable target pos, but then calls `harvestAndReplant(level, pos, ...)` with the **original** pos, so redirecting
-through the event would harvest the wrong block. Build a patcherMod mixin instead:
+through the event would harvest the wrong block. Build a Creative Common mixin instead:
 - `mixin/QuarkTwoHighHarvestMixin` on `SimpleHarvestModule` (`remap = false`), `@ModifyVariable(method = "handle",
   at = @At("HEAD"), argsOnly = true, ordinal = 0)` on the `BlockPos` argument: if the block at `pos` is in a new tag
   `creativeengineering:crops/harvest_from_below` and the block below is the same block, return `pos.below()`.
@@ -205,7 +205,7 @@ SimpleHarvestModule.handle(Player, InteractionHand, BlockPos, boolean, boolean)`
 
 ## crops #2: Crop parity for the G-list crops
 
-Status Planned · Work patcherMod / data · TODO `farming/crops #2`
+Status Planned · Work Creative Common / data · TODO `farming/crops #2`
 
 ### Goal
 Each crop behaves like wheat where it makes sense: soils (Farmland, Rich Farmland, Fertile Soil), right-click
@@ -267,12 +267,12 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
 - Free pineapple replant (no sapling cost)? Recommendation: yes, like crops whose block has no item (crops.md §2.2).
 
 ### Gotchas
-- One patcherMod build for crops #1, #2 and #4; register new mixins in
+- One Creative Common build for crops #1, #2 and #4; register new mixins in
   `development/creativeCommon/src/main/resources/creativecommon.mixins.json` next to `TobaccoPlacementMixin` (line 140)
   and the Quark mixins (148-154).
 - `libs/` compile jars are not in git: Farmer's Respite for the tea mixin; the hemp rule reads properties by name.
 - The Vinery port change ships in the Creative Brewing jar (`creativebrewing-*.jar` in `mods/`); install it with the
-  patcherMod jar, never while the game runs.
+  Creative Common jar, never while the game runs.
 
 ### Tests
 - **CR-new1 Hemp right-click** (proposed, numbered when queued; was "CR-70", taken by bell peppers): right-click a grown hemp top -> fibre + seeds drop, the bottom stays at full growth and
@@ -286,7 +286,7 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
 
 ## crops #4: Weeds behavior
 
-Status Planned · Work data / patcherMod · TODO `farming/crops #4`
+Status Planned · Work data / Creative Common · TODO `farming/crops #4`
 
 ### Goal
 Audit weeds; no weeds on rich soil.
@@ -345,7 +345,7 @@ Audit weeds; no weeds on rich soil.
 
 ## crops #10: Melon and pumpkin growth stages
 
-Status Planned · Work patcherMod / resource pack · TODO `farming/crops #10`
+Status Planned · Work Creative Common / resource pack · TODO `farming/crops #10`
 
 ### Goal
 A pumpkin or melon starts small beside the stem and grows to full size, instead of appearing full-size.
@@ -362,7 +362,7 @@ A pumpkin or melon starts small beside the stem and grows to full size, instead 
 - Large 2x2 / 3x3 pumpkins are `ports/autumnityport #3`; this row only adds the stages before full size.
 
 ### Build
-1. patcherMod blocks `creativeengineering:growing_pumpkin` and `growing_melon` (and `growing_hamimelon` if wanted),
+1. Creative Common blocks `creativeengineering:growing_pumpkin` and `growing_melon` (and `growing_hamimelon` if wanted),
    `age` 0-2, random tick at the stem's growth speed, at max age they replace themselves with the vanilla fruit.
    Shape grows with age (small, medium, near full). Loot: age 0-1 drop nothing or one seed (decision), age 2 drops a
    few slices / the fruit. Not `BonemealableBlock` (or yes, decision).
@@ -372,7 +372,7 @@ A pumpkin or melon starts small beside the stem and grows to full size, instead 
 3. Mixin on `AttachedStemBlock` `m_7417_`: treat the matching growing block as the fruit so the stem stays attached.
 4. Models: age 0/1 parent the Fantasy Furniture small-pumpkin models for pumpkins (with a fallback scaled cube model in
    the pack if FF is absent); melons need their own small cube models from vanilla textures (`minecraft:block/melon_side`
-   etc.). Put them in patcherMod assets (the pack's "resource pack" option only reskins, it cannot add stages).
+   etc.). Put them in Creative Common assets (the pack's "resource pack" option only reskins, it cannot add stages).
 5. WTHIT: add the growing blocks to `crop_growth.json` (age 0-2). Hoe area break: they are not plants, so the hoe break
    ignores them (good).
 6. Config switch `[crop_growth] fruitStages` (off = vanilla behavior) in `CEConfig`.
@@ -408,7 +408,7 @@ New blocks above. Vanilla `minecraft:pumpkin_stem`, `attached_pumpkin_stem`, `me
 ---
 
 ## crops #14: Bone meal in planters
-Status **Planned** / Work patcherMod / KubeJS / TODO `farming/crops #14`
+Status **Planned** / Work Creative Common / KubeJS / TODO `farming/crops #14`
 
 ### Goal
 Bone meal on a crop standing in a Supplementaries planter does what the pack intends (the row names no intent).
@@ -426,7 +426,7 @@ Bone meal on a crop standing in a Supplementaries planter does what the pack int
 ### Build
 1. Test first: bone meal on wheat, a bush and a tomato in a planter and a rich planter, and on dirt next to them.
 2. If the wanted rule is "a rich planter acts like Rich Soil" (20% step per random tick on the plant above): the planter has no
-   random tick, so a patcherMod mixin on `PlanterBlock` (implement `isRandomlyTicking` + `randomTick`: with
+   random tick, so a Creative Common mixin on `PlanterBlock` (implement `isRandomlyTicking` + `randomTick`: with
    `richSoilBoostChance` from FD's config, bone-meal the plant above if it is `BonemealableBlock`, skipping
    `#farmersdelight:unaffected_by_rich_soil` as FD does) or a block-tag-driven hook in the existing soil mixins.
 3. If the wanted rule is only "bone meal works": nothing to build; document it.
@@ -514,7 +514,7 @@ A hoe mines the Oceanic Delight sea grape plant at tool speed, as the newer Ocea
 ---
 
 ## crops #29: Tomato ropes and sticks harvestable with the hoe harvest area
-Status **Planned** · Work patcherMod (tag first) · id `farming/crops #29`
+Status **Planned** · Work Creative Common (tag first) · id `farming/crops #29`
 
 **BUILT 2026-11-02** (pre-scratch pass): steps 1-3 done in Creative Delight (crop code moved there with the split):
 four tomato blocks tagged own-pick (`farmersdelight/tags.js`, new keys `b.stick_tomatoes`, `b.rope_tomatoes`),
@@ -547,7 +547,7 @@ vine.
    the two Supplementaries blocks need new keys `b.stick_tomatoes`, `b.rope_tomatoes` in block_dict.js. `/reload`.
    The bottom vine changes from Quark replant to FD's pick: both reset to stage 0 (crops.md line 111), so the
    result is the same.
-2. Height (patcherMod): vines on ropes run several blocks up and the area reaches only one block above the click. In
+2. Height (Creative Common): vines on ropes run several blocks up and the area reaches only one block above the click. In
    `QuarkHoeAreaHarvestMixin`, for own-pick blocks walk the column up from the area's top while the next block is the
    same block, up to a cap (`HoeHarvestArea.MAX_CLIMB`, say 6), clicking each.
 3. crops.md 2.1 tomato row (`Hoe RC` column) and 2.3 (area mechanics).
@@ -569,7 +569,7 @@ vine.
 ---
 
 ## crops #17: Wet farmland from buckets and water bottles
-Status **Planned** · Work KubeJS (or patcherMod) · id `farming/crops #17`
+Status **Planned** · Work KubeJS (or Creative Common) · id `farming/crops #17`
 
 ### Goal
 A water bucket or a water bottle used on Farmland, Rich Farmland or Fertile Soil soaks it (moisture 7).
@@ -597,7 +597,7 @@ A water bucket or a water bottle used on Farmland, Rich Farmland or Fertile Soil
    - water bottle (item `i.potion` with the water nbt) on all three: moisture 7, `i.glass_bottle` back, sound
      `minecraft:item.bottle.empty`, cancel.
 2. Changelog bullet (Farming family) and a crops.md 2.4 line.
-3. Fallback if the client shows a ghost water block (see Gotchas): the same rule as a patcherMod `@SubscribeEvent` on
+3. Fallback if the client shows a ghost water block (see Gotchas): the same rule as a Creative Common `@SubscribeEvent` on
    `PlayerInteractEvent.RightClickBlock`, which both sides run.
 
 ### Decisions
@@ -609,7 +609,7 @@ A water bucket or a water bottle used on Farmland, Rich Farmland or Fertile Soil
 
 ### Gotchas
 - KubeJS server scripts cancel only on the server; the client may predict the bucket use and flash a water block. Test
-  it; use the patcherMod fallback if it shows.
+  it; use the Creative Common fallback if it shows.
 - Dry-out is vanilla: without water within 4 blocks or rain, the soil loses moisture again, as after the can.
 
 ### Tests
@@ -621,7 +621,7 @@ A water bucket or a water bottle used on Farmland, Rich Farmland or Fertile Soil
 ---
 
 ## crops #21: Melon stems not on fertile soil; check other melon-like crops
-Status **Planned** · Work KubeJS / data (or patcherMod) · id `farming/crops #21`
+Status **Planned** · Work KubeJS / data (or Creative Common) · id `farming/crops #21`
 
 **BUILT 2026-11-02, reading 2** (plan_prescratch_fixes.md: "drop the fertile-soil rule"): stems no longer get IW's
 10 extra random ticks on soaked Fertile Soil (CD `MulchBlockCropGrowthMixin` redirect, `[stem_fruit] fertileSoilBoost`,
@@ -647,12 +647,12 @@ line 121) and apply it to every melon-like crop.
 
 ### Readings (ask the owner which one)
 1. **Melon stems should plant on plain soil** (dirt, grass, untilled Rich Soil), not only tilled soils. Build: a
-   patcherMod mixin on `StemBlock.mayPlaceOn` (`m_6266_`) RETURN, true when the soil is in a new tag
+   Creative Common mixin on `StemBlock.mayPlaceOn` (`m_6266_`) RETURN, true when the soil is in a new tag
    `creativeengineering:crops/stem_soils` (filled through `global.tags` in blocktags.js Crop parity section). Applies to
    all three stems at once.
 2. **Melon stems should not be boosted by Fertile Soil** (the 10 extra random ticks make stems on mulch outgrow
    everything). Build: IW's setting is global, so either lower `mulch_growth_random_ticks` (config, also
-   `configs_edited/root_config/`), or a patcherMod hook that skips the extra ticks for `StemBlock`s.
+   `configs_edited/root_config/`), or a Creative Common hook that skips the extra ticks for `StemBlock`s.
 3. **Seasons wording:** melons grow at full speed outside their fertile season (no "off" penalty). Build: a season type
    change in `crop_seasons.json`, no code.
 Recommendation: reading 1 is the most literal ("do not need" a special soil). Ask before building.
@@ -701,7 +701,7 @@ crop season types are checked for every plant that spreads.
 ### Build
 1. `CropSeasons.Type`: add `GRASS("grass", {N, N, N, O}, {N, N})` (winter off; tropical neutral both seasons), its
    readme line in `crop_seasons.json` and an empty `"grass"` list.
-2. Hooks (patcherMod, `mixin/CropSeasonGrowHookMixin` style): `SpreadingSnowyDirtBlock.randomTick` HEAD, and IW's
+2. Hooks (Creative Common, `mixin/CropSeasonGrowHookMixin` style): `SpreadingSnowyDirtBlock.randomTick` HEAD, and IW's
    growth tick for grass-block owners: when `CropSeasons.fertility(level, pos, Type.GRASS)` is off, skip the tick with
    chance `offPenalty`. Read the type from the block (`minecraft:grass_block`, and the tall grass / fern plants if they
    are typed) so the json stays the switch.
@@ -778,7 +778,7 @@ Rustic Delight crops appear in village farms only in the climates where their wi
 ---
 
 ## crops #24: Better soils raise nether crop yield
-Status **Planned** · Work KubeJS / patcherMod · id `farming/crops #24`
+Status **Planned** · Work KubeJS / Creative Common · id `farming/crops #24`
 
 ### Goal
 The soil yield of `farming/crops #23` for nether crops: extra produce on Nulch (Fertile Soul Soil) and Rich Soul Soil.
@@ -802,7 +802,7 @@ plain table pool on age 3), then ghost pepper (break only; its right-click is an
 ripe-age choice. Propelplant needs the pick decision first.
 
 ### Decisions
-- Propelplant: table pool only (reaches only a broken cane) or a patcherMod hook on its pick? Recommendation: table only
+- Propelplant: table pool only (reaches only a broken cane) or a Creative Common hook on its pick? Recommendation: table only
   for now; a hook breaks the data-only design.
 - Colony ripe age and whether shears and break both count. Recommendation: max age only, break and shears both.
 - Soil values: recommend Rich Soul Soil = Rich Farmland's (2 x 35 %), Nulch = Fertile Soil's (2 x 25 %), soul sand and
@@ -861,7 +861,7 @@ Soul Soil (Nulch), with Rich Soul Soil an input of the Nulch recipe. Maybe recol
 ---
 
 ## crops #20: Melon and pumpkin stems connect to their own fruit
-Status **Planned** · Work patcherMod · id `farming/crops #20`
+Status **Planned** · Work Creative Common · id `farming/crops #20`
 
 **BUILT 2026-11-02** (pre-scratch pass, Creative Delight): steps 1-4 and 6 as written (vanilla block properties, not
 a new block); `<init>` re-registers the default with all sides false (a boolean's first value is true). Step 5: no
@@ -874,7 +874,7 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
 
 ### Now (checked 2026-10-31)
 - Vanilla `AttachedStemBlock` has one `facing` property and one bent model per side; it points at one fruit only.
-- Extra stem fruit ([crops.md](../crops.md) 2.10; patcherMod
+- Extra stem fruit ([crops.md](../crops.md) 2.10; Creative Common
   [StemExtraFruit.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/crops/StemExtraFruit.java)
   `randomTick` lines 53-92, `reattach` from line 99, and `mixin/AttachedStemExtraFruitMixin`): grows up to 4 fruits on
   free sides; counts every same-kind fruit beside it toward the cap (hand-placed ones too); on harvest re-points
@@ -893,7 +893,7 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
 3. `reattach` / `updateShape`: when a connected neighbor is no longer the fruit, clear its bit; when the `facing` fruit
    goes, re-point only at a side whose bit is set (today: any same-kind neighbor), and clear that bit. No bit left:
    vanilla (back to a plain stem).
-4. Blockstate overrides in patcherMod assets for the three attached stems: multipart, the vanilla attached model per
+4. Blockstate overrides in Creative Common assets for the three attached stems: multipart, the vanilla attached model per
    side `when` `{"OR": [{"facing": "<side>"}, {"<side>": "true"}]}`, rotated like vanilla.
 5. Cap and pacing: keep counting every same-kind neighbor toward the cap (the row: "hampered by neighboring grown
    melons"); optionally lower the roll per neighbor (`[stem_fruit] neighbourPenalty`, e.g. x0.75 per fruit) if the
@@ -902,12 +902,12 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
 
 ### Decisions
 - Per-neighbor chance on top of the waits? Recommendation: no; the waits already slow the 2nd to 4th fruit. Ask.
-- Properties on the vanilla block (recommended; state ids are rebuilt at load, both sides run patcherMod) or a new
+- Properties on the vanilla block (recommended; state ids are rebuilt at load, both sides run Creative Common) or a new
   `creativeengineering:` attached stem block? The new block avoids touching vanilla states but needs swaps in every
   stem path (vanilla, extra fruit, Fruits Delight).
 
 ### Gotchas
-- patcherMod is on both sides, so the added properties match; a client without patcherMod could not join anyway.
+- Creative Common is on both sides, so the added properties match; a client without Creative Common could not join anyway.
 - Existing attached stems load with all bits false: they keep pointing at their `facing` fruit, extra fruits already
   grown show unconnected until harvested once.
 - Do this in one build with `farming/crops #10` (growing fruit blocks change the same "is this my fruit" checks).
@@ -1024,9 +1024,9 @@ Rows at Testing: nothing to build. Open tiers from the TODO Tests cell; the feat
 
 | Row | Status | Note |
 |---|---|---|
-| crops #5 Realistic growth seasons | Testing (S C P T) | Built 2026-10-30, [crops.md](../crops.md) 2.12.1; patcherMod installed 2026-10-31, not yet booted; SQ-CS-01 to -09, CQ-CS-07 (2026-10-31 bulk run), CR-89 to CR-99, CR-76. Open owner points in the TODO row (Floral Enchantment bushes, temperate grapes, greenhouse column rule, bone meal) |
+| crops #5 Realistic growth seasons | Testing (S C P T) | Built 2026-10-30, [crops.md](../crops.md) 2.12.1; Creative Common installed 2026-10-31, not yet booted; SQ-CS-01 to -09, CQ-CS-07 (2026-10-31 bulk run), CR-89 to CR-99, CR-76. Open owner points in the TODO row (Floral Enchantment bushes, temperate grapes, greenhouse column rule, bone meal) |
 | crops #6 Apples only from apple trees | Testing (S+ P) | Shipped 1.1.01 (`loot/08_leaf_apples.js`, rubberwood added), [crops.md](../crops.md) V17; scratch SQ-CD-02 PASSED 2026-10-22; CR-57 in game |
-| crops #8 Watering can | Testing (S C P) | Built 2026-10-30, moved into the CD `hearth` member with six tiers 2026-10-31, [hearth_and_harvest.md](../hearth_and_harvest.md) 4.0; patcherMod and CD built, not installed (install together); SQ-WC-01 to -05, CQ-WC-04, SQ-WCT-01 to -05; HNH-25 to HNH-33, HNH-38 to HNH-44 in game |
+| crops #8 Watering can | Testing (S C P) | Built 2026-10-30, moved into the CD `hearth` member with six tiers 2026-10-31, [hearth_and_harvest.md](../hearth_and_harvest.md) 4.0; Creative Common and CD built, not installed (install together); SQ-WC-01 to -05, CQ-WC-04, SQ-WCT-01 to -05; HNH-25 to HNH-33, HNH-38 to HNH-44 in game |
 | crops #9 Bell pepper colors | Testing (S+ P T) | Shipped 1.1.01, now CD `rusticdelight/crop_drops.js`, [crops.md](../crops.md) 3; scratch SQ-CD-01 and SQ-SY-06 PASSED; CR-69, CR-70 in game |
 | crops #11 Extra stem fruit | Testing (S+ P T) | Shipped 1.1.01, [crops.md](../crops.md) 2.10; SQ-SF 17 of 17 PASSED 2026-10-22; CR-71 to CR-75 in game |
 | crops #12 Extra stem fruit ignores seasons | Testing (S P) | Fixed 2026-10-30 by crop seasons (attached stems typed), [crops.md](../crops.md) 4 F-SS1; SQ-CS (bulk run), CR-76 |

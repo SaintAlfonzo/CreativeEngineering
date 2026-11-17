@@ -34,7 +34,7 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
 
 ## 1. What Engineering holds
 
-- **Java** (`com.SaintAlfonzo.creativeengineering`, the same package and subpackages as in patcherMod, so the moved
+- **Java** (`com.SaintAlfonzo.creativeengineering`, the same package and subpackages as in Creative Common, so the moved
   classes are unchanged; 67 classes plus 3 new, about 4300 lines):
   - `fan/` (Create's dragon breathing fan processing type and recipe, exclusive results, the catalyst helper) and
     `compat/DragonBreathingJEI`; `sawmill/` (IE sawmill blade routing); `item/` (package `items`: precision sawblade,
@@ -42,11 +42,11 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
     listener); `excavation/` (Ore Excavation undo rules); `surface/` (BlockRunner tier speeds, sticky facing,
     camouflage, visual sinking, the WTHIT Run Speed line, `LeafPileSlow`); `fluid/FluidBridge` (the liquid XP bridge,
     D3 settled here by the owner, 2026-11-04); `compat/IECompat`, `compat/ImmersivePostsMaterials`.
-  - New: `CreativeEngineering` (main class: every registration that left patcherMod's main class, same order),
+  - New: `CreativeEngineering` (main class: every registration that left Creative Common's main class, same order),
     `CEConfig` (this jar's three tables), `EngineeringMixinPlugin` (a `GatedMixinPlugin`).
 - **Mixins:** `creativeengineering.mixins.json`, 26 common and 3 client, SRG with `remap = false`, member prefixes
   `creativeengineering$` unchanged. Each one is gated on its mod (IE, Immersive Posts, PneumaticCraft, Sophisticated
-  Core, Create, Dreams and Desires, Ore Excavation, BlockRunner, Framed Blocks, Copycats+); patcherMod applied them
+  Core, Create, Dreams and Desires, Ore Excavation, BlockRunner, Framed Blocks, Copycats+); Creative Common applied them
   all unconditionally. The three client ones (dragon head catalyst, sinking render and camera) target vanilla.
 - **Config:** `config/creativeengineering-common.toml` keeps `[shrapnel]`, `[surface]` (with every subtable) and
   `[vein_undo]`, keys and comments unchanged. Forge drops the other tables from the file on the first boot after Common
@@ -126,7 +126,7 @@ scratchpad only). The live `config/` file is left for the first boot to split (S
 - Engineering's mixins are now gated on their mods; with every target mod in the pack nothing changes.
 - `instance.json` (ATLauncher) still names `creativeengineering-1.1.01.jar`; update it with ATLauncher closed.
 - Not updated: `tools/remainder_buffer_test/` and `tools/shield_test/` keep stub sources in the old package (both
-  were already stale); prose in tool comments and in history sections of the docs still says patcherMod.
+  were already stale); prose in tool comments and in history sections of the docs still says Creative Common.
 - `tools/build_deploy.py`: both jars in `IN_TREE_MODS`; the climate reader check reads Common's `WorldgenFiles`; the
   `[worldgen.debug]` release check now reads `creativeworldgen-common.toml` (it still read the CE file, stale since wave 5).
 
@@ -271,7 +271,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/engineering/fabric.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/engineering/fabric.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/startup_scripts/items/coil_blocks.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/engineering/end.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/engineering/end.js)
-- 2026-11-04: The mixins moved from patcherMod on 2026-11-04 (Creative Split wave 8) unchanged: same package, SRG names with remap = false, creativeengineering$ member prefixes (development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/EngineeringMixinPlugin.java)
+- 2026-11-04: The mixins moved from Creative Common on 2026-11-04 (Creative Split wave 8) unchanged: same package, SRG names with remap = false, creativeengineering$ member prefixes (development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/EngineeringMixinPlugin.java)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/engineering/mechanisms.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/engineering/mechanisms.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/tags/engineeringtags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/tags/engineeringtags.js)
 - 2026-11-04: Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to Creative Common (patcherMod until the 2026-11-04 swap) (development/creativeCommon/build.gradle)
@@ -292,13 +292,13 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/engineering/transport.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/engineering/transport.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/engineering/components.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/engineering/components.js)
 - 2026-11-04: Split out of items/echo_tools.js on 2026-11-04 when the echo tools moved to Creative Equipment (creative_split.md 7.6, wave 7); rows unchanged (development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components_amethyst.js)
-- 2026-11-04: Creative Engineering (feature_writeup/creative_engineering.md): the pack's machines and engineering content, carved out of patcherMod in the Creative Split wave 8 (2026-11-04, creative_split.md 7.6 and 7.13) (development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java)
+- 2026-11-04: Creative Engineering (feature_writeup/creative_engineering.md): the pack's machines and engineering content, carved out of Creative Common in the Creative Split wave 8 (2026-11-04, creative_split.md 7.6 and 7.13) (development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/CreativeEngineering.java)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/tags/wood_tags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/tags/wood_tags.js)
 - 2026-11-04: Sawblade and sawdust items, the shrapnel entity, the dragon breathing recipe type, the wooden bucket: Creative Engineering (creativeengineering, 2026-11-04, creative_split.md 7.13 wave 8) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CreativeCommon.java)
 - 2026-11-04: Creative Engineering; moved from kubejs/startup_scripts/items/misc_items.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/misc_items.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/tags/storageblocktags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/tags/storageblocktags.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/wood/ash.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/wood/ash.js)
-- 2026-11-04: creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md), carved out of patcherMod on 2026-11-04 (creative_split.md 7.6 and 7.13, wave 8) (development/creativeEngineering/build.gradle)
+- 2026-11-04: creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md), carved out of Creative Common on 2026-11-04 (creative_split.md 7.6 and 7.13, wave 8) (development/creativeEngineering/build.gradle)
 - 2026-11-04: [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm], [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment, 2026-11-04) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CommonConfig.java)
 - 2026-11-04: Nothing in the pack passes air or the empty fluid on purpose (checked 2026-11-04); in the full pack the label showing up in the [absent mods] summary means a real missing id (development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
 - 2026-11-04: Creative Engineering; moved from kubejs/server_scripts/metal/metal_building.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged (kubejs/data/creativeengineering/kubejs/metal/metal_building.js)
@@ -447,7 +447,7 @@ Optional rows use `versionRange="*"` in `mods.toml`: the gate skips an out-of-ra
 boot. Removed: ItemPhysic, Create: Deep Dark's echo mixin and Easy Elytra Takeoff rows (their mixins left with the carves).
 
 **`mods.toml`**: description rewritten (library, interface, fixes and performance, pack settings); `issueTrackerURL` and
-`displayURL` point to the repo; authors from `gradle.properties`; stale patcherMod-era comments gone.
+`displayURL` point to the repo; authors from `gradle.properties`; stale Creative Common-era comments gone.
 
 **Vanilla defaults (2026-11-07, owner; TODO `creativecommon/publish #2`)**. Built and installed 13:27. A standalone install
 behaves as vanilla; the pack keeps its behavior through `config/creativecommon-common.toml` (and the `configs_edited/root_config/`

@@ -12,7 +12,7 @@ the Cooking for Blockheads and Incubation members optional with load guards and 
 (M8, section 3b). Third round, same day: D4 `GPL-3.0-only`; D5 no read-time potion alias, old potions in saves may break;
 D6 every block M8 folds in moves to `creativedelight:` (11). All decisions closed.
 
-**Status: Step 1 BUILT 2026-11-04, INSTALLED 2026-11-05 (C 1.1.0, P, L, W, D 1.1.0, B, Q, Engineering 2.0.0, Magic, Devtools; the old patcherMod jar `creativeengineering-1.1.09` displaced, so this install is also the Creative Split swap), not booted; scratch rows queued (8); Step 2 license audit DONE 2026-11-04 (creative_brewing.md 9.2; fixes are TODO `licence/*` rows, owner sign-off pending).** Result: section 0b. TODO row `creativebrewing/publish #3`. Background: [creative_brewing.md](creative_brewing.md)
+**Status: Step 1 BUILT 2026-11-04, INSTALLED 2026-11-05 (C 1.1.0, P, L, W, D 1.1.0, B, Q, Engineering 2.0.0, Magic, Devtools; the old Creative Common jar `creativeengineering-1.1.09` displaced, so this install is also the Creative Split swap), not booted; scratch rows queued (8); Step 2 license audit DONE 2026-11-04 (creative_brewing.md 9.2; fixes are TODO `licence/*` rows, owner sign-off pending).** Result: section 0b. TODO row `creativebrewing/publish #3`. Background: [creative_brewing.md](creative_brewing.md)
 9 (license audit 2026-11-01), [creative_split.md](creative_split.md) 7.4 and Q7.
 
 Written for: the owner, and the session that executes it.

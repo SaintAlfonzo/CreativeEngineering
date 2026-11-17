@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text Target: patcherMod built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in
+@@text Target: Creative Common built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in
 @@text `mods/`: install it first, `./gradlew :creativeCommon:build --offline` then `:creativeCommon:installToMods`, game closed), plus
 @@text the pack file `kubejs/data/tectonic/worldgen/density_function/overworld/legacy/cliffs.json`. Group B worlds on the eval
 @@text seed -8188900049893920259 with `tools/perf/eval/eval_server.sh setup OUT LEVEL` (JFR on; it copies
@@ -47,7 +47,7 @@ look toml has dimensionFilter, sharedTerrainCache and sampleGrid = 4 (wgp_new pr
 @group `wgp_new`, then `wgp_old`
 @commands `/wgp cliffs` and `/wgp dims` in each
 @pass `wgp_new`: `PASS cliffs override` (flat_cache 3), Overworld skips `twigs:bloodstone_obelisk` and the other Nether/End structures (count noted), Nether keeps the obelisk, End lists the Overworld and Nether structures. `wgp_old`: flat_cache 0 (Tectonic's file), 0 skipped everywhere
-@fails flat_cache 0 in `wgp_new`: KubeJS's `kubejs/data` pack sits under `tectonic/terratonic` (`Pack.Position.TOP`); ship the file from the patcherMod jar or a TOP pack instead. Obelisk not skipped: `MetaSlots.canSpawnAmong` / the biome fits widened its biomes
+@fails flat_cache 0 in `wgp_new`: KubeJS's `kubejs/data` pack sits under `tectonic/terratonic` (`Pack.Position.TOP`); ship the file from the Creative Common jar or a TOP pack instead. Obelisk not skipped: `MetaSlots.canSpawnAmong` / the biome fits widened its biomes
 @reviewed 2026-11-16
 > wgp cliffs
 > wgp dims

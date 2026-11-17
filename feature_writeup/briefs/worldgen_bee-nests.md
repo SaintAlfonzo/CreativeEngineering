@@ -33,7 +33,7 @@ Know where wild bees come from and how often, and tune it where it is wrong.
   - before the pack's tuning: bee_nests.md 2.2 (17 of 126 land biomes, about 1 nest per 785 chunks);
   - with the starter rules: bee_nests.md 9 (47 biomes, about 1 per 170).
   - The rules are `kubejs/generation_scripts/worldgen/bee_nests.json`, applied by
-    `kubejs/server_scripts/worldgen/bee_nests.js` and patcherMod `worldgen/BeeNests.java`, DEPLOYED with 1.0.6.
+    `kubejs/server_scripts/worldgen/bee_nests.js` and Creative Common `worldgen/BeeNests.java`, DEPLOYED with 1.0.6.
 - **Stale:** [bee_nests_by_biome.md](../bee_nests_by_biome.md) was last generated 2026-10-14. Its "area %" column and
   the area-weighted totals predate the 2026-10-19 rarity floor. For example lavender forest shows 0.00 %, and
   `biome_config.json` now has 0.15 %. The per-biome "1 in N" values don't depend on area and still hold.

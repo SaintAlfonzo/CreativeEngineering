@@ -39,7 +39,7 @@ public final class CBConfig {
 	public static final List<String> SECTIONS = List.of("brewing", "alcohol");
 
 	/**
-	 * Feature switches: {section, id, comment lines...}. Add one row per feature as it moves in from patcherMod or the
+	 * Feature switches: {section, id, comment lines...}. Add one row per feature as it moves in from Creative Common or the
 	 * pack scripts (creative_brewing.md 4); the id is what {@code global.CB.feature(id)} and {@link #feature} take.
 	 */
 	private static final List<String[]> FEATURE_ROWS = List.of();
@@ -62,7 +62,7 @@ public final class CBConfig {
 		for (String id : MEMBERS) MEMBER_SWITCHES.put(id, b.define(id, true));
 		b.pop();
 
-		// Sections with only feature switches; alcohol and effects also hold dials moved from patcherMod and write
+		// Sections with only feature switches; alcohol and effects also hold dials moved from Creative Common and write
 		// their switches inside their own section (featureRows).
 		for (String section : SECTIONS) {
 			if (DIAL_SECTIONS.contains(section) || rows(section).isEmpty()) continue;

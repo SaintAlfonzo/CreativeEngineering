@@ -9,7 +9,7 @@ Storage added to furniture that ships without it. The kitchen corner (Cooking fo
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
 <!-- generated:status_index end open_work -->
 
-## 1. Handcrafted nightstands (2026-10-31, patcherMod 1.1.04)
+## 1. Handcrafted nightstands (2026-10-31, Creative Common 1.1.04)
 
 User (TODO scratchpad "nightstands (handcrafted) have storage"): a chest's worth of storage.
 

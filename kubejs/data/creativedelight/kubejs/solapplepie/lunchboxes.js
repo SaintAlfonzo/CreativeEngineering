@@ -2,7 +2,7 @@
 // requires: solapplepie
 // Spice of Life lunchboxes: Lunchbag (paper, 5 slots) -> Copper Lunchbox (9) -> Iron Lunchbox (14) -> Netherite
 // Lunchbox (18, the pack's tier). Ids keep Spice of Life's names (lunchbox = copper, golden_lunchbox = iron).
-// Every upgrade, skin, dye and soap recipe keeps the box's contents (patcherMod lunchbox/; Spice of Life keeps the
+// Every upgrade, skin, dye and soap recipe keeps the box's contents (Creative Common lunchbox/; Spice of Life keeps the
 // food in a capability, which vanilla results drop). Non-member file: recipe ids are creativedelight:<type>/<suffix>
 // (global.CD.recipes). Doc and tests: feature_writeup/lunchboxes.md.
 ServerEvents.recipes(e => {

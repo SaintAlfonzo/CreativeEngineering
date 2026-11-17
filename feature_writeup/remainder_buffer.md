@@ -3,7 +3,7 @@
 When a Farmer's Delight style station finishes a recipe, it throws each ingredient's leftover container (glass
 bottle, bowl, bucket) out of the block as an item. With this feature the leftovers stay in the station: in its
 container slot when the waiting meal is served in them, otherwise in two leftover slots right of the output.
-Java in patcherMod (mixins for the FD cooking pot and the Farmer's Respite kettle, native code in the oven); the
+Java in Creative Common (mixins for the FD cooking pot and the Farmer's Respite kettle, native code in the oven); the
 keg's is native code in the `backportedBrewin` port (3.6). Test prefix `RB-` (the keg's: AL-79 to AL-81, AL-84 in
 [alcohol.md](alcohol.md)).
 
@@ -31,12 +31,12 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 |---|---|
 | Feasibility study (1, 2) | DONE 2026-10-18, from the decompiled jars the pack uses |
 | Design (3) | DECIDED 2026-10-18: D1-D5 as recommended (5) |
-| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: patcherMod compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
+| Cooking pot + kettle (mixins), oven (native), config `[cooking]` | BUILT 2026-10-18: Creative Common compiles and builds (reobf checked); 10 GameTests pass (6). DEPLOYED with 1.0.7; one leftover per item used (for the oven's ingredient counts) DEPLOYED with 1.0.8 (2026-10-19); not run in game (RB-01 to RB-11) |
 | Keg | BUILT 2026-10-19 in the port's `-03` (now the jar in `pack/manifest.json`), see 3.6; not tested |
-| WTHIT line "Holding: ..." | BUILT 2026-10-21 (patcherMod 1.1.01, `compat/WthitRemainderBuffer`, 3.3), deployed with 1.1.01 (2026-10-22); not seen in game (WL-31) |
-| Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (patcherMod 1.1.01, 3.4), deployed with 1.1.01; GameTest RB-T11; not seen in game (RB-12) |
+| WTHIT line "Holding: ..." | BUILT 2026-10-21 (Creative Common 1.1.01, `compat/WthitRemainderBuffer`, 3.3), deployed with 1.1.01 (2026-10-22); not seen in game (WL-31) |
+| Oven client sync (leftovers vanished from the GUI) | FIXED 2026-10-21 (Creative Common 1.1.01, 3.4), deployed with 1.1.01; GameTest RB-T11; not seen in game (RB-12) |
 | Bowl count ("duplicate bowl", [TODO](todo/TODO.md) `cooking/kitchen #4`) | no duplication: RB-T13 counts bowls before and after on the pot (4 ways) and oven, all equal (3.1) |
-| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `cooking/kitchen #13`) | BUILT 2026-10-21 (patcherMod 1.1.01, deployed 2026-10-22); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
+| Plating delay: a recycled container shows in the container slot before plating (`[cooking] recycleShowTicks`, [TODO](todo/TODO.md) `cooking/kitchen #13`) | BUILT 2026-10-21 (Creative Common 1.1.01, deployed 2026-10-22); GameTests RB-T14, RB-T15; not seen in game (RB-14) |
 
 Files to open first:
 
@@ -46,7 +46,7 @@ Files to open first:
 - Creative Delight (QoL-1 since 2026-10-25, creative_delight.md 22): `mixin/farmersdelight/` `CookingPotRemainderMixin`,
   `CookingPotMenuRemainderMixin`, `CookingPotScreenRemainderMixin`; `mixin/farmersrespite/` `KettleRemainderMixin`,
   `KettleMenuRemainderMixin`, `KettleScreenRemainderMixin`; switch `creativedelight-common.toml [qol] remainderBuffer`
-  (`qol/RemainderBufferQol`). patcherMod's `[cooking] remainderBuffer` is the oven's only; the other dials are shared
+  (`qol/RemainderBufferQol`). Creative Common's `[cooking] remainderBuffer` is the oven's only; the other dials are shared
 - `oven/OvenBlockEntity`, `OvenMenu`, `client/OvenScreen` (native buffer)
 - `compat/WthitRemainderBuffer` (the WTHIT "Holding" / "Waiting" lines, 3.3)
 - `CEConfig.Cooking`; `config/creativeengineering-common.toml` `[cooking]`
@@ -69,7 +69,7 @@ bottle, stews and soups -> bowl, buckets -> bucket).
 | Kettle | Farmer's Respite 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KettleBlockEntity.processBrewing`, ingredient slots 0-1 | `@Redirect` on that call | none |
 | Keg (current jar) | Brewin' & Chewin' 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KegBlockEntity.processFermenting`, ingredient slots 0-3 | `@Redirect` on that call | slot 8 already holds the **fluid-item** slot's (4) leftovers, but ingredient leftovers still fly out |
 | Keg (port) | `development/backportedBrewin` (4.5.0 port, in progress) | `KegBlockEntity.ejectIngredientRemainder(ItemStack)`, line ~757 | edit our own source | none |
-| Oven | patcherMod `oven/` | `OvenBlockEntity.ejectIngredientRemainder(ItemStack)` (private) | edit our own source | none |
+| Oven | Creative Common `oven/` | `OvenBlockEntity.ejectIngredientRemainder(ItemStack)` (private) | edit our own source | none |
 
 Not in scope, checked: the FD skillet and stove grill (they pop the **finished food**, not leftovers), the
 Nether's / Ender's Delight stoves (subclasses of the grill), Create Central Kitchen's blaze stove, Cooking for
@@ -86,7 +86,7 @@ Create Central Kitchen 1.3.11.c (`create_central_kitchen.mixins.json`) is the on
 - `KegBlockEntityMixin`: `@ModifyExpressionValue` in `updateTemperature`. Unrelated.
 
 No conflict. MixinExtras 0.2.0 is in the pack (CCK jar-in-jar), but plain `@Inject` / `@Redirect` is enough here
-and patcherMod doesn't use MixinExtras yet.
+and Creative Common doesn't use MixinExtras yet.
 
 ### 1.2 How often it happens (recipe scan of the jars)
 
@@ -206,7 +206,7 @@ items, so bottles and buckets seemed to vanish ([TODO](todo/TODO.md) `cooking/ki
 carries `Remainders`, `load` only reads it when present, and a buffer change sends a block update like any oven slot
 change (RB-T11).
 
-### 3.5 Mixins (patcherMod `creativeengineering.mixins.json`)
+### 3.5 Mixins (Creative Common `creativeengineering.mixins.json`)
 
 | Mixin | Target | Injections |
 |---|---|---|
@@ -215,7 +215,7 @@ change (RB-T11).
 | `CookingPotMenuRemainderMixin`, `KettleMenuRemainderMixin` | `CookingPotMenu`, `KettleMenu` | main constructor TAIL (`addSlot` x2), `quickMoveStack` HEAD for the new slots |
 | `CookingPotScreenRemainderMixin`, `KettleScreenRemainderMixin` (client list) | `CookingPotScreen`, `KettleScreen` | `renderBg` TAIL (frames) |
 
-All `remap = false` with SRG names, as the rest of patcherMod. `quickMoveStack` and `renderBg` are listed under both
+All `remap = false` with SRG names, as the rest of Creative Common. `quickMoveStack` and `renderBg` are listed under both
 names (`m_7648_`/`quickMoveStack`, `m_7286_`/`renderBg`, `require = 1`) so the same mixins also apply in a dev run.
 The menu and screen mixins extend the vanilla menu/screen class to call `addSlot`, `moveItemStackTo`, `slots`,
 `leftPos`/`topPos`; the reobfuscated jar was checked to carry the SRG names (`m_38897_`, `m_38903_`, `f_38839_`,
@@ -224,7 +224,7 @@ The menu and screen mixins extend the vanilla menu/screen class to call `addSlot
 ### 3.6 Keg (BUILT 2026-10-19 in the port, slot rules scratch server PASSED 2026-10-22, not tested in game)
 
 Native code in `development/backportedBrewin` (D5), its own copy of the routing rather than a dependency on
-patcherMod; full description in [alcohol.md](alcohol.md) 10.16. Differences from the pot:
+Creative Common; full description in [alcohol.md](alcohol.md) 10.16. Differences from the pot:
 
 - **Slots:** one new take-only slot (8) right of the output, plus the keg's existing empty-container slot (7, under
   the fluid slot), which already holds the same kind of item. There is no room for a second new slot: the right
@@ -232,7 +232,7 @@ patcherMod; full description in [alcohol.md](alcohol.md) 10.16. Differences from
 - **No recycle step:** the keg's container slot is for pouring drinks out of a tank, not for plating one waiting
   meal, so leftovers never go there.
 - **Settings:** the port's own `brewinandchewin-common.toml [keg] remainderBuffer` / `stallWhenFull` (defaults
-  true), not patcherMod's `[cooking]`, so the port doesn't depend on patcherMod.
+  true), not Creative Common's `[cooking]`, so the port doesn't depend on Creative Common.
 - **Automation and breaking:** the sides and bottom extract slot 8 with the output and slot 7; it is part of the
   keg inventory, so it drops on break and saves with it.
 
@@ -320,7 +320,7 @@ or pulled over for the waiting meals (and same-kind leftovers once it holds that
 
 ## 4. Risks
 
-- **Menu sync**: the extra slots exist only where patcherMod is loaded. It is `both` in
+- **Menu sync**: the extra slots exist only where Creative Common is loaded. It is `both` in
   [mod_sides.md](../mod_sides.md) and required on both sides, so this is fine.
 - **Removing the mod** drops nothing: items in the buffer are lost with the NBT key. Same as any modded
   inventory.
@@ -350,7 +350,7 @@ or pulled over for the waiting meals (and same-kind leftovers once it holds that
 - `./gradlew :creativeCommon:build`: compiles (the whole mod, against the pack's 414 jars in `libs/`) and reobfuscates;
   the reobf jar's mixin classes carry SRG names for the inherited menu/screen members (3.5).
 - GameTests: `tools/test_remainder_buffer.sh` (harness in `tools/remainder_buffer_test/`: builds the `cooking/`
-  classes, the pot/kettle BE + menu mixins and `oven/` straight from patcherMod's source, with FD 1.2.4 and Respite
+  classes, the pot/kettle BE + menu mixins and `oven/` straight from Creative Common's source, with FD 1.2.4 and Respite
   2.0 deobfuscated at runtime, a stand-in main class/config and a small test datapack). **All 10 pass.** The first
   run failed RB-T9: both bottles went to the kettle's container slot, leaving a spare there after plating. That
   led to the "only as many as needed" rule in 3.1.
@@ -389,7 +389,7 @@ SRG-named jar in game, Create Central Kitchen alongside.
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-RB-21, -21b, -22.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RB-21; FAIL SQ-RB-21b: the copper pot stalls when a recipe leaves two kinds of leftover and slot 5 already holds the container (`CopperPotBlockEntity.leftoversFit` 334-364; the bowl-only rerun passes); SQ-RB-22 OPEN: no fermenting recipe returns a container, so N/A; owner to confirm none is meant to exist.
 
-In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
+In Creative Common 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 
 - [ ] **RB-01 Pot recycle:** hot cocoa with a milk bottle. Nothing on the ground; the cocoa comes out plated.
 - [ ] **RB-02 Pot bucket:** a milk-bucket recipe. The bucket is in a leftover slot (right of the output).
@@ -407,13 +407,13 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - [ ] **RB-09 CCK:** Create Central Kitchen's blaze stove under the pot and kettle still signals.
 - [ ] **RB-10 Oven:** a baking recipe with a milk bottle (muffin): bottle in a leftover slot.
 - [ ] **RB-11 Server:** the same on a dedicated server with a client (slots sync, shift-click works).
-- [ ] **RB-12 Oven leftovers stay visible** (patcherMod 1.1.01): bake blueberry muffins (milk bottle) with the GUI
+- [ ] **RB-12 Oven leftovers stay visible** (Creative Common 1.1.01): bake blueberry muffins (milk bottle) with the GUI
   open, take the muffins out: the bottle stays in the leftover slot. Close and reopen: still there. Take it with a
   click.
-- [ ] **RB-13 Bowl count** (patcherMod 1.1.01): 10 bowls in the pot's plating slot, cook 5 of a tomato-sauce bowl
+- [ ] **RB-13 Bowl count** (Creative Common 1.1.01): 10 bowls in the pot's plating slot, cook 5 of a tomato-sauce bowl
   meal: bowls in the slot + leftover slots + meals add up to 15. Once with Create Central Kitchen's blaze stove under
   the pot.
-- [ ] **RB-14 Recycle shows** (patcherMod 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
+- [ ] **RB-14 Recycle shows** (Creative Common 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
   slot empty: the bowl appears in the plating slot for half a second, then the meal is plated. The same with hot
   cocoa and a milk bottle in the pot, and strong green tea in the kettle.
 - [ ] **RB-15 Copper pot recycle** (rule of 3.8, CD jar of 2026-11-03 19:13+): a Miner's copper pot over heat, plating
@@ -449,9 +449,9 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - 2026-10-18: feasibility study (1-5 as a proposal).
 - 2026-10-18: built as decided (D1-D5 as recommended). `cooking/` package, six mixins (pot and kettle: block entity,
   menu, screen), native oven buffer, `[cooking]` config, GameTest harness; container-slot recycle capped at what
-  the waiting meals need after the first test run. patcherMod compiles and builds; 10 GameTests pass.
+  the waiting meals need after the first test run. Creative Common compiles and builds; 10 GameTests pass.
 - 2026-10-19: keg built in the Brewin' port `-03` (3.6); compiles, no GameTest (in-game tests in alcohol.md).
-- 2026-10-21 (patcherMod 1.1.01, not deployed): oven client sync fixed (3.4, `cooking/kitchen #14`); "duplicate bowl"
+- 2026-10-21 (Creative Common 1.1.01, not deployed): oven client sync fixed (3.4, `cooking/kitchen #14`); "duplicate bowl"
   checked and found to be the designed recycle (3.1, `cooking/kitchen #4`); WTHIT "Holding" / "Waiting" line built
   (3.3, `cooking/kitchen #3`). GameTests 17, harness stand-in config resynced.
 - 2026-10-21 (later): plating delay `[cooking] recycleShowTicks` (3.1, `cooking/kitchen #13`); GameTests 19.
@@ -460,10 +460,10 @@ In patcherMod 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - 2026-11-03: one rule on all five stations (3.8): shared `LeftoverPlan` (container slot up to a stack, then
   overflow, then wait; fixes SQ-RB-21b), containers only in the container slot (hand, shift-click, automation), one
   automation face layout, Pickling Jar progress per recipe. Headless check of `LeftoverPlan` 10 of 10 (the SQ-RB-21b
-  case included). The GameTest harness (`tools/remainder_buffer_test`) still compiles patcherMod's pre-carve copies
+  case included). The GameTest harness (`tools/remainder_buffer_test`) still compiles Creative Common's pre-carve copies
   of `cooking/` and `oven/`, not Creative Delight's: not run.
 - 2026-11-16: `tools/test_remainder_buffer.sh` is now a headless check of `LeftoverPlan` and `OverflowPull` against
   Creative Delight's build/classes (15 checks, `tools/remainder_buffer_test/headless/`, about 3 s), so the install gate
   can run it. The GameTest runner moved to `tools/gametest_remainder_buffer.sh`; it boots a server and still needs
-  retargeting from patcherMod's copies to Creative Delight before it is trusted.
+  retargeting from Creative Common's copies to Creative Delight before it is trusted.
 - 2026-11-17: the 2026-10-18 feasibility draft that was pasted below this History moved to [plan_remainder_buffer_old.md](plan_remainder_buffer_old.md) (design_rules.md V-52).

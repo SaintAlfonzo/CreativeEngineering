@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Creative Calendar (feature_writeup/creative_calendar.md): the pack's calendar, day and night length, seasons, season
- * types by biome and crop seasons. Creative Delight and Creative Brewing require it; it requires patcherMod
+ * types by biome and crop seasons. Creative Delight and Creative Brewing require it; it requires Creative Common
  * ({@code creativeengineering}, later Creative Common).
  *
  * Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE})
@@ -34,7 +34,7 @@ public class CreativeCalendar {
     public static final String NAMESPACE = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    /** patcherMod's file, which held [seasons], [crop_seasons], [time] and the three strays before the carve. */
+    /** Creative Common's file, which held [seasons], [crop_seasons], [time] and the three strays before the carve. */
     private static final String OLD_FILE = "creativeengineering-common.toml";
     /** The tables taken from it; [perf] and [wthit] hold the strays, and Forge's correction drops their other keys. */
     private static final List<String> SECTIONS = List.of("seasons", "crop_seasons", "time", "perf", "wthit");

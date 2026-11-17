@@ -7,7 +7,7 @@
 - Milestone: M5. Tests: LO-02 (world L1, folds on, batch all from spawn first thing), LO-01 (world L2, folds off,
   same batch; compare), LO-06, LO-15, LO-05 (world L1 again).
 - Server: SESSION 3 (c0d10b34) scratchpad srv/ (rebuilt 13:05: the 54725a7d scratchpad was empty, no server was
-  running; 373 mods, patcherMod = build/libs creativeengineering-1.0.6.jar, md5 5acd69dc = the one in mods/, 12:44).
+  running; 373 mods, Creative Common = build/libs creativeengineering-1.0.6.jar, md5 5acd69dc = the one in mods/, 12:44).
   toml = scratchpad toml_m5_base.toml: instance toml + earth_fill log ALL, meta log true, placement log true; density
   1. asyncLocatorThreads 4 in st_l1 + st_l2 serverconfig. Helper scratchpad/cmd.sh "<cmd>".
 - Worlds: st_l1 (folds on), st_l2 (foldPlacement + foldBiomes false).

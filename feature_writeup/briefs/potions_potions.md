@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# potions`, Sub `potions` (rows 2 to 9 open, row 1 Complete). Feature
 writeups: [potions.md](../potions.md) (test prefix `PO-`, last PO-26) and [effects.md](../effects.md) (prefix `EF-`).
-Main code: [potions.js](../../kubejs/startup_scripts/cooking/potions.js) (all potions and mixes) and patcherMod
+Main code: [potions.js](../../kubejs/startup_scripts/cooking/potions.js) (all potions and mixes) and Creative Common
 `fluidbrewing/` + `potion/` (`development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`, shortened
 to `CE/` below).
 
@@ -18,12 +18,12 @@ Rustic Delight 1.3.0 (`ModPotions`, `ModBrewingRecipe`), IE 9.2.4 (`EventHandler
 |---|---|---|---|---|
 | 1 | #5 | Delete the 3 duplicate Luck mixes | KubeJS, 3 lines | Bug, trivial, no decision |
 | 2 | #4, #6 | Reagent and strength retune in `CUSTOM_POTIONS` / `CB_POTION_MIXES` | KubeJS | Same file as step 1, needs only your picks |
-| 3 | #2, #3 | Batch sizes and the Refinery shortcut | patcherMod (one rebuild) | Both touch `Lingerification.java`; do in one build |
-| 4 | #8 | Overlap trims: Quark Resilience brew off (config), Caffeinated mixin | config + patcherMod | Can ride the step 3 build |
-| 5 | #7 | New potions for modded effects | patcherMod class + KubeJS mixes + lang | Largest; reuses the step 3 build if decided by then |
-| 6 | #9 | Shock effects: no merge needed; optional Conductive extension | none / patcherMod | Answer is "nothing to merge"; close or extend |
+| 3 | #2, #3 | Batch sizes and the Refinery shortcut | Creative Common (one rebuild) | Both touch `Lingerification.java`; do in one build |
+| 4 | #8 | Overlap trims: Quark Resilience brew off (config), Caffeinated mixin | config + Creative Common | Can ride the step 3 build |
+| 5 | #7 | New potions for modded effects | Creative Common class + KubeJS mixes + lang | Largest; reuses the step 3 build if decided by then |
+| 6 | #9 | Shock effects: no merge needed; optional Conductive extension | none / Creative Common | Answer is "nothing to merge"; close or extend |
 
-Batch one patcherMod build for #2, #3, #8 (Caffeinated) and #7. Everything in `potions.js` is startup: restart, not
+Batch one Creative Common build for #2, #3, #8 (Caffeinated) and #7. Everything in `potions.js` is startup: restart, not
 `/reload`.
 
 Related rows:
@@ -95,7 +95,7 @@ clover, `TODO` comment at `potions.js` line 86).
 
 ### Now
 - Magic Resistance: `CB_POTION_MIXES` line 72, `['minecraft:amethyst_shard', 'minecraft:thick', 'creativeengineering:magic_resistance']`,
-  then redstone / glowstone (73-74). Potions registered in patcherMod `CE/potion/MagicResistancePotions.java`
+  then redstone / glowstone (73-74). Potions registered in Creative Common `CE/potion/MagicResistancePotions.java`
   (3:00 / 8:00 / 1:30 II), effect in `MagicResistanceEffect.java`, tuning in CEConfig `[magic_resistance]`
   ([armor_effects.md](../armor_effects.md) 2.5).
 - The Magic Resistance fluid is consumed by every felsic sequenced assembly (CEConfig `[crafting] felsic_*` `potion` =
@@ -188,7 +188,7 @@ Decide how much a Potion of Saturation should feed, and give it a strong step if
 ---
 
 ## potions #2: Batch sizes differ between machines
-Status **Planned** · Work: patcherMod · id `potions/potions #2`
+Status **Planned** · Work: Creative Common · id `potions/potions #2`
 
 ### Goal
 Settle one rule for potion batch sizes, especially the dragon's breath exchange rate into lingering.
@@ -210,7 +210,7 @@ step". The `potions.js` header (line 19) still says the IE Mixer runs at "1000 m
 ### Build
 Recommended version (see Decisions):
 1. `Lingerification.java` line 63: `POTION_AMOUNT = 1000`. JEI's Lingerification page and recipes regenerate at the
-   next `/reload` (generated list), but the class is in the jar, so rebuild patcherMod.
+   next `/reload` (generated list), but the class is in the jar, so rebuild Creative Common.
 2. Optional, if you want knobs: add a CEConfig COMMON section `[potions]` (new `Potions` class in `CEConfig.java`, next
    to `Effects` at line 2631, registered with the others at lines 36-112):
    `ieMixerMb` (1500), `ieMixerLingeringMb` (1000), `lingerificationMb` (1000), `lingerificationDragonBreathMb` (250),
@@ -242,7 +242,7 @@ Recommended version (see Decisions):
 ---
 
 ## potions #3: Refinery regular -> lingering shortcut
-Status **Planned** · Work: patcherMod · id `potions/potions #3`
+Status **Planned** · Work: Creative Common · id `potions/potions #3`
 
 ### Goal
 Decide whether the IE Refinery may turn a regular potion straight into lingering (every other machine needs splash
@@ -274,7 +274,7 @@ None new.
 ---
 
 ## potions #8: Total-overlap effect groups
-Status **Planned** · Work: KubeJS / config / patcherMod · id `potions/potions #8`
+Status **Planned** · Work: KubeJS / config / Creative Common · id `potions/potions #8`
 
 ### Goal
 Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the two that cost something; leave the rest.
@@ -303,7 +303,7 @@ Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the t
 1. **Resilience:** in both `config/quark-common.toml` and `configs_edited/root_config/quark-common.toml`, `[mobs.crabs]`:
    `"Enable Brewing" = false` and `"Resilience Required For All Effects" = false` (otherwise "How Did We Get Here?"
    asks for an effect nobody can get). This also hides `quark:crab_shell` (no pack use). Restart.
-2. **Caffeinated:** new patcherMod mixin `CaffeinatedEffectMixin`, `@Mixin(targets = "umpaz.farmersrespite.common.effect.CaffeinatedEffect", remap = false)`,
+2. **Caffeinated:** new Creative Common mixin `CaffeinatedEffectMixin`, `@Mixin(targets = "umpaz.farmersrespite.common.effect.CaffeinatedEffect", remap = false)`,
    `@Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true)` (SRG name, as `BonemealCharmMixin` does for
    `m_6225_`). Replace the reset with "pause": for a `ServerPlayer`, read
    `getStats().getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST))` and write it back minus 1 (floor 0) so the
@@ -343,7 +343,7 @@ Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the t
 ---
 
 ## potions #7: Potions for unbrewable effects
-Status **Planned** · Work: patcherMod + KubeJS · id `potions/potions #7`
+Status **Planned** · Work: Creative Common + KubeJS · id `potions/potions #7`
 
 ### Goal
 Give a potion line to the beneficial modded effects that have none, within the exclusions: Brewin' and Vinery effects
@@ -366,14 +366,14 @@ stay unbrewable (`alcohol/decisions #13`), Fruits Delight stays food-only for no
   re-adds the three steps as `Mix` entries (`RD_POTION_MIXES`, `potions.js` lines 101-105), PO-07 tests it. Nothing to
   build; tick that part of the row.
 - Mechanism: KubeJS's `StartupEvents.registry('potion')` runs before modded effects exist (header comment lines
-  129-137), so modded-effect potions are Forge `DeferredRegister<Potion>` in patcherMod, as `CE/potion/BetterBeaconsPotions.java`
+  129-137), so modded-effect potions are Forge `DeferredRegister<Potion>` in Creative Common, as `CE/potion/BetterBeaconsPotions.java`
   (with a `ModList` guard) and `MagicResistancePotions.java`, registered at `CreativeEngineering.java` lines 85-86;
   brewing mixes go in `CB_POTION_MIXES` in `potions.js`.
 - Potion names live in `kubejs/assets/kubejs/lang/en_us.json` (`item.minecraft.potion.effect.<path>`, `splash_potion`,
   `lingering_potion`, `tipped_arrow` keys, e.g. lines 35-40, 74-79, 113-118 for Long Reach / Magic Resistance).
 
 ### Build
-1. patcherMod: new `CE/potion/ModdedEffectPotions.java`, generalizing `BetterBeaconsPotions`: a table of
+1. Creative Common: new `CE/potion/ModdedEffectPotions.java`, generalizing `BetterBeaconsPotions`: a table of
    `{name, modid, effectPath, base, long, strongDur, strongAmp}`; in `register(IEventBus)`, for each row whose
    `ModList.get().isLoaded(modid)`, call `POTIONS.register(name, supplier)` (the supplier looks the effect up at
    `RegisterEvent<Potion>` time, after every mod's effects exist). Register the class next to lines 85-86.
@@ -420,7 +420,7 @@ exists; potion ids stay in `potions.js` / the Java class (recommend not adding o
 ---
 
 ## potions #9: Shock and electric effects
-Status **Planned** · Work: none / patcherMod · id `potions/potions #9`
+Status **Planned** · Work: none / Creative Common · id `potions/potions #9`
 
 ### Goal
 Find out whether several shock / electric effects exist and merge duplicates.
@@ -441,7 +441,7 @@ So there is nothing to merge.
 
 ### Build
 - Close the row (no duplicates). Optional extension, if you want copper / iron / gold armor's Conductive to mean
-  something outside IE: a patcherMod `LivingHurtEvent` handler that applies IE's multiplier for any source in
+  something outside IE: a Creative Common `LivingHurtEvent` handler that applies IE's multiplier for any source in
   `DamageTags.is(source, DamageTags.id("electric"))` that IE doesn't already handle (skip `ieTesla*`, `ieWireShock`,
   `ieRazorShock` to avoid double-dipping). Put the multiplier behind CEConfig `[effects] conductiveAllElectric`.
 

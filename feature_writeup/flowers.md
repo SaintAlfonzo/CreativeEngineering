@@ -16,7 +16,7 @@
 |---|---|---|
 | Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); DEPLOYED with pack 1.0.6 (2026-10-14); applied in single player 2026-10-11 | FL-01 to FL-14 |
 | First tuning pass (palettes for 124 land biomes, 19 flower entries, 2 existing tweaks) | BUILT | your in-game look |
-| CEConfig `[worldgen.systems] wildFlowers` | BUILT, in patcherMod 1.0.5; DEPLOYED with pack 1.0.6 (1.0.5 was never deployed), on in the shipped config | |
+| CEConfig `[worldgen.systems] wildFlowers` | BUILT, in Creative Common 1.0.5; DEPLOYED with pack 1.0.6 (1.0.5 was never deployed), on in the shipped config | |
 | Generator + report (`tools/gen_wild_flowers.py` -> [flowers_by_biome.md](flowers_by_biome.md)) | BUILT | |
 
 - **Edit:** [wild_flowers.json](../kubejs/generation_scripts/worldgen/wild_flowers.json). Rejoin the world; only new chunks change.
@@ -213,7 +213,7 @@ Use a new world (or new chunks). `/locate biome` then fly over.
 - [ ] **FL-09 Flower Patch:** in plains/forest/lavender, some flowers are multi-flower patches (2, 3, 4); breaking one drops that many
 - [ ] **FL-10 Clover:** white clover in plains/forests, pink clover in flower forest/meadow/birch
 - [ ] **FL-11 Every Botania color:** over a long trip, find all 16 colors (flowers_by_biome.md section 1 lists where)
-- [ ] **FL-12 Switch off:** `wildFlowers = false` (needs the rebuilt patcherMod jar), rejoin, new chunks -> Botania random colors everywhere, no pack patches
+- [ ] **FL-12 Switch off:** `wildFlowers = false` (needs the rebuilt Creative Common jar), rejoin, new chunks -> Botania random colors everywhere, no pack patches
 - [ ] **FL-13 Meadow:** meadow still looks like vanilla's mix, now with a few patch blocks
 - [ ] **FL-14 Bone meal:** bone meal on grass in plains -> flowers, sometimes a Flower Patch block
 - [ ] **FL-15 Glow lichen:** new chunks, any cave -> about three times as many glow lichen spots as before, most of them clusters of 3 or more blocks; no worldgen errors in the log
@@ -222,14 +222,14 @@ Use a new world (or new chunks). `/locate biome` then fly over.
 
 - 2026-10-07: built. Config + first tuning pass, runtime script, generator/report, Rhino test, CEConfig switch (source
   only). Flower Patch configurable by share and size per entry and per existing feature (user request mid-build).
-- 2026-10-07: scratch dedicated server (instance mods + kubejs, patcherMod 1.0.5 without the switch): world loads,
+- 2026-10-07: scratch dedicated server (instance mods + kubejs, Creative Common 1.0.5 without the switch): world loads,
   `[wild-flowers] 99 Botania palette features, 19 flower features ... (378 files)` and `291 flower/biome pairs in 119
   tags` with no problems. `/place feature` x4 on 17x17 grass pads: `wild_flowers/lavender/c1` -> 16 allium patches,
   lilacs, plain alliums; Terralith's `minecraft:flower_default` (rewritten) -> 8 of 49 as poppy/dandelion patches
   (setting 15%); `taiga_floor/r4` -> cornflower and lily of the valley patches; `minecraft:flower_plain`
   (noise_threshold) -> cornflower patches. Natural generation across biomes not looked at (FL-02 onwards).
 - 2026-10-11: ships in pack 1.0.5 (staged, not deployed): `wild_flowers.json`, `flower_features.json` (snapshot, now a
-  runtime file in `KUBEJS_CLASSES`), `wild_flowers.js` and the CEConfig switch in patcherMod 1.0.5. Single player with
+  runtime file in `KUBEJS_CLASSES`), `wild_flowers.js` and the CEConfig switch in Creative Common 1.0.5. Single player with
   the staged files: `99 Botania palette features, 19 flower features ... 378 files`, `291 flower/biome pairs in 119
   tags`, no errors. Only new chunks change.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED

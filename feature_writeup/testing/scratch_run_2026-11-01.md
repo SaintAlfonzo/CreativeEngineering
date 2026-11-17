@@ -9,7 +9,7 @@ pre-10-28 backlog.
 Perf session `r1101` (JFR on, no prune). Batches `tools/scratch_query/batches/r1101/`. Results and row logs
 `perf/runs/r1101/` (`results.md`, `rows/`, `judged_p1.md`, log copies in `p1_logs/`).
 
-Jars: prep_srv.sh hard-linked the build jars of 2026-11-01 01:56 CDT (patcherMod 1.1.04, creative_delight 1.0.0;
+Jars: prep_srv.sh hard-linked the build jars of 2026-11-01 01:56 CDT (Creative Common 1.1.04, creative_delight 1.0.0;
 newer than `mods/`, so the bug batch's "needs the 01:35 / 01:23 jars" held), creative_brewing 2026-10-31 16:55 (nests Vinery
 -08, Brewin' -05), backportedVintage -09, backportedVeggies -03, repackedStorage. Note: the clock fell back (DST) during
 the run; log times are CST, an hour behind the debug.log CDT times.
@@ -89,7 +89,7 @@ blocks (keg / press / rich farmland 0): look in the client.
 
 ## 4. Client block
 
-Throwaway client (`eval_client.py`, JFR on) in the session scratchpad, instance `mods/` plus the 01:56 patcherMod and
+Throwaway client (`eval_client.py`, JFR on) in the session scratchpad, instance `mods/` plus the 01:56 Creative Common and
 Creative Delight builds hard-linked in; worlds QA_A1 (r11p1 with the r1031 A1 look targets rebuilt by
 `r1031/a1_world.qb` rows SQ-VS-04, -02, SQ-CS-02, SQ-KT-21, SQ-POT-06, SQ-SVA-02), QA_W2, QA_W3, QA_W3B.
 
@@ -164,7 +164,7 @@ backlog.
 
 Owner request: run the scratch tests of the split's first wave (Calendar and Devtools carves, commit 72cc7303).
 Batches `tools/scratch_query/batches/r1101/cs1_split.qb`, `cs1b_restart.qb`, `cs1c_normal.qb`; results
-`perf/runs/rcs1/`. Jars: the `mods/` jars of 2026-11-01 11:02 to 11:16 (patcherMod 1.1.05, creativecalendar,
+`perf/runs/rcs1/`. Jars: the `mods/` jars of 2026-11-01 11:02 to 11:16 (Creative Common 1.1.05, creativecalendar,
 creativedevtools, creative_delight, creative_brewing), hard-linked by prep_srv.sh. Boot 1 on the instance config (CE
 toml still held `[seasons]`, `[time]`, `[crop_seasons]`); boot 2 = same world restarted with
 `[debug.level_random] probe = true`; boot 3 = group B world (seed 8675309) for the two rows a superflat cannot answer.
@@ -201,17 +201,17 @@ upgraded across three jar sets as a player save would be); batches `tools/scratc
 JFR off. New helpers: `region_ids.py` (ids in a world's region files), `tag_diff.py` (two /dumptags exports compared);
 `qrun.py` now keeps each row's shell output.
 
-- **Boot 1 (old):** patcherMod 1.1.05 (`development/patcherMod/jar_archive/displaced/`), `creative_delight` and
+- **Boot 1 (old):** Creative Common 1.1.05 (`development/creativeCommon/jar_archive/displaced/`), `creative_delight` and
   `creative_brewing` (`jar_archive/displaced/`), the installed Calendar with its Compat dependency stripped from the
   jar's mods.toml (no wave 1 Calendar jar was archived; nothing else in it changed since HEAD), no Devtools (so no
   perfBot), HEAD `kubejs/`, `config/`, `defaultconfigs/`. Edited before boot: CE `[campfire] rainOutTicks = 200`, CD
   `[qol] placeableTooltips = false`, a marker comment in the CB file (it has only `[members]`).
-- **Boot 2 (waves 2 and 3):** the installed `mods/` jars (patcherMod 1.1.06, creativedelight, creativebrewing,
+- **Boot 2 (waves 2 and 3):** the installed `mods/` jars (Creative Common 1.1.06, creativedelight, creativebrewing,
   creativecompat, calendar, devtools of 12:49 to 12:53) and the instance's current `kubejs/`. **The instance is not a
   pure wave 3 state:** its `kubejs/` already holds the wave 4 script moves (the moved startup files exist only inside
   the wave 4 CB / CD jars), so boot 2 had no CE potions; IE bottling / Create emptying recipe errors and the
   `creativebrewing:kubejs/vinery/wandering_trades.js` error there are that mismatch, not waves 2 or 3. Boot 2b = restart.
-- **Boot 3 (wave 4):** build jars copied in (patcherMod 1.1.07, CD 14:46 with the cob pipe fix, CB 13:47, Compat and
+- **Boot 3 (wave 4):** build jars copied in (Creative Common 1.1.07, CD 14:46 with the cob pipe fix, CB 13:47, Compat and
   Calendar 13:52); CE file edited before boot (`quarkLine = false`, `reductionPerLevel = 0.3`, copper `10` / `1.0`,
   `emptyCanChance = 0.5`, `troughMissCooldownTicks = 300`). Boot 3b = restart with the NCH.cfg fix.
 - **Remap rerun (rcs234r):** fresh world, boot 1 jars, then straight to the wave 4 jars with the remap fix.
@@ -219,7 +219,7 @@ JFR off. New helpers: `region_ids.py` (ids in a world's region files), `tag_diff
 | ID | Result | Evidence |
 |---|---|---|
 | SQ-CS2-01 | PASS | save with `creative_delight:treated_stick` (axis_y) and `treated_stick_tomatoes[age=2]` on farmland, a chest, a `village_plains` start 2754 blocks out (forceload 7 chunks off). Queue text was wrong: the old CD registered only the two blocks and the processor type, no items, so there are no item ids to remap (the stick item is IE's) |
-| SQ-CS2-02 | FAIL, fixed, PASS on rcs234r | boot 2: `the survivor is not registered, left missing` for both blocks. Cause: Forge fires `MissingMappingsEvent` from its STAGING registry (`GameData.injectSnapshot`), which holds only the snapshot's ids, so `mapping.getRegistry().containsKey(newId)` is false. Fix: look the survivor up in `RegistryManager.ACTIVE` (patcherMod 1.1.07 `SwapRemapper`). rcs234r: `[swaps] 2 list file(s): 2 namespace move(s), 0 single id(s)`, `minecraft:block: 2 id(s) remapped to their survivors`, no WARN |
+| SQ-CS2-02 | FAIL, fixed, PASS on rcs234r | boot 2: `the survivor is not registered, left missing` for both blocks. Cause: Forge fires `MissingMappingsEvent` from its STAGING registry (`GameData.injectSnapshot`), which holds only the snapshot's ids, so `mapping.getRegistry().containsKey(newId)` is false. Fix: look the survivor up in `RegistryManager.ACTIVE` (Creative Common 1.1.07 `SwapRemapper`). rcs234r: `[swaps] 2 list file(s): 2 namespace move(s), 0 single id(s)`, `minecraft:block: 2 id(s) remapped to their survivors`, no WARN |
 | SQ-CS2-03 | FAIL, fixed, PASS on rcs234r | stick `axis_y` and tomato `age=2` kept under `creativedelight:`; after a save the region file names only `creativedelight:treated_stick*`. Note: a world opened once with the broken 1.1.06 remap keeps the old palette names with no snapshot entry, so no later boot remaps them (the rcs234 world); 1.1.06 never shipped |
 | SQ-CS2-04 | PASS | resaved village chunks name `creativedelight:village_farm_crops` (2, r.3.3), untouched ones keep the old id until loaded (r.4.3); no `Unknown processor` / decode error. Farm crop look is a client check |
 | SQ-CS2-05 | PASS | both `carried over` lines; `creativedelight-common.toml` holds `placeableTooltips = false`, underscore files gone (the CB marker comment is dropped by Forge's rewrite) |
@@ -234,7 +234,7 @@ JFR off. New helpers: `region_ids.py` (ids in a world's region files), `tag_diff
 | SQ-CMP-06 | PASS | box placed and given (`creativeengineering:weathered_cardboard_box`), monster box reward table rolled (4 Rabbit Hide), netherite has `physics/fireproof` and `physics/lavaproof` |
 | SQ-CMP-07 | LOOK | 10 `paintings` log lines, no painting load error; the 475-image count is a client check |
 | SQ-CMP-08 | PASS (wave 3) | no Compat script error; the one error was the wave 4 `vinery/wandering_trades.js` under the wave 3 CB jar (mismatch above) |
-| SQ-CBJ4-01 | PASS | CB: 13 of 14 common mixins apply (`PotionHelperMixin` did not apply under patcherMod either), none also from CE |
+| SQ-CBJ4-01 | PASS | CB: 13 of 14 common mixins apply (`PotionHelperMixin` did not apply under Creative Common either), none also from CE |
 | SQ-CBJ4-02 | PASS | `config sections [alcohol, effects, magic_resistance, copper_poisoning] merged from creativeengineering-common.toml into creativebrewing-common.toml`; CB file has the four edited values; CE has none; boot 3b no WARN |
 | SQ-CBJ4-03 | PASS | long_reach potion given; the dispenser burst the potion bucket and kept the empty bucket (vanilla would eject it); `[potion_area] dispenser handler installed`. The cloud had gone by the 3 s check |
 | SQ-CBJ4-04 | PASS | Insomnia refused (`immune to effects`), Agility applied as `vinery:climbing_effect` |
@@ -249,23 +249,23 @@ JFR off. New helpers: `region_ids.py` (ids in a world's region files), `tag_diff
 | SQ-CBM-06 | LOOK | dragon sword + echo set: Phantom Bane, Soul Cross, Night Vision active; judge against the armor / tool effect tables |
 | SQ-CDS-01 | PASS (server half) | sample syringe scripts load from CD, both syringe items given; sampling a cow is a client / bot-use check |
 | SQ-CDS-02 to -04 | PASS | `tag_diff.py` against boot 2: all 16 tags the same (oven heat sources 29, FD heat sources 40, mineable/shovel 218, farmland soils 3, hoe 5x5 3, sourdough 1, tea 1, honey 1, kelp net 10, needs_copper 14, iron 345, stone 596, diamond 57) |
-| SQ-CDJ4-01 | FAIL, fixed, PASS | first boot crashed: `MobCobPipeSlotMixin` targeted `Mob`, but `m_147233_` (`getEquipmentSlotForItem`) is on `LivingEntity`. It never applied in patcherMod either (that config has no `defaultRequire`, so the miss was silent: Cob Pipe shift click / dispenser to the head never worked); CD's `defaultRequire: 1` made it fatal. Retargeted. A scan of every CD / CB / Compat / Calendar mixin's SRG method names against its target class found no other miss. After the fix: CD 37 of 39 common mixins apply (`KettleDispenseMixin`, `TobaccoPlacementMixin` did not apply under patcherMod either), none also from CE |
+| SQ-CDJ4-01 | FAIL, fixed, PASS | first boot crashed: `MobCobPipeSlotMixin` targeted `Mob`, but `m_147233_` (`getEquipmentSlotForItem`) is on `LivingEntity`. It never applied in Creative Common either (that config has no `defaultRequire`, so the miss was silent: Cob Pipe shift click / dispenser to the head never worked); CD's `defaultRequire: 1` made it fatal. Retargeted. A scan of every CD / CB / Compat / Calendar mixin's SRG method names against its target class found no other miss. After the fix: CD 37 of 39 common mixins apply (`KettleDispenseMixin`, `TobaccoPlacementMixin` did not apply under Creative Common either), none also from CE |
 | SQ-CDJ4-02 | PASS | `config sections [crop_growth, dandelion_maturing, crop_drops, stem_fruit, canning, cooking, perf] merged ... into creativedelight-common.toml`; `emptyCanChance = 0.5`, `troughMissCooldownTicks = 300`; CE has none; boot 3b no WARN. rcs234r: rename and merge in one boot, all edited values kept |
 | SQ-CDJ4-03 | PASS | members end `baby_mobs, incubation_additions`; no standalone jars; `baby_mobs.mixins.json` and `incubation_additions.mixins.json` apply from the nested jars |
 | SQ-CDJ4-04 | PASS | oven placed over a lit campfire with its block entity; no missing registry line. (Powdered sugar has no block item, its item is `powdered_sugar_bucket`) |
-| SQ-CDJ4-05 | FAIL, fixed, PASS | `NCH.cfg` returned undefined for every section that moved to CD / CB: Rhino throws (`InternalError ... has no public instance field or method named "CANNING"`) on a missing static field of a Java class, and CEConfig is probed first. Fix in `neoCraftHelper.js` (patcherMod 1.1.07): a missing field reads as "not here". Boot 3b: no WARN, values read from CDConfig |
+| SQ-CDJ4-05 | FAIL, fixed, PASS | `NCH.cfg` returned undefined for every section that moved to CD / CB: Rhino throws (`InternalError ... has no public instance field or method named "CANNING"`) on a missing static field of a Java class, and CEConfig is probed first. Fix in `neoCraftHelper.js` (Creative Common 1.1.07): a missing field reads as "not here". Boot 3b: no WARN, values read from CDConfig |
 | SQ-CDJ4-06 | FAIL, fixed, PASS | symptom of the NCH.cfg bug: `soil_yield.js ... Cannot read property "farmlandTries" from undefined` (6x). Boot 3b: `[soil-yield] no crop switched on`, 0 event errors in server.log |
 | SQ-CDJ4-07 | PASS (server half) | lunch bag given, no lunchbox serializer error |
 | SQ-CDJ4-08 | PARTIAL | Emu Nest (`incubation_additions:emu_nest`, the queue's id was wrong) exists; baby squid not testable here: `spawn-animals=false` makes vanilla discard every Animal / WaterAnimal on its next tick (needs a world with animals on) |
 
-Found and fixed (all in unreleased 1.1.07 work, built, NOT installed): `SwapRemapper` (patcherMod), `NCH.cfg` missing-field
-lookup (patcherMod `neoCraftHelper.js`), `MobCobPipeSlotMixin` target (CD; player-visible since 1.1.03, changelog bullet
-under "Cob Pipe"). Test-setup lessons: hard-linked jars were rewritten in place by a parallel session's patcherMod
+Found and fixed (all in unreleased 1.1.07 work, built, NOT installed): `SwapRemapper` (Creative Common), `NCH.cfg` missing-field
+lookup (Creative Common `neoCraftHelper.js`), `MobCobPipeSlotMixin` target (CD; player-visible since 1.1.03, changelog bullet
+under "Cob Pipe"). Test-setup lessons: hard-linked jars were rewritten in place by a parallel session's Creative Common
 build mid-run (a non-reobf jar, `NoSuchFieldError: ENTITY_TYPE_REGISTRY`), so `split_w234.sh` copies jars; perfBot
 bots take no damage; group A/B scratch servers run with `spawn-animals=false`.
 
 Still open: client rows (CBJ4-C1 to -C3, CBM-C1 to -C4, CDS-C1 / -C2, CDJ4-C1 to -C5, CS2-07 craft, CMP-07 count),
-baby squid, sampling a cow. Install of wave 4 (game closed): `./gradlew :patcherMod:installToMods
+baby squid, sampling a cow. Install of wave 4 (game closed): `./gradlew :creativeCommon:installToMods
 :creativeCompat:installToMods :creativeCalendar:installToMods :creativeDelight:installToMods
 :creativeBrewing:installToMods --offline`; until then the instance's `kubejs/` (wave 4) does not match its `mods/`
 (wave 3): no CE potions in a game launched now.

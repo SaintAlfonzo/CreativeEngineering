@@ -1,6 +1,6 @@
 # sinking-blocks-investigation
 
-> Soul-sand-style sinking for soft/dust/spongy/very_sticky - user rejected hitbox changes; purely visual camera + model offset (patcherMod CameraSinkMixin/EntitySinkRenderMixin + #creativeengineering:sinking); status in feature_writeup/blockrunner.md
+> Soul-sand-style sinking for soft/dust/spongy/very_sticky - user rejected hitbox changes; purely visual camera + model offset (Creative Common CameraSinkMixin/EntitySinkRenderMixin + #creativeengineering:sinking); status in feature_writeup/blockrunner.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

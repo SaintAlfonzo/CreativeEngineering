@@ -2,8 +2,8 @@
 // Priority 900: before every other Creative Delight startup file (after cd_core.js), so the tiers exist for anything
 // that reads them at load time. Rule order is the order of the category() calls below, and no other script registers
 // categories. Startup script in the CD jar: an edit needs a CD rebuild and restart. Compost rules - which items count
-// as logically compostable, and at what chance. Engine and full syntax: compost.js in patcherMod's jar
-// (development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/). Per-item chances:
+// as logically compostable, and at what chance. Engine and full syntax: compost.js in Creative Common's jar
+// (development/creativeCommon/src/main/resources/kubejs_startup/creativeengineering/func/). Per-item chances:
 // <mod>/compost_values.js (generated) and <mod>/compost.js in this tree.
 //
 // Categories are checked top to bottom; the FIRST one an item matches gives its chance. Anything

@@ -12,7 +12,7 @@ correctness part was run.
 
 - Scratch dedicated server in the session scratchpad: Trash `CreEngServer` libraries; instance `kubejs/`,
   `config/`, `defaultconfigs/` copied; 373 mods symlinked (mod_sides.md server/both rows plus the 4 unlisted jars
-  `campsite_structures`, `restApi`, `rsec`, `unlitcampfire`). patcherMod = `development/patcherMod/build/libs/
+  `campsite_structures`, `restApi`, `rsec`, `unlitcampfire`). Creative Common = `development/creativeCommon/build/libs/
   creativeengineering-1.0.6.jar` built 2026-10-14 01:28. The jar in `mods/` was not used.
 - Seed 8675309, `max-tick-time=-1`, view distance 6, `asyncLocatorThreads = 4`.
 - Scratch toml (server copy only): earth fill `log = ALL`, meta structures `log = true`, placement priority
@@ -74,7 +74,7 @@ correctness part was run.
 2. **Earth fill can't see stone bases:** size and checks count only earth base blocks
    (dirt/sand/gravel/clay/path). The drum tower's 49x45 polished andesite base counts as "small, 10 earth", so it
    could hang over a cliff unchecked. Same family as the piglin camp note from M1.
-   **Fixed in source 2026-10-18** (patcherMod 1.0.7, DEPLOYED 2026-10-18): opt-in structure tag `earth_fill/stone_base` (the drum tower) counts stone and brick
+   **Fixed in source 2026-10-18** (Creative Common 1.0.7, DEPLOYED 2026-10-18): opt-in structure tag `earth_fill/stone_base` (the drum tower) counts stone and brick
    bases too. [structure_tuning.md](../../structure_tuning.md) 3.23 item 6, ST-197.
 3. **Census reports every slot "known":** `/cwglocate census` on fresh land showed no prediction path, so its
    false-negative column means nothing yet. Check before Phase 6.

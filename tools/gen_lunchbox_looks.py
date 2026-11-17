@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Lunchbox looks: dyeable textures and the item models -> kubejs/assets/solapplepie/.
 
-Spice of Life's three lunchboxes plus the pack's Netherite Lunchbox (patcherMod lunchbox/) each show one of four
+Spice of Life's three lunchboxes plus the pack's Netherite Lunchbox (Creative Common lunchbox/) each show one of four
 looks: lunchbag (paper, the jar's own texture), copper, iron, netherite (source art in
 kubejs/assets/solapplepie/textures/items/). Their own looks: Lunchbag = lunchbag, Lunchbox (Copper Lunchbox in game)
 = copper, Golden Lunchbox (Iron Lunchbox) = iron, Netherite Lunchbox = netherite. Spice of Life's own lunchbox.png and
@@ -16,7 +16,7 @@ iron_lunchbox_outline.png (netherite_lunchbox_outline.png must match it); the la
 lunchbag has no outline file, so its darkest browns (every channel under BAG_OUTLINE_MAX) are its outline.
 
 Override numbers: the item property creativedelight:lunchbox_skin is the position in SKINS + 1, which must
-match Lunchboxes.SKINS in patcherMod. Only append to both.
+match Lunchboxes.SKINS in Creative Common. Only append to both.
 
     python3 tools/gen_lunchbox_looks.py           write the files
     python3 tools/gen_lunchbox_looks.py --check   exit 1 if any file is missing or stale

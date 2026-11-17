@@ -43,7 +43,7 @@ The 1.20 share is almost all of it: worldgen moved from code to datapack JSON (s
 
 | Change | Detail | Proposed |
 |---|---|---|
-| Placed Mangosteen Cake: bites give no effects | `MangosteenCakeBlock.eat` in 0.5.11 builds each effect as `new MobEffectInstance(effect, amplifier, duration / 3)`, so the duration is the amplifier (0 ticks) and the amplifier is a third of the duration (Comfort 400, Sliding 800). The effect ends on the next tick. 1.1.3 passes `(effect, duration / 3, amplifier)`: a bite gives Comfort 20 s and Sliding 40 s (a third of the item's 60 s and 120 s) | **fix**: patcherMod mixin on `MangosteenCakeBlock.eat` swapping the two arguments; player-visible, gets a bullet when built |
+| Placed Mangosteen Cake: bites give no effects | `MangosteenCakeBlock.eat` in 0.5.11 builds each effect as `new MobEffectInstance(effect, amplifier, duration / 3)`, so the duration is the amplifier (0 ticks) and the amplifier is a third of the duration (Comfort 400, Sliding 800). The effect ends on the next tick. 1.1.3 passes `(effect, duration / 3, amplifier)`: a bite gives Comfort 20 s and Sliding 40 s (a third of the item's 60 s and 120 s) | **fix**: Creative Common mixin on `MangosteenCakeBlock.eat` swapping the two arguments; player-visible, gets a bullet when built |
 
 ### 2.2 Recipes on existing items (data only)
 

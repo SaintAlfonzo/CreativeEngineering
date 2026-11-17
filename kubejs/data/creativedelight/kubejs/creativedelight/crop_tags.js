@@ -6,7 +6,7 @@ ServerEvents.tags('block', e => {
 	var t = global.tags
 	var item = global.item
 
-	// ── Crop parity (patcherMod crops/CropParity, feature_writeup/crops.md) ──
+	// ── Crop parity (Creative Common crops/CropParity, feature_writeup/crops.md) ──
 	// Soils that count as farmland for crops whose own check is hard-coded to vanilla farmland
 	// (tobacco via mixin/TobaccoPlacementMixin). Untilled Rich Soil stays out, as for every farmland crop.
 	t.add(e, 'creativedelight:crops/farmland_soils', [item.farmland, item.rich_farmland, item.fertile_soil])
@@ -45,7 +45,7 @@ ServerEvents.tags('item', e => {
 	var i = global.item
 
 	// Hoe harvest area: side of the square Quark's hoe right-click (harvest + replant) and hoe
-	// area break cover. Read by patcherMod crops.HoeHarvestArea, which also writes the
+	// area break cover. Read by Creative Common crops.HoeHarvestArea, which also writes the
 	// "Harvest area: NxN" tooltip. Any size 1x1 to 9x9 works; the largest tag wins. An even
 	// area reaches one block further toward where the player looks. A hoe in none of these
 	// keeps Quark's own 3x3 / 5x5 (config/quark-common.toml [tweaks.hoe_harvesting]).

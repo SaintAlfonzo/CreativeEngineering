@@ -8,7 +8,7 @@
 
 | Part | Status |
 |---|---|
-| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | DEPLOYED with 1.0.3 (patcherMod 1.0.3) |
+| Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | DEPLOYED with 1.0.3 (Creative Common 1.0.3) |
 | `allContainers` switch for every other container (off) + `excludedScreens` | DEPLOYED with 1.0.3, off by default |
 | Starting positions per screen (`positions`) | DEPLOYED with 1.0.3 |
 | Sophisticated Backpacks: one position and on/off per tier | DEPLOYED with 1.0.3 |
@@ -90,7 +90,7 @@ shared one spot even though each tier has a different panel size, and it never a
 
 ## 6. Offline checks
 
-- `./gradlew build --offline` in `patcherMod/`, then `javap -p -c` on the built mixin classes: vanilla
+- `./gradlew build --offline` in `creativeCommon/`, then `javap -p -c` on the built mixin classes: vanilla
   references must be SRG names (`f_96544_` for `Screen.height`, `m_6262_` for `getMenu`, `m_142503_` for `setCarried`).
 - Mixin targets checked against TrashSlot 12.1.0 bytecode: `runKeyBindings` calls `ContainerSettings.isEnabled`
   four times; ordinal 0 is the delete-hovered-slot guard.
@@ -114,6 +114,6 @@ shared one spot even though each tier has a different panel size, and it never a
 ## 8. History
 
 - 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/creativeCommon/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
-- 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
+- 2026-10-02: in `mods/` (Creative Common 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-19: status sweep: went out with pack 1.0.3 (DEPLOYED 2026-10-02); TS-01 to TS-13 pending.
 - 2026-11-06: `onScreenInit` overwrite replaced by four redirects and one inject (license, TODO `licence/compat #3`; [creative_compat.md](creative_compat.md) 6.4); same behaviour. Compat jar built 13:17, not installed; CQ-TSL-01, -02 queued.

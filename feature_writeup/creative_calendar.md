@@ -7,7 +7,7 @@ brewing would rely on, called creative calendar". Carved in wave 1 of the Creati
 
 **Status: carve INSTALLED 2026-11-01, scratch-verified (SQ-CAL-01 to -07 PASS, run rcs1,
 [scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 6); client CQ-CAL-08 and in-game CAL-01 to -04 open.**
-`creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`) is in `mods/` with the patcherMod, Creative
+`creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`) is in `mods/` with the Creative Common, Creative
 Delight and Creative Brewing jars of the same pass (section 7).
 
 Written for: the owner and the split agents, as the working reference for Calendar. Same shape as
@@ -40,7 +40,7 @@ Written for: the owner and the split agents, as the working reference for Calend
 ## 1. Shape
 
 Calendar holds the pack's time and season systems and sits below the two bundles: **Creative Delight** (crops grow by
-crop season) and **Creative Brewing** (Vinery's wine clock) both require it. patcherMod does not depend on it.
+crop season) and **Creative Brewing** (Vinery's wine clock) both require it. Creative Common does not depend on it.
 
 ## 2. Inventory before the carve (2026-10-31, kept for reference)
 
@@ -63,7 +63,7 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
    `@Mod.EventBusSubscriber` annotations, the config file, the script packs and, since 2026-11-07
    ([plan_owner_ids.md](plan_owner_ids.md)), the WTHIT plugin id and line ids (`creativecalendar:crop_seasons`,
    `crop_out_of_season`), which are not saved anywhere.
-2. **Dependencies point down.** Calendar calls no patcherMod Java (it keeps `compileOnly project(':patcherMod')` for the
+2. **Dependencies point down.** Calendar calls no Creative Common Java (it keeps `compileOnly project(':creativeCommon')` for the
    later Common APIs). CD and CB call down into Calendar; Calendar never names CD or CB.
 3. **Config keys moved with their feature**, names and comments unchanged (4.3).
 4. **Mixins moved unchanged** apart from their package (SRG names, `remap = false`), each on the side it had.
@@ -90,7 +90,7 @@ copies the server script tree into the jar, and fails the jar task when `kubejs_
   loaded: Serene Seasons for the 10 Serene Seasons mixins and `SeasonRainColumnMixin` (vanilla target, reads
   `SeasonTypes`), `betterdays`, `seasonhud`, `xaerominimap`, `particlerain`; `CropSeasonGrowHookMixin` on any of
   `immersiveengineering`, `the_dirty_stuff`, `nethersdelight`. `ServerLevelTimePauseMixin` (vanilla) always applies.
-- `creativecalendar.mixins.json`: 10 common, 8 client, no `injectors.defaultRequire` (as patcherMod's, so every
+- `creativecalendar.mixins.json`: 10 common, 8 client, no `injectors.defaultRequire` (as Creative Common's, so every
   injector's `require` is what it was).
 - `waila_plugins.json`: the `creativecalendar:crop_seasons` entry (required `sereneseasons`), now pointing at
   `com.SaintAlfonzo.creativecalendar.compat.WthitCropSeasons`.
@@ -101,8 +101,8 @@ copies the server script tree into the jar, and fails the jar task when `kubejs_
 
 `mods.toml`: `creativeengineering` mandatory `[1.1.04,)` AFTER; `sereneseasons` mandatory (2026-11-06: the season and time classes import it directly, so without it the jar
 failed at load with NoClassDefFoundError; it was wrongly optional after the carve); `betterdays`, `seasonhud` optional, no
-ordering (patcherMod never declared them, so the load order is the one it had). CD's and CB's `mods.toml` require
-`creativecalendar` `[1.0.0,)` AFTER, so the startup script packs run: patcherMod, `startup_scripts/`, Calendar, CD, CB.
+ordering (Creative Common never declared them, so the load order is the one it had). CD's and CB's `mods.toml` require
+`creativecalendar` `[1.0.0,)` AFTER, so the startup script packs run: Creative Common, `startup_scripts/`, Calendar, CD, CB.
 
 The Vinery member compiles against `project(':creativeCalendar')`. `PackTime` imports
 `com.SaintAlfonzo.creativecalendar.time.WineTime` and calls it directly: the `ModList.isLoaded` guard is gone because
@@ -150,12 +150,12 @@ and restart.
 | 18 mixins (10 common: CropSeasonGrowHook, SereneSeasonsMeltThrottle, SereneSeasonsClock, SereneSeasonsTimeSkip, BetterDaysConfig, BetterDaysTimePause, ServerLevelTimePause, SeasonBiomeConfig, SeasonHooksTypes, SeasonFertility; 8 client: SereneSeasonsClientClock, XaeroTimeInfo, SeasonHooksClient, SeasonRainColumn, SeasonColorUtil, SeasonHudHelper, SeasonHudCurrentSeason, PrettyRainSeason) | `PM/mixin/`, `creativeengineering.mixins.json` | `creativecalendar/mixin/`, `creativecalendar.mixins.json` |
 | Config sections and keys (4.3) | `CEConfig` | `CalendarConfig` |
 | Registrations | `CreativeEngineering.java` 225-231 | `CreativeCalendar` |
-| WTHIT plugin entry, 31 lang keys | patcherMod resources | Calendar resources |
+| WTHIT plugin entry, 31 lang keys | Creative Common resources | Calendar resources |
 | 2 server scripts | `kubejs/server_scripts/tags/` | `kubejs/data/creativecalendar/kubejs/sereneseasons/` |
 
 **Doubtful rows, decided in this carve:**
 
-- `IEConcreteSetTimeMixin` (listed "check" in 2): **stays in patcherMod** (Engineering later). It lowers IE liquid
+- `IEConcreteSetTimeMixin` (listed "check" in 2): **stays in Creative Common** (Engineering later). It lowers IE liquid
   concrete's set time from 32 to 30 s for the JEI Concrete Hardening tab and reads no `[time]` value; the earlier brief's
   "tied to day length" reason does not hold.
 - `CampfireRain` and `campfire/`: **stay** (owner 7.6: Compat).
@@ -187,17 +187,17 @@ The moved features keep their own suites: TI- ([time.md](time.md)), WE- ([weathe
 
 ## 7. Install (game closed)
 
-All four in one go (a new patcherMod without the Calendar jar loses `/ccaltime` and the seasons; the old patcherMod with it
+All four in one go (a new Creative Common without the Calendar jar loses `/ccaltime` and the seasons; the old Creative Common with it
 applies every season mixin twice): `./gradlew :creativeCommon:installToMods :creativeCalendar:installToMods
 :creativeDelight:installToMods :creativeBrewing:installToMods --offline`. The dedicated server (CreEngServer) needs
-the same four jars at the next deploy. Calendar's `creativeengineering` range `[1.1.04,)` cannot tell the old patcherMod
-1.1.04 from the new one: raise it with the next patcherMod version bump (8, Q1).
+the same four jars at the next deploy. Calendar's `creativeengineering` range `[1.1.04,)` cannot tell the old Creative Common
+1.1.04 from the new one: raise it with the next Creative Common version bump (8, Q1).
 
 ## 8. Open questions
 
 | # | Question | Recommendation |
 |---|---|---|
-| Q1 | patcherMod's version: the carve leaves it at 1.1.04 | Bump with the wave-1 commit and set Calendar's range to that version, so an old patcherMod beside Calendar refuses to load instead of doubling the mixins |
+| Q1 | Creative Common's version: the carve leaves it at 1.1.04 | Bump with the wave-1 commit and set Calendar's range to that version, so an old Creative Common beside Calendar refuses to load instead of doubling the mixins |
 | Q2 | Calendar's `creativecompat` dependency | Added when Compat is carved (creative_split.md 7.6) |
 | Q3 | License audit for publishing (Q7: CB's chain) | Calendar is all own code (GPLv3); no donor files, no ARR content |
 
@@ -206,7 +206,7 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
 - 2026-10-31: reserved (owner); WineTime marked; inventory from names only.
 - 2026-11-01: carved (creative_split.md 7.6 wave 1): 13 classes, `WthitCropSeasons`, 18 mixins, 3 config sections and 3
   keys, 2 server scripts, 31 lang keys and the WTHIT entry moved; CD and CB require Calendar; Vinery's `PackTime` calls
-  it directly. patcherMod, Calendar, CD and CB compile; SQ-CAL rows queued; not installed.
+  it directly. Creative Common, Calendar, CD and CB compile; SQ-CAL rows queued; not installed.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
@@ -214,9 +214,9 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: Every section moved from creativeengineering-common.toml on 2026-11-01 with its keys and comments unchanged (rule 3.3 of creative_split.md): {@code [seasons]}, {@code [crop_seasons]}, {@code [time]} (with {@code .day}, {@code .seasons}, {@code .wine}, {@code .wine.boosts}), and the two keys of other sections that only Calendar reads, kept under their old section names: {@code [perf] seasonsMeltIntervalTicks} and {@code [wthit] cropSeasons} / {@code cropOutOfSeason} (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java)
 - 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js)
 - 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js)
-- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): moved here from patcherMod's time/ package on 2026-11-01 with the rest of [time]; the class name and getters are the contract with the Vinery port's PackTime (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/time/WineTime.java)
-- 2026-11-01: creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md), carved out of patcherMod on 2026-11-01 (development/creativeCalendar/build.gradle)
-- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): the pack's calendar, day and night length, seasons, season types by biome and crop seasons, carved out of patcherMod on 2026-11-01 (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): moved here from Creative Common's time/ package on 2026-11-01 with the rest of [time]; the class name and getters are the contract with the Vinery port's PackTime (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/time/WineTime.java)
+- 2026-11-01: creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md), carved out of Creative Common on 2026-11-01 (development/creativeCalendar/build.gradle)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): the pack's calendar, day and night length, seasons, season types by biome and crop seasons, carved out of Creative Common on 2026-11-01 (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
 - 2026-11-02: Adding every forward client step instead (before 2026-11-02) counted a jump twice when it came with its sync ({@code /ccaltime date}, /time add): the server's value already held it, and Better Days then glides the client's time of day up to the new one, adding it again (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/mixin/SereneSeasonsClientClockMixin.java)
 - 2026-11-02: LoadingModList, not ModList: IW builds its grass block in vanilla bootstrap, before ModList exists (boot crash 2026-11-02, r1102b) (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/GrassSeasonHook.java)
 - 2026-11-07: Xaero's World Map calls the resolver up to 9 times per map pixel and chunk meshing once per tinted block; on 2026-11-07 that was about 6% of the render thread (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonAnswers.java)

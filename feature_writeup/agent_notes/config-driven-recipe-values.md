@@ -12,7 +12,7 @@ pickaxe/axe/shovel/hoe), not just the sword.
 Went through several iterations before landing here — see the shape below, not earlier
 per-field or separate-file versions.
 
-- **Java side**: `CEConfig.Crafting.FelsicPiece` (patcherMod/.../CEConfig.java) — **one reusable
+- **Java side**: `CEConfig.Crafting.FelsicPiece` (creativeCommon/.../CEConfig.java) — **one reusable
   nested class**, not one class per piece: constructor takes `(Builder b, String tomlSection,
   String defaultPotion, int defaultMb, int defaultLoops, int defaultBlows)`, instantiated 9x in
   `Crafting`'s constructor (`FELSIC_HELMET`, `FELSIC_CHESTPLATE`, ..., `FELSIC_HOE`), each under
@@ -21,7 +21,7 @@ per-field or separate-file versions.
   8 near-identical classes. **Java field names are kept short/internal** (`mb`, `blows`) while
   the **toml key strings** passed to `.define("potionMb", ...)` / `.defineInRange("hammerBlows",
   ...)` stay the descriptive, human-facing labels shown in the toml file and Create's Configs
-  GUI — these are deliberately different from each other by request. Requires a patcherMod
+  GUI — these are deliberately different from each other by request. Requires a Creative Common
   rebuild + jar redeploy to take effect (never overwrite `mods/` while the game is running —
   see [patchermod-coremod](patchermod-coremod.md)).
 - **JS side**: `global.NCH.cfg(defaults, path)` (neoCraftHelper.js, next to `bulk()`) — takes
@@ -54,5 +54,5 @@ per-field or separate-file versions.
   `Boolean`/`Enum`/`Number` `ForgeConfigSpec` values natively - a plain `ConfigValue<String>`
   (every `FelsicPiece.potion` field) fell through to an "Impl missing" placeholder row. First
   found 2026-09-15, initially left as toml-and-`/reload`-only by user's call; later that same
-  session a real fix was built - see [create-config-string-widget](create-config-string-widget.md) (patcherMod mixin +
+  session a real fix was built - see [create-config-string-widget](create-config-string-widget.md) (Creative Common mixin +
   custom widget class) - so `potion` fields now get a proper in-game text field too.

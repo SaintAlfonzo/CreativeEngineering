@@ -7,7 +7,7 @@
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
-@@text patcherMod 1.1.04 (new part field `overlap`) installed in `mods/` 2026-10-30 17:06; data in `meta_structures.json`,
+@@text Creative Common 1.1.04 (new part field `overlap`) installed in `mods/` 2026-10-30 17:06; data in `meta_structures.json`,
 @@text `structure_tags.json`, `structure_groups.json`, `kubejs/data/creativeengineering/worldgen/{structure,template_pool}/sky_island.json`.
 @@text Full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.31 (ST-306 to ST-315). All in group B
 @@text (fresh normal world, toml `[worldgen.meta_structures] log = true`); one world for all rows.
@@ -109,7 +109,7 @@ look 2-4 craters in a sand desert; a sky stone sphere in or by the monument (ST-
 @group B
 @commands `/locate` `meta/witch_coven`; night, kill the hut's witch, wait
 @pass circle + hut + 1-2 wagons; a witch respawns in the hut, none on the wagons (ST-317)
-@fails no respawn: patcherMod older than 2026-10-30 17:55 (per-part lookup)
+@fails no respawn: Creative Common older than 2026-10-30 17:55 (per-part lookup)
 @from batches/r1031/w2_metas_spawns.qb
 > locate structure creativeengineering:meta/witch_coven
 waitlog nearest creativeengineering:meta/witch_coven is at|type "?creativeengineering:meta/witch_coven|creativeengineering:meta/witch_coven.*timed out 330
@@ -138,7 +138,7 @@ look guardians respawn inside the monument (first check passes) and none out ove
 @group B
 @commands `/locate` `meta/village_siege_ring`, `meta/village_siege_camp` (plains)
 @pass ring: 2-6 weapons around, none in the village; camp: grouped on one side (ST-318)
-@fails camp spread all round: `cluster` not in the jar (old patcherMod)
+@fails camp spread all round: `cluster` not in the jar (old Creative Common)
 @from batches/r1031/w2_metas_spawns.qb
 > locate structure creativeengineering:meta/village_siege_ring
 waitlog nearest creativeengineering:meta/village_siege_ring is at|type "?creativeengineering:meta/village_siege_ring|creativeengineering:meta/village_siege_ring.*timed out 330

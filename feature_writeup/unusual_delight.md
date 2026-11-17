@@ -176,7 +176,7 @@ Grouped by theme. "Lands in" names the pack system that must take it before it c
 In the order a port would hit them. Each line names the pack rule that applies.
 
 1. **License and form.** AFL 3.0 cannot go into the GPLv3 Creative Delight jar. Hostile is handled as an untouched jar plus
-   KubeJS / patcherMod. Unusual is 1.20.1 only, so there is no untouched jar to install: either an AFL-licensed backport
+   KubeJS / Creative Common. Unusual is 1.20.1 only, so there is no untouched jar to install: either an AFL-licensed backport
    jar kept separate (its own `mods/` entry and notice), or chosen items re-made as pack items with our own code and the
    art under an AFL notice (as `glowing_calamari_art_notice.txt`). Decision U1.
 2. **Hostile first.** Section 3.1 means the Hostile integration (`mod-additions #6`) should be built before any Unusual

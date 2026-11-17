@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text patcherMod 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
+@@text Creative Common 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
 @@text config plugin `perf/CommonMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
 @@text with op. The JVM switch `-Dcreativecommon.iwFastTick=false` turns all three parts off for the comparison boots.
 @@text

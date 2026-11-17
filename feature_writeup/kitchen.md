@@ -28,15 +28,15 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 
 | Part | Status | TODO |
 |---|---|---|
-| CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (patcherMod 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
+| CfB oven: any furnace fuel plus cooking oil; every fuel container comes back | BUILT 2026-10-21 (Creative Common 1.1.01 + config), scratch server PASSED, not in game | `cooking/kitchen #8` |
 | CfB sink: infinite water | BUILT 2026-10-21 (config), scratch server PASSED | `#8` |
-| FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (patcherMod), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
-| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (patcherMod 1.1.02 + KubeJS tags), deployed with 1.1.03 (2026-10-26); `/kttest` 30 of 34 on 2026-10-25 / 26 / 27 (KT-15d, KT-17 fail on Display Delight 1.7.0's leg; probe rewritten 2026-10-27); rewritten probe scratch PASSED 2026-11-01 (SQ-KT-25, 34 of 34) and r1102b (SQ-KT-02, KT-17 x4) (deep scan 2026-11-02) | `#20` |
+| FD cutting board on a CfB counter or corner, drawn on the worktop, config offset | BUILT 2026-10-21 (Creative Common), placement and cutting PASSED on a scratch server; the drawing not seen | `#8` |
+| Display Delight plates and plated foods, Brewin' coaster on a CfB counter or corner, drawn on the worktop, own offset | BUILT 2026-10-24 (Creative Common 1.1.02 + KubeJS tags), deployed with 1.1.03 (2026-10-26); `/kttest` 30 of 34 on 2026-10-25 / 26 / 27 (KT-15d, KT-17 fail on Display Delight 1.7.0's leg; probe rewritten 2026-10-27); rewritten probe scratch PASSED 2026-11-01 (SQ-KT-25, 34 of 34) and r1102b (SQ-KT-02, KT-17 x4) (deep scan 2026-11-02) | `#20` |
 | CfB 2-tall fridge filled to a full block with a white box on top (the 2026-10-21 stretch reverted) | BUILT 2026-10-25 (resource override); top box rendered missing in a client, texture fixed 2026-10-26; since 2026-10-31 drawn by blockheadsAdditions code instead of the override (2.4), not seen in game | `#6`, `#19` |
 | CfB spice rack and tool rack in 20 woods (2.7) | BUILT 2026-10-31 (Creative Delight member blockheadsAdditions + KubeJS); scratch server PASSED 2026-11-01 (SQ-KT-22 to -24: 40 recipes, rack holds and drops items); not in game | `#22` |
-| CfB code moved out of patcherMod into the Creative Delight member blockheadsAdditions (section 9) | BUILT 2026-10-31; scratch server PASSED 2026-11-01 (SQ-KT-22 boot, SQ-KT-25 `/kttest` 34 of 34, `/kctest` 9 of 9); not in game | `#22` |
-| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); rerun scratch PASSED 2026-11-01 (SQ-KT-25) and r1102b (SQ-KT-02) | `#20` |
-| CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
+| CfB code moved out of Creative Common into the Creative Delight member blockheadsAdditions (section 9) | BUILT 2026-10-31; scratch server PASSED 2026-11-01 (SQ-KT-22 boot, SQ-KT-25 `/kttest` 34 of 34, `/kctest` 9 of 9); not in game | `#22` |
+| Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (Creative Common 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); rerun scratch PASSED 2026-11-01 (SQ-KT-25) and r1102b (SQ-KT-02) | `#20` |
+| CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (Creative Common), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
 | Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalog) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
@@ -68,7 +68,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 CfB's kitchen arrived half-working in this pack: its oven wanted Pam's cooking oil and found none, its sink only
 gave water that was piped in, FD's cutting board couldn't sit on a counter, its corner piece held nothing, and its
 2-tall fridge left gaps and a sunken top. Each is fixed at the smallest point: two config values, one tag, and
-patcherMod mixins where the mods' own code had to bend. The hand tools follow the same idea: the mortar and pestle
+Creative Common mixins where the mods' own code had to bend. The hand tools follow the same idea: the mortar and pestle
 that Old Guns already ships grinds food in the crafting grid, mirroring the machines, so a player without Create can
 make flour and cornmeal.
 
@@ -543,16 +543,16 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 
 ## 8. History
 
-- 2026-10-21: writeup started from the kitchen brief's built sections. Built the same day (patcherMod 1.1.01, not
+- 2026-10-21: writeup started from the kitchen brief's built sections. Built the same day (Creative Common 1.1.01, not
   deployed): CfB oven fuel and bottles, sink, cutting board support and offset (`cooking/kitchen #8`), fridge models
   (`#6`), corner storage (`#15`), bamboo bowl and mortar grinding (`#10`); scythe and stepstool split to `#16`,
   `#17`. Row `#5`'s cause found in Sticky It!'s tooltip handler (fixed by Creative Labels). Corner tests renamed from
   the brief's KC-01 to KC-04 to KT-09 to KT-12.
 - 2026-10-24: planned from the scratchpad: fridge texture padding, plates and coasters on the counter (`textures/art #1`, `cooking/kitchen #20`). No code changed.
-- 2026-10-24: built `#20` (patcherMod 1.1.02, in `mods/` only): the cutting board route generalized to counter toppers
+- 2026-10-24: built `#20` (Creative Common 1.1.02, in `mods/` only): the cutting board route generalized to counter toppers
   (2.3), `plateOffset*` config, coaster renderer mixin; `cutting_board_supports` renamed `counter_supports`. KT-15, KT-16
   added; `/kttest` extended, scratch run queued (SQ-KT).
-- 2026-10-25: Display Delight blocks, toppers and the coaster break when the block below goes (2.3, KT-17, patcherMod
+- 2026-10-25: Display Delight blocks, toppers and the coaster break when the block below goes (2.3, KT-17, Creative Common
   1.1.02 rebuilt, not in `mods/`). Fridge stretch reverted, white top fill box instead (2.4, `#6`, `#19`); KT-06
   rewritten.
 - 2026-10-25: slime block mixing (`cooking/kitchen #12`, KT-18; the brief's KT-08 number was taken), written as a
@@ -562,9 +562,9 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - 2026-10-29: coaster contents (2.3): `tools/gen_coaster_models.py` reads Display Delight 1.7.0's multipart
   blockstates and all its jar links, and adds Vinery wine bottles, Vintage Delight jars and same-sprite borrows; 208
   pack coaster files, tag 96 to 304 (`placeable_catalog.py` rerun). Data only, no build. KT-19, KT-20.
-- 2026-10-31: deep scan: bamboo bowl and mortar recipe file paths updated (moved into Creative Delight 2026-10-25); stepstool row: patcherMod 1.1.04 installed 2026-10-31 00:44, not yet booted. No code changed.
+- 2026-10-31: deep scan: bamboo bowl and mortar recipe file paths updated (moved into Creative Delight 2026-10-25); stepstool row: Creative Common 1.1.04 installed 2026-10-31 00:44, not yet booted. No code changed.
 - 2026-10-31: Cooking for Blockheads folded into Creative Delight as the member blockheadsAdditions (section 9): the CfB
-  mixins, corner storage and counter toppers moved out of patcherMod (`[kitchen]` config with them), the fridge
+  mixins, corner storage and counter toppers moved out of Creative Common (`[kitchen]` config with them), the fridge
   override replaced by code (2.4), 40 wood racks from the owner's art (2.7, `cooking/kitchen #22`). KT-22 to KT-24.
 - 2026-11-02: deep scan 2026-11-02: At a glance and 2.7 to 2.9 updated from the scratch runs (SQ-KT-21 r1031;
   SQ-KT-22 to -25 2026-11-01; SQ-KT-02, SQ-FCB-05, -07, -08 r1102b). No KT- test run in game yet.
@@ -607,7 +607,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   CD's `gradle.properties`) and `checkNoArrPackResources` (CD `build.gradle`, the files under `packs/*/`) fail on any
   path the CfB jar also ships (tag files excepted: they merge by path). Models name CfB's models as parents and its
   textures by id, never copy them.
-- **Moved from patcherMod (2026-10-31), behavior unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
+- **Moved from Creative Common (2026-10-31), behavior unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbCornerStorage` (now `kitchen/CornerStorage`),
   `CounterToppers`, `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
   `CEConfig.Kitchen` (then `BAConfig`, now `CDConfig.CFB`, same keys). Kept ids: the corner capability

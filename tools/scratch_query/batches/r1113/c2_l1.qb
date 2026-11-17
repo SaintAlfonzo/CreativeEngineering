@@ -35,7 +35,7 @@ bootexpect \[swaps\] config sections \[jei, gui_title, toasts, tooltips, coaster
 shell ls config | grep -E "^creative"; grep -nE "^\s*count *=" config/creativecompat-common.toml | head -2; grep -nE "^\s*format *=" config/creativecompat-common.toml | head -3; grep -nE "^\s*tutorial *=" config/creativecompat-common.toml
 look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] tutorial = true in Compat's file; creativecommon-swaps.toml exists. Superseded parts of the row text: [toasts]/[jei] and [shrapnel]/[surface]/[vein_undo] now end in creativecompat-common.toml (moved 11-06 / 11-07), not in Common's or Engineering's file; Engineering 2.0.0 has no config of its own
 
-## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old patcherMod file into the existing CD file
+## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old Creative Common file into the existing CD file
 bootexpect \[swaps\] config sections \[campfire\] merged from creativeengineering-common.toml into creativedelight-common.toml
 bootreject \[campfire\] carried over from creativecompat-common.toml
 shell grep -nE "^\[campfire\]|rainOutTicks *=" config/creativedelight-common.toml

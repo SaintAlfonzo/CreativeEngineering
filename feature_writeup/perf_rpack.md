@@ -243,7 +243,7 @@ they happen:
   Decision (owner unavailable): the DH jar is removed from the bench client's `mods/` (hard links, the instance is
   untouched). DH is the same in every config, so pack deltas are unaffected; `vista` has no LODs. The crash is
   `pack/server #33` in the TODO, with the F1 + dimension change repro to check.
-- 13:19 attempt 2 launched: fresh client dir, DH jar removed (patcherMod's `DhCloudHeightMixin` is `@Pseudo`, so
+- 13:19 attempt 2 launched: fresh client dir, DH jar removed (Creative Common's `DhCloudHeightMixin` is `@Pseudo`, so
   the missing target is fine). Attempts 0 and 1 kept in `perf/reports/rpbench-1/attempt0|1/` (logs), hs_err files
   and JFR repos in the scratchpad. 13:21 the driver's click opened the world.
 - 13:22 `start`, `site` 0 non-air samples (the `rpbEnd` fix works). 13:27 config `all` done, 16 scenes, no

@@ -7,7 +7,7 @@ console.log('misctagremoval starting')
 var i = global.item;
 var t = global.tags
 
-// Chestplates that glide but aren't a vanilla ElytraItem — patcherMod's Easy Elytra
+// Chestplates that glide but aren't a vanilla ElytraItem — Creative Common's Easy Elytra
 // Takeoff mixins read this (EasyElytraTakeoffHelperMixin = rocket-takeoff is allowed at
 // all; EasyElytraTakeoffGroundCheckMixin = allowed even mid-fall / on thin blocks).
 global.tags.add(e, 'creativeequipment:elytra_chestplates', [i.upgraded_dragon_chestplate])
@@ -17,7 +17,7 @@ global.tags.add(e, 'creativeequipment:elytra_chestplates', [i.upgraded_dragon_ch
 t.add(e, 'creativeequipment:bottled_air/fire_sources', [i.campfire, i.soul_campfire, i.fire_charge, i.lava_bucket, i.magma_block])
 
 // Armor Trims allowlist (gear/tuning #14, gear_tuning.md Armor Trims): only standard armor drawn on the vanilla armor
-// model can be trimmed. patcherMod compat/ArmorTrimsItemCache keeps only these in Armor Trims' trimmable list (smithing
+// model can be trimmed. Creative Common compat/ArmorTrimsItemCache keeps only these in Armor Trims' trimmable list (smithing
 // table, JEI trim pages, the trimmed-item decorator, untrimming); an empty tag means no filter. Out: hats, mob heads,
 // diving gear, backtanks, goggles, Immersive Armors, Wardrobe, Botania and other custom models (audit: gear/tuning #16).
 var trimPieces = ['helmet', 'chestplate', 'leggings', 'boots']
@@ -44,7 +44,7 @@ global.tags.add(e, 'creativeequipment:dragon_gear', [
 	i.ce_dragon_shield, i.air_brake
 ])
 
-// Items that trigger patcherMod's BonemealCharmMixin ("infinite bonemeal" - see
+// Items that trigger Creative Common's BonemealCharmMixin ("infinite bonemeal" - see
 // [[bonemeal-charm-tool-effect]]) when held in the hand opposite bone meal - a chance to
 // refund the bone meal just used, at a chance of durability damage to the charm itself.
 // Read by com.SaintAlfonzo.creativeequipment.util.BonemealCharms.TAG; tunable via

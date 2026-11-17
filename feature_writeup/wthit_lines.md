@@ -32,7 +32,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 
 | Part | Status | Full detail |
 |---|---|---|
-| Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initializes on a dedicated scratch server and a scratch client | here, 3 |
+| Plugin wiring: eleven Creative Common plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (Creative Common 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initializes on a dedicated scratch server and a scratch client | here, 3 |
 | "Run Speed" line (BlockRunner tiers, camo, sticky, sinking) | DEPLOYED (BR-44 to BR-47 pending) | [blockrunner.md](blockrunner.md) 3.8 |
 | "Growth" line for the 62 plants WTHIT skips, plus "(Harvestable)" | DEPLOYED with 1.0.6; CR-59 to CR-66 pending | [crops.md](crops.md) 2.9 |
 | Block model icon for every mod (272 blocks), substitute items, Forge's hit-aware pick block | BUILT 2026-10-20; DD part DEPLOYED with 1.0.4 | here, 2.2 |
@@ -41,7 +41,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 | Hive: "Bees: 2 / 3" on top, "Honey Level: 3 / 5" | BUILT 2026-10-20 | here, 2.4 |
 | State lines: servings, slices, eggs, hatching, cauldron level, charges, pickles (213 blocks) | BUILT 2026-10-20; eggs and cauldron level seen in a world | here, 2.5 |
 | Campfire: "Burns forever", "Rain: Puts it out / Going out in 6s / Safe (fuel block below)" | BUILT 2026-10-20; burn, douses and safe lines seen in a world | here, 2.6 |
-| Pot, kettle, oven leftover slots: "Holding: 3 Glass Bottle, 1 Bucket", red "Waiting: leftover slots full" | BUILT 2026-10-21 (patcherMod 1.1.01, not deployed); not seen in game | here, 2.9 |
+| Pot, kettle, oven leftover slots: "Holding: 3 Glass Bottle, 1 Bucket", red "Waiting: leftover slots full" | BUILT 2026-10-21 (Creative Common 1.1.01, not deployed); not seen in game | here, 2.9 |
 | Jade-only ports: IE sheetmetal tank contents on every part, Applied Cooking kitchen station | BUILT 2026-10-20 | here, 2.7 |
 | Silk Touch book + "Needs Silk Touch" on the 707 blocks that only drop themselves with it | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.11 |
 | "Fertile Seasons: Spring, Summer" and red "Out of season here" on Serene Seasons crops | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.12 |
@@ -304,7 +304,7 @@ and single player with cheats on); everyone else falls through to the blacklist 
 
 ## 3. What the pack changes
 
-- **Declaration:** `waila_plugins.json` at the root of patcherMod (fifteen entries) and of the Brewin' port (one). A
+- **Declaration:** `waila_plugins.json` at the root of Creative Common (fifteen entries) and of the Brewin' port (one). A
   missing required mod skips that plugin only.
 - **Toggles:** WTHIT writes each plugin into `config/waila/plugin_toggle.json5` (player config, not shipped).
 - **Switches:** every change to WTHIT's overlay can be turned off on its own (all default on). In
@@ -343,7 +343,7 @@ and single player with cheats on); everyone else falls through to the blacklist 
   `brewinandchewin.wthit.keg.*` and `config.waila.plugin_brewinandchewin*` in the port's. Unlit Campfire, Applied
   Cooking, the keg GUI and WTHIT's own keys are reused where they exist.
 - **Compile-only jars:** `development/creativeCommon/libs/` gained Moonlight, Unlit Campfire and Applied Cooking (WTHIT,
-  Supplementaries and IE were there); the Brewin' port compiles against patcherMod's WTHIT jar. MC calls are
+  Supplementaries and IE were there); the Brewin' port compiles against Creative Common's WTHIT jar. MC calls are
   checked with `javap` after reobf.
 
 ## 4. Limits and decisions
@@ -386,7 +386,7 @@ TreeChop ship WTHIT plugins.
 
 - **Giving item-less DD blocks items:** 70 unobtainable items in JEI.
 - **A namespace allow-list for the icon:** the generic rule broke nothing in the audit.
-- **Keg line in patcherMod by reflection** (the coaster's way): the keg's state is private; the port is the pack's own
+- **Keg line in Creative Common by reflection** (the coaster's way): the keg's state is private; the port is the pack's own
   code and the Vinery port already carries its own WTHIT plugin.
 - **A literal Unlit Campfire port:** in this pack every campfire burns forever, so the useful line is the rain rule.
 
@@ -503,7 +503,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   "Beer: Must Be ..." (the requirement the recipe book shows).
 - [ ] **WL-30 Keg on the server:** WL-29 on the dedicated server.
 
-**Kitchen leftover slots** (patcherMod 1.1.01)
+**Kitchen leftover slots** (Creative Common 1.1.01)
 
 - [ ] **WL-32 Holding line:** cook hot cocoa with a milk bucket in an FD pot -> "Holding: 1 Bucket". Bake a milk-bottle
   recipe in the oven -> "Holding: 1 Glass Bottle" (note whether WTHIT's own item line lists the bottle as well). An
@@ -512,7 +512,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   a honey bottle recipe, or use `/data`), then load a recipe that leaves a third kind -> red "Waiting: leftover slots
   full"; take one slot out -> the red line goes and the pot cooks. Repeat once on the dedicated server.
 
-**Sheared grass** (patcherMod 1.1.03, Vintage port `-08`, Vinery port `-05`)
+**Sheared grass** (Creative Common 1.1.03, Vintage port `-08`, Vinery port `-05`)
 
 - [ ] **WL-34 Sheared line:** shears on a grass block -> grass particles and a crop sound, the line "Sheared, prevents
   spreading" appears; an unsheared grass block shows no line. Repeat on mycelium.
@@ -523,7 +523,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   particles and line; WL-35 with lush grass on rich soil and a grass slab next to dirt slabs. A hoe still tills
   sheared lush grass, a shovel still makes a path slab from a sheared grass slab.
 
-**Silk Touch, crop seasons, operator blocks** (patcherMod 1.1.03 of 2026-10-28)
+**Silk Touch, crop seasons, operator blocks** (Creative Common 1.1.03 of 2026-10-28)
 
 - [ ] **WL-37 Silk Touch tag:** *Tag half: scratch server PASSED r1031 (2026-10-31, SQ-WT-01).* after `/reload`, no `[wthit-silk-touch]` error in `logs/latest.log`. Look at glass, ice, a grass block, iron ore and stone -> a Silk Touch book and
   "Needs Silk Touch"; dirt, oak log, oak leaves and an iron block -> no line.
@@ -552,7 +552,7 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 ## 8. History
 
 - 2026-09-27: Run Speed line ([blockrunner.md](blockrunner.md) 8).
-- 2026-10-04: Growth line and Display Delight icon fix (patcherMod 1.0.4).
+- 2026-10-04: Growth line and Display Delight icon fix (Creative Common 1.0.4).
 - 2026-10-18: this hub writeup; findings F1 to F3; tests WL-01 to WL-06.
 - 2026-10-20: plugin names in lang (F2); coaster plugin ([alcohol.md](alcohol.md) 12).
 - 2026-10-20: TODO `ui/wthit #2` to `#4`: icon for every namespace (F1) with `/cdevdumpicons` and the audit tool; jar
@@ -561,21 +561,21 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
   station (F7), keg in the Brewin' port (F8), Forge pick + `iconItems` (F10). Scratch server + client run (section 6).
   From the user's review of the first shots: goblet shows the fluid only, potion effects under jar potions, the hive's
   Bees line takes the place of WTHIT's names line, the cheese wheel's duplicate Servings line fixed (one line per
-  property). patcherMod 1.1.01 and Brewin' `-03` rebuilt and installed in `mods/` and `server_mods/` (old jars in
+  property). Creative Common 1.1.01 and Brewin' `-03` rebuilt and installed in `mods/` and `server_mods/` (old jars in
   each project's `jar_archive/displaced/`). Tests rewritten as WL-01 to WL-30.
 - 2026-10-20 (later): an on/off switch for every change (section 3 table: new `iconBlockModel`, `iconForgePick`,
   `iconSubstitutes`, `holderSingleName`, `hiveBeesOnTop`, `[wthit.state_lines]` per line, `campfireBurn` /
   `campfireRain` (replacing `campfire`), `sheetmetalTank`, the port's `wthitKeg`). Headless spec check: every key
   present, all true. Jars rebuilt and installed again. WL-31.
 - 2026-10-21: F9 built: pot / kettle / oven leftover lines (2.9, `compat/WthitRemainderBuffer`, `[wthit]
-  remainderBuffer`, TODO `cooking/kitchen #3`). patcherMod 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
+  remainderBuffer`, TODO `cooking/kitchen #3`). Creative Common 1.1.01 rebuilt and installed in `mods/` and `server_mods/`.
   WL-32, WL-33.
 - 2026-10-24: planned from the scratchpad: Silk Touch required icon (`ui/wthit #11`). No code changed.
 - 2026-10-28: sheared grass line (2.10, TODO `misc #6`): IW's shears already stop spreading; the pack adds the line
   and the same shearing to Vintage lush grass and the Vinery grass slab. Jars installed in `mods/`. WL-34 to WL-36.
 - 2026-10-28: `ui/wthit #9` to `#11` built: Silk Touch line from a generated block tag (2.11, 707 blocks), Fertile
   Seasons and out-of-season lines (2.12), barriers and the other blacklisted technical blocks shown to operators (2.13).
-  Six new `[wthit]` switches. patcherMod 1.1.03 built; installed since and shipped in 1.1.04 (client 2026-10-29). WL-37 to WL-42.
+  Six new `[wthit]` switches. Creative Common 1.1.03 built; installed since and shipped in 1.1.04 (client 2026-10-29). WL-37 to WL-42.
 
 ## Owner notes (scratchpad 2026-11-07)
 

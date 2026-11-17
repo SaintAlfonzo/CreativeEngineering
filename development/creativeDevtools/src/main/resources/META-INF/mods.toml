@@ -23,7 +23,7 @@ versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 # patcherMod (becomes creativecommon at the Q1 swap): KubeJS, the shared helpers, the startup script loader and the
-# util/ hooks the probes subscribe to. Needs the patcherMod build that has those hooks.
+# util/ hooks the probes subscribe to. Needs the Creative Common build that has those hooks.
 [[dependencies.creativedevtools]]
 modId="creativecommon"
 mandatory=true

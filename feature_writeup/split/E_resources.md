@@ -1,14 +1,14 @@
 # Sweep E: resources
 
-Audit run 2026-11-01, read-only (only this file written). Covers `development/patcherMod/src/main/resources/`, the rest
-of `development/patcherMod/`, `kubejs/data/` and `kubejs/assets/`. Targets use the vocabulary of
+Audit run 2026-11-01, read-only (only this file written). Covers `development/creativeCommon/src/main/resources/`, the rest
+of `development/creativeCommon/`, `kubejs/data/` and `kubejs/assets/`. Targets use the vocabulary of
 [README.md](README.md); `?` marks a doubtful row with its note. Rule 3.1 applies throughout: every id and every lang
 key keeps its `creativeengineering:` name and `*.creativeengineering.*` key whichever jar ships the file; only the jar
 that carries the file changes. Sizes are `du -sh` (4K blocks), counts are files.
 
-`PMR` = `development/patcherMod/src/main/resources/`.
+`PMR` = `development/creativeCommon/src/main/resources/`.
 
-## 1. patcherMod resources (`PMR`, 500 files, 3.6M)
+## 1. Creative Common resources (`PMR`, 500 files, 3.6M)
 
 ### 1.1 Root files and META-INF
 
@@ -110,7 +110,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `kubejs_startup/creativeengineering/func/tag_helper.js` | 1 (269) | `global.tags` | Common | |
 | `kubejs_startup/creativeengineering/func/compost.js` | 1 (395) | compost helper | Common | plan 2.4 keeps it shared although every caller is food |
 
-## 2. `development/patcherMod/` outside `src/main` (git-ignored unless noted)
+## 2. `development/creativeCommon/` outside `src/main` (git-ignored unless noted)
 
 | path | files | what it is | target | note |
 |---|---|---|---|---|
@@ -178,7 +178,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `loot_tables/gameplay/fishing_net/` | 3 | coral, ocean treasure, junk | CD (creative_delight.md 154) |
 | `loot_tables/misc/monster_box_reward.json` | 1 | `mobs/MonsterBoxVault` reward | Worldgen (fauna) |
 | `recipes/sawmill/` | 5 | hand-written sawmill recipes (recycle slab/stairs/door, layered obsidian, rose quartz) | Engineering |
-| ~~`curios/slots/{face,feet,hands}.json`, `curios/entities/player_hands_face.json`~~ (deleted 2026-11-01: never loaded on Curios 5.1.x; slots now IMC in patcherMod `compat/CuriosSlots`, moves with the Equipment Java) | 4 | Curios slot definitions | Equipment ? (`backpackskin/BackpackSkinCurios` is Equipment; `compat/CornDelightCurios` cob pipe is CD; one jar must own the slot files, Equipment suggested) |
+| ~~`curios/slots/{face,feet,hands}.json`, `curios/entities/player_hands_face.json`~~ (deleted 2026-11-01: never loaded on Curios 5.1.x; slots now IMC in Creative Common `compat/CuriosSlots`, moves with the Equipment Java) | 4 | Curios slot definitions | Equipment ? (`backpackskin/BackpackSkinCurios` is Equipment; `compat/CornDelightCurios` cob pipe is CD; one jar must own the slot files, Equipment suggested) |
 | `creativedelight/kubejs/`, `creativedelight/cup_conversion/` | 108 + 1 | CD server scripts and cup conversion data | CD (sweep F for the scripts) |
 | `creativebrewing/kubejs/_core/cb_server.js` | 1 | CB server core | CB (sweep F) |
 
@@ -278,7 +278,7 @@ Measured totals: PMR 500 files, 3.6M; `kubejs/data` 1998 files, 15M; `kubejs/ass
 | `curios` slot files and `textures/slot` | Equipment (backpack skins) or CD (cob pipe); one jar must register the slots. |
 | `myrtrees` blockstates | Engineering (rubber chain) or Compat. |
 | `prepared_flesh_block` texture and `jrftl` | CD (food chain) or Compat. |
-| `development/patcherMod/working/` | parked code, no jar; keep or delete. |
+| `development/creativeCommon/working/` | parked code, no jar; keep or delete. |
 
 ### 5.3 Folders that mix targets and must be split by file
 

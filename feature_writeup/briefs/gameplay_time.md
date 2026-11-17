@@ -26,7 +26,7 @@ Re-checked 2026-10-31 (brief sweep): #5 (built 2026-10-23) and #6 (built 2026-10
 Build order:
 
 1. **#4 diagnosis** (TI-31) in the same play session as #5's test (TI-30); both are queued together as client row
-   CQ-NEW-01 (scratch_queue.md 979). A fix (config line or a client mixin) goes into the next patcherMod build.
+   CQ-NEW-01 (scratch_queue.md 979). A fix (config line or a client mixin) goes into the next Creative Common build.
 2. **#3** any time; no game needed. Do it before the next `[time]` change so the table catches mistakes.
 
 Related rows: `pack/release #2` (the server preset gotcha, time.md 3.9), `alcohol` Vinery rows (wine clock).
@@ -34,7 +34,7 @@ Related rows: `pack/release #2` (the server preset gotcha, time.md 3.9), `alcoho
 ---
 
 ## time #4: Clock icon frozen while sleeping
-Status Bug / Work patcherMod / TODO `gameplay/time #4`
+Status Bug / Work Creative Common / TODO `gameplay/time #4`
 
 ### Goal
 While a player lies in bed, the clock they see (Better Days' bed clock, or a clock in the hotbar) turns with the
@@ -56,7 +56,7 @@ fast-forwarding night.
   (`config/betterdays-common.toml` 104), so the pack's 9,300-unit night passes in about 85 ticks (4 s): the face should
   spin about a third of a turn. Better Days broadcasts a time packet every tick (`broadcastTime`), and its client
   `TimeInterpolator` smooths the client's dayTime between packets.
-- **The master's code (read):** nothing in patcherMod touches client dayTime or gameTime.
+- **The master's code (read):** nothing in Creative Common touches client dayTime or gameTime.
   `ServerLevelTimePauseMixin` / `BetterDaysTimePauseMixin` only act on a dedicated server with nobody online
   (`TimePause.paused`), `SereneSeasonsClientClockMixin` only reads dayTime. `BetterDaysConfigMixin` replaces the four
   speed/sunrise getters, which the sleep path doesn't use (it uses `sleepSpeedMax`, and `daySpeed` only for the
@@ -65,7 +65,7 @@ fast-forwarding night.
   errors. Rechecked 2026-10-31: the configs above unchanged, `enableSleepFeature = true` (common 99), jars the same
   versions. TI-31 is in time.md 7 (655) and queued with TI-30 as client row CQ-NEW-01 (scratch_queue.md 979).
   Rechecked 2026-11-02 (pre-scratch pass): CQ-NEW-01 still not run (no r1031 / r1101 result), no log evidence; the
-  code now lives in Creative Calendar (`development/creativeCalendar`), not patcherMod. No change until TI-31 is run.
+  code now lives in Creative Calendar (`development/creativeCalendar`), not Creative Common. No change until TI-31 is run.
 - So no cause is visible offline. Ranked hypotheses:
   1. **The night isn't fast-forwarding** (`enableSleepFeature` off in a profile, or the sleep ratio not reached;
      `betterdays-common.toml` `[sleep] ratioPlayersForSleep = 0.0` (134) means any one sleeper is enough), so the face moves at the normal night pace: 9,300 units in 15 min, one of the clock's 64

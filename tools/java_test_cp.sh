@@ -1,4 +1,4 @@
-# Sourced by tools/test_*.sh: sets CP to the classpath for headless patcherMod tests (dev/Mojmap names: the mapped Forge
+# Sourced by tools/test_*.sh: sets CP to the classpath for headless Creative Common tests (dev/Mojmap names: the mapped Forge
 # jar + development/creativeCommon/build/classes + development/creativeWorldgen/build/classes (the worldgen classes) +
 # what Bootstrap.bootStrap needs). Expects ROOT, L, C.
 MAPPED="$HOME/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.19.2-43.3.9_mapped_official_1.19.2/forge-1.19.2-43.3.9_mapped_official_1.19.2.jar"

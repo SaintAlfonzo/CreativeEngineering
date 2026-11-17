@@ -1,6 +1,6 @@
 # toast-filter
 
-> Tutorial + advancement toasts off pack-wide via patcherMod ToastFilterMixin (CEConfig [toasts]); Rubidium Extra toggles are local-only
+> Tutorial + advancement toasts off pack-wide via Creative Common ToastFilterMixin (CEConfig [toasts]); Rubidium Extra toggles are local-only
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
