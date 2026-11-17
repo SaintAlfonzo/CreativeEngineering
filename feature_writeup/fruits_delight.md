@@ -13,7 +13,14 @@ for the pack is one bug fix (placed Mangosteen Cake), two small recipe changes a
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fruits Delight 1.1.3 fixes on the installed 0.5.11 (placed Mangosteen Cake effects, Bellini Heal Aura once, `getFoodData` null guard, Fig Pudding any egg, `forge:jams` and crate tags; in Creative Delight, active only beside Fruits Delight 0.5.11). Status: DEPLOYED with 1.1.03 (in the CD jar); scratch PASSED (SQ-FR-01 to -05, r1101 / r1102b 2026-11-02); FR-03 tooltip (client) and play open; `mod-additions #20`
+<!-- generated:status_index begin open_work sha1=a775c43eaaba -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/types-and-tuning #15` | Testing | S~ C P T | Comfort vs Nourishment split |
+| `largecontent/mod-additions #20` | Testing | S+ C P | Fruits Delight 1.1.3 changes on the installed 0.5.11 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

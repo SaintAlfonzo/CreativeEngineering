@@ -2,7 +2,9 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Trash slot (pack default screens, per-tier backpack positions, creative support, allContainers switch). Status: DEPLOYED with 1.0.3, TS-01 to TS-13 pending; overwrite replaced by redirects 2026-11-06 (Compat, not installed), CQ-TSL-01, -02 queued
+<!-- generated:status_index begin open_work sha1=82c9ec667fb6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 1 Complete.
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

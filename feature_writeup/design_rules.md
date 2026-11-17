@@ -9,7 +9,13 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Design rules (every rule for code, docs, writeups and language in one place: language, player-facing text, writeup layout, code structure and naming, forbidden patterns, licence, formatting as observed, agent conduct; gaps to decide). Status: reference; audited 2026-11-14: 63 rules, 52 proposed from unwritten conventions, 62 violations V-01 to V-62 open (5 high), gaps G1 to G20 for the owner; recheck with `python3 tools/design_rules_audit.py`
+<!-- generated:status_index begin open_work sha1=5fd4ce17ff16 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/conventions #10` | Planned | none | id_owner_lint: 8 unresolved ids |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

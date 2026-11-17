@@ -23,7 +23,22 @@ This file has three parts, as asked:
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Hostile Delight integration plan (native 1.19.2, AFL licence, no fork: 68 monster foods + candied slime block, Dioxide and Collapsing effects, Dioxiding potion, 3 replaced vanilla mob loot tables; overlaps with End's / Ender's / Ocean's Delight drops and the pack's cooking, baking, food and potion rules; 20-step fold-in list, decisions D1 to D16). Status: planned (2026-10-23); the integration plan is not built, but pack rows touch it: any bread (1.1.04), cooking trio for its meats and egg, Prepared Sea Pickle removed (2026-11-02, scratch PASSED r1102b SQ-FCB-01), food types (deep scan 2026-11-02); HTD-01 to HTD-31 drafted
+<!-- generated:status_index begin open_work sha1=b5c57a4beb30 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 8, In Progress 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #43` | Planned | C P | Hostile Delight: no native tooltips, eaten effects on every food |
+| `largecontent/mod-additions #44` | Planned | S C P | Hostile Delight: remove items |
+| `largecontent/mod-additions #45` | Planned | S C P | Hostile Delight: Blazing Apple, Blazing Sauce, Blazing Cookie |
+| `largecontent/mod-additions #46` | Planned | S P | Hostile Delight: Magma and Slime Brownies |
+| `largecontent/mod-additions #48` | Planned | S P | Hostile Delight: rotten foods hunger type, not saltable |
+| `largecontent/mod-additions #49` | Planned | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
+| `largecontent/mod-additions #50` | Planned | S P | Hostile Delight: guardian dishes |
+| `largecontent/mod-additions #51` | Planned | S P | Hostile Delight: Spiked Tartare, Slime Syrup, Candied Salad |
+| `largecontent/mod-additions #6` | In Progress | S C P T | Integrate Hostile Delight |
+| `largecontent/mod-additions #47` | Testing | S P | Hostile Delight: rotten ham tags |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

@@ -4,7 +4,15 @@ Written 2026-10-05. Test prefix `NE-`.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nests and egg crates (Incubation Additions mod: per-bird-mod content sets and built-in packs, nests for emus, ducks and geese, duck/goose egg crates, duck mod egg sprites, egg-layer mixins, foreign-nest guard, old-id remap, texture locations + hotswap route). Status: **r1103 2026-11-03: SQ-NEST-01 PASS; SQ-NEST-02 open (no loaded-ground check, hand-check).** **2026-11-03: wild duck, goose and emu nests (2.4) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-NEST-01, -02 queued (SQ-CDJ7).** own mod `incubation_additions` 1.0.0 DEPLOYED with 1.0.6 (first release; scratch-server verified), nested in Creative Delight since 2026-11-01 (`members/incubation`); emu nest DEPLOYED (1.0.2, old id, remapped); 1.1.0 goose golden egg DEPLOYED with 1.1.02, NE-15/-16 logic scratch PASSED (SQ-VP-13); NE-01 to NE-17 pending
+<!-- generated:status_index begin open_work sha1=7238c14395c3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (In Progress 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/nests #3` | In Progress | S C P | Nest variety in spawning |
+| `mobs/nests #1` | Testing | S+ C P | Incubation Additions 1.0.0 |
+| `mobs/nests #2` | Testing | C | License fix before publishing |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

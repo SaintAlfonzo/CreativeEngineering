@@ -16,7 +16,22 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Raspberry Pie (new mod Spice of Life: Raspberry Pie Addition, `solraspberrypie`: diet bonus ladder, selectable effect slots paid in greyed foods, inventory widget, effect screen, Diet Log changes, Liquid Diet Log). Status: BUILT 2026-11-12, scratch server PASSED (SQ-RP-01 to -06, r1112), client rows queued (CQ-RP-01 to -28); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, Apple Pie benefits inert; SQ-RP-07, -08, CQ-RP-29 to -40 queued), `solRaspberryPie-1.0.0.jar` of 17:57 and Creative Delight 17:58 in `mods/`; Liquid Diet Log art waits for the owner (#35); Common and Creative Brewing rebuilds pending (section 1 status); ladder values are a draft (#12)
+<!-- generated:status_index begin open_work sha1=c344aa8da95d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
+| `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
+| `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
+| `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
+| `food/types-and-tuning #31` | Testing | C | Diet Log: double page view |
+| `food/types-and-tuning #32` | Testing | C | Diet Log progress bar: windowed milestones |
+| `food/types-and-tuning #33` | Testing | S P | Extra hearts at 0 diversity; damage when max health is lowered |
+| `food/types-and-tuning #36` | Testing | C P | Minimum foods to activate shown wrong in the book |
+| `food/types-and-tuning #37` | Testing | C | Diet Log milestone icons and colours missing |
+| `food/types-and-tuning #38` | Testing | C | Apple Pie pages still at the end of the Diet Log |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it is
 

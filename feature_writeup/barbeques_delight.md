@@ -11,7 +11,31 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Barbeque's Delight 1.3.0 (NeoForge 1.21.1, LGPL-2.1, 36 items + 3 blocks: grill, ingredients basin, tray, 10 skewers raw/grilled, seasonings that boost food effects; overlap with the pack skewer family and seasonings framework, upstream bugs, port plan). Status: **r1114 2026-11-14: BROKEN: SQ-BBQW-02s (stick lost on a one-beef basin); SQ-BBQW-02, -03, SQ-BBQ2-03, -05, -06 PASS.** **r1103 2026-11-03: built, scratch server PASSED (SQ-BBQF-01 to -07, SQ-BBQ-02, -06, -07).** **2026-11-03: fold (4.5) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 queued (SQ-CDJ7), BBQ-22 to -29 in game.** survey 2026-10-30; owner decisions 2026-10-31 (all skewers, wrap / sandwich / bibimbap, six seasonings kept as upstream and marked for the pack framework, no seasoning trades, compost map, Jade to WTHIT; second batch: plain Forge in Creative Delight, vanilla-rule grill campfire, tray for evaluation, seasoning fold and skewer fold designs); port BUILT 2026-11-01 (Creative Delight member `backportedBarbeques`, NCH emitters, 26 recipes, compost, tags, WTHIT, JEI; 4.0), in `mods/` since the CD jar of 11-02 14:01, not played; scratch r1102b SQ-BBQ-01, -03 to -05 PASS, -02, -06, -07 OPEN (batch faults), -08 not run (deep scan 2026-11-02), BBQ-01 to BBQ-21 in game
+<!-- generated:status_index begin open_work sha1=ca5529c0608d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 3, Pinned 2, In Progress 2, Testing 12), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `dishes/meals #48` | Planned | S C P | Integrate Kebab Sandwich and Bibimbap |
+| `food/seasoning #20` | Planned | C | Own seasoned icons for the Barbeque's Delight seasonings and `grilled` |
+| `food/types-and-tuning #19` | Planned | S P | Barbeque's Delight skewers: food and saturation investigation |
+| `food/placeable #5` | Pinned | C P | Barbeque's Delight placeables: model recolor review |
+| `food/seasoning #17` | Pinned | S P | Crafting recipe for each Barbeque's Delight seasoning |
+| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `food/seasoning #12` | In Progress | S P | Seasoning sources and villager trades |
+| `dishes/meals #47` | Testing | S+ P | Kebab Wrap on a tortilla |
+| `dishes/meals #49` | Testing | S P | Decide: smelt or smoke raw skewers |
+| `dishes/meals #50` | Testing | S C P T | Raw versions of the pack skewers |
+| `dishes/meals #62` | Testing | C P | Skewering QoL: basin grab, input tags, JEI, wood variants |
+| `food/seasoning #11` | Testing | S C P T | Seasoning fold: Barbeque's Delight seasonings into the pack system |
+| `food/seasoning #13` | Testing | S C P T | `grilled` seasoning type |
+| `food/seasoning #18` | Testing | S P | Restore the six Barbeque's Delight butcher trades |
+| `food/seasoning #21` | Testing | C | JEI titles, Burnt text, BBQ seasoned icons, seasoning trades in JER on the server |
+| `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
+| `largecontent/mod-additions #37` | Testing | S~ C P T | Barbeque's Delight: integrate skewers, combos, seasonings and blocks |
+| `largecontent/mod-additions #38` | Testing | C P | Barbeque's Delight Tray: evaluate |
+| `ui/wthit #13` | Testing | S C P | Barbeque's Delight grill line |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

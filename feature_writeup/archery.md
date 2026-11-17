@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Archery and bullets (Nock Enough Arrows recipes replaced by fletching-table + `archery` blueprint recipes, shaft and fletching tags, torch arrow / quiver / slingshot changes, NEA enchantments removed, dragon scale armor-piercing bullets). Status: DEPLOYED (since 1.0.3), in-game test pending (AR-01 to AR-18); F1 (dragon scale bullets on the `bullet` blueprint), F5, F7 BUILT 2026-10-22 (AR-07, AR-13); F3 kept; F2 needs a decision, F4 open; F1 / F5 recipes scratch server PASSED 2026-10-22 (SQ-GM-04)
+<!-- generated:status_index begin open_work sha1=8596f4fb5ae5 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gear/archery #2` | Testing | S+ P | Dragon scale bullets unreachable |
+| `gear/archery #5` | Testing | S+ P | Archery leftovers |
+| `loot/tables #10` | Testing | S P | NEA quiver enchanted books still in loot |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

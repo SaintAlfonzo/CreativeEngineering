@@ -12,7 +12,25 @@ The ask, from cooking.md:
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Oven (FD cooking-pot style baking block in patcherMod: `creativeengineering:baking` recipes with an optional bakeware tool, plating, non-stove heat below, stove heat on top, side automation, JEI; bakeware items; baking copies of the pot's baked goods; muffin dough fix). Status: **r1103 2026-11-03: baked family follow-ups SQ-FFB-02 to -04 PASS.** first version DEPLOYED with 1.0.7; 37 recipes, ingredient counts, hammered bakeware, hammer fix, cornmeal DEPLOYED with 1.0.8; JEI [+] fix DEPLOYED with 1.0.9 (OV-11); OV-01 to OV-19 pending; 2026-10-21 muffins x4, CfB oven smokes + other-oven tooltips built, scratch server PASSED 2026-10-22 (SQ-OF-05, SQ-OF-06; OV-24 done, OV-20, OV-23 in game); 2026-10-22 baking overhaul (all cake / pie / cookie recipes replaced, frosting + cookie dough items, pot pie fillings, opened-can check in patcherMod 1.1.01 in `mods/`) built, scratch server PASSED 2026-10-22; in game OV-25 to OV-32; muffins Oven only, Cooking Pot route removed 2026-10-29, shipped 1.1.05, scratch PASSED r1031 (SQ-BJ-01; OV-36 in game) (deep scan 2026-11-02)
+<!-- generated:status_index begin open_work sha1=2aae5b8555dd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 1, In Progress 6, Testing 6), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `baking/baked-goods #30` | Planned | S C P | Baking dish bakeware |
+| `baking/baked-goods #1` | In Progress | S~ P | Flour, crust and cake base in every baked recipe |
+| `baking/baked-goods #12` | In Progress | S C P | Durian and pineapple pie rework |
+| `baking/baked-goods #13` | In Progress | S C P | Cherry pie |
+| `baking/baked-goods #14` | In Progress | S C P | Unobtainable pie slices |
+| `cooking/oven #2` | In Progress | S P | Oven crafting pattern (bakeware is hammered) |
+| `cooking/oven #6` | In Progress | S P | Baking audit |
+| `baking/baked-goods #31` | Testing | S+ P | Bread baked from dough on a baking sheet |
+| `cans/canning #16` | Testing | S+ C P | Sweet Berry Pie filling can |
+| `cooking/kitchen #14` | Testing | S+ C P | Oven overflow buffer loses bottles and buckets |
+| `cooking/oven #1` | Testing | S+ C P | Oven block, baking recipe type, JEI, bakeware, 38 baking recipes, ingredient counts option, hammered bakeware, hammer no-rotate |
+| `cooking/oven #5` | Testing | S+ P | Muffin yield 4 from baking |
+| `textures/food #3` | Testing | C~ P | Frosting and Cookie Dough textures |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

@@ -2,7 +2,13 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Vine shearing (shears stop every vine growing: modded vines get a sheared state with a trimmed look like Quark's cut vine, weeping/twisting/cave vine and kelp tips capped as in 1.20; WTHIT lines; trimmed-texture investigation). Status: BUILT 2026-10-31 (patcherMod 1.1.04, installed 2026-10-31); offline checks PASSED; scratch server PASSED r1031 2026-10-31 (SQ-VS-01 to -08); VS-01 to VS-11 pending in game
+<!-- generated:status_index begin open_work sha1=f1f150254dbc -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `potions/enchanting #5` | Testing | S C P | Floral enchantment: shearing vines |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Files | Knobs |
 |---|---|---|---|

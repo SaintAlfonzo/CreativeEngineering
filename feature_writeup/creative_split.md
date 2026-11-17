@@ -16,7 +16,22 @@ Written for: the owner, and the agents that will run the audit sweeps. Related: 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Split (audit of patcherMod for the carve into Creative Engineering, Equipment, Worldgen (with fauna), Compat, Calendar and Devtools, food and husbandry to CD, brewing to CB, remainder plus interface code to Creative Common; Creative Magic and Creative Computers reserved). Status: **r1115 2026-11-15: 7.21 optional-mod guards built, scratch server PASSED (SQ-DEP-09a, -09b, reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01, -03b; only the unreachable upgrade_aquatic pair fails, owner note).** **r1114 2026-11-14: BROKEN (fixed, see r1115): SQ-DEP-02 (no Creative Brewing: Hearth and Harvest cherry loot modifier fails the datapack, `creativedelight/members #57`); SQ-CIF-02 to -04b, SQ-ENGM-01 to -05 (Engineering carve: built, scratch server PASSED), SQ-IDS-01, -02, SQ-NSM-08, -08a PASS.** waves 1 to 8 carved 2026-11-01 to 11-04; wave 8 (Engineering and the `creativecommon` swap) built, not installed (7.13); wave 9 (Common's data to the `creativecommon` namespace, meal tooltips, two fixes and Curios slots moved out) built, not installed (7.14). Before that: waves 1-3 carved and installed (Devtools, Calendar, rename + prep, Compat; 2 and 3 untested); wave 4 (CB phases 1-3, CD carve) built 2026-11-01, not installed (7.8); feature regression SQ-SPF / CQ-SPF scratch test queued 2026-11-06 (7.18); owner ids and `ce` names outside Engineering built 2026-11-07, not installed, SQ-IDS / CQ-IDS queued (7.20); Creative Delight content to the `creativedelight` namespace planned 2026-11-09 (plan_cd_namespace.md); optional-mod reference audit `tools/optional_ref_audit.py` and guards built and installed 2026-11-14, scratch test queued SQ-DEP-09a, -09b (7.21)
+<!-- generated:status_index begin open_work sha1=e3382ac65978 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativesplit/deps #27` | Planned | S C | Audit leftovers: soft Java references, assets, pack files naming Creative jars |
+| `creativesplit/audit #1` | Testing | none | Audit patcherMod and the pack folders for the split: carve Engineering, Equipment, Worldgen, Compat, Calendar, Devtools (and CD / CB rows) first, the remainder becomes Creative Common |
+| `creativesplit/cdfinish #11` | Testing | S | Finish Creative Delight: campfire from Compat to CD, Nether's Delight repacked as a CD member, Ender's and Cooking for Blockheads leftover rows into CD |
+| `creativesplit/deps #26` | Testing | S | Data that names an optional mod sits behind a guard (audit) |
+| `creativesplit/ids #23` | Testing | S C | Ids that name the wrong owner jar: event subscriber mod ids, WTHIT plugin and option ids, JEI plugin uids and category ids, network channels; `ce` / `CE` commands, classes, member mod ids and constants outside Engineering |
+| `creativesplit/ids #24` | Testing | S C P | Creative Delight content to the `creativedelight` namespace |
+| `creativesplit/ids #25` | Testing | S C P | Other jars to their own namespaces |
+| `creativesplit/namespace #13` | Testing | S | Move Creative Common's data to the `creativecommon` namespace; meal tooltips to CD, two fixes to Compat, Curios slots to Equipment |
+| `creativesplit/prep #3` | Testing | S | Prep in patcherMod before the first carve: GatedMixinPlugin replaces CEMixinPlugin's accept-all, NCH.cfg per-jar config registration, the Common APIs of creative_split.md 7.2; CD and CB rename |
+| `creativesplit/regression #14` | Testing | S C | Feature regression of every Creative jar after the split |
+<!-- generated:status_index end open_work -->
 
 - The audit is **read-only**. It produces an inventory (section 7) that puts every patcherMod class, mixin, config
   section, resource folder and pack-folder script into exactly one target jar, lists the cross-jar calls, and fixes

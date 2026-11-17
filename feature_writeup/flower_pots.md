@@ -6,7 +6,30 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Flower pots and planters (which plant goes in which of the 12 holder kinds: vanilla / framed / hanging pots, flower box, planter box, Beautify, Floral, Vinery, silt pot, planters; findings and decisions for labels and full coverage). Status: **r1103 2026-11-03: SQ-POT-04v FAILED (potted gossypium / potted hemp drop nothing when broken).** **r1102b 2026-11-02: SQ-POT-03 FAILED (`minecraft:hanging_roots` throws in 6 holders; F1 not reproduced, struck), SQ-POT-04 FAILED (Beautify hanging pot loses its plant); `blocks/framed-and-decor #6` Bug.** audit 2026-10-27 (static); `/dumppots`, `/pottest` built, SQ-POT-01 PASSED 2026-10-27, SQ-POT-02 to -04 ran (427 probe mismatches to read), SQ-POT-05 open; POT-01 to POT-07 pending; decisions D1 to D6 open; botanist workbench pot BUILT, installed 2026-10-29, shipped 1.1.05, mixins scratch server PASSED r1031 2026-10-31, SQ-POT-06 client pending (POT-08, CQ-POT-02); flower pot tweaks (section 3.2) BUILT 2026-10-31 in patcherMod 1.1.04 and backportedVinery `-07`, shipped 1.1.06 with the Flower Test world type, SQ-POT-07 and -08 PASSED r1101 (POT-09 to POT-16 in game); r1102b: F1 not reproduced (SQ-POT-03), Beautify hanging pot loses its plant on break (SQ-POT-04, new); Floral pot rebuild planned
+<!-- generated:status_index begin open_work sha1=fc25cb1d69bd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 13, In Progress 1, Testing 4), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/flower-pots #1` | Planned | S C P | Flower pots placeable like candles |
+| `blocks/flower-pots #2` | Planned | C P | Pottable tooltip and Contains line on every flower pot |
+| `blocks/flower-pots #3` | Planned | S P | Remove Handcrafted flower pots from the flower pot world |
+| `blocks/flower-pots #4` | Planned | S C P | Framed pots accept flowers before framing |
+| `blocks/flower-pots #5` | Planned | S C P | Beautify hanging pot becomes lush hanging pot |
+| `blocks/flower-pots #7` | Planned | C | Vinery flower box centred on the ground |
+| `blocks/flower-pots #8` | Planned | C | 'Can be placed on walls' tooltip on flower boxes |
+| `blocks/flower-pots #11` | Planned | S C P | Another Furniture flower boxes: missing plants |
+| `blocks/flower-pots #12` | Planned | S C P | Floral Enchantment large pot and Vinery flower box: missing models |
+| `blocks/flower-pots #13` | Planned | C | Silt pot and Vinery pot models |
+| `blocks/flower-pots #15` | Planned | C | Glow berries: missing flower box models |
+| `blocks/flower-pots #16` | Planned | C | Glow lichen: missing pot and box models |
+| `blocks/framed-and-decor #11` | Planned | C P | Random flower block position |
+| `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
+| `blocks/flower-pots #6` | Testing | C | Rename the Supplementaries flower box to large flower box |
+| `blocks/flower-pots #9` | Testing | S P | Exclude melon, moss and pumpkin blocks from the flower pot world |
+| `blocks/framed-and-decor #5` | Testing | S C P | Botanist workbench as a flower pot |
+| `blocks/framed-and-decor #6` | Testing | S~ C P | Flower potting audit |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Open |
 |---|---|---|

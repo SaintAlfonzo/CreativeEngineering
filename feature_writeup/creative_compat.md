@@ -9,7 +9,17 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Compat (own mod `creativecompat`: tweaks to third-party mods with no wider system, carved from patcherMod in the Creative Split; every other Creative jar requires it). Status: carved 2026-11-01, installed; scratch SQ-CMP-01 to -08 queued, CMP-01 to -04 in game open; licence fixes (banner textures built at load, TrashSlot without overwrite) built 2026-11-06, not installed, SQ-BPT-01, CQ-BPT-01 to -03, CQ-TSL-01, -02 queued
+<!-- generated:status_index begin open_work sha1=4d8fa8602f82 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativecompat/publish #1` | Testing | C S | Compat crashes at load without the Tempad upstream jar |
+| `creativesplit/compat #5` | Testing | S C | Carve Creative Compat |
+| `licence/compat #1` | Testing | C | Paintings out of the Compat jar |
+| `licence/compat #2` | Testing | C | Banner-derived textures and MineColonies leftovers |
+| `licence/compat #3` | Testing | C | Compat: cardboard notice, moss texture, TrashSlot overwrite |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it holds
 

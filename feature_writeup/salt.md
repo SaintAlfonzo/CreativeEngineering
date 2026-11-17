@@ -14,7 +14,13 @@ seasonings: [seasonings.md](seasonings.md).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Salt and Create: The Salt as Creative Delight repack members (access transformer kept, rock salt no-dissolve as direct code, config not moved). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-SLT-01 to -05, SQ-SALT2-01).** **2026-11-02 night: BUILT, nested in the installed CD jar (23:16; saltable tag in the CD jar installed 2026-11-03 00:08), not booted; `salt` and `create_salt` jars displaced.** SQ-SLT-01 to -05, CQ-SLT-01, -02 queued (SQ-CDJ6); SQ-SALT2-01 (SQ-CDJ7). **2026-11-15: salt dispenser, layer vanish chance, lick refill and top layers, Salt Melt BUILT (CD 1.1.0 with Salt -04, Common 1.2.0; build/libs, not installed), salt.md 7; SQ-PS15-01 to -07; B4 (falling layers) open for the owner**
+<!-- generated:status_index begin open_work sha1=bb13bb01e7d0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativedelight/members #52` | Testing | S | Salt config into the Creative Delight config (R3) |
+<!-- generated:status_index end open_work -->
 
 ## 1. What was built
 

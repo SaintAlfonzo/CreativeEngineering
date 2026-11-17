@@ -7,7 +7,9 @@ with no crash report (`*** stack smashing detected ***: terminated` in the launc
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Jar handle leak (Creative Common 1.2.0: Forge leaks one file descriptor per mod jar, so a client with 420+ jars died in glfwCreateWindow when GLFW's descriptors passed 1024; Common closes the leaked jar filesystems before glfwInit). Status: BUILT and installed 2026-11-14; **r1115 2026-11-15: client gate PASSED (CQ-FDR-01 to -04: 421 jars, three sessions, no closed-filesystem error; without the mixin it crashes again)**
+<!-- generated:status_index begin open_work sha1=82c9ec667fb6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 1 Complete.
+<!-- generated:status_index end open_work -->
 
 ## 1. Cause (confirmed 2026-11-14)
 

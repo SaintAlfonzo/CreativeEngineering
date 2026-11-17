@@ -6,7 +6,13 @@ Target: JEI 1.19.2-forge-11.8.1.1034 (patcherMod client mixin).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI craftable-first port map (JEI 19 sort vs 11.8.1, hook points). Status: reference + implementation; the backport DEPLOYED with 1.0.6 (JEI-01 to JEI-06 pending)
+<!-- generated:status_index begin open_work sha1=a922ddd59cfe -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `jei/jei-ordering #4` | Testing | C~ P | JEI craftable-first backport |
+<!-- generated:status_index end open_work -->
 
 ## Verdict
 

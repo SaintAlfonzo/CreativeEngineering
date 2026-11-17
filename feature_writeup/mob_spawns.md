@@ -6,7 +6,19 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mob spawns by biome (`/dumpspawns`: every biome's spawners after biome modifiers, per-mob placement conditions; generated per-mob / per-biome / per-biome-type tables with category share and area; spawn tuning: `mob_spawns.json` set/scale/remove rules per biome, applied after every mod's modifiers). Status: DEPLOYED with 1.0.6: 12 tuning rules + 3 spawn conditions + spawn ground; MS-01 to MS-12 pending
+<!-- generated:status_index begin open_work sha1=cf7cb1fdf555 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, In Progress 2, Testing 4), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/spawns #3` | Planned | S P T | Alex's Mobs and duck / goose parity |
+| `mobs/pillagers #1` | In Progress | S P T | Pillager overhaul |
+| `mobs/spawns #5` | In Progress | S P | Allay spawns |
+| `mobs/mooblooms #4` | Testing | S P | Skylands cows and mooblooms |
+| `mobs/pillagers #2` | Testing | S C P | End pillagers in diving gear |
+| `mobs/spawns #1` | Testing | S P | First spawn block (12 rules, 3 conditions, spawn ground) |
+| `mobs/spawns #4` | Testing | S P | Lone villagers |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

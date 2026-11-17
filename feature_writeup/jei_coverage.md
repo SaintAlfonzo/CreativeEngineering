@@ -6,7 +6,19 @@ that no recipe describes. Each gap gets a suggested fix so the list can be worke
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI coverage gaps (catalog: crafting recipes JEI hides, recipe types with no category, world interactions; suggested fix per gap). Status: part 1 (crafting) generated, regenerate with `python3 tools/jei_coverage.py` after `/dumpcraftingaudit`; part 2 not started; part 3 catalog done and tabs DEPLOYED with 1.1.01 (jei_world_tabs.md); refreshed 2026-10-22; part 1 fixes BUILT 2026-10-22 (61 cycling pages, AE2 facades hidden; 9 left); part 4 (bulk sets) catalog DONE and Tipped Arrows / Potion Buckets / Canning / Using Cans pages BUILT 2026-10-22, in `mods/` since 2026-10-26 (JC-21 to JC-27)
+<!-- generated:status_index begin open_work sha1=6a8f5710776b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `jei/jei-coverage #2` | Planned | C | Part 2, rest of part 3 |
+| `jei/jei-coverage #29` | Planned | C | Maple bacon and cookies missing from JEI |
+| `jei/jei-coverage #30` | Planned | C | JEI `@` shortcuts, starting with `@mca` |
+| `jei/jei-coverage #1` | Testing | C P | Part 1 fixes (hidden crafting recipes) |
+| `jei/jei-coverage #4` | Testing | C P | Bulk recipe sets on their own pages |
+| `jei/jei-coverage #15` | Testing | C | Better JEI screens for Vintage Delight |
+| `jei/jei-coverage #24` | Testing | C P | Update the JEI arrow in potion tipping, seasoning and potion buckets |
+<!-- generated:status_index end open_work -->
 
 | Part | Scope | Status |
 |---|---|---|

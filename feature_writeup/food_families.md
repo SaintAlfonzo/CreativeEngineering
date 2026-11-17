@@ -4,7 +4,106 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Food families (every food and whole food block by culinary form: per-family rules for cans, placement and recipe shape by station, cited or marked as decisions; compliance per family and per member; foods without a family; `tools/food_families.py`). Status: **r1103 2026-11-03: pancake family built, scratch server PASSED (SQ-PCK-01 to -05).** **2026-11-02 night: pancake family (4.7) BUILT, CD jar installed 2026-11-02 23:16, not booted; SQ-PCK-01 to -05, CQ-PCK-01, -02 queued (SQ-CDJ6).** Produce families (fruit to dairy) decided and BUILT 2026-10-25 (recipes in the Creative Delight tree, coaster tag, 9 Display Delight dish blocks in patcherMod), shipped with 1.1.03, scratch server PASSED (SQ-FF-00 to -02, deep scan 2026-11-02), not run in game (FF-01 to FF-08); baked families BUILT 2026-10-27, shipped with 1.1.04, SQ-FFB-00 PASS (FF-11 to FF-14); other families DESIGN draft: D1 to D4 open, findings F1 to F9
+<!-- generated:status_index begin open_work sha1=4c99991db86d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 15, Pinned 1, In Progress 50, Testing 28), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `baking/baked-goods #34` | Planned | S C P | Every cake as a sequenced assembly |
+| `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
+| `baking/baked-goods #36` | Planned | S C P | Dessert cookware and recipe treatments |
+| `dishes/ingredients #9` | Planned | S C P T | Cheese |
+| `dishes/ingredients #10` | Planned | S C P T | Fats and oils: animal fat, blubber, cooking oil |
+| `dishes/ingredients #15` | Planned | S C P | Butter |
+| `dishes/meals #14` | Planned | S C P T | Patty food type |
+| `dishes/meals #18` | Planned | S C P | Cheese in nachos |
+| `dishes/meals #20` | Planned | S C P | Feasts in ovens |
+| `dishes/meals #27` | Planned | S C P | Pineapple pizza |
+| `dishes/meals #37` | Planned | S C P | Pancake coverings review |
+| `dishes/ocean #2` | Planned | S C P | Fish egg roll accepts eggs |
+| `dishes/pickles-and-ferments #5` | Planned | S C P | Enzymes from crushed or milled mushrooms |
+| `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
+| `tooling/generators-and-tests #11` | Planned | S | `food_families.py` reports 94 unsorted foods |
+| `creativedelight/qol #3` | Pinned | S | QoL-3 Food types and the Quark saturation word |
+| `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
+| `baking/baked-goods #4` | In Progress | S P | Pie sequenced assembly and chorus pie |
+| `baking/baked-goods #5` | In Progress | S C P T | Cakes |
+| `baking/baked-goods #6` | In Progress | S C P | Cake paste and tarts |
+| `baking/baked-goods #7` | In Progress | S C P T | Sourdough chain |
+| `baking/baked-goods #8` | In Progress | S P | Yeast |
+| `baking/baked-goods #9` | In Progress | S P | Sliced bread / toast in recipes |
+| `baking/baked-goods #10` | In Progress | S C P | Bread block |
+| `baking/baked-goods #12` | In Progress | S C P | Durian and pineapple pie rework |
+| `baking/baked-goods #13` | In Progress | S C P | Cherry pie |
+| `baking/baked-goods #14` | In Progress | S C P | Unobtainable pie slices |
+| `baking/baked-goods #17` | In Progress | S C P | Dough unification |
+| `baking/baked-goods #18` | In Progress | S C P | Brownie and cupcake baking types |
+| `baking/baked-goods #19` | In Progress | S C P | Quiche baking type |
+| `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
+| `baking/baked-goods #21` | In Progress | S C P | Lasagna baking type |
+| `baking/baked-goods #22` | In Progress | S P | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
+| `baking/baked-goods #32` | In Progress | S C P | Merge muffin and cupcake |
+| `baking/sweets #1` | In Progress | S C P T | Gummies |
+| `baking/sweets #2` | In Progress | S C P | Rock candy variants |
+| `baking/sweets #3` | In Progress | S C P | Cold sweets variants |
+| `baking/sweets #4` | In Progress | S C P T | Ice cream rework |
+| `cans/canning #8` | In Progress | S P | Canning automation |
+| `cooking/oven #7` | In Progress | S P | Cooking pot recipes that suit the oven |
+| `dishes/ingredients #7` | In Progress | S C P | Batter uses |
+| `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
+| `dishes/ingredients #21` | In Progress | S C P | Potato and sweet potato compatibility |
+| `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
+| `dishes/jams #2` | In Progress | S C P | Jam crafting: 4 fruit, sugar, lemon slice for 2 jam |
+| `dishes/jams #3` | In Progress | S C P | Recipes use jam, never bottled jam or jelly |
+| `dishes/meals #13` | In Progress | S C P T | Skewer food type |
+| `dishes/meals #15` | In Progress | S C P T | Salad and wrap food types |
+| `dishes/meals #21` | In Progress | S C P | Meal-specific ingredients audit |
+| `dishes/meals #24` | In Progress | S C P | Extra veggie omelette recipe |
+| `dishes/meals #29` | In Progress | S C P | Fermented veg in uncooked crafts |
+| `dishes/meals #31` | In Progress | S C P | Nut butter sandwich |
+| `dishes/meals #35` | In Progress | S C P | Steak and broccoli sides |
+| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `dishes/pickles-and-ferments #2` | In Progress | S C P | Pickle recipes take real pickles only |
+| `food/drinks #2` | In Progress | S C P | Tea cleanup |
+| `food/drinks #7` | In Progress | S C P T | Kettle with 6 ingredient slots; drinks move to the Kettle |
+| `food/placeable #3` | In Progress | S C P | Drinks placeable |
+| `food/seasoning #1` | In Progress | S P T | Salt system expansion |
+| `food/seasoning #5` | In Progress | S P T | Sugar as a seasoning |
+| `food/types-and-tuning #3` | In Progress | S P T | Golden food changes vanilla values |
+| `food/types-and-tuning #6` | In Progress | S P | Vanilla egg -> `#forge:eggs` in recipes |
+| `food/types-and-tuning #8` | In Progress | S P T | Soup and stew values from their ingredients |
+| `food/types-and-tuning #13` | In Progress | S P | Food families: one set of cooking rules per family |
+| `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
+| `baking/baked-goods #15` | Testing | S+ P | Maple cookie |
+| `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
+| `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
+| `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |
+| `baking/baked-goods #27` | Testing | S+ C P | Dough block for every dough |
+| `baking/baked-goods #37` | Testing | S+ P | Zucchini quiche sequenced assembly fails to load |
+| `cans/canning #17` | Testing | S P | All feasts cannable |
+| `cooking/kitchen #21` | Testing | S+ C P | Coaster tag: models or cuts |
+| `creativedelight/framework #11` | Testing | S+ | Move members from `global.foodFamily` to `global.CD.food` |
+| `creativedelight/framework #12` | Testing | S~ C | Hand-written family rows onto `global.CD.food` |
+| `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
+| `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
+| `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
+| `dishes/meals #12` | Testing | S C P T | Pancake food type |
+| `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
+| `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
+| `dishes/pickles-and-ferments #1` | Testing | S~ C P | Remove pickled pickles; pickled sea pickle |
+| `dishes/pickles-and-ferments #6` | Testing | S C P | Vinegar craft |
+| `food/drinks #8` | Testing | S~ P T | Standard crafting rule for juices and teas |
+| `food/seasoning #4` | Testing | S P | Salt on more foods |
+| `food/stack-sizes #1` | Testing | S+ P | Consistent cooking stack sizes |
+| `food/types-and-tuning #10` | Testing | S+ P | Remove unused meats from recipes and view |
+| `food/types-and-tuning #40` | Testing | S | Whole food block families were empty in `food_families.json` |
+| `merges/dishes #3` | Testing | S+ C P | Stuffed peppers: remove Veggies Delight's |
+| `merges/dishes #7` | Testing | S C P | Merge nut butter and nut mash |
+| `merges/dishes #9` | Testing | S C P | Merge kimchis |
+| `merges/drinks #1` | Testing | S~ P | Dandelion juice and tea |
+<!-- generated:status_index end open_work -->
 
 Every food in the pack, plus every whole food block (cakes, pies, pizzas, feasts), sorted into **families** by culinary
 form (jam, pie slice, juice, burger), so one set of rules covers a whole family: should it be canned, where it can be

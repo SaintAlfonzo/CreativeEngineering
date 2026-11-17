@@ -13,7 +13,14 @@ KubeJS, data or, since 2026-10-25, the overlay of FD's Creative Delight repack (
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Delight 1.3.4 update (changes against installed 1.2.4: Comfort kept, salvaging recipes at 75%, Gleaming Salad, rope fence, onion and pumpkin loot, rich soil mixins to build). Status: **BROKEN: r1103 2026-11-03 SQ-FDB-05 FAILED (live placeAs toml edits never reload; check by hand first); SQ-FDB-06, -07 open; SQ-FDB-09, -11 PASS.** DEPLOYED with 1.1.03: FD repack `-02` in the CD jar plus CD-tree scripts ([creative_delight.md](creative_delight.md) 21); scratch r1102b 2026-11-02: 7 PASS, SQ-FDB-04 FAILED (Gleaming Salad lost Nourishment), 5 to rerun; Onion Soup left out (owner), pumpkin pie pick and salad cans open; `mod-additions #18`
+<!-- generated:status_index begin open_work sha1=02da6bf4b516 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/types-and-tuning #15` | Testing | S~ C P T | Comfort vs Nourishment split |
+| `largecontent/mod-additions #18` | Testing | S~ C P | Farmer's Delight 1.3.4 changes on the installed 1.2.4 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

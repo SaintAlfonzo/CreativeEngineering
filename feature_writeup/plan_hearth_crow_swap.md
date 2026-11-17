@@ -9,6 +9,23 @@ settles the crow evaluation of N21 / N26-2 in favour of the Hearth and Harvest c
 
 ## 0. Owner decisions 2026-11-10
 
+<!-- generated:status_index begin open_work sha1=fa2e7cb9394d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 5, Testing 5), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/new #21` | Planned | S P | Pitchfork: Pinned rules (3 s on players; bosses, flying and swimming mobs exempt) |
+| `blocks/new #22` | Planned | S P T | Manure buildup system |
+| `gameplay/misc #17` | Planned | S C P | Feather fluff |
+| `gameplay/misc #18` | Planned | C P | Dreamcatcher: tooltip, placeable, sleep rewards |
+| `ui/names #11` | Planned | S C P | Wardrobe backpacks: rename, no slots tooltip, no storage |
+| `blocks/new #19` | Testing | S C P T | H&H scarecrow, salt lick, crow mechanics (on the H&H crow since 2026-11-10) |
+| `farming/crops #8` | Testing | S+ C P | Watering can |
+| `farming/crops #32` | Testing | S~ C P | Create spout gun wets farmland |
+| `largecontent/mod-additions #10` | Testing | none | Examine Hearth and Harvest in full |
+| `locate #6` | Testing | S+ P T | Corn maze cannot be located within the 120 s search deadline |
+<!-- generated:status_index end open_work -->
+
 | Id | Decision |
 |---|---|
 | D-1 | Fix the crow spawn crash that stopped scratch run r1110. |

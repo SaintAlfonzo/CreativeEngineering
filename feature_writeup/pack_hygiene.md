@@ -6,7 +6,14 @@ version handling between in-tree pieces that always ship together.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Pack hygiene (audit of rule bypasses and reinvented solutions: version gates between in-tree pieces, port conversions, recipes and tags beside the helpers, item and effect dict bypasses, food code outside Creative Delight, copied Java, build and tool infrastructure, config backups, mod_sides rows). Status: AUDIT 2026-10-27: 55 findings; 42 fixed and 24 closed, all BUILT and installed 2026-10-27, scratch test queued (PH-01 to -04, -09 to -11, -16 to -26), in-game PH-05 to -08, -12 to -15, -27 to -37 (section 5); open: 11, 12, 18, 22, 23, 30 to 35, 53
+<!-- generated:status_index begin open_work sha1=7b1cbdf07229 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/conventions #8` | Planned | S | Pack hygiene: open findings |
+| `tooling/conventions #9` | Testing | S P | Pack hygiene: owner batch 2026-10-27 |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

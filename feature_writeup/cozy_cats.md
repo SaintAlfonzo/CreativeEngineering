@@ -17,7 +17,13 @@ owner asks for it by name. Upstream bugs are fixed (3.6).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Cozy's Improved Cats and Domestication Innovation overlap and integration report (Cozy 2.1.0 native 1.19.2, LGPL: improved cat entity replacing vanilla cats, stats, classes, ancient fish taming, collar revival; DI 1.6.1 installed: pet revival and command conflicts with Cozy, three pet-bed sets; 17-step fold-in, decisions D1 to D10). Status: owner's cat changes built 2026-11-01 (section 10: no gender, no ancient fish, vanilla fish taming, Cozy owns modes, Feather on a Stick lure and mob hook), built, scratch server PASSED (SQ-CAT-01 to -05, r1102b 2026-11-02); rest of the fold-in planned; CIC-01 to CIC-36 drafted, CQ-CAT queued; `mod-additions #34`
+<!-- generated:status_index begin open_work sha1=251918455d75 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (In Progress 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #34` | In Progress | S C P T | Integrate Cozy's Improved Cats; settle its conflicts with Domestication Innovation |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

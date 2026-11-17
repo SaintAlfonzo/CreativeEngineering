@@ -1,5 +1,22 @@
 # Plan: ids that name the wrong owner jar (2026-11-07)
 
+<!-- generated:status_index begin open_work sha1=e3382ac65978 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativesplit/deps #27` | Planned | S C | Audit leftovers: soft Java references, assets, pack files naming Creative jars |
+| `creativesplit/audit #1` | Testing | none | Audit patcherMod and the pack folders for the split: carve Engineering, Equipment, Worldgen, Compat, Calendar, Devtools (and CD / CB rows) first, the remainder becomes Creative Common |
+| `creativesplit/cdfinish #11` | Testing | S | Finish Creative Delight: campfire from Compat to CD, Nether's Delight repacked as a CD member, Ender's and Cooking for Blockheads leftover rows into CD |
+| `creativesplit/deps #26` | Testing | S | Data that names an optional mod sits behind a guard (audit) |
+| `creativesplit/ids #23` | Testing | S C | Ids that name the wrong owner jar: event subscriber mod ids, WTHIT plugin and option ids, JEI plugin uids and category ids, network channels; `ce` / `CE` commands, classes, member mod ids and constants outside Engineering |
+| `creativesplit/ids #24` | Testing | S C P | Creative Delight content to the `creativedelight` namespace |
+| `creativesplit/ids #25` | Testing | S C P | Other jars to their own namespaces |
+| `creativesplit/namespace #13` | Testing | S | Move Creative Common's data to the `creativecommon` namespace; meal tooltips to CD, two fixes to Compat, Curios slots to Equipment |
+| `creativesplit/prep #3` | Testing | S | Prep in patcherMod before the first carve: GatedMixinPlugin replaces CEMixinPlugin's accept-all, NCH.cfg per-jar config registration, the Common APIs of creative_split.md 7.2; CD and CB rename |
+| `creativesplit/regression #14` | Testing | S C | Feature regression of every Creative jar after the split |
+<!-- generated:status_index end open_work -->
+
 Status: BUILT 2026-11-07 (all of section 5; nine jars built, NOT installed, not booted, not tested). TODO row
 `creativesplit/ids #23`. What was done and where it differs from this plan: section 8. Old names below are the audit
 record and stay as written.

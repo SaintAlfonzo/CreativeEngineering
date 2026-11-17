@@ -37,7 +37,13 @@ text in those rows is kept for history and marked "(rev 11-09)" where it no long
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Extra Delight overlap and integration report (NeoForge 1.21.1 2.6.6; native Forge 1.19.2 line ends at 1.3.3, compared 2026-11-08, route is now a fork of its source plus a 2.6.6 backport; CC BY-NC-SA 4.0, kept out of the GPLv3 trees; 1490 named ids: about 120 duplicate installed mods, about 520 new after the 2026-11-08 re-scan on top of the pack and installed H&H; own oven / bakeware / mortar / vat / evaporator vs pack systems; Cornfield dimension; 35 recipes need Butchercraft tags; comparison with Hearth and Harvest (41 rows, H&H wins shared items); 26-step fold-in, decisions D1 to D19). Status: survey 2026-10-30, re-scan 2026-11-08, owner rulings R1 to R5 2026-11-09 (all stations, furniture and decor registered for eval, Ground Coffee kept, Cornfield defined in 3.7), nothing built; D1 and D2 approved 2026-11-08; texture comparison plan in [extra_delight_textures.md](extra_delight_textures.md); `mod-additions #11`
+<!-- generated:status_index begin open_work sha1=a9b206a6118a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #11` | Testing | none | Examine Extra Delight in full |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

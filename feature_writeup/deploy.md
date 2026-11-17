@@ -15,7 +15,14 @@ Last marks: 1.2.02 2026-11-09 17:59 (server); 1.2.02 2026-11-09 17:46 (client); 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Deploy pipeline (deployment snapshot, update/install payloads, verify scripts, kubejs file classes, gzipped climate samples). Status: BUILT, used for the 1.0.3, 1.0.4, 1.0.6, 1.0.7, 1.0.8, 1.0.9, 1.1.01 to 1.1.06 and 1.2.00 deploys (server 1.1.05 since 2026-10-31; client 1.2.00 full install since 2026-11-03); 1.0.5 staged but never deployed; DP-01, DP-02, DP-06 PASSED, DP-03 to DP-05, DP-07 pending; DP-08 world serverconfig scratch server PASSED 2026-10-22 (SQ-OM-17, SQ-OM-18), carried by the 1.1.02 to 1.1.04 payloads; preflight stops on two jars with one mod id since 1.0.9
+<!-- generated:status_index begin open_work sha1=b7e8d36ae7e4 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/vineryport #4` | Planned | none | Upstream jars on publish |
+| `pack/release #6` | Testing | S+ C P | World serverconfig payload in every build |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Open |
 |---|---|---|

@@ -2,7 +2,17 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Shields (seven tier shields + vanilla shield as the iron tier: per-group reduction, elemental breakdown, facing, scaled wear, round-down, knockback threshold, on-block effects, disable cooldown, recipes; the damage tag layer they read). Status: DEPLOYED, in-game test pending (SH-06 passed); mob-axe cooldown, banners on every tier, burn/thorn tick gates, unblockable effect ticks, JEI template-only smithing DEPLOYED with 1.0.6 (SH-01 to SH-43); netherite smithing keeps Armor Trims' template (F8); offline `tools/test_shields.sh`; Resistance on block for echo and up built, scratch server PASSED 2026-10-22 (SQ-GM-01; SH-44 tooltip in game)
+<!-- generated:status_index begin open_work sha1=307fe03628e0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 4, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gear/shields #2` | Planned | S P T | Knockback thresholds and per-tier disable cooldown |
+| `gear/shields #3` | Planned | S P | 1-damage ticks fully blocked |
+| `gear/shields #4` | Planned | S | Shield damage-type sanity check |
+| `gear/tuning #4` | Planned | S P | Gear upgrades keep every NBT |
+| `gear/shields #5` | Testing | S+ C P | Resistance while blocking with echo and up |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

@@ -2,7 +2,36 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Effects (every mob effect by mod, vanilla first: brewable, tipped arrow name, superset, JEI potion fluid, JEI description, food sources, subset effects, overlaps, brief and detailed descriptions; overlap groups; harmful / helpful category audit; JEI item lists for every effect (`jeed_providers.js`); `tools/effect_audit.py`). Status: reference, written 2026-10-19 (140 effects); DEPLOYED with 1.1.01, not seen in game: providers (scratch server PASSED 2026-10-22, SQ-OM-16, after a Xaero skip), 16 description fixes, 6 category overrides (patcherMod 1.1.01), Sunny kept hidden; Passion Aloe Nectar marked for removal (F8); EF-01 to EF-19 pending; F2 (10 descriptions kept as `TODO`), F5 (total overlaps) and F12 (potions for unbrewable effects) need a decision; 2026-10-23 built, scratch test queued (SQ-LE): F6 Buzzier Bees' luck mixes removed, F8 nectar and 3 more Abnormals Delight items removed (EF-05, EF-12, EF-20); 2026-10-31 built, scratch server PASSED r1031 2026-10-31 (SQ-EFX-01 to -11): HUD icon audit (2.5), effect swaps and removals (2.6), compound effects (2.7), copper poisoning (2.8), EF-22 to EF-30
+<!-- generated:status_index begin open_work sha1=81c7c42acad3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 4, In Progress 3, Testing 17), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `potions/effects #15` | Planned | S P | Pipe Builder's Tea: Haste lasts 20 seconds |
+| `potions/effects #16` | Planned | S P | Open-ended pipe drinking for more fluids |
+| `potions/potions #7` | Planned | S P | Potions for unbrewable effects |
+| `ui/effects #10` | Planned | C | Hostile Mobs effect provider |
+| `pack/release #5` | In Progress | S | `/dumpall` refresh with the ports |
+| `potions/potions #8` | In Progress | S P | Total-overlap effect groups |
+| `ui/effects #1` | In Progress | C | JEED descriptions for 11 effects |
+| `alcohol/vineryport #27` | Testing | S C P | Jellie Wine: the enchanted golden apple set |
+| `potions/effects #8` | Testing | C | Intoxicated visible in game; audit auto-hidden effects |
+| `potions/effects #9` | Testing | S+ C P | Effect swaps and removals |
+| `potions/effects #10` | Testing | S+ C P | Compound effects |
+| `potions/effects #11` | Testing | S+ P T | Copper poisoning |
+| `potions/effects #13` | Testing | S P | Phantom Bane skips phantoms for every player |
+| `potions/effects #14` | Testing | S+ P | Double Jump overrides Jump Boost |
+| `potions/potions #5` | Testing | S+ P | Luck brewed twice |
+| `ui/effects #2` | Testing | C P | Wrong or partial JEED descriptions |
+| `ui/effects #3` | Testing | C P | Merge backported effect descriptions with JEED |
+| `ui/effects #4` | Testing | S+ C P | Effect providers in JEI |
+| `ui/effects #5` | Testing | C | Sunny hidden from JEI |
+| `ui/effects #6` | Testing | S C P | Remove Passion Aloe Nectar |
+| `ui/effects #7` | Testing | C P | Effect colour audit (harmful / helpful) |
+| `ui/effects #8` | Testing | S~ C P | Effects reference tests |
+| `ui/effects #9` | Testing | C P | Potion bundles do not render in the effect provider |
+| `ui/names #2` | Testing | C P | Raw lang keys in game |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

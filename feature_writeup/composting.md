@@ -4,7 +4,15 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Composting (`global.compost` rebuilds the composter table on every tag load: 10 rule categories, 688 per-item values, exclusions; `/dumpcompost`, `gen_compost_values.py`). Status: DEPLOYED (since 1.0.3), CM-01 to CM-08 pending; seed milling to bone meal built 2026-10-30, shipped 1.1.05, scratch server PASSED r1031 2026-10-31 (SQ-CP-01); findings F1-F4; prefix CM- (CP- is can parity)
+<!-- generated:status_index begin open_work sha1=abbab143a30a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `farming/composting #2` | Planned | S P T | Fertile Soul Soil (Nulch) recipe: review, then move into the compost file |
+| `farming/composting #5` | Planned | S P | Expand organic compost |
+| `farming/composting #4` | Testing | S+ P T | Seed milling to bone meal |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

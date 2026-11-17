@@ -6,7 +6,29 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: WTHIT lines (hub: every pack WTHIT plugin; icons for every mod, jar contents + potion effects, hive bees, state lines (servings, slices, eggs, cauldron levels), campfire burn + rain, IE tank and kitchen station ports, Brewin' keg, sheared grass (WL-34 to 36, Testing); Silk Touch line, crop seasons, barriers for operators (WL-37 to 42, BUILT 2026-10-28, jar not installed); Run Speed, Growth, coaster point to blockrunner.md / crops.md / alcohol.md). Status: DD icons DEPLOYED 1.0.4, Growth 1.0.6; the rest DEPLOYED with 1.1.01, plugins load on a scratch server, 7 lines seen there; Silk Touch / crop seasons / operator blocks DEPLOYED to the client with 1.1.04; WL-01 to WL-31 pending; every change has its own config switch; F1-F8, F10 done, F9 open
+<!-- generated:status_index begin open_work sha1=1df147b038ed -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 17 open TODO rows (Testing 17), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `baking/baked-goods #11` | Testing | S+ C P | Mixed cookie jars |
+| `cooking/kitchen #3` | Testing | S+ C P | Remainder buffer WTHIT line "Holding: ..." |
+| `dishes/ingredients #13` | Testing | S+ C P | Every soup and stew as a jar fluid |
+| `gameplay/misc #6` | Testing | S+ C P | Grass shearing and spreading |
+| `ui/names #2` | Testing | C P | Raw lang keys in game |
+| `ui/wthit #1` | Testing | C P | WTHIT lines |
+| `ui/wthit #2` | Testing | C P | Icon fix for every mod |
+| `ui/wthit #3` | Testing | C P | Jar contents line |
+| `ui/wthit #4` | Testing | C P | Bees and honey line on hives |
+| `ui/wthit #5` | Testing | C~ P | State lines: servings, slices, eggs, cauldron levels |
+| `ui/wthit #6` | Testing | C~ P | Jade-only integrations |
+| `ui/wthit #7` | Testing | C P | Brewin' keg fermentation progress |
+| `ui/wthit #8` | Testing | C P | Blank icons left |
+| `ui/wthit #9` | Testing | C P | Barrier block visibility by permission |
+| `ui/wthit #10` | Testing | C P | Crop growing season on WTHIT |
+| `ui/wthit #11` | Testing | S C P | Silk Touch required icon |
+| `ui/wthit #12` | Testing | C | Silk Touch line rework |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Full detail |
 |---|---|---|

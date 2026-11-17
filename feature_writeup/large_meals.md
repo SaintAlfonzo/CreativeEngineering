@@ -16,7 +16,14 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Large Meals 1.3.0 (Forge 1.20.1, ARR, 18 items + 3 feasts: FD bowl meals, soups, desserts, mutton rack from sheep; Chicken Curry clash with Ender's, 13 Display Delight blocks waiting, fold-in, D1-D9). Status: BUILT 2026-11-01 (member `backportedLargeMeals`, CD scripts, Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; BROKEN: scratch r1102b SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAILED (Chicken Curry recipe ids clash with Ender's) (deep scan 2026-11-02)
+<!-- generated:status_index begin open_work sha1=ca974584249c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
+| `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

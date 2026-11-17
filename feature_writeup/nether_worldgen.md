@@ -6,7 +6,18 @@ per thing that can be changed, with a **Decision** column (blank = still open).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether blocks in Overworld generation (decision sheet: biome surface rules, biome features, Volcanic Caverns, Upgrade Aquatic canyons, YUNG's obelisk, structures after the swaps; swap / drop / keep per row). Status: scan BUILT 2026-10-19; two rounds of decisions DEPLOYED with 1.0.9 (new chunks only; Scarlet Mountains jasper/crimsite, Moonlight flowers, Mirage Isles acacia, D&D deep layer granite, bunker warts, red roof magma, soul fire -> fire, glowstone -> yellow corundum; scratch-server verified, NW-01 to NW-11 pending); open: B12, K19, K25, K28-K33, K35, K36
+<!-- generated:status_index begin open_work sha1=73ab50041337 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, In Progress 1, Testing 4), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `biomes/netherblocks #2` | Planned | S P | Frostfire caves (B12) |
+| `biomes/netherblocks #4` | In Progress | S P | No glowstone in the Overworld |
+| `biomes/netherblocks #1` | Testing | S~ P | Biome rounds 1 and 2 |
+| `structures/netherblockswap #1` | Testing | S+ P | Swaps rounds 1 and 2 |
+| `structures/netherblockswap #3` | Testing | S+ P | Soul lanterns and soul wall torches (K25, K32) |
+| `structures/netherblockswap #4` | Testing | S P | Crimson and warped wood pieces (K28 to K31, K33, K35, K36) |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

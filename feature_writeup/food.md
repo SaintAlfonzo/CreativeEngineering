@@ -10,7 +10,34 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Food (1.0.2: `/dumpfood`, 31 food types as `#creativedelight:food_type/...` tags, canned map, Spice of Life mechanics, Canned Goods parity, tuning design). Status: **r1103 2026-11-03: built, scratch server PASSED for SQ-CF-02, SQ-FO-01 to -05, SQ-PS-06 (FO-02 to FO-28 server halves; client halves open).** BUILT/DEPLOYED parts, see its status block (FO-01 passed; FO-02 to FO-28 pending); generated per-type cans (113) and egg stacks via the stack size policy DEPLOYED with 1.0.6; tuning system designed, not built (D1-D6); egg tag migration TODO; placed pies and cakes count for Spice of Life BUILT 2026-10-22 (built, scratch server PASSED 2026-10-22, FO-44 done; FO-43 in game); Glistering Melon Slice values scratch server PASSED 2026-10-22 (FO-29 in game); SoL pack config in defaultconfigs (scratch PASSED, FO-32 single player); powdered sugar item, block, bucket and sugar seasoning BUILT 2026-10-25 (3.13, scratch server PASSED r1031 2026-10-31 except the 0.5 second results (client pending, SQ-PS-05), FO-50 to FO-53; patcherMod 1.1.03 in `mods/`)
+<!-- generated:status_index begin open_work sha1=28537f2a6ac6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Pinned 1, In Progress 5, Testing 14), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `cans/canning #20` | Planned | S P T | Canned effects follow the input food |
+| `food/types-and-tuning #1` | Planned | S P T | Food tuning system (values per type, Spice of Life complexity, canned parity) |
+| `food/types-and-tuning #12` | Pinned | S P T | Spice of Life much slower |
+| `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
+| `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
+| `food/types-and-tuning #3` | In Progress | S P T | Golden food changes vanilla values |
+| `food/types-and-tuning #6` | In Progress | S P | Vanilla egg -> `#forge:eggs` in recipes |
+| `food/types-and-tuning #16` | In Progress | S C P | Spice of Life carrot for the food dictionary only |
+| `dishes/ingredients #23` | Testing | S~ C P T | Powdered sugar recipe rebalance |
+| `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
+| `food/seasoning #2` | Testing | C P | Seasoning crafts in their own JEI category |
+| `food/seasoning #6` | Testing | S~ C P | Merge salts; all salt is Vintage pink |
+| `food/seasoning #7` | Testing | S C P | Salt layers: place from inside, retexture |
+| `food/seasoning #8` | Testing | C P | Show seasoning on AppleSkin |
+| `food/seasoning #9` | Testing | C P | Seasoned icon for every new seasoning |
+| `food/types-and-tuning #2` | Testing | S+ C P | Canned Goods data broken |
+| `food/types-and-tuning #4` | Testing | S~ P T | Spice of Life config |
+| `food/types-and-tuning #5` | Testing | S+ P | Placed pies and non-vanilla cakes don't count for SoL |
+| `food/types-and-tuning #11` | Testing | S C P | Food tests FO-02 to FO-28 |
+| `food/types-and-tuning #22` | Testing | S C P | Golden food and gilded food recipes |
+| `food/types-and-tuning #23` | Testing | C P | Call enchanted golden food gilded in language |
+| `merges/dishes #7` | Testing | S C P | Merge nut butter and nut mash |
+<!-- generated:status_index end open_work -->
 
 The pack has **1030 edible items** from 40 mods (plus 139 food blocks: placed cakes, pies, feasts and jelly bottles, and 33
 drinks with no food value). Every one of them is sorted into **one of 31 types** (raw vegetable, cooked meat, soup, prepared meal, drink,

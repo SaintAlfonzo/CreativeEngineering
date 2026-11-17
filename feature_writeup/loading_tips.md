@@ -2,7 +2,17 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loading screen tips (rolling tip bar on every loading screen from world / server selection to join, tip ids and override packs, built-in resource packs Loading Tips and Creative Tips, tip list by pack, planned chat announcements). Status: BUILT 2026-11-06 in creativecommon-1.1.0 (not installed); screens, ids and overrides BUILT 2026-11-14, installed in creativecommon-1.2.0 (LT-07 to LT-14 untested); LT-01 to LT-06 untested (CQ-LT-01 to CQ-LT-06); tip audit 2 BUILT 2026-11-14 (213 tips, LT-15 untested); chat announcements planned; Creative Tips content plan step 1 done (206 drafts, awaiting review)
+<!-- generated:status_index begin open_work sha1=f61f45c8ea25 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `ui/loadingtips #2` | Planned | S C | Tip announcements in chat |
+| `ui/loadingtips #3` | In Progress | C | Creative Tips: the pack's own tips |
+| `ui/loadingtips #1` | Testing | S C | Loading screen tip bar and tip packs |
+| `ui/loadingtips #4` | Testing | C | Audit Loading Tips against pack changes |
+| `ui/loadingtips #5` | Testing | C | Tip ids, override packs, tips on every loading screen |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

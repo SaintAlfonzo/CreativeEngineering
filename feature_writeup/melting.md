@@ -6,7 +6,14 @@ Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/crea
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Melting (salt, fire and lava melt ice and snow; packed and blue ice one tier down; Nether snow melts when placed; vanilla light melt off; Creative Common `melting/`). Status: **r1115 2026-11-15: SQ-MELT-01 to -07, -09, -P1, SQ-SALT2-06, -06b PASS (-09 Rare Ice log and -P1 config reads fixed in Common 03:15, reruns PASS); SQ-MELT-08 (no per-click salt melt) and -10 (fire-tag lantern does not tick) FAIL for the owner.** **2026-11-15: -08 closed by design (a click places a layer); -10 fixed (lantern dropped from the fire tag) and salt-melt listener added, Common built, not installed; SQ-PS15-09.** BUILT and installed 2026-11-14 (Creative Common 1.2.0)
+<!-- generated:status_index begin open_work sha1=9c3f2041819c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Bug 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativedelight/members #60` | Bug | S | Salt item click does not melt ice one stage per click (SQ-MELT-08) |
+| `creativedelight/members #61` | Testing | S | Glowstone cage lantern is in the melting fire tag but does not random tick (SQ-MELT-10) |
+<!-- generated:status_index end open_work -->
 
 ## 1. Rules
 

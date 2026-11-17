@@ -11,7 +11,19 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Large Meals, Roll Delight and Barbeque's Delight changes 2026-11-04 (broth nausea, feast cans, pot pie and plate-meal families; Cooked Nether Wart type, Salmon Maki Roll Slice, Golden Roll on the golden rule; skewer helper for all 18 lines, 8 raw pack skewers, shulker mollusk merge undone, plain combos, seasoning item tooltip, Skewer renames). Status: BUILT 2026-11-04 (CD jar built, not installed), not run; generator output (cans, families, placeables) waits on `/dumpall`
+<!-- generated:status_index begin open_work sha1=a4d73835f71d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, In Progress 1, Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `dishes/meals #57` | Planned | S P | Sequenced assembly for raw skewers |
+| `dishes/meals #58` | Planned | S C P | Cave Skewer: merge with Miner's Delight |
+| `dishes/meals #59` | Planned | S P | Cooked Nether Wart: integrate with Nether's Delight |
+| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `largecontent/mod-additions #37` | Testing | S~ C P T | Barbeque's Delight: integrate skewers, combos, seasonings and blocks |
+| `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
+| `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
+<!-- generated:status_index end open_work -->
 
 | Part | Needs | Rebuild | Restart |
 |---|---|---|---|

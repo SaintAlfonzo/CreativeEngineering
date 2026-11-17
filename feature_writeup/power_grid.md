@@ -20,7 +20,15 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Create: Power Grid overlap, port and integration report (1.20.1 / Create 6, Apache-2.0, speculative: circuit-simulation voltage system with MNA solver, wires as entities, generators, motors, transformers, thermal burnout, FE bridge, components and circuit boards; 45 overlap rows, port change list, 3 routes, D1 to D14). Status: **r1114 2026-11-14: P11 regression on jar -17: 95 server rows, PASS 93, FAIL 1 (SQ-PWG-91, B36), INCONCLUSIVE 1 (SQ-PWG-82); plan_power_grid.md P11.** in progress: port phases P0 to P10 built 2026-11-13 (`development/backportedPowerGrid`, solver core with offline harness `tools/test_power_grid_solver.sh`; P2 grid base, P3 devices, transformers, battery, FE bridge, P4 motors and generators: D1's "phase 1" complete; P5 ponder; P6 heat, light, fluid, solar; P7 equipment; P8 display and control, CC: Tweaked peripherals; P9a to P9c components on boards, design table and editor, acid and the etching / assembly chain (survival boards); P9d Integrated Circuit and boost; P10 decor (copper plating, ceiling tiles, string lights): **port complete**, every upstream id and recipe in; jar 0.6.2-ce-19.2-17, not in mods/; P2 run r1113 done, later gate runs in progress, P10 rows SQ-PWG-90 to -96, CQ-PWG-28, -29 queued; P11 prepared: regression plan scratch_run_2026-11-13.md section 9, owner hand list power_grid.md 8.1, keep / drop / merge table energy_advanced.md 8; runs and owner session pending); `mod-additions #74`; execution plan [plan_power_grid.md](plan_power_grid.md) P0 to P11 (2026-11-13); PWG-01 to PWG-44 drafted
+<!-- generated:status_index begin open_work sha1=8c20f27b7fe0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, In Progress 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #77` | Planned | none | Cold Sweat: add or integrate? |
+| `largecontent/mod-additions #74` | In Progress | none | Investigate Create: Power Grid (voltage system) |
+| `largecontent/mod-additions #78` | Testing | S P | Power Grid: wire block does not drop when the block under it breaks, and cannot be broken by hand |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

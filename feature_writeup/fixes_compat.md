@@ -5,7 +5,24 @@ feature are documented with that feature and only pointed to here.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fixes and compat (catalogue of 29 patches: forgiving void, banner patterns on beds/elytra, D&D crash, client exit hang, axe tag ghosts, armor bar icons + overflow, Create config text field, bonemeal charm, ghost blocks, Breezy wind vane, thread-safe random, async map trades, tooltip fixes, title plaque, creative menu, XP fluid merge, IE tag order, AppleSkin bars in the remaining food screens, Polymorph in the backpack crafting upgrade, the Engineer's Crafting Table and the Crafting Terminal). Status: DEPLOYED (1.0.3 to 1.0.8, 2.22 with 1.0.8); 2.24 BUILT 2026-10-20, untested; 2.25 (Trinket Case) built, scratch server PASSED 2026-10-22, any item incl. shulker boxes; 2.26 (Ore Excavation undo rules) and 2.27 (JEI `$` search, Breezy wind, chalk symbols, cosmetic armor checked) built, scratch server PASSED 2026-10-22 (SQ-GM-05 to SQ-GM-08: vein undo rules and config, chalk unlocks; FX-34 done); 2.28 (Polymorph in the backpack crafting upgrade) built 2026-10-22, untested; 2.29 (Polymorph in the Engineer's Crafting Table and Crafting Terminal) built 2026-10-22, untested (FX-39 to FX-42); 2.31 (Upgrade Aquatic coral grows through Immersive Weathering) built 2026-10-28, scratch r1031 2026-10-31: files load and prismarine grows (SQ-UC-01, -03), acan client check pending (SQ-UC-02, FX-48); FX-01 to FX-48 pending; findings F1-F6 (ghost-block fix ceiling at 2^20 states; version-pinned fixes)
+<!-- generated:status_index begin open_work sha1=41dc5cb93270 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Planned 2, In Progress 1, Testing 9), 4 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/patchermod-cleanup #2` | Planned | none | Banner compat needs a jar rebuild per pattern mod |
+| `ui/misc #5` | Planned | C | Symbols on Xaero's maps |
+| `pack/server #8` | In Progress | S | Off-thread `Level.random` caller never identified |
+| `gameplay/misc #8` | Testing | S+ C | Every chalk symbol unlocked |
+| `gameplay/misc #11` | Testing | C T | Hot air balloon wind particle frequency |
+| `gameplay/misc #12` | Testing | S+ P | Undo vein mine command |
+| `gameplay/misc #13` | Testing | C P T | Biome-tinted moss |
+| `gameplay/misc #15` | Testing | S P | Immersive Weathering on Upgrade Aquatic coral |
+| `pack/server #6` | Testing | C P | Ghost-block fix ceiling |
+| `recipes/magic #3` | Testing | S+ C P | Botania trinket case takes any item, plus Quark sort/search |
+| `ui/misc #3` | Testing | C P | Disable wide JEI search |
+| `ui/tooltips #4` | Testing | C~ P | AppleSkin bars in more screens |
+<!-- generated:status_index end open_work -->
 
 | # | Fix | Where | Status |
 |---|---|---|---|

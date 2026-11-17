@@ -17,7 +17,13 @@ bamboo and cherry sets); pale oak and poplar have no wood here.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Storage Delight 26.10.05 update (changes against installed 25.12.09: 94 new blocks on new woods and countertop stones, 64 usable here; no behaviour change; MIT). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-STD-03 PASS).** DEPLOYED with 1.1.03 (`repackedStorage`, 50 blocks: blackstone / diorite / stone bricks / tuff countertops on 9 woods + bamboo set), SQ-STD-01 and -02 scratch PASSED (2026-10-26, r1102b 2026-11-02), SQ-STD-03 (fuel) queued, in game open; `mod-additions #33`
+<!-- generated:status_index begin open_work sha1=8b6df0599d2c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #33` | Testing | S~ C P | Storage Delight 26.10.05 changes on the installed 25.12.09 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

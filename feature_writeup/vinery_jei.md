@@ -6,7 +6,14 @@ file is kept as history; VJ-01 to VJ-10 can no longer run.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Vinery JEI pages (Aging Barrel fermentation, Apple Press, Grape Stomping, Wine Aging). Status: REMOVED 2026-10-27: patcherMod's 1.3.10 plugin deleted (pack_hygiene.md finding 6); the Vinery port ships its own pages. File kept as history
+<!-- generated:status_index begin open_work sha1=0777b234ed3a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, In Progress 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/vineryport #8` | Planned | none | 1.3.10 reference tests |
+| `alcohol/vineryport #26` | In Progress | C | Shorten Backported Vinery JEI descriptions |
+<!-- generated:status_index end open_work -->
 
 **Numbers below are the retired plugin's (6 grapes, 3 stomps, 2 bottles).** The port's Grape Stomping page follows the pot's current values (12 grapes, `grapevinePotStomps` stomps [4], 4 bottles); its Grape Planting page is documented in [jei_world_tabs.md](jei_world_tabs.md) (JW-16).
 

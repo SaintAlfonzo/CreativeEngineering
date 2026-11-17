@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Camera bags (Exposure Extras: leather / iron / netherite bags, 5 / 9 / 14 slots of `#exposureextras:camera_equipment`, contents in NBT, dyeable, smithing upgrades, old-id remap). Status: DEPLOYED (1.0.3, moved 1.0.4), never tested in game; CB-01 to CB-11 + R4-04..06/11 pending; F1 (netherite upgrade needs Armor Trims' template) and F2 (no tier looks) need a decision; F4 (flashes in the bag) built, scratch server PASSED 2026-10-22 (SQ-GM-03; CB-11 click in game)
+<!-- generated:status_index begin open_work sha1=b09428fe697a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gear/camera-bags #3` | Planned | C | Tier looks |
+| `gear/camera-bags #1` | Testing | S C P | Camera bags |
+| `gear/camera-bags #4` | Testing | S+ P | Flashes in the bag tag |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

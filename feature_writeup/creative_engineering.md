@@ -22,7 +22,15 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Engineering and Creative Common (wave 8: own mod `creativeengineering` 2.0.0 carved from patcherMod with the machines, fan type, sawmill routing, shrapnel, surfaces, liquid XP bridge and the engineering scripts; the rest of patcherMod swapped to `creativecommon`, development/creativeCommon). Status: **r1114 2026-11-14: Creative Common 1.2.0 (build/libs, scratch only) built, scratch server PASSED (SQ-CC12-01 to -03); SQ-CEN-02, -02b, -05s, SQ-CMV-02, -03 PASS.** **carved and swapped 2026-11-04; Common 1.1.0 (with the 7.2 publish cleanup) installed 2026-11-07 19:35 with all ten Creative jars, scratch server PASSED (r1107cc: SQ-CC-01..11, -13..16, SQ-CPP-01..05); client rows CQ-CC / CQ-CPP and SQ-CC-12 open. Common 1.2.0 (swap aliases, capability keys, load report, chat-key fix) built 2026-11-13, not installed; publish re-check in creative_engineering.md 7.5**
+<!-- generated:status_index begin open_work sha1=1813904de4e9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativecommon/publish #1` | Testing | S+ C | Creative Common publish readiness: mixin version gates, `mods.toml`, dependency list |
+| `creativecommon/publish #2` | Testing | S C | Neutral defaults for wide distribution |
+| `creativesplit/engineering #10` | Testing | none | Carve Creative Engineering with the Computers rows, then the id swap |
+<!-- generated:status_index end open_work -->
 
 ## 1. What Engineering holds
 

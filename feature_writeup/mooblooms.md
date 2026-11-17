@@ -6,7 +6,17 @@ Test prefix `MB-`. Sections 1-3 describe Buzzier Bees' moobloom, read from Buzzi
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mooblooms (Buzzier Bees moobloom reference; flower spawns per biome (2.8, generated); **More Mooblooms**, this pack's own mod: its own moobloom with 10 data-driven variants, two-stage shearing (bare -> cow) with grass regrowth, flower breeding, cow + flower conversion, pack-controlled spawning (rare roll + 100% random mooblooms in flower-variety biomes), cow tags; a Buzzier Bees set with granular switches that removes BB's mooblooms, the buttercup and Sunny from outside; Abnormals License rules). Status: More Mooblooms 1.0.0 DEPLOYED with 1.0.6 (first release; scratch-server verified); client-side checks pending; 1.1.0 (JEI pages incl. Moobloom Conversion) DEPLOYED with 1.1.01 (boot check scratch server PASSED 2026-10-22, SQ-GM-09); sunflower fix (MB-105) DEPLOYED to the client with 1.1.04; MB-01 to MB-12 (BB reference), MB-20 to MB-71, MB-97, MB-98, MB-100 to MB-104
+<!-- generated:status_index begin open_work sha1=5b2ab751068c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `textures/art #2` | Planned | C P | Azaleabloom texture |
+| `mobs/mooblooms #3` | In Progress | S P T | Per-biome moobloom shares (D47) |
+| `mobs/mooblooms #1` | Testing | S+ C P | More Mooblooms 1.0 |
+| `mobs/mooblooms #2` | Testing | S+ C | More Mooblooms 1.1 JEI |
+| `mobs/mooblooms #6` | Testing | C | Sunflowers face backwards on the Moobloom JEI tab |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

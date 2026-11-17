@@ -8,7 +8,14 @@ difference between "all packs" and "all packs but this one".
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Resource pack bench (what each resource pack costs: offline scan of atlas pixels, animations, model elements, dead files; one throwaway client swaps pack sets in game, times reloads, builds each pack's blocks in the End void, measures rebuild and frame times; leave-one-out report). Status: BUILT 2026-10-29; client run 1 done 2026-10-29 (perf_rpack.md 9): no enabled pack worth acting on; RP-01, RP-03 PASSED, RP-02 partial
+<!-- generated:status_index begin open_work sha1=5528a0f9e9ba -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `pack/server #34` | Planned | C | CE2 Iron Armor Fix frame cost with many armored mobs |
+| `pack/server #32` | Testing | C~ | Resource pack performance stress tests |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

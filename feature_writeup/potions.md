@@ -2,7 +2,18 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Potions and brewing (12 `kubejs:*` potions, Long Reach / Phantom Bane / Magic Resistance potions, item-agnostic mixes for every machine, Alex's Mobs and Rustic Delight fixes, Automatic Brewing rebuild, dragon's breath fluid brew, IE Mixer / Refinery / Bottler on `create:potion` with splash/lingering parity, Automated Potion Mixing and Lingerification JEI pages, potion fluid tooltips, Potion Bundles drain). Status: DEPLOYED (built 2026-09-06 to 09-08, shipped since 1.0.3), in-game test pending (PO-01 to PO-26); findings F1-F8 open, F1 (batch sizes) and F2 (Refinery regular → lingering) need a decision
+<!-- generated:status_index begin open_work sha1=e39a5685d619 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 6), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `potions/effects #12` | Planned | S P | Oiled: source |
+| `potions/enchanting #8` | Planned | S P | Floral enchantment: BlockRunner slowdown speed |
+| `potions/potions #2` | Planned | S | Batch sizes differ between machines |
+| `potions/potions #4` | Planned | S P | Placeholder reagents |
+| `potions/potions #6` | Planned | S P T | Saturation potion strength |
+| `potions/potions #10` | Planned | S P | Every vanilla effect brewable through the pack's own systems |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

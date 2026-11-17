@@ -11,7 +11,57 @@ matching (3.8), the CEConfig `[worldgen]` section with its debug density (3.9) a
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Structure tuning (structure groups: shared grids with a minimum gap and per-structure weight/frequency, standalone sets, village-house pool weights, Lootr container swaps, ground matching of grass/dirt bases, CEConfig [worldgen] switches + debug density, /cdevplace mass placement, other mods' structure configs, meta structures: villages with towers, ruin clusters, wrecks, rafts, pillager camps/fleets, driftwood flotilla, /locate of parts, biome fits: towers by wood incl. Terralith). Status: DEPLOYED, in-game test pending (plans 7.1 to 7.4 went out INCOMPLETE with 1.0.6; the scratch run 8.0.1 to 8.0.10 finished 2026-10-19, client list 8.0.11 pending; 1.0.6 open bugs in [plan_1.0.6.md](plan_1.0.6.md) 2.1). Earlier: DEPLOYED, in-game test pending (ST-11 passed; groups ST-17 to ST-26, ground matching / [worldgen] config / /cdevplace ST-27 to ST-42; biome rules, IPO, banks, driftwood, earth fill DEPLOYED with 1.0.4, ST-44 to ST-55); DEPLOYED with 1.0.6: water fill ST-56 to ST-60, terrain adaptation + soft beard + template trim ST-61 to ST-68, meta structures (15) ST-69 to ST-76 + ST-84 to ST-92, biome fits ST-77 to ST-83, and (INCOMPLETE) ST-93 to ST-146; DEPLOYED with 1.0.7: six fixes from the scratch run (3.23: pool order per seed, code-added village pieces, ground match over deep structures, driftwood banks, `land/any/deep`, stone bases), ST-191 to ST-198 pending; DEPLOYED with 1.0.8: the 11_fixes_1_0_8 worldgen fixes; DEPLOYED with 1.0.9: earth fill on water, camp plinths, `avoidCoasts` (7.5, ST-199 to ST-205 passed on a scratch server); ocean geodes under the deepest floor built, scratch server PASSED 2026-10-22 (SQ-GE, after a prismarine fix; ST-133 in-game look open); 2026-10-23 `group/desert_temples` (32 / 20) built, scratch test queued (SQ-LE-06, 3.24); 2026-10-30 earth fill judges every surface piece, prunes instead of cancelling (villages, meta parts), override fixes, crypt sunk start (3.28, ST-235 to ST-242) built and in `mods/`, BROKEN: scratch r1031 2026-10-31 SQ-EF-05 FAILED (ancient_crypt sunk start refused, also SQ-TER-01), SQ-EF-01, -04, -08 PASSED, looks client pending, SQ-EF-06 owner call; 2026-10-30 later: wet pruning for every jigsaw, meta parts and anchors pruned, phase 4 robustness (3.29, ST-297 to ST-299) built, installed 2026-10-30 17:06 with the meta batch, scratch server PASSED r1031 (SQ-EF-09, -11), SQ-EF-10 pending; 2026-10-30 evening: meta batch (13 metas: sky clusters, sky village islands, caravans, meteorite strikes on villages / the vanilla pyramid / sunken ruins / pillager camps, YUNG temples with ruins; part field `overlap`) (3.31, ST-306 to ST-315) built and in `mods/` (patcherMod 1.1.04 of 17:06, which also carries 3.29 and 3.30), BROKEN: scratch r1031 SQ-META31-04 FAILED (struck pyramid without its pyramid, ST-311), log halves PASSED, looks client pending; later: meteor shower, witch coven, sieged villages (part field `cluster`), struck monument (3.31, ST-316 to ST-319) built and in `mods/` (patcherMod 1.1.04 of 17:44), scratch r1031: SQ-META31-08, -09 PASSED, -06 client pending, -07 (witch coven) rerun pending; 2026-10-30 late: pillager spawners removed, spawn boxes with mixes by class on every pillager and witch structure, the mansion and Unwrecked pillager ships, box evokers without totem (3.32, ST-320 to ST-327) built and in `mods/` (patcherMod 1.1.04 of 17:55), BROKEN: scratch r1031 SQ-SB-03 FAILED (no illagers at a lone tower, cause open), SQ-SB-01 PASSED, SQ-SB-04 to -08 not run
+<!-- generated:status_index begin open_work sha1=4934c721c310 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 45 open TODO rows (Planned 7, In Progress 2, Testing 36), 4 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/new #12` | Planned | S P T | Rare ice: hide it, make it configurable |
+| `structures/earthfill #18` | Planned | S | Earth fill checked on the placed blocks |
+| `structures/metas #2` | Planned | S C P | More raft and wreckage variants |
+| `structures/rates-and-groups #1` | Planned | S P T | Nether, End and underground grouping pass |
+| `structures/rates-and-groups #2` | Planned | S P T | Tuning pass after the scratch run |
+| `structures/rates-and-groups #8` | Planned | S | Advanced Peripherals structures |
+| `structures/testing #1` | Planned | C | Client test list 8.0.11 |
+| `structures/contents #2` | In Progress | S P | River tree and driftwood cleanup |
+| `structures/rates-and-groups #13` | In Progress | S P | Underground starts counted as missing in the census |
+| `farming/trees #2` | Testing | S+ P T | Acacia stumps and fallen logs |
+| `pack/server #3` | Testing | S~ P | End teleports into unexplored terrain still stall |
+| `structures/contents #1` | Testing | S P | Move soul dungeons to the Nether |
+| `structures/contents #3` | Testing | S P T | Pillager spawners in structures |
+| `structures/contents #6` | Testing | S P | No illagers at a lone birch tower |
+| `structures/earthfill #3` | Testing | S P | Sunk-start candidates not tagged |
+| `structures/earthfill #4` | Testing | S P | Undead castle cancelled by earth fill |
+| `structures/earthfill #5` | Testing | S P | Stone bases are opt-in |
+| `structures/earthfill #8` | Testing | S+ P | Water fill |
+| `structures/earthfill #10` | Testing | S~ | Sunk starts over-estimate the beard fill |
+| `structures/earthfill #11` | Testing | S P | Desert structures spawn in water |
+| `structures/earthfill #12` | Testing | S P | More water-replace checks for lakes |
+| `structures/earthfill #13` | Testing | S P | Override and log-level fixes the 10-30 build missed |
+| `structures/earthfill #14` | Testing | S P T | Starts with no earth are never judged |
+| `structures/earthfill #15` | Testing | S P | Pruning and footprint robustness |
+| `structures/earthfill #16` | Testing | S P | Prune offending parts instead of cancelling |
+| `structures/earthfill #17` | Testing | S P | Ancient crypt sunk start refused |
+| `structures/earthfill #19` | Testing | S P T | Water depth for cancels 2; desert bases counted |
+| `structures/metas #1` | Testing | S C P | Vehicle metas (caravans) |
+| `structures/metas #8` | Testing | S C P | Meta batch: sky, meteorites, temples |
+| `structures/metas #10` | Testing | S P | Part spawns inside metas |
+| `structures/metas #11` | Testing | S P | Struck desert pyramid placed without its pyramid |
+| `structures/rates-and-groups #3` | Testing | S~ P T | Strip unexplained structure weights |
+| `structures/rates-and-groups #6` | Testing | S+ P T | Fortified metas vs the locate timeout |
+| `structures/rates-and-groups #7` | Testing | S+ C P | Ocean geodes under the deepest floor |
+| `structures/rates-and-groups #9` | Testing | S P | Pool tuning switches |
+| `structures/rates-and-groups #10` | Testing | S~ P | Pyramid separation |
+| `structures/rates-and-groups #11` | Testing | S P T | Lone waystones |
+| `structures/rates-and-groups #12` | Testing | S P T | Boost Mysticrift towers 3x |
+| `structures/sky #2` | Testing | S C P | More sky metas |
+| `structures/terrain #1` | Testing | S C P | Terrain adaptation batch 4 |
+| `structures/terrain #2` | Testing | S+ P | Beardifier fill estimate |
+| `structures/terrain #5` | Testing | S+ P | Beehive structure spawns underwater in oceans, stacked twice |
+| `structures/terrain #6` | Testing | S+ C P | Ocean geodes peeking out: patch the ocean floor block type |
+| `structures/terrain #7` | Testing | S~ P | Underground jungle house spawns under oceans and floods |
+| `structures/testing #2` | Testing | S~ C P | Open ST- tests |
+<!-- generated:status_index end open_work -->
 
 Two systems cover every structure in the pack. **Structure groups** decide how often each whole structure
 (village, temple, house mod, meteorite) spawns and how far apart structures of one kind keep: every structure of a

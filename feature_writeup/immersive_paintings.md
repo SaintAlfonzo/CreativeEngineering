@@ -6,7 +6,14 @@ painting screen has not been checked in game**
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Immersive Paintings (every painting variant on Immersive Paintings' Datapacks page at 32 px per block: modded ones built at load from the installed jars by Creative Compat, vanilla ones from a generated pack datapack; `/dumppaintings`, `gen_immersive_paintings.py`). Status: DEPLOYED with 1.0.6 (475 paintings, scratch-server verified); 2026-11-05 built-at-load rework built, NOT installed, scratch test queued (SQ-PA-01 to -04, CQ-PA-01, -02); PA-01 to PA-07 pending, painting screen never checked
+<!-- generated:status_index begin open_work sha1=ae9c79392189 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/misc #5` | Testing | C P | Immersive Paintings: every painting variant on the Datapacks page |
+| `licence/compat #1` | Testing | C | Paintings out of the Compat jar |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

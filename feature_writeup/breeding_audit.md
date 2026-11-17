@@ -11,7 +11,14 @@ naturally are absent. Mobs that are not `Animal` (fish, jellyfish, lobster) are 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Animal breeding item and bee flower audit (static read of every jar: breeding items per animal, bee flower tags item vs block, findings F-B1 to F-B7). Status: **r1115 2026-11-15: SQ-BREED-01 PASS by a scratch probe dump; sections 3 and 4 measured.** **r1114 2026-11-14: SQ-BREED-03 PASS.** audit DONE 2026-11-10 (static); JEI page and tag fixes open (TODO `mobs/tweaks #14`, `mobs/bees #1`)
+<!-- generated:status_index begin open_work sha1=c92a25a7ee21 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (In Progress 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/bees #1` | In Progress | S P | Bee breeding flower audit |
+| `mobs/tweaks #14` | In Progress | S C P | Animal breeding item audit |
+<!-- generated:status_index end open_work -->
 
 ## 1. Result in short
 

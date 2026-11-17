@@ -2,7 +2,26 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Engineering (IE Sawmill recipe routing by precision-sawblade profile, Dragon Breathing fan processing, 15 components, wire coils and coil blocks for 12 metals + HV, sample syringe, exclusive chance outputs, rose quartz sand blasting). Status: DEPLOYED (since 1.0.3), EN-01 to EN-18 pending; exclusive chance outputs and rose quartz sand blasting built 2026-10-30, EN-21 server half scratch server PASSED r1031 2026-10-31, EN-19 to EN-21 in game; findings F1-F8, F2 (JEI doesn't show the blade) needs a decision, F4 (component centres differ by route) owner asked for more info 2026-10-30, F5 and F7 decided 2026-10-29
+<!-- generated:status_index begin open_work sha1=fde163958e44 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 11, Testing 3), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `engineering/dreams-and-desires #7` | Planned | S P T | Tune milkshake lava generation |
+| `engineering/dreams-and-desires #8` | Planned | S P T | Tune sulfuric acid lava generation |
+| `engineering/sawmill-and-components #2` | Planned | S | Sawmill recipes off the manual pipeline |
+| `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
+| `engineering/sawmill-and-components #4` | Planned | S P | One centre per component |
+| `engineering/sawmill-and-components #6` | Planned | none | Tier names in comments |
+| `engineering/sawmill-and-components #8` | Planned | S P | Metal component chains generated |
+| `engineering/sawmill-and-components #9` | Planned | S P | Wire alternatives by conductivity |
+| `engineering/sawmill-and-components #11` | Planned | S P | Electron and vacuum tube tag |
+| `engineering/sawmill-and-components #12` | Planned | S P T | Redstone mechanism |
+| `engineering/sawmill-and-components #13` | Planned | S P T | Gates and Project Red |
+| `engineering/dreams-and-desires #3` | Testing | S C P T | Rose quartz sand blasting |
+| `engineering/sawmill-and-components #1` | Testing | S C P | Engineering features |
+| `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

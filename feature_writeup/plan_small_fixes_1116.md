@@ -1,5 +1,32 @@
 # Small fixes batch (written 2026-11-16)
 
+<!-- generated:status_index begin open_work sha1=d7181d17a00c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (In Progress 1, Testing 19), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
+| `blocks/flower-pots #9` | Testing | S P | Exclude melon, moss and pumpkin blocks from the flower pot world |
+| `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
+| `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/pickles-and-ferments #6` | Testing | S C P | Vinegar craft |
+| `farming/crops #52` | Testing | S | Red jungle grapes cannot be bonemealed |
+| `farming/wild-crops #11` | Testing | S | Wild crop table generator misses Rustic Delight's JSON placed features |
+| `food/types-and-tuning #27` | Testing | S P | Arc Furnace gilding: at most 4 gold |
+| `gameplay/blockrunner #12` | Testing | S C P | Ice boat speed by ice type |
+| `items/jars #12` | Testing | S P | Glass bottle and mason jar crafts make 4 |
+| `jei/jei-ordering #7` | Testing | C | Remove fishing rods and backpacks from JEI ordering |
+| `largecontent/mod-additions #63` | Testing | C | Straw rug: break overlay extends over 4 adjacent blocks |
+| `largecontent/mod-additions #89` | Testing | S | A stick replaces an age-1 hops vine (SQ-HOP-04) |
+| `mobs/bees #4` | Testing | S | Flower tag removals empty the tags that include them |
+| `mobs/tweaks #25` | Testing | S | Quark endermen block pickup nerf enabled |
+| `mobs/tweaks #27` | Testing | S P | Iron golem summon cooldown after golem losses |
+| `recipes/engineering #3` | Testing | S P | Smaller findings |
+| `structures/contents #9` | Testing | S P | Waystone structure glowstone -> yellow corundum |
+| `tooling/conventions #7` | Testing | S C | `NCH.ieBlueprint`: repeated inputs never match |
+| `ui/misc #7` | Testing | C | Splash text 'Stience!' |
+<!-- generated:status_index end open_work -->
+
 Source: owner chat 2026-11-16 (a pick from the "simplest bugs and tweaks" breakdown of [TODO.md](todo/TODO.md)), taken in
 with the `intake` skill. Premise checks were read from the code the same day; file:line references are from that read.
 Status: **built 2026-11-16, all phases; 8 jars installed (Common, Creative Delight, Brewing, Equipment, Worldgen, Compat,

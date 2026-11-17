@@ -7,7 +7,14 @@ TODO rows: `alcohol/decisions #6, #7`, `alcohol/vineryport #10, #11, #12`.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Storage audit (wine bottle sizes vs racks, crates and bags across mods: duplicates, one-way recipes, proposed sizes and survivors; compressed). Status: audit 2026-10-19, decisions open; sacks as bundles DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22 for the logic (SQ-GM-10), SB-01 to SB-09 in game
+<!-- generated:status_index begin open_work sha1=5a46252560dd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/vineryport #10` | Testing | C~ P | Wine case and rack fit bugs |
+| `items/storage-and-item-loss #7` | Testing | S+ C P | Sacks as bundles |
+<!-- generated:status_index end open_work -->
 
 ## 1. Rules (how the port decides)
 

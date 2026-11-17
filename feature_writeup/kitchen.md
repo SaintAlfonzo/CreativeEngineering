@@ -10,7 +10,21 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Kitchen (Cooking for Blockheads in Creative Delight as the member blockheadsAdditions (CfB itself stays its own jar, All Rights Reserved); spice and tool racks in 20 woods; Cooking for Blockheads oven on any fuel with every bottle back, infinite sink, FD cutting board, Display Delight plates and Brewin' coasters on counters drawn on the worktop with config offsets, 2-tall fridge filled to a full block with a white top box, plates pop when the block below breaks, kitchen corner storage; bamboo bowl; pack's own mortar and pestle (Old Guns texture; Old Guns' is the Powder Pestle) food grinding through NCH `foodGrinding` and a generated catalogue). Status: **r1114 2026-11-14: SQ-CFS-02b, SQ-CBW-02, SQ-FCB-09, -10 PASS.** **2026-11-04: wood cutting boards (8 vanilla woods) BUILT, Creative Delight jar installed, SQ-CBW queued.** **r1103 2026-11-03: stone cutting boards and cookware pickup built, scratch server PASSED (SQ-FCB-07, -08b).** DEPLOYED with 1.1.01 (2026-10-22); scratch-server probes pass; plates and coasters on counters (BUILT 2026-10-24) and fridge top box and plate pop (BUILT 2026-10-25) DEPLOYED with 1.1.03; coaster contents BUILT 2026-10-29, shipped 1.1.05, scratch server PASSED r1031 2026-10-31 (SQ-KT-21); KT-01 to KT-21 pending; 2026-10-31 CfB code moved from patcherMod into the CD member, fridge box by code, 40 wood racks (`cooking/kitchen #22`, 1.1.06 client), scratch PASSED 2026-11-01 (SQ-KT-22 to -25; KT-22 to KT-25 in game); 2026-11-02 stone cutting boards, CfB rack merge, cookware pickup built, scratch r1102b SQ-FCB-05, -08 PASS, -07 partial (deep scan 2026-11-02)
+<!-- generated:status_index begin open_work sha1=3ce92e571203 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Testing 9), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `cooking/kitchen #5` | Testing | C P | Returned serve items don't stack |
+| `cooking/kitchen #6` | Testing | C P | Fridge |
+| `cooking/kitchen #8` | Testing | S+ C P | Counters, stove, sink |
+| `cooking/kitchen #10` | Testing | S+ P | Bamboo bowl, mortar and pestle grinding |
+| `cooking/kitchen #15` | Testing | S+ C P | Corner cabinet storage |
+| `cooking/kitchen #20` | Testing | S+ C P | Plates and coasters on the Blockhead counter |
+| `cooking/kitchen #22` | Testing | S+ C P | Cooking for Blockheads in Creative Delight; wood spice and tool racks |
+| `cooking/kitchen #36` | Testing | C P | Cooking for Blockheads double fridges connect visually |
+| `textures/art #1` | Testing | C P | Fridge texture |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | TODO |
 |---|---|---|

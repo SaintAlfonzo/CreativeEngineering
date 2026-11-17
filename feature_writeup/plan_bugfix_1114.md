@@ -18,7 +18,19 @@ One jar at a time, never while the game runs. Every item gets its changelog bull
 
 ## 0. Decisions taken in this plan (owner can override)
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Bugfix run from the 2026-11-11 to 11-14 scratch runs (seed pouch and bundle dispensing, Debugify config, optional-mod guards, global portal exit lift, rose gold golden items, bitten cakes, hops as a Vinery-gated vine on the Vinery lattice, salt, fire and lava melting system, layered salt lick, crow, horseshoe, corn maze 2x, Power Grid drops, stomping basin, all-flesh Visceral Heap). Status: **r1115 2026-11-15: BUILT and scratch tested: most rows PASS; seed pouch Nether, basin stick and salt lick reach fixed in Creative Delight 03:18, Rare Ice log and melting config reads in Common 03:15. FAIL for the owner: SQ-HOP-04, -05 (pass-through session), -06, SQ-MELT-08, -10, SQ-PWG-82, SQ-PG-01b, SQ-PG-01c (URGENT client crash).** planned 2026-11-14
+<!-- generated:status_index begin open_work sha1=68b2520db82f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Bug 1, Planned 1, Testing 5), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/tnt-and-portal #15` | Bug | S C P | Portal Gun: player lifted one block after walking out of a wall portal |
+| `largecontent/mod-additions #72b` | Planned | S | Syrup to sugar: heated Create mixing recipe with a better yield |
+| `creativecommon/publish #4` | Testing | S | SQ-AZW-01: `[item_dict] Missing` for the block-only Sunflower Stem |
+| `creativecommon/publish #5` | Testing | S | SQ-DCM-02: `global.has` read five data namespaces as absent mods |
+| `dishes/ingredients #43` | Testing | S+ C | Vegetarian patty renamed Veggie patty; cave carrot makes patties |
+| `largecontent/mod-additions #81` | Testing | S+ C P | Debugify has no config in the instance: every fix runs and MC-121706 crashes a server boot |
+| `locate #6` | Testing | S+ P T | Corn maze cannot be located within the 120 s search deadline |
+<!-- generated:status_index end open_work -->
 
 Defaults chosen from the brief; each is marked **[default]** where it is used.
 1. Seed pouch pattern: fixed 5x5, up to 25 seeds (owner 2026-11-14, was 3x3); matches the pack's Quark `Shift Range = 5`

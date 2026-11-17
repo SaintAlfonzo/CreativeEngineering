@@ -11,7 +11,18 @@ seasonings, its three sauces are sauces.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Seasonings and sauces catalog (every pack and Barbeque's Delight seasoning: type, system, effect, mutex, complementary, source; cap of 2). Status: **2026-11-03: Barbeque's seasonings folded into the pack framework (barbeques_delight.md 4.5) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 (SQ-CDJ7).** Catalog written 2026-10-31
+<!-- generated:status_index begin open_work sha1=6ee4b8367bac -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 4, In Progress 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `dishes/meals #61` | Planned | S C P | Any item in the off hand or basin for skewering |
+| `food/seasoning #22` | Planned | S C P | Grill raw meat for the grilled effect; burnt meat |
+| `food/seasoning #23` | Planned | S C P | Sauces on more meat-like foods |
+| `textures/food #11` | Planned | C | Cumin, pepper and chili powder as dusts |
+| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `dishes/meals #62` | Testing | C P | Skewering QoL: basin grab, input tags, JEI, wood variants |
+<!-- generated:status_index end open_work -->
 
 ## 1. Catalog (current state)
 

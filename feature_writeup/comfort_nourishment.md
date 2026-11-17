@@ -5,7 +5,16 @@ saturation value decides between them. Written so the owner can set pack rules (
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Comfort vs Nourishment audit (no hunger or saturation cutoff; FD picks the effect by dish form, the duration by value tier; rule options R1-R5, R5 = recipe inputs' hunger and count for bowls). Status: **r1103 2026-11-03: SQ-CNS-02, -03 PASS (owner to confirm the -03 row text: can ticks are the source x the section dur).** Audit DONE 2026-10-26; R5 BUILT 2026-10-27 (generator + CD startup script, CD jar in `mods/`, plus golden-food and 60 s light-Comfort rules); R5 DEPLOYED with 1.1.04 (client) and 1.1.05 (server); BROKEN (deep scan 2026-11-02): r1102b SQ-RD-22 and SQ-FDB-04 FAIL (no rule for Rustic Delight foods or Gleaming Salad, Nourishment stripped), SQ-CNS-01 PASS; cans follow the rule since the 2026-11-01 `gen_can_types.py` rerun (SQ-CNS-03); CNS-01 to CNS-08 pending in game; B.2 hand check (19 bowls) open
+<!-- generated:status_index begin open_work sha1=fc7b068ff468 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, In Progress 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/types-and-tuning #18` | Planned | S P T | Other effects on high-value meals |
+| `food/types-and-tuning #25` | Planned | S P T | Formless foods need another effect |
+| `textures/food #5` | In Progress | S P T | Comfort vs Nourishment rule |
+| `food/types-and-tuning #15` | Testing | S~ C P T | Comfort vs Nourishment split |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

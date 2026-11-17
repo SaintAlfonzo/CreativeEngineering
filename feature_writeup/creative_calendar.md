@@ -17,7 +17,14 @@ Written for: the owner and the split agents, as the working reference for Calend
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Calendar (own mod `creativecalendar`: calendar, day and night, seasons, crop seasons, weather by biome, the wine clock; Creative Delight and Creative Brewing require it). Status: carved 2026-11-01, installed; scratch SQ-CAL-01 to -07 PASS (rcs1); CQ-CAL-08 and in game open 2026-11-03: grass rule (summer and tropical half speed) and per-target grass mixins, config migration; jar rebuilt, not installed.
+<!-- generated:status_index begin open_work sha1=b36ae7ada50c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativecalendar/reserve #1` | Testing | none | Reserve the time, season and biome weather systems for Creative Calendar |
+| `creativesplit/calendar #6` | Testing | none | Carve Creative Calendar |
+<!-- generated:status_index end open_work -->
 
 | | |
 |---|---|

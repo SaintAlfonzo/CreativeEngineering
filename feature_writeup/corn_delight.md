@@ -14,7 +14,14 @@ villager food pool. Village corn farms are handled elsewhere. Nothing else from 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Corn Delight 1.2.11 update (planned subset: Corncob with cutting, milling and compost uses and a knife-harvest chance, Corn Popsicle in the popsicle family, Cob Pipe, Classic Corn Dog grid recipe, corn trades and villager food; village farms elsewhere; MIT). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-CN-04, -04b, -07 PASS; the rest r1102b).** DEPLOYED with 1.1.03; scratch SQ-CN PASSED but SQ-CN-04 (knife cob, probe) open, r1102b 2026-11-02; CN-01 to CN-11 in game pending; chest loot bug `#31`; `mod-additions #24`
+<!-- generated:status_index begin open_work sha1=467753cc6393 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #31` | Planned | S | Corn Delight chest loot never loads |
+| `largecontent/mod-additions #24` | Testing | S~ C P T | Corn Delight 1.2.11 changes on the installed 1.0.3 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

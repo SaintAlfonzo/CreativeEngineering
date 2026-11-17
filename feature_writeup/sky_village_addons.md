@@ -7,7 +7,13 @@ blocks the pack has, with no new structure, structure set or biome change.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Sky Village addon houses (Farmer's Delight, Vinery and Let's Do Brewery houses from the Sky Villages addon datapacks, added to the existing sky village pools). Status: BUILT 2026-10-30 (data only, needs a restart): 17 templates, 8 houses at weight 20 + 9 Brewery deco, Brewery blocks swapped to Brewin' / Farmer's Delight / Vinery blocks, hops to grape lattices (swap table `tools/skyvillage_addon_remap.json`); SVA-01 PASSED offline, scratch SQ-SVA-01, -02 PASSED r1031, SQ-SVA-05 (hanging herbs) PASSED r1101; SQ-SVA-03, -04, CQ-SVA and the looks open; `skyvillages #1`
+<!-- generated:status_index begin open_work sha1=2fbdbf5701c6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `skyvillages #1` | Testing | S~ C P | Sky Villages addon support (Brewin, Vinery, Farmer's Delight) |
+<!-- generated:status_index end open_work -->
 
 ## 1. What is there (read 2026-10-30)
 

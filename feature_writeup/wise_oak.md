@@ -6,7 +6,9 @@ Test prefix: `WO-`. TODO: `mobs/tweaks #19` (cooldown basis). Related: [time.md]
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wise Oak (stock behaviour from bytecode, full audit of the mod's web calls, loop: awake by day / asleep by night, timed tired sleep, timed anger; oak-biome-only generation; web calls blocked). Status: **r1115 2026-11-15: SQ-WO-15 to -25, -31, -33 PASS.** built 2026-11-09 with high-trust gifts and `/wiseoak trust`, Creative Worldgen installed in `mods/`, scratch test queued (SQ-WO-01 to -37, CQ-WO-01 to -07; WO- suite open); insults still open
+<!-- generated:status_index begin open_work sha1=ba133888da4a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

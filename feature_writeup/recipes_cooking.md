@@ -7,7 +7,45 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Cooking recipes (one flour and dough, bread blocks, sourdough; tomato sauce and melon juice by machine; sugar as `#forge:sugar`; machine routes for about 25 meals; heatless cooked meal routes, shaped burgers and 16 meal assemblies (2026-10-21); chorus juice fluid, berry matcha kettle, milk from CfB jars (2026-10-22), bone broth soups, mod pastas, ice cubes, egg solution and frosting fluids (2026-10-22); golden food by mixing and arc furnace; ruby chocolate; cultivated meat from mob samples). Status: **r1114 2026-11-14: SQ-PJL-04 PASS.** **r1103 2026-11-03: cooking removals SQ-RCO-01, -02 PASS.** DEPLOYED (since 1.0.3); F6, orange jam from slices, beignet removed, Egg Fried Rice built 2026-10-23, scratch test queued (SQ-LE, RC-79 to RC-81); meals BUILT 2026-10-21, DEPLOYED 1.1.01 (RC-55 to RC-64, RC-66 to RC-70); drinks #4 to #6 BUILT 2026-10-22, DEPLOYED 1.1.01 (RC-71 to RC-74); ingredients #4, #5 BUILT 2026-10-22, DEPLOYED 1.1.01 (RC-75, RC-76); ingredients #2 BUILT 2026-10-22, DEPLOYED 1.1.01 (RC-77, RC-78); RC-01 to RC-14 pending; findings F1-F7, F1 (smoker) and F2 (vanilla cake) closed 2026-10-22, removals kept; every 2026-10-22 item and the server half of the 2026-10-21 meals and cornmeal scratch server PASSED 2026-10-22 (SQ-DR, SQ-FL, SQ-IN, SQ-CO, SQ-OF-04, SQ-OF-07 to SQ-OF-11); any bread, grape and cherry jams shipped 1.1.05 (SQ-BJ-01 to -03 PASSED r1031); mason-jar jams 2026-11-02: r1102b SQ-PSU-06 FAIL (lemon and orange jam from slices still bottle), -07, -08 PASS (deep scan 2026-11-02)
+<!-- generated:status_index begin open_work sha1=0e24e5b3221d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 2, In Progress 9, Testing 22), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `dishes/meals #27` | Planned | S C P | Pineapple pizza |
+| `dishes/meals #37` | Planned | S C P | Pancake coverings review |
+| `baking/baked-goods #22` | In Progress | S P | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
+| `dishes/jams #2` | In Progress | S C P | Jam crafting: 4 fruit, sugar, lemon slice for 2 jam |
+| `dishes/jams #3` | In Progress | S C P | Recipes use jam, never bottled jam or jelly |
+| `dishes/meals #21` | In Progress | S C P | Meal-specific ingredients audit |
+| `dishes/meals #24` | In Progress | S C P | Extra veggie omelette recipe |
+| `dishes/meals #31` | In Progress | S C P | Nut butter sandwich |
+| `merges/dishes #5` | In Progress | S C P | Merge cheesy pastas |
+| `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
+| `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
+| `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
+| `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |
+| `baking/baked-goods #27` | Testing | S+ C P | Dough block for every dough |
+| `cooking/kitchen #10` | Testing | S+ P | Bamboo bowl, mortar and pestle grinding |
+| `dishes/ingredients #1` | Testing | S+ C P | Cornmeal |
+| `dishes/ingredients #14` | Testing | S+ C P | Cornmeal fixes (priority) |
+| `dishes/ingredients #25` | Testing | S+ P | Cabbage cutting gives 4 leaves |
+| `dishes/jams #4` | Testing | S+ C P | Grape and cherry jam |
+| `dishes/jams #8` | Testing | S C P | Pack jam line: new jars, jam and jello blocks, jellos, cauldrons |
+| `dishes/meals #9` | Testing | S+ C P T | Gold food cheap in machines |
+| `dishes/meals #22` | Testing | S+ C P | Overnight oats |
+| `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/meals #32` | Testing | S~ C P | Remove mhadjeb |
+| `dishes/meals #36` | Testing | S+ C P | Cacciatore takes chicken cuts |
+| `food/drinks #9` | Testing | S C P | Bayberry soup becomes juice |
+| `food/drinks #10` | Testing | S~ P | Azalea tea and tea audit |
+| `merges/dishes #6` | Testing | S+ C P | Merge Caesar salads |
+| `recipes/cooking #1` | Testing | S P | Smoker recipe |
+| `recipes/cooking #2` | Testing | S P | Vanilla cake removed |
+| `recipes/cooking #3` | Testing | S+ P | Comment and id fixes |
+| `recipes/cooking #4` | Testing | S+ P | 12 shulker bowls from a shell |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

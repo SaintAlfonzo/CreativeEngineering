@@ -1,5 +1,25 @@
 # Creative Brewing publish polish plan (2026-11-06, from scratch run r1106cbo)
 
+<!-- generated:status_index begin open_work sha1=0d15ad8715b3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Testing 13), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativebrewing/publish #11` | Testing | S | `[absent mods]` summary never prints |
+| `creativebrewing/publish #12` | Testing | S | Echo tool on-hit rows leak without Creative Engineering |
+| `creativebrewing/publish #13` | Testing | S | Chain: loot tables of optional-mod blocks fail to parse |
+| `creativebrewing/publish #14` | Testing | S | Chain: horror lasagna assembly gets an empty fluid |
+| `creativebrewing/publish #15` | Testing | S | Cooking set: 77 `Empty array?` NCH remove failures left |
+| `creativebrewing/publish #16` | Testing | S | Common compost WARN with Immersive Weathering and no Architect's Palette / Fruits Delight |
+| `creativebrewing/publish #17` | Testing | S | Echo, dragon and copper effect rows, copper poisoning and echo-armor mixins into Equipment |
+| `creativebrewing/publish #18` | Testing | S P | All effects into Creative Common: frameworks, rules, categories, Magic Resistance, potion registrations, `[effects]` config |
+| `creativebrewing/publish #19` | Testing | S | Fix `[absent mods]` print and the 77 `Empty array?` failures |
+| `creativebrewing/publish #20` | Testing | S | Food fluid leftovers into Creative Delight; rename duplicate `kubejs_startup/creativeengineering/` folders |
+| `creativebrewing/publish #22` | Testing | S | Equipment's felsic ingot assembly needs Creative Engineering's incomplete items |
+| `creativedelight/framework #14` | Testing | S | Culture and dough blocks show the missing texture outside the pack |
+| `creativeengineering/carve #1` | Testing | M | Non-engineering content out of Creative Engineering |
+<!-- generated:status_index end open_work -->
+
 Follows [plan_cb_publish.md](plan_cb_publish.md) (sections 14 and 15) and the run [scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 4.
 Owner request 2026-11-06: write these notes as a new plan; echo tools and the effects go in Equipment, not Engineering;
 fix the absent-mods print; fix the 77 "Empty array?" failures; merge food fluids into Creative Delight; all effects into

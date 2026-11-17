@@ -2,7 +2,20 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mixed jars (Supplementaries jars hold several kinds of one family: cookies, candied apples/berries, candies, marshmallows, chocolate bars, apples, berries, dried fruit; every cookie jarable; every soup and stew as a jar liquid). Status: **r1103 2026-11-03: jar fluid pipes built, scratch server PASSED (SQ-JFP-01, -02; -03 to -05 r1102b).** DEPLOYED with 1.1.01 (2026-10-22); scratch server `/jartest` 18 pass; MJ-01 to MJ-10 pending; soups (section 9, data only) built, scratch server PASSED 2026-10-22 (SQ-MJ), MJ-13 done, MJ-11, MJ-12, MJ-14 in game
+<!-- generated:status_index begin open_work sha1=cf6ab2e7436e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 6, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `items/jars #1` | Planned | S C P T | Jar capacity rework |
+| `items/jars #2` | Planned | C P | New jar contents |
+| `items/jars #3` | Planned | S C P | More foods in jars |
+| `items/jars #4` | Planned | C P | Soups and stews take 1 jar space |
+| `items/jars #5` | Planned | S C P | Pickled veg storage |
+| `items/jars #6` | Planned | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
+| `baking/baked-goods #11` | Testing | S+ C P | Mixed cookie jars |
+| `items/jars #7` | Testing | S+ P | Create pump does not fill the Supplementaries jar |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Where |
 |---|---|---|

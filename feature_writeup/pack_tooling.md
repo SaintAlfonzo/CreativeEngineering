@@ -6,7 +6,20 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Pack tooling (hub: item / block / fluid dictionaries and removed items, `global.NCH` recipe helpers, `global.tags` tag helper, CEConfig, the 23 `/dump*` commands and `/dumpall`, `/cdevgen` generators, headless test suites, root Gradle build, item-loss repro harness, Slice & Dice `_manual_only`). Status: in use; TL-01 to TL-16 pending; findings F1-F10 (item_dict tag check probably runs before tags load; test recipes shipped), F3 and F4 need a decision
+<!-- generated:status_index begin open_work sha1=5aefd516b4db -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 3, Testing 5), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/dictionaries #2` | Planned | S | Block, fluid and NCH fluid tags not validated |
+| `tooling/generators-and-tests #2` | Planned | none | Headless tests need this machine's caches |
+| `tooling/generators-and-tests #3` | Planned | S | Removed items keep their recipes |
+| `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
+| `tooling/conventions #2` | Testing | S | Define-once violations |
+| `tooling/conventions #6` | Testing | S C | Test recipes shipped |
+| `tooling/dictionaries #1` | Testing | S~ | item_dict tag check runs before tags load |
+| `tooling/generators-and-tests #1` | Testing | S | More tools in `/cdevgen` |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

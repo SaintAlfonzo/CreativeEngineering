@@ -1,5 +1,28 @@
 # Post-scratch plan 2: pass-through rework (written 2026-11-15)
 
+<!-- generated:status_index begin open_work sha1=b707ced72bf0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Planned 9, In Progress 1, Testing 6), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/scratch-1115-follow-ups-2 #8` | Planned | S | Ground-level web: same-tick enter and land takes full fall damage |
+| `tooling/scratch-1115-follow-ups-2 #9` | Planned | S | IW sand layer and Supplementaries fodder never slow |
+| `tooling/scratch-1115-follow-ups-2 #10` | Planned | S | In-place Compat toml save not reloaded |
+| `tooling/scratch-1115-follow-ups-2 #11` | Planned | S | Pass-through bench web cube over budget |
+| `tooling/scratch-1115-follow-ups-2 #12` | Planned | S | Rare Ice swallows salt dust and Salt Melt clicks on plain ice |
+| `tooling/scratch-1115-follow-ups-2 #13` | Planned | S | Salt layer on melting ice drops as dust before the vanish roll |
+| `tooling/scratch-1115-follow-ups-2 #14` | Planned | S | Arm: early loose part blocks the belt end depot |
+| `tooling/scratch-1115-follow-ups-2 #15` | Planned | S | Upgrade Aquatic guard misses IW coral growth files |
+| `tooling/scratch-1115-follow-ups-2 #16` | Planned | S | SQ-TX-18 second boot impossible: Devtools needs Compat |
+| `tooling/scratch-1115-follow-ups-2 #7` | In Progress | S C | Broken config switches (timing, denseWalk, wthit passThrough) |
+| `tooling/scratch-1115-follow-ups-2 #1` | Testing | S | Cobweb fall distance reset |
+| `tooling/scratch-1115-follow-ups-2 #2` | Testing | S | Stopped break-group projectiles break as a fallback |
+| `tooling/scratch-1115-follow-ups-2 #3` | Testing | S P | Neighbour model: 4 sides for crops, 6 faces for webs, dense 3 / 3, surrounded 6 |
+| `tooling/scratch-1115-follow-ups-2 #4` | Testing | S P | Neighbour count cached per block; recount only on break or place |
+| `tooling/scratch-1115-follow-ups-2 #5` | Testing | S C | Layer height blocks: leaf piles, ash, snow slow by height |
+| `tooling/scratch-1115-follow-ups-2 #6` | Testing | S C | Solid threshold for leaf piles (default 2 stages below full) |
+<!-- generated:status_index end open_work -->
+
 Source: owner notes of 2026-11-15 on the r1115 pass-through findings
 ([scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md): SQ-PTH-03, -11, -25, -27, -28, CQ-PTH-02, -04) and
 [plan_passthrough.md](plan_passthrough.md). Follows [plan_post_scratch_1115.md](plan_post_scratch_1115.md) (portals, salt,
