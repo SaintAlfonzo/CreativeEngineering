@@ -17,7 +17,7 @@ standalone `-01`; mod id `displaydelight`, display name "Display Delight (Creati
 **Licence:** LGPLv3 for the mod code and models (Copyright (c) 2024 jkvin114), with a third-party MIT notice (owner-supplied
 2026-10-25). 5 models are derived from the Farmers 3D resource pack by Pder (MIT, Copyright (c) 2024 Pder; the notice must stay
 with copies). The port is GPLv3 (LGPLv3 section 2 / GPLv3 section 7 allow it); both upstream notices and the LGPLv3 text
-are in `development/creativeDelight/members/display/NOTICE-upstream.txt`, shipped in the jar.
+are in `development/creativeDelight/members/display/NOTICE-upstream-LGPL.txt`, shipped in the jar.
 
 **Result in one line:** 210 food display blocks and the 2 plates (1.2.0: 191 and 2). 101 are new, 93 of them for foods the
 pack has today (95 with Creative Delight's Farmer's Delight 1.3.4 foods); every 1.2.0 block for a mod in the pack keeps its id, so placed blocks stay.

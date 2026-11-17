@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  * An overwrite, not a cancellable inject, so the hot path allocates no CallbackInfo.
  *
  * <p>The fallback branch reproduces Immersive Weathering 1.2.10's own method body (Ordana, MehVahdJukaar,
- * Keybounce), GNU LGPL v3; see creativecommon-NOTICE-thirdparty.txt.
+ * Keybounce), GNU LGPL v3; see creativecommon-NOTICE-thirdparty-various.txt.
  */
 @Mixin(value = BlockGrowthHandler.class, remap = false)
 public class IwBlockGrowthHandlerMixin {

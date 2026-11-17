@@ -152,8 +152,8 @@ IN_TREE_MODS = [
     # Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar since 2026-11-07 (nested in Creative Compat
     # before, so Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
     ('backportedTempad', 'backportedTempad', True),
-    # Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): not required, and not in mods/ during the port
-    # (plan E1: scratch servers only); it ships once the basic/advanced energy switch exists (energy_advanced.md stage 5).
+    # Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): in mods/ for development testing, never staged
+    # until energy_advanced.md stage 5 (the basic/advanced energy switch). Not required: collect() skips it.
     ('backportedPowerGrid', 'backportedPowerGrid', False),
     # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
     # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
@@ -496,6 +496,9 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
             continue
         if side == 'dev':
             continue  # dev mods/ only (Creative Devtools, Q6): never in a payload or a recorded version
+        if root == ROOT and any(not req and in_tree_jar(prefix, jar) for _, prefix, req in IN_TREE_MODS):
+            print(f'not staged: mods/{jar} (in-tree mod marked not required in IN_TREE_MODS: development testing only)')
+            continue
         entry = by_file.get(('mods', jar))
         # hand-added jars (patcherMod) get an entry named after the file, version "Unknown"
         name = entry['name'] if entry and not entry['name'].endswith('.jar') else modid or os.path.splitext(jar)[0]

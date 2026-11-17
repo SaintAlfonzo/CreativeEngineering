@@ -176,7 +176,7 @@ Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md
 | Own Java (about 270 classes) and 70 mixins | own, GPLv3 | yes | OK |
 | `IwBlockGrowthHandlerMixin` fallback (about 10 lines of IW 1.2.10's body, the only `@Overwrite`) | Immersive Weathering, LGPLv3 | yes | OK; attribution added 2026-11-05 (`NOTICE-thirdparty.txt`, source comment) |
 | `ArmorOverflowRenderer.row0Y` / `drawRow` (from Detail Armor Bar 2.6.4 `ArmorBarRenderer#render`) | MIT | yes | OK; MIT notice added 2026-11-05 (`NOTICE-thirdparty.txt`, source comment) |
-| commonmark-java 0.21.0, shaded to `...creativecommon.shadow.commonmark` | BSD-2-Clause | yes, with `NOTICE-commonmark.txt` | fixed 2026-11-05 (names Creative Common and the `creativecommon` package) |
+| commonmark-java 0.21.0, shaded to `...creativecommon.shadow.commonmark` | BSD-2-Clause | yes, with `NOTICE-commonmark-BSD.txt` | fixed 2026-11-05 (names Creative Common and the `creativecommon` package) |
 | `kubejs_startup/creativecommon/_lib` (12 dicts) and `func/` helpers, `kubejs/_lib` scripts, data, lang, plugin json | own | yes | OK |
 | 12 `textures/gui/*_tint.png` (27x9) | **Mojang-derived**: recolours of the vanilla armor icon | yes | OK: vanilla art and edits of it are accepted everywhere (owner 2026-11-05, [creative_brewing.md](creative_brewing.md) 9.5) |
 | 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | no (out 2026-11-07; back and out again 2026-11-08: the capture is a flat sky with no terrain, so it looked blank; vanilla by default); the pack keeps its `kubejs/assets/` copy | OK |
@@ -335,8 +335,8 @@ The six empty `create:scrap_*` placeholders were dropped: those tags belong to C
 only with Create Recycle. Not touched: Compat writes `creativeengineering:burn/to_ash` and similar physics tags (Compat's
 own cleanup).
 
-**Licence**: Common's `NOTICE-thirdparty.txt` keeps Immersive Weathering only; Equipment's new `NOTICE-thirdparty.txt`
-(Detail Armor Bar, MIT) ships as `creativeequipment-NOTICE-thirdparty.txt`; `ArmorOverflowRenderer` points to it.
+**Licence**: Common's `NOTICE-thirdparty-various.txt` keeps Immersive Weathering only; Equipment's new `NOTICE-thirdparty-MIT.txt`
+(Detail Armor Bar, MIT) ships as `creativeequipment-NOTICE-thirdparty-MIT.txt`; `ArmorOverflowRenderer` points to it.
 
 **Pack-held values**: `config/creativecommon-common.toml` already holds the full `[mod_names]` list and the three removed
 effects; on a deploy the `[effects]` values come over from `configs_edited/root_config/creativebrewing-common.toml`

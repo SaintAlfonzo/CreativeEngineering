@@ -2,7 +2,7 @@ Creative Common: third-party material
 
 Creative Common's own code is licensed under the GNU General Public License v3 (creativecommon-LICENSE.txt). The parts
 below are adapted from other projects and stay under their own licences as well. The bundled commonmark-java library
-has its own notice (creativecommon-NOTICE-commonmark.txt).
+has its own notice (creativecommon-NOTICE-commonmark-BSD.txt).
 
 Immersive Weathering 1.2.10 by Ordana, MehVahdJukaar, Keybounce (GNU LGPL v3)
   com/SaintAlfonzo/creativecommon/mixin/IwBlockGrowthHandlerMixin: the fallback branch reproduces the upstream method

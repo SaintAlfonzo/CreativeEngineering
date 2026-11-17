@@ -526,7 +526,7 @@ other mods starts**. A config switch then picks the electricity mode:
 
 | File | Role |
 |---|---|
-| `development/backportedPowerGrid/` | the fork (mod id `powergrid`), Apache-2.0 upstream files with NOTICE, our changes GPLv3 |
+| `development/backportedPowerGrid/` | the fork (mod id `powergrid`), Apache-2.0 upstream files with `NOTICE-upstream-Apache.txt` (the port notice, then the Apache 2.0 text; was `NOTICE` and `LICENSE` until 2026-11-17), our changes GPL-3.0-only (`LICENSE.txt`) |
 | [plan_power_grid.md](plan_power_grid.md) | execution plan per port phase, P0 to P11 (written 2026-11-13) |
 | `kubejs/server_scripts/` Engineering tree, `power_grid.js` | recipe swaps and removals through `global.NCH` |
 | Creative Common `_lib/item_dict.js`, `removed_items.js` | PG ids, removed PG duplicates |

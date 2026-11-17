@@ -90,7 +90,7 @@ author's licence on the art. The upstream column is what governs textures.
 
 Textures made for this pack (Creative Engineering, Common, Equipment, Magic, Labels, Worldgen, the Delight and
 Brewing bundles' own items) are the owner's, GPLv3, free to use. Exceptions are the recolours credited in
-`development/*/NOTICE-thirdparty.txt` (for example the powdered sugar block, recoloured from Immersive Weathering,
+`development/*/NOTICE-thirdparty-*.txt` (for example the powdered sugar block, recoloured from Immersive Weathering,
 LGPLv3), which keep their source's terms. Check the notice file before using a recoloured texture.
 
 ## 3. Resource packs in `resourcepacks/`
