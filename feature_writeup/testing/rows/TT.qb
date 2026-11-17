@@ -29,6 +29,6 @@ expect READ tooltip_text creativelabels:eraser \d+: .*Right-click a labeled item
 ## CQ-TT-03 | MCA gray eyes option
 @group client
 @commands MCA villager editor (or the player editor) with Creative Compat's extra eye colors: the eye color list
-@pass the option reads "Gray Eyes", not "Grey Eyes" (LOOK)
+@pass the option reads "Gray Eyes", not `Grey Eyes` (LOOK)
 @fails creativecompat jar older than the lang edit (rebuild `:creativeCompat:`)
 @draft no driver step opens the MCA editor; owner LOOK

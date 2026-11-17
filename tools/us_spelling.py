@@ -101,6 +101,7 @@ def blank_spans(line):
 	m = re.sub(r'`[^`]*`', blank, line)
 	m = re.sub(r'\]\([^)]*\)', blank, m)
 	m = re.sub(r'<[^>]+>', blank, m)
+	m = re.sub(r'"[A-Za-z]+"', blank, m)   # a single quoted word is a mention ("colour" 608 times)
 	m = TOKEN_SKIP.sub(blank, m)
 	m = PROTECT.sub(blank, m)
 	return m

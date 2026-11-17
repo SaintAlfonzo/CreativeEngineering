@@ -176,7 +176,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 The agenda for making these rules hard. Each item names the rule ids it would settle.
 
-- **G1 Spelling** (closed 2026-11-16: DR-L7). The docs mix British and American spelling: "color" 608 times, "color" 84 (mostly in code
+- **G1 Spelling** (closed 2026-11-16: DR-L7). The docs mixed British and American spelling: `colour` 608 times, `color` 84 (mostly in code
   names); "capitalization" 2, "capitalization" 5. Pick one for prose (code identifiers follow the language or API).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D20: American; code identifiers follow their API).
 - **G2 Code formatting** (closed 2026-11-16: DR-C21 to DR-C24). Indent per language, tabs or spaces, line length, brace style, and
@@ -483,3 +483,4 @@ each area's numbering. Counts are from 2026-11-14.
 - 2026-11-16: G1 (American spelling) and G19 (`->`) decided, plan D20, D21.
 - 2026-11-16: G16 decided (recipe unlocks removed entirely, plan D23); every V-id scheduled in plan_rules_fixes.md.
 - 2026-11-16: P0 rule text (plan_rules_fixes.md): DR-L4b (ISO dates), DR-L7 (American spelling and `->`; the plan called it DR-L6, which already names in-game names), DR-W3b (prefix index first), DR-W3 test line form (D12), DR-L5 owner only (D9), DR-P4 brackets (D10), DR-C14 no recipe unlocks (D23), DR-C19 `GPL-3.0-only` and NOTICE names (D1), section 5.5 rewritten as rules DR-C21 to DR-C26 (D3, D7, D8); G1, G2, G3, G11, G12, G16, G19 closed; `.editorconfig` added.
+- 2026-11-17: P1 of plan_rules_fixes.md: V-12, V-13, V-17, V-49, V-52, V-59 (docs), V-60, V-61, V-62 fixed; `tools/test_prefix_lint.py` (DR-W3b), `tools/iso_dates.py` (DR-L4b), `tools/us_spelling.py` (DR-L7) and the NOTICE-name and `client_mods/` checks added to the audit; DR-W12 names the two integration-report layouts.
