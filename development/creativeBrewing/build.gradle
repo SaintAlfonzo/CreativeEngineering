@@ -10,61 +10,61 @@
 //   - creativebrewing_members.txt: the mod ids of bundle_members, read by CBConfig (one list).
 // Build: ./gradlew :creativeBrewing:build --offline   Install: ./gradlew :creativeBrewing:installToMods
 plugins {
-    id 'ce.forge-bundle'
+	id 'ce.forge-bundle'
 }
 
 dependencies {
-    // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
-    compileOnly project(':creativeCommon')
-    compileOnly project(':creativeCompat')
-    // Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
-    compileOnly project(':creativeLoot')
-    // The mods the potion, effect and machine code targets (Create, IE, JEI, JEED, Farmer's Respite, ...): the pack's
-    // jars, shared with Creative Common (git-ignored libs/, SRG-named), as creativeCompat does.
-    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+	// CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
+	compileOnly project(':creativeCommon')
+	compileOnly project(':creativeCompat')
+	// Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
+	compileOnly project(':creativeLoot')
+	// The mods the potion, effect and machine code targets (Create, IE, JEI, JEED, Farmer's Respite, ...): the pack's
+	// jars, shared with Creative Common (git-ignored libs/, SRG-named), as creativeCompat does.
+	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
 def scriptTrees = ['data/creativebrewing/kubejs', 'assets/creativebrewing/kubejs']
 
 def membersFile = layout.buildDirectory.file('generated/cb_members/creativebrewing_members.txt')
 def writeMembers = tasks.register('writeMembersList') {
-    def ids = providers.provider {
-        (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
-                .collectMany { m ->
-                    // a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
-                    // that mod gets its own [members] switch too
-                    def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
-                    [project(m).findProperty('mod_id').toString()] + extra
-                }
-    }
-    inputs.property('ids', ids)
-    outputs.file(membersFile)
-    doLast {
-        def f = membersFile.get().asFile
-        f.parentFile.mkdirs()
-        f.text = '# Mod ids of the members nested in this jar (generated from bundle_members)\n' + ids.get().join('\n') + '\n'
-    }
+	def ids = providers.provider {
+		(findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
+				.collectMany { m ->
+					// a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+					// that mod gets its own [members] switch too
+					def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
+					[project(m).findProperty('mod_id').toString()] + extra
+				}
+	}
+	inputs.property('ids', ids)
+	outputs.file(membersFile)
+	doLast {
+		def f = membersFile.get().asFile
+		f.parentFile.mkdirs()
+		f.text = '# Mod ids of the members nested in this jar (generated from bundle_members)\n' + ids.get().join('\n') + '\n'
+	}
 }
 
 tasks.named('processResources', ProcessResources).configure {
-    dependsOn writeMembers
-    from(membersFile)
-    scriptTrees.each { tree ->
-        from(rootProject.file("kubejs/${tree}")) {
-            into tree
-            exclude '**/*.md'
-        }
-    }
+	dependsOn writeMembers
+	from(membersFile)
+	scriptTrees.each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
 }
 
 // The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
 tasks.named('jar', Jar).configure {
-    doLast {
-        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creativebrewing/', 'data/creativebrewing/kubejs/', 'assets/creativebrewing/kubejs/'].each { dir ->
-            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creativebrewing jar has no scripts under ${dir}")
-            }
-        }
-    }
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		['kubejs_startup/creativebrewing/', 'data/creativebrewing/kubejs/', 'assets/creativebrewing/kubejs/'].each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativebrewing jar has no scripts under ${dir}")
+			}
+		}
+	}
 }

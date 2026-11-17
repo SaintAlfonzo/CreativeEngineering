@@ -3,5 +3,5 @@
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
 // Build from the instance root (`./gradlew :creativeDelight:build`); it ships only nested in the Creative Delight jar.
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }

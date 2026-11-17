@@ -7,33 +7,33 @@ plugins { id 'ce.forge-mod' }
 repositories { flatDir { dirs 'libs' } }
 
 dependencies {
-    implementation fg.deobf('local:farmersdelight:1.2.4')
-    implementation fg.deobf('local:farmersrespite:2.0')
+	implementation fg.deobf('local:farmersdelight:1.2.4')
+	implementation fg.deobf('local:farmersrespite:2.0')
 }
 
 def patcherSrc = file('../../development/patcherMod/src/main/java')
 def cdSrc = file('../../development/creativeDelight/src/main/java')
 def syncPatcherSources = tasks.register('syncPatcherSources', Sync) {
-    from(patcherSrc) {
-        include 'com/SaintAlfonzo/creativeengineering/cooking/**'
-        include 'com/SaintAlfonzo/creativeengineering/oven/**'
-        exclude '**/jei/**', '**/client/**'
-    }
-    from(cdSrc) {
-        include 'com/SaintAlfonzo/creativedelight/CDConfig.java'
-        include 'com/SaintAlfonzo/creativedelight/qol/RemainderBufferQol.java'
-        include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotMenuRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleRemainderMixin.java'
-        include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleMenuRemainderMixin.java'
-    }
-    into layout.buildDirectory.dir('patcher-src')
+	from(patcherSrc) {
+		include 'com/SaintAlfonzo/creativeengineering/cooking/**'
+		include 'com/SaintAlfonzo/creativeengineering/oven/**'
+		exclude '**/jei/**', '**/client/**'
+	}
+	from(cdSrc) {
+		include 'com/SaintAlfonzo/creativedelight/CDConfig.java'
+		include 'com/SaintAlfonzo/creativedelight/qol/RemainderBufferQol.java'
+		include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotRemainderMixin.java'
+		include 'com/SaintAlfonzo/creativedelight/mixin/farmersdelight/CookingPotMenuRemainderMixin.java'
+		include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleRemainderMixin.java'
+		include 'com/SaintAlfonzo/creativedelight/mixin/farmersrespite/KettleMenuRemainderMixin.java'
+	}
+	into layout.buildDirectory.dir('patcher-src')
 }
 sourceSets.main.java.srcDir(syncPatcherSources)
 
 // Dev runs: the mods' refmaps need remapping to official names, and our mixin config isn't in a jar manifest.
 minecraft.runs.configureEach {
-    property 'mixin.env.remapRefMap', 'true'
-    property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-    args '-mixin.config=rbtest.mixins.json'
+	property 'mixin.env.remapRefMap', 'true'
+	property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+	args '-mixin.config=rbtest.mixins.json'
 }

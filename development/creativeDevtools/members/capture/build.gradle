@@ -3,14 +3,14 @@
 // Dev-only: the jar goes into tools/client_capture's own game dir, never into the instance's mods/
 // (feature_writeup/client_capture.md). Don't run installToMods for this mod.
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }
 
 dependencies {
-    // Third-party mod jars copied from ../../mods (git-ignored): only jei (recipe screens and their bounds).
-    compileOnly fileTree(dir: 'libs', include: '*.jar')
+	// Third-party mod jars copied from ../../mods (git-ignored): only jei (recipe screens and their bounds).
+	compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
 
 tasks.named('installToMods').configure {
-    doFirst { throw new GradleException('clientCapture is dev-only: tools/client_capture/run_captures.py picks it up from build/libs') }
+	doFirst { throw new GradleException('clientCapture is dev-only: tools/client_capture/run_captures.py picks it up from build/libs') }
 }

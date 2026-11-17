@@ -34,9 +34,9 @@
 // Every mod gets the `libs/` flatDir repository (third-party mod jars copied from the pack's mods/, git-ignored);
 // flatDir notation: 'local:<file name without -version>:<version>'.
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'net.minecraftforge.gradle'
+	id 'eclipse'
+	id 'idea'
+	id 'net.minecraftforge.gradle'
 }
 
 def prop = { String key, String fallback = null -> (project.findProperty(key) ?: fallback)?.toString() }
@@ -48,50 +48,50 @@ version = prop('mod_version')
 group = prop('mod_group_id')
 
 base {
-    archivesName = jarName
+	archivesName = jarName
 }
 
 repositories {
-    flatDir { dir 'libs' }
+	flatDir { dir 'libs' }
 }
 
 // Mojang ships Java 17 to end users in 1.18+.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: prop('mapping_channel'), version: prop('mapping_version')
+	mappings channel: prop('mapping_channel'), version: prop('mapping_version')
 
-    copyIdeResources = true
+	copyIdeResources = true
 
-    runs {
-        configureEach {
-            workingDirectory project.file('run')
+	runs {
+		configureEach {
+			workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', modId
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+			property 'forge.enabledGameTestNamespaces', modId
 
-            // A mod with extra source sets adds them to this entry in its own build.gradle.
-            mods {
-                "${modId}" {
-                    source sourceSets.main
-                }
-            }
-        }
+			// A mod with extra source sets adds them to this entry in its own build.gradle.
+			mods {
+				"${modId}" {
+					source sourceSets.main
+				}
+			}
+		}
 
-        client {}
+		client {}
 
-        server {
-            args '--nogui'
-        }
+		server {
+			args '--nogui'
+		}
 
-        gameTestServer {}
+		gameTestServer {}
 
-        data {
-            workingDirectory project.file('run-data')
-            args '--mod', modId, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-    }
+		data {
+			workingDirectory project.file('run-data')
+			args '--mod', modId, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+		}
+	}
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -100,29 +100,29 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 // template package moved to shared_base, and compile them as part of main.
 def sharedModules = csv('shared_sources')
 if (sharedModules) {
-    def sharedBase = prop('shared_base')
-    if (!sharedBase) throw new GradleException("${project.name}: shared_sources needs shared_base (this mod's base package)")
-    def sharedSources = tasks.register('sharedSources', Sync) {
-        description = "Copies development/shared/{${sharedModules.join(',')}} into ${sharedBase}"
-        inputs.property('sharedBase', sharedBase)
-        sharedModules.each { m ->
-            def dir = rootProject.file("development/shared/${m}")
-            if (!dir.isDirectory()) throw new GradleException("${project.name}: no shared module ${dir}")
-            from(dir) { include '**/*.java' }
-        }
-        into layout.buildDirectory.dir('generated/sources/shared')
-        includeEmptyDirs = false
-        duplicatesStrategy = DuplicatesStrategy.FAIL
-        eachFile { it.path = it.path.replaceFirst(/^ce\//, sharedBase.replace('.', '/') + '/') }
-        filter { String line -> line.replaceAll(/\bce\.(shared|mixin)\b/, sharedBase + '.$1') }
-    }
-    sourceSets.main.java.srcDir(sharedSources)
+	def sharedBase = prop('shared_base')
+	if (!sharedBase) throw new GradleException("${project.name}: shared_sources needs shared_base (this mod's base package)")
+	def sharedSources = tasks.register('sharedSources', Sync) {
+		description = "Copies development/shared/{${sharedModules.join(',')}} into ${sharedBase}"
+		inputs.property('sharedBase', sharedBase)
+		sharedModules.each { m ->
+			def dir = rootProject.file("development/shared/${m}")
+			if (!dir.isDirectory()) throw new GradleException("${project.name}: no shared module ${dir}")
+			from(dir) { include '**/*.java' }
+		}
+		into layout.buildDirectory.dir('generated/sources/shared')
+		includeEmptyDirs = false
+		duplicatesStrategy = DuplicatesStrategy.FAIL
+		eachFile { it.path = it.path.replaceFirst(/^ce\//, sharedBase.replace('.', '/') + '/') }
+		filter { String line -> line.replaceAll(/\bce\.(shared|mixin)\b/, sharedBase + '.$1') }
+	}
+	sourceSets.main.java.srcDir(sharedSources)
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
+	minecraft "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 // Dev runs: match the loader libraries of the real Forge 43.3.9 install (instance.json libraries). Forge's
@@ -132,95 +132,95 @@ dependencies {
 // "Module com.google.common reads more than one module named cpw.mods.securejarhandler". FG builds the run
 // classpath from its own `minecraft` configuration, so this has to cover every configuration.
 configurations.configureEach {
-    resolutionStrategy.force 'net.minecraftforge:forgespi:6.0.0', 'net.minecraftforge:unsafe:0.2.0',
-            'org.apache.logging.log4j:log4j-api:2.17.0', 'org.apache.logging.log4j:log4j-core:2.17.0'
-    exclude group: 'net.minecraftforge', module: 'securemodules'
-    exclude group: 'net.minecraftforge', module: 'modlauncher'
-    exclude group: 'org.slf4j', module: 'slf4j-simple'
+	resolutionStrategy.force 'net.minecraftforge:forgespi:6.0.0', 'net.minecraftforge:unsafe:0.2.0',
+			'org.apache.logging.log4j:log4j-api:2.17.0', 'org.apache.logging.log4j:log4j-core:2.17.0'
+	exclude group: 'net.minecraftforge', module: 'securemodules'
+	exclude group: 'net.minecraftforge', module: 'modlauncher'
+	exclude group: 'org.slf4j', module: 'slf4j-simple'
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+	options.encoding = 'UTF-8'
 }
 
 if (prop('disable_target_validator') == 'true') {
-    tasks.named('compileJava', JavaCompile).configure {
-        options.compilerArgs << '-AdisableTargetValidator=true'
-    }
+	tasks.named('compileJava', JavaCompile).configure {
+		options.compilerArgs << '-AdisableTargetValidator=true'
+	}
 }
 
 // resource_guard_jars: the jar must not carry upstream resources (license and port guard: miners_delight.md D2, alcohol.md
 // B4.8, rustic, Ender's ARR). Fail the build if a file under src/main/resources has the same path as a file in one
 // of the jars, except resource_guard_own_files.
 def upstreamJars = csv('resource_guard_jars').collect { String path ->
-    def f = rootProject.file(path)
-    f.name.contains('*') ? f.parentFile.listFiles()?.find { it.name ==~ f.name.replace('.', '\\.').replace('*', '.*') } : f
+	def f = rootProject.file(path)
+	f.name.contains('*') ? f.parentFile.listFiles()?.find { it.name ==~ f.name.replace('.', '\\.').replace('*', '.*') } : f
 }
 if (upstreamJars) {
-    def ownFiles = csv('resource_guard_own_files') as Set
-    def arr = prop('resource_guard_arr') == 'true'
-    def checkName = arr ? 'checkNoArrResources' : 'checkNoUpstreamResources'
-    def what = arr ? "the installed ${prop('resource_guard_name')} (ARR) jar" :
-            (upstreamJars.size() > 1 ? "an upstream ${prop('resource_guard_name')} jar" : "the upstream ${prop('resource_guard_name')} jar")
-    tasks.register(checkName) {
-        group = 'verification'
-        description = "Fails if src/main/resources contains a path that also exists in ${what}"
-        def resDir = file('src/main/resources')
-        inputs.dir(resDir)
-        doLast {
-            def ours = [] as Set
-            resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
-            def clashes = []
-            upstreamJars.findAll { it?.exists() }.each { jar ->
-                new java.util.zip.ZipFile(jar).withCloseable { zip ->
-                    zip.entries().each { e ->
-                        if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) {
-                            clashes << (upstreamJars.size() > 1 ? "${e.name} (${jar.name})" : e.name)
-                        }
-                    }
-                }
-            }
-            if (clashes) {
-                def head = arr ? "paths also in ${upstreamJars.find { it?.exists() }.name} (ARR):" : 'upstream files in src/main/resources:'
-                throw new GradleException(head + '\n  ' + clashes.join('\n  '))
-            }
-        }
-    }
-    tasks.named('check') { dependsOn checkName }
-    tasks.named('jar') { dependsOn checkName }
+	def ownFiles = csv('resource_guard_own_files') as Set
+	def arr = prop('resource_guard_arr') == 'true'
+	def checkName = arr ? 'checkNoArrResources' : 'checkNoUpstreamResources'
+	def what = arr ? "the installed ${prop('resource_guard_name')} (ARR) jar" :
+			(upstreamJars.size() > 1 ? "an upstream ${prop('resource_guard_name')} jar" : "the upstream ${prop('resource_guard_name')} jar")
+	tasks.register(checkName) {
+		group = 'verification'
+		description = "Fails if src/main/resources contains a path that also exists in ${what}"
+		def resDir = file('src/main/resources')
+		inputs.dir(resDir)
+		doLast {
+			def ours = [] as Set
+			resDir.eachFileRecurse(groovy.io.FileType.FILES) { ours << resDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+			def clashes = []
+			upstreamJars.findAll { it?.exists() }.each { jar ->
+				new java.util.zip.ZipFile(jar).withCloseable { zip ->
+					zip.entries().each { e ->
+						if (!e.directory && ours.contains(e.name) && !ownFiles.contains(e.name)) {
+							clashes << (upstreamJars.size() > 1 ? "${e.name} (${jar.name})" : e.name)
+						}
+					}
+				}
+			}
+			if (clashes) {
+				def head = arr ? "paths also in ${upstreamJars.find { it?.exists() }.name} (ARR):" : 'upstream files in src/main/resources:'
+				throw new GradleException(head + '\n  ' + clashes.join('\n  '))
+			}
+		}
+	}
+	tasks.named('check') { dependsOn checkName }
+	tasks.named('jar') { dependsOn checkName }
 }
 
 tasks.withType(ProcessResources).configureEach {
-    def replaceProperties = [
-            minecraft_version   : prop('minecraft_version'), minecraft_version_range: prop('minecraft_version_range'),
-            forge_version       : prop('forge_version'), forge_version_range: prop('forge_version_range'),
-            loader_version_range: prop('loader_version_range'),
-            mod_id              : modId, mod_name: prop('mod_name'), mod_license: prop('mod_license'),
-            mod_version         : prop('mod_version'), mod_authors: prop('mod_authors'),
-            mod_description     : prop('mod_description'),
-    ]
-    inputs.properties replaceProperties
+	def replaceProperties = [
+			minecraft_version   : prop('minecraft_version'), minecraft_version_range: prop('minecraft_version_range'),
+			forge_version       : prop('forge_version'), forge_version_range: prop('forge_version_range'),
+			loader_version_range: prop('loader_version_range'),
+			mod_id              : modId, mod_name: prop('mod_name'), mod_license: prop('mod_license'),
+			mod_version         : prop('mod_version'), mod_authors: prop('mod_authors'),
+			mod_description     : prop('mod_description'),
+	]
+	inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
-    }
+	filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+		expand replaceProperties + [project: project]
+	}
 }
 
 def mixinConfigs = csv('mixin_configs', "${modId}.mixins.json").findAll { it != 'none' }
 
 tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title'     : modId,
-                'Specification-Vendor'    : prop('mod_authors'),
-                'Specification-Version'   : '1',
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : prop('mod_authors'),
-        ] + (mixinConfigs ? ['MixinConfigs': mixinConfigs.join(',')] : [:]))
-    }
+	manifest {
+		attributes([
+				'Specification-Title'     : modId,
+				'Specification-Vendor'    : prop('mod_authors'),
+				'Specification-Version'   : '1',
+				'Implementation-Title'    : project.name,
+				'Implementation-Version'  : project.jar.archiveVersion,
+				'Implementation-Vendor'   : prop('mod_authors'),
+		] + (mixinConfigs ? ['MixinConfigs': mixinConfigs.join(',')] : [:]))
+	}
 
-    finalizedBy 'reobfJar'
+	finalizedBy 'reobfJar'
 }
 
 // Build stamp (plan_process_overhaul.md P1.2, owner ruling D1): every shipped jar names the build it came from, in
@@ -233,91 +233,91 @@ tasks.named('jar', Jar).configure {
 ext.ceStampDirs = [projectDir, rootProject.file('build-logic')]
 def stampFile = layout.buildDirectory.file('ceStamp/META-INF/ce-build.json')
 def computeStamp = { ->
-    def root = rootProject.projectDir
-    def git = { List<String> args ->
-        def pr = (['git', '-C', root.path] + args).execute()
-        def out = pr.inputStream.text
-        pr.waitFor()
-        pr.exitValue() == 0 ? out.trim() : ''
-    }
-    def dirs = (project.ext.ceStampDirs + sourceSets.collectMany { it.allSource.srcDirs + it.resources.srcDirs })
-            .collect { it.absoluteFile }.findAll { it.exists() }.unique()
-    def rel = dirs.collect { root.toPath().relativize(it.toPath()).toString() ?: '.' }
-    def specs = rel + rel.collectMany { [":(exclude)${it}/build", ":(exclude)${it}/jar_archive", ":(exclude)${it}/run"] }
-    def sha = git(['rev-parse', '--short', 'HEAD']) ?: 'nogit'
-    def dirtyFiles = git(['status', '--porcelain', '--untracked-files=all', '--'] + specs).readLines()
-            .findAll { it.length() > 3 }.collect { it.substring(3).replaceAll(/^.* -> /, '') }.sort().unique()
-    def stampTime
-    def suffix = ''
-    if (dirtyFiles) {
-        def md = java.security.MessageDigest.getInstance('SHA-1')
-        long newest = 0
-        dirtyFiles.each { p ->
-            def f = new File(root, p)
-            md.update((p + '\n').bytes)
-            if (f.isFile()) { md.update(f.bytes); newest = Math.max(newest, f.lastModified()) }
-        }
-        suffix = '.dirty-' + md.digest().encodeHex().toString().substring(0, 6)
-        stampTime = newest ?: System.currentTimeMillis()
-    } else {
-        stampTime = ((git(['log', '-1', '--format=%ct']) ?: '0') as long) * 1000L
-    }
-    def t = new Date(stampTime)
-    def stamp = "${version}+${sha}${suffix}.${t.format('yyMMddHHmm')}"
-    [stamp: stamp, json: [mod_id: modId, mod_version: version.toString(), sha: sha, dirty: !dirtyFiles.isEmpty(),
-                          built_at: t.format("yyyy-MM-dd'T'HH:mm"), gradle_task: prop('shipped_jar_task', 'jar'),
-                          stamp: stamp]]
+	def root = rootProject.projectDir
+	def git = { List<String> args ->
+		def pr = (['git', '-C', root.path] + args).execute()
+		def out = pr.inputStream.text
+		pr.waitFor()
+		pr.exitValue() == 0 ? out.trim() : ''
+	}
+	def dirs = (project.ext.ceStampDirs + sourceSets.collectMany { it.allSource.srcDirs + it.resources.srcDirs })
+			.collect { it.absoluteFile }.findAll { it.exists() }.unique()
+	def rel = dirs.collect { root.toPath().relativize(it.toPath()).toString() ?: '.' }
+	def specs = rel + rel.collectMany { [":(exclude)${it}/build", ":(exclude)${it}/jar_archive", ":(exclude)${it}/run"] }
+	def sha = git(['rev-parse', '--short', 'HEAD']) ?: 'nogit'
+	def dirtyFiles = git(['status', '--porcelain', '--untracked-files=all', '--'] + specs).readLines()
+			.findAll { it.length() > 3 }.collect { it.substring(3).replaceAll(/^.* -> /, '') }.sort().unique()
+	def stampTime
+	def suffix = ''
+	if (dirtyFiles) {
+		def md = java.security.MessageDigest.getInstance('SHA-1')
+		long newest = 0
+		dirtyFiles.each { p ->
+			def f = new File(root, p)
+			md.update((p + '\n').bytes)
+			if (f.isFile()) { md.update(f.bytes); newest = Math.max(newest, f.lastModified()) }
+		}
+		suffix = '.dirty-' + md.digest().encodeHex().toString().substring(0, 6)
+		stampTime = newest ?: System.currentTimeMillis()
+	} else {
+		stampTime = ((git(['log', '-1', '--format=%ct']) ?: '0') as long) * 1000L
+	}
+	def t = new Date(stampTime)
+	def stamp = "${version}+${sha}${suffix}.${t.format('yyMMddHHmm')}"
+	[stamp: stamp, json: [mod_id: modId, mod_version: version.toString(), sha: sha, dirty: !dirtyFiles.isEmpty(),
+						  built_at: t.format("yyyy-MM-dd'T'HH:mm"), gradle_task: prop('shipped_jar_task', 'jar'),
+						  stamp: stamp]]
 }
 def writeBuildStamp = tasks.register('writeBuildStamp') {
-    group = 'ce'
-    description = 'Writes META-INF/ce-build.json (the build stamp) for the shipped jar'
-    outputs.file(stampFile)
-    outputs.upToDateWhen { false }
-    doLast {
-        def s = computeStamp()
-        def f = stampFile.get().asFile
-        def text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(s.json)) + '\n'
-        f.parentFile.mkdirs()
-        if (!f.exists() || f.text != text) f.text = text   // unchanged content keeps the jar up to date
-        logger.info("build stamp ${s.stamp}")
-    }
+	group = 'ce'
+	description = 'Writes META-INF/ce-build.json (the build stamp) for the shipped jar'
+	outputs.file(stampFile)
+	outputs.upToDateWhen { false }
+	doLast {
+		def s = computeStamp()
+		def f = stampFile.get().asFile
+		def text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(s.json)) + '\n'
+		f.parentFile.mkdirs()
+		if (!f.exists() || f.text != text) f.text = text   // unchanged content keeps the jar up to date
+		logger.info("build stamp ${s.stamp}")
+	}
 }
 ext.ceStampOf = { -> new groovy.json.JsonSlurper().parse(stampFile.get().asFile).stamp }
 tasks.matching { it.name in ['jar', 'repackJar', 'bundleJar'] }.configureEach { t ->
-    t.dependsOn writeBuildStamp
-    t.from(stampFile.map { it.asFile.parentFile.parentFile })
-    t.doFirst { t.manifest.attributes('Implementation-Version': project.ext.ceStampOf()) }
+	t.dependsOn writeBuildStamp
+	t.from(stampFile.map { it.asFile.parentFile.parentFile })
+	t.doFirst { t.manifest.attributes('Implementation-Version': project.ext.ceStampOf()) }
 }
 
 // Reproducible jars: no build timestamp in the manifest, fixed entry order and entry times. Rebuilding
 // unchanged source gives a byte-identical jar, so a root `./gradlew build` that repacks every mod changes
 // nothing downstream (same sha1 in mods/, no false "differs from build/libs" deploy warning).
 tasks.withType(AbstractArchiveTask).configureEach {
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
 }
 
 // License files in the mod's folder (GPLv3 LICENSE / LICENSE.txt, upstream NOTICE-*) go into its jar.
 // A mod whose mod_license names the GPL and whose folder has no LICENSE file stops the build, so no jar ships
 // without the license text (plan_cb_publish.md M6).
 def checkLicenseFile = tasks.register('checkLicenseFile') {
-    def license = prop('mod_license', '')
-    def hasFile = ['LICENSE', 'LICENSE.txt'].any { new File(projectDir, it).isFile() }
-    inputs.property('mod_license', license)
-    inputs.property('has_license_file', hasFile)
-    doLast {
-        if (license.contains('GPL') && !hasFile) {
-            throw new GradleException("${project.path}: mod_license '${license}' names the GPL but ${projectDir} " +
-                    "has no LICENSE or LICENSE.txt; copy development/creativeCommon/LICENSE.txt there")
-        }
-    }
+	def license = prop('mod_license', '')
+	def hasFile = ['LICENSE', 'LICENSE.txt'].any { new File(projectDir, it).isFile() }
+	inputs.property('mod_license', license)
+	inputs.property('has_license_file', hasFile)
+	doLast {
+		if (license.contains('GPL') && !hasFile) {
+			throw new GradleException("${project.path}: mod_license '${license}' names the GPL but ${projectDir} " +
+					"has no LICENSE or LICENSE.txt; copy development/creativeCommon/LICENSE.txt there")
+		}
+	}
 }
 tasks.named('jar', Jar).configure {
-    dependsOn checkLicenseFile
-    from(projectDir) {
-        include 'LICENSE', 'LICENSE.txt', 'NOTICE*'
-        rename { "${jarName}-${it}" }
-    }
+	dependsOn checkLicenseFile
+	from(projectDir) {
+		include 'LICENSE', 'LICENSE.txt', 'NOTICE*'
+		rename { "${jarName}-${it}" }
+	}
 }
 
 // The jar that ships: `jar` (reobfed in place), or the repack / bundle of ce.forge-repack / ce.forge-bundle.
@@ -328,10 +328,10 @@ def shippedJarTask = { tasks.named(prop('shipped_jar_task', 'jar'), AbstractArch
 // A build only adds a version that isn't there yet, so dev rebuilds never replace a released jar;
 // tools/build_deploy.py stores the jar it actually ships.
 def archiveJar = tasks.register('archiveJar', Copy) {
-    dependsOn 'reobfJar', { shippedJarTask() }
-    from { shippedJarTask().archiveFile }
-    into "${projectDir}/jar_archive"
-    eachFile { if (new File("${projectDir}/jar_archive", it.name).exists()) it.exclude() }
+	dependsOn 'reobfJar', { shippedJarTask() }
+	from { shippedJarTask().archiveFile }
+	into "${projectDir}/jar_archive"
+	eachFile { if (new File("${projectDir}/jar_archive", it.name).exists()) it.exclude() }
 }
 tasks.named('build').configure { finalizedBy archiveJar }
 
@@ -339,60 +339,60 @@ tasks.named('build').configure { finalizedBy archiveJar }
 // project's classes compile, before the jar is installed; a FAIL stops the install and names the check. -PskipChecks overrides it (logged in the install ledger, P1.2).
 // Runs once per Gradle invocation, however many projects install.
 def preInstallChecks = tasks.register('preInstallChecks') {
-    group = 'ce'
-    description = 'Runs tools/check_all.py --fast --changed (skipped with -PskipChecks)'
-    onlyIf { !project.hasProperty('skipChecks') }
-    dependsOn 'classes'   // this project's class-based tests read fresh classes; other stale mods SKIP (check_all.py)
-    doLast {
-        if (gradle.ext.has('ceChecksDone')) return
-        gradle.ext.ceChecksDone = true
-        def out = new ByteArrayOutputStream()
-        def r = project.exec {
-            workingDir rootProject.projectDir
-            commandLine 'python3', 'tools/check_all.py', '--fast', '--changed'
-            environment 'CE_IN_GRADLE', '1'
-            environment 'CE_INSTALL_PROJECT', project.name
-            standardOutput = out
-            errorOutput = out
-            ignoreExitValue = true
-        }
-        def text = out.toString()
-        text.readLines().findAll { it ==~ /^(FAIL|KNOWN|WARN|SKIP|check_all).*/ }.each { logger.lifecycle(it) }
-        if (r.exitValue != 0) {
-            def fails = text.readLines().findAll { it.startsWith('FAIL') }.collect { it.split(/\s+/)[1] }
-            throw new GradleException("install refused: check_all FAIL in ${fails.join(', ')} " +
-                    "(python3 tools/check_all.py --only ${fails.join(',')} -v; -PskipChecks overrides)")
-        }
-    }
+	group = 'ce'
+	description = 'Runs tools/check_all.py --fast --changed (skipped with -PskipChecks)'
+	onlyIf { !project.hasProperty('skipChecks') }
+	dependsOn 'classes'   // this project's class-based tests read fresh classes; other stale mods SKIP (check_all.py)
+	doLast {
+		if (gradle.ext.has('ceChecksDone')) return
+		gradle.ext.ceChecksDone = true
+		def out = new ByteArrayOutputStream()
+		def r = project.exec {
+			workingDir rootProject.projectDir
+			commandLine 'python3', 'tools/check_all.py', '--fast', '--changed'
+			environment 'CE_IN_GRADLE', '1'
+			environment 'CE_INSTALL_PROJECT', project.name
+			standardOutput = out
+			errorOutput = out
+			ignoreExitValue = true
+		}
+		def text = out.toString()
+		text.readLines().findAll { it ==~ /^(FAIL|KNOWN|WARN|SKIP|check_all).*/ }.each { logger.lifecycle(it) }
+		if (r.exitValue != 0) {
+			def fails = text.readLines().findAll { it.startsWith('FAIL') }.collect { it.split(/\s+/)[1] }
+			throw new GradleException("install refused: check_all FAIL in ${fails.join(', ')} " +
+					"(python3 tools/check_all.py --only ${fails.join(',')} -v; -PskipChecks overrides)")
+		}
+	}
 }
 
 // Explicit only (never part of `build`): put this build's jar into the instance's mods/. Older versions
 // of this mod and anything matching replaces_jars are MOVED to jar_archive/displaced/, not deleted.
 // When the game is running, install_jar.py asks first (dialog); never replaces a jar under a running game.
 tasks.register('installToMods') {
-    group = 'ce'
-    description = "Builds ${jarName} and swaps it into ../mods (old versions -> jar_archive/displaced/)"
-    dependsOn preInstallChecks, 'build', { shippedJarTask() }
-    doFirst {
-        def bundledIn = prop('bundled_in')
-        if (bundledIn) {
-            throw new GradleException("${project.name} ships nested in ${bundledIn}'s jar, not on its own: " +
-                    "run ./gradlew :${bundledIn}:installToMods")
-        }
-    }
-    // tools/install_jar.py does the swap, the install ledger (jar_archive/installed.csv) and, when the owner's game is
-    // running, the Install now / Install on exit / Skip dialog (plan_process_overhaul.md P1.2 item 7).
-    doLast {
-        def built = shippedJarTask().archiveFile.get().asFile
-        def args = ['python3', 'tools/install_jar.py', '--jar', built.path, '--name', jarName,
-                    '--displaced', file('jar_archive/displaced').path, '--replaces', csv('replaces_jars').join(',')]
-        if (project.hasProperty('skipChecks')) args << '--skip-checks'
-        project.exec {
-            workingDir rootProject.projectDir
-            commandLine args
-            ['DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY', 'DBUS_SESSION_BUS_ADDRESS'].each { k ->
-                if (System.getenv(k)) environment k, System.getenv(k)
-            }
-        }
-    }
+	group = 'ce'
+	description = "Builds ${jarName} and swaps it into ../mods (old versions -> jar_archive/displaced/)"
+	dependsOn preInstallChecks, 'build', { shippedJarTask() }
+	doFirst {
+		def bundledIn = prop('bundled_in')
+		if (bundledIn) {
+			throw new GradleException("${project.name} ships nested in ${bundledIn}'s jar, not on its own: " +
+					"run ./gradlew :${bundledIn}:installToMods")
+		}
+	}
+	// tools/install_jar.py does the swap, the install ledger (jar_archive/installed.csv) and, when the owner's game is
+	// running, the Install now / Install on exit / Skip dialog (plan_process_overhaul.md P1.2 item 7).
+	doLast {
+		def built = shippedJarTask().archiveFile.get().asFile
+		def args = ['python3', 'tools/install_jar.py', '--jar', built.path, '--name', jarName,
+					'--displaced', file('jar_archive/displaced').path, '--replaces', csv('replaces_jars').join(',')]
+		if (project.hasProperty('skipChecks')) args << '--skip-checks'
+		project.exec {
+			workingDir rootProject.projectDir
+			commandLine args
+			['DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY', 'DBUS_SESSION_BUS_ADDRESS'].each { k ->
+				if (System.getenv(k)) environment k, System.getenv(k)
+			}
+		}
+	}
 }

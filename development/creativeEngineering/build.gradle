@@ -11,39 +11,39 @@
 //     tools/gen_sawmill_recipes.py through /cdevgen).
 // Build: ./gradlew :creativeEngineering:build --offline   Install: ./gradlew :creativeEngineering:installToMods
 plugins {
-    id 'ce.forge-mod'
+	id 'ce.forge-mod'
 }
 
 dependencies {
-    // Creative Common: a hard dependency (KubeJS, the shared helpers, the startup loader) and the Common APIs this
-    // jar calls.
-    compileOnly project(':creativeCommon')
-    // Creative Compat: required by every Creative jar (creative_split.md 7.6).
-    compileOnly project(':creativeCompat')
-    // The mods the mixins target (Create, IE, Immersive Posts, Dreams and Desires, JEI): the pack's jars, shared with
-    // Creative Common (git-ignored libs/, SRG-named).
-    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+	// Creative Common: a hard dependency (KubeJS, the shared helpers, the startup loader) and the Common APIs this
+	// jar calls.
+	compileOnly project(':creativeCommon')
+	// Creative Compat: required by every Creative jar (creative_split.md 7.6).
+	compileOnly project(':creativeCompat')
+	// The mods the mixins target (Create, IE, Immersive Posts, Dreams and Desires, JEI): the pack's jars, shared with
+	// Creative Common (git-ignored libs/, SRG-named).
+	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
 def scriptTrees = ['data/creativeengineering/kubejs']
 
 tasks.named('processResources', ProcessResources).configure {
-    scriptTrees.each { tree ->
-        from(rootProject.file("kubejs/${tree}")) {
-            into tree
-            exclude '**/*.md'
-        }
-    }
+	scriptTrees.each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
 }
 
 // The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
 tasks.named('jar', Jar).configure {
-    doLast {
-        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        ['kubejs_startup/creativeengineering/', 'data/creativeengineering/kubejs/'].each { dir ->
-            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creativeengineering jar has no scripts under ${dir}")
-            }
-        }
-    }
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		['kubejs_startup/creativeengineering/', 'data/creativeengineering/kubejs/'].each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativeengineering jar has no scripts under ${dir}")
+			}
+		}
+	}
 }

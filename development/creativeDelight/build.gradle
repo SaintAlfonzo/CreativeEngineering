@@ -16,40 +16,40 @@
 //     into the jar, for the jar-path checks of SQ-CDT. Never for a release (build_deploy refuses such a jar).
 // Build: ./gradlew :creativeDelight:build --offline   Install: ./gradlew :creativeDelight:installToMods
 plugins {
-    id 'ce.forge-bundle'
+	id 'ce.forge-bundle'
 }
 
 dependencies {
-    // Fruits Delight compartment (compat/FruitsDelightHooks). SRG-named jar; only its own type is used.
-    compileOnly 'local:fruitsdelight:0.5.11'
-    // QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are Creative Common's
-    // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in creativeCommon/libs.
-    compileOnly project(':creativeCommon')
-    compileOnly project(':creativeCompat')
-    // Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
-    compileOnly project(':creativeLoot')
-    compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
-    compileOnly 'local:FarmersRespite:1.19-2.0'
-    compileOnly 'local:wthit:1.19.2-forge-5.36.1'
-    // Farmer's Respite Kettle tank (farmers_respite.md 2.1): drink <-> fluid pairs from Create's filling / emptying
-    // recipes, and the base fluid slot on Respite's JEI page.
-    compileOnly 'local:create:1.19.2-0.5.1.i'
-    compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
-    // Banana merge (item_merges.md 2.1): the gorilla and sugar glider forage mixins.
-    compileOnly 'local:alexsmobs:1.21.1'
-    // The kitchen and food Java moved from Creative Common at the CD carve (creative_delight.md 34): the mods it
-    // touches (Quark, Spice of Life, Corn Delight, Canned Goods, The Salt, Immersive Weathering, AppleSkin, Curios, KubeJS,
-    // The Dirty Stuff, ...) from Creative Common's git-ignored libs/, and the Display Delight port for the placed dishes.
-    // (Cooking for Blockheads and Balm are excluded here: the compartment compiles against their deobf copies below.)
-    compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar',
-            exclude: ['cookingforblockheads-*.jar', 'balm-*.jar'])
-    compileOnly project(':backportedDisplay')
-    // M8 compartments (plan_cb_publish.md 3b; were the blockheadsAdditions and incubationAdditions members). Cooking for
-    // Blockheads and Balm (libs/, copied from mods/): the racks extend CfB's blocks, the mixins target its oven and corner;
-    // deobf as the member had them. Incubation, Blueprint, Alex's Mobs, Citadel, Untitled Duck Mod and GeckoLib come
-    // SRG-named from Creative Common's libs/ above.
-    compileOnly fg.deobf('local:cookingforblockheads-forge-1.19.2:13.3.4')
-    compileOnly fg.deobf('local:balm-forge-1.19.2:4.6.0')
+	// Fruits Delight compartment (compat/FruitsDelightHooks). SRG-named jar; only its own type is used.
+	compileOnly 'local:fruitsdelight:0.5.11'
+	// QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are Creative Common's
+	// (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in creativeCommon/libs.
+	compileOnly project(':creativeCommon')
+	compileOnly project(':creativeCompat')
+	// Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
+	compileOnly project(':creativeLoot')
+	compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
+	compileOnly 'local:FarmersRespite:1.19-2.0'
+	compileOnly 'local:wthit:1.19.2-forge-5.36.1'
+	// Farmer's Respite Kettle tank (farmers_respite.md 2.1): drink <-> fluid pairs from Create's filling / emptying
+	// recipes, and the base fluid slot on Respite's JEI page.
+	compileOnly 'local:create:1.19.2-0.5.1.i'
+	compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
+	// Banana merge (item_merges.md 2.1): the gorilla and sugar glider forage mixins.
+	compileOnly 'local:alexsmobs:1.21.1'
+	// The kitchen and food Java moved from Creative Common at the CD carve (creative_delight.md 34): the mods it
+	// touches (Quark, Spice of Life, Corn Delight, Canned Goods, The Salt, Immersive Weathering, AppleSkin, Curios, KubeJS,
+	// The Dirty Stuff, ...) from Creative Common's git-ignored libs/, and the Display Delight port for the placed dishes.
+	// (Cooking for Blockheads and Balm are excluded here: the compartment compiles against their deobf copies below.)
+	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar',
+			exclude: ['cookingforblockheads-*.jar', 'balm-*.jar'])
+	compileOnly project(':backportedDisplay')
+	// M8 compartments (plan_cb_publish.md 3b; were the blockheadsAdditions and incubationAdditions members). Cooking for
+	// Blockheads and Balm (libs/, copied from mods/): the racks extend CfB's blocks, the mixins target its oven and corner;
+	// deobf as the member had them. Incubation, Blueprint, Alex's Mobs, Citadel, Untitled Duck Mod and GeckoLib come
+	// SRG-named from Creative Common's libs/ above.
+	compileOnly fg.deobf('local:cookingforblockheads-forge-1.19.2:13.3.4')
+	compileOnly fg.deobf('local:balm-forge-1.19.2:4.6.0')
 }
 
 // The ARR guard of ce.forge-mod (checkNoArrResources, gradle.properties resource_guard_*) compares jar-root paths; the
@@ -57,36 +57,36 @@ dependencies {
 // installed Cooking for Blockheads jar may ship (memory arr-mod-overrides-route); our packs only name its models as
 // parents.
 def arrPacks = tasks.register('checkNoArrPackResources') {
-    group = 'verification'
-    description = 'Fails if a file under src/main/resources/packs/*/ repeats a path of the installed Cooking for Blockheads jar'
-    def packsDir = file('src/main/resources/packs')
-    inputs.dir(packsDir)
-    doLast {
-        def jar = rootProject.file('mods').listFiles()?.find { it.name ==~ /cookingforblockheads-.*\.jar/ }
-        if (jar == null) return
-        def ours = [] as Set
-        packsDir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
-            def rel = packsDir.toPath().relativize(f.toPath()).toString().replace('\\', '/')
-            def m = rel =~ /^(?:incubation\/[^\/]+|[^\/]+)\/(.+)$/
-            if (m.matches()) ours << m.group(1)
-        }
-        def clashes = []
-        new java.util.zip.ZipFile(jar).withCloseable { zip ->
-            // tag files are merged by path, never overridden (data/<ns>/tags/...): the same path is ours, not a copy
-            zip.entries().each { e ->
-                if (!e.directory && e.name != 'pack.mcmeta' && !(e.name ==~ /data\/[^\/]+\/tags\/.+/) && ours.contains(e.name)) clashes << e.name
-            }
-        }
-        if (clashes) throw new GradleException("packs/ repeat paths of ${jar.name} (ARR):\n  " + clashes.join('\n  '))
-    }
+	group = 'verification'
+	description = 'Fails if a file under src/main/resources/packs/*/ repeats a path of the installed Cooking for Blockheads jar'
+	def packsDir = file('src/main/resources/packs')
+	inputs.dir(packsDir)
+	doLast {
+		def jar = rootProject.file('mods').listFiles()?.find { it.name ==~ /cookingforblockheads-.*\.jar/ }
+		if (jar == null) return
+		def ours = [] as Set
+		packsDir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+			def rel = packsDir.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+			def m = rel =~ /^(?:incubation\/[^\/]+|[^\/]+)\/(.+)$/
+			if (m.matches()) ours << m.group(1)
+		}
+		def clashes = []
+		new java.util.zip.ZipFile(jar).withCloseable { zip ->
+			// tag files are merged by path, never overridden (data/<ns>/tags/...): the same path is ours, not a copy
+			zip.entries().each { e ->
+				if (!e.directory && e.name != 'pack.mcmeta' && !(e.name ==~ /data\/[^\/]+\/tags\/.+/) && ours.contains(e.name)) clashes << e.name
+			}
+		}
+		if (clashes) throw new GradleException("packs/ repeat paths of ${jar.name} (ARR):\n  " + clashes.join('\n  '))
+	}
 }
 tasks.named('check') { dependsOn arrPacks }
 tasks.named('jar') { dependsOn arrPacks }
 
 def scriptTrees = ['data/creativedelight/kubejs', 'assets/creativedelight/kubejs']
 def genData = ['food/food_tuning.json', 'food/comfort_nourishment.json', 'food/food_families.json',
-               'food/placed_food_slices.json', 'food/placeable.json', 'food/food_types.json', 'food/can_types.json',
-               'food/can_servings.json']
+			   'food/placed_food_slices.json', 'food/placeable.json', 'food/food_types.json', 'food/can_types.json',
+			   'food/can_servings.json']
 def genDataExclude = []
 def dataTrees = ['data/creativedelight/cup_conversion', 'data/creativedelight/loot_tables']
 
@@ -100,129 +100,129 @@ def worldgenSrc = rootProject.file('kubejs/data/creativedelight/worldgen')
 def wildCropsJson = rootProject.file('kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json')
 def worldgenOut = layout.buildDirectory.dir('generated/cd_worldgen')
 def splitWorldgen = tasks.register('splitWorldgen') {
-    group = 'build'
-    description = 'Splits the wild crop worldgen files into the plain data tree and one pack per optional mod'
-    inputs.dir(worldgenSrc)
-    inputs.file(wildCropsJson)
-    outputs.dir(worldgenOut)
-    doLast {
-        def out = worldgenOut.get().asFile
-        project.delete(out)
-        def slurper = new groovy.json.JsonSlurper()
-        // namespaces that are always there; creativeengineering is only named as tags (an unknown tag is empty, not an error)
-        def always = ['minecraft', 'forge', 'creativedelight', 'creativeengineering'] as Set
-        def gate = [:]
-        def claim = { String rel, String mod, String rule ->
-            def had = gate[rel]
-            if (had != null && had != mod) throw new GradleException("worldgen/${rel} is needed by rules requiring ${had} and ${mod} (${rule})")
-            gate[rel] = mod
-        }
-        slurper.parse(wildCropsJson).crops.each { key, rule ->
-            def mod = rule.requires
-            if (!mod || mod in ['creativedelight', 'minecraft']) return
-            (rule.features ?: []).findAll { it.startsWith('creativedelight:wild/') }.each { id ->
-                def placed = "placed_feature/${id.substring('creativedelight:'.length())}.json"
-                def pf = new File(worldgenSrc, placed)
-                if (!pf.file) throw new GradleException("wild_crops.json ${key}: no worldgen/${placed}")
-                claim(placed, mod, key)
-                def feat = slurper.parse(pf).feature
-                if (feat instanceof String && feat.startsWith('creativedelight:')) {
-                    def conf = "configured_feature/${feat.substring('creativedelight:'.length())}.json"
-                    if (new File(worldgenSrc, conf).file) claim(conf, mod, key)
-                }
-            }
-        }
-        def unrouted = []
-        worldgenSrc.eachFileRecurse(groovy.io.FileType.FILES) { f ->
-            if (!f.name.endsWith('.json')) return
-            def rel = worldgenSrc.toPath().relativize(f.toPath()).toString().replace('\\', '/')
-            def mod = gate[rel]
-            if (mod == null) {
-                def ns = (f.text =~ /"#?([a-z0-9_.-]+):[a-z0-9_\/.-]+"/).collect { it[1] }.findAll { !(it in always) }.unique()
-                if (ns) unrouted << "${rel}: ${ns.join(', ')}"
-            }
-            def dest = new File(out, (mod == null ? '' : "packs/worldgen/${mod}/") + "data/creativedelight/worldgen/${rel}")
-            dest.parentFile.mkdirs()
-            dest.bytes = f.bytes
-        }
-        if (unrouted) throw new GradleException("worldgen files name another mod but no wild_crops.json rule with \"requires\" owns them:\n  " + unrouted.join('\n  '))
-        gate.values().toSet().each { mod ->
-            new File(out, "packs/worldgen/${mod}/pack.mcmeta").text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([pack: [
-                    description: "Creative Delight: wild crop worldgen that needs ${mod} (added only with it)".toString(),
-                    pack_format: 9, 'forge:resource_pack_format': 9, 'forge:data_pack_format': 10]])) + '\n'
-        }
-        logger.lifecycle("splitWorldgen: ${gate.size()} files gated, packs " + gate.values().toSet().sort().join(', '))
-    }
+	group = 'build'
+	description = 'Splits the wild crop worldgen files into the plain data tree and one pack per optional mod'
+	inputs.dir(worldgenSrc)
+	inputs.file(wildCropsJson)
+	outputs.dir(worldgenOut)
+	doLast {
+		def out = worldgenOut.get().asFile
+		project.delete(out)
+		def slurper = new groovy.json.JsonSlurper()
+		// namespaces that are always there; creativeengineering is only named as tags (an unknown tag is empty, not an error)
+		def always = ['minecraft', 'forge', 'creativedelight', 'creativeengineering'] as Set
+		def gate = [:]
+		def claim = { String rel, String mod, String rule ->
+			def had = gate[rel]
+			if (had != null && had != mod) throw new GradleException("worldgen/${rel} is needed by rules requiring ${had} and ${mod} (${rule})")
+			gate[rel] = mod
+		}
+		slurper.parse(wildCropsJson).crops.each { key, rule ->
+			def mod = rule.requires
+			if (!mod || mod in ['creativedelight', 'minecraft']) return
+			(rule.features ?: []).findAll { it.startsWith('creativedelight:wild/') }.each { id ->
+				def placed = "placed_feature/${id.substring('creativedelight:'.length())}.json"
+				def pf = new File(worldgenSrc, placed)
+				if (!pf.file) throw new GradleException("wild_crops.json ${key}: no worldgen/${placed}")
+				claim(placed, mod, key)
+				def feat = slurper.parse(pf).feature
+				if (feat instanceof String && feat.startsWith('creativedelight:')) {
+					def conf = "configured_feature/${feat.substring('creativedelight:'.length())}.json"
+					if (new File(worldgenSrc, conf).file) claim(conf, mod, key)
+				}
+			}
+		}
+		def unrouted = []
+		worldgenSrc.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+			if (!f.name.endsWith('.json')) return
+			def rel = worldgenSrc.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+			def mod = gate[rel]
+			if (mod == null) {
+				def ns = (f.text =~ /"#?([a-z0-9_.-]+):[a-z0-9_\/.-]+"/).collect { it[1] }.findAll { !(it in always) }.unique()
+				if (ns) unrouted << "${rel}: ${ns.join(', ')}"
+			}
+			def dest = new File(out, (mod == null ? '' : "packs/worldgen/${mod}/") + "data/creativedelight/worldgen/${rel}")
+			dest.parentFile.mkdirs()
+			dest.bytes = f.bytes
+		}
+		if (unrouted) throw new GradleException("worldgen files name another mod but no wild_crops.json rule with \"requires\" owns them:\n  " + unrouted.join('\n  '))
+		gate.values().toSet().each { mod ->
+			new File(out, "packs/worldgen/${mod}/pack.mcmeta").text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([pack: [
+					description: "Creative Delight: wild crop worldgen that needs ${mod} (added only with it)".toString(),
+					pack_format: 9, 'forge:resource_pack_format': 9, 'forge:data_pack_format': 10]])) + '\n'
+		}
+		logger.lifecycle("splitWorldgen: ${gate.size()} files gated, packs " + gate.values().toSet().sort().join(', '))
+	}
 }
 def testSuite = rootProject.file('tools/creative_delight_test/suite')
 def withTestSuite = project.hasProperty('cd_test_suite')
 
 def membersFile = layout.buildDirectory.file('generated/cd_members/creativedelight_members.txt')
 def writeMembers = tasks.register('writeMembersList') {
-    def ids = providers.provider {
-        (findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
-                .collectMany { m ->
-                    // a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
-                    // that mod gets its own [members] switch too
-                    def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
-                    [project(m).findProperty('mod_id').toString()] + extra
-                }
-    }
-    inputs.property('ids', ids)
-    outputs.file(membersFile)
-    doLast {
-        def f = membersFile.get().asFile
-        f.parentFile.mkdirs()
-        f.text = '# Mod ids of the members nested in this jar (generated from bundle_members)\n' + ids.get().join('\n') + '\n'
-    }
+	def ids = providers.provider {
+		(findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
+				.collectMany { m ->
+					// a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+					// that mod gets its own [members] switch too
+					def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
+					[project(m).findProperty('mod_id').toString()] + extra
+				}
+	}
+	inputs.property('ids', ids)
+	outputs.file(membersFile)
+	doLast {
+		def f = membersFile.get().asFile
+		f.parentFile.mkdirs()
+		f.text = '# Mod ids of the members nested in this jar (generated from bundle_members)\n' + ids.get().join('\n') + '\n'
+	}
 }
 
 tasks.named('processResources', ProcessResources).configure {
-    // Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;
-    // Creative Common WorldgenFiles / global.genText).
-    from(rootProject.file('kubejs/generation_scripts')) {
-        into 'generation_scripts'
-        include genData
-        exclude genDataExclude
-    }
-    dependsOn writeMembers
-    from(membersFile)
-    dependsOn splitWorldgen
-    from(worldgenOut)
-    (scriptTrees + dataTrees).each { tree ->
-        from(rootProject.file("kubejs/${tree}")) {
-            into tree
-            exclude '**/*.md'
-        }
-    }
-    inputs.property('cd_test_suite', withTestSuite)
-    if (withTestSuite) {
-        from(testSuite) {
-            exclude '**/*.md'
-        }
-    }
+	// Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;
+	// Creative Common WorldgenFiles / global.genText).
+	from(rootProject.file('kubejs/generation_scripts')) {
+		into 'generation_scripts'
+		include genData
+		exclude genDataExclude
+	}
+	dependsOn writeMembers
+	from(membersFile)
+	dependsOn splitWorldgen
+	from(worldgenOut)
+	(scriptTrees + dataTrees).each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
+	inputs.property('cd_test_suite', withTestSuite)
+	if (withTestSuite) {
+		from(testSuite) {
+			exclude '**/*.md'
+		}
+	}
 }
 
 // The scripts in the jar run only through KubeJS; a missing tree means the pack-folder path moved.
 tasks.named('jar', Jar).configure {
-    doLast {
-        def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-        genData.findAll { !it.contains('*') }.each { f ->
-            if (!entries.contains('generation_scripts/' + f)) throw new GradleException("creativedelight jar has no generation_scripts/${f}")
-        }
-        ['kubejs_startup/creativedelight/', 'data/creativedelight/kubejs/', 'assets/creativedelight/kubejs/'].each { dir ->
-            if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
-                throw new GradleException("creativedelight jar has no scripts under ${dir}")
-            }
-        }
-    }
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		genData.findAll { !it.contains('*') }.each { f ->
+			if (!entries.contains('generation_scripts/' + f)) throw new GradleException("creativedelight jar has no generation_scripts/${f}")
+		}
+		['kubejs_startup/creativedelight/', 'data/creativedelight/kubejs/', 'assets/creativedelight/kubejs/'].each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativedelight jar has no scripts under ${dir}")
+			}
+		}
+	}
 }
 
 // A test-suite build is a separate jar (creativedelight-<v>-cdtest.jar): never archived, never installed.
 if (withTestSuite) {
-    tasks.named('bundleJar', Jar).configure { archiveClassifier = 'cdtest' }
-    tasks.named('archiveJar').configure { enabled = false }
-    tasks.named('installToMods').configure {
-        doFirst { throw new GradleException('-Pcd_test_suite builds a scratch-test jar: copy it into the scratch server, never mods/') }
-    }
+	tasks.named('bundleJar', Jar).configure { archiveClassifier = 'cdtest' }
+	tasks.named('archiveJar').configure { enabled = false }
+	tasks.named('installToMods').configure {
+		doFirst { throw new GradleException('-Pcd_test_suite builds a scratch-test jar: copy it into the scratch server, never mods/') }
+	}
 }

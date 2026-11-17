@@ -8,30 +8,30 @@
 // Shared versions (Minecraft, Forge, mappings, Java home) are in the root gradle.properties;
 // mod_id / mod_version / ... are in each mod's own gradle.properties.
 pluginManagement {
-    includeBuild 'build-logic'
-    repositories {
-        gradlePluginPortal()
-        maven {
-            name = 'MinecraftForge'
-            url = 'https://maven.minecraftforge.net/'
-        }
-        maven {
-            name = 'Sponge'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-    }
+	includeBuild 'build-logic'
+	repositories {
+		gradlePluginPortal()
+		maven {
+			name = 'MinecraftForge'
+			url = 'https://maven.minecraftforge.net/'
+		}
+		maven {
+			name = 'Sponge'
+			url = 'https://repo.spongepowered.org/repository/maven-public/'
+		}
+	}
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
 }
 
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
 ['creativeCommon', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat', 'creativeLoot', 'creativeMagic', 'creativeEquipment', 'creativeEngineering'].each { name ->
-    include name
-    project(":${name}").projectDir = file("development/${name}")
+	include name
+	project(":${name}").projectDir = file("development/${name}")
 }
 
 // Creative Delight (feature_writeup/creative_delight.md 14.3): the bundle, and its repacked members (ce.forge-repack)
@@ -41,8 +41,8 @@ rootProject.name = 'CreativeEngineering'
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
 ['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'backportedHearth': 'hearth', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners', 'repackedSalt': 'salt', 'repackedCreateSalt': 'createsalt', 'repackedCannedGoods': 'cannedgoods', 'portedGolden': 'golden'].each { name, dir ->
-    include name
-    project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
+	include name
+	project(":${name}").projectDir = file("development/creativeDelight/members/${dir}")
 }
 
 // Creative Brewing (feature_writeup/creative_brewing.md): the bundle, and its members under
@@ -50,8 +50,8 @@ project(':creativeDelight').projectDir = file('development/creativeDelight')
 include 'creativeBrewing'
 project(':creativeBrewing').projectDir = file('development/creativeBrewing')
 ['backportedVinery': 'vinery', 'backportedBrewin': 'brewin'].each { name, dir ->
-    include name
-    project(":${name}").projectDir = file("development/creativeBrewing/members/${dir}")
+	include name
+	project(":${name}").projectDir = file("development/creativeBrewing/members/${dir}")
 }
 
 // Creative Devtools (feature_writeup/creative_devtools.md): the dev-only bundle, and its members under
@@ -59,8 +59,8 @@ project(':creativeBrewing').projectDir = file('development/creativeBrewing')
 include 'creativeDevtools'
 project(':creativeDevtools').projectDir = file('development/creativeDevtools')
 ['perfBot': 'perfbot', 'clientCapture': 'capture'].each { name, dir ->
-    include name
-    project(":${name}").projectDir = file("development/creativeDevtools/members/${dir}")
+	include name
+	project(":${name}").projectDir = file("development/creativeDevtools/members/${dir}")
 }
 
 // Creative Worldgen (feature_writeup/creative_worldgen.md): world generation and fauna, and its members under
@@ -68,8 +68,8 @@ project(':creativeDevtools').projectDir = file('development/creativeDevtools')
 include 'creativeWorldgen'
 project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
 ['moreMooblooms': 'mooblooms', 'babyMobs': 'babymobs', 'terrablenderStub': 'terrablenderstub'].each { name, dir ->
-    include name
-    project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
+	include name
+	project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }
 
 // Tempad 3.0.4 port: its own jar (planned to fold into Creative Computing).
