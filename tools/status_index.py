@@ -30,6 +30,9 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'scratch_query'))
+import qrows  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 FW = ROOT / 'feature_writeup'
 README = FW / 'README.md'
@@ -78,11 +81,12 @@ def block_spans(lines):
     return out
 
 
-def strip_blocks(lines):
+def strip_blocks(lines, keep=None):
+    """Blank every generated block (blocks whose name keep(name) accepts stay)."""
     spans = block_spans(lines)
     skip = set()
-    for b, e, _ in spans.values():
-        if e is not None:
+    for name, (b, e, _) in spans.items():
+        if e is not None and not (keep and keep(name)):
             skip.update(range(b, e + 1))
     return [l if i not in skip else '' for i, l in enumerate(lines)]
 
@@ -137,7 +141,9 @@ def read_todo():
 
 
 def read_queue():
-    lines = strip_blocks(QUEUE.read_text().split('\n'))
+    # rows blocks are the queue sections rendered from feature_writeup/testing/rows/*.qb (qrows.py): their row lines
+    # count like hand-written ones
+    lines = strip_blocks(QUEUE.read_text().split('\n'), keep=lambda n: n.startswith('rows_'))
     rows, codes = [], Counter()
     code_sections = defaultdict(set)
     section_text, sec = [[]], 0
@@ -388,6 +394,7 @@ def build():
     rindex, seen = run_index(runs)
     views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo),
              'queue': view_queue(queue, rindex, seen)}
+    views['rows'] = {name: qrows.render(sec) for name, (_, sec) in qrows.sections_by_block().items()}
     return feats, todo, queue, views
 
 
@@ -433,6 +440,26 @@ def check(feats, todo, queue, views):
                          'TODO.md and rerun tools/status_index.py' % (rel, name, b + 2, e))
         elif content != views[name]:
             warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
+    # queue sections rendered from rows/*.qb (plan P2.1)
+    qfails, _ = qrows.check()
+    fails += qfails
+    lines = QUEUE.read_text().split('\n')
+    rel = QUEUE.relative_to(ROOT)
+    spans = {n: v for n, v in block_spans(lines).items() if n.startswith('rows_')}
+    for name, (b, e, stored) in sorted(spans.items(), key=lambda kv: kv[1][0]):
+        if e is None:
+            fails.append('%s: generated block %s unterminated' % (rel, name))
+            continue
+        content = lines[b + 1:e]
+        if sha(content) != stored:
+            fails.append('%s: hand edit inside generated block %s (lines %d-%d); edit the .qb in '
+                         'feature_writeup/testing/rows/ and rerun tools/status_index.py' % (rel, name, b + 2, e))
+        elif name not in views['rows']:
+            fails.append('%s: block %s has no section in feature_writeup/testing/rows/' % (rel, name))
+        elif content != views['rows'][name]:
+            warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
+    for name in sorted(set(views['rows']) - set(spans)):
+        warns.append('%s: rows section %s not in the queue yet; run python3 tools/status_index.py' % (rel, name))
     return fails, warns
 
 
@@ -450,6 +477,25 @@ def write(views):
             lines[b:e + 1] = new
             path.write_text('\n'.join(lines))
             changed.append(name)
+    # rows sections: regenerate each block; a section without a block is appended at the end of the queue
+    lines = QUEUE.read_text().split('\n')
+    spans = block_spans(lines)
+    n = 0
+    for name, (b, e, _) in sorted(((k, v) for k, v in spans.items() if k.startswith('rows_') and v[1] is not None),
+                                  key=lambda kv: -kv[1][0]):
+        if name in views['rows']:
+            new = empty_block(name, views['rows'][name])
+            if lines[b:e + 1] != new:
+                lines[b:e + 1] = new
+                n += 1
+    for name in sorted(set(views['rows']) - set(spans)):
+        while lines and not lines[-1].strip():
+            lines.pop()
+        lines += [''] + empty_block(name, views['rows'][name]) + ['']
+        n += 1
+    if n:
+        QUEUE.write_text('\n'.join(lines))
+        changed.append('%d rows sections' % n)
     return changed
 
 
