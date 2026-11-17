@@ -73,6 +73,8 @@ LINTS = {
                                                                        'textureswapper/'], 70, True),
     'design_rules_audit': (['python3', 'tools/design_rules_audit.py'], SCRIPT_TREES + ['feature_writeup/'], 30, True),
     'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),
+    'todo_rows': (['python3', 'tools/todo.py', 'lint', '--changed'], ['feature_writeup/todo/', 'feature_writeup/briefs/',
+                                                                     'tools/todo.py', 'tools/todo_rows.py'], 2, False),
 }
 PATH_RE = re.compile(r'\b((?:development|kubejs|tools|data|config|configs_edited|generation_scripts)/[A-Za-z0-9_.\-/]+)')
 

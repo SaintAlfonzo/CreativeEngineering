@@ -47,6 +47,13 @@ The plan gets an "Owner rulings" table:
   unconfirmed default is allowed only for *clear* items.
 - Later owner changes edit the row and add a History line; never delete a ruling.
 
+## 4b. TODO rows
+
+Each item that becomes work is a TODO row, written with the tool, never into TODO.md (it is generated):
+`python3 tools/todo.py add --family "<## family>" --change "..." --tests "S P" --source "scratchpad 2026-11-16"
+--plan plan_x.md [--priority high]`, then `python3 tools/status_index.py`. An item that changes an existing row:
+`todo.py set ID field=value` or `todo.py log ID "..."`. The plan lists the row ids; its Open work block is generated.
+
 ## 5. Look-check for UI and visual items
 
 The first build of a screen, book, HUD element, texture use or model is a look-check: capture a screenshot with the client

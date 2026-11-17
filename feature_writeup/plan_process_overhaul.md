@@ -1,5 +1,20 @@
 # Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers, TODO as the source of truth)
 
+<!-- generated:status_index begin open_work sha1=cffa8b23ef94 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 3, In Progress 2, Testing 3), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/process #8` | Planned | none | Phase 3: clean-up passes, install baseline, features audit and CSV, TODO as the source of truth |
+| `tooling/process #9` | Planned | none | 155 agent notes and other docs not named snake_case |
+| `tooling/process #10` | Planned | S | 77 dead ids in scratch queue rows |
+| `tooling/process #6` | In Progress | none | Commit per plan phase, push to agent_staging |
+| `tooling/process #7` | In Progress | none | Agent notes out of memory |
+| `tooling/process #2` | Testing | S | Build stamps and install ledger |
+| `tooling/process #3` | Testing | none | Design intake before building |
+| `tooling/process #5` | Testing | S | Tiered scratch queue with expiry (phase 2) |
+<!-- generated:status_index end open_work -->
+
 Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
 P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). P1.1 to P1.3 BUILT 2026-11-16 night
 (offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). P1.4
@@ -525,6 +540,21 @@ shows status is generated.
 **Done when:** TODO.md, the plan row blocks, the writeup Open work blocks and the feature status are all generated
 from the CSVs; `status_index.py --check` and `todo_rows` pass; a status change made with `todo.py set` shows in TODO,
 the plan, the writeup and the README after one `status_index.py` run.
+
+**Done 2026-11-16:** owner chose a fully generated TODO.md (AskUserQuestion 2026-11-16: "Whole file generated", over
+keeping prose by hand around generated tables) and committed the unclaimed TODO edits first (52f9cefb).
+`tools/todo_rows.py` (schema, render), `tools/todo.py` (add / set / log / move / show / find / lint),
+`tools/todo_migrate.py` (one-time; round trip: same ids and cells, every Details word kept, 0 problems). 1,622 rows in
+22 category files plus `archive.csv`; `todo/layout.md` holds headings and prose with placeholders. 291 rows had
+leading status prose moved to `log`; 6 high-priority markers became `priority=high`; the 40 plan-table rows were filed
+by hand into feature families (map in todo_migrate.py `REFILE`). TODO.md's first line carries its body sha1, so a hand
+edit FAILs `--check`. features.csv `todo ids` dropped: the 39 links moved to the rows' `feature` field (7 rows already
+linked elsewhere kept theirs). Open work blocks: 174 docs (160 writeups replaced their D6 section 0 paragraph; 19
+plans got a block with a generated Status line; `can_parity.md` is generated and skipped). plan_rules_fixes.md sections
+2 to 19b are rows `conventions #1` to `#26` (priority high, 19 low; section 2 Complete). `pack/release #7` closed.
+Checks: `todo_rows` in check_all (schema; `--changed` FAILs new status words in Details, WARNs in briefs).
+Not converted: the `- [ ]` lists left in plans are test lists (SCAT-, PROC-) or closed release plans, not tasks. The
+17 generated writeups have no Open work block; their generators would need to keep the markers (follow-up).
 
 ### P3.6 Clean-up passes (D10)
 

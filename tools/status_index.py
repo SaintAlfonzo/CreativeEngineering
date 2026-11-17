@@ -45,13 +45,13 @@ LEDGER = ROOT / 'jar_archive' / 'installed.csv'
 sys.path.insert(0, str(ROOT / 'tools'))
 import table_io  # noqa: E402
 
-TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 'todo ids', 'note', 'override',
+TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 'note', 'override',
             'override_reason', 'override_date']
 FEATURE_LEGEND = ('VERIFIED', 'DEPLOYED', 'BUILT', 'BROKEN', 'reference', 'planned')
 TODO_LEGEND = ('Bug', 'Planned', 'Pinned', 'In Progress', 'Testing', 'Complete')
 TIERS = 'SCPT'
 DEPLOY_DOC = FW / 'deploy.md'
-BLOCKS = {'readme': README, 'todo': TODO, 'queue': QUEUE, 'deploy': DEPLOY_DOC}
+BLOCKS = {'readme': README, 'queue': QUEUE, 'deploy': DEPLOY_DOC}   # TODO.md is rendered whole (P3.5)
 BEGIN = re.compile(r'^<!-- generated:status_index begin (\w+) sha1=([0-9a-f]+) -->$')
 CODE_RE = re.compile(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-([A-Za-z0-9.]+)')
 RESULT_RE = re.compile(r'^[*~ ]*(PASS|FAIL|INCONCLUSIVE|BATCH[- ]FAULT|OPEN|SKIP\w*|CRASH|LOOK|OWNER|BLOCKED|'
@@ -111,34 +111,22 @@ def split_list(s):
 
 
 def read_todo():
-    lines = strip_blocks(TODO.read_text().split('\n'))
-    arch = next((i for i, l in enumerate(lines) if l.strip() == '# archive'), len(lines))
-    open_rows, arch_rows, odd_arch, rows_text = [], [], [], []
-    ids = set()
-    status_table = False
-    for i, l in enumerate(lines):
-        if l.startswith('| Id |'):
-            status_table = l.startswith('| Id | Change | Status | Tests |')
+    """TODO rows from feature_writeup/todo/rows/*.csv (P3.5). open: every row not Complete; archive: Complete ids;
+    odd_archive: open rows without a family; ids: every id."""
+    import todo_rows
+    rows = todo_rows.load()
+    open_rows, arch_rows, odd_arch = [], [], []
+    for r in rows:
+        text = ' '.join(r.get(k, '') for k in ('change', 'details', 'decisions', 'log'))
+        if r['status'] == 'Complete':
+            arch_rows.append(r['id'])
             continue
-        if not l.startswith('|'):
-            status_table = False
-            continue
-        m = re.match(r'\| `([^`]+ #\d+)`', l)
-        if not m:
-            continue
-        c = cells_of(l)
-        if i > arch:
-            arch_rows.append(m.group(1))
-            ids.add(m.group(1))
-            if len(c) >= 8 and c[2] in TODO_LEGEND and c[2] != 'Complete':
-                odd_arch.append((m.group(1), c[2]))
-            continue
-        if not status_table or len(c) < 4:
-            continue
-        ids.add(m.group(1))
-        rows_text.append(l)
-        open_rows.append({'id': m.group(1), 'status': c[2], 'tests': c[3], 'line': i + 1, 'text': l})
-    return {'open': open_rows, 'archive': arch_rows, 'odd_archive': odd_arch, 'ids': ids, 'rows_text': rows_text}
+        open_rows.append({'id': r['id'], 'status': r['status'], 'tests': r.get('tests', ''), 'line': r['_line'],
+                          'file': r['_file'], 'text': text, 'priority': r.get('priority', '')})
+        if not r.get('family'):
+            odd_arch.append((r['id'], r['status']))
+    return {'open': open_rows, 'archive': arch_rows, 'odd_archive': odd_arch, 'ids': {r['id'] for r in rows},
+            'rows': rows}
 
 
 def read_queue():
@@ -331,35 +319,17 @@ def view_readme(feats, rindex, jars):
     return out
 
 
-def view_todo(todo):
-    st = Counter(r['status'] for r in todo['open'])
-    out = ['| Status | Rows |', '|---|---|']
-    for s in TODO_LEGEND:
-        out.append('| %s | %d |' % (s, st.get(s, 0)))
-    for s in sorted(set(st) - set(TODO_LEGEND)):
-        out.append('| %s (off the legend) | %d |' % (s, st[s]))
-    out.append('| **All rows in the family tables** | %d |' % len(todo['open']))
-    tiers = {t: Counter() for t in TIERS}
-    none = 0
-    for r in todo['open']:
-        if r['status'] == 'Complete':
-            continue
-        toks = re.findall(r'\b([SCPT])([+~]?)(?=\s|$)', r['tests'])
-        if not toks:
-            none += 1
-        for t, mark in toks:
-            tiers[t][mark or 'open'] += 1
-    out += ['', 'Test tiers over the rows that are not Complete (`+` passed, `~` partly passed):', '',
-            '| Tier | Passed | Partly | Open |', '|---|---|---|---|']
-    for t in TIERS:
-        out.append('| %s | %d | %d | %d |' % (t, tiers[t]['+'], tiers[t]['~'], tiers[t]['open']))
-    out += ['', '%d rows need no tier (`none` or empty). Archive: %d rows.' % (none, len(todo['archive']))]
-    if todo['odd_archive']:
-        c = Counter(s for _, s in todo['odd_archive'])
-        out.append('%d archive rows still carry an open status (%s): %s.' % (
-            len(todo['odd_archive']), ', '.join('%s %d' % kv for kv in sorted(c.items())),
-            ', '.join('`%s`' % i for i, _ in todo['odd_archive'])))
-    return out
+def view_todo_md(todo, feats, jars):
+    """The whole TODO.md (P3.5): layout.md plus the rows. A row's jar install state comes from its feature's jars."""
+    import todo_rows
+    fjars = {f['key']: split_list(f['jars']) for f in feats}
+
+    def install_of(r):
+        pend = [j for j in fjars.get(r.get('feature'), []) if jars.get(j) == 'pending']
+        return ('%s built, not installed' % ', '.join(pend)) if pend else ''
+    if not todo_rows.LAYOUT.exists():
+        return None
+    return todo_rows.render(todo['rows'], todo_rows.LAYOUT.read_text(), install_of)
 
 
 def view_queue(queue, rindex, seen):
@@ -443,6 +413,88 @@ def write_features(feats):
     table_io.write(TSV, TSV_COLS, [[f.get(k, '') for k in TSV_COLS] for f in feats], comments)
 
 
+SECTION0_RE = re.compile(r'^\*\*README index entry, moved here 2026-11-16[^\n]*(?:\n(?!\s*\n)[^\n]*)*', re.M)
+DOC_LINK_RE = re.compile(r'\]\(\.\./([^)#]+\.md)')
+GEN_DOC_RE = re.compile(r'generated by|do not edit|regenerate|written by `?tools|auto-generated', re.I)
+
+
+def doc_generated(path):
+    """A writeup a generator rewrites (its open_work block would be dropped): skipped (P3.5 item 5)."""
+    try:
+        head = '\n'.join(path.read_text(errors='replace').split('\n')[:6])
+    except OSError:
+        return True
+    return bool(GEN_DOC_RE.search(head))
+
+
+def doc_views(todo, feats):
+    """{path: block lines} of the `open_work` block of every writeup (rows whose feature is the writeup's feature,
+    or whose Writeup cell links it) and every plan with rows (`plan` field) (P3.5 items 3 and 5)."""
+    import todo_rows
+    rows = todo['rows']
+    by_doc = defaultdict(dict)
+    files_of = {f['key']: [x.strip() for x in f['file'].split(',') if x.strip().endswith('.md')] for f in feats}
+    for r in rows:
+        docs = set(files_of.get(r.get('feature'), []))
+        docs |= {d for d in DOC_LINK_RE.findall(r.get('writeup', '')) if not d.startswith(('plan_', 'briefs/'))}
+        for p in (x.strip().split()[0] for x in r.get('plan', '').split(',') if x.strip()):
+            docs.add(p)
+        for d in docs:
+            by_doc[d][r['id']] = r
+    for fl in files_of.values():
+        for d in fl:
+            by_doc.setdefault(d, {})
+    writeups = {d for fl in files_of.values() for d in fl}
+    out = {}
+    for d, rs in sorted(by_doc.items()):
+        path = FW / d
+        if '/' in d or d == 'README.md' or not (d in writeups or d.startswith('plan_')):
+            continue   # only feature writeups (features.csv `file`) and plans, directly in feature_writeup/
+        if not path.is_file() or doc_generated(path):
+            continue
+        open_rs = sorted((r for r in rs.values() if r['status'] != 'Complete'), key=todo_rows.row_key)
+        done = sum(1 for r in rs.values() if r['status'] == 'Complete')
+        c = Counter(r['status'] for r in open_rs)
+        head = ('Status: %d open TODO row%s (%s), %d Complete.' % (
+            len(open_rs), '' if len(open_rs) == 1 else 's',
+            ', '.join('%s %d' % (s, c[s]) for s in todo_rows.STATUS_ORDER if c.get(s)) or 'none', done))
+        lines = ['**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with '
+                 '`tools/todo.py`). ' + head]
+        if open_rs:
+            lines += ['', '| Id | Status | Tests | Change |', '|---|---|---|---|']
+            lines += ['| `%s` | %s | %s | %s |' % (r['id'], r['status'], todo_rows.cell(r.get('tests')),
+                                                todo_rows.cell(r.get('change'))) for r in open_rs]
+        out[path] = lines
+    return out
+
+
+def place_doc_block(path, content):
+    """Insert or refresh the open_work block: in place of the D6 section 0 paragraph, else after a `## 0.` heading,
+    else after the title (plans). Returns True when the file changed."""
+    text = path.read_text()
+    lines = text.split('\n')
+    span = block_spans(lines).get('open_work')
+    new_block = empty_block('open_work', content)
+    if span and span[1] is not None:
+        b, e, _ = span
+        if lines[b:e + 1] == new_block:
+            return False
+        lines[b:e + 1] = new_block
+        path.write_text('\n'.join(lines))
+        return True
+    blk = '\n'.join(new_block)
+    if SECTION0_RE.search(text):
+        text = SECTION0_RE.sub(lambda m: blk, text, count=1)
+    else:
+        m = re.search(r'^## 0\.[^\n]*\n', text, re.M) or (re.search(r'^# [^\n]*\n', text, re.M)
+                                                             if path.name.startswith('plan_') else None)
+        if not m:
+            return False
+        text = text[:m.end()] + '\n' + blk + '\n' + text[m.end():]
+    path.write_text(text)
+    return True
+
+
 def view_deploy():
     """deploy.md header: the deployed version per side and the last five marks, from deploy/DEPLOYED.json (P3.4 i)."""
     try:
@@ -466,10 +518,12 @@ def build():
     queue = read_queue()
     runs = read_runs()
     rindex, seen = run_index(runs)
-    views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo), 'deploy': view_deploy(),
+    jars = jar_states()
+    views = {'readme': view_readme(feats, rindex, jars), 'todo_md': view_todo_md(todo, feats, jars), 'deploy': view_deploy(),
              'queue': view_queue(queue, rindex, seen)}
     views['rows'], views['rows_where'] = rows_views(runs)
     views['features_changed'] = feats_changed
+    views['docs'] = doc_views(todo, feats)
     return feats, todo, queue, views
 
 
@@ -493,15 +547,43 @@ def check(feats, todo, queue, views):
         if f['status word'] not in FEATURE_LEGEND:
             fails.append('features.csv line %d (%s): status word %r not in the legend' % (
                 f['line'], f['key'], f['status word']))
-        for t in split_list(f['todo ids']):
-            if t not in todo['ids']:
-                fails.append('features.csv line %d (%s): TODO id %r does not exist' % (f['line'], f['key'], t))
         for p in split_list(f['file']):
             if not (FW / p).exists():
                 fails.append('features.csv line %d (%s): file %s does not exist' % (f['line'], f['key'], p))
-    for r in todo['open']:
-        if r['status'] not in TODO_LEGEND:
-            fails.append('TODO.md line %d %s: status %r not in the legend' % (r['line'], r['id'], r['status'][:60]))
+    import todo_rows
+    layout_text = todo_rows.LAYOUT.read_text() if todo_rows.LAYOUT.exists() else None
+    for f, line, rid, msg in todo_rows.validate(todo['rows'], layout_text):
+        fails.append('todo/rows/%s line %s %s: %s' % (f, line, rid, msg))
+    fkeys = {f['key'] for f in feats}
+    for r in todo['rows']:
+        if r.get('feature') and r['feature'] not in fkeys:
+            fails.append('todo/rows/%s line %s %s: feature %r is not a features.csv key' % (
+                r['_file'], r['_line'], r['id'], r['feature']))
+    stale_docs = []
+    for p, content in views.get('docs', {}).items():
+        lines = p.read_text().split('\n')
+        span = block_spans(lines).get('open_work')
+        if not span or span[1] is None:
+            if SECTION0_RE.search('\n'.join(lines)):
+                stale_docs.append(p.name)
+            continue
+        b, e, stored = span
+        if sha(lines[b + 1:e]) != stored:
+            fails.append('%s: hand edit inside the open_work block; change the rows with tools/todo.py' %
+                         p.relative_to(ROOT))
+        elif lines[b + 1:e] != content:
+            stale_docs.append(p.name)
+    if stale_docs:
+        warns.append('%d open_work block(s) out of date or missing (%s); run python3 tools/status_index.py' % (
+            len(stale_docs), ', '.join(stale_docs[:4]) + (' ...' if len(stale_docs) > 4 else '')))
+    if views.get('todo_md') is not None:
+        have = TODO.read_text() if TODO.exists() else ''
+        rec_sha, body = todo_rows.split_generated(have)
+        if rec_sha is None or todo_rows.body_sha(body) != rec_sha:
+            fails.append('TODO.md: hand edit (or not generated yet); change rows with tools/todo.py, prose in '
+                         'todo/layout.md, then run python3 tools/status_index.py')
+        elif have != views['todo_md']:
+            warns.append('TODO.md is out of date; run python3 tools/status_index.py')
     owned = {c for f in feats for c in split_list(f['queue codes'])}
     for code in sorted(set(queue['codes']) - owned):
         fails.append('scratch_queue.md: queue code %s (%d rows) has no feature in features.csv' % (
@@ -601,6 +683,12 @@ def main(argv):
             'FAIL %d' % len(fails) if fails else 'OK', len(feats), len(todo['open']), len(queue['codes'])))
         return 1 if fails else 0
     changed = write(views)
+    nd = sum(place_doc_block(p, c) for p, c in views['docs'].items())
+    if nd:
+        changed.append('open_work blocks (%d docs)' % nd)
+    if views.get('todo_md') is not None and (not TODO.exists() or TODO.read_text() != views['todo_md']):
+        TODO.write_text(views['todo_md'])
+        changed.append('TODO.md')
     if views['features_changed']:
         write_features(feats)
         changed.append('features.csv status (%d)' % len(views['features_changed']))
