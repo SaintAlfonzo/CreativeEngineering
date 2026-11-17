@@ -1,6 +1,9 @@
 // requires: creativedelight
 // requires: neapolitan
 // Neapolitan client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
+// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
+
 ClientEvents.lang('en_us', e => {
 	if (!global.CD) return
 	e.renameItem(global.item.chocolate_spider_eye, 'Chocolate Night Berries')
@@ -9,5 +12,5 @@ ClientEvents.lang('en_us', e => {
 ItemEvents.tooltip(e => {
 	if (!global.CD) return
 	// Y follows neapolitan-common.toml "White Strawberry minimum height"
-	e.add(global.item.white_strawberries, Text.green('Strawberry Bushes at Y 192 or higher grow these instead of red ones'))
+	e.add(global.item.white_strawberries, tipLine('Strawberry Bushes at Y 192 or higher grow these instead of red ones', 'hint'))
 })

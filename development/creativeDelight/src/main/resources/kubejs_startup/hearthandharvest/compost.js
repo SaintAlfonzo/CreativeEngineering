@@ -5,7 +5,7 @@
 	var i = global.item
 	var C = global.compost
 	var ON = { when: () => global.CD.qol('compost') && global.CD.on('hearthandharvest') }
-	var hops = global.has.mod('vinery')   // hops only with Vinery (plan_bugfix_1114 3.1)
+	var hops = global.has('vinery')   // hops only with Vinery (plan_bugfix_1114 3.1)
 
 	C.values('crates', [
 		[i.manure_bag,       1.0],

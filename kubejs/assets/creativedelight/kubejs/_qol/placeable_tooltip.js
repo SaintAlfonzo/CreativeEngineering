@@ -18,35 +18,34 @@
 // "Shift right click to place down".
 // Reference: feature_writeup/placeable_food.md, catalog feature_writeup/placeable_catalog.md
 
+// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
+
 ItemEvents.tooltip(e => {
 	var i = global.item
-	var $TranslatableContents = Java.loadClass('net.minecraft.network.chat.contents.TranslatableContents')
 	var tagOf = key => String(i[key]).replace(/^#/, '')
 	var T_PLACEABLE = tagOf('t_placeable')
 	var T_SNEAK = tagOf('t_placeable_sneak')
 	var T_PLATE = tagOf('t_placeable_on_plate')
 	var T_SMALL = tagOf('t_placeable_on_small_plate')
 	var T_COASTER = tagOf('t_placeable_on_coaster')
-	var STRIP = {
-		'item.displaydelight.tooltip.displayable': true,
-		'item.displaydelight.tooltip.can_placed_on': true,
-		'block.displaydelight.food_plate': true,
-		'block.displaydelight.small_food_plate': true,
-		'fruitsdelight.tooltip.place': true,
-	}
+	var STRIP = [
+		'item.displaydelight.tooltip.displayable',
+		'item.displaydelight.tooltip.can_placed_on',
+		'block.displaydelight.food_plate',
+		'block.displaydelight.small_food_plate',
+		'fruitsdelight.tooltip.place',
+	]
 
 	e.addAdvancedToAll((item, advanced, text) => {
 		if (!global.CD.qol('placeableTooltips')) return
-		// index 0 is the name: the Food Plate item's own name uses one of the stripped keys
-		for (var n = text.size() - 1; n >= 1; n--) {
-			var contents = text.get(n).getContents()
-			if (contents instanceof $TranslatableContents && STRIP[String(contents.getKey())]) text.remove(n)
-		}
+		// index 0, the name, is kept: the Food Plate item's own name uses one of the stripped keys
+		global.tooltips.stripTooltipKeys(text, STRIP)
 		if (item.hasTag(T_PLACEABLE)) {
-			text.add(Text.literal(item.hasTag(T_SNEAK) ? 'Placeable (while sneaking)' : 'Placeable').gray())
+			text.add(tipLine(item.hasTag(T_SNEAK) ? 'Placeable (while sneaking)' : 'Placeable', 'text'))
 		}
-		if (item.hasTag(T_PLATE)) text.add(Text.literal('Placeable on plate').gray())
-		if (item.hasTag(T_SMALL)) text.add(Text.literal('Placeable on small plate').gray())
-		if (item.hasTag(T_COASTER)) text.add(Text.literal('Placeable on a coaster').gray())
+		if (item.hasTag(T_PLATE)) text.add(tipLine('Placeable on plate', 'text'))
+		if (item.hasTag(T_SMALL)) text.add(tipLine('Placeable on small plate', 'text'))
+		if (item.hasTag(T_COASTER)) text.add(tipLine('Placeable on a coaster', 'text'))
 	})
 })

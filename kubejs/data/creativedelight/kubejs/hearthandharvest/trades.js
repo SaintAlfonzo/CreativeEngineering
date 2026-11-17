@@ -10,14 +10,14 @@ MoreJSEvents.villagerTrades(e => {
 
 	// Level 1 - Novice: buys the new crops
 	// Hops only with Vinery (plan_bugfix_1114 3.1)
-	if (global.has.mod('vinery')) e.addTrade(farmer, 1, [Item.of(i.hops, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
-	e.addTrade(farmer, 1, [Item.of(i.raspberry, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
-	e.addTrade(farmer, 1, [Item.of(i.sunflower_seeds, 32)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
+	if (global.has('vinery')) global.trades.villager(e, farmer, 1, { buy: [i.hops, 24], sell: [i.emerald, 1], uses: 16, xp: 2, priceMultiplier: 0.05 })
+	global.trades.villager(e, farmer, 1, { buy: [i.raspberry, 24], sell: [i.emerald, 1], uses: 16, xp: 2, priceMultiplier: 0.05 })
+	global.trades.villager(e, farmer, 1, { buy: [i.sunflower_seeds, 32], sell: [i.emerald, 1], uses: 16, xp: 2, priceMultiplier: 0.05 })
 
 	// Botanist (Beautify's villager, when loaded): sells mums
 	if (global.has('beautify')) {
 		;['white', 'red', 'orange', 'yellow', 'light_blue', 'blue', 'purple', 'pink'].forEach(c => {
-			e.addTrade('beautify:botanist', 1, [Item.of(i.emerald, 1)], Item.of(i[c + '_mum'], 4)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
+			global.trades.villager(e, 'beautify:botanist', 1, { buy: [i.emerald, 1], sell: [i[c + '_mum'], 4], uses: 12, xp: 2, priceMultiplier: 0.05 })
 		})
 	}
 })
@@ -27,6 +27,6 @@ MoreJSEvents.wandererTrades(e => {
 	var i = global.item
 	var t = global.trades
 	var seeds = [i.raspberry_pips, i.sunflower_seeds, i.blueberry_pips]
-	if (global.has.mod('vinery')) seeds.unshift(i.hops)   // hops only with Vinery (plan_bugfix_1114 3.1)
+	if (global.has('vinery')) seeds.unshift(i.hops)   // hops only with Vinery (plan_bugfix_1114 3.1)
 	t.sell(e, t.COMMON, seeds, { emeralds: 1, maxUses: 12 })
 })

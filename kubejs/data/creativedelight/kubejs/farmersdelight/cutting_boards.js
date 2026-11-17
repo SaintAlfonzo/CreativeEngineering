@@ -30,7 +30,7 @@ ServerEvents.tags('item', e => {
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('farmersdelight')) return
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		;[[i.granite_cutting_board, i.polished_granite], [i.andesite_cutting_board, i.polished_andesite],

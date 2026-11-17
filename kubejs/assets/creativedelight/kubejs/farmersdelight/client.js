@@ -6,6 +6,9 @@
 // helpers and palette come through global.tooltips), then the farmer villager line: Creative Delight's Farmer's
 // Delight repack, config/farmersdelight-ce-common.toml [villagers] farmlandBlocks (feature_writeup/farmers_delight.md
 // 3), after the soil lines as before.
+// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
+
 ItemEvents.tooltip(e => {
 	if (!global.CD || !global.CD.on('farmersdelight')) return
 	var i = global.item
@@ -22,8 +25,8 @@ ItemEvents.tooltip(e => {
 			[i.nulch, ['Grows nether crops faster', col.rare],['Can be filled w/ lava, but watch your feet!', col.rare]]
 		);
 	}
-	e.add(i.rich_farmland, Text.green('Farmer villagers work it like Farmland'))
-	if (global.has(i.fertile_soil)) e.add(i.fertile_soil, Text.darkBlue('Farmer villagers work it like Farmland'))
+	e.add(i.rich_farmland, tipLine('Farmer villagers work it like Farmland', 'hint'))
+	if (global.has(i.fertile_soil)) e.add(i.fertile_soil, tipLine('Farmer villagers work it like Farmland', 'hint'))
 })
 
 ClientEvents.lang('en_us', e => {

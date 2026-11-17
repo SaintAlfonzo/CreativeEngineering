@@ -7,6 +7,7 @@
 // assets/creativeengineering/textures/item/cornmeal.png. Tags: server_scripts/tags/cookingtags.js. Recipes:
 // server_scripts/cooking/cooking.js "Cornmeal".
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-    e.create(global.item.cornmeal).displayName('Cornmeal')
+    reg.item(e, global.item.cornmeal).displayName('Cornmeal')
 })

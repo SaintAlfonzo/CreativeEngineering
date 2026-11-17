@@ -1,8 +1,0 @@
-{
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "condition": "forge:false"
-    }
-  ]
-}

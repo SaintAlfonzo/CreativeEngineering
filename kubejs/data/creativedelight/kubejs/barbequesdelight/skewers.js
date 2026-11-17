@@ -9,7 +9,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('barbequesdelight')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var on = id => global.CD.on(id)
 
 	global.CD.recipes(() => {

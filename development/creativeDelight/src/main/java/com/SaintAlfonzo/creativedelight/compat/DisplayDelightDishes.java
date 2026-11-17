@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativedelight.compat;
 
+import com.SaintAlfonzo.creativedelight.CDConfig;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -17,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.SaintAlfonzo.creativedelight.CreativeDelight;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import org.slf4j.Logger;
 
 /**
@@ -45,7 +46,7 @@ public final class DisplayDelightDishes {
     private DisplayDelightDishes() {}
 
     public static void register(IEventBus modEventBus) {
-        if (!ModList.get().isLoaded("displaydelight")) return;
+        if (!CDConfig.member("displaydelight")) return;
         List<Dish> dishes = read();
         dishes.forEach(d -> BLOCK_IDS.add(new ResourceLocation(CreativeDelight.MOD_ID, d.block())));
         DisplayDelightDishBlocks.register(modEventBus, dishes);
@@ -59,7 +60,7 @@ public final class DisplayDelightDishes {
         List<Dish> out = new ArrayList<>();
         try (InputStream in = DisplayDelightDishes.class.getResourceAsStream(LIST)) {
             if (in == null) {
-                LOGGER.error("[creativeengineering] {} missing from the jar: no Display Delight dishes", LIST);
+                LOGGER.error("[creativedelight] {} missing from the jar: no Display Delight dishes", LIST);
                 return out;
             }
             JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
@@ -67,11 +68,11 @@ public final class DisplayDelightDishes {
                 JsonObject o = e.getAsJsonObject();
                 // "requires": the dish's food only exists with that mod (corn popsicle: Corn Delight); no block then,
                 // and its loot table sits in packs/mods/<mod>/ (plan_bugfix_1114 5.1, TODO creativedelight/members #58)
-                if (o.has("requires") && !ModList.get().isLoaded(o.get("requires").getAsString())) continue;
+                if (o.has("requires") && !CDConfig.on(o.get("requires").getAsString())) continue;
                 out.add(new Dish(o.get("block").getAsString(), new ResourceLocation(o.get("item").getAsString())));
             }
         } catch (Exception e) {
-            LOGGER.error("[creativeengineering] could not read {}: {}", LIST, e.toString());
+            LOGGER.error("[creativedelight] could not read {}: {}", LIST, e.toString());
         }
         return Collections.unmodifiableList(out);
     }

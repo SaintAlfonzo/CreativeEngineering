@@ -10,10 +10,10 @@ MoreJSEvents.villagerTrades(e => {
 	var v = { farmer: 'minecraft:farmer' }
 
 	// Level 1 - Novice: buys corn (upstream 16-32 or 32-48 a trade, one random price; here one fixed price)
-	e.addTrade(v.farmer, 1, [Item.of(i.corn, 24)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(2).priceMultiplier(0.05)
+	global.trades.villager(e, v.farmer, 1, { buy: [i.corn, 24], sell: [i.emerald, 1], uses: 16, xp: 2, priceMultiplier: 0.05 })
 	// Level 2 - Apprentice: sells Cornbread and Tortillas (upstream 6-16 for 6-16 emeralds)
-	e.addTrade(v.farmer, 2, [Item.of(i.emerald, 8)], Item.of(i.cornbread, 8)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 2, [Item.of(i.emerald, 8)], Item.of(i.tortilla, 8)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
+	global.trades.villager(e, v.farmer, 2, { buy: [i.emerald, 8], sell: [i.cornbread, 8], uses: 16, xp: 5, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 2, { buy: [i.emerald, 8], sell: [i.tortilla, 8], uses: 16, xp: 5, priceMultiplier: 0.05 })
 })
 
 // Wandering Trader: corn (kernels are already in the pack's COMMON seeds list, economy/wandering_trades.js) and the

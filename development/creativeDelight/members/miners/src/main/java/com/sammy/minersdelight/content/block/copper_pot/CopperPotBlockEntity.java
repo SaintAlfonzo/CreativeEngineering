@@ -544,23 +544,24 @@ public class CopperPotBlockEntity extends SyncedBlockEntity implements MenuProvi
         return null;
     }
 
-    @Override
-    public void awardUsedRecipes(Player player) {
-        player.awardRecipes(getUsedRecipesAndPopExperience(player.getLevel(), player.position()));
+    /**
+     * Pops the experience of the meals since the last take, at the player, when the output is taken. No recipe is
+     * unlocked (design rule DR-C14): RecipeHolder's own awardUsedRecipes stays a no-op, since getRecipeUsed is null.
+     */
+    public void popExperience(Player player) {
+        popUsedExperience(player.getLevel(), player.position());
         usedRecipeTracker.clear();
     }
 
-    public List<Recipe<?>> getUsedRecipesAndPopExperience(Level level, Vec3 pos) {
-        List<Recipe<?>> recipes = new ArrayList<>();
+    /** Pops the experience of the meals since the last take at {@code pos} (also when the pot breaks). */
+    public void popUsedExperience(Level level, Vec3 pos) {
         for (var entry : usedRecipeTracker.object2IntEntrySet()) {
             level.getRecipeManager().byKey(entry.getKey()).ifPresent(recipe -> {
-                recipes.add(recipe);
                 if (level instanceof ServerLevel server && recipe instanceof CookingPotRecipe cooking) {
                     awardExperience(server, pos, entry.getIntValue(), cooking.getExperience());
                 }
             });
         }
-        return recipes;
     }
 
     private static void awardExperience(ServerLevel level, Vec3 pos, int crafted, float experience) {

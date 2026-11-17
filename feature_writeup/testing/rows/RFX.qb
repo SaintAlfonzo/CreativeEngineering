@@ -115,3 +115,100 @@ shot echo_pickaxe_on_hit
 do {"tooltip": "farmersdelight:rich_soil_farmland"}
 shot rich_farmland_pots
 look each shot matches the before shot line by line in color and weight
+
+@@section 3
+@@title SQ-RFX Rules fixes P3b: Creative Delight and Calendar, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) sections 6, 7, 12, 12b, 12c, 12e, 12f; TODO `conventions #17`, `#18`, `#23`, `#24`, `#25`, `#28`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecalendar creativecommon creativedelight creativeengineering
+@@sources kubejs/data/creativedelight/kubejs kubejs/assets/creativedelight/kubejs development/creativeDelight/src/main/resources/kubejs_startup development/creativeDelight/src/main/java development/creativeDelight/members/barbeques/src/main/java development/creativeDelight/members/miners/src/main/java development/creativeDelight/members/vintage/src/main/java development/creativeDelight/src/main/resources/data/creativedelight/swaps/merges_tmted.json development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js development/creativeCalendar/src/main/java development/creativeEngineering/src/main/resources/kubejs_startup tools/dump_diff.py
+@@text
+@@text Same content expected except the wheat flour merge (SQ-RFX-13). Baselines: `kubejs/exported/baseline_rules_p3a_2026-11-17/` (recipes, tags, trades) and `kubejs/exported/baseline_rules_p3b_2026-11-17/food/foods.json`, all from the 2026-11-15 `/dumpall`, before P2 to P3b. Needs the P3b jars of 2026-11-17 (`creativecalendar-1.0.0`, `creativecommon-1.2.0`, `creativedelight-1.1.0`, `creativeengineering-2.0.0`). Run SQ-RFX-07 before any `/reload`.
+@@table
+## SQ-RFX-07 | boot: Delight scripts bound to their pack, registrations through global.reg, no binding error
+@group A
+@commands Boot on the installed jars; read the KubeJS startup and server logs and latest.log
+@pass `[creativedelight] core finished` in the startup log; the only `[reg] ... registered from the ... pack (override` line names `jrftl:prepared_flesh`; `[itemMerges] creativedelight: N merges` one more than the last run (the Engineer's Delight flour); no `forPack: invalid`, `ReferenceError`, `is not defined` or `Cannot find function` from a Delight script; latest.log has no mixin error naming `VintageLushGrassSeasonMixin` (it is gone) and `[salt] N Vintage salt blocks random tick` is present
+@fails `[reg]` lines for creativedelight or creativeengineering ids: a registration id outside its pack (`namespace_lint.py -v`); `ReferenceError`: a dict alias swapped in a scope that does not bind it (`literal_id_swap.py` binds by file)
+kjsexpect \[creativedelight\] core finished
+kjsexpect \[itemMerges\] creativedelight: \d+ merges
+kjsreject forPack: invalid|ReferenceError|is not defined|Cannot find function|registered from the creative(delight|engineering) pack
+bootexpect \[salt\] \d+ Vintage salt blocks random tick
+bootreject VintageLushGrassSeasonMixin
+shell grep -hE '\[reg\] ' logs/kubejs/startup.log | sort -u | head -5
+## SQ-RFX-08 | recipe ids: Delight recipes unchanged
+@group A
+@commands `/dumpall`; `python3 $INST/tools/dump_diff.py recipes $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels`
+@pass `RECIPES_SAME`; no `ONLY_` line in the `creativedelight:` namespace (Delight's ids were already bound by `global.CD.recipes`); `tmted:crusher/wheat_flour` and `wheat_flour_from_bale` absent from `recipes/all.csv` as before (now `R.remove` in `create/recipes.js`, was a `forge:false` override); no recipe names `tmted:wheat_flour`
+@fails A `creativedelight:` id only on one side: a `forPack` alias that changed a namespace, or a recipe-id literal swapped to an item key (`literal_id_swap.py` reviewed list in the P3b report); the crusher recipes present: the removal ran before IE's recipes loaded (check the IE recipe serializer key)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(RECIPES|ONLY_.*creativedelight|moved)' | head -20
+shell grep -cE 'tmted:crusher/wheat_flour|tmted:wheat_flour' kubejs/exported/recipes/all.csv || true
+look RECIPES_SAME or every ONLY_ line explained by P2 to P3a (SQ-RFX-02); the grep count 0
+## SQ-RFX-09 | food values: the absolute rows give the same foods
+@group A
+@commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py food $INST/kubejs/exported/baseline_rules_p3b_2026-11-17 kubejs/exported`
+@pass `FOOD_SAME`: Delightful's 17 foods (3.8.1 hunger and saturation), the Bellini Cocktail (one Heal Aura 10 s) and Ghost Charcoal (0 hunger, always edible, Wither 5 s, Fire Resistance 3 min) as before
+@fails `CHANGED <id>: <fields>`: the absolute row (`delightful_foods.js`, `fruits_foods.js`, `vintage_items.js`) or the applier (`food_value_copies.js`); effects in a new order or missing: `keepEffects` / `dedupeEffects`
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported | tail -25
+expect FOOD_SAME
+## SQ-RFX-10 | villager trades: the Delight trades unchanged through global.trades.villager
+@group A
+@commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist`
+@pass `TRADES_SAME` (the farmer's Veggies, Hearth and Harvest and Corn Delight rows, the butcher's salt and the Barbeque's seasonings and sauces, the botanist's mums); no `global.trades.villager:` warning
+@fails A profession differs: a converted row's count, uses, xp or price multiplier, or an item the helper rejected (`is not an item_dict key`)
+shell python3 "$INST/tools/dump_diff.py" trades "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist
+expect TRADES_SAME
+kjsreject global\.trades\.villager:
+## SQ-RFX-11 | tags: Delight tags unchanged after the literal swap
+@group A
+@commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/`
+@pass `TAGS_SAME` (Hearth and Harvest crow, salt lick, butchering and pitchfork tags, the patty and bread tags, Display Delight mineable tags)
+@fails A tag lost or gained members: a swapped literal resolves to a different dict value, or an entity-type tag got an item key (the P3b swap reverted those by hand)
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -20
+## SQ-RFX-12 | member switch off: Salt's block ticks and JEI salting pages go, boot clean
+@group A
+@commands Separate boot with `config/creativedelight-common.toml` `[members] salt = false`; read latest.log; then set it back
+@pass boot completes with no error naming salt; no `[salt] N Vintage salt blocks random tick` line (SaltBlockTicks asks `CDConfig.member("salt")`); the KubeJS server log has no salt rows from Delight's salt scripts (`global.CD.on('salt')` off)
+@fails the `[salt]` line present: `SaltBlockTicks.init` still asks the mod list; an exception in a salt script: a script that checks `Platform.isLoaded('salt')` instead of the switch
+@draft needs its own boot with a changed member switch; qrun has no per-row config and reboot step
+## SQ-RFX-13 | Engineer's Delight wheat flour merges into Create's
+@group A
+@commands Fake player holding 5 `tmted:wheat_flour`; wait a second; read the player's inventory
+@pass the stack becomes 5 `create:wheat_flour`; `tmted:wheat_flour` stays hidden in JEI (removed items); recipes that took or made it take or make Create's flour (SQ-RFX-08 grep 0)
+@fails the stack stays: `merges_tmted.json` not read (`requires` tmted and create, both loaded?) or the `creativedelight` merge group's inventory half not running
+> pbot spawn wfl1 0 -60 0 minecraft:overworld survival
+sleep 2
+> give wfl1 tmted:wheat_flour 5
+sleep 3
+> cdevtest inventory wfl1
+sleep 1
+expect create:wheat_flour
+> pbot remove wfl1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+## SQ-RFX-14 | LootJS names: CD/ for Creative Delight's loot scripts
+@group A
+@commands Uncomment `event.enableLogging()` in the server's `kubejs/data/creativeloot/kubejs/loot/99_debug.js`, `/reload`, break an age 7 corn crop with a knife (`/loot spawn ... mine <pos> <knife>`); read latest.log
+@pass `[LootJS]` lines name `CD/corn_knife_corncob`; no `CE/corn_knife`, `CE/fd_`, `CE/squid_chain`, `CE/delightful_`, `CE/vintage_mixed` names
+@fails Old names: the Delight jar older than 2026-11-17 (the loot scripts ship in it)
+@draft placement of the corn crop and the knife loot call need the SQ-CORN-04 setup; run with it
+## SQ-RFX-15 | Barbeque's Delight skewers keep their seasonings through the direct calls
+@group A
+@commands Grill a raw skewer to done on a lit Grill; read the result's NBT; eat it as a fake player with a seasoned skewer
+@pass the cooked skewer carries `Seasonings:["barbequesdelight:grilled"]`; no `Creative Delight seasonings not found` warning in latest.log (the reflection is gone); eating applies the seasoning bonuses as before
+@fails a NoSuchMethodError or NoClassDefFoundError naming `food.Seasonings`: the member compiled against a different Creative Delight than it ships in
+@draft no driver step runs a Grill to completion yet; owner LOOK or a /cdevtest grill verb
+## CQ-RFX-03 | Delight tooltips by role: same look, Fertile Soil's villager line green
+@group client
+@commands Hover Rich Farmland, Fertile Soil, a placeable food on a plate (Display Delight), Ender Dragon meat (Ends Delight), Rotten Apple (Domestication Innovation), the Seed Pouch (Hearth and Harvest)
+@pass "Farmer villagers work it like Farmland" green on both soils (Fertile Soil was dark blue); "Placeable ..." lines gray and Display Delight's own placement lines gone; "Ender Dragon drop" gray; "Turns a horse into a zombie horse" dark purple; the Seed Pouch lines gray
+@fails a white line: a role missing from `global.tooltips.col`; Display Delight's lines back: `global.tooltips.stripTooltipKeys` missing (Common's client `_lib/tooltips.js` older than 2026-11-17)
+do {"tooltip_text": "farmersdelight:rich_soil_farmland", "expect": "Farmer villagers"}
+do {"tooltip_text": "farmersdelight:fertile_soil", "expect": "Farmer villagers"}
+do {"tooltip_text": "ends_delight:dragon_leg", "expect": "Ender Dragon drop"}
+do {"tooltip": "farmersdelight:fertile_soil"}
+shot fertile_soil_hint
+do {"tooltip": "domesticationinnovation:rotten_apple"}
+shot rotten_apple_uncanny
+look Fertile Soil's villager line green like Rich Farmland's; the rest as before

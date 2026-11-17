@@ -143,7 +143,7 @@ breaking the corn with a knife: SQ-CORN-04b). Client half: CQ-CORN-01 (CORN-01, 
 | Compost | CD startup `corn_delight/compost.js` | 0.3 |
 | Recipes | `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` (cob cutting, popsicle, pipe, Classic Corn Dog grid); cob secondary in `creativedelight/recipes.js` (corn and wild corn `foodGrinding`) and `immersiveengineering/recipes.js` (corn crusher) | `foodGrinding` keeps byproducts machine-only, so the mortar gives no cob. Wild corn in the IE crusher is a kernel recipe, not a cornmeal route, so it gets no cob |
 | Tags | `corn_delight/tags.js`: `curios:face`, `curios:head` (mouth dropped 2026-11-02) | The pack's Face slot ([curios_slots.md](curios_slots.md)) is the "mouth or face" slot of 2.3 |
-| Knife loot | `corn_delight/loot.js` (LootJS, `CE/corn_knife_corncob`) | `corn_crop` at age 7, as 1.2.11's straw modifier (either half) |
+| Knife loot | `corn_delight/loot.js` (LootJS, `CD/corn_knife_corncob`) | `corn_crop` at age 7, as 1.2.11's straw modifier (either half) |
 | Trades | `corn_delight/trades.js` (MoreJS) | Fixed prices: 24 corn -> 1 emerald (Novice, 16 uses); 8 emeralds -> 8 Cornbread / 8 Tortillas (Apprentice); wanderer corn 1 emerald COMMON, Popcorn Box 2 emeralds RARE |
 | Head slot | patcherMod `mixin/MobCobPipeSlotMixin` (`Mob.getEquipmentSlotForItem`, SRG `m_147233_`) | Armor slot, shift click, dispensers. Mobs that pick up gear may wear it too, as with 1.2.11's `Equipable` |
 | Right click, Curios | CD `compat/CornDelightCompat` (+ `CornDelightCurios`): face, empty head slot, then Curios head; `compat/CobPipeRenderer` (client, 1.2.11's renderer ported to 1.19.2) | Done in a right-click handler, not a Curios capability, so the order is the pack's |

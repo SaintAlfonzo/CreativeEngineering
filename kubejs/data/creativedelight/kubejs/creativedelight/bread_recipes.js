@@ -11,7 +11,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		var keep = [ // G5 begin (R.replaceInput filters)

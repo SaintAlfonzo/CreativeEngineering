@@ -10,37 +10,28 @@ global.removedItems.push(global.item.salted_cod, global.item.salted_salmon)
 // in JEI, tags stripped, its recipes not carried over (Creative Brewing's alcohol.js drops the pack's jar recipe). The new
 // kimchi recipes are in data/creativedelight/kubejs/vintagedelight/recipes.js; the id is in Creative Brewing's
 // swaps/removed.json.
-if (Platform.isLoaded('brewinandchewin')) global.removedItems.push(global.item.kimchi)
+if (global.has('brewinandchewin')) global.removedItems.push(global.item.kimchi)
 
 // One nut butter (merges/dishes #7, owner 2026-11-02): Vintage's nut mash jar is the only one. The nut mash bottle,
 // Delightful's nut butter and its Nut Butter and Jelly Sandwich merge (swaps merges_vintagedelight.json,
 // merges_delightful.json); Delightful's nut dough is removed with its recipe (delightful/recipes.js).
-if (Platform.isLoaded('delightful')) global.removedItems.push(global.item.nut_dough)
+if (global.has('delightful')) global.removedItems.push(global.item.nut_dough)
 
 // Ghost charcoal is edible (vintageport #13): no hunger, eaten at any time, Wither I 5 s and Fire Resistance 3 min.
 // Still a furnace fuel.
-ItemEvents.modification(e => {
-	var $GhostFoodBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
-	var $GhostEffectInstance = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
-	var $GhostRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-	var $GhostRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
-	var mobEffect = id => $GhostRegistries.MOB_EFFECTS.getValue(new $GhostRL(id))
-
-	e.modify(global.item.ghost_charcoal, item => {
-		item.setFoodProperties(new $GhostFoodBuilder().nutrition(0).saturationMod(0).alwaysEat()
-			.effect(new $GhostEffectInstance(mobEffect('minecraft:wither'), 100, 0), 1.0)
-			.effect(new $GhostEffectInstance(mobEffect('minecraft:fire_resistance'), 3600, 0), 1.0)
-			.build())
-	})
-})
+// An absolute row of global.foodValueCopies (applied by creativedelight/food_value_copies.js).
+global.foodValueCopies = global.foodValueCopies || {}
+global.foodValueCopies.ghost_charcoal = { absolute: { nutrition: 0, saturationMod: 0, alwaysEat: true,
+	effects: [{ effect: 'wither', ticks: 100 }, { effect: 'fire_resistance', ticks: 3600 }] } }
 
 // Pickled Sea Pickle (TODO dishes/pickles-and-ferments #1): sea pickles from the Pickling Jar, no honey (recipe in
 // data/creativedelight/kubejs/vintagedelight/recipes.js). It replaces Brewin' and Chewin's Pickled Pickles, which merge
 // into it (the pair is in item_merges.js here; recipes, loot and inventories swap). Values: the Pickled
 // Pickles' 4 hunger, modifier 0.3, eaten fast like a Pickle. Art: Vintage's pickle (GPL) in the sea pickle's colours
 // (textureswapper/palette_swap.py), kubejs/assets/creativeengineering/textures/item/pickled_sea_pickle.png (the owner's pick).
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-	e.create(global.item.pickled_sea_pickle).displayName('Pickled Sea Pickle').food(f => {
+	reg.item(e, global.item.pickled_sea_pickle).displayName('Pickled Sea Pickle').food(f => {
 		f.hunger(4).saturation(0.3).fastToEat(true)
 	})
 })

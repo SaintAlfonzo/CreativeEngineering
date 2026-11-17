@@ -10,9 +10,10 @@ global.fastToasts = ['toast', 'toast_with_chocolate', 'toast_with_egg', 'toast_w
 
 // Cheese Toast: toast + Flaxen Cheese Wedge (recipe in data/creativedelight/kubejs/moredelight/recipes.js). Hunger 5
 // like Toast with Egg, modifier 0.7 (toast 0.4, wedge 1.0).
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
 	var i = global.item
-	e.create(i.cheese_toast).displayName('Cheese Toast').food(f => {
+	reg.item(e, i.cheese_toast).displayName('Cheese Toast').food(f => {
 		f.hunger(5).saturation(0.7).fastToEat(true)
 	})
 })

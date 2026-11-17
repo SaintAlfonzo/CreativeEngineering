@@ -13,7 +13,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('largemeals')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var F = global.CD.food(e)
 
 	global.CD.recipes(() => {

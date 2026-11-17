@@ -8,28 +8,7 @@
 // Bellini Cocktail lists Heal Aura twice: its own 10 s and the peach's 5 s (Fruits Delight's FoodType skips a fruit
 // effect the food already has by comparing suppliers, which never match). 1.1.3 keeps one Heal Aura 10 s. Drinking
 // it already gave 10 s; the tooltip loses the second line.
-ItemEvents.modification(e => {
-	var $FruitsFoodBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
-
-	e.modify(global.item.bellini_cocktail, item => {
-		var old = item.getFoodProperties()
-		if (!old) return
-		var food = new $FruitsFoodBuilder().nutrition(old.getNutrition()).saturationMod(old.getSaturationModifier())
-		if (old.isMeat()) food.meat()
-		if (old.canAlwaysEat()) food.alwaysEat()
-		if (old.isFastFood()) food.fast()
-		// longest entry per effect, in the original order
-		var effects = old.getEffects()
-		var keep = []
-		for (var n = 0; n < effects.size(); n++) {
-			var pair = effects.get(n)
-			var inst = pair.getFirst()
-			var same = -1
-			for (var k = 0; k < keep.length; k++) if (keep[k].getFirst().getEffect().equals(inst.getEffect())) same = k
-			if (same < 0) keep.push(pair)
-			else if (inst.getDuration() > keep[same].getFirst().getDuration()) keep[same] = pair
-		}
-		keep.forEach(p => food.effect(p.getFirst(), p.getSecond()))
-		item.setFoodProperties(food.build())
-	})
-})
+// An absolute row of global.foodValueCopies (applied by creativedelight/food_value_copies.js): every value kept, the
+// longest entry per effect, in the original order.
+global.foodValueCopies = global.foodValueCopies || {}
+global.foodValueCopies.bellini_cocktail = { absolute: { dedupeEffects: true } }

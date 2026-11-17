@@ -20,7 +20,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var on = m => global.CD.on(m)
 	var leaf = i.t_respite_tea_leaves     // any tea leaf: green, yellow, black
 	var sweet = i.any_sweetener_drink     // sugar-like

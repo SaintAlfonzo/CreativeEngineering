@@ -25,7 +25,7 @@ Vine Tile, Cheese Wheel, Cheese Pizza and Meat Pizza. Plan: feature_writeup/vint
   * Moonlight soft fluids: 1.19.2 texture ids (no 'block/'), KOTS jar ids, no gearo jam; honey_vd holds the honey jar
     (upstream lists the apple sauce bottle and jar)
   * worldgen: the farmersdelight:biome_tag filter key is 'biome_tag' (upstream 'tag')
-  * advancements: 1.20 placed_block location lists -> the 1.19.2 'block' field; purged items left out
+  * advancements: not ported (the pack has no advancements, design rule DR-C14, plan_rules_fixes.md V-03)
   * loot tables lose 'random_sequence'; lang: purged keys out, jar item keys moved to the block keys, the fermenting
     jar is named Pickling Jar (S7), 1.19.2 creative tab key, KOTS keys (cucumber dough, ghost pepper soil tooltip)
   * new: block tag #vintagedelight:ghost_pepper_soil (soul soil; the pack adds the rest)
@@ -68,6 +68,7 @@ JAR_IDS = {
 SKIP_PREFIXES = (
     'META-INF/', 'net/', '.cache/', 'pack.mcmeta', 'logo.png', 'vintagedelight.',
     'data/diet/',
+    'data/vintagedelight/advancements/',  # no advancements in the pack (DR-C14, V-03)
     'data/vintagedelight/recipes/integration/',  # Galosphere and Spelunkery only
     'assets/vintagedelight/textures/mob_effect/',  # the Dehydrated icon
 )

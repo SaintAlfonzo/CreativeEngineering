@@ -8,6 +8,8 @@
 // Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or
 // another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight.
 
+var R = global.NCH.forPack('creativedelight')
+
 LootJS.modifiers(event => {
 	if (!global.CD) return
 	var i = global.item
@@ -19,7 +21,7 @@ LootJS.modifiers(event => {
 		event.addEntityLootModifier(s[0])
 			.removeLoot(Ingredient.all)
 			.addLoot(s[1])
-			.logName('CE/squid_chain/' + s[0].split(':')[1])
+			.logName(R.logName('squid_chain/' + s[0].split(':')[1]))
 	})
 })
 

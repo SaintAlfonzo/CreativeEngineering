@@ -50,7 +50,7 @@ public class OvenResultSlot extends SlotItemHandler {
     protected void checkTakeAchievements(ItemStack stack) {
         stack.onCraftedBy(player.level, player, removeCount);
         if (!player.level.isClientSide) {
-            oven.awardUsedRecipes(player);
+            oven.popExperience(player);
         }
         removeCount = 0;
     }

@@ -8,21 +8,22 @@
 // registered fluid (creativecommon client _lib/fluid_jei.js) and shows the bottle's effects on the fluid through its Create
 // emptying recipe (Creative Engineering's DrinkFluidEffects).
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('fluid', e => {
     var f = global.fluid
     // Ender's Delight's chorus juice (TODO food/drinks #4)
-    e.create(f.chorus_juice).displayName('Chorus Juice').thinTexture(0xB283C9).bucketColor(0xB283C9).noBucket().noBlock()
+    reg.fluid(e, f.chorus_juice).displayName('Chorus Juice').thinTexture(0xB283C9).bucketColor(0xB283C9).noBucket().noBlock()
     // Veggies Delight's juices (feature_writeup/veggies_delight.md 4.9)
-    e.create(f.carrot_juice).displayName('Carrot Juice').thinTexture(0xF08A24).bucketColor(0xF08A24).noBucket().noBlock()
-    e.create(f.dandelion_juice).displayName('Dandelion Juice').thinTexture(0xEFCF3A).bucketColor(0xEFCF3A).noBucket().noBlock()
-    e.create(f.turnip_water).displayName('Turnip Juice').thinTexture(0xE3D5E6).bucketColor(0xE3D5E6).noBucket().noBlock()
+    reg.fluid(e, f.carrot_juice).displayName('Carrot Juice').thinTexture(0xF08A24).bucketColor(0xF08A24).noBucket().noBlock()
+    reg.fluid(e, f.dandelion_juice).displayName('Dandelion Juice').thinTexture(0xEFCF3A).bucketColor(0xEFCF3A).noBucket().noBlock()
+    reg.fluid(e, f.turnip_water).displayName('Turnip Juice').thinTexture(0xE3D5E6).bucketColor(0xE3D5E6).noBucket().noBlock()
     // Cooking fluids (TODO dishes/ingredients #2): egg solution stands in for egg + milk, frosting for the frosting item
-    e.create(f.egg_solution).displayName('Egg Solution').thinTexture(0xF3D97A).bucketColor(0xF3D97A).noBucket().noBlock()
-    e.create(f.frosting).displayName('Frosting').thinTexture(0xFFF4F0).bucketColor(0xFFF4F0).noBucket().noBlock()
+    reg.fluid(e, f.egg_solution).displayName('Egg Solution').thinTexture(0xF3D97A).bucketColor(0xF3D97A).noBucket().noBlock()
+    reg.fluid(e, f.frosting).displayName('Frosting').thinTexture(0xFFF4F0).bucketColor(0xFFF4F0).noBucket().noBlock()
     // Kettle tank drinks (feature_writeup/farmers_respite.md K9): Rustic Delight's coffees past plain Coffee (that one
     // is Central Kitchen's coffee fluid) and Delightful's Kettle drinks. Bottle <-> 250 mB in Creative Delight's
     // farmersrespite/kettle.js; the Kettle reads those pairs to fill and empty bottles.
-    var drink = (id, name, color) => e.create(id).displayName(name).thinTexture(color).bucketColor(color).noBucket().noBlock()
+    var drink = (id, name, color) => reg.fluid(e, id).displayName(name).thinTexture(color).bucketColor(color).noBucket().noBlock()
     drink(f.milk_coffee, 'Milk Coffee', 0xB58560)
     drink(f.honey_coffee, 'Honey Coffee', 0xC08A3E)
     drink(f.chocolate_coffee, 'Chocolate Coffee', 0x5E3B23)

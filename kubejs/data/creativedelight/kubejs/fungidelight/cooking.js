@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('fungidelight') || !global.CD.qol('manualOnlyRoutes')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 

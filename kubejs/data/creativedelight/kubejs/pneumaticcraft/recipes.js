@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -35,9 +35,7 @@ ServerEvents.recipes(e => {
 				{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
 		})
 		// slice to 3 bread
-		if (Platform.isLoaded('farmersdelight')) {
-			R.fdCutting(i.sourdough_bread, i.any_knife, Item.of(i.bread, 3), e)
-		}
+		R.fdCutting(i.sourdough_bread, i.any_knife, Item.of(i.bread, 3), e)
 		// Mixing
 		if (Platform.isLoaded('create')) {
 			R.createMixing(Item.of(i.sourdough, 8), [Fluid.of(f.yeast_culture, 500), i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough, i.dough], e, undefined, 'heated')
@@ -62,13 +60,11 @@ ServerEvents.recipes(e => {
 		// Delight's two pot recipes (egg and potato, egg and diced potatoes) go as duplicates. PneumaticCraft's Chips
 		// (Fries) are removed (owner 2026-11-01, CD startup pneumaticcraft/pneumatic_items.js), so the Fries + fish grid
 		// route went with them.
-		if (Platform.isLoaded('veggiesdelight')) {
+		if (global.CD.on('veggiesdelight')) {
 			R.remove({ id: 'veggiesdelight:cooking/fish_and_chips' }, e)
 			R.remove({ id: 'veggiesdelight:compat/moredelight/cooking/fish_and_chips' }, e)
-			if (Platform.isLoaded('farmersdelight')) {
-				R.fdCooking([i.t_cooking_oil, i.t_food_raw_fish, i.t_sliced_potato, i.t_sliced_potato], i.fish_and_chips, e,
-					'fish_and_chips', 0.35, 200, i.bowl)
-			}
+			R.fdCooking([i.t_cooking_oil, i.t_food_raw_fish, i.t_sliced_potato, i.t_sliced_potato], i.fish_and_chips, e,
+				'fish_and_chips', 0.35, 200, i.bowl)
 		}
 	})
 })

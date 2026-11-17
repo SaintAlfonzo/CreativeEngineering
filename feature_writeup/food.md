@@ -785,7 +785,7 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
 
 **NOTE (marked 2026-11-02, revisit before building):** **Owner decision 2026-11-02 (replaces the nine fixed effects and the four-random idea):** each serving applies **3 effects chosen at random from the brewable effects, each for 5 seconds at level II**. Defaults until corrected: the three are distinct; "brewable" means an effect that a potion in the pack can carry, as one list (a tag or generated list, so new potions join on their own); the instant effects (instant health and damage) are left out because 5 seconds means nothing to them. Open: whether harmful effects (wither, poison, blindness, levitation and so on) stay in the pool, which they do by default; whether an effect that has no level II in brewing (night vision) still gets level II here.
 
-### 3.19 Food value copies and absolute rows (applier BUILT 2026-11-17, rows move in plan_rules_fixes.md P3)
+### 3.19 Food value copies and absolute rows (applier BUILT 2026-11-17, Delight rows moved 2026-11-17)
 
 One applier, Creative Delight's `kubejs_startup/creativedelight/food_value_copies.js`, sets food values that are not
 the item's own. Each owning script adds a row to `global.foodValueCopies` (target item_dict key -> row):
@@ -799,8 +799,10 @@ the item's own. Each owning script adds a row to `global.foodValueCopies` (targe
   `global.effect.resolve`; they are added after the target's own effects when `keepEffects` is true (the default when
   `effects` is left out), else in their place. `dedupeEffects` keeps the longest entry of each effect.
 
-The four hand `FoodProperties$Builder` rebuilds (`alcohol_drinks.js`, `fruits_foods.js`, `vintage_items.js`,
-`delightful_foods.js`) become absolute rows in P3; the `/dumpall` food dump diff must be empty after the move.
+Absolute rows in use (built 2026-11-17, P3b): Delightful's 3.8.1 hunger and saturation (`delightful_foods.js`, one
+row per `delightfulFoodValues` pair), the Bellini Cocktail (`fruits_foods.js`, `dedupeEffects`) and Ghost Charcoal
+(`vintage_items.js`); their hand `FoodProperties$Builder` rebuilds are gone. Creative Brewing's `alcohol_drinks.js`
+follows in its P3c rebuild. The `/dumpall` food dump diff must be empty (SQ-RFX-09).
 
 ## 4. Limits and decisions
 

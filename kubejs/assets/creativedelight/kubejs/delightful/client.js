@@ -1,6 +1,9 @@
 // requires: creativedelight
 // requires: delightful
 // Delightful client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
+// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
+
 ClientEvents.lang('en_us', e => {
 	if (!global.CD) return
 	var i = global.item
@@ -13,5 +16,5 @@ ClientEvents.lang('en_us', e => {
 
 ItemEvents.tooltip(e => {
 	if (!global.CD) return
-	e.add(global.item.lead_knife, Text.darkRed('Extra nutrients in your food...'))
+	e.add(global.item.lead_knife, tipLine('Extra nutrients in your food...', 'warn'))
 })

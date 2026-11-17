@@ -15,7 +15,9 @@
 // ItemEvents.modification runs at startup: restart to apply.
 // This file is the one applier. The rows live in the file of the mod that owns the target item, each adding to
 // global.foodValueCopies (created with `global.foodValueCopies = global.foodValueCopies || {}`):
-//   delightful/delightful_foods.js   cantaloupe_slice
+//   delightful/delightful_foods.js   cantaloupe_slice; absolute: the 3.8.1 hunger and saturation (delightfulFoodValues)
+//   fruitsdelight/fruits_foods.js    absolute: bellini_cocktail (dedupeEffects)
+//   vintagedelight/vintage_items.js  absolute: ghost_charcoal
 //   minecraft/food_values.js         glistering_melon_slice
 // The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/
 // effect_swaps.js (moved from the pack's cooking/food_values.js 2026-11-01).

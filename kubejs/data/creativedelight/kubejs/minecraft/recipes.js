@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -35,7 +35,7 @@ ServerEvents.recipes(e => {
 		var PLAIN = [
 			{ mod: 'botania' }, { mod: 'prettypipes' }, { mod: 'securitycraft' },
 			{ id: 'pneumaticcraft:speed_upgrade' }, { type: 'pneumaticcraft:thermo_plant' }, { id: 'createaddition:mixing/bioethanol' },
-			{ id: 'create:compacting/blaze_cake' }, { output: 'minecraft:potion' }, { output: 'minecraft:fermented_spider_eye' },
+			{ id: 'create:compacting/blaze_cake' }, { output: i.potion }, { output: i.fermented_spider_eye },
 		]
 		var DRINK = [{ output: i.t_food_drink }].concat([
 			'create_confectionery:hot_chocolate_recipe', 'tmted:mixer/apple_cider',

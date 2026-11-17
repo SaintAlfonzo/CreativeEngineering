@@ -52,7 +52,7 @@ ServerEvents.tags('block', e => {
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('cookingforblockheads')) return
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		Object.keys(CD_RACK_WOODS).forEach(w => {

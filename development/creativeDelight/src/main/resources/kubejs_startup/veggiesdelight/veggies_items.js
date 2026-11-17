@@ -16,8 +16,9 @@ global.removedItems.push(global.item.stuffed_bellpeppers_block, global.item.stuf
 // It fills the sliced potato tags More Delight's dishes and the pack's frying read (veggiesdelight/tags.js there).
 // Food values copy the potato slices: 1 hunger, modifier 0.3. No own art: the model reads Rustic Delight's potato slices
 // sprite in place (not copied; Rustic is ARR), so the sprite comes with the Rustic member.
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-	e.create(global.item.sliced_sweet_potato).displayName('Sliced Sweet Potato').texture('rusticdelight:item/potato_slices')
+	reg.item(e, global.item.sliced_sweet_potato).displayName('Sliced Sweet Potato').texture('rusticdelight:item/potato_slices')
 		.food(f => {
 			f.hunger(1).saturation(0.3)
 		})

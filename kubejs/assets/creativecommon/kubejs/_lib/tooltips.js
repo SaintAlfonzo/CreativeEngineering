@@ -101,21 +101,28 @@ function removeTooltips(e) {
 // A key ending in '*' matches every key with that prefix (mods that build the key from the item id).
 //   removeTooltipKey(e, 'desc.somemod.flavour.thing', i.thing, i.thing_slab)
 //   removeTooltipKey(e, 'item.somemod.fruit.tooltip.*', i.apple, i.pear)
+// Removes from a tooltip's lines (index 0, the name, is kept) every line whose translation key is in keys; a key ending
+// in '*' matches as a prefix. For tooltip callbacks that strip lines themselves (addAdvancedToAll).
+function stripTooltipKeys(text, keys) {
+    for (var n = text.size() - 1; n >= 1; n--) {
+        var lineKey = null;
+        try { lineKey = String(text.get(n).getContents().getKey()); } catch (err) {}
+        if (lineKey === null) continue;
+        for (var k = 0; k < keys.length; k++) {
+            var key = keys[k];
+            var hit = key.charAt(key.length - 1) === '*' ? lineKey.indexOf(key.substring(0, key.length - 1)) === 0 : lineKey === key;
+            if (hit) { text.remove(n); break; }
+        }
+    }
+}
+
 function removeTooltipKey(e, key) {
     var ids = Array.prototype.slice.call(arguments, 2);
-    var isPrefix = key.charAt(key.length - 1) === '*';
-    var prefix = isPrefix ? key.substring(0, key.length - 1) : key;
     for (var k = 0; k < ids.length; k++) {
         var tipId = tipIds(ids[k]);
         if (tipId === null) continue;
         e.addAdvanced(tipId, function(item, advanced, text) {
-            for (var n = text.size() - 1; n >= 1; n--) {
-                var lineKey = null;
-                try { lineKey = String(text.get(n).getContents().getKey()); } catch (err) {}
-                if (lineKey !== null && (isPrefix ? lineKey.indexOf(prefix) === 0 : lineKey === key)) {
-                    text.remove(n);
-                }
-            }
+            stripTooltipKeys(text, [key]);
         });
     }
 }
@@ -189,6 +196,7 @@ global.tooltips = {
 	addTooltipPattern: addTooltipPattern,
 	removeTooltips: removeTooltips,
 	removeTooltipKey: removeTooltipKey,
+	stripTooltipKeys: stripTooltipKeys,
 	col: col,
 	code: colorCode,
 	_absent: tipAbsent,

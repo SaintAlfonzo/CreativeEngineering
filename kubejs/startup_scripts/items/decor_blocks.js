@@ -5,9 +5,10 @@
 // files win). Textures live at creativeengineering:block/<name>.
 // The Weathered Cardboard Box moved to Creative Compat on 2026-11-01 (creativecompat/decor_blocks.js in that jar).
 
+var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
     // Layered Obsidian — vanilla-obsidian stats (hard, blast-resistant, needs a diamond pick).
-    e.create('creativeengineering:layered_obsidian')
+    reg.block(e, 'layered_obsidian')
         .displayName('Layered Obsidian')
         .material('stone')
         .soundType('stone')

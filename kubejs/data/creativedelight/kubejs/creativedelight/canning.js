@@ -8,7 +8,7 @@ ServerEvents.recipes(e=>{
 if (!global.CD) return
 console.log('canning starting')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativedelight')
 var f = global.fluid
 var i = global.item;
 

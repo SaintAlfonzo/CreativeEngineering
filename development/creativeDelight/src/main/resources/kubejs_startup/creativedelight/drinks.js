@@ -13,15 +13,16 @@
 
 const $DrinkUseAnim = Java.loadClass('net.minecraft.world.item.UseAnim')
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
 	var i = global.item
-	var drink = (id, name) => e.create(id).displayName(name).maxStackSize(32)
+	var drink = (id, name) => reg.item(e, id).displayName(name).maxStackSize(32)
 		.useAnimation($DrinkUseAnim.DRINK)
 		.food(f => {
 			f.hunger(1).saturation(0.2).alwaysEdible(true)
 			f.eaten(ev => {
 				var p = ev.player
-				if (p && !p.isCreative()) p.give('minecraft:glass_bottle')
+				if (p && !p.isCreative()) p.give(i.glass_bottle)
 			})
 		})
 	;[
@@ -35,7 +36,7 @@ StartupEvents.registry('item', e => {
 
 StartupEvents.registry('fluid', e => {
 	var f = global.fluid
-	var fluid = (id, name, color) => e.create(id).displayName(name).thinTexture(color).bucketColor(color).noBucket().noBlock()
+	var fluid = (id, name, color) => reg.fluid(e, id).displayName(name).thinTexture(color).bucketColor(color).noBucket().noBlock()
 	// New teas (section 2.1) and juices (section 1)
 	fluid(f.kiwi_tea, 'Kiwi Tea', 0x8FAE3C)
 	fluid(f.turnip_tea, 'Turnip Tea', 0xCBB8C9)

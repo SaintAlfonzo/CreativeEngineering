@@ -2174,3 +2174,11 @@ looks in every in-tree jar's assets for a KubeJS item's sprite. Jar built, not i
   (`global.has('neapolitan', ef.climbing)`), so CD alone skips it.
 - Built 2026-11-06 (Common and CD in build/libs), not installed. Tests SQ-CDFL-01 to -04, CQ-CDFL-01.
   Scratch r1106cbp 2026-11-06: SQ-CDFL-01 to -04 PASS (-04 static: soft fluid JSONs); CQ-CDFL-01 open.
+- 2026-11-17 (plan_rules_fixes.md P3b): every server and client script binds `global.NCH.forPack('creativedelight')`
+  (ids unchanged, `CD.recipes` already bound them); LootJS names `CD/` through `R.logName`; startup registrations through
+  `global.reg.forPack`; dict keys for literals; Java member checks ask `CDConfig.member` or the new `CDConfig.on` (Farmer's
+  Delight checks deleted, it is mandatory); scripts use `global.CD.on` for members and `global.has` for Creative Brewing's;
+  14 trades through `global.trades.villager`; food rebuilds as absolute rows; Engineer's Delight flour merged into
+  Create's (`swaps/merges_tmted.json`); its crusher flour recipes removed by script; Vintage advancements dropped; Oven
+  and Copper Pot pop XP without unlocking recipes; Barbeques calls the seasoning framework directly; requires Creative
+  Loot. Queue SQ-RFX-07 to -15, CQ-RFX-03, SQ-AV-02, -03, SQ-PST-10c.

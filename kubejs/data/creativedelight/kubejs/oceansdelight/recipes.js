@@ -6,7 +6,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('oceansdelight')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 

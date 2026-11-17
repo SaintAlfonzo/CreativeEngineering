@@ -106,7 +106,7 @@ public class OvenBlock extends BaseEntityBlock {
         if (!state.is(newState.getBlock())) {
             if (level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
                 Containers.dropContents(level, pos, oven.getDroppableInventory());
-                oven.getUsedRecipesAndPopExperience(level, Vec3.atCenterOf(pos));
+                oven.popUsedExperience(level, Vec3.atCenterOf(pos));
                 level.updateNeighbourForOutputSignal(pos, this);
             }
             super.onRemove(state, level, pos, newState, isMoving);

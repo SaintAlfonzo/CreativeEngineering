@@ -2,6 +2,9 @@
 // requires: endersdelight
 // Ender's Delight client rows (non-member; ends_delight.md 3.1): knife drop tooltips and JEI pages (1.1.4's info
 // lines), and 1.1.4's Shulker Bowl message for the Stuffed Shulker feast.
+// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
+
 ClientEvents.lang('en_us', e => {
 	if (!global.CD) return
 	// set in the endersdelight namespace, where the mod's lang sets it (client_scripts/name_fixes.js)
@@ -11,9 +14,9 @@ ClientEvents.lang('en_us', e => {
 ItemEvents.tooltip(e => {
 	if (!global.CD) return
 	var i = global.item
-	e.add(i.enderman_sight, Text.gray('Enderman drop when killed with a knife'))
-	e.add(i.mite_crust, Text.gray('Endermite drop when killed with a knife'))
-	e.add(i.shulker_mollusk, Text.gray('Shulker drop when killed with a knife'))
+	e.add(i.enderman_sight, tipLine('Enderman drop when killed with a knife', 'text'))
+	e.add(i.mite_crust, tipLine('Endermite drop when killed with a knife', 'text'))
+	e.add(i.shulker_mollusk, tipLine('Shulker drop when killed with a knife', 'text'))
 })
 
 if (Platform.isLoaded('jei')) {

@@ -17,5 +17,5 @@ ServerEvents.tags('item', e => {
 	] // G5 end
 	t.add(e, i.t_bread, general.filter(id => Platform.isLoaded(String(id).split(':')[0])))
 
-	t.add(e, i.t_bread_loaf, ['#forge:bread/wheat', '#forge:bread/corn', '#forge:bread/cauliflower', i.sourdough_bread])
+	t.add(e, i.t_bread_loaf, [i.bread, '#forge:bread/corn', '#forge:bread/cauliflower', i.sourdough_bread])
 })

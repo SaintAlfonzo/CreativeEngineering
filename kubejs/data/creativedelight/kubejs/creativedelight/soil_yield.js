@@ -127,7 +127,8 @@
 
     var $SoilYield = (function () {
         try {
-            return Java.loadClass('com.SaintAlfonzo.creativedelight.CDConfig').CROP_DROPS.SOIL_YIELD
+            var cd = global.NCH.cfgClass('creativedelight')   // CDConfig, registered by cd_core.js
+            return cd ? cd.CROP_DROPS.SOIL_YIELD : null
         } catch (err) {
             return null
         }

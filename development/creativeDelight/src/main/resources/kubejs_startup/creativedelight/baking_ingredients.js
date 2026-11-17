@@ -8,11 +8,12 @@
 // kubejs/data/creativedelight/kubejs/creativedelight/baking.js, kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js. The powdered sugar block and bucket are
 // patcherMod (food/PowderedSugarRegistry.java).
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
     var i = global.item
-    e.create(i.frosting).displayName('Frosting').texture('creativedelight:item/frosting')
-    e.create(i.cookie_dough).displayName('Cookie Dough').texture('creativedelight:item/cookie_dough')
-    e.create(i.powdered_sugar).displayName('Powdered Sugar').texture('creativedelight:item/powdered_sugar')
+    reg.item(e, i.frosting).displayName('Frosting').texture('creativedelight:item/frosting')
+    reg.item(e, i.cookie_dough).displayName('Cookie Dough').texture('creativedelight:item/cookie_dough')
+    reg.item(e, i.powdered_sugar).displayName('Powdered Sugar').texture('creativedelight:item/powdered_sugar')
 })
 
 // Dough blocks (TODO baking/baked-goods #27): 9-dough storage blocks with Create Compressed's dough block stats (sand,
@@ -30,7 +31,7 @@ StartupEvents.registry('block', e => {
         [i.sourdough_block, 'Sourdough Block'],
     ]
     doughBlocks.forEach(d => {
-        e.create(d[0]).displayName(d[1])
+        reg.block(e, d[0]).displayName(d[1])
             .material('sand').soundType('slime_block').hardness(0.5).resistance(10.0)
             .textureAll(d[0].replace(':', ':block/dough_block/'))
             .model(d[0].replace(':', ':block/'))

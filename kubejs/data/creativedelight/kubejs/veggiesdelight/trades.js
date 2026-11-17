@@ -11,12 +11,12 @@ MoreJSEvents.villagerTrades(e => {
 
 	// Farmer: Veggies Delight's produce trades, as upstream had them in code. Its bell pepper trade is dropped with the crop.
 	// Level 1 - Novice
-	e.addTrade(v.farmer, 1, [Item.of(i.broccoli, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 1, [Item.of(i.cauliflower, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 1, [Item.of(i.garlic, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 1, [Item.of(i.sweet_potato, 26)], Item.of(i.emerald, 1)).maxUses(12).villagerExperience(2).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 1, [Item.of(i.turnip, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
-	e.addTrade(v.farmer, 1, [Item.of(i.zucchini, 16)], Item.of(i.emerald, 1)).maxUses(16).villagerExperience(5).priceMultiplier(0.05)
+	global.trades.villager(e, v.farmer, 1, { buy: [i.broccoli, 26], sell: [i.emerald, 1], uses: 12, xp: 2, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 1, { buy: [i.cauliflower, 16], sell: [i.emerald, 1], uses: 16, xp: 5, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 1, { buy: [i.garlic, 26], sell: [i.emerald, 1], uses: 12, xp: 2, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 1, { buy: [i.sweet_potato, 26], sell: [i.emerald, 1], uses: 12, xp: 2, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 1, { buy: [i.turnip, 16], sell: [i.emerald, 1], uses: 16, xp: 5, priceMultiplier: 0.05 })
+	global.trades.villager(e, v.farmer, 1, { buy: [i.zucchini, 16], sell: [i.emerald, 1], uses: 16, xp: 5, priceMultiplier: 0.05 })
 })
 
 // Wandering Trader: upstream's list, minus its bell pepper seeds. Pools and helper as economy/wandering_trades.js.

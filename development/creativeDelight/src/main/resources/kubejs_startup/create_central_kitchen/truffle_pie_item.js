@@ -10,7 +10,7 @@ StartupEvents.registry('item', e => {
 	var $Properties = Java.loadClass('net.minecraft.world.item.Item$Properties')
 	var $CreativeModeTab = Java.loadClass('net.minecraft.world.item.CreativeModeTab')
 	var $ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-	var ID = 'create_central_kitchen:truffle_pie'
+	var ID = global.item.truffle_pie
 	e.createCustom(ID, () => new $BlockItem(
 		$ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ID)),
 		new $Properties().tab($CreativeModeTab.TAB_FOOD)))

@@ -492,6 +492,13 @@ Not a merge: Supplementaries' flax goes with no survivor, folded into the string
 - Generated data still naming flax, harmless until their next run: `item_physics_families.json`, `crop_seasons.json`,
   `jei_world/knife_drops/generated.json`, CD `soil_yield.js` (flax row).
 
+### 2.23 Wheat flour (built 2026-11-17, not run; SQ-RFX-07; plan_rules_fixes.md V-34)
+
+Engineer's Delight's `tmted:wheat_flour` merges into Create's `create:wheat_flour` (`swaps/merges_tmted.json` in the
+Creative Delight jar, requires `tmted` and `create`). Until now `create/recipes.js` swapped it in recipe inputs and
+outputs by hand and Common's `removed_items.js` hid it; the merge does both and also converts stacks in the world and
+loot. Engineer's Delight's two crusher flour recipes stay off (`create/recipes.js`, `R.remove`, V-20).
+
 ## 3. Known limits
 
 - A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no

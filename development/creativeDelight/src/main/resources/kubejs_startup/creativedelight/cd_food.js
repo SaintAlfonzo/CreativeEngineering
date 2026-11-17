@@ -61,7 +61,7 @@ global.CD.FOOD = {
 }
 
 global.CD.food = function (e) {
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var i = global.item
 	var V = global.CD.FOOD
 	var n = (id, count) => ({ id: id, count: count })

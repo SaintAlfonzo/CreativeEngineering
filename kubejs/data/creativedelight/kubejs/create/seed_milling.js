@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		R.createMilling(Item.of(i.bonemeal).withChance(0.15), i.t_millable_seeds, e, 'seeds_bone_meal')

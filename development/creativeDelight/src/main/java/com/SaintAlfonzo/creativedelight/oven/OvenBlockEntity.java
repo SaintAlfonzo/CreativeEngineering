@@ -361,24 +361,24 @@ public class OvenBlockEntity extends BlockEntity implements MenuProvider, Remain
 
     // ------------------------------------------------------------------ experience
 
-    /** FD awards recipes and experience when the output is taken (OvenResultSlot) or the oven breaks. */
-    public void awardUsedRecipes(Player player) {
-        List<Recipe<?>> usedRecipes = getUsedRecipesAndPopExperience(player.level, player.position());
-        player.awardRecipes(usedRecipes);
+    /**
+     * Pops the experience of the bakes since the last take, at the player, when the output is taken (OvenResultSlot).
+     * No recipe is unlocked (design rule DR-C14).
+     */
+    public void popExperience(Player player) {
+        popUsedExperience(player.level, player.position());
         usedRecipeTracker.clear();
     }
 
-    public List<Recipe<?>> getUsedRecipesAndPopExperience(Level level, Vec3 pos) {
-        List<Recipe<?>> list = new ArrayList<>();
+    /** Pops the experience of the bakes since the last take at {@code pos} (also when the oven breaks). */
+    public void popUsedExperience(Level level, Vec3 pos) {
         for (Object2IntMap.Entry<ResourceLocation> entry : usedRecipeTracker.object2IntEntrySet()) {
             level.getRecipeManager().byKey(entry.getKey()).ifPresent(recipe -> {
-                list.add(recipe);
                 if (level instanceof ServerLevel serverLevel && recipe instanceof BakingRecipe baking) {
                     splitAndSpawnExperience(serverLevel, pos, entry.getIntValue(), baking.getExperience());
                 }
             });
         }
-        return list;
     }
 
     private static void splitAndSpawnExperience(ServerLevel level, Vec3 pos, int craftedAmount, float experience) {

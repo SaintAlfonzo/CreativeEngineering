@@ -37,6 +37,7 @@ function ceCanFood(f, c) {
     if (c.clear_effects) f.eaten(ev => ev.entity.removeAllEffects())   // Canned Powdered Milk
 }
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
     var i = global.item
     var cans = ceCanTypes()
@@ -47,7 +48,7 @@ StartupEvents.registry('item', e => {
         var id = i[key]
         if (typeof id !== 'string') { console.warn('[cans] ' + key + ' has no item_dict key, run tools/gen_can_types.py'); return }
         try {
-            var b = e.create(id).displayName(c.name)
+            var b = reg.item(e, id).displayName(c.name)
             if (c.food !== false) b.food(f => ceCanFood(f, c))   // false: an ingredient can (Canned Dough)
             if (c.texture) b.texture(c.texture)   // null: own sprite at creativedelight:item/<id>
             if (c.glow) b.glow(true)

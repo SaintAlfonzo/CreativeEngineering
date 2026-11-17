@@ -285,6 +285,8 @@
 - **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
 - **Changed:** Vinegar ferments from 3 Apple Mash and any mushroom in the Pickling Jar [any jam and a mushroom].
 - **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
+- **Changed:** Engineer's Delight Wheat Flour turns into Create Wheat Flour in inventories, chests and loot.
+- **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -313,6 +315,7 @@
 - **New:** Title screen splash: Stience!
 - **Changed:** Tooltips and screen text use American spelling: color, gray, labeled, fueled.
 - **Changed:** Recipes are no longer unlocked in the recipe book by crafting or cooking.
+- **Changed:** Fertile Soil's farmer villager tooltip line is green, as on Rich Farmland [dark blue].
 
 ## Gameplay
 

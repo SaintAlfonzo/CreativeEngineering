@@ -4884,7 +4884,7 @@ shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/c
 @group A
 @commands `/loot spawn ~ ~ ~ mine <pos of age 7 corn_crop> <knife>` x40, then with an empty hand x20, then on age 3 x20
 @pass knife: about 10 cobs in 40; hand and age 3: none
-@fails `corn_delight/loot.js` (`CE/corn_knife_corncob`)
+@fails `corn_delight/loot.js` (`CD/corn_knife_corncob`)
 @from batches/r1103/p2_R.qb
 > setblock {R1+2} {R2-1} {R3+134} minecraft:farmland[moisture=7]
 > setblock {R1+2} {R2} {R3+134} corn_delight:corn_crop[age=7,upper=false]

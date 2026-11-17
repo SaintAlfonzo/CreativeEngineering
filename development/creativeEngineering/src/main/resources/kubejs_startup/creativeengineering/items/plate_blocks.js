@@ -19,9 +19,10 @@ const PLATE_BLOCK_METALS = [
     'netherite', 'nickel', 'silver', 'steel', 'uranium', 'zinc',
 ];
 
+var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
     PLATE_BLOCK_METALS.forEach(metal => {
-        e.create('creativeengineering:' + metal + '_plate_block')
+        reg.block(e, metal + '_plate_block')
             .displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plate Block')
             .material('metal')
             .soundType('metal')
