@@ -80,7 +80,7 @@
 @@text   gates P0 to P9d on jars -02 to -16 interleaved (verdicts `perf/runs/r1113/verdicts/`); found the client zap.json
 @@text   crash, the winding recursion server crash (B19) and the battery charge loss (B20). Resume point: [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10.
 @@text
-@@text - **r1112, 2026-11-12 21:18 to 22:35 (PASS 64, FAIL 3, INCONCLUSIVE 1), SQ-RP server rows and the r1111 batch-fault reruns; 9 boots.** Worlds: group A `rp` (3 boots: fresh, edited ladder, broken ladder), `hhm12` (2 boots, salt caves band 0..0 then off), `hhc12` (Crow, Loading Protection 1 s in srv config), `hhg12` (Gear + row-text reruns), group B `bw12` (seed 8675309, 2 boots; spawn-animals must be true). Jars: build/libs of 11-12 20:46 to 20:47 (Common, Compat, Calendar, Brewing), Delight 11-11 16:52, Raspberry Pie 21:21 rebuild (the 20:47 jar did not load: `solapplepie` range `[2.2.0]` vs `1.19.2-2.2.0`; fixed, 21:27 jar installed). FAIL: SQ-HH-474 (dust places a salt layer on stage 0, owner question), -482 (`mod-additions #76`), -1555 (`#75`). Row texts fixed: SQ-HH-206, -223, -233, -266, -319, -412, -1524, -1529, -1540, -1590, SQ-OB-03, -06, SQ-RP-06. Perf: `perf/sessions/r1112/summary.md`. Doc: [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md) 8.
+@@text - **r1112, 2026-11-12 21:18 to 22:35 (PASS 64, FAIL 3, INCONCLUSIVE 1), SQ-RP server rows and the r1111 batch-fault reruns; 9 boots.** Worlds: group A `rp` (3 boots: fresh, edited ladder, broken ladder), `hhm12` (2 boots, salt caves band 0..0 then off), `hhc12` (Crow, Loading Protection 1 s in srv config), `hhg12` (Gear + row-text reruns), group B `bw12` (seed 8675309, 2 boots; spawn-animals must be true). Jars: build/libs of 11-12 20:46 to 20:47 (Common, Compat, Calendar, Brewing), Delight 11-11 16:52, Raspberry Pie 21:21 rebuild (the 20:47 jar did not load: `solapplepie` range `[2.2.0]` vs `1.19.2-2.2.0`; fixed, 21:27 jar installed). FAIL: SQ-HH-474 (dust places a salt layer on stage 0, owner question), -482 (`mod-additions #76`), -1555 (`#75`). Row texts fixed: SQ-HH-206, -223, -233, -266, -319, -412, -1524, -1529, -1540, -1590, SQ-OB-03, -06, SQ-RPI-06. Perf: `perf/sessions/r1112/summary.md`. Doc: [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md) 8.
 @@text - **r1111 step 5, 2026-11-12 00:32 to 04:10 (SQ-HH rest, SQ-VH, SQ-OB, SQ-SCAT; 11 boots, 2 crashes).** Worlds: group A `hhm` (5 boots: Machines, worldgen A, Machines boot 2 + Crow D + Gear A, Crow F + Gear B (crashed at SQ-HH-1574), Gear rest (boot 4 crashed at -1575, boot 5)), group B `bw` and `wc` (seed 8675309; `wc` without Biomes O' Plenty, salt toml), `vh10` (A + real TerraBlender), `scat` (Structure Catalogue preset, 2 boots). SQ-HH 317 rows: PASS 233, FAIL 15, BATCH-FAULT 67, open 2; SQ-VH PASS 9, BATCH-FAULT 1, RECORD 1; SQ-OB PASS 5, FAIL 1, BATCH-FAULT 5; SQ-SCAT 4 PASS. **Server crash found:** Quark seed pouch in a dispenser (TODO `largecontent/mod-additions #65`). Other FAILs: TODO `#66` to `#72`, `dishes/ingredients #43`; owner questions `#73`. Jars: Common, Compat, Delight 11-11 16:50 to 16:52, the rest 11-10 (build/libs, as step 4). Perf session r1111 (closed, `perf/sessions/r1111/summary.md`). Per-row verdicts `perf/runs/r1111/verdicts/`; [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md) 7, 8.
 @@text - **r1111 step 4, 2026-11-11 20:55 to 21:18 (PASS 4, PARTIAL 3), SQ-NSM old-save rows and SQ-HCS-09.** Fixture built on the 1.2.02 jars (`tools/scratch_query/nsm_fixture.sh` + `nsm_fixture.js`, group A superflat; Biomes O' Plenty and Devtools left out, not in 1.2.02), booted on the new jars (`nsm_newjars.sh`, probe `nsm_probe.js`). PASS: SQ-NSM-02, -03, -09, SQ-HCS-09; PASS (server part) SQ-NSM-10; PARTIAL SQ-NSM-05 (client parts), -07 (dimension half PASS; sky island, meta structure, waystone not in a superflat fixture). No old id left in the saved world. Perf session r1111 (open). Fixture world and logs `perf/runs/r1111/nsm/`. [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md) 7, 8.
 @@text - **b1110, 2026-11-10 21:13 to 21:26 (PASS), rebuild-all boot and exit check.** Every top-level jar rebuilt and installed (namespace move jars included), group A server, `NOSWAP=1`, 4 boots, no perf session. Fixed on the way: Worldgen `ResourceKeyLegacyDimensionMixin` null-key boot crash; echo tools, Equipment recipe types and the Netherite Lunchbox still registered under the old namespaces; Devtools `flower_test` world preset path; Labels test tools package. Final boot: KubeJS errors 0, no ERROR from our jars, clean stop. Not run: client, SQ-NSM. [scratch_run_2026-11-10.md](scratch_run_2026-11-10.md) 11.
@@ -265,7 +265,7 @@
 @@text `perf/sessions/r1101/summary.md` (11 boots, JFR on, no prune). Jars: patcherMod and Creative Delight builds of
 @@text 2026-11-01 01:56. Priority server rows and the bug batch: PASS (SQ-AC-02, SQ-CM-32 / -35, SQ-RW-23, SQ-TER-01 now PASS)
 @@text except SQ-CDF-07 without-Brewin' half (pack does not start without Vinery), SQ-CBJ-05 and SQ-TL-09 (OPEN). Worldgen:
-@@text SQ-HR-05, SQ-EN-01 / -02, SQ-MRD-03, SQ-META31-04b, SQ-WG30-C02b, SQ-SB-01e PASS; SQ-SB-04 likely FAIL, SQ-SB-05 to
+@@text SQ-HR-05, SQ-ENC-01 / -02, SQ-MRD-03, SQ-META31-04b, SQ-WG30-C02b, SQ-SB-01e PASS; SQ-SB-04 likely FAIL, SQ-SB-05 to
 @@text -08 OPEN; meteorite desert pyramids lose their above-ground pyramid (client look). Client: priority CQ rows PASS on
 @@text looks (CQ-PRI-02 block shows as "Snow Block" in WTHIT); r1031 client batch PASS 5, FAIL 2 (CQ-UI-01 tobacco name,
 @@text CQ-TD-06 recheck), BATCH-FAULT 5, OPEN 20. qrun.py client mode fixed (slash prefix, slower typing). Not run: L1 to L4.
@@ -452,11 +452,11 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 ## SQ-GFB-03, -04, SQ-FTW-03
 @group PASS
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-## SQ-PB-01 to -04
-@group PASS (PB-02 wheat half; night mobs in the suite)
+## SQ-PFS-01 to -04
+@group PASS (PFS-02 wheat half; night mobs in the suite)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | SQ-SK / FP-10 | FAIL -> fixed (`starter_kit.js`, three KubeJS API calls) -> PASS on bots |
-## SQ-PB-05
+## SQ-PFS-05
 @group PASS: suite `g1` every row ok (G02 5.55, G03a 18.5, G04 50.1 ms; G12 heap floor near 6 GB, GC-pause spikes); G09 rerun `g1s` after a group S fix
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-WGP-08 (with CQ-WGP-01), all CQ- rows |
@@ -722,7 +722,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text
 @@text | Entries | Result |
 @@text |---|---|
-## SQ-CDB-01, SQ-EN-01 (server half), SQ-FFH-01/02 (no `foodFamily` / `cd_food.js` error), SQ-STD-01, SQ-FSD-01
+## SQ-CDB-01, SQ-EDL-01 (server half), SQ-FFH-01/02 (no `foodFamily` / `cd_food.js` error), SQ-STD-01, SQ-FSD-01
 @group PASS after fix 1. Only NCH error: the known `truffle_pie` (`fungiport #3`). `[itemMerges] 12 merges`; Storage Delight 140 recipes; Farmer's donor 177 files, only Aether / Aquaculture blocks to air, no `Could not translate`
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | `/fgdtest all`, `/vtdtest all`, `/kttest`, `/cdjtest`, `/fdtest all` | fgd 135/136 (truffle pie), vtd 373+ all PASS after the probe update, kt 30/34 (same 4 as 10-25: KT-15d, KT-17 x3), cdj 23/23, fd 97/97 after fixes 3 and the probe alias |
@@ -738,7 +738,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 ## SQ-CDB-04, -06, -07
 @group PASS (`/cbetest squid`, `jars`): one squid / glow squid item per kill, no ink / calamari / tentacles (a knife adds Delightful's animal fat: upstream `fatty_animals` holds squid); lava bottle in and out; milkshakes go in; Splash Milk's bottle shows `moonlight:milk`
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-## SQ-EN-02, -03, -04, -06
+## SQ-EDL-02, -03, -04, -06
 @group PASS (`/cbetest`): crate and stove drop themselves; the 4 plants survive only on end stone / tilled end stone; chorusflame 9-10 vs 16-24 and void pepper 18 vs 28 growth ticks of 100 (tilled faster); dragon bare 23 meat / 8 legs / 5 teeth in 4 kills, knife and machete 34 / 8 / 9; Dragon Tooth Knife repairs with a tooth
 @jars creativedelight
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
@@ -750,11 +750,11 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @group Upstream finding: Farmer's Structures 1.0.6 templates name `minecraft:cook_end_1_pool` / `cook_additions_N_pool` (no namespace) on the back-connectors and on 4 expansion connectors (`cook_additions_2_6/7/10`, `cook_end_1_15`); log `Empty or non-existent pool`, those 4 never expand. Same on 1.21. Not changed: owner decision (rewrite in the donor converter or leave)
 @jars creativecommon
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-## SQ-EN-07
+## SQ-EDL-07
 @group Partial: `end_house` found 156 blocks from 1500 0 in a new End; the earth-fill check needs `log = ALL` in the srv toml and a restart (not done)
 @jars creativedelight
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-@@text | Not run | Group B worldgen counts (SQ-FGD-12 to -15, SQ-WCD, SQ-DW, SQ-VP-14/15, SQ-MD-01, SQ-RD-09 to -11 / -26 to -28, SQ-OPEN-*, SQ-EN-07 rest, SQ-EN-10), fake-player rows of Round 1 not covered by a probe, all client rows (CDB-05/08/12, EN-05/08, CQ-*) |
+@@text | Not run | Group B worldgen counts (SQ-FGD-12 to -15, SQ-WCD, SQ-DW, SQ-VP-14/15, SQ-MD-01, SQ-RD-09 to -11 / -26 to -28, SQ-OPEN-*, SQ-EDL-07 rest, SQ-EDL-10), fake-player rows of Round 1 not covered by a probe, all client rows (CDB-05/08/12, EDL-05/08, CQ-*) |
 @@text
 @@text Other findings (not fixed): Corn Delight 1.0.3's `village_house` / `shipwreck_loot` loot modifiers use `mmlib:add_loot_table`,
 @@text not in the pack, so they never load (old: also in 2026-10-24 client logs). `i.spider_eye` is defined 3 times in `item_dict.js`.
@@ -790,7 +790,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text
 @@text | Entries | Result |
 @@text |---|---|
-## SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half)
+## SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CORN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half)
 @group PASS after fixes 1 to 3: `Done (`, no mixin / registry / `Error occurred while handling event` / NCH failure from our code except the known `truffle_pie` (`fungiport #3`). Only noise: redeco's two `Not a JSON object` tag files (also in the client log). Counts that moved since the rows were written: `[cans] registered 272`, `Cup conversions: 16`, Rustic upstream 452 files (8 dropped), `[jar-startup] creativedelight: 57 of 57`, `[CE potions] 58 item-agnostic mixes`, `[jeiRemove] 349`. FDB toml, `[moss]` keys, displaydelight `[Features]`, simplehats chef hat weight 0 all as the rows say
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SN-00, SQ-PS-00

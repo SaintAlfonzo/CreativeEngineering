@@ -18,7 +18,7 @@ real ones so that random ticks, mob spawning and player-gated code run as they d
 
 | Part | Status |
 |---|---|
-| `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PB-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
+| `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PFS-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
 | Runner `tools/perf/suite/perf_suite.py` (RCON, end-of-server triage, retries, resume, report) | BUILT 2026-10-28; offline self-test 12/12 PASS (section 6) |
 | General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28; first run g1 2026-10-28 03:04 to 05:27, every row ok (baseline; results in [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md) "Perf suite g1"); G09 from rerun g1s |
 | Cooking scenarios C- | PROPOSED, owner veto pending (section 8) |
@@ -217,20 +217,20 @@ Also checked: `./gradlew :perfBot:build --offline` builds; every plan command ex
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-SK-01, -02.
 
-Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PB-01 to -04 PASS (PB-02 wheat half: 17 of 81 grew with a bot, 0 without;
-the night-mob half is G03b). PB-05 is the g1 run.
+Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PFS-01 to -04 PASS (PFS-02 wheat half: 17 of 81 grew with a bot, 0 without;
+the night-mob half is G03b). PFS-05 is the g1 run.
 
-- [x] **PB-01 bot logs in:** boot with the jar and `-Dcdevperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
+- [x] **PFS-01 bot logs in:** boot with the jar and `-Dcdevperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
   spawn bot1 ~ ~ ~` -> latest.log shows a normal join (no exception from Forge networking, FTB, KubeJS login
   handlers, Lightman's), `list` names bot1, `forge tps` shows the overworld with loaded chunks near spawn.
-- [x] **PB-02 bot counts as a player:** flat world, bot beside a 9 x 9 wheat field (age 0) with `randomTickSpeed 3`
+- [x] **PFS-02 bot counts as a player:** flat world, bot beside a 9 x 9 wheat field (age 0) with `randomTickSpeed 3`
   -> some wheat grows within 5 min (none grows with the bot removed); in a normal world at night, hostile mobs
   spawn near the bot (`census`).
-- [x] **PB-03 path and census:** `pbot path bot1 <x+500> 200 <z> 1.5` -> `path_done:bot1` in the tick log after about
+- [x] **PFS-03 path and census:** `pbot path bot1 <x+500> 200 <z> 1.5` -> `path_done:bot1` in the tick log after about
   334 ticks; loaded chunks move with the bot (status lines); `census t` writes `perf/bot/census-t.json`.
-- [x] **PB-04 tick log and endings:** after a kill -9 of the scratch JVM the tick file ends with complete lines up to
+- [x] **PFS-04 tick log and endings:** after a kill -9 of the scratch JVM the tick file ends with complete lines up to
   the last second; `jfr assemble` of the repo works (the runner's salvage).
-- [x] **PB-05 general run:** *(PASSED 2026-10-28, run g1: every row ok, G02 5.55 ms; G09 rerun in g1s after the group S fix)* `perf_suite.py run general g1` end to end -> every G row `ok` or a triaged ending;
+- [x] **PFS-05 general run:** *(PASSED 2026-10-28, run g1: every row ok, G02 5.55 ms; G09 rerun in g1s after the group S fix)* `perf_suite.py run general g1` end to end -> every G row `ok` or a triaged ending;
   `report g1` writes `summary.md`; the G02 idle reading matches perf.md 12.1 (about 5-6 ms on a fresh world).
 
 ## 8. Proposed: cooking and farming scenarios (C-), owner veto pending
@@ -306,7 +306,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
    season cache mixins, Creative Delight, the Vintage and Veggies ports, ModernFix). Take the first suite run (g1)
    after it, on the jars it leaves in `mods/`, and treat that run as the baseline. Earlier perf.md numbers are on
    other builds.
-2. **Queue rows the bot can unblock** (once SQ-PB-01/-02 pass): SQ-HT-02 / -03 (horse armor handlers skip levels
+2. **Queue rows the bot can unblock** (once SQ-PFS-01/-02 pass): SQ-HT-02 / -03 (horse armor handlers skip levels
    with no player), SQ-SALT-07 (random ticks), SQ-PF-03 (chunk waits from a player teleport), SQ-SK (starter kit on
    join, server half), SQ-IPO-02 (arm and truss), SQ-SV-01's viaduct, and the Moonlight soft-fluid map that stays
    empty until a player joins.
@@ -345,7 +345,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 
 - 2026-10-28 night: run g1 (baseline): G02 5.55, G03a 18.5, G04 50.1 ms (four spread bots reach the budget), G12
   no drift but heap floor 5.4-5.8 GB of 6 GB with 1.7 s GC-pause ticks; group S animal fix, G09 rerun g1s 16.2 ms.
-- 2026-10-28 night: live tests PB-01 to -04 PASS; bots now move their chunk tickets from the server tick (bug: a bot
+- 2026-10-28 night: live tests PFS-01 to -04 PASS; bots now move their chunk tickets from the server tick (bug: a bot
   spawned away from its login spot never ticked); runner rewrites `summary.md` after every result (owner: summaries
   saved regularly, never capped); first run g1 started 03:04.
 - 2026-10-28: built the mod, the runner, the G- plan and the self-test; C- and W- proposed for veto. Split agreed with

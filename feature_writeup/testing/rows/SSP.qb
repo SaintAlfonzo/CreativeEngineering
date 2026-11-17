@@ -67,7 +67,7 @@ reject verb=\S+ .*done=0
 look 13 recipes, one per smoked shape; inputs oak / spruce, no botania and no driftwood
 reject verb=\S+ .*done=0
 
-## SQ-EN-01 | librarians: no Nock Enough Arrows enchantments in trades
+## SQ-ENC-01 | librarians: no Nock Enough Arrows enchantments in trades
 @group B
 @commands `/dumptrades`; summon a librarian with a lectern, step `VillagerData.level` 1 to 5 (reset offers each level)
 @pass librarians still offer enchanted books; no offer or dump entry holds `nock_enough_arrows:stockpile`, `:recovery` or `:cycle`
@@ -87,7 +87,7 @@ reject nock_enough_arrows:(stockpile|recovery|cycle)
 shell ! grep -rqE "nock_enough_arrows:(stockpile|recovery|cycle)" kubejs/exported/villager_trades.json
 look librarians offer enchanted books; Offers reset at a level change may need a trade-up; record what the level-5 librarian offered
 
-## SQ-EN-02 | Lightman's Currency cashiers: no NEA enchantments
+## SQ-ENC-02 | Lightman's Currency cashiers: no NEA enchantments
 @group B
 @commands summon several Lightman's Currency cashiers at levels 1 to 4
 @pass cashiers still offer enchanted books; none of the three NEA enchantments

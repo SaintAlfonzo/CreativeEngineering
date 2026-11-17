@@ -180,12 +180,12 @@ results). Rhino differences from node are not covered; the live run is the test 
 
 ## 8. Live test list (client queue CQ-RP-)
 
-- [x] **RP-01 bench runs** (PASS 2026-10-29, run 1 attempt 2, after the 9.1 fixes): `rp_bench.py run <G> perf/reports/rpbench-1` -> `[rpbench] start` with `sodium: true`,
+- [x] **RPB-01 bench runs** (PASS 2026-10-29, run 1 attempt 2, after the 9.1 fixes): `rp_bench.py run <G> perf/reports/rpbench-1` -> `[rpbench] start` with `sodium: true`,
   `site` 0 non-air samples, every config has a `reload` and its `scene` lines, `done` with `failed: 0`; no
   `error` lines; `built` lists no unknown blocks other than ones the scan predicted from removed mods.
-- [ ] **RP-02 report** (PARTIAL 2026-10-29: atlas and reload-delta checks PASS; drift 3.3% and reload sd 11% miss narrowly, 9.2): `rp_report.py` -> the control drift under 3%; `all` reload sd under 10% of the mean; every
+- [ ] **RPB-02 report** (PARTIAL 2026-10-29: atlas and reload-delta checks PASS; drift 3.3% and reload sd 11% miss narrowly, 9.2): `rp_report.py` -> the control drift under 3%; `all` reload sd under 10% of the mean; every
   target has a reload delta; the block atlas size of `all` matches the user's latest.log (8192x4096).
-- [x] **RP-03 findings recorded** (2026-10-29, 9.2; TODO `pack/server #33`, `#34`): the per-pack verdicts and the all vs none table copied into this file
+- [x] **RPB-03 findings recorded** (2026-10-29, 9.2; TODO `pack/server #33`, `#34`): the per-pack verdicts and the all vs none table copied into this file
   (section 9), with any pack that steps the atlas, lowers the mip level or costs over 3% of frame time listed as a
   TODO row for the owner.
 
@@ -286,7 +286,7 @@ block or entity.
     size (64x32), so the cause is not the texture; unexplained, negligible in play. TODO `pack/server #34`.
   - All vs none per scene: largest +4.8% (the same armor scene), vista +2.4%, everything else within +-3.2%.
 - **Rebuild:** not usable in this run (9.1, 13:22: every End scene at the 2-tick floor).
-- **RP-02 criteria:** atlas matches the owner's latest.log (PASS); every target has a reload delta (PASS); control
+- **RPB-02 criteria:** atlas matches the owner's latest.log (PASS); every target has a reload delta (PASS); control
   drift 3.3% (target under 3%) and `all` reload sd 11% of the mean (target under 10%) miss narrowly, both from the
   first config's warm-up. Next run: a warm-up config (one reload + control scene) before the first measured `all`,
   and `--repeat 2`.

@@ -128,20 +128,20 @@ Built-in packs (`resourcepacks/<folder>/` in the Creative Common jar, registered
 
 | ID | Setup | Action | Expected |
 |---|---|---|---|
-| LT-01 | client, new singleplayer world | create the world, watch the chunk progress screen | bar at the bottom, green "Tip:" and a white tip; the tip changes about every 7 s; no overlap with the progress square |
-| LT-02 | client, join a server or change dimension | watch "Loading terrain" | same bar on the receiving screen |
-| LT-03 | client | Options, Resource Packs | "Loading Tips" is in the selected list (Creative Tips comes with KubeJS's resources since 2026-11-07); latest.log shows `Loading tips: 213 tips from 2 files` |
-| LT-04 | client, `cycleSeconds = 2`, small window and GUI scale 4 | load a world | long tips wrap inside the bar; nothing off screen |
-| LT-05 | client | add a tip to Creative Tips (`kubejs/assets/`), F3+T | latest.log tip count rises by one; the tip can appear |
-| LT-06 | client, `enabled = false` | load a world | no bar |
-| LT-07 | client | start a singleplayer world (and create one) | tip on "Reading world data" / "Preparing for world creation" and on the chunk screen; the same tip, rolled only by the timer; `Loading tips: bar on` lines per screen |
-| LT-08 | client | join a server | tip on the connecting and receiving screens, same tip until the timer rolls it |
-| LT-09 | client | change dimension; leave a world | tip on the transition screen; no bar on "Saving world" or the screen after it |
-| LT-10 | client | grep latest.log | `Loading tips: 213 tips from 2 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` |
-| LT-11 | client, a test pack without `override` that repeats an id | F3+T | the first tip stays, a clash line in the log |
-| LT-12 | client, a test pack with `override: true` and one same-id tip | F3+T | that tip replaces the same-id tip, no per-tip flag needed |
-| LT-13 | client, a test pack with a plain-string tip | F3+T | the tip shows; the count rises by one |
-| LT-14 | client, small window, GUI scale 4 | join a server | the bar never covers the Cancel button (it moves below or hides) |
+| LTP-01 | client, new singleplayer world | create the world, watch the chunk progress screen | bar at the bottom, green "Tip:" and a white tip; the tip changes about every 7 s; no overlap with the progress square |
+| LTP-02 | client, join a server or change dimension | watch "Loading terrain" | same bar on the receiving screen |
+| LTP-03 | client | Options, Resource Packs | "Loading Tips" is in the selected list (Creative Tips comes with KubeJS's resources since 2026-11-07); latest.log shows `Loading tips: 213 tips from 2 files` |
+| LTP-04 | client, `cycleSeconds = 2`, small window and GUI scale 4 | load a world | long tips wrap inside the bar; nothing off screen |
+| LTP-05 | client | add a tip to Creative Tips (`kubejs/assets/`), F3+T | latest.log tip count rises by one; the tip can appear |
+| LTP-06 | client, `enabled = false` | load a world | no bar |
+| LTP-07 | client | start a singleplayer world (and create one) | tip on "Reading world data" / "Preparing for world creation" and on the chunk screen; the same tip, rolled only by the timer; `Loading tips: bar on` lines per screen |
+| LTP-08 | client | join a server | tip on the connecting and receiving screens, same tip until the timer rolls it |
+| LTP-09 | client | change dimension; leave a world | tip on the transition screen; no bar on "Saving world" or the screen after it |
+| LTP-10 | client | grep latest.log | `Loading tips: 213 tips from 2 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` |
+| LTP-11 | client, a test pack without `override` that repeats an id | F3+T | the first tip stays, a clash line in the log |
+| LTP-12 | client, a test pack with `override: true` and one same-id tip | F3+T | that tip replaces the same-id tip, no per-tip flag needed |
+| LTP-13 | client, a test pack with a plain-string tip | F3+T | the tip shows; the count rises by one |
+| LTP-14 | client, small window, GUI scale 4 | join a server | the bar never covers the Cancel button (it moves below or hides) |
 
 ## 8. History
 

@@ -94,7 +94,7 @@ look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap 
 @@text `[immersive_portals]` and `[portalgun]` tables.
 @@text
 @@table
-## SQ-IP-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
+## SQ-PRT-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
 @group A
 @commands #17 build a 4x5 obsidian frame in the Overworld; light it with flint and steel (bot `qa`), a fire charge from a dispenser, and lightning (`/summon lightning_bolt` on top of a lit-fire frame); a fresh frame each time; also crouch + flint and steel on the obsidian; flint and steel on the smallest frame Smaller Nether Portals takes (2x3 inside)
 @pass no portal (no `imm_ptl_core:nether_portal_new` entity, no `minecraft:nether_portal` blocks); frame turns to crying obsidian, soul fire in it; `PortalSpawnEvent fired` in the log for each, the full-size frames with `state=Block{minecraft:fire}` (not `nether_portal`: that is Smaller Nether Portals' late event); the small frame also turns to crying obsidian, its portal blocks gone
@@ -154,10 +154,10 @@ count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
 count \[cdevtest\] verb=state pos=12[0-4][01],-(60|58),1000 state=minecraft:crying_obsidian >= 8
 look all ten edge-middle reads crying obsidian (corners stay obsidian: the converter takes only frame blocks beside the interior); soul fire inside each; small frame 1240 too (row: its portal blocks gone)
 
-## SQ-IP-02 | Dark Fire: IP portal entity pair in a valid frame (Overworld and Nether), frame stays obsidian, L frame does not light
+## SQ-PRT-02 | Dark Fire: IP portal entity pair in a valid frame (Overworld and Nether), frame stays obsidian, L frame does not light
 @group A
 @commands #18 Dark Fire in a valid 4x5 frame (Overworld), then in an L-shaped frame, then in the Nether; `/data get entity @e[type=imm_ptl_core:nether_portal_new,limit=2,sort=nearest]`; walk `qa` through
-@pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-IP-01)
+@pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-PRT-01)
 @fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behaviour)
 @from batches/r1113/c3_a1.qb
 @reviewed 2026-11-16
@@ -191,9 +191,9 @@ sleep 3
 sleep 5
 > execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new,x=1,y=102,z=0,distance=..4]
 > pbot remove qn
-look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-IP-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the state lines first
+look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-PRT-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the state lines first
 
-## SQ-IP-03 | flint and steel on a 3x3 wall of each mirror-glass block and pane: a breakable mirror on each; breaking a block removes it
+## SQ-PRT-03 | flint and steel on a 3x3 wall of each mirror-glass block and pane: a breakable mirror on each; breaking a block removes it
 @group A
 @commands #23 build a 3x3 wall of each `#creativecompat:mirror_glass` block and of each `_panes` member (`/tag`-free: one wall per id); flint and steel on each (sneaking for frosty glass)
 @pass an `imm_ptl_core:breakable_mirror` entity on each wall; breaking one block of a wall removes its mirror
@@ -319,7 +319,7 @@ sleep 3
 expect Test passed, count: 51\b
 look 52 walls (29 #creativecompat:mirror_glass, 23 _panes, x 1200 to 1455 at z 1075, frosty glass and pane used sneaking); a count under 52: find which wall has none with `execute positioned <x+1> -59 1075 if entity @e[type=imm_ptl_core:breakable_mirror,distance=..3]`; flint and steel has 64 uses (52 needed)
 
-## SQ-IP-04 | gun portals go on logout and on dimension change; a new shot places a fresh pair
+## SQ-PRT-04 | gun portals go on logout and on dimension change; a new shot places a fresh pair
 @group A
 @commands #24 `qa` places both gun portals; `qa` logs out (kick); log in, shoot a new pair, change dimension (`/execute in minecraft:the_nether run tp qa 0 100 0`); back, shoot a pair, die in another dimension and respawn
 @pass portals gone at once on logout and on dimension change; after each a new shot places a fresh pair; after the respawn case they go within one heartbeat (10 s)
@@ -366,7 +366,7 @@ sleep 2
 waitlog \[c3\] portals: \d+ 20
 look `portals:` sequence 4, 2 (after logout), 4, 2 (after the Nether tp), 4 (pg's pair from SQ-PG-01a is the steady 2). The death-and-respawn case is not driven (perfBot respawn untested): leave for a client or a later row
 
-## SQ-IP-05 | despawn at distance: stays at 120, gone within a beat at 140; 2 s beat; despawnDistance 0 never; offline owner at load (boot 2)
+## SQ-PRT-05 | despawn at distance: stays at 120, gone within a beat at 140; 2 s beat; despawnDistance 0 never; offline owner at load (boot 2)
 @group A
 @commands #24 `qa` places a pair, walks (`/tp`) 120 then 140 blocks away, waits 12 s each; set `[portalgun] heartbeatSeconds` 2 and repeat; set `despawnDistance` 0 and repeat at 300 blocks; place a pair, stop the server with `qa` online, start it with `qa` offline (spawn-chunk portals)
 @pass stay at 120; gone within 10 s at 140 (not before the beat); within 2 s with the shorter beat; never with 0; the saved portals of the absent owner go on their first beat
@@ -421,25 +421,25 @@ sleep 2
 > save-all flush
 look portals: 4 at the start (qa + pg), 4 after 12 s at 120 blocks, 2 after 12 s at 140; with the 2 s beat 4 then 2 within 4 s; with despawnDistance 0, 4 after 12 s at 300 blocks; last line: qa's spawn-chunk pair (x 0, z 10) plus pg's pair. qa stays online to the stop; c3_a2.qb checks the offline-owner half. If the toml edits are not picked up live (Forge watcher), the 2 s and 0 cases read like the 10 s / 128 case: note it, not a mod FAIL
 
-## CQ-IP-01
+## CQ-PRT-01
 @group client
-@commands #18, #19 look through a Nether portal both ways (a portal lit with Dark Fire, SQ-IP-02); then a portal made before the update
+@commands #18, #19 look through a Nether portal both ways (a portal lit with Dark Fire, SQ-PRT-02); then a portal made before the update
 @pass the far side ends at about 32 blocks (2 chunks); clear for the first 8 blocks past the portal, full fog by 32; the portal surface tinted purple; edit `[immersive_portals.fog.nether]` start/end and see it follow (config reload), `enabled = false` removes the fog; the old portal may have no tint (note it: relight)
 @fails fog: `IPPortalFogMixin` not applied, or `PortalRendering.isRendering()` false during fog setup (IP renders through a separate path: report)
 @draft no batch holds this row yet
-## CQ-IP-02
+## CQ-PRT-02
 @group client
 @commands #20 opaque gun portals: default, look through a pair; set `[portalgun] opaquePortals = true`; look again, walk through, dye one side red
 @pass default: see-through; on: a solid disc in each portal's colour, no view through, walking through still teleports, the red side shows red
 @fails the disc is the gun's own filled texture: a soft edge is expected
 @draft no batch holds this row yet
-## CQ-IP-03
+## CQ-PRT-03
 @group client
 @commands #22 two facing mirrors 6 blocks apart (glass walls), stand between; walk 20 blocks away and back; one mirror facing open land
 @pass at most 4 reflections deep; past 12 blocks both show plain glass, within 12 they reflect; the reflection of open land is clear for 16 blocks past the mirror, then fades to full fog by 32 and stops (2 chunks); `[immersive_portals.fog.mirror] enabled = false` shows the hard cut instead; a gun portal pair looking over open land: same 16 to 32 fog and cut (`portalGun`, `portalGunViewDistance`)
 @fails IP's `maxPortalLayer` (5) caps first if `mirrorMaxBounces` is higher
 @draft no batch holds this row yet
-## CQ-IP-04
+## CQ-PRT-04
 @group client
 @commands #21, #23 JEI and WTHIT on Design and Decor's three tinted framed glass and Create Framed's; frosty glass wall: flint and steel without sneaking, then sneaking on a fresh wall; a pane wall of each tagged pane type
 @pass "Smooth Tinted Glass", "Horizontal Smooth Tinted Glass", "Vertical Smooth Tinted Glass" for Design and Decor only, Create Framed's keep "Tinted Framed Glass"; plain use melts the frost, sneaking makes a mirror; each pane wall makes a mirror

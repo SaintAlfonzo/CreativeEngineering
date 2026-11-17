@@ -350,7 +350,7 @@ Proposed RD-41: JEI shows a sequenced assembly for each roll; a Create line make
 | members #3 | Vintage Delight rows into CD | Testing | creative_delight.md 27; CDM-05 clean; open SQ-CDM |
 | members #4 | Fungi Delight rows into CD | Testing | creative_delight.md 27; CDM-06 clean; open SQ-CDM |
 | members #5 | Miner's Delight rows into CD | Testing | creative_delight.md 27 (cup conversion in CD `dataTrees`); CDM-07; open SQ-CDM-05 |
-| members #7 | End's Delight integration | Testing | [ends_delight.md](../ends_delight.md) 5; open SQ-EN-05, -08 (client), -07 earth-fill half |
+| members #7 | End's Delight integration | Testing | [ends_delight.md](../ends_delight.md) 5; open SQ-EDL-05, -08 (client), -07 earth-fill half |
 | members #12 | Wild crops into CD | Testing | creative_delight.md 24; SQ-CM-09 PASS; open SQ-WCD-01 to -07 (group B) |
 | members #13 | All pack food KubeJS into CD by mod | Testing | creative_delight.md 29; open SQ-CDF-01, -02, -04 to -08 |
 | members #22 | Rustic cutover cleanups (Fruit Beignet, cotton) | Testing | [rustic_delight.md](../rustic_delight.md) 5.7; SQ-CM-30 PASSED r1031, nothing open |

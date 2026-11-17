@@ -146,7 +146,7 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 - SQ-WO-04 (and the other 30040-area WO rows): tickwarp runs real ticks, but random ticks only happen within 128 blocks of a player. Unless the batch has a bot there, the tree gets no random ticks (same exposure as the old real-time sleep)
 - SQ-SPF-70: the first locate waitlog `(nearest|Could not find).*` does not name its target (lint warning); left as is
 - SQ-FCK-13 edits a config while the server runs (lint cfgedit warning, pre-existing); the row already treats a missed reload as BATCH
-- SQ-RP-06 @commands still names a 'solraspberrypie:liquid_diet_log' recipe type; only the steps were fixed
+- SQ-RPI-06 @commands still names a 'solraspberrypie:liquid_diet_log' recipe type; only the steps were fixed
 - SQ-PSW-02 @pass also asks for structure y levels (5/12/33); the steps check only the biome at y 40
 - CQ-TX-01 waits 60/120/300 ticks (24 s at randomTickSpeed 200). The shot names t60/t180/t480 are ticks, not seconds; crops may not reach their last stage
 
@@ -156,18 +156,18 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 - RD.qb priority 3: none of the 58 CQ- @draft client rows has capture-driver steps yet. The 14 SQ rows newly marked @client true (listed under left_draft) are also still waiting for driver steps.
 - Client drafts not written (low priority, left @draft 'no batch holds this row yet'): CQ-CBO-01..04 (CEPortTesting port_chain setup around the client), CQ-OB-02, CQ-OB-04, CQ-GAP-01, CQ-GAP-03, CQ-ROLL-10, CQ-PJL-06, CQ-PJL-07, CQ-PNE-02..06, CQ-PNE-08, CQ-PNE-09, CQ-CAL-08, SQ-SV-02 (client group). Item and tab ids for most of these are not in the dumps (rotten ham, fertile soil, Quark and Every Compat blocks, creative tab ids), so I did not guess them.
 - PWG client drafts CQ-PWG-01 to -29 and CQ-PWG-66: not touched (low priority). Most target old gate jars (-04 to -18), dedicated-server joins or hand work. The ponder-shot rows (CQ-PWG-14, -15, -20, -29) could become /create ponder + shot driver steps
-- Client drafts left as @draft (low priority, no driver steps yet): FO CQ-CNP-01, CQ-FO-60, CQ-FR-01, CQ-DF-01, CQ-CN-01, CQ-STD-01, CQ-NDM-01; SCAT CQ-SCAT-05; TP CQ-TP-01 to -16
+- Client drafts left as @draft (low priority, no driver steps yet): FO CQ-CNP-01, CQ-FO-60, CQ-FR-01, CQ-DF-01, CQ-CORN-01, CQ-STD-01, CQ-NDM-01; SCAT CQ-SCAT-05; TP CQ-TP-01 to -16
 - Server drafts left @draft with a reason (see left_draft): TP -08,-09,-11 to -17,-19 to -21,-23 to -26,-29,-32 to -39; PS15 -04,-08,-11,-11b,-12,-12b,-12c; CDNS -01 to -04,-06,-09,-12; CEQ-03, CEQ-06; CBP-10; CUP-05; EF-07; IWF-05; GFB HRU-02, STC-01, STC-02; EFB -02 to -16, -18 to -22
-- Priority 2, server @draft rows not written (they can be automated, but there was no context left for them): GLD SQ-GLD-10, SQ-GLD-15; PTH SQ-PTH-28, -03b, -11c, -25b, -28b; SPF SQ-SPF-30, -81, -92, -111; CDJ SQ-MDP-14, SQ-MDP-16, SQ-VTD8-01 (rewritten, I2), SQ-VTD8-02, SQ-FGD-14 (worldgen judgement); CCO SQ-CCO-13; HCS SQ-HCS-09, -10; EN SQ-EN-05, -07, -08, SQ-LR-01; PROC SQ-PROC-01, -13, -15; FSD SQ-FSD-01, -03, -04, -05, -06; BBQ SQ-BBQ-08; SWL SQ-SWL-01; PG SQ-PG-01c
+- Priority 2, server @draft rows not written (they can be automated, but there was no context left for them): GLD SQ-GLD-10, SQ-GLD-15; PTH SQ-PTH-28, -03b, -11c, -25b, -28b; SPF SQ-SPF-30, -81, -92, -111; CDJ SQ-MDP-14, SQ-MDP-16, SQ-VTD8-01 (rewritten, I2), SQ-VTD8-02, SQ-FGD-14 (worldgen judgement); CCO SQ-CCO-13; HCS SQ-HCS-09, -10; EN SQ-EDL-05, -07, -08, SQ-LR-01; PROC SQ-PROC-01, -13, -15; FSD SQ-FSD-01, -03, -04, -05, -06; BBQ SQ-BBQ-08; SWL SQ-SWL-01; PG SQ-PG-01c
 - Priority 3, client CQ- @draft rows: none written (FCK 8, GLD 9, PTH 6, SPF 2, CDJ 1, CCO 3, HCS 1, KT 1, PROC 1, PG 5, TXC 11, CMV 3, SWL 2, CLOG 2, FDR 4, AR 1, CDTX 1, JO 1, LGM 1, BBQ2 1)
 - Client rows (priority 3) in every file: none written. Open CQ drafts: TPF CQ-TPF-31 to -91 (about 45), WO CQ-WO-01 to -07, BBQF CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01, CC CQ-CC-01 to -06, CGE CQ-CGE-01, CDB SQ-CDB-14 (group client), DEP CQ-DEP-01, SPFX CQ-SPFX-01, -02, BM CQ-BM-01 to -07, PF SQ-PF-06 (group client), EFX/ENGM/NDM/CFR/PT/CPP client rows (CQ-ENGM-01, CQ-CFR-01, CQ-PT-01, CQ-CPP-01), NM CQ-NM-01 (its draft reason left as it was). No xdotool or eval_client steps were converted to driver steps.
 - WO: its server rows were converted in the earlier run and checked here; nothing else was changed.
-- Client drafts (priority 3) with no driver steps yet. RP: CQ-RP-01..03 in section 1 and CQ-RP-01..40 in section 2
-- LT: CQ-LT-01..15
+- Client drafts (priority 3) with no driver steps yet. RP: CQ-RPB-01..03 in section 1 and CQ-RPI-01..40 in section 2
+- LT: CQ-LTP-01..15
 - JT: CQ-JT-01..10
 - PSU: CQ-PST-04, -05, CQ-PSD-08, -09, CQ-PSF-01, CQ-PSU-01..05
 - WGE: CQ-WGE-07a/b/c, -17, -18
-- IP: CQ-IP-01..04
+- IP: CQ-PRT-01..04
 - FLR: CQ-FLR-01..03
 - BRA: CQ-BRA-01, CQ-NCR-01
 - TX: CQ-TX-04, CQ-TXR-01
@@ -201,14 +201,14 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 - SQ-RS-01: needs two boots with different configs
 - SQ-VP-13: needs a boot with goldenEggChance = 1 set before start
 - SQ-MDP-02, SQ-MDP-04, SQ-MDP-08, SQ-KS-05: @draft replaced with @superseded naming the replacing rows (SQ-MDP-17, SQ-MDL-02/-03, SQ-CDT-01/-02), as the rows' own text already said
-- SALT section 1 'Run log', 111 entries (SQ-CM-01 to -09, SQ-SALT-01 to -04 old, SQ-PB-01 to -05 old and others): past-run verdict entries, not test rows; reason changed to say so
+- SALT section 1 'Run log', 111 entries (SQ-CM-01 to -09, SQ-SALT-01 to -04 old, SQ-PFS-01 to -05 old and others): past-run verdict entries, not test rows; reason changed to say so
 - SQ-PTH-28c (PS15B): perf suite P row (PERF_JARS, JFR on minus off), not a qrun batch
 - SQ-CDW-04 (MIN): needs a client joining the dedicated server (datapack-validation screen)
 - SQ-MIN-02 (MIN): WTHIT crop line plus rain at a desert; no verb reads isRainingAt
 - SQ-MIN-05 (MIN): missing-texture lines and models load only on a client
 - SQ-CBB-04 (CBB): rerun of SQ-CBA-01 to -08 and -10; run those rows on the chain boot
-- SQ-PB-04 (PB): kill -9 of the scratch JVM ends any batch; run it by hand after the last row
-- SQ-PB-05 (PB): perf suite run (about 2 h 15 min), not a qrun batch
+- SQ-PFS-04 (PB): kill -9 of the scratch JVM ends any batch; run it by hand after the last row
+- SQ-PFS-05 (PB): perf suite run (about 2 h 15 min), not a qrun batch
 - SQ-PERFCFG-03 (PERFCFG): two boots compared with the ModernFix jar moved between them
 - SQ-MCL-06 (MCL): perf suite G04 rows at three forced levels
 - CQ-TXP-01, CQ-TXP-02 (TXQ): they run qrun.py pair / matrix themselves, not steps inside a batch

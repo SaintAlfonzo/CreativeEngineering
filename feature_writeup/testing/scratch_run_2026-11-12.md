@@ -10,10 +10,10 @@ Perf session `r1112`, opened 21:19 before the first boot. Report without `--prun
 ## 1. Scope
 
 Taken, in order:
-1. SQ-RP-01 to -06 (Spice of Life: Raspberry Pie Addition, added 2026-11-12), group A fresh world `rp`.
+1. SQ-RP-01 (now SQ-RPI-01) to -06 (Spice of Life: Raspberry Pie Addition, added 2026-11-12), group A fresh world `rp`.
 2. r1111 batch-fault reruns with fixed batches: SQ-HH Machines, Crow, Gear (group A); SQ-OB-04, -09; SQ-VH-06 (group B).
 
-Not taken: every client row (CQ-, incl. CQ-RP-01 to -28 and CQ-CHK-01: real player or window); SQ-FLR-02 to -05
+Not taken: every client row (CQ-, incl. CQ-RP-01 (now CQ-RPI-01) to -28 and CQ-CHK-01: real player or window); SQ-FLR-02 to -05
 (Create rig not built); SQ-BREED-01 (`/dumpbreeding` not written); SQ-VH-11, SQ-OB-11 (no old save); SQ-FDI (Spice
 of Life: Carrot Edition jar not in `mods/`); SQ-HH-1574, -1575 (known crash, TODO `largecontent/mod-additions #65`);
 row-text faults (rejudged, not rerun; section 8).
@@ -42,10 +42,10 @@ Scratch servers get COPIES of the build jars.
   client and server too. Fix (boot metadata only, no behaviour change): `mods.toml` range `[1.19.2-2.2.0]`.
   Rebuilt 21:21, rebooted: Done, `Diet ladder: 38 rungs, 5 slots, 14 pool effects`.
 - 21:23 rp1.qb: SQ-RP-01, -02 PASS, -05, -06 judged PASS (below). Apple Pie's `solapplepie:food_book` recipe is
-  already removed: `diet_log.js` loads from the pack's `kubejs/data/creativedelight/kubejs/` folder, so SQ-RP-06's
+  already removed: `diet_log.js` loads from the pack's `kubejs/data/creativedelight/kubejs/` folder, so SQ-RP-06 (now SQ-RPI-06)'s
   "rebuild" note is wrong (the CD jar copy only matters for a pack without that folder).
-- 21:24 boot 2 (ladder edited): SQ-RP-03 PASS, pause list survived the restart (SQ-RP-05b PASS).
-- 21:26 boot 3 (ladder broken): SQ-RP-04 PASS. Stopped 21:27; fixed jar installed into `mods/` (no game running).
+- 21:24 boot 2 (ladder edited): SQ-RP-03 (now SQ-RPI-03) PASS, pause list survived the restart (SQ-RP-05b (now SQ-RPI-05b) PASS).
+- 21:26 boot 3 (ladder broken): SQ-RP-04 (now SQ-RPI-04) PASS. Stopped 21:27; fixed jar installed into `mods/` (no game running).
 - 21:30 three subagents writing the HH Machines / Crow / Gear and OB / VH rerun batches.
 - 21:36 subagents done: `hh_mach_a.qb` + `hh_mach_a2.qb` (two boots: SQ-HH-320 needs saltCaves false, -274 a
   restart), `b_vh.qb` (SQ-VH-06 with new probe `zq_heapcol.js`, SQ-OB-04, -09), `hh_gear.qb` (24 rows),
@@ -78,10 +78,10 @@ Scratch servers get COPIES of the build jars.
 | ID | Result | Evidence |
 |---|---|---|
 | SQ-RP-01 | PASS (after the mods.toml fix) | `Diet ladder: 38 rungs, 5 slots, 14 pool effects`; no mixin error, no Apple Pie benefits or resetOnDeath warning |
-| SQ-RP-02 | PASS | `Seeded ./rp/./serverconfig/solraspberrypie/ladder.json from .../defaultconfigs/...`; diff identical |
+| SQ-RP-02 (now SQ-RPI-02) | PASS | `Seeded ./rp/./serverconfig/solraspberrypie/ladder.json from .../defaultconfigs/...`; diff identical |
 | SQ-RP-03 | PASS | one `skipped 1 entries ... unlock nosuchmod:thing at 3.0`; one `V10: flat minecraft:absorption at 4.0 cannot be refreshed safely; skipped`; still 38 rungs |
 | SQ-RP-04 | PASS | `DIET LADDER FILE IS BROKEN OR MISSING` block (Unterminated array), no `Diet ladder:` line, `/solrp pause list` answers |
-| SQ-RP-05 | PASS | none -> `Paused diet bonuses for 1 players` -> `1 paused: rpb` -> `Resumed ...` -> none; still `1 paused: rpb` after two restarts |
+| SQ-RP-05 (now SQ-RPI-05) | PASS | none -> `Paused diet bonuses for 1 players` -> `1 paused: rpb` -> `Resumed ...` -> none; still `1 paused: rpb` after two restarts |
 | SQ-RP-06 | PASS | `solraspberrypie:diet_log` (type `diet_book`) and `liquid_diet_log` loaded; `/zq recipes food_book` 0 (Apple Pie's removed, `diet_log.js` loaded), no NCH error |
 | SQ-HH-209 | PASS | first useitem CONSUME, Amount 1000; on lava useitem FAIL, Amount still 1000; Test passed |
 | SQ-HH-223 | PASS (rain fix) | wheat, carrot, seagrass, alexsmobs:lobster_tail each 1b in its trough; acacia_blossom also taken (RECORD) |

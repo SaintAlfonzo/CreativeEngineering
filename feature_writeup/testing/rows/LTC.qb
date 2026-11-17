@@ -7,7 +7,7 @@
 @@date 2026-11-08
 @@sources feature_writeup/loading_tips.md
 @@text
-@@text Not run. Common built 2026-11-08, needs the game closed to go into CEPortTesting. Keys in `config/creativecommon-client.toml`, no longer in `creativecommon-common.toml`, so CQ-LT-04 and -06 edit that file.
+@@text Not run. Common built 2026-11-08, needs the game closed to go into CEPortTesting. Keys in `config/creativecommon-client.toml`, no longer in `creativecommon-common.toml`, so CQ-LTP-04 and -06 edit that file.
 @@text
 @@table
 ## CQ-LTC-01

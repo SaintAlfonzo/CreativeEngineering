@@ -111,7 +111,7 @@ so they run first; the time total is unchanged.
   `goldenfood:gf_enchantment` book in the saved chest), SQ-CWG-08o FAIL ("That position is not loaded" at the village
   place): their boot-2 read-backs are setup gaps. 01:30 boot 2 (current jars on sAo) preparing.
 - 01:42 slice B judged (`perf/runs/r1103/sB/judged.md`): PASS 29, FAIL 1 (SQ-VNG-01: four pickling recipes still
-  take `vintagedelight:vinegar_bottle`; `i.vinegar` in item_dict.js names the bottle), BATCH-FAULT 2 (SQ-CN-04b: same
+  take `vintagedelight:vinegar_bottle`; `i.vinegar` in item_dict.js names the bottle), BATCH-FAULT 2 (SQ-CN-04b (now SQ-CORN-04b): same
   dimension bug in zsb_probe.js, fixed; SQ-WCT-08: bot aim, fixed in `sB_R.qb`), RERUN pending 7 (SQ-LBS). Owner
   decisions: SQ-FO-02, SQ-CNS-03, SQ-FFB-02 (judged.md). `chain3.sh` runs sB_R.qb after chain2.
 - 01:31 slice A boot 2 up on the 1.1.06 world with current jars (no event errors: the upgrade path loads). 02:06

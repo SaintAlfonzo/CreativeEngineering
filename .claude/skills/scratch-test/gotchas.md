@@ -138,7 +138,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 
 - Live toml edits are not picked up on scratch servers: the Forge config watcher thread is parked in ModernFix's
   NightConfigWatchThrottler (same family as SQ-WO-34). An in-place rewrite (`sed > tmp; cat tmp > file`, even a
-  same-length `os.write`) is not seen either (no "changed" line in debug.log; r1114 fix_c3a1 FCK-13, IP-05, superseding
+  same-length `os.write`) is not seen either (no "changed" line in debug.log; r1114 fix_c3a1 FCK-13, PRT-05, superseding
   an r1113 note that it works; not within 30 s in r1116). Set every value with `qrun.py toml` before a boot and split
   value cases across boots (r1108cge, r1114, r1115) (partly checked: qlint W cfgedit).
 - `world/serverconfig/*.toml`: edit only while the server is stopped. Forge writes the in-memory config back on

@@ -31,7 +31,7 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
 | 3 | Fact check every kept draft against code, config and dumps (tooltips can be stale since the 11-04 split) | Open | `Checked` column |
 | 4 | Gap harvest: features in `feature_writeup/` and the changelogs with no UI text (seasons, worldgen, mob spawns, loot, structures, Create/IE changes) | Open | section 5 |
 | 5 | Write the tips into the pack files (layout decided in section 3, Q1), run `tools/loading_tips_md.py` | Open | tip files, [loading_tips_list.md](loading_tips_list.md) |
-| 6 | Build and install the owning jars; LT-03 count check, LT-01 read-through in game | Open | test IDs |
+| 6 | Build and install the owning jars; LTP-03 count check, LTP-01 read-through in game | Open | test IDs |
 | 7 | Changelog bullet under `## Loading screen tips`; close `ui/loadingtips #3` | Open | `unreleased.md` |
 | 8 | Hand the final list to the chat announcer (`ui/loadingtips #2`) | Open | shared list |
 

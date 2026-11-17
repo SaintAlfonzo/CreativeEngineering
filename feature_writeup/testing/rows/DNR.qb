@@ -146,7 +146,7 @@ look own boot with oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar moved
 ## SQ-DNR-E-02
 @group A
 @commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
-@pass Crate drops itself; plants drop as in EN-01 / EN-02; the End House is located and placed
+@pass Crate drops itself; plants drop as in EDL-01 / EDL-02; the End House is located and placed
 @fails Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`)
 @reviewed 2026-11-16
 > forceload add 2592 2592 2616 2616
@@ -159,7 +159,7 @@ expect Dropped [1-9]
 expect verb=loot state="?endersdelight:chorus_flame_block\[age=2\]"? .*drops=\S+
 expect nearest endersdelight:end_house
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
-look the chorus flame drops as in EN-01; the fruiting voidpepper_block half (its fruiting state name) is EN-02's
+look the chorus flame drops as in EDL-01; the fruiting voidpepper_block half (its fruiting state name) is EDL-02's
 ## SQ-DNR-E-03
 @group A
 @commands Move `enders_upstream/endersdelight-1.1.4.jar` away and start; restore

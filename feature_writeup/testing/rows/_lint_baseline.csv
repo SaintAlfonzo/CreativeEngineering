@@ -33,7 +33,7 @@ DRK.qb,SQ-DRK-01,dead id: creativeengineering:orange_tea
 DRK.qb,SQ-DRK-01,dead id: creativeengineering:peach_juice
 DRK.qb,SQ-DRK-01,dead id: creativeengineering:pear_tea
 DRK.qb,SQ-DRK-01,dead id: creativeengineering:turnip_tea
-EN.qb,SQ-EN-02,dead id: lightmanscurrency:cashier
+EN.qb,SQ-EDL-02,dead id: lightmanscurrency:cashier
 GF31.qb,CQ-GF31-06,dead id: myrtrees:rubberwood_wood
 GLD.qb,SQ-GLD-16,dead id: creativedelight:canned_golden_mushroom_stew
 GLD.qb,SQ-PCK-03,dead id: creativeengineering:placed_sweet_potato_pancakes
@@ -72,7 +72,7 @@ SB.qb,SQ-DM-03,dead id: creativedelight:fertile_soil
 SPF.qb,SQ-SPF-21,dead id: #creativeengineering:crop_seasons/temperate
 SPF.qb,SQ-SPF-21,dead id: #creativeengineering:crop_seasons/warm_dry
 SPF.qb,SQ-SPF-21,dead id: #creativeengineering:crop_seasons/warm_wet
-SSP.qb,SQ-EN-02,dead id: lightmanscurrency:cashier
+SSP.qb,SQ-ENC-02,dead id: lightmanscurrency:cashier
 SSP.qb,SQ-SSP-01,dead id: creativeengineering:sliced_sweet_potato
 TSK.qb,SQ-DM-03,dead id: creativedelight:fertile_soil
 VDF.qb,SQ-VDF-07,dead id: creativeengineering:canned_chips

@@ -3,7 +3,7 @@
 Owner notes of 2026-11-07 (scratchpad "portal changes"). Investigation 2026-11-07 (bytecode of
 `immersive-portals-2.3.7-mc1.19.2-forge.jar` and `portalgun-1.19.2-5.0.0.jar`). All decisions answered by the owner 2026-11-07 (section 5).
 **Status: BUILT and installed 2026-11-07 16:44** (Creative Magic, Creative Compat, Creative Common; IP config edited); not booted.
-Scratch rows SQ-IP-01..05, CQ-IP-01..04 queued. As built, and where it differs from the plan: section 8.
+Scratch rows SQ-PRT-01..05, CQ-PRT-01..04 queued. As built, and where it differs from the plan: section 8.
 Parent writeup: [immersive_portals.md](immersive_portals.md) 2.3, 2.4. TODO rows `gameplay/tnt-and-portal #17..#25`.
 
 The Portal Gun items of the same notes (names, hotbar desaturation, exit lift, dyeing) are already built:
@@ -165,24 +165,24 @@ one heartbeat; the owner messages are immediate.
    `installToMods` only with the game closed. Tags through `global.tags` (Creative Common only if the tag helper
    needs extending).
 6. Scratch queue rows, added when built (prefix `IP-`):
-   - SQ-IP-01: flint and steel, fire charge and lightning on a vanilla frame with IP loaded: no portal, frame turns
+   - SQ-PRT-01: flint and steel, fire charge and lightning on a vanilla frame with IP loaded: no portal, frame turns
      to crying obsidian; log shows `PortalSpawnEvent fired`.
-   - SQ-IP-02: Dark Fire in a valid rectangle: an IP Nether portal entity (`NetherPortalEntity`) appears, not
+   - SQ-PRT-02: Dark Fire in a valid rectangle: an IP Nether portal entity (`NetherPortalEntity`) appears, not
      vanilla portal blocks; an L-shaped frame does not light; Nether side frame generated, no failure there.
-   - SQ-IP-03: `isGlass` accepts each `mirror_glass` member (flint and steel creates `imm_ptl_core:breakable_mirror`).
-   - CQ-IP-01: through a Nether portal: far side ends at 4 chunks, clear for the first 4 blocks then fading to full
+   - SQ-PRT-03: `isGlass` accepts each `mirror_glass` member (flint and steel creates `imm_ptl_core:breakable_mirror`).
+   - CQ-PRT-01: through a Nether portal: far side ends at 4 chunks, clear for the first 4 blocks then fading to full
      fog at the limit; portal tinted by the overlay; changing `nether.start` / `nether.end` changes the fog; `nether.enabled` false removes it.
-   - CQ-IP-02: opaque gun portals: off by default (view through); on: no view through, colour fill matches the dye,
+   - CQ-PRT-02: opaque gun portals: off by default (view through); on: no view through, colour fill matches the dye,
      teleport works.
-   - CQ-IP-03: a mirror more than 24 blocks away shows glass, within 24 it reflects; two facing mirrors show 4
+   - CQ-PRT-03: a mirror more than 24 blocks away shows glass, within 24 it reflects; two facing mirrors show 4
      bounces; the reflection stops at 4 chunks with no fog; turning `mirror` fog on in the config fades it;
      `portalGun` fog off by default, on when enabled.
-   - SQ-IP-04: place both gun portals; owner logs out: both dissolve at once; owner changes dimension: both
+   - SQ-PRT-04: place both gun portals; owner logs out: both dissolve at once; owner changes dimension: both
      dissolve at once; record cleared and a new shot places a fresh pair after each.
-   - SQ-IP-05: owner walks past `despawnDistance`: portals dissolve within one heartbeat (10 s), not before; set
+   - SQ-PRT-05: owner walks past `despawnDistance`: portals dissolve within one heartbeat (10 s), not before; set
      `heartbeatSeconds` shorter and see it follow; `despawnDistance` 0 disables the distance case; a portal saved
      with its owner missing dissolves on its first beat; the beat survives a restart.
-   - CQ-IP-04: names: Smooth Tinted Glass (Design and Decor only) in JEI and WTHIT; frosty glass: sneak + flint and
+   - CQ-PRT-04: names: Smooth Tinted Glass (Design and Decor only) in JEI and WTHIT; frosty glass: sneak + flint and
      steel makes a mirror, plain use melts the frost; a pane of each tagged type makes a mirror.
 7. Changelog (when built), `## Portals` family: ordinary fire no longer lights portals with Immersive Portals (fix,
    past tense); Nether portal view distance 4 chunks, tint and fog; opaque portal option (off); gun portals dissolve when the owner logs out, changes dimension or gets too far away; more glass and panes make
@@ -190,7 +190,7 @@ one heartbeat; the owner messages are immediate.
 8. Writeup: fold the result into [immersive_portals.md](immersive_portals.md) 2.3, 2.4 and
    [nether_portal.md](nether_portal.md) (IP interplay in section 3).
 
-Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-IP-01, -04, -05, -05b PASS (crying obsidian frames, logout dissolve, distance and heartbeat despawn).
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PRT-01, -04, -05, -05b PASS (crying obsidian frames, logout dissolve, distance and heartbeat despawn).
 
 ## 8. As built (2026-11-07)
 

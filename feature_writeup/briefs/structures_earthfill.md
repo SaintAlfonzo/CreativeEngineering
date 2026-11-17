@@ -53,7 +53,7 @@ Nothing in this section is built yet unless it says so.
 | #7 hot spots | Deployed with 1.1.04 (client); server still 1.1.03 | close when the server takes 1.1.04 |
 | #3 sunk-start candidates | Not started | phase 3 |
 | #4 undead castle | Not started | phase 3 |
-| #5 stone bases | Drum tower + End House; SQ-EN-07 earth half never run | phase 3 |
+| #5 stone bases | Drum tower + End House; SQ-EDL-07 earth half never run | phase 3 |
 | #8 water fill | ST-57 data exists (07_phase_7.md 2.4), unticked | tick ST-57 after reading it |
 | #11 desert structures in water | Not started; **the row's recommended fix is backwards** (see phase 2) | phase 2 |
 | #12 camps / ruins floating in water | Not started; probably the same cause as #11 | phase 2 |
@@ -114,7 +114,7 @@ Player-visible: yes (fewer flooded structures): changelog bullet under the earth
   `ancient_crypt` (+ seabed ruins after the look).
 - **#4** undead castle: measure per fit, then override `eugene:undead_castle=24,320,400` and drop `land/highlands`
   if most cancels are there. With E1 fixed, a two-number override is also safe now.
-- **#5** stone bases: look at the drum tower in the #4 run; run SQ-EN-07's earth half (End House, `log = ALL`).
+- **#5** stone bases: look at the drum tower in the #4 run; run SQ-EDL-07's earth half (End House, `log = ALL`).
 
 ### Phase 4: robustness (decide case by case; each needs real village data)
 
@@ -149,7 +149,7 @@ Village on a lake (the open #2 decision, step 4 of its section) belongs here too
 - Scratch run (12_earth_fill_camps.md 2 recipe, seed 8675309, density 4, `log = ALL`, inland square 2144 -2592 and a
   desert square): E1 two-number override keeps the mound limit; E2 ST-54 rerun with a village unlimited: piece count
   equals the CANCELLED-level world; phase 2 no-earth lines listed, flooded pyramid cancelled (ST-229); #3 ST-209..211;
-  #4 ST-212; SQ-EN-07 earth half. Queue entries go into scratch_queue.md when each phase is built.
+  #4 ST-212; SQ-EDL-07 earth half. Queue entries go into scratch_queue.md when each phase is built.
 
 Out of scope, adjacent: SQ-WG30-D03 FAIL (seabed clearance ignores aquifer water, `structures/terrain #5`) is the same
 "structure in water" symptom underground, but a different system.

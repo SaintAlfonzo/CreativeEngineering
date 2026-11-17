@@ -1,6 +1,6 @@
 # Corn Delight 1.2.11 against the installed 1.0.3
 
-**BUILT 2026-10-25; Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-CN-00 to -03, -05 to -07 PASSED (r1101 boot, r1102b 2026-11-02), SQ-CN-04 (knife Corncob) open: a console `/loot ... mine` has no player for LootJS `matchMainHand`, needs a fake-player break; CN-01 to CN-11 not run in game.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Open: Corn Delight 1.0.3's `village_house` and `shipwreck_loot` loot modifiers never load: the two modifiers name `mmlib:add_loot_table`, but the installed Mysterious Mountain Lib 1.2.3 registers its serializer as `mysterious_mountain_lib:add_loot_table` (`GLMRegistry`, mod id `mysterious_mountain_lib`), so `latest.log` warns `Could not decode GlobalLootModifier ... corn_delight:village_house` / `shipwreck_loot` (deep scan 2026-11-02; the earlier "mmlib not in the pack" was wrong) (found 2026-10-26, TODO `largecontent/mod-additions #31`). Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
+**BUILT 2026-10-25; Shipped in 1.1.03 (deployed to server and players 2026-10-26); scratch SQ-CORN-00 to -03, -05 to -07 PASSED (r1101 boot, r1102b 2026-11-02), SQ-CORN-04 (knife Corncob) open: a console `/loot ... mine` has no player for LootJS `matchMainHand`, needs a fake-player break; CORN-01 to CORN-11 not run in game.** Owner decisions are in section 2, what was built and where in section 5; the rest of the 1.2.11 diff is not taken (section 3). Open: Corn Delight 1.0.3's `village_house` and `shipwreck_loot` loot modifiers never load: the two modifiers name `mmlib:add_loot_table`, but the installed Mysterious Mountain Lib 1.2.3 registers its serializer as `mysterious_mountain_lib:add_loot_table` (`GLMRegistry`, mod id `mysterious_mountain_lib`), so `latest.log` warns `Could not decode GlobalLootModifier ... corn_delight:village_house` / `shipwreck_loot` (deep scan 2026-11-02; the earlier "mmlib not in the pack" was wrong) (found 2026-10-26, TODO `largecontent/mod-additions #31`). Installed: `corn_delight-1.0.3-1.19.2.jar` (`mods/`, `server_mods/`), 1.19.2, needs Mysterious Mountain
 Lib (installed 1.2.3). Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/corn_delight-1.2.11-1.20.1.jar`
 (1.20.1 / Forge, needs FD 1.3.2 and MML 1.5.15), method in [devmods_evaluation.md](devmods_evaluation.md) section 1.
 Both jars unpacked in `DecompiledMods/`. Plan row: `largecontent/mod-additions #24` in [todo/TODO.md](todo/TODO.md).
@@ -106,31 +106,31 @@ Village corn farms: handled elsewhere (not in this plan).
 
 ## 4. Tests
 
-- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CN-01, -02, -03, -05, -06, -07; rerun pending (batch fault) SQ-CN-04.
-- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CN-04b, -04, -07.
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CORN-01, -02, -03, -05, -06, -07; rerun pending (batch fault) SQ-CORN-04.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CORN-04b, -04, -07.
 
 In game (client), after installing both jars and a restart. The server halves are queued as SQ-CN in
-[scratch_queue.md](testing/scratch_queue.md): SQ-CN-00 PASS (r1101 boot), -01 to -03, -05 to -07 PASS r1102b 2026-11-02
+[scratch_queue.md](testing/scratch_queue.md): SQ-CORN-00 PASS (r1101 boot), -01 to -03, -05 to -07 PASS r1102b 2026-11-02
 (`perf/runs/r1102b/s2/`; -05 now checks Face + Head only, the mouth tag was dropped), -04 open (rerun with a fake player
-breaking the corn with a knife: SQ-CN-04b). Client half: CQ-CN-01 (CN-01, CN-05, CN-06). Both added by the deep scan 2026-11-02.
+breaking the corn with a knife: SQ-CORN-04b). Client half: CQ-CORN-01 (CORN-01, CORN-05, CORN-06). Both added by the deep scan 2026-11-02.
 
-- [ ] CN-01 Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
-- [ ] CN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
+- [ ] CORN-01 Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
+- [ ] CORN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
   and Millstone the same; mortar gives no cob. (Wild corn in the IE crusher gives kernels only, as before: no cob.)
-- [ ] CN-03 Composter accepts a Corncob at the Straw chance (0.3).
-- [ ] CN-04 Mature corn broken with a knife drops a Corncob about 1 in 4; with a hand, no cob; immature corn none; a Silk Touch
+- [ ] CORN-03 Composter accepts a Corncob at the Straw chance (0.3).
+- [ ] CORN-04 Mature corn broken with a knife drops a Corncob about 1 in 4; with a hand, no cob; immature corn none; a Silk Touch
   knife none.
-- [ ] CN-05 Corn Popsicle: the recipe takes Ice Cubes; eating it gives the stick back (not in Creative); 4 nutrition. Sneak +
+- [ ] CORN-05 Corn Popsicle: the recipe takes Ice Cubes; eating it gives the stick back (not in Creative); 4 nutrition. Sneak +
   right click it on a block top places "Placed Corn Popsicle" on Display Delight's tray, an empty hand takes it back.
-- [ ] CN-06 Cob Pipe crafts (Corncob + stick). Right click with no helmet: it goes in the Face slot (the pack's slot), the
+- [ ] CORN-06 Cob Pipe crafts (Corncob + stick). Right click with no helmet: it goes in the Face slot (the pack's slot), the
   Face slot full: on the head; with a helmet and Face full: a Curios Head slot if one exists. It fits the armor head slot by
   hand and shift click. Drawn on the head from the head slot and from Face / Head curios (3D pipe, flat in the GUI).
-- [ ] CN-07 Corn Dog + Tomato Sauce in the grid gives a Classic Corn Dog (bowl back).
-- [ ] CN-08 Farmer trades (buy 24 corn; sell 8 cornbread / 8 tortillas for 8 emeralds); wandering trader corn (common) and
+- [ ] CORN-07 Corn Dog + Tomato Sauce in the grid gives a Classic Corn Dog (bowl back).
+- [ ] CORN-08 Farmer trades (buy 24 corn; sell 8 cornbread / 8 tortillas for 8 emeralds); wandering trader corn (common) and
   Popcorn Box (rare).
-- [ ] CN-09 A villager picks up corn from the ground, and two villagers with corn in reach breed.
-- [ ] CN-10 `logs/latest.log` after boot: `[corn-delight] corn is villager food`, no KubeJS error from `corn_delight/`.
-- [ ] CN-11 After `/dumpall`: `python3 tools/food_catalog.py --check` and `python3 tools/food_families.py` list the Corn
+- [ ] CORN-09 A villager picks up corn from the ground, and two villagers with corn in reach breed.
+- [ ] CORN-10 `logs/latest.log` after boot: `[corn-delight] corn is villager food`, no KubeJS error from `corn_delight/`.
+- [ ] CORN-11 After `/dumpall`: `python3 tools/food_catalog.py --check` and `python3 tools/food_families.py` list the Corn
   Popsicle under `frozen/popsicle` (classify it there if not), then `tools/gen_can_types.py` for the family's can rule
   (section 5 open items).
 
@@ -168,4 +168,4 @@ Rows in [TODO](todo/TODO.md) `farming/crops #47` to `#51`. Status checked 2026-1
 - Drop rates, wanted: corn cob 75% when cutting corn, kernels from corn cutting 6, cob milling 3 [4], cob cutting 2, wild corn identical in every process, husk 20% on harvest. Built: cob cutting 2 and mortar 3 kernels; cutting corn gives 4 kernels and a husk at 75%; machines still give 4; harvest husk not built.
 - Corn, hemp and the other two-tall crops slow the player to 50%: not started.
 - Corn husk block placeable as a log: not started.
-- Corn pipe rendered as a flat item on the head: fixed 2026-11-09 (built, untested). Cause: KubeJS's generated item model outranked the jar's `cob_pipe.json`; the model is now set with `modelJson` in `corn_items.js`. Test CQ-CN-01.
+- Corn pipe rendered as a flat item on the head: fixed 2026-11-09 (built, untested). Cause: KubeJS's generated item model outranked the jar's `cob_pipe.json`; the model is now set with `modelJson` in `corn_items.js`. Test CQ-CORN-01.
