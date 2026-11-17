@@ -18,6 +18,7 @@ and comments are skipped.
         whose .qb is not is an error (the rewrite was forgotten); other stale rows are warnings.
 Library: lint_file(path, changed=None) -> [(severity, line, row id, message)].
 """
+import csv
 import json
 import os
 import re
@@ -259,22 +260,31 @@ def lint_file(path, changed=None):
     return out
 
 
-BASELINE = ROOT / 'feature_writeup/testing/rows/_lint_baseline.tsv'
+BASELINE = ROOT / 'feature_writeup/testing/rows/_lint_baseline.csv'
 
 
 def _key(path, rid, msg):
-    return '%s\t%s\t%s' % (Path(path).name, rid, msg.split(' not in ')[0])
+    return (Path(path).name, rid, msg.split(' not in ')[0])
 
 
 def baseline():
+    """{(file, row, finding)} from the baseline CSV (header: file,row,finding)."""
     try:
-        return {l for l in BASELINE.read_text().split('\n')[1:] if l.strip()}
+        with open(BASELINE, newline='') as f:
+            return {tuple(r) for r in list(csv.reader(f))[1:] if len(r) == 3}
     except OSError:
         return set()
 
 
+def write_baseline(found):
+    with open(BASELINE, 'w', newline='') as f:
+        w = csv.writer(f)
+        w.writerow(('file', 'row', 'finding'))
+        w.writerows(sorted(found))
+
+
 def main(argv):
-    """--gate: errors already in _lint_baseline.tsv (dead ids found at the migration) are warnings; a new one fails.
+    """--gate: errors already in _lint_baseline.csv (dead ids found at the migration) are warnings; a new one fails.
     --write-baseline: rewrite the baseline from the current errors (only to shrink it after fixes)."""
     quiet = '--quiet' in argv
     gate = '--gate' in argv
@@ -308,7 +318,7 @@ def main(argv):
             if sev == 'E' or not quiet:
                 print('%s %s:%d %s: %s' % (sev, os.path.relpath(p, ROOT), n, rid, msg))
     if '--write-baseline' in argv:
-        BASELINE.write_text('file\trow\tfinding\n' + ''.join(k + '\n' for k in sorted(found)))
+        write_baseline(found)
         print('baseline: %d entries -> %s' % (len(found), os.path.relpath(BASELINE, ROOT)))
     elif gate and base - found:
         print('baseline: %d entries fixed; shrink it with --write-baseline' % len(base - found))
