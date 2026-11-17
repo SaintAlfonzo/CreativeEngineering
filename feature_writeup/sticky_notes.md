@@ -862,3 +862,4 @@ Donor jars and performance:
   drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a canceled or failed fluid
   tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.
   Rebuilt into `creativeLabels-1.0.1` (still not installed). SN-61 added.
+- 2026-11-17: the recipe script moved into the jar's own script tree (`kubejs/data/creativelabels/kubejs/other/creative_labels.js`, copied by `build.gradle`; mods.toml requires Creative Common and KubeJS); recipe ids now `creativelabels:` (plan_rules_fixes.md V-26, SQ-RFX-01, -02).

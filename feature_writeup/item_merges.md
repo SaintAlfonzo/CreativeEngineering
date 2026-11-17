@@ -101,6 +101,7 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
 | 2.9 | `salt:salt`, `vintagedelight:salt_block` (and the salt bucket, removed) | `vintagedelight:salt_dust`, `salt:salt_block` | See 2.9: one pink salt |
 | 2.21 | `twigs:azalea_flowers` | `immersive_weathering:azalea_flowers` | See 2.21: Twigs' block placed from Immersive Weathering's item |
 | 2.22 | Supplementaries flax, flax seeds, flax bale, wild flax | none (removed) | See 2.22: config switch, string recipes |
+| 2.23 | `littlelogistics:receiver_component`, `littlelogistics:transmitter_component` | `create:redstone_link` | Pack group since 2026-11-17 (plan_rules_fixes.md V-34; a hand input swap in Creative Engineering's `transport.js` before): their own recipes removed there, every other recipe takes the Redstone Link (SQ-RFX-06) |
 | 2.10 | `fruitsdelight:hamimelon_slice`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` | `delightful:cantaloupe_slice`, `delightful:cantaloupe_popsicle`, `creativeengineering:canned_cantaloupe` | See 2.10: hamimelon line renamed Cantaloupe, Delightful's cantaloupe renamed Mini Cantaloupe |
 
 Related rename (not a merge): Vinery's `vinery:apple_cider` is "Hard Cider" (`client_scripts/namechanges.js`), and

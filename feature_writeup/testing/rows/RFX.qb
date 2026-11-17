@@ -1,0 +1,117 @@
+# Scratch queue rows RFX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RFX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RFX Rules fixes P3a: namespace binding, dict keys, moved tags and trades, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) sections 6, 7, 12, 12b, 12c; TODO `conventions #17`, `#18`, `#23`, `#24`, `#25`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon creativecompat creativedevtools creativeengineering creativeequipment creativelabels creativeloot creativemagic creativeworldgen
+@@sources kubejs/server_scripts kubejs/data/creativecompat/kubejs kubejs/data/creativemagic/kubejs kubejs/data/creativelabels/kubejs kubejs/data/creativeloot/kubejs kubejs/data/creativecommon/kubejs/tags kubejs/data/creativeequipment/kubejs/tags development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib tools/dump_diff.py
+@@text
+@@text Same content expected: recipes, tags and trades must equal the pre-change dumps except the listed moves. Baseline: `kubejs/exported/baseline_rules_p3a_2026-11-17/` in the instance (the 2026-11-15 `/dumpall` `recipes/`, `tags/`, `villager_trades.json`, `names.json`, copied before any P3a jar ran). It predates P2 and P2b (2026-11-17), so their own changes can also show (P2: tilled end stone tags, SQ-DRK-08); the exact pre-change state is commit 86659cfc with the jars `installToMods` moved to `jar_archive/displaced/` on 2026-11-17. Run SQ-RFX-01 before any `/reload`. Needs the P3a jars of 2026-11-17 (`creativecommon-1.2.0`, `creativecompat`, `creativemagic`, `creativeLabels-1.0.1`, `creativeequipment`, `creativedevtools`, `creativeworldgen`, `creativeloot` 1.0.0, `creativeengineering-2.0.0`, stamp `91d2ffb5`).
+@@table
+## SQ-RFX-01 | boot: the moved scripts load from their jars, no binding error
+@group A
+@commands Boot on the installed jars; read the KubeJS server log and latest.log
+@pass `Dragon breathing starting` and `done`, `creative labels starting` and `done` in the server log; `[itemMerges] pack: N merges` with N two more than before (Little Logistics receiver and transmitter components into the Redstone Link); no `forPack: invalid`, no `ReferenceError`, no `is not defined` from a moved file (`dragon_breathing.js`, `creative_labels.js`, `botany_pots.js`, `wthittags.js`, `build_grid.js`, `equipmenttags.js`, `trades.js`)
+@fails A moved file missing: its jar did not copy the tree (Labels: `build.gradle` script copy step; `jar` task checks it). `ReferenceError`: a dict alias used outside the callback that binds it (literal_id_swap.py places keys by the file's binding)
+kjsexpect Dragon breathing done
+kjsexpect creative labels done
+kjsexpect \[itemMerges\] pack: \d+ merges
+kjsreject forPack: invalid|ReferenceError|is not defined|global\.CDV\.buildGrid|tuneBase is not a function
+shell grep -hE '\[itemMerges\] (pack|[0-9]+ pack)' logs/kubejs/server.log logs/kubejs/startup.log | tail -3
+## SQ-RFX-02 | recipe ids: count unchanged, moves exactly the Compat, Magic and Labels sets
+@group A
+@commands `/dumpall`; `python3 $INST/tools/dump_diff.py recipes $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels`
+@pass `RECIPES_SAME` (same count, no unexplained id); `moved creativeengineering -> creativecompat` about 380 (feature ports 377, misc mods, flower pots, the Fertile Soil pot soil), `-> creativemagic: 14` (dragon breathing), `-> creativelabels: 7` (3 shaped, 4 note specials); Equipment, Devtools, Worldgen, Loot and Engineering ids unchanged (they were already bound by their `recipes(...)` wrappers)
+@fails `ONLY_BASE`/`ONLY_NEW` lines name the ids: a recipe file missed its `forPack` (namespace_lint.py), or a P2/P2b change since the 2026-11-15 baseline (check against commit 86659cfc before blaming P3a). A count change: a `global.has` guard or a dict key that resolves to nothing (`literal_id_swap.py`)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -vE '^(ONLY_|moved)' ; python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | head -40
+look moved counts as in Pass; every ONLY_ line explained in the run doc
+## SQ-RFX-03 | tags: dump equal to the baseline after the loot tag rename
+@group A
+@commands Same `/dumpall` as SQ-RFX-02; `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/`
+@pass `TAGS_SAME`: the mining tags of Layered Obsidian, the Weathered Cardboard Box and the 10 coil blocks (from the builders' `tagBlock` to the tag scripts, V-32), the Creative Compat BlockRunner hook tags, `creativeequipment:bottled_air/fire_sources` and the WTHIT Silk Touch tags (into their jars, V-41) and the 611 swapped literals change nothing
+@fails The listed tag shows the missing or extra member: `t.mineable` call in `server_scripts/tags/blocktags.js`, Compat's `tags/blocktags.js` or Engineering's `tags/storageblocktags.js`; a WTHIT tag empty: Common's jar has no `data/creativecommon/kubejs/tags/wthittags.js`. Tilled end stone differences are P2 (SQ-DRK-08)
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -40
+## SQ-RFX-04 | villager trades: the pack-folder trades unchanged through global.trades.villager
+@group A
+@commands Same `/dumpall` (it runs `/dumptrades`); `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported dynamicvillage:mechanical_engineer dynamicvillage:hydraulic_engineer chefsdelight:delightchef minecraft:cleric`
+@pass `TRADES_SAME`; no `global.trades.villager:` warning in the server log
+@fails A profession differs: the converted row in `server_scripts/economy/trades.js` (count, uses, xp, price multiplier) or a rejected item (`global.trades.villager: ... is not an item_dict key`, `_validItem`)
+shell python3 "$INST/tools/dump_diff.py" trades "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported dynamicvillage:mechanical_engineer dynamicvillage:hydraulic_engineer chefsdelight:delightchef minecraft:cleric
+kjsreject global\.trades\.villager:
+## SQ-RFX-05 | LootJS names: CL/ for Creative Loot, CCM/ for the item merges
+@group A
+@commands Uncomment `event.enableLogging()` in the server's `kubejs/data/creativeloot/kubejs/loot/99_debug.js`, `/reload`, roll a village plains house chest 3 times; read latest.log
+@pass `[LootJS]` lines name `CL/tuning`, `CL/removals/village_botania_cc` and `CCM/item_merges/pack`; none name `CE/loot/` or `CE/item_merges/`
+@fails Old names: the pack-folder copy of `05_tuning.js` / `10_removals.js` or Common's `item_merges.js` is older than 2026-11-17; no `[LootJS]` lines: logging not on (the edit did not reach the script the server loads)
+shell sed -i 's#^\(\s*\)// event.enableLogging()#\1event.enableLogging()#' kubejs/data/creativeloot/kubejs/loot/99_debug.js 2>/dev/null; grep -c 'event.enableLogging()' kubejs/data/creativeloot/kubejs/loot/99_debug.js || true
+> reload
+waitlog Reloaded|reload 180
+> forceload add 3200 3200 3216 3216
+> fill 3200 -60 3200 3210 -50 3210 minecraft:air
+repeat 3
+> loot spawn 3205 -58 3205 loot minecraft:chests/village/village_plains_house
+end
+sleep 2
+shell grep -oE '(CL|CCM|CE)/[a-z_/]+' logs/latest.log | sort | uniq -c
+expect CL/tuning
+expect CCM/item_merges/pack
+reject CE/(loot|item_merges)/
+look `CL/removals/village_botania_cc` appears when a roll had a Botania or CC:Tweaked stack to remove (it may not in 3 rolls)
+## SQ-RFX-06 | Little Logistics wireless components become the Redstone Link
+@group A
+@commands `/give` a fake player one `littlelogistics:receiver_component` and one `littlelogistics:transmitter_component`; read its inventory; `/cdevtest recipe` the Little Logistics recipes that used them
+@pass The inventory holds 2 `create:redstone_link` and no component (PlayerEvents.inventoryChanged swap, item_merges.md); no recipe input names either component
+@fails Components stay: the pack group runner `server_scripts/other/item_merges.js` or the two pairs in Common's `_lib/item_merges.js`
+@draft the fake-player give and inventory read verbs are in creative_devtools.md; the recipe-input check reads `kubejs/exported/recipes/all.csv` after SQ-RFX-02 (no input column there: use `/cdevtest recipe` on littlelogistics:receiver and transmitter ids when the runner confirms the verb's arguments)
+
+@@section 2
+@@title CQ-RFX Rules fixes P3a on a client: names from the registrations, tooltip colors by role, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 12 V-43, V-44, 12b V-46; TODO `conventions #23`, `#24`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon creativeengineering creativeequipment creativemagic
+@@sources kubejs/client_scripts kubejs/assets/creativemagic/kubejs/jei.js development/creativeEngineering/src/main/resources development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/archery_items.js development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/effects
+@@text
+@@text Names and colors must look as before. Before shots: the 2026-11-17 pre-change jars in `jar_archive/displaced/` (stamp `86659cfc`) with the pack scripts of that commit, or the owner's memory of the tooltips; the role values equal the old colors (`col.data` = dark gray, `col.text` = gray, `col.value` = gold, `col.removed` = red).
+@@table
+## CQ-RFX-01 | names: own items keep their shown names without the pack-folder lang lines
+@group client
+@commands Client on the installed jars; read the names of the items below
+@pass Precision Sawblade, Creosote Soaked Sawdust, Zinc Grit, Transmitter, Spool, Copper Grit Pile, Aluminum Plate Block, Prepared Flesh Block, Arrow Fletching
+@fails A raw key (`item.creativeengineering....`): the Engineering jar lang (`assets/creativeengineering/lang/en_us.json`, the two Java items) or the `.displayName` in `misc_items.js`, `dust_piles.js`, `plate_blocks.js`, `archery_items.js`
+do {"tooltip_text": "creativeengineering:precision_sawblade", "expect": "Precision Sawblade"}
+do {"tooltip_text": "creativeengineering:creosote_soaked_sawdust", "expect": "Creosote Soaked Sawdust"}
+do {"tooltip_text": "creativeengineering:zinc_grit", "expect": "Zinc Grit"}
+do {"tooltip_text": "creativeengineering:transmitter", "expect": "Transmitter"}
+do {"tooltip_text": "creativeengineering:spool", "expect": "Spool"}
+do {"tooltip_text": "creativeengineering:copper_dust_pile", "expect": "Copper Grit Pile"}
+do {"tooltip_text": "creativeengineering:aluminum_plate_block", "expect": "Aluminum Plate Block"}
+do {"tooltip_text": "creativeengineering:prepared_flesh_block", "expect": "Prepared Flesh Block"}
+do {"tooltip_text": "creativeequipment:arrow_fletching", "expect": "Arrow Fletching"}
+## CQ-RFX-02 | tooltip colors by role: six tooltips look as before
+@group client
+@commands Hover each item; screenshot; compare with the before shots (section text)
+@pass Copper Ingot Material Information lines dark gray; Precision Sawblade "Unprogrammed" line dark gray; Canned Food "REMOVED ITEM: DO NOT USE" bold red; Dragon Helmet "When worn:" header and "(infinite)" gray, effect names green or red; Echo Pickaxe "On hit, inflicts to target:" gray; Rich Farmland Botany Pots lines gray
+@fails A white line: a role key missing from `global.tooltips.col` (Common's `assets/creativecommon/kubejs/_lib/tooltips.js`); a `§` shown literally: `global.tooltips` not defined when the effect lines were built (`armor_effects.js` `textCode`)
+do {"tooltip_text": "minecraft:copper_ingot", "expect": "Density"}
+do {"tooltip_text": "creativeengineering:precision_sawblade", "expect": "Unprogrammed"}
+do {"tooltip_text": "canned_goods:canned_food", "expect": "REMOVED ITEM"}
+do {"tooltip_text": "dragonloot:dragon_helmet", "expect": "When worn"}
+do {"tooltip_text": "creativeequipment:echo_pickaxe", "expect": "On hit"}
+do {"tooltip": "minecraft:copper_ingot"}
+shot copper_ingot_material
+do {"tooltip": "creativeengineering:precision_sawblade"}
+shot precision_sawblade
+do {"tooltip": "canned_goods:canned_food"}
+shot canned_food_removed
+do {"tooltip": "dragonloot:dragon_helmet"}
+shot dragon_helmet_worn
+do {"tooltip": "creativeequipment:echo_pickaxe"}
+shot echo_pickaxe_on_hit
+do {"tooltip": "farmersdelight:rich_soil_farmland"}
+shot rich_farmland_pots
+look each shot matches the before shot line by line in color and weight

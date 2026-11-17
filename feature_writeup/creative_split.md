@@ -963,6 +963,7 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 
 ## 8. History
 
+- 2026-11-17: P3a of [plan_rules_fixes.md](plan_rules_fixes.md): every script pack outside Delight and Brewing binds `global.NCH.forPack(<its namespace>)` (Compat recipe ids now `creativecompat:`); `dragon_breathing.js` moved to Magic, `creative_labels.js` to Labels (the Labels jar copies `kubejs/data/creativelabels/kubejs/` and requires Common and KubeJS), `botany_pots.js` to Compat; the tag fills a jar's Java reads moved into that jar (Compat BlockRunner hooks, Equipment bottled air, Common WTHIT Silk Touch); queue SQ-RFX-01 to -06, CQ-RFX-01, -02.
 - 2026-11-17: namespace binding in Common ([plan_rules_fixes.md](plan_rules_fixes.md) section 6, D22): `global.NCH.forPack(ns)` (recipe ids and `R.logName` in the folder's namespace), `global.reg.forPack(ns)` for registrations, `_lib/profession_dict.js`; `tools/namespace_lint.py` in report mode lists what each jar still writes outside its namespace ([namespace_report.md](namespace_report.md)). Scripts switch over in P3.
 
 - 2026-11-07, owner: interface (JEI, WTHIT, tooltips) moves to Compat, Detail Armor Bar to Equipment, Caffeinated to

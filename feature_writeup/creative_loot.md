@@ -92,6 +92,7 @@ mod load order. D14: design for the worst case, where only one copy counts.
 
 ## 5. History
 
+- 2026-11-17: P3a of plan_rules_fixes.md: LootJS names through `R.logName` (`CL/tuning`, `CL/removals/...`), the loot group tags renamed `#creativeloot:loot/chalk` and `#creativeloot:loot/golden_food` (dict keys unchanged); SQ-RFX-03, -05.
 - 2026-11-17: built (P2b of plan_rules_fixes.md): the jar, the loot tree and `loottags.js` moved from Creative Worldgen,
   `global.CWG.lootRules` -> `global.LOOT.rules` with the four Creative Delight callers, `CWGResources` -> `CLResources`,
   the LootJS dependency moved from Worldgen, GlmMerge written; `tools/loot_tuning_sim.js` repointed (TODO

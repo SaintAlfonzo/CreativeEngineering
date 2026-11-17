@@ -930,7 +930,7 @@ Nothing is built. Each answer is also written into the row it concerns.
 | N26-1 | **Brine is added for evaluation** (reverses D15) | Bottle, bucket and fluid ported: water bottle + salt, keg and Create routes, salt set to the pack's salt. Kept pickles stay on salt in the Vintage jar until the eval reports. Hooks below |
 | N26-2 | **Crow nests are evaluated with the crows** (N21's total drop is on hold) | The nest block joins the crow eval. If ported, nests are more common in villages (`mobs/tweaks #23`). If not, N24-8 theft without a nest stands. Plan section 11 |
 | N26-3 | **D16, D19, D20 and D22 defaults accepted** | Moonshine like Vodka and the juice and wine rows; Pickled Cabbage and Chicken Pot Pie dropped; chicken plucking ported, no karma until a karma system exists; Pungent and Tempting kept with the B10 fix |
-| N26-4 | **D26 manure default accepted, except Botany Pots** | Pots take no fertilizer in the pack (`kubejs/server_scripts/other/botany_pots.js` removes the recipe type). By-hand bone-meal use, composter values, IE cloche and FD organic compost stand |
+| N26-4 | **D26 manure default accepted, except Botany Pots** | Pots take no fertilizer in the pack (`kubejs/data/creativecompat/kubejs/other/botany_pots.js` removes the recipe type). By-hand bone-meal use, composter values, IE cloche and FD organic compost stand |
 | N26-5 | **Candy Corn uses Corn Delight's kernels** | Through `global.NCH` at step 4 |
 | N26-6 | **No extra stomping recipes before the basin eval** | Slime, sponge, sugar and any other addition wait for D12's eval |
 | N26-7 | **Half cabinets do not extend to other woods for now** | Every Compat module not ported; closes step 22 |
