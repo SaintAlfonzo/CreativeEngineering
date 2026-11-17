@@ -14,7 +14,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | Collection of existing rules (sections 2 to 6) | Collected 2026-11-13: 63 rules and 7 formatting observations (section 11 lists the sources) |
 | Compliance audit (sections 8 and 9) | Audited 2026-11-14 (whole repo, read-only): 62 violations recorded as V-01 to V-62, all Open; 5 high |
 | Unwritten conventions (section 10) | Found 2026-11-14: 52 proposed rules, marked Proposed until the owner confirms them |
-| Hardening (owner confirms, edits or drops each rule; decides the gaps) | In progress: G1, G2, G3, G5, G11, G12, G13, G19, G20 decided 2026-11-16 (plan_rules_fixes.md D1 to D22); the rest of section 7 open |
+| Hardening (owner confirms, edits or drops each rule; decides the gaps) | In progress: G1, G2, G3, G5, G11, G12, G13, G16, G19, G20 decided 2026-11-16 (plan_rules_fixes.md D1 to D26); the rest of section 7 open |
 | Enforcement | 6 rules are checked by a tool (section 1); `tools/design_rules_audit.py` reports 13 more; the rest rely on review |
 
 **Hardness of each rule** (column H in the tables):
@@ -181,6 +181,7 @@ The agenda for making these rules hard. Each item names the rule ids it would se
   terse, facts-only style, and who is "you" (README.md and tooltips.md address the owner as "you")?
 - **G7 Writeup size.** Some writeups have grown very large (creative_delight.md is 2,124 lines). Set a size at which
   a writeup splits into sub-files, and a cap on dated banner lines at the top of docs (scratch_queue.md has dozens).
+  **Decided 2026-11-16** (plan_rules_fixes.md D27: split when a tree-style contents table serves better than one file; no line threshold; banner cap in V-58).
 - **G8 Memory-only rules** (DR-W7, DR-W9, DR-C3, DR-C6, DR-C16, DR-C20, DR-A4). Move each into the repo (this file
   or the writeup it belongs to) so it is not lost if memory is cleared.
 - **G9 Where rules live.** CLAUDE.md, this file, the skills and the memory all hold rules today, with overlap. Decide
@@ -209,6 +210,7 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
   bag id remap move our own data, not another version's. Exempt them, or set a release to remove them.
 - **G16 Recipe-book unlocks** (DR-C14). The Oven calls `awardRecipes` like the furnace and Farmer's Delight. Exempt
   recipe-book parity, or drop it.
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D23: no recipe unlocks of any kind; the Oven, Keg and Copper Pot stop awarding, and a Common mixin blocks the rest).
 - **G17 JEI and WTHIT in player text** (DR-L3). Players know these mods by the abbreviation (75 and 25 uses in
   deployed changelogs). Exempt them, or spell them out.
 - **G18 Writeup layout variants** (DR-W2, DR-W5). 35 writeups add sections after History; integration reports, jar
@@ -466,3 +468,4 @@ each area's numbering. Counts are from 2026-11-14.
 - 2026-11-16: G2, G3, G5, G11, G12, G13 and G20 decided in [plan_rules_fixes.md](plan_rules_fixes.md) section 0; DR-W3
   points to the new [testing/test_prefix_index.md](testing/test_prefix_index.md).
 - 2026-11-16: G1 (American spelling) and G19 (`->`) decided, plan D20, D21.
+- 2026-11-16: G16 decided (recipe unlocks removed entirely, plan D23); every V-id scheduled in plan_rules_fixes.md.
