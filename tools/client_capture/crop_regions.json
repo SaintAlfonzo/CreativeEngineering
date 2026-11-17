@@ -1,10 +1,10 @@
 {
-  "_doc": "Named crop regions in GUI coordinates [x, y, w, h] at the run's GUI scale (client_capture.md 2.3). Values are numbers or expressions of W and H (GUI width and height). Measured against vanilla HUD layout; adjust after the first run (CC-03).",
-  "hotbar": ["W/2-91", "H-23", 182, 23],
-  "hud:topleft": [0, 0, 200, 60],
-  "hud:topright": ["W-200", 0, 200, 60],
-  "hud:wthit": ["W/2-120", 0, 240, 60],
-  "hud:hunger": ["W/2+9", "H-40", 82, 11],
-  "hud:health": ["W/2-91", "H-40", 82, 11],
-  "hud:effects": ["W-150", 0, 150, 60]
+	"_doc": "Named crop regions in GUI coordinates [x, y, w, h] at the run's GUI scale (client_capture.md 2.3). Values are numbers or expressions of W and H (GUI width and height). Measured against vanilla HUD layout; adjust after the first run (CC-03).",
+	"hotbar": ["W/2-91", "H-23", 182, 23],
+	"hud:topleft": [0, 0, 200, 60],
+	"hud:topright": ["W-200", 0, 200, 60],
+	"hud:wthit": ["W/2-120", 0, 240, 60],
+	"hud:hunger": ["W/2+9", "H-40", 82, 11],
+	"hud:health": ["W/2-91", "H-40", 82, 11],
+	"hud:effects": ["W-150", 0, 150, 60]
 }

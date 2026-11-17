@@ -1,8 +1,8 @@
 {
-  "_doc": "Shared step lists for capture specs (client_capture.md 2.1); a step {\"macro\": \"name\"} inlines one. $X $Y $Z are resolved after inlining.",
-  "survival_ground": [
-    {"cmd": "gamemode survival"},
-    {"fly": false},
-    {"wait": "20"}
-  ]
+	"_doc": "Shared step lists for capture specs (client_capture.md 2.1); a step {\"macro\": \"name\"} inlines one. $X $Y $Z are resolved after inlining.",
+	"survival_ground": [
+		{"cmd": "gamemode survival"},
+		{"fly": false},
+		{"wait": "20"}
+	]
 }

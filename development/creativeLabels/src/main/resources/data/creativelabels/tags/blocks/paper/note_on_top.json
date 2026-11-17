@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    {"id": "supplementaries:jar", "required": false},
-    {"id": "vintagedelight:fermenting_jar", "required": false}
-  ]
+	"replace": false,
+	"values": [
+		{"id": "supplementaries:jar", "required": false},
+		{"id": "vintagedelight:fermenting_jar", "required": false}
+	]
 }

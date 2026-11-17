@@ -1,8 +1,8 @@
 {
-  "rules": [
-    {
-      "biomes": ["#moremooblooms:spawns_witherbloom"],
-      "replace": [{ "variant": "moremooblooms:witherbloom", "percent": 100 }]
-    }
-  ]
+	"rules": [
+		{
+			"biomes": ["#moremooblooms:spawns_witherbloom"],
+			"replace": [{ "variant": "moremooblooms:witherbloom", "percent": 100 }]
+		}
+	]
 }
