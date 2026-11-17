@@ -192,6 +192,9 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 - D2. Paired client + own scratch server as one "game run" under the one-JVM rule (TX-30)?
 - D3. Install `xvfb` for unattended client runs (TX-07)?
 - D4. Devtools test command in Java (TX-20) vs keep growing KubeJS probes.
+- Item 3 CLOSED 2026-11-16 (owner: "move everything to cdevtest once the tests pass"): (a), (b) and (c) below all answered
+  yes, gated on SQ-TX-01 to -16 passing in game; the migration step is then built (retire the `/zq` verbs and the
+  `prep_srv.sh` copy, `zq season` into `/cdevtest`, install the Devtools jar). Original questions:
 - Item 3 open (2026-11-15, after the build): (a) retire the migrated `/zq` verbs and stop copying `zq_probe.js` in
   `prep_srv.sh` once SQ-TX passes, or keep both while old batches exist? (b) `zq season` (Creative Calendar) into
   `/cdevtest` through an optional reflective read, or keep it KubeJS? (c) install the Devtools jar into dev `mods/`
