@@ -13,7 +13,8 @@ ServerEvents.tags('item', e => {
 
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {
-	global.NCH.backpackSkin(BACKPACK_SKIN_TAG, e)
-	global.NCH.backpackSkinClear(e)
+	var R = global.NCH.forPack('creativeequipment')
+	R.backpackSkin(BACKPACK_SKIN_TAG, e)
+	R.backpackSkinClear(e)
 })
 })

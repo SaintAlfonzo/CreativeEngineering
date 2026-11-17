@@ -59,7 +59,8 @@ FORPACK = re.compile(r'global\.NCH\.forPack\(\s*[\'"]([^\'"]+)[\'"]\s*\)')
 NCH_DIRECT = re.compile(r'global\.NCH\.(\w+)\(')
 NCH_NOT_RECIPES = {'cfg', 'cfgClass', 'cfgValue', 'forPack', 'withNamespace', 'ns', 'registerConfig', 'logName', 'has',
 	'toId', 'getAbsentCounts'}
-LOGNAME = re.compile(r'\blogName\(\s*[\'"]([A-Za-z]+)/')
+# R.logName('x/y') and forPack('ns').logName('x/y') make the prefix themselves; a literal 'XX/...' anywhere else is checked.
+LOGNAME = re.compile(r'(?<!R\.)(?<!\'\)\.)\blogName\(\s*[\'"]([A-Za-z]+)/')
 HELPER_FILES = re.compile(r'kubejs_startup/creativecommon/func/')
 DEFREG = re.compile(r'DeferredRegister\.create\(\s*([^;]*?)\)\s*;', re.S)
 

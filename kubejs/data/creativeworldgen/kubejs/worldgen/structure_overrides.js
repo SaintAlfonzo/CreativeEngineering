@@ -117,7 +117,7 @@
 	// KubeJS's class filter blocks java.io, so the markdown report goes through patcherMod.
 	var WorldgenFiles = Java.loadClass('com.SaintAlfonzo.creativecommon.util.WorldgenFiles')
 	// patcherMod's worldgen side: switches, and the stages the plan is handed to
-	var WorldgenConfig = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig')
+	var WorldgenConfig = global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig')
 	var StructureFrequencies = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureFrequencies')
 	var StructureBiomeRules = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeRules')
 	var StructureBiomeFits = Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeFits')

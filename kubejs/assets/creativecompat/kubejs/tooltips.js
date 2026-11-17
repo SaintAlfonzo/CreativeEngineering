@@ -94,16 +94,16 @@ ItemEvents.tooltip(e => {
 
 	//addTooltipPattern(e, 'quark:*_rune', {text: 'Recolor enchantment shine!',color: 'white'});
 	//addTooltipPattern(e, 'quark:*_rune', ['Recolor enchantment shine!', col.norm]);
-	addTooltipPattern(e, 'quark:*_rune', {exclude: ['quark:rainbow_rune']}, ['Recolor enchantment shine!', col.norm]);
+	addTooltipPattern(e, 'quark:*_rune', {exclude: [i.rainbow_rune]}, ['Recolor enchantment shine!', col.norm]);
 	addTooltipPattern(e, 'quark:hollow_*_log', ['Can be crawled through', col.norm]);
 	addTooltipPattern(e, 'quark:*_crystal_lamp', ['Recolors beacon beam when powered', col.norm]);
 	addTooltipPattern(e, 'quark:*_corundum_cluster', ['Redirects and recolors beacon beam', col.norm]);
 	addTooltipPattern(e, 'minecraft:*_coral_fan', {exclude: [
-		'minecraft:dead_tube_coral_fan',
-		'minecraft:dead_brain_coral_fan',
-		'minecraft:dead_bubble_coral_fan',
-		'minecraft:dead_fire_coral_fan',
-		'minecraft:dead_horn_coral_fan'
+		i.dead_tube_coral_fan,
+		i.dead_brain_coral_fan,
+		i.dead_bubble_coral_fan,
+		i.dead_fire_coral_fan,
+		i.dead_horn_coral_fan
 	]}, ['Can be placed on cacti', col.norm]);
 	addTooltipPattern(e, 'everycomp:*_ladder', ['Right click to extend ladder, can hang below a supported ladder', col.norm]);
 	addTooltipPattern(e, 'copycats:*_ladder', ['Right click to extend ladder, can hang below a supported ladder', col.norm]);

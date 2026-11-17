@@ -1,9 +1,11 @@
+// requires: creativecompat
 // requires: botanypots
 // Botany Pots growth (feature_writeup/botany_pots.md; plan_farming_cooking_batch.md A15 / C5, owner Q15 to Q17).
 // Every pot crop grows BOTANY_GROWTH_MULT times slower, flowers (seed in #minecraft:flowers, wild crops excluded)
 // BOTANY_FLOWER_MULT times slower. Soils are untouched, so their growthModifier still stacks on top. Pot fertilizers (bone meal is the
 // only one in the pack) are removed. One pass over every loaded botanypots:crop recipe, so crops other mods (or
-// future jars) add are covered too, and JEI shows the new times.
+// future jars) add are covered too, and JEI shows the new times. The added
+// Fertile Soil pot soil is creativecompat:<type>/fertile_soil.
 global.BOTANY_GROWTH_MULT = 8
 global.BOTANY_FLOWER_MULT = 2
 // Better soils speed pot growth only, never pot yield (plan_crop_yields_wave2.md 8): Rich Soil and Rich Soil Farmland
@@ -12,7 +14,7 @@ global.BOTANY_SOIL_SPEED = { rich: 1.10, fertile: 1.20 }
 
 ServerEvents.recipes(e => {
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativecompat')
 	if (!R.scaleRecipeInt) {
 		console.error('[botany_pots] global.NCH.scaleRecipeInt missing: Creative Common is older than this script; pot growth left at the mod\'s values')
 		return

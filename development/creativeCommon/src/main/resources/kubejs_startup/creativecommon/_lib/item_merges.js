@@ -54,7 +54,7 @@ global.itemMergeRun = {
 		}
 		global.itemMergeRun._done[group] = true
 		var pairs = global.itemMergeGroups[group]
-		var changed = global.NCH.replaceItems(pairs, e)
+		var changed = global.NCH.forPack('creativecommon').replaceItems(pairs, e)
 		console.log('[itemMerges] ' + group + ': ' + pairs.length + ' merges, ' + changed + ' recipes swapped')
 	},
 
@@ -64,7 +64,7 @@ global.itemMergeRun = {
 		if (pairs.length === 0) return
 		var mod = event.addLootTableModifier(/.*/)
 		pairs.forEach(m => { mod = mod.replaceLoot(m[0], m[1], true) })
-		mod.logName('CE/item_merges/' + group)
+		mod.logName(global.NCH.forPack('creativecommon').logName('item_merges/' + group))
 	},
 
 	// PlayerEvents.inventoryChanged: a purged stack in the player's inventory becomes the survivor (same count)
@@ -88,6 +88,10 @@ global.addItemMerges('pack', [
 	// Twigs' azalea flowers -> Immersive Weathering's; the placed block stays Twigs' (Creative Compat
 	// IwAzaleaFlowersPlaceMixin places it from Immersive Weathering's item; item_merges.md 2.21)
 	[i.azalea_flowers, i.immersive_weathering_azalea_flowers],
+	// Little Logistics' wireless components -> Create's Redstone Link (their own recipes are removed in Creative
+	// Engineering's transport.js)
+	[i.ll_receiver_component, i.redstone_link],
+	[i.ll_transmitter_component, i.redstone_link],
 ])
 
 console.log(`[itemMerges] ${global.itemMergeGroups.pack.length} pack merges registered`)

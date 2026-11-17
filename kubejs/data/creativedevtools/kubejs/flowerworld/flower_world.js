@@ -53,23 +53,23 @@
         // R11 (blocks/flower-pots #10, plan_small_fixes_1116.md): the Beautify pot is a lantern, so Supplementaries hangs it
         // on walls. This column shows that: a wall lantern holding a copy of the Beautify cell to its left (the plant it
         // took, if any). For the owner to look at; no placement change.
-        { id: 'supplementaries:wall_lantern[facing=south]', ceiling: true, wallOf: 'beautify:hanging_pot', pts: [] },
+        { id: 'supplementaries:wall_lantern[facing=south]', ceiling: true, wallOf: global.item.rich_hanging_pot, pts: [] },
         { id: 'beautify:botanist_workbench[facing=south]', face: 'up', pts: TOP },
         { id: 'supplementaries:flower_box[facing=north,floor=true]', face: 'up', pts: [[0.17, 0.5], [0.5, 0.5], [0.83, 0.5], [0.5, 0.2]] },
         { id: 'another_furniture:oak_planter_box[facing=north]', face: 'up', pts: TOP },
         { id: 'vinery:flower_pot', face: 'up', pts: TOP },
         { id: 'vinery:flower_box', face: 'up', pts: TOP },
-        { id: 'twigs:silt_pot', kind: 'soil', face: 'up', pts: [[0.5, 0.5]], fill: 'minecraft:rooted_dirt' },
+        { id: 'twigs:silt_pot', kind: 'soil', face: 'up', pts: [[0.5, 0.5]], fill: global.item.rooted_dirt },
         { id: 'supplementaries:planter', kind: 'soil', face: 'up', pts: [[0.5, 0.5]] },
         { id: 'supplementaries:planter_rich', kind: 'soil', face: 'up', pts: [[0.5, 0.5]] },
     ]
     const W = STEP * HOLDERS.length + 2   // table width past the axis
     const PRESET_LAYERS = 'minecraft:bedrock*1,minecraft:stone*1,minecraft:dirt*1,minecraft:grass_block*1'
-    const KEEP = ['minecraft:grass', 'minecraft:fern', 'minecraft:tall_grass', 'minecraft:large_fern', 'minecraft:vine']
-    const EXTRA = ['minecraft:cactus', 'minecraft:bamboo', 'minecraft:hanging_roots']
+    const KEEP = [global.item.grass, global.item.fern, global.item.tall_grass, global.item.large_fern, global.item.vine]
+    const EXTRA = [global.item.cactus, global.item.bamboo, global.item.hanging_roots]
     // whole blocks, not plants: every box refuses them (#creativecompat:not_in_flower_boxes, R12), left out of the table
-    const EXCLUDE = ['minecraft:melon', 'minecraft:pumpkin', 'minecraft:carved_pumpkin', 'minecraft:jack_o_lantern',
-        'minecraft:moss_block', 'minecraft:moss_carpet']
+    const EXCLUDE = [global.item.melon_block, global.item.pumpkin, global.item.carved_pumpkin, global.item.jack_o_lantern,
+        global.item.moss, global.item.moss_carpet]
 
     function log(s) { console.info('[flowerworld] ' + s) }
     function rl(id) { return new $FWRL(id) }
@@ -120,7 +120,7 @@
         try {
             let d = JSON.parse(String(JsonIO.readString('kubejs/exported/blocks/pot_probe.json')))
             Object.keys(d.holders).forEach(h => {
-                if (h.indexOf('supplementaries:planter') == 0) return
+                if (h.indexOf(global.item.planter) == 0) return
                 let rows = d.holders[h].rows
                 Object.keys(rows).forEach(i => { if (rows[i].n > 0 || rows[i].survive === true) set[i] = 1 })
             })
@@ -131,7 +131,7 @@
             if (it instanceof $FWBlockItem && it.getBlock() instanceof $FWBush) set[key($FWReg.ITEMS, it)] = 1
         }
         EXTRA.forEach(i => { set[i] = 1 })
-        Ingredient.of('#minecraft:flowers').getItemIds().forEach(i => { set[String(i)] = 1; keep[String(i)] = 1 })
+        Ingredient.of(global.item.t_flowers).getItemIds().forEach(i => { set[String(i)] = 1; keep[String(i)] = 1 })
         KEEP.forEach(i => { set[i] = 1; keep[i] = 1 })
         EXCLUDE.forEach(i => { delete set[i] })
         let ids = Object.keys(set).filter(i => key($FWReg.ITEMS, $FWReg.ITEMS.getValue(rl(i))) == i)
@@ -265,7 +265,7 @@
                 let a = axisPlant(server, level, fp, 0, z, id)
                 let took = HOLDERS.map((H, c) => cell(level, fp, H, STEP * (c + 1), z, id))
                 killItems(level, -STEP - 2, z - 1, W + 1, z + 2)
-                if (!rows.keep[id] && !took.some((t, c) => t && HOLDERS[c].id.indexOf('supplementaries:planter') != 0)) {
+                if (!rows.keep[id] && !took.some((t, c) => t && HOLDERS[c].id.indexOf(global.item.planter) != 0)) {
                     clearRow(server, level, z)
                     dropped++
                     continue
@@ -292,7 +292,7 @@
         if (!global.CDV || !global.CDV.feature('flowerWorld')) return
         let server = event.server, level = server.overworld()
         if (!isPresetWorld(level)) return
-        if (key($FWReg.BLOCKS, level.getBlockState(pos(STEP, Y, -STEP)).getBlock()) == 'minecraft:oak_sign') return
+        if (key($FWReg.BLOCKS, level.getBlockState(pos(STEP, Y, -STEP)).getBlock()) == global.item.sign_oak) return
         log('Flower Test world without a table: building')
         build(server, level)
     })

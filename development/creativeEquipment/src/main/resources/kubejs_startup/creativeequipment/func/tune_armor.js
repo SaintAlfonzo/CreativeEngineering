@@ -46,18 +46,9 @@ console.log('tuneArmor starting')
 var i = global.item;
 
 ;(function () {
-	const Rarity = Java.loadClass('net.minecraft.world.item.Rarity')
-
 	function applySpec(id, item, s) {
-		const set = (label, fn) => {
-			try { fn() }
-			catch (err) { console.warn('[tuneArmor] ' + id + ': skipped ' + label + ' — ' + err) }
-		}
-
-		if (s.durability != null) set('durability', () => item.setMaxDamage(Math.round(s.durability)))
-		if (s.stackSize  != null) set('stackSize',  () => item.setMaxStackSize(Math.round(s.stackSize)))
-		if (s.fireproof  != null) set('fireproof',  () => item.setFireResistant(s.fireproof === true))
-		if (s.rarity     != null) set('rarity',     () => item.setRarity(Rarity.valueOf(String(s.rarity).toUpperCase())))
+		// durability, stackSize, fireproof, rarity: _tune_base.js
+		const set = global.CEQ.tuneBase('tuneArmor', id, item, s)
 
 		if (s.armor               != null) set('armor',               () => item.setArmorProtection(s.armor))
 		if (s.toughness           != null) set('toughness',           () => item.setArmorToughness(s.toughness))

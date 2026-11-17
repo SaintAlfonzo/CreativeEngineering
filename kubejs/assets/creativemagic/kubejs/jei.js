@@ -5,7 +5,7 @@
 ItemEvents.tooltip(e => {
 	var unwantedIds = ['nock_enough_arrows:stockpile', 'nock_enough_arrows:recovery', 'nock_enough_arrows:cycle']
 
-	e.addAdvanced('minecraft:enchanted_book', (item, advanced, text) => {
+	e.addAdvanced(global.item.enchanted_book, (item, advanced, text) => {
 		let stored = item.nbt ? item.nbt.StoredEnchantments : null;
 		if (!stored) return;
 
@@ -19,7 +19,7 @@ ItemEvents.tooltip(e => {
 		}
 
 		if (hasUnwanted) {
-			text.add(Text.red('REMOVED ITEM: DO NOT USE').bold());
+			text.add(Text.of(global.tooltips.buildTooltipLine(['REMOVED ITEM: DO NOT USE', global.tooltips.col.removed, { bold: true }])));
 		}
 	});
 });

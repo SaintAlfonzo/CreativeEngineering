@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 
 console.log('Hello! The laser event has started!')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeengineering')
 var i = global.item;
 
 //Bottles

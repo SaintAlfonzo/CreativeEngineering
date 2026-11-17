@@ -5,7 +5,7 @@ ServerEvents.recipes(e=>{
 
     var i = global.item
     var f = global.fluid
-    var R = global.NCH
+    var R = global.NCH.forPack('creativeengineering')
 
     // ---------- Components ----------
     // Transition items ('component_<m>') are registered in startup_scripts/changes/transition_items.js.

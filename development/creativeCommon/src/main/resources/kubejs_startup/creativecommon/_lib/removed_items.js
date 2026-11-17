@@ -154,8 +154,6 @@ global.removedItems = [
 	i.crushed_osmium_pile,
 	i.crushed_tin_pile,
 	i.crushed_platium_pile,
-	i.ll_receiver_component,
-	i.ll_transmitter_component,
 	i.bamboo_mat,
 	i.bamboo_mat_carpet,
 	i.crank,

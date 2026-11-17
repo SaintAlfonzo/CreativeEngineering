@@ -5,7 +5,7 @@
 // result pools, which need Creative Engineering (fan/ResultPools); without it every item rolls on its own.
 
 ServerEvents.recipes(e => {
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeworldgen')
 	var i = global.item
 	var f = global.fluid
 

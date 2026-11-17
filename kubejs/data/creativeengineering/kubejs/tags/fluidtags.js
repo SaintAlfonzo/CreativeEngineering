@@ -65,12 +65,12 @@ ServerEvents.tags('fluid', e => {
 
 	// ── fixes / removals ──────────────────────────────────────────────────
 	var realWater = [f.water, f.flowing_water]
-	var badWaterTagged = e.get('minecraft:water').getObjectIds()
+	var badWaterTagged = e.get(f.water).getObjectIds()
 		.map(rl => rl.toString())
 		.filter(id => realWater.indexOf(id) === -1)
 
 	if (badWaterTagged.length > 0) {
-		t.remove(e, 'minecraft:water', badWaterTagged)
+		t.remove(e, f.water, badWaterTagged)
 		console.log('[fluidtags] stripped minecraft:water tag from: ' + badWaterTagged.join(', '))
 	}
 

@@ -18,7 +18,12 @@ var softStorage = {
 
 // dough blocks (shovel): Creative Delight (creativeengineering/kitchen_tags.js)
 
+// coil blocks (startup items/coil_blocks.js): pickaxe, iron
+var coilBlocks = ['aluminum', 'brass', 'constantan', 'gold', 'iron', 'lead', 'nickel', 'silver', 'zinc', 'steel']
+	.map(metal => i['coil_block_' + metal])
+
 ServerEvents.tags('block', e => {
+	t.mineable(e, 'pickaxe', 'iron', coilBlocks)
 	for (var mat in storage) t.storageBlock(e, mat, storage[mat], { level: 'iron' })
 	for (var mat in softStorage) t.storageBlock(e, mat, softStorage[mat], { tool: 'hoe' })
 })

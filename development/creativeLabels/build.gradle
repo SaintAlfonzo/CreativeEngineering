@@ -25,3 +25,29 @@ dependencies {
 tasks.named('compileJava', JavaCompile).configure {
     options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
 }
+
+// The Labels server scripts, authored in the pack folder so /reload picks them up without a rebuild, copied into the
+// jar at the same resource path: kubejs/data/creativelabels/kubejs/ -> data/creativelabels/kubejs/. They run through
+// KubeJS and Creative Common's helpers (global.NCH).
+def scriptTrees = ['data/creativelabels/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+	scriptTrees.each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
+}
+
+// A missing tree means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		scriptTrees.collect { it + '/' }.each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativelabels jar has no scripts under ${dir}")
+			}
+		}
+	}
+}

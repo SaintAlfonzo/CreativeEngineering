@@ -542,13 +542,13 @@
         check(rec == 26, 'recycle smelting recipes ' + rec + ' (want 26)')
         check(spl == 33, 'copper splashing recipes ' + spl + ' (want 33)')
         let out = id => { let r = ids[id]; return r == null ? 'missing' : idOf(r.getResultItem()) + ' x' + r.getResultItem().getCount() }
-        ;[['creativeengineering:shaped/name_tag', 'minecraft:name_tag x1'],
+        ;[['creativecompat:shaped/name_tag', 'minecraft:name_tag x1'],
           ['creativeengineering:smelting/recycle_hopper', 'minecraft:iron_ingot x1'],
           ['creativeengineering:smelting/recycle_rail', 'minecraft:iron_nugget x1'],
           ['creativeengineering:smelting/recycle_anvil', 'minecraft:iron_block x1'],
           ['creativeengineering:createsplashing/copper_block_exposed', 'minecraft:exposed_copper x1']].forEach(r =>
             check(out(r[0]) == r[1], r[0] + ' -> ' + out(r[0])))
-        let nt = ids['creativeengineering:shaped/name_tag']
+        let nt = ids['creativecompat:shaped/name_tag']
         if (nt) {
             let ins = []
             nt.getIngredients().forEach(g => { let s = stacksOf(g)[0]; if (s) ins.push(idOf(s)) })

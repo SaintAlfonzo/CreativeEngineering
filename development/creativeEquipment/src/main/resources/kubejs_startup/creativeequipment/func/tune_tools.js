@@ -44,22 +44,13 @@
 
 console.log('tuneTools starting')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeequipment')
 var i = global.item;
 
 ;(function () {
-	const Rarity = Java.loadClass('net.minecraft.world.item.Rarity')
-
 	function applySpec(id, item, s) {
-		const set = (label, fn) => {
-			try { fn() }
-			catch (err) { console.warn('[tuneTools] ' + id + ': skipped ' + label + ' — ' + err) }
-		}
-
-		if (s.durability     != null) set('durability',  () => item.setMaxDamage(Math.round(s.durability)))
-		if (s.stackSize      != null) set('stackSize',   () => item.setMaxStackSize(Math.round(s.stackSize)))
-		if (s.fireproof      != null) set('fireproof',   () => item.setFireResistant(s.fireproof === true))
-		if (s.rarity         != null) set('rarity',      () => item.setRarity(Rarity.valueOf(String(s.rarity).toUpperCase())))
+		// durability, stackSize, fireproof, rarity: _tune_base.js
+		const set = global.CEQ.tuneBase('tuneTools', id, item, s)
 
 		// tooltip damage = 1.0 (player base) + modifier ; tooltip speed = 4.0 + modifier
 		if (s.damage         != null) set('damage',      () => item.setAttackDamage(s.damage - 1.0))

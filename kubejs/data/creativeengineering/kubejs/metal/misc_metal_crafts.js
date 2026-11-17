@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 
 console.log('Hello! The metal base event has started!')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeengineering')
 var f = global.fluid
 var i = global.item;
 

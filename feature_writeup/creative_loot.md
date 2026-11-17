@@ -35,8 +35,8 @@ packed food, drops) is [loot.md](loot.md); this file is the jar.
 - **Server scripts** `kubejs/data/creativeloot/kubejs/`: `loot/00_lib.js` (adds the LootJS helpers to `global.LOOT` on
   every reload, keeping `rules` and the queue), `05_tuning.js` (the pre-roll engine, `global.lootTuning`, `/loottuning`),
   `06_dead_maps.js`, `07_rules.js`, `08_leaf_apples.js`, `09_drops.js`, `10_removals.js` to `40_targeted.js` (LootJS),
-  `95_tag_capture.js`, `99_debug.js`; `tags/loottags.js` (the loot group tags, ids still `#creativeworldgen:loot/chalk`
-  and `#creativeworldgen:loot/golden_food`, dict keys `i.t_loot_chalk`, `i.t_loot_golden_food`). Data next to the
+  `95_tag_capture.js`, `99_debug.js`; `tags/loottags.js` (the loot group tags `#creativeloot:loot/chalk`
+  and `#creativeloot:loot/golden_food`, `#creativeworldgen:loot/` before 2026-11-17; dict keys `i.t_loot_chalk`, `i.t_loot_golden_food`). Data next to the
   scripts: `loot/loot_config.json` (hand-edited knobs), `loot/loot_index.json` (generated), `loot/loot_census.md` and
   `loot/readme.md` (not copied into the jar).
 - **Java**: `CreativeLoot` (main class, logs `[creativeloot] loaded`), `CLResources` (was Worldgen's `CWGResources`:
@@ -75,7 +75,7 @@ mod load order. D14: design for the worst case, where only one copy counts.
 - `06_dead_maps.js` and `07_rules.js` hold the structure-related chest rules (dead explorer maps, village chests); they
   read only loot tables and `loot_config.json`, nothing of Worldgen's.
 - Exposure's fragment (P3) is read whenever Creative Loot is present; Exposure does not depend on it.
-- LootJS log names in the scripts still say `CE/loot/...`; they move to `R.logName` (`CL/` tag) with section 6 in P3.
+- LootJS log names come from `R.logName` (`R = global.NCH.forPack('creativeloot')`): `CL/tuning`, `CL/removals/...` (`CE/loot/...` before 2026-11-17).
 
 ## 4. Tests
 

@@ -253,7 +253,7 @@ Silk Touch.
 - **Source:** loot tables are server data and never reach the client, so the list is a block tag,
   `creativecommon:wthit/needs_silk_touch`, synced like every tag. `tools/gen_silk_touch_blocks.py` (`/cdevgen run
   silk_touch_blocks dumps`, after `/dumploot`) reads `kubejs/exported/loot_tables/` and writes
-  `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `kubejs/server_scripts/tags/wthittags.js` adds the
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `kubejs/data/creativecommon/kubejs/tags/wthittags.js` adds the
   registered ones to the tag (`/reload`).
 - **Rule:** the table `blocks/<id>` gives the item `<id>`, and every entry that gives it has a `match_tool`
   condition naming Silk Touch on the pool, the entry or a parent entry (an `alternative` counts only when all its
@@ -399,7 +399,7 @@ TreeChop ship WTHIT plugins.
   `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`,
   `WthitRemainderBuffer`, `WthitSheared`, `WthitSilkTouch`, `WthitCropSeasons`, `WthitOperatorBlocks`.
 - Silk Touch list: [tools/gen_silk_touch_blocks.py](../tools/gen_silk_touch_blocks.py) ->
-  `kubejs/generation_scripts/wthit/silk_touch_blocks.json` -> [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json` -> [wthittags.js](../kubejs/data/creativecommon/kubejs/tags/wthittags.js).
 - Sheared grass blocks in the ports: [LushGrassBlock.java](../development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/custom/LushGrassBlock.java),
   [SpreadableGrassSlabBlock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/block/SpreadableGrassSlabBlock.java).
 - [state_lines.json](../development/creativeCompat/src/main/resources/assets/creativecompat/state_lines.json).

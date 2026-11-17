@@ -1,7 +1,9 @@
+// requires: creativemagic
+// Creative Magic: dragon breathing recipes. Recipe ids are creativemagic:dragonbreathing/<suffix>.
 ServerEvents.recipes(e => {
     console.log('Dragon breathing starting')
 
-    const R = global.NCH
+    const R = global.NCH.forPack('creativemagic')
     const i = global.item
 
     

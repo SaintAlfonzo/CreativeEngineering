@@ -7,22 +7,22 @@ global.CEQ.recipes(() => {
 
     const i = global.item
     const f = global.fluid
-    const R = global.NCH
+    const R = global.NCH.forPack('creativeequipment')
 
     // ============================== Echo ==============================
 
     // out base key event potion A potion B
     R.bulk('echoAssembly', [
-        [i.echo_sword, i.netherite_sword, 'echo_sword', e, 'creativecommon:darkness', 'minecraft:weakness'],
-        [i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', e, 'creativecommon:darkness', 'minecraft:weakness'],
-        [i.echo_axe, i.netherite_axe, 'echo_axe', e, 'creativecommon:darkness', 'minecraft:weakness'],
-        [i.echo_shovel, i.netherite_shovel, 'echo_shovel', e, 'creativecommon:darkness', 'minecraft:weakness'],
-        [i.echo_hoe, i.netherite_hoe, 'echo_hoe', e, 'creativecommon:darkness', 'minecraft:weakness'],
-        [i.echo_helmet, i.netherite_helmet, 'echo_helmet', e, 'creativecommon:darkness', 'minecraft:night_vision'],
-        [i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', e, 'creativecommon:darkness', 'minecraft:night_vision'],
-        [i.echo_leggings, i.netherite_leggings, 'echo_leggings', e, 'creativecommon:darkness', 'minecraft:night_vision'],
-        [i.echo_boots, i.netherite_boots, 'echo_boots', e, 'creativecommon:darkness', 'minecraft:night_vision'],
-        [i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', e, 'creativecommon:darkness', 'minecraft:night_vision']
+        [i.echo_sword, i.netherite_sword, 'echo_sword', e, 'creativecommon:darkness', global.effect.weakness],
+        [i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', e, 'creativecommon:darkness', global.effect.weakness],
+        [i.echo_axe, i.netherite_axe, 'echo_axe', e, 'creativecommon:darkness', global.effect.weakness],
+        [i.echo_shovel, i.netherite_shovel, 'echo_shovel', e, 'creativecommon:darkness', global.effect.weakness],
+        [i.echo_hoe, i.netherite_hoe, 'echo_hoe', e, 'creativecommon:darkness', global.effect.weakness],
+        [i.echo_helmet, i.netherite_helmet, 'echo_helmet', e, 'creativecommon:darkness', global.effect.night_vision],
+        [i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', e, 'creativecommon:darkness', global.effect.night_vision],
+        [i.echo_leggings, i.netherite_leggings, 'echo_leggings', e, 'creativecommon:darkness', global.effect.night_vision],
+        [i.echo_boots, i.netherite_boots, 'echo_boots', e, 'creativecommon:darkness', global.effect.night_vision],
+        [i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', e, 'creativecommon:darkness', global.effect.night_vision]
     ])
 
     R.bulk('remove', [
@@ -71,16 +71,16 @@ global.CEQ.recipes(() => {
     ])
     
     // Felsic default values + config override 
-    const felsicHelmet = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
-    const felsicChestplate = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
-    const felsicLeggings = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
-    const felsicBoots = R.cfg({potion: 'creativecommon:magic_resistance', mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
-    const felsicSword = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
-    const felsicPickaxe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
-    const felsicAxe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
-    const felsicShovel = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
-    const felsicHoe = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
-    const felsicShield = R.cfg({potion: 'creativecommon:magic_resistance', mb: 250, reachMb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
+    const felsicHelmet = R.cfg({potion: global.effect.magic_resistance, mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_HELMET')
+    const felsicChestplate = R.cfg({potion: global.effect.magic_resistance, mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_CHESTPLATE')
+    const felsicLeggings = R.cfg({potion: global.effect.magic_resistance, mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_LEGGINGS')
+    const felsicBoots = R.cfg({potion: global.effect.magic_resistance, mb: 500, reachMb: 500, loops: 1, blows: 5}, 'CRAFTING.FELSIC_BOOTS')
+    const felsicSword = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SWORD')
+    const felsicPickaxe = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_PICKAXE')
+    const felsicAxe = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_AXE')
+    const felsicShovel = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_SHOVEL')
+    const felsicHoe = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 3}, 'CRAFTING.FELSIC_HOE')
+    const felsicShield = R.cfg({potion: global.effect.magic_resistance, mb: 250, reachMb: 250, loops: 1, blows: 8}, 'CRAFTING.FELSIC_SHIELD')
 
     R.bulk('felsicAssembly', [
         [i.felsic_helmet, i.echo_helmet, 'felsic_helmet', e, felsicHelmet.potion, felsicHelmet.mb, felsicHelmet.loops, felsicHelmet.blows, felsicHelmet.reachMb],

@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 
 console.log('Hello! The metal building event has started!')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeengineering')
 var i = global.item;
 
 //Remove unneeded

@@ -217,7 +217,7 @@ function dumpFood() {
 			let recipe = manager.byKey(rid).orElse(null)
 			if (!recipe) continue
 			let rg = guardThrowable(() => {
-				var row = { id: String(rid), type: String(recipe.getType()), in: [], out: [] }
+				var row = { id: String(rid), type: String($Reg.RECIPE_SERIALIZERS.getKey(recipe.getSerializer())), in: [], out: [] }
 				// item outputs: Create / FD chance lists first, then the vanilla single result
 				var rolled = guardThrowable(() => recipe.getRollableResults())
 				if (rolled.ok && rolled.value) each(rolled.value, o => { if (!o.getStack().isEmpty()) row.out.push(stackRow(o.getStack(), o.getChance())) })

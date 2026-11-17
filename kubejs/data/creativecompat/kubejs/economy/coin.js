@@ -3,7 +3,7 @@
 ServerEvents.recipes(e=>{
 console.log('Coin starting')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativecompat')
 var f = global.fluid
 var i = global.item;
 

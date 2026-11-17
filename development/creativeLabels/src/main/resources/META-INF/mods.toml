@@ -34,6 +34,21 @@ versionRange="[1.19.2-2.3.0,)"
 ordering="NONE"
 side="BOTH"
 
+# Creative Common: KubeJS script loading and the recipe helpers the jar's server scripts call (global.NCH).
+[[dependencies.${mod_id}]]
+modId="creativecommon"
+mandatory=true
+versionRange="*"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="kubejs"
+mandatory=true
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+
 # Art donors until phase 5 (sticky_notes.md 3.12): their textures and models are read from the installed jars at
 # runtime; nothing of theirs is in this jar. Mandatory while they are the donors.
 [[dependencies.${mod_id}]]

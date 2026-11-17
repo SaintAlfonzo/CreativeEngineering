@@ -8,7 +8,7 @@
 // Pack scripts that name a literal gold item are edited where they are (components, redstone, process).
 ServerEvents.recipes(e => {
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativeengineering')
 
 	var goldOnly = []
 	var forms = ['ore', 'ds_ore', 'raw', 'raw_block', 'crushed', 'crushed_block', 'dust', 'dust_block', 'nugget', 'ingot',

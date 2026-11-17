@@ -138,12 +138,19 @@ console.log('Armor Effects framework loading')
 	// Common client effects/armor_effects_tooltip.js — kept here so the exact formatting
 	// (matching EchoArmorTooltipMixin) lives in one place.
 	function buildTooltipLines(header, effects) {
-		var lines = ['§7' + header + ':']
+		var text = textCode()
+		var lines = [text + header + ':']
 		effects.forEach(spec => {
 			var d = describe(spec)
-			lines.push('§7- §' + d.color + d.name + ' §7(infinite)')
+			lines.push(text + '- §' + d.color + d.name + ' ' + text + '(infinite)')
 		})
 		return lines
+	}
+
+	// Formatting code of the tooltip text role (global.tooltips.col.text, gray), read at tooltip time on the client,
+	// where Creative Common's client tooltip lib defines global.tooltips.
+	function textCode() {
+		return global.tooltips ? global.tooltips.code('text') : ''
 	}
 
 	function clampEffects(context, effects) {
@@ -179,6 +186,7 @@ console.log('Armor Effects framework loading')
 		// internals, exposed for the tooltip/tick consumers - not meant to be called directly
 		_resolveEffect: resolveEffect,
 		_describe: describe,
+		_textCode: textCode,
 		_buildTooltipLines: buildTooltipLines,
 	}
 })()

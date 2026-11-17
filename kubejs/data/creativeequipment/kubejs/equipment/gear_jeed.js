@@ -7,7 +7,7 @@
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativeequipment')
 
 	var providers = {}
 	var add = (effect, items) => {
@@ -33,8 +33,8 @@ global.CEQ.recipes(() => {
 	}
 	// Echo armor: CDD's own set bonus, redirected by Equipment's EchoArmorEffectProcedureMixin (memory echo-tier-gear)
 	var echoArmor = [i.echo_helmet, i.echo_chestplate, i.echo_leggings, i.echo_boots]
-	add('minecraft:night_vision', echoArmor)
-	add('better_beacons:phantom_bane', echoArmor)
+	add(global.effect.night_vision, echoArmor)
+	add(global.effect.phantom_bane, echoArmor)
 
 	// NCH drops a provider or an effect of an absent mod by itself (G5)
 	Object.keys(providers).sort().forEach(effect => R.jeedProvider(effect, providers[effect], e, 'gear_' + String(effect).replace(':', '_')))

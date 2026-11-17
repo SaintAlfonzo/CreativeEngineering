@@ -12,18 +12,18 @@
 global.creativePotions = (function () {
 	var S = 20 // ticks per second
 	return {
-	resistance:     { effect: 'minecraft:resistance',     dur: 180 * S, long: 480 * S, strong: [90 * S, 1] },
-	health_boost:   { effect: 'minecraft:health_boost',   dur: 180 * S, long: 480 * S, strong: [90 * S, 1] },
-	absorption:     { effect: 'minecraft:absorption',     dur: 120 * S, long: 300 * S, strong: [120 * S, 1] },
-	glowing:        { effect: 'minecraft:glowing',        dur: 90 * S,  long: 240 * S },
-	saturation:     { effect: 'minecraft:saturation',     dur: 5 },
-	wither:         { effect: 'minecraft:wither',         dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1] },
-	levitation:     { effect: 'minecraft:levitation',     dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1] },
-	mining_fatigue: { effect: 'minecraft:mining_fatigue', dur: 90 * S,  long: 240 * S, strong: [30 * S, 1] },
-	hunger:         { effect: 'minecraft:hunger',         dur: 30 * S,  long: 60 * S,  strong: [15 * S, 1] },
-	nausea:         { effect: 'minecraft:nausea',         dur: 30 * S,  long: 60 * S },
-	blindness:      { effect: 'minecraft:blindness',      dur: 30 * S,  long: 60 * S },
-	darkness:       { effect: 'minecraft:darkness',       dur: 30 * S,  long: 60 * S },
+	resistance:     { effect: global.effect.resistance,     dur: 180 * S, long: 480 * S, strong: [90 * S, 1] },
+	health_boost:   { effect: global.effect.health_boost,   dur: 180 * S, long: 480 * S, strong: [90 * S, 1] },
+	absorption:     { effect: global.effect.absorption,     dur: 120 * S, long: 300 * S, strong: [120 * S, 1] },
+	glowing:        { effect: global.effect.glowing,        dur: 90 * S,  long: 240 * S },
+	saturation:     { effect: global.effect.saturation,     dur: 5 },
+	wither:         { effect: global.effect.wither,         dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1] },
+	levitation:     { effect: global.effect.levitation,     dur: 40 * S,  long: 90 * S,  strong: [20 * S, 1] },
+	mining_fatigue: { effect: global.effect.mining_fatigue, dur: 90 * S,  long: 240 * S, strong: [30 * S, 1] },
+	hunger:         { effect: global.effect.hunger,         dur: 30 * S,  long: 60 * S,  strong: [15 * S, 1] },
+	nausea:         { effect: global.effect.nausea,         dur: 30 * S,  long: 60 * S },
+	blindness:      { effect: global.effect.blindness,      dur: 30 * S,  long: 60 * S },
+	darkness:       { effect: global.effect.darkness,       dur: 30 * S,  long: 60 * S },
 	}
 })()
 

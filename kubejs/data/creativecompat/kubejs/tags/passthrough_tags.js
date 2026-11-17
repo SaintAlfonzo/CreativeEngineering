@@ -64,13 +64,13 @@ ServerEvents.tags('block', e => {
 	// spanish moss and glowworm silk where Biomes O' Plenty registers them)
 	t.addMatching(e, PASS.vine, [i.vine, i.twisting_vines, 'minecraft:twisting_vines_plant',
 		i.weeping_vines, 'minecraft:weeping_vines_plant', 'minecraft:cave_vines', 'minecraft:cave_vines_plant',
-		'vinery:jungle_grape_bush_red', 'vinery:jungle_grape_bush_white', 'hearthandharvest:hops_vine',
+		b.jungle_grape_bush_red, b.jungle_grape_bush_white, b.hops_vine,
 		'floralench:*_vine', i.cut_vine, 'botania:solid_vine', i.ivy,
-		'upgrade_aquatic:mulberry_vine', 'neapolitan:vanilla_vine', 'neapolitan:vanilla_vine_plant',
+		b.mulberry_vine, b.vanilla_vine, b.vanilla_vine_plant,
 		'/^biomesoplenty:(flesh_tendons|hanging_cobweb|spanish_moss|glowworm_silk)(_strand|_plant)?$/'])
 
 	// Wild crops: Farmer's Delight's tag plus the wild plants it misses (Supplementaries wild flax stays out with flax)
-	t.addMatching(e, PASS.wild_crop, ['#farmersdelight:wild_crops', i.wild_oats,
+	t.addMatching(e, PASS.wild_crop, [i.t_wild_crops, i.wild_oats,
 		i.wild_cucumbers, i.wild_ghost_peppers, i.wild_peanuts,
 		i.wild_coffee_bush, i.wild_tea_bush, i.wild_pineapple,
 		i.wild_hops], { except: tiered().filter(x => x !== '#' + PASS.wild_crop) })
@@ -96,10 +96,10 @@ ServerEvents.tags('block', e => {
 	t.addMatching(e, PASS.grass, [i.grass, i.fern, i.dead_bush, i.nether_sprouts,
 		i.crimson_roots, i.warped_roots, i.hanging_roots, 'immersive_weathering:hanging_roots_wall',
 		i.frosty_grass, i.frosty_fern, i.weeds,
-		i.beachgrass, i.sandy_shrub, '#minecraft:small_flowers', '#minecraft:saplings',
+		i.beachgrass, i.sandy_shrub, i.t_small_flowers, i.t_saplings,
 		'flowerpatch:*_patch', i.gossypium,
 		// Botania flowers and mushrooms (owner 2026-11-15); floating flowers are solid, left out
-		'#botania:mystical_flowers', '#botania:shiny_flowers', '#botania:special_flowers', '/^botania:[a-z_]+_mushroom$/'],
+		'#botania:mystical_flowers', '#botania:shiny_flowers', i.t_botania_special_flowers, '/^botania:[a-z_]+_mushroom$/'],
 		{ except: [i.azalea, i.flowering_azalea, 'floralench:*_bush', 'farmersrespite:wither_roots', 'farmersrespite:wither_roots_plant',
 			i.beanstalk_thorns, i.blue_pickerelweed, i.purple_pickerelweed]
 			.concat(tiered().filter(x => x !== '#' + PASS.grass)) })

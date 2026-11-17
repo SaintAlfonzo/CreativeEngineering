@@ -14,7 +14,7 @@ var t = global.tags
 // ============================================================
 // the smoked planks have their own cheaper creosote recipe (wood/smoked_wood.js); expanded from #minecraft:planks
 // as it stands when this runs
-t.addMatching(e, 'creativeengineering:unsmoked_planks', '#minecraft:planks', { except: i.smoked_planks })
+t.addMatching(e, 'creativeengineering:unsmoked_planks', i.planks, { except: i.smoked_planks })
 
 // Smokable wood tags moved to Creative Common 2026-11-10 (data/creativecommon/kubejs/tags/smokable_tags.js).
 

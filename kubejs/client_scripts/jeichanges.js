@@ -14,7 +14,7 @@ JEIEvents.hideItems(e => {
 // ============================================================
 function tagRemovedItems(e) {
 	global.removedItems.forEach(id => {
-		e.add(id, Text.red('REMOVED ITEM: DO NOT USE').bold());
+		e.add(id, global.tooltips.buildTooltipLine(['REMOVED ITEM: DO NOT USE', global.tooltips.col.removed, { bold: true }]));
 	});
 }
 

@@ -176,7 +176,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   listing classes; CC/AP's `VillagerTrade` and Lightman's `SimpleTrade` are neither.
 - **Wares: both listings x20.** "Move it to the common pool" read as the rare agreement moving, "20x" applied to
   each. That is about 4.9 agreements per trader; `weight` in `t.move` changes it.
-- **Golden food tag of its own.** `#creativeworldgen:loot/golden_food` includes golden chorus fruit (End), so
+- **Golden food tag of its own.** `#creativeloot:loot/golden_food` includes golden chorus fruit (End), so
   trades use `#creativecommon:trades/golden_food` (same set minus it), in
   [tradetags.js](../kubejs/server_scripts/tags/tradetags.js).
 - **Ancient sapling and sponge in the rare pool** at 8 emeralds: both have no other renewable source.

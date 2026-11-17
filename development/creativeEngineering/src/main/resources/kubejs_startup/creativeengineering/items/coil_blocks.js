@@ -28,8 +28,7 @@ StartupEvents.registry('block', e => {
             .texture('up', top).texture('down', top)
             .texture('north', side).texture('south', side)
             .texture('east', side).texture('west', side)
-            .texture('particle', side)
-            .tagBlock('minecraft:mineable/pickaxe')
-            .tagBlock('minecraft:needs_iron_tool');
+            .texture('particle', side);
+        // Mining tags (pickaxe, iron): tags/storageblocktags.js in this jar's server scripts
     });
 });

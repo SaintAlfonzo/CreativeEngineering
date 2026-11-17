@@ -6,7 +6,7 @@ console.log('misc mods starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativecompat')
 
 // ============================================================
 // Supplementaries

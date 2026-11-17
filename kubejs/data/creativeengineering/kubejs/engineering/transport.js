@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 
 console.log('Hello! The transport event has started!')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeengineering')
 var i = global.item;
 
 // ############################## Resource Swap ##############################  
@@ -107,20 +107,10 @@ R.replaceInput(
  
 // ############################## Wireless ##############################
  
-//Remove wireless transmitter and receiver
+// Wireless transmitter and receiver: merged into the Redstone Link (Common's item_merges.js, pack group), which swaps
+// them in every recipe; their own recipes go here
 R.remove({id:'littlelogistics:receiver_component'}, e)
 R.remove({id:'littlelogistics:transmitter_component'}, e)
-//replace w/ redstone link
-R.replaceInput(
-  { input: 'littlelogistics:receiver_component' },
-  i.ll_receiver_component,
-  i.redstone_link, e
-)
-R.replaceInput(
-  { input: 'littlelogistics:transmitter_component' },
-  i.ll_transmitter_component,
-  i.redstone_link, e
-)
  
 // ############################## Hoppers ############################## 
 

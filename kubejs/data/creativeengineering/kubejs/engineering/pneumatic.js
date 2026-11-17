@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 console.log('Hello! The pneumatic event has started!')
 
 var i = global.item
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // Compressed iron to steel swap
 R.remove({id: 'pneumaticcraft:compressed_iron_ingot_from_block'}, e)

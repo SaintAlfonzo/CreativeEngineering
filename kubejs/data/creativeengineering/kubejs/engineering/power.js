@@ -3,7 +3,7 @@
 ServerEvents.recipes(e=>{
 console.log('Power starting')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeengineering')
 var i = global.item;
 
 // Create addition removals

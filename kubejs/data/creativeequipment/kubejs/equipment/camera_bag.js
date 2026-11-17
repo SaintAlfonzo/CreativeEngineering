@@ -10,7 +10,7 @@
 
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeequipment')
 	var i = global.item
 
 	R.shaped(i.leather_camera_bag, [

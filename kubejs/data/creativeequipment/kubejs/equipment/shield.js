@@ -7,7 +7,7 @@ global.CEQ.recipes(() => {
 
 console.log('Hello! The shield event has started!')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativeequipment')
 var f = global.fluid
 var i = global.item;
 

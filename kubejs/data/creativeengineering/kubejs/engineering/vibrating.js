@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 console.log('Hello! The vibrating event has started!')
 
 var i = global.item
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 //Sand to shells and heart of the sea
 R.viVibrating([

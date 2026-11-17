@@ -42,7 +42,7 @@
 // expect NCH's "no incomplete item registered" WARN in the log for this one recipe; it's
 // harmless and expected for a throwaway JEI test chain.
 
-var R = global.NCH
+var R = global.NCH.forPack('creativedevtools')
 console.log('Hello! The sequence assembly test event has started!')
 
 ServerEvents.recipes(e => {

@@ -36,7 +36,7 @@
 	var MODIFIER_PATH = 'creativeworldgen:forge/biome_modifier/bee_nests.json'
 	var NESTS_CLASS = 'com.SaintAlfonzo.creativeworldgen.worldgen.BeeNests'
 	var NEVER = ['ocean', 'cave']
-	var DEFAULT_SAPLING = 'minecraft:oak_sapling'
+	var DEFAULT_SAPLING = global.item.oak_sapling
 	var LOG = '[bee-nests] '
 
 	var $Registry = Java.loadClass('net.minecraft.core.Registry')
@@ -46,7 +46,7 @@
 	var $BeeNests = Java.loadClass(NESTS_CLASS)
 
 	function enabled() {
-		return Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig').beeNestsEnabled() == true
+		return global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig').beeNestsEnabled() == true
 	}
 
 	function readJson(path) {

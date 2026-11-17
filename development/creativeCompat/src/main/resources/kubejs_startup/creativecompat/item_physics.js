@@ -142,16 +142,16 @@ console.log('Item Physics (fire/lava split) starting')
 	//  creativecompat/kubejs/tags/item_physics_tags.js; only the params below need a restart.
 
 	// exclusions FIRST — the end products never re-transform when re-dropped
-	api.burnExclude('quark:dirty_glass', 'quark:dirty_glass_pane', 'quark:dirty_shard', 'supplementaries:ash')
+	api.burnExclude(global.item.dirty_glass, global.item.dirty_glass_pane, global.item.dirty_shard, global.item.ash)
 
-	api.burnReplace('#forge:glass',       'quark:dirty_glass',      1.0, true)   // glass block  -> dirty glass  (tinted_glass is in #forge:glass)
-	api.burnReplace('#forge:glass_panes', 'quark:dirty_glass_pane', 1.0, true)   // glass pane   -> dirty glass pane
-	api.burnReplace('#quark:shards',      'quark:dirty_shard',      1.0, true)   // glass shard  -> dirty shard
-	api.burnReplace('#creativecompat:burn/to_ash', 'supplementaries:ash', 0.25, true) // wood -> ~1-in-4 ash per plank/log
+	api.burnReplace(global.item.any_glass,       global.item.dirty_glass,      1.0, true)   // glass block  -> dirty glass  (tinted_glass is in #forge:glass)
+	api.burnReplace('#forge:glass_panes', global.item.dirty_glass_pane, 1.0, true)   // glass pane   -> dirty glass pane
+	api.burnReplace('#quark:shards',      global.item.dirty_shard,      1.0, true)   // glass shard  -> dirty shard
+	api.burnReplace('#creativecompat:burn/to_ash', global.item.ash, 0.25, true) // wood -> ~1-in-4 ash per plank/log
 
-	api.burnExplode('minecraft:tnt',          2.0, 1.0, true)   // shrapnel — see CEConfig.Shrapnel
-	api.burnExplode('minecraft:tnt_minecart', 2.0, 1.0, true)
-	api.burnExplode('minecraft:gunpowder',    1.0, 1.0)
+	api.burnExplode(global.item.tnt,          2.0, 1.0, true)   // shrapnel — see CEConfig.Shrapnel
+	api.burnExplode(global.item.tnt_minecart, 2.0, 1.0, true)
+	api.burnExplode(global.item.gunpowder,    1.0, 1.0)
 	api.burnExplode('#creativecompat:burn/explosive', 1.0, 1.0)             // spare bucket for anything else
 
 	console.log('[item_physics] ' + api.summary())

@@ -2,7 +2,7 @@
 // requires: create
 (function () {
 
-var R = global.NCH
+var R = global.NCH.forPack('creativedevtools')
 
 
 console.log('Hello! The metal test event has started!')
@@ -15,34 +15,8 @@ var seqMetals = [
 var seqForms = ['ore', 'ds_ore', 'raw', 'raw_block', 'crushed', 'crushed_block', 'dust', 'dust_block', 'nugget', 'ingot', 'block', 'plate', 'plate_block', 'rod', 'wire', 'wire_coil', 'coil_block', 'spring', 'small_spring', 'component'];
 var i = global.item;
 
-// Builds a roughly-square grid pattern + keys object from a flat list of {letter, item} pairs.
-// cols/rows auto-sized via ceil(sqrt(n)); leftover cells left blank (space = empty slot).
-function buildGrid(entries) {
-	var n = entries.length;
-	var cols = Math.ceil(Math.sqrt(n));
-	var rows = Math.ceil(n / cols);
-
-	var keys = {};
-	var pattern = [];
-	var idx = 0;
-
-	for (var r = 0; r < rows; r++) {
-		var row = '';
-		for (var c = 0; c < cols; c++) {
-			if (idx < n) {
-				var entry = entries[idx];
-				keys[entry.letter] = entry.item;
-				row += entry.letter;
-				idx++;
-			} else {
-				row += ' ';
-			}
-		}
-		pattern.push(row);
-	}
-
-	return { pattern: pattern, keys: keys };
-}
+// Grid pattern builder: global.CDV.buildGrid (_lib/build_grid.js)
+var buildGrid = global.CDV.buildGrid;
 
 var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

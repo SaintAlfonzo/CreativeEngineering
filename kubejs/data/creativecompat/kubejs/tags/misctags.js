@@ -11,15 +11,15 @@ ServerEvents.tags('item', e => {
 	// Whole blocks a box took as a plant (R12, plan_small_fixes_1116.md; the Flower Test world already left them out)
 	t.add(e, 'creativecompat:not_in_flower_boxes', [i.azalea, i.flowering_azalea, i.melon_block, i.pumpkin, i.carved_pumpkin,
 		i.jack_o_lantern, i.moss, i.moss_carpet])
-	t.add(e, 'another_furniture:planter_box_banned', '#creativecompat:not_in_flower_boxes')
+	t.add(e, 'another_furniture:planter_box_banned', i.t_not_in_flower_boxes)
 	t.add(e, 'another_furniture:planter_box_placeables', [
 		i.beetroot_seeds, i.cactus, i.minecraft_carrot, i.chorus_flower, i.cocoa_beans, i.crimson_roots, i.warped_roots,
 		i.dead_bush, i.grass, i.fern, i.lilac, i.melon_seeds, i.peony, i.minecraft_potato, i.pumpkin_seeds, i.rose_bush, i.sunflower,
 		i.nether_sprouts, i.nether_wart, i.glow_berries, i.glow_lichen,
 	])
 	// The Vinery flower box takes the planter box list (backportedVinery LegacyFlowerBoxBlock)
-	t.addMatching(e, 'creativecompat:flower_box_plants', '#another_furniture:planter_box_placeables',
-		{ except: '#creativecompat:not_in_flower_boxes' })
+	t.addMatching(e, 'creativecompat:flower_box_plants', i.t_planter_box_placeables,
+		{ except: i.t_not_in_flower_boxes })
 
 	// Remove dye tags from chalk (no accidental crafts)
 	;['red','orange','yellow','green','lime','blue','light_blue','cyan','purple',

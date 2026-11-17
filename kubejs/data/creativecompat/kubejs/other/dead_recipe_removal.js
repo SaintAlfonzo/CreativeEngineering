@@ -7,7 +7,7 @@ console.log('dead recipe removal starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativecompat')
 
 R.bulk('remove', [
     [{ id: 'vintageimprovements:craft/vanadium_nuggets_to_ingot' }, e],

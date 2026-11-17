@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 
     var i = global.item
     var f = global.fluid
-    var R = global.NCH
+    var R = global.NCH.forPack('creativeengineering')
 
     // ############################## Amethyst ##############################
     // One shard recipe per machine: millstone and crushing wheels 0.75 dust, IE crusher 1 + 25 % (1.25).
@@ -23,18 +23,18 @@ ServerEvents.recipes(e => {
     // ############################## Cinder Flour Dusts ##############################
 
     // Redstone <- Strength
-    R.shapeless(Item.of(i.redstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:strength"}' }], e, 'cinder_redstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
-    R.ieBottling(i.redstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:strength"}' },i.cinder_flour,e, 'redstone_from_cinder_flour_potion')
-    R.createFilling(i.redstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:strength"}'), i.cinder_flour], e, 'cinder_redstone_filling')
-    R.createFilling(Item.of(i.redstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:strength"}'), i.cinder_flour_pile], e, 'cinder_pile_redstone_filling')
-    R.ieBottling(Item.of(i.redstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:strength"}' },i.cinder_flour_pile,e, 'redstone_from_cinder_flour_pile_potion')
+    R.shapeless(Item.of(i.redstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:global.effect.strength}' }], e, 'cinder_redstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
+    R.ieBottling(i.redstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:global.effect.strength}' },i.cinder_flour,e, 'redstone_from_cinder_flour_potion')
+    R.createFilling(i.redstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:global.effect.strength}'), i.cinder_flour], e, 'cinder_redstone_filling')
+    R.createFilling(Item.of(i.redstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:global.effect.strength}'), i.cinder_flour_pile], e, 'cinder_pile_redstone_filling')
+    R.ieBottling(Item.of(i.redstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:global.effect.strength}' },i.cinder_flour_pile,e, 'redstone_from_cinder_flour_pile_potion')
 
     // Glowstone <- Night Vision
-    R.shapeless(Item.of(i.glowstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:night_vision"}' }], e, 'cinder_glowstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
-    R.ieBottling(i.glowstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}' },i.cinder_flour,e, 'glowstone_from_cinder_flour_potion')
-    R.createFilling(i.glowstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}'), i.cinder_flour], e, 'cinder_glowstone_filling')
-    R.createFilling(Item.of(i.glowstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}'), i.cinder_flour_pile], e, 'cinder_pile_glowstone_filling')
-    R.ieBottling(Item.of(i.glowstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:night_vision"}' },i.cinder_flour_pile,e, 'glowstone_from_cinder_flour_pile_potion')
+    R.shapeless(Item.of(i.glowstone, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:global.effect.night_vision}' }], e, 'cinder_glowstone_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
+    R.ieBottling(i.glowstone,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:global.effect.night_vision}' },i.cinder_flour,e, 'glowstone_from_cinder_flour_potion')
+    R.createFilling(i.glowstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:global.effect.night_vision}'), i.cinder_flour], e, 'cinder_glowstone_filling')
+    R.createFilling(Item.of(i.glowstone, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:global.effect.night_vision}'), i.cinder_flour_pile], e, 'cinder_pile_glowstone_filling')
+    R.ieBottling(Item.of(i.glowstone, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:global.effect.night_vision}' },i.cinder_flour_pile,e, 'glowstone_from_cinder_flour_pile_potion')
 
     // Gunpowder <- Harming
     R.shapeless(Item.of(i.gunpowder, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:harming"}' }], e, 'cinder_gunpowder_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
@@ -65,18 +65,18 @@ ServerEvents.recipes(e => {
     R.createFilling(Item.of(i.dust_coke, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:strong_slowness"}'), i.cinder_flour_pile], e, 'cinder_pile_coke_dust_filling')
 
     // Cocoa powder <- Weakness
-    R.shapeless(Item.of(i.cocoa_powder, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:weakness"}' }], e, 'cinder_cocoa_powder_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
-    R.ieBottling(i.cocoa_powder,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:weakness"}' },i.cinder_flour,e, 'cocoa_powder_from_cinder_flour_potion')
-    R.createFilling(i.cocoa_powder, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:weakness"}'), i.cinder_flour], e, 'cinder_cocoa_powder_filling')
-    R.ieBottling(Item.of(i.cocoa_powder, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:weakness"}' },i.cinder_flour_pile,e, 'cocoa_powder_from_cinder_flour_pile_potion')
-    R.createFilling(Item.of(i.cocoa_powder, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:weakness"}'), i.cinder_flour_pile], e, 'cinder_pile_cocoa_powder_filling')
+    R.shapeless(Item.of(i.cocoa_powder, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:global.effect.weakness}' }], e, 'cinder_cocoa_powder_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
+    R.ieBottling(i.cocoa_powder,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:global.effect.weakness}' },i.cinder_flour,e, 'cocoa_powder_from_cinder_flour_potion')
+    R.createFilling(i.cocoa_powder, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:global.effect.weakness}'), i.cinder_flour], e, 'cinder_cocoa_powder_filling')
+    R.ieBottling(Item.of(i.cocoa_powder, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:global.effect.weakness}' },i.cinder_flour_pile,e, 'cocoa_powder_from_cinder_flour_pile_potion')
+    R.createFilling(Item.of(i.cocoa_powder, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:global.effect.weakness}'), i.cinder_flour_pile], e, 'cinder_pile_cocoa_powder_filling')
 
     // Matcha <- Slow Falling
-    R.shapeless(Item.of(i.matcha, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:slow_falling"}' }], e, 'cinder_matcha_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
-    R.ieBottling(i.matcha,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:"minecraft:slow_falling"}' },i.cinder_flour,e, 'matcha_from_cinder_flour_potion')
-    R.createFilling(i.matcha, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:slow_falling"}'), i.cinder_flour], e, 'cinder_matcha_filling')
-    R.ieBottling(Item.of(i.matcha, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:"minecraft:slow_falling"}' },i.cinder_flour_pile,e, 'matcha_from_cinder_flour_pile_potion')
-    R.createFilling(Item.of(i.matcha, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:"minecraft:slow_falling"}'), i.cinder_flour_pile], e, 'cinder_pile_matcha_filling')
+    R.shapeless(Item.of(i.matcha, 8), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:global.effect.slow_falling}' }], e, 'cinder_matcha_shapeless', null, [i.potion, Item.of(i.glass_bottle)])
+    R.ieBottling(i.matcha,{ tag: f.t_potion, amount: 20, nbt: '{Bottle:"REGULAR",Potion:global.effect.slow_falling}' },i.cinder_flour,e, 'matcha_from_cinder_flour_potion')
+    R.createFilling(i.matcha, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:global.effect.slow_falling}'), i.cinder_flour], e, 'cinder_matcha_filling')
+    R.ieBottling(Item.of(i.matcha, 9),{ tag: f.t_potion, amount: 180, nbt: '{Bottle:"REGULAR",Potion:global.effect.slow_falling}' },i.cinder_flour_pile,e, 'matcha_from_cinder_flour_pile_potion')
+    R.createFilling(Item.of(i.matcha, 9), [Fluid.of(f.create_potion, 225, '{Bottle:"REGULAR",Potion:global.effect.slow_falling}'), i.cinder_flour_pile], e, 'cinder_pile_matcha_filling')
 
     // Ash <- Healing
     R.shapeless(Item.of(i.ash, 32), [Item.of(i.cinder_flour, 8), { type: 'forge:partial_nbt', item: i.potion, nbt: '{Potion:"minecraft:healing"}' }], e, 'cinder_ash_shapeless', null, [i.potion, Item.of(i.glass_bottle)])

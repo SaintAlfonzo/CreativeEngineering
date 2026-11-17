@@ -53,6 +53,7 @@ StartupEvents.registry('item', e => {
         // air brake (its assembly sits with the dragon rows in end_gear.js)
         ['air_brake'],
     ]
-    END_GEAR_ASSEMBLIES.forEach(([key, texture, color]) => global.NCH.registerIncomplete(e, key, texture, color))
+    const R = global.NCH.forPack('creativeequipment')
+    END_GEAR_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))
     console.log(`[creativeequipment] end gear transition items (${END_GEAR_ASSEMBLIES.length})`)
 })

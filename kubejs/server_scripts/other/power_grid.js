@@ -17,7 +17,7 @@ ServerEvents.recipes(e => {
 	var R = global.NCH
 
 	// Power Grid's acid fluid has no fluid_dict key yet (f.acid to be added in Creative Common's fluid_dict.js).
-	var ACID = f.acid ?? 'powergrid:acid'
+	var ACID = f.acid ?? f.acid
 
 	R.remove({ id: 'powergrid:mixing/acid' }, e)
 	R.createMixing(Fluid.of(ACID, 250), [i.redstone, i.blaze_powder, i.rotten_flesh, Fluid.of(f.water, 250)], e,

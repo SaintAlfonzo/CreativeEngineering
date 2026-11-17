@@ -68,7 +68,8 @@ const sandbox = {
     },
   },
   ServerEvents: { highPriorityData: fn => { handler = fn }, tags: (type, fn) => { if (type === 'worldgen/structure') tagsHandler = fn; if (type === 'worldgen/biome') biomeTagsHandler = fn } },
-  global: { tags: { add: (e, tag, ids) => [].concat(ids).forEach(id => e.add(tag, id)) }, genText: p => readText(String(p)) },
+  global: { tags: { add: (e, tag, ids) => [].concat(ids).forEach(id => e.add(tag, id)) }, genText: p => readText(String(p)),
+    NCH: { cfgClass: (m, c) => classes['com.SaintAlfonzo.' + m + '.' + c] || null } },
 }
 new Function(...Object.keys(sandbox), fs.readFileSync(SCRIPT, 'utf8'))(...Object.values(sandbox))
 

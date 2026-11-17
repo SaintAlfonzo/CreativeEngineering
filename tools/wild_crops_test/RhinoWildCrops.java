@@ -48,6 +48,7 @@ public class RhinoWildCrops {
 			"  warn: function (m) { __HOST.log('WARN ', String(m)) }, error: function (m) { __HOST.log('ERROR ', String(m)) } };",
 			"var JsonIO = { readString: function (p) { return __HOST.read(p) } };",
 			"var Platform = { isLoaded: function (ns) { return __HOST.loaded(ns) } };",
+			"global.NCH = { cfgClass: function (m, c) { try { return Java.loadClass('com.SaintAlfonzo.' + m + '.' + c) } catch (err) { return null } } };",
 			"var Java = { loadClass: function (n) {",
 			"  if (n.indexOf('WorldgenFiles') >= 0) return { readText: function (p) { return __HOST.readOrNull(p) } };",
 			"  if (n.indexOf('WorldgenConfig') >= 0) return { mushroomSpawnsEnabled: function () { return __HOST.enabled() } };",
