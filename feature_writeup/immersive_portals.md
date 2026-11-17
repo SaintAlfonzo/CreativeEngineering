@@ -208,7 +208,7 @@ redirect then takes over the same call; the outline is kept ([creative_engineeri
   DH has crashed other things, so test the pair early.
 - Whether Smaller Nether Portals and NetherPortalFix stay once Immersive Portals handles Nether portals.
 
-## 6. Owner notes (scratchpad 2026-11-13, all planned, none built)
+## 5. Owner notes (scratchpad 2026-11-13, all planned, none built)
 
 TODO `gameplay/tnt-and-portal #27` to `#37`.
 
@@ -218,3 +218,7 @@ TODO `gameplay/tnt-and-portal #27` to `#37`.
 - **Bugs to confirm:** marker name and color fields not drawn until clicked, color update inconsistent; default app, single macro option, locked workstation, empty or marked location card on the Tempad, card stuck in the wallet, timeline language entry, every app present in the Tempad, location broadcaster in multiplayer.
 - **Server:** chronomarker navigation of mining and resource dimensions; better dimensions need an own Tempad; location cards as unlocks (rare wandering trader, End chests).
 - **Portal Gun:** placement must not be blocked by the position of the color being moved (a blue portal could not move up or down at the same spot).
+
+## 6. History
+
+- 2026-11-17: Owner notes renumbered 5 (was 6; plan_rules_fixes.md V-53).
