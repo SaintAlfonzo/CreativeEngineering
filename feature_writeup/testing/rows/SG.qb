@@ -1,0 +1,68 @@
+# Scratch queue rows SG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SG.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Sheared grass, 2026-10-28 ([wthit_lines.md](../wthit_lines.md) 2.10, TODO `misc #6`)
+@@date 2026-10-28
+@@jars creativedelight
+@@sources feature_writeup/wthit_lines.md
+@@text
+@@text Jars: patcherMod 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).
+@@text Group A (superflat), daylight (`/time set noon`). Shearing needs a player, so the server checks place the sheared
+@@text state directly; the line itself is WL-34 in game. Each check: two 5x1x5 patches 8 blocks apart, on a stone layer 4 blocks above the superflat grass (grass spreads at most 1 up), the centre block
+@@text sheared in one and not in the other, `/gamerule randomTickSpeed 300`, wait 60 s, then count what is left with
+@@text `/fill <patch> minecraft:coarse_dirt replace <soil>` (the printed count = soil not converted). Set randomTickSpeed back to 3.
+@@text
+@@table
+## SQ-SG-01 | sheared grass blocks
+@group A
+@commands Boot
+@pass `Done (`; no error naming `LushGrassBlock`, `SpreadableGrassSlabBlock` or `WthitSheared`; no blockstate/model warning for `vintagedelight:lush_grass_block` or `vinery:grass_slab`
+@fails Read the trace; a model warning means a blockstate variant needs the `fertile` key
+@from batches/r1031/a1_boot.qb passed
+bootreject (?i)(LushGrassBlock|SpreadableGrassSlabBlock|WthitSheared).*(error|exception)
+bootreject (?i)(missing|exception).*(vintagedelight:lush_grass_block|vinery:grass_slab)
+
+## SQ-SG-02 | sheared grass does not spread (also sets up SQ-SG-03; 60 s at randomTickSpeed 300)
+@group A
+@commands Patches of `minecraft:dirt`; centres `minecraft:grass_block[fertile=false]` and `minecraft:grass_block`
+@pass Sheared patch: 24 dirt left, centre still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24
+@fails IW behaviour changed: re-read `ModGrassBlock#isRandomlyTicking`
+@from batches/r1031/a1_world.qb
+> fill -42 -57 20 -12 -57 36 minecraft:stone
+> fill -40 -56 30 -36 -56 34 minecraft:dirt
+> setblock -38 -56 32 minecraft:grass_block[fertile=false]
+> fill -32 -56 30 -28 -56 34 minecraft:dirt
+> setblock -30 -56 32 minecraft:grass_block
+> fill -24 -56 30 -20 -56 34 farmersdelight:rich_soil
+> setblock -22 -56 32 vintagedelight:lush_grass_block[fertile=false]
+> fill -18 -56 30 -14 -56 34 farmersdelight:rich_soil
+> setblock -16 -56 32 vintagedelight:lush_grass_block
+> fill -40 -56 22 -36 -56 26 vinery:dirt_slab
+> setblock -38 -56 24 vinery:grass_slab[fertile=false]
+> fill -32 -56 22 -28 -56 26 vinery:dirt_slab
+> setblock -30 -56 24 vinery:grass_slab
+> tp qa -27 -56 28
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -38 -56 32 minecraft:grass_block[fertile=false]
+> fill -40 -56 30 -36 -56 34 minecraft:coarse_dirt replace minecraft:dirt
+> fill -32 -56 30 -28 -56 34 minecraft:coarse_dirt replace minecraft:dirt
+expect Test passed
+expect Successfully filled 24 block
+look the second fill (unsheared patch) reports fewer than 24
+
+## SQ-SG-03 | sheared lush grass and grass slab do not spread
+@group A
+@commands Same with `farmersdelight:rich_soil` + `vintagedelight:lush_grass_block[fertile=false]` / unsheared, and `vinery:dirt_slab` + `vinery:grass_slab[fertile=false]` / unsheared
+@pass Sheared patches: 24 left; unsheared: fewer
+@fails Check the port's `isRandomlyTicking` override is in the jar (`javap`, `m_6724_`)
+@from batches/r1031/a1_world.qb
+> fill -24 -56 30 -20 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
+> fill -18 -56 30 -14 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
+> fill -40 -56 22 -36 -56 26 minecraft:coarse_dirt replace vinery:dirt_slab
+> fill -32 -56 22 -28 -56 26 minecraft:coarse_dirt replace vinery:dirt_slab
+count Successfully filled 24 block == 2
+look order: sheared rich soil 24, unsheared fewer, sheared slab 24, unsheared fewer

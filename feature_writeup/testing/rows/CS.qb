@@ -1,0 +1,229 @@
+# Scratch queue rows CS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CS crop seasons, 2026-10-30 ([crops.md](../crops.md) §2.12.1, TODO `farming/crops #5`, CR-89 to CR-97)
+@@date 2026-10-30
+@@jars creativecalendar creativedelight
+@@sources feature_writeup/crops.md
+@@text
+@@text Needs patcherMod 1.1.04 built 2026-10-30 after 21:40 (`seasons/CropSeasons`, `CropSeasonGrowHookMixin`), backportedVinery
+@@text `-06`, creativedelight with endersAdditions `-02`, the new `config/sereneseasons/fertility.toml` and the KubeJS files
+@@text (`crop_seasons.json`, `tags/cropseasontags.js`). Fresh normal world, plains spawn.
+@@text
+@@text | Entry | Tier | Steps | Pass | Fail meaning |
+@@text |---|---|---|---|---|
+## SQ-CS-01 | crop season hook
+@group server
+@commands Boot; grep latest.log for `CropSeasonGrowHookMixin`, `Mixin apply`, `[crop-seasons]`
+@pass No mixin apply error; no `[crop-seasons]` error line (an info line about unregistered ids is fine)
+@fails SRG name or target class changed (IE, The Dirty Stuff, Nether's Delight updated); json typo
+@from batches/r1106spf/b1.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*CropSeasonGrowHookMixin
+bootreject \[crop-seasons\].*(ERROR|error|Error)
+
+## SQ-CS-02 | crop season type tags (each block passes its own type only)
+@group server
+@commands `/execute if block` on placed `minecraft:wheat`, `the_dirty_stuff:tobacco_seeds`, `minecraft:attached_melon_stem`, `minecraft:cave_vines` against `#creativeengineering:crop_seasons/temperate`, `warm_dry`, `warm_wet`, `cave`
+@pass each passes for its own type only
+@fails tags not filled (script not run, registry check)
+@from batches/r1106spf/b1.qb
+> setblock 30 -61 30 minecraft:farmland
+> setblock 30 -60 30 minecraft:wheat
+> setblock 32 -61 30 minecraft:farmland
+> setblock 32 -60 30 the_dirty_stuff:tobacco_seeds
+> setblock 34 -60 30 minecraft:attached_melon_stem
+> setblock 36 -50 30 minecraft:stone
+> setblock 36 -51 30 minecraft:cave_vines
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 32 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 34 -60 30 #creativeengineering:crop_seasons/cave
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/temperate
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_dry
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_wet
+> execute if block 36 -51 30 #creativeengineering:crop_seasons/cave
+count Test passed == 4
+look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperate), 6 (tobacco warm_dry), 11 (melon stem warm_wet), 16 (cave vines cave); "Unknown block" for tobacco = id changed
+
+## SQ-CS-03 | winter: open field behind the glass-roofed field; spring: ahead
+@group server
+@commands Two 16x16 wheat fields on hydrated farmland, plains, one roofed with glass 3 blocks up; `/season set mid_winter`; `/gamerule randomTickSpeed 30`; wait 2 min; count ripe wheat in each (`/execute store` or eyeball). Repeat in `mid_spring`
+@pass winter: open field behind the glass field (about 3/4 of it); spring: open field ahead of the glass field (about 5/4)
+@fails off penalty or fertile bonus not cancelled under glass, or glass not counted
+@from batches/r1031/a2_variants.qb
+# measure = mean wheat age per field (`zq ages`), first line open field (x 100), second glass field (x 120);
+# 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (10-31 first run)
+> kill @e[type=!minecraft:player]
+> forceload add 96 -4 132 12
+> fill 96 -61 -4 132 -61 12 minecraft:grass_block
+> fill 100 -61 0 108 -61 8 minecraft:farmland[moisture=7]
+> setblock 104 -61 4 minecraft:water
+> fill 120 -61 0 128 -61 8 minecraft:farmland[moisture=7]
+> setblock 124 -61 4 minecraft:water
+> fill 119 -57 -1 129 -57 9 minecraft:glass
+> tp qa 114 -60 -6
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_WINTER
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SPRING
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+look winter: open mean below glass mean (about 3/4 of the growth); spring: open mean above glass mean (about 5/4)
+
+## SQ-CS-04 | spring field ahead of a summer field (same timing)
+@group server
+@commands Same fields replanted, `/season set mid_spring` vs a third field in `mid_summer` (separate runs, same timing)
+@pass spring run ahead of the summer run (about 5/4)
+@fails fertile bonus not queued / extra tick not run
+@from batches/r1031/a2_variants.qb
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SPRING
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+> fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
+> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
+> setblock 104 -60 4 minecraft:air
+> setblock 124 -60 4 minecraft:air
+> season set MID_SUMMER
+> gamerule randomTickSpeed 30
+sleep 120
+> gamerule randomTickSpeed 3
+> zq ages 100 -60 0 108 -60 8 minecraft:wheat
+> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+look open field (first line of each pair): spring growth about 5/4 of the summer growth (wheat temperate: spring fertile, summer neutral)
+> season set MID_SPRING
+
+## SQ-CS-05 | off-season crops still grow (mid_winter, randomTickSpeed 100, 1 min)
+@group server
+@commands Hemp, tobacco, a red grape bush, a crimson fungus colony and an Ender crop planted in the overworld in `mid_winter`, `randomTickSpeed` 100 for 1 min
+@pass all still grow (off is slower, never stopped); no exception in latest.log
+@fails hook cancels the whole tick wrongly or crashes
+@from batches/r1031/a2_variants.qb
+> season set MID_WINTER
+> fill 100 -61 12 112 -61 12 minecraft:farmland[moisture=7]
+> setblock 100 -60 12 immersiveengineering:hemp
+> setblock 102 -60 12 the_dirty_stuff:tobacco_seeds
+> setblock 104 -61 12 minecraft:grass_block
+> setblock 104 -60 12 vinery:red_grape_bush
+> setblock 106 -61 12 nethersdelight:rich_soul_soil
+> setblock 106 -60 12 nethersdelight:crimson_fungus_colony
+> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -60 12 endercrop:ender_crop
+# fungus colony and Ender crop need low light (colony: raw light <= 12): a dark stone box over x 105..109
+> fill 105 -61 11 109 -57 13 minecraft:stone hollow
+> setblock 106 -61 12 nethersdelight:rich_soul_soil
+> setblock 106 -60 12 nethersdelight:crimson_fungus_colony
+> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -60 12 endercrop:ender_crop
+> gamerule randomTickSpeed 100
+sleep 120
+> gamerule randomTickSpeed 3
+> execute if block 100 -60 12 immersiveengineering:hemp[growth=bottom0]
+> execute if block 102 -60 12 the_dirty_stuff:tobacco_seeds[blockstate=0]
+> execute if block 104 -60 12 vinery:red_grape_bush[age=0]
+> execute if block 106 -60 12 nethersdelight:crimson_fungus_colony[age=0]
+> execute if block 108 -60 12 endercrop:ender_crop[age=0]
+reject (?i)exception
+count Test failed >= 4
+look every "Test failed" = grew past age 0; an "Unknown block" or property error = a guessed id (Ender crop id from endersdelight, CD endersAdditions); fix the id and rerun the row
+> season set MID_SPRING
+> fill 105 -61 11 109 -57 13 minecraft:air
+> fill 100 -61 12 112 -61 12 minecraft:grass_block
+> forceload remove all
+
+## SQ-CS-06 | crop_seasons.json edit + /reload moves wheat (run last: /reload truncates the KubeJS log)
+@group server
+@commands Edit crop_seasons.json (wheat to cold), `/reload`, repeat SQ-CS-02 for wheat
+@pass wheat now in `cold`, not `temperate`; put it back
+@fails tag cache not cleared on reload
+@from batches/r1106spf/b1.qb
+shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/crop_seasons.json';d=json.load(open(p));b=d['blocks'];b['temperate'].remove('minecraft:wheat');b['cold'].append('minecraft:wheat');json.dump(d,open(p,'w'),indent=2)"
+> reload
+sleep 20
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/cold
+> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+shell cp "$INST/kubejs/generation_scripts/worldgen/crop_seasons.json" kubejs/generation_scripts/worldgen/crop_seasons.json
+expect Test passed
+expect Test failed
+look the shell step restored the instance file in srv; /reload again before any later season row
+
+## SQ-CS-08 | greenhouse glass tag
+@group server
+@commands `/execute if block` on placed `minecraft:glass_pane`, `immersiveengineering:insulating_glass`, `securitycraft:reinforced_red_stained_glass_pane`, `create:framed_glass_door`, `storagedelight:oak_cabinet_with_glass_doors` against `#sereneseasons:greenhouse_glass`
+@pass all but the cabinet pass
+@fails greenhouse_glass list not added (addMatching, regex)
+@from batches/r1106spf/b1.qb passed
+> setblock 30 -55 34 minecraft:glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 immersiveengineering:insulating_glass
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 securitycraft:reinforced_red_stained_glass_pane
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 create:framed_glass_door
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 storagedelight:oak_cabinet_with_glass_doors
+> execute if block 30 -55 34 #sereneseasons:greenhouse_glass
+> setblock 30 -55 34 minecraft:air
+count Test passed == 4
+count Test failed == 1
+
+## SQ-CS-09 | Fruits Delight apple sapling merges into Vinery's; no Fruits Delight apple trees
+@group server
+@commands `/give @s fruitsdelight:apple_sapling`; new world, `/locate biome minecraft:flower_forest`, fly over 10 chunks; grep latest.log `[itemMerges]`
+@pass the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creativedelight pairs
+@fails biome modifier override not loaded, or merge group skipped by `requires: vinery`
+@from batches/r1031/b1_gameplay.qb
+> give qa fruitsdelight:apple_sapling
+> data get entity qa Inventory
+> execute positioned 0 70 0 run locate biome minecraft:flower_forest
+waitlog nearest minecraft:flower_forest is at 300
+capture FF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {FF1} 200 {FF3}
+sleep 30
+> zq count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
+reject fruitsdelight:apple_sapling
+bootexpect \[itemMerges\]
+look the inventory shows the Vinery apple sapling id; the leaves count is 0; the [itemMerges] boot line count includes the creativedelight pairs
+
+## CQ-CS-07 | crop season tooltips and WTHIT lines (CR-89, CR-90)
+@group client
+@commands CR-89, CR-90 tooltips and WTHIT lines on the same world
+@pass lines as in CR-89 / CR-90
+@fails client tag sync or lang keys
+@from batches/r1101/c1_client.qb
+> tp @s 30 -59 27 0 30
+shot wheat_wthit
+> item replace entity @s hotbar.0 with minecraft:wheat_seeds
+> item replace entity @s hotbar.1 with vinery:red_grape_seeds
+> item replace entity @s hotbar.2 with minecraft:nether_wart
+look WTHIT on the A1 wheat (30 -60 30): the crop's seasons and whether it is fertile or offseason here. hand: hover the three seeds (fertile / offseason seasons; grapes by biome; "Season: Nether")

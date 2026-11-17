@@ -1,0 +1,115 @@
+# Scratch queue rows CBJ4 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBJ4.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBJ4 Creative Brewing phases 2 and 3 (potion Java, mixins, config), 2026-11-01 ([creative_brewing.md](../creative_brewing.md) 4.2, 4.5, TODO `creativesplit/cdcb #7`)
+@@date 2026-11-01
+@@sources feature_writeup/creative_brewing.md
+@@text
+@@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CBJ4-01 to -07 PASS. -05 needs a long wait: `jitterSeconds = 120` puts the first roll up to 130 s out and the poison lasts 4 s (poll every 2 s past `ce_copper_poison_roll`); -07 on iron golems (perfBot bots are invulnerable). Client rows open.
+@@text
+@@text Run after SQ-CS2 and SQ-CMP pass (waves 2 and 3 are the base). Jars: `creativeengineering-1.1.07.jar` and the rebuilt
+@@text `creativebrewing-1.0.0.jar` together (CB requires `[1.1.07,)`), with the wave 4 script moves (phase 1) in the same jar.
+@@text Scratch copy: edit one value in each moved section of `creativeengineering-common.toml` before the boot (`[alcohol]
+@@text quarkLine = false`, `[magic_resistance] reductionPerLevel = 0.3`) and delete those four sections from the scratch
+@@text `creativebrewing-common.toml` if present, so the merge path runs. (The instance's own config was moved by hand: CE file
+@@text without the four sections, CB file with them.)
+@@text
+@@table
+## SQ-CBJ4-01 | CB mixins
+@group A
+@commands `grep -E "creativebrewing.mixins.json\|Mixin apply.*creativebrewing\|\[creativebrewing\]" logs/latest.log`; `grep -c "from creativebrewing.mixins.json" logs/debug.log`
+@pass No mixin apply error; the 14 common mixins apply on a server (the 11 client ones do not load); none listed twice
+@fails A compartment name not a mod id, or patcherMod still listing a moved mixin
+@from batches/r1101/cs4_boot3.qb
+bootreject creativebrewing\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativebrewing.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativebrewing.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cb_mx.txt; wc -l < cb_mx.txt; cat cb_mx.txt | tr '\n' ' '; echo; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cb_mx.txt; rm -f cb_mx.txt
+look 14 common mixins (minus absent mods), none also from creativeengineering.mixins.json
+
+## SQ-CBJ4-02 | config sections merged into the CB file
+@group A
+@commands Same boot: `grep "\[swaps\] config sections" logs/latest.log`; read `config/creativebrewing-common.toml` and `config/creativeengineering-common.toml`; restart and grep `still has sections that moved`
+@pass `merged from creativeengineering-common.toml into creativebrewing-common.toml` with the four sections; CB file has `quarkLine = false` and `reductionPerLevel = 0.3`; CE file no longer has them after the boot; second boot no WARN
+@fails `mergeSections` ran after config load, or the section names differ
+@from batches/r1101/cs4_boot3.qb
+bootexpect \[swaps\] config sections .*alcohol.* merged from creativeengineering-common.toml into creativebrewing-common.toml
+shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|quarkLine|reductionPerLevel|intervalSeconds|chancePerPiece" config/creativebrewing-common.toml; echo CE:; grep -nE "^\[(alcohol|effects|magic_resistance|copper_poisoning)\]" config/creativeengineering-common.toml || echo "CE has none of the four"
+look CB file has [alcohol] quarkLine = false, [magic_resistance] reductionPerLevel = 0.3, copper 10 / 1.0; CE file lost the four
+
+## SQ-CBJ4-03 | CE potions from CB, potion bucket dispenser
+@group A
+@commands Same boot: `/effect give @p minecraft:speed`, then `/give` a `creativeengineering:long_reach` potion (`/give @p minecraft:potion{Potion:"creativeengineering:long_reach"}`), `/give` a potion bucket and fire it from a dispenser
+@pass Potion exists (CommonPotions registered from CB); dispenser places / splashes as before
+@fails `CommonPotions` or `PotionBucketDispenser` not registered (CB `commonSetup`)
+@from batches/r1101/cs4_boot3.qb
+> give qa minecraft:potion{Potion:"creativeengineering:long_reach"}
+> setblock {H1-4} {H2} {H3} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
+> setblock {H1-4} {H2} {H3+1} minecraft:redstone_block
+sleep 1
+> execute positioned {H1-4} {H2} {H3-1} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say CBJ4 bucket cloud
+> execute positioned {H1-4} {H2} {H3-1} if entity @e[type=minecraft:item,distance=..3] run say CBJ4 bucket ejected
+> data get block {H1-4} {H2} {H3} Items
+expect Gave 1 +.*to qa
+expect CBJ4 bucket cloud|minecraft:bucket
+reject CBJ4 bucket ejected
+reject Unknown (item|potion)|Invalid
+
+## SQ-CBJ4-04 | effect remap from the CB file
+@group A
+@commands Same boot: `/effect give @p upgrade_aquatic:insomnia` and `/effect give @p neapolitan:agility` (if loaded), `/data get entity @p ActiveEffects`
+@pass Insomnia refused, Agility swapped to `vinery:climbing_effect` ([effects] read from the CB file)
+@fails `LivingEntityEffectRemapMixin` not applied, or EffectRules reading the wrong config
+@from batches/r1101/cs4_boot3.qb
+> effect give qa upgrade_aquatic:insomnia 30
+> effect give qa neapolitan:agility 30
+> data get entity qa ActiveEffects
+look Insomnia refused, Agility swapped to vinery:climbing_effect (Id of that effect in the ActiveEffects reply)
+
+## SQ-CBJ4-05 | copper poisoning
+@group A
+@commands Same boot: wear one fully oxidized Everything Copper piece with `[copper_poisoning] intervalSeconds = 10`, `chancePerPiece = 1.0` in the scratch CB file; wait 30 s
+@pass Poison applied
+@fails `CopperPoisoningHandler` not registered
+@from batches/r1101/cs4_boot3.qb
+> effect clear qa
+> item replace entity qa armor.head with everythingcopper:copper_helmet{state:"oxidized"}
+sleep 40
+> data get entity qa ActiveEffects
+expect Id: 19
+look poison (Id 19) applied within 40 s at interval 10, chance 1.0
+
+## SQ-CBJ4-06 | lingerification list, DragonBreathBrewing
+@group A
+@commands Same boot: `grep -E "DragonBreathBrewing\|Lingerification\|lingerification_list" logs/latest.log`; `/reload`
+@pass No error; the lingerification list recipe loads from the CB jar (`creativeengineering:lingerification_list`)
+@fails `data/creativeengineering/recipes/lingerification_list.json` missing from the CB jar
+@from batches/r1101/cs4_boot3.qb
+shell grep -E "DragonBreathBrewing|Lingerification|lingerification_list" logs/latest.log | grep -iE "error|fail|exception" | head -3; unzip -l mods/creativebrewing-1.0.0.jar | grep -c "data/creativeengineering/recipes/lingerification_list.json"
+look no error lines; the CB jar holds the lingerification list (1)
+
+## SQ-CBJ4-07 | Magic Resistance cuts magic damage by 30 % (iron golems: perfBot bots are invulnerable)
+@group A
+@commands Same boot: hit a player with Magic Resistance I with `/damage`-like magic (splash Harming)
+@pass Damage cut by 30 % (scratch value)
+@fails `MagicResistanceEffect` not on the FORGE bus
+@from batches/r1101/cs4_boot3.qb
+> difficulty normal
+> summon minecraft:iron_golem {H1-12} {H2} {H3+4} {Tags:["mrC"],NoAI:1b,PersistenceRequired:1b}
+> summon minecraft:iron_golem {H1-12} {H2} {H3+8} {Tags:["mrB"],NoAI:1b,PersistenceRequired:1b}
+sleep 2
+> effect give @e[tag=mrB,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=mrC,limit=1] minecraft:instant_damage 1 0
+> effect give @e[tag=mrB,limit=1] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=mrC,limit=1] Health
+> data get entity @e[tag=mrB,limit=1] Health
+> difficulty peaceful
+expect 94\.0f
+expect 95\.8f
+
+@@text
+@@text In game after install (client): CBJ4-C1 JEI shows the Automated Potion Mixing and Lingerification pages (IE Mixer and
+@@text Refinery catalysts), Tipped Arrows and Potion Buckets pages, and IE's own Mixer page has no potion rows; CBJ4-C2 a
+@@text Brewin' drink tooltip reads "Intoxicating Drink"; a JEED page on a compound effect shows "Compound of"; a Builder's Tea
+@@text gives its HUD icon; CBJ4-C3 a WTHIT coaster line still shows (WthitCoaster stays in patcherMod).

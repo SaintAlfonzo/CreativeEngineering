@@ -1,0 +1,103 @@
+# Scratch queue rows CNS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CNS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CNS Creative Common namespace and moves out (wave 9), 2026-11-04 ([creative_split.md](../creative_split.md) 7.14)
+@@date 2026-11-04
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Not run. Built 2026-11-04 with SQ-CEN's jars (Common, Compat, CD, Equipment, Brewing, Engineering rebuilt), NOT
+@@text installed. Runs on SQ-CEN's save and boots (boot 2 = the new jars). Renamed outright: on the old save the item merges
+@@text run once more and What's New shows once (expected, not a failure).
+@@text
+@@table
+## SQ-CNS-01 | Comfort / Nourishment split at startup
+@group A
+@commands Boot 2: `grep -iE "damage tag\|damage_tags\|creativeengineering:(fire\|magic\|burn_tick)" logs/latest.log`; with `[damage_tags]` logging on, set the bot on fire and hit it with an Instant Damage potion, read the `DamageTagLogger` lines
+@pass Damage tags load from `creativecommon` (32 plus CD's `creativedelight:stoves`), no unknown `#creativeengineering:` reference; the fire hit is tagged `fire`/`burn_tick`, the magic hit `magic`
+@fails A file still naming `#creativeengineering:`: grep `development/*/src/main/resources/data/*/damage_tags`
+@from batches/r1102b/s1_A.qb
+bootexpect \[comfort_nourishment\] \d+ ruled foods set, \d+ bottles stripped, \d+ other foods lost Nourishment
+bootreject \[comfort_nourishment\] (could not read|no item_dict key)
+bootreject comfort_nourishment\.js.*(Error|error|exception)
+shell grep -o "\[comfort_nourishment\] [0-9]* ruled foods set.*" logs/latest.log | head -1
+look the ruled count is 269 (row text) or the current comfort_nourishment.json count
+
+## SQ-CNS-02 | Comfort / Nourishment on eight foods
+@group A
+@commands Same boot: `/execute if block <glass> #creativecommon:wthit/needs_silk_touch` on a placed glass block; `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log`
+@pass Glass matches; both scripts load with no error
+@fails `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT
+@from batches/r1102b/s1_R.qb
+> zq food farmersdelight:noodle_soup
+> zq food farmersdelight:beef_stew
+> zq food farmersdelight:bone_broth
+> zq food farmersdelight:dog_food
+> zq food minecraft:golden_carrot
+> zq food minecraft:enchanted_golden_apple
+> zq food delightful:chunkwich
+> zq food delightful:azalea_tea
+expect food farmersdelight:noodle_soup: .*farmersdelight:nourishment amp 0 4800t
+expect food farmersdelight:beef_stew: .*farmersdelight:comfort amp 0 4800t
+reject food farmersdelight:bone_broth: .*(comfort|nourishment)
+expect food farmersdelight:dog_food: .*farmersdelight:comfort amp 0 1200t
+expect food minecraft:golden_carrot: .*farmersdelight:nourishment amp 0 2400t
+expect food minecraft:enchanted_golden_apple: .*farmersdelight:nourishment amp 0 4800t
+expect food minecraft:enchanted_golden_apple: .*minecraft:absorption
+reject food delightful:chunkwich: .*nourishment
+reject food delightful:azalea_tea: .*(comfort|nourishment)
+reject not a food|\[zq\] error
+
+## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
+@group A
+@commands Boot 2 then boot 3: `grep -iE "item merge\|swap_merges" logs/latest.log` each time
+@pass Boot 2 runs the merge rewrite once (stamp `creativecommon:swap_merges`); boot 3 skips it
+@fails `swap/ItemMerges` STAMP
+@from batches/r1103/sB_2.qb
+> zq food farmersdelight:noodle_soup
+> zq food creativeengineering:canned_noodle_soup
+> zq food creativeengineering:canned_bone_broth
+> zq food farmersdelight:beef_stew
+> zq food creativeengineering:canned_beef_stew
+waitlog \[zq\] food creativeengineering:canned_beef_stew: 30
+expect \[zq\] food creativeengineering:canned_noodle_soup: .*farmersdelight:nourishment
+reject \[zq\] food creativeengineering:canned_bone_broth: .*farmersdelight:(nourishment|comfort)
+expect \[zq\] food creativeengineering:canned_beef_stew: .*farmersdelight:comfort
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zq|zsb|zlbs)\] (error|unknown))
+look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
+
+## SQ-CNS-04 | no Compat / CD / Common mixin failures; Curios hands, face, feet slots registered by Equipment
+@group A
+@commands Same boot: `grep -E "creativecompat.mixins.json\|creativedelight.mixins.json\|creativecommon.mixins.json" logs/latest.log \| grep -iE "fail\|error\|could not"`; `/curios list @p` (or the Curios screen on the bot)
+@pass No mixin failures (Compat's Jetpack and falling-block mixins, CD's two Central Kitchen mixins on the client config only); the hands, face and feet slots exist (now registered by Equipment)
+@fails Equipment constructor `CuriosSlots::enqueue` under the `curios` check
+@from batches/r1113/c2_a1.qb
+bootreject (creativecompat|creativedelight|creativecommon)\.mixins\.json.*(rror|ailed|could not)
+> curios list c2b
+sleep 2
+> curios list
+expect (?i)hands
+expect (?i)face
+expect (?i)feet
+look the curios list output names the slot types hands, face and feet (registered by Equipment)
+
+## SQ-CNS-05 | Common's JFR events (creativecommon.ServerTick, LevelTick) are recorded
+@group A
+@commands Short JFR recording on boot 2 (perf suite settings, `server/perf/ce-server.jfc`), then `java tools/perf/PerfParse.java <file>`
+@pass `creativecommon.ServerTick` and `creativecommon.LevelTick` events counted
+@fails `PerfJfrEvents` names, the parser's prefix
+@from batches/r1113/c2_a1.qb
+shell for p in $(pgrep -x java); do [ "$(readlink /proc/$p/cwd)" = "$PWD" ] && jcmd $p JFR.dump name=ce filename=$PWD/perf/c2_cns05.jfr 2>&1 | tail -1; done; ls -la perf/c2_cns05.jfr 2>&1 | tail -1
+shell rm -rf perf/c2_cns05_parse; java $INST/tools/perf/PerfParse.java perf/c2_cns05_parse perf/c2_cns05.jfr 2>&1 | tail -3; grep -c '"creativecommon.ServerTick"' perf/c2_cns05_parse/events.jsonl; grep -c '"creativecommon.LevelTick"' perf/c2_cns05_parse/events.jsonl
+look both counts above 0 (event type names as written in events.jsonl; if both 0, grep the file for "creativecommon." to see the real names before calling FAIL). If no JFR (CE_PERF=0 at setup) the dump line says no recording: not judged
+
+## CQ-CNS-01
+@group client
+@commands Client on boot 2: WTHIT on a flower pot, a Supplementaries jar, a beehive, a sheared grass block, a glass block, a cake; WTHIT config screen; JEI world tabs (Weathering and Growth, Lightning, Salt) and a cycling crafting page; armor bar with dragon armor; What's New from the menu; hover a Curios item and a Create Central Kitchen cooking guide's meal slot; drop sand into water; open the creative search tab with D&D loaded
+@pass Every line reads as text (no raw `creativecommon.` keys), the plugin group is "Creative Common"; tabs have titles and rows; tinted armor bar; the changelog shows; "Slot:" line and the meal tooltip show; the sand splashes; no crash
+@fails Lang key renamed in Java but not in `assets/creativecommon/lang/en_us.json`, or `kubejs/assets/creativecommon/jei_world` missing
+@draft no batch holds this row yet
+@@text
+@@text Results: not run yet.

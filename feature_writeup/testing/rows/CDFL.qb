@@ -1,0 +1,90 @@
+# Scratch queue rows CDFL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDFL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDFL Creative Delight food fluids renamed to creativedelight:, startup folder renamed, 2026-11-06 ([creative_delight.md](../creative_delight.md) 40.4, [plan_cb_polish.md](../plan_cb_polish.md) 4, TODO `creativebrewing/publish #20`)
+@@date 2026-11-06
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md feature_writeup/plan_cb_polish.md
+@@text
+@@text Not run. The 33 food fluids CD registers moved from `creativeengineering:` to `creativedelight:` (and their 33
+@@text `flowing_` variants; swaps file `data/creativedelight/swaps/food_fluids.json`, 66 entries); CD's startup scripts moved
+@@text from `kubejs_startup/creativeengineering/` to `kubejs_startup/creativedelight/`; `effect_swaps.js` moved from CB to CD;
+@@text the 59 Moonlight soft fluids moved into the CD jar under their old ids (`data/creativeengineering/moonlight/soft_fluids/`).
+@@text Needs the 2026-11-06 Creative Common and Creative Delight builds from `development/*/build/libs/` (plus the Creative
+@@text Brewing build with `effect_swaps.js` removed, for SQ-CDFL-03). Group A (superflat, blocks at y -61).
+@@text
+@@table
+## SQ-CDFL-01 | CD alone: creativedelight: fluids, startup folder, swaps, effect swaps
+@group A (CD alone, no CB)
+@commands new OUT: `DROP="creativebrewing-*.jar" port_chain.sh server OUT cdfl1 A cooking`; boot; `shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log`; `> forge tags minecraft:fluid get forge:fluid/chorus_juice`; same for `forge:fluid/egg_solution`, `forge:fluid/frosting`, `forge:fluid/turnip_water`; `> kubejs dump_registry minecraft:fluid` (or `shell grep -o "creativedelight:[a-z_]*" logs/kubejs/server.log`)
+@pass no `Missing or unsupported`; `[jar-startup] creativedelight: N of N files loaded` with N one above the last CD boot's (effect_swaps.js moved in), same N twice; `[swaps]` line counts 66 more single ids than before; each tag lists `creativedelight:<name>`, none `creativeengineering:<name>`; the dump has the 33 fluids and 33 `creativedelight:flowing_*`; `kjsreject (Unknown|Invalid) fluid`; `kjsreject effect_swaps\.js`; `kjsexpect \[food values\] [0-9]+ effect swaps` (Climbing swap skipped without Vinery: count is the coffee rows only, with Farmer's Respite in the cooking set)
+@fails a fluid still `creativeengineering:`: a literal id outside `fluid_dict.js`; files not loaded: the folder move or the jar's `kubejs_startup/` tree; a Climbing error: the `global.has('neapolitan', ef.climbing)` guard in `effect_swaps.js`
+@from batches/r1106cbp/p5_cd_alone.qb passed
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
+shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log logs/kubejs/startup.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+shell grep -h "jar-startup\] creativedelight" logs/latest.log logs/kubejs/startup.log | head -3
+> forge tags minecraft:fluid get forge:fluid/chorus_juice
+> forge tags minecraft:fluid get forge:fluid/egg_solution
+> forge tags minecraft:fluid get forge:fluid/frosting
+> forge tags minecraft:fluid get forge:fluid/turnip_water
+sleep 2
+expect creativedelight:chorus_juice
+expect creativedelight:egg_solution
+expect creativedelight:frosting
+expect creativedelight:turnip_water
+reject creativeengineering:(chorus_juice|egg_solution|frosting|turnip_water)
+shell grep -h "Unknown fluid\|Invalid fluid" logs/kubejs/*.log | head; ! grep -qh "Unknown fluid\|Invalid fluid" logs/kubejs/*.log
+shell ! grep -h "effect_swaps" logs/kubejs/*.log | grep -iE "error|fail"
+shell grep -h "\[food values\].*effect swaps" logs/kubejs/*.log logs/latest.log | head -3
+shell grep -h "\[food values\] [0-9]* effect swaps" logs/kubejs/*.log logs/latest.log | head -1 | grep -q .
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+
+## SQ-CDFL-02 | CD alone: filling, emptying, kettle, mixing name creativedelight: fluids
+@group A (CD alone)
+@commands same boot: `> zq bytype create:filling`, `> zq bytype create:emptying`, `> zq recipes farmersrespite:brewing` and grep the output for `creativedelight:`; `> zq bytype create:mixing` grep `egg_solution`, `frosting`
+@pass filling / emptying pairs name `creativedelight:` fluids (carrot juice, coffees, teas); Kettle recipes with pack teas present (counts as SQ-CBA-09 cooking set); egg solution and frosting mixing recipes present; `kjsreject failed and was skipped` count not above SQ-CBC-03
+@fails a recipe built from a literal fluid id string, or a tag that lost its entry
+@from batches/r1106cbp/p5_cd_alone.qb passed
+> zq bytype create:filling
+> zq bytype create:emptying
+sleep 3
+expect creativedelight:
+reject creativeengineering:(carrot_juice|egg_solution|frosting|[a-z_]*_coffee|[a-z_]*_tea)\b
+> zq bytype farmersrespite:brewing
+> zq bytype create:mixing
+sleep 3
+expect egg_solution
+expect frosting
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l
+
+## SQ-CDFL-03 | old world: food fluids remapped to creativedelight:
+@group A (old save, full pack jars)
+@commands **Fresh old-id save** (note [forge-missing-mappings-staging](../agent_notes/forge-missing-mappings-staging.md)): boot a scratch server with the PREVIOUS CD and Common jars (the installed `mods/` copies), new superflat world; `> setblock 0 -61 0 create:fluid_tank{TankContent:{FluidName:"creativeengineering:carrot_juice",Amount:4000}}`; `> setblock 2 -61 0 create:basin{InputTanks:[{Level:{Value:0.5f},TankContent:{FluidName:"creativeengineering:egg_solution",Amount:500}}]}` (or fill both by hand with a spout); `> setblock 4 -61 0 supplementaries:jar` holding 4 `creativeengineering:shulker_soup` (fill from bowls in game or by NBT `FluidHolder:{Fluid:"creativeengineering:shulker_soup",Count:4}`); `> save-all`; stop. Swap in the new Common + CD (+ CB) jars; boot the SAME world; `> data get block 0 -61 0 TankContent`, `> data get block 2 -61 0`, `> data get block 4 -61 0 FluidHolder`
+@pass boot log has no `missing` registry warning or `Identifier .* is missing` for `creativeengineering:carrot_juice` / `egg_solution` or their `flowing_` ids; tank reads `FluidName: "creativedelight:carrot_juice"`, Amount 4000; basin keeps 500 mB of `creativedelight:egg_solution`; the jar still holds `creativeengineering:shulker_soup` (soft fluid ids unchanged) with Count 4
+@fails fluid gone or `minecraft:empty`: `food_fluids.json` not read (`[swaps]` count) or not in the jar; a soft fluid emptied: the soft fluid JSON path in the CD jar (`data/creativeengineering/moonlight/soft_fluids/`)
+@from batches/r1106cbp/p8_full_new.qb passed
+shell ! grep -E "Identifier .* is missing|[Mm]issing.*creativeengineering:(carrot_juice|egg_solution|flowing_)" logs/latest.log
+> data get block 0 -61 0 TankContent
+> data get block 0 -61 3 TankContent
+sleep 1
+expect FluidName: "creativedelight:carrot_juice"
+expect FluidName: "creativedelight:egg_solution"
+expect Amount: 4000
+
+## SQ-CDFL-04 | soft fluid equivalent of the renamed carrot juice (static + log; jar fill is a client step)
+@group A (full pack jars)
+@commands same boot as -03, second world or the same: `> setblock 6 -61 0 supplementaries:jar`; fill it from a Veggies' Delight carrot juice bottle in game (or `/zq useitem`), then pipe it out: emptying basin fed by `creativedelight:carrot_juice` from a tank into the jar with a Create spout or hand bucket where possible
+@pass the jar takes the carrot juice soft fluid; Moonlight maps the Forge fluid `creativedelight:carrot_juice` to the `creativeengineering:carrot_juice` soft fluid (`equivalent_fluids`); no WARN naming `equivalent_fluids`
+@fails the three hand-written soft fluid JSONs (carrot juice, dandelion juice, turnip water) still name the old Forge id
+@from batches/r1106cbp/p8_full_new.qb passed
+shell for f in carrot_juice dandelion_juice turnip_water; do unzip -p mods/creativedelight-*.jar data/creativeengineering/moonlight/soft_fluids/$f.json 2>/dev/null | tr -d ' \n' | grep -o '"equivalent_fluids":\[[^]]*\]' || echo "$f: no json"; done
+shell ! grep -E "WARN.*equivalent_fluids" logs/latest.log
+
+## CQ-CDFL-01
+@group client (full pack jars)
+@commands JEI: search `Carrot Juice`, `Egg Solution`, `Milk Coffee`, `Kiwi Tea` and open the fluid pages (U); hover the fluid in a Create tank
+@pass fluid names show (`Carrot Juice`, not `fluid.creativedelight.carrot_juice`); the bottle effect lines (Common `DrinkFluidEffects`) still show on each fluid; fluid colours as before
+@fails KubeJS lang for the new namespace (displayName), or a client script naming the old id
+@draft no batch holds this row yet

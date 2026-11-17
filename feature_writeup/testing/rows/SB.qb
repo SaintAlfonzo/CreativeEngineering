@@ -1,0 +1,223 @@
+# Scratch queue rows SB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SB pillager spawners out, spawn boxes on pillager and witch structures, 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon
+@@text
+@@text patcherMod 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
+@@text CEConfig `[worldgen.systems] spawnBoxes`, `removeSpawners`); data `kubejs/generation_scripts/worldgen/spawn_boxes.json`.
+@@text Full restart. Spawners: new chunks only; boxes: old chunks too. Writeup [structure_tuning.md](../structure_tuning.md) 3.32
+@@text (ST-320 to ST-327). Group B (fresh normal world, difficulty Normal, `/gamerule doDaylightCycle false`, `/time set night`
+@@text unless a row says day); one world for all rows. Spawns need a player 24-128 blocks away: stand at the box edge.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-SB-01 | spawn boxes load
+@group B
+@commands boot; `grep -E '\[spawn-boxes\]\|\[spawner-filter\]' logs/latest.log`
+@pass `15 box(es)`; after the first spawns `N structure(s) boxed` (about 75), no `is in box` warning, no `no pool` / `no entity type` (ST-321)
+@fails 0 boxes: `spawn_boxes.json` missing or unreadable (error line)
+@from batches/r1031/w2_metas_spawns.qb
+bootexpect \[spawn-boxes\].*15 box\(es\)
+bootreject \[spawn-boxes\].*(no pool|no entity type|is in box)
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+> gamerule doDaylightCycle false
+> time set 18000
+look after the first spawns the log has "N structure(s) boxed" (about 75); re-check at the end of the batch
+
+## SQ-SB-02 | no pillager spawners in the templates
+@group B
+@commands `/cdevplace` `illager_siege_weapons:catapult`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `blocky_siege:pillager_ship`, `mysticrift_pillagers_towers_aris:end_pillager_tower` (in the End)
+@pass no spawner block in any; a `[spawner-filter] ... removed` line per template, the End tower's with `plus 2 with no mob` (ST-320)
+@fails spawner left: its NBT shape (not `SpawnData.entity.id`), `TemplateSpawnerFilter.entities`
+@from batches/r1031/w2_metas_spawns.qb
+> execute positioned 3000 100 3000 run ceplace structures illager_siege_weapons:catapult mysticrift_pillagers_towers_aris:oak_wood_pillager_tower blocky_siege:pillager_ship
+> execute in minecraft:the_end run ceplace structures mysticrift_pillagers_towers_aris:end_pillager_tower
+waitlog \[ceplace\] done 600
+reject \[ceplace\] done.* [1-9]\d* failed
+expect \[spawner-filter\].*removed
+expect \[spawner-filter\].*plus 2 with no mob
+look no spawner block in any (zq count around the logged placements for minecraft:spawner = 0); /ceplace syntax per memory worldgen-config-ceplace if the command is rejected
+
+## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
+@group B
+@commands `/locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower` (a lone one, not in a meta); wait 3-5 min at night, then `/time set day` 3 min; `/kill @e[type=!player,distance=..64]` between
+@pass night: pillagers, vindicators, evokers, illusioners, witches, no ravager, no zombie or creeper inside; day: only pillagers (ST-322)
+@fails biome mobs inside: mixin not applied (boot log mixin error) or tag `meta/pillager_large_towers` empty
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower
+waitlog nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at|type "?mysticrift_pillagers_towers_aris:birch_pillager_tower|mysticrift_pillagers_towers_aris:birch_pillager_tower.*timed out 330
+capture BT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BT1+30} 100 {BT3}
+> time set 18000
+sleep 240
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:evoker,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:illusioner,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:ravager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:zombie,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:creeper,distance=..48]
+> execute positioned {BT1} 80 {BT3} run kill @e[type=!minecraft:player,distance=..64]
+> time set 6000
+sleep 180
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
+look night: pillager, vindicator, evoker, illusioner, witch present (counts), ravager / zombie / creeper "Test failed"; day: only pillagers (ST-322). y 80 is a guess: if every check fails, read the tower's y from the locate line or a meta log line and rerun with that y
+> time set 18000
+
+## SQ-SB-04 | tower siege meta: both spots spawn the large-tower mix; lone T&T tower its own mix
+@group B
+@commands `/locate structure creativeengineering:meta/pillager_tower_siege`; wait by the anchor tower, then by a siege weapon; then a lone T&T tower (`towns_and_towers:pillager_outpost_forest`)
+@pass meta: both spots spawn the large-tower mix; lone T&T tower: pillagers, vindicators, rare witch (ST-323)
+@fails meta spots spawn nothing or biome mobs: `StructureSpawnBoxes.inMeta` / `MetaStructure.parts`
+@from batches/r1101/w2_worldgen.qb
+> locate structure creativeengineering:meta/pillager_tower_siege
+waitlog nearest creativeengineering:meta/pillager_tower_siege is at|type "?creativeengineering:meta/pillager_tower_siege|creativeengineering:meta/pillager_tower_siege.*timed out 330
+capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TS1+30} 100 {TS3}
+sleep 240
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:evoker,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:illusioner,distance=..64]
+> execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:zombie,distance=..64]
+> locate structure towns_and_towers:pillager_outpost_forest
+waitlog nearest towns_and_towers:pillager_outpost_forest is at|type "?towns_and_towers:pillager_outpost_forest|towns_and_towers:pillager_outpost_forest.*timed out 330
+capture TT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {TT1+30} 100 {TT3}
+sleep 240
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:pillager,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:vindicator,distance=..48]
+> execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:evoker,distance=..48]
+look meta: evokers and illusioners present, no zombie; T&T tower: pillagers and vindicators, no evoker (ST-323)
+
+## SQ-SB-05 | pillager camp + ruin meta: camp illagers, ruin its own mobs
+@group B
+@commands `/locate structure creativeengineering:meta/pillager_camp_ruin`
+@pass camp: pillagers, vindicators, witches, evokers; the ruin: its own Philip's Ruins mobs (ST-324)
+@fails ruin spawns illagers: meta box applied to an unboxed part
+@from batches/r1101/w2_worldgen.qb
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog nearest creativeengineering:meta/pillager_camp_ruin is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out 330
+capture PR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {PR1+30} 100 {PR3}
+sleep 240
+> execute positioned {PR1} 70 {PR3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..96] run data get entity @s id
+look camp: pillagers, vindicators, witches, evokers; the ruin part (offset from the meta log): its Philip's Ruins mobs, no illagers (ST-324)
+
+## SQ-SB-06 | box evokers drop no totem
+@group B
+@commands `/locate structure towns_and_towers:pillager_outpost_badlands` (a fort); kill evokers that spawn there; `/locate structure minecraft:mansion`, kill a generated evoker
+@pass fort evokers drop no Totem of Undying; the mansion's generated evoker does (ST-325)
+@fails totem from a box evoker: `onSpecialSpawn` mark missing (`/data get entity @e[type=evoker,limit=1,sort=nearest] ForgeData`)
+@from batches/r1101/w2_worldgen.qb
+> locate structure towns_and_towers:pillager_outpost_badlands
+waitlog nearest towns_and_towers:pillager_outpost_badlands is at|type "?towns_and_towers:pillager_outpost_badlands|towns_and_towers:pillager_outpost_badlands.*timed out 330
+capture BF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BF1+30} 110 {BF3}
+sleep 240
+> execute positioned {BF1} 80 {BF3} as @e[type=minecraft:evoker,distance=..64,limit=1] run data get entity @s ForgeData
+> execute positioned {BF1} 80 {BF3} run kill @e[type=minecraft:evoker,distance=..64]
+sleep 3
+> execute positioned {BF1} 80 {BF3} if entity @e[type=item,nbt={Item:{id:"minecraft:totem_of_undying"}},distance=..64]
+expect Test failed|No entity was found
+look ForgeData shows the spawn-box mark; the totem check fails. Mansion half (generated evoker drops a totem) is a client check
+
+## SQ-SB-07 | pillager ship crews: boat mix; villager ships none
+@group B
+@commands `/locate structure unwrecked_ships:ship` until one has pillager sailors; wait on its deck; then a villager-crew ship
+@pass pillager ship: boat mix (pillagers, vindicators, evokers, witches); villager ship: no illagers (ST-326)
+@fails illagers on every ship: `requires_piece` ignored
+@from batches/r1101/w2_worldgen.qb
+> locate structure unwrecked_ships:ship
+waitlog nearest unwrecked_ships:ship is at|type "?unwrecked_ships:ship|unwrecked_ships:ship.*timed out 330
+capture US is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {US1+20} 90 {US3}
+sleep 240
+> execute positioned {US1} 63 {US3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..48] run data get entity @s id
+look pillager-crew ship: pillagers, vindicators, evokers, witches; villager-crew ship: no illagers (ST-326)
+
+## SQ-SB-08 | witch wagon and swamp hut: witches only inside
+@group B
+@commands `/locate structure eugene:witch_wagon`, `terralith:underground/witch_hut`, `minecraft:swamp_hut`
+@pass witches only inside each; swamp hut cats still spawn (ST-327)
+@fails no witches: wrong box type for the piece layout
+@from batches/r1101/w2_worldgen.qb
+> locate structure eugene:witch_wagon
+waitlog nearest eugene:witch_wagon is at|type "?eugene:witch_wagon|eugene:witch_wagon.*timed out 330
+capture WW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WW1+24} 100 {WW3}
+sleep 240
+> execute positioned {WW1} 70 {WW3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..32] run data get entity @s id
+> locate structure minecraft:swamp_hut
+waitlog nearest minecraft:swamp_hut is at|type "?minecraft:swamp_hut|minecraft:swamp_hut.*timed out 330
+capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SH1+24} 90 {SH3}
+sleep 240
+> execute positioned {SH1} 70 {SH3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..24] run data get entity @s id
+look witches only inside each; swamp hut cats still spawn (ST-327)
+
+@@text
+## SQ-DM-01 | dandelions mature on Rich Soil and Fertile Soil, not on grass
+@group D
+@commands plant a dandelion on Rich Soil, one on Fertile Soil, one on grass; `/gamerule randomTickSpeed 300`; wait 1 min
+@pass rich and fertile dandelions become Mature Dandelions, the grass one does not
+@fails nothing: soil mixin not applied (boot log), or `[dandelion_maturing]` value 0
+@jars creativedelight
+@from batches/r1031/a1_world.qb passed
+> setblock -10 -61 10 farmersdelight:rich_soil
+> setblock -10 -60 10 minecraft:dandelion
+> setblock -13 -61 10 immersive_weathering:mulch_block
+> setblock -13 -60 10 minecraft:dandelion
+> setblock -16 -60 10 minecraft:dandelion
+> tp qa -13 -60 7
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -60 10 veggiesdelight:mature_dandelion
+> execute if block -13 -60 10 veggiesdelight:mature_dandelion
+> execute if block -16 -60 10 veggiesdelight:mature_dandelion
+count Test passed == 2
+count Test failed == 1
+
+## SQ-DM-02 | richSoilTicks 0: a Rich Soil dandelion stays plain
+@group D
+@commands set `richSoilTicks = 0` in the toml, reload world; repeat SQ-DM-01 on Rich Soil
+@pass Rich Soil dandelion stays plain
+@fails config not read live
+@jars creativedelight
+@from batches/r1031/a2_variants.qb passed
+> setblock -10 -61 14 farmersdelight:rich_soil
+> setblock -10 -60 14 minecraft:dandelion
+> tp qa -10 -60 11
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -60 14 minecraft:dandelion
+expect Test passed
+
+## SQ-DM-03 | dandelion maturing: fertile soil about twice as fast as rich soil
+@group D
+@commands right-click a Mature Dandelion with shears, then with a Farmer's Delight knife (50 times for the drop rate)
+@pass becomes a plain dandelion, 2-3 leaves every time, a dandelion about half the time, tool loses 1 durability; bare hand does nothing
+@fails no drop: `DandelionBlock.use` not reached
+@jars creativedelight
+@from batches/r1101/p1_server.qb
+> gamerule randomTickSpeed 0
+> fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
+> fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
+> fill 20 -60 30 29 -60 30 minecraft:dandelion
+> fill 20 -60 32 29 -60 32 minecraft:dandelion
+> gamerule randomTickSpeed 30
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> gamerule randomTickSpeed 3
+look fertile row (z 32) matures about twice as fast as rich row (z 30); fertile soil id may differ (record the fill error if any)

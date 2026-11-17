@@ -1,0 +1,94 @@
+# Scratch queue rows WC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-WC watering can, 2026-10-30 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.0, HNH-25 to HNH-33)
+@@date 2026-10-30
+@@jars creativedelight
+@@sources feature_writeup/hearth_and_harvest.md
+@@text
+@@text Needs patcherMod 1.1.04 built 2026-10-30 after 22:03 (`wateringcan/`) and `server_scripts/equipment/watering_can.js`.
+@@text Group A (superflat), a bot player.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-WC-01 | watering can registers under hearthandharvest
+@group A
+@commands Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Potentially Dangerous alternative prefix`
+@pass at most the Forge alternative-prefix warning for `hearthandharvest:watering_can`; no error; recipe `creativeengineering:...watering_can` loaded (`/kubejs` recipe dump or JEI)
+@fails registration under the foreign namespace refused, or NCH key missing
+@from batches/r1031/a1_boot.qb
+bootreject (?i)watering_can.*(error|exception)
+look at most the Forge "Potentially Dangerous alternative prefix" warning for hearthandharvest:watering_can
+
+## SQ-WC-02 | bonemeal substitutes tag
+@group A
+@commands `/execute if items` is 1.20; instead `/give <bot> minecraft:bone_meal 64` and check the tag: `/kubejs hand` not usable on a bot, so grep the tag dump (`/dumptags`) for `hearthandharvest:bonemeal_substitutes`
+@pass the tag holds `minecraft:bone_meal`
+@fails tag script not loaded
+@from batches/r1031/a1_data.qb passed
+> zq itemtag hearthandharvest:bonemeal_substitutes
+expect itemtag hearthandharvest:bonemeal_substitutes .*minecraft:bone_meal
+
+## SQ-WC-03 | (rerun on the moved can) bone meal loads from the off hand
+@group A
+@commands Bot holds the can, bone meal off hand; bot uses it 3 times; `data get entity <bot> SelectedItem`
+@pass `tag:{BonemealLevel:3,FertilizerItem:"minecraft:bone_meal"}`, 61 bone meal left
+@fails off-hand load path broken
+@from batches/r1101/p1_server.qb passed
+> setblock -20 -61 -20 minecraft:farmland
+> setblock -20 -60 -20 minecraft:wheat[age=0]
+> tp qa -20 -60 -22
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
+> item replace entity qa weapon.offhand with minecraft:bone_meal 64
+repeat 3
+> zq useitem qa
+end
+> data get entity qa SelectedItem
+> data get entity qa Inventory[{Slot:-106b}].Count
+expect BonemealLevel: 3
+expect FertilizerItem: "minecraft:bone_meal"
+expect entity data: 61b
+> item replace entity qa weapon.offhand with minecraft:air
+
+## CQ-WC-04 | watering can by hand (HNH-26, HNH-28, HNH-29)
+@group client
+@commands HNH-26, HNH-28, HNH-29 by hand: fill at water, charged use on a 3x3 of young wheat, campfire
+@pass one use = water -1, fertiliser -1 (not -2), 3x3 grows; campfire unlit
+@fails double application (client claim not working)
+@from batches/r1101/c1_client.qb
+> item replace entity @s hotbar.0 with hearthandharvest:watering_can
+> item replace entity @s weapon.offhand with minecraft:bone_meal 64
+> tp @s -40 -55 -32 180 20
+sleep 3
+> fill -40 -61 -40 -36 -61 -36 minecraft:farmland[moisture=7]
+> fill -39 -60 -39 -37 -60 -37 minecraft:wheat[age=0]
+> setblock -40 -60 -34 minecraft:water
+> setblock -34 -60 -38 minecraft:campfire[lit=true]
+look hand: fill the can at the water (-40 -60 -34); one charged use on the 3x3 wheat: water -1 and fertiliser -1 (not -2), the 3x3 grows; on the campfire: unlit, water -1
+
+## SQ-WC-05 | (rerun on the moved can) golden can soaks 3x3 farmland and mulch
+@group A
+@commands (patcherMod 1.1.04 from 2026-10-30 23:40, soil watering) `/fill ~-1 ~-1 ~-1 ~1 ~-1 ~1 minecraft:farmland[moisture=0]`, `/fill ~-1 ~ ~-1 ~1 ~ ~1 minecraft:wheat[age=7]`; give the bot a can with `{WaterLevel:16}`, bot uses it on the centre wheat; `/execute if block ~1 ~-1 ~1 minecraft:farmland[moisture=7]`; `data get entity <bot> SelectedItem`. Repeat on `immersive_weathering:mulch_block[moisture=0]`
+@pass all 9 farmland at moisture 7, WaterLevel 15; second use leaves 15; mulch soaked likewise
+@fails soil check or client claim; mulch property not `moisture`
+@from batches/r1101/p1_server.qb
+> gamerule randomTickSpeed 0
+> fill -26 -61 -21 -24 -61 -19 minecraft:farmland[moisture=0]
+> fill -26 -60 -21 -24 -60 -19 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
+> tp qa -25 -60 -23
+> pbot use qa -25 -60 -20 up
+> data get entity qa SelectedItem
+> fill -26 -61 -21 -24 -61 -19 minecraft:stone replace minecraft:farmland[moisture=7]
+expect WaterLevel: 15
+expect Successfully filled 9 block
+> fill -32 -61 -21 -30 -61 -19 immersive_weathering:mulch_block[moisture=0]
+> fill -32 -60 -21 -30 -60 -19 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
+> tp qa -31 -60 -23
+> pbot use qa -31 -60 -20 up
+> fill -32 -61 -21 -30 -61 -19 minecraft:stone replace immersive_weathering:mulch_block[moisture=1]
+> gamerule randomTickSpeed 3
+look second "filled 9" = mulch soaked (moisture=1); if 0, the mulch property value differs: record the mulch state

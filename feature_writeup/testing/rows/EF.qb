@@ -1,0 +1,190 @@
+# Scratch queue rows EF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/EF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-EF earth fill build plan, 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon
+@@text
+@@text TODO `structures/earthfill #13`, `#14`, `#16`, `#3`, `#4`; [structure_tuning.md](../structure_tuning.md) 3.28, ST-235 to
+@@text ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). patcherMod `creativeengineering-1.1.04.jar`
+@@text rebuilt 2026-10-30 16:2x (in `mods/`). Group B, the recipe of [structures/12_earth_fill_camps.md](structures/12_earth_fill_camps.md) 2
+@@text (seed 8675309, `structureDensity` 4, scratch toml `[worldgen.earth_fill] log = "ALL"`, Chunky r 400 at 2144 -2592), plus
+@@text a desert square and a swamp square found with `/locate biome`. Fill lines: `grep -E '\[earth-fill\]' logs/latest.log`.
+@@text
+@@table
+## SQ-EF-01 | -1,-1 keeps the size's mound limit; -1,-1,-1 never prunes (W1a)
+@group B
+@commands scratch toml `overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]`; Chunky the inland square (and a savanna square r 200)
+@pass plains lines show `mound columns (limit N)` with N the size's limit, not -1; savanna lines `limit -1` everywhere, `-> kept`, and no `pruned` line for savanna villages (ST-242)
+@fails plains at -1: `EarthFill.unlimited`; savanna pruned: `prunes()` in `filter`; savanna unmatched: `parseOverrides` namespace default
+@from batches/r1031/w1_earthfill.qb
+> chunky world minecraft:overworld
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+> execute positioned 0 70 0 run locate biome minecraft:savanna
+waitlog nearest minecraft:savanna is at 300
+capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SV1} {SV3}
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*village_plains.*mound columns \(limit \d+\)
+reject \[earth-fill\].*village_plains.*mound columns \(limit -1\)
+reject \[earth-fill\].*village_savanna.*pruned
+reject \[earth-fill\].*village_savanna.*CANCELLED
+look savanna village lines show limit -1 and "-> kept" (ST-242); none in the savanna square = Chunky one more savanna square
+
+## SQ-EF-02 | villages at a lake lose the wet houses only (W1b)
+@group B
+@commands same world, no overrides; `grep 'pruned.*footprint'`
+@pass at least one village logs `pruned K of N pieces` with a `(footprint W water / G ground)` reason, W >= 16; tp there: the dry part of the village stands, no house over the lake (ST-239)
+@fails none in the square: Chunky a coast square r 200; wrong house gone: `pruneMinWetColumns`
+@from batches/r1031/w1_earthfill.qb
+> chunky world minecraft:overworld
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*pruned \d+ of \d+ pieces.*footprint \d+ water / \d+ ground
+look tp a spectator (pbot spawn qa X 150 Z minecraft:overworld creative, or the client block) to one pruned village: the dry part stands, no house over the lake (ST-239); W >= 16 in the reason; none: Chunky a coast square r 200 at -80 -16 and grep again
+
+## SQ-EF-03 | desert pyramids and temples judged by footprint, none in water (same world)
+@group B
+@commands desert square r 300 with a river or oasis (`/locate biome minecraft:desert`, Terralith `desert_oasis` if present); `grep -E 'desert_pyramid\|desert_temple\|desert'`
+@pass every pyramid / temple line has a `footprint` part; no kept one with water > ground; tp to 3 kept pyramids: none in standing water; a line for a tent camp or ruin with `0 earth` and a footprint exists (#12) (ST-235, ST-237)
+@fails no footprint on pyramid lines: the structure's step is not `surface_structures` (check `/dumpstructuregen`) or `footprintAllPieces` false; kept in water: span top rule
+@from batches/r1031/w1_earthfill.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:desert
+waitlog nearest minecraft:desert is at 300
+capture DS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DS1} {DS3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*(desert_pyramid|desert_temple).*footprint
+expect \[earth-fill\].* 0 earth.*footprint
+look no kept pyramid with water > ground; tp to 3 kept pyramids (client block or spectator bot): none in standing water (ST-235, ST-237)
+
+## SQ-EF-04 | swamp huts, witch huts, mangrove towers still stand in water (same world)
+@group B
+@commands swamp + mangrove square r 300; `grep -E 'swamp_hut\|witch_hut\|mangrove_pillager_tower'`
+@pass their lines (if any) show no footprint part; `/locate structure minecraft:swamp_hut` and `betterwitchhuts:witch_hut` still find huts standing in water (ST-236)
+@fails lines say `too wet`: the `earth_fill/wet_ok` tag did not load (KubeJS error)
+@from batches/r1031/w1_earthfill.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:mangrove_swamp
+waitlog nearest minecraft:mangrove_swamp is at 300
+capture MW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MW1} {MW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> execute positioned {MW1} 70 {MW3} run locate structure minecraft:swamp_hut
+> execute positioned {MW1} 70 {MW3} run locate structure betterwitchhuts:witch_hut
+waitlog nearest betterwitchhuts:witch_hut is at 300
+reject \[earth-fill\] (minecraft:swamp_hut|betterwitchhuts:witch_hut|[a-z_]+:[a-z_/]*mangrove_pillager_tower) .*too wet
+reject \[earth-fill\] (minecraft:swamp_hut|betterwitchhuts:witch_hut|[a-z_]+:[a-z_/]*mangrove_pillager_tower) .*footprint
+expect nearest minecraft:swamp_hut is at
+
+## SQ-EF-05 | sunk crypt entrance, seabed ruins (same world)
+@group B
+@commands boot: `grep 'terrain-adaptation'`; `/place structure philipsruins:ancient_crypt` on a slope and on flat ground; `/place structure philipsruins:ocean_ruins` and `ocean_fortress` on a seabed
+@pass load line counts 7 sunk starts, no `ignored` warning; crypt: the ground ring sits at the entrance roof, no pit, rooms open; record how the seabed ruins sit, for brief #3's tag decision (ST-238)
+@fails `ignored` for the crypt: its start pool has a terrain-matching element after all (read the pool json)
+@from batches/r1031/w1_earthfill.qb
+bootexpect \[terrain-adaptation\].*7 sunk
+bootreject \[terrain-adaptation\].*ignored
+> execute positioned 2144 70 -2592 run locate biome terralith:alpine_highlands
+waitlog nearest terralith:alpine_highlands is at 300
+capture AH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> pbot spawn qa {AH1} 200 {AH3} minecraft:overworld creative
+sleep 20
+> execute at qa run place structure philipsruins:ancient_crypt ~ ~ ~
+> execute positioned 2144 64 -2592 run place structure philipsruins:ancient_crypt
+> execute positioned 0 70 0 run locate biome minecraft:deep_ocean
+waitlog nearest minecraft:deep_ocean is at 300
+capture DO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {DO1} 40 {DO3} run place structure philipsruins:ocean_ruins
+> execute positioned {DO1+80} 40 {DO3} run place structure philipsruins:ocean_fortress
+reject (?i)failed to place
+look crypt: ground ring at the entrance roof, no pit, rooms open (screenshots in the client block at the logged positions); record how the seabed ruins sit for brief #3 (ST-238)
+
+## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
+@group B
+@commands two r 400 squares, one plains/taiga, one highlands (`/locate biome terralith:alpine_highlands`); `grep 'eugene:undead_castle'`; biome per line with the `/zcol`-style `getNoiseBiome` probe (brief #4)
+@pass at least half the castles kept; lines show `limit 400` for mound; tp to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into brief #4
+@fails most cancels on air in highlands: drop `land/highlands` from its fits (brief #4 option 2)
+@from batches/r1031/w1_earthfill.qb
+> chunky center {AH1} {AH3}
+> chunky radius 400
+> chunky start
+waitlog Task finished 2400
+expect \[earth-fill\].*eugene:undead_castle.*limit 400
+look at least half the eugene:undead_castle lines end "-> kept" across both squares; tp to one kept on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into briefs/structures_earthfill.md #4
+
+## SQ-EF-07
+@group B-perf
+@commands the SQ-WGP-07 pregen (2601 chunks, same square and settings) with the new jar
+@pass pregen within 10% of 3:50; `[earth-fill]` CANCELLED count noted against SQ-WG30-E01 (15 inland) (ST-237)
+@fails much slower: spans read too many columns; check which structures log footprints under `log = ALL` and narrow `rigid()`
+@draft no batch holds this row yet
+## SQ-EF-08 | metas inland build with short parts; at the beach not placed; survive a restart
+@group B
+@commands toml `[worldgen.meta_structures] log = true`; `/place structure creativeengineering:meta/farmers_camp` (then `house_camp`, `ruin_scatter`) about 40 blocks inland from the spawn beach (-80 100 -16), and at the beach itself; then save, stop, start, rejoin a built one
+@pass inland: the meta builds, its log line has `short:` for the part that met the coast; at the beach: `not placed, no anchor fits` as before; any `dropped K of N parts` earth-fill line names satellite ids; after the restart the meta loads with no error and `/locate structure` finds it (ST-241)
+@fails meta still `not placed`: `keepShortParts` false in the toml; error on load: `MetaStructure.withParts` index ranges
+@from batches/r1031/w1_earthfill.qb
+# seed 8675309: x -80..-40 z -16..100 is ocean / beach (r1031); inland = plains near 1762 -3249, beach near 1792 -2208
+> execute positioned 1840 100 -3249 run place structure creativeengineering:meta/farmers_camp
+> execute positioned 1762 100 -3150 run place structure creativeengineering:meta/house_camp
+> execute positioned 1680 100 -3249 run place structure creativeengineering:meta/ruin_scatter
+> execute positioned 1792 100 -2208 run place structure creativeengineering:meta/farmers_camp
+bootexpect (?i)\[meta.*short:
+expect not placed, no anchor fits
+look after this batch: save-all, stop, boot, then "locate structure creativeengineering:meta/farmers_camp" finds a naturally built one (a /place structure start is never locatable, vanilla) and the boot log has no MetaStructure error (ST-241); any "dropped K of N parts" line names satellite ids
+
+## SQ-EF-09 | non-village jigsaws at water lose wet parts only
+@group B
+@commands same world as SQ-EF-02, `log = "ALL"`; a lake or river square r 300; `grep 'wet only'`
+@pass at least one non-village jigsaw (outpost, camp, ruin) logs `pruned K of N pieces (wet only)` with a `footprint` reason; tp there: its dry part stands, no piece over the water; no `type/village` id with `wet only` (ST-297)
+@fails none logged: `pruneWetJigsaws` false in the toml, or the structure's step is not `surface_structures`; a broken-looking building: add it to `earth_fill/no_prune`
+@from batches/r1031/w1_earthfill.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:river
+waitlog nearest minecraft:river is at 300
+capture RV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*pruned \d+ of \d+ pieces \(wet only\).*footprint
+reject \[earth-fill\].*(village).*wet only
+look tp to one: its dry part stands, no piece over the water (ST-297); a broken-looking building goes into earth_fill/no_prune
+
+## SQ-EF-10 | a meta anchored on a jigsaw at a lake shore prunes instead of cancelling
+@group B
+@commands toml `[worldgen.meta_structures] log = true`; `/place structure` a meta with a jigsaw anchor (`creativeengineering:meta/farmers_camp`, a village meta) at a lake shore
+@pass `[earth-fill] ... pruned` line names the anchor or satellite id and the meta builds; a `dropped K of N parts` line only for a part still over its limits (ST-298)
+@fails meta `CANCELLED` with no pruned line: `EarthFill.filterParts` / `prunes`
+@from batches/r1031/w1_earthfill.qb
+> execute positioned {RV1} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
+> execute positioned {RV1+40} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
+expect \[earth-fill\].*pruned
+reject \[earth-fill\].*farmers_camp.*CANCELLED
+look the meta builds; a "dropped K of N parts" line only for a part still over its limits (ST-298)
+
+## SQ-EF-11 | small water never counts, predicted lines, census rejects (same world)
+@group B
+@commands same `log = "ALL"` world; `grep -E 'too wet\|under 9 water\|\(predicted\)'`; `/cwglocate census` on a village
+@pass every `too wet` line has water >= 9; `under 9 water` lines end `-> kept`; `(predicted)` lines exist; census shows EARTH_FILL and PRIORITY rejects; boot log has no mixin error for ChunkGeneratorEarthFillMixin / PlacementPriorityMixin (ST-299)
+@fails mixin error: the merged injector in ChunkGeneratorEarthFillMixin
+@from batches/r1031/w1_earthfill.qb
+> celocate census 96 2144 -2592
+waitlog (?i)census.*(done|finished|written) 2400
+bootexpect \[earth-fill\].*too wet
+bootexpect \[earth-fill\].*under 9 water.*-> kept
+bootexpect \[earth-fill\].*\(predicted\)
+bootreject \[earth-fill\].*under 9 water.*CANCELLED
+look every "too wet" line has water >= 9 (python over RES/rows/SQ-EF-02.log + this one); census shows EARTH_FILL and PRIORITY rejects (ST-299)

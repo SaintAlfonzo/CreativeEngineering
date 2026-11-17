@@ -1,0 +1,31 @@
+# Scratch queue rows SWL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SWL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Swap alias cycle fix, 2026-11-08 ([creative_split.md](../creative_split.md) 7.7, TODO `creativedelight/swappers #4`)
+@@date 2026-11-08
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Targets `creativecommon-1.1.0.jar` of 11-08 20:28 (installed in `mods/`). Fix: `SwapRemapper` drops the alias leading out of a survivor, so a swap A -> B followed by B -> A no longer hangs the world load. `saves/Workspace` still holds the cycle until CQ-SWL-01 opens it, so run that first. After a successful open it no longer reproduces.
+@@text
+@@table
+## CQ-SWL-01
+@group client
+@commands Open world `Workspace` (level.dat of 11-07 13:11, not opened since). `grep -F "[swaps]" logs/latest.log`. Open a chest or inventory holding a Reach or Phantom Bane potion if any
+@pass World opens, no hang on the load screen. 5 lines `dropped stale alias creativebrewing:<potion> -> creativecommon:<potion>`, line `minecraft:potion: 5 id(s) remapped to their survivors`. LOOK: potions keep their name and effect
+@fails Hang: thread dump (`jstack <pid>`, never print the process command line); `getRaw` on the stack means a cycle not through a survivor (`SwapRemapper.dropAliasFromSurvivor`). `IllegalStateException` `[swaps] could not read ForgeRegistry.aliases`: reflection blocked on the live module layer
+@draft no batch holds this row yet
+## CQ-SWL-02
+@group client
+@commands After CQ-SWL-01, save and quit, open `Workspace` again. Check `level.dat` with an NBT dump of `fml.Registries` `minecraft:potion`
+@pass No `dropped stale alias` and no `minecraft:potion: .* remapped` on the second open. Registry holds ids `creativebrewing:<potion>`, aliases `creativecommon:<potion> -> creativebrewing:<potion>`, and no alias starting at `creativebrewing:<potion>`
+@fails World did not save under the survivor: Forge's `processMissingEvent` path, the swap list `better_beacons_potions.json`
+@draft no batch holds this row yet
+## SQ-SWL-01
+@group A (old save, full pack jars)
+@commands Rerun SQ-CDFL-03 with this Common as the new jar (previous Common: newest in `jar_archive/displaced/`)
+@pass SQ-CDFL-03's pass line holds: an old id with no cycle still remaps to its survivor and the fluid is kept. No `dropped stale alias` line for it
+@fails A survivor's outgoing alias was needed after all: `SwapRemapper.dropAliasFromSurvivor`, `ForgeRegistry.sync`
+@draft no batch holds this row yet

@@ -1,0 +1,271 @@
+# Scratch queue rows GAP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/GAP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-GAP Recent features with no scratch row of their own, 2026-11-08 (gap sweep of the player changelog and TODO rows dated 11-05 to 11-08)
+@@date 2026-11-08
+@@jars creativedelight powergrid
+@@text
+@@text **HOLD: run this section only after the Common suite is finished.** Order: SQ-CGE and its re-run list (Common 11-08 00:01 jar), then every FAIL or PARTIAL from that run debugged and rerun until the Common rows are complete; only then boot for SQ-GAP. Sweep method: every TODO row dated 11-05 to 11-08 in Built / Testing / In Progress with no test ID (13 rows), plus changelog bullets with no table row (Botany Pot tooltip, grape seed tooltip, Pineapple and Tea planting). Features that already have rows (Tempad SQ-TP, Portals SQ-IP / SQ-PG, cans, cookware, skewers, crops, lichen, Rose Gold recipes in SQ-CDFW-08, Nether DH CQ-PNE) are not repeated; swept and found covered: `dishes/meals #8` rotten ham tags (SQ-T1-02), `creativesplit/regression #21` textures (CQ-ENGM-01, extended by CQ-GAP-01), loading tips (SQ-CC-01..03). Jars: whatever Common run left installed in `mods/` plus the 11-07 Engineering, Delight, Compat 23:10 builds; no new build is needed.
+@@text
+@@table
+## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Fruits Delight jams, jars stack to 64
+@group A (full pack)
+@commands jams (TODO `dishes/jams #9`, changelog Jams): `/zq rdetail` on every recipe id that matches `vintagedelight:*jam*` and `fruitsdelight:*jam*` (`/zq recipes` filter, or grep `kubejs/exported/` recipe dump); read output count, cook time
+@pass every Vintage Delight jam recipe outputs 1 item; every Fruits Delight jam cooks 400 ticks in the Cooking Pot; the jam jar items stack to 64 (`/zq item vintagedelight:cherry_jam_jar` or the item dump `maxStackSize`)
+@fails `jams.js`, jar JSONs in the Delight jar, stack-size policy script
+@from batches/r1113/c4_a.qb
+> zq rdetail jam_jar
+waitlog \[zq\] done 30
+count \[zq\] \S+ \{farmersdelight:cooking\} -> 1 vintagedelight:\S*jam_jar >= 9
+reject \[zq\] \S+ \{farmersdelight:cooking\} -> ([2-9]|\d\d+) vintagedelight:\S*jam_jar
+> zc4 cooktime jam
+waitlog \[zc4\] done 30
+> zq item vintagedelight:cherry_jam_jar
+waitlog \[zq\] done 30
+expect \[zq\] item vintagedelight:cherry_jam_jar: .*max stack 64
+look every fruitsdelight jam in the zc4 cook lines has time=400 (if none is listed, Fruits Delight jams are not Cooking Pot recipes in this build: record which serializer makes them)
+
+## SQ-GAP-02 | Moobloom rules idempotent, checker clean (offline)
+@group A
+@commands Moobloom rules (TODO `flowers #2`): offline `python3 tools/gen_moobloom_rules.py` then `python3 tools/check_moobloom_data.py`; `git diff --stat -- kubejs/data`
+@pass no rule changes on a rerun (37 rules, idempotent), checker prints no errors
+@fails `moobloom_rules.json` manual block, `wild_flowers.json` drift (mooblooms.md 2.8)
+@from batches/r1113/c4_a.qb
+shell cd $INST && python3 tools/gen_moobloom_rules.py --check; echo "gen exit=$?"; python3 tools/check_moobloom_data.py 2>&1 | tail -8; echo "check exit=$?"
+look gen --check prints no change and exit 0 (37 rules); checker prints no errors
+
+## SQ-GAP-03 | Bushier Flowers worldgen off: 5 forge:none modifiers, zero bushierflowers blocks after pregen
+@group B (fresh world)
+@commands Bushier Flowers off (TODO `flowers #3`): boot; `grep -c "forge:none" kubejs/data/bushierflowers/forge/biome_modifier/*.json`; `/forceload add -300 -300 300 300`, pregen, then `python3 tools/scratch_query/region_blocks.py` over the region for namespace `bushierflowers`
+@pass the 5 modifier files each hold `forge:none`; zero `bushierflowers:` blocks generated; no `bushierflowers` worldgen error in the log
+@fails a 6th modifier file added by a mod update (list `ls kubejs/data/bushierflowers/forge/biome_modifier`), datapack order
+@from batches/r1113/c4_b.qb
+shell cd $INST && for f in kubejs/data/bushierflowers/forge/biome_modifier/*.json; do printf "%s %s\n" "$(grep -c 'forge:none' "$f")" "$f"; done; ls kubejs/data/bushierflowers/forge/biome_modifier | wc -l
+bootreject (?i)bushierflowers.*(error|exception)
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center 0 0
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'bushierflowers:' --box -300 -300 300 300 2>&1 | tail -15
+look 5 files each with 1 forge:none; region census finds no bushierflowers: block
+
+## SQ-GAP-04 | rose gold in gold plate/wire/block tags; gold-input recipes and golden apple/pickaxe/chestplate/carrot take the tag; gold ingot and block literal
+@group A
+@commands Rose gold interchange (TODO `recipes/metal #3`, `#7`; rewritten 2026-11-14, plan_bugfix_1114.md 4.2): `/dumptags` item `forge:plates/gold`, `forge:wires/gold`, block `forge:storage_blocks/gold`; `/zq rdetail` on a gold-input recipe (clock, powered rail, mechanical crafter, a component_gold craft); `/zq recipes` that output `minecraft:gold_ingot`, `minecraft:gold_block`, `minecraft:golden_apple`, `minecraft:golden_pickaxe`, `minecraft:golden_chestplate`, `minecraft:golden_carrot`
+@pass rose gold plate and wire in the gold tags; each gold-input recipe takes a gold tag (rose gold works), the golden apple, golden pickaxe, golden chestplate and golden carrot included; gold ingot (from nuggets) and gold block still take literal gold only
+@fails `metal/rose_gold_interchange.js` `goldOnly` forms list, tag json
+@from batches/r1115/p1_a1.qb
+> zq itemtag forge:plates/gold
+> zq itemtag forge:wires/gold
+> zq blocktag forge:storage_blocks/gold
+> zq rdetail minecraft:clock
+> zq rdetail minecraft:powered_rail
+> zq rdetail mechanical_crafter
+> zq rdetail minecraft:golden_apple
+> zq rdetail minecraft:golden_pickaxe
+> zq rdetail minecraft:golden_chestplate
+> zq rdetail minecraft:golden_carrot
+> zq makes minecraft:gold_ingot
+waitlog \[zq\] makes minecraft:gold_ingot 30
+> zq makes minecraft:gold_block
+waitlog \[zq\] makes minecraft:gold_block 30
+expect itemtag forge:plates/gold \(\d+\): .*rose_gold
+expect itemtag forge:wires/gold \(\d+\): .*rose_gold
+expect blocktag forge:storage_blocks/gold \(\d+\): .*rose_gold
+look clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: gold ingredient is a tag holding rose gold; gold ingot (nuggets) and gold block recipes take literal gold only
+
+## SQ-GAP-05 | golden egg: falls, sinks in water like an ordinary item, in no floating tag
+@group A
+@commands Golden egg item gravity (TODO `items/item-physics #5`): `/give @s <golden egg id>` (id: `grep -rhoE "[a-z_]+:golden_egg" kubejs/exported/ \| sort -u`); drop it 5 blocks above water, above lava and above solid ground: `/summon item ~ ~5 ~ {Item:{id:"<id>",Count:1b}}`; read Pos[1] at 10 ticks; `/dumptags` the four item physics tags
+@pass the egg falls (Pos[1] drops about 0.04 per tick squared) and sinks in water like an ordinary item; it is in none of the floating tags (or the owner's wish is recorded as floating)
+@fails `item_physics` tag json, ItemPhysic config
+@from batches/r1113/c4_a.qb
+> forceload add 40290 39990 40330 40010
+sleep 3
+> fill 40300 -63 40000 40300 -61 40002 minecraft:water
+> fill 40310 -63 40000 40310 -61 40002 minecraft:lava
+> zq tagsof vintagedelight:golden_egg
+waitlog \[zq\] done 20
+reject item tags of vintagedelight:golden_egg: .*creativecompat:physics/floats
+> kill @e[type=minecraft:item,x=40290,y=-64,z=39990,dx=40,dy=20,dz=20]
+> summon minecraft:item 40300.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gew"]}
+> summon minecraft:item 40300.5 -55 40002.5 {Item:{id:"minecraft:egg",Count:1b},Tags:["cew"]}
+> summon minecraft:item 40310.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gel"]}
+> summon minecraft:item 40320.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["geg"]}
+sleep 0.5
+> data get entity @e[tag=gew,limit=1] Pos
+> data get entity @e[tag=geg,limit=1] Pos
+sleep 4
+> data get entity @e[tag=gew,limit=1] Pos
+> data get entity @e[tag=cew,limit=1] Pos
+> data get entity @e[tag=gel,limit=1] Pos
+> data get entity @e[tag=geg,limit=1] Pos
+look after 10 ticks both golden eggs are below y -55 (falling); after 4 s the water egg sits at the same depth as the plain egg (y -63 to -61), the ground egg at -60.0, the lava egg burns or floats per the lava rule; it is in no floating tag
+
+## SQ-GAP-06 | renames that need no client (lang sources)
+@group A
+@commands Rename checks that need no client: `grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources \| head`; `/zq` lang lookup not available, so also read the generated lang dump
+@pass `block.redeco.jar` = Empty Terrarium, Supplementaries flower box = Large Flower Box, tinted framed glass = Smooth Tinted Glass (three variants), refined gelatin id kept with name Gelatin
+@fails `names.js` in Compat and Delight, lang override priority
+@from batches/r1113/c4_a.qb
+shell cd $INST && grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-220 | head -20; grep -rn '"Gelatin"' kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-200 | head -5
+look block.redeco.jar = Empty Terrarium; Supplementaries flower box = Large Flower Box; tinted framed glass = Smooth Tinted Glass (three variants); refined gelatin keeps its id with the name Gelatin (shell output)
+
+## SQ-GAP-07 | planting rules: pineapple and tea on farmland, rich soil farmland, fertile soil; grape seeds off farmland
+@group A (survival bot)
+@commands planting rules (changelog Crops): `/setblock` farmland, rich soil farmland and fertile soil with water beside; place pineapple seeds, tea seeds, grape seeds on each, then on sand, grass and stone; `/blockupdate` or wait 5 ticks
+@pass pineapple and tea stay on Farmland, Rich Soil Farmland and Fertile Soil; pineapple also still on sand, red sand, coarse dirt; both break on stone; grape seeds on farmland pop off, on grass or dirt stay
+@fails `plantable` tag / crop `canSurvive` scripts (plantable.md)
+@from batches/r1113/c4_a.qb
+> forceload add 40390 39990 40420 40020
+sleep 3
+# three rows (pineapple z 40000, tea z 40004, grape z 40008); soils x 40400..40408; water under z-1 keeps farmland wet
+> fill 40400 -61 39999 40408 -61 39999 minecraft:water
+> fill 40400 -61 40003 40408 -61 40003 minecraft:water
+> fill 40400 -61 40007 40408 -61 40007 minecraft:water
+> fill 40400 -60 39999 40408 -55 40009 minecraft:air
+> setblock 40400 -61 40000 minecraft:farmland
+> setblock 40401 -61 40000 farmersdelight:rich_soil_farmland
+> setblock 40402 -61 40000 immersive_weathering:mulch_block
+> setblock 40403 -61 40000 minecraft:sand
+> setblock 40404 -61 40000 minecraft:red_sand
+> setblock 40405 -61 40000 minecraft:coarse_dirt
+> setblock 40406 -61 40000 minecraft:grass_block
+> setblock 40407 -61 40000 minecraft:dirt
+> setblock 40408 -61 40000 minecraft:stone
+> clone 40400 -61 40000 40408 -61 40000 40400 -61 40004
+> clone 40400 -61 40000 40408 -61 40000 40400 -61 40008
+> pbot spawn g7 40404.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear g7
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40400 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40401 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40402 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40403 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40404 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40405 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40406 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40407 -61 40000 up
+> pbot hold g7 fruitsdelight:pineapple_sapling
+> pbot use g7 40408 -61 40000 up
+> pbot spawn g7 40404.5 -60 40006.5 minecraft:overworld survival
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40400 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40401 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40402 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40403 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40406 -61 40004 up
+> pbot hold g7 farmersrespite:tea_seeds
+> pbot use g7 40408 -61 40004 up
+> pbot spawn g7 40404.5 -60 40010.5 minecraft:overworld survival
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40400 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40401 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40406 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40407 -61 40008 up
+> pbot hold g7 vinery:red_grape_seeds
+> pbot use g7 40408 -61 40008 up
+sleep 6
+> execute unless block 40400 -60 40000 minecraft:air run say G7 pine farmland
+> execute unless block 40401 -60 40000 minecraft:air run say G7 pine rich
+> execute unless block 40402 -60 40000 minecraft:air run say G7 pine fertile
+> execute unless block 40403 -60 40000 minecraft:air run say G7 pine sand
+> execute unless block 40404 -60 40000 minecraft:air run say G7 pine redsand
+> execute unless block 40405 -60 40000 minecraft:air run say G7 pine coarse
+> execute unless block 40406 -60 40000 minecraft:air run say G7 pine grass
+> execute unless block 40407 -60 40000 minecraft:air run say G7 pine dirt
+> execute unless block 40408 -60 40000 minecraft:air run say G7 pine stone
+> execute unless block 40400 -60 40004 minecraft:air run say G7 tea farmland
+> execute unless block 40401 -60 40004 minecraft:air run say G7 tea rich
+> execute unless block 40402 -60 40004 minecraft:air run say G7 tea fertile
+> execute unless block 40403 -60 40004 minecraft:air run say G7 tea sand
+> execute unless block 40406 -60 40004 minecraft:air run say G7 tea grass
+> execute unless block 40408 -60 40004 minecraft:air run say G7 tea stone
+> execute unless block 40400 -60 40008 minecraft:air run say G7 grape farmland
+> execute unless block 40401 -60 40008 minecraft:air run say G7 grape rich
+> execute unless block 40406 -60 40008 minecraft:air run say G7 grape grass
+> execute unless block 40407 -60 40008 minecraft:air run say G7 grape dirt
+> execute unless block 40408 -60 40008 minecraft:air run say G7 grape stone
+expect G7 pine farmland
+expect G7 pine rich
+expect G7 pine fertile
+expect G7 pine sand
+expect G7 pine redsand
+expect G7 pine coarse
+reject G7 pine stone
+expect G7 tea farmland
+expect G7 tea rich
+expect G7 tea fertile
+reject G7 tea stone
+reject G7 grape (farmland|rich)
+expect G7 grape grass
+expect G7 grape dirt
+> pbot remove g7
+look record the unlisted cells (pineapple on grass and dirt, tea on sand and grass, grape on stone) for the writeup
+
+## SQ-GAP-08 | Vinery JEI description lines at most 220 characters
+@group A
+@commands Vinery JEI text (TODO `alcohol/vineryport #26`): `grep -rn "where\.\|wine_aging\|support.taiga" development/creativeBrewing/members/vinery/src/main/resources/assets/*/lang/en_us.json \| awk 'length>0' \| awk '{ if (length($0) > 220) print "LONG", $0 }'`
+@pass no description line over 220 characters; the Grape Planting category text sizing is NOT done (brief step 2), so CQ-GAP-02 LOOK is expected to still show tight text
+@fails `GrapePlantingCategory` layout, lang lines
+@from batches/r1113/c4_a.qb
+shell cd $INST && grep -rn "where\.\|wine_aging\|support.taiga" development/creativeBrewing/members/vinery/src/main/resources/assets/*/lang/en_us.json | awk 'length>0' | awk '{ if (length($0) > 220) print "LONG", $0 }' | cut -c1-200; echo "long lines: $(grep -rn 'where\.\|wine_aging\|support.taiga' development/creativeBrewing/members/vinery/src/main/resources/assets/*/lang/en_us.json | awk 'length($0) > 220' | wc -l)"
+look "long lines: 0"; the Grape Planting box sizing is still open (CQ-GAP-02)
+
+## SQ-GAP-09 | command renames: new names registered, old names gone
+@group A
+@commands Command renames (changelog Commands): run `/ccswap`, `/ccaltime date`, `/cwglocate`, `/cwgspawnbox` (new names) and `/ceswap`, `/cetime`, `/celocate`, `/cespawnbox` (old names) once each; `grep -i "unknown or incomplete" logs/latest.log \| tail`
+@pass the four new names run (usage text at worst); the four old names are unknown commands; `/ccaltime date` behaves per SQ-TD-01
+@fails command registration in Common, Calendar, Worldgen
+@from batches/r1113/c4_a.qb
+> zc4 cmd ccswap,ccaltime,cwglocate,cwgspawnbox,ceswap,cetime,celocate,cespawnbox
+waitlog \[zc4\] done 20
+expect \[zc4\] cmd ccswap registered
+expect \[zc4\] cmd ccaltime registered
+expect \[zc4\] cmd cwglocate registered
+expect \[zc4\] cmd cwgspawnbox registered
+count \[zc4\] cmd (ceswap|cetime|celocate|cespawnbox) missing == 4
+> ccaltime date
+look ccaltime date prints the date as SQ-TD-01 describes
+
+## CQ-GAP-01
+@group client (full pack)
+@commands texture and name sweep: creative tab Creative Engineering: the 16 dust piles, 11 plate blocks, 10 coil blocks, components; `grep -ciE "missing texture\|Unable to load model\|Using missing" logs/latest.log` before and after opening those tabs and placing three of each; weathered cardboard box placed
+@pass all textured, count unchanged by the sweep; names read Gelatin, Empty Terrarium, Large Flower Box, Smooth Tinted Glass, Salmon Maki Roll Slice, Barbecue Skewer, End Skewer, Improvised Skewer, mod list "Vinery (Creative Brewing)" / "Foundation (Creative Brewing)"; KNOWN: the weathered cardboard box UV is still wrong (generated cube model, scratchpad), record only
+@fails `dust_piles.js` `.textureAll()`, `plate_blocks.js`, `coil_blocks.js`, names.js
+@draft no batch holds this row yet
+## CQ-GAP-02
+@group client
+@commands tooltips (changelog Interface & Tooltips, Botany Pots): hover Botany Pot ("Useful for flowers, not great for crops"), Copper Pot (4 ingredients, cooks some of what a Cooking Pot can), grape seeds that grow on the ground (need a full solid block, not farmland), a seasoning; open the JEI Grape Planting page
+@pass each tooltip reads as written, once, no duplicate line; JEI Grape Planting text fits its box (LOOK, expected tight, see SQ-GAP-08)
+@fails Compat / Brewing tooltip scripts, placeable-tooltip helper
+@draft no batch holds this row yet
+## CQ-GAP-03
+@group client
+@commands Hostile Delight / Delight leftovers: hover Rotten Ham and Cooked Rotten Ham (no raw or cooked meat food-type line), eat one, feed a dog Rotten Flesh and Rotten Ham
+@pass tooltips show Rotten Meat; hams no longer count as raw or cooked meat in JEI tag views; dog accepts per `dishes/meals #8` (unchanged)
+@fails `food_types.json` hazard, `forge:rotten_meat` tag
+@draft no batch holds this row yet
+@@text
+@@text Close-out for the section: refresh pass (skill part A step 5): rerun the changelog-versus-queue comparison after the Common suite so any bullet added since 11-08 gets a row, then record the SQ-GAP results in the run doc and the TODO rows named above.

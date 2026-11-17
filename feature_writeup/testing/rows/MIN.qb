@@ -1,0 +1,182 @@
+# Scratch queue rows MIN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MIN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDW Creative Delight worldgen gated on its mods, 2026-11-06 ([creative_delight.md](../creative_delight.md) 24.4, TODO `creativedelight/framework #13`)
+@@date 2026-11-06
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md
+@@text
+@@text Not run. Built 2026-11-06, not installed (`development/creativeDelight/build/libs/creativedelight-1.1.0.jar`, with
+@@text `packs/worldgen/<mod>/` in it). Every boot needs a new level-name (worldgen registries and biome modifiers are read at
+@@text world creation). Mods CDW-01 removes: `myrtrees` and `fruitsdelight` (their packs go off), then the `endersdelight` jar
+@@text (no pack goes off: `enders_additions` registers the `endersdelight:` blocks itself). Nested members cannot be removed
+@@text (a `[members]` switch only skips script rows, the mod stays loaded), so their packs are always on in the pack.
+@@text
+@@table
+## SQ-CDW-01 | myrtrees removed: no datapack error, level created, wild crop packs line lists it under off
+@group B
+@commands Rerun after 2026-11-14 (framework #16, plan_bugfix_1114.md 5.1): `prep_srv.sh` now drops the dev-only `srv/kubejs/data/creativedelight/worldgen` source tree (the jar's split copies stay), so check `ls srv/kubejs/data/creativedelight/` has no `worldgen` first. One boot per optional mod, myrtrees first: remove the jar from `mods/`, new level, boot; grep `latest.log` for `Failed to validate datapack`, `Unknown registry key`, `wild crop worldgen packs on`
+@pass no datapack error, the level is created; the packs line lists that mod under `off` (endersdelight has no pack of its own, so nothing is listed for it; run r1114)
+@fails the error names a `creativedelight:wild/*` file: its rule in `wild_crops.json` lacks `"requires"` and the build guard missed it (`splitWorldgen` namespace regex); error names a pack id `creativedelight:worldgen/<mod>`: that pack's mcmeta
+@jars creativedelight powergrid
+@from batches/r1115/p1_cdw1.qb
+bootexpect Done \(
+bootreject ^(?!.*json id corn_delight:).*(Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks)
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[[^]]*myrtrees[^]]*\]
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell test "$(ls mods | grep -c '^myrtrees')" = 0 && echo "jar gone"
+shell ls kubejs/data/creativedelight/
+look the level is created (Done); no worldgen dir in srv kubejs/data/creativedelight; the packs line as expected
+
+## SQ-CDW-02 | all mods present: wild crop packs line off none, no skip line; rubber trees near a jungle
+@group B
+@commands All mods present, new level: the packs line, then `/locate biome minecraft:jungle`, tp, forceload a 10x10 chunk box, count `myrtrees:rubberwood_log`
+@pass packs line `on: [delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight]`, `off: none`; `[wild-crops]` counts as SQ-WCD-01 with no `mod not loaded, skipped` line; rubber logs in about 1 chunk in 4
+@fails packs missing from the line: `CompartmentPacks.addWorldgen` did not find `packs/worldgen` in the jar (check the jar listing); rubber trees 0 but no skip line: the placed feature did not reach the level (pack added only on `SERVER_DATA`)
+@jars creativedelight powergrid
+@from batches/r1115/p4_b1.qb
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): none
+kjsreject \[wild-crops\].*mod not loaded, skipped
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell grep -h "\[wild-crops\]" logs/kubejs/server.log | cut -c1-200 | head -6
+> locate biome minecraft:jungle
+waitlog nearest minecraft:jungle is at|Could not find 300
+capture JG minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+> forceload add {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+sleep 90
+> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
+waitlog \[zq\] count myrtrees:rubberwood_log: \d+ 600
+> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} minecraft:jungle_log
+waitlog \[zq\] count minecraft:jungle_log: \d+ 600
+expect \[zq\] count myrtrees:rubberwood_log: [1-9]
+> forceload remove {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
+
+## SQ-CDW-03 | [wild-crops] skip lines name only the removed mod's rules
+@group B
+@commands after each CDW-01 boot, grep `latest.log` for `[wild-crops] mod not loaded, skipped`
+@pass exactly the rules of the removed mod (myrtrees: `rubber: needs myrtrees`; fruitsdelight: `hamimelon: needs fruitsdelight`; endersdelight jar: none), nothing else
+@fails extra lines: another rule's feature id names the absent mod's namespace without `requires`
+@jars creativedelight powergrid
+@from batches/r1113/c3_cdw1.qb
+shell grep -h "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log | cut -c1-200
+shell test "$(grep -c "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log)" = 1
+shell grep -q "\[wild-crops\] mod not loaded, skipped rubber: needs myrtrees" logs/kubejs/server.log
+look exactly the one line `rubber: needs myrtrees`; other [wild-flowers] / mob spawn skip lines naming myrtrees are not this row's (judge them: another rule naming the absent namespace without `requires`)
+
+## SQ-CDW-03b | (rerun 5.2) fruitsdelight removed: its 17 rules skip quietly through requires; no skip line names a fruitsdelight feature; apple rule runs
+@group B
+@commands Rerun after 2026-11-14 (framework #17, plan_bugfix_1114.md 5.1: `"requires": "fruitsdelight"` on the 16 Fruits Delight tree and bush rules of `wild_crops.json`): the CDW-01 boot without fruitsdelight; `grep -c "\[wild-crops\] mod not loaded, skipped" logs/latest.log`; `grep "\[wild-crops\].*fruitsdelight" logs/latest.log`
+@pass no `mod not loaded` WARN naming a fruitsdelight feature; the 17 fruitsdelight rules (hamimelon and the 16) skipped quietly through `requires` (their `needs fruitsdelight` lines only); the apple rule (Vinery feature) still runs
+@fails a fruitsdelight rule without `requires`: `grep -n fruitsdelight kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json`; `_biome_rules.js` `requires` handling
+@jars creativedelight powergrid
+@from batches/r1115/p7_d_fruitsdelight.qb
+shell echo "skip lines $(grep -c '\[wild-crops\] mod not loaded, skipped' logs/kubejs/server.log), needs-fruitsdelight $(grep -c '\[wild-crops\] mod not loaded, skipped .*: needs fruitsdelight' logs/kubejs/server.log), naming a fruitsdelight feature $(grep -c '\[wild-crops\] mod not loaded, skipped .*: fruitsdelight:' logs/kubejs/server.log)"
+shell test "$(grep -c '\[wild-crops\] mod not loaded, skipped .*: fruitsdelight:' logs/kubejs/server.log)" = 0
+shell test "$(grep -c '\[wild-crops\] mod not loaded, skipped .*: needs fruitsdelight' logs/kubejs/server.log)" = 17
+shell grep -h "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log | grep -i apple | head -3; true
+look 17 "<rule>: needs fruitsdelight" lines, none naming a fruitsdelight: feature; no apple skip line
+
+## SQ-CDW-04
+@group B
+@commands dedicated server boot with myrtrees removed, then a client joins (world-creation screen path: single-player new world, Create World)
+@pass server: as CDW-01; client: no "Failed to validate datapack" screen, world opens
+@fails pack only reached one side: `AddPackFindersEvent` for `SERVER_DATA` on the integrated server (BuiltInPacks.addFolder)
+@jars creativedelight powergrid
+@draft no batch holds this row yet
+@@text
+@@text #### SQ-MIN: Creative jars in a minimal instance (added 2026-11-06)
+@@text
+@@text Feature: [../plan_cb_publish.md](../plan_cb_publish.md) 14. Built and installed in the pack 2026-11-06 01:30 (Common,
+@@text Calendar, Delight, Brewing, Worldgen). Run in `CEPortTesting` (no pack `kubejs/` folder): copy the five jars from
+@@text `mods/` plus `kubejs-create-forge-1902.2.4-build.36.jar`, `kubejsdelight-1.19.2-1.1.2.jar`,
+@@text `lootjs-forge-1.19.2-2.9.1.jar` into its `mods/` with the game closed. Rows 01 to 05 also hold in the full pack.
+@@text
+@@table
+## SQ-MIN-01 | season-types, crop-seasons, food families read; arid tag has desert biomes
+@group B
+@commands boot; grep `logs/kubejs/server.log` for `season-types`, `crop-seasons`, `food families`; `/kubejs list_tag minecraft:worldgen/biome creativeengineering:seasons/arid` (or JEI tag view)
+@pass no `could not read` / `not found` line; the arid tag has desert biomes
+@fails jar copy missing (`unzip -l creativecalendar*.jar generation_scripts/`), or `WorldgenFiles.existing` not reaching nested jars
+@from batches/r1113/c3_ch1.qb
+kjsreject (season-types|crop-seasons|food families).*(could not read|not found)
+shell grep -hE "season-types|crop-seasons|food families" logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-200 | head -6
+> zq biometag creativecalendar:seasons/arid
+waitlog \[zq\] biometag creativecalendar:seasons/arid \(\d+\) 30
+expect biometag creativecalendar:seasons/arid \([1-9]\d*\):.*minecraft:desert
+look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 11-09 namespace move)
+
+## SQ-MIN-02
+@group B
+@commands desert and jungle: `/weather rain`, watch; WTHIT on a wheat crop in a desert
+@pass desert never rains; WTHIT shows the crop-season line ("Season: ...", fertile/offseason here)
+@fails SQ-MIN-01 first; then `[wthit] cropSeasons` in `creativecalendar-common.toml`
+@draft no batch holds this row yet
+## SQ-MIN-03 | reduced set: no Constructor for / errored recipe / incomplete failed / ReferenceError / Couldn't parse loot table; no ERR hit
+@group B
+@commands grep `latest.log` for `Constructor for`, `errored recipe`, `incomplete failed`, `ReferenceError`, `Couldn't parse loot table`
+@pass none
+@fails the KubeJS addons are not in `mods/` (the jars now refuse to load without them)
+@from batches/r1115/p7_ch.qb
+bootexpect Done \(
+bootreject Missing or unsupported mandatory
+shell grep -nE "Constructor for|errored recipe|incomplete failed|ReferenceError|Couldn't parse loot table" logs/latest.log logs/kubejs/*.log | cut -c1-300 | head -10
+shell test "$(cat logs/latest.log logs/kubejs/*.log | grep -cE "Constructor for|errored recipe|incomplete failed|ReferenceError|Couldn't parse loot table")" = 0
+shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "vintagedelight:blocks/fd_|rusticdelight|hearthandharvest|creativedelight:blocks/placed_|storagedelight|creativeengineering:sawmill" | cut -c1-300 | head -8; echo "ERR lines naming the row list: $(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "vintagedelight:blocks/fd_|rusticdelight|hearthandharvest|creativedelight:blocks/placed_|storagedelight|creativeengineering:sawmill")"
+shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "vintagedelight:blocks/fd_|rusticdelight|hearthandharvest|creativedelight:blocks/placed_|storagedelight|creativeengineering:sawmill")" = 0
+shell ls mods | grep -ciE 'corn_delight'; true
+look none of the five lines; no ERR hit in the row list
+
+## SQ-MIN-04
+@group B
+@commands JEI: open Create's mixing category, page through; grep `latest.log` for `Found a broken recipe`
+@pass no Creative Brewing `potion_mixing_dragonbreath_*` errors; without Create Central Kitchen those recipes do not exist, with it they show
+@fails `DragonBreathBrewing.build` guard
+@draft no batch holds this row yet
+## SQ-MIN-05
+@group B
+@commands grep `latest.log` for `Using missing texture` with `creativeengineering:` / `creativedelight:`; look at a beef culture block, cookie dough block, sample syringe, corn popsicle
+@pass none; the blocks and items have their textures
+@fails file not in the CD jar (`unzip -l`), or a model still only under `kubejs/assets`
+@draft no batch holds this row yet
+## SQ-MIN-06 | absent mods skip quietly: no DetailArmorBarCompat, Display Delight dish, chopstick lines
+@group B
+@commands grep `latest.log` for `DetailArmorBarCompat`, `Display Delight dish`, `chopstick foods not registered`
+@pass in CEPortTesting: none (absent mods skip quietly); in the full pack only real mismatches
+@fails the `ModList` / `global.has` checks
+@from batches/r1113/c3_ch1.qb passed
+bootreject DetailArmorBarCompat|Display Delight dish|chopstick foods not registered
+kjsreject DetailArmorBarCompat|Display Delight dish|chopstick foods not registered
+
+## SQ-MIN-07 | fishing-net loot in a river and an ocean: biome-tagged entries (condition registered by Delight, no duplicate-id crash)
+@group B
+@commands full pack: fish with an Oceanic Delight fishing net in a river and an ocean
+@pass biome-tagged loot as before (condition now registered by Creative Delight, not Worldgen)
+@fails `creativedelight.loot.BiomeTagCondition` not registered: no duplicate-id crash expected, Worldgen no longer registers it
+@from batches/r1113/c3_b1.qb
+bootreject Duplicate.*biome_tag|already registered.*biome_tag
+> locate biome minecraft:river
+waitlog nearest minecraft:river is at|Could not find 300
+capture RV minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {RV1} {RV3}
+> locate biome minecraft:ocean
+waitlog nearest minecraft:ocean is at|Could not find 300
+capture OC minecraft:ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {OC1} {OC3}
+sleep 20
+repeat 20
+# r1114: /loot ... loot <table> sets ORIGIN to the command source (console = world spawn), not the drop position:
+# run it positioned so the biome_tag condition reads the river / ocean
+> execute positioned {RV1} 64 {RV3} run loot spawn ~ ~ ~ loot creativedelight:gameplay/fishing_net/kelp
+> execute positioned {OC1} 64 {OC3} run loot spawn ~ ~ ~ loot creativedelight:gameplay/fishing_net/kelp
+end
+sleep 2
+> execute positioned {RV1} 64 {RV3} run kill @e[type=minecraft:item,distance=..3]
+> execute positioned {OC1} 64 {OC3} run kill @e[type=minecraft:item,distance=..3]
+> forceload remove {RV1} {RV3}
+> forceload remove {OC1} {OC3}
+reject Couldn't parse loot table|Unknown loot table|biome_tag.*(not registered|Unknown)
+look the `loot spawn` reply lines ("Dropped N items" or the item list) differ between river and ocean per the table's biome_tag conditions (read the table creativedelight:gameplay/fishing_net/kelp.json for which tag gates which entry); in-game net fishing itself is a client check. Also check sea_grass if kelp has no biome entries

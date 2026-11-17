@@ -1,0 +1,79 @@
+# Scratch queue rows FSD (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FSD.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Farmer's Structures donor (farmers_structures.md section 5)
+@@jars creativecommon
+@@text
+@@text Needs patcherMod rebuilt and installed (`:creativeCommon:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-FSD-01
+@group B
+@commands Boot a server; read `logs/latest.log`
+@pass One `[farmers-donor] N files from Farmer's Structures 1.0.6 {...}` line; no `Could not translate`; the counts list `blocks mapped minecraft:pink_petals`, no `blocks to air` for a block you expect to exist (rope fence, gleaming salad, hanging canvas sign, basket)
+@fails donor jar
+@draft no batch holds this row yet
+## SQ-FSD-02 | no donor jar: one warning, the game loads on Farmer's Structures 1.0.0 data
+@group B
+@commands Rename the donor jar, boot
+@pass One warning that it is missing; the game loads with the 1.0.0 structures only
+@fails donor jar
+@from batches/r1102b/s3_A2.qb
+bootexpect Done \(
+bootexpect is missing: Farmer's Structures runs on its installed 1\.0\.0 data
+bootreject \[farmers-donor\] \d+ files from Farmer's Structures 1\.0\.6
+shell n=$(grep -c "is missing: Farmer's Structures runs on its installed 1.0.0 data" logs/latest.log); echo "warnings: $n"; [ "$n" -eq 1 ]
+> forceload add 96 96 127 127
+sleep 20
+> place structure farmers_structures:cooks 240 -60 600
+look the cook house places (1.0.0 pieces only; any "Empty or non-existent pool" line names a 1.0.6 piece)
+
+## SQ-FSD-03
+@group B
+@commands `/place structure farmers_structures:aquacultures_cod` a few times (different spots)
+@pass Pond places; fish are cod in some, with pike and perch in others; no empty pond
+@fails Upgrade Aquatic
+@draft no batch holds this row yet
+## SQ-FSD-04
+@group B
+@commands `/place structure` each of `cacaos` (jungle), `fishs_stew`, `ratatouilles`, `squids`, `shepherd_farms`
+@pass All place; chests, item frames and cooking pots hold items; the cacao basement piece attaches; ratatouilles and squids sit below ground; the stew hut fish include salmon and pike / perch
+@fails
+@draft no batch holds this row yet
+## SQ-FSD-05
+@group B
+@commands `/place structure farmers_structures:cooks` 10 times
+@pass More varied houses than before; rope fences and gates present; azalea flower piles where pink petals were; Vinery cherry leaves; no air holes in walls
+@fails
+@draft no batch holds this row yet
+## SQ-FSD-06
+@group B
+@commands `/locate structure farmers_structures:aquacultures_carp`
+@pass Not found (no carp set); `farmers_structures:squids` etc. are locatable in their biomes
+@fails
+@draft no batch holds this row yet
+## SQ-FSD-07 | structure groups: Farmer's sets in group remote, no carp (queue group B: registry only)
+@group B
+@commands Dump with `/dumpall`; look at `structure_set` for `farmers_structures:*`
+@pass Group `remote` holds cod, cacaos, fishs_stew, ratatouilles, shepherd_farms, squids; no `aquacultures_carp`
+@fails
+@from batches/r1102b/s3_A.qb passed
+> dumpstructuregen
+waitlog structuregen\.json 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py sset creativeengineering:group/remote +farmers_structures:aquacultures_cod +farmers_structures:cacaos +farmers_structures:fishs_stew +farmers_structures:ratatouilles +farmers_structures:shepherd_farms +farmers_structures:squids -farmers_structures:aquacultures_carp
+shell python3 -I $INST/tools/scratch_query/dumpq.py sset any -farmers_structures:aquacultures_carp
+
+## SQ-FSD-08 | cook_end_1_21 template has the hanging canvas sign (200 -60 540)
+@group B
+@commands Look at the cook house piece with a hanging canvas sign (`cook_end_1_21`, via `/cdevplace` or many cooks)
+@pass The sign is present, hanging from a ceiling
+@fails CD jar
+@from batches/r1102b/s3_A.qb
+> place template farmers_structures:cook_houses/cook_end_1_21 200 -60 540
+expect Loaded template
+> zq count 195 -64 535 235 -30 575 farmersdelight:hanging_canvas_sign
+expect \[zq\] count farmersdelight:hanging_canvas_sign: [1-9]
+look the sign hangs under a block (the count line's "on:" lists what is under it: air under a hanging sign is expected; the ceiling is the block above)

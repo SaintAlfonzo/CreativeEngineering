@@ -1,0 +1,96 @@
+# Scratch queue rows CBC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBC Creative Brewing chain, round 3: NCH failures, incomplete items, absent-mods summary, 2026-11-06 ([plan_cb_publish.md](../plan_cb_publish.md) 15, TODO `creativebrewing/publish #9`)
+@@date 2026-11-06
+@@jars creativebrewing creativecommon creativedelight
+@@sources feature_writeup/plan_cb_publish.md
+@@text
+@@text Not run. Follows r1106cbb ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 3, open issues 2.2 #2 to #4). Needs the
+@@text 2026-11-06 13:17 builds of Creative Common, Creative Delight, Creative Engineering (full pack only) and Creative Brewing,
+@@text plus Creative Compat once its licence rebuild lands, copied into `CEPortTesting/mods/` (`port_chain.sh check`). Boots:
+@@text (1) chain A: CBC-01, -03, -05; (2) cooking A: CBC-02; (3) the full pack (prep_srv, group B): CBC-04; then CQ-CBC-01 in the
+@@text owner's client.
+@@text
+@@table
+## SQ-CBC-01 | chain: CD transition items, no incomplete-item errors
+@group A (chain)
+@commands boot; `shell grep -h "transition items" logs/kubejs/startup.log`; `shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log`
+@pass `[creativedelight] transition items (80)`; 0 incomplete errors (r1106cbb cooking boot: 63 + 9)
+@fails `cd_transition_items.js` not loaded (jar startup scripts) or a CD assembly keyed on a row still in Engineering's `transition_items.js`
+@from batches/r1106cbp/p1_chain.qb
+shell grep -h "transition items" logs/kubejs/startup.log
+shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not registered - add a row\|no incomplete item registered")" = 0
+
+## SQ-CBC-02 | cooking: NCH failures and absent-mods summary
+@group A (cooking)
+@commands boot; `shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log \| sed -E 's/[0-9]+//g' \| sort \| uniq -c \| sort -rn`; `shell grep -h "absent mods" logs/kubejs/server.log`
+@pass no `Empty array?` lines (r1106cbb: 81), no `grown_*`, `twig_nest`, `rope_to__air`, `canned_mulberry_pie_filling_pie` lines; total under 40 (was 230); record what is left; `[absent mods]` lines name absent mods (expected among them `quark`, `upgrade_aquatic`, `bushierflowers`)
+@fails an `Empty array?` left: a filter key other than `input` / `output`, or a list filter (left to KubeJS on purpose); no `[absent mods]` line at all: `absent_mods.js` listener not running (it now always prints one line)
+@from batches/r1106cbp/p2_cooking.qb
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | sed -E 's/[0-9]+//g' | sort | uniq -c | sort -rn | head -40
+shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l
+shell ! grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | grep -E "Empty array\?|grown_|twig_nest|rope_to__air|canned_mulberry_pie_filling_pie"
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "failed and was skipped")" -lt 40
+shell grep -h "absent mods" logs/kubejs/server.log
+kjsexpect absent mods
+look record what is left; [absent mods] names quark, upgrade_aquatic, bushierflowers among others
+
+## SQ-CBC-03 | chain: failed-recipe count under 50
+@group A (chain)
+@commands `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`
+@pass failed-recipe count under 50 (r1106cbb: 204, the `create:deploying` steps built from the missing incomplete items)
+@fails `logErroringRecipes=true` in `srv/local/kubejs/dev.properties` and group the rest by script (open issue 2.2 #2)
+@from batches/r1106cbp/p1_chain.qb passed
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "failed=${n:-0}"; test "${n:-0}" -lt 50
+
+## SQ-CBC-04 | full pack: transition items split, removed count, sequenced assembly count
+@group B (full pack)
+@commands boot; `shell grep -h "transition items" logs/kubejs/startup.log`; `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `shell grep -h "absent mods" logs/kubejs/server.log`; `> zq recipes creativeengineering:createsequencedassembly/` count, compare with `kubejs/exported/recipes`
+@pass CD line 80 and Engineering's own count line (80 fewer than before); removed 1328 as r1106cbb boot 4; sequenced assembly count unchanged; `[absent mods]` prints `none skipped` or only mods truly absent from the pack
+@fails a row lost in the move (compare both row lists with git)
+@from batches/r1106cbo/c4_full.qb
+shell grep -h "transition items" logs/kubejs/startup.log
+shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
+shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
+shell grep -h "absent mods" logs/kubejs/server.log
+shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log
+> zq bytype create:sequenced_assembly
+waitlog bytype create:sequenced_assembly: [0-9]+ 60
+expect bytype create:sequenced_assembly: 296$
+look sequenced assembly count against 296 (11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
+
+## SQ-CBC-05
+@group A (chain)
+@commands new OUT: `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain`; boot; wait for `Stopping\|crash`
+@pass `bootexpect Vinery \(Creative Brewing\)` in the missing-jar message; no `Backport`
+@fails `UpstreamJars.verifyOrFail` label
+@draft no batch holds this row yet
+## SQ-CBC-06
+@group B (instance + Creative Worldgen)
+@commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
+@pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`
+@fails Worldgen `mods.toml` entry
+@draft no batch holds this row yet
+## SQ-CBC-07 | chain: no dependency or ordering error for creativebrewing
+@group A (chain)
+@commands the SQ-CBC-01 boot: `shell grep -c "creativebrewing" logs/latest.log` near `Missing or unsupported`; in the full-pack boot (SQ-CBC-04) the same
+@pass no dependency error for creativebrewing in either (the 24 optional entries never stop a boot); no `cycle` / `ordering` error from FML
+@fails an optional entry with a wrong mod id is harmless; an ordering cycle names the mod: drop its `ordering`
+@from batches/r1106cbp/p1_chain.qb passed
+bootreject Missing or unsupported mandatory
+bootreject \b[Cc]ycle\b|[Oo]rdering (cycle|error|constraint)
+shell grep -n "creativebrewing" logs/latest.log | grep -iE "depend|missing|unsupported|cycle" | head
+
+## CQ-CBC-01
+@group client (full pack)
+@commands JEI: search `incomplete`; open the sequenced assembly page of a cod roll, a large meal (omurice) and an enchanted golden apple
+@pass LOOK: the incomplete items keep their names and tinted sprites; the three assemblies list as before
+@fails a moved row's texture override lost
+@draft no batch holds this row yet

@@ -1,0 +1,35 @@
+# Scratch queue rows CSI (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CSI.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CSI Curios slots by IMC, 2026-11-01 ([curios_slots.md](../curios_slots.md) 0)
+@@date 2026-11-01
+@@jars creativecommon
+@@sources feature_writeup/curios_slots.md
+@@text
+@@text Needs the patcherMod jar with `compat/CuriosSlots` (built 2026-11-01). The slots were datapack JSON in the 1.20 format, which
+@@text Curios 5.1.6.4 ignores. Group A.
+@@text
+@@table
+## SQ-CSI-01 | Curios hands, face, feet slots by IMC (bot at 140)
+@group A
+@commands Boot; join a bot or player; `/curios list`
+@pass `hands`, `face`, `feet` listed alongside head, back, etc.; no IMC error naming creativeengineering in `logs/latest.log`
+@fails listener not added (check `CreativeEngineering` curios branch) or jar stale
+@from batches/r1102b/s3_A.qb
+bootreject (?i)IMC.*creativeengineering.*(error|exception)
+> pbot spawn csi 140 -60 503 minecraft:overworld survival
+sleep 2
+> curios list csi
+expect \bhands\b
+expect \bface\b
+expect \bfeet\b
+look rows/SQ-CSI-01.log: the three new slots listed alongside head, back and the rest
+
+## SQ-CSI-02
+@group A
+@commands `/curios list <bot>` on a bot that joined an existing world
+@pass the bot has 1 slot each of hands, face, feet
+@fails existing saves not getting new IMC slots (then note in curios_slots.md)
+@draft no batch holds this row yet

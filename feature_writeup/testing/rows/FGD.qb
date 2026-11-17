@@ -1,0 +1,107 @@
+# Scratch queue rows FGD (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FGD.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-FGDC Fungi census rerun, 2026-11-02 ([plan_creative_delight.md](../plan_creative_delight.md) I, r1102 [scratch_run_2026-11-02.md](scratch_run_2026-11-02.md) 8; the mushroom half of SQ-FGD-12 and SQ-FGD-15)
+@@date 2026-11-02
+@@jars creativecommon creativedelight
+@@sources feature_writeup/plan_creative_delight.md feature_writeup/testing/scratch_run_2026-11-02.md
+@@text
+@@text Targets the installed `mods/creativedelight-1.0.0.jar` (Fungi `-02`). r1102 could not judge these: its mushroom-fields
+@@text square held 3 mushroom-fields chunks in ocean (the locate result is the nearest edge, not the middle), and five 300-radius
+@@text squares held 3 animals in total (chunk-generation spawns are sparse, gotchas.md). Run with the truffle-dirt fix (I6) in, so
+@@text SQ-FGD-14 shares the world. Fresh group B world (`prep_srv.sh OUT cdj5c B spawn-animals=true`, seed 8675309), disk check first
+@@text (`df -h /`, Chunky squares of 300 take about 1 GB each). Batches go in `tools/scratch_query/batches/<run>/`, offline counts
+@@text with `tools/scratch_query/region_blocks.py`.
+@@text
+@@table
+## SQ-FGD-12m | mushroom fields: 300+ chunks; huge inky 1 in 3, huge morel 1 in 4; singles at the surface; colonies on dirt
+@group B (fresh)
+@commands `/locate biome minecraft:mushroom_fields` (r1102: [-4272, -4430]); `forceload`/`tp` to it and read `/zq biometag`-style surface biomes around it with a probe, or run Chunky radius 100 at the located point and count the biome share with `region_blocks.py` (`chunks with a match by surface biome`); move the Chunky centre toward the biome interior until at least 300 chunks are mushroom_fields, then Chunky radius 150 around that centre; offline `region_blocks.py blocks` for inky / morel singles and `*_mushroom_block` (huge forms) with `--box` over the square
+@pass at least 300 mushroom_fields chunks in the square; huge inky in about 1 of 3 chunks and huge morel 1 of 4 ("chunks with a match by surface biome"); inky cap and morel singles present at the surface; colonies only over dirt / podzol
+@fails no mushroom_fields interior within 5000 blocks: try `level-seed=` of a mushroom-fields spawn seed in the srv properties; zero huge forms: `[mushroom-spawns]` log line, `mushroomSpawns` in CEConfig
+@from batches/r1103w/w_11_B.qb
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'fungidelight:(inky_cap|morel)_mushroom_block$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'minecraft:mycelium$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150} | grep -i 'surface biome'
+bootreject (?i)(error|exception).*mushroom-spawns
+look "chunks with a match by surface biome": mushroom_fields at least 300 chunks; huge inky about 1 of 3 chunks, huge morel 1 of 4; inky and morel singles at depth 0..1; colonies next to dirt / podzol
+
+## SQ-FGD-15c | animal census with enough animals; summoned and egg mooshrooms all red
+@group B, same world
+@commands animal census with enough animals: Chunky radius 150 over the mushroom_fields square and a dark forest and a mangrove swamp; the animals are only saved when generated, so also `/summon` 20 `minecraft:mooshroom` and 20 `fungidelight:inky_cap_cow` and `morel_cow` in each biome and `/save-all` (FGD-29: summoned and egg mooshrooms all red); `region_blocks.py entities` by biome and `Type` field
+@pass mushroom fields: at least 20 mooshrooms per sample and about 25 % brown among naturally generated ones; dark forest about 50 % brown; Fungi cows rare in dark forest, morel cows in swamps (r1102: 3 morel cows in the mangrove swamp, 0 elsewhere), both common in mushroom fields; summoned and egg mooshrooms all red
+@fails too few natural animals even after Chunky: judge only the summoned and egg half and the `SpawnTuning.brownChance` summary line (`[mob-spawns]`); wrong share: `SpawnTuning.brownChance`, `/dumpspawns` + `gen_spawn_table.py` with no "mod not loaded"
+@from batches/r1103w/w_11_B.qb
+> forceload add {MF1-24} {MF2-24} {MF1+24} {MF2+24}
+sleep 10
+repeat 20
+> summon minecraft:mooshroom {MF1} 300 {MF2} {Tags:["fgd15mf"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:inky_cap_cow {MF1} 300 {MF2} {Tags:["fgd15mf"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:morel_cow {MF1} 300 {MF2} {Tags:["fgd15mf"],NoGravity:1b}
+end
+> spreadplayers {MF1} {MF2} 2 20 false @e[tag=fgd15mf]
+> execute as @e[tag=fgd15mf] run data merge entity @s {NoGravity:0b}
+sleep 3
+> execute as @e[type=minecraft:mooshroom,tag=fgd15mf,nbt={Type:"red"}] run say FGD15c MF summoned red
+> execute as @e[type=minecraft:mooshroom,tag=fgd15mf,nbt={Type:"brown"}] run say FGD15c MF summoned brown
+count FGD15c MF summoned red == 20
+reject FGD15c MF summoned brown
+> forceload add {DF1-24} {DF3-24} {DF1+24} {DF3+24}
+sleep 10
+repeat 20
+> summon minecraft:mooshroom {DF1} 300 {DF3} {Tags:["fgd15df"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:inky_cap_cow {DF1} 300 {DF3} {Tags:["fgd15df"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:morel_cow {DF1} 300 {DF3} {Tags:["fgd15df"],NoGravity:1b}
+end
+> spreadplayers {DF1} {DF3} 2 20 false @e[tag=fgd15df]
+> execute as @e[tag=fgd15df] run data merge entity @s {NoGravity:0b}
+sleep 3
+> execute as @e[type=minecraft:mooshroom,tag=fgd15df,nbt={Type:"red"}] run say FGD15c DF summoned red
+> execute as @e[type=minecraft:mooshroom,tag=fgd15df,nbt={Type:"brown"}] run say FGD15c DF summoned brown
+count FGD15c DF summoned red == 20
+reject FGD15c DF summoned brown
+> forceload add {MG1-24} {MG3-24} {MG1+24} {MG3+24}
+sleep 10
+repeat 20
+> summon minecraft:mooshroom {MG1} 300 {MG3} {Tags:["fgd15mg"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:inky_cap_cow {MG1} 300 {MG3} {Tags:["fgd15mg"],NoGravity:1b}
+end
+repeat 20
+> summon fungidelight:morel_cow {MG1} 300 {MG3} {Tags:["fgd15mg"],NoGravity:1b}
+end
+> spreadplayers {MG1} {MG3} 2 20 false @e[tag=fgd15mg]
+> execute as @e[tag=fgd15mg] run data merge entity @s {NoGravity:0b}
+sleep 3
+> execute as @e[type=minecraft:mooshroom,tag=fgd15mg,nbt={Type:"red"}] run say FGD15c MG summoned red
+> execute as @e[type=minecraft:mooshroom,tag=fgd15mg,nbt={Type:"brown"}] run say FGD15c MG summoned brown
+count FGD15c MG summoned red == 20
+reject FGD15c MG summoned brown
+> fill {MF1+5} 200 {MF2-1} {MF1+7} 200 {MF2+1} minecraft:stone
+> pbot spawn egg {MF1+3} 201 {MF2} minecraft:overworld survival
+> pbot hold egg minecraft:mooshroom_spawn_egg 20
+repeat 20
+> pbot use egg {MF1+6} 200 {MF2} up
+end
+sleep 2
+> execute positioned {MF1+6} 201 {MF2} as @e[type=minecraft:mooshroom,distance=..6,tag=!fgd15mf,nbt={Type:"red"}] run say FGD15c egg red
+> execute positioned {MF1+6} 201 {MF2} as @e[type=minecraft:mooshroom,distance=..6,tag=!fgd15mf,nbt={Type:"brown"}] run say FGD15c egg brown
+count FGD15c egg red == 20
+reject FGD15c egg brown
+> save-all flush
+waitlog Saved the game 300
+shell for b in "MF {MF1} {MF2}" "DF {DF1} {DF3}" "MG {MG1} {MG3}"; do set -- $b; echo "== $1 square (after summons)"; python3 -I $INST/tools/scratch_query/region_blocks.py entities cdj5c '^(minecraft:mooshroom|fungidelight:[a-z_]+_cow)$' --field Type --box $(($2-150)) $(($3-150)) $(($2+150)) $(($3+150)); done
+shell grep -a "\[mob-spawns\]" logs/latest.log | grep -i "brown\|mooshroom" | cut -c1-300 | head -5
+look natural share (SQ-FGD-15c-nat): mushroom fields at least 20 mooshrooms and about 25 % brown, dark forest about 50 % brown, Fungi cows rare in dark forest, morel cows in swamps, both common in mushroom fields; too few natural animals: judge the summoned / egg half and the SpawnTuning.brownChance line

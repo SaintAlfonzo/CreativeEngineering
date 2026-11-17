@@ -1,0 +1,140 @@
+# Scratch queue rows HR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/HR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-HR raspberries, 2026-10-31 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.1, HNH-03, HNH-04, HNH-34 to HNH-37)
+@@date 2026-10-31
+@@jars creativedelight
+@@sources feature_writeup/hearth_and_harvest.md
+@@text
+@@text Needs the CD jar built 2026-10-31 (member `backportedHearth 1.4.1-ce-19.2-01`) installed; full restart (new member,
+@@text items, worldgen). Group A (superflat) and a bot player, except SQ-HR-05 (group B, new chunks).
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-HR-01 | raspberry member loads
+@group A
+@commands Boot; grep `latest.log` for `hearthandharvest`, `raspberr`, `Error occurred while handling event`
+@pass member `hearthandharvest` loads; no missing model / texture for `hearthandharvest:raspberry_bush`; no error in `hearthandharvest/*.js`; recipe `creativedelight:...raspberry_pips_from_raspberry` loaded; watering can still registers
+@fails two registrations under one namespace clash; NCH key missing
+@from batches/r1101/p1_server.qb passed
+bootreject (?i)(missing|unknown).*(raspberry)
+bootreject hearthandharvest/.*\.js.*(Error|error)
+> zq item hearthandharvest:raspberry_pips
+> zq item hearthandharvest:raspberries
+> zq makes hearthandharvest:raspberry_pips
+reject Unknown item
+expect raspberry_pips_from_raspberry
+
+## SQ-HR-02 | pips plant on dirt, not sand; grow to age 3
+@group A
+@commands `/setblock ~ ~-1 ~ minecraft:dirt`, bot uses `hearthandharvest:raspberry_pips` on it; also on sand; `/gamerule randomTickSpeed 300`, wait; `/execute if block ~ ~ ~ hearthandharvest:raspberry_bush[age=3]`
+@pass placed on dirt, refused on sand; reaches age 3
+@fails soil rule
+@from batches/r1101/p1_server.qb passed
+> setblock 20 -61 -10 minecraft:dirt
+> setblock 22 -61 -10 minecraft:sand
+> tp qa 21 -60 -12
+> pbot hold qa hearthandharvest:raspberry_pips
+> pbot use qa 20 -61 -10 up
+> pbot hold qa hearthandharvest:raspberry_pips
+> pbot use qa 22 -61 -10 up
+> execute if block 20 -60 -10 hearthandharvest:raspberry_bush
+> execute if block 22 -60 -10 minecraft:air
+count Test passed >= 2
+> gamerule randomTickSpeed 300
+sleep 45
+> gamerule randomTickSpeed 3
+> execute if block 20 -60 -10 hearthandharvest:raspberry_bush[age=3]
+count Test passed >= 3
+
+## SQ-HR-03 | harvest: age 2 nothing, age 3 drops 2-3, bush to age 1
+@group A
+@commands Bot right-clicks the bush at age 2, then at age 3 (`/setblock ... [age=2]` / `[age=3]`); count dropped items
+@pass age 2: nothing; age 3: 2-3 raspberries, bush age 1
+@fails `use` override
+@from batches/r1101/p1_server.qb
+> kill @e[type=item]
+> clear qa
+> setblock 24 -61 -10 minecraft:grass_block
+> setblock 24 -60 -10 hearthandharvest:raspberry_bush[age=2]
+> tp qa 24 -60 -12
+> pbot use qa 24 -60 -10 north
+sleep 1
+> execute positioned 24 -60 -10 if entity @e[type=item,distance=..3]
+> setblock 24 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> pbot use qa 24 -60 -10 north
+sleep 2
+> execute positioned 24 -60 -10 as @e[type=item,distance=..4] run data get entity @s Item
+> data get entity qa Inventory
+> execute if block 24 -60 -10 hearthandharvest:raspberry_bush[age=1]
+look age 2: the first `if entity` fails (no drop); age 3: 2-3 raspberries on the ground or in qa's inventory; bush age 1 Test passed
+
+## SQ-HR-04 | tags; fox eats from the bush
+@group A
+@commands `/tag` check via `/kubejs` or `/dumptags`: `forge:fruits/raspberries`, `forge:berries`, `minecraft:fox_food`, `forge:seeds/raspberry`, `forge:seeds`; `/summon fox` next to an age 3 bush, wait 60 s
+@pass tags hold the items; the fox empties the bush to age 1 and holds a raspberry
+@fails tags.js not run (member switch); fox goal not added
+@from batches/r1101/p1_server.qb
+> zq tagsof hearthandharvest:raspberries
+> zq tagsof hearthandharvest:raspberry_pips
+expect forge:fruits/raspberries
+expect forge:berries
+expect minecraft:fox_food
+expect forge:seeds/raspberry
+> setblock 28 -61 -10 minecraft:grass_block
+> setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> fill 26 -60 -12 30 -58 -8 minecraft:glass hollow
+> setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
+> summon fox 27 -60 -10
+sleep 60
+> execute if block 28 -60 -10 hearthandharvest:raspberry_bush[age=1]
+> execute as @e[type=fox,limit=1,sort=nearest] at @s run data get entity @s HandItems
+look fox emptied the bush (age 1 Test passed) and holds a raspberry; a fox asleep at noon does not forage (vanilla): rerun at night if it fails
+
+## SQ-HR-05 | wild raspberry patches in forest
+@group B
+@commands New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/zq biometag creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/zq count`)
+@pass tag lists 26 biomes; ripe raspberry bush patches in forest / plains
+@fails `requires` skipped the rule; feature json invalid in 1.19.2
+@from batches/r1101/w2_worldgen.qb
+bootexpect \[wild-crops\].*raspberry
+> locate biome minecraft:forest
+waitlog nearest minecraft:forest is at 300
+capture FO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {FO1} 150 {FO3}
+sleep 40
+> forceload add {FO1-64} {FO3-64} {FO1+64} {FO3+64}
+sleep 30
+> zq count {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+> forceload remove all
+look the [wild-crops] line lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them; record the count
+
+## CQ-HR-06 | raspberry bush ages and WTHIT growth line
+@group client
+@commands Look at the bush through its four ages with WTHIT; hover the pips; walk into the bush
+@pass art matches upstream (cutout, no black faces); growth line, "Mature" at age 3; season line on the pips; slowed, no damage
+@fails render type; crop_growth.json rule
+@from batches/r1101/c0_priority.qb
+> tp @s 250 -55 8 180 20
+sleep 3
+> setblock 250 -61 0 minecraft:grass_block
+> setblock 252 -61 0 minecraft:grass_block
+> setblock 254 -61 0 minecraft:grass_block
+> setblock 256 -61 0 minecraft:grass_block
+> setblock 250 -60 0 hearthandharvest:raspberry_bush[age=0]
+> setblock 252 -60 0 hearthandharvest:raspberry_bush[age=1]
+> setblock 254 -60 0 hearthandharvest:raspberry_bush[age=2]
+> setblock 256 -60 0 hearthandharvest:raspberry_bush[age=3]
+> tp @s 250.5 -60 2.5 180 30
+shot age0
+> tp @s 252.5 -60 2.5 180 30
+shot age1
+> tp @s 254.5 -60 2.5 180 30
+shot age2
+> tp @s 256.5 -60 2.5 180 30
+shot age3
+> tp @s 253 -58 4 180 25
+shot all_ages
+look cutout art, no black faces; WTHIT growth line, "Mature" at age 3. hand: hover the pips (season line); walk into a bush (slowed, no damage)

@@ -1,0 +1,154 @@
+# Scratch queue rows CC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CC Creative Common 1.1.0 full check: the 11-07 18:02 build and every Common feature since the split, 2026-11-07 ([creative_split.md](../creative_split.md) 7.19, [creative_engineering.md](../creative_engineering.md) 7.1 and 7.2, [loading_tips.md](../loading_tips.md), [effects.md](../effects.md))
+@@date 2026-11-07
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_split.md feature_writeup/creative_engineering.md feature_writeup/loading_tips.md feature_writeup/effects.md
+@@text
+@@text Not run. Targets `development/creativeCommon/build/libs/creativecommon-1.1.0.jar` built 2026-11-07 18:02 (`mods/` still holds
+@@text the 16:44 build; prep_srv.sh swaps the newer one into a scratch server, copy it into `mods/` only with the game closed).
+@@text This section is the Common-only regression; it points at older rows for the cross-jar checks instead of repeating them.
+@@text Changed in the 18:02 build: `SequencedAssemblyRecipeMixin`, `CreateTeaPipeIconMixin`, `FluidTagInputMixin`,
+@@text `DrinkFluidEffects` left for Engineering and `FruitsDelightEffectFuncMixin` for Delight (SQ-CPP); `MOD_RANGE` rows for
+@@text create, immersiveengineering and fruitsdelight dropped; `mods.toml` ordering rows now Immersive Portals and Heartstone;
+@@text config defaults `[mod_names] overrides` and `[effects] removed` empty; the Creative Tips pack left the jar for
+@@text `kubejs/assets/creative_tips/loading_tips/tips.json`; `create:scrap_*` placeholder tags gone; tags `creativecommon:bark`
+@@text and `metal_dusts`; dict keys for Create Framed / SecurityCraft tinted glass and the mirror glass block tags. Probe:
+@@text `tools/scratch_query/cc_dict_probe.js`. Rows marked (old) rerun an earlier row on this build.
+@@text
+@@table
+## SQ-CC-01
+@group build check (no boot)
+@commands `unzip -l development/creativeCommon/build/libs/creativecommon-1.1.0.jar \| grep -E "DrinkFluidEffects\|FluidTagInputMixin\|SequencedAssemblyRecipeMixin\|CreateTeaPipeIconMixin\|FruitsDelightEffectFuncMixin\|resourcepacks/creative_tips\|data/create/tags"`; `unzip -p <jar> creativecommon.mixins.json \| grep -c Mixin`; `unzip -p <jar> META-INF/mods.toml \| grep -E "modId\|version="`
+@pass the first command prints nothing; every mixin named in the json has a class in the jar; `mods.toml` lists no `create`, `immersiveengineering`, `fruitsdelight` dependency and does list `immersive_portals` and `heartstone` (optional, `ordering="NONE"`: the Heartstone-before-IP order is set in `CommonMixinPlugin`)
+@fails a moved file left behind (git status shows it staged as deleted), a json entry for a class that moved
+@draft no batch holds this row yet
+## SQ-CC-02
+@group A (full pack)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|outside the tested range\|ClassNotFoundException\|NoClassDefFoundError" logs/latest.log`; `grep -n "creativecommon: .* files loaded" logs/kubejs/startup.log`; `grep -c "ERROR" logs/kubejs/startup.log`
+@pass no mixin or class error; no out-of-range warning; all Common startup files loaded; 0 startup script errors (also reruns SQ-CMV-01 and SQ-CPP-01)
+@fails `CommonMixinPlugin.MOD_RANGE` / `NEEDS_MOD` (a table row still naming a moved mixin), `creativecommon.mixins.json`
+@draft no batch holds this row yet
+## SQ-CC-03
+@group B (Common + Compat + Calendar only, fresh folder, empty `kubejs/`)
+@commands boot, `/reload`, stop; delete `config/creativecommon-common.toml` first
+@pass boots and stops clean with Create, IE, Fruits Delight, Immersive Portals, Heartstone all absent; no class error, no script error under `logs/kubejs/`; the config is written
+@fails Java reaching an optional mod without a load check, a dict key without an absent-mod guard (extends SQ-CMV-02/-04)
+@draft no batch holds this row yet
+## SQ-CC-04
+@group B (same folder, config just generated)
+@commands `grep -nE "^\s*(overrides\|removed\|gravityLimitDimensions\|enabled\|disabled) =" config/creativecommon-common.toml`; `grep -n -A3 "mod_names\|\[effects\]" config/creativecommon-common.toml \| cut -c1-100`
+@pass `[mod_names] overrides = []`; `[effects] removed = []`; `[advancements] enabled = true`; `[creative_menu] disabled = false`; `[perf] gravityLimitDimensions = true`; no per-mod name lines left
+@fails defaults still carrying the pack's lists in `CommonConfig`
+@draft no batch holds this row yet
+## SQ-CC-05
+@group A (full pack, pack config)
+@commands after the SQ-CC-02 boot: `grep -nE "removed\|overrides" config/creativecommon-common.toml \| cut -c1-90`; `/effect give <bot> <one of the removed effects listed there> 30 0`; `/effect give <bot> minecraft:speed 30 0`; `/data get entity <bot> ActiveEffects`
+@pass the pack config keeps its 3 removed effects and its name list; the removed effect is refused, Speed applies
+@fails pack defaults not copied from `configs_edited/root_config/creativecommon-common.toml`
+@draft no batch holds this row yet
+## SQ-CC-06
+@group A (full pack)
+@commands copy `tools/scratch_query/cc_dict_probe.js` to `srv/kubejs/server_scripts/zz_cc_dict_probe.js` before the boot; `kjsexpect \[ccdict\] done`; `/zq itemtag creativecommon:bark`, `creativecommon:metal_dusts`; `shell grep "\[ccdict\]" logs/kubejs/server.log`
+@pass `any_bark` = `#creativecommon:bark`, `t_metal_dusts` = `#creativecommon:metal_dusts`; the Create Framed and SecurityCraft keys print their ids when those mods are installed and a skip value (not an exception) when not; mirror glass tags print `#creativecompat:mirror_glass` and `..._panes`
+@fails dict edits in `item_dict.js` / `block_dict.js` not in the jar (Common not rebuilt)
+@draft no batch holds this row yet
+## SQ-CC-07
+@group A (full pack)
+@commands `/zq itemtag create:scrap_wood_small` (and `scrap_copper_blocks`); `grep -iE "scrap_(wood\|copper)" logs/latest.log logs/kubejs/server.log \| grep -iE "error\|missing"`
+@pass with Create Recycling installed the tags still hold their entries from the pack's own scripts; no error naming a `create:scrap_*` tag (reruns SQ-CPP-05 with the full pack)
+@fails physics tag script guard in Compat, a Common data file still shipping the placeholders
+@draft no batch holds this row yet
+## SQ-CC-08
+@group A (full pack)
+@commands Immersive Portals: `grep -E "ChunkMapMixin\|Heartstone\|serene" logs/latest.log \| head`; create a world, `/execute in minecraft:the_nether run tp <bot> 0 100 0`, back; the Heartstone client ordering is CQ-CC-01
+@pass no crash; no `Mixin apply failed`; Serene Seasons and Immersive Portals coexist (old SQ-SPFX-01 on this build)
+@fails `mods.toml` ordering rows, `CommonMixinPlugin` Immersive Portals access transformer fix
+@draft no batch holds this row yet
+## SQ-CC-09
+@group B (world saved on the 11-06 builds, as SQ-CIF-02)
+@commands before the swap: a chest holding a `creativecommon:long_reach` potion; after: `/zsa potionat <chest>` (`cc_seqasm_probe.js`); `/ccswap items` rewrites item merges only, so the NBT keeps the old string by design (`PotionByNameRemapMixin` maps it on every read)
+@pass the stack reads `creativebrewing:long_reach` with Better Beacons Long Reach; no exception
+@fails swap list `better_beacons_potions.json`, `/ccswap`
+@draft no batch holds this row yet
+## SQ-CC-10
+@group A (full pack)
+@commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without; Better Beacons: `batches/r1107cc/b1_phantom.qb` or `/zph N` (`cc_phantom_probe.js`), two bots on platforms at y 70 (above the superflat sea level 63), `spawn-monsters=true`
+@pass poison and wither ticks shortened under Magic Resistance, damage reduced (old SQ-EFX-02/-03); the second bot still gets phantoms with the first bot holding Phantom Bane
+@fails `effect/EffectRules`, `LivingEntityEffectRemapMixin`, Better Beacons mixin gate
+@draft no batch holds this row yet
+## SQ-CC-11
+@group A (full pack)
+@commands `qrun.py toml srv/config/creativecommon-common.toml effects removed '["minecraft:slowness"]'`, boot; `/effect give <bot> minecraft:slowness 30 0`; `/effect give <bot> minecraft:speed 30 0`; `/data get entity <bot> ActiveEffects`
+@pass Slowness refused, Speed applies; no config parse error in the log
+@fails `EffectRules` list parsing
+@draft no batch holds this row yet
+## SQ-CC-12
+@group dedicated server + client (CreEngServer)
+@commands join the scratch server from the owner client; open JEI villager trade category and the wandering trader's offers; `grep -i "TradeSync" logs/latest.log`
+@pass the client lists the server's trades (not vanilla's); no sync error (old trade sync rows)
+@fails `TradeSync` packet, `fml:netversion` mismatch
+@draft no batch holds this row yet
+## SQ-CC-13
+@group A (full pack)
+@commands `/jfr`-less: start a JFR recording with `jcmd <pid> JFR.start settings=profile`, play 60 s, `JFR.dump`; `jfr summary <file> \| grep -E "creativecommon\|Ce[A-Z]"`
+@pass Common's server tick, dimension tick, chunk wait and KubeJS handler events appear in the dump; none without a recording
+@fails profiling events registration after the carve
+@draft no batch holds this row yet
+## SQ-CC-14
+@group A (full pack, pack config)
+@commands `grep -n -A6 "wandering_trader\|creative_menu\|advancements" config/creativecommon-common.toml`; `/advancement grant @p only minecraft:story/root`; `/summon minecraft:wandering_trader`; `/data get entity @e[type=wandering_trader,limit=1] Offers.Recipes`
+@pass pack values still apply (advancements off: grant finds no advancement; trader offers count matches config) (old SQ-CMV-04 on the pack config)
+@fails config file or `configs_edited/` copy drifted
+@draft no batch holds this row yet
+## SQ-CC-15
+@group A
+@commands gravity: Create: Gravity installed, `grep -iE "gravity" logs/latest.log \| head -5`; entity in the overworld vs the End
+@pass no mixin error; the overworld entity is not ticked by Gravity's per-entity logic (list holds the End only)
+@fails `[perf] gravityLimitDimensions` mixin target
+@draft no batch holds this row yet
+## SQ-CC-16
+@group A (full pack)
+@commands `grep -E "Done \(" logs/latest.log` (WorldEdit state table skipped); `/tp <bot> 50000 100 50000` and time to arrive, `grep -c "Preparing spawn\|Generating" logs/latest.log` before and after; shoot a Nock Enough Arrows whistle arrow
+@pass start time as the last run (no multi-second WorldEdit stall); no forced chunk generation from the Quark teleport; no lag from the whistle search
+@fails version gate off (look for the out-of-range WARN), SRG target moved
+@draft no batch holds this row yet
+## CQ-CC-01
+@group client (full pack, Common 18:02)
+@commands launch; `grep -E "Loading tips:\|Mixin apply failed" logs/latest.log`; Heartstone installed: reach the title screen; Mods screen, Creative Common description (new text: no blocks or items, Effects, Interface lines)
+@pass launch without crash (Heartstone before Immersive Portals); description is the new one; log shows `Loading tips: N tips from M files`
+@fails `mods.toml` ordering, `gradle.properties` description
+@draft no batch holds this row yet
+## CQ-CC-02
+@group client
+@commands new singleplayer world, watch the loading screen; options, Resource Packs; `grep "Loading tips:" logs/latest.log`
+@pass tip bar shows, tips roll about every 7 s; the pack list no longer shows "Creative Tips"; the pack's own tips (from `kubejs/assets/creative_tips/`) are in the count (335 as in the changelog) and a custom tip added to that tips.json shows after F3+T
+@fails `LoadingTipPacks` still looking for the removed pack, KubeJS assets not read as a tip pack
+@draft no batch holds this row yet
+## CQ-CC-03
+@group client
+@commands rerun CQ-LT-04 to -06 (wrap at GUI scale 4, `enabled = false`) and CQ-CMV-03 (panorama, creative E, no toasts)
+@pass all as written there
+@fails config keys moved, `CreativeMenuDisableMixin`
+@draft no batch holds this row yet
+## CQ-CC-04
+@group client
+@commands rename display: add `create=Create Test` under `[mod_names] overrides` (restart); hover a Create item in JEI, WTHIT on a Create block, Mods screen; then clear the list
+@pass the mod line reads the override in all three; cleared list shows the real names (the list is empty by default)
+@fails `ModNames` not reading the pack's list
+@draft no batch holds this row yet
+## CQ-CC-05
+@group client
+@commands Mirror glass of the portal change (SQ-IP rows): flint and steel on tinted glass and on SecurityCraft reinforced tinted glass; then on a Framed Blocks framed cube with tinted glass as camouflage, a framed pane and framed bars
+@pass a mirror portal appears on the two glass blocks; none on any framed block (owner 2026-11-08: framed and copycat blocks are never mirrors)
+@fails tag `creativecompat:mirror_glass` contents, dict keys
+@draft no batch holds this row yet
+## CQ-CC-06
+@group client
+@commands changelog viewer: title screen and pause menu buttons; open it, scroll the Unreleased list, close
+@pass the viewer opens with the pack changelog and all family headings; Creative Compat's WTHIT and JEI still work (carve)
+@fails `[changelog]` config, jar assets
+@draft no batch holds this row yet

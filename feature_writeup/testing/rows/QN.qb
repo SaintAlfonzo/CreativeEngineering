@@ -1,0 +1,57 @@
+# Scratch queue rows QN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/QN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-QN Quark Mending and elytra nerfs off, 2026-11-14 ([loading_tips_audit.md](../loading_tips_audit.md) 1)
+@@date 2026-11-14
+@@jars creativecommon
+@@sources feature_writeup/loading_tips_audit.md
+@@text
+@@text Config only: `config/quark-common.toml` `[experimental.game_nerfs]` "Nerf Mending" and "Enable Dimension Locked Elytra"
+@@text set to false (copy in `configs_edited/root_config/`). Copy the instance's `config/quark-common.toml` into the scratch
+@@text instance. Any player with op, survival.
+@@text
+@@table
+## SQ-QN-01 | Mending repairs from XP orbs (bot, survival)
+@group any
+@commands On a scratch server a bot runs it through the `zqn` probe (r1115). `/give @s diamond_pickaxe{Damage:500,Enchantments:[{id:"minecraft:mending",lvl:1}]}`, hold it, `/summon experience_orb ~ ~ ~ {Value:50}`
+@pass the pickaxe's damage drops; your XP bar rises less than 50
+@fails config not read: check the copied file and Quark's `latest.log` config line
+@from batches/r1115/p8_a0.qb
+> pbot spawn qn 105 -60 105 minecraft:overworld survival
+sleep 2
+> xp set qn 0 points
+> xp set qn 0 levels
+> item replace entity qn weapon.mainhand with minecraft:diamond_pickaxe{Damage:500,Enchantments:[{id:"minecraft:mending",lvl:1}]}
+> zqn hand qn
+waitlog \[zqn\] done 20
+expect \[zqn\] hand qn minecraft:diamond_pickaxe damage 500
+> summon minecraft:experience_orb 105 -60 105 {Value:50}
+sleep 3
+> zqn hand qn
+waitlog \[zqn\] done 20
+expect \[zqn\] hand qn minecraft:diamond_pickaxe damage [0-4]\d\d 
+> kill @e[type=minecraft:experience_orb]
+look damage after the orb below 500 (Mending: 2 durability per point, 50 points = 100 durability); xpTotal under 50
+
+## SQ-QN-02 | Overworld elytra: the start-fall-flying packet path starts and keeps gliding
+@group any
+@commands Server half on a bot via `zqn`; the hand feel is a client check (r1115). Overworld: `/give @s elytra`, wear it, `/tp @s ~ ~60 ~`, jump and press jump again while falling
+@pass you glide
+@fails the dimension lock still applies
+@from batches/r1115/p8_a0.qb
+> item replace entity qn armor.chest with minecraft:elytra
+> item replace entity qn weapon.mainhand with minecraft:air
+> tp qn 105 240 105
+sleep 1
+> zqn fly qn
+waitlog \[zqn\] done 20
+expect \[zqn\] fly qn quarkCanUse true onGround false started true fallFlying true chest minecraft:elytra
+> zqn flying qn
+sleep 2
+> zqn flying qn
+sleep 1
+expect \[zqn\] flying qn fallFlying true dim minecraft:overworld y [0-9]
+> pbot remove qn
+look gliding (fallFlying true one second after the start); the client-side hand check (jump in air) is CQ-style and not run here

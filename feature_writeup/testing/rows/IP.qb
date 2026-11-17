@@ -1,0 +1,429 @@
+# Scratch queue rows IP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/IP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Census biome ties, 2026-10-27 ([locate.md](../locate.md) 3.6, TODO `structures/testing #4`)
+@@date 2026-10-27
+@@jars creativecompat tempad
+@@sources feature_writeup/locate.md
+@@text
+@@text patcherMod 1.1.03 with `worldgen/TiedBiomes` (prediction only; generation unchanged). Group B. Fresh world on the
+@@text `wgp` seed (the perf.md 10.9 census worlds), census at the same center so the 10 known positions are inside.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-TIE-01 | census 96 at 4000 4000: falseNegatives 0, built equal to wgp_new, no reflection error
+@group B
+@commands Boot; `/cwglocate census 96` at the perf.md 10.9 center; read `kubejs/exported/worldgen/locate_census.json`; grep latest.log for `locate reflection` and `f_48435_`
+@pass `falseNegatives` 0 in total, and 0 for `terralith:underground/old_refinery` and `mining_outpost` (were 4 and 6 at 162,270 / 157,199 / 240,325 and others); their `no.biome` drops by about that many; `built` per structure equal to `wgp_new` (generation unchanged); census time within noise of 424 s; no reflection error
+@fails A false negative still at `biome`: the tie set misses the generated biome (another biome source wraps the multi-noise one, or a mod changes `getNoiseBiome`); at another stage: a new bug, read its row; reflection error: the SRG name of `MultiNoiseBiomeSource.parameters`
+@from batches/r1103w/w_9_B.qb
+> celocate census 96 4000 4000
+waitlog \[celocate\] census done 2400
+shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/f1_census_tie.json && echo copied f1_census_tie
+reject (?i)locate reflection
+bootreject (?i)locate reflection
+bootreject f_48435_
+shell python3 -c "import json; a=json.load(open('$INST/perf/runs/r1103w/w/f1_census_tie.json')); b=json.load(open('$INST/perf/wgp/wgp_new/locate_census.json')); print('seconds', a['seconds'], 'vs', b['seconds'], '; falseNegatives', a['falseNegatives'], 'vs', b['falseNegatives']); B={s['structure']:s for s in b['structures']}; diff=[(s['structure'], s['built'], B[s['structure']]['built']) for s in a['structures'] if s['structure'] in B and s['built']!=B[s['structure']]['built']]; print(len(diff), 'structures with a different built count'); [print(' ', d) for d in diff[:30]]; [print(s['structure'], 'fn', s['falseNegatives'], 'no.biome', s['predictedNo']['biome'], 'was', B.get(s['structure'],{}).get('predictedNo',{}).get('biome')) for s in a['structures'] if s['structure'].endswith(('old_refinery','mining_outpost'))]; exit(0 if a['falseNegatives']==0 else 1)"
+look built per structure equal to wgp_new (generation unchanged; 6 structures differed by 1-5 between wgp_old and wgp_new from options 2 and 4, same here is fine); census time within noise of 424 s
+
+@@text
+@@text Results: not run yet.
+@@text
+@@text patcherMod 1.1.03 `AllurementItemCurses` (ItemPhysic + Allurement). Group A, any world with both mods.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-IP-15 | Allurement curses under ItemPhysic: Ascension item rises, Fleeting pushes a mob
+@group A
+@commands `/give` a sword with `allurement:ascension_curse` 1 and one with `allurement:fleeting_curse` 1; drop each (Q) near a mob
+@pass Ascension item rises; Fleeting item pushes the mob away; no errors in latest.log
+@fails Mixin not applied (grep `ItemPhysicServerMixin`), or reflection failed (AllurementUtil method names)
+@from batches/r1106spf/b1.qb
+> forceload add 16 16 48 48
+sleep 3
+> summon minecraft:item 20 -55 20 {Tags:["ip15a"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:ascension_curse",lvl:1s}]}}}
+> summon minecraft:item 20 -55 24 {Tags:["ip15n"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b}}
+> summon minecraft:iron_golem 40.5 -60 40.5 {Tags:["ip15g"]}
+> summon minecraft:item 40.5 -59 41.5 {Tags:["ip15f"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:fleeting_curse",lvl:1s}]}}}
+sleep 6
+> execute as @e[tag=ip15a,y=-54,dy=300] run say IP15 ascension above start
+> execute as @e[tag=ip15n,y=-62,dy=4] run say IP15 plain on the ground
+> data get entity @e[tag=ip15a,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Pos
+> data get entity @e[tag=ip15g,limit=1] Motion
+expect IP15 ascension above start
+expect IP15 plain on the ground
+reject (?i)(ItemPhysicServerMixin|AllurementUtil|AllurementItemCurses).*(error|exception|fail)
+bootreject (?i)(ItemPhysicServerMixin|AllurementItemCurses).*(error|exception|fail)
+> forceload remove 16 16 48 48
+look golem position against 40.5 / 40.5 (pushed away from the Fleeting item); the drop by a player (Q) is a client check
+
+## SQ-IP-16 | /dumpphysics after /reload; audit over the scratch dump (LAST: /reload)
+@group A
+@commands `/reload`; `/dumpphysics`; then on the host `python3 tools/item_physics_audit.py`
+@pass Chat "Dumped N items (M survive lava)"; `kubejs/exported/physics/item_physics.json` exists, block-item rows carry `material` / `sound`; audit header says "dump yes", unclassified below 650, `minecraft:netherite_scrap` listed under `fire_resistant_item` (IP-21)
+@fails `[dumpphysics] skipped` lines in latest.log: a reflection name (Material / SoundType constant, `ForgeHooks.getBurnTime`, `ItemPhysic.CONFIG`) failed; fix in `_lib/dump_physics.js`
+@from batches/r1103w/w_8_A.qb
+> reload
+sleep 40
+> dumpphysics
+waitlog (Dumped \d+ items|\[dumpphysics\] failed) 300
+expect Dumped \d+ items \(\d+ survive lava\)
+reject \[dumpphysics\] skipped
+shell test -s kubejs/exported/physics/item_physics.json && mkdir -p tools feature_writeup kubejs/generation_scripts/physics && cp $INST/tools/item_physics_audit.py tools/ && python3 -I tools/item_physics_audit.py > ../ip16.txt 2>&1; r=$?; head -30 ../ip16.txt; grep -n 'dump\|unclassified\|netherite_scrap' feature_writeup/item_physics_audit.md | head -12; exit $r
+# the audit runs on a copy inside srv/ so it reads the scratch dump and writes srv/feature_writeup, not the instance
+look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap under fire_resistant_item (IP-21); block-item rows carry material / sound
+
+@@text
+@@text Results: not run yet.
+
+@@section 2
+@@title SQ-IP Immersive Portals changes: Nether portal failure, Dark Fire, fog, opaque gun portals, despawn, mirrors, 2026-11-07 ([plan_portal_changes.md](../plan_portal_changes.md) 6, TODO `gameplay/tnt-and-portal #17..#24`)
+@@date 2026-11-07
+@@jars creativecompat tempad
+@@sources feature_writeup/plan_portal_changes.md
+@@text
+@@text Not run. Targets the 2026-11-07 16:44 builds, installed in `mods/`: `creativemagic-1.0.0` (N1), `creativecompat-1.0.0`
+@@text (N3, G5, G6, M2 to M4), `creativecommon-1.1.0` (dict keys), and `config/immersive_portals_forge.json`
+@@text (`indirectLoadingRadiusCap` 4, `netherPortalOverlay` true). Keep `immersive-portals`, `portalgun` and `geckolib` in the
+@@text server and client (as SQ-PG); Serene Seasons conflicts are SQ-SPFX's. Boot check first:
+@@text `grep -E "IPFireGateMixin|IPMirrorGlassMixin|IPPortalRenderLimitsMixin|IPPortalFogMixin|IPPortalRenderingAccessor|PortalGunHeartbeatMixin|PortalGunPortalInvoker|PortalGunRendererOpaqueMixin" logs/latest.log`
+@@text shows no apply failure (`require = 1` on each, so a miss crashes the boot), and `[creativecompat]` config has the new
+@@text `[immersive_portals]` and `[portalgun]` tables.
+@@text
+@@table
+## SQ-IP-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
+@group A
+@commands #17 build a 4x5 obsidian frame in the Overworld; light it with flint and steel (bot `qa`), a fire charge from a dispenser, and lightning (`/summon lightning_bolt` on top of a lit-fire frame); a fresh frame each time; also crouch + flint and steel on the obsidian; flint and steel on the smallest frame Smaller Nether Portals takes (2x3 inside)
+@pass no portal (no `imm_ptl_core:nether_portal_new` entity, no `minecraft:nether_portal` blocks); frame turns to crying obsidian, soul fire in it; `PortalSpawnEvent fired` in the log for each, the full-size frames with `state=Block{minecraft:fire}` (not `nether_portal`: that is Smaller Nether Portals' late event); the small frame also turns to crying obsidian, its portal blocks gone
+@fails `IPFireGateMixin` not applied (boot check), or IP's redirect took another path: grep `onFireLitOnObsidian` callers again
+@from batches/r1113/fix_c3a1.qb
+> fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
+> fill 1201 -59 1000 1202 -57 1000 minecraft:air
+> fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
+> fill 1211 -59 1000 1212 -57 1000 minecraft:air
+> fill 1220 -60 1000 1223 -56 1000 minecraft:obsidian
+> fill 1221 -59 1000 1222 -57 1000 minecraft:air
+> fill 1230 -60 1000 1233 -56 1000 minecraft:obsidian
+> fill 1231 -59 1000 1232 -57 1000 minecraft:air
+> fill 1240 -60 1000 1242 -57 1000 minecraft:obsidian
+> fill 1241 -59 1000 1241 -58 1000 minecraft:air
+> clear qa
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1201 -60 1000 up
+sleep 2
+> setblock 1211 -59 1001 minecraft:stone
+> setblock 1211 -59 999 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:fire_charge",Count:1b}]}
+> setblock 1211 -59 998 minecraft:redstone_block
+sleep 3
+> gamerule doFireTick true
+> summon minecraft:lightning_bolt 1221 -59 1000
+sleep 3
+> gamerule doFireTick false
+> zp sneak qa on
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1231 -60 1000 up
+> zp sneak qa off
+sleep 2
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1241 -60 1000 up
+sleep 2
+> zc3 bstate 1201 -60 1000 1200 -58 1000 1211 -60 1000 1210 -58 1000 1221 -60 1000 1220 -58 1000 1231 -60 1000 1230 -58 1000 1241 -60 1000 1240 -58 1000
+> zc3 bstate 1201 -59 1000 1211 -59 1000 1221 -59 1000 1231 -59 1000 1241 -59 1000 1241 -58 1000
+> execute if entity @e[type=imm_ptl_core:nether_portal_new]
+reject Test passed
+reject bstate .*minecraft:nether_portal
+count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
+count bstate 12[0-4][01] -(60|58) 1000 Block\{minecraft:crying_obsidian\} >= 8
+look all ten edge-middle reads crying obsidian (corners stay obsidian: the converter takes only frame blocks beside the interior); soul fire inside each; small frame 1240 too (row: its portal blocks gone)
+
+## SQ-IP-02 | Dark Fire: IP portal entity pair in a valid frame (Overworld and Nether), frame stays obsidian, L frame does not light
+@group A
+@commands #18 Dark Fire in a valid 4x5 frame (Overworld), then in an L-shaped frame, then in the Nether; `/data get entity @e[type=imm_ptl_core:nether_portal_new,limit=2,sort=nearest]`; walk `qa` through
+@pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-IP-01)
+@fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behaviour)
+@from batches/r1113/c3_a1.qb
+> fill 1200 -60 1020 1203 -56 1020 minecraft:obsidian
+> fill 1201 -59 1020 1202 -57 1020 minecraft:air
+> fill 1210 -60 1020 1213 -60 1020 minecraft:obsidian
+> fill 1210 -59 1020 1210 -56 1020 minecraft:obsidian
+> pbot hold qa creativemagic:flint_and_terrasteel 1
+> pbot use qa 1201 -60 1020 up
+sleep 5
+> pbot hold qa creativemagic:flint_and_terrasteel 1
+> pbot use qa 1211 -60 1020 up
+sleep 2
+> execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1201,y=-58,z=1020,distance=..4]
+> execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1211,y=-58,z=1020,distance=..3]
+> execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new]
+> zc3 bstate 1200 -60 1020 1201 -59 1020
+expect bstate 1200 -60 1020 Block\{minecraft:obsidian\}
+reject bstate 1201 -59 1020 Block\{minecraft:nether_portal\}
+> execute in minecraft:the_nether run forceload add 0 0 32 32
+sleep 20
+> execute in minecraft:the_nether run fill -2 99 -3 6 99 3 minecraft:obsidian
+> execute in minecraft:the_nether run fill -2 100 -3 6 106 3 minecraft:air
+> execute in minecraft:the_nether run fill 0 100 0 3 104 0 minecraft:obsidian
+> execute in minecraft:the_nether run fill 1 101 0 2 103 0 minecraft:air
+> pbot spawn qn 1.5 100 -2.5 minecraft:the_nether survival
+sleep 3
+> pbot hold qn creativemagic:flint_and_terrasteel 1
+> pbot use qn 1 100 0 up
+sleep 5
+> execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new,x=1,y=102,z=0,distance=..4]
+> pbot remove qn
+look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-IP-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the bstate first
+
+## SQ-IP-03 | flint and steel on a 3x3 wall of each mirror-glass block and pane: a breakable mirror on each; breaking a block removes it
+@group A
+@commands #23 build a 3x3 wall of each `#creativecompat:mirror_glass` block and of each `_panes` member (`/tag`-free: one wall per id); flint and steel on each (sneaking for frosty glass)
+@pass an `imm_ptl_core:breakable_mirror` entity on each wall; breaking one block of a wall removes its mirror
+@fails `/kubejs` tag dump: the tag is empty (blocktags.js not in the jar) or the mixin missed (boot check)
+@from batches/r1113/c3_a1.qb
+> clear qm
+> pbot hold qm minecraft:flint_and_steel 1
+> fill 1200 -60 1075 1202 -58 1075 alexsmobs:rainbow_glass
+> pbot use qm 1201 -59 1075 north
+> fill 1205 -60 1075 1207 -58 1075 createframed:horizontal_tinted_framed_glass
+> pbot use qm 1206 -59 1075 north
+> fill 1210 -60 1075 1212 -58 1075 createframed:tinted_framed_glass
+> pbot use qm 1211 -59 1075 north
+> fill 1215 -60 1075 1217 -58 1075 createframed:tinted_tiled_glass
+> pbot use qm 1216 -59 1075 north
+> fill 1220 -60 1075 1222 -58 1075 createframed:vertical_tinted_framed_glass
+> pbot use qm 1221 -59 1075 north
+> fill 1225 -60 1075 1227 -58 1075 design_decor:horizontal_tinted_framed_glass
+> pbot use qm 1226 -59 1075 north
+> fill 1230 -60 1075 1232 -58 1075 design_decor:tinted_framed_glass
+> pbot use qm 1231 -59 1075 north
+> fill 1235 -60 1075 1237 -58 1075 design_decor:vertical_tinted_framed_glass
+> pbot use qm 1236 -59 1075 north
+> fill 1240 -60 1075 1242 -58 1075 immersive_weathering:frosty_glass
+> zp sneak qm on
+> pbot use qm 1241 -59 1075 north
+> zp sneak qm off
+> fill 1245 -60 1075 1247 -58 1075 minecraft:tinted_glass
+> pbot use qm 1246 -59 1075 north
+> fill 1250 -60 1075 1252 -58 1075 quark:black_framed_glass
+> pbot use qm 1251 -59 1075 north
+> fill 1255 -60 1075 1257 -58 1075 quark:blue_framed_glass
+> pbot use qm 1256 -59 1075 north
+> fill 1260 -60 1075 1262 -58 1075 quark:brown_framed_glass
+> pbot use qm 1261 -59 1075 north
+> fill 1265 -60 1075 1267 -58 1075 quark:cyan_framed_glass
+> pbot use qm 1266 -59 1075 north
+> fill 1270 -60 1075 1272 -58 1075 quark:dirty_glass
+> pbot use qm 1271 -59 1075 north
+> fill 1275 -60 1075 1277 -58 1075 quark:framed_glass
+> pbot use qm 1276 -59 1075 north
+> fill 1280 -60 1075 1282 -58 1075 quark:gray_framed_glass
+> pbot use qm 1281 -59 1075 north
+> fill 1285 -60 1075 1287 -58 1075 quark:green_framed_glass
+> pbot use qm 1286 -59 1075 north
+> fill 1290 -60 1075 1292 -58 1075 quark:light_blue_framed_glass
+> pbot use qm 1291 -59 1075 north
+> fill 1295 -60 1075 1297 -58 1075 quark:light_gray_framed_glass
+> pbot use qm 1296 -59 1075 north
+> fill 1300 -60 1075 1302 -58 1075 quark:lime_framed_glass
+> pbot use qm 1301 -59 1075 north
+> fill 1305 -60 1075 1307 -58 1075 quark:magenta_framed_glass
+> pbot use qm 1306 -59 1075 north
+> fill 1310 -60 1075 1312 -58 1075 quark:orange_framed_glass
+> pbot use qm 1311 -59 1075 north
+> fill 1315 -60 1075 1317 -58 1075 quark:pink_framed_glass
+> pbot use qm 1316 -59 1075 north
+> fill 1320 -60 1075 1322 -58 1075 quark:purple_framed_glass
+> pbot use qm 1321 -59 1075 north
+> fill 1325 -60 1075 1327 -58 1075 quark:red_framed_glass
+> pbot use qm 1326 -59 1075 north
+> fill 1330 -60 1075 1332 -58 1075 quark:white_framed_glass
+> pbot use qm 1331 -59 1075 north
+> fill 1335 -60 1075 1337 -58 1075 quark:yellow_framed_glass
+> pbot use qm 1336 -59 1075 north
+> fill 1340 -60 1075 1342 -58 1075 securitycraft:reinforced_tinted_glass
+> pbot use qm 1341 -59 1075 north
+> fill 1345 -60 1075 1347 -58 1075 createframed:horizontal_tinted_framed_glass_pane
+> pbot use qm 1346 -59 1075 north
+> fill 1350 -60 1075 1352 -58 1075 createframed:tinted_framed_glass_pane
+> pbot use qm 1351 -59 1075 north
+> fill 1355 -60 1075 1357 -58 1075 createframed:tinted_tiled_glass_pane
+> pbot use qm 1356 -59 1075 north
+> fill 1360 -60 1075 1362 -58 1075 createframed:vertical_tinted_framed_glass_pane
+> pbot use qm 1361 -59 1075 north
+> fill 1365 -60 1075 1367 -58 1075 immersive_weathering:frosty_glass_pane
+> zp sneak qm on
+> pbot use qm 1366 -59 1075 north
+> zp sneak qm off
+> fill 1370 -60 1075 1372 -58 1075 quark:black_framed_glass_pane
+> pbot use qm 1371 -59 1075 north
+> fill 1375 -60 1075 1377 -58 1075 quark:blue_framed_glass_pane
+> pbot use qm 1376 -59 1075 north
+> fill 1380 -60 1075 1382 -58 1075 quark:brown_framed_glass_pane
+> pbot use qm 1381 -59 1075 north
+> fill 1385 -60 1075 1387 -58 1075 quark:cyan_framed_glass_pane
+> pbot use qm 1386 -59 1075 north
+> fill 1390 -60 1075 1392 -58 1075 quark:dirty_glass_pane
+> pbot use qm 1391 -59 1075 north
+> fill 1395 -60 1075 1397 -58 1075 quark:framed_glass_pane
+> pbot use qm 1396 -59 1075 north
+> fill 1400 -60 1075 1402 -58 1075 quark:gray_framed_glass_pane
+> pbot use qm 1401 -59 1075 north
+> fill 1405 -60 1075 1407 -58 1075 quark:green_framed_glass_pane
+> pbot use qm 1406 -59 1075 north
+> fill 1410 -60 1075 1412 -58 1075 quark:light_blue_framed_glass_pane
+> pbot use qm 1411 -59 1075 north
+> fill 1415 -60 1075 1417 -58 1075 quark:light_gray_framed_glass_pane
+> pbot use qm 1416 -59 1075 north
+> fill 1420 -60 1075 1422 -58 1075 quark:lime_framed_glass_pane
+> pbot use qm 1421 -59 1075 north
+> fill 1425 -60 1075 1427 -58 1075 quark:magenta_framed_glass_pane
+> pbot use qm 1426 -59 1075 north
+> fill 1430 -60 1075 1432 -58 1075 quark:orange_framed_glass_pane
+> pbot use qm 1431 -59 1075 north
+> fill 1435 -60 1075 1437 -58 1075 quark:pink_framed_glass_pane
+> pbot use qm 1436 -59 1075 north
+> fill 1440 -60 1075 1442 -58 1075 quark:purple_framed_glass_pane
+> pbot use qm 1441 -59 1075 north
+> fill 1445 -60 1075 1447 -58 1075 quark:red_framed_glass_pane
+> pbot use qm 1446 -59 1075 north
+> fill 1450 -60 1075 1452 -58 1075 quark:white_framed_glass_pane
+> pbot use qm 1451 -59 1075 north
+> fill 1455 -60 1075 1457 -58 1075 quark:yellow_framed_glass_pane
+> pbot use qm 1456 -59 1075 north
+sleep 3
+> execute if entity @e[type=imm_ptl_core:breakable_mirror]
+expect Test passed, count: 52\b
+> setblock 1201 -60 1075 minecraft:air
+sleep 3
+> execute if entity @e[type=imm_ptl_core:breakable_mirror]
+expect Test passed, count: 51\b
+look 52 walls (29 #creativecompat:mirror_glass, 23 _panes, x 1200 to 1455 at z 1075, frosty glass and pane used sneaking); a count under 52: find which wall has none with `execute positioned <x+1> -59 1075 if entity @e[type=imm_ptl_core:breakable_mirror,distance=..3]`; flint and steel has 64 uses (52 needed)
+
+## SQ-IP-04 | gun portals go on logout and on dimension change; a new shot places a fresh pair
+@group A
+@commands #24 `qa` places both gun portals; `qa` logs out (kick); log in, shoot a new pair, change dimension (`/execute in minecraft:the_nether run tp qa 0 100 0`); back, shoot a pair, die in another dimension and respawn
+@pass portals gone at once on logout and on dimension change; after each a new shot places a fresh pair; after the respawn case they go within one heartbeat (10 s)
+@fails `PortalGunDissolve` not registered (portalgun absent at construct) or the record key differs; `/data get` the portal's `descriptor`
+@from batches/r1113/fix_c3a1.qb
+> fill 1340 -60 1040 1360 -50 1040 minecraft:stone
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> pbot remove qa
+sleep 3
+> zc3 portals
+> pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
+> clear qa
+> give qa portalgun:portal_gun 1
+sleep 1
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> execute in minecraft:the_nether run tp qa 20 110 20
+sleep 4
+> zc3 portals
+> execute in minecraft:overworld run tp qa 1350 -60 1030 0 0
+sleep 4
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+look `portals:` sequence 4, 2 (after logout), 4, 2 (after the Nether tp), 4 (pg's pair from SQ-PG-01a is the steady 2). The death-and-respawn case is not driven (perfBot respawn untested): leave for a client or a later row
+
+## SQ-IP-05 | despawn at distance: stays at 120, gone within a beat at 140; 2 s beat; despawnDistance 0 never; offline owner at load (boot 2)
+@group A
+@commands #24 `qa` places a pair, walks (`/tp`) 120 then 140 blocks away, waits 12 s each; set `[portalgun] heartbeatSeconds` 2 and repeat; set `despawnDistance` 0 and repeat at 300 blocks; place a pair, stop the server with `qa` online, start it with `qa` offline (spawn-chunk portals)
+@pass stay at 120; gone within 10 s at 140 (not before the beat); within 2 s with the shorter beat; never with 0; the saved portals of the absent owner go on their first beat
+@fails the heartbeat runs off `tickCount`; a portal whose owner is offline at load is meant to go
+@from batches/r1113/fix_c3a1.qb
+> zc3 portals
+> tp qa 1470 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 12
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+shell sed 's/^\(\s*heartbeatSeconds = \)[0-9]*/\12/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> zc3 portals
+> tp qa 1490 -60 1030
+sleep 4
+> zc3 portals
+> tp qa 1350 -60 1030 0 0
+sleep 2
+shell sed 's/^\(\s*despawnDistance = \)[0-9]*/\10/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> tp qa 1650 -60 1030
+sleep 12
+> zc3 portals
+shell sed 's/^\(\s*despawnDistance = \)[0-9]*/\1128/; s/^\(\s*heartbeatSeconds = \)[0-9]*/\110/' config/creativecompat-common.toml > config/creativecompat-common.toml.tmp && cat config/creativecompat-common.toml.tmp > config/creativecompat-common.toml && rm config/creativecompat-common.toml.tmp && grep -E "heartbeatSeconds|despawnDistance" config/creativecompat-common.toml
+sleep 5
+> fill -10 -60 10 10 -50 10 minecraft:stone
+> tp qa 0 -60 0 0 0
+sleep 3
+> execute as qa at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot qa blue
+sleep 2
+> execute as qa at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot qa orange
+sleep 2
+> zc3 portals
+> save-all flush
+look portals: 4 at the start (qa + pg), 4 after 12 s at 120 blocks, 2 after 12 s at 140; with the 2 s beat 4 then 2 within 4 s; with despawnDistance 0, 4 after 12 s at 300 blocks; last line: qa's spawn-chunk pair (x 0, z 10) plus pg's pair. qa stays online to the stop; c3_a2.qb checks the offline-owner half. If the toml edits are not picked up live (Forge watcher), the 2 s and 0 cases read like the 10 s / 128 case: note it, not a mod FAIL
+
+## CQ-IP-01
+@group client
+@commands #18, #19 look through a Nether portal both ways (a portal lit with Dark Fire, SQ-IP-02); then a portal made before the update
+@pass the far side ends at about 32 blocks (2 chunks); clear for the first 8 blocks past the portal, full fog by 32; the portal surface tinted purple; edit `[immersive_portals.fog.nether]` start/end and see it follow (config reload), `enabled = false` removes the fog; the old portal may have no tint (note it: relight)
+@fails fog: `IPPortalFogMixin` not applied, or `PortalRendering.isRendering()` false during fog setup (IP renders through a separate path: report)
+@draft no batch holds this row yet
+## CQ-IP-02
+@group client
+@commands #20 opaque gun portals: default, look through a pair; set `[portalgun] opaquePortals = true`; look again, walk through, dye one side red
+@pass default: see-through; on: a solid disc in each portal's colour, no view through, walking through still teleports, the red side shows red
+@fails the disc is the gun's own filled texture: a soft edge is expected
+@draft no batch holds this row yet
+## CQ-IP-03
+@group client
+@commands #22 two facing mirrors 6 blocks apart (glass walls), stand between; walk 20 blocks away and back; one mirror facing open land
+@pass at most 4 reflections deep; past 12 blocks both show plain glass, within 12 they reflect; the reflection of open land is clear for 16 blocks past the mirror, then fades to full fog by 32 and stops (2 chunks); `[immersive_portals.fog.mirror] enabled = false` shows the hard cut instead; a gun portal pair looking over open land: same 16 to 32 fog and cut (`portalGun`, `portalGunViewDistance`)
+@fails IP's `maxPortalLayer` (5) caps first if `mirrorMaxBounces` is higher
+@draft no batch holds this row yet
+## CQ-IP-04
+@group client
+@commands #21, #23 JEI and WTHIT on Design and Decor's three tinted framed glass and Create Framed's; frosty glass wall: flint and steel without sneaking, then sneaking on a fresh wall; a pane wall of each tagged pane type
+@pass "Smooth Tinted Glass", "Horizontal Smooth Tinted Glass", "Vertical Smooth Tinted Glass" for Design and Decor only, Create Framed's keep "Tinted Framed Glass"; plain use melts the frost, sneaking makes a mirror; each pane wall makes a mirror
+@fails names.js not in the jar; frost melted while sneaking: IW's block use ran (report: the sneak skip did not apply)
+@draft no batch holds this row yet

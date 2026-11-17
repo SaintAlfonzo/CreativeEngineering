@@ -1,0 +1,17 @@
+# Scratch queue rows XAC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/XAC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-XAC Xaero's World Map colours from the block atlas, 2026-11-07 ([perf.md](../perf.md) section 18; Compat 13:35 installed)
+@@date 2026-11-07
+@@sources feature_writeup/perf.md
+@@text
+@@text | ID | Side | Check | Expect | Failure means |
+@@text |---|---|---|---|---|
+## CQ-XAC-01
+@group client
+@commands Open a world, open the world map over grass, water, sand, leaves, a modded block area; F3+T, look again; `grep -c "Leaked resource.*Finalizer" logs/latest.log`; `grep -i "XaeroAtlasColour\|xaero.map.MapWriter" logs/latest.log`
+@pass map colours as before (no grey or black blocks), no mixin apply errors, leaked-resource warnings from Xaero gone (reload-listener ones may remain)
+@fails redirect not applied (Xaero updated, ordinal moved) or sampling differs
+@draft no batch holds this row yet

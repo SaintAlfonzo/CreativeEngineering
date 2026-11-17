@@ -1,0 +1,32 @@
+# Scratch queue rows LB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Lunchboxes, 2026-10-29 ([lunchboxes.md](../lunchboxes.md), TODO `storage-and-item-loss #9`)
+@@date 2026-10-29
+@@sources feature_writeup/lunchboxes.md
+@@text
+@@text Server half only: the item, the recipes and the mixins loading. Looks, tooltip, dye colors and seagulls need the
+@@text client (LB-01 to LB-13). Jars: patcherMod 1.1.04 and Creative Delight 1.0.0 from `mods/` (both 2026-10-29).
+@@text
+@@table
+## SQ-LB-01 | netherite lunchbox resolves as an item entity
+@group A
+@commands boot; console: `summon item 0 100 0 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}`, then `execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]`
+@pass the test prints `Test passed`; boot log has no `InvalidInjectionException` / `Mixin apply failed` naming `AlexsMobsSeagull`; `latest.log` has no `Unknown item 'solapplepie:netherite_lunchbox'`; the id resolves
+@fails mixin target names changed in Alex's Mobs: javap `SeagullAIStealFromPlayers.isBlacklisted`, `EntitySeagull.canTargetItem`; item: `LunchboxItems` registered only with solapplepie loaded
+@from batches/r1031/a1_world.qb passed
+> summon item 2 -55 2 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}
+> execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]
+expect Test passed
+> kill @e[type=item]
+
+## SQ-LB-02 | lunchbox recipes parse
+@group A
+@commands boot; grep `server.log` for `lunchbox` after the recipe load
+@pass no `Error occurred while handling event` or `[NCH]` warning from `solapplepie/lunchboxes.js`; no `Parsing error loading recipe creativedelight:` for the 6 lunchbox recipes (`shaped/...lunchbox...`, `smithing/...`, `smithing/lunchbox_skin`, `lunchbox/lunchbox_dye`, `lunchbox/lunchbox_soap`); `solapplepie:lunchbox` / `golden_lunchbox` recipes removed
+@fails serializer id typo (`LunchboxRecipes`), or `global.CD` missing (CD jar not copied)
+@from batches/r1031/a1_boot.qb passed
+bootreject Parsing error loading recipe creativedelight:.*lunchbox
+kjsreject (lunchboxes\.js|lunchbox).*(Error|error)

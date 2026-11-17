@@ -1,0 +1,93 @@
+# Scratch queue rows KT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/KT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Cooking for Blockheads in Creative Delight, 2026-10-31 ([kitchen.md](../kitchen.md) 2.7, 9; TODO `cooking/kitchen #22`)
+@@date 2026-10-31
+@@jars creativecommon creativedelight
+@@sources feature_writeup/kitchen.md
+@@text
+@@text Jars: patcherMod (CfB mixins removed) and Creative Delight (nests the new `blockheadsAdditions`) installed together
+@@text 2026-10-31 16:29. The server half reruns SQ-KT-01 / -02 (`/kttest`) and `/kctest` against the moved code.
+@@text
+@@table
+## SQ-KT-22 | Cooking for Blockheads member boots
+@group A
+@commands boot
+@pass `Done (`; mod list has `blockheads_additions`; no mixin error naming `BlockStateCounterTopperMixin`, `CfbOven*`, `CfbCorner*`; no `Duplicate capability key` / `creativeengineering:corner_storage` error; `config/blockheads_additions-common.toml` written with `[kitchen]`; no `[blockheads_additions] could not add the wood racks`
+@fails a mixin error: SRG names; duplicate capability: the old patcherMod still in `mods/`; rack error: `BARacks.addValidBlocks` field name
+@from batches/r1101/p1_server.qb passed
+bootexpect blockheads_additions
+bootreject (Mixin apply failed|InvalidInjectionException).*(BlockStateCounterTopperMixin|CfbOven|CfbCorner)
+bootreject Duplicate capability key
+bootreject creativeengineering:corner_storage
+bootreject \[blockheads_additions\] could not add the wood racks
+shell grep -q "^\s*\[kitchen\]" config/blockheads_additions-common.toml
+
+## SQ-KT-23 | 40 wood racks: recipes, slab tag, mineable
+@group A
+@commands recipe probe (RecipeManager id dump) and `/dumptags`
+@pass 40 `creativedelight:shaped/<wood>_spice_rack` / `_tool_rack` recipes; `cookingforblockheads:spice_rack` and `tool_rack` take `#creativedelight:rack_slabs/other`, which holds no `minecraft:oak_slab` but holds `quark:blossom_planks_slab`; the 40 racks in `#minecraft:mineable/axe`
+@fails `kitchen.js` errors in `/kubejs errors`; `CD.on('blockheads_additions')` false (member switch)
+@from batches/r1101/p1_server.qb
+> zq recipes _spice_rack
+> zq recipes _tool_rack
+> zq itemtag creativedelight:rack_slabs/other
+> zq blocktag minecraft:mineable/axe
+> zq rdetail cookingforblockheads:spice_rack
+count creativedelight:shaped/[a-z_]+_spice_rack >= 20
+count creativedelight:shaped/[a-z_]+_tool_rack >= 20
+expect itemtag creativedelight:rack_slabs/other .*quark:blossom_planks_slab
+reject itemtag creativedelight:rack_slabs/other .*minecraft:oak_slab
+look 40 rack recipes (20 + 20); cookingforblockheads:spice_rack and tool_rack take #creativedelight:rack_slabs/other; mineable/axe lists the racks (blocktag line is long; grep spice_rack)
+
+## SQ-KT-24 | oak spice rack block entity keeps and drops items
+@group A
+@commands `/setblock` an oak wall, `/setblock ~ ~ ~ cookingforblockheads:oak_spice_rack[facing=north]`; `/data get block ~ ~ ~`; put an item in through `/item replace block ~ ~ ~ container.0 with minecraft:sugar`; break it with a bot
+@pass block entity data present (CfB's spice rack items list); the sugar drops with the rack
+@fails no block entity: the BE type's valid blocks (SQ-KT-22 rack error)
+@from batches/r1101/p1_server.qb
+> setblock 40 -60 1 minecraft:oak_planks
+> setblock 40 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> data get block 40 -60 0
+> item replace block 40 -60 0 container.0 with minecraft:sugar
+> data get block 40 -60 0
+expect minecraft:sugar
+> kill @e[type=item]
+> setblock 40 -60 0 minecraft:air destroy
+sleep 2
+> execute positioned 40 -60 0 as @e[type=item,distance=..3] run data get entity @s Item.id
+expect "minecraft:sugar"
+> kill @e[type=item]
+
+## SQ-KT-25 | /kttest and /kctest against the moved code
+@group A
+@commands copy `tools/kitchen_probe/cfb_kitchen_probe.js` and `cfb_corner_probe.js`, `/kttest`, `/kctest`
+@pass same results as the last run (kt 30 of 34 with the known KT-15d / KT-17 expectation fails, kc 9 of 9)
+@fails probe updated 2026-10-31 (`BAConfig`); a class-not-found: the member jar not nested
+@from batches/r1101/p1_server.qb
+> kttest
+sleep 20
+> kctest
+sleep 10
+count \[kttest\] PASS >= 28
+count \[kctest\] PASS >= 9
+look kt 30 of 34 expected with the known KT-15d / KT-17 expectation fails; kc 9 of 9; any class-not-found = member jar not nested
+
+## CQ-KT-22 | Cooking for Blockheads member: fridge box and racks
+@group client
+@commands KT-22, KT-23, KT-24 (KT-06 fridge box: textured and dyed)
+@pass as written in kitchen.md 7
+@fails fridge box missing: `[blockheads_additions] ... did not load` in latest.log, or the model map key (FridgeTopFill.wrap)
+@from batches/r1101/c0_priority.qb
+> tp @s 260 -55 8 180 20
+sleep 3
+> setblock 260 -60 0 cookingforblockheads:fridge[facing=south]
+> setblock 262 -60 1 minecraft:oak_planks
+> setblock 262 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> setblock 264 -60 1 minecraft:spruce_planks
+> setblock 264 -60 0 cookingforblockheads:spruce_tool_rack[facing=north]
+> tp @s 262 -59 3.5 180 20
+shot racks_fridge
+look fridge textured (no checker), racks in their wood. hand: kitchen.md KT-22 to KT-24 (dyed fridge box)

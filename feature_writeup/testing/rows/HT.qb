@@ -1,0 +1,36 @@
+# Scratch queue rows HT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/HT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Horse walks per dimension, 2026-10-27 ([perf.md](../perf.md) 10.4, TODO `server #15`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text Results 2026-10-27 evening run: SQ-HT-01 FAIL then PASS: both handlers threw `Cannot call property players` every
+@@text interval (`level.players` is a bean property); fixed to `level.getPlayers()`, no error after. SQ-HT-02, -03 need a
+@@text player (the handlers skip levels with none): client session.
+@@text
+@@text Target: current `kubejs/server_scripts` (script only, `/reload` on a running server). Needs a tamed horse with
+@@text `dragonloot:dragon_horse_armor` near the player.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-HT-01
+@group A
+@commands Boot; `/reload`; grep latest.log for `armor_effects.js`, `dragon_autorepair.js`
+@pass No script error; no `Error occurred while handling event` on `ServerEvents.tick`
+@fails `level.players()` or `server.getAllLevels()` not visible to Rhino: use `level.getPlayers()`
+@draft no batch holds this row yet
+## SQ-HT-02
+@group same
+@commands Summon a tamed horse, `/item replace entity @e[type=horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor`; wait 11 s; `/data get entity @e[type=horse,limit=1,sort=nearest] ActiveEffects`; same on the player and on a second horse without armor
+@pass Regeneration (Amplifier 0) on the armored horse only; no repair (armor has no durability, branch removed 2026-10-28)
+@fails Handler never fires: check `event.getServer()` on `ServerEvents.tick`
+@draft no batch holds this row yet
+## SQ-HT-03
+@group same
+@commands Same horse; `/execute in minecraft:the_nether run tp @s 0 100 0`, `/forceload add` the horse's chunk first, wait 30 s, come back, `/data get` the horse's `ActiveEffects`
+@pass No Regeneration while away (no player in the overworld); back within 10 s after return
+@fails
+@draft no batch holds this row yet

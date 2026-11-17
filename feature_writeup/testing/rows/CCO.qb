@@ -1,0 +1,324 @@
+# Scratch queue rows CCO (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CCO.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CCO Creative Common with its optional mods only: every Common tweak of a third-party mod, no Compat, no Calendar, no other Creative jar, 2026-11-07 ([creative_engineering.md](../creative_engineering.md) 7.1, `CommonMixinPlugin` NEEDS_MOD / MOD_RANGE)
+@@date 2026-11-07
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_engineering.md
+@@text
+@@text Not run. Targets the newest `development/creativeCommon/build/libs/creativecommon-*.jar` (prep_srv.sh swaps it in when newer than `mods/`).
+@@text Every server is built with `bash tools/scratch_query/cc_only_srv.sh OUT LEVEL full|alone|without=<keys> [prop=value ...]`:
+@@text Common plus the KubeJS stack (KubeJS, Rhino, Architectury) plus the optional mods in the set, and nothing else (the script
+@@text fails if another Creative jar is left; config/, defaultconfigs/ and the pack's kubejs/ are emptied so Common writes its own
+@@text defaults). Optional mods covered: Immersive Weathering (+ Moonlight), Armor Trims, WorldEdit, Quark (+ AutoRegLib), Create
+@@text Gravity (+ Create), Nock Enough Arrows, Better Beacons, Immersive Portals, Heartstone, Serene Seasons (portal overwrite
+@@text conform). Keys: `iw trims we quark gravity nea beacons portals heartstone seasons`. If the first `full` boot reports a missing
+@@text library for one mod (Create Gravity needs Create's own libraries), add it to `LIBS` in the script and note it in the run doc.
+@@text Boot 1 `full` runs `batches/r1107cco/b1_full.qb` (SQ-CCO-01 to -04); the rest are console steps. Pack-config comparisons
+@@text copy `configs_edited/root_config/creativecommon-common.toml` over the generated file. A `-` in Group means the row reuses the boot named.
+@@text
+@@table
+## SQ-CCO-01 | no mixin or class error, every optional mod's mixins applied, no other Creative jar loaded
+@group `full`, B
+@commands `cc_only_srv.sh cco1 cco1 full spawn-monsters=true`, boot; batch b1_full.qb
+@pass no `Mixin apply failed`, class error or out-of-range WARN; the Immersive Weathering `callTick ... now calls IwGrowthFast.blockTick`, Immersive Portals `overwrites conform` and Heartstone priority lines are present; no Creative jar name in the log apart from Common; 0 KubeJS startup errors; `creativecommon: N files loaded`
+@fails `CommonMixinPlugin` tables, a dict key or startup file reaching a removed jar (Compat, Engineering)
+@from batches/r1107cco/b1_full.qb
+# 'Error loading class' WARNs are third-party mixin configs probing absent mods (Quark -> Lootr ConfigManager): not ours
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+bootexpect \[compat\] Immersive Portals overwrites conform to target visibility
+# the Heartstone priority line is client-only (orderHeartstoneBeforePortals returns on a dedicated server): CQ-CCO-01
+kjsreject (?i)error
+look Done( \(|) line present, the Common startup files loaded line (`creativecommon: N files loaded`) in logs/kubejs/startup.log
+
+## SQ-CCO-02 | Better Beacons present: its potions registered; effects work with only Common
+@group -
+@commands batch: Magic Resistance and Phantom Bane effects on a bot; no `[CE potions] ... not present` line
+@pass both effects apply; Better Beacons' potions registered (`/give @p minecraft:potion{Potion:"creativecommon:magic_resistance"}` resolves)
+@fails `CommonPotions` row `needsMod`, effect registration
+@from batches/r1107cco/b1_full.qb passed
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> data get entity s5pb1 ActiveEffects
+expect creativecommon:magic_resistance
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+expect Applied effect Phantom Bane to s5pb1
+reject (Unknown (item|block|block type|entity|effect)|Incorrect argument for command|No player was found|no such bot)
+bootreject \[CE potions\] .* not present
+
+## SQ-CCO-03 | WorldEdit present: the state-id skip does not break world edit
+@group -
+@commands batch: WorldEdit fill; `grep -c "WorldEdit" logs/latest.log`; time the `Done (` line against a boot with `without=we` (SQ-CCO-12)
+@pass `//set` or fill works; no WorldEdit mixin error; `full` start is not slower by the WorldEdit state-table stall
+@fails `WorldEditSkipStateIdInitMixin`, `WorldEditBlockStateIdAccessMixin`
+@from batches/r1107cco/b1_full.qb
+> execute at s5pb1 run fill ~ 69 ~ ~4 69 ~4 minecraft:stone
+> execute at s5pb1 run say CCO03 fill done
+expect CCO03 fill done
+bootreject WorldEditSkipStateId|BlockStateIdAccess
+look //pos1 and //set stone from the console is not possible (needs a player); run //set with the bot or a client when a window is up, else the fill above stands as the check
+
+## SQ-CCO-04 | Common's default config is written fresh, no pack lists
+@group -
+@commands batch: default config; `grep -nE "overrides\|removed" config/creativecommon-common.toml`
+@pass file written; `[mod_names] overrides = []`, `[effects] removed = []`, `[advancements] enabled = true`, `[creative_menu] disabled = false`, `[perf] gravityLimitDimensions = true`
+@fails `CommonConfig` defaults
+@from batches/r1107cco/b1_full.qb
+shell grep -nE "^\s*(overrides|removed|gravityLimitDimensions|enabled|disabled) =" config/creativecommon-common.toml
+shell test -f config/creativecommon-common.toml && echo CCO04 config present
+look shell.txt: config present and overrides = [], removed = [], gravityLimitDimensions = true, [advancements] enabled = true, [creative_menu] disabled = false (the shell output is not in the server log)
+
+## SQ-CCO-05 | Immersive Weathering fast random tick: no ASM warning, moss still spreads
+@group -
+@commands Immersive Weathering: `grep -E "IwGrowth\|callTick\|ServerLevelMixin" logs/latest.log`; `/gamerule randomTickSpeed 300`, place a stone block next to water and moss, `/time add 2400`, wait 60 s, count growth (moss, cracked, mossy variants) in a `/fill`-ed 32x32 stone slab with `/execute store result score ... run clone` or `/zq` block count
+@pass no ASM warning (`unknown signature`, `handler not found`); growth still happens (block variants change) with the fast path; with `-Dcreativecommon.iwFastTick=false` in `srv/user_jvm_args.txt` the second boot logs `random-tick fast path off` and growth still happens
+@fails `IwServerLevelTickMixin`, `IwGrowthFast`, IW 1.2.10 `callTick` signature
+@from batches/r1107cco/b2_console.qb
+bootreject (?i)unknown signature|handler not found
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+> pbot remove-all
+sleep 2
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+> forceload add 0 0 31 31
+> fill 8 66 8 23 68 23 minecraft:stone
+> fill 8 69 8 23 69 23 minecraft:cobblestone
+> fill 8 70 8 23 72 23 minecraft:air
+> setblock 15 69 15 minecraft:mossy_cobblestone
+> setblock 16 70 16 minecraft:water
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> gamerule randomTickSpeed 300
+sleep 60
+> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> zq count 8 69 8 23 69 23 minecraft:cobblestone
+> gamerule randomTickSpeed 3
+look mossy_cobblestone count after 60 s at randomTickSpeed 300 is higher than the first count (growth happens with the fast path)
+
+## SQ-CCO-06 | Armor Trims item list cache survives two reloads
+@group -
+@commands Armor Trims: open the trim UI is client-only, so server: `grep -iE "armor_trims\|ArmorTrimsItemCache" logs/latest.log`; `/give <bot> minecraft:diamond_chestplate`; `/reload` twice; `grep -c "ERROR" logs/latest.log` before and after
+@pass no error from `ArmorTrimsLargeItemListsMixin` or the cache; two reloads leave the item list cache valid (no stale or duplicate error); client look is CQ-CCO-02
+@fails `ArmorTrimsItemCache` reset rules, Armor Trims 1.3.3 `LargeItemLists`
+@from batches/r1107cco/b2_console.qb passed
+> give s5pb1 minecraft:diamond_chestplate
+> reload
+sleep 20
+> reload
+sleep 20
+reject (?i)(armortrims|ArmorTrimsItemCache|LargeItemLists).*(error|exception|stale)
+reject (?i)/ERROR\].*(trim)
+shell grep -iE "armor_?trims|ArmorTrimsItemCache" logs/latest.log | grep -viE "loading|found mod|Mixing|\.mixins\.json" | head -5
+
+## SQ-CCO-07 | Quark Spiral Spires teleport hook skipped outside the End: /tp into new terrain is quick
+@group -
+@commands Quark: `/tp <bot> 50000 100 50000` (or a Spiral Spires biome position if the set has Spiral Spires), time it; `grep -c "Preparing spawn\|Generating" logs/latest.log` before and after
+@pass arrives without the long forced generation stall; no `QuarkSpiralSpiresTeleportMixin` error (old SQ-CC-16 on this set)
+@fails `QuarkSpiralSpiresTeleportMixin`, Quark 3.4-418 target
+@from batches/r1107cco/b2_console.qb
+> say CCO07 start
+> tp s5pb1 50000 100 50000
+> say CCO07 arrived
+waitlog CCO07 arrived 120
+reject (?i)QuarkSpiralSpires|Can't keep up|watchdog|single server tick took
+look seconds between the CCO07 start and arrived lines (vanilla /tp does not wait for the chunk: a few seconds at most)
+> tp s5pb1 0 70 0
+
+## SQ-CCO-08 | Create Gravity per-entity logic runs in the End only (gravityLimitDimensions = true)
+@group -
+@commands Create Gravity: `grep -iE "gravity" logs/latest.log \| head -5`; falling block or item entity in the overworld vs the End (`/execute in minecraft:the_end run summon minecraft:falling_block ~ 120 ~ {BlockState:{Name:"minecraft:sand"}}`)
+@pass no mixin error; the overworld entity is not ticked by Gravity's per-entity logic, the End entity is (`[perf] gravityLimitDimensions = true`); with `qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false` and a reboot both dimensions are ticked
+@fails `CreateGravityDimensionMixin`, config key
+@from batches/r1107cco/b2_console.qb
+# Gravity adds its low-gravity modifier only while the entity falls (removed on landing): read it mid-fall from y 200.
+# NoAI mobs do not move at all in 1.19, so these zombies have AI
+bootreject (?i)CreateGravityDimensionMixin.*(error|fail)
+shell grep -E "biome_configs" cco1/serverconfig/create_gravity-server.toml
+> kill @e[tag=cco08]
+> execute in minecraft:the_end run forceload add 0 0
+> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+sleep 2
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
+> data get entity @e[tag=cco08o,limit=1] Pos[1]
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Attributes
+> data get entity @e[tag=cco08o,limit=1] Attributes
+look End zombie is higher after the same time (slower fall) and carries the Low Gravity Biome modifier on forge:entity_gravity ([I;2020721635,269896998,-1235373740,-1522950634]); the overworld zombie falls at vanilla speed with no modifier
+> kill @e[tag=cco08]
+
+## SQ-CCO-09 | Nock Enough Arrows whistle goal: no mixin error, mobs with no whistling arrow do not search
+@group -
+@commands Nock Enough Arrows: give a bot a bow and a whistle arrow, `shell` the arrows with `/execute as` summons or a client (CQ-CCO-03); `grep -iE "NeaWhistle\|nock" logs/latest.log`
+@pass no mixin error; the whistle search does not lag (tick time of the arrow's search under 5 ms, `/perf` or the JFR event)
+@fails `NeaWhistleGoalSkipMixin`
+@from batches/r1107cco/b2_console.qb
+bootreject (?i)NeaWhistle.*(error|fail)
+> summon minecraft:pig 5 70 5 {NoAI:0b,PersistenceRequired:1b,Tags:["cco09"]}
+> summon minecraft:cow 6 70 5 {PersistenceRequired:1b,Tags:["cco09"]}
+> summon nock_enough_arrows:whistling_arrow 5 72 5
+sleep 5
+> kill @e[tag=cco09]
+reject (?i)/ERROR\].*(nock|whistl)
+look no NEA error with mobs ticking and a whistling arrow summoned (if the entity id is unknown the console says so: note it). Tick cost is a JFR / client check (CQ-CCO-03)
+
+## SQ-CCO-10 | Better Beacons Phantom Bane on the first player skips only that player (/zph, fresh spawner passes)
+@group -
+@commands Better Beacons phantom: `batches/r1107cc/b1_phantom.qb` (or `/zph N` with `cc_phantom_probe.js`); bots on y 70 platforms, `spawn-monsters=true`
+@pass the second bot still gets phantoms while the first holds Phantom Bane (SQ-CC-10b on this set)
+@fails `PhantomSpawnerBaneSkipMixin`
+@from batches/r1107cco/b2_console.qb
+> pbot remove-all
+sleep 2
+> effect clear s5pb1
+> time set 18000
+# platforms in unloaded chunks are not placed (bots then fall into caves with no sky): forceload first
+> forceload add -208 -8 -192 8
+> forceload add 192 -208 208 -192
+> fill -202 149 -2 -198 149 2 minecraft:stone
+> fill 198 149 -202 202 149 -198 minecraft:stone
+> pbot spawn s5pb1 -200 150 0 minecraft:overworld survival
+sleep 2
+> pbot spawn s5pb2 200 150 -200 minecraft:overworld survival
+sleep 5
+> s5 rest s5pb1 1200000
+> s5 rest s5pb2 1200000
+> zph 10
+sleep 3
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10C phantom near bot 1
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10C phantom near bot 2
+expect CCO10C phantom near bot 1
+expect CCO10C phantom near bot 2
+> kill @e[type=minecraft:phantom]
+> effect give s5pb1 better_beacons:phantom_bane 9999
+sleep 2
+> zph 10
+sleep 3
+> execute at s5pb2 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10 phantom near bot 2
+> execute at s5pb1 if entity @e[type=minecraft:phantom,distance=..80] run say CCO10 phantom near bot 1
+expect CCO10 phantom near bot 2
+reject CCO10 phantom near bot 1
+> kill @e[type=minecraft:phantom]
+> time set noon
+> forceload remove -208 -8 -192 8
+> forceload remove 192 -208 208 -192
+> pbot remove-all
+reject (No player was found|no such bot|Unknown or incomplete command)
+
+## SQ-CCO-11 | Immersive Portals + Serene Seasons + Heartstone on a server: conform line once, Nether trip
+@group -
+@commands Immersive Portals + Serene Seasons + Heartstone: `grep -E "overwrites conform\|Static binding violation\|Heartstone LevelRendererMixin priority" logs/latest.log`; `/execute in minecraft:the_nether run tp <bot> 0 100 0` and back; world join with a bot
+@pass the conform line and the Heartstone priority line each appear once; no `cannot reduce visibility`; the Nether trip and the return do not crash
+@fails `conformPortalsOverwrites`, `orderHeartstoneBeforePortals`, `imm_ptl.mixins.json` name
+@from batches/r1107cco/b2_console.qb
+shell grep -c "overwrites conform" logs/latest.log; grep -c "cannot reduce visibility\|Static binding violation" logs/latest.log
+> pbot spawn s5pb1 0 70 0 minecraft:overworld survival
+sleep 2
+> execute in minecraft:the_nether run tp s5pb1 0 100 0
+sleep 8
+> execute in minecraft:overworld run tp s5pb1 0 80 0
+sleep 5
+reject (?i)exception|crash
+# one "Static binding violation ... visibility will be upgraded" for MixinChunkMap_C is the designed result of the conform
+bootreject ^(?!.*Static binding violation).*cannot reduce visibilit|InvalidMixinException
+look conform count 1, Static binding violation count 1 (designed, MixinChunkMap_C upgraded); the Heartstone priority line is client-only (CQ-CCO-01)
+
+## SQ-CCO-12 | boots, reloads and stops clean with this set; absent mods' mixins skipped, effects still work
+@group `without=we`, `without=iw`, `without=quark,gravity,nea`, `without=beacons`, `without=portals,heartstone,seasons`, `without=trims` (six boots, B; reuse level cco1 for speed)
+@commands boot each; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-13
+@group `alone`, B (fresh)
+@commands `cc_only_srv.sh cco2 cco2 alone`, boot, `/reload`, stop
+@pass boots with only Common and the KubeJS stack; no class or script error; config written; no optional-mod mixin applied (`grep "Mixin" logs/latest.log` lists only vanilla and Forge targets)
+@fails Java or KubeJS reaching an optional mod without a load check (extends SQ-CC-03 without Compat and Calendar)
+@draft no batch holds this row yet
+## SQ-CCO-14 | old potion id with Brewing absent: left untouched, no crash (emulated: no save from before the carve)
+@group `full`, old save
+@commands keep cco1's level, swap to a copy of the world saved before the carve if one exists (SQ-CC-09 setup) else skip; chest holding a `creativecommon:long_reach` potion
+@pass the stack reads `creativebrewing:long_reach` only when Brewing is installed; with Common alone the old id is left untouched and not a crash (`PotionByNameRemapMixin` and `ItemMerges` `requires` gate)
+@fails swap list `requires`, `PotionByNameRemapMixin`
+@from batches/r1107cco/b5_gravity.qb
+# The chest NBT is written the way an 11-06 save holds it (as r1107cc SQ-CC-09); this `full` set has no Brewing.
+> setblock 6 71 6 minecraft:chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativecommon:long_reach"}}]}
+sleep 2
+> data get block 6 71 6 Items
+expect creativecommon:long_reach
+> save-all
+sleep 3
+> data get block 6 71 6 Items
+expect creativecommon:long_reach
+reject (?i)exception|crash
+> setblock 6 71 6 minecraft:air
+look the stack keeps Potion "creativecommon:long_reach" after a save (no rewrite to creativebrewing:, no crash); with Brewing installed the read is SQ-CC-09
+
+## SQ-CCO-15 | Common startup files loaded, Common tags exist, dict keys of absent mods do not throw
+@group `full`
+@commands KubeJS tweaks: `grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log`; `/zq itemtag creativecommon:bark` and `creativecommon:metal_dusts`; copy `tools/scratch_query/cc_dict_probe.js` to `srv/kubejs/server_scripts/zz_cc_dict_probe.js`, `/reload`, `grep "\[ccdict\]" logs/kubejs/server.log`
+@pass all Common startup files loaded; tags exist; dict keys of absent mods print a skip value, not an exception
+@fails `item_dict.js` / `block_dict.js` guards
+@from batches/r1107cco/b2_console.qb
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log
+shell cp "$INST/tools/scratch_query/s5_probe.js" kubejs/server_scripts/zz_s5_probe.js && cp "$INST/tools/scratch_query/cc_phantom_probe.js" kubejs/server_scripts/zz_cc_phantom_probe.js && cp "$INST/tools/scratch_query/cc_dict_probe.js" kubejs/server_scripts/zz_cc_dict_probe.js && echo probes copied
+> reload
+sleep 20
+> zq itemtag creativecommon:bark
+> zq itemtag creativecommon:metal_dusts
+sleep 2
+shell grep -E "\[ccdict\]" logs/kubejs/server.log | head -40
+shell grep -ciE "exception|error" logs/kubejs/server.log || true
+reject Unknown or incomplete command
+look startup line says creativecommon N of N files loaded; both tags list items (or the zq line says empty for a tag whose items are all from absent mods); [ccdict] lines show skip values, no exception
+
+## SQ-CCO-16 | trader offers and advancements on Common's defaults
+@group `full`
+@commands effect, trader and advancement rules on defaults: `/summon minecraft:wandering_trader`; `/data get entity @e[type=wandering_trader,limit=1] Offers.Recipes`; `/advancement grant @p only minecraft:story/root`; `qrun.py toml srv/config/creativecommon-common.toml effects removed '["minecraft:slowness"]'`, reboot, `/effect give <bot> minecraft:slowness 30 0`
+@pass trader offers are vanilla-default and advancements work on defaults; with the list set Slowness is refused and Speed applies
+@fails `WanderingTraderTradesMixin`, `ServerAdvancementManagerMixin`, `EffectRules`
+@from batches/r1107cco/b2_console.qb
+> summon minecraft:wandering_trader 4 71 4 {NoAI:1b,Tags:["cco16"]}
+sleep 2
+> data get entity @e[tag=cco16,limit=1] Offers.Recipes
+> advancement grant s5pb1 only minecraft:story/root
+expect (?i)granted the advancement|has the advancement|Granted
+> kill @e[tag=cco16]
+> pbot remove-all
+look trader offers are vanilla (no pack trade ids, [wandering_trader] enabled = false); the advancement grant works
+
+## CQ-CCO-01
+@group client, `full` set (CEPortTesting: copy the `cc_only_srv.sh full` mod list, add client-only JEI/WTHIT only if wanted)
+@commands launch; `grep -E "Loading tips:\|Mixin apply failed\|NoClassDefFound" logs/latest.log`; title screen, singleplayer world, loading screen
+@pass reaches the title screen (Heartstone before Immersive Portals); loading tips roll; Mods screen shows the Creative Common description; no Compat or Calendar entry
+@fails `mods.toml` ordering, `LoadingTipPacks`
+@draft no batch holds this row yet
+## CQ-CCO-02
+@group client, `full`
+@commands Armor Trims smithing table with a trim template and armor, creative inventory opens quickly; Immersive Portals: build a Nether portal and walk through; Heartstone render with a portal in view
+@pass no stall opening the trims list; portal and Heartstone render together without crash
+@fails `ArmorTrimsLargeItemListsMixin`, Heartstone priority
+@draft no batch holds this row yet
+## CQ-CCO-03
+@group client, `full`
+@commands Nock Enough Arrows whistle arrow; Quark teleport; Create Gravity with a falling block in the overworld; WorldEdit `//wand` `//set`
+@pass all four behave as the server rows (SQ-CCO-03, -07 to -09)
+@fails the matching mixin
+@draft no batch holds this row yet

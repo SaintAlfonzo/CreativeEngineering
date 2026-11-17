@@ -1,0 +1,175 @@
+# Scratch queue rows EFB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/EFB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-EFB Earth fill on the placed blocks: water, air and earth replaced, 2026-11-02 ([structure_tuning.md](../structure_tuning.md) 3.8, 3.13, 3.28 to 3.30, 7.3.1, 7.5; TODO `structures/earthfill`, `structures/terrain #2`)
+@@date 2026-11-02
+@@jars creativecommon
+@@sources feature_writeup/structure_tuning.md
+@@text
+@@text Targets patcherMod 1.1.07 **build/libs 2026-11-02 00:42** (not in `mods/` yet; prep_srv.sh swaps it in) with `waterReach` (new,
+@@text default 2) and the `earth_fill/sand_base` tags, and the instance `[worldgen.earth_fill]`:
+@@text `baseLayers` 3, `beardReach` 6 (air), `waterReach` 2 (water), `buryReach` 10, `maxMoundHeight` 8, `maxOverWater` 24, sizes small 24/8, medium 64/24,
+@@text large 160/64, huge 320/128 (bounds 150/600/2000), `maxWaterSurplus` **0.5** (the instance value since 2026-11-02, was 0.0;
+@@text the 7.5 writeup default; the code default is 0), `footprintMinWater` 9, `pruneMinWetColumns` 16, `beardFootprint` false, override `eugene:undead_castle=24,800,400`.
+@@text Earth fill only cancels or prunes; the blocks are replaced by the vanilla beard (water and air under a bearded piece, out
+@@text to `beardReach`; since 2026-11-02 earth over water deeper than `waterReach` 2 already counts toward `maxOverWater`, so deep fill is
+@@text judged even where the beard could reach it) and by ground match (template earth swapped for the native ground). The earlier SQ-EF rows checked the
+@@text log lines; these check that the world matches them. Probe: `/zq under <x> <z> <rChunks> [id text|-]` in
+@@text `tools/scratch_query/zq_probe.js` (prep_srv.sh copies it in), **new 2026-11-02 and untested**: SQ-EFB-01 debugs it first.
+@@text One group B fresh world, seed 8675309, scratch toml `[worldgen.earth_fill] log = "ALL"`. Chunky each square
+@@text (`chunky center <x> <z>`, `chunky radius 300`, `chunky start`) and wait for it to finish before probing; a square is
+@@text probed in tiles of `rChunks` 6 (the probe prints at most 30 starts per call). Every probe line is kept in
+@@text `RES/rows/<ID>.log` for the comparison rows (11 to 13).
+@@text
+@@table
+## SQ-EFB-00 | offline: worldgen tool tests (GroundMatch, EarthFill 113+, Meta print ALL)
+@group none, offline
+@commands `bash tools/test_worldgen_tools.sh`
+@pass GroundMatchTest, EarthFillTest (113 or more checks) and MetaTest print `ALL` and no FAIL
+@fails the failing test names the method; nothing to boot until it passes
+@from batches/r1103w/w_1_B.qb passed
+shell bash $INST/tools/test_worldgen_tools.sh > ../twt.txt 2>&1; grep -nE "^==|ALL|FAIL|error:|Could not find" ../twt.txt | head -60; ! grep -qE "FAIL|error:|Could not find or load main class" ../twt.txt
+
+## SQ-EFB-01 | probe: /zq under at spawn prints full lines; earth-fill log has lines (log = ALL)
+@group B
+@commands boot; `grep -c '\[earth-fill\]' logs/latest.log`; spawn chunks loaded: `/zq under 0 0 4 -`
+@pass probe prints `under ...` lines with all fields and a final `under: N starts`; no `Error occurred while handling event`; the earth-fill log has lines (log = ALL)
+@fails Rhino errors: `getTagOrEmpty`, `getAllStarts`, `Heightmap$Types` names (memory `rhino-fieldandmethods-gotcha`); fix the probe in `tools/`, rerun
+@from batches/r1103w/w_1r_B.qb
+bootexpect \[earth-fill\]
+> zq under {S1} {S3} 4 -
+waitlog \[zq\] (under: \d+ starts|error) 120
+expect \[zq\] under: \d+ starts
+reject \[zq\] error
+reject Error occurred while handling event
+shell echo "earth-fill lines: $(grep -c "\[earth-fill\]" ../w1_all.log || true)"; grep "\[zq\] under " logs/latest.log | tail -5 | cut -c1-400
+look the under lines carry every field (pieces, cols, air-below, water-below, base water, base earth, ring, foreign); 0 starts at an ocean spawn is a pass for the probe, rerun on a square tile (SQ-EFB-02) if so
+
+## SQ-EFB-02 (air)
+@group B
+@commands inland plains / taiga square (`/locate biome minecraft:plains`, a spot with hills nearby), Chunky r 300; `/zq under` tiles over the square
+@pass every kept start: `over6 0` (no column hangs more than `beardReach` over air); `air-below` columns only where the gap is 1 to 6 and the beard rounded them off; no village house standing on air
+@fails `over6` > 0 on a kept start: find its `[earth-fill]` line; if it says `0 over air after beard` the count misses this piece kind (span, sunk piece, rotation), with the piece id
+@draft no batch holds this row yet
+## SQ-EFB-03 (air, mounds)
+@group B
+@commands hills square (`/locate biome minecraft:windswept_hills` or `terralith:highlands`), Chunky r 300; `grep 'mound columns'`
+@pass every start whose line shows mound columns within its limit is kept and the probe shows `air-below 0` under it (the beard built the mound); every start over the mound limit is CANCELLED and has no probe line; LOOK at two mound starts from the side: an earth slope, no overhang, no stone pillar
+@fails air under a kept mound start: the beard reach is shorter than the mound counted (`maxMoundHeight` 8 vs the size limit); note gap and size
+@draft no batch holds this row yet
+## SQ-EFB-04 (air, earthless pieces)
+@group B
+@commands same squares plus a desert and a jungle square; `/zq under` filtered `pyramid`, `igloo`, `jungle`, `camp`, `ruin` (`/zq under <x> <z> 6 camp`)
+@pass legacy and earthless pieces (spans, 3.28): `over6 0` for kept ones; a camp or ruin with a column more than 6 over air has a CANCELLED line, not a world entry; tents and plinths sit on the ground (LOOK one camp, one ruin)
+@fails floating camp kept: the span rule skipped it (`surface_structures` step or above sea level less `baseLayers`), note the structure id for `footprintAllPieces`
+@draft no batch holds this row yet
+## SQ-EFB-05 (water, lakes)
+@group B
+@commands check the scratch toml has `[worldgen.earth_fill] maxWaterSurplus = 0.5` (instance value since 2026-11-02); lake / river square (the SQ-EF-09 kind, `/locate biome minecraft:river` near plains), Chunky r 300; `grep -E 'too wet\|wet only\|footprint'`; `/zq under` tiles
+@pass kept starts: `water-below` only with `max` 2 or less (`waterReach`; deeper water under earth counts, and over `maxOverWater` 24 the start goes), `base water 0` (no flooded floor) except `wet_ok` and pond structures; every `too wet` start has no probe line; no kept start has footprint water above 1.5 x its ground (60:40 passes, 61:39 goes) in its log line; record how many kept starts sit between 50:50 and 60:40 (kept at 0.5, cancelled at 0.0)
+@fails water under a kept piece deeper than 2: `waterReach` not read (toml key missing, fallback) or the piece has no earth (add its base to `stone_base` / `sand_base`); base water in a house: the ground-level column was counted as ground (E12 lowest-layer rule); a kept start over 60:40: `maxWaterSurplus` not read (still 0.0 or the code default)
+@draft no batch holds this row yet
+## SQ-EFB-06 (water, coast)
+@group B
+@commands beach and coast square with villages (`/locate structure minecraft:village_plains` near an ocean, or `minecraft:beach`), Chunky r 300; `/zq under <x> <z> 6 village`
+@pass no house floor in the sea-level water layer (`base water 0` on every kept village); `water-below` under houses `max` 2 or less; pruned wet houses (log `pruned K of N`) are not in the world: the probe's `pieces` equals N minus K
+@fails a house in the water: pruning kept a piece under `pruneMinWetColumns` 16; record its water columns
+@draft no batch holds this row yet
+## SQ-EFB-07 (water kept on purpose)
+@group B
+@commands swamp and mangrove square (SQ-EF-04 kind) plus a hillside with `/place structure farmers_structures:aquacultures_common` and `_carp`, and `old_swamp_fisherman_house:fisherman_house`
+@pass swamp huts, witch huts, mangrove towers (`earth_fill/wet_ok`) keep `water-below` > 0 and stand on their stilts (LOOK: water under the hut, not earth); ponds keep their water (`base water` > 0, the pond full, no earth plugging it, rim intact)
+@fails stilts filled with earth: the beard ran on a `wet_ok` start (tag missing on the id); pond drained: template trim dropped water (3.30 says water is a built block)
+@draft no batch holds this row yet
+## SQ-EFB-08 (earth, desert)
+@group B
+@commands desert square with Philip's ruins and villages (`/locate biome minecraft:desert`; `/place structure philipsruins:ancient_ruins` twice on sand), Chunky r 300; `/zq under` tiles; `/zq count <box> minecraft:grass` and `minecraft:tall_grass` over each probed box
+@pass `foreign: none` on every start that is not in `ground_match/exempt` (base earth is sand / sandstone, no grass block or dirt in the bottom 3 layers); no grass plants standing on sand (`count` 0 or on `minecraft:grass_block` only)
+@fails grass or dirt under a desert ruin: ground match did not see the chunk as non-native (`nativeShare`, sampling skipped columns under pieces), note the ring counts
+@draft no batch holds this row yet
+## SQ-EFB-09 (earth, other grounds)
+@group B
+@commands one square each in snow (`minecraft:snowy_plains`), badlands (`minecraft:badlands`), volcanic peaks (`terralith:volcanic_peaks`); `/zq under` tiles
+@pass `foreign: none` outside the exempt list; badlands bases are terracotta or red sand, volcanic bases stone or basalt-family (the ring's ids), snowy bases snow or dirt under snow per ring; the exempt structures (ids in `ground_match.js`) keep their own earth and are listed as foreign on purpose
+@fails foreign earth on a non-exempt start: GroundMatch `rewrite()` mode for that family (TERRAIN / PALETTE / REMOVE), check `ground_match/*` block tags
+@draft no batch holds this row yet
+## SQ-EFB-10 (earth, the beard band)
+@group B
+@commands on 3 kept villages from 02, 05 and 08: `/zq count <x1> <y-8> <z1> <x2> <y-1> <z2>` for `minecraft:stone`, `minecraft:dirt`, `minecraft:sand`, the box being the start box 8 layers down from its bottom
+@pass the fill under the houses is native ground (dirt / grass in plains, sand / sandstone in desert); exposed beard sides are not bare stone walls; LOOK at one desert village edge from below the sea level
+@fails stone walls at the beard edge: vanilla Beardifier surface rule, not ours; record and do not fix in this plan
+@draft no batch holds this row yet
+## SQ-EFB-11 (log vs world)
+@group B
+@commands for 20 kept starts across 02 to 06 with a `log = ALL` line, compare the line's `over water` and `over air after beard` numbers with the probe's columns
+@pass a start logged with 0 over water has no `water-below` deeper than 2 under its earth pieces; logged 0 over air has `over6 0`; no kept start shows the probe far worse than its line (record the pairs in a table in the run doc)
+@fails a systematic gap: the prediction reads `getBaseColumn` before other structures or carvers changed the ground; name the cause in TODO `structures/earthfill`
+@draft no batch holds this row yet
+## SQ-EFB-12 (cancelled really gone)
+@group B
+@commands for 10 CANCELLED lines (chunk coords in each line), `/zq under <chunkX*16> <chunkZ*16> 0 <id>`
+@pass no start of that id in that chunk (the slot is empty or a priority / group neighbour); the census (`/cwglocate census 96 <x> <z>`) counts the cancels as EARTH_FILL rejects
+@fails a cancelled start in the world: the mixin's STORE slot (index 15) missed on this path; check `ChunkGeneratorEarthFillMixin` applied at boot
+@draft no batch holds this row yet
+## SQ-EFB-13 (pruned pieces gone)
+@group B
+@commands for 5 `pruned K of N pieces` lines (village and `wet only`), `/zq under` at the start's chunk
+@pass probe `pieces` = N - K; LOOK at one: no street end ending in a beard blob or a half path into the water (E8), the rest of the village joined
+@fails pieces count N: pruning ran only in the prediction; dead street ends: `forgetJunctions`
+@draft no batch holds this row yet
+## SQ-EFB-14 (undead castle, new air limit)
+@group B
+@commands the castles found in SQ-WGE-03b: `/zq under <x> <z> 6 undead_castle`
+@pass each kept castle: `over6` columns only where its line logged them (limit 800), max gap recorded; LOOK from the side: earth under the walls, not a floating wall section over a ravine; no castle in a highland biome
+@fails gaps over 6 under the walls look bad: the 800 limit is too loose for the look, give the measured gaps to the owner (ST-240)
+@draft no batch holds this row yet
+## SQ-EFB-15 (meta parts)
+@group B
+@commands `/place structure creativeengineering:meta/farmers_camp` and `meta/ruin_scatter` on a slope 40 blocks from a lake; `/zq under <x> <z> 3 meta`
+@pass the meta's pieces: `over6 0`, `base water 0`, `foreign: none` like single starts; dropped parts (log `dropped K of N parts`) are not in the world
+@fails parts placed over water: `filterParts` judged them at the anchor's height
+@draft no batch holds this row yet
+## SQ-EFB-16 (switch off)
+@group B, second fresh world (new level-name)
+@commands scratch toml `[worldgen.systems] earthFill = false`, Chunky the SQ-EFB-05 lake square again; `/zq under` tiles
+@pass with earth fill off the probe finds floating or flooded starts the first world cancelled (at least a few `over6` > 0 or `base water` > 0); this shows the probe and the system each catch the real cases
+@fails no difference: the lake square had no hard cases, take a wider square or the coast
+@draft no batch holds this row yet
+## SQ-EFB-17 (water reach, offline)
+@group none, offline
+@commands `bash tools/test_worldgen_tools.sh`, EarthFillTest
+@pass the new checks pass: `water reach 2 ... (x 3..12 = 10)`, `no water reach ... beard's reach 6 as before`, `water reach leaves air at the beard's reach`, `bury: water reach 2 too`, `water reach above the beard's reach is capped at it`, and the three `withBases` checks (`no base tag`, `sand base`, `stone + sand`); `ALL` for the test
+@fails `EarthFill.Reach.ofWater` / `countEarth`'s water branch; `withBases` cache
+@draft no batch holds this row yet
+## SQ-EFB-18 (water reach, config)
+@group B
+@commands boot; `grep -n 'waterReach' OUT/srv/config/creativeengineering-common.toml`; `grep -c 'over water' logs/latest.log`
+@pass Forge wrote `waterReach = 2` under `[worldgen.earth_fill]` with its comment; earth-fill lines still parse (`... over water (limit 24) ...`); no config error
+@fails key missing: the jar in `srv/mods` is not the 00:42 build
+@draft no batch holds this row yet
+## SQ-EFB-19 (water reach, live)
+@group B, plus a second fresh world (new level-name) with `waterReach = 6`
+@commands the SQ-EFB-05 river / lake square and the SQ-EFB-06 coast square in both worlds, Chunky r 300 each; per world: `grep -cE 'CANCELLED' logs/latest.log` over-water lines, `grep -c 'pruned'`, census `/cwglocate census 96 <x> <z>` village and outpost counts; `/zq under` tiles in the 2 world
+@pass world 2: every kept start `water-below max` 2 or less under its earth; more over-water cancels and prunes than world 6 (record both counts and the share of villages lost near water; flag to the owner if villages drop by more than a third in the river square); the kept villages near rivers stand on filled banks, no house on a 3+ deep fill (LOOK one from the water)
+@fails no difference between worlds: the value is not read per start (`EarthFill.reach()`); villages lost wholesale instead of pruned: `pruneMaxHanging` 8 now trips on water (pieces dropped) and the start still cancels, give the lines
+@draft no batch holds this row yet
+## SQ-EFB-20 (sand base, tags)
+@group B
+@commands `/zq blocktag creativeengineering:earth_fill/sand_base`; `grep -i 'item_dict\|philips_sand' logs/latest.log` at startup; `/reload` then read `[earth-fill] blocks:` warnings
+@pass the block tag lists the 8 `forge:sandstone` blocks, the terracottas and the 3 Philip's blocks; no unresolved-key warning for `philips_sand_stone_brick`, `philips_red_sand_stone_brick`, `philips_sandstone_tiles`; no `holds no block` warning
+@fails Philip's ids renamed in the jar: fix the keys in `item_dict.js` (startup, restart)
+@draft no batch holds this row yet
+## SQ-EFB-21 (sand base, counted)
+@group B
+@commands a desert square with villages and a river or oasis (`/locate biome minecraft:desert`, `terralith:desert_oasis`), and a badlands square (`/locate structure towns_and_towers:village_badlands`); Chunky r 300 each; `grep -E 'village_desert\|fortified_desert\|village_badlands\|village_wooded_badlands\|pillager_outpost_desert\|pillager_outpost_badlands\|desert_structures\|badlands_start_dungeon\|village_temple' logs/latest.log`; `/zq under` tiles
+@pass their lines show earth counts that include the sandstone / terracotta floor (a T&T badlands village logs hundreds of earth, not 0 to 16; size medium or larger); a house over a river or a cliff now logs over water / air and is pruned or the start cancelled; kept ones: `over6 0`, water-below max 2
+@fails earth still near 0: the structure tag did not load (`earth_fill.js`, `/reload`) or `withBases` not reached; check `/zq` that the structure is in `#creativeengineering:earth_fill/sand_base`
+@draft no batch holds this row yet
+## SQ-EFB-22 (deserts still work)
+@group B, both worlds of SQ-EFB-19
+@commands in the desert and badlands squares compare the two worlds: census counts of `minecraft:village_desert`, `terralith:fortified_desert_village`, `towns_and_towers:village_badlands`, the desert and badlands outposts, `minecraft:desert_pyramid`, `betterdeserttemples:desert_temple`; `grep -c` CANCELLED per id
+@pass dry desert (no water near): the same count within 10 % in both worlds (sandstone counted makes the size larger, so the air and mound limits grow with it); losses only at water and cliffs, each with a line naming over water / air; desert pyramids judged by their footprint as before; Better Desert Temples and the desert mimic unchanged (not in the tag); LOOK at 2 kept desert villages by an oasis: houses on sand banks, no floor over water
+@fails dry-desert villages lost: the larger earth count pushed a mound or air limit (sandstone floors on dunes), give the size and mound numbers; consider `sizes` or an override for `village_desert`
+@draft no batch holds this row yet

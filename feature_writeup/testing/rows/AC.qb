@@ -1,0 +1,57 @@
+# Scratch queue rows AC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/AC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Armor cap 50 (gear/tuning #2), 2026-10-30 ([gear_tuning.md](../gear_tuning.md) F13)
+@@date 2026-10-30
+@@sources feature_writeup/gear_tuning.md
+@@text
+@@text Needs patcherMod 1.1.04 built 2026-10-30 after 21:47 (ArmorCapMixin).
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-AC-01 | armor cap mixin
+@group server
+@commands Boot; grep latest.log for `ArmorCapMixin`, `Mixin apply`
+@pass No mixin apply error
+@fails SRG name wrong for `RangedAttribute.sanitizeValue` / `getMaxValue`
+@from batches/r1031/a1_boot.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
+
+## SQ-AC-02 | dragon set 36 armor, 18 toughness
+@group server
+@commands Give a bot player the full dragon set (helmet, chestplate, leggings, boots) and equip it; `/attribute <bot> minecraft:generic.armor get`
+@pass 36 (was 30)
+@fails mixin not applied, or config `[dragon_gear] armorCap` below 36
+@from batches/r1101/p1_server.qb
+> item replace entity qa armor.head with dragonloot:dragon_helmet
+> item replace entity qa armor.chest with dragonloot:dragon_chestplate
+> item replace entity qa armor.legs with dragonloot:dragon_leggings
+> item replace entity qa armor.feet with dragonloot:dragon_boots
+sleep 2
+> attribute qa minecraft:generic.armor get
+> attribute qa minecraft:generic.armor_toughness get
+expect for entity qa is 36
+expect armor_toughness for entity qa is 18
+> clear qa
+
+## SQ-AC-03 | armor capped at 50
+@group server
+@commands `/attribute <bot> minecraft:generic.armor base set 100`; `/attribute <bot> minecraft:generic.armor get`
+@pass 50 (the cap), not 100
+@fails sanitizeValue inject missing
+@from batches/r1031/a1_world.qb passed
+> attribute qa minecraft:generic.armor base set 100
+sleep 1
+> attribute qa minecraft:generic.armor get
+> attribute qa minecraft:generic.armor base set 0
+> clear qa
+expect for entity qa is 50
+
+## SQ-AC-04
+@group client
+@commands Wear the full dragon set
+@pass HUD armor bar shows 36 (one extra row past 20)
+@fails client-side config or mixin
+@draft no batch holds this row yet

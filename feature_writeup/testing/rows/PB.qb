@@ -1,0 +1,46 @@
+# Scratch queue rows PB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Perf suite and bot players, 2026-10-28 ([perf_suite.md](../perf_suite.md), TODO `server #28`)
+@@date 2026-10-28
+@@sources feature_writeup/perf_suite.md
+@@text
+@@text Dev-only `perfBot` jar (`development/perfBot/build/libs/cdevperfbot-0.1.0.jar`, built 2026-10-28 00:50) and the runner
+@@text `tools/perf/suite/perf_suite.py`. Run AFTER the rest of the queue, on the jars it leaves in `mods/` (perf_suite.md 10):
+@@text the first full run is the baseline. Never copy the jar into the instance's `mods/`. Offline self-test first:
+@@text `python3 tools/perf/suite/selftest/selftest.py` (12/12).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-PB-01
+@group A, plus the jar in `srv/mods` and `-Dcdevperfbot.out=perf/bot` in `user_jvm_args.txt`
+@commands Boot; `pbot status`; `pbot spawn bot1 ~ ~ ~`; `pbot list`; `forge tps`; grep latest.log for `bot1` and `Exception`
+@pass `cdevperfbot ok`; a normal join line, no exception from Forge networking, FTB, KubeJS login handlers or Lightman's; bot listed
+@fails NPE in a mod's login handler: that mod reads something `BotConnection` lacks (remote address, channel attribute); stack names it
+@draft no batch holds this row yet
+## SQ-PB-02
+@group A, `gamerule randomTickSpeed 3`
+@commands `fill` a 9 x 9 farmland + `wheat[age=0]` patch 10 blocks from spawn; `pbot spawn bot1` beside it; 5 min; `execute if block` count of age > 0; repeat with the bot removed
+@pass Wheat grows with the bot, none without
+@fails No growth: `BotPlayer.tick` chunk move not running, or the bot is in spectator
+@draft no batch holds this row yet
+## SQ-PB-03
+@group A
+@commands `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t`
+@pass `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written
+@fails Chunks don't follow: `ServerChunkCache.move` not reached
+@draft no batch holds this row yet
+## SQ-PB-04
+@group A
+@commands `kill -9` the scratch JVM (recorded pid only); `tail -2` of the tick file; `jfr assemble srv/perf/jfr-repo/<dir> x.jfr`
+@pass Complete lines to the last second; assemble works
+@fails
+@draft no batch holds this row yet
+## SQ-PB-05
+@group suite S and N
+@commands `setsid nohup python3 tools/perf/suite/perf_suite.py run general g1 > /dev/null 2>&1 &` (about 2 h 15 min); then `perf_suite.py report g1`
+@pass Every G row `ok` or a triaged ending in `perf/suite/g1/*/endings/`; G02 about 5-6 ms (perf.md 12.1); record the summary in perf_suite.md
+@fails Read `runner.log`; `resume g1` after fixing
+@draft no batch holds this row yet

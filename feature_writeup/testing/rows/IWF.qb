@@ -1,0 +1,92 @@
+# Scratch queue rows IWF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/IWF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Immersive Weathering growth fast path, 2026-10-28 ([perf.md](../perf.md) 15.4, TODO `server #29`)
+@@date 2026-10-28
+@@sources feature_writeup/perf.md
+@@text
+@@text patcherMod 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
+@@text config plugin `perf/CommonMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
+@@text with op. The JVM switch `-Dcreativecommon.iwFastTick=false` turns all three parts off for the comparison boots.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-IWF-01 | Immersive Weathering fast tick handler
+@group B
+@commands Boot; grep latest.log for `[perf] Immersive Weathering`, `IwBlockGrowth`, `IwServerLevel`, `Mixin` errors
+@pass One `callTick handler handler$...$callTick now calls IwGrowthFast.blockTick` line; no mixin error; `Loaded N block growths configurations` as before
+@fails `not found` / `unknown signature` warning: IW's handler name or descriptor differs (javap the merged ServerLevel); crash at load: read the mixin error
+@from batches/r1031/a1_boot.qb passed
+bootexpect \[perf\] Immersive Weathering.*callTick
+bootreject (?i)(IwBlockGrowth|IwServerLevel).*(error|fail|not found|unknown signature)
+
+## SQ-IWF-02 | grass, flowers and leaf piles grow (fast path on; repeated on boot B1b with it off)
+@group B
+@commands In a plains area: `/fill` a 16x1x16 grass_block floor with air above, a 5x3x5 oak_leaves block 3 above air next to it; `/gamerule randomTickSpeed 300` for 60 s, then 3; count grass / flowers on the floor and leaf piles under the leaves. Repeat on a boot with `-Dcreativecommon.iwFastTick=false`
+@pass Grass and flowers grow on the floor and leaf piles form, in both boots, counts of the same order
+@fails Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject)
+@from batches/r1031/b1_gameplay.qb
+> tp qa {PL1} 150 {PL3}
+sleep 20
+> fill {PL1-8} 160 {PL3-8} {PL1+8} 160 {PL3+8} minecraft:grass_block
+> fill {PL1-8} 161 {PL3-8} {PL1+8} 163 {PL3+8} minecraft:air
+> fill {PL1+10} 160 {PL3-2} {PL1+14} 160 {PL3+2} minecraft:stone
+> fill {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves[persistent=false,distance=1]
+> fill {PL1+12} 164 {PL3} {PL1+12} 166 {PL3} minecraft:oak_log
+> tp qa {PL1} 161 {PL3-12}
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:grass
+> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:tall_grass
+> zq count {PL1+10} 161 {PL3-2} {PL1+14} 163 {PL3+2} immersive_weathering:oak_leaf_pile
+> zq count {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves
+look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expected: 72 leaves x 1000/4096 x 1200 x 0.0005); leaves still about 72 (the log keeps them from decaying, so the piles come from IW's block-tick growth, the fast path, not from decay); record the numbers for B1b
+
+## SQ-IWF-03 | snowy stone or icicles in a snowy biome in thunder
+@group B
+@commands Snowy biome (`/locate biome minecraft:snowy_plains`): `/weather thunder`, `/gamerule randomTickSpeed 300` 60 s; look for snowy stone and icicles near exposed stone; then `/weather clear`
+@pass Snow-covered stone or icicles appear (universal snow growths through the sky tick)
+@fails None: the universal table is empty, check `universal[]` after rebuild
+@from batches/r1031/b1_gameplay.qb
+> execute positioned 0 70 0 run locate biome minecraft:snowy_plains
+waitlog nearest minecraft:snowy_plains is at 300
+capture SN is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SN1} 150 {SN3}
+sleep 20
+> weather thunder
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> weather clear
+> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:icicle
+> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:snowy_stone
+look either count above 0
+
+## SQ-IWF-04 | block_growths off: no grass, flowers or leaf piles from growths (boot B1c)
+@group B
+@commands `/stop`; set `block_growths = false` in `config/immersive_weathering-common.toml`; boot; SQ-IWF-02 setup again; then restore `true`
+@pass No grass, flowers or leaf piles from growths (leaf piles still come from decay)
+@fails Growths run: the switch is not read (`growthsOn`)
+@from batches/r1031/b1_iwf.qb
+> pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
+sleep 15
+> fill {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:dirt
+> setblock {PL1} 180 {PL3} minecraft:grass_block
+> fill {PL1+10} 180 {PL3-2} {PL1+14} 180 {PL3+2} minecraft:stone
+> fill {PL1+10} 184 {PL3-2} {PL1+14} 186 {PL3+2} minecraft:oak_leaves[persistent=true]
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> zq count {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:grass_block
+> zq count {PL1+10} 181 {PL3-2} {PL1+14} 181 {PL3+2} immersive_weathering:oak_leaf_pile
+look grass still spreads (vanilla), but no IW flowers on it and no leaf piles beyond what leaf decay drops (persistent leaves do not decay, so 0)
+
+## SQ-IWF-05
+@group B
+@commands Perf suite run on the new jar: `perf_suite.py run general g2` (or at least G03a, G04, G12); compare with `g1` (perf.md 15.1)
+@pass IW `tickBlock` share of the Server thread well under 0.5% (g1: 1.9 to 2.6%); IW allocation share near 0 (g1: 5.5 to 6.4%); tickChunk share down by about the same
+@fails Shares unchanged: the overwrite is not live (check `IwGrowthFast` frames in the JFR)
+@draft no batch holds this row yet

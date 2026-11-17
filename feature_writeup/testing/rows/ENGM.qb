@@ -1,0 +1,123 @@
+# Scratch queue rows ENGM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/ENGM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-ENGM Creative Engineering content moved to its sibling jars, 2026-11-06 ([plan_cb_polish.md](../plan_cb_polish.md) 9, TODO `creativeengineering/carve #1`)
+@@date 2026-11-06
+@@jars creativebrewing creativecommon creativedelight
+@@sources feature_writeup/plan_cb_polish.md
+@@text
+@@text Not run. Builds of 2026-11-06 18:51-18:54 (Common, Compat, Magic, Equipment, Engineering, Worldgen, Delight, Brewing),
+@@text NOT installed. Moved, ids unchanged: XP fluid bridge to Magic; BlockRunner / camo / sinking walk speeds, WTHIT speed line,
+@@text Ore Excavation undo and auto-pickup, TNT shrapnel to Compat (config `[shrapnel] [surface] [vein_undo]` now in
+@@text `creativecompat-common.toml`; Engineering has no config file); wooden bucket and arrow fletching to Equipment; Vinery
+@@text barrel tag to Brewing; animal-fat torch, seed milling, mulch tags to Delight; sky islands, waystone ruins, deadwood,
+@@text driftwood, Scarlet mountains, Moobloom and azalea spawns, wild mushrooms, cave carrots, ghost peppers to Worldgen (gated
+@@text packs `packs/<modid>/` for upgrade_aquatic, farmersdelight, fungidelight, miners_delight, vintagedelight); seasoned and
+@@text culture models to Delight; 229 Engineering block / item assets from `kubejs/assets/` into the Engineering jar. Boot
+@@text risks: mixins moved between jars, registrations moved (shrapnel entity, bucket), worldgen pack folders.
+@@text
+@@table
+## SQ-ENGM-01 | Done; no mixin or moved-class error; Worldgen and Equipment mod data packs lines
+@group B (full pack, fresh world)
+@commands prep_srv (swaps all eight builds); boot; `grep -E "Mixing [A-Za-z_.]*(creativecompat|creativemagic|creativeengineering)" logs/latest.log \| wc -l`; `grep -h "mod data packs\|NCH.*not on classpath\|CEConfig" logs/latest.log logs/kubejs/startup.log`
+@pass boot reaches Done; no `Mixin apply failed`, `InvalidMixinException`, `ClassNotFoundException` naming a moved class; no `CEConfig not on classpath`; Worldgen and Equipment print `mod data packs on: [...]` naming the five Delight / Upgrade Aquatic packs and `felsic_gear`; `[swaps] config sections ... carried` not needed (values already in the Compat file)
+@fails a mixin left in the old json (moved class missing); gate row missing in `CompatMixinPlugin` / `MagicMixinPlugin`
+@from batches/r1113/c3_b1.qb
+bootexpect Done \(
+bootreject Mixin apply failed|InvalidMixinException
+bootreject ClassNotFoundException.*com\.SaintAlfonzo
+bootreject CEConfig not on classpath|NCH.*not on classpath
+bootexpect \[creativeworldgen\] mod data packs on: \[(?=.*farmersdelight)(?=.*fungidelight)(?=.*miners_delight)(?=.*upgrade_aquatic)(?=.*vintagedelight)
+bootexpect \[creativeequipment\] mod data packs on: \[.*felsic_gear
+shell grep -hE "mod data packs|NCH.*not on classpath|CEConfig" logs/latest.log logs/kubejs/startup.log | cut -c1-250
+# r1114: latest.log has no "Mixing" lines (grep -c 0 = exit 1 failed the row); count the mixin configs in debug.log, record only
+shell for m in creativecompat creativemagic creativeengineering; do echo "$m $(grep -cE "from (mixins\.)?$m\.mixins\.json" logs/debug.log)"; done
+look Worldgen's line also has biomesoplenty now (its pack folder exists since the row was written); the mixin count is for the record
+
+## SQ-ENGM-02 | creativeworldgen packs listed; sky island locatable; driftwood, morels, cave carrots present near spawn
+@group B (same boot)
+@commands `> datapack list`; `/locate structure creativeengineering:sky_island` and `waystone_ruin` (or `/cdevplace`); `> execute in minecraft:the_nether run locate biome terralith:scarlet_mountains` or the Scarlet biome id; `/zq census` driftwood / deadwood / morel / cave carrot features over a few chunks near spawn
+@pass all `creativeworldgen:<mod>` packs listed and enabled; sky island and waystone ruin locatable; wild mushrooms, cave carrots, driftwood present as before (compare SQ-WGE / SQ-CDW census numbers)
+@fails a feature file left behind in `kubejs/data/creativeengineering/` (now duplicate) or a pack folder missing `pack.mcmeta`
+@from batches/r1113/c3_b1.qb
+> datapack list
+waitlog data packs? enabled 30
+expect creativeworldgen
+> locate structure creativeworldgen:sky_island
+waitlog (nearest creativeworldgen:sky_island|Could not find) 300
+> locate structure creativeworldgen:waystone_ruin_part
+waitlog (nearest creativeworldgen:waystone_ruin_part|Could not find|no structure|Unknown|Invalid) 300
+> locate biome terralith:scarlet_mountains
+waitlog (nearest terralith:scarlet_mountains|Could not find) 300
+> forceload add -80 -80 79 79
+sleep 60
+> zq count -80 50 -80 79 120 79 upgrade_aquatic:driftwood_log
+waitlog \[zq\] count upgrade_aquatic:driftwood_log: \d+ 300
+> zq count -80 -64 -80 79 120 79 fungidelight:morel_mushroom
+waitlog \[zq\] count fungidelight:morel_mushroom: \d+ 300
+> zq count -80 -64 -80 79 60 79 miners_delight:wild_cave_carrots
+waitlog \[zq\] count miners_delight:wild_cave_carrots: \d+ 300
+> forceload remove -80 -80 79 79
+look sky island located (ids are creativeworldgen: since the Worldgen carve; the row's creativeengineering: ids are gone); the waystone ruin is a meta structure (its part is the only registered structure: a "Could not find" is not a FAIL, use /cdevplace later); Scarlet Mountains is an Overworld Terralith biome (the row's Nether execute is wrong); the counts near spawn (mostly ocean) are for the record against SQ-WGE / SQ-CDW census numbers: driftwood > 0 expected on this ocean spawn
+
+## SQ-ENGM-03 | TNT shrapnel spawns (Compat); torch and seed milling recipes under creativedelight:; tags filled; wooden bucket recipe
+@group B (same boot)
+@commands `> summon minecraft:tnt ~ ~ ~ {Fuse:1}` near a scratch area, `> kill @e[type=creativeengineering:shrapnel]` count; `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `> forge tags minecraft:item get creativeengineering:millable_seeds`, `vinery` barrel tag, a mulch tag; `/zq recipes` of a wooden bucket recipe
+@pass shrapnel entities spawn (Compat); torch and seed milling recipes present under `creativedelight:`; millable seeds tag has the same members as `kubejs/exported/tags` (11-05 dump); barrel and mulch tags filled; wooden bucket item and its recipe present
+@fails the tag ran before `#forge:seeds` was complete in Delight's script pack order
+@from batches/r1113/c3_b1.qb
+> setblock 0 210 0 minecraft:stone
+> summon minecraft:tnt 0 211 0 {Fuse:1}
+sleep 0.4
+> kill @e[type=creativecompat:shrapnel]
+expect Killed [1-9]\d* entit|Killed .*[Ss]hrapnel
+> zq recipes creativedelight:shaped/torch_crafting_animal_fat
+waitlog \[zq\] recipes matching creativedelight:shaped/torch_crafting_animal_fat: 1 30
+> zq recipes creativedelight:createmilling/seeds_bone_meal
+waitlog \[zq\] recipes matching creativedelight:createmilling/seeds_bone_meal: 1 30
+> zq itemtag creativedelight:millable_seeds
+waitlog \[zq\] itemtag creativedelight:millable_seeds \(\d+\) 30
+shell python3 -c "import json;d=json.load(open('$INST/kubejs/exported/tags/item_tags.json'));v=d.get('creativedelight:millable_seeds',[]);print('pack dump millable_seeds',len(v))"
+> zq itemtag vinery:barrel
+> zq itemtag forge:mulch/green
+waitlog \[zq\] itemtag forge:mulch/green \(\d+\) 30
+expect itemtag vinery:barrel \([1-9]
+expect itemtag forge:mulch/green \([1-9]
+> zq makes creativedelight:wooden_bucket
+waitlog \[zq\] makes creativedelight:wooden_bucket: [1-9] 30
+look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag creativedelight:millable_seeds (row: creativeengineering:), the wooden bucket creativedelight:wooden_bucket; millable_seeds count equals the pack dump's (11-10). If no shrapnel is killed, the 0.4 s window may have been too long (shrapnel lifetime): rerun with `sleep 0.1` before judging
+
+## SQ-ENGM-04 | [surface] [shrapnel] values in Compat's file as in the old Engineering file (excavation half: client)
+@group B (same boot)
+@commands `/zq` config read of `[surface]` / `[shrapnel]` through `NCH.cfg('creativecompat', ...)`; fake player mines an ore vein with Ore Excavation, then `/undo_excavation`
+@pass walk speed values as in the old Engineering file; undo restores the blocks; excavated drops go to the inventory
+@fails `CompatConfig` splice (Surface / Wthit nesting)
+@from batches/r1113/c3_b1.qb
+shell grep -nE "^\[(surface|shrapnel|vein_undo)\]" config/creativecompat-common.toml
+shell diff <(git -C "$INST" show 85104427:config/creativeengineering-common.toml | sed -n '/^\[surface\]/,/^\[vein_undo\]/p' | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') <(sed -n '/^\[surface\]/,/^\[vein_undo\]/p' config/creativecompat-common.toml | grep -E "^\s*[A-Za-z_]+ =" | sed 's/^\s*//') | head -20; echo "diff exit ${PIPESTATUS[0]}"
+look no diff lines (or only keys added since 11-06) between the old Engineering [surface] values and Compat's; the Ore Excavation undo / auto-pickup half needs the client excavation key (not driven by perfBot): left for CQ-ENGM-01
+
+## SQ-ENGM-05 | chain boot as r1106cbp p1: CD transition items, failed recipes under 50, no new Compat / Delight script error
+@group A (chain, CEPortTesting)
+@commands `port_chain.sh` chain with the eight builds copied in; `run_boots.sh '^p1$'`
+@pass as r1106cbp p1; no new errors from Compat / Delight scripts
+@fails a moved script missing its `// requires:` guard
+@from batches/r1113/c3_ch1.qb
+bootexpect Done \(
+shell grep -h "transition items" logs/kubejs/startup.log | cut -c1-200
+shell grep -qE "\[creativedelight\] transition items \([0-9]+\)" logs/kubejs/startup.log
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not registered - add a row\|no incomplete item registered")" = 0
+shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log | tail -1; n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "failed=${n:-0}"; test "${n:-0}" -lt 50
+shell grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "creativecompat|creativedelight" | cut -c1-200 | head -10
+shell test "$(grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -ciE "creativecompat|creativedelight")" = 0
+bootreject Missing or unsupported mandatory
+look CD transition count (89 in the full pack); r1106cbp p1 is the reference (scratch_run_2026-11-06.md 5); a script error naming a moved file = its `// requires:` guard is missing
+
+## CQ-ENGM-01
+@group client (full pack)
+@commands look at dust piles, plate blocks, coil blocks, components, wires, wood pellets, prepared flesh block, seasoned / culture items, wooden bucket, arrow fletching in JEI and placed; walk on a BlockRunner path block and a framed block (camo speed); WTHIT on a surface block; Ore Excavation undo chat line
+@pass every model and texture shows (no purple-black); walk speed and the WTHIT speed line as before; lang lines show text, not keys
+@fails an asset left in `kubejs/assets` only, or a lang key under the wrong jar's `assets/<modid>/lang`
+@draft no batch holds this row yet

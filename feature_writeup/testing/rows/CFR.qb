@@ -1,0 +1,130 @@
+# Scratch queue rows CFR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CFR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CFR Campfire and Ender's stove tag in Creative Delight, 2026-11-04 ([creative_split.md](../creative_split.md) 7.9 steps 1 and 3, TODO `creativesplit/cdfinish #11`)
+@@date 2026-11-04
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Targets `creativecompat-1.0.0.jar` (installed 2026-11-04 19:05), `creativedelight-1.0.0.jar` (19:19) and `creativeengineering-1.1.09.jar` (19:17) (campfire rain, Comfort,
+@@text Campfire Rules JEI rows and `[campfire]` moved from Compat to CD; mixin now `mixin.minecraft.CampfireRainMixin` in
+@@text `creativedelight.mixins.json`). CFR-08 checks patcherMod 1.1.09's `#creativedelight:stoves` include in
+@@text `damage_tags/fire.json` and `burn_tick.json` (built by the Creative Magic and Equipment carve session, installed with
+@@text Creative Magic and Creative Equipment). Group A (superflat) unless noted; CFR-02 to -04 each need their own config state
+@@text before the boot. Run SQ-NDM (Nether's Delight member, same CD jar) in the same boots.
+@@text
+@@table
+## SQ-CFR-01 | campfire rain mixin applies once, from Delight
+@group A
+@commands Boot; `grep -n "CampfireRainMixin" logs/debug.log`; `grep -niE "campfire.*(error\|exception)\|InvalidInjection" logs/latest.log \| head`
+@pass `CampfireRainMixin` applies once, from `creativedelight.mixins.json` (none from `creativecompat.mixins.json`); no injection error (CD has `defaultRequire: 1`, so a miss crashes the boot)
+@fails Mixin json entry, or a stale Compat jar still listing it (applied twice: `@Unique` field clash)
+@from batches/r1106spf/b1.qb
+shell grep -c "CampfireRainMixin" logs/debug.log; grep -n "CampfireRainMixin" logs/debug.log | head -3; grep -niE "campfire.*(error|exception)|InvalidInjection" logs/latest.log | head
+bootreject (?i)campfire.*(InvalidInjection|exception)
+look one apply, from creativedelight.mixins.json
+
+## SQ-CFR-02
+@group A
+@commands Before the boot: `config/creativecompat-common.toml` holds `[campfire]` with `rainOutTicks = 100`, `config/creativedelight-common.toml` exists without `[campfire]`. Boot; read both files; reboot and grep again
+@pass `[swaps] config sections [campfire] merged from creativecompat-common.toml into creativedelight-common.toml`; the CD file has `[campfire]` with `rainOutTicks = 100` and the other six keys; after the boot the Compat file has no `[campfire]`; second boot: no merge line, no WARN
+@fails `CreativeDelight` constructor order (carry must run before `registerConfig`), or Forge did not correct the Compat file
+@draft no batch holds this row yet
+## SQ-CFR-03 | [campfire] carried from Compat's file into a new CD file, then the CD carve tables merged from the old file
+@group A
+@commands Before the boot: no `config/creativedelight-common.toml`; Compat file with `[campfire] rainOutTicks = 100`. Boot
+@pass `[swaps] config sections [campfire] carried over from creativecompat-common.toml to creativedelight-common.toml`, then the CD carve sections merged from `creativeengineering-common.toml` (if present); the CD file has `[members]`, `[campfire]` (100) and every other section after Forge's correction
+@fails `carrySections` wrote the file first and the second carry skipped: the merge branch must run
+@from batches/r1113/c2_l2.qb
+bootexpect \[swaps\] config sections \[campfire\] carried over from creativecompat-common.toml to creativedelight-common.toml
+bootexpect \[swaps\] config sections \[crop_growth, dandelion_maturing, crop_drops, stem_fruit, canning, cooking, perf\] merged from creativeengineering-common.toml into creativedelight-common.toml
+bootreject could not (carry|merge) config sections
+shell grep -nE "^\[" config/creativedelight-common.toml | tr '\n' ' '; echo; grep -nE "rainOutTicks *=" config/creativedelight-common.toml; grep -cE "^\[campfire\]" config/creativecompat-common.toml; true
+look the carry line comes before the merge line in the log; the CD file has [members] (or [compartments], M8), [campfire] with rainOutTicks = 100 and every other section after Forge's correction; last number 0 = Forge dropped [campfire] from Compat's file
+
+## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old patcherMod file into the existing CD file
+@group A
+@commands Before the boot (pack that skipped 1.2.00): Compat file without `[campfire]` (or no Compat file), `config/creativeengineering-common.toml` with `[campfire] rainOutTicks = 120`, CD file present. Boot
+@pass `[swaps] config sections [campfire] merged from creativeengineering-common.toml into creativedelight-common.toml`; CD file `rainOutTicks = 120`
+@fails The fallback `mergeSections(OLD_FILE ...)` in `CreativeDelight` ran before the Compat one, or `campfireCarried` was true
+@from batches/r1113/c2_l1.qb
+bootexpect \[swaps\] config sections \[campfire\] merged from creativeengineering-common.toml into creativedelight-common.toml
+bootreject \[campfire\] carried over from creativecompat-common.toml
+shell grep -nE "^\[campfire\]|rainOutTicks *=" config/creativedelight-common.toml
+look CD file [campfire] rainOutTicks = 120
+
+## SQ-CFR-05 | rain douses an open-sky campfire on stone only
+@group A
+@commands Default config. `/weather rain`; `/setblock` stone, a lit `minecraft:campfire` on it under open sky; second lit campfire on `minecraft:coal_block`; a lit `minecraft:soul_campfire` on stone; a lit campfire on stone under a 3-block roof; wait 200 ticks; `/data get block` / block state of each
+@pass Only the open-sky one on stone is `lit=false` (after 160 ticks; fizz sound, food on it stays); coal-block, soul and roofed ones stay `lit=true`; `/weather clear` + relight: stays lit
+@fails `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js)
+@from batches/r1106spf/b1.qb
+> fill 90 -61 -40 100 -61 -30 minecraft:stone
+> setblock 90 -60 -40 minecraft:campfire[lit=true]
+> setblock 93 -61 -40 minecraft:coal_block
+> setblock 93 -60 -40 minecraft:campfire[lit=true]
+> setblock 96 -60 -40 minecraft:soul_campfire[lit=true]
+> setblock 99 -60 -40 minecraft:campfire[lit=true]
+> fill 98 -57 -41 100 -57 -39 minecraft:stone
+> weather rain
+sleep 11
+> execute if block 90 -60 -40 minecraft:campfire[lit=false]
+> execute if block 93 -60 -40 minecraft:campfire[lit=true]
+> execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]
+> execute if block 99 -60 -40 minecraft:campfire[lit=true]
+count Test passed == 4
+> execute if block -25 -60 -35 minecraft:campfire[lit=false]
+> weather clear
+look the fixture campfire (open sky, grass) also out: SQ-SPF-81 thunder half
+
+## SQ-CFR-06 | rainDouses = false: open-sky campfire stays lit
+@group A
+@commands `qrun.py toml` CD `[campfire] rainDouses = false`, reboot; repeat the open-sky campfire of CFR-05
+@pass Stays lit after 400 ticks
+@fails `rainDouses` read from the wrong spec (Compat)
+@from batches/r1106spf/b1c.qb passed
+> setblock 90 -60 -44 minecraft:campfire[lit=true]
+> weather rain
+sleep 20
+> execute if block 90 -60 -44 minecraft:campfire[lit=true]
+expect Test passed
+> weather clear
+
+## SQ-CFR-07 | comfort near a campfire (default config)
+@group A
+@commands Default config. Bot player 2 blocks from a lit campfire, wait 40 ticks, `/data get entity <bot> ActiveEffects`; move the bot 6 blocks away, wait 120 ticks; `qrun.py toml` CD `[campfire] useComfort = false`, reboot, repeat at 2 blocks
+@pass Near: `farmersdelight:comfort` with 3 to 5 s left; far: none after it runs out; `useComfort = false`: `minecraft:regeneration`
+@fails `CampfireComfort.tick` not called, or the effect lookup (`farmersdelight:comfort` registry)
+@from batches/r1106spf/b1.qb
+> setblock 90 -60 -20 minecraft:campfire[lit=true]
+> effect clear qa
+> tp qa 92 -60 -20
+sleep 3
+> data get entity qa ActiveEffects
+expect farmersdelight:comfort|Id:
+> tp qa 96 -60 -20
+> effect clear qa
+sleep 7
+> data get entity qa ActiveEffects
+> tp qa -20 -60 -24
+look near: comfort 3 to 5 s left; far: none
+
+## SQ-CFR-08 | damage tags: creativedelight:stoves
+@group A
+@commands Boot; `grep "\[damage-tags\] loaded" logs/latest.log`; `grep -i "creativedelight:stoves" logs/latest.log`; probe (server script, `/reload`): `DamageTags.is(new DamageSource('endersdelight.endstone_stove'), 'creativecommon:fire')` and the same for `creativecommon:burn_tick`
+@pass Loaded line lists `creativedelight:stoves(1)`; no "neither a built-in flag tag nor defined by any pack" WARN for it; with patcherMod 1.1.09 or later both probes are true (with 1.1.08 also true, from the old direct entry)
+@fails CD jar missing `data/creativedelight/damage_tags/stoves.json`, or patcherMod's files lost the include
+@from batches/r1106spf/b1.qb passed
+bootexpect \[damage-tags\] loaded.*creativedelight:stoves\(1\)
+bootreject neither a built-in flag tag nor defined by any pack.*creativedelight:stoves
+
+## CQ-CFR-01
+@group client
+@commands Client with JEI and WTHIT, rain on: look at a lit campfire on stone in open rain; open JEI World Interactions, Campfire Rules tab
+@pass WTHIT shows the rain line with the count; Campfire Rules rows: placed unlit, lighting, shovel, water, rain 8 s, coal rule, soul campfire, Comfort; each row once (Compat no longer adds them)
+@fails `WorldRows.provider(CAMPFIRE ...)` in `CreativeDelight.registerKitchen`; WTHIT reads `CampfireRainInfo` set from CD
+@draft no batch holds this row yet
+@@text
+@@text Results: not run yet.

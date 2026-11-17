@@ -1,0 +1,179 @@
+# Scratch queue rows WG30 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WG30.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-WG30 worldgen batch 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon
+@@text
+@@text Worldgen TODO rows built in parallel on 2026-10-30, tested together on one scratch run. patcherMod build of 2026-10-30.
+@@text
+@@text **Run 2026-10-30 (afternoon, `creativeengineering-1.1.04.jar` of 13:38, seed 8675309, RCON driven):** worlds `wg30a`
+@@text (density 4, `log = ALL`, A01 + A03 overrides; A, B, D02), `wg30e` (density 4, no overrides; E, D03), `wg30c1` (density 1,
+@@text switch off; C01, C02, C05), `wg30c2` (switch on; C03, C04). Result per row in its ID cell. Not run: CQ-WG30-A04
+@@text (client). Method note: `/locate` sent over RCON runs on the server thread (Async Locator only takes player and console
+@@text sources), so a slow search stalls the server there (rare ruin: 65 s); use the stdin fifo for locate timing.
+@@text
+@@text ### A. Earth fill and DH clip (TODO `structures/earthfill #9`, `#10`, `locate #4`; [structure_tuning.md](../structure_tuning.md) 3.13, [locate.md](../locate.md) 3.7, LO-22)
+@@text
+@@text Earth-fill rows: group B, the recipe of [structures/12_earth_fill_camps.md](structures/12_earth_fill_camps.md) 2 (seed 8675309, `structureDensity` 4, scratch toml `[worldgen.earth_fill] log = "ALL"`, Chunky r 400 at 2144 -2592). A01 and A02/A03 can share one world if A01's override is added to the A03 list.
+@@text
+@@table
+## SQ-WG30-A01 **PASS 2026-10-30**: 34 village starts in the square, all `-> kept`, no `too wet`; 3 with water over 1.5x ground kept (e.g. T&T snowy slopes 315 / 0)
+@group B
+@commands scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids
+@pass every village line ends `-> kept`, none `CANCELLED`, none says `too wet`, also lines whose footprint has water more than 1.5x ground (#9)
+@fails `EarthFill.earthCancelled` / `EarthCheck.cancels`
+@draft no batch holds this row yet
+## SQ-WG30-A02 **PARTIAL 2026-10-30**: 27 Campsite starts, 1 cancel (fisher at [124, -115], 208 over water, too wet), none for air; ST-199 not checkable: the weight strip changed the pick at [-7, -9] (now a circus tent, cancelled by mounds); a sampled sunk camp (butcher, 2138 102 -2426) sits flush; no 1.1.04-jar run to compare air counts
+@group B
+@commands same run; the `[earth-fill]` lines of the 6 Campsite camps (sunk 4); then ST-199 (armorer campsite at chunk [-7, -9])
+@pass ST-199 passes; camp lines on slopes show more air than the same starts on the 1.1.04 jar; Campsite cancels rise by a few at most, each with a gap of 3 or more blocks under the camp (#10)
+@fails `EarthCheck.cancels` (`box.minY() + sink`); TerrainAdaptation sink value
+@draft no batch holds this row yet
+## SQ-WG30-A03 **PARTIAL 2026-10-30**: `minecraft:village_plains` [177, -93] logged at limit -1 and kept; the 31 `philipsruins:ancient_ruins` lines show limit 0 but none had earth over water or air, so the cancel path was not exercised; exempt ids not checked
+@group B
+@commands ST-54 at `log = "ALL"`: `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]` (village_savanna if no plains in the square)
+@pass the `-1,-1,-1` village is logged but never cancelled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing
+@fails as A01
+@draft no batch holds this row yet
+## SQ-WG30-A04 **PASS 2026-10-30**: no mixin or `DistantClip` error; Nether chunk at 24 24 and 8 24: lava 31..24; End chunks at 1208 8 / 1224 24 have no floor at y 47
+@group B-nether
+@commands boot with `[worldgen.distant] clip` true; forceload a Nether chunk and an End chunk (`execute in ... run forceload add`)
+@pass no mixin apply error for the three `*DistantClip*` mixins, no exception from `DistantClip`; Nether chunk has its lava sea at y 31 (real chunks are never clipped)
+@fails `DistantClip.clipsDimension`
+@draft no batch holds this row yet
+## CQ-WG30-A04 **NOT RUN** (client row)
+@group client
+@commands LO-22: delete the client's DH data for the Nether and the End, fly over the End's outer islands and the Nether with DH generating; then a fresh Overworld area
+@pass no stone floor at y 47 in Nether / End LODs, the lava sea is drawn; Overworld LODs still clipped (LO-11)
+@fails `DistantClip.mark` / `skipFeature` gate
+@draft no batch holds this row yet
+@@text
+@@text ### B. Soul lanterns and soul torches to plain ones (TODO `structures/netherblockswap #3`; [nether_worldgen.md](../nether_worldgen.md) K25, K32, NW-13 to NW-17)
+@@text
+@@text Data only: `nether_block_swaps.json` (1407 swaps, 323 new) and `config/betterdungeons-forge-1_19.toml`
+@@text (`Enable Nether Blocks in Dungeons` false). Group B world (any seed); `/place template` goes through
+@@text `StructureTemplateManager#get`, so it shows the swaps without finding the structure.
+@@text
+@@table
+## SQ-WG30-B01 **PASS 2026-10-30**: `[template-swaps] 1412 block swap(s) in 105 template(s)`, no `bad entry`
+@group B
+@commands boot; `grep '\[template-swaps\]' latest.log`
+@pass the load line reads `1412 block swap(s) in 105 template(s)` (1407 nether + 5 meat; was 1089); no `bad entry` line
+@fails file not regenerated or not copied: rerun `python3 tools/gen_nether_swaps.py`
+@draft no batch holds this row yet
+## SQ-WG30-B02 **PASS 2026-10-30**: 0 soul blocks; layer1 12 hanging + 57 standing lanterns (template 12 + 61; the 4 missing stood on air at the template's bottom layer, placed in mid-air), base_l 13 + 1 + wall torch west, parkour wall torches N2 S2 W4, snowy depot E1 S2 W1 (facings as the template); no `no longer hold`
+@group B
+@commands `/place template terralith:spire/layer1` and `terralith:spire/base_l`; `/place template betterjungletemples:challenge_room/challenge_room_water_parkour`; `/place template veggiesdelight:village/houses/snowy_depot_house`; then grep the log for `no longer hold`
+@pass plain lanterns, none soul; hanging ones hang under their chains, standing ones stand; wall torches plain and on their walls (facing kept); no `no longer hold` warning for these templates
+@fails standing where it should hang or torch facing north everywhere: `keep_for` / `FAMILY_KEEP` in `gen_nether_swaps.py`; warnings: template moved, rerun the generator
+@draft no batch holds this row yet
+## SQ-WG30-B03 **PASS 2026-10-30**: ancient city center 6 soul lanterns (+57 soul sand), bone dungeon start 1 soul lantern
+@group B
+@commands `/place template minecraft:ancient_city/city_center/city_center_1` and `philipsruins:bone_dungeon_start`
+@pass both still have soul lanterns (ancient city and sculk structure exclusion)
+@fails `except` / `except_holding` `@sculk` in rule 23
+@draft no batch holds this row yet
+## SQ-WG30-B04 **PASS 2026-10-30**: 1 zombie + 3 small dungeons placed and scanned (y 28 to 38): plain lanterns (44) and campfires, coarse dirt, no soul block in them; the only soul blocks in the scanned area are inside a Philip's `lost_soul_city` start (y -53..1)
+@group B
+@commands `/place structure betterdungeons:zombie_dungeon` and `betterdungeons:small_dungeon` a few times each (or `/locate` and visit 3)
+@pass no soul lantern, soul campfire or soul sand anywhere in them (plain lanterns, campfires, coarse dirt)
+@fails the YUNG's config line did not reach the server copy of the toml
+@draft no batch holds this row yet
+@@text
+@@text ### C. Weight strip, test overrides, fortified metas vs `/locate` (TODO `structures/rates-and-groups #3`, `#5`, `#6`; [structure_tuning.md](../structure_tuning.md) 3.27, ST-217, ST-218, ST-221 to ST-223, ST-135)
+@@text
+@@text Data + patcherMod (CEConfig `[worldgen.debug] testOverrides`, `[worldgen.locate] searchTimeoutSeconds` default 300).
+@@text `structure_groups.json` weights stripped (204 members to 100, `tuned` ones kept), `meta_structures.json` fortified shares
+@@text 0.25, new `structure_test_overrides.json`. Needs the 2026-10-30 patcherMod jar (without it the switch reads off and
+@@text the timeout stays at the toml value). C01, C02, C05 run at density 1 with the switch **off**; C03 and C04 in a second
+@@text fresh world with it **on**. Seed 8675309.
+@@text
+@@table
+## SQ-WG30-C01 **PASS 2026-10-30**: summary without TEST OVERRIDES, no ERROR; report: swamp outpost 100, flower house 100, camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, `takesapillage:pillager_camp` 87; no `## Test overrides`
+@group B
+@commands boot (switch off); `grep '\[structure-tuning\]' latest.log`
+@pass summary line has no `TEST OVERRIDES` and no ERROR line; `structure_tag_report.md` shows weight 100 for stripped members (e.g. `towns_and_towers:pillager_outpost_swamp`, `villager_flower_house:flower_house`), the Campsite camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, camp 87; no `## Test overrides` section (ST-217)
+@fails a member with `tuned` changed: `strip_weights` in `gen_structure_groups.py`; unknown field `tuned`: old `structure_overrides.js`
+@draft no batch holds this row yet
+## SQ-WG30-C02 **PARTIAL 2026-10-30**: census done (100,616 slot chunks, 2,749 starts, 316 s, 5 false negatives: old refinery x4 and a mineshaft, reason biome); at density 1 the counts are too small to judge evenness (settlements 6 starts in 17 slots); counts in structure_tuning.md 3.27
+@group B
+@commands same world: Chunky square r 400 at 2144 -2592, then `/cwglocate census 96 2144 -2592`
+@pass per group, members that share a biome and have equal frequencies start in about equal numbers (x0.7 to x1.4), e.g. the T&T villages with frequency 1.0 in plains; write the per-member counts into structure_tuning.md 3.27 for TODO #2 (ST-218)
+@fails uneven: check `biome_frequency` and the frequencies (kept on purpose); not a failure of the strip itself
+@draft no batch holds this row yet
+## SQ-WG30-C03 **PASS 2026-10-30**: one `TEST OVERRIDES ACTIVE` line with 33 changes, summary `TEST OVERRIDES (33)`, report `## Test overrides`, no REFUSED
+@group B
+@commands stop; scratch toml `[worldgen.debug] testOverrides = true`; new world; boot; `grep 'TEST OVERRIDES' latest.log`
+@pass exactly one `TEST OVERRIDES ACTIVE` warning listing 33 changes (towers weight 100, rare ruin frequency 0.25, fortified shares 0.45, town villages 0.1...); summary starts `TEST OVERRIDES (33)`; report has `## Test overrides`; no `REFUSED` line; for ST-221 the C01 boot is the switch-off half
+@fails no line: the jar lacks `WorldgenConfig.testOverrides` (old patcherMod) or the toml key did not reach the server copy
+@draft no batch holds this row yet
+## SQ-WG30-C04 **PASS 2026-10-30**: fortified_ruins 2728 blocks (4 s; fortified village + 3 ruins 64 to 71 out), fortified_camps 2608 (8 s; 2 camps 79 and 81 out), mangrove tower 2254 (9 s), rare ruin 2771 (65 s); bad `biomes` key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)`, report "None applied: the file was refused"
+@group B
+@commands same world (switch on): ST-135 `/locate structure creativeengineering:meta/fortified_ruins` and `.../meta/fortified_camps` from 0 0, with `[worldgen.meta_structures] log = true`; then `/locate structure mysticrift_pillagers_towers_aris:mangrove_pillager_tower` and `philipsruins:rare_ruin`; then add `"biomes": "#minecraft:is_overworld"` to one entry of the scratch copy of `structure_test_overrides.json` and `/reload`
+@pass both metas answer inside 300 s; the meta log lists a fortified village (or red roof castle) with 2 to 6 ruins / 2 to 4 camps 44 to 108 blocks out; the tower and the rare ruin answer; after the bad key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)` warning and the report says the file was refused (ST-222, ST-135)
+@fails metas time out even with the overrides: earth fill or peaceful radius cancels (grep `[earth-fill]` / `[placement-priority] dropped` for the anchor), not a rate problem
+@draft no batch holds this row yet
+## SQ-WG30-C05 **PASS 2026-10-30**: toml `searchTimeoutSeconds = 300`; fortified_camps from 0 0: 1823 blocks (4 s), from 2448 -624: same village, 3019 blocks (1 s); fortified_ruins from 0 0: 2608 blocks (5 s); camps 56 / 74 and ruins 73 to 97 blocks out; no timeout
+@group B
+@commands first world (switch off, density 1): `/zcfg` or the toml shows `searchTimeoutSeconds = 300`; `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, then `meta/fortified_ruins` from 0 0
+@pass each answers, or ends with a clean `[locate] ... timed out after 300 s` line (no stall, server keeps ticking; LO-05 style); record the time and load count of each (ST-223)
+@fails timeout still 120: Forge kept the old toml value; a stall: `LocateStats.expired` path
+@draft no batch holds this row yet
+@@text
+@@text ### E. Water share 0, metas off coasts, Nullscape biomes (TODO `structures/earthfill #2`, `structures/metas #5`, `worldgen/biomes #8`)
+@@text
+@@text New defaults (patcherMod CEConfig and the instance toml): `[worldgen.earth_fill] maxWaterSurplus` 0.5 -> 0.0,
+@@text `[worldgen.meta_structures] avoidCoasts` false -> true (restart only, not reloaded live). `biome_config.json` End:
+@@text `nullscape:crystal_peaks` x0.25 -> x3 (model 0.61 % -> 3.95 % of the End surface), `nullscape:void_barrens` x0.75 -> x2
+@@text (1.825 % -> 5.41 %). All three are new-chunk or new-world changes. E01 and E02 use the A world recipe (group B, seed
+@@text 8675309, Chunky r 400 at 2144 -2592) but **without** A01's village override: an override with every limit -1 skips the
+@@text share check, so villages would never show a share cancel.
+@@text
+@@table
+## SQ-WG30-E01 **PASS 2026-10-30**: every line `surplus limit 0.0`; inland square 359 starts, 15 cancelled, 6 too wet (all share-only, ratios 1.76 to inf, none under 1.5); coast r 200: 143 starts, 0 too wet; no kept start with water > ground; the 470 / 425 village is not in this world (weight strip)
+@group B
+@commands scratch toml `[worldgen.earth_fill] log = "ALL"`, no `overrides`; Chunky the square, then a coast square (r 200 at the spawn beach -80 -16); `grep '\[earth-fill\].*footprint' latest.log` and tabulate water / ground for kept and cancelled starts
+@pass every line shows `surplus limit 0.0`; every `too wet` line has water > ground, every kept start has water <= ground; on diag3's numbers expect about one more cancel (the 470 / 425 shore village); for each share-only cancel with a ratio under 1.5 teleport there: open water or a lake island = right, a shore with a pond = wrong
+@fails more than two wrong cancels: raise `maxWaterSurplus` to 0.25 (then 0.5) in the toml and CEConfig; `EarthFill.Footprint.tooWet`
+@draft no batch holds this row yet
+## SQ-WG30-E02 **PASS 2026-10-30**: toml `avoidCoasts = true`; ST-203 all three `not placed, no anchor fits`; ST-204 all three built; driftwood flotilla found 144 blocks out and assembles (15/15, 10/10); square: 35 land metas, all built (diag3 count not recorded, no comparison)
+@group B
+@commands same world, toml `[worldgen.meta_structures] log = true`; ST-203: `/place structure` `creativeengineering:meta/farmers_camp`, `house_camp`, `ruin_scatter` at the spawn beach (-80 100 -16); ST-204: the same three at 2144 -2592; `/locate structure` a driftwood flotilla; count assembled land metas in the Chunky square vs the 2026-10-19 diag3 log
+@pass the switch reads true (log or `/zcfg`); ST-203: all three "not placed, no anchor fits"; ST-204: all three build; the flotilla (in `meta/coast_ok`) still assembles; land metas within about 32 blocks of a beach or river fail (expected side effect, written up), elsewhere their count matches diag3
+@fails switch still false: Forge kept an old toml value, check the instance toml; flotilla gone: `meta/coast_ok` tag in `structure_tags.json`
+@draft no batch holds this row yet
+## SQ-WG30-E03 **PARTIAL 2026-10-30**: End line `override minecraft:the_end`, no note for either biome; crystal peaks 1361 (0 0) / 1647 (3000 0), void barrens 906 / 1345, so only one find is nearer than 1,064 / 1,086 (other seed); a 20,000-point `getNoiseBiome` sample of the End (r 20,000) gives crystal peaks 5.28 %, void barrens 7.11 % (model 3.95 / 5.41)
+@group B (new world, second seed: 8675309)
+@commands boot, check the biome tuner lines in latest.log; `execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, same for `nullscape:void_barrens`, from 0 0 and from 3000 0; optionally `/dumpclimate` in the End and compare the shares
+@pass the End line says `override minecraft:the_end`, no `note` for crystal peaks or void barrens; both biomes found from both points, each nearer than the 1,064 / 1,086 blocks seen on seed -8188900049893920259 at the old multipliers; a dump (if taken) holds both biomes
+@fails not found: the model and the live End disagree (biome_tuning.md F4); raise the multiplier or set `target_pct`, or check whether `ModdedBiomeSource` replaces the layout
+@draft no batch holds this row yet
+@@text
+@@text ### D. Floating islands and seabed clearance (TODO `structures/terrain #5`, `#7`; [structure_tuning.md](../structure_tuning.md) 3.26, ST-233, ST-234)
+@@text
+@@text patcherMod `SkyIslands` (Sky Structures' 9 island features: one island per hit, based on the higher of ground and sea)
+@@text and `SeabedClearance` (structure tag `creativeengineering:seabed_clearance`: 7 Terralith `underground/*`, 6
+@@text Subterrestrial land cabins). New chunks only. D01 and D03 can share the A / E world (group B); D02 needs any Overworld.
+@@text
+@@table
+## SQ-WG30-D01 **PASS 2026-10-30**: `[seabed-clearance] world load: 13 structures tagged (clearance 8, reach 4)` in all four boots; no mixin error
+@group B
+@commands boot; `grep -E 'seabed-clearance\|SkyIslands\|SeabedClearance' latest.log`
+@pass `[seabed-clearance] world load: 13 structures tagged (clearance 8, reach 4)`; no mixin apply error for `ConfiguredFeatureSkyIslandsMixin` or `ChunkGeneratorSeabedClearanceMixin`
+@fails 0 tagged: `terrain_adaptation.js` tag block did not load (KubeJS error) or ids changed; mixin error: SRG names in the two mixins
+@draft no batch holds this row yet
+## SQ-WG30-D02 **PASS 2026-10-30**: 13 placed (7 over deep ocean, 3 on a hillside, 3 on flat land): each one island (bees 207 blocks every time), ocean ones y 100 to 149, land ones above the ground and roofs under them; stop line `placed 22` = 13 + 9 from worldgen. Label note: the hillside and flat blacksmith islands count as `over water` (see TODO terrain #5 note)
+@group B
+@commands over a deep ocean (`/locate biome minecraft:deep_ocean`, stand on the water) run `/place feature sky_structures:grass_island_bees` 5 times, then `grass_island`, `grass_island_blacksmith` once each; same 3 over flat land and on a hillside; stop the server
+@pass every island stands 16 to 79 blocks above the sea surface (land: above the highest ground under it), never in or under water; each command places exactly one island (no second copy nearby); stop line `[sky-islands] placed 13: {... over water=..., ... over land=...}` with counts that match
+@fails island in water: `SkyIslands.place` base / heightmap; two islands: the mixin is not applied (Sky Structures' own loop ran); `failed to place`: template id (blacksmith uses `sky_grass_blacksmith`)
+@draft no batch holds this row yet
+## SQ-WG30-D03 **FAIL 2026-10-30** (seabed part passes): stop lines `dropped 148` / `dropped 145 starts`, tag ids only; 9 boxes checked (3 cabin, 6 witch hut finds): seabed intact over every one, but kept starts under the ocean sit in flooded caves: jungle cabin [104, 84] (top y 28, seabed 51) has water at 13..19 around its slabs, 3,768 water in the box (template has 3); witch huts [-92, 0] and [94, 93] also hold water. Clearance checks only the seabed distance, not aquifer water
+@group B
+@commands Chunky r 400 around a jungle coast with deep ocean (`/locate biome minecraft:jungle` from an ocean spawn, or any lush-caves-under-ocean area); then `/locate structure subterrestrial:jungle_cabin` and `terralith:underground/witch_hut` from the ocean side, tp to 3 finds each; stop the server
+@pass no cabin or Terralith cave structure has an open hole in the seabed above it or water inside; stop line `[seabed-clearance] dropped N starts: {...}` with N above 0 for a sea-heavy square, ids only from the tag; finds under land look as before
+@fails flooded start still present: compare its box top with the floor there (8-block clearance too small for a `beard_box` piece: raise `CLEARANCE`); N 0 in an ocean square: tag not bound (D01)
+@draft no batch holds this row yet

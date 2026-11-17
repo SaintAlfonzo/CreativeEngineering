@@ -1,0 +1,87 @@
+# Scratch queue rows VS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/VS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Vine shearing, 2026-10-31 ([vine_shearing.md](../vine_shearing.md), TODO `potions/enchanting #5`)
+@@date 2026-10-31
+@@jars creativecommon
+@@sources feature_writeup/vine_shearing.md
+@@text
+@@text patcherMod 1.1.04 build of 2026-10-31 (`VineShearing`, `VineBlockShearMixin`). Group A (superflat). Shearing needs a
+@@text player, so the server checks place the sheared state directly; the shears interaction and the look are VS-01 to VS-11
+@@text in game. Each growth check: `/gamerule randomTickSpeed 300`, wait 60 s, look, set it back to 3.
+@@text
+@@table
+## SQ-VS-01 | vine shearing mixin, flower vine models
+@group A
+@commands Boot
+@pass `Done (`; no mixin error naming `VineBlockShearMixin`; no blockstate/model warning for `floralench:*_vine` or `botania:solid_vine`
+@fails Mixin error: SRG names `m_7926_` / `m_213898_`; a model warning means a variant file names every property and needs `fertile`
+@from batches/r1106spf/b1.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*VineBlockShearMixin
+bootreject (?i)(missing|exception).*(floralench:[a-z_]*vine|botania:solid_vine)
+
+## SQ-VS-02 | sheared flower vine stays put, unsheared spreads (60 s at randomTickSpeed 300; also runs SQ-VS-03)
+@group A
+@commands Stone wall 8 high; `/setblock` at the top on its face `floralench:poppy_vine[north=true,fertile=false]` and 6 blocks along `floralench:poppy_vine[north=true]`
+@pass Sheared: still one block (`/execute if block ... floralench:poppy_vine[fertile=false]`); unsheared: has grown down or sideways
+@fails Sheared one grew: the randomTick cancel is not applied (check the mixin loaded)
+@from batches/r1106spf/b1.qb
+> setblock 10 -53 9 floralench:poppy_vine[south=true,fertile=false]
+> setblock 16 -53 9 floralench:poppy_vine[south=true]
+> setblock 20 -51 10 minecraft:weeping_vines[age=25]
+> setblock 26 -51 10 minecraft:weeping_vines[age=0]
+> tp qa 15 -60 5
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 10 -53 9 floralench:poppy_vine[fertile=false]
+> execute if block 10 -54 9 minecraft:air
+> execute if block 9 -53 9 minecraft:air
+> execute if block 11 -53 9 minecraft:air
+> execute if block 16 -54 9 floralench:poppy_vine
+count Test passed >= 4
+look the last answer (unsheared grew down) may fail if it spread sideways instead: zq count 13 -60 9 19 -53 9 floralench:poppy_vine in the next row decides
+
+## SQ-VS-03 | weeping vine age 25 does not grow, age 0 does
+@group A
+@commands `/setblock` `minecraft:weeping_vines[age=25]` and `minecraft:weeping_vines[age=0]` under a ceiling 10 up, 6 apart
+@pass age 25: still one block; age 0: grown down
+@fails Vanilla, not this feature: re-read `GrowingPlantHeadBlock#isRandomlyTicking`
+@from batches/r1106spf/b1.qb
+> zq count 13 -60 9 19 -53 9 floralench:poppy_vine
+> execute if block 20 -52 10 minecraft:air
+> execute if block 26 -52 10 minecraft:weeping_vines_plant
+count Test passed == 2
+look zq count of the unsheared vine area above 1 (VS-02 unsheared spread)
+
+## SQ-VS-04 | flower vine default state is fertile
+@group A
+@commands `/setblock ~ ~ ~ floralench:poppy_vine` (no properties)
+@pass Placed state has `fertile=true` (`/execute if block ... [fertile=true]`)
+@fails Default flipped: a vine constructor sets defaults from a state with `fertile=false`; set it in the mixin
+@from batches/r1106spf/b1.qb passed
+> fill 10 -60 10 18 -53 10 minecraft:stone
+> setblock 18 -58 9 floralench:poppy_vine
+> execute if block 18 -58 9 floralench:poppy_vine[fertile=true]
+expect Test passed
+
+## SQ-RW-28 | Dreams & Desires rose, rubber, spirit wood removed (new row, recipes_wood.md 2.6)
+@group A
+@commands boot; probe `global.removedWoods` keys and `global.removedItems`
+@pass `river`, `rose`, `rubber`, `spirit`; every rose / rubber / spirit id and the 18 track ids in `removedItems`; no `[itemMerges]` skipped or chain line; no `[item_dict] Missing`
+@fails `startup_scripts/_lib/removed_woods.js` (RW-28)
+@from batches/r1031/a1_effects.qb
+> zq makes create_dd:rose_planks
+> zq makes create_dd:rubber_planks
+> zq makes create_dd:spirit_planks
+> zq tagsof create_dd:rose_log
+> zq makes create_dd:smoked_planks
+expect makes create_dd:rose_planks: 0
+expect makes create_dd:rubber_planks: 0
+expect makes create_dd:spirit_planks: 0
+reject item tags of create_dd:rose_log: \S
+reject makes create_dd:smoked_planks: 0
+kjsreject (removed_woods\.js).*(Error|error)
+look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block

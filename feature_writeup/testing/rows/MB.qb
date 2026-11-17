@@ -1,0 +1,130 @@
+# Scratch queue rows MB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-MB monster box vaults, 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9, TODO `mobs/tweaks #5`, MT-34 to MT-37, MT-47 to MT-50)
+@@date 2026-10-30
+@@sources feature_writeup/mob_block_tweaks.md
+@@text
+@@text Needs patcherMod 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,
+@@text `CreateBreakerMonsterBoxMixin`), the KubeJS block properties, block tags and reward table, and
+@@text `quark-common.toml` with `Enable Extra Loot Table = false`. Group A (superflat), Normal difficulty, a bot player.
+@@text For SQ-MB-04 set `[monster_box] cooldownTicks = 200` in the scratch `creativeengineering-common.toml` before boot.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-MB-01 | monster box mixins and reward table
+@group A
+@commands Boot; grep latest.log for `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `monster box reward`
+@pass no mixin apply error, no missing-table warning
+@fails mixin target or SRG name wrong; table path
+@from batches/r1106spf/b1.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*(MonsterBoxBlockEntityMixin|CreateBreakerMonsterBoxMixin)
+bootreject (?i)monster.?box.*(missing|not found)
+
+## SQ-MB-02 | monster box stays and records its wave (Normal difficulty, bot next to it)
+@group A
+@commands `/setblock ~2 ~ ~ quark:monster_box`; tp the bot next to it; wait 3 s; `/execute if block ~2 ~ ~ quark:monster_box`; `/data get block ~2 ~ ~`
+@pass box still there; NBT has `creativeengineering:phase` 1b and a `creativeengineering:wave` list of 5-8 UUIDs
+@fails redirect not applied (box gone) or claim scan missed the mobs
+@from batches/r1106spf/b1.qb
+> difficulty normal
+> setblock 20 -60 -20 quark:monster_box
+> tp qa 18 -60 -20
+sleep 4
+> execute if block 20 -60 -20 quark:monster_box
+> data get block 20 -60 -20
+expect Test passed
+expect creativeengineering:phase": 1b
+expect creativeengineering:wave
+look the wave list holds 5 to 8 UUIDs
+
+## SQ-MB-03 | wave dead -> one reward stack, rest phase
+@group A
+@commands `/kill @e[type=!player,type=!item,distance=..20]`; wait 2 s; `/data get block ~2 ~ ~`; count `@e[type=item,distance=..3]`
+@pass phase 2b, `until` = game time + 72000; exactly 1 item entity at the box
+@fails wave check or reward roll
+@from batches/r1106spf/b1.qb
+# scratch-only: no mob drops, so the item count is the reward alone; bot leaves at once so the 200-tick cooldown
+# does not re-arm the box with the bot beside it (SQ-MB-04 needs phase 0 first) and the bot cannot pick up the reward
+> kill @e[type=minecraft:item]
+> gamerule doMobLoot false
+> tp qa 0 -60 0
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,type=!minecraft:item,distance=..24]
+sleep 3
+> data get block 20 -60 -20
+> execute positioned 20 -60 -20 if entity @e[type=item,distance=..3]
+expect creativeengineering:phase": 2b
+expect creativeengineering:until
+expect Test passed, count: 1
+> gamerule doMobLoot true
+look until = game time + 72000 normally; this boot has cooldownTicks 200, so until = game time + 200
+
+## SQ-MB-04 | cooldown ends, a new wave starts (cooldownTicks 200)
+@group A
+@commands (cooldownTicks 200) after SQ-MB-03 wait 11 s with the bot away, then bring it back
+@pass phase 0b, then a new wave and phase 1b
+@fails cooldown never ends
+@from batches/r1106spf/b1.qb passed
+> tp qa 0 -60 0
+> kill @e[type=item]
+sleep 12
+> data get block 20 -60 -20
+> tp qa 18 -60 -20
+sleep 4
+> data get block 20 -60 -20
+expect creativeengineering:phase": 0b
+expect creativeengineering:phase": 1b
+> execute positioned 20 -60 -20 run kill @e[type=!minecraft:player,distance=..24]
+
+## SQ-MB-05 | monster box mining tags
+@group A
+@commands `/data get block ~2 ~ ~` on a box in phase 2; check the block's destroy speed with `/kubejs` dump or WTHIT (client)
+@pass hardness 50, needs diamond pickaxe
+@fails startup modification or tags not loaded
+@from batches/r1106spf/b1.qb
+> execute if block 20 -60 -20 #minecraft:mineable/pickaxe
+> execute if block 20 -60 -20 #minecraft:needs_diamond_tool
+count Test passed == 2
+look hardness 25 per the changelog (queue row says 50): check with WTHIT in the client block (CQ-MB-08)
+
+## SQ-MB-06 | Create drill cannot break it
+@group A
+@commands Powered Create drill facing a box, 30 s
+@pass box still there
+@fails Create mixin not applied
+@from batches/r1106spf/b1.qb
+> setblock 22 -60 -20 create:creative_motor[facing=west]
+> setblock 21 -60 -20 create:mechanical_drill[facing=west]
+sleep 30
+> execute if block 20 -60 -20 quark:monster_box
+expect Test passed
+look if the drill did not turn (motor facing wrong), set facing=east on the motor and rerun the row
+> fill 21 -60 -20 22 -60 -20 minecraft:air
+
+## SQ-MB-07 | vaultMode off: box breaks after spawning (Quark behaviour)
+@group A
+@commands `[monster_box] vaultMode = false`, boot, repeat SQ-MB-02
+@pass box breaks after spawning (Quark behaviour)
+@fails off switch
+@from batches/r1031/a2_variants.qb passed
+> setblock 20 -60 -24 quark:monster_box
+> tp qa 18 -60 -24
+sleep 5
+> execute if block 20 -60 -24 quark:monster_box
+expect Test failed
+> execute positioned 20 -60 -24 run kill @e[type=!minecraft:player,distance=..24]
+
+## CQ-MB-08 | monster box: standing warning, sneak break, no flames in cooldown (MT-48, MT-49)
+@group client
+@commands MT-48, MT-49 by hand: diamond pickaxe standing (warning, box back), sneaking (breaks, no drop); flames gone in cooldown
+@pass as MT-48, MT-49
+@fails break guard or client phase sync
+@from batches/r1101/c1_client.qb
+> tp @s 8 -55 -22 180 20
+sleep 3
+> setblock 8 -60 -30 quark:monster_box
+> tp @s 6 -60 -30 -90 20
+shot box
+look hand: diamond pickaxe standing -> warning, box back; sneaking -> breaks, no drop; WTHIT hardness 25 (changelog) vs the queue's 50; flames gone while it rests (SQ-MB phase 2)

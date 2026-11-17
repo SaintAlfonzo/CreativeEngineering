@@ -1,0 +1,35 @@
+# Scratch queue rows PERFCFG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PERFCFG.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Performance defaults: Distant Horizons and ModernFix, 2026-10-27 ([perf.md](../perf.md) 10.2 #2, 11.2 #9, TODO `perf #11`, `perf #22`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text Config `DistantHorizons.toml` (threads 1, both request distances 256) and ModernFix 5.18.1 in `mods/` (mod_sides row
+@@text added). Group A. Copy `config/DistantHorizons.toml` and the ModernFix jar into the scratch dirs. Create Deco, Immersive
+@@text Weathering and the ATLauncher debug log config are unchanged by decision (perf.md 11.2 #5, #8).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-PERFCFG-01
+@group A
+@commands Boot with DH and ModernFix in `mods/`; `grep -i -E "modernfix|Mixin.*(error|fail)|Exception" logs/latest.log`
+@pass Server reaches `Done`; ModernFix prints its patch list and no mixin error or crash; no DH config parse error
+@fails Name the mixin or mod in the stack; ModernFix mixin options are in `config/modernfix-mixins.properties` (written on first boot)
+@draft no batch holds this row yet
+## SQ-PERFCFG-02
+@group A
+@commands `grep -n -E "numberOfThreads|maxGenerationRequestDistance|maxSyncOnLoadRequestDistance" config/DistantHorizons.toml` after boot; `/forge tps` idle after 4 min
+@pass 1 / 256 / 256 kept (DH did not rewrite them); idle MSPT no worse than the 5.5 ms of perf.md 10.1
+@fails DH rewrote the file: check the `_version` header
+@draft no batch holds this row yet
+## SQ-PERFCFG-03
+@group A
+@commands Pregen `chunky radius 400` at 4000 4000 as in perf.md 10.1, once with ModernFix and once without (move the jar out); compare `Done` time and pregen time
+@pass Not slower; record both in perf.md 11.2 #9
+@fails Record the numbers; do not ship ModernFix on a loss
+@draft no batch holds this row yet
+@@text
+@@text Results 2026-10-27 night (overall run, perf.md 12): SQ-PERFCFG-01 PASS (ModernFix patch list, its own "Static binding violation" WARNs only; it carried `cache_strongholds`, which pre-empted the pack's ring cache: now off in `config/modernfix-mixins.properties`). SQ-PERFCFG-02: values kept PASS; idle 5.7-6.0 ms against 5.5 ms not met on the number, the JFR puts the extra on mob ticking of an aged world (pack and DH costs fell, p95 41 -> 6.5 ms). SQ-PERFCFG-03 not run (owner 2026-10-27: overall measurement only, no per-change worlds).

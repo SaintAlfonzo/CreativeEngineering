@@ -1,0 +1,210 @@
+# Scratch queue rows RDX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RDX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RDX Rustic member items, 2026-11-01 ([rustic_delight.md](../rustic_delight.md) 5.10; TODO `creativedelight/members #11 #15 #16 #20 #25 #26`, `framework #12`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/rustic_delight.md
+@@text
+@@text **RERUN (nested jar 2026-11-02):** SQ-RDX-01, -04, -05 (coffee merge) rerun with the 2026-11-02 CD jar (00:45) and CB jar together, SQ-CDJ5 Boot 1.
+@@text
+@@text Needs the CD jar and the Creative Brewing jar built 2026-11-01 20:30 (or later), plus the pack's item_dict.js, block_dict.js and transition_items.js: full restart. Group A (superflat), except RDX-13 (an old save).
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-RDX-01 | Rustic member (baked): no recipe or NCH error
+@group A
+@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Boot; `grep -n "rusticdelight\|Rustic Delight upstream" logs/latest.log \| grep -i "error\|exception\|data:" \| head`; `grep -n "rusticdelight\|pizza\|golden_coffee" logs/kubejs/server.log \| grep -i "error\|warn" \| head`
+@pass "Rustic Delight upstream data: N files" line; no recipe parse error; no `incomplete(...) not registered`; no NCH warning
+@fails missing incomplete key in transition_items.js; translator REPLACED broke a JSON
+@from batches/r1113/c4_a.qb passed
+bootreject (?i)rusticdelight.*(parse error|exception)
+bootreject incomplete\(.*\) not registered
+kjsreject (?i)(rusticdelight|pizza|golden_coffee).*(error|warn)
+kjsreject (?i)\[NCH\].*warn
+
+## SQ-RDX-02
+@group A
+@commands JEI search "Pancake", "Fried Dough"; hover Supplementaries' pancake
+@pass No Rustic plain Pancake or Fried Dough; Supplementaries' item is named "Pancake" with gray "Stackable: place up to 8 ..." line; the six flavoured Rustic pancakes still listed
+@fails lang not reloaded (client scripts)
+@draft no batch holds this row yet
+## SQ-RDX-03 | Rustic pancakes recipes
+@group A
+@commands Recipe lookup `rusticdelight:pancakes_from_pancake`, `pancake_from_pancakes`, `cutting/pancakes`; give a Pancakes plate, place, right-click x2, sneak-use with `supplementaries:pancake`, break it at 4
+@pass 6 Supplementaries Pancakes + Bowl -> plate; plate -> 6; knife -> 6 + Bowl; right-click gives `supplementaries:pancake`; sneak-use puts one back; broken plate drops Supplementaries pancakes
+@fails REPLACED not applied (recipes missing), PancakeStackBlock serving lookup
+@from batches/r1113/c4_a.qb passed
+> zq rdetail pancakes_from_pancake
+> zq rdetail pancake_from_pancakes
+> zq rdetail cutting/pancakes
+waitlog \[zq\] done 30
+expect \[zq\] rusticdelight:pancakes_from_pancake \{.*supplementaries:pancake
+expect \[zq\] rusticdelight:pancake_from_pancakes \{.*-> 6 (supplementaries:)?pancake\b
+expect \[zq\] rusticdelight:cutting/pancakes \{.*-> 6 (supplementaries:)?pancake\b
+
+## SQ-RDX-04 | coffees: only Caffeinated, 900 ticks, amplifier 0 (food properties)
+@group A
+@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Drink Syrup, Pumpkin, Cherry Blossom Coffee; `/data get entity @s ActiveEffects` after each (`/effect clear` between)
+@pass each: only `farmersrespite:caffeinated`, 900 ticks, amplifier 0; no Speed or Haste
+@fails CB jar old (swap list) or CD jar old (RDFoods)
+@from batches/r1113/c4_a.qb passed
+> zq food rusticdelight:syrup_coffee
+> zq food rusticdelight:pumpkin_coffee
+> zq food rusticdelight:cherry_blossom_coffee
+waitlog \[zq\] food rusticdelight:cherry_blossom_coffee 30
+expect \[zq\] food rusticdelight:syrup_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:pumpkin_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+expect \[zq\] food rusticdelight:cherry_blossom_coffee: .*effects \[farmersrespite:caffeinated amp 0 900t x1(\.0)?\]
+reject \[zq\] food rusticdelight:[a-z_]*coffee: .*minecraft:(speed|haste)
+
+## SQ-RDX-05 | coffee recipes merged
+@group A
+@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Recipe lookup `farmersrespite:brewing/coffee`, `create_central_kitchen:mixing/coffee`, `creativedelight:frbrewing/gamblers_tea`; JEI Farmer's Respite coffee items
+@pass first two absent; gambler's tea from coffee beans + glow berries; Respite's coffee items hidden / merged as before
+@fails coffee_merge.js not in the jar
+@from batches/r1113/c4_a.qb passed
+> zq recipes farmersrespite:brewing/coffee
+> zq recipes create_central_kitchen:mixing/coffee
+> zq rdetail creativedelight:farmersrespitebrewing/gamblers_tea
+waitlog \[zq\] done 30
+expect \[zq\] recipes matching farmersrespite:brewing/coffee: 0
+expect \[zq\] recipes matching create_central_kitchen:mixing/coffee: 0
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*coffee_beans
+expect \[zq\] creativedelight:farmersrespitebrewing/gamblers_tea \{.*<- .*minecraft:glow_berries
+
+## SQ-RDX-06 | Maple Glazed Bacon and Maple Cookie
+@group A
+@commands Recipe lookup Maple Glazed Bacon, Maple Cookie
+@pass bacon: Cooked Bacon + Syrup + Honey Bottle (one recipe); cookie: one Oven recipe, Cookie Dough + Syrup + Honey Bottle -> 12, no 2-syrup recipe
+@fails baking.js row still present
+@from batches/r1113/c4_a.qb
+> zq makes maple_glazed_bacon
+> zq makes maple_cookie
+> zq rdetail maple_glazed_bacon
+> zq rdetail maple_cookie
+waitlog \[zq\] done 30
+count \[zq\] \S+ -> \d+ abnormals_delight:maple_glazed_bacon$ == 1
+look bacon: cooked bacon + syrup + honey bottle; cookie: one Oven recipe, cookie dough + syrup + honey bottle -> 12, no 2-syrup recipe
+
+## SQ-RDX-07 | Supreme Pizza recipes and roasted slice tag
+@group A
+@commands JEI Supreme Pizza; craft with cooked beef, cooked cod, brown mushroom, roasted red pepper slice, onion, flaxen cheese, Create dough + tomato sauce + oat dough; try cooked cod in the meat slot; `/dumptags` `creativeengineering:roasted_bell_pepper_slice`
+@pass shaped `pizza_manual_only` + sequenced assembly on dough; the craft works with mixed doughs and a roasted slice; cooked cod is refused in the meat slot; the tag holds 9 roasted slices
+@fails tag empty (rusticdelight/tags.js), food_type tags missing
+@from batches/r1113/c4_a.qb
+> zq makes brewinandchewin:pizza
+> zq rdetail pizza_manual_only
+> zq itemtag creativedelight:roasted_bell_pepper_slice
+> zq uses minecraft:cooked_cod
+waitlog \[zq\] done 30
+expect \[zq\] creativedelight:\S*pizza_manual_only \{
+expect itemtag creativedelight:roasted_bell_pepper_slice \(9\)
+look cooked cod not in the pizza meat slot (no pizza id in the minecraft:cooked_cod uses list, or only the fish slot)
+
+## SQ-RDX-08 | Glowing Calamari Crate recipes and tags
+@group A
+@commands Craft 9 Glowing Calamari -> crate and back; place it; mine with an axe vs hand; `/dumptags` block `forge:storage_blocks/glowing_calamari`, `minecraft:mineable/axe`
+@pass both recipes; block shows the placeholder glowing crate texture (not missing); axe is the fast tool; drops itself; name "Glowing Calamari Crate"
+@fails assets not in the nested Rustic jar; name script
+@from batches/r1113/c4_a.qb passed
+> zq makes rusticdelight:glowing_calamari_crate
+> zq uses rusticdelight:glowing_calamari_crate
+> zq blocktag forge:storage_blocks/glowing_calamari
+> zq blocktag minecraft:mineable/axe
+waitlog \[zq\] blocktag minecraft:mineable/axe 30
+expect makes rusticdelight:glowing_calamari_crate: [1-9]
+expect uses rusticdelight:glowing_calamari_crate: [1-9]
+expect blocktag forge:storage_blocks/glowing_calamari \(\d+\): .*rusticdelight:glowing_calamari_crate
+expect blocktag minecraft:mineable/axe \(\d+\): .*rusticdelight:glowing_calamari_crate
+
+## SQ-RDX-09 | Rustic roll assemblies
+@group A
+@commands JEI Sequenced Assembly for each Bell Pepper Roll, Cherry Blossom Roll, Calamari Roll, Glowing Calamari Roll, Rice Roll Royale; run the green roll and Royale on a deployer belt
+@pass 13 assemblies, each with its own incomplete item sprite; green: cooked rice + 2 green slices -> 2 rolls; Royale on a bowl, 8 deploys; shapeless recipes still there
+@fails incomplete item textures (auto-derived path)
+@from batches/r1113/c4_a.qb passed
+> zq recipes bell_pepper_roll
+> zq recipes cherry_blossom_roll
+> zq recipes calamari_roll
+> zq recipes rice_roll_royale
+waitlog \[zq\] done 30
+count \[zq\] \S*(bell_pepper_roll|cherry_blossom_roll|calamari_roll|glowing_calamari_roll|rice_roll_royale)\S*sequenced_assembly\S* -> >= 13
+expect \[zq\] \S*rice_roll_royale\S*sequenced_assembly\S* ->
+
+## SQ-RDX-10 | heatless Rustic soups and braised beef
+@group A
+@commands Recipe lookup `creativedelight:shapeless/bell_pepper_soup_cooked_manual_only`, `calamari_soup_cooked_manual_only`, `coffee_braised_beef_cooked_manual_only`; put the soup's inputs in a Create basin (unheated)
+@pass the three grid recipes as rustic_delight.md 5.10; basin does not make them
+@fails id not ending _manual_only
+@from batches/r1113/c4_a.qb passed
+> zq rdetail bell_pepper_soup_cooked_manual_only
+> zq rdetail calamari_soup_cooked_manual_only
+> zq rdetail coffee_braised_beef_cooked_manual_only
+> zq uses rusticdelight:calamari
+waitlog \[zq\] done 30
+expect \[zq\] creativedelight:shapeless/bell_pepper_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/calamari_soup_cooked_manual_only \{
+expect \[zq\] creativedelight:shapeless/coffee_braised_beef_cooked_manual_only \{
+reject (alone|shared) \S*(createmixing|mixing)/\S*calamari_soup
+
+## SQ-RDX-11 | Golden Coffee Beans routes
+@group A
+@commands Recipe lookup Golden Coffee Beans; craft with roasted beans + 8 gold nuggets; mixer (heated) with 6 nuggets; Arc Furnace with 5
+@pass ring of any gold nugget (raw or roasted bean); heated mixer and Arc Furnace routes exist; upstream's shaped recipe gone
+@fails golden.js not loaded
+@from batches/r1113/c4_a.qb passed
+> zq makes rusticdelight:golden_coffee_beans
+> zq rdetail golden_coffee_beans
+waitlog \[zq\] done 30
+reject \[zq\] rusticdelight:golden_coffee_beans \{
+expect \{create:mixing\} -> \S* ?\S*golden_coffee_beans
+expect \{immersiveengineering:arc_furnace\}
+
+## SQ-RDX-12 | one cutting recipe for Glowing Calamari
+@group A
+@commands Cutting board: knife on Glowing Calamari
+@pass 2 Glowing Calamari Slices + 1 Bone Meal; one recipe, id `creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari`
+@fails old fdCutting id still present (duplicate)
+@from batches/r1113/c4_a.qb passed
+> zq makes creativedelight:glowing_calamari_slice
+> zq rdetail glowing_calamari_slice_from_glowing_calamari
+waitlog \[zq\] done 30
+count \[zq\] creativedelight:\S+ -> 2 creativedelight:glowing_calamari_slice == 1
+expect \[zq\] creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari
+reject \[zq\] \S*fdcutting\S*glowing_calamari
+
+## SQ-RDX-13 | removed Rustic pancake and fried dough leave the chest without a crash; the old plate serves Supplementaries pancakes
+@group old save
+@commands Needs a pre-11-02 save (the 1.2.02 jars have no `rusticdelight:pancake` / `fried_dough`; r1115 ran only the plate half). Copy a save that has `rusticdelight:pancake` and `rusticdelight:fried_dough` in a chest and a placed plain Pancakes plate; boot it
+@pass items gone from the chest without a crash (Forge missing-mapping prompt accepted); the plate stays and serves Supplementaries pancakes
+@fails remap behaviour (no conversion wanted)
+@from batches/r1115/p9_o2.qb
+> data get block 200 -60 205 Items
+> pbot spawn rx13 200 -60 202 minecraft:overworld survival
+sleep 4
+> clear rx13
+> pbot hold rx13 minecraft:air
+> pbot use rx13 200 -60 200 up
+sleep 1
+> data get entity rx13 Inventory
+> zp9 bstate 200 -60 200
+sleep 1
+reject has the following block data: .*rusticdelight:(pancake|fried_dough)"
+expect rx13 has the following entity data: .*supplementaries:pancake
+look chest has no rusticdelight:pancake / fried_dough (if 1.2.02 held them); the plate gave one supplementaries:pancake and its servings went 4 -> 3
+
+## SQ-RDX-14 | Vintage pizzas unchanged
+@group A
+@commands Recipe lookup Supreme Pizza incomplete item `kubejs:incomplete_pizza`; Vintage Cheese and Meat Pizza
+@pass incomplete pizza item renders (Brewin pizza sprite, grey); Vintage pizzas unchanged (dough, sauce, dough)
+@fails texture path `brewinandchewin:item/pizza`
+@from batches/r1113/c4_a.qb
+> zq rdetail vintagedelight:cheese_pizza
+> zq rdetail vintagedelight:meat_pizza
+> zq item kubejs:incomplete_pizza
+waitlog \[zq\] item kubejs:incomplete_pizza 30
+expect item kubejs:incomplete_pizza: class
+look both Vintage pizza grids still dough, sauce, dough

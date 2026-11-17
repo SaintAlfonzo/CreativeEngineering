@@ -1,0 +1,120 @@
+# Scratch queue rows DCM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/DCM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-DCM / SQ-CBS / SQ-CDFO Creative Brewing publish prep, Step 1 (dicts to Common, guards, fold-in, namespace, names), 2026-11-04 ([plan_cb_publish.md](../plan_cb_publish.md) 8)
+@@date 2026-11-04
+@@jars creativebrewing creativecommon creativedelight
+@@sources feature_writeup/plan_cb_publish.md
+@@text
+@@text Not run. Built 2026-11-04 (Creative Common 1.1.0 and the jars listed in plan_cb_publish.md 9), NOT installed. Install order
+@@text C, P, L, W, D, B, Q, game closed. Offline checks already passed: dict baseline equal
+@@text (`tools/dict_baseline/run.sh`, [dict_baseline_2026-11-04.json](dict_baseline_2026-11-04.json)); `tools/guard_check.py` result
+@@text in plan_cb_publish.md 8. SQ-CBS-01/02 and SQ-CDFO-02/03 need throwaway server folders with a reduced mod list.
+@@text
+@@table
+## SQ-DCM-01 | startup packs in order start with creativecommon, all Common files loaded, no ReferenceError
+@group A
+@commands Boot the full pack: `grep -nE "jar-startup\] startup script packs in order\|ReferenceError\|is not defined" logs/kubejs/startup.log \| head`
+@pass packs in order start with `creativecommon`; `creativecommon: 18 of 18 files loaded`; no `ReferenceError` / `is not defined`
+@fails a pack-folder script read a dict at top level before Common's pack (order), or a moved file is missing from the jar
+@from batches/r1113/c3_a1.qb passed
+shell grep -h "startup script packs in order" logs/kubejs/startup.log | cut -c1-300
+shell grep -qE "startup script packs in order: creativecommon," logs/kubejs/startup.log
+shell grep -qE "\[jar-startup\] creativecommon: ([0-9]+) of \1 files loaded" logs/kubejs/startup.log
+shell test "$(grep -cE "ReferenceError|is not defined" logs/kubejs/startup.log)" = 0
+# row text said "18 of 18": Common has 22 files since the 11-07 to 11-12 builds; the check is N of N
+
+## SQ-DCM-02 | rerun after /reload: no new KubeJS errors, recipe count vs the pack dump, [absent mods] names none of the 5 G5 mods
+@group A
+@commands Same boot: `/reload`; `grep -cE "error\|Error" logs/kubejs/server.log`; `/dumpall`, compare the recipe count with the last pre-migration dump; `grep "absent mods" logs/kubejs/server.log`
+@pass no new errors; recipe count equal; no `[absent mods]` line (every mod is present in the full pack)
+@fails `absent_mods.js` line names a mod: a namespace that is not a mod id (G5 false skip)
+@from batches/r1115/p3_a1b.qb
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort | uniq | cut -c1-160 | head -40
+> reload
+sleep 40
+shell grep -cE "\[ERROR\]" logs/kubejs/server.log; grep -hE "\[ERROR\]" logs/kubejs/server.log | cut -c1-200 | head -8; true
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort | uniq | cut -c1-160 | head -40
+shell ! grep -h "\[absent mods\]" logs/kubejs/server.log | grep -E "towns_and_towers|hopo|unwrecked_ships|yuushya|cozys-improved-cats"
+> dumprecipes
+sleep 60
+shell wc -l < kubejs/exported/recipes/all.csv; wc -l < $INST/kubejs/exported/recipes/all.csv; ls -l --time-style=+%m-%d_%H:%M $INST/kubejs/exported/recipes/all.csv
+look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a listed small difference); [absent mods] lines name only mods not in srv/mods
+
+## SQ-DCM-03
+@group A
+@commands Old world (pre-migration save): `grep -nE "missing.*registry\|Missing mappings" logs/latest.log \| head`; hold an old `creativeengineering:potion_bucket`, have Magic Resistance active before the update
+@pass no unresolved ids for the moved ones; bucket and effect read as `creativebrewing:`; old bottled potions and potion fluids read as unknown (expected, D5)
+@fails swap list entry missing (`data/creativebrewing/swaps/creative_split.json`). Use a fresh save made with the old ids (memory forge-missing-mappings-staging); also CBR-06 in creative_brewing.md
+@draft no batch holds this row yet
+## CQ-DCM-01
+@group client
+@commands Full pack client: hover a white wool and an Immersive Petroleum asphalt block; open JEI fluid list
+@pass pack tooltips show (wool test lines, asphalt flavour text stripped); `create:potion` in the JEI fluid list; JEI order unchanged
+@fails `global.tooltips` missing (Common client scripts not loaded), `fluid_jei.js` / `jei_order.js` not in the jar
+@draft no batch holds this row yet
+## SQ-CBS-01
+@group B
+@commands Superseded by SQ-CBA-01 to -18. **Minimal chain**: fresh server folder with Forge, KubeJS (+ Rhino, Architectury), Common, Compat, Calendar, CD, CB, the Vinery donor jars, no Cooking for Blockheads, Balm or Incubation; empty `kubejs/`
+@pass boots, no script error in `logs/kubejs/*.log`; `/effect give @s creativebrewing:magic_resistance` works; a potion bucket fills from a cauldron; one keg brew and one wine ferment
+@fails the mod or file named in the error (missing guard: add it, rerun `tools/guard_check.py`)
+@draft no batch holds this row yet
+## SQ-CBS-02
+@group B
+@commands Minimal chain plus Alex's Mobs only
+@pass Alex's Mobs potion rows appear; `[absent mods]` lines name the other mods, no errors
+@fails an AM row guarded by the wrong mod id
+@draft no batch holds this row yet
+## SQ-CDFO-01
+@group A
+@commands Full pack after M8, old world: placed racks, fridge, corner and oven keep their contents; oven fuel and smoking; emu, duck and goose nests and egg crates; `config/creativedelight-common.toml`
+@pass all work, no missing-registry warnings (old ids read as `creativedelight:`); moved config values present
+@fails swap list (`data/creativedelight/swaps/`), `MemberConfigMove`
+@draft no batch holds this row yet
+## SQ-CDFO-02 | no Cooking for Blockheads, Balm or Incubation: no class load error, no recipe / tag / loot error naming them
+@group B
+@commands CD chain without Cooking for Blockheads, Balm and Incubation
+@pass boots; no CfB / Incubation class load error, no recipe, tag or loot error naming `cookingforblockheads` or the nests in `latest.log`
+@fails a compartment class referenced outside its `init`
+@from batches/r1113/c3_ch1.qb
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(cookingforblockheads|blay09|incubation|balm)
+bootreject (Couldn't parse|Unknown item|Unknown tag|Can't find|Failed to load).*(cookingforblockheads|incubation|_nest\b)
+shell grep -ciE "cookingforblockheads|incubation" logs/latest.log
+> zq item creativedelight:oak_spice_rack
+> zq item creativedelight:duck_nest
+waitlog \[zq\] item creativedelight:duck_nest 20
+look both compartment items absent or inert (class AirItem, or registered but no error); the grep count is for the record (a WARN that says a compartment is off is fine)
+
+## SQ-CDFO-03 | CfB present, Incubation absent: boots; rack half loads, nest half does not
+@group B
+@commands Pack with CfB but no Incubation; then Incubation without Alex's Mobs and Untitled Duck Mod
+@pass each boots; only the present half's content loads. Also CfB installed with `[compartments] cookingforblockheads = false`: no racks, no oven mixins, no rack merges
+@fails built-in pack mod list, mixin gate, `Compartments` switch
+@from batches/r1113/c3_ch2.qb
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(incubation|cookingforblockheads|blay09)
+bootreject (Couldn't parse|Unknown item|Unknown tag|Failed to load).*(incubation|cookingforblockheads)
+> zq item creativedelight:oak_spice_rack
+waitlog \[zq\] item creativedelight:oak_spice_rack 20
+expect item creativedelight:oak_spice_rack: class (?!AirItem)
+> zq item creativedelight:duck_nest
+waitlog \[zq\] item creativedelight:duck_nest 20
+> zq recipes creativedelight:shaped/oak_spice_rack
+waitlog \[zq\] recipes matching creativedelight:shaped/oak_spice_rack: \d+ 30
+shell grep -A6 "^\[compartments\]" config/creativedelight-common.toml | grep -E "incubation|cookingforblockheads"
+look rack item registered (a CfB compartment class), nest item AirItem or inert; the oven / fridge mixins applied (grep `creativedelight` mixin lines naming cookingforblockheads in latest.log)
+
+## CQ-CDFO-01
+@group client
+@commands Rack textures, raised oven and fridge-top fill, duck egg models; mod list
+@pass render as before; the two member mods no longer listed
+@fails packs not registered on the client
+@draft no batch holds this row yet
+## CQ-CBS-01
+@group client
+@commands Superseded by CQ-CBA-01. Mod list; potion buckets and the Magic Resistance icon on the minimal-chain client
+@pass "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)"; buckets and icon textured
+@fails M3 assets not in the CB jar
+@draft no batch holds this row yet

@@ -1,0 +1,98 @@
+# Scratch queue rows MCL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MCL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Mob cap levels, spawn radius and vertical band, 2026-10-28 ([perf.md](../perf.md) 17, TODO `server #31`)
+@@date 2026-10-28
+@@sources feature_writeup/perf.md
+@@text
+@@text patcherMod 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
+@@text Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineering-common.toml` (read live).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-MCL-01 | mob cap level mixins
+@group A
+@commands Boot; `grep -i -E "MobCap|Mixin.*(error|fail)" logs/latest.log`
+@pass No mixin error; server reaches `Done`
+@fails Name the mixin; SRG ids m_8490_ (tickChunks), m_186524_ (createState), m_186548_ / m_186522_ (cap reads), m_47045_ / m_220421_ (NaturalSpawner)
+@from batches/r1031/a1_boot.qb passed
+bootreject (?i)(MobCapLevelTickMixin|MobCapMixin|MobCapSpawnAreaMixin).*(error|fail)
+
+## SQ-MCL-02 | one player at night: level 0, about 289 chunks
+@group A
+@commands One player, night, `/cdevperf mobcap`
+@pass overworld about 289 spawnable chunks, level 0; monster count reaches about 70 as vanilla
+@fails Level above 0 alone: chunk count read wrong
+@from batches/r1031/a2_variants.qb
+> tp qa 0 -60 0
+> time set 18000
+sleep 90
+> ceperf mobcap
+look overworld about 289 spawnable chunks, level 0; monster count climbing toward vanilla 70
+
+## SQ-MCL-03 | two players 600 apart: level 1, back to 0 together
+@group A
+@commands Two bots 600 apart, `/cdevperf mobcap`; then bring them together
+@pass Apart: about 578 chunks, level 1; together: back to level 0 once below 400
+@fails Level does not drop: hysteresis bug
+@from batches/r1031/a2_variants.qb
+> pbot spawn qb 600 -60 0
+sleep 20
+> ceperf mobcap
+> tp qb 20 -60 0
+sleep 30
+> ceperf mobcap
+look apart about 578 chunks and level 1; together back to level 0 once below 400
+> pbot remove qb
+
+## SQ-MCL-04 | forced level 2: hostiles settle near 25, none far out
+@group A
+@commands `mobCapForceLevel 2`, one player at night, `/kill @e[type=!player]`, wait 2 min, `/execute if entity @e[type=minecraft:zombie]` style counts for the common hostiles, then `/tp @p @e[type=minecraft:zombie,sort=furthest,limit=1]` and read the distance moved
+@pass Hostiles settle near 25 (not 70); the farthest is no more than about 5 chunks (80 to 90 blocks) from where the player stood
+@fails About 70: cap redirect did not apply; far spawns: radius check off
+@from batches/r1031/a2_variants.qb
+# needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
+# run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+sleep 10
+# a fresh boot spawns nothing near a just-joined bot for about 2.5 min (seen 10-31, level 0 too): wait it out
+sleep 160
+> tp qa 0 -60 0
+> time set 18000
+> kill @e[type=!minecraft:player]
+sleep 120
+> ceperf mobcap
+> execute if entity @e[type=minecraft:zombie]
+> execute if entity @e[type=minecraft:skeleton]
+> execute if entity @e[type=minecraft:spider]
+> execute if entity @e[type=minecraft:creeper]
+> execute as @e[type=#zq:monsters,limit=1,sort=furthest] run data get entity @s Pos
+look the four counts sum to about 25 (not 70); the farthest monster within about 90 blocks of 0 0 (perf.md 17); the toml switch is read live (if the level line still says auto, it is not)
+
+## SQ-MCL-05 | forced level 2: no new monster more than 32 blocks above or below the player
+@group A
+@commands `mobCapForceLevel 2`, player on the surface over deep caves, wait 2 min, `/execute as @e[type=#forge:monsters,distance=..128] run data get entity @s Pos[1]`
+@pass No new monster more than 32 blocks above or below the player
+@fails Deep cave spawns: band mixin did not apply
+@from batches/r1031/b1_gameplay.qb
+# needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
+# run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+> pbot spawn qm {PL1} 120 {PL3} minecraft:overworld survival
+# fresh boot: nothing spawns near a just-joined bot for about 2.5 min (10-31): wait it out
+sleep 160
+> time set 18000
+> kill @e[type=#zq:monsters]
+sleep 120
+> execute at qm as @e[type=#zq:monsters,distance=..128] run data get entity @s Pos[1]
+> execute at qm run data get entity qm Pos[1]
+look every monster Y within 32 of qm's Y; qm stands in plains over caves
+> pbot remove qm
+> time set noon
+
+## SQ-MCL-06
+@group A
+@commands Four bots as suite G04 (perf_suite.md), `mobCapForceLevel -1`, JFR, `perf_report.py` against `perf/suite/g1/reports/G04.summary.json`; repeat with level 1 and 2 forced
+@pass Auto picks level 2 (about 1150 chunks); monster share below 22.0%, natural spawning below 5.3%, MSPT mean below 50.1
+@fails Record the numbers per level in perf.md 17.5 for the thresholds
+@draft no batch holds this row yet

@@ -1,0 +1,228 @@
+# Scratch queue rows CWG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CWG.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CWG Creative Worldgen carve, 2026-11-02 ([creative_worldgen.md](../creative_worldgen.md) 5, TODO `creativesplit/worldgen #8`)
+@@date 2026-11-02
+@@jars creativecommon creativeworldgen
+@@sources feature_writeup/creative_worldgen.md
+@@text
+@@text Not run. One save carried across: boot 1 on the installed jars (patcherMod 1.1.07, standalone `moreMooblooms-1.1.0.jar`,
+@@text Baby Mobs inside Creative Delight), generate a world, `/save-all`; boot 2 on patcherMod 1.1.08, `creativeworldgen-1.0.0.jar`,
+@@text the rebuilt Creative Delight (no Baby Mobs) and Devtools, standalone More Mooblooms removed. Instance config with the six
+@@text sections still in `creativeengineering-common.toml` and no `creativeworldgen-common.toml` (delete it in the scratch copy;
+@@text edit one value, `[named_mobs]` or `[worldgen.earth_fill]`, before boot 1). Fresh world for -06 and -07.
+@@text
+@@table
+## SQ-CWG-01 | Creative Worldgen mixins apply once, More Mooblooms and Baby Mobs nested once
+@group A
+@commands Boot 2: `grep -E "creativeworldgen.mixins.json\|creativeengineering.mixins.json" logs/latest.log`; `grep -c "from creativeworldgen.mixins.json" logs/debug.log`; mod list
+@pass No mixin apply error; the 60 common mixins apply (minus gated ones whose mod is absent: AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers); no worldgen mixin from patcherMod (double apply); one `more_mooblooms` and one `baby_mobs`, nested
+@fails Gate id wrong in `WorldgenMixinPlugin`, a moved mixin still in patcherMod's json, or the old standalone jar left in `mods/`
+@from batches/r1103/sA_2.qb
+bootreject (Mixin apply failed|InvalidMixinException|MixinApplyError).*(creativeworldgen|creativeengineering)
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -E "creativeworldgen.mixins.json|creativeengineering.mixins.json" logs/latest.log | head -20
+shell echo "mixing lines from creativeworldgen.mixins.json: $(grep -c 'from creativeworldgen.mixins.json' logs/debug.log || true)"
+shell echo "worldgen mixins still applied from patcherMod json (should be none of the moved ones):"; grep -oE "Mixing [A-Za-z_.]+ from creativeengineering.mixins.json" logs/debug.log | grep -iE "worldgen|structure|locate|leaf|raid|named|forgiving|mobcap|spawn" | sort -u | head -20 || true
+shell grep -oiE "(moreMooblooms|babyMobs)-[0-9.]+[^ ]*\.jar" logs/debug.log | sort | uniq -c
+shell ! ls mods | grep -iE "^(moreMooblooms|babyMobs)"
+look mixing count = 60 minus the gated ones whose mod is absent (AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers: those mods are installed, so expect about 60); no moved worldgen mixin from creativeengineering.mixins.json; each of moreMooblooms / babyMobs found once, from jarjar of creativeworldgen
+
+## SQ-CWG-02 | config sections carried from creativeengineering-common.toml into creativeworldgen-common.toml (first boot)
+@group A
+@commands Same boot: read `config/creativeworldgen-common.toml`, `config/creativeengineering-common.toml`; restart, read again
+@pass `[swaps] config sections [...] carried over`; the Worldgen file holds the edited value; `[perf]` there has only the 13 mob cap keys; after the boot the CE file has no `[worldgen]`, `[forgiving_void]`, `[leaf_decay]`, `[raids]`, `[named_mobs]` or mob cap keys; no WARN on the second boot
+@fails `carrySections` ran after the config was registered
+@from batches/r1103/sA_2.qb
+bootexpect config sections .*carried over
+shell grep -nE "config sections .*carried" logs/latest.log | head -5
+shell ls -l config/creativeworldgen-common.toml && grep -nE "^\[" config/creativeworldgen-common.toml | head -40
+shell awk '/^\[named_mobs\]/{s=1;next} /^\[/{s=0} s && /chance/' config/creativeworldgen-common.toml | grep -E "chance = 0\.02"
+shell awk '/^\[perf\]/{s=1;next} /^\[/{s=0} s && /=/' config/creativeworldgen-common.toml | grep -vE "^\s*#" | wc -l
+shell ! grep -nE "^\[(worldgen|forgiving_void|leaf_decay|raids|named_mobs)\]" config/creativeengineering-common.toml
+shell grep -nE "(WARN|ERROR).*(creativeworldgen-common|creativeengineering-common)" logs/latest.log | head -5 || true
+look named_mobs chance 0.02 carried (edited before this boot); [perf] in the Worldgen file has the 13 mob cap keys only (count above); the CE file lost the six sections. Second-boot half: SQ-CWG-02b in sA_3.qb
+
+## SQ-CWG-03 | Creative Worldgen script pack loads, no missing-name errors, reports rewritten
+@group A
+@commands Same boot: `grep -E "startup script packs in order\|creativeworldgen\|NCH.cfg\|loot-tuning" logs/kubejs/startup.log logs/kubejs/server.log \| head -30`
+@pass Pack `creativeworldgen` loads; no `global.CWG missing`, no `no ... section in any registered config`, no `[loot-tuning] could not read`; structure, bee nest, wild flower, mushroom and mob spawn reports rewritten
+@fails `cwg_core.js` not in the jar, `registerConfig` class name, or a moved script reading a pack-scope name
+@from batches/r1103/sA_2.qb
+shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | head -3
+shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | grep -q creativeworldgen
+shell ! grep -hE "global\.CWG missing|section in any registered config|\[loot-tuning\] could not read" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell grep -hE "creativeworldgen|NCH\.cfg|loot-tuning" logs/kubejs/startup.log logs/kubejs/server.log | head -30
+shell find kubejs -path kubejs/exported -prune -o -type f -newer eula.txt -print | grep -vE "\.log$" | head -30
+look reports written this boot (structure, bee nest, wild flower, mushroom, mob spawn) appear in the find list
+
+## SQ-CWG-04 | loot tuning lists the Creative Delight crate rules
+@group A
+@commands Same boot: `/loottuning` (or its list subcommand); `grep -iE "lootRules\|crate" logs/kubejs/server.log \| head`
+@pass The CD rules (veggie, vintage, rustic, cave carrot crates) are listed, as on boot 1
+@fails CD `loot.js` ran before `05_tuning.js` and its queued rules never ran
+@from batches/r1103/sA_2.qb
+> loottuning
+sleep 2
+> zloot packs crate
+waitlog \[zloot\] (packs|pack[s]?) crate: \d+ 30
+expect Loot tuning: active
+expect \[zloot\] pack .*crate
+shell grep -hiE "lootRules|crate" logs/kubejs/server.log | head -15
+look veggie, vintage, rustic and cave carrot crate pairs listed (the CD rules ran after 05_tuning.js); same rule count as /loottuning on SQ-CWG-05 (sA_3.qb)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zloot\] error)
+
+## SQ-CWG-05 | loot tuning loads from the jar when the kubejs/data json files are gone
+@group A
+@commands Scratch copy with `kubejs/data/creativeworldgen/kubejs/loot/loot_config.json` and `loot_index.json` moved away; boot
+@pass Loot tuning loads from the jar (`CWGResources`); same rule count as -04
+@fails `CWGResources.text` path, or the json missing from the jar
+@from batches/r1103/sA_3.qb
+shell ! ls kubejs/data/creativeworldgen/kubejs/loot/loot_config.json kubejs/data/creativeworldgen/kubejs/loot/loot_index.json 2>/dev/null
+kjsreject \[loot-tuning\] (could not read|disabled: missing)
+kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
+> loottuning
+sleep 2
+expect Loot tuning: active
+look the "N rules" number equals SQ-CWG-04's /loottuning in sA_2.qb (rows/SQ-CWG-04.log)
+
+## SQ-CWG-06 | fresh world: locates resolve, /celocate status, a punch meta structure places, earth fill logs, dimensions
+@group A
+@commands Fresh world: `/locate structure` three pack structures, `/cwglocate status`; `/place structure creativeengineering:meta/meteorite_desert_pyramid` (a meta structure with a punch part); grep latest.log for `meteorite_desert_pyramid` and `unknown field`; `/tp` to a village and read the earth fill log lines
+@pass Locates resolve; no `[meta-structures] ... unknown field "punch"` or `not a loaded structure` line; the meta structure places its punch shaft; earth fill and ground match log as before; custom dimensions load (`/execute in` each)
+@fails `punch` missing from `META_PART_KEYS` in the Worldgen jar's `structure_overrides.js` (fixed 2026-11-03, rebuild Creative Worldgen), registration not moved to `CreativeWorldgen`, or the `meta_punch` piece type id changed
+@from batches/r1103/sA_4.qb
+> locate structure minecraft:pillager_outpost
+waitlog The nearest minecraft:pillager_outpost 600
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture SVP The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog (The nearest creativeengineering:meta/pillager_camp_ruin|Could not find) 900
+> celocate status
+> forceload add {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
+sleep 45
+> forceload remove {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
+> forceload add 3008 3008 3135 3135
+sleep 60
+> place structure creativeengineering:meta/meteorite_desert_pyramid 3072 100 3072
+sleep 10
+> forceload remove 3008 3008 3135 3135
+> execute in creativeengineering:autumnsky run say SA4 dim autumnsky
+> execute in creativeengineering:desert run say SA4 dim desert
+> execute in creativeengineering:flowergrove run say SA4 dim flowergrove
+> execute in creativeengineering:flowerhills run say SA4 dim flowerhills
+> execute in creativeengineering:flowerridge run say SA4 dim flowerridge
+> execute in creativeengineering:hub run say SA4 dim hub
+> execute in creativeengineering:shield run say SA4 dim shield
+> execute in creativeengineering:springsky run say SA4 dim springsky
+> execute in creativeengineering:summersky run say SA4 dim summersky
+> execute in creativeengineering:wintersky run say SA4 dim wintersky
+> execute in creativeengineering:yellowstone run say SA4 dim yellowstone
+count SA4 dim [a-z]+$ == 11
+expect The nearest minecraft:pillager_outpost
+expect The nearest minecraft:village_plains
+shell grep -nhiE "earth.?fill|ground.?match|meta_punch|punch" logs/latest.log | tail -20 || true
+look pillager camp ruin meta located (or "Could not find" within 900 s = note); /celocate status answered; the place line succeeded and the log shows the punch part (meteorite rebuilt with crater NONE) or meta piece lines; earth fill and ground match lines for the village chunks as before
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Unknown dimension|Invalid (block state|tag))
+
+## SQ-CWG-07 | no wild-crops-off warning; earth fill, ground match, soils and bubble-column tags filled
+@group A
+@commands Same world: `grep -E "wild crops off\|biomeRules" logs/kubejs/server.log`; `/dumptags` for `#creativeengineering:earth_fill/*`, `ground_match/*`, `worldgen/grass_like_soils`, entity `bubble_column_immune`
+@pass No "wild crops off" warning (CD reads `global.biomeRules` at event time); every tag filled
+@fails Tag rows lost in the `blocktags.js` split, or the CD guard tripping
+@from batches/r1103/sA_4.qb
+shell ! grep -hE "wild crops off" logs/kubejs/server.log logs/kubejs/startup.log logs/latest.log
+shell grep -hE "biomeRules" logs/kubejs/server.log | head -5 || true
+> dumptags
+waitlog (Dumped|dumptags|tags/) 300
+sleep 10
+shell python3 -c "import json;b=json.load(open('kubejs/exported/tags/block_tags.json'));e=json.load(open('kubejs/exported/tags/entity_type_tags.json'));i=json.load(open('kubejs/exported/tags/item_tags.json'));want=[(k,len(v)) for d in (b,i) for k,v in d.items() if k.startswith(('creativeengineering:earth_fill/','creativeengineering:ground_match/')) or k=='creativeengineering:worldgen/grass_like_soils'];want+=[(k,len(v)) for k,v in e.items() if k.endswith('bubble_column_immune')];[print(k,n) for k,n in sorted(want)];empty=[k for k,n in want if n==0];print('empty:',empty);import sys;sys.exit(1 if empty or not want else 0)"
+look every listed tag has members; the bubble_column_immune entity tag present
+
+## SQ-CWG-08 | old world on the new jars: chunks, mobs and blocks intact; mooshroom breeding; leaf decay; Devtools commands
+@group A
+@commands Boot 2 save: walk into boot 1's chunks; spawn a cow next to a flower biome, a mooshroom pair with a brown and red; break a log under leaves; start a raid; `/cdevperf mobcap`, `/dumpspawns`, `/cdevplace` (Devtools)
+@pass Saved structures and mobs intact; mooshroom breeding as before; leaf decay cascade; raiders glow; the three Devtools commands run
+@fails A listener that did not move, or Devtools' `ModList` guard
+@from batches/r1103/sA_2.qb
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA2 brown ok
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA2 red ok
+> scoreboard objectives add sacwg dummy
+> execute store result score #sacows sacwg if entity @e[type=minecraft:cow,tag=sacwgc]
+> scoreboard players get #sacows sacwg
+expect SA2 brown ok
+expect SA2 red ok
+expect #sacows has 2 \[sacwg\]
+> forceload add {SAH1+112} {SAH3-48} {SAH1+208} {SAH3+48}
+sleep 30
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+# mooshroom pair bred (pen x+41..+45 z+9..+13, a bot nearby so the pen chunks get entity ticks)
+> pbot spawn sacwg {SAH1+43} {SAH2+3} {SAH3+11} minecraft:overworld creative
+> data merge entity @e[type=minecraft:mooshroom,tag=sacwgbrown,limit=1] {InLove:600}
+> data merge entity @e[type=minecraft:mooshroom,tag=sacwgred,limit=1] {InLove:600}
+sleep 40
+> zcount {SAH1+41} {SAH2} {SAH3+9} {SAH1+45} {SAH2+2} {SAH3+13}
+waitlog \[zcount\] entities 30
+> execute as @e[type=minecraft:mooshroom,tag=!sacwgm,x={SAH1+40},y={SAH2},z={SAH3+8},dx=6,dy=3,dz=6] run data get entity @s Type
+# leaf decay cascade: log + leaves, log removed, bot within 128 blocks for random ticks
+> fill {SAH1+68} {SAH2+2} {SAH3+18} {SAH1+72} {SAH2+4} {SAH3+22} minecraft:oak_leaves[persistent=false]
+> fill {SAH1+70} {SAH2} {SAH3+20} {SAH1+70} {SAH2+4} {SAH3+20} minecraft:oak_log
+sleep 3
+> setblock {SAH1+70} {SAH2} {SAH3+20} minecraft:air destroy
+> fill {SAH1+70} {SAH2+1} {SAH3+20} {SAH1+70} {SAH2+4} {SAH3+20} minecraft:air destroy
+> gamerule randomTickSpeed 200
+sleep 25
+> gamerule randomTickSpeed 3
+> zq count {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} minecraft:oak_leaves
+waitlog \[zq\] count minecraft:oak_leaves
+> ceperf mobcap
+> dumpspawns
+> ceplace status
+sleep 5
+> pbot remove sacwg
+look bell / bed clone counts equal boot 1's (SQ-CWG-08o); the mooshroom pair bred (a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 25 s at randomTickSpeed 200; ceperf mobcap, dumpspawns and ceplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
+
+## SQ-CWG-09 | Forgiving Void in the End, End illager divers, Farmer's donor pack order
+@group A
+@commands Same boot: fall into the void in the End; summon an End illager; `grep -E "Farmer's Structures donor\|FarmersDonor\|farmers-donor" logs/latest.log`
+@pass Forgiving Void pulls the player back; End illager in diving gear, upgrade_aquatic flares refused; the donor line reads `[farmers-donor] N files from Farmer's Structures 1.0.6`
+@fails `forgivingvoid` gate, `end_divers.js`, or `shared_sources=packs` in the Worldgen build
+@from batches/r1103/sA_2.qb
+> execute in minecraft:the_end run forceload add 192 0 239 31
+sleep 10
+> pbot spawn safv 210 5 16 minecraft:the_end survival
+sleep 20
+> data get entity safv Pos
+> data get entity safv Dimension
+> execute in minecraft:the_end run summon minecraft:pillager -30 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
+> execute in minecraft:the_end run summon minecraft:witch -28 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
+sleep 4
+> execute in minecraft:the_end run data get entity @e[type=minecraft:pillager,tag=saendp,limit=1] ArmorItems
+> execute in minecraft:the_end run data get entity @e[type=minecraft:witch,tag=saendp,limit=1] ArmorItems
+expect create:copper_diving_helmet
+shell grep -nhE "Farmer's Structures donor|FarmersDonor" logs/latest.log | head -5
+shell grep -qhE "Farmer's Structures donor|FarmersDonor" logs/latest.log
+> pbot remove safv
+look safv still in minecraft:the_end, caught by Forgiving Void (y well above 0, x pulled toward 0 from 210, not dead); pillager and witch wear copper diving helmet, backtank, boots; donor line says the donor pack sorts above Farmer's Structures. "upgrade_aquatic flares refused": no server-side command decides it (LOOK in the log for a refused flare line if any)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CWG-10 | build_deploy.py dry run with the Creative Worldgen jar in mods/
+@group A
+@commands After installing the boot 2 jars into the scratch copy: `python3 tools/build_deploy.py --dry-run`
+@pass No error on the Farmer's donor pin (now read from Creative Worldgen) or the climate reader check; the Worldgen script tree and `data/more_mooblooms` are dev-only in the payload
+@fails `UPSTREAM_DONORS` / `check_climate_reader` paths
+@from batches/r1103/sA_2.qb
+shell cd "$INST" && python3 tools/build_deploy.py --dry-run 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+look no error on the Farmer's donor pin or check_climate_reader; the Worldgen script tree and data/more_mooblooms reported dev-only (not in the payload)
+
+## CQ-CWG-11
+@group client
+@commands Pinned until wave 8+ (7.8): look at a moobloom, a baby squid and a baby dolphin; JEI Moobloom Conversion page
+@pass LOOK: models and textures as before
+@fails Member assets not nested
+@draft no batch holds this row yet

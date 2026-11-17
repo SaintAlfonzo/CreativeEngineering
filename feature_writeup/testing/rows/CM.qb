@@ -1,0 +1,335 @@
+# Scratch queue rows CM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Easy-fix batch, 2026-10-28 ([item_merges.md](../item_merges.md) 2.10, TODO rows named per entry)
+@@date 2026-10-28
+@@jars creativecommon creativedelight
+@@sources feature_writeup/item_merges.md
+@@text
+@@text Install the patcherMod 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Creative Delight must be rebuilt and installed again first: `pneumaticcraft/recipes.js` (sourdough cut to 3 Bread, 18:03) is newer than the installed jar (18:01). Server checks; the
+@@text names, JEI and wild-patch looks are MG-39 to MG-44 in game.
+@@text
+@@text | ID | World | What to do and look at | Existing test |
+@@text |---|---|---|---|
+## SQ-CM-01
+@group any
+@commands latest.log: `[itemMerges] creativedelight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice`
+@pass MG-39
+@draft no batch holds this row yet
+## SQ-CM-02
+@group same
+@commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creativedelight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
+@pass MG-41
+@draft no batch holds this row yet
+## SQ-CM-03
+@group same
+@commands `#creativeengineering:exotic_fruit` holds `delightful:cantaloupe_slice`; `#forge:seeds` holds `fruitsdelight:hamimelon_seeds`; `#forge:pasta` holds `veggiesdelight:potato_noodle`
+@pass MG-43
+@draft no batch holds this row yet
+## SQ-CM-04
+@group same
+@commands Pasta: every recipe that took `farmersdelight:raw_pasta` or `#forge:pasta/raw_pasta` (FD pasta dishes, Brewin's cheesy pasta, More Delight, Alex's Delight pastas) now takes `#forge:pasta`; count the swapped recipes, none left naming raw pasta alone
+@pass none (TODO `dishes/meals #38`)
+@draft no batch holds this row yet
+## SQ-CM-05
+@group same
+@commands Food values (the 1.1.04 check, PASSED 2026-10-28 at 11; the 12 of 2026-10-29 is SQ-CM-21): `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else
+@pass none (TODO `dishes/pickles-and-ferments #10`)
+@draft no batch holds this row yet
+## SQ-CM-06
+@group same
+@commands Recipes: `endersdelight:shulker_bowl` gone, `creativedelight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creativedelight:shapeless/overnight_oats` present
+@pass none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`)
+@draft no batch holds this row yet
+## SQ-CM-07
+@group same
+@commands `felsic_sword` max damage 2501. `creativeengineering:strong_phantom_bane` not in the potion registry, no brewing mix with glowstone on Phantom Bane, base and long present; latest.log no `[CE potions]` error
+@pass none (gear_tuning F9, armor_effects F7)
+@draft no batch holds this row yet
+## SQ-CM-08
+@group new world
+@commands Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0
+@pass AE-10 (expected now 0)
+@draft no batch holds this row yet
+## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 10-28)
+@group any
+@commands `creativedelight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers)
+@pass none
+@from batches/r1031/a1_data.qb passed
+> zq uses salt:salt_block
+> zq makes vintagedelight:salt_bucket
+> zq makes creativeengineering:powdered_sugar_bucket
+count froglight_from_fermenting == 3
+reject tactical_fishing:fishing_vintagedelight_salt_bucket
+reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
+
+## SQ-CM-09
+@group new world
+@commands `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna
+@pass MG-44
+@draft no batch holds this row yet
+
+@@section 2
+@@title Food batch: powdered sugar, batter, meals, coasters, 2026-10-29 ([food.md](../food.md) 3.13, 3.15; [briefs/dishes_meals.md](../briefs/dishes_meals.md); [kitchen.md](../kitchen.md) 2.3)
+@@date 2026-10-29
+@@jars creativecommon creativedelight
+@@sources feature_writeup/food.md feature_writeup/briefs/dishes_meals.md feature_writeup/kitchen.md
+@@text
+@@text Jars: Creative Delight and patcherMod rebuilt 2026-10-29 (see the session hand-over for install state).
+@@text
+@@table
+## SQ-PS-05 | powdered sugar and batter recipes
+@group A
+@commands boot; recipe probe (RecipeManager id dump)
+@pass `creativedelight:vivacuumizing/powdered_sugar_bucket` has bucket + 4 sugar; `createcrushing/` and `createmilling/sugar_powdered_sugar` each have 2 results (second at chance 0.5); `mortar/sugar_powdered_sugar` takes 3 sugar and gives 4; `shapeless/powdered_sugar_from_bucket` gives 8; `shapeless/powdered_sugar_bucket_from_powder` exists; no `tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket`; `rusticdelight:cooking/batter`, `sliceanddice:cooking/rusticdelight/cooking/batter` and `creativedelight:createmixing/batter_egg_solution` grain slots list wheat flour, cornmeal and `farmersdelight:rice`; no `[NCH]` errors
+@fails food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`)
+@from batches/r1031/a1_data.qb
+> zq makes creativeengineering:powdered_sugar_bucket
+> zq makes creativeengineering:powdered_sugar
+> zq rdetail batter
+expect vivacuumizing/powdered_sugar_bucket -> 1 creativeengineering:powdered_sugar_bucket
+expect powdered_sugar_bucket_from_powder -> 1 creativeengineering:powdered_sugar_bucket
+expect powdered_sugar_from_bucket -> 8 creativeengineering:powdered_sugar
+expect mortar/sugar_powdered_sugar -> 4 creativeengineering:powdered_sugar
+expect createmilling/sugar_powdered_sugar
+expect createcrushing/sugar_powdered_sugar
+reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
+look rdetail: vacuum recipe takes bucket + 4 sugar; milling and crushing have a second result at 0.5; the three batter recipes list wheat flour, cornmeal and farmersdelight:rice in the grain slots
+
+## SQ-CM-20 | field salad recipes and tags
+@group A
+@commands same probe
+@pass `creativedelight:shapeless/field_salad_manual_only` and `field_salad_flowers_manual_only` exist, `delightful:food/field_salad` does not; tags `#creativeengineering:field_salad/root` (5), `/nut` (acorn, peanut), `/green` (8) resolve
+@fails RC-160
+@from batches/r1031/a1_data.qb passed
+> zq recipes field_salad
+> zq itemtag creativeengineering:field_salad/root
+> zq itemtag creativeengineering:field_salad/nut
+> zq itemtag creativeengineering:field_salad/green
+expect creativedelight:shapeless/field_salad_manual_only
+expect creativedelight:shapeless/field_salad_flowers_manual_only
+reject delightful:food/field_salad
+expect itemtag creativeengineering:field_salad/root \(5\)
+expect itemtag creativeengineering:field_salad/nut \(2\)
+expect itemtag creativeengineering:field_salad/green \(8\)
+
+## SQ-CM-21 | coleslaw and shrimp fried rice values
+@group A
+@commands same probe
+@pass `veggiesdelight:coleslaw` nutrition 12, modifier 0.6; `alexsmobs:shrimp_fried_rice` nutrition 20, modifier 0.6, Comfort 4800 ticks
+@fails RC-161, RC-163
+@from batches/r1031/a1_data.qb
+> zq food veggiesdelight:coleslaw
+> zq food alexsmobs:shrimp_fried_rice
+expect food veggiesdelight:coleslaw: nutrition 12, modifier 0\.6
+expect food alexsmobs:shrimp_fried_rice: nutrition 20, modifier 0\.6.*4800
+look the shrimp fried rice effect named is Comfort
+
+## SQ-CM-22 | veggie noodle dough
+@group A
+@commands same probe
+@pass `creativedelight:shapeless/cucumber_dough` takes `#creativeengineering:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone
+@fails RC-162
+@from batches/r1031/a1_data.qb passed
+> zq rdetail cucumber_dough
+> zq itemtag creativeengineering:veggie_noodle_veg
+expect creativedelight:shapeless/cucumber_dough
+reject vintagedelight:cucumber_dough \{
+expect itemtag creativeengineering:veggie_noodle_veg \(6\)
+
+## SQ-CM-23 | shrimp fried rice in the Cooking Pot
+@group A
+@commands same probe
+@pass `creativedelight:farmersdelightcooking/shrimp_fried_rice` takes Fried Rice + 2 `#forge:shrimps`
+@fails RC-163
+@from batches/r1031/a1_data.qb
+> zq rdetail farmersdelightcooking/shrimp_fried_rice
+expect creativedelight:farmersdelightcooking/shrimp_fried_rice
+look inputs: Fried Rice + 2 of #forge:shrimps
+
+## SQ-CM-24 | no strawberry banana smoothie
+@group A
+@commands same probe
+@pass no recipe outputs `neapolitan:strawberry_banana_smoothie`; no errors from the edited CD scripts
+@fails RC-164
+@from batches/r1031/a1_data.qb passed
+> zq makes neapolitan:strawberry_banana_smoothie
+expect makes neapolitan:strawberry_banana_smoothie: 0
+
+## SQ-KT-21 | coaster accepts modelled drinks and food, refuses others (fake player)
+@group A
+@commands boot with current kubejs
+@pass latest.log has `[placeable] ... placeable_on_coaster=` with the new count and no `not item ids` warning; a Coaster accepts `vinery:red_wine`, `farmersdelight:hamburger`, `farmersrespite:long_black_tea`, refuses `fruitsdelight:apple_jelly`, `goldenfood:golden_cookie`
+@fails kitchen.md 2.3, KT-20 (client half KT-19)
+@from batches/r1031/a1_world.qb
+> setblock 5 -60 -5 brewinandchewin:coaster
+> setblock 7 -60 -5 brewinandchewin:coaster
+> setblock 9 -60 -5 brewinandchewin:coaster
+> setblock 11 -60 -5 brewinandchewin:coaster
+> setblock 13 -60 -5 brewinandchewin:coaster
+> tp qa 9 -60 -3
+> pbot hold qa vinery:red_wine
+> pbot use qa 5 -60 -5 up
+> pbot hold qa farmersdelight:hamburger
+> pbot use qa 7 -60 -5 up
+> pbot hold qa farmersrespite:long_black_tea
+> pbot use qa 9 -60 -5 up
+> pbot hold qa fruitsdelight:apple_jelly
+> pbot use qa 11 -60 -5 up
+> pbot hold qa goldenfood:golden_cookie
+> pbot use qa 13 -60 -5 up
+> data get block 5 -60 -5
+> data get block 7 -60 -5
+> data get block 9 -60 -5
+> data get block 11 -60 -5
+> data get block 13 -60 -5
+look the first three coasters hold their item in the block entity data, the last two hold nothing (pbot use lines: SUCCESS / CONSUME vs PASS / FAIL)
+
+## SQ-BJ-01 | muffins oven only, new jam jars (needs Vintage -09 in srv/mods)
+@group A
+@commands boot after the CD and Vintage `-09` install; recipe dump
+@pass no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creativedelight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items
+@fails RC-172 to RC-175, OV-36
+@from batches/r1031/a1_data.qb
+> zq makes fruitsdelight:blueberry_muffin
+> zq makes fruitsdelight:cranberry_muffin
+> zq makes veggiesdelight:sweet_potato_cupcake
+> zq rdetail jam_jar
+reject farmersdelight:cooking.*-> \d+ (fruitsdelight:blueberry_muffin|fruitsdelight:cranberry_muffin|veggiesdelight:sweet_potato_cupcake)
+expect creativedelight:farmersdelightcooking/green_grape_jam_jar
+expect creativedelight:farmersdelightcooking/red_grape_jam_jar
+expect creativedelight:farmersdelightcooking/cherry_jam_jar
+look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
+
+## SQ-BJ-02 | any bread
+@group A
+@commands same
+@pass `farmersdelight:chicken_sandwich` and the `moredelight` slice sandwiches list `#forge:bread`; `moredelight` bread_slice cutting and `canned_goods:canned_bread` keep their own input; no errors from `bread_recipes.js` or `jams.js`
+@fails RC-170, RC-171
+@from batches/r1031/a1_data.qb
+> zq rdetail chicken_sandwich
+> zq rdetail moredelight
+expect farmersdelight:.*chicken_sandwich
+look chicken sandwich and the More Delight slice sandwiches list #forge:bread (rdetail shows the first 3 breads); bread_slice cutting and canned_goods:canned_bread keep their own input
+kjsreject (bread_recipes\.js|jams\.js).*(Error|error)
+
+## SQ-BJ-03 | relish jar not a jam
+@group A
+@commands same; tag dump
+@pass `vintagedelight:relish_jar` not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the 3 new jars in `#forge:jams`
+@fails RC-174
+@from batches/r1031/a1_data.qb passed
+> zq tagsof vintagedelight:relish_jar
+> zq itemtag forge:jams
+reject item tags of vintagedelight:relish_jar:.*(forge:jam_jars|vintagedelight:savory_jam)
+expect itemtag forge:jams .*green_grape_jam_jar
+expect itemtag forge:jams .*red_grape_jam_jar
+expect itemtag forge:jams .*cherry_jam_jar
+
+
+@@section 3
+@@title CD members 22 to 24, 2026-10-29 ([creative_delight.md](../creative_delight.md) 31)
+@@date 2026-10-29
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md
+@@text
+@@text Script-only except the Storage Delight name (repackedStorage jar rebuilt 2026-10-29, not installed: a game was running). Recipe checks need a full restart (removed_items.js, order.js are startup scripts).
+@@text
+@@table
+## SQ-CM-30 | no fruit beignet
+@group A
+@commands boot with current kubejs; recipe id dump
+@pass no recipe outputs or takes `rusticdelight:fruit_beignet`; no errors from `rusticdelight/recipes.js` or `removed_items.js`
+@fails `creativedelight/members #22`
+@from batches/r1031/a1_data.qb passed
+> zq makes rusticdelight:fruit_beignet
+> zq uses rusticdelight:fruit_beignet
+expect makes rusticdelight:fruit_beignet: 0
+expect uses rusticdelight:fruit_beignet: 0 alone, 0 with other items
+kjsreject (rusticdelight/recipes\.js|removed_items\.js).*(Error|error)
+
+## SQ-CM-31 | seagrass salad, no tentacles anywhere
+@group A
+@commands same probe
+@pass `oceansdelight:seagrass_salad` recipe is `creativedelight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`)
+@fails `creativedelight/members #24`, `dishes/ocean #4`
+@from batches/r1031/a1_data.qb
+> zq rdetail seagrass_salad
+> zq uses miners_delight:tentacles
+> zq uses miners_delight:baked_tentacles
+> zq uses oceansdelight:tentacles
+> zq uses oceansdelight:cut_tentacles
+> zq uses oceanic_delight:squid_tentacles
+> zq uses oceanic_delight:glow_squid_tentacles
+> zq makes tentacle
+expect creativedelight:shapeless/seagrass_salad
+count : 0 alone, 0 with other items == 6
+expect makes tentacle: 0
+look seagrass salad takes 2 minecraft:seagrass + bowl; the 4 tentacle-on-a-stick and grilled ids are covered by "makes tentacle"
+
+## SQ-CM-32 | tentacle dishes take calamari
+@group A
+@commands same probe
+@pass `oceansdelight:cooking/squid_rings`, `oceanic_delight:sea_pickle_roll`, `shrimp_rice`, `squid_salad`, `takoyaki` take `#forge:raw_fishes/calamari`; `glow_squid_stew` takes `#forge:raw_fishes/calamari` (glowing and every slice included); `seafood_skewer`, `squid_and_pickles` take `#forge:cooked_fishes/calamari` (the tag replace in the four `#forge:squid_tentacles` recipes is the part most likely to miss)
+@fails replaceInput on a tag
+@from batches/r1031/a1_data.qb
+> zq rdetail squid_rings
+> zq rdetail sea_pickle_roll
+> zq rdetail shrimp_rice
+> zq rdetail squid_salad
+> zq rdetail takoyaki
+> zq rdetail glow_squid_stew
+> zq rdetail seafood_skewer
+> zq rdetail squid_and_pickles
+look each takes #forge:raw_fishes/calamari (seafood_skewer, squid_and_pickles: #forge:cooked_fishes/calamari); rdetail lists the tag's first items, so a calamari item there = PASS, a tentacle = FAIL
+
+## SQ-CM-33 | (server half) no tag error naming the Storage Delight JEI tag; the tag holds the 140 blocks
+@group A
+@commands boot; JEI item list (client)
+@pass the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativecommon:jei/storage_delight`
+@fails `creativedelight/members #23`
+@from batches/r1113/c1_a1.qb
+# id fix: the tag is creativecompat:jei/storage_delight since the 11-09 namespace move (row says creativecommon:)
+bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
+> zq itemtag creativecompat:jei/storage_delight
+waitlog \[zq\] itemtag creativecompat:jei/storage_delight 30
+expect itemtag creativecompat:jei/storage_delight \(140\)
+look client half (JEI item list in wood order) stays open: CQ row / client run
+
+## SQ-CM-34
+@group A
+@commands after the repackedStorage install; mod list
+@pass Storage Delight shows as "Storage Delight (Creative Delight)"
+@fails jar not installed
+@draft no batch holds this row yet
+## SQ-CM-35 | calamari tags and dishes (with SQ-CM-32)
+@group A
+@commands boot with the 2026-10-31 12:32 CD jar; recipe probe + kubejs/startup.log and latest.log
+@pass `#forge:squid_tentacles` and `#forge:foods/tentacles` hold the raw calamari items; `miners_delight:cooking/takoyaki` takes calamari in both tentacle slots; `squid_rings`, `glow_squid_stew`, `seafood_skewer`, `squid_and_pickles` exist (rerun SQ-CM-32 alongside); no `[NCH]` error naming `squid_tentacles` or `truffle_pie`
+@fails `dishes/ocean #4`
+@from batches/r1101/p1_server.qb
+> zq itemtag forge:squid_tentacles
+> zq itemtag forge:foods/tentacles
+> zq rdetail takoyaki
+> zq rdetail squid_rings
+> zq rdetail glow_squid_stew
+> zq rdetail seafood_skewer
+> zq rdetail squid_and_pickles
+> zq rdetail sea_pickle_roll
+> zq rdetail shrimp_rice
+> zq rdetail squid_salad
+bootreject \[NCH\].*(squid_tentacles|truffle_pie)
+expect squid_rings
+expect glow_squid_stew
+expect seafood_skewer
+expect squid_and_pickles
+look both tags hold raw calamari; takoyaki (miners_delight) takes calamari in both slots; no empty slots
+
+## SQ-CM-36
+@group A
+@commands same boot; recipe probe, `/fgdtest all`, then a client
+@pass `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creativedelight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list
+@fails `ports/fungiport #3`
+@draft no batch holds this row yet

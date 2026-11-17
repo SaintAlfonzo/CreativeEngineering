@@ -1,0 +1,36 @@
+# Scratch queue rows STL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/STL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Stepstools, 2026-10-29 ([stepstool.md](../stepstool.md))
+@@date 2026-10-29
+@@jars creativecommon
+@@sources feature_writeup/stepstool.md
+@@text
+@@text Needs patcherMod 1.1.04 (built 2026-10-29, `development/creativeCommon/build/libs/creativecommon-1.1.04.jar`, not yet in `mods/`) and current kubejs.
+@@text
+@@table
+## SQ-STL-01 | stepstool mixins and scripts
+@group A
+@commands boot
+@pass boot log has no `Mixin apply failed` / `InvalidInjectionException` naming `EntityStepstoolCollisionMixin` or `ServerGamePacketListenerStepstoolMixin`; no KubeJS errors from `stepstools.js`, `equipment/stepstool.js`, `curiostags.js`
+@fails SRG names `m_20272_` (Entity.collide), `m_9793_` (noBlocksAround); the `@ModifyVariable` STORE on the List local
+@from batches/r1106spf/b1.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*(EntityStepstoolCollisionMixin|ServerGamePacketListenerStepstoolMixin)
+kjsreject (stepstools\.js|stepstool\.js|curiostags\.js).*(Error|error)
+
+## SQ-STL-02 | stepstool recipes and curios tag
+@group A
+@commands same; recipe + tag probe
+@pass 16 `creativeengineering:shaped/*_stepstool` recipes (seat over `minecraft:oak_fence`); `#creativeengineering:stepstools` has 16, `#curios:feet` resolves to them; `/curios list` shows `feet`
+@fails dict keys `i.<colour>_seat`, `i.fence_oak`; `feet.json` path
+@from batches/r1106spf/b1.qb passed
+> zq recipes _stepstool
+> zq itemtag creativeengineering:stepstools
+> zq itemtag curios:feet
+> curios list
+count creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
+expect itemtag creativeengineering:stepstools \(16\)
+expect itemtag curios:feet .*stepstool
+expect (?i)feet

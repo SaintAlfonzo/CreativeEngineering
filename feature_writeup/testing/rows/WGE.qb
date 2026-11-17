@@ -1,0 +1,301 @@
+# Scratch queue rows WGE (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WGE.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-WGE Worldgen edit plan, built part, 2026-11-02 ([plan_worldgen_edit.md](../plan_worldgen_edit.md) A1 to A5, B1, B5; TODO `worldgen/biomes #9`, `locate #5`, `earthfill #4`, `rates-and-groups #6 #9 #11 #12`, `seasons #2`)
+@@date 2026-11-02
+@@sources feature_writeup/plan_worldgen_edit.md
+@@text
+@@text Rewritten in depth 2026-11-02 (one row per changed value, each with a before/after number to compare). Targets: patcherMod
+@@text 1.1.07 and Creative Calendar 1.0.0 installed in `mods/` 2026-11-02 00:18 or later, plus the same-day data / config edits
+@@text (`pool_config.json`, `structure_groups.json`, `structure_tags.json`, `biome_config.json`, `waystones-common.toml`,
+@@text `creativeengineering-common.toml`; the scratch server needs `waystones-common.toml` copied from `config/`, `prep_srv.sh`
+@@text does not carry it). Fresh normal world (group B) for every worldgen row; seed 8675309 so numbers compare with SQ-WG30.
+@@text Rows 00b to 18 (added 2026-11-02 late) cover steps 3 to 5: A6, A7, B2 to B4, C3 to C6, N1 to N11; they need the Creative Worldgen jar from the wave 5 carve (B2 punch, C6 meteorite heights; patcherMod no longer holds worldgen) and `end_divers.js`. Not queued: B6 (no rule built, owner call), C1 (runs inside the scratch session as SQ-TER-05), N2 and N3 (already in SQ-PSW).
+@@text Order: 00 (offline, no boot), then one group B boot for 01 to 05 and 08, one group A boot for 06, one client session for 07.
+@@text
+@@table
+## SQ-WGE-00 (all)
+@group none, offline
+@commands `bash tools/test_pool_merge/run.sh`; `python3 tools/gen_structure_groups.py --check`; `python3 tools/changelog_lint.py`; `python3 -c "import json;[json.load(open(f)) for f in ('kubejs/generation_scripts/worldgen/pool_config.json','kubejs/generation_scripts/worldgen/structure_groups.json','kubejs/generation_scripts/worldgen/structure_tags.json','kubejs/generation_scripts/worldgen/biome_config.json')]"`; `diff config/waystones-common.toml configs_edited/root_config/waystones-common.toml`; same diff for `creativeengineering-common.toml`
+@pass merge harness prints `ALL PASS` (6 ok lines); groups check passes and lists no new warning; lint 0 errors and no `unreleased.md` warning; JSON loads; both diffs empty
+@fails harness: `PoolTuner.mergeCurrent`; diff: re-copy the config to `configs_edited/`
+@draft no batch holds this row yet
+## SQ-WGE-01a (A1)
+@group B, fresh world
+@commands before boot: `grep -n -A2 'nullscape:shadowlands' kubejs/generation_scripts/worldgen/biome_config.json` (multiplier 0.75); boot; `grep -i 'BiomeLayoutTuner\|biome solver' OUT/srv/logs/latest.log`
+@pass the solver summary names `nullscape:shadowlands` with a modelled End share near 14 % (aim about 16 % of the surface); no solver note for it, `crystal_peaks` still 3 and `void_barrens` 2 (3.95 % / 5.41 % in the old samples); no ERROR from the tuner
+@fails cached layout used: delete `biome_layout_cache.json.gz` in the scratch `OUT/srv` and reboot; multiplier not 0.75
+@draft no batch holds this row yet
+## SQ-WGE-01b (A1)
+@group B
+@commands `execute in minecraft:the_end run locate biome nullscape:shadowlands` from 0 0 and after `tp` to 3000 0, 0 3000 and -3000 -3000 (outer islands start near 1000); then the 20,000-point End sample used in SQ-WG30-E03 (`tools/scratch_query/zq_probe.js` End climate dump)
+@pass shadowlands found from all four spots, nearest find under 1500 blocks from each; sample share of shadowlands between 12 and 20 % (old 10.7 %); crystal peaks and void barrens still found (SQ-WG30-E03 numbers within a factor of 1.3)
+@fails share still near 10 %: the multiplier is applied before another donor re-solve, read the solver line; `end_highlands` taking its place: biome_tuning.md F4
+@draft no batch holds this row yet
+## SQ-WGE-02a (A2)
+@group B
+@commands `qrun.py toml` read of `[worldgen.locate] searchTimeoutSeconds`; delete that toml line and reboot once (or read the spec default via `/zcfg`)
+@pass toml shows 120; with the line removed Forge writes 120 back (CEConfig default)
+@fails CEConfig default not rebuilt: check the jar in `mods/` is the 00:18 build
+@draft no batch holds this row yet
+## SQ-WGE-02b (A2)
+@group B
+@commands SQ-WG30-C05 at 120: `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, `meta/fortified_ruins` from 0 0
+@pass each answers, or ends with exactly one `[locate] ... timed out after 120 s` line; previous answers were 1 to 5 s (1823 / 3019 / 2608 blocks), so none should time out; server keeps ticking
+@fails a timeout where C05 passed at 300 s: the earlier answers were slow only on a cold world, rerun; message says 300: toml not updated
+@draft no batch holds this row yet
+## SQ-WGE-02c (A2)
+@group B
+@commands set `searchTimeoutSeconds = 5` in the scratch toml, reboot, `/locate structure minecraft:mansion` from 0 0 (rare, long), then `/locate structure creativeengineering:meta/fortified_ruins`; restore 120
+@pass the mansion search ends as not found with a `[locate] ... timed out after 5 s` line and its counters; the tick time stays under 100 ms during it; fortified ruins either answers or times out the same way; thread free for the next search
+@fails no timeout line: `LocateStats.expired` path or the value is not read per search
+@draft no batch holds this row yet
+## SQ-WGE-03a (A3)
+@group B
+@commands `python3 -c` over `structure_tags.json`: `eugene:undead_castle` in `land/plains` and `land/taiga`, not in `land/highlands`; boot; `grep -i 'earth.fill.*override\|undead_castle' OUT/srv/logs/latest.log`
+@pass tag lists as stated; the override line reads `eugene:undead_castle` water 24, air 800, mound 400
+@fails toml copy differs (`diff` in 00); override string malformed: `EarthFillConfig` parse log
+@draft no batch holds this row yet
+## SQ-WGE-03b (A3)
+@group B
+@commands SQ-EF-06 again, two r 400 squares (plains/taiga and highlands, `/locate biome terralith:alpine_highlands`); `/cwglocate census 96 <x> <z>` for `eugene:undead_castle` over 4 centres; `grep 'eugene:undead_castle'` earth-fill log lines (`log = ALL`)
+@pass no castle starts in a highlands biome (`getNoiseBiome` probe per start); every plains/taiga castle that the old limit cancelled with 562 to 708 over air is now kept (log shows kept, air value, limit 800); castle count in the census about the same as before per area (fits no longer include highlands, so a drop in highland-adjacent area is expected, not a fail); `tp` to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240)
+@fails cancels still logged with air over 800: the beard sees terrain far below, raise the limit and note the measured value; castles in highlands: groups not regenerated, `structure_group_estimates.md` castle row should read spacing 100
+@draft no batch holds this row yet
+## SQ-WGE-04a (A4)
+@group B
+@commands `python3 tools/gen_structure_groups.py --check`; in `structure_groups.json` the 8 weights are acacia 30, birch 24, cherry 51, desert 3, end 3, jungle 30, mangrove 15, oak 15 and `frequency` unchanged
+@pass all 8 `tuned` strings end `weight x3 by hand (user, 2026-11-01)`; no value reverted; the estimates table lists acacia 115, birch 169, cherry 137, desert 355, jungle 91, mangrove 765, oak 190, end 232 chunks per start
+@fails a `--fit-rates` or `--refit` rerun overwrote the weights
+@draft no batch holds this row yet
+## SQ-WGE-04b (A4)
+@group B, seed 8675309
+@commands `/cwglocate census 128 0 0` and `... 4000 4000` with `mysticrift_pillagers_towers_aris:*_pillager_tower` rows; compare with the pre-change census in `structure_group_estimates.md` (192 / 288 / 230 / 599 / 151 / 1304 / 242 chunks per start)
+@pass each tower type is 1.3 to 2.2 times as common as before where it is not biome-limited (acacia, birch, cherry, jungle, oak, desert); end (232) and mangrove (limited by its own 0.038 frequency) within 15 % of before; total pillager_settlements group not displacing camps, vehicles or statues by more than 15 % (they share the grid)
+@fails camps / statues fell: the group's other members lost slots, give the shortfall in the TODO row
+@draft no batch holds this row yet
+## SQ-WGE-05a (A5)
+@group B, fresh world
+@commands `grep -n 'frequency\|forceSpawnInVillages' OUT/srv/config/waystones-common.toml`; `/locate structure` has no waystone entry, so use `/cwglocate census 128 0 0` or a block probe over 40,000 chunks counting `waystones:*waystone*` blocks outside villages (`zq_probe.js`)
+@pass toml frequency 60 and forceSpawnInVillages true; lone waystones about 1 per 60 chunks of free land (was 25: about 5.8 times fewer in count), deserts no longer the densest area
+@fails `waystones-common.toml` not in the scratch `config/`; a world made before the change: use a new level-name
+@draft no batch holds this row yet
+## SQ-WGE-05b (A5)
+@group B
+@commands find 10 villages (`/locate structure minecraft:village_plains` and the other four kinds), `tp` to each, look for a waystone within 20 blocks of the village centre (probe: nearest `waystones:` block entity)
+@pass at least 8 of 10 villages have one, near the centre (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
+@fails fewer than 8 (list the villages without one): `forceSpawnInVillages` not read, or a village mod (Towns and Towers, Villages and Pillages) without the waystone piece, list which
+@draft no batch holds this row yet
+## SQ-WGE-05c (A5)
+@group B-nether
+@commands `tp` through 3 Nether and End chunks areas with `dimensionAllowList` unchanged
+@pass waystones generate in the Nether and End at the 60 chunk rate; none inside lava or void; nothing in latest.log from `waystones` worldgen
+@fails feature global: one rate for all dimensions, note if the Nether feels crowded
+@draft no batch holds this row yet
+## SQ-WGE-06a (B1)
+@group A
+@commands boot with the new `pool_config.json`; `grep -i 'piece order changed\|changed this edited piece\|PoolTuner' OUT/srv/logs/latest.log`; read `pool_tag_report.md` "Retuned pools"
+@pass no `piece order changed` warning (no duplicate is edited); the retuned list has only the vinery / beautify / tech pools (the 9 village pieces), down from 39
+@fails warnings for unedited duplicates: `mergeCurrent` not in the jar; extra retuned pools: reset list incomplete
+@draft no batch holds this row yet
+## SQ-WGE-06b (B1)
+@group A
+@commands compare effective weights in `pool_tag_report.md` / `pool_config.json` for `subterrestrial:cabin/deepslate/base`, `betterfortresses:bridge` (pillars 10 / 15 / 20 in that order), `nullscape:dragon_skeleton`, `unwrecked_ships:ship/sails`, `villagesandpillages:village_witch/road_and_house` against `original`
+@pass every `#2` / `#3` duplicate has `current == original` and plays that weight; sample 300 generations of the bridge pool with a probe: proportions match 10 : 15 : 20 within sampling error
+@fails pieces still permuted: pool_config.json not reset, or `canonicalOrder` reordered after the merge
+@draft no batch holds this row yet
+## SQ-WGE-06c (B1)
+@group A
+@commands edit one duplicate by hand (`current` of a `#2` piece, say 7), reboot; then change nothing and reboot again
+@pass first reboot keeps 7 with no warning (original unchanged); to force reorder, set its stored `original` to a different number and reboot: a `piece order changed under an edited duplicate` warning appears in the log and the report, value kept at 7
+@fails warning missing: `mergeCurrent` branch for edited entries
+@draft no batch holds this row yet
+## SQ-WGE-06d (B1)
+@group B
+@commands ST-191: boot a normal world, `/locate structure minecraft:village_plains` and note 3 village coordinates plus a pillager outpost; stop, boot again with the same world and seed, repeat; then generate a fresh area (`/cdevplace` or `forceload`) and compare the first 5 village layouts (piece list) across two restarts
+@pass same coordinates and same layouts across restarts (canonical order is on); no `Element ... is not valid` errors on save
+@fails layouts differ per start: `canonicalOrder` off in the toml, or the sort tie-break
+@draft no batch holds this row yet
+## CQ-WGE-07a (B5)
+@group client
+@commands WE-25: Cool Rain 1.0.2 and Serene Seasons loaded; `grep -i 'CoolRainSeasonMixin\|coolrain' logs/latest.log` after the title screen
+@pass no mixin error or `InvalidInjectionException`; the INFO line `[creativecalendar] Cool Rain's rain sounds follow the season (handler$...$tickRain)`, no `[creativecalendar]` Cool Rain WARN
+@fails WARN "handler not found": handler name format or priority 1500 (postApply ran before Cool Rain merged); WARN "changed": Cool Rain's calls differ, `javap` its `RainMixin`
+@draft no batch holds this row yet
+## CQ-WGE-07b (B5)
+@group client
+@commands `/weather rain`; stand in a desert for 60 s, in a plains biome in winter (`/time` forward to Winter Day 1 with the Calendar commands), in a plains biome in spring, and in a warm river in a desert
+@pass no rain splash sounds in the desert or in winter snow (snow is quiet), splash sounds in spring plains; the warm river in a desert is dry (arid rule); each result agrees with the Season HUD word
+@fails sounds in the desert: redirect did not apply (`require = 1` should have failed boot); sounds in snow: `precipitationAt` for that biome, check the seasonal rule
+@draft no batch holds this row yet
+## CQ-WGE-07c (B5)
+@group client
+@commands repeat 07b with Pretty Rain loaded (it was already patched) and with Cool Rain removed from `mods/` for one boot
+@pass Pretty Rain unchanged; without Cool Rain the game boots clean (the mixin is gated on `coolrain` in `CalendarMixinPlugin`)
+@fails boot crash with Cool Rain removed: gating entry missing
+@draft no batch holds this row yet
+## SQ-WGE-08 (all)
+@group B
+@commands full-boot regression: `grep -c 'ERROR' latest.log`, `grep -i 'mixin\|Exception' latest.log | head`, tick time of the first 5 min with the perf session
+@pass no new ERROR lines against the last clean boot; boot time within 10 % of SQ-WG30; the changelog World Generation bullets (9) each match a row above
+@fails an unrelated error: check `git stash` against the last clean jars before blaming this plan
+@draft no batch holds this row yet
+## SQ-WGE-00b (step 3 to 5, all)
+@group none, offline
+@commands `python3 tools/gen_nether_swaps.py`; `python3 tools/check_worldgen_json.py`; `python3 tools/gen_structure_groups.py --check`; `python3 tools/check_moobloom_data.py`; `node --check` on `end_divers.js`
+@pass 1514 swaps in 117 templates (1407 before C3); 0 worldgen problems; groups check lists `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1 and no new warning; moobloom check OK with 38 spawn rules; script parses
+@fails swap count off by the 7 rule rows: a rule's `to` id or a KEEP property
+@draft no batch holds this row yet
+## SQ-WGE-09 (A7)
+@group B, plus the Nether
+@commands ST-294 and ST-295 (already queued with the pre-scratch pass): in the Overworld `/locate structure philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`; in the Nether the same four; `/locate structure creativeengineering:meta/ruin_cluster` in the Overworld
+@pass none found in the Overworld; each found in the Nether in its biomes (soul sand valley; crimson / warped forest; wastes / deltas) at y 33 (ruins), 12 (dungeon), 5 (city); soul fire inside them kept (no swap: the generator skips Nether-owned templates); ruin cluster still found
+@fails found in the Overworld: the jar json override in `kubejs/data/philipsruins/` not loaded; soul fire swapped: template also owned by an Overworld structure
+@draft no batch holds this row yet
+## SQ-WGE-10 (C3)
+@group B
+@commands `/place structure` a fortified desert village, YUNG's desert temple, YUNG's stronghold, a T&T jungle outpost, the spire, the zombie dungeon, an ocean ruin; at each, `/zq` block probe (or F3) on the pieces listed in nether_swaps.md rules 26 to 32
+@pass no crimson or warped trapdoor, button, slab, pressure plate, stairs or stripped hyphae; mangrove trapdoors / buttons / slabs and dark oak pressure plates / trapdoors / stairs / stripped wood in their place, facing, half, open and axis as before (trapdoors still open where they were); the desert temple's 24-plate puzzle still triggers
+@fails old block still there: template id renamed (rerun the generator); state lost: KEEP table
+@draft no batch holds this row yet
+## SQ-WGE-11 (C4, C5)
+@group B, seed 8675309
+@commands `[worldgen.meta_structures] log = true`; `/cwglocate census 128 0 0` and `... 4000 4000` counting `meta/pillager_camp_ruin`, `pillager_camp_ruins`, `pillager_great_tower_siege`, `meteor_shower`; compare with the SQ-META31 census
+@pass camp ruin metas about 1.7 times as common as before (share 0.25 [0.15]); great tower siege about 0.6 times (0.30 [0.50]); meteor shower about 0.66 times (0.33 [0.50]); plain camp, great tower and meteorite counts unchanged within 15 % (shares never change an anchor's slots)
+@fails anchors fell: MetaSlots counts a meta as its anchor's slot
+@draft no batch holds this row yet
+## SQ-WGE-12 (B2)
+@group B
+@commands Needs the Creative Worldgen jar of 2026-11-03 or later (`punch` accepted by `structure_overrides.js`; before, the definition was dropped). SQ-META31-04b: `/place structure creativeengineering:meta/meteorite_desert_pyramid` 3 times on desert ground, and 2 found with `/locate`; grep `[meta-structures] ... meteorite_desert_pyramid` (log on); LOOK at each from the ground and from the side
+@pass log line has `punch r <n> column <c> y <from>-<top>`; the meteorite centre within 4 blocks of the pyramid centre; the pyramid above ground stands (walls, towers, roof) except a round shaft over the meteorite; sky stone sphere under or through the floor; no crater, no fallout, no cleared sand around the pyramid; no `could not rebuild an AE2 meteorite piece` error
+@fails crater still there: crater type not rewritten (AE2 tag keys changed: read `MeteoriteStructurePiece` save keys); no shaft: `topOver` found no box (meteorite missed the pyramid)
+@draft no batch holds this row yet
+## SQ-WGE-13 (C6)
+@group B
+@commands `/cwglocate census 128 0 0` for `ae2:meteorite` and its start positions; for 20 free-standing ones `/zq` the sky stone height against the ground (`WORLD_SURFACE`); `/locate` 3 meteorite villages, 3 pillager camp meteorites, 1 underwater meteorite
+@pass about 40 % at the surface with a crater (AE2 as before), about 30 % underground (sky stone sphere in stone, no crater, no hole to the surface), about 30 % in the air 16 to 96 blocks over the ground (floating sphere, no crater, no earth fill under it); every meta meteorite on the surface as before; no `[meteorites] could not move` error
+@fails all at the surface: mixin not applied (`AeMeteoriteHeightMixin` in the Creative Worldgen mixin config); metas moved: `MeteoriteHeights.enterMeta` not around `generate`
+@draft no batch holds this row yet
+## SQ-WGE-14 (A6)
+@group B
+@commands `/locate structure creativeengineering:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
+@pass a small ruin with one waystone 4 to 12 blocks from its centre, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
+@fails `no satellite fitted` for most: margin 1 too tight, raise distance; waystone not registered: template block entity, compare with a village waystone
+@draft no batch holds this row yet
+## SQ-WGE-15 (B3, B4)
+@group B
+@commands run SQ-PSM-02 and SQ-PSM-03 as written; for the tower siege also `kill @e[type=!player,distance=..128]` at the anchor first (the T&T tower places about 11 grunt pillagers and vindicators when it generates)
+@pass as in those rows: the lone birch tower resolves to box `large_towers`; each siege part prints the meta's box; evokers, illusioners or witches only on floors with block light 0
+@fails as in those rows
+@draft no batch holds this row yet
+## SQ-MOB-N5 | lone villagers: plains creature list has minecraft:villager 1 (1-1); villagers in the plains square
+@group B
+@commands `/dumpspawns`; explore new plains and meadow chunks by day
+@pass plains `creature` list has `minecraft:villager` 1 (1-1); `lone_villagers` matched 7; now and then a lone villager in open plains or meadow, never in a cave; it becomes an MCA villager (MS-27, MS-28)
+@fails category not creature; MCA not converting natural spawns (record what spawns)
+@from batches/r1103w/w_12_B.qb
+> dumpspawns
+sleep 10
+shell python3 -c "import json; d=json.load(open('kubejs/exported/spawns.json')); b=d['biomes']; [print(k, [s for s in b[k]['spawners'].get('creature', []) if 'villager' in s['type']]) for k in ('minecraft:plains', 'minecraft:meadow')]; t=json.dumps(d.get('tuning', {})); print('lone_villagers' in t, t[t.find('lone_villagers'):t.find('lone_villagers')+160])"
+shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/spawns.json'))['biomes']; ok=any(s['type']=='minecraft:villager' and s['weight']==1 for s in d['minecraft:plains']['spawners'].get('creature', [])); print('plains villager 1:', ok); sys.exit(0 if ok else 1)"
+shell python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'villager' --box {PL1-400} {PL3-400} {PL1+400} {PL3+400} | head -12
+look villagers in the plains square outside villages (by_biome lines), none in caves; MCA conversion (MS-27, MS-28)
+
+## SQ-MOB-N6 | allays: moonlight grove creature list, allays in the grove, outposts with a cage, temple box
+@group B
+@commands `/locate biome terralith:moonlight_grove`, explore by day; 3 pillager outposts in new chunks; `/locate structure ancient_enchantment_temple:temple`, inside `/cwgspawnbox ~ ~ ~ creature`, wait 5 min
+@pass grove `creature` list has `minecraft:allay` 3 (1-2), allays seen (MS-29, MS-30); an allay cage in at least one of 3 outposts, pool report shows weight 3 (MS-31); probe answers `allay_temples`, allays appear in the temple; no `first wins` warning
+@fails `category` not read (box treated as monster); pool key renamed
+@from batches/r1103w/w_12_B.qb
+shell python3 -c "import json; b=json.load(open('kubejs/exported/spawns.json'))['biomes']; print([s for s in b.get('terralith:moonlight_grove', {}).get('spawners', {}).get('creature', []) if 'allay' in s['type']])"
+> locate biome terralith:moonlight_grove
+waitlog (nearest terralith:moonlight_grove.* is at|type "?terralith:moonlight_grove|terralith:moonlight_grove.*timed out|Could not find|There is no) 300
+capture GROVE nearest terralith:moonlight_grove.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}
+sleep 60
+> execute positioned 0 70 0 run locate structure minecraft:pillager_outpost
+waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
+capture PO0 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PO01-48} {PO03-48} {PO01+48} {PO03+48}
+sleep 20
+> execute positioned 3000 70 0 run locate structure minecraft:pillager_outpost
+waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
+capture PO1 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PO11-48} {PO13-48} {PO11+48} {PO13+48}
+sleep 20
+> execute positioned 0 70 -3000 run locate structure minecraft:pillager_outpost
+waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
+capture PO2 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PO21-48} {PO23-48} {PO21+48} {PO23+48}
+sleep 20
+> locate structure ancient_enchantment_temple:temple
+waitlog (nearest ancient_enchantment_temple:temple.* is at|type "?ancient_enchantment_temple:temple|ancient_enchantment_temple:temple.*timed out|Could not find|There is no) 600
+capture AT nearest ancient_enchantment_temple:temple.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {AT1-32} {AT3-32} {AT1+32} {AT3+32}
+sleep 20
+> summon minecraft:armor_stand {AT1} 300 {AT3} {Tags:["w12g"],NoGravity:1b,Invisible:1b}
+> spreadplayers {AT1} {AT3} 0 1 false @e[tag=w12g,limit=1]
+sleep 1
+> data get entity @e[tag=w12g,limit=1] Pos
+capture GAT entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> kill @e[tag=w12g]
+> cespawnbox {AT1} {GAT2} {AT3} creature
+sleep 1
+expect allay_temples
+> save-all flush
+waitlog Saved the game 300
+shell python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'allay' --box {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119} | head -4
+shell for v in "{PO01} {PO03}" "{PO11} {PO13}" "{PO21} {PO23}"; do set -- $v; echo "outpost $1 $2"; python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'allay' --box $(($1-48)) $(($2-48)) $(($1+48)) $(($2+48)) | head -2; done
+reject first wins
+look grove creature list has minecraft:allay 3 (1-2); allays counted in the grove; an allay in at least 1 of 3 outposts; allays appear in the temple (5 min wait needs a player: client)
+> forceload remove {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}
+> forceload remove {PO01-48} {PO03-48} {PO01+48} {PO03+48}
+> forceload remove {PO11-48} {PO13-48} {PO11+48} {PO13+48}
+> forceload remove {PO21-48} {PO23-48} {PO21+48} {PO23+48}
+> forceload remove {AT1-32} {AT3-32} {AT1+32} {AT3+32}
+
+## SQ-MOB-N8 | End pillagers wear the copper diving gear, Overworld ones do not
+@group B, End
+@commands `/execute in minecraft:the_end run summon minecraft:pillager ~ ~ ~`; `/data get entity @e[type=pillager,limit=1,sort=nearest] ArmorItems`; kill it; same in the Overworld; End tower: `/cwgspawnbox` inside, wait
+@pass End pillager has the copper diving helmet, backtank and boots and drops none; Overworld pillager has none; probe answers `end_tower` and box mobs all wear the gear; the gear is not drawn on the model (known, no armour layer on illagers) (MS-34, MS-35)
+@fails `getDimension` string differs; Rhino overload error from `end_divers.js` in latest.log
+@from batches/r1103w/w_12_B.qb
+> execute in minecraft:the_end run forceload add 1488 -16 1519 15
+sleep 10
+> execute in minecraft:the_end run summon minecraft:pillager 1500 90 0 {NoAI:1b,PersistenceRequired:1b,Tags:["w12end"]}
+sleep 2
+> execute in minecraft:the_end run data get entity @e[tag=w12end,limit=1] ArmorItems
+expect has the following entity data: \[.*copper_diving_boots.*copper_diving_helmet
+> execute in minecraft:the_end run data get entity @e[tag=w12end,limit=1] ArmorDropChances
+> forceload add {S1-8} {S3-8} {S1+8} {S3+8}
+> summon minecraft:pillager {S1} 120 {S3} {NoAI:1b,PersistenceRequired:1b,Tags:["w12ow"]}
+sleep 2
+> data get entity @e[tag=w12ow,limit=1] ArmorItems
+reject w12ow.*copper_diving
+> kill @e[tag=w12ow]
+> execute in minecraft:the_end run kill @e[tag=w12end]
+shell grep -aiE 'end_divers|getDimension' logs/latest.log | grep -iE 'error|overload' | head -3; ! grep -aiE 'end_divers' logs/latest.log | grep -qiE 'error'
+look End drop chances 0 for the three pieces; Overworld pillager ArmorItems all empty; End tower box (MS-34, MS-35) needs a player wait: client
+> execute in minecraft:the_end run forceload remove 1488 -16 1519 15
+> forceload remove {S1-8} {S3-8} {S1+8} {S3+8}
+
+## SQ-WGE-16 (N9)
+@group B
+@commands MB-97 and MB-99: `/locate biome terralith:skylands_spring`, `_summer`, `_autumn`, `_winter`; explore new chunks, count cows and mooblooms
+@pass spring: no plain cows, the 7 spring variants in roughly equal numbers; summer: sunbloom / moobloom / oxeyebloom about even; autumn: moobloom / sunbloom / rosebloom about even; winter: plain cows (new) with goats and sheep
+@fails plain cows in spring to autumn: rule order (exact biome rules win over tag rules); no winter cows: biome modifier not loaded
+@draft no batch holds this row yet
+## CQ-WGE-17 (N11)
+@group client
+@commands `structures/testing #1`: the client list structure_tuning.md 8.0.11; `structures/testing #3`: create a Superflat world in single player, then `/time` across a season change with Serene Seasons' clock item in hand
+@pass 8.0.11 items as written there; Superflat world loads and plays without errors; the seasons clock shows the Calendar's season (`SereneSeasonsClientClockMixin` applied, no mixin error)
+@fails Superflat crash: worldgen classes reading the overworld noise settings; clock wrong: mixin target moved
+@draft no batch holds this row yet
+## CQ-WGE-18 (N7)
+@group client
+@commands `mobs/spawns #6`: swamp at night with Firefly Bush blocks nearby, F3 tick time and `/cdevperf` for 2 min; catch fireflies with a jar; leave a jar near a bush through a night
+@pass fireflies show around bushes at night; tick time not more than 1 ms above a swamp without bushes; a jar catches them; the jar near a bush fills at night
+@fails cost over 1 ms: the per-tick block reschedule, give the numbers
+@draft no batch holds this row yet

@@ -1,0 +1,55 @@
+# Scratch queue rows BPT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BPT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-BPT / CQ-TSL Creative Compat licence fixes, 2026-11-06 ([writeup](../creative_compat.md) sections 6.3, 6.4, TODO `licence/compat #2`, `#3`)
+@@date 2026-11-06
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_compat.md
+@@text
+@@text Not run. Built 2026-11-06 13:17 (`creativecompat-1.0.0.jar` in `development/creativeCompat/build/libs/`), NOT installed
+@@text (`mods/` has the 11-05 22:08 jar, which still carries the 98 banner textures and the TrashSlot overwrite). Offline: the
+@@text banner builder reproduces all 73 old textures from `mods/*.jar` pixel for pixel and adds Neapolitan's 2 patterns. The
+@@text banner pack and the TrashSlot mixin are client-only, so most rows need a client.
+@@text
+@@table
+## SQ-BPT-01 | dedicated server: no [banner_patterns] line, no Compat mixin error
+@group A
+@commands Boot (dedicated server); `grep -nE "banner_patterns\|creativecompat.mixins.json.*(fail\|error)" srv/logs/latest.log`
+@pass no `[banner_patterns]` line (client-only pack) and no Compat mixin error; boots clean
+@fails `CreativeCompat` registers `BannerPatternPack::add` outside the `Dist.CLIENT` check
+@from batches/r1113/c3_a1.qb passed
+bootreject \[banner_patterns\]
+bootreject creativecompat\.mixins\.json.*(fail|error)|Mixin apply failed.*creativecompat
+
+## CQ-BPT-01
+@group client
+@commands Launch the client to the title screen; `grep -n "banner_patterns" logs/latest.log`; `grep -n "TrashSlotGuiHandlerMixin" logs/latest.log logs/debug.log \| grep -i "error\|fail"`
+@pass one line `[banner_patterns] 27 Bedspreads and 25 Customizable Elytra pattern textures built from <n> jars`, no `[banner_patterns]` WARN; no TrashSlot mixin error
+@fails `banners/BannerPatternPack.patterns` (jar file system listing) or `BannerPatternArt`; WARN lines name the pattern
+@draft no batch holds this row yet
+## CQ-BPT-02
+@group client
+@commands Creative world: loom a bed-sized banner with a Botania pattern (Tiny Potato), an IE pattern (Hammer), Buzzier Bees (Honeycomb) and Neapolitan (Chimpanzee); apply each to a Bedspreads bed; apply to a Customizable Elytra and wear it (F5), video setting low and normal elytra quality if offered
+@pass LOOK: each pattern on the bed quilt and on both wings, placed like the mods' own patterns (as with the 11-05 jar); Neapolitan's Chimpanzee now shows (before: nothing)
+@fails atlas: `BannerPatternAtlasCompat` (file check through the resource manager); paths must stay `creativeengineering:textures/entity/<ns>/<id>.png` and `elytra_banner[_low]/<ns>/<id>.png`
+@draft no batch holds this row yet
+## CQ-BPT-03
+@group client
+@commands Same world: F3+T
+@pass the `[banner_patterns]` built line does not repeat (cached); patterns still drawn
+@fails cache in `BannerPatternPack.files()`
+@draft no batch holds this row yet
+## CQ-TSL-01
+@group client
+@commands Single player, survival: run [trashslot.md](../trashslot.md) 7 TS-01, TS-03, TS-04, TS-06, TS-11; then `/gamemode creative` and run TS-08, TS-09, TS-10, and open the survival inventory tab while creative
+@pass same as the 11-05 jar: slot on the inventory and workstations, off on shulker and hopper; creative screen has the slot and the delete key removes only the hovered item; LOOK: no slot left drawn from the previous screen
+@fails the redirect targets in `TrashSlotGuiHandlerMixin` (TrashSlot 12.1.0 bytecode: `getScreen` ordinal 1, `Abilities.f_35937_`, `Player.m_5833_`, `TrashSlotSaveState.getSettings`)
+@draft no batch holds this row yet
+## CQ-TSL-02
+@group client
+@commands Open a chest (slot shows), close; `/gamemode spectator`; open the inventory or a chest
+@pass no trash slot drawn in spectator; back to survival, chest shows the slot again
+@fails `creativecompat$spectatorClears` redirect
+@draft no batch holds this row yet

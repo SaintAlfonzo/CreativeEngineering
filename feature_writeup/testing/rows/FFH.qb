@@ -1,0 +1,49 @@
+# Scratch queue rows FFH (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FFH.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Food family recipe helpers (food_families.md 4.5)
+@@jars creativecommon creativedelight
+@@text
+@@text Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-FFH-01
+@group B
+@commands Retired 2026-10-27: `global.foodFamily` is deleted (PASSED before, run log). Its dump diff is SQ-FFH-02 now
+@pass -
+@fails -
+@draft no batch holds this row yet
+## SQ-FFH-02 | CD.food recipe ids (the 10-26 dump diff half is stale: s3_skip.md)
+@group B
+@commands Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30); the 2026-10-27 CD jar is installed and in 1.1.04, so this is the dump diff only: boot, `/dumpall`, then diff the recipe dump against the 10-26 one
+@pass No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creativedelight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone
+@fails CD jar; creative_delight.md 30
+@from batches/r1102b/s3_A.qb
+kjsreject (?i)(cd_food\.js|global\.CD\.food|CD\.food).*(error|exception)
+bootreject (?i)duplicate recipe.*muffin
+> zq recipes creativedelight:baking/
+> zq recipes _from_culture_
+> zq recipes _by_fdcutting
+> zq recipes _from_glowing_calamari
+> zq recipes cooked_glowing_calamari
+> zq recipes muffin
+expect recipes matching creativedelight:baking/: [1-9]
+count \[zq\] creativedelight:farmersdelightcutting/[a-z_]+_from_culture_\S* -> == 7
+reject \[zq\] \S*culture_\S*_by_fdcutting
+count \[zq\] \S*(smelting|smoking|campfirecooking)/cooked_calamari(_slice)?_from_glowing_calamari(_slice)? -> == 6
+expect recipes matching cooked_glowing_calamari: 0$
+look muffin lines: one farmersdelightcooking/ (Cooking Pot) recipe per muffin
+
+## SQ-FFH-03 | zucchini quiche sequenced assembly parses
+@group A
+@commands Added 2026-10-30. After the `CD.food` `assemble` fix (an array step became a filling step with fluid `minecraft:empty`, creative_delight.md 30): boot, grep `logs/kubejs/server.log`, `/dumpall` recipe dump
+@pass No `Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche_sequenced_assembly`; that id is in the recipe dump: pie crust base, 3 roasted zucchini deploys, one cooked-meat deploy (any of 5), 250 mB milk fill
+@fails SQ-FFH-02
+@from batches/r1101/p1_server.qb
+kjsreject Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche
+> zq rdetail zucchini_quiche
+expect zucchini_quiche_sequenced_assembly
+look pie crust base, 3 roasted zucchini deploys, cooked meat deploy, 250 mB milk fill

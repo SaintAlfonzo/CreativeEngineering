@@ -1,0 +1,57 @@
+# Scratch queue rows CDS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDS Creative Delight script moves (wave 4), 2026-11-01 ([creative_split.md](../creative_split.md) 7.6, TODO `creativesplit/cdcb #7`)
+@@date 2026-11-01
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CDS-01 (server half) to -04 PASS (tags compared with `tools/scratch_query/tag_diff.py`). Client rows open.
+@@text
+@@text Run after SQ-CS2 and SQ-CMP pass, in the CD boot of wave 4 (rebuilt `creativedelight-1.0.0.jar`; the sample syringe
+@@text startup scripts are in it).
+@@text
+@@table
+## SQ-CDS-01 | sample syringe
+@group A
+@commands `grep -E "sample_syringe\|Error" logs/kubejs/startup.log \| head`; `/give @p creativeengineering:cow_sample_syringe`; right-click a cow with `creativeengineering:sample_syringe`
+@pass Syringe items exist; sampling fills it
+@fails `global.sampleSyringe` not set before the item callback
+@from batches/r1101/cs4_boot3.qb
+shell grep -E "sample_syringe|Error" logs/kubejs/startup.log | head -5 | cut -c1-200
+> give qa creativeengineering:cow_sample_syringe
+> give qa creativeengineering:sample_syringe
+reject Unknown item
+look both syringes exist (sampling a cow is a client / bot-use check)
+
+## SQ-CDS-02 | CD kitchen tags (dumptags of SQ-CBM-05)
+@group A
+@commands Same boot: `/dumptags` block `creativeengineering:oven_heat_sources`, `farmersdelight:heat_sources` (has the oven), `minecraft:mineable/shovel` (the six dough blocks), `creativeengineering:crops/farmland_soils`; item `creativeengineering:hoe_harvest/5x5`, `forge:storage_blocks/sourdough`
+@pass Same contents as before the move
+@fails CD tag script not loaded
+@from batches/r1101/cs4_boot3.qb
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:oven_heat_sources block:farmersdelight:heat_sources block:minecraft:mineable/shovel block:creativeengineering:crops/farmland_soils item:creativeengineering:hoe_harvest/5x5 item:forge:storage_blocks/sourdough
+look same contents as boot 2 (heat_sources has the oven only after wave 4 if the oven moved: judge the diff)
+
+## SQ-CDS-03 | CD fluid and fishing tags
+@group A
+@commands Same boot: `/dumptags` fluid `forge:fluid/tea`, `forge:fluid/honey`; biome `creativeengineering:fishing_net/ocean`; block `creativeengineering:fishing_net/kelp`
+@pass Same contents as before
+@fails CD tag script not loaded, or Oceanic member off
+@from batches/r1101/cs4_boot3.qb
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags fluid:forge:fluid/tea fluid:forge:fluid/honey block:creativeengineering:fishing_net/kelp
+look same contents as boot 2
+
+## SQ-CDS-04 | mining tiers (harvest.js now in CD)
+@group A
+@commands Same boot: `/dumptags` block `creativeengineering:needs_copper_tool`, `minecraft:needs_iron_tool` on `creativeengineering:plate_block_iron` and the copper dust pile
+@pass One tier and one tool per listed block, as before (harvest.js now in CD)
+@fails Exclusive mineable ran before a pack add
+@from batches/r1101/cs4_boot3.qb
+shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:needs_copper_tool block:minecraft:needs_iron_tool block:minecraft:needs_stone_tool block:minecraft:needs_diamond_tool
+look same contents as boot 2
+
+@@text
+@@text In game (client): CDS-C1 names "Caviar Roll", "Cantaloupe", "Mini Cantaloupe", "Netherite Lunchbox", Ender's Delight
+@@text "Amberveils"; CDS-C2 tooltips on a bowl, Rich Soil (soil line, then the farmer villager line) and Nulch.

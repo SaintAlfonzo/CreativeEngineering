@@ -1,0 +1,488 @@
+# Scratch queue rows CGE (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CGE.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CGE Creative Common 1.1.0 of 2026-11-08 00:01: low gravity for falling blocks, items and TNT, and the re-check list for the publish ([creative_engineering.md](../creative_engineering.md) 7.1, TODO `creativecommon/publish #3`)
+@@date 2026-11-08
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_engineering.md
+@@text
+@@text Not run. Targets `development/creativeCommon/build/libs/creativecommon-1.1.0.jar` of 11-08 00:01 (newer than the 11-07 20:28 jar in `mods/`; prep_srv.sh and `cc_only_srv.sh` swap it in, install it in `mods/` only with the game closed). New code: `CreateGravityEntitiesMixin` (gated on `create_gravity`; `require = 0`, so a wrong method name skips silently: SQ-CGE-02 is the real check). Servers: full pack for SQ-CGE-01 to -05, `bash tools/scratch_query/cc_only_srv.sh OUT LEVEL full` for SQ-CGE-06. Probe scripts go in `tools/scratch_query/` (`cge_probe.js` or `.qb` batch `batches/r1108cge/`).
+@@text Entity speed rows: `/forceload add 0 0`, summon at y 120 over the End main island (0, 120, 0) and over a flat overworld spot, read `Pos[1]` after 20 and 40 ticks with `data get entity @e[type=...,limit=1] Pos[1] 1000`; vanilla pull is -0.04 per tick, so 40 ticks drop about 27 blocks, and Create Gravity's default End factor -0.8 should leave about a fifth of that.
+@@text
+@@text | ID | Setup | Steps | Pass | Fail points at |
+@@text |---|---|---|---|---|
+## SQ-CGE-01 | boots, no mixin error naming the Create Gravity mixins
+@group A (full pack, new Common)
+@commands boot; `grep -nE "Mixin apply failed\|InvalidMixinException\|CreateGravity\|outside the tested range" logs/latest.log \| head`
+@pass no mixin error or WARN naming `CreateGravityEntitiesMixin` or `CreateGravityDimensionMixin`; boots
+@fails `mixins.json` / `NEEDS_MOD` entry, Create Gravity 1.2.0 class names
+@from batches/r1108cge/b1_full.qb
+bootreject Mixin apply failed|InvalidMixinException
+bootreject (?i)(CreateGravityEntitiesMixin|CreateGravityDimensionMixin).*(error|fail|warn)
+bootreject outside the tested range.*create_gravity
+bootexpect Done \(
+look Done line present; no WARN/ERROR naming either Create Gravity mixin
+
+## SQ-CGE-02
+@group A (same boot)
+@commands falling block: `summon falling_block 0 120 0 {BlockState:{Name:"minecraft:sand"},Time:1}` in the End and in the overworld (plains, flat); read `Pos[1]` at 20 and 40 ticks
+@pass End drop is under 40 percent of the overworld drop at both reads (expected about 20 percent); overworld drop equals vanilla (about 27 blocks at 40 ticks)
+@fails method name `m_8119_` on `FallingBlockEntity`, `ServerConfig.getBiomeConfig` returning null for the End (tag `#minecraft:is_end` not resolved), `PULL` constant
+@draft no batch holds this row yet
+## SQ-CGE-03 | item and TNT in the End (covered by the drop lines of 02b / 02c: type=item.minecraft.stone, entity.minecraft.tnt)
+@group A (same boot)
+@commands dropped item `summon item 0 120 0 {Item:{id:"minecraft:stone",Count:1b},Age:0}` and lit TNT `summon tnt 0 120 0 {Fuse:200}`, End vs overworld, as SQ-CGE-02
+@pass both drop under 40 percent of the overworld drop in the End; overworld unchanged
+@fails `ItemEntity` / `PrimedTnt` target in the mixin
+@from batches/r1108cge/b1_full.qb
+> say CGE03 see SQ-CGE-02c
+look judged from SQ-CGE-02c lines of the item and TNT types
+
+## SQ-CGE-04 | resting entities in the End: no upward drift, landed block becomes a block
+@group A (same boot)
+@commands resting entities: an item on obsidian at 0 60 0 in the End and a falling block landing on it (`Time:1` from y 80), 200 ticks
+@pass the item stays at its Y (no upward drift); the landed block becomes a block or drops as an item and does not float; no entity left hovering above the floor
+@fails the `isOnGround` guard, `hurtMarked`
+@from batches/r1108cge/b1_full.qb
+> execute in minecraft:the_end run fill -2 60 -2 10 60 2 minecraft:obsidian
+> execute in minecraft:the_end run fill -2 61 -2 10 70 2 minecraft:air
+> zgv watch the_end 0 63 0 180
+waitlog \[zgv\] watch done dim=minecraft:the_end 20
+> execute in minecraft:the_end run data get block 0 61 0
+> execute in minecraft:the_end run kill @e[tag=zgv]
+look item y stays 61.000 after landing (no climb), falling block removed=true and block 0 61 0 is sand; tnt rests on 61
+
+## SQ-CGE-05 | factor -1 in the End, plains listed with the default factor, desert unlisted
+@group A (same boot)
+@commands factor -1 and a non-End biome: stop, set `biome_configs = ["#minecraft:is_end;;-1", "minecraft:plains;;"]` in `world/serverconfig/create_gravity-server.toml`, boot; repeat SQ-CGE-02 in the End and over plains
+@pass End block does not fall (Pos[1] unchanged after 40 ticks); plains block falls at a reduced rate (-0.8 default); a biome not listed (desert) falls at vanilla speed
+@fails the `factor >= 0.0` return, `BiomeConfig` default factor
+@from batches/r1108cge/b2_factor.qb
+> reload
+sleep 10
+> zgv cfg the_end 0 70 0
+> zgv cfg overworld 0 -60 0
+waitlog \[zgv\] cfg dim=minecraft:overworld 10
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1(\.0)?\b
+expect \[zgv\] cfg dim=minecraft:overworld biome=minecraft:plains factor=-0\.8
+look End t=40 drop 0 (no fall) for all three; plains (superflat = plains) drop about 25 percent of vanilla 24.6; desert half in SQ-CGE-05b
+
+## SQ-CGE-06 | Create Gravity on living entities in the End with Common's dimension gate, no /reload
+@group CCO full set (`cc_only_srv.sh OUT LEVEL full`)
+@commands rerun SQ-CCO-08 with entity data: in the End `summon zombie 0 70 0 {NoAI:1b,PersistenceRequired:1b}`, `summon villager 5 70 0 {NoAI:1b}`, join a survival bot or player; `data get entity @e[type=zombie,limit=1] Attributes` and the same for the villager; `execute as @e[type=zombie,limit=1] at @s if biome ~ ~ ~ #minecraft:is_end run say IN_END`; do it with `gravityLimitDimensions` true, then `qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false` and reboot; also SQ-CGE-02 on this set
+@pass the zombie, villager and survivor each carry `forge:entity_gravity` with a modifier named "Low Gravity Biome" (-0.8) while IN_END prints; falling blocks as SQ-CGE-02. If the modifier is missing while IN_END prints: record the `biome_configs` the set wrote, `cache_time`, and `grep -i "gravity" logs/latest.log` (the finding for TODO `creativecommon/publish #3`; Common is not at fault unless it also fails with the mixin config switched off)
+@fails Create Gravity `ServerConfig.reloadConfig` timing (server started before tags), the entity's `fallFlying` / blacklist tag, then Common's gate
+@from batches/r1108cge/b5_cco.qb
+> difficulty normal
+> execute in minecraft:the_end run forceload add 0 0
+> pbot spawn cge06 0 75 0 minecraft:the_end survival
+sleep 3
+> zgv cfg the_end 0 70 0
+waitlog \[zgv\] cfg dim=minecraft:the_end 10
+> execute in minecraft:the_end run summon minecraft:zombie 0 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge06"]}
+> execute in minecraft:the_end run summon minecraft:villager 5 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge06"]}
+sleep 6
+# 1.19.2 has no `execute if biome`: the probe's cfg line names the biome at the spot
+> execute in minecraft:the_end run attribute @e[type=zombie,tag=cge06,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute @e[type=villager,tag=cge06,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute cge06 forge:entity_gravity get
+> execute in minecraft:the_end run data get entity @e[type=zombie,tag=cge06,limit=1] Attributes
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+> kill @e[tag=cge06]
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-0\.8
+expect \[zgv\] cfg dim=minecraft:the_end biome=minecraft:the_end
+count Entity Gravity for entity .* is 0\.01599 >= 3
+# the low-gravity modifier is transient (addTransientModifier): not in the saved Attributes, the value is the check
+look End drops about 20 percent of the overworld's (4.9 vs 24.6 at t=40)
+
+## CQ-CGE-01
+@group client (full pack or CEPortTesting with Common 00:01)
+@commands singleplayer, survival, creative to place sand high in the End; watch falling sand, an item drop and lit TNT; LOOK for jitter or stutter
+@pass LOOK: they fall slowly and smoothly, no stutter, no rubber-banding; same objects in the overworld fall as before
+@fails `hurtMarked` motion packets every tick
+@draft no batch holds this row yet
+@@text
+@@text Re-run list for the same jar (rows exist above, nothing new to write): SQ-CPP-01 to -05 (Common alone, Brewing chain without Engineering, full pack; Engineering / Delight / Compat 11-07 builds), SQ-CC-12 and CQ-CC-01 to -06, CQ-CPP-01, CQ-CIF-01, SQ-CMV-04, CQ-CMV-03, CQ-CCO-02/-03 (CQ-CCO-03 now also covers falling blocks, see CQ-CGE-01), CQ-SPFX-02, and CQ-CCB-03 with Common + Compat + `backportedTempad` only (the Tempad split of 11-07 23:10; `mods/` already holds both). Suggested boots: (1) full pack A: SQ-CPP-01 to -03, SQ-CGE-01 to -05, SQ-CMV-04; (2) chain set: SQ-CPP-04, -05; (3) CCO full set: SQ-CGE-06; (4) CreEngServer plus owner client: SQ-CC-12; (5) client rows.
+
+@@section 2
+@@title SQ-CGE part 2: low gravity for every falling entity without motion packets, dimension limit, End oxygen, script phase, physics tags, 2026-11-08 ([creative_engineering.md](../creative_engineering.md) 7.4, TODO `creativecommon/publish #3`)
+@@date 2026-11-08
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_engineering.md
+@@text
+@@text Targets Common `creativecommon-1.1.0` and Compat `creativecompat-1.0.0` of 11-08 15:08 (build/libs, NOT installed; install the two together: the new Common moves only files headed `// phase: helpers` ahead of `startup_scripts/`, and only the new Compat has that header on `jei_order.js`). New mixins `LowGravityPullMixin` (items, falling blocks, TNT, minecarts, Shulker bullets), `LowGravitySlowPullMixin` (XP orbs, fishing bobbers), `LowGravityArrowMixin`, `LowGravityLlamaSpitMixin`, `LowGravityBoatMixin` (out of water only), `LowGravityThrowableMixin`, `LowGravityItemPhysicMixin` (items under ItemPhysic), accessor `CreateGravityConfigAccessor`; all `require = 1`, so a wrong target crashes the boot (SQ-CGE-07 is the first row of the first boot).
+@@text
+@@text **How to run** (all scripted, one game JVM at a time; targeted run, no perf session):
+@@text - Server, five boots in one go (b5 = SQ-CGE-16, ItemPhysic without Create Gravity): `bash tools/scratch_query/cge2_run.sh server OUT` (OUT under the session scratchpad). b1 full pack group A superflat (level r1108cge2, configs as generated) -> b2 same world with Create Gravity `biome_configs = ["#minecraft:is_end;;-1", "#minecraft:is_nether;;"]` -> b3 same world with Common `gravityDimensions = ["minecraft:the_end", "minecraft:the_nether"]` -> b4 `cc_only_srv.sh full` (Common without Compat). The runner copies Common and Compat from build/libs into each srv (refuses if they are not these builds), edits the configs while stopped (Forge writes its copy back on shutdown), stops on a boot crash. Results `perf/runs/r1108cge2/b1..b4/`.
+@@text - Client, single player: `cge2_run.sh client OUT GAME` (throwaway client, the two jars copied into its mods/, the b1 world as CGE2), then `eval_client.py launch GAME`, open CGE2, `qrun.py client GAME tools/scratch_query/batches/r1108cge2/c1_sp.qb perf/runs/r1108cge2/c1`.
+@@text - Client joined to a dedicated server (needs a client and a server up together, which the one-game-JVM rule does not allow an agent to start; owner's call; the only path that uses the synced config on the client): `cge2_run.sh join OUT` (b1 srv with default configs, left up), in the client Multiplayer > Direct Connection > `localhost:25599`, `cge2_run.sh op OUT`, then `qrun.py client GAME .../c2_join.qb perf/runs/r1108cge2/c2`; `cge2_run.sh stop OUT` after.
+@@text - Fall rows are judged by `tools/scratch_query/cge_judge.py` (per type: End drop / overworld drop at 40 ticks; `low` 0.10-0.30, `zero` under 0.01 blocks, `same` within 2 percent); probe `cge_probe.js` `/zgv dropall` drops a falling block, item, TNT, XP orb, arrow, snowball, boat, minecart and llama spit.
+@@text
+@@table
+## SQ-CGE-07 | boots; every LowGravity mixin applied; startup order with the helper phase
+@group b1 (A, full pack)
+@commands boot; batch `b1_full.qb`
+@pass no mixin / injection error; startup order `creativecommon, creativecompat_helpers, startup_scripts, ... creativecompat`; `creativecompat: 1 helper file(s) run before startup_scripts`; `[jeiOrder] defined`; 0 startup errors
+@fails the constant in the failing `LowGravity*Mixin` (javap the target), `JarStartupScripts.splitHelpers`, the header in Compat's `jei_order.js`
+@from batches/r1108cge2/b1_full.qb
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+bootreject (?i)(LowGravity|CreateGravity)\w*Mixin.*(error|fail|warn)
+bootexpect Done \(
+shell grep -E "packs in order" logs/kubejs/startup.log | grep -q "creativecommon, creativecompat_helpers, startup_scripts, .*creativecompat" && echo "order ok"
+shell grep -q "creativecompat: 1 helper file(s) run before startup_scripts" logs/kubejs/startup.log && echo "helper line ok"
+shell grep -q "\[jeiOrder\] defined" logs/kubejs/startup.log && echo "jeiOrder ok"
+shell test "$(grep -c '\[ERROR\]' logs/kubejs/startup.log)" = 0 && echo "0 startup errors"
+look shell.txt holds the four ok lines (each shell step exits 1 when its check fails)
+
+## SQ-CGE-08 | every fixed-pull type falls at 20 percent of vanilla in the End, overworld vanilla, no /reload
+@group b1, no /reload
+@commands `/zgv dropall the_end 0 120 0`, `/zgv dropall overworld 0 120 0`; judge `low`
+@pass 9 entities each; every type about 0.2
+@fails that type's mixin; `LowGravity.serverFactor`; `perf.gravityDimensions`
+@from batches/r1108cge2/b1_full.qb
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv cfg the_end 0 70 0
+> zgv dropall the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+expect \[zgv\] start dim=minecraft:the_end entities=9
+expect \[zgv\] start dim=minecraft:overworld entities=9
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
+look shell.txt: 9 types ok (falling_block, item, tnt, experience_orb, arrow, snowball, boat, minecart, llama_spit), ratio about 0.2
+
+## SQ-CGE-13 | boats in water float at vanilla height in the End (buoyancy untouched)
+@group b1
+@commands boats on two glass water tubs at the same height, End and overworld
+@pass boat heights within 0.05 blocks (buoyancy untouched in water)
+@fails `LowGravityBoatMixin` water guard
+@from batches/r1108cge2/b1_full.qb
+# two glass tubs with water at the same height (y 61..65) in the End and the overworld
+> execute in minecraft:the_end run forceload add 16 16 28 28
+> forceload add 16 16 28 28
+> execute in minecraft:the_end run fill 19 60 19 25 66 25 minecraft:glass hollow
+> execute in minecraft:the_end run fill 20 61 20 24 65 24 minecraft:water
+> fill 19 60 19 25 66 25 minecraft:glass hollow
+> fill 20 61 20 24 65 24 minecraft:water
+> execute in minecraft:the_end run fill 20 66 20 24 66 24 minecraft:air
+> fill 20 66 20 24 66 24 minecraft:air
+> execute in minecraft:the_end run summon minecraft:boat 22 66 22 {Tags:["cge13e"]}
+> summon minecraft:boat 22 66 22 {Tags:["cge13o"]}
+sleep 8
+> execute in minecraft:the_end run data get entity @e[tag=cge13e,limit=1] Pos[1] 1000
+> data get entity @e[tag=cge13o,limit=1] Pos[1] 1000
+shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on Boat after scale factor of 1000\.00 is (-?\d+)',open('logs/latest.log').read())][-2:];print(v);sys.exit(0 if len(v)==2 and abs(v[0]-v[1])<=50 else 1)"
+look shell.txt: the two boat heights (End, overworld) within 0.05 blocks, both at the water surface (about 65.9)
+
+## SQ-CGE-10 | End oxygen: air runs out without a backtank; a Create Goggles backtank supplies air; tag sizes
+@group b1
+@commands survival bot in the End (chest slot cleared), `Air` at 2 s and 12 s later
+@pass Air 300, then 288, 292 or 296 (Create Gravity removes 4 air about every 4 s; bots are invulnerable: damage is CQ-CGE-04)
+@fails Create Gravity `handleOxygen`, the dimension limit
+@from batches/r1108cge2/b1_full.qb
+# bots are invulnerable: the damage half is CQ-CGE-04 (client)
+> execute in minecraft:the_end run forceload add 40 0
+> pbot spawn cge10 40 80 0 minecraft:the_end survival
+# a rerun on the same world reloads the bot's saved backtank from SQ-CGE-10b
+> item replace entity cge10 armor.chest with minecraft:air
+sleep 2
+> data get entity cge10 Air
+sleep 10
+> data get entity cge10 Air
+# Create Gravity 1.2.0: oxygen_depletion_amount (4) every oxygen_factor ticks (default 100), not every tick
+expect cge10 has the following entity data: (288|292|296)s
+look Air 300 at first, then 4 lower per 5 s (296 or 292 after 12 s) without a backtank
+
+## SQ-CGE-10b | a Create Goggles backtank supplies air in the End; every backtank and goggle helmet is in Create Gravity's tags
+@group b1
+@commands same bot with a Create Goggles leather backtank `{Air:900}`; tag counts
+@pass Air back above 0, the backtank's Air NBT 880-899 after 6 s; `create_gravity:backtanks` 7, `diving_helmets` 4
+@fails Compat `tags/misctags.js`; `full_set` (false: backtank alone is enough)
+@from batches/r1108cge2/b1_full.qb
+> item replace entity cge10 armor.chest with creategoggles:leather_backtank{Air:900}
+sleep 6
+> data get entity cge10 Air
+> data get entity cge10 Inventory[{Slot:102b}].tag.Air
+expect cge10 has the following entity data: (\d{2,3})s
+expect cge10 has the following entity data: 8[89]\d$
+> zq itemtag create_gravity:backtanks
+> zq itemtag create_gravity:diving_helmets
+expect itemtag create_gravity:backtanks \(7\)
+expect itemtag create_gravity:diving_helmets \(4\)
+> pbot remove cge10
+look with the leather backtank Air climbs back (2-3 digits, positive) and the backtank's Air NBT falls from 900 by about 1 a second
+
+## SQ-CGE-11 | no oxygen loss and vanilla gravity in the overworld
+@group b1
+@commands survival bot in the overworld
+@pass Air 300, gravity 0.08
+@fails dimension limit
+@from batches/r1108cge2/b1_full.qb passed
+> pbot spawn cge11 0 -60 0 minecraft:overworld survival
+sleep 6
+> data get entity cge11 Air
+> attribute cge11 forge:entity_gravity get
+> pbot remove cge11
+expect cge11 has the following entity data: 300s
+expect Entity Gravity for entity cge11 is 0\.08
+
+## SQ-CGE-12 | physics tags renamed to creativecompat:, item physics still floats and sinks
+@group b1
+@commands `/zq itemtag creativecompat:physics/*`, `burn/to_ash`, the four old `creativeengineering:physics/*` tags; acacia log and redstone items in the overworld tub
+@pass floats 3+ digits, sinks non-empty, all four old tags empty; startup line names `creativecompat:physics/floats`; log at the surface (>= 64.5), redstone on the floor (<= 61.5)
+@fails Compat `item_physics_tags.js`, `ItemPhysicSplit.TAG_NS`, `item_physics.js`
+@from batches/r1108cge2/b1_full.qb
+> zq itemtag creativecompat:physics/floats
+> zq itemtag creativecompat:physics/sinks
+> zq itemtag creativecompat:physics/fireproof
+> zq itemtag creativecompat:physics/lavaproof
+> zq itemtag creativecompat:burn/to_ash
+> zq itemtag creativeengineering:physics/floats
+> zq itemtag creativeengineering:physics/sinks
+> zq itemtag creativeengineering:physics/fireproof
+> zq itemtag creativeengineering:physics/lavaproof
+expect itemtag creativecompat:physics/floats \(\d{3,}\)
+expect itemtag creativecompat:physics/sinks \([1-9]\d*\)
+reject itemtag creativeengineering:physics/(floats|sinks|fireproof|lavaproof) \([1-9]
+# float check in the overworld tub of SQ-CGE-13 (acacia log floats, redstone sinks; both tags as of the 11-07 dump)
+> summon minecraft:item 21 61.2 21 {Item:{id:"minecraft:acacia_log",Count:1b},PickupDelay:32767,Tags:["cge12f"]}
+> summon minecraft:item 23 61.2 23 {Item:{id:"minecraft:redstone",Count:1b},PickupDelay:32767,Tags:["cge12s"]}
+sleep 8
+> data get entity @e[tag=cge12f,limit=1] Pos[1] 1000
+> data get entity @e[tag=cge12s,limit=1] Pos[1] 1000
+shell grep -E "\[item_physics\] canonical tags" logs/kubejs/startup.log | grep -q "creativecompat:physics/floats" && echo "startup names creativecompat"
+shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on (?:Acacia Log|Redstone Dust) after scale factor of 1000\.00 is (-?\d+)',open('logs/latest.log').read())][-2:];print(v);sys.exit(0 if len(v)==2 and v[0]>=64500 and v[1]<=61500 else 1)"
+look shell.txt: log near the surface (>= 64.5), redstone on the floor (<= 61.5)
+
+## SQ-CGE-14 | factor -1 holds every type still in the End
+@group b2 (End -1)
+@commands dropall End and overworld; judge `zero`
+@pass every type in the End drops under 0.01 blocks in 40 ticks
+@fails `LowGravity.pullScale` (1 + factor)
+@from batches/r1108cge2/b2_factor_nether.qb passed
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv cfg the_end 0 70 0
+expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1\b
+> zgv dropall the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld zero
+
+## SQ-CGE-09a | dimension limit: a gravity biome in the Nether is ignored while the Nether is not in gravityDimensions
+@group b2 (Nether listed, limit = End)
+@commands clear a Nether column, `/zgv cfg the_nether`, dropall; judge `same`; Nether villager gravity
+@pass cfg factor -0.8 printed, yet every Nether drop = overworld; villager 0.08
+@fails `LowGravity.dimensionAllowed`, `CreateGravityDimensionMixin`
+@from batches/r1108cge2/b2_factor_nether.qb
+# clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
+> execute in minecraft:the_nether run forceload add -3 -3 9 21
+> execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
+> zgv cfg the_nether 0 100 0
+expect \[zgv\] cfg dim=minecraft:the_nether .*factor=-0\.8
+> zgv dropall the_nether 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_nether 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nether overworld same
+> execute in minecraft:the_nether run summon minecraft:villager 3 100 3 {NoAI:1b,PersistenceRequired:1b,NoGravity:1b,Tags:["cge09"]}
+sleep 6
+> execute in minecraft:the_nether run attribute @e[tag=cge09,limit=1] forge:entity_gravity get
+expect Entity Gravity for entity .* is 0\.08
+look Nether drops = overworld (vanilla) and the Nether villager 0.08, although the Nether biome is listed
+
+## SQ-CGE-09b | with the Nether allowed, its listed biome lowers gravity for every type and for mobs
+@group b3 (limit End + Nether)
+@commands dropall Nether and overworld; judge `low`; the same villager
+@pass about 0.2 for every type; villager 0.016
+@fails as 09a
+@from batches/r1108cge2/b3_nether_allowed.qb passed
+# clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
+> execute in minecraft:the_nether run forceload add -3 -3 9 21
+> execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
+> forceload add 0 0 6 18
+> zgv dropall the_nether 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_nether 20
+> zgv dropall overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nether overworld low
+> execute in minecraft:the_nether run attribute @e[tag=cge09,limit=1] forge:entity_gravity get
+expect Entity Gravity for entity .* is 0\.01599
+
+## SQ-CGE-15 | Common without Compat: no helper pack, low gravity for every type, Create Gravity's own tags only
+@group b4 (Common without Compat)
+@commands order line, startup errors, dropall End (y 140) and overworld (y 200); judge `low`; backtanks tag
+@pass no `_helpers` pack, `creativecommon, startup_scripts`; 0 startup errors; about 0.2; backtanks 2 (Create's own)
+@fails Common's low gravity must not need Compat
+@from batches/r1108cge2/b4_common_only.qb
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+shell grep -E "packs in order" logs/kubejs/startup.log | grep -v "_helpers" | grep -q "creativecommon, startup_scripts" && echo "order ok"
+shell test "$(grep -c '\[ERROR\]' logs/kubejs/startup.log)" = 0 && echo "0 startup errors"
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
+> zq itemtag create_gravity:backtanks
+expect itemtag create_gravity:backtanks \(2\)
+look order line without a _helpers pack; 9 types at about 0.2; backtanks = Create's two (Compat absent)
+
+## SQ-CGE-16 | ItemPhysic without Create Gravity: boots, ticks items without an error, vanilla fall everywhere
+@group b5 (`cc_only_srv.sh without=gravity` + ItemPhysic, CreativeCore)
+@commands `cge2_run.sh b5`; dropall End (y 140) and overworld (y 200); judge `same`
+@pass boots, no `LowGravity` or `NoClassDefFoundError` line, all 9 types at vanilla speed in both dimensions
+@fails gate on `LowGravityItemPhysicMixin` in `CommonMixinPlugin` (needs ItemPhysic and Create Gravity)
+@from batches/r1108cge2/b5_itemphysic_no_gravity.qb
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException|NoClassDefFoundError
+bootexpect Done \(
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject NoClassDefFoundError|LowGravity
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld same
+look every type the same in the End and the overworld (no Create Gravity, so no low gravity at all), no error line naming LowGravity
+
+## CQ-CGE-02a | client boot clean, no mixin error, world joined
+@group client, single player CGE2
+@commands `c1_sp.qb`
+@pass client boot clean, no mixin error
+@fails as SQ-CGE-07
+@from batches/r1108cge2/c1_sp.qb
+bootexpect Sound engine started|FIRST_CLIENT_TICK
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
+bootreject (?i)(LowGravity|CreateGravity)\w*Mixin.*(error|fail|warn)
+> gamemode creative
+> time set noon
+> gamerule doDaylightCycle false
+shot joined
+
+## CQ-CGE-02 | End: every fixed-pull type falls slowly and smoothly (client prediction matches the server)
+@group client
+@commands camera on glass at y 112 in the End; `/function cge2:drop_end` (datapack `tools/scratch_query/datapack/cge2_drop`) drops seven objects at y 118 in one tick; shots at 0, 1, 3, 6 s
+@pass LOOK: they descend slowly together, no jumps back up; owner: watch once live for stutter
+@fails client side of `LowGravity`
+@from batches/r1108cge2/c1_sp.qb
+# datapack tools/scratch_query/datapack/cge2_drop in the world: one function summons everything in one tick (typed one
+# by one they spread over 35 s); the camera stands on glass (a creative player not flying falls to the ground).
+# No /reload in this row: the commands typed during its hitch were lost (cge2_run.sh installs the datapack before launch).
+> gamemode creative
+> execute in minecraft:the_end run tp @s 14 125 9
+sleep 8
+> execute in minecraft:the_end run fill 12 111 7 16 111 11 minecraft:glass
+> execute in minecraft:the_end run fill -2 60 -2 8 125 20 minecraft:air
+> execute in minecraft:the_end run tp @s 14 112 9 facing 3 115 9
+sleep 3
+> function cge2:drop_end
+shot end_t0
+sleep 1
+shot end_t1
+sleep 2
+shot end_t3
+sleep 3
+shot end_t6
+look shots: the seven objects descend slowly together (about 1 block in the first second, about 5 by 3 s at most), no jumps back up between shots; owner: watch it live once for stutter or rubber-banding (none expected)
+
+## CQ-CGE-02b | client lookup ran: the client parsed Create Gravity's list (single player)
+@group client
+@commands whole client log
+@pass `[low gravity] client biome list: 1 of 1 entries [#minecraft:is_end;;]`
+@fails `CreateGravityConfigAccessor`, the parse
+@from batches/r1108cge2/c1_sp.qb
+bootexpect \[low gravity\] client biome list: 1 of 1 entries \[#minecraft:is_end;;\]
+look the line appears once (it is logged on each (re)parse)
+
+## CQ-CGE-02c | overworld: the same objects fall at vanilla speed
+@group client
+@commands three objects in the overworld
+@pass LOOK: vanilla fall
+@fails dimension limit on the client
+@from batches/r1108cge2/c1_sp.qb
+> execute in minecraft:overworld run tp @s 14 -30 9
+sleep 8
+> execute in minecraft:overworld run fill 12 -41 7 16 -41 11 minecraft:glass
+> execute in minecraft:overworld run tp @s 14 -40 9 facing 3 -36 9
+sleep 3
+> function cge2:drop_over
+shot over_t0
+sleep 1
+shot over_t1
+look shots: vanilla fall (most of the 30 blocks in under 2 s)
+
+## CQ-CGE-04 | End oxygen with a real player: damage without a backtank, none with one
+@group client
+@commands survival on an End platform (arrive in creative, platform after the chunks load, then survival), no backtank, until the log shows the damage (about 290 s)
+@pass `msgId='out_of_oxygen'` damage or death "ran out of air"
+@fails Create Gravity oxygen damage
+@from batches/r1108cge2/c1_sp.qb
+# Create Gravity drains air slowly (about 1 a second measured), damage starts when it reaches -10. No dragon on the long wait.
+# Arrive in creative and let the End chunks load before the platform: the fill fails on unloaded chunks and survival then falls.
+> gamemode creative
+> execute in minecraft:the_end run tp @s 32 90 0
+sleep 8
+> execute in minecraft:the_end run kill @e[type=minecraft:ender_dragon]
+> execute in minecraft:the_end run fill 30 75 -2 34 75 2 minecraft:obsidian
+> execute in minecraft:the_end run tp @s 32 76 0
+sleep 3
+> effect clear @s
+> gamemode survival
+# Air ran out about 290 s after arriving (r1108cge2), then the player died within about 25 s: wait on the log, not a clock.
+waitlog ran out of air|msgId='out_of_oxygen' 420
+shot oxygen_no_tank
+> gamemode creative
+look the waitlog line appeared (out_of_oxygen damage or death "ran out of air")
+
+## CQ-CGE-04b | End oxygen with a backtank: no damage past the time the air would have run out
+@group client
+@commands same platform with a leather backtank `{Air:900}`, survival 330 s; or a nearly empty tank, watch it reach 0
+@pass Health 20 past 290 s; at 0 pressure the display swaps to bubbles and they fall
+@fails the tag rows, `full_set`
+@from batches/r1108cge2/c1_sp.qb
+> gamemode creative
+> execute in minecraft:the_end run tp @s 32 76 0
+sleep 3
+> effect give @s minecraft:instant_health 1 5
+> item replace entity @s armor.chest with creategoggles:leather_backtank{Air:900}
+sleep 2
+> gamemode survival
+sleep 330
+> data get entity @s Health
+expect has the following entity data: 20(\.0)?f
+reject ran out of air
+shot oxygen_tank
+> gamemode creative
+> item replace entity @s armor.chest with minecraft:air
+look with the backtank Health stays 20 past the 290 s no-tank run-out, and the backtank air bar shows
+
+## CQ-CGE-03a/-03/-03b
+@group client joined to the b1 srv (`c2_join.qb`)
+@commands as CQ-CGE-02 on the dedicated server
+@pass no snapping about once a second (items, blocks; TNT every half second); the client biome list line appears (synced SERVER config)
+@fails client parse of the synced config; Forge config sync
+@draft no batch holds this row yet
+## CQ-CGE-03c | ridden boat glides down off an End edge (the client moves a steered boat)
+@group client joined
+@commands hand: ride a boat off an End platform at y 100
+@pass LOOK: the boat sinks slowly, no snapping
+@fails `LowGravityBoatMixin` on the client (the client moves a steered boat)
+@from batches/r1108cge2/c2_join.qb
+> execute in minecraft:the_end run fill 40 100 -3 46 100 3 minecraft:obsidian
+> execute in minecraft:the_end run summon minecraft:boat 43 101 0
+> execute in minecraft:the_end run tp @s 41 101 0 facing 43 101 0
+look hand: right-click the boat (xdotool click at the window centre), hold W until it leaves the platform, then shots every second: the boat sinks slowly (about 20 percent of vanilla), no snapping
+
+@@text
+@@text Supersedes the motion-packet design of SQ-CGE-02 to -04 and CQ-CGE-01 (the 00:49 jar's `CreateGravityEntitiesMixin` is gone; its End results, 4.914 vs 24.570 blocks at 40 ticks, stand as the target numbers).

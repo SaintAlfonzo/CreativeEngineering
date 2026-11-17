@@ -1,0 +1,307 @@
+# Scratch queue rows CBA (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBA.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBA Creative Brewing chain on its own (CEPortTesting), 2026-11-06 ([creative_brewing.md](../creative_brewing.md) 6, [plan_cb_publish.md](../plan_cb_publish.md) 1.2 and 14, TODO `creativebrewing/publish #3`)
+@@date 2026-11-06
+@@jars creativebrewing creativecommon
+@@sources feature_writeup/creative_brewing.md feature_writeup/plan_cb_publish.md
+@@text
+@@text Not run. Needs the Creative Brewing jar with MoreJS required and the Creative Delight jar with the culture and dough
+@@text block texture fix (both built 2026-11-06 late, see TODO `creativebrewing/publish #3`, `creativedelight/framework #14`),
+@@text the other jars as installed in the pack 2026-11-06 01:30; copy all five into `CEPortTesting/mods/`. Supersedes SQ-CBS-01 and CQ-CBS-01. Everything runs
+@@text from the CEPortTesting instance: `bash tools/scratch_query/port_chain.sh check` first (prints `MISSING` / `STALE` lines:
+@@text copy the pack's jar over, game closed). Server rows use `port_chain.sh server OUT LEVEL A|B chain|instance` (a scratch
+@@text dedicated server built from CEPortTesting's jars, empty `config/`, CEPortTesting's `kubejs/` plus the /zq probe), then
+@@text `scratch_server.sh boot|stop OUT` and `qrun.py run` as usual. **chain** = the 14 jars Creative Brewing needs, all the way
+@@text down: Rhino, Architectury, KubeJS, Create, KubeJS Create, KubeJS Delight, LootJS, MoreJS, Serene Seasons, Common, Compat,
+@@text Calendar, Delight, Brewing (+ the `*_upstream` donor folders). **instance** = every non-client jar CEPortTesting has (adds
+@@text Quark, Supplementaries, Fruits Delight, Hostile Delight, More Delight, Worldgen, ...). Boots, one JVM at a time:
+@@text (1) chain, group A, fresh: CBA-01 to -10; (2) same OUT, `[members] vinery = false`: CBA-11; (3) same OUT, vinery back on,
+@@text `brewinandchewin = false`: CBA-12; (4) new OUT, `NOUPSTREAM=vinery_upstream`: CBA-13; (5) new OUT,
+@@text `DROP="kubejsdelight-*.jar SereneSeasons-*.jar morejs-forge-*.jar"`: CBA-14; (6) new OUT, instance, group B: CBA-15 to -18. Client rows run
+@@text in CEPortTesting itself through ATLauncher: `port_chain.sh bare` parks every non-chain jar in
+@@text `disabledmods/cba_parked/` (game closed), `port_chain.sh restore` puts them back; a new creative superflat world each.
+@@text Superflat surface: blocks at y -61, air from -60; spawn chunks around 0 0 stay loaded.
+@@text
+@@table
+## SQ-CBA-01 | chain boot: Creative Brewing loads with both members
+@group A (chain)
+@commands `port_chain.sh server OUT cba1 A chain`, boot, wait for `Done (`
+@pass `bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$`; `bootreject NOT loaded:\|is loaded from .*not from the Creative Brewing jar\|Missing or unsupported mandatory\|Encountered an unexpected exception\|Exception in thread`
+@fails a missing hard dependency: add the jar to `CHAIN` in port_chain.sh and to plan_cb_publish.md 1.2 (and to the jar's `mods.toml` if it was not declared); a class from an absent mod loaded by CB Java: the stack trace's first `creativebrewing` frame (`CreativeBrewing`, `potion/`, `fluidbrewing/`, `trader/`)
+@from batches/r1106cba/b1.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
+
+## SQ-CBA-02 | no mixin failure, no client class on the dedicated server
+@group A (chain)
+@commands same boot: `bootreject Mixin apply failed\|InvalidMixinException\|creativebrewing.*(NoClassDefFoundError\|ClassNotFoundException)\|Attempted to load class net/minecraft/client`
+@pass no match (a dedicated server also proves no client class is reached from common code)
+@fails `compat/CBMixinPlugin` gate: a mixin outside `mixin.<modid>.` for a mod that is absent, or a client mixin listed under `mixins` instead of `client` in `creativebrewing.mixins.json`
+@from batches/r1106cba/b1.qb
+bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Attempted to load class net/minecraft/client
+
+## SQ-CBA-03 | startup script order and script errors
+@group A (chain)
+@commands same boot: `shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log`; `shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log`; `shell ! grep -nE "ReferenceError\|TypeError\|EvaluatorException\|is not defined\|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log`; `kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded`; `kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js`
+@pass all shell steps exit 0; only `alexsmobs/lava_vision.js` is skipped among the 12 `creativebrewing:kubejs/` server scripts
+@fails the script and line in the error: a row naming an optional mod without a `global.has` guard (`python3 tools/guard_check.py --jar creativebrewing`), or a pack-folder global the chain does not define (plan_cb_publish.md 1.1)
+@from batches/r1106cba/b1.qb passed
+shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -E "Skipped creativebrewing:kubejs/|Loaded script creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
+kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded
+kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js
+
+## SQ-CBA-04 | creativebrewing-common.toml tables and members
+@group A (chain)
+@commands same boot: `shell grep -nE "^\[(members\|alcohol\|effects\|magic_resistance\|copper_poisoning)\]\|^\s*(vinery\|brewinandchewin) = " config/creativebrewing-common.toml`; `bootreject still has sections that moved to`
+@pass the five tables present; `vinery = true`, `brewinandchewin = true`; no carry WARN (fresh config, nothing to carry)
+@fails `CBConfig` spec (`SECTIONS`, `MOVED_SECTIONS`) or `ConfigRename` running with no Common config file
+@from batches/r1106cba/b1.qb passed
+shell grep -nE "^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]|^\s*(vinery|brewinandchewin) = " config/creativebrewing-common.toml
+shell test "$(grep -cE '^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]' config/creativebrewing-common.toml)" = 5
+shell grep -qE "^\s*vinery = true" config/creativebrewing-common.toml && grep -qE "^\s*brewinandchewin = true" config/creativebrewing-common.toml
+bootreject still has sections that moved to
+
+## SQ-CBA-05 | potions registered
+@group A (chain)
+@commands `> zq potion creativebrewing:magic_resistance`, same for `long_magic_resistance`, `strong_magic_resistance`, `wither`, `resistance`, `darkness`; `> zq potion creativebrewing:long_reach`; `bootexpect better_beacons not present - skipping the long_reach potions`
+@pass `count registered: true == 6`; `expect long_reach registered: false`
+@fails `CommonPotions` (Java, the magic resistance potions) or `potions.js` `StartupEvents.registry('potion')` (the KubeJS ones); `long_reach` true: CommonPotions' Better Beacons check
+@from batches/r1106cba/b1.qb passed
+> zq potion creativebrewing:magic_resistance
+> zq potion creativebrewing:long_magic_resistance
+> zq potion creativebrewing:strong_magic_resistance
+> zq potion creativebrewing:wither
+> zq potion creativebrewing:resistance
+> zq potion creativebrewing:darkness
+> zq potion creativebrewing:long_reach
+sleep 2
+count registered: true == 6
+expect long_reach registered: false
+bootexpect better_beacons not present - skipping the long_reach potions
+
+## SQ-CBA-06 | MoreJS potion mixes, Automatic Brewing, dragon-breath guard
+@group A (chain)
+@commands `shell grep -qE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log`; `shell grep -qE "Automatic Brewing: rebuilt [0-9]+ recipes" logs/kubejs/startup.log`; `shell grep -q "re-added 0 dragon-breath fluid brews" logs/kubejs/startup.log`; `> zq potion minecraft:mundane minecraft:wither_rose`; `> zq potion minecraft:thick minecraft:amethyst_shard`; `> zq potion creativebrewing:magic_resistance minecraft:redstone,minecraft:glowstone_dust`
+@pass the three lines found (MoreJS is in the chain since 2026-11-06); `-> minecraft:potion wither`, `-> minecraft:potion magic_resistance`, `-> minecraft:potion long_magic_resistance`, `-> minecraft:potion strong_magic_resistance`; no error line
+@fails no mixes: `MoreJSEvents.registerPotionBrewing` block in `potions.js`; a dragon-breath count above 0: `DragonBreathBrewing.build` guard (Create Central Kitchen is absent)
+@from batches/r1106cba/b1.qb passed
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log
+shell grep -qE "Automatic Brewing: rebuilt [0-9]+ recipes" logs/kubejs/startup.log
+shell grep -q "re-added 0 dragon-breath fluid brews" logs/kubejs/startup.log
+> zq potion minecraft:mundane minecraft:wither_rose
+> zq potion minecraft:thick minecraft:amethyst_shard
+> zq potion creativebrewing:magic_resistance minecraft:redstone,minecraft:glowstone_dust
+sleep 2
+expect -> minecraft:potion wither
+expect mundane \+ minecraft:wither_rose -> minecraft:potion
+expect thick \+ minecraft:amethyst_shard -> minecraft:potion magic_resistance
+expect -> minecraft:potion long_magic_resistance
+expect -> minecraft:potion strong_magic_resistance
+reject \[zq\] error|ERROR
+
+## SQ-CBA-07 | Magic Resistance reduces instant damage and negates Poison I
+@group A (chain)
+@commands `> forceload add 0 0` (no player: entities stop ticking 300 ticks after start); `> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}`; `> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}`; `> effect give @e[tag=cbaA] creativebrewing:magic_resistance 120 0`; `> effect give @e[tag=cbaA] minecraft:instant_damage 1 0`; `> effect give @e[tag=cbaB] minecraft:instant_damage 1 0`; `sleep 2`; `> data get entity @e[tag=cbaA,limit=1] Health`; `> data get entity @e[tag=cbaB,limit=1] Health`; `> effect give @e[tag=cbaA] minecraft:poison 10 0`; `sleep 5`; `> data get entity @e[tag=cbaA,limit=1] Health`; `> kill @e[tag=cbaA]`; `> kill @e[tag=cbaB]`
+@pass `expect Applied effect Magic Resistance`; golem A 95.2 after the instant damage (6 x 0.8, `reductionPerLevel` 0.2), golem B 94.0; golem A still 95.2 after the poison (Poison I negated by Magic Resistance I)
+@fails effect not found: `magic_resistance.js` (KubeJS `mob_effect` registry); damage not reduced: `MagicResistanceEffect` Forge listener not registered by `CreativeBrewing`
+@from batches/r1106cba/b1.qb passed
+# a level with no player and no forced chunk stops ticking entities after 300 ticks: forceload the golems' chunk
+> forceload add 0 0
+sleep 2
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
+> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}
+> effect give @e[tag=cbaA] creativebrewing:magic_resistance 120 0
+> effect give @e[tag=cbaA] minecraft:instant_damage 1 0
+> effect give @e[tag=cbaB] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=cbaA,limit=1] Health
+> data get entity @e[tag=cbaB,limit=1] Health
+> effect give @e[tag=cbaA] minecraft:poison 10 0
+sleep 5
+> data get entity @e[tag=cbaA,limit=1] Health
+> kill @e[tag=cbaA]
+> kill @e[tag=cbaB]
+> forceload remove 0 0
+expect Applied effect Magic Resistance
+count entity data: 95\.2 == 2
+count entity data: 94\.0 == 1
+
+## SQ-CBA-08 | lingering potion bucket from a dispenser
+@group A (chain)
+@commands `bootexpect potion bucket dispenser behaviors registered`; `bootexpect potion bucket dispense handler installed from KubeJS`; `> setblock 10 -60 10 minecraft:dispenser[facing=up]{Items:[{Slot:0b,id:"creativebrewing:lingering_potion_bucket",Count:1b,tag:{Potion:"minecraft:regeneration"}}]}`; `> setblock 11 -60 10 minecraft:redstone_block`; `sleep 2`; `> execute if entity @e[type=minecraft:area_effect_cloud,x=10,y=-59,z=10,distance=..8]`
+@pass `expect Test passed`; `reject dispensed with no KubeJS handler installed`
+@fails `PotionBucketDispenser.register` (bucket items missing: `potion_buckets.js` registry), or `potion_area.js` handler not installed (class lookup `com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser`)
+@from batches/r1106cba/b1.qb passed
+bootexpect potion bucket dispenser behaviors registered
+bootexpect potion bucket dispense handler installed from KubeJS
+> setblock 10 -60 10 minecraft:dispenser[facing=up]{Items:[{Slot:0b,id:"creativebrewing:lingering_potion_bucket",Count:1b,tag:{Potion:"minecraft:regeneration"}}]}
+> setblock 11 -60 10 minecraft:redstone_block
+sleep 2
+> execute if entity @e[type=minecraft:area_effect_cloud,x=10,y=-59,z=10,distance=..8]
+expect Test passed
+reject dispensed with no KubeJS handler installed
+
+## SQ-CBA-09 | Vinery and Brewin' recipes, CB recipe ids
+@group A (chain)
+@commands `> zq bytype brewinandchewin:fermenting`; `> zq bytype brewinandchewin:keg_pouring`; `> zq bytype vinery:wine_fermentation`; `> zq bytype vinery:apple_mashing`; `> zq recipes creativebrewing:`
+@pass Brewin' fermenting and keg pouring `: ` counts of 20 or more each; both Vinery counts 1 or more (the full pack's counts from the last `/dumpall` are the reference); `creativebrewing:` recipe ids listed (NCH writes CB's rows under its namespace); no `errored recipe` / `Couldn't parse` line in the segment
+@fails Vinery 0: the donor jars were not read (`vinery_upstream` link in OUT/srv, `UpstreamJars`); Brewin' 0: the member's data pack; no `creativebrewing:` ids: `global.CB.recipes` wrapper
+@from batches/r1106cba/b1.qb
+> zq bytype brewinandchewin:fermenting
+> zq bytype brewinandchewin:keg_pouring
+> zq bytype vinery:wine_fermentation
+> zq bytype vinery:apple_mashing
+> zq recipes creativebrewing:
+sleep 4
+expect bytype brewinandchewin:fermenting: ([2-9]\d|\d{3,})$
+expect bytype brewinandchewin:keg_pouring: ([2-9]\d|\d{3,})$
+expect bytype vinery:wine_fermentation: [1-9]
+expect bytype vinery:apple_mashing: [1-9]
+expect \[zq\] creativebrewing:
+reject errored recipe|Couldn't parse
+
+## SQ-CBA-10 | alcohol food values, winemaker trades, PackTime
+@group A (chain)
+@commands `shell grep -qE "\[alcohol\] food values set on 42 of 44 drinks" logs/kubejs/startup.log` (chain: Fruits Delight's bellini and tmted's wodka are absent; the instance boot gives 43); `> zq food brewinandchewin:beer`; `kjsexpect \[wandering trades\] winemaker [1-9]`; `> summon vinery:wandering_winemaker 0 -60 -5`; `bootreject (PackTime\|WineTime).*(Exception\|Error)`
+@pass food line for beer lists `brewinandchewin:tipsy`; winemaker count above 0; the winemaker spawns (`Summoned new`); no PackTime error
+@fails `alcohol_drinks.js` (`[alcohol]` warnings name the drink); winemaker 0: `vinery/winemaker_trades.js` (`global.trades` missing means Common's `trade_helper.js` did not load); PackTime error: Calendar's `WineTime` API
+@from batches/r1106cba/b1.qb passed
+shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+ drinks" logs/kubejs/startup.log
+# chain: Fruits Delight (bellini_cocktail) and tmted (bottle_of_wodka) are absent, so 42; the instance boot has more
+shell grep -qE "\[alcohol\] food values set on 42 of 44 drinks" logs/kubejs/startup.log
+> zq food brewinandchewin:beer
+> summon vinery:wandering_winemaker 0 -60 -5
+sleep 2
+expect food brewinandchewin:beer: .*brewinandchewin:tipsy
+expect Summoned new
+kjsexpect \[wandering trades\] winemaker [1-9]
+bootreject (PackTime|WineTime).*(Exception|Error)
+
+## SQ-CBA-11 | Vinery member off: scripts skip, member data stays
+@group A (chain)
+@commands stop; `qrun.py toml OUT/srv/config/creativebrewing-common.toml members vinery false`; boot
+@pass `bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]` (the mod stays loaded); `kjsexpect server scripts ready, members on: brewinandchewin$` (the startup "core finished, members:" line lists the members whatever their switch); `kjsreject \[wandering trades\] winemaker`; `shell ! grep -nE "ReferenceError\|TypeError\|is not defined" logs/kubejs/*.log`; `> zq bytype vinery:wine_fermentation` still 1 or more (the member's own data stays)
+@fails a script row for Vinery without the `global.CB.on('vinery')` early return (the file in the error)
+@from batches/r1106cba/b2.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]
+# the startup "core finished, members:" line lists the nested members whatever their switch; the server line has the on-set
+kjsexpect server scripts ready, members on: brewinandchewin$
+kjsreject \[wandering trades\] winemaker
+shell ! grep -nE "ReferenceError|TypeError|is not defined" logs/kubejs/*.log
+> zq bytype vinery:wine_fermentation
+sleep 3
+expect bytype vinery:wine_fermentation: [1-9]
+
+## SQ-CBA-12 | Brewin' member off: scripts skip, member data stays
+@group A (chain)
+@commands stop; `vinery true`, `brewinandchewin false` with `qrun.py toml`; boot
+@pass `kjsexpect server scripts ready, members on: vinery$`; no script error; `> zq bytype brewinandchewin:fermenting` still 20 or more
+@fails as SQ-CBA-11 for `brewinandchewin` (`brewinandchewin/alcohol.js`, `tooltips.js`)
+@from batches/r1106cba/b3.qb passed
+kjsexpect server scripts ready, members on: vinery$
+shell ! grep -nE "ReferenceError|TypeError|is not defined" logs/kubejs/*.log
+> zq bytype brewinandchewin:fermenting
+sleep 3
+expect bytype brewinandchewin:fermenting: ([2-9]\d|\d{3,})$
+
+## SQ-CBA-13 | Vinery donor folder missing: startup stops with the message
+@group A (chain)
+@commands new OUT: `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cba13 A chain`; boot; wait for `Stopping\|crash` instead of `Done (`
+@pass `bootexpect missing: .*vinery_upstream/letsdo-vinery`; `bootexpect get it from`; `bootreject Done \(` (the server stops with the message, no world)
+@fails `DonorJars.verifyOrFail` not reached (Vinery `UpstreamJars`), or a different crash first (read the first `Caused by`)
+@from batches/r1106cba/b4.qb passed
+bootexpect missing: .*vinery_upstream/letsdo-vinery
+bootexpect get it from
+bootreject Done \(
+
+## SQ-CBA-14 | missing hard dependencies reported by FML
+@group A (chain)
+@commands new OUT: `DROP="kubejsdelight-*.jar SereneSeasons-*.jar morejs-forge-*.jar" port_chain.sh server OUT cba14 A chain`; boot
+@pass `bootexpect Missing or unsupported mandatory dependencies`; the list names `kubejsdelight` (for `creativedelight`), `sereneseasons` (for `creativecalendar`) and `morejs` (for `creativebrewing`); no `creativebrewing` / `creativedelight` / `creativecalendar` stack frame before that list
+@fails a jar's `mods.toml` lacks the dependency (the mod then crashes in its own code instead)
+@from batches/r1106cba/b5.qb passed
+bootexpect Missing or unsupported mandatory dependencies
+bootexpect kubejsdelight
+bootexpect sereneseasons
+bootexpect morejs
+shell grep -nE "Missing or unsupported|Mod ID: '(kubejsdelight|sereneseasons|morejs)'|Requested by: '|kubejsdelight|sereneseasons|morejs" logs/latest.log | head -30
+
+## SQ-CBA-15 | instance boot: SQ-CBA-01 to -03 again
+@group B (instance)
+@commands new OUT: `port_chain.sh server OUT cba15 B instance`; boot; the SQ-CBA-01 to -03 checks again (`lava_vision.js` still the only skip)
+@pass as SQ-CBA-01 to -03
+@fails the optional mod named in the error: its `global.has` guard (creative_brewing.md 2.4)
+@from batches/r1106cba/b6.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
+bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Attempted to load class net/minecraft/client
+shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
+shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -E "Skipped creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
+shell test "$(grep -c 'Skipped creativebrewing:kubejs/' logs/kubejs/server.log)" -le 1
+
+## SQ-CBA-16 | instance: same brews, mix count compared with the chain boot
+@group B (instance)
+@commands `> zq potion minecraft:mundane minecraft:wither_rose`; `> zq potion minecraft:thick minecraft:amethyst_shard`; capture the `added N item-agnostic potion mixes` count and compare with SQ-CBA-06's
+@pass same brews as SQ-CBA-06; the mix count equal or higher (the Quark-guarded mixes are in)
+@fails a guarded block in `potions.js` (Quark, Alex's Mobs, ...) checking the wrong mod id
+@from batches/r1106cba/b6.qb
+shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log
+> zq potion minecraft:mundane minecraft:wither_rose
+> zq potion minecraft:thick minecraft:amethyst_shard
+sleep 2
+expect mundane \+ minecraft:wither_rose -> minecraft:potion
+expect thick \+ minecraft:amethyst_shard -> minecraft:potion magic_resistance
+look compare the mix count above with SQ-CBA-06's shell output (equal or higher)
+
+## SQ-CBA-17 | instance: winemaker trade count compared with the chain boot
+@group B (instance)
+@commands `kjsexpect \[wandering trades\] winemaker [1-9]`; capture the count and compare with SQ-CBA-10's
+@pass count higher than in the chain boot (the Fruits Delight rows are in)
+@fails `vinery/wandering_trades.js` `global.has('fruitsdelight')` block
+@from batches/r1106cba/b6.qb
+kjsexpect \[wandering trades\] winemaker [1-9]
+shell grep -oE "\[wandering trades\] winemaker [0-9]+[^\"]*" logs/kubejs/server.log | head -3
+look compare with SQ-CBA-10's winemaker count (higher)
+
+## SQ-CBA-18 | instance: absent-mods list and CB errors
+@group B (instance)
+@commands `shell grep -h "absent mods" logs/kubejs/server.log \| head -20`
+@pass LOOK: the list names only mods CEPortTesting lacks (no `quark`, `fruitsdelight`, `supplementaries`); no `creativebrewing` error line in `latest.log` (`bootreject ERROR.*creativebrewing`)
+@fails a guard checking the wrong mod id
+@from batches/r1106cba/b6.qb
+shell grep -h "absent mods" logs/kubejs/server.log | head -20
+bootreject ERROR.*creativebrewing
+look the absent list names only mods CEPortTesting lacks (no quark, fruitsdelight, supplementaries)
+
+## CQ-CBA-01
+@group client
+@commands `port_chain.sh bare`; launch CEPortTesting (ATLauncher); new creative superflat world; Mods screen; `/give @s creativebrewing:potion_bucket{Potion:"minecraft:swiftness"}`, same for `splash_potion_bucket` and `lingering_potion_bucket`; `/effect give @s creativebrewing:magic_resistance 60`; place a beef culture block and a cookie dough block; `grep -E "Using missing texture.*(creativebrewing\|vinery\|brewinandchewin\|foundation\|_culture_block\|dough_block)" logs/latest.log`
+@pass "Creative Brewing", "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)" listed; the three buckets show the bucket with the potion's tint; Magic Resistance shows its own HUD and inventory icon; the culture and dough blocks show their own textures in hand and placed; the grep prints nothing (Vinery's 14 `#missing` wine-box warnings are also in the full pack, not counted)
+@fails M3 assets not in the CB jar (`unzip -l`), or KubeJS client textures `assets/creativebrewing/kubejs/creativebrewing/potion_buckets.js`
+@draft no batch holds this row yet
+## CQ-CBA-02
+@group client
+@commands same world (bare): place a Brewin' keg on a campfire, brew one beer (no JEI in the bare set: inputs from the `brewinandchewin:fermenting` lines of SQ-CBA-09), pour into a tankard, drink; hover the tankard
+@pass LOOK: the brew finishes, the tankard drinks, Tipsy applies; the tooltip has the intoxicating-drink line
+@fails `IntoxicatingDrinkTooltip`, `brewinandchewin/tooltips.js`
+@draft no batch holds this row yet
+## CQ-CBA-03
+@group client
+@commands same world (bare): place a Vinery apple press and a fermentation barrel; press apples into apple juice; ferment one wine; place the wine in a wine rack; `/time add 24000` twice; hover the wine
+@pass LOOK: press and barrel work and their screens open; the wine's age line rises with the day count (Calendar's vintage clock)
+@fails Vinery screens: the member's menu registration on the client; age: Vinery `PackTime` / Calendar `[time]`
+@draft no batch holds this row yet
+## CQ-CBA-04
+@group client
+@commands quit; `port_chain.sh restore`; launch CEPortTesting (instance set, with JEI); JEI: search `@creativebrewing`, open the brewing-stand page of Magic Resistance, Create's mixing and Automatic Brewing pages, the potion bucket page; `grep -n "Found a broken recipe" logs/latest.log`
+@pass LOOK: the buckets, the CB potions and Magic Resistance listed under "Creative Brewing"; the brewing mixes show; Create's JEI pages open (no crash); the grep prints nothing naming `creativebrewing`
+@fails `PotionMachinesJEI` / `PotionPagesJEI`; a broken mixing recipe: `DragonBreathBrewing.build` guard (SQ-MIN-04)
+@draft no batch holds this row yet

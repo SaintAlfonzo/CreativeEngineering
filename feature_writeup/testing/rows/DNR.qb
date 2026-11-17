@@ -1,0 +1,70 @@
+# Scratch queue rows DNR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/DNR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-DNR Oceanic and Ender's donor jars, 2026-11-01 ([creative_delight.md](../creative_delight.md) 36, [ocean_delight.md](../ocean_delight.md) 5.6, [ends_delight.md](../ends_delight.md) 5.3; TODO `creativedelight/framework #3`, `members #6`, `members #9`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/creative_delight.md feature_writeup/ocean_delight.md feature_writeup/ends_delight.md
+@@text
+@@text Needs the CD jar built 2026-11-01 20:42 or later (nests `portedOceanic-1.0.1-ce-19.2-02`, `endersAdditions-1.1.4-ce-19.2-03`) and the donor folders `oceanic_upstream/` and `enders_upstream/` beside `mods/` (already in the instance root). Full restart.
+@@text
+@@text > Rerun SQ-DNR-E-01 to -04 on the CD jar that nests `repackedEnds-1.19.2-2.1-ce-19.2-03` (Ender's 1.1.4 content merged into the End's member, ends_delight.md 5.9) and no `endersAdditions-*` jar. Same rows, same expected text: the startup message still names "Ender's Delight Additions (Creative Delight)"; the donor folder and sha1 are unchanged.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-DNR-O-01
+@group old world
+@commands Scratch server and client with the new CD jar plus both donor folders; load a copy of a 1.1.03+ world that has a placed paella plate (part eaten), a stuffed pufferfish, a sponge cake with bites, a sea grape column with fruit, wild sea grape and both crates; `grep -iE "oceanic_upstream\|Missing\|remap\|oceanic_delight" logs/latest.log`
+@pass Boots; "Oceanic Delight upstream assets/data: N files" logged; no missing-id or remap lines; every block keeps its state and texture; creative tab "Oceanic Delight" lists the items
+@fails Missing art: check `/datapack list` and the resource pack list for `oceanic_upstream_*`; a reset state: compare the property names in `ServingPlateBlock` / `SeaGrapePlantBlock`
+@draft no batch holds this row yet
+## SQ-DNR-O-02
+@group A
+@commands Eat Shrimp Stew, Bowl of Paella, Sea Grape, Sea Grape Juice and Nautilus Juice; use the paella and pufferfish with and without a bowl; knife the sponge cake, then eat from it; bone meal a sea grape plant; brew Awkward + Elder Guardian Eye, then + redstone, + glowstone
+@pass Bowls, bottle and shell come back; Comfort 5:00, Nourishment 5:00, Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them
+@fails Compare with ocean_delight.md 5.6; missing effect: Farmer's Delight effect id lookup in `OceanicFood.farmers`
+@draft no batch holds this row yet
+## SQ-DNR-O-03
+@group A
+@commands Rerun DA-01, DA-02, DA-09, DA-10 and DA-11 (ocean_delight.md 6)
+@pass Same results as before; drops come from `creativedelight:gameplay/fishing_net/*`; Upgrade Aquatic kelps and pickerelweed work through the tags; no loot parse error
+@fails Nothing drops: the CD jar is missing `data/creativedelight/loot_tables`; a block ignored: the tag fill in `oceanic_delight/fishing_net_tags.js`
+@draft no batch holds this row yet
+## SQ-DNR-O-04
+@group normal world
+@commands Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean
+@pass Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate
+@fails Modifier error in the log: codec `oceanic_delight:oceanic_delight_loot_modifier` not registered
+@draft no batch holds this row yet
+## SQ-DNR-O-05
+@group A
+@commands Move `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` away and start; then put any other jar there under that name and start; restore
+@pass Startup stops with the "reads its textures, models and recipes from the original Oceanic Delight jar ... folder 'oceanic_upstream' ... missing" message and the Modrinth URL; the second run says "wrong file ... expected 91fd8842..."
+@fails Game starts: `UpstreamJars.verifyOrFail` is not the first call of the constructor
+@draft no batch holds this row yet
+## SQ-DNR-E-01
+@group old world
+@commands Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|enders_additions\|Missing" logs/latest.log`
+@pass No missing-id or remap lines; every 1.1.4 block and item keeps its texture and model; 1.2.2 items look as before
+@fails Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2
+@draft no batch holds this row yet
+## SQ-DNR-E-02
+@group A
+@commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
+@pass Crate drops itself; plants drop as in EN-01 / EN-02; the End House is located and placed
+@fails Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`)
+@draft no batch holds this row yet
+## SQ-DNR-E-03
+@group A
+@commands Move `enders_upstream/endersdelight-1.1.4.jar` away and start; restore
+@pass Startup stops with the "Ender's Delight Additions (Creative Delight) ... folder 'enders_upstream' ... missing" message
+@fails `verifyOrFail` is not running first
+@draft no batch holds this row yet
+## SQ-DNR-E-04
+@group A
+@commands Put another jar there under the same name and start; restore
+@pass Stops with "wrong file ... expected d1541d70..."
+@fails The sha1 pin is not checked
+@draft no batch holds this row yet

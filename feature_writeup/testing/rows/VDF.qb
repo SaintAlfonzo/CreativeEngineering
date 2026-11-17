@@ -1,0 +1,211 @@
+# Scratch queue rows VDF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/VDF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-VDF Veggies Delight merges and family folds, 2026-11-01 ([veggies_delight.md](../veggies_delight.md) 3.3, 5.1, 8; TODO `merges/dishes #1` to `#3`, `creativedelight/members #30`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/veggies_delight.md
+@@text
+@@text Needs the Creative Delight jar rebuilt after 2026-11-01 (scripts `veggiesdelight/`, `moredelight/recipes.js`,
+@@text `pneumaticcraft/`, `creativedelight/recipes.js`, startup `pneumaticcraft/item_merges.js`, `pneumatic_items.js`, `veggies_items.js`,
+@@text `compost_rules.js`; second batch 2026-11-01 evening: SQ-VDF-07 to -10) and the
+@@text pack's `transition_items.js` (5 new incomplete items): full restart. Port `-04` is not needed for these. Group A.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-MG-21 | Cod 'n' Chips merged into Fish and Chips
+@group A
+@commands Boot; `grep -n "itemMerges\|cod_n_chips" logs/kubejs/server.log \| head`; `/kubejs dump recipes` or the recipe probe for outputs `veggiesdelight:fish_and_chips` and `pneumaticcraft:cod_n_chips`; `/give @p pneumaticcraft:cod_n_chips` then check the inventory
+@pass no recipe makes or uses Cod 'n' Chips; Fish and Chips has only `creativedelight:cooking/fish_and_chips` (container bowl; the Fries grid route left with the Fries 2026-11-01); no `veggiesdelight:cooking/fish_and_chips` or its More Delight compat; the given stack becomes Fish and Chips (MG-48, VD-47)
+@fails pair not loaded (startup `pneumaticcraft/item_merges.js` requires both mods); `already merged` warning
+@jars creativecommon creativedelight
+@from batches/r1102b/s3_A.qb
+> zq makes pneumaticcraft:cod_n_chips
+> zq uses pneumaticcraft:cod_n_chips
+> zq makes veggiesdelight:fish_and_chips
+> pbot spawn mg21 110 -60 506 minecraft:overworld survival
+> give mg21 pneumaticcraft:cod_n_chips 2
+sleep 3
+> clear mg21 veggiesdelight:fish_and_chips 0
+> clear mg21 pneumaticcraft:cod_n_chips 0
+expect makes pneumaticcraft:cod_n_chips: 0
+expect uses pneumaticcraft:cod_n_chips: 0 alone, 0 with
+expect makes veggiesdelight:fish_and_chips: [12]$
+expect creativedelight:\S*cooking/fish_and_chips ->
+reject veggiesdelight:cooking/fish_and_chips
+reject veggiesdelight:compat/moredelight\S*fish_and_chips
+expect Found 2 matching item
+expect No items were found on player mg21
+kjsreject (?i)already merged.*cod_n_chips
+> pbot remove mg21
+
+## SQ-VDF-01 | Veggies edits load; the five incomplete items exist
+@group A
+@commands `grep -n "Error occurred while handling event\|veggiesdelight/\|moredelight/recipes\|pneumaticcraft/recipes\|creativeengineering/recipes" logs/kubejs/server.log \| head -30`; `grep -n "no incomplete item registered" logs/kubejs/*.log`
+@pass no error from the edited files; no missing incomplete item for vegan_pizza, stuffed_zucchini_boat, stuffed_zucchinis, turnip_mutton_skewer, vegetarian_burger
+@fails transition_items.js row missing (startup, needs restart)
+@from batches/r1102b/s3_A.qb passed
+kjsreject (?i)error.*(veggiesdelight/|moredelight/recipes|pneumaticcraft/recipes|creativeengineering/recipes)
+shell ! grep -n "no incomplete item registered" logs/kubejs/*.log
+
+## SQ-VDF-02 | Mashed Potatoes / Mashed Sweet Potatoes recipes
+@group A
+@commands Recipe lookup by output: `moredelight:mashed_potatoes`, `veggiesdelight:mashed_potatoes`
+@pass Mashed Potatoes: pot `creativedelight:...mashed_potatoes` (potato or potato slices x2, milk, bowl) and grid `mashed_potatoes_cooked_manual_only`; Mashed Sweet Potatoes: pot `mashed_sweet_potatoes` (sweet potato or sliced sweet potato x2, milk, bowl) and grid `mashed_sweet_potatoes_cooked_manual_only` (3 baked sweet potatoes); no `moredelight:cooking/mashed_potatoes`, `veggiesdelight:cooking/mashed_potatoes` or its Vintage version (VD-48)
+@fails ids differ: check the CD id prefix
+@from batches/r1102b/s3_A.qb
+> zq makes moredelight:mashed_potatoes
+> zq makes veggiesdelight:mashed_potatoes
+> zq rdetail mashed_
+reject moredelight:cooking/mashed_potatoes
+reject veggiesdelight:cooking/mashed_potatoes
+reject veggiesdelight:\S*vintagedelight\S*mashed_potatoes
+expect \[zq\] creativedelight:\S*mashed_potatoes_cooked_manual_only \{
+expect \[zq\] creativedelight:\S*mashed_sweet_potatoes_cooked_manual_only \{
+expect \[zq\] creativedelight:\S*farmersdelightcooking/mashed_potatoes\S* \{
+expect \[zq\] creativedelight:\S*farmersdelightcooking/mashed_sweet_potatoes\S* \{
+look which output id is Mashed Potatoes and which Mashed Sweet Potatoes; pot: potato or potato slices x2, milk, bowl / sweet potato or sliced sweet potato x2, milk, bowl; sweet grid recipe: 3 baked sweet potatoes
+
+## SQ-VDF-03 | stuffed bell peppers have no recipe or tag; Veggies bread recipes gone
+@group A
+@commands Recipe lookup: outputs `veggiesdelight:stuffed_bellpeppers_block`, `veggiesdelight:stuffed_bellpepper`; ids `veggiesdelight:bread_from_smelting`, `_smoking`, `_campfire_cooking`; `/dumptags` on the two stuffed pepper items
+@pass no recipe for either stuffed pepper item; no tags; the three bread ids absent; `creativedelight:...bread_from_dough_*` still list sweet potato dough via `#forge:dough` (VD-49, VD-50)
+@fails removedItems push in the startup file
+@from batches/r1102b/s3_A.qb
+> zq makes veggiesdelight:stuffed_bellpeppers_block
+> zq makes veggiesdelight:stuffed_bellpepper
+> zq recipes veggiesdelight:bread_from_
+> zq tagsof veggiesdelight:stuffed_bellpeppers_block
+> zq tagsof veggiesdelight:stuffed_bellpepper
+> zq rdetail bread_from_dough
+expect makes veggiesdelight:stuffed_bellpeppers_block: 0$
+expect makes veggiesdelight:stuffed_bellpepper: 0$
+expect recipes matching veggiesdelight:bread_from_: 0$
+expect item tags of veggiesdelight:stuffed_bellpeppers_block: ?$
+expect item tags of veggiesdelight:stuffed_bellpepper: ?$
+expect \[zq\] creativedelight:\S*bread_from_dough\S* \{.*sweet_potato_dough
+look if the dough slot shows /+N only, sweet potato dough membership: zq itemtag forge:dough in SQ-VDF-04's lines
+
+## SQ-VDF-04 | quiche, vegan pizza, zucchini boat and bowl: manual_only + one assembly each
+@group A
+@commands Recipe lookup: `veggiesdelight:zucchini_quiche`, `vegan_pizza`, `stuffed_zucchini_boat`, `stuffed_zucchinis`
+@pass quiche: oven only (no grid or assembly recipe); pizza: one shaped `vegan_pizza_manual_only` (row 2 dough, sauce, dough) + one assembly on `#forge:dough`; boat and bowl: one assembly each on the roasted zucchini beside their grid / pot recipes; no `veggiesdelight:zucchini_quiche`, `compat/vintagedelight/zucchini_quiche`, `vegan_pizza` ids (VD-51, VD-52)
+@fails `F.assemble` needs Create; array step
+@from batches/r1102b/s3_A.qb
+> zq rdetail zucchini_quiche
+> zq rdetail vegan_pizza
+> zq rdetail stuffed_zucchini
+> zq itemtag forge:dough
+reject \[zq\] veggiesdelight:zucchini_quiche \{
+reject \[zq\] veggiesdelight:compat/vintagedelight/zucchini_quiche
+reject \[zq\] veggiesdelight:vegan_pizza \{
+count \[zq\] creativedelight:\S*zucchini_quiche_manual_only \{ == 1
+count \[zq\] creativedelight:\S*zucchini_quiche\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*vegan_pizza_manual_only \{ == 1
+count \[zq\] creativedelight:\S*vegan_pizza\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*stuffed_zucchini_boat\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*stuffed_zucchinis\S*sequenced_assembly \{ == 1
+expect itemtag forge:dough \(\d+\): .*veggiesdelight:sweet_potato_dough
+look vegan pizza grid row 2 dough, sauce, dough; its assembly starts on #forge:dough; boat and bowl assemblies start on the roasted zucchini
+
+## SQ-VDF-05 | skewer, vegetarian burger, patty, More Delight burgers
+@group A
+@commands Recipe lookup: `veggiesdelight:turnip_mutton_skewer`, `vegetarian_burger`, `cooked_vegetarian_patty`, `moredelight:simple_hamburger`, `hamburger_with_egg`, `loaded_hamburger`
+@pass skewer and burger: shaped `_manual_only` + one assembly each, no shapeless; the patty from furnace, smoker and campfire (CD ids); the three More Delight burgers' shaped recipes accept the vegetarian patty; no `veggiesdelight:compat/moredelight/*hamburger*` (VD-53)
+@fails Platform check in creativedelight/recipes.js
+@from batches/r1102b/s3_A.qb
+> zq rdetail turnip_mutton_skewer
+> zq rdetail vegetarian_burger
+> zq makes veggiesdelight:cooked_vegetarian_patty
+> zq uses veggiesdelight:cooked_vegetarian_patty
+reject \[zq\] \S*turnip_mutton_skewer\S* \{minecraft:crafting_shapeless\}
+reject \[zq\] \S*vegetarian_burger\S* \{minecraft:crafting_shapeless\}
+count \[zq\] creativedelight:\S*turnip_mutton_skewer\S*manual_only \{ == 1
+count \[zq\] creativedelight:\S*turnip_mutton_skewer\S*sequenced_assembly \{ == 1
+count \[zq\] creativedelight:\S*vegetarian_burger\S*manual_only \{ == 1
+count \[zq\] creativedelight:\S*vegetarian_burger\S*sequenced_assembly \{ == 1
+expect makes veggiesdelight:cooked_vegetarian_patty: [3-9]
+count \[zq\] creativedelight:\S*(smelting|smoking|campfirecooking)/\S*vegetarian_patty\S* -> == 3
+expect (alone|shared) \S*simple_hamburger
+expect (alone|shared) \S*hamburger_with_egg
+expect (alone|shared) \S*loaded_hamburger
+reject veggiesdelight:compat/moredelight/\S*hamburger
+
+## SQ-VDF-06 | fermented garlic honey in the pickle preserve family
+@group A
+@commands `/dumptags` item `creativeengineering:food_family/preserve/pickle`
+@pass holds `veggiesdelight:fermented_garlic_honey` (VD-54)
+@fails seasoning_tags.js read of food_families.json
+@from batches/r1102b/s3_A.qb passed
+> zq itemtag creativeengineering:food_family/preserve/pickle
+expect itemtag creativeengineering:food_family/preserve/pickle \(\d+\): .*veggiesdelight:fermented_garlic_honey
+
+## SQ-VDF-07 | Chips gone: no recipes, no tags, no Canned Chips
+@group A
+@commands Recipe lookup by output and input `pneumaticcraft:chips`, `creativeengineering:canned_chips`; `/give @p pneumaticcraft:chips`; JEI search "Chips"
+@pass no recipe makes or uses Chips (no `creativedelight:cooking/fries`); Canned Chips does not exist (unknown item); Chips hidden in JEI; `/dumptags` lists no tag on Chips (owner 2026-11-01, `merges/dishes #1`)
+@fails startup `pneumaticcraft/pneumatic_items.js` not loaded (requires line)
+@from batches/r1102b/s3_A.qb
+> zq makes pneumaticcraft:chips
+> zq uses pneumaticcraft:chips
+> zq recipes creativedelight:cooking/fries
+> zq tagsof pneumaticcraft:chips
+> give @a creativeengineering:canned_chips
+> zq item creativeengineering:canned_chips
+expect makes pneumaticcraft:chips: 0$
+expect uses pneumaticcraft:chips: 0 alone, 0 with
+expect recipes matching creativedelight:cooking/fries: 0$
+expect item tags of pneumaticcraft:chips: ?$
+expect (Unknown item|error: .*canned_chips|item creativeengineering:canned_chips: class AirItem)
+look Chips hidden in JEI is the client half
+
+## SQ-VDF-08 | salting mashed potatoes (both mods)
+@group A
+@commands Salting craft in a crafting grid: salt + `moredelight:mashed_potatoes`, then salt + `veggiesdelight:mashed_potatoes`; `/dumptags` item `salt:can_be_salted`
+@pass both give a salted dish; the tag holds both (`merges/dishes #2`)
+@fails `i.t_can_be_salted` missing in item_dict, or `moredelight/tags.js` not loaded
+@from batches/r1102b/s3_A.qb
+> zq itemtag salt:can_be_salted
+> zq uses moredelight:mashed_potatoes
+> zq uses veggiesdelight:mashed_potatoes
+expect itemtag salt:can_be_salted \(\d+\): .*moredelight:mashed_potatoes
+expect itemtag salt:can_be_salted \(\d+\): .*veggiesdelight:mashed_potatoes
+look a salting recipe (salt: or creativedelight: salting id) in both uses lists
+
+## SQ-VDF-09 | canning recipes for the new cans; no Canned Mhadjeb
+@group A
+@commands Recipe lookup by output: `creativeengineering:canned_mashed_potatoes`, `canned_mashed_sweet_potatoes`, `canned_bat_soup`, `canned_cave_soup`, `canned_insect_stew`, `canned_golden_nutritional_bar`; `/give @p creativeengineering:canned_mhadjeb`
+@pass each can has its canning recipe (the soups also `_broth`; the golden bar with honey); Canned Mhadjeb is unknown; CNS-08 rides on the same boot (Canned Noodle Soup Nourishment, Canned Bone Broth none)
+@fails gen_can_types.py output not in the jar's cans.js read (restart)
+@from batches/r1102b/s3_A.qb
+> zq makes creativeengineering:canned_mashed_potatoes
+> zq makes creativeengineering:canned_mashed_sweet_potatoes
+> zq makes creativeengineering:canned_bat_soup
+> zq makes creativeengineering:canned_cave_soup
+> zq makes creativeengineering:canned_insect_stew
+> zq makes creativeengineering:canned_golden_nutritional_bar
+> zq item creativeengineering:canned_mhadjeb
+> zq food creativeengineering:canned_noodle_soup
+> zq food creativeengineering:canned_bone_broth
+expect makes creativeengineering:canned_mashed_potatoes: [1-9]
+expect makes creativeengineering:canned_mashed_sweet_potatoes: [1-9]
+expect makes creativeengineering:canned_bat_soup: [2-9]
+expect makes creativeengineering:canned_cave_soup: [2-9]
+expect makes creativeengineering:canned_insect_stew: [2-9]
+expect makes creativeengineering:canned_golden_nutritional_bar: [1-9]
+expect (error: .*canned_mhadjeb|item creativeengineering:canned_mhadjeb: class AirItem)
+look CNS-08: canned noodle soup lists Nourishment, canned bone broth none; the golden bar can recipe uses honey; soups have a _broth recipe
+
+## SQ-VDF-10 | doughs compost at 85 %
+@group A
+@commands Hopper into a composter, one stack each: `create:dough`, `vintagedelight:oat_dough`, `vintagedelight:cucumber_dough`, `veggiesdelight:sweet_potato_dough`, `farmersdelight:wheat_dough`; or the compost probe
+@pass each adds a layer at 85 % (owner 2026-11-01); cucumber noodles unchanged
+@fails `doughs` category order in CD `compost_rules.js`
+@from batches/r1102b/s3_A.qb
+> dumpcompost
+waitlog Dumped compost table 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost create:dough=0.85 vintagedelight:oat_dough=0.85 vintagedelight:cucumber_dough=0.85 veggiesdelight:sweet_potato_dough=0.85 farmersdelight:wheat_dough=0.85
+shell python3 -I -c "import json;n=json.load(open('kubejs/exported/compost/compost.json'))['now'];print({k:v for k,v in n.items() if 'noodle' in k and 'cucumber' in k})"
+look cucumber noodles unchanged against the instance dump (kubejs/exported/compost/compost.json)

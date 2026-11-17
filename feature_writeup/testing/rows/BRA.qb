@@ -1,0 +1,312 @@
+# Scratch queue rows BRA (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BRA.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-BRA BlockRunner audit, 2026-11-10 ([blockrunner.md](../blockrunner.md) sections 2, 6, 7; TODO `gameplay/blockrunner #2`, `#5`)
+@@date 2026-11-10
+@@jars creativedevtools
+@@sources feature_writeup/blockrunner.md
+@@text
+@@text Targets `creativecommon-1.1.0.jar` (22:43, `has.js` fix), `creativecompat-1.0.0.jar` and `creativedevtools-1.0.0.jar`
+@@text (22:38, new tiers and `/dumpsurface`), all from `build/libs`, installed together, plus `blocktags.js` as of 2026-11-10.
+@@text
+@@table
+## SQ-BRA-01 | BlockRunner tier overlap check and block tag timing
+@group A
+@commands Boot; `grep -c "BlockRunner tier overlaps checked: [0-9]* ids, 0 overlap" logs/latest.log`; `grep -n "block tags starting\|block tags finished" logs/latest.log`
+@pass 1 match, ids about 13800; finished within a few seconds of starting (BR-64)
+@fails overlaps: sim (`node tools/blockrunner_tag_sim.js`) shows which; slow: the `auditLeft` except lists in `blocktags.js`
+@from batches/r1111/a1.qb passed
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+shell grep -n "BlockRunner tier overlaps checked\|block tags starting\|block tags finished" logs/latest.log | cut -c1-220
+
+## SQ-BRA-02 | /dumpsurface writes surface_audit.json
+@group A
+@commands `/dumpsurface`; read `kubejs/exported/surface_audit.json` (BR-59)
+@pass file written; `immersivepetroleum:asphalt` tier `asphalt`; `minecraft:soul_sand` no tier, speedFactor 0.4; `minecraft:white_carpet` collisionTop 0.0625; `errors` 0 or listed
+@fails command missing: Devtools not installed; NoSuchMethodError: Compat jar older than Devtools
+@from batches/r1111/a1.qb
+> dumpsurface
+sleep 15
+shell python3 -c "import json;d=json.load(open('kubejs/exported/surface_audit.json'));b=d.get('blocks',d);print(type(b).__name__,len(b));print({k:d[k] for k in d if k!='blocks'} if isinstance(d,dict) else '')" 2>&1 | cut -c1-600
+shell python3 -c "import json;d=json.load(open('kubejs/exported/surface_audit.json'));s=json.dumps(d);import re;[print(i, re.search(r'\"'+i+r'\"[^}]{0,300}',s).group(0) if re.search(r'\"'+i+r'\"',s) else 'MISSING') for i in ['immersivepetroleum:asphalt','minecraft:soul_sand','minecraft:white_carpet']]" 2>&1 | cut -c1-500
+look surface_audit.json: asphalt tier asphalt, soul_sand no tier speedFactor 0.4, white_carpet collisionTop 0.0625, errors 0
+
+## SQ-BRA-03 | blockrunner_scan.py --audit
+@group A
+@commands after 02: `python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json` (BR-60)
+@pass untiered list holds only `minecraft:magma_block` (exit 3) or nothing; outlier list printed
+@fails listed blocks: tier them in the `blocktags.js` audit block
+@from batches/r1111/a1.qb
+shell python3 $INST/tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json 2>&1 | tail -40; echo "exit=${PIPESTATUS[0]}" 
+look untiered list only minecraft:magma_block (exit 3) or empty
+
+## SQ-BRA-04 | tier tag members
+@group A
+@commands Tag probes: `/execute if block` or block tag dump for `framedblocks:framed_cube` and `copycats:copycat_block` in `#blockrunner:surface/camouflage`; `create_confectionery:chocolate_bricks` in `confectionery`; `metalfences:*` in `metal`; `create:mechanical_press` in `machinery`; `handcrafted:oak_counter_1` in `furniture`; `vintagedelight:strawberry_jam_block` in `very_sticky`; `upgrade_aquatic:coralstone` in `natural_smooth`
+@pass each in that tier
+@fails camouflage holding only 2: Common jar without the `has.js` fix
+@from batches/r1111/a1.qb
+> zq tagsof framedblocks:framed_cube
+waitlog \[zq\] done 20
+expect blockrunner:surface/camouflage
+> zq tagsof copycats:copycat_block
+waitlog \[zq\] done 20
+expect blockrunner:surface/camouflage
+> zq tagsof create_confectionery:chocolate_bricks
+waitlog \[zq\] done 20
+expect blockrunner:surface/confectionery
+> zq tagsof create:mechanical_press
+waitlog \[zq\] done 20
+expect blockrunner:surface/machinery
+> zq tagsof handcrafted:oak_counter_1
+waitlog \[zq\] done 20
+expect blockrunner:surface/furniture
+> zq tagsof vintagedelight:strawberry_jam_block
+waitlog \[zq\] done 20
+expect blockrunner:surface/very_sticky
+> zq tagsof upgrade_aquatic:coralstone
+waitlog \[zq\] done 20
+expect blockrunner:surface/natural_smooth
+> zq blocktag blockrunner:surface/metal
+waitlog \[zq\] done 20
+expect metalfences:
+> zq blocktag blockrunner:surface/camouflage
+waitlog \[zq\] done 20
+look camouflage holds more than 2 members (framed + copycats); each block above in its tier (tagsof lines)
+
+## SQ-BRA-05 | speed modifiers, set 1
+@group A
+@commands `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` standing on a Neapolitan chocolate brick, an Upgrade Aquatic kelpy stone brick, a Vintage jam block, a crafting table (BR-63)
+@pass -0.015, +0.025, -0.055, no modifier
+@fails wrong tier: `blocktags.js` audit block; crafting table with a modifier: a 1.00 tier with another speed in `[surface.speed]`
+@from batches/r1111/a1.qb passed
+> forceload add 900 -40 1100 40
+> fill 890 -61 -3 1050 -61 3 minecraft:grass_block
+sleep 2
+> fill 899 -60 -1 901 -60 1 minecraft:air
+> setblock 900 -61 0 neapolitan:chocolate_bricks
+> pbot spawn br900 900.5 -57 0.5
+sleep 3
+> say BRA neapolitan:chocolate_bricks
+> attribute br900 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br900
+> fill 905 -60 -1 907 -60 1 minecraft:air
+> setblock 906 -61 0 upgrade_aquatic:kelpy_stone_bricks
+> pbot spawn br906 906.5 -57 0.5
+sleep 3
+> say BRA upgrade_aquatic:kelpy_stone_bricks
+> attribute br906 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br906
+> fill 911 -60 -1 913 -60 1 minecraft:air
+> setblock 912 -60 0 vintagedelight:strawberry_jam_block
+> pbot spawn br912 912.5 -57 0.5
+sleep 3
+> say BRA vintagedelight:strawberry_jam_block
+> attribute br912 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br912
+> fill 917 -60 -1 919 -60 1 minecraft:air
+> setblock 918 -61 0 minecraft:crafting_table
+> pbot spawn br918 918.5 -57 0.5
+sleep 3
+> say BRA minecraft:crafting_table
+> attribute br918 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br918
+
+## CQ-BRA-01
+@group client
+@commands BR-62 and BR-63: framed block with stone camo, Copycats+ block with planks, empty framed block; WTHIT with `hideNormal = false` on a mechanical press, crafting table, Handcrafted counter
+@pass camo modifiers +0.005 / +0.01, WTHIT "from camo", empty frame none; LOOK: "1.00× (Machinery)", "(Functional)", "(Furniture)"
+@fails no tier name: lang keys for furniture/flora in Compat `en_us.json`
+@draft no batch holds this row yet
+
+@@section 2
+@@title SQ-BRA part 2 and CQ-NCR, gap sweep 2026-11-11 (unreleased changelog against the queue; [blockrunner.md](../blockrunner.md) BR-63, BR-65, BR-66; TODO `gameplay/blockrunner #2`, `#5`)
+@@date 2026-11-11
+@@jars creativedevtools
+@@sources feature_writeup/blockrunner.md
+@@text
+@@text Gap sweep of `unreleased.md` against the queue: every bullet already had a row except the Walk Speed values below and
+@@text the Cast Iron Plating rename. Same jars as SQ-BRA, newest 11-10 builds (Common 23:26, Compat 23:25, Devtools 22:38; none in `mods/`, which holds the 21:11-21:23 jars), `blocktags.js` of
+@@text 2026-11-10 22:45); run in the SQ-BRA boot. Modifier = 0.1 x (factor - 1), read with the BlockRunner uuid
+@@text `23237052-61ad-11eb-ae93-0242ac130002` as in SQ-BRA-05. CQ-NCR-01 needs only `kubejs/client_scripts/namechanges.js` (any client).
+@@text
+@@table
+## SQ-BRA-06 | speed modifiers, 06
+@group A
+@commands Same boot as SQ-BRA-05. `/setblock` each block at a free plot and stand the bot on it, then `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002`: `comforts:sleeping_bag_white`, `comforts:hammock_white`, `domesticationinnovation:pet_bed_white`, `quark:thatch`, `dustrial_decor:cardboard_box`; `minecraft:cake`, `farmersdelight:roast_chicken_block`; `minecraft:tube_coral_block`; `upgrade_aquatic:kelpy_cobblestone`; `upgrade_aquatic:scute_pavement`, `hearthandharvest:polished_manure`, `hearthandharvest:manure_bricks`; `farmersdelight:carrot_crate`, `minecraft:beehive`; `vintagedelight:ancient_fruit_jello_block`
+@pass soft five -0.012; cake and roast chicken -0.015; tube coral block -0.008; kelpy cobblestone +0.015; scute pavement, polished manure, manure bricks +0.025; carrot crate and beehive +0.01; jello block -0.055
+@fails wrong value: the block's tier in `kubejs/exported/surface_audit.json` (SQ-BRA-02), then its entry in the `blocktags.js` audit block; a tier with the right name but wrong value: `[surface.speed]` in `config/creativecompat-common.toml` (copy in `configs_edited/root_config/`); a coral block on the wrong value: the coral tier's speed, the changelog says 0.92
+@from batches/r1111/a1.qb passed
+> fill 923 -60 -1 925 -60 1 minecraft:air
+> setblock 924 -60 0 comforts:sleeping_bag_white
+> pbot spawn br924 924.5 -57 0.5
+sleep 3
+> say BRA comforts:sleeping_bag_white
+> attribute br924 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br924
+> fill 929 -60 -1 931 -60 1 minecraft:air
+> setblock 930 -60 0 comforts:hammock_white
+> pbot spawn br930 930.5 -57 0.5
+sleep 3
+> say BRA comforts:hammock_white
+> attribute br930 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br930
+> fill 935 -60 -1 937 -60 1 minecraft:air
+> setblock 936 -60 0 domesticationinnovation:pet_bed_white
+> pbot spawn br936 936.5 -57 0.5
+sleep 3
+> say BRA domesticationinnovation:pet_bed_white
+> attribute br936 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br936
+> fill 941 -60 -1 943 -60 1 minecraft:air
+> setblock 942 -61 0 quark:thatch
+> pbot spawn br942 942.5 -57 0.5
+sleep 3
+> say BRA quark:thatch
+> attribute br942 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br942
+> fill 947 -60 -1 949 -60 1 minecraft:air
+> setblock 948 -61 0 dustrial_decor:cardboard_box
+> pbot spawn br948 948.5 -57 0.5
+sleep 3
+> say BRA dustrial_decor:cardboard_box
+> attribute br948 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br948
+> fill 953 -60 -1 955 -60 1 minecraft:air
+> setblock 954 -60 0 minecraft:cake
+> pbot spawn br954 954.5 -57 0.5
+sleep 3
+> say BRA minecraft:cake
+> attribute br954 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br954
+> fill 959 -60 -1 961 -60 1 minecraft:air
+> setblock 960 -60 0 farmersdelight:roast_chicken_block
+> pbot spawn br960 960.5 -57 0.5
+sleep 3
+> say BRA farmersdelight:roast_chicken_block
+> attribute br960 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br960
+> fill 965 -60 -1 967 -60 1 minecraft:air
+> setblock 966 -61 0 minecraft:tube_coral_block
+> pbot spawn br966 966.5 -57 0.5
+sleep 3
+> say BRA minecraft:tube_coral_block
+> attribute br966 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br966
+> fill 971 -60 -1 973 -60 1 minecraft:air
+> setblock 972 -61 0 upgrade_aquatic:kelpy_cobblestone
+> pbot spawn br972 972.5 -57 0.5
+sleep 3
+> say BRA upgrade_aquatic:kelpy_cobblestone
+> attribute br972 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br972
+> fill 977 -60 -1 979 -60 1 minecraft:air
+> setblock 978 -61 0 upgrade_aquatic:scute_pavement
+> pbot spawn br978 978.5 -57 0.5
+sleep 3
+> say BRA upgrade_aquatic:scute_pavement
+> attribute br978 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br978
+> fill 983 -60 -1 985 -60 1 minecraft:air
+> setblock 984 -61 0 hearthandharvest:polished_manure
+> pbot spawn br984 984.5 -57 0.5
+sleep 3
+> say BRA hearthandharvest:polished_manure
+> attribute br984 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br984
+> fill 989 -60 -1 991 -60 1 minecraft:air
+> setblock 990 -61 0 hearthandharvest:manure_bricks
+> pbot spawn br990 990.5 -57 0.5
+sleep 3
+> say BRA hearthandharvest:manure_bricks
+> attribute br990 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br990
+> fill 995 -60 -1 997 -60 1 minecraft:air
+> setblock 996 -61 0 farmersdelight:carrot_crate
+> pbot spawn br996 996.5 -57 0.5
+sleep 3
+> say BRA farmersdelight:carrot_crate
+> attribute br996 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br996
+> fill 1001 -60 -1 1003 -60 1 minecraft:air
+> setblock 1002 -61 0 minecraft:beehive
+> pbot spawn br1002 1002.5 -57 0.5
+sleep 3
+> say BRA minecraft:beehive
+> attribute br1002 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1002
+> fill 1007 -60 -1 1009 -60 1 minecraft:air
+> setblock 1008 -61 0 vintagedelight:ancient_fruit_jello_block
+> pbot spawn br1008 1008.5 -57 0.5
+sleep 3
+> say BRA vintagedelight:ancient_fruit_jello_block
+> attribute br1008 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1008
+
+## SQ-BRA-07 | speed modifiers, 07
+@group A
+@commands Same boot. As SQ-BRA-06 for `mosaic_masonry:common_bond`, `mosaic_masonry:english_bond`, `metalfences:copper_fence` (stand on top), `metalfences:copper_fence_gate` (closed, on top)
+@pass each +0.025 (constructed_brick and metal tiers, both 1.25); none "no modifier"
+@fails no modifier: the `@mosaic_masonry` / `@metalfences` mod filters in `blocktags.js` (the `@mod` filter fix in Common `has.js`, 22:36); a stale Common jar in `mods/`
+@from batches/r1111/a1.qb
+> fill 1013 -60 -1 1015 -60 1 minecraft:air
+> setblock 1014 -61 0 mosaic_masonry:common_bond
+> pbot spawn br1014 1014.5 -57 0.5
+sleep 3
+> say BRA mosaic_masonry:common_bond
+> attribute br1014 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1014
+> fill 1019 -60 -1 1021 -60 1 minecraft:air
+> setblock 1020 -61 0 mosaic_masonry:english_bond
+> pbot spawn br1020 1020.5 -57 0.5
+sleep 3
+> say BRA mosaic_masonry:english_bond
+> attribute br1020 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1020
+> fill 1025 -60 -1 1027 -60 1 minecraft:air
+> setblock 1026 -60 0 metalfences:copper_fence
+> pbot spawn br1026 1026.5 -57 0.5
+sleep 3
+> say BRA metalfences:copper_fence
+> attribute br1026 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1026
+> fill 1031 -60 -1 1033 -60 1 minecraft:air
+> setblock 1032 -60 0 metalfences:copper_fence_gate[open=false]
+> pbot spawn br1032 1032.5 -57 0.5
+sleep 3
+> say BRA metalfences:copper_fence_gate
+> attribute br1032 minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+sleep 1
+> pbot remove br1032
+look per block: the line after 'BRA <block>' (value or 'has no modifier') against the row's Pass list (judge_bra.py)
+
+## CQ-NCR-01
+@group client
+@commands Any world; JEI search `cast iron`; hover `createdeco:cast_iron_block` and `dustrial_decor:cast_iron_block`; place both and look with WTHIT
+@pass LOOK: Create Deco's block reads "Cast Iron Plating" in JEI, the tooltip and WTHIT; Dustrial Decor's still reads "Cast Iron Block"; no other Create Deco cast iron name changed
+@fails `renameItem` line in `kubejs/client_scripts/namechanges.js`; a name only in JEI and not WTHIT = the block's lang key differs from the item's, add a block rename
+@draft no batch holds this row yet

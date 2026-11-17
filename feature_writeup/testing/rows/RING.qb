@@ -1,0 +1,34 @@
+# Scratch queue rows RING (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RING.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Stronghold ring positions stored per world, 2026-10-27
+@@date 2026-10-27
+@@jars creativecommon
+@@text
+@@text patcherMod 1.1.03 with `ChunkGeneratorRingCacheMixin` and `worldgen/RingPositionCache` (TODO server #18, perf.md
+@@text 11.2 #2). Group A. Fresh world folder; any player with op.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-RING-01
+@group A
+@commands Boot a new world; grep latest.log for `[rings]` and `Mixin`; then `/locate structure minecraft:stronghold` and note the result
+@pass One `not stored ... computing` and one `stored in the world's data` line per ring set (vanilla strongholds, Better Strongholds); `world/data/creativeengineering_ring_positions.json` exists with 128 x,z pairs per set
+@fails No `[rings]` line: the mixin did not apply (check `m_223148_`); `no cache key` warning: read the stack trace (codec encode or probe)
+@draft no batch holds this row yet
+## SQ-RING-02
+@group A
+@commands `/stop`, boot again; grep `[rings]`; repeat the `/locate` from SQ-RING-01; time "Preparing spawn area" against SQ-RING-01's boot
+@pass `positions from the world's data` per set, key time well under 1 s; the same locate result; the level-creation stretch about 12 s shorter
+@fails `computing` again: the key is not stable between boots (an input is non-deterministic; diff the keys in the file)
+@draft no batch holds this row yet
+## SQ-RING-03
+@group A
+@commands `/stop`; change the seed in `server.properties` and delete `world/`, or add a datapack biome change to the same world; boot
+@pass `computing` again with a new key; the new positions are stored next to the old entry
+@fails Old positions reused: the key misses the changed input
+@draft no batch holds this row yet
+@@text
+@@text Results 2026-10-27 night: SQ-RING-01 first FAIL: ModernFix's `cache_strongholds` RETURN hook returned before ours, nothing stored (perf.md 12.2 #3); with it off, PASS: 10 `computing` lines (one per dimension with the ring set), 10 `192 positions stored`, file with 10 keys (192 per set in this pack). `/locate structure betterstrongholds:stronghold` (the vanilla stronghold is replaced) -1168 -880 both times. SQ-RING-02 PASS: 10 `from the world's data`, key 8-74 ms, `Done` 5.7 s. SQ-RING-03 PASS: an Overworld biome multiplier change computed a new key for the Overworld only (11 keys), the other 9 read from data; restoring it read the old key again.

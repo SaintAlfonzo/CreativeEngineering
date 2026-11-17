@@ -1,0 +1,112 @@
+# Scratch queue rows LT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Loading screen tips, 2026-11-06 ([loading_tips.md](../loading_tips.md) LT-01 to LT-06)
+@@date 2026-11-06
+@@jars creativecommon
+@@sources feature_writeup/loading_tips.md
+@@text
+@@text Creative Common 1.1.0 jar built 17:51 (not installed yet). Client only, Round 2 (any world). TODO `ui/loadingtips #1`.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## CQ-LT-01
+@group client, new singleplayer world
+@commands Create a world and watch the chunk progress screen
+@pass Dark bar at the bottom, green "Tip:" and a white tip; a new tip about every 7 s; the bar does not cover the progress square
+@fails No bar: grep latest.log for `Loading tips:`; 0 tips means the built-in packs were not found (`LoadingTipPacks`)
+@draft no batch holds this row yet
+## CQ-LT-02
+@group client, join a server, then go through a Nether portal
+@commands Watch "Loading terrain"
+@pass Same bar on the receiving screen
+@fails Screen is not `ReceivingLevelScreen` in this pack: note its class (F3 or a mod screen)
+@draft no batch holds this row yet
+## CQ-LT-03
+@group client
+@commands Options, Resource Packs; grep latest.log
+@pass "Loading Tips" and "Creative Tips" in the selected list; `Loading tips: 340 tips from 2 files`
+@fails Packs missing: pack.mcmeta format or `findResource` path
+@draft no batch holds this row yet
+## CQ-LT-04
+@group client, `[loading_tips] cycleSeconds = 2`, small window, GUI scale 4
+@commands Load a world
+@pass Long tips wrap inside the bar, nothing off screen
+@fails Width math in `LoadingTipBar`
+@draft no batch holds this row yet
+## CQ-LT-05
+@group client
+@commands Add a tip to the Creative Tips tips.json, rebuild, install, load a world
+@pass Log count 341; the new tip shows up within one deck
+@fails Namespace clash or JSON error: latest.log `Loading tips: skipped`
+@draft no batch holds this row yet
+## CQ-LT-06
+@group client, `[loading_tips] enabled = false`
+@commands Load a world
+@pass No bar
+@fails Config not read
+@draft no batch holds this row yet
+@@text
+@@text ### Every loading screen, tip ids, override packs, 2026-11-14 ([plan_loading_tips_screens.md](../plan_loading_tips_screens.md), LT-07 to LT-14)
+@@text
+@@text Creative Common 1.2.0 installed 23:22. Client only; LT-08 needs a server (CreEngServer or a scratch one). TODO `ui/loadingtips #5`.
+@@text Test packs for LT-11 to LT-13: a folder in `resourcepacks/` with `pack.mcmeta` (format 9) and `assets/cqlt/loading_tips/tips.json`.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## CQ-LT-07
+@group client
+@commands Open an existing world; create a new one; `grep "Loading tips: bar on" logs/latest.log`
+@pass Bar on "Reading world data" / "Preparing for world creation", the chunk screen and "Joining world"; the same tip across them, it changes only on the timer
+@fails A screen missing from the grep list: note its class, add it to `startsJoin` / `continuesJoin` in `LoadingTipBar`
+@draft no batch holds this row yet
+## CQ-LT-08
+@group client + server
+@commands Join the server; grep as above
+@pass Bar on the connecting and terrain screens, same tip
+@fails A modded screen in between: note the class
+@draft no batch holds this row yet
+## CQ-LT-09
+@group client in a world
+@commands Go through a Nether portal; then Save and Quit
+@pass Bar on the terrain screen; no bar on "Saving world" or the blank progress screen after it
+@fails Bar on leaving: `NO_BAR_DIRT_TITLES` or the 5 s join gap
+@draft no batch holds this row yet
+## CQ-LT-10
+@group client
+@commands `grep "Loading tips:" logs/latest.log`
+@pass `213 tips from 2 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` (counts since tip audit 2, loading_tips_audit.md LT-15)
+@fails Unmatched or clash lines name the id
+@draft no batch holds this row yet
+## CQ-LT-11
+@group client, test pack with `{"priority":5,"tips":[{"id":"loading_tips:endermen_hate_water","text":"CQLT clash"}]}` (priority 5 so it loads after Loading Tips; at 0 `cqlt:` sorts first and would win)
+@commands Enable the pack, F3+T, grep the log
+@pass A `repeats id loading_tips:endermen_hate_water without override` line; "CQLT clash" never shows
+@fails Clash replaced the tip: `override` default
+@draft no batch holds this row yet
+## CQ-LT-12
+@group client, same pack with `"override": true, "priority": 20`
+@commands F3+T
+@pass one more replaced than CQ-LT-10; the Endermen tip ("Endermen are hurt by water, ...") reads "CQLT clash"
+@fails Not replaced: priority order
+@draft no batch holds this row yet
+## CQ-LT-13
+@group client, same pack with `{"tips":["CQLT plain"]}`
+@commands F3+T
+@pass 336 tips in the log; "CQLT plain" can show
+@fails Plain-string parse
+@draft no batch holds this row yet
+## CQ-LT-14
+@group client, small window, GUI scale 4
+@commands Join a server (or one that does not answer, to hold the connect screen)
+@pass The bar never covers the Cancel button
+@fails Widget check in `LoadingTipBar.onScreenRender`
+@draft no batch holds this row yet
+## CQ-LT-15
+@group client, after tip audit 2 (loading_tips_audit.md)
+@commands F3+T, load a world, watch about 20 tips
+@pass Log line as CQ-LT-10 (213 tips, 0 unmatched); every tip shown is in loading_tips_list.md and none is cut off in the bar
+@fails A merged-away or removed tip shows: Creative Tips not reloaded
+@draft no batch holds this row yet

@@ -1,0 +1,490 @@
+# Scratch queue rows TP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-TP Tempad port phase 1: core Tempad, chronons, timedoors, three apps, 2026-11-07 ([immersive_portals.md](../immersive_portals.md) 2.1.1, member notes `development/creativeCompat/members/tempad/PORT_NOTES.md` 9)
+@@date 2026-11-07
+@@jars creativecompat tempad
+@@sources feature_writeup/immersive_portals.md
+@@text
+@@text Server rows run 2026-11-07 (r1107tp, Run log); without a client they are driven by perfBot bots and `/ztp`
+@@text (tools/scratch_query/ztp_probe.js, copy into srv/kubejs/server_scripts). Targets `creativecompat-1.0.0.jar` built 2026-11-07 with `backportedTempad-3.0.4-ce-19.2-01.jar` nested; not in
+@@text `mods/` yet. The srv needs `tempad_upstream/tempad-1.21.1-3.0.4-all.jar` (sha1 `7a4d6837...`) next to `mods/`, and no
+@@text `tempad-forge-*.jar` in `mods/`. Phase 2-4 work lands later from another session; rerun SQ-TP-01 after each phase.
+@@text
+@@table
+## SQ-TP-01
+@group A
+@commands boot with the donor present; second boot with `tempad_upstream/` renamed away
+@pass first boot reaches `Done (`, no `tempad` errors in latest.log, `/datapack list` shows `tempad_upstream_data`; second boot stops with a message naming `tempad_upstream/` and the jar
+@fails translator or pack registration (`forge/UpstreamTranslator`, `BuiltInPacks.addUpstream`); donor sha1 mismatch
+@draft no batch holds this row yet
+## SQ-TP-02 | phase 1 recipes, forge tags, new-location upgrade absent
+@group A
+@commands `/zq rdetail tempad:tempad`, the same for `chronon_cell`, `chronon_battery`, `chronon_generator`, `chronometer`, `time_steel_shaped`; `/zq rdetail tempad:upgrades/new_location`
+@pass each recipe loads with `forge:` tags (ender pearls, quartz, tinted glass); the new-location upgrade recipe is absent while `require_location_upgrade=false`
+@fails c: -> forge: tag map in the translator; condition `tempad:required_location_upgrade`
+@from batches/r1107tp/a1.qb
+> zq rdetail tempad:
+waitlog \[zq\] done 60
+expect tempad:tempad
+expect tempad:chronon_cell
+expect tempad:chronon_battery
+expect tempad:chronon_generator
+expect tempad:chronometer
+expect tempad:time_steel_shaped
+reject upgrades/new_location
+shell grep -hE "\[zq\]" logs/latest.log | grep -E "tempad:(tempad|chronon_cell|chronon_battery|chronon_generator|chronometer|time_steel_shaped) " -A4 | head -60
+look inputs use forge: tags (ender pearls, quartz, tinted glass) or items; no c: tags
+
+## SQ-TP-03 | locations and Teleport app after a restart
+@group A
+@commands `/give` a Tempad and a Creative Chronometer; use the Tempad; save a location with the New Location app; restart; open Teleport
+@pass the Teleport app opens; the location is listed after the restart
+@fails player capability save / clone (`TempadPlayerData`)
+@from batches/r1107tp/a2.qb passed
+bootexpect Done \(
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> ztp locs qa
+waitlog \[ztp\] done 20
+expect \[ztp\] loc tempad:default .* "Home One" minecraft:overworld 0\.50 -60\.00 0\.50
+expect \[ztp\] loc tempad:default .* "Far East" minecraft:overworld 30\.50
+expect \[ztp\] loc tempad:default .* "Hell Spot" minecraft:the_nether 0\.50 120\.00
+> pbot hold qa tempad:tempad
+> zq useitem qa
+> ztp menu qa
+waitlog \[ztp\] menu 20
+expect \[ztp\] menu tempad:teleport
+
+## SQ-TP-04
+@group A
+@commands Teleport to the saved location in the same dimension and in the Nether; check chronons before and after; use again at once
+@pass a timedoor opens, costs 1000 chronons, carries the player; a second door waits for the 40-tick cooldown; the door closes after 200 ticks
+@fails `TimedoorEntity`, `forge/Teleports`
+@draft no batch holds this row yet
+## SQ-TP-05 | pinned location + default macro, after restart and after a death
+@group A
+@commands pin a location, set it as default macro in Settings, shift-use the Tempad; die and respawn, shift-use again
+@pass the macro opens a door to the pinned location both times
+@fails favourites capability not cloned on respawn
+@from batches/r1107tp/a2.qb
+> ztp pdata qa
+waitlog \[ztp\] pdata 20
+expect pinned_location:\{locationId:\[I;-191329597,-100384576,-1821537137,2007787117\],providerId:"tempad:default"\}
+> ztp settings qa tempad:teleport tempad:default
+> ztp setchr qa 0 6000
+> kill @e[type=tempad:timedoor]
+sleep 3
+> ztp macro qa
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\)
+> kill @e[type=tempad:timedoor]
+> gamerule keepInventory true
+> kill qa
+sleep 3
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 2
+> ztp pdata qa
+waitlog \[ztp\] pdata 20
+count pinned_location:\{locationId:\[I;-191329597 >= 2
+> ztp macro qa
+> ztp doors
+waitlog \[ztp\] doors total 20
+count \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\) >= 2
+look perfBot relogs a dead bot (no PlayerEvent.Clone): the death half covers save/load only; Clone (copyFrom) needs a client death (CQ note)
+
+## SQ-TP-06 | require_location_upgrade = true
+@group A
+@commands set `require_location_upgrade = true` in `tempad-common.toml`, restart; open the Tempad without and with the upgrade (craft it into the Tempad)
+@pass New Location is missing without the upgrade, present with it; the upgrade item is in the creative tab and has its recipe
+@fails ConfigSyncPacket, `ModApps` new-location gate
+@from batches/r1107tp/a3.qb
+bootexpect Done \(
+shell grep -E "require_location_upgrade|cost_per_door|time_in_world" config/tempad-common.toml; grep -A2 "^\[tempad\]" config/tempad-common.toml
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> clear qa
+> item replace entity qa hotbar.0 with tempad:tempad
+> ztp apps qa
+waitlog \[ztp\] apps 20
+expect \[ztp\] apps tempad:settings tempad:teleport$
+> item replace entity qa hotbar.0 with tempad:tempad{installed_upgrades:{upgrades:["tempad:new_location"]}}
+> ztp apps qa
+waitlog \[ztp\] apps tempad:new 20
+expect \[ztp\] apps tempad:new_location tempad:settings tempad:teleport
+> zq rdetail tempad:upgrades/new_location
+waitlog \[zq\] done 30
+expect \[zq\] tempad:upgrades/new_location
+> zq makes tempad:new_location_upgrade
+waitlog \[zq\] done 30
+expect \[zq\] .*new_location_upgrade
+look upgrade installed by NBT (the crafting of the upgrade into the Tempad is the tempad:upgrade recipe listed here); creative tab is a client check
+
+## SQ-TP-07 | chronon generator charges a carried Tempad
+@group A
+@commands put a Chronon Generator and a Tempad in the inventory, wait 2 minutes
+@pass the Tempad's chronon count rises
+@fails chronon capability / generator tick
+@from batches/r1107tp/a2.qb
+> kill @e[type=tempad:timedoor]
+> clear qa
+> give qa tempad:tempad
+> give qa tempad:chronon_generator
+sleep 1
+> ztp chr qa
+waitlog \[ztp\] chr end 20
+sleep 120
+> ztp chr qa
+waitlog \[ztp\] chr end 20
+shell grep -hE "\[ztp\] chr slot" logs/latest.log | tail -6
+look tempad chronons rose between the two chr reads (generator 1 per 48 ticks: about 50 in 2 min)
+
+## CQ-TP-01
+@group client
+@commands on SQ-TP-03's save: open the Tempad; switch Teleport / New Location / Settings
+@pass LOOK: upstream frame, app bar icons with hover titles, clock, chronon bar and its tooltip, close button
+@fails sprite paths or .mcmeta scaling (`client/ui/Sprites`)
+@draft no batch holds this row yet
+## CQ-TP-02
+@group client
+@commands New Location: map, colour picker (square, hue bar, eyedropper, presets, hex), name, Done
+@pass LOOK: map of the current chunk with the player arrow, dimension and X/Y/Z; Done grey until a name is typed (max 32); the saved location shows in its colour
+@fails `MapWidget`, `ColorPicker`
+@draft no batch holds this row yet
+## CQ-TP-03
+@group client
+@commands Teleport: search, sort dropdown, collapse headers, scroll, select, pin, delete, Teleport; restart the client and check the sort
+@pass sort is still set after the restart; delete asks first; Teleport opens a timedoor
+@fails `TeleportScreen`, `ClientConfig.setSortingMode`
+@draft no batch holds this row yet
+## CQ-TP-04
+@group client
+@commands look at an open timedoor in Fast and in Fancy graphics
+@pass LOOK: coloured box, white light running along the outline, animated open and close; no `rendertype_timedoor` errors in latest.log
+@fails `TimedoorRenderer`, shader registration
+@draft no batch holds this row yet
+## CQ-TP-05
+@group client
+@commands tooltips of the Tempad, cell, battery, chronometer and generator (with and without shift); an upgraded Tempad; bind and use the three Tempad keys; GUI scale 1 to 4 and a window resize
+@pass chronon bar (exact count with shift); upgrades list with icons; keys open the Tempad, run the macro, open New Location; layout holds
+@fails `ChrononTooltip`, `ModKeybinds`
+@draft no batch holds this row yet
+## SQ-TP-08
+@group A
+@commands phase 2: place a Workstation with room on its left, then with a block on its left; break each half in survival with a docked Tempad, then in creative; pick-block the terminal
+@pass terminal half appears beside the pad, facing kept; refused without room; breaking either half removes both and drops the workstation and the docked Tempad (creative: nothing); pick-block gives a workstation
+@fails `WorkstationBlock` / `WorkstationChildBlock` placement and loot
+@draft no batch holds this row yet
+## SQ-TP-09
+@group A
+@commands phase 2: dock a Tempad with upgrades installed via the pad (use an upgrade on it); power either half with redstone; leave it powered 10 s; unpower; restart
+@pass upgrade install plays sounds, adds the upgrade, refuses a duplicate; a timedoor opens at the configured offset and stays while powered, chronons drop by `cost_to_persist` per second; without chronons players within 5 blocks get an error; docked Tempad and settings survive the restart
+@fails `WorkstationBE`, `WorkstationChrononHandler`, packet 13
+@draft no batch holds this row yet
+## SQ-TP-10 | phase 2 recipes and items
+@group A
+@commands phase 2: `/zq rdetail` card_cheap, card_expensive, location_card_clean, card_wallet, location_broadcaster, screening_device, player_teleport_upgrade; `/give` each of the four items; check creative tab order
+@pass every recipe loads (card wallet with `forge:leather`); no `tempad` recipe or tag errors in latest.log; tab: card and wallet first, broadcaster after chronon generator, screening device before creative chronometer
+@fails translator tag maps (`c:leathers`, `c:dyes`, `c:gems/emerald`)
+@from batches/r1107tp/a1.qb
+expect tempad:card_cheap
+expect tempad:card_expensive
+expect tempad:location_card_clean
+expect tempad:card_wallet
+expect tempad:location_broadcaster
+expect tempad:screening_device
+expect tempad:player_teleport_upgrade
+shell grep -hE "Error|Couldn't|Unknown|Parsing error" logs/latest.log | grep -iE "tempad" | head -10; grep -hE "\[zq\]" logs/latest.log | grep -A4 "card_wallet " | head -8
+look card wallet with forge:leather; no tempad recipe/tag errors
+
+## SQ-TP-11
+@group A, B
+@commands phase 2: A carries an enabled Location Broadcaster, B has a Tempad with the Player Teleport upgrade; then A turns it off; then A carries a Screening Device set to public, then cycled to off
+@pass B's Teleport lists A only while the broadcaster is on or the screening device allows; device use cycles access ids then off with action-bar text
+@fails `PlayerAccess` capability on the two items
+@draft no batch holds this row yet
+## SQ-TP-12
+@group A
+@commands phase 2: write a card in Teleport (blank card on the info panel, click); use the written card with a wallet carried, with a full wallet (no slot can take it: identical cards stack to 16, as upstream), without one; open the wallet; relog; open Teleport
+@pass card turns written (a stack of 2 gives one back); inserted / fail messages; wallet shows 18 slots, takes only written cards, keeps them after relog; the cards appear as the `wallet` section in Teleport and open a timedoor
+@fails packet 12 `WriteToCardPacket`, `WalletLocationHandler`, `WalletMenu`
+@draft no batch holds this row yet
+## CQ-TP-06
+@group client
+@commands phase 2: open Portal Setup from the workstation terminal; type offsets (decimals, "-"), angle, upright toggle; search and select a location; close and reopen
+@pass LOOK: upstream layout; offsets clamped to +-5; settings and selection kept on reopen; docked Tempad drawn flat on the pad (Fast and Fancy)
+@fails `PortalSetupScreen`, `WorkstationRenderer`
+@draft no batch holds this row yet
+## CQ-TP-07
+@group client
+@commands phase 2: Wallet screen; written-card / full-wallet / enabled-broadcaster / screening-device item models; wallet tooltip; Teleport orange outline with a blank card, and none while the sort dropdown or delete modal is open
+@pass LOOK: wallet art and close button; models switch; tooltip lists card names or "empty"; outline only with no popup
+@fails `WalletScreen`, item properties in `TempadClient`, `AbstractTempadScreen.popups()`
+@draft no batch holds this row yet
+## SQ-TP-13
+@group A
+@commands phase 3: place a Timedoor Projector; right-click a written card in, swap it, take it out; shift-pick it up with empty hand; break it in survival; give it chronons, insert a card, pulse redstone twice; use the item with a card
+@pass faces the player; swap returns the old card; pick-up and break keep chronons and card; a glitching door opens 4 ticks after the pulse and costs 1000; second pulse gives "already open" within 5 blocks; item use opens a door from the hand
+@fails `RudimentaryTempadBE` / `Block` / `Item`
+@draft no batch holds this row yet
+## SQ-TP-14
+@group A, B
+@commands phase 3: A places a Timedoor Marker up and down, and a Chronomark; sets name, colour, public, chronomark access, y offset 9 and an angle; dyes one; writes a card from each; restarts; B tries to open and place A's markers; A breaks one and re-places it
+@pass settings kept after restart; y offset clamped to 5; dye recolours; cards open doors to the markers; Teleport shows a "markers" section (public marker for B, chronomark per access); locked markers block B; broken marker keeps colour, name and owner; re-place: note whether cards still work (known upstream bug, PORT_NOTES 6.16.15)
+@fails `AbstractMarkerBe`, `AnchorPointsHandler`, packets 15-16
+@draft no batch holds this row yet
+## SQ-TP-15
+@group A
+@commands phase 3: place two Metronomes; jump-start one with 2000 chronons pushed into the block (a neighbouring chronon block, or `/ztp bchr X Y Z 2000`; a booting metronome does not read its slots, as upstream); put a charged cell in slots 1-4; wait 10 s; put an empty cell in slots 5-8; put a chronon block beside it; break one; restart
+@pass boots after 100 ticks, the owner's shared pool fills every 24 ticks with summed capacity; chronons flow into the cell and the neighbour (20 per tick); the broken one returns its share as item chronons; pool survives the restart
+@fails `MetronomeBe`, `MetronomeData` tick, packet 17
+@draft no batch holds this row yet
+## SQ-TP-16
+@group A
+@commands phase 3: Time Twister with fewer than 1000 chronons, then charged; travel between 3 places across dimensions; use it and backtrack twice quickly; stack it onto a Tempad and off again
+@pass low-chronon message; history lists newest first; backtrack costs 500, waits 40 ticks, teleports across dimensions and drops later entries; stacking keeps chronons and name
+@fails `TimeTwisterItem`, `TempadItem` stacking, packet 14
+@draft no batch holds this row yet
+## SQ-TP-17
+@group dedicated
+@commands phase 3: boot a dedicated server with the jar; place all five phase 2-3 blocks and use the twister from a joined client
+@pass server reaches `Done (` with no client-class errors (projector arm pose, marker tooltip, s2c packets 18-20)
+@fails client-only class loaded on the server
+@draft no batch holds this row yet
+## CQ-TP-08
+@group client
+@commands phase 3: hold the projector (first and third person, both hands); Marker and Chronomark screens (colour picker, hex, public switch, access dropdown opening upward, y offset and angle); placed markers in their colour
+@pass LOOK: both arms raised; Olympus-sized layout; marker colours on block and item
+@fails `RudimentaryTempadClient`, `TimedoorMarkerScreen`, `ChronomarkScreen`, `SpatialAnchorRenderer`
+@draft no batch holds this row yet
+## CQ-TP-09
+@group client
+@commands phase 3: Metronome screen (pool bar, tooltip, lock toggle); Time Twister radial screen (keys 1-8, click, hover, red empty slots); Timeline app with the twister attached (wheel scroll, player model follows the mouse, Teleport); bind travel_timeline and press it
+@pass LOOK: upstream art; Timeline only in the app bar with the twister attached; key opens Timeline
+@fails `MetronomeScreen`, `TimeTwisterScreen`, `TimelineScreen` / `TimelineWidget`, `ModKeybinds`
+@draft no batch holds this row yet
+## SQ-TP-18
+@group A
+@commands phase 4: boot with Curios, FTB Teams and WTHIT; second boot with the three jars moved out; `/zq rdetail` knowledge_projector, knowledge_repository_upgrade, upgrades/knowledge_repository
+@pass both boots reach `Done (` with no tempad compat errors or ClassNotFound; recipes load; debug log drops `data/tempad/curios/` but keeps `data/curios/tags`
+@fails ModList guards in `Tempad` / `ModContext` / `ModLocations`; translator
+@draft no batch holds this row yet
+## SQ-TP-19
+@group A
+@commands phase 4: open the Curios GUI; put a Tempad in the belt slot and use the open-Tempad and macro keys; cells and chronometer in charm slots; wallet in belt; open a timedoor
+@pass bracelet, belt and 3 charm slots exist; the belt Tempad opens and its macro works, the door costs that Tempad's chronons; items fit their slots
+@fails `CuriosCompat` IMC slots and locator
+@draft no batch holds this row yet
+## SQ-TP-20
+@group A, B
+@commands phase 4: A and B in one FTB party, C outside it; A's Screening Device cycled to the FTB Teams option; B and C open Teleport with the Player Teleport upgrade
+@pass B lists A, C does not
+@fails `FTBTeamsCompat`
+@draft no batch holds this row yet
+## CQ-TP-10
+@group client
+@commands phase 4: use the Knowledge Projector: chapters, item pages, crafting grids, item links, scroll; GUI scale 1-4; install the Knowledge Repository upgrade and open its app; third person with Curios-worn Tempad, wallet, charms, bracelet (slim and wide skin)
+@pass LOOK: orange guide frame and pages as upstream (Location Card page has no grid: upstream bug); app opens the guide in the Tempad frame; worn items drawn at hip, chest and arm
+@fails `KnowledgeScreen`, `CuriosRenderer`
+@draft no batch holds this row yet
+## CQ-TP-11
+@group client
+@commands phase 4: look at a timedoor, marker, chronomark, projector with a card, booting metronome, workstation installing an upgrade, a chronon block; open WTHIT plugin config
+@pass WTHIT lines and bars as upstream Jade (closing time, target, owner, booting / installing %, chronon bar); six readable Tempad toggles
+@fails `WthitPlugin` / `WthitClientPlugin`, lang alias `config.waila.plugin_tempad.*`
+@draft no batch holds this row yet
+
+@@section 2
+@@title SQ-TP Tempad port: upstream bug fixes and whole-mod checks, 2026-11-07 ([immersive_portals.md](../immersive_portals.md) 2.1.1, TODO `gameplay/tnt-and-portal #9`, member notes `development/creativeCompat/members/tempad/PORT_NOTES.md` 6.12, 6.16.15)
+@@date 2026-11-07
+@@jars creativecompat tempad
+@@sources feature_writeup/immersive_portals.md
+@@text
+@@text From 2026-11-07 23:01 Tempad is its own jar (`backportedTempad-3.0.4-ce-19.2-01.jar` in `mods/`, no longer nested in `creativecompat-1.0.0.jar`); rows not yet run target that jar. SQ-TP-40 (not run): full pack boots with both jars, `tempad` and `creativecompat` both listed, no duplicate-mod error; Common + Compat alone (no Tempad jar, no `tempad_upstream/`) boots clean (with CQ-CCB-03).
+@@text
+@@text Not run. Targets `creativecompat-1.0.0.jar` built 2026-11-07 10:31 (`backportedTempad-3.0.4-ce-19.2-01.jar` nested), which
+@@text holds the five fixes of TODO #9 plus two found while fixing them (the missing `intradimensional_all` key; array lang
+@@text lines that stopped 1.19.2 loading the rest of `tempad_static` lang). Same setup as SQ-TP-01 (donor jar in
+@@text `tempad_upstream/`, no `tempad-forge-*.jar`). Rows 21 to 25 / CQ-TP-12 to -14 check the fixes; 26 to 30 / CQ-TP-15 fill the
+@@text gaps left by the phase rows above, so SQ-TP-01..30 plus CQ-TP-01..15 cover the whole mod. A FAIL in rows 1 to 20 that
+@@text rows 21 to 25 also touch: check it against the fix first (door offsets, messages, momentum, markers, number boxes).
+@@text
+@@table
+## SQ-TP-21
+@group A
+@commands fix 1: dock a charged Tempad in a Workstation, set offsets x 2, y 1, z -3 in Portal Setup (or on the docked stack's portal-offset NBT), select a location, power it; `/data get entity @e[type=tempad:timedoor,limit=1,sort=nearest] PlacementSettings`; `/save-all`, restart with the power still on, read it again; repeat with the upright toggle off (floor door)
+@pass door stands 2 / 1 / -3 off the pad (turned by the pad facing); saved `x`, `y`, `z` are 2, 1, -3, not 1, 1, 1; after the restart the door is in the same place; floor door the same
+@fails `FloorPlacementSettings` / `VerticalPlacementSettings` TYPE writer; `WorkstationBE` offset read
+@draft no batch holds this row yet
+## SQ-TP-22
+@group A
+@commands fixes 2 and 2b: `qrun.py toml` `tempad-common.toml` `allow_intradimensional_travel=false`, restart, Teleport to a same-dimension location; set it back, add a scratch datapack tag `data/tempad/tags/dimension_type/intradimensional_travel_not_supported.json` with `minecraft:overworld`, `/reload`, try again; set `allow_interdimensional_travel=false`, try a Nether location; give the scratch tag file to `leaving_not_supported` and then `entering_not_supported` and try the Nether location each time
+@pass no door opens in any of the five cases, chronons unchanged; latest.log has no exception; the message text is checked in CQ-TP-12
+@fails `TimedoorEntity.getTimedoor` gates; dimension-type tag folder name on 1.19.2
+@draft no batch holds this row yet
+## SQ-TP-23
+@group A
+@commands fix 3 (server side): open a same-dimension door from the Tempad facing east to a location saved facing north; `/summon item` 1 block in front of the door with `Motion:[0.0,0.0,0.4]` aimed into it, and a pig with the same motion; after they pass, `/data get entity` their `Motion` and `Rotation`; repeat with a Nether location
+@pass both leave the exit with horizontal motion pointing north (x about 0, z about -0.4 times drag), not reversed or sideways; across dimensions they keep their motion unrotated (as upstream)
+@fails `TimedoorEntity.momentumRotation` sign or units; `forge/Teleports.teleportSameLevel`
+@draft no batch holds this row yet
+## SQ-TP-24
+@group A
+@commands fix 4: place a Timedoor Marker, name it, write a card from it; break it in survival and re-place the dropped item 20 blocks away; use the card; `/save-all`, read `world/data/tempad_anchor_points.dat` (python `nbtlib`, or `/zq` if a reader exists); do the same with a Chronomark; then middle-click copy a standing marker in creative and place the copy
+@pass card opens a door to the new place; the anchor file holds one entry per standing marker, under the id the card holds, and no entry for the old place; the copied marker gets its own id and the first card still points at the original
+@fails `SpatialAnchorItem.adoptStoredId`; Forge's snapshot capture defers `onPlace` until after `updateCustomBlockEntityTag`, both orders must end with the stored id
+@draft no batch holds this row yet
+## SQ-TP-25
+@group A
+@commands fix 4 restart check: after SQ-TP-24, restart; open Teleport (markers section) and use the card again; break the re-placed marker and `/save-all`
+@pass marker listed once under its name; card works after the restart; after breaking, the anchor file has no entry for it
+@fails `AbstractMarkerBlock.onRemove`, `AnchorPointsData` save / load
+@draft no batch holds this row yet
+## SQ-TP-26
+@group A
+@commands whole mod: open a same-dimension door, walk through, then walk back through the exit door before it closes; same for a Nether door; drop a stack of 64 items and push a minecart through one door; add `minecraft:pig` to a scratch `tempad:teleporting_not_supported` entity tag and walk a pig in
+@pass the exit door carries you back to the start both ways; items and the minecart arrive whole; the tagged pig is not moved; no duplicated entities (count with `/execute if entity`)
+@fails linked portal (`tryInitReceivingPortal`, `LinkedPortalId`), `canTeleport`, cross-level entity copy
+@draft no batch holds this row yet
+## SQ-TP-27
+@group A
+@commands whole mod: `/zq rdetail` every `tempad:` recipe (`/zq recipes tempad`); `/give` every `tempad:` item; check the creative tab; `allow_location_saving=false`, restart, open New Location
+@pass every recipe loads, none with a missing tag; every item has a name (no `item.tempad.` key in a hover on the client, CQ-TP-15); with saving off the New Location app is gone from the app bar (and its hotkey opens nothing)
+@fails translator tag maps; `CommonConfig.allowLocationSaving` gate in `ModApps` / `NewLocationApp`
+@draft no batch holds this row yet
+## SQ-TP-28
+@group A
+@commands whole mod: Chronon Cell, Battery and Creative Chronometer: carry a generator with an empty cell, then the charged cell (and a battery) with an empty Tempad; carry the Creative Chronometer and open 5 doors; add `tempad:tempad` to a scratch `tempad:auto_charge_blacklist` tag, `/reload`, carry it with a charged cell
+@pass the cell fills from the generator, then the Tempad fills from the cell / battery (cell drains); Creative Chronometer doors cost nothing and the bar shows infinite; the blacklisted Tempad stays empty
+@fails `ChrononItem.isChargable` / `ChrononHandler.move` inventory tick
+@draft no batch holds this row yet
+## SQ-TP-29
+@group dedicated
+@commands whole mod, all four phases on a dedicated server with Curios, FTB Teams and WTHIT: join with a client; run SQ-TP-04, -09, -13, -16, -19 once each from the client; a second client joins and sees the doors
+@pass server reaches `Done (`, no client-class or `NoClassDefFoundError` in the server log; both clients see doors, markers, WTHIT lines; no disconnects on any tempad packet
+@fails client-only class reached from common code; packet ids (registration order in `ModNetworking`)
+@draft no batch holds this row yet
+## SQ-TP-30 | changed config numbers (server half; ConfigSyncPacket to a client is CQ)
+@group A
+@commands whole mod: run the phase rows that use `tempad-common.toml` numbers with changed values (`qrun.py toml` in `tempad-common.toml`: `[timedoor] cost_per_door=10`, `[timedoor] time_in_world=100`, `[tempad] capacity=2000`); restart
+@pass door cost, door life (5 s) and Tempad capacity follow the toml; the client shows the same values (ConfigSyncPacket)
+@fails `CommonConfig` key names against upstream's; sync packet
+@from batches/r1107tp/a3.qb
+> ztp setchr qa 0 6000
+waitlog \[ztp\] setchr 20
+expect \[ztp\] setchr slot 0 tempad:tempad inserted 2000 now 2000
+> ztp locs qa
+> kill @e[type=tempad:timedoor]
+> ztp open qa tempad:default Far East
+waitlog \[ztp\] open 20
+expect chronons 2000 -> 1990
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] door minecraft:overworld 0\.50 -60\.00 3\.50 .* age \d+ closing \d+ .*original true
+sleep 6
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] doors total 0
+
+## CQ-TP-12
+@group client
+@commands fixes 2 and 2b: repeat SQ-TP-22's five cases from a client; also save a location (New Location, Done) and open Teleport to a player you cannot see
+@pass the action bar shows "Error: Travelling within this dimension is not allowed" (tag case), "Error: Travelling within dimensions is not allowed" (config case), and the interdimensional, leaving and entering texts; "location saved" text shows; no line shows a raw `entity.tempad.` or `location.tempad.` key; client latest.log has no `Skipped language file` for `tempad`
+@fails `UpstreamTranslator.flattenRichLang`; `TimedoorEntity` key constants
+@draft no batch holds this row yet
+## CQ-TP-13
+@group client
+@commands fix 3: sprint-jump into a same-dimension door whose target was saved facing a different way (90 and 180 degrees off); walk in slowly; fly in (creative)
+@pass you come out moving along the exit facing at about the speed you went in; never stopped dead, never thrown backwards; walking in slowly is smooth
+@fails `ClientPacketHandler.rotatePlayerMomentum`; packet arriving before the position packet
+@draft no batch holds this row yet
+## CQ-TP-14
+@group client
+@commands fix 5: launch the client with `-Duser.language=de -Duser.country=DE` (comma decimal); open Portal Setup with offsets -2.5 / 0.25 / 1; edit each box (delete a digit, type "-", type "1.5"); close and reopen; then launch with the normal locale and check the same
+@pass boxes show `-2.5`, `0.25`, `1` (dot, no grouping) and accept edits; values kept on reopen; same under both locales
+@fails `TempadUI.formatNumber` / `numberInput` filter
+@draft no batch holds this row yet
+## CQ-TP-15
+@group client
+@commands whole mod lang sweep: hover every `tempad:` item in JEI, open each app and screen, look at each block with WTHIT, trigger each message in SQ-TP-04, -12, -13, -16; change the language to Czech, then Turkish, and repeat a few
+@pass no raw `tempad.` / `tempad_static.` keys anywhere in English; Czech and Turkish lines show where upstream has them
+@fails lang files skipped (client log `Skipped language file`), `flattenRichLang`, the WTHIT alias
+@draft no batch holds this row yet
+
+@@section 3
+@@title SQ-TP Tempad port: loot tables, marker anchor id, creative workstation break, 2026-11-07 ([immersive_portals.md](../immersive_portals.md) 2.1.1, TODO `gameplay/tnt-and-portal #10`, `#11`, `#12`, findings in [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 1)
+@@date 2026-11-07
+@@jars creativecompat tempad
+@@sources feature_writeup/immersive_portals.md feature_writeup/testing/scratch_run_2026-11-07.md
+@@text
+@@text Not run. Targets `creativecompat-1.0.0.jar` built 2026-11-07 12:01 (build/libs, not in `mods/`; prep_srv.sh swaps it in).
+@@text Same setup as SQ-TP-01 (donor in `tempad_upstream/`, Immersive Portals / Portal Gun / Portal Gels / loadingscreentips
+@@text left out). Copy `tools/scratch_query/ztp_probe.js` into `srv/kubejs/server_scripts/zz_ztp_probe.js`; one bot `qa`
+@@text (perfBot, survival unless a row says otherwise). **No scratch loot tables in `srv/kubejs/data/tempad/`** (r1107tp's
+@@text workaround): the rows check the jar's own tables. Drops scatter: `/ztp pickup qa 24`, `kill @e[type=item]` before each
+@@text break. Then rerun the break steps of SQ-TP-08, -13, -14, -15 and all of SQ-TP-24, -25 on this jar.
+@@text
+@@table
+## SQ-TP-31
+@group A
+@commands #10 loot tables load: boot; `grep "Tempad upstream data dropped" logs/debug.log`; `/loot spawn 0 -59 10 loot tempad:blocks/<x>` for workstation, timedoor_marker, chronomark, metronome, timedoor_projector; `kill @e[type=item]`
+@pass debug.log names no `loot_table` file (only the NeoForge loot modifier list, the two curios files, advancements); each `/loot spawn` "Dropped 1" of that block; no `Couldn't parse loot table tempad` in latest.log
+@fails `UpstreamTranslator.NON_REGISTRY_KEYS` (`random_sequence`); the loot_table -> loot_tables path rename
+@draft no batch holds this row yet
+## SQ-TP-32
+@group A
+@commands #10 survival drops, bare hand and iron pickaxe: place each of the five blocks (projector and markers with `/ztp sneak qa on` where placing needs shift), give the marker a name (`/ztp markerui`), the chronomark one (`/ztp chronoui`), the metronome a booted pool (`/ztp bchr X Y Z 2000`, wait 6 s), the projector a card and 1500 chronons; `/ztp break qa X Y Z` each, `/ztp pickup qa 24`
+@pass exactly one item per block: workstation (plus the docked Tempad when one is docked), marker and chronomark with name, colour, owner and `anchor_id`, metronome with its share as `chronon_content`, projector with chronons and card (one projector, not two); no `workstation_child` item, no second workstation
+@fails `getDrops` overrides adding to the now-loaded table (`WorkstationBlock`, `AbstractMarkerBlock`, `MetronomeBlock`, `RudimentaryTempadBlock`); a tool requirement (`needs_iron_tool` tag) if bare hand drops nothing
+@draft no batch holds this row yet
+## SQ-TP-33
+@group A
+@commands #10 terminal half and explosions: place a workstation with a docked Tempad, break the terminal half in survival; place a marker (also a chronomark or projector), `summon tnt` beside it with `Fuse:1` (workstation and metronome resist 1200: TNT cannot break them, as upstream)
+@pass terminal break: pad and terminal gone, one workstation and the Tempad dropped; TNT: the blocks drop their item (`survives_explosion` condition rolls), no duplicate workstation from the terminal
+@fails `WorkstationChildBlock.playerWillDestroy` (destroyBlock on the pad); explosion path calls getDrops of both halves
+@draft no batch holds this row yet
+## SQ-TP-34
+@group A
+@commands #12 creative breaks: `gamemode creative qa`; place a workstation, dock a Tempad, `/ztp break qa` the pad; repeat breaking the terminal; repeat with the workstation powered (door open)
+@pass both halves gone, **no item entities** (`execute if entity @e[type=item,distance=..30]` count 0), no ghost terminal (`/ztp blocks`); powered case: the door closes; latest.log has no exception
+@fails `WorkstationBlock.playerWillDestroy` flags (UPDATE_KNOWN_SHAPE); a terminal left standing = the shape update was needed to clear something else
+@draft no batch holds this row yet
+## SQ-TP-35
+@group A
+@commands #12 survival unchanged: survival break of the pad and of the terminal, each with a docked Tempad and the workstation powered; then place a block in the terminal's spot and check placement still refused
+@pass one workstation + the Tempad each time; open door closes; placement rule unchanged
+@fails the flag change must only touch the creative branch
+@draft no batch holds this row yet
+## SQ-TP-36
+@group A
+@commands #11 anchor id across a restart: place a Timedoor Marker and a Chronomark, name them, write a card from each (blank card use on the block); `/data get block` both; `/save-all`, restart; `/data get block` again, `/ztp anchors`, `/ztp locs qa`
+@pass before and after: `anchor_id` holds the UUID the card's `portal_target.id` holds, `id` is the type id; anchors file one entry per marker; both listed under markers
+@fails `AbstractMarkerBe` ID = `anchor_id`, `parseUuid` on load
+@draft no batch holds this row yet
+## SQ-TP-37
+@group A
+@commands #11 break after a restart (SQ-TP-25 again): after SQ-TP-36's restart break the marker in survival, `/ztp pickup`, `/ztp anchors`; re-place it 20 blocks away; `/ztp open qa tempad:markers <name>` and use the card in a projector
+@pass the anchor entry is gone after the break; the drop has `anchor_id` = the card's id; after the re-place the entry points at the new place and the door / projector open there
+@fails `AbstractMarkerBlock.onRemove` (needs `marker.id`); `getDrops` `setAnchorId`; `SpatialAnchorItem.adoptStoredId`
+@draft no batch holds this row yet
+## SQ-TP-38
+@group A
+@commands #11 chunk reload without a restart: marker at 300 0 300 (forceload, place, name, card); `forceload remove`, move every player 500 blocks away for 30 s, come back; break it
+@pass as SQ-TP-37: entry removed, drop keeps `anchor_id`
+@fails same as SQ-TP-37 (load runs on every chunk load)
+@draft no batch holds this row yet
+## SQ-TP-39
+@group A
+@commands #11 copies: `/give` a marker item carrying a standing marker's `anchor_id` and place it; `/give` a marker with `BlockEntityTag:{anchor_id:"<standing marker's id>"}` (what creative ctrl-pick writes) and place it (`op qa` first: vanilla applies BlockEntityTag only for ops)
+@pass both copies get their own new id (`/ztp anchors` one entry each), the standing marker keeps its id and its cards still open to it
+@fails `SpatialAnchorItem.updateCustomBlockEntityTag` keeps the id chosen before the vanilla BlockEntityTag load
+@draft no batch holds this row yet
+## CQ-TP-16
+@group client
+@commands #11 / #12 from a client: creative ctrl + middle-click a named marker and place the copy; break a docked workstation pad in creative; WTHIT on a marker after a relog (shift for id)
+@pass copy gets its own id (WTHIT shift line differs from the original's); no drops from the creative break; WTHIT shows the id, not blank, after the relog
+@fails `WthitPlugin` reading `marker.id`; client-side `adoptStoredId` branch
+@draft no batch holds this row yet

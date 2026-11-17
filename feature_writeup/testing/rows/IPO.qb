@@ -1,0 +1,34 @@
+# Scratch queue rows IPO (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/IPO.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Immersive Posts materials cut, 2026-10-27 ([perf.md](../perf.md) 11.3, TODO `perf #21`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text patcherMod 1.1.03 with `ImmersivePostsRegistrationMixin` and `ImmersivePostsValidItemMixin`. Group A. Any player
+@@text with op; Immersive Posts 4.3.0 and Immersive Engineering in the scratch `mods/`.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-IPO-01
+@group A
+@commands Boot; grep latest.log for `ImmersivePosts`, `Mixin`, `immersiveposts`; `/setblock ~ ~ ~ immersiveposts:ironpost`, then `immersiveposts:silverpost`
+@pass Both mixins apply, no error; the iron post places; `silverpost` is an unknown block. State count (the pack's state dump, or `Block.BLOCK_STATE_REGISTRY` size) is about 44,900 lower than 770,959
+@fails A mixin did not apply: the static-init lambda is no longer `lambda$static$0` (mod updated)
+@draft no batch holds this row yet
+## SQ-IPO-02
+@group A
+@commands Place a post base; use an iron fence on it 3 times; use a hammer on the post's side to make an arm; place a second post 3 blocks away and join them with a truss (fence on the post side)
+@pass Post grows, arm and truss form as before
+@fails A kept material lost its post or truss: `Posts.get` returned null, check `ImmersivePostsMaterials.KEPT`
+@draft no batch holds this row yet
+## SQ-IPO-03
+@group A
+@commands Use a silver fence, a gold fence and a nether brick fence on a post base
+@pass Nothing happens (fence places as a normal block or the click is ignored), no exception in the log
+@fails Exception from `getPostState`: `isValidItem` was not redirected at that call site
+@draft no batch holds this row yet
+@@text
+@@text Results 2026-10-27 night (`tools/immersive_posts_probe/ipo_probe.js`, `/ipotest`): first the 17:47 jar's `ImmersivePostsValidItemMixin` crashed at load (static handler, `method = "*"`): fixed. SQ-IPO-01 PASS: 726,031 states (-44,928), kept posts and trusses registered, dropped ones not, `setblock ... silverpost` = unknown block; but the mod's own `mineable/pickaxe`, `needs_stone_tool`, `needs_iron_tool` files then failed to load (and IE's `mineable/drill`): fixed with `TagLoaderImmersivePostsMixin`, no IPO tag error after (perf.md 12.2). SQ-IPO-02 partial: an iron fence grows the post 3 times; arms and trusses are hammer paths the mixin does not touch and the fake-player clicks did not form them (player check left: hammer arm, truss). SQ-IPO-03 PASS: silver, gold and nether brick fences place as plain fences, no exception.

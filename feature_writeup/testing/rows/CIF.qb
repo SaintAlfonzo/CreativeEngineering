@@ -1,0 +1,98 @@
+# Scratch queue rows CIF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CIF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CIF Creative Common interface carve: JEI, WTHIT, tooltips to Compat; armor bar to Equipment; Caffeinated to Delight; Better Beacons potions to Brewing, 2026-11-07 ([creative_split.md](../creative_split.md) 7.19)
+@@date 2026-11-07
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Not run. Builds of 2026-11-07 (Common, Compat, Equipment, Delight, Brewing, Devtools, Engineering), installed by the
+@@text parallel build session if at all (check `jar_archive/displaced/`). Moved: 89 classes (35 client mixins, the JEI and
+@@text WTHIT plugins and helpers, tooltip stacks, GUI title plaques, compound effect tooltip) to Compat; Detail Armor Bar compat,
+@@text its 2 mixins and the tint sheets (now `creativeequipment:textures/gui/*_tint.png`) to Equipment; CaffeinatedEffectMixin
+@@text and the Caffeinated -> Phantom Bane rule to Delight; Long Reach / Phantom Bane potions to Brewing as `creativebrewing:`
+@@text (swap list `better_beacons_potions.json`). Config `[jei] [gui_title] [toasts] [tooltips] [coaster] [wthit]` now in
+@@text `creativecompat-common.toml`, `[armor_overflow]` in `creativeequipment-common.toml`. Kept ids: WTHIT plugin ids, JEI
+@@text category uids and lang keys stay `creativecommon.*` (ids since renamed, see SQ-IDS). Boot risks: client mixins in a new config, config merge, potion remap.
+@@text
+@@table
+## SQ-CIF-01 | old configs carried: Compat has [jei] [gui_title] [toasts] [tooltips] [coaster] [wthit] with the old values, Equipment has [armor_overflow]; no moved-class errors
+@group B (full pack, world from before the carve)
+@commands prep_srv with the seven builds; boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException.*creativecommon\.(compat\|mixin)" logs/latest.log`; open `config/creativecompat-common.toml`, `creativeequipment-common.toml`, `creativecommon-common.toml`
+@pass boot reaches Done, no hits; Compat file has the six sections with the pack's edited values (e.g. `[jei]`, `[toasts]` as in `configs_edited/`), Equipment has `[armor_overflow]`; Common's file no longer has them after Forge corrects it
+@fails ConfigRename merge order in CreativeCompat / CreativeEquipment constructors
+@from batches/r1113/c3_a3.qb
+bootreject Mixin apply failed|InvalidMixinException
+bootreject ClassNotFoundException.*creativecommon\.(compat|mixin)
+shell for s in jei gui_title toasts tooltips coaster wthit shrapnel surface vein_undo; do printf "%s compat=%s old=%s\n" $s "$(grep -c "^\[$s\]" config/creativecompat-common.toml)" "$(grep -c "^\[$s\]" cif_old_common.toml cif_old_eng.toml | awk -F: '{n+=$2} END {print n}')"; done
+shell for s in jei gui_title toasts tooltips coaster wthit; do grep -q "^\[$s\]" config/creativecompat-common.toml || { echo "missing [$s]"; exit 1; }; done
+shell grep -q "^\[armor_overflow\]" config/creativeequipment-common.toml
+shell python3 $INST/tools/scratch_query/cif_carry_check.py cif_old_common.toml config/creativecompat-common.toml config/creativeequipment-common.toml
+shell grep -cE "^\[(jei|gui_title|toasts|tooltips|coaster|wthit|armor_overflow)\]" config/creativecommon-common.toml
+look the carry log line (`[swaps] config sections ... carried` or similar) in latest.log; DIFF lines: every carried key keeps the old value (a DIFF on a key Forge renamed or re-ranged is judged by hand); the last count is 0 once Forge has corrected Common's file (may need the stop: Forge rewrites on load, so 0 expected). The Engineering sections [shrapnel] [surface] [vein_undo] also land in Compat (SQ-ENGM carry, same mechanism)
+
+## SQ-CIF-02 | Better Beacons potions under creativebrewing: mixes exist; drinking phantom_bane gives Better Beacons Phantom Bane
+@group B (same world)
+@commands before the swap: put a `creativecommon:long_reach` potion, a `creativecommon:long_phantom_bane` tipped arrow in a chest (11-06 build); after: `/data get block` on the chest; `/zq recipes` brewing mixes for `creativebrewing:long_long_reach`; `/give @p potion{Potion:"creativebrewing:phantom_bane"}` and drink
+@pass chest items read `creativebrewing:` ids; mixes present; drinking gives Better Beacons Phantom Bane
+@fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
+@from batches/r1113/c3_b1.qb
+> zq potion creativebrewing:long_long_reach
+waitlog \[zq\] potion creativebrewing:long_long_reach registered: 30
+expect potion creativebrewing:long_long_reach registered: true
+> zq potion creativebrewing:long_reach minecraft:redstone
+waitlog \[zq\] done 30
+expect creativebrewing:long_reach \+ minecraft:redstone -> minecraft:potion creativebrewing:long_long_reach
+> clear cb
+> item replace entity cb weapon.mainhand with minecraft:potion{Potion:"creativebrewing:phantom_bane"}
+> zp eat cb
+waitlog \[zp\] done 20
+> zp effects cb
+waitlog \[zp\] effects cb: 20
+expect effects cb: .*better_beacons:phantom_bane
+look old-world half (a chest with creativecommon:long_reach potions from an 11-06 save) not run: no 11-06 build kept to make the save
+
+## SQ-CIF-03 | Farmer's Respite coffee: Caffeinated plus a hidden Phantom Bane of the same length; rest stat not -24000; reset to 0 when it ends
+@group B (same boot)
+@commands fake player drinks a Farmer's Respite coffee; `/effect` list; wait for effect end; `/data get entity` TimeSinceRest stat via `/scoreboard` on `minecraft.custom:minecraft.time_since_rest`
+@pass Caffeinated plus a hidden Phantom Bane of the same duration; rest stat not pushed to -24000; reset to 0 when Phantom Bane ends
+@fails CaffeinatedPhantomBane not registered (farmersrespite gate) or the mixin compartment gate
+@from batches/r1113/c3_b1.qb
+> effect clear cb
+> zc3 rest cb
+> clear cb
+> item replace entity cb weapon.mainhand with farmersrespite:coffee
+> zp eat cb
+waitlog \[zp\] done 20
+> zp effects cb
+waitlog \[zp\] effects cb: 20
+expect effects cb: .*farmersrespite:caffeinated
+expect effects cb: .*better_beacons:phantom_bane
+capture PB better_beacons:phantom_bane amp \d+ (\d+)t
+> zc3 rest cb
+shell sleep $(( {PB} / 20 + 4 ))
+> zp effects cb
+> zc3 rest cb
+waitlog \[c3\] done 20
+reject rest cb: -2\d{4}
+look Caffeinated and Phantom Bane durations equal; the rest stat after the drink is not near -24000; after Phantom Bane ends the stat reads near 0 (a few seconds of ticks, under about 200). If the coffee item id differs (farmersrespite:coffee is the cup), the eat line says so
+
+## SQ-CIF-04 | Common + Compat boot: no Compat class missing in Common
+@group A (chain, CEPortTesting)
+@commands Common + Compat only, then Common + Compat + Equipment; boot each
+@pass both boot; no Compat class missing in Common, no Equipment class asked for by Compat
+@fails a leftover cross-jar reference
+@from batches/r1113/c3_cc1.qb
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+shell ls mods
+look mods list: Common, Compat, Calendar, Serene Seasons, the KubeJS stack, perfBot only
+
+## CQ-CIF-01
+@group client (full pack)
+@commands JEI: World tab pages, cycling crafting, craftable-first list, pack ingredient order, potion fluid tooltip, fluid tank scale; WTHIT on a state-line block, campfire, hive, IE sheetmetal tank, coaster, pot; WTHIT plugin toggles screen; tall tooltip keeps its top; advancement toast filtered; long container title plaque; Detail Armor Bar with over 20 armor and a tinted set (echo, dragon); JEED page of Caffeinated; HUD icon of a hidden-icon effect; Create Configs screen string entry; AE2 / FTB Quests / LC tooltips
+@pass all as before the carve; WTHIT toggles kept their old values; tint sheets draw (no purple-black)
+@fails moved client mixin not listed under `client` in creativecompat.mixins.json; tint path
+@draft no batch holds this row yet

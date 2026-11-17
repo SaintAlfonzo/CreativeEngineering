@@ -1,0 +1,82 @@
+# Scratch queue rows SVA (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SVA.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Sky Village addon houses (skyvillages #1), 2026-10-30
+@@date 2026-10-30
+@@text
+@@text Data only ([sky_village_addons.md](../sky_village_addons.md)): `kubejs/data/skyvillages` templates and pools, nothing to
+@@text install. Copy `kubejs/data/skyvillages/` to the scratch server, full restart. Looks (SVA-03 to SVA-05) are for the user in
+@@text game; the server half is load errors, placement and loot.
+@@text
+@@table
+## SQ-SVA-01 | Sky Village addon templates and pools load
+@group A
+@commands boot; `grep -iE 'skyvillages\|template' latest.log \| grep -iE 'error\|unknown\|failed'`
+@pass no line for `skyvillages` (SVA-02)
+@fails template file or pool JSON named in the line
+@from batches/r1031/a1_boot.qb passed
+bootreject (?i)skyvillages.*(error|unknown|failed)
+bootreject (?i)(error|failed).*skyvillages
+
+## SQ-SVA-02 | the 17 Sky Village addon templates place
+@group A
+@commands `/place template skyvillages:<path>` for the 8 houses and 9 deco pieces (paths in the doc, 3.1)
+@pass each places; `/data get block` on the keg, wine press, shelf and a cabinet returns a block entity
+@fails swap table entry for that block (`tools/skyvillage_addon_remap.json`), rerun the tool
+@from batches/r1031/a1_world.qb
+> forceload add 100 100 400 220
+sleep 8
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_0 100 -40 100
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_1 140 -40 100
+> place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_2 180 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0 220 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1 260 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_0 300 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_1 340 -40 100
+> place template skyvillages:letsdo_vinery/sky_village_letsdo_vinery_2 380 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_0 100 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_1 130 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_2 160 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_3 190 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_4 220 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_5 250 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_6 280 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_7 310 -40 180
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_8 340 -40 180
+> zq count 100 -40 100 420 0 140 brewinandchewin:keg
+> zq count 100 -40 100 420 0 140 vinery:wine_press
+count Loaded template "skyvillages == 17
+reject There is no template|Failed to load
+look keg and wine press counts above 0; /data get block on one keg, press, shelf and cabinet returns block entity data (positions from a client fly-by or zq); SVA-04 loot: the farm_0 chest and brewery_1 chests carry LootTable sky_village_weaponsmith / butcher / shepherd
+> forceload remove all
+
+## SQ-SVA-03 | sky villages get addon houses
+@group A
+@commands `/locate structure skyvillages:skyvillage` x5 (teleport, look or count pieces with the structure scan)
+@pass at least one addon house over 5 villages, bridges and villagers attached (SVA-06)
+@fails pool weights in `skyvillage_houses.json`
+@from batches/r1031/w3_terrain.qb
+> locate structure skyvillages:skyvillage
+waitlog nearest skyvillages:skyvillage is at|type "?skyvillages:skyvillage 330
+capture SVL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SVL1} 200 {SVL3}
+sleep 25
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} brewinandchewin:keg
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} vinery:wine_press
+> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} farmersdelight:rich_soil_farmland
+> execute positioned 3000 100 3000 run locate structure skyvillages:skyvillage
+> execute positioned -3000 100 3000 run locate structure skyvillages:skyvillage
+> execute positioned 3000 100 -3000 run locate structure skyvillages:skyvillage
+> execute positioned -3000 100 -3000 run locate structure skyvillages:skyvillage
+sleep 120
+look at least one addon house over the 5 villages (keg / press / FD farmland counts above 0 at one of them; tp + zq count for the other four), bridges and villagers attached (SVA-06)
+
+## SQ-SVA-04 | addon house chests roll Lootr loot tables
+@group A
+@commands open the chest in `sky_village_farmersdelight_farm_0` and the 3 chests in `sky_village_letsdo_brewery_1`
+@pass Lootr chests rolling `sky_village_weaponsmith` / `butcher` / `shepherd` (SVA-07)
+@fails template `LootTable` field
+@from batches/r1031/w3_terrain.qb
+look in the client block: open the chest in sky_village_farmersdelight_farm_0 and the 3 chests in sky_village_letsdo_brewery_1 (placed by SQ-SVA-02 in the A1 world copy): Lootr chests rolling sky_village_weaponsmith / butcher / shepherd (SVA-07)

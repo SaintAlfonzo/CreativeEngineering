@@ -1,0 +1,236 @@
+# Scratch queue rows TSK (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TSK.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Small changes batch, 2026-10-31 (watering can, spout gun, nightstands, sky village herbs, oats, treated sticks, seasoning names, JEI berries, dandelion odds)
+@@date 2026-10-31
+@@jars creativedelight
+@@text
+@@text Jars: patcherMod and Creative Delight, built 2026-10-31, installed together (see the session hand-over). Writeups:
+@@text [hearth_and_harvest.md](../hearth_and_harvest.md) HNH-45 to -47, [furniture_storage.md](../furniture_storage.md) NS-01 to -05,
+@@text [sky_village_addons.md](../sky_village_addons.md) SVA-08, [vintage_delight.md](../vintage_delight.md) VTD-78,
+@@text [treated_sticks.md](../treated_sticks.md) TSK-01 to -05, [food.md](../food.md) FO-59, [jei_coverage.md](../jei_coverage.md) JC-32.
+@@text
+@@table
+## SQ-SB31-01 | small changes batch mixins load; treated stick places
+@group A
+@commands boot
+@pass `Done (`; no mixin or event errors naming `SpoutGunFarmland`, `HandcraftedNightstand*`, `HandcraftedItemHoldingSaveMixin`, `TreatedStickPlaceMixin`, `TomatoClimbTreatedStickMixin`, `SuppTomatoClimbTreatedStickMixin`, `BlockItemOwnStackFillMixin`; `/setblock ~ ~ ~ creativedelight:treated_stick` works
+@fails mixin error: SRG names in the named mixin
+@from batches/r1101/p1_server.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*(SpoutGunFarmland|HandcraftedNightstand|HandcraftedItemHoldingSaveMixin|TreatedStickPlaceMixin|TomatoClimbTreatedStickMixin|SuppTomatoClimbTreatedStickMixin|BlockItemOwnStackFillMixin)
+> setblock -5 -60 30 creativedelight:treated_stick
+> execute if block -5 -60 30 creativedelight:treated_stick
+expect Test passed
+
+## SQ-NS-01 | nightstand storage (first half; restart half in p1b)
+@group A
+@commands `/setblock` an oak and an Every Compat nightstand; `/item replace block ~ ~ ~ container.0 with minecraft:sugar`; restart; `/data get block`; break it with a bot
+@pass `CENightstandItems` holds the sugar after the restart; the sugar drops on break; a hopper below pulls it
+@fails `HandcraftedItemHoldingSaveMixin` (save/load names), `NightstandStorage` item handler
+@from batches/r1101/p1_server.qb
+> setblock 40 -60 10 handcrafted:oak_nightstand
+> setblock 42 -60 10 everycomp:hc/architects_palette/twisted_nightstand
+> item replace block 40 -60 10 container.0 with minecraft:sugar
+> item replace block 42 -60 10 container.0 with minecraft:sugar
+> data get block 40 -60 10
+> data get block 42 -60 10
+count CENightstandItems >= 2
+> setblock 44 -60 10 handcrafted:oak_nightstand
+> item replace block 44 -60 10 container.0 with minecraft:sugar
+> setblock 44 -61 10 minecraft:hopper
+sleep 3
+> data get block 44 -61 10 Items
+expect minecraft:sugar
+look the hopper below pulled the sugar; restart and break halves in p1b
+
+## SQ-SVA-05 | brewery sky houses carry hanging herbs
+@group A
+@commands `/place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` and `_1`
+@pass `fantasyfurniture:decorations/hanging_herbs` at 4 and 2 spots (SVA-08)
+@fails `brewery:dried_*` rows in `tools/skyvillage_addon_remap.json`, rerun the tool
+@from batches/r1101/p1_server.qb
+> forceload add 96 96 160 160
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0 100 -40 100
+> place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1 130 -40 100
+sleep 3
+> zq count 95 -45 95 128 0 128 fantasyfurniture:decorations/hanging_herbs
+> zq count 128 -45 95 160 0 128 fantasyfurniture:decorations/hanging_herbs
+> zq count 95 -45 95 160 0 128 brewery:dried_wheat
+look counts 4 (template 0) and 2 (template 1); no brewery:dried_* left; `count` prints the total per box
+
+## SQ-TSK-02 | tomato vines climb treated sticks
+@group A
+@commands FD tomato vine on farmland with `creativedelight:treated_stick` two above, `/gamerule randomTickSpeed 300`; repeat with `supplementaries:stick_tomatoes` under a treated stick
+@pass the vine climbs into `creativedelight:treated_stick_tomatoes`, stops at three high
+@fails `TomatoClimbTreatedStickMixin` / `SuppTomatoClimbTreatedStickMixin`
+@from batches/r1101/p1_server.qb
+> gamerule randomTickSpeed 0
+> setblock -10 -61 30 minecraft:farmland[moisture=7]
+> setblock -10 -60 30 farmersdelight:tomatoes[age=3]
+> setblock -10 -59 30 creativedelight:treated_stick
+> setblock -10 -58 30 creativedelight:treated_stick
+> setblock -8 -61 30 minecraft:farmland[moisture=7]
+> setblock -8 -60 30 supplementaries:stick_tomatoes
+> setblock -8 -59 30 creativedelight:treated_stick
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block -10 -59 30 creativedelight:treated_stick_tomatoes
+> execute if block -10 -57 30 minecraft:air
+> execute if block -8 -59 30 creativedelight:treated_stick_tomatoes
+count Test passed >= 2
+look FD vine climbed into treated_stick_tomatoes, at most three high; Supplementaries stick tomatoes likewise (third Test passed)
+
+## SQ-TSK-03 | broken soil reverts vines; treated stick loot
+@group A
+@commands break the farmland under a treated-stick vine; `/loot` on a `treated_stick` with all three axes
+@pass vines revert to `treated_stick` and drop FD tomato loot; 3 treated sticks
+@fails `TreatedStickTomatoBlock` remove path, `TreatedStickBlock.getDrops`
+@from batches/r1101/p1_server.qb
+> kill @e[type=item]
+> setblock -10 -61 30 minecraft:air destroy
+sleep 2
+> execute if block -10 -59 30 creativedelight:treated_stick
+> execute positioned -10 -60 30 as @e[type=item,distance=..4] run data get entity @s Item
+> kill @e[type=item]
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:wooden_axe
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:iron_axe
+> loot spawn -5 -55 34 mine -5 -60 30 minecraft:netherite_axe
+look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 1 treated stick (3 total)
+
+## SQ-DM-03 | dandelion maturing: fertile soil about twice as fast as rich soil
+@group A
+@commands Dandelions on Rich Soil and Fertile Soil, `/gamerule randomTickSpeed 300`
+@pass Fertile Soil matures about twice as fast as Rich Soil (`fertileSoilTicks = 10`, `richSoilTicks = 20`)
+@fails the config file still holds the old values
+@from batches/r1101/p1_server.qb
+> gamerule randomTickSpeed 0
+> fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
+> fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
+> fill 20 -60 30 29 -60 30 minecraft:dandelion
+> fill 20 -60 32 29 -60 32 minecraft:dandelion
+> gamerule randomTickSpeed 30
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+sleep 30
+> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> gamerule randomTickSpeed 3
+look fertile row (z 32) matures about twice as fast as rich row (z 30); fertile soil id may differ (record the fill error if any)
+
+## CQ-WC-06 | bone-meal can on a sweet berry bush
+@group client
+@commands HNH-45: Bone Meal loaded, click a sweet berry bush on grass
+@pass it grows with splash particles (also seen by a second client if one is available)
+@fails `WateringCanItem.applyBonemeal`
+@from batches/r1101/c0_priority.qb
+> item replace entity @s hotbar.0 with hearthandharvest:golden_watering_can{WaterLevel:16,BonemealLevel:8,FertilizerItem:"minecraft:bone_meal"}
+> tp @s 270 -55 8 180 20
+sleep 3
+> setblock 270 -61 0 minecraft:grass_block
+> setblock 270 -60 0 minecraft:sweet_berry_bush[age=0]
+> tp @s 270.5 -60 2.5 180 35
+key 1
+shot berry_before
+look hand: right-click the bush with the can: it grows with splash particles (HNH-45)
+
+## CQ-WC-07 | can does nothing on saplings and fungi
+@group client
+@commands HNH-46: click an oak sapling, a modded sapling, a mangrove propagule, a crimson fungus, an azalea, a red mushroom; then a Golden can on a crop with a sapling in its area
+@pass nothing happens, counts unchanged; the sapling in the area does not grow
+@fails `WateringCanItem.isTreeGrower`
+@from batches/r1101/c0_priority.qb
+> tp @s 274 -55 8 180 20
+sleep 3
+> setblock 274 -60 0 minecraft:oak_sapling
+> setblock 276 -60 0 minecraft:mangrove_propagule
+> setblock 278 -61 0 minecraft:crimson_nylium
+> setblock 278 -60 0 minecraft:crimson_fungus
+> setblock 280 -60 0 minecraft:azalea
+> setblock 282 -60 0 minecraft:red_mushroom
+> tp @s 278 -59 3 180 30
+shot saplings
+look hand: click each with the loaded can: nothing changes, can counts unchanged (HNH-46)
+
+## CQ-SG-01 | spout gun wets farmland
+@group client
+@commands HNH-47: water Spout Gun at dry farmland and at a crop on dry farmland; lava/honey gun likewise
+@pass both become moist; the other guns do not wet
+@fails `SpoutGunFarmland` entity id match
+@from batches/r1101/c0_priority.qb
+> tp @s 290 -55 8 180 20
+sleep 3
+> setblock 290 -61 0 minecraft:farmland[moisture=0]
+> setblock 292 -61 0 minecraft:farmland[moisture=0]
+> setblock 292 -60 0 minecraft:wheat[age=0]
+> tp @s 291 -59 4 180 30
+shot farmland_dry
+look hand: water Spout Gun at both (HNH-47): both moist; lava / honey guns do not wet
+
+## CQ-NS-02 | nightstand menu and looks
+@group client
+@commands NS-01 to NS-05 (chest menu, sheet and lamp unchanged)
+@pass as written in furniture_storage.md
+@fails `HandcraftedNightstandUseMixin` PASS / top-face check
+@from batches/r1101/c0_priority.qb
+> tp @s 300 -55 8 180 20
+sleep 3
+> setblock 300 -60 0 handcrafted:oak_nightstand
+> tp @s 300.5 -60 2.5 180 30
+shot nightstand
+look hand: furniture_storage.md NS-01 to NS-05 (open the chest menu by right-click; sheet and lamp unchanged)
+
+## CQ-OAT-01 | oats at every stage
+@group client
+@commands VTD-78
+@pass oats bushy at every stage; ripe oats two tall in three shapes
+@fails `kubejs/assets/vintagedelight/blockstates/oat_crop.json`
+@from batches/r1101/c0_priority.qb
+> tp @s 310 -55 8 180 20
+sleep 3
+> fill 310 -61 0 318 -61 0 minecraft:farmland[moisture=7]
+> setblock 310 -60 0 vintagedelight:oat_crop[age=0]
+> setblock 312 -60 0 vintagedelight:oat_crop[age=2]
+> setblock 314 -60 0 vintagedelight:oat_crop[age=4]
+> setblock 316 -60 0 vintagedelight:oat_crop[age=6]
+> setblock 318 -60 0 vintagedelight:oat_crop[age=7]
+> tp @s 314 -58 4 180 25
+shot oats
+look bushy at every stage; ripe two tall (VTD-78); an "Unknown block" or bad property = id or age range differs (record)
+
+## CQ-TSK-01 | treated sticks and tomato vines look
+@group client
+@commands TSK-01 to TSK-05
+@pass as written in treated_sticks.md
+@fails textures under `kubejs/assets/creativedelight/textures/block/`
+@from batches/r1101/c0_priority.qb
+> tp @s 320 -55 8 180 20
+sleep 3
+> setblock 320 -61 0 minecraft:farmland[moisture=7]
+> setblock 320 -60 0 creativedelight:treated_stick_tomatoes
+> setblock 320 -59 0 creativedelight:treated_stick
+> setblock 322 -60 0 creativedelight:treated_stick
+> tp @s 321 -59 3 180 20
+shot treated_sticks
+look textures present (treated_sticks.md TSK-01 to TSK-05)
+
+## CQ-CSR-01 | client scripts from the CD jar load once
+@group client
+@commands restart, no F3+T; FO-59, PL-01
+@pass `logs/kubejs/client.log` lists every `creativedelight:kubejs/...` client script once with no new errors; garlic-seasoned popcorn shows "Garlic: Speed (0:10)"
+@fails `KubeJSClientResourceScriptsMixin`
+@from batches/r1101/c0_priority.qb
+kjsreject (?i)error occurred
+shell grep -c "creativedelight:kubejs/" logs/kubejs/client.log
+look client.log lists every creativedelight:kubejs/... client script once with no new errors; hand: garlic-seasoned popcorn tooltip "Garlic: Speed (0:10)"
+
+## CQ-JB-01 | JEI berries and pips (hand)
+@group client
+@commands JC-32
+@pass JEI shows Sweet Berries, Glow Berries and both pips separately; no doubled pips in the Food tab
+@fails `BlockItemOwnStackFillMixin`
+@from batches/r1101/c0_priority.qb
+look hand: JEI search "berries" and "pips": Sweet Berries, Glow Berries and both pips listed separately; no doubled pips in the Food tab (JC-32)

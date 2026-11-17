@@ -1,0 +1,92 @@
+# Scratch queue rows STK (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/STK.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-STK Stack size policy gaps, 2026-11-01 ([briefs/food_stack-sizes.md](../briefs/food_stack-sizes.md), TODO `food/stack-sizes #1`)
+@@date 2026-11-01
+@@sources feature_writeup/briefs/food_stack-sizes.md
+@@text
+@@text Needs `kubejs/generation_scripts/stacks/stack_sizes.json` from this tree (1341 entries, 2026-11-01). Startup data: full
+@@text restart. Group A.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-STK-01 | stack sizes applied, no missing dict key
+@group A
+@commands Boot; `grep -nE "\[stack_sizes\]\|no item_dict key" logs/latest.log logs/kubejs/startup.log \| head`
+@pass `set 1341 stack sizes`, no `no item_dict key` warning
+@fails count differs: the JSON in the instance is not the regenerated one
+@from batches/r1102b/s3_A.qb passed
+bootexpect \[stack_sizes\] set 1341 stack sizes
+bootreject no item_dict key
+kjsreject no item_dict key
+
+## SQ-STK-02 | food stack sizes 32 (desserts, sweets)
+@group A
+@commands `/dumpstacks` (or `/kubejs hand` per item): `fruitsdelight:pear_with_rock_sugar`, `apple_jello`, `hamimelon_shaved_ice`, `mangosteen_cake`, `berry_good:glowgurt`, `incubation:scrambled_eggs`, `farmersdelight:dog_food`, `veggiesdelight:sweet_potato_pancakes`
+@pass 32 each
+@fails rule order in `gen_stack_sizes.py`
+@from batches/r1102b/s3_A.qb passed
+> zq item fruitsdelight:pear_with_rock_sugar
+> zq item fruitsdelight:apple_jello
+> zq item fruitsdelight:hamimelon_shaved_ice
+> zq item fruitsdelight:mangosteen_cake
+> zq item berry_good:glowgurt
+> zq item incubation:scrambled_eggs
+> zq item farmersdelight:dog_food
+> zq item veggiesdelight:sweet_potato_pancakes
+count \[zq\] item \S+: .*max stack 32$ == 8
+
+## SQ-STK-03 | drink and cheese wheel stack sizes 32
+@group A
+@commands Same: `farmersdelight:hot_cocoa`, `melon_juice`, `farmersrespite:gamblers_tea`, `strong_hot_cocoa`, `create:builders_tea`, `abnormals_delight:cherry_cream_soda`; `brewinandchewin:flaxen_cheese_wheel`, `unripe_scarlet_cheese_wheel`
+@pass 32 each
+@fails as above
+@from batches/r1102b/s3_A.qb passed
+> zq item farmersdelight:hot_cocoa
+> zq item farmersdelight:melon_juice
+> zq item farmersrespite:gamblers_tea
+> zq item farmersrespite:strong_hot_cocoa
+> zq item create:builders_tea
+> zq item abnormals_delight:cherry_cream_soda
+> zq item brewinandchewin:flaxen_cheese_wheel
+> zq item brewinandchewin:unripe_scarlet_cheese_wheel
+count \[zq\] item \S+: .*max stack 32$ == 8
+
+## SQ-STK-04 | milk bottles and fish oil 64; brew flask and potion unchanged
+@group A
+@commands Same: `farmersdelight:milk_bottle`, `neapolitan:milk_bottle` (64); `alexsmobs:fish_oil` (64); `botania:brew_flask`, `potion` unchanged
+@pass as listed
+@fails milk rule must run before the drink rules
+@from batches/r1102b/s3_A.qb
+> zq item farmersdelight:milk_bottle
+> zq item neapolitan:milk_bottle
+> zq item alexsmobs:fish_oil
+> zq item botania:brew_flask
+> zq item minecraft:potion
+count \[zq\] item (farmersdelight:milk_bottle|neapolitan:milk_bottle|alexsmobs:fish_oil): .*max stack 64$ == 3
+look brew_flask and potion against the instance's kubejs/exported/stacks/stack_sizes.json (unchanged)
+
+## SQ-STK-05
+@group A
+@commands After the restart: `/dumpstacks`, then `python3 tools/stack_sizes.py` (`food/stack-sizes #2`)
+@pass stack_sizes.md dated today, the items above at their new sizes
+@fails none
+@draft no batch holds this row yet
+## SQ-STK-06 | Syrup stacks to 64; 3 cucumbers + 2 zucchini + salt pickle; cabbage cutting gives 4 leaves
+@group A
+@commands `/kubejs hand` on Rustic Delight Syrup; in the Pickling Jar put 3 cucumbers + 2 zucchini + salt
+@pass Syrup max stack 64; the jar offers 5 Pickles (zucchini accepted in every cucumber slot); cabbage on a board gives 4 leaves
+@fails pickle recipe or syrup size wrong
+@from batches/r1113/c1_a1.qb
+> zq item rusticdelight:syrup
+waitlog \[zq\] item rusticdelight:syrup 30
+expect item rusticdelight:syrup: .*max stack 64
+> zq rdetail pickle_from_fermenting
+waitlog \[zq\] rdetail matching pickle_from_fermenting: \d+ 30
+expect pickle_from_fermenting \{vintagedelight:fermenting\} -> 5 pickle <- (vintagedelight:cucumber/veggiesdelight:zucchini|veggiesdelight:zucchini/vintagedelight:cucumber)
+> zq rdetail farmersdelightcutting/cabbage_leaves
+waitlog \[zq\] rdetail matching farmersdelightcutting/cabbage_leaves: \d+ 30
+expect cabbage_leaves \{farmersdelight:cutting\} -> 4 cabbage_leaf
+look the jar half (3 cucumbers + 2 zucchini + salt in the jar at 1000 -60 1009) is judged in SQ-VTD8-03's check row below

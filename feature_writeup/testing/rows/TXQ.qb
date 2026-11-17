@@ -1,0 +1,50 @@
+# Scratch queue rows TXQ (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TXQ.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-TXQ / CQ-TXP qrun lint, crash watch, verdict files, paired runs, 2026-11-15 ([plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) items 1 and 5, TX-40, TX-41, TX-06, TX-45, TX-30, TX-31)
+@@date 2026-11-15
+@@sources feature_writeup/plan_scratch_testing_expansion.md
+@@text
+@@text Tooling only, no jar: `tools/scratch_query/qrun.py` with `qlint.py`, `qwatch.py`, `qverdict.py`, `qpair.py` (2026-11-15,
+@@text offline-tested with fake JVMs). CQ-TXP rows need the owner's go for the one-JVM carve-out (D2 wording in the skill and
+@@text memory note not written yet) and Creative Devtools with the capture driver in the client game dir.
+@@text
+@@table
+## SQ-TXQ-01
+@group A
+@commands Any small server batch of the run: `qrun.py lint BATCH` then `qrun.py run OUT BATCH RES`
+@pass lint prints `lint: ... E, ... W`; the run prints the same E lines first; `RES/verdicts/<ID>.json` per row with `checks` (one per expect / waitlog / shell ...), `looks`, `verdict`; `qrun.py table RES` matches `results.md`
+@fails `qverdict.write`, `run_row` `chk()`
+@draft no batch holds this row yet
+## SQ-TXQ-02 | say then a long sleep; JVM killed during the sleep
+@group A
+@commands Batch with one row `> say a`, `sleep 60`; during the sleep, from another shell, `kill -9` the scratch server pid (`game_jvms.sh`)
+@pass that row ends CRASH within about 5 s ("JVM pid N gone with no crash file"), `RES/crash/<ID>/` holds `logs_latest.log`, the batch ends with "no --relaunch given"; no later row times out
+@fails `qwatch.Watch.check`; the qrun shell cannot see the game pids (gotchas): it then says "watching crash files only"
+@from batches/r1116/txq02.qb
+> say a
+sleep 60
+
+## SQ-TXQ-03 | say then a long sleep; JVM killed during the sleep
+@group A
+@commands As SQ-TXQ-02 with `--relaunch 'bash tools/creative_labels_test/scratch_server.sh boot OUT'`
+@pass "relaunch 1: relaunched (pid N)" after `Done (`; the next row runs and PASSes; `RES/crash/relaunch_1.out` written
+@fails `qwatch.Watch.relaunch`, `--ready`
+@from batches/r1116/txq03.qb
+> say a
+sleep 60
+
+## CQ-TXP-01
+@group client
+@commands `prep_srv.sh OUT txp A`; `qrun.py pair OUT ~/.cache/ce_capture/game BATCH RES` with rows `srv> say s1`, `cli> say c1`, `srv:expect \[Server\] s1`, `expect <PerfEval> c1|\[PerfEval\] c1`, `cli:expect CMD say c1`
+@pass "server: Done", "client: JOINED", rows PASS, "stopped both", `game_jvms.sh` empty after
+@fails `qpair.Pair` boot / `wait_join` / `stop`; join text in `RES/client_launch.out`
+@draft no batch holds this row yet
+## CQ-TXP-02
+@group client
+@commands `qrun.py matrix SPEC RES --plan`, then without `--plan`; SPEC: case M01 = Power Grid gate jar on the client only (`cli_jars`), server without it (no PGJAR), `"expect": "refuse"`; case M02 = Power Grid on both (`srv_env` PGJAR, `cli_jars`), `"expect": "join"`
+@pass M01 outcome REFUSED with the Forge refusal text in the evidence (not CRASH-CLIENT; the phase 10 crash was the reference bug), M02 JOINED; `RES/matrix.md` written; no JVM left
+@fails refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (owner to confirm the real text); a stale `GAME/cdev_channel/pid` or `state.json` from an earlier launch can misread the outcome (open, see the plan)
+@draft no batch holds this row yet

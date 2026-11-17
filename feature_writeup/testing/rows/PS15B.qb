@@ -1,0 +1,634 @@
+# Scratch queue rows PS15B (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PS15B.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PS15B / CQ-PS15B Pass-through rework, 2026-11-15 ([plan_post_scratch_1115b.md](../plan_post_scratch_1115b.md) A to E; [plan_passthrough.md](../plan_passthrough.md) 1, 2.1, 4, 5.1; TODO `tooling/scratch-1115-follow-ups-2`)
+@@date 2026-11-15
+@@sources feature_writeup/plan_post_scratch_1115b.md feature_writeup/plan_passthrough.md
+@@text
+@@text Creative Compat 1.0.0 built 2026-11-15 15:42 (build/libs, not installed; carries another session's uncommitted Compat
+@@text edits). Supersedes SQ-PTH-03b, -11c, -25b and -28b (same setups, new model). Real tags (`creativecompat:passthrough_layers`
+@@text is new). Headless: `tools/test_passthrough.sh` ALL 292 OK. Rows that need `/cdevreload compat` wait for the Creative
+@@text Devtools build that adds it.
+@@text
+@@table
+## SQ-PS15B-01 | 20-block drops (100 hp zombies, base speed 0): plain, lone web ground, lone web 5 up, 3 stacked, 3-face web, ripe berry bush; per-tick fall watch
+@group A
+@commands SQ-PTH-03 rerun, same drop heights (100 hp zombies, 20-block drops, per-tick fallDistance watch): plain, lone web at ground level, lone web 5 up, 3 stacked webs, a web with webs on 3 of its 6 faces (2 sides and below), a ripe sweet berry bush
+@pass lone web: fall distance 14.55 -> about 12.4 on entering, damage about x0.85; 3 stacked: about x0.61; 3-face web: fall distance 0 inside, no damage (dense reset); bush: full plain damage
+@fails `PassThrough.fallResetClip` / `ownsFallReset`, `PassRule.cell` `resetFall` (dense only)
+@from batches/r1116/ps15b_a.qb
+> setblock 1004 -60 1090 minecraft:cobweb
+> setblock 1008 -55 1090 minecraft:cobweb
+> fill 1012 -60 1090 1012 -58 1090 minecraft:cobweb
+> setblock 1016 -59 1090 minecraft:cobweb
+> setblock 1015 -59 1090 minecraft:cobweb
+> setblock 1017 -59 1090 minecraft:cobweb
+> setblock 1016 -60 1090 minecraft:cobweb
+> setblock 1020 -60 1090 minecraft:sweet_berry_bush[age=3]
+> summon minecraft:zombie 1000.5 -40 1090.5 {Tags:["z01p","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1004.5 -40 1090.5 {Tags:["z01w","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1008.5 -40 1090.5 {Tags:["z01u","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1012.5 -40 1090.5 {Tags:["z01s","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1016.5 -40 1090.5 {Tags:["z01f","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1020.5 -40 1090.5 {Tags:["z01b","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> zpth watch pth01 70 1
+sleep 10
+> zpth mod z01p
+> zpth mod z01w
+> zpth mod z01u
+> zpth mod z01s
+> zpth mod z01f
+> zpth mod z01b
+look hp (100 - hp = damage): plain about 16; lone web about x0.85; 3 stacked about x0.61; 3-face web 0 (fall 0 inside); bush full plain damage (plus thorns); watch: z01u (x 1008) fall about 14.55 -> about 12.4 on entering y -55, never about 1
+
+## SQ-PS15B-02 | elevated cube: snowball from z 994.5 / 995.5 / 996.2, pearl from 995.5 (breakStallTicks 3)
+@group A
+@commands SQ-PTH-11 rerun from z 995.5, 994.5 and 996.2: snowball and ender pearl (bot thrower); then `breakStallTicks = 0` (restart) and the 995.5 snowball again
+@pass 995.5: snowball and pearl stop in the edge web and break about 3 ticks later where they stopped; the pearl teleports the bot there and is gone; 994.5 and 996.2 as SQ-PTH-11; with 0 the edge-cell snowball hangs (no break)
+@fails `PassProjectiles.stallBreaks`, `PassState.stallTicks`, `breakIn(.., false)`
+@from batches/r1116/ps15b_a.qb
+> fill 1090 -57 1000 1092 -55 1002 minecraft:cobweb
+> fill 1091 -58 994 1091 -58 996 minecraft:stone
+> zpth watchnew minecraft:snowball s02 300 1 1091.5 -56 999 7
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 994.5 0 0
+> zpth use P
+sleep 3
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 995.5 0 0
+> zpth use P
+sleep 3
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 996.2 0 0
+> zpth use P
+sleep 3
+> zpth watchnew minecraft:ender_pearl p02 200 1 1091.5 -56 999 7
+> item replace entity P weapon.mainhand with minecraft:ender_pearl
+> tp P 1091.5 -57 995.5 0 0
+> zpth use P
+sleep 4
+> zpth player P
+> zpth count s02
+> zpth count p02
+expect \[zpth\] count s02 n=0
+expect \[zpth\] count p02 n=0
+look 995.5 snowball and pearl: slow in the edge cell (z about 1000.7), gone about 3 ticks after stopping where they stopped; P ends at the pearl's stop point; 994.5 and 996.2 break as SQ-PTH-11 (centre)
+> tp P 1000.5 -60 990.5
+
+## SQ-PS15B-03 | 5x5 ripe wheat field: middle row 0.50x, corner 0.75x; 3-wide strip middle row and edge 0.50x; bot standing and walking
+@group A
+@commands 5x5 ripe wheat field: bot walks the middle row, then the corner cell, then a 3-wide strip's middle row
+@pass middle and edge cells (3 or 4 of 4 sides): 0.50x; corner (2 of 4): 0.75x
+@fails `PassThrough.neighbours` SIDES, `denseFrom` 3
+@from batches/r1116/ps15b_a.qb
+> fill 1000 -61 1150 1004 -61 1154 minecraft:farmland[moisture=7]
+> fill 1000 -60 1150 1004 -60 1154 minecraft:wheat[age=7]
+> fill 1010 -61 1150 1012 -61 1154 minecraft:farmland[moisture=7]
+> fill 1010 -60 1150 1012 -60 1154 minecraft:wheat[age=7]
+> summon minecraft:zombie 1002.5 -60 1150.5 {Tags:["z03m0","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1002.5 -60 1151.5 {Tags:["z03m1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1002.5 -60 1152.5 {Tags:["z03m2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1002.5 -60 1153.5 {Tags:["z03m3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1002.5 -60 1154.5 {Tags:["z03m4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1000.5 -60 1150.5 {Tags:["z03c","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -60 1150.5 {Tags:["z03s0","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -60 1151.5 {Tags:["z03s1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -60 1152.5 {Tags:["z03s2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -60 1153.5 {Tags:["z03s3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -60 1154.5 {Tags:["z03s4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1010.5 -60 1152.5 {Tags:["z03e","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+sleep 3
+> zpth mod z03m0
+> zpth mod z03m1
+> zpth mod z03m2
+> zpth mod z03m3
+> zpth mod z03m4
+> zpth mod z03c
+> zpth mod z03s0
+> zpth mod z03s1
+> zpth mod z03s2
+> zpth mod z03s3
+> zpth mod z03s4
+> zpth mod z03e
+expect \[zpth\] mod z03m0 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03s0 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03m1 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03s1 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03m2 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03s2 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03m3 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03s3 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03m4 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03s4 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03c minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z03e minecraft:zombie mod=-0\.500 
+> kill @e[tag=z03m2]
+> tp P 1002.5 -60 1152.5
+sleep 2
+> zpth player P
+expect \[zpth\] player P minecraft:player mod=-0\.500 
+> kill @e[tag=z03c]
+> tp P 1000.5 -60 1150.5
+sleep 2
+> zpth player P
+expect \[zpth\] player P minecraft:player mod=-0\.250 
+> tp P 1002.5 -60 1146.5 0 0
+> kill @e[tag=z03m0]
+> kill @e[tag=z03m1]
+> kill @e[tag=z03m3]
+> kill @e[tag=z03m4]
+sleep 1
+> pbot moveto P 1002.5 1158.5 walk 400
+waitlog verb=pbot\.moveto bot=P end= 30
+> tp P 1006.5 -60 1146.5 0 0
+sleep 1
+> pbot moveto P 1006.5 1158.5 walk 400
+sleep 9
+look bot walk through the middle row (x 1002) vs open grass (x 1006): speed_bps about half inside the field (plus farmland); P standing mods above
+
+## SQ-PS15B-04 | webs: cross (3 faces) dense; cube centre surrounded (hangs, bot jump climbs, sneak sinks); cube open above: dense, falls slowly
+@group A
+@commands Webs: a cross (web with webs on 3 faces), a 3x3x3 cube (centre), the cube with the block above the centre removed; zombie in each, a bot jumping and sneaking in the cube centre
+@pass 3 faces: dense (0.35 / 0.20, no fall damage); cube centre (6 of 6): falling stops, hangs, jump climbs about 0.07 b/t, sneak sinks about 0.05; open above: dense, not surrounded (falls slowly)
+@fails `PassRule.cell` `surroundedCount`, `[surface.passthrough.cobweb] surroundedAt`
+@from batches/r1116/ps15b_a.qb
+> setblock 1000 -60 1180 minecraft:cobweb
+> setblock 999 -60 1180 minecraft:cobweb
+> setblock 1001 -60 1180 minecraft:cobweb
+> setblock 1000 -60 1181 minecraft:cobweb
+> fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb
+> fill 1020 -60 1179 1022 -58 1181 minecraft:cobweb
+> setblock 1021 -58 1180 minecraft:air
+> fill 1030 -60 1179 1032 -58 1181 minecraft:cobweb
+> summon minecraft:zombie 1000.5 -60 1180.5 {Tags:["z04x","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1011.5 -59 1180.5 {Tags:["z04c","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1021.5 -58.9 1180.5 {Tags:["z04o","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> zpth watch z04c 60 10
+> zpth watch z04o 60 5
+sleep 4
+> zpth mod z04x
+> zpth mod z04c
+> zpth mod z04o
+expect \[zpth\] mod z04x minecraft:zombie mod=-0\.650 
+> tp P 1031.5 -59 1180.5
+sleep 2
+> zpth player P
+> pbot sneak P off
+> tag P add P
+> zpth input P jump
+> zpth watch P 40 5
+sleep 3
+> zpth input P none
+> zpth player P
+> tp P 1031.5 -59 1180.5
+sleep 2
+> pbot sneak P on
+> zpth watch P 40 5
+sleep 3
+> pbot sneak P off
+> zpth player P
+> tag P remove P
+> tp P 1000.5 -60 990.5
+look z04x -0.65 (0.35); z04c y stays about -59 (hangs); z04o falls slowly to the bottom (not hanging); P in the cube centre: y steady, jump climbs about 0.07 b/t, sneak sinks about 0.05 b/t
+
+## SQ-PS15B-05 | timing on: cows penned in a ripe 7x7 field 60 s, counts= near 0 after the first window; right-click harvest and replant do not raise it; young crops not slowed
+@group A
+@commands Ripe wheat field with `[debug.passthrough] timing = true`: cows penned in it 60 s; then right-click harvest (and a Create harvester pass) over the field while they stay
+@pass after the first window the `counts=` field stays near 0 (baked); harvest and replant do not raise it; the slowdown follows the growth (young crops not slowed)
+@fails `PassCounts.changesCounts` (same block = keep), `mixin/LevelChunkPassMixin` applied
+@from batches/r1116/ps15b_a.qb
+> fill 1039 -60 1149 1047 -60 1157 minecraft:oak_fence
+> fill 1040 -60 1150 1046 -60 1156 minecraft:air
+> fill 1040 -61 1150 1046 -61 1156 minecraft:farmland[moisture=7]
+> fill 1040 -60 1150 1046 -60 1156 minecraft:wheat[age=7]
+> summon minecraft:cow 1041.5 -60 1151.5 {Tags:["c05"],PersistenceRequired:1b}
+> summon minecraft:cow 1042.5 -60 1152.5 {Tags:["c05"],PersistenceRequired:1b}
+> summon minecraft:cow 1043.5 -60 1153.5 {Tags:["c05"],PersistenceRequired:1b}
+> summon minecraft:cow 1044.5 -60 1154.5 {Tags:["c05"],PersistenceRequired:1b}
+> summon minecraft:cow 1045.5 -60 1151.5 {Tags:["c05"],PersistenceRequired:1b}
+> summon minecraft:cow 1046.5 -60 1152.5 {Tags:["c05"],PersistenceRequired:1b}
+sleep 65
+count \[passthrough-timing\] side=server .*counts=0 >= 3
+> zpth mod c05
+> cdevtest use 1040 -60 1153 held=none
+> cdevtest use 1041 -60 1153 held=none
+> cdevtest use 1042 -60 1153 held=none
+> cdevtest use 1043 -60 1153 held=none
+> cdevtest use 1044 -60 1153 held=none
+> cdevtest use 1045 -60 1153 held=none
+> cdevtest use 1046 -60 1153 held=none
+> cdevtest ages 1040 -60 1153 1046 -60 1153 minecraft:wheat
+> fill 1040 -60 1155 1046 -60 1155 minecraft:wheat[age=0] replace minecraft:wheat
+sleep 25
+> zpth mod c05
+look timing lines: counts= high in the first window after the setup, then near 0 for the 60 s; after the harvest (row z 1153: ages reset) and the replant row (z 1155 age 0) counts stays near 0; cows on age-0 cells mod none (Create harvester pass not run)
+
+## SQ-PS15B-06 | 5x5 field: edge cell (3 of 4) dense; break its inner neighbour: 2 of 4 at once (0.75); plant it again: dense again with the seedling
+@group A
+@commands Same field: break one crop next to the bot's cell, then plant it again; read the speed in the cell beside it each time
+@pass break: the neighbour drops to 3 of 4 or less at once (0.75 at 2); plant: back to dense at once, with the new seedling (age 0) counting
+@fails `PassCounts.blockChanged`, `PassCountData.remove`
+@from batches/r1116/ps15b_a.qb
+> fill 1060 -61 1150 1064 -61 1154 minecraft:farmland[moisture=7]
+> fill 1060 -60 1150 1064 -60 1154 minecraft:wheat[age=7]
+> summon minecraft:zombie 1060.5 -60 1152.5 {Tags:["z06","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+sleep 3
+> zpth mod z06
+> cdevtest break 1061 -60 1152
+sleep 0.3
+> zpth mod z06
+sleep 1
+> zpth mod z06
+> cdevtest use 1061 -61 1152 held=minecraft:wheat_seeds face=up
+sleep 0.3
+> zpth mod z06
+> cdevtest state 1061 -60 1152
+sleep 1
+> zpth mod z06
+look z06: -0.500, after the break -0.250 at once, after the planting -0.500 at once; state wheat[age=0]
+
+## SQ-PS15B-07 | one ripe wheat with 3 age-0 wheat on its sides: ripe dense 0.50x, seedling none
+@group A
+@commands One ripe wheat with 3 freshly planted wheat (age 0) on its sides; bot stands in the ripe one, then in a seedling
+@pass ripe: 0.50 (dense); seedling: no slowdown
+@fails `PassThrough.rule` (growth on the block itself only)
+@from batches/r1116/ps15b_a.qb passed
+> fill 1079 -61 1151 1083 -61 1154 minecraft:farmland[moisture=7]
+> setblock 1081 -60 1152 minecraft:wheat[age=7]
+> setblock 1080 -60 1152 minecraft:wheat[age=0]
+> setblock 1082 -60 1152 minecraft:wheat[age=0]
+> setblock 1081 -60 1153 minecraft:wheat[age=0]
+> summon minecraft:zombie 1081.5 -60 1152.5 {Tags:["z07r","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1081.5 -60 1153.5 {Tags:["z07s","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+sleep 3
+> zpth mod z07r
+> zpth mod z07s
+expect \[zpth\] mod z07r minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z07s minecraft:zombie mod=(none|-?0\.000) 
+
+## SQ-PS15B-08 | chunk border x 1007 / 1008: wheat field and web cube straddling it; same mods both sides; bot crosses; no moved wrongly
+@group A
+@commands A web cube and a wheat field straddling a chunk border (x 15 / 16); bot and zombies cross it; restart the server and cross again
+@pass same speeds both sides of the border, no "moved wrongly" lines; after the restart the same
+@fails `PassCounts.onChunkLoad` edge drops, `Saved` capability load
+@from batches/r1116/ps15b_a.qb
+> fill 1006 -61 1200 1009 -61 1204 minecraft:farmland[moisture=7]
+> fill 1006 -60 1200 1009 -60 1204 minecraft:wheat[age=7]
+> fill 1007 -60 1209 1009 -58 1211 minecraft:cobweb
+> summon minecraft:zombie 1007.5 -60 1202.5 {Tags:["z08wl","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1008.5 -60 1202.5 {Tags:["z08wr","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1006.5 -60 1200.5 {Tags:["z08cl","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1009.5 -60 1200.5 {Tags:["z08cr","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1007.5 -60 1210.5 {Tags:["z08bl","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1009.5 -60 1210.5 {Tags:["z08br","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1008.5 -59 1210.5 {Tags:["z08c","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+sleep 3
+> zpth mod z08wl
+> zpth mod z08wr
+> zpth mod z08cl
+> zpth mod z08cr
+> zpth mod z08bl
+> zpth mod z08br
+> zpth mod z08c
+expect \[zpth\] mod z08wl minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z08wr minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z08cl minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z08cr minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z08bl minecraft:zombie mod=-0\.650 
+expect \[zpth\] mod z08br minecraft:zombie mod=-0\.650 
+> tp P 1002.5 -60 1203.5 -90 0
+sleep 1
+> pbot moveto P 1013.5 1203.5 walk 400
+sleep 8
+> tp P 1002.5 -60 1209.5 -90 0
+sleep 1
+> pbot moveto P 1013.5 1209.5 walk 600
+sleep 12
+> pbot moveto-stop P
+> zpth player P
+reject moved wrongly
+look z08c y about -59 (hangs); bot crossings end reached (or note); left/right mods equal
+> tp P 1000.5 -60 990.5
+
+## SQ-PS15B-09 | boot 1 on the instance (r1115-model) toml: migration line, new table shape
+@group A
+@commands Boot once with the r1115 srv toml (RING / CUBE, denseFrom 6, `[surface.passthrough.leaf_pile]`)
+@pass log line "pass-through tables moved to the 2026-11-15 model"; toml has SIDES / FACES, denseFrom 3, surroundedAt 6, `[surface.passthrough.layers]`, no leaf_pile; second boot: no line
+@fails `PassConfigMigration`
+@from batches/r1116/ps15b_a.qb
+bootexpect pass-through tables moved to the 2026-11-15 model
+shell grep -c 'neighbours = "SIDES"' config/creativecompat-common.toml; grep -c 'neighbours = "FACES"' config/creativecompat-common.toml; grep -c 'neighbours = "RING"\|neighbours = "CUBE"' config/creativecompat-common.toml; grep -c 'denseFrom = 3' config/creativecompat-common.toml; grep -c 'surroundedAt = 6' config/creativecompat-common.toml; grep -c 'passthrough.layers\]' config/creativecompat-common.toml; grep -c 'passthrough.leaf_pile\]' config/creativecompat-common.toml; true
+look shell: SIDES >= 1, FACES >= 1, RING/CUBE 0, denseFrom 3 in every table, surroundedAt 6 in every table, layers 1, leaf_pile 0 (second boot: SQ-PS15B-09b)
+
+## SQ-PS15B-10 | layered blocks 1 to max: 8-layer families 1.0 / 0.875 / 0.75 / 0.625 / 0.5, 6-8 none; bamboo 0.75 at 2, 0.5 at 3, 4 none; sawdust 0.5 at 6, 7-9 none
+@group A
+@commands Layered blocks, bot walking through each height (setblock with `layers=`): snow 1 to 8, an IW oak leaf pile 1 to 8, IW sand layer 1 to 8, Supplementaries ash and fodder 1 to 8, Twigs bamboo leaves 1 to 4, IE sawdust 1 to 9
+@pass 8-layer families: 1.0, 0.875, 0.75, 0.625, 0.5 for 1 to 5 layers, 6 to 8 normal terrain (stand on top, no slowdown); bamboo leaves 0.75 at 2, 0.5 at 3, 4 normal; sawdust 0.5 at 6, 7 to 9 normal
+@fails `PassRule.layerWalk`, `PassValues.solidBelowFull` overrides, tag `creativecompat:passthrough_layers`
+@from batches/r1116/ps15b_a.qb
+> setblock 1103 -60 1100 minecraft:snow[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1100.5 {Tags:["z10snow1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1100 minecraft:snow[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1100.5 {Tags:["z10snow2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1100 minecraft:snow[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1100.5 {Tags:["z10snow3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1100 minecraft:snow[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1100.5 {Tags:["z10snow4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1100 minecraft:snow[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1100.5 {Tags:["z10snow5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1100 minecraft:snow[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1100.5 {Tags:["z10snow6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1100 minecraft:snow[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1100.5 {Tags:["z10snow7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1100 minecraft:snow[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1100.5 {Tags:["z10snow8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1103 immersive_weathering:oak_leaf_pile[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1103.5 {Tags:["z10leaf1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1103 immersive_weathering:oak_leaf_pile[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1103.5 {Tags:["z10leaf2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1103 immersive_weathering:oak_leaf_pile[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1103.5 {Tags:["z10leaf3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1103 immersive_weathering:oak_leaf_pile[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1103.5 {Tags:["z10leaf4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1103 immersive_weathering:oak_leaf_pile[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1103.5 {Tags:["z10leaf5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1103 immersive_weathering:oak_leaf_pile[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1103.5 {Tags:["z10leaf6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1103 immersive_weathering:oak_leaf_pile[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1103.5 {Tags:["z10leaf7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1103 immersive_weathering:oak_leaf_pile[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1103.5 {Tags:["z10leaf8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1106 immersive_weathering:sand_layer_block[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1106.5 {Tags:["z10sand1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1106 immersive_weathering:sand_layer_block[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1106.5 {Tags:["z10sand2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1106 immersive_weathering:sand_layer_block[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1106.5 {Tags:["z10sand3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1106 immersive_weathering:sand_layer_block[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1106.5 {Tags:["z10sand4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1106 immersive_weathering:sand_layer_block[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1106.5 {Tags:["z10sand5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1106 immersive_weathering:sand_layer_block[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1106.5 {Tags:["z10sand6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1106 immersive_weathering:sand_layer_block[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1106.5 {Tags:["z10sand7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1106 immersive_weathering:sand_layer_block[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1106.5 {Tags:["z10sand8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1109 supplementaries:ash[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1109.5 {Tags:["z10ash1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1109 supplementaries:ash[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1109.5 {Tags:["z10ash2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1109 supplementaries:ash[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1109.5 {Tags:["z10ash3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1109 supplementaries:ash[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1109.5 {Tags:["z10ash4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1109 supplementaries:ash[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1109.5 {Tags:["z10ash5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1109 supplementaries:ash[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1109.5 {Tags:["z10ash6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1109 supplementaries:ash[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1109.5 {Tags:["z10ash7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1109 supplementaries:ash[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1109.5 {Tags:["z10ash8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1112 supplementaries:fodder[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1112.5 {Tags:["z10fodder1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1112 supplementaries:fodder[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1112.5 {Tags:["z10fodder2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1112 supplementaries:fodder[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1112.5 {Tags:["z10fodder3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1112 supplementaries:fodder[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1112.5 {Tags:["z10fodder4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1112 supplementaries:fodder[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1112.5 {Tags:["z10fodder5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1112 supplementaries:fodder[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1112.5 {Tags:["z10fodder6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1112 supplementaries:fodder[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1112.5 {Tags:["z10fodder7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1112 supplementaries:fodder[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1112.5 {Tags:["z10fodder8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1115 twigs:bamboo_leaves[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1115.5 {Tags:["z10bamboo1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1115 twigs:bamboo_leaves[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1115.5 {Tags:["z10bamboo2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1115 twigs:bamboo_leaves[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1115.5 {Tags:["z10bamboo3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1115 twigs:bamboo_leaves[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1115.5 {Tags:["z10bamboo4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1103 -60 1118 immersiveengineering:sawdust[layers=1]
+> summon minecraft:zombie 1103.5 -58.5 1118.5 {Tags:["z10sawdust1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1106 -60 1118 immersiveengineering:sawdust[layers=2]
+> summon minecraft:zombie 1106.5 -58.5 1118.5 {Tags:["z10sawdust2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1109 -60 1118 immersiveengineering:sawdust[layers=3]
+> summon minecraft:zombie 1109.5 -58.5 1118.5 {Tags:["z10sawdust3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1112 -60 1118 immersiveengineering:sawdust[layers=4]
+> summon minecraft:zombie 1112.5 -58.5 1118.5 {Tags:["z10sawdust4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1115 -60 1118 immersiveengineering:sawdust[layers=5]
+> summon minecraft:zombie 1115.5 -58.5 1118.5 {Tags:["z10sawdust5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1118 -60 1118 immersiveengineering:sawdust[layers=6]
+> summon minecraft:zombie 1118.5 -58.5 1118.5 {Tags:["z10sawdust6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1121 -60 1118 immersiveengineering:sawdust[layers=7]
+> summon minecraft:zombie 1121.5 -58.5 1118.5 {Tags:["z10sawdust7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1124 -60 1118 immersiveengineering:sawdust[layers=8]
+> summon minecraft:zombie 1124.5 -58.5 1118.5 {Tags:["z10sawdust8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> setblock 1127 -60 1118 immersiveengineering:sawdust[layers=9]
+> summon minecraft:zombie 1127.5 -58.5 1118.5 {Tags:["z10sawdust9","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+sleep 4
+> zpth mod z10snow1
+> zpth mod z10snow2
+> zpth mod z10snow3
+> zpth mod z10snow4
+> zpth mod z10snow5
+> zpth mod z10snow6
+> zpth mod z10snow7
+> zpth mod z10snow8
+> zpth mod z10leaf1
+> zpth mod z10leaf2
+> zpth mod z10leaf3
+> zpth mod z10leaf4
+> zpth mod z10leaf5
+> zpth mod z10leaf6
+> zpth mod z10leaf7
+> zpth mod z10leaf8
+> zpth mod z10sand1
+> zpth mod z10sand2
+> zpth mod z10sand3
+> zpth mod z10sand4
+> zpth mod z10sand5
+> zpth mod z10sand6
+> zpth mod z10sand7
+> zpth mod z10sand8
+> zpth mod z10ash1
+> zpth mod z10ash2
+> zpth mod z10ash3
+> zpth mod z10ash4
+> zpth mod z10ash5
+> zpth mod z10ash6
+> zpth mod z10ash7
+> zpth mod z10ash8
+> zpth mod z10fodder1
+> zpth mod z10fodder2
+> zpth mod z10fodder3
+> zpth mod z10fodder4
+> zpth mod z10fodder5
+> zpth mod z10fodder6
+> zpth mod z10fodder7
+> zpth mod z10fodder8
+> zpth mod z10bamboo1
+> zpth mod z10bamboo2
+> zpth mod z10bamboo3
+> zpth mod z10bamboo4
+> zpth mod z10sawdust1
+> zpth mod z10sawdust2
+> zpth mod z10sawdust3
+> zpth mod z10sawdust4
+> zpth mod z10sawdust5
+> zpth mod z10sawdust6
+> zpth mod z10sawdust7
+> zpth mod z10sawdust8
+> zpth mod z10sawdust9
+expect \[zpth\] mod z10snow1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10snow2 minecraft:zombie mod=-0\.125 
+expect \[zpth\] mod z10snow3 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10snow4 minecraft:zombie mod=-0\.375 
+expect \[zpth\] mod z10snow5 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10snow6 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10snow7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10snow8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10leaf1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10leaf2 minecraft:zombie mod=-0\.125 
+expect \[zpth\] mod z10leaf3 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10leaf4 minecraft:zombie mod=-0\.375 
+expect \[zpth\] mod z10leaf5 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10leaf6 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10leaf7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10leaf8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sand1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sand2 minecraft:zombie mod=-0\.125 
+expect \[zpth\] mod z10sand3 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10sand4 minecraft:zombie mod=-0\.375 
+expect \[zpth\] mod z10sand5 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10sand6 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sand7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sand8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10ash1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10ash2 minecraft:zombie mod=-0\.125 
+expect \[zpth\] mod z10ash3 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10ash4 minecraft:zombie mod=-0\.375 
+expect \[zpth\] mod z10ash5 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10ash6 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10ash7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10ash8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10fodder1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10fodder2 minecraft:zombie mod=-0\.125 
+expect \[zpth\] mod z10fodder3 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10fodder4 minecraft:zombie mod=-0\.375 
+expect \[zpth\] mod z10fodder5 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10fodder6 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10fodder7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10fodder8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10bamboo1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10bamboo2 minecraft:zombie mod=-0\.250 
+expect \[zpth\] mod z10bamboo3 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10bamboo4 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sawdust1 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sawdust2 minecraft:zombie mod=-0\.100 
+expect \[zpth\] mod z10sawdust3 minecraft:zombie mod=-0\.200 
+expect \[zpth\] mod z10sawdust4 minecraft:zombie mod=-0\.300 
+expect \[zpth\] mod z10sawdust5 minecraft:zombie mod=-0\.400 
+expect \[zpth\] mod z10sawdust6 minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z10sawdust7 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sawdust8 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10sawdust9 minecraft:zombie mod=(none|-?0\.000) 
+> fill 1100 -60 1135 1112 -60 1135 minecraft:snow[layers=5]
+> fill 1100 -60 1137 1112 -60 1137 minecraft:snow[layers=3]
+> tp P 1099.5 -59 1135.5 -90 0
+sleep 1
+> pbot moveto P 1113.5 1135.5 walk 400
+sleep 6
+> tp P 1099.5 -59 1137.5 -90 0
+sleep 1
+> pbot moveto P 1113.5 1137.5 walk 400
+sleep 5
+> tp P 1099.5 -60 1139.5 -90 0
+sleep 1
+> pbot moveto P 1113.5 1139.5 walk 400
+sleep 5
+look bot speed_bps: 5-layer snow about half of grass (z 1139), 3-layer about 0.75 of grass; zombie mods as expected
+
+## SQ-PS15B-11 | bot speed modifiers standing in snow layers 3 to 5, then sand layers 3 to 5
+@group A
+@commands Snow layers 3 to 5: attribute dump of the bot's speed modifiers; then sand layers 3 to 5 the same
+@pass snow: only the pass-through modifier, no BlockRunner snow modifier (no double slowdown); sand: record both (dust 0.85 still applies: open owner question)
+@fails blocktags.js `runner.snow` without snow layers
+@from batches/r1116/ps15b_a.qb
+> pbot moveto-stop P
+> setblock 1100 -60 1145 minecraft:snow[layers=3]
+> tp P 1100.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> setblock 1103 -60 1145 minecraft:snow[layers=4]
+> tp P 1103.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> setblock 1106 -60 1145 minecraft:snow[layers=5]
+> tp P 1106.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> setblock 1109 -60 1145 immersive_weathering:sand_layer_block[layers=3]
+> tp P 1109.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> setblock 1112 -60 1145 immersive_weathering:sand_layer_block[layers=4]
+> tp P 1112.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> setblock 1115 -60 1145 immersive_weathering:sand_layer_block[layers=5]
+> tp P 1115.5 -59 1145.5
+sleep 2
+> zpth attrs P
+> tp P 1099.5 -60 1147.5
+sleep 2
+> zpth attrs P
+look snow 3-5: only the pass-through modifier (a1386f64-...), no BlockRunner snow modifier; sand 3-5: record both (dust 0.85 open owner question); grass control at the end
+
+## SQ-PS15B-12
+@group A
+@commands Reload test per switch (needs `/cdevreload compat`): save each with `sed -i` (rename, missed by the watcher), then run the command: `[debug.passthrough] timing` true / false, cobweb `denseWalk` 0.2, `breakStallTicks` 0, cobweb `surroundedAt` 3, layers `layerMaxSlow` 0.3, layers `solidBelowFull` 0; also one save written in place (single write) without the command
+@pass each value applies after the command (timing lines start / stop, speeds change, the client gets the re-sent table: no rubber band); the in-place save applies within a few seconds without the command
+@fails `CompatConfigReload.reload`, `PassValues.onConfig` re-send; night-config watcher (ENTRY_MODIFY, count 1 only)
+@draft no batch holds this row yet
+## SQ-PTH-25c | /cdevbench passthrough, run 1: 12 cases
+@group A
+@commands As SQ-PTH-25 with this build: `/cdevbench passthrough` twice
+@pass `tick_field` and `tick_web_cube` under 1000 ns median; record all 12 cases in blockrunner.md 3.10 and perf_suite.md 12
+@fails `PassCounts.baked` path, `LevelChunkPassMixin` field
+@jars creativedevtools
+@from batches/r1116/ps15b_a.qb passed
+> tp P 1150.5 -60 1150.5
+sleep 2
+> execute as P at P run cdevbench passthrough
+waitlog \[cdevbench\] passthrough: .* calls per case 300
+sleep 2
+shell python3 -c "import json;d=json.load(open('kubejs/exported/perf/passthrough_bench.json'));print({k:v for k,v in d.items() if k!='cases'});[print(c['id'],c['median_ns'],c['p99_ns']) for c in d['cases']]"
+
+## SQ-PTH-28c
+@group suite P
+@commands As SQ-PTH-28 with `PERF_JARS` = this Compat build (copy aside first)
+@pass PT01 and PT04 on minus off under +0.5 ms
+@fails JFR: `PassCounts`, `PassCountData.get`
+@jars creativedevtools
+@draft no batch holds this row yet
+## CQ-PS15B-01
+@group client
+@commands WTHIT on: the SQ-PS15B-03 field (middle, corner), the -04 webs, a 3-layer and a 6-layer snow pile
+@pass `Neighbors: 4 of 4` / `2 of 4`, `Neighbors: 3 of 6` / `6 of 6` with `Fall Through: stopped`; 3 layers: `Walk Through: 0.75x (3 of 8 layers)`; 6 layers: the Run Speed line, no Walk Through
+@fails `PassThroughFormat`, `WthitRunSpeed.passThrough` layered branch
+@draft no batch holds this row yet
+## CQ-PS15B-02
+@group client
+@commands Client toml `[surface.wthit] passThrough = false` saved with `sed -i`, then the client-side reload of `/cdevreload compat`
+@pass the Walk Through lines go at once after the reload
+@fails client command routing to `CompatConfigReload.reload`
+@draft no batch holds this row yet

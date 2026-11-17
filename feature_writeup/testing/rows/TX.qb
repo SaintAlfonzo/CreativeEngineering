@@ -1,0 +1,392 @@
+# Scratch queue rows TX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Texture fixes, 2026-10-27 (unreleased.md: Farming & Nature, Food & Cooking, Mobs & Animals)
+@@date 2026-10-27
+@@jars creativecommon creativedelight creativedevtools
+@@text
+@@text Client checks (textures are client side). Install the moreMooblooms jar built 2026-10-27 00:14, the CD jar
+@@text (2026-10-26 22:30) and the patcherMod jar (2026-10-26 23:36) first; the fridge and Vintage textures are loose files in
+@@text `kubejs/assets/`, so a resource reload is enough for those.
+@@text
+@@text | ID | World | What to do and look at | Existing test |
+@@text |---|---|---|---|
+## CQ-TX-01
+@group creative superflat
+@commands Plant Coffee, Bell Pepper, Pale Bell Pepper and Dark Bell Pepper seeds; bone meal each through every stage: no purple-black stage, none of the four crops missing a texture; latest.log has no `Missing textures in model` lines for these crops
+@pass SQ-RD-32
+@draft no batch holds this row yet
+## CQ-TX-02
+@group same
+@commands Place a Bell Pepper Medley, Pale Bell Pepper Medley and Dark Bell Pepper Medley: the platter under each shows a texture (new `farmersdelight:block/platter`); take servings down to leftovers, platter still drawn
+@pass SQ-RD-32
+@draft no batch holds this row yet
+## CQ-TX-03
+@group same
+@commands Place a two-high Cooking for Blockheads Fridge: the white box on top has a texture and fills the block (the model now uses CfB's own `fridge_top`, `fridge_side`, `fridge_back`; the custom `fridge_top_fill` is deleted; latest.log has no missing-texture line for `fridge_large_upper`)
+@pass CQ-NEW-05
+@draft no batch holds this row yet
+## CQ-TX-04
+@group same
+@commands Sunbloom (Moobloom) in the world and in the JEI Moobloom Conversion and Shearing pages: sunflower faces show, not the back
+@pass CQ-JT-09, MB-105
+@draft no batch holds this row yet
+@@text
+@@text Results: not run yet.
+
+@@section 2
+@@title SQ-TX Scratch testing tools, item 3: /cdevtest, tick warp, bot verbs, 2026-11-15 ([creative_devtools.md](../creative_devtools.md) "/cdevtest and the perfBot test verbs", CDV-07; [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) item 3, TX-20 to TX-22)
+@@date 2026-11-15
+@@jars creativecommon creativedelight creativedevtools
+@@sources feature_writeup/creative_devtools.md feature_writeup/plan_scratch_testing_expansion.md
+@@text
+@@text Creative Devtools 1.0.0 and `cdevperfbot-0.1.0.jar` from `development/creativeDevtools/build/libs` and
+@@text `members/perfbot/build/libs` (built 2026-11-15 15:38, not installed; `prep_srv.sh` swaps both in). One boot, group A,
+@@text `prep_srv.sh OUT tx A`. Every call ends with `[cdevtest] verb=<verb> done=1` (or `done=0` after an `error=` line); judge
+@@text from `logs/latest.log`. Site x 900 to 1000, z 890 to 910 (superflat: grass at y -61, air from -60):
+@@text `forceload add 896 880 1007 927` first, then `time set noon`, `gamerule doDaylightCycle false`, `weather clear`.
+@@text
+@@table
+## SQ-TX-01 | help, unknown verb, unloaded pos, missing arg
+@group A
+@commands `cdevtest help`; `cdevtest bogus`; `cdevtest state 0 -60 4000`; `cdevtest count 1 2 3`
+@pass `verb=help verbs=` lists state ... tickwarp ... states; `verb=bogus error="unknown verb ...` `done=0`; `error="unloaded 0,-60,4000 ...` `done=0`; `error="missing to x"` `done=0`; no stack trace, server up
+@fails `TestCommand.run` (every Throwable is caught there); not registered: `CreativeDevtools` listener line, jar not swapped in (prep output "swap:")
+@from batches/r1116/tx.qb
+> cdevtest help
+> cdevtest bogus
+> cdevtest state 0 -60 4000
+> cdevtest count 1 2 3
+expect \[cdevtest\] verb=help verbs=\S*state\S*tickwarp\S*states
+expect \[cdevtest\] verb=bogus error="unknown verb
+expect \[cdevtest\] verb=bogus done=0
+expect \[cdevtest\] verb=state error="unloaded 0,-60,4000
+expect \[cdevtest\] verb=state done=0
+expect \[cdevtest\] verb=count error="missing to x"
+expect \[cdevtest\] verb=count done=0
+reject Exception|\tat 
+
+## SQ-TX-02 | place, state, be
+@group A
+@commands `cdevtest place 900 -60 900 minecraft:chest[facing=north]`; `cdevtest state 900 -60 900`; `cdevtest be 900 -60 900`; `cdevtest place 901 -60 900 minecraft:oak_leaves[persistent=true] flags=18`
+@pass `placed=true state="minecraft:chest[facing=north,type=single,waterlogged=false]"`; state line `be=minecraft:chest shape_top=0.875 biome=minecraft:plains`; `verb=be be=minecraft:chest nbt="{...id:\"minecraft:chest\"...}"`; leaves `placed=true`
+@fails `TestWorld.place` (BlockStateParser), `TestWorld.state`
+@from batches/r1116/tx.qb passed
+> cdevtest place 900 -60 900 minecraft:chest[facing=north]
+> cdevtest state 900 -60 900
+> cdevtest be 900 -60 900
+> cdevtest place 901 -60 900 minecraft:oak_leaves[persistent=true] flags=18
+expect verb=place placed=true state="minecraft:chest\[facing=north,type=single,waterlogged=false\]"
+expect verb=state pos=900,-60,900 .*be=minecraft:chest shape_top=0.875 .*biome=minecraft:plains
+expect verb=be be=minecraft:chest nbt=".*id:\\"minecraft:chest\\"
+expect verb=place placed=true state="?minecraft:oak_leaves\[
+count verb=place done=1 == 2
+
+## SQ-TX-03 | inv (two faces), tank, energy on the chest
+@group A
+@commands After -02: `item replace block 900 -60 900 container.0 with minecraft:apple 5`; `cdevtest inv 900 -60 900`; `cdevtest inv 900 -60 900 face=up`; `cdevtest tank 900 -60 900`; `cdevtest energy 900 -60 900`
+@pass `slot=0 item=minecraft:apple*5` then `via=item_handler slots=27 filled=1` (both calls); `tanks=0`; `energy=none`
+@fails capability side (`face=null` default); Container fallback
+@from batches/r1116/tx.qb passed
+> item replace block 900 -60 900 container.0 with minecraft:apple 5
+> cdevtest inv 900 -60 900
+> cdevtest inv 900 -60 900 face=up
+> cdevtest tank 900 -60 900
+> cdevtest energy 900 -60 900
+expect verb=inv slot=0 item=minecraft:apple\*5
+count verb=inv via=item_handler slots=27 filled=1 == 2
+expect verb=tank tanks=0
+expect verb=energy energy=none
+
+## SQ-TX-04 | ages, randomtick, count on a wheat field
+@group A
+@commands `fill 900 -61 902 915 -61 917 minecraft:farmland`; `fill 900 -60 902 915 -60 917 minecraft:wheat`; `cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat`; `cdevtest randomtick 900 -60 902 915 -60 917 20`; `cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat`; `cdevtest count 900 -61 902 915 -60 917 #minecraft:crops`
+@pass first ages `n=256 mean=0.000 hist=0:256`; randomtick `rounds=20 block_ticks=5120 changed=` over 100, `equiv_game_ticks=27306` (randomTickSpeed 3); second ages mean over 1.0; count `n=256 on=minecraft:farmland:256`
+@fails crops not growing: a season or growth rule cancels CropGrowEvent (Creative Calendar season at the biome: `/cdevtest state` biome, `/zq season`); block_ticks 0: `isRandomlyTicking` false for the state
+@from batches/r1116/tx.qb passed
+> fill 900 -61 902 915 -61 917 minecraft:farmland
+> fill 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest randomtick 900 -60 902 915 -60 917 20
+waitlog verb=randomtick done= 60
+> cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest count 900 -61 902 915 -60 917 #minecraft:crops
+expect verb=ages .*n=256 mean=0.000 hist=0:256
+expect verb=randomtick rounds=20 block_ticks=5120 .*changed=[1-9]\d{2,} .*equiv_game_ticks=27306
+expect verb=ages .*n=256 mean=([1-9]\d*|[1-9]\d*\.\d+)\b
+expect verb=count .*n=256 on=minecraft:farmland:256
+
+## SQ-TX-05 | blocktick on sand
+@group A
+@commands `setblock 905 -55 900 minecraft:sand`; `cdevtest blocktick 905 -55 900`; `cdevtest items 905 -60 900 2` after `sleep 3`
+@pass blocktick `before=minecraft:sand after=minecraft:air` (the falling block entity took it); after 3 s `cdevtest state 905 -60 900` shows sand
+@fails `TestTicks.blocktick`
+@from batches/r1116/tx.qb
+> setblock 905 -55 900 minecraft:sand
+> cdevtest blocktick 905 -55 900
+sleep 3
+> cdevtest items 905 -60 900 2
+> cdevtest state 905 -60 900
+expect verb=blocktick before=minecraft:sand after=minecraft:air
+expect verb=state pos=905,-60,900 state=minecraft:sand
+
+## SQ-TX-06 | tickwarp 2400
+@group A
+@commands `time query gametime`; `cdevtest tickwarp 2400`; waitlog `verb=tickwarp end=done` (timeout 120 s); `time query gametime`; `cdevtest tickwarp status`
+@pass `started=2400`; end line `end=done ticks=2400 asked=2400` with `tps=` over 40; game time up by at least 2400; status `running=false`
+@fails `tps` near 20: the nextTickTime field write failed (log `tickwarp cannot set nextTickTime`, SRG name `f_129726_`); waiting `pollTask` work; `ticks` short: stopped early
+@from batches/r1116/tx.qb
+> time query gametime
+capture G0 The time is (\d+)
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 120
+> time query gametime
+> cdevtest tickwarp status
+expect verb=tickwarp started=2400
+expect verb=tickwarp end=done ticks=2400 asked=2400 .*tps=([4-9]\d|\d{3,})
+expect verb=tickwarp running=false
+look game time after the warp is at least {G0+2400} (second "The time is" line)
+
+## SQ-TX-07 | tickwarp 6000 with a bot near a second wheat field
+@group A
+@commands H7 statistics: `fill 920 -61 902 935 -61 917 minecraft:farmland`; `fill 920 -60 902 935 -60 917 minecraft:wheat`; `pbot spawn T 927 -60 920 minecraft:overworld creative`; `cdevtest tickwarp 6000`; waitlog `end=done`; `cdevtest ages 920 -60 902 935 -60 917 minecraft:wheat`
+@pass wheat mean clearly above 0 (6000 ticks = about 4.4 random ticks per block); compare with -04's 20-round mean per random tick; `tps` over 20
+@fails no growth with a bot near: season or growth rule (as -04); bot chunk tickets (`cdevtest chunk 927 920`)
+@from batches/r1116/tx.qb
+> fill 920 -61 902 935 -61 917 minecraft:farmland
+> fill 920 -60 902 935 -60 917 minecraft:wheat
+> pbot spawn T 927 -60 920 minecraft:overworld creative
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done 400
+> cdevtest ages 920 -60 902 935 -60 917 minecraft:wheat
+expect verb=tickwarp end=done ticks=6000 asked=6000 .*tps=([2-9]\d|\d{3,})
+expect verb=ages .*n=256 mean=(0\.[1-9]|0\.0[1-9]|[1-9])
+look wheat mean clearly above 0 and in line with -04's mean per random-tick round (6000 ticks = about 4.4 random ticks per block)
+
+## SQ-TX-08 | watch the chest inventory
+@group A
+@commands After -03: `cdevtest watch 900 -60 900 40 10 what=inv`; `sleep 1`; `item replace block 900 -60 900 container.1 with minecraft:bread 2`; `sleep 3`
+@pass lines `verb=watch t=0 ... items=0:minecraft:apple*5`, then t=10, 20, 30, 40 (the later ones with `1:minecraft:bread*2`), then `verb=watch end=done t=40`
+@fails `TestTicks.tickWatches`
+@from batches/r1116/tx.qb
+> cdevtest watch 900 -60 900 40 10 what=inv
+sleep 1
+> item replace block 900 -60 900 container.1 with minecraft:bread 2
+waitlog verb=watch end=done t=40 30
+expect verb=watch t=0 .*items=0:minecraft:apple\*5
+expect verb=watch t=40 .*1:minecraft:bread\*2
+count verb=watch t=(0|10|20|30|40) == 5
+
+## SQ-TX-09 | data verbs against /zq
+@group A
+@commands Data verbs against `/zq` on the same boot: `cdevtest recipes minecraft:bread` / `zq recipes minecraft:bread`; `cdevtest food minecraft:bread` / `zq food minecraft:bread`; `cdevtest tag item minecraft:logs` / `zq itemtag minecraft:logs`; `cdevtest states` / `zq states all`; `cdevtest rdetail create:crushing/`; `cdevtest bytype minecraft:smelting`; `cdevtest uses minecraft:wheat`; `cdevtest makes minecraft:bread`; `cdevtest tagsof minecraft:oak_log`; `cdevtest attrs minecraft:diamond_sword`; `cdevtest reg item ^minecraft:wheat`; `cdevtest potion minecraft:awkward minecraft:sugar,minecraft:spider_eye`; `cdevtest item minecraft:bread`
+@pass counts and values equal the `/zq` lines (recipe count, nutrition and modifier, tag size, state count); rdetail has `part=results` lines; bytype `n=` over 100; attrs `n=` 2 or more on mainhand; potion `output="minecraft:potion minecraft:swiftness"` and `minecraft:potion minecraft:poison` for the eye (vanilla; r1116); every call `done=1`
+@fails a mismatch with `/zq`: `TestData` (Ingredient.getItems vs KubeJS getStacks); rdetail extras: reflection names `getRollableResults`, `getSequence`
+@from batches/r1116/tx.qb
+> cdevtest recipes minecraft:bread
+> zq recipes minecraft:bread
+> cdevtest food minecraft:bread
+> zq food minecraft:bread
+> cdevtest tag item minecraft:logs
+> zq itemtag minecraft:logs
+> cdevtest states
+> zq states all
+sleep 5
+> cdevtest rdetail create:crushing/
+> cdevtest bytype minecraft:smelting
+> cdevtest uses minecraft:wheat
+> cdevtest makes minecraft:bread
+> cdevtest tagsof minecraft:oak_log
+> cdevtest attrs minecraft:diamond_sword
+> cdevtest reg item ^minecraft:wheat
+> cdevtest potion minecraft:awkward minecraft:sugar,minecraft:spider_eye
+> cdevtest item minecraft:bread
+sleep 3
+expect verb=rdetail .*part=results
+expect verb=bytype .*n=[1-9]\d{2,}
+expect output="minecraft:potion minecraft:swiftness"
+reject verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=0
+count verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=1 == 13
+look counts and values equal the /zq lines (recipe count, nutrition and modifier, tag size, state count); attrs n= 2+ on mainhand; spider eye gives awkward or nothing
+
+## SQ-TX-10 | break, use, loot, useair as the fake player
+@group A
+@commands `setblock 940 -60 900 minecraft:oak_log`; `cdevtest break 940 -60 900 held=minecraft:iron_axe`; `cdevtest use 941 -61 900 held=minecraft:iron_hoe`; `setblock 942 -60 900 minecraft:oak_leaves[persistent=true]`; `cdevtest loot 942 -60 900 tool=minecraft:shears rolls=10`; `cdevtest useair held=minecraft:ender_pearl`
+@pass break `who=fake broken=true before=minecraft:oak_log[axis=y] after=minecraft:air` then `drops=minecraft:oak_log:1`; use `result=CONSUME` (or SUCCESS) and `state="minecraft:farmland[moisture=0]"`; loot `drops=minecraft:oak_leaves:10`; useair `result=` CONSUME or SUCCESS
+@fails fake player per dimension (profile `[cdevtest:overworld]`); a protection mod refusing fake players
+@from batches/r1116/tx.qb passed
+> setblock 940 -60 900 minecraft:oak_log
+> cdevtest break 940 -60 900 held=minecraft:iron_axe
+> cdevtest use 941 -61 900 held=minecraft:iron_hoe
+> setblock 942 -60 900 minecraft:oak_leaves[persistent=true]
+> cdevtest loot 942 -60 900 tool=minecraft:shears rolls=10
+> cdevtest useair held=minecraft:ender_pearl
+expect verb=break who=fake\S* broken=true before="?minecraft:oak_log\[axis=y\]"? after=minecraft:air
+expect verb=break .*drops=minecraft:oak_log:1
+expect verb=use .*result=(CONSUME|SUCCESS)
+expect verb=use .*state="?minecraft:farmland\[moisture=0\]
+expect verb=loot .*drops=minecraft:oak_leaves:10
+expect verb=useair .*result=(CONSUME|SUCCESS)
+
+## SQ-TX-11 | kill cows (sword, then fire)
+@group A
+@commands `cdevtest kill 950 -60 900 minecraft:cow n=5 held=minecraft:diamond_sword`; `cdevtest kill 950 -60 905 minecraft:cow n=5 fire`
+@pass `n=5 killed=5` and `drops=` with minecraft:leather and minecraft:beef (cooked beef with fire); `xp=` about 10 (1.19.2 drops the orbs in `die()`; r1116)
+@fails `TestWorld.kill`; peaceful discards animals only on their next tick, so kills in the same call still drop
+@from batches/r1116/tx.qb
+> cdevtest kill 950 -60 900 minecraft:cow n=5 held=minecraft:diamond_sword
+> cdevtest kill 950 -60 905 minecraft:cow n=5 fire
+count verb=kill type=minecraft:cow n=5 killed=5 == 2
+expect verb=kill drops=.*minecraft:leather.*xp=0|verb=kill drops=.*minecraft:beef.*minecraft:leather.*xp=0|verb=kill drops=.*minecraft:leather
+expect verb=kill drops=.*minecraft:beef
+expect verb=kill drops=.*minecraft:cooked_beef
+reject verb=kill .*xp=[1-9]
+
+## SQ-TX-12 | Loading Protection exemption and attack
+@group A
+@commands Loading Protection and attack: `summon minecraft:iron_golem 961 -60 900 {NoAI:1b}`; `pbot spawn A 960 -60 900 minecraft:overworld survival`; `sleep 1`; `pbot inv A set 0 minecraft:iron_sword`; `pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]`; `pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest] weak`; `pbot remove A`; `pbot spawn A 960 -60 900 minecraft:overworld survival`; `sleep 1`; `pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]`
+@pass log has Loading Protection's "Player A logged in, protection active for 150 seconds"; each attack within 2 s of a spawn: `strength=1 ... health_after` below `health_before`; the weak one `strength=` under 0.3; the respawn at the same spot also hits (the exemption, gotchas "Loading Protection")
+@fails exemption: `Bots.onLogin` must run before Loading Protection's listener (HIGHEST); `pendingSpawn` null when the login fires
+@from batches/r1116/tx.qb
+> summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot inv A set 0 minecraft:iron_sword
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest] weak
+> pbot remove A
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+expect Player A logged in, protection active for 150 seconds
+count verb=pbot.attack bot=A target=minecraft:iron_golem strength=1 == 2
+expect verb=pbot.attack bot=A target=minecraft:iron_golem strength=0\.[0-2]\d*\b
+look each attack line health_after below health_before (respawned bot included)
+
+## SQ-TX-13 | vulnerable toggle, interact
+@group A
+@commands After -12: `effect give A minecraft:instant_damage 1 0`; `cdevtest player A`; `pbot vulnerable A on`; `effect give A minecraft:instant_damage 1 0`; `cdevtest player A`; `pbot vulnerable A off`; `pbot interact A @e[type=minecraft:iron_golem,limit=1,sort=nearest]` after `pbot inv A set 0 minecraft:iron_ingot`
+@pass first player line `health=20 invulnerable=true`; after vulnerable on `health=` under 20 and `invulnerable=false`; interact `result=SUCCESS` (or CONSUME) and `held_after=minecraft:iron_ingot*0` or empty (golem repaired)
+@fails `Bots.setVulnerable`; `pbot interact` uses Player.interactOn
+@from batches/r1116/tx.qb passed
+> effect give A minecraft:instant_damage 1 0
+> cdevtest player A
+> pbot vulnerable A on
+> effect give A minecraft:instant_damage 1 0
+> cdevtest player A
+> pbot vulnerable A off
+> pbot inv A set 0 minecraft:iron_ingot
+> pbot interact A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+expect verb=player name=A .*health=20 .*invulnerable=true
+expect verb=player name=A .*health=(1?\d|1\d\.\d+) .*invulnerable=false
+expect verb=pbot.vulnerable bot=A invulnerable=false
+expect verb=pbot.interact bot=A .*result=(SUCCESS|CONSUME) held_after=(minecraft:air|-|empty|minecraft:iron_ingot\*0)\b
+
+## SQ-TX-14 | eat bread, shoot a bow
+@group A
+@commands `pbot hunger A 10`; `pbot inv A set 0 minecraft:bread 2`; `pbot inv A select 0`; `pbot eat A`; `sleep 3`; `cdevtest food minecraft:bread`; `pbot inv A set 0 minecraft:bow`; `pbot inv A set 9 minecraft:arrow 16`; `pbot look A 0 0`; `pbot useitem A main 20`; `sleep 2`; `cdevtest entities 960 -60 900 40 type=minecraft:arrow`
+@pass eat `result=CONSUME using=true use_ticks=32 food=10`; within 3 s `verb=pbot.useitem bot=A end=finish item=minecraft:bread result=minecraft:bread food=` 10 + bread nutrition and `sat=` equal to `cdevtest food` saturation (start 0), finish `tick` 32 after the eat line's; bow `using=true release_after=20`, then `end=released`, entities `n=1`
+@fails no finish line: the bot's LivingEntity tick does not count the use down (BotPlayer.tick calls doTick); food values off by the pack's food tuning: compare with `cdevtest food`, not vanilla
+@from batches/r1116/tx.qb
+> pbot hunger A 10
+> pbot inv A set 0 minecraft:bread 2
+> pbot inv A select 0
+> pbot eat A
+sleep 3
+> cdevtest food minecraft:bread
+> pbot inv A set 0 minecraft:bow
+> pbot inv A set 9 minecraft:arrow 16
+> pbot look A 0 0
+> pbot useitem A main 20
+sleep 2
+> cdevtest entities 960 -60 900 40 type=minecraft:arrow
+expect verb=pbot.eat bot=A .*result=CONSUME using=true use_ticks=32 .*food=10
+expect verb=pbot.useitem bot=A end=finish item=minecraft:bread
+expect verb=pbot.useitem bot=A .*using=true use_ticks=\d+ release_after=20
+expect verb=pbot.useitem bot=A end=released
+expect verb=entities n=1
+look finish line food = 10 + bread nutrition and sat = cdevtest food saturation; finish tick 32 after the eat line's tick
+
+## SQ-TX-15 | sneak, look, break, punch
+@group A
+@commands `pbot sneak A on`; `sleep 1`; `cdevtest player A`; `pbot sneak A off`; `pbot look A 90 30`; `cdevtest player A`; `pbot break A 961 -61 901`; `pbot punch A 962 -61 901`
+@pass `shift=true pose=CROUCHING`; then `yaw=90 pitch=30`; break `broken=true`; punch `after=` the same grass block (survival click aborted)
+@fails pose updates on the bot's own tick; `handleBlockBreakAction` arguments
+@from batches/r1116/tx.qb
+> pbot sneak A on
+sleep 1
+> cdevtest player A
+> pbot sneak A off
+> pbot look A 90 30
+> cdevtest player A
+> pbot break A 961 -61 901
+> pbot punch A 962 -61 901
+expect verb=player name=A .*shift=true pose=CROUCHING
+expect verb=player name=A .*yaw=90 pitch=30
+expect verb=pbot.break bot=A broken=true
+expect verb=pbot.punch bot=A before=(\S+) after=\1
+look punch after= is the same grass block as before=
+
+## SQ-TX-16 | walk, sprint, wall, pickup off
+@group A
+@commands Walk (H2): `fill 960 -60 905 1000 -60 905 minecraft:air`; `pbot spawn W 960 -60 905 minecraft:overworld survival`; `sleep 1`; `pbot moveto W 990 905`; `sleep 10`; `pbot moveto W 960 905 sprint`; `sleep 10`; `setblock 975 -60 905 minecraft:stone`; `setblock 975 -59 905 minecraft:stone`; `pbot moveto W 990 905`; `sleep 10`; `pbot pickup W off`; `summon minecraft:item 960 -60 905 {Item:{id:"minecraft:apple",Count:1b}}`; `pbot moveto W 960 905`; `sleep 10`; `pbot inv W get`; `cdevtest items 960 -60 905 3`
+@pass walk `end=reached ticks=` about 139 `speed_bps=` 4.1 to 4.4 (vanilla walk 4.317); sprint `speed_bps=` 5.3 to 5.8; the 2-high wall `end=stuck`; with pickup off the apple stays: `inv` has no apple, items `minecraft:apple:1`
+@fails no movement: travel input not applied (zza reset before travel; check `cdevtest player W speed=`); slow walk on grass: the pack's walk speed changes (Creative Compat pass-through) apply to players and are expected; overshoot: `Walk.ARRIVE`
+@from batches/r1116/tx.qb
+> fill 960 -60 905 1000 -60 905 minecraft:air
+> pbot spawn W 960 -60 905 minecraft:overworld survival
+sleep 1
+> pbot moveto W 990 905
+sleep 10
+> pbot moveto W 960 905 sprint
+sleep 10
+> setblock 975 -60 905 minecraft:stone
+> setblock 975 -59 905 minecraft:stone
+> pbot moveto W 990 905
+sleep 10
+> pbot pickup W off
+> summon minecraft:item 960 -60 905 {Item:{id:"minecraft:apple",Count:1b}}
+> pbot moveto W 960 905
+sleep 10
+> pbot inv W get
+> cdevtest items 960 -60 905 3
+expect verb=pbot.moveto bot=W end=reached ticks=1[2-5]\d .*speed_bps=4\.[1-4]
+expect verb=pbot.moveto bot=W end=reached .*speed_bps=5\.[3-8]
+expect verb=pbot.moveto bot=W end=stuck
+reject verb=pbot.inv bot=W slot=\d+ item=minecraft:apple
+expect verb=items .*minecraft:apple:1
+look walk ticks about 139, speeds in range (pack walk-speed changes are expected)
+
+## SQ-TX-17 | D0 layer dump
+@group A
+@commands D0 layer dump (plan_post_scratch_1115b.md D0), Creative Compat build 15:42 or newer swapped in: `cdevtest layerdump`; then `cp OUT/srv/kubejs/exported/passthrough_layers_dump.json kubejs/exported/`
+@pass `verb=layerdump ... done=1`; `class=in_tag` for minecraft:snow (1-8), the 9 IW leaf piles and azalea_flower_pile (0-8), IW ash, sand and red sand layers, supplementaries:ash and fodder (1-8), twigs:bamboo_leaves (`max=4`), immersiveengineering:sawdust (`max=9`); `class=d1_out` for the 7 createdeco coin stacks and controlengineering:logic_cabinet; summary `tag_without_property=0`; snow `collision_px=1:0,2:2,...,8:14` (vanilla snow collides one layer lower). Every `class=new` line (Copycats layers by their code-defined property, anything code-only) goes to the owner as a D1 question
+@fails `TestLayers` (EmptyBlockGetter: a `shape_error` block needs a real world; read it with `cdevtest state` on a placed block); tag empty: Compat not loaded or `passthrough_tags.js` not in the Compat jar
+@from batches/r1116/tx.qb
+> cdevtest layerdump
+waitlog verb=layerdump .*done= 120
+shell cp kubejs/exported/passthrough_layers_dump.json "$INST/kubejs/exported/" && echo copied
+expect verb=layerdump .*done=1
+expect tag_without_property=0
+look dump json: class=in_tag for snow 1-8, 9 IW leaf piles + azalea_flower_pile 0-8, IW ash/sand/red sand layers, supplementaries ash and fodder, twigs bamboo_leaves max=4, IE sawdust max=9; class=d1_out for 7 createdeco coin stacks and logic_cabinet; snow collision_px; class=new lines go to the owner
+
+## SQ-TX-18 | cdevreload compat with Compat loaded (boot 1 part)
+@group A
+@commands Compat swapped in: `cdevreload compat`; then SQ-PS15B-12 uses it. A second boot with `SKIPSWAP` and the Compat jar removed from `OUT/srv/mods/`: `cdevreload compat`, `cdevtest help`
+@pass first boot: log line `[cdevreload] compat: ` followed by CompatConfigReload's result (not "not loaded yet"); second boot: `Unknown or incomplete command` for cdevreload, no ERROR or NoClassDefFoundError naming `creativecompat` at load, `cdevtest help` works
+@fails `CompatReloadCommand` registered outside the `ModList.isLoaded("creativecompat")` guard in `CreativeDevtools`
+@from batches/r1116/tx.qb passed
+> cdevreload compat
+sleep 2
+expect \[cdevreload\] compat: 
+reject not loaded yet
+
+## CQ-TXR-01
+@group client
+@commands Devtools build and Compat build in the client's mods (the capture runner's game dir or `eval_client.py`): in chat `/cdevreloadclient compat` after editing the client's `creativecompat-common.toml` `[surface.wthit] passThrough = false` with `sed -i`
+@pass chat `[cdevreload] compat: ...`; the WTHIT pass-through line goes away without a restart (CQ-PTH-04's case)
+@fails `CompatReloadClient` only registered on Dist.CLIENT; RegisterClientCommandsEvent fires on world join
+@jars creativecommon creativedevtools
+@draft no batch holds this row yet

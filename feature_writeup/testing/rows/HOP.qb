@@ -1,0 +1,367 @@
+# Scratch queue rows HOP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/HOP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-HOP / Hearth and Harvest hops, tilled end stone, stomping basin, 2026-11-14 ([plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.1, 3.2, 3.10; [hearth_and_harvest.md](../hearth_and_harvest.md) J75, J76; TODO `largecontent/mod-additions #70`, `#71`, `#73`, `#75`)
+@@date 2026-11-14
+@@jars creativedelight
+@@sources feature_writeup/plan_bugfix_1114.md feature_writeup/hearth_and_harvest.md
+@@text
+@@text Targets `creativedelight-1.1.0.jar` and `creativebrewing-1.0.0.jar` installed 2026-11-14 23:03 (cd-b), with Ender Crop's
+@@text `endstoneNeedsUnbreaking = false` (config). Hops exist only with Creative Brewing (Vinery). SQ-HH-304 and SQ-HOP-06 need a
+@@text fresh world (worldgen). Retired by this section (the blocks they test are gone): SQ-HH-1542 to -1545 (H&H tilled end stone,
+@@text superseded by SQ-HH-1546, -1546b, -1546c); SQ-HH-1547 to -1557 and -1555h (hops on an H&H lattice block, farmland rule,
+@@text superseded by SQ-HOP-07 to -11); SQ-HH-D09 (same).
+@@text
+@@table
+## SQ-HOP-01 | no Brewing: no hops item, salad, bag, wild hops or hops vine registered; no hearthandharvest:hops error
+@group A
+@commands Fold into SQ-DEP-02 (boot without `creativebrewing-*.jar`): `/zq items hearthandharvest:hops`, `/zq items hearthandharvest:hops_salad`, `/zq items hearthandharvest:hops_bag`, `/zq items hearthandharvest:wild_hops`, `/zq blocks hearthandharvest:hops_vine`
+@pass none registered; no `hearthandharvest:hops` error in `latest.log` (recipes, tags, trades, compost skip hops); Common's `[item_dict] Missing/invalid item IDs` WARN listing the hops ids is expected without Brewing
+@fails `HHBlocks.HOPS_ON`, the `has.mod('vinery')` guards in `hearthandharvest/recipes.js`, `tags.js`, `trades.js`, `compost.js`
+@from batches/r1115/p7_nb.qb
+> zq items hearthandharvest:hops
+waitlog \[zq\] done 20
+reject \[zq\] items id hearthandharvest:hops
+> zq items hearthandharvest:wild_hops
+waitlog \[zq\] done 20
+reject \[zq\] items id hearthandharvest:wild_hops
+> zq blocks hearthandharvest:hops_vine
+waitlog \[zq\] done 20
+reject \[zq\] blocks id hearthandharvest:hops_vine
+shell grep -nE "hearthandharvest:(hops|wild_hops)" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-260 | head -8; echo "hops lines: $(cat logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | grep -cE 'hearthandharvest:(hops|wild_hops)')"
+look zq lists no hops item / block (hops_salad and hops_bag are covered by the hearthandharvest:hops text query); no hops error line
+
+## SQ-HOP-02 | hops item on a log face places a hops vine (north=true, age 0); one hops used
+@group A
+@commands `/setblock 600 -60 520 minecraft:oak_log`; `/pbot hold G hearthandharvest:hops 2`; `/pbot use G 600 -60 520 south` (south face); `/execute if block 600 -60 521 hearthandharvest:hops_vine[north=true,age=0]`; `/zhh5 hand G`
+@pass "Test passed"; hand count 1
+@fails `HHItems.HOPS` (ItemNameBlockItem of the vine), `HopsVineBlock` VineBlock placement
+@from batches/r1115/p5_a1.qb
+> setblock 600 -60 520 minecraft:oak_log
+> clear G
+> pbot hold G hearthandharvest:hops 2
+> pbot use G 600 -60 520 south
+> execute if block 600 -60 521 hearthandharvest:hops_vine[north=true,age=0] run say HOP02-vine
+> zhh5 hand G
+waitlog \[zhh5\] done 20
+expect HOP02-vine$
+expect \[zhh5\] hand id=hearthandharvest:hops count=1 
+look "Test passed"; hand count 1
+
+## SQ-HOP-03 | hops vine grows to age 3 at randomTickSpeed 3000 in 10 s (open sky, mid autumn)
+@group A
+@commands `/setblock 602 -60 520 minecraft:oak_log`; `/setblock 602 -60 521 hearthandharvest:hops_vine[north=true,age=0]`; `/gamerule randomTickSpeed 3000`; wait 10 s; `/execute if block 602 -60 521 hearthandharvest:hops_vine[age=3]`; `/gamerule randomTickSpeed 3`
+@pass "Test passed" (open sky, light 15). Out of season the crop season may stop growth: run at an in-season date
+@fails `HopsVineBlock.randomTick` (1 in 5, light 9 at the block above), crop season tag `autumn_fruit`
+@from batches/r1115/p5_a1.qb
+> setblock 602 -60 520 minecraft:oak_log
+> setblock 602 -60 521 hearthandharvest:hops_vine[north=true,age=0]
+> zmelt w hop03 overworld 602 -60 521
+> zmelt light overworld 602 -59 521
+> gamerule randomTickSpeed 3000
+sleep 10
+> gamerule randomTickSpeed 3
+> execute if block 602 -60 521 hearthandharvest:hops_vine[age=3] run say HOP03-age3
+> zmelt show
+> zmelt clear
+expect HOP03-age3$
+look "Test passed" (watch shows age 0 -> 1 -> 2 -> 3)
+
+## SQ-HOP-04 | stick pick: age 3 gives 1 or 2 hops and goes to age 1 (x3); age 2 gives 0 or 1; age 1 is not picked
+@group A
+@commands `/setblock 604 -60 520 minecraft:oak_log`; `/setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=3]`; `/pbot hold G minecraft:stick 1`; `/pbot use G 604 -60 521 north`; `/execute if block 604 -60 521 hearthandharvest:hops_vine[age=1]`; `/zhh5 items 604 -60 521 3`; repeat 3 times; then `age=2` once; then `age=1`: use does nothing
+@pass "Test passed"; age 3 gives 1 or 2 `hearthandharvest:hops`, age 2 gives 0 or 1, age 1 is not picked
+@fails `HopsVineBlock.use`
+@from batches/r1115/p5_a1.qb
+> setblock 604 -60 520 minecraft:oak_log
+> kill @e[type=minecraft:item]
+> clear G
+> pbot hold G minecraft:stick 1
+repeat 3
+> setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=3]
+> pbot use G 604 -60 521 north
+> execute if block 604 -60 521 hearthandharvest:hops_vine[age=1] run say HOP04-age3-to-1
+> zhh5 items 604 -60 521 3
+sleep 1
+end
+> setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=2]
+> pbot use G 604 -60 521 north
+> execute if block 604 -60 521 hearthandharvest:hops_vine[age=1] run say HOP04-age2-to-1
+> zhh5 items 604 -60 521 3
+> setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> pbot use G 604 -60 521 north
+> execute if block 604 -60 521 hearthandharvest:hops_vine[age=1] run say HOP04-age1-stays
+> zhh5 items 604 -60 521 3
+count HOP04-age3-to-1$ == 3
+look per use: "use SUCCESS/CONSUME" lines; age 3 items lines 1 or 2 hearthandharvest:hops each; age 2 line 0 or 1 hops (age 1 after); age 1 use PASS/FAIL and no items
+
+## SQ-HOP-05 | shears sterilize: no growth while sterilized; second shears use clears it (rerun on Compat 11:31)
+@group A
+@commands `/setblock 606 -60 520 minecraft:oak_log`; `/setblock 606 -60 521 hearthandharvest:hops_vine[north=true,age=1]`; `/pbot hold G minecraft:shears 1`; `/pbot use G 606 -60 521 north`; `/execute if block 606 -60 521 hearthandharvest:hops_vine[sterilized=true]`; `/gamerule randomTickSpeed 3000`; wait 10 s; `/execute if block 606 -60 521 hearthandharvest:hops_vine[age=1]`; `/gamerule randomTickSpeed 3`; shears again
+@pass "Test passed" twice (no growth while sterilized); the second shears use gives `sterilized=false`
+@fails `HopsVineBlock` STERILIZED, `isRandomlyTicking`
+@from batches/r1115/pth_a2.qb passed
+> setblock 606 -60 520 minecraft:oak_log
+> setblock 606 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> clear G
+> pbot hold G minecraft:shears 1
+> pbot use G 606 -60 521 north
+> execute if block 606 -60 521 hearthandharvest:hops_vine[sterilized=true] run say HOP05-sterilized
+> gamerule randomTickSpeed 3000
+sleep 10
+> gamerule randomTickSpeed 0
+> execute if block 606 -60 521 hearthandharvest:hops_vine[age=1] run say HOP05-still-age1
+> pbot use G 606 -60 521 north
+> execute if block 606 -60 521 hearthandharvest:hops_vine[sterilized=false] run say HOP05-unsterilized
+expect HOP05-sterilized$
+expect HOP05-still-age1$
+expect HOP05-unsterilized$
+
+## SQ-HOP-06 | judged from SQ-HH-304's countsets: hops vine chunks at least 1 and at most a quarter of the wild carrot chunks
+@group B (fresh world, with SQ-HH-304)
+@commands As SQ-HH-304 (two located forests, 256 chunks each) counting `hearthandharvest:hops_vine`; also the typical crop: same boxes, `/zhh2 countset ... farmersdelight:wild_carrots`
+@pass hops vine count at least 1 over the two sites and below the wild carrot patch count (rarity 96 vs 120, but one tree per hit, several vine blocks per tree; compare hits: vine clusters at most a quarter of the carrot patches)
+@fails `worldgen/placed_feature/wild/wild_hops.json` (rarity 96, `MOTION_BLOCKING_NO_LEAVES`), `TrunkVineFeature` (trunk search: a log with a non-log below within origin y-6..+10)
+@from batches/r1115/p5_b1.qb
+look hops_vine "in K chunks" over the two sites at least 1 and at most a quarter of wild_carrots' chunk count
+
+## SQ-HOP-07 | hops on an empty Vinery lattice (no farmland): age 1, grape=hops; one hops used
+@group A
+@commands `/setblock 610 -60 520 minecraft:stone`; `/setblock 610 -60 521 vinery:grapevine_lattice[facing=south,age=0]`; `/pbot hold G hearthandharvest:hops 2`; `/pbot use G 610 -60 521 south`; `/execute if block 610 -60 521 vinery:grapevine_lattice[age=1,grape=hops]`; `/zhh5 hand G`
+@pass "Test passed"; hand count 1; no farmland needed
+@fails `GrapeTypeRegistry.forSeed`, `LegacyLatticeStemBlock.use`
+@from batches/r1115/p5_a1.qb
+> setblock 610 -60 520 minecraft:stone
+> setblock 610 -60 521 vinery:grapevine_lattice[facing=south,age=0]
+> clear G
+> pbot hold G hearthandharvest:hops 2
+> pbot use G 610 -60 521 south
+> execute if block 610 -60 521 vinery:grapevine_lattice[age=1,grape=hops] run say HOP07-lattice-hops
+> zhh5 hand G
+waitlog \[zhh5\] done 20
+expect HOP07-lattice-hops$
+look "Test passed"; hand count 1
+
+## SQ-HOP-08 | hops lattice grows to age 4 in the open at randomTickSpeed 3000 in 15 s; a dark one (stone box, light 0) stays age 1
+@group A
+@commands Lattice as -07 at 612 with `[age=1,grape=hops]`; `/gamerule randomTickSpeed 3000`; wait 15 s; `/execute if block 612 -60 521 vinery:grapevine_lattice[age=4,grape=hops]`; `/gamerule randomTickSpeed 3`; a second lattice under a stone roof at light 0 (`/fill` a 3x3 box around it) does not grow
+@pass "Test passed" in the open; the dark one stays age 1
+@fails `LegacyLatticeStemBlock.randomTick` (light 9)
+@from batches/r1115/p5_a1.qb
+> setblock 612 -60 520 minecraft:stone
+> setblock 612 -60 521 vinery:grapevine_lattice[facing=south,age=1,grape=hops]
+> fill 649 -61 519 651 -59 523 minecraft:stone
+> setblock 650 -60 521 vinery:grapevine_lattice[facing=south,age=1,grape=hops]
+> zmelt light overworld 650 -60 521
+> zmelt w hop08_open overworld 612 -60 521
+> zmelt w hop08_dark overworld 650 -60 521
+> gamerule randomTickSpeed 3000
+sleep 15
+> gamerule randomTickSpeed 3
+> execute if block 612 -60 521 vinery:grapevine_lattice[age=4,grape=hops] run say HOP08-open-age4
+> execute if block 650 -60 521 vinery:grapevine_lattice[age=1,grape=hops] run say HOP08-dark-age1
+> zmelt show
+> zmelt clear
+expect HOP08-open-age4$
+expect HOP08-dark-age1$
+look open "Test passed" age 4; dark stays age 1 (light line block 0 sky 0)
+
+## SQ-HOP-09 | ripe hops lattice: stick gives 3 or 4 hops, back to age 1; age 3 with shears gives 2 + 1 hops, age 0
+@group A
+@commands Lattice at 614 `[age=4,grape=hops]`; `/pbot hold G minecraft:stick 1`; `/pbot use G 614 -60 521 south`; `/execute if block 614 -60 521 vinery:grapevine_lattice[age=1,grape=hops]`; `/zhh5 items 614 -60 521 3`; then `[age=3,grape=hops]` with shears
+@pass ripe: 3 or 4 `hearthandharvest:hops`, back to age 1; age 3 with shears: 2 hops plus 1 hops (seed), `age=0`
+@fails `StemBlock.dropGrapes`, `dropGrapeSeeds` with the hops type
+@from batches/r1115/p5_a1.qb
+> setblock 614 -60 520 minecraft:stone
+> setblock 614 -60 521 vinery:grapevine_lattice[facing=south,age=4,grape=hops]
+> kill @e[type=minecraft:item]
+> clear G
+> pbot hold G minecraft:stick 1
+> pbot use G 614 -60 521 south
+> execute if block 614 -60 521 vinery:grapevine_lattice[age=1,grape=hops] run say HOP09-ripe-to-1
+> zhh5 items 614 -60 521 3
+> setblock 614 -60 521 vinery:grapevine_lattice[facing=south,age=3,grape=hops]
+> pbot hold G minecraft:shears 1
+> pbot use G 614 -60 521 south
+> execute if block 614 -60 521 vinery:grapevine_lattice[age=0] run say HOP09-shears-age0
+> zhh5 items 614 -60 521 3
+> data get block 614 -60 521
+expect HOP09-ripe-to-1$
+expect HOP09-shears-age0$
+look ripe: 3 or 4 hearthandharvest:hops, age 1; shears on age 3: 3 hops in total (2 + 1 seed), age 0
+
+## SQ-HOP-10 | grapevine pot refuses hops (hand still 3); jungle white seeds on a lattice still plant
+@group A
+@commands `/setblock 616 -60 520 vinery:grapevine_pot`; `/pbot hold G hearthandharvest:hops 3`; `/pbot use G 616 -60 520 up`; `/zhh5 hand G`; jungle grapes on a lattice: `/setblock 618 -60 521 vinery:grapevine_lattice[facing=south,age=0]` (stone behind), `/pbot hold G vinery:jungle_grape_seeds_white 1`, use; `/execute if block 618 -60 521 vinery:grapevine_lattice[age=1,grape=jungle_white]`; `/zq blocks hearthandharvest:` (grep lattice)
+@pass hand still 3 hops (pot refuses); jungle "Test passed"; no `hearthandharvest:*lattice*` and no `hearthandharvest:hops` block
+@fails `GrapevinePotBlock.useItemOn` (`hasJuice`), `GrapeTypeRegistry`
+@from batches/r1115/p5_a1.qb
+> setblock 616 -60 520 vinery:grapevine_pot
+> clear G
+> pbot hold G hearthandharvest:hops 3
+> pbot use G 616 -60 520 up
+> zhh5 hand G
+waitlog \[zhh5\] done 20
+> setblock 618 -60 520 minecraft:stone
+> setblock 618 -60 521 vinery:grapevine_lattice[facing=south,age=0]
+> pbot hold G vinery:jungle_grape_seeds_white 1
+> pbot use G 618 -60 521 south
+> execute if block 618 -60 521 vinery:grapevine_lattice[age=1,grape=jungle_white] run say HOP10-jungle
+expect \[zhh5\] hand id=hearthandharvest:hops count=3 
+expect HOP10-jungle$
+reject (Unknown item|Unknown block type|Incorrect argument for command)
+look hand still 3 hops after the pot; jungle "Test passed"; registry part in SQ-HOP-10x
+
+## SQ-HOP-11 | old save: lattices keep age and facing (grape none until a random tick), then grape=hops; swap log line
+@group A (old save)
+@commands Fresh save on the previous jars (`creativedelight` before 2026-11-14 from `jar_archive/displaced/`): `/setblock 620 -60 521 hearthandharvest:hops[age=4,facing=south]` (stone behind), `/setblock 622 -60 521 hearthandharvest:hops[age=2,facing=south]`, `/setblock 624 -61 520 hearthandharvest:tilled_end_stone`; stop; swap in the new jars; boot; `/execute if block 620 -60 521 vinery:grapevine_lattice[age=4,facing=south]`; `/gamerule randomTickSpeed 3000`; wait 5 s; `/execute if block 620 -60 521 vinery:grapevine_lattice[grape=hops]`; same for 622; `/execute if block 624 -61 520 endercrop:tilled_end_stone`
+@pass log `[swaps] minecraft:block: 2 id(s) remapped`; all "Test passed" (memory forge-missing-mappings-staging: a fresh old-id save)
+@fails `data/creativedelight/swaps/hearth_removals.json`, `LegacyLatticeStemBlock.restoreHops`
+@from batches/r1115/p5_a2.qb
+bootexpect \[swaps\] minecraft:block: 2 id\(s\) remapped
+> gamerule randomTickSpeed
+> zmelt w hop11_620 overworld 620 -60 521
+> zmelt w hop11_622 overworld 622 -60 521
+> zmelt w hh1546b overworld 624 -61 520
+> execute if block 620 -60 521 vinery:grapevine_lattice[age=4,facing=south] run say HOP11-620-lattice-age4
+> execute if block 622 -60 521 vinery:grapevine_lattice[age=2,facing=south] run say HOP11-622-lattice-age2
+> execute if block 624 -61 520 endercrop:tilled_end_stone run say HH1546b-ender-tes
+> pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 2
+> gamerule randomTickSpeed 3000
+sleep 5
+> gamerule randomTickSpeed 0
+> execute if block 620 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-620-grape-hops
+> execute if block 622 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-622-grape-hops
+> zmelt show
+> zmelt clear
+expect Gamerule randomTickSpeed is currently set to: 0
+expect HOP11-620-lattice-age4$
+expect HOP11-622-lattice-age2$
+expect HH1546b-ender-tes$
+expect HOP11-620-grape-hops$
+expect HOP11-622-grape-hops$
+look watch lines: loaded states (grape none), then grape=hops; 624 loads as endercrop:tilled_end_stone (may revert to end stone during the 5 s of random ticks: Ender Crop behaviour)
+
+## CQ-HOP-01
+@group client
+@commands Place hops vines at age 0 to 3 on a log, and lattices with hops at age 1 to 4; open JEI on `hearthandharvest:hops`
+@pass vine and lattice stages show the white jungle grape art (tinted green, cutout, no missing texture); JEI: Grape Planting has a vine page (logs) and a lattice page for hops; Grape Stomping has no hops page; lattice tooltip "Plant jungle grape seeds or hops on it"
+@fails `VineryHopsModels` (BakingCompleted alias, log line `hops states drawn with the white jungle grape models: N`), `blockstates/hops_vine.json`, `HHClient` colours and cutout
+@draft no batch holds this row yet
+## SQ-HH-304 (rewritten)
+@group B
+@commands As SQ-HH-304 above, counting `hearthandharvest:hops_vine` instead of `hearthandharvest:wild_hops`
+@pass sum of the two counts at least 1 (vines on trunks, 1 in 96 chunks); `columns skipped: 0`
+@fails as SQ-HOP-06
+@jars creativedelight powergrid
+@draft no batch holds this row yet
+## SQ-HH-1546 (rewritten)
+@group A
+@commands `/zhh5 loot endercrop:tilled_end_stone 5 minecraft:diamond_pickaxe`; `/zq blocktag minecraft:mineable/pickaxe` (grep `endercrop:tilled_end_stone`); `/setblock 630 -61 520 endercrop:tilled_end_stone`; `/pbot hold G endercrop:ender_seeds 1`; `/pbot use G 630 -61 520 up`; `/execute if block 630 -60 520 endercrop:ender_crop`
+@pass loot gives end stone; id in the mineable tag; "Test passed"
+@fails `hearthandharvest/tags.js` (`b.tilled_end_stone`, endercrop guard)
+@jars creativedelight powergrid
+@draft no batch holds this row yet
+## SQ-HH-1546b | old save: H&H tilled end stone loads as Ender Crop's (checked in SQ-HOP-11 before any random tick)
+@group A (old save)
+@commands Part of SQ-HOP-11 (block at 624 -61 520)
+@pass "Test passed"
+@fails `hearth_removals.json`
+@jars creativedelight powergrid
+@from batches/r1115/p5_a2.qb
+look HH1546b-ender-tes line in SQ-HOP-11
+
+## SQ-HH-1546c | iron and diamond hoes leave end stone; netherite tills; tilling-enchanted area: diamond nothing, netherite 3x3
+@group A
+@commands `/setblock 632 -61 520 minecraft:end_stone` and at 634, 636; `/pbot hold G minecraft:iron_hoe 1`, `/pbot use G 632 -61 520 up`; `minecraft:diamond_hoe` on 634; `minecraft:netherite_hoe` on 636; `/execute if block 632 -61 520 minecraft:end_stone`; same 634; `/execute if block 636 -61 520 endercrop:tilled_end_stone`; then a diamond and a netherite hoe enchanted `hearthandharvest:tilling` 1, sneak-use on a 3x3 of end stone
+@pass iron and diamond: "Test passed" (end stone stays; action bar "End stone needs a netherite hoe"); netherite: tilled; area till: diamond tills nothing, netherite tills the 3x3 into `endercrop:tilled_end_stone`
+@fails `TillingEvents.onToolModification` (HIGHEST, cancels Ender Crop's `BlockToolModificationEvent` path), `netheriteOrBetter`, area `till`
+@jars creativedelight powergrid
+@from batches/r1115/p5_a1.qb
+> setblock 632 -61 520 minecraft:end_stone
+> setblock 634 -61 520 minecraft:end_stone
+> setblock 636 -61 520 minecraft:end_stone
+> clear G
+> pbot hold G minecraft:iron_hoe 1
+> pbot use G 632 -61 520 up
+> pbot hold G minecraft:diamond_hoe 1
+> pbot use G 634 -61 520 up
+> pbot hold G minecraft:netherite_hoe 1
+> pbot use G 636 -61 520 up
+> execute if block 632 -61 520 minecraft:end_stone run say HH1546c-iron-stays
+> execute if block 634 -61 520 minecraft:end_stone run say HH1546c-diamond-stays
+> execute if block 636 -61 520 endercrop:tilled_end_stone run say HH1546c-netherite-tills
+> fill 640 -61 525 642 -61 527 minecraft:end_stone
+> fill 645 -61 525 647 -61 527 minecraft:end_stone
+> fill 640 -60 525 647 -59 527 minecraft:air
+> clear G
+> item replace entity G weapon.mainhand with minecraft:diamond_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
+> zhh5 hand G
+> zhh5 sneak G on
+> pbot use G 641 -61 526 up
+> item replace entity G weapon.mainhand with minecraft:netherite_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
+> zhh5 hand G
+> pbot use G 646 -61 526 up
+> zhh5 sneak G off
+> zhh2 countset 640 -61 525 642 -61 527 minecraft:end_stone,endercrop:tilled_end_stone
+waitlog \[zhh2\] countset columns skipped 20
+> zhh2 countset 645 -61 525 647 -61 527 minecraft:end_stone,endercrop:tilled_end_stone
+expect HH1546c-iron-stays$
+expect HH1546c-diamond-stays$
+expect HH1546c-netherite-tills$
+look first countset (diamond, enchanted): end_stone 9, tilled 0; second (netherite, enchanted): end_stone 0, tilled 9; hand lines show the tilling enchant; action bar text not visible to a bot
+
+## SQ-HH-266 (rerun)
+@group A
+@commands Plot 176 208 as SQ-HH-266, then on an empty basin: `pbot hold hb1 minecraft:bucket`, use; `pbot hold hb1 minecraft:dirt 4`, use; `/zhh2 basin 176 -60 208`; a hopper above the basin holding dirt and a bucket, wait 2 s, `/zhh2 basin 176 -60 208`
+@pass the fill/empty part as before; basin slots stay empty after the bucket, the dirt and the hopper (bot still holds them, hopper keeps them)
+@fails `StompingInputs.accepts`, `StompingBasinBlockEntity.insert` and `Items.isItemValid`
+@jars creativedelight powergrid
+@draft no batch holds this row yet
+## SQ-HH-266b | 2x2 basin group: 3 grapes + wine bottle, stomp -> juice bottle (white, savanna red, jungle white); basin empty after each
+@group A
+@commands Four basins formed as SQ-HH-267 at 304 208; `/zhh2 insert 304 -60 208 vinery:white_grape 3 up`; `/zhh2 insert 304 -60 208 vinery:wine_bottle 1 up`; jump in (`/tp` the bot 1.5 blocks above and let it fall, as SQ-HH-27x); `/zhh5 items 304 -60 208 3`; same with `vinery:savanna_grapes_red` and `vinery:jungle_grapes_white`
+@pass one `vinery:white_grapejuice_wine_bottle`, then `vinery:savanna_red_grapejuice_bottle`, `vinery:jungle_white_grapejuice_bottle`; basin empty after each; a single basin (1 slot) cannot hold both items: the recipes need the 2x2 group
+@fails `hearthandharvest/vinery_stomping.js` (`creativedelight:stomping/*_grapejuice`), `StompingRecipe.findAssignment`
+@jars creativedelight powergrid
+@from batches/r1115/p5_a1.qb
+> clear hb1
+> tp hb1 302.5 -59 206.5 0 60
+> pbot hold hb1 hearthandharvest:stomping_basin 4
+> pbot use hb1 304 -61 208 up
+> pbot use hb1 305 -61 208 up
+> pbot use hb1 304 -61 209 up
+> pbot use hb1 305 -61 209 up
+> zhh2 basin 304 -60 208
+> zhh2 basin 305 -60 209
+> zq items vinery:white_grape
+> zq items savanna_grapes_red
+> zq items jungle_grapes_white
+> zq items grapejuice
+waitlog \[zq\] items matching grapejuice: \d+ 30
+# single basin (1 slot) cannot hold both: insert into a lone basin
+> setblock 312 -60 208 hearthandharvest:stomping_basin[facing=north]
+> zhh2 insert 312 -60 208 vinery:white_grape 3 up
+> zhh2 insert 312 -60 208 vinery:wine_bottle 1 up
+> zhh2 basin 312 -60 208
+look group formed (controller 304 -60 208); ids exist; lone basin: wine bottle remainder 1 (one slot taken by the grapes)
+
+## SQ-HH-266c | hops: insert remainder 3, basin empty; bot click with hops passes, hops not used
+@group A
+@commands `/zhh2 insert 176 -60 208 hearthandharvest:hops 3 up`; bot right-click with hops
+@pass `remainder 3`; basin empty; the bot's click passes (hops not used up)
+@fails `StompingInputs` (hops are in no stomping recipe)
+@jars creativedelight powergrid
+@from batches/r1115/p5_a1.qb
+> setblock 176 -59 208 minecraft:air
+> zhh2 insert 176 -60 208 hearthandharvest:hops 3 up
+> zhh2 basin 176 -60 208
+> clear hb1
+> pbot hold hb1 hearthandharvest:hops 3
+> pbot use hb1 176 -60 208 up
+> data get entity hb1 SelectedItem
+> zhh2 basin 176 -60 208
+look `remainder 3`; basin slots empty both times; use PASS (or not SUCCESS) and hand still 3 hops

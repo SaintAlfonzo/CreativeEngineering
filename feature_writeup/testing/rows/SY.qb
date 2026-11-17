@@ -1,0 +1,279 @@
+# Scratch queue rows SY (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SY.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SY wave 2, 2026-11-14 ([crop_yields.md](../crop_yields.md) sections 2.5, 3, 4; TODO `farming/crops #53` to `#57`, `largecontent/mod-additions #35`)
+@@date 2026-11-14
+@@jars creativecommon
+@@sources feature_writeup/crop_yields.md
+@@text
+@@text Targets the Creative Delight and Creative Common jars built 2026-11-14 (`development/creativeDelight/build/libs/creativedelight-1.1.0.jar`,
+@@text `development/creativeCommon/build/libs/creativecommon-1.2.0.jar`; both must be in the scratch `mods/`) and the
+@@text `soil_yield.js` / `botany_pots.js` / `tooltips.js` of that day. Probe: copy `tools/soil_yield_probe/sy_probe.js` as
+@@text `kubejs/server_scripts/zz_sy_probe.js`. Fresh config (all switches `true`). Group A; place each soil with `/setblock`,
+@@text the plant above it in its ripe state (block-state syntax), then `/syt roll` (break) or `/syt pick` (own pick), 400+ each.
+@@text Run SQ-SY-08 to -13 on the old jar first if they are still open.
+@@text
+@@table
+## SQ-SY-14 | boot lines: Fortune strip on 70+ tables, 36 crops, nether soils, no "no base", PickSoilYieldMixin applied
+@group A
+@commands Boot. `grep "\[soil-yield\]" logs/latest.log`
+@pass `Fortune stripped: N terms on M crop tables` with M at least 70; `35 crops (...)` naming `sweet_berry`, `lemon`, `nether_wart`, `crimson_fungus_colony`; soils list `rich soul soil +33%, fertile soul soil +66%`; no `no base in soil_yield.json`; no mixin apply error for `PickSoilYieldMixin` (a failed `require = 1` stops the boot)
+@fails Boot stops on a mixin: the target class or `m_49840_` call changed (crop_yields.md 4); `no base`: `soil_yield.json` missing from the jar
+@from batches/r1115/p6_a1.qb
+bootexpect \[soil-yield\] Fortune stripped: \d+ terms on ([7-9]\d|\d{3,}) crop tables
+bootexpect \[soil-yield\] 36 crops \(.*sweet_berry.*\)
+bootexpect \[soil-yield\] 36 crops \(.*lemon.*\)
+bootexpect \[soil-yield\] 36 crops \(.*nether_wart.*\)
+bootexpect \[soil-yield\] 36 crops \(.*crimson_fungus_colony.*\)
+bootexpect rich soul soil \+33%, fertile soul soil \+66%
+bootreject no base in soil_yield\.json
+bootreject PickSoilYieldMixin.*(fail|error|Error|could not)
+bootreject Mixin apply.*SoilYield
+shell grep -h "\[soil-yield\]\|\[botany_pots\]" logs/latest.log logs/kubejs/server.log | cut -c1-1500 | sort -u
+shell grep -ic "PickSoilYield" logs/latest.log; grep -i "mixin" logs/latest.log | grep -i "creativedelight" | grep -iE "error|fail|warn" | head -5
+look shell lines: soils list and crop list as the pass text
+
+## SQ-SY-15 | (rerun 2, Fortune half) Fortune III rolls equal the no-tool means
+@group A
+@commands Ripe wheat, carrots, sweet potato on farmland / Rich Farmland / Fertile Soil: `/syt roll X Y Z 600 none`, then the same with `minecraft:diamond_hoe{Enchantments:[{id:"minecraft:fortune",lvl:3}]}`
+@pass Wheat 1.00 / 1.33 / 1.66, carrots 3.71 / 4.87 / 6.02, sweet potato 2.71 / 3.54 / 4.36 (within 0.1; ripe sweet potato is `age=5`, its max); the Fortune III means match the no-tool means (wheat seeds 2.71 both)
+@fails Fortune higher: table not in `fortune_free` or the strip missed a nested function; base off: `soil_yield.json`
+@from batches/r1115/p6_a6.qb
+> setblock 1000 -60 1000 minecraft:wheat[age=7]
+> setblock 1002 -60 1000 minecraft:wheat[age=7]
+> setblock 1004 -60 1000 minecraft:wheat[age=7]
+> setblock 1006 -60 1000 minecraft:carrots[age=7]
+> setblock 1008 -60 1000 minecraft:carrots[age=7]
+> setblock 1010 -60 1000 minecraft:carrots[age=7]
+> setblock 1012 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> setblock 1014 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> setblock 1016 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> syt roll 1000 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1002 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1004 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1006 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1008 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1010 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1012 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1014 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1016 -60 1000 600 minecraft:diamond_hoe@fortune=3
+count \[syt\] roll .* nbt .*fortune.* n 600: == 9
+reject \[syt\] error
+look wheat 1.00 / 1.33 / 1.66 (seeds about 2.71), carrots 3.71 / 4.87 / 6.02, sweet potato 2.71 / 3.54 / 4.36 with F3
+
+## SQ-SY-16 | (rerun 2, Fortune half) Fortune III picks equal the no-tool picks
+@group A
+@commands Own picks over farmland / Fertile Soil: ripe `vintagedelight:cucumber_crop[age=7]`, `vintagedelight:ghost_pepper_crop[age=7]` (over Soul Soil / Nulch), `veggiesdelight:zucchini_crop[age=7]`: `/syt pick X Y Z 400 none`. Tomato: Fertile Soil, `farmersdelight:tomatoes[age=3]` bottom vine, a rope above with `farmersdelight:tomatoes[age=3,ropelogged=true]`; pick the rope vine; then with a Fortune III hoe
+@pass Cucumber 1.50 / 2.49, zucchini 1.50 / 2.49, ghost pepper 1.00 / 1.66, rope vine tomato 2.49 (rotten tomato about 0.05, not raised); the plant goes back to stage 5 (cucumber, ghost pepper) or 0 (vine); Fortune changes nothing
+@fails Pick unchanged: mixin not applied (check `-Dmixin.debug.export`), or the block id lacks a `picks` row; rope vine at 1.50: walk list in `soil_yield.json`
+@from batches/r1115/p6_a6.qb
+> setblock 1002 -60 1004 vintagedelight:cucumber_crop[age=7]
+> setblock 1006 -60 1004 veggiesdelight:zucchini_crop[age=7]
+> setblock 1010 -60 1004 vintagedelight:ghost_pepper_crop[age=7]
+> setblock 1012 -59 1004 farmersdelight:tomatoes[age=3,ropelogged=true]
+> syt pick 1002 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1006 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1010 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1012 -59 1004 400 minecraft:diamond_hoe@fortune=3
+> kill @e[type=minecraft:item]
+count \[syt\] pick .* n 400: == 4
+reject \[syt\] error
+look cucumber 2.49, zucchini 2.49, ghost pepper 1.66, rope tomato 2.49 with F3
+
+## SQ-SY-17 | bushes over dirt / Rich Soil / Fertile Soil: picks and breaks; unripe picks flat
+@group A
+@commands Bushes over dirt / Rich Soil / Fertile Soil: `minecraft:sweet_berry_bush[age=3]`, `neapolitan:strawberry_bush[age=6,type=red]`, `fruitsdelight:blueberry_bush[age=4]`, `fruitsdelight:cranberry_bush[age=4]`, `delightful:salmonberry_bush[age=4]`, lemon tree lower `fruitsdelight:lemon_tree[age=4,half=lower]` with its upper half: `/syt pick` and `/syt roll` (lower half) 400 each; sweet berries at `age=2` and salmonberries at `age=3` picked too
+@pass Picks: sweet berry 2.50 / 3.33 / 4.15, strawberry 1.50 / 2.00 / 2.49, blueberry and cranberry 1.50 / 2.00 / 2.49, salmonberry 2.50 / 3.33 / 4.15, lemon 3.50 / 4.66 / 5.81. Breaks: sweet berry 2.50 / 3.33 / 4.15, strawberry 1.00 / 1.33 / 1.66, blueberry and cranberry 1.00 / 1.33 / 1.66, lemon 3.50 / 4.66 / 5.81. Unripe picks (sweet berry age 2, salmonberry age 3) the same on every soil
+@fails A bush that holds no soil (dirt only) in the pack: crops.md soil table; unripe raised: `ripe` in `soil_yield.json`
+@from batches/r1115/p6_a2.qb
+> setblock 1000 -61 1008 minecraft:dirt
+> setblock 1002 -61 1008 farmersdelight:rich_soil
+> setblock 1004 -61 1008 immersive_weathering:mulch_block
+> setblock 1000 -60 1008 minecraft:sweet_berry_bush[age=3]
+> setblock 1002 -60 1008 minecraft:sweet_berry_bush[age=3]
+> setblock 1004 -60 1008 minecraft:sweet_berry_bush[age=3]
+> setblock 1006 -61 1008 minecraft:dirt
+> setblock 1008 -61 1008 farmersdelight:rich_soil
+> setblock 1010 -61 1008 immersive_weathering:mulch_block
+> setblock 1006 -60 1008 neapolitan:strawberry_bush[age=6,type=red]
+> setblock 1008 -60 1008 neapolitan:strawberry_bush[age=6,type=red]
+> setblock 1010 -60 1008 neapolitan:strawberry_bush[age=6,type=red]
+> setblock 1012 -61 1008 minecraft:dirt
+> setblock 1014 -61 1008 farmersdelight:rich_soil
+> setblock 1016 -61 1008 immersive_weathering:mulch_block
+> setblock 1012 -60 1008 fruitsdelight:blueberry_bush[age=4]
+> setblock 1014 -60 1008 fruitsdelight:blueberry_bush[age=4]
+> setblock 1016 -60 1008 fruitsdelight:blueberry_bush[age=4]
+> setblock 1018 -61 1008 minecraft:dirt
+> setblock 1020 -61 1008 farmersdelight:rich_soil
+> setblock 1022 -61 1008 immersive_weathering:mulch_block
+> setblock 1018 -60 1008 fruitsdelight:cranberry_bush[age=4]
+> setblock 1020 -60 1008 fruitsdelight:cranberry_bush[age=4]
+> setblock 1022 -60 1008 fruitsdelight:cranberry_bush[age=4]
+> setblock 1024 -61 1008 minecraft:dirt
+> setblock 1026 -61 1008 farmersdelight:rich_soil
+> setblock 1028 -61 1008 immersive_weathering:mulch_block
+> setblock 1024 -60 1008 delightful:salmonberry_bush[age=4]
+> setblock 1026 -60 1008 delightful:salmonberry_bush[age=4]
+> setblock 1028 -60 1008 delightful:salmonberry_bush[age=4]
+> setblock 1030 -61 1008 minecraft:dirt
+> setblock 1032 -61 1008 farmersdelight:rich_soil
+> setblock 1034 -61 1008 immersive_weathering:mulch_block
+> setblock 1030 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 1032 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 1034 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 1030 -59 1008 fruitsdelight:lemon_tree[age=4,half=upper]
+> setblock 1032 -59 1008 fruitsdelight:lemon_tree[age=4,half=upper]
+> setblock 1034 -59 1008 fruitsdelight:lemon_tree[age=4,half=upper]
+> syt pick 1000 -60 1008 400 none
+> syt pick 1002 -60 1008 400 none
+> syt pick 1004 -60 1008 400 none
+> syt pick 1006 -60 1008 400 none
+> syt pick 1008 -60 1008 400 none
+> syt pick 1010 -60 1008 400 none
+> syt pick 1012 -60 1008 400 none
+> syt pick 1014 -60 1008 400 none
+> syt pick 1016 -60 1008 400 none
+> syt pick 1018 -60 1008 400 none
+> syt pick 1020 -60 1008 400 none
+> syt pick 1022 -60 1008 400 none
+> syt pick 1024 -60 1008 400 none
+> syt pick 1026 -60 1008 400 none
+> syt pick 1028 -60 1008 400 none
+> syt pick 1030 -60 1008 400 none
+> syt pick 1032 -60 1008 400 none
+> syt pick 1034 -60 1008 400 none
+> syt roll 1000 -60 1008 400 none
+> syt roll 1002 -60 1008 400 none
+> syt roll 1004 -60 1008 400 none
+> syt roll 1006 -60 1008 400 none
+> syt roll 1008 -60 1008 400 none
+> syt roll 1010 -60 1008 400 none
+> syt roll 1012 -60 1008 400 none
+> syt roll 1014 -60 1008 400 none
+> syt roll 1016 -60 1008 400 none
+> syt roll 1018 -60 1008 400 none
+> syt roll 1020 -60 1008 400 none
+> syt roll 1022 -60 1008 400 none
+> syt roll 1030 -60 1008 400 none
+> syt roll 1032 -60 1008 400 none
+> syt roll 1034 -60 1008 400 none
+> setblock 1000 -60 1008 minecraft:sweet_berry_bush[age=2]
+> setblock 1002 -60 1008 minecraft:sweet_berry_bush[age=2]
+> setblock 1004 -60 1008 minecraft:sweet_berry_bush[age=2]
+> setblock 1024 -60 1008 delightful:salmonberry_bush[age=3]
+> setblock 1026 -60 1008 delightful:salmonberry_bush[age=3]
+> setblock 1028 -60 1008 delightful:salmonberry_bush[age=3]
+> syt pick 1000 -60 1008 400 none
+> syt pick 1002 -60 1008 400 none
+> syt pick 1004 -60 1008 400 none
+> syt pick 1024 -60 1008 400 none
+> syt pick 1026 -60 1008 400 none
+> syt pick 1028 -60 1008 400 none
+> kill @e[type=minecraft:item]
+count \[syt\] pick .* n 400: == 24
+count \[syt\] roll .* n 400: == 15
+reject \[syt\] error|does not have property|Invalid value|Unknown block
+look picks sweet berry 2.50 / 3.33 / 4.15, strawberry 1.50 / 2.00 / 2.49, blue/cranberry 1.50 / 2.00 / 2.49, salmonberry 2.50 / 3.33 / 4.15, lemon 3.50 / 4.66 / 5.81; breaks sweet berry 2.50 / 3.33 / 4.15, strawberry, blue/cranberry 1.00 / 1.33 / 1.66, lemon 3.50 / 4.66 / 5.81; unripe picks flat
+
+## SQ-SY-18 | break ripe and age 3 cucumber and ghost pepper: ripe produce 1.00 + seeds about 2.71; age 3 seeds about 3.71
+@group A
+@commands Break ripe and age 3 `vintagedelight:cucumber_crop` and `ghost_pepper_crop`: `/syt roll X Y Z 600 none`
+@pass Ripe: produce 1.00 plus seeds mean about 2.71 (1 to 4); age 3: seeds about 3.71 (2 to 5) as before
+@fails No ripe seeds: the seed pool's age condition
+@from batches/r1115/p6_a2.qb
+> setblock 1000 -61 1012 minecraft:farmland
+> setblock 1002 -61 1012 minecraft:farmland
+> setblock 1004 -61 1012 minecraft:farmland
+> setblock 1006 -61 1012 minecraft:farmland
+> setblock 1000 -60 1012 vintagedelight:cucumber_crop[age=7]
+> setblock 1002 -60 1012 vintagedelight:cucumber_crop[age=3]
+> setblock 1004 -60 1012 vintagedelight:ghost_pepper_crop[age=7]
+> setblock 1006 -60 1012 vintagedelight:ghost_pepper_crop[age=3]
+> syt roll 1000 -60 1012 600 none
+> syt roll 1002 -60 1012 600 none
+> syt roll 1004 -60 1012 600 none
+> syt roll 1006 -60 1012 600 none
+count \[syt\] roll .* n 600: == 4
+reject \[syt\] error|does not have property|Invalid value|Unknown block
+look ripe: produce 1.00, seeds about 2.71 (max 4); age 3: seeds about 3.71 (max 5)
+
+## SQ-SY-19 | nether wart on Soul Sand / Nulch; crimson colony on Rich Soul Soil: break none / shears, shear pick
+@group A
+@commands Nether: `minecraft:nether_wart[age=3]` on Soul Sand / Nulch (roll); `nethersdelight:crimson_fungus_colony[age=3]` on Rich Soul Soil (roll none and with `minecraft:shears`; `/syt pick ... 400 minecraft:shears` at age 3)
+@pass Wart 3.00 / 4.98; colony break 6.65 crimson fungus with no tool, the colony item only with shears (no extra fungi); shear pick 1.33 fungus
+@fails Shears give fungi: the `notTool` condition; wart on Nulch 3.00: soil id
+@from batches/r1115/p6_a2.qb
+> setblock 1000 -61 1016 minecraft:soul_sand
+> setblock 1002 -61 1016 immersive_weathering:nulch_block
+> setblock 1000 -60 1016 minecraft:nether_wart[age=3]
+> setblock 1002 -60 1016 minecraft:nether_wart[age=3]
+> setblock 1004 -61 1016 nethersdelight:rich_soul_soil
+> setblock 1004 -60 1016 nethersdelight:crimson_fungus_colony[age=3]
+> syt roll 1000 -60 1016 600 none
+> syt roll 1002 -60 1016 600 none
+> syt roll 1004 -60 1016 600 none
+> syt roll 1004 -60 1016 600 minecraft:shears
+> syt pick 1004 -60 1016 400 minecraft:shears
+> kill @e[type=minecraft:item]
+count \[syt\] (roll|pick) .* n (600|400): == 5
+reject \[syt\] error|does not have property|Invalid value|Unknown block
+look wart 3.00 / 4.98; colony break 6.65 crimson fungus (none), colony item only with shears; shear pick 1.33 fungus
+
+## SQ-SY-20 | propelplant on netherrack / Rich Soul Soil: berry cane pick pearls 1.50 / 2.00
+@group A
+@commands Propelplant: netherrack / Rich Soul Soil, `nethersdelight:propelplant_stem` on the soil, `propelplant_cane` above, `propelplant_berry_cane[pearl=true]` on top; `/syt pick` the berry cane 400
+@pass Pearls 1.50 / 2.00
+@fails 1.50 on Rich Soul Soil: the walk list misses a propelplant block id
+@from batches/r1115/p6_a2.qb
+> setblock 1000 -61 1020 minecraft:netherrack
+> setblock 1002 -61 1020 nethersdelight:rich_soul_soil
+> setblock 1000 -60 1020 nethersdelight:propelplant_stem
+> setblock 1002 -60 1020 nethersdelight:propelplant_stem
+> setblock 1000 -59 1020 nethersdelight:propelplant_cane
+> setblock 1002 -59 1020 nethersdelight:propelplant_cane
+> setblock 1000 -58 1020 nethersdelight:propelplant_berry_cane[pearl=true]
+> setblock 1002 -58 1020 nethersdelight:propelplant_berry_cane[pearl=true]
+> syt pick 1000 -58 1020 400 none
+> syt pick 1002 -58 1020 400 none
+> kill @e[type=minecraft:item]
+count \[syt\] pick .* n 400: == 2
+reject \[syt\] error|does not have property|Invalid value|Unknown block
+look pearls 1.50 / 2.00
+
+## SQ-SY-21 | (rerun) pots filled with /syt potset: required 8000 Fertile, 8727 Rich Farmland, 9600 dirt; growth counts up
+@group A
+@commands `/kubejs dump_recipes` or JEI-free check: `grep "\[botany_pots\]" logs/latest.log`; place a botany pot with Fertile Soil and wheat seeds
+@pass `3 soils set (Rich x1.1, Fertile x1.2)`; a wheat pot on Fertile Soil completes in about 8000 ticks (9600 / 1.2), on Rich Farmland about 8727 (9600 / 1.1)
+@fails `setRecipeNumber missing`: old Creative Common jar; Fertile Soil not accepted: recipe `<NCH ns>:botany_soil/fertile_soil` not loaded
+@from batches/r1115/p6_a3.qb
+> setblock 1000 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1002 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1004 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1006 -60 1024 botanypots:terracotta_botany_pot
+> syt potset 1000 -60 1024 immersive_weathering:mulch_block minecraft:wheat_seeds
+> syt potset 1002 -60 1024 farmersdelight:rich_soil_farmland minecraft:wheat_seeds
+> syt potset 1004 -60 1024 minecraft:dirt minecraft:wheat_seeds
+> syt potset 1006 -60 1024 farmersdelight:rich_soil minecraft:wheat_seeds
+sleep 2
+> syt pot 1000 -60 1024
+> syt pot 1002 -60 1024
+> syt pot 1004 -60 1024
+> syt pot 1006 -60 1024
+sleep 20
+> syt pot 1000 -60 1024
+> syt pot 1002 -60 1024
+> syt pot 1004 -60 1024
+> syt pot 1006 -60 1024
+> pbot remove c6t
+reject \[syt\] error|pot: no block entity|required err
+look required 8000 (Fertile) / 8727 (Rich Farmland) / 9600 (dirt); rich soil as the Rich line; growth up about 400 in 20 s
+
+## CQ-SY-22
+@group client
+@commands Hover Rich Soil, Rich Soil Farmland, Fertile Soil
+@pass "Growth speed in Botany Pots +10%" (Fertile: +20%) and "Does not change yield" under each
+@fails Client script `tooltips.js` not reloaded, or Botany Pots absent
+@draft no batch holds this row yet

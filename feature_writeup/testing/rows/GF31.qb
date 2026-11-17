@@ -1,0 +1,133 @@
+# Scratch queue rows GF31 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/GF31.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Gap fill, 2026-10-31: changelog bullets that had no row
+@@date 2026-10-31
+@@jars creativecommon
+@@text
+@@text Added with the 2026-10-31 run plan ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md)); the batch files hold the
+@@text exact commands and checks.
+@@text
+@@table
+## SQ-GF31-01 | Sawmill: slabs, stairs, doors to sticks (new row)
+@group A
+@commands `zq makes minecraft:stick`
+@pass `creativeengineering:sawmill/recycle_wooden_slab` -> 2, `_stairs` -> 3, `_door` -> 4 sticks
+@fails recipe JSONs in `kubejs/data/creativeengineering/recipes/sawmill/`
+@from batches/r1031/a1_data.qb
+> zq makes minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_slab -> 2 minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_stairs -> 3 minecraft:stick
+expect creativeengineering:sawmill/recycle_wooden_door -> 4 minecraft:stick
+> zq rdetail sawmill/recycle_wooden
+look inputs are the wooden slab / stairs / door tags; the sawdust secondary shows in JEI (CQ-GF31-01)
+
+## SQ-GF31-02 | dispenser vanilla recipe back (new row)
+@group A
+@commands `zq makes minecraft:dispenser`
+@pass `minecraft:dispenser` -> 1 (vanilla craft back)
+@fails `engineering/redstone.js` still removes it
+@from batches/r1031/a1_data.qb passed
+> zq makes minecraft:dispenser
+expect minecraft:dispenser -> 1 minecraft:dispenser
+
+## SQ-GF31-03 | Sputter cannot be built (new row)
+@group A
+@commands bot places a carved pumpkin on a barrel; `execute if entity @e[type=nock_enough_arrows:sputter]`
+@pass test fails, the pumpkin stays
+@fails `config/nock_enough_arrows-common.toml` `enableSputter` not false on the server copy
+@from batches/r1031/a1_world.qb
+> setblock 45 -60 0 minecraft:barrel
+> tp qa 45 -60 2
+# a bot use on a barrel opens it (no sneak): setblock runs the same CarvedPumpkinBlock.onPlace pattern check
+> setblock 45 -59 0 minecraft:carved_pumpkin
+sleep 3
+> execute if entity @e[type=nock_enough_arrows:sputter]
+> execute if block 45 -59 0 minecraft:carved_pumpkin
+expect Test failed
+expect Test passed
+reject (?i)unknown entity|invalid
+look "Test failed" must come from the sputter check and "Test passed" from the pumpkin check
+
+## SQ-GF31-04 | fresh world: next year is Year 2 at the first Early Spring (TI-37 server half, new row)
+@group B (fresh world)
+@commands `ccaltime date next year`; `ccaltime date`
+@pass "Year 2, Early Spring, day 1" (TI-37 server half)
+@fails `TimeDate` first-sunrise rounding
+@from batches/r1031/b1_gameplay.qb passed
+> cetime date
+> cetime date next year
+> cetime date
+expect Year 2, Early Spring, day 1
+> cetime date reset
+
+## SQ-RW-28 | Dreams & Desires rose, rubber, spirit wood removed (new row, recipes_wood.md 2.6)
+@group A
+@commands `zq makes create_dd:{rose,rubber,spirit}_planks`; `zq tagsof create_dd:rose_log`
+@pass 0 recipes each, no tags; smoked planks keep their recipe
+@fails `removed_woods.js` (start and server)
+@from batches/r1031/a1_effects.qb
+> zq makes create_dd:rose_planks
+> zq makes create_dd:rubber_planks
+> zq makes create_dd:spirit_planks
+> zq tagsof create_dd:rose_log
+> zq makes create_dd:smoked_planks
+expect makes create_dd:rose_planks: 0
+expect makes create_dd:rubber_planks: 0
+expect makes create_dd:spirit_planks: 0
+reject item tags of create_dd:rose_log: \S
+reject makes create_dd:smoked_planks: 0
+kjsreject (removed_woods\.js).*(Error|error)
+look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block
+
+## CQ-GF31-01 | sawmill sticks show sawdust (new row)
+@group client
+@commands JEI: IE Sawmill uses of oak slab / stairs / door
+@pass 2 / 3 / 4 sticks plus sawdust
+@fails
+@from batches/r1101/c1_client.qb
+look hand: JEI uses of oak slab / stairs / door in the IE Sawmill: 2 / 3 / 4 sticks plus sawdust
+
+## CQ-GF31-05 | Explorer's Compass tooltip (new row)
+@group client
+@commands hover the Explorer's Compass
+@pass "Not craftable" line
+@fails `client_scripts/tooltips.js`
+@from batches/r1101/c1_client.qb
+> item replace entity @s hotbar.0 with explorerscompass:explorerscompass
+look hand: hover it: "Points to any structure!" and "Not craftable"
+
+## CQ-GF31-06 | rubberwood bark texture (new row)
+@group client
+@commands look at `myrtrees:rubberwood_log` and `filled_rubberwood_log`
+@pass bark textured on every side
+@fails `kubejs/assets/myrtrees/blockstates/`
+@from batches/r1101/c1_client.qb
+> tp @s 50 -55 58 180 20
+sleep 3
+> setblock 50 -60 50 myrtrees:rubberwood_log[axis=x]
+> setblock 50 -60 52 myrtrees:filled_rubberwood_log[axis=y]
+> setblock 50 -60 54 myrtrees:rubberwood_wood
+> tp @s 46 -59 52 -90 20
+shot rubberwood
+look bark sides textured (no purple-black checker) on the log, the filled log and the wood block; an "Unknown block" for rubberwood_wood is fine (only the logs changed)
+
+## SQ-TL-09 | /cegen lists the generators
+@group A
+@commands `/cdevgen` (op, console)
+@pass lists 50 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cdevgen]` error in `latest.log`
+@fails pack_tooling.md TL-09, TODO `tooling/generators-and-tests #1`
+@from batches/r1101/p1_server.qb
+> cegen
+sleep 3
+reject \[cegen\].*(Error|error|failed)
+look lists the generators from tools/generators.json with groups (stacks among them)
+
+## SQ-JRFTL-01 (r1101 PASS)
+@group A
+@commands after JRFTL jar is out of mods/: `/give @s jrftl:prepared_flesh`; creosote filling and IE bottling on rotten flesh; smoke it
+@pass item exists with the new texture and name "Prepared Flesh"; recipes work; smoking gives leather; no jrftl errors in latest.log
+@fails `misc_items.js`
+@draft no batch holds this row yet
