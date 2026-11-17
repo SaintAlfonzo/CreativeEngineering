@@ -1,7 +1,8 @@
 # Rules violation fix plan (design_rules.md section 9, V-01 to V-62)
 
 Owner brief 2026-11-16 applied to the 2026-11-14 compliance audit in [design_rules.md](design_rules.md) section 9.
-Status: PLANNED 2026-11-16; the test prefix index (section 2) is written, nothing else built. Code facts below were read
+Status: P0 and P1 built 2026-11-17 (rule text, prefix lint and renames, docs moves, licence names, mod sides, date and
+spelling sweeps of the docs; owner list below); P2 to P7 planned. Code facts below were read
 2026-11-16 (paths and lines drift; re-read before editing).
 
 Short names: R = instance root; dict = `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/`;
@@ -12,37 +13,34 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=7a7d26a7e71c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 26), 1 Complete.
+<!-- generated:status_index begin open_work sha1=53f74177ebe2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 19, In Progress 4), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #13` | Planned | none | Two documents in one file |
 | `conventions #14` | Planned | none | Tilled end stone and sea pickles |
 | `conventions #15` | Planned | none | Global loot modifiers |
 | `conventions #16` | Planned | none | Split Creative Loot out of Creative Worldgen |
 | `conventions #17` | Planned | none | Registration and namespace |
 | `conventions #18` | Planned | none | Dict keys for literals and the lints |
-| `conventions #19` | Planned | none | License string |
 | `conventions #20` | Planned | none | Test-item palette switch |
-| `conventions #21` | Planned | none | Mod sides |
 | `conventions #22` | Planned | none | Brewin' advancement scan |
 | `conventions #23` | Planned | none | Member checks, remaps, helper copies |
-| `conventions #24` | Planned | none | Small fixes (added 2026-11-16) |
 | `conventions #25` | Planned | none | Villager trade helper |
 | `conventions #26` | Planned | none | Delight loot through Creative Loot |
 | `conventions #27` | Planned | none | No recipe unlocks |
 | `conventions #28` | Planned | none | Sideways edges and what the dependencies simplify |
 | `conventions #29` | Planned | none | patcherMod to Creative Common in text |
 | `conventions #30` | Planned | none | Underscores in own names, touches saves |
-| `conventions #31` | Planned | none | ISO 8601 dates only |
-| `conventions #32` | Planned | none | American spelling and arrows |
-| `conventions #33` | Planned | none | Tab indent only and the rule |
 | `conventions #34` | Planned | none | Dated history out of code |
 | `conventions #35` | Planned | none | Memory cleanup todo |
 | `conventions #36` | Planned | none | History audit, low priority, marked |
 | `conventions #37` | Planned | none | Docs and writeup form, last |
 | `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
+| `conventions #24` | In Progress | none | Small fixes (added 2026-11-16) |
+| `conventions #31` | In Progress | none | ISO 8601 dates only |
+| `conventions #32` | In Progress | CQ-TT-01 to -03 | American spelling and arrows |
+| `conventions #33` | In Progress | none | Tab indent only and the rule |
 <!-- generated:status_index end open_work -->
 
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
@@ -544,14 +542,14 @@ configs `baby_mobs-common.toml`, `more_mooblooms-common.toml`; lang namespace `v
 ## 15b. American spelling and arrows (D20, D21)
 
 - Rule: DR-L7 (new; DR-L6 is the in-game names rule) "American spelling in prose and player text; `->` for arrows". design_rules.md G1 and G19 closed.
-- Tool `tools/us_spelling.py` (dry-run, report per file): a word list of British to American forms (color, armor,
-  behavior, gray, center, meter, liter, license as a noun, favor, flavor, honor, -ise/-isation verbs, catalog,
-  program, traveled) applied to prose only. Skips code identifiers, quoted ids (`ns:id`, config keys, file paths),
+- Tool `tools/us_spelling.py` (dry-run, report per file): a word list of British to American forms (`colour`, `armour`,
+  `behaviour`, `grey`, `centre`, `metre`, `litre`, `licence` as a noun, `favour`, `flavour`, `honour`, -ise/-isation verbs, `catalogue`,
+  `programme`, `travelled`) applied to prose only. Skips code identifiers, quoted ids (`ns:id`, config keys, file paths),
   upstream text (repack and donor files, quoted upstream lines), deployed changelogs and `exported/`. Lang files: only
   own namespaces' `en_us.json` values, never keys. Also rewrites `→` to `->` outside player text.
 - Order: docs, memory, skills and own lang in P1 (with the date pass, one commit each); code comments and strings in P5
   after section 17. Lint in `design_rules_audit.py` (the word list) from P1 end.
-- Player-visible: own lang and tooltip text change (for example "color" 12 times, "behavior", "gray" in own lang
+- Player-visible: own lang and tooltip text change (for example `colour` 12 times, `behaviour`, `grey` in own lang
   today). Changelog bullet under a catch-all family when it ships: "Item names and tooltips use American spelling
   (color, armor, gray)". Queue row: none needed (text only); a client look at 5 changed tooltips.
 
@@ -634,6 +632,33 @@ split (O3) is not needed here.
 
 Every violation is scheduled (owner 2026-11-16: D23 to D26).
 
+## Owner list (P1)
+
+Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
+
+1. **Queue ids defined twice** (`tools/test_prefix_lint.py` check d, accepted in `tools/check_known.csv` until settled):
+   20 ids have two `## ID` rows in `testing/rows/*.qb`, each in a different section (a rerun or a second batch that reused
+   the id): `SQ-VTD8-01` (CDJ.qb:385, CDJ.qb:205), `SQ-DEP-02` (DEP.qb:201, DEP.qb:25), `SQ-CNS-03` (FO.qb:317, CNS.qb:55), `SQ-HH-304` (HOP.qb:306, HH.qb:6012), `SQ-HH-1546` (HOP.qb:329, HH.qb:10265), `SQ-CDW-01` (MIN.qb:18, DEP.qb:233), `SQ-CDW-02` (MIN.qb:33, HH.qb:11825), `SQ-CDW-03b` (MIN.qb:72, DEP.qb:240), `SQ-MIN-03` (MIN.qb:122, DEP.qb:225), `SQ-PWG-07` (PWG.qb:1725, PWG.qb:313), `SQ-PWG-06` (PWG.qb:3456, PWG.qb:132), `SQ-FGD-14` (RD.qb:226, CDJ.qb:425), `SQ-MDP-13` (RD.qb:870, CDJ.qb:318), `SQ-MDP-14` (RD.qb:900, CDJ.qb:332), `SQ-MDP-16` (RD.qb:962, CDJ.qb:339), `SQ-CNS-01` (RD.qb:1712, CNS.qb:16), `SQ-CNS-02` (RD.qb:1725, CNS.qb:28), `SQ-CDJ-05` (RD.qb:2071, CDJ.qb:305), `SQ-DM-03` (TSK.qb:110, SB.qb:233), `SQ-RW-28` (VS.qb:74, GF31.qb:72). Proposal: the later row gets a letter suffix (`SQ-CNS-01b`) or `(rerun)`; the
+   scratch-test owner session decides, since the rows and their verdict history are theirs.
+2. **Number ranges the date tool reports** (not dates, left as written): `briefs/recipes_cooking.md` "cooking.js 12-13",
+   `plan_1.0.3.md` "12-16 rounds", `split/F_pack_scripts.md` "- 12-18:" (line numbers), `testing/structures/02_new_mods_tests.md`
+   "30 and 12-15", `todo/rows/kitchen_and_cooking.csv` "12-14 (moved from cooking...)" (line numbers). No impossible
+   dates were found (D5): every year-less date that is a date resolved to 2026 on or before its file's last change.
+3. **V-61 "Create Confectionery"**: the jar's own display name is "Create Confectionery", so `unreleased.md` was not
+   changed; confirm, or name the pack form if there is one.
+4. **V-60 "JEI" in `unreleased.md`**: left as is until G17 (JEI and WTHIT in player text) is decided.
+5. **NOTICE name for files that credit several licences**: `NOTICE-thirdparty-various.txt` (Common, Compat, Delight);
+   Equipment's credits only MIT (`NOTICE-thirdparty-MIT.txt`). Rename if another word is wanted.
+6. **Generated docs and the date rule**: the date sweep converted dates in generated docs (for example
+   `item_physics_audit.md`, `stack_sizes.md`); their generators still print year-less dates and will write them back on
+   the next run. The generators are code: P5 section 15 code pass. The spelling sweep skipped generated docs.
+7. **Rows files keep their names**: `EN.qb` holds `SQ-EDL-` rows, `LT.qb` `CQ-LTP-`, `PB.qb` `SQ-PFS-`, `RP.qb` `CQ-RPB-` and
+   the Raspberry Pie `SQ-RPI-` / `CQ-RPI-`, `IP.qb` section 2 `SQ-PRT-` / `CQ-PRT-`. Renaming a rows file renames its
+   generated queue blocks; left for the scratch-test owner.
+8. **Alcohol Part B numbering**: `alcohol_part_b.md` keeps the old B-section numbers without the B (0 to 9, `7.14`), not
+   a new 0 to 6 layout; references in other docs were rewritten to `alcohol_part_b.md 7.14`. Section numbers 10 to 13
+   in it still point to alcohol.md (noted at its top).
+
 ## 21. Done means for this plan
 
 - design_rules.md section 9 status cell per id: fix date and "Built, untested" until the queue row passes.
@@ -662,3 +687,4 @@ Every violation is scheduled (owner 2026-11-16: D23 to D26).
   stays on until TODO `tooling/design-rules #4`; section 19b gap references fixed (G13, not G1; World column is DR-W4).
 - 2026-11-16: section 12b and 19b added (small fixes, docs form last); Power Grid stays in mods/, license GPL-3.0-only confirmed.
 - 2026-11-16: plan written from the owner brief and the 2026-11-14 audit. Section 4 tilled end stone found already built (plan_bugfix_1114 3.2).
+- 2026-11-17: P0 and P1 built (P1 agent): rule text (DR-L7 for spelling, since DR-L6 was taken), `.editorconfig`; sections 2, 3, 8, 10, 12b docs rows, 15 and 15b doc passes; "Owner list (P1)" added. Mechanical sweep commits carry `[no-stale]`, which `qrowlint.py` now skips when it dates a source change.

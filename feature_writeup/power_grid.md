@@ -654,3 +654,4 @@ the scratch queue row by row (the owner's run notes) and the keep / drop / merge
 - 2026-11-12: owner decisions D1 to D13 recorded (section 5.1), D14 deferred to measurement, 15 holes listed (5.3).
 - 2026-11-12: investigation written (jar 0.6.2 for 1.20.1, decompiled to the session scratchpad; source repo checked:
   no 1.19.2 branch). Nothing built.
+- 2026-11-17: `LICENSE` (Apache 2.0) and `NOTICE` merged into `NOTICE-upstream-Apache.txt` (plan_rules_fixes.md section 8); `tools/build_deploy.py` never stages the jar while `IN_TREE_MODS` marks it not required (in `mods/` for development testing only).
