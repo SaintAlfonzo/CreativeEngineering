@@ -666,7 +666,7 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 ### `rusticdelight:bell_pepper_block_patch_placed` (Giant Bell Peppers)
 
 - Rate 1 in 64 chunks, height: surface
-- Rustic Delight 1.7.0 (Creative Delight): red, yellow and green giant peppers, 1 in 64 chunks (owner 2026-10-25: fairly rare); the port drops upstream's own biome modifier. Owner 2026-10-25: hot dry grassy, like the wild crops there.
+- Rustic Delight 1.7.0 (Creative Delight): red, yellow and green giant peppers, 1 in 64 chunks (owner, 2026-10-25: fairly rare); the port drops upstream's own biome modifier. Owner 2026-10-25: hot dry grassy, like the wild crops there.
 - Added by: wild_crops.json giant_bell_pepper
 - 12 biomes: savanna (1.02%), savanna_plateau (0.71%), windswept_savanna (0.62%), wooded_badlands (0.23%), terralith:arid_highlands (0.77%), terralith:ashen_savanna (0.26%), terralith:brushland (1.32%), terralith:fractured_savanna (0.28%), terralith:hot_shrubland (0.56%), terralith:savanna_badlands (0.29%), terralith:savanna_slopes (0.29%), terralith:shrubland (0.33%)
 
