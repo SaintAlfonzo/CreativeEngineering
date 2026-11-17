@@ -1,0 +1,916 @@
+# Scratch queue rows SMK (plan_process_overhaul.md P2.2): T1 smoke rows, one section per own jar. Data: the queue table
+# in scratch_queue.md is generated from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py
+# docstring. Run: qrun.py run OUT feature_writeup/testing/rows/SMK.qb RES [--section KEY] [--tier T1] [--rows ID,...]
+# Group A (superflat, prep_srv.sh). Blocks go in a forceloaded area of their own: x 9000..9100, z 9000..9100, one x
+# column per section (9000 + 6 x (KEY - 1)), y -60 on the flat surface. The first block row of each section forceloads it.
+
+@@section 1
+@@title SQ-SMK Creative Common smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativecommon
+@@sources development/creativeCommon
+@@tier T1
+@@text Creative Common boots with its mixins and script pack, registers its potions and effect, and `/ccswap items` rewrites a merged stack.
+@@text
+@@table
+## SQ-SMK-01 | Common boots: setup lines, swaps report, mixins, no error naming it
+@group A
+@commands Boot; grep `logs/latest.log` for the Common setup and `[swaps]` lines; count `from creativecommon.mixins.json` in `logs/debug.log`
+@pass `CreativeCommon setup complete`; `[swaps] load report: every listed id resolved`; `[melting] tags:` and `[damage-tags] loaded` lines; jar found with `{creativecommon}`; at least one mixin applied; no ERROR line or mixin failure naming `creativecommon`
+@fails Jar missing or broken mods.toml, a mixin target renamed, a swap list id that no longer resolves
+bootexpect Done \(
+bootexpect CreativeCommon setup complete
+bootexpect \[swaps\] load report: every listed id resolved
+bootexpect \[melting\] tags: \d+ meltable
+bootexpect \[damage-tags\] loaded [1-9]\d* data-defined tag
+bootreject /ERROR\].*\bcreativecommon\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativecommon
+bootreject \[CE potions\] .* not found while building
+shell grep -q "Found valid mod file creativecommon-[^ ]*\.jar with .creativecommon." logs/debug.log
+shell echo "mixins $(grep -c 'from creativecommon.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativecommon.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-02 | Common script pack: helpers and dicts load from the jar
+@group A
+@commands Same boot: grep `logs/latest.log` for the `[jar-startup]` lines and the tag helper's summary
+@pass `[jar-startup] creativecommon: N of N files loaded from its jar` (both numbers equal); the pack order line starts with `creativecommon`; `neoCraftHelper.js` loaded; the tag helper reports `[minecraft:item] Found N tags, added N objects`
+@fails `kubejs_startup/creativecommon/` missing from the jar, a helper throwing at load, JarStartupScripts not run
+bootexpect \[jar-startup\] creativecommon: (\d+) of \1 files loaded from its jar
+bootexpect \[jar-startup\] startup script packs in order: creativecommon,
+bootexpect Loaded script creativecommon:creativecommon/func/neoCraftHelper\.js
+bootexpect \[minecraft:item\] Found [1-9]\d* tags, added [1-9]\d* objects
+
+## SQ-SMK-03 | Common registers Magic Resistance and its potions
+@group A
+@commands `/cdevtest reg effect ^creativecommon:magic_resistance$`; `/cdevtest reg potion ^creativecommon: max=1`; `/cdevtest potion creativecommon:strong_resistance`; `/cdevtest potion creativecommon:long_magic_resistance`
+@pass the effect is registered (`n=1`); 30 or more `creativecommon` potions (33 on 2026-11-15); both potions `registered=true`
+@fails `CommonPotions` rows not registered (effect lookup null at potion registration), magic_resistance.js not run
+> cdevtest reg effect ^creativecommon:magic_resistance$
+> cdevtest reg potion ^creativecommon: max=1
+> cdevtest potion creativecommon:strong_resistance
+> cdevtest potion creativecommon:long_magic_resistance
+expect verb=reg kind=effect regex=\S+ n=1\b
+expect verb=reg kind=potion regex=\S+ n=(3\d|[4-9]\d)\b
+expect verb=potion potion=creativecommon:strong_resistance registered=true
+expect verb=potion potion=creativecommon:long_magic_resistance registered=true
+
+## SQ-SMK-04 | /ccswap items rewrites a merged stack in a chest
+@group A
+@commands `forceload add 9000 9000 9100 9100`; chest at 9000 -60 9010 with `alexsmobs:banana` x3 in slot 0; `/ccswap items`; `/cdevtest inv 9000 -60 9010`
+@pass `[swaps] /ccswap items: N stack(s) rewritten` with N at least 1; slot 0 holds `neapolitan:banana*3`
+@fails Swap lists not read (no merge pairs: command rewrites 0), chunk not tracked by `ItemMerges.onChunkLoad`, Container rewrite path broken
+> forceload add 9000 9000 9100 9100
+sleep 5
+> setblock 9000 -60 9010 minecraft:chest
+> item replace block 9000 -60 9010 container.0 with alexsmobs:banana 3
+> ccswap items
+> cdevtest inv 9000 -60 9010
+expect \[swaps\] /ccswap items: [1-9]\d* stack\(s\) rewritten
+expect verb=inv slot=0 item=neapolitan:banana\*3
+reject Unknown or incomplete command
+
+@@section 2
+@@title SQ-SMK Creative Engineering smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativeengineering
+@@sources development/creativeEngineering
+@@tier T1
+@@text Creative Engineering boots with its mixins and scripts, registers its items and blocks, carries its recipes and the dragon breathing type, and its blocks place and drop.
+@@text
+@@table
+## SQ-SMK-05 | Engineering boots: loaded line, script pack, mixins, no error naming it
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativeengineering]` and `[jar-startup] creativeengineering`; count `from creativeengineering.mixins.json` in `logs/debug.log`
+@pass `[creativeengineering] loaded`; `core finished`; `N of N files loaded from its jar`; jar found with `{creativeengineering}`; at least one mixin applied; no ERROR line or mixin failure naming `creativeengineering`
+@fails Jar missing, a mixin target renamed (IE, Create, JEI), a startup script throwing
+bootexpect Done \(
+bootexpect \[creativeengineering\] loaded
+bootexpect \[creativeengineering\] core finished
+bootexpect \[jar-startup\] creativeengineering: (\d+) of \1 files loaded from its jar
+bootreject /ERROR\].*\bcreativeengineering\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativeengineering
+shell grep -q "Found valid mod file creativeengineering-[^ ]*\.jar with .creativeengineering." logs/debug.log
+shell echo "mixins $(grep -c 'from creativeengineering.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativeengineering.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-06 | Engineering items and blocks registered
+@group A
+@commands `/cdevtest reg item ^creativeengineering: max=1`; `/cdevtest reg block ^creativeengineering: max=1`; `/cdevtest item creativeengineering:precision_sawblade`
+@pass 70 or more items (81 on 2026-11-15), 35 or more blocks (40); the sawblade is a `PrecisionSawbladeItem`
+@fails A startup items script not run (KubeJS registry), `CreativeEngineeringItems` not registered
+> cdevtest reg item ^creativeengineering: max=1
+> cdevtest reg block ^creativeengineering: max=1
+> cdevtest item creativeengineering:precision_sawblade
+expect verb=reg kind=item regex=\S+ n=([7-9]\d|[1-9]\d{2,})\b
+expect verb=reg kind=block regex=\S+ n=(3[5-9]|[4-9]\d|[1-9]\d{2,})\b
+expect verb=item item=creativeengineering:precision_sawblade class=com\.SaintAlfonzo\.creativeengineering\.item\.PrecisionSawbladeItem
+
+## SQ-SMK-07 | Engineering recipes and the dragon breathing type
+@group A
+@commands `/cdevtest recipes creativeengineering: max=1`; `/cdevtest bytype creativeengineering:dragon_breathing max=1`; `/cdevtest makes creativeengineering:iron_wire`
+@pass 1500 or more `creativeengineering` recipes (1804 on 2026-11-15); 10 or more dragon breathing recipes (14); at least one recipe makes iron wire
+@fails Server scripts not in the jar (`data/creativeengineering/kubejs/`), the dragon breathing serializer not registered
+> cdevtest recipes creativeengineering: max=1
+> cdevtest bytype creativeengineering:dragon_breathing max=1
+> cdevtest makes creativeengineering:iron_wire
+expect verb=recipes text=creativeengineering: n=(1[5-9]\d\d|[2-9]\d{3}|\d{5,})\b
+expect verb=bytype serializer=creativeengineering:dragon_breathing n=([1-9]\d+)\b
+expect verb=makes item=creativeengineering:iron_wire n=[1-9]\d*\b
+
+## SQ-SMK-08 | an Engineering plate block places and drops itself
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9006 -60 9010 creativeengineering:steel_plate_block`; `/cdevtest state`; `/cdevtest break 9006 -60 9010 held=minecraft:iron_pickaxe`
+@pass placed, state `creativeengineering:steel_plate_block`; broken with the pickaxe, drops one `creativeengineering:steel_plate_block`
+@fails Block not registered, no loot table, wrong mineable tag
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9006 -60 9010 creativeengineering:steel_plate_block
+> cdevtest state 9006 -60 9010
+> cdevtest break 9006 -60 9010 held=minecraft:iron_pickaxe
+expect verb=place placed=true state="?creativeengineering:steel_plate_block
+expect verb=state pos=9006,-60,9010 state="?creativeengineering:steel_plate_block
+expect verb=break .*broken=true
+expect verb=break .*drops=creativeengineering:steel_plate_block:1
+
+@@section 3
+@@title SQ-SMK Creative Equipment smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativeequipment
+@@sources development/creativeEquipment
+@@tier T1
+@@text Creative Equipment boots with its mixins and scripts, registers its gear with durability and attributes, and carries its recipes and stepstool tag.
+@@text
+@@table
+## SQ-SMK-09 | Equipment boots: loaded line, script pack, data packs, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativeequipment]` and `[jar-startup] creativeequipment`; count `from creativeequipment.mixins.json` in `logs/debug.log`
+@pass `[creativeequipment] loaded (config/creativeequipment-common.toml)`; `core finished`; `mod data packs on:`; `N of N files loaded from its jar`; jar found; at least one mixin applied; no ERROR line or mixin failure naming `creativeequipment`
+@fails Jar missing, a mixin target renamed (shields, armor bar, backpacks), a startup script throwing
+bootexpect Done \(
+bootexpect \[creativeequipment\] loaded \(config/creativeequipment-common\.toml\)
+bootexpect \[creativeequipment\] core finished
+bootexpect \[creativeequipment\] mod data packs on:
+bootexpect \[jar-startup\] creativeequipment: (\d+) of \1 files loaded from its jar
+bootreject /ERROR\].*\bcreativeequipment\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativeequipment
+shell grep -q "Found valid mod file creativeequipment-[^ ]*\.jar with .creativeequipment." logs/debug.log
+shell echo "mixins $(grep -c 'from creativeequipment.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativeequipment.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-10 | Equipment items: echo pickaxe and copper shield are real gear
+@group A
+@commands `/cdevtest reg item ^creativeequipment: max=1`; `/cdevtest item creativeequipment:echo_pickaxe`; `/cdevtest attrs creativeequipment:echo_pickaxe`; `/cdevtest item creativeequipment:copper_shield`
+@pass 25 or more items (30 on 2026-11-15); the pickaxe and the shield have durability; the pickaxe has a main-hand attack damage modifier
+@fails Tier or shield registration broken (durability 0), `tuneTools` not applied
+> cdevtest reg item ^creativeequipment: max=1
+> cdevtest item creativeequipment:echo_pickaxe
+> cdevtest attrs creativeequipment:echo_pickaxe
+> cdevtest item creativeequipment:copper_shield
+expect verb=reg kind=item regex=\S+ n=(2[5-9]|[3-9]\d|[1-9]\d{2,})\b
+expect verb=item item=creativeequipment:echo_pickaxe class=\S+ max_damage=[1-9]\d*
+expect verb=attrs slot=mainhand attribute=minecraft:generic\.attack_damage
+expect verb=item item=creativeequipment:copper_shield class=\S+ max_damage=[1-9]\d*
+
+## SQ-SMK-11 | Equipment recipes and the stepstool tag
+@group A
+@commands `/cdevtest recipes creativeequipment: max=1`; `/cdevtest makes creativeequipment:copper_shield`; `/cdevtest makes creativeequipment:white_stepstool`; `/cdevtest tag item creativeequipment:stepstools`
+@pass 140 or more `creativeequipment` recipes (167 on 2026-11-15); a recipe for the copper shield and for the white stepstool; the stepstool tag holds 16 items
+@fails Server scripts not in the jar (`data/creativeequipment/kubejs/`), tag file missing
+> cdevtest recipes creativeequipment: max=1
+> cdevtest makes creativeequipment:copper_shield
+> cdevtest makes creativeequipment:white_stepstool
+> cdevtest tag item creativeequipment:stepstools
+expect verb=recipes text=creativeequipment: n=(1[4-9]\d|[2-9]\d\d|\d{4,})\b
+expect verb=makes item=creativeequipment:copper_shield n=[1-9]\d*\b
+expect verb=makes item=creativeequipment:white_stepstool n=[1-9]\d*\b
+expect verb=tag kind=item tag=creativeequipment:stepstools n=16\b
+
+@@section 4
+@@title SQ-SMK Creative Magic smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativemagic
+@@sources development/creativeMagic
+@@tier T1
+@@text Creative Magic boots with its mixins and script, carries its recipes, and Flint and Terrasteel lights Dark Fire.
+@@text
+@@table
+## SQ-SMK-12 | Magic boots: loaded line, script pack, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativemagic]` and `[jar-startup] creativemagic`; count `from creativemagic.mixins.json` in `logs/debug.log`
+@pass `[creativemagic] loaded (config/creativemagic-common.toml)`; `core finished`; `N of N files loaded from its jar`; jar found; at least one mixin applied; no ERROR line or mixin failure naming `creativemagic`
+@fails Jar missing, a mixin target renamed (Botania, PneumaticCraft, Immersive Portals, Sophisticated)
+bootexpect Done \(
+bootexpect \[creativemagic\] loaded \(config/creativemagic-common\.toml\)
+bootexpect \[creativemagic\] core finished
+bootexpect \[jar-startup\] creativemagic: (\d+) of \1 files loaded from its jar
+bootreject /ERROR\].*\bcreativemagic\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativemagic
+shell grep -q "Found valid mod file creativemagic-[^ ]*\.jar with .creativemagic." logs/debug.log
+shell echo "mixins $(grep -c 'from creativemagic.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativemagic.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-13 | Magic item, block and recipes registered
+@group A
+@commands `/cdevtest reg item ^creativemagic: max=1`; `/cdevtest reg block ^creativemagic:dark_fire$`; `/cdevtest recipes creativemagic: max=1`; `/cdevtest makes creativemagic:flint_and_terrasteel`
+@pass at least one item; the Dark Fire block (`n=1`); 7 or more `creativemagic` recipes (9 on 2026-11-15); a recipe makes Flint and Terrasteel
+@fails `CreativeMagic` registries not run, server scripts not in the jar (`data/creativemagic/kubejs/`)
+> cdevtest reg item ^creativemagic: max=1
+> cdevtest reg block ^creativemagic:dark_fire$
+> cdevtest recipes creativemagic: max=1
+> cdevtest makes creativemagic:flint_and_terrasteel
+expect verb=reg kind=item regex=\S+ n=[1-9]\d*\b
+expect verb=reg kind=block regex=\S+ n=1\b
+expect verb=recipes text=creativemagic: n=([7-9]|[1-9]\d+)\b
+expect verb=makes item=creativemagic:flint_and_terrasteel n=[1-9]\d*\b
+
+## SQ-SMK-14 | Flint and Terrasteel lights Dark Fire
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `setblock 9018 -61 9010 minecraft:stone`; `/cdevtest use 9018 -61 9010 held=creativemagic:flint_and_terrasteel face=up`; `/cdevtest state 9018 -60 9010`
+@pass the use succeeds; the block above the stone is `creativemagic:dark_fire`
+@fails `FlintAndTerraSteelItem.useOn` not reached, Dark Fire removed at once (`canSurvive`)
+> forceload add 9000 9000 9100 9100
+sleep 5
+> setblock 9018 -61 9010 minecraft:stone
+> setblock 9018 -60 9010 minecraft:air
+> cdevtest use 9018 -61 9010 held=creativemagic:flint_and_terrasteel face=up
+> cdevtest state 9018 -60 9010
+expect verb=use .*result=(CONSUME|SUCCESS)
+expect verb=state pos=9018,-60,9010 state="?creativemagic:dark_fire
+
+@@section 5
+@@title SQ-SMK Creative Labels smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativelabels
+@@sources development/creativeLabels
+@@tier T1
+@@text Creative Labels boots with its mixins, registers its items and paper block, has its recipes, and a sticky note places as face paper.
+@@text
+@@table
+## SQ-SMK-15 | Labels boots: jar found, mixins, no error naming it
+@group A
+@commands Boot; grep `logs/debug.log` for the jar and `from creativelabels.mixins.json`; grep `logs/latest.log` for errors
+@pass jar found with `{creativelabels}`; at least one mixin applied; no ERROR line or mixin failure naming `creativelabels`; no tag load error for `creativelabels:paper/` tags
+@fails Jar missing, a mixin target renamed, a broken tag file
+bootexpect Done \(
+bootreject /ERROR\].*\bcreativelabels\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativelabels
+bootreject Couldn't load tag creativelabels:
+shell grep -q "Found valid mod file creativeLabels-[^ ]*\.jar with .creativelabels." logs/debug.log
+shell echo "mixins $(grep -c 'from creativelabels.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativelabels.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-16 | Labels items, paper block and recipes
+@group A
+@commands `/cdevtest reg item ^creativelabels:`; `/cdevtest reg block ^creativelabels:face_paper$`; `/cdevtest makes creativelabels:sticky_note`; `/cdevtest makes creativelabels:label`
+@pass three items (`sticky_note`, `label`, `eraser`); the `face_paper` block; a recipe makes 2 sticky notes and one makes 16 labels
+@fails `CLRegistry` not run, the pack's `other/creative_labels.js` recipes missing (they come from the pack's server scripts, not the jar)
+> cdevtest reg item ^creativelabels:
+> cdevtest reg block ^creativelabels:face_paper$
+> cdevtest makes creativelabels:sticky_note
+> cdevtest makes creativelabels:label
+expect verb=reg kind=item regex=\S+ n=3\b
+expect verb=reg kind=item id=creativelabels:sticky_note
+expect verb=reg kind=block regex=\S+ n=1\b
+expect verb=makes id=\S+ result=creativelabels:sticky_note\*2
+expect verb=makes id=\S+ result=creativelabels:label\*16
+
+## SQ-SMK-17 | a sticky note places as face paper
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `setblock 9024 -61 9010 minecraft:stone`; `/cdevtest use 9024 -61 9010 held=creativelabels:sticky_note face=up`; `/cdevtest state 9024 -60 9010`
+@pass the use returns CONSUME; the cell above is `creativelabels:face_paper` with block entity `creativelabels:face_paper`
+@fails `FacePaperInteractions.placeNote` refused the top face (`Spots.fit`), block entity not registered
+> forceload add 9000 9000 9100 9100
+sleep 5
+> setblock 9024 -61 9010 minecraft:stone
+> setblock 9024 -60 9010 minecraft:air
+> cdevtest use 9024 -61 9010 held=creativelabels:sticky_note face=up
+> cdevtest state 9024 -60 9010
+expect verb=use .*result=(CONSUME|SUCCESS)
+expect verb=state pos=9024,-60,9010 state="?creativelabels:face_paper.* be=creativelabels:face_paper
+
+@@section 6
+@@title SQ-SMK Creative Compat smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativecompat
+@@sources development/creativeCompat
+@@tier T1
+@@text Creative Compat boots with its mixins, scripts, paintings and surface speeds, reloads its config, and its tags and block are in place.
+@@text
+@@table
+## SQ-SMK-18 | Compat boots: loaded line, script pack, paintings, surface speeds, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativecompat]`, `[paintings]`, `[surface]`, `[feature-ports]`; count `from creativecompat.mixins.json` in `logs/debug.log`
+@pass `[creativecompat] loaded (config/creativecompat-common.toml)`; `N of N files loaded from its jar`; `[paintings] N of M modded painting variants built`; `[surface] N tier speeds applied to BlockRunner`; `[feature-ports] tier 1: N recipes`; jar found; at least one mixin applied; no ERROR line or mixin failure naming `creativecompat`
+@fails Jar missing, a mixin target renamed, painting builder or surface table failing at load
+bootexpect Done \(
+bootexpect \[creativecompat\] loaded \(config/creativecompat-common\.toml\)
+bootexpect \[jar-startup\] creativecompat: (\d+) of \1 files loaded from its jar
+bootexpect \[paintings\] [1-9]\d* of [1-9]\d* modded painting variants built
+bootexpect \[surface\] [1-9]\d* tier speeds applied to BlockRunner
+bootexpect \[feature-ports\] tier 1: [1-9]\d* recipes
+bootreject /ERROR\].*\bcreativecompat\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativecompat
+shell grep -q "Found valid mod file creativecompat-[^ ]*\.jar with .creativecompat." logs/debug.log
+shell echo "mixins $(grep -c 'from creativecompat.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativecompat.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-19 | /cdevreload compat reloads the Compat config
+@group A
+@commands `/cdevreload compat`
+@pass `[cdevreload] compat:` answers; no `not loaded yet`; no ERROR naming `creativecompat` in the segment
+@fails Compat's reload hook gone (Devtools calls it by name), config parse failing on reload
+> cdevreload compat
+sleep 2
+expect \[cdevreload\] compat:
+reject not loaded yet
+reject /ERROR\].*\bcreativecompat\b
+
+## SQ-SMK-20 | Compat tags and the weathered cardboard box
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest tag item creativecompat:burn/to_ash`; `/cdevtest place 9030 -60 9010 creativecompat:weathered_cardboard_box`; `/cdevtest state 9030 -60 9010`
+@pass the burn tag holds 400 or more items (535 on 2026-11-15); the box places and reads back as `creativecompat:weathered_cardboard_box`
+@fails Server tag scripts not in the jar (`data/creativecompat/kubejs/tags/`), `decor_blocks.js` not run
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest tag item creativecompat:burn/to_ash
+> cdevtest place 9030 -60 9010 creativecompat:weathered_cardboard_box
+> cdevtest state 9030 -60 9010
+expect verb=tag kind=item tag=creativecompat:burn/to_ash n=([4-9]\d\d|\d{4,})\b
+expect verb=place placed=true state="?creativecompat:weathered_cardboard_box
+expect verb=state pos=9030,-60,9010 state="?creativecompat:weathered_cardboard_box
+
+@@section 7
+@@title SQ-SMK Creative Calendar smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativecalendar
+@@sources development/creativeCalendar
+@@tier T1
+@@text Creative Calendar boots with time, seasons and crop seasons, `/ccaltime` answers, and the season biome tags are filled.
+@@text
+@@table
+## SQ-SMK-21 | Calendar boots: features loaded, scripts ready, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativecalendar]`; count `from creativecalendar.mixins.json` in `logs/debug.log`
+@pass `[creativecalendar] time, seasons and crop seasons loaded`; `N of N files loaded from its jar`; `server scripts ready, features on: seasons, crop_seasons, time`; jar found; at least one mixin applied; no ERROR line or mixin failure naming `creativecalendar`
+@fails Jar missing, a feature switched off by a config migration, a mixin target renamed (Serene Seasons, Better Days)
+bootexpect Done \(
+bootexpect \[creativecalendar\] time, seasons and crop seasons loaded
+bootexpect \[jar-startup\] creativecalendar: (\d+) of \1 files loaded from its jar
+bootexpect \[creativecalendar\] server scripts ready, features on: seasons, crop_seasons, time
+bootreject /ERROR\].*\bcreativecalendar\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativecalendar
+shell grep -q "Found valid mod file creativecalendar-[^ ]*\.jar with .creativecalendar." logs/debug.log
+shell echo "mixins $(grep -c 'from creativecalendar.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativecalendar.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-22 | /ccaltime prints the calendar
+@group A
+@commands `/ccaltime`
+@pass prints `Preset:` and the world day line (`... day + ... night = ...`); no unknown command
+@fails `TimeCommand` not registered, `[time]` switched off (`[time] is off` line)
+> ccaltime
+sleep 2
+expect Preset:
+expect day \+ .* night =
+reject Unknown or incomplete command
+reject \[time\] is off
+
+## SQ-SMK-23 | season biome tags are filled
+@group A
+@commands `/cdevtest tag biome creativecalendar:seasons/arid`; `/cdevtest tag biome creativecalendar:seasons/frozen`
+@pass the arid tag holds `minecraft:desert`; the frozen tag is not empty
+@fails `SeasonTypes` tag data missing from the jar or the pack
+> cdevtest tag biome creativecalendar:seasons/arid
+> cdevtest tag biome creativecalendar:seasons/frozen
+expect verb=tag kind=biome tag=creativecalendar:seasons/arid n=[1-9]\d* ids=.*minecraft:desert
+expect verb=tag kind=biome tag=creativecalendar:seasons/frozen n=[1-9]
+
+@@section 8
+@@title SQ-SMK Creative Devtools smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativedevtools
+@@sources development/creativeDevtools
+@@tier T1
+@@text Creative Devtools boots with its members and scripts, and `/cdevtest`, tick warp, perfBot and `/cdevgen` answer (every other smoke section relies on them).
+@@text
+@@table
+## SQ-SMK-24 | Devtools boots: members, script pack, server scripts
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativedevtools]`
+@pass `[creativedevtools] loaded, members:`; `N of N files loaded from its jar`; `server scripts ready`; jar found; no ERROR line or mixin failure naming `creativedevtools`
+@fails Jar missing, a member jar not nested
+bootexpect Done \(
+bootexpect \[creativedevtools\] loaded, members: \[
+bootexpect \[jar-startup\] creativedevtools: (\d+) of \1 files loaded from its jar
+bootexpect \[creativedevtools\] server scripts ready
+bootreject /ERROR\].*\bcreativedevtools\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativedevtools|cdevcapture)
+shell grep -q "Found valid mod file creativedevtools-[^ ]*\.jar with .creativedevtools." logs/debug.log
+
+## SQ-SMK-25 | /cdevtest place, state, be and inv on a chest
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9042 -60 9010 minecraft:chest[facing=north]`; `/cdevtest state`; `/cdevtest be`; apple x5 in slot 0; `/cdevtest inv`
+@pass `placed=true` with the chest state; state line with `be=minecraft:chest`; be NBT with the chest id; inv slot 0 `minecraft:apple*5`; every call ends `done=1`
+@fails `/cdevtest` not registered, argument parser changed
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9042 -60 9010 minecraft:chest[facing=north]
+> cdevtest state 9042 -60 9010
+> cdevtest be 9042 -60 9010
+> item replace block 9042 -60 9010 container.0 with minecraft:apple 5
+> cdevtest inv 9042 -60 9010
+expect verb=place placed=true state="minecraft:chest\[facing=north,type=single,waterlogged=false\]"
+expect verb=state pos=9042,-60,9010 .*be=minecraft:chest
+expect verb=be be=minecraft:chest nbt=
+expect verb=inv slot=0 item=minecraft:apple\*5
+count verb=(place|state|be|inv) done=1 >= 4
+reject verb=\S+ .*done=0
+
+## SQ-SMK-26 | /cdevtest tickwarp runs 200 ticks
+@group A
+@commands `/cdevtest tickwarp 200`; `/cdevtest tickwarp status`
+@pass `started=200`; `end=done ticks=200 asked=200`; status `running=false`
+@fails `nextTickTime` reflection (SRG `f_129726_`) failing
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=done 60
+> cdevtest tickwarp status
+expect verb=tickwarp started=200
+expect verb=tickwarp end=done ticks=200 asked=200
+expect verb=tickwarp running=false
+
+## SQ-SMK-27 | perfBot spawns, reads back and leaves
+@group A
+@commands `/pbot spawn smk8 9042.5 -60 9020.5 minecraft:overworld survival`; `/cdevtest player smk8`; `/pbot remove smk8`
+@pass the bot joins (`smk8 joined the game`); the player line names `smk8` with health 20; no unknown command
+@fails perfBot member not loaded, login listener broken
+> forceload add 9000 9000 9100 9100
+sleep 3
+> pbot spawn smk8 9042.5 -60 9020.5 minecraft:overworld survival
+sleep 2
+> cdevtest player smk8
+> pbot remove smk8
+sleep 1
+expect smk8 joined the game
+expect verb=player name=smk8 .*health=20
+reject Unknown or incomplete command
+
+## SQ-SMK-28 | /cdevgen status answers
+@group A
+@commands `/cdevgen status`
+@pass prints the last run, the running generator or `nothing has run since the game started`; no unknown command
+@fails `GeneratorCommand` not registered
+> cdevgen status
+sleep 2
+expect nothing has run since the game started|last run \(|running
+reject Unknown or incomplete command
+
+@@section 9
+@@title SQ-SMK Creative Worldgen smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativeworldgen
+@@sources development/creativeWorldgen
+@@tier T1
+@@text Creative Worldgen boots with its data packs and members, its commands answer, Mooblooms summon, and its recipes and biome trims are in place.
+@@text
+@@table
+## SQ-SMK-29 | Worldgen boots: loaded line, data packs, Visceral Heap trim, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativeworldgen]`; count `from creativeworldgen.mixins.json` and the member configs in `logs/debug.log`
+@pass `[creativeworldgen] loaded (config/creativeworldgen-common.toml)`; `N of N files loaded from its jar`; `mod data packs on:`; a `Visceral Heap: kept` line for `minecraft:worldgen/biome`; jar found; mixins applied from `creativeworldgen`; no ERROR line or mixin failure naming `creativeworldgen`, `more_mooblooms` or `baby_mobs`
+@fails Jar missing, a member not nested, a worldgen mixin target renamed
+bootexpect Done \(
+bootexpect \[creativeworldgen\] loaded \(config/creativeworldgen-common\.toml\)
+bootexpect \[jar-startup\] creativeworldgen: (\d+) of \1 files loaded from its jar
+bootexpect \[creativeworldgen\] mod data packs on:
+bootexpect \[creativeworldgen\] Visceral Heap: kept \d+ of \d+ Biomes O' Plenty entries in minecraft:worldgen/biome
+bootreject /ERROR\].*\b(creativeworldgen|more_mooblooms|baby_mobs)\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativeworldgen|more_mooblooms|baby_mobs)
+shell grep -q "Found valid mod file creativeworldgen-[^ ]*\.jar with .creativeworldgen." logs/debug.log
+shell echo "mixins $(grep -c 'from creativeworldgen.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativeworldgen.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-30 | /cwglocate status and /cwgspawnbox answer
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cwglocate status`; `/cwgspawnbox 9048 -60 9010 monster`
+@pass `[cwglocate] nothing running.`; one `[spawn-boxes] monster at 9048 -60 9010:` line; no unknown command
+@fails `LocateCommand` or `StructureSpawnBoxes` not registered
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cwglocate status
+> cwgspawnbox 9048 -60 9010 monster
+sleep 2
+expect \[cwglocate\] nothing running\.
+expect \[spawn-boxes\] monster at 9048 -60 9010:
+reject Unknown or incomplete command
+
+## SQ-SMK-31 | a Moobloom summons
+@group A
+@commands `/cdevtest reg entity ^more_mooblooms:moobloom$`; `summon more_mooblooms:moobloom 9048 -60 9030 {NoAI:1b}`; `/cdevtest entities 9048 -60 9030 3 type=more_mooblooms:moobloom`; kill it
+@pass the entity type is registered (`n=1`); one Moobloom found
+@fails Mooblooms member not nested or its entity not registered
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest reg entity ^more_mooblooms:moobloom$
+> summon more_mooblooms:moobloom 9048 -60 9030 {NoAI:1b}
+sleep 2
+> cdevtest entities 9048 -60 9030 3 type=more_mooblooms:moobloom
+> kill @e[type=more_mooblooms:moobloom]
+expect verb=reg kind=entity regex=\S+ n=1\b
+expect verb=entities n=1\b
+
+## SQ-SMK-32 | Worldgen recipes and the kept biome
+@group A
+@commands `/cdevtest recipes creativeworldgen: max=1`; `/cdevtest reg biome ^biomesoplenty:visceral_heap$`
+@pass 10 or more `creativeworldgen` recipes (13 on 2026-11-15); the Visceral Heap biome registered
+@fails Server scripts not in the jar (`data/creativeworldgen/kubejs/`), the Biomes O' Plenty trim dropping the kept biome
+> cdevtest recipes creativeworldgen: max=1
+> cdevtest reg biome ^biomesoplenty:visceral_heap$
+expect verb=recipes text=creativeworldgen: n=([1-9]\d+)\b
+expect verb=reg kind=biome regex=\S+ n=1\b
+
+@@section 10
+@@title SQ-SMK Creative Delight smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativedelight
+@@sources development/creativeDelight
+@@tier T1
+@@text Creative Delight boots with every member from its own jar, registers its items and recipes, the cooking pot works as a block, and its foods have food values.
+@@text
+@@table
+## SQ-SMK-33 | Delight boots: members, script pack, server scripts, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativedelight]`; count `from creativedelight.mixins.json` and `from farmersdelight.ce.mixins.json` in `logs/debug.log`
+@pass `[creativedelight] members: [farmersdelight, ...]` with no `NOT loaded`; `N of M files loaded from its jar` (a file whose member mod is absent is skipped); `server scripts ready, members on:`; `village farm crops added to N pool elements`; jar found; mixins applied from both configs; no member loaded from another jar; no ERROR line or mixin failure naming `creativedelight`
+@fails A member jar not nested or shadowed by a loose upstream jar, a mixin target renamed, a member script throwing
+bootexpect Done \(
+bootexpect \[creativedelight\] members: \[farmersdelight,
+bootexpect \[jar-startup\] creativedelight: [1-9]\d* of \d+ files loaded from its jar
+bootexpect \[creativedelight\] server scripts ready, members on: farmersdelight
+bootexpect \[creativedelight\] village farm crops added to [1-9]\d* pool elements
+bootreject \[creativedelight\] members: .*NOT loaded
+bootreject is loaded from .*not from the Creative Delight jar
+bootreject /ERROR\].*\bcreativedelight\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativedelight|farmersdelight\.ce)
+shell grep -q "Found valid mod file creativedelight-[^ ]*\.jar with .creativedelight." logs/debug.log
+shell for c in creativedelight farmersdelight.ce; do n=$(grep -c "from $c.mixins.json" logs/debug.log); echo "$c $n"; test "$n" -gt 0 || exit 1; done
+
+## SQ-SMK-34 | Delight items and recipes registered
+@group A
+@commands `/cdevtest reg item ^creativedelight: max=1`; `/cdevtest recipes creativedelight: max=1`; `/cdevtest bytype farmersdelight:cooking max=1`; `/cdevtest bytype creativedelight:baking max=1`; `/cdevtest makes creativedelight:cheese_toast`
+@pass 380 or more items (441 on 2026-11-15); 2000 or more `creativedelight` recipes (2465); 300 or more cooking pot recipes (375); 80 or more baking recipes (97); a recipe makes cheese toast
+@fails Startup or server scripts not in the jar, a member's recipe serializer not registered
+> cdevtest reg item ^creativedelight: max=1
+> cdevtest recipes creativedelight: max=1
+> cdevtest bytype farmersdelight:cooking max=1
+> cdevtest bytype creativedelight:baking max=1
+> cdevtest makes creativedelight:cheese_toast
+expect verb=reg kind=item regex=\S+ n=(3[89]\d|[4-9]\d\d|\d{4,})\b
+expect verb=recipes text=creativedelight: n=([2-9]\d{3}|\d{5,})\b
+expect verb=bytype serializer=farmersdelight:cooking n=([3-9]\d\d|\d{4,})\b
+expect verb=bytype serializer=creativedelight:baking n=([89]\d|[1-9]\d{2,})\b
+expect verb=makes item=creativedelight:cheese_toast n=[1-9]\d*\b
+
+## SQ-SMK-35 | the cooking pot and a fruit basket place as blocks
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9054 -60 9010 farmersdelight:cooking_pot`; `/cdevtest state`; `/cdevtest inv`; `/cdevtest place 9054 -60 9012 creativedelight:acacia_fruit_basket`; `/cdevtest state`
+@pass the pot places with block entity `farmersdelight:cooking_pot` and an item handler with slots; the basket places as `creativedelight:acacia_fruit_basket`
+@fails Farmer's Delight member not loaded, block entity type missing, basket block not registered
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9054 -60 9010 farmersdelight:cooking_pot
+> cdevtest state 9054 -60 9010
+> cdevtest inv 9054 -60 9010
+> cdevtest place 9054 -60 9012 creativedelight:acacia_fruit_basket
+> cdevtest state 9054 -60 9012
+expect verb=place placed=true state="?farmersdelight:cooking_pot
+expect verb=state pos=9054,-60,9010 .*be=farmersdelight:cooking_pot
+expect verb=inv via=\S+ slots=[1-9]\d*
+expect verb=place placed=true state="?creativedelight:acacia_fruit_basket
+expect verb=state pos=9054,-60,9012 state="?creativedelight:acacia_fruit_basket
+
+## SQ-SMK-36 | Delight foods have food values
+@group A
+@commands `/cdevtest food creativedelight:cheese_toast`; `/cdevtest food farmersdelight:beef_stew`; `/cdevtest food farmersdelight:tomato_sauce`
+@pass each line `food=true` with nutrition 1 or more
+@fails Food tuning (`food_values` scripts) breaking a food, a member item not registered
+> cdevtest food creativedelight:cheese_toast
+> cdevtest food farmersdelight:beef_stew
+> cdevtest food farmersdelight:tomato_sauce
+expect verb=food item=creativedelight:cheese_toast\*1 food=true nutrition=[1-9]
+expect verb=food item=farmersdelight:beef_stew\*1 food=true nutrition=[1-9]
+expect verb=food item=farmersdelight:tomato_sauce\*1 food=true nutrition=[1-9]
+
+@@section 11
+@@title SQ-SMK Creative Brewing smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars creativebrewing
+@@sources development/creativeBrewing
+@@tier T1
+@@text Creative Brewing boots with Vinery and Brewin' from its own jar, brews its potions, carries its recipes, and the keg, wines and potion buckets work.
+@@text
+@@table
+## SQ-SMK-37 | Brewing boots: members, script pack, fluid brewing, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `[creativebrewing]` and the fluid brewing lines; count `from creativebrewing.mixins.json`, `from vinery.mixins.json`, `from brewinandchewin.mixins.json` in `logs/debug.log`
+@pass `[creativebrewing] members: [vinery, brewinandchewin]`; `N of N files loaded from its jar`; `server scripts ready, members on: vinery, brewinandchewin`; `registered N dragon-breath fluid-brewing recipes`; `Lingerification: registered refinery list generator`; `potion bucket dispense handler installed`; jar found; mixins from all three configs; no ERROR line or mixin failure naming `creativebrewing`
+@fails A member not nested or shadowed by a loose jar, a mixin target renamed, a member script throwing
+bootexpect Done \(
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootexpect \[jar-startup\] creativebrewing: (\d+) of \1 files loaded from its jar
+bootexpect \[creativebrewing\] server scripts ready, members on: vinery, brewinandchewin
+bootexpect registered [1-9][0-9]* dragon-breath fluid-brewing recipes
+bootexpect Lingerification: registered refinery list generator
+bootexpect potion bucket dispense handler installed
+bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar
+bootreject /ERROR\].*\bcreativebrewing\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativebrewing|vinery|brewinandchewin)
+shell grep -q "Found valid mod file creativebrewing-[^ ]*\.jar with .creativebrewing." logs/debug.log
+shell for c in creativebrewing vinery brewinandchewin; do n=$(grep -c "from $c.mixins.json" logs/debug.log); echo "$c $n"; test "$n" -gt 0 || exit 1; done
+
+## SQ-SMK-38 | Brewing potions and brewing-stand mixes
+@group A
+@commands `/cdevtest reg potion ^creativebrewing: max=1`; `/cdevtest potion creativecommon:magic_resistance minecraft:redstone,minecraft:glowstone_dust`
+@pass at least one `creativebrewing` potion; redstone brews Magic Resistance into the long potion, glowstone into the strong one
+@fails `potions.js` mixes (`CB_POTION_MIXES`) not registered
+> cdevtest reg potion ^creativebrewing: max=1
+> cdevtest potion creativecommon:magic_resistance minecraft:redstone,minecraft:glowstone_dust
+expect verb=reg kind=potion regex=\S+ n=[1-9]\d*\b
+expect verb=potion potion=creativecommon:magic_resistance ingredient=minecraft:redstone output="?minecraft:potion creativecommon:long_magic_resistance
+expect verb=potion potion=creativecommon:magic_resistance ingredient=minecraft:glowstone_dust output="?minecraft:potion creativecommon:strong_magic_resistance
+
+## SQ-SMK-39 | Brewing recipes: keg, wine barrel, potion buckets
+@group A
+@commands `/cdevtest recipes creativebrewing: max=1`; `/cdevtest bytype brewinandchewin:fermenting max=1`; `/cdevtest bytype vinery:wine_fermentation max=1`
+@pass 2300 or more `creativebrewing` recipes (2840 on 2026-11-15); 20 or more keg recipes (25); 25 or more wine barrel recipes (33)
+@fails Server scripts not in the jar (`data/creativebrewing/kubejs/`), a member serializer not registered
+> cdevtest recipes creativebrewing: max=1
+> cdevtest bytype brewinandchewin:fermenting max=1
+> cdevtest bytype vinery:wine_fermentation max=1
+expect verb=recipes text=creativebrewing: n=(2[3-9]\d\d|[3-9]\d{3}|\d{5,})\b
+expect verb=bytype serializer=brewinandchewin:fermenting n=([2-9]\d|\d{3,})\b
+expect verb=bytype serializer=vinery:wine_fermentation n=(2[5-9]|[3-9]\d|\d{3,})\b
+
+## SQ-SMK-40 | the keg places; wine, beer and the potion bucket read back
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9060 -60 9010 brewinandchewin:keg`; `/cdevtest state`; `/cdevtest food vinery:red_wine`; `/cdevtest food brewinandchewin:beer`; `/cdevtest item creativebrewing:potion_bucket`
+@pass the keg places with a `brewinandchewin` block entity; both drinks are food; the potion bucket is registered
+@fails Brewin' member not loaded, alcohol food values (`alcohol_drinks.js`) breaking a drink, `potion_buckets.js` not run
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9060 -60 9010 brewinandchewin:keg
+> cdevtest state 9060 -60 9010
+> cdevtest food vinery:red_wine
+> cdevtest food brewinandchewin:beer
+> cdevtest item creativebrewing:potion_bucket
+expect verb=place placed=true state="?brewinandchewin:keg
+expect verb=state pos=9060,-60,9010 .*be=brewinandchewin:
+expect verb=food item=vinery:red_wine\*1 food=true
+expect verb=food item=brewinandchewin:beer\*1 food=true
+expect verb=item item=creativebrewing:potion_bucket class=
+
+@@section 12
+@@title SQ-SMK Exposure Backport smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars exposure
+@@sources development/exposureBackport
+@@tier T1
+@@text Exposure Backport boots with its five mods and mixins, registers its items and recipes, and the lightroom places with its inventory.
+@@text
+@@table
+## SQ-SMK-41 | Exposure boots: five mods in one jar, catalog, Polaroid hook, mixins
+@group A
+@commands Boot; grep `logs/debug.log` for the jar and `from exposure-common.mixins.json`; grep `logs/latest.log` for the catalog and Polaroid lines
+@pass jar found with `{exposure,exposure_expanded,exposure_polaroid,exposure_catalog,exposureextras}`; `Loaded exposure_catalog <version>`; `Exposure Polaroid hook successful.`; at least one mixin applied; no ERROR line or mixin failure naming `exposure`
+@fails Jar missing, a member mod id dropped from mods.toml, a mixin target renamed
+bootexpect Done \(
+bootexpect Loaded exposure_catalog \S+
+bootexpect Exposure Polaroid hook successful\.
+bootreject /ERROR\].*\bexposure(_catalog|_polaroid|_expanded|extras)?\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bexposure
+shell grep -q "Found valid mod file exposureBackport-[^ ]*\.jar with .exposure,exposure_expanded,exposure_polaroid,exposure_catalog,exposureextras." logs/debug.log
+shell echo "mixins $(grep -c 'from exposure-common.mixins.json' logs/debug.log)"; test "$(grep -c 'from exposure-common.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-42 | Exposure items and recipes
+@group A
+@commands `/cdevtest reg item ^exposure: max=1`; `/cdevtest makes exposure:camera`; `/cdevtest bytype exposure:film_developing max=1`; `/cdevtest item exposure:camera`
+@pass 15 or more items (19 on 2026-11-15); a recipe makes the camera; two film developing recipes; the camera has a stack size of 1
+@fails Backport recipe codecs (`BackportRecipes`) refusing a recipe, a serializer not registered
+> cdevtest reg item ^exposure: max=1
+> cdevtest makes exposure:camera
+> cdevtest bytype exposure:film_developing max=1
+> cdevtest item exposure:camera
+expect verb=reg kind=item regex=\S+ n=(1[5-9]|[2-9]\d|\d{3,})\b
+expect verb=makes item=exposure:camera n=[1-9]\d*\b
+expect verb=bytype serializer=exposure:film_developing n=2\b
+expect verb=item item=exposure:camera class=\S+ max_damage=\d+ max_stack=1\b
+
+## SQ-SMK-43 | the lightroom places with its inventory
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9066 -60 9010 exposure:lightroom`; `/cdevtest state`; `/cdevtest inv`
+@pass placed with block entity `exposure:lightroom`; an inventory with slots
+@fails Block entity type not registered, the lightroom's item handler capability missing
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9066 -60 9010 exposure:lightroom
+> cdevtest state 9066 -60 9010
+> cdevtest inv 9066 -60 9010
+expect verb=place placed=true state="?exposure:lightroom
+expect verb=state pos=9066,-60,9010 .*be=exposure:lightroom
+expect verb=inv via=\S+ slots=[1-9]\d*
+
+@@section 13
+@@title SQ-SMK Backported Power Grid smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars powergrid
+@@sources development/backportedPowerGrid
+@@tier T1
+@@text Backported Power Grid boots with its wire types and components, its registries are filled, `/powergrid` answers, and a battery places.
+@@text prep_srv.sh drops the Power Grid jar unless `PGJAR=1` (newest build jar) or `PGJAR=<path>` is set: prepare this section's server with it.
+@@text
+@@table
+## SQ-SMK-44 | Power Grid boots: phase line, wire types, components, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for the Power Grid start line, wire types and component items; count `from powergrid.mixins.json` in `logs/debug.log`
+@pass `Power grid starting, prepare to be electrocuted (1.19.2 port, phase N)`; `Loaded N wire types`; `Loaded N component items`; jar found with `{powergrid}`; at least one mixin applied; no mixin, tag or loot error naming `powergrid`
+@fails Jar missing from `srv/mods`, wire type or component data not read, a mixin target renamed (Create)
+bootexpect Done \(
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase
+bootexpect Loaded [1-9]\d* wire types
+bootexpect Loaded [1-9]\d* component items
+bootreject /ERROR\].*\b(powergrid|patryk3211)\b
+bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
+bootreject ^(?!.*MinecraftServer/\]: Unknown item).*(Couldn't load tag|Failed to load|Couldn't parse|Unknown item|Unknown tag|Error loading registry data).*powergrid
+bootreject (ERROR|WARN).*[Ll]oot.*powergrid
+shell grep -q "Found valid mod file backportedPowerGrid-[^ ]*\.jar with .powergrid." logs/debug.log
+shell echo "mixins $(grep -c 'from powergrid.mixins.json' logs/debug.log)"; test "$(grep -c 'from powergrid.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-45 | Power Grid registries and recipes
+@group A
+@commands `/cdevtest reg item ^powergrid: max=1`; `/cdevtest reg block ^powergrid: max=1`; `/cdevtest recipes powergrid: max=1`; `/cdevtest makes powergrid:wire_cutter`
+@pass 100 or more items (119 on 2026-11-15), 60 or more blocks (71), 90 or more `powergrid` recipes (115); a recipe makes the wire cutter
+@fails Registrate entries dropped, the port's recipe data missing
+> cdevtest reg item ^powergrid: max=1
+> cdevtest reg block ^powergrid: max=1
+> cdevtest recipes powergrid: max=1
+> cdevtest makes powergrid:wire_cutter
+expect verb=reg kind=item regex=\S+ n=([1-9]\d{2,})\b
+expect verb=reg kind=block regex=\S+ n=([6-9]\d|[1-9]\d{2,})\b
+expect verb=recipes text=powergrid: n=(9\d|[1-9]\d{2,})\b
+expect verb=makes item=powergrid:wire_cutter n=[1-9]\d*\b
+
+## SQ-SMK-46 | /powergrid debug and performance answer
+@group A
+@commands `/powergrid debug problems`; `/powergrid performance get NetSolve`
+@pass `Last measurement:` printed; no unknown command; no unexpected error
+@fails Command tree not registered on the server
+> powergrid debug problems
+> powergrid performance get NetSolve
+sleep 2
+expect Last measurement:
+reject An unexpected error occurred
+reject Unknown or incomplete command
+
+## SQ-SMK-47 | a battery places with its block entity
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9072 -60 9010 powergrid:battery`; `/cdevtest state 9072 -60 9010`
+@pass placed as `powergrid:battery` with a `powergrid` block entity
+@fails Block or block entity not registered, electrical node setup throwing on placement
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9072 -60 9010 powergrid:battery
+> cdevtest state 9072 -60 9010
+expect verb=place placed=true state="?powergrid:battery
+expect verb=state pos=9072,-60,9010 .*be=powergrid:
+reject /ERROR\].*\b(powergrid|patryk3211)\b
+
+@@section 14
+@@title SQ-SMK Backported Tempad smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars tempad
+@@sources development/backportedTempad
+@@tier T1
+@@text Backported Tempad boots with its translated upstream data, registers its items and recipes, and a metronome places.
+@@text
+@@table
+## SQ-SMK-48 | Tempad boots: upstream data served, no error naming it
+@group A
+@commands Boot; grep `logs/latest.log` for `Tempad upstream data`; grep `logs/debug.log` for the jar
+@pass `Tempad upstream data: N files served`; jar found with `{tempad}`; no ERROR line naming `tempad`
+@fails Jar missing, the upstream donor jar not found by `UpstreamTranslator`
+bootexpect Done \(
+bootexpect Tempad upstream data: [1-9]\d* files served
+bootreject /ERROR\].*\btempad\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\btempad
+shell grep -q "Found valid mod file backportedTempad-[^ ]*\.jar with .tempad." logs/debug.log
+
+## SQ-SMK-49 | Tempad items and recipes
+@group A
+@commands `/cdevtest reg item ^tempad: max=1`; `/cdevtest makes tempad:tempad`; `/cdevtest bytype tempad:upgrade max=1`
+@pass 18 or more items (21 on 2026-11-15); a recipe makes the Tempad; two upgrade recipes
+@fails Upstream recipe data not served, upgrade serializer not registered
+> cdevtest reg item ^tempad: max=1
+> cdevtest makes tempad:tempad
+> cdevtest bytype tempad:upgrade max=1
+expect verb=reg kind=item regex=\S+ n=(1[89]|[2-9]\d|\d{3,})\b
+expect verb=makes item=tempad:tempad n=[1-9]\d*\b
+expect verb=bytype serializer=tempad:upgrade n=2\b
+
+## SQ-SMK-50 | a metronome places
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9078 -60 9010 tempad:metronome`; `/cdevtest state 9078 -60 9010`
+@pass placed and read back as `tempad:metronome`
+@fails Block not registered
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9078 -60 9010 tempad:metronome
+> cdevtest state 9078 -60 9010
+expect verb=place placed=true state="?tempad:metronome
+expect verb=state pos=9078,-60,9010 state="?tempad:metronome
+
+@@section 15
+@@title SQ-SMK Storage Delight repack smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars storagedelight
+@@sources development/repackedStorage
+@@tier T1
+@@text Storage Delight (repackedStorage) boots after Farmer's Delight, registers its cabinets and recipes, and a drawer holds items.
+@@text
+@@table
+## SQ-SMK-51 | Storage Delight boots: jar found, no error naming it
+@group A
+@commands Boot; grep `logs/debug.log` for the jar; grep `logs/latest.log` for errors
+@pass jar found with `{storagedelight}`; no dependency error; no ERROR line naming `storagedelight`
+@fails Jar missing, the upstream `storagedelight-*.jar` loaded beside it, a replaced registry class broken
+bootexpect Done \(
+bootreject (?i)storagedelight.*(missing|requires)
+bootreject /ERROR\].*\bstoragedelight\b
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -q "Found valid mod file repackedStorage-[^ ]*\.jar with .storagedelight." logs/debug.log
+
+## SQ-SMK-52 | Storage Delight items and recipes, added sets included
+@group A
+@commands `/cdevtest reg item ^storagedelight: max=1`; `/cdevtest recipes storagedelight: max=1`; `/cdevtest makes storagedelight:acacia_drawer`; `/cdevtest reg block ^storagedelight:bamboo_drawer$`
+@pass 130 or more items (140 on 2026-11-15); 130 or more recipes (140); a recipe makes the acacia drawer; the added bamboo drawer is registered
+@fails The repack's replaced `BlockRegistry` / `ItemRegistry` dropping entries, overlay recipes missing
+> cdevtest reg item ^storagedelight: max=1
+> cdevtest recipes storagedelight: max=1
+> cdevtest makes storagedelight:acacia_drawer
+> cdevtest reg block ^storagedelight:bamboo_drawer$
+expect verb=reg kind=item regex=\S+ n=(1[3-9]\d|[2-9]\d\d|\d{4,})\b
+expect verb=recipes text=storagedelight: n=(1[3-9]\d|[2-9]\d\d|\d{4,})\b
+expect verb=makes item=storagedelight:acacia_drawer n=[1-9]\d*\b
+expect verb=reg kind=block regex=\S+ n=1\b
+
+## SQ-SMK-53 | a drawer places and holds items
+@group A
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9084 -60 9010 storagedelight:acacia_drawer`; apple x3 in slot 0; `/cdevtest inv 9084 -60 9010`
+@pass placed with a `storagedelight` block entity; slot 0 holds `minecraft:apple*3`
+@fails Block entity type (`EntityTypesRegistry`) not bound to the block, container broken
+> forceload add 9000 9000 9100 9100
+sleep 5
+> cdevtest place 9084 -60 9010 storagedelight:acacia_drawer
+> cdevtest state 9084 -60 9010
+> item replace block 9084 -60 9010 container.0 with minecraft:apple 3
+> cdevtest inv 9084 -60 9010
+expect verb=place placed=true state="?storagedelight:acacia_drawer
+expect verb=state pos=9084,-60,9010 .*be=storagedelight:
+expect verb=inv slot=0 item=minecraft:apple\*3
+
+@@section 16
+@@title SQ-SMK Spice of Life: Raspberry Pie smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
+@@date 2026-11-16
+@@jars solraspberrypie
+@@sources development/solRaspberryPie
+@@tier T1
+@@text Raspberry Pie boots with its diet ladder and mixins, `/solrp` answers, and its diet log items and recipes are in place.
+@@text
+@@table
+## SQ-SMK-54 | Raspberry Pie boots: diet ladder, mixins
+@group A
+@commands Boot; grep `logs/latest.log` for `Diet ladder`; count `from solraspberrypie.mixins.json` in `logs/debug.log`
+@pass `Diet ladder: N rungs, N slots, N pool effects`; no `DIET LADDER FILE IS BROKEN OR MISSING`; jar found; at least one mixin applied; no Apple Pie benefit or reset warning; no ERROR line or mixin failure naming `solraspberrypie`
+@fails Jar missing, `ladder.json` unreadable (built-in ladder used), Apple Pie mixin target renamed
+bootexpect Done \(
+bootexpect Diet ladder: [1-9]\d* rungs, [1-9]\d* slots, \d+ pool effects
+bootreject DIET LADDER FILE IS BROKEN OR MISSING
+bootreject Apple Pie still has its own benefits
+bootreject Apple Pie resetOnDeath is true
+bootreject /ERROR\].*\bsolraspberrypie\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bsolraspberrypie
+shell grep -q "Found valid mod file solRaspberryPie-[^ ]*\.jar with .solraspberrypie." logs/debug.log
+shell echo "mixins $(grep -c 'from solraspberrypie.mixins.json' logs/debug.log)"; test "$(grep -c 'from solraspberrypie.mixins.json' logs/debug.log)" -gt 0
+
+## SQ-SMK-55 | /solrp pause list answers
+@group A
+@commands `/solrp pause list`
+@pass `No player has paused diet bonuses` or `N paused: ...`; no unknown command
+@fails `RpCommands` not registered
+> solrp pause list
+sleep 2
+expect No player has paused diet bonuses|\d+ paused: |solraspberrypie\.cmd\.(none_paused|paused_list)
+reject Unknown or incomplete command
+
+## SQ-SMK-56 | Raspberry Pie items and recipes
+@group A
+@commands `/cdevtest reg item ^solraspberrypie:`; `/cdevtest makes solraspberrypie:liquid_diet_log`; `/cdevtest bytype solraspberrypie:diet_book max=1`
+@pass two items (`diet_marker`, `liquid_diet_log`); a recipe makes the liquid diet log; one diet book recipe
+@fails Items not registered, the diet book serializer missing
+> cdevtest reg item ^solraspberrypie:
+> cdevtest makes solraspberrypie:liquid_diet_log
+> cdevtest bytype solraspberrypie:diet_book max=1
+expect verb=reg kind=item regex=\S+ n=2\b
+expect verb=reg kind=item id=solraspberrypie:liquid_diet_log
+expect verb=makes item=solraspberrypie:liquid_diet_log n=[1-9]\d*\b
+expect verb=bytype serializer=solraspberrypie:diet_book n=1\b

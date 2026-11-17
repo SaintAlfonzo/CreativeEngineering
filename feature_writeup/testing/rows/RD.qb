@@ -556,6 +556,7 @@ bootreject (?i)(CopperPotBlockEntityMixin|StickyBasketBlockEntityMixin|StickyBas
 @fails `UpstreamJars.verifyOrFail`
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
+@superseded superseded by SQ-MDP-17: the message now names "Miner's Delight (Creative Delight (2026-11-16 P2.5, from the row text)
 ## SQ-MDP-03 | copper pot cave soup serves 2 cups
 @group A
 @commands `/setblock` a lit campfire and a copper pot on it; `/data merge block` the pot's `Inventory` slots 0-3 with `miners_delight:cave_carrot`, `minecraft:red_mushroom`, 2 x `minecraft:brown_mushroom` (the cave soup recipe, 200 ticks, so 160 in the pot); wait 10 s; `/data get block`
@@ -579,6 +580,7 @@ look the cave_soup_cup stack in slot 4 (meal) has Count 2b
 @fails the GLM types (`miners_delight:add_items` / `replace_items`) or `any_of` translation
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
+@superseded superseded by SQ-MDL-02: squid kills are the squid chain's; Miner's squid modifiers are not served (2026-11-16 P2.5, from the row text)
 ## SQ-MDP-05 | Miner's items exist, hot_cocoa_cup removed
 @group A
 @commands probe: count registry entries in namespace `miners_delight`; `/give @p` each of `hot_cocoa_cup`, `arthropod`, `cooked_arthropod`, `spider_leg`, `baked_spider_leg`, `moss`, `copper_carrot`, `crunchy_bar`, `nutritional_bar`, `golden_nutritional_bar`, `bat_cookie`, `bat_soup_cup`, `insect_stew_cup`, `bone_broth_cup`, `onion_soup_cup`
@@ -682,6 +684,7 @@ look values against food_values.js / the food dump; Poison II cured by both bars
 @fails the GLM entries (`add_items` / `replace_items`) and their `on_fire` / knife conditions; `kubejs/data` loot overrides
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
+@superseded superseded by SQ-MDL-02 and -03 (2026-11-16 P2.5, from the row text)
 ## SQ-MDP-09 | mineshaft chests can hold copper and cave carrots
 @group A
 @commands (superseded by SQ-MDL-05) 400 x `/loot spawn ~ ~ ~ loot minecraft:chests/abandoned_mineshaft`; count `miners_delight:copper_carrot` and `miners_delight:cave_carrot` stacks
@@ -689,6 +692,7 @@ look values against food_values.js / the food dump; Poison II cured by both bars
 @fails No pack rule adds these (`loot/07_rules.js` has none): the port's loot modifier (`miners_delight` data in `miners_upstream`) must have reached the table; check the modifier is in `forge:loot_modifiers/global_loot_modifiers` and has a weight under the pack's loot ceilings
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+@superseded superseded by SQ-MDL-05 (2026-11-16 P2.5, from the row text)
 > kill @e[type=minecraft:item]
 repeat 400
 > loot spawn {H1+58} {H2} {H3+30} loot minecraft:chests/abandoned_mineshaft
@@ -2041,6 +2045,7 @@ look keg still holds 3 wheat + 2 sugar (or a fermenting result) and the barrel 4
 @fails
 @jars creativebrewing creativecommon
 @from batches/r1101/p1_server.qb
+@superseded Dropped 2026-11-01: Vinery and Brewin' are one package under Creative Brewing; the per-member switch is not tested (no reload-time log exists, the members line is logged only at server start (2026-11-16 P2.5, from the row text)
 shell sed -i -E 's/^(\s*brewinandchewin\s*=\s*)true/\1false/' config/creativebrewing-common.toml
 > reload
 sleep 15
@@ -3032,6 +3037,7 @@ look the kubejs lines show the Fruits Delight scripts skipped by their "// requi
 @pass Boot stops with "reads its textures ... must be in the folder 'rustic_upstream'" and the Modrinth URL
 @fails Starts anyway: `UpstreamJars.verifyOrFail` not called
 @from batches/r1102b/s2_RDstop.qb
+@superseded Obsolete from `backportedRustic` -02 (2026-11-10 bake): replaced by SQ-RDB-01, -06. Same boot with `rustic_upstream/` renamed (2026-11-16 P2.5, from the row text)
 bootexpect Rustic Delight \(Creative Delight\) reads its textures, models and recipes from the original Rustic Delight jar, which must be in the folder 'rustic_upstream' of the game directory
 bootexpect missing: .*rustic_upstream/rusticdelight-forge-1\.20\.1-1\.7\.0\.jar
 bootexpect https://cdn\.modrinth\.com/data/foa4fGIH/versions/z29Gd3ec/rusticdelight-forge-1\.20\.1-1\.7\.0\.jar \(Modrinth

@@ -61,6 +61,7 @@ look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a li
 @pass boots, no script error in `logs/kubejs/*.log`; `/effect give @s creativebrewing:magic_resistance` works; a potion bucket fills from a cauldron; one keg brew and one wine ferment
 @fails the mod or file named in the error (missing guard: add it, rerun `tools/guard_check.py`)
 @draft no batch holds this row yet
+@superseded Superseded by SQ-CBA-01 to -18 (2026-11-16 P2.5, from the row text)
 ## SQ-CBS-02
 @group B
 @commands Minimal chain plus Alex's Mobs only
@@ -118,3 +119,4 @@ look rack item registered (a CfB compartment class), nest item AirItem or inert;
 @pass "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)"; buckets and icon textured
 @fails M3 assets not in the CB jar
 @draft no batch holds this row yet
+@superseded Superseded by CQ-CBA-01 (2026-11-16 P2.5, from the row text)

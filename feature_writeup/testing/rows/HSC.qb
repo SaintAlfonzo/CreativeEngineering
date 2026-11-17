@@ -16,12 +16,14 @@
 @pass takes exactly 1 diamond, from the hotbar stack only; the main-inventory stack is never touched
 @fails takes more than 1 or reads the main inventory
 @draft no batch holds this row yet
+@superseded SUPERSEDED 2026-11-10 by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap (2026-11-16 P2.5, from the row text)
 ## SQ-HSC-88
 @group A
 @commands **SUPERSEDED 2026-11-10** by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap.md 8). Was HNH-88: crow carrying loot; unload its chunk, relog, kill it
 @pass does not despawn while carrying; loot survives the reload (NBT); drops on death with no despawn timer
 @fails loot lost on despawn or reload
 @draft no batch holds this row yet
+@superseded SUPERSEDED 2026-11-10 by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap (2026-11-16 P2.5, from the row text)
 ## SQ-HSC-89 | salt caves in the set biomes: raw rock salt shell (desert box of SQ-FCK-08)
 @group A
 @commands HNH-89: locate a salt cave, enter it
@@ -42,9 +44,11 @@ look the box is desert (in #hearthandharvest:has_salt_caves); rarity 24 gives ab
 @pass tempts and tames at the plan odds (AM seeds still work)
 @fails corn not in the crow food tag
 @draft no batch holds this row yet
+@superseded SUPERSEDED 2026-11-10 by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap (2026-11-16 P2.5, from the row text)
 ## SQ-HSC-91
 @group A
 @commands **SUPERSEDED 2026-11-10** by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap.md 8). Was HNH-91: unprotected crop and a scarecrow-covered crop near a crow, defaults
 @pass first is pecked back to age 0, second is not
 @fails pecking off by default or scarecrow ignored
 @draft no batch holds this row yet
+@superseded SUPERSEDED 2026-11-10 by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap (2026-11-16 P2.5, from the row text)
