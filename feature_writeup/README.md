@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=e879d144d9f3 -->
+<!-- generated:status_index begin readme sha1=2eb8c6d44da0 -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED; SQ-BRA r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL | creativecompat pending, creativedevtools installed 2026-11-17 | DEPLOYED, in-game test pending |
@@ -70,7 +70,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Creative Calendar | [creative_calendar.md](creative_calendar.md) | `SQ-CAL`, `CAL-` | BUILT | SQ-CAL r1101 2026-11-01: 7 PASS; CQ-CAL r1101 2026-11-01: 1 OPEN | creativedelight installed 2026-11-16, creativebrewing installed 2026-11-16, creativecalendar installed 2026-11-16 | carved 2026-11-01, installed |
 | Creative Compat | [creative_compat.md](creative_compat.md) | `SQ-CMP`, `CMP-` | BUILT | SQ-CMP r1101 2026-11-01: 7 PASS, 1 LOOK | creativecommon pending, creativecompat pending | carved 2026-11-01, installed |
 | Creative Devtools | [creative_devtools.md](creative_devtools.md) | `CDV-` | BUILT | SQ-TX r1116 2026-11-16: 19 PASS, 8 FAIL; CQ-TXR r1116 2026-11-16: 1 DEFERRED; SQ-CDV r1101 2026-11-01: 4 PASS | creativecommon pending, creativedevtools installed 2026-11-17 | carved 2026-11-01, installed |
-| Structure Catalogue world type | [plan_structure_catalogue.md](plan_structure_catalogue.md) | `SCAT-` | BUILT | none | creativedevtools installed 2026-11-17 | client rows not run) |
+| Structure Catalog world type | [plan_structure_catalogue.md](plan_structure_catalogue.md) | `SCAT-` | BUILT | none | creativedevtools installed 2026-11-17 | client rows not run) |
 | Creative Worldgen | [creative_worldgen.md](creative_worldgen.md) | `SQ-CWG`, `CWG-` | BUILT | none | creativecommon pending, creativeworldgen installed 2026-11-16 | SQ-CWG-08 / -08o open (old-world rerun) |
 | Creative Magic | [creative_magic.md](creative_magic.md) | `SQ-CMG (tests in nether_portal.md NP-`, `recipes_magic.md RA-)` | BUILT | none | creativecommon pending, creativemagic installed 2026-11-16 | built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted |
 | Creative Equipment | [creative_equipment.md](creative_equipment.md) | `SQ-CEQ`, `CQ-CEQ` | BUILT | SQ-CBP r1115 2026-11-15: 1 PASS | creativecommon pending, creativeequipment installed 2026-11-16 | built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted |
