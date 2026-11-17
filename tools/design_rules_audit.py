@@ -395,6 +395,17 @@ if wants('history'):
 	report('DR-C26', 'source folders with no owning writeup (WARNING: add a tools/writeup_owner.json entry)', missing,
 		   'folders', top=20)
 
+# DR-W3: test lines not in the D12 form (tools/test_line_fix.py fixes them; it fails in check_all as test_lines).
+if wants('testlines'):
+	out = subprocess.run([sys.executable, str(ROOT / 'tools/test_line_fix.py'), '--lint', '-v'], cwd=ROOT,
+						 capture_output=True, text=True).stdout.rstrip().split('\n')
+	hits = [(l.split(':', 2)[0], int(l.split(':', 2)[1]), l.split(':', 2)[2].strip()) for l in out
+			if not l.startswith('AMBIGUOUS ') and l.count(':') >= 2 and l.split(':', 2)[1].isdigit()]
+	report('DR-W3', 'test lines off the D12 form (test_line_fix.py --apply fixes them)', hits)
+	amb = [(l.split(' ', 1)[1].split(':', 2)[0], int(l.split(' ', 1)[1].split(':', 2)[1]), l.split(':', 3)[-1].strip())
+		   for l in out if l.startswith('AMBIGUOUS ')]
+	report('DR-W3', 'test lines the fixer cannot read (WARNING: fix by hand or leave as prose)', amb)
+
 # DR-W11: doc file names.
 if wants('docnames'):
 	hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')

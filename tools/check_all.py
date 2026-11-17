@@ -85,6 +85,8 @@ LINTS = {
 	'test_prefix_lint': (['python3', 'tools/test_prefix_lint.py', '--quiet'],
 						 ['feature_writeup/', 'tools/test_prefix_lint.py'], 1, False),
 	'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),
+	'test_lines': (['python3', 'tools/test_line_fix.py', '--lint'], ['feature_writeup/', 'tools/test_line_fix.py',
+															 'tools/test_prefix_lint.py'], 1, False),
 	'cleanup': (['python3', 'tools/cleanup_check.py'], ['feature_writeup/', 'tools/cleanup_check.py',
 														'tools/cleanup_thresholds.csv', '.claude/skills/'], 17, False),
 	'todo_rows': (['python3', 'tools/todo.py', 'lint', '--changed'], ['feature_writeup/todo/', 'feature_writeup/briefs/',
