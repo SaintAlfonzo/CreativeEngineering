@@ -30,7 +30,7 @@ Effect swaps, potions and alcohol belong to Creative Brewing ([creative_brewing.
 | 9 | `members #6` Ocean's and Oceanic | KubeJS / overlay data | After #29 tests pass |
 | 10 | `members #8` mooshroom family | patcherMod + moreMooblooms | Independent |
 | 11 | `members #10` cutover release | build / docs | After #1 |
-| - | `members #9` Ender's rebuild | pinned | Licence answer first |
+| - | `members #9` Ender's rebuild | pinned | License answer first |
 
 ---
 
@@ -66,10 +66,10 @@ Every medley state textured; giant pepper blocks look as the owner expects.
 1. Client check SQ-RD-32 (medley at every serving). If it passes, the medley half is done.
 2. Pepper blocks: only after the owner says what "connect" means (decision). If it is a stacked look, write a
    `bell_pepper_<colour>_block` blockstate with `up`/`down` booleans in the Rustic member's overlay and a small `RusticPepperBlock`
-   (`updateShape` sets the booleans) with top / middle / bottom models; nine colours share one model set by texture.
+   (`updateShape` sets the booleans) with top / middle / bottom models; nine colors share one model set by texture.
 ### Decisions
 - What "do not connect" means: (a) side-by-side blocks show seams (as melons do), (b) a 2-high stack should read as one
-  pepper, (c) something else. Recommend: close as upstream behaviour unless (b), which needs new art for the middle piece.
+  pepper, (c) something else. Recommend: close as upstream behavior unless (b), which needs new art for the middle piece.
 ### Tests
 SQ-RD-32, SQ-RD-29 (queued). Proposed RD-34 (only if blocks change): stack 2 and 3 high, place side by side; models change by neighbour.
 
@@ -142,7 +142,7 @@ Proposed CDM-11: breeding any two of red, brown, inky, morel; brown chance per b
 
 ## members #9: Ender's Delight compliant rebuild
 Status Pinned / new jar / `creativedelight/members #9`. Writeup 15; Miner's method ([miners_delight.md](../miners_delight.md)): fresh code, art and
-data read from the unmodified donor jar, sha1-pinned. Do not start until the owner answers the licence question (upstream 1.1.4 declares MIT,
+data read from the unmodified donor jar, sha1-pinned. Do not start until the owner answers the license question (upstream 1.1.4 declares MIT,
 installed `endersdelight-1.19-1.2.2.jar` is ARR). Since 2026-10-25 the CD member `endersAdditions` (`enders_additions`, 1.1.4-ce-19.2-02)
 already adds the 1.1.4 MIT content under `endersdelight:` ids (`largecontent/mod-additions #28`); a full rebuild would absorb it.
 

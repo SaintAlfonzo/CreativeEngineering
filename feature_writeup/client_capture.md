@@ -25,7 +25,7 @@ In-game checks are queue rows CQ-TXC-01 to -10 ([testing/scratch_queue.md](testi
 decisions are in section 4.1. TODO: `tooling/generators-and-tests #6`. Test prefix `CC-`.
 
 The point: Round 2 of [testing/scratch_queue.md](testing/scratch_queue.md) (the `CQ-` rows) is mostly "open this,
-look at that": a JEI page, a tooltip, a WTHIT line, a block's colour, a GUI. Today each needs the user at the keyboard.
+look at that": a JEI page, a tooltip, a WTHIT line, a block's color, a GUI. Today each needs the user at the keyboard.
 With this system a session (or the user) picks the capturable rows, one throwaway client runs them all unattended in a
 single-player world, and each check leaves one cropped PNG named after its test ID, next to a manifest that says what
 the picture should show.
@@ -136,7 +136,7 @@ through `cmd`.
 | `use` | Right-clicks the targeted block or the held item through `gameMode.useItemOn` / `useItem` (opens real GUIs: pickling jar, kettle, oven) |
 | `attack` | Left-click on the target (one swing) |
 | `screen` | `inventory`, `creative:<tab>`, `jei_recipes:<item>`, `jei_uses:<item>`, `jei_category:<uid>`, `close` |
-| `tooltip` | Opens the driver's stage screen: flat `#202020` background, the item at the centre, its tooltip drawn by the normal path (so Legendary Tooltips, AppleSkin, KubeJS and our tooltip lines all run). Options: `shift`, `ctrl`, `advanced` (F3+H) |
+| `tooltip` | Opens the driver's stage screen: flat `#202020` background, the item at the center, its tooltip drawn by the normal path (so Legendary Tooltips, AppleSkin, KubeJS and our tooltip lines all run). Options: `shift`, `ctrl`, `advanced` (F3+H) |
 | `hover` | Puts the virtual mouse at GUI coords or on slot N of the open screen (2.7), for tooltips inside a real GUI |
 | `key` | Holds a modifier (`shift`, `ctrl`, `alt`) for the next capture |
 | `reload` | F3+T resource reload, then waits `resources` |
@@ -178,14 +178,14 @@ Toggle-mode sprint / sneak mappings are pressed on the edges only. A walk step's
 
 **Widget actions (TX-05, `Widgets.java`).** Resolved from the open screen's widget list (`children()`, nested
 containers flattened), never from window pixels; clicks go through the screen's own `mouseClicked` /
-`mouseReleased` at the centre, and the virtual mouse is parked there.
+`mouseReleased` at the center, and the virtual mouse is parked there.
 
 | Step | Does |
 |---|---|
 | `{"click_slot": N, "button": 0, "shift": false}` | clicks slot N of the open container (shift-click through the virtual Shift) |
 | `{"click_widget": REF, "button": 0}` | REF: `"label"` (message, exact then substring, case-insensitive), `N` (index in `READ widgets`), `{"class": "EditBox", "n": 0}` |
 | `{"type_into": REF \| null, "text": "...", "clear": true, "enter": false}` | clicks REF (null: keep the focused widget), clears an EditBox, types each character through the screen's `charTyped`; the note has the EditBox value |
-| `{"scroll": d, "at": REF}` or `{"scroll": d, "x": gx, "y": gy}` | `mouseScrolled` there (default screen centre) |
+| `{"scroll": d, "at": REF}` or `{"scroll": d, "x": gx, "y": gy}` | `mouseScrolled` there (default screen center) |
 | `{"click": {"x": gx, "y": gy} \| {"px": wx, "py": wy}, "button": 0}` | raw click in GUI coordinates or window pixels |
 | `{"press": "escape" \| "e" \| "enter" \| "key.inventory", "shift": false}` | a key: to the open screen (`keyPressed` / `keyReleased`); with no screen through its key mapping, `escape` opens the pause menu. F3 combinations are not keys here (`reload` covers F3+T) |
 
@@ -200,7 +200,7 @@ px), `max_edge` (default 1024 px).
 | `gui` | Open `AbstractContainerScreen`'s `leftPos/topPos/imageWidth/imageHeight`; for JEI's recipes screen, its area through the JEI runtime |
 | `tooltip` | Bounds the driver records from `RenderTooltipEvent.Pre` / `.Color` in the captured frame (pre-border; `pad` covers Legendary Tooltips' frame) |
 | `auto` | Cropper trims everything matching the stage background (only meaningful after `tooltip` or another flat-background stage) |
-| `hotbar`, `hud:wthit`, `hud:topleft`... | Named regions in GUI coords from `crop_regions.json` (WTHIT top-centre box, AppleSkin bars, hotbar), measured once at the fixed GUI scale |
+| `hotbar`, `hud:wthit`, `hud:topleft`... | Named regions in GUI coords from `crop_regions.json` (WTHIT top-center box, AppleSkin bars, hotbar), measured once at the fixed GUI scale |
 | `center:WxH` | Box of W x H GUI px around the crosshair (block looks) |
 | `rect:x,y,w,h` | Explicit GUI coords |
 | `slot:N` | One slot of the open screen, for texture checks |
@@ -392,10 +392,10 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 - D1 (closed 2026-11-01): the driver is a member of Creative Devtools (`members/capture`, mod id `cdevcapture`),
   inert without the system property.
 - D2 (closed 2026-11-15): real 1280 x 720 window on `:1` by default (capture reads the framebuffer, so windows on top
-  don't matter, but the window must not be minimised). Xvfb is installed; the experimental `--display xvfb` (TX-07,
+  don't matter, but the window must not be minimized). Xvfb is installed; the experimental `--display xvfb` (TX-07,
   built 2026-11-16, not run in game: CQ-TXC-11) starts an own Xvfb per launch through `eval_client.start_xvfb`
   (`GAME/xvfb.pid`, a detached reaper stops it when the client pid is gone) and records `display` in `run.json`. Only
-  for tests that cannot run otherwise (unattended blocks); never for colour rows.
+  for tests that cannot run otherwise (unattended blocks); never for color rows.
 - D3 (default taken): copy of the instance's `config/`; `--fresh-config` for pack-default checks.
 - D4 (open, owner): test IDs for queue rows that have no writeup test ID. The first spec set uses the queue ID with a
   letter (`CQ-NEW-04a`); alternative: give each such row a writeup test ID first.
@@ -463,11 +463,11 @@ Done 2026-11-15 (scratchpad, no game):
 - Channel: a Python fake driver speaking 2.11; `qrun.py client` on it: `>` + `do` read with expect PASS, a failing
   walk expect FAIL with the driver's error, `key` / `click` / `shot` (copied to the judgement folder, LOOK), a forced
   step failure FAIL; `chan.py ping` / `stop`; a stale heartbeat raises `ChannelError`. `qrun.py lint` accepts `do`.
-- Driver Java compiles in `:creativeDevtools:build`; its behaviour in game is CQ-TXC-01 to -10.
+- Driver Java compiles in `:creativeDevtools:build`; its behavior in game is CQ-TXC-01 to -10.
 
 ## 7. In-game test suite
 
-Run by the runner itself on a first group (CQ-NEW is small and covers a block colour, a tooltip, a HUD mod).
+Run by the runner itself on a first group (CQ-NEW is small and covers a block color, a tooltip, a HUD mod).
 
 - [ ] CC-01 Preflight refuses to start while any `java` process is up and names its cwd; never prints a command line.
 - [ ] CC-02 A run reaches the world, writes `[cdevcapture] BEGIN` / `END` for every test, and the client exits by itself.

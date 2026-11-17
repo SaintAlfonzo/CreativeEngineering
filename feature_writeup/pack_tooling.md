@@ -314,7 +314,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   - `metal_test_recipes.js`: a mechanical crafting recipe per metal (15 metals + netherite) that takes one of every form
     of the metal (ore to component, up to 20 items) for 1 ingot;
   - `wood_test_recipes.js`: the same idea for wood;
-  - `sequence_assembly_processes.js`: a nether star → nether star sequenced assembly using every legal assembly step.
+  - `sequence_assembly_processes.js`: a nether star -> nether star sequenced assembly using every legal assembly step.
 
   They show in JEI and are craftable (each is a loss, so no exploit). Keep as showcases, or gate them.
 - **F5.** FIXED 2026-10-27 (pack_hygiene 44). **Many Python tools aren't in `generators.json`:** every generator or
@@ -367,35 +367,35 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 
 ## 7. In-game test suite
 
-- [ ] **TL-01 Dict validation (F1):** boot, open `logs/latest.log` → note whether `[item_dict] Missing/invalid item IDs`
+- [ ] **TL-01 Dict validation (F1):** boot, open `logs/latest.log` -> note whether `[item_dict] Missing/invalid item IDs`
   lists tag keys (`... (tag not found or empty)`), and which real item ids it lists.
 - [ ] **TL-02 NCH strict:** add `R.shaped('minecraft:stone', ['A'], { A: 'minecraft:not_an_item' }, e)` to a scratch
-  server script, `/reload` → the script errors with `[NCH] ... does not exist`; with `global.NCH.strict = false` it warns
+  server script, `/reload` -> the script errors with `[NCH] ... does not exist`; with `global.NCH.strict = false` it warns
   instead. Remove the line.
-- [ ] **TL-03 Recipe ids:** JEI on any pack recipe, hover the recipe id (advanced tooltips) → `creativeengineering:<type>/<suffix>`.
-- [ ] **TL-04 Removed items:** a removed item (`/give` one, e.g. a NAND gate) → hidden from JEI, red "REMOVED ITEM" line,
+- [ ] **TL-03 Recipe ids:** JEI on any pack recipe, hover the recipe id (advanced tooltips) -> `creativeengineering:<type>/<suffix>`.
+- [ ] **TL-04 Removed items:** a removed item (`/give` one, e.g. a NAND gate) -> hidden from JEI, red "REMOVED ITEM" line,
   no item tags (F3+H shows none).
-- [ ] **TL-05 CEConfig live edit:** change `[dragon_gear.autorepair] intervalTicks` in Create's config screen → the
+- [ ] **TL-05 CEConfig live edit:** change `[dragon_gear.autorepair] intervalTicks` in Create's config screen -> the
   toml changes on disk without restart. Put it back.
 - [ ] **TL-06 String field:** in Create's config screen, `[crafting.felsic_sword] potion` is an editable text field, not
   "Impl missing".
-- [ ] **TL-07 `/dumpall`:** run it → chat ends with `[dumpall] all 22 dumps done`; `kubejs/exported/` timestamps
+- [ ] **TL-07 `/dumpall`:** run it -> chat ends with `[dumpall] all 22 dumps done`; `kubejs/exported/` timestamps
   updated; `server_mods/` refreshed.
 - [ ] **TL-08 A dump failing:** (if one fails) `/dumpall` reports it and carries on with the rest.
-- [ ] **TL-09 `/cdevgen` list:** `/cdevgen` → the 50 generators, the groups (`stacks` among them) and the last run.
+- [ ] **TL-09 `/cdevgen` list:** `/cdevgen` -> the 50 generators, the groups (`stacks` among them) and the last run.
 - [ ] **TL-10 `/cdevgen run core`:** runs the core group in the background, one chat line per script, changed outputs
   named; `logs/cdevgen/structure_config.log` exists.
 - [ ] **TL-11 `/cdevgen run loot dumps`:** runs `/dumploot` and `/dumptags item` first, then the loot generators.
-- [ ] **TL-12 `/cdevgen cancel`:** start `/cdevgen run all`, cancel → the running script is killed, the rest skipped,
+- [ ] **TL-12 `/cdevgen cancel`:** start `/cdevgen run all`, cancel -> the running script is killed, the rest skipped,
   `/cdevgen status` says so.
-- [ ] **TL-13 Startup run:** `[debug.generators] runAtStartup = true`, restart → the log shows the core generators
+- [ ] **TL-13 Startup run:** `[debug.generators] runAtStartup = true`, restart -> the log shows the core generators
   running during load; the first player to join gets the results. Turn it off.
 - [ ] **TL-14 `tools/dump_server_mods.py`:** copies only `both` / `server` jars into `server_mods/`; with a jar missing
   from `mod_sides.md` it writes nothing and names the jar. (`/dumpservermods` was removed 2026-10-27; `/dumpall` no
   longer copies jars.)
 - [ ] **TL-15 Gradle:** `./gradlew :creativeCommon:build` succeeds (libs populated); `./gradlew :creativeCommon:installToMods`
   moves the old jar to `jar_archive/displaced/`.
-- [ ] **TL-16 `_manual_only`:** JEI on cooking oil → the cooking-pot recipe (2 oil from 6 ingredients) and a separate
+- [ ] **TL-16 `_manual_only`:** JEI on cooking oil -> the cooking-pot recipe (2 oil from 6 ingredients) and a separate
   heated mixing recipe (1 oil from 3 + a bottle); no mixer copy of the pot recipe.
 
 ## 8. History
@@ -415,7 +415,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `UpstreamPacks`, the `UpstreamJars` reading code, the three `NEEDS_MOD` mixin plugins, the two `ItemHiddenMixin`s
   and the built-in `packs/` registration; patcherMod's two potion registrars became one table (`potion/CommonPotions`,
   same ids); `/dumpservermods` (`devtools/ServerModsDump`) removed, `tools/dump_server_mods.py` is the only route
-  (TL-14 now tests it). No id or behaviour change.
+  (TL-14 now tests it). No id or behavior change.
 - 2026-10-27 (pack_hygiene 44-49): `tools/pack_paths.py` (2.6) replaces the per-tool item_dict regexes
   (`gen_mortar_catalog`, `gen_stack_sizes`, `lang_index`; `food_catalog.parse_dict` wraps it), the four lenient JSON
   loaders (and `nether_worldgen_scan`'s monkeypatch) and the 13 hard-coded vanilla / Forge jar paths (Forge no longer

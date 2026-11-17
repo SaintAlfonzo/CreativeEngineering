@@ -119,7 +119,7 @@ look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones
 ## SQ-WG30-C02b | census false negatives carry a diagnosis (long: Chunky r 400 + census r 96)
 @group C
 @commands new world, Chunky square, `/cwglocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json`
-@pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece centre); record which case it shows
+@pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece center); record which case it shows
 @fails `structures/rates-and-groups #13`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb

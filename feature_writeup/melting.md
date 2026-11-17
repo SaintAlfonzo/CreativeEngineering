@@ -49,8 +49,8 @@ Three source kinds melt two target kinds. One roll per random tick of the target
   calls) runs before the block's own random tick, and skips it when the block melted. Every block class is covered
   without a mixin per class; other blocks pay one identity-map lookup (`Reference2ByteOpenHashMap` of flags, rebuilt
   on `TagsUpdatedEvent`).
-- Target tick: roll the chance first (a dark glacier costs mostly the roll), then the 6 neighbours (salt, fire, lava
-  within 1), then, only when block light reaches the target or a neighbour, a sphere scan of radius
+- Target tick: roll the chance first (a dark glacier costs mostly the roll), then the 6 neighbors (salt, fire, lava
+  within 1), then, only when block light reaches the target or a neighbor, a sphere scan of radius
   max(fire, lava range), nearest first, stopping at the first source. Reads use loaded chunks only
   (`getChunkNow`), never loading one.
 - Light gate: every fire-tag block is meant to give light 4 or more, so a source within 3 always lights the target.
@@ -180,4 +180,4 @@ SQ-MELT-P1 (perf, ice spikes style box against a control), SQ-SALT2-06 (rewritte
 SQ-MELT-08 (the salt item click, one stage per click) closed 2026-11-15 as by design (a click places a layer, owner;
 plan_post_scratch_1115 B1); the salt rows are SQ-PS15-01 to -03, -07, -09.
 
-Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-MELT-01 to -07, -09, -P1, SQ-SALT2-06, -06b, SQ-AZW-01, SQ-DCM-02 PASS. SQ-MELT-08 FAIL: no per-click salt melt exists (a salt dust click places a Vintage Delight salt layer, which melts at block rate; the salt dispenser behaviour returns at once), owner choice in TODO. SQ-MELT-10 FAIL (finding): `architects_palette:glowstone_cage_lantern` is in the fire tag but does not random tick (boot WARN), owner TODO. Fix-1 (Common 03:15, behaviour-neutral): Rare Ice mixin skipped without Rare Ice, config values cached; reruns SQ-MELT-09b PASS, -P1b PASS (Melting 0.30 % of server samples, was 1.00 %; the live toml edit clause not judgeable on scratch, a restart picks values up).
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-MELT-01 to -07, -09, -P1, SQ-SALT2-06, -06b, SQ-AZW-01, SQ-DCM-02 PASS. SQ-MELT-08 FAIL: no per-click salt melt exists (a salt dust click places a Vintage Delight salt layer, which melts at block rate; the salt dispenser behavior returns at once), owner choice in TODO. SQ-MELT-10 FAIL (finding): `architects_palette:glowstone_cage_lantern` is in the fire tag but does not random tick (boot WARN), owner TODO. Fix-1 (Common 03:15, behavior-neutral): Rare Ice mixin skipped without Rare Ice, config values cached; reruns SQ-MELT-09b PASS, -P1b PASS (Melting 0.30 % of server samples, was 1.00 %; the live toml edit clause not judgeable on scratch, a restart picks values up).

@@ -28,9 +28,9 @@ entirely — vanilla or modded, one place, no per-mod config hunting.
 - `kubejs/generation_scripts/worldgen/gen_structure_overrides.js` — `node
   gen_structure_overrides.js`, diffs `current` vs `original` + `enabled`, writes/removes
   `kubejs/data/<ns>/worldgen/structure_set/<path>.json` overrides. Untouched entries get no
-  file. Sole-member removal → whole set gets `frequency: 0` (schema-safe for any placement
-  type). Subset removal within a multi-structure set → that entry dropped from `structures`.
-- `kubejs/server_scripts/_lib/dump_structuregen.js` — `/dumpstructuregen` in-world →
+  file. Sole-member removal -> whole set gets `frequency: 0` (schema-safe for any placement
+  type). Subset removal within a multi-structure set -> that entry dropped from `structures`.
+- `kubejs/server_scripts/_lib/dump_structuregen.js` — `/dumpstructuregen` in-world ->
   `kubejs/exported/worldgen/structuregen.json`, live post-merge registry values via
   `server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY / STRUCTURE_REGISTRY)`.
   **Verification tool only** (diff against `current` after applying), not the primary data
@@ -63,7 +63,7 @@ have their own structure frequency/enable config toggles as an alternative to th
 
 ## Biome merge proposals (added 2026-09-25)
 
-`tools/analyze_structure_biome_merges.py` → `kubejs/generation_scripts/worldgen/biome_merge_suggestions.{md,json}`:
+`tools/analyze_structure_biome_merges.py` -> `kubejs/generation_scripts/worldgen/biome_merge_suggestions.{md,json}`:
 25 numbered proposals (theme × target mod) adding modded biomes to structure spawn pools. User
 approves by number; **nothing applied yet** — execution plan is one additive tag file
 (`"replace": false`) per tag under `kubejs/data/<ns>/tags/worldgen/biome/`.
@@ -78,20 +78,20 @@ approves by number; **nothing applied yet** — execution plan is one additive t
   c:wasteland, mountain category (meadow villages matched it).
 - Tags can be shared across structures (T&T mimic_desert uses minecraft:has_structure/desert_pyramid),
   so extending one tag affects every structure referencing it.
-- Loose proposals worth a second look: forest→woodland_mansion, snowy (gravel_desert/snowy_badlands),
+- Loose proposals worth a second look: forest->woodland_mansion, snowy (gravel_desert/snowy_badlands),
   jungle (amethyst_canyon, cave/underground_jungle).
 
 ### Biome merges EXECUTED (2026-09-25 later)
 
-24 of 25 proposals applied → 52 additive tag files under kubejs/data/*/tags/worldgen/biome/ via
-`tools/build_biome_merges.py` (decisions as constants) → `biome_merges.json` (source of truth) →
+24 of 25 proposals applied -> 52 additive tag files under kubejs/data/*/tags/worldgen/biome/ via
+`tools/build_biome_merges.py` (decisions as constants) -> `biome_merges.json` (source of truth) ->
 `node gen_biome_merges.js`. Report: `biome_merge_suggestions.md`. Analyzer now writes
 `biome_merge_proposals.*` (raw) so it can't clobber the annotated report.
 - User rules: NO skylands biomes added anywhere (only listed: mineshaft, stronghold,
   philipsruins:ancient_dungeon already generate there via #terralith:all_terralith_biomes); NO cave
   biomes added to non-cave-native structures (Terralith `underground/*` counts as native);
   P9 (End/philipsruins) HELD for a breakout; P10 mansion = sakura_valley only; P11/P21 variant-matched
-  (birch→birch_taiga+white_cliffs, flower→c:flower_forests, snowy grove/slopes/taiga/plains/beach
+  (birch->birch_taiga+white_cliffs, flower->c:flower_forests, snowy grove/slopes/taiga/plains/beach
   split by c:mountain_slope/tree_coniferous/snowy_plains/beach); P17 sunflower got nothing (only
   skylands_summer has sunflowers); P25 minus bryce_canyon.
 - User wanted precision: biome-variant structures (birch tower, flower forest tower, sunflower) must
@@ -105,7 +105,7 @@ approves by number; **nothing applied yet** — execution plan is one additive t
 
 ## Structure tags + generator rewrite (2026-09-26)
 
-`structure_tags.json` (hand-maintained) → multipliers applied by `gen_structure_overrides.js` on top
+`structure_tags.json` (hand-maintained) -> multipliers applied by `gen_structure_overrides.js` on top
 of `current`; product over every tag containing a structure (each tag once, nested refs deduped).
 Values: id / glob `*` / `#tag` / `!` exclude; unknown id/tag/cycle/bad multiplier = abort, no writes.
 Families: `mod/<ns>` (+`mod/yungs`), `type/*` (user asked for STRUCTURE TYPE tags — tower, camp,
@@ -114,8 +114,8 @@ constructed, vanilla-or-better dungeon — NOT loot theme/richness, which they r
 (surface/underground × vanilla/better/modded + unions, `dungeon/classic` = vanilla+better), metas
 `dungeons pillager nether end ruins`. Classified by T&T start-pool folder (camps/forts/towers/ships)
 and template block palettes (MES = constructed except meteorite/prairie/grove/enderskog).
-- Math: grid → spacing floor(s/√m), frequency absorbs rounding (exact); rings → count; legacy_type_1
-  switches to default when frequency changes. Mixed multipliers in one set → split into
+- Math: grid -> spacing floor(s/√m), frequency absorbs rounding (exact); rings -> count; legacy_type_1
+  switches to default when frequency changes. Mixed multipliers in one set -> split into
   `creativeengineering:split/<ns>/<path>_<n>` (exact only if biomes disjoint; report warns).
 - Output `structure_tag_report.md`; manifest `.generated_structure_sets.json` for stale cleanup.
 - **Bugs fixed:** old generator wrote `type` OUTSIDE `placement` (invalid; the 4 files were never
@@ -124,15 +124,15 @@ and template block palettes (MES = constructed except meteorite/prairie/grove/en
   freq 0.2 legacy_type_1 + villages exclusion 10, mineshaft legacy_type_3, buried treasure
   legacy_type_2 + locate_offset 9,0,9, mansion/end_city triangular, nether_complexes fortress 2 /
   bastion 3, strongholds required preferred_biomes). Scanner now 3-way-merges `current`.
-- All YUNG/MES custom placement types extend RandomSpreadStructurePlacement (javap) → spacing math valid.
+- All YUNG/MES custom placement types extend RandomSpreadStructurePlacement (javap) -> spacing math valid.
 - Tested only via node against real config (scenario + error cases); NOT loaded in game yet.
 
 ## Runtime migration (2026-09-26): no node step any more
 
 User didn't want to run a script after every edit, so all three worldgen appliers now run at world load:
 - `kubejs/server_scripts/worldgen/structure_overrides.js`: KubeJS port of gen_structure_overrides.js, run from `ServerEvents.highPriorityData`. It adds each changed set with `event.add('<ns>:worldgen/structure_set/<p>.json', text)` into KubeJS's top-priority virtual pack. It writes structure_tag_report.md through patcherMod `worldgen/WorldgenFiles.writeText`, because KubeJS's class filter blocks java.io/java.nio. Any config error applies nothing and writes an error report.
-- `biome_merges.js`: `ServerEvents.tags('worldgen/biome')` → `global.tags.add` (NOT addTag, which expands parent tags). It detects unknown biomes by checking whether `event.totalAdded` stays unchanged. KubeJS validates tag ids against the live dynamic biome registry (TagManagerMixin gets the RegistryAccess entry), so Terralith biomes resolve.
-- `biome_overrides.js` → patcherMod `worldgen/BiomeLayoutTuner.run()` (Java port of the solver, getters only, SHA-256 input cache). See [biome-frequency-tuning](biome-frequency-tuning.md).
+- `biome_merges.js`: `ServerEvents.tags('worldgen/biome')` -> `global.tags.add` (NOT addTag, which expands parent tags). It detects unknown biomes by checking whether `event.totalAdded` stays unchanged. KubeJS validates tag ids against the live dynamic biome registry (TagManagerMixin gets the RegistryAccess entry), so Terralith biomes resolve.
+- `biome_overrides.js` -> patcherMod `worldgen/BiomeLayoutTuner.run()` (Java port of the solver, getters only, SHA-256 input cache). See [biome-frequency-tuning](biome-frequency-tuning.md).
 - Pack order verified via javap: `wrapResourceManager` = lowPriority virtual (addFirst) … mods … `kubejs/data` … zips … highPriority virtual (addLast = top). `DataPackEventJS.add(RL, String)` takes the full path including `.json`; `addJson` appends `.json` itself.
 - Node scripts are archived in `kubejs/archive/worldgen/`, their 86 kubejs/data outputs are deleted, and the manifests are gone. Python scanners are still manual, but only needed after mod updates.
 - Verification: in real Rhino (see memory `kubejs-headless-rhino-harness`) the outputs are byte-identical to the node oracle on the real config: 34 structure_sets, 237 tag adds, the report, and the biome solve on synthetic samples. The Java solver matched node in 4 scenarios (tuned/removed/replaced/errors/no-samples), including under gson 2.8.9. **Not yet run in game.**

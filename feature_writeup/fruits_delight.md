@@ -29,7 +29,7 @@ for the pack is one bug fix (placed Mangosteen Cake), two small recipe changes a
 - Recipes and loot tables compared semantically (file moves, wrappers, `group`, `category`, `random_sequence`, list order
   ignored): 151 recipe files and 200 loot tables change on disk, **3 recipes and 0 loot tables change in content**.
 - Tags and loot modifiers compared by value.
-- Classes decompiled with Vineflower (`~/.cache/ce-tools/vineflower-1.10.1.jar`), registrate package rename normalised,
+- Classes decompiled with Vineflower (`~/.cache/ce-tools/vineflower-1.10.1.jar`), registrate package rename normalized,
   then diffed: food values (`FoodType`, `FDFood`, `FDJuice`, `FruitType`), effects, config, plants and worldgen
   (`FDTrees`, `FDBushes`, `FDMelons`, `FDPineapple`, `FDBiomeTagsProvider`), blocks, mixins.
 

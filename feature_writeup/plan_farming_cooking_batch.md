@@ -1,11 +1,11 @@
 # Plan: farming, cooking and homesteading batch (2026-11-07)
 
-<!-- generated:status_index begin open_work sha1=055003ad7fe0 -->
+<!-- generated:status_index begin open_work sha1=c411d2315ef6 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `farming/crops #4` | Testing | S P | Weeds behaviour |
+| `farming/crops #4` | Testing | S P | Weeds behavior |
 <!-- generated:status_index end open_work -->
 
 **Status 2026-11-07 night: BUILT except `kitchen #36` (double fridges, not started) and F2 (random-tick audit done as a
@@ -120,8 +120,8 @@ with the remainder buffers (`kitchen #1`..`#14`) and the cookware pickup toggle 
 
 | Item | Finding | Effort | Recommended |
 |---|---|---|---|
-| Double fridges connect (`kitchen #36`) | CfB fridge is a closed jar; "double" today is 2 tall. Needs a client-only wrapper on the baked model / renderer in the CD member, neighbour detection left and right, 2-4 new models, separate inventories kept | M-L | cosmetic only, shared door optional. Q27 |
-| Faucet lines up with non-full blocks (`kitchen #26`) | Supplementaries faucet (jar). Stream drawn at a fixed length by the tile renderer. A renderer mixin can shorten the stream by the target block's shape top. Depth / centring needs a table | S-M | shape-based height first. Q28 |
+| Double fridges connect (`kitchen #36`) | CfB fridge is a closed jar; "double" today is 2 tall. Needs a client-only wrapper on the baked model / renderer in the CD member, neighbor detection left and right, 2-4 new models, separate inventories kept | M-L | cosmetic only, shared door optional. Q27 |
+| Faucet lines up with non-full blocks (`kitchen #26`) | Supplementaries faucet (jar). Stream drawn at a fixed length by the tile renderer. A renderer mixin can shorten the stream by the target block's shape top. Depth / centering needs a table | S-M | shape-based height first. Q28 |
 | Wall-hung skillet (`kitchen #39`) | FD `SkilletBlock` cannot take a new property by mixin. Needs a new block `hanging_skillet` (facing, shape, model, loot, lang), a `SkilletItem.useOn` hook when a wall face is clicked and the space above is clear, item NBT round trip. Hung skillet does not cook | M | Q29 |
 
 ## Done-means checklist per task

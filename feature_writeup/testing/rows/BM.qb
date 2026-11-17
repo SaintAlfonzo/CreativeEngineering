@@ -106,19 +106,19 @@ look the two entities reads at x 145 z 505 (by_type): the cat (minecraft:cat) ri
 ## CQ-BM-03
 @group client
 @commands BM-12 (horse babies)
-@pass horse in 7 coats with markings (not 1.1x, legs visible, rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colours), trader llama; summoned with armour: none drawn
+@pass horse in 7 coats with markings (not 1.1x, legs visible, rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colors), trader llama; summoned with armour: none drawn
 @fails `EquineBabies`, `EquineHorseMarkingMixin`
 @draft no batch holds this row yet
 ## CQ-BM-04
 @group client
 @commands BM-13 (other babies)
-@pass bee (hover height, angry, nectar), axolotl (5 colours, land / water / play dead), goat, panda (7 genes, sit, sneeze, eat), polar bear (not 1.2x), turtle, strider (full size, cold texture), hoglin, zoglin
+@pass bee (hover height, angry, nectar), axolotl (5 colors, land / water / play dead), goat, panda (7 genes, sit, sneeze, eat), polar bear (not 1.2x), turtle, strider (full size, cold texture), hoglin, zoglin
 @fails `MiscBabies`, `MiscAxolotlAnimation`
 @draft no batch holds this row yet
 ## CQ-BM-05
 @group client
 @commands BM-14 (humanoid babies; villagers via `/summon minecraft:villager ~ ~ ~ {Age:-24000}` since MCA replaces most)
-@pass zombie, husk, drowned (outer layer), zombie villager, villager (7 biomes), piglin (admire, dance), zombified piglin: shape, walk, arms; vanilla armour on each slot, dyed leather, glint, turtle helmet fit; sword / gold / trident / pumpkin / skull sit right; modded armour falls back to half-size; chicken jockey
+@pass zombie, husk, drowned (outer layer), zombie villager, villager (7 biomes), piglin (admire, dance), zombified piglin: shape, walk, arms; vanilla armor on each slot, dyed leather, glint, turtle helmet fit; sword / gold / trident / pumpkin / skull sit right; modded armor falls back to half-size; chicken jockey
 @fails `UndeadBabies`, `UndeadArmorLayerMixin`, `UndeadItemInHandMixin`, `UndeadCustomHeadMixin`
 @draft no batch holds this row yet
 ## CQ-BM-06

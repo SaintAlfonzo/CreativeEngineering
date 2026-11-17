@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/BPT.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title SQ-BPT / CQ-TSL Creative Compat licence fixes, 2026-11-06 ([writeup](../creative_compat.md) sections 6.3, 6.4, TODO `licence/compat #2`, `#3`)
+@@title SQ-BPT / CQ-TSL Creative Compat license fixes, 2026-11-06 ([writeup](../creative_compat.md) sections 6.3, 6.4, TODO `licence/compat #2`, `#3`)
 @@date 2026-11-06
 @@jars creativecommon creativecompat
 @@sources feature_writeup/creative_compat.md

@@ -25,7 +25,7 @@ Accepted difference from BOP: BOP puts the Heap in Warped Forest's exact climate
 Without regions the Heap needs its own climate point, so large-scale layout differs. Biome contents and surface rules match.
 
 Intended difference from BOP (owner, 2026-11-09): BOP silently drops the part of a floor-to-ceiling tendon outside the chunk
-write window, leaving a strand that ends abruptly, and lets tendons cross into neighbouring biomes. Here the tendon's end
+write window, leaving a strand that ends abruptly, and lets tendons cross into neighboring biomes. Here the tendon's end
 point is pulled back to the window edge or the biome edge, whichever comes first (section 3, row 9).
 
 ## 2. Stub member (`development/creativeWorldgen/members/terrablenderstub`)
@@ -51,7 +51,7 @@ lambda. Add the BOP jar to `development/creativeCommon/libs` to compile.
 |---|---|---|---|
 | 1 | `DeferredRegister.addEntries` (HEAD) | When `modid` is `biomesoplenty`, remove entries not in `HeapAllowlist` | Single gate for all registries. Match on registry and name, since names such as `hair` repeat across registries |
 | 2 | `ResourcePackLoader.createPackForMod` (RETURN) | For BOP, return `HeapPackResources` (section 5) | Hides everything else in the jar |
-| 3 | `ModBiomes.setupTerraBlender` | `@Overwrite` to empty | Removes every TerraBlender reference. Cancelling is not enough, the bytecode verifier would still load the region classes |
+| 3 | `ModBiomes.setupTerraBlender` | `@Overwrite` to empty | Removes every TerraBlender reference. Canceling is not enough, the bytecode verifier would still load the region classes |
 | 4 | `ModVanillaCompat.setup` | Cancel | 255 eager lookups. First list any Heap lines and re-add them through pack helpers |
 | 5 | `ColorHandler.registerItemColors`, `registerBlockColors` | Cancel | 22 eager lookups. Confirm no Heap block is tinted |
 | 6 | `EntityRendererHandler.onRegisterRenderers` | Cancel | 3 eager lookups, for entities that are filtered out |

@@ -52,7 +52,7 @@ look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a li
 ## CQ-DCM-01
 @group client
 @commands Full pack client: hover a white wool and an Immersive Petroleum asphalt block; open JEI fluid list
-@pass pack tooltips show (wool test lines, asphalt flavour text stripped); `create:potion` in the JEI fluid list; JEI order unchanged
+@pass pack tooltips show (wool test lines, asphalt flavor text stripped); `create:potion` in the JEI fluid list; JEI order unchanged
 @fails `global.tooltips` missing (Common client scripts not loaded), `fluid_jei.js` / `jei_order.js` not in the jar
 @reviewed 2026-11-16
 do {"tooltip_text": "minecraft:white_wool"}

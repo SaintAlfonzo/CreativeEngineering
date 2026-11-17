@@ -1,4 +1,4 @@
-# Plan: Creative Brewing publish prep (dicts and helpers to Common, guards, namespace, names, licence files)
+# Plan: Creative Brewing publish prep (dicts and helpers to Common, guards, namespace, names, license files)
 
 Written 2026-11-04. Owner request: "plan a dict and helper migration to common. ensure this plan includes guards on
 scripts that require items from mods. ensure my license is in each of the creative mods. cb will work with the [4]
@@ -12,8 +12,8 @@ the Cooking for Blockheads and Incubation members optional with load guards and 
 (M8, section 3b). Third round, same day: D4 `GPL-3.0-only`; D5 no read-time potion alias, old potions in saves may break;
 D6 every block M8 folds in moves to `creativedelight:` (11). All decisions closed.
 
-**Status: Step 1 BUILT 2026-11-04, INSTALLED 2026-11-05 (C 1.1.0, P, L, W, D 1.1.0, B, Q, Engineering 2.0.0, Magic, Devtools; the old patcherMod jar `creativeengineering-1.1.09` displaced, so this install is also the Creative Split swap), not booted; scratch rows queued (8); Step 2 licence audit DONE 2026-11-04 (creative_brewing.md 9.2; fixes are TODO `licence/*` rows, owner sign-off pending).** Result: section 0b. TODO row `creativebrewing/publish #3`. Background: [creative_brewing.md](creative_brewing.md)
-9 (licence audit 2026-11-01), [creative_split.md](creative_split.md) 7.4 and Q7.
+**Status: Step 1 BUILT 2026-11-04, INSTALLED 2026-11-05 (C 1.1.0, P, L, W, D 1.1.0, B, Q, Engineering 2.0.0, Magic, Devtools; the old patcherMod jar `creativeengineering-1.1.09` displaced, so this install is also the Creative Split swap), not booted; scratch rows queued (8); Step 2 license audit DONE 2026-11-04 (creative_brewing.md 9.2; fixes are TODO `licence/*` rows, owner sign-off pending).** Result: section 0b. TODO row `creativebrewing/publish #3`. Background: [creative_brewing.md](creative_brewing.md)
+9 (license audit 2026-11-01), [creative_split.md](creative_split.md) 7.4 and Q7.
 
 Written for: the owner, and the session that executes it.
 
@@ -47,7 +47,7 @@ ids in M4 and M5.
 | Step | What | Section | Gate |
 |---|---|---|---|
 | **Step 1: migration work** | M1 dicts and helpers to Common; M2 guards; M8 Blockheads and Incubation folded into CD, optional; M3 CB's pack-folder assets into the CB jar; M4 `creativebrewing:` namespace; M5 display names; M6 GPLv3 LICENSE in every Creative jar; M7 verification | 2 to 8 | M7 passes |
-| **Step 2: licence audit** (separate, read-only, runs after Step 1 so it audits the jars that ship) | CB re-audit, Common, Compat, Calendar, CD; findings written up, fixes become their own rows | 10 | owner sign-off |
+| **Step 2: license audit** (separate, read-only, runs after Step 1 so it audits the jars that ship) | CB re-audit, Common, Compat, Calendar, CD; findings written up, fixes become their own rows | 10 | owner sign-off |
 | Step 3 (not planned here) | Release prep: donor jars out of the public payload, public repo and tags, project page, satisfy notice, CBR-01 to -05 in game | creative_brewing.md 9 | Step 2 |
 
 Rebuild map: **C** = Creative Common, **D** = Creative Delight, **B** = Creative Brewing, **P** = Compat, **L** = Calendar,
@@ -113,7 +113,7 @@ become optional compartments of CD's own jar (M8); after it the chain needs none
 
 ### 1.3 Script guards today
 
-Common's jar loader (`compat/kubejs/JarStartupScripts.java`) honours `// requires:` per file, as KubeJS does in the pack
+Common's jar loader (`compat/kubejs/JarStartupScripts.java`) honors `// requires:` per file, as KubeJS does in the pack
 folder. Files sitting in a mod-named folder with no matching `// requires:` header: CB 0, CD 4, Compat 11. CB's 22 files in
 pack-native folders (`creativeengineering/`) have no header and mix many mods per file:
 
@@ -218,7 +218,7 @@ Recheck this table when a jar starts reading another jar's global: that is the t
 ### 3.1 Rules
 
 - **G1, one mod per file:** a file whose rows all touch one optional mod lives in that mod's folder and starts with
-  `// requires: <modid>` (honoured by the jar loader and by KubeJS). This is the existing CD/CB rule, now enforced.
+  `// requires: <modid>` (honored by the jar loader and by KubeJS). This is the existing CD/CB rule, now enforced.
 - **G2, mixed files:** a file in a pack-native folder (`creativeengineering/`, `creativecommon/`, `minecraft/`) that names
   several mods is split by mod into G1 files where the rows are independent (preferred: `potions.js` rows for Alex's Mobs
   go to `alexsmobs/potions.js`, and so on). Where a row has to stay in the shared file, it is wrapped in
@@ -365,8 +365,8 @@ Edit `members/vinery/gradle.properties` `mod_name` and the `foundation` `display
 | Where | Missing |
 |---|---|
 | Creative jars | `creativeCalendar`, `creativeCompat`, `creativeEngineering`, `creativeEquipment`, `creativeMagic`, `creativeWorldgen` |
-| CD members, own code | `blockheads`, `largemeals`, `oceanic`, `roll`, `rustic` (Oceanic and Rustic: check the upstream licence in Step 2 before adding) |
-| CD repack members (upstream licence + GPLv3 overlay, NOTICE only) | `barbeques`, `cannedgoods`, `createsalt`, `delightful`, `ends`, `farmers`, `hearth`, `nethers`, `oceans`, `salt` |
+| CD members, own code | `blockheads`, `largemeals`, `oceanic`, `roll`, `rustic` (Oceanic and Rustic: check the upstream license in Step 2 before adding) |
+| CD repack members (upstream license + GPLv3 overlay, NOTICE only) | `barbeques`, `cannedgoods`, `createsalt`, `delightful`, `ends`, `farmers`, `hearth`, `nethers`, `oceans`, `salt` |
 
 Have (all the same file): `creativeBrewing`, `creativeCommon`, `creativeDelight`, `creativeDevtools`, `creativeLabels`; CB's two
 members and the Worldgen members carry their own.
@@ -374,7 +374,7 @@ members and the Worldgen members carry their own.
 1. Copy `development/creativeCommon/LICENSE.txt` to each folder above (repack members: the upstream NOTICE stays beside it).
 2. **Build check:** in `ce.forge-mod.gradle`, fail the jar task when `mod_license` mentions GPL and the folder has no
    `LICENSE*`, so a new jar cannot ship without it.
-3. **Licence text (D4):** set `mod_license` to `GPL-3.0-only` in every own-code `gradle.properties` (32 jars); repacks read
+3. **License text (D4):** set `mod_license` to `GPL-3.0-only` in every own-code `gradle.properties` (32 jars); repacks read
    `<upstream> (upstream); overlay GPL-3.0-only`. No "or later" notice anywhere.
 4. Rebuild and install each jar (a LICENSE file alone changes nothing in game; ride along with the next build of each jar
    where possible, but CB's chain (C, P, L, D, B) must have it before Step 3).
@@ -410,22 +410,22 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 4. Build and install in order C, P, L, W, D, B, Q (game closed, `./gradlew :<mod>:build --offline` then `installToMods`).
 5. Queue M7 rows; the owner runs the scratch pass.
 
-## 10. Step 2: licence audit (separate from the migration)
+## 10. Step 2: license audit (separate from the migration)
 
 Read-only; runs on the jars built in Step 1 (they are what ships). Same method and table shape as creative_brewing.md 9.
-Output: a "Licence audit" section in each jar's writeup and one summary row per jar in creative_brewing.md 9. Fixes found
+Output: a "License audit" section in each jar's writeup and one summary row per jar in creative_brewing.md 9. Fixes found
 become their own TODO rows, not part of this step.
 
 | Jar | Scope | Known risks to settle |
 |---|---|---|
 | Creative Brewing | **re-audit of the own jar** (2026-11-01 audited a 28 KB jar; it is now about 195 KB after phases 2 and 3) and the M3 assets now inside it; members re-confirmed (no resource change since `-08`, checked 2026-11-04) | potion bucket textures (`potion_bucket_texture.py` output: derived from vanilla bucket art? Mojang textures cannot be redistributed), the Magic Resistance icon's origin, mixin classes that copy upstream method bodies |
 | Creative Common | all Java, the dicts and helpers after M1, every resource file | fixes and perf mixins that copy upstream code; the dicts are id lists (fine); any donor files |
-| Creative Compat | everything | the 950 painting files (creative_split Q7): authors and licences of each source |
+| Creative Compat | everything | the 950 painting files (creative_split Q7): authors and licenses of each source |
 | Creative Calendar | confirm creative_calendar.md Q3 ("all own code") against the built jar | none known |
-| Creative Delight | own jar and all 22 members | ARR overrides (CfB, Ender's: note [arr-mod-overrides-route](agent_notes/arr-mod-overrides-route.md)), Incubation-derived nest textures (`mobs/nests #2`, repaint open), Oceanic licence conflict (creative_delight.md 28), Rustic and Oceanic upstream licences (7), every repack's NOTICE matching its upstream licence |
+| Creative Delight | own jar and all 22 members | ARR overrides (CfB, Ender's: note [arr-mod-overrides-route](agent_notes/arr-mod-overrides-route.md)), Incubation-derived nest textures (`mobs/nests #2`, repaint open), Oceanic license conflict (creative_delight.md 28), Rustic and Oceanic upstream licenses (7), every repack's NOTICE matching its upstream license |
 | All five | `mods.toml` `license=` text, the GPLv3 file present (M6), NOTICE files for every MIT / LGPL / AFL upstream | `mod_license` reads `GPL-3.0-only` (D4); project pages pick GPL-3.0-only |
 
-Per jar: list every file with an origin (own, upstream with licence, generated from what); compare against the upstream
+Per jar: list every file with an origin (own, upstream with license, generated from what); compare against the upstream
 jar or repo where a member is a port; note anything ARR, unknown or Mojang-derived. Verdict per row: OK, fix, or remove.
 
 ## 11. Decisions (owner)
@@ -447,8 +447,8 @@ similar (10 jars). The LICENSE file is the same GPLv3 text either way; what diff
 - `GPL-3.0-or-later`: users may also take it under any later GPL. Others can then fold our code into a future GPLv4
   project; the owner gives up control over which future terms apply.
 Nothing in the repo picks one today: no file of ours carries the "either version 3 ... or any later version" notice (the
-phrase appears only in the GPL text's own appendix and in an LGPL credit). Upstream licences we combine with (MIT, AFL
-3.0, LGPL-2.1) allow either. CurseForge and Modrinth pick the licence from their own list on the project page (both list
+phrase appears only in the GPL text's own appendix and in an LGPL credit). Upstream licenses we combine with (MIT, AFL
+3.0, LGPL-2.1) allow either. CurseForge and Modrinth pick the license from their own list on the project page (both list
 "GPL-3.0-only" and "GPL-3.0-or-later" separately), so the choice also decides that dropdown. If chosen: set
 `mod_license` to the SPDX id (`GPL-3.0-only` or `GPL-3.0-or-later`; repacks keep their upstream part, e.g. "MIT
 (upstream); overlay GPL-3.0-only"), and, for "or later", add the standard two-line notice to each jar's README or
@@ -482,7 +482,7 @@ pack never has them). The NBT itself keeps the old string until the item is rewr
   a guard changes what a player sees in the pack.
 - No bullet for this plan itself (nothing built).
 
-## 13. Notes for the next plan (owner, 2026-11-05): chain licence fixes before publishing
+## 13. Notes for the next plan (owner, 2026-11-05): chain license fixes before publishing
 
 Input to the plan that follows Step 2 (Compat and CD rows gate the publish order in creative_brewing.md 9.5).
 
@@ -528,7 +528,7 @@ Built and installed in the pack 2026-11-06 01:30; tests SQ-MIN-01 to -07 (scratc
 
 Owner request: "build the fixes for all of the issues without decisions for the creative brewing publish process".
 Built 13:16-13:17 (Common 1.1.0, CD 1.1.0, Engineering 2.0.0, Brewing 1.0.0 in build/libs), NOT installed; Compat
-rebuilt by the licence work (`licence/compat #2`, `#3`). Tests SQ-CBC-01 to -05, CQ-CBC-01. TODO `creativebrewing/publish #9`. **Scratch r1106cbo 2026-11-06 ([scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 4): SQ-CBC-01, -03 to
+rebuilt by the license work (`licence/compat #2`, `#3`). Tests SQ-CBC-01 to -05, CQ-CBC-01. TODO `creativebrewing/publish #9`. **Scratch r1106cbo 2026-11-06 ([scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 4): SQ-CBC-01, -03 to
 -07 PASS (chain: 0 incomplete-item errors, failed recipes 204 -> 1; full pack: 296 sequenced assemblies, removed 1328);
 SQ-CBC-02 FAIL: 77 `Empty array?` left (TODO `creativebrewing/publish #15`); `[absent mods]` never prints because
 KubeJS 1902.6.2 never posts `afterRecipes` (`#11`). CQ-CBC-01 not run.**

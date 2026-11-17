@@ -290,7 +290,7 @@ expect \[cdevtest\] verb=bytype id=\S*filling\S*kiwi_tea\S* result=
 expect \[s5\] spout creativedelight:kiwi_tea 250 mB into minecraft:glass_bottle: can true, needs 250 mB, gives creativedelight:kiwi_tea x1
 look the water spout line is the probe control (vanilla potion fill); if it also reads -1, the probe is wrong, not the pack
 
-## SQ-DRK-05 | coffee: roasted beans only, flavour tags, Kettle from the coffee tank, heated mixers
+## SQ-DRK-05 | coffee: roasted beans only, flavor tags, Kettle from the coffee tank, heated mixers
 @group A
 @commands Coffee: probe recipes for `rusticdelight:coffee`, `rusticdelight:chocolate_coffee`, `rusticdelight:cooking/pumpkin_coffee`; Kettle tank of `create_central_kitchen:coffee` + milk bottle + cocoa beans
 @pass pots take `rusticdelight:roasted_coffee_beans` only (no raw beans), chocolate takes `#creativeengineering:coffee_chocolate`, pumpkin `#creativeengineering:coffee_pumpkin`; the Kettle brews Chocolate Coffee from the plain coffee tank; heated mixer recipes `creativedelight:createmixing/{coffee,dark_coffee,milk_coffee,<flavour>_coffee,<flavour>_coffee_from_coffee}` exist

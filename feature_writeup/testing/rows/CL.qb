@@ -21,7 +21,7 @@
 ## SQ-MG-16 | (server half) Old and Weathered Cardboard Box made only by washing; weathered box tags
 @group C
 @commands Full restart; look at a Wares package block, Wares cardboard box block and both items in JEI; `/give` and place a Weathered Cardboard Box and an Old Cardboard Box; wash a Dustrial Decor Cardboard Box in a Create fan, then wash the result; check JEI for any other recipe of the Old or Weathered box
-@pass Wares boxes brown; Weathered box grey-brown with light tape, Old box keeps its original pale texture and name; the first wash gives an Old box, the second a Weathered box, and no crafting recipe makes either; weathered box mines with an axe at Dustrial-box speed, walking on it is soft-tier speed and it sinks slightly; no purple-black squares
+@pass Wares boxes brown; Weathered box gray-brown with light tape, Old box keeps its original pale texture and name; the first wash gives an Old box, the second a Weathered box, and no crafting recipe makes either; weathered box mines with an axe at Dustrial-box speed, walking on it is soft-tier speed and it sinks slightly; no purple-black squares
 @fails Path or namespace wrong: check `kubejs/assets/wares/textures/` and `design_decor/`
 @jars creativecommon creativedelight
 @from batches/r1113/c1_a1.qb

@@ -128,7 +128,7 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 ## SQ-EF-07
 @group B-perf
 @commands the SQ-WGP-07 pregen (2601 chunks, same square and settings) with the new jar
-@pass pregen within 10% of 3:50; `[earth-fill]` CANCELLED count noted against SQ-WG30-E01 (15 inland) (ST-237)
+@pass pregen within 10% of 3:50; `[earth-fill]` CANCELED count noted against SQ-WG30-E01 (15 inland) (ST-237)
 @fails much slower: spans read too many columns; check which structures log footprints under `log = ALL` and narrow `rigid()`
 @draft perf row: reruns the SQ-WGP-07 pregen (square and settings in WGP.qb) on a B-perf world and compares wall time; a runner times it, nothing for /cdevtest to read
 ## SQ-EF-08 | metas inland build with short parts; at the beach not placed; survive a restart
@@ -163,7 +163,7 @@ expect \[earth-fill\].*pruned \d+ of \d+ pieces \(wet only\).*footprint
 reject \[earth-fill\].*(village).*wet only
 look tp to one: its dry part stands, no piece over the water (ST-297); a broken-looking building goes into earth_fill/no_prune
 
-## SQ-EF-10 | a meta anchored on a jigsaw at a lake shore prunes instead of cancelling
+## SQ-EF-10 | a meta anchored on a jigsaw at a lake shore prunes instead of canceling
 @group B
 @commands toml `[worldgen.meta_structures] log = true`; `/place structure` a meta with a jigsaw anchor (`creativeengineering:meta/farmers_camp`, a village meta) at a lake shore
 @pass `[earth-fill] ... pruned` line names the anchor or satellite id and the meta builds; a `dropped K of N parts` line only for a part still over its limits (ST-298)

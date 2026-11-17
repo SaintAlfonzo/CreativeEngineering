@@ -11,7 +11,7 @@ instead: swap the base for the natural ground wherever it doesn't match.
 - Hooks: StructureTemplateGroundMatchMixin (RETURN of Forge processBlockInfos, like the Lootr swaps) +
   StructureStartGroundMatchMixin (placeInChunk m_226850_ HEAD/RETURN sets a ThreadLocal start). It only acts in a
   WorldGenRegion, or on a ServerLevel inside placeInChunk (/place structure). Structure blocks and /place template are skipped.
-- Decision per chunk: sample the top solid block + 3 below on this chunk and its 8 neighbours (OCEAN_FLOOR_WG, or
+- Decision per chunk: sample the top solid block + 3 below on this chunk and its 8 neighbors (OCEAN_FLOOR_WG, or
   OCEAN_FLOOR for FULL chunks), skipping columns under any structure piece. A family tag is native when it has
   >= nativeShare of the tops. Otherwise its blocks in the bottom baseLayers get mode TERRAIN (keep existing ground, else
   pick from the sample) / PALETTE / REMOVE. Plants on swapped blocks are dropped.

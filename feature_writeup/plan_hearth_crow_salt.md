@@ -27,7 +27,7 @@ Open owner calls are in section 7. Everything else below is the build.
   stays and becomes the "dropped food" path of H&H (so it is not changed); trust only governs how close a wild crow lets a
   player come. This replaces the "mixin on `mobInteract`, default off" idea in 5.4 and removes the "changes AM taming" risk.
 - **H&H's goals assume its own `CrowMoveControl`.** Rewrite movement on AM's navigation (`getNavigation()`, `getBlockInViewAway`) when porting;
-  copy the logic from behaviour, not the call sites.
+  copy the logic from behavior, not the call sites.
 - **Goal clash.** AM's `CrowAIDepositChests` also fires when a crow holds an item. The steal goal gets a lower priority number than the AM
   deposit goal and sets a `StolenLoot` flag; the deposit goal must not take loot mid-theft (verify with the tests, mixin only if priority is not enough).
 - **Perf: Minecraft's POI system, not a registry (2026-11-05 analysis, 1.19.2 code read).** H&H's lick goal reads a 29 x 29 x 7 box (5,887 blocks) per
@@ -43,7 +43,7 @@ Open owner calls are in section 7. Everything else below is the build.
 - **Animals that lick are an allowlist,** not an exclusion list (H&H gives the goal to every `Animal`, which includes bees, parrots, axolotls and AM birds).
 - **Standing spot, not the block.** The lick trip paths to an open walkable position next to the block, not into its solid block (avoids partial paths and retries).
 - **The Salt's block is not ours.** `salt:salt_block` cannot take H&H's `waxed` property. Stage 0 stays `salt:salt_block`; licking, waxing and restoring on it go through
-  `PlayerInteractEvent.RightClickBlock` and the dispenser behaviour; only the worn stages and the waxed variants are new blocks.
+  `PlayerInteractEvent.RightClickBlock` and the dispenser behavior; only the worn stages and the waxed variants are new blocks.
 
 ## 2. Salt lick
 
@@ -55,7 +55,7 @@ form of each of the three plus `waxed_salt_block` (waxed stage 0). Same ids as u
 | S1 | Blocks, items, loot (drops itself, waxed keeps `waxed`), lang, blockstates. Textures: a tool script (`tools/`) darkens and dents `salt:salt_block`'s texture into the three stages, so they match the pack's salt; the waxed forms reuse them |
 | S2 | Player lick: right-click with both hands empty, lick sound, `salt.saltPlayerLickChance` (0.05) to advance one stage; last stage pops 1 `salt:salt` |
 | S3 | Wax: honeycomb on any unwaxed lick block (including `salt:salt_block`) waxes it, an axe removes the wax; salt on a worn block restores one stage (by hand and by dispenser). **2026-11-15 (plan_post_scratch_1115 B5, B7; [salt.md](salt.md) 7):** one refill (`SaltLick.refill`) for hand, dispenser (now waxed stages too) and a salt layer on top; salt on a full lick puts a layer on top; a lick with layers on top gives up a layer per lick, top first, before it wears |
-| S4 | Animal lick goal `StayNearSaltGoal`, on the animals in the allowlist tag `#creativedelight:salt_lickers` (new, via `global.tags`: cow, sheep, goat, pig, horse, donkey, mule, llama, rabbit, and the AM grazers deer, bison, moose; owner trims). Every 200 ticks (config `salt.saltSearchInterval`) it asks `PoiManager.findClosest` for the nearest unwaxed lick block within `salt.saltAnimalRadius` + 2 (**20** blocks, was 12). While one is within the radius the animal is held there (pull-back path only when it is beyond 20); every `salt.saltLickInterval` (**1200 ticks average (N24-10)**, randomised 900 to 1500, was 500 and originally 9600; first lick staggered between 600 and 1800) it walks to a **standing spot** beside the block (an open walkable position within 1 block, picked with the entity's own path check, not the block position), licks, and the lick has a **1 in 8 chance** (`salt.saltAnimalStageChance` 0.125) to step the block one stage. A failed trip retries after 125 ticks. Skips leashed, riding, sitting and tamed animals; no `restrictTo` |
+| S4 | Animal lick goal `StayNearSaltGoal`, on the animals in the allowlist tag `#creativedelight:salt_lickers` (new, via `global.tags`: cow, sheep, goat, pig, horse, donkey, mule, llama, rabbit, and the AM grazers deer, bison, moose; owner trims). Every 200 ticks (config `salt.saltSearchInterval`) it asks `PoiManager.findClosest` for the nearest unwaxed lick block within `salt.saltAnimalRadius` + 2 (**20** blocks, was 12). While one is within the radius the animal is held there (pull-back path only when it is beyond 20); every `salt.saltLickInterval` (**1200 ticks average (N24-10)**, randomized 900 to 1500, was 500 and originally 9600; first lick staggered between 600 and 1800) it walks to a **standing spot** beside the block (an open walkable position within 1 block, picked with the entity's own path check, not the block position), licks, and the lick has a **1 in 8 chance** (`salt.saltAnimalStageChance` 0.125) to step the block one stage. A failed trip retries after 125 ticks. Skips leashed, riding, sitting and tamed animals; no `restrictTo` |
 | S5 | POI type `creativedelight:salt_lick` (`PoiType` registered via `DeferredRegister`, `maxTickets` 0, search distance 1) whose block states are every unwaxed state of `salt:salt_block` and the three worn stages (waxed blocks are left out). Boot check: a clear log line if Forge reports a POI clash. Old worlds: nothing to migrate (see the one-time gap above). Optional later: an accessor limiting the search to the sections within +-3 blocks of height, only if profiling shows the search |
 | S6 | JEI / WTHIT: a hint line on the block ("Animals lick this"); no new JEI category |
 | S7 | Sound: `lick` from the H&H jar into the member's `sounds.json` |
@@ -82,7 +82,7 @@ All goals attach to `alexsmobs:crow` only while it is wild (`!isTame()`, not sit
 | C3 | **Trust and tempting:** `WaryTemptGoal` for a player holding crow food; comfort distance 4 to 1.5 blocks as trust fills (+1 per tick, +2 sneaking, -5 sprinting). Crow food and tempt items: new tag `#creativedelight:crow_food` = AM `crow_foodstuffs` seeds plus the pack's corn crop and corn kernels (N24-7, no longer waiting on a port) | 120 |
 | C4 | **Taming paths on AM:** hand-feed crow food, 1 in 5 (event, wild only); eating dropped crow food heals 1 and 1 in 8 tames the thrower (`EatDroppedFoodGoal`); a stolen item picked up from a player's throw tames 1 in 3 and the item is returned (see C6). AM's thrown-seed taming is left as is | 130 |
 | C5 | **Crop pecking:** `EatCropsGoal` (scan 8, peck 40 ticks, resets `age` to 0); needs `mobGriefing` and `crow.eatCrops` (default **on**, as the owner asked; flagged in section 7); protected by scarecrow range, `#alexsmobs:crow_fears`, and a crow-proof corn state when corn exists. Tag `#creativedelight:crow_edible_crops` built through `global.tags` from pack crops (wheat, stems, berries, FD cabbages and tomatoes, raspberry, trellis crops, peanuts, corn) | 100 |
-| C6 | **Theft (nest sink void, N21; with no nest only the "fly away and drop" variant remains, decide after the crow eval):** `SeekShinyItemGoal`: scan 10, **N24-8: take 1 item (never more, even from a stack) from the player's hotbar only**, from `#creativedelight:crow_shiny_items` (gems, ingots, nuggets, raw ores, glowstone dust, ender pearl and eye; tools, armour and enchanted items are cut), carry it in the main hand and fly away from the nearest player; the loot survives without a nest (crow does not despawn while carrying, NBT-saved, dropped on death or after `crow.carryTicks`, item entity without despawn timer); full rules in [hearth_and_harvest.md](hearth_and_harvest.md) 5.8. Never while tame; `crow.stealShinyItems` switch | 170 |
+| C6 | **Theft (nest sink void, N21; with no nest only the "fly away and drop" variant remains, decide after the crow eval):** `SeekShinyItemGoal`: scan 10, **N24-8: take 1 item (never more, even from a stack) from the player's hotbar only**, from `#creativedelight:crow_shiny_items` (gems, ingots, nuggets, raw ores, glowstone dust, ender pearl and eye; tools, armor and enchanted items are cut), carry it in the main hand and fly away from the nearest player; the loot survives without a nest (crow does not despawn while carrying, NBT-saved, dropped on death or after `crow.carryTicks`, item entity without despawn timer); full rules in [hearth_and_harvest.md](hearth_and_harvest.md) 5.8. Never while tame; `crow.stealShinyItems` switch | 170 |
 | C7 | **Void (nests dropped, N21).** ~~Stash:~~ the nest block (section 5) is the sink; deposit marks it `CrowStash`. Wild-loot nests only count as a stash when marked | in section 5 **On hold with the nest block (N26-2).** |
 | C8 | **Crow feather:** item `crow_feather` in `#forge:feathers`; AM crow loot swapped to it (0 to 1, looting) through a global loot modifier replacing the vanilla feather; arrows, brush and book and quill need no recipe (tag). Bad Omen potion (awkward + crow feather) added as a Forge `BrewingRecipeRegistry` entry; effect text and the Pungent and Tempting potions stay with N16 | 60 |
 | C9 | **Spawning:** keep the pack's `flying_birds` rule; add `LivingSpawnEvent.CheckSpawn` ALLOW for crows near a generated nest or `crow.cropRequirement` crops (the H&H rule, additive so AM spawns do not drop); optional deny mode off | 70 |
@@ -125,7 +125,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 | HNH-56 | Wild AM crow near wheat, `crow.eatCrops` on and mobGriefing on, then off | crops reset to age 0 on, untouched off; the scarecrow protects the field |
 | HNH-57 | Throw a diamond near a wild crow | it takes 1, carries it to a nest within 16, waits 1 s, deposits it; a nest gets the `CrowStash` mark |
 | HNH-58 | Same with no nest nearby | the crow flies away from the player and drops the item |
-| HNH-59 | A tame crow with a diamond on the ground | it does not steal (the AM fetch behaviour is unchanged) |
+| HNH-59 | A tame crow with a diamond on the ground | it does not steal (the AM fetch behavior is unchanged) |
 | HNH-60 | Break a stash nest | the items drop; open it with an empty hand shows the contents |
 | HNH-61 | Hold crow food near a wild crow, walk, sneak, then sprint | the crow approaches, comfort distance shrinks as trust rises, sprinting loses trust |
 | HNH-62 | Hand-feed a wild crow 20 times; throw food and let it eat; a thrown stolen item | tames about 1 in 5, 1 in 8, and 1 in 3; AM's thrown seed still tames |
@@ -140,7 +140,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 
 1. **Crop pecking default.** Planned on, with `mobGriefing` and the scarecrow as protection. Pack farms that were safe become raidable; say if it should default off.
 2. **Crow food.** Corn kernels only exist once corn is ported (a later step). Until then crow food is AM's seeds; is that the wanted taming food?
-3. **Stolen-item balance.** A wild crow can take dropped gems, ores, tools and armour near a base. Planned shiny list from H&H; tell me which entries to cut (tools and armour are the risky ones).
+3. **Stolen-item balance.** A wild crow can take dropped gems, ores, tools and armor near a base. Planned shiny list from H&H; tell me which entries to cut (tools and armor are the risky ones).
 4. **Dressable scarecrow (R3)** stays separate; confirm it is not meant to replace the H&H block.
 5. **Salt lick wear rate.** With the 500-tick interval every animal wears the block one stage about every 25 s, so a block with 5 cows is gone in about 2 minutes (3 stages
    then the pop) against about 40 minutes at H&H's 8 minutes. Confirm 500 is wanted, or tell me whether it is the rate per animal or per block.
@@ -223,7 +223,7 @@ All six section 7 calls are answered; the details are in [hearth_and_harvest.md]
 
 1. **Crop pecking default: on.**
 2. **Crow food: the pack's existing corn and corn kernels** (plus AM seeds); used for taming and breeding food.
-3. **Stolen items:** one item, from the hotbar only; list generated by tag (tools, armour, enchanted items cut); the item survives without a nest. **Theft stays in** (answers the N21 open question).
+3. **Stolen items:** one item, from the hotbar only; list generated by tag (tools, armor, enchanted items cut); the item survives without a nest. **Theft stays in** (answers the N21 open question).
 4. **Dressable scarecrows (R3): pinned.** A later eval decides whether H&H's scarecrow can be dressed.
 5. **Salt lick wear:** cow licks once a minute on average, 1 in 8 licks wears a stage.
 6. **Salt caves: added**, then examined in game for a further eval (HNH-87 to HNH-89).

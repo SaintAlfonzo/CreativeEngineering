@@ -57,5 +57,5 @@ and bananas with the capuchin but is a large defender, not a duplicate. The gela
 | Drop gorilla | `gorillaSpawnWeight = 0` | gorilla egg | the large jungle defender / pet |
 | Drop gelada | `geladaMonkeySpawnWeight = 0` | gelada egg | one rare herd animal, no overlap |
 
-Existing mobs stay in the world unless cancelled with `EntityEvents.spawned` (skip tamed with `isTame()`). Verify a
+Existing mobs stay in the world unless canceled with `EntityEvents.spawned` (skip tamed with `isTame()`). Verify a
 cut with `/dumpspawns` and MT-30. Hand-edited configs also go to `configs_edited/root_config/`.

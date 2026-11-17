@@ -23,7 +23,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
   structure rules 20 soul_fire->fire, 21 glowstone->yellow corundum (1084 swaps).
 - **Flower features go through wild_flowers.js**, which rebuilds them from flower_features.json: after changing any
   flower feature, rerun gen_wild_flowers.py or the old version stays live. Only fresh chunks prove worldgen changes
-  (decorated neighbours spill over).
+  (decorated neighbors spill over).
 - Fire on soul sand/soil turns back into soul fire on any block update (BaseFireBlock.getState); the ancient city's
   kept soul sand is under its new fire.
 - Open rows: B12 (frostfire soul fire), K19 (crying obsidian), K25 (soul lanterns), K28-K33/K35/K36 (crimson/warped

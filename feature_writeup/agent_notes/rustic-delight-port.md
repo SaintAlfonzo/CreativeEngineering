@@ -9,7 +9,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 (dev-only `rustic_upstream/`) into `src/main/resources` with a manifest; edit rules there and rebake, never hand-edit a
 baked file (own files at baked paths go in `tools/own_overrides.json`). No runtime donor, no folder on clients.
 State: `feature_writeup/rustic_delight.md` 5.14. Earlier method as [miners-delight-backport-plan](miners-delight-backport-plan.md).
-- A removed id's file name can also be a shared parent (models/coaster/pancake.json is the six flavoured coasters'
+- A removed id's file name can also be a shared parent (models/coaster/pancake.json is the six flavored coasters'
   parent): drop by file name only after checking parents (`KEPT_SHARED`).
 
 Gotchas found (add to the Miner's list):

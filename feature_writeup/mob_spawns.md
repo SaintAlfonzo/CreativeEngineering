@@ -235,7 +235,7 @@ mangrove roots, Immersive Weathering soils, Botania grasses, rich soil...) goes 
 Vanilla checks a second thing after the rule: the mob's walk value (`Animal.getWalkTargetValue`), which hard-codes
 grass_block and otherwise uses a light value that goes negative at night, so an animal on podzol would pass the rule
 and then fail at night. `AnimalWalkTargetMixin` / `MushroomCowWalkTargetMixin` make it read the same tags. Side
-effect: wandering animals favour every spawnable dirt the way they favour grass. With the system off the tags are
+effect: wandering animals favor every spawnable dirt the way they favor grass. With the system off the tags are
 vanilla (grass_block, mycelium), so the mixins change nothing.
 
 The block tags rely on patcherMod's walk-value mixins (same jar as `SpawnTuning`).
@@ -372,7 +372,7 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
   (spawn lists are read live), unlike the worldgen systems. MS-01 to MS-12 still pending.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
   2026-10-14, update from 1.0.4, [plan_1.0.6.md](plan_1.0.6.md)), unchanged.
-- 2026-11-02 (plan_worldgen_edit N5 to N9): `spawns #4`, `#5`, `pillagers #2`, `mooblooms #4`. lone villagers, allays in mystical biomes, outpost allay cage weight 3 [1], spawn boxes `allay_temples` (category creature) and `end_tower`, `server_scripts/mobs/end_divers.js` (End illagers and witches in the copper diving set, drop 0; not drawn: illager renderers have no armour layer). The "leave predators" premise was false: every Alex's Mobs roll is 1 except the sunbird. One box per structure: pillager structures (monster box) cannot take an allay box until boxes resolve per category. Skylands: spring to autumn 100 % mooblooms (even per variant), winter plain cows. Tests SQ-MOB-N5 to -N8, SQ-WGE-16.
+- 2026-11-02 (plan_worldgen_edit N5 to N9): `spawns #4`, `#5`, `pillagers #2`, `mooblooms #4`. lone villagers, allays in mystical biomes, outpost allay cage weight 3 [1], spawn boxes `allay_temples` (category creature) and `end_tower`, `server_scripts/mobs/end_divers.js` (End illagers and witches in the copper diving set, drop 0; not drawn: illager renderers have no armor layer). The "leave predators" premise was false: every Alex's Mobs roll is 1 except the sunbird. One box per structure: pillager structures (monster box) cannot take an allay box until boxes resolve per category. Skylands: spring to autumn 100 % mooblooms (even per variant), winter plain cows. Tests SQ-MOB-N5 to -N8, SQ-WGE-16.
 
 ## 9. Plans
 
@@ -423,14 +423,14 @@ Baseline for making creature spawns cohesive, starting with farm animals, the du
 animals that spawn above ground in the overworld. Snapshot of the 2026-10-09 21:58 `/dumpspawns` with no tuning
 rules, overworld surface biomes only (no caves, Nether, End). Spawn rules come from the bytecode (vanilla, mapped jar)
 and decompiled jars (Alex's Mobs 1.21.1, untitledduckmod 0.6.1). The passive / neutral / predator split for Alex's Mobs
-is a hand classification by behaviour, not something the mod defines. Rerun the dump after rule changes;
+is a hand classification by behavior, not something the mod defines. Rerun the dump after rule changes;
 [spawns_by_biome.md](spawns_by_biome.md) has the generated per-biome and per-mob lists.
 
 ### 10.1 Findings
 
 | Topic | Finding |
 |---|---|
-| One block everywhere | Sheep 12 / pig 10 / chicken 10 / cow 8 is identical in 63 of the 78 biomes that have farm animals (Terralith's biome files). Jungles differ only by a second chicken entry (chicken 20); wintry forest and lowlands have sheep 8. No biome favours one farm animal over another |
+| One block everywhere | Sheep 12 / pig 10 / chicken 10 / cow 8 is identical in 63 of the 78 biomes that have farm animals (Terralith's biome files). Jungles differ only by a second chicken entry (chicken 20); wintry forest and lowlands have sheep 8. No biome favors one farm animal over another |
 | Share = dilution | What changes per biome is how much other wildlife shares the pool. Cow+pig+sheep+chicken get 53% of creature picks in plains, 38% in forest, 20-29% in jungles, about 20% in savannas, 9% in meadow |
 | Grass only | `#animals_spawnable_on` = `minecraft:grass_block` and nothing else. Podzol, coarse dirt, Immersive Weathering soils (fluvisol, humus, vertisol, silt, rooted grass), Botania grasses and stone all fail. Windswept spires and windswept gravelly hills list the full farm block on rock (marked `*` in 10.5) |
 | Herd sizes | Set by Terralith per biome, not per animal: 8 in 62 biomes; 4 in swamp, orchid swamp, ice marsh, dark forest, birch forest, old growth birch forest, mirage isles, alpha islands and the skylands; 6 in wintry forest and lowlands; 2-4 in meadow and blooming plateau |

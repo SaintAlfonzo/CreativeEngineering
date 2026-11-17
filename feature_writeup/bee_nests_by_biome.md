@@ -207,7 +207,7 @@ Every placed feature some overworld biome uses that can carry a nest, with its n
 | minecraft:birch_other | Terralith_1.19.3_v2.3.12.jar | 10.1 at p=0.002 | minecraft:forest |
 | minecraft:forest_flower_trees | Terralith_1.19.3_v2.3.12.jar | 6.1 at p=0.02 | minecraft:flower_forest |
 | minecraft:plain_vegetation | Terralith_1.19.3_v2.3.12.jar | 0.05 at p=0.05 | minecraft:dripstone_caves, minecraft:plains, minecraft:sunflower_plains, terralith:cave/frostfire_caves, terralith:cave/mantle_caves, terralith:cold_shrubland, terralith:hot_shrubland, terralith:rocky_shrubland, terralith:shrubland |
-| minecraft:trees_meadow | Java (modelled) | 0.01 at p=1 | minecraft:meadow, terralith:blooming_plateau |
+| minecraft:trees_meadow | Java (modeled) | 0.01 at p=1 | minecraft:meadow, terralith:blooming_plateau |
 | terralith:birch/birch_tall | Terralith_1.19.3_v2.3.12.jar | 5.05 at p=0.002, 5.05 at p=0.03 | minecraft:old_growth_birch_forest |
 | terralith:cave/jungle/trees_1 | Terralith_1.19.3_v2.3.12.jar | 19 at p=0.02, 5.04 at p=0.25 | terralith:cave/underground_jungle |
 | terralith:cherry/birch | kubejs/data | 0.217 at p=0.03 | terralith:sakura_grove, terralith:sakura_valley |

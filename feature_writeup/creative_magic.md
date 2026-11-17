@@ -8,7 +8,7 @@ Written 2026-11-01 from the Creative Split audit ([creative_split.md](creative_s
 Written for: the owner and agents working on the split. Own mod `creativemagic` (development/creativeMagic,
 `creativemagic-1.0.0.jar`, side both), package `com.SaintAlfonzo.creativemagic`, config `creativemagic-common.toml`,
 script packs `kubejs_startup/creativemagic/`, `kubejs/data/creativemagic/kubejs/`, `kubejs/assets/creativemagic/kubejs/`.
-Same behaviour as before the carve; every registry id keeps `creativeengineering:`. Potions, effects, alcohol and gear
+Same behavior as before the carve; every registry id keeps `creativeengineering:`. Potions, effects, alcohol and gear
 effects are Creative Brewing's ([creative_brewing.md](creative_brewing.md) 4.2).
 
 ## 0. At a glance

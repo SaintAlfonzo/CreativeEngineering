@@ -61,19 +61,19 @@ the fixture rows are replaced. The generator exits 1 and prints a WARNING while 
 - **Per-potion rows (`PotionRows`, 2026-10-26):** the generator writes the potion soft fluid's jar rows once with
   `"per_potion": true`; at JEI start each becomes one row per potion (water, awkward, thick, mundane and effectless
   potions left out): bottles with the potion (normal, splash, lingering, cycling together with the jar of that bottle
-  kind), the jar with Moonlight's `NBT:{Potion, Bottle}` and the potion's colour, Create's potion fluid with its tag.
+  kind), the jar with Moonlight's `NBT:{Potion, Bottle}` and the potion's color, Create's potion fluid with its tag.
   Row format addition: `{"stacks": [{"item", "nbt"}, ...]}` (each stack its own NBT); `"nbt"` also applies to a fluid.
 - **Drawn-only slots:** air outputs are an empty slot, tooltip "Nothing" (was a named barrier); `{"effect": id}` draws
   the mob effect's icon (Campfire Rules' Comfort). Both are drawn by the category, so JEI can't look them up.
 - **Jars:** filled jar icons carry `CachedColor` in `FluidHolder` (the soft fluid's `color`, -1 for none or
-  `no_tint`); Supplementaries' jar item renderer reads the colour only from there, and without it the liquid was black.
+  `no_tint`); Supplementaries' jar item renderer reads the color only from there, and without it the liquid was black.
 - **Row format:** JSON, documented in `WorldRow.java`. Ingredients are items, item tags, blocks, block tags, fluids or
   entities (shown as spawn eggs, a named name tag when there is none). Rows for missing mods drop out (`requires`, or
   ids that don't resolve).
 - **Where rows come from**, merged per tab (`WorldInteractionJEI`):
   1. `kubejs/assets/creativecommon/jei_world/<tab>/generated.json`, written by `tools/gen_jei_world.py` from the
      mod jars' data (kubejs/data on top), the loot dump and `/dumpworldjei`. One module per group in `tools/jei_world/`.
-  2. `.../<tab>/manual.json`, hand-written, for hardcoded mod behaviour (each row checked in the mod jar).
+  2. `.../<tab>/manual.json`, hand-written, for hardcoded mod behavior (each row checked in the mod jar).
   3. `WorldRows`: `add` from KubeJS startup (the sample syringe, from `global.sampleSyringe` in
      `startup_scripts/func/sample_syringe.js`) and Java providers read when JEI starts (`BurnRows`, `CampfireRows`).
   The files are client resources, so the tabs work on a dedicated server too.
@@ -84,13 +84,13 @@ the fixture rows are replaced. The generator exits 1 and prints a WARNING while 
 | Tab | Source | Rows (2026-10-22) |
 |---|---|---|
 | Weathering and Growth | Immersive Weathering `block_growths` + its tag-paired built-in rules (`tab_weathering.py`) | 82 |
-| Lightning Conversion | IW lightning growths, copper de-oxidising | 9 |
+| Lightning Conversion | IW lightning growths, copper de-oxidizing | 9 |
 | Lava Interactions (was Lava Generation) | IW `fluid_generators`, Create and Dreams and Desires fluid interactions, vanilla | 25 |
 | Concrete Hardening | IE liquid concrete (manual); sets after 30 s (patcherMod `IEConcreteSetTimeMixin`, was 32) | 2 |
 | Salt Dissolving and Melting | Salt mod (manual, tags) | 7 |
 | Stripping | `/dumpworldjei` axe strip pairs, IW bark (`tab_tools.py`); one row per log pair | 85 (2026-10-26) |
 | Waxing and Scraping | honeycomb, axe wax-off and scrape, IW rust, everythingcopper, steel wool | 503 (2026-10-26) |
-| Block Dyeing | Supplementaries dye-on-block colour sets, Create sails, seats, valve handles | 2177 (2026-10-26) |
+| Block Dyeing | Supplementaries dye-on-block color sets, Create sails, seats, valve handles | 2177 (2026-10-26) |
 | Soap Washing | Supplementaries soap on blocks, sheep, collars, signs; one row per target, sources cycle | 347 (2026-10-26) |
 | Jar Storage | soft fluids (jars + the pack's own), cookie families, mob capture (`tab_drops.py`); potions one row each (`PotionRows`); icon: jar with a small faucet | 143 + potions |
 | Jar Fluids | pouring from jars, Supplementaries faucet sources; potions one row each | 132 + potions |
@@ -113,14 +113,14 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
 
 - Unlit Campfire's config is server-side; `CampfireRows` reads `defaultconfigs/unlitcampfire-server.toml`, so an
   edited world config shows the pack default.
-- **Mod behaviour found while building** (shown as it really behaves, not fixed): Salt's melting places water only in
+- **Mod behavior found while building** (shown as it really behaves, not fixed): Salt's melting places water only in
   ultra-warm dimensions, elsewhere the block becomes air (its config comment says water); two IW growths use
   `sky_access`, not a valid tick source; Backported Vinery: shearing a ripe stem drops seed and grapes but only steps
   the stem back one stage, so repeated shearing may duplicate seeds (1.3.10 emptied it). TODO rows open: `jei/jei-coverage #6`
   (salt, IW), `alcohol/vineryport #24` (stem shearing). The salt rework in 1.1.04 (salt no longer melts ice or snow when
   used or dispensed) may change the salt half: recheck before fixing.
 - Unverified details (check in game): concrete now sets after 30 s (32 s before the mixin, by the javap reading); DnD milkshake-lava pairing order and chances;
-  powder snow per faucet pull; bed and framed-sign soap behaviour; whether Create seats and valve handles use the dye;
+  powder snow per faucet pull; bed and framed-sign soap behavior; whether Create seats and valve handles use the dye;
   MCA zombie-kill conversion path.
 - The axe dump simulates on the world-bottom block under spawn with a fake player; doors skip the Forge event because
   everythingcopper's listener writes the other half even when simulating.
@@ -132,7 +132,7 @@ Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). TODO rows `jei
 
 - Tool tabs regenerated from the real `/dumpworldjei` dump (`#16`, `#17`, `#18`): Stripping one row per log pair; Soap
   Washing keeps one row per target with the sources cycling (soap already takes off copper oxidation, the `unoxidise`
-  pairs); Block Dyeing 2177 rows (load cost not measured yet, JW-21; fallback: one row per colour set with the dye
+  pairs); Block Dyeing 2177 rows (load cost not measured yet, JW-21; fallback: one row per color set with the dye
   cycling). Create's dyed sails were Barriers because they have no item: they now draw as blocks (`#18`, `#19`).
 - Itemless blocks draw their model (`#19`); the Budding "Drops nothing" output is the "Nothing" slot. Deviation from the
   plan: the ice / cake stand-ins and dropping the crop rows were replaced by drawing the real block, which also fixes the
@@ -166,10 +166,10 @@ Install patcherMod 1.1.01, moreMooblooms-1.1.0 and backportedVinery-1.5.5-ce-19.
 - [ ] **JW-08 Waxing:** recipes for Exposed Cut Iron -> steel wool only, no axe; Weathered Cut Iron -> axe and steel
   wool. Uses of Honeycomb -> copper, Create copper and IW iron waxing.
 - [ ] **JW-09 Dyeing and soap:** uses of Red Dye -> Red Wool / Glass / Terracotta pages, no sack or shulker box page, one
-  Create sail page and one seat page. Uses of Soap -> terracotta from coloured terracotta (no glazed), sticky piston ->
+  Create sail page and one seat page. Uses of Soap -> terracotta from colored terracotta (no glazed), sticky piston ->
   piston.
 - [ ] **JW-10 Jars:** uses of Honey Bottle -> Jar Storage "1 of 12" with honey 250 mB, and Jar Fluids pouring a honey jar
-  into a glass bottle. Filled jars draw their liquid in colour, not black: water blue, honey golden, lava orange. Uses of Cookie -> the cookie family row. Uses of Faucet -> beehive
+  into a glass bottle. Filled jars draw their liquid in color, not black: water blue, honey golden, lava orange. Uses of Cookie -> the cookie family row. Uses of Faucet -> beehive
   and water cauldron rows.
 - [ ] **JW-11 Drops:** Knife and Machete Drops for a pig -> ham 50%, not burning, looting note, knife and machete. Uses of
   Grass -> 3 Grass Drops rows (hand: seeds 12.5%, hemp 10%; knife: straw 20%; shears: grass).
@@ -194,11 +194,11 @@ Tab tweaks (2026-10-26; install the patcherMod jar built 2026-10-26 first):
 
 - [ ] **JW-19 Stripping:** uses of Oak Log -> Stripping: Oak Log -> Stripped Oak Log + Oak Bark on its own page; paging
   shows one log type per page, nothing cycles.
-- [ ] **JW-20 Soap:** uses of Soap -> a "washes the dye out" glass row cycling the colours; an oxidised copper row
+- [ ] **JW-20 Soap:** uses of Soap -> a "washes the dye out" glass row cycling the colors; an oxidized copper row
   ("takes off wax and all oxidation").
 - [ ] **JW-21 Block Dyeing:** note the world-join time against before (latest.log `[jei_world] N rows`); uses of Red Dye ->
   a Create sail page whose input cycles the dyed sails drawn as sails (not Barriers). If JEI start is more than about
-  2 s slower, switch `_dyeing` to one row per colour set.
+  2 s slower, switch `_dyeing` to one row per color set.
 - [ ] **JW-22 Blocks drawn:** page Weathering and Growth (frosted ice row), Lava Interactions (bubble column: water
   bucket), Knife and Machete Drops (a candle cake draws as the cake with its candle), Grass Drops (tall seagrass): no
   Barrier icon anywhere; hovering names the block. Budding Blocks: the "drops nothing" row has an empty slot, tooltip

@@ -49,7 +49,7 @@ Feature doc: [blockrunner.md](blockrunner.md). Earlier design of the tooling: [b
 
 Design as in the brief; only changes are listed.
 
-1. `devtools/SurfaceAudit.java` in Creative Common (modelled on `WthitIconDump`): server command `/dumpsurface` writes
+1. `devtools/SurfaceAudit.java` in Creative Common (modeled on `WthitIconDump`): server command `/dumpsurface` writes
    `kubejs/exported/surface_audit.json` with, per block default state: id, collisionTop, tier, override, friction,
    speedFactor, jumpFactor, inside, has item. Expose `RunSpeed.REGISTER_HEIGHT` package-visible. Errors listed per block.
    Check where `RunSpeed` lives now (it is in creativeEngineering per the brief; Common cannot depend on it, so either put

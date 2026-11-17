@@ -134,8 +134,8 @@ ents = json.load(open('biome_baselines/minecraft__the_end.json'))['generator']['
 ### Tests (prefix WG-)
 
 - WG-14 End biomes present: in a world created after the decision, `/locate biome` each of
-  `nullscape:crystal_peaks`, `void_barrens`, `shadowlands` → all found.
-- WG-15 Confusion stats: `/reload` → `biome_config.json` End stats list the mismatch pairs. With End multipliers at 1,
+  `nullscape:crystal_peaks`, `void_barrens`, `shadowlands` -> all found.
+- WG-15 Confusion stats: `/reload` -> `biome_config.json` End stats list the mismatch pairs. With End multipliers at 1,
   agreement is above 95 %.
 
 ---
@@ -154,20 +154,20 @@ reach.
 The TODO row's list is from 2026-10-18. The current file (`biome_config.json`, notes written by
 `BiomeLayoutTuner.java:423-426`) has **14** "aimed for" notes:
 
-| Dimension | Biome | Mult. | Share → result (aimed) |
+| Dimension | Biome | Mult. | Share -> result (aimed) |
 |---|---|---|---|
-| Nether | nether_wastes | 2 | 34.9 → 46.833 (69.8) |
-| Nether | soul_sand_valley | 1.25 | 17.4 → 18.933 (21.753) |
-| End | crystal_peaks | 0.25 | 3.067 → 1.667 (0.767) |
-| End | void_barrens | 0.75 | 3.967 → 2.767 (2.967) |
-| Overworld | mushroom_fields | 3.75 | 0.04 → 0.06 (0.15) |
-| Overworld | cave/mantle_caves | 1.61 | 0.746 → 0.725 (1.203) |
-| Overworld | caldera | target 0.3 | 0 → 0.24 |
-| Overworld | volcanic_peaks | 1.5 | 0.205 → 0.27 (0.31) |
+| Nether | nether_wastes | 2 | 34.9 -> 46.833 (69.8) |
+| Nether | soul_sand_valley | 1.25 | 17.4 -> 18.933 (21.753) |
+| End | crystal_peaks | 0.25 | 3.067 -> 1.667 (0.767) |
+| End | void_barrens | 0.75 | 3.967 -> 2.767 (2.967) |
+| Overworld | mushroom_fields | 3.75 | 0.04 -> 0.06 (0.15) |
+| Overworld | cave/mantle_caves | 1.61 | 0.746 -> 0.725 (1.203) |
+| Overworld | caldera | target 0.3 | 0 -> 0.24 |
+| Overworld | volcanic_peaks | 1.5 | 0.205 -> 0.27 (0.31) |
 | Overworld | lush_desert, desert_oasis, ashen_savanna, eroded_badlands, taiga, alpine_highlands | floor / donor values | within 0.01 to 0.05 % of the aim |
 
 - The clamp is `PMAX = 0.6² x Q²` (`BiomeLayoutTuner.java:69`, applied at `:377`). The Nether's vanilla preset has
-  zero-size boxes (points) and nether wastes has offset 0. It can't win more than its nearest neighbours lose within
+  zero-size boxes (points) and nether wastes has offset 0. It can't win more than its nearest neighbors lose within
   the clamp.
 - The Overworld multipliers are owned by `tools/biome_rarity_floor.py` (`:8-16`, keep list `:30`, `:50`). It resets any
   multiplier it doesn't need to 1, so hand edits to its biomes are overwritten at the next run.
@@ -181,7 +181,7 @@ The TODO row's list is from 2026-10-18. The current file (`biome_config.json`, n
    the notes already say why. If the user wants the file clean, add a `--settle` option to `biome_rarity_floor.py`.
    It would read the last solve's `result_pct` and, for every noted biome, write `multiplier = result / share`
    (or `target_pct = result`). Run it after a `/reload`.
-4. `/reload` → check the notes in `biome_config.json`; update biome_tuning.md 2.1 and F1.
+4. `/reload` -> check the notes in `biome_config.json`; update biome_tuning.md 2.1 and F1.
 
 ### Decisions
 
@@ -263,17 +263,17 @@ Now): check it before doing anything about it.
 ### Now (verified against the jars: Quark-3.4-418, immersive_weathering-1.19.2-1.2.10-forge)
 
 - **Where Quark's permafrost generates.** It is not an ore or a cluster. It is an **underground style**
-  (`vazkii.quark.content.world.module.PermafrostModule` → `undergroundstyle.PermafrostStyle`):
+  (`vazkii.quark.content.world.module.PermafrostModule` -> `undergroundstyle.PermafrostStyle`):
   - In `minecraft:frozen_peaks` caves between y 105 and 140 (`config/quark-common.toml:814-842`: rarity 2,
     horizontal size 100, vertical 30), it restyles cave surfaces. Floors and ceilings become `quark:permafrost`, and
     walls become packed ice (`PermafrostStyle()` passes the same vanilla block for all three, then `setBlock` sets
     floor and ceiling).
   - On 1.5 % of floor blocks it grows a 3 to 5 high pillar of permafrost (`PermafrostStyle.fillFloor`).
-  - The generator is Java (`AbstractUndergroundStyleModule.setup` → `WorldGenHandler.addGenerator(...,
+  - The generator is Java (`AbstractUndergroundStyleModule.setup` -> `WorldGenHandler.addGenerator(...,
     UNDERGROUND_DECORATION)`), so a datapack can't touch it.
   - `BasicUndergroundStyle.floorState` / `ceilingState` are **public, non-final** fields, and
     `AbstractUndergroundStyleModule.generationSettings` is a public field. Its `biomeObj` is the style.
-- **Where IW's permafrost generates.** Placed feature `immersive_weathering:cryosol_patch` → configured
+- **Where IW's permafrost generates.** Placed feature `immersive_weathering:cryosol_patch` -> configured
   `immersive_weathering:permafrost`. It is a `minecraft:ore`, size 64:
   - stone, dirt and snow_block become `immersive_weathering:permafrost`; grass_block becomes `cryosol`;
   - placement: count 3 + noise count, at the heightmap, so it shows at the surface;
@@ -292,7 +292,7 @@ Now): check it before doing anything about it.
 - Tags that name them: `kubejs/server_scripts/tags/blocktags.js:54` (keg freeze sources, IW only), `:285` (Block
   Runner natural smooth: `quark:permafrost*`), `:330` (Block Runner loose ground: IW permafrost).
 - Recipes:
-  - IW: `immersive_weathering:permafrost` = shapeless 2 packed ice + 2 dirt → 2;
+  - IW: `immersive_weathering:permafrost` = shapeless 2 packed ice + 2 dirt -> 2;
   - Quark: no recipe makes `quark:permafrost` itself, only its bricks, slabs, stairs and walls (crafting and
     stonecutting under `data/quark/recipes/world/`).
 - Renaming precedent: `kubejs/client_scripts/namechanges.js:137-147` renames Quark limestone to "Gabbro" with
@@ -318,17 +318,17 @@ Now): check it before doing anything about it.
    ```
    No config route exists for this: Quark's config can only turn the style off (biome list), not change its block.
 2. **Rename Quark's family** in `namechanges.js`, next to the Gabbro block. Use dict keys, not literals (CLAUDE.md):
-   `e.renameItem(item.permafrost, 'Frost Stone')`, `item.permafrost_bricks` → 'Frost Stone Bricks', and so on for all
+   `e.renameItem(item.permafrost, 'Frost Stone')`, `item.permafrost_bricks` -> 'Frost Stone Bricks', and so on for all
    11 ids in `item_dict.js:3292-3301`.
    - Consider renaming the dict keys too (`i.frost_stone = 'quark:permafrost'`, ...) so `i.permafrost` no longer
      means Quark's. Nothing in `kubejs/` uses `item.permafrost*` yet (grep 2026-10-21), so the rename is free now.
-     Add `i.permafrost` → IW only if a later script needs it.
+     Add `i.permafrost` -> IW only if a later script needs it.
    - Then run `tools/name_audit.py` (names.md).
 3. **Recipe** in a server recipe script (wood/stone crafts: `kubejs/server_scripts/` stone section; pick the file
    that holds other Quark stone changes): `global.NCH.shapeless(Item.of(item.permafrost, 2),
-   [item.packed_ice, item.packed_ice, item.stone, item.stone], e, 'frost_stone')`. This mirrors IW's 2+2 → 2.
+   [item.packed_ice, item.packed_ice, item.stone, item.stone], e, 'frost_stone')`. This mirrors IW's 2+2 -> 2.
    `item.packed_ice` and `item.stone` exist (`item_dict.js:1338, 1314`).
-   Optional second recipe: IW permafrost + stone → Quark's (`'frost_stone_from_permafrost'`).
+   Optional second recipe: IW permafrost + stone -> Quark's (`'frost_stone_from_permafrost'`).
 4. **Tags:** none needed. The Block Runner tiers already cover both blocks (`blocktags.js:285, 330`).
 5. **Mirror config:** none (the swap is in code). The new CEConfig key needs patcherMod `CEConfig.java`
    `[worldgen.systems]`, next to `wildFlowers` / `beeNests`.
@@ -361,12 +361,12 @@ Now): check it before doing anything about it.
 
 ### Tests (new writeup section; suggest prefix `PF-` in a short `permafrost.md`, or add to mob_block_tweaks.md as `MT-`)
 
-- PF-01 Freezing: stand on `immersive_weathering:permafrost` for 30 s in survival → no freezing (config off). If it
+- PF-01 Freezing: stand on `immersive_weathering:permafrost` for 30 s in survival -> no freezing (config off). If it
   does freeze, the server config differs: compare the server's `config/immersive_weathering-common.toml`.
-- PF-02 Generation: new frozen peaks chunks, caves at y 105-140 → IW permafrost floors and ceilings, packed ice walls,
+- PF-02 Generation: new frozen peaks chunks, caves at y 105-140 -> IW permafrost floors and ceilings, packed ice walls,
   no `quark:permafrost`.
 - PF-03 Names: JEI shows "Froststone" and its 10 variants (name as built; the plan said "Frost Stone").
-- PF-04 Recipe: 2 packed ice + 2 stone → 2 Frost Stone.
+- PF-04 Recipe: 2 packed ice + 2 stone -> 2 Frost Stone.
 
 ---
 
@@ -390,7 +390,7 @@ stagnant pools.
 - Logs available: vanilla logs, stripped logs, `immersive_weathering:charred_log` (`i.charred_log`,
   `item_dict.js:10586`) and `immersive_weathering:rotten_log`.
 - Vehicle for "which biomes": `wild_crops.json` already places pack tree features by trait (the `rubber` entry,
-  `wild_crops.json:403-408` → `kubejs/data/creativeengineering/worldgen/{configured,placed}_feature/wild/rubber_tree.json`).
+  `wild_crops.json:403-408` -> `kubejs/data/creativeengineering/worldgen/{configured,placed}_feature/wild/rubber_tree.json`).
   `wild_crops.js` writes the tag and modifier, `tools/gen_crop_worldgen_table.py` reports it, and
   `tools/test_wild_crops.sh` tests it. Traits: swamp (4 biomes), savanna (11), badlands (8), dry (32), muddy (2).
 - Bee nests: `BeeNests.java:150-161` skips trees without leaves, so dead trees never get nests.
@@ -452,8 +452,8 @@ stagnant pools.
 
 ### Tests (crops.md prefix is `CR-`; or a short new section in crops.md)
 
-- CR-xx Dead trees: new swamp chunks → leafless branched trees in small groups, some in one-deep pools; savanna and
-  badlands → occasional groups; ashen savanna → charred trunks. No floating trees, no nests.
+- CR-xx Dead trees: new swamp chunks -> leafless branched trees in small groups, some in one-deep pools; savanna and
+  badlands -> occasional groups; ashen savanna -> charred trunks. No floating trees, no nests.
 
 ---
 
@@ -525,7 +525,7 @@ cane, grass, flowers and fluid.
 
 ### Tests (structure_tuning.md prefix `ST-`)
 
-- ST-xx Missing island: `/locate structure creativeengineering:end/missing_island` in the End → found. The island
+- ST-xx Missing island: `/locate structure creativeengineering:end/missing_island` in the End -> found. The island
   floats low, with all the block kinds present and the fluid flowing in its pool.
 
 ---
@@ -540,10 +540,10 @@ cane, grass, flowers and fluid.
 ## Writeup corrections made
 
 - [biome_tuning.md](../biome_tuning.md):
-  - 2.1 End rows updated to the current file (shadowlands 18.933 → 9.633 %, void barrens 3.967 → 2.767 % aimed
-    2.967, crystal peaks 3.067 → 1.667 % aimed 0.767); Nether crimson / warped results to the file's values;
-    volcanic peaks result 0.25 → 0.27 %.
-  - 2.1 samples paragraph: model agreement Nether 86.7 → 86.4 %, End 70.0 → 80.1 %, plus a note that the End's
+  - 2.1 End rows updated to the current file (shadowlands 18.933 -> 9.633 %, void barrens 3.967 -> 2.767 % aimed
+    2.967, crystal peaks 3.067 -> 1.667 % aimed 0.767); Nether crimson / warped results to the file's values;
+    volcanic peaks result 0.25 -> 0.27 %.
+  - 2.1 samples paragraph: model agreement Nether 86.7 -> 86.4 %, End 70.0 -> 80.1 %, plus a note that the End's
     Nullscape biomes are now measured on the surface layer (the 2026-10-14 file measured them underground).
   - F1: End numbers to the current file, plus a note on the 10 Overworld notes.
   - F4: 80 % (was 70 %), Overworld 96.6 % (was 99 %), and a pointer to the #4 lead in this brief.

@@ -87,7 +87,7 @@ Candied Slime Block (9 candied slime). Raw meat comes from three replaced vanill
 | Tags | none |
 | Advancements | 65 (the pack drops all advancements at load) |
 | Lang | `en_us`, `ko_kr` |
-| Tooltips | every item adds one hard-coded English flavour line (`Component.literal`, no lang key) |
+| Tooltips | every item adds one hard-coded English flavor line (`Component.literal`, no lang key) |
 | Config | none |
 
 Effect notation below: MCreator passes the amplifier, so "Levitation VI 3 s" is amplifier 5 for 60 ticks. Values are
@@ -139,7 +139,7 @@ nutrition / saturation modifier. Stack is the item's own max stack. "Returns" is
 | Glimmering Chowder (`glimmeringchowder`) | 8 / 1.0, drink | 16, bowl | Regeneration IV 6 s | pot: popped chorus fruit + raw endermite + ender pearl |
 | Crawling Cookie (`mitecookie`) | 2 / 0.3 | 64 | removes Levitation | 2 wheat + raw endermite -> 8 |
 | Dragon Tonic (`dragontonic`) | 2 / 1.3, always edible, epic, foil | 16, bottle | Blindness II 3 s, Strength IV 30 s, Regeneration III 30 s | pot: chorus fruit + amethyst + Magical Butter, container dragon's breath |
-| Ender Substance (`endersubstance`) | 3 / 0.3, always edible | 1, bowl | 8 void damage (ignores armour, can kill), Resistance IV 30 s | Dragon Tonic + ender pearl + Magical Butter + cooked endermite + 2 bowls -> 2 |
+| Ender Substance (`endersubstance`) | 3 / 0.3, always edible | 1, bowl | 8 void damage (ignores armor, can kill), Resistance IV 30 s | Dragon Tonic + ender pearl + Magical Butter + cooked endermite + 2 bowls -> 2 |
 | Ender Pearlsicle (`enderpop`) | 4 / 0.3, always edible | 64 | | 2 sugar + 2 ender pearls + 2 ice + stick. *overlaps w/ the popsicle family and the ice cube rule* |
 | Trembling cookie (`pearlcookie`) | 2 / 0.3 | 64 | **spawns an endermite** at the eater | 2 wheat + ender pearl -> 8 |
 
@@ -207,7 +207,7 @@ nutrition / saturation modifier. Stack is the item's own max stack. "Returns" is
 
 ### 2.3 Effects and potion
 
-| Effect | Category, colour | What it does | Sources |
+| Effect | Category, color | What it does | Sources |
 |---|---|---|---|
 | Dioxide (`hostiledelight:dioxide`) | harmful | Sets air to 2 every tick. On land: the air bar shows empty, no damage. In water: drowning damage within about a second. Water Breathing stops the damage (air never drops below 2) | raw fillet 30 s, patty 3 s, Dioxiding potion 3:00 (splash, lingering, arrow) |
 | Collapsing (`hostiledelight:collapsing`) | harmful, `#333333` | A global `LivingHurtEvent` handler: while it lasts, every hit also sets health to health - 3 (B4) | none: nothing applies it; only `/effect` |
@@ -256,7 +256,7 @@ override is checked in game (HTD-05).
 - No tags at all: no `#forge:` meat, egg, sauce or storage block tags, no FD tags, no `#forge:storage_blocks/*` for the
   slime block.
 - 65 advancements (`data/hostiledelight/advancements`), dropped by the pack at load.
-- One literal flavour line per item ("A body of well-roasted endermite. It's surprisingly crispy."). Without a lang
+- One literal flavor line per item ("A body of well-roasted endermite. It's surprisingly crispy."). Without a lang
   key, `removeTooltipKey` cannot target them (D11).
 - Own creative tab.
 
@@ -267,7 +267,7 @@ override is checked in game (HTD-05).
 | B1 | `grolllrecp` (Ghast Roll) and `grollrecp` (Guardian Roll) are `crafting_shapeless` with `pattern` / `key` | Fail at load (`latest.log` line 30515-30516); both rolls have no recipe | Remove, re-add through `global.NCH` by the roll rule (step 6) |
 | B2 | `ppicklerecp` outputs `hostiledelight:preapredseapickle` (typo) | Prepared Sea Pickle has no working recipe | Remove, re-add with the right id. **Built 2026-10-25** (Creative Delight `hostiledelight/recipes.js`, with the campfire recipes the family rule wants; [food_families.md](food_families.md) 4.4, FF-02, FF-04) |
 | B3 | Lang key `item.hostile_delight.blazingale` (wrong namespace) beside the right one | Harmless duplicate | none |
-| B4 | Collapsing's handler calls `setHealth(health - 3)` on any hurt event | Bypasses armour, absorption and the death path (no damage source; `die()` is not called if it reaches 0) | patcherMod: cancel the handler, or route it through a real damage source (D9) |
+| B4 | Collapsing's handler calls `setHealth(health - 3)` on any hurt event | Bypasses armor, absorption and the death path (no damage source; `die()` is not called if it reaches 0) | patcherMod: cancel the handler, or route it through a real damage source (D9) |
 | B5 | Gazing cookie sets air to 20 (of 300) | Under water it empties the air bar instead of filling it (the tooltip reads as a breathing food) | Set to max air (D9) |
 | B6 | Silme Syrup: the honey bottle's crafting remainder (glass bottle) comes back and the syrup also returns a bottle when drunk | One glass bottle gained per syrup | Recipe takes a glass bottle too, or drop the remainder (step 6) |
 | B7 | No item sets a crafting remainder | Bowls and bottles vanish when Glowing / Ardent Sauce (4 recipes), Silme Syrup (2), Ghast Blood (1), Dragon Tonic (1), Bone Gelatin (smoker) are used as ingredients | Crafting remainders in `ItemEvents.modification` (step 6) |
@@ -304,7 +304,7 @@ literally; every overlap is a concept.
 | Turtle Egg Sandwich | FD egg sandwich (bread + 2 fried eggs) | Sandwich rule; keep both items |
 | Suspicious Bacon And Eggs | FD bacon and eggs (shapeless + assembly) | Same rule; keep both |
 | Fried Turtle Egg | Pack fried egg rule (smoking, cooking oil, NCH `smoking` xp / time); `#forge:eggs` migration TODO (food.md 3.8) | Same routes; not in `#forge:eggs` (turtle eggs are a breeding block) |
-| 9 cookies | Baking overhaul: every cookie is oven only, cookie dough + flavour (oven.md) | Rebuild on cookie dough (D12) |
+| 9 cookies | Baking overhaul: every cookie is oven only, cookie dough + flavor (oven.md) | Rebuild on cookie dough (D12) |
 | Rotten Pie, Green Pie | Same overhaul: pies on pie crust, oven only | Rebuild on pie crust (D12) |
 | Slime Brownie, Magma Brownie | No brownie in the pack; `bake/slice` or `cake` family | Oven like the other bakes (D12) |
 | Glowing Bread | One dough rule (all bread from dough) | Dough + Glowing Sauce in the oven (D12) |
@@ -410,7 +410,7 @@ with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate 
      Mitey Meal, Glowing Ink Pasta): a cooked-input grid recipe, one more main ingredient, id `_manual_only`; soups
      with bone broth. Hostile's grid meals (Sashimi, Tartare, Carrotmite, Candied Salad, Slime Stew, Glow Wax Shuffle,
      Ghast Pudding, Ender Substance) re-id'd `_manual_only` so the unheated basin skips them.
-   - **Baking** (D12): 9 cookies on cookie dough + flavour in the oven; Rotten Pie and Green Pie on pie crust; the two
+   - **Baking** (D12): 9 cookies on cookie dough + flavor in the oven; Rotten Pie and Green Pie on pie crust; the two
      brownies and Glowing Bread in the oven on dough. Hostile's grid recipes added to `baking.js` `REMOVED_OUTPUTS`.
    - **Ice foods**: Ender Pearlsicle and Popsiclime take `#forge:ice_cubes`.
    - **Fried Turtle Egg**: the fried egg routes (smoking with NCH xp / time, cooking oil pan route as the fried egg).
@@ -428,7 +428,7 @@ with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate 
 9. **Food types, values, code effects.** `food_types.json` rows for 68 foods; `/dumpfood`, `food_catalog.py`, tune
    against the type bands (Mitey Meal 10 / 1.3 is above every `meal` median; Ghast Tentacle 0 / 1.0). Code effects
    (D10): the 33 items whose procedure only adds lasting effects get those effects as food properties and their
-   procedure cancelled by a patcherMod mixin; the 9 others keep their procedure (XP, endermite spawn, void damage, air,
+   procedure canceled by a patcherMod mixin; the 9 others keep their procedure (XP, endermite spawn, void damage, air,
    effect removal, Ghast Brew's heal applied once, B12), each with a pack tooltip line. Values then match AppleSkin, JEED and cans.
 10. **Food families.** `tools/food_families.py` rules so every Hostile food lands in a family (`--check` fails closed on
     unsorted): raw meats -> `meat/raw` or `hazard` (Ghast Tentacle, Raw Endermite, Rotten Ham, Frozen Flesh), cooked ->
@@ -460,7 +460,7 @@ before step 6 (recipes name the survivors).
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
-| D1 | Integrate now, or hold for an Unusual Delight port? | Integrate now, KubeJS + patcherMod only (AFL licence, no fork). An Unusual port later merges onto these items | integrate now |
+| D1 | Integrate now, or hold for an Unusual Delight port? | Integrate now, KubeJS + patcherMod only (AFL license, no fork). An Unusual port later merges onto these items | integrate now |
 | D2 | Which raw endermite item does an endermite drop? | One: End's `raw_ender_mite_meat` survives (knife drop, machete set, own tag), Hostile `rawendermite` merged into it; Hostile Cooked Endermite stays as its cooked form; Ender's `mite_crust` kept (knife, separate part). Decide together with `mod-additions #4` | End's survives, knife only |
 | D3 | Guardian meat | Ocean's whole `guardian` stays the drop; cutting board: guardian -> 3 Hostile fillets; Hostile's always-drop removed. Hostile Guardian Soup merged into Ocean's `guardian_soup` | as recommended |
 | D4 | Ghast tentacle rate | 0-2 + looting 0-1, no knife (ghasts are shot); tear and gunpowder back to vanilla | 0-2 + looting |
@@ -469,8 +469,8 @@ before step 6 (recipes name the survivors).
 | D7 | Trembling cookie spawns an endermite | Keep (it is the joke); it feeds the endermite line, 8 mites per pearl | keep |
 | D8 | Ender Substance 8 void damage | Keep as the cost of Resistance IV; JEI page and tooltip warn | keep |
 | D9 | Collapsing and the Gazing cookie | Collapsing: cancel the `setHealth` handler and leave the effect unsourced (hidden), or make it 3 magic damage per hit if a source is ever wanted. Gazing cookie: fill air (B5) | cancel handler; fill air |
-| D10 | Code-side effects | Food properties for the 33 plain-effect foods (procedures cancelled), code kept for the 9 others (food.md D4) | as recommended |
-| D11 | 69 literal flavour lines | Remove them (pack style, as Vinery's): needs a literal-text helper beside `removeTooltipKey`, or a patcherMod mixin cancelling Hostile's `appendHoverText` | remove |
+| D10 | Code-side effects | Food properties for the 33 plain-effect foods (procedures canceled), code kept for the 9 others (food.md D4) | as recommended |
+| D11 | 69 literal flavor lines | Remove them (pack style, as Vinery's): needs a literal-text helper beside `removeTooltipKey`, or a patcherMod mixin canceling Hostile's `appendHoverText` | remove |
 | D12 | Grid cookies, pies, brownies, bread vs the baking overhaul | Rebuild on the pack bases, oven only | rebuild |
 | D13 | Guardian Burger on a raw patty | The burger takes Cooked Guardian Fillet in place of the raw patty (a cooked patty would be a new item) | cooked fillet |
 | D14 | Prepared Sea Pickle (no use anywhere) | Fix the recipe and give it no use (scope rule), or remove the item through `removed_items.js` | fix, keep |
@@ -573,7 +573,7 @@ Notes, as rows:
 | HTD-18 | Eat Ender Substance at 20 health | 8 damage, Resistance IV 30 s |
 | HTD-19 | AppleSkin / JEED on Blazing Apple, Glow Wax Shuffle | the effects show (D10) |
 | HTD-20 | Eat Blazing Apple | Fire Resistance and Absorption apply once each (no double from procedure and properties) |
-| HTD-21 | Tooltips on 5 Hostile items | no flavour line (D11); effect lines present |
+| HTD-21 | Tooltips on 5 Hostile items | no flavor line (D11); effect lines present |
 | HTD-22 | Cookies in JEI | oven only, on cookie dough; no grid recipe |
 | HTD-23 | Rotten / Green Pie | oven on pie crust |
 | HTD-24 | Pearlsicle, Popsiclime | accept ice cubes and ice |

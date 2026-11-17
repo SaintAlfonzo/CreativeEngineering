@@ -87,9 +87,9 @@ recipes/cooking recheck, [recipes_cooking.md](../recipes_cooking.md) F2); the ov
   the gap back.
 
 ### Tests
-- **RP-09 Furnace variants:** JEI `minecraft:blast_furnace` and `minecraft:smoker` → the two Quark recipes each; craft a
+- **RP-09 Furnace variants:** JEI `minecraft:blast_furnace` and `minecraft:smoker` -> the two Quark recipes each; craft a
   blast furnace from a deepslate furnace.
-- **RP-10 Cake:** JEI `minecraft:cake` → FD milk bottle, Neapolitan, Create dough, oven baking.
+- **RP-10 Cake:** JEI `minecraft:cake` -> FD milk bottle, Neapolitan, Create dough, oven baking.
 - RP-05 stays as the umbrella check; RE-08 (dispenser) and RA-07 (compass) close the last two.
 
 ---
@@ -104,8 +104,8 @@ The removed-item scan costs one pass over the recipes instead of one per removed
 ### Now
 - [_lib/recipe_scan.js](../../kubejs/server_scripts/_lib/recipe_scan.js) lines 5-45: `ServerEvents.recipes` at
   `// priority: -10000`, guarded by `global.hasScannedRemovedItemRecipes` (set in `removed_items.js` line 6, so once per
-  game session, not per `/reload`). Lines 21-42: `global.removedItems.forEach` → `event.forEachRecipe({}, ...)` →
-  `recipe.json.toString()` → `indexOf(itemId)`. That is 309 passes in 1.0.9 (312 in the working tree), each serialising
+  game session, not per `/reload`). Lines 21-42: `global.removedItems.forEach` -> `event.forEachRecipe({}, ...)` ->
+  `recipe.json.toString()` -> `indexOf(itemId)`. That is 309 passes in 1.0.9 (312 in the working tree), each serializing
   every recipe again.
 - Measured cost: the pasted log in `startup_scripts/todo/recipes_to_remove.txt` runs from 20:33:15 (first hit) to
   20:33:39 ("Scan complete. 178 total recipe references found across 297 removed items"), so at least 24 s of the
@@ -161,8 +161,8 @@ No recipe ids. Log tags `[jeiRemove]`, `[recipe_scan]` stay, so existing greps k
   this row (see `dump_recipes.js` lines 7-16 for why the event is not a full snapshot). Don't move it.
 
 ### Tests
-- **RP-11 Scan speed:** first world load → `[recipe_scan] Scan complete. N ... in T ms`; note N and T next to the old
-  24 s; second `/reload` → "Skipping". Supersedes the timing part of RP-01.
+- **RP-11 Scan speed:** first world load -> `[recipe_scan] Scan complete. N ... in T ms`; note N and T next to the old
+  24 s; second `/reload` -> "Skipping". Supersedes the timing part of RP-01.
 - **RP-12 Scan hits:** `vintageimprovements:aluminum_sheet` is still listed with `vintageimprovements:pressing/aluminum_ingot`
   (until `recipes/metal #1` removes that recipe), proving exact matching still finds hits.
 
@@ -178,16 +178,16 @@ No dead recipe JSONs in the tree: each is ported to a load path or deleted.
 ### Now
 - `kubejs/recipes/` is not a KubeJS load path (datapack files load from `kubejs/data/<ns>/recipes/`).
 - `kubejs/recipes/food/bonemeal_broth.json`: FD cooking, bone meal + glow berries / mushrooms / hanging roots / glow
-  lichen → bone broth. Superseded: [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) lines 18-20 remove
+  lichen -> bone broth. Superseded: [cooking.js](../../kubejs/server_scripts/cooking/cooking.js) lines 18-20 remove
   `farmersdelight:cooking/bone_broth` and add `R.fdCooking([[i.bone, i.bonemeal], [...]], Item.of(i.bone_broth, 2), ...)`
   plus a shapeless version, which already accept bone meal.
-- `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json`: IE sawmill, `#minecraft:wooden_slabs` → 2 sticks,
-  `#minecraft:wooden_stairs` → 3 sticks, `#minecraft:wooden_doors` → 4 sticks, each + `#forge:dusts/wood`.
+- `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json`: IE sawmill, `#minecraft:wooden_slabs` -> 2 sticks,
+  `#minecraft:wooden_stairs` -> 3 sticks, `#minecraft:wooden_doors` -> 4 sticks, each + `#forge:dusts/wood`.
 - The pack's sawmill makes a door and a stair from **one** plank each (patcherMod
-  `data/creativeengineering/recipes/sawmill/oak_planks-oak_door.json`, `oak_planks-oak_stairs.json`: 1 plank → 1 + wood
+  `data/creativeengineering/recipes/sawmill/oak_planks-oak_door.json`, `oak_planks-oak_stairs.json`: 1 plank -> 1 + wood
   dust), and the Create saw does the same (`wood/wood_types.js` lines 23-33). Ported as written, the recycle files would
   turn 1 plank into 4 sticks + 2 sawdust (door) or 3 sticks + 2 sawdust (stairs), against 2 sticks by crafting.
-- The pack deliberately removed IE's own recycling (`immersiveengineering:sawmill/<wood>_door` and `_stairs` → 1
+- The pack deliberately removed IE's own recycling (`immersiveengineering:sawmill/<wood>_door` and `_stairs` -> 1
   plank, `wood_types.js` lines 40-44, verified in the IE jar), so recycling wood shapes is not part of the design today.
 - Live sawmill JSONs from KubeJS sit in `kubejs/data/creativeengineering/recipes/sawmill/` (2 files: layered obsidian,
   rose quartz).
@@ -196,13 +196,13 @@ No dead recipe JSONs in the tree: each is ported to a load path or deleted.
 Recommended (delete):
 1. Delete `kubejs/recipes/food/bonemeal_broth.json` and the three `kubejs/recipes/recycle/*.json`, then the empty
    `kubejs/recipes/` folder.
-2. Writeup: 2.3 rows say "deleted 20xx-xx-xx", F3 fixed, RP-06 struck or reworded ("oak slab in the IE sawmill → IE's
-   own planks → slab recipe only").
+2. Writeup: 2.3 rows say "deleted 20xx-xx-xx", F3 fixed, RP-06 struck or reworded ("oak slab in the IE sawmill -> IE's
+   own planks -> slab recipe only").
 
 If the decision is "port" instead:
 1. Write them as `kubejs/data/creativeengineering/recipes/sawmill/recycle_{door,stairs,slab}.json` (ids
-   `creativeengineering:sawmill/recycle_*`) with the counts matched to the pack's sawmill cost: door → 2 sticks, stairs
-   → 2 sticks, slab → 1 stick, each + `{"output":{"tag":"forge:dusts/wood"},"stripping":false}`. Keep `energy` 800.
+   `creativeengineering:sawmill/recycle_*`) with the counts matched to the pack's sawmill cost: door -> 2 sticks, stairs
+   -> 2 sticks, slab -> 1 stick, each + `{"output":{"tag":"forge:dusts/wood"},"stripping":false}`. Keep `energy` 800.
 2. Or wait for `engineering/sawmill-and-components #2` (an NCH helper writing raw sawmill JSON from
    `ServerEvents.highPriorityData`), which removes the reason these are hand-written files; `R.ieSawmill`
    ([neoCraftHelper.js](../../kubejs/startup_scripts/func/neoCraftHelper.js) lines 1813-1849) refuses secondaries today.
@@ -225,7 +225,7 @@ for `tooling/conventions #2`).
 
 ### Tests
 - **RP-13 Dead folder:** `kubejs/recipes/` is gone; `/reload` logs nothing about it; JEI bone broth shows the two
-  `cooking.js` recipes. (If ported: an oak door in the IE sawmill → 2 sticks + sawdust.)
+  `cooking.js` recipes. (If ported: an oak door in the IE sawmill -> 2 sticks + sawdust.)
 
 ---
 
@@ -239,7 +239,7 @@ for `tooling/conventions #2`).
 
 - [recipe_progression.md](../recipe_progression.md) F1: added the 2026-10-21 recheck (blast furnace and smoker still
   made by Quark's variant-furnace recipes, cake by FD / Create / the oven; only dispenser and Explorer's Compass left).
-- [recipe_progression.md](../recipe_progression.md) 2.1: "309 ids" → 309 in 1.0.9, 312 in the working tree (three
+- [recipe_progression.md](../recipe_progression.md) 2.1: "309 ids" -> 309 in 1.0.9, 312 in the working tree (three
   Creative Labels donors, 2026-10-20, unshipped).
 - [README.md](../README.md) recipe progression row: F1 list narrowed to the dispenser and Explorer's Compass.
 - [recipes_cooking.md](../recipes_cooking.md) at-a-glance row and F1: smoker still made by Quark's deepslate /

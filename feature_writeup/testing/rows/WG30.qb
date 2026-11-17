@@ -35,7 +35,7 @@ shell grep -aE '\[earth-fill\]' logs/latest.log | grep -iE 'village' | cut -c1-2
 expect \[earth-fill\].*village.*-> kept
 reject \[earth-fill\].*village.*(CANCELLED|too wet)
 look village lines whose footprint has water more than 1.5x ground are kept too (#9). Preset before the boot: scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`, density 4, seed 8675309
-## SQ-WG30-A02 **PARTIAL 2026-10-30**: 27 Campsite starts, 1 cancel (fisher at [124, -115], 208 over water, too wet), none for air; ST-199 not checkable: the weight strip changed the pick at [-7, -9] (now a circus tent, cancelled by mounds); a sampled sunk camp (butcher, 2138 102 -2426) sits flush; no 1.1.04-jar run to compare air counts
+## SQ-WG30-A02 **PARTIAL 2026-10-30**: 27 Campsite starts, 1 cancel (fisher at [124, -115], 208 over water, too wet), none for air; ST-199 not checkable: the weight strip changed the pick at [-7, -9] (now a circus tent, canceled by mounds); a sampled sunk camp (butcher, 2138 102 -2426) sits flush; no 1.1.04-jar run to compare air counts
 @group B
 @commands same run; the `[earth-fill]` lines of the 6 Campsite camps (sunk 4); then ST-199 (armorer campsite at chunk [-7, -9])
 @pass ST-199 passes; camp lines on slopes show more air than the same starts on the 1.1.04 jar; Campsite cancels rise by a few at most, each with a gap of 3 or more blocks under the camp (#10)
@@ -44,7 +44,7 @@ look village lines whose footprint has water more than 1.5x ground are kept too 
 ## SQ-WG30-A03 **PARTIAL 2026-10-30**: `minecraft:village_plains` [177, -93] logged at limit -1 and kept; the 31 `philipsruins:ancient_ruins` lines show limit 0 but none had earth over water or air, so the cancel path was not exercised; exempt ids not checked
 @group B
 @commands ST-54 at `log = "ALL"`: `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]` (village_savanna if no plains in the square)
-@pass the `-1,-1,-1` village is logged but never cancelled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing
+@pass the `-1,-1,-1` village is logged but never canceled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing
 @fails as A01
 @reviewed 2026-11-16
 > chunky world minecraft:overworld
@@ -178,7 +178,7 @@ look preset `[worldgen.debug] testOverrides = true` and a new world; the ACTIVE 
 @@text share check, so villages would never show a share cancel.
 @@text
 @@table
-## SQ-WG30-E01 **PASS 2026-10-30**: every line `surplus limit 0.0`; inland square 359 starts, 15 cancelled, 6 too wet (all share-only, ratios 1.76 to inf, none under 1.5); coast r 200: 143 starts, 0 too wet; no kept start with water > ground; the 470 / 425 village is not in this world (weight strip)
+## SQ-WG30-E01 **PASS 2026-10-30**: every line `surplus limit 0.0`; inland square 359 starts, 15 canceled, 6 too wet (all share-only, ratios 1.76 to inf, none under 1.5); coast r 200: 143 starts, 0 too wet; no kept start with water > ground; the 470 / 425 village is not in this world (weight strip)
 @group B
 @commands scratch toml `[worldgen.earth_fill] log = "ALL"`, no `overrides`; Chunky the square, then a coast square (r 200 at the spawn beach -80 -16); `grep '\[earth-fill\].*footprint' latest.log` and tabulate water / ground for kept and cancelled starts
 @pass every line shows `surplus limit 0.0`; every `too wet` line has water > ground, every kept start has water <= ground; on diag3's numbers expect about one more cancel (the 470 / 425 shore village); for each share-only cancel with a ratio under 1.5 teleport there: open water or a lake island = right, a shore with a pond = wrong

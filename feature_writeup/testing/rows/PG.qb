@@ -69,7 +69,7 @@ look the pg pair at x 1290-1310 z 1040 shows the same adjust values as the last 
 ## SQ-PG-02 | Portal Gun dye recipe: columns, mixing, kept NBT, no output for the bad grids
 @group A
 @commands #16 recipe: give `qa` a gun and dyes; craft in a crafting table (or `/ztp`-style grid fill) with: blue dye left of the gun; red dye right; lime dye under it; red and yellow both left; on a gun with a custom blue colour, white dye left; a gun renamed and damaged by `/data`; two guns + a dye; gun + dye + stick; gun alone
-@pass `CustomPortalColors.blue` set; `.orange` set; both set; the average (orange-ish), not either dye; a mix with the old colour, not pure white; name and other NBT kept; no output for the last three
+@pass `CustomPortalColors.blue` set; `.orange` set; both set; the average (orange-ish), not either dye; a mix with the old color, not pure white; name and other NBT kept; no output for the last three
 @fails `PortalGunDyeRecipe` (column rule or `mix`); missing output on every case: the recipe JSON did not load (`portal_gun_dye` in the log)
 @from batches/r1113/c3_a1.qb
 > zc3 craft G minecraft:blue_dye|portalgun:portal_gun|-|-|-|-|-|-|-
@@ -111,7 +111,7 @@ look red+yellow left: blue = an orange-ish average, not either dye; white on a g
 ## CQ-PG-04
 @group client
 @commands #16 in game: dye a gun both sides, shoot both portals; hover it; `/customportalcolors` set and clear; JEI uses of the Portal Gun
-@pass each portal drawn in its dyed colour; tooltip lists both colours; the command still overrides and clears; JEI shows 32 one-dye pages plus the both-sides and same-column pages
+@pass each portal drawn in its dyed color; tooltip lists both colors; the command still overrides and clears; JEI shows 32 one-dye pages plus the both-sides and same-column pages
 @fails JEI pages: `portalgun/PortalGunDyeJEI`
 @draft no batch holds this row yet
 ## CQ-PG-05

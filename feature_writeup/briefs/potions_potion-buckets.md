@@ -10,7 +10,7 @@ dispenser handler), [server_scripts/engineering/potion_buckets.js](../../kubejs/
 patcherMod `CE/potion/PotionBucketDispenser.java` (`CE/` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`).
 
 Jar facts checked 2026-10-21: KubeJS 1902.6.2 build 73 (`RecipeJS.replaceIngredient`, `IngredientActionFilter`,
-`ReplaceAction`); recipe scan of the 132 mod jars cached in the scratchpad (not all 407). Vanilla behaviour
+`ReplaceAction`); recipe scan of the 132 mod jars cached in the scratchpad (not all 407). Vanilla behavior
 (`ItemStack.getItem()` on an empty stack, dispensed potions' owner) is from memory and marked so.
 
 ## Scope and order
@@ -57,7 +57,7 @@ clouds.
   bucket.
 - F6: the dispenser path calls `global.potionArea.spawn(..., null)` (`potion_area.js` line 124), so dispensed clouds
   have no owner. From memory, vanilla dispensed splash / lingering potions also have no owner
-  (`ThrownPotion` built without one in the dispenser's projectile behaviour), so this matches vanilla.
+  (`ThrownPotion` built without one in the dispenser's projectile behavior), so this matches vanilla.
 
 ### Build
 1. One shared skip test, used by both loops: skip a potion when it has no effects.
@@ -108,12 +108,12 @@ clouds.
   each file wraps them in its own `ServerEvents.recipes` callback. Keep new names inside the callbacks.
 
 ### Tests
-- **PB-21 No noise:** JEI → Arrow of Awkward / Water Potion Bucket → no recipe; Potion of Swiftness bucket recipes
+- **PB-21 No noise:** JEI -> Arrow of Awkward / Water Potion Bucket -> no recipe; Potion of Swiftness bucket recipes
   still there; the load log counts drop.
 - **PB-22 No-effect bucket:** `/give @s creativeengineering:potion_bucket{Potion:"minecraft:awkward"}`, right-click a
-  block → nothing happens, bucket kept; a bucket with no NBT still bursts Night Vision.
+  block -> nothing happens, bucket kept; a bucket with no NBT still bursts Night Vision.
 - **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other within
-  a second → the second is on cooldown (white sweep on the slot).
+  a second -> the second is on cooldown (white sweep on the slot).
 
 ---
 
@@ -140,13 +140,13 @@ the pack's own bucket-fill recipes do.
     (That file also redefines `i.mundane_potion` at line 9, a duplicate of `item_dict.js` line 1363; CLAUDE.md
     one-definition rule.)
   - Archery dousing arrow (`archery.js` lines 255-257) uses a water bottle in a fletching table / IE blueprint;
-    whether those honour remainders is mod-specific (unverified).
+    whether those honor remainders is mod-specific (unverified).
   - Mod jars (scan of the 132 cached jars, `data/*/recipes`, crafting types only): PneumaticCraft `jet_boots_upgrade_4`,
     `jumping_upgrade_3`, `jumping_upgrade_4`, `night_vision_upgrade`. The other ~275 jars are unscanned.
 - **KubeJS fact (verified, decompiled):** `RecipeJS.replaceIngredient(IngredientActionFilter, ItemStack)` adds a
   `ReplaceAction` ingredient action: when the matching slot is used up, it leaves the given item. That **is** a
   per-recipe remainder. The comment in `NCH.shapeless` (`neoCraftHelper.js` lines 742-751) says the opposite; it is
-  wrong for this KubeJS build (and `dust.js` relies on the real behaviour). Filter forms: a number (slot index), an
+  wrong for this KubeJS build (and `dust.js` relies on the real behavior). Filter forms: a number (slot index), an
   item id / Ingredient, or `{item, index}`.
 
 ### Build
@@ -182,12 +182,12 @@ the pack's own bucket-fill recipes do.
 ### Gotchas
 - With the global remainder, a stack of potions in a Create basin auto-crafting leaves glass bottles in the basin
   output; fine, but basins can clog if nothing pulls them.
-- In game check to finish the audit: JEI → glass bottle / Potion → U, crafting tab, for every recipe that consumes a
+- In game check to finish the audit: JEI -> glass bottle / Potion -> U, crafting tab, for every recipe that consumes a
   potion; or `/kubejs dump` the recipe list and grep for `minecraft:potion` in `crafting_*` types.
 
 ### Tests
 - PB-17 (vanilla tipped arrow returns the bottle) stays the test for "keep".
-- **PB-24 PneumaticCraft upgrades:** craft a Night Vision Upgrade → a glass bottle is left in the grid (keep) / not
+- **PB-24 PneumaticCraft upgrades:** craft a Night Vision Upgrade -> a glass bottle is left in the grid (keep) / not
   (scope).
 
 ---
@@ -196,11 +196,11 @@ the pack's own bucket-fill recipes do.
 
 | Row | Status | Note |
 |---|---|---|
-| potion-buckets #1 Potion buckets and machine-tipped arrows | Testing | PB-01 to PB-20 never run. Two code findings to fold in before testing: (1) survival cooldown never applies: `server_scripts/engineering/potion_buckets.js` line 49 calls `addCooldown(stack.getItem(), 20)` after `stack.shrink(1)` emptied the unstackable bucket, and an empty stack's `getItem()` is air (vanilla, from memory), so PB-09 only passes in creative; (2) a bucket of a no-effect potion (awkward / thick / mundane / water) bursts Night Vision through `DEFAULT_EFFECTS`. Both fixed by #3 steps 2-3 above. potion_buckets.md file-map line for the dispenser registration was stale (265 → 290, fixed) |
+| potion-buckets #1 Potion buckets and machine-tipped arrows | Testing | PB-01 to PB-20 never run. Two code findings to fold in before testing: (1) survival cooldown never applies: `server_scripts/engineering/potion_buckets.js` line 49 calls `addCooldown(stack.getItem(), 20)` after `stack.shrink(1)` emptied the unstackable bucket, and an empty stack's `getItem()` is air (vanilla, from memory), so PB-09 only passes in creative; (2) a bucket of a no-effect potion (awkward / thick / mundane / water) bursts Night Vision through `DEFAULT_EFFECTS`. Both fixed by #3 steps 2-3 above. potion_buckets.md file-map line for the dispenser registration was stale (265 -> 290, fixed) |
 
 ## Writeup corrections made
 
-- [potion_buckets.md](../potion_buckets.md) section 5: `CreativeEngineering.java` line 265 → 290 (dispenser
+- [potion_buckets.md](../potion_buckets.md) section 5: `CreativeEngineering.java` line 265 -> 290 (dispenser
   registration).
 - [potion_buckets.md](../potion_buckets.md) Known limits: the 1 s cooldown line now says it probably only applies in
   creative (code reading, links here).

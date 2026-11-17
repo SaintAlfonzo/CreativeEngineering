@@ -6,7 +6,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=fc25cb1d69bd -->
+<!-- generated:status_index begin open_work sha1=24d5ccebfc20 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 13, In Progress 1, Testing 4), 1 Complete.
 
 | Id | Status | Tests | Change |
@@ -16,7 +16,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | `blocks/flower-pots #3` | Planned | S P | Remove Handcrafted flower pots from the flower pot world |
 | `blocks/flower-pots #4` | Planned | S C P | Framed pots accept flowers before framing |
 | `blocks/flower-pots #5` | Planned | S C P | Beautify hanging pot becomes lush hanging pot |
-| `blocks/flower-pots #7` | Planned | C | Vinery flower box centred on the ground |
+| `blocks/flower-pots #7` | Planned | C | Vinery flower box centered on the ground |
 | `blocks/flower-pots #8` | Planned | C | 'Can be placed on walls' tooltip on flower boxes |
 | `blocks/flower-pots #11` | Planned | S C P | Another Furniture flower boxes: missing plants |
 | `blocks/flower-pots #12` | Planned | S C P | Floral Enchantment large pot and Vinery flower box: missing models |
@@ -38,7 +38,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | Probe `/pottest` (`tools/flower_pot_test/pot_probe.js`, scratch-only) | BUILT 2026-10-27; SQ-POT-02 to -04 ran 2026-10-27 evening (427 probe mismatches, 6 probe exceptions: `minecraft:hanging_roots` in 6 holders; the F1 `ClassCastException` did not show) | read the mismatches (SQ-POT-05) |
 | Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | stale since the 3.2 tweaks (2026-10-31, 1.1.06 changed planter box, Vinery box / pot and silt pot lists): rerun `/dumppots`, `/pottest all`, the audit (deep scan 2026-11-02) |
 | Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (patcherMod 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
-| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centred on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
+| Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centered on floors) | BUILT 2026-10-31 (patcherMod 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
 | Bugs found (section 3) | F12 and F13 fixed 2026-11-03 (plan_scratch_bugfix_1103 2.4, 2.5; CD jar 19:43 and pack loot tables, not installed); F14 was a probe fault, not a bug; F1 struck (did not reproduce in r1102b) | rerun SQ-POT-03, -04, -04v; decisions D1 to D5 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
@@ -127,10 +127,10 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
   any item that is not pottable) on a full bench takes the plant back; breaking the bench drops it.
 - **Look:** `compat/BotanistPotClient` wraps every workbench state model at bake time. For the stored plant it takes
   the quads of the map's `potted_*` block model, drops those whose sprite is used by the empty `minecraft:flower_pot`
-  model (pot and dirt), scales them to 2/3 about the plant base (pot centre, y4) and moves that point onto the bench's
+  model (pot and dirt), scales them to 2/3 about the plant base (pot center, y4) and moves that point onto the bench's
   pot (x11.5 y15 z10.5 in the north model), then turns it with the bench's facing. Models come from the current bake
   and the quad cache dies with the wrapper, so resource-pack potted models show after F3+T. Tinted plants (fern,
-  grass) keep their colour: plant tint indices are moved up by 1000 and handed to the potted block's colour handler.
+  grass) keep their colour: plant tint indices are moved up by 1000 and handed to the potted block's color handler.
 - **Structures:** `mixin/StructureTemplateBotanistPotMixin` (on Forge's 6-argument `processBlockInfos`, like the loot
   swap) gives each template workbench without NBT a random flower: map keys in the `minecraft` namespace, in
   `#minecraft:flowers`, with a pot entry, not the wither rose. Benches in chunks generated before this change stay
@@ -163,9 +163,9 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
    item plus `#minecraft:tall_flowers`, never azalea; non-double plants are no longer forced to the upper half.
 6. **Vinery flower box** (port `-07`): state `wall` (default true, so placed boxes keep their look), false when placed
    on a floor: shape, model (`vinery:block/flower_box_centered`, built in memory by `UpstreamTranslator`) and plants
-   move 4.5 px forward to the centre of the block.
+   move 4.5 px forward to the center of the block.
 7. **Names, looks, tooltips.** Supplementaries' Flower Box is the Large Flower Box; Beautify's hanging pot is the Rich
-   Hanging Pot (`namechanges.js`), its soil repainted in Farmer's Delight rich soil colours on all 51 pot textures
+   Hanging Pot (`namechanges.js`), its soil repainted in Farmer's Delight rich soil colors on all 51 pot textures
    (`kubejs/assets/beautify/textures/blocks/`, generated from the 1.4.3 textures: the 6x6 soil patch at x0-5 y32-37),
    recipe rope / flower pot / rich soil (`other/flowers.js`; was rope over a flower pot), and WTHIT names it "Rich Pot"
    when it stands on the ground. "Can be placed on walls" on the Large Flower Box, the Vinery box (replacing Vinery's
@@ -223,7 +223,7 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
   `FramedFlowerPotUnframedMixin`, `SuppFlowerBoxPlantsMixin`, `SiltPotSoilMixin`, `AnotherFurniturePlanterRenderMixin`
   (client); models `assets/creativeengineering/models/block/flower_box/` (section 3.2)
 - backportedVinery `legacy/block/LegacyFlowerBoxBlock`, `LegacyFlowerPotBlock`, `legacy/client/PlantRenderer`,
-  `SupplementariesFlowerModels`, `forge/upstream/UpstreamTranslator` (centred box model)
+  `SupplementariesFlowerModels`, `forge/upstream/UpstreamTranslator` (centered box model)
 - [../kubejs/server_scripts/tags/misctags.js](../kubejs/server_scripts/tags/misctags.js) flower box tags;
   [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) Flower Pots;
   [../kubejs/client_scripts/namechanges.js](../kubejs/client_scripts/namechanges.js); Rich Hanging Pot recipe in
@@ -254,9 +254,9 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   unbroken table (header signs at z = -2, rows every 2 blocks along +z, no second section); the Supplementaries and
   Beautify hanging pots hang one block above the grass under glass; no Handcrafted pot column; no melon, pumpkin or
   moss rows, no Floral large pot column; the silt pot column is filled with rooted dirt and has plants on top; no
-  animals in the table; leave and rejoin → no rebuild message; a normal Superflat world gets no table.
-- [ ] **POT-10 framed pot before framing:** place a framed flower pot, click it with a poppy → the poppy goes in (no
-  "block not valid" message); then frame it with a block → frame applied, poppy stays; empty hand takes the poppy out.
+  animals in the table; leave and rejoin -> no rebuild message; a normal Superflat world gets no table.
+- [ ] **POT-10 framed pot before framing:** place a framed flower pot, click it with a poppy -> the poppy goes in (no
+  "block not valid" message); then frame it with a block -> frame applied, poppy stays; empty hand takes the poppy out.
 - [ ] **POT-11 planter box plants:** an oak planter box takes beetroot seeds, cactus, carrot, chorus flower, cocoa
   beans, crimson roots, dead bush, grass, lilac, nether wart, glow berries, glow lichen; each looks like the same plant
   in the Large Flower Box (no tiny seedling, no missing-model cube; lilac whole, not two halves); grass is green.
@@ -286,13 +286,13 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   (a wall placement for the pot) or remove.
 - [ ] **POT-16 silt pot as soil:** fill a silt pot with rooted dirt; wheat seeds, an oak sapling, sugar cane, cactus and
   a poppy each plant on top and stay after a block update; an unfilled silt pot takes none.
-- [ ] **POT-01 vanilla pot map:** with the matrix open, put 10 plants marked Y in a flower pot and 5 marked blank → Y ones
+- [ ] **POT-01 vanilla pot map:** with the matrix open, put 10 plants marked Y in a flower pot and 5 marked blank -> Y ones
   plant, blank ones do nothing.
 - [ ] **POT-02 framed and hanging pots:** the same 5 Y plants in a framed pot and a Supplementaries hanging pot (empty
-  pot clicked under a ceiling); break each → pot and plant drop.
+  pot clicked under a ceiling); break each -> pot and plant drop.
 - [ ] **POT-03 flower box:** a Botania mystical flower, a sapling and a sunflower in the 3 slots; empty hand takes one
   back; the sunflower shows both halves.
-- [ ] **POT-04 planter box:** 2 flowers; a truffle on it → nothing happens and latest.log has no `ClassCastException`
+- [ ] **POT-04 planter box:** 2 flowers; a truffle on it -> nothing happens and latest.log has no `ClassCastException`
   (fails until D6).
 - [ ] **POT-05 Beautify and Floral:** a rose bush in each; a modded flower in each is refused.
 - [ ] **POT-06 Vinery pot and box:** a Botania double flower and wild rice in the pot (client draws both, no crash);
@@ -300,7 +300,7 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-08 botanist workbench:** a poppy, an oak sapling, a fern and a Quark-potted lilac each go in (one at a
   time, empty hand takes each back); the plant sits in the bench's small pot at 2/3 size, turns with all four
   facings, the fern is green; a Botania mystical flower is refused and still places as a block against the bench;
-  break a filled bench → bench and plant drop; F3+T keeps the plant; a botanist house in new chunks has a flower in
+  break a filled bench -> bench and plant drop; F3+T keeps the plant; a botanist house in new chunks has a flower in
   its bench.
 - [ ] **POT-07 silt pot and planters:** rooted dirt into a silt pot, a Botania mystical flower on top; wheat, cactus,
   sugar cane and nether wart on a planter survive.

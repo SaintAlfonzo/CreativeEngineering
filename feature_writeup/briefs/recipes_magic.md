@@ -89,7 +89,7 @@ leave `i.explore_compass` for the dict-duplicate cleanup.
 ### Decisions
 - **Recipe or loot only.** Recommendation: the recipe above. Loot only would need a loot entry (none exists), and the
   structure-heavy pack is where the compass earns its place.
-- **Centre item.** Nature's Compass (recommended, reuses the terrasteel gate) or a magical component from #4 once it
+- **Center item.** Nature's Compass (recommended, reuses the terrasteel gate) or a magical component from #4 once it
   exists (swap `C` then).
 
 ### Gotchas
@@ -235,12 +235,12 @@ made from magic materials. They gate magic-side recipes the way the metal compon
      | terrasteel | terrasteel nugget (terrasteel is costly) | mana diamond |
      | celestite | celestite shard | manasteel component |
      | wrappist | wrappist shard | elementium component |
-   - sequenced assembly: centre as base, deploy 1 part, 3 loops (`R.createSequencedAssembly(..., ['component_<m>'],
+   - sequenced assembly: center as base, deploy 1 part, 3 loops (`R.createSequencedAssembly(..., ['component_<m>'],
      e, 'component_<m>_sequenced_assembly', 3)`), transition rows in transition_items.js.
-   - runic altar: 2 parts + centre + a rune at about 5000 mana -> 2 (the efficient magic route, as the blueprint is
+   - runic altar: 2 parts + center + a rune at about 5000 mana -> 2 (the efficient magic route, as the blueprint is
      for metals).
 4. **Uses** (pick per the decision): disenchanter and printer take an arcane component in place of one experience
-   block; Ender Storage pouch / chest / tank a manasteel component; Explorer's Compass centre (#1); the felsic or
+   block; Ender Storage pouch / chest / tank a manasteel component; Explorer's Compass center (#1); the felsic or
    dragon armor assemblies a warding component (that's #2's "armor uses").
 5. Docs: a new section in [recipes_magic.md](../recipes_magic.md) (2.5 "Magical components"), the RA tests.
 
@@ -288,7 +288,7 @@ Armor and potion uses for the Geode+ shards.
   with redstone / glowstone steps; [potions.md](../potions.md) 80-81, test PO-04. Magic Resistance still uses
   amethyst as a placeholder (potions.js 72, `potions/potions #4`).
 - **Armor:** Armor Trims 1.3.3 has no data-driven trim materials (only templates and loot modifiers in its jar). The
-  shards can't become trim colours without a mixin.
+  shards can't become trim colors without a mixin.
 
 ### Build
 1. Fold the armor half into #4: the two "warding" components (celestite, wrappist) go into armor recipes. Which armor

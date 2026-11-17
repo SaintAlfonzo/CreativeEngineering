@@ -235,7 +235,7 @@ reject verb=\S+ .*done=0
 ## CQ-CBP-02
 @group client (full pack)
 @commands JEI: Felsic Scrap, echo pickaxe / axe / shovel / hoe, air brake; hold each tier shield (copper to dragon) and block; a felsic and a dragon sequenced assembly page
-@pass sprites show (echo tools animated as before); shields render their tier pattern in hand and on block (entity textures now in the Equipment jar); incomplete items show grey sprites
+@pass sprites show (echo tools animated as before); shields render their tier pattern in hand and on block (entity textures now in the Equipment jar); incomplete items show gray sprites
 @fails asset paths in the Equipment jar (`assets/creativeengineering/textures/entity/shield/`, `textures/item/`)
 @reviewed 2026-11-16
 do {"wait": "jei"}

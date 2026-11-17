@@ -15,7 +15,7 @@ the same day: [roll_delight.md](../roll_delight.md), [large_meals.md](../large_m
 | Source | `devmods/toBackport/mineraldelight-2.9.jar` (file name 2.9, `mods.toml` version 1.0.0) |
 | Loader | Forge 1.20.1 only (`loaderVersion [47,)`, `minecraft [1.20.1]`); needs Farmer's Delight at runtime (FD `milk_bottle`, `onion`, `pumpkin_slice`, cooking pot and cutting board recipes) but does not declare it |
 | Mod id | `mineraldelight`; MCreator generated (`net.mcreator.mineraldelight`) |
-| Licence | **Academic Free License 3.0**: permissive, derivative works and redistribution allowed with attribution and the licence notice. Not the ARR donor-jar route that Miner's and Vinery needed |
+| License | **Academic Free License 3.0**: permissive, derivative works and redistribution allowed with attribution and the license notice. Not the ARR donor-jar route that Miner's and Vinery needed |
 | Content | 54 items (no blocks), 4 mob effects, 52 recipes, 1 brewing recipe (Java), 3 item tags, 1 advancement, `en_us` + `ko_kr` |
 | Theme | Joke food made from minerals: gems, ores, metals, stone, sand and glass eaten directly or cooked into sweets |
 
@@ -63,7 +63,7 @@ Amplifier III = level 3.
 
 ### 1.3 Effects (4, all beneficial)
 
-| Effect | Behaviour |
+| Effect | Behavior |
 |---|---|
 | Brilliance | +3 XP on every critical hit (CriticalHitEvent) |
 | Knowledge | +3 XP every time a shield blocks (ShieldBlockEvent) |
@@ -163,7 +163,7 @@ Content with no pack counterpart, which is the reason to port at all:
 ## 5. Integration work (if ported)
 
 Assumed route: a Creative Delight member under the `mineraldelight` namespace (CD routing rule: all food goes in CD
-trees), own GPLv3 code plus the AFL 3.0 notice for upstream art and lang. Licence allows shipping upstream textures directly.
+trees), own GPLv3 code plus the AFL 3.0 notice for upstream art and lang. License allows shipping upstream textures directly.
 
 | # | Pack system | Work |
 |---|---|---|
@@ -189,7 +189,7 @@ trees), own GPLv3 code plus the AFL 3.0 notice for upstream art and lang. Licenc
 2. Dusts: fold into the pack dusts as in I2, or keep Mineral's own powders as food-only ingredients?
 3. XP: keep XP food and the two XP effects, given Vinery's Experience already exists?
 4. Copper Carrot (Miner's) and Amethyst Apple / Carrot: one shared "mineral-coated" rule, or leave both?
-5. Century Egg: rename the amethyst one, or drop it in favour of Vintage's?
+5. Century Egg: rename the amethyst one, or drop it in favor of Vintage's?
 
 ## 7. History
 

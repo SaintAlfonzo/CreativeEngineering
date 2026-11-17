@@ -104,7 +104,7 @@ The ids keep Spice of Life's names so existing boxes and their contents carry ov
 
 Rendering: two item properties, `creativeengineering:lunchbox_skin` (position in `Lunchboxes.SKINS` + 1) and
 `creativeengineering:lunchbox_dyed`, drive the model overrides. Each look has a plain model (the drawn texture) and a
-dyed model: layer 0 is a greyscale copy of the base (tinted by the item colour handler), layer 1 the outline and
+dyed model: layer 0 is a greyscale copy of the base (tinted by the item color handler), layer 1 the outline and
 latches. `tools/gen_lunchbox_looks.py` writes those textures and every model from the source art.
 
 ## 4. Limits and decisions
@@ -157,28 +157,28 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 
 ## 7. In-game test suite
 
-- [ ] **LB-01 Names and looks:** JEI search "lunchbox" → Lunchbag (paper), Copper Lunchbox (copper), Iron Lunchbox
+- [ ] **LB-01 Names and looks:** JEI search "lunchbox" -> Lunchbag (paper), Copper Lunchbox (copper), Iron Lunchbox
   (iron), Netherite Lunchbox (netherite); open each: screen titles match, 5 / 9 / 14 / 18 slots, 18 = two rows of 9.
-- [ ] **LB-02 Tooltip:** hover each → `Food slots: 5` / `9` / `14` / `18` under the name.
-- [ ] **LB-03 Copper recipe:** 6 copper ingots + an empty Bundle → Copper Lunchbox. A Bundle holding items → no result.
-- [ ] **LB-04 Iron upgrade keeps food:** Copper Lunchbox with 3 foods + 6 iron ingots → Iron Lunchbox with the same 3
+- [ ] **LB-02 Tooltip:** hover each -> `Food slots: 5` / `9` / `14` / `18` under the name.
+- [ ] **LB-03 Copper recipe:** 6 copper ingots + an empty Bundle -> Copper Lunchbox. A Bundle holding items -> no result.
+- [ ] **LB-04 Iron upgrade keeps food:** Copper Lunchbox with 3 foods + 6 iron ingots -> Iron Lunchbox with the same 3
   foods in the same slots; rename the copper box first, the name stays.
 - [ ] **LB-05 Netherite upgrade:** smithing table, Iron Lunchbox (with food) in slot 0. Netherite Ingot without a
-  template → nothing; Netherite Upgrade template + ingot → Netherite Lunchbox, food kept, template used up.
-- [ ] **LB-06 Fire:** drop a Netherite Lunchbox in lava → it floats, not burnt. Iron Lunchbox → burns.
-- [ ] **LB-07 Skin, lower tier:** Iron Lunchbox in slot 0, empty Copper Lunchbox in slot 1 (no template) → Iron Lunchbox
-  with the copper look, still 14 slots, contents kept; the copper box is used up. Copper box with food in it → no
-  result. A Netherite Lunchbox as the skin on an Iron Lunchbox → no result.
-- [ ] **LB-08 Skin, basket:** Lunchbag + each berry basket → basket look in hand, inventory, dropped.
-- [ ] **LB-09 Dye:** Copper Lunchbox + red dye → red base, dark outline and gold latches unchanged; + blue dye again →
-  mixed color like leather armor; tooltip "Dyed". Basket-skinned box + dye → no result.
-- [ ] **LB-10 Dyed skin:** dye an Iron Lunchbox wearing the copper skin → copper-shaped box with dyed base.
-- [ ] **LB-11 Soap:** dyed and skinned box + Soap → dye gone, skin stays; + Soap again → own look; undyed unskinned box +
-  Soap → no result. Contents kept each time.
-- [ ] **LB-12 Seagulls:** stand on a beach with only lunchboxes (with food inside) and one Bread in the inventory →
-  gulls take the Bread, never a box. Drop a lunchbox near gulls → they ignore it (MT-26).
+  template -> nothing; Netherite Upgrade template + ingot -> Netherite Lunchbox, food kept, template used up.
+- [ ] **LB-06 Fire:** drop a Netherite Lunchbox in lava -> it floats, not burnt. Iron Lunchbox -> burns.
+- [ ] **LB-07 Skin, lower tier:** Iron Lunchbox in slot 0, empty Copper Lunchbox in slot 1 (no template) -> Iron Lunchbox
+  with the copper look, still 14 slots, contents kept; the copper box is used up. Copper box with food in it -> no
+  result. A Netherite Lunchbox as the skin on an Iron Lunchbox -> no result.
+- [ ] **LB-08 Skin, basket:** Lunchbag + each berry basket -> basket look in hand, inventory, dropped.
+- [ ] **LB-09 Dye:** Copper Lunchbox + red dye -> red base, dark outline and gold latches unchanged; + blue dye again ->
+  mixed color like leather armor; tooltip "Dyed". Basket-skinned box + dye -> no result.
+- [ ] **LB-10 Dyed skin:** dye an Iron Lunchbox wearing the copper skin -> copper-shaped box with dyed base.
+- [ ] **LB-11 Soap:** dyed and skinned box + Soap -> dye gone, skin stays; + Soap again -> own look; undyed unskinned box +
+  Soap -> no result. Contents kept each time.
+- [ ] **LB-12 Seagulls:** stand on a beach with only lunchboxes (with food inside) and one Bread in the inventory ->
+  gulls take the Bread, never a box. Drop a lunchbox near gulls -> they ignore it (MT-26).
 - [ ] **LB-14 Eaten food counts, not the box:** fill a Netherite Lunchbox with 3 foods never eaten, eat from it
-  3 times → the Spice of Life food book lists those 3 foods and never a lunchbox; diversity rises each time; a
+  3 times -> the Spice of Life food book lists those 3 foods and never a lunchbox; diversity rises each time; a
   seasoned food eaten from the box gives its seasoning bonus; a bowl food returns the bowl to the inventory.
 - [ ] **LB-15 Food only:** a pumpkin pie, an apple pie and a stick are refused by the screen and by a script insert
   through the item handler; cooked beef goes in both ways (SQ-PS15-13).

@@ -134,12 +134,12 @@ the rest were read row by row. Batch sections ("Queue", "Run log", "Deep scan", 
 | SQ-PS15 | Lunchboxes (101) | salt dust layers | move to Salt (62) |
 | SQ-GF31 | Time system (114) | sawmill, dispenser gap fill | drop |
 | CQ-BBQ2 | Names (120) | seasoning names (BBQ-34) | move to Large Meals/Roll/BBQ changes (80) |
-| CQ-NEW | Client capture (137) | Xaero time line, moss colour | drop |
+| CQ-NEW | Client capture (137) | Xaero time line, moss color | drop |
 | SQ-MB | Wood recipes (178) | monster box vaults | move to Mob and block tweaks (141) |
 | SQ-PSU | Cooking recipes (179) | pre-scratch UI/gear mixins | drop |
 | all 49 | Rules violation fix plan (183) | rows the plan renames or cites, none its own (nothing built) | drop all |
 
-Unclear, left in place for the owner: CQ-TX and CQ-LCA on Kitchen (41) (texture fixes on crops; licence compartment
+Unclear, left in place for the owner: CQ-TX and CQ-LCA on Kitchen (41) (texture fixes on crops; license compartment
 art); SQ-KS on Creative Delight (49) (KubeJS scripts in a datapack, closer to Pack tooling); SQ-PST on Time system (114)
 (grass seasons, arguably Creative Calendar 52).
 

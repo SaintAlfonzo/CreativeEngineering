@@ -158,7 +158,7 @@ look all ten edge-middle reads crying obsidian (corners stay obsidian: the conve
 @group A
 @commands #18 Dark Fire in a valid 4x5 frame (Overworld), then in an L-shaped frame, then in the Nether; `/data get entity @e[type=imm_ptl_core:nether_portal_new,limit=2,sort=nearest]`; walk `qa` through
 @pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-PRT-01)
-@fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behaviour)
+@fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behavior)
 @from batches/r1113/c3_a1.qb
 @reviewed 2026-11-16
 > fill 1200 -60 1020 1203 -56 1020 minecraft:obsidian
@@ -430,7 +430,7 @@ look portals: 4 at the start (qa + pg), 4 after 12 s at 120 blocks, 2 after 12 s
 ## CQ-PRT-02
 @group client
 @commands #20 opaque gun portals: default, look through a pair; set `[portalgun] opaquePortals = true`; look again, walk through, dye one side red
-@pass default: see-through; on: a solid disc in each portal's colour, no view through, walking through still teleports, the red side shows red
+@pass default: see-through; on: a solid disc in each portal's color, no view through, walking through still teleports, the red side shows red
 @fails the disc is the gun's own filled texture: a soft edge is expected
 @draft no batch holds this row yet
 ## CQ-PRT-03

@@ -64,7 +64,7 @@ mulberry jam's eat-return), tests RC-176 to RC-179. Left: steps 2 and 3 (panes, 
 2. Mason jar from panes: in CD `vintagedelight/recipes.js`, `R.remove({ id: 'vintagedelight:mason_jar' }, e)` then
    `R.shaped(Item.of(i.empty_mason_jar, 3), [' s ', 'p p', 'ppp'], { s: <wooden slab tag key>, p: <glass pane tag key> }, e, 'mason_jar')`
    (add dict keys if missing). New empty jar texture: port resource, needs a port build.
-3. Colour per fruit: per-jam textures in the repack, or a tint layer; the jar blocks need per-jam models (the port has one
+3. Color per fruit: per-jam textures in the repack, or a tint layer; the jar blocks need per-jam models (the port has one
    model set per jam). Resource-pack and port work.
 
 ### Decisions

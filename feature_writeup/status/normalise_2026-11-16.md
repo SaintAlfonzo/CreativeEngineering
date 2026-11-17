@@ -1,4 +1,4 @@
-# TODO status normalisation, 2026-11-16
+# TODO status normalization, 2026-11-16
 
 One-time pass by `tools/status_normalise_todo.py` (plan_process_overhaul.md P1.4 item 3). Mapping: "Built" to
 Testing (In Progress when the old text says FAIL or "not built"); "Installed ..." and "Tested" to Testing; "Done" /

@@ -85,7 +85,7 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
 ### Open decision carried by trees #1 (not a build task yet)
 - **F6, diagonal-only leaves fall at placement** ([mob_block_tweaks.md](../mob_block_tweaks.md) 4, F6, with the
   options listed there): 189 leaves on 29 tree features are touched only diagonally and decay right after worldgen
-  because `TreeFeature`'s edge shape updates count as a neighbour change. Recommendation: play MT-17 (big trees in new
+  because `TreeFeature`'s edge shape updates count as a neighbor change. Recommendation: play MT-17 (big trees in new
   chunks) first. Only if the bare corners show in game, pick one of F6's options and file it as a new `trees` row.
 
 ## Writeup corrections made

@@ -49,14 +49,14 @@ Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Del
 | New jar | Baseline in pack | Gap / note |
 |---|---|---|
 | FarmersDelight-1.20.1-1.3.4 | FarmersDelight-1.19.2-1.2.4 | **evaluated 2026-10-25**, [farmers_delight.md](farmers_delight.md), `mod-additions #18`: mostly 1.20 porting; Comfort kept on the 10 soups (decided); salvaging at 75%, Gleaming Salad, rope fence, onion and pumpkin loot, rich soil changes **built 2026-10-25** in the FD repack `-02` (Creative Delight member, not installed); Onion Soup open |
-| rusticdelight-forge-1.20.1-1.7.0 | 1.19.2-1.3.0 | **evaluated 2026-10-25**, [rustic_delight.md](rustic_delight.md), `mod-additions #19`: about 100 new items (6 pepper colours, slices, rolls, medleys, pancake rework, syrup, coffee and fried foods), no id removed; ARR, so new items need a donor-jar backport or own art; small recipe carry-overs proposed |
+| rusticdelight-forge-1.20.1-1.7.0 | 1.19.2-1.3.0 | **evaluated 2026-10-25**, [rustic_delight.md](rustic_delight.md), `mod-additions #19`: about 100 new items (6 pepper colors, slices, rolls, medleys, pancake rework, syrup, coffee and fried foods), no id removed; ARR, so new items need a donor-jar backport or own art; small recipe carry-overs proposed |
 | fruitsdelight-1.1.3 | 0.5.11 | **evaluated 2026-10-25**, [fruits_delight.md](fruits_delight.md), `mod-additions #20`: a 1.20 port, no new content; placed Mangosteen Cake effect bug to fix, Fig Pudding any egg, `forge:jams` and crate tags to carry over |
 | displaydelight-1.7.0 | 1.2.0 | **ported 2026-10-25** (`development/backportedDisplay`, installed, not deployed), [display_delight.md](display_delight.md), `mod-additions #22`: 101 new display blocks, 95 for foods the pack has; links by block name; axe hides plates, take-all, silk-touch items; no trader sales; blocks for 8 missing mods left out |
 | Delightful-1.20.1-3.8.1 | 3.4.1 | **evaluated 2026-10-25**, [delightful.md](delightful.md), `mod-additions #23`: about 18 new items would be on here (cantaloupe and cactus lines, baklava, milkshakes, mulberry pie), the rest need absent mods; 25 food value changes; jam jar turns off beside Fruits Delight; MIT |
 | farmersrespite-1.20.1-2.1.2 | 2.0 | **evaluated 2026-10-25**, [farmers_respite.md](farmers_respite.md), `mod-additions #21`: no new item; fluid Kettle rewrite (not ported as is, parts go to `food/drinks #7`); potted Wild Tea Bush fix and death-message lang fix proposed |
 | corn_delight-1.2.11-1.20.1 | 1.0.3 | **evaluated 2026-10-25**, [corn_delight.md](corn_delight.md), `mod-additions #24`: Corncob (replaces straw from corn), Corn Popsicle, Cob Pipe (head / Curios cosmetic); village corn farms and farmer trades (code); straw from knife-harvested corn; Comfort -> Nourishment on 3 foods (kept Comfort); MIT |
 | moredelight-26.05.20-1.20 | 25.07.28 (1.19) | **evaluated 2026-10-25**, [more_delight.md](more_delight.md), `mod-additions #25`: no new item; rewrite onto DelightLib; knives move to vanilla Wood / Stone tiers (installed ones are overtuned), toasts eat fast, Carrot Soup Comfort -> Nourishment (skip); MIT |
-| storagedelight-26.10.05-26.3 (NeoForge) | 25.12.09 (1.19) | **evaluated 2026-10-25**, [storage_delight.md](storage_delight.md), `mod-additions #33`: 94 new blocks, no new block type or behaviour; 64 fit the pack (Blackstone / Diorite / Stone Bricks / Tuff countertops on the 9 woods, bamboo on Quark, cherry on Vinery's dark cherry), pale oak and poplar have no wood; needs Java (rebuilt jar or patcherMod); MIT |
+| storagedelight-26.10.05-26.3 (NeoForge) | 25.12.09 (1.19) | **evaluated 2026-10-25**, [storage_delight.md](storage_delight.md), `mod-additions #33`: 94 new blocks, no new block type or behavior; 64 fit the pack (Blackstone / Diorite / Stone Bricks / Tuff countertops on the 9 woods, bamboo on Quark, cherry on Vinery's dark cherry), pale oak and poplar have no wood; needs Java (rebuilt jar or patcherMod); MIT |
 | abnormals_delight-1.21.1-6.0.3 | 1.19.2-4.1.2 | **evaluated 2026-10-25**, [abnormals_delight.md](abnormals_delight.md), `mod-additions #26`: 9 new items (8 copper knives, Plum Cabinet) all need Caverns and Chasms or Environmental (not installed); food values unchanged; Boatload and Upgrade Aquatic salvaging to fold into the FD salvaging carry-over; Adzuki Curry craft and slice XP small carry-overs |
 | FarmersStructures-1.0.6 (1.21.1 NeoForge) | 1.0.0 | **evaluated 2026-10-25**, [farmers_structures.md](farmers_structures.md), `mod-additions #27`: data only; cod pond for the carp pond (installed one spawns fishless), 5 new Overworld structures, cook house pools 33 -> 78 templates, 5 dimension-only structures skipped; 83 of 91 templates are 1.21 saves, so `port_structure_jars.py` needs an item / entity downgrade first; ARR |
 | VeggiesDelight-1.20.1-1.9.3 and 1.21.1-1.9.3 | port `backportedVeggies` from 1.9.2 | **evaluated 2026-10-25**, [veggies_delight.md](veggies_delight.md) 2.7, `ports/veggiesport #3`: mostly FD 1.3 follow-ups; carry the carrot cake cut face; Comfort -> Nourishment on 9 foods waits for the FD survey |
@@ -65,7 +65,7 @@ Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Del
 | endersdelight-1.1.4 (1.20.1) | endersdelight-1.19-1.2.2 | **evaluated 2026-10-25**, [ends_delight.md](ends_delight.md) 3.1 and 3.2, `mod-additions #28`: 4 End plants, 5 dishes, Crushed Void Pepper, End House; food values unchanged; wooden-bowl variants gone (pack removes them already); 12 retextures; **1.1.4 declares MIT** while installed 1.2.2 is ARR (route question for Creative Delight); still in `createiveDelight/` |
 | oceanic_delight-1.0.4 (1.20.1) | 1.0.1 | currently in `createiveDelight/` |
 | oceansdelight-neoforge-1.0.4 (1.21.1) | 1.0.2 | currently in `createiveDelight/` |
-| nethersdelight-1.20.1-4.0 | NethersDelight-1.19-3.1 | already surveyed in [nethers_delight.md](nethers_delight.md); execution plan documented 2026-10-25 (section 4, not built); Fungus Colony found to be a behaviour change |
+| nethersdelight-1.20.1-4.0 | NethersDelight-1.19-3.1 | already surveyed in [nethers_delight.md](nethers_delight.md); execution plan documented 2026-10-25 (section 4, not built); Fungus Colony found to be a behavior change |
 
 ### createiveDelight (members of the Creative Delight merge, [creative_delight.md](creative_delight.md))
 
@@ -147,13 +147,13 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | Placeable Pumpkin Pie + slice | content | first "skip (pack already has them)", then owner asked to compare | BUILT: third pie `farmersdelight:pumpkin_pie` with `placeAs` switch (FARMERSDELIGHT / DELIGHTFUL / CREATE_CENTRAL_KITCHEN / OFF). Pick one after SQ-FDB-05, then merge or remove the other slices |
 | Feedback lines | lang | owner | BUILT: rice shallow water line, skillet underwater (mixin); the rest were key renames |
 | Onion Soup | content | evaluate adding | **OPEN**; overlaps Creamy Onion Soup and the Onion Soup cup |
-| Bamboo / cherry cabinets, hanging canvas signs, bamboo basket, torchflower, smithing template, tag generalisation, tool-action matching, worldgen as data, new tags, 55 retextured items | 1.20 / format | skip | the 55 retextures are a still-open row (writeup 2.4); preview page not kept |
+| Bamboo / cherry cabinets, hanging canvas signs, bamboo basket, torchflower, smithing template, tag generalization, tool-action matching, worldgen as data, new tags, 55 retextured items | 1.20 / format | skip | the 55 retextures are a still-open row (writeup 2.4); preview page not kept |
 
 ### Rustic Delight 1.3.0 -> 1.7.0 ([rustic_delight.md](rustic_delight.md), `mod-additions #19`)
 
 | Change | Class | Decision |
 |---|---|---|
-| Six more pepper colours (Pale and Dark crops), slices, roasted slices, rolls, 9 stuffed peppers, 3 medley feasts, Rice Roll Royale, giant pepper blocks and jungle patch | content (code: crops, feasts) | proposed: owner picks delivery A / B / C (writeup 3) |
+| Six more pepper colors (Pale and Dark crops), slices, roasted slices, rolls, 9 stuffed peppers, 3 medley feasts, Rice Roll Royale, giant pepper blocks and jungle patch | content (code: crops, feasts) | proposed: owner picks delivery A / B / C (writeup 3) |
 | Pancakes: stacks hand out Pancake items, stack to 12; plain, Pumpkin, Coffee pancakes | code | only with a backport (B) |
 | Syrup line, coffee cookie / cheesecake / pancakes, Pumpkin and Syrup Coffee, Fried Dough, Fried Dumplings, Calamari Soup | content | proposed: B or own art (C) |
 | Fried Fish; cherry blossom foods | content | skip (Fish Tempura chain; no cherry blocks in 1.19.2) |
@@ -229,7 +229,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | Knives on vanilla Wood / Stone tiers, attack speed 2.0 (installed Stone Knife beats Flint, mines faster than Iron) | value change | proposed: carry over with `tuneTools` |
 | Toast and its 5 toppings eat fast | value change | owner's call (needs a `fast` option in `food_values.js`) |
 | Carrot Soup Comfort -> Nourishment | value change | skip (FD decision) |
-| Create cutting moved to the right folder; bowl containers named; `forge:sliced_potato` tag rename | data | skip (Slice and Dice covers bread; same pot behaviour; merge uses the old tag) |
+| Create cutting moved to the right folder; bowl containers named; `forge:sliced_potato` tag rename | data | skip (Slice and Dice covers bread; same pot behavior; merge uses the old tag) |
 | Brewin' cheese recipes for Casualness-only items | data | skip; a Cheese Toast is the owner's call |
 
 ### Storage Delight 25.12.09 -> 26.10.05 ([storage_delight.md](storage_delight.md), `mod-additions #33`)
@@ -275,7 +275,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | Chorus Crate and End Stone Stove loot tables; mining tags | data | decided in 3.1: add self drops (they drop nothing today) |
 | JEI info for the 3 knife drops; Shulker Bowl lang fix | data / lang | decided in 3.1 |
 | 12 retextures (Stuffed Shulker bowl item now a Shulker Bowl) | art | proposed: carry over the Stuffed Shulker one; rest owner's call |
-| Licence: 1.1.4 MIT, 1.2.2 ARR | licence | owner's call: possible MIT route for Creative Delight, confirm co-author status upstream first |
+| Licence: 1.1.4 MIT, 1.2.2 ARR | license | owner's call: possible MIT route for Creative Delight, confirm co-author status upstream first |
 | Wooden-bowl variants removed; 13 food definitions unchanged; Uncanny Cookies recipe (kept); 1.20 damage types, empty mixin config | removal / code-only | skip |
 
 ### End's Delight 2.1 -> 2.6.1 ([ends_delight.md](ends_delight.md) 3.1 and 3.3, `mod-additions #29`)
@@ -289,7 +289,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | `forge:storage_blocks/chorus_fruit` on the chorus crate | data | decided in 3.1: tag both crates |
 | Respite brewing of the 3 teas removed; the pot recipes were already in 2.1, unchanged | data | 3.1 stands (Respite keeps them); pricier pot recipes are a change to live recipes |
 | Dragon Tooth Knife repair Bone Block -> Dragon Tooth; Dragon Tooth and Egg Shell knives faster, higher enchantability, Dragon Tooth harvest level 2 -> 3 | value change (Java tier) | proposed: carry the repair fix; tier values to `gear #12` |
-| Dragon Breath and Chorus Soup no longer clears a debuff (tooltip still says it does) | behaviour | skip: keep 2.1 |
+| Dragon Breath and Chorus Soup no longer clears a debuff (tooltip still says it does) | behavior | skip: keep 2.1 |
 | 13 retextures (shulker meats, sausages, dragon legs, omelette, stir-fry, wine, 2 feast details) | art | owner's call (MIT) |
 | Food values, stack sizes, remainders, config; stove on FD 1.3 base class; 1.20 model parent, damage type, tooltip key renames | none / code-only | skip |
 
@@ -300,7 +300,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
   (drop `group`, `category`, `show_notification`, pool names; unwrap `forge:conditional`) and read food values from the
   `FoodValues` bytecode (`javap -c -p -constants`, effects via the lambda bodies).
 - Enum-heavy classes (registrate mods like Fruits Delight) read better decompiled: `java -jar
-  ~/.cache/ce-tools/vineflower-1.10.1.jar -only=<package path> OLD.jar out/` for both jars, normalise repackaged library
+  ~/.cache/ce-tools/vineflower-1.10.1.jar -only=<package path> OLD.jar out/` for both jars, normalize repackaged library
   names, then `diff -u -w`.
 
 ## 4. Notes

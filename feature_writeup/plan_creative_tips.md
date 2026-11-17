@@ -12,7 +12,7 @@
 | `ui/loadingtips #5` | Testing | C | Tip ids, override packs, tips on every loading screen |
 <!-- generated:status_index end open_work -->
 
-Owner request 2026-11-06: more loading screen tips about the pack's own behaviours, as a large multistep job
+Owner request 2026-11-06: more loading screen tips about the pack's own behaviors, as a large multistep job
 documented here. Step 1: scan item tooltips, WTHIT lines and JEI info pages and draft tips from what the UI already
 documents. TODO row: `ui/loadingtips #3`. Since 2026-11-14 Loading Tips is the unmodified upstream list and every
 change to it (the audit and owner edits below) lives in Creative Tips as `remove` entries and same-id replacements
@@ -26,7 +26,7 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
 
 | # | Step | Status | Output |
 |---|---|---|---|
-| 1 | Harvest: scan item tooltips, WTHIT providers, JEI info pages; one draft tip per behaviour | DONE 2026-11-06 | section 4 |
+| 1 | Harvest: scan item tooltips, WTHIT providers, JEI info pages; one draft tip per behavior | DONE 2026-11-06 | section 4 |
 | 2 | Owner review: mark each draft keep / edit / drop, decide the open questions in section 3 | In progress (first pass 2026-11-07) | `Verdict` column in section 4 |
 | 3 | Fact check every kept draft against code, config and dumps (tooltips can be stale since the 2026-11-04 split) | Open | `Checked` column |
 | 4 | Gap harvest: features in `feature_writeup/` and the changelogs with no UI text (seasons, worldgen, mob spawns, loot, structures, Create/IE changes) | Open | section 5 |
@@ -43,7 +43,7 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
   structures, dimensions, mod names, control keys (Shift, Sprint) and quoted UI labels keep their capitals.
   Applied to every tip in Loading Tips and Creative Tips and to section 4.
 - **Concise and informative** (owner, 2026-11-14). Every tip tells the player something they can use: a mechanic, a
-  rule, a number, a recipe. No trivia, flavour, jokes, history or tips that only name a thing ("The Wither is a
+  rule, a number, a recipe. No trivia, flavor, jokes, history or tips that only name a thing ("The Wither is a
   powerful boss", "Dragon heads look cool on walls").
 - **The full picture of one feature** (owner, 2026-11-14). A tip covers its feature whole: the counter cases, the
   sister cases and the limits that go with it ("Ice melts near bright light, but packed and blue ice never do", not
@@ -103,7 +103,7 @@ Scan notes:
   bone meal is not limited ([crops.md](crops.md) 2.12.1). Drafts CT-041 to CT-043 are worded for that.
 - Every KubeJS JEI info page and every Creative Delight member page shows only while the `jeiInfoPages` QoL switch
   is on.
-- Left out: pure readouts (food values, material stats, sawblade value, slot and serving numbers alone), flavour
+- Left out: pure readouts (food values, material stats, sawblade value, slot and serving numbers alone), flavor
   text, renames, WTHIT icon and name fixes, the coaster "(put away)" suffix.
 
 ### 4.1 Pack changes (PACK)
@@ -272,12 +272,12 @@ Scan notes:
 | CT-165 | Elytra | Craft an elytra with dyes or a banner to style it; the wings can be split and styled one at a time | T | `ka/creativeequipment/kubejs/tooltips.js:32-34` |  |  |  |
 | CT-167 | Enchanting | Books on a shelf boost enchanting: four books, or three enchanted books, count as one bookshelf | T | `kubejs/client_scripts/tooltips.js:296-297` |  |  |  |
 | CT-168 | Enchanting | An end crystal on a pedestal near an enchanting table adds 3 enchanting power | T | `ka/creativecompat/kubejs/tooltips.js:175` |  |  |  |
-| CT-169 | Enchanting | Craft enchanted gear with a rune to change the colour of its glint | T | `ka/creativecompat/kubejs/tooltips.js:97,115` |  |  |  |
+| CT-169 | Enchanting | Craft enchanted gear with a rune to change the color of its glint | T | `ka/creativecompat/kubejs/tooltips.js:97,115` |  |  |  |
 | CT-170 | Music | Make your own music discs at the etching table from blank discs and music labels | T | `kubejs/client_scripts/tooltips.js:397-405` |  |  |  |
 | CT-171 | Music | An album cover holds nine discs, and an album jukebox plays them in order | T | `kubejs/client_scripts/tooltips.js:400-409` |  |  |  |
 | CT-172 | Music | A boombox plays its disc while you carry it; hold it and people near you hear it too | T | `kubejs/client_scripts/tooltips.js:394-396` |  |  |  |
 | CT-173 | Exposure | Right-click a camera with a lens, film or filter to swap it in | T | `exposure/lang/en_us.json:286-289` |  |  |  |
-| CT-174 | Exposure | Print red, green and blue layers on a chromatic sheet for a full-colour photo | T | `exposure/lang/en_us.json:294-296` |  |  |  |
+| CT-174 | Exposure | Print red, green and blue layers on a chromatic sheet for a full-color photo | T | `exposure/lang/en_us.json:294-296` |  |  |  |
 | CT-175 | Exposure | Retro films and camera filters give Game Boy, NES or pencil-sketch photos | T | `exposure_expanded/lang/en_us.json:3-77` |  |  |  |
 | CT-176 | Exposure | Photograph frames come in three sizes, go on floors and ceilings, and glow with a glow ink sac | J | `ExposureJeiPlugin.java:68` |  |  |  |
 | CT-177 | Gunpowder | Lay gunpowder as a fuse trail; it also makes TNT go off sooner | T | `kubejs/client_scripts/tooltips.js:295` |  |  |  |

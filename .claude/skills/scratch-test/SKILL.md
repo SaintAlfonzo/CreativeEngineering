@@ -39,7 +39,7 @@ date", "collect queued tests".
 
 1. **Now or queue.** For each feature you changed, give the user 2 to 4 lines: "test now" (can break boot: mixin,
    registry, startup script, worldgen registry; hard to debug without this session's context; others depend on it;
-   tiny and isolated) or "queue" (plain behaviour check; covered by a headless harness; fits a world group already
+   tiny and isolated) or "queue" (plain behavior check; covered by a headless harness; fits a world group already
    queued; debuggable from the writeup). The user decides; silence = queue.
 2. **Where.** Rows are data (plan_process_overhaul.md P2.1): a new `@@section` in
    `feature_writeup/testing/rows/<CODE>.qb` (a new file for a new code; key = the file's highest + 1). Fields:
@@ -84,7 +84,7 @@ everything below is the default unless the prompt says otherwise.
    `tools/`).
 2. **No gameplay changes to make a row pass.** A temporary change for a test (config value, scratch datapack, srv-only
    script) lives in the scratch `srv/` only, or is reverted before the run ends. A real bug fix that changes
-   behaviour is a finding: report it and add a TODO row; fix it only if the user said to.
+   behavior is a finding: report it and add a TODO row; fix it only if the user said to.
 3. **Unclear next step**: do what the latest run doc that did the same kind of step did (run docs in
    `feature_writeup/testing/`, newest first), and note the choice.
 4. **Perf capture on** for every bulk run: `perf_session.sh start <run id>` before the first boot, JFR on (never
@@ -167,7 +167,7 @@ everything below is the default unless the prompt says otherwise.
   in-process, tick-exact, no focus or typing loss; shots go to `test_captures/judgement/` for the owner); `--xdotool`
   forces the old window mode (`eval_client.py setup/launch`, `sp_world.py`, xdotool hand steps, `RES/shots/`).
   `serve --drop GLOB` / `--config FILE:SECTION:KEY=VALUE` change the client per launch; `--display xvfb` is
-  experimental (TX-07), only for blocks that cannot run on the real window, never colour rows.
+  experimental (TX-07), only for blocks that cannot run on the real window, never color rows.
 - Client + own server: `qrun.py pair OUT GAME BATCH RES [--drop ...] [--config ...]` (`srv>` / `cli>` lines) and
   `qrun.py matrix SPEC RES [--plan]` (specs in `feature_writeup/testing/matrix_specs/`; outcomes JOINED / REFUSED /
   CRASH-* / HANG, a join is held 30 s, `hold_secs`, so a crash after joining is not a PASS). Refusal regexes are the
@@ -193,7 +193,7 @@ fills LOOKs; a row with shots gets PASS / FAIL only from the owner (`--by owner`
 1. Queue: one Run log entry at the top of "Run log" (run id, worlds, seed, perf session, jars, counts, link to the run
    doc); update the header's "Latest" pointer; results stay out of the rows.
 2. Feature writeups: results into each test list; README status "built, scratch server PASSED" where all rows passed.
-3. FAILs and found bugs: TODO rows (family table) with the test ID; fixes that change behaviour wait for the owner.
+3. FAILs and found bugs: TODO rows (family table) with the test ID; fixes that change behavior wait for the owner.
 4. New gotchas: add them to [gotchas.md](gotchas.md) under their topic (not memory).
 5. `perf_session.sh stop` and `report` (no server up while it parses); perf summary path in the Run log entry.
 

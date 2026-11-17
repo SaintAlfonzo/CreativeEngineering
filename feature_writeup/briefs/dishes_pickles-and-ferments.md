@@ -105,7 +105,7 @@ take this tag today.
 
 ### Decisions
 - Which mushrooms: recommend brown, red, the Fungi Delight mushrooms and crimson / warped fungus ("crushed fungus" in row 6);
-  leave Botania's coloured mushrooms out (they are Botania's flower ingredients).
+  leave Botania's colored mushrooms out (they are Botania's flower ingredients).
 - Which machines: recommend what `foodGrinding` gives (crushing wheels, millstone, mortar); skip the IE crusher.
 
 ### Tests

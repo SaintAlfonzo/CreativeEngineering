@@ -46,7 +46,7 @@ or how much it hurts. Supplementaries' spiky bomb has its own shrapnel; this is 
 
 ### 2.2 The burst
 
-- `count` pieces from the explosion centre, evenly spaced around the full circle with a little random jitter (a ring
+- `count` pieces from the explosion center, evenly spaced around the full circle with a little random jitter (a ring
   even at low counts), each at a random pitch within ±`verticalAngle` and a speed of `speed` ± `speedVariance`.
 - Each piece flies straight (no gravity) until it has gone `maxDistance` blocks, hits a block (it just stops: no block
   damage, no sticking), or hits a living thing: `damage` as a thrown-projectile hit (armor applies; a raised shield
@@ -104,19 +104,19 @@ None.
 
 Use a flat test area, armor off, a few zombies or armor stands around.
 
-- [ ] **TN-01 Burst:** light TNT with flint and steel → a ring of iron-nugget fragments flies out roughly level and
+- [ ] **TN-01 Burst:** light TNT with flint and steel -> a ring of iron-nugget fragments flies out roughly level and
   stops at about 12 blocks.
 - [ ] **TN-02 Damage:** zombies 6-10 blocks away (outside the blast) take about 3 damage per hit.
-- [ ] **TN-03 Owner immune (F1):** stand 8 blocks away from TNT you lit → no shrapnel damage; stand at the same spot when
-  a redstone-lit TNT goes off → you're hit.
-- [ ] **TN-04 Shield:** raise an iron shield facing the TNT → shrapnel blocked (shield sound), 60 % of each hit gets through (iron: physical 40 %).
-- [ ] **TN-05 Minecart:** a TNT minecart over an activator rail → burst.
-- [ ] **TN-06 Burning TNT item:** throw a TNT item into fire → a small explosion, no block damage, and a burst.
-- [ ] **TN-07 Not creepers:** a creeper explodes → no shrapnel.
-- [ ] **TN-08 Config:** `count = 64`, `maxDistance = 30`, `item = "minecraft:flint"` → a denser, longer burst of flint;
-  `enabled = false` → none. Put them back.
-- [ ] **TN-09 Blocks:** shrapnel hitting glass and leaves → nothing broken.
-- [ ] **TN-10 Chain (F2):** a 5 × 5 × 2 block of TNT → note any lag spike.
+- [ ] **TN-03 Owner immune (F1):** stand 8 blocks away from TNT you lit -> no shrapnel damage; stand at the same spot when
+  a redstone-lit TNT goes off -> you're hit.
+- [ ] **TN-04 Shield:** raise an iron shield facing the TNT -> shrapnel blocked (shield sound), 60 % of each hit gets through (iron: physical 40 %).
+- [ ] **TN-05 Minecart:** a TNT minecart over an activator rail -> burst.
+- [ ] **TN-06 Burning TNT item:** throw a TNT item into fire -> a small explosion, no block damage, and a burst.
+- [ ] **TN-07 Not creepers:** a creeper explodes -> no shrapnel.
+- [ ] **TN-08 Config:** `count = 64`, `maxDistance = 30`, `item = "minecraft:flint"` -> a denser, longer burst of flint;
+  `enabled = false` -> none. Put them back.
+- [ ] **TN-09 Blocks:** shrapnel hitting glass and leaves -> nothing broken.
+- [ ] **TN-10 Chain (F2):** a 5 × 5 × 2 block of TNT -> note any lag spike.
 
 ## 8. History
 

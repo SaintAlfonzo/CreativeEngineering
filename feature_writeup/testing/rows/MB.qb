@@ -104,10 +104,10 @@ expect Test passed
 look if the drill did not turn (motor facing wrong), set facing=east on the motor and rerun the row
 > fill 21 -60 -20 22 -60 -20 minecraft:air
 
-## SQ-MB-07 | vaultMode off: box breaks after spawning (Quark behaviour)
+## SQ-MB-07 | vaultMode off: box breaks after spawning (Quark behavior)
 @group A
 @commands `[monster_box] vaultMode = false`, boot, repeat SQ-MB-02
-@pass box breaks after spawning (Quark behaviour)
+@pass box breaks after spawning (Quark behavior)
 @fails off switch
 @from batches/r1031/a2_variants.qb passed
 > setblock 20 -60 -24 quark:monster_box

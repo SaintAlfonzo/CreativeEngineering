@@ -54,7 +54,7 @@ Distant Horizons' LOD builder threads took 34.9% of all CPU samples during the p
 
 ## 3. Findings (no bugs)
 
-- **Structure starts are rebuilt about 16 times per chunk** (up to 23). This is the placement-priority neighbour
+- **Structure starts are rebuilt about 16 times per chunk** (up to 23). This is the placement-priority neighbor
   pass and the meta predictions, which M7 also saw as doubled earth-fill lines. The repeats are almost free (the
   whole stage is 6.4%), but every rebuild also reruns the earth-fill terrain prediction, about 4% of worldgen CPU.
 - **twigs' obelisk `canGenerate`** costs 3.1% of worldgen CPU by itself. The obelisk is in `group/nether_ruins`;

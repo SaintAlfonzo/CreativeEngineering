@@ -30,7 +30,7 @@ Result lines are inline in [structure_tuning.md](../../structure_tuning.md) sect
   Region files were read for starts, piece boxes, junctions, heightmaps and entities. `/locate` was used to make
   the server build rare starts (mansion, pond, fisherman house) and to check answers.
 - **Duplicate lines:** each chunk logs twice, minutes apart, with identical numbers. The placement-priority
-  neighbour pass rebuilds its starts. That re-check also runs earth fill again, which costs time but isn't wrong.
+  neighbor pass rebuilds its starts. That re-check also runs earth fill again, which costs time but isn't wrong.
 
 ## 2. Results
 
@@ -42,7 +42,7 @@ Result lines are inline in [structure_tuning.md](../../structure_tuning.md) sect
 | ST-162 | PASSED | `/locate` built 4 mansion starts (3 dropped by peaceful radius, 1 answered at 2560 -5504): no `[earth-fill] minecraft:mansion` line |
 | ST-167 | FAILED as shipped; PASSED with the tag fix | `earth_fill/prune` is empty, so nothing is ever pruned (3.2). Patched: village cancels 4 -> 2 in the same square; the probes are clean |
 | ST-168 | PASSED (with the tag fix) | 4 pruned lines, all villages; both pruned villages `/locate` at their own chunk |
-| ST-169 | PASSED | `prune = false`: 0 pruned lines; the same two villages log CANCELLED with the same numbers as the unpatched run |
+| ST-169 | PASSED | `prune = false`: 0 pruned lines; the same two villages log CANCELED with the same numbers as the unpatched run |
 | ST-67 | PASSED | Circus tent [-144, -228]: 784 earth with trim off, 520 with it on; the difference is the 264 pad blocks |
 | ST-53 | PASSED, one clause wrong | At zero, every start with any gap cancels and none without one. "The slot stays empty" holds only for one-structure sets (2.3) |
 | ST-54 | PASSED | `-1,-1,-1` (savanna villages; the square had no plains) never cancels; `0,0,0` ancient ruins cancel at 3 and 7 air; exempt ids never log |
@@ -55,7 +55,7 @@ Result lines are inline in [structure_tuning.md](../../structure_tuning.md) sect
 Starts judged once each (`st_c2`). **Underground** = Subterrestrial cabins, Terralith's `underground/*`, Philip's
 ancient dungeons, the ancient city and YUNG's dungeons.
 
-| Size (limits air / mound) | Starts (underground) | Cancelled | Earth median / p90 / max | Air after beard p90 / max | Mound p90 / max | Over water, nonzero |
+| Size (limits air / mound) | Starts (underground) | Canceled | Earth median / p90 / max | Air after beard p90 / max | Mound p90 / max | Over water, nonzero |
 |---|---|---|---|---|---|---|
 | small (24 / 8) | 1833 (1617) | 160, of which 141 underground | 64 / 100 / 146 | 0 / 94 | 2 / 94 | 104 starts, max 72 |
 | medium (64 / 24) | 276 (178) | 22, 10 underground | 186 / 302 / 584 | 25 / 174 | 7 / 170 | 2, max 50 |
@@ -71,9 +71,9 @@ ancient dungeons, the ancient city and YUNG's dungeons.
 - **Underground starts dominate** the small size. Ocean cabins cancel 95 of 181: their fixed height lands in open
   sea water. The kept ones sit under shallow sea floors. That is a correct cancel. Ancient dungeons cancel 35 of
   807, jungle cabins 11 of 157.
-- **Drum tower:** with its stone base counted (1.0.7), it is the only `huge` start and is cancelled at 1366 air.
-  It is the same structure as the M2 open item (cancelled 4 of 5 on slopes).
-- **Unpatched (as shipped):** pruning never runs. Large: 14 starts, 5 cancelled (35%), against 1 with the tag fix.
+- **Drum tower:** with its stone base counted (1.0.7), it is the only `huge` start and is canceled at 1366 air.
+  It is the same structure as the M2 open item (canceled 4 of 5 on slopes).
+- **Unpatched (as shipped):** pruning never runs. Large: 14 starts, 5 canceled (35%), against 1 with the tag fix.
 
 ### 2.2 ST-160: villages that log `small`
 
@@ -87,7 +87,7 @@ village in the square, so that part wasn't seen.
 
 ### 2.3 ST-53: "the slot stays empty"
 
-In a set with several structures (all groups, and vanilla's own multi-structure sets), a cancelled start lets the
+In a set with several structures (all groups, and vanilla's own multi-structure sets), a canceled start lets the
 set try its next member. That is vanilla's selection loop. Seen at zero:
 - `subterrestrial:jungle_cabin` -> `deepslate_cabin`
 - `village_taiga`, a Terralith fortified village and T&T's Swedish village -> T&T `village_old_growth_taiga`
@@ -144,8 +144,8 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 
   | Village | Prune off | Prune on |
   |---|---|---|
-  | `village_taiga` [-81, -181] | CANCELLED | 5 of 124 pieces dropped (a shepherd's house over 78 air / 58 mound), kept |
-  | `village_savanna` [-142, -130] | CANCELLED | 8 of 171 dropped (houses over 27-58 water), kept |
+  | `village_taiga` [-81, -181] | CANCELED | 5 of 124 pieces dropped (a shepherd's house over 78 air / 58 mound), kept |
+  | `village_savanna` [-142, -130] | CANCELED | 8 of 171 dropped (houses over 27-58 water), kept |
 
   - In the same square, plain and anchor village cancels went 4 -> 2.
   - Pruned starts: 119 and 163 pieces. No kept junction points at a missing piece (the street ends there).
@@ -160,7 +160,7 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 
 - **What happens:** pruning lowers a start's earth count, which can move it down a size class.
 - **Example:** `village_savanna` [-165, -68] lost its pet shop (102 air), dropping from 695 to 583 earth. That is
-  large -> medium, so 64 / 24 limits replaced 160 / 64. It was then cancelled on 40 mound columns, which the large
+  large -> medium, so 64 / 24 limits replaced 160 / 64. It was then canceled on 40 mound columns, which the large
   limit would have allowed.
 - **Fix idea:** take the size from the start before pruning.
 
@@ -194,7 +194,7 @@ The instance's `config/` and `kubejs/` are unchanged.
 2. **3.2:** pick fix (a) or (b) for the prune tag. With it in, ST-167 and ST-168 pass as tested here.
 3. **3.3:** decide whether the size should come from the unpruned start.
 4. **ST-52 / ST-57 limits:** the numbers are in 2.1 and 2.4. Defaults cancel about 8-12% of surface starts, nearly
-   all on real cliffs or water. Nothing here argues for a change except the drum tower (huge, 1 of 1 cancelled; the
+   all on real cliffs or water. Nothing here argues for a change except the drum tower (huge, 1 of 1 canceled; the
    M2 item).
 5. **Test text (done 2026-10-19 in structure_tuning.md):** ST-53's "the slot stays empty" should read "the set's next member may take the slot". ST-160's
    "villages medium or large" should allow small villages.

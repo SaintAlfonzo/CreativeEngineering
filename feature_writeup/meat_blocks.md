@@ -1,6 +1,6 @@
 # Meat blocks: lone red blocks in structure templates
 
-Written by `python3 tools/meat_block_scan.py`. Do not edit. Every red block (`red_glazed_terracotta`, `red_terracotta`, `red_wool`, `red_concrete`, `red_concrete_powder`, `pink_glazed_terracotta`, `red_mushroom_block`, `nether_wart_block`, `redstone_block`) in the templates of live Overworld structures. **Lone** = no neighbour of the same block. **Marked**: lone `red_glazed_terracotta` in a settlement-family structure (village, house, camp, fort, pillager) or a food-named template, to become `architects_palette:salmon_log[axis=y]` (marks in `kubejs/generation_scripts/worldgen/meat_block_swaps.json`). **Review**: every other lone red block.
+Written by `python3 tools/meat_block_scan.py`. Do not edit. Every red block (`red_glazed_terracotta`, `red_terracotta`, `red_wool`, `red_concrete`, `red_concrete_powder`, `pink_glazed_terracotta`, `red_mushroom_block`, `nether_wart_block`, `redstone_block`) in the templates of live Overworld structures. **Lone** = no neighbor of the same block. **Marked**: lone `red_glazed_terracotta` in a settlement-family structure (village, house, camp, fort, pillager) or a food-named template, to become `architects_palette:salmon_log[axis=y]` (marks in `kubejs/generation_scripts/worldgen/meat_block_swaps.json`). **Review**: every other lone red block.
 
 ## Red blocks overall
 

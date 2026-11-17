@@ -71,7 +71,7 @@ New: `creativeengineering:{wooden,iron,diamond,netherite}_scythe`. Existing: tag
 
 ### Decisions
 - Areas per tier (row: "areas per tier vs the hoe_harvest tags"): **the row's 3 / 5 / 7 / 9** (each two sizes above
-  the same tier's hoe, odd so it centres). Copper / gold / end-gear scythes: not now.
+  the same tier's hoe, odd so it centers). Copper / gold / end-gear scythes: not now.
 - KubeJS item in `#forge:tools/hoes` instead of a Java class: **no**. It needs no Java, but every `i.any_hoe` recipe
   slot (FD salvaging, `farmersdelight/recipes.js` 64-74) would take it, and other mods treat that tag as tilling hoes.
 - Durability: **1 per harvest click** (a 9x9 netherite scythe lasts 2031 clicks); Quark's own setting stays off for hoes.

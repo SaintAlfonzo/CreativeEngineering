@@ -258,7 +258,7 @@ Row ranges of the mixed files:
 | `server_scripts/tags/equipmenttags.js` | 88 | Equipment | gear tags | - ; top: i, shaft, t | item, tags | tags; NCH 0, tags 11; no wrapper | yes |
 | `server_scripts/tags/feature_port_tags.js` | 18 | Compat | ported mod tags | - | item, tags | tags; NCH 0, tags 2; no wrapper | yes |
 | `server_scripts/tags/fluidtags.js` | 116 | Engineering | fluid category tags | - | fluid, tags | tags; NCH 0, tags 1; no wrapper | yes |
-| `server_scripts/tags/item_physics_tags.js` | 400 | Compat | ItemPhysic behaviour tags | - ; top: COLORS, COPPER, PHYSICS_TAG, physicsFromTag | item, tags | tags; NCH 0, tags 3; no wrapper | no |
+| `server_scripts/tags/item_physics_tags.js` | 400 | Compat | ItemPhysic behavior tags | - ; top: COLORS, COPPER, PHYSICS_TAG, physicsFromTag | item, tags | tags; NCH 0, tags 3; no wrapper | no |
 | `server_scripts/tags/jei_order_tags.js` | 7 | Common | JEI order tags from global.jeiOrder | - | jeiOrder | tags; NCH 0, tags 0; no wrapper | no |
 | `server_scripts/tags/loottags.js` | 49 | Worldgen | loot meta tags | - ; top: b, i, t | blocks, item, tags | tags; NCH 0, tags 1; no wrapper | yes |
 | `server_scripts/tags/metaltags.js` | 102 | Engineering | metal part tags, springs, coil and component families | - | item, tags | tags; NCH 0, tags 1; no wrapper | no |
@@ -346,8 +346,8 @@ Row ranges of the mixed files:
   - 334-340: CD (lunchbox tier names)
   - 341-349: Engineering (painted asphalt names)
 - `client_scripts/tooltips.js`:
-  - 1-91: Common (helpers addTooltips/removeTooltips, colours)
-  - 92-389: Common (global, colour, material information)
+  - 1-91: Common (helpers addTooltips/removeTooltips, colors)
+  - 92-389: Common (global, color, material information)
   - 390-489: Common (tools, crafting materials, blocks, decor, IE, Create, transport: third-party data)
   - 490-515: CD (food and Farmer's Delight lines)
   - 516-521: Equipment (archery (commented out))

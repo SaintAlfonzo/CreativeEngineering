@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/PNE.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title CQ-PNE Nether Distant Horizons, season colour answers, log filter, 2026-11-07 ([perf.md](../perf.md) section 19; Compat + Calendar built, not installed)
+@@title CQ-PNE Nether Distant Horizons, season color answers, log filter, 2026-11-07 ([perf.md](../perf.md) section 19; Compat + Calendar built, not installed)
 @@date 2026-11-07
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
@@ -65,6 +65,6 @@ look the printed lines show the mixins applied and the overrides registered (no 
 ## CQ-PNE-09
 @group client
 @commands Nether: walk crimson forest, warped forest, soul sand valley, basalt deltas, wastes; then step into lava, drink a Blindness potion; look into the Nether through an Immersive Portals portal from the overworld
-@pass the same deep red fog and sky colour (#3F0905) in every biome, DH far fog the same red; lava and Blindness keep vanilla's fog; the portal view shows red fog
-@fails event not reaching vanilla clear colour, or another mod overriding after LOW
+@pass the same deep red fog and sky color (#3F0905) in every biome, DH far fog the same red; lava and Blindness keep vanilla's fog; the portal view shows red fog
+@fails event not reaching vanilla clear color, or another mod overriding after LOW
 @draft no batch holds this row yet

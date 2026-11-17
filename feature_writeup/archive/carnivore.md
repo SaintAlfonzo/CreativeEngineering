@@ -5,8 +5,8 @@
 
 Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Carnivore part; the Barbeque's Delight
 report is its batch sibling). **Nothing is built.** Jar: `devmods/toBackport/carnivore-1.5.0.jar` (Forge 1.20.1).
-Licence **All Rights Reserved**, so a port is needed and it takes the donor-jar route (upstream jar unmodified, our own
-code written from behaviour). Short name in this file: Carnivore. Test prefix: `CRN-`.
+License **All Rights Reserved**, so a port is needed and it takes the donor-jar route (upstream jar unmodified, our own
+code written from behavior). Short name in this file: Carnivore. Test prefix: `CRN-`.
 
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
 asks for it by name. Upstream bugs are fixed.
@@ -28,7 +28,7 @@ asks for it by name. Upstream bugs are fixed.
   prefixed `PMF`). `loaderVersion [47,)`, `minecraft [1.20.1,1.21)`. Decompiled to `DecompiledMods/carnivore-1.5.0/`.
 - **Licence:** `license="All Rights Reserved"` in `mods.toml`. Route as for Miner's Delight (memory
   `miners-delight-backport-plan`, skill `port` step 2): donor jar kept unmodified in `carnivore_upstream/`, our code
-  written from the behaviour described here, never translated from the decompile, no upstream files shipped in our jar.
+  written from the behavior described here, never translated from the decompile, no upstream files shipped in our jar.
 - **Dependencies:** declares only Forge and Minecraft. Uses Farmer's Delight without declaring it (cutting board and
   cooking pot recipe types, knife ids) and Alex's Mobs entity ids as plain strings (no hard dependency). Inside Creative
   Delight both are present.

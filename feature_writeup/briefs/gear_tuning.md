@@ -128,7 +128,7 @@ Java field names are what `R.cfg` reads (`mb`, `reachMb`), toml keys are labels 
 - Player-visible only if a default changes; with today's defaults no changelog bullet (dev-only config split).
 
 ### Tests
-- GR-31: `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` → log line `CRAFTING.FELSIC_HELMET.reachMb
+- GR-31: `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` -> log line `CRAFTING.FELSIC_HELMET.reachMb
   overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
 
 ---
@@ -149,7 +149,7 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
 | Path | Recipes | Keeps |
 |---|---|---|
 | Create sequenced assembly | echo / felsic / dragon gear and shields, air brake, dragon anvil ([end_gear.js](../../kubejs/server_scripts/equipment/end_gear.js)) | the 6 keys above only |
-| Vanilla smithing (`UpgradeRecipe.assemble` copies the base's whole tag) | diamond → netherite gear, shield ladder ([shield.js](../../kubejs/server_scripts/equipment/shield.js) 27+), camera bags, Iron Fishing Rods smithing route, DragonLoot `upgraded_dragon_chestplate` (dragon chestplate + elytra, generated in code by `RecipeGenerator`) | everything, Damage too |
+| Vanilla smithing (`UpgradeRecipe.assemble` copies the base's whole tag) | diamond -> netherite gear, shield ladder ([shield.js](../../kubejs/server_scripts/equipment/shield.js) 27+), camera bags, Iron Fishing Rods smithing route, DragonLoot `upgraded_dragon_chestplate` (dragon chestplate + elytra, generated in code by `RecipeGenerator`) | everything, Damage too |
 | Armor Trims' smithing menu (`SmithingMenuNew.createResult`) | same smithing recipes, template in slot 1 | delegates to `UpgradeRecipe.assemble` (verified), so everything |
 | Crafting grid | Iron Fishing Rods `*_fishing_rod_recipe` (rod + 2 ingots, shaped), PneumaticCraft `pneumatic_*` (`crafting_shaped_pressurizable`, output from template, only air summed; verified), PNC `compressed_iron_*` from leather armor (vanilla shaped) | nothing |
 | Create Goggles backtanks / goggle helmets | `creategoggles:crafting_nbt` | everything (by design) |
@@ -179,7 +179,7 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
 
 ### Decisions
 - D1: carry damage over: **no** for assembly (an upgrade is a new piece; full durability is a small reward and keeps
-  the 2501 → 3350 jumps clean). Smithing already carries it; leave vanilla alone.
+  the 2501 -> 3350 jumps clean). Smithing already carries it; leave vanilla alone.
 - D2: whitelist vs carry everything except `SequencedAssembly` / `CEStash` / `Damage`: **whitelist** (other
   assemblies with NBT inputs exist, e.g. potion fluids are fluids but filled items are not; a blacklist would start
   firing on non-gear recipes).
@@ -194,11 +194,11 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
 - Changelog bullet: upgrades keep trims, rune glint and banners (Gear family).
 
 ### Tests
-- GR-33: trim a netherite chestplate (Armor Trims), run it to echo → trim kept (`/data get entity @s SelectedItem`
+- GR-33: trim a netherite chestplate (Armor Trims), run it to echo -> trim kept (`/data get entity @s SelectedItem`
   shows `trim`).
-- GR-34: rune a netherite sword (Quark), echo assembly → glint kept.
-- SH-27 (update): bannered netherite shield → echo assembly → banner kept.
-- GR-35: enchanted iron fishing rod in the grid → gold rod keeps the enchantments (after #13).
+- GR-34: rune a netherite sword (Quark), echo assembly -> glint kept.
+- SH-27 (update): bannered netherite shield -> echo assembly -> banner kept.
+- GR-35: enchanted iron fishing rod in the grid -> gold rod keeps the enchantments (after #13).
 
 ---
 
@@ -212,7 +212,7 @@ The four specials sit on the ladder like the rest of the dragon gear.
 
 | Item | Durability | Damage | Ench. | Rarity | Fireproof |
 |---|---|---|---|---|---|
-| `dragonloot:dragon_bow` (`DragonBowItem extends BowItem`) | 3350 (67 x 50) | arrow base damage x1.25 + 1 (vanilla 2.0 → 3.5) | 1 (BowItem) | common | yes |
+| `dragonloot:dragon_bow` (`DragonBowItem extends BowItem`) | 3350 (67 x 50) | arrow base damage x1.25 + 1 (vanilla 2.0 -> 3.5) | 1 (BowItem) | common | yes |
 | `dragonloot:dragon_crossbow` (`extends CrossbowItem`) | 3350 | vanilla crossbow | 1 | common | yes |
 | `dragonloot:dragon_trident` (`DragonTridentItem`) | 3350 | melee vanilla 8 + 1.2 (tooltip ~10.2), thrown flat 8 (`DragonTridentEntity`) | 1 | common | yes |
 | `dragonloot:dragon_horse_armor` (`HorseArmorItem(18, "dragon", ...)`) | none | protection 18 | n/a | common | yes |
@@ -254,8 +254,8 @@ armor is assembled from **diamond** horse armor (end_gear.js 131), skipping neth
   `durability` on the ranged items shows in game before trusting it.
 
 ### Tests
-- GR-36: hover the three ranged items and the horse armor → purple name. Enchanting table at 30 levels with the dragon
-  bow (if D1) → enchants comparable to the dragon sword.
+- GR-36: hover the three ranged items and the horse armor -> purple name. Enchanting table at 30 levels with the dragon
+  bow (if D1) -> enchants comparable to the dragon sword.
 
 ---
 
@@ -274,7 +274,7 @@ Close F6, F8 and the F11 tag question (F9 is done).
   drop all three from the tag (the tag then means "repairs itself"). `/reload`.
 - **F8 air brake echo** (`AirBrakeHandler.java` 140-143): the handler runs on both sides and sets
   `player.hurtMarked = true` every braking tick. On the server that makes `ServerEntity` send the player their own
-  motion packet every tick (vanilla behaviour, from memory), which can fight client prediction. Fix: only set it when
+  motion packet every tick (vanilla behavior, from memory), which can fight client prediction. Fix: only set it when
   the server stalls the player (`stopFallFlying`), or drop the line; the client computes the same velocity itself and
   other players see position updates. Watch GR-24 first; if no stutter, leave it.
 - **F11 Alex's Mobs elytra:** the only one in Alex's Mobs 1.21.1 is `alexsmobs:tarantula_hawk_elytra`
@@ -377,7 +377,7 @@ Pneumatic armor is made through PneumaticCraft machines, not a plain grid, and k
   `pneumaticcraft:crafting_shaped_pressurizable`, `CPC / CAC / CCC` with air canisters, a printed circuit board and
   the steel piece; drops the steel piece's NBT (see #4).
 - PNC is barely edited in the pack ([pneumatic.js](../../kubejs/data/creativeengineering/kubejs/engineering/pneumatic.js): compressed
-  iron → steel swap). NCH has `pcPressureChamber` (2341), `pcExplosionCrafting` (2362), `pcThermoPlant` (2381); no
+  iron -> steel swap). NCH has `pcPressureChamber` (2341), `pcExplosionCrafting` (2362), `pcThermoPlant` (2381); no
   PNC assembly-line or amadron helper.
 
 ### Build (a sketch; D1 picks)
@@ -397,7 +397,7 @@ Pneumatic armor is made through PneumaticCraft machines, not a plain grid, and k
 
 ### Gotchas
 - Pneumatic armor starts empty of air when not made through the pressurizable recipe (the pressurizable type sums
-  canister air into the output). Fine for a chamber recipe (the chamber is already pressurised), but say so in a
+  canister air into the output). Fine for a chamber recipe (the chamber is already pressurized), but say so in a
   tooltip or JEI note.
 
 ### Tests
@@ -440,7 +440,7 @@ Shears take Fortune at the table and the anvil, and the level does something.
   Leaves and other shear-only block drops stay as they are (they drop the block itself).
 
 ### Tests
-- GR-39 (this brief's proposal): enchanting table and anvil offer Fortune on shears; Fortune III shears on a sheep, 20 shears → average wool above 2.
+- GR-39 (this brief's proposal): enchanting table and anvil offer Fortune on shears; Fortune III shears on a sheep, 20 shears -> average wool above 2.
 
 ---
 
@@ -491,7 +491,7 @@ Diving helmet, backtank and boots for the echo, felsic and dragon tiers, made by
 - Big art load; split code and art into two sessions.
 
 ### Tests
-- GR-40: full echo diving set in lava → netherite-style lava vision and no burning while air lasts. Backtank refills at
+- GR-40: full echo diving set in lava -> netherite-style lava vision and no burning while air lasts. Backtank refills at
   a Create air compressor setup (placed backtank).
 
 ---
@@ -535,7 +535,7 @@ Every recipe above netherite reads its numbers from CEConfig through `R.cfg`, li
   felsic `potion`).
 
 ### Tests
-- GR-41: `[crafting.dragon_helmet] loops = 3`, `/reload` → log override line; JEI shows 3 loops. Same for
+- GR-41: `[crafting.dragon_helmet] loops = 3`, `/reload` -> log override line; JEI shows 3 loops. Same for
   `[crafting.echo_sword] lavaMb = 500`. Put them back.
 
 ---
@@ -544,7 +544,7 @@ Every recipe above netherite reads its numbers from CEConfig through `R.cfg`, li
 Status **Planned** · Work: KubeJS / new item · id `gear/tuning #13`
 
 ### Goal
-One rod ladder: vanilla → iron → gold → diamond → netherite (Iron Fishing Rods) → dragon (new), each step more
+One rod ladder: vanilla -> iron -> gold -> diamond -> netherite (Iron Fishing Rods) -> dragon (new), each step more
 durability and enchantability, the dragon rod with its own bonus.
 
 ### Now (verified in `Iron Fishing Rods 1.0.0 - 1.19.2.jar`)
@@ -597,7 +597,7 @@ durability and enchantability, the dragon rod with its own bonus.
 - Removing the `*_upgrade` items' recipes leaves the items in JEI; hide them (jei hide list) or leave.
 
 ### Tests
-- GR-42: JEI chain vanilla → dragon rod, one recipe per step; an enchanted diamond rod keeps its enchantments through
+- GR-42: JEI chain vanilla -> dragon rod, one recipe per step; an enchanted diamond rod keeps its enchantments through
   netherite and dragon; the dragon rod repairs itself (autorepair).
 
 ---
@@ -765,7 +765,7 @@ client memory, so #14 cuts where it pays.
 - 226 trimmable items (see #14 Now; list in `kubejs/exported/gear/armor.csv`, refreshed by `/dumpall`).
 - Client cost candidates (Armor Trims 1.3.3 classes): `model/TrimDecorationBaker` (one baked decoration model per
   item in `customModels`, plus `other`), `model/TrimRenderLayer` (armor-layer trim textures), `util/GetAvgColor`
-  (material colours). perf.md 10.2 #3: heap 6.6-9.0 GB of 10 GB while exploring; Armor Trims was not singled out.
+  (material colors). perf.md 10.2 #3: heap 6.6-9.0 GB of 10 GB while exploring; Armor Trims was not singled out.
 - The JEI cost (finding 1, 58 s) is fixed by the cache (perf.md 10.3; CQ-ATC-01 PASS, JEI start 16-19 s); CQ-ATC-02 /
   -03 (trim rendering in a client) not run.
 
@@ -877,6 +877,6 @@ by hand.
 
 - [gear_tuning.md](../gear_tuning.md) section 0 "Pending": open findings list now excludes the fixed F1, F3, F7, F12;
   added a link to this brief.
-- [gear_tuning.md](../gear_tuning.md) 2.7 and F5: Armor Trims tag `Trim` → `trim` (verified in the jar), Quark rune keys
+- [gear_tuning.md](../gear_tuning.md) 2.7 and F5: Armor Trims tag `Trim` -> `trim` (verified in the jar), Quark rune keys
   named.
-- [gear_tuning.md](../gear_tuning.md) section 5: NCH assembly helpers' line range `~1061-1110` → `~1159-1207`.
+- [gear_tuning.md](../gear_tuning.md) section 5: NCH assembly helpers' line range `~1061-1110` -> `~1159-1207`.

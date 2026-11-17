@@ -23,7 +23,7 @@
 | Alex's Mobs fixes (modifier steps on splash/lingering, poison resistance re-based, lava vision base on both mixers) and Rustic Delight haste made item-agnostic; duplicate-recipe trim (`PotionMixDedup`) | DEPLOYED (built 2026-09-06 to 2026-09-08), in-game check never recorded |
 | Create Automatic Brewing rebuilt at load so the pack's potions are in it; item dragon's breath removed; dragon's breath **fluid** turns splash into lingering (heated mixer) | DEPLOYED |
 | IE Mixer on Create's `create:potion` fluid (1500 mB), with splash and lingering parity, thick/mundane bases allowed | DEPLOYED |
-| IE Refinery "Lingerification": regular or splash + 250 mB dragon's breath fluid → lingering | DEPLOYED |
+| IE Refinery "Lingerification": regular or splash + 250 mB dragon's breath fluid -> lingering | DEPLOYED |
 | IE Bottling Machine fills bottles from `create:potion` (IE's own potion bottling removed); IE fluid inputs by id and by NBT subset (`FluidTagInputMixin`) | DEPLOYED |
 | JEI: Automated Potion Mixing and Lingerification pages, potion name and effects on IE fluid slots, every fluid in the ingredient list, Potion Bundles fixes for the Spout and Item Drain pages | DEPLOYED |
 | Potion Bundles drain whole (3 charges, right bottle type) | DEPLOYED; a per-drain `TEMP diagnostic` log line is still in |
@@ -38,7 +38,7 @@
 - **Knobs:** none in the toml. Potions, reagents and durations are code in `potions.js` (restart). Batch sizes and
   energy are constants in the Java classes (rebuild). Create's own `allowBrewingInMixer` (world server config) also
   gates the dragon's breath fluid brew.
-- **How to look:** JEI → any potion → R. The log at load prints `[CE potions] added N item-agnostic potion mixes`,
+- **How to look:** JEI -> any potion -> R. The log at load prints `[CE potions] added N item-agnostic potion mixes`,
   `Automatic Brewing: rebuilt N recipes`, `IE Mixer: +N splash/lingering potion recipes`, `Lingerification: generated N
   refinery recipes`, `potion mixer dedup: hid N BrewingRecipe(s)`.
 
@@ -98,12 +98,12 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 
 | Source | Steps re-added as item-agnostic mixes | Why |
 |---|---|---|
-| Alex's Mobs | lengthen: knockback resistance, lava vision, bug pheromones, soulsteal, clinging; komodo spit → long poison resistance; amplify: knockback resistance, soulsteal; gazelle horn + Swiftness II → Speed III | AM locks them to the regular potion item; splash/lingering couldn't be modified and the mixers couldn't see them |
-| Alex's Mobs | centipede leg + Poison II → Poison Resistance | AM brews it from a poison-bottle item, which no mixer can use; AM's own stand recipe still works too |
+| Alex's Mobs | lengthen: knockback resistance, lava vision, bug pheromones, soulsteal, clinging; komodo spit -> long poison resistance; amplify: knockback resistance, soulsteal; gazelle horn + Swiftness II -> Speed III | AM locks them to the regular potion item; splash/lingering couldn't be modified and the mixers couldn't see them |
+| Alex's Mobs | centipede leg + Poison II -> Poison Resistance | AM brews it from a poison-bottle item, which no mixer can use; AM's own stand recipe still works too |
 | Alex's Mobs | Lava Vision base: Create mixer 1000 mB lava + bone serpent tooth, heated ([lava_vision.js](../kubejs/server_scripts/magic/lava_vision.js)); IE Mixer 1500 mB lava + tooth (`PotionRecipeGeneratorsMixin`) | AM brews it from a lava-bottle item |
-| Rustic Delight | golden coffee beans + awkward → Haste; redstone, glowstone steps | RD's own `IBrewingRecipe` class is invisible to both mixers |
-| Fungi Delight (port, 2026-10-23) | truffle + awkward → Burrowing 3:00; redstone → 8:00; glowstone → Burrowing II 1:30. Registered in the port's Java as vanilla `PotionBrewing` mixes, not Forge brewing recipes, so the stand, Create Automatic Brewing, both mixers, bottling, splash / lingering, the potion buckets and tipped arrows all see them. Burrowing: shovel-mineable blocks break 1.5x (I) / 2x (II) faster. Weak Stomach (harmful, from inky caps and durian) has no potion | upstream used `BrewingRecipeRegistry`, which the mixers miss ([fungi_delight.md](fungi_delight.md) 5.1.4) |
-| Buzzier Bees / vanilla | four-leaf clover + awkward → Luck, redstone → long; silverfish bottle + awkward → Unluck, redstone → long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover and lengthens Bad Luck, so rows 1, 2 and 4 are duplicates; only silverfish → Bad Luck is new ([effects.md](effects.md) F6) |
+| Rustic Delight | golden coffee beans + awkward -> Haste; redstone, glowstone steps | RD's own `IBrewingRecipe` class is invisible to both mixers |
+| Fungi Delight (port, 2026-10-23) | truffle + awkward -> Burrowing 3:00; redstone -> 8:00; glowstone -> Burrowing II 1:30. Registered in the port's Java as vanilla `PotionBrewing` mixes, not Forge brewing recipes, so the stand, Create Automatic Brewing, both mixers, bottling, splash / lingering, the potion buckets and tipped arrows all see them. Burrowing: shovel-mineable blocks break 1.5x (I) / 2x (II) faster. Weak Stomach (harmful, from inky caps and durian) has no potion | upstream used `BrewingRecipeRegistry`, which the mixers miss ([fungi_delight.md](fungi_delight.md) 5.1.4) |
+| Buzzier Bees / vanilla | four-leaf clover + awkward -> Luck, redstone -> long; silverfish bottle + awkward -> Unluck, redstone -> long | Luck had no brew. Reagent marked "TODO: better/magic ingredient" (`potions.js` line 86). Out of date: Buzzier Bees already brews Luck from the clover and lengthens Bad Luck, so rows 1, 2 and 4 are duplicates; only silverfish -> Bad Luck is new ([effects.md](effects.md) F6) |
 
 ### 2.4 Machines
 
@@ -111,10 +111,10 @@ KubeJS's potion registry runs before any mod's mob effects exist, so potions for
 |---|---|---|---|
 | Brewing stand | every mix above, every bottle type | 1 to 3 bottles | MoreJS `registerPotionBrewing` |
 | Create Automatic Brewing (Mechanical Mixer + basin) | every mix and container conversion, rebuilt after MoreJS adds the pack's | 1000 mB | `potions.js` part 3 (postInit) |
-| Create mixer, dragon's breath | splash + 250 mB dragon's breath fluid → lingering, **heated**; the item dragon's breath recipe is removed | 1000 mB | `DragonBreathBrewing` + `MechanicalMixerBlockEntityMixin` |
-| IE Mixer | every mix in REGULAR, SPLASH and LINGERING; per potion REGULAR + gunpowder → SPLASH and SPLASH + dragon's breath item → LINGERING; thick/mundane bases | 1500 mB (into lingering: 1000 mB) | `PotionRecipeGeneratorsMixin`, `PotionHelperMixin` |
-| IE Refinery, Lingerification | REGULAR or SPLASH + 250 mB `#forge:fluid/dragon_breath` → LINGERING, 120 RF/t | 1500 mB | `Lingerification` + `data/creativeengineering/recipes/lingerification_list.json` |
-| IE Bottling Machine | 250 mB `create:potion` + glass bottle → potion / splash / lingering item, per potion | 250 mB | [potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js) |
+| Create mixer, dragon's breath | splash + 250 mB dragon's breath fluid -> lingering, **heated**; the item dragon's breath recipe is removed | 1000 mB | `DragonBreathBrewing` + `MechanicalMixerBlockEntityMixin` |
+| IE Mixer | every mix in REGULAR, SPLASH and LINGERING; per potion REGULAR + gunpowder -> SPLASH and SPLASH + dragon's breath item -> LINGERING; thick/mundane bases | 1500 mB (into lingering: 1000 mB) | `PotionRecipeGeneratorsMixin`, `PotionHelperMixin` |
+| IE Refinery, Lingerification | REGULAR or SPLASH + 250 mB `#forge:fluid/dragon_breath` -> LINGERING, 120 RF/t | 1500 mB | `Lingerification` + `data/creativeengineering/recipes/lingerification_list.json` |
+| IE Bottling Machine | 250 mB `create:potion` + glass bottle -> potion / splash / lingering item, per potion | 250 mB | [potion_bottling.js](../kubejs/data/creativeengineering/kubejs/engineering/potion_bottling.js) |
 | Create Spout / Item Drain | Create's own bottle fill and empty | 250 mB | Create |
 
 `#forge:fluid/potion` is only `create:potion` (IE's potion fluid is taken out of it, [fluidtags.js](../kubejs/data/creativeengineering/kubejs/tags/fluidtags.js)
@@ -155,7 +155,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
 - **Dedup:** Alex's Mobs steps exist both as AM's `BrewingRecipe` and as the pack's `Mix`, so both generators made
   each one twice. `PotionMixingRecipesMixin` (Create) and `PotionHelperMixin` (IE) redirect
   `BrewingRecipeRegistry.getRecipes()` to `PotionMixDedup.withoutMixDuplicates`, which drops a `BrewingRecipe` whose
-  from → to pair a `Mix` already covers.
+  from -> to pair a `Mix` already covers.
 - **IE Mixer on `create:potion`:** `PotionRecipeGeneratorsMixin` redirects the input and output fluids of
   `registerPotionRecipe` to `create:potion` (water stays plain water), skips recipes with an `EMPTY` input (AM's
   bottle bases), and at the end of `initPotionRecipes` appends the splash and lingering copies, the container
@@ -189,7 +189,7 @@ line 66). Potion buckets and tipped arrows on these machines: [potion_buckets.md
   line up.
 - **F2. Lingering from regular, only on the Refinery.** DECIDED 2026-10-29 (owner): keep the Refinery shortcut (TODO `potions/potions #3`, no change). Lingerification takes regular or splash; the Create
   mixer and the IE Mixer only convert splash (vanilla's rule). Keep the Refinery as the shortcut, or drop its
-  regular → lingering recipes.
+  regular -> lingering recipes.
 - **F3. Placeholder reagents:** Magic Resistance (amethyst shard, `potions.js` line 72) and Luck (four-leaf clover,
   line 86). In [TODO](todo/TODO.md) `potions/potions #4`.
 - **F4. `TEMP diagnostic` log on every bundle drain** (`PotionFluidHandlerMixin` line 62). One INFO line per bundle
@@ -248,49 +248,49 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 
 - [ ] **PO-01 Load log:** after a boot, `logs/latest.log` has non-zero counts for all five lines in section 0 and no
   `mix skipped` or `FAILED` line.
-- [ ] **PO-02 Pack potion, stand:** brewing stand, awkward potion + iron block → Potion of Resistance; + redstone →
-  8:00; + glowstone → Resistance II 1:30.
-- [ ] **PO-03 Thick and mundane bases:** thick + golden apple → Health Boost; mundane + echo shard → Darkness.
-- [ ] **PO-04 Modded effect potions:** thick + wrappist shard → Long Reach; thick + celestite shard → Phantom Bane;
-  drink Phantom Bane and skip three nights → no phantoms.
-- [ ] **PO-05 Splash modifiers (AM):** splash Potion of Knockback Resistance + redstone in a brewing stand → long
+- [ ] **PO-02 Pack potion, stand:** brewing stand, awkward potion + iron block -> Potion of Resistance; + redstone ->
+  8:00; + glowstone -> Resistance II 1:30.
+- [ ] **PO-03 Thick and mundane bases:** thick + golden apple -> Health Boost; mundane + echo shard -> Darkness.
+- [ ] **PO-04 Modded effect potions:** thick + wrappist shard -> Long Reach; thick + celestite shard -> Phantom Bane;
+  drink Phantom Bane and skip three nights -> no phantoms.
+- [ ] **PO-05 Splash modifiers (AM):** splash Potion of Knockback Resistance + redstone in a brewing stand -> long
   splash version (failed before the fix).
-- [ ] **PO-06 Poison resistance re-base:** Potion of Poison II + centipede leg → Poison Resistance; AM's poison bottle
+- [ ] **PO-06 Poison resistance re-base:** Potion of Poison II + centipede leg -> Poison Resistance; AM's poison bottle
   route still works.
-- [ ] **PO-07 Haste:** awkward + golden coffee beans → Haste, in the brewing stand and in the Create mixer.
-- [ ] **PO-08 Automatic Brewing has pack potions:** JEI Automatic Brewing page shows awkward + iron block →
+- [ ] **PO-07 Haste:** awkward + golden coffee beans -> Haste, in the brewing stand and in the Create mixer.
+- [ ] **PO-08 Automatic Brewing has pack potions:** JEI Automatic Brewing page shows awkward + iron block ->
   Resistance. A heated basin with 1000 mB awkward potion + an iron block under a Mechanical Mixer brews it.
-- [ ] **PO-09 No duplicate AM recipes:** JEI Automatic Brewing for long lava vision → exactly one recipe per bottle type.
+- [ ] **PO-09 No duplicate AM recipes:** JEI Automatic Brewing for long lava vision -> exactly one recipe per bottle type.
 - [ ] **PO-10 Dragon's breath item gone from Create:** JEI shows no Automatic Brewing recipe with a dragon's breath item.
 - [ ] **PO-11 Dragon's breath fluid, Create:** heated basin, 1000 mB splash Swiftness + 250 mB dragon's breath fluid,
-  mixer → 1000 mB lingering Swiftness. Unheated → nothing. JEI Automatic Brewing lists the recipe.
-- [ ] **PO-12 IE Mixer regular:** IE Mixer with 1500 mB awkward `create:potion` + iron block → 1500 mB Resistance
+  mixer -> 1000 mB lingering Swiftness. Unheated -> nothing. JEI Automatic Brewing lists the recipe.
+- [ ] **PO-12 IE Mixer regular:** IE Mixer with 1500 mB awkward `create:potion` + iron block -> 1500 mB Resistance
   `create:potion`.
-- [ ] **PO-13 IE Mixer splash parity:** 1500 mB splash Resistance + redstone → long splash Resistance.
-- [ ] **PO-14 IE Mixer container conversions:** 1500 mB regular + gunpowder → splash; 1000 mB splash + dragon's breath
-  item → 1000 mB lingering.
-- [ ] **PO-15 IE Mixer thick base:** 1500 mB thick + golden apple → Health Boost (blocked before `PotionHelperMixin`).
-- [ ] **PO-16 IE Mixer lava vision:** 1500 mB lava + bone serpent tooth → Lava Vision. Create mixer: 1000 mB lava +
-  tooth, heated → Lava Vision.
-- [ ] **PO-17 Lingerification:** IE Refinery, 1500 mB regular Resistance + 250 mB dragon's breath fluid → 1500 mB
+- [ ] **PO-13 IE Mixer splash parity:** 1500 mB splash Resistance + redstone -> long splash Resistance.
+- [ ] **PO-14 IE Mixer container conversions:** 1500 mB regular + gunpowder -> splash; 1000 mB splash + dragon's breath
+  item -> 1000 mB lingering.
+- [ ] **PO-15 IE Mixer thick base:** 1500 mB thick + golden apple -> Health Boost (blocked before `PotionHelperMixin`).
+- [ ] **PO-16 IE Mixer lava vision:** 1500 mB lava + bone serpent tooth -> Lava Vision. Create mixer: 1000 mB lava +
+  tooth, heated -> Lava Vision.
+- [ ] **PO-17 Lingerification:** IE Refinery, 1500 mB regular Resistance + 250 mB dragon's breath fluid -> 1500 mB
   lingering Resistance; same from splash.
-- [ ] **PO-18 IE Bottling:** Bottling Machine, `create:potion` Resistance + glass bottles → Potions of Resistance
+- [ ] **PO-18 IE Bottling:** Bottling Machine, `create:potion` Resistance + glass bottles -> Potions of Resistance
   (250 mB each). Splash and lingering fluids give splash and lingering bottles. IE's own `immersiveengineering:potion`
   bottling recipes are gone from JEI.
 - [ ] **PO-19 JEI pages:** JEI shows "Automated Potion Mixing" with the IE Mixer as catalyst and "Lingerification" with
   the Refinery; IE's own Mixer and Refinery pages have no potion recipes.
 - [ ] **PO-20 JEI fluid tooltips:** hover the fluid slots on Automated Potion Mixing, Lingerification and the Bottling
-  Machine page → potion name and effect lines (e.g. "Resistance (3:00)"), not just "Potion 1500 mB".
-- [ ] **PO-21 JEI fluid list:** search `@create` or "Potion of" in the ingredient list → `create:potion` stacks per
+  Machine page -> potion name and effect lines (e.g. "Resistance (3:00)"), not just "Potion 1500 mB".
+- [ ] **PO-21 JEI fluid list:** search `@create` or "Potion of" in the ingredient list -> `create:potion` stacks per
   potion; dragon's breath fluid present; no `flowing_*` entries.
-- [ ] **PO-22 Bundle drain:** a full splash potion bundle into an Item Drain → 750 mB splash `create:potion` + 3 glass
+- [ ] **PO-22 Bundle drain:** a full splash potion bundle into an Item Drain -> 750 mB splash `create:potion` + 3 glass
   bottles; the bundle is used up.
 - [ ] **PO-23 Bundle JEI:** the Spout page has no recipe that fills a potion bundle; the Item Drain page shows 750 mB
   for a full bundle.
-- [ ] **PO-24 Strong Magic Resistance:** thick + amethyst shard → Magic Resistance; + glowstone → Magic Resistance II.
-- [ ] **PO-25 Luck:** awkward + four-leaf clover → Potion of Luck; + redstone → long Luck.
-- [ ] **PO-26 Speed III:** Swiftness II + gazelle horn → Speed III (AM), on the brewing stand and in the Create mixer.
-- [ ] **PO-27 Burrowing:** awkward + truffle → Burrowing, + redstone → long, + glowstone → Burrowing II, on the brewing stand, in the Create mixer and the IE Mixer; JEED shows the Burrowing and Weak Stomach descriptions (= FGD-18, FGD-37).
+- [ ] **PO-24 Strong Magic Resistance:** thick + amethyst shard -> Magic Resistance; + glowstone -> Magic Resistance II.
+- [ ] **PO-25 Luck:** awkward + four-leaf clover -> Potion of Luck; + redstone -> long Luck.
+- [ ] **PO-26 Speed III:** Swiftness II + gazelle horn -> Speed III (AM), on the brewing stand and in the Create mixer.
+- [ ] **PO-27 Burrowing:** awkward + truffle -> Burrowing, + redstone -> long, + glowstone -> Burrowing II, on the brewing stand, in the Create mixer and the IE Mixer; JEED shows the Burrowing and Weak Stomach descriptions (= FGD-18, FGD-37).
 
 ## 8. History
 
@@ -324,13 +324,13 @@ Flare's only source).
   their parts accurately.
 - Teleport: move every chorus effect to Teleport.
 - Power Outage: remove.
-- Stimulation: a compound of Refreshing and Sweetening; behaviour unchanged.
+- Stimulation: a compound of Refreshing and Sweetening; behavior unchanged.
 - Recovering: compound; identify every other compound effect.
 - Golden apple (wine): find a better 'best effect'; compound as is, updated if it changes; rename it if unchanged.
 - Double jump: compound.
 - Copper poisoning (new): from wearing or carrying fully oxidized copper gear for too long. Damage dealing is replaced by
   plain Poison. Every 5 minutes (+- 2 minutes random, configurable) while a fully oxidized piece is worn or in the
   hotbar or offhand, roll for the effect; more fully oxidized pieces raise the chance; the poison is short and its
-  duration grows with the piece count. Analyse the performance cost of scanning for oxidized gear first.
+  duration grows with the piece count. Analyze the performance cost of scanning for oxidized gear first.
 - Oiled: remove it from fish oil; decide where the effect comes from (a chemical thrower without igniter?).
 - 2026-10-31: scratchpad notes translated into TODO rows (`potions/enchanting #8`). No code changed.

@@ -105,12 +105,12 @@ This modpack has 6 mods registering their own banner patterns (scanned every mod
   no Mixin refmap, always runs reobfuscated. Regular Java method/field references in a mixin
   (or any) class body can use clean Mojmap names — `reobfJar` rewrites them to SRG automatically
   (**empirically confirmed**: decompiled the actual built+reobfuscated jar and every vanilla
-  reference — `TextureAtlas.location()`→`m_118330_`, `.LOCATION_BLOCKS`→`f_118259_`,
-  `Registry.BANNER_PATTERN`→`f_235736_`, `.registryKeySet()`→`m_214010_`,
-  `BannerPattern.location(...)`→`m_222697_`, `Material.sprite()`→`m_119204_`,
-  `TextureAtlasSprite.getName()`→`m_118413_`, `MissingTextureAtlasSprite.getLocation()`→
-  `m_118071_`, `ResourceKey.location()`→`m_135782_`, `ResourceLocation.getNamespace()`→
-  `m_135827_`, `.getPath()`→`m_135815_` — all match the SRG names the real shipped
+  reference — `TextureAtlas.location()`->`m_118330_`, `.LOCATION_BLOCKS`->`f_118259_`,
+  `Registry.BANNER_PATTERN`->`f_235736_`, `.registryKeySet()`->`m_214010_`,
+  `BannerPattern.location(...)`->`m_222697_`, `Material.sprite()`->`m_119204_`,
+  `TextureAtlasSprite.getName()`->`m_118413_`, `MissingTextureAtlasSprite.getLocation()`->
+  `m_118071_`, `ResourceKey.location()`->`m_135782_`, `ResourceLocation.getNamespace()`->
+  `m_135827_`, `.getPath()`->`m_135815_` — all match the SRG names the real shipped
   bedspreads/customizableelytra jars use natively, and all cross-checked directly against
   `srg_to_official_1.19.2.tsrg` at
   `~/.gradle/caches/forge_gradle/minecraft_user_repo/de/oceanlabs/mcp/mcp_config/

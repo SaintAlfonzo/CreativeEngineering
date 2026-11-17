@@ -124,7 +124,7 @@ reject (Unknown or incomplete command)
 @group A
 @commands Boot 2: `grep -E "canned_goods\|repackedCannedGoods\|creativedelight.mixins.json" logs/latest.log \| head -20`; `grep -i "canned_golem\|CannedGolem" logs/latest.log`
 @pass `repackedCannedGoods-1.19.2-3-ce-19.2-01` found by `JarInJarDependencyLocator`; mod `canned_goods` version `1.19.2-3-ce-19.2-01`; no mixin error, no `CannedGolemColorMixin` / `CannedGolemRendererMixin` line (removed); no "member canned_goods is loaded from CannedGoods-..." error
-@fails Stale `CannedGoods-*.jar` in `mods/` (`replaces_jars`), or CD built from a tree that still lists the mixins (double definition of the colour data)
+@fails Stale `CannedGoods-*.jar` in `mods/` (`replaces_jars`), or CD built from a tree that still lists the mixins (double definition of the color data)
 @from batches/r1103/sA_2.qb
 bootexpect repackedCannedGoods-1\.19\.2-3-ce-19\.2-01
 bootreject CannedGolemColorMixin|CannedGolemRendererMixin
@@ -198,7 +198,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## CQ-CNG-02
 @group client
 @commands Mod list (Mods screen)
-@pass LOOK: "Canned Goods (Creative Delight)" `1.19.2-3-ce-19.2-01`, licence line names AFL 3.0
+@pass LOOK: "Canned Goods (Creative Delight)" `1.19.2-3-ce-19.2-01`, license line names AFL 3.0
 @fails `members/cannedgoods/src/main/resources/META-INF/mods.toml`
 @draft no batch holds this row yet
 @@text
@@ -534,7 +534,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @group A
 @commands Place a golden cake and an enchanted golden cake; at full hunger right-click each 7 times, `/data get entity @p ActiveEffects` after the first slice of each
 @pass Each slice eats at full hunger; golden slice: Regeneration amp 1 100 t, Absorption amp 1 2400 t; enchanted slice: Regeneration amp 1 400 t, Resistance and Fire Resistance 6000 t, Absorption amp 3 2400 t; after the 7th slice the block is gone, no drop
-@fails `GoldenCakeBlock.Slice`; no eating at full hunger is the expected upstream behaviour, so a hunger check means vanilla `CakeBlock.use` ran (override missing)
+@fails `GoldenCakeBlock.Slice`; no eating at full hunger is the expected upstream behavior, so a hunger check means vanilla `CakeBlock.use` ran (override missing)
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
 > setblock {SAH1+20} {SAH2} {SAH3+44} goldenfood:golden_cake
@@ -702,7 +702,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## CQ-GLD-01
 @group client
 @commands Open the creative inventory "Golden Food!" tab; look at both cakes placed and part eaten, every golden and enchanted item in hand, the golden carrot and golden apple
-@pass LOOK: tab named "Golden Food!" with the golden cake icon; textures and slice models as before the swap (no purple-black); enchanted items and the enchanted cake item glint; golden carrot and both apples now sit in this tab (upstream behaviour); cakes are not in the tab (upstream)
+@pass LOOK: tab named "Golden Food!" with the golden cake icon; textures and slice models as before the swap (no purple-black); enchanted items and the enchanted cake item glint; golden carrot and both apples now sit in this tab (upstream behavior); cakes are not in the tab (upstream)
 @fails Missing art: resource pack list must have `goldenfood_upstream_assets`; tab name: lang key `itemGroup.gf_tab`
 @draft no batch holds this row yet
 ## CQ-GLD-02
@@ -829,7 +829,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## CQ-GLD-03
 @group client
 @commands JEI: open the sequenced assembly pages of 3 enchanted golden foods
-@pass LOOK: the incomplete items show the golden food's sprite tinted grey, not purple-black
+@pass LOOK: the incomplete items show the golden food's sprite tinted gray, not purple-black
 @fails Texture: the row's second column in `transition_items.js` (golden form's sprite path)
 @draft no batch holds this row yet
 @@text
@@ -1135,7 +1135,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## CQ-PCK-01
 @group client
 @commands sneak + right click the top of a block with Sweet Potato Pancakes; look from 4 sides; WTHIT on it; empty-hand right click; place again and break it
-@pass LOOK: a Display Delight bowl with a pancake-coloured food surface, facing the player, no missing texture; WTHIT "Placed Sweet Potato Pancakes"; empty hand gives the pancakes back; breaking drops one
+@pass LOOK: a Display Delight bowl with a pancake-colored food surface, facing the player, no missing texture; WTHIT "Placed Sweet Potato Pancakes"; empty hand gives the pancakes back; breaking drops one
 @fails model crop `[4, 3, 12, 8]` in `displaydelight_dishes.json` (rerun `tools/gen_dd_dishes.py`, rebuild CD); bowl texture `displaydelight:block/salad_bowl` from the Display Delight port
 @jars creativecommon creativedelight
 @draft no batch holds this row yet

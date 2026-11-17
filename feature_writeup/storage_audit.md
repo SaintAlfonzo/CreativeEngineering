@@ -47,7 +47,7 @@ uses the 1.3.10 cherry glass door (10.11; upstream's dark cherry door is solid).
 
 Size comes from "per block"; the fit columns follow it. "Shrunk" = longer than the 15 px slot, drawn shorter lying
 down (model heights from the 1.5.5 / 1.3.10 models). "Wide" = wider than a small bottle's 4 px. "Slim" = drawn as a
-4 x 15 px bottle in its own colours in the 4x rack and the wine box ([alcohol.md](alcohol.md) 10.14, 2026-10-19).
+4 x 15 px bottle in its own colors in the 4x rack and the wine box ([alcohol.md](alcohol.md) 10.14, 2026-10-19).
 
 | Wine | Id | Per block | Size | 9x | 4x / box | Single | Lying in a rack |
 |---|---|---|---|---|---|---|---|
@@ -64,7 +64,7 @@ down (model heights from the 1.5.5 / 1.3.10 models). "Wide" = wider than a small
 | Praetorian | `praetorian_wine` | 2 | medium | no | yes | yes | own model, shrunk 18 -> 15 px, wide (6 px) (your call: no slim) |
 | Stal | `stal_wine` | 2 | medium | no | yes | yes | slim (own model 18 px, 8 px wide) |
 | Sun-kissed | `glowing_wine` | 2 | medium | no | yes | yes | slim (own model 16 px, 8 px wide) |
-| Magnetic | `magnetic_wine` | 2 | medium | no | yes | yes | slim; in the wine box Strad's shape in Magnetic's colours |
+| Magnetic | `magnetic_wine` | 2 | medium | no | yes | yes | slim; in the wine box Strad's shape in Magnetic's colors |
 | Eiswein | `eiswein` | 2 | medium | no | yes | yes | slim (own model full size, wide (7 px)) |
 | Chenet | `chenet_wine` | 2 | medium | no | yes | yes | slim (own model full size, wide (8 px)) |
 | Aegis | `aegis_wine` | 2 | medium | no | yes | yes | slim (own model shrunk 16 -> 15 px, wide (8 px)) |

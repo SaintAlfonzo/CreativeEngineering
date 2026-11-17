@@ -224,7 +224,7 @@ After the sweeps, a single pass merges them and adds:
 5. **perfBot and clientCapture:** closed 2026-11-01: nested in Creative Devtools.
 6. **Devtools on the live server:** dev `mods/` only, or also on CreEngServer for `/dumpall` there?
 8. **Release number: CLOSED 2026-11-02 (owner): the Creative Split deployment is 1.2.00.** The Creative Delight cutover (creative_delight.md `members #10`) goes in the next deployment unless a fix must be pushed first, so it ships before 1.2.00.
-7. **Publishing:** which jars are meant to be published alone (that drives the licence audit, as creative_brewing.md 9
+7. **Publishing:** which jars are meant to be published alone (that drives the license audit, as creative_brewing.md 9
    did for CB)?
 
 ## 7. Inventory (filled by the audit)
@@ -403,7 +403,7 @@ Engineering for good.
   nothing. Saved worlds carry over through the swap lists (7.7).
 
 **Q6:** Devtools goes in dev `mods/` only. **Q7:** Creative Brewing is the first jar to publish. Its required chain
-(Common, Compat, Calendar, CD) has to be published with it, so each needs the licence audit that creative_brewing.md
+(Common, Compat, Calendar, CD) has to be published with it, so each needs the license audit that creative_brewing.md
 9 did for CB. Compat's 950 painting files and CD's ARR overrides are the known risks.
 
 **7.4 rows.**
@@ -608,7 +608,7 @@ as separate commits, each with a scratch dedicated-server boot queued (SQ entrie
 rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCompat:installToMods
 :creativeDelight:installToMods --offline` (plus `:patcherMod:` for the damage-tag edit in step 3).
 
-**Changelog.** Steps 1, 3, 4 are same-behaviour moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
+**Changelog.** Steps 1, 3, 4 are same-behavior moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
 Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
 
 ### 7.10 Wave 5 as built (2026-11-02; built, installed 2026-11-02 23:16, not booted, not tested)
@@ -703,7 +703,7 @@ read-old fallback), the pack-folder trees included; and move four groups out of 
 - **Why some compat stays in Common:** Common holds the interface rows (2.4: JEI, WTHIT, tooltip and GUI fixes), the
   APIs content jars fill (`RemainderView`, `PottedPlantHolder`, `JarContents`, `DamageTags`, `TradeListings`,
   `BurnBursts`) and engine/perf fixes even when they target a mod (IW growth, Create: Gravity, Quark spiral spires,
-  Nock Enough Arrows whistles). Compat holds behaviour tweaks to third-party mods with no system of their own.
+  Nock Enough Arrows whistles). Compat holds behavior tweaks to third-party mods with no system of their own.
 - Built: Common, Compat, CD, Equipment, Brewing, Engineering. Scratch SQ-CNS-01 to -06.
 
 ### 7.15 Dependency trace: Common, Delight, Brewing (2026-11-04; fixes built, NOT installed, not booted, not tested)

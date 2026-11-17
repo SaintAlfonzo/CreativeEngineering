@@ -58,7 +58,7 @@
 ## 1. Overview
 
 In vanilla 1.19.2 (Forge 43.3.9) a raised shield blocks a hit only when all of these hold: the hit is not
-armour-bypassing, the shield has been up for 5 ticks (0 here: Responsive Shields sets Raise Time to 0), the
+armor-bypassing, the shield has been up for 5 ticks (0 here: Responsive Shields sets Raise Time to 0), the
 hit is not from a piercing arrow, and the source has a position inside the front 180 degrees. A block absorbs
 100% of the damage. Fire, poison, magic, lightning and anything without a position can never be blocked.
 Wear is `1 + floor(damage)` for hits of 3 or more. An axe hit disables the shield for 100 ticks (5 s). The
@@ -114,14 +114,14 @@ untouched. In order:
 
 1. Not raised, or the hit is tagged `bypasses_invulnerability` (void, `/kill`): no.
 2. Piercing arrow: no (a vanilla rule, not a damage tag).
-3. Damage from a ticking effect listed in `unblockableEffectTicks`: no. Recognised by which effect is ticking
+3. Damage from a ticking effect listed in `unblockableEffectTicks`: no. Recognized by which effect is ticking
    on the holder (`EffectTickContext`), because poison hurts with the same `magic` source as Instant Damage, so
    no tag can tell them apart.
 4. A tick gate (`ShieldTickGate`) the tier doesn't have: no. `burn_tick` (fire, campfires, magma, stoves) needs
    `blocksBurnTicks`; `contact_tick` (cactus, berry bushes, thorny plants, barbed panes) needs
    `blocksContactTicks`. Projectiles never count (an ownerless fireball also uses the `onFire` id).
 5. The tier's reduction for this hit is 0: no. The hit is ordinary damage, no shield sound.
-6. A gated tick the tier does have: yes, from any direction, armour-piercing or not.
+6. A gated tick the tier does have: yes, from any direction, armor-piercing or not.
 7. Physical hit tagged `armor_piercing`: no (vanilla's rule). Elemental and magic ignore this tag, because
    almost all of them carry it.
 8. Facing for the group:
@@ -164,7 +164,7 @@ all four, also for blanket tiers.
 
 ### 2.6 Tooltip
 
-- **Compact view:** one line per non-zero group, e.g. `Physical: 60%`, coloured white under 40, green
+- **Compact view:** one line per non-zero group, e.g. `Physical: 60%`, colored white under 40, green
   40-59, blue 60-99, purple 100. Wear shows only when it isn't 100%, e.g. `(50% wear)`. Then the effect
   lists and "Hold [SHIFT] for full stats".
 - **Shift or F3+H:** every line including zeros, plus `Fireproof`, `Blocks burning`, `Blocks thorns` and
@@ -208,7 +208,7 @@ any tier that blocks one of these at all blocks it completely, with a shield sou
 | `wasWatered` | Ender's Delight Phasing effect | never (`unblockableEffectTicks`) |
 | `freeze` | powder snow, every 40 ticks (5 to freeze-vulnerable mobs) | cold %: gold, echo, felsic, dragon |
 | `acid` | PneumaticCraft etching acid | chemical %: gold, echo, felsic, dragon (kept, by request) |
-| `inWall`, `starve` | suffocation, hunger | never (armour-piercing physical) |
+| `inWall`, `starve` | suffocation, hunger | never (armor-piercing physical) |
 
 Other periodic sources that aren't 1 damage: `drown` 2, `create.fan_fire` 2, `lava` 4, `create.fan_lava` 4,
 `cramming` 6, Botania relic 2, Upgrade Aquatic guardian spine 3, SecurityCraft fake water 4, Create Addition
@@ -339,7 +339,7 @@ message ids in `data/creativecommon/damage_tags/<name>.json`:
 
 ### Known limits
 
-- **Unblockable modded sources:** armour-bypassing sources with no elemental or magic tag land in
+- **Unblockable modded sources:** armor-bypassing sources with no elemental or magic tag land in
   physical/other and can't be blocked. Examples: Create saw/crush/drill, dragon breath, the wither effect.
   This matches vanilla.
 - **Mixed tags:** a hit tagged both `magic` and `cold` counts as magic only (category order) and never
@@ -369,7 +369,7 @@ message ids in `data/creativecommon/damage_tags/<name>.json`:
   work.
 - **Effects as a toml list:** Create's config screen only edits strings, so they are one string.
 - **Per-element wear:** not asked for; wear stays per group.
-- **First knockback attempt:** a mixin on `LivingEntity#blockUsingShield` cancelled the attacker's recoil,
+- **First knockback attempt:** a mixin on `LivingEntity#blockUsingShield` canceled the attacker's recoil,
   which fires before the holder's push, so the holder was still pushed ("I take kb even on a half-heart
   netherite block"). Replaced by the holder-keyed `LivingKnockBackEvent` cancel.
 - **Raw `DamageSource` flag checks in shield code:** the user asked for shields to read only the pack's
@@ -382,7 +382,7 @@ message ids in `data/creativecommon/damage_tags/<name>.json`:
 ## 5. File map
 
 - [shield/ShieldTier.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTier.java): tier enum, code defaults, `of(stack)`.
-- [shield/ShieldGroup.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldGroup.java): physical / elemental / magic, default facing, armour-bypass rule.
+- [shield/ShieldGroup.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldGroup.java): physical / elemental / magic, default facing, armor-bypass rule.
 - [shield/ShieldCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldCategory.java): tag-based classification, priority order.
 - [shield/ElementalKind.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ElementalKind.java): fire / electric / cold / chemical.
 - [shield/ShieldBlocking.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlocking.java): block verdict and facing.
@@ -429,87 +429,87 @@ message ids in `data/creativecommon/damage_tags/<name>.json`:
 Survival, Normal difficulty. Use `/give @s creativeengineering:<tier>_shield` or `minecraft:shield`, and turn
 on F3+H. "Raise" means hold right click.
 
-- [ ] **SH-01 Items and looks:** give all eight shields → each has its own name, rarity colour and texture
+- [ ] **SH-01 Items and looks:** give all eight shields -> each has its own name, rarity color and texture
   (iron looks vanilla). A bannered iron shield smithed to diamond (SH-26) shows the banner on the diamond
   texture.
-- [ ] **SH-02 Raised model:** raise each tier shield in first and third person → raised-arm pose like vanilla.
-- [ ] **SH-03 Compact tooltip:** hover the copper shield → `Physical: 20%`, `Electric: 50%`, "Hold [SHIFT]".
-  Diamond → Physical 50, Fire 50, Magic 25.
-- [ ] **SH-04 Full tooltip:** hold Shift on gold → Physical, Cold/Chemical/Fire/Electric each 30%, Magic 30,
+- [ ] **SH-02 Raised model:** raise each tier shield in first and third person -> raised-arm pose like vanilla.
+- [ ] **SH-03 Compact tooltip:** hover the copper shield -> `Physical: 20%`, `Electric: 50%`, "Hold [SHIFT]".
+  Diamond -> Physical 50, Fire 50, Magic 25.
+- [ ] **SH-04 Full tooltip:** hold Shift on gold -> Physical, Cold/Chemical/Fire/Electric each 30%, Magic 30,
   Fireproof No, Blocks burning No, Blocks thorns No, Knockback threshold 2. Iron gets the same style of lines;
   diamond shows Blocks thorns Yes; netherite shows both Yes.
-- [ ] **SH-05 Partial physical block:** copper raised, let a zombie hit you from the front → shield sound,
+- [ ] **SH-05 Partial physical block:** copper raised, let a zombie hit you from the front -> shield sound,
   about 2.4 damage taken (vanilla shield used to take 0).
 - [x] **SH-06 Percentage reduction:** PASSED 2026-09-24 (reduction confirmed working in game).
-- [ ] **SH-07 Facing, physical:** copper raised, zombie behind you → full damage, no shield sound.
-- [ ] **SH-08 Arrow:** iron raised, skeleton in front → 40% blocked, no crash (the 2026-09-24 copper-arrow crash
+- [ ] **SH-07 Facing, physical:** copper raised, zombie behind you -> full damage, no shield sound.
+- [ ] **SH-08 Arrow:** iron raised, skeleton in front -> 40% blocked, no crash (the 2026-09-24 copper-arrow crash
   was a stale jar).
 - [ ] **SH-09 Piercing arrow:** shoot yourself with a Piercing crossbow bolt via a second player or a pillager
-  holding one → never blocked.
-- [ ] **SH-10 Fire from any side:** stand in fire with netherite raised, facing any way → no burning damage,
+  holding one -> never blocked.
+- [ ] **SH-10 Fire from any side:** stand in fire with netherite raised, facing any way -> no burning damage,
   shield sound on each tick.
-- [ ] **SH-11 Lava wear:** netherite raised in lava → no damage; durability drops by about 5 per lava tick
-  (4 damage → 1+4).
-- [ ] **SH-12 Round-down:** walk into a cactus with diamond raised (physical 50%) → no damage while raised,
-  shield sound per tick; lower it → you take damage.
-- [ ] **SH-13 Breakdown mode:** copper, `/summon lightning_bolt` next to you → half the damage. Iron, same →
+- [ ] **SH-11 Lava wear:** netherite raised in lava -> no damage; durability drops by about 5 per lava tick
+  (4 damage -> 1+4).
+- [ ] **SH-12 Round-down:** walk into a cactus with diamond raised (physical 50%) -> no damage while raised,
+  shield sound per tick; lower it -> you take damage.
+- [ ] **SH-13 Breakdown mode:** copper, `/summon lightning_bolt` next to you -> half the damage. Iron, same ->
   full damage (electric 0 in breakdown mode).
-- [ ] **SH-14 Poison never blocked:** `/effect give @s minecraft:poison 10`, dragon raised → poison hurts,
+- [ ] **SH-14 Poison never blocked:** `/effect give @s minecraft:poison 10`, dragon raised -> poison hurts,
   no shield sound. (Changed 2026-10-05: gold used to block it.)
-- [ ] **SH-15 Unblockable:** dragon raised, `/effect give @s minecraft:wither 5` → wither still hurts
-  (armour-piercing physical/other).
-- [ ] **SH-16 Knockback suppressed:** netherite raised, zombie hits → no push. Copper raised → pushed.
-- [ ] **SH-17 Dragon effects:** dragon raised, let a zombie hit you → you get Regeneration, the zombie gets
+- [ ] **SH-15 Unblockable:** dragon raised, `/effect give @s minecraft:wither 5` -> wither still hurts
+  (armor-piercing physical/other).
+- [ ] **SH-16 Knockback suppressed:** netherite raised, zombie hits -> no push. Copper raised -> pushed.
+- [ ] **SH-17 Dragon effects:** dragon raised, let a zombie hit you -> you get Regeneration, the zombie gets
   Poison (5 s each).
-- [ ] **SH-18 Disable cooldown (player axe):** second player hits your raised shield with an axe → shield
+- [ ] **SH-18 Disable cooldown (player axe):** second player hits your raised shield with an axe -> shield
   lowered for about 1 s (`disableCooldownTicks = 20`).
 - [ ] **SH-19 Disable cooldown (mob axe):** a vindicator hits your raised diamond shield until it disables it
-  (about 1 in 4 hits) → shield drops, about 1 s cooldown, shield-break sound. Repeat with the iron shield.
-- [ ] **SH-20 Live durability:** change `[shields.copper].durability` to 50 in the config screen → the copper
+  (about 1 in 4 hits) -> shield drops, about 1 s cooldown, shield-break sound. Repeat with the iron shield.
+- [ ] **SH-20 Live durability:** change `[shields.copper].durability` to 50 in the config screen -> the copper
   shield's max durability shows 50 without restart. Put it back.
 - [ ] **SH-21 Iron durability and repair:** `minecraft:shield` shows max 336; anvil: iron ingot repairs it,
   planks don't.
 - [ ] **SH-22 Tier repair:** anvil repairs diamond with a diamond, dragon with a dragon scale; wrong material
   is refused.
-- [ ] **SH-23 Breaking:** worn shield breaks on a block → break sound, slot emptied, shield lowered.
-- [ ] **SH-24 Master switch:** `[shields] enabled = false` → copper blocks 100% of a zombie hit and none of
+- [ ] **SH-23 Breaking:** worn shield breaks on a block -> break sound, slot emptied, shield lowered.
+- [ ] **SH-24 Master switch:** `[shields] enabled = false` -> copper blocks 100% of a zombie hit and none of
   fire (vanilla rules). Set back to true.
 - [ ] **SH-25 Recipes:** JEI shows the copper/iron/gold shaped recipes, the smithing chain to netherite, and the
   echo/felsic/dragon assemblies; vanilla's plank shield recipe is gone.
 - [ ] **SH-26 Smithing keeps NBT:** put a banner on an iron shield (crafting grid), enchant and name it, smith
-  it to diamond → name, enchantments and banner kept.
-- [ ] **SH-27 Assembly NBT, F5:** carry the SH-26 shield on to netherite, then run it through echo assembly →
+  it to diamond -> name, enchantments and banner kept.
+- [ ] **SH-27 Assembly NBT, F5:** carry the SH-26 shield on to netherite, then run it through echo assembly ->
   name and enchantments kept; expected: banner lost.
-- [ ] **SH-28 Dragon autorepair:** damage a dragon shield and carry it → durability recovers over time.
+- [ ] **SH-28 Dragon autorepair:** damage a dragon shield and carry it -> durability recovers over time.
 - [ ] **SH-29 Damage tag reload:** remove `lightningBolt` from `electric.json` in a datapack override and
-  `/reload` → copper no longer blocks lightning. Remove the override.
-- [ ] **SH-30 Seen-sources log:** `[damage_tags] logSeenSources = true`, get hurt by fire and a zombie →
+  `/reload` -> copper no longer blocks lightning. Remove the override.
+- [ ] **SH-30 Seen-sources log:** `[damage_tags] logSeenSources = true`, get hurt by fire and a zombie ->
   `logs/latest.log` has one `[damage-tags] seen msgId=...` line each with their tags. Turn it off.
-- [ ] **SH-31 Fireproof:** throw a netherite shield into lava → it survives; a diamond shield burns.
-- [ ] **SH-32 MineColonies guard:** give a guard a diamond shield → it equips and raises it.
-- [ ] **SH-33 Banner on every tier:** crafting grid, copper shield + any banner → bannered copper shield; same
+- [ ] **SH-31 Fireproof:** throw a netherite shield into lava -> it survives; a diamond shield burns.
+- [ ] **SH-32 MineColonies guard:** give a guard a diamond shield -> it equips and raises it.
+- [ ] **SH-33 Banner on every tier:** crafting grid, copper shield + any banner -> bannered copper shield; same
   for gold, diamond, netherite, echo, felsic, dragon. The banner shows on the tier texture, and an already
   bannered shield can't take a second banner.
 - [ ] **SH-34 Burn ticks below netherite:** walk through a fire block and step out still burning, diamond
-  raised → you burn, no shield sound. Stand in a campfire with gold raised → same.
-- [ ] **SH-35 Burn ticks from netherite:** on fire with netherite raised → no burning damage, shield sound per
+  raised -> you burn, no shield sound. Stand in a campfire with gold raised -> same.
+- [ ] **SH-35 Burn ticks from netherite:** on fire with netherite raised -> no burning damage, shield sound per
   tick. Same in a campfire, on a magma block and on a lit Farmer's Delight stove. Diamond on magma or a stove
-  → full damage, no shield sound.
-- [ ] **SH-36 Fireball still blocks:** diamond raised, a dispenser shoots a fire charge at your front → blocked
+  -> full damage, no shield sound.
+- [ ] **SH-36 Fireball still blocks:** diamond raised, a dispenser shoots a fire charge at your front -> blocked
   as a projectile (physical 50%), shield sound.
-- [ ] **SH-37 Wither never blocked:** `/effect give @s minecraft:wither 5`, dragon raised → wither hurts, no
+- [ ] **SH-37 Wither never blocked:** `/effect give @s minecraft:wither 5`, dragon raised -> wither hurts, no
   shield sound.
-- [ ] **SH-38 Instant damage still blocks:** gold raised, `/effect give @s minecraft:instant_damage` → 6 damage,
+- [ ] **SH-38 Instant damage still blocks:** gold raised, `/effect give @s minecraft:instant_damage` -> 6 damage,
   30% blocked (4.2 taken), shield sound. Only poison and wither ticks are excluded.
-- [ ] **SH-39 Thorns below diamond:** iron raised, walk into a cactus and through a sweet berry bush → full
+- [ ] **SH-39 Thorns below diamond:** iron raised, walk into a cactus and through a sweet berry bush -> full
   damage, no shield sound.
-- [ ] **SH-40 Barbed pane:** diamond raised, stand in a Dustrial Decor barbed pane → no damage, shield sound per
-  tick; gold → damage.
+- [ ] **SH-40 Barbed pane:** diamond raised, stand in a Dustrial Decor barbed pane -> no damage, shield sound per
+  tick; gold -> damage.
 - [ ] **SH-41 Modded effect ticks:** `/effect give @s everythingcopper:copper_poisoning 10` and
-  `/effect give @s alexsmobs:exsanguination 10`, dragon raised → both hurt, no shield sound.
+  `/effect give @s alexsmobs:exsanguination 10`, dragon raised -> both hurt, no shield sound.
 - [ ] **SH-42 Netherite smithing (F8):** smithing table, diamond shield + Netherite Upgrade Smithing Template +
-  netherite ingot → netherite shield, template used up. Without the template → no result (Armor Trims).
-- [ ] **SH-43 JEI shows the template (F8):** look up the netherite shield's recipes (R) → an Item Upgrading
+  netherite ingot -> netherite shield, template used up. Without the template -> no result (Armor Trims).
+- [ ] **SH-43 JEI shows the template (F8):** look up the netherite shield's recipes (R) -> an Item Upgrading
   page with diamond shield, Netherite Upgrade Smithing Template and netherite ingot; no two-slot Smithing page.
   Same for a vanilla netherite sword. Diamond shield from an iron shield (U on the iron shield) still shows on
   the vanilla Smithing page. A trim template (e.g. U on a coast template) shows Armor Trimming pages.
@@ -531,7 +531,7 @@ on F3+H. "Raise" means hold right click.
   threshold (first attempt wrong, replaced the same day).
 - 2026-09-26: default ladder rebaked from the tuned toml.
 - By 2026-09-27 (initial git commit): own textures per tier, recipes (shield.js, end_gear.js), disable
-  cooldown mixin, Shift full-stat tooltip with colour ladder. Shipped in the deployed jar; unchanged since the
+  cooldown mixin, Shift full-stat tooltip with color ladder. Shipped in the deployed jar; unchanged since the
   1.0.4 deploy.
 - 2026-10-05: this writeup; `tools/shield_check.py`; findings F1 to F7.
 - 2026-10-05: mob axes disable every shield with the 20-tick cooldown (`MobShieldDisableMixin`); banners on
@@ -542,7 +542,7 @@ on F3+H. "Raise" means hold right click.
   SH-19 rewritten.
 - 2026-10-05: all seven tick-damage effects unblockable; magma and stoves moved into `burn_tick` (netherite+);
   new `contact_tick` gate (cactus, berry bushes, wither roots, beanstalk thorns, barbed pane: diamond+,
-  `blocksContactTicks`), wither roots and beanstalk thorns tagged `piercing`; `ShieldTickGate` generalises both;
+  `blocksContactTicks`), wither roots and beanstalk thorns tagged `piercing`; `ShieldTickGate` generalizes both;
   etching acid left on chemical %. Smithing investigated: F8 (Armor Trims needs the netherite template). Tests
   SH-39 to SH-42; SH-04, SH-12, SH-35 updated. Built, not in `mods/`.
 - 2026-10-05: JEI smithing matches Armor Trims' template rule (`SmithingTemplateJEI`, F8 decided: keep the

@@ -35,7 +35,7 @@ it edits the merged result. Datapack JSON = ~340 tables, no "remove X everywhere
 - `10_removals.js` / `20_frequency.js` / `30_redistribute.js` / `40_targeted.js` — one
   commented example each, inert until filled. `99_debug.js` — `event.enableLogging()` toggle.
 - **First real step:** run `/dumploot` (existing cmd, `kubejs/server_scripts/_lib/loot_dump.js`)
-  in a test world → `kubejs/exported/loot_tables/<ns>.json` → build the lists from it. The export is
+  in a test world -> `kubejs/exported/loot_tables/<ns>.json` -> build the lists from it. The export is
   tables as loaded (datapacks + pools mods add in code via LootTableLoadEvent) — NOT GLM output.
 
 **Key gotchas (also in README):**
@@ -81,14 +81,14 @@ forEach; the vanilla lambda still reads the real pack). (2) LootJS LootType come
 CALLER passes to LootContext.Builder.create; containers, Lootr and `/loot give @s loot <table>` all
 pass CHEST, whatever the table's declared type. `/loot give` is the quick test path.
 
-**Files:** `tools/gen_loot_config.py` → `kubejs/server_scripts/loot/loot_config.json` (editable:
+**Files:** `tools/gen_loot_config.py` -> `kubejs/server_scripts/loot/loot_config.json` (editable:
 per item `remove`/`frequency` + read-only `chests`/`where` %; `patterns` `@modid`//regex/ with
 `except`; `settings.enabled/slack/log_tables`) + `loot_index.json` (generated: per item `edit`
 tables + `reach` set or `"*"`, table types). Runtime `loot/05_tuning.js` (IIFE, `global.lootTuning`).
 
 **Why pre-roll via KubeJS, not LootJS:** LootJS 2.x is a GLM — every action is post-roll, it can
 never change a weight (the old `L.reweight` helper was a no-op and was deleted). KubeJS's
-`ServerEvents.genericLootTables` → `event.modify(id, b => ...)` exposes the raw JSON (`b.pools` is
+`ServerEvents.genericLootTables` -> `event.modify(id, b => ...)` exposes the raw JSON (`b.pools` is
 the live Gson array) before parsing and re-runs on /reload. Gotchas: `modify` forces `b.type` to
 `minecraft:generic` (restore from index); on a nonexistent id it creates an empty table (throw
 inside the callback to abort); the event's `lootMap` is private and reflection is class-filtered, so
@@ -128,7 +128,7 @@ entries -> catalog `post_roll_only`, stale exports skipped, template scan cached
 Offline: `node tools/loot_tuning_sim.js` ("4 rules -> rewrote 204 tables", all checks pass).
 
 Related: [loot-system](loot-system.md) (the LootJS scaffold this sits beside), [structure-gen-framework](structure-gen-framework.md)
-(same generator → editable JSON → apply pattern).
+(same generator -> editable JSON -> apply pattern).
 
 ## loot-catalog
 

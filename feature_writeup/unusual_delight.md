@@ -34,7 +34,7 @@ jars, crates, loot), so very little of it can go in as shipped (section 5).
 | Fact | Value |
 |---|---|
 | Id, version, loader | `unusual_delight` 5.0, Forge 1.20.1 only, MCreator-generated |
-| Licence | Academic Free License 3.0 (same as Hostile Delight): not GPL-compatible |
+| License | Academic Free License 3.0 (same as Hostile Delight): not GPL-compatible |
 | Registry | 306 items (26 of them blocks or block states), 14 mob effects, 2 creative tabs, villager trades, fuels |
 | Data | 345 recipes (crafting, smelting / smoking / campfire, FD `cooking` and `cutting`, one blasting), 20 advancements, 12 tag files, 3 vanilla loot tables |
 | Mandatory deps | `minecraft` only in `mods.toml`, but about 60 recipes use Farmer's Delight (pot, board, rice, cabbage, tomato sauce, wheat dough) |
@@ -175,7 +175,7 @@ Grouped by theme. "Lands in" names the pack system that must take it before it c
 
 In the order a port would hit them. Each line names the pack rule that applies.
 
-1. **Licence and form.** AFL 3.0 cannot go into the GPLv3 Creative Delight jar. Hostile is handled as an untouched jar plus
+1. **License and form.** AFL 3.0 cannot go into the GPLv3 Creative Delight jar. Hostile is handled as an untouched jar plus
    KubeJS / patcherMod. Unusual is 1.20.1 only, so there is no untouched jar to install: either an AFL-licensed backport
    jar kept separate (its own `mods/` entry and notice), or chosen items re-made as pack items with our own code and the
    art under an AFL notice (as `glowing_calamari_art_notice.txt`). Decision U1.
@@ -193,7 +193,7 @@ In the order a port would hit them. Each line names the pack rule that applies.
 6. **Baking overhaul.** 16+ cookies, cakes, breads, the stroopwafels and biscuits: oven recipes with flour, no grid route.
    The filled breads (Ink, Glow Ink, Slime-Coated, Cream-Coated, Crimson, Pale, Silent, Seeking) contradict
    `baking/baked-goods #33` (filled breads dropped from the bread family). Decision U4.
-7. **Sweets families.** Ice creams into the ice cream rework (`baking/sweets #4`: fluid per flavour, block per flavour);
+7. **Sweets families.** Ice creams into the ice cream rework (`baking/sweets #4`: fluid per flavor, block per flavor);
    popsicles into the cold sweets family (`#3`); gummies (`#1`); Amethyst Apple vs the amethyst rock candy (`#2`).
 8. **Drinks.** Ales, Soul Wine, Glacier Tequila, Siren Schnapps, Cactus Ale: alcohol belongs to the reserved Creative
    Brewing line (memory: CD routing), and Brewin' intoxication rules apply if they are alcoholic. Teas and juices into

@@ -38,7 +38,7 @@ The FD-style stations' leftover slots (pot, kettle, oven; rows #1, #3, #4, #13, 
 | Display Delight blocks, toppers and the coaster break with drops when the block below goes | BUILT 2026-10-25 (patcherMod 1.1.03, deployed 2026-10-26); since Display Delight 1.7.0 only the toppers and the coaster rely on it (2026-10-27); rerun scratch PASSED 2026-11-01 (SQ-KT-25) and r1102b (SQ-KT-02) | `#20` |
 | CfB kitchen corner storage (27 slots, chest GUI, hoppers, cooking table) | BUILT 2026-10-21 (patcherMod), scratch server PASSED | `#15` |
 | Bamboo bowl | BUILT 2026-10-21 (KubeJS), scratch server PASSED | `#10` |
-| Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalogue) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
+| Mortar and pestle food grinding (own recipes through `foodGrinding`, other mods' through a catalog) | BUILT 2026-10-21 (KubeJS + generator), scratch server PASSED | `#10` |
 | Returned bowls that wouldn't stack | cause found elsewhere: Sticky It!'s tooltip handler, fixed by Creative Labels ([sticky_notes.md](sticky_notes.md) 3.13, SN-48) | `#5` |
 | Coaster contents: only items with a coaster model (tag 304, 208 pack models from `gen_coaster_models.py`), 2.3 | BUILT 2026-10-29 (KubeJS assets + tag), scratch server PASSED r1031 (2026-10-31, SQ-KT-21: tag count logged, coaster accepts and refuses as listed); KT-19, KT-20 in game pending | `#21` |
 | Stepstool | BUILT 2026-10-29 as a worn stool that lifts the player one block ([stepstool.md](stepstool.md)); scratch server PASSED r1031 (SQ-STL-01, -02); client and play open | `#17` |
@@ -135,7 +135,7 @@ water".
   (`assets/<ns>/brewinandchewin/coaster/*.json`) names it and its model loads; the renderer draws anything else as a
   flat item sprite, and a JSON whose model is missing draws nothing (`checkModel`). The tag is the port's 96 files plus
   every file in `kubejs/assets/creativeengineering/brewinandchewin/coaster/` (`tools/placeable_catalog.py`
-  `add_coaster`), so the tag can only hold modelled items. Since 2026-10-27 the pack folder had been empty
+  `add_coaster`), so the tag can only hold modeled items. Since 2026-10-27 the pack folder had been empty
   (`gen_coaster_models.py` read only plain-variant blockstates; Display Delight 1.7.0's are multipart) and the
   in-game tag was the port's 96. `gen_coaster_models.py` now writes 208 files from three sources: Display Delight
   1.7.0's default-state model for every food the port registers a block for (155, all links from the jar, not the
@@ -143,9 +143,9 @@ water".
   (34: 26 wines, 8 jars; Vinery's art read from `vinery_upstream/`), and same-sprite borrows (19: Farmer's Respite
   long/strong drinks take the base drink's model, Create Central Kitchen's pumpkin pie slice Delightful's, the
   Enchanted Golden Carrot the golden carrot's with the glint). Each model is scaled to 10 px wide and 16 px tall at
-  most. Tag 304. Left out: Fruits Delight jellies (their contents are block-tinted, the coaster draws one colour per
-  model so they would show white; needs a tint modifier in the port) and the colour-shifted look-alikes in
-  [coaster_model_candidates.md](coaster_model_candidates.md) (a borrowed model would show the wrong colour). Foods
+  most. Tag 304. Left out: Fruits Delight jellies (their contents are block-tinted, the coaster draws one color per
+  model so they would show white; needs a tint modifier in the port) and the color-shifted look-alikes in
+  [coaster_model_candidates.md](coaster_model_candidates.md) (a borrowed model would show the wrong color). Foods
   the dumps have not seen (Creative Delight's newer foods) join after `/dumpall`, then the two generators.
 
 ### 2.4 Fridge
@@ -154,7 +154,7 @@ water".
   on top floated 3 px above it. A box fills it: x 1-15, y 13-16, z 1-15 (the body and the closed door's front), all six
   faces (the bottom shows over the door's gap when it swings open), textured with the white inside of CfB's own
   `fridge_side` (uv 1-15 on top and bottom, a 14 x 3 strip on the sides) with `tintindex` 0, so a dyed fridge's box
-  takes the dye from CfB's block colour like the body.
+  takes the dye from CfB's block color like the body.
 - Since 2026-10-31: the box is our own model `creativedelight:block/fridge_top_fill` (`blockheads_additions:` until M8; written by
   `tools/gen_cfb_racks.py`), registered as an additional model (so its texture is stitched).
   `client/FridgeTopFill` wraps the fridge's baked model for every `model_type=large_upper` state in
@@ -281,7 +281,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 
 - `farmersdelight:{oak,birch,jungle,acacia,dark_oak,mangrove,crimson,warped}_cutting_board`: FD's `CuttingBoardBlock`
   registered by the repackedFarmers member (`FDBackportRegistry.WOOD_CUTTING_BOARDS`), properties copied from the
-  wood's planks (map colour; crimson and warped not flammable) with FD's strength 2.0 and wood sound. Common setup
+  wood's planks (map color; crimson and warped not flammable) with FD's strength 2.0 and wood sound. Common setup
   (`allowExtraBoards`, was `allowStoneBoards`) adds them and the stone boards to the cutting board block entity type.
 - FD's own `farmersdelight:cutting_board` is the spruce board (its art is spruce): renamed "Spruce Cutting Board" in
   the member's lang, id unchanged.
@@ -307,7 +307,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
   the block: remainder buffer (pot, kettle), the kettle's two bottle boxes, the copper pot's leftover slot.
 - Placing the item restores them (vanilla `BlockItem` loads `BlockEntityTag`).
 - Only marked breaks keep: `CookwareContents` marks the block entity (Forge persistent data, key
-  `creativedelight:keep_contents`, valid for the current game tick) from a lowest-priority `BreakEvent` (not cancelled,
+  `creativedelight:keep_contents`, valid for the current game tick) from a lowest-priority `BreakEvent` (not canceled,
   not creative, `canHarvestBlock`) or the pickup. Creative breaks, explosions, Create drills and `/setblock` drop the
   contents as before, so nothing is lost when no item follows.
 - QoL-7 pickup with QoL-8 on: no longer empties the station into the inventory; the hand gets the stocked item.
@@ -358,7 +358,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 - Pairing (`compat/cookingforblockheads/kitchen/FridgePairs`): CfB's `flipped` state picks the door side. In CfB's model
   frame (front at north, model +x = `facing.getClockWise()`) an unflipped door has its handle at -x and its hinge at +x.
   Two fridges are a pair when they face the same way, have the same height (1-tall, or both 2-tall) and each one's
-  handle side points at the other, so the hinges are on the outer edges. A handle side holds one neighbour, so a row of
+  handle side points at the other, so the hinges are on the outer edges. A handle side holds one neighbor, so a row of
   fridges pairs without a scan; an odd one out stays single. A 2-tall fridge's door side is its lower block's (CfB's
   renderer draws both halves from it; the upper block's own `flipped` is ignored).
 - Placement (`mixin/cookingforblockheads/CfbFridgePlaceMixin`, on `getStateForPlacement`): a fridge placed next to a
@@ -366,13 +366,13 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
   CfB's own choice (from where the player stands) stays when it already pairs or nothing qualifies. Fridges placed
   before this do not change; place one again to pair it.
 - Drawing (`client/FridgeDouble`): on the joined side, the body gets a 1 px strip to the block edge and a white lip where
-  CfB's grey seal stood (the seal's quads are dropped), and the door gets a 1 px strip to the block edge that swings
+  CfB's gray seal stood (the seal's quads are dropped), and the door gets a 1 px strip to the block edge that swings
   with it. The pieces are our own models `creativedelight:block/fridge_join_<small|lower|upper>_<body|door>`
   (`gen_cfb_racks.py`; boxes on CfB's `fridge_side` white, `tintindex` 0 so a dyed fridge matches), built for a joint
   at model -x and mirrored in code for a flipped door. The body pieces come from a wrapper on every fridge state
   model (after `FridgeTopFill`, from its listener), which reads the pairing into its model data per block; the door
   piece from `mixin/cookingforblockheads/CfbFridgeRendererMixin` (CfB's `renderDoor`, the door model argument).
-- A neighbour change rebuilds the chunk section, so pairs update when a fridge is placed, broken or stacked. A 1-tall
+- A neighbor change rebuilds the chunk section, so pairs update when a fridge is placed, broken or stacked. A 1-tall
   next to a 2-tall fridge does not join.
 
 ## 3. What the pack changes
@@ -385,7 +385,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
   renderers (client), CfB corner block entity and use, CfB oven `lit` state, sync, shape and renderer (2.10). Fridge
   fill and raised oven by baked-model wrappers (2.4, 2.10). Wood racks (2.7).
 - Resource overrides: none since 2026-10-31 (the fridge override was removed, 2.4).
-- Recipes: bamboo bowl; mortar crafts (own and catalogue); slime block from a dough block + green dye in a heated mixer
+- Recipes: bamboo bowl; mortar crafts (own and catalog); slime block from a dough block + green dye in a heated mixer
   (`cooking/kitchen #12`, Creative Delight script `kubejs/data/creativedelight/kubejs/create/slime.js`, id
   `creativedelight:createmixing/slime_block_from_dough_block`; it replaces the Pickling Jar's slime block).
 - Tooltips: CfB oven, sink.
@@ -468,42 +468,42 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-FCB-07, -08b.
 
 - [ ] **KT-01 CfB oven fuel:** coal starts a Cooking for Blockheads Oven, and so does Cooking Oil.
-- [ ] **KT-02 Sink:** right-click the Sink with an empty bucket → a water bucket, with nothing piped in.
+- [ ] **KT-02 Sink:** right-click the Sink with an empty bucket -> a water bucket, with nothing piped in.
 - [ ] **KT-03 Board on a counter:** a Cutting Board places on a Kitchen Counter's top (and a Kitchen Corner's) and
   cuts.
-- [ ] **KT-04 Oil bottles:** 5 Cooking Oil in the oven's fuel slot, cook until 2 are used → 2 glass bottles in the
+- [ ] **KT-04 Oil bottles:** 5 Cooking Oil in the oven's fuel slot, cook until 2 are used -> 2 glass bottles in the
   output slots; when the last oil burns, its bottle is in the fuel slot.
 - [ ] **KT-05 Board drawn on the worktop:** the board and an item on it sit on the counter top with no gap, on
-  counters facing all four ways; set `cuttingBoardOffsetZ = -2`, restart, F3+A → it moves toward the door on each.
+  counters facing all four ways; set `cuttingBoardOffsetZ = -2`, restart, F3+A -> it moves toward the door on each.
 - [ ] **KT-06 Fridge look:** a 2-tall fridge: CfB's own body and doors (not stretched), a white box on top (textured, not
   purple-black) level
   with a full block next to it, a candle on top sits on it; the door opens and closes cleanly on both hinge sides and
   passes under the box; a dyed fridge's body and box both take the colour.
-- [ ] **KT-07 Bamboo bowl:** 3 bamboo in a V → 1 bowl.
-- [ ] **KT-08 Mortar:** wheat + Mortar and Pestle in the crafting table → wheat flour, the mortar back with 1 damage;
+- [ ] **KT-07 Bamboo bowl:** 3 bamboo in a V -> 1 bowl.
+- [ ] **KT-08 Mortar:** wheat + Mortar and Pestle in the crafting table -> wheat flour, the mortar back with 1 damage;
   JEI's uses page for the mortar lists the grinding crafts.
-- [ ] **KT-09 Corner GUI:** right-click a Kitchen Corner → a 3-row chest titled "Kitchen Corner".
-- [ ] **KT-10 Corner keeps items:** put items in, relog → still there.
-- [ ] **KT-11 Corner drops:** break it → its contents drop.
+- [ ] **KT-09 Corner GUI:** right-click a Kitchen Corner -> a 3-row chest titled "Kitchen Corner".
+- [ ] **KT-10 Corner keeps items:** put items in, relog -> still there.
+- [ ] **KT-11 Corner drops:** break it -> its contents drop.
 - [ ] **KT-12 Corner feeds the Cooking Table:** a Cooking Table connected to the corner (through counters) lists
   recipes from ingredients kept only in the corner.
-- [ ] **KT-13 Mortar item:** lever over 3 polished granite (Old Guns' shape) in the crafting table → Mortar and
+- [ ] **KT-13 Mortar item:** lever over 3 polished granite (Old Guns' shape) in the crafting table -> Mortar and
   Pestle with the Old Guns texture; Old Guns' item reads "Powder Pestle" and wheat + Powder Pestle gives nothing.
 - [ ] **KT-15 Plates and coasters on a counter:** a Food Plate, a Small Food Plate and a Coaster each place on a
   Kitchen Counter's top and a Kitchen Corner's; put a hamburger on the plate (plated hamburger) and drinks on the
   coaster: both stay; reload the world: still there. Placing a coaster on a counter, then breaking the counter, pops
   the coaster.
 - [ ] **KT-16 Plates drawn on the worktop:** the plate, its food, the coaster and its drinks sit on the counter top with
-  no gap, on counters facing all four ways; set `plateOffsetY = -3`, restart, F3+A → plates and coaster sink 2 px
+  no gap, on counters facing all four ways; set `plateOffsetY = -3`, restart, F3+A -> plates and coaster sink 2 px
   more, the cutting board does not move.
 - [ ] **KT-17 Block below goes:** a Food Plate, a plated food and a Display Delight bowl on stone, and a plate and a
-  Coaster with drinks on a counter: break the block under each → the Display Delight blocks stay on a wooden leg; the
+  Coaster with drinks on a counter: break the block under each -> the Display Delight blocks stay on a wooden leg; the
   coaster breaks and drops its drinks; nothing floats without a leg.
-- [ ] **KT-18 Slime block in the mixer:** a dough block + green dye in a heated basin → slime block; JEI lists it under
+- [ ] **KT-18 Slime block in the mixer:** a dough block + green dye in a heated basin -> slime block; JEI lists it under
   Mixing (needs the Creative Delight jar).
-- [ ] **KT-19 Block-modelled foods on a coaster:** on a Coaster put a Display Delight food (Apple Cider, Hamburger, a
+- [ ] **KT-19 Block-modeled foods on a coaster:** on a Coaster put a Display Delight food (Apple Cider, Hamburger, a
   Farmer's Respite tea), a Vinery wine (Red Wine, Stal Wine), a Vintage Delight jar (Honey Jar) and an Enchanted
-  Golden Carrot → each shows its small 3D model (wine as a bottle, jar as a jar, carrot with glint), none lies flat as
+  Golden Carrot -> each shows its small 3D model (wine as a bottle, jar as a jar, carrot with glint), none lies flat as
   a sprite or is invisible, four fit without overlapping much; the tooltip says "Placeable on a coaster"; no
   `Failed to get model` in `latest.log`.
 - [ ] **KT-22 Wood racks:** JEI lists 20 spice racks and 20 tool racks in CfB's tab; 2 oak slabs in a row craft an
@@ -520,24 +520,24 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   KT-06 (fridge box textured, dyed fridge's box dyed), KT-16 pass again; `config/blockheads_additions-common.toml` has
   `[kitchen]`.
 - [ ] **KT-20 Unmodelled items refused:** right click a Coaster with a Fruits Delight jelly, a Golden Cookie and Cooked
-  Goose (no coaster model) → not taken (the item is used or
+  Goose (no coaster model) -> not taken (the item is used or
   placed as normal); a port drink (Beer) is still taken.
 
 - [ ] **KT-26 Stocked pot (cooking/kitchen #40):** put ingredients, bowls and a finished meal in a Cooking Pot, break it
-  in survival → one glinted pot item, tooltip "Holds:" lists the ingredients and bowls; place it → all slots as before.
+  in survival -> one glinted pot item, tooltip "Holds:" lists the ingredients and bowls; place it -> all slots as before.
   Same for a Copper Pot and a Kettle with tea leaves and water (the tank comes back too). Bottles in the leftover slots
-  drop on the ground. Sneak right-click pickup with an empty hand → the same stocked item in the hand. Break one in
-  creative → contents drop loose.
+  drop on the ground. Sneak right-click pickup with an empty hand -> the same stocked item in the hand. Break one in
+  creative -> contents drop loose.
 - [ ] **KT-27 Hung skillet (cooking/kitchen #39):** sneak right-click the side of a stone wall with an enchanted, renamed
-  Skillet, air above → it hangs on the wall, handle up; with a block above → a standing skillet as before. Food in the
-  other hand does not cook on it. Break it → the same enchanted, renamed Skillet; empty-hand right-click → into the hand;
-  break the wall → it drops.
+  Skillet, air above -> it hangs on the wall, handle up; with a block above -> a standing skillet as before. Food in the
+  other hand does not cook on it. Break it -> the same enchanted, renamed Skillet; empty-hand right-click -> into the hand;
+  break the wall -> it drops.
 - [ ] **KT-28 Faucet fit (cooking/kitchen #26):** a faucet on the side of a Supplementaries Jar sits against the jar's
-  glass (no 3 px gap); open it over a carpet and over a Cooking Pot and a Kettle → the stream ends on the carpet / the
-  rim; faucet on a full block over a full block → stream stops at the top of the lower block.
+  glass (no 3 px gap); open it over a carpet and over a Cooking Pot and a Kettle -> the stream ends on the carpet / the
+  rim; faucet on a full block over a full block -> stream stops at the top of the lower block.
 - [ ] **KT-29 Double fridges (cooking/kitchen #36):** place a fridge, then a second one beside it facing the same
-  way → its door opens the other way, the two handles meet in the middle and no gap or grey seal shows between them;
-  open each door → each has its own inventory, and the joined edge swings with its door. Stack both to 2-tall → still
+  way -> its door opens the other way, the two handles meet in the middle and no gap or gray seal shows between them;
+  open each door -> each has its own inventory, and the joined edge swings with its door. Stack both to 2-tall -> still
   joined, the top boxes meet. A fridge beside a 2-tall fridge, or two whose handles point away from each other, stay
   apart. Repeat facing another way and with a dyed pair (the joint takes the dye).
 
@@ -549,7 +549,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   `#17`. Row `#5`'s cause found in Sticky It!'s tooltip handler (fixed by Creative Labels). Corner tests renamed from
   the brief's KC-01 to KC-04 to KT-09 to KT-12.
 - 2026-10-24: planned from the scratchpad: fridge texture padding, plates and coasters on the counter (`textures/art #1`, `cooking/kitchen #20`). No code changed.
-- 2026-10-24: built `#20` (patcherMod 1.1.02, in `mods/` only): the cutting board route generalised to counter toppers
+- 2026-10-24: built `#20` (patcherMod 1.1.02, in `mods/` only): the cutting board route generalized to counter toppers
   (2.3), `plateOffset*` config, coaster renderer mixin; `cutting_board_supports` renamed `counter_supports`. KT-15, KT-16
   added; `/kttest` extended, scratch run queued (SQ-KT).
 - 2026-10-25: Display Delight blocks, toppers and the coaster break when the block below goes (2.3, KT-17, patcherMod
@@ -598,7 +598,7 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
     blockheads_additions` switch became `[compartments] cookingforblockheads` (value carried once).
   - Scripts: `global.CD.on('cookingforblockheads')` is the compartment test (`kitchen.js`, the oven tooltip lines,
     `swap_merges.js`); rack recipes skip a wood whose slab mod is absent.
-- **Licence route:** Cooking for Blockheads 13.3.4 is All Rights Reserved (its `LICENSE`: "All Rights Reserved,
+- **License route:** Cooking for Blockheads 13.3.4 is All Rights Reserved (its `LICENSE`: "All Rights Reserved,
   Copyright (c) 2023 BlayTheNinth"); its permissions page (mods.twelveiterations.com/permissions, read 2026-10-31)
   allows modpack use but no rehosting and no publicly published modified versions. It cannot be repacked like the MIT
   members, and a Miner's-style rewrite of the whole mod (with Balm) is out of proportion, so CfB stays its own jar in
@@ -607,12 +607,12 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
   CD's `gradle.properties`) and `checkNoArrPackResources` (CD `build.gradle`, the files under `packs/*/`) fail on any
   path the CfB jar also ships (tag files excepted: they merge by path). Models name CfB's models as parents and its
   textures by id, never copy them.
-- **Moved from patcherMod (2026-10-31), behaviour unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
+- **Moved from patcherMod (2026-10-31), behavior unchanged:** `CfbOvenFuelMixin`, `CfbOvenSmokingMixin`,
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbCornerStorage` (now `kitchen/CornerStorage`),
   `CounterToppers`, `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
   `CEConfig.Kitchen` (then `BAConfig`, now `CDConfig.CFB`, same keys). Kept ids: the corner capability
   `creativeengineering:corner_storage` and the tags `#creativedelight:counter_supports` / `counter_toppers`. The
-  pack's own Display Delight dishes are recognised by their Display Delight block class. The counter tags live in
+  pack's own Display Delight dishes are recognized by their Display Delight block class. The counter tags live in
   `cookingforblockheads/kitchen.js`.
 - **New:** wood racks (2.7), fridge fill in code (2.4), oven as a stove (2.10).
 - **Build:** `./gradlew :creativeDelight:build --offline`, install `:creativeDelight:installToMods`. Compiles against

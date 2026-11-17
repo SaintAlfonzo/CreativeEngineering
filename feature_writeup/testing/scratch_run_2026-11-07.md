@@ -38,7 +38,7 @@ allows. Targeted run, no perf session (12 GB free on /).
   would load), /reload.
 - 11:14-11:18 SQ-TP-24 by hand on a6 (loot workaround in): marker placed, Marker B named (markerui), card written
   (portal_target id 85c537c6, provider tempad:markers); survival break dropped the marker with anchor_id 85c537c6,
-  name, colour, owner; anchors file emptied; re-placed at 25 -60 0 -> anchors = {85c537c6 -> 25 -60 0} (fix 4 works);
+  name, color, owner; anchors file emptied; re-placed at 25 -60 0 -> anchors = {85c537c6 -> 25 -60 0} (fix 4 works);
   a stack copy with the same anchor_id placed at 25 -60 6 got its own id 42e7d8c4, original kept 85c537c6; Tempad
   markers section lists both, door to Marker B opens at the new place. SQ-TP-09 part: workstation door persisted
   ~300 s while powered, docked Tempad 5000 -> 2250 (~10/s = cost_to_persist). Code read: AbstractMarkerBe saves its
@@ -62,13 +62,13 @@ allows. Targeted run, no perf session (12 GB free on /).
   placed with room (pad south-facing, terminal at x+1); survival break of either half removes both and drops the
   workstation + docked Tempad. **FAIL: creative break of the pad also drops both** (reproduced twice, items cleared
   first, playerGameType 1). Likely cause: WorkstationBlock.playerWillDestroy (creative) clears the terminal with
-  setBlock flags 35; the neighbour shape update (flags & -34 = 2) runs the pad's own updateShape (terminal side AIR ->
+  setBlock flags 35; the neighbor shape update (flags & -34 = 2) runs the pad's own updateShape (terminal side AIR ->
   AIR), and Block.updateOrDestroy destroys the pad with drops (getDrops adds the docked Tempad) before the creative
   removal. Vanilla double blocks avoid it through loot conditions on the other half; check upstream before fixing.
   Pick-block is a client check.
   SQ-TP-09 server half PASS: player_teleport upgrade installed through the pad (Recipe tempad:player_teleport,
   MaxDownloadTime 80, upgrade in installed_upgrades), duplicate refused (item kept; the PASS falls through to the
-  empty-hand take-out, upstream PASS_TO_DEFAULT behaviour), docked Tempad and portal settings survived the a7 restart.
+  empty-hand take-out, upstream PASS_TO_DEFAULT behavior), docked Tempad and portal settings survived the a7 restart.
   SQ-TP-12 part: card written from the Teleport menu with a stack of 2 on the cursor -> one written card back, one
   blank left (probe `carry`/`card`). SQ-TP-13 server half PASS: projector placed with shift-use (faces the player),
   card in, swap returns the old card, empty-hand use takes it out, shift + empty hand picks it up with chronons and
@@ -87,8 +87,8 @@ allows. Targeted run, no perf session (12 GB free on /).
   chronomark at y -55; qb renames while unlocked, refused once qa locks it private, which also hides it; qb cannot
   place a marker owned by qa; restart half: see SQ-TP-25). SQ-TP-15 PASS with a row correction: a booting metronome
   never reads its slots (the tick returns while bootTime > 0, upstream bytecode identical); it boots from 2000
-  chronons pushed into its block capability (a neighbouring chronon block; probe `bchr`), then pool registered after
-  100 ticks, slots 1-4 drain into the pool, 5-8 fill, two metronomes sum to 12000, a neighbouring projector receives,
+  chronons pushed into its block capability (a neighboring chronon block; probe `bchr`), then pool registered after
+  100 ticks, slots 1-4 drain into the pool, 5-8 fill, two metronomes sum to 12000, a neighboring projector receives,
   breaking one drops it with its share and capacity falls back to 6000. SQ-TP-16 server half PASS (history newest
   first with dimension markers; backtrack 3000 -> 2500, Nether -> overworld, later entries dropped; twister stacked on
   the Tempad by inventory right-click keeps 2222 chronons and its name, Timeline app appears; right-click on an empty
@@ -108,7 +108,7 @@ place of the screens. Action-bar messages, screens, rendering, sounds and pick-b
 | SQ-TP-01 | PASS | a1: Done, 0 tempad error lines, tempad_upstream data pack listed; a9: FML stop with the folder, jar path and link |
 | SQ-TP-02 | PASS | all phase-1 recipes load, forge: tags / items only, no upgrades/new_location while the option is off |
 | SQ-TP-03 | PASS | three locations listed after a restart; Tempad use opens tempad:teleport |
-| SQ-TP-04 | PASS | door cost 1000, carries bot / golem / armour stand, same dimension and Nether; macro refused during the 40-tick cooldown; door gone after 200 ticks (age + closing = 200) |
+| SQ-TP-04 | PASS | door cost 1000, carries bot / golem / armor stand, same dimension and Nether; macro refused during the 40-tick cooldown; door gone after 200 ticks (age + closing = 200) |
 | SQ-TP-05 | PASS (server) | pin and macro after a restart and after a death (perfBot relog: Clone path not covered, needs a client death) |
 | SQ-TP-06 | PASS (server) | New Location hidden without the upgrade, shown with it (installed by NBT); upgrade recipe loaded; creative tab is CQ |
 | SQ-TP-07 | PASS | carried generator: Tempad 1 -> 51 in 2 min |
@@ -119,7 +119,7 @@ place of the screens. Action-bar messages, screens, rendering, sounds and pick-b
 | SQ-TP-12 | PASS (server) | card written from a stack of 2 (one back), wallet insert, wallet section and door, wallet menu; "full wallet" stacks identical cards (upstream: no slot limit) |
 | SQ-TP-13 | PASS (server) | projector placement, card swap / take-out, shift pick-up and survival break keep chronons + card, pulse door (glitching, 1000), no second door while open, hand use |
 | SQ-TP-14 | PASS (server) | marker up / down, chronomark clamp 5, angle, access, dye, second-player listing, lock, owner check on placement (restart: see 25) |
-| SQ-TP-15 | PASS (row corrected) | boot only from chronons pushed into the block capability (upstream: slots not read while booting); pool, slot flow, summed capacity, neighbour push, break share, restart |
+| SQ-TP-15 | PASS (row corrected) | boot only from chronons pushed into the block capability (upstream: slots not read while booting); pool, slot flow, summed capacity, neighbor push, break share, restart |
 | SQ-TP-16 | PASS (server) | history newest first, backtrack 500 across dimensions dropping later entries, twister stacking on / off keeps chronons and name, Timeline app; low-chronon text is CQ |
 | SQ-TP-17 | not run | needs a dedicated server with a joined client |
 | SQ-TP-18 | PASS | a1 with Curios / FTB Teams / WTHIT (Curios slot data dropped only); a8 without them and their 15 dependents: no class errors, recipes load, no ftbteams access option |
@@ -168,7 +168,7 @@ JFR_MAX 200m per boot).
   list and the two curios files, no loot_table; `/loot spawn` of the five tables "Dropped 1" each; no
   "Couldn't parse loot table tempad".
 - 12:09-12:11 SQ-TP-32 PASS (bare hand and iron pickaxe): one item per block; workstation + docked Tempad; marker and
-  chronomark keep name, colour, owner, anchor_id; metronome `chronon_content` 40 (its pool share); one projector with
+  chronomark keep name, color, owner, anchor_id; metronome `chronon_content` 40 (its pool share); one projector with
   1500 chronons and the card; no workstation_child item. Tooling: `pbot hold` puts a FRESH stack in slot 0 (it does not
   select an inventory stack), so charge with `/ztp setchr qa 0 N` after the hold.
 - 12:12-12:16 SQ-TP-33: terminal-half survival break PASS (both gone, one workstation + the Tempad). TNT: marker 6/6
@@ -180,13 +180,13 @@ JFR_MAX 200m per boot).
 - 12:25-12:31 SQ-TP-35 PASS: survival powered break of pad and of terminal: one workstation + the docked Tempad each
   time; placement refused (use FAIL) with stone on the terminal spot. Note: in the powered terminal case the dropped
   Tempad fell into the open timedoor on the pad and came out at the destination (found intact at 20 -60 21): door
-  behaviour, the drop itself is right.
+  behavior, the drop itself is right.
 - 12:13-12:16 SQ-TP-36 PASS: marker "Marker R" (40 -60 0) and chronomark "Chrono R" (44 -60 0) named, a card written
   from each (card ids 0b6ae395 / 6e77e623 = the blocks' `anchor_id`; `id` = the type id); save-all, stop, boot b2
   (Done 4.3 s): both blocks still hold the same `anchor_id`, anchors file 2 entries, `/ztp locs` lists both under
   tempad:markers.
 - 12:17-12:19 SQ-TP-37 PASS (= SQ-TP-25 rerun PASS): survival break of Marker R after the restart removed its entry;
-  drop has anchor_id 0b6ae395, name, colour, owner; re-placed at 60 -60 0 (main hand set to the drop's exact NBT:
+  drop has anchor_id 0b6ae395, name, color, owner; re-placed at 60 -60 0 (main hand set to the drop's exact NBT:
   1.19.2 `item replace ... from entity` has no `contents` slot for item entities) -> entry 0b6ae395 -> 60 -60 0; Tempad
   door opens there; a projector with the card (pulse) opens a glitching door to 60 -59.5 -0.5, 2000 -> 1000.
 - 12:20 SQ-TP-38 PASS: marker at 300 -60 300 (forceloaded, named, card 118b2c75), forceload removed, bot 500 blocks
@@ -198,7 +198,7 @@ JFR_MAX 200m per boot).
   re-placed at 24 -60 0 -> entry moves there, door opens there. Marker half = SQ-TP-37 and -39. Reruns of SQ-TP-08,
   -13, -14, -15 break steps covered by SQ-TP-32..35 and -37 (workstation, projector, marker, metronome). Side notes,
   not row checks: a marker re-placed from its item reads `Locked: 1b`, and its y offset / angle return to defaults
-  (the item carries name, colour, owner, id only; as r1107tp's SQ-TP-14 noted).
+  (the item carries name, color, owner, id only; as r1107tp's SQ-TP-14 noted).
 - 12:24 stopped; no JVM up. latest.log: no tempad error or exception lines across both boots.
 
 ### Verdicts (r1107tp2, server rows)

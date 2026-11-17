@@ -72,8 +72,8 @@ Every pack can has its own 16x16 sprite; none borrows its family's sprite or a C
 | preserve | 2 | `canned_food` |
 | hazard, special, drink, dessert | 1 each | rotten flesh, apple, honey bottles, cake |
 
-- Sprite layout (measured on canned_apple.png vs canned_carrot.png): grey can body and rim shared; the label is rows
-  6-11, columns 3-12, a section colour band with a ~5x5 food icon centred. Every sprite is 16x16 RGBA.
+- Sprite layout (measured on canned_apple.png vs canned_carrot.png): gray can body and rim shared; the label is rows
+  6-11, columns 3-12, a section color band with a ~5x5 food icon centred. Every sprite is 16x16 RGBA.
 - Pipeline: drawn in `textureswapper/canned/newcan` (label layers in `newlabel`, combined by `combine_tex.py --batch`),
   copied in by hand. That folder is not in the repo.
 - A can stops borrowing only when `gen_can_types.py` is rerun (it writes `"texture": null` when `<key>.png` exists,
@@ -181,7 +181,7 @@ settled.
    it.setCraftingRemainder(Item.of(i.bowl).item))` (unprefixed call, as potion_buckets.js lines 74-81 note). Find the
    list first: a one-off script logging every soup / salad / meal food whose `getCraftingRemainingItem()` is empty.
 3. Delete the canning.js TODO lines 94-99 once settled; say where the answer lives (cans.md).
-4. Optional flavour later (Creative Canning): Create sequenced assembly "fill then press the lid".
+4. Optional flavor later (Creative Canning): Create sequenced assembly "fill then press the lid".
 
 ### Decisions
 - Rely on Create's auto-shapeless (recommend) vs explicit mixing recipes.

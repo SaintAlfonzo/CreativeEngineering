@@ -34,7 +34,7 @@ Reruns on restarts of the same world (p1b, p1c to p1e, p3_reruns, p3b_check). Fi
 | SQ-PRI-02 | PASS | no floral large pot recipe; `floralench:large_poppy_pot` (ids are `large_<flower>_pot`) places |
 | SQ-PRI-03 | PASS | no jrftl jar or toml; the only log line naming jrftl is the probe's own |
 | SQ-JRFTL-01 | PASS | judged_p1.md |
-| SQ-WCT-01, -02, -04 | PASS | six ids; cauldron WaterLevels 8 / 20 / 32 / 10 / 21; dragon 7x7, copper centre only |
+| SQ-WCT-01, -02, -04 | PASS | six ids; cauldron WaterLevels 8 / 20 / 32 / 10 / 21; dragon 7x7, copper center only |
 | SQ-WCT-03 | PASS (can) | roof-half use gives WaterLevel 12; the well tank stayed at 86000 mB (no 1000 mB drop seen: note) |
 | SQ-WCT-05 | PASS | `creative_delight:smithing/diamond_watering_can`; over-full can clamps 16 -> 7 after a use |
 | SQ-WC-03, -05 | PASS | moved can: off-hand bone meal loads; 3x3 farmland and mulch soaked (mulch moisture 7) |
@@ -73,7 +73,7 @@ w2b / w2c (raspberry), w2d (spawn counts). Log copy `perf/runs/r1101/w2_latest.l
 | SQ-EN-02 (now SQ-ENC-02) | PASS | cashier is a villager profession (`lightmanscurrency:cashier`, the entity summon in the row is wrong): 95 enchanted books, no NEA enchantment (the one "recovery" is `create:potato_recovery`) |
 | SQ-MRD-03 | PASS | cheese toast shapeless toast + flaxen cheese wedge; `forge:sliced_potato` and `forge:sliced_potatoes` both hold `rusticdelight:potato_slices` (+ sliced sweet potato) |
 | SQ-META31-04b | PASS | placed: -5958 87 -1910 and 5802 73 -8182, both `1/1 [minecraft:desert_pyramid]` + meteorite; short slot [387, 583] logged `not placed, core part [minecraft:desert_pyramid] placed 0 of at least 1` (the batch's reject regex matched that refusal line) |
-| SQ-WG30-C02b | PASS | census r 96 at 2144 -2592 (100,616 slot chunks, 365 s): 6 false negatives, each with point, biome, nearest entries and start-piece centre; all are underground starts in deep cave biomes (`terralith:cave/mantle_caves`, `minecraft:deep_dark`): the deep-biome tie case |
+| SQ-WG30-C02b | PASS | census r 96 at 2144 -2592 (100,616 slot chunks, 365 s): 6 false negatives, each with point, biome, nearest entries and start-piece center; all are underground starts in deep cave biomes (`terralith:cave/mantle_caves`, `minecraft:deep_dark`): the deep-biome tie case |
 | SQ-SB-04 | FAIL (likely) | siege meta at -384 32: in 240 s 0 evokers, 0 illusioners, 1 zombie; the T&T tower located 12 blocks away (the meta's own part) had pillagers 2, vindicators 3, no evoker: the siege spot spawns the T&T mix, not the large-tower mix (ST-323). Spawning is noisy: owner to rerun by hand before fixing |
 | SQ-SB-05 | OPEN | camp + ruin at -2544 544 at night: 2 pillagers, 0 vindicators / witches / evokers in 240 s (40 natural night monsters around): too few to judge the mix |
 | SQ-SB-06 | OPEN | no evoker near the badlands outpost (-1872 -800) in 240 s: totem check not reached |

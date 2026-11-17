@@ -1,7 +1,7 @@
 # Crop yields and soil yield
 
 What every crop drops when harvested ripe, and the soil yield system: extra produce for crops grown on better soil.
-Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights: [crops.md](crops.md) section 3.
+Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper color weights: [crops.md](crops.md) section 3.
 
 ## 0. At a glance
 
@@ -69,7 +69,7 @@ soil columns are that mean with the soil yield at the default values (section 2.
 | Onion | `onions` | multi | 2 to 5 Onions | (the onion is the seed) | 3.71 (base 3.5) | 4.87 | 6.02 | can't grow |
 | Tomatoes (bottom vine) | `tomatoes` | multi | 1 to 2 Tomatoes; 5% one Rotten Tomato | 1 seed (not on a rope) | 1.50 (base 1.5) | 2.00 | 2.49 | can't grow |
 | Rice (panicles) | `rice` | single | 1 Rice Panicle (1 Rice with a knife); the bottom always drops 1 Rice | (rice is the seed) | 1.00 | 1.33 | 1.66 | 1.33 |
-| Bell Pepper | `bell_peppers` | multi | 1 pepper (red, green, yellow 1:1:1), plus 15% each for one more of each colour | 1 to 2 seeds (1.5) | 1.45 (base 1.5) | 1.94 | 2.44 | can't grow |
+| Bell Pepper | `bell_peppers` | multi | 1 pepper (red, green, yellow 1:1:1), plus 15% each for one more of each color | 1 to 2 seeds (1.5) | 1.45 (base 1.5) | 1.94 | 2.44 | can't grow |
 | Coffee (Rustic) | `coffee` | multi | 1 + 1 to 4 Coffee Beans | (the bean is the seed) | 3.50 (base 3.5) | 4.66 | 5.81 | can't grow |
 | Cotton | `cotton` | multi | 1 to 3 Cotton Bolls | 1 to 3 seeds (2) | 2.00 | 2.66 | 3.32 | can't grow |
 | Ender Crop | `ender_crop` | n/a | 1 Ender Pearl, 10% one more | 1 seed, 10% one more (1.1) | 1.10 | out | out | out |
@@ -213,7 +213,7 @@ Per-crop choices:
 | Corn | the lower half (`upper=false`) | both halves drop corn; one pool per plant |
 | Flax | the lower half | only the lower half drops flax |
 | Tomatoes | the bottom vine | a vine on a rope has no soil below it |
-| Bell Pepper | red, green or yellow per roll, 1:1:1 | same colours as the main roll; the pools have 3 entries and no `random_chance`, so `crop_drops.js` never takes one for its own bonus pools |
+| Bell Pepper | red, green or yellow per roll, 1:1:1 | same colors as the main roll; the pools have 3 entries and no `random_chance`, so `crop_drops.js` never takes one for its own bonus pools |
 | Oats | Oat, Raw Oats with a knife | as the table's own knife rule |
 
 Key lists: crop blocks in `global.blocks` (block_dict.js "Crop blocks with a soil yield row"), produce and soils in

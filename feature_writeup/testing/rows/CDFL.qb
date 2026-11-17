@@ -87,7 +87,7 @@ shell ! grep -E "WARN.*equivalent_fluids" logs/latest.log
 ## CQ-CDFL-01
 @group client (full pack jars)
 @commands JEI: search `Carrot Juice`, `Egg Solution`, `Milk Coffee`, `Kiwi Tea` and open the fluid pages (U); hover the fluid in a Create tank
-@pass fluid names show (`Carrot Juice`, not `fluid.creativedelight.carrot_juice`); the bottle effect lines (Common `DrinkFluidEffects`) still show on each fluid; fluid colours as before
+@pass fluid names show (`Carrot Juice`, not `fluid.creativedelight.carrot_juice`); the bottle effect lines (Common `DrinkFluidEffects`) still show on each fluid; fluid colors as before
 @fails KubeJS lang for the new namespace (displayName), or a client script naming the old id
 @reviewed 2026-11-16
 do {"wait": "jei"}

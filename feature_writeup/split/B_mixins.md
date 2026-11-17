@@ -69,7 +69,7 @@ Columns: mixin class | side | target mod | gate | target jar | reason | config k
 | `ShieldDisableCooldownMixin` | common | minecraft | none | Equipment | shields | - | `shield.ShieldConfig` |
 | `MobShieldDisableMixin` | common | minecraft | none | Equipment | shields | - | `shield.ShieldConfig` |
 | `ShieldDecorationRecipeMixin` | common | minecraft | none | Equipment | shields | - | `shield.TierShieldItem` |
-| `BonemealCharmMixin` | common | minecraft | none; config | Equipment ? | bonemeal charm held item; generalised Vinery Winemaker trick, could be Magic | `BONEMEAL_CHARM.chance`, `BONEMEAL_CHARM.damageChance`, `BONEMEAL_CHARM.damagePerUse`, `BONEMEAL_CHARM.enabled` | `util.BonemealCharms` |
+| `BonemealCharmMixin` | common | minecraft | none; config | Equipment ? | bonemeal charm held item; generalized Vinery Winemaker trick, could be Magic | `BONEMEAL_CHARM.chance`, `BONEMEAL_CHARM.damageChance`, `BONEMEAL_CHARM.damagePerUse`, `BONEMEAL_CHARM.enabled` | `util.BonemealCharms` |
 | `ArmorCapMixin` | common | minecraft | none; COMMON_SPEC.isLoaded in code; config | Equipment | dragon gear armor cap | `DRAGON_GEAR.armorCap` | - |
 
 ## Magic (Equipment) (3: 3 common, 0 client)
@@ -177,7 +177,7 @@ Columns: mixin class | side | target mod | gate | target jar | reason | config k
 | `TrinketCaseMenuMixin` | common | botania | hard botania | Compat | Botania trinket case rules (storage tweak) | - | `compat.TrinketCaseRules` |
 | `ItemBackedInventoryAccessor` | common | botania | hard botania | Compat | Botania trinket case rules (storage tweak) | - | - |
 | `AnotherFurniturePlanterRenderMixin` | client | another_furniture | @Pseudo another_furniture | Compat | plant pots and planters compat (BotanistPot, PlantBoxModels) | - | `compat.PlantBoxModelsClient` |
-| `McaCombEyeColourMixin` | client | mca | hard mca | Compat | MCA comb eye colour | - | - |
+| `McaCombEyeColourMixin` | client | mca | hard mca | Compat | MCA comb eye color | - | - |
 | `SupplementariesJarRendererMixin` | client | supplementaries | hard supplementaries | Compat | Supplementaries jar mixing (JarMixing); tooltip shows only this feature | - | - |
 | `SupplementariesJarItemRendererMixin` | client | supplementaries | hard supplementaries | Compat | Supplementaries jar mixing (JarMixing); tooltip shows only this feature | - | - |
 | `BedspreadsBannerPatternMixin` | client | bedspreads | hard bedspreads | Compat | banner pattern atlas compat fix | - | `compat.BannerPatternAtlasCompat` |
@@ -373,7 +373,7 @@ Devtools: 0 mixins. The block-state probe (`devtools.BlockStateSyncDebug`) is re
 | `ArmorTrimsLargeItemListsMixin` | Common ? | perf cache of Armor Trims item lists; Compat if the owner counts it as a third-party tweak rather than perf |
 | `FluidTagInputMixin` | Common ? | FluidTagInput is listed as a shared API in plan 2.4; the mixin is an IE fluid-input tweak shared by Bottling Machine, Mixer and Refinery (potion inputs), so CB or Engineering are the alternatives |
 | `SequencedAssemblyRecipeMixin` | Engineering ? | Create sequenced assembly NBT passthrough; a Create recipe fix but it exists only for the Equipment gear progression (echo/felsic/dragon assembly) |
-| `BonemealCharmMixin` | Equipment ? | bonemeal charm held item; generalised Vinery Winemaker trick, could be Magic |
+| `BonemealCharmMixin` | Equipment ? | bonemeal charm held item; generalized Vinery Winemaker trick, could be Magic |
 | `QuarkSpiralSpiresTeleportMixin` | Common ? | perf: Quark viaduct hook forced sync chunk gen on teleport; Compat if read as a Quark tweak |
 | `CreateGravityDimensionMixin` | Common ? | perf gate for Create: Gravity per dimension; Compat if the PERF.gravity* keys move with it |
 | `BubbleColumnImmunityMixin` | Worldgen ? | bubble column immunity by entity tag for big ocean mobs (fauna); the tag lives in server_scripts/tags |

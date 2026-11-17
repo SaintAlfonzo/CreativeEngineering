@@ -63,7 +63,7 @@ Defaults chosen from the brief; each is marked **[default]** where it is used.
 Status: DONE 2026-11-14 (cd-a). Quark pickup check: no double count (Quark fills only a held pouch; both shrink the same ground stack).
 2026-11-15 (fix-2, r1115): SQ-SPD-08 FAILed in the Nether (the cached fake player is the overworld one and `UseOnContext` took its level); the context now gets the dispenser's level. Rerun SQ-SPD-08b.
 
-### 1.1 Behaviour
+### 1.1 Behavior
 - Crash cause: HH `gear/QuarkCompat.java:40-47`. The anonymous `DefaultDispenseItemBehavior.execute` calls `dispense(source, pouch)`,
   which binds to the inherited instance method, not the static helper at :87, so it recurses forever.
 - Replace with one class, HH `gear/SeedContainerDispense.java`. Register it from `HearthAndHarvestMod.java:68-73` in common setup
@@ -78,19 +78,19 @@ Status: DONE 2026-11-14 (cd-a). Quark pickup check: no double count (Quark fills
   - Accept only stacks in `quark:seed_pouch_holdable` (pouch) or items whose `useOn` succeeds (bundle).
   - Use a fake player (Forge `FakePlayerFactory`) for the context.
 - **Quark seed pouch** (`quark:seed_pouch`; NBT `storedItem`, `itemCount`; API `SeedPouchItem.getContents` / `setCount`):
-  - The target is the 5x5 centred on the block in front (`front = pos.relative(facing)`):
+  - The target is the 5x5 centered on the block in front (`front = pos.relative(facing)`):
     - Front block is air (or replaceable): the soil layer is the 5x5 at `front.below()`, and seeds go on top of it.
     - Front block is soil (dirt, farmland, or anything a seed's `useOn` accepts): the soil layer is the 5x5 at `front`,
       and seeds go on the blocks above.
     - Facing up or down: the same two rules on the vertical line. Facing down onto air, the 5x5 is the layer below that
-      air. The centre column under the dispenser is skipped if blocked.
+      air. The center column under the dispenser is skipped if blocked.
   - Plant up to 25 seeds, never more than the pouch holds. Decrement `itemCount` once per success. When the count reaches
     0, clear the contents but keep the empty pouch.
   - Return success if at least one planted.
   - The old `canSurvive` + `setBlock` path (QuarkCompat :87-120) goes; the seed's `useOn` replaces it.
 - **Bundle** (`minecraft:bundle`, vanilla `Items` list):
   - Take the first entry (vanilla's remove-one order). If it is a seed, plant ONE seed on the single front target (the same
-    air/soil rule, centre only).
+    air/soil rule, center only).
   - Decrement that entry's count, or remove it at 0. Rewrite the vanilla `Items` NBT and the bundle weight stays correct.
   - If the first entry is not a seed, or nothing plants, nothing happens and the bundle stays.
   - Register this regardless of Quark. The vanilla item is always registered. Only its recipe comes from Quark.
@@ -166,7 +166,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
     `gear/FarmersHatEvents.java:26`) and the scripts (`KJ/hearthandharvest/recipes.js:71,79`, `tags.js:34,61`,
     `trades.js:12,28`) all get `// requires: vinery` or a split file.
   - Dict keys `item_dict.js:132,138,153,198,216,250` stay. Dicts tolerate absent items; confirm with the dict check (C).
-- Vine block: add `HopsVineBlock`, a copy of Vinery's `GrapeVineBlock` behaviour (the lattice form follows below)
+- Vine block: add `HopsVineBlock`, a copy of Vinery's `GrapeVineBlock` behavior (the lattice form follows below)
   (`development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/block/GrapeVineBlock.java`):
   - It extends `VineBlock` and clings to a wall face. There is no lattice and no farmland.
   - `AGE_3` and `sterilized` (shears toggle). It grows 1 in 5 per random tick at light 9 or more, via `onCropsGrowPre`.
@@ -188,7 +188,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
       (the H&H hops item is both). There is no Creative Delight class import.
     - With Hearth and Harvest absent, the suppliers return null and the type is inert.
   - The lattice accepts hops: `LegacyLatticeStemBlock.use` (:92) checks `instanceof GrapeBushSeedItem`, which the plain
-    H&H hops item is not. Generalise it to a seed lookup, `GrapeTypeRegistry.forSeed(item)`, returning a lattice type.
+    H&H hops item is not. Generalize it to a seed lookup, `GrapeTypeRegistry.forSeed(item)`, returning a lattice type.
     The `GrapeBushSeedItem` path keeps working through it.
   - Hops have no juice (`getBottle()` null). Guard every `getBottle`/`getFruit` caller:
     - `V/core/block/GrapevinePotBlock.java:170,196`: stomping hops does nothing.
@@ -227,7 +227,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
 - Retires: the H&H lattice planting path, the farmland rule `hopsRequireFarmland` (`HHConfig.java:40`; keep the key as
   ignored and say so in the config comment), TODO `#75`, the hops half of `#70`, and `#73` item 2.
 - Wild hops (SQ-HH-304; the old cause was the `MOTION_BLOCKING` canopy heightmap plus rarity 120):
-  - Replace `KJ/../worldgen/{configured,placed}_feature/wild/wild_hops.json` with a vine feature modelled on Vinery
+  - Replace `KJ/../worldgen/{configured,placed}_feature/wild/wild_hops.json` with a vine feature modeled on Vinery
     `world/feature/JungleGrapeFeature.java`, hanging hops vines on tree trunks.
   - Where (owner): every temperate forest biome. The rule `wild_hops` in `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json:155`
     already uses `temperate grassy forest`, which resolves to 18 biomes (vanilla forests plus Terralith;
@@ -257,7 +257,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
 
 ### 3.2 Drop H&H tilled end stone (TODO `#70` first half; C + B)
 
-Status: dict part DONE 2026-11-14 (common): `item_dict.js` `i.tilled_end_stone = 'hearthandharvest:tilled_end_stone'` deleted; the endercrop item line and `block_dict.js` `b.tilled_end_stone` kept. The rest BUILT 2026-11-14 (cd-b), CD installed, not run (SQ-HH-1546 rewritten, -1546b, -1546c). Build check (10.2): Ender Crop tills in `BlockToolModificationEvent` (HOE_TILL, `ForgeEventHandlers.onUseHoe`, returns early when cancelled); gated by `TillingEvents.onToolModification` at HIGHEST, no RightClickBlock handler needed. Ender Crop's `endstoneNeedsUnbreaking` set to false (owner to confirm: the netherite rule replaces its Unbreaking rule). The tooltip is on end stone and Ender Crop's tilled end stone: the dict has no `endercrop:ender_seeds` key (Common could add `i.ender_seeds`). `HHTags.GROWS_ON_TILLED_END_STONE` deleted (nothing reads it).
+Status: dict part DONE 2026-11-14 (common): `item_dict.js` `i.tilled_end_stone = 'hearthandharvest:tilled_end_stone'` deleted; the endercrop item line and `block_dict.js` `b.tilled_end_stone` kept. The rest BUILT 2026-11-14 (cd-b), CD installed, not run (SQ-HH-1546 rewritten, -1546b, -1546c). Build check (10.2): Ender Crop tills in `BlockToolModificationEvent` (HOE_TILL, `ForgeEventHandlers.onUseHoe`, returns early when canceled); gated by `TillingEvents.onToolModification` at HIGHEST, no RightClickBlock handler needed. Ender Crop's `endstoneNeedsUnbreaking` set to false (owner to confirm: the netherite rule replaces its Unbreaking rule). The tooltip is on end stone and Ender Crop's tilled end stone: the dict has no `endercrop:ender_seeds` key (Common could add `i.ender_seeds`). `HHTags.GROWS_ON_TILLED_END_STONE` deleted (nothing reads it).
 - Remove the H&H block and its pieces:
   - Code: `HHBlocks.java:58`, `HHItems.java:174`, `block/TilledEndStoneBlock.java`.
   - Assets: the blockstate, models, textures and loot table under `members/hearth/src/main/resources`.
@@ -369,8 +369,8 @@ Status: DONE 2026-11-14 (cd-a). Rows renamed: SQ-HH-483/-486/-487 were taken, so
   - Also rerun SQ-HH-1534 (single till, INCONCLUSIVE r1112).
 - Salt layers refill a licked block (owner, 2026-11-14):
   - Placing a Vintage Delight salt layer (`vintagedelight:salt`, `members/vintage/.../block/custom/SaltLayerBlock.java`)
-    on top of a licked stage drops it into the lick: the layer is consumed and the block goes back one stage (heavily →
-    well → lightly → `salt:salt_block`).
+    on top of a licked stage drops it into the lick: the layer is consumed and the block goes back one stage (heavily ->
+    well -> lightly -> `salt:salt_block`).
   - **[default]** A waxed stage keeps its wax.
   - Hook it in `SaltLayerBlock.onPlace` (our port code): if the block below is a `LickableSaltBlock` stage above 0, set
     that block one stage back, and remove the layer or reduce `layers` by 1. That covers players, dispensers and falling
@@ -390,7 +390,7 @@ Status: DONE 2026-11-14 (common) for the Creative Common part: `melting/` packag
 New system, owner 2026-11-14. It replaces the salt member's block-tick melting and the plan's earlier stage-chain-only fix.
 
 - Why the old one failed: `salt:salt_block` is a `SaltSandBlock` copied from sand with no `randomTicks()`, so
-  `ISaltBlock.onSaltRandomTick` → `tryMeltFromBlock` never runs.
+  `ISaltBlock.onSaltRandomTick` -> `tryMeltFromBlock` never runs.
   - Trace why Nether ice still melted (r1113), to make sure no second path stays live.
 - Owner: Creative Common, new package `melting/`. It works without the Salt mod, and the salt source is a tag. Config
   `[melting]` in `creativecommon-common.toml` plus its `configs_edited/root_config/` copy.
@@ -447,7 +447,7 @@ New system, owner 2026-11-14. It replaces the salt member's block-tick melting a
       off).
     - `snow_block`, `powder_snow` and `snow` (layers) become air.
   - `creativecommon:melting/meltable_slow` (owner: packed and blue ice, one tier down):
-    - `blue_ice` → `packed_ice`, `packed_ice` → `ice`.
+    - `blue_ice` -> `packed_ice`, `packed_ice` -> `ice`.
 - Ranges (owner):
 
   | Source | Meltable | Packed and blue ice (low chance) |
@@ -468,13 +468,13 @@ New system, owner 2026-11-14. It replaces the salt member's block-tick melting a
   - Turn on random ticks for `snow_block`, `powder_snow`, `packed_ice` and `blue_ice`, the same way
     `src/main/java/com/SaintAlfonzo/creativedelight/salt/SaltBlockTicks.java:68-76` does (field `f_60445_`).
   - Each target random tick does a cheap check first, then a scan:
-    1. The 6 neighbours, for salt and fire (adjacent cases).
+    1. The 6 neighbors, for salt and fire (adjacent cases).
     2. Only if block light at the target is above 0: a sphere scan of radius `max(fireRange, lavaRange)`, stopping at
        the first hit. Fire, soul fire, campfires, torches (soul torch 10), lanterns, glowstone and lava all give light
        10 or more, so the light check never hides them within range.
   - Magma gives light 3, so it can sit dark 3 blocks away. Magma blocks therefore get random ticks too, and melt
     targets in their own 3-block sphere (source-driven). The same melt rule and chances apply.
-  - Glaciers, frozen oceans and ice spikes then cost only the neighbour check per tick (dark, no sources).
+  - Glaciers, frozen oceans and ice spikes then cost only the neighbor check per tick (dark, no sources).
   - Perf row: SQ-MELT-P1 with the perf suite in an ice spikes box (TPS and MSPT against a control).
 - Vanilla light melting: **[default]** off. Torches, lanterns and glowstone melt through the fire rule instead (3 blocks;
   vanilla was light-based). Sea lanterns, shroomlights and the other non-flame lights stop melting ice and snow layers.
@@ -486,7 +486,7 @@ New system, owner 2026-11-14. It replaces the salt member's block-tick melting a
   switched off and its config comment points at `[melting]`, so nothing double-fires. `Melting.meltedState` is reused or
   replaced by Common's result table.
 - Nether snow melts at once:
-  - Hook `BlockEvent.EntityPlaceEvent` plus a `SnowLayerBlock`/`SnowBlock` `onPlace` check (mixin, or a neighbour-update
+  - Hook `BlockEvent.EntityPlaceEvent` plus a `SnowLayerBlock`/`SnowBlock` `onPlace` check (mixin, or a neighbor-update
     handler). In any `ultraWarm` dimension, snow layers, snow blocks and powder snow become air when placed. This covers
     players, dispensers, snow golem trails and commands.
   - Decide powder snow at build. **[default]** It melts too.
@@ -496,14 +496,14 @@ New system, owner 2026-11-14. It replaces the salt member's block-tick melting a
 - Writeup: new `feature_writeup/melting.md` (rules, tags, config, tests), with a cross-link from `salt.md`. Changelog
   family "Melting".
 - Verify (rerun SQ-SALT2-06 rewritten; new SQ-MELT rows, randomTickSpeed raised in the batch):
-  - SQ-MELT-01: Salt Block beside ice, snow block, powder snow and snow layers → water / air / air / air.
+  - SQ-MELT-01: Salt Block beside ice, snow block, powder snow and snow layers -> water / air / air / air.
   - SQ-MELT-02: fire at distance 3 melts ice and snow; at 4 it does not. The same for soul fire, a lit campfire, a lit
     soul campfire and magma. An unlit campfire does nothing.
   - SQ-MELT-03: lava at distance 4 melts; at 5 it does not. Flowing lava counts.
-  - SQ-MELT-04: blue ice → packed → ice → water beside salt, at the slow rate (count steps over N ticks against
+  - SQ-MELT-04: blue ice -> packed -> ice -> water beside salt, at the slow rate (count steps over N ticks against
     `slowMeltChance`). Packed ice beside fire steps down; at 2 from fire it does not. At 2 from lava it steps down; at
     3 it does not.
-  - SQ-MELT-05: in the Nether, ice beside salt → air.
+  - SQ-MELT-05: in the Nether, ice beside salt -> air.
   - SQ-MELT-06: at distance 3, a torch, a soul torch, a lantern, a Supplementaries sconce, a copper lantern and
     glowstone melt ice and snow; at 4 they do not.
     - A sea lantern, a redstone torch and a jelly torch beside ice do nothing (`vanillaLightMelting = false`).
@@ -573,7 +573,7 @@ stomping (their recipe types are fermenting, apple mashing for the Apple Press, 
   - The saved per-portal flag is ignored **[default]**. Stale NBT on old portals is harmless.
 - Docs: [plan_portal_gun.md](plan_portal_gun.md) section 3 (78-110), D3 (157), the row at 198, and "Not chosen" (c) at 103.
 - Verify: SQ-PG-01a and -01b rewritten.
-  - The lift is decided by geometry for wall→wall (no lift), wall→floor (lift) and floor→wall.
+  - The lift is decided by geometry for wall->wall (no lift), wall->floor (lift) and floor->wall.
   - The same after a restart.
   - New SQ-PG-01c: a nether frame portal into a wall-facing exit gets no lift.
   - Client CQ-PG for the feel.
@@ -611,7 +611,7 @@ Status: DONE 2026-11-14 (cd-a).
   - Use `Item.of(fd.veggie_vegetarian_patty, 2)` (raw cave carrot) and `Item.of(fd.veggie_cooked_vegetarian_patty, 2)`
     (baked).
   - `n()` at :45 stays for `ceBaking` at :48.
-  - The ratio stays 1 → 2.
+  - The ratio stays 1 -> 2.
   - The Slice & Dice copies follow.
 - Verify: SQ-OB-05 rerun.
 
@@ -619,7 +619,7 @@ Status: DONE 2026-11-14 (cd-a).
 - **Status 2026-11-14 (misc): DONE.** Comment says 1-2, SQ-CBP-11 row and creative_equipment.md fixed; Creative Equipment rebuilt and installed (the comment is a jar resource). No changelog.
 - The loot table already rolls 1-2 (`development/creativeEquipment/.../felsic_gear/loot_tables/blocks/felsic_block.json:32`).
   Fix its `__comment` (line 2), the SQ-CBP-11 row (`scratch_queue.md:4779`), and the felsic writeup.
-- Changelog: none; no behaviour change.
+- Changelog: none; no behavior change.
 
 ### 4.6 Barbeque's Delight basin eats the stick (B; TODO `dishes/meals #67`)
 Status: DONE 2026-11-14 (cd-a). The exact loss path was not proven by reading; a stick is now never stored and passes without a recipe.
@@ -653,7 +653,7 @@ Status: SQ-DCM-02 part DONE 2026-11-14 (common): `func/has.js` `global.has._modO
   - unwrecked_ships/unwrecked_ships_plus
   - yuushya/yuushya_modelling
   - cozys-improved-cats/cozys_improved_cats
-  Fix: a namespace → mod id map in has.js, or fall back to "the namespace has registry entries". Used by
+  Fix: a namespace -> mod id map in has.js, or fall back to "the namespace has registry entries". Used by
   `tag_helper.js:86` and `neoCraftHelper.js:422-433` (C).
 
 ### 5.2 Audit for the rest
@@ -726,7 +726,7 @@ Status: DONE 2026-11-14 (cd-a). Not proven; SQ-CDW-02 rerun last.
   - SQ-VH-06 rewritten: 0 netherrack in a Heap column sample, cave walls included. Floors and ceilings are flesh or
     porous flesh at 95 % or more; the rest is structure blocks.
   - New SQ-VH-06b: caves still carve inside the Heap.
-  - New SQ-VH-06c: neighbouring Nether biomes are unchanged.
+  - New SQ-VH-06c: neighboring Nether biomes are unchanged.
   - Client CQ-VH: the look.
 - Changelog: "The Visceral Heap is made entirely of flesh".
 
@@ -777,7 +777,7 @@ below was read from source, with no game run.
 - Verify: SQ-PWG-91: all four drop tile + attachment by hand; wrench path unchanged.
 
 ### 8.2 Wire connector drop (B35, TODO `#78`): deliberate deviation B37
-- **Status 2026-11-14 (agent pwg): built**, B37 on `AbstractConnectorBlock` (wire and heavy connector; support = sturdy face centre or any Power Grid electric block; placement on an unsupporting face is now refused; cord junction not changed), jar -18; new SQ-PWG-97, not run.
+- **Status 2026-11-14 (agent pwg): built**, B37 on `AbstractConnectorBlock` (wire and heavy connector; support = sturdy face center or any Power Grid electric block; placement on an unsupporting face is now refused; cord junction not changed), jar -18; new SQ-PWG-97, not run.
 - Upstream is the same: no `canSurvive`/`updateShape` in `U/electricity/wireconnector/` or its `DirectionalElectricBlock`
   parent. Registration at `U/collections/ModdedBlocks.java:240-246` is stone + `pickaxeOnly()` + default loot, and the
   port matches.
@@ -796,10 +796,10 @@ below was read from source, with no game run.
 - **Status 2026-11-14 (agent pwg): done, not run.** `#85` built as B38 (jar -18); `#82` pack script `kubejs/server_scripts/other/power_grid.js` (acid fluid has no `fluid_dict` key: the script falls back to the literal `powergrid:acid` until Creative Common adds `f.acid`); `#83`, `#84`, `#86`, `#87` no code. Rows: SQ-PWG-06, -43, -80, -82 rewritten; new SQ-PWG-80b, -54r, CQ-PWG-66. No changelog bullet (Power Grid not shipped to players; bullets come with stage 5).
 - `#83` arm leaves parts loose on the belt: **matches upstream**.
   - Upstream `forge/.../mixin/forge/ArmInteractionPointMixin.java:82-129` falls back to Create's normal belt insert
-    whenever no incomplete circuit sits in the centre window. That is the case before the circuit arrives and after it
+    whenever no incomplete circuit sits in the center window. That is the case before the circuit arrives and after it
     becomes a board, so the arm drops what it carries.
   - The port copy is identical; B25 only touches the lock scan.
-  - Mirror: no change. SQ-PWG-82 becomes PASS-as-upstream (assembly completes; loose parts are upstream behaviour). Row
+  - Mirror: no change. SQ-PWG-82 becomes PASS-as-upstream (assembly completes; loose parts are upstream behavior). Row
     text rewritten.
 - `#84` thyratron conducts at grid -30 V: **matches upstream**.
   - `U/electricity/sim/special/ThyratronWire.java:50-74` checks the grid only while unlit (`strike = max(Vh, Vb - mu*Vg)`).
@@ -817,7 +817,7 @@ below was read from source, with no game run.
 - `#86` display board `Speed:0.0f`: **not Power Grid**.
   - `SpeedScrollValueBehaviour.java:62` is only a clipboard key. The text is Create's own display board `Speed` tag: the
     board gets no rotation from the motor and shaft.
-  - Mirror: no Power Grid change. CQ-PWG-66 checks the Create 0.5.1 drive by hand (motor → shaft → board). If Create
+  - Mirror: no Power Grid change. CQ-PWG-66 checks the Create 0.5.1 drive by hand (motor -> shaft -> board). If Create
     needs a different hookup, the row text changes.
 - `#87` solar contraption after restart: **matches upstream**.
   - Re-attachment is not stored in NBT. `movedContraption` is set again when the contraption entity ticks and calls
@@ -826,7 +826,7 @@ below was read from source, with no game run.
     X 1340 contraption.
 - `#82` acid vs heated salt mixing (owner, 2026-11-14): the acid recipe also takes rotten flesh.
   - Upstream `PG/src/main/resources/data/powergrid/recipes/mixing/acid.json` is heated: redstone + blaze powder + 250 mB
-    water → 250 mB acid.
+    water -> 250 mB acid.
   - Make it a pack change, not a port change: a new server script guarded on `powergrid` removes
     `powergrid:mixing/acid` and re-adds it through `R.createMixing(..., 'heated')` (`neoCraftHelper.js:2104`), with
     `minecraft:rotten_flesh` (dict key) as a fourth input. The port jar stays as upstream.
@@ -882,7 +882,7 @@ Owner 2026-11-14: every default in this plan is accepted unless changed below.
 - **Corn maze at 2x** may still miss the 120 s locate deadline from some spawns (6.3); the rerun records the times.
 - **Power Grid:**
   - 8.1 and 8.2 deviate from upstream on purpose (B36, B37).
-  - Arm loose parts, thyratron latching and solar re-attach are upstream behaviour, kept.
+  - Arm loose parts, thyratron latching and solar re-attach are upstream behavior, kept.
   - The display board reading is a Create hookup question, settled by hand (CQ-PWG-66).
 - **Rubber tree:** the cause is a suspicion, not proven, and may need a second pass.
 - **Build-time checks:**

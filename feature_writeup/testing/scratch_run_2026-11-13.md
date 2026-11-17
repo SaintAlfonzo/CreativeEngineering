@@ -106,7 +106,7 @@ Write-back per skill part B5; client rows and hand steps listed in section 8 for
   mixin or packet errors, P2 blocks and wires render; creative tab and hand steps left for the owner). CQ-PWG-06 not
   run: needs server + client together (one-JVM rule), owner row. Client killed by pid (own, throwaway world).
 - 02:17 c3a1 boot, c3_a1.qb (46 rows) to 02:34. Judged (`verdicts/c3a1.md`): PASS 30, FAIL 3 (AZW-01 item_dict
-  lists `hearthandharvest:sunflower_stem`, a block without an item; T1-04 vanilla golden tools and armour accept the
+  lists `hearthandharvest:sunflower_stem`, a block without an item; T1-04 vanilla golden tools and armor accept the
   rose gold ingot; DCM-02 `[absent mods]` skips 5 installed mods whose data namespace differs from the mod id),
   BATCH-FAULT 13 (bot aim `setYRot` missing on BotPlayer; `sed -i` config edits not seen by Forge's watcher; ids).
   Rerun batch `fix_c3a1.qb`; `zact_probe.js` gained `break ... keep`. c3_a2's portal rows have nothing to read (no
@@ -168,7 +168,7 @@ pwg10b, pwg12, pwg15, pwg16 for Power Grid; SQ-PWG-09 to -23 judged in section 7
 
 Queue rows (124 judged): PASS 91, FAIL 6, BATCH-FAULT 25, INCONCLUSIVE 2.
 - FAIL: SQ-AZW-01 (item_dict lists `hearthandharvest:sunflower_stem`, a block without an item); SQ-T1-04 (vanilla golden
-  tools and armour accept the rose gold ingot); SQ-DCM-02 (`[absent mods]` skips 5 installed mods whose data namespace
+  tools and armor accept the rose gold ingot); SQ-DCM-02 (`[absent mods]` skips 5 installed mods whose data namespace
   differs from the mod id); SQ-CBW-03 (pumpkin pie placed as Delightful's block on a cutting board); SQ-LGM-13
   (block-form food families empty); SQ-ROLL-12 (two roll medley cans exist against ROLL-27: owner).
 - INCONCLUSIVE: SQ-ROLL-11 (every eat gave 4 more food than the item), SQ-SALT2-06 (no end-state probe).
@@ -199,7 +199,7 @@ lines change). Batches: `tools/scratch_query/batches/r1113pwg/` (headers hold pr
 Every row block is copied unchanged from the latest r1113 batch that ran it with fixed probes (the source is named
 above each block), apart from the SQ-PWG-68 regex and the SQ-PWG-06 thyratron heater (6.5 V) from `verdicts/pwg12.md`
 and the level-name paths in shell steps. `pwg_p8_probe.js` now calls `BlockState.use` directly for the modular display:
-Create 0.5.1's value box handler takes every fake-player click and replays it at the block centre, so all clicks went
+Create 0.5.1's value box handler takes every fake-player click and replays it at the block center, so all clicks went
 to slot 3 (SQ-PWG-63, not a port fault).
 
 | Boot | World | Batch | Rows | Est. time |

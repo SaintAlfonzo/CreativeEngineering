@@ -132,7 +132,7 @@ look the bot walked through the Far East door (player x near 30.5); the 40-tick 
 @group A
 @commands pin a location, set it as default macro in Settings, shift-use the Tempad; die and respawn, shift-use again
 @pass the macro opens a door to the pinned location both times
-@fails favourites capability not cloned on respawn
+@fails favorites capability not cloned on respawn
 @from batches/r1107tp/a2.qb
 > ztp pdata qa
 waitlog \[ztp\] pdata 20
@@ -220,7 +220,7 @@ look tempad chronons rose between the two chr reads (generator 1 per 48 ticks: a
 ## CQ-TP-02
 @group client
 @commands New Location: map, colour picker (square, hue bar, eyedropper, presets, hex), name, Done
-@pass LOOK: map of the current chunk with the player arrow, dimension and X/Y/Z; Done grey until a name is typed (max 32); the saved location shows in its colour
+@pass LOOK: map of the current chunk with the player arrow, dimension and X/Y/Z; Done gray until a name is typed (max 32); the saved location shows in its color
 @fails `MapWidget`, `ColorPicker`
 @draft client Tempad screens: driver steps (click_widget, type_into, widgets readback, shot) need the widget labels from one live look; not written in the 2026-11-16 pass
 ## CQ-TP-03
@@ -232,7 +232,7 @@ look tempad chronons rose between the two chr reads (generator 1 per 48 ticks: a
 ## CQ-TP-04
 @group client
 @commands look at an open timedoor in Fast and in Fancy graphics
-@pass LOOK: coloured box, white light running along the outline, animated open and close; no `rendertype_timedoor` errors in latest.log
+@pass LOOK: colored box, white light running along the outline, animated open and close; no `rendertype_timedoor` errors in latest.log
 @fails `TimedoorRenderer`, shader registration
 @draft client Tempad screens: driver steps (click_widget, type_into, widgets readback, shot) need the widget labels from one live look; not written in the 2026-11-16 pass
 ## CQ-TP-05
@@ -306,13 +306,13 @@ look card wallet with forge:leather; no tempad recipe/tag errors
 ## SQ-TP-14
 @group A, B
 @commands phase 3: A places a Timedoor Marker up and down, and a Chronomark; sets name, colour, public, chronomark access, y offset 9 and an angle; dyes one; writes a card from each; restarts; B tries to open and place A's markers; A breaks one and re-places it
-@pass settings kept after restart; y offset clamped to 5; dye recolours; cards open doors to the markers; Teleport shows a "markers" section (public marker for B, chronomark per access); locked markers block B; broken marker keeps colour, name and owner; re-place: note whether cards still work (known upstream bug, PORT_NOTES 6.16.15)
+@pass settings kept after restart; y offset clamped to 5; dye recolours; cards open doors to the markers; Teleport shows a "markers" section (public marker for B, chronomark per access); locked markers block B; broken marker keeps color, name and owner; re-place: note whether cards still work (known upstream bug, PORT_NOTES 6.16.15)
 @fails `AbstractMarkerBe`, `AnchorPointsHandler`, packets 15-16
 @draft multi-step Tempad block or menu flow driven through ztp_probe.js (open, doors, bchr, markerui, card, history, curios, click: Tempad readers stay KubeJS); the workstation, projector and marker block ids, menu slot numbers and door positions are not recorded anywhere yet, so the first TP runner writes the steps after one live look (immersive_portals.md 2.1.1)
 ## SQ-TP-15
 @group A
 @commands phase 3: place two Metronomes; jump-start one with 2000 chronons pushed into the block (a neighbouring chronon block, or `/ztp bchr X Y Z 2000`; a booting metronome does not read its slots, as upstream); put a charged cell in slots 1-4; wait 10 s; put an empty cell in slots 5-8; put a chronon block beside it; break one; restart
-@pass boots after 100 ticks, the owner's shared pool fills every 24 ticks with summed capacity; chronons flow into the cell and the neighbour (20 per tick); the broken one returns its share as item chronons; pool survives the restart
+@pass boots after 100 ticks, the owner's shared pool fills every 24 ticks with summed capacity; chronons flow into the cell and the neighbor (20 per tick); the broken one returns its share as item chronons; pool survives the restart
 @fails `MetronomeBe`, `MetronomeData` tick, packet 17
 @draft multi-step Tempad block or menu flow driven through ztp_probe.js (open, doors, bchr, markerui, card, history, curios, click: Tempad readers stay KubeJS); the workstation, projector and marker block ids, menu slot numbers and door positions are not recorded anywhere yet, so the first TP runner writes the steps after one live look (immersive_portals.md 2.1.1)
 ## SQ-TP-16
@@ -330,7 +330,7 @@ look card wallet with forge:leather; no tempad recipe/tag errors
 ## CQ-TP-08
 @group client
 @commands phase 3: hold the projector (first and third person, both hands); Marker and Chronomark screens (colour picker, hex, public switch, access dropdown opening upward, y offset and angle); placed markers in their colour
-@pass LOOK: both arms raised; Olympus-sized layout; marker colours on block and item
+@pass LOOK: both arms raised; Olympus-sized layout; marker colors on block and item
 @fails `RudimentaryTempadClient`, `TimedoorMarkerScreen`, `ChronomarkScreen`, `SpatialAnchorRenderer`
 @draft client Tempad screens: driver steps (click_widget, type_into, widgets readback, shot) need the widget labels from one live look; not written in the 2026-11-16 pass
 ## CQ-TP-09
@@ -629,7 +629,7 @@ expect \[ztp\] doors total 0
 ## CQ-TP-12
 @group client
 @commands fixes 2 and 2b: repeat SQ-TP-22's five cases from a client; also save a location (New Location, Done) and open Teleport to a player you cannot see
-@pass the action bar shows "Error: Travelling within this dimension is not allowed" (tag case), "Error: Travelling within dimensions is not allowed" (config case), and the interdimensional, leaving and entering texts; "location saved" text shows; no line shows a raw `entity.tempad.` or `location.tempad.` key; client latest.log has no `Skipped language file` for `tempad`
+@pass the action bar shows "Error: Traveling within this dimension is not allowed" (tag case), "Error: Traveling within dimensions is not allowed" (config case), and the interdimensional, leaving and entering texts; "location saved" text shows; no line shows a raw `entity.tempad.` or `location.tempad.` key; client latest.log has no `Skipped language file` for `tempad`
 @fails `UpstreamTranslator.flattenRichLang`; `TimedoorEntity` key constants
 @draft client Tempad screens: driver steps (click_widget, type_into, widgets readback, shot) need the widget labels from one live look; not written in the 2026-11-16 pass
 ## CQ-TP-13
@@ -694,7 +694,7 @@ look shell: the dropped-data line names no loot_table file (second number 0)
 ## SQ-TP-32
 @group A
 @commands #10 survival drops, bare hand and iron pickaxe: place each of the five blocks (projector and markers with `/ztp sneak qa on` where placing needs shift), give the marker a name (`/ztp markerui`), the chronomark one (`/ztp chronoui`), the metronome a booted pool (`/ztp bchr X Y Z 2000`, wait 6 s), the projector a card and 1500 chronons; `/ztp break qa X Y Z` each, `/ztp pickup qa 24`
-@pass exactly one item per block: workstation (plus the docked Tempad when one is docked), marker and chronomark with name, colour, owner and `anchor_id`, metronome with its share as `chronon_content`, projector with chronons and card (one projector, not two); no `workstation_child` item, no second workstation
+@pass exactly one item per block: workstation (plus the docked Tempad when one is docked), marker and chronomark with name, color, owner and `anchor_id`, metronome with its share as `chronon_content`, projector with chronons and card (one projector, not two); no `workstation_child` item, no second workstation
 @fails `getDrops` overrides adding to the now-loaded table (`WorkstationBlock`, `AbstractMarkerBlock`, `MetronomeBlock`, `RudimentaryTempadBlock`); a tool requirement (`needs_iron_tool` tag) if bare hand drops nothing
 @draft multi-step Tempad block flow (placement with shift, markerui / chronoui / card / anchors through ztp_probe.js, Tempad readers stay KubeJS); block ids of the workstation halves, positions and menu slots need one live look, so the first TP runner writes the steps (section text lists the probe calls)
 ## SQ-TP-33

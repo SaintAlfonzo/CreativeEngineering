@@ -16,7 +16,7 @@
 |---|---|
 | Three bags `exposureextras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposureextras:camera_equipment` | DEPLOYED (patcherMod in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |
 | Contents in the bag's NBT (tooltip shows them, smithing upgrades keep them, destroyed bags drop them) | DEPLOYED |
-| Dyeable like leather armour, colour kept through upgrades | DEPLOYED with 1.0.4 |
+| Dyeable like leather armor, color kept through upgrades | DEPLOYED with 1.0.4 |
 | Old `creativeengineering:*_camera_bag` items remapped to the new ids | DEPLOYED with 1.0.4; R4-04 never run |
 | Recipes: leather bag crafted; iron and netherite by smithing | DEPLOYED; the netherite step probably needs Armor Trims' template (F1) |
 
@@ -46,7 +46,7 @@ Life's lunch box, that only takes camera gear.
 | Iron | 9 | no | smithing: leather bag + iron block |
 | Netherite | 14 | yes | smithing: iron bag + netherite ingot (F1) |
 
-All stack to 1, sit in the Exposure creative tab, and dye like leather armour (crafting grid with dyes; washed in a
+All stack to 1, sit in the Exposure creative tab, and dye like leather armor (crafting grid with dyes; washed in a
 cauldron). All three currently share the leather look (two-layer model: a tinted body and an untinted outline).
 
 ### 2.2 What goes in
@@ -60,7 +60,7 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
 
 ### 2.3 Using one
 
-- Right-click with the bag in either hand → its screen (slots centred, up to 9 per row, rows balanced) over the
+- Right-click with the bag in either hand -> its screen (slots centered, up to 9 per row, rows balanced) over the
   player inventory; a leather-equip sound.
 - The bag's own slot is locked while open: hidden, can't be clicked or swapped with a number key or F. If the bag
   leaves its slot anyway, the screen closes.
@@ -76,7 +76,7 @@ in containers (shulker boxes). The pack adds `#exposure:flashes` (redstone lamp,
   client sees them for the tooltip and a smithing upgrade (which copies the base's NBT) keeps them. An empty bag has no
   tag, like a new one. `CameraBagMenu` copies them into a container and writes back after every change.
 - **Slot count from the server:** the open packet carries the size, so the client agrees with the server's config.
-- **Move from patcherMod (1.0.4):** ids `creativeengineering:*_camera_bag` → `exposure_extras:*_camera_bag`, remapped
+- **Move from patcherMod (1.0.4):** ids `creativeengineering:*_camera_bag` -> `exposure_extras:*_camera_bag`, remapped
   by a `MissingMappingsEvent` handler in `ExposureExtras`; contents come along in the NBT. The old `[camera_bag]`
   section in `creativeengineering-common.toml` was dropped (not carried over). Details: [plan_1.0.4.md](plan_1.0.4.md) 2.
 - **Mod id rename (2026-11-10, namespace_move.md D-EXPO):** `exposure_extras` became `exposureextras` (naming rule).
@@ -128,22 +128,22 @@ None. The exposureBackport build (`./gradlew :exposureBackport:build`) compiles 
 
 Also R4-04 (remap), R4-05 (basics), R4-06 (slot count), R4-11 (dye) in [plan_1.0.4.md](plan_1.0.4.md).
 
-- [ ] **CB-01 Craft:** string + 5 leather in the shape → leather camera bag; tooltip `0 / 5`.
+- [ ] **CB-01 Craft:** string + 5 leather in the shape -> leather camera bag; tooltip `0 / 5`.
 - [ ] **CB-02 Filter:** open it; a camera, a film roll and a lens go in; a photograph, a stick and another bag don't.
-- [ ] **CB-03 Iron upgrade:** smithing table, leather bag with 3 items + iron block → iron bag, same items, tooltip
+- [ ] **CB-03 Iron upgrade:** smithing table, leather bag with 3 items + iron block -> iron bag, same items, tooltip
   `3 / 9`.
 - [ ] **CB-04 Netherite upgrade (F1):** iron bag + netherite ingot, without and with a Netherite Upgrade Smithing
-  Template → note which works; contents kept; the netherite bag survives lava.
+  Template -> note which works; contents kept; the netherite bag survives lava.
 - [ ] **CB-05 Slot lock:** open the bag from the hotbar, try to click its slot, press its number key on a slot, press
-  F → the bag doesn't move. Repeat with the bag in the off hand.
-- [ ] **CB-06 Shift-click:** shift-click a camera from the inventory → into the bag; shift-click it back → inventory.
-- [ ] **CB-07 Tooltip:** a bag with 7 different stacks → 5 lines and "and 2 more".
-- [ ] **CB-08 Dye:** dye a leather bag blue in the grid → blue; wash it in a water cauldron → undyed; upgrade a blue bag
-  → still blue.
-- [ ] **CB-09 Destroyed:** throw a full leather bag into lava → its contents drop out (and burn, by item physics).
+  F -> the bag doesn't move. Repeat with the bag in the off hand.
+- [ ] **CB-06 Shift-click:** shift-click a camera from the inventory -> into the bag; shift-click it back -> inventory.
+- [ ] **CB-07 Tooltip:** a bag with 7 different stacks -> 5 lines and "and 2 more".
+- [ ] **CB-08 Dye:** dye a leather bag blue in the grid -> blue; wash it in a water cauldron -> undyed; upgrade a blue bag
+  -> still blue.
+- [ ] **CB-09 Destroyed:** throw a full leather bag into lava -> its contents drop out (and burn, by item physics).
 - [ ] **CB-11 Flashes (F4):** a redstone lamp and an IE light bulb go into a bag. The accept rule
   (`CameraBag.canHold`) scratch server PASSED 2026-10-22 (SQ-GM-03: lamp and bulb accepted, stick refused); clicking them into the bag screen: in game.
-- [ ] **CB-10 Multiplayer:** on the dedicated server with `netheriteSlots = 20`, open a netherite bag → 20 slots
+- [ ] **CB-10 Multiplayer:** on the dedicated server with `netheriteSlots = 20`, open a netherite bag -> 20 slots
   shown, as the server says.
 
 ## 8. History

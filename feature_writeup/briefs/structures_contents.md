@@ -434,7 +434,7 @@ soul city, the rare ruin and the blackstone Nether ruin.
 ### Ids and data
 
 Structure ids, pools, template sizes and the jar jsons verified in `PhilipsRuins1.19.2-10.8.jar`. The Nether's
-`WORLD_SURFACE_WG` = roof behaviour is how Philip's existing Nether structures work (their -95 offset only makes
+`WORLD_SURFACE_WG` = roof behavior is how Philip's existing Nether structures work (their -95 offset only makes
 sense that way); confirm with `/locate` + F3 in game (ST-294).
 
 ### Decisions

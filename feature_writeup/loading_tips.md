@@ -39,7 +39,7 @@ deck that carries over between loads, so no tip repeats until every tip has been
 twice in a row across a reshuffle.
 
 Mechanism after Loading Screen Tips 1.1.0 by UltrusBot (MIT, Fabric 1.19.x): same file format, same label colour.
-The pack's version is written from that behaviour as Forge event handlers, without the upstream mixin or config library.
+The pack's version is written from that behavior as Forge event handlers, without the upstream mixin or config library.
 
 ## 2. Reference
 

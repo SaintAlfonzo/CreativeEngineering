@@ -32,7 +32,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 
 | Part | Status | Full detail |
 |---|---|---|
-| Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initialises on a dedicated scratch server and a scratch client | here, 3 |
+| Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initializes on a dedicated scratch server and a scratch client | here, 3 |
 | "Run Speed" line (BlockRunner tiers, camo, sticky, sinking) | DEPLOYED (BR-44 to BR-47 pending) | [blockrunner.md](blockrunner.md) 3.8 |
 | "Growth" line for the 62 plants WTHIT skips, plus "(Harvestable)" | DEPLOYED with 1.0.6; CR-59 to CR-66 pending | [crops.md](crops.md) 2.9 |
 | Block model icon for every mod (272 blocks), substitute items, Forge's hit-aware pick block | BUILT 2026-10-20; DD part DEPLOYED with 1.0.4 | here, 2.2 |
@@ -232,7 +232,7 @@ face); unchecked in game. `[wthit] remainderBuffer`.
 - **Immersive Weathering** (its own feature, `soil_shearing`): grass block, mycelium, podzol, rooted grass. Its
   `isRandomlyTicking` is `fertile && super`, so a sheared block gets no random ticks: it doesn't spread to dirt, IW
   grows no grass, flowers or weeds on it, and it doesn't die back to dirt when covered. Checked from IW 1.2.10's
-  bytecode (`ModGrassBlock`, `SoilBlock`, `ModMyceliumBlock`). IW's dirt never pulls grass in from a neighbour
+  bytecode (`ModGrassBlock`, `SoilBlock`, `ModMyceliumBlock`). IW's dirt never pulls grass in from a neighbor
   (no block growth has dirt as owner and grass as result), so spreading only ever starts from the grass block itself.
 - **Pack additions**, same behaviour: Vintage Delight's lush grass block (port `0.1.6-ce-19.2-08`, `LushGrassBlock`)
   and Vinery's grass slab (port `1.5.5-ce-19.2-05`, `SpreadableGrassSlabBlock`) gained a `fertile` property (default
@@ -398,13 +398,13 @@ TreeChop ship WTHIT plugins.
   `WthitBlockModelIcon` + `BlockModelIcons` (icon), `WthitHolderContents`, `WthitHive`, `WthitStateLines` +
   `StateLines`, `WthitCampfire`, `WthitSheetmetalTank`, `WthitKitchenStation`, `WthitCoaster`,
   `WthitRemainderBuffer`, `WthitSheared`, `WthitSilkTouch`, `WthitCropSeasons`, `WthitOperatorBlocks`.
-- Silk Touch list: [tools/gen_silk_touch_blocks.py](../tools/gen_silk_touch_blocks.py) →
-  `kubejs/generation_scripts/wthit/silk_touch_blocks.json` → [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
+- Silk Touch list: [tools/gen_silk_touch_blocks.py](../tools/gen_silk_touch_blocks.py) ->
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json` -> [wthittags.js](../kubejs/server_scripts/tags/wthittags.js).
 - Sheared grass blocks in the ports: [LushGrassBlock.java](../development/backportedVintage/src/main/java/net/ribs/vintagedelight/block/custom/LushGrassBlock.java),
   [SpreadableGrassSlabBlock.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/block/SpreadableGrassSlabBlock.java).
 - [state_lines.json](../development/creativeCompat/src/main/resources/assets/creativecompat/state_lines.json).
 - [KegWthit.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/integration/wthit/KegWthit.java).
-- [devtools/WthitIconDump.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java) → `kubejs/exported/wthit_icons.json` → [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
+- [devtools/WthitIconDump.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java) -> `kubejs/exported/wthit_icons.json` -> [tools/wthit_icon_audit.py](../tools/wthit_icon_audit.py).
 - [tools/gen_display_delight_models.py](../tools/gen_display_delight_models.py); `check_display_delight_models` in [tools/build_deploy.py](../tools/build_deploy.py).
 - `surface/WthitRunSpeed`, CD `compat/wthit/WthitCropGrowth`: the two older lines.
 
@@ -416,7 +416,7 @@ TreeChop ship WTHIT plugins.
   rule matching) passed 2026-10-20; a dry run over `display_names.json` gives the counts in 2.5.
 - `python3 tools/gen_display_delight_models.py --check`; `python3 tools/crop_growth_coverage.py` (0 UNKNOWN).
 - **Scratch server + client, 2026-10-20** (superflat, test blocks set with `/setblock`, in-game screenshots taken by a
-  scratch-only client script): every plugin initialised on the dedicated server (`[WTHIT] Initializing common plugin
+  scratch-only client script): every plugin initialized on the dedicated server (`[WTHIT] Initializing common plugin
   ... keg / hive / campfire / sheetmetal_tank / kitchen_station`) and on the client. Seen in a world: "Contents:
   Honey (6 / 12)", "Contents: Cookie (5 / 12)", "Eggs: 3 / 6", "Level: 2 / 3", "Burns forever", "Rain: Puts it out",
   "Rain: Safe (fuel block below)". The same run showed the cheese wheel's double line (fixed since) and fed the
@@ -441,113 +441,113 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 
 **Icons**
 
-- [ ] **WL-04 DD icon, item-less plate:** 3 cookies on a food plate → the icon shows the plate with 3 cookies.
-- [ ] **WL-05 DD icon, modelled item:** a placed Plated Hamburger → its item icon (no purple cube).
-- [ ] **WL-06 Other mods untouched:** a Farmer's Delight pie and a vanilla cake → WTHIT's normal icons.
+- [ ] **WL-04 DD icon, item-less plate:** 3 cookies on a food plate -> the icon shows the plate with 3 cookies.
+- [ ] **WL-05 DD icon, modeled item:** a placed Plated Hamburger -> its item icon (no purple cube).
+- [ ] **WL-06 Other mods untouched:** a Farmer's Delight pie and a vanilla cake -> WTHIT's normal icons.
 - [ ] **WL-07 Model icon outside DD:** a dyed Colored Water cauldron, an Immersive Posts post, a placed Delightful pie
-  → their own models in the icon slot. A placed backpack → its backpack item.
-- [ ] **WL-08 Exclude list:** `"colored_water"` in `[wthit] iconExclude`, restart → the dyed cauldron's icon is empty.
+  -> their own models in the icon slot. A placed backpack -> its backpack item.
+- [ ] **WL-08 Exclude list:** `"colored_water"` in `[wthit] iconExclude`, restart -> the dyed cauldron's icon is empty.
   Remove it.
-- [ ] **WL-09 Substitute item:** look at a D&D powered flywheel (a furnace engine's flywheel while running) → Create's
+- [ ] **WL-09 Substitute item:** look at a D&D powered flywheel (a furnace engine's flywheel while running) -> Create's
   flywheel as the icon.
-- [ ] **WL-10 Forge pick:** a Supplementaries skull pile (two skulls stacked) → the icon is the skull looked at; look at
-  the other half → the other skull. A skull with candles → the skull.
+- [ ] **WL-10 Forge pick:** a Supplementaries skull pile (two skulls stacked) -> the icon is the skull looked at; look at
+  the other half -> the other skull. A skull with candles -> the skull.
 
 **Holders**
 
-- [ ] **WL-11 Jar fluid:** 6 bottles of honey in a jar → "Contents: Honey (6 / 12)"; fill to 12 → "(12 / 12)".
-- [ ] **WL-12 Goblet:** a goblet of water → "Contents: Water", no numbers.
-- [ ] **WL-13 Jar potion:** pour Splash Potions of Healing II into a jar → "Contents: Splash Potion of Healing (1 / 12)"
-  and a blue "Instant Health II" line under it. A jar of Potions of Regeneration (long) → "Regeneration (1:30)".
-  Lingering Potion of Regeneration (long) → "Regeneration (0:22)" (¼). A harmful potion (Poison) → a red line.
-- [ ] **WL-14 Potion effects off:** `[wthit] holderPotionEffects = false` → only the Contents line.
-- [ ] **WL-15 Cookie jar and cage:** 5 cookies → "Contents: Cookie (5 / 12)". A bee in a jar or cage → "Contents: Bee".
+- [ ] **WL-11 Jar fluid:** 6 bottles of honey in a jar -> "Contents: Honey (6 / 12)"; fill to 12 -> "(12 / 12)".
+- [ ] **WL-12 Goblet:** a goblet of water -> "Contents: Water", no numbers.
+- [ ] **WL-13 Jar potion:** pour Splash Potions of Healing II into a jar -> "Contents: Splash Potion of Healing (1 / 12)"
+  and a blue "Instant Health II" line under it. A jar of Potions of Regeneration (long) -> "Regeneration (1:30)".
+  Lingering Potion of Regeneration (long) -> "Regeneration (0:22)" (¼). A harmful potion (Poison) -> a red line.
+- [ ] **WL-14 Potion effects off:** `[wthit] holderPotionEffects = false` -> only the Contents line.
+- [ ] **WL-15 Cookie jar and cage:** 5 cookies -> "Contents: Cookie (5 / 12)". A bee in a jar or cage -> "Contents: Bee".
 
 **Hives**
 
 - [ ] **WL-16 Hive with bees:** a beehive with 2 bees inside (`/setblock ~ ~ ~ minecraft:beehive[honey_level=3]{Bees:[{EntityData:{id:"minecraft:bee"},MinOccupationTicks:100000},{EntityData:{id:"minecraft:bee"},MinOccupationTicks:100000}]}`)
-  → "Bees: 2 / 3" first, "Honey Level: 3 / 5" under it, no "2 Bee" line.
-- [ ] **WL-17 Empty nest:** a bee nest with no bees → "Bees: 0 / 3" first, then "Honey Level: n / 5".
-- [ ] **WL-18 Hive options:** WTHIT's "Show Beehive Occupants" off → still Bees then Honey. "Show Beehive Honey Level"
-  off → Bees only. `[wthit] hiveBees = false` → WTHIT's own lines back (names, "Honey Level: 3 / 5").
+  -> "Bees: 2 / 3" first, "Honey Level: 3 / 5" under it, no "2 Bee" line.
+- [ ] **WL-17 Empty nest:** a bee nest with no bees -> "Bees: 0 / 3" first, then "Honey Level: n / 5".
+- [ ] **WL-18 Hive options:** WTHIT's "Show Beehive Occupants" off -> still Bees then Honey. "Show Beehive Honey Level"
+  off -> Bees only. `[wthit] hiveBees = false` -> WTHIT's own lines back (names, "Honey Level: 3 / 5").
 - [ ] **WL-19 Hive on the server:** WL-16 on the dedicated server (the count comes from the server half).
 
 **State lines**
 
-- [ ] **WL-20 Feast:** a Roast Chicken block, take one serving → "Servings: 3 / 4"; Rustic Delight honey pancakes, eat
-  two → "Servings: 4 / 6".
-- [ ] **WL-21 Cakes and cheese:** a cake with two slices eaten → "Slices: 5 / 7"; an FD apple pie, one slice → "Slices:
-  3 / 4"; a Brewin' flaxen cheese wheel, cut twice → "Slices: 2 / 4" and no "Servings" line.
-- [ ] **WL-22 Eggs:** an Incubation hay nest with 3 eggs → "Eggs: 3 / 6"; a turtle egg cluster → "Eggs" and "Hatching".
-- [ ] **WL-23 Cauldrons:** a dyed water cauldron two-thirds full → "Level: 2 / 3"; a vanilla water cauldron → only
-  WTHIT's fluid bar, no Level line; a Fruits Delight juice cauldron and a powder snow cauldron → Level lines.
-- [ ] **WL-24 Others and override:** a respawn anchor with 2 charges → "Charges: 2 / 4"; 3 sea pickles → "Pickles: 3 /
-  4". Copy `state_lines.json` to `kubejs/assets/creativecompat/`, delete the pickle rule, F3+T → the Pickles line
+- [ ] **WL-20 Feast:** a Roast Chicken block, take one serving -> "Servings: 3 / 4"; Rustic Delight honey pancakes, eat
+  two -> "Servings: 4 / 6".
+- [ ] **WL-21 Cakes and cheese:** a cake with two slices eaten -> "Slices: 5 / 7"; an FD apple pie, one slice -> "Slices:
+  3 / 4"; a Brewin' flaxen cheese wheel, cut twice -> "Slices: 2 / 4" and no "Servings" line.
+- [ ] **WL-22 Eggs:** an Incubation hay nest with 3 eggs -> "Eggs: 3 / 6"; a turtle egg cluster -> "Eggs" and "Hatching".
+- [ ] **WL-23 Cauldrons:** a dyed water cauldron two-thirds full -> "Level: 2 / 3"; a vanilla water cauldron -> only
+  WTHIT's fluid bar, no Level line; a Fruits Delight juice cauldron and a powder snow cauldron -> Level lines.
+- [ ] **WL-24 Others and override:** a respawn anchor with 2 charges -> "Charges: 2 / 4"; 3 sea pickles -> "Pickles: 3 /
+  4". Copy `state_lines.json` to `kubejs/assets/creativecompat/`, delete the pickle rule, F3+T -> the Pickles line
   is gone. Remove the copy.
 
 **Campfires**
 
-- [ ] **WL-25 Campfire lines:** a lit campfire on grass → "Burns forever", "Rain: Puts it out"; on a coal block → green
-  "Rain: Safe (fuel block below)"; a soul campfire → "Burns forever" only.
-- [ ] **WL-26 Rain countdown:** `/weather rain` beside the open-sky campfire → red "Rain: Going out in 8s" counting down,
+- [ ] **WL-25 Campfire lines:** a lit campfire on grass -> "Burns forever", "Rain: Puts it out"; on a coal block -> green
+  "Rain: Safe (fuel block below)"; a soul campfire -> "Burns forever" only.
+- [ ] **WL-26 Rain countdown:** `/weather rain` beside the open-sky campfire -> red "Rain: Going out in 8s" counting down,
   then it goes out and the lines disappear.
 
 **Jade ports and keg**
 
-- [ ] **WL-27 Sheetmetal tank:** build and fill an IE sheetmetal tank → the same fluid bar on every part, including the
+- [ ] **WL-27 Sheetmetal tank:** build and fill an IE sheetmetal tank -> the same fluid bar on every part, including the
   two ports (once each).
-- [ ] **WL-28 Kitchen station:** an ME Kitchen Station on its own → red "Device Offline"; tied to an ME Security
-  Terminal on a grid → green "Device Online" and "Connected to ME Security Terminal at x, y, z".
-- [ ] **WL-29 Keg:** an empty keg → "Temperature: Normal" (near a heat source "Warm"/"Hot"). Load a beer recipe at a
-  valid temperature → "Fermenting: Beer n%" rising; move it somewhere the recipe can't run (wrong temperature) → red
+- [ ] **WL-28 Kitchen station:** an ME Kitchen Station on its own -> red "Device Offline"; tied to an ME Security
+  Terminal on a grid -> green "Device Online" and "Connected to ME Security Terminal at x, y, z".
+- [ ] **WL-29 Keg:** an empty keg -> "Temperature: Normal" (near a heat source "Warm"/"Hot"). Load a beer recipe at a
+  valid temperature -> "Fermenting: Beer n%" rising; move it somewhere the recipe can't run (wrong temperature) -> red
   "Beer: Must Be ..." (the requirement the recipe book shows).
 - [ ] **WL-30 Keg on the server:** WL-29 on the dedicated server.
 
 **Kitchen leftover slots** (patcherMod 1.1.01)
 
-- [ ] **WL-32 Holding line:** cook hot cocoa with a milk bucket in an FD pot → "Holding: 1 Bucket". Bake a milk-bottle
-  recipe in the oven → "Holding: 1 Glass Bottle" (note whether WTHIT's own item line lists the bottle as well). An
+- [ ] **WL-32 Holding line:** cook hot cocoa with a milk bucket in an FD pot -> "Holding: 1 Bucket". Bake a milk-bottle
+  recipe in the oven -> "Holding: 1 Glass Bottle" (note whether WTHIT's own item line lists the bottle as well). An
   empty pot shows no line.
 - [ ] **WL-33 Waiting line:** fill both of a pot's leftover slots with different items (cook with a milk bucket, then
-  a honey bottle recipe, or use `/data`), then load a recipe that leaves a third kind → red "Waiting: leftover slots
-  full"; take one slot out → the red line goes and the pot cooks. Repeat once on the dedicated server.
+  a honey bottle recipe, or use `/data`), then load a recipe that leaves a third kind -> red "Waiting: leftover slots
+  full"; take one slot out -> the red line goes and the pot cooks. Repeat once on the dedicated server.
 
 **Sheared grass** (patcherMod 1.1.03, Vintage port `-08`, Vinery port `-05`)
 
-- [ ] **WL-34 Sheared line:** shears on a grass block → grass particles and a crop sound, the line "Sheared, prevents
+- [ ] **WL-34 Sheared line:** shears on a grass block -> grass particles and a crop sound, the line "Sheared, prevents
   spreading" appears; an unsheared grass block shows no line. Repeat on mycelium.
 - [ ] **WL-35 No spreading:** *Server half: scratch server PASSED r1031 (2026-10-31, SQ-SG-01, -02).* a 3 x 3 dirt patch with one sheared grass block in the middle, in daylight; next to it
   the same patch around an unsheared block. Wait (or `/gamerule randomTickSpeed 300` for a minute, then back to 3):
   only the unsheared patch turns to grass, and the sheared block stays sheared.
-- [ ] **WL-36 Port blocks:** *No-spread half (lush grass, grass slab): scratch server PASSED r1031 (SQ-SG-03).* shears on Vintage Delight's lush grass block and on a Vinery grass slab → the same
+- [ ] **WL-36 Port blocks:** *No-spread half (lush grass, grass slab): scratch server PASSED r1031 (SQ-SG-03).* shears on Vintage Delight's lush grass block and on a Vinery grass slab -> the same
   particles and line; WL-35 with lush grass on rich soil and a grass slab next to dirt slabs. A hoe still tills
   sheared lush grass, a shovel still makes a path slab from a sheared grass slab.
 
 **Silk Touch, crop seasons, operator blocks** (patcherMod 1.1.03 of 2026-10-28)
 
-- [ ] **WL-37 Silk Touch tag:** *Tag half: scratch server PASSED r1031 (2026-10-31, SQ-WT-01).* after `/reload`, no `[wthit-silk-touch]` error in `logs/latest.log`. Look at glass, ice, a grass block, iron ore and stone → a Silk Touch book and
-  "Needs Silk Touch"; dirt, oak log, oak leaves and an iron block → no line.
-- [ ] **WL-38 Silk Touch held:** hold a Silk Touch pickaxe → the line goes on all five; a plain pickaxe → it is back.
-- [ ] **WL-39 Seasons line:** wheat → "Fertile: Spring" and "Offseason: Winter, Dry" under Growth; tobacco → "Fertile:
-  Summer, Dry" and "Offseason: Winter"; an oak sapling and kelp → no line.
-- [ ] **WL-40 Here line:** in a temperate plains biome, `/season set early_spring`; the wheat → green "Fertile here: grows
-  faster". `/season set mid_winter` → red "Offseason here: grows slower"; glass (any `sereneseasons:greenhouse_glass`
-  block) a few blocks above → green "Greenhouse: preventing offseason debuff". `/season set mid_summer` → no here line. Wheat in a jungle in
-  `mid_summer` (dry) → red.
+- [ ] **WL-37 Silk Touch tag:** *Tag half: scratch server PASSED r1031 (2026-10-31, SQ-WT-01).* after `/reload`, no `[wthit-silk-touch]` error in `logs/latest.log`. Look at glass, ice, a grass block, iron ore and stone -> a Silk Touch book and
+  "Needs Silk Touch"; dirt, oak log, oak leaves and an iron block -> no line.
+- [ ] **WL-38 Silk Touch held:** hold a Silk Touch pickaxe -> the line goes on all five; a plain pickaxe -> it is back.
+- [ ] **WL-39 Seasons line:** wheat -> "Fertile: Spring" and "Offseason: Winter, Dry" under Growth; tobacco -> "Fertile:
+  Summer, Dry" and "Offseason: Winter"; an oak sapling and kelp -> no line.
+- [ ] **WL-40 Here line:** in a temperate plains biome, `/season set early_spring`; the wheat -> green "Fertile here: grows
+  faster". `/season set mid_winter` -> red "Offseason here: grows slower"; glass (any `sereneseasons:greenhouse_glass`
+  block) a few blocks above -> green "Greenhouse: preventing offseason debuff". `/season set mid_summer` -> no here line. Wheat in a jungle in
+  `mid_summer` (dry) -> red.
 - [ ] **WL-41 Barriers, operator:** as an op (or single player with cheats), `/setblock ~ ~ ~2 minecraft:barrier`,
-  look at it → WTHIT shows "Barrier". Same for `structure_void`.
-- [ ] **WL-42 Barriers, player:** on the server, `/deop` yourself → the barrier shows the block behind it (or nothing),
-  as before; `/op` again → "Barrier" is back without a relog.
+  look at it -> WTHIT shows "Barrier". Same for `structure_void`.
+- [ ] **WL-42 Barriers, player:** on the server, `/deop` yourself -> the barrier shows the block behind it (or nothing),
+  as before; `/op` again -> "Barrier" is back without a relog.
 
 **Switches**
 
 - [ ] **WL-31 Every switch:** set each switch in the section 3 table to false in turn (or all at once, then back) and
-  restart: its line or icon goes and the others stay. Expected when off: `iconBlockModel` → empty icon on an item-less
-  DD plate; `iconForgePick` → skull pile icon empty; `iconSubstitutes` → powered flywheel icon empty;
-  `holderPotionEffects` → no effect lines; `holderSingleName` → goblet "Water (1 / 1)"; `hiveBeesOnTop` → WTHIT's
-  "2 Bee" line back and Bees at the end; `[wthit.state_lines] slices` → no Slices on a cake while feasts keep Servings;
-  `campfireBurn` / `campfireRain` → that line only; `sheetmetalTank` → the bar only on the two ports; `kitchenStation`
-  → no station lines; `remainderBuffer` → no Holding / Waiting lines; `sheared` → no Sheared line; `wthitKeg` (brewinandchewin-client.toml) → no keg lines. Set them all back to true.
+  restart: its line or icon goes and the others stay. Expected when off: `iconBlockModel` -> empty icon on an item-less
+  DD plate; `iconForgePick` -> skull pile icon empty; `iconSubstitutes` -> powered flywheel icon empty;
+  `holderPotionEffects` -> no effect lines; `holderSingleName` -> goblet "Water (1 / 1)"; `hiveBeesOnTop` -> WTHIT's
+  "2 Bee" line back and Bees at the end; `[wthit.state_lines] slices` -> no Slices on a cake while feasts keep Servings;
+  `campfireBurn` / `campfireRain` -> that line only; `sheetmetalTank` -> the bar only on the two ports; `kitchenStation`
+  -> no station lines; `remainderBuffer` -> no Holding / Waiting lines; `sheared` -> no Sheared line; `wthitKeg` (brewinandchewin-client.toml) -> no keg lines. Set them all back to true.
 
 ## 8. History
 

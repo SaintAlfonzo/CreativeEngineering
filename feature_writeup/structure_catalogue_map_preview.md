@@ -23,7 +23,7 @@ Row rule: a family wraps to a new row so that it stays within 661 blocks of dept
 Changes the preview makes beyond reordering:
 
 - Small, Medium, Large and Other homes are one **House** family.
-- Town centres are named **Well and centre**. All 69 are kept together, because only a handful of pieces carry `well` or `fountain` in their names and the rest are meeting points.
+- Town centers are named **Well and center**. All 69 are kept together, because only a handful of pieces carry `well` or `fountain` in their names and the rest are meeting points.
 - Mod job sites that the current rules file under Other homes (compost piles, vaults, electrician, gunsmith, outfitter, mechanic and bard buildings) move to **Workplace**, so House holds homes.
 - Streets are named **Road**.
 - **Stall** holds the 2 Wandering Trader Camp tents. No template in the pack has `stall`, `booth`, `market` or `kiosk` in its name.
@@ -613,7 +613,7 @@ Changes the preview makes beyond reordering:
 - Taiga / minecraft (1): `minecraft:village/taiga/houses/taiga_animal_pen_1`
 - Wandering Trader Camp (2): `kaisyn:village/exclusives/wandering_trader_camp/side/trader_llama_pen_{1-2}`
 
-### Well and centre (69)
+### Well and center (69)
 
 **Row 1** (80 wide, 34 deep)
 
@@ -1097,7 +1097,7 @@ Changes the preview makes beyond reordering:
 
 - Sky (1): `skyvillages:house_1`
 
-### Well and centre (1)
+### Well and center (1)
 
 - Sky (1): `skyvillages:fountain`
 

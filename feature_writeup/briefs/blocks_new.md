@@ -35,7 +35,7 @@ Status **Planned** / Work patcherMod / TODO `blocks/new #1`
 Curtains that hang three blocks tall (top with the rod, middle, bottom), opening and closing as one.
 
 ### Now
-- The pack's only curtains are Another Furniture's: `another_furniture-forge-1.19.2-2.1.4.jar` (licence MIT), 16
+- The pack's only curtains are Another Furniture's: `another_furniture-forge-1.19.2-2.1.4.jar` (license MIT), 16
   `another_furniture:<colour>_curtain`, class `com.starfish_studios.another_furniture.block.CurtainBlock` (properties
   `facing`, `type` single / left / middle / right, `open`, `powered`, `facing_vertical`, `waterlogged`). Placement
   (`setPlacedBy`) adds a second block below, so one curtain item is two blocks: the top has `facing_vertical=down` (it
@@ -60,7 +60,7 @@ Curtains that hang three blocks tall (top with the rod, middle, bottom), opening
    `CreativeEngineeringBlocks` does). Blockstates and models in patcherMod resources reuse Another Furniture's
    curtain textures by id (MIT: add its notice to patcherMod's NOTICE); the middle piece uses the bottom textures.
 4. KubeJS: `i.<colour>_long_curtain` keys in item_dict (and the 16 Another Furniture curtains as `i.<colour>_curtain`),
-   recipe through `global.NCH` (`R.shapeless`: 3 curtains of a colour -> 2 long curtains, same cloth), tags through
+   recipe through `global.NCH` (`R.shapeless`: 3 curtains of a color -> 2 long curtains, same cloth), tags through
    `global.tags` (`another_furniture:curtains` block and item, `minecraft:mineable/axe` like the source), lang names
    "Long <Colour> Curtain".
 5. Drop the dead `handcrafted:white_curtain` line in fabric.js.
@@ -81,7 +81,7 @@ New: 16 `creativeengineering:<colour>_long_curtain`. Uses `another_furniture:<co
 
 ### Tests (BL-, proposed)
 - BL-new1 Place a long curtain under a ceiling: three blocks; right-click any part opens all three and its side
-  neighbours; breaking the bottom drops one item; placing with only one free block below fails.
+  neighbors; breaking the bottom drops one item; placing with only one free block below fails.
 
 ---
 
@@ -147,7 +147,7 @@ slot used. Decide whether framed and copycat versions come too.
 - patcherMod precedent for a block with a block entity: `oven/OvenBlock.java`, `oven/OvenRegistry.java`.
 
 ### Build
-Follow the `port` skill (licence route: Mojang's 1.20 code and textures are not copied; own code, own or user-drawn
+Follow the `port` skill (license route: Mojang's 1.20 code and textures are not copied; own code, own or user-drawn
 textures).
 1. patcherMod `block/bookshelf/ChiseledBookshelfBlock` + block entity (6-slot `NonNullList`, one book each), the
    1.20 slot-from-hit-position rule (2 rows x 3 columns on the front face), `facing`, six `slot_N_occupied` booleans,
@@ -238,7 +238,7 @@ A lit fel pumpkin, as the jack o'lantern is to the carved pumpkin.
 1. decor_blocks.js: `e.create('creativeengineering:lit_fel_pumpkin', 'cardinal')`, material / sound like the pumpkin,
    hardness 1, `.lightLevel(1.0)` (KubeJS scales 0-1 to 0-15; check in game), mineable axe.
 2. Model `orientable` with front `creativeengineering:block/lit_fel_pumpkin` (a lit face, drawn in the user's texture
-   flow; base it on the Botania face only if its licence allows: check), sides and top vanilla pumpkin.
+   flow; base it on the Botania face only if its license allows: check), sides and top vanilla pumpkin.
 3. `i.lit_fel_pumpkin` in item_dict; recipe through `global.NCH`: fel pumpkin + torch -> lit fel pumpkin (shapeless,
    like the jack o'lantern); tags through `global.tags`: `alexsmobs:crow_fears` (recommend), `minecraft:mineable/axe`.
 
@@ -267,10 +267,10 @@ Mushrooms that grow off the sides of blocks (logs, cave walls), with slightly al
   ([mushroom_spawns.json](../../kubejs/generation_scripts/worldgen/mushroom_spawns.json), `rules`, read by patcherMod
   `CEConfig`; `tools/test_mushroom_spawns.sh`), Fungi Delight's inky cap and morel (`backportedFungi`).
 - Web leads (2026-10-31, unverified): Mushroom Quest (Forge, a 1.19.2 build "v4.1.0", MCreator, adds bracket and shelf
-  fungi, each edible with effects); Extended Mushrooms 1.19.2-3.0.3.0 (behaviour changes, no wall mushrooms).
+  fungi, each edible with effects); Extended Mushrooms 1.19.2-3.0.3.0 (behavior changes, no wall mushrooms).
 
 ### Build
-1. Check Mushroom Quest (licence, block list, whether its fungi attach to sides, food values). Its edible fungi would
+1. Check Mushroom Quest (license, block list, whether its fungi attach to sides, food values). Its edible fungi would
    go through the `integration-report` skill (food overlap, Spice of Life).
 2. If no mod fits (recommend own blocks): KubeJS `cardinal` blocks `creativeengineering:wall_brown_mushroom` and
    `wall_red_mushroom` in decor_blocks.js (no collision, a thin box per facing, light like vanilla mushrooms, drop the
@@ -297,12 +297,12 @@ A wall form must not count as the mushroom for recipes or compost (it drops the 
 Status **Planned** / Work new jar / patcherMod / TODO `blocks/new #8`
 
 ### Goal
-An armor-stand-like scarecrow for fields: placed from an item, dressable with armour and a pumpkin head, with a default
+An armor-stand-like scarecrow for fields: placed from an item, dressable with armor and a pumpkin head, with a default
 clothes look.
 
 ### Now
-- MmmMmmMmmMmm `dummmmmmy-1.19.2-1.7.1.jar` (target dummy; licence "code: Public Domain, assets: ARR",
-  `mod_sides.md` line 204): an armour-stand-like entity placed from an item. Its code may be reused, its model and
+- MmmMmmMmmMmm `dummmmmmy-1.19.2-1.7.1.jar` (target dummy; license "code: Public Domain, assets: ARR",
+  `mod_sides.md` line 204): an armor-stand-like entity placed from an item. Its code may be reused, its model and
   textures may not.
 - Alex's Mobs crows (`crowSpawnWeight = 10`, `config/alexsmobs.toml` line 314) eat `#minecraft:crops`
   (`alexsmobs:crow_foodblocks`), fear blocks in `alexsmobs:crow_fears` (carved pumpkin, jack o'lantern) and scatter
@@ -311,9 +311,9 @@ clothes look.
 
 ### Build
 1. patcherMod `entity/scarecrow/Scarecrow extends ArmorStand` (or the dummy's approach): placed by
-   `creativeengineering:scarecrow` item on farmland or a fence post, holds armour slots and a head slot, no gravity
+   `creativeengineering:scarecrow` item on farmland or a fence post, holds armor slots and a head slot, no gravity
    when on a fence.
-2. Default clothes: an own model layer (straw body, burlap shirt, hat) drawn when the slots are empty; armour renders
+2. Default clothes: an own model layer (straw body, burlap shirt, hat) drawn when the slots are empty; armor renders
    over it. Model built in Blockbench, own textures.
 3. Entity type tag `alexsmobs:scatters_crows` through `global.tags` (entity type tags), so crows flee from it.
 4. KubeJS: `i.scarecrow`, recipe through `global.NCH` (sticks, hay bale, carved pumpkin; recommendation), lang.
@@ -322,13 +322,13 @@ clothes look.
 New: entity `creativeengineering:scarecrow`, item `creativeengineering:scarecrow`.
 
 ### Decisions
-- Model: armour-stand proportions (recommend; armour fits) or the target dummy's shape (its model is ARR: own redraw
+- Model: armor-stand proportions (recommend; armor fits) or the target dummy's shape (its model is ARR: own redraw
   only).
 - Function beyond decor: crows scatter (recommend, one tag line); no mob spawn blocking.
 
 ### Gotchas
 - A new entity needs a renderer registration on the client side only (patcherMod client class), and a WTHIT name.
-- If it is an `ArmorStand` subclass, other mods' armour-stand handling (Quark's armour stand arms, MCA) may apply.
+- If it is an `ArmorStand` subclass, other mods' armor-stand handling (Quark's armor stand arms, MCA) may apply.
 
 ### Tests (BL-, proposed)
 - BL-new7 Place a scarecrow on farmland and on a fence; dress it (helmet, pumpkin); empty slots show the clothes; a crow
@@ -343,7 +343,7 @@ Status **Planned** / Work resource pack / data / TODO `blocks/new #9`
 More seashell variety: recoloured shells beside Twigs' four.
 
 ### Now
-- Twigs 3.0.1 (licence all rights reserved): `twigs:{bronzed,opaline,roseate,tangerine}_seashell` (item_dict lines
+- Twigs 3.0.1 (license all rights reserved): `twigs:{bronzed,opaline,roseate,tangerine}_seashell` (item_dict lines
   619-622), class `SeashellBlock` (waterloggable), item tag `twigs:seashells`, bone meal recipe from the tag, worldgen
   `twigs:patch_seashell` (weights opaline 20, tangerine 20, roseate 15, bronzed 8) placed by
   `data/twigs/forge/biome_modifier/add_land_sea_shells.json`.
@@ -351,7 +351,7 @@ More seashell variety: recoloured shells beside Twigs' four.
   each).
 
 ### Build
-1. KubeJS blocks in decor_blocks.js: `creativeengineering:<name>_seashell` (4 to 6 new colours), `.waterlogged()`,
+1. KubeJS blocks in decor_blocks.js: `creativeengineering:<name>_seashell` (4 to 6 new colors), `.waterlogged()`,
    `.noCollision()`, a flat `box`, instant break; models shaped like a shell, own textures (drawn fresh; Twigs' pngs
    are ARR, so no recolours of them).
 2. Tags through `global.tags`: `twigs:seashells` (so the bone meal recipe and any shell use takes them).
@@ -455,7 +455,7 @@ Status **Planned** / Work KubeJS / config / TODO `blocks/new #12`
 Rare Ice is harder to stumble on (its visible sources removed) and its generation can be configured.
 
 ### Now
-- Mod `rare-ice-0.5.1.jar` (licence CC BY-NC 4.0): block `rare-ice:rare_ice` with **no item** (the loot table gives
+- Mod `rare-ice-0.5.1.jar` (license CC BY-NC 4.0): block `rare-ice:rare_ice` with **no item** (the loot table gives
   `minecraft:ice` with Silk Touch), a block entity holding an item, a chest loot table `chests/rare_ice`. Its block tag
   `minecraft:ice` adds `rare-ice:rare_ice`.
 - **Generation (read from the classes 2026-10-31):** the configured and placed features `rare-ice:rare_ice` are

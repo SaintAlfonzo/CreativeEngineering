@@ -129,7 +129,7 @@ truffle pie art.
    `add-mod` skill (sides row, `/dumpall`, generators), and turn off what is not wanted through its config and KubeJS
    (remove items, recipes, spawns, worldgen biome modifiers).
 2. For a port: the `port` skill; a Creative Delight member only for the food parts (truffle pie), other parts in patcherMod
-   or a new in-tree mod. Licence check first (Team Abnormals mods: read the jar's licence).
+   or a new in-tree mod. License check first (Team Abnormals mods: read the jar's license).
 3. Pieces: cattail (block + worldgen through the wild-flowers / wild-plants rules), mud ball (projectile, sets a pig muddy
    state), muddy pig (entity data on vanilla pig, dries over time, flower placement), koi (fish entity, spawn rules, its
    anti-spawn radius), deer / reindeer (entities, spawns per [mob spawns](../mob_spawns.md), venison back in
@@ -215,7 +215,7 @@ Decide whether to add a social expansion mod for MCA (Minecraft Comes Alive) and
 
 ### Now
 - MCA is `minecraft-comes-alive-7.5.20+1.19.2-universal.jar` (`mod_sides.md` row, both sides). The pack's MCA work:
-  villager sleep glitch (`mobs/tweaks #2`), eye colour and shape in the Comb (`mobs/tweaks #12`, built), MCA items in village
+  villager sleep glitch (`mobs/tweaks #2`), eye color and shape in the Comb (`mobs/tweaks #12`, built), MCA items in village
   houses (`loot/tables #6`), MCA family group in JEI (`jei/jei-ordering #3`), starter kit combs.
 - No social-expansion mod is in `mods/`, `disabledmods/` or `DecompiledMods`; nothing in the repo docs names a candidate.
   Which 1.19.2 mods exist is *unverified*: needs a search (CurseForge / Modrinth for "MCA" addons).

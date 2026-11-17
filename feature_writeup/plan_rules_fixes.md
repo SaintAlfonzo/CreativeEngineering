@@ -12,7 +12,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=b50a8e13db13 -->
+<!-- generated:status_index begin open_work sha1=7a7d26a7e71c -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 26), 1 Complete.
 
 | Id | Status | Tests | Change |
@@ -23,7 +23,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #16` | Planned | none | Split Creative Loot out of Creative Worldgen |
 | `conventions #17` | Planned | none | Registration and namespace |
 | `conventions #18` | Planned | none | Dict keys for literals and the lints |
-| `conventions #19` | Planned | none | Licence string |
+| `conventions #19` | Planned | none | License string |
 | `conventions #20` | Planned | none | Test-item palette switch |
 | `conventions #21` | Planned | none | Mod sides |
 | `conventions #22` | Planned | none | Brewin' advancement scan |
@@ -47,7 +47,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
 
-1. **D1 Licence string**: `GPL-3.0-only` confirmed (can be widened later); change the rule text, not the jars (section 8).
+1. **D1 License string**: `GPL-3.0-only` confirmed (can be widened later); change the rule text, not the jars (section 8).
 2. **D2 Loot modifiers**: see D14.
 3. **D3 Tab scope**: own source files only: Java, JS, Gradle, Python, own hand-written JSON. Excluded: YAML (tabs are
    illegal), Markdown, game-written configs, generated files (D3 test: section 16), MIT/ARR files baked from an upstream
@@ -63,7 +63,7 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
 7. **D7 Code formatting (G2)**: tabs as indent in every D3 file, Python included (179 files, all spaces today); no trailing
    whitespace; `.editorconfig` added. Line length and brace style stay free.
 8. **D8 Comments (G3)**: new rule DR-C26, code comments say what the code does now; history and status go to the writeup
-   History (section 17). File headers stay as they are (no licence header rule).
+   History (section 17). File headers stay as they are (no license header rule).
 9. **D9 Citations (G5)**: one word, "owner", in the form "(owner, YYYY-MM-DD)"; "user" citations convert in the section 15 sweep.
 10. **D10 Old value in changelog bullets (G12)**: brackets, `[2]`, as CLAUDE.md and every file since 1.1.03 do. DR-P4's
     "(was 2)" text is rewritten; V-60 converts the `unreleased.md` stragglers.
@@ -190,7 +190,7 @@ tag. The forge tag line is dead. Unify on `#creativedelight:sea_pickles`:
 
 ## 5. Global loot modifiers (V-08)
 
-Facts: 9 files ship `data/forge/loot_modifiers/global_loot_modifiers.json`: Exposure (main and `expanded` flavours),
+Facts: 9 files ship `data/forge/loot_modifiers/global_loot_modifiers.json`: Exposure (main and `expanded` flavors),
 Creative Delight members hearth, veggies, rustic, ends, vintage, the Vinery pack inside Creative Delight
 (`packs/mods/vinery/`), and Brewin' in Creative Brewing. Third-party jars in `mods/` ship their own copies too.
 Creative Delight, Brewing and Exposure depend on Common, not on Worldgen or Creative Loot (until D25).
@@ -318,12 +318,12 @@ Per violation:
   `// requires: <mod>`.
 - Dict lint: duplicate key assignments in a dict file fail (catches V-22, V-23, V-24 for good); add to `design_rules_audit.py`.
 
-## 8. Licence string (V-12, V-13)
+## 8. License string (V-12, V-13)
 
 - **GNU GPL3 (free text) vs `GPL-3.0-only` (SPDX)**: both name the GPL version 3 licence. `GPL-3.0-only` is the SPDX
   identifier, unambiguous and machine-readable: GPL 3 only, not "or any later version" (`GPL-3.0-or-later`).
   "GNU GPL3" is only a label with no "only/or later" statement. All 44 jars already use the SPDX form and ship the full
-  GPL-3 text, so the licence content is identical; only the rule text is wrong.
+  GPL-3 text, so the license content is identical; only the rule text is wrong.
 - Fix: DR-C19 and CLAUDE.md "Own work is GPLv3" say "GPL-3.0-only (SPDX)"; mods.toml `license=` takes the same string;
   `design_rules_audit.py` checks it. Widening to or-later later is a one-line change in each `gradle.properties` (owner 2026-11-16: only for now).
 - V-13: NOTICE naming: one form `NOTICE-<scope>-<licence>.txt` (for example `NOTICE-upstream-MIT.txt`); rename the 7 odd names; Power Grid's
@@ -544,14 +544,14 @@ configs `baby_mobs-common.toml`, `more_mooblooms-common.toml`; lang namespace `v
 ## 15b. American spelling and arrows (D20, D21)
 
 - Rule: DR-L7 (new; DR-L6 is the in-game names rule) "American spelling in prose and player text; `->` for arrows". design_rules.md G1 and G19 closed.
-- Tool `tools/us_spelling.py` (dry-run, report per file): a word list of British to American forms (colour, armour,
-  behaviour, grey, centre, metre, litre, licence as a noun, favour, flavour, honour, -ise/-isation verbs, catalogue,
-  programme, travelled) applied to prose only. Skips code identifiers, quoted ids (`ns:id`, config keys, file paths),
+- Tool `tools/us_spelling.py` (dry-run, report per file): a word list of British to American forms (color, armor,
+  behavior, gray, center, meter, liter, license as a noun, favor, flavor, honor, -ise/-isation verbs, catalog,
+  program, traveled) applied to prose only. Skips code identifiers, quoted ids (`ns:id`, config keys, file paths),
   upstream text (repack and donor files, quoted upstream lines), deployed changelogs and `exported/`. Lang files: only
   own namespaces' `en_us.json` values, never keys. Also rewrites `→` to `->` outside player text.
 - Order: docs, memory, skills and own lang in P1 (with the date pass, one commit each); code comments and strings in P5
   after section 17. Lint in `design_rules_audit.py` (the word list) from P1 end.
-- Player-visible: own lang and tooltip text change (for example "colour" 12 times, "behaviour", "grey" in own lang
+- Player-visible: own lang and tooltip text change (for example "color" 12 times, "behavior", "gray" in own lang
   today). Changelog bullet under a catch-all family when it ships: "Item names and tooltips use American spelling
   (color, armor, gray)". Queue row: none needed (text only); a client look at 5 changed tooltips.
 
@@ -660,5 +660,5 @@ Every violation is scheduled (owner 2026-11-16: D23 to D26).
   (Worldgen GlmMerge); section 6 bound helper `forPack`; V-04 and V-48 use member switches; V-03 repack route;
   V-62b and V-62c settled; section 13 limited to text (identifier audit TODO `tooling/design-rules #3`); palette demo
   stays on until TODO `tooling/design-rules #4`; section 19b gap references fixed (G13, not G1; World column is DR-W4).
-- 2026-11-16: section 12b and 19b added (small fixes, docs form last); Power Grid stays in mods/, licence GPL-3.0-only confirmed.
+- 2026-11-16: section 12b and 19b added (small fixes, docs form last); Power Grid stays in mods/, license GPL-3.0-only confirmed.
 - 2026-11-16: plan written from the owner brief and the 2026-11-14 audit. Section 4 tilled end stone found already built (plan_bugfix_1114 3.2).

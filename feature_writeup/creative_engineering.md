@@ -14,7 +14,7 @@ Written for: the owner and agents working on the split. Two jars come out of thi
   `creativecommon-1.0.0.jar`): what was left of patcherMod after waves 1 to 8, as section 2.4 of the split plan lists it.
   Package `com.SaintAlfonzo.creativecommon`, config `creativecommon-common.toml`. Every Creative jar requires it.
 
-Same behaviour as before the carve. Engineering's registry ids, tags, lang keys and channels keep the
+Same behavior as before the carve. Engineering's registry ids, tags, lang keys and channels keep the
 `creativeengineering` namespace. Common's own data moved to `creativecommon` the same day (owner, 2026-11-04,
 [creative_split.md](creative_split.md) 7.14): `CreativeCommon.NS` is now `creativecommon`, which covers the damage tags,
 WTHIT plugin and line ids, JEI uids, the `jei/` and `wthit/` tags, the lang keys, the `kubejs/assets/creativecommon/`
@@ -121,7 +121,7 @@ scratchpad only). The live `config/` file is left for the first boot to split (S
 ## 4. Known effects and leftovers
 
 - Mods screen: "Creative Common 1.0.0" is a new entry and "Creative Engineering" shows 2.0.0 with the narrower
-  description. Same behaviour otherwise: no changelog bullet (dev-only move, as for the earlier carves).
+  description. Same behavior otherwise: no changelog bullet (dev-only move, as for the earlier carves).
 - Event and listener order shifts a little: Engineering's registrations run in its constructor after Common and Compat.
 - Engineering's mixins are now gated on their mods; with every target mod in the pack nothing changes.
 - `instance.json` (ATLauncher) still names `creativeengineering-1.1.01.jar`; update it with ATLauncher closed.
@@ -167,11 +167,11 @@ two new jars, put 1.1.09 back, and reinstall the other jars from their `jar_arch
 - 2026-11-04: carved and swapped (wave 8). Owner: D3 (liquid XP bridge) goes to Engineering; the carve and the swap in
   one step, the project folder renamed too. Built: all ten Creative jars; not installed, not booted.
 
-## 7. Licence audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)
+## 7. License audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)
 
 Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md](creative_brewing.md) 9.2.
 
-| Part | Source licence | In the jar | Verdict |
+| Part | Source license | In the jar | Verdict |
 |---|---|---|---|
 | Own Java (about 270 classes) and 70 mixins | own, GPLv3 | yes | OK |
 | `IwBlockGrowthHandlerMixin` fallback (about 10 lines of IW 1.2.10's body, the only `@Overwrite`) | Immersive Weathering, LGPLv3 | yes | OK; attribution added 2026-11-05 (`NOTICE-thirdparty.txt`, source comment) |
@@ -185,7 +185,7 @@ Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md
 | Farmer's Structures donor (ARR) | read at runtime from `farmers_upstream/` | no | OK |
 
 Fixes: TODO `licence/common #1` (tint sheets, closed: vanilla edits accepted), `#2` (notices, `credit.txt`), `#3` (panorama,
-closed: the owner's own). No licence row open for Common.
+closed: the owner's own). No license row open for Common.
 
 ### 7.1 Publishing readiness (2026-11-05, TODO `creativecommon/publish #1`)
 
@@ -244,7 +244,7 @@ boot. Removed: ItemPhysic, Create: Deep Dark's echo mixin and Easy Elytra Takeof
 `displayURL` point to the repo; authors from `gradle.properties`; stale patcherMod-era comments gone.
 
 **Vanilla defaults (2026-11-07, owner; TODO `creativecommon/publish #2`)**. Built and installed 13:27. A standalone install
-behaves as vanilla; the pack keeps its behaviour through `config/creativecommon-common.toml` (and the `configs_edited/root_config/`
+behaves as vanilla; the pack keeps its behavior through `config/creativecommon-common.toml` (and the `configs_edited/root_config/`
 copy), which already held every value explicitly:
 
 | Setting | Default now (vanilla) | Pack value (in config) |
@@ -258,7 +258,7 @@ copy), which already held every value explicitly:
 The title panorama left the jar for `kubejs/assets/minecraft/textures/gui/title/background/` (pack-owned, shipped to
 clients as `assets/*`; KubeJS assets rank above mod jars). **2026-11-08 (owner): the six images were put back in Common's jar, found to be a terrain-free sky capture (blank on screen) and taken out again; Common ships no panorama (vanilla). A new capture is owner work; the planned switch is a built-in resource pack, enabled by default, with a client config key, stepping aside when a panorama mod is installed.** The `mods.toml` description now says the pack settings are off by
 default. Kept as they are: the swap triggers (`creativecommon-swaps.toml`) act only on merge lists that jars ship, so they are
-library behaviour, not pack taste. Pack-flavoured defaults still in place and not in this change: `[mod_names] overrides`
+library behavior, not pack taste. Pack-flavored defaults still in place and not in this change: `[mod_names] overrides`
 (the pack's display-name list), `[effects]` remap / removed / HUD lists. Tests SQ-CMV-04, CQ-CMV-03.
 
 **Project page**: CurseForge project created 2026-11-07 (private, `curseforge.com/minecraft/mc-mods/creative-common`);
@@ -282,7 +282,7 @@ Patchouli, Lightman's, Pretty Pipes, Wares, Legendary Tooltips, JEI, Detail Armo
 2. Done: `mods.toml` description (gradle.properties `mod_description`) matches the project page.
 3. Done: Detail Armor Bar notice moved to Equipment's `NOTICE-thirdparty.txt`.
 4. Done: `[mod_names] overrides` and `[effects] removed` default to empty; Creative Tips left the jar for the pack's
-   `kubejs/assets/creative_tips/`. Still pack-flavoured, kept: `[effects] forceHudIcon` / `forceHudIconItems` (they
+   `kubejs/assets/creative_tips/`. Still pack-flavored, kept: `[effects] forceHudIcon` / `forceHudIconItems` (they
    only show icons).
 5. Done: no tag in another jar's namespace (7.2).
 6. Commit, push and tag the source (creative_brewing.md 9.4 R6); the page links the repo.
@@ -306,7 +306,7 @@ flower box extra models only with the mods they draw from.
 
 ### 7.2 Publish cleanup (2026-11-07 evening; built, NOT installed: the game was running)
 
-Owner request: mods.toml, licence notice, pack-held defaults, foreign tag namespaces, Create / IE / Fruits Delight code
+Owner request: mods.toml, license notice, pack-held defaults, foreign tag namespaces, Create / IE / Fruits Delight code
 out of Common.
 
 | Change | Where now | Guard |
@@ -335,7 +335,7 @@ The six empty `create:scrap_*` placeholders were dropped: those tags belong to C
 only with Create Recycle. Not touched: Compat writes `creativeengineering:burn/to_ash` and similar physics tags (Compat's
 own cleanup).
 
-**Licence**: Common's `NOTICE-thirdparty-various.txt` keeps Immersive Weathering only; Equipment's new `NOTICE-thirdparty-MIT.txt`
+**License**: Common's `NOTICE-thirdparty-various.txt` keeps Immersive Weathering only; Equipment's new `NOTICE-thirdparty-MIT.txt`
 (Detail Armor Bar, MIT) ships as `creativeequipment-NOTICE-thirdparty-MIT.txt`; `ArmorOverflowRenderer` points to it.
 
 **Pack-held values**: `config/creativecommon-common.toml` already holds the full `[mod_names]` list and the three removed

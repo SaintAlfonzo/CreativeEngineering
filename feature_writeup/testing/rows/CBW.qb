@@ -95,7 +95,7 @@ look board inv: the pie on the board or not placed as FD's board allows (pass: n
 
 @@text
 @@text Client:
-@@text - CQ-CBW-01: the 8 wood boards render with their wood colours (item, placed, all four facings); FD's board reads
+@@text - CQ-CBW-01: the 8 wood boards render with their wood colors (item, placed, all four facings); FD's board reads
 @@text   "Spruce Cutting Board"; a wood and a stone board on a CfB counter sit on the worktop like FD's board, not at the
 @@text   plate height; JEI shows the 8 recipes and the spruce board's planks list without the 8 vanilla planks.
 @@text

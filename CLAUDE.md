@@ -127,7 +127,7 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
   `kubejs/assets/creativecommon/changelog/unreleased.md`, under a family named after the feature (`## Lunchboxes`); lone changes go under a broad catch-all heading and move into a feature family once a second change touches the same thing.
   Follow [changelog.md](feature_writeup/changelog.md) section 3.6: terse, facts only, no flavor or benefit
   clauses, old value in brackets, fixes in past tense, no ids/file names/config keys/emoji. Rewrite or merge
-  existing bullets when later work changes them. Never edit a deployed version's file. Same-behaviour ports and
+  existing bullets when later work changes them. Never edit a deployed version's file. Same-behavior ports and
   dev-only changes get no bullet. Run `python3 tools/changelog_lint.py` after editing. State in the hand-over
   whether a bullet was added (or why not).
 - Status lives in the repo docs, not memory or agent notes: [feature_writeup/README.md](feature_writeup/README.md)

@@ -4,8 +4,8 @@ Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the 
 section 4.2): member `backportedLargeMeals 1.3.0-ce-19.2-01` nested in the Creative Delight jar; installed in `mods/` (CD jar 2026-11-02 14:01), scratch run r1102b (8), not played (deep scan 2026-11-02).
 **Owner decisions D1-D9 answered 2026-11-01** (section 5); the sections below are updated to match.
 Jar: `devmods/toBackport/largemeals-1.20.1-1.3.0.jar`, unpacked to `DecompiledMods/largemeals-1.3.0/`, code in
-`DecompiledMods/largemeals-1.3.0-src/` (7 classes). Forge 1.20.1 only, so a **port is needed**. Licence **All Rights
-Reserved**: donor-jar route (jar kept unmodified in `largemeals_upstream/`, our code written from behaviour). The code
+`DecompiledMods/largemeals-1.3.0-src/` (7 classes). Forge 1.20.1 only, so a **port is needed**. License **All Rights
+Reserved**: donor-jar route (jar kept unmodified in `largemeals_upstream/`, our code written from behavior). The code
 is thin: every class extends Farmer's Delight (MIT) `FeastBlock` / `ConsumableItem`, and FD 1.19.2-1.2.4 has the same
 constructors and `ModItems.foodItem / bowlFoodItem / basicItem` helpers (checked with `javap`). "Large Meals" is not
 abbreviated in this file. Test prefix `LGM-`.

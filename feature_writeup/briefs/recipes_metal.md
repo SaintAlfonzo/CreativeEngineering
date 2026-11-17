@@ -49,7 +49,7 @@ Per metal today (pack lines in [metal_base_materials.js](../../kubejs/data/creat
 | Plate ↔ plate block (9:1) | all 9 base metals (578-606) | Create Compressed for copper / iron / gold / brass |
 
 - The removed Create sheets (`create:pressing/{copper,iron,gold}_ingot`, lines 45, 88, 106) are already replaced.
-  Create's own brass pressing (`create:pressing/brass_ingot` → `create:brass_sheet` = `i.plate_brass`) is the pack's
+  Create's own brass pressing (`create:pressing/brass_ingot` -> `create:brass_sheet` = `i.plate_brass`) is the pack's
   brass plate, so brass is fine.
 - Dict keys follow `i.<part>_<metal>` (`i.plate_aluminum`, `i.ingot_aluminum`, `i.block_aluminum`,
   `i.plate_block_aluminum`, lines 828-1265); missing parts are `i.na` (`minecraft:barrier`) or `i.none`
@@ -77,7 +77,7 @@ Per metal today (pack lines in [metal_base_materials.js](../../kubejs/data/creat
    and delete the hand-written lines 585, 589, 610-620 they replace.
 4. Plate ↔ plate block: extend lines 578-606 to the same loop where `has(i['plate_block_' + m])` (steel, constantan,
    electrum, cast iron and netherite have pack plate blocks: `creativeengineering:<m>_plate_block`).
-5. With `recipes/engineering #6`: laser cutting `i['block_' + m]` → plates in the same loop.
+5. With `recipes/engineering #6`: laser cutting `i['block_' + m]` -> plates in the same loop.
 6. Rewrite the header audit item 1 (lines 6-11) as a short note of the new state; writeup 2.3 Plate row, F1 fixed,
    RM-07.
 
@@ -92,7 +92,7 @@ stable ids matter for JEI ordering or tests.
   set a data change. The IE-press-only option would still have to remove the nine VI pressing recipes.
 - **Alloys in the list?** Recommend yes (steel, constantan, electrum, brass, cast iron, rose gold); they already have
   plates and IE / VI recipes, just not the pack's.
-- **Hammer yield:** keep 1 ingot → 1 plate (IE's), so the hand route isn't worse than the press.
+- **Hammer yield:** keep 1 ingot -> 1 plate (IE's), so the hand route isn't worse than the press.
 
 ### Gotchas
 - IE's own press recipes output a tag (`forge:plates/<m>`) resolved by IE's mod preference; the pack's use the dict
@@ -103,8 +103,8 @@ stable ids matter for JEI ordering or tests.
   the same pass.
 
 ### Tests
-- **RM-15 Plates everywhere:** for aluminium, steel and cast iron: JEI plate → Create press, IE press, hammer, all pack
-  ids; put an aluminium ingot under a mechanical press → IE aluminium plate (not a hidden VI sheet). Replaces RM-07.
+- **RM-15 Plates everywhere:** for aluminium, steel and cast iron: JEI plate -> Create press, IE press, hammer, all pack
+  ids; put an aluminium ingot under a mechanical press -> IE aluminium plate (not a hidden VI sheet). Replaces RM-07.
 
 ---
 
@@ -116,7 +116,7 @@ Status Planned · Work KubeJS · TODO `recipes/metal #2` (F4)
 Decide whether every metal gets a crafting-table rod.
 
 ### Now
-Already every base metal, 2 ingots → 4 rods (all **jar**-verified except the pack's):
+Already every base metal, 2 ingots -> 4 rods (all **jar**-verified except the pack's):
 
 | Metal | Recipe |
 |---|---|
@@ -125,7 +125,7 @@ Already every base metal, 2 ingots → 4 rods (all **jar**-verified except the p
 | copper, gold, lead, silver, nickel, uranium, constantan, electrum | `immersiveposts:has_<metal>_rod` (Immersive Posts 4.3.0; gold's ingot tag is swapped to `i.ingot_gold` at line 121) |
 
 Not covered: brass (`createaddition:brass_rod`), cast iron (`vintageimprovements:cast_iron_rod`), rose gold
-(`creativeengineering:rose_gold_rod`). The writeup's F4 and the code header (line 15: "2 ingot → 1 rod", "line 558")
+(`creativeengineering:rose_gold_rod`). The writeup's F4 and the code header (line 15: "2 ingot -> 1 rod", "line 558")
 were wrong; F4 is corrected.
 
 ### Build
@@ -147,7 +147,7 @@ were wrong; F4 is corrected.
   line 121 didn't swap the input (see metal #3).
 
 ### Tests
-- **RM-16 Hand rods:** 2 lead ingots in a column → 4 lead rods; same for copper and nickel.
+- **RM-16 Hand rods:** 2 lead ingots in a column -> 4 lead rods; same for copper and nickel.
 
 ---
 
@@ -166,10 +166,10 @@ Decide where rose gold may stand in for gold, and make the tags say exactly that
   `dusts/gold.json` = `mca:rose_gold_dust`. So rose gold already counts as gold for every `#forge:ingots/gold` and
   `#forge:dusts/gold` recipe, independent of the pack.
 - Consequences (recipes **jar**-verified, the outcome in game unverified):
-  - IE crusher `immersiveengineering:crusher/ingot_gold`: `#forge:ingots/gold` → `#forge:dusts/gold`; IE picks the
-    output by mod preference, presumably IE's gold dust, so rose gold ingot → gold dust → gold ingot (a conversion).
-  - IE arc furnace `arcfurnace/dust_gold` takes `#forge:dusts/gold`: rose gold dust → gold ingot directly.
-  - IE alloy `alloysmelter/electrum`: `#forge:ingots/gold` + silver → 2 electrum, so rose gold makes electrum.
+  - IE crusher `immersiveengineering:crusher/ingot_gold`: `#forge:ingots/gold` -> `#forge:dusts/gold`; IE picks the
+    output by mod preference, presumably IE's gold dust, so rose gold ingot -> gold dust -> gold ingot (a conversion).
+  - IE arc furnace `arcfurnace/dust_gold` takes `#forge:dusts/gold`: rose gold dust -> gold ingot directly.
+  - IE alloy `alloysmelter/electrum`: `#forge:ingots/gold` + silver -> 2 electrum, so rose gold makes electrum.
   - Pack recipes on the tags: golden carrot / apple / enchanted apple (`cooking/golden.js` lines 11-23, via
     `i.any_nugget_gold`, `i.any_ingot_gold`, `i.any_block_gold`), powered rails and shields (`i.any_rod_gold`,
     `transport.js` 46-47, `equipment/shield.js`).
@@ -178,7 +178,7 @@ Decide where rose gold may stand in for gold, and make the tags say exactly that
 - Beacons: the item tag doesn't make a beacon base (that is the block tag `minecraft:beacon_base_blocks`); the
   writeup's "beacon bases" note is corrected.
 - `forge:ingots/rose_gold` and `forge:dusts/rose_gold` are empty, so IE's `arcfurnace/alloy_rose_gold` (3 copper +
-  `#forge:ingots/gold` → 4 rose gold) and `crusher/ingot_rose_gold` are switched off by their `tag_empty` conditions.
+  `#forge:ingots/gold` -> 4 rose gold) and `crusher/ingot_rose_gold` are switched off by their `tag_empty` conditions.
   VI does tag `forge:plates/rose_gold`, `rods/rose_gold`, `wires/rose_gold` (**jar**).
 - [dishes_meals.md](dishes_meals.md) `dishes/meals #9` wants rose gold out of the golden foods and recommends a local
   pure-gold tag there, "since rose gold rods in `forge:rods/gold` may be intended".
@@ -198,7 +198,7 @@ Recommended: rose gold is its own metal; only the rods stay interchangeable.
    ```
    Keep line 15 (rods) if powered rails and shields should take rose gold rods (recommended: yes, that is the one
    place it reads as intended).
-2. Check what the new rose gold tags switch on: IE's `arcfurnace/alloy_rose_gold` (3 copper + 1 gold → 4 rose gold)
+2. Check what the new rose gold tags switch on: IE's `arcfurnace/alloy_rose_gold` (3 copper + 1 gold -> 4 rose gold)
    and `crusher/ingot_rose_gold` load once `forge:ingots/rose_gold` has a member. Recommend keeping the crusher and
    removing the alloy (`R.remove({ id: 'immersiveengineering:arcfurnace/alloy_rose_gold' }, e)`) unless rose gold
    should become craftable; it would make a cheap gold multiplier for the rods.
@@ -227,8 +227,8 @@ Recommended: rose gold is its own metal; only the rods stay interchangeable.
   IE ones above; check JEI uses of the rose gold ingot before and after the change (RM-17) and note what disappears.
 
 ### Tests
-- **RM-17 Rose gold apart:** `/kubejs hand` on a rose gold ingot → `forge:ingots/rose_gold`, not `forge:ingots/gold`;
-  rose gold ingot in the IE crusher → rose gold dust; IE alloy kiln rose gold + silver → nothing; golden carrot does not
+- **RM-17 Rose gold apart:** `/kubejs hand` on a rose gold ingot -> `forge:ingots/rose_gold`, not `forge:ingots/gold`;
+  rose gold ingot in the IE crusher -> rose gold dust; IE alloy kiln rose gold + silver -> nothing; golden carrot does not
   take rose gold nuggets; powered rail still takes rose gold rods. Replaces RM-11.
 
 ---
@@ -242,7 +242,7 @@ Close the remaining gaps in the metal scripts and remove the leftovers.
 
 ### Now
 - **Plates:** metal #1. **Rods:** already complete (metal #2).
-- **Dust → ingot (F6):** the pack's own only for zinc: smelting line 490, blasting 510, arc furnace 522 (the header's
+- **Dust -> ingot (F6):** the pack's own only for zinc: smelting line 490, blasting 510, arc furnace 522 (the header's
   "lines 458/471/476" are stale). The other 8 use IE's `immersiveengineering:arcfurnace/dust_<m>` and IE's
   `smelting/ingot_<m>_from_dust` (per the header audit; unverified per metal).
 - **Header audit** (lines 3-29): written as a chat reply ("Want me to fill these in?"); items 1-3 partly wrong (see
@@ -256,13 +256,13 @@ Close the remaining gaps in the metal scripts and remove the leftovers.
 - **Log line:** `misc_metal_crafts.js` line 3 says "The metal base event has started!" (copy of the base file's;
   line 128 says "misc metal").
 - Also found: Create Deco's shaped bars (`createdeco:{copper,gold,zinc,brass,cast_iron,andesite,netherite}_bars`, 6
-  ingots → 16, **jar**) are not removed; only the stonecutter ones are (`metal_building.js` lines 9-23). They sit next
-  to the pack's 6 rods → 9 (3 bars per ingot by hand rods, 2.7 by Create Deco), so no exploit, just an extra route.
+  ingots -> 16, **jar**) are not removed; only the stonecutter ones are (`metal_building.js` lines 9-23). They sit next
+  to the pack's 6 rods -> 9 (3 bars per ingot by hand rods, 2.7 by Create Deco), so no exploit, just an extra route.
 - Dead code: `replaceOutput({ mod: 'createsifter' }, ...)` (line 81; Create Sifter is not in the pack) and the
   `minecraft:pressing/zinc_sheet` removal (line 211).
 
 ### Build
-1. Dust → ingot: in the metal #1 loop, add `R.smelting`, `R.blasting`, `R.ieArcFurnace` for `i['dust_' + m]` →
+1. Dust -> ingot: in the metal #1 loop, add `R.smelting`, `R.blasting`, `R.ieArcFurnace` for `i['dust_' + m]` ->
    `i['ingot_' + m]` for the 9 base metals and remove IE's `arcfurnace/dust_<m>` and `smelting/ingot_<m>_from_dust` /
    `blasting/...` ids (check the exact ids with `/kubejs` or JEI first; IE 9.2.4 names them under
    `immersiveengineering:smelting/` and `blasting/`, unverified per metal). Or leave IE's (Decisions).
@@ -285,7 +285,7 @@ Door keys: `i.tall_rusty_iron_door` 1290, `i.tall_iron_door` 1300, `i.short_rust
 = `creativeengineering:zinc_grit`, 909).
 
 ### Decisions
-- **Pack dust → ingot for all, or leave IE's?** Recommend leaving IE's (they work and give the same 1:1) unless the
+- **Pack dust -> ingot for all, or leave IE's?** Recommend leaving IE's (they work and give the same 1:1) unless the
   metal #1 pass is open anyway; then do all 9 for uniformity.
 - **The header question** ("plate: keep IE press for the 8 or replace"): answered by metal #1 (replace).
 - **Create Deco 6-ingot bars:** recommend removing them, so bars come only from rods and the laser (one design).
@@ -297,8 +297,8 @@ Door keys: `i.tall_rusty_iron_door` 1290, `i.tall_iron_door` 1300, `i.short_rust
   removal doesn't take, report it and use a Dramatic Doors config option instead (unverified).
 
 ### Tests
-- **RM-18 Rust doors:** wash a tall iron door → tall rusty iron door; JEI tall rusty iron door → washing only.
-- **RM-19 Dust recycle (if built):** smelt aluminium dust → aluminium ingot by a `creativeengineering:` id.
+- **RM-18 Rust doors:** wash a tall iron door -> tall rusty iron door; JEI tall rusty iron door -> washing only.
+- **RM-19 Dust recycle (if built):** smelt aluminium dust -> aluminium ingot by a `creativeengineering:` id.
 
 ---
 
@@ -311,12 +311,12 @@ Status Planned · Work KubeJS · TODO `recipes/metal #5`
 
 ### Now
 - [metal_building.js](../../kubejs/data/creativeengineering/kubejs/metal/metal_building.js) line 11 removes
-  `createdeco:polished_iron_bars_from_iron_ingot_stonecutting` (1 iron ingot → 4, **jar**), the item's only real
+  `createdeco:polished_iron_bars_from_iron_ingot_stonecutting` (1 iron ingot -> 4, **jar**), the item's only real
   recipe; `createdeco:iron_bars_from_panel` turns the overlay back into bars, and the overlay is made from the bars.
 - Create Deco uses polished iron bars in `createdeco:iron_catwalk` (3), `iron_catwalk_stairs` and `iron_support` (4),
   **jar**. So iron catwalks, catwalk stairs and iron supports are uncraftable today. This is closer to a bug than a
   question.
-- The other bars get three pack routes (laser ×64, assembly ×12, 6 rods → 9).
+- The other bars get three pack routes (laser ×64, assembly ×12, 6 rods -> 9).
 
 ### Build
 1. In `metal_building.js` after line 40, tie polished bars to iron bars both ways by stonecutting:
@@ -336,10 +336,10 @@ Status Planned · Work KubeJS · TODO `recipes/metal #5`
   it breaks the catwalks. Stonecutting from iron bars (not ingots) keeps the pack's "bars from rods" cost.
 
 ### Gotchas
-- A stonecutter loop (A → B, B → A) is fine at 1:1; don't give either direction more than 1.
+- A stonecutter loop (A -> B, B -> A) is fine at 1:1; don't give either direction more than 1.
 
 ### Tests
-- **RM-20 Polished bars:** stonecutter iron bars → polished iron bars and back; craft an iron catwalk.
+- **RM-20 Polished bars:** stonecutter iron bars -> polished iron bars and back; craft an iron catwalk.
 
 ---
 
@@ -353,8 +353,8 @@ Decide whether gold needs another source, and if so add "panning".
 ### Now
 Gold sources in the pack:
 - Ore (overworld, nether gold ore), raw gold, crushed ore (the ore tables, writeup 2.2).
-- Create washing already pans: `create:splashing/red_sand` → 3 gold nuggets at 12.5 % (+ 5 % dead bush),
-  `splashing/soul_sand` → 2 % gold nugget, `splashing/crushed_raw_gold` → 9 nuggets (**jar**); none removed.
+- Create washing already pans: `create:splashing/red_sand` -> 3 gold nuggets at 12.5 % (+ 5 % dead bush),
+  `splashing/soul_sand` -> 2 % gold nugget, `splashing/crushed_raw_gold` -> 9 nuggets (**jar**); none removed.
 - Tuff crushing: 10 % gold nugget (and 10 % rose gold nugget), `resource_blocks.js` line 146.
 - Ochrum: compacting 6 gold nuggets + 2 gravel + lava (line 55, a net loss when crushed back: 52 % crushed gold or 5
   nuggets), but **extruding** lava + water over a gold dust block gives ochrum for free (line 60, Create Mechanical
@@ -394,7 +394,7 @@ Recommended, KubeJS only, in `misc_metal_crafts.js` or a "Panning" section of `r
 - Don't give soul sand more gold: it is already a quartz source.
 
 ### Tests
-- **RM-21 Panning:** wash 64 gravel → about 3 gold nuggets, flint and iron nuggets as before.
+- **RM-21 Panning:** wash 64 gravel -> about 3 gold nuggets, flint and iron nuggets as before.
 
 ---
 

@@ -1,6 +1,6 @@
 # Texture reuse from culinary mods
 
-Catalogue of food-mod textures that could serve new pack items or retexture existing ones. Research only:
+Catalog of food-mod textures that could serve new pack items or retexture existing ones. Research only:
 nothing here is built. One section per mod; Rustic Delight first (2026-10-22).
 
 ## 0. At a glance
@@ -56,7 +56,7 @@ Contact sheets (regenerable): unzip the jar's `assets/rusticdelight/textures` an
 |---|---|
 | `block/crate_bottom`, `*_crate_side`, `*_crate_top` | Crop crates: same wooden frame, swap the produce fill (crates for crops that lack one) |
 | `block/bag_side`, `bag_side_tied`, `bag_bottom`, `*_bag_top` | Seed / produce sacks: plain sack sides, only the top changes |
-| `item/stuffed_bell_pepper_*` (3 colours) | Other stuffed vegetables: hollowed shell with a rice filling |
+| `item/stuffed_bell_pepper_*` (3 colors) | Other stuffed vegetables: hollowed shell with a rice filling |
 | `item/bell_pepper_*` vs `item/roasted_bell_pepper_*` | Shows the raw -> roasted shading pass (darker, charred spots) for "roasted X" sprites |
 | `item/calamari_slice`, `cooked_calamari_slice` | Raw / cooked slice pair for other seafood slices |
 | `item/spring_rolls`, `fruit_beignet`, `fried_chicken`, `fried_mushrooms` | Fried-food bases (golden batter shading) |

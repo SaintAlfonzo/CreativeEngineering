@@ -75,7 +75,7 @@ ingredient); and `recipe_scan.js` can list any recipe still using or making it (
 ### 2.1 Removed items (`_lib/removed_items.js`, priority -10000)
 
 309 ids in 1.0.9 (312 in the working tree: the three Creative Labels donors added 2026-10-20, unshipped), grouped by origin: Gates logic and wireless parts; every duplicate sheet, rod, wire and spring from Create
-Crafts & Additions, Create Deco and Vintage Improvements for metals the pack standardises on IE parts; parts for metals
+Crafts & Additions, Create Deco and Vintage Improvements for metals the pack standardizes on IE parts; parts for metals
 the pack doesn't use (tin, osmium, signalum, slimesteel, shadow steel, vanadium, ...); Dave's Building Mod steel ingot;
 Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bucket (no source left,
 [potion_buckets.md](potion_buckets.md)).
@@ -100,7 +100,7 @@ Nock Enough Arrows' quiver and torch arrow; Quark's dragon scale; IE's potion bu
 |---|---|---|
 | Vintage Improvements recipes for unused metals (vanadium storage, plate, rolling, pressing; shadow steel, netherite, refined radiance, andesite, cast iron and uranium coiling; sulfur trioxide pressurizing) | [dead_recipe_removal.js](../kubejs/server_scripts/other/dead_recipe_removal.js) | removed (21 ids) |
 | `kubejs/recipes/food/bonemeal_broth.json` | not a load path | dead; superseded: Creative Delight `farmersdelight/recipes.js` bone broth pot recipe takes a bone or bone meal |
-| `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json` (IE sawmill: slabs → 2 sticks + sawdust, ...) | not a load path | ported 2026-10-31 as `kubejs/data/creativeengineering/recipes/sawmill/recycle_wooden_{slab,stairs,door}.json` (F3) |
+| `kubejs/recipes/recycle/sawmill_recycle_{slab,stairs,door}.json` (IE sawmill: slabs -> 2 sticks + sawdust, ...) | not a load path | ported 2026-10-31 as `kubejs/data/creativeengineering/recipes/sawmill/recycle_wooden_{slab,stairs,door}.json` (F3) |
 | Old `global.CE` blocks | `misc_mods.js`, `resource_blocks.js`, `cooking.js` | deleted 2026-10-22 |
 | `kubejs/archive/` | only `worldgen/pre_groups_2026-09-27/` left (the 9 old scripts and the other `worldgen/` files deleted 2026-10-22) | not loaded |
 
@@ -169,23 +169,23 @@ None. The scan runs in game (`/recipescan`, or at load with the config on); its 
 The per-folder suites carry the recipe tests: RE-01 to RE-20, RM-01 to RM-14, RW-01 to RW-10, RC-01 to RC-14, RA-01 to
 RA-08.
 
-- [x] **RP-01 Scan [scratch: SQ-RS-01 PASS 2026-10-23]:** default config: world load prints no `[recipe_scan]` line. `/recipescan` → chat "Recipe scan: N
+- [x] **RP-01 Scan [scratch: SQ-RS-01 PASS 2026-10-23]:** default config: world load prints no `[recipe_scan]` line. `/recipescan` -> chat "Recipe scan: N
   references to M removed items"; log has `[jeiRemove]` blocks with `(input)`/`(output)` and `[recipe_scan] Scan
   complete. ... N recipes read, U unreadable`. No `[jeiRemove]` line for a merged id (item_merges.md). With
   `[debug.recipe_scan] runAtLoad = true`: one scan when the server finishes loading, none on `/reload` or a second
   world in the same session.
-- [ ] **RP-02 Hidden:** JEI search for `vanadium` → nothing; `/give` a Vintage Improvements vanadium ingot → red "REMOVED
+- [ ] **RP-02 Hidden:** JEI search for `vanadium` -> nothing; `/give` a Vintage Improvements vanadium ingot -> red "REMOVED
   ITEM" tooltip.
-- [ ] **RP-03 Tags stripped:** `/kubejs hand` on a removed sheet (e.g. a Create Crafts & Additions zinc sheet) → no
+- [ ] **RP-03 Tags stripped:** `/kubejs hand` on a removed sheet (e.g. a Create Crafts & Additions zinc sheet) -> no
   tags; it doesn't go into a recipe asking for `#forge:plates/zinc`.
-- [ ] **RP-04 Dead removal:** JEI vanadium and shadow steel coiling → no recipes.
-- [ ] **RP-05 Missing recipes (F1):** JEI blast furnace, dispenser, smoker, Explorer's Compass, cake → note which have a
+- [ ] **RP-04 Dead removal:** JEI vanadium and shadow steel coiling -> no recipes.
+- [ ] **RP-05 Missing recipes (F1):** JEI blast furnace, dispenser, smoker, Explorer's Compass, cake -> note which have a
   recipe (same checks as RE-03, RE-08, RC-01, RC-02, RA-07).
-- [ ] **RP-06 Recycle JSONs (F3):** an IE sawmill with oak slabs → note the output (expect 2 sticks + sawdust; stairs 3, doors 4; recycle JSONs ported 2026-10-31).
+- [ ] **RP-06 Recycle JSONs (F3):** an IE sawmill with oak slabs -> note the output (expect 2 sticks + sawdust; stairs 3, doors 4; recycle JSONs ported 2026-10-31).
 - [ ] **RP-07 Progression walk:** in a fresh survival world, check each step in 1.1 is reachable in order (no step needs
   an item from a later one).
-- [ ] **RP-08 Steel before blueprints:** try to craft an Engineer's Workbench before any steel → impossible; after one
-  pressure chamber or blast furnace run → possible.
+- [ ] **RP-08 Steel before blueprints:** try to craft an Engineer's Workbench before any steel -> impossible; after one
+  pressure chamber or blast furnace run -> possible.
 
 ## 8. History
 

@@ -79,7 +79,7 @@ Every class here is Worldgen unless noted. Internal references between worldgen 
 | BotanistPotBlockEntity | 93 | Compat | its block entity | none | none |
 | BotanistPotClient | 201 | Compat | its model wrapper | none | @Mod.EventBusSubscriber(MOD, CLIENT); @SubscribeEvent x2 |
 | CobPipeRenderer | 64 | CD | Corn Delight cob pipe curio render (food mod, CD routing) | none | none (Curios renderer register) |
-| CornDelightCompat | 117 | CD | Corn Delight 1.2.11 behaviour for CD's KubeJS items | none | @SubscribeEvent PlayerInteractEvent.RightClickItem |
+| CornDelightCompat | 117 | CD | Corn Delight 1.2.11 behavior for CD's KubeJS items | none | @SubscribeEvent PlayerInteractEvent.RightClickItem |
 | CornDelightCurios | 30 | CD | Curios half of the above | none | none |
 | CraftingMenuPolymorphClient | 42 | Compat | Polymorph widget on IE and Pretty Pipes crafting menus | none | none |
 | CraftingMenuPolymorphCompat | 37 | Compat | Polymorph server half | none | @SubscribeEvent PlayerContainerEvent.Open |
@@ -348,7 +348,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | class | lines | target | reason | calls into other targets | registrations and event subscribers |
 |---|---|---|---|---|---|
 | backpackskin/BackpackSkinClearRecipe | 48 | Equipment | skin removal recipe for Sophisticated Backpacks | none | none (serializer in BackpackSkinSerializers) |
-| backpackskin/BackpackSkinColors | 43 | Equipment | client colour handler for skinned backpacks | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, `@SubscribeEvent` RegisterColorHandlersEvent (LOWEST) |
+| backpackskin/BackpackSkinColors | 43 | Equipment | client color handler for skinned backpacks | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, `@SubscribeEvent` RegisterColorHandlersEvent (LOWEST) |
 | backpackskin/BackpackSkinCurios | 20 | Equipment | Curios equip hook for skinned backpacks | none | `@SubscribeEvent` CurioEquipEvent (instance registered by CreativeEngineering, sweep D) |
 | backpackskin/BackpackSkinRecipe | 85 | Equipment | smithing recipe backpack + skin block | none | none |
 | backpackskin/BackpackSkinsClient | 72 | Equipment | client model lookup of the skin block | none | none |
@@ -363,7 +363,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | block/FastLeafDecayPort | 47 | Worldgen | Fast Leaf Decay port; plan 2.1 puts the leaf decay mixins in Worldgen, the helpers follow | none | `@SubscribeEvent` (BlockEvent.NeighborNotify) |
 | block/LeafDecayPiles | 36 | Worldgen | IW leaf pile on decay, same leaf decay system | none | none; `ModList.isLoaded("immersive_weathering")` |
 | block/LeafDecayRange | 172 | Worldgen | leaf life range, helper of LeavesDecayRangeMixin (Worldgen) | none | none |
-| block/MossTint | 99 | Engineering? | biome-tinted moss models; client-only visual block tweak; Worldgen (biome colour) is the other candidate | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, 4 `@SubscribeEvent` (model bake, colour handlers) |
+| block/MossTint | 99 | Engineering? | biome-tinted moss models; client-only visual block tweak; Worldgen (biome color) is the other candidate | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, 4 `@SubscribeEvent` (model bake, color handlers) |
 | block/SaltBlockTicks | 120 | Engineering? | one-salt merge (item_merges.md 2.9): Vintage Delight salt blocks tick like The Salt's; CD if salt counts as food | none | none; `ModList.isLoaded("salt")`, reflection init |
 | block/VineShearingClient | 134 | Engineering? | client model of a sheared modded vine; Compat (Quark extension) or Worldgen (plants) are candidates | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, `@SubscribeEvent` model bake |
 | block/VineShearing | 118 | Engineering? | shears stop vines growing (VineBlockShearMixin helper); same doubt as the client half | none | `@SubscribeEvent` (PlayerInteractEvent) |
@@ -458,7 +458,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | food/CanServingsTooltip | 23 | CD | servings tooltip line | none | `@SubscribeEvent` ItemTooltipEvent |
 | food/IntoxicatingDrinkTooltip | 81 | CB | alcohol: replaces Quark's saturation word on Intoxication drinks; named in creative_brewing.md 4.2 phase 2 | none | `@Mod.EventBusSubscriber(CLIENT)`, `@SubscribeEvent(LOWEST)` ItemTooltipEvent |
 | food/PlacedFoodSol | 130 | CD | Spice of Life for placed pies and cakes | worldgen.WorldgenFiles (Worldgen; a plain file helper, better a Common util) | `@SubscribeEvent` (PlayerInteractEvent.RightClickBlock); `ModList.isLoaded` solapplepie, farmersdelight |
-| food/PowderedSugarBlock | 39 | CD | powdered sugar block behaviour | none | none |
+| food/PowderedSugarBlock | 39 | CD | powdered sugar block behavior | none | none |
 | food/PowderedSugarRegistry | 44 | CD | registers powdered_sugar_block and its bucket | none | `DeferredRegister<Block>`, `DeferredRegister<Item>` (creativeengineering), `register(IEventBus)` |
 | food/SeasonedItemModel | 166 | CD | seasoning overlay item models (client) | none | `@Mod.EventBusSubscriber(MOD, CLIENT)`, 2 `@SubscribeEvent` (model bake, additional models) |
 | food/SeasoningRecipe | 174 | CD | shapeless food + seasoning recipe | none | `DeferredRegister<RecipeSerializer>` (creativeengineering), `register(IEventBus)` |
@@ -468,7 +468,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 ### gear (Equipment)
 | class | lines | target | reason | calls into other targets | registrations and event subscribers |
 |---|---|---|---|---|---|
-| gear/AirBrakeHandler | 154 | Equipment | air brake item behaviour | none | `@SubscribeEvent` (item use) |
+| gear/AirBrakeHandler | 154 | Equipment | air brake item behavior | none | `@SubscribeEvent` (item use) |
 | gear/ElytraDuplicationRecipe | 117 | Equipment | elytra duplication crafting recipe | none | none |
 | gear/ElytraDuplicationSerializers | 59 | Equipment | registers elytra_duplication serializer | none | `DeferredRegister<RecipeSerializer>` (creativeengineering), `register(IEventBus)` |
 
@@ -478,7 +478,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | item/BottledAir | 69 | Engineering? | Bottled Air port (glass bottle refills air under water); a player-item port with no machine, Equipment is the alternative | none | `@SubscribeEvent` (PlayerInteractEvent / LivingEntityUseItemEvent) |
 | item/CreativeEngineeringItems | 40 | Engineering | registers the component items (precision sawblade, creosote sawdust, flint and terrasteel). Note: file sits in `item/` but declares `package ...items` | none | `DeferredRegister<Item>` (creativeengineering), `register(IEventBus)` |
 | item/CreosoteSoakedSawdustItem | 20 | Engineering | fuel item | none | none |
-| item/FlintAndTerraSteelItem | 56 | Engineering | places Dark Fire; header says TEMPORARY testing behaviour | block.CreativeEngineeringBlocks (Engineering) | none |
+| item/FlintAndTerraSteelItem | 56 | Engineering | places Dark Fire; header says TEMPORARY testing behavior | block.CreativeEngineeringBlocks (Engineering) | none |
 | item/PrecisionSawbladeItem | 25 | Engineering | sawblade component for the sawmill routing | none | none |
 
 ### itemphysic (Compat)
@@ -529,7 +529,7 @@ inventory for how a `register(IEventBus)` method is wired from `CreativeEngineer
 | potion/EffectRules | 147 | CB | [effects] remap/removed/forceHudIcon; read by 4 effect mixins (CB) | none | none |
 | potion/MagicResistanceEffect | 122 | CB | the magic_resistance effect logic | damage.DamageTags (Equipment?, see damage), shield.EffectTickContext (Common) | 2 `@SubscribeEvent` (LivingHurt, LivingAttack) |
 | potion/PhantomBaneRules | 67 | CB | phantom prevention rule | none | 3 `@SubscribeEvent` |
-| potion/PotionBucketDispenser | 101 | CB | dispenser behaviour of the KubeJS potion buckets | none | none (dispenser registration in CreativeEngineering, sweep D) |
+| potion/PotionBucketDispenser | 101 | CB | dispenser behavior of the KubeJS potion buckets | none | none (dispenser registration in CreativeEngineering, sweep D) |
 
 ### sawmill (Engineering)
 | class | lines | target | reason | calls into other targets | registrations and event subscribers |

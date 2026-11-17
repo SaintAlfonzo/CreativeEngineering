@@ -1,4 +1,4 @@
-# Plan: Portal Gun fixes and portal colour dyeing
+# Plan: Portal Gun fixes and portal color dyeing
 
 Owner notes of 2026-11-07 (scratchpad "portal changes"). Investigation done 2026-11-07; all four built 2026-11-07 15:58 (section 7), jar not installed. All
 decisions answered by the owner 2026-11-07 (section 5).
@@ -11,7 +11,7 @@ Parent writeup: [immersive_portals.md](immersive_portals.md) 2.2. TODO rows `gam
 | 1 | Portal and mirror have no name | Entities with no lang key | Lang keys "Portal", "Mirror" | Creative Compat names.js | BUILT |
 | 2 | Hotbar desaturates the gun and every slot left of it | GeckoLib flushes ImmediatelyFast's hotbar batch early | Client mixin: skip that flush while ImmediatelyFast is batching (not the config switch) | Creative Compat | BUILT |
 | 3 | Player is lifted one block after walking out of a wall portal | Immersive Portals' post-teleport lift counts the wall behind the exit portal | Lift only when the exit portal is on the floor | Creative Compat | BUILT |
-| 4 | Dye the gun's portal colours by grid column, as with Sophisticated Backpacks | New feature | Own crafting recipe writing the gun's existing portal colour data; no model change | Creative Compat | BUILT |
+| 4 | Dye the gun's portal colors by grid column, as with Sophisticated Backpacks | New feature | Own crafting recipe writing the gun's existing portal color data; no model change | Creative Compat | BUILT |
 
 The mod: `portalgun-1.19.2-5.0.0.jar`, mod id `portalgun` (MeowMC, qouteall, Thelnfamous1), **MIT**, built on Immersive
 Portals 2.3.7 (`imm_ptl_core`) and GeckoLib 3.1.40. Items: `portalgun:portal_gun`, `portalgun_body`, `portalgun_claw`.
@@ -91,7 +91,7 @@ directly and never sees the exclusion.
 **Fix (decided, D3): the lift runs only when the exit portal is on the floor** (it faces up). There it is what lifts
 the player clear of the floor block the portal sits on. Wall and ceiling exits get no lift.
 
-**Amendment 2026-11-15 (SQ-PG-01b):** a fall from a floor portal into a wall portal left the player at y -61.0 inside the floor in front of the wall. `IPExitLiftMixin` now also lifts when a block collision overlapping the box lies in front of the exit plane (centre on the content-direction side of the destination position); collisions behind the plane still do not lift. Built, not installed; test CQ-PS15-01 ([plan_post_scratch_1115.md](plan_post_scratch_1115.md) A1).
+**Amendment 2026-11-15 (SQ-PG-01b):** a fall from a floor portal into a wall portal left the player at y -61.0 inside the floor in front of the wall. `IPExitLiftMixin` now also lifts when a block collision overlapping the box lies in front of the exit plane (center on the content-direction side of the destination position); collisions behind the plane still do not lift. Built, not installed; test CQ-PS15-01 ([plan_post_scratch_1115.md](plan_post_scratch_1115.md) A1).
 
 - **Rewritten 2026-11-14 ([plan_bugfix_1114.md](plan_bugfix_1114.md) 4.1; built, untested).** The first fix (a common
   mixin on Portal Gun's `CustomPortal` that set the saved `adjustPositionAfterTeleport` flag) failed in r1113: it
@@ -109,22 +109,22 @@ and filter out the exit wall: a `@Redirect` of `getBlockCollisions` in
 gets only the player, so the exit portal has to be found, which is more code and more risk. (d) The 2026-11-07 flag on
 `CustomPortal` (replaced 2026-11-14, see above).
 
-## 4. Dyeing the portal colours
+## 4. Dyeing the portal colors
 
 **Sophisticated Backpacks' rule** (`StorageDyeRecipeBase`, `BackpackDyeRecipe`): any crafting grid, one backpack plus
-dyes (`forge:dyes`) anywhere. A dye in a column **left of or in** the backpack's column colours the main part. A dye
-**right of or in** its column colours the trim, so a dye in the same column colours both. Several dyes average like
-leather armour (`ColorHelper.calculateColor`), and the current colour joins the average unless it is still the
+dyes (`forge:dyes`) anywhere. A dye in a column **left of or in** the backpack's column colors the main part. A dye
+**right of or in** its column colors the trim, so a dye in the same column colors both. Several dyes average like
+leather armor (`ColorHelper.calculateColor`), and the current color joins the average unless it is still the
 default. There is no washing.
 
-**The gun's existing colour data** (`me.Thelnfamous1.portalgun.ColoredPortalGun`, which `PortalGunItem` implements):
+**The gun's existing color data** (`me.Thelnfamous1.portalgun.ColoredPortalGun`, which `PortalGunItem` implements):
 stack NBT `CustomPortalColors {blue:int, orange:int}`. Only the `/customportalcolors` command sets it today. With no
 entry a side uses its default (blue `#005DDF`, orange `#EE7F1B`). When a portal is shot, `colorPortal` copies the side's
-colour onto the `CustomPortal` entity, and `CustomPortalEntityRenderer` draws the portal in it. The tooltip already
-lists each custom colour ("Blue Portal Color: #RRGGBB"). The gun's item model ignores these colours, and that stays as
+color onto the `CustomPortal` entity, and `CustomPortalEntityRenderer` draws the portal in it. The tooltip already
+lists each custom color ("Blue Portal Color: #RRGGBB"). The gun's item model ignores these colors, and that stays as
 it is (owner, 2026-11-07).
 
-**Design (decided, D2).** The two grid parts are the two portal colours, and the dyes write `CustomPortalColors`, the
+**Design (decided, D2).** The two grid parts are the two portal colors, and the dyes write `CustomPortalColors`, the
 same data the command writes:
 
 | Grid position (Sophisticated's column rule) | Portal side | Fired by |
@@ -132,8 +132,8 @@ same data the command writes:
 | Column left of the gun, or the gun's column | Blue | Left click (`onAttack`) |
 | Column right of the gun, or the gun's column | Orange | Right click (`use`) |
 
-Left goes with the left mouse button. Several dyes on one side average. The side's current colour joins the average
-when it has a custom entry (as with a dyed backpack); a side still on its default colour is replaced, not mixed with
+Left goes with the left mouse button. Several dyes on one side average. The side's current color joins the average
+when it has a custom entry (as with a dyed backpack); a side still on its default color is replaced, not mixed with
 its default. The command keeps working and edits the same data.
 
 **Work.**
@@ -145,10 +145,10 @@ its default. The command keeps working and edits the same data.
    serializer in Compat. Add one `data/creativecompat/recipes/portal_gun_dye.json` (`{"type": ...}`), shaped like
    Sophisticated's `backpack_dye.json`. A special recipe has no ingredients for `global.NCH` to build, so it is a jar
    data file. Check whether NCH has a special-recipe entry first and use it if so.
-2. **Portals already placed** keep their old colour until they are shot again (the colour is copied at shot time).
-   That is upstream behaviour; the changelog bullet says it.
+2. **Portals already placed** keep their old color until they are shot again (the color is copied at shot time).
+   That is upstream behavior; the changelog bullet says it.
 3. **JEI:** example recipes as Sophisticated does: one per dye for each side, plus one two-sided example, from
-   Compat's JEI plugin. The output's tooltip shows the colour lines.
+   Compat's JEI plugin. The output's tooltip shows the color lines.
 4. **No washing** (D4). To go back to the defaults, use `/customportalcolors` clear.
 5. **Later, not now:** tinting the gun's lights on the item model to match.
 
@@ -157,7 +157,7 @@ its default. The command keeps working and edits the same data.
 | Id | Question | Decision |
 |---|---|---|
 | D1 | Name more Immersive Portals entities? | No: only the gun portal and the two mirrors; the End Portal already shows a valid name |
-| D2 | What do the two dye parts colour? | The portal colours: left of the gun blue, right of the gun orange, written to `CustomPortalColors`; the item model is not changed |
+| D2 | What do the two dye parts color? | The portal colours: left of the gun blue, right of the gun orange, written to `CustomPortalColors`; the item model is not changed |
 | D3 | Exit lift | Only when the exit portal is on the floor; since 2026-11-14 for every Immersive Portals portal, by geometry (plan_bugfix_1114.md 4.1) |
 | D4 | Washing in a cauldron | No |
 | D5 | Desaturation fix | Compat mixin (`hud_batching` stays on) |
@@ -171,15 +171,15 @@ its default. The command keeps working and edits the same data.
      `adjustPositionAfterTeleport` false on wall-exit portals and true on floor-exit ones, including portals saved
      before the fix.
    - SQ-PG-02: the dye recipe: gun + dye in the column left sets `CustomPortalColors.blue`, right sets `orange`, the
-     same column sets both; two dyes on one side average; a side with a custom colour mixes, a default side is
+     same column sets both; two dyes on one side average; a side with a custom color mixes, a default side is
      replaced; other gun NBT kept; two guns or a non-dye item gives no output.
    - CQ-PG-01: look at a gun portal and a breakable mirror with WTHIT: "Portal", "Mirror".
    - CQ-PG-02: gun in hotbar slot 5 with block items and flat items in 1-4 and 6-9: no slot desaturated; the gun looks
      the same as in the inventory screen. Repeat with another GeckoLib item if the pack has one.
    - CQ-PG-03: walk (not jump) through wall-to-wall, wall-to-floor and floor-to-wall portal pairs: no lift on wall
      exits; a floor exit still clears the floor; no `Adjusting Client Player Position` line for wall exits.
-   - CQ-PG-04: shoot both portals with a dyed gun: each portal is drawn in its dyed colour; the tooltip lists both
-     colours; the command still overrides; JEI shows the examples.
+   - CQ-PG-04: shoot both portals with a dyed gun: each portal is drawn in its dyed color; the tooltip lists both
+     colors; the command still overrides; JEI shows the examples.
    - CQ-PG-05: mirror creation (flint and steel on glass) still works beside Creative Magic's flint-and-steel portal
      rule.
 4. Changelog bullets when built, under a `## Portal Gun` family: names, the two fixes (past tense), dyeing (left of the
@@ -187,7 +187,7 @@ its default. The command keeps working and edits the same data.
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-PG-01a PASS (server half: no exit-lift class on the server, fresh portal pairs keep portalgun's own flag; old-save half not run). Client (phase 10): SQ-PG-01b PASS on the log criterion with a finding: floor-to-wall leaves the player at y -61 inside the ground, unable to move (2 of 2; owner TODO). SQ-PG-01c FAIL: lighting a Flint and Terrasteel Nether portal kills the client natively within 3 s (3 of 3, Immersive Portals stencil renderer; URGENT TODO). CQ-PG-03 LOOK for the owner.
 
-Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PG-01a, -01b FAIL: the exit-lift flag follows the portal colour, not the geometry, and recomputes wrong after a restart (Creative Compat `PortalGunExitLift` rotates an already rotated direction; `PortalGunExitLiftMixin` misses portals linked in PortalGunItem). TODO `gameplay/tnt-and-portal #15` back to Bug; fix waits for the owner.
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PG-01a, -01b FAIL: the exit-lift flag follows the portal color, not the geometry, and recomputes wrong after a restart (Creative Compat `PortalGunExitLift` rotates an already rotated direction; `PortalGunExitLiftMixin` misses portals linked in PortalGunItem). TODO `gameplay/tnt-and-portal #15` back to Bug; fix waits for the owner.
 
 Out of scope here (still in the scratchpad): the extra mirror glass types (tinted, Quark framed, dirty, frosted), the
 Portal Gun as a computing endgame recipe.
@@ -202,7 +202,7 @@ into `development/creativeCommon/libs/` (git-ignored) to compile against. Immedi
 | 1 | `kubejs/assets/creativecompat/kubejs/names.js` | 3-argument `e.add` under `portalgun` and `imm_ptl_core` |
 | 2 | `mixin/GeckoItemHudBatchMixin` (client), `compat/GeckoHudBatch` | `@Redirect` of `m_109911_` in `GeoItemRenderer#m_108829_`; skips the flush when the source is `BatchingBuffers.ITEM_MODEL_CONSUMER` (reflective; warns once if missing). Gated on `geckolib3` + `immediatelyfast` |
 | 3 | `mixin/IPExitLiftMixin` (client) | Since 2026-11-14 (replaced `PortalGunExitLiftMixin` and `portalgun/PortalGunExitLift`): HEAD inject on IP `ClientTeleportationManager.teleportPlayer` keeps the portal; `@Redirect` of the `PortalExtension.adjustPositionAfterTeleport` GETFIELD returns `getContentDirection().y > 0.5`. Gated on `imm_ptl_core`; every IP portal |
-| 4 | `portalgun/PortalGunDyeRecipe`, `PortalGunRecipes`, `PortalGunDyeJEI`, `data/creativecompat/recipes/portal_gun_dye.json` | Reads and writes `CustomPortalColors` NBT directly and names the gun only by id, so nothing loads Portal Gun classes and the serializer registers always; the JSON has a `forge:mod_loaded` condition. NCH has no generic special-recipe entry (only `creativeLabelsSpecial`), so the JSON is a jar data file. Dye averaging is the leather-armour formula on `DyeColor` diffuse colours. JEI: 16 blue + 16 orange one-dye pages, a both-sides page (light blue left, red right) and a same-column page (lime under the gun) |
+| 4 | `portalgun/PortalGunDyeRecipe`, `PortalGunRecipes`, `PortalGunDyeJEI`, `data/creativecompat/recipes/portal_gun_dye.json` | Reads and writes `CustomPortalColors` NBT directly and names the gun only by id, so nothing loads Portal Gun classes and the serializer registers always; the JSON has a `forge:mod_loaded` condition. NCH has no generic special-recipe entry (only `creativeLabelsSpecial`), so the JSON is a jar data file. Dye averaging is the leather-armor formula on `DyeColor` diffuse colours. JEI: 16 blue + 16 orange one-dye pages, a both-sides page (light blue left, red right) and a same-column page (lime under the gun) |
 
 Still open from this plan: the `item_dict.js` keys (side finding above) wait for the next Creative Common build.
 Tests: SQ-PG-01, -02, CQ-PG-01..05 in [scratch_queue.md](testing/scratch_queue.md).

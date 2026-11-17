@@ -203,7 +203,7 @@ look every chunk line shows a loaded full chunk (11 dimensions; debug= names the
 ## SQ-NSM-09
 @group Old save (NSM fixture)
 @commands Fixture built on `creativeLabels-1.0.1.jar` before the rename: a stone wall with 3 written, dyed notes (one special, one with its text erased), a label showing a diamond on a chest face, notes and an eraser in a chest and the player inventory; hand-edited `creative_labels-common.toml` (`noteLength` 20) and `creative_labels-client.toml` (`textDistance` 10). Boot a copy on the new jars; `/save-all flush`; reload the chunks; `/data get block <chest>`; check config/
-@pass Log: `[creativelabels] config creative_labels-common.toml carried over`, `[swaps]` remap lines for `creative_labels:*`, no `[swaps] unresolved`, no block entity load error for `face_paper`. Every note keeps text, colour, special and layer order; the label keeps its picture. Chest reads `creativelabels:sticky_note` with `CreativeLabels.Text` and `creativelabels:eraser`. `config/creativelabels-*.toml` hold 20 and 10, old files gone. `/give @s creativelabels:sticky_note` works
+@pass Log: `[creativelabels] config creative_labels-common.toml carried over`, `[swaps]` remap lines for `creative_labels:*`, no `[swaps] unresolved`, no block entity load error for `face_paper`. Every note keeps text, color, special and layer order; the label keeps its picture. Chest reads `creativelabels:sticky_note` with `CreativeLabels.Text` and `creativelabels:eraser`. `config/creativelabels-*.toml` hold 20 and 10, old files gone. `/give @s creativelabels:sticky_note` works
 @fails Notes gone but block present: the `replaces` entry for `face_paper` (block entity alias). Config at defaults: `CreativeLabels.carryOverConfig` ran after the new file existed
 @reviewed 2026-11-16
 # setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
@@ -244,7 +244,7 @@ look leatherSlots 6; the leather bag shows 6 slots and accepts #exposureextras:c
 ## CQ-NSM-01
 @group Client
 @commands New world: JEI search `@creativeequipment`, `@creativemagic`, `@creativecompat`; hover each moved item; WTHIT on the box, Dark Fire, pot and a sticky note; the shield and canned golem colours
-@pass Every moved item has its name, model and texture (no purple-black, no raw lang key) and lists under its new mod; tier shields render their pattern base; canned golems show their dye colour
+@pass Every moved item has its name, model and texture (no purple-black, no raw lang key) and lists under its new mod; tier shields render their pattern base; canned golems show their dye color
 @fails Missing texture: an asset path still under `creativeengineering` (`python3 tools/id_owner_lint.py`)
 @reviewed 2026-11-16
 do {"tooltip_text": "creativeequipment:copper_shield", "reject": "item\\.creativeengineering"}

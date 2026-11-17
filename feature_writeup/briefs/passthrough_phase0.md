@@ -260,7 +260,7 @@ also mixes into a bobber class.
 | Class | `getPickupItem` | Fix needed for a web hang |
 |---|---|---|
 | vanilla `Arrow`, `SpectralArrow`, `ThrownTrident` | tipped/plain, spectral, trident copy | no |
-| Nock Enough Arrows, 25 classes (`com.itayfeder.nock_enough_arrows.arrows.*`) | `new ItemStack(ItemInit.<OWN>_ARROW)`; Paint keeps its colour | no |
+| Nock Enough Arrows, 25 classes (`com.itayfeder.nock_enough_arrows.arrows.*`) | `new ItemStack(ItemInit.<OWN>_ARROW)`; Paint keeps its color | no |
 | Alex's Mobs `EntitySharkToothArrow` (< `Arrow`) | own item | no |
 | Dragon Loot `DragonTridentEntity` | `tridentStack.copy()` | no |
 | Creative Delight Hearth `ThrownTool` (cleaver, pitchfork), `ThrownHorseshoe` | tool / shoe copy | no |
@@ -342,7 +342,7 @@ BlockRunner 4.2.2 (`fuzs.blockrunner`):
    `createaddition:barbed_wire`. Any "WebBlock and subclasses" default in code finds only vanilla.
 3. **Spider exemption widens:** vanilla exempts spiders only from `minecraft:cobweb`; a tier-wide exempt tag frees
    them in reinforced webs, Fantasy webs and barbed wire too (barbed wire damage still applies). Fine if intended.
-4. **Reinforced cobweb owner pass-through** lives in its `entityInside`; once `makeStuckInBlock` is cancelled the
+4. **Reinforced cobweb owner pass-through** lives in its `entityInside`; once `makeStuckInBlock` is canceled the
    cobweb tier slows the owner. Phase 1/2 must keep it (owner check via `OwnableBlockEntity#isOwnedBy`, or a
    per-block hook).
 5. **Vintage oats are one block** (`OatBlock` < `CropBlock`, age 0-7): rule `half`, not `tall_half`.
@@ -382,7 +382,7 @@ BlockRunner 4.2.2 (`fuzs.blockrunner`):
     (firework: after the `setDeltaMovement` following `move`; pickarang: `AbstractPickarang#m_8119_`; chakram:
     TAIL of its `m_8119_`). For arrows the hook runs after `setPos`, so slowdown lands one tick later (fine).
 19. **Items, orbs, bobbers and fireworks use `Entity#move`**, so they already get vanilla web slowdown today
-    (plan's "projectiles ignore cobwebs" is right for arrows and throwables only). Cancelling `makeStuckInBlock` for
+    (plan's "projectiles ignore cobwebs" is right for arrows and throwables only). Canceling `makeStuckInBlock` for
     tiered blocks removes it from them too, so PassThrough must apply its own values to them.
 20. **Item stick hook:** vanilla gravity is in `ItemEntity#tick` behind `isNoGravity()`; ItemPhysic forces that call
     to true and applies gravity in `ItemPhysicServer.updatePre` behind the real `isNoGravity()`. Using
@@ -393,7 +393,7 @@ BlockRunner 4.2.2 (`fuzs.blockrunner`):
 22. **FOV:** BlockRunner recomputes only while its own UUID is present and its client option is on; a pass-through
     modifier alone would show in the FOV. Phase 1 needs its own `m_108565_` STORE-ordinal-2 modifier (section 6).
 23. **Unlisted plants with their own `makeStuckInBlock`** (Floral `*_bush` 0.9, FR wither roots 0.8, Neapolitan
-    beanstalk thorns 0.95, UA pickerelweed 0.6/0.75): untiered they keep vanilla stuck behaviour; `StuckInBlock`
+    beanstalk thorns 0.95, UA pickerelweed 0.6/0.75): untiered they keep vanilla stuck behavior; `StuckInBlock`
     lacks them for WTHIT. Decide per block in phase 4 (owner).
 24. **Tag namespace:** the plan's `blockrunner:passthrough/<tier>` follows the legacy `blockrunner:surface/*`
     pattern, but the ids-follow-owning-mod rule (2026-11-09) and Compat's existing `creativecompat:*` block tags

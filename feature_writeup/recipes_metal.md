@@ -21,7 +21,7 @@ metal half of [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags
 | Part | Status |
 |---|---|
 | Unification: IE's nuggets, plates, rods and wires are the pack's parts; Create / Everything Copper / Create Compressed / Create Crafts & Additions duplicates swapped out of recipes | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
-| Ore processing for 9 metals: ore and raw ore → crushed ore → dust → ingot, Create and IE routes with set yields | DEPLOYED, complete for all 9 |
+| Ore processing for 9 metals: ore and raw ore -> crushed ore -> dust -> ingot, Create and IE routes with set yields | DEPLOYED, complete for all 9 |
 | Dust, plate and crushed-ore storage blocks; block smelting | DEPLOYED (copper plate block one-way, F2) |
 | Plates, rods, wires: Create rolling and IE press standard across the metals; plates only partly (F1) | DEPLOYED, plates uneven |
 | Bars (Create Deco, Quark, Everything Copper): laser cutting ×64, assembly ×12, crafting ×9 from rods | DEPLOYED |
@@ -52,12 +52,12 @@ constantan, electrum, cast iron, rose gold; they get dust blocks and coils, not 
 
 | Step | Create | IE |
 |---|---|---|
-| Ore → crushed ore | crushing wheels: 1 + 50 % (stone ore), 2 + 25 % (deepslate ore), 75 % XP nugget, 12 % cobblestone | crusher: 2 per ore |
-| Raw ore → crushed ore | Create's own recipe (kept) | 1 + 33 %; raw block → 12 |
-| Crushed ore → dust | | crusher: 1 + 33 %; crushed block → 12 |
-| Crushed ore → ingot | smelt (1, Create's) | arc furnace: 1 + 50 %; crushed block → 13 + 50 % |
-| Dust → ingot | | IE's own (smelting, arc furnace) |
-| Dust / crushed block → storage block | smelt or blast | |
+| Ore -> crushed ore | crushing wheels: 1 + 50 % (stone ore), 2 + 25 % (deepslate ore), 75 % XP nugget, 12 % cobblestone | crusher: 2 per ore |
+| Raw ore -> crushed ore | Create's own recipe (kept) | 1 + 33 %; raw block -> 12 |
+| Crushed ore -> dust | | crusher: 1 + 33 %; crushed block -> 12 |
+| Crushed ore -> ingot | smelt (1, Create's) | arc furnace: 1 + 50 %; crushed block -> 13 + 50 % |
+| Dust -> ingot | | IE's own (smelting, arc furnace) |
+| Dust / crushed block -> storage block | smelt or blast | |
 
 The design yields (comment in `resource_blocks.js`): smelting crushed ore 1×, IE crusher 1.33×, arc furnace 1.5×. Create
 and IE's original ore crushing, IE's hand-hammer ore crushing and the IE raw-ore crushing are removed for every metal
@@ -70,10 +70,10 @@ and IE's original ore crushing, IE's hand-hammer ore crushing and the IE raw-ore
 | Nugget | IE (copper: IE's, replacing Create's and Everything Copper's in every recipe) | vanilla / IE 9 ↔ 1 |
 | Plate | IE plate (Create's copper, iron and gold sheets replaced everywhere) | see F1: Create pressing for copper, iron, gold, zinc; IE press for all (8 by IE's own recipe, gold by the pack's); hammer for all (7 by IE's own, gold and zinc by the pack's) |
 | Plate block | Create Compressed sheet blocks | 9 plates ↔ 1 block (copper one-way, F2) |
-| Rod | IE rods (and the pack's) | Create rolling (Create Crafts & Additions) ×4 and IE press ×4 for all 9; crafting (2 ingots → 4): zinc by the pack, iron and aluminium by IE's own, the other six by Immersive Posts (F4) |
-| Wire | IE wires | wire cutter + plate → 2; rolling ×4; IE press ×4; 8 metals (no uranium wire) |
+| Rod | IE rods (and the pack's) | Create rolling (Create Crafts & Additions) ×4 and IE press ×4 for all 9; crafting (2 ingots -> 4): zinc by the pack, iron and aluminium by IE's own, the other six by Immersive Posts (F4) |
+| Wire | IE wires | wire cutter + plate -> 2; rolling ×4; IE press ×4; 8 metals (no uranium wire) |
 | Dust block | the pack's dust piles (`creativeengineering:<metal>_dust_pile`) | 9 dust ↔ 1 for the 9 metals, the 6 alloys and diamond; crushed ore blocks are Create Compressed's piles |
-| Spool | the pack's (`creativeengineering:spool`) | 2 iron plates + iron nugget → 8; assembly ×12; blueprint ×16. Create Crafts & Additions' copper spool is replaced by the copper wire coil in that mod's recipes |
+| Spool | the pack's (`creativeengineering:spool`) | 2 iron plates + iron nugget -> 8; assembly ×12; blueprint ×16. Create Crafts & Additions' copper spool is replaced by the copper wire coil in that mod's recipes |
 
 `metaltags.js` fills the forge tags the dict's `any_*` keys read: rods, wires and the zinc plate under
 `forge:<type>/<metal>` and `forge:<type>/all_metal`; rose gold rods, nuggets and block under gold (F5); IE steel as
@@ -82,7 +82,7 @@ and IE's original ore crushing, IE's hand-hammer ore crushing and the IE raw-ore
 
 ### 2.4 Bars (`metal_building.js`)
 
-| Bars | Laser cut a block → 64 | Assembly on a rod → 12 (5 loops) | 6 rods → 9 | Variants |
+| Bars | Laser cut a block -> 64 | Assembly on a rod -> 12 (5 loops) | 6 rods -> 9 | Variants |
 |---|---|---|---|---|
 | Copper | yes | yes | yes | ornate ×3, raw ×5, and back |
 | Iron, cast iron, zinc | yes | yes | yes | |
@@ -102,7 +102,7 @@ removed.
   into its rusty one (11 pairs; `createSplashing(output, input)` with the rusty block as the output).
 - **Billets:** Dustrial Decor's industrial and cast iron billets removed; its recipes take the industrial iron block and
   a cast iron ingot instead.
-- **Gilded blackstone:** deploy a gold block on blackstone; IE crusher → 18 gold nuggets.
+- **Gilded blackstone:** deploy a gold block on blackstone; IE crusher -> 18 gold nuggets.
 - **Chain** ×4 by assembly from an iron ingot (nugget, ingot, nugget). **Steel wool** from 6 steel wire, or 4 by mixing.
 - Wind vane takes an iron rod instead of redstone; Supplementaries Squared's metal frame an iron rod instead of nuggets.
 
@@ -124,14 +124,14 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   items ([brief](briefs/recipes_metal.md)). IE press: gold by the pack, the other 8 by IE's own recipes.
   Hammer: gold and zinc by the pack, 7 by IE's own. The header audit in the file asks the same question: keep the IE
   press for the 8 and add Create pressing for the missing 5, or move every metal onto the pack's recipes.
-- **F2.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Copper plate block is one-way:** block → 9 plates exists, 9 plates → block doesn't (Create Compressed's recipe
+- **F2.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Copper plate block is one-way:** block -> 9 plates exists, 9 plates -> block doesn't (Create Compressed's recipe
   covers it today).
 - **F3.** FIXED 2026-10-19 ([plan_1.0.9.md](plan_1.0.9.md)). **Zinc can still be hammer-crushed:** IE's `hammercrushing_zinc` and `raw_hammercrushing_zinc` aren't removed
   (every other metal's are).
-- **F4. Rods by hand only for zinc, iron and aluminium. Your call.** Zinc 2 ingots → 4 by the pack; iron and aluminium by
-  IE's own (2 ingots → 4 rods, IE 9.2.4 jar; the header audit's "2 ingot → 1 rod" is wrong); copper, gold, lead, silver, nickel, uranium have no crafting-table rod. Rolling
+- **F4. Rods by hand only for zinc, iron and aluminium. Your call.** Zinc 2 ingots -> 4 by the pack; iron and aluminium by
+  IE's own (2 ingots -> 4 rods, IE 9.2.4 jar; the header audit's "2 ingot -> 1 rod" is wrong); copper, gold, lead, silver, nickel, uranium have no crafting-table rod. Rolling
   and the IE press cover all 9. Rechecked 2026-10-21: wrong, Immersive Posts 4.3.0 ships `immersiveposts:has_<metal>_rod`
-  (2 ingots → 4) for copper, gold, lead, silver, nickel, uranium, constantan and electrum, none removed (gold's input is
+  (2 ingots -> 4) for copper, gold, lead, silver, nickel, uranium, constantan and electrum, none removed (gold's input is
   swapped to the vanilla ingot, `metal_base_materials.js` line 121), so all 9 already have a hand rod
   ([brief](briefs/recipes_metal.md)).
 - **F5. Rose gold counts as gold in tags** (`forge:rods/gold`, `nuggets/gold`, `storage_blocks/gold`). Any recipe asking
@@ -141,7 +141,7 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   in `forge:ingots/gold` and the dust in `forge:dusts/gold` (MCA 7.5.20 jar). Check with RM-11.
   Decided (2026-11-07, narrowed 2026-11-14 in `recipes/metal #7`): rose gold counts as gold in every recipe, golden
   armor, tools and food included, except the ones that make raw gold forms (`metal/rose_gold_interchange.js`).
-- **F6. Dust → ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
+- **F6. Dust -> ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
   but uneven.
 - **F7.** PARTLY FIXED 2026-10-19: the two `EVENT:` lines are gone; the rest stays ([plan_1.0.9.md](plan_1.0.9.md)). **Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);
   `misc_metal_crafts.js` logs "The metal base event has started!"; the header audit is written as a chat reply ("Want
@@ -170,24 +170,24 @@ None.
 
 ## 7. In-game test suite
 
-- [ ] **RM-01 Log:** `/reload` → no validation errors from the metal scripts.
-- [ ] **RM-02 Copper unified:** JEI copper nugget → one item (IE's); a Create recipe that used Create's copper sheet shows
+- [ ] **RM-01 Log:** `/reload` -> no validation errors from the metal scripts.
+- [ ] **RM-02 Copper unified:** JEI copper nugget -> one item (IE's); a Create recipe that used Create's copper sheet shows
   the IE copper plate.
-- [ ] **RM-03 Crushing wheels:** 10 iron ore → about 15 crushed iron, about 7 XP nuggets; 10 deepslate iron ore → about
+- [ ] **RM-03 Crushing wheels:** 10 iron ore -> about 15 crushed iron, about 7 XP nuggets; 10 deepslate iron ore -> about
   22.
-- [ ] **RM-04 IE ore chain:** IE crusher on raw iron → about 1.33 crushed; on crushed iron → about 1.33 dust; arc
-  furnace on crushed iron → about 1.5 ingots.
-- [ ] **RM-05 Crushed block:** crushed iron block in the arc furnace → 13 ingots (+50 % one more).
-- [ ] **RM-06 Dust blocks:** 9 copper dust ↔ dust block; smelt the dust block → copper block.
-- [ ] **RM-07 Plates (F1):** JEI aluminium plate → note which machines make it (expect IE press and hammer, no Create
+- [ ] **RM-04 IE ore chain:** IE crusher on raw iron -> about 1.33 crushed; on crushed iron -> about 1.33 dust; arc
+  furnace on crushed iron -> about 1.5 ingots.
+- [ ] **RM-05 Crushed block:** crushed iron block in the arc furnace -> 13 ingots (+50 % one more).
+- [ ] **RM-06 Dust blocks:** 9 copper dust ↔ dust block; smelt the dust block -> copper block.
+- [ ] **RM-07 Plates (F1):** JEI aluminium plate -> note which machines make it (expect IE press and hammer, no Create
   press).
-- [ ] **RM-08 Copper plate block (F2):** 9 copper plates in the grid → note result.
-- [ ] **RM-09 Rods:** rolling mill with a lead ingot → 4 lead rods; IE press with the rod mold → 4.
-- [ ] **RM-10 Wires:** wire cutter + copper plate → 2 copper wire, cutter damaged not used up.
-- [ ] **RM-11 Rose gold (F5):** powered rail with rose gold rods → note whether it crafts.
-- [ ] **RM-12 Bars:** laser cut an iron block → 64 iron bars; 6 iron rods → 9.
-- [ ] **RM-13 Rust:** wash an iron block with a fan through water → rusty iron block.
-- [ ] **RM-14 Red electrum:** heated mixer, electrum + 4 redstone → red electrum ingot.
+- [ ] **RM-08 Copper plate block (F2):** 9 copper plates in the grid -> note result.
+- [ ] **RM-09 Rods:** rolling mill with a lead ingot -> 4 lead rods; IE press with the rod mold -> 4.
+- [ ] **RM-10 Wires:** wire cutter + copper plate -> 2 copper wire, cutter damaged not used up.
+- [ ] **RM-11 Rose gold (F5):** powered rail with rose gold rods -> note whether it crafts.
+- [ ] **RM-12 Bars:** laser cut an iron block -> 64 iron bars; 6 iron rods -> 9.
+- [ ] **RM-13 Rust:** wash an iron block with a fan through water -> rusty iron block.
+- [ ] **RM-14 Red electrum:** heated mixer, electrum + 4 redstone -> red electrum ingot.
 
 ## 8. History
 

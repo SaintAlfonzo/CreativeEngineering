@@ -18,7 +18,7 @@ and the summary.
 | CP | Crop parity layer: tobacco on Rich Farmland / Fertile Soil, Quark replant and hoe harvesting | feature | BUILT, patcherMod 1.0.4 in `mods/`, not boot-tested; CR-01/02/21-25 pending | [crops.md](crops.md) 2.6 (`CR-`) |
 | HA | Harvest area per hoe (1x1 to 9x9) + tooltip | feature | BUILT, patcherMod 1.0.4 in `mods/`; scratch boots clean before the bump; CR-26..30 pending | [crops.md](crops.md) 2.3 (`CR-`) |
 | GL | WTHIT growth line for the plants WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all), `[crop_growth]` config, `/dumpcropgrowth` audit | feature | BUILT 2026-10-04, headless-tested; jar built in `build/libs`, not installed; CR-59..66 pending | [crops.md](crops.md) 2.9 (`CR-`) |
-| CG | Canned golem can be dyed (16 colours) | feature | BUILT, patcherMod 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
+| CG | Canned golem can be dyed (16 colors) | feature | BUILT, patcherMod 1.0.4 in `mods/`, not tested in game | none yet; this file 4 |
 | DD | Display Delight: missing-texture icons in WTHIT and JEI, empty WTHIT icon for item-less plates | fix | BUILT: kubejs models + patcherMod 1.0.4 in `mods/`; R4-08..10 pending | this file 4b |
 | NM | New mods: Blue Flame Burning, Fruits Delight, Improved Pillager Outpost, Well | mods | in `mods/`; `mod_sides.md` rows added 2026-10-02 (all `both`), in the payload | this file 5 |
 | DR | Data refresh for every mod added since the last dumps: `/dumpall` + `/dumpfood`, all generators, food types, compost, item_dict, BlockRunner tiers, JEI coverage, writeups | data + scripts | BUILT 2026-10-02; scratch server loads it clean; your client needs a restart (new item_dict keys) | this file 5b |
@@ -109,9 +109,9 @@ correction). Anyone who changed slot counts on the server sets them again in the
 - Both jars build. The `-02` jar contains every extras class, the tag and the models.
 
 **Dyeable (added 2026-10-03 20:04, after the move):** `CameraBagItem` implements `DyeableLeatherItem`, so the vanilla
-dye recipe and cauldron washing work on all three tiers and a smithing upgrade carries the colour (`display.color`)
+dye recipe and cauldron washing work on all three tiers and a smithing upgrade carries the color (`display.color`)
 with the contents. The three item models now have two layers: `exposure_extras:item/camera_bag_dyable` (tinted by the
-client item colour handler in `CameraBagClient`) and `camera_bag_outline_leather` (untinted). The iron and netherite
+client item color handler in `CameraBagClient`) and `camera_bag_outline_leather` (untinted). The iron and netherite
 bags therefore no longer use the Spice of Life lunchbox textures; all three tiers share the leather look until
 tier-specific outlines are drawn. The two PNGs are in the jar's `textures/item/`; `kubejs/assets/dyable.png` and
 `leatheroutline.png` are the source art (they ship in the kubejs payload but nothing reads them).
@@ -123,7 +123,7 @@ tier-specific outlines are drawn. The two PNGs are in the jar's `textures/item/`
    the live server.
 3. The in-game checks that were never run for the bags at all: the GUI, slot locking, smithing keeping the
    contents, the tooltip, overflow spill.
-4. Iron and netherite have no look of their own yet (the dyeable leather model above); check that dyeing, washing and a smithing upgrade keep the colour and the contents (R4-11).
+4. Iron and netherite have no look of their own yet (the dyeable leather model above); check that dyeing, washing and a smithing upgrade keep the color and the contents (R4-11).
 5. Flashes stay out of the default tag unless you want them in (the example line in `equipmenttags.js`).
 6. A writeup: a Camera bags / Extras section in [exposure.md](exposure.md) with its own tests.
 
@@ -199,7 +199,7 @@ under the new `[perf]` section, read live (details and the mixin-into-a-mixin le
 |---|---|---|
 | Quark feeding trough re-searched every few ticks | no new search for 30 s after a miss | `troughMissCooldownTicks` 600 |
 | Serene Seasons melt walked every chunk every tick | runs every 4th tick with 4x the chance | `seasonsMeltIntervalTicks` 4 |
-| Create: Gravity ran for every entity in every dimension | cancelled outside the End | `gravityLimitDimensions`, `gravityDimensions` |
+| Create: Gravity ran for every entity in every dimension | canceled outside the End | `gravityLimitDimensions`, `gravityDimensions` |
 | Fruits Delight leaves tested the leaf tag on every collision query | bytecode patch via a mixin config plugin: projectile check first | none (does nothing if the handler changed) |
 | Dragon horse armor effect was disabled for cost | back on, one walk per interval | `mountEffectIntervalTicks` 100 |
 
@@ -235,7 +235,7 @@ another year still blocks it. Also `config/vinery/config.json5` `years_per_effec
 
 Right-clicking Canned Goods' canned golem with any dye (including `#forge:dyes/*`) recolours it. It uses one
 dye unless you're in creative. The default is red, the mod's own texture.
-- The colour is synced entity data, saved as NBT `Color`: patcherMod `mixin/CannedGolemColorMixin`.
+- The color is synced entity data, saved as NBT `Color`: patcherMod `mixin/CannedGolemColorMixin`.
 - The client texture is swapped by `CannedGolemRendererMixin`.
 - The other 15 textures are in `kubejs/assets/creativeengineering/textures/entity/canned_golem/`.
 
@@ -376,34 +376,34 @@ release. Rebuilds before a release keep the number.
 
 ## 8. Release checks (`R4-`)
 
-- [ ] **R4-01 join:** a real client joins the updated dedicated server → no kick; the server log has no
+- [ ] **R4-01 join:** a real client joins the updated dedicated server -> no kick; the server log has no
   "Error receiving packet".
-- [ ] **R4-02 client start:** a non-dev client with the payload starts → main menu; latest.log has no "could not
+- [ ] **R4-02 client start:** a non-dev client with the payload starts -> main menu; latest.log has no "could not
   find any targets" and no "refmap ... could not be read" for `exposure` or `exposure_polaroid`.
-- [ ] **R4-03 polaroid render:** hold an instant camera and a developed instant slide → they render (this is what
+- [ ] **R4-03 polaroid render:** hold an instant camera and a developed instant slide -> they render (this is what
   the missing refmap broke).
-- [ ] **R4-04 old bag remap:** on a copy of a world with a 1.0.3 `creativeengineering:` camera bag holding items →
+- [ ] **R4-04 old bag remap:** on a copy of a world with a 1.0.3 `creativeengineering:` camera bag holding items ->
   after the update it is the same tier of `exposure_extras` bag with the same contents, and the log has no
   missing-registry warning for it.
-- [ ] **R4-05 bag basics:** craft a leather bag, put in a camera and film, upgrade to iron and then netherite →
+- [ ] **R4-05 bag basics:** craft a leather bag, put in a camera and film, upgrade to iron and then netherite ->
   contents kept; a photograph or another bag won't go in.
-- [ ] **R4-06 bag slots:** set `exposure_extras-common.toml` `leatherSlots` to 3 with 5 items inside, reopen → 2
+- [ ] **R4-06 bag slots:** set `exposure_extras-common.toml` `leatherSlots` to 3 with 5 items inside, reopen -> 2
   items move to the inventory (or drop).
-- [ ] **R4-07 golem dye:** right-click a canned golem with blue dye → it turns blue; it is still blue after a
+- [ ] **R4-07 golem dye:** right-click a canned golem with blue dye -> it turns blue; it is still blue after a
   relog; one dye used in survival.
-- [ ] **R4-08 DD item icons:** look at a placed Plated Hamburger, Rabbit Stew and a `df_` stew → WTHIT shows the
+- [ ] **R4-08 DD item icons:** look at a placed Plated Hamburger, Rabbit Stew and a `df_` stew -> WTHIT shows the
   3D plate, not the purple/black cube; JEI shows the same for `displaydelight:plated_hamburger`.
-- [ ] **R4-09 DD item-less plates:** place 1 and then 3 cookies on a food plate, and a pumpkin pie → WTHIT shows a
+- [ ] **R4-09 DD item-less plates:** place 1 and then 3 cookies on a food plate, and a pumpkin pie -> WTHIT shows a
   3D icon of the plate with the right number of cookies (it was blank before).
 - [ ] **R4-10 DD soups:** a placed pumpkin soup has no purple/black patches inside the bowl.
-- [ ] **R4-11 bag dye:** craft a leather bag with a dye in the crafting grid → tinted; wash it in a cauldron → undyed;
-  upgrade a dyed bag at a smithing table → the colour and the contents stay. Items inside still open normally.
+- [ ] **R4-11 bag dye:** craft a leather bag with a dye in the crafting grid -> tinted; wash it in a cauldron -> undyed;
+  upgrade a dyed bag at a smithing table -> the color and the contents stay. Items inside still open normally.
 - [ ] **R4-12 perf throttles:** server log at start has no error from `FeedingTroughModuleMixin`, `SereneSeasonsMeltThrottleMixin`,
   `CreateGravityDimensionMixin` or `CreativeEngineeringMixinPlugin`; no `CEConfig has no public` line from KubeJS. A dragon
   horse armor on a horse gives Regeneration within about 5 s.
 - [ ] **R4-13 barrel:** VN-07 in [vinery.md](vinery.md) (output stacks, a different year stops it).
 - [ ] **R4-14 Lootr containers:** open a converted chest in a ported structure (any file under
-  `kubejs/data/*/loot_tables/chests/fixed/`) as two players → each sees the fixed contents; the second player's chest was not emptied by the first.
+  `kubejs/data/*/loot_tables/chests/fixed/`) as two players -> each sees the fixed contents; the second player's chest was not emptied by the first.
 - Crops and hoes: CR-01, CR-02, CR-21 to CR-37 in [crops.md](crops.md).
 - Wild crops (WC): CR-47 to CR-58 in [crops.md](crops.md).
 - Worldgen (WG, EF): ST-44 to ST-55 in [structure_tuning.md](structure_tuning.md).

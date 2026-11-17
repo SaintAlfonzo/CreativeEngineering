@@ -14,7 +14,7 @@ that carries the file changes. Sizes are `du -sh` (4K blocks), counts are files.
 
 | path | files | what it is | target jar | note |
 |---|---|---|---|---|
-| `PMR/META-INF/mods.toml` | 1 | mod id, licence, mixin config, soft deps (create, itemphysic, ...) | Common | each new jar gets its own mods.toml; the optional-dependency list is split by which jar's mixins need it |
+| `PMR/META-INF/mods.toml` | 1 | mod id, license, mixin config, soft deps (create, itemphysic, ...) | Common | each new jar gets its own mods.toml; the optional-dependency list is split by which jar's mixins need it |
 | `PMR/creativeengineering.mixins.json` | 1 | 289 mixin entries | Common (split) | sweep B assigns the entries; each jar gets its own json (rule 3.6) |
 | `PMR/pack.mcmeta` | 1 | pack format 9/10 | Common | every jar needs a copy |
 | `PMR/credit.txt` | 1 | LGPL notice for CreateNumismatics textures | Common ? | stays with whichever jar ends up carrying the borrowed textures; no current resource is traced to it, check before dropping |
@@ -71,7 +71,7 @@ Lang key groups in `PMR/assets/creativeengineering/lang/en_us.json`:
 | `item.creativeengineering.wooden_*bucket` | 2 | Engineering | |
 | `creativeengineering.vein_undo.*` | 2 | Engineering | `excavation/VeinUndo` |
 | `chat.creativeengineering.named_mob.title`, `.monster_box.sneak` | 2 | Worldgen | fauna (`mobs/`) |
-| `creativeengineering.mca_eyes.*` | 12 | Compat | MCA comb eye colour mixin |
+| `creativeengineering.mca_eyes.*` | 12 | Compat | MCA comb eye color mixin |
 | `key.creativeengineering.stepstool` | 1 | Equipment | `stepstool/` |
 | `generator.creativeengineering.flower_test` | 1 | Devtools | flower test world preset |
 | `waila.h12y.tier.creativeengineering.copper` | 1 | ? | no `h12y` mod in `mods/` and no Java reference; stale key, candidate for deletion rather than a target |

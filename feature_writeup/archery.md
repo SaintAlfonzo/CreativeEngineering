@@ -16,7 +16,7 @@
 |---|---|
 | Nock Enough Arrows' own recipes removed; every arrow re-made at the fletching table (head + shaft + fin) and on an IE `archery` blueprint | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |
 | Shaft tags `#forge:arrow_shaft[/wooden|light|quick|metal|heavy|blazing]` and `#forge:fletching` | DEPLOYED |
-| Fletching from feathers (knife), emu feather → feathers | DEPLOYED |
+| Fletching from feathers (knife), emu feather -> feathers | DEPLOYED |
 | Torch arrow on Quark's item (5 recipes), NEA's torch arrow and quiver hidden; Supplementaries quiver recipe; slingshot takes leather / hemp fabric / canvas | DEPLOYED |
 | `archery` and `bullet` blueprints | DEPLOYED; the archery blueprint needs the trader-only Ethereal Arrow, kept on purpose (F3) |
 | NEA's Stockpile, Recovery and Cycle enchantments taken out (mixins, MoreJS filters, red tooltip on books) | DEPLOYED; the `isDiscoverable` override (F6) fixed in 1.0.9 (SRG `m_6592_`), not yet checked in game (`pack/release #4`); trade leak (F9) FIXED 2026-11-01 (`isTradeable` override, patcherMod built, not installed; `loot/tables #10`) |
@@ -50,7 +50,7 @@ material classes (wooden, light, quick, metal, heavy) that gate the better arrow
 
 ### 2.1 Arrows
 
-Fletching table: head + shaft + fin → count. The IE `archery` blueprint takes the same three items for the same
+Fletching table: head + shaft + fin -> count. The IE `archery` blueprint takes the same three items for the same
 count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stated.
 
 | Arrow | Mod | Head | Shaft | Fin | Count | Other routes |
@@ -58,7 +58,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 | Arrow | vanilla | flint | any | | 6 | vanilla grid recipe (4) kept |
 | Spectral Arrow | vanilla | glowstone dust | an arrow | glowstone dust | 2 | vanilla grid recipe kept |
 | Shark Tooth Arrow | Alex's Mobs | shark tooth | any | kelp | 10 | AM's own recipe kept |
-| Torch Arrow | Quark | coal | wooden | | 4 | smelt or campfire an arrow (1); arrow + flint and steel (flint and steel kept, damaged) shapeless or by Deployer; 3 arrows + torch → 3 |
+| Torch Arrow | Quark | coal | wooden | | 4 | smelt or campfire an arrow (1); arrow + flint and steel (flint and steel kept, damaged) shapeless or by Deployer; 3 arrows + torch -> 3 |
 | Redstone Torch Arrow | NEA | redstone torch | any | | 2 | |
 | Soul Torch Arrow | NEA | soul torch | any | | 2 | |
 | Blossom Arrow | NEA | bone meal | wooden | | 3 | |
@@ -80,7 +80,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 | Paint Arrow | NEA | white wool | any | | 6 | NEA's dye recipe |
 | Dousing Arrow | NEA | water bottle | metal | | 3 | |
 | Drill Arrow | NEA | iron / steel drill head (IE) | heavy | | 32 / 64 | |
-| Split Arrow | NEA | | | | | grid: 6 arrows + electrum or brass wire → 2; blueprint: **4** arrows + wire → 2 (F2) |
+| Split Arrow | NEA | | | | | grid: 6 arrows + electrum or brass wire -> 2; blueprint: **4** arrows + wire -> 2 (F2) |
 | Balloon Arrow | Cloud Storage | | | | | balloon + arrow, shapeless |
 | Cupid, Ethereal, Growing | NEA | | | | | wandering trader only |
 
@@ -99,7 +99,7 @@ count. "Any" shaft = `#forge:arrow_shaft`; fin is `#forge:fletching` unless stat
 
 The shaft class only decides which recipe accepts it; it doesn't change the arrow.
 
-Fletching: feather on a cutting board with any knife → 2 arrow fletchings. Emu feather on a cutting board → 2
+Fletching: feather on a cutting board with any knife -> 2 arrow fletchings. Emu feather on a cutting board -> 2
 feathers. So one feather makes 12 arrows at the fletching table (4 in the crafting grid).
 
 ### 2.3 Blueprints (IE Engineer's Workbench)
@@ -109,12 +109,12 @@ feathers. So one feather makes 12 arrows at the fletching table (4 in the crafti
 | `archery` | echoing + ethereal + reinforced arrow over 3 blue dye + 3 paper, or over an empty schematic | every arrow in 2.1 |
 | `bullet` | gunpowder + empty casing + gunpowder over an empty schematic | IE's own cartridges, the dragon scale armor-piercing recipe |
 
-Any blueprint + an empty schematic → 2 copies.
+Any blueprint + an empty schematic -> 2 copies.
 
 ### 2.4 Bullets
 
 [bullets.js](../kubejs/server_scripts/equipment/bullets.js) adds one recipe: 64 empty casings + 32 gunpowder + a dragon
-scale → 64 armor-piercing cartridges, in blueprint category `bullet` (was `projectiles`, which nothing made; F1).
+scale -> 64 armor-piercing cartridges, in blueprint category `bullet` (was `projectiles`, which nothing made; F1).
 IE's own cartridge recipes are untouched.
 
 ### 2.5 Removed or hidden
@@ -177,7 +177,7 @@ IE's own cartridge recipes are untouched.
   recipe for the quiver (it is loot-only there); AR-15 only confirms that JEI shows one recipe.
 - **F9. The books came from trades, not loot.** FIXED 2026-11-01 (`loot/tables #10`).
   No loot table in the dumps or `kubejs/data` names Stockpile, Recovery or Cycle; the random-enchant functions
-  (`enchant_randomly`, `enchant_with_levels`) honour the F6 override (present in the installed patcherMod jar). The
+  (`enchant_randomly`, `enchant_with_levels`) honor the F6 override (present in the installed patcherMod jar). The
   `/dumptrades` dump (2026-10-30) had NEA books in two trade paths the MoreJS filter in `enchants.js` never sees:
   Dynamic Villager Trades librarians (one offer per enchantment whose `isTradeable()` is true, built from vanilla's
   `EnchantBookForEmeralds` listing) and Lightman's Currency cashiers (`enchanted_book_for_coins`, levels 1 to 4, which
@@ -218,42 +218,42 @@ replacement or a hidden item.
 
 ## 7. In-game test suite
 
-- [ ] **AR-01 Fletching:** cutting board, feather + knife → 2 arrow fletchings; emu feather → 2 feathers.
-- [ ] **AR-02 Plain arrows:** fletching table, flint + stick + fletching → 6 arrows; flint + iron rod + feather → 6.
+- [ ] **AR-01 Fletching:** cutting board, feather + knife -> 2 arrow fletchings; emu feather -> 2 feathers.
+- [ ] **AR-02 Plain arrows:** fletching table, flint + stick + fletching -> 6 arrows; flint + iron rod + feather -> 6.
 - [ ] **AR-03 Shaft gates:** echoing arrow needs an aluminum rod (a stick or iron rod is refused); teleportation needs a
   silver / electrum / gold / rose gold rod; drill arrow a lead or uranium rod; dousing a metal rod.
-- [ ] **AR-04 Torch arrows:** smelt an arrow → Quark torch arrow; campfire → same; arrow + flint and steel in the grid →
-  torch arrow, flint and steel stays with 1 durability less; Deployer with flint and steel on an arrow → same; 3 arrows +
-  torch → 3.
-- [ ] **AR-05 NEA recipes gone:** JEI on a slime arrow → only the pack's fletching and blueprint recipes; the NEA quiver
+- [ ] **AR-04 Torch arrows:** smelt an arrow -> Quark torch arrow; campfire -> same; arrow + flint and steel in the grid ->
+  torch arrow, flint and steel stays with 1 durability less; Deployer with flint and steel on an arrow -> same; 3 arrows +
+  torch -> 3.
+- [ ] **AR-05 NEA recipes gone:** JEI on a slime arrow -> only the pack's fletching and blueprint recipes; the NEA quiver
   and NEA torch arrow don't show in JEI.
-- [ ] **AR-06 Big yields:** reinforced arrow from a dragon scale + steel rod + fletching → 32; drill arrow from a steel
-  drill head → 64.
+- [ ] **AR-06 Big yields:** reinforced arrow from a dragon scale + steel rod + fletching -> 32; drill arrow from a steel
+  drill head -> 64.
 - [ ] **AR-07 Explosive arrow (F5):** TNT + blaze rod (any `#forge:arrow_shaft/blazing`, only the blaze rod today) +
-  fletching → 4, at the fletching table and the archery blueprint; JEI shows the shaft slot as the tag. Recipes:
+  fletching -> 4, at the fletching table and the archery blueprint; JEI shows the shaft slot as the tag. Recipes:
   scratch server PASSED 2026-10-22 (SQ-GM-04, blueprint and fletching take a blaze rod); the JEI view: client.
-- [ ] **AR-08 Split arrow:** grid, 6 arrows around electrum wire → 2; brass wire works too. Workbench with the archery
-  blueprint: 4 arrows + wire → 2 (F2).
-- [ ] **AR-09 Balloon arrow:** grid, balloon + arrow → balloon arrow.
-- [ ] **AR-10 Archery blueprint:** echoing + ethereal + reinforced arrow over an empty schematic → archery blueprint;
-  blueprint + empty schematic → 2 blueprints.
+- [ ] **AR-08 Split arrow:** grid, 6 arrows around electrum wire -> 2; brass wire works too. Workbench with the archery
+  blueprint: 4 arrows + wire -> 2 (F2).
+- [ ] **AR-09 Balloon arrow:** grid, balloon + arrow -> balloon arrow.
+- [ ] **AR-10 Archery blueprint:** echoing + ethereal + reinforced arrow over an empty schematic -> archery blueprint;
+  blueprint + empty schematic -> 2 blueprints.
 - [ ] **AR-11 Workbench arrows:** Engineer's Workbench with the archery blueprint lists every arrow in 2.1; flint +
-  stick + feather → 6 arrows.
-- [ ] **AR-12 Bullet blueprint:** gunpowder + empty casing + gunpowder over an empty schematic → bullet blueprint; the
+  stick + feather -> 6 arrows.
+- [ ] **AR-12 Bullet blueprint:** gunpowder + empty casing + gunpowder over an empty schematic -> bullet blueprint; the
   workbench shows IE's cartridges.
 - [ ] **AR-13 Dragon scale bullets (F1)** (recipe category and input match: scratch server PASSED 2026-10-22, SQ-GM-04, `bullet` only, 64 out; the workbench
-  screen: in game): Engineer's Workbench with the bullet blueprint → the dragon scale recipe is
-  listed; 64 casings + 32 gunpowder + a dragon scale → 64 armor-piercing cartridges.
-- [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls → never Stockpile, Recovery or
-  Cycle; new librarians and cashiers still sell enchanted books, never one of these three (F9); an anvil refuses a book of one. `/give` an enchanted book with Cycle → red "REMOVED
+  screen: in game): Engineer's Workbench with the bullet blueprint -> the dragon scale recipe is
+  listed; 64 casings + 32 gunpowder + a dragon scale -> 64 armor-piercing cartridges.
+- [ ] **AR-14 Enchantments gone:** enchanting table with a book at level 30, many rolls -> never Stockpile, Recovery or
+  Cycle; new librarians and cashiers still sell enchanted books, never one of these three (F9); an anvil refuses a book of one. `/give` an enchanted book with Cycle -> red "REMOVED
   ITEM: DO NOT USE".
-- [ ] **AR-15 Quiver:** JEI on the Supplementaries quiver → the pack's copper recipe; note whether Supplementaries' own
+- [ ] **AR-15 Quiver:** JEI on the Supplementaries quiver -> the pack's copper recipe; note whether Supplementaries' own
   recipe is also listed (F8).
 - [ ] **AR-16 Slingshot:** the Supplementaries slingshot recipe accepts leather, hemp fabric or canvas where it had
   rabbit hide.
-- [ ] **AR-17 Dedicated server join:** join the dedicated server with NEA installed → no
+- [ ] **AR-17 Dedicated server join:** join the dedicated server with NEA installed -> no
   `DecoderException ... readerIndex` kick; the log has `[nock-recipe-book] added server-side RecipeBookType`.
-- [ ] **AR-18 Arrow tooltips:** hover a seeker, split and drill arrow → one line each ("Homes in on entities", ...).
+- [ ] **AR-18 Arrow tooltips:** hover a seeker, split and drill arrow -> one line each ("Homes in on entities", ...).
 - [ ] **AR-19 Repeated blueprint inputs (`tooling/conventions #7`):** Engineer's Workbench with the archery blueprint:
   2 glowstone dust + 1 arrow -> 2 spectral arrows; 4 arrows + electrum wire -> 2 split arrows (both uncraftable before
   2026-11-16). Redstone components blueprint: 4 of one stone kind + quartz + redstone -> observer; 3 oak planks +

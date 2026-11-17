@@ -30,7 +30,7 @@ Status **In Progress** / Work patcherMod (+ KubeJS tags, tooltip) / TODO `gamepl
 
 ### Owner decision 2026-11-02 (one system, no new tag)
 - **Rain does not douse a campfire in the vanilla `SIGNAL_FIRE` state.** `CampfireRain` checks that state instead of looking at the block below; no new system.
-- **The signal-fire source list gets coal and charcoal blocks** (hay bale stays, vanilla). The existing `campfire/rain_proof_fuel` tag is that list: the `isSmokeSource` mixin (Build 2) reads it, so one list drives both smoke height and rain. Item fuelling of a campfire stays off (the old unwanted system).
+- **The signal-fire source list gets coal and charcoal blocks** (hay bale stays, vanilla). The existing `campfire/rain_proof_fuel` tag is that list: the `isSmokeSource` mixin (Build 2) reads it, so one list drives both smoke height and rain. Item fueling of a campfire stays off (the old unwanted system).
 - The wider block list in Build 1 (coke, petcoke, blaze, magma, other bales, kelp) is not added unless asked; Build 1 shrinks to coal and charcoal blocks.
 - A hay-bale signal fire is therefore also rain-proof (follows from the state rule).
 
@@ -74,7 +74,7 @@ fuel block in the pack; the fuel block says so in its tooltip; nothing else puts
 2. **Signal smoke** (patcherMod, common): `mixin/CampfireSignalFuelMixin` on `CampfireBlock#isSmokeSource`
    (private, RETURN: `|| state.is(CampfireRain.RAIN_PROOF_FUEL)`; read the SRG name from the mapped Forge jar first).
    One tag drives both rules, as the row asks ("longer smoke over them"). `SIGNAL_FIRE` is set on placement and on a
-   neighbour update below, so existing campfires update when their fuel block is replaced.
+   neighbor update below, so existing campfires update when their fuel block is replaced.
 3. **Tooltip** ([client_scripts/tooltips.js](../../kubejs/client_scripts/tooltips.js) `addTooltips`, the Decor block
    near 437): one line on every fuel block item, e.g. "Keeps a campfire on top lit in rain", ids through `i.` keys.
    Tooltips are client side and cannot read the tag, so list the same ids as step 1 (or use a tag-driven tooltip if
@@ -99,7 +99,7 @@ IP `petcoke_block`, Botania `blaze_block`, magma, hay, FD straw and rice bales, 
   tooltip is true for every fire the pack has.
 
 ### Gotchas
-- Changing a block's `SIGNAL_FIRE` source changes chunk-saved state only on the next neighbour update; old campfires
+- Changing a block's `SIGNAL_FIRE` source changes chunk-saved state only on the next neighbor update; old campfires
   on coal blocks keep short smoke until touched.
 - Tags are server data (`/reload`); the mixin needs a patcherMod build and restart; the tooltip needs a client reload.
 
@@ -123,7 +123,7 @@ A cheap block, available before the anvil, that only renames items: costs no lev
   and `oven/OvenMenu.java` are the pattern (block, block item, menu type, client screen).
 
 ### Build
-1. Search for a 1.19.2 Forge "renaming table" mod first (licence, sides); if a GPL / MIT one is small, port it per
+1. Search for a 1.19.2 Forge "renaming table" mod first (license, sides); if a GPL / MIT one is small, port it per
    the `port` skill; else own code (recommended below).
 2. Own: `rename/RenameRegistry.java` (block `creativeengineering:renaming_table`, item, `MenuType`),
    `rename/RenameMenu extends AnvilMenu` overriding `createResult` to copy the input and set only the custom name
@@ -138,7 +138,7 @@ A cheap block, available before the anvil, that only renames items: costs no lev
 - **Source (TODO decision).** Recommendation: own patcherMod block; the menu is about 80 lines on top of `AnvilMenu`.
 - **"Unbreakable".** Read as "never wears out like an anvil" (normal hardness, mineable). The other reading
   (bedrock hardness) would make it unmovable; recommend not.
-- **Name length / formatting.** Same 50-character limit as the anvil; no colour codes.
+- **Name length / formatting.** Same 50-character limit as the anvil; no color codes.
 
 ### Gotchas
 - `AnvilMenu` also checks `player.getAbilities().instabuild` for "Too Expensive"; cost 0 sidesteps it.
@@ -159,7 +159,7 @@ fit Curios slots (a scarf shown on the head, an apron on the body).
 
 ### Now
 - Wardrobe 1.0.3 (`mods/wardrobe-1.0.3-1.19.2.jar`, MCreator, package `net.mcreator.warbrode`, needs Curios). Its
-  armour pieces (`*_helmet`, `*_chestplate`, `*_leggings`, `*_boots`, under armour) are `ArmorItem`s and already go on
+  armor pieces (`*_helmet`, `*_chestplate`, `*_leggings`, `*_boots`, under armor) are `ArmorItem`s and already go on
   stands. The Curios-only items (verified from the jar's `data/curios/tags/items`):
   - head (21): 16 `wardrobe:<colour>_scarf`, `breathing_reed`, `book_hat`, `book_hat_2`, `book_hat_3`;
   - body (7): `leather_apron`, `hardened_leather_arpon` (sic), `chiton`, `brewing_apron`, `fishing_apron`,
@@ -214,7 +214,7 @@ chance, from tables that differ by biome and lean hard on Luck.
   leaves a hand pan open; owner 2026-10-30 there: find a gold pan, plus a sluice model and texture.
 - No pan, sluice or sieve item exists (no `*_pan` other than `creativeengineering:cake_pan`, no sifting mod).
 - Existing gold-from-washing: `create:splashing/red_sand` (gold nuggets 12.5 %), `splashing/soul_sand` (2 %).
-- Loot tables honour Luck through `bonus_rolls` and per-entry `quality`; the pack's loot scripts live in
+- Loot tables honor Luck through `bonus_rolls` and per-entry `quality`; the pack's loot scripts live in
   `kubejs/server_scripts/loot/` (LootJS layer).
 
 ### Build
@@ -273,7 +273,7 @@ in quilted wool, firework star). The dreamcatcher takes feathers too.
   (verified in the jar): crushing 1 feather -> **4 fluff**; scrap arrows -> 25 % fluff; `feather_from_fluff` 4 fluff ->
   1 feather (shapeless). Hearth and Harvest's chicken plucking (hearth_and_harvest.md, HNH-13) is a feather source.
 - `#forge:feathers` = feather, duck feather (live tag dump); fluff is not in it. No script mentions fluff.
-- The recipes (verified in the jars): Handcrafted cushions 6 wool + 3 **feather item** -> 8 (16 colours,
+- The recipes (verified in the jars): Handcrafted cushions 6 wool + 3 **feather item** -> 8 (16 colors,
   `handcrafted:<colour>_cushion`); Wares `delivery_table` uses `#forge:feathers`; Domestication Innovation
   `feather_on_a_stick` uses `#forge:feathers`; Wardrobe `fletchers_hat_helmet` uses the feather item; Wardrobe
   `fishing_apron` uses 1 string; dbExtended `rec_<colour>_quilted_wool` uses 2 wool + 2 string; Dreamcatcher `dream`
@@ -281,7 +281,7 @@ in quilted wool, firework star). The dreamcatcher takes feathers too.
   (burst shape). IE's `cushion` is hemp fabric only.
 
 ### Build
-1. Cushions: for each Handcrafted colour, `global.NCH.shaped` 6 wool + 3 fluff -> 8 (same as feathers, so fluff is 4x
+1. Cushions: for each Handcrafted color, `global.NCH.shaped` 6 wool + 3 fluff -> 8 (same as feathers, so fluff is 4x
    as efficient per feather crushed); leave the feather recipe.
 2. Feather crafts: `global.NCH.replaceInput` on `wares:delivery_table`, `domesticationinnovation:feather_on_a_stick`,
    `wardrobe:fletchers_hat_recipe` swapping the feather for a pack tag `#creativeengineering:feather_like` (feather,

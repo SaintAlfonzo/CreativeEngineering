@@ -1,6 +1,6 @@
 # Log warnings and errors: what shows up every launch
 
-A catalogue of the warnings and errors that appear in every client startup, from any mod: what each message is,
+A catalog of the warnings and errors that appear in every client startup, from any mod: what each message is,
 which mods produce it, whether it matters, and how to acknowledge it. Written 2026-10-24 from a real client startup
 (`logs/latest.log`, 18071 lines, about 5700 WARN/ERROR lines; the two earlier 2026-10-24 launches match within a handful of lines).
 Section 10 adds a dedicated server startup on 1.2.00 (2026-11-03), split into pack-side and mod-side.
@@ -113,7 +113,7 @@ define that variable. The slot renders the checkerboard. `#missingno` is the sam
 | Mod | Lines | What is affected |
 |---|---|---|
 | redeco | 941 (221 unique) | Fences (`*_plank_fence_east/north/south/west`) and upholstered chairs (`<colour>_upholstered_<wood>_chair_back_<n>`) and `redeco:item` equivalents (16). Example from the jar: `acacia_plank_fence_east` supplies textures `0`, `3` and `particle` to a parent that also reads another slot. Likely a real visual flaw on the fence connections and chair backs. |
-| interiors | 306 (306 unique) | `block/chair/<colour>_chair_{none,left,right,both}` and the `_cropped` forms, `block/floor_chair/...` (128), 34 item models. Every colour of chair and floor chair. Likely a visual flaw unless the textures come from a block-entity renderer (not verified). |
+| interiors | 306 (306 unique) | `block/chair/<colour>_chair_{none,left,right,both}` and the `_cropped` forms, `block/floor_chair/...` (128), 34 item models. Every color of chair and floor chair. Likely a visual flaw unless the textures come from a block-entity renderer (not verified). |
 | vintageimprovements | 24 | `block/belt_grinder`, 16 of them from the `#missing` slot. Belt grinder block is a block-entity model; check in game. |
 | alexsabnormalities | 12 | whale tooth doors (`cachalot_whale_tooth_door_*`), uses `#missingno`. |
 | vinery_backport | 10 | `block/wine_box/*` - our own port; this one is ours to fix. |
@@ -272,7 +272,7 @@ railways-common` (the SecurityCraft camera tick redirect is skipped because Rail
 PRIVATE @Overwrite ... rubidium`, `Method overwrite conflict for setMaxUses` (asynclocator vs MoreJS) and `getPalettes`
 (immersiveengineering vs MoreJS), `Found problematic active MixinExtras instance at ca.fxco.memoryleakfix.mixinextras`.
 The conflict ones mean one of two mods did not get its mixin applied; the first mod loaded wins. Only worth following
-up if the feature of the losing mod is broken (SecurityCraft camera behaviour in a Railways world is the one case here).
+up if the feature of the losing mod is broken (SecurityCraft camera behavior in a Railways world is the one case here).
 
 ### 4.5 Our own mod lines
 

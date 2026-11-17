@@ -309,7 +309,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | YUNG's Better Strongholds | `betterstrongholds` | `YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar` |  |
 | both | YUNG's Better Witch Huts | `betterwitchhuts` | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` |  |
 | both | YUNG's Extras | `yungsextras` | `YungsExtras-1.19.2-Forge-3.1.0.jar` |  |
-| both | Yuushya Modelling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
+| both | Yuushya Modeling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
 | both | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
 | both | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
 | both | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |
@@ -322,7 +322,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Tax Free Levels | `taxfreelevels` | `TaxFreeLevels-1.4.23-forge-1.20.1.jar` | Server-side enchanting cost |
 | client | Better Third Person | `betterthirdperson` | `BetterThirdPerson-Forge-1.19-1.9.0.jar` | Camera |
 | client | BetterF3 | `betterf3` | `BetterF3-4.0.1-Forge-1.19.2.jar` | F3 screen |
-| client | Cherished Worlds | `cherishedworlds` | `cherishedworlds-forge-6.0.5+1.19.4.jar` | World-list favourites |
+| client | Cherished Worlds | `cherishedworlds` | `cherishedworlds-forge-6.0.5+1.19.4.jar` | World-list favorites |
 | client | Clear Void | `clearvoid` | `clearvoid-forge-1.3.0.jar` | Removes void fog/skybox band |
 | client | Controlling | `controlling` | `Controlling-forge-1.19.2-10.0+7.jar` | Keybind menu search |
 | client | Create Questing | `create_questing` | `Create_Questing-FORGE-1.19.2-1.0.0.jar` | Create-styled FTB Quests GUI |
@@ -330,10 +330,10 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | client | Durability Tooltip | `durabilitytooltip` | `durabilitytooltip-1.1.6a-forge-mc1.19.jar` | Tooltips |
 | client | Effective (Forge) | `effective_fg` | `effective_fg-1.3.4.jar` | Visual/ambient effects |
 | client | EnchantmentDescriptions | `enchdesc` | `EnchantmentDescriptions-Forge-1.19.2-13.0.20.jar` | Enchantment tooltips |
-| client | EntityCulling | `entityculling` | `entityculling-forge-1.6.1-mc1.19.2.jar` | Rendering optimisation |
+| client | EntityCulling | `entityculling` | `entityculling-forge-1.6.1-mc1.19.2.jar` | Rendering optimization |
 | client | Highlighter | `highlighter` | `Highlighter-1.19.1-1.1.4.jar` | New-item highlight |
 | client | Iceberg | `iceberg` | `Iceberg-1.19.2-forge-1.1.4.jar` | Library for Legendary Tooltips / Highlighter |
-| client | ImmediatelyFast | `immediatelyfast` | `ImmediatelyFast-Forge-1.4.0+1.19.2.jar` | Rendering optimisation |
+| client | ImmediatelyFast | `immediatelyfast` | `ImmediatelyFast-Forge-1.4.0+1.19.2.jar` | Rendering optimization |
 | client | Just Enough Breeding | `justenoughbreeding` | `justenoughbreeding-forge-1.19.2-1.4.0.jar` | JEI add-on |
 | both | Just Enough Effect Descriptions | `jeed` | `jeed-1.19.2-2.1.4.jar` | JEI add-on. Moved client -> both 2026-10-11: it registers the `jeed:effect_provider` / `potion_provider` recipe types on both sides (only its JEI code is client-gated), and recipes reach players from the server, so without it there MEED's data and JEED's own providers never show on a dedicated server |
 | client | Just Enough Immersive Multiblocks | `jeimultiblocks` | `jeimultiblocks-1.19.2-0.0.3.jar` | JEI add-on |
@@ -422,7 +422,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Debugify Reforged | `debugify` | `debugify-1.1.0-forge-1.19.2.jar` | Vanilla 1.19.2 bug fixes (Mojira mixins, server and client). Ships with `config/debugify.json` (`configs_edited/root_config/debugify.json`, written by `tools/scratch_query/tpf_debugify_cfg.py`): `default_disabled` true, 9 fixes on (the r1114 server set plus MC-237493); MC-121706 stays off because it crashes the boot. Client fixes are untested (CQ-TPF-31 to -91). [thirdparty_fixes.md](feature_writeup/thirdparty_fixes.md) |
 | both | Rebirth: Paintings | `rebirth_paintings` | `REBIRTH Paintings 5.0.0 Backport 1.19.2.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | both | Splash Milk | `splash_milk` | `splash_milk-1.19.2-1.4.0.jar` | Splash milk item + recipes. Added 2026-10-13 |
-| both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Art donor for Creative Labels, gameplay off (items hidden, recipes removed, tooltip handler cancelled; sticky_notes.md 3.13). Added 2026-10-13 |
+| both | Sticky It! | `sticky_it` | `sticky_it-1.2.1-forge-1.19.2.jar` | Art donor for Creative Labels, gameplay off (items hidden, recipes removed, tooltip handler canceled; sticky_notes.md 3.13). Added 2026-10-13 |
 | both | Subterrestrial | `subterrestrial` | `subterrestrial-forge-1.19.2-2.0.0.jar` | Structures only (registers its own structure type). Added 2026-10-13 |
 | both | Too Many Paintings! | `toomanypaintings` | `toomanypaintings-26.08.16-1.19-forge.jar` | Painting variants (Forge registry, synced). Added 2026-10-13 |
 | both | Underground Bunkers | `underground_bunkers` | `UndergroundBunkers-1.0.4-1.19.2-1.20.4-forge.jar` | Structures only (data-only jar) Added 2026-10-13 |

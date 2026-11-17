@@ -206,24 +206,24 @@ Brief: [briefs/ui_names.md](briefs/ui_names.md). Built since: `ui/names #8` (bel
 
 Restart the game, or reload resources with F3+T (lang only).
 
-- [ ] **NM-01 JEI names:** search `@displaydelight` in JEI → every entry has a name ("Placed ...", "Plated ...",
+- [ ] **NM-01 JEI names:** search `@displaydelight` in JEI -> every entry has a name ("Placed ...", "Plated ...",
   "Small Plated ...", "Food Plate", "Small Food Plate"), no `block.displaydelight.` keys.
-- [ ] **NM-02 Placed bowl food:** sneak-place Beef Stew on the floor and look at it with WTHIT → "Placed Beef Stew".
-- [ ] **NM-03 Plated:** place a Food Plate, sneak-place a Hamburger on it → WTHIT "Plated Hamburger"; breaking it
+- [ ] **NM-02 Placed bowl food:** sneak-place Beef Stew on the floor and look at it with WTHIT -> "Placed Beef Stew".
+- [ ] **NM-03 Plated:** place a Food Plate, sneak-place a Hamburger on it -> WTHIT "Plated Hamburger"; breaking it
   drops the hamburger and the plate.
-- [ ] **NM-04 Small plate:** a Small Food Plate with a Slice of Apple Pie → WTHIT "Small Plated Slice of Apple Pie".
-- [ ] **NM-05 Rustic Delight crops:** plant bell pepper, cotton and coffee seeds → WTHIT "Bell Peppers", "Cotton",
+- [ ] **NM-04 Small plate:** a Small Food Plate with a Slice of Apple Pie -> WTHIT "Small Plated Slice of Apple Pie".
+- [ ] **NM-05 Rustic Delight crops:** plant bell pepper, cotton and coffee seeds -> WTHIT "Bell Peppers", "Cotton",
   "Coffee Plant" at every growth stage.
-- [ ] **NM-06 Potted wild plants:** put Wild Bell Peppers, Wild Coffee and Wild Cotton in flower pots → WTHIT
+- [ ] **NM-06 Potted wild plants:** put Wild Bell Peppers, Wild Coffee and Wild Cotton in flower pots -> WTHIT
   "Potted Wild Bell Peppers", "Potted Wild Coffee", "Potted Wild Cotton".
-- [x] **NM-07 /dumpnames:** in single player run `/dumpnames` → green chat line with "missing: block a/b, item ...",
+- [x] **NM-07 /dumpnames:** in single player run `/dumpnames` -> green chat line with "missing: block a/b, item ...",
   no yellow dedicated-server warning, and `kubejs/exported/names.json` exists. No errors in `logs/latest.log`
   (grep `dumpnames`). PASSED 2026-10-02 21:54 (through `/dumpall`): `missing: block 237/15007, item 65/18413, effect
   1/142, enchantment 0/100, entity 53/526, fluid 2/483, profession 20/42, potion 2/119`.
 - [x] **NM-08 Catalog from the dump:** `python3 tools/missing_names.py` prints `source: dump`, and section 9 says "from
   the `/dumpnames` export". Tell Claude, so the triage in section 9 can be redone from real data. PASSED 2026-10-02
   22:11; triage redone the same day.
-- [ ] **NM-14 Splash:** open the title screen repeatedly (or F3+T to reload) → `Stience!` shows among the splashes;
+- [ ] **NM-14 Splash:** open the title screen repeatedly (or F3+T to reload) -> `Stience!` shows among the splashes;
   the rest of the list still shows. Queue CQ-NM-01.
 
 ## 8. History

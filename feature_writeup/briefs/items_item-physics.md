@@ -16,7 +16,7 @@ SRG names. "Verified" means read from one of them.
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #2 | Classify modded items (families) | Planned | medium: rerun the audit on the 2026-10-30 dump, settle 9.6, then a generator mode writes `physics/family/*` tags; KubeJS maps families to behaviour |
+| #2 | Classify modded items (families) | Planned | medium: rerun the audit on the 2026-10-30 dump, settle 9.6, then a generator mode writes `physics/family/*` tags; KubeJS maps families to behavior |
 | #6 | Light items skim on water; lavaproof items float on lava | Planned | small-medium: one `Buoyancy` query, extend the existing `updatePre` TAIL inject, a new tag, a config section |
 | #5 | Golden egg gets gravity | Planned | tiny once reproduced: one tag line; folds into #2 (egg -> `organic` family) |
 | #7 | Player speed in lava; Lava Vision speed | Planned | investigation, then a small `LivingEntity#travel` mixin |
@@ -40,7 +40,7 @@ Status **Planned** / Work KubeJS / tools / TODO `items/item-physics #2` (item_ph
 
 ### Goal
 Every item gets exactly one of the 21 material families of [item_physics.md](../item_physics.md) 9.2, and the family
-fixes its water and fire behaviour through the existing four physics tags. Nothing falls to the default by accident:
+fixes its water and fire behavior through the existing four physics tags. Nothing falls to the default by accident:
 89% of items (17,650 of 19,743 in the tag-only run) are in no physics tag today and sink and burn.
 
 ### Now
@@ -71,7 +71,7 @@ fixes its water and fire behaviour through the existing four physics tags. Nothi
    `apply`): one JSON item tag per family, `creativecompat:physics/family/<family>`, under
    `kubejs/data/creativeengineering/tags/items/physics/family/`; reads the manual-override list so every item is in
    exactly one family tag. Write ids, not nested tags, so a reload never depends on tag order.
-4. **Map families to behaviour** in `item_physics_tags.js` through `global.tags` only:
+4. **Map families to behavior** in `item_physics_tags.js` through `global.tags` only:
    `t.add(e, PHYSICS_TAG.floats, ['#creativecompat:physics/family/wood', ...])`, sinks / fireproof / lavaproof the
    same way (table 9.2); skim families go to the new `physics/skims` tag of #6 (and to floats until #6 ships). Replace
    `physicsFromTag` (F6) and shrink the hand lists to the override list.
@@ -138,7 +138,7 @@ other floaters settle without bobbing forever; items that survive lava float on 
    to `configs_edited/root_config/creativeengineering-common.toml`.
 4. KubeJS: fill `physics/skims` from the foliage / fibre / light_powder families (#2) or, if #2 is not in yet, from the
    leaves / flowers / wool / paper / feathers lines of the floats list, through `global.tags`.
-5. Writeup: item_physics.md 10 (built), 2.1 (third water behaviour), 5 (file map).
+5. Writeup: item_physics.md 10 (built), 2.1 (third water behavior), 5 (file map).
 
 ### Ids and data
 - New tag `creativecompat:physics/skims` (item). Existing `physics/lavaproof`.
@@ -193,7 +193,7 @@ move through lava about as fast as through water.
 2. **Lava Vision speed:** a common mixin on `LivingEntity#travel`, `@ModifyArg` on the lava branch's `moveRelative`
    speed and `@ModifyConstant` on its 0.5 drag: when the entity has `alexsmobs:lava_vision` (resolved once from
    `ForgeRegistries.MOB_EFFECTS`, null when AM is absent), use the water values (0.02 * swim speed, drag 0.8).
-   If Forge's `FluidType` path applies, hook `ForgeMod.LAVA_TYPE` behaviour there instead.
+   If Forge's `FluidType` path applies, hook `ForgeMod.LAVA_TYPE` behavior there instead.
 3. **Slower lava without it (optional, per decision):** scale the lava drag by a config factor `[lava_movement]
    playerDrag` (default 0.5 = vanilla), players only.
 4. Config switch `[lava_movement] lavaVisionSwimming = true`; writeup section 10.4 -> built.
@@ -219,7 +219,7 @@ move through lava about as fast as through water.
 ### Tests
 - **IP-new7 Lava Vision swim:** in a lava pool with Fire Resistance, time 10 blocks of swimming without and with Lava
   Vision: with it, about the water time.
-- **IP-new8 Netherite set:** full netherite armour in lava: same speed as IP-new7 with the effect.
+- **IP-new8 Netherite set:** full netherite armor in lava: same speed as IP-new7 with the effect.
 
 ---
 

@@ -5,7 +5,7 @@ Status: **carved 2026-11-02, built, installed 2026-11-02 23:16 (`mods/creativewo
 
 Written for: the owner and agents working on the split. Own mod `creativeworldgen` (development/creativeWorldgen,
 `creativeworldgen-1.0.0.jar`, side both): the pack's world generation and fauna. A bundle like Creative Delight: its
-own Java plus two nested members. Same behaviour as before the carve; every registry id keeps `creativeengineering:`.
+own Java plus two nested members. Same behavior as before the carve; every registry id keeps `creativeengineering:`.
 
 ## 0. At a glance
 

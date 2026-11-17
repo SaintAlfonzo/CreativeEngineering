@@ -51,21 +51,21 @@ samples from the pack's noise settings (Terralith + Tectonic).
 
 Share = the biome's % of its layer in the sample set (surface or underground); result = after the last solve.
 
-| Dimension | Biome | Multiplier | Share → result | Solver note |
+| Dimension | Biome | Multiplier | Share -> result | Solver note |
 |---|---|---|---|---|
-| Overworld | `terralith:skylands_spring` / `summer` / `autumn` / `winter` | 0.15 | 0.065 / 0.08 / 0.225 / 0.225 → 0.01 / 0.01 / 0.035 / 0.035 % | |
-| Overworld | `terralith:volcanic_peaks` | 1.5 | 0.205 → 0.27 % | aimed 0.31 % |
-| Overworld | `terralith:yellowstone` | 1.5 | 3.175 → 4.775 % | |
-| Overworld | `terralith:yosemite_cliffs`, `yosemite_lowlands` | 1.5 | 0.14 / 0.11 → 0.2 / 0.16 % | |
+| Overworld | `terralith:skylands_spring` / `summer` / `autumn` / `winter` | 0.15 | 0.065 / 0.08 / 0.225 / 0.225 -> 0.01 / 0.01 / 0.035 / 0.035 % | |
+| Overworld | `terralith:volcanic_peaks` | 1.5 | 0.205 -> 0.27 % | aimed 0.31 % |
+| Overworld | `terralith:yellowstone` | 1.5 | 3.175 -> 4.775 % | |
+| Overworld | `terralith:yosemite_cliffs`, `yosemite_lowlands` | 1.5 | 0.14 / 0.11 -> 0.2 / 0.16 % | |
 | Overworld | rarity floor + targets: 41 rare biomes lifted (37 surface, 4 cave), 9 never-spawning biomes targeted (volcanic crater included), 14 donors (tables below) | see below | | 2026-10-19 |
-| End | `nullscape:shadowlands` | 0.75 (0.5 before 2026-11-02, row #9) | 18.933 → about 14.2 % (old samples; aimed about 16 % of the 21.3 % share) | confirm in the boot log (SQ-WG-BIOME-SHADOW) |
-| End | `nullscape:void_barrens` | 2 (0.75 before 2026-10-30) | 2.71 → 5.41 % (2026-10-26 samples) | |
-| End | `nullscape:crystal_peaks` | 3 (0.25 before 2026-10-30) | 1.315 → 3.95 % (2026-10-26 samples) | |
-| Nether | `minecraft:nether_wastes` | 2.0 | 34.9 → 46.8 % | aimed 69.8 % |
-| Nether | `minecraft:basalt_deltas` | 0.666 | 18.6 → 12.4 % | |
-| Nether | `minecraft:crimson_forest` | 0.75 | 21.4 → 16.067 % | |
-| Nether | `minecraft:warped_forest` | 0.75 | 7.7 → 5.767 % | |
-| Nether | `minecraft:soul_sand_valley` | 1.25 | 17.4 → 18.9 % | aimed 21.8 % |
+| End | `nullscape:shadowlands` | 0.75 (0.5 before 2026-11-02, row #9) | 18.933 -> about 14.2 % (old samples; aimed about 16 % of the 21.3 % share) | confirm in the boot log (SQ-WG-BIOME-SHADOW) |
+| End | `nullscape:void_barrens` | 2 (0.75 before 2026-10-30) | 2.71 -> 5.41 % (2026-10-26 samples) | |
+| End | `nullscape:crystal_peaks` | 3 (0.25 before 2026-10-30) | 1.315 -> 3.95 % (2026-10-26 samples) | |
+| Nether | `minecraft:nether_wastes` | 2.0 | 34.9 -> 46.8 % | aimed 69.8 % |
+| Nether | `minecraft:basalt_deltas` | 0.666 | 18.6 -> 12.4 % | |
+| Nether | `minecraft:crimson_forest` | 0.75 | 21.4 -> 16.067 % | |
+| Nether | `minecraft:warped_forest` | 0.75 | 7.7 -> 5.767 % | |
+| Nether | `minecraft:soul_sand_valley` | 1.25 | 17.4 -> 18.9 % | aimed 21.8 % |
 
 **Rarity floor and targets (user, 2026-10-19: "allow the rarest biomes to spawn more frequently, take the chance
 from the highest frequency biomes"; then "widen the surface biome spawn requirements to allow reasonable spawning
@@ -87,82 +87,82 @@ frequency").** `python3 tools/biome_rarity_floor.py` (defaults `--floor 0.15 --c
 
 Never-spawning surface biomes (all found by `/locate biome` in a new scratch world, 71 to 2,548 blocks away):
 
-| Biome | Layer | Multiplier / target | Share → result | Solver note |
+| Biome | Layer | Multiplier / target | Share -> result | Solver note |
 |---|---|---:|---|---|
-| `minecraft:stony_shore` | surface | target 0.3 % | 0 → 0.305 % |  |
-| `terralith:basalt_cliffs` | surface | target 0.3 % | 0 → 0.295 % |  |
-| `terralith:caldera` | surface | target 0.3 % | 0 → 0.24 % | aimed 0.3% |
-| `terralith:frozen_cliffs` | surface | target 0.3 % | 0 → 0.295 % |  |
-| `terralith:granite_cliffs` | surface | target 0.3 % | 0 → 0.305 % |  |
-| `terralith:shield_clearing` | surface | target 0.15 % | 0 → 0.155 % |  |
-| `terralith:valley_clearing` | surface | target 0.3 % | 0 → 0.3 % |  |
-| `terralith:volcanic_crater` | surface | target 0.15 % | 0 → 0.15 % |  |
-| `terralith:white_cliffs` | surface | target 0.3 % | 0 → 0.29 % |  |
+| `minecraft:stony_shore` | surface | target 0.3 % | 0 -> 0.305 % |  |
+| `terralith:basalt_cliffs` | surface | target 0.3 % | 0 -> 0.295 % |  |
+| `terralith:caldera` | surface | target 0.3 % | 0 -> 0.24 % | aimed 0.3% |
+| `terralith:frozen_cliffs` | surface | target 0.3 % | 0 -> 0.295 % |  |
+| `terralith:granite_cliffs` | surface | target 0.3 % | 0 -> 0.305 % |  |
+| `terralith:shield_clearing` | surface | target 0.15 % | 0 -> 0.155 % |  |
+| `terralith:valley_clearing` | surface | target 0.3 % | 0 -> 0.3 % |  |
+| `terralith:volcanic_crater` | surface | target 0.15 % | 0 -> 0.15 % |  |
+| `terralith:white_cliffs` | surface | target 0.3 % | 0 -> 0.29 % |  |
 
 Lifted:
 
-| Biome | Layer | Multiplier / target | Share → result | Solver note |
+| Biome | Layer | Multiplier / target | Share -> result | Solver note |
 |---|---|---:|---|---|
-| `terralith:lush_desert` | surface | 30.0 | 0.005 → 0.135 % | aimed 0.15% |
-| `terralith:alpha_islands_winter` | surface | 15.0 | 0.01 → 0.15 % |  |
-| `terralith:lavender_forest` | surface | 10.0 | 0.015 → 0.15 % |  |
-| `terralith:savanna_slopes` | surface | 10.0 | 0.015 → 0.145 % |  |
-| `terralith:red_oasis` | surface | 7.5 | 0.02 → 0.15 % |  |
-| `terralith:siberian_grove` | surface | 6.0 | 0.025 → 0.15 % |  |
-| `terralith:warm_river` | surface | 6.0 | 0.025 → 0.145 % |  |
-| `terralith:ancient_sands` | surface | 5.0 | 0.03 → 0.15 % |  |
-| `terralith:painted_mountains` | surface | 5.0 | 0.03 → 0.16 % |  |
-| `terralith:rocky_shrubland` | surface | 4.29 | 0.035 → 0.15 % |  |
-| `minecraft:mushroom_fields` | surface | 3.75 | 0.04 → 0.06 % | aimed 0.15% |
-| `terralith:alpha_islands` | surface | 3.75 | 0.04 → 0.15 % |  |
-| `terralith:ashen_savanna` | surface | 3.75 | 0.04 → 0.125 % | aimed 0.15% |
-| `terralith:snowy_maple_forest` | surface | 3.33 | 0.045 → 0.155 % |  |
-| `terralith:cloud_forest` | surface | 2.73 | 0.055 → 0.15 % |  |
-| `terralith:desert_canyon` | surface | 2.5 | 0.06 → 0.15 % |  |
-| `terralith:amethyst_rainforest` | surface | 2.14 | 0.07 → 0.145 % |  |
-| `terralith:desert_oasis` | surface | 2.14 | 0.07 → 0.105 % | aimed 0.15% |
-| `terralith:sakura_valley` | surface | 2.0 | 0.075 → 0.15 % |  |
-| `terralith:snowy_shield` | surface | 1.76 | 0.085 → 0.145 % |  |
-| `minecraft:eroded_badlands` | surface | 1.67 | 0.09 → 0.135 % | aimed 0.15% |
-| `terralith:haze_mountain` | surface | 1.67 | 0.09 → 0.15 % |  |
-| `terralith:sakura_grove` | surface | 1.58 | 0.095 → 0.15 % |  |
-| `terralith:wintry_lowlands` | surface | 1.58 | 0.095 → 0.14 % |  |
-| `minecraft:flower_forest` | surface | 1.5 | 0.1 → 0.15 % |  |
-| `minecraft:windswept_gravelly_hills` | surface | 1.5 | 0.1 → 0.15 % |  |
-| `terralith:white_mesa` | surface | 1.5 | 0.1 → 0.15 % |  |
-| `minecraft:ice_spikes` | surface | 1.43 | 0.105 → 0.145 % |  |
-| `terralith:amethyst_canyon` | surface | 1.43 | 0.105 → 0.15 % |  |
-| `terralith:desert_spires` | surface | 1.43 | 0.105 → 0.155 % |  |
-| `minecraft:sunflower_plains` | surface | 1.36 | 0.11 → 0.14 % |  |
-| `terralith:emerald_peaks` | surface | 1.36 | 0.11 → 0.15 % |  |
-| `terralith:moonlight_grove` | surface | 1.36 | 0.11 → 0.15 % |  |
-| `terralith:warped_mesa` | surface | 1.36 | 0.11 → 0.15 % |  |
-| `minecraft:windswept_hills` | surface | 1.2 | 0.125 → 0.14 % |  |
-| `terralith:bryce_canyon` | surface | 1.15 | 0.13 → 0.16 % |  |
-| `terralith:alpine_grove` | surface | 1.11 | 0.135 → 0.15 % |  |
-| `terralith:cave/frostfire_caves` | underground | 2.48 | 0.483 → 1.196 % |  |
-| `terralith:cave/underground_jungle` | underground | 1.68 | 0.715 → 1.203 % |  |
-| `terralith:cave/mantle_caves` | underground | 1.61 | 0.746 → 0.725 % | aimed 1.203% |
-| `terralith:cave/diorite_caves` | underground | 1.18 | 1.013 → 1.188 % |  |
+| `terralith:lush_desert` | surface | 30.0 | 0.005 -> 0.135 % | aimed 0.15% |
+| `terralith:alpha_islands_winter` | surface | 15.0 | 0.01 -> 0.15 % |  |
+| `terralith:lavender_forest` | surface | 10.0 | 0.015 -> 0.15 % |  |
+| `terralith:savanna_slopes` | surface | 10.0 | 0.015 -> 0.145 % |  |
+| `terralith:red_oasis` | surface | 7.5 | 0.02 -> 0.15 % |  |
+| `terralith:siberian_grove` | surface | 6.0 | 0.025 -> 0.15 % |  |
+| `terralith:warm_river` | surface | 6.0 | 0.025 -> 0.145 % |  |
+| `terralith:ancient_sands` | surface | 5.0 | 0.03 -> 0.15 % |  |
+| `terralith:painted_mountains` | surface | 5.0 | 0.03 -> 0.16 % |  |
+| `terralith:rocky_shrubland` | surface | 4.29 | 0.035 -> 0.15 % |  |
+| `minecraft:mushroom_fields` | surface | 3.75 | 0.04 -> 0.06 % | aimed 0.15% |
+| `terralith:alpha_islands` | surface | 3.75 | 0.04 -> 0.15 % |  |
+| `terralith:ashen_savanna` | surface | 3.75 | 0.04 -> 0.125 % | aimed 0.15% |
+| `terralith:snowy_maple_forest` | surface | 3.33 | 0.045 -> 0.155 % |  |
+| `terralith:cloud_forest` | surface | 2.73 | 0.055 -> 0.15 % |  |
+| `terralith:desert_canyon` | surface | 2.5 | 0.06 -> 0.15 % |  |
+| `terralith:amethyst_rainforest` | surface | 2.14 | 0.07 -> 0.145 % |  |
+| `terralith:desert_oasis` | surface | 2.14 | 0.07 -> 0.105 % | aimed 0.15% |
+| `terralith:sakura_valley` | surface | 2.0 | 0.075 -> 0.15 % |  |
+| `terralith:snowy_shield` | surface | 1.76 | 0.085 -> 0.145 % |  |
+| `minecraft:eroded_badlands` | surface | 1.67 | 0.09 -> 0.135 % | aimed 0.15% |
+| `terralith:haze_mountain` | surface | 1.67 | 0.09 -> 0.15 % |  |
+| `terralith:sakura_grove` | surface | 1.58 | 0.095 -> 0.15 % |  |
+| `terralith:wintry_lowlands` | surface | 1.58 | 0.095 -> 0.14 % |  |
+| `minecraft:flower_forest` | surface | 1.5 | 0.1 -> 0.15 % |  |
+| `minecraft:windswept_gravelly_hills` | surface | 1.5 | 0.1 -> 0.15 % |  |
+| `terralith:white_mesa` | surface | 1.5 | 0.1 -> 0.15 % |  |
+| `minecraft:ice_spikes` | surface | 1.43 | 0.105 -> 0.145 % |  |
+| `terralith:amethyst_canyon` | surface | 1.43 | 0.105 -> 0.15 % |  |
+| `terralith:desert_spires` | surface | 1.43 | 0.105 -> 0.155 % |  |
+| `minecraft:sunflower_plains` | surface | 1.36 | 0.11 -> 0.14 % |  |
+| `terralith:emerald_peaks` | surface | 1.36 | 0.11 -> 0.15 % |  |
+| `terralith:moonlight_grove` | surface | 1.36 | 0.11 -> 0.15 % |  |
+| `terralith:warped_mesa` | surface | 1.36 | 0.11 -> 0.15 % |  |
+| `minecraft:windswept_hills` | surface | 1.2 | 0.125 -> 0.14 % |  |
+| `terralith:bryce_canyon` | surface | 1.15 | 0.13 -> 0.16 % |  |
+| `terralith:alpine_grove` | surface | 1.11 | 0.135 -> 0.15 % |  |
+| `terralith:cave/frostfire_caves` | underground | 2.48 | 0.483 -> 1.196 % |  |
+| `terralith:cave/underground_jungle` | underground | 1.68 | 0.715 -> 1.203 % |  |
+| `terralith:cave/mantle_caves` | underground | 1.61 | 0.746 -> 0.725 % | aimed 1.203% |
+| `terralith:cave/diorite_caves` | underground | 1.18 | 1.013 -> 1.188 % |  |
 
 Donors:
 
-| Biome | Layer | Multiplier / target | Share → result | Solver note |
+| Biome | Layer | Multiplier / target | Share -> result | Solver note |
 |---|---|---:|---|---|
-| `terralith:forested_highlands` | surface | 0.736 | 1 → 0.715 % |  |
-| `terralith:alpine_highlands` | surface | 0.736 | 1.04 → 0.72 % | aimed 0.765% |
-| `terralith:glacial_chasm` | surface | 0.736 | 1.115 → 0.81 % |  |
-| `minecraft:meadow` | surface | 0.736 | 1.285 → 0.96 % |  |
-| `terralith:shield` | surface | 0.736 | 1.335 → 0.95 % |  |
-| `terralith:rocky_mountains` | surface | 0.736 | 1.48 → 1.12 % |  |
-| `minecraft:snowy_taiga` | surface | 0.736 | 1.52 → 1.135 % |  |
-| `terralith:brushland` | surface | 0.736 | 1.655 → 1.205 % |  |
-| `minecraft:taiga` | surface | 0.736 | 1.74 → 1.2 % | aimed 1.28% |
-| `minecraft:snowy_plains` | surface | 0.736 | 1.87 → 1.36 % |  |
-| `minecraft:plains` | surface | 0.736 | 2.82 → 2.085 % |  |
-| `minecraft:forest` | surface | 0.736 | 3.545 → 2.585 % |  |
-| `minecraft:lush_caves` | underground | 0.941 | 13.199 → 12.412 % |  |
-| `terralith:cave/deep_caves` | underground | 0.941 | 18.167 → 17.623 % |  |
+| `terralith:forested_highlands` | surface | 0.736 | 1 -> 0.715 % |  |
+| `terralith:alpine_highlands` | surface | 0.736 | 1.04 -> 0.72 % | aimed 0.765% |
+| `terralith:glacial_chasm` | surface | 0.736 | 1.115 -> 0.81 % |  |
+| `minecraft:meadow` | surface | 0.736 | 1.285 -> 0.96 % |  |
+| `terralith:shield` | surface | 0.736 | 1.335 -> 0.95 % |  |
+| `terralith:rocky_mountains` | surface | 0.736 | 1.48 -> 1.12 % |  |
+| `minecraft:snowy_taiga` | surface | 0.736 | 1.52 -> 1.135 % |  |
+| `terralith:brushland` | surface | 0.736 | 1.655 -> 1.205 % |  |
+| `minecraft:taiga` | surface | 0.736 | 1.74 -> 1.2 % | aimed 1.28% |
+| `minecraft:snowy_plains` | surface | 0.736 | 1.87 -> 1.36 % |  |
+| `minecraft:plains` | surface | 0.736 | 2.82 -> 2.085 % |  |
+| `minecraft:forest` | surface | 0.736 | 3.545 -> 2.585 % |  |
+| `minecraft:lush_caves` | underground | 0.941 | 13.199 -> 12.412 % |  |
+| `terralith:cave/deep_caves` | underground | 0.941 | 18.167 -> 17.623 % |  |
 
 Still out of reach: `terralith:cave/tuff_caves` (never sampled, even by `/dumpclimatecaves`: its entry carries a 0.24
 offset and deep dark covers the same climate with none), mantle caves (0.725 %, aimed 1.2 %: its climate space is
@@ -171,8 +171,8 @@ all-or-nothing), mushroom fields (about 0.06 %). Caldera stops at 0.24 % of its 
 Samples (2026-10-19): Overworld surface 20,000 points from `/dumpclimate 20000` (radius 20,000; 721 KB gzipped,
 was 3,000 / 111 KB), underground 42,071 points from `/dumpclimatecaves 5000` (every 16 blocks from 16 below the
 surface to the world bottom; 244 KB), replacing the main dump's four shallow levels; End 7,050, Nether 15,000; all
-seed 7379340783510277000. The denser surface set changed many base shares (volcanic peaks 0.47 → 0.205 %,
-yellowstone 2.8 → 3.175 %): the 3,000-column set was one sample per 0.033 %. Model agreement: Overworld
+seed 7379340783510277000. The denser surface set changed many base shares (volcanic peaks 0.47 -> 0.205 %,
+yellowstone 2.8 -> 3.175 %): the 3,000-column set was one sample per 0.033 %. Model agreement: Overworld
 96.639 %, Nether 86.4 %, End 80.1 % (End and Nether samples of 2026-10-18; the End's Nullscape biomes
 are now measured on the surface layer, 3,000 points, where the 2026-10-14 file measured them underground, hence the
 new End shares). The Overworld solve takes about 10 s per world load (about 2 s
@@ -181,8 +181,8 @@ before), only when an input changed: the result is cached on the input hashes in
 
 ### 2.2 The fields
 
-- `multiplier`: 1 untouched, 0 removed (its climate space goes to its neighbours), 0.5 half as common, 2 twice. A
-  boosted biome grows outward from its own patches into neighbouring climate; it never appears somewhere unrelated.
+- `multiplier`: 1 untouched, 0 removed (its climate space goes to its neighbors), 0.5 half as common, 2 twice. A
+  boosted biome grows outward from its own patches into neighboring climate; it never appears somewhere unrelated.
 - `replace_with`: a biome id; every entry of this biome is relabelled. Overrides the multiplier. Needs no samples.
 - `target_pct` (2026-10-19): an absolute share of the biome's layer, in place of the multiplier. Works for a biome
   the samples never hit. `target_layer` names the layer for such a biome (default surface).
@@ -215,7 +215,7 @@ before), only when an input changed: the result is cached on the input hashes in
     biome makes it lose exactly the samples it was winning by less than P; a negative P lets it win the ones it was
     losing by less than |P|. One number per tuned biome, chosen so the biome's share lands on multiplier × original.
   - Penalties are picked strictly between two distinct margins, never on a plateau (a tie the game would break
-    arbitrarily). Negative penalties are realised by adding a constant to every entry (the winner doesn't change), so
+    arbitrarily). Negative penalties are realized by adding a constant to every entry (the winner doesn't change), so
     every written offset is non-negative.
   - Rounds (`rounds`) re-solve each biome with the others' penalties in place; `maxCandidates` limits each sample to the
     closest entries.
@@ -307,37 +307,37 @@ before), only when an input changed: the result is cached on the input hashes in
 
 ## 7. In-game test suite
 
-- [ ] **WG-01 Solve on reload:** `/reload` → `latest.log` has `[biome-tuning] inputs unchanged, reusing the last solve`;
-  edit a multiplier and `/reload` → a fresh solve, `result_pct` updated in the file.
-- [ ] **WG-02 New world:** create a world, `/locate biome terralith:yellowstone` from a few spots → found more often
+- [ ] **WG-01 Solve on reload:** `/reload` -> `latest.log` has `[biome-tuning] inputs unchanged, reusing the last solve`;
+  edit a multiplier and `/reload` -> a fresh solve, `result_pct` updated in the file.
+- [ ] **WG-02 New world:** create a world, `/locate biome terralith:yellowstone` from a few spots -> found more often
   than in a world created with `[worldgen] biomeLayout = false` (same seed).
-- [ ] **WG-03 Off switch:** `biomeLayout = false`, `/reload` → no `[biome-tuning]` solve; a new world has Terralith's
+- [ ] **WG-03 Off switch:** `biomeLayout = false`, `/reload` -> no `[biome-tuning]` solve; a new world has Terralith's
   stock layout. Turn it back on.
-- [ ] **WG-04 Nether:** in a new world's Nether, fly 2000 blocks → nether wastes clearly the most common, basalt deltas
+- [ ] **WG-04 Nether:** in a new world's Nether, fly 2000 blocks -> nether wastes clearly the most common, basalt deltas
   less than usual.
-- [ ] **WG-05 End:** outer End islands in a new world → shadowlands noticeably rarer than in a world made with
+- [ ] **WG-05 End:** outer End islands in a new world -> shadowlands noticeably rarer than in a world made with
   `biomeLayout = false`; note how crystal peaks compare (F1).
-- [ ] **WG-06 Skylands (F3):** `/locate biome terralith:skylands_spring` in a new world → note the distance.
-- [ ] **WG-07 Replace:** set `replace_with` on a test biome, `/reload`, new world → that biome never appears; its
+- [ ] **WG-06 Skylands (F3):** `/locate biome terralith:skylands_spring` in a new world -> note the distance.
+- [ ] **WG-07 Replace:** set `replace_with` on a test biome, `/reload`, new world -> that biome never appears; its
   replacement takes its place.
-- [ ] **WG-08 /dumpclimate:** `/dumpclimate 500` → three `.json.gz` files rewritten in
+- [ ] **WG-08 /dumpclimate:** `/dumpclimate 500` -> three `.json.gz` files rewritten in
   `kubejs/generation_scripts/worldgen/climate/`, a few seconds of server time, no chunk generation.
 - [ ] **WG-09 Rarity floor:** in a world created after 2026-10-19, `/locate biome` for `terralith:lush_desert`,
-  `lavender_forest`, `red_oasis`, `siberian_grove` → each found (they were 0.005 to 0.025 % before, now about 0.15 %).
-- [ ] **WG-10 Solve time:** create a new world → `latest.log` `[biome-tuning] override minecraft:overworld (72 tuned`,
+  `lavender_forest`, `red_oasis`, `siberian_grove` -> each found (they were 0.005 to 0.025 % before, now about 0.15 %).
+- [ ] **WG-10 Solve time:** create a new world -> `latest.log` `[biome-tuning] override minecraft:overworld (72 tuned`,
   and world creation is no more than about 10 s slower than before.
 - [ ] **WG-11 Never-spawning biomes:** in a new world, `/locate biome` each of `minecraft:stony_shore`,
   `terralith:basalt_cliffs`, `caldera`, `frozen_cliffs`, `granite_cliffs`, `valley_clearing`, `white_cliffs`,
-  `shield_clearing`, `volcanic_crater` → each found (scratch world 2026-10-19: 71 to 2,548 blocks away).
-- [ ] **WG-12 /dumpclimatecaves:** `/dumpclimatecaves 500` → `minecraft__overworld.caves.json.gz` rewritten, the
-  Nether and End skipped, `/reload` → `biome_config.json` `samples.file` names both files.
+  `shield_clearing`, `volcanic_crater` -> each found (scratch world 2026-10-19: 71 to 2,548 blocks away).
+- [ ] **WG-12 /dumpclimatecaves:** `/dumpclimatecaves 500` -> `minecraft__overworld.caves.json.gz` rewritten, the
+  Nether and End skipped, `/reload` -> `biome_config.json` `samples.file` names both files.
 - [ ] **WG-13 Cave biomes:** in a new world, `/locate biome terralith:cave/frostfire_caves` and
-  `terralith:cave/mantle_caves` → found (they were never sampled before).
+  `terralith:cave/mantle_caves` -> found (they were never sampled before).
 
 ## 8. History
 
 - By 2026-09-27 (initial git commit): Java solver (port of the node script), the current 17 edits.
-- 2026-09-30: samples resampled on a new seed and gzipped; model agreement 51 % → 99 % (Overworld)
+- 2026-09-30: samples resampled on a new seed and gzipped; model agreement 51 % -> 99 % (Overworld)
   ([plan_1.0.3.md](plan_1.0.3.md) WG).
 - 2026-10-11: biome merges retired for biome fits.
 - 2026-10-14: samples refreshed (the current file's dates).
@@ -349,7 +349,7 @@ before), only when an input changed: the result is cached on the input hashes in
   `gen_biome_config.py`; `/dumpclimatecaves` + caves-file merge; layer by depth-0 entries (the share rule put
   surface biomes underground once deep samples existed, and the floor tool then gave lush caves x10: caught on the
   scratch server); `/dumpclimate` default 20,000 columns (`/dumpall` would otherwise have overwritten the dense
-  samples with 3,000). User: "widen the surface biome spawn requirements" → 9 targets, all found in a new world.
+  samples with 3,000). User: "widen the surface biome spawn requirements" -> 9 targets, all found in a new world.
   F2 resolved. Tests WG-11 to WG-13.
 - 2026-10-19: rarity floor, `target_pct`, 20,000-column Overworld samples and cave samples DEPLOYED with pack 1.0.9 (15:54,
   server + clients). The live world keeps its layout (new worlds only).

@@ -44,9 +44,9 @@ the top blocks of a column; `/zcfg`: live config values) read the results.
 
 **Footprint share (ST-201, ST-202).**
 - diag2: the fisher campsite at [-36, -7], kept by the old check, "footprint 169 water / 0 ground (too wet) ->
-  CANCELLED". Same run: false positives underground: Philip's ancient dungeon (bury) and Subterrestrial's cabins,
+  CANCELED". Same run: false positives underground: Philip's ancient dungeon (bury) and Subterrestrial's cabins,
   whose bottom layers lie deep under the sea (every solid there is seabed) or in aquifers. Fixed with the burial rule.
-- diag3, 2,601 inland chunks: 972 starts checked, 40 cancelled, 21 "too wet", 14 by the share alone: a T&T sunflower
+- diag3, 2,601 inland chunks: 972 starts checked, 40 canceled, 21 "too wet", 14 by the share alone: a T&T sunflower
   plains village (739 water / 0 ground) and a birch forest village (1,691 / 497) on one lake, two drum towers (2,123 /
   66), a windmill (255 / 0), a big horse stable (505 / 244), T&T outposts (old growth taiga x2, taiga, Tudor), the
   desert watchtower, a Mysticrift jungle tower. No underground structure. The drum tower spot, generated and probed:
@@ -68,7 +68,7 @@ assembled during the run. The switch did NOT reload live: Forge kept the old val
 (`/zcfg`); it took a restart.
 
 **Quark spire teleport (ST-205).** An armor stand teleported from spawn to 300016 100 300016:
-- Overworld (hook cancelled by `QuarkSpiralSpiresTeleportMixin`): done in 4 ms; no region file at the target.
+- Overworld (hook canceled by `QuarkSpiralSpiresTeleportMixin`): done in 4 ms; no region file at the target.
 - End (hook kept on purpose): 38 s server stall ("766 ticks behind"); the target regions r.585.585 to r.586.586 were
   generated. The first End try found no entity: the stand was summoned right after `forceload` into a chunk not yet
   entity-ticking.
@@ -86,7 +86,7 @@ DEPLOYED with pack 1.0.9 (2026-10-19 15:54, [plan_1.0.9.md](../../plan_1.0.9.md)
   it always. Not run (ST-232, scratch queue SQ-SV-01).
 - `maxWaterSurplus` 0.5 was a first value. 2026-10-30 (user: aggressive): set to 0 in the toml and the CEConfig
   default (patcherMod built, not installed), so any start with more water than dry ground under its footprint is
-  cancelled; on the diag3 sample that adds the 470 / 425 shore village. A village on a lake still goes as a whole.
+  canceled; on the diag3 sample that adds the 470 / 425 shore village. A village on a lake still goes as a whole.
   Reasoning: [briefs/structures_earthfill.md](../../briefs/structures_earthfill.md) #2. Test SQ-WG30-E01 PASSED 2026-10-30 (every line `surplus limit 0.0`; inland square 6 too-wet cancels, all
   share-only with water over 1.76x ground or more; coast square none; no kept start with more water than ground; the
   470 / 425 village is not picked in the stripped-weight world).

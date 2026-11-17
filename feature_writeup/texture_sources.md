@@ -28,18 +28,18 @@ Where every pack-owned texture came from, the texture rule, and the textures tha
 Contact sheets: [swap and redo](texture_sources/sheet_swap_redo.png),
 [confirm, edited or unmatched](texture_sources/sheet_confirm_painted.png) (pixels off any clean recolour, or no
 source found), [confirm, clean recolours](texture_sources/sheet_confirm_recolour.png) (a human sprite in new
-colours, tool unknown).
+colors, tool unknown).
 
 No texture in the pack is image-model output. The session logs show no freehand drawing into a texture: every AI
-hand on a texture was a script that recoloured, shifted, greyed or split a human sprite. Shape-drawing calls in the logs
+hand on a texture was a script that recoloured, shifted, grayed or split a human sprite. Shape-drawing calls in the logs
 were preview and contact sheets only.
 
 ## 1. The texture rule
 
-- Every texture is human-made: upstream or vanilla art used under its licence, or the owner's own drawing.
+- Every texture is human-made: upstream or vanilla art used under its license, or the owner's own drawing.
 - Or it is made from human art by the owner's tools, on a source and palette a human picked:
   `textureswapper/palette_swap.py` (recolour, bulk recolour), `combine_tex.py` (layering), `scale_tex.py` and
-  `upscale_sprites.py` (nearest-neighbour scaling). `textureswapper/` is the owner's local folder (git-ignored).
+  `upscale_sprites.py` (nearest-neighbor scaling). `textureswapper/` is the owner's local folder (git-ignored).
   Scripts that only call these tools count (`make_seasoning.py`, `make_salt.py`, `make_psugar.py`, `gen_jam_art.py`).
 - Not allowed: AI-drawn pixels, AI-chosen palettes or ramps, and one-off AI scripts that transform pixels themselves
   (hue shifts, brightness maps, greyscale splits) instead of going through the tools above.
@@ -63,9 +63,9 @@ were preview and contact sheets only.
    `disabledmods/`, `jar_archive/`, `DecompiledMods/`, `*_upstream/`, member `libs/`, vanilla 1.19.2, resource pack zips;
    about 155k textures; the pack's own jars are skipped) is indexed by RGBA content. Same pixels = `copy`.
 2. **Recolour test.** Otherwise a third-party sprite with the same alpha silhouette (for opaque squares, one sharing a
-   name word) is compared colour by colour. Every source colour going to exactly one output colour = `recolour`
+   name word) is compared color by colour. Every source color going to exactly one output color = `recolour`
    (`consistency=1.000`); pixels that break that map = `edited`, with the count in `offmap_px`. No candidate =
-   `unmatched`. A match from an unrelated file (`unchanged=0.00`, different name) is a lead, not proof: few-colour
+   `unmatched`. A match from an unrelated file (`unchanged=0.00`, different name) is a lead, not proof: few-color
    sources recolour onto almost anything.
 3. **Session logs.** Claude Code transcripts (`~/.claude/projects/...`, from 2026-10-14; earlier work has none) are
    scanned for tool calls that name the file: `owned` (called the owner's tools), `paint` (ad-hoc pixel code that
@@ -81,23 +81,23 @@ made by an AI script look the same; those stay `confirm`. Mojang 26.1 files are 
 
 | Texture | What it is | Source | Note |
 |---|---|---|---|
-| Creative Equipment `item/echo_axe`, `echo_pickaxe`, `echo_shovel`, `echo_hoe` (+ `.mcmeta`) | 12-frame animated strips | vanilla `diamond_<tool>` shape | Owner flagged. Frame 0 is an exact one-colour-to-one-colour recolour of the vanilla diamond tool, so not freehand, but `tools/echo_texture.py` (AI-written) picked the 12-step glow ramp and which pixels glow. Replace: owner draws frame 0 in the ramp colours (or a `palette_swap.py` of the diamond tool onto a human-picked echo palette), then `echo_texture.py animate` only steps the ramp |
+| Creative Equipment `item/echo_axe`, `echo_pickaxe`, `echo_shovel`, `echo_hoe` (+ `.mcmeta`) | 12-frame animated strips | vanilla `diamond_<tool>` shape | Owner flagged. Frame 0 is an exact one-color-to-one-color recolour of the vanilla diamond tool, so not freehand, but `tools/echo_texture.py` (AI-written) picked the 12-step glow ramp and which pixels glow. Replace: owner draws frame 0 in the ramp colors (or a `palette_swap.py` of the diamond tool onto a human-picked echo palette), then `echo_texture.py animate` only steps the ramp |
 
 ## 5. Redo: AI transforms of human art
 
 | Texture(s) | Source (human) | How it was made | Redo with |
 |---|---|---|---|
-| Rustic member `block/glowing_calamari_crate_side`, `_top` | Rustic Delight 1.7.0 `calamari_crate_side`, `_top` | ad-hoc brightness remap onto the Glowing Calamari colours (14 to 14 colours, wood unchanged) | `palette_swap.py` with the calamari shades only, glow ink sac palette. Owner flagged; the plain Calamari Crate is an exact Rustic copy (ok) |
-| `kubejs/assets/wares/textures/block/*` (cardboard box, package sides) | Wares packages and boxes; Dustrial Decor cardboard colours | `make_cardboard.py` own remap with a tape mask | `palette_swap.py` (`--drop` for the tape) |
-| Creative Compat `block/weathered_cardboard_box` | Design and Decor box sheet | `make_cardboard.py` greying | `palette_swap.py` onto a grey palette |
-| `kubejs/assets/solapplepie/textures/items/lunchbox_dye/*` (8) | the four lunchbox looks | `gen_lunchbox_looks.py` greyscale split into dye base + overlay | `palette_swap.py` onto a grey ramp for the base; overlay by hand or `combine_tex.py` |
+| Rustic member `block/glowing_calamari_crate_side`, `_top` | Rustic Delight 1.7.0 `calamari_crate_side`, `_top` | ad-hoc brightness remap onto the Glowing Calamari colors (14 to 14 colors, wood unchanged) | `palette_swap.py` with the calamari shades only, glow ink sac palette. Owner flagged; the plain Calamari Crate is an exact Rustic copy (ok) |
+| `kubejs/assets/wares/textures/block/*` (cardboard box, package sides) | Wares packages and boxes; Dustrial Decor cardboard colors | `make_cardboard.py` own remap with a tape mask | `palette_swap.py` (`--drop` for the tape) |
+| Creative Compat `block/weathered_cardboard_box` | Design and Decor box sheet | `make_cardboard.py` graying | `palette_swap.py` onto a gray palette |
+| `kubejs/assets/solapplepie/textures/items/lunchbox_dye/*` (8) | the four lunchbox looks | `gen_lunchbox_looks.py` greyscale split into dye base + overlay | `palette_swap.py` onto a gray ramp for the base; overlay by hand or `combine_tex.py` |
 | Canned food: CD `canned_cabbage` (8 px edited), `canned_carrot`; `canned_goods` `canned_fish`, `canned_mushrooms` | Canned Goods can sprites | ad-hoc recolour (2026-10-21) | `palette_swap.py` from the Canned Goods can |
 | CD `item/cornmeal` | Create `wheat_flour` | ad-hoc recolour | `palette_swap.py` |
 | CD `item/wooden_bucket`, `wooden_water_bucket` | a bucket sprite (nearest matches Extra Delight / Everything Copper buckets, about 57 px off-map) | ad-hoc pixel edits (2026-10-30) | owner check: most likely needs own art |
 | CD `block/dough_block/cucumber_dough_block` | another dough block (match is a lead only) | ad-hoc recolour (2026-11-04) | `palette_swap.py` from the dough block the family uses |
 | `kubejs/assets/vintagedelight` `item/cucumber_dough`, `cucumber_noodles` | Vintage KOTS `cucumber_dough`; Farmer's Delight `raw_pasta` | ad-hoc recolour | `palette_swap.py` |
 | Hearth member `block/sunflower_stem` | a stem sprite (match is a lead only) | ad-hoc recolour (2026-11-09) | `palette_swap.py` |
-| `kubejs/assets/beautify` `blocks/hanging_pot` | Beautify `hanging_pot` (36 px changed) | colour-map `putpixel` script | `palette_swap.py --drop`, or `combine_tex.py` |
+| `kubejs/assets/beautify` `blocks/hanging_pot` | Beautify `hanging_pot` (36 px changed) | color-map `putpixel` script | `palette_swap.py --drop`, or `combine_tex.py` |
 | Brewin' member `gui/keg` | Brewin' & Chewin' 4.5.0 `gui/keg` (98 % unchanged) | ad-hoc pixel edit of the GUI | owner check: hand edit in an image editor |
 
 The full list with the matched source per file: `ledger.csv` rows with status `redo`.
@@ -115,7 +115,7 @@ pixels no recolour explains, or no source found.
 | Creative Delight `item/` (cans, baking sheet, cake pan, teas, syringe) | 53 | 40 recolour, 11 edited, 2 unmatched | per file; `sample_syringe` has a working copy in `textureswapper/tex/` |
 | Canned golem coats (`kubejs/assets/creativedelight/textures/entity/canned_golem`) | 15 | recolours of Canned Goods' golem | tool? |
 | Creative Equipment shields | 14 | recolours of vanilla shield; `_nopattern` 2 to 21 px edited; felsic 19 to 21 px | hand-edited? |
-| Creative Equipment GUI tints (`gui/*_tint.png`) | 12 | unmatched, 27x9 armour-stripe swatches | who drew them? |
+| Creative Equipment GUI tints (`gui/*_tint.png`) | 12 | unmatched, 27x9 armor-stripe swatches | who drew them? |
 | More Mooblooms coats | 11 | unmatched | README says "drawn for this mod": by the owner? `sunbloom` was recoloured from allium by `make_dandelion_texture.py` |
 | Lunchbox looks (copper, iron, netherite + outlines) | 5 | recolours of Spice of Life's lunchbox; outlines unmatched | owner's art? (hand-named working file `ntherite_lunchbox_outline.png`) |
 | Farmer's Delight cutting boards (stone, wood) | 11 | recolours of FD's board, stone ones edited | tool? |
@@ -135,7 +135,7 @@ Every owned-tool texture's source, tool and use is in `sources.csv` (families) a
 | Seasoned overlays (CD `item/seasoned/*`) | The Salt's salted overlay shape; palettes from Brewin' cheese, FD onion, Veggies garlic, vanilla sugar, Ender's void pepper | `palette_swap.py` (`make_seasoning.py`) | overlay drawn over a seasoned dish |
 | Pink salt (`kubejs/assets/salt`, Vintage `block/salt`) | The Salt 1.2.4.1 shapes; Vintage Delight pink salt palette | `palette_swap.py` (`make_salt.py`); lamp side = recolour + upstream wood combined | The Salt's blocks, ores, cauldron, lamp, items; Salt Layer |
 | Powdered Sugar Block | vanilla moss block; powdered sugar item palette | `palette_swap.py` (`make_psugar.py`) | Powdered Sugar Block |
-| Pack jam line (Vintage member jars, jellos, jam / jello blocks, interiors) | Fruits Delight jar, jam, jello textures; one colour sample per jam | `palette_swap.py` (`gen_jam_art.py`) | jam jars, jellos, jam and jello blocks, mason jar fillings |
+| Pack jam line (Vintage member jars, jellos, jam / jello blocks, interiors) | Fruits Delight jar, jam, jello textures; one color sample per jam | `palette_swap.py` (`gen_jam_art.py`) | jam jars, jellos, jam and jello blocks, mason jar fillings |
 | Glowing Calamari items (CD) | Rustic calamari, slice, roll; glow ink sac palette; rice layer combined back | `palette_swap.py` (art notice) | Glowing Calamari, Slice, Roll |
 | Cardboard Box and Package items | owner's drafts | by hand | Wares items |
 

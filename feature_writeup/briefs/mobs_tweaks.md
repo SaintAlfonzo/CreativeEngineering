@@ -20,7 +20,7 @@ Jars checked (decompiled with vineflower, under `scratchpad/decomp/`): `alexsmob
 | #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional patcherMod |
 | #5 | Quark monster boxes | Built | vault rework built 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9); MT-34 to MT-37, MT-47 to MT-50 |
 | #2 | MCA villagers glitch while sleeping | Bug | reported on adults (owner, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
-| #12 | MCA villager eye colour | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
+| #12 | MCA villager eye color | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
 
 Build order:
 
@@ -67,7 +67,7 @@ all.
   `CreatureAITargetItems`) picks up dropped items that pass `canTargetItem`, which is `isEdible()` again. A dropped
   lunchbox gets picked up and eaten. A class scan of Alex's Mobs shows 11 more entities that use `isEdible` for item
   targeting or eating: blue jay, cockroach, crocodile, crow, kangaroo, mimicube, raccoon, rattlesnake, snow leopard,
-  tasmanian devil, tiger. Per-entity behaviour not read.
+  tasmanian devil, tiger. Per-entity behavior not read.
 
 ### Build
 1. **Config (the row's fix).** In both copies of `alexsmobs.toml`, edit with the game stopped (Forge rewrites a
@@ -78,7 +78,7 @@ all.
    A config file can't read `global.item`. Note the three ids in the writeup instead.
 2. **Optional, for dropped boxes (patcherMod).** Add an item tag `creativeengineering:not_mob_food` through
    `global.tags` in a server tag script (e.g. `kubejs/server_scripts/tags/itemtags.js`, or the file that holds other
-   behaviour tags) with `i.lunchbox`, `i.lunchbag`, `i.golden_lunchbox`. Then a mixin:
+   behavior tags) with `i.lunchbox`, `i.lunchbag`, `i.golden_lunchbox`. Then a mixin:
    ```java
    @Mixin(value = EntitySeagull.class, remap = false)
    public class SeagullFoodTagMixin {
@@ -103,7 +103,7 @@ all.
 ### Decisions
 - **Config only, or config + mixin?** Recommend config now, and the mixin only with the next patcherMod build. The
   hotbar theft is the reported problem. A dropped box near gulls is rarer.
-- **Turn stealing off altogether (`seagullStealing = false`)?** No. It's the seagull's flavour, and the row only asks
+- **Turn stealing off altogether (`seagullStealing = false`)?** No. It's the seagull's flavor, and the row only asks
   to protect lunchboxes.
 
 ### Gotchas
@@ -114,8 +114,8 @@ all.
 
 ### Tests
 - **MT-26 Lunchbox safe in the hotbar:** stand on a beach with a lunchbox in hotbar slot 1 and bread in slot 2, and
-  wait for a gull → it takes the bread, never the box. With only the box in the hotbar, no gull dives at you.
-- **MT-27 Dropped box (only with the mixin):** drop a lunchbox near gulls → none picks it up.
+  wait for a gull -> it takes the bread, never the box. With only the box in the hotbar, no gull dives at you.
+- **MT-27 Dropped box (only with the mixin):** drop a lunchbox near gulls -> none picks it up.
 
 ---
 
@@ -248,9 +248,9 @@ Depends on the decision:
   `PLANKS_PREDICATE` to vanilla `minecraft:barrel` or require sneaking. Not recommended unless it shows up.
 
 ### Tests
-- **MT-29 Sputter:** place a carved pumpkin on a barrel → a Sputter appears and the advancement fires; give it 16
-  arrows and lure a zombie in → it shoots, the count goes down; with an empty hand take the rest back. With
-  `enableSputter = false` (game stopped) → nothing happens.
+- **MT-29 Sputter:** place a carved pumpkin on a barrel -> a Sputter appears and the advancement fires; give it 16
+  arrows and lure a zombie in -> it shoots, the count goes down; with an empty hand take the rest back. With
+  `enableSputter = false` (game stopped) -> nothing happens.
 
 ---
 
@@ -280,7 +280,7 @@ the overlap. The overlap is capuchin vs chimpanzee: same jungles, same bananas.
   ([item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js) 10209) by adding it to `global.removedItems`
   ([removed_items.js](../../kubejs/startup_scripts/_lib/removed_items.js)). The Ancient Dart (`alexsmobs:ancient_dart`)
   then has no use. Hide it too. Raise the chimp group chance to make up the numbers, e.g. `Chimpanzee group chance`
-  0.25 → 0.5.
+  0.25 -> 0.5.
 - **Chimpanzee goes:** `neapolitan-common.toml` `"Chimpanzee group chance" = 0.0`. Hide `neapolitan:chimpanzee_spawn_egg`,
   `neapolitan:bananarrow`, `neapolitan:chimpanzee_head` and `neapolitan:chimpanzee_banner_pattern` (add dict keys
   first: `i.chimpanzee_spawn_egg` etc.; none are in item_dict today). Remove the bananarrow recipe through `NCH`
@@ -313,8 +313,8 @@ the overlap. The overlap is capuchin vs chimpanzee: same jungles, same bananas.
   the switch. Check that a 0 weight really adds no spawn with `/dumpspawns` after the change (MT-30).
 
 ### Tests
-- **MT-30 One monkey:** after the change, `/dumpspawns` + `python3 tools/gen_spawn_table.py` → the loser has no biome
-  spawn. Fly through a fresh jungle → only the survivor appears. The hidden items are gone from JEI.
+- **MT-30 One monkey:** after the change, `/dumpspawns` + `python3 tools/gen_spawn_table.py` -> the loser has no biome
+  spawn. Fly through a fresh jungle -> only the survivor appears. The hidden items are gone from JEI.
 
 ---
 
@@ -331,7 +331,7 @@ A small chance that a mob spawns with a random name. Deaths of named mobs, and k
 Killing one costs a little karma later (`largecontent/karma #1`).
 
 ### Now
-- Nothing exists. Vanilla behaviour to build on (from vanilla 1.19.2 knowledge, not decompiled here):
+- Nothing exists. Vanilla behavior to build on (from vanilla 1.19.2 knowledge, not decompiled here):
   - `LivingEntity#die` only **logs** "Named entity ... died: ..." to the server console for a custom-named mob. It
     doesn't send it to chat (tamed pets' deaths go to the owner only).
   - A player killed by a named mob already gets a death message with the mob's name ("Steve was slain by Grumbo").
@@ -373,11 +373,11 @@ Killing one costs a little karma later (`largecontent/karma #1`).
    writing, and fall back to `EntityEvents.spawned` + a "rolled" persistent flag if it's missing (that fires on every
    level join, so the flag is required).
 3. **Announcements** (server script, reloadable), e.g. `kubejs/server_scripts/other/named_mobs.js`:
-   - `EntityEvents.death(event => ...)`: if the dead entity has the `creativeengineering:named` flag →
+   - `EntityEvents.death(event => ...)`: if the dead entity has the `creativeengineering:named` flag ->
      `server.tell(entity.getCombatTracker().getDeathMessage())` (the vanilla message, with killer). Prefix it with
      the type (`Text.translate(entity.getType().getDescriptionId())`) so "Grumbo" reads as "Grumbo the Zombie".
    - If the killer (`event.source.actual`) is a flagged named mob and the victim isn't a player (player deaths are
-     already announced) → announce it too, for named victims or a hand-picked list only (decision), or chat fills up.
+     already announced) -> announce it too, for named victims or a hand-picked list only (decision), or chat fills up.
    - Karma hook: when the killer is a player, call `global.karma?.add(player, 'kill_named_mob', -1)` if karma exists.
      It doesn't today, so leave a guarded call and a comment pointing at `largecontent/karma #1`.
 4. **Optional patcherMod:** `Mob#checkDespawn` keeps despawning named mobs (wanted). If they should stay once a player
@@ -413,9 +413,9 @@ Killing one costs a little karma later (`largecontent/karma #1`).
 ### Tests
 - **MT-31 Name rolls:** set `chance = 1` (startup, restart), and new hostile spawns at night carry a name. Reloading
   the chunk doesn't rename them.
-- **MT-32 Announce:** kill a named zombie → one chat line with its name and type. A named skeleton that kills you →
+- **MT-32 Announce:** kill a named zombie -> one chat line with its name and type. A named skeleton that kills you ->
   the vanilla death message names it.
-- **MT-33 Despawn:** walk 128+ blocks away from an untouched named mob → it despawns like any other.
+- **MT-33 Despawn:** walk 128+ blocks away from an untouched named mob -> it despawns like any other.
 
 ---
 
@@ -445,7 +445,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 - **Spawns:** `quark:misc/monster_box_spawns` = one spawn egg per mob: zombie 7, cave spider 2, witch 1. Each mob is
   spawned `MobSpawnType.SPAWNER` with a small random push.
 - **Rewards:** `quark:misc/monster_box` (1 roll per mob): raw iron, copper, gold, coal, bone blocks, cobweb, TNT,
-  infested stone, heads, horse armour, saddle, name tag, enchanted book, 12 music discs, a damaged diamond pickaxe or
+  infested stone, heads, horse armor, saddle, name tag, enchanted book, 12 music discs, a damaged diamond pickaxe or
   sword, golden apple, and **`quark:monster_box` itself (weight 1)**. The block can also come from Quark's Ancient
   Tome table (`quark-common.toml` 502, `quark:misc/monster_box,5` is the tome's weight in that table, not a box drop).
 - **Block:** `MonsterBoxBlock`, hardness 25, its block loot table has no pools (mining one drops nothing). The block
@@ -494,7 +494,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
    the box reward. If the pack-side loot layer should own it, add the table there instead (see
    [loot.md](../loot.md); `loot/07_rules.js` holds per-table rules).
 3b. **Single-item reward (user spec).** One roll, one item out: `LootTable#getRandomItems` with
-   `LootContextParamSets.CHEST` (origin = box centre, `LUCK` from the nearest player), then keep one random non-empty
+   `LootContextParamSets.CHEST` (origin = box center, `LUCK` from the nearest player), then keep one random non-empty
    stack from the result and drop the rest. This keeps the code safe if the table is later given several pools. The
    table itself is 1 pool, 1 roll, so it yields one entry. Eject that stack from the box top as an `ItemEntity` with
    a small upward push and pickup delay 10. The `rewardRolls` config key goes; `rewardSingleCount` (default per
@@ -513,7 +513,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
    false)`, aqua `Style`, key `lootr.message.should_sneak`). Creative players follow the same rule. Pack version: a
    Forge listener `world/MonsterBoxBreakGuard.java` in patcherMod, gated by `vaultMode` like the rest, so MT-37
    restores plain Quark. Logic: `state.is(MonsterBoxModule.monster_box)` (or the block's registry id), player not
-   sneaking → `setCanceled(true)` + translatable `creativeengineering.message.monster_box_sneak`, aqua. Lang:
+   sneaking -> `setCanceled(true)` + translatable `creativeengineering.message.monster_box_sneak`, aqua. Lang:
    "Breaking the monster box destroys it for good. Sneak while mining to break it." (pack lang file
    `kubejs/assets/creativeengineering/lang/en_us.json`). A sneaking break drops nothing (Quark's empty block table is
    kept, or the box becomes a carryable spawner). As in Lootr, the check fires at the end of the mining time (about
@@ -523,7 +523,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
    only when the player isn't null (bytecode 61-62 `ifnull`), and Create's drill and contraption drills pass null.
    So a Create drill would grind a box away with no check. Fix: a small mixin returning false from
    `com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity#isBreakable(BlockState, float)`
-   (static, used by the drill block entity; check the contraption drill behaviour also calls it) for the box. Also tag the box
+   (static, used by the drill block entity; check the contraption drill behavior also calls it) for the box. Also tag the box
    `create:non_movable` so a contraption can't carry it off as a spawner. Pickarang (max hardness 20) and pistons
    (block entity) can't move or break it. The pack's own Excavation Drill posts `BreakEvent`, so 3d covers it. Other
    machine breakers (IE excavator etc.) weren't checked.
@@ -531,7 +531,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
    spawner. Dropping that entry (step 3) closes the main route. Decide whether player-placed boxes (creative,
    tomes) should be vaults at all. A cheap rule is "only boxes that generated": stamp `ce:natural` from the generator
    with a `MonsterBoxGenerator` mixin, or treat a box without any `ce:` data on first tick after placement by a
-   player as plain Quark (`BlockEvent.EntityPlaceEvent` → stamp `ce:placed`).
+   player as plain Quark (`BlockEvent.EntityPlaceEvent` -> stamp `ce:placed`).
 5. Writeup: a section in [mob_block_tweaks.md](../mob_block_tweaks.md), and a line in [loot.md](../loot.md) 413
    about `Enable Extra Loot Table`.
 
@@ -569,16 +569,16 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 - Named mobs (#6) should skip `SPAWNER` spawns, or every wave can name a zombie.
 
 ### Tests
-- **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up → mobs spawn, the box stays.
-- **MT-35 Reward:** kill the wave → items pop out of the box once; walking up again within the cooldown does nothing.
-- **MT-36 Re-arm:** `cooldownTicks = 200` (game stopped), repeat → after 10 s it growls again.
-- **MT-37 Off switch:** `vaultMode = false` → Quark behaviour (the box breaks).
-- **MT-47 Single item:** kill the wave → exactly one stack pops out, from the reward table.
-- **MT-48 Obsidian hardness:** survival, diamond pickaxe → about 9.4 s to mine, like obsidian next to it; iron
-  pickaxe → barely progresses; TNT next to it → box survives.
-- **MT-49 Sneak to break:** mine it standing → aqua warning in chat, box stays (and reappears client side); mine it
-  sneaking → breaks, drops nothing. Same in creative.
-- **MT-50 Create drill:** a powered Create drill against a box → it doesn't break.
+- **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up -> mobs spawn, the box stays.
+- **MT-35 Reward:** kill the wave -> items pop out of the box once; walking up again within the cooldown does nothing.
+- **MT-36 Re-arm:** `cooldownTicks = 200` (game stopped), repeat -> after 10 s it growls again.
+- **MT-37 Off switch:** `vaultMode = false` -> Quark behavior (the box breaks).
+- **MT-47 Single item:** kill the wave -> exactly one stack pops out, from the reward table.
+- **MT-48 Obsidian hardness:** survival, diamond pickaxe -> about 9.4 s to mine, like obsidian next to it; iron
+  pickaxe -> barely progresses; TNT next to it -> box survives.
+- **MT-49 Sneak to break:** mine it standing -> aqua warning in chat, box stays (and reappears client side); mine it
+  sneaking -> breaks, drops nothing. Same in creative.
+- **MT-50 Create drill:** a powered Create drill against a box -> it doesn't break.
 
 ---
 
@@ -633,9 +633,9 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 1. **Diagnose first** (MT-38): next to a sleeping villager at night, run
    `/data get entity @e[type=mca:male_villager,limit=1,sort=nearest] SleepingX` a few times. Also check `Pose` via
    F3 + looking at it (or `/data get ... Brain`), and whether it has a vehicle (`/data get ... RootVehicle`).
-   - Steady sleeping data + bent limbs → (a).
-   - The sleeping data appearing and vanishing → (b).
-   - A vehicle → (c).
+   - Steady sleeping data + bent limbs -> (a).
+   - The sleeping data appearing and vanishing -> (b).
+   - A vehicle -> (c).
 
    Try a vanilla bed vs a Bedspreads bed, and note the bed block (F3) in the row.
 2. **(a) fix, client mixin** `McaVillagerSleepPoseMixin` in the `client` list of
@@ -654,7 +654,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
        }
    }
    ```
-   Changing a captured parameter at HEAD needs `@ModifyVariable(argsOnly)` on `limbDistance` → 0 when sleeping. The
+   Changing a captured parameter at HEAD needs `@ModifyVariable(argsOnly)` on `limbDistance` -> 0 when sleeping. The
    TAIL reset alone is enough if the wear layers are re-copied: `VillagerEntityModelMCA#setupAnim` copies limbs to
    wear after `super`, so target `VillagerEntityModelMCA` too, or reset the wear parts as well. Use
    `@Mixin(targets = ...)` and `require = 0`, so a future MCA rename doesn't crash the client. patcherMod ships no refmap
@@ -686,45 +686,45 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 
 ### Tests
 - **MT-38 Diagnose (adults):** the `/data` checks in Build 1, plus `/data get entity <same selector> Pos` a few times (a changing value means (d)). Record the result in the row.
-- **MT-39 Still sleepers:** a village at night → sleeping villagers lie straight and still, in vanilla beds and
+- **MT-39 Still sleepers:** a village at night -> sleeping villagers lie straight and still, in vanilla beds and
   in every modded bed type that villagers use.
 
-## tweaks #12: MCA villager eye colour
+## tweaks #12: MCA villager eye color
 
 Investigated 2026-10-22 against `minecraft-comes-alive-7.5.20+1.19.2-universal.jar` (javap + the face PNGs).
 
-- **No config, no gene for it.** `config/mca.json` has nothing on eyes; `Genetics` has no eye gene. Eye colour is
+- **No config, no gene for it.** `config/mca.json` has nothing on eyes; `Genetics` has no eye gene. Eye color is
   painted into the face textures `assets/mca/skins/face/<normal|zombie>/<male|female>/<n>.png` (`<n>_blink`,
-  `<n>_hetero` alongside), n = 0 to 21. `FaceLayer` has no tint (it keeps `VillagerLayer`'s default colour).
+  `<n>_hetero` alongside), n = 0 to 21. `FaceLayer` has no tint (it keeps `VillagerLayer`'s default color).
 - **Which face:** `FaceLayer.getSkin` takes `n = (int) min(21, max(0, FACE * 22))`; the `FACE` gene is
   `RandomSource.nextFloat()` at spawn and mixes from both parents for children. So every face is equally likely.
-- **The 22 faces are 2 eye shapes x 11 colours**, same colour order in both shapes (n and n + 11), both genders:
-  brown, pink, light brown / amber, purple, green, blue, magenta, cyan, red, grey, yellow. So about 6 in 11
-  villagers have an unnatural eye colour (pink, purple, magenta, cyan, red, yellow).
+- **The 22 faces are 2 eye shapes x 11 colors**, same color order in both shapes (n and n + 11), both genders:
+  brown, pink, light brown / amber, purple, green, blue, magenta, cyan, red, gray, yellow. So about 6 in 11
+  villagers have an unnatural eye color (pink, purple, magenta, cyan, red, yellow).
 - **Heterochromia** is a trait (`Traits.HETEROCHROMIA`, on in `enabledTraits`, `traitChance` 0.25 over all traits):
-  the `_hetero` texture paints two colours (e.g. `0_hetero` red + yellow), not a second index.
+  the `_hetero` texture paints two colors (e.g. `0_hetero` red + yellow), not a second index.
 - **Per villager by hand:** MCA's editor has a "Face" gene slider (`gene.face`), so a single villager can be set
   in game; players get only the limited editor (`allowLimitedPlayerEditor` true, full false).
 
 Ways to set it (pick one):
 
 1. **Resource pack (no code, client only).** Override the 88 base faces (+ blink + hetero, 264 files incl. zombie)
-   with the same art recoloured: map the 6 unnatural slots to natural colours (more brown, hazel, blue, green,
-   grey). The weighting is then simply how many of the 11 slots each colour gets. Generated by a tool from MCA's
-   own PNGs (palette swap, like `textureswapper/palette_swap.py`); MCA's art licence must allow a recoloured
+   with the same art recoloured: map the 6 unnatural slots to natural colors (more brown, hazel, blue, green,
+   gray). The weighting is then simply how many of the 11 slots each color gets. Generated by a tool from MCA's
+   own PNGs (palette swap, like `textureswapper/palette_swap.py`); MCA's art license must allow a recoloured
    copy in a shipped pack, check first.
 2. **patcherMod client mixin on `FaceLayer.getSkin`** remapping n to a slot in an allowed list (e.g. 0, 2, 4, 5,
-   9, 13 ... plus their +11). No new art, but cuts the variety to the 5 natural colours MCA ships; existing
+   9, 13 ... plus their +11). No new art, but cuts the variety to the 5 natural colors MCA ships; existing
    villagers change look too (the gene is untouched, only the render).
 3. A server mixin on `Genetics.randomize` writing only allowed FACE ranges: affects only new villagers, children
    of old ones can still inherit an unnatural face. Worse than 2.
 
-**Chosen 2026-10-22 (user): let players pick, not restrict.** Built as an eye-colour and eye-shape row on the MCA
+**Chosen 2026-10-22 (user): let players pick, not restrict.** Built as an eye-color and eye-shape row on the MCA
 Comb's hairstyle page (`McaCombEyeColourMixin`, client only), for the player's own look and a combed villager;
-all 11 colours stay. Options 1 to 3 above are kept for the record.
+all 11 colors stay. Options 1 to 3 above are kept for the record.
 
-Recommendation was: 2 if the 5 shipped natural colours are enough (smallest, reversible); 1 if more shades are wanted.
-Decision needed: which colours are allowed (and whether heterochromia stays, its pairs are fixed in the art).
+Recommendation was: 2 if the 5 shipped natural colors are enough (smallest, reversible); 1 if more shades are wanted.
+Decision needed: which colors are allowed (and whether heterochromia stays, its pairs are fixed in the art).
 
 ### Tests
 - **MT-40 Comb eye colour:** in [mob_block_tweaks.md](../mob_block_tweaks.md) section 7.
@@ -737,7 +737,7 @@ Decision needed: which colours are allowed (and whether heterochromia stays, its
 |---|---|---|---|
 | #1 | Mob and block tweaks (bubble columns, Bushier Flowers off, trough retry, asphalt) | Testing | Nothing wrong found. MT-01 to MT-12 open. The same writeup now also carries the leaf decay work (MT-13 to MT-25, `farming/trees #1`), built 2026-10-19/20 after the 1.0.9 deploy and correctly marked not deployed |
 | #7 | Seagulls skip lunchboxes | Testing | Config 2026-10-22 (`seagullStealingBlacklist`), MT-26; scratch probe SQ-GM-07 checks the list loads |
-| #12 | MCA Comb eye colour and shape | Testing | Built 2026-10-22 (patcherMod 1.1.01 in `mods/`), MT-40 in [mob_block_tweaks.md](../mob_block_tweaks.md), client only |
+| #12 | MCA Comb eye color and shape | Testing | Built 2026-10-22 (patcherMod 1.1.01 in `mods/`), MT-40 in [mob_block_tweaks.md](../mob_block_tweaks.md), client only |
 
 ## Writeup corrections made
 

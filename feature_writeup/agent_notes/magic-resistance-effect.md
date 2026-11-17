@@ -12,7 +12,7 @@ partly because CoFH's version is all-or-nothing immunity rather than tunable per
 
 **Split, and why:** the MobEffect's EXISTENCE is pure KubeJS
 (`kubejs/startup_scripts/magic/magic_resistance.js`, `StartupEvents.registry('mob_effect', ...)`
-→ KubeJS's `BasicMobEffect`/`MobEffectBuilder`, builder type string `'basic'`) — this is a
+-> KubeJS's `BasicMobEffect`/`MobEffectBuilder`, builder type string `'basic'`) — this is a
 pack-ORIGINAL effect with no cross-mod registry-timing problem (unlike `better_beacons:
 long_reach`/`phantom_bane`, which needed patcherMod specifically because KubeJS's early registry
 pass can't see another mod's not-yet-fired MobEffect registration — see [echo-tier-gear](echo-tier-gear.md)

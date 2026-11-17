@@ -179,13 +179,13 @@ MB-38, MB-94, MB-95, MB-96 (existing). Counting: stand in the biome after it gen
 Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
 
 ### Goal
-"Grey parts to brown; more azalea rings" on the azaleabloom coat.
+"Gray parts to brown; more azalea rings" on the azaleabloom coat.
 
 ### Now
 - Coat: `development/moreMooblooms/src/main/resources/assets/more_mooblooms/textures/entity/moobloom/azaleabloom.png`,
   64x32, cow UV layout, olive base `#6C8031` (853 px) with lighter / darker greens, and about nine 3x3 pink-purple
   "rings" (`#D07BE3`, `#BA62CE`, `#9E5088`: the flowering-azalea blossoms).
-- The grey parts (read from the PNG 2026-10-21) are the pixels every coat shares (the cow template):
+- The gray parts (read from the PNG 2026-10-21) are the pixels every coat shares (the cow template):
   horns (u 22-25, v 0-3), muzzle on the head front (u 7-12, v 11-13), hooves (bottom row v 31 of the leg strip, and
   the leg undersides u 8-11, v 16-19), plus an unused muzzle copy at u 53-58, v 11-13 that the cow model never
   draws. Eyes are black `#000000` / `#13110C`; keep them.
@@ -200,18 +200,18 @@ Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
 3. Test through the hot-swap path; when the user likes it, copy it into the mod's assets and delete the
    `kubejs/assets` copy (it would otherwise ship as a dead duplicate, as the 11 loose coats did until 2026-10-14).
 4. `python3 development/moreMooblooms/tools/egg_colors.py` (write), then `--check`; then
-   `python3 tools/gen_moobloom_variants.py --check` (egg colours live in the variant JSON).
+   `python3 tools/gen_moobloom_variants.py --check` (egg colors live in the variant JSON).
 5. Ships with #2 as 1.1.0.
 
 ### Gotchas
 - **`egg_colors.py` masks "pixels identical on every coat"** (`shared_pixels`, egg_colors.py:30). Repainting
-  azaleabloom's horns and hooves takes those pixels out of the mask for **all** coats, so other coats' egg colours
-  can shift (the pink udder once became the spot colour of the white and blue coats). Run `--check` and look at all
+  azaleabloom's horns and hooves takes those pixels out of the mask for **all** coats, so other coats' egg colors
+  can shift (the pink udder once became the spot color of the white and blue coats). Run `--check` and look at all
   11 lines; if others change, make the mask "identical on all coats but one" or a fixed template mask.
 
 ### Tests
 - **MB-104 Azaleabloom coat:** `/summon more_mooblooms:moobloom ~ ~ ~ {Variant:"more_mooblooms:azaleabloom"}` ->
-  brown horns, muzzle and hooves, more pink rings; the egg colours still look right for all 11 eggs in JEI.
+  brown horns, muzzle and hooves, more pink rings; the egg colors still look right for all 11 eggs in JEI.
 
 ---
 

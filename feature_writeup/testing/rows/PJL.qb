@@ -155,12 +155,12 @@ reject \[cdevtest\] verb=\S+ done=0
 ## CQ-PJL-06
 @group client
 @commands 2026-11-03 art pass (needs the CD jar built 2026-11-03 or later). JEI: look up `vintagedelight:cherry_jam_block`, `cherry_jello_block` and the `cherry_jam` / `cherry_jello` fluids (Create filling page); place a 2x2 wall of each block; hold `vintagedelight:empty_mason_jar`, `honey_jar`; place 4 honey jars; fill a cherry fruit cauldron
-@pass Jam block and jam fluid show a seamless swirl, jello block and jello fluid the framed-square pattern, both in the fruit's colour (cherry dark red, red grape deep purple, salmonberry orange); empty jar is Fruits Delight's jar sprite; honey jar item and placed interior are the new orange-gold mason jar art; cauldron water tint close to the jam colour
+@pass Jam block and jam fluid show a seamless swirl, jello block and jello fluid the framed-square pattern, both in the fruit's color (cherry dark red, red grape deep purple, salmonberry orange); empty jar is Fruits Delight's jar sprite; honey jar item and placed interior are the new orange-gold mason jar art; cauldron water tint close to the jam color
 @fails `gen_jam_art.py` (art), `gen_pack_jams.py` (`new_jello_block` path, RETEXTURE honey, empty jar model), `JamCauldronColors`
 @draft no batch holds this row yet
 ## CQ-PJL-07
 @group client
 @commands 2026-11-04 approved art (`textureswapper/mason_jar/approved_2026-11-03/`, needs the CD jar built 2026-11-04 00:13 or later). Hold and place (4 each) the ten jam jars, `honey_jar`, `apple_sauce_jar`, `nut_mash_jar`, `nut_milk_jar`, `relish_jar`, `vinegar_jar`; place a few `fd_*_jam_jar` (apple, glowberry, sweetberry, orange); place pepper jam block, jello block, hold a bowl of pepper jello
-@pass Items and placed interiors match the approved PNGs; pepper interior, jello block and bowl are the new even-gradient art, not the old hand-edited ones; Fruits Delight placed jars show their jam colour inside, no purple-black
+@pass Items and placed interiors match the approved PNGs; pepper interior, jello block and bowl are the new even-gradient art, not the old hand-edited ones; Fruits Delight placed jars show their jam color inside, no purple-black
 @fails `gen_pack_jams.py` (RETEXTURE, FD_JAMS), art in `kubejs/assets/mason_jar_new/`
 @draft no batch holds this row yet

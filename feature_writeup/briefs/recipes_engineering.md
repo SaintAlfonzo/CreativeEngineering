@@ -48,7 +48,7 @@ The vanilla blast furnace (needed by Little Logistics' locomotive and tug) and t
   with `minecraft:iron_ingot`, `quark:deepslate_furnace` / `quark:blackstone_furnace`, `minecraft:smooth_stone`,
   condition `quark:flag variant_furnaces` (**jar**), and "Variant Furnaces" = true in both
   `config/quark-common.toml` and `configs_edited/root_config/quark-common.toml` (line 127). Not yet seen in JEI.
-- [transport.js](../../kubejs/data/creativeengineering/kubejs/engineering/transport.js) lines 92-100 swap `i.furnace` → `i.blast_furnace`
+- [transport.js](../../kubejs/data/creativeengineering/kubejs/engineering/transport.js) lines 92-100 swap `i.furnace` -> `i.blast_furnace`
   in `littlelogistics:steam_locomotive` and `littlelogistics:tug` (LL recipes use the `minecraft:furnace` item,
   **jar**).
 - Nether's Delight's `nethersdelight:blackstone_blast_furnace` (its own block, **jar**) does not satisfy those recipes.
@@ -71,7 +71,7 @@ The vanilla blast furnace (needed by Little Logistics' locomotive and tug) and t
    R.createDeploying(Item.of(i.dispenser, 1), [i.dropper, i.bow], e, 'dispenser_deploying')
    R.ieBlueprint(Item.of(i.dispenser, 1), [i.dropper, i.bow, i.redstone], 'redstonecomponents', e, 'dispenser_by_redstonecomponents')
    ```
-3. Writeup: F1 and F2 fixed, 2.3 "dispenser crafting removed (F2)" → the new routes; RE-03, RE-08.
+3. Writeup: F1 and F2 fixed, 2.3 "dispenser crafting removed (F2)" -> the new routes; RE-03, RE-08.
 
 ### Ids and data
 `i.blast_furnace` (dict line 554), `i.dispenser` (1446), `i.dropper` (549), `i.bow` (2072), `i.redstone`,
@@ -79,7 +79,7 @@ The vanilla blast furnace (needed by Little Logistics' locomotive and tug) and t
 the dict. Quark recipe ids verified in the jar.
 
 ### Decisions
-- **Plates in the Quark blast furnace?** Recommend yes (matches "iron ingots → iron plates in the whole of Little
+- **Plates in the Quark blast furnace?** Recommend yes (matches "iron ingots -> iron plates in the whole of Little
   Logistics" and the press / saw gating); costs nothing to build.
 - **Dispenser input: bow or crossbow?** Recommend the bow (vanilla's part, cheap), the dropper carries the stone.
 
@@ -89,7 +89,7 @@ the dict. Quark recipe ids verified in the jar.
 - `createDeploying` without `keepIngredient` consumes the bow, as intended.
 
 ### Tests
-- **RE-21 Blast furnace:** JEI `minecraft:blast_furnace` → the two Quark recipes (with plates if step 1's option is
+- **RE-21 Blast furnace:** JEI `minecraft:blast_furnace` -> the two Quark recipes (with plates if step 1's option is
   taken); craft one from a deepslate furnace; JEI locomotive and tug accept it. Replaces RE-03's "note whether".
 - **RE-22 Dispenser:** craft a dispenser from a dropper, bow and 2 redstone; deploy a bow onto a dropper; workbench
   `redstonecomponents`. Replaces RE-08.
@@ -121,24 +121,24 @@ One amethyst-shard recipe per machine, so JEI shows only what the machine does.
   has other sources: cinder flour + night vision (`dust.js` 29-33), soul sandstone in the IE crusher
   (`resource_blocks.js` line 197), Create's glowstone block crushing.
 - No mod recipe takes an amethyst shard as crushing input (Create only has `crushing/amethyst_block` and
-  `amethyst_cluster` → shards; IE only `crusher/amethyst` for the block, **jars**).
+  `amethyst_cluster` -> shards; IE only `crusher/amethyst` for the block, **jars**).
 
 ### Build
-1. Delete `dust.js` lines 104-105 (the crushing-wheel and IE-crusher glowstone recipes). Keep line 103 (millstone →
-   glowstone) and lines 12-13 (wheels and crusher → amethyst dust).
+1. Delete `dust.js` lines 104-105 (the crushing-wheel and IE-crusher glowstone recipes). Keep line 103 (millstone ->
+   glowstone) and lines 12-13 (wheels and crusher -> amethyst dust).
 2. Optional, if glowstone from amethyst should stay on the big machines: add it as a secondary instead of a second
    recipe, e.g. line 12 becomes `R.createCrushing([Item.of(i.amethyst_dust, 1).withChance(0.75), Item.of(i.glowstone, 1).withChance(0.25)], i.amethyst_shard, e)`;
    line 13's secondaries become `[{ chance: 0.25, output: Item.of(i.glowstone, 1) }]`.
 3. Move the remaining glowstone line under the Amethyst header (or a comment at line 102 "millstone only") so the split
    is visible.
-4. Writeup: 2.6 "amethyst shard → glowstone (millstone, crushing wheels, IE crusher; F3)" → millstone only; F3 fixed;
+4. Writeup: 2.6 "amethyst shard -> glowstone (millstone, crushing wheels, IE crusher; F3)" -> millstone only; F3 fixed;
    RE-16 rewritten.
 
 ### Ids and data
 Ids above (derived from `NCH.toId`; check with `/kubejs` recipe search after the reload if a test needs them).
 
 ### Decisions
-- **Which output per machine?** Recommend: millstone → glowstone, crushing wheels and IE crusher → amethyst dust (the
+- **Which output per machine?** Recommend: millstone -> glowstone, crushing wheels and IE crusher -> amethyst dust (the
   dust has no other source and gates budding amethyst; the millstone is the early machine, glowstone is an early
   need). With step 2 the big machines still give some glowstone.
 
@@ -147,7 +147,7 @@ Ids above (derived from `NCH.toId`; check with `/kubejs` recipe search after the
   file uses (none) or pass an `idOverride` so the id doesn't change when outputs are reordered.
 
 ### Tests
-- **RE-23 Amethyst split:** JEI uses of amethyst shard → millstone: glowstone; crushing wheels: amethyst dust (+ glowstone
+- **RE-23 Amethyst split:** JEI uses of amethyst shard -> millstone: glowstone; crushing wheels: amethyst dust (+ glowstone
   if step 2); IE crusher: amethyst dust (+ glowstone). Run each machine once. Replaces RE-16.
 
 ---
@@ -164,9 +164,9 @@ Fix four small inconsistencies in one pass.
   33-35): `pcPressureChamber(i.diamond, Item.of(i.coal_block, 9), 8, e)` (id
   `creativeengineering:pcpressurechamber/coal_block_to_diamond_by_pressure`) and `pcPressureChamber(i.diamond_shard,
   Item.of(i.coal_block, 4), 8, e)` (`..._to_diamond_shard_by_pressure`); line 33 also compacts 9 blocks + 250 mB lava
-  (superheated) → 1 shard. PNC selection (**decompiled** `PressureChamberValveBlockEntity.checkForRecipeRecalc` /
+  (superheated) -> 1 shard. PNC selection (**decompiled** `PressureChamberValveBlockEntity.checkForRecipeRecalc` /
   `processApplicableRecipes`): every recipe whose ingredients are present is collected in recipe-stream order, and the
-  first one with enough pressure runs. With 9+ blocks both match, so which runs is the stream order. Value: 2 shards →
+  first one with enough pressure runs. With 9+ blocks both match, so which runs is the stream order. Value: 2 shards ->
   1 diamond (`create_crush_everything:diamond_from_shards`, **jar**), so the shard route is 8 blocks per diamond, the
   diamond route 9: they are not even consistent.
 - **F5 Cinder flour** ([dust.js](../../kubejs/data/creativeengineering/kubejs/engineering/dust.js) lines 23-39): redstone (23-27),
@@ -184,7 +184,7 @@ Fix four small inconsistencies in one pass.
 
 ### Build
 1. F4, crystal.js line 34: make the diamond recipe consistent with the shard one, `Item.of(i.coal_block, 8)` (8 blocks
-   → 1 diamond, 4 → 1 shard = half). Then whichever runs, 8 blocks give one diamond's worth; the clash stops mattering.
+   -> 1 diamond, 4 -> 1 shard = half). Then whichever runs, 8 blocks give one diamond's worth; the clash stops mattering.
 2. F5, dust.js: add the three missing single-flour fillings next to their pile lines, same shape as line 44:
    ```js
    R.createFilling(i.redstone, [Fluid.of(f.create_potion, 25, '{Bottle:"REGULAR",Potion:"minecraft:strength"}'), i.cinder_flour], e, 'cinder_redstone_filling')
@@ -194,7 +194,7 @@ Fix four small inconsistencies in one pass.
 3. F9, redstone.js line 226: `'{Bottle:"REGULAR",Potion:"minecraft:mundane"}'`. The shaped (line 222) and blueprint
    (229) routes use `i.mundane_potion` (strict `forge:nbt` on `minecraft:potion`), already regular-only.
 4. F8: rewrite the press comment ("stiff springs and an iron block instead of brass") and drop the three `.id(...)`
-   calls on the sequence steps (sub-recipes inside a sequenced assembly don't need ids; Create serialises them inline).
+   calls on the sequence steps (sub-recipes inside a sequenced assembly don't need ids; Create serializes them inline).
    If ids are kept, name them `vehicle_link_step{1,2,3}_{wire,nugget,wire}` with the `creativeengineering:` namespace.
 5. Writeup: F4, F5, F8, F9 fixed; RE-12 (expect a diamond from 8 blocks); RE-15 add a single-flour filling.
 
@@ -218,9 +218,9 @@ Fix four small inconsistencies in one pass.
 ### Tests
 Built 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7): numbered RE-31, RE-32, RE-33 in
 [recipes_engineering.md](../recipes_engineering.md) (RE-24 to RE-30 were taken); queue SQ-RE-31 to -33.
-- **RE-24 Coal:** 9 coal blocks in a pressure chamber at 8 bar → a diamond (1 block left) or 2 shards (1 left); either
+- **RE-24 Coal:** 9 coal blocks in a pressure chamber at 8 bar -> a diamond (1 block left) or 2 shards (1 left); either
   is one diamond's worth.
-- **RE-25 Cinder singles:** spout 25 mB strength / night vision / harming potion onto one cinder flour → 1 redstone /
+- **RE-25 Cinder singles:** spout 25 mB strength / night vision / harming potion onto one cinder flour -> 1 redstone /
   glowstone dust / gunpowder.
 - **RE-26 Thunder detector NBT:** a spout with splash mundane potion fluid does not advance the thunder detector
   assembly; regular mundane does.
@@ -254,7 +254,7 @@ Fold AstikorCarts' four recipes into the pack's progression (iron plates, the th
      `R.shaped(Item.of(i.ac_wheel, 1), ['SPS', 'P P', 'SPS'], { S: i.any_stick, P: i.any_plate_iron }, e, 'ac_wheel')`
      plus a blueprint `R.ieBlueprint(Item.of(i.ac_wheel, 2), [Item.of(i.any_plate_iron, 2), Item.of(i.stick_treated, 4)], 'railtransport', e, 'ac_wheel_by_railtransport')`.
    - Plow: a real blade. `R.replaceInput({ id: 'astikorcarts:plow' }, i.any_stick, i.any_plate_iron, e)` (the top row
-     and centre become plates).
+     and center become plates).
    - Animal cart and supply cart: keep as they are (planks + wheels); the wheel carries the iron cost.
 3. Writeup: a short "Horse carts" paragraph in recipes_engineering.md 2.4 and a test.
 
@@ -282,7 +282,7 @@ Fold AstikorCarts' four recipes into the pack's progression (iron plates, the th
 
 Status Built 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44, not yet booted; untested) · Work KubeJS + patcherMod `bucket/` · TODO `recipes/engineering #5`
 
-**Done:** `process.js` Buckets section removes `minecraft:bucket` and adds `shaped/bucket_from_plates` (2 plates + 1 plate, `P P / _P_`) and `shaped/wooden_bucket` (3 planks, same shape). patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`: `creativeengineering:wooden_bucket` (stacks to 16) and `wooden_water_bucket` (stacks to 1). Chose patcherMod over cech12's Wooden Bucket (MIT, needs BucketLib, takes lava/milk/fish): it cannot be limited to water. Texture is cech12's `wooden_bucket.png` (MIT) with a painted water surface for the full one. Keys `i.wooden_bucket`, `i.wooden_water_bucket`. Empty bucket scoops only water sources (also waterlogged blocks); full one places water via vanilla and returns the wooden bucket; the fluid-handler wrapper swaps wooden items and accepts only water. Not done: dispenser behaviour, cauldron interactions, use as `minecraft:water_bucket` in recipes.
+**Done:** `process.js` Buckets section removes `minecraft:bucket` and adds `shaped/bucket_from_plates` (2 plates + 1 plate, `P P / _P_`) and `shaped/wooden_bucket` (3 planks, same shape). patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`: `creativeengineering:wooden_bucket` (stacks to 16) and `wooden_water_bucket` (stacks to 1). Chose patcherMod over cech12's Wooden Bucket (MIT, needs BucketLib, takes lava/milk/fish): it cannot be limited to water. Texture is cech12's `wooden_bucket.png` (MIT) with a painted water surface for the full one. Keys `i.wooden_bucket`, `i.wooden_water_bucket`. Empty bucket scoops only water sources (also waterlogged blocks); full one places water via vanilla and returns the wooden bucket; the fluid-handler wrapper swaps wooden items and accepts only water. Not done: dispenser behavior, cauldron interactions, use as `minecraft:water_bucket` in recipes.
 (scratchpad 2026-10-19)
 
 ### Goal
@@ -295,7 +295,7 @@ Buckets made from iron plates; an early wooden bucket that carries water.
   buckets for shulker shells (`magic/dragon_breathing.js` line 8, `engineering/sawmill-and-components #7`).
 - No wooden fluid bucket exists in the pack. `myrtrees:wooden_bucket` is a **block** that collects latex under a tree
   tap (**decompiled** `WoodenBucketBlock.use`: only `latex`), not a fluid container. The mod list has no bucket mod.
-- KubeJS 6 can't register a custom-behaviour bucket item (only its own fluids' buckets), so a water-only wooden bucket
+- KubeJS 6 can't register a custom-behavior bucket item (only its own fluids' buckets), so a water-only wooden bucket
   needs Java (patcherMod) or a mod.
 
 ### Build
@@ -304,7 +304,7 @@ Buckets made from iron plates; an early wooden bucket that carries water.
    R.remove({ id: 'minecraft:bucket' }, e)
    R.shaped(Item.of(i.bucket, 1), ['P P', ' P '], { P: i.any_plate_iron }, e, 'bucket_from_plates')
    ```
-   Optional third route: a blueprint (`components`, 3 plates → 2 buckets), if the three-route pattern is wanted here.
+   Optional third route: a blueprint (`components`, 3 plates -> 2 buckets), if the three-route pattern is wanted here.
 2. Wooden water bucket, one of:
    - **mods/** (recommended if available): a maintained wooden bucket mod for Forge 1.19.2 (for example cech12's
      "Wooden Bucket" or "Ceramic Bucket"; **unverified**: check CurseForge / Modrinth for a 1.19.2 Forge file, its
@@ -336,7 +336,7 @@ Buckets made from iron plates; an early wooden bucket that carries water.
 - Plates are 1 ingot each in this pack, so the plate bucket costs the same iron as vanilla; it only adds a press step.
 
 ### Tests
-- **RE-28 Plate bucket:** JEI `minecraft:bucket` → only the plate recipe (and any mod recipe noted); craft one.
+- **RE-28 Plate bucket:** JEI `minecraft:bucket` -> only the plate recipe (and any mod recipe noted); craft one.
 - **RE-29 Wooden bucket:** fill from a water source, place it, refill; it refuses lava; a Create spout / FD cooking pot
   accepts water from it.
 
@@ -385,18 +385,18 @@ file, process.js is already long). Proposed recipes (the row fixes the component
 | Machine | Change | Helper |
 |---|---|---|
 | Mechanical arm | replace the 3 brass plates with `i.component_zinc`, add 2 `i.springs_stiff`: remove + `R.shaped(i.mechanical_arm, ['ZZA', 'Z S', 'PBS'], {Z: component_zinc, A: andesite_alloy, S: springs_stiff, P: precision_mechanism, B: brass_casing})` | `R.remove`, `R.shaped` |
-| Helve hammer | 5 iron blocks → 1 `i.block_netherite` + 4 `i.component_iron` (or steel, Decisions) in the same slots | `R.remove`, `R.createMechanicalCrafting` |
-| Centrifuge | logs → `i.component_zinc` | `R.replaceInput({id}, '#minecraft:logs', i.component_zinc, e)` |
-| Curving press | iron springs → `i.component_zinc` | `R.replaceInput` |
-| Spring coiling machine | iron ingots → `i.component_zinc` | `R.replaceInput({id}, '#forge:ingots/iron', i.component_zinc, e)` |
-| Compressor | andesite alloy → `i.component_copper` | `R.replaceInput` |
-| Mechanical extruder | 2 of the 4 glass → `i.component_netherite` (rebuild: `S / GNG / N`? see Decisions) | `R.remove`, `R.shaped` |
+| Helve hammer | 5 iron blocks -> 1 `i.block_netherite` + 4 `i.component_iron` (or steel, Decisions) in the same slots | `R.remove`, `R.createMechanicalCrafting` |
+| Centrifuge | logs -> `i.component_zinc` | `R.replaceInput({id}, '#minecraft:logs', i.component_zinc, e)` |
+| Curving press | iron springs -> `i.component_zinc` | `R.replaceInput` |
+| Spring coiling machine | iron ingots -> `i.component_zinc` | `R.replaceInput({id}, '#forge:ingots/iron', i.component_zinc, e)` |
+| Compressor | andesite alloy -> `i.component_copper` | `R.replaceInput` |
+| Mechanical extruder | 2 of the 4 glass -> `i.component_netherite` (rebuild: `S / GNG / N`? see Decisions) | `R.remove`, `R.shaped` |
 | Laser item ("laser assembly") | replace the mechanical crafting with a sequenced assembly on `i.amethyst_lens`: deploy `i.electron_tube`, deploy `i.plate_copper`, deploy `i.glowstone`, 2 loops (keeps VI's tube, copper and glowstone); plus `R.ieBlueprint(i.laser_item, [i.amethyst_lens, i.electron_tube, Item.of(i.plate_copper, 2), i.glowstone], 'components', e)` | `R.remove`, `R.createSequencedAssembly` (register `['laser_item']` in `transition_items.js`), `R.ieBlueprint` |
-| Laser | redstone block → `i.component_diamond`, quartz → `i.component_brass`, keep precision mechanism and the laser item | `R.remove`, `R.shaped` |
+| Laser | redstone block -> `i.component_diamond`, quartz -> `i.component_brass`, keep precision mechanism and the laser item | `R.remove`, `R.shaped` |
 | Rotation speed controller | brass craft ×2 with 2 `i.component_brass` (`B / P / C` + components), plus a brassless one: andesite casing + `i.component_steel` + `i.component_gold` + `i.electron_tube`... ×1 | `R.remove`, `R.shaped` ×2 |
-| Sequenced gearshift | shapeless brass casing, cog, electron tube, `i.component_zinc`, `i.component_brass` → ×2 | `R.remove`, `R.shapeless` |
+| Sequenced gearshift | shapeless brass casing, cog, electron tube, `i.component_zinc`, `i.component_brass` -> ×2 | `R.remove`, `R.shapeless` |
 | Vibrating table | check only (see Gotchas) | none |
-| Laser cutting blocks → plates | for each metal with a block and a plate: `R.viLaserCutting(Item.of(i['plate_' + m], 12), i['block_' + m], e, m + '_plate_laser_cutting', 16000, 800)` | `R.viLaserCutting` in a loop over the metal list of `recipes/metal #1` |
+| Laser cutting blocks -> plates | for each metal with a block and a plate: `R.viLaserCutting(Item.of(i['plate_' + m], 12), i['block_' + m], e, m + '_plate_laser_cutting', 16000, 800)` | `R.viLaserCutting` in a loop over the metal list of `recipes/metal #1` |
 
 Steps:
 1. Register `['laser_item']` in `startup_scripts/changes/transition_items.js` `SEQUENCED_ASSEMBLIES` (texture
@@ -441,9 +441,9 @@ In `replaceInput`, match the recipes' tag ingredients: `i.any_log` (`#minecraft:
 - Each machine recipe change is visible in Ponder / guide books that still show the old recipe; acceptable.
 
 ### Tests
-- **RE-30 Add-on machines:** JEI each machine in the table → the new recipe only (two for the RSC); craft one of each.
+- **RE-30 Add-on machines:** JEI each machine in the table -> the new recipe only (two for the RSC); craft one of each.
 - **RE-31 Laser assembly:** run the laser item assembly on an amethyst lens; workbench blueprint too.
-- **RE-32 Laser plates:** laser cut an iron block → 12 iron plates (or the chosen count); repeat for aluminium.
+- **RE-32 Laser plates:** laser cut an iron block -> 12 iron plates (or the chosen count); repeat for aluminium.
 
 ---
 
@@ -453,8 +453,8 @@ None in this subfamily (no Testing / Complete rows).
 
 ## Writeup corrections made
 
-- [recipes_engineering.md](../recipes_engineering.md) at-a-glance row and 2.1 table: blast furnace "no recipe" →
+- [recipes_engineering.md](../recipes_engineering.md) at-a-glance row and 2.1 table: blast furnace "no recipe" ->
   vanilla recipe removed, Quark's deepslate / blackstone furnace recipes still make it.
 - [recipes_engineering.md](../recipes_engineering.md) F1: added the 2026-10-21 recheck with the two Quark recipe ids.
 - [recipes_engineering.md](../recipes_engineering.md) F5: redstone, glowstone **and gunpowder** lack the single-flour
-  filling (was redstone and glowstone); at-a-glance "9 resources" → 10.
+  filling (was redstone and glowstone); at-a-glance "9 resources" -> 10.

@@ -165,7 +165,7 @@ unplated meal).
 current ingredients' leftovers are simulated through steps 1 and 2 (`RemainderBuffer.fits`). If they don't all
 fit, it returns false. The station then holds its progress at 0, as it already does when the meal slot is full,
 and resumes as soon as a slot is emptied. A hopper or funnel on an output face keeps it running indefinitely.
-`stallWhenFull = false` skips the check: the station crafts and throws what doesn't fit (the old behaviour, only
+`stallWhenFull = false` skips the check: the station crafts and throws what doesn't fit (the old behavior, only
 once the buffer is full).
 
 ### 3.3 Getting the items out

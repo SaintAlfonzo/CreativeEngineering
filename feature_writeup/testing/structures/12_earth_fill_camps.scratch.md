@@ -17,7 +17,7 @@ Scratchpad scripts: setup_srv.sh (LEVEL, JAR, SEED env; libraries + run.sh from
 ~/.local/share/atlauncher/servers/Minecraft1192withForge, kubejs/config/defaultconfigs copied, vinery_upstream linked,
 mods symlinked by mod_sides.md, creativeengineering swapped for JAR), boot.sh (fifo + nohup), cmd.sh (echo to fifo),
 tune_toml.sh (structureDensity 4, [earth_fill] log ALL, [meta_structures] log true), zz_probe.js (scratch-only
-/zground x z r: ground height map relative to the centre, a..i = -1..-9, w = water; /zcol x z n: top n blocks).
+/zground x z r: ground height map relative to the center, a..i = -1..-9, w = water; /zcol x z n: top n blocks).
 server.properties: seed 8675309, port 25599, online-mode false, max-tick-time -1, view 6.
 
 ## diag1: old jar, find the tent plinth
@@ -25,7 +25,7 @@ server.properties: seed 8675309, port 25599, online-mode false, max-tick-time -1
 - Boot 315 s. locate of the 3 tent mods (big_villager_tent, circus, snowy) timed out at 120 s each from spawn.
 - Earth-fill ALL lines showed camps checked during the locates: campsite_structures:armorer_campsite chunk [-7, -9] kept.
 - forceload -128 -176 .. -80 -112, /zground -106 -152 14: a round plateau 4 above a flat ring (the ring 4 below
-  the centre, terrain rising beyond). /zcol -104 -152: bricks 95-96 (template y5), dirt 94 .. 89; natural grass at
+  the center, terrain rising beyond). /zcol -104 -152: bricks 95-96 (template y5), dirt 94 .. 89; natural grass at
   -96 -152 is y 90. So the template's grass layer (y4) is at 94, 4 above the ground: the dirt dome y0-3 stands out.
 - Cause: Campsite templates (13x16x13) are a dirt dome y0-3 (37/73/121/121 blocks) under a grass layer y4; the port
   uses start_height -5 (the old feature placed the template at surface - 5: ArmorerCampsiteFeature bytecode, heightmap
@@ -44,9 +44,9 @@ server.properties: seed 8675309, port 25599, online-mode false, max-tick-time -1
   bricks 95-96, dirt 94..90, stone 89. Plinth gone. With -5 the camp sits 1 below the ring (the old feature's dip,
   template air in y5); start_height changed to -4 for all 6 (same layout: dome y0-3, ground y4) so it is flush.
 - Earth-fill log: armorer camp "footprint 0 water / 72 ground -> kept". campsite_structures:fisher_campsite at
-  [-36, -7] "0 over water ... footprint 169 water / 0 ground (too wet) -> CANCELLED" (in diag1 it was kept: the beard
+  [-36, -7] "0 over water ... footprint 169 water / 0 ground (too wet) -> CANCELED" (in diag1 it was kept: the beard
   filled the shallow water, so maxOverWater never saw it). forest_watchtower same chunk too wet as well.
-- 326 checked, 64 cancelled, 47 too wet. FALSE POSITIVES: philipsruins:ancient_dungeon (bury, underground) x6,
+- 326 checked, 64 canceled, 47 too wet. FALSE POSITIVES: philipsruins:ancient_dungeon (bury, underground) x6,
   subterrestrial:deepslate_cabin, subterrestrial:ocean_cabin x~30 (most already over the 24 water limit). Their footprint
   layer is deep underground: under the sea every solid block is SEABED (not ground), aquifer water counts as water.
   Fix: a footprint spot with more than baseLayers (3) blocks of predicted terrain above it is buried, counted as
@@ -71,7 +71,7 @@ server.properties: seed 8675309, port 25599, online-mode false, max-tick-time -1
   too. At 2144 -2592 (nearest river 101 blocks): ruin_scatter, house_camp, farmers_camp, ruin_cluster, waysign_camps
   all built. `locate structure #creativeengineering:meta/coast_ok`: 6 members; a driftwood_flotilla assembled during it.
 - Ratio on the final jar: avoidCoasts off again (restart), Chunky square r 400 at 2144 -2592 (2601 chunks, 11:55).
-  972 checked, 40 cancelled, 21 too wet; 14 cancelled by the share alone: T&T village_birch_forest + sunflower_plains
+  972 checked, 40 canceled, 21 too wet; 14 canceled by the share alone: T&T village_birch_forest + sunflower_plains
   at [102, -180] (1691/497 and 739/0), 2 drum towers (2123/66 at [155, -192]), windmill 255/0, big horse stable 505/244,
   T&T outposts (old growth taiga x2, taiga, tudor), desert watchtower, mysticrift jungle tower. No underground ones.
   Kept with any footprint water: 5 of 926 (villages: savanna 470/425, tudor 395/568, meadow 805/1262, plains 113/462 x2).

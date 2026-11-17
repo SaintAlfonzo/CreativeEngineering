@@ -1,4 +1,4 @@
-# Wise Oak (Mystical Oak Tree): behaviour breakdown, replacement plan, web-call audit
+# Wise Oak (Mystical Oak Tree): behavior breakdown, replacement plan, web-call audit
 
 Test prefix: `WO-`. TODO: `mobs/tweaks #19` (cooldown basis). Related: [time.md](time.md) (the pack's day length),
 [enchant_power.md](enchant_power.md) (the Wise Oak gives 15 enchanting power, finding F1),
@@ -12,7 +12,7 @@ Test prefix: `WO-`. TODO: `mobs/tweaks #19` (cooldown basis). Related: [time.md]
 
 | Part | Status |
 |---|---|
-| Behaviour of the stock mod (section 2) | DONE 2026-11-09, read from the bytecode of `mysticaloaktree-1.19.2-1.10.jar` |
+| Behavior of the stock mod (section 2) | DONE 2026-11-09, read from the bytecode of `mysticaloaktree-1.19.2-1.10.jar` |
 | Web-call audit (section 3) | DONE 2026-11-09, every outbound call in the jar listed |
 | New sleep and anger loop (section 4.1 to 4.3) | BUILT 2026-11-09, installed in `mods/`, not tested in game |
 | Lightning growth (section 4.4) | defined from the stock code, no change made |
@@ -135,7 +135,7 @@ block**. Lightning lands on the top solid block, and a sapling has no collision,
    clients are notified (sendBlockUpdated).
 
 It does not look at the biome, the rarity, the soil or the light, and it only matches the **oak** sapling. A struck sapling
-that is not oak is ignored. The variant is picked by the biome (2.10). This is stock behaviour; nothing in the pack touches it.
+that is not oak is ignored. The variant is picked by the biome (2.10). This is stock behavior; nothing in the pack touches it.
 
 ### 2.10 Natural generation (stock)
 
@@ -246,7 +246,7 @@ No change. It is documented in 2.9 so that testing has a known target. It does *
   unused (mangrove swamps have no oak trees). The swamp and jungle vine variants apply only to the biomes the generator keeps.
 - **Existing worlds:** only newly generated chunks change. Existing trees stay.
 - **Lightning:** not gated by the tag (4.4).
-- **Result (generated 2026-11-09):** 42 included, 109 excluded of the 151 overworld biomes. `trees_meadow`, `trees_badlands`, `trees_savanna`, `trees_jungle` and `trees_water` are vanilla Java features and are modelled in the generator from vanilla.
+- **Result (generated 2026-11-09):** 42 included, 109 excluded of the 151 overworld biomes. `trees_meadow`, `trees_badlands`, `trees_savanna`, `trees_jungle` and `trees_water` are vanilla Java features and are modeled in the generator from vanilla.
 - **Denied (owner decision 2026-11-09):** 16 biomes that pass the rule only on a technicality, held in `DENY` in the generator: 9 ocean biomes (island oaks through `trees_water`), `river`, `frozen_river` and Terralith `warm_river`, and four cave biomes (`dripstone_caves`, Terralith `desert_caves`, `frostfire_caves`, `mantle_caves`).
 
 ### 4.6 Blocking the web calls
@@ -299,7 +299,7 @@ Out of implementation (owner, 2026-11-09):
 - **Insults when another oak dies** (TODO `mobs/tweaks #19`, second half). Needs the dormant dialogue types plus new lines. Stays open in the TODO.
 
 Nothing else is open.
-- **Rejected:** replace the block with our own (licence). KubeJS only (the sleep logic is private Java). A per-world opt-out for the web
+- **Rejected:** replace the block with our own (license). KubeJS only (the sleep logic is private Java). A per-world opt-out for the web
   calls (nobody wants them).
 
 ## 6. Where it lives and how (as built)
@@ -352,7 +352,7 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 
 ## 10. History
 
-- 2026-11-09: stock behaviour decompiled; plan written. Owner decisions added: Creative Worldgen, storms are night, mirror the
+- 2026-11-09: stock behavior decompiled; plan written. Owner decisions added: Creative Worldgen, storms are night, mirror the
   right-click effects, oak-biome-only generation, web calls blocked, lightning growth defined, full web audit.
 - 2026-11-09: built: sleep and anger loop, config, oak-biome tag and modifier, web block. Creative Worldgen installed. Corrected the stock blink chance (always, not 1 in 100).
 - 2026-11-09: owner confirmed the timer defaults and denied 16 technicality biomes. High-trust gifts built.

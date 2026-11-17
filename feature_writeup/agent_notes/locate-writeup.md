@@ -11,7 +11,7 @@ Key facts found (1.19.2 + AL 1.3.0, decompiled):
 - Under AL, a miss's getChunk is still handed to the server thread, which blocks in managedBlock. Fix idea: getChunkFuture + join on the locator thread.
 - StructureCheck maps are plain HashMaps. Already racy with 1 AL thread; needs a synchronized mixin before asyncLocatorThreads > 1.
 - AL catches no exceptions: a throwing search never completes.
-- Rule order to fold: A set freq/exclusion, B biome (generalise MetaSlots.fits), C conservative group pick, D surface check (jigsaw only), E earth fill/priority via PlacementPriority's predictor (switchable). Exact or conservative only. Census false negatives must be 0.
+- Rule order to fold: A set freq/exclusion, B biome (generalize MetaSlots.fits), C conservative group pick, D surface check (jigsaw only), E earth fill/priority via PlacementPriority's predictor (switchable). Exact or conservative only. Census false negatives must be 0.
 - Deep band: measure with JFR ChunkGeneration first. Then a DH-only skip (FEATURES mode, cave culling 60) and Chunky pregen. A real retrogen band is not recommended.
 
 Related: memory `async-locator-everywhere`, [plan-7-1-execution](plan-7-1-execution.md), [placement-priority](placement-priority.md), [meta-structures](meta-structures.md), [perf-profiling-jfr](perf-profiling-jfr.md).

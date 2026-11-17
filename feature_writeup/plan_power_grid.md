@@ -13,7 +13,7 @@ is complete (D1, 5.1 delivery model).
 
 | Phase | Content | Upstream size (classes) | Exit gate |
 |---|---|---|---|
-| P0 | Fork, Gradle project, licence files, platform inlining, phase manifest | n/a | empty mod loads on a scratch server |
+| P0 | Fork, Gradle project, license files, platform inlining, phase manifest | n/a | empty mod loads on a scratch server |
 | P1 | Solver core (`electricity/sim`) and thermal model (`circuits/thermal`) | about 90 | javac harness passes 5 circuits |
 | P2 | Grid base: wires, connectors, sync, creative sources, gauges, wire tools, `/powergrid`, Overheated Component | about 130 | PWG-01 to -05, -25, -26, -28; SQ-PWG-01 to -05, -08; CQ-PWG-01 to -04 |
 | P3 | Passive and switching devices, transformers, storage, FE bridge, magnet | about 150 | PWG-12 to -19, -24, -31 |
@@ -44,7 +44,7 @@ reordered or stopped at any point: the manifest (P0) keeps unported content out 
 ## 1. Shared rules for every phase
 
 - **Home:** `development/backportedPowerGrid` (mod id `powergrid`), `ce.forge-mod` plugin, own jar. Model:
-  [backportedTempad](../development/backportedTempad/build.gradle) (`PORT_NOTES.md`, licence files, `-Xmaxerrs`).
+  [backportedTempad](../development/backportedTempad/build.gradle) (`PORT_NOTES.md`, license files, `-Xmaxerrs`).
 - **Phase manifest:** `development/backportedPowerGrid/phases.json` maps every upstream block, item, entity, fluid and
   menu id to a phase. The `ModdedBlocks` / `ModdedItems` / `ModdedEntities` entries check a build-time constant
   (`PortPhase.CURRENT`), and `processResources` excludes the data and assets of unported ids (blockstates, models, loot,
@@ -66,7 +66,7 @@ reordered or stopped at any point: the manifest (P0) keeps unported content out 
   clients (skill `scratch-test`) with the pack's mods plus the PG jar (E1, answered).
 - **Per phase, done means:** build clean with `--offline`; the phase's harness or scratch rows written in
   [scratch_queue.md](testing/scratch_queue.md) (run only when the owner says); `PORT_NOTES.md` lists the classes ported
-  and every behaviour change; power_grid.md history line; TODO `mod-additions #74` status. **No changelog bullet** during
+  and every behavior change; power_grid.md history line; TODO `mod-additions #74` status. **No changelog bullet** during
   the port (the jar is not in the pack); bullets come with stage 5.
 - **Upstream bugs** found while porting are fixed and listed in power_grid.md 3.5 (B5 onward).
 
@@ -205,7 +205,7 @@ P3) fixed in `-08`. 31 recipe overrides unchanged.
 | Code | `electricity/heater`, `basinheater`, `fan`, `pump`, `light`, `solarpanel` |
 | Data | `solar_biome_override` as a reload listener |
 | Mixins | `AirCurrentMixin` (done in P3, without its circuit board branch; P9 adds it), `FanProcessingMixin`, `ChuteBlockEntityMixin`, `FluidPropagatorMixin`, `BasinRecipeMixin`; Farmer's Delight `CookingPotBlockEntityMixin`, `SkilletBlockEntityMixin` (FD installed) |
-| Checks | fan processing type against the pack's Dragon Breathing hook (memory `create-fan-processing-type`); Growth Lamp random ticks run on the port as upstream; the season gate is an integration step (PWG-22 records the upstream behaviour) |
+| Checks | fan processing type against the pack's Dragon Breathing hook (memory `create-fan-processing-type`); Growth Lamp random ticks run on the port as upstream; the season gate is an integration step (PWG-22 records the upstream behavior) |
 
 Gate: PWG-20 to -23, -33.
 
@@ -323,7 +323,7 @@ covers fluids.
 | Code | `circuits/circuitboard`, `components`, `editor`, `gui`, `schematic`; `equipment/BoostRecipe`, `ItemBoostUtils` |
 | Data | `component_items` (28 entries) as a reload listener plus sync. It also maps items registered in earlier phases onto boards (bulbs, neon bulb, gauges, switch, button, fuse holder, display module, connector); those items keep their phase, and only their board use arrives here. Board-only entries `inductor`, `label`, `via` have no item; recipe types `boost_recipe` and the sequenced assembly chains; damage source `acid` |
 | Mixins | `ArmBlockEntityMixin`, `ArmInteractionPointMixin`, `BeltDeployerMixin` and `RecipeApplierMixin` (boost; advancement call removed) |
-| GUI | `GuiGraphics` to `PoseStack` + `GuiComponent` for the whole editor (32 files); client config colours |
+| GUI | `GuiGraphics` to `PoseStack` + `GuiComponent` for the whole editor (32 files); client config colors |
 | Compat | JEI boost category |
 | Sub-steps | P9a (9.1) components on boards and the solver's non-linear models (diode, BJT, tubes): board, components, schematic model, `component_items`, component items and `pins`, circuit ponder; P9b (9.2) design table and editor (`circuits/editor`, `gui`, schematic item and render, menus, edit menu); P9c (9.3) etching, acid, assembly (`IncompleteCircuitItem`, acid, unetched / etched chains, arm mixins); P9d (9.4) Integrated Circuit and boost (`BoostingChipItem`, `BoostRecipe`, deployer and applier mixins, JEI boost). Each sub-step builds and is playable on its own; the manifest split is in `phases.json` (PORT_NOTES.md section 20) |
 
@@ -372,7 +372,7 @@ Gate: PWG-44. Last priority (D11), but ported in full for evaluation; the non-ov
   energy_advanced.md 8.1 (owner columns empty).
 - Step 4: bugs B5 to B34 in power_grid.md 3.5 are current; H7 method in energy_advanced.md 8.2.
 - Open: the runs themselves (runner), the owner session, and the pwg16 probe fault (P9b to P9d rows not yet judged on a
-  working probe). SQ-PWG-63 closed: Create 0.5.1's value box handler replays every fake-player click as a block-centre
+  working probe). SQ-PWG-63 closed: Create 0.5.1's value box handler replays every fake-player click as a block-center
   hit (not a port fault; probe calls the block's `use` directly now; the hand check is owner item 12).
 
 **P11 step 1 run 2026-11-14 (scratch run r1114 phase 5, jar `-17`, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8):** R1 to R3 and the perf world, plus the
@@ -442,7 +442,7 @@ rewritten. Not run yet.
 
 - 2026-11-13: **P9b done.** 25 classes moved (`circuits/editor` 12, `circuits/gui` 9, `CircuitSchematicItem`,
   `CircuitSchematicRender`, `IMultiScreenHandlerFactory`, the two packets), restored P9b parts in `CircuitSchematic`
-  (`toItemStack`), `CircuitBoardBlock` (creative edit menu), `ComponentFootprint` (colours), `PowerGridJEI` (ghost
+  (`toItemStack`), `CircuitBoardBlock` (creative edit menu), `ComponentFootprint` (colors), `PowerGridJEI` (ghost
   handler); `utility/GuiGraphics` extended (now a `GuiComponent`: lines, gradient, `blitRepeating`, tooltips).
   `port_phase=9.2`, jar 0.6.2-ce-19.2-14 (68 blocks, 107 items, 56 block entities, 7 menus, 94 recipes), build clean;
   solver harness not rerun (no `sim` change). Manifest: override `deploying/schematic_copy` 9.3. B21 to B24 found and
@@ -467,7 +467,7 @@ rewritten. Not run yet.
   are: `EncasingRegistry`, `GhostItemMenu`, `ScrollOptionBehaviour` (board overridden), `SpriteShifter`, the display link
   API (no new source); CC: Tweaked 1.101.4 API unchanged. B15 to B17 found and fixed. P9 notes: PORT_NOTES.md section 9.
 - 2026-11-13: **P7 done.** 31 classes moved (portable battery block, block entity, item, utils and armor layer; drill,
-  saw, baton, zapper with its projectile, renderers, render handler and packet; lightning rod movement behaviour; zinc
+  saw, baton, zapper with its projectile, renderers, render handler and packet; lightning rod movement behavior; zinc
   materials; `ItemBoostUtils`; three packets; `SheepMixin`, `PlayerDrillMixin`) plus the P7 parts of the collections and
   glue; new `DrillBreakActionMixin`. `port_phase=7`, jar 0.6.2-ce-19.2-09 (59 blocks, 77 items, 4 entity types, 49 block
   entities, 61 recipes, 25 mixins), build clean; solver harness not rerun (no `sim` change). Create 0.5.1 counterparts used

@@ -6,7 +6,7 @@ The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=b33c54336003 -->
+<!-- generated:status_index begin open_work sha1=7bbfb9e092e6 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Bug 1, Planned 3, Pinned 1, In Progress 2, Testing 18), 3 Complete.
 
 | Id | Status | Tests | Change |
@@ -17,7 +17,7 @@ The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch 
 | `tooling/generators-and-tests #8` | Planned | S | Feature tests for patcherMod and the in-tree mods |
 | `structures/terrain #4` | Pinned | S C P | Avoid straight lines in worldgen noise |
 | `pack/server #21` | In Progress | S~ P | Block state count |
-| `pack/server #38` | In Progress | C | Client swapping, Nether DH, season colour cost, log spam (live client recording 2026-11-07) |
+| `pack/server #38` | In Progress | C | Client swapping, Nether DH, season color cost, log spam (live client recording 2026-11-07) |
 | `pack/server #9` | Testing | S~ | Performance tooling gaps |
 | `pack/server #10` | Testing | S+ C~ P | Armor Trims JEI page costs 58 s per world join |
 | `pack/server #11` | Testing | S+ P T | Distant Horizons cost on server and client |
@@ -354,7 +354,7 @@ one applied, and there are no errors from them in the log. None of it is tested 
 |---|---|---|---|
 | Horse armor effect used too many resources, was disabled | Back on, but the all-entities walk runs once per interval (not every tick) and effects last interval + 40 ticks. **Also fixed:** the registration used `minecraft:strong_regeneration`, a potion id, so the horse never got any effect even before it was disabled; now `minecraft:regeneration`; since 2026-10-31 Regeneration II, Health Boost II and Resistance II (armor_effects.md F9) | `server_scripts/magic/armor_effects.js`, `startup_scripts/func/armor_effects.js` | `mountEffectIntervalTicks` = 100 |
 | Quark feeding trough re-searched constantly | After a miss (no trough, no real player tempting) the goal skips the search for 30 s. Hits are never stamped, so cached troughs are unchanged | `FeedingTroughModuleMixin`, `TemptGoalTroughRetryMixin`, `compat/TroughRetryAccess` | `troughMissCooldownTicks` = 600 |
-| Create: Gravity ran for every entity in every dimension | `ForgeEvents#handleLogic` is cancelled outside the listed dimensions (the End). An entity still carrying the low-gravity modifier runs it once more so the modifier is removed | `CreateGravityDimensionMixin` | `gravityLimitDimensions` = true, `gravityDimensions` = the End |
+| Create: Gravity ran for every entity in every dimension | `ForgeEvents#handleLogic` is canceled outside the listed dimensions (the End). An entity still carrying the low-gravity modifier runs it once more so the modifier is removed | `CreateGravityDimensionMixin` | `gravityLimitDimensions` = true, `gravityDimensions` = the End |
 | Serene Seasons melt check every tick | `RandomUpdateHandler#onWorldTick` runs every 4th tick and the melt chance roll gets 4x the chance (`nextInt(bound / 4)`); same average rate for the mod's bounds 16/12/8/4 | `SereneSeasonsMeltThrottleMixin` | `seasonsMeltIntervalTicks` = 4 |
 | Fruits Delight leaves tested the tag on every collision query | The handler's `is(BlockTags.LEAVES)` is rewritten to a projectile-first test (`FruitsDelightHooks.isLeafForProjectile`); same result. Mixin cannot inject into another mixin's handler, so this is a bytecode edit in a mixin config plugin. Moved to Creative Delight's `fruitsdelight` compartment 2026-10-27 (applies with Fruits Delight 0.5.11 only) | CD `mixin/fruitsdelight/FruitsDelightLeafCheckMixin` (empty anchor), CD `compat/CDMixinPlugin`, CD `compat/FruitsDelightHooks` | none (applies at launch) |
 
@@ -487,7 +487,7 @@ server script idled at spawn, then teleported the player 6 times 1500 blocks apa
 | Single player integrated server, idle at spawn | median 26.5 ms, p95 48.5 ms, 73 ticks over 50 ms in 95 s | |
 | Single player, exploring (6 teleports to new land) | 11.8 TPS, median 23.9 ms, 129 ticks over 50 ms, one 29 s tick; heap after GC 6.6-9.0 GB of 10 GB | |
 | Single player, back at spawn | 20 TPS, median 12.0 ms, p95 14.3 ms | |
-| Probe suites run (`/fdtest all`, `/cdjtest`, `/fgdtest all`, `/kttest`, `/sntest`, `/vtdtest all`, `/mgtest`) | median tick 15.7 ms, 15 ticks over 50 ms, longest 5.7 s (`/vtdtest` serialising 12,683 loot tables) | |
+| Probe suites run (`/fdtest all`, `/cdjtest`, `/fgdtest all`, `/kttest`, `/sntest`, `/vtdtest all`, `/mgtest`) | median tick 15.7 ms, 15 ticks over 50 ms, longest 5.7 s (`/vtdtest` serializing 12,683 loot tables) | |
 | Block states | 770,959 of 1,048,576 | same as 2026-10-26 |
 
 Client startup and join times come from `python3 tools/perf/log_timings.py --months logs` (user's real launches, by
@@ -711,7 +711,7 @@ rest of EarthFill's cold reads. Measured 2026-10-27 (10.9): pregen 5:26 -> 3:50,
 
 **`sampleGrid` 4 vs 2 offline** (`GRID=2|4 tools/earth_fill_sim.sh 4242 60`, vanilla terrain, 60 sites each, 2026-10-27):
 cancel rates at every candidate limit pair moved by at most 4 points (1-2 starts of 60); medians and p90 of earth over
-water / air moved by at most 7 blocks. Cancelled % at (24, 64) / (48, 128), grid 2 -> 4: plains 67/35 -> 70/33, desert
+water / air moved by at most 7 blocks. Canceled % at (24, 64) / (48, 128), grid 2 -> 4: plains 67/35 -> 70/33, desert
 77/48 -> 77/52, savanna 95/88 -> 95/90, snowy 77/48 -> 78/45, taiga 78/45 -> 75/45, mansion 13/0 -> 12/0; outpost and
 igloo 0 in both. No family shifts one way, so grid 4 is kept.
 
@@ -818,7 +818,7 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    instance (`mod_sides.md` lists it `both`); B, a patcherMod mixin that defers the registration to first use.
    B BUILT 2026-10-27 (TODO server #17). How the init works: `Capability$4.ready` loops `BlockType.REGISTRY`,
    calls `getAllStates()` (which runs `BlockState.generateStateMap`: a cartesian product of property values, a
-   `TreeMap` and an `ImmutableMap` key and a `populate` neighbour table per state), then for each state
+   `TreeMap` and an `ImmutableMap` key and a `populate` neighbor table per state), then for each state
    `ForgeBlockRegistry.getInternalBlockStateId`, which maps it back to the vanilla state through
    `ForgeTransmogrifier` and returns `Block.getId`. The stored id is only vanilla's `BLOCK_STATE_REGISTRY` id, so
    the table can be filled on demand. Both `ForgeAdapter.adapt` directions already fall back to
@@ -1024,7 +1024,7 @@ with `--mods mods`). Scratch tests SQ-STC-01/02, SQ-GFB-01 to -04, SQ-HRU-01/02;
 ### 13.1 Season type cache (client chunk meshing)
 
 `SeasonTypes.tagged` was 20% of the client's `Chunk Render Task Executor` (95% of the pack's share there) and showed on
-the render thread: Serene Seasons' grass and foliage colour handlers reach it through `SeasonColorUtilMixin` and
+the render thread: Serene Seasons' grass and foliage color handlers reach it through `SeasonColorUtilMixin` and
 `SeasonBiomeConfigMixin` once per tinted block, and each call ran up to ten biome tag lookups. Now the result is cached
 per biome holder (`TYPE_CACHE`, a `ConcurrentHashMap` keyed by registry references; direct holders are not cached).
 `TagsUpdatedEvent` (server reload and the client's tag packet) swaps in a new map, so a lookup racing the reload lands
@@ -1036,7 +1036,7 @@ The entity census of the overall run found 193 `minecraft:falling_block` (69 san
 spawn. Generation never makes them fall; they fall when the chunk first ticks, and in the outer ring of loaded chunks
 block ticks run but entities do not, so the falling entity never lands and stays saved. Three triggers:
 `LevelChunk.postProcessGeneration` re-running `updateShape` on marked positions (blocks above carvers and lakes),
-generated water settling (10.6 window) and updating its neighbours, and ticks a feature scheduled during generation.
+generated water settling (10.6 window) and updating its neighbors, and ticks a feature scheduled during generation.
 
 `worldgen/GeneratedFallingBlocks` (`[worldgen.systems] holdGeneratedFallingBlocks`, default on):
 - `FallingBlockHoldMixin`: `FallingBlock.updateShape` (m_7417_) HEAD returns the state without scheduling the fall
@@ -1109,7 +1109,7 @@ mean MSPT is a fair ms estimate). Classes read with vineflower from the jar.
 
 ### 15.1 Numbers
 
-| Scenario | MSPT | tickChunk | IW total | IW `tickBlock` (random tick) | sky tick | `MossyBlock` isRandomlyTicking | Growth work done | Mossable neighbour cascade |
+| Scenario | MSPT | tickChunk | IW total | IW `tickBlock` (random tick) | sky tick | `MossyBlock` isRandomlyTicking | Growth work done | Mossable neighbor cascade |
 |---|---|---|---|---|---|---|---|---|
 | G03a one bot, day | 18.5 | 16.8% | 3.31% | 2.57% | 0.10% | 0.22% | 0.08% | 0 |
 | G03b one bot, night | 16.3 | 19.5% | 3.00% | 2.26% | 0.16% | 0.31% | 0.07% | 0 |
@@ -1138,8 +1138,8 @@ IW is about 17% of the random-tick phase in every scenario with players, about 0
    lightning), so every block without an owner-listed growth can return before any of this.
 2. **`MossyBlock#isRandomlyTicking` (0.2 to 0.3%).** Vanilla asks it on every random-tick position that lands on a
    mossy block; IW answers with `hasProperty` + `getValue` (FerriteCore `FastMap#getKeyFor`) instead of a cached flag.
-3. **Mossable neighbour cascade (1.35% in G05a only).** Scheduled ticks left in pregenerated chunks fire when a
-   player first loads them: `MossableBlock#tick` calls `updateNeighborsAt`, each mossable neighbour runs
+3. **Mossable neighbor cascade (1.35% in G05a only).** Scheduled ticks left in pregenerated chunks fire when a
+   player first loads them: `MossableBlock#tick` calls `updateNeighborsAt`, each mossable neighbor runs
    `updateWeatheredStateOnNeighborChanged` -> `PatchSpreader#getWantedWeatheringState` (scans faces), and a state
    change schedules the next tick. A one-off per chunk; gone in G05b and the soak.
 4. **Sky-access tick (0.1%), grass spreading (`ModGrassBlock` randomTick, mostly the vanilla `super` call),
@@ -1147,7 +1147,7 @@ IW is about 17% of the random-tick phase in every scenario with players, about 0
 
 ### 15.3 Candidates
 
-| # | Change | Expected | Behaviour change |
+| # | Change | Expected | Behavior change |
 |---|---|---|---|
 | A | patcherMod mixin on `BlockGrowthHandler.tickBlock`: cache `block_growths` (refresh on config load), look up the block's growth set and the source's universal set first, return when both are empty, only then build the biome supplier | most of item 1: about 1.5 to 2% of the Server thread (0.5 to 1 ms per tick with players), most of IW's allocation | none |
 | B | A plus a precomputed per-block flag (an `IdentityHashMap` set at rebuild, or a field on the block) so the early return skips the hash lookup too | a further share of the 15% lookup | none |
@@ -1155,7 +1155,7 @@ IW is about 17% of the random-tick phase in every scenario with players, about 0
 | D | `MossyBlock` / `MossableBlock` `isRandomlyTicking`: read a precomputed per-state boolean | item 2, 0.2 to 0.3% | none |
 | E | Mossable cascade: leave | one-off per chunk | |
 
-A is the clear first step: small, no behaviour change, and it applies to every scenario with players. Measure with
+A is the clear first step: small, no behavior change, and it applies to every scenario with players. Measure with
 the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
 
 ### 15.4 Built: A, B and C (2026-10-28, patcherMod 1.1.03, installed in `mods/` 2026-10-28)
@@ -1177,7 +1177,7 @@ the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
 - Off switch for A/B measurements: JVM property `-Dcreativecommon.iwFastTick=false` (all three parts).
 - Checked headless (scratchpad harness): the rewrite on IW's real `callTick` bytecode gives a 9-instruction body that
   passes ASM's type-aware verifier as a ServerLevel method; another mixin's handler and other post-applies are left
-  alone. Mixin application, growth behaviour and the gain need a server: SQ-IWF-01 to -05 (scratch_queue.md).
+  alone. Mixin application, growth behavior and the gain need a server: SQ-IWF-01 to -05 (scratch_queue.md).
   Scratch r1031 (2026-10-31): SQ-IWF-01, -02, -02b, -03, -04b PASSED (fast path on and off grow the same: 15 / 14 leaf
   piles; growths off grows nothing; caveat: -04b used persistent leaves). SQ-IWF-05 (the gain) not run.
 
@@ -1195,7 +1195,7 @@ finding 10). Inclusive shares of the 18,725 Server thread samples in `perf/suite
 
 The mob cap is not changed here; section 17 adds cap levels.
 
-### 16.1 Whistle goal skip (no behaviour change)
+### 16.1 Whistle goal skip (no behavior change)
 
 `perf.WhistleArrowTracker` keeps the server's live whistling arrows (weak set, join and leave events, matched by class
 name). `NeaWhistleGoalSkipMixin` (Pseudo, `m_8036_` HEAD) returns false while the set is empty, before the query.
@@ -1206,7 +1206,7 @@ name). `NeaWhistleGoalSkipMixin` (Pseudo, `m_8036_` HEAD) returns false while th
 
 `MobBeeIdleMixin` (`Mob.serverAiStep`, `m_6140_` HEAD): a `Bee` below y 32 with no living player within 32 blocks
 skips its AI step (goals, sensing, navigation, move and look controls). Travel, gravity and damage still tick; the
-bee resumes when a player comes within 32 blocks. Behaviour change: an underground bee farm below y 32 does not
+bee resumes when a player comes within 32 blocks. Behavior change: an underground bee farm below y 32 does not
 pollinate or return to its hive while nobody is near. Bees inside hives are block entity data and unaffected.
 Expected: up to about 65% of the bee cost for bees below y 32 (the census has no bee heights, so the share of
 underground bees is not known).
@@ -1348,7 +1348,7 @@ and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold z
 - Distant Horizons: `distantGeneratorMode = "FEATURES"` with `lodChunkRenderDistanceRadius = 192` (about 147,000
   chunks of pack worldgen to generate around the player).
 - Debug log config still on (11.2 #8): 163 MB `debug.log` and 5,903 dumped classes for the session; disk 98% full.
-- Xaero's World Map, accurate colours (`block_colors = 0`): 666 texture PNGs read and decoded on the render thread
+- Xaero's World Map, accurate colors (`block_colors = 0`): 666 texture PNGs read and decoded on the render thread
   (`MapWriter.loadBlockColourFromTexture`), each leaving the resource stream open (the 1,292 "Leaked resource ...
   Finalizer" warnings, 703 from Xaero, the rest from reload listeners).
 
@@ -1398,7 +1398,7 @@ and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold z
 - **Log spam**: Compat `compat/LogSpamFilter`, a config-level filter on the running log4j context (installed in the
   Compat constructor). Each listed message passes once per session after an info note, the rest are denied. Listed:
   Better Fortresses' and Better Dungeons' `NoBasaltColumnsInStructuresMixin` warning ("Detected a mod with a broken
-  basalt columns configuredfeature"): their check asks the WorldGenRegion for the neighbour chunk, which DH's
+  basalt columns configuredfeature"): their check asks the WorldGenRegion for the neighbor chunk, which DH's
   generator regions do not have. YUNG's check itself still runs.
 - **No DH generation in the Nether**: Compat `mixin/DhNoGenerationMixin` (common list, gated on distanthorizons,
   @Pseudo) cancels `AbstractDhServerLevel.shouldDoWorldGen()` with false for the dimensions in
@@ -1409,22 +1409,22 @@ and the local-cap path in `MobCapMixin`. Note: `#forge:monsters` does not hold z
   `farFogEndDistance` 1.0, `farFogMaxThickness` 1.0; any other level and logout clear them. API overrides are not
   written to `DistantHorizons.toml`. DH scales far-fog distances by the LOD radius (fog shader reads
   `lodChunkRenderDistanceRadius`), so the fog edge follows the radius; start (0.4), falloff (EXPONENTIAL_SQUARED),
-  density (2.5) and colour stay configured, about 99.8% thick at the edge.
-- **Xaero biome colour time**: 85% of `BiomeColorCalculator.getBiomeColor` was Serene Seasons' grass/foliage
+  density (2.5) and color stay configured, about 99.8% thick at the edge.
+- **Xaero biome color time**: 85% of `BiomeColorCalculator.getBiomeColor` was Serene Seasons' grass/foliage
   resolver, which Xaero calls up to 9 times per pixel (biome blending) and chunk meshing once per tinted block. Per
-  call it scanned the biome blacklist, tropical list, less-colour list and dimension whitelist and read two
+  call it scanned the biome blacklist, tropical list, less-color list and dimension whitelist and read two
   ForgeConfigSpec values. Calendar `seasons/SeasonAnswers` keeps those answers per biome holder (references only) and
   per dimension: `SeasonBiomeConfigMixin` (HEAD returns a known answer, RETURN stores; the tag overrides store too),
   new `SeasonServerConfigMixin` (`isDimensionWhitelisted`), `SeasonColorUtilMixin` @Redirect of the two
   `BooleanValue.get()` (require 2). Cleared on TagsUpdatedEvent (`SeasonTypes.onTagsUpdated`) and on
   ModConfigEvent Loading/Reloading of Creative Calendar and of Serene Seasons (its own mod bus through
   `FMLModContainer.getEventBus()`). Season and sub-season are still read live. Expected: about 350 of the 546
-  getBiomeColor samples gone; the rest is Xaero's registry lookup (`MappedRegistry.get`, 44) and the colour math.
+  getBiomeColor samples gone; the rest is Xaero's registry lookup (`MappedRegistry.get`, 44) and the color math.
   Not changed: Xaero `biome_blending` (true); turning it off would cut the calls 9x more but gives hard biome edges.
 - **Recording**: `server/perf/ce-server.jfc` `jdk.Deoptimization` disabled.
 - Tests: CQ-PNE-01..07 (scratch_queue.md). Changelog: 4 bullets under Performance & Stability. TODO `pack/server #38`.
 
-### 19.2 Rubidium on the render thread (2026-11-07 recording, categorised)
+### 19.2 Rubidium on the render thread (2026-11-07 recording, categorized)
 
 699 render-thread samples (11.4%) had Rubidium as the innermost mod frame (vanilla callees counted to it). By
 Rubidium entry point; "via portals" = inside Immersive Portals' world-through-portal render (29% of the total):
@@ -1433,26 +1433,26 @@ Rubidium entry point; "via portals" = inside Immersive Portals' world-through-po
 |---|---|---|---|---|
 | Chunk visibility and render lists (`updateChunks`) | 234 | 3.8 | 48 | the section-graph walk (`DirectionUtil.getOpposite` 91), render-list building (`addAll` 63), `tickVisibleRenders` 20 |
 | Block entities (`renderTileEntities`) | 221 | 3.6 | 55 | vanilla BE renderers, mostly **signs** (`SignRenderer` 111, 1.8% alone, text drawn every frame), model quads 31, banners |
-| Fog colour sampling (`FastCubicSampler.sampleColor`) | 93 | 1.5 | 77 | Sodium's smooth fog colour (biome sample per frame); repeated for every portal view |
+| Fog color sampling (`FastCubicSampler.sampleColor`) | 93 | 1.5 | 77 | Sodium's smooth fog color (biome sample per frame); repeated for every portal view |
 | Terrain draw calls (`drawChunkLayer`) | 72 | 1.2 | 1 | uploading uniforms and issuing the chunk-layer draws |
 | Entity vertex output (`VertexDrain`) | 44 | 0.7 | 6 | entity and item vertex writes |
 | Other | 35 | 0.6 | | rebuild scheduling, entity visibility |
 
 Candidates (not built): sign text culling by distance (a mod such as a sign-render-distance option, or a mixin
 skipping text past N blocks); Immersive Portals' portal render limits (another session's `IPPortalRenderLimitsMixin`
-work) cut the "via portals" share, fog colour sampling most of all.
+work) cut the "via portals" share, fog color sampling most of all.
 
-### 19.3 Sign text distance and Nether fog colour (built 2026-11-07 evening, Compat, not installed)
+### 19.3 Sign text distance and Nether fog color (built 2026-11-07 evening, Compat, not installed)
 
 - **Sign text**: Compat `mixin/SignTextDistanceMixin` (client list, SRG names, remap off): `SignRenderer.m_6922_`
-  (render) cancels at the `SignBlockEntity.m_155717_` (getRenderMessages) call when the sign centre is more than 24
+  (render) cancels at the `SignBlockEntity.m_155717_` (getRenderMessages) call when the sign center is more than 24
   blocks from the camera, popping the one outer pose still open (the model's inner pose is already popped). The sign
   model is still drawn; text stays while scoping (`isScoping`, as vanilla's glowing outline). Covers modded wood signs
   that use the vanilla renderer. The cost was about 80% text (line widths through `StringSplitter`, glyphs) and 20%
   model. Test CQ-PNE-08.
-- **Nether fog colour**: Compat `compat/NetherFogColour` (client, Forge bus, LOW): `ViewportEvent.ComputeFogColor` sets
+- **Nether fog color**: Compat `compat/NetherFogColour` (client, Forge bus, LOW): `ViewportEvent.ComputeFogColor` sets
   #3F0905 when the drawn level (`Minecraft.level`, so also Immersive Portals' Nether views) is the Nether, the camera is
-  in no fluid and the camera entity has neither Blindness nor Darkness. Clear colour, terrain fog and DH's world-coloured
+  in no fluid and the camera entity has neither Blindness nor Darkness. Clear color, terrain fog and DH's world-colored
   far fog follow. The biome fog sample (Rubidium's `FastCubicSampler`, 19.2) still runs; skipping it would need a second
   redirect on a call Rubidium already redirects. Owner request 2026-11-07. Test CQ-PNE-09.
 

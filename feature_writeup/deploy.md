@@ -166,7 +166,7 @@ an unmatched file is functional.
 | Class | Ships | Paths |
 |---|---|---|
 | functional | always | everything not listed below, incl. `jei/blacklist.cfg`, the three JEI sort orders (`recipe-category-sort-order.ini`, `ingredient-list-mod-sort-order.ini`, `ingredient-list-type-sort-order.ini`) and Xaero's server side (`xaero/*/common.cfg`, `xaero/*/server_profiles/`, `*_server.json`) |
-| player | `--config full` only | `*-client.*` / `*_client.*` (every mod's client config), `jei/` (options, colours, per-world bookmarks), `xaero/` (minimap and world map), `waila/`, `pneumaticcraft/PneumaticArmorHUDLayout.cfg`, `presencefootsteps/`, `spyglass-improvements/`, `betterf3.toml`, `betterthirdperson-common.toml`, `detailarmorbar.json`, `enchdesc.json`, `MouseTweaks.cfg`, `notenoughanimations.json`, `panorama.json`, `rubidium-options.json`, `sodium-extra-options.json`, `sidebar_buttons.json`, `transition.json`, `trender.json` |
+| player | `--config full` only | `*-client.*` / `*_client.*` (every mod's client config), `jei/` (options, colors, per-world bookmarks), `xaero/` (minimap and world map), `waila/`, `pneumaticcraft/PneumaticArmorHUDLayout.cfg`, `presencefootsteps/`, `spyglass-improvements/`, `betterf3.toml`, `betterthirdperson-common.toml`, `detailarmorbar.json`, `enchdesc.json`, `MouseTweaks.cfg`, `notenoughanimations.json`, `panorama.json`, `rubidium-options.json`, `sodium-extra-options.json`, `sidebar_buttons.json`, `transition.json`, `trender.json` |
 | player, one-off | functional mode too, up to the version in the rule's third field | `trashslot-common.toml` (through 1.0.3) |
 
 - A player file is never a removal. When the pack stops shipping one, the changelog lists it as "no longer

@@ -10,7 +10,7 @@
 @@text
 @@text Jars: patcherMod 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).
 @@text Group A (superflat), daylight (`/time set noon`). Shearing needs a player, so the server checks place the sheared
-@@text state directly; the line itself is WL-34 in game. Each check: two 5x1x5 patches 8 blocks apart, on a stone layer 4 blocks above the superflat grass (grass spreads at most 1 up), the centre block
+@@text state directly; the line itself is WL-34 in game. Each check: two 5x1x5 patches 8 blocks apart, on a stone layer 4 blocks above the superflat grass (grass spreads at most 1 up), the center block
 @@text sheared in one and not in the other, `/gamerule randomTickSpeed 300`, wait 60 s, then count what is left with
 @@text `/fill <patch> minecraft:coarse_dirt replace <soil>` (the printed count = soil not converted). Set randomTickSpeed back to 3.
 @@text
@@ -27,8 +27,8 @@ bootreject (?i)(missing|exception).*(vintagedelight:lush_grass_block|vinery:gras
 ## SQ-SG-02 | sheared grass does not spread (also sets up SQ-SG-03; 60 s at randomTickSpeed 300)
 @group A
 @commands Patches of `minecraft:dirt`; centres `minecraft:grass_block[fertile=false]` and `minecraft:grass_block`
-@pass Sheared patch: 24 dirt left, centre still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24
-@fails IW behaviour changed: re-read `ModGrassBlock#isRandomlyTicking`
+@pass Sheared patch: 24 dirt left, center still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24
+@fails IW behavior changed: re-read `ModGrassBlock#isRandomlyTicking`
 @from batches/r1031/a1_world.qb
 > fill -42 -57 20 -12 -57 36 minecraft:stone
 > fill -40 -56 30 -36 -56 34 minecraft:dirt

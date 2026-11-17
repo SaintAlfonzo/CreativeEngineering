@@ -174,7 +174,7 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 ## CQ-RPI-07
 @group client
 @commands Slots 1-3 active with Speed, Haste, Luck (or any three); Drop slot 1 (RPI-07)
-@pass Haste in slot 1, Luck in slot 2, slot 3 empty and greyed; red lost lines queue (RPI-32)
+@pass Haste in slot 1, Luck in slot 2, slot 3 empty and grayed; red lost lines queue (RPI-32)
 @fails `SlotActions.simulate` drop branch (shift loop)
 @draft no batch holds this row yet
 ## CQ-RPI-08
@@ -192,7 +192,7 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 ## CQ-RPI-10
 @group client
 @commands With bonuses on: die and respawn. Open P and the Diet Log (RPI-10, RPI-31)
-@pass one red "You lost every diet bonus due to death"; all slots greyed with choices kept; unlocks kept; P says "Eat 5 more foods"; Diet Log foods past 32 meals
+@pass one red "You lost every diet bonus due to death"; all slots grayed with choices kept; unlocks kept; P says "Eat 5 more foods"; Diet Log foods past 32 meals
 @fails `ServerEvents.respawn`; `resetOnDeath` must be false in the world's Apple Pie config
 @draft no batch holds this row yet
 ## CQ-RPI-11
@@ -234,7 +234,7 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 ## CQ-RPI-17
 @group client
 @commands With a slot greyed (eat repeated foods or die), open P (RPI-18)
-@pass greyed slot shows its stored choice dimmed, no buttons on its row
+@pass grayed slot shows its stored choice dimmed, no buttons on its row
 @fails `EffectScreen.buildSlots`
 @draft no batch holds this row yet
 ## CQ-RPI-18
@@ -277,13 +277,13 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 ## CQ-RPI-24
 @group client
 @commands Respec that drops diversity below the changed slot's own milestone (small window: eat 3 foods past slot 1) (RPI-29, Q-C)
-@pass allowed; panel says the slot switches off; new choice stored greyed
+@pass allowed; panel says the slot switches off; new choice stored grayed
 @fails `Sim.preview slotGreyedAfter`
 @draft no batch holds this row yet
 ## CQ-RPI-25
 @group client
 @commands `/solrp pause @s`; `/effect clear @s`; eat a new food; die and respawn; open P; inventory bar; `/solrp resume @s` (RPI-37)
-@pass effects stay gone, no messages; Diet Log and counters still update, death still ages the window; P shows PAUSED, no buttons; bar icons greyed; resume brings effects back with gained lines
+@pass effects stay gone, no messages; Diet Log and counters still update, death still ages the window; P shows PAUSED, no buttons; bar icons grayed; resume brings effects back with gained lines
 @fails `RpData.paused` checks in `DietEngine`, `SlotActions`, `ServerEvents.tick`
 @draft no batch holds this row yet
 ## CQ-RPI-26
@@ -372,7 +372,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-29
 @group client
 @commands Hover Raspberry Pie and a Raspberry Pie slice (#29)
-@pass grey italic line "Doesn't run programs"
+@pass gray italic line "Doesn't run programs"
 @fails `hearthandharvest/client.js` in the Creative Delight jar
 @draft no batch holds this row yet
 ## CQ-RPI-30
@@ -396,13 +396,13 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-33
 @group client
 @commands Diet Ladder page at diversity 0, about 6 and about 22 (#32, #37)
-@pass the bar spans a window: at 0 it ends at 7 with icons at 2, 5, 7; at 6 it starts a little before 5 and ends at 12; values printed under both ends, "..." when more lie ahead, "<" on the left when earlier milestones exist; icons: heart, effect sprites (Speed, Haste, ...), slot box (holding the chosen effect), chestplate or shield for attributes; reached icons in colour with a coloured frame, unreached greyed; hover gives the value; legend shows the five icons
+@pass the bar spans a window: at 0 it ends at 7 with icons at 2, 5, 7; at 6 it starts a little before 5 and ends at 12; values printed under both ends, "..." when more lie ahead, "<" on the left when earlier milestones exist; icons: heart, effect sprites (Speed, Haste, ...), slot box (holding the chosen effect), chestplate or shield for attributes; reached icons in color with a colored frame, unreached grayed; hover gives the value; legend shows the five icons
 @fails `DietLogPages.ProgressPage`, `Window.of`, `drawIcon`
 @draft no batch holds this row yet
 ## CQ-RPI-34
 @group client
 @commands Milestones pages (#37)
-@pass every row has its icon (greyed when not reached); no overlap with the page number at the bottom
+@pass every row has its icon (grayed when not reached); no overlap with the page number at the bottom
 @fails `DietLogPages.ListPage` (12 px rows, 11 per page)
 @draft no batch holds this row yet
 ## CQ-RPI-35
@@ -414,7 +414,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-36
 @group client
 @commands Client config `[dietLog] doublePage = true`, window at least 380 px wide (GUI scale), eat 40+ foods so some leave the window; open the Diet Log; then a narrow window (#31)
-@pass book moves left, a second book on the right shows "Older foods (N)" page 1; the left food pages read "Counting foods (N)" then older foods page 2+; item tooltips work on both; Diet Bonuses button centred under the pair; narrow window falls back to one book
+@pass book moves left, a second book on the right shows "Older foods (N)" page 1; the left food pages read "Counting foods (N)" then older foods page 2+; item tooltips work on both; Diet Bonuses button centered under the pair; narrow window falls back to one book
 @fails `FoodBookScreenMixin.solrp$placeBook`, `DietLogPages.splitFoodPages`, `renderCompanion`
 @draft no batch holds this row yet
 ## CQ-RPI-37

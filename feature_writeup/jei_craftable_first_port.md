@@ -48,7 +48,7 @@ Craftable means the transfer button is enabled with nothing missing: `getMissing
 9. `RecipeSortUtil.sortRecipeCategories` (sorts categories that have a transfer handler for the open menu first) is unused
    by anything in the jar listing I searched. Treat as dead code.
 
-Behaviour note: this is computed when the list is built, not continuously. The order is refreshed when the category,
+Behavior note: this is computed when the list is built, not continuously. The order is refreshed when the category,
 container id or stage set changes, which includes reopening the recipe screen. It does not re-sort on every inventory
 change while the screen stays open. If live re-sorting is wanted, it is an addition beyond 19.39.
 
@@ -92,7 +92,7 @@ change while the screen stays open. If live re-sorting is wanted, it is an addit
 
 ## Not verified
 
-Class files only were inspected. Behaviour above is read from bytecode, not run. 19.39 targets MC 1.21.1 / NeoForge, so
+Class files only were inspected. Behavior above is read from bytecode, not run. 19.39 targets MC 1.21.1 / NeoForge, so
 every Mojang/NeoForge name differs from the 1.19.2 mappings the mixin will use.
 
 ## History

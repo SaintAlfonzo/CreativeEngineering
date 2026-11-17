@@ -100,7 +100,7 @@ the oven, add tools or dishes where needed, and let the oven smoke (decided 2026
   `getRecipeFor(OvenRegistry.BAKING_TYPE ...)`); JEI catalyst only for the baking category (`jei/OvenJeiPlugin.java` 45).
 - Food dump 2026-10-30 (`kubejs/exported/food/recipes.json`): 338 `farmersdelight:cooking`, 135 `minecraft:smoking`,
   84 `creativeengineering:baking`. Pot recipes with bake-like outputs (from the dump, by name):
-  - Stuffed: FD stuffed pumpkin (and Corn Delight's from cornbread), Rustic stuffed bell peppers (9 colours, and CD's
+  - Stuffed: FD stuffed pumpkin (and Corn Delight's from cornbread), Rustic stuffed bell peppers (9 colors, and CD's
     `_from_roasted` copies), Veggies stuffed bell peppers block, stuffed zucchinis, garlic stuffed mushrooms,
     Delightful stuffed cantaloupe, Fungi stuffed morels, Ender's stuffed shulker, Nether's stuffed hoglin, Miner's
     stuffed squid, Oceanic stuffed pufferfish.
@@ -181,7 +181,7 @@ A final crafting pattern for the oven that clashes with no other recipe.
 (`i.bricks`, 2171), `minecraft:furnace` (`i.furnace`), FD stove `farmersdelight:stove`.
 
 ### Decisions
-- Pattern: **`PPP / BFB / BBB` with F = furnace** (reads as an oven, no clash with the stove's campfire centre), or keep
+- Pattern: **`PPP / BFB / BBB` with F = furnace** (reads as an oven, no clash with the stove's campfire center), or keep
   the current one if the clash check is clean. Owner's call.
 
 ### Gotchas

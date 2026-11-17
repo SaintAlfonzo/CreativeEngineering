@@ -20,7 +20,7 @@ remodel of every other baby) BUILT 2026-11-01 as babyMobs 1.1.0 (nested in Creat
   spawning system like mooblooms. don't port the golden dandelion, poison potato already does this."
 - **What "the 1.20+ baby mobs" are:** Java 1.21.2 (24w33a) gave squid, glow squid and dolphins a baby form (natural
   spawns only, no breeding), and the 26.1 "Tiny Takeover" drop (2026-03-24) remodelled and retextured every baby mob
-  (38 mobs), gave five of them their own sounds, added baby armour models for the undead and the golden dandelion.
+  (38 mobs), gave five of them their own sounds, added baby armor models for the undead and the golden dandelion.
   Nothing else in 1.20+ is a "baby mob" that 1.19.2 lacks: camels, sniffers and armadillos are whole mobs (not in the
   pack); baby zombie / villager / animal forms already exist here.
 - **Where:** `development/creativeDelight/members/babymobs` (mod id `baby_mobs`, jar `babyMobs-<version>.jar` nested in
@@ -47,7 +47,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
 | Looks (26.1) | own 32x32 texture (`squid_baby.png`, `glow_squid_baby.png`) and model: 8x10x8 body at y 13, 8 tentacles 2x6x2 on a 3-block ring at y 18.5; renderer offsets 0.25 / -0.6 instead of 0.5 / -1.2 | own 64x64 texture and model: 6x5x8 body at y 21.5, head 6x5x4 with a 2x2x2 nose, fins 1x3x6 at 0.8727 / 1.7017 rad, tail 4x3x7 + fin 8x1x4, back fin 1x3x4 |
 | Sounds | pitch 1.3 to 1.7 (vanilla `getVoicePitch` for any baby) | same; eat / splash unchanged |
 | Drops | none, no experience (vanilla `shouldDropLoot` / `shouldDropExperience` for any baby) | none, no experience |
-| Behaviour | ink cloud a little tighter (0.1 instead of 0.3 offset) | passive: `canAttack` is false while young (adults are neutral and hit back) |
+| Behavior | ink cloud a little tighter (0.1 instead of 0.3 offset) | passive: `canAttack` is false while young (adults are neutral and hit back) |
 | Golden dandelion | pauses growth | pauses growth. **Not ported** (user: Quark's poisonous potato already stops baby growth) |
 
 ## 3. What the jar does (milestone 1)
@@ -58,7 +58,7 @@ world that loses the jar keeps every squid and dolphin, grown up (their `Age` ta
   `ageUp(seconds)` is vanilla's. `finalizeSpawn` (Mob, `m_6518_`): a null group becomes `AgeableMobGroupData(chance)`
   (`@ModifyVariable` at HEAD, as 1.21.2's Squid / Dolphin do) and at RETURN vanilla's roll runs: first member adult,
   then `chance` per member, baby = `-growTicks`.
-- **Baby behaviour (`mixin/LivingEntityBabyMixin`):** `isBaby` -> age < 0 (client: the flag); `getScale` -> 0.625 for
+- **Baby behavior (`mixin/LivingEntityBabyMixin`):** `isBaby` -> age < 0 (client: the flag); `getScale` -> 0.625 for
   squid (0.5 / 0.8), 0.65 for dolphins, so vanilla's `getDimensions` shrinks the hitbox; `aiStep` TAIL ticks the age
   up to 0; `canAttack` false for a baby dolphin; `onSyncedDataUpdated` refreshes the client hitbox. Pitch, loot and
   experience need nothing: vanilla already keys them off `isBaby()`.
@@ -107,7 +107,7 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
   ocelot, wolf, fox, rabbit (+ `PetAnimations` keyframes); `EquineBabies` horse, donkey, mule, skeleton / zombie
   horse, llama, trader llama; `MiscBabies` bee, axolotl, goat, panda, polar bear, turtle, strider, hoglin, zoglin
   (+ `MiscAxolotlAnimation`); `UndeadBabies` zombie, husk, drowned (+ outer layer), zombie villager, villager,
-  piglin, zombified piglin, with baby armour (26.1 `humanoid_baby` textures, per-slot baby armour meshes). Family
+  piglin, zombified piglin, with baby armor (26.1 `humanoid_baby` textures, per-slot baby armor meshes). Family
   mixins: `EquineHorseMarkingMixin`, `EquineHorseArmorMixin`, `EquineLlamaDecorMixin`, `PetFoxHeldItemMixin`,
   `UndeadArmorLayerMixin`, `UndeadItemInHandMixin`, `UndeadCustomHeadMixin`.
 - **How the ports fit 1.19.2:** each baby model is a subclass (or plain instance) of the 1.19.2 adult class, with
@@ -137,9 +137,9 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
   vanilla CatModel) shares the cat kit, registered by id (`BabyRender.register(ResourceLocation, kit)`, resolved at
   render time, since the type doesn't exist when the families register). `PetCozyYarnMixin` (@Pseudo, require 0):
   the yarn ball in a baby's mouth skips Cozy's old half-size baby offset and scales 0.75 at the head.
-- **Decisions / deviations (from the family reports):** babies never show carpets, horse armour, saddles or chests
+- **Decisions / deviations (from the family reports):** babies never show carpets, horse armor, saddles or chests
   (as 26.1); trader llama babies get the 26.1 baby trader decor; held items and head items are full size (26.1);
-  modded armour on a baby falls back to 1.19.2's half-size adult armour; no armour trims on babies (26.1);
+  modded armor on a baby falls back to 1.19.2's half-size adult armor; no armor trims on babies (26.1);
   ElytraLayer and the villager crossed-arms item layer are not ported; catloaf's loaf pose doesn't apply to baby
   cats; cozy's improved cats (own entity type) keep the 1.19.2 baby; Quark variant / pride bee, More Mob Variants
   zombie and modded villager-type babies use the single baby texture (modded villager types: plains clothes);
@@ -162,7 +162,7 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
   armadillo (n/a), axolotl, bee, camel (n/a), cat / ocelot, chicken, cow, mooshroom, donkey, horse, mule, skeleton and
   zombie horse, fox, goat, llama, trader llama, panda, pig, polar bear, rabbit (whole mob), sheep, strider, turtle,
   wolf, hoglin, zoglin, piglin, zombified piglin, zombie, husk, drowned, zombie villager, villager, plus baby sounds
-  for cat, chicken, horse, pig, wolf and baby armour models for the undead. Each needs the geometry ported into a
+  for cat, chicken, horse, pig, wolf and baby armor models for the undead. Each needs the geometry ported into a
   1.19.2 model class with the same part names as the vanilla model it replaces (or a new model + renderer), its
   texture, and a renderer swap like section 3. Our own mooblooms (More Mooblooms) and the pack's many mob mods are
   untouched either way. Build it one family at a time (cow / mooshroom / moobloom first: shared model).
@@ -222,17 +222,17 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
   the snout), ocelot, fox (red, snow, sleeping, item in mouth),
   rabbit (types, Toast, killer rabbit, hop, idle head tilt)
 - [ ] **BM-12 Horse babies [game]:** baby horse in all 7 coats with each marking (size not 1.1x, legs visible,
-  rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colours, no carpet), trader llama (baby
+  rearing, grazing, tail), skeleton / zombie horse, donkey, mule, llama (4 colors, no carpet), trader llama (baby
   decor fits); summoned with armour: none drawn
 - [ ] **BM-13 Other babies [game]:** bee (hover height, angry, nectar; pride bees: 1.19.2 baby with the flag, mixed
-  in with new-model babies; `NEW_MODELS` -> plain baby bee), axolotl (5 colours, land / water / play dead),
+  in with new-model babies; `NEW_MODELS` -> plain baby bee), axolotl (5 colors, land / water / play dead),
   goat (head tipped), panda (7 genes, sit, sneeze, eat), polar bear (not 1.2x), turtle, strider (full size, cold
   texture), hoglin / zoglin (headbutt)
 - [ ] **BM-14 Humanoid babies [game]:** baby husk, drowned (outer layer), zombie villager and villager (7
   biomes; MCA replaces most villagers, use `/summon minecraft:villager ~ ~ ~ {Age:-24000}`), piglin (admire, dance),
-  zombified piglin: shape, texture, walk, zombie arms; armour on each slot (all vanilla materials, dyed leather,
+  zombified piglin: shape, texture, walk, zombie arms; armor on each slot (all vanilla materials, dyed leather,
   glint, turtle helmet) fits; a sword / gold / trident in hand and a pumpkin / skull on the head sit right; one
-  modded armour piece falls back to half-size armour; chicken jockey
+  modded armor piece falls back to half-size armor; chicken jockey
 - [ ] **BM-16 MCA [game]:** MCA baby villagers and zombie villagers keep their own skins and model
 - [ ] **BM-15 Adults and log [game]:** adults of every mob above unchanged; inventory / spawn egg previews fine;
   `logs/latest.log` has no "Baby Mobs:" errors (an info line "renders with ..., not ..." names a mod renderer the kit

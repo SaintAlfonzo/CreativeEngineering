@@ -23,7 +23,7 @@ Test prefix `MB-`. Sections 1-3 describe Buzzier Bees' moobloom, read from Buzzi
 | More Mooblooms 1.0 | `development/moreMooblooms`, jar `moreMooblooms-1.1.0.jar` in `mods/`; 1.1.0 (JEI, section 5) built 2026-10-22, boot check scratch server PASSED 2026-10-22 (SQ-GM-09), DEPLOYED with 1.1.01 (2026-10-22); the 2026-10-27 build (sunflower fix, MB-105) is in `mods/` and went to the client with 1.1.04 (2026-10-29) (rebuilt and installed in `mods/` 2026-10-11 with azaleabloom's moss spawning; DEPLOYED with pack 1.0.6 (2026-10-14), its first release). Install with `./gradlew :moreMooblooms:installToMods`, on the client and the server (same jar on both, 4.2; the deploy ships it to both). Verified on a scratch server (4.14). Rendering, JEI, feeding, grazing and the soul sand valley spawn still need a client (section 8) |
 | Variants | 11 (4.4): moobloom (the default), sunbloom, rosebloom, peonybloom, onionbloom, bluebloom, orchidbloom, lilybloom, oxeyebloom, azaleabloom, witherbloom. Each grows a weighted pool of flowers; every vanilla flower is in at least one pool |
 | Variant data | generated from the variant table (4.4) by `python3 tools/gen_moobloom_variants.py`; checked by `python3 tools/check_moobloom_data.py` |
-| Breeding | any two mooblooms breed: 10 colour-mix combinations, otherwise same variant breeds true, otherwise a random calf (4.8) |
+| Breeding | any two mooblooms breed: 10 color-mix combinations, otherwise same variant breeds true, otherwise a random calf (4.8) |
 | Spawning | the pack's rules follow the wild flowers (2.8): 25-100% of cows become mooblooms in 18 flower biomes (set per biome), 25% in 5 flowery ones, 2% in 34 with some flowers, each biome's variants matching its flowers; `rareChance` 0.002 applies to every other cow; azaleablooms on moss in lush caves. The mod's own: rare witherblooms in soul sand valleys (4.9) |
 | Buzzier Bees | its moobloom, buttercup and Sunny are removed from outside, one config switch each (4.11). BB is under the Abnormals License 1.0: nothing of BB's ships in our jar (4.0) |
 | Pack side | per-biome spawn rules, cows in meadow, blooming plateau and skylands spring, `rareChance`, syringe line, `i.more_moobloom_spawn_egg`, JEED hides Sunny, Quark restock ignores the egg (4.12) |
@@ -68,7 +68,7 @@ There is no variant field, no NBT and no data file. That is why More Mooblooms h
 | Milking | bucket gives milk (inherited `Cow.mobInteract`) | vanilla |
 | Model / texture | vanilla `CowModel` on its own layer `buzzier_bees:moobloom#main`; texture `buzzier_bees:textures/entity/cow/moobloom.png` | `MoobloomRenderer`, `BBModelLayers` |
 | Flowers on its back | 3 buttercup block models (2 on the back, 1 on the head), adults only, hidden when invisible | `MoobloomFlowerLayer` |
-| Spawn egg | `buzzier_bees:moobloom_spawn_egg`, colours `#DBA336` / `#DCDADC`; `i.moobloom_spawn_egg` | `BBItems` |
+| Spawn egg | `buzzier_bees:moobloom_spawn_egg`, colors `#DBA336` / `#DCDADC`; `i.moobloom_spawn_egg` | `BBItems` |
 | Lang | `entity.buzzier_bees.moobloom` = "Moobloom", `effect.buzzier_bees.sunny` = "Sunny" | `en_us.json` |
 
 ### 2.2 Shearing
@@ -88,7 +88,7 @@ This is Buzzier Bees on its own; with More Mooblooms installed it is out of play
 | What | Detail |
 |---|---|
 | Aura tick | server side, every 20 game ticks (`gameTime % 20 == 0`, so every moobloom fires on the same tick) |
-| Range | its bounding box inflated by 7 horizontally and 3 vertically: roughly 7.5 blocks out from its centre, 3 blocks above and below |
+| Range | its bounding box inflated by 7 horizontally and 3 vertically: roughly 7.5 blocks out from its center, 3 blocks above and below |
 | Targets | every `LivingEntity` in range except mooblooms (`instanceof Moobloom`): players, animals, monsters, armor stands |
 | Effect | `buzzier_bees:sunny` amplifier 0, 100 ticks (5 s), ambient false, particles off, so no HUD icon either. Refreshed every second, so it lasts up to 5 s after leaving range |
 | Undead burn | `MobEntityMixin` injects at the TAIL of `Mob.isSunBurnTick`, the final `return false`. A mob with Sunny counts as in sunlight unless it is in water, rain or a bubble column. There is no day or sky check, so it works at night and underground. It only affects mobs that call `isSunBurnTick` (zombies, drowned out of water, skeletons, strays, phantoms). Husks and fire-immune mobs don't burn |
@@ -327,7 +327,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 **Rules this puts on the implementation:**
 
 1. **Our own moobloom entity, written from scratch.** It does not subclass, copy or mixin into BB's `Moobloom`.
-   The back-flower layer is modelled on vanilla's mooshroom mushroom layer (`MushroomCowMushroomLayer`), which is
+   The back-flower layer is modeled on vanilla's mooshroom mushroom layer (`MushroomCowMushroomLayer`), which is
    also where BB's idea comes from. The positions, angles and scale are ours.
 2. **No BB assets in our jar.** BB's yellow `moobloom.png` can't ship, so the yellow default variant (`moobloom`) has
    **our own coat** (D15), like the other ten. We don't reuse BB's buttercup model, particles or lang either.
@@ -344,7 +344,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 4. **No compile dependency on BB.** We refer to BB only by registry ids (`buzzier_bees:moobloom`,
    `buzzier_bees:buttercup`, `buzzier_bees:sunny`, ...), looked up at runtime and only when `buzzier_bees` is loaded.
    Nothing of BB goes in `libs/`.
-5. This writeup describes BB's behaviour in our own words and numbers; no BB code is quoted.
+5. This writeup describes BB's behavior in our own words and numbers; no BB code is quoted.
 
 ### 4.1 Requirements
 
@@ -413,7 +413,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 `more_mooblooms:moobloom`: a class of our own extending vanilla `Cow` and implementing `Shearable` and
 `IForgeShearable`. It is `CREATURE`, cow-sized (0.9 x 1.4), with `Cow.createAttributes()`.
 
-| Behaviour | How |
+| Behavior | How |
 |---|---|
 | Synced and saved | `Variant` (variant id), `Sheared` (boolean), `Flowers` (the three grown block states; saved as a list of strings, synced as one string). An unknown `Variant` on load becomes the default variant with a log line. No `Variant` at all (`/summon` with NBT skips `finalizeSpawn`) picks a weighted random one |
 | Flowers | each of the three positions grows its own roll from the variant's pool (4.4). Empty while bare or a calf. Rolled when it first shows flowers (spawn, egg, `/summon`, cow conversion, a calf growing up) and again, fresh, on every regrowth (D46). A saved flower that is no longer in its pool is re-rolled on load. `/summon` and egg NBT can set `Flowers` directly |
@@ -441,7 +441,7 @@ the default variant (when it's missing, the first one; with no variants at all, 
 
 **Client sync:** `OnDatapackSyncEvent` (at login, before the recipe and tag packets, so JEI sees every egg; and
 after `/reload`) sends every variant and breeding file as JSON text, and the client parses them the same way. The
-client needs them for names, the egg list and colours, and the JEI pages. Each moobloom's own flowers are synced as
+client needs them for names, the egg list and colors, and the JEI pages. Each moobloom's own flowers are synced as
 entity data.
 
 ```json
@@ -469,7 +469,7 @@ entity data.
 | `any_weight` | 1 | weight for "any" spawn rules, the rare roll and a plain egg; 0 = never wild |
 | `breed_weight` | `any_weight` | weight in the random calf pick (4.8) |
 | `spawns_in_dark_on` | none | block ids or `#tags` this variant may spawn on naturally with no grass or light (4.3, 4.9). Witherbloom: `["#more_mooblooms:spawnable_on_in_dark"]` (soul sand, soul soil). Azaleabloom: `["minecraft:moss_block"]` (lush caves, 4.9). Not a table column: the generator keeps it from the existing file |
-| `egg_colors` | the cow egg's | spawn egg base and spot colours |
+| `egg_colors` | the cow egg's | spawn egg base and spot colors |
 
 **Texture and name:** `assets/<ns>/textures/entity/moobloom/<path>.png`, 64x32 in the cow UV layout, and the lang
 key `entity.more_mooblooms.moobloom.<path>` (`.<ns>.<path>` outside our namespace) holding the name alone. Pack-side
@@ -486,7 +486,7 @@ docstring) and then runs `development/moreMooblooms/tools/egg_colors.py`.
 - **Tall flowers** use their top half (`[half=upper]`); shearing drops the full 2-block item.
 - **Every vanilla flower is in at least one pool.** Dandelion (moobloom, sunbloom) and pink tulip (onionbloom,
   peonybloom) are in two; feeding one to a cow picks a variant by `feed_weight` (4.5).
-- **Parent combos** are breeding combinations (4.8), chosen by colour mixing (red + white = pink, yellow + blue =
+- **Parent combos** are breeding combinations (4.8), chosen by color mixing (red + white = pink, yellow + blue =
   green). A combination is an extra route: every variant except witherbloom also spawns wild (`any_weight` 1) and
   comes from feeding.
 
@@ -499,7 +499,7 @@ docstring) and then runs `development/moreMooblooms/tools/egg_colors.py`.
 | `onionbloom.png` | `onionbloom` / Onionbloom | purple, lilac spots | allium 6, pink_tulip 1, `farmersdelight:wild_onions` 1 (only when Farmer's Delight is installed) | | rose+blue(25%) | rose+orchid(25%) |
 | `bluebloom.png` | `bluebloom` / Bluebloom | blue, light blue spots | cornflower 1 | | orchid+onion(20%) | |
 | `orchidbloom.png` | `orchidbloom` / Orchidbloom | light blue, pale blue spots | blue_orchid 1 | | lily+blue(20%) | |
-| `lilybloom.png` | `lilybloom` / Lilybloom | white, grey spots | lily_of_the_valley 2, white_tulip 1 | | | |
+| `lilybloom.png` | `lilybloom` / Lilybloom | white, gray spots | lily_of_the_valley 2, white_tulip 1 | | | |
 | `oxeyebloom.png` | `oxeyebloom` / Oxeyebloom | white, yellow spots | oxeye_daisy 2, azure_bluet 1 | | lily+sunbloom(50%) | lily+moobloom(20%) |
 | `azaleabloom.png` | `azaleabloom` / Azaleabloom | olive, pink blossom pixels | flowering_azalea 2, azalea 1; `scale` 0.5 (D4) | | moobloom+blue(20%) | |
 | `witherbloom.png` | `witherbloom` / Witherbloom | black-brown, dark spots | wither_rose 1, drop `chance` 0.1 (D43) | | | |
@@ -515,12 +515,12 @@ per position). With Farmer's Delight installed it grows on onionbloom's back, dr
 food like any pool flower. Without it the entry is skipped and onionbloom grows allium and pink tulips (6 to 1).
 
 **Egg colours:** `development/moreMooblooms/tools/egg_colors.py` writes `egg_colors` from each coat: the commonest
-colour as the base and the commonest clearly different one (RGB distance 60 or more) as the spots. Pixels that are
+color as the base and the commonest clearly different one (RGB distance 60 or more) as the spots. Pixels that are
 identical on every coat (udder, eyes, hooves, horns) are skipped; without that, the pink udder came out as the spot
-colour of the white and blue coats.
+color of the white and blue coats.
 
 **Spawn eggs (D14):** one item, `more_mooblooms:moobloom_spawn_egg`, with `EntityTag.Variant` NBT. The creative tab
-and JEI list one stack per synced variant (JEI subtypes by variant), named "<Name> Spawn Egg" and coloured from
+and JEI list one stack per synced variant (JEI subtypes by variant), named "<Name> Spawn Egg" and colored from
 `egg_colors`; middle-click on a moobloom gives its own egg. The moobloom variant's egg and the plain egg both read
 "Moobloom Spawn Egg" (D42). A plain egg spawns a weighted random variant.
 
@@ -798,7 +798,7 @@ sub-packs sit above BB's mod resources (they replace BB's files by path) and bel
 | What | How |
 |---|---|
 | Its spawns | `add_animal/moobloom.json` -> `{"type": "forge:none"}` (`disableMoobloomSpawns`); `remove_animal/cow.json` -> `forge:none` (`restoreCowSpawns`: cows return to sunflower plains, where the pack's sunflower plains rule turns them into mooblooms) |
-| Existing BB mooblooms, its spawn egg, `/summon buzzier_bees:moobloom` | **removed, not converted** (D25): `EntityJoinLevelEvent` (server, HIGHEST) is cancelled for `buzzier_bees:moobloom`, so a new one never enters the world and one loaded from disk isn't added to its chunk (gone at the next chunk save). It never ticks, so the Sunny aura and BB shearing never happen. Logged (first 5, then powers of two) |
+| Existing BB mooblooms, its spawn egg, `/summon buzzier_bees:moobloom` | **removed, not converted** (D25): `EntityJoinLevelEvent` (server, HIGHEST) is canceled for `buzzier_bees:moobloom`, so a new one never enters the world and one loaded from disk isn't added to its chunk (gone at the next chunk save). It never ticks, so the Sunny aura and BB shearing never happen. Logged (first 5, then powers of two) |
 | Zombie bait | gone with the removal. Belt and braces: `moobloom_hostiles.json` with `"replace": true, "values": []` (`emptyHostilesTag`) |
 | BB's spawn egg | hidden from the creative tab (mixin on vanilla `Item.allowedIn`, gated on a hidden-items set) and from JEI (our plugin) |
 | Two by Two (`minecraft:husbandry/bred_all_animals`) | BB's Blueprint modifier asks for a bred BB moobloom, which can no longer exist, so the advancement would be impossible. Our own file at that modifier's path asks for `more_mooblooms:moobloom` instead (`replaceTwoByTwo`). Without BB, the `blueprint` set adds ours |
@@ -877,7 +877,7 @@ would mean patching BB.
 | D25 | Convert BB mooblooms? | no: removed entirely, they shouldn't be in the game |
 | D26 | Config switches for the BB set | one per change, all on by default |
 | D27 | Blooming plateau and meadow are flower biomes with no cows | the pack adds cows to both |
-| D29 | Should "any" favour the flowers that grow in the biome? | 2026-10-08: yes, as explicit per-biome variant percents from 2.8 rather than a weighted "any" (4.9). The rare roll stays flat |
+| D29 | Should "any" favor the flowers that grow in the biome? | 2026-10-08: yes, as explicit per-biome variant percents from 2.8 rather than a weighted "any" (4.9). The rare roll stays flat |
 | D30 | Pool flowers, weights and parents | the variant table (4.4), the user's |
 | D32 | Breeding food: each parent its own flowers, or any flower? | each its own |
 | D33 | Random calf: weighted over every variant, or one of the parents? | weighted by `breed_weight`; witherbloom 0 |
@@ -999,7 +999,7 @@ Blueprint's `SpawnEggItemMixin` (it only sorts `minecraft:` eggs in the creative
   (md5 3440dbc0, 16:58, with Conversion); it still has to be copied to `mods/` (`:moreMooblooms:installToMods`).
   Two different jars carry the name 1.1.0, so bump the version before the next deploy if the earlier one could have
   reached anyone; `server_mods/` still holds 1.0.0 until the next deploy. Same jar on the server: nothing in
-  1.1.0 changes server behaviour, and it boots there (scratch server PASSED 2026-10-22, SQ-GM-09: `Done (`, no error naming
+  1.1.0 changes server behavior, and it boots there (scratch server PASSED 2026-10-22, SQ-GM-09: `Done (`, no error naming
   `more_mooblooms` or `compat.jei`).
   MB-100 to MB-104 are client only (JEI).
 - **Sunflower turned (2026-10-26, `mobs/mooblooms #6`):** the upper sunflower half is one-sided and showed its back on the
@@ -1021,7 +1021,7 @@ Brief: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md). Nothing here is bui
 | More Mooblooms | `development/moreMooblooms/` (README); Java in `src/main/java/com/SaintAlfonzo/more_mooblooms/`: `entity/` (Moobloom, CowFeeding, MMEntities), `variant/` (MoobloomVariant, MoobloomVariants, MoobloomBreeding), `spawn/MoobloomSpawns`, `item/MoobloomSpawnEggItem`, `client/` (renderer, model, flower layer), `compat/` (BuzzierBeesSet, `jei/`), `mixin/` (NaturalSpawnerMixin, TagLoaderStripMixin, MobSunBurnMixin; ItemHiddenMixin plus `shared/` (BuiltInPacks, GatedMixinPlugin, HiddenItems) are generated from `development/shared/`, [pack_tooling.md](pack_tooling.md) 2.8), `network/SyncVariantsPacket`, `MMConfig` |
 | Mod data | `src/main/resources/data/more_mooblooms/` (`moobloom_variants/`, `moobloom_breeding/`, `loot_tables/`, `tags/blocks/spawnable_on_in_dark.json`); `src/main/resources/packs/` (`more_mooblooms/witherbloom_spawns/`, `buzzier_bees/<switch>/`, one folder per compat mod) |
 | Coats | `src/main/resources/assets/more_mooblooms/textures/entity/moobloom/<variant>.png`; working copies and the flower crops in `textureswapper/moobloom/` (a local folder, not in the git repo) |
-| Generators | `tools/gen_moobloom_variants.py` (variant table -> variant and breeding files), `development/moreMooblooms/tools/egg_colors.py` (egg colours from the coats) |
+| Generators | `tools/gen_moobloom_variants.py` (variant table -> variant and breeding files), `development/moreMooblooms/tools/egg_colors.py` (egg colors from the coats) |
 | Checks | `tools/check_moobloom_data.py` |
 | Config | `config/more_mooblooms-common.toml` (+ `configs_edited/root_config/`) |
 | Pack side | [sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), `kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`, `kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json` and `azaleabloom_lush_caves.json`, [jeed-client.toml](../config/jeed-client.toml), [quark-common.toml](../config/quark-common.toml) (Ignored Items), [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) (`i.more_moobloom_spawn_egg`, `i.moobloom_spawn_egg`, `i.buttercup`) |
@@ -1034,12 +1034,12 @@ Brief: [briefs/mobs_mooblooms.md](briefs/mobs_mooblooms.md). Nothing here is bui
 ## 7. Offline checks
 
 - `python3 tools/check_moobloom_data.py`: variants (pool entries, weights, chances, `feed_weight`, feed ids, weights,
-  egg colours, texture, lang), the default variant, breeding rules (known parents and results, a pair claimed twice),
+  egg colors, texture, lang), the default variant, breeding rules (known parents and results, a pair claimed twice),
   spawn rules (biome ids against `kubejs/exported/biome_data.json`, known variants, sums of 100 or less). Prints the
   split for every flower that is food for several variants. Exit code 1 on a problem.
 - `python3 tools/gen_moobloom_variants.py --check`: the shipped data matches the variant table (exit code 1 if a
   file would change).
-- `python3 development/moreMooblooms/tools/egg_colors.py --check`: the egg colours match the coats.
+- `python3 development/moreMooblooms/tools/egg_colors.py --check`: the egg colors match the coats.
 - The moobloom's entity tags: `python3 -c "import json;d=json.load(open('kubejs/exported/tags/entity_type_tags_by_entity_type.json'));print(d['more_mooblooms']['more_mooblooms:moobloom'])"`
   (refresh with `/dumptags`).
 - No BB material in our jar: `unzip -l development/moreMooblooms/build/libs/moreMooblooms-*.jar | grep -i buzzier`
@@ -1071,7 +1071,7 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [x] **MB-89 Flowers NBT:** `/summon ... {Variant:"more_mooblooms:rosebloom",Flowers:["minecraft:poppy","minecraft:dandelion","minecraft:rose_bush[half=upper]"]}` -> the dandelion position is re-rolled from the pool, the other two kept (scratch)
 
 **Spawn eggs and JEI**
-- [ ] **MB-71 JEI eggs:** JEI search "moobloom" -> 11 eggs named "<Name> Spawn Egg" in their colours, each with an info page (pool odds, food, shearing); middle-click a moobloom in creative -> its own egg
+- [ ] **MB-71 JEI eggs:** JEI search "moobloom" -> 11 eggs named "<Name> Spawn Egg" in their colors, each with an info page (pool odds, food, shearing); middle-click a moobloom in creative -> its own egg
 - [ ] **MB-81 JEI breeding:** JEI uses of the rosebloom egg -> "Moobloom Breeding" pages, e.g. rosebloom + lilybloom -> peonybloom 35%
 - [ ] **MB-100 JEI shearing:** JEI uses of shears -> "Moobloom Shearing", 11 pages; rosebloom shows rose bush 1.5, poppy 1.2, red tulip 0.3 per shear; witherbloom wither rose 0.3; the rendered moobloom cycles through every pool flower and turns with the mouse; the cow egg slot appears (and is gone with `shearBareToCow = false` after a restart)
 - [ ] **MB-101 JEI breeding outputs:** rosebloom egg -> pages for rosebloom + rosebloom -> rosebloom 100%, rosebloom + lilybloom -> peonybloom 35% / random 65%, the random-calf page (no witherbloom); each parent shows its food cycling; moobloom + moobloom -> sunbloom 10% / moobloom 90%
@@ -1164,16 +1164,16 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - 2026-10-05: overhaul planned (section 4): O1-O8 from the user, 10 variants (9 textures in `kubejs/assets/`), architecture, data formats, spawn roll order, work steps P1-P8, decisions D1-D14, tests MB-20 to MB-45 reserved. Nothing built.
 - 2026-10-05 (later): plan extended with O9-O12: two-stage shearing (stays a moobloom, regrows after eating grass via `EatBlockGoal`/`ate()`), two flowers per variant in fixed slots of BB's flower layer with per-flower chance drops, buttercup item removal (worldgen, trader, recipes, tags, JEI), Sunny effect removal (aura, stew, JEED). The buttercup moobloom becomes a dandelion variant (D15). D8/D13 answered; D15-D21 added; MB-28 retired; MB-46 to MB-58 added.
 - 2026-10-05 (evening): moved the overhaul into its own mod, **More Mooblooms** (O13, O14): its own moobloom entity instead of mixins on BB's, data-driven variants synced to clients, content sets + built-in packs (Incubation Additions pattern), a Buzzier Bees set that converts BB's mooblooms and removes the buttercup and Sunny from outside, compat tag packs. Added BB's Abnormals License 1.0 (4.0) and its rules: nothing of BB's in our jar (own dandelion texture), no mixins into BB, no compile dependency. patcherMod/CEConfig/`copyTags` parts dropped. D1 answered; D14/D15/D21 revised; D22-D26 added; MB-59 to MB-66 added.
-- 2026-10-05 (night): answers applied: names "<Id> Moobloom" (D2); one pack rule, 100% random mooblooms in `#creativeengineering:moobloom/flower_variety` (D12); no mod spawn rules, `rareChance` default 0 (D24); D22/D23/D25 as suggested; granular BB switches with per-switch sub-packs (D26). Added 2.8 flower spawns per biome (scratch generator on the crop-table loaders + decompiled vanilla flower features) and the per-moobloom map in 4.4 (names, textures, egg colours, flowers, suggested secondaries, drops, where the flower grows). New D27-D29, MB-38 to MB-40 reworded, MB-67 added.
+- 2026-10-05 (night): answers applied: names "<Id> Moobloom" (D2); one pack rule, 100% random mooblooms in `#creativeengineering:moobloom/flower_variety` (D12); no mod spawn rules, `rareChance` default 0 (D24); D22/D23/D25 as suggested; granular BB switches with per-switch sub-packs (D26). Added 2.8 flower spawns per biome (scratch generator on the crop-table loaders + decompiled vanilla flower features) and the per-moobloom map in 4.4 (names, textures, egg colors, flowers, suggested secondaries, drops, where the flower grows). New D27-D29, MB-38 to MB-40 reworded, MB-67 added.
 - 2026-10-07: **built** (4.15). The user's answers in the 4.14 Notes column applied: bare shearing makes a cow again
   (D8), flowers are the breeding food (D6), BB mooblooms removed rather than converted (D25), corn renamed cornflower
   (D28), cows added to meadow and blooming plateau (D27), D20 ignored, D16/D29 deferred. Forge 1.19.2 has no tag
   `remove` entries, so the buttercup is stripped by a TagLoader mixin. Scratch server with the full pack: boots, all
   mixins apply, flower-variety rule verified on chunk generation. MB-21/46/60/66 reworded, MB-57 retired, MB-68..71 added.
 - 2026-10-07 (evening): planned 4.16 (nothing built): variant table for the new `textureswapper/` coats (12 wild + 7 bred mixes, three explicit flower slots), `food`/`convert`/`breed_weight` fields, `_i` coat twins, breeding combination data + random calves, egg-on-moobloom calf fix, Sunny off (vanilla TAIL mixin at priority 900 ahead of BB's + effect DENY). Egg swap traced to Quark Automatic Tool Restock (same item, NBT ignored); the fix is a Quark ignored item. D30-D40 and MB-72 to MB-84 added.
-- 2026-10-07 (night): 4.16 rewritten for the final textures the user put in `kubejs/assets/` (11 coats, final names = ids; not moved into the mod yet). Each of the 17 vanilla flowers sits on exactly one variant; 10 colour-mix breeding combinations; old ids remapped through a new `replaces` field; default variant becomes `moobloom`. The `_i` twins and bred-only mix coats are gone (D31, D36, D37, D40 closed; D41, D42 added). MB-74/75/79/80/81 reworded, MB-85 added, mapping note for the older tests.
+- 2026-10-07 (night): 4.16 rewritten for the final textures the user put in `kubejs/assets/` (11 coats, final names = ids; not moved into the mod yet). Each of the 17 vanilla flowers sits on exactly one variant; 10 color-mix breeding combinations; old ids remapped through a new `replaces` field; default variant becomes `moobloom`. The `_i` twins and bred-only mix coats are gone (D31, D36, D37, D40 closed; D41, D42 added). MB-74/75/79/80/81 reworded, MB-85 added, mapping note for the older tests.
 - 2026-10-07 (late): flowers became a weighted pool per variant (positions fixed, each flower rolled per position and saved as `Flowers`). First shear drops the flowers actually grown; second shear rolls the pool by weight. Wild onions added to onionbloom as food through an optional tag. Shear lists dropped from the format; D43-D46 added; MB-74/80/85 reworded, MB-86 to MB-88 added.
-- 2026-10-07 (night): **More Mooblooms 1.0.** Final variants built from the user's table: 11 coats with their names as ids, weighted flower pools rolled per position and saved on the moobloom (`Flowers`), first shear drops the carried flowers and the second rolls the pool, 10 parent combinations plus breeds-true and random calves, egg-on-moobloom calves, `disableSunny` (priority-900 mixin ahead of BB's burn check, effect denied and stripped). Then: wild onions as an optional pool entry, `feed_weight` for flowers in several pools (dandelion 90/10 moobloom/sunbloom), witherblooms in soul sand valleys (switch pack, dark spawn placement, direct-spawn variant from the biome rule), old-id remapping dropped (the user clears old entities by hand), version set to 1.0.0. Data now generated from the variant table (`tools/gen_moobloom_variants.py`), egg colours from the coats. Egg swap traced to Quark restock and fixed in the pack. Writeup rewritten to the 1.0 state (sections 0-8; this history kept as is). MB-23/50/75 retired, MB-89 to MB-93 added.
+- 2026-10-07 (night): **More Mooblooms 1.0.** Final variants built from the user's table: 11 coats with their names as ids, weighted flower pools rolled per position and saved on the moobloom (`Flowers`), first shear drops the carried flowers and the second rolls the pool, 10 parent combinations plus breeds-true and random calves, egg-on-moobloom calves, `disableSunny` (priority-900 mixin ahead of BB's burn check, effect denied and stripped). Then: wild onions as an optional pool entry, `feed_weight` for flowers in several pools (dandelion 90/10 moobloom/sunbloom), witherblooms in soul sand valleys (switch pack, dark spawn placement, direct-spawn variant from the biome rule), old-id remapping dropped (the user clears old entities by hand), version set to 1.0.0. Data now generated from the variant table (`tools/gen_moobloom_variants.py`), egg colors from the coats. Egg swap traced to Quark restock and fixed in the pack. Writeup rewritten to the 1.0 state (sections 0-8; this history kept as is). MB-23/50/75 retired, MB-89 to MB-93 added.
 - 2026-10-07 (late night): dark spawning made per variant: new variant field `spawns_in_dark_on` (only witherbloom has it); the variant is now picked in `checkSpawnRules`, so soul blocks in the dark take witherblooms only. MB-93 reworded.
 - 2026-10-08: 2.8 regenerated from the wild flower tuning (`gen_wild_flowers.py` inventory, per pool flower and per
   biome with variant mixes and cows). Spawns rewritten by hand from it (D12, D29 answered; D47, D48 added): 35
@@ -1212,4 +1212,4 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   `dumpspawns`) writes the spawn rule file and the 2.8 / 4.9 tables from the wild flowers, the variant pools and the
   cows; hand-set flower-biome rules live in `kubejs/generation_scripts/worldgen/moobloom_rules.json` `manual`. First
   run: the same spawn percents as the hand-written file (37 rules), only rule and entry order changed; 2.8 got the
-  current biome areas and per-1000 numbers (unchanged tiers). No spawn behaviour change.
+  current biome areas and per-1000 numbers (unchanged tiers). No spawn behavior change.

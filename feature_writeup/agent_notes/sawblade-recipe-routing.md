@@ -5,7 +5,7 @@
 Moved from agent memory 2026-11-16 (last edited there 2026-09-07). Repo status docs win over any status line here.
 
 The IE Sawmill can run **different recipes for the same input** depending on which sawblade
-is installed. `minecraft:oak_planks` → stairs / door / fence / … is chosen by the blade.
+is installed. `minecraft:oak_planks` -> stairs / door / fence / … is chosen by the blade.
 
 **Why it was needed:** `kubejs/generation_scripts/sawmill.js` emits many `immersiveengineering:sawmill`
 recipes that share one input; IE's `SawmillRecipe.findRecipe` returns only the first input
@@ -25,7 +25,7 @@ selection deterministic.
 
 - `SawbladeRouting` — `profileOf(ItemStack)`, `route(Level, input, profile)`. Pure logic + the
   `((Recipe<?>)r).getId()` cast (IE's SRG jar hides the Mojmap `Recipe` methods; cast to the
-  Mojmap `Recipe` interface so reobf maps `getId`→`m_6423_`).
+  Mojmap `Recipe` interface so reobf maps `getId`->`m_6423_`).
 - `SawmillRecipeMixin` — `@Unique String` blade field + `SawmillRecipeExt` duck iface.
 - `SawmillRecipeSerializerMixin` — `@Inject` RETURN of `readFromJson`, `GsonHelper.getAsString(json,"blade","")`.
 - `SawmillProcessMixin` (targets `SawmillBlockEntity$SawmillProcess`) — captures `be.sawblade`
@@ -39,7 +39,7 @@ selection deterministic.
 
 - `kubejs/generation_scripts/sawmill.js` — `profileFor(outputId)` regex classifies the output
   shape; `createSawmillSimpleRecipeFile` auto-derives `blade` from the output. Regenerate with
-  `node sawmill.js`, then copy `recipes/sawmill/*.json` → `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/`.
+  `node sawmill.js`, then copy `recipes/sawmill/*.json` -> `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/`.
 - Default per planks input: IE's own `immersiveengineering:sawmill/<species>_slab` (9 vanilla/nether,
   still live) or the generated `*_slab` (4 modded woods). `wood_types.js` unchanged.
 - Blueprint recipes: `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`
@@ -75,4 +75,4 @@ Status: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
 
 ## TODO (earmarked 2026-09-26): make the sawmill recipes dynamic
 
-The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` → `recipes/sawmill/*.json` → hand-copied into `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) → jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.
+The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` -> `recipes/sawmill/*.json` -> hand-copied into `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) -> jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.

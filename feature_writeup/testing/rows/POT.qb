@@ -8,7 +8,7 @@
 @@jars creativebrewing creativecompat
 @@sources feature_writeup/flower_pots.md
 @@text
-@@text Audit tooling only, no pack behaviour change; none of these blocks another feature. Target: the instance's
+@@text Audit tooling only, no pack behavior change; none of these blocks another feature. Target: the instance's
 @@text `kubejs/` as of 2026-10-27 (new `server_scripts/_lib/dump_flower_pots.js`) and the jars in `mods/`; no new jar.
 @@text Probe: copy `tools/flower_pot_test/pot_probe.js` into `srv/kubejs/server_scripts/zz_pot_probe.js` before boot.
 @@text Output lines `[pottest] PASS|FAIL|INFO <id> ...` in `logs/latest.log`; the probe runs one holder per few ticks, 30
@@ -116,8 +116,8 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text **SQ-POT-06** (patcherMod 1.1.04 built 2026-10-29, copy into the scratch `mods/`; [flower_pots.md](../flower_pots.md) 3.1):
 @@text boot, grep latest.log for `BotanistWorkbenchPotMixin` / `StructureTemplateBotanistPotMixin` warnings; then
 @@text `/place structure beautify:botanist_house_plains ~ ~ ~` (and `_desert`), find the workbench and
-@@text `/data get block <pos>` → `Plant: "minecraft:<flower>"` with a vanilla flower (no wither rose), different ones across
-@@text a few placements; `/setblock <pos2> beautify:botanist_workbench` then `/data get block <pos2>` → no `Plant`. If it fails: no
+@@text `/data get block <pos>` -> `Plant: "minecraft:<flower>"` with a vanilla flower (no wither rose), different ones across
+@@text a few placements; `/setblock <pos2> beautify:botanist_workbench` then `/data get block <pos2>` -> no `Plant`. If it fails: no
 @@text NBT at all = the mixin did not apply (Beautify class name, `@Pseudo`); `Plant` missing on placed houses only = the
 @@text pool places the bench through another path (check `processBlockInfos` callers).
 @@text
@@ -125,8 +125,8 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text
 @@text **SQ-POT-07** (patcherMod 1.1.04 built 2026-10-31 with the Flower Test preset; [flower_pots.md](../flower_pots.md) 5):
 @@text in the scratch `server.properties` set `level-type=creativeengineering\:flower_test` and a fresh `level-name`; boot;
-@@text grep `[flowerworld]` in latest.log → `Flower Test world without a table: building`, then one `holder ... of N` line per
-@@text holder, `rows N (...)`, `DONE`; no `Error occurred while handling event` naming `flower_world.js`. Restart → no
+@@text grep `[flowerworld]` in latest.log -> `Flower Test world without a table: building`, then one `holder ... of N` line per
+@@text holder, `rows N (...)`, `DONE`; no `Error occurred while handling event` naming `flower_world.js`. Restart -> no
 @@text `building` line. Probe: `/data get block 2 -60 -2` is a sign; `execute if block 6 -59 0 supplementaries:hanging_flower_pot`
 @@text and `if block 6 -60 0 minecraft:air` (hanging pot one up); no block at x > 26 in the table area (12 holders); no
 @@text `handcrafted:` or `floralench:` block and no melon / pumpkin / moss block in the table; no `fill click did not take`
@@ -141,11 +141,11 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @@text `creativeengineering:block/flower_box/*` or `vinery:block/flower_box_centered`, no blockstate error for
 @@text `vinery:flower_box`. Tags: `#creativeengineering:flower_box_plants` has `minecraft:cactus`, `minecraft:glow_berries`,
 @@text `minecraft:poppy` and not `minecraft:azalea`; `#another_furniture:planter_box_banned` has azalea. A survival fake player
-@@text (like `/flowerworld`'s) clicks: an unframed `framedblocks:framed_flower_pot` with a poppy → BE `flower` = poppy;
-@@text `supplementaries:flower_box` with azalea → empty, with glow berries / glow lichen → filled; an oak planter box with
-@@text cactus, nether wart, glow lichen → filled, with azalea → empty; `vinery:flower_box` with cactus → filled; a
-@@text `vinery:flower_pot` with wheat seeds and an oak sapling → filled; a `twigs:silt_pot[filled=true]` → wheat seeds and
-@@text sugar cane plant on top; `beautify:botanist_workbench` with glow lichen → `Plant: "minecraft:glow_lichen"`. Recipe
+@@text (like `/flowerworld`'s) clicks: an unframed `framedblocks:framed_flower_pot` with a poppy -> BE `flower` = poppy;
+@@text `supplementaries:flower_box` with azalea -> empty, with glow berries / glow lichen -> filled; an oak planter box with
+@@text cactus, nether wart, glow lichen -> filled, with azalea -> empty; `vinery:flower_box` with cactus -> filled; a
+@@text `vinery:flower_pot` with wheat seeds and an oak sapling -> filled; a `twigs:silt_pot[filled=true]` -> wheat seeds and
+@@text sugar cane plant on top; `beautify:botanist_workbench` with glow lichen -> `Plant: "minecraft:glow_lichen"`. Recipe
 @@text manager: `beautify:hanging_pot` gone, one shaped recipe for it with `farmersdelight:rich_soil`. If it fails: a mixin
 @@text "target not found" = class or SRG name changed (FramedBlocks 6.8.6, Supplementaries 2.4.20); tags empty = KubeJS did
 @@text not expand the nested AF tag in `addMatching` (list members instead).

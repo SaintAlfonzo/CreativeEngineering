@@ -62,7 +62,7 @@ spire, the fish ponds and the swamp fisherman house, Philip's padded ruins, and 
 
 - Carp pond template (read from the jar, `aquaculture/aquaculture_carp_spawn`, 20x14x20): y 0-3 a dirt bowl (177 to 291
   dirt per layer), y 4 the grass rim and water. Start -4 puts y 4 at the surface: the same layout as the Campsite camps.
-  With `none` it gets no beard, and earth fill counts every earth block (Phase 7: `large`, cancelled once on 209 air;
+  With `none` it gets no beard, and earth fill counts every earth block (Phase 7: `large`, canceled once on 209 air;
   water fill 103-144 into ground and 26-67 into air on slopes, 07_phase_7.md 2.4).
 
 ### Build
@@ -189,7 +189,7 @@ Config: new `beardFootprint` (boolean) in `CEConfig.EarthFill` (class at `CEConf
 ### Tests
 - Offline: a `footprint` sim run printed per structure (no pass/fail; numbers go into 3.13).
 - ST-219 Beard pillar caught [scratch] (if step 2): with `beardFootprint = true`, a stone tower on a cliff edge logs
-  mound columns and is cancelled; the same tower on flat ground is kept.
+  mound columns and is canceled; the same tower on flat ground is kept.
 
 ---
 

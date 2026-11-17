@@ -182,7 +182,7 @@ drinks go, Rustic's drinks give Caffeinated instead of Speed and Haste, every ot
 - Fixed in the scratch run (2026-10-22): gambler's tea, Canned Coffee Berries and a mortar craft still named Respite's
   coffee berries. KubeJS's swap skips script-added recipes, so item merges pass `includeAdded` to NCH `replaceInput` /
   `replaceOutput` (the two can recipes, [pack_tooling.md](pack_tooling.md) 2.2). Respite's kettle has no KubeJS
-  schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalogue
+  schema, so gambler's tea is removed and rebuilt with `R.frBrewing` on Rustic's beans. `mortar.js` skips catalog
   entries naming a purged item (`[mortar] 6 of 7`).
 - Bush removed (C6, owner Q21b, 2026-11-07; built, not run): Farmer's Respite's coffee plant no longer exists in play.
   The purged beans already meant no new bush could be planted; a bush already in a world grew on and ate any
@@ -206,7 +206,7 @@ PASS. Retest r1031 (2026-10-31, SQ-CM-10): the froglight recipes take the Salt B
 
 All salt is Vintage Delight's pink salt (owner, scratchpad 2026-10-26). Pairs in Creative Delight's
 `vintagedelight/vintage_items.js` (jar startup): The Salt's salt -> Vintage's salt dust; Vintage's Salt Block -> The
-Salt's Salt Block (owner: The Salt's block stays, its shape in Vintage's block colours). Vintage's salt bucket is
+Salt's Salt Block (owner: The Salt's block stays, its shape in Vintage's block colors). Vintage's salt bucket is
 removed with both its recipes (water bucket smelt, bucket -> 3 dust). Vintage's bricks, smooth block, pillar, mixed
 bricks and the 17 lamps stay.
 
@@ -224,13 +224,13 @@ bricks and the 17 lamps stay.
   default lamp outline without its salt on top, every other slot a Salt Block: `SSS / SGS / SDS`, S Salt Block, G
   glowstone, D deepslate tiles (Vintage's lamp uses tiles). Was raw rock salt block, torch, wooden slab.
 - Art: `textureswapper/salt/make_salt.py --install` writes The Salt's 19 textures into `kubejs/assets/salt/textures/`:
-  Salt Block in Vintage's salt block colours (`textureswapper/salt.png`); both ores (salt pixels only), raw rock salt
+  Salt Block in Vintage's salt block colors (`textureswapper/salt.png`); both ores (salt pixels only), raw rock salt
   and its block, buds, cluster, cauldron fill (salt pixels only), lamp top, the salt item and the salted overlay in
-  Vintage's salt dust colours; lamp side: the salt part recoloured, the wood base (2 rows) kept
+  Vintage's salt dust colors; lamp side: the salt part recoloured, the wood base (2 rows) kept
   (`src/lamp/salt_lamp_side_{salt,wood}.png`). Sources copied to `textureswapper/salt/src/`. The new Salt Block
   texture also goes over Vintage's `block/salt.png` (`kubejs/assets/vintagedelight/`), so the Salt Layer matches it.
 - Seasoning JEI page icon: salt dust (patcherMod `SeasoningJEI`, falls back to The Salt's salt).
-- Block behaviour (owner, 2026-10-26; Creative Delight `salt/SaltBlockTicks.java` + mixins `SaltBlockRandomTickMixin`,
+- Block behavior (owner, 2026-10-26; Creative Delight `salt/SaltBlockTicks.java` + mixins `SaltBlockRandomTickMixin`,
   `SaltLayerRandomTickMixin`; the rock salt exemption was `SaltRockNoDissolveMixin`, since 2026-11-02 an edit in the
   Salt member's own `Dissolving`, [salt.md](salt.md)). All through The Salt's own `Melting` / `Dissolving`, so
   `salt-common.toml` chances apply:
@@ -249,7 +249,7 @@ bricks and the 17 lamps stay.
 - Performance (analysis 2026-10-26, no profile yet):
   - Random ticks are spent per chunk section: 3 picks per tick (`randomTickSpeed`) in each section holding any
     randomly ticking block. A salt block is hit about once every 23 min of game time on average (4096 / 3 ticks),
-    and a hit costs 6 neighbour reads and tag checks: well under a microsecond.
+    and a hit costs 6 neighbor reads and tag checks: well under a microsecond.
     10 000 salt bricks give about 150 hits a second, much less than 0.1 ms per second of server time.
   - The only new cost per section: a section with no random tickers before (an underground salt-brick build; surface
     sections already have grass and leaves) now gets its 3 picks a tick. Same as any section with one grass block.
@@ -286,7 +286,7 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
   slices. Cantaloupe Seeds join `#forge:seeds`. The survivor popsicle keeps its Display Delight plated form.
 - Compost: the hami slice row removed; food_dict: `fruit_slice_hamimelon`, `can_hamimelon` removed.
 - Worldgen (`_worldgen/wild_crops.json`): the hamimelon rule (warm desert, warm badlands; sand, red sand, terracotta,
-  grass-like soils) is labelled Cantaloupe. The Mini Cantaloupe rule moved there too (owner: same spawn locations):
+  grass-like soils) is labeled Cantaloupe. The Mini Cantaloupe rule moved there too (owner: same spawn locations):
   new pack feature `creativedelight:wild/mini_cantaloupe`, a copy of `wild/hamimelon` placing `delightful:cantaloupe`.
   Was warm dry grassy with Delightful's `patch_cantaloupe`.
 - Open: the Mini Cantaloupe Plant still needs sand next to water to be planted (Delightful's rule); the wild patch
@@ -508,7 +508,7 @@ Not a merge: Supplementaries' flax goes with no survivor, folded into the string
   dissolving of a dropped salt item does not apply to salt dust.
 - Salt merge gaps (audit 2026-10-26):
   - Open, owner to decide: using salt on ice or snow, or dispensing it, no longer melts it. The Salt binds right-click
-    melting (`SaltItem.useOn`) and the dispenser behaviour to `salt:salt` itself, not the tag, so salt dust does
+    melting (`SaltItem.useOn`) and the dispenser behavior to `salt:salt` itself, not the tag, so salt dust does
     neither. The two world JEI rows that promised it are removed. Fix if wanted: a patcherMod use-on / dispenser hook
     for `#forge:salts`.
   - Open, minor: the Salt Layer has a block item ("Salt Layer", Vintage's creative tab). It drops salt dust
@@ -561,7 +561,7 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-28 | Break a placed FR coffee bush at stage 2 (old world, or `/setblock`) | Rustic's Coffee Beans drop, no FR berries |
 | MG-29 | JEI search salt | One salt item (pink Salt Dust), one Salt Block (The Salt's, pink), no Salt Bucket; Large Salt Lamp plus Vintage's 17 lamps; ores, raw rock salt, buds and cluster pink |
 | MG-30 | Craft 9 salt dust; craft the block back; JEI uses of Salt Block | 1 Salt Block; 9 Salt Dust (one recipe each way); Evaporator, salt bricks / pillar / smooth recipes take it |
-| MG-31 | Craft Large Salt Lamp (7 Salt Block, glowstone centre, deepslate tiles bottom middle); place it | Large Salt Lamp, lights up; no raw rock salt block + torch recipe |
+| MG-31 | Craft Large Salt Lamp (7 Salt Block, glowstone center, deepslate tiles bottom middle); place it | Large Salt Lamp, lights up; no raw rock salt block + torch recipe |
 | MG-32 | `/give @s salt:salt 3`, `vintagedelight:salt_block 1`; salt a food with salt dust in the grid | 3 Salt Dust, 1 Salt Block; Salted food |
 | MG-33 | Cauldron of water over a fire until it evaporates; smelt a water bucket | Salt dust drops; no salt bucket recipe |
 | MG-34 | New world, beach: find a salt patch (`/place feature vintagedelight:patch_salt`) | Salt layers on raw rock salt blocks; the rock salt next to the sea stays |
@@ -575,7 +575,7 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 | MG-42 | Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe | 9 Cantaloupe Slices; 4 Cantaloupe Slices |
 | MG-43 | JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread | All accept it |
 | MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
-| MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered grey-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
+| MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered gray-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
 | MG-46 | Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants | Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20) |
 - [ ] **MG-47 Apple tree [game]:** JEI has no Fruits Delight apple sapling or leaves; a Fruits Delight apple sapling
   given by `/give` turns into the Vinery apple tree sapling in the inventory; a new world's forest has no Fruits Delight
@@ -657,7 +657,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 - Zucchini stuffing: no overlap, nothing to merge.
 - Skewers: fold into the skewer family with consistent rules (`dishes/meals #13`). Patties: every patty type is always
   interchangeable (`dishes/meals #14`).
-- Burgers: mark all burgers for an ingredient-variant audit and balancing. Drop More Delight's loaded burger in favour
+- Burgers: mark all burgers for an ingredient-variant audit and balancing. Drop More Delight's loaded burger in favor
   of "The Burger", renamed Loaded Burger, accepting any cheese. (Rename BUILT 2026-10-30, `namechanges.js`, shipped 1.1.05;
   the drop and the any-cheese recipe are open.)
 - Kimchi (BUILT 2026-11-03, 2.19): Vintage Delight's texture. DECIDED 2026-11-02 (owner): Brewin's kimchi removed, its recipes not migrated; new
@@ -667,7 +667,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
 
 ### 5.2 Baking (`merges/baking`)
 
-- Pancakes: recolour the individual pancake items to the Supplementaries pancake shape (one colour per pancake
+- Pancakes: recolour the individual pancake items to the Supplementaries pancake shape (one color per pancake
   type, put on the Supplementaries pancake item). Rename Supplementaries' pancake to Stackable Pancake (BUILT
   2026-10-30, `namechanges.js`, unreleased). Cooking pot:
   3 batter + 2 sugar + 1 egg -> 4 stackable pancakes (check food values against the craft cost). Syrup can go on
@@ -703,7 +703,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
   - Quark: disabled.
   - Supplementaries: rename to Rope Netting; tooltip "Climbable, nets and tightwires can be walked across. Use again
     to extend rope lower. Requires support like scaffolding"; recipe 3 Farmer's Delight ropes vertically.
-  - Beautify: rename to Twine; tooltip "Climbable, acts like chain"; rope extension behaviour (like Create shafts);
+  - Beautify: rename to Twine; tooltip "Climbable, acts like chain"; rope extension behavior (like Create shafts);
     keep the existing recipe.
 - Rotten flesh: Architect's Palette's block becomes the pack's own prepared block with a prepared flesh item. BUILT
   (`merges/materials #3`): the block is `creativeengineering:prepared_flesh_block` (KubeJS `misc_items.js`, hand-authored

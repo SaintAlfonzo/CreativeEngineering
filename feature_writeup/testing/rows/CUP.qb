@@ -54,7 +54,7 @@ reject verb=\S+ .*done=0
 ## SQ-CUP-03 | Copper Pot: recipe keyed on the water bucket; soups served in bowls (x 110..122)
 @group A
 @commands recipe probe for `miners_delight:copper_pot`; `/setblock` a lit campfire and a copper pot; `/data merge block` the inputs of Cave Soup, Bat Soup, a Farmer's Delight beef stew and Delightful Cactus Soup in turn; wait; `/data get block`
-@pass the Copper Pot recipe exists, its centre key is only `minecraft:water_bucket`; each soup comes out as its bowl item (count as the recipe) with container `minecraft:bowl`
+@pass the Copper Pot recipe exists, its center key is only `minecraft:water_bucket`; each soup comes out as its bowl item (count as the recipe) with container `minecraft:bowl`
 @fails `MinersTranslator.withoutRemovedAlternatives` (the recipe dropped whole if the patch missed), `CopperPotBlockEntity.servedResult`
 @from batches/r1103/sB_2.qb
 @reviewed 2026-11-16

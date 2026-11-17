@@ -647,7 +647,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-SPF-100 | Labels: fixture note and label kept, new note places
 @group A
 @commands Labels: fixture sticky note and label after boot 1 (labels are neither block entities nor `creative_labels:label` entities: `/data` cannot read them, judge in CQ-SPF-02); bot places a new note on a chest face and a floor (`/zq useitem bot`)
-@pass old note and label keep text and colour; new ones place on the surface rules of SQ-LBS
+@pass old note and label keep text and color; new ones place on the surface rules of SQ-LBS
 @fails Labels built 2026-11-04 against the pre-swap Common (only matters if it imports Common)
 @from batches/r1106spf/b1.qb
 > data get block -20 -60 -19

@@ -21,7 +21,7 @@
 | Tool effects framework `global.toolEffects`: `onHit()` (to the target) and `held()` (to the wielder) | DEPLOYED, in-game test pending |
 | Echo tools on-hit Weakness II + Darkness II; dragon sword / axe / shovel / trident / bow / crossbow on-hit and held effects | DEPLOYED, in-game test pending; dragon bow and crossbow swapped 2026-10-22 (F4); on-hit never applied until F10 (fixed 2026-10-22); built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02); held effects in game (AE-19, AE-20) |
 | Echo armor set bonus swapped from Resistance II + Strength II to Night Vision + Phantom Bane (`EchoArmorEffectProcedureMixin`), tooltip to match (`EchoArmorTooltipMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativecommon:magic` tag; Poison / Wither ticks at or below its level cancelled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
+| `creativeengineering:magic_resistance` effect (KubeJS) and its damage cut (`MagicResistanceEffect`, 20% per level on the `creativecommon:magic` tag; Poison / Wither ticks at or below its level canceled) | Effect DEPLOYED; tag switch and tick cover BUILT 2026-10-31 (`potions/effects #3`, patcherMod 1.1.04), scratch server PASSED r1031 (2026-10-31, SQ-EFX-02, -03) |
 | Magic Resistance potions (base, long, strong) and their brewing | DEPLOYED; brewing and reagent belong to the potions writeup (backlog row 4); reagent is a placeholder |
 | Tooltip lines for all of the above (`armor_effects_tooltip.js`, `tool_effects_tooltip.js`) | DEPLOYED |
 
@@ -48,7 +48,7 @@ Vanilla 1.19.2 armor and tools carry no potion effects. Create: Deep Dark is the
   "With full set on: Resistance II (infinite) / Strength II (infinite)".
 - **Echo sword:** Weakness II + Darkness II (5 s) on hit, with an "On hit, inflicts to target:" tooltip.
 
-The pack generalises that idea into two data-driven KubeJS frameworks, one for armor and one for tools, styled on
+The pack generalizes that idea into two data-driven KubeJS frameworks, one for armor and one for tools, styled on
 CDD's tooltip. The echo armor bonus itself is retargeted in place by two mixins. Magic Resistance is a new effect,
 the first one the pack defines.
 
@@ -100,7 +100,7 @@ the item is in either hand. Tooltip headers: "On hit, inflicts to target:" (with
 | Dragon bow | Slowness IV 2.5 s, Glowing I 25 s | Invisibility I |
 | Dragon crossbow | Exsanguination II 7.5 s, Weakness III 12.5 s | Resistance II |
 
-`held` specs also carry a `duration`; it is ignored (F3). Hand-written flavour lines for the dragon tools are in
+`held` specs also carry a `duration`; it is ignored (F3). Hand-written flavor lines for the dragon tools are in
 [tooltips.js](../kubejs/client_scripts/tooltips.js) around line 815 (none for the bow or crossbow).
 
 ### 2.4 Echo armor set bonus
@@ -115,7 +115,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
 
 ### 2.5 Magic Resistance
 
-- **Effect:** `creativeengineering:magic_resistance`, beneficial, colour `#8a2be2`, registered in KubeJS.
+- **Effect:** `creativeengineering:magic_resistance`, beneficial, color `#8a2be2`, registered in KubeJS.
 - **Cut:** a Forge `LivingHurtEvent` listener multiplies damage by `1 - min(1, reductionPerLevel x level)` when the
   source is in the pack's `creativecommon:magic` damage tag (the shields' MAGIC column, [shields.md](shields.md)
   2.9) and the entity has the effect. 20% at I, 40% at II, 100% from V.
@@ -124,7 +124,7 @@ The check that all four pieces are worn is CDD's; the mixin only swaps the two `
   `#life_drain` (Health Siphon, Supplementaries XP extraction). A datapack edit of `magic.json` and `/reload` changes it.
 - **Effect ticks no shield can block** (2026-10-31, owner): a tick from an effect in `[magic_resistance]
   negatedEffectTicks` (default Poison, Wither) deals no damage when its level is at most the Magic Resistance level; it is
-  cancelled in `LivingAttackEvent`, before the hurt sound and flash, recognised through `EffectTickContext` (poison ticks
+  canceled in `LivingAttackEvent`, before the hurt sound and flash, recognized through `EffectTickContext` (poison ticks
   share Instant Damage's source). A higher level takes the per-level cut (Wither too, though it is not in the tag).
 - **Where it comes from:** felsic and dragon set bonuses (level I), the potions (base 3:00, long 8:00, strong
   1:30 at II, from `CommonPotions`), `/effect`. Felsic gear assembly fills with it (see
@@ -196,7 +196,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
   - Crossbow: the target gets **Resistance II** on hit; the wielder gets **Exsanguination** (bleeding) and **Weakness
     III** while holding it.
   - Possible reading: Slowness on the bow is a deliberate zoom (Slowness narrows the FOV) and the rest are drawbacks;
-    or on-hit and held were swapped. Neither item has a flavour line in `tooltips.js`, unlike the other dragon tools.
+    or on-hit and held were swapped. Neither item has a flavor line in `tooltips.js`, unlike the other dragon tools.
     The tooltip shows target Resistance in green under "On hit, inflicts to target", which reads oddly either way.
 - **F5. On-hit is keyed to the main hand at damage time.**
   - A thrown dragon trident has left the hand, so a thrown hit applies nothing; melee with it works.
@@ -256,7 +256,7 @@ several `onHit()` calls on one item add up; armor `piece()` / `mount()` calls re
 - [potion/MagicResistanceEffect.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistanceEffect.java): damage cut; [potion/MagicResistancePotions.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/potion/MagicResistancePotions.java): the three potions.
 - [mixin/EchoArmorEffectProcedureMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EchoArmorEffectProcedureMixin.java), [mixin/EchoArmorTooltipMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EchoArmorTooltipMixin.java): echo set bonus.
 - `CEConfig.Magic` (`[magic_resistance]`) and `CEConfig.Perf.mountEffectIntervalTicks` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java); listener registered in `CreativeEngineering.java` line 109.
-- Related: [potions.js](../kubejs/startup_scripts/cooking/potions.js) lines 68-74 (Magic Resistance brewing), [tooltips.js](../kubejs/client_scripts/tooltips.js) (dragon flavour lines), [tooltips.md](tooltips.md), [gear_tuning.md](gear_tuning.md) (the gear these effects sit on).
+- Related: [potions.js](../kubejs/startup_scripts/cooking/potions.js) lines 68-74 (Magic Resistance brewing), [tooltips.js](../kubejs/client_scripts/tooltips.js) (dragon flavor lines), [tooltips.md](tooltips.md), [gear_tuning.md](gear_tuning.md) (the gear these effects sit on).
 
 ## 6. Offline checks
 
@@ -274,48 +274,48 @@ in the dict. Not built.
 
 Survival, Normal difficulty. Check hidden effects with `/data get entity @s ActiveEffects`.
 
-- [ ] **AE-01 Set tooltip:** hover any netherite piece → "With full set on:", Fire Resistance, Lava Vision,
+- [ ] **AE-01 Set tooltip:** hover any netherite piece -> "With full set on:", Fire Resistance, Lava Vision,
   Knockback Resistance, each "(infinite)". Same block on all four pieces.
-- [ ] **AE-02 Set needs all four:** wear three netherite pieces → none of the three effects. Add the fourth → all three
+- [ ] **AE-02 Set needs all four:** wear three netherite pieces -> none of the three effects. Add the fourth -> all three
   present, no HUD icon, no particles.
-- [ ] **AE-03 Set ends:** take one piece off → the effects run out within 2 s.
-- [ ] **AE-04 Drawback sets:** full iron set → `immersiveengineering:conductive`; full wooden Immersive Armors set →
+- [ ] **AE-03 Set ends:** take one piece off -> the effects run out within 2 s.
+- [ ] **AE-04 Drawback sets:** full iron set -> `immersiveengineering:conductive`; full wooden Immersive Armors set ->
   `flammable`. Iron tooltip shows the block once (F1).
-- [ ] **AE-05 Gold and diamond:** full gold → Luck + Conductive; full diamond → Speed (walk speed visibly up).
-- [ ] **AE-06 Felsic:** full felsic → Long Reach (blocks and mobs reachable from further than usual), Jump Boost, Magic Resistance.
-- [ ] **AE-07 Dragon, both chestplates:** full dragon set with `dragon_chestplate` → all 7 effects. Swap in
-  `upgraded_dragon_chestplate` → still all 7. Its tooltip shows the block once.
-- [ ] **AE-08 Echo bonus:** full echo set → Night Vision (no flicker) and Phantom Bane; no Resistance, no Strength.
-- [ ] **AE-09 Echo tooltip:** hover an echo piece → "Night Vision (infinite)" and "Phantom Bane (infinite)", nothing
+- [ ] **AE-05 Gold and diamond:** full gold -> Luck + Conductive; full diamond -> Speed (walk speed visibly up).
+- [ ] **AE-06 Felsic:** full felsic -> Long Reach (blocks and mobs reachable from further than usual), Jump Boost, Magic Resistance.
+- [ ] **AE-07 Dragon, both chestplates:** full dragon set with `dragon_chestplate` -> all 7 effects. Swap in
+  `upgraded_dragon_chestplate` -> still all 7. Its tooltip shows the block once.
+- [ ] **AE-08 Echo bonus:** full echo set -> Night Vision (no flicker) and Phantom Bane; no Resistance, no Strength.
+- [ ] **AE-09 Echo tooltip:** hover an echo piece -> "Night Vision (infinite)" and "Phantom Bane (infinite)", nothing
   about Resistance or Strength, and no second "With full set on" block.
-- [ ] **AE-10 Phantom Bane level (F7):** with the echo set, `/data get entity @s ActiveEffects` → note Phantom Bane's
+- [ ] **AE-10 Phantom Bane level (F7):** with the echo set, `/data get entity @s ActiveEffects` -> note Phantom Bane's
   Amplifier (expected 0 since 2026-10-28, F7).
 - [ ] **AE-11 Horse armor:** put dragon horse armor on a tamed horse, wait 5 s; its
-  ActiveEffects shows Regeneration, Health Boost and Resistance (Amplifier 1 each); its health does not drop every 5 s. (No repair half: the armor has no durability, 2026-10-28.) Take the armor off → gone within 7 s.
-- [ ] **AE-12 Horse interval:** set `[perf] mountEffectIntervalTicks = 20` → newly equipped armor works within 1 s.
+  ActiveEffects shows Regeneration, Health Boost and Resistance (Amplifier 1 each); its health does not drop every 5 s. (No repair half: the armor has no durability, 2026-10-28.) Take the armor off -> gone within 7 s.
+- [ ] **AE-12 Horse interval:** set `[perf] mountEffectIntervalTicks = 20` -> newly equipped armor works within 1 s.
   Put it back to 100.
-- [ ] **AE-13 Echo tool on hit:** hit a zombie with the echo pickaxe → it gets Weakness II and Darkness II (5 s).
+- [ ] **AE-13 Echo tool on hit:** hit a zombie with the echo pickaxe -> it gets Weakness II and Darkness II (5 s).
   Tooltip: "On hit, inflicts to target:", both lines with "(5 sec.)". Same for axe, shovel, hoe.
-- [ ] **AE-14 Off hand doesn't hit:** echo axe in the off hand, punch a zombie → no effects.
-- [ ] **AE-15 Dragon sword:** hit a mob → Weakness III 10 s, Exsanguination II 7.5 s. While held: Soul Cross; killing a
+- [ ] **AE-14 Off hand doesn't hit:** echo axe in the off hand, punch a zombie -> no effects.
+- [ ] **AE-15 Dragon sword:** hit a mob -> Weakness III 10 s, Exsanguination II 7.5 s. While held: Soul Cross; killing a
   mob heals you.
-- [ ] **AE-16 Dragon axe:** hit → target levitates 3 s and bleeds; while held, Jump Boost III (jumps visibly
+- [ ] **AE-16 Dragon axe:** hit -> target levitates 3 s and bleeds; while held, Jump Boost III (jumps visibly
   higher).
-- [ ] **AE-17 Dragon shovel:** hit a player or mob → all six discombobulate effects; while held, Knockback Resistance.
-- [ ] **AE-18 Dragon trident:** melee hit → Mining Fatigue II 3 s; thrown hit → nothing (F5). While held: Slow Falling.
+- [ ] **AE-17 Dragon shovel:** hit a player or mob -> all six discombobulate effects; while held, Knockback Resistance.
+- [ ] **AE-18 Dragon trident:** melee hit -> Mining Fatigue II 3 s; thrown hit -> nothing (F5). While held: Slow Falling.
 - [ ] **AE-19 Dragon bow (F4)** (on-hit tables and a main-hand hit: scratch server PASSED 2026-10-22, SQ-GM-02, slowness 3 + glowing 0, no Invisibility
-  on the target; held effects need a real ticking player: in game): holding it → Invisibility, no Slowness or Glowing on you. Shoot a zombie with the bow
-  in the main hand → it gets Slowness IV 2.5 s and Glowing 25 s; tooltip lists Invisibility under held.
-- [ ] **AE-20 Dragon crossbow (F4)** (same split as AE-19; on-hit: scratch server PASSED 2026-10-22, SQ-GM-02, exsanguination 1 + weakness 2): holding it → Resistance II, no bleeding or Weakness on you. Shoot a zombie → it
+  on the target; held effects need a real ticking player: in game): holding it -> Invisibility, no Slowness or Glowing on you. Shoot a zombie with the bow
+  in the main hand -> it gets Slowness IV 2.5 s and Glowing 25 s; tooltip lists Invisibility under held.
+- [ ] **AE-20 Dragon crossbow (F4)** (same split as AE-19; on-hit: scratch server PASSED 2026-10-22, SQ-GM-02, exsanguination 1 + weakness 2): holding it -> Resistance II, no bleeding or Weakness on you. Shoot a zombie -> it
   gets Exsanguination II 7.5 s and Weakness III 12.5 s.
-- [ ] **AE-21 Held in either hand:** dragon axe in the off hand → Jump Boost III still applies.
+- [ ] **AE-21 Held in either hand:** dragon axe in the off hand -> Jump Boost III still applies.
 - [ ] **AE-22 Magic Resistance cut:** `/effect give @s creativeengineering:magic_resistance 60 0`, then
-  `/effect give @s minecraft:instant_damage 1 0` → 4.8 damage instead of 6 (20%). Amplifier 1 → 3.6.
-- [ ] **AE-23 Only magic:** with Magic Resistance, let a zombie hit you → full damage; stand in fire → full damage.
+  `/effect give @s minecraft:instant_damage 1 0` -> 4.8 damage instead of 6 (20%). Amplifier 1 -> 3.6.
+- [ ] **AE-23 Only magic:** with Magic Resistance, let a zombie hit you -> full damage; stand in fire -> full damage.
 - [ ] **AE-29 Poison and Wither cover:** with Magic Resistance I, `/effect give @s minecraft:poison 10 0` and
-  `minecraft:wither 10 0` → no damage, no hurt flash; Poison II → damage at 80%. A raised shield still never blocks them.
-- [ ] **AE-30 Tag-driven cut:** with Magic Resistance I, another player's Botania relic damage (2) → 1.6.
-- [ ] **AE-24 Live knob:** `[magic_resistance] reductionPerLevel = 0.5` in the config screen → Instant Damage I now
+  `minecraft:wither 10 0` -> no damage, no hurt flash; Poison II -> damage at 80%. A raised shield still never blocks them.
+- [ ] **AE-30 Tag-driven cut:** with Magic Resistance I, another player's Botania relic damage (2) -> 1.6.
+- [ ] **AE-24 Live knob:** `[magic_resistance] reductionPerLevel = 0.5` in the config screen -> Instant Damage I now
   does 3. Put it back to 0.2.
 
 ## 8. History
@@ -324,7 +324,7 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
   replacing `echo_tool_effects.js`, dragon tool effects, Magic Resistance effect and damage cut, potions; shipped with
   1.0.3. The echo set-bonus mixins were in the jar and first committed 2026-10-02.
 - 2026-10-03: horse armor effect back on with an interval walk (`mountEffectIntervalTicks`), and its effect id fixed
-  (`strong_regeneration` → `regeneration`). [perf.md](perf.md) 7. Shipped with 1.0.4.
+  (`strong_regeneration` -> `regeneration`). [perf.md](perf.md) 7. Shipped with 1.0.4.
 - 2026-10-18: this writeup; findings F1 to F9; tests AE-01 to AE-24. No code changed.
 - 2026-10-19: F1 fixed, the second iron `set()` deleted ([plan_1.0.9.md](plan_1.0.9.md)).
 - 2026-10-19: F2 and the magic_resistance.js part of F6 fixed (comments only; TODO `pack/docs`).
@@ -337,6 +337,6 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
   `dragon_autorepair.js` was removed: `HorseArmorItem` has no durability, so it never had anything to repair
   ([gear_tuning.md](gear_tuning.md)).
 - 2026-10-31: `potions/effects #3` (F6: Magic Resistance on the `magic` tag, Poison / Wither ticks at or below its level
-  cancelled, CEConfig `[magic_resistance] negatedEffectTicks`; description written) and `#4` (F9: horse Regeneration II,
+  canceled, CEConfig `[magic_resistance] negatedEffectTicks`; description written) and `#4` (F9: horse Regeneration II,
   Health Boost II, Resistance II, health kept across refreshes). AE-11 updated, AE-29 / AE-30 added; scratch SQ-EFX-02
   to -04.

@@ -57,7 +57,7 @@ smaller. Mapping by power would make PG machines absurdly expensive to feed from
 1. **`forgeEnergyPerWatt` = 0.1 for the mapping for now**, so a motor at rated speed costs about 260 FE/t, the same as one IE LV
    connector. Check against IE generator outputs (Dynamo, diesel, thermoelectric) and CC&A rates after the first
    running build.
-2. **LV / MV / HV bands are not fixed yet:** they are mapped to behaviour observed in a **bare PG port** (PWG tests with no
+2. **LV / MV / HV bands are not fixed yet:** they are mapped to behavior observed in a **bare PG port** (PWG tests with no
    integration). The bands below are a starting guess only: LV about 12 to 48 V, MV about 120 to 260 V, HV above 500 V.
    PG has no tiers itself; wire current limits and device ratings are the real limits.
 3. Machine sinks translate rated FE per tick into rated watts: `W = FE per tick / forgeEnergyPerWatt`. The converter
@@ -117,7 +117,7 @@ marked "recorded".
 |---|---|---|---|---|---|---|
 | Wires and cords (copper, iron, golden, insulated wire; copper cord; cutters; connectors, socket, cord junction) | wire entities with resistance; the solver gives every node a voltage each tick | IE copper wire, CE iron and gold wire (D6, A3); IE wire cutter; IE connectors run a separate FE network | B5 (wire to ground ignored after the first solve) | copper drop matches 0.0015 ohm per item (SQ-PWG-16); burnt wire vanishes, no drop (-17); solver 0.11 ms per changed solve on a 1000-node ladder (offline harness) | | |
 | Sources, gauges, meters (creative sources and resistor, voltage / current / power gauge, energy meter, thermometer, multimeter, debug item, `/powergrid`) | creative test parts and readouts | multimeter name with IE, ProjectRed, D&D (D7) | B8 (`performance get` NPE) | gauges read V / R within rounding (-14) | | |
-| Overheated Component (port-only, D4) | an overheated device becomes a cracked block that keeps its data | none | none | drop chance 0 / 0.25 / 1 honoured (-18) | | |
+| Overheated Component (port-only, D4) | an overheated device becomes a cracked block that keeps its data | none | none | drop chance 0 / 0.25 / 1 honored (-18) | | |
 | Passive and switching (power resistor, fuse holder, LV / MV / HV switch, HV breaker, LV button, contactor, redstone converter, spark gap, carbon pile, grounding rod) | protection and control on the grid | IE breaker and redstone breaker (different network) | B6 (grounding rod damage grew with distance) | HV switch and breaker add 2 SU each; fuse cut (-30); carbon pile holds a generator within about 5 V under load (-44) | | |
 | Transformers (core, small, medium, nether; winding; variac) | step voltage by turns ratio; nether pair across a portal | IE transformers (FE tiers, a different system) | B19 (winding recursion crashed the server) | 1:10 small transformer: secondary 91.6 V for 100 V (-8.4 %), primary current 10.01 x secondary (-26) | | |
 | Storage (battery, potato battery) | simulated cell with EMF and internal resistance | CC&A accumulators, IE capacitors | none | battery 388 800 J (108 Wh) at 90 %, about 0.1 ohm internal, 11.52 V at 10.55 A (-31) | | |

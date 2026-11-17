@@ -9,13 +9,13 @@ live on the server since 1.1.02) and the new one (1.4.5). Some content will be d
 been seen in game: the first build ships everything, and the drops are decided in a review test (§3.3, `MND-40`).
 Test prefix `MND-`.
 
-**Licence (owner, 2026-10-24): all rights reserved.** So the port is done **like the Vinery port**
+**License (owner, 2026-10-24): all rights reserved.** So the port is done **like the Vinery port**
 ([alcohol_part_b.md](alcohol_part_b.md), note [backported-vinery](agent_notes/backported-vinery.md)): the pack never redistributes upstream art, data or code.
 The unmodified upstream jar travels as a resource donor in its own folder, the port reads art and data out of it at
 load time (sha1-pinned), and everything the port ships is our own GPLv3 code. See D2, D12 and D13.
 
 **Scope rule:** the port adds no recipe or mechanic that is in neither version. Where both versions have the same id,
-1.4.5 wins (art, recipe, food values, behaviour), the same rule as the Brewin' port. Content only in 1.1.2 is restored.
+1.4.5 wins (art, recipe, food values, behavior), the same rule as the Brewin' port. Content only in 1.1.2 is restored.
 
 **Overlap marker:** every item or system that duplicates something the pack already has carries the text
 `*overlaps w/ <what>*` (§3). The overlaps all ship; which side stays is decided after play.
@@ -47,7 +47,7 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 
 ### 0.1 The four builds on disk
 
-| Build | File | Loader / MC | Mod id | Licence (as declared) | Content |
+| Build | File | Loader / MC | Mod id | License (as declared) | Content |
 |---|---|---|---|---|---|
 | Old, installed, **live** | `mods/miners_delight-1.19.2-1.1.2.jar` (in the 1.1.02 payload) | Forge 1.19.2 | `miners_delight` | All rights reserved (`mods.toml`) | 37 items, 7 blocks, 54 recipe files, 10 loot modifiers |
 | Forge 1.20.1, 1.2.3 | `~/.local/share/atlauncher/downloads/miners_delight-1.20.1-1.2.3.jar` | Forge 1.20.1 | `miners_delight` | All rights reserved | 57 items (a middle step; not needed) |
@@ -73,8 +73,8 @@ Checked facts:
   still reads `deploy/DEPLOYED.json` 1.1.01 and has no frozen `changelog/1.1.02.md`; the snapshot record is
   missing here, see §9.) Worlds can hold 1.1.2 items, so every 1.1.2 id except `hot_cocoa_cup` must keep working.
 
-So the behaviour reference is the Forge 1.20.1 1.4.5 build (closest API, same mod id, full 1.4.5 content), cross-checked
-against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset source for the port, only for reading.
+So the behavior reference is the Forge 1.20.1 1.4.5 build (closest API, same mod id, full 1.4.5 content), cross-checked
+against the 1.21.1 jar. Because of the license (D2) neither is a code or asset source for the port, only for reading.
 
 ## 1. Decisions (proposed 2026-10-24; all confirmed or changed by the owner 2026-11-02)
 
@@ -92,9 +92,9 @@ against the 1.21.1 jar. Because of the licence (D2) neither is a code or asset s
 | D10 | **Advancements** stay in the jar and are dropped at load with every other mod's | Pack rule |
 | D11 | **1.1.02 is deployed (owner, SETTLED): the port replaces the live 1.1.2 jar in a later pack version.** The old jar leaves through the normal removal diff; the port's `-01` jar and the donor jar arrive in the same payload (the donor in its own category, `vinery_upstream` style, D12). Players get a changelog line for the hot cocoa cup loss | The earlier proposal (pull 1.1.2 out of 1.1.02) is moot |
 | D12 | **Donor jar (SETTLED 2026-10-24 by P1):** the Forge 1.20.1 1.4.5 jar is the official Modrinth release `1.20.1-1.4.5-backport` (project `qMxbM4BQ`, file `https://cdn.modrinth.com/data/qMxbM4BQ/versions/p0INUam7/miners_delight-1.20.1-1.4.5-backport.jar`, sha1 matches the Downloads copy), pinned in `UpstreamJars`. Original proposal: the unmodified upstream jar, in its own folder `miners_upstream/` on server and client (FML would reject or clash with it in `mods/`: it has a `mods.toml` with the id `miners_delight`), sha1-pinned in `UpstreamJars`, copied into the deploy payload as the Vinery jars are, downloaded from source on publish. Recommended donor: the **Forge 1.20.1 1.4.5 jar** (data already in `recipes/`, `tags/items`, `loot_tables`, the 1.20 JSON shapes, same ids, so the translator is tiny). Fallback: the official NeoForge 1.21.1 jar (`minersdelight` namespace, `recipe/` `tags/item/` `loot_table/` folders, data maps), which needs a Vinery-size translator. Open: where the 1.20.1 1.4.5 jar comes from (it sat in Downloads as `miners_delight-1.20.1-1.4.5-backport.jar`, vendor Sammy Semicolon, built 2026-05-27, no source recorded); it must be a download the publish step can fetch | Checked: its recipes/loot/worldgen match the 1.21.1 jar item for item |
-| D13 | **Code is ours, written from behaviour, not translated.** Unlike Vinery (MIT code, ARR assets), Miner's code is also all rights reserved, so the Java in the port is a fresh implementation of the behaviour the donor's data expects (registry ids, block entity types, menu and recipe interplay, the 21 loot modifier types and 4 loot functions/conditions the data names), not a line-for-line port of the decompile. The decompile under the scratchpad is read for behaviour only. About 3,100 lines remain after datagen and Registrate go (copper pot ~1,200, sticky basket ~460, cups ~350, JEI ~170, loot ~180, the rest registry) | Same effect as the Brewin' / Vinery work, with a clean boundary: nothing copied |
+| D13 | **Code is ours, written from behavior, not translated.** Unlike Vinery (MIT code, ARR assets), Miner's code is also all rights reserved, so the Java in the port is a fresh implementation of the behavior the donor's data expects (registry ids, block entity types, menu and recipe interplay, the 21 loot modifier types and 4 loot functions/conditions the data names), not a line-for-line port of the decompile. The decompile under the scratchpad is read for behavior only. About 3,100 lines remain after datagen and Registrate go (copper pot ~1,200, sticky basket ~460, cups ~350, JEI ~170, loot ~180, the rest registry) | Same effect as the Brewin' / Vinery work, with a clean boundary: nothing copied |
 
-**Licence consequences (replaces the earlier L1 check, which the owner settled):**
+**License consequences (replaces the earlier L1 check, which the owner settled):**
 
 - The jar we ship contains no upstream file: no model, texture, lang, recipe, loot modifier, tag, worldgen or class text.
 - Everything the pack changes in upstream data (the onion cup row, haste potion review, loot values) goes through a
@@ -180,8 +180,8 @@ holds it) and in the data the port ships.
 |---|---|
 | P1 | Pick the donor (D12): confirm where the Forge 1.20.1 1.4.5 jar is downloaded from, record its sha1 and download URL for the publish step |
 | P2 | New project `development/creativeDelight/members/miners` like `backportedVintage`: `gradle.properties` (`mod_id=miners_delight`, `mod_version=1.4.5-ce-19.2-01`, `jar_name=backportedMiners`, GPLv3, **no** upstream notice file because nothing upstream is shipped), `settings.gradle` include, `installToMods`. Copy the three generic donor classes from the Vinery port's `forge/upstream` (`UpstreamJars` sha1 pin, `MemoryPackResources`, `UpstreamPacks`) |
-| P3 | `upstream/MinersTranslator`: the in-memory view of the donor: lists the donor's assets and data as a `PackResources` (client resource pack and server data pack, both sides), drops `hot_cocoa_cup` and every file naming it, moves the 10 stray `data/minersdelight/` recipes under `miners_delight/`, applies `REMOVED` ids and `patchData` for later drops, takes lang from the donor `en_us.json`. Fail fast at startup if the donor jar is missing or its sha1 differs (Vinery behaviour). A tool `tools/check_donor.py` reports every id the donor's data names against the registered ids |
-| P4 | Java, written from behaviour (D13): `DeferredRegister` for 69 items / 10 blocks / 4 potions, copper pot (block, entity, menu, screen, recipe book, result slot, item handler), sticky basket, cups (`CopperCupItem`, `SolidCupItem`, `MilkCupItem`, `CopperCupFoodItem`, `HoneyBarItem`, `SilverfishEggsItem`), the 3 feast blocks, wild cave carrot and gossypium blocks, loot modifier types (`AddSeveralItemsModifier`, `ReplaceDroppedLootModifier`, block tag condition, copy-meal function), cup conversion reload listener, cauldron interactions, composting, food values (read from the donor's behaviour, kept equal), the one `FoodPropertiesMixin`, JEI category for JEI 11. 1.19.2 API from the start (no `GuiGraphics`, `getResultItem()`, a `CreativeModeTab` subclass); this is where the 1.20 differences found by grep do not matter any more, because nothing is translated |
+| P3 | `upstream/MinersTranslator`: the in-memory view of the donor: lists the donor's assets and data as a `PackResources` (client resource pack and server data pack, both sides), drops `hot_cocoa_cup` and every file naming it, moves the 10 stray `data/minersdelight/` recipes under `miners_delight/`, applies `REMOVED` ids and `patchData` for later drops, takes lang from the donor `en_us.json`. Fail fast at startup if the donor jar is missing or its sha1 differs (Vinery behavior). A tool `tools/check_donor.py` reports every id the donor's data names against the registered ids |
+| P4 | Java, written from behavior (D13): `DeferredRegister` for 69 items / 10 blocks / 4 potions, copper pot (block, entity, menu, screen, recipe book, result slot, item handler), sticky basket, cups (`CopperCupItem`, `SolidCupItem`, `MilkCupItem`, `CopperCupFoodItem`, `HoneyBarItem`, `SilverfishEggsItem`), the 3 feast blocks, wild cave carrot and gossypium blocks, loot modifier types (`AddSeveralItemsModifier`, `ReplaceDroppedLootModifier`, block tag condition, copy-meal function), cup conversion reload listener, cauldron interactions, composting, food values (read from the donor's behavior, kept equal), the one `FoodPropertiesMixin`, JEI category for JEI 11. 1.19.2 API from the start (no `GuiGraphics`, `getResultItem()`, a `CreativeModeTab` subclass); this is where the 1.20 differences found by grep do not matter any more, because nothing is translated |
 | P5 | Farmer's Delight 1.19.2-1.2.4 gaps: `BlockShapes` (used by the two new feast blocks; copy the shapes) and `PlaceableItem` (`MDBlocks`; a small `BlockItem` subclass) are missing; every other FD class the code imports exists |
 | P6 | Keep the CCK hook points (D1): `processCooking` calls `setRecipeUsed(Recipe)` (CCK injects there and calls `BlazeStoveBlock.startSignal` on the block below); `StickyBasketBlockEntity.setTransferCooldown(int)` and `isOnTransferCooldown()` keep their signatures. Check against CCK's bytecode as for Brewin' |
 | P7 | Cut: the hot cocoa cup is dropped (D3), no class, no row |
@@ -200,7 +200,7 @@ close.
   check tool is `development/creativeDelight/members/miners/tools/check_donor.py` (0 problems: 63 recipes, 11 loot tables, 18 loot
   modifiers, 35 tags, the cup rows).
 - P4: 49 classes. The pot and basket follow Farmer's Delight's own pot and basket (MIT), which the upstream classes
-  mirror. Differences from upstream behaviour are listed in `development/creativeDelight/members/miners/README.md` (the empty cup
+  mirror. Differences from upstream behavior are listed in `development/creativeDelight/members/miners/README.md` (the empty cup
   milks only cows and goats, no Forge fluid capability on cups, two no-op brewing steps left out, "Served on" tooltip
   on the meal display slot, cup table sent to clients). The cup foods read their bowl's effects through the accessor
   mixin (`FoodPropertiesAccessor`) so FD's effects resolve only when eaten; `PotionBrewing.addMix` is opened by the
@@ -284,7 +284,7 @@ rule (`forge:none`); it is skipped without the mod.
 ## 7. Offline checks (all passed 2026-10-24)
 
 Results: build passes; the jar holds `META-INF/{MANIFEST.MF,mods.toml,accesstransformer.cfg}`, `pack.mcmeta`, the
-mixin config and refmap, the licence and 49 classes under `com/sammy/minersdelight/`, nothing else; no `GuiGraphics` or
+mixin config and refmap, the license and 49 classes under `com/sammy/minersdelight/`, nothing else; no `GuiGraphics` or
 `RegistryAccess`; `check_donor.py` 0 problems; CCK targets as in P6. A headless run of the real `MinersTranslator`
 over the donor (javac harness in the scratchpad) gives 182 data files and 228 assets, all JSON valid, no `any_of` left,
 no stray namespace, 18 loot modifier entries, 14 cup rows (onion row dropped).
@@ -425,7 +425,7 @@ CD jar again 2026-11-03 00:08); not booted. Live rows SQ-MDL-01 to -05 (queue se
 
 - 2026-10-24: plan written. Base chosen (Forge 1.20.1 1.4.5 build, mod id `miners_delight`); four builds compared;
   CCK hook points and FD 1.19.2 gaps found; nothing built.
-- 2026-10-24 later (owner answers): licence is all rights reserved, so the port follows the Vinery donor-jar method
+- 2026-10-24 later (owner answers): license is all rights reserved, so the port follows the Vinery donor-jar method
   (D2, D12, D13); hot cocoa cup dropped (D3); 1.1.02 with the 1.1.2 jar is deployed (D11); onion soup cup equivalent is
   Brewin' Creamy Onion Soup (D9); cave carrot worldgen built as a cave rule (D6, §4.3). Plan now counts 69 items.
 - 2026-10-24 build: D12 settled (the donor is the Modrinth release); port built as planned (P1 to P7, P9), offline
@@ -445,8 +445,8 @@ The installed `miners_delight-1.19.2-1.1.2.jar` is the **OLD** version. The newe
 Delight). Not a drop-in: different mod id (`minersdelight` vs `miners_delight`), different loader, so a newer
 Miner's Delight on 1.19.2 would be a backport in the Veggies / Vintage style, not an update.
 
-**2026-10-24: the merged backport is this file** (behaviour reference: the Forge 1.20.1
-build of 1.4.5, mod id `miners_delight`; licence all rights reserved, so the Vinery donor-jar method; all 1.1.2 and 1.4.5 content except
+**2026-10-24: the merged backport is this file** (behavior reference: the Forge 1.20.1
+build of 1.4.5, mod id `miners_delight`; license all rights reserved, so the Vinery donor-jar method; all 1.1.2 and 1.4.5 content except
 the hot cocoa cup, overlaps reviewed in game before any drop; onion soup cup = Brewin' Creamy Onion Soup; cave carrots now placed by the
 cave mushroom system).
 

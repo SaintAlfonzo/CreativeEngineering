@@ -36,7 +36,7 @@
 - ST-144: p8.py same a_s1.json b_s1.json: 674 vs 674, same id+chunk 674, only A 0, only B 0, same start with
   different piece boxes 0. PASSED (two JVM runs, opposite approach, identical starts and pieces).
 - 05:20 st_8cd: srv kubejs/generation_scripts/worldgen/structure_groups.json priority.shape = [] and priority.peaceful
-  deleted (re-serialised with json.dumps indent 2; restore = copy the instance file back). Boot; then S1 + S2.
+  deleted (re-serialized with json.dumps indent 2; restore = copy the instance file back). Boot; then S1 + S2.
 - 05:26:49 st_8cd Done (298 s); no "[placement-priority] N peaceful structure(s)" line (A had "104 peaceful ... keep 70
   hostile ... radius up to 8"). Chunky S1 (-05:35:46), S2 (-05:41:34). latest_8cd.log, cd_s1.json 676, cd_s2.json 221.
 - ST-157 (p8.py peace latest_8a.log cd_*.json): A's peaceful drop lines name every candidate a slot tried (several per

@@ -100,7 +100,7 @@ expect barbequesdelight:grilled
 look Seasonings [cumin, grilled] on the grilled skewer (read before Time reaches 2 x Duration = burnt)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
 
-## SQ-BBQF-07 | raw skewer through a fuelled furnace by hopper: plain Beef Skewer
+## SQ-BBQF-07 | raw skewer through a fueled furnace by hopper: plain Beef Skewer
 @group A
 @commands Raw beef skewer into a fuelled furnace by hopper
 @pass Beef Skewer, no Seasonings tag
@@ -116,7 +116,7 @@ expect Slot: 2b, id: "barbequesdelight:grilled_beef_skewer"|Slot:2b,id:"barbeque
 reject Seasonings
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
 
-## SQ-VTDA-10 | wild ghost peppers: only the crimson nylium one survives a neighbour update
+## SQ-VTDA-10 | wild ghost peppers: only the crimson nylium one survives a neighbor update
 @group B
 @commands Terralith world: `/setblock` wild ghost peppers on grass, moss, mycelium, crimson nylium; update a neighbour
 @pass Only the nylium one survives

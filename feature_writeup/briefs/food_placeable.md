@@ -57,8 +57,8 @@ the real foods in the catalog's "Review" list into `INCLUDE`.
 1. In [tools/placeable_catalog.py](../../tools/placeable_catalog.py):
    - `INCLUDE` (line 90): add
      `'brewinandchewin:flaxen_cheese_wheel': 'cheese wheel block, cut with a knife into wedges'` and the scarlet one.
-   - Make `FOOD_BLOCK_WIDE` (line 71) narrower so that Review only lists open questions: `Ham` → `Ham(?!mock)`,
-     `Wheel` → `CheeseWheel`. Keep `Rice` and `Medley`: `RiceRollMedleyBlock` and `PineappleRiceBlock` are tagged
+   - Make `FOOD_BLOCK_WIDE` (line 71) narrower so that Review only lists open questions: `Ham` -> `Ham(?!mock)`,
+     `Wheel` -> `CheeseWheel`. Keep `Rice` and `Medley`: `RiceRollMedleyBlock` and `PineappleRiceBlock` are tagged
      today, and the wide regex is only the Review net, but don't narrow it blindly. Add a `REVIEW_IGNORE` regex for the rest:
      `^(farmersdelight:(rice|rice_bale|wild_rice)|fruitsdelight:\w+_(jelly_block|jello_cauldron|jelly_cauldron)|upgrade_aquatic:\w+_jelly_torch|vinery:\w*wine_(rack|box)\w*|architects_palette:bread_block)$`
      (add `vintagedelight:cheese_mold` and the hammock / wheel ids if the regex change misses them) and apply it in
@@ -159,7 +159,7 @@ breaking it gives the drink back.
   `cardinal` block type (`HorizontalDirectionalBlockBuilder`: facing, rotated custom shape, but no `canSurvive` and no
   clone override).
 - `kubejs/server_scripts/_lib/dump_placeable.js:75` already reads `BlockAssociations` live, so new links reach the
-  catalog and tooltips through the normal `/dumpplaceable` → tool path.
+  catalog and tooltips through the normal `/dumpplaceable` -> tool path.
 
 ### Build
 **Revised 2026-10-31:** build it on the patcherMod dish route instead of KubeJS `createCustom` (steps 2-3 below are the
@@ -179,15 +179,15 @@ breaking it gives the drink back.
      `displayDelight`).
    - `EXCLUDE`: `canned_goods:*` (cans), Vinery bottles (own blocks), tankard drinks (`remainder` `brewinandchewin:tankard`,
      coaster only), `botania:*` flasks, `minecraft:milk_bucket`.
-   - `MODEL_BY` rule: bottle → `apple_cider`, mug (coffee, hot chocolate) → `hot_cocoa`, milkshake / smoothie → `df_matcha_milkshake`.
-   - Output: `kubejs/generation_scripts/food/placed_drinks.json` (block name → item_dict key, base model,
+   - `MODEL_BY` rule: bottle -> `apple_cider`, mug (coffee, hot chocolate) -> `hot_cocoa`, milkshake / smoothie -> `df_matcha_milkshake`.
+   - Output: `kubejs/generation_scripts/food/placed_drinks.json` (block name -> item_dict key, base model,
      liquid texture key). Block names are flat: `placed_<item path>`, plus the namespace when two mods share a path
      (`placed_rusticdelight_coffee` vs `placed_coffee`).
    - It also writes the assets: `kubejs/assets/creativeengineering/blockstates/placed_*.json` (4 facings, as DD's),
      `models/block/placed_*.json` (`{"parent": "displaydelight:block/apple_cider", "textures": {"6": "creativeengineering:block/placed_drink/<x>"}}`),
      `models/item/placed_*.json` (parent the block model), `kubejs/data/creativeengineering/loot_tables/blocks/placed_*.json`
      (copy of DD's apple_cider table with the drink id), lang `block.creativeengineering.placed_*` = the drink's name,
-     and the liquid textures: DD's 16x16 liquid sprite tinted with the drink's colour, taken from the item sprite in
+     and the liquid textures: DD's 16x16 liquid sprite tinted with the drink's color, taken from the item sprite in
      its mod jar. `tools/potion_bucket_texture.py` and `tools/echo_texture.py` show how the pack reads and tints jar sprites.
    - Long / strong variants get their own block (one block ↔ one item in both maps). They share the base drink's texture.
    - `--check` mode like the other generators.
@@ -212,7 +212,7 @@ breaking it gives the drink back.
    Add block keys to [block_dict.js](../../kubejs/startup_scripts/_lib/block_dict.js) in a generated block, the way
    `placeable_catalog.py` writes its item_dict block (`b.placed_green_tea = 'creativeengineering:placed_green_tea'`).
 3. **Links (KubeJS server).** New `kubejs/server_scripts/cooking/placed_drinks.js`:
-   `ServerEvents.loaded` → `Java.loadClass('com.jkvin114.displaydelight.init.BlockAssociations').addToMap(item, block, false)`
+   `ServerEvents.loaded` -> `Java.loadClass('com.jkvin114.displaydelight.init.BlockAssociations').addToMap(item, block, false)`
    for each entry. Get `Item` / `Block` through `ForgeRegistries` as `dump_placeable.js` does, inside `guardThrowable`
    ([java_guard.js](../../kubejs/server_scripts/_lib/java_guard.js)). Log `[placed_drinks] linked N`.
    `putIfAbsent` makes repeat loads harmless.
@@ -364,11 +364,11 @@ skewers and its 3 combos (Kebab Wrap, Kebab Sandwich, Bibimbap) before any displ
 ## Writeup corrections made
 
 - [placeable_food.md](../placeable_food.md) status line: "catalog built from the 2026-10-03 `/dumpfood` export...;
-  `/dumpplaceable` not run yet" → built from the live `/dumpplaceable` of 2026-10-18, rerun 2026-10-20.
-- Same file, At a glance table: `/dumpplaceable` "not run" → "run 2026-10-18"; generator "run on the fallback data" → "run on the 2026-10-18 live dump".
-- Same file, Counts line: fallback 164 / 130 / 73 / 29 / 11 → live 233 items, 132 placeable (101 sneak), 29, 11, 152 coaster.
-- Same file, section 1 point 2: Vinery bottles "place on a plain right click" → place only while sneaking (backport 1.5.5 `DrinkBlockItem`, as the tool and catalog say).
+  `/dumpplaceable` not run yet" -> built from the live `/dumpplaceable` of 2026-10-18, rerun 2026-10-20.
+- Same file, At a glance table: `/dumpplaceable` "not run" -> "run 2026-10-18"; generator "run on the fallback data" -> "run on the 2026-10-18 live dump".
+- Same file, Counts line: fallback 164 / 130 / 73 / 29 / 11 -> live 233 items, 132 placeable (101 sneak), 29, 11, 152 coaster.
+- Same file, section 1 point 2: Vinery bottles "place on a plain right click" -> place only while sneaking (backport 1.5.5 `DrinkBlockItem`, as the tool and catalog say).
 - Same file, section 2 examples: Cherry Wine moved to its own row, "Placeable (while sneaking)".
-- Same file, section 4 "Fallback data (until `/dumpplaceable` runs)" → used only when there is no export; live dump since 2026-10-18.
-- Same file, PL-01 expected log line → `placeable=132, placeable/sneak=101, placeable_on_plate=29, placeable_on_small_plate=11, placeable_on_coaster=152`.
-- Same file, PL-06: Cherry Wine expectation → "Placeable (while sneaking)".
+- Same file, section 4 "Fallback data (until `/dumpplaceable` runs)" -> used only when there is no export; live dump since 2026-10-18.
+- Same file, PL-01 expected log line -> `placeable=132, placeable/sneak=101, placeable_on_plate=29, placeable_on_small_plate=11, placeable_on_coaster=152`.
+- Same file, PL-06: Cherry Wine expectation -> "Placeable (while sneaking)".

@@ -99,10 +99,10 @@ waitlog verb=tickwarp end=done ticks=400 60
 reject verb=tickwarp .*done=0
 look WaterLevel 12 after each use; well tank down 1000 mB per fill; an empty well (no rain / no water below) = setup, not the can: record the tank NBT
 
-## SQ-WCT-04 | dragon can soaks 7x7, copper can the centre only
+## SQ-WCT-04 | dragon can soaks 7x7, copper can the center only
 @group A
 @commands `/fill ~-3 ~-1 ~-3 ~3 ~-1 ~3 minecraft:farmland[moisture=0]`, `/fill ~-3 ~ ~-3 ~3 ~ ~3 minecraft:wheat[age=7]`; bot with `dragon_watering_can{WaterLevel:64}` uses it on the centre; `/execute if block ~3 ~-1 ~3 minecraft:farmland[moisture=7]` and the corner `~-3 ~-1 ~-3`; repeat on fresh soil with `watering_can{WaterLevel:8}`, check `~1 ~-1 ~` stays dry
-@pass 7x7 soaked, WaterLevel 63; copper soaks the centre only
+@pass 7x7 soaked, WaterLevel 63; copper soaks the center only
 @fails area spans
 @from batches/r1101/p1_server.qb passed
 > gamerule randomTickSpeed 0

@@ -234,7 +234,7 @@ bootreject (?i)\b(error|exception)\b.*(truffle_dirt|rooted_dirt|wild_crops)
 shell for b in "DF {DF1} {DF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}" "SW {SW1} {SW3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5b 'fungidelight:truffle_dirt$' --near 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
 look both near the surface in dark forest and cold forest (taiga, grove) biomes, none in a conifer biome that is neither (read the by_biome lines; the four squares hold several biomes each, e.g. old growth or windswept forests); truffle dirt mostly with a rooted dirt neighbour. Rooted dirt but no truffle dirt: the two rules ran in the wrong order (merge them, row text)
 
-## SQ-FGD-15 | mooshroom colours and Fungi cows by biome; summoned and egg mooshrooms red
+## SQ-FGD-15 | mooshroom colors and Fungi cows by biome; summoned and egg mooshrooms red
 @group B, same world
 @commands in the same pregen count entities: `minecraft:mooshroom` with `Type:"brown"` vs all, inky cap and morel cows, per biome; then 20 `/summon minecraft:mooshroom` and 20 spawn-egg uses
 @pass dark forest about 50 % brown, mushroom fields about 25 %, at least 20 mooshrooms per sample; Fungi cows rare in dark forest, morel cows in swamps, both common in mushroom fields; summoned and egg mooshrooms all red (FGD-29)
@@ -1955,7 +1955,7 @@ bootreject (?i)BlockStateCounterTopperMixin.*(error|fail|exception)
 ## SQ-KT-01
 @group A
 @commands copy `tools/kitchen_probe/cfb_kitchen_probe.js` into `srv/kubejs/server_scripts/`, `/kttest`
-@pass every `[kttest]` line PASS, in particular KT-03a/b, KT-05a/b/c (the board, unchanged behaviour) and KT-15a-d, KT-16a/b (plates, coaster, plated hamburger, corner; plate over air stays with `support true`)
+@pass every `[kttest]` line PASS, in particular KT-03a/b, KT-05a/b/c (the board, unchanged behavior) and KT-15a-d, KT-16a/b (plates, coaster, plated hamburger, corner; plate over air stays with `support true`)
 @fails KT-15a FAIL with `above: minecraft:air`: tag not filled (`/kubejs` errors in `blocktags.js`, `addMatching` wildcard `displaydelight:*plated_*`); KT-16 FAIL: the per-state cache never saw the tag (`CounterToppers.init` / `TagsUpdatedEvent`)
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
@@ -2186,7 +2186,7 @@ shell grep -qE "JarInJarDependencyLocator.*backportedBrewin|backportedBrewin.*(J
 @group A
 @commands Same boot: `grep "startup script packs in order\|creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log`
 @pass Startup order lists `creativedelight` before `creativebrewing`; `[creativebrewing] core finished, members: vinery, brewinandchewin`; no `global.CD missing`; server log has `[creativebrewing] server scripts ready, members on: vinery, brewinandchewin`
-@fails `ordering="AFTER"` not honoured by the mod sort: order the loader by dependency
+@fails `ordering="AFTER"` not honored by the mod sort: order the loader by dependency
 @jars creativebrewing creativecommon
 @from batches/r1101/p1_server.qb passed
 shell grep -n "startup script packs in order" logs/kubejs/startup.log | grep -q "creativedelight.*creativebrewing"
@@ -2269,7 +2269,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 ## SQ-CDT-02
 @group A
 @commands `/cdtest startup`
-@pass All PASS: helpers and dicts before the CD pack, ns at load `creativeengineering`, compost tiers > 0, requires honoured
+@pass All PASS: helpers and dicts before the CD pack, ns at load `creativeengineering`, compost tiers > 0, requires honored
 @fails Dict missing: the CD pack ran before the folder pack (order in `JarStartupScripts.addPacks`)
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
@@ -3404,7 +3404,7 @@ look pasta and soup take 3 of #forge:vegetables/bell_pepper (several peppers lis
 ## SQ-RD-07 | oven-only cookies and cheesecakes; maple cookie, glazed bacon, supreme pizza, roasted pepper pasta
 @group A
 @commands Recipe dump: syrup, coffee and cherry blossom cookies, the three cheesecakes, Maple Cookie, Maple Glazed Bacon, Supreme Pizza, the heatless Bell Pepper Pasta
-@pass Cookies and cheesecakes only in the oven (cookie dough + 2 flavour -> 12; pie crust + 2 flavour + 2 sweet); Maple Cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; pasta takes 3 of `#creativeengineering:roasted_bell_pepper` (9 colours)
+@pass Cookies and cheesecakes only in the oven (cookie dough + 2 flavor -> 12; pie crust + 2 flavor + 2 sweet); Maple Cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; pasta takes 3 of `#creativeengineering:roasted_bell_pepper` (9 colors)
 @fails Missing: `rusticdelight/recipes.js` returned early (CD member switch, `global.CD`)
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -3496,7 +3496,7 @@ expect \[ztrades\] fisherman L1 .*rusticdelight:calamari
 ## SQ-RD-13 | giant peppers: 9 slices -> block, cutting -> 9, drops slices never the block
 @group A
 @commands Giant peppers: `/give` 9 `rusticdelight:bell_pepper_slice_red`, craft 3x3; recipe dump for all 9 `bell_pepper_<colour>_block_from_bell_pepper_slice_<colour>` and `cutting/bell_pepper_<colour>_block`; cut one block on a Cutting Board with a knife; place 5, break with an axe, by hand, with Silk Touch, and one by TNT
-@pass 9 slices -> 1 giant pepper for all 9 colours; cutting gives exactly 9 slices; breaking drops 1 to 9 slices and never the block (Silk Touch too); axe breaks faster than hand (melon hardness)
+@pass 9 slices -> 1 giant pepper for all 9 colors; cutting gives exactly 9 slices; breaking drops 1 to 9 slices and never the block (Silk Touch too); axe breaks faster than hand (melon hardness)
 @fails No craft: a pack script removes it (grep the id in `server_scripts/`) or `RusticTranslator` dropped it; block drops itself: loot table not loaded
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -3531,7 +3531,7 @@ look the board cut gave 9 slices in total (zcount entity counts, merged or not);
 ## SQ-RD-14 | peppers -> slices + seed, roasting, slice -> seed, slices + rice -> rolls
 @group A
 @commands Survival chain for giant peppers without worldgen: `/give` each of the 9 peppers; cut each on a Cutting Board with a knife (x20 for chances); roast a slice of each in furnace, smoker, campfire; craft 1 slice of each colour alone in the grid; 2 slices + `farmersdelight:cooked_rice`
-@pass Each pepper -> 2 slices + about 10% seed (base colours Bell Pepper Seeds, white / pink / orange Pale, blue / purple / black Dark); every slice roasts in all three; slice -> 1 seed of its family; 2 slices + rice -> 2 rolls of that colour
+@pass Each pepper -> 2 slices + about 10% seed (base colors Bell Pepper Seeds, white / pink / orange Pale, blue / purple / black Dark); every slice roasts in all three; slice -> 1 seed of its family; 2 slices + rice -> 2 rolls of that color
 @fails Wrong seed family: the donor's cutting json; roast missing: smoker / campfire types
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -3763,7 +3763,7 @@ look first zcount (stack with a serving taken, broken) shows no pancake item; th
 ## SQ-RD-18 | Pale and Dark Bell Pepper Medleys
 @group A
 @commands Pale and Dark Bell Pepper Medley: dump the 3 feast recipes; place each, take every serving; break one half-eaten
-@pass Pale gives white, pink, orange stuffed peppers; Dark blue, purple, black; then the bowl; all 9 stuffed peppers cook in the pot from their colour
+@pass Pale gives white, pink, orange stuffed peppers; Dark blue, purple, black; then the bowl; all 9 stuffed peppers cook in the pot from their color
 @fails Wrong item: `PepperMedleyBlock` serving list
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -3971,7 +3971,7 @@ look the three plates are gone (zcount blocks: no cheesecake left) and the slice
 ## SQ-RD-24 | /place feature: giant pepper patch on grass only; wild patches (configured feature ids)
 @group A
 @commands `/place feature` each on grass in a cleared flat area: `rusticdelight:bell_pepper_block_patch_placed`, the wild bell pepper, coffee and cotton patches (placed ids from `wild_crops.json`) x5
-@pass Giant patch puts red, yellow, green blocks on grass only (never on dirt or sand, never a rare colour); wild patches place their plant; no Pale or Dark wilds in the bell pepper patch
+@pass Giant patch puts red, yellow, green blocks on grass only (never on dirt or sand, never a rare color); wild patches place their plant; no Pale or Dark wilds in the bell pepper patch
 @fails Rare colours: `RusticTranslator.basePatch`; fails to place: rarity filter id or `configurable_rarity_filter` codec
 @from batches/r1113/c4_a.qb passed
 @reviewed 2026-11-16
@@ -4371,7 +4371,7 @@ look the link count in rows/SQ-FF-02.shell.txt against the 2026-10-24 dump (+9 e
 @@text #### SQ-FFB: baked family rules applied (added 2026-10-27)
 @@text
 @@text Feature: [../food_families.md](../food_families.md) 4.6 (FF-11 to FF-14), [../oven.md](../oven.md) 4 (baking audit).
-@@text Jar state: a Creative Delight jar built after 2026-10-27 (`cd_food.js` `handPieBake`, `cakeBake` second flavour) in the
+@@text Jar state: a Creative Delight jar built after 2026-10-27 (`cd_food.js` `handPieBake`, `cakeBake` second flavor) in the
 @@text scratch `mods/`; restart (item_dict `t_grain_wheat`, transition item `zucchini_quiche`). Client half (Sponge Pie name,
 @@text JEI pages) is FF-11 to FF-14 in game.
 @@text
@@ -5794,7 +5794,7 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 ## SQ-SY-06
 @group A
 @commands `bell_peppers = true`, ripe peppers on Rich Farmland
-@pass Colours still roll about 1:1:1; log has the `[crop-drops] bell peppers` line as before
+@pass Colors still roll about 1:1:1; log has the `[crop-drops] bell peppers` line as before
 @fails Bell pepper rewrite skipped (`table shape changed`): pools mistaken
 @jars creativecommon
 @draft needs its own boot with bell_peppers switched on before start; colour ratio from cdevtest loot rolls=300 once that boot batch exists
@@ -6177,7 +6177,7 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text #### CQ-OLD: client halves left open by earlier runs
 @@text
 @@text Tests already named in their writeups with "in game" as the open half; one pass in one creative world covers them.
-@@text Colours / WTHIT / JEI / GUI each need the client.
+@@text Colors / WTHIT / JEI / GUI each need the client.
 @@text
 @@text | ID | Existing tests | What to do and look at |
 @@text |---|---|---|
@@ -6240,7 +6240,7 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 ## CQ-MND-NAMES
 @group any
 @commands `/cdevdumpnames`, then `python3 tools/name_audit.py --print`
-@pass I3 names audit: no raw key and no capitalisation fix left for `miners_delight` (or the fixes land in `name_fixes.json`)
+@pass I3 names audit: no raw key and no capitalization fix left for `miners_delight` (or the fixes land in `name_fixes.json`)
 @fails `python3 tools/name_audit.py`
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet

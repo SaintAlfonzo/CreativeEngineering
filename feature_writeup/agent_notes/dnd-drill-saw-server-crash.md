@@ -8,7 +8,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 
 The follow-up watchdog crash 60s later ("single server tick took 60s") was only fallout: the crashed server stayed alive because of non-daemon DH/AWT threads until the watchdog halted it.
 
-Fix: `mixin/ExcavationDrillItemMixin` (onBlockDestroyed+destroyVein, require=2) + `mixin/DeforesterSawItemMixin` (destroyTree, require=1). Each has static `@Redirect`s on `SimpleChannel#sendToServer` (no-op) and `ConfigBase$ConfigBool#get` (returns FALSE, the config default) when `!FMLEnvironment.dist.isClient()`. SP/LAN behaviour is unchanged. The D&D jar was copied to `patcherMod/libs/Create-DnDesire-1.19.2-1.2c.jar`. Built and deployed to mods/, server_mods/, and the local CreEngServer/mods. **Not boot-tested** (not enough free RAM with the client running). Re-check the call sites if create_dd updates.
+Fix: `mixin/ExcavationDrillItemMixin` (onBlockDestroyed+destroyVein, require=2) + `mixin/DeforesterSawItemMixin` (destroyTree, require=1). Each has static `@Redirect`s on `SimpleChannel#sendToServer` (no-op) and `ConfigBase$ConfigBool#get` (returns FALSE, the config default) when `!FMLEnvironment.dist.isClient()`. SP/LAN behavior is unchanged. The D&D jar was copied to `patcherMod/libs/Create-DnDesire-1.19.2-1.2c.jar`. Built and deployed to mods/, server_mods/, and the local CreEngServer/mods. **Not boot-tested** (not enough free RAM with the client running). Re-check the call sites if create_dd updates.
 
 Related: [patchermod-coremod](patchermod-coremod.md), [creengserver-dedicated-server](creengserver-dedicated-server.md), memory `debugging-with-latest-log`.
 

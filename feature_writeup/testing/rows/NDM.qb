@@ -96,7 +96,7 @@ look rdetail: the pot recipe's inputs and the smithing table Diamond Machete + N
 ## SQ-NDM-05 | fungus colony survival on dirt by daylight (262 open, 268 boxed, 274 rich soul soil)
 @group A
 @commands `/time set noon`; `/setblock` dirt, then `nethersdelight:crimson_fungus_colony` on it under open sky, then `/setblock` a block beside it; repeat under a 3-block roof in the dark; repeat on `nethersdelight:rich_soul_soil` in daylight; bot tries to place a colony item on dirt at noon
-@pass open-sky colony on dirt breaks on the neighbour update (drops the item); the roofed one and the rich soul soil one stay; placing on dirt in daylight is refused
+@pass open-sky colony on dirt breaks on the neighbor update (drops the item); the roofed one and the rich soul soil one stay; placing on dirt in daylight is refused
 @fails survive check not merged (mixin)
 @from batches/r1102b/s3_A.qb
 > time set noon

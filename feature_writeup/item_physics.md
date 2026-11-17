@@ -22,8 +22,8 @@ Tag namespace: `creativecompat:physics/*` and `creativecompat:burn/*` since 2026
 | Fire/lava split on top of ItemPhysic: per item, survive fire, survive lava, both, or neither (`ItemPhysicSplit` + `ItemPhysicServerMixin`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); its recurring `$1` crash (F1) was fixed in 1.0.9 |
 | Float/sink control in water, additive to ItemPhysic's own list | DEPLOYED |
 | Four item tags `#creativecompat:physics/{floats,sinks,fireproof,lavaproof}`, filled in KubeJS (reloadable) with a small jar baseline | DEPLOYED |
-| Burn transforms: glass → dirty glass, wood → 25% ash, TNT / TNT minecart / gunpowder explode (TNT with shrapnel) | DEPLOYED |
-| Family classification audit: `/dumpphysics` + `tools/item_physics_audit.py` → [item_physics_audit.md](item_physics_audit.md) (section 9) | BUILT 2026-10-28, report only; `/dumpphysics` not run yet (SQ-IP-16) |
+| Burn transforms: glass -> dirty glass, wood -> 25% ash, TNT / TNT minecart / gunpowder explode (TNT with shrapnel) | DEPLOYED |
+| Family classification audit: `/dumpphysics` + `tools/item_physics_audit.py` -> [item_physics_audit.md](item_physics_audit.md) (section 9) | BUILT 2026-10-28, report only; `/dumpphysics` not run yet (SQ-IP-16) |
 | Surface floating for light items and lava floating for lavaproof items (section 10) | DESIGNED 2026-10-28, not built |
 | Allurement Curse of Ascension / Fleeting on dropped items (`AllurementItemCurses`, history 2026-10-27) | DEPLOYED to the client with 1.1.04 (changelog Fixed bullet); same cause as TODO `items/item-physics #3` (forced `isNoGravity` skips the gravity branch), so that row is fixed, not open; IP-15 / SQ-IP not run |
 
@@ -81,7 +81,7 @@ resting in a shallow pool count); anything else burning it is fire.
 - **Fireproof:** metal storage blocks, ice / packed ice / snow, the sculk family, sea lanterns, bottled honey.
 - **Left burning on purpose:** TNT, torches, campfires, coal, redstone torches and lamps, targets, nether wart.
 
-The file's header lists each grey-area call ("flip any of these freely").
+The file's header lists each gray-area call ("flip any of these freely").
 
 ### 2.3 Burn transforms (`global.itemPhysics`)
 
@@ -108,8 +108,8 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 - **The mixin:** ItemPhysic asks one question for every hazard, `SortingList.canPass(stack)`, against the list in
   play. `ItemPhysicServerMixin` redirects that call in `fireImmune`, `hurt`, `updatePre` and
   `updateFluidHeightAndDoFluidPushing`, and dispatches on which list it is:
-  - `burningItems`: `ItemPhysicSplit.burnDecision(stack, touchingLava)`; no rule → ItemPhysic's own list.
-  - `swimmingItems`: `physics/sinks` → sink; else `isFloat` (tag or rule) or ItemPhysic's list.
+  - `burningItems`: `ItemPhysicSplit.burnDecision(stack, touchingLava)`; no rule -> ItemPhysic's own list.
+  - `swimmingItems`: `physics/sinks` -> sink; else `isFloat` (tag or rule) or ItemPhysic's list.
   - anything else (`undestroyableItems`) untouched.
 - **Burn death:** a second redirect on `discard()` in `hurt` runs `ItemBurnTransform.apply` first when the killing
   source is fire, server side, and the item isn't already a product.
@@ -202,23 +202,23 @@ Drop items with Q into the hazard.
 
 - IP-15: drop an item with Curse of Ascension (anvil or `/give` with the enchantment) and one with Curse of Fleeting. Ascension rises; Fleeting pushes nearby mobs and players away. Queued as SQ-IP-15.
 
-- [ ] **IP-01 Default:** drop a Create cogwheel in water → sinks; in fire → burns; in lava → burns.
-- [ ] **IP-02 Floats:** oak planks, a boat and bone meal in water → float. Gunpowder → sinks.
-- [ ] **IP-03 Sinks wins:** an item in both floats and sinks (add one via a datapack tag) → sinks.
-- [ ] **IP-04 Fireproof:** an iron block into a campfire → survives; into lava → destroyed.
-- [ ] **IP-05 Lavaproof:** cobblestone, a diamond and a netherite ingot into lava → all survive.
-- [ ] **IP-06 Shallow lava:** a gold block resting in a 1-deep lava pool → destroyed (counts as lava).
-- [ ] **IP-07 Dirty glass:** 8 glass into fire → 8 Quark dirty glass; those 8 back into fire → just burn.
-- [ ] **IP-08 Ash:** 16 oak planks into lava → about 4 Supplementaries ash.
-- [ ] **IP-09 TNT:** a TNT item into fire → explosion (no block damage) with shrapnel; gunpowder → a small pop.
-- [ ] **IP-10 Fire-resistant gear (F5):** a felsic sword into lava → survives (lavaproof tag); a netherite sword → survives.
-- [ ] **IP-11 Peaceful blast:** on Peaceful, stand next to burning TNT items → you take damage.
+- [ ] **IP-01 Default:** drop a Create cogwheel in water -> sinks; in fire -> burns; in lava -> burns.
+- [ ] **IP-02 Floats:** oak planks, a boat and bone meal in water -> float. Gunpowder -> sinks.
+- [ ] **IP-03 Sinks wins:** an item in both floats and sinks (add one via a datapack tag) -> sinks.
+- [ ] **IP-04 Fireproof:** an iron block into a campfire -> survives; into lava -> destroyed.
+- [ ] **IP-05 Lavaproof:** cobblestone, a diamond and a netherite ingot into lava -> all survive.
+- [ ] **IP-06 Shallow lava:** a gold block resting in a 1-deep lava pool -> destroyed (counts as lava).
+- [ ] **IP-07 Dirty glass:** 8 glass into fire -> 8 Quark dirty glass; those 8 back into fire -> just burn.
+- [ ] **IP-08 Ash:** 16 oak planks into lava -> about 4 Supplementaries ash.
+- [ ] **IP-09 TNT:** a TNT item into fire -> explosion (no block damage) with shrapnel; gunpowder -> a small pop.
+- [ ] **IP-10 Fire-resistant gear (F5):** a felsic sword into lava -> survives (lavaproof tag); a netherite sword -> survives.
+- [ ] **IP-11 Peaceful blast:** on Peaceful, stand next to burning TNT items -> you take damage.
 - [ ] **IP-12 Tag reload:** remove `minecraft:oak_planks` from floats in a datapack override, `/reload`, drop planks in
-  water → sink. Remove the override.
+  water -> sink. Remove the override.
 - [ ] **IP-13 No crash (F1):** throw a stack of mixed items into lava and fire repeatedly over a few minutes on the
-  dedicated server → no `NoClassDefFoundError ... ItemPhysicSplit$1`.
-- [ ] **IP-14 Echo gear:** an echo helmet into lava → survives.
-- [ ] **IP-21 Physics dump (SQ-IP-16):** `/dumpphysics` → chat "Dumped N items (M survive lava)", no `[dumpphysics]
+  dedicated server -> no `NoClassDefFoundError ... ItemPhysicSplit$1`.
+- [ ] **IP-14 Echo gear:** an echo helmet into lava -> survives.
+- [ ] **IP-21 Physics dump (SQ-IP-16):** `/dumpphysics` -> chat "Dumped N items (M survive lava)", no `[dumpphysics]
   skipped` flood in latest.log; `kubejs/exported/physics/item_physics.json` rows carry `material` and `sound` for
   block items. Then `python3 tools/item_physics_audit.py`: the header line says "dump yes", unclassified drops below
   the 650 of the tag-only run, and section 4 lists `minecraft:netherite_scrap` under `fire_resistant_item`.
@@ -257,11 +257,11 @@ lists it by mod. An item that only matched its mod's default is also listed.
 | masonry | sink | fireproof | bricks, terracotta, concrete, tiles, plaster, pottery | partly |
 | earth | sink | fireproof | sand, gravel, dirt, mud, clay, salt, silt | partly |
 | crystal | sink | fireproof | gems other than diamond, amethyst, prismarine, certus, fluix | partly |
-| glass | sink | burn → dirty glass | glass, panes, windows, shards | burn transform exists |
+| glass | sink | burn -> dirty glass | glass, panes, windows, shards | burn transform exists |
 | container | sink | fireproof | potions, bottles, buckets, jars, cans, drinks | partly |
 | powder | sink | fireproof | redstone, glowstone, metal dusts, crushed ores | `sinks`, burns |
 | ice | **float** | fireproof | ice, packed and blue ice, snow | sinks |
-| wood | float | burn → ash | logs, planks, wooden blocks, furniture, wooden tools | = `floats` + `burn/to_ash` |
+| wood | float | burn -> ash | logs, planks, wooden blocks, furniture, wooden tools | = `floats` + `burn/to_ash` |
 | nether_wood | float | **fireproof** | crimson and warped wood (`#minecraft:non_flammable_wood`) | floats, burns |
 | produce | float | burn | crops, fruit, vegetables, mushrooms, kelp, gourds | partly |
 | food | float | burn | prepared food not in a container | partly |
@@ -272,7 +272,7 @@ lists it by mod. An item that only matched its mod's default is also listed.
 | technical | sink | burn | spawn eggs, debug and creative-only items | not audited |
 | unclassified | sink | burn | no rule matched | listed by the audit |
 
-Three water behaviours (skim / float / sink) and three fire behaviours (burn / fireproof / lavaproof) cover
+Three water behaviors (skim / float / sink) and three fire behaviors (burn / fireproof / lavaproof) cover
 everything the pack does today, plus the transforms each family already has. 21 families is small enough to read
 in one table, and each maps to a material a player would recognise.
 
@@ -282,15 +282,15 @@ in one table, and each maps to a material a player would recognise.
    from their family, e.g. prismarine and nether brick lavaproof). Beats everything.
 2. **Tag:** a vanilla / Forge / pack tag (`#minecraft:planks`, `#forge:ingots`, `#forge:glass`, the pack's
    `creativedelight:food_type/*`, ...). The most reliable signal, and modded items usually carry Forge tags.
-3. **Fire resistance:** `Item#isFireResistant` → refractory (it survives lava anyway, F5).
-4. **Block material and sound** (block items, from `/dumpphysics`): `Material.WOOD` → wood, `STONE` → refractory unless
-   the id says brick / machine / metal, `METAL` → metal, `WOOL` → fibre, `PLANT` / `LEAVES` → foliage, and so on. A
+3. **Fire resistance:** `Item#isFireResistant` -> refractory (it survives lava anyway, F5).
+4. **Block material and sound** (block items, from `/dumpphysics`): `Material.WOOD` -> wood, `STONE` -> refractory unless
+   the id says brick / machine / metal, `METAL` -> metal, `WOOL` -> fibre, `PLANT` / `LEAVES` -> foliage, and so on. A
    metal-sounding block on stone material is metal.
-5. **Gear:** tool tier / armor material name (iron → metal, diamond / netherite → refractory, leather / wood → wood).
+5. **Gear:** tool tier / armor material name (iron -> metal, diamond / netherite -> refractory, leather / wood -> wood).
 6. **Edible:** food, unless the name says container (bottled drinks), produce or organic.
 7. **Name token:** whole tokens of the id path (`oak`, `brick`, `copper`, `flour`, ...), with a few compound parts
    (`stone`, `glass`, `flower`).
-8. **Mod default:** one family per mod for what is left (AE2 → machine, Create → metal, Simple Hats → fibre, ...).
+8. **Mod default:** one family per mod for what is left (AE2 -> machine, Create -> metal, Simple Hats -> fibre, ...).
 9. **None:** `unclassified`. The audit lists every one by mod and `--check` exits 1.
 
 ### 9.4 Audit results (tag-only run, 2026-10-28; rerun after `/dumpphysics`)
@@ -303,9 +303,9 @@ in one table, and each maps to a material a player would recognise.
   - nether wood: floats and burns today, the family says fireproof (97 items); vanilla crimson and warped wood
     don't burn.
   - ice and snow: sink today, the family says float (5).
-  - the pack's grey-area calls: nether brick and prismarine are lavaproof today (masonry / crystal say fireproof);
+  - the pack's gray-area calls: nether brick and prismarine are lavaproof today (masonry / crystal say fireproof);
     smooth stone and sandstone are fireproof today, but their names hit the refractory rung (29).
-- Name-rung misses still to expect: colour words, furniture named after wood in metal mods, Botania flower names.
+- Name-rung misses still to expect: color words, furniture named after wood in metal mods, Botania flower names.
   The material rung fixes most block items. Each run's list is in [item_physics_audit.md](item_physics_audit.md)
   sections 5 and 6.
 
@@ -315,7 +315,7 @@ in one table, and each maps to a material a player would recognise.
 2. Move the classifier's tables into a generator mode of the same script that writes one item tag per family,
    `creativecompat:physics/family/<family>`, as JSON under `kubejs/data/creativeengineering/tags/items/physics/family/`.
    It reads the manual-override list too, so every item lands in exactly one family tag.
-3. `item_physics_tags.js` maps families to behaviour with nested tag refs through `global.tags` (e.g. floats ⊇
+3. `item_physics_tags.js` maps families to behavior with nested tag refs through `global.tags` (e.g. floats ⊇
    `#…/family/wood`, `#…/family/produce`). The hand lists shrink to the override list.
 4. New mods: `/dumpall`, `/cdevgen run item_physics_audit`; unclassified items or a mod with no default show in the
    report; add a tag rule, a name token, a mod default or an override, then rerun.
@@ -344,7 +344,7 @@ Per tick in a fluid, with the constants from `ItemPhysicServer.updatePre` and `u
 
 ### 10.2 Proposed motion (simulated, not built)
 
-Add a **skim** water behaviour, plus lava floating for lavaproof items. Both use one damped surface spring, applied
+Add a **skim** water behavior, plus lava floating for lavaproof items. Both use one damped surface spring, applied
 at the tail of `ItemPhysicServer.updatePre` (the mixin already injects there for Allurement) so it replaces
 ItemPhysic's vertical force for those items only:
 
@@ -356,7 +356,7 @@ ItemPhysic's vertical force for those items only:
 
 Simulated (scratchpad `float_sim.py`, the same tick order as ItemPhysic):
 
-| Behaviour | drag / k / rest depth | Deepest after a 3-block drop | Bob when settled |
+| Behavior | drag / k / rest depth | Deepest after a 3-block drop | Bob when settled |
 |---|---|---|---|
 | ItemPhysic float (today) | none | 2.81 | 0.355 |
 | float, damped | 0.75 / 0.06 / 0.15 | 1.07 | 0 |

@@ -41,11 +41,11 @@
   find" (in no set, correct). Server then sat idle 02:53-08:03 (no hang: jstack shows idle server + AL threads).
 - Seen in passing: eugene:camp [-285,-46] dropped T&T mimic_desert and a reinforced battering ram within 3 chunks
   (peaceful radius works for it). Campsite camps generate as meta parts (fortified_camps on a red roof castle at
-  [-84,-221]; farmers_camp [144,-119]). Fisher camp [-118,6] CANCELLED by earth fill (26 over water, limit 24).
+  [-84,-221]; farmers_camp [144,-119]). Fisher camp [-118,6] CANCELED by earth fill (26 over water, limit 24).
 - Probe fix: KubeJS level.dimension is a property; commands only re-register on full /reload. zp ents ignores its box
   (Rhino AABB binding?): use vanilla `execute if entity @e[type=..,x,y,z,dx,dy,dz]` counts instead.
 - eugene:camp (in house_camp): trader_camp piece at -2711 100 1584, built on the surface (105), chest -> lootr_chest;
-  1 trader llama in place; the trader walked 44 blocks off (template trader not leashed; mod behaviour). Template
+  1 trader llama in place; the trader walked 44 blocks off (template trader not leashed; mod behavior). Template
   entities fine.
 - pillager_camp -160 832: forest; pillager 1 + vindicator 1 present.
 - undead_castle [161,-187] alpine_highlands (land/highlands), earth fill huge/beard kept (0 over water, 180 air of
@@ -82,9 +82,9 @@
 - Carriage locate misses 19/20 loads: only 2 explained by drops (peaceful farmers_structures:cooks). Misses can be
   normal "maybe" predictions; running `/cwglocate census 64 6000 -6000` (44750 slot chunks) for false negatives.
 
-- Earth fill (st_c, unique starts): Campsite cartographer 1 / cleric 2 kept (medium, beard); fisher [-118,6] CANCELLED
+- Earth fill (st_c, unique starts): Campsite cartographer 1 / cleric 2 kept (medium, beard); fisher [-118,6] CANCELED
   (26 over water); eugene:camp 6, pillager_camp 6, fake_trader_camp 1, carriage 2, witch_wagon 1 kept (small, beard);
-  red_roof_castle 2 kept (large); undead_castle 1 kept (huge); ruined_drum_tower 1 kept + 1 CANCELLED, both "small,
+  red_roof_castle 2 kept (large); undead_castle 1 kept (huge); ruined_drum_tower 1 kept + 1 CANCELED, both "small,
   10 earth". Drum tower template (same as the original mod's) is a 49x45 base of polished andesite (19k of 27k
   blocks): earth fill sizes and judges starts by EARTH base blocks (dirt/sand/gravel/clay/path) only, so a big stone
   base is "small" and mostly invisible to it -> open issue (ST-176 partly).
@@ -100,7 +100,7 @@
   sets hit their densest grid (stay below x4, fine). placement-priority 104 peaceful in 2 sets keep 70 hostile, 242 ranked.
   Already in the spawn chunks: `dropped eugene:pillager_camp`, `eugene:fake_trader_camp`, `meta/pillager_great_tower_siege`
   at [-10,-9] within 3 chunks of peaceful campsite_structures:armorer_campsite [-7,-9] (ST-173/174 evidence).
-- 09:13 Chunky radius 1200 around 0 0 was ~45-60 min at 5-8 cps; cancelled at 09:14 and restarted at radius 800
+- 09:13 Chunky radius 1200 around 0 0 was ~45-60 min at 5-8 cps; canceled at 09:14 and restarted at radius 800
   (100x100 chunks, ~10.2k) for a shorter run.
 - Offline analysis tools (scratchpad): starts.py <world> <out.json> reads every valid start from region files (id,
   chunk, pieces with pool location + BB, biome at the start chunk's (0,0) column at WORLD_SURFACE height and at y64);
@@ -119,16 +119,16 @@
 - Toml note: Forge "corrected" the scratch toml on boot 3 = only added the 1.0.6 earth-fill keys (beardReach 6,
   buryReach 10, maxMoundHeight 8, prune true, sizes) and dropped maxOverAir (renamed in 7.3.1). Test values intact.
 - 09:41 /zp biomemap x0 z0 x1 z1 step added (biome source getNoiseBiome at y64, NO chunk loads): -4000..4000 step 128.
-  Best land window: centre 2144 -2592 (92% land, 35 biomes incl. swamp, mangrove, dark_forest, badlands, beach, river).
+  Best land window: center 2144 -2592 (92% land, 35 biomes incl. swamp, mangrove, dark_forest, badlands, beach, river).
 - GOTCHA: /reload removes Chunky's commands ("Unknown or incomplete command"); restart needed. 09:45 stop (clean, no
   kill), boot 4 on st_d. boot-3 latest.log kept as scratchpad boot3_latest.log.
 
 - 09:48 boot 4 Done (11 s), pregen 2 started: Chunky radius 800 around 2144 -2592.
 - Checker fixes: (1) fits.json lists can hold biome tags (#minecraft:is_ocean in land/sky, #minecraft:is_deep_ocean =
-  ocean/deep), now expanded; (2) biome sample point: 1.19.2 JigsawPlacement puts the generation stub at the CENTRE of
+  ocean/deep), now expanded; (2) biome sample point: 1.19.2 JigsawPlacement puts the generation stub at the CENTER of
   the start piece's box (y = its floor), and isValidBiome reads there; starts.py now samples that point (chunk (0,0)
   for non-jigsaw). Rerun on area 1: 0 out-of-fit starts of 2606. The sawmill "beach" lead was my sample point
-  (corner of chunk [-7,3] vs piece centre), CLOSED.
+  (corner of chunk [-7,3] vs piece center), CLOSED.
 
 - 10:22 pregen 2 done (radius 800 around 2144 -2592, 10201 chunks, 33:43). Both areas: 5530 starts. check.py:
   0 out-of-fit starts (all structures), 78 peaceful / 26 hostile starts, 0 peaceful-radius violations. New starts saved:
@@ -139,15 +139,15 @@
   (all siege weapons: 11 by peaceful radius 3/5/8, 2 catapult overlaps); ~16 rolled vs ~15 expected from the grid
   (26x26 at density 4, x0.5 ordinary). No carriage/wagon rolled here (weights 100 and 200x0.76 of 900): rarity, not a fault.
 - Castles: red roof castle 5 earth-fill lines, all kept (large; 0-8 over air), every one a meta anchor (town_villages x4,
-  fortified_ruins x1 at [50,-83] = new ST-180 evidence). Undead castle 5 lines: 4 CANCELLED (huge, beard; over air
+  fortified_ruins x1 at [50,-83] = new ST-180 evidence). Undead castle 5 lines: 4 CANCELED (huge, beard; over air
   683/314/407/514 of 320, mound columns 448/264/0/341 of 128), 1 kept [146,-222] then dropped by the peaceful radius
-  (forest_watchtower, 3 chunks). Terrain under 2 of the cancelled ones (48x48 around the start chunk,
+  (forest_watchtower, 3 chunks). Terrain under 2 of the canceled ones (48x48 around the start chunk,
   MOTION_BLOCKING_NO_LEAVES): [138,-208] 77..107 (p10 88, p90 105) = real slope; [184,-158] 78..93 (p10 79, p90 91),
-  cancelled on mounds (264 of 128) with over-air 314 under its 320. -> open issue: undead castle survives rarely.
+  canceled on mounds (264 of 128) with over-air 314 under its 320. -> open issue: undead castle survives rarely.
 - Earth fill (unique, all logs): kept camps all 0 over water and 0 over air (armorer 5, butcher 5, cartographer 9,
   cleric 5, farmer 4, fisher 2 of 3, eugene:camp 14, fake 19, pillager 27); campsite = medium/beard, eugene camps =
-  small/beard, red roof = large, undead = huge, drum tower = small (stone-base issue). Fisher [124,-115] CANCELLED (26
-  over water of 24, a shore); drum tower [168,-110] CANCELLED (10 over air of 24... mound columns 10 of 8).
+  small/beard, red roof = large, undead = huge, drum tower = small (stone-base issue). Fisher [124,-115] CANCELED (26
+  over water of 24, a shore); drum tower [168,-110] CANCELED (10 over air of 24... mound columns 10 of 8).
 - ST-171: entities scan (scratchpad ents.py over st_d/entities): 14 campsite_structures:camper, all inside a Campsite
   piece (12 + meta parts), 0 outside any start. All 6 camps generate in fitted biomes (pregen, stronger than /locate).
 - ST-172: pieces: eugene:camp = trader_camp 1 + trader_camp_lost_llama 2; pillager_camp = pillager_camp only (also 3 in
@@ -169,7 +169,7 @@
   ballista [141,-276] birch_taiga, witch_wagon [266,-101] mangrove_swamp, carriage [251,-167] desert (chase variant),
   trebuchet [244,-206] desert; catapult from (1000,-2600) timed out (4 misses), battering_ram from (600,-2000) timed out
   (16 misses of 16 loads). save-all + ANY=1 starts.py: every answer chunk holds the start. Biomes from the biome
-  source at the piece-centre floor (/zp biomesrc; region biomes of structure_starts-status chunks are placeholders):
+  source at the piece-center floor (/zp biomesrc; region biomes of structure_starts-status chunks are placeholders):
   all in fit, none harsh. Load line: biome factors {#harsh=1.0, default=0.5} for group/vehicles.
 - ST-173/174 drop tallies (unique): peaceful Campsite/eugene:camp keep away a witch hut, 2 dungeons, a battering ram,
   outposts, a pillager tower, a great-tower siege meta, pillager camp, fake trader camp (r3). Hostile camps dropped:
@@ -190,8 +190,8 @@
 | ST-172 | PASSED | camp = trader + lost llama templates only, pillager_camp = pillager template only, fake = fake template only; mobs present (trader+llamas, pillager+vindicator) |
 | ST-173 | PASSED | drop lines with Campsite camps / eugene:camp as the peaceful side (witch hut, dungeons, battering ram, outposts, hostile camps); 0 radius violations over 78 peaceful / 26 hostile starts |
 | ST-174 | PASSED | pillager camp 19 / fake camp 15 drops at r3 (houses, camps, way-sign metas), r5 (villages, village_towers), r8 (town_villages); 0 violations |
-| ST-175 | PASSED | every kept camp 0 over water, 0 over air; all camp starts in fit (0 out-of-fit of 5530 starts); fisher on gravel beach, 1 shore fisher cancelled (26 over water) |
-| ST-176 | PARTLY | sizes sensible (Campsite medium, eugene camps small, red roof large, undead huge); undead castle cancelled 4 of 5 over slopes (real relief 30 / 12-15 blocks); drum tower "small" from its 10 earth base blocks (stone-base issue) |
+| ST-175 | PASSED | every kept camp 0 over water, 0 over air; all camp starts in fit (0 out-of-fit of 5530 starts); fisher on gravel beach, 1 shore fisher canceled (26 over water) |
+| ST-176 | PARTLY | sizes sensible (Campsite medium, eugene camps small, red roof large, undead huge); undead castle canceled 4 of 5 over slopes (real relief 30 / 12-15 blocks); drum tower "small" from its 10 earth base blocks (stone-base issue) |
 | ST-177 | PASSED ([game] boss bar left) | no eugene:castle start; drum tower 3 in fit; red roof castles anchor metas; undead castle with knights/archers/Ser Marrow (st_c); red roof villagers + golems, no zombie (st_c) |
 | ST-178 | PASSED | in group/surface_dungeons (report); dropped within 3 of a watchtower; 0 violations |
 | ST-181 | PASSED (log part) | report shares 0.20/0.20/0.40, no over-100% warning; rate parts skipped (constraint) |
@@ -218,7 +218,7 @@
   do assemble; st_c was a small sample. CLOSED.
 - Console commands lost: of 15 commands sent 1 s apart during a heavy /locate batch, the last 6 never ran. Send
   commands to a busy server one at a time and confirm each.
-- Undead castle rarely survives: 4 of 5 rolled castles in area 2 cancelled by earth fill (huge size, slopes in its
+- Undead castle rarely survives: 4 of 5 rolled castles in area 2 canceled by earth fill (huge size, slopes in its
   plains/highlands/taiga fits), the 5th dropped by the peaceful radius. Rules work as designed; whether to narrow its
   fits (e.g. drop land/highlands) or relax its mound limit is the user's call.
 - Locate misses: the battering ram search loaded 16 "maybe" candidates and all missed (catapult 4). Not wrong answers,

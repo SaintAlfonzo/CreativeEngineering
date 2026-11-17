@@ -54,7 +54,7 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 | Gleaming Salad (feast, 4 bowls) | 2 glow berries, honey bottle, tomato, golden carrot, beetroot, 2 cabbage, bowl; serving 14 / 0.75, Nourishment 6000 | none (Display Delight has placed salads only) | optional: a pack item would need a new feast block (patcherMod or KubeJS block + loot); owner's call |
 | Placeable vanilla Pumpkin Pie + Slice of Pumpkin Pie (`PlacePumpkinPieMixin`, knife slicing loot modifier, 4 slices) | | Create Central Kitchen placed pie and slice (`i.pumpkin_pie_slice`), Delightful pie and slice (`i.delightful_pumpkin_pie_slice`) | skip (already twice) |
 | Rope Fence (4 rope + 2 sticks -> 3), Rope Fence Gate (2 rope + 4 sticks); fences connect to rope (`RopeFenceConnectionMixin`) | | none | optional; owner's call. Ties to `materials #2` (rope merge). Fence and gate are plain blocks (KubeJS block types); the rope connection needs a patcherMod mixin |
-| Tomatoes on Rope (`HangingTomatoBlock`) | split out of the tomato block | 1.2.4 tomatoes already climb rope | skip (same behaviour) |
+| Tomatoes on Rope (`HangingTomatoBlock`) | split out of the tomato block | 1.2.4 tomatoes already climb rope | skip (same behavior) |
 | Basket renamed `wooden_basket`, new Bamboo Basket | | `farmersdelight:basket` | skip (id rename only; bamboo variant needs 1.20 bamboo) |
 | Bamboo and Cherry Cabinets | | Every Compat `i.bamboo_cabinet` (Quark), `i.cherry_cabinet` (Vinery) | skip (covered) |
 | Hanging Canvas Signs (17), wall canvas sign keys | 1.20 hanging signs | Supplementaries hanging signs | **BUILT** only the undyed ceiling `farmersdelight:hanging_canvas_sign` (state `rotation` 0-15, `attached`, `waterlogged`, so Farmer's Structures places); no text, block entity, renderer, dyes or wall variant. See 4.2 |
@@ -63,7 +63,7 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 
 | Change | Decision (proposed) |
 |---|---|
-| Ingredients generalised to tags: `minecraft:carrot / potato / beetroot / wheat` -> `forge:crops/*` in 25 recipes; cooking pot takes `#forge:buckets/water` | skip by default: the pack's tag work already makes most of these interchangeable; revisit only if a modded crop fails a recipe |
+| Ingredients generalized to tags: `minecraft:carrot / potato / beetroot / wheat` -> `forge:crops/*` in 25 recipes; cooking pot takes `#forge:buckets/water` | skip by default: the pack's tag work already makes most of these interchangeable; revisit only if a modded crop fails a recipe |
 | Noodle Soup: `forge:cooked_eggs` -> `forge:eggs` (raw egg) | skip (the pack's own noodle soup craft, `cooking.js`, uses cooked eggs) |
 | Rabbit Stew (pot): baked potato -> any potato | skip |
 | Kelp Roll: carrot -> any `forge:vegetables` | skip (the pack builds kelp roll by sequenced assembly, `cooking.js`) |
@@ -73,7 +73,7 @@ Most of the 1.3 delta is 1.20 porting: hanging signs, cherry and bamboo woods, t
 | Torchflower -> 2 orange dye | skip (1.20 plant) |
 | Netherite knife: smithing template | skip (1.20 smithing) |
 
-### 2.4 Loot, worldgen, tags, behaviour
+### 2.4 Loot, worldgen, tags, behavior
 
 | Change | Decision (proposed) |
 |---|---|
@@ -133,7 +133,7 @@ item and is meant to accept a modded one is the only place it would matter. **De
   custard), `drinks` (4: milk bottle, apple cider, melon juice, hot cocoa), `feasts` (6 feast blocks), `pies` (4 whole pies).
   1.2.4 reads none of them. They can be filled by the pack later; the food-type tags in
   [food.md](food.md) already cover the same ground.
-- Block behaviour tags, read by 1.3 code that 1.2.4 does not have: `planted_from_below` (cave vines),
+- Block behavior tags, read by 1.3 code that 1.2.4 does not have: `planted_from_below` (cave vines),
   `mushroom_colonies`, `campfire_signal_smoke` (straw and rice bales make signal smoke), `mushroom_colony_growable_on`,
   `unaffected_by_rich_soil`, `terrain`, `heat_sources` / `tray_heat_sources` / `heat_conductors` (stove and pot heat).
   Item tags `straw_harvesters`, `serving_containers`, `flat_on_cutting_board` and `tools/knives` are likewise read only by
@@ -199,7 +199,7 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 | Tooltip | `kubejs/client_scripts/tooltips.js` (`fdVillagerLine`, shown only with `creativedelight` loaded) |
 | Version | repack `1.19.2-1.2.4-ce-19.2-02`; `:creativeDelight:build` 2026-10-25 nests it |
 
-### 4.2 Behaviour and choices
+### 4.2 Behavior and choices
 
 - **Config** `config/farmersdelight-ce-common.toml` (registered by the repack, FD's container). A change needs a restart:
   r1103 (SQ-FDB-05) showed a live edit is not picked up; the config comment says so since 2026-11-03.
@@ -232,7 +232,7 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
 - **Hanging Canvas Sign** (`HangingCanvasSignBlock`, registry id `farmersdelight:hanging_canvas_sign`, stack 16): a no-collision JSON-model
   block (board and chains from 1.3.4's entity texture `entity/signs/hanging/canvas.png`, copied to `textures/block/`; 8 models,
   `attached` V chains or straight chains, 22.5 degree steps by element rotation plus blockstate y) with 1.3.4's property names. Placed
-  under a block that supports the centre (or any non-air block); sneaking while placing sets `attached`, which then pops off when
+  under a block that supports the center (or any non-air block); sneaking while placing sets `attached`, which then pops off when
   the support above goes (unattached never pops). Recipe 6 from 2 Chains, 4 logs, 2 Canvas (1.3.4's, `creativedelight:` id
   `crafting_shaped/hanging_canvas_sign`). Tag `minecraft:mineable/axe`; loot drops itself. Limits: no text, dyes, wall variant
   or hanging-sign tag.

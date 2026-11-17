@@ -259,9 +259,9 @@ directly (`compileOnly project(':creativeCalendar')`).
 |---|---|---|
 | Q1 | Brewin' dishes and their food tags: CB or CD? | **Decided 2026-10-31 (owner): CD**, added only while Brewin' is loaded. Moved: CD `brewinandchewin/recipes.js` and `tags.js` (`// requires: brewinandchewin`), 4.5. |
 | Q2 | Ciders (CD `farmersdelight/recipes.js` 142-155) and the sweetener passes that list `vinery:wine_fermentation` / `brewinandchewin:fermenting` (CD `minecraft/recipes.js` 18-40) | Leave in CD: not alcohol, and the sweetener pass must see every recipe type in one place. |
-| Q3 | Copper poisoning (oxidised copper gear rolls Poison): effects (CB) or gear (stays)? | **Follows the gear effects into CB** (inferred from the 2026-10-31 decision that gear effects go to CB; confirm). |
+| Q3 | Copper poisoning (oxidized copper gear rolls Poison): effects (CB) or gear (stays)? | **Follows the gear effects into CB** (inferred from the 2026-10-31 decision that gear effects go to CB; confirm). |
 | Q4 | Anything in the "stays" list of 4.2 to move anyway? | **Decided 2026-10-31 (owner):** Winemaker trades, Vinery effects and gear effects move to CB; the wine clock goes to Creative Calendar. The rest stays. |
-| Q5 | Effects unrelated to potions or drinks (echo armor set bonus, AM effects, mob effect text in `jeed_providers.js` 35-59): all effect text to CB? | Yes: JEED providers move whole, and with the 2026-10-31 decision gear behaviour moves too. |
+| Q5 | Effects unrelated to potions or drinks (echo armor set bonus, AM effects, mob effect text in `jeed_providers.js` 35-59): all effect text to CB? | Yes: JEED providers move whole, and with the 2026-10-31 decision gear behavior moves too. |
 
 ### 4.5 Move log
 
@@ -447,14 +447,14 @@ Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativ
 - 2026-10-31: bundle built with the two ports nested, framework (config, core scripts, mixin plugin), tooling repointed,
   inventory and move plan written. Not installed.
 
-## 9. Publishing on CurseForge (licence audit 2026-11-01)
+## 9. Publishing on CurseForge (license audit 2026-11-01)
 
 Audit of the built `creativebrewing-1.0.0.jar` and its two nested members (TODO `creativebrewing/publish #3`).
 
-| Part | Source licence | In the jar | Verdict |
+| Part | Source license | In the jar | Verdict |
 |---|---|---|---|
 | CB's own jar (Java, config, 3 KubeJS scripts) | own, GPLv3 | `creativebrewing-LICENSE.txt` | OK |
-| Vinery member: code (port of Let's Do Vinery 1.5.5 / 1.3.10 + Foundation) | MIT code; upstream `*/src/main/resources/` All Rights Reserved (Satisfy, 2022) | GPLv3 `LICENSE` + `backportedVinery-NOTICE-upstream-MIT.txt` (CurseForge licence text verbatim: ARR scope and both MIT notices); same file copied to `creativebrewing-NOTICE-vinery-MIT.txt` in the outer jar | OK. No upstream resources shipped (read from `vinery_upstream/` at runtime); NOTICE updated 2026-11-05 |
+| Vinery member: code (port of Let's Do Vinery 1.5.5 / 1.3.10 + Foundation) | MIT code; upstream `*/src/main/resources/` All Rights Reserved (Satisfy, 2022) | GPLv3 `LICENSE` + `backportedVinery-NOTICE-upstream-MIT.txt` (CurseForge license text verbatim: ARR scope and both MIT notices); same file copied to `creativebrewing-NOTICE-vinery-MIT.txt` in the outer jar | OK. No upstream resources shipped (read from `vinery_upstream/` at runtime); NOTICE updated 2026-11-05 |
 | Brewin' member: code, textures, models, data, `logo.png` | Brewin' And Chewin' 4.5.0, MIT (Umpaz; checked against upstream `LICENSE`) | GPLv3 `LICENSE` + MIT notice in `backportedBrewin-NOTICE-upstream-MIT.txt` | OK. NeoForge milk textures (LGPL 2.1) left out |
 | Brewin' `fd_tray.png` | Farmer's Delight 1.21, MIT (vectorwing) | named in the same NOTICE | OK |
 | Vinery member: code (Vinery 1.5.5, 1.3.10 blocks, Foundation 1.0.1) | MIT (satisfy, Cristelknight) | GPLv3 `LICENSE` + both MIT notices | OK |
@@ -482,7 +482,7 @@ Audit of the jars built 2026-11-04 after Step 1: `creativebrewing-1.0.0.jar` (23
 nested) and `-own.jar` (271 KB). Same method as 9; textures pixel-compared against the vanilla 1.19.2 client, every jar
 in `mods/` and the donor folders. Supersedes the 2026-11-01 verdict for the own jar; the members' verdicts hold.
 
-| Part | Source licence | In the jar | Verdict |
+| Part | Source license | In the jar | Verdict |
 |---|---|---|---|
 | Java, 49 classes (33 mixins) | own, GPLv3; no `@Overwrite`, no upstream method bodies (IE, Create, vanilla); the JEI categories extend IE's, not copy | `com/SaintAlfonzo/creativebrewing/**` | OK |
 | KubeJS scripts (12 startup, 11 server, 8 client), lang, swap lists, mixin json | own | yes | OK |
@@ -521,14 +521,14 @@ Kristoffer Zetterstrand, shipped as a set) stay in `licence/compat #1`.
 
 ### 9.4 Readiness review 2026-11-05 (owner: "is creative brewing ready to publish")
 
-Verdict: **not ready.** Licences of CB's own jar and members pass (9, 9.1). What blocks it is the chain around it,
+Verdict: **not ready.** Licenses of CB's own jar and members pass (9, 9.1). What blocks it is the chain around it,
 verification, and what a public install looks like. Checked against the jar built 2026-11-05 00:05 and the tree.
 
 **Blockers**
 
 | # | Gap | Evidence | Fix |
 |---|---|---|---|
-| R1 | The 4 hard dependencies are unpublished; Compat and CD still have open licence rows | `mods.toml`: Common, Compat, Calendar, CD mandatory; 9.2 rows `licence/compat #1` (built, not installed), `#2`, `#3` (TrashSlot `@Overwrite`), `licence/cd #2`, `mobs/nests #2` | Finish those rows; publish Common, Compat, Calendar, CD first |
+| R1 | The 4 hard dependencies are unpublished; Compat and CD still have open license rows | `mods.toml`: Common, Compat, Calendar, CD mandatory; 9.2 rows `licence/compat #1` (built, not installed), `#2`, `#3` (TrashSlot `@Overwrite`), `licence/cd #2`, `mobs/nests #2` | Finish those rows; publish Common, Compat, Calendar, CD first |
 | R2 | A public install must hand-place 10 jars, from 3 loaders and 3 MC versions | CB: `vinery_upstream/` (Vinery 1.5.5 Fabric 1.21.1, 1.3.10 Forge). CD: 7 members call `UpstreamJars.verifyOrFail()` in their constructor with no switch (enders, golden, largemeals, miners x2, oceanic, roll, rustic) | Install guide with links and sha1s on the project page; consider making CD's donor members skip (not crash) when their folder is absent; confirm the current CurseForge and Modrinth rules on required files not hosted as dependencies |
 | R3 | Step 1 builds were never booted | `mods/creativebrewing-1.0.0.jar` is the 2026-11-03 build (sha1 differs from build/libs); SQ-DCM, SQ-CBS (the minimal-chain gate, plan_cb_publish.md M7), SQ-CDFO not run; CBR-01 to -06 open | Install with the game closed, run SQ-DCM, SQ-CBS-01/02, SQ-CDFO, then CBR |
 | R4 | 25 mixins into 8 optional mods apply at any version, and `defaultRequire 1` turns a changed target into a boot crash | `CBMixinPlugin.FOR_VERSION` empty; targets Create, IE, JEED, Create: Deep Dark, Everything Copper, Farmer's Respite, Fruits Delight, Better Beacons. The pack pins versions, public players will not | Gate each compartment on the tested version range (plugin, or optional `[[dependencies]]` with `versionRange`), or `require = 0` on the cosmetic (JEI, tooltip) injects |
@@ -560,12 +560,12 @@ verification, and what a public install looks like. Checked against the jar buil
 
 | Item | Decision |
 |---|---|
-| Publish order | Common, Compat, Calendar and Creative Delight (CD) are published first; Creative Brewing (CB) is the goal. R1 stands: their open licence rows gate it |
+| Publish order | Common, Compat, Calendar and Creative Delight (CD) are published first; Creative Brewing (CB) is the goal. R1 stands: their open license rows gate it |
 | R2 donor jars | The 10 jars are a manual download from a list of URLs on the project page and README first (names and sha1s from each `UpstreamJars`). A download script comes later. Future design: the player downloads the upstream mods from any source into `mods/`, and a startup script moves them into the shared upstream folder |
 | R4 mixin versions | Closed for now: the pack is static for mod updates, so versions are pinned and a version gate is not needed. Reopen if the mod list ever updates |
 | R5 ids | The ports keep the original ids (`vinery`, `foundation`, `brewinandchewin`). Duplicate-jar handling (real Vinery or Brewin' also in `mods/`) is later work; the project page states the conflict meanwhile |
 | R6 source | The whole project is one public repo, not split per submod: https://github.com/SaintAlfonzo/CreativeEngineering . Tag the release there and link the tag from the upload |
-| Textures | Vanilla textures and edits of them are wanted for visual consistency, and are not treated as a licence issue (supersedes 9.3's "optional cleanup"). `licence/cb #1` and `#2` are closed as accepted; no vanilla-art replacement work anywhere |
+| Textures | Vanilla textures and edits of them are wanted for visual consistency, and are not treated as a license issue (supersedes 9.3's "optional cleanup"). `licence/cb #1` and `#2` are closed as accepted; no vanilla-art replacement work anywhere |
 | Manifest | Done 2026-11-05, built: CB requires CD `[1.1.0,)`; CB and CD descriptions rewritten; CB has `issueTrackerURL` and `displayURL` (the repo); stale header comments fixed |
 
 **2026-11-06 (plan_cb_publish.md 15):** Vinery's donor message and both members' pack descriptions use the Creative

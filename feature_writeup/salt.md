@@ -9,7 +9,7 @@ are nested in `mods/creativedelight-1.0.0.jar` (installed 2026-11-02 23:16; the 
 Last game boot 2026-10-31. Scratch test queued: SQ-CDJ6 (section 4), SQ-CDJ7 (SQ-SALT2-01 to -07). Salt `-03` (Melting S8, config move S10, section 6)
 built 2026-11-03 in the CD jar, not installed. Open salt work and its plan: section 6.
 Plan: [plan_creative_delight.md](plan_creative_delight.md) J2; TODO `creativedelight/members #47`, `#48`.
-Salt behaviour in the pack (one salt, melting, dissolving): [item_merges.md](item_merges.md) 2.9;
+Salt behavior in the pack (one salt, melting, dissolving): [item_merges.md](item_merges.md) 2.9;
 seasonings: [seasonings.md](seasonings.md).
 
 ## 0. At a glance
@@ -67,7 +67,7 @@ Our overlay is GPLv3.
 1. **Rock salt exemption moved into Salt.** CD's `SaltRockNoDissolveMixin` (on Salt's `Dissolving`) is gone. The
    Salt member ships an edited `Dissolving` (a decompiled copy, `replaced_classes` with the upstream sha1 pin): both
    `maybeDissolve` and `maybeDissolveInRain` return false for `salt:raw_rock_salt_block` (the in-rain check reads the
-   block at the position, as the mixin did). Same behaviour, no mixin. CD's `SaltBlockTicks` lost its
+   block at the position, as the mixin did). Same behavior, no mixin. CD's `SaltBlockTicks` lost its
    `NO_DISSOLVE` set and `noDissolve()`; its Vintage calls into `Dissolving.maybeDissolve` are unchanged.
 2. **`SaltBlockRandomTickMixin` and `SaltLayerRandomTickMixin` stay.** They target vanilla `BlockBehaviour` and
    `SnowLayerBlock` for Vintage Delight's salt family, not Salt classes. Vintage's salt brick stairs, slabs and

@@ -57,8 +57,8 @@ owner asks for it by name. Upstream bugs are fixed (3.6).
 
 Cozy turns cats into companions with stats. Its entity `cozys-improved-cats:improved_cat` extends vanilla `Cat`.
 Spawns are not replaced: a vanilla cat (exact class `Cat`) is swapped for an improved cat when it starts being tracked
-(`event/CatReplacementHandler.java:33`). Tamed cats keep their owner, collar colour, variant, name, age, equipment,
-ForgeData and caps (best effort), and are given a class, a gender and a favourite food. Cats then have affinity and bond
+(`event/CatReplacementHandler.java:33`). Tamed cats keep their owner, collar color, variant, name, age, equipment,
+ForgeData and caps (best effort), and are given a class, a gender and a favorite food. Cats then have affinity and bond
 levels (1 to 5), 20 to 35 health, hunger, genetics on breeding, a home (Cat Bed) and roaming radius, four modes
 (follow / stay / wander / guard), fetching of a Yarn Ball, and one of five classes with an owner ability (Lucky: Luck;
 Guardian: Resistance near creepers and phantoms; Naiad: Regeneration; Witchling: random gifts; Dreamer: XP bottles).
@@ -81,10 +81,10 @@ Tamer villager and 5 village pet shops. It makes axolotls, horses, foxes, rabbit
 |---|---|---|
 | Mod id / namespace | `cozys_improved_cats` / `cozys-improved-cats` (Forge logs "dangerous alternative prefix") | `domesticationinnovation` |
 | Items | 11 (4 fish, collar, training string, treat, yarn ball, guide, 2 block items) | 25 |
-| Blocks | 2: `cat_bed` (colour in the item / block entity, 16 colours), `cat_food_bowl` (3 slots) | 18 (16 pet beds, drum, wayward lantern) |
+| Blocks | 2: `cat_bed` (color in the item / block entity, 16 colors), `cat_food_bowl` (3 slots) | 18 (16 pet beds, drum, wayward lantern) |
 | Entities | `improved_cat` (replaces vanilla cats at tracking) | 2 technical (`giant_bubble`, `highlighted_block`) + projectiles |
 | Effects / potions | none (uses vanilla Luck, Regeneration, Resistance, Slow Falling) | none (37 enchantments) |
-| Recipes | 45 files: 32 bed (white + 15 colours, 16 recolours), 8 smelting / blasting (4 per fish), 5 crafting | 36 crafting |
+| Recipes | 45 files: 32 bed (white + 15 colors, 16 recolours), 8 smelting / blasting (4 per fish), 5 crafting | 36 crafting |
 | Loot | GLM `ancient_fish_fishing`; cod / salmon entity pools by `LootTableLoadEvent`; no tables replaced | 1 chest (`chests/petshop_chest`, rolled by code), book pools by code |
 | Worldgen | biome modifier `dimensional_cats` (crimson forest; End highlands / midlands / barrens) | 5 village pet shops (pool weight 17) |
 | Trades | fisherman level 3: ancient cod, ancient salmon | Animal Tamer profession |
@@ -100,7 +100,7 @@ Tamer villager and 5 village pet shops. It makes axolotls, horses, foxes, rabbit
 
 | Item | Overlaps with | Problem | Proposal |
 |---|---|---|---|
-| Cat Bed (`cat_bed`, 16 colours) *overlaps w/ DI Pet Bed x16, Redeco Pet Bed x16* | DI beds: pet respawn point; Redeco beds: decor | three bed sets, different jobs; Cozy's bed is a cat home and (if `bedRevivalEnabled`) a revival point | keep all three (no merge: different functions); same treatment as DI beds (BlockRunner soft list, tooltip line); D3 |
+| Cat Bed (`cat_bed`, 16 colors) *overlaps w/ DI Pet Bed x16, Redeco Pet Bed x16* | DI beds: pet respawn point; Redeco beds: decor | three bed sets, different jobs; Cozy's bed is a cat home and (if `bedRevivalEnabled`) a revival point | keep all three (no merge: different functions); same treatment as DI beds (BlockRunner soft list, tooltip line); D3 |
 | Cat Collar (`cat_collar`) *overlaps w/ DI Collar Tag (name)* | Collar Tag holds enchantments; Cat Collar holds a dead cat | similar names, unrelated jobs | keep both; tooltips make the job plain (step 12) |
 | Raw / Cooked Ancient Cod and Salmon *overlaps w/ cod, salmon* | vanilla fish, `forge:raw_fishes/cod`, `/salmon` | same food under another id, but the raw ones are the only taming item | no merge (D5); cooked ones join the pack food tags as fish |
 | Cat Treat | none (no cat item in the name dump) | not a food: breeding / bond item | keep |
@@ -148,7 +148,7 @@ Cozy and DI are the batch. Beyond 2.2: DI's "Allows pets to respawn if killed" p
 | `training_string` | Training String | trains a tamed cat; links a bed; 99 uses (config) | 1 |
 | `cat_collar` | Cat Collar | holds a dead cat; use to revive; tooltip lists name, owner, class, deaths, stats | 1 |
 | `cat_guidebook` | Cat Care Guide | opens a vanilla book screen | 1 |
-| `cat_bed` (block) | Cat Bed | home; GUI; 16 colours by recipe; strength 1.5, wood | 64 |
+| `cat_bed` (block) | Cat Bed | home; GUI; 16 colors by recipe; strength 1.5, wood | 64 |
 | `cat_food_bowl` (block) | Cat Food Bowl | 3-slot feeder; strength 2.0, metal | 64 |
 
 Food values are read from the config when items register, so changes need a restart.
@@ -156,7 +156,7 @@ Food values are read from the config when items register, so changes need a rest
 ### 3.2 Recipes
 
 Cat Treat (wheat + sugar, shapeless, x2), Cat Food Bowl (3 iron ingots), Yarn Ball (4 string), Training String
-(ancient cod + ancient salmon + string), Cat Care Guide (book + string), Cat Bed (2 wool + 2 planks, colour by wool;
+(ancient cod + ancient salmon + string), Cat Care Guide (book + string), Cat Bed (2 wool + 2 planks, color by wool;
 recolour by dye), smelting and blasting of both ancient fish (1.0 XP). Literal inputs: `minecraft:iron_ingot`,
 `minecraft:string`, `minecraft:wheat`, `minecraft:sugar`, `minecraft:book`, `minecraft:*_wool`.
 
@@ -235,7 +235,7 @@ CIC-10; 16 before any player-side test.
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
 | D1 | Which revival system for cats? | Cozy's collar for cats (it keeps stats); DI pet beds for every other pet; patcherMod skips DI's respawn request for `improved_cat` | as recommended |
-| D2 | Which command system for cats? | Cozy's four modes; DI's three-mode right-click cancelled on Cozy cats only | **built 2026-11-01** (10.3) |
+| D2 | Which command system for cats? | Cozy's four modes; DI's three-mode right-click canceled on Cozy cats only | **built 2026-11-01** (10.3) |
 | D3 | Three pet-bed sets (DI, Redeco, Cozy) | keep all three: DI = respawn, Cozy = cat home, Redeco = decor | keep |
 | D4 | Cats eat only vanilla raw meat and fish | add `food_type/raw/fish` and `/raw/meat` to `cat_food` | add |
 | D5 | Ancient fish as a cod / salmon variant | separate items (taming item); raw and cooked join the fish tags so recipes accept them | **owner 2026-11-01: removed, merged into vanilla cod / salmon** (10.2); D6, D8 moot |
@@ -275,14 +275,14 @@ CIC-10; 16 before any player-side test.
 |---|---|---|
 | CIC-01 | Boot with an existing world | no Cozy parse errors; no B1 exception; world opens |
 | CIC-02 | Walk to a village with cats | each cat is a Cozy cat (Jade / WTHIT shows the Cozy entity) |
-| CIC-03 | Load a tamed vanilla cat from before the install | still owned, same name, collar colour and variant; sitting |
+| CIC-03 | Load a tamed vanilla cat from before the install | still owned, same name, collar color and variant; sitting |
 | CIC-04 | Cat with a More Mob Variants texture | same texture after conversion |
 | CIC-05 | Tame a stray with vanilla cod, then Raw Ancient Cod | cod refused; ancient cod tames (about 1 in 2) |
 | CIC-06 | Tamed cat slept in a DI pet bed, then killed | Cat Collar given; no DI respawn at dawn (D1) |
 | CIC-07 | Tamed wolf slept in a DI pet bed, then killed | respawns at the bed at dawn |
 | CIC-08 | Use the Cat Collar | cat revived with its stats |
 | CIC-09 | Destroy a collar (lava) with a linked Cat Bed | cat respawns at the bed (D10) |
-| CIC-10 | Empty-hand right-click a tamed Cozy cat | Cozy behaviour only, no DI "following / wandering / staying" message (D2); a wolf still cycles DI modes |
+| CIC-10 | Empty-hand right-click a tamed Cozy cat | Cozy behavior only, no DI "following / wandering / staying" message (D2); a wolf still cycles DI modes |
 | CIC-11 | DI collar tag with Extra Health on a Cozy cat | health above the Cozy stat; tag kept on revival |
 | CIC-12 | Carry Cats: pick up and put down a Cozy cat | rides the shoulder with its texture; same cat after |
 | CIC-13 | Cat Loaf with a Cozy cat | loaf pose works |
@@ -365,7 +365,7 @@ every tick in Stay, Wander and Guard) stopped it or walked it back to the bed. N
   (`FishingHook.setHookedEntity`, via ObfuscationReflectionHelper), so it rides the mob like a hooked bobber.
 - Allowed: hostile mobs (`Enemy` and not `NeutralMob`, `hookHostile`, default true); peaceful and neutral mobs
   (`hookNeutralAndPassive`, default false); players other than the caster (`hookPlayers`, default false, independent of
-  pvp). Never the caster, the caster's own pets (OwnableEntity owner), armour stands or other non-mobs.
+  pvp). Never the caster, the caster's own pets (OwnableEntity owner), armor stands or other non-mobs.
 - While hooked, every 10 ticks the caster's tamed cats within 21 blocks of the caster that DI counts as ambulatory
   (plus the Stay rule) take the mob as target. `FeatherAttackGoal` (MeleeAttackGoal, speed 1.3, priority 1, added to
   every cat on the server) chases and claws it while the feather holds it, outranking Cozy's home goal and every

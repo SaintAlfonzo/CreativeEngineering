@@ -5,7 +5,7 @@
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
 2026-10-20 (feature_writeup/baby_mobs.md, BM-01..08; TODO largecontent/babymobport #1 In Progress). User's definition
-of "the 1.20+ baby mobs": port every baby behaviour, texture, model, drops and acquire mechanic; spawning via the
+of "the 1.20+ baby mobs": port every baby behavior, texture, model, drops and acquire mechanic; spawning via the
 pack's spawn system like mooblooms; NOT the golden dandelion (Quark poisonous potato already pauses growth).
 - Facts: 1.21.2 (24w33a) added baby squid/glow squid (5 % of natural spawns) and dolphins (10 %), no breeding, 20 min
   growth, dolphin fish feeding 10 %/fish, babies drop nothing. 26.1 "Tiny Takeover" (2026-03-24) remodelled every
@@ -25,7 +25,7 @@ pack's spawn system like mooblooms; NOT the golden dandelion (Quark poisonous po
   SpawnEggItem drops the offspring unless isBaby() is true afterwards.
 - Milestone 2 framework: `client/kit/BabyKit` per entity type, applied by a LivingEntityRenderer mixin that swaps
   `model` only if it is instanceof the kit's 1.19.2 adult class, forces `young` false, swaps texture in getRenderType
-  and layer textures/models by adult layer texture key. Anything 1.19.2 keys off `young` (armour, held item, head,
+  and layer textures/models by adult layer texture key. Anything 1.19.2 keys off `young` (armor, held item, head,
   renderer-wide scales) needs per-family fixes. 26.1 client jar: piston-meta version json, Vineflower.
 - Offline mixin check: javap against forge-1.19.2-43.3.9-srg.jar (gradle cache) for every remap=false target.
 Related: [feature-ports-2026-10-20](feature-ports-2026-10-20.md), [moobloom-variants](moobloom-variants.md), [root-gradle-build](root-gradle-build.md).

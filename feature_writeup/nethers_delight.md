@@ -8,7 +8,7 @@ save) not run; not played** (section 4.9; deep scan 2026-11-02): Nether's Deligh
 `MyNethersDelight-1.20.1-1.10.4-backport.1.jar` (a separate, larger mod, mod id `mynethersdelight`). Neither runs on 1.19.2
 as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/TODO.md).
 
-**Licence:** Nether's Delight is MIT (owner-supplied 2026-10-25; checked 2026-11-01 against the repository's 1.19 branch `LICENSE`, "Copyright (c) 2022 Umpaz", whole repository, no separate asset licence). My Nether's Delight: not stated.
+**Licence:** Nether's Delight is MIT (owner-supplied 2026-10-25; checked 2026-11-01 against the repository's 1.19 branch `LICENSE`, "Copyright (c) 2022 Umpaz", whole repository, no separate asset license). My Nether's Delight: not stated.
 
 ## 0. At a glance
 
@@ -56,8 +56,8 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
 | Move | `stuffed_hoglin` cooking recipe: `nethersdelight/recipes/cooking/` -> `farmersdelight/recipes/cooking/` |
 | Move | `netherite_machete_smithing` recipe: `nethersdelight/` -> `minecraft/` |
 | Move | recipe advancements regrouped into category folders (the pack drops all advancements, so no effect) |
-| Behaviour | Fungus Colony (section 4.4): growth chance 1 in 5 -> 1 in 4 and runs through the Forge crop-growth hook; off rich soul soil a colony needs light below 13 to stay. Missed by the first survey, which filed it as code only |
-| Code only | Blackstone Stove now extends new `AbstractStoveBlock` / `AbstractStoveBlockEntity`; registry split into `NDFeatures`, `NDConfiguredFeatures`, `NDPlacements`, `NDBiomeModifiers`; `NDRecipes` inner classes; creative tab class `NDCreativeTab`; shared `PropelplantBlock`; Fungus Colony own survive check (behaviour, see the row above); stove inventory saved as vanilla `Items` instead of Forge `Inventory` (matters only to a jar swap) |
+| Behavior | Fungus Colony (section 4.4): growth chance 1 in 5 -> 1 in 4 and runs through the Forge crop-growth hook; off rich soul soil a colony needs light below 13 to stay. Missed by the first survey, which filed it as code only |
+| Code only | Blackstone Stove now extends new `AbstractStoveBlock` / `AbstractStoveBlockEntity`; registry split into `NDFeatures`, `NDConfiguredFeatures`, `NDPlacements`, `NDBiomeModifiers`; `NDRecipes` inner classes; creative tab class `NDCreativeTab`; shared `PropelplantBlock`; Fungus Colony own survive check (behavior, see the row above); stove inventory saved as vanilla `Items` instead of Forge `Inventory` (matters only to a jar swap) |
 | 1.20 syntax | loot modifier condition `minecraft:alternative` -> `alternatives` (not applicable to 1.19.2) |
 
 No food value, item, loot-modifier or vanilla loot-table change; `minecraft:entities/hoglin` is identical to 3.1.
@@ -114,7 +114,7 @@ re-add the same recipe as `farmersdelight:cooking/stuffed_hoglin`; the same for 
 -> `minecraft:netherite_machete_smithing`. Check first that nothing in `kubejs/` or the Creative Delight members refers to
 the old ids (grep). The advancement regroup is moot (the pack drops advancements).
 
-### 4.4 Fungus Colony (behaviour, mixin on `umpaz.nethersdelight.common.block.FungusColonyBlock`)
+### 4.4 Fungus Colony (behavior, mixin on `umpaz.nethersdelight.common.block.FungusColonyBlock`)
 
 | | 3.1 | 4.0 |
 |---|---|---|
@@ -136,7 +136,7 @@ Player-visible, so it gets a changelog bullet when built.
 ### 4.6 Skipped under (A)
 
 Stove base classes, feature registry split, `NDRecipes` inner classes, `NDCreativeTab`, shared `PropelplantBlock`: refactors
-with no behaviour change. 1.20 loot condition syntax: not applicable to 1.19.2.
+with no behavior change. 1.20 loot condition syntax: not applicable to 1.19.2.
 
 ### 4.7 Tests (to write when built)
 

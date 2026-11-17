@@ -209,17 +209,17 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 - Verify: summer vs spring spread counts on vanilla and one modded grass (about half in summer), a tropical biome in any season, winter normal.
 
 ### 4.4 Sticky note on a jar top, not a sack (SQ-LBS-03) [decided: jar and Pickling Jar]
-- **BUILT 2026-11-03:** tag `creative_labels:paper/note_on_top` (the existing namespace, not `creativelabels:`), jar and Pickling Jar tops use `centreNoteFit` (the Pickling Jar lid is 2.5 px down, past the shape test's 2 px), other centre-note tops and all bottoms none. Labels 1.0.1 jar 19:43 (1.0.1 never left build/libs, so no bump), not installed.
-- Cause: `Spots.fit` 298-300: centre-note hosts take notes on side faces only through `centreNoteFit`; top and bottom use `shapeFit`,
+- **BUILT 2026-11-03:** tag `creative_labels:paper/note_on_top` (the existing namespace, not `creativelabels:`), jar and Pickling Jar tops use `centreNoteFit` (the Pickling Jar lid is 2.5 px down, past the shape test's 2 px), other center-note tops and all bottoms none. Labels 1.0.1 jar 19:43 (1.0.1 never left build/libs, so no bump), not installed.
+- Cause: `Spots.fit` 298-300: center-note hosts take notes on side faces only through `centreNoteFit`; top and bottom use `shapeFit`,
   which lets the jar lid and the sack neck carry spot C.
 - Change: tops (UP) of `supplementaries:jar` and the Pickling Jar take a note; the sack top and bottom stay refused. Add a tag `creativelabels:note_on_top`
-  (the two jars; other jars stay out); in `fit`, for a centre-note host with `face` UP or DOWN: tag member -> `shapeFit` (UP only; DOWN refused for all);
+  (the two jars; other jars stay out); in `fit`, for a center-note host with `face` UP or DOWN: tag member -> `shapeFit` (UP only; DOWN refused for all);
   otherwise `Fit.NONE`. Check the Pickling Jar's block id (Vintage Delight member) and its shape has a flat top at spot C. Update `sticky_notes.md` 3.3a and
   the row (SQ-LBS-03 currently expects the Pickling Jar top refused: flip it).
 - Verify: SQ-LBS-03 (jar and Pickling Jar tops accepted, sack top and bottom refused, trash can and botany pot tops as before).
 
 ### 4.5 Labels drop when the support block goes to air (SQ-LBS-04)
-- **BUILT 2026-11-03 (partly a guess):** the probe already used `setBlockAndUpdate` (flag 3), and the Labels path (`neighborChanged` / `updateShape` -> `hostChanged` -> `popResource`) is sound. Suspected cause: Creative Worldgen `FirstTickWater.ticking` left true after a fluid tick that threw or was cancelled, which skips every `popResource`. Now cleared at every level tick end and checked per thread (Worldgen jar 19:45). `zlbs_probe.js` gained a wall-torch control (tells global drop loss from a Labels bug) and a piston case. Not verified in game.
+- **BUILT 2026-11-03 (partly a guess):** the probe already used `setBlockAndUpdate` (flag 3), and the Labels path (`neighborChanged` / `updateShape` -> `hostChanged` -> `popResource`) is sound. Suspected cause: Creative Worldgen `FirstTickWater.ticking` left true after a fluid tick that threw or was canceled, which skips every `popResource`. Now cleared at every level tick end and checked per thread (Worldgen jar 19:45). `zlbs_probe.js` gained a wall-torch control (tells global drop loss from a Labels bug) and a piston case. Not verified in game.
 - Finding: code path exists (`FacePaperBlock.updateShape` / `neighborChanged` -> `hostChanged` -> `Block.popResource` 447). The probe
   `zlbs refit` sets the host to air with a plain `/setblock`-style call; a flag-2 `setBlock` fires no `updateShape` or `neighborChanged`, so
   nothing could drop. Likely a probe fault.
@@ -368,7 +368,7 @@ drunk, golden honey and milk no longer grant the bundle; [Potions] levitation re
   `VillagerEntityMCA` runs its own brain. `VillagersTargetFarmlandMixin` is on vanilla `SecondaryPoiSensor` and only adds the toml list `farmlandBlocks`
   for vanilla `Villager`s, so it never reaches MCA farmers (their memories never held `secondary_job_site`). MCA farmers farm through
   `net.mca.entity.ai.brain.tasks.chore.HarvestingTask` (assigned chore) and its own farmland scan.
-- Change: (1) `javap` / decompile `HarvestingTask` and the MCA farmer behaviour for the farmland test (likely `FarmBlock` / `Blocks.FARMLAND` or a block tag);
+- Change: (1) `javap` / decompile `HarvestingTask` and the MCA farmer behavior for the farmland test (likely `FarmBlock` / `Blocks.FARMLAND` or a block tag);
   (2) mixin that test to accept every `FarmBlock` subclass in the overworld (Rich Soil, mulch, fertile soil, modded farmland), not only the listed
   blocks; (3) keep the vanilla-villager mixin; (4) decide whether `farmlandBlocks = []` still disables it (recommended: the list stays for vanilla, MCA
   takes all `FarmBlock`s). Dimension limit: overworld only (check `level.dimension() == Level.OVERWORLD`).

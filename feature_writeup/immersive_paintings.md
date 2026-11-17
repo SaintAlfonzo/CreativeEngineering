@@ -20,7 +20,7 @@ painting screen has not been checked in game**
 | `/dumppaintings`: every registered painting variant with its size and whether it is placeable | DEPLOYED with 1.0.6, part of `/dumpall`; last run 2026-10-18 18:31 (475 variants) |
 | Modded paintings (445) built at load from the installed jars: Creative Compat `paintings/PaintingArt` + `PaintingPack`, served as the hidden data pack `creativecompat_paintings`; `[paintings]` config | 2026-11-05: built, NOT installed. Offline: all 445 equal the old generated files (pixels and json); scratch rows SQ-PA-01 to -04, CQ-PA-01, -02 queued |
 | `tools/gen_immersive_paintings.py`: since 2026-11-05 writes only the 30 vanilla paintings (`/cdevgen` id `immersive_paintings`, group `pack`) | in use; output in `kubejs/data/creativeengineering/paintings/minecraft/` (pack folder, never a jar) |
-| Before 2026-11-05: all 475 as generated files (in `kubejs/data`, then in the Compat jar after the split) | DEPLOYED with 1.0.6; removed 2026-11-05 (licence audit, TODO `licence/compat #1`) |
+| Before 2026-11-05: all 475 as generated files (in `kubejs/data`, then in the Compat jar after the split) | DEPLOYED with 1.0.6; removed 2026-11-05 (license audit, TODO `licence/compat #1`) |
 
 - **Files to open:** [PaintingArt.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/paintings/PaintingArt.java)
   (header = the rules), [PaintingPack.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/paintings/PaintingPack.java)
@@ -47,7 +47,7 @@ screen with four pages:
 - **Yours / Players:** images players uploaded (from a file, a URL or a screenshot), synced through the server.
 - **Datapacks:** paintings loaded from `data/<ns>/paintings/**/<name>.png` with a sibling `<name>.json`
   (`name`, `author`, `width` and `height` in blocks, `resolution` in pixels per block). The mod ships 94 of its own.
-- **New Painting:** the upload editor (dither, colours, offsets, zoom, pixel-art switch).
+- **New Painting:** the upload editor (dither, colors, offsets, zoom, pixel-art switch).
 
 The page opens filtered to resolution 32 and can also filter by width and height and search by name. Frames and
 materials are picked on the Frame page.
@@ -89,7 +89,7 @@ Dimensional Paintings registers no painting variants (it has its own items), so 
   pack in `extraSources`. Animated strips use the first
   frame. A texture off the block grid (Upgrade Aquatic's 65 x 31 sightless painting) is stretched to the variant's
   size, as vanilla does.
-- **Resolution:** under 32 px per block is scaled up nearest-neighbour by a whole factor to 32 (pixel art stays
+- **Resolution:** under 32 px per block is scaled up nearest-neighbor by a whole factor to 32 (pixel art stays
   sharp); larger keeps its own. Today every one ends at 32.
 - **Name:** the `painting.<ns>.<id>.title` lang key, else the id in title case.
 - **Author:** vanilla: Kristoffer Zetterstrand, except earth, wind, water, fire and wither (Mojang); these are the
@@ -157,18 +157,18 @@ placement.
 
 ## 7. In-game tests
 
-- [ ] **PA-01 Datapacks page:** craft an Immersive Painting, place it on a wall → the screen opens; the Datapacks
+- [ ] **PA-01 Datapacks page:** craft an Immersive Painting, place it on a wall -> the screen opens; the Datapacks
   page lists the pack's 475 paintings next to Immersive's own 32 px ones (the default filter).
-- [ ] **PA-02 search:** type `rebirth` in the search box → only Rebirth Paintings entries; type a painting's name →
+- [ ] **PA-02 search:** type `rebirth` in the search box -> only Rebirth Paintings entries; type a painting's name ->
   it appears.
-- [ ] **PA-03 size filter:** filter width 4, height 4 → the 4 x 4 paintings (vanilla Burning Skull, Pigscene, Pointer
+- [ ] **PA-03 size filter:** filter width 4, height 4 -> the 4 x 4 paintings (vanilla Burning Skull, Pigscene, Pointer
   among them).
-- [ ] **PA-04 placed:** pick a 2 x 2 pack painting → it is placed at 2 x 2 and looks like the vanilla variant
+- [ ] **PA-04 placed:** pick a 2 x 2 pack painting -> it is placed at 2 x 2 and looks like the vanilla variant
   (sharp pixels, no blur).
-- [ ] **PA-05 retextured:** with a resource pack that retextures a vanilla painting enabled at generation time →
+- [ ] **PA-05 retextured:** with a resource pack that retextures a vanilla painting enabled at generation time ->
   Immersive shows the retextured image.
-- [ ] **PA-06 authors:** hover a vanilla painting → "By Kristoffer Zetterstrand"; Earth → "By Mojang"; a DarkPaintings
-  one → its artist, not the mod name.
+- [ ] **PA-06 authors:** hover a vanilla painting -> "By Kristoffer Zetterstrand"; Earth -> "By Mojang"; a DarkPaintings
+  one -> its artist, not the mod name.
 - [ ] **PA-07 multiplayer:** on the dedicated server, a second player sees a pack painting another player placed.
 - Scratch queue (2026-11-05, built at load): SQ-PA-01 (445 built, no errors), SQ-PA-02 (vanilla datapack, reload
   cache), SQ-PA-03 (`extraSources` override and a bad path), SQ-PA-04 (`enabled = false`), CQ-PA-01 (screen and an old
@@ -180,7 +180,7 @@ placement.
   of them. Shipped in pack 1.0.6 (DEPLOYED 2026-10-14).
 - 2026-10-18: `/dumppaintings` rerun with `/dumpall` (475, unchanged).
 - 2026-10-19: this writeup (TODO `pack/docs`).
-- 2026-11-05: licence fix (TODO `licence/compat #1`, owner pick in [creative_compat.md](creative_compat.md) 6.2): the
+- 2026-11-05: license fix (TODO `licence/compat #1`, owner pick in [creative_compat.md](creative_compat.md) 6.2): the
   445 modded paintings are built at load from the installed jars (`paintings/PaintingArt`, `PaintingPack`, config
   `[paintings]`), the 950 generated files left the Compat jar, the generator writes only vanilla's 30 into
   `kubejs/data`. Built, not installed; scratch rows queued.

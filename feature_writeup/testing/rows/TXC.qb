@@ -71,12 +71,12 @@
 ## CQ-TXC-10
 @group client
 @commands Served client: `do` rows with `{"screen": "inventory"}`, `{"widgets": true}`, `{"click_widget": 0}`, `{"scroll": -1}`, `{"screen": "close"}`, `{"press": "e"}` then `{"assert_screen": "CreativeModeInventoryScreen"}`; pause menu: `{"press": "escape"}`, `{"click_widget": "Options"}`, `{"assert_screen": "OptionsScreen"}`
-@pass every row PASS; `READ widgets` lists labelled buttons with bounds (CC-18)
+@pass every row PASS; `READ widgets` lists labeled buttons with bounds (CC-18)
 @fails `Widgets.list` misses nested children; `press` with no screen (`KeyMapping.click`)
 @draft no batch holds this row yet
 ## CQ-TXC-11
 @group client
 @commands EXPERIMENTAL, low priority (TX-07, owner D3): `run_captures.py CC --only CC-02` with the real window, then `run_captures.py CC --only CC-02 --display xvfb`; while the xvfb client runs, `bash tools/scratch_query/game_jvms.sh` and `cat ~/.cache/ce_capture/game/xvfb.pid`
-@pass both runs reach the same progress and READ lines; the xvfb run prints "display :N (xvfb, experimental)", `run.json` has `"display": "xvfb"`, no window appears on the desktop; after the client exits the Xvfb pid is gone (reaper); the owner compares the two CC-02 images in the judgement folder (colours may differ on llvmpipe)
+@pass both runs reach the same progress and READ lines; the xvfb run prints "display :N (xvfb, experimental)", `run.json` has `"display": "xvfb"`, no window appears on the desktop; after the client exits the Xvfb pid is gone (reaper); the owner compares the two CC-02 images in the judgement folder (colors may differ on llvmpipe)
 @fails llvmpipe GL too old or too slow for Immersive Portals, Distant Horizons or shaders (record which, then xvfb stays limited to the tests that pass); `eval_client.start_xvfb`, reaper shell
 @draft no batch holds this row yet

@@ -2,7 +2,7 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=81c7c42acad3 -->
+<!-- generated:status_index begin open_work sha1=8b48a2e77000 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 4, In Progress 3, Testing 17), 2 Complete.
 
 | Id | Status | Tests | Change |
@@ -27,7 +27,7 @@
 | `ui/effects #4` | Testing | S+ C P | Effect providers in JEI |
 | `ui/effects #5` | Testing | C | Sunny hidden from JEI |
 | `ui/effects #6` | Testing | S C P | Remove Passion Aloe Nectar |
-| `ui/effects #7` | Testing | C P | Effect colour audit (harmful / helpful) |
+| `ui/effects #7` | Testing | C P | Effect color audit (harmful / helpful) |
 | `ui/effects #8` | Testing | S~ C P | Effects reference tests |
 | `ui/effects #9` | Testing | C P | Potion bundles do not render in the effect provider |
 | `ui/names #2` | Testing | C P | Raw lang keys in game |
@@ -54,7 +54,7 @@
   `[copper_poisoning]` (2.8). JEED's `config/jeed-client.toml` (`hidden_effects`), the
   Vinery wine table (`config/vinery-common.toml` `effects`), Fruits Delight aura ranges
   (`config/fruitsdelight-common.toml`).
-- **How to look:** JEI → the effect list (JEED adds one entry per effect) → click for its description and the items
+- **How to look:** JEI -> the effect list (JEED adds one entry per effect) -> click for its description and the items
   that give it. `python3 tools/effect_audit.py` for the name, description and JEI-source gaps.
 
 ## 1. Overview
@@ -132,7 +132,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Darkness `minecraft:darkness` | Minecraft | Y (pack) | Y | N | Y | Y | | | Blindness: slight | Pulsing darkness. | Causes vision to temporarily deteriorate. |
 | Bug Pheromones `alexsmobs:bug_pheromones` | Alex's Mobs | Y | Y | N | Y | Y | | | Harmony, Intimidation: slight | Arthropods don't target you unless you hit them. | Make hostile arthropods neutral to the user. |
 | Clinging `alexsmobs:clinging` | Alex's Mobs | Y | Y | N | Y | Y | | | Climbing (Vinery), Agility: slight | Walk upside down on ceilings; sneak to drop. | Allows walking upside-down on ceilings. |
-| Debilitating Sting `alexsmobs:debilitating_sting` | Alex's Mobs | N | - | N | N | Y | | | Poison: slight; Scared Still: slight (arthropods) | Tarantula Hawk sting. Others take magic damage down to half health; arthropods are paralysed, then take 30 damage per level (level II hatches a tarantula hawk). | An Effect which poisons the victim but paralyzes arthropods. It will stop if the victim is at half health and is not an arthropod. Inflicted by a Tarantula Hawk. |
+| Debilitating Sting `alexsmobs:debilitating_sting` | Alex's Mobs | N | - | N | N | Y | | | Poison: slight; Scared Still: slight (arthropods) | Tarantula Hawk sting. Others take magic damage down to half health; arthropods are paralyzed, then take 30 damage per level (level II hatches a tarantula hawk). | An Effect which poisons the victim but paralyzes arthropods. It will stop if the victim is at half health and is not an arthropod. Inflicted by a Tarantula Hawk. |
 | Earthquake `alexsmobs:earthquake` | Alex's Mobs | N | - | N | N | Y | | | Nausea: slight | Camera shake; from Rocky Rollers. | Shakes the user violently. |
 | Ender Flu `alexsmobs:ender_flu` | Alex's Mobs | N | - | N | N | Y | Cosmic Cod | | | When it runs out: 10 damage per level and one Enderiophage per level. | After the effect runs out naturally, the user takes massive damage and an Enderiophage will spawn. Inflicted by an Enderiophage. |
 | Exsanguination `alexsmobs:exsanguination` | Alex's Mobs | N | - | N | N | Y | | | Wither, Poison: slight | 1 magic damage per second per level, can kill; Frilled Shark bite. | Gradually drains health. |
@@ -211,7 +211,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Repellence `upgrade_aquatic:repellence` | Upgrade Aquatic | Y | Y | Y | Y | Y | | Poison (on whatever touches you) | | Mobs touching you get Poison one level higher. | Inflicts poison on mobs that physically touch the user; higher levels increase the given poison effect level. |
 | Restfulness `upgrade_aquatic:restfulness` | Upgrade Aquatic | Y | Y | N | Y | Y | | | Caffeinated: total; Phantom Bane: slight | Instant: -1 day since rest per level; kills phantoms. | Decreases the insomnia timer by 1 day worth per effect level, decreasing Phantoms spawn chance. If given to Flares will turn them into Phantoms, if given to Phantoms it will instantly kill them. |
 | Vibing `upgrade_aquatic:vibing` | Upgrade Aquatic | Y | Y | Y | Y | Y | | Regeneration (on whatever touches you) | | Mobs touching you get Regeneration one level higher. | Inflicts regeneration on mobs that physically touch the user; higher levels increase the given regeneration effect level. |
-| Travel Fatigue `via_romana:travellers_fatigue` | Via Romana | N | - | N | N | Y (ported) | | | | Cooldown after fast travel along a road. | PROPOSED: You've just travelled along a road. You can't fast-travel again until this wears off. | Prevents fast travel. (Effect Insights 26.3.1) 
+| Travel Fatigue `via_romana:travellers_fatigue` | Via Romana | N | - | N | N | Y (ported) | | | | Cooldown after fast travel along a road. | PROPOSED: You've just traveled along a road. You can't fast-travel again until this wears off. | Prevents fast travel. (Effect Insights 26.3.1) 
 | Armor `vinery:armor_effect` | Vinery (port) | N | - | N | N | Y | Aegis Wine | | Resistance, Frosty Armor, Berserking: slight | +2 armor, +3 armor toughness. | Increases Armor and Armor Toughness. |
 | Climbing `vinery:climbing_effect` | Vinery (port) | N | - | N | N | Y | 2: Chenet Wine, Jo's Special Mixture | | Agility: total; Clinging: slight | Walk into a wall to climb it. | Allows climbing Walls. |
 | Explosion `vinery:creeper_effect` | Vinery (port) | N | - | N | N | Y | A Bottle of 'Creepers Crush' | | Instant Damage: slight | You explode (power = level) and take 50 damage. | Causes the player to explode after a few seconds. Kaboom! |
@@ -292,13 +292,13 @@ The `total` overlaps, grouped. Each is two ways to get the same result.
 | Underwater | Conduit Power contains Water Breathing, Night Vision, Haste | Vanilla |
 | Xaero switches | each `*_harmful` and its neutral twin | Same switch, different category |
 
-### 2.4 Category audit (harmful / helpful colouring)
+### 2.4 Category audit (harmful / helpful coloring)
 
-Every effect has a category: BENEFICIAL, HARMFUL or NEUTRAL. Tooltips colour the effect's name by it: potion and
+Every effect has a category: BENEFICIAL, HARMFUL or NEUTRAL. Tooltips color the effect's name by it: potion and
 tipped-arrow tooltips, food tooltips (Farmer's Delight, Quark), the pack's gear lines. HARMFUL is red; BENEFICIAL
 and NEUTRAL are both blue. AppleSkin, Quark's saturation word and `isBeneficial()` read the category too.
 
-The audit (2026-10-20) asked one question per effect: does the colour match what the effect does to whoever has
+The audit (2026-10-20) asked one question per effect: does the color match what the effect does to whoever has
 it?
 
 - Six didn't. CEConfig `[effects] categoryOverrides` changes them (patcherMod `MobEffectCategoryMixin`).
@@ -307,7 +307,7 @@ it?
 - NEUTRAL and BENEFICIAL show the same blue, so nothing was moved between them.
 - Own category is from `/dumppotions` 2026-10-18, and the ports' sources for Vinery and Brewin'.
 
-| Effect | Mod | Own category | Colour | Pack | Note |
+| Effect | Mod | Own category | Color | Pack | Note |
 |---|---|---|---|---|---|
 | Speed `minecraft:speed` | Minecraft | BENEFICIAL | blue | |  |
 | Slowness `minecraft:slowness` | Minecraft | HARMFUL | red | |  |
@@ -507,7 +507,7 @@ JEED page text ("Compound of: ...", `mixin/JeedEffectInfoMixin`). Text only, exc
 
 | Compound | Parts | Notes |
 |---|---|---|
-| Caffeinated (Farmer's Respite) | Phantom Bane | Its +10% speed and +20% attack speed show as its own modifiers. Phantom Bane is really applied, hidden, same time (`PhantomBaneRules`); Caffeinated's own tick (Time Since Rest set to -24000 every tick, phantoms gone for days after) is cancelled (`CaffeinatedEffectMixin`). Decided 2026-10-31 |
+| Caffeinated (Farmer's Respite) | Phantom Bane | Its +10% speed and +20% attack speed show as its own modifiers. Phantom Bane is really applied, hidden, same time (`PhantomBaneRules`); Caffeinated's own tick (Time Since Rest set to -24000 every tick, phantoms gone for days after) is canceled (`CaffeinatedEffectMixin`). Decided 2026-10-31 |
 | Stimulation (Create Confectionery) | Refreshing, Sweetening | Same result: clears Slowness and Mining Fatigue each tick (the parts refuse them) |
 | Recovering (Fruits Delight) | Poison Resistance, Wither Immunity (text) | |
 | Double Jump (Vinery) | Jump Boost (same level), One Mid-Air Jump (text) | With Jump Boost on too, the higher jump power counts (fixed 2026-10-31, backportedVinery -06; upstream replaced Jump Boost's) |
@@ -639,12 +639,12 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
   `potions.js` removes every `Mix` whose output is a luck or bad luck potion, then adds the pack's six rows (clover and
   silverfish bottle, then redstone and glowstone on each; `potions.js` 88-94). Strong luck / bad luck brew with glowstone;
   only the fermented spider eye corruption is gone. DEPLOYED with 1.1.03.
-  **Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover → Luck, Luck + redstone
-  → long, + glowstone → strong, + fermented spider eye → Bad Luck, and Bad Luck + redstone → long, + glowstone → strong
+  **Luck is brewed twice.** Buzzier Bees 5.0.1 already registers awkward + four-leaf clover -> Luck, Luck + redstone
+  -> long, + glowstone -> strong, + fermented spider eye -> Bad Luck, and Bad Luck + redstone -> long, + glowstone -> strong
   (`BBMobEffects.registerRecipes`, all real `PotionBrewing.Mix` entries via Blueprint `DataUtil.addMix`; checked
   against the 5.0.1 jar 2026-10-21). The pack's `LUCK_POTION_MIXES` rows 1, 2 and 4 in `potions.js` add three of
   those again, which probably shows twice in JEI's brewing and Automatic Brewing pages (EF-05). potions.md 2.3 says
-  "Luck had no brew"; that's out of date. Only the silverfish bottle → Bad Luck row (row 3) is new.
+  "Luck had no brew"; that's out of date. Only the silverfish bottle -> Bad Luck row (row 3) is new.
 - **F7.** DECIDED 2026-10-20: keep it hidden (your call: "hide sunny"). The setting is in both `config/` and
   `configs_edited/root_config/`. Correction 2026-10-21: it no longer shows anywhere. More Mooblooms (in the pack since
   1.0.6) removes Buzzier Bees' moobloom and strips the buttercup from every tag (no Sunny stew), and its
@@ -685,7 +685,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
   Other mods' mobs that inflict vanilla effects aren't listed (e.g. a mod's venomous spider giving Poison).
 - **Botania's brew table is copied** from `BotaniaBrews.registerBrews` (440.2), not read at runtime; a Botania update
   that adds a brew needs a row.
-- **Category overrides change the colour everywhere the category is read**, including AppleSkin and Quark's
+- **Category overrides change the color everywhere the category is read**, including AppleSkin and Quark's
   saturation word on foods that give them (none of the six comes from a food).
 
 - **Values are read from code at these versions.** A mod update can change any of them; `effect_audit.py` only checks
@@ -699,7 +699,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
 
 - **One table per mod:** easier to read, but you asked for one table with the mod as a column, and one table sorts and
   searches as a whole.
-- **Generating the table:** the behaviour, overlap and description columns are judgement, not data. The mechanical
+- **Generating the table:** the behavior, overlap and description columns are judgement, not data. The mechanical
   columns are checked by `effect_audit.py` instead.
 
 ### Planned from the scratchpad (2026-10-24)
@@ -748,9 +748,9 @@ pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice neede
 - [kubejs/assets/kubejs/lang/en_us.json](../kubejs/assets/kubejs/lang/en_us.json): potion and arrow names for the `kubejs:*` and `creativeengineering:*` potions.
 - [kubejs/startup_scripts/cooking/potions.js](../kubejs/startup_scripts/cooking/potions.js): pack potions and brewing mixes.
 - [kubejs/startup_scripts/magic/magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js): the pack's effect.
-- [kubejs/server_scripts/_lib/dump_potions.js](../kubejs/server_scripts/_lib/dump_potions.js) (`/dumppotions`) → `kubejs/exported/mob_effects.json`, `potions.json`.
-- [kubejs/server_scripts/_lib/dump_food.js](../kubejs/server_scripts/_lib/dump_food.js) (`/dumpfood`) → `kubejs/exported/food/foods.json`.
-- [config/vinery-common.toml](../config/vinery-common.toml) `effects`: wine → effect table.
+- [kubejs/server_scripts/_lib/dump_potions.js](../kubejs/server_scripts/_lib/dump_potions.js) (`/dumppotions`) -> `kubejs/exported/mob_effects.json`, `potions.json`.
+- [kubejs/server_scripts/_lib/dump_food.js](../kubejs/server_scripts/_lib/dump_food.js) (`/dumpfood`) -> `kubejs/exported/food/foods.json`.
+- [config/vinery-common.toml](../config/vinery-common.toml) `effects`: wine -> effect table.
 - `config/jeed-client.toml`: `hidden_effects`.
 - Port sources: [MobEffectRegistry.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/core/registry/MobEffectRegistry.java), [BnCEffects.java](../development/backportedBrewin/src/main/java/umpaz/brewinandchewin/common/registry/BnCEffects.java).
 
@@ -787,34 +787,34 @@ pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice neede
 Creative, `/effect give @s <id> 60 <amp>` for effects without an item. JEI: the effect list is under the JEED
 ingredient type.
 
-- [ ] **EF-01 Raw names (F1):** `/effect give @s vinery:trippy` and `everythingcopper:copper_poisoning` → the HUD shows
-  the raw `effect.*` key. Search JEI for "Arrow of" → the Intimidation arrows show a raw key. All three show a name
+- [ ] **EF-01 Raw names (F1):** `/effect give @s vinery:trippy` and `everythingcopper:copper_poisoning` -> the HUD shows
+  the raw `effect.*` key. Search JEI for "Arrow of" -> the Intimidation arrows show a raw key. All three show a name
   once F1 is fixed.
-- [ ] **EF-02 JEED placeholders (F2):** JEI → Long Reach → the page reads "TODO: write a description for Long Reach."
-- [ ] **EF-03 Comfort (F3):** survival, saturation empty (AppleSkin), hurt, no Regeneration, eat Beef Stew → half a
+- [ ] **EF-02 JEED placeholders (F2):** JEI -> Long Reach -> the page reads "TODO: write a description for Long Reach."
+- [ ] **EF-03 Comfort (F3):** survival, saturation empty (AppleSkin), hurt, no Regeneration, eat Beef Stew -> half a
   heart every 4 s; no Slowness/Hunger/Weakness removal (`/effect give @s slowness` first, it stays).
-- [ ] **EF-04 Soul Cross (F3):** with Soul Cross, kill a cow (10 HP) → heal 0.5 HP; kill an iron golem (100 HP) → heal 5.
-- [ ] **EF-05 Luck once (F6, after the 2026-10-23 fix):** JEI → Potion of Luck → R: one awkward + four-leaf clover
+- [ ] **EF-04 Soul Cross (F3):** with Soul Cross, kill a cow (10 HP) -> heal 0.5 HP; kill an iron golem (100 HP) -> heal 5.
+- [ ] **EF-05 Luck once (F6, after the 2026-10-23 fix):** JEI -> Potion of Luck -> R: one awkward + four-leaf clover
   recipe on the brewing page and one per bottle type on Automatic Brewing; no strong luck recipe; Luck + fermented
-  spider eye gives nothing. Awkward + silverfish bottle → Bad Luck, + redstone → long Bad Luck.
-- [ ] **EF-06 Resilience = Knockback Resistance (F5):** drink Potion of Stability, get hit by a zombie → half knockback;
-  add Knockback Resistance (AM) → none. Strong Stability alone → none.
-- [ ] **EF-07 Caffeinated vs phantoms (F5):** stay awake 3+ nights drinking Black Tea before each night → no phantoms.
-- [ ] **EF-08 Shocked:** stand next to an active Tesla coil → you can't walk while Shocked.
-- [ ] **EF-09 Teleport direction (F3):** drink Chorus Wine five times on a flat field → you land in random directions,
+  spider eye gives nothing. Awkward + silverfish bottle -> Bad Luck, + redstone -> long Bad Luck.
+- [ ] **EF-06 Resilience = Knockback Resistance (F5):** drink Potion of Stability, get hit by a zombie -> half knockback;
+  add Knockback Resistance (AM) -> none. Strong Stability alone -> none.
+- [ ] **EF-07 Caffeinated vs phantoms (F5):** stay awake 3+ nights drinking Black Tea before each night -> no phantoms.
+- [ ] **EF-08 Shocked:** stand next to an active Tesla coil -> you can't walk while Shocked.
+- [ ] **EF-09 Teleport direction (F3):** drink Chorus Wine five times on a flat field -> you land in random directions,
   within 8 blocks.
-- [ ] **EF-10 Double Jump:** drink Clark Wine → jump height as with Jump Boost I; press jump in mid-air → second jump.
-- [ ] **EF-11 Sunny in JEI (F7):** search JEI for "Sunny" → no effect entry.
-- [ ] **EF-12 Passion Aloe Nectar (F8):** `/give @s abnormals_delight:passion_aloe_nectar` → the item shows the red
-  REMOVED line (`removedItems` doesn't unregister it); JEI search "nectar" / "Passion" → no Abnormals Delight
+- [ ] **EF-10 Double Jump:** drink Clark Wine -> jump height as with Jump Boost I; press jump in mid-air -> second jump.
+- [ ] **EF-11 Sunny in JEI (F7):** search JEI for "Sunny" -> no effect entry.
+- [ ] **EF-12 Passion Aloe Nectar (F8):** `/give @s abnormals_delight:passion_aloe_nectar` -> the item shows the red
+  REMOVED line (`removedItems` doesn't unregister it); JEI search "nectar" / "Passion" -> no Abnormals Delight
   entries; latest.log `[jeiRemove]` lists no recipe for it. Same for Cherry Cream Soda, Dune Platter, Yucca Gateau
   Slice.
 - [ ] **EF-21 Potion bundles on provider pages (2026-10-26):** `/reload`, JEI -> Regeneration effect page: the three
-  potion bundles show, drawn full (3 bottles) in the potion's colour, hover names the Regeneration bundle.
-- [ ] **EF-20 Slow Falling sources:** JEI → Slow Falling effect page → Red Wine and the potions, no Cherry Cream Soda.
-- [ ] **EF-13 Pack effect potions as fluid:** JEI fluid list → "Potion of Long Reach", "Potion of Magic Resistance" and
+  potion bundles show, drawn full (3 bottles) in the potion's color, hover names the Regeneration bundle.
+- [ ] **EF-20 Slow Falling sources:** JEI -> Slow Falling effect page -> Red Wine and the potions, no Cherry Cream Soda.
+- [ ] **EF-13 Pack effect potions as fluid:** JEI fluid list -> "Potion of Long Reach", "Potion of Magic Resistance" and
   "Potion of Intimidation" `create:potion` stacks exist.
-- [ ] **EF-14 Heal Aura hits undead:** eat Peach Jam near a zombie → the zombie takes damage every 3 s.
+- [ ] **EF-14 Heal Aura hits undead:** eat Peach Jam near a zombie -> the zombie takes damage every 3 s.
 - [ ] **EF-15 JEI item lists:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-00 the 83 line, no warning after the Xaero skip; SQ-OM-16 no empty ingredient, Health Boost lists the Vinery standard, Solaris and Stal Wine, Sunny none; Cherry Cream Soda still has no recipe, its bug stays open).* check `logs/latest.log` for `jeed_providers.js: 83 effect provider recipes` and no
   `jeedProvider` warnings. Then open these pages in JEI:
   - Rest: four Create Confectionery chocolates.
@@ -824,34 +824,34 @@ ingredient type.
   - Phantom Bane: the beacon and the four echo armor pieces.
   - Health Boost: the Vinery standard (banner), Solaris and Stal Wine.
   - No Minimap: a command block.
-- [ ] **EF-16 Potion carriers:** JEI → Regeneration. The potion bucket (three kinds), potion bundles (three kinds),
+- [ ] **EF-16 Potion carriers:** JEI -> Regeneration. The potion bucket (three kinds), potion bundles (three kinds),
   the IE potion bullet and PneumaticCraft gun ammo each show filled with a Regeneration potion.
-- [ ] **EF-17 Fixed descriptions:** JEI → Comfort reads "Heals half a heart every 4 seconds..."; Absorption says
+- [ ] **EF-17 Fixed descriptions:** JEI -> Comfort reads "Heals half a heart every 4 seconds..."; Absorption says
   "hearts", not "hearths"; Teleport says "random safe spot"; Travel Fatigue reads "Prevents fast travel."
-- [ ] **EF-18 Category colours:** `/give @s create_confectionery:bar_of_white_chocolate`, hover it → Rest is blue.
-  Hover the dragon shovel → Sensory Perception and Scared Still are red. In `config/creativeengineering-common.toml`,
-  delete the `create_confectionery:rest` line under `[effects]` and save → Rest goes red again with no restart.
-- [ ] **EF-19 Sunny stays hidden:** search JEI for "Sunny" → no effect entry (same as EF-11, after the config was
+- [ ] **EF-18 Category colours:** `/give @s create_confectionery:bar_of_white_chocolate`, hover it -> Rest is blue.
+  Hover the dragon shovel -> Sensory Perception and Scared Still are red. In `config/creativeengineering-common.toml`,
+  delete the `create_confectionery:rest` line under `[effects]` and save -> Rest goes red again with no restart.
+- [ ] **EF-19 Sunny stays hidden:** search JEI for "Sunny" -> no effect entry (same as EF-11, after the config was
   confirmed).
 
-- [ ] **EF-22 Intoxication icon:** drink a Beer → Intoxication's icon is on the HUD (top right) as well as in the inventory.
-- [ ] **EF-23 Food icons:** eat Cocoa Fudge and a Baklava slice → Speed and Haste icons on the HUD, no particles. Drink
-  Builder's Tea, a Farmer's Respite tea, eat Canned Pufferfish and an Immersive Weathering food → their effect icons show;
+- [ ] **EF-22 Intoxication icon:** drink a Beer -> Intoxication's icon is on the HUD (top right) as well as in the inventory.
+- [ ] **EF-23 Food icons:** eat Cocoa Fudge and a Baklava slice -> Speed and Haste icons on the HUD, no particles. Drink
+  Builder's Tea, a Farmer's Respite tea, eat Canned Pufferfish and an Immersive Weathering food -> their effect icons show;
   with the dragon set on, its Fire Resistance stays without an icon. Stand under an open-ended pipe spilling Builder's
-  Tea → Haste icon on the HUD.
-- [ ] **EF-24 Compound tooltip:** hover a Coffee → "When Applied:" lists Phantom Bane above the speed lines; a Stimulation
+  Tea -> Haste icon on the HUD.
+- [ ] **EF-24 Compound tooltip:** hover a Coffee -> "When Applied:" lists Phantom Bane above the speed lines; a Stimulation
   chocolate bar lists Refreshing and Sweetening; Clark Wine lists Jump Boost and One Mid-Air Jump.
-- [ ] **EF-25 JEED page:** JEI → Caffeinated effect → text ends "Compound of: Phantom Bane."; hover the icon → Phantom Bane
+- [ ] **EF-25 JEED page:** JEI -> Caffeinated effect -> text ends "Compound of: Phantom Bane."; hover the icon -> Phantom Bane
   under "When Applied:".
-- [ ] **EF-26 Swaps in tooltips:** hover a banana → Climbing (not Agility); a chorus jelly → Teleport.
-- [ ] **EF-27 Removed effects hidden:** JEI search "Resilience", "Restfulness", "Insomnia", "Power Outage", "Agility" →
+- [ ] **EF-26 Swaps in tooltips:** hover a banana -> Climbing (not Agility); a chorus jelly -> Teleport.
+- [ ] **EF-27 Removed effects hidden:** JEI search "Resilience", "Restfulness", "Insomnia", "Power Outage", "Agility" ->
   no effect entries; Flare spawn egg absent.
-- [ ] **EF-28 Phantoms after coffee:** drink Coffee, skip sleep 4 nights → no phantoms while Caffeinated lasts; after it
-  ends, Statistics → Time Since Rest restarted from 0.
-- [ ] **EF-29 Jellie Wine:** hover → four effect lines (Regeneration, Absorption, Resistance, Fire Resistance); drink → all four.
-- [ ] **EF-31 Double Jump with Jump Boost:** drink Clark Wine, then `/effect give @s minecraft:jump_boost 60 1` → jumps
+- [ ] **EF-28 Phantoms after coffee:** drink Coffee, skip sleep 4 nights -> no phantoms while Caffeinated lasts; after it
+  ends, Statistics -> Time Since Rest restarted from 0.
+- [ ] **EF-29 Jellie Wine:** hover -> four effect lines (Regeneration, Absorption, Resistance, Fire Resistance); drink -> all four.
+- [ ] **EF-31 Double Jump with Jump Boost:** drink Clark Wine, then `/effect give @s minecraft:jump_boost 60 1` -> jumps
   as high as Jump Boost II alone, and the mid-air jump still works.
-- [ ] **EF-30 Oxidized copper:** wear four oxidized copper pieces for 20 min → poisoned at least once; tooltip-free, Poison
+- [ ] **EF-30 Oxidized copper:** wear four oxidized copper pieces for 20 min -> poisoned at least once; tooltip-free, Poison
   icon only.
 - [ ] **EF-32 Phantom Bane skips one player only:** two players (or a bot) awake 4+ days at night in the open, the first
   in the player list with `/effect give <p1> better_beacons:phantom_bane 600`; within a few spawn passes phantoms come
@@ -865,7 +865,7 @@ ingredient type.
   `jeed_providers.js`' gear block to Equipment's `gear_jeed.js`. Paths in this writeup older than this line name the
   old places.
 - 2026-10-19: this writeup: table of all 140 effects (vanilla, 25 mods, the pack), counts, overlap groups, findings
-  F1 to F13, tests EF-01 to EF-14; `tools/effect_audit.py`. Behaviour read from decompiled jars and the Vinery and Brewin
+  F1 to F13, tests EF-01 to EF-14; `tools/effect_audit.py`. Behavior read from decompiled jars and the Vinery and Brewin
   port sources. No game code changed.
 - 2026-10-19: F9 fixed (magic_resistance.js header).
 - 2026-10-20: the ui/effects TODO rows.
@@ -894,4 +894,4 @@ ingredient type.
 ## Owner notes (scratchpad 2026-11-07)
 
 - Harmony effect: add to a lit or signal campfire, more sources (owner). Row `potions/effects #20`; Neapolitan's Harmony exists.
-- Copper gear: ensure it is waxable, waxing prevents copper poisoning; warning tooltip on oxidised gear is `ui/tooltips #14`. Row `potions/effects #21`.
+- Copper gear: ensure it is waxable, waxing prevents copper poisoning; warning tooltip on oxidized gear is `ui/tooltips #14`. Row `potions/effects #21`.

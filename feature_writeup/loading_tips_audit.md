@@ -47,7 +47,7 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
   id, text) plus the decision table and apply script (`audit_decisions.py`, `audit_apply.py`), and git holds the
   files themselves.
 - Quark's Nerf Mending and Dimension Locked Elytra were turned off on 2026-11-14 (owner), after this audit first
-  applied them; the Mending and elytra tips (54, 98) describe vanilla behaviour again.
+  applied them; the Mending and elytra tips (54, 98) describe vanilla behavior again.
 - **A later pass will change more tips** (owner, 2026-11-14). This audit fixed tips the pack makes wrong; a second
   pass, describing the pack itself, will override more of them with the pack's own facts, for example golden and
   gilded foods (tip 68) and ice melting near light (tip 87). Those tips are true but generic until then. That pass
@@ -77,7 +77,7 @@ The first tip keeps its id and takes the new text; the others go to `remove`.
 | 37 `axolotls_help_fight_guardians_and_grant` | 285 | Axolotls play dead to heal, and killing a mob one is fighting gives you Regeneration | same mob |
 | 42 `spyglasses_zoom_in_on_the_horizon` | 293 | Spyglasses, made from amethyst and copper, zoom in on distant things | recipe and use |
 | 43 `goats_can_ram_you_off_cliffs` | 214 | Goats can ram you off cliffs, and a Goat that rams a hard block drops a goat horn | same mob |
-| 44 `frogs_eat_small_slimes_and_magma_cubes` | 210, 211, 212, 213 | Frogs eat small Slimes for slimeballs and small Magma Cubes for froglight in the Frog's colour, set by its biome | five fragments of one feature |
+| 44 `frogs_eat_small_slimes_and_magma_cubes` | 210, 211, 212, 213 | Frogs eat small Slimes for slimeballs and small Magma Cubes for froglight in the Frog's color, set by its biome | five fragments of one feature |
 | 48 `pumpkins_need_space_to_grow` | 49 | Pumpkins and melons need a free dirt, grass or farmland block beside the stem to grow | sister crops |
 | 51 `bells_alert_villagers_to_raids` | 171 | Ring a bell, by hand or with an arrow, to send villagers indoors and make nearby raiders glow | same block |
 | 60 `blast_protection_reduces_explosion_damage_and` | 61, 62 | Protection, Fire, Blast and Projectile Protection exclude each other; each specific one guards best against its own damage | exclusive family |
@@ -90,7 +90,7 @@ The first tip keeps its id and takes the new text; the others go to `remove`.
 | 90 `water_cannot_be_placed_in_the_nether` | 91 | Water cannot be placed in the Nether, except in a cauldron | counter case |
 | 92 `sponge_blocks_soak_up_nearby_water` | 93 | A sponge soaks up to 256 water blocks; dry a wet one in a furnace or by placing it in the Nether | Quark Sponges Better (256, vanilla 64) |
 | 94 `conduits_require_a_prismarine_frame` | 273 | A conduit in a prismarine frame gives Conduit Power underwater, and a full frame makes it attack hostile mobs | same block |
-| 95 `beacons_require_a_pyramid_base` | 192, 304 | A beacon's pyramid size unlocks effects, a richer base block strengthens them, payment sets the range, glass colours the beam | Better Beacons base amplifier and payment range; three beacon fragments |
+| 95 `beacons_require_a_pyramid_base` | 192, 304 | A beacon's pyramid size unlocks effects, a richer base block strengthens them, payment sets the range, glass colors the beam | Better Beacons base amplifier and payment range; three beacon fragments |
 | 98 `elytra_let_you_glide_through_the_sky` | 270 | Elytra let you glide from a height; repair them with phantom membrane | same item (Quark Dimension Locked Elytra turned off 2026-11-14) |
 | 100 `shulker_boxes_are_portable_chests` | 101 | Shulker boxes keep their items when broken; craft them from shulker shells, dropped by Shulkers in End Cities | 101 was wrong (shells drop from Shulkers, not cities) |
 | 104 `silverfish_spawn_from_infested_blocks_and` | 186 | Silverfish come from spawners and from infested blocks, which look like stone but break fast | dup |
@@ -138,7 +138,7 @@ The first tip keeps its id and takes the new text; the others go to `remove`.
 
 | # | Before | After | Why |
 |---|---|---|---|
-| 3 | Gold tools mine faster than diamond, are easy to enchant, and naturally apply Fortune or Looting. Unfortunately they aren't very durable | Gold tools mine faster than diamond, enchant well and carry Fortune II or Looting II, but wear fast and mine only what iron can | Quark Gold Tools Have Fortune (level 2, harvest level 2); cut flavour 'Unfortunately'; adds the harvest limit |
+| 3 | Gold tools mine faster than diamond, are easy to enchant, and naturally apply Fortune or Looting. Unfortunately they aren't very durable | Gold tools mine faster than diamond, enchant well and carry Fortune II or Looting II, but wear fast and mine only what iron can | Quark Gold Tools Have Fortune (level 2, harvest level 2); cut flavor 'Unfortunately'; adds the harvest limit |
 | 4 | Beds explode when used outside the Overworld | Beds set your spawn in the Overworld and explode in any other dimension | adds the use, sister of the respawn anchor tip |
 | 13 | Zombies burn in sunlight | Zombies, Skeletons and Phantoms burn in sunlight; a helmet, water or shade saves them, and Husks never burn | counter cases (helmet, water, Husk) and sister mobs |
 | 14 | Creepers are afraid of cats | Creepers run from cats and Ocelots, and Phantoms keep away from cats | sister cases |
@@ -323,7 +323,7 @@ The tip is applied as written; check it in game or in code, and fix the tip if t
 | 19 | Milk removes all potion effects | milk vs Tipsy (alcohol.md 2.4 says milk removes one Tipsy level; doc may be old) |
 | 50 | Campfires place unlit and cook four items; rain puts one out unless a coal or charcoal block is under it | campfire kindling (CT-098) will change this tip |
 | 60 | Protection, Fire, Blast and Projectile Protection exclude each other; each specific one guards best against its own damage | Allurement may relax protection exclusivity |
-| 95 | A beacon's pyramid size unlocks effects, a richer base block strengthens them, payment sets the range, glass colours the beam | Better Beacons payment range and base amplifier wording |
+| 95 | A beacon's pyramid size unlocks effects, a richer base block strengthens them, payment sets the range, glass colors the beam | Better Beacons payment range and base amplifier wording |
 | 106 | Wandering Traders offer exotic items | wandering_trader changes and MCA inn traders |
 | 156 | Raw fish heals injured cats | Cozy's Improved Cats healing foods |
 | 302 | Wither Skeletons spawn only in Nether Fortresses and sometimes drop their skull | Wither Skeleton spawns outside fortresses (YUNG's, worldgen) |

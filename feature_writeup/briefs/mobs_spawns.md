@@ -191,7 +191,7 @@ Now and then a single villager wanders the open countryside: plains, temperate h
 
 ### Gotchas
 - Villagers count toward the creature cap (10 per player area); a lone villager is persistent once spawned.
-- A villager far from a village has no bed or job site and is zombie food at night; that is the flavour, but MCA may
+- A villager far from a village has no bed or job site and is zombie food at night; that is the flavor, but MCA may
   try to give it a home (it can claim beds in player bases). Check in play.
 - MCA's `overwriteOriginalZombieVillagers` is also on; nothing to do here.
 
@@ -226,7 +226,7 @@ Blocky Siege, Villages & Pillages and Unwrecked Ships jars):
   villager 3, clay golem 3; `ModLists.PRISONER_LIST`, decompiled): no allays without a mixin.
 - No biome spawner (spawns_by_biome.md 7: "pillager outposts, woodland mansions (placed)"). The allay is category
   creature; it has no `SpawnPlacements` entry, so placement is `NO_RESTRICTIONS` and the rule always passes (vanilla
-  behaviour from memory; the dump's section 6 lists only mobs with a spawner, so check `spawns.json` `entities` after
+  behavior from memory; the dump's section 6 lists only mobs with a spawner, so check `spawns.json` `entities` after
   adding the rule).
 
 ### Build

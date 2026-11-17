@@ -60,7 +60,7 @@ reject \[cdevtest\] .*done=0
 ## CQ-WC-04 | watering can by hand (HNH-26, HNH-28, HNH-29)
 @group client
 @commands HNH-26, HNH-28, HNH-29 by hand: fill at water, charged use on a 3x3 of young wheat, campfire
-@pass one use = water -1, fertiliser -1 (not -2), 3x3 grows; campfire unlit
+@pass one use = water -1, fertilizer -1 (not -2), 3x3 grows; campfire unlit
 @fails double application (client claim not working)
 @from batches/r1101/c1_client.qb
 > item replace entity @s hotbar.0 with hearthandharvest:watering_can

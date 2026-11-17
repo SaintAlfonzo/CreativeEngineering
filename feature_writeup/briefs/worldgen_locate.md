@@ -59,7 +59,7 @@ only where generation would certainly say no (locate.md 1, 4).
 ### Gate (decide before building)
 
 1. Rerun the census on 1.0.9 (locate #1: LO-03 + LO-14). On a scratch server: `/cwglocate census 96` on a fresh world,
-   seed 8675309, centre 2144 -2592 as in Phase 6. Read `kubejs/exported/worldgen/locate_census.json`:
+   seed 8675309, center 2144 -2592 as in Phase 6. Read `kubejs/exported/worldgen/locate_census.json`:
    `missReasons` per structure.
 2. Build only if `slot_taken + surface_check + earth_fill + priority` is a large part of all misses, say over half,
    **or** if the rare metas from `structures/rates-and-groups #6` (fortified metas, bastille) still time out at 120 s.
@@ -97,7 +97,7 @@ only where generation would certainly say no (locate.md 1, 4).
      `LocatePrediction.placementRejects` builds, `:63-66`) whose placement `isStructureChunk` at the chunk: replay the
      set. If any replay's `Predicted.structure() == wanted`, return false.
    - **Run the replay at generation depth, not prediction depth.** `predictSet` runs inside `isolated()`, which adds 1 to
-     `DEPTH`, and `filter` skips its neighbour checks once `DEPTH >= MAX_DEPTH` (3, `:92, :500`). A replay at depth 1
+     `DEPTH`, and `filter` skips its neighbor checks once `DEPTH >= MAX_DEPTH` (3, `:92, :500`). A replay at depth 1
      sees one level less than real generation (depth 0), so its answer can differ. Use a variant that saves the
      thread-locals like `isolated()` but leaves `DEPTH` alone. **Don't read or write `CACHE` under the set's key**:
      entries there were computed at depth 1 or more. Cache the replay's own answer in the vanilla `featureChecks` only.
@@ -147,12 +147,12 @@ against.
 
 ### Gotchas
 
-- **Exactness is bounded by generation's own determinism.** Neighbour predictions in real generation read `CACHE`
+- **Exactness is bounded by generation's own determinism.** Neighbor predictions in real generation read `CACHE`
   entries computed at whatever depth came first. Meta layouts can differ between JVM runs (LO-02: village_desert and
   village_savanna a few blocks apart). Within one run the replay and the real chunk see the same state, unless the
   cache evicts in between. The census false-negative column is the only proof. Run it twice, with different origins.
 - **Cost moves onto the locator threads.** A replay runs jigsaw assembly, earth-fill terrain sampling (62 % of the
-  pack's worldgen CPU in LO-10) and neighbour predictions. That is cheaper than a chunk load: no IO, no ticket, no
+  pack's worldgen CPU in LO-10) and neighbor predictions. That is cheaper than a chunk load: no IO, no ticket, no
   other sets, no proto-chunk saved. Every miss load today also writes a STRUCTURE_STARTS proto-chunk to the region
   files, and the replay doesn't. Run it only after A and B said "maybe".
 - **Thread safety.** `PlacementPriority` state is ThreadLocal or synchronized (`CACHE`, `SETS`). EarthFill and MetaSlots
@@ -199,8 +199,8 @@ Decision 5 and option B in locate.md 3.7.
     applies, assuming the queue is the same; this is inferred from `GeneratedFullDataSourceProvider`, not traced to
     `DhLitWorldGenRegion`.
 - **Chunky 1.3.38 is installed** (`pack/MODLIST.md:72`). `config/chunky/config.json` has `continueOnRestart` false.
-  `config/chunky/tasks/minecraft/overworld.properties` and `the_end.properties` are leftover cancelled tasks from a dev
-  run (centre 1000 -800, radius 500), so they do nothing.
+  `config/chunky/tasks/minecraft/overworld.properties` and `the_end.properties` are leftover canceled tasks from a dev
+  run (center 1000 -800, radius 500), so they do nothing.
 - **DH config** (`config/DistantHorizons.toml`, shipped to both sides):
   - `distantGeneratorMode = "FEATURES"` (`:234`), `enableDistantGeneration = true` (`:271`),
     `enableServerGeneration = true` (`:32`), `maxGenerationRequestDistance = 4096` (`:27`).

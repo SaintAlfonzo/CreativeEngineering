@@ -3,14 +3,14 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/LCA.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title CQ-LCA Licence fixes: compartment art built on the client, vanilla Resistance icon, 2026-11-05 ([creative_delight.md](../creative_delight.md) 40, [creative_brewing.md](../creative_brewing.md) 9.1)
+@@title CQ-LCA License fixes: compartment art built on the client, vanilla Resistance icon, 2026-11-05 ([creative_delight.md](../creative_delight.md) 40, [creative_brewing.md](../creative_brewing.md) 9.1)
 @@date 2026-11-05
 @@jars creativecommon creativedelight
 @@sources feature_writeup/creative_delight.md feature_writeup/creative_brewing.md
 @@text
 @@text Not run. Built 2026-11-05 (Creative Delight 1.1.0 00:21, Creative Brewing 1.0.0), NOT installed. Offline check passed:
 @@text the Java recipes reproduce 66 of the 68 removed PNGs byte for byte from the installed jars (scratch harness; the two
-@@text vertical treated wood racks differ in 30 / 20 pixels between equally bright colours).
+@@text vertical treated wood racks differ in 30 / 20 pixels between equally bright colors).
 @@text
 @@table
 ## CQ-LCA-01
@@ -25,7 +25,7 @@ shell grep -n "\[compartment art\]" logs/latest.log | cut -c1-240
 ## CQ-LCA-02
 @group client
 @commands Place or JEI-view the 19 spice racks, 19 tool racks, 19 fruit baskets (one of each wood: oak, crimson, twisted, dreamwood, smoked, treated wood, vertical treated wood, rubberwood, ancient, driftwood)
-@pass textured like before (the art in `textureswapper/rack/`), no missing texture; tool rack hooks grey
+@pass textured like before (the art in `textureswapper/rack/`), no missing texture; tool rack hooks gray
 @fails `ArtRecipes.PLANKS` path, `TOOL_RACK_HOOKS`
 @reviewed 2026-11-16
 > fill 0 100 0 10 100 6 minecraft:stone
@@ -70,7 +70,7 @@ look textured like the art in textureswapper/rack/ (one row per kind, 10 woods),
 @group client
 @commands Duck nest, goose nest (block and item), emu nest with eggs, duck and goose egg crates (top and side), duck and goose eggs in nests
 @pass as before (nests.md 4 table), no missing texture
-@fails `ArtRecipes.INCUBATION` colour maps
+@fails `ArtRecipes.INCUBATION` color maps
 @reviewed 2026-11-16
 > fill 0 100 10 8 100 12 minecraft:stone
 > setblock 0 101 11 creativedelight:duck_nest

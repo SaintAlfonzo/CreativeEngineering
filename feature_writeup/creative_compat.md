@@ -5,7 +5,7 @@ Status: **carved 2026-11-01, installed; scratch SQ-CMP queued, nothing booted.**
 
 Written for: the owner and agents working on the split. Own mod `creativecompat` (development/creativeCompat,
 `creativecompat-1.0.0.jar`, side both): the pack's tweaks to third-party mods that have no wider system of their own.
-Every other Creative jar requires it (Common <- Compat <- content jars). Same behaviour as before the carve.
+Every other Creative jar requires it (Common <- Compat <- content jars). Same behavior as before the carve.
 
 ## 0. At a glance
 
@@ -98,7 +98,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
-and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colours and a Bedspreads / Elytra banner.
+and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
 
 ## 5. History
 
@@ -109,13 +109,13 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colours a
   (creative_split.md 7.9 step 1); Compat 33 -> 32 common mixins. Tests SQ-CFR.
 - 2026-11-04 (creative_split.md 7.14): from Creative Common, the Create: Dreams & Desires jetpack tooltip null-level
   guard (`JetpackItemTooltipMixin`) and the falling-block water splash (`FallingBlockWaterSplashMixin`): third-party
-  and vanilla behaviour fixes, not interface or perf. Common keeps its interface, API and engine/perf rows (2.4).
+  and vanilla behavior fixes, not interface or perf. Common keeps its interface, API and engine/perf rows (2.4).
 - 2026-11-14 to 2026-11-15: pass-through blocks (blockrunner.md 3.10): `surface/Pass*`, 13 new mixins (`WallSlideMixin`
   renamed `InsideBlocksMixin`), `[surface.passthrough]`, `[surface.wthit] passThrough`, `[debug.passthrough]`; the
   tier tags `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js` ship in the jar from the 2026-11-15 00:40
   build; `[leaf_piles]` and `LeafPileSlowMixin` removed (migration above). Built, not installed.
 
-## 6. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
+## 6. License audit (2026-11-04, plan_cb_publish.md Step 2)
 
 Audit of `creativecompat-1.0.0.jar` (23:34). Summary row in [creative_brewing.md](creative_brewing.md) 9.2. mods.toml
 `GPL-3.0-only`, `creativecompat-LICENSE.txt` present, no NOTICE.
@@ -123,17 +123,17 @@ Audit of `creativecompat-1.0.0.jar` (23:34). Summary row in [creative_brewing.md
 The 950 painting files (475 PNG + 475 JSON from `gen_immersive_paintings.py`; removed 2026-11-05, 6.2): every PNG is another mod's or vanilla's
 art upscaled (474 exact after downscaling, one stretched). None is own art; each JSON names the artist.
 
-| Part | Source licence | Verdict |
+| Part | Source license | Verdict |
 |---|---|---|
 | paintings `rebirth_paintings` (250) | Academic Free License 3.0 (GPL-incompatible per FSF) | fix (notice) or out of the jar |
 | paintings `toomanypaintings` (65) | MIT | fix (notice) |
-| paintings `darkpaintings` (30) | LGPL 2.1 | fix (notice + licence text) |
+| paintings `darkpaintings` (30) | LGPL 2.1 | fix (notice + license text) |
 | paintings `alexsmobs` (2), `cccbridge` (1, Apache-2.0), `create_things_and_misc` (1, AFL 3.0) | as named | fix (notice) |
 | paintings `paintings_pack1` (49) | CC BY-NC 3.0 | remove |
-| paintings `handcrafted` (28) | Terrarium Licence | remove |
+| paintings `handcrafted` (28) | Terrarium License | remove |
 | paintings `minecraft_style_paintings` (12) | none stated (ARR) | remove |
 | paintings `supplementaries` (1) | ARR | remove |
-| paintings `buzzier_bees`, `clayworks`, `neapolitan`, `upgrade_aquatic` (6) | Abnormals licence (URL only, not read) | remove unless it allows |
+| paintings `buzzier_bees`, `clayworks`, `neapolitan`, `upgrade_aquatic` (6) | Abnormals license (URL only, not read) | remove unless it allows |
 | paintings `minecraft` (30) | Mojang | remove |
 | elytra banner and bedspread textures (73) | derived from Botania, IE (Blu's), Alex's Mobs (LGPL), Buzzier Bees banner patterns | built 2026-11-06: built at load from the installed jars, none ship (6.3) |
 | MineColonies banner textures (25) | MineColonies not in the pack; leftover output | removed 2026-11-06 (6.3) |
@@ -147,7 +147,7 @@ art upscaled (474 exact after downscaling, one stretched). None is own art; each
 Fixes: TODO `licence/compat #1` (paintings), `#2` (banner textures, MineColonies leftovers), `#3` (cardboard notice,
 moss, TrashSlot overwrite).
 
-2026-11-05: `NOTICE-thirdparty.txt` added (in the jar as `creativecompat-NOTICE-thirdparty.txt`): credit and licence for
+2026-11-05: `NOTICE-thirdparty.txt` added (in the jar as `creativecompat-NOTICE-thirdparty.txt`): credit and license for
 every painting source and banner-pattern source, the Design and Decor MIT notice, and the full MIT, Apache 2.0, AFL 3.0,
 LGPL 2.1 and LGPL 3 texts. Credit does not grant redistribution: the remove rows above stand (`licence/compat #1`, `#2`).
 
@@ -160,23 +160,23 @@ source mod is installed on both sides ("both" in mod_sides.md), and each jar car
 Compat can build the set in memory at load from the installed jars (the same idea as CD 40.1, as a data pack). The
 dedicated server jar has no vanilla textures, so vanilla paintings can't be read there.
 
-| Source | Paintings | Licence | Ship in a datapack | Build from the installed jar |
+| Source | Paintings | License | Ship in a datapack | Build from the installed jar |
 |---|---|---|---|---|
 | rebirth_paintings | 250 | Academic Free License 3.0 | yes, with notice; keep out of the GPL jar (AFL is GPL-incompatible) | yes |
 | toomanypaintings | 65 | MIT | yes, with notice | yes |
-| darkpaintings | 30 | LGPL 2.1 | yes, with notice and licence text | yes |
+| darkpaintings | 30 | LGPL 2.1 | yes, with notice and license text | yes |
 | alexsmobs | 2 | LGPL | yes, with notice | yes |
 | cccbridge | 1 | Apache 2.0 | yes, with notice | yes |
 | create_things_and_misc | 1 | Academic Free License 3.0 | yes, with notice (not in the GPL jar) | yes |
 | paintings_pack1 | 49 | CC BY-NC 3.0 | only non-commercial with credit; CurseForge rewards make it doubtful | yes |
-| handcrafted | 28 | Terrarium Licence | no | yes |
+| handcrafted | 28 | Terrarium License | no | yes |
 | minecraft_style_paintings | 12 | none stated | no | yes |
 | supplementaries | 1 | ARR | no | yes |
-| buzzier_bees 1, clayworks 1, neapolitan 3, upgrade_aquatic 1 | 6 | Abnormals licence (not read) | no until read | yes |
+| buzzier_bees 1, clayworks 1, neapolitan 3, upgrade_aquatic 1 | 6 | Abnormals license (not read) | no until read | yes |
 | minecraft | 30 | Mojang | pack-folder datapack only (low, 9.3 of creative_brewing.md), never a published jar | single player only (no textures in the server jar) |
 
 Totals: 349 can ship with notices; 96 can't ship (49 of them NC-doubtful); all 445 modded ones can be built from the
-installed jars, which needs no notices and no licence reading. Vanilla's 30: drop from the set, or keep in a pack-folder
+installed jars, which needs no notices and no license reading. Vanilla's 30: drop from the set, or keep in a pack-folder
 datapack.
 
 ### 6.2 Owner pick (2026-11-05; TODO `licence/compat #1`)
@@ -233,7 +233,7 @@ Status: **built 2026-11-06 13:17, NOT installed.** `TrashSlotGuiHandlerMixin` no
 | Spectator: previous screen's slot cleared | `@Redirect` of `Player.isSpectator()`, clears when true |
 | Server without TrashSlot (first screen): previous slot cleared | `@Inject` at the `sentMissingMessage` write |
 
-Behaviour is the same as the overwrite. The one path that differs in principle: TrashSlot builds the slot component only
+Behavior is the same as the overwrite. The one path that differs in principle: TrashSlot builds the slot component only
 when the settings are not `NONE`, the overwrite always did; `settingsFor` never returns `NONE`, so the outcome is equal.
 The `onMouseClick`, `runKeyBindings` and `onScreenDrawn` redirects are unchanged. Tests: CQ-TSL-01, -02 (with the
 [trashslot.md](trashslot.md) 7 list).

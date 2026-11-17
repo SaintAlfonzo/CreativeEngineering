@@ -53,7 +53,7 @@ about 20 mod configs with their own loot knobs.
 | Post-roll pass + `/loottuning` | LootJS `LootType.CHEST` modifier in `05_tuning.js` | DEPLOYED; nothing logged or tested yet |
 | PneumaticCraft / Lightman chest loot off at the source | `pneumaticcraft-common.toml`, `lightmanscurrency-common.lcconfig` | DEPLOYED 2026-09-27, guarded by bans |
 | LootJS-only scripts + `global.LOOT` | `00_lib.js`, `10`-`40`, `99_debug.js` | DEPLOYED as scaffolding (commented examples of LootJS-only edits) |
-| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-11-05 22:44 via `/dumpall` (12,931 live tables). Two tables can't be serialised and are skipped with a warning: `farmersrespite:blocks/kettle` (custom copy function with no serializer), `myrtrees:blocks/wooden_bucket` (block-state condition on a missing property). The Brewin' port's keg serialises since the port |
+| `/dumploot` | `_lib/loot_dump.js` | Works; last run 2026-11-05 22:44 via `/dumpall` (12,931 live tables). Two tables can't be serialized and are skipped with a warning: `farmersrespite:blocks/kettle` (custom copy function with no serializer), `myrtrees:blocks/wooden_bucket` (block-state condition on a missing property). The Brewin' port's keg serializes since the port |
 | Census (this writeup's numbers) | `tools/loot_census.py` -> `loot_census.md` | BUILT; re-run 2026-10-26 (TODO `loot/lootjs-layer #3`, done): 12,342 distinct tables, 472 chest tables; the section 2 numbers below are still the 2026-10-02 run. It lists 1 "unindexed" table, `botania:inject/village_chest`: the pool the pack's own `restoreInjection` puts back, which the generator ignores on purpose |
 | Lootr container swaps | patcherMod | See [structure_tuning.md](structure_tuning.md) 3.6 / ST-14 |
 | Loot catalog (every container table entry by entry, structures, hand-placed containers) | `tools/loot_breakdown.py` -> [loot_catalog/](loot_catalog/README.md) | BUILT 2026-10-03: 383 tables in 47 namespaces, 963 hand-placed containers; read-only reference for writing replacement tables |
@@ -472,7 +472,7 @@ is last) copies the members of every tag a rule names. It also reads during Kube
 re-run (see `tag_helper.js`). If the capture didn't run, the runtime falls back to the registry's bound tags (last
 reload's; empty on a fresh start) and warns. Two meta tags in `tags/loottags.js`:
 
-- `#creativeworldgen:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colours follow) + the chalk
+- `#creativeworldgen:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colors follow) + the chalk
   box. `L.frequency(i.t_loot_chalk, 0.5)`: 8 of its 17 members show up in chest loot.
 - `#creativeworldgen:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
   23 plain `golden_*` foods (the enchanted ones and the notch apple are left out as the rare tier). Only the golden

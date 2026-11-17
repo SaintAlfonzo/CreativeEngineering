@@ -40,7 +40,7 @@ directly; nothing regenerates this file.
 - **Item**: name and id. Every food of the family's types in [food_types.json](../kubejs/generation_scripts/food/food_types.json)
   is listed, including the ones that will never be canned. Sliced forms are folded into their whole item's row.
 - **Can**: the can's display name (can differ from the input: Cactus Flesh -> Canned Cactus Flesh, pie slices -> pie filling).
-  Several items can share one can (bell pepper colours, bananas, hoglin plates).
+  Several items can share one can (bell pepper colors, bananas, hoglin plates).
 - **Alt input (sliced)**: the sliced form, and whether the can's recipe takes it (`Raw Chicken Cuts: no`).
 - **Impl**: the can item is registered (cans.js, the generated block, or a reused Canned Goods can).
 - **Texture**: the can has its own sprite (a reused Canned Goods can, or a sprite from `textureswapper/canned/newcan`).
@@ -1215,7 +1215,7 @@ Settled 2026-10-20. "Decided" means the rule is fixed; none of it is built yet e
 |---|---|---|
 | Pumpkin | Fruit: moved to canning.js's raw fruit section, 3 servings, 4 slices or 3 + sugar or honey (recipe id `canned_pumpkin_sugar`, was `canned_pumpkin_salt`). Slices only: the whole pumpkin is a block, not a food | BUILT 2026-10-20, not run in game |
 | White strawberries | Same ratio as normal strawberries (the old 3 / 2 + sugar), with a much higher boost to the per-serving nutrition and saturation (raw item is 5 hunger, 0.05). Numbers set 2026-10-21 from the audit: own serving 7 hunger, 5 saturation points (Fruit Meal 5 / 3), 3 servings: in -> out 140% hunger (the family's usual is 125%, normal strawberries 83%) | BUILT 2026-10-21, not run in game |
-| Bananas | Merged: Alex's Mobs bananas stay out of the can. Any behaviour or recipe the Alex's Mobs banana had (can, slices) is replicated for the Neapolitan banana | decided, not built |
+| Bananas | Merged: Alex's Mobs bananas stay out of the can. Any behavior or recipe the Alex's Mobs banana had (can, slices) is replicated for the Neapolitan banana | decided, not built |
 | Raw meat "half can" | Was: a slice recipe that needed more than 8 items took 8 and made a can with fewer servings (8 Raw Chicken Cuts -> 2/4). Removed: no recipe makes a partly full can ([4.2](#slice-family-rule)) | superseded 2026-10-20 |
 | Sliced and whole meats | Every can whose whole item and slice are both edible takes either, in the same slots at the whole item's count ([4.2](#slice-family-rule)). Slicing first is the 2x+ boost: one whole item cuts into 2 or more slices | BUILT 2026-10-20, not run in game |
 | Partial cans as pie input | Not allowed. Filling + pie crust -> pie requires a full filling can; an opened can no longer makes a pie (NCH `cans { whole }`: the recipe's result checks `CanServings.isPartial`) | BUILT 2026-10-21, not run in game (CP-23) |
@@ -1933,7 +1933,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 - 2026-10-13: written. Same day: removed 11 raw cans, split White Strawberries into its own can, renamed Canned Cactus
   to Canned Cactus Flesh (id `canned_cactus_flesh`) and the item Cactus Chunk to Cactus Flesh.
 - 2026-10-13: newcan sprites deployed (5.1): 19 hand-written cans, 3 reused and 6 unused Canned Goods cans. Texture
-  column checked against the sprites: added the bell pepper colour rows and the Alex's Mobs banana (they share a
+  column checked against the sprites: added the bell pepper color rows and the Alex's Mobs banana (they share a
   textured can) and the drawn-but-unbuilt raw cod, raw salmon, tropical fish, chorus fruit. Not checked in game (CP-06).
 - 2026-10-13: every remaining `x` row built through gen_can_types.py (raw fruit, shulker, raw fish, hazard, special,
   cookies, cooked veggie/meat, pastas, pie, feast, drink), the 15 implemented `/` cans removed (cooked patties, bacon,

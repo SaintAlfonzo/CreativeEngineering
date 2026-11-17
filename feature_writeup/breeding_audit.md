@@ -153,7 +153,7 @@ Floral Enchantment `*_bush` and `dancing_sunflower` are vine / own classes (not 
 `WineBottleBlock` (a drink, not a plant). F-B7 stays closed (owner 2026-11-10: no tag needed).
 
 **Plant-like pack blocks in no flower tag** (candidates, need a look at the block class to confirm):
-Botania shiny flowers (16 colours), `buzzier_bees:four_leaf_clover` (item only), `vinery:creepers_crush`,
+Botania shiny flowers (16 colors), `buzzier_bees:four_leaf_clover` (item only), `vinery:creepers_crush`,
 `fireflybushport:firefly_bush` (a `FlowerBlock`, no tags), Floral Enchantment: `dancing_sunflower` and the 17 `*_bush`
 variants of vanilla flowers, Upgrade Aquatic pickerelweed (aquatic, leave out), Botania black lotus and blacker lotus
 (Botania items, not placed). Floating flowers and the `*_basket` blocks are decoration and stay out.

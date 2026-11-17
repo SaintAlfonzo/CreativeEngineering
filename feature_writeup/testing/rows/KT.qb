@@ -116,7 +116,7 @@ bootreject (?i)mixin.*(CfbFridgePlaceMixin|CfbFridgeRendererMixin)|(CfbFridgePla
 ## CQ-KT-29 | double fridges drawn joined
 @group client
 @commands setblock pairs facing south: a joined 1-tall pair, a joined 2-tall pair, an unjoined pair (same door side); KT-29 by hand
-@pass joined pairs: no gap or grey seal between them, handles meet in the middle, hinges on the outer edges, the 2-tall top boxes meet; the unjoined pair keeps its gap; no checker texture
+@pass joined pairs: no gap or gray seal between them, handles meet in the middle, hinges on the outer edges, the 2-tall top boxes meet; the unjoined pair keeps its gap; no checker texture
 @fails nothing joined: `double fridges are drawn apart` in latest.log (fridge_join_* models missing) or the wrapper not on (FridgeTopFill.wrap); door strip missing only: `CfbFridgeRendererMixin`
 @jars creativedelight
 @draft no batch holds this row yet

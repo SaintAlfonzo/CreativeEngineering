@@ -52,7 +52,7 @@ extensions" below): `L.define` (a new table from pools), `L.addRef` (a `loot_tab
 3. **Content on top:** #11 book tiers (also the durable fix for #10), #5 cans, #6 MCA items, #12 azalea. One
    session; they share the "define a small sub-table, `addRef` it into a table group" pattern.
 4. **#10:** FIXED 2026-11-01 ([archery.md](../archery.md) F9): no table names the three enchantments and the random
-   functions honour the 1.0.9 override; the books came from Dynamic Villager Trades librarians and Lightman's Currency
+   functions honor the 1.0.9 override; the books came from Dynamic Villager Trades librarians and Lightman's Currency
    cashiers. The NEA mixins now also make the three enchantments non-tradeable (`isTradeable`, patcherMod built, not
    installed); other book trades stay. In-game check AR-14 left; #11 stays the durable loot-side guard.
 5. **#1 comprehensive tree + #2 island folding:** last, a project of its own. #2 is a subset of #1 (recommend
@@ -268,8 +268,8 @@ Chalk rarer overall, and where it does show up, mostly in libraries and undergro
    JSON in 07_rules.js lines 92-95. The pool is the pack's own (only where goldenfood overrides), so this is exact and
    village-only. Village chalk per chest: ~17% -> ~8%.
 2. Libraries up: `L.addPool(LIBRARIES, { rolls: 1, entries: [{ type: 'minecraft:loot_table', name: 'chalk:chests/dungeon_chalk_loot' }] })`
-   (one extra roll each; ~17% per chest at x0.5). Use `village_chalk_loot` instead if the coloured chalks fit libraries
-   better (it has 7 colours; dungeon has 3 + boxes).
+   (one extra roll each; ~17% per chest at x0.5). Use `village_chalk_loot` instead if the colored chalks fit libraries
+   better (it has 7 colors; dungeon has 3 + boxes).
 3. Underground up: the same `addPool` into the Underground group except the two that already roll it
    (`simple_dungeon`, `abandoned_mineshaft`). Optionally a second `dungeon_chalk_loot` pool in those two.
 4. Keep the global `L.frequency(i.t_loot_chalk, 0.5)` (lowers everything, including the new pools) or drop it to 0.35
@@ -591,7 +591,7 @@ minable, emeralds, tools, food, building, rare random; blacksmith / armorer).
 - **Tree layout** (the row's open decision): recommend `creativeengineering:loot/container/<setting>/<role>/<tier>`
   with setting in {village, ocean, underground, nether, end, ruin, camp}, role = profession or room, tier in
   {mediocre, treasure}; categories under `container/basic/*`.
-- **Keep mod-specific loot** (Philip's Ruins relics, YUNG's flavour): recommend a leaf may reference the mod's own
+- **Keep mod-specific loot** (Philip's Ruins relics, YUNG's flavor): recommend a leaf may reference the mod's own
   table as one pool ("reuse existing tables").
 - **JSON vs JS for the tree:** JSON + dict keys (recommend; editable, generator can draft it).
 
@@ -626,7 +626,7 @@ than from the file.
 ### Decisions
 - **Which to fold** (the row's decision): recommend all of A1 / B house-and-room tables (SimplyHouses, Beautify
   botanists, Monobank village vaults, T&T exclusives) map to the matching village nodes; keep YUNG's / Better Desert
-  Temples tomb / pharaoh and MES as their own leaves (flavour). Merge this row into #1.
+  Temples tomb / pharaoh and MES as their own leaves (flavor). Merge this row into #1.
 
 ---
 

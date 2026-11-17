@@ -44,7 +44,7 @@ jars as resource donors, 4.8)**
 | In-game tests | VB-01 to VB-98 drafted (8; VB-95 to VB-98 = village houses, section 13); in-game testing is the user's. PASSED 2026-10-20: VB-73, VB-74, VB-81 to VB-83, VB-87 to VB-89, VB-91 (10.18) |
 
 - **Source jars:**
-  - Ours: `mods/letsdo-vinery-forge-1.3.10.jar` (Forge 1.19.2, needs `doapi-1.1.0b`). Behaviour reference:
+  - Ours: `mods/letsdo-vinery-forge-1.3.10.jar` (Forge 1.19.2, needs `doapi-1.1.0b`). Behavior reference:
     [vinery.md](vinery.md).
   - Target: `DecompiledMods/letsdo-vinery-fabric-1.5.5/` (Fabric, Minecraft 1.21.1, needs Architectury 13, Cloth Config
     15 and Foundation 1.0.1, which is bundled at `META-INF/jars/foundation-fabric-1.0.1.jar`).
@@ -141,7 +141,7 @@ The machines, wine aging, effects, wood set and decoration all change, and a lot
 | | 1.3.10 | 1.5.5 |
 |---|---|---|
 | Slots | 0 wine bottle, 1-4 ingredients (juice is an ingredient item), 5 output | 0 juice input, 1-3 ingredients, 4 wine bottle, 5 output |
-| Juice | an ingredient that gets used up | Pouring juice into slot 0 turns each bottle into **25 juice units** (setting `maxFluidIncrease`). The barrel holds up to **100** (`maxFluidLevel`) of **one juice type** (`red_general`, `white_general`, `{red,white}_{savanna,taiga,jungle}`, `apple`). The empty wine bottles go to slot 4 (or drop on top). Sneak-right-click with an empty hand empties the juice. A dripping tap shows the juice colour |
+| Juice | an ingredient that gets used up | Pouring juice into slot 0 turns each bottle into **25 juice units** (setting `maxFluidIncrease`). The barrel holds up to **100** (`maxFluidLevel`) of **one juice type** (`red_general`, `white_general`, `{red,white}_{savanna,taiga,jungle}`, `apple`). The empty wine bottles go to slot 4 (or drop on top). Sneak-right-click with an empty hand empties the juice. A dripping tap shows the juice color |
 | Recipe | ingredients only | `juice {type, amount}` + 1-3 ingredients + `wine_bottle.required`. The amount is in units, so `red_wine` needs 10 units: 2.5 wines per juice bottle |
 | Time | 1800 is in the code but never used; the real time is about 50 ticks and becomes 0 after a reload (vinery.md 2.3) | **6000 ticks** (setting `totalFermentationTime`) |
 | Output | stalls until slot 5 is empty (the pack's `FermentationBarrelStackOutputMixin` fixes that) | stacks on its own (`fits()`); the pack mixin is no longer needed |
@@ -199,7 +199,7 @@ except chorus (10), creepers crush (100) and mellohi (1).
 
 | Thing | 1.3.10 | 1.5.5 |
 |---|---|---|
-| Grapevine Pot | no block entity; 6 grapes, 3 landings on it, 2 juice bottles | block entity; still 6 grapes (one type only now, where the first grape used to set the type) and 3 per bottle. It takes **12 stomps** (`grapevinePotStomps`), and an entity with 15 armor or more counts 10% more (`grapevinePotHeavyArmorBonus`). Coloured splash particles. Breaking an unstomped pot drops its grapes. **Pack (7.14):** 12 grapes, 4 stomps, 4 bottles |
+| Grapevine Pot | no block entity; 6 grapes, 3 landings on it, 2 juice bottles | block entity; still 6 grapes (one type only now, where the first grape used to set the type) and 3 per bottle. It takes **12 stomps** (`grapevinePotStomps`), and an entity with 15 armor or more counts 10% more (`grapevinePotHeavyArmorBonus`). Colored splash particles. Breaking an unstomped pot drops its grapes. **Pack (7.14):** 12 grapes, 4 stomps, 4 bottles |
 | Grapevine stem | ages 0-4; shears prune it | same, plus **grapevine leaves**: a red or white stem on a non-stem block grows up to 11 leaf blocks around it 4800-9600 ticks after planting (`grapevineLeavesEnabled`) |
 | Lattice | one `grapevine_lattice` | 10 woods; block entity; connects left/right, floor or wall placement, an axe toggles the support post, shears prune, hanging-grape model on 15%; leaf particles |
 | Wild bushes | grow by vanilla random tick | growth chance 0.5 x `grapeGrowthMultiplier`; min light 10 (savanna 14, taiga 5 and needs podzol / coarse dirt / grass within 4); foxes eat ripe grapes (mixin) |
@@ -228,7 +228,7 @@ except chorus (10), creepers crush (100) and mellohi (1).
 | armor_effect / health_effect / luck_effect | +2 armor and +3 toughness / +4 max health / +2 luck (attribute modifiers). luck_effect has no wine |
 | resistance_effect | +0.2 knockback resistance, +2 toughness. No wine uses it |
 | double_jump | **client-side** second jump in the air (not with elytra, riding, swimming, levitation); jump power 0.1 per level; fall damage -1 |
-| party_effect | every hit spawns a firework with a random colour at the target; hits on non-mob, non-player entities are cancelled |
+| party_effect | every hit spawns a firework with a random color at the target; hits on non-mob, non-player entities are canceled |
 | climbing_effect | walk up walls (horizontal collision -> 0.2 up, no fall damage) |
 | frosty_armor | freezes you (powder-snow freeze ticks) for +4 armor and +2 attack damage, -5% speed |
 | lava_walker / water_walker | stand and walk on lava / water, float up when inside |
@@ -351,7 +351,7 @@ no code.
 | I4 | patcherMod `WinemakerTrades` | reflects on `satisfyu.vinery.entity.WanderingWinemakerEntity`'s static trade map. The class moves to `net.satisfy.vinery.core.entity` and its trades become config-driven: rewrite against the port's API (a direct dependency is fine now, since we own the jar) |
 | I5 | patcherMod `WinemakerSpawner` (moved into the port 2026-10-27: `forge/WinemakerSpawner`, `[trader] ownSpawner`) | reads `config/vinery/config.json5 wine_trader_chance`: switch to the port's `trader.spawnChance` (pack: 0) |
 | I6 | patcherMod `StuckInBlock` | rule keyed by class name `satisfyu.vinery.block.grape.TaigaGrapeBush`: becomes `net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush` |
-| I7 | patcherMod `BonemealCharmMixin` | modelled on Vinery's bone-meal mixin. 1.5.5's version changes the return to PASS, so the charm (which checks for CONSUME) and the winemaker set no longer double-refund. The order still matters if both mixins hit the same call: check (VB-27) |
+| I7 | patcherMod `BonemealCharmMixin` | modeled on Vinery's bone-meal mixin. 1.5.5's version changes the return to PASS, so the charm (which checks for CONSUME) and the winemaker set no longer double-refund. The order still matters if both mixins hit the same call: check (VB-27) |
 | I8 | patcherMod `crop_growth.json` (WTHIT growth line) | `vinery:grapevine_lattice` -> the 10 lattice ids (`vinery:*_lattice`); lattice age now lives in the block entity too, but the state `age` still drives it |
 | I9 | Foundation `BlockInfoOverlay` HUD | not ported; the lines go into WTHIT (D6, decided) |
 | I10 | KubeJS `item_dict.js` (144 Vinery entries) | rename keys/values per 4.1; add the new ids (lattices, racks, bags, cabinet, drawer, window block, path slab, banner, lilitu wine, new juices). Supplementaries / Every Compat entries follow D1 |
@@ -367,7 +367,7 @@ no code.
 | I20 | `config/ftbquests/quests/chapters/progression.snbt` | `vinery:flower_pot` (icon + task) and `vinery:flower_box` task: removed upstream. D2 |
 | I21 | Alcohol Part A 2.7 heat audit | `vinery:stove` and `vinery:wood_fired_oven` are FD heat sources today; 1.5.5 removes both and has no `farmersdelight` tag at all. D2. The new fired `stackable_log` is a heat-source candidate |
 | I22 | `config/everycomp-wood_types.toml` | `[types.wood_type.vinery]` / `leaves_type` keys follow D1 |
-| I23 | Tooltips (`client_scripts/tooltips.js` Vinery section, [tooltips.md](tooltips.md)) | the grape / seed flavour keys may change; rewrite the placeholders for the new blocks |
+| I23 | Tooltips (`client_scripts/tooltips.js` Vinery section, [tooltips.md](tooltips.md)) | the grape / seed flavor keys may change; rewrite the placeholders for the new blocks |
 | I24 | Placeable food ([placeable_food.md](placeable_food.md)) | wine bottles still need sneaking: no change; new juice ids |
 | I25 | `tools/` (`crop_growth_coverage.py`, `placeable_catalog.py`, `stack_sizes.py`, `gen_spawn_table.py`, `food_catalog.py`) and `/dumpall` | rerun after the swap |
 | I26 | Deploy | replace the jar in `mods/` and `server_mods/`, drop `doapi-1.1.0b.jar` (both sides; nothing else needs it: check with a scan first), update `mod_sides.md`, regenerate `pack/` |
@@ -495,7 +495,7 @@ SOFTWARE.
 |---|---|
 | `cherry_*` wood set | **unchanged** (D1). The display name may become "Dark Cherry" through lang only |
 | 1.5.5 `dark_cherry_*` furniture (`cabinet`, `drawer`, `barrel`, `chair`, `table`, `big_table`, `shelf`, `lattice`, `wine_rack_{small,mid,big}`) | added as `cherry_*` (D1). 1.5.5's vanilla-cherry `cherry_lattice` and `cherry_wine_rack_*` merge into these |
-| `wine_press` | **kept**, with the 1.5.5 Apple Press behaviour (2 tall, two stages). There's no separate `apple_press` id. Lang: "Apple Press" |
+| `wine_press` | **kept**, with the 1.5.5 Apple Press behavior (2 tall, two stages). There's no separate `apple_press` id. Lang: "Apple Press" |
 | grape juice (`red_grapejuice_wine_bottle`, `savanna_red_grapejuice_bottle`, ...) | **kept**. The 1.5.5 juice ids aren't registered; recipes and juice tags point at the old ids |
 | `vinemaker_apron` / `_leggings` / `_boots` | **kept** (lang can say "Winemaker") |
 | `apple_crate`, `cherry_crate`, `red_grape_crate`, `white_grape_crate` | kept. The 10 `*_bag` blocks are added |
@@ -570,7 +570,7 @@ Build order. Each step should boot before starting the next:
 8. **Entities and trades:** mule, Wandering Winemaker (the port's own spawner since 2026-10-27, I4, I5), villager profession +
    config trades (P16).
 9. **Worldgen** (P15, F7). **Commands** (2.6). **Data** (F1 to F6, done in memory by the 4.8 translation). **Config** (P14).
-10. **Client:** renderers (lattice, pot, storage pot, log, bottles, racks, banner), screens, colours, armor models.
+10. **Client:** renderers (lattice, pot, storage pot, log, bottles, racks, banner), screens, colors, armor models.
     WTHIT lines (D6, 4.6) in place of the info overlay.
 11. **JEI** (I3).
 12. ~~**Old-world conversion pass** (W2, W3, W6) and a scratch-server boot on a copy of a 1.3.10 world.~~ REMOVED 2026-10-27 (3.3).
@@ -606,7 +606,7 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | `config/jei/recipe-category-sort-order.ini` + `configs_edited/root_config/jei/` | I3 |
 | `config/ftbquests/quests/chapters/progression.snbt` | I20 (no change if D2 keeps the flower box and pot) |
 | Part A 2.7 heat audit | I21 |
-| [vinery.md](vinery.md), [vinery_jei.md](vinery_jei.md), [tooltips.md](tooltips.md) | rewrite vinery.md 2.x for 1.5.5 behaviour once built; retire VJ tests that cover removed pages |
+| [vinery.md](vinery.md), [vinery_jei.md](vinery_jei.md), [tooltips.md](tooltips.md) | rewrite vinery.md 2.x for 1.5.5 behavior once built; retire VJ tests that cover removed pages |
 | Deploy | I26 |
 
 **Outcome (2026-10-18):**
@@ -859,7 +859,7 @@ booted yet.
     1.19.2's single `use` through them in 1.21's order.
   - Recipe inputs are small `SimpleContainer`s; the serializers read upstream's 1.21 JSON (`"id"` or `"item"` stacks).
   - Effects: UUID attribute modifiers, one stable UUID per upstream id. Jellie adds its absorption on start and takes
-    it back on end (1.21's start / add pair cancelled out).
+    it back on end (1.21's start / add pair canceled out).
   - Storage aging hooks: a listener on Foundation's storage block entity instead of upstream's mixin.
   - Mixins avoid local capture: grass-to-slab spreading wraps the loop's block lookup; the experience effect modifies
     the call argument.
@@ -895,7 +895,7 @@ booted yet.
 - **Second boot (2026-10-18, user):** `LegacyFlowerPotBlock` (1.3.10 keeper) threw an NPE in its static init, which
   aborted block registration; the IE / salt / geode / fireflybushport "Registry Object not present" errors after it
   were knock-on. The decompile declared `SHAPE = voxelShapeSupplier.get()` above the supplier (static fields
-  initialise in source order). Moved `SHAPE` below it. A scan of the whole port for static forward references found
+  initialize in source order). Moved `SHAPE` below it. A scan of the whole port for static forward references found
   no other case.
 - **Third boot (2026-10-18, scratch client, main menu only):** reaches the main menu with no Vinery/Foundation errors.
   Only Vinery lines: first-boot `vinery-common.toml` corrections, and 4 `#missing` texture references in upstream
@@ -937,12 +937,12 @@ with the unmodified upstream jar, and the port reads it. How the jar gets onto e
     - Anything 1.5.5 doesn't have, such as the D2 keepers, still needs art. That art could come from the 1.3.10 jar in
       the same way.
 - **C: write our own resources.**
-  - Recipes, tags, loot, lang and worldgen are small enough to write fresh from the behaviour described in 2.
+  - Recipes, tags, loot, lang and worldgen are small enough to write fresh from the behavior described in 2.
   - Textures and models are the expensive part: about 170 item models plus blocks, entities and armor.
   - Only makes sense combined with B for the art.
 - **D: don't port 1.5.5 as a mod.**
   - Keep the official 1.3.10 jar.
-  - Bring over only behaviour that needs no new assets, using patcherMod mixins: barrel juice level, press stages, wine
+  - Bring over only behavior that needs no new assets, using patcherMod mixins: barrel juice level, press stages, wine
     aging rules, effect changes.
   - New blocks (lattices, racks, bags, cabinet, banner) and the new effects' icons would be left out.
 
@@ -1141,11 +1141,11 @@ went up because `-01` shipped in 1.0.7, and a rebuild under the same name wouldn
   - **Plan:** both use the gauge's full rectangle, empty part included, so a quarter-full bar shows its tooltip
     anywhere on the bar.
 - **Wine Aging page text:**
-  - **Now:** `WineAgingCategory#draw` writes three single lines centred on a 150 px page (`drawCentered`). They run
-    past the grey background, in white.
+  - **Now:** `WineAgingCategory#draw` writes three single lines centered on a 150 px page (`drawCentered`). They run
+    past the gray background, in white.
   - **Plan:**
     - Wrap each line to the page width (`font.split`).
-    - Draw in dark grey with no shadow, like JEI's own text (`0x404040`, decided 2026-10-18).
+    - Draw in dark gray with no shadow, like JEI's own text (`0x404040`, decided 2026-10-18).
     - Size the page height from the number of wrapped lines.
 - **Tests:** VB-48, VB-49, VB-60.
 
@@ -1334,7 +1334,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 
 | # | Question | My default |
 |---|---|---|
-| VQ1 | Wine Aging page text colour | DECIDED 2026-10-18: dark grey `0x404040` |
+| VQ1 | Wine Aging page text color | DECIDED 2026-10-18: dark gray `0x404040` |
 | VQ2 | Cask: the 1.3.10 decorative `barrel` keeps its name? | Yes, only the wine block is renamed |
 | VQ3 | Praetorian / King Danis: big racks (1 per placed block), or small racks with 2 per placed block as in 1.3.10? | DECIDED 2026-10-18 (10.8): small racks, shrunk to fit; King Danis removed |
 | VQ4 | Time questions | [time.md](time.md) section 4 |
@@ -1424,7 +1424,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-80 Warm slows (10.13):** a fresh wine racked by a lit furnace in daylight -> its tooltip's next-level estimate is 4/3 of an unracked one; `/wine info` on it over time -> the age only goes up
 - [ ] **VB-79 Old stored wine (10.13):** a wine racked before the update in a cellar still shows "cellar x2.5" (its stored rate) until taken out and put back
 - [x] **VB-81 New sizes (10.14):** PASSED 2026-10-20 ("all vinery bottle shape and case size"). Was: Stal and Sun-kissed stack 2 per placed block and are refused by a 9x rack; Magnetic stacks 2 per placed block and goes into a 4x rack and the wine box
-- [x] **VB-82 Box looks in the 4x rack (10.17, was 10.14's slim bottles):** PASSED 2026-10-20 ("all vinery bottle shape and case size"). Was: Stal and Strad lie as their own bottles, a little smaller; Sun-kissed, Aegis, Apple Cider, Chenet, Mellohi, Creeper's Crush, Eiswein and Magnetic lie as Strad-shaped bottles in their own colours, the same size; four fit without overlapping; Praetorian and Red Wine look as before; no missing-texture (purple/black) bottles; the same wines placed on the ground or in the single-bottle rack keep their own models
+- [x] **VB-82 Box looks in the 4x rack (10.17, was 10.14's slim bottles):** PASSED 2026-10-20 ("all vinery bottle shape and case size"). Was: Stal and Strad lie as their own bottles, a little smaller; Sun-kissed, Aegis, Apple Cider, Chenet, Mellohi, Creeper's Crush, Eiswein and Magnetic lie as Strad-shaped bottles in their own colors, the same size; four fit without overlapping; Praetorian and Red Wine look as before; no missing-texture (purple/black) bottles; the same wines placed on the ground or in the single-bottle rack keep their own models
 - [x] **VB-83 Wine box (10.17):** PASSED 2026-10-20 ("all vinery bottle shape and case size", with the 10.18 recolours). Was: the same 10 wines show the same looks as VB-82 at full box size; Magnetic's bottle is inverted with a salmon outline (no white, 10.18); F3+T (resource reload) keeps all of it
 - [ ] **VB-84 Wine size lines (10.15, reworded 10.18):** hover Red Wine -> "Small bottle: 3 per placed block" and "Fits in Single, Small, and Big Wine Rack, and Wine Box"; Eiswein -> "Medium bottle: 2 per placed block", "Fits in Single and Small Wine Rack, and Wine Box"; Cristel -> "Large bottle: 1 per placed block", "Fits in Single Wine Rack"; each matches what VB-73 shows the racks accept. First run 2026-10-20: TWEAK (the old "Small Wine Bottle Storage, the Wine Rack..." wording was clunky)
 - [ ] **VB-85 Capacity lines (10.15):** an oak 9x rack says "Holds 9 wines (small only)", the 4x rack "Holds 4 wines (small or medium)", the single-bottle rack "Holds 1 wine (any size)", the Wine Box "Holds 1 wine (small or medium)" and the sneak line; the aging hint still follows
@@ -1438,10 +1438,10 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-93 Cask automation (10.19):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-07).* a hopper above with red grape juice, one beside with a recipe's ingredients in 128s -> the first ingredient fills one slot only and the rest waits in the hopper; add an ingredient of another recipe to the side hopper -> it stays in the hopper; a white juice bottle with red juice in the cask stays in the hopper; the wine comes out the bottom
 - [x] **VB-95 Houses served (13):** `logs/latest.log` after a world load has four `[vinery-houses] vinery:vinery_<biome> added to minecraft:village/<biome>/houses at weight 2 (... pool average)` lines and no `[vinery-houses]` warning; `kubejs/generation_scripts/worldgen/pool_config.json` lists the four pieces under their pools (current 3 / 3.5 / 3 / 3); `pool_tag_report.md` shows them retuned. *PASSED on the scratch server 2026-10-20 (weight 2 lines; second boot: report rows 2 -> 9 / 11 "current 3 / 3.5", shares 2.2 to 2.9 %)*
 - [x] **VB-96 Houses load (13):** `/place template vinery:vinery_plains` (and taiga, savanna, desert) places the house with a wine press, cask, grapevine stems, cherry furniture, a Big Wine Rack holding wines and, in the desert one, red and white grape bags and a chain stub under the eave where the sign hung; nothing is missing or air where the press, crates or sign were; *PASSED scratch 2026-10-20 (3 boots): all four placed and counted (plains: 2 wine press blocks, cask, 4 stems, cabinet, big rack, Noir wine, storage pot, 4 windows ...; desert: 4 red + 2 white grape bags, Cherry wine, rack, drawer, basket, chair, table, 1 chain); a wall sign and then a lantern popped, the chain stays*; `/place jigsaw minecraft:village/plains/houses minecraft:building_entrance 1 ~ ~ ~` can place a Vinery house among the vanilla ones
-- [ ] **VB-97 Houses in villages (13):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-08, 2 of 8 placed villages have a winery).* `/locate structure minecraft:village_plains` a few times and walk the villages: about one village in two or three has a winery house, which fits the street grid (entrance on the road) and sits on the ground like its neighbours; the cask gives an unemployed villager the Winemaker job
+- [ ] **VB-97 Houses in villages (13):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-08, 2 of 8 placed villages have a winery).* `/locate structure minecraft:village_plains` a few times and walk the villages: about one village in two or three has a winery house, which fits the street grid (entrance on the road) and sits on the ground like its neighbors; the cask gives an unemployed villager the Winemaker job
 - [ ] **VB-98 Houses config (13):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-14 / SQ-OM-15, weight 20 read; `enabled = false`: no `[vinery-houses]` line, template unknown).* `[village_houses] weight = 20` + restart -> the log line says weight 20 (configured) and the house turns up in most villages; `enabled = false` -> no log lines and `/place template vinery:vinery_plains` says the template is missing
 - [ ] **VB-94 Press automation (10.19):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-07).* hopper beside the press with apples and wine bottles -> apple mash and cider as before; put honeycomb in that hopper -> it waits until the apples are done and the output emptied; glass bottles wait while wine bottles' recipe is queued; by hand honeycomb still goes in
-- [ ] **VB-60 Wine Aging page text (7.1):** every line stays inside the grey page, wrapped, in dark text without shadow
+- [ ] **VB-60 Wine Aging page text (7.1):** every line stays inside the gray page, wrapped, in dark text without shadow
 - [ ] **VB-61 JEI transfer (7.1):** with juice bottles, ingredients and a wine bottle in your inventory, click [+] on a Cask page -> juice in slot 0, ingredients in 1-3, the bottle in 4; without the juice bottles the [+] is red
 - [ ] **VB-62 Calendar gone (7.8):** no `vinery:calendar` in JEI, the creative tab or `/give`; the log has no recipe or loot errors about it
 - [ ] **VB-63 JEED providers move (7.5):** after editing `[wine] effects` and `/reload`, the JEI page of the old effect no longer lists the wine
@@ -1458,11 +1458,11 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
   - The pack's barrel stacking mixin is now redundant (I2).
 - 2026-10-14: added the upstream license text (3.6): code MIT, resources All Rights Reserved. Shipping upstream
   assets or data needs permission. Added D13 (ask Satisfy, read the player's own copy of the upstream jar, write our own
-  resources, or behaviour-only mixins); 13 decisions open.
+  resources, or behavior-only mixins); 13 decisions open.
 - 2026-10-14: decided:
   - D1: keep `cherry_*`.
   - D2: keep every 1.3.10 block and id and add the new ones. Renamed things keep their old id with the new
-    behaviour; replaced things exist side by side. 4.1 rewritten.
+    behavior; replaced things exist side by side. 4.1 rewritten.
   - D6: WTHIT lines (4.6).
   - D11: winemaker set damage set in config, including none (4.7).
   - Wine aging is redesigned onto a playtime vintage clock with a configurable real-time scale, a `WORLD` day unit for
@@ -1554,4 +1554,4 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 
 ## Owner notes (scratchpad 2026-11-07)
 
-- Stomping: expand the heavy armour list; stomping moves to the H&H stomping basin. Row `alcohol/vineryport #29`.
+- Stomping: expand the heavy armor list; stomping moves to the H&H stomping basin. Row `alcohol/vineryport #29`.

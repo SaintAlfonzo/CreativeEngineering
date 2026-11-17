@@ -43,7 +43,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | `python3 tools/test_prefix_lint.py` | DR-W3b | prefix rows, defining lines outside the owner doc, duplicate prefixes, duplicate queue ids (fails) |
 | `python3 tools/iso_dates.py` / `python3 tools/us_spelling.py` | DR-L4b, DR-L5, DR-L7 | sweep tools (dry run by default, report per file); `--apply` rewrites |
 | `python3 tools/texture_provenance.py` | DR-C18 | every derived texture has a `sources.csv` row |
-| `python3 tools/design_rules_audit.py` (`-v` lists every hit; name checks to run only some) | DR-L1, DR-L4, DR-L4b, DR-L5, DR-W3b, DR-W9, DR-W11, DR-W16, DR-C1, DR-C2, DR-C10, DR-C14, DR-C19, DR-C21 to DR-C25, G1 | report only (exit 0): emoji, relative and non-ISO dates (DR-L4b), spelling mix, citation form, test prefixes (DR-W3b), path spans, config backups, `mod_sides.md` rows, underscores, licence fields, raw recipe and tag calls, literal ids, formatting counts, doc file names |
+| `python3 tools/design_rules_audit.py` (`-v` lists every hit; name checks to run only some) | DR-L1, DR-L4, DR-L4b, DR-L5, DR-W3b, DR-W9, DR-W11, DR-W16, DR-C1, DR-C2, DR-C10, DR-C14, DR-C19, DR-C21 to DR-C25, G1 | report only (exit 0): emoji, relative and non-ISO dates (DR-L4b), spelling mix, citation form, test prefixes (DR-W3b), path spans, config backups, `mod_sides.md` rows, underscores, license fields, raw recipe and tag calls, literal ids, formatting counts, doc file names |
 
 ## 2. Language (all text)
 
@@ -80,7 +80,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 |---|---|---|---|
 | DR-P10 | Every shown name is a real name, never a raw key or id. A fix borrows a related name first (the fluid's name for its block, the item's name for its projectile), then falls back to the id in Title Case. | Checked | names.md 11 |
 | DR-P11 | Vanilla-style Title Case: every word capitalized except small words mid-name ("Block of Iron", "Flint and Steel"); hyphen and slash parts count as words ("High-Grade"). Exceptions go in `name_rules.json`. | Checked | names.md 11 |
-| DR-P12 | Tooltip colours are picked by role, not by look, from the `col.*` legend in `tooltips.js`. | Hard | tooltips.md 2 |
+| DR-P12 | Tooltip colors are picked by role, not by look, from the `col.*` legend in `tooltips.js`. | Hard | tooltips.md 2 |
 | DR-P13 | Every tooltip change is recorded in [tooltips.md](tooltips.md), cross-linked from its feature's writeup. | Hard | README.md "Keeping them current" |
 | DR-P14 | Wording the owner gives is used as given (for example the BlockRunner camo line). | Convention | tooltips.md 3 |
 | DR-P15 | Each jar's lang file lives at `assets/<modid>/lang/en_us.json`; Forge 1.19.2 reads only the first jar's copy of a shared path. A resource pack zip outranks KubeJS lang, so fix names in the zip when one sets them. | Hard | creative_split.md rule 11; memory `forge-shared-asset-path`, `resource-pack-lang-priority` |
@@ -138,16 +138,16 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | Id | Rule | H | Source |
 |---|---|---|---|
 | DR-C14 | No advancements for rewards or unlocks (the pack drops them all at load). No recipe unlocks of any kind (recipe book, advancements, knowledge books). No features that grant items or detect progress through advancements. | Hard | CLAUDE.md; advancements.md (owner, 2026-10-18); plan_rules_fixes.md D23 (owner, 2026-11-16) |
-| DR-C15 | Ports and backports: no old-version or cross-mod conversions or remaps. Code from an ARR donor is written from behaviour, never translated from a decompile. | Hard | CLAUDE.md; skill `port` |
+| DR-C15 | Ports and backports: no old-version or cross-mod conversions or remaps. Code from an ARR donor is written from behavior, never translated from a decompile. | Hard | CLAUDE.md; skill `port` |
 | DR-C16 | Structure searches go through Async Locator off the server thread, never a synchronous search. | Memory | memory `async-locator-everywhere` |
 | DR-C17 | No `getChunkAt`, `getBiome` or `getHeight` on ungenerated land from a KubeJS command; no `r.getType()` while looping all recipes. | Hard | skill `scratch-test` gotchas.md |
 | DR-C18 | Textures: human art or the owner's tools only (`palette_swap.py`, `combine_tex.py`, `scale_tex.py`, `upscale_sprites.py`) on a source and palette the owner picked. Never drawn, generated, palette-picked or transformed by an ad-hoc script. Each derived texture gets a `sources.csv` row the same session. | Checked | CLAUDE.md; texture_sources.md 1 |
 
-### 5.4 Licence
+### 5.4 License
 
 | Id | Rule | H | Source |
 |---|---|---|---|
-| DR-C19 | Own work is `GPL-3.0-only` (SPDX): full GPL-3 text as the `LICENSE` file, `mod_license=GPL-3.0-only` in `gradle.properties` and so `license="GPL-3.0-only"` in mods.toml (widening to `GPL-3.0-or-later` is a one-line change per jar). Code under another licence keeps its notice in a separate file named `NOTICE-<scope>-<licence>.txt` (`NOTICE-upstream-MIT.txt`, `NOTICE-commonmark-BSD.txt`; licence `various` when one file credits several licences, `NOTICE-thirdparty-various.txt`); each jar ships its LICENSE and NOTICE files and the build gate in `ce.forge-mod.gradle` checks them. | Checked | CLAUDE.md; plan_rules_fixes.md D1, section 8 (owner, 2026-11-16); `design_rules_audit.py licence` |
+| DR-C19 | Own work is `GPL-3.0-only` (SPDX): full GPL-3 text as the `LICENSE` file, `mod_license=GPL-3.0-only` in `gradle.properties` and so `license="GPL-3.0-only"` in mods.toml (widening to `GPL-3.0-or-later` is a one-line change per jar). Code under another license keeps its notice in a separate file named `NOTICE-<scope>-<licence>.txt` (`NOTICE-upstream-MIT.txt`, `NOTICE-commonmark-BSD.txt`; license `various` when one file credits several licenses, `NOTICE-thirdparty-various.txt`); each jar ships its LICENSE and NOTICE files and the build gate in `ce.forge-mod.gradle` checks them. | Checked | CLAUDE.md; plan_rules_fixes.md D1, section 8 (owner, 2026-11-16); `design_rules_audit.py licence` |
 | DR-C20 | Abnormals-licensed and other no-modification mods: our jars carry none of their textures, models or data; reference them by resource location. | Memory | memory `license-gplv3`; mooblooms.md 4.0 |
 
 ### 5.5 Formatting and comments
@@ -159,7 +159,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-C23 | Line length and brace style are free. | Hard | plan_rules_fixes.md D7 (owner, 2026-11-16) |
 | DR-C24 | No formatter in the build (no Spotless or Checkstyle); `.editorconfig` and `design_rules_audit.py format` are the tools. | Hard | plan_rules_fixes.md D7 (owner, 2026-11-16) |
 | DR-C25 | (merged into DR-C21 and DR-C22, 2026-11-16) | | |
-| DR-C26 | Code comments say what the code does now. History, status, dates of past changes and "was X" notes go to the writeup's History, not into comments. File headers stay as they are (no licence header rule); Creative Computers files carry no source header (owner, 2026-11-01). | Hard | plan_rules_fixes.md D8 (owner, 2026-11-16) |
+| DR-C26 | Code comments say what the code does now. History, status, dates of past changes and "was X" notes go to the writeup's History, not into comments. File headers stay as they are (no license header rule); Creative Computers files carry no source header (owner, 2026-11-01). | Hard | plan_rules_fixes.md D8 (owner, 2026-11-16) |
 | DR-C27 | Commit messages: short free text, mostly lowercase ("power grid backport"); no format. | None |
 
 ## 6. Agent and session conduct
@@ -176,15 +176,15 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 The agenda for making these rules hard. Each item names the rule ids it would settle.
 
-- **G1 Spelling** (closed 2026-11-16: DR-L7). The docs mix British and American spelling: "colour" 608 times, "color" 84 (mostly in code
-  names); "capitalisation" 2, "capitalization" 5. Pick one for prose (code identifiers follow the language or API).
+- **G1 Spelling** (closed 2026-11-16: DR-L7). The docs mix British and American spelling: "color" 608 times, "color" 84 (mostly in code
+  names); "capitalization" 2, "capitalization" 5. Pick one for prose (code identifiers follow the language or API).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D20: American; code identifiers follow their API).
 - **G2 Code formatting** (closed 2026-11-16: DR-C21 to DR-C24). Indent per language, tabs or spaces, line length, brace style, and
   whether to add an `.editorconfig` (editors apply it with no build change) or a formatter (Spotless rewrites files
   and would need a one-time reformat commit).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D7: tabs as indent in every own source file, Python included; no trailing whitespace; `.editorconfig`; line length and braces free).
 - **G3 Comments** (closed 2026-11-16: DR-C26). When a comment or doc comment is required, what it may say (no history or status in
-  code comments?), and file headers (licence line or none).
+  code comments?), and file headers (license line or none).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D8: comments say what the code does now (DR-C26); history goes to the writeup; no file header rule).
 - **G4 Commit messages** (DR-C27). Format and length, or leave free.
 - **G5 Decision citations** (DR-L5). "owner" (279 uses) or "user" (43, older): settle on one word and the form
@@ -205,7 +205,7 @@ The agenda for making these rules hard. Each item names the rule ids it would se
 
 Conflicts the 2026-11-14 audit found between a written rule and what the files do:
 
-- **G11 Licence string** (closed 2026-11-16: DR-C19). The rule says `license="GNU GPL3"`; all 44 jars use `GPL-3.0-only` (SPDX), with
+- **G11 License string** (closed 2026-11-16: DR-C19). The rule says `license="GNU GPL3"`; all 44 jars use `GPL-3.0-only` (SPDX), with
   an "upstream; overlay" form for repacks. Likely fix: change the rule text. Also settle NOTICE file names
   (`NOTICE-upstream-<licence>.txt` for donors, `NOTICE-thirdparty.txt` for libraries).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D1: `GPL-3.0-only`; NOTICE form `NOTICE-<scope>-<licence>.txt` (plan section 8)).
@@ -241,7 +241,7 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
 Method: `tools/design_rules_audit.py` and the four rule tools (section 1) for the mechanical rules; three read-only
 passes for judgement (own Java and build files; the 665 tracked KubeJS scripts; the writeups, skills, TODO, scratch
 queue and changelog prose), with the strongest claims re-checked by hand. Upstream code inside ports was checked
-only for licence handling and DR-C14 / DR-C15. Followed = no or only trivial breaks; Mostly = a few breaks;
+only for license handling and DR-C14 / DR-C15. Followed = no or only trivial breaks; Mostly = a few breaks;
 Poorly = breaks are common or growing.
 
 | Rule | Result | Notes |
@@ -254,12 +254,12 @@ Poorly = breaks are common or growing.
 | DR-L6 | Mostly | unreleased.md lowercases vanilla and mod names next to Title Case ones |
 | DR-P1, DR-P8 | Followed | No stale or duplicate bullets found in unreleased.md |
 | DR-P2 | Poorly | 5 one-bullet family headings in unreleased.md next to an existing catch-all |
-| DR-P3, DR-P4 | Mostly | No flavour words; one missing number, one benefit clause, two reassurance bullets; old-value form differs from the rule (G12) |
-| DR-P5 | Mostly | 3 Fixed bullets in present tense; 2 warnings labelled Changed. Lint: 0 errors |
+| DR-P3, DR-P4 | Mostly | No flavor words; one missing number, one benefit clause, two reassurance bullets; old-value form differs from the rule (G12) |
+| DR-P5 | Mostly | 3 Fixed bullets in present tense; 2 warnings labeled Changed. Lint: 0 errors |
 | DR-P6, DR-P7 | Mostly | One "Mod Ids" heading and one datapack bullet are internals |
 | DR-P9 | Followed | Lint frozen check passes; 55 over-long bullets are all in deployed files (record only) |
 | DR-P10, DR-P11 | Mostly | `name_audit.py --check` reports OUT OF DATE (434 fixes, 13 raw villager professions in the preview) |
-| DR-P12 | Poorly | 50 raw-colour tooltip lines in 21 files; raw `§` codes in the effects framework; only 13 of 31 tooltip scripts use `global.tooltips` |
+| DR-P12 | Poorly | 50 raw-color tooltip lines in 21 files; raw `§` codes in the effects framework; only 13 of 31 tooltip scripts use `global.tooltips` |
 | DR-P15 | Mostly | Lang paths are right; one stray `.en_us.json`; 8 members share `data/forge/loot_modifiers/global_loot_modifiers.json` (effect unverified) |
 | DR-P16 | Poorly | "Brewin' and Chewin'" in 5 post-rule deployed bullets and 42 writeup uses; Create addons without the colon form |
 | DR-W2 | Mostly | About 75 writeups follow 0 to 8; 35 add sections after History; 5 have broken numbering; 2 hold a second document (G18) |
@@ -290,7 +290,7 @@ Poorly = breaks are common or growing.
 | DR-C16 | Followed | No synchronous structure search anywhere |
 | DR-C17 | Mostly | Guarded `getType()` in 2 dump scripts |
 | DR-C18 | Poorly | Texture ledger: 349 confirm, 27 redo, 4 swap (2,574 ok) |
-| DR-C19 | Mostly | Every jar ships the GPL text and NOTICE files (build gate in `ce.forge-mod.gradle`); licence string and NOTICE names differ from the rule (G11) |
+| DR-C19 | Mostly | Every jar ships the GPL text and NOTICE files (build gate in `ce.forge-mod.gradle`); license string and NOTICE names differ from the rule (G11) |
 | DR-C20 | Followed | No Abnormals assets in our jars |
 | DR-C21 to DR-C25 | (no rule) | Own Java 1,390 files: 267 tab-indented, 6 mixed, 4,063 lines over 120. KubeJS 678 files: 432 tab-indented, 13 mixed, 1,981 over 120, 211 trailing-space lines. Python 179: spaces only, 1,206 over 120. No CRLF anywhere |
 | DR-A1 to DR-A5 | Not audited | Session conduct; no files to check |
@@ -317,7 +317,7 @@ gap in section 7 say so. Deployed changelog files are frozen: their breaks are r
 | V-10 | DR-C9, DR-C11 | `"[creativeengineering]"` log tags in `creativedelight/compat/DisplayDelightDishes.java:62,71`, `DisplayDelightDishBlocks.java:57`; logger names in `creativeCompat/.../ItemBurnTransform.java:42`, `creativeDevtools/.../StructureCatalogue.java:73`, `MassPlacer.java:95`; ticket `creativeengineering_locate` in `creativeWorldgen/.../LocateLoads.java:51` | Runtime names point at the wrong jar (not saved data) | Use each jar's mod id; add the pattern to `id_owner_lint.py` | low | Open |
 | V-11 | DR-C10 | Packages `com.SaintAlfonzo.baby_mobs`, `com.SaintAlfonzo.more_mooblooms`; mixin jsons and default config names `baby_mobs-common.toml`, `more_mooblooms-common.toml`; lang namespace `vinery_backport` | Underscores in own names (mod ids kept on purpose) | G20: name as exceptions, or rename packages and configs | low | Open |
 | V-12 | DR-C19 | Every own `gradle.properties` (`mod_license=GPL-3.0-only`) | Rule text says "GNU GPL3" | G11: fix the rule text | med | Fixed 2026-11-17 (DR-C19 text) |
-| V-13 | DR-C19 | NOTICE names: `NOTICE-upstream-MIT.txt` (19), `NOTICE-thirdparty.txt`, `NOTICE-vinery-upstream.txt`, `NOTICE-upstream.txt`, `NOTICE`, `NOTICE-commonmark.txt`, `NOTICE-upstream-MIT-enders.txt`; `development/backportedPowerGrid/LICENSE` holds Apache 2.0 | No single naming form; Power Grid's `LICENSE` is the upstream licence | G11: settle names; rename Power Grid's file to `NOTICE-upstream-Apache.txt` | low | Fixed 2026-11-17 (NOTICE renames, audit check) |
+| V-13 | DR-C19 | NOTICE names: `NOTICE-upstream-MIT.txt` (19), `NOTICE-thirdparty.txt`, `NOTICE-vinery-upstream.txt`, `NOTICE-upstream.txt`, `NOTICE`, `NOTICE-commonmark.txt`, `NOTICE-upstream-MIT-enders.txt`; `development/backportedPowerGrid/LICENSE` holds Apache 2.0 | No single naming form; Power Grid's `LICENSE` is the upstream license | G11: settle names; rename Power Grid's file to `NOTICE-upstream-Apache.txt` | low | Fixed 2026-11-17 (NOTICE renames, audit check) |
 | V-14 | DR-C15 | `development/creativeDelight/members/miners` (34 files in `com.sammy.minersdelight`) | ARR rewrite keeps the upstream package, unlike the other ARR rewrites | Repackage to `com.SaintAlfonzo.creativedelight.miners`, or record the reason in miners_delight.md | low | Open |
 | V-15 | DR-C14 | `creativedelight/oven/OvenBlockEntity.java:365-368` | `awardRecipes` unlocks recipe-book entries | G16 | low | Open |
 | V-16 | DR-C7 | `development/creativeDelight/build.gradle:52` (`compileOnly project(':backportedBrewin')`, coaster mixin); `creativeCalendar/.../VineryGrassSlabSeasonMixin.java`, `VintageLushGrassSeasonMixin.java` | Sideways edges (gated, so rule 2 allows them) | Record in creative_split.md, or move each patch into the target jar | low | Open |
@@ -352,8 +352,8 @@ gap in section 7 say so. Deployed changelog files are frozen: their breaks are r
 | V-40 | DR-C8 | `kubejs/data/creativedevtools/kubejs/create/metal_test_recipes.js:20`, `wood_test_recipes.js:22` | Two top-level `function buildGrid` in one scope; the later replaces the first | One copy, or IIFE each file | low | Open |
 | V-41 | DR-C7 | `kubejs/server_scripts/tags/blocktags.js:598-606` (`creativecompat:` tags), `tags/feature_port_tags.js:9` (`creativeequipment:`), `tags/wthittags.js:13-14` (`creativecommon:`) | The pack folder fills tags a jar's Java reads | Move each to its jar's script pack | low | Open |
 | V-42 | DR-C17 | `kubejs/data/creativedevtools/kubejs/dump/dump_food.js:220`, `dump/dump_recipes.js:39,97` | `recipe.getType()` in a loop over all recipes (guarded) | Serializer key, as `dump_crafting_audit.js` does | low | Open |
-| V-43 | DR-P12 | 50 lines in 21 files (for example `kubejs/assets/creativedelight/kubejs/ends_delight/tooltips.js:9-15`, `supplementaries/client.js:7-11`, `kubejs/client_scripts/tooltips.js:337-339`, `creativebrewing/potion_buckets.js:54,70`); raw `§7`/`§a` in `creativecommon/effects/armor_effects.js:141-144`, `tool_effects.js:72-77` | Tooltip colours outside the `col.*` legend | `global.tooltips.col.<role>` | med | Open |
-| V-44 | DR-P12 | `kubejs/client_scripts/tooltips.js` (159 `col.dark_gray`, Material Information), `creativebrewing/vinery/tooltips.js:38` (`col.lpurple`) | Colours picked by look; the legend has no role for data lines | Add a role key (for example `col.data`) | low | Open |
+| V-43 | DR-P12 | 50 lines in 21 files (for example `kubejs/assets/creativedelight/kubejs/ends_delight/tooltips.js:9-15`, `supplementaries/client.js:7-11`, `kubejs/client_scripts/tooltips.js:337-339`, `creativebrewing/potion_buckets.js:54,70`); raw `§7`/`§a` in `creativecommon/effects/armor_effects.js:141-144`, `tool_effects.js:72-77` | Tooltip colors outside the `col.*` legend | `global.tooltips.col.<role>` | med | Open |
+| V-44 | DR-P12 | `kubejs/client_scripts/tooltips.js` (159 `col.dark_gray`, Material Information), `creativebrewing/vinery/tooltips.js:38` (`col.lpurple`) | Colors picked by look; the legend has no role for data lines | Add a role key (for example `col.data`) | low | Open |
 | V-45 | DR-P3, DR-P6 | `kubejs/client_scripts/tooltips.js:14-34` | A "Test item" palette demo ships to players on White Wool and White Concrete | Delete, or gate behind Devtools | med | Open |
 | V-46 | DR-P15 | `kubejs/client_scripts/namechanges.js:10-11, 64`; `creativeengineering/items/misc_items.js:22` | Pack folder names CE items; the transmitter is registered with no display name | Names in CE's registration or lang | low | Open |
 | V-47 | DR-L2 | `patcherMod` 192 times in 117 scripts, including player-log text in the 8 jar cores (for example `kubejs/data/creativedelight/kubejs/_core/cd_server.js:12`); stale paths in `kubejs/client_scripts/plantable_tooltip.js:1`, `kubejs/data/creativedevtools/kubejs/_core/cdv_server.js:8` | Old name and paths | Rename to Creative Common; fix the paths | low | Open |
@@ -424,13 +424,13 @@ each area's numbering. Counts are from 2026-11-14.
 | DR-C35 | Optional mods are gated three ways: mixins by the plugin's `NEEDS_MOD` table and a `MOD_RANGE` pinned to the tested minor version; Java by `ModList.isLoaded` before loading a separate class; resources by a `// requires: <modid>` header. In mods.toml the mod is `mandatory=false` with a comment naming what uses it | `CommonMixinPlugin.java:89-100`, `CompatMixinPlugin.java:133`, `CreativeDevtools.java:47` | `Class.forName` reflection in Compat and Worldgen |
 | DR-C36 | Event handlers are registered from the main class constructor (`addListener`, `EVENT_BUS.register`), each block headed by a comment naming the feature and its config; `@Mod.EventBusSubscriber` is the exception and names its own jar via the constant | 255 explicit, 40 subscriber files | Subscriber modid as a literal |
 | DR-C37 | Logging via `LogUtils.getLogger()`; every message starts with a bracketed tag `[<modid>]` or `[<feature>]`; Worldgen uses named loggers `creativeworldgen/<area>` | 129 files | V-10; Raspberry Pie untagged; 12 files use `LoggerFactory` |
-| DR-C38 | Every class has a javadoc saying what it does and why, citing the writeup section and TODO row; no licence header in source files | About 1,355 of 1,374; 461 cite a `.md` | About 19 without; 2 with a copyright header |
+| DR-C38 | Every class has a javadoc saying what it does and why, citing the writeup section and TODO row; no license header in source files | About 1,355 of 1,374; 461 cite a `.md` | About 19 without; 2 with a copyright header |
 | DR-C39 | One `SimpleChannel` per feature, named `<modid>:<feature>` (or `<modid>:main`), with a `PROTOCOL` string and exact-match predicates, defined in the feature's class | 5 channels | `TradeSync` (`acceptMissingOr`, on purpose) |
 | DR-C40 | Saved names (NBT keys, saved-data names, lang keys) keep their original `creativeengineering` prefix when code moves jars, in a named `private static final String`; registered ids move and get a swap entry | `MonsterBoxVault.java:69-75`, `SeasonClock.java:36`; about 40 lang keys | |
 | DR-C41 | Swap lists are generated by `tools/owner_namespace_ids.py` into `data/<modid>/swaps/owner_namespace.json` (`_comment` names the generator and "Never prune"); hand lists sit beside it, one file per reason | 6 jars; 18 hand lists in CD | V-06 |
 | DR-C42 | Offline tests live in `tools/<feature>_test/` (plain `javac` or Rhino harness, Mojmap, stubs first on the classpath), run by `tools/test_<feature>.sh` sourcing `tools/java_test_cp.sh`; no mod has a `src/test` | 20 test folders, 14 scripts | Empty upstream `exposureBackport/src/test` |
-| DR-C43 | Licence files sit in the mod folder: GPL text as `LICENSE.txt` (own) or `LICENSE` (ports), upstream terms as `NOTICE-upstream-<licence>.txt`; `ce.forge-mod` copies them into the jar and fails a GPL build without one; `mod_license` is SPDX, "upstream; overlay" for repacks | 34 + 10 licence files; `ce.forge-mod.gradle:235-255` | V-13 |
-| DR-C44 | ARR donors ship only our code: upstream art and data are read at runtime from the unmodified jar in `<game dir>/<member>_upstream/` through the shared `packs` / `upstream` modules, and a comment block at the top of `gradle.properties` states the licence route | golden, roll, largemeals, miners, oceanic, tempad | |
+| DR-C43 | License files sit in the mod folder: GPL text as `LICENSE.txt` (own) or `LICENSE` (ports), upstream terms as `NOTICE-upstream-<licence>.txt`; `ce.forge-mod` copies them into the jar and fails a GPL build without one; `mod_license` is SPDX, "upstream; overlay" for repacks | 34 + 10 license files; `ce.forge-mod.gradle:235-255` | V-13 |
+| DR-C44 | ARR donors ship only our code: upstream art and data are read at runtime from the unmodified jar in `<game dir>/<member>_upstream/` through the shared `packs` / `upstream` modules, and a comment block at the top of `gradle.properties` states the license route | golden, roll, largemeals, miners, oceanic, tempad | |
 
 ### 10.3 KubeJS scripts
 

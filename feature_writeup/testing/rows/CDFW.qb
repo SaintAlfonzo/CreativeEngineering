@@ -16,7 +16,7 @@
 @group A
 @commands Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head`
 @pass `[cans] registered 276 generated cans`; `[food types] ... in 31 types`; `[placeable]` counts; `[can servings] 313 cans` (less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error
-@fails a member script did not load: check its `// requires:` mod id and that the jar loader honours `requires`; rerun `tools/test_gen_members.py`
+@fails a member script did not load: check its `// requires:` mod id and that the jar loader honors `requires`; rerun `tools/test_gen_members.py`
 @from batches/r1102b/s3_A.qb
 bootexpect \[cans\] registered \d+ generated cans
 bootexpect \[food types\] \d+ foods in 31 types

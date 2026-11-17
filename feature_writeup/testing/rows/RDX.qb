@@ -28,7 +28,7 @@ kjsreject (?i)\[NCH\].*warn
 ## SQ-RDX-02
 @group A
 @commands JEI search "Pancake", "Fried Dough"; hover Supplementaries' pancake
-@pass No Rustic plain Pancake or Fried Dough; Supplementaries' item is named "Pancake" with gray "Stackable: place up to 8 ..." line; the six flavoured Rustic pancakes still listed
+@pass No Rustic plain Pancake or Fried Dough; Supplementaries' item is named "Pancake" with gray "Stackable: place up to 8 ..." line; the six flavored Rustic pancakes still listed
 @fails lang not reloaded (client scripts)
 @reviewed 2026-11-16
 > cdevtest reg item ^rusticdelight:(pancake|fried_dough)$
@@ -211,7 +211,7 @@ reject \[cdevtest\] .*(done=0|error=)
 @group old save
 @commands Needs a pre-11-02 save (the 1.2.02 jars have no `rusticdelight:pancake` / `fried_dough`; r1115 ran only the plate half). Copy a save that has `rusticdelight:pancake` and `rusticdelight:fried_dough` in a chest and a placed plain Pancakes plate; boot it
 @pass items gone from the chest without a crash (Forge missing-mapping prompt accepted); the plate stays and serves Supplementaries pancakes
-@fails remap behaviour (no conversion wanted)
+@fails remap behavior (no conversion wanted)
 @from batches/r1115/p9_o2.qb
 @reviewed 2026-11-16
 > data get block 200 -60 205 Items
@@ -231,7 +231,7 @@ look chest has no rusticdelight:pancake / fried_dough (if 1.2.02 held them); the
 ## SQ-RDX-14 | Vintage pizzas unchanged
 @group A
 @commands Recipe lookup Supreme Pizza incomplete item `kubejs:incomplete_pizza`; Vintage Cheese and Meat Pizza
-@pass incomplete pizza item renders (Brewin pizza sprite, grey); Vintage pizzas unchanged (dough, sauce, dough)
+@pass incomplete pizza item renders (Brewin pizza sprite, gray); Vintage pizzas unchanged (dough, sauce, dough)
 @fails texture path `brewinandchewin:item/pizza`
 @from batches/r1113/c4_a.qb
 @reviewed 2026-11-16

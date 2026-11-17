@@ -11,7 +11,7 @@ We disable all ruined portals (structure_overrides.js writes the set at frequenc
 
 **Fix (since [structure-groups](structure-groups.md) emptied sets have no members at all):**
 - `mixin/ChunkGeneratorLocateMixin` @Inject RETURN on private `getPlacementsForStructure` (m_223138_, sole caller is
-  findNearestMapStructure) → `worldgen/DeadPlacementFilter` drops placements with `frequency` (f_227024_) <= 0.
+  findNearestMapStructure) -> `worldgen/DeadPlacementFilter` drops placements with `frequency` (f_227024_) <= 0.
   Covers maps, /locate, cartographer trades, dolphins.
 - `kubejs/server_scripts/loot/06_dead_maps.js`: pre-roll genericLootTables strip of exploration_map entries whose
   destination is in DEAD_DESTINATIONS, over an explicit TABLES list (5 Monobank tables). Node-tested.

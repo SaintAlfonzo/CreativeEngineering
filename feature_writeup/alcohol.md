@@ -242,7 +242,7 @@ that age. The wider keg / cask fluid audit is still open. Tests VTD-16.
 
 **New and changed effects:**
 
-| # | Effect | Behaviour |
+| # | Effect | Behavior |
 |---|---|---|
 | E1 | Intoxication | Every drink gives it, hidden, and it lasts a little less than the drink's Tipsy. While it lasts, food gives no saturation (hunger still fills). AppleSkin / HUD overlay on the hunger bar. Undead can't get it (`#immune_to_intoxication`) |
 | E2 | Raging | From Bloody Mary and Red Rum. Each melee hit at more than 80% charge adds a stack, up to 4. Each stack adds 5% attack speed, plus 2.5% per extra effect level, capped at 80% (multiplies the total). One stack drops every 2.5 x attack cooldown. Each stage has its own particles. Needs per-entity data and a sync packet |
@@ -365,7 +365,7 @@ bricks and so on).
 | yes | `botania:blaze_block` | Blaze Mesh, a fuel block that glows hot |
 | no | `handcrafted:oven`, `fantasyfurniture:*/oven` (7) | decorative furniture with no fire |
 | no | boilers: `davebuildingmod:*_boiler` (~70), `design_decor:*_boiler*` (~40), `railways:*locometal_boiler` (~65) | decorative shells, no heat |
-| no | `minecraft:coal_block`, charcoal blocks, `blocky_siege:fire_bomb_*`, fire coral, `botania:endoflame` / `exoflame` | not burning; named by colour or theme only |
+| no | `minecraft:coal_block`, charcoal blocks, `blocky_siege:fire_bomb_*`, fire coral, `botania:endoflame` / `exoflame` | not burning; named by color or theme only |
 
 **Missing cold sources:**
 
@@ -546,7 +546,7 @@ button); all assets and data through `tools/port_resources.py`.
   `RenderNameTagEvent`, signs by building scrambled lines each frame (the sign's line cache stays clean).
 - "Place a temperature block near a keg" is awarded from code (`BnCCommonEvents`): its 1.21 triggers take loot
   conditions, which 1.19.2's `placed_block` can't. Upstream's two loot conditions served only this, so they aren't ported.
-- Coaster models are extra baked models drawn quad by quad with the texture-modifier tint (no wrapped model or colour
+- Coaster models are extra baked models drawn quad by quad with the texture-modifier tint (no wrapped model or color
   handler). Fluid item displays copy NBT keys (`copy_nbt`) where upstream remaps data components.
 - Create Central Kitchen's required keg mixin (2.6) was checked against the bytecode: both its injectors find their
   targets in the port's `updateTemperature` (first `Level#getBlockState`, second `BlockState#is(TagKey)` with a second
@@ -699,11 +699,11 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-71 Intoxicated wobble (10.4):** with AppleSkin, Intoxicated and holding food -> the saturation / food preview icons wobble; `intoxicationFoodOverlay = false` -> they don't
 - [ ] **AL-72 Tipsy drift (10.4):** Tipsy V or higher, stand still -> the view slides slightly as it spins; Distortion Effects 0 -> no spin and no drift
 - [ ] **AL-73 Lit only (10.13):** keg next to an unlit furnace -> normal; light it -> warm; same with a Decorative Blocks brazier and a bonfire on firewood
-- [ ] **AL-74 Machines running (10.13):** keg within 2 blocks of an IE coke oven's centre block -> normal while idle, warm while it cooks; IE furnace heater only while powered and heating; PneumaticCraft air compressor only while burning fuel
+- [ ] **AL-74 Machines running (10.13):** keg within 2 blocks of an IE coke oven's center block -> normal while idle, warm while it cooks; IE furnace heater only while powered and heating; PneumaticCraft air compressor only while burning fuel
 - [ ] **AL-75 Fueled blaze (10.13):** keg beside a blaze burner with no fuel -> normal; feed it -> warm; liquid blaze burner the same; blaze enchanter warm only with experience in its tank
 - [ ] **AL-76 Cold blocks (10.13):** a temperate-biome keg ringed by snow blocks, thin ice, powder snow, permafrost or cryosol -> chilly/cold; a lit furnace beside them cancels one
 - [ ] **AL-77 Tooltips (10.13, split 10.18):** furnace, brazier, blaze burner, campfire -> "Heats the surrounding environment" with "Useful for keg brewing and wine casking" on the next line; snow block, ice, permafrost -> "Cools the surrounding environment" and the same second line; keg -> "Sensitive to hot and cold blocks in the environment"; an FD cooking pot on a lit furnace still doesn't cook
-- [ ] **AL-78 Tankard slot icon (10.16):** open an empty keg -> the container slot shows the grey tankard outline, not black and purple
+- [ ] **AL-78 Tankard slot icon (10.16):** open an empty keg -> the container slot shows the gray tankard outline, not black and purple
 - [ ] **AL-79 Leftover slot (10.16):** ferment a recipe with a honey bottle ingredient -> the glass bottle lands in the new slot right of the output, nothing pops out; it can't be placed into; shift-click moves it to the inventory
 - [ ] **AL-80 Leftovers overflow and stall (10.16):** with the leftover slot full of glass bottles (64) -> the next bottle goes to the empty-container slot under the fluid slot; with that slot holding buckets instead (empty milk buckets through the fluid slot first) the next honey-bottle batch waits at 0 progress and resumes once the bottles are taken out; `stallWhenFull = false` -> it ferments and throws the bottle
 - [ ] **AL-81 Old keg loads (10.16):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-01).* a keg placed with `-02` holding ingredients, a tankard and a drink keeps all of them after the `-03` install
@@ -713,10 +713,10 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-85 Drink food values (11):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-04).* hover Beer, Red Wine, the Bellini and Bottle of Wodka -> AppleSkin shows half a rotten (green) shank and no saturation; drink one at full hunger -> it can be drunk, hunger goes up by half a shank, saturation doesn't
 - [ ] **AL-86 Intoxication everywhere (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-04).* drink Red Wine, the Bellini and Bottle of Wodka (one at a time, after milk) -> the hunger bar turns Intoxicated for 1:30, no Intoxication icon or particles; eat bread -> hunger fills, saturation doesn't
 - [ ] **AL-87 Nausea (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-04).* Red Wine -> Nausea 0:05; Jellie Wine and Mojang Noir -> 0:10; the Bellini -> one Nausea 0:05 (not two); Beer -> no Nausea; Bottle of Wodka -> its own Nausea 1:00 only
-- [ ] **AL-88 Tooltip name (11):** Beer, Vodka, the Bellini, Bottle of Wodka and a wine show Quark's grey saturation word as "Intoxicating Drink" (not "Disgusting Snack"); rotten flesh still says "Disgusting Snack"; the effect lines read "Intoxication (m:ss)"; a wine lists its own effect, then Intoxication and Nausea; `[alcohol] quarkLine = false` brings "Disgusting Snack" back
+- [ ] **AL-88 Tooltip name (11):** Beer, Vodka, the Bellini, Bottle of Wodka and a wine show Quark's gray saturation word as "Intoxicating Drink" (not "Disgusting Snack"); rotten flesh still says "Disgusting Snack"; the effect lines read "Intoxication (m:ss)"; a wine lists its own effect, then Intoxication and Nausea; `[alcohol] quarkLine = false` brings "Disgusting Snack" back
 - [ ] **AL-89 Wine still a wine (11):** drink a wine in survival -> its own effect (aged level and duration), the empty wine bottle back; in creative the bottle stays; sneak-place still works; Apple Cider from Farmer's Delight unchanged (no rotten shank)
 - [ ] **AL-90 Log (11):** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-00, 44 of 44 drinks).* after the restart `logs/latest.log` has `[alcohol] food values set on 44 of 44 drinks` and no `[alcohol]` warnings
-- [ ] **AL-91 Coaster takes modelled items only (12):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-02).* right-click an empty coaster with a Vinery wine, a Farmer's Respite tea and a stone block -> none goes on; with a beer, an apple and FD hot cocoa -> each goes on with its own model; `[coaster] taggedItemsOnly = false` in `brewinandchewin-common.toml` -> the wine goes on again, drawn flat
+- [ ] **AL-91 Coaster takes modeled items only (12):** *Logic: scratch server PASSED 2026-10-22 (SQ-OM-02).* right-click an empty coaster with a Vinery wine, a Farmer's Respite tea and a stone block -> none goes on; with a beer, an apple and FD hot cocoa -> each goes on with its own model; `[coaster] taggedItemsOnly = false` in `brewinandchewin-common.toml` -> the wine goes on again, drawn flat
 - [ ] **AL-92 Display Delight foods on a coaster (12):** put a Hamburger, Bacon and Eggs, a Cake Slice and a Corn Delight Taco on one coaster (plain right-click) -> each drawn with its Display Delight model, about bowl size, none of them a flat item, none sticking far past the tray
 - [ ] **AL-93 Tooltip follows the tag (12):** "Placeable on a coaster" on the Hamburger and on a beer, not on a Vinery wine or a Farmer's Respite tea
 - [ ] **AL-94 WTHIT on a coaster (12):** look at a coaster with beer, beer, apple -> body "Coaster: 3 / 4", "2x Beer", "Apple"; sneak-right-click with an empty hand (coaster put away) -> "Coaster: 3 / 4 (put away)"; an empty coaster -> "Coaster: 0 / 4"; `[coaster] wthit = false` in `creativeengineering-common.toml` -> no lines
@@ -834,7 +834,7 @@ Lines go in [../kubejs/client_scripts/tooltips.js](../kubejs/client_scripts/tool
   - About 110 items have their own coaster model in the port's `assets/brewinandchewin/brewinandchewin/coaster/`.
     These are vanilla foods, Farmer's Delight meals and drinks, and every Brewin drink. Anything else is drawn as a
     plain item.
-  - So it works with other mods' items (Vinery wines, Farmer's Respite teas), but only the modelled ones look placed.
+  - So it works with other mods' items (Vinery wines, Farmer's Respite teas), but only the modeled ones look placed.
 - **Display Delight overlap.** A plain right-click on a coaster always goes to the coaster: the block's own use runs
   before the held item's. A **sneak** right-click with something in hand skips the block, so a Display Delight food
   (which places on sneak) would try to put a plate on top of the coaster. Vinery bottles place on a plain click
@@ -1011,7 +1011,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
 |---|---|---|
 | Q1 | The black and purple texture: which screen is "plating"? The keg GUI, the JEI Fermenting page (the pouring row), or the recipe book? | ANSWERED 2026-10-19: the keg GUI's tankard slot icon; fixed in `-03` (10.16) |
 | Q2 | Keg fluid slot: two slots (in / empty out, 2.0 style) or one slot where the empty container stays put? | BUILT with the default: two slots |
-| Q3 | "Placeable on a coaster": items with a coaster model plus wines and juices, or every item? | BUILT with the default: modelled items plus Vinery and Farmer's Respite drinks |
+| Q3 | "Placeable on a coaster": items with a coaster model plus wines and juices, or every item? | BUILT with the default: modeled items plus Vinery and Farmer's Respite drinks |
 | Q4 | Pierogi: drop both pack recipes, including the heatless shapeless one? cooking.md (the cooking plans, folded into [todo/TODO.md](todo/TODO.md) and removed 2026-10-19) likes heatless shapeless meals | BUILT with the default: both dropped |
 | Q5 | Steel Toe Stout boost size | BUILT with the default: Resistance II, 90 s |
 | Q6 | Ham and cheese | DECIDED 2026-10-18: as in the 8.6 table |
@@ -1025,7 +1025,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
   Replaces the earlier `brewinandchewin_parity.md`.
 - 2026-10-14: decided: the pack's `create:honey` / `minecraft:milk` (4.1), green tea kombucha (4.5). Added the heat / cold
   block audit (2.7) and AL-41.
-- 2026-10-17: port begun in `development/backportedBrewin`: build files, licence, about 45 upstream classes (blocks, keg
+- 2026-10-17: port begun in `development/backportedBrewin`: build files, license, about 45 upstream classes (blocks, keg
   block entity, recipes, items, utilities, Forge containers).
 - 2026-10-18: port completed to a building jar (3.5): registries, config, fluids, effects, capability, network, menu,
   screen, recipe book, HUD, camera, scrambling, coaster renderer, JEI, remaps, mixins; `tools/port_resources.py` for
@@ -1330,7 +1330,7 @@ Your rule, 2026-10-19: a wine's size is how many fit in one placed block, and th
 - **Drawing:** a bottle lying in a 4x / 9x rack or the wine box is shrunk to the 15 px slot length, measured from its
   own baked model (`BottleRenderer.fitToSlot`). That replaces 10.8's fixed 15/18 for BIG items, and covers stal (18 px)
   and sun-kissed (16 px), now small. Width isn't fitted, so wide mediums (Aegis, Creeper's Crush, Mellohi) still
-  overlap a neighbour in the 4x rack until their models are tweaked. The single-bottle rack stands bottles upright, as
+  overlap a neighbor in the 4x rack until their models are tweaked. The single-bottle rack stands bottles upright, as
   before.
 - **Changes with today's numbers:** stal and sun-kissed move from large to small (9x racks); the 8 mediums leave the
   9x rack and gain the wine box; the 6 larges leave every 4x / 9x rack (10.11 had let them in).
@@ -1405,7 +1405,7 @@ WTHIT shows `cold x2.0`, `cellar x2.0`, `cold cellar x4.0`.
 
 Your list, 2026-10-19: Stal and Sun-kissed medium and slimmed in the 4x rack; Strad, Aegis, Apple Cider, Chenet,
 Mellohi, Creeper's Crush, Eiswein slimmed in the 4x rack; Magnetic medium with a new wine box look (Strad's shape in
-Magnetic's colours, made with the palette swap tool) and a slim 4x look; slim bottles in the wine box too; Praetorian
+Magnetic's colors, made with the palette swap tool) and a slim 4x look; slim bottles in the wine box too; Praetorian
 stays as it is.
 
 - **Sizes (`ObjectRegistry`):** `stal_wine` 3 -> 2, `glowing_wine` (Sun-kissed) 3 -> 2, `magnetic_wine` 1 -> 2. So Stal
@@ -1503,9 +1503,9 @@ stays as it is.
 - **Still open in 3.4:** food types, stack sizes and the Canned Kimchi `satisfaction` copy need `/dumpall` (or
   `/dumpfood` + `/dumpstacks`) in a game running the port, then `tools/food_catalog.py`, `tools/gen_can_types.py` and
   `tools/gen_stack_sizes.py`. The 4.5.0 kimchi has no effect (2 hunger, 0.6 saturation).
-- **Vinery grass slab tint (pack, `alcohol/vineryport #6`):** the slab used the same grass colour as grass blocks, but
-  Rubidium blends the vanilla grass block's tint per vertex across its neighbours (biome blend above 0) and colours a
-  modded block flat, one colour per block, so the slab read a shade off. `blocktags.js` puts `vinery:grass_slab` in
+- **Vinery grass slab tint (pack, `alcohol/vineryport #6`):** the slab used the same grass color as grass blocks, but
+  Rubidium blends the vanilla grass block's tint per vertex across its neighbors (biome blend above 0) and colors a
+  modded block flat, one color per block, so the slab read a shade off. `blocktags.js` puts `vinery:grass_slab` in
   Rubidium's `#c:blendable_blocks` (`b.t_blendable_blocks`), which opts it into the same blending.
 - **Tests:** AL-78 to AL-84.
 
@@ -1521,9 +1521,9 @@ stays as it is.
   `OWN_SHAPE`, `BOX_SHAPE` (strad) and `INVERT` sit at the top of the class, so a wine can move to Stal's shape or
   change mapping in one line.
 - **4x rack:** draws the same box model, only smaller: at most 0.75 scale (`BottleRenderer.FOUR_RACK_BOX_SCALE`), so
-  the 8 px Strad body comes out 6 px and the diagonal neighbours, 0.35 / 0.33 apart, don't overlap. No model change.
+  the 8 px Strad body comes out 6 px and the diagonal neighbors, 0.35 / 0.33 apart, don't overlap. No model change.
   Smalls, Praetorian and every other rack draw as before.
-- **Magnetic inverted:** its recolour uses the swap tool's `--invert` mapping (the shape's darkest colour takes the
+- **Magnetic inverted:** its recolour uses the swap tool's `--invert` mapping (the shape's darkest color takes the
   palette's brightest): a light outline round dark red glass. Checked against `palette_swap.py --invert` output.
 - **Dump (`/dumpwinetextures`, client command):** writes every wine texture the last resource load saw to
   `kubejs/exported/wine_textures/`: `upstream/` as the donor jars have it (every wine's own textures, parts included,
@@ -1546,7 +1546,7 @@ round on the local `-03` jars (10.15, 10.17 and the recolour tweaks below were a
 | Tweak | Heat / cold source line: "Useful for..." on its own line | AL-77 reworded |
 
 - **Recolour tweaks (port, `BottleLooks`, built 2026-10-20 before the test round):** Sun-kissed (`glowing_wine`) and
-  Aegis use the inverted mapping like Magnetic. `DROPS` leaves colour classes out of a wine's palette before the swap:
+  Aegis use the inverted mapping like Magnetic. `DROPS` leaves color classes out of a wine's palette before the swap:
   brown (hue 10 to 45, saturation 0.4 or more, value 0.7 or less) for Mellohi, Apple Cider and Creeper's Crush; white
   (saturation 0.15 or less, value 0.85 or more) for Magnetic, whose outline takes its salmon instead. The swap tool has
   the same filter as `--drop brown,white` (`textureswapper/palette_swap.py`). Still built in memory (D13).
@@ -1629,7 +1629,7 @@ reads "Intoxicating Drink".
   a harmful Intoxication, so all 44 read "Disgusting Snack", together with rotten flesh and raw chicken. No saturation
   value gives a bucket of its own (the user's "half a shank of saturation" idea: 1 point is still the lowest bucket,
   and a lang override of any bucket renames every other food in it), so the listener runs after Quark's on
-  `RenderTooltipEvent.GatherComponents` and swaps that word for "Intoxicating Drink" (grey, lang key
+  `RenderTooltipEvent.GatherComponents` and swaps that word for "Intoxicating Drink" (gray, lang key
   `tooltip.creativeengineering.intoxicating_drink`) on any food whose effects hold Intoxication: the drink list in
   `global.alcohol` stays the single source. The earlier KubeJS rename of the effect line (`alcohol_tooltip.js`,
   "Intoxicating Drink (m:ss)") is retired so the two lines don't repeat each other: the effect line reads
@@ -1651,12 +1651,12 @@ reads "Intoxicating Drink".
   category" means (JEI category, real items with a tab group, or a tooltip line) and the effects per brew. Brief:
   [briefs/alcohol_pack.md](briefs/alcohol_pack.md).
 
-## 12. Coasters: modelled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
+## 12. Coasters: modeled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
 
 Your scratchpad note (2026-10-19, TODO `alcohol/brewinport #8`): remove anything without a model from coasters; add
 Display Delight models to the coaster; add WTHIT info.
 
-- **Only modelled items (port):** `CoasterBlockEntity#addItem` now checks `CoasterBlockEntity.accepts`: with the new
+- **Only modeled items (port):** `CoasterBlockEntity#addItem` now checks `CoasterBlockEntity.accepts`: with the new
   `[coaster] taggedItemsOnly` (`brewinandchewin-common.toml`, default true) a stack must be in
   `#brewinandchewin:placeable_on_coaster`. False takes any item, as 4.5.0 does. A rejected item falls through to
   4.5.0's empty-hand path, so it takes the top item off a coaster that has one, the same as clicking a full coaster.
@@ -1670,9 +1670,9 @@ Display Delight models to the coaster; add WTHIT info.
   model for (the other 29 keep the port's). Each points at the DD block's default model: the food on its own first,
   then on a Small Food Plate, then on a Food Plate. DD's models are full blocks (a plate is 14 px), so the file has a
   `"scale"` that brings the widest side to 10 px (the port's bowls are 12); 33 are scaled (0.63 to 0.95), 23 already
-  fit. `"scale"` is new in the port's coaster renderer, applied around the bottom centre, default 1.
+  fit. `"scale"` is new in the port's coaster renderer, applied around the bottom center, default 1.
   - Generator `coaster_models` (groups client, food) runs before `placeable_catalog`.
-- **Tooltip line:** `tools/placeable_catalog.py` now tags only modelled items, the port's plus the generated ones:
+- **Tooltip line:** `tools/placeable_catalog.py` now tags only modeled items, the port's plus the generated ones:
   152 (was 158). Out: the Vinery wines and juices and Farmer's Respite teas (60), which have no coaster model.
   In: the 56 Display Delight foods. This replaces the 8.3 allow-list (8.9 Q3).
   **Superseded 2026-10-29:** the generator now reads DD 1.7.0 multipart blockstates, Vinery wine bottles and
