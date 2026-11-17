@@ -747,6 +747,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass -
 @fails -
 @draft no batch holds this row yet
+@superseded obsolete 2026-11-10: the golden stews were removed; replaced by SQ-GLD-16 (2026-11-16 P2.5, from the row text)
 ## SQ-GLD-16 | old golden stews, cans and the jar fluid gone without warnings; /give fails; other golden foods intact
 @group A
 @commands Needs the CD and Common jars built 2026-11-10 and a full restart. Start on an old world that holds golden and enchanted golden stews, beetroot soups, rabbit stews and their cans (also a jar filled with one); `/give @p goldenfood:golden_mushroom_stew`; JEI search `golden stew`, `golden soup`, `canned golden`; `/dumpall`
