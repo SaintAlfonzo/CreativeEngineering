@@ -36,7 +36,7 @@ ItemEvents.tooltip(e => {
 		[i.stackable_log, ['A campfire: cooks up to 4 foods and burns 10 minutes; rain can put it out', col.norm],
 			['Add logs to refuel; a shovel or a water bottle puts it out', col.norm]],
 		// Wines
-		[i.chorus_wine, ['Makes you wake up in strange places', col.lpurple]]
+		[i.chorus_wine, ['Makes you wake up in strange places', col.strange]]
 	);
 
 	// Vinery flower box rows (feature_writeup/flower_pots.md 3.4)

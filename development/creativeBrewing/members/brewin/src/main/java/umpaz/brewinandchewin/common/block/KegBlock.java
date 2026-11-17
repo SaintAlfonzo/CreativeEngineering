@@ -76,7 +76,7 @@ public class KegBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                      }
                   }
                });
-               kegBE.awardUsedRecipes(player);
+               kegBE.popExperience(player);
                level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
                return InteractionResult.SUCCESS;
             }
@@ -141,7 +141,7 @@ public class KegBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
       if (state.getBlock() != newState.getBlock()) {
          if (level.getBlockEntity(pos) instanceof KegBlockEntity kegEntity) {
             Containers.dropContents(level, pos, kegEntity.getDroppableInventory());
-            kegEntity.getUsedRecipesAndPopExperience(level, Vec3.atCenterOf(pos));
+            kegEntity.popUsedExperience(level, Vec3.atCenterOf(pos));
             level.updateNeighbourForOutputSignal(pos, this);
          }
 

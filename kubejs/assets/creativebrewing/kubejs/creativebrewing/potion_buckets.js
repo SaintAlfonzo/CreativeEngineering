@@ -30,9 +30,9 @@ const $PB_StringUtil      = Java.loadClass('net.minecraft.util.StringUtil')
 const $PB_MobEffectCategory = Java.loadClass('net.minecraft.world.effect.MobEffectCategory')
 
 const PB_TOOLTIP_IDS = [
-    'creativebrewing:potion_bucket',
-    'creativebrewing:splash_potion_bucket',
-    'creativebrewing:lingering_potion_bucket',
+    global.item.ce_potion_bucket,
+    global.item.ce_splash_potion_bucket,
+    global.item.ce_lingering_potion_bucket,
 ]
 
 // "M:SS" (StringUtil.formatTickDuration - same helper vanilla's own tooltip uses) or the

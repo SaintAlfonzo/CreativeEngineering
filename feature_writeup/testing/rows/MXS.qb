@@ -116,7 +116,7 @@ sleep 3
 > cdevtest items {H1+46} {H2+1} {H3+38} 2
 expect verb=items items=\S*vintagedelight:mixed_seeds:\d+
 reject verb=\S+ .*done=0
-shell grep -c "CE/vintage_mixed_seeds_grass" logs/latest.log; true
+shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -3; true
 look the three verb=items lines in order: line 1 (chest rolls): some vintagedelight:mixed_seeds (share 0.04, 1-4); line 2 (300 empty-hand grass, /loot mine with no tool): about 6 mixed seeds; line 3 (100 with shears): grass items only, no mixed seeds
 > kill @e[type=minecraft:item]
 

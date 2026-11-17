@@ -27,6 +27,8 @@ dependencies {
     compileOnly project(':creativeCommon')
     // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
     compileOnly project(':creativeCompat')
+    // Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
+    compileOnly project(':creativeLoot')
     compileOnly 'local:FarmersDelight:1.19.2-1.2.4'
     compileOnly 'local:FarmersRespite:1.19-2.0'
     compileOnly 'local:wthit:1.19.2-forge-5.36.1'
@@ -46,10 +48,9 @@ dependencies {
     // M8 compartments (plan_cb_publish.md 3b; were the blockheadsAdditions and incubationAdditions members). Cooking for
     // Blockheads and Balm (libs/, copied from mods/): the racks extend CfB's blocks, the mixins target its oven and corner;
     // deobf as the member had them. Incubation, Blueprint, Alex's Mobs, Citadel, Untitled Duck Mod and GeckoLib come
-    // SRG-named from Creative Common's libs/ above. The coaster offset mixin targets the Brewin' port (Creative Brewing).
+    // SRG-named from Creative Common's libs/ above.
     compileOnly fg.deobf('local:cookingforblockheads-forge-1.19.2:13.3.4')
     compileOnly fg.deobf('local:balm-forge-1.19.2:4.6.0')
-    compileOnly project(':backportedBrewin')
 }
 
 // The ARR guard of ce.forge-mod (checkNoArrResources, gradle.properties resource_guard_*) compares jar-root paths; the

@@ -11,7 +11,7 @@ Vine Tile, Cheese Wheel, Cheese Pizza and Meat Pizza. Plan: feature_writeup/vint
     plant (S1, S3, S8); the 1.20-only sniffer_diggable_block tag; the Galosphere / Spelunkery recipes; the Diet tags
   * not shipped: the biome modifiers of the four wild plants (the pack places them; salt_patch stays); the seven
     chest-loot GLMs and their global_loot_modifiers entries (the tables ship, wired to nothing; the straw modifier
-    stays); the chests/mixed_seeds table loses its 1.20 armor trim pool
+    stays, in the fragment data/vintagedelight/glm_entries.json); the chests/mixed_seeds table loses its 1.20 armor trim pool
   * KOTS jar ids: the separate mason_jar / *_mason_jar items are gone; the jar item is the block's own item, so every
     reference is renamed to the block id (vintagedelight:mason_jar -> empty_mason_jar, relish_mason_jar -> relish_jar,
     sweet_berry_mason_jar -> sweet_berry_jam_jar, ...)
@@ -449,7 +449,9 @@ def main():
             d = json.loads(rename_ids(raw.decode('utf-8')))
             path = out_path(path)
             if path == 'data/forge/loot_modifiers/global_loot_modifiers.json':
-                d['entries'] = [e for e in d['entries'] if 'add_loot_' not in e]
+                # The pack's jars ship no Forge list: a fragment Creative Loot's GlmMerge reads (plan_rules_fixes.md section 5)
+                path = 'data/vintagedelight/glm_entries.json'
+                d = {'entries': [e for e in d['entries'] if 'add_loot_' not in e]}
             elif '/recipes/' in path:
                 rel = path.split('/recipes/', 1)[1][:-5]
                 d = convert_recipe(rel, d)

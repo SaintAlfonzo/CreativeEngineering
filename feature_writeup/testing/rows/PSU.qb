@@ -501,6 +501,44 @@ expect PST09 covered slab turned to dirt slab in winter
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 reject Enum constant must be one of
 
+## SQ-PST-09c | Vinery grass slab slower in winter, rerun on the direct hook (2026-11-17)
+@group A (same temperate column)
+@commands Owner rule 2026-11-03 (plan_scratch_bugfix_1103 4.3): grass spreads normally in spring, autumn and winter and at half speed (`[crop_seasons] grassOffPenalty` 0.5) in summer and in tropical (wet/dry) biomes. As SQ-PST-03 with a 32x32 pad of `vinery:dirt_slab` (bottom) ringed with `vinery:grass_slab`; count with `/fill <pad> vinery:dirt_slab replace vinery:grass_slab`; then put stone on one grass slab in summer and wait 30 s (it still turns to a dirt slab); 3 runs each in `mid_spring`, `mid_summer`, `mid_winter` at randomTickSpeed 100, rebuilding the pad before each run; reset to 3. Boot log: `[creativecalendar] grass season hook live: <target>` once for this block
+@pass summer mean about 50 % of spring (35 to 65 %); winter about equal to spring (85 to 115 %); the hook-live line present
+@fails no hook-live line: the Vinery port's `SpreadableGrassSlabBlock.randomTick` does not call `GrassSeasonHook.refuse` (Calendar's `VineryGrassSlabSeasonMixin` was deleted 2026-11-17, plan_rules_fixes.md 12f step 1; Creative Brewing and Calendar jars of 2026-11-17 both needed); the covered slab not dying: the hook placed before the survive check
+@jars creativecalendar creativebrewing
+@reviewed 2026-11-17
+> fill {S5H1+37} {S5H2-1} {S5H3+57} {S5H1+74} {S5H2-1} {S5H3+94} minecraft:stone
+> fill {S5H1+37} {S5H2} {S5H3+57} {S5H1+74} {S5H2+3} {S5H3+94} minecraft:air
+> fill {S5H1+39} {S5H2-1} {S5H3+59} {S5H1+72} {S5H2-1} {S5H3+92} vinery:grass_slab
+> fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab
+> gamerule randomTickSpeed 100
+> season set MID_SPRING
+sleep 2
+> fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab replace vinery:grass_slab
+repeat 3
+sleep 10
+> say S5R PST09c spring
+> fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab replace vinery:grass_slab
+end
+> season set MID_WINTER
+sleep 2
+> fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab replace vinery:grass_slab
+repeat 3
+sleep 10
+> say S5R PST09c winter
+> fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab replace vinery:grass_slab
+end
+> setblock {S5H1+39} {S5H2} {S5H3+70} minecraft:stone
+> gamerule randomTickSpeed 3
+> cdevtest randomtick {S5H1+39} {S5H2-1} {S5H3+70} {S5H1+39} {S5H2-1} {S5H3+70} 15 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 60
+> execute if block {S5H1+39} {S5H2-1} {S5H3+70} vinery:dirt_slab run say PST09c covered slab turned to dirt slab in winter
+> gamerule randomTickSpeed 3
+shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST09c
+expect PST09c covered slab turned to dirt slab in winter
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+reject Enum constant must be one of
 ## SQ-PST-10 | Vintage lush grass slower in winter
 @group A (same temperate column)
 @commands Owner rule 2026-11-03 (plan_scratch_bugfix_1103 4.3): grass spreads normally in spring, autumn and winter and at half speed (`[crop_seasons] grassOffPenalty` 0.5) in summer and in tropical (wet/dry) biomes. As SQ-PST-03 with a 32x32 pad of `farmersdelight:rich_soil` ringed with `vintagedelight:lush_grass_block`; count with `/fill <pad> farmersdelight:rich_soil replace vintagedelight:lush_grass_block`; 3 runs each in `mid_spring`, `mid_summer`, `mid_winter` at randomTickSpeed 100, rebuilding the pad before each run; reset to 3. Boot log: `[creativecalendar] grass season hook live: <target>` once for this block

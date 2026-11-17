@@ -20,6 +20,27 @@
 //   L.dropShare(table, item, share)    `share` of the rolls of the table's main pool (the one with the most entries)
 //                                      give `item` instead: the pool's other entries keep their ratios and Luck
 //                                      bonuses (weights and qualities are scaled together); exact with no Luck
+//     killedByPlayer true              only when a player killed the mob (minecraft:killed_by_player)
+//     holding  id | '#tag'             block tables: the breaking tool is this item or in this tag; entity tables: the
+//                                      killer's main hand
+//     notHolding id | '#tag'           the opposite of holding
+//     silkTouch true | false           block tables: the breaking tool has / has not Silk Touch
+//     state    { prop: 'value' }       block tables: the broken block's state (minecraft:block_state_property; the
+//                                      block is the table's, or stateBlock)
+//   L.swapDrop(tables, item, into, opts)  when the conditions of opts hold (the drop() options above), entries of
+//                                      `item` drop nothing and a pool gives `into` instead ({ item, count } or an id);
+//                                      otherwise the table is unchanged (the knife-scavenging rules: a pumpkin broken
+//                                      with a knife gives 4 slices)
+//   L.replaceDrops(tables, item, opts) every pool of the table is replaced by one pool giving `item` (count option)
+//   L.rewrite(tables, fn, name)        fn(pools, functions, table) edits the raw table JSON in place and returns true
+//                                      when it changed something; for rules with no shape above (Creative Delight's
+//                                      soil yield and bell pepper weights). Tables of a mod that is not loaded are
+//                                      skipped. Runs before the pools and shares above.
+//   L.afterTables(fn)                  fn() runs once after this reload's tables are rewritten (summary log lines)
+//   L.onlyDrop(entities, item, opts)   post-roll (a LootJS modifier, so after every mod's global loot modifiers): a
+//                                      kill of one of these entity types drops `item` and nothing else, whatever
+//                                      added it (Miner's Delight's squid chain). opts.logName: the caller's
+//                                      R.logName(...)
 //
 // Tables: exact ids only ('minecraft:entities/bat'). An empty vanilla table (bat, silverfish) is fine. The pools are
 // named ce_drop_<n>_<item> so a /dumploot export shows where they came from.
@@ -39,6 +60,10 @@
 
     T.drops = []       // drop(): { table, pool }
     T.dropShares = []  // dropShare(): { table, item, share }
+    T.swaps = []       // swapDrop(), replaceDrops(): { table, item, conditions, pool, all }
+    T.rewrites = []    // rewrite(): { table, fn, name }
+    T.afterFns = []    // afterTables()
+    T.onlyDrops = []   // onlyDrop(): { entity, item, logName }
 
     function warn(msg) {
         if (T.stats && T.stats.warnings) T.stats.warnings.push(msg)
@@ -88,6 +113,66 @@
         return flag ? held : { condition: 'minecraft:inverted', term: held }
     }
 
+    function isBlock(table) {
+        return typeOf(table) === 'minecraft:block'
+    }
+
+    // An item or '#tag' as a 1.19.2 item predicate.
+    function itemPredicate(id) {
+        id = String(id)
+        return id.charAt(0) === '#' ? { tag: id.substring(1) } : { items: [normId(id)] }
+    }
+
+    function heldCondition(id, table) {
+        if (isBlock(table)) return { condition: 'minecraft:match_tool', predicate: itemPredicate(id) }
+        return { condition: 'minecraft:entity_properties', entity: 'killer', predicate: { equipment: { mainhand: itemPredicate(id) } } }
+    }
+
+    function not(term) {
+        return { condition: 'minecraft:inverted', term: term }
+    }
+
+    // The conditions of the drop() options for one table, or null after a warning.
+    function conditionsFor(opts, table, where, chanceAllowed) {
+        var c = []
+        if (opts.knife === true || opts.knife === false) {
+            if (isBlock(table)) {
+                var tool = heldCondition('#' + KNIVES, table)
+                c.push(opts.knife ? tool : not(tool))
+            } else {
+                c.push(knifeCondition(opts.knife))
+            }
+        }
+        if (opts.burning === true || opts.burning === false) c.push(onFire(opts.burning))
+        if (opts.tool) c.push({ condition: 'forge:can_tool_perform_action', action: String(opts.tool) })
+        if (opts.killedByPlayer === true) c.push({ condition: 'minecraft:killed_by_player' })
+        if (opts.holding != null) c.push(heldCondition(opts.holding, table))
+        if (opts.notHolding != null) c.push(not(heldCondition(opts.notHolding, table)))
+        if (opts.silkTouch === true || opts.silkTouch === false || opts.state) {
+            if (!isBlock(table)) {
+                warn(where + ': silkTouch and state are for block tables, ' + table + ' skipped')
+                return null
+            }
+            if (opts.silkTouch === true || opts.silkTouch === false) {
+                var silk = { condition: 'minecraft:match_tool', predicate: { enchantments: [{ enchantment: 'minecraft:silk_touch', levels: { min: 1 } }] } }
+                c.push(opts.silkTouch ? silk : not(silk))
+            }
+            if (opts.state) {
+                // the block of a blocks/<id> table is <ns>:<id>; stateBlock names it when the table is shared
+                c.push({ condition: 'minecraft:block_state_property', properties: opts.state,
+                    block: opts.stateBlock ? normId(opts.stateBlock) : table.replace(':blocks/', ':') })
+            }
+        }
+        if (!chanceAllowed) return c
+        var chance = opts.chance === undefined ? 1 : opts.chance
+        if (opts.looting > 0) {
+            c.push({ condition: 'minecraft:random_chance_with_looting', chance: chance, looting_multiplier: opts.looting })
+        } else if (chance < 1) {
+            c.push({ condition: 'minecraft:random_chance', chance: chance })
+        }
+        return c
+    }
+
     function itemEntry(item, count) {
         var e = { type: 'minecraft:item', name: normId(item) }
         if (Array.isArray(count)) {
@@ -111,17 +196,6 @@
         }
         var count = opts.count === undefined ? 1 : opts.count
 
-        var conditions = []
-        if (opts.knife === true || opts.knife === false) conditions.push(knifeCondition(opts.knife))
-        if (opts.burning === true || opts.burning === false) conditions.push(onFire(opts.burning))
-        if (opts.tool) conditions.push({ condition: 'forge:can_tool_perform_action', action: String(opts.tool) })
-        var chance = opts.chance === undefined ? 1 : opts.chance
-        if (opts.looting > 0) {
-            conditions.push({ condition: 'minecraft:random_chance_with_looting', chance: chance, looting_multiplier: opts.looting })
-        } else if (chance < 1) {
-            conditions.push({ condition: 'minecraft:random_chance', chance: chance })
-        }
-
         var entry = itemEntry(item, count)
         if (cooked) {
             var hot = itemEntry(cooked.item, cooked.count === undefined ? count : cooked.count)
@@ -133,10 +207,103 @@
         for (var i = 0; i < list.length; i++) {
             var table = normId(list[i])
             if (!okTable(table, where)) continue
+            var conditions = conditionsFor(opts, table, where, true)
+            if (conditions == null) continue
             var pool = { rolls: 1, bonus_rolls: 0, entries: [entry] }
             if (conditions.length) pool.conditions = conditions
             T.drops.push({ table: table, pool: JSON.parse(JSON.stringify(pool)), item: normId(item) })
         }
+    }
+
+    T.swapDrop = function (tables, item, into, opts) {
+        opts = opts || {}
+        var where = 'swapDrop ' + item
+        var to = into != null && into.item != null ? into : { item: into }
+        if (!okItem(item, where) || !okItem(to.item, where + ' into')) return
+        if (opts.chance !== undefined || opts.looting !== undefined) {
+            warn(where + ': chance and looting do not apply to a swap, skipped')
+            return
+        }
+        var list = arr(tables)
+        for (var i = 0; i < list.length; i++) {
+            var table = normId(list[i])
+            if (!okTable(table, where)) continue
+            var conditions = conditionsFor(opts, table, where, false)
+            if (conditions == null) continue
+            if (!conditions.length) {
+                warn(where + ': a swap needs at least one condition, ' + table + ' skipped')
+                continue
+            }
+            T.swaps.push({ table: table, item: normId(item), conditions: conditions,
+                pool: { rolls: 1, bonus_rolls: 0, entries: [itemEntry(to.item, to.count === undefined ? 1 : to.count)],
+                    conditions: JSON.parse(JSON.stringify(conditions)) } })
+        }
+    }
+
+    T.replaceDrops = function (tables, item, opts) {
+        opts = opts || {}
+        var where = 'replaceDrops ' + item
+        if (!okItem(item, where)) return
+        var list = arr(tables)
+        for (var i = 0; i < list.length; i++) {
+            var table = normId(list[i])
+            if (!okTable(table, where)) continue
+            T.swaps.push({ table: table, item: normId(item), all: true,
+                pool: { rolls: 1, bonus_rolls: 0, entries: [itemEntry(item, opts.count === undefined ? 1 : opts.count)] } })
+        }
+    }
+
+    T.rewrite = function (tables, fn, name) {
+        var list = arr(tables)
+        for (var i = 0; i < list.length; i++) {
+            var table = normId(list[i])
+            if (!okTable(table, 'rewrite ' + name)) continue
+            T.rewrites.push({ table: table, fn: fn, name: name || 'rewrite' })
+        }
+    }
+
+    T.onlyDrop = function (entities, item, opts) {
+        opts = opts || {}
+        if (!okItem(item, 'onlyDrop ' + item)) return
+        arr(entities).forEach(function (e) {
+            T.onlyDrops.push({ entity: normId(e), item: normId(item), logName: opts.logName || ('CL/only_drop/' + normId(e)) })
+        })
+    }
+
+    T.afterTables = function (fn) {
+        T.afterFns.push(fn)
+    }
+
+    // Every item entry of `item` (at any depth) gets the inverted swap conditions, so it drops only when they fail.
+    function guardEntries(node, item, guard) {
+        var n = 0
+        if (Array.isArray(node)) {
+            node.forEach(function (x) { n += guardEntries(x, item, guard) })
+            return n
+        }
+        if (!node || typeof node !== 'object') return 0
+        if (node.type === 'minecraft:item' && normId(node.name) === item) {
+            node.conditions = (node.conditions || []).concat([JSON.parse(JSON.stringify(guard))])
+            return 1
+        }
+        if (Array.isArray(node.children)) n += guardEntries(node.children, item, guard)
+        if (Array.isArray(node.entries)) n += guardEntries(node.entries, item, guard)
+        return n
+    }
+
+    function applySwap(pools, swap, table) {
+        if (swap.all) {
+            pools.splice(0, pools.length)
+            pools.push(JSON.parse(JSON.stringify(swap.pool)))
+            return true
+        }
+        var guard = not(swap.conditions.length === 1 ? swap.conditions[0] : { condition: 'minecraft:all_of', terms: swap.conditions })
+        if (!guardEntries(pools, swap.item, guard)) {
+            warn(table + ': no ' + swap.item + ' entry to swap, skipped')
+            return false
+        }
+        pools.push(JSON.parse(JSON.stringify(swap.pool)))
+        return true
     }
 
     T.dropShare = function (table, item, share) {
@@ -200,20 +367,28 @@
 
     ServerEvents.genericLootTables(function (event) {
         var byTable = {}
-        T.drops.forEach(function (d) {
-            var t = byTable[d.table] = byTable[d.table] || { pools: [], shares: [] }
-            t.pools.push(d)
+        function slot(table) {
+            return byTable[table] = byTable[table] || { pools: [], shares: [], swaps: [], rewrites: [] }
+        }
+        T.rewrites.forEach(function (d) {
+            if (Platform.isLoaded(d.table.split(':')[0])) slot(d.table).rewrites.push(d)
         })
-        T.dropShares.forEach(function (d) {
-            var t = byTable[d.table] = byTable[d.table] || { pools: [], shares: [] }
-            t.shares.push(d)
-        })
-        var stats = { tables: 0, pools: 0, shares: 0 }
+        T.swaps.forEach(function (d) { slot(d.table).swaps.push(d) })
+        T.drops.forEach(function (d) { slot(d.table).pools.push(d) })
+        T.dropShares.forEach(function (d) { slot(d.table).shares.push(d) })
+        var stats = { tables: 0, pools: 0, shares: 0, swaps: 0, rewrites: 0 }
         Object.keys(byTable).forEach(function (table) {
             var todo = byTable[table]
             try {
                 event.modify(table, function (b) {
                     var pools = JSON.parse(String(b.pools.toString()))
+                    var functions = b.functions ? JSON.parse(String(b.functions.toString())) : []
+                    for (var r = 0; r < todo.rewrites.length; r++) {
+                        var res = callGuardedRewrite(todo.rewrites[r], pools, functions, table)
+                        if (res) stats.rewrites++
+                    }
+                    if (functions.length) b.functions = JsonIO.parseRaw(JSON.stringify(functions))
+                    for (var w = 0; w < todo.swaps.length; w++) if (applySwap(pools, todo.swaps[w], table)) stats.swaps++
                     if (todo.shares.length) stats.shares += applyShares(pools, todo.shares, table)
                     for (var i = 0; i < todo.pools.length; i++) {
                         var pool = todo.pools[i].pool
@@ -230,6 +405,34 @@
             }
         })
         console.info(TAG + stats.pools + ' drop pools and ' + stats.shares + ' shared entries in ' + stats.tables + ' tables')
+        console.info(TAG + stats.swaps + ' swaps and ' + stats.rewrites + ' table rewrites')
+        T.afterFns.forEach(function (fn) {
+            try {
+                fn()
+            } catch (err) {
+                warn('afterTables: ' + err)
+            }
+        })
     })
+
+    // Post-roll rules: the queued rules ran at highPriorityData, before LootJS builds its modifiers on this reload.
+    LootJS.modifiers(function (event) {
+        T.onlyDrops.forEach(function (d) {
+            event.addEntityLootModifier(d.entity)
+                .removeLoot(Ingredient.all)
+                .addLoot(d.item)
+                .logName(d.logName)
+        })
+        if (T.onlyDrops.length) console.info(TAG + T.onlyDrops.length + ' only-drop rules')
+    })
+
+    function callGuardedRewrite(d, pools, functions, table) {
+        try {
+            return d.fn(pools, functions, table) === true
+        } catch (err) {
+            if (String(err).indexOf('[skip]') < 0) warn(table + ' (' + d.name + '): ' + err)
+            return false
+        }
+    }
 
 })()

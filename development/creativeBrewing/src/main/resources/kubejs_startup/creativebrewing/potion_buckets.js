@@ -63,7 +63,7 @@ StartupEvents.registry('item', e => {
         // crafting remainder for the potion_bucket_drain shapeless recipes
         // (CB server creativebrewing/potion_bottling.js) - same idiom as
         // CD's kubejs_startup/creativedelight/sample_syringe_items.js containerItem calls.
-        .containerItem('minecraft:bucket')
+        .containerItem(global.item.bucket)
 
     mk('potion_bucket',           'Potion Bucket')
     mk('splash_potion_bucket',    'Splash Potion Bucket')
@@ -80,8 +80,8 @@ StartupEvents.registry('item', e => {
 // @RemapPrefixForJS('kjs$') — see [[tune-tools-func]] — so `.setCraftingRemainder(...)`, a
 // DIFFERENT name AND it takes a real Item object, not a string id).
 ItemEvents.modification(event => {
-    var glassBottle = Item.of('minecraft:glass_bottle').getItem()
-    ;['minecraft:potion', 'minecraft:splash_potion', 'minecraft:lingering_potion'].forEach(id => {
+    var glassBottle = Item.of(global.item.glass_bottle).getItem()
+    ;[global.item.potion, global.item.splash_potion, global.item.lingering_potion].forEach(id => {
         try {
             event.modify(id, item => item.setCraftingRemainder(glassBottle))
         } catch (err) {

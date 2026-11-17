@@ -66,6 +66,9 @@ public class CreativeDelight {
 		// M8: [members] blockheads_additions / incubation_additions became [compartments] switches; read raw below.
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryCompartmentSwitches();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
+		// Global loot modifier fragments (data/<member>/glm_entries.json) of a member whose switch is off are skipped
+		// (Creative Loot's GlmMerge, plan_rules_fixes.md section 5, D17)
+		com.SaintAlfonzo.creativeloot.GlmMerge.gate(ns -> !CDConfig.isMember(ns) || CDConfig.member(ns));
 		// [salt] lives in this file, so its load events reach this bus, not Salt's: Salt rereads its food list here.
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((net.minecraftforge.fml.event.config.ModConfigEvent.Loading e) -> {
 			if (e.getConfig().getSpec() == CDConfig.SPEC) com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.refresh();

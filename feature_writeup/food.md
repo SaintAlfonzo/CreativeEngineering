@@ -785,7 +785,7 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
 
 **NOTE (marked 2026-11-02, revisit before building):** **Owner decision 2026-11-02 (replaces the nine fixed effects and the four-random idea):** each serving applies **3 effects chosen at random from the brewable effects, each for 5 seconds at level II**. Defaults until corrected: the three are distinct; "brewable" means an effect that a potion in the pack can carry, as one list (a tag or generated list, so new potions join on their own); the instant effects (instant health and damage) are left out because 5 seconds means nothing to them. Open: whether harmful effects (wither, poison, blindness, levitation and so on) stay in the pool, which they do by default; whether an effect that has no level II in brewing (night vision) still gets level II here.
 
-### 3.19 Food value copies and absolute rows (applier BUILT 2026-11-17, Delight rows moved 2026-11-17)
+### 3.19 Food value copies and absolute rows
 
 One applier, Creative Delight's `kubejs_startup/creativedelight/food_value_copies.js`, sets food values that are not
 the item's own. Each owning script adds a row to `global.foodValueCopies` (target item_dict key -> row):
@@ -793,16 +793,22 @@ the item's own. Each owning script adds a row to `global.foodValueCopies` (targe
 - `'source_key'`: the target takes the source's whole food (values, effects, flags).
 - `{ from: 'source_key', effects: false }`: the same without the effects.
 - `{ absolute: { ... } }` (new, design rule V-36): values set directly. Fields `nutrition`, `saturationMod` (the
-  modifier), `meat`, `alwaysEat`, `fast`, `effects`, `keepEffects`, `dedupeEffects`; a field left out keeps the
-  target's own value (0 or false when the item is not a food). `effects` is a list of
-  `{ effect, ticks, amplifier, chance }` with an effect id or a `global.effect` key, resolved through
-  `global.effect.resolve`; they are added after the target's own effects when `keepEffects` is true (the default when
-  `effects` is left out), else in their place. `dedupeEffects` keeps the longest entry of each effect.
+  modifier), `meat`, `alwaysEat`, `fast`, `effects`, `keepEffects`, `dropEffects`, `dedupeEffects`,
+  `requireEffects`; a field left out keeps the target's own value (0 or false when the item is not a food). `effects`
+  is a list of `{ effect, ticks, amplifier, chance, visible, unlessHas }` with an effect id or a `global.effect` key,
+  resolved through `global.effect.resolve`; they are added after the target's own effects when `keepEffects` is true
+  (the default when `effects` is left out), else in their place; `visible: false` hides the particles and the icon, as
+  Brewin's own Intoxication; `unlessHas` skips the effect when the list already holds one of those effects.
+  `dropEffects` removes effects from the target's own list, then `dedupeEffects` keeps the longest entry of each
+  effect. `requireEffects`: a row whose listed effect is not registered is skipped (the food stays as shipped).
+  Two scripts may fill one row: `global.foodValueCopies.absolute(key, fields)` merges into an existing absolute row.
 
 Absolute rows in use (built 2026-11-17, P3b): Delightful's 3.8.1 hunger and saturation (`delightful_foods.js`, one
 row per `delightfulFoodValues` pair), the Bellini Cocktail (`fruits_foods.js`, `dedupeEffects`) and Ghost Charcoal
 (`vintage_items.js`); their hand `FoodProperties$Builder` rebuilds are gone. Creative Brewing's `alcohol_drinks.js`
-follows in its P3c rebuild. The `/dumpall` food dump diff must be empty (SQ-RFX-09).
+(P3c): one row per alcoholic drink (hunger 1, saturation 0, always edible, own effects but Nausea, hidden Intoxication
+unless it has one, Nausea unless Tipsy), merged into the Bellini's row; it still logs `[alcohol] food values set on N
+of 44 drinks`. The `/dumpall` food dump diff must be empty (SQ-RFX-09, SQ-RFX-19).
 
 ## 4. Limits and decisions
 
@@ -1110,6 +1116,7 @@ Cooking oil and fried eggs (3.7), after a restart:
 
 ## 8. History
 
+- 2026-11-17: absolute rows gained `dropEffects`, `unlessHas`, `visible`, `requireEffects` and the merging `global.foodValueCopies.absolute`; Creative Brewing's alcoholic drinks became rows (plan_rules_fixes.md V-36, P3c; SQ-RFX-19).
 - **2026-11-17** Absolute rows in the food value applier (3.19, plan_rules_fixes.md section 12, V-36); no rows use them yet.
 
 - **2026-11-02** Owner decisions recorded: D1 review and exempt, D2 golden multiplier rule (golden x2, gilded x4) with gilded tier and new recipes (3.16), D5 cans count as their contents, D6 raw meat follows raw chicken (3.17). D3 pinned until most food effects are set, D4 answered (3.18).

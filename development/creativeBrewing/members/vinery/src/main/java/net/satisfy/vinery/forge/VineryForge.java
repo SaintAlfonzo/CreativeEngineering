@@ -56,5 +56,6 @@ public class VineryForge {
         bus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(Vinery::commonSetup));
 
         VineryCommonEvents.register(MinecraftForge.EVENT_BUS);
+        PackTime.registerDateMoves();
     }
 }

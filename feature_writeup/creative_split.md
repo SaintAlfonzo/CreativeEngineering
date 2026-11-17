@@ -765,9 +765,9 @@ Map (hard deps on our mods; soft = guarded or by name; third-party optional deps
 |---|---|---|---|
 | Common | none | KubeJS | as 7.15 |
 | Compat | Common | | Vinery (`VineShearing` class name); Cozy's Improved Cats, Domestication Innovation (`ModList`) |
-| Calendar | Common, Compat | | as 7.15; Vinery (the grass slab season mixin, the vintage clock by class name as a fallback when no `DateMoves` listener is registered) until the Creative Brewing rebuild of plan_rules_fixes.md P3c |
-| CD | Common, Compat, Calendar, Loot, Farmer's (member) | | as 7.15; Creative Brewing's members by mod id only: hops rows with Vinery (`global.has('vinery')`, which asks its switch; `HHBlocks.HOPS_ON` reads the mod list at class load), the Brewin' pizza ids in Feast Plating JEI; the Brewin' coaster offset mixin until P3c (12f step 4) |
-| CB | Common, Compat, Calendar, CD | | `global.CD`; Create, IE (fix 2) |
+| Calendar | Common, Compat | | as 7.15; Nether's Delight (a Creative Delight member) by class name in `CropSeasonGrowHookMixin` (`FungusColonyBlock`, not moved: owner); no Vinery class since P3c (the Vinery port calls `GrassSeasonHook` and registers with `DateMoves`) |
+| CD | Common, Compat, Calendar, Loot, Farmer's (member) | | as 7.15; Creative Brewing's members by mod id only: hops rows with Vinery (`global.has('vinery')`, which asks its switch; `HHBlocks.HOPS_ON` reads the mod list at class load), the Brewin' pizza ids in Feast Plating JEI (registry lookups that answer nothing without Brewing; kept, plan_rules_fixes.md 12f step 5); Creative Loot's `GlmMerge.gate` (hard) |
+| CB | Common, Compat, Calendar, CD, Loot | | `global.CD`; Create, IE (fix 2); the Brewin' coaster renderer reads Delight's `CounterToppers` offset (CB requires CD) |
 | Engineering | Common, Compat | KubeJS | Vinery (`StuckInBlock` class name) |
 | Equipment | Common, Compat | | none |
 | Magic | Common, Compat | | none |
@@ -963,6 +963,7 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 
 ## 8. History
 
+- 2026-11-17: P3c of [plan_rules_fixes.md](plan_rules_fixes.md) section 12f: the Vinery grass slab calls `GrassSeasonHook` (Calendar's `VineryGrassSlabSeasonMixin` deleted), the Vinery port registers its clock with `DateMoves` (Calendar's reflection deleted), the coaster offset moved into the Brewin' renderer (Delight's mixin and its `compileOnly project(':backportedBrewin')` deleted); Brewing requires Creative Loot (D25). Kept: `HHBlocks.HOPS_ON` (a registration-time mod check, Delight does not require Brewing), the pizza ids in Feast Plating JEI, Calendar's Nether's Delight class name (owner).
 - 2026-11-17: P3b of [plan_rules_fixes.md](plan_rules_fixes.md) section 12f (D24): Vintage Delight's lush grass calls Calendar's `GrassSeasonHook` itself (Delight requires Calendar) and Calendar's `VintageLushGrassSeasonMixin` is gone; Calendar has `time.DateMoves` for clocks that follow `/ccaltime date`, the Vinery port registers in P3c; Delight requires Creative Loot (D25). Remaining edges in the map (CD and Calendar rows).
 - 2026-11-17: P3a of [plan_rules_fixes.md](plan_rules_fixes.md): every script pack outside Delight and Brewing binds `global.NCH.forPack(<its namespace>)` (Compat recipe ids now `creativecompat:`); `dragon_breathing.js` moved to Magic, `creative_labels.js` to Labels (the Labels jar copies `kubejs/data/creativelabels/kubejs/` and requires Common and KubeJS), `botany_pots.js` to Compat; the tag fills a jar's Java reads moved into that jar (Compat BlockRunner hooks, Equipment bottled air, Common WTHIT Silk Touch); queue SQ-RFX-01 to -06, CQ-RFX-01, -02.
 - 2026-11-17: namespace binding in Common ([plan_rules_fixes.md](plan_rules_fixes.md) section 6, D22): `global.NCH.forPack(ns)` (recipe ids and `R.logName` in the folder's namespace), `global.reg.forPack(ns)` for registrations, `_lib/profession_dict.js`; `tools/namespace_lint.py` in report mode lists what each jar still writes outside its namespace ([namespace_report.md](namespace_report.md)). Scripts switch over in P3.

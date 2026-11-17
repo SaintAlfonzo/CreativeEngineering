@@ -10,8 +10,7 @@
 // Wild bell peppers stay red-only (a forage hint; seeds are the real drop). feature_writeup/crops.md section 3,
 // TODO farming/crops #9.
 //
-// Pre-roll, same mechanism as 08_leaf_apples.js: ServerEvents.genericLootTables rewrites the raw table JSON
-// before the game parses it. Pools are found by their entries, not by index; existing pools keep their positions
+// Pre-roll, through Creative Loot's drops engine (L.rewrite): the raw table JSON is rewritten before the game parses it. Pools are found by their entries, not by index; existing pools keep their positions
 // (Forge names pools by position) and new pools are only appended. modify() resets the table type to
 // minecraft:generic, so it is set back to minecraft:block.
 //
@@ -20,7 +19,7 @@
 (function () {
 
     var TAG = '[crop-drops] '
-    var SKIP = 'crop-drops:skip' // G5 (a marker string of this script, not an id)
+    var SKIP = '[skip] crop-drops' // a table left as the mod ships it; the engine logs nothing for '[skip]'
 
     function names(pool) {
         return (pool.entries || []).map(function (e) { return e.name })
@@ -73,30 +72,15 @@
             + ' (red:green:yellow), bonus ' + cfg.redBonusChance + ' / ' + cfg.greenBonusChance + ' / ' + cfg.yellowBonusChance)
     }
 
-    var TABLES = {
-        'rusticdelight:blocks/bell_peppers': bellPeppers,
-    }
-
-    ServerEvents.genericLootTables(function (event) {
+    // A table rewrite of Creative Loot's drops engine (loot/09_drops.js, L.rewrite), queued with global.LOOT.rules
+    global.LOOT.rules(function (L) {
         if (!global.CD || !global.CD.on('rusticdelight')) return
         var i = global.item
-        var ids = Object.keys(TABLES)
-        var done = 0
-        ids.forEach(function (table) {
-            try {
-                event.modify(table, function (b) {
-                    var pools = JSON.parse(String(b.pools.toString()))
-                    if (!pools.length) throw new Error(SKIP)
-                    TABLES[table](pools, i)
-                    b.pools = JsonIO.parseRaw(JSON.stringify(pools))
-                    b.type = 'minecraft:block'
-                    done++
-                })
-            } catch (err) {
-                if (String(err).indexOf(SKIP) < 0) console.warn(TAG + table + ': ' + err)
-            }
-        })
-        console.info(TAG + 'rewrote ' + done + ' of ' + ids.length + ' crop tables')
+        L.rewrite('rusticdelight:blocks/bell_peppers', function (pools) {
+            if (!pools.length) throw new Error(SKIP)
+            bellPeppers(pools, i)
+            return true
+        }, 'crop-drops bell peppers')
     })
 
 })()

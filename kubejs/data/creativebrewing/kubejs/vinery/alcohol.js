@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 if (!global.CB || !global.CB.on('vinery')) return
 global.CB.recipes(() => {
 var i = global.item
-var R = global.NCH
+var R = global.NCH.forPack('creativebrewing')
 
 //######################### Vinery banner #########################
 // Advancements are gone (alcohol.md 10.2), so wine_somelier no longer hands it out. Any banner over a nether star,

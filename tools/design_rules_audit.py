@@ -302,6 +302,38 @@ if wants('colors'):
             if color.search(l) and not l.strip().startswith('//') and not swatch.match(l.strip())]
     report('DR-P12', 'tooltip colors picked by look (raw section signs, Text.<color>, raw col color keys)', hits)
 
+# DR-P15: global loot modifiers (plan_rules_fixes.md section 5, V-08). No own jar ships Forge's list
+# data/forge/loot_modifiers/global_loot_modifiers.json (it would race the other copies); each member writes a fragment
+# data/<ns>/glm_entries.json that Creative Loot's GlmMerge reads, and every fragment entry has its definition
+# data/<ns>/loot_modifiers/<name>.json in the repo or, for a repacked member, in its upstream jar (gradle.properties
+# upstream_jar, development/creativeDelight/upstream/).
+if wants('glm'):
+    import json
+    import zipfile
+    own = re.compile(r'^development/.*/src/[^/]+/resources/(.*/)?data/')
+    lists = [(p, 0, 'Forge list') for p in FILES if own.match(p) and p.endswith('data/forge/loot_modifiers/global_loot_modifiers.json')]
+    defs = {re.sub(r'^.*?data/([^/]+)/loot_modifiers/(.+)\.json$', r'\1:\2', p) for p in FILES
+            if re.search(r'data/[^/]+/loot_modifiers/.+\.json$', p)}
+    missing = []
+    for p in FILES:
+        if not (own.match(p) and re.search(r'data/[^/]+/glm_entries\.json$', p)):
+            continue
+        try:
+            entries = json.loads(read(p))['entries']
+        except (TypeError, ValueError, KeyError):
+            missing.append((p, 0, 'no entries array'))
+            continue
+        upstream = set()
+        props = ROOT / p.split('/src/')[0] / 'gradle.properties'
+        jar = re.search(r'^upstream_jar=(.+)$', props.read_text(encoding='utf-8'), re.M) if props.exists() else None
+        if jar and (ROOT / 'development/creativeDelight/upstream' / jar.group(1).strip()).exists():
+            with zipfile.ZipFile(ROOT / 'development/creativeDelight/upstream' / jar.group(1).strip()) as z:
+                upstream = {re.sub(r'^data/([^/]+)/loot_modifiers/(.+)\.json$', r'\1:\2', n) for n in z.namelist()
+                            if re.match(r'data/[^/]+/loot_modifiers/.+\.json$', n)}
+        missing += [(p, 0, e) for e in entries if e not in defs and e not in upstream]
+    report('DR-P15', 'own jars shipping the Forge global loot modifier list (use a glm_entries.json fragment)', lists)
+    report('DR-P15', 'global loot modifier fragment entries with no definition', missing)
+
 # DR-C21 to DR-C25: formatting facts.
 if wants('format'):
     groups = {'own Java': [p for p in FILES if OWN_JAVA in p and p.endswith('.java')],

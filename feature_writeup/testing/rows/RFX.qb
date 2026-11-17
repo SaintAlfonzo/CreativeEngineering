@@ -189,10 +189,10 @@ expect create:wheat_flour
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 ## SQ-RFX-14 | LootJS names: CD/ for Creative Delight's loot scripts
 @group A
-@commands Uncomment `event.enableLogging()` in the server's `kubejs/data/creativeloot/kubejs/loot/99_debug.js`, `/reload`, break an age 7 corn crop with a knife (`/loot spawn ... mine <pos> <knife>`); read latest.log
-@pass `[LootJS]` lines name `CD/corn_knife_corncob`; no `CE/corn_knife`, `CE/fd_`, `CE/squid_chain`, `CE/delightful_`, `CE/vintage_mixed` names
+@commands Uncomment `event.enableLogging()` in the server's `kubejs/data/creativeloot/kubejs/loot/99_debug.js`, `/reload`, kill a squid (`/loot spawn <pos> kill <squid>`); read latest.log
+@pass `[LootJS]` lines name `CD/squid_chain/squid` and `CD/squid_chain/glow_squid` (the only Delight rules still post-roll since P3c moved the rest into Creative Loot's tables, SQ-RFX-21); no `CE/` names
 @fails Old names: the Delight jar older than 2026-11-17 (the loot scripts ship in it)
-@draft placement of the corn crop and the knife loot call need the SQ-CORN-04 setup; run with it
+@draft the squid summon in water and the kill selector need the SQ-MDL setup; run with SQ-RFX-22
 ## SQ-RFX-15 | Barbeque's Delight skewers keep their seasonings through the direct calls
 @group A
 @commands Grill a raw skewer to done on a lit Grill; read the result's NBT; eat it as a fake player with a seasoned skewer
@@ -212,3 +212,101 @@ shot fertile_soil_hint
 do {"tooltip": "domesticationinnovation:rotten_apple"}
 shot rotten_apple_uncanny
 look Fertile Soil's villager line green like Rich Farmland's; the rest as before
+
+@@section 4
+@@title SQ-RFX Rules fixes P3c: Creative Brewing, member loot lists, Delight loot through Creative Loot, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) sections 5, 6, 7, 11, 12, 12b, 12d, 12e, 12f; TODO `conventions #15`, `#17`, `#18`, `#22`, `#23`, `#24`, `#26`, `#27`, `#28`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativebrewing creativecalendar creativecompat creativedelight creativeloot exposure
+@@sources kubejs/data/creativebrewing/kubejs kubejs/assets/creativebrewing/kubejs development/creativeBrewing kubejs/data/creativeloot/kubejs/loot/09_drops.js kubejs/data/creativedelight/kubejs development/creativeDelight/members development/creativeDelight/src/main/resources/packs/mods/vinery development/exposureBackport/src kubejs/data/creativecompat/kubejs/tags/jei_order_tags.js
+@@text
+@@text No member jar ships Forge's `global_loot_modifiers.json` any more: nine fragments `data/<ns>/glm_entries.json` (hearthandharvest 2, veggiesdelight 5, rusticdelight 2, ends_delight 15, vintagedelight 1, vinery 1 in Delight's `packs/mods/vinery/`, brewinandchewin 4, exposure 5, exposure_expanded 21: 56 entries) are read by Creative Loot's GlmMerge, gated by the Delight and Brewing member switches. Creative Delight's own loot rules (Delightful, Corn, Farmer's, Vintage and Miner's `loot.js`, `rusticdelight/crop_drops.js`, `creativedelight/soil_yield.js`) now run in Creative Loot's drops engine (`loot/09_drops.js`: `swapDrop`, `drop` with `silkTouch`/`state`/`notHolding`/`killedByPlayer`, `rewrite`, `onlyDrop`). Needs the jars of 2026-11-17 P3c (`creativeloot-1.0.0`, `creativecalendar-1.0.0`, `creativedelight-1.1.0`, `creativebrewing-1.0.0`, `exposureBackport-1.9.19-ce-19.2-04`, `creativecompat`). Baselines as section 3. Run SQ-RFX-16 before any `/reload`.
+@@table
+## SQ-RFX-16 | boot: GlmMerge reads the nine fragments, Brewing scripts bound, drops engine lines
+@group A
+@commands Boot on the installed jars; read latest.log and the KubeJS logs
+@pass `[GlmMerge] N entries (lists: ..., fragments: 9 files, 56 entries, 0 gated off; ...)`; `added` at least 50 (the member entries Forge no longer reads; a third-party list may hold some); no `skipped` entry in our namespaces (hearthandharvest, veggiesdelight, rusticdelight, ends_delight, vintagedelight, brewinandchewin, exposure, exposure_expanded); `[loot-drops] 26 drop pools and 2 shared entries` and `[loot-drops] 3 swaps and N table rewrites`; `[loot-drops] 2 only-drop rules`; `[alcohol] food values set on 44 of 44 drinks` (or the count the mod set allows, as before); no `forPack: invalid`, `ReferenceError`, `queued loot rules failed`
+@fails `fragments: 0 files`: the member jars still ship the old list or the fragment path is wrong; `gated off` above 0 with every switch on: a gate answers false (`CDConfig.member`, `CBConfig.member`); `[alcohol] ... 0 of 44`: the absolute rows did not apply (Delight's `food_value_copies.js` older than 2026-11-17 has no `global.foodValueCopies.absolute`)
+bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: 9 files, 56 entries, 0 gated off
+bootreject \[GlmMerge\] could not read
+kjsexpect \[loot-drops\] 26 drop pools and 2 shared entries in \d+ tables
+kjsexpect \[loot-drops\] 3 swaps and \d+ table rewrites
+kjsexpect \[loot-drops\] 2 only-drop rules
+kjsexpect \[alcohol\] food values set on \d+ of 44 drinks
+kjsreject forPack: invalid|ReferenceError|is not defined|queued loot rules failed
+shell grep -hE '\[GlmMerge\]' logs/latest.log | tail -3
+shell grep -hE '\[loot-drops\]|\[alcohol\] food values' logs/kubejs/server.log logs/kubejs/startup.log | tail -6
+## SQ-RFX-17 | one global loot modifier per member still fires
+@group A
+@commands Fake player `glm` with the tool each case needs; one probe per fragment and one third-party list: (hearth) `hearthandharvest:pitchfork_straw`, (veggies) `veggiesdelight:slicing_carrot_cake`, (rustic) `rusticdelight:calamari_from_squid` is overridden by the squid chain (SQ-RFX-22), so use `calamari_from_glow_squid` only if the chain is off, else skip, (ends) `ends_delight:add_dragon_meat` on an Ender Dragon kill, (vintage) `vintagedelight:straw_from_mature_oat`, (vinery pack) `hearthandharvest:cherries_from_cherry_leaves` on cherry leaves, (brewin) `brewinandchewin:slicing_pizza`, (exposure) `exposure:simple_dungeon` and `exposure_expanded:simple_dungeon` (`/loot spawn ... loot minecraft:chests/simple_dungeon` x200), (Farmer's Delight, third-party list) a straw from grass with a knife
+@pass every probe gives the modifier's item at its rate; the GlmMerge line of SQ-RFX-16 lists none of these as skipped
+@fails a member's item never drops: its fragment entry is missing or gated (SQ-RFX-16 numbers)
+@draft each probe needs its own setup (feast blocks placed and cut, a dragon kill, a mature oat crop); one loot spawn line per chest probe can be written once the item ids per modifier are read from the definitions
+## SQ-RFX-18 | member switch off: that member's fragment is skipped
+@group A
+@commands Separate boot with `config/creativedelight-common.toml` `[members] veggiesdelight = false`; read latest.log; then set it back
+@pass `[GlmMerge] ... fragments: 8 files, 51 entries, 1 gated off`; no error naming `veggiesdelight` loot modifiers
+@fails `0 gated off`: Delight's `GlmMerge.gate` not registered (CreativeDelight constructor)
+@draft the config edit before boot needs a qrun setup step (edit the toml in the scratch instance); owner or runner sets it by hand
+## SQ-RFX-19 | recipes, tags and foods unchanged after the Brewing swap and the Compat JEI tag move
+@group A
+@commands `/dumpall`; `dump_diff.py recipes`, `tags` (as SQ-RFX-08, -11) and `food` (as SQ-RFX-09) against the baselines
+@pass `RECIPES_SAME` with the P3a moves only; `TAGS_SAME` apart from the P3a renames (the `creativecompat:jei/*` tags are filled from Compat's pack now, same members); `FOOD_SAME` (the 44 alcoholic drinks through absolute rows: hunger 1, saturation 0, always edible, Intoxication hidden, Nausea unless Tipsy)
+@fails a recipe id `creativeengineering:` to `creativebrewing:`: a Brewing file outside `global.CB.recipes`; a drink with a second Nausea or no Intoxication: the `dropEffects` / `unlessHas` fields of the applier
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | tail -15
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -15
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported | tail -15
+expect FOOD_SAME
+## SQ-RFX-20 | Keg next to heat and next to ice still sets its temperature; no placement scan
+@group A
+@commands Place a Keg; place a lit campfire beside it, then replace it with packed ice; read the Keg's temperature each time (WTHIT keg line or `/data get block <keg>`); place 50 blocks near the Keg as a fake player with a JFR or `/forge tps` before and after
+@pass warm next to the campfire, cold next to ice, neutral with neither (as before); no tick cost from block placement (Brewin's `BnCCommonEvents` has no place or right-click listener any more)
+@fails temperature stuck: the keg temperature logic lost a helper (`BnCHeatSources`); a `place_temperature_block_near_keg` line: Brewing older than 2026-11-17
+@draft no verb reads a Keg's temperature yet; owner LOOK through WTHIT
+## SQ-RFX-21 | Delight loot rules from Creative Loot: knife swaps, corn cob, onions, mixed seeds
+@group A
+@commands On a stone pad place pumpkin, `delightful:cantaloupe`, `delightful:mini_melon`, age 7 `corn_delight:corn_crop`; `/loot spawn` each with `mine` and a tool: `farmersdelight:iron_knife`, the same knife with Silk Touch, an empty hand; `/loot spawn ... kill` 200 zombies' worth (`/summon zombie` then `loot ... kill`) with a player killer is not possible from a command, so onions only through `/loot ... loot minecraft:entities/zombie`: no onion (killed_by_player fails without a player)
+@pass knife: 4 pumpkin slices / 4 cantaloupe slices / 4 melon slices and no block item; Silk Touch knife or empty hand: the block itself; corn with a knife about 25 % corncob over 100 tries, none with an empty hand; `/loot ... loot minecraft:entities/zombie` never gives an onion; mixed seeds from grass: SQ-MXS rows
+@fails the block and the slices together: the `swapDrop` guard missed the table's entry (`[loot-drops] ... no <item> entry to swap` warning names it); no slices: the knife tag or the table id differs
+@draft the four blocks need placing on a pad and a knife-with-enchantment item argument; steps follow SQ-MXS-02's `loot spawn ... mine` pattern
+## SQ-RFX-22 | squid chain: a squid drops one squid item and nothing else
+@group A
+@commands `/summon minecraft:squid` and `minecraft:glow_squid` in water; `/loot spawn <pos> kill @e[type=minecraft:squid,limit=1]` x20 and the same for the glow squid; count with `/cdevtest items`
+@pass each kill gives exactly one `miners_delight:squid` (glow: `miners_delight:glow_squid`): no ink sac, no calamari, no tentacles (the only-drop rule runs after every loot modifier, as the old LootJS rule)
+@fails calamari as well: the rule runs before Rustic's modifier (it must be a LootJS modifier, `L.onlyDrop`); nothing: the `[loot-drops] 2 only-drop rules` line missing (queued rules ran after LootJS built its modifiers)
+@draft the summon position in water and the kill target selector need the SQ-MDL setup
+## SQ-RFX-23 | loot dump: only the moved rules' tables change
+@group A
+@commands After SQ-RFX-19's `/dumpall`: diff `kubejs/exported/loot_tables/` against `$INST/kubejs/exported/baseline_loot_split_2026-11-17/`
+@pass changed tables are exactly: `minecraft:blocks/pumpkin`, `delightful:blocks/cantaloupe`, `delightful:blocks/mini_melon` (guarded entry and a slice pool), `corn_delight:blocks/corn_crop`, the six zombie and illager entity tables, `minecraft:blocks/grass` and `tall_grass` (one `ce_drop_` pool each), `rusticdelight:blocks/bell_peppers` and the soil yield crop tables (same pools as before, now written by the engine); nothing else
+@fails other tables changed: a rule matched more than its table; a soil yield or bell pepper pool missing: `L.rewrite` skipped the table (warning in the server log)
+@draft the loot dump diff has no dump_diff.py mode yet; diff by hand or add a `loot` mode
+## SQ-RFX-24 | /ccaltime date backward moves the vintage clock (Vinery registers with Calendar)
+@group A
+@commands `[time.wine] clock = SUN`; `/wine time`; `/ccaltime date add 10 days`; `/ccaltime date set 1 early_spring 1 6:00 am`; `/wine time`
+@pass the date command's output ends with `wine clock moved back` (not `no wine clock registered`); the second `/wine time` shows the clock moved back by the same days
+@fails `no wine clock registered`: the Vinery port's `PackTime.registerDateMoves` did not run (Creative Brewing older than 2026-11-17)
+> wine time
+> ccaltime date add 10 days
+> ccaltime date set 1 early_spring 1 6:00 am
+expect wine clock moved back
+> wine time
+look the two `/wine time` lines: the second clock value smaller by the move
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|no wine clock registered)
+
+@@section 5
+@@title CQ-RFX Rules fixes P3c on a client: the Brewin' coaster offset from its own renderer, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 12f step 4; TODO `conventions #28`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativebrewing creativedelight
+@@sources development/creativeBrewing/members/brewin/src/main/java/umpaz/brewinandchewin/client/renderer/CoasterBlockEntityRenderer.java
+@@text
+@@table
+## CQ-RFX-04 | a coaster on a Cooking for Blockheads counter draws at the counter top
+@group client
+@commands Place a Cooking for Blockheads counter; put a Brewin' coaster on it with two drinks; place a second coaster on stone; look at both
+@pass the coaster on the counter sits on the worktop (no gap, not sunk), the drinks with it; the one on stone as before; no `CoasterRendererOffsetMixin` in the log
+@fails floating 1 px: the renderer did not shift (Delight's Cooking for Blockheads compartment off, or Brewing older than 2026-11-17); a crash naming `CounterToppers`: Delight older than the Brewing jar
+@draft placing a coaster with drinks needs a driver step for block-entity contents; owner LOOK

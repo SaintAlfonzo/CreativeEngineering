@@ -49,7 +49,7 @@ Object.keys(global.potionArea.BUCKETS).forEach(id => {
         const bucketItem = stack.getItem()
         if (!player.isCreative()) {
             stack.shrink(1)
-            const empty = Item.of('minecraft:bucket')
+            const empty = Item.of(global.item.bucket)
             if (!player.getInventory().add(empty)) player.drop(empty, false)
         }
         player.getCooldowns().addCooldown(bucketItem, 20)

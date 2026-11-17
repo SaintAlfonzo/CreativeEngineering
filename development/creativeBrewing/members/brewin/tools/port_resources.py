@@ -6,13 +6,13 @@
 Source: DecompiledMods/BrewinAndChewin-neoforge-4.5.0+1.21.1-src (assets/, data/). EMI files and 1.21-only data
 (damage types, data maps, 1.20+ block tags) are left out. What changes on the way (alcohol.md 3.1 step 5):
 
-  * folders: recipe -> recipes, loot_table -> loot_tables, advancement -> advancements, tags/block -> tags/blocks (and
-    item/fluid/entity_type); data/neoforge/loot_modifiers -> data/forge/loot_modifiers
+  * folders: recipe -> recipes, loot_table -> loot_tables, tags/block -> tags/blocks (and item/fluid/entity_type);
+    the global loot modifier list data/neoforge/loot_modifiers/global_loot_modifiers.json -> the fragment
+    data/brewinandchewin/glm_entries.json (Creative Loot's GlmMerge reads it)
   * item stacks: {"id", "count", "components"} -> {"item", "count", "nbt"}; components that 1.19.2 keeps in NBT are
     translated (potion_contents -> Potion), the port's own JSON readers take "id" too
   * c: tags -> the forge: tag 1.19.2 mods use (C_TAGS below); neoforge:conditions -> Forge "conditions"
-  * advancements: 1.20.5 item predicates and placed_block loot conditions -> 1.19.2 predicates; the temperature-near-keg
-    advancement becomes impossible criteria that BnCCommonEvents awards from code
+  * advancements: not ported (the pack has no advancements, design rule DR-C14, plan_rules_fixes.md V-03)
   * the port's deviations: honey pours from create:honey when Create is loaded (4.1), Dread Nog takes a poison potion
     (4.4), kombucha ferments green tea (4.5)
   * GUI: the four recipe-book filter sprites are packed into one 256x256 sheet (1.19.2 has no GUI sprite atlas); the
@@ -83,6 +83,7 @@ SKIP_DATA = (
     'brewinandchewin/damage_type/', 'brewinandchewin/tags/damage_type/', 'minecraft/tags/damage_type/',
     'minecraft/tags/block/combination_step_sound_blocks.json', 'neoforge/data_maps/',
     'c/tags/item/',  # c:foods, c:foods/soup, c:foods/edible_when_placed: no 1.19.2 consumer
+    'brewinandchewin/advancement/',  # the pack has no advancements (design rule DR-C14, plan_rules_fixes.md V-03)
 )
 POISONS = ['minecraft:poison', 'minecraft:long_poison', 'minecraft:strong_poison']
 # alcohol.md 8.5: Fruits Delight covers jams, so these leave the port (every file named after them, lang keys, and their
@@ -296,38 +297,6 @@ def item_predicate(p):
     return p
 
 
-def convert_advancement(rel, d):
-    d = copy.deepcopy(d)
-    d.pop('sends_telemetry_event', None)
-    disp = d.get('display')
-    if disp and 'icon' in disp:
-        disp['icon'] = {'item': disp['icon'].get('id', disp['icon'].get('item'))}
-    for name, crit in d['criteria'].items():
-        trig = crit.get('trigger')
-        c = crit.get('conditions', {})
-        if trig == 'minecraft:inventory_changed' and 'items' in c:
-            c['items'] = [item_predicate(p) for p in c['items']]
-        elif trig == 'minecraft:consume_item' and 'item' in c:
-            c['item'] = item_predicate(c['item'])
-        elif trig == 'minecraft:placed_block' and not rel.endswith('place_temperature_block_near_keg.json'):
-            loc = c.get('location', [])
-            if len(loc) == 1 and loc[0].get('condition') == 'minecraft:block_state_property':
-                crit['conditions'] = {'block': loc[0]['block']}
-            else:
-                warn(f'{rel}: placed_block criterion {name} left as is')
-    if rel.endswith('place_temperature_block_near_keg.json'):
-        for crit in d['criteria'].values():
-            crit.clear()
-            crit['trigger'] = 'minecraft:impossible'
-    jam_criteria = [name for name in d['criteria'] if any(j in name for j in JAMS)]
-    for name in jam_criteria:
-        del d['criteria'][name]
-    if jam_criteria and 'requirements' in d:
-        d['requirements'] = [[c for c in req if c not in jam_criteria] for req in d['requirements']]
-        d['requirements'] = [req for req in d['requirements'] if req]
-    return d
-
-
 def convert_loot(obj):
     """Recursively: any_of -> alternative, match_tool item predicates, c: tags."""
     if isinstance(obj, list):
@@ -372,7 +341,8 @@ def out_path_for_data(rel):
     parts = rel.split('/')
     ns, kind = parts[0], parts[1]
     if ns == 'neoforge' and kind == 'loot_modifiers':
-        return '/'.join(['forge'] + parts[1:])
+        # The pack's jars ship no Forge list; Creative Loot's GlmMerge reads this fragment (plan_rules_fixes.md section 5)
+        return 'brewinandchewin/glm_entries.json'
     if ns == 'c':
         ns = 'forge'
     if kind == 'tags':
@@ -409,10 +379,10 @@ def port_data():
             if parts[1] == 'recipe':
                 d = convert_recipe(rel, d)
                 extra = apply_deviations(new_rel, d)
-            elif parts[1] == 'advancement':
-                d = convert_advancement(new_rel, d)
             elif parts[1] in ('loot_table', 'loot_modifiers'):
                 d = convert_loot(d)
+                if new_rel.endswith('/glm_entries.json'):
+                    d = {'entries': d['entries']}
             elif parts[1] == 'tags':
                 d = convert_tag(rel, d, fluid=(parts[2] == 'fluid'))
             write_json(os.path.join(out, new_rel), d)

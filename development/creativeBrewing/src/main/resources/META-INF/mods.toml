@@ -56,6 +56,14 @@ mandatory=true
 versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Loot: the loot rule engine (global.LOOT) the CB loot scripts call and GlmMerge, which reads the Brewin'
+# member's global loot modifier fragment (plan_rules_fixes.md D25). AFTER so its script pack runs before CB's.
+[[dependencies.creativebrewing]]
+modId="creativeloot"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 # MoreJS: potions.js adds every brewing-stand mix (and through them Create's Automatic Brewing and the IE Mixer list)
 # with MoreJSEvents.registerPotionBrewing; without it the CB potions exist but cannot be brewed (owner 2026-11-06).
 [[dependencies.creativebrewing]]

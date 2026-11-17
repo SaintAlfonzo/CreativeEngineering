@@ -36,19 +36,19 @@
 //   reagent     : brewing-stand ingredient for the base brew
 // lengthen step is always redstone, amplify step is always glowstone dust.
 const CUSTOM_POTIONS = {
-	resistance:     { base: 'awkward', reagent: 'minecraft:iron_block' },
-	health_boost:   { base: 'thick',   reagent: 'minecraft:golden_apple' },
-	absorption:     { base: 'mundane', reagent: 'minecraft:golden_apple' },
+	resistance:     { base: 'awkward', reagent: global.item.block_iron },
+	health_boost:   { base: 'thick',   reagent: global.item.golden_apple },
+	absorption:     { base: 'mundane', reagent: global.item.golden_apple },
 	// no haste here: Rustic Delight already registers rusticdelight:haste (see RD_POTION_MIXES)
-	glowing:        { base: 'awkward', reagent: 'minecraft:glow_ink_sac' },
-	saturation:     { base: 'thick',   reagent: 'minecraft:golden_carrot' },
-	wither:         { base: 'mundane', reagent: 'minecraft:wither_rose' },
-	levitation:     { base: 'awkward', reagent: ['ends_delight:shulker_meat_slice', 'minecraft:shulker_shell'] },
-	mining_fatigue: { base: 'awkward', reagent: 'minecraft:prismarine_crystals' },
-	hunger:         { base: 'thick',   reagent: 'minecraft:rotten_flesh' },
-	nausea:         { base: 'thick',   reagent: 'minecraft:pufferfish' },
-	blindness:      { base: 'mundane', reagent: 'minecraft:ink_sac' },
-	darkness:       { base: 'mundane', reagent: 'minecraft:echo_shard' },
+	glowing:        { base: 'awkward', reagent: global.item.glow_ink },
+	saturation:     { base: 'thick',   reagent: global.item.golden_carrot },
+	wither:         { base: 'mundane', reagent: global.item.wither_rose },
+	levitation:     { base: 'awkward', reagent: [global.item.shulker_meat_slice, global.item.shulker_shell] },
+	mining_fatigue: { base: 'awkward', reagent: global.item.prismarine_crystals },
+	hunger:         { base: 'thick',   reagent: global.item.rotten_flesh },
+	nausea:         { base: 'thick',   reagent: global.item.pufferfish },
+	blindness:      { base: 'mundane', reagent: global.item.ink_sac },
+	darkness:       { base: 'mundane', reagent: global.item.echo_shard },
 }
 
 // long_reach / phantom_bane use a modded effect (better_beacons:*) — KubeJS's own
@@ -62,27 +62,27 @@ const CB_POTION_MIXES = [
 	// above since KubeJS's own 'potion' registry runs too early to see even its own
 	// 'mob_effect' registrations - see magic_resistance.js). amethyst_shard is a placeholder
 	// reagent - retune later.
-	['minecraft:amethyst_shard', 'minecraft:thick',                    'creativecommon:magic_resistance'],
-	['minecraft:redstone',       'creativecommon:magic_resistance',   'creativecommon:long_magic_resistance'],
-	['minecraft:glowstone_dust', 'creativecommon:magic_resistance',   'creativecommon:strong_magic_resistance'],
+	[global.item.amethyst_shard, 'minecraft:thick',                    'creativecommon:magic_resistance'],
+	[global.item.redstone,       'creativecommon:magic_resistance',   'creativecommon:long_magic_resistance'],
+	[global.item.glowstone, 'creativecommon:magic_resistance',   'creativecommon:strong_magic_resistance'],
 ]
 // Long Reach / Phantom Bane exist only with Better Beacons (CommonPotions skips them otherwise); their base brews use
 // Geode's shards.
 if (global.has('better_beacons')) {
 	CB_POTION_MIXES.push(
-		['minecraft:redstone',       'creativebrewing:long_reach',   'creativebrewing:long_long_reach'],
-		['minecraft:glowstone_dust', 'creativebrewing:long_reach',   'creativebrewing:strong_long_reach'],
-		['minecraft:redstone',       'creativebrewing:phantom_bane', 'creativebrewing:long_phantom_bane'])
+		[global.item.redstone,       'creativebrewing:long_reach',   'creativebrewing:long_long_reach'],
+		[global.item.glowstone, 'creativebrewing:long_reach',   'creativebrewing:strong_long_reach'],
+		[global.item.redstone,       'creativebrewing:phantom_bane', 'creativebrewing:long_phantom_bane'])
 	// no glowstone step: Phantom Bane is levelless (CommonPotions, like Night Vision)
 	if (global.has('geode')) {
 		CB_POTION_MIXES.push(
-			['geode:wrappist_shard',  'minecraft:thick', 'creativebrewing:long_reach'],
-			['geode:celestite_shard', 'minecraft:thick', 'creativebrewing:phantom_bane'])
+			[global.item.wrappist_shard,  'minecraft:thick', 'creativebrewing:long_reach'],
+			[global.item.celestite_shard, 'minecraft:thick', 'creativebrewing:phantom_bane'])
 	}
 }
 
-const LENGTHEN_REAGENT = 'minecraft:redstone'
-const AMPLIFY_REAGENT = 'minecraft:glowstone_dust'
+const LENGTHEN_REAGENT = global.item.redstone
+const AMPLIFY_REAGENT = global.item.glowstone
 
 // Luck / Unluck: the potion types are vanilla minecraft:luck plus buzzier_bees's unluck and long_ variants (no
 // CUSTOM_POTIONS registration needed). Buzzier Bees brews them itself (clover base, redstone / glowstone steps,
@@ -127,8 +127,8 @@ if (global.has('upgrade_aquatic')) {
 // (same reagents as RD). [reagent, fromPotion, toPotion]
 const RD_POTION_MIXES = [
 	[global.item.golden_coffee_beans, 'minecraft:awkward',     'rusticdelight:haste'],
-	['minecraft:redstone',            'rusticdelight:haste',   'rusticdelight:long_haste'],
-	['minecraft:glowstone_dust',      'rusticdelight:haste',   'rusticdelight:strong_haste'],
+	[global.item.redstone,            'rusticdelight:haste',   'rusticdelight:long_haste'],
+	[global.item.glowstone,      'rusticdelight:haste',   'rusticdelight:strong_haste'],
 ]
 
 // Alex's Mobs modifier steps. AM locks its own brews to the regular potion item +
@@ -138,21 +138,21 @@ const RD_POTION_MIXES = [
 const AM_POTION_MIXES = []
 if (global.has('alexsmobs')) {
 	AM_POTION_MIXES.push(
-	['minecraft:redstone',       'alexsmobs:knockback_resistance', 'alexsmobs:long_knockback_resistance'],
-	['minecraft:redstone',       'alexsmobs:lava_vision',          'alexsmobs:long_lava_vision'],
-	['minecraft:redstone',       'alexsmobs:bug_pheromones',       'alexsmobs:long_bug_pheromones'],
-	['minecraft:redstone',       'alexsmobs:soulsteal',            'alexsmobs:long_soulsteal'],
-	['minecraft:redstone',       'alexsmobs:clinging',             'alexsmobs:long_clinging'],
-	['alexsmobs:komodo_spit',    'alexsmobs:poison_resistance',    'alexsmobs:long_poison_resistance'],
-	['minecraft:glowstone_dust', 'alexsmobs:knockback_resistance', 'alexsmobs:strong_knockback_resistance'],
-	['minecraft:glowstone_dust', 'alexsmobs:soulsteal',            'alexsmobs:strong_soulsteal'],
-	['alexsmobs:gazelle_horn',   'minecraft:strong_swiftness',     'alexsmobs:speed_iii'],
+	[global.item.redstone,       'alexsmobs:knockback_resistance', 'alexsmobs:long_knockback_resistance'],
+	[global.item.redstone,       'alexsmobs:lava_vision',          'alexsmobs:long_lava_vision'],
+	[global.item.redstone,       'alexsmobs:bug_pheromones',       'alexsmobs:long_bug_pheromones'],
+	[global.item.redstone,       'alexsmobs:soulsteal',            'alexsmobs:long_soulsteal'],
+	[global.item.redstone,       'alexsmobs:clinging',             'alexsmobs:long_clinging'],
+	[global.item.komodo_spit,    'alexsmobs:poison_resistance',    'alexsmobs:long_poison_resistance'],
+	[global.item.glowstone, 'alexsmobs:knockback_resistance', 'alexsmobs:strong_knockback_resistance'],
+	[global.item.glowstone, 'alexsmobs:soulsteal',            'alexsmobs:strong_soulsteal'],
+	[global.item.gazelle_horn,   'minecraft:strong_swiftness',     'alexsmobs:speed_iii'],
 
 	// AM brews poison_resistance from an alexsmobs:poison_bottle item — the mixers can't see a
 	// non-potion base (patcherMod cancels the broken auto-generated {Potion:empty} recipe).
 	// Re-base it onto Potion of Poison II so it brews everywhere (stand + both mixers) and
 	// picks up splash/lingering parity for free. AM's poison-bottle stand recipe still works.
-	['alexsmobs:centipede_leg',  'minecraft:strong_poison',        'alexsmobs:poison_resistance'])
+	[global.item.centipede_leg,  'minecraft:strong_poison',        'alexsmobs:poison_resistance'])
 	// crab shell: Quark's Resilience reagent, now a second Knockback Resistance base next to AM's Strength + bear fur
 	if (global.has('quark')) {
 		AM_POTION_MIXES.push([global.item.crab_shell, 'minecraft:awkward', 'alexsmobs:knockback_resistance'])
@@ -307,7 +307,7 @@ else StartupEvents.postInit(() => {
 	}
 
 	// reagent ids whose Automatic-Brewing recipes should be removed
-	const BLACKLIST = ['minecraft:dragon_breath'] // lingering — replaced by patcherMod's fluid brew
+	const BLACKLIST = [global.item.dragon_breath] // lingering — replaced by patcherMod's fluid brew
 
 	const stacks = BLACKLIST.map(id => Item.of(id))
 

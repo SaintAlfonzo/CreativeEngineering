@@ -3762,12 +3762,6 @@
    "upstream_sha1": "5f229757a4a282fb09c2fbb5476a7f2178406836",
    "rules": []
   },
-  "data/forge/loot_modifiers/global_loot_modifiers.json": {
-   "upstream_sha1": "73fe102006eda48e62a968de3dfe9b0f1e05a7a3",
-   "rules": [
-    "dangling_loot_modifiers"
-   ]
-  },
   "data/forge/tags/blocks/storage_blocks.json": {
    "upstream_sha1": "dc4b91f141a8c9b95de000b3099ad11a380daf4e",
    "rules": [
@@ -4046,6 +4040,13 @@
    "upstream_sha1": "487acdc938e839054193ff6332e4f9157f6cfb43",
    "rules": []
   },
+  "data/rusticdelight/glm_entries.json": {
+   "upstream_sha1": "73fe102006eda48e62a968de3dfe9b0f1e05a7a3",
+   "rules": [
+    "dangling_loot_modifiers",
+    "glm_fragment"
+   ]
+  },
   "data/rusticdelight/loot_modifiers/calamari_from_glow_squid.json": {
    "upstream_sha1": "0a13a2e1b11e4864561e644a443b2ab3b8e2ea67",
    "rules": []
@@ -4214,7 +4215,8 @@
    "upstream_sha1": "5d27342add639dcabfb7be0b94bc1b701224dbc1",
    "rules": [
     "replaced_ids"
-   ]
+   ],
+   "own_override": true
   },
   "data/rusticdelight/loot_tables/blocks/potted_wild_bell_peppers.json": {
    "upstream_sha1": "08245991e5f9214b7a7576cd3ef27c462a108c7f",
@@ -4866,7 +4868,8 @@
    "upstream_sha1": "76e88708dad33ead9ad4875140d2f9af2c1ff2ec",
    "rules": [
     "replaced_ids"
-   ]
+   ],
+   "own_override": true
   },
   "data/rusticdelight/recipes/cutting/potato_slices.json": {
    "upstream_sha1": "170fd6fbc587d05cd895de77ccca76a3a5215ec1",
@@ -5048,7 +5051,8 @@
    "upstream_sha1": "ac5ff57ef106caa3d23299344780e2db78d3a7fe",
    "rules": [
     "replaced_ids"
-   ]
+   ],
+   "own_override": true
   },
   "data/rusticdelight/recipes/pancakes.json": {
    "upstream_sha1": "5120029d7d6749438e7aff8032d49cf20f63299a",
@@ -5058,7 +5062,8 @@
    "upstream_sha1": "56cbc71ba968ccd21534660283d6e5d17032a265",
    "rules": [
     "replaced_ids"
-   ]
+   ],
+   "own_override": true
   },
   "data/rusticdelight/recipes/paper_from_cotton_boll.json": {
    "upstream_sha1": "fae09736e27fa898f6a85e7205d692b80bfe50fa",

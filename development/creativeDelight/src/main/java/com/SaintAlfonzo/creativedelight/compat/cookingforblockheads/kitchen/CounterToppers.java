@@ -24,8 +24,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * The counter and corner ({@code #creativedelight:counter_supports}) are 15 px tall with no full top face, so these
  * refused to stay on them, and would float 1 px above the worktop. {@code BlockStateCounterTopperMixin} lets them stay
  * ({@code canSurvive}), breaks them (and every Display Delight block) when the block below goes ({@code updateShape}),
- * and shifts their model ({@code getOffset}); {@code CuttingBoardRendererOffsetMixin} and
- * {@code CoasterRendererOffsetMixin} shift what their block entity renderers draw. The shift is
+ * and shifts their model ({@code getOffset}); {@code CuttingBoardRendererOffsetMixin} and the Brewin' port's own coaster
+ * renderer (Creative Brewing) shift what their block entity renderers draw. The shift is
  * {@code cuttingBoardOffset*} ({@code creativedelight-common.toml [cookingforblockheads]}) for the board and {@code plateOffset*} for the rest. The hitbox is not moved.
  */
 public final class CounterToppers {

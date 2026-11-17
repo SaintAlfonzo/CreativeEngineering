@@ -8,20 +8,35 @@
 //   global.foodValueCopies.ghost_charcoal = { absolute: { nutrition: 0, saturationMod: 0, alwaysEat: true,
 //       effects: [{ effect: 'wither', ticks: 100 }, { effect: 'fire_resistance', ticks: 3600 }] } }
 // Fields of `absolute`: nutrition, saturationMod (the modifier), meat, alwaysEat, fast, effects, keepEffects,
-// dedupeEffects. A field left out keeps the target's own value (no food: 0 and false). `effects` is a list of
-// { effect: id or global.effect key, ticks, amplifier (default 0), chance (default 1) }, added after the target's own
-// effects when keepEffects is true (the default when effects is left out), else in their place. dedupeEffects keeps
-// the longest entry of each effect, in the original order.
+// dropEffects, dedupeEffects, requireEffects. A field left out keeps the target's own value (no food: 0 and false).
+// `effects` is a list of { effect: id or global.effect key, ticks, amplifier (default 0), chance (default 1),
+// visible (default true; false also makes it non-ambient and hides the particles), unlessHas: [effect, ...] (skip it
+// when the list so far holds one of these) }, added after the target's own effects when keepEffects is true (the
+// default when effects is left out), else in their place. dropEffects removes those effects from the target's own
+// list; dedupeEffects then keeps the longest entry of each effect, in the original order. requireEffects: when one of
+// these effects is not registered the row is skipped and the target keeps its food.
+// Two files may set fields of one row (Creative Brewing's alcohol_drinks.js adds to Fruits Delight's bellini_cocktail):
+// write rows with global.foodValueCopies.absolute(key, fields), which merges into an existing absolute row.
 // ItemEvents.modification runs at startup: restart to apply.
 // This file is the one applier. The rows live in the file of the mod that owns the target item, each adding to
 // global.foodValueCopies (created with `global.foodValueCopies = global.foodValueCopies || {}`):
 //   delightful/delightful_foods.js   cantaloupe_slice; absolute: the 3.8.1 hunger and saturation (delightfulFoodValues)
 //   fruitsdelight/fruits_foods.js    absolute: bellini_cocktail (dedupeEffects)
 //   vintagedelight/vintage_items.js  absolute: ghost_charcoal
+//   Creative Brewing creativebrewing/alcohol_drinks.js  absolute: every alcoholic drink (global.alcohol)
 //   minecraft/food_values.js         glistering_melon_slice
 // The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/
 // effect_swaps.js (moved from the pack's cooking/food_values.js 2026-11-01).
 global.foodValueCopies = global.foodValueCopies || {}
+Object.defineProperty(global.foodValueCopies, 'absolute', {
+	enumerable: false,
+	value: (key, fields) => {
+		var row = global.foodValueCopies[key]
+		if (!row || typeof row !== 'object' || !row.absolute) row = global.foodValueCopies[key] = { absolute: {} }
+		Object.keys(fields).forEach(f => { row.absolute[f] = fields[f] })
+		return row
+	},
+})
 
 ItemEvents.modification(e => {
 	var i = global.item
@@ -30,7 +45,16 @@ ItemEvents.modification(e => {
 	var $FoodValuesBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
 	var done = 0
 	var $FoodValuesEffect = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
+	var same = (inst, ids) => (ids || []).some(x => {
+		var me = global.effect.resolve(x)
+		return me && inst.getEffect().equals(me)
+	})
 	var absolute = (key, id, spec) => {
+		var missing = (spec.requireEffects || []).filter(x => !global.effect.resolve(x))
+		if (missing.length) {
+			console.error('[food values] ' + key + ': ' + missing.join(', ') + ' not registered, food left unchanged')
+			return false
+		}
 		e.modify(id, item => {
 			var old = item.getFoodProperties()
 			var pick = (field, fromOld, none) => spec[field] !== undefined ? spec[field] : (old ? fromOld() : none)
@@ -44,13 +68,10 @@ ItemEvents.modification(e => {
 			var keep = spec.keepEffects !== undefined ? spec.keepEffects : spec.effects === undefined
 			if (keep && old) {
 				var own = old.getEffects()
-				for (var n = 0; n < own.size(); n++) pairs.push({ inst: own.get(n).getFirst(), chance: own.get(n).getSecond() })
+				for (var n = 0; n < own.size(); n++) {
+					if (!same(own.get(n).getFirst(), spec.dropEffects)) pairs.push({ inst: own.get(n).getFirst(), chance: own.get(n).getSecond() })
+				}
 			}
-			;(spec.effects || []).forEach(fx => {
-				var me = global.effect.resolve(fx.effect)
-				if (!me) { console.warn('[food values] ' + key + ': effect ' + fx.effect + ' skipped'); return }
-				pairs.push({ inst: new $FoodValuesEffect(me, fx.ticks, fx.amplifier || 0), chance: fx.chance === undefined ? 1.0 : fx.chance })
-			})
 			if (spec.dedupeEffects) {
 				var longest = []
 				pairs.forEach(p => {
@@ -61,6 +82,15 @@ ItemEvents.modification(e => {
 				})
 				pairs = longest
 			}
+			;(spec.effects || []).forEach(fx => {
+				if (fx.unlessHas && pairs.some(p => same(p.inst, fx.unlessHas))) return
+				var me = global.effect.resolve(fx.effect)
+				if (!me) { console.warn('[food values] ' + key + ': effect ' + fx.effect + ' skipped'); return }
+				var inst = fx.visible === false
+					? new $FoodValuesEffect(me, fx.ticks, fx.amplifier || 0, false, false)
+					: new $FoodValuesEffect(me, fx.ticks, fx.amplifier || 0)
+				pairs.push({ inst: inst, chance: fx.chance === undefined ? 1.0 : fx.chance })
+			})
 			pairs.forEach(p => b.effect(p.inst, p.chance))
 			item.setFoodProperties(b.build())
 		})
@@ -71,8 +101,7 @@ ItemEvents.modification(e => {
 			var target = i[key]
 			if (typeof target !== 'string') { console.warn('[food values] ' + key + ': not in item_dict'); return }
 			try {
-				absolute(key, target, entry.absolute)
-				done++
+				if (absolute(key, target, entry.absolute) !== false) done++
 			} catch (err) {
 				console.error('[food values] could not set food on ' + target + ': ' + err)
 			}

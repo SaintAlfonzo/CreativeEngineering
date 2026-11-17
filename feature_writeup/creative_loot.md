@@ -11,12 +11,12 @@ packed food, drops) is [loot.md](loot.md); this file is the jar.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8a534918451a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (In Progress 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=136cfd48874f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #15` | In Progress | SQ-LOOT-02 | Global loot modifiers |
+| `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
 | `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
 <!-- generated:status_index end open_work -->
 
@@ -60,21 +60,39 @@ mod load order. D14: design for the worst case, where only one copy counts.
 - Skipped, and named in a second log line: a missing definition, a serializer (`"type"`) that is not registered (its mod
   is gone), a decode error. Duplicates are dropped by entry id.
 - Gates: `GlmMerge.gate(Predicate<String>)` turns fragments off by namespace. Creative Delight and Creative Brewing
-  register their member switch there when they move their lists to fragments (plan P3, section 5:
-  `ns -> !CDConfig.isMember(ns) || CDConfig.member(ns)`, the same with `CBConfig`).
+  register their member switch there in their constructors (`ns -> !CDConfig.isMember(ns) || CDConfig.member(ns)`, the
+  same with `CBConfig`), so a member switched off loses its modifiers.
+- The fragments (no own jar ships the Forge list; `design_rules_audit.py glm` checks it and that every entry has a
+  definition): `hearthandharvest` 2, `veggiesdelight` 5, `rusticdelight` 2, `ends_delight` 15 (definitions in End's
+  Delight's upstream jar; its own list is left out by `replaced_resources`), `vintagedelight` 1, `vinery` 1 (Delight's
+  `packs/mods/vinery/`, the cherry leaves modifier, gated by the Vinery switch), `brewinandchewin` 4, `exposure` 5,
+  `exposure_expanded` 21: 9 files, 56 entries. The Rustic bake and the Brewin', Veggies and Vintage port scripts write
+  fragments. Third-party lists (Farmer's Delight, Delightful, Nether's, Ocean's repacks unchanged, other mods) are read
+  as before.
 - One log line per reload: `[GlmMerge] N entries (lists: a files, b entries; fragments: c files, d entries, e gated off;
-  Forge read f, added g, skipped h)`. Until P3 the members still ship the Forge list and no fragment exists, so
-  `added` is 0 unless a `replace: true` copy dropped entries.
+  Forge read f, added g, skipped h)`. `added` counts the fragment entries Forge no longer reads itself.
 - Creative Loot ships no list and no fragment (no modifiers of its own).
+
+## 2b. Drop rules of other jars
+
+Creative Delight's loot scripts declare rules only; the drops engine (`loot/09_drops.js`) applies them (plan section
+12d, V-38). Shapes besides `drop` and `dropShare`: `swapDrop(tables, item, into, opts)` (the item's entries drop only
+when the conditions fail, a pool gives `into` when they hold: knife scavenging), `replaceDrops`, `rewrite(tables, fn,
+name)` (raw table edits: soil yield, bell pepper weights), `afterTables(fn)` (summary log lines) and the post-roll
+`onlyDrop(entities, item, { logName })` (a LootJS modifier, after every global loot modifier: the squid chain). New
+`drop` options: `silkTouch`, `state` (with `stateBlock`), `holding`, `notHolding`, `killedByPlayer`; `knife` on a block
+table tests the breaking tool. Log: `[loot-drops] N drop pools and M shared entries in T tables` and `[loot-drops] S
+swaps and R table rewrites`. `_core/item_merges.js` (Common's item-merge runner) stays a LootJS modifier.
 
 ## 3. Edges
 
 - `global.CWG.lootRules` is gone (no alias): the four Creative Delight callers (`miners_delight/loot.js`,
   `rusticdelight/loot.js`, `veggiesdelight/loot.js`, `vintagedelight/loot.js`) call `global.LOOT.rules` with no guard
-  (D25). Their pack-folder copies load in dev now; the Creative Delight jar carries the old text until its P3 rebuild.
+  (D25), as do Corn, Delightful, Farmer's, `crop_drops.js` and `soil_yield.js` since P3c; Creative Brewing requires
+  Creative Loot too.
 - `06_dead_maps.js` and `07_rules.js` hold the structure-related chest rules (dead explorer maps, village chests); they
   read only loot tables and `loot_config.json`, nothing of Worldgen's.
-- Exposure's fragment (P3) is read whenever Creative Loot is present; Exposure does not depend on it.
+- Exposure's fragments are read whenever Creative Loot is present; Exposure does not depend on it.
 - LootJS log names come from `R.logName` (`R = global.NCH.forPack('creativeloot')`): `CL/tuning`, `CL/removals/...` (`CE/loot/...` before 2026-11-17).
 
 ## 4. Tests
@@ -91,6 +109,10 @@ mod load order. D14: design for the worst case, where only one copy counts.
   as before (the file moved unchanged; Worldgen had no `[loot]` toml section). Queue SQ-LOOT-06.
 
 ## 5. History
+
+- 2026-11-17: P3c of plan_rules_fixes.md: every member list became a fragment, Delight and Brewing gate them (section 5);
+  the drops engine gained the shapes of section 2b and Creative Delight's own loot rules moved into it (12d). Queue
+  SQ-RFX-16 to -18, -21 to -23; SQ-LOOT-02 and SQ-MDL-01 updated.
 
 - 2026-11-17: P3a of plan_rules_fixes.md: LootJS names through `R.logName` (`CL/tuning`, `CL/removals/...`), the loot group tags renamed `#creativeloot:loot/chalk` and `#creativeloot:loot/golden_food` (dict keys unchanged); SQ-RFX-03, -05.
 - 2026-11-17: built (P2b of plan_rules_fixes.md): the jar, the loot tree and `loottags.js` moved from Creative Worldgen,

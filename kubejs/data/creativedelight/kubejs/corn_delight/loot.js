@@ -1,23 +1,16 @@
 // requires: creativedelight
 // requires: corn_delight
-// requires: lootjs
 // Corn Delight loot rows (feature_writeup/corn_delight.md 2.4). Non-member file.
 
-var R = global.NCH.forPack('creativedelight')
-
-LootJS.modifiers(event => {
+// A rule of Creative Loot's drops engine (loot/09_drops.js), queued with global.LOOT.rules.
+global.LOOT.rules(function (L) {
 	if (!global.CD) return
 	var i = global.item
 	var b = global.blocks
 
 	// Mature corn broken with a knife (no Silk Touch): 25% chance of a Corncob on top of the normal drops. 1.2.11 gives
-	// Straw here; the pack gives the cob, and corn still gives no straw. Same form as the pumpkin knife rule
-	// (farmersdelight/loot.js).
-	event.addBlockLootModifier(b.corn_crop)
-		.matchBlockState(Block.getBlock(b.corn_crop), { age: '7' })
-		.matchMainHand(i.any_knife)
-		.not(n => n.matchMainHand(ItemFilter.hasEnchantment('minecraft:silk_touch')))
-		.randomChance(0.25)
-		.addLoot(i.corncob)
-		.logName(R.logName('corn_knife_corncob'))
+	// Straw here; the pack gives the cob, and corn still gives no straw. Same knife and Silk Touch test as the pumpkin
+	// rule (farmersdelight/loot.js).
+	L.drop('corn_delight:blocks/corn_crop', i.corncob, { chance: 0.25, knife: true, silkTouch: false, state: { age: '7' },
+		stateBlock: b.corn_crop })
 })

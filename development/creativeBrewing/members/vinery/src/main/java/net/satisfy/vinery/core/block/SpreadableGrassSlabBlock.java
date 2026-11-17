@@ -1,5 +1,6 @@
 package net.satisfy.vinery.core.block;
 
+import com.SaintAlfonzo.creativecalendar.seasons.GrassSeasonHook;
 import net.satisfy.vinery.core.util.PortUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -116,6 +117,9 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
         if (!canSurviveNew(state, level, pos)) {
             level.setBlock(pos, getDirtSlabBlock().withPropertiesOf(state), Block.UPDATE_CLIENTS);
         } else {
+            // Crop seasons (feature_writeup/crops.md 2.12.1): Creative Calendar may refuse this spread try; the covered-slab
+            // revert above is untouched. Creative Brewing requires Calendar.
+            if (GrassSeasonHook.refuse("vinery:SpreadableGrassSlabBlock", state, level, pos)) return;
             if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
                 for(int i = 0; i < 4; ++i) {
                     BlockPos blockPos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);

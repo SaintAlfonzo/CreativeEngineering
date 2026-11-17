@@ -19,9 +19,9 @@
 // yield; melons and cantaloupe are left alone), and gives Vintage's cucumber and ghost pepper their seeds on a ripe
 // break (part G).
 //
-// Same pre-roll mechanism as rusticdelight/crop_drops.js: ServerEvents.genericLootTables rewrites the raw table JSON
-// before the game parses it. New pools are only appended (Forge names pools by position), and modify() resets the table
-// type, so it is set back to minecraft:block. The bell pepper rewrite finds its pools by their entries; these pools
+// Same pre-roll mechanism as rusticdelight/crop_drops.js: Creative Loot's drops engine (L.rewrite) rewrites the raw
+// table JSON before the game parses it. New pools are only appended (Forge names pools by position); the engine sets
+// the table type back to minecraft:block. The bell pepper rewrite finds its pools by their entries; these pools
 // have three entries and no random_chance, so it never mistakes one for its own.
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.
@@ -237,25 +237,11 @@
 
     // Edits a table's raw pools (and table-level functions) as plain JS, then writes them back. fn(pools, functions)
     // returns true when it changed anything. modify() resets the table type, so it is set back to minecraft:block.
-    function edit(event, table, fn) {
-        if (!Platform.isLoaded(table.split(':')[0])) return
-        try {
-            event.modify(table, function (t) {
-                var pools = JSON.parse(String(t.pools.toString()))
-                var functions = t.functions ? JSON.parse(String(t.functions.toString())) : []
-                if (fn(pools, functions)) {
-                    t.pools = JsonIO.parseRaw(JSON.stringify(pools))
-                    if (functions.length) t.functions = JsonIO.parseRaw(JSON.stringify(functions))
-                }
-                t.type = 'minecraft:block'
-            })
-        } catch (err) {
-            console.warn(TAG + table + ': ' + err)
-        }
-    }
-
-    ServerEvents.genericLootTables(function (event) {
+    // Table rewrites of Creative Loot's drops engine (loot/09_drops.js, L.rewrite; a table of a mod that is not loaded
+    // is skipped there), queued with global.LOOT.rules. The counts are logged after the tables are rewritten.
+    global.LOOT.rules(function (L) {
         if (!global.CD) return
+        var edit = function (table, fn) { L.rewrite(table, fn, 'soil yield') }
         var i = global.item
         var cfg = global.NCH.cfg(DEFAULTS, 'CROP_DROPS.SOIL_YIELD')
         var soilList = soils(i, cfg)
@@ -273,20 +259,22 @@
         // Part A first, so the soil pools (which never read Fortune) are appended to stripped tables.
         var stripped = 0, strippedTables = 0
         fortuneFree().forEach(function (table) {
-            edit(event, table, function (pools, functions) {
+            edit(table, function (pools, functions) {
                 var n = stripFortune(pools) + stripFortune({ functions: functions })
                 stripped += n
                 if (n) strippedTables++
                 return n > 0
             })
         })
-        console.info(TAG + 'Fortune stripped: ' + stripped + ' terms on ' + strippedTables + ' crop tables')
+        L.afterTables(function () {
+            console.info(TAG + 'Fortune stripped: ' + stripped + ' terms on ' + strippedTables + ' crop tables')
+        })
 
         // Part G: seeds on a ripe cucumber and ghost pepper break.
         ripeSeeds(i2, b2).forEach(function (row) {
             if (global.CD.absentIn(row.block)) return
             var parts = row.block.split(':')
-            edit(event, parts[0] + ':blocks/' + parts[1], function (pools) {
+            edit(parts[0] + ':blocks/' + parts[1], function (pools) {
                 pools.push(seedPool(row))
                 return true
             })
@@ -299,7 +287,7 @@
         var done = []
         on.forEach(function (crop) {
             var parts = crop.block.split(':')
-            edit(event, parts[0] + ':blocks/' + parts[1], function (pools) {
+            edit(parts[0] + ':blocks/' + parts[1], function (pools) {
                 var added = 0
                 soilList.forEach(function (s) {
                     if (!s.nether != !crop.nether) return
@@ -310,9 +298,11 @@
                 return added > 0
             })
         })
-        console.info(TAG + done.length + ' crops (' + done.join(', ') + '), soils: ' + soilList.map(function (s) {
-            return s.name + ' +' + Math.round(s.bonus * 100) + '%'
-        }).join(', '))
+        L.afterTables(function () {
+            console.info(TAG + done.length + ' crops (' + done.join(', ') + '), soils: ' + soilList.map(function (s) {
+                return s.name + ' +' + Math.round(s.bonus * 100) + '%'
+            }).join(', '))
+        })
     })
 
 })()
