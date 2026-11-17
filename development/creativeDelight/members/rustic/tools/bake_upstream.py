@@ -255,7 +255,11 @@ def recipe_rule(recipe, reg):
     return out, 'mod_loaded:' + mod
 
 
+FRAGMENT = 'data/rusticdelight/glm_entries.json'
+
+
 def drop_dangling_loot_modifiers(files):
+    """The Forge list becomes the member's fragment, less the entries whose definition is not baked."""
     path = 'data/forge/loot_modifiers/global_loot_modifiers.json'
     if path not in files:
         return
@@ -265,9 +269,10 @@ def drop_dangling_loot_modifiers(files):
         ns, p = entry.split(':', 1)
         if 'data/%s/loot_modifiers/%s.json' % (ns, p) in files:
             kept.append(entry)
-    if kept != lst['entries']:
-        lst['entries'] = kept
-        files[path] = (dump(lst), files[path][1], files[path][2] + ['dangling_loot_modifiers'])
+    rules = files[path][2] + (['dangling_loot_modifiers'] if kept != lst['entries'] else [])
+    # The pack's jars ship no Forge list: a fragment Creative Loot's GlmMerge reads (plan_rules_fixes.md section 5)
+    files[FRAGMENT] = (dump({'entries': kept}), files[path][1], rules + ['glm_fragment'])
+    del files[path]
 
 
 def dump(obj):
@@ -470,7 +475,8 @@ def selftest():
     files = {'data/forge/loot_modifiers/global_loot_modifiers.json': (b'{"replace": false, "entries": ["rusticdelight:a", "rusticdelight:b"]}', 's', []),
              'data/rusticdelight/loot_modifiers/a.json': (b'{}', 's', [])}
     drop_dangling_loot_modifiers(files)
-    assert json.loads(files['data/forge/loot_modifiers/global_loot_modifiers.json'][0])['entries'] == ['rusticdelight:a']
+    assert 'data/forge/loot_modifiers/global_loot_modifiers.json' not in files
+    assert json.loads(files[FRAGMENT][0]) == {'entries': ['rusticdelight:a']}
     print('selftest ok')
 
 

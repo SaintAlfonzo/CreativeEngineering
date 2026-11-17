@@ -1,6 +1,8 @@
 package net.satisfy.vinery.forge;
 
+import com.SaintAlfonzo.creativecalendar.time.DateMoves;
 import com.SaintAlfonzo.creativecalendar.time.WineTime;
+import net.satisfy.vinery.core.wine.VintageClock;
 
 /**
  * The Creative Engineering pack's {@code [time]} master (feature_writeup/time.md 3.7), held by Creative Calendar (mod id
@@ -11,6 +13,17 @@ import com.SaintAlfonzo.creativecalendar.time.WineTime;
  */
 public final class PackTime {
     private PackTime() {
+    }
+
+    /**
+     * Registers the vintage clock with Calendar's {@code /ccaltime date} (plan_rules_fixes.md 12f step 3): a backward
+     * date move on the sun clock moves the clock back by the same amount (forward moves reach it on its next tick).
+     */
+    static void registerDateMoves() {
+        DateMoves.register((server, delta) -> {
+            VintageClock.add(server, delta);
+            return "wine clock moved back";
+        });
     }
 
     public static boolean active() {

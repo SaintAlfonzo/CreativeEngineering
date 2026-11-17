@@ -13,7 +13,7 @@ console.log('alcohol recipes starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativebrewing')
 
 //######################### Pickling moves to the Pickling Jar #########################
 // The keg is for beer fluids, the cask for wine, the Vintage Pickling Jar for all pickling (vintage_delight.md S7, 3.2).

@@ -1,29 +1,14 @@
 // requires: creativedelight
 // requires: miners_delight
-// requires: lootjs
 // Squid drops for the squid chain (TODO dishes/ocean #3): a squid drops one Miner's Delight squid item and a glow squid
 // one glow squid item, every kill, knife or not; the ink and the calamari come from cutting it (miners_delight/recipes.js).
-// LootJS runs after every mod's loot modifiers, so this also takes out what they add: Rustic's calamari, Miner's knife
+// The rule is post-roll (Creative Loot's L.onlyDrop, a LootJS modifier), after every mod's loot modifiers, so this also
+// takes out what they add: Rustic's calamari, Miner's knife
 // squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4).
 // Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or
 // another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight.
 
 var R = global.NCH.forPack('creativedelight')
-
-LootJS.modifiers(event => {
-	if (!global.CD) return
-	var i = global.item
-
-	;[
-		['minecraft:squid', i.squid],
-		['minecraft:glow_squid', i.glow_squid],
-	].forEach(s => {
-		event.addEntityLootModifier(s[0])
-			.removeLoot(Ingredient.all)
-			.addLoot(s[1])
-			.logName(R.logName('squid_chain/' + s[0].split(':')[1]))
-	})
-})
 
 // Cave carrot crate split out of the loose cave carrot's entry, like the Farmer's Delight crates (pre-roll loot
 // framework, Creative Loot loot/05_tuning.js). miners_delight.md I5.
@@ -34,7 +19,7 @@ LootJS.modifiers(event => {
 // (MinersTranslator); these rules give the same drops at the same rates, as loot pools in the vanilla tables
 // (L.drop / L.dropShare, loot/09_drops.js), so a rate is one number here and /reload applies it. A mob that dies on
 // fire (Fire Aspect, lava, sun) drops the cooked item instead of the raw one. "Knife" is #forge:tools/knives in the
-// killer's main hand. Squid and glow squid kills are the squid chain's (LootJS rule above); only fishing is here.
+// killer's main hand. Squid and glow squid kills are the squid chain's (L.onlyDrop above); only fishing is here.
 global.LOOT.rules(function (L) {
 	var i = global.item
 	var SPIDER = 'minecraft:entities/spider'
@@ -46,6 +31,10 @@ global.LOOT.rules(function (L) {
 		.map(function (b) { return 'minecraft:blocks/infested_' + b })
 
 	L.pack(i.cave_carrot_crate, i.cave_carrot)
+
+	// The squid chain (top of this file): one squid item per kill, nothing else
+	L.onlyDrop('minecraft:squid', i.squid, { logName: R.logName('squid_chain/squid') })
+	L.onlyDrop('minecraft:glow_squid', i.glow_squid, { logName: R.logName('squid_chain/glow_squid') })
 
 	// Abandoned mineshaft chests also roll Miner's own table (cave carrots, copper carrots, ...)
 	L.addPool('minecraft:chests/abandoned_mineshaft',

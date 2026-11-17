@@ -23,7 +23,8 @@ ServerEvents.recipes(e => {
 if (!global.CB) return
 global.CB.recipes(() => {
 	var i = global.item
-	var R = global.NCH
+	var ef = global.effect
+	var R = global.NCH.forPack('creativebrewing')
 
 	// effect id -> provider list; built up by add(), written once per effect at the end
 	var providers = {}
@@ -39,53 +40,53 @@ global.CB.recipes(() => {
 	// G5 begin: every row below only feeds add(), whose lists go to R.jeedProvider alone (Write section); NCH drops a
 	// provider or an effect of an absent mod by itself, one entry at a time.
 	//######################### Mobs (spawn eggs) #########################
-	add('minecraft:slowness', [i.stray_spawn_egg, i.witch_spawn_egg, i.spawn_egg_mudskipper, i.wraith_spawn_egg])
-	add('minecraft:instant_damage', i.witch_spawn_egg)
-	add('minecraft:weakness', i.witch_spawn_egg)
-	add('minecraft:poison', [i.bee_spawn_egg, i.pufferfish_spawn_egg, i.lionfish_spawn_egg, i.jellyfish_spawn_egg,
+	add(ef.slowness, [i.stray_spawn_egg, i.witch_spawn_egg, i.spawn_egg_mudskipper, i.wraith_spawn_egg])
+	add(ef.instant_damage, i.witch_spawn_egg)
+	add(ef.weakness, i.witch_spawn_egg)
+	add(ef.poison, [i.bee_spawn_egg, i.pufferfish_spawn_egg, i.lionfish_spawn_egg, i.jellyfish_spawn_egg,
 		i.spawn_egg_centipede, i.spawn_egg_komodo_dragon, i.spawn_egg_mimic_octopus, i.spawn_egg_rattlesnake,
 		i.spawn_egg_platypus])
-	add('minecraft:nausea', [i.pufferfish_spawn_egg, i.spawn_egg_skunk])
-	add('minecraft:hunger', i.pufferfish_spawn_egg)
-	add('minecraft:blindness', [i.spawn_egg_guster, i.squid_spawn_egg])     // Guster sand; UA: hurt squid ink
-	add('minecraft:night_vision', i.glow_squid_spawn_egg)                    // UA: hurt glow squid ink
-	add('minecraft:glowing', i.spawn_egg_blue_jay)
-	add('minecraft:slow_falling', i.spawn_egg_sugar_glider)                  // riding on your shoulder
+	add(ef.nausea, [i.pufferfish_spawn_egg, i.spawn_egg_skunk])
+	add(ef.hunger, i.pufferfish_spawn_egg)
+	add(ef.blindness, [i.spawn_egg_guster, i.squid_spawn_egg])     // Guster sand; UA: hurt squid ink
+	add(ef.night_vision, i.glow_squid_spawn_egg)                    // UA: hurt glow squid ink
+	add(ef.glowing, i.spawn_egg_blue_jay)
+	add(ef.slow_falling, i.spawn_egg_sugar_glider)                  // riding on your shoulder
 	add('alexsmobs:debilitating_sting', i.spawn_egg_tarantula_hawk)
-	add('alexsmobs:earthquake', i.spawn_egg_rocky_roller)
+	add(ef.earthquake, i.spawn_egg_rocky_roller)
 	add('alexsmobs:ender_flu', [i.spawn_egg_endergrade, i.spawn_egg_enderiophage])
-	add('alexsmobs:exsanguination', i.spawn_egg_frilled_shark)
-	add('alexsmobs:fear', i.spawn_egg_tiger)
+	add(ef.exsanguination, i.spawn_egg_frilled_shark)
+	add(ef.fear, i.spawn_egg_tiger)
 	add('alexsmobs:tigers_blessing', i.spawn_egg_tiger)
 	add('alexsmobs:fleet_footed', i.spawn_egg_jerboa)
 	add('alexsmobs:orcas_might', i.spawn_egg_orca)
 	add('alexsmobs:sunbird_blessing', i.spawn_egg_sunbird)
 	add('alexsmobs:sunbird_curse', i.spawn_egg_sunbird)
-	add('neapolitan:slipping', i.plantain_spider_spawn_egg)
+	add(ef.slipping, i.plantain_spider_spawn_egg)
 
 	//######################### Blocks, fluids and gear #########################
-	add('minecraft:mining_fatigue', [i.guardian_spine, i.elder_guardian_spine])
-	add('minecraft:slowness', i.concrete_bucket)
-	add('minecraft:nausea', [i.ethanol_bucket, i.acetaldehyde_bucket])
-	add('minecraft:fire_resistance', i.straddleboard)
-	add('minecraft:poison', [i.thorn_chakram, i.spiky_bomb])
-	add('minecraft:weakness', i.blue_bomb)
-	add('minecraft:speed', i.oil_can)                                       // lubricated iron golems
-	add('minecraft:strength', i.oil_can)
-	add('minecraft:absorption', i.electrum_amulet)
-	add('minecraft:luck', i.electrum_amulet)
-	add('minecraft:bad_omen', i.ravager_horn)
-	add('alexsmobs:exsanguination', i.shield_of_the_deep)
-	add('better_beacons:long_reach', i.beacon)
+	add(ef.mining_fatigue, [i.guardian_spine, i.elder_guardian_spine])
+	add(ef.slowness, i.concrete_bucket)
+	add(ef.nausea, [i.ethanol_bucket, i.acetaldehyde_bucket])
+	add(ef.fire_resistance, i.straddleboard)
+	add(ef.poison, [i.thorn_chakram, i.spiky_bomb])
+	add(ef.weakness, i.blue_bomb)
+	add(ef.speed, i.oil_can)                                       // lubricated iron golems
+	add(ef.strength, i.oil_can)
+	add(ef.absorption, i.electrum_amulet)
+	add(ef.luck, i.electrum_amulet)
+	add(ef.bad_omen, i.ravager_horn)
+	add(ef.exsanguination, i.shield_of_the_deep)
+	add(ef.long_reach, i.beacon)
 	add('better_beacons:patrol_nullifier', i.beacon)
-	add('better_beacons:phantom_bane', i.beacon)
+	add(ef.phantom_bane, i.beacon)
 	add('createaddition:shocking', i.createaddition_tesla_coil)
-	add('fruitsdelight:alienating', i.durian_helmet)
+	add(ef.alienating, i.durian_helmet)
 	// Alienating gives mobs nearby Disgusted: the helmet and the foods with Alienating
 	add('fruitsdelight:disgusted', [i.durian_helmet, i.baked_durian, i.durian_jello, i.durian_jelly, i.durian_pie])
 	add('immersiveengineering:concrete_feet', [i.concrete_bucket, i.chemthrower])
-	add('immersiveengineering:conductive', [i.redstone_acid_bucket, i.chemthrower])
-	add('immersiveengineering:flammable', [i.creosote_bucket, i.biodiesel_bucket, i.chemthrower, i.crudeoil_bucket,
+	add(ef.conductive, [i.redstone_acid_bucket, i.chemthrower])
+	add(ef.flammable, [i.creosote_bucket, i.biodiesel_bucket, i.chemthrower, i.crudeoil_bucket,
 		i.gasoline_bucket, i.naphtha_bucket, i.benzene_bucket, i.napalm_bucket])
 	add('immersiveengineering:flashed', [i.immersiveengineering_shield, i.toolupgrade_shield_flash])
 	add('immersiveengineering:slippery', [i.lubricant_bucket, i.chemthrower])
@@ -93,26 +94,26 @@ global.CB.recipes(() => {
 	add('immersiveengineering:stunned', [i.railgun, i.tesla_coil])            // endermen
 	add('immersivepetroleum:anti_fire', [i.speedboat, i.upgrade_reinforced_hull])
 	add('monobank:thief', i.monobank)
-	add('neapolitan:slipping', i.bananarrow)
+	add(ef.slipping, i.bananarrow)
 	add('via_romana:travellers_fatigue', i.any_sign)                         // fast travel between linked signs
 
 	//######################### Food and drink with code-applied effects #########################
-	add('minecraft:speed', [i.bar_of_caramel, i.black_chocolate_candy, i.ruby_chocolate_candy, i.pancakes,
+	add(ef.speed, [i.bar_of_caramel, i.black_chocolate_candy, i.ruby_chocolate_candy, i.pancakes,
 		i.coin_chocolate_gold])
-	add('minecraft:haste', [i.builders_tea, i.candy_cane, i.coin_chocolate_iron])
-	add('minecraft:regeneration', [i.hot_chocolate_bottle, i.soothing_hot_chocolate])
-	add('minecraft:resistance', [i.gingerbread, i.coin_chocolate_diamond])
-	add('minecraft:fire_resistance', i.coin_chocolate_netherite)
-	add('minecraft:absorption', i.coin_chocolate_netherite)
-	add('minecraft:luck', i.coin_chocolate_emerald)
-	add('minecraft:saturation', [i.bar_of_ruby_chocolate, i.full_ruby_chocolate_bar, i.ruby_chocolate_candy,
+	add(ef.haste, [i.builders_tea, i.candy_cane, i.coin_chocolate_iron])
+	add(ef.regeneration, [i.hot_chocolate_bottle, i.soothing_hot_chocolate])
+	add(ef.resistance, [i.gingerbread, i.coin_chocolate_diamond])
+	add(ef.fire_resistance, i.coin_chocolate_netherite)
+	add(ef.absorption, i.coin_chocolate_netherite)
+	add(ef.luck, i.coin_chocolate_emerald)
+	add(ef.saturation, [i.bar_of_ruby_chocolate, i.full_ruby_chocolate_bar, i.ruby_chocolate_candy,
 		i.ruby_chocolate_candy_2, i.ruby_chocolate_candy_3])
-	add('minecraft:water_breathing', i.pickerelweed_juice)
-	add('minecraft:nausea', i.candy)
+	add(ef.water_breathing, i.pickerelweed_juice)
+	add(ef.nausea, i.candy)
 	var gamblersTea = [i.gamblers_tea, i.long_gamblers_tea, i.strong_gamblers_tea]
-	add('minecraft:glowing', gamblersTea)
-	add('minecraft:night_vision', gamblersTea)
-	add('minecraft:wither', gamblersTea)
+	add(ef.glowing, gamblersTea)
+	add(ef.night_vision, gamblersTea)
+	add(ef.wither, gamblersTea)
 	add('alexsmobs:oiled', i.fish_oil)
 	// Fungi Delight (Creative Delight member) gives Weak Stomach from code when a food in its alcohol_reaction tag is
 	// eaten (ModEffectEvents; ui/effects #12). Burrowing comes only from its potions, which JEED lists by itself.
@@ -128,22 +129,22 @@ global.CB.recipes(() => {
 	//######################### Botania brews #########################
 	// BotaniaBrews.registerBrews (Botania 440.2): brew key -> effects, and whether it infuses incense / the pendant
 	var brews = [
-		['speed', ['minecraft:speed'], true, true],
-		['strength', ['minecraft:strength'], true, true],
-		['haste', ['minecraft:haste'], true, true],
-		['healing', ['minecraft:instant_health'], true, true],
-		['jump_boost', ['minecraft:jump_boost'], true, true],
-		['regen', ['minecraft:regeneration'], true, true],
-		['regen_weak', ['minecraft:regeneration'], true, true],
-		['resistance', ['minecraft:resistance'], true, true],
-		['fire_resistance', ['minecraft:fire_resistance'], true, true],
-		['water_breathing', ['minecraft:water_breathing'], true, true],
-		['invisibility', ['minecraft:invisibility'], true, false],
-		['night_vision', ['minecraft:night_vision'], true, true],
-		['absorption', ['minecraft:absorption'], false, false],
-		['overload', ['minecraft:strength', 'minecraft:speed', 'minecraft:weakness', 'minecraft:hunger'], true, true],
-		['soul_cross', ['botania:soul_cross'], true, true],
-		['feather_feet', ['botania:feather_feet'], true, true],
+		['speed', [ef.speed], true, true],
+		['strength', [ef.strength], true, true],
+		['haste', [ef.haste], true, true],
+		['healing', [ef.instant_health], true, true],
+		['jump_boost', [ef.jump_boost], true, true],
+		['regen', [ef.regeneration], true, true],
+		['regen_weak', [ef.regeneration], true, true],
+		['resistance', [ef.resistance], true, true],
+		['fire_resistance', [ef.fire_resistance], true, true],
+		['water_breathing', [ef.water_breathing], true, true],
+		['invisibility', [ef.invisibility], true, false],
+		['night_vision', [ef.night_vision], true, true],
+		['absorption', [ef.absorption], false, false],
+		['overload', [ef.strength, ef.speed, ef.weakness, ef.hunger], true, true],
+		['soul_cross', [ef.soul_cross], true, true],
+		['feather_feet', [ef.feather_feet], true, true],
 		['emptiness', ['botania:emptiness'], true, true],
 		['bloodthirst', ['botania:bloodthirst'], true, true],
 		['allure', ['botania:allure'], true, true],
@@ -160,7 +161,7 @@ global.CB.recipes(() => {
 	//######################### Vinery: wines and the standard banner #########################
 	// The wine -> effect map is the port's [wine] effects config, so editing it and running /reload moves the
 	// providers (alcohol.md B7.5).
-	if (Platform.isLoaded('vinery')) {
+	if (global.CB.on('vinery')) {
 		try {
 			var winesByEffect = Java.loadClass('net.satisfy.vinery.core.wine.WineEffects').winesByEffect()
 			var effectIds = winesByEffect.keySet().iterator()

@@ -27,8 +27,6 @@ console.log('potion_area func loading')
     const $AreaEffectCloud   = Java.loadClass('net.minecraft.world.entity.AreaEffectCloud')
     const $MobEffectInstance  = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
     const $PotionUtils        = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
-    const $ForgeRegistries    = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-    const $ResourceLocation   = Java.loadClass('net.minecraft.resources.ResourceLocation')
     const $SoundEvents        = Java.loadClass('net.minecraft.sounds.SoundEvents')
     const $SoundSource        = Java.loadClass('net.minecraft.sounds.SoundSource')
 
@@ -57,7 +55,6 @@ console.log('potion_area func loading')
     ]
     // ----------------------------------------------------------------------------
 
-    const mobEffect = (id) => $ForgeRegistries.MOB_EFFECTS.getValue(new $ResourceLocation(id))
 
     // rebuild a MobEffectInstance with its duration scaled (instant effects untouched)
     function scaledInstance(inst, mult) {
@@ -138,14 +135,14 @@ console.log('potion_area func loading')
         // the effect as a ring applies it (duration x the bucket's effectMult) - the tooltip
         // in CB client creativebrewing/potion_buckets.js shows this, so it matches what the player gets
         scaled(itemId, inst) {
-            const dial = BUCKETS[itemId] || BUCKETS['creativebrewing:potion_bucket']
+            const dial = BUCKETS[itemId] || BUCKETS[global.item.ce_potion_bucket]
             return scaledInstance(inst, dial.effectMult)
         },
 
         // level: server-side Level | x,y,z: doubles (base spawn point) | itemId: a key of BUCKETS
         // stack: the potion-bucket ItemStack (read for NBT) | owner: LivingEntity or null
         spawn(level, x, y, z, itemId, stack, owner) {
-            const dial = BUCKETS[itemId] || BUCKETS['creativebrewing:potion_bucket']
+            const dial = BUCKETS[itemId] || BUCKETS[global.item.ce_potion_bucket]
             const ringCount = Math.max(1, Math.round(dial.rings || 1))
 
             // effects: prefer the bucket's own potion (getMobEffects is a single, unambiguous
@@ -160,7 +157,7 @@ console.log('potion_area func loading')
                 return []
             } else {
                 DEFAULT_EFFECTS.forEach(d => {
-                    const me = mobEffect(d.id)
+                    const me = global.effect.resolve(d.id)
                     if (me) baseEffects.push(new $MobEffectInstance(me, Math.max(1, Math.round(d.seconds * 20)), d.amplifier))
                 })
             }

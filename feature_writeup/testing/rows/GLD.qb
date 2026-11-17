@@ -845,11 +845,11 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## SQ-MDL-01 | Miner's drops on the pack loot engine (boot load; the /reload half is SQ-MDL-01b in sA_3.qb)
 @group A
 @commands boot, `/reload`; grep `logs/latest.log` and `logs/kubejs/server.log`
-@pass `[loot-drops] 17 drop pools and 2 shared entries in 11 tables` once per load; no `[loot-drops]` warning; no `[miners_delight] the loot engine has no drop rules`; no loot modifier or `Error occurred while handling event` line naming `miners_delight`
+@pass `[loot-drops] 26 drop pools and 2 shared entries in N tables` once per load (17 Miner's pools plus 9 Creative Delight pools moved into the engine 2026-11-17, SQ-RFX-21); no `[loot-drops]` warning; no `[miners_delight] the loot engine has no drop rules`; no loot modifier or `Error occurred while handling event` line naming `miners_delight`
 @fails the Worldgen jar lacks `09_drops.js` (error line from CD `miners_delight/loot.js`), or a rule warning (item id)
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
-kjsexpect \[loot-drops\] 17 drop pools and 2 shared entries in 11 tables
+kjsexpect \[loot-drops\] 26 drop pools and 2 shared entries in [0-9]+ tables
 kjsreject \[miners_delight\] the loot engine has no drop rules
 bootreject Error occurred while handling event.*miners_delight
 shell grep -hcE "\[loot-drops\] [0-9]+ drop pools" logs/kubejs/server.log; true

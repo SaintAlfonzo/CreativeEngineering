@@ -90,7 +90,6 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 	 */
 	private static final Map<String, String> NEEDS_COMPARTMENT = Map.of(
 			"CuttingBoardRendererOffsetMixin", Compartments.CFB,
-			"CoasterRendererOffsetMixin", Compartments.CFB,
 			"EntityEmuEggLayerMixin", Compartments.INCUBATION,
 			"DuckEntityEggLayerMixin", Compartments.INCUBATION,
 			"GooseEntityEggLayerMixin", Compartments.INCUBATION);

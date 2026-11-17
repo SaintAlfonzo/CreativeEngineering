@@ -95,7 +95,6 @@
     "create_central_kitchen.CckCookingGuideMealTooltipMixin",
     "create_central_kitchen.CckBrewingGuideMealTooltipMixin",
     "farmersdelight.CuttingBoardRendererOffsetMixin",
-    "brewinandchewin.CoasterRendererOffsetMixin",
     "cookingforblockheads.CfbOvenRendererMixin",
     "cookingforblockheads.CfbFridgeRendererMixin",
     "supplementaries.FaucetStreamFitMixin"

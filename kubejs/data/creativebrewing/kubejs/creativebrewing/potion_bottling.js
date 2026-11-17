@@ -11,7 +11,7 @@ console.log('potion bottling starting')
 // potion item, regular only) and packs them into a single generated_list container recipe.
 // Removing the container drops every expanded sub-recipe (they aren't individual RecipeManager
 // entries, so this is the only way to remove them).
-global.NCH.remove({ id: 'immersiveengineering:potion_bottling_list' }, e)
+global.NCH.forPack('creativebrewing').remove({ id: 'immersiveengineering:potion_bottling_list' }, e)
 
 // ── Bottle Create's potion fluid ─────────────────────────────────────────────
 // create:potion (in #forge:fluid/potion) + glass bottle -> the matching potion / splash
@@ -21,7 +21,7 @@ global.NCH.remove({ id: 'immersiveengineering:potion_bottling_list' }, e)
 // fluid stack (CustomPotionColor, ...) also match. Nothing here needs Engineering.
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativebrewing')
 var POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION
 var BOTTLES = [
 	['REGULAR',   i.potion],

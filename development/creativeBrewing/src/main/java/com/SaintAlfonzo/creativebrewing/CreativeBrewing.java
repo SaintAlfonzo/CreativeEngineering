@@ -69,6 +69,9 @@ public class CreativeBrewing {
 		com.SaintAlfonzo.creativebrewing.potion.BetterBeaconsPotions.register(modEventBus);
 		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)
 		MinecraftForge.EVENT_BUS.register(PotionBucketDispenser.class);
+		// Global loot modifier fragments (data/<member>/glm_entries.json) of a member whose switch is off are skipped
+		// (Creative Loot's GlmMerge, plan_rules_fixes.md section 5, D17)
+		com.SaintAlfonzo.creativeloot.GlmMerge.gate(ns -> !CBConfig.isMember(ns) || CBConfig.member(ns));
 
 		List<String> members = CBConfig.MEMBERS;
 		List<String> missing = members.stream().filter(id -> !ModList.get().isLoaded(id)).toList();

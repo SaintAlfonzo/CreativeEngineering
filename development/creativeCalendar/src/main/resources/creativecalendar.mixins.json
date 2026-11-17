@@ -19,8 +19,7 @@
     "GrassSpreadSeasonMixin",
     "IWGrowthSeasonMixin",
     "IWGrassSpreadSeasonMixin",
-    "BotaniaGrassSeasonMixin",
-    "VineryGrassSlabSeasonMixin"
+    "BotaniaGrassSeasonMixin"
   ],
   "client": [
     "SereneSeasonsClientClockMixin",

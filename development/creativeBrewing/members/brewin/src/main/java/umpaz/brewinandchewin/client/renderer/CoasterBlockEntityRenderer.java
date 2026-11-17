@@ -1,5 +1,8 @@
 package umpaz.brewinandchewin.client.renderer;
 
+import com.SaintAlfonzo.creativedelight.CDConfig;
+import com.SaintAlfonzo.creativedelight.compat.Compartments;
+import com.SaintAlfonzo.creativedelight.compat.cookingforblockheads.kitchen.CounterToppers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
@@ -145,8 +149,24 @@ public class CoasterBlockEntityRenderer implements BlockEntityRenderer<CoasterBl
       poseStack.translate(-x, 0.0, -z);
    }
 
+   /**
+    * On a Cooking for Blockheads counter the whole coaster moves by Creative Delight's topper offset
+    * ({@code CounterToppers}, TODO cooking/kitchen #20; plan_rules_fixes.md 12f step 4): the coaster has no block model,
+    * this renderer draws it and the drinks. Creative Brewing requires Creative Delight; the offset applies only while
+    * Delight's Cooking for Blockheads compartment is on.
+    */
    @Override
    public void render(CoasterBlockEntity entity, float tickDelta, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+      poseStack.pushPose();
+      if (entity.getLevel() != null && CDConfig.compartment(Compartments.CFB)) {
+         Vec3 offset = CounterToppers.offset(entity.getBlockState().getBlock(), entity.getLevel(), entity.getBlockPos());
+         poseStack.translate(offset.x, offset.y, offset.z);
+      }
+      renderCoaster(entity, poseStack, buffer, combinedLight, combinedOverlay);
+      poseStack.popPose();
+   }
+
+   private void renderCoaster(CoasterBlockEntity entity, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
       int count = (int)entity.getItems().stream().filter(ix -> !ix.isEmpty()).count();
       rotateAround(poseStack, -22.5F * (float)entity.getBlockState().getValue(CoasterBlock.ROTATION), 0.5F, 0.5F);
       RandomSource random = new LegacyRandomSource(entity.getBlockPos().asLong());

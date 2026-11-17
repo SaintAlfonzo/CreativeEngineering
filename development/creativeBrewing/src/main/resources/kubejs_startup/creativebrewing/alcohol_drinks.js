@@ -13,7 +13,7 @@
 // Vinery wines only get the food side with the rebuilt port -03 (DrinkBlockItem eats instead of shrinking).
 // Quark's saturation word on these drinks reads "Intoxicating Drink" (Creative Brewing alcohol.IntoxicatingDrinkTooltip picks
 // the drinks by their Intoxication food effect, so this list is the single source).
-// ItemEvents.modification runs at startup: restart to apply.
+// Startup values: restart to apply.
 
 global.alcohol = {
 	hunger: 1,
@@ -41,54 +41,41 @@ global.alcohol = {
 	ownDrunkEffect: ['bottle_of_wodka'],
 }
 
-ItemEvents.modification(e => {
-	var i = global.item
+// The food values are absolute rows of Creative Delight's applier (creativedelight/food_value_copies.js, V-36): hunger
+// and saturation set, the drink's own effects kept but Nausea, then Intoxication (hidden) unless it has one, then
+// Nausea unless it has Tipsy. Rows merge into an existing row of the same drink (Fruits Delight's bellini_cocktail).
+global.alcohol.drinks.forEach(key => {
 	var A = global.alcohol
-	var $AlcoholFoodBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
-	var $AlcoholEffectInstance = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
+	var effects = [{ effect: 'brewinandchewin:intoxication', ticks: A.intoxicationTicks, visible: false,
+		unlessHas: ['brewinandchewin:intoxication'] }]
+	if (A.ownDrunkEffect.indexOf(key) < 0) {
+		effects.push({ effect: global.effect.nausea, ticks: A.mixed.indexOf(key) >= 0 ? A.mixedNauseaTicks : A.nauseaTicks,
+			unlessHas: ['brewinandchewin:tipsy'] })
+	}
+	global.foodValueCopies.absolute(key, {
+		nutrition: A.hunger, saturationMod: 0, alwaysEat: true,
+		keepEffects: true, dropEffects: [global.effect.nausea], effects: effects,
+		requireEffects: ['brewinandchewin:intoxication', 'brewinandchewin:tipsy'],
+	})
+})
+
+// The count line the tests read: drinks whose food now carries Intoxication. Runs after the applier (this jar's
+// startup pack loads after Creative Delight's).
+ItemEvents.modification(e => {
+	var A = global.alcohol
 	var $AlcoholRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var $AlcoholRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
-	var mobEffect = id => $AlcoholRegistries.MOB_EFFECTS.getValue(new $AlcoholRL(id))
-	var INTOXICATION = mobEffect('brewinandchewin:intoxication')
-	var TIPSY = mobEffect('brewinandchewin:tipsy')
-	var NAUSEA = mobEffect('minecraft:nausea')
-	if (!INTOXICATION || !TIPSY) {
-		console.error('[alcohol] Brewin\' and Chewin\' effects missing, drinks left unchanged')
-		return
-	}
-
+	var intox = global.effect.resolve('brewinandchewin:intoxication')
 	var done = 0
 	A.drinks.forEach(key => {
-		var id = i[key]
+		var id = global.item[key]
 		if (typeof id !== 'string') { console.warn('[alcohol] ' + key + ' has no item_dict key'); return }
-		try {
-			e.modify(id, item => {
-				var old = item.getFoodProperties()
-				var food = new $AlcoholFoodBuilder().nutrition(A.hunger).saturationMod(0).alwaysEat()
-				if (old && old.isMeat()) food.meat()
-				if (old && old.isFastFood()) food.fast()
-				var hasIntox = false
-				var drunk = A.ownDrunkEffect.indexOf(key) >= 0
-				var effects = old ? old.getEffects() : null
-				for (var n = 0; effects && n < effects.size(); n++) {
-					var pair = effects.get(n)
-					var inst = pair.getFirst()
-					var effect = inst.getEffect()
-					if (effect.equals(INTOXICATION)) hasIntox = true
-					if (effect.equals(TIPSY)) drunk = true
-					// Nausea is set below (Bellini's own 5 s would otherwise stack with it)
-					if (!effect.equals(NAUSEA)) food.effect(inst, pair.getSecond())
-				}
-				if (!hasIntox) food.effect(new $AlcoholEffectInstance(INTOXICATION, A.intoxicationTicks, 0, false, false), 1.0)
-				if (!drunk) {
-					var ticks = A.mixed.indexOf(key) >= 0 ? A.mixedNauseaTicks : A.nauseaTicks
-					food.effect(new $AlcoholEffectInstance(NAUSEA, ticks, 0), 1.0)
-				}
-				item.setFoodProperties(food.build())
-				done++
-			})
-		} catch (err) {
-			console.error('[alcohol] could not set food on ' + id + ': ' + err)
+		var item = $AlcoholRegistries.ITEMS.getValue(new $AlcoholRL(id))
+		var food = item ? item.getFoodProperties() : null
+		if (!food || !intox) return
+		var fx = food.getEffects()
+		for (var n = 0; n < fx.size(); n++) {
+			if (fx.get(n).getFirst().getEffect().equals(intox)) { done++; return }
 		}
 	})
 	console.log('[alcohol] food values set on ' + done + ' of ' + A.drinks.length + ' drinks')

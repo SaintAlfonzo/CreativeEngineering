@@ -5,10 +5,11 @@
 
 Checks, each printed as PASS / FAIL with details:
   duplicates   no path appears twice in the jar
-  merged       every addon tag / global_loot_modifiers.json that shares a path with src/main holds the union of both
+  merged       every addon tag that shares a path with src/main holds the union of both
                (build.gradle's processResources merge)
   models       every item registered in source has models/item/<id>.json and an en_us name (unused lang names: INFO)
-  loot         every global loot modifier entry has its JSON, and every add_table target table exists
+  loot         every global loot modifier fragment entry has its JSON, every add_table target table exists, and
+               no Forge list ships
   shaders      every filter's shader file exists, in the jar or (minecraft: namespace) in the 1.19.2 client jar
 Exit code 1 if any check fails.
 """
@@ -105,7 +106,11 @@ def main():
 
     # loot
     problems = []
-    glm = read_json('data/forge/loot_modifiers/global_loot_modifiers.json')
+    # Global loot modifier fragments (data/<ns>/glm_entries.json, read by Creative Loot's GlmMerge; no Forge list)
+    glm = {'entries': [e for f in sorted(files) if re.fullmatch(r'data/[^/]+/glm_entries\.json', f)
+                       for e in read_json(f)['entries']]}
+    if 'data/forge/loot_modifiers/global_loot_modifiers.json' in files:
+        problems.append('the jar ships the Forge list data/forge/loot_modifiers/global_loot_modifiers.json (use a fragment)')
     for entry in glm['entries']:
         ns, _, path = entry.partition(':')
         mod_file = f'data/{ns}/loot_modifiers/{path}.json'

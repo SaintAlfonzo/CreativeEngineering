@@ -19,7 +19,7 @@
 ServerEvents.recipes(e => {
 if (!global.CB) return
 global.CB.recipes(() => {
-    const R = global.NCH
+    const R = global.NCH.forPack('creativebrewing')
     const f = global.fluid
 
     const LAVA_VISION = '{Bottle:"REGULAR",Potion:"alexsmobs:lava_vision"}'
@@ -27,7 +27,7 @@ global.CB.recipes(() => {
     // Create Mechanical Mixer — 1000 mB lava + bone serpent tooth -> Lava Vision fluid, heated.
     R.createMixing(
         Fluid.of(f.create_potion, 1000, LAVA_VISION),
-        ['alexsmobs:bone_serpent_tooth', Fluid.of(f.lava, 1000)],
+        [global.item.bone_serpent_tooth, Fluid.of(f.lava, 1000)],
         e, 'lava_vision_mixing', 'heated'
     )
 })

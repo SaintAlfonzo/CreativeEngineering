@@ -42,6 +42,13 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass XP as before; no recipe learned; Create Central Kitchen's blaze stove still drives the pot (its mixin targets `setRecipeUsed`, kept)
 @fails as SQ-AV-02 (`CopperPotBlockEntity.popExperience`, `CopperPotResultSlot`); a mixin error naming `CopperPotBlockEntityMixin` (Central Kitchen): the method shape changed
 @draft no driver step takes a pot result slot by hand; owner LOOK
+## SQ-AV-04 | Keg: taking a drink pops XP, unlocks nothing
+@group A
+@commands As SQ-AV-02 with Brewin' and Chewin's Keg fermenting one recipe (beer: wheat and water); take the finished drink by right-clicking the Keg with an empty tankard, then ferment again and break the Keg with a finished drink inside
+@pass XP orbs at the player (and at the Keg when it breaks) as before; `/recipe take rbk2 *` answers "No recipes could be forgotten"; no "new recipe" toast
+@fails no XP: `KegBlock` does not call `KegBlockEntity.popExperience` (Creative Brewing older than 2026-11-17); recipes learned: the Common mixin missing and the Keg still awarding
+@jars creativecommon creativebrewing
+@draft no driver step fills a tankard from a Keg; owner LOOK, or break the Keg with a finished drink inside and count XP orbs
 
 @@section 2
 @@title CQ-AV No recipe unlocks, client half, 2026-11-17 ([advancements.md](../advancements.md) AV-06, AV-07; same section)

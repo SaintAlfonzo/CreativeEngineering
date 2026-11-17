@@ -44,7 +44,6 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
             // modded grass blocks that spread outside the vanilla random tick; Serene Seasons checked at runtime
             Map.entry("IWGrassSpreadSeasonMixin", List.of("immersive_weathering")),
             Map.entry("BotaniaGrassSeasonMixin", List.of("botania")),
-            Map.entry("VineryGrassSlabSeasonMixin", List.of("vinery")),
             Map.entry("SeasonColorUtilMixin", SERENE),
             // vanilla target, but it reads SeasonTypes, which needs Serene Seasons' classes
             Map.entry("SeasonRainColumnMixin", SERENE),

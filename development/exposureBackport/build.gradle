@@ -57,11 +57,12 @@ minecraft.runs.configureEach {
 }
 
 // The jar is one resource pack, so an addon file at the same path as one in main would replace it (jar) or be hidden
-// by it (dev runs). Upstream ships them as separate jars, where tags and global loot modifiers merge across packs.
+// by it (dev runs). Upstream ships them as separate jars, where tags merge across packs. Global loot modifiers are
+// fragments per namespace (data/<ns>/glm_entries.json, Creative Loot's GlmMerge), so they never share a path.
 // Here main's processResources merges each addon's copy into its own output (list union, `replace` OR'd), and the
 // addon's processResources leaves those files out. Any other shared path fails the build.
 def mergeableJson = { String path ->
-    path ==~ /data\/[^\/]+\/tags\/.+\.json/ || path == 'data/forge/loot_modifiers/global_loot_modifiers.json'
+    path ==~ /data\/[^\/]+\/tags\/.+\.json/
 }
 def resourceOverlaps = { String addon ->
     def mainRoot = file('src/main/resources')
@@ -81,7 +82,7 @@ tasks.named('processResources', ProcessResources).configure {
             resourceOverlaps(addon).each { path ->
                 if (!mergeableJson(path)) {
                     throw new GradleException("src/${addon}/resources/${path} has the same path as a file in src/main/resources " +
-                            "and can't be merged (only tags and global_loot_modifiers.json can)")
+                            "and can't be merged (only tags can)")
                 }
                 def target = new File(destinationDir, path)
                 def merged = slurper.parse(target)

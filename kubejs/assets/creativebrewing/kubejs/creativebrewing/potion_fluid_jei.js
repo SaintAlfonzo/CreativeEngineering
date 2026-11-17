@@ -18,7 +18,7 @@ JEIEvents.addFluids(e => {
 		// REGULAR bottle type - the base fluid representation of this potion. Splash/
 		// lingering are the same colour/tooltip and only differ by an internal NBT key, so
 		// they'd just be visually-duplicate ingredient-list entries.
-		e.add(Fluid.of('create:potion', 1000, '{Bottle:"REGULAR",Potion:"' + pid + '"}'))
+		e.add(Fluid.of(global.fluid.create_potion, 1000, '{Bottle:"REGULAR",Potion:"' + pid + '"}'))
 		n++
 	}
 

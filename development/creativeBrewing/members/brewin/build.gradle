@@ -26,6 +26,8 @@ dependencies {
     compileOnly 'io.github.llamalad7:mixinextras-common:0.4.1'
     // WTHIT keg lines (wthit_lines.md 2.8); the pack's jar, shared with Creative Common
     compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
+    // Creative Brewing requires Creative Delight: the coaster renderer reads Delight's counter topper offset
+    compileOnly project(':creativeDelight')
     annotationProcessor 'io.github.llamalad7:mixinextras-common:0.4.1'
 }
 

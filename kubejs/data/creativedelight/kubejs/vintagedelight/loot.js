@@ -1,6 +1,5 @@
 // requires: creativedelight
 // requires: vintagedelight
-// requires: lootjs
 // Vintage Delight chest loot (vintageport #5, vintage_delight.md S11). Rules for the pre-roll loot framework
 // (Creative Loot loot/05_tuning.js, global.lootTuning); the pack's rules are in Creative Loot's loot/07_rules.js.
 //
@@ -8,8 +7,6 @@
 
 // Queued with global.LOOT.rules (Creative Loot's loot engine, loot/05_tuning.js): its script pack can load
 // after this one, so the rules run when the engine of the current reload exists. Creative Delight requires Creative Loot.
-var R = global.NCH.forPack('creativedelight')
-
 global.LOOT.rules(function (L) {
     var i = global.item
 
@@ -47,12 +44,9 @@ global.LOOT.rules(function (L) {
 
 // Mixed Seeds from grass (creativedelight/members #32): 2 % per grass or tall grass broken without shears, beside the
 // vanilla wheat seed drop (12.5 %).
-LootJS.modifiers(event => {
+// A rule of Creative Loot's drops engine (loot/09_drops.js): an extra pool in the two grass tables.
+global.LOOT.rules(function (L) {
     if (!global.CD || !global.CD.on('vintagedelight')) return
     var i = global.item
-    event.addBlockLootModifier([i.grass, i.tall_grass])
-        .not(n => n.matchMainHand(i.any_shears))
-        .randomChance(0.02)
-        .addLoot(i.mixed_seeds)
-        .logName(R.logName('vintage_mixed_seeds_grass'))
+    L.drop(['minecraft:blocks/grass', 'minecraft:blocks/tall_grass'], i.mixed_seeds, { chance: 0.02, notHolding: i.any_shears })
 })

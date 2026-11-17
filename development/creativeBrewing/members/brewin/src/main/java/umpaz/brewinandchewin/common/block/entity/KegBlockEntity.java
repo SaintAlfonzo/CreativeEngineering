@@ -1,6 +1,5 @@
 package umpaz.brewinandchewin.common.block.entity;
 
-import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import java.util.ArrayList;
@@ -973,26 +972,25 @@ public class KegBlockEntity extends SyncedBlockEntity implements MenuProvider, N
       return null;
    }
 
-   @Override
-   public void awardUsedRecipes(Player player) {
-      List<Recipe<?>> usedRecipes = this.getUsedRecipesAndPopExperience(player.level, player.position());
-      player.awardRecipes(usedRecipes);
+   /**
+    * Pops the experience of the drinks since the last take, at the player, when a drink is taken. No recipe is unlocked
+    * (design rule DR-C14, plan_rules_fixes.md 12e): RecipeHolder's own awardUsedRecipes stays a no-op, since
+    * getRecipeUsed is null.
+    */
+   public void popExperience(Player player) {
+      this.popUsedExperience(player.level, player.position());
       this.usedRecipeTracker.clear();
    }
 
-   public List<Recipe<?>> getUsedRecipesAndPopExperience(Level level, Vec3 pos) {
-      List<Recipe<?>> list = Lists.newArrayList();
-
+   /** Pops the experience of the drinks since the last take at {@code pos} (also when the keg breaks). */
+   public void popUsedExperience(Level level, Vec3 pos) {
       for (Entry<ResourceLocation> entry : this.usedRecipeTracker.object2IntEntrySet()) {
          level.getRecipeManager().byKey(entry.getKey()).ifPresent(recipe -> {
-            list.add(recipe);
             if (recipe instanceof KegFermentingRecipe fermenting && level instanceof ServerLevel serverLevel) {
                splitAndSpawnExperience(serverLevel, pos, entry.getIntValue(), fermenting.getExperience());
             }
          });
       }
-
-      return list;
    }
 
    private static void splitAndSpawnExperience(ServerLevel level, Vec3 pos, int craftedAmount, float experience) {

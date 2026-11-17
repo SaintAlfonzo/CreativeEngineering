@@ -42,14 +42,13 @@ import java.util.regex.Pattern;
  *     {@link SeasonClock} step tracker, so the jump is not added again;</li>
  * <li>the year ({@link CalendarDate}): follows from the two above, it is not stored;</li>
  * <li>the Vinery vintage clock ({@code [time.wine] clock = SUN}): moved by the same amount as the sun, back as well as
- *     forward, so wines age or un-age with the calendar. It adds forward steps itself; backward ones go through its
- *     {@code add}.</li>
+ *     forward, so wines age or un-age with the calendar. It adds forward steps itself; backward ones go to the
+ *     {@link DateMoves} listeners (the Vinery port registers one).</li>
  * </ul>
  * Needs {@code [time.seasons] clock = SUN}: on TICKS Serene Seasons' counter is not tied to the sun.
  */
 public final class TimeDate {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String VINTAGE_CLOCK = "net.satisfy.vinery.core.wine.VintageClock";
     private static final Pattern TIME = Pattern.compile("(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?");
     private static final String[] UNITS = {"day", "month", "season", "year"};
 
@@ -217,20 +216,9 @@ public final class TimeDate {
         if (delta >= 0) {
             return "wine clock follows";
         }
-        if (DateMoves.any()) {
-            List<String> notes = DateMoves.fire(server, delta);
-            return notes.isEmpty() ? "wine clock moved back" : String.join("; ", notes);
-        }
-        // Until the Vinery port registers with DateMoves (plan_rules_fixes.md 12f step 3, Creative Brewing rebuild)
-        try {
-            Class.forName(VINTAGE_CLOCK).getMethod("add", MinecraftServer.class, long.class).invoke(null, server, delta);
-            return "wine clock moved back";
-        } catch (ClassNotFoundException e) {
-            return "no Vinery port";
-        } catch (ReflectiveOperationException e) {
-            LOGGER.warn("[time] could not move the vintage clock back", e);
-            return "wine clock NOT moved back (see log)";
-        }
+        if (!DateMoves.any()) return "no wine clock registered";
+        List<String> notes = DateMoves.fire(server, delta);
+        return notes.isEmpty() ? "wine clock moved back" : String.join("; ", notes);
     }
 
     private static int show(CommandSourceStack source) throws CommandSyntaxException {

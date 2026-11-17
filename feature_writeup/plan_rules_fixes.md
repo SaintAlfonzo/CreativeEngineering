@@ -13,13 +13,11 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=ef9d1ef716ba -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 9, In Progress 11, Testing 3), 4 Complete.
+<!-- generated:status_index begin open_work sha1=659beb5f6512 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 7, In Progress 6, Testing 10), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #22` | Planned | none | Brewin' advancement scan |
-| `conventions #26` | Planned | none | Delight loot through Creative Loot |
 | `conventions #29` | Planned | none | patcherMod to Creative Common in text |
 | `conventions #30` | Planned | none | Underscores in own names, touches saves |
 | `conventions #34` | Planned | none | Dated history out of code |
@@ -27,20 +25,22 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #36` | Planned | none | History audit, low priority, marked |
 | `conventions #37` | Planned | none | Docs and writeup form, last |
 | `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
-| `conventions #15` | In Progress | SQ-LOOT-02 | Global loot modifiers |
-| `conventions #17` | In Progress | SQ-RFX-01 to -02, -05, -07, -08, -14 | Registration and namespace |
-| `conventions #18` | In Progress | SQ-RFX-02 to -03, -11 | Dict keys for literals and the lints |
-| `conventions #23` | In Progress | SQ-RFX-01, SQ-RFX-06, -07, -09, -12, -13, CQ-RFX-02 | Member checks, remaps, helper copies |
-| `conventions #24` | In Progress | SQ-RFX-01, -03, -07, -08, -12, -15, CQ-RFX-01, CQ-RFX-03 | Small fixes (added 2026-11-16) |
+| `conventions #23` | In Progress | SQ-RFX-01, SQ-RFX-06, -07, -09, -12, -13, -16, -19, CQ-RFX-02 | Member checks, remaps, helper copies |
+| `conventions #24` | In Progress | SQ-RFX-01, -03, -07, -08, -12, -15, -19, CQ-RFX-01, CQ-RFX-03 | Small fixes (added 2026-11-16) |
 | `conventions #25` | In Progress | SQ-RFX-04, -10 | Villager trade helper |
-| `conventions #27` | In Progress | SQ-AV-01 to -03, CQ-AV-01, CQ-AV-02 | No recipe unlocks |
-| `conventions #28` | In Progress | SQ-PST-10c | Sideways edges and what the dependencies simplify |
 | `conventions #31` | In Progress | none | ISO 8601 dates only |
 | `conventions #32` | In Progress | CQ-TT-01 to -03 | American spelling and arrows |
 | `conventions #33` | In Progress | none | Tab indent only and the rule |
 | `conventions #14` | Testing | SQ-DRK-08 | Tilled end stone and sea pickles |
+| `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
 | `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
+| `conventions #17` | Testing | SQ-RFX-01 to -02, -05, -07, -08, -14, -16, -19 | Registration and namespace |
+| `conventions #18` | Testing | SQ-RFX-02 to -03, -11, -19 | Dict keys for literals and the lints |
 | `conventions #20` | Testing | CQ-TT-04, CQ-TT-05 | Test-item palette switch |
+| `conventions #22` | Testing | SQ-RFX-20 | Brewin' advancement scan |
+| `conventions #26` | Testing | SQ-RFX-21 to -23, SQ-MDL-01 | Delight loot through Creative Loot |
+| `conventions #27` | Testing | SQ-AV-01 to -04, CQ-AV-01, CQ-AV-02 | No recipe unlocks |
+| `conventions #28` | Testing | SQ-PST-09c, SQ-PST-10c, SQ-RFX-24, CQ-RFX-04 | Sideways edges and what the dependencies simplify |
 <!-- generated:status_index end open_work -->
 
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
@@ -697,3 +697,4 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
 - 2026-11-17: P2b built (P2b agent), `creativeloot-1.0.0.jar` and `creativeworldgen-1.0.0.jar` installed together: section 5b steps 1 to 4 ([creative_loot.md](creative_loot.md)), `global.LOOT.rules` with the 4 Creative Delight callers edited in the pack folder (they ship with the P3 Delight rebuild, which also adds the D25 `creativeloot` dependency to Delight and Brewing), `tools/loot_tuning_sim.js` migrated and passing; section 5 GlmMerge written (member list files stay until P3; members register `GlmMerge.gate` for their switches then). Findings: Forge 1.19.2's `LootModifierManager` already reads every copy of the list (`getResourceStack`), so only a `"replace": true` copy can drop entries; Worldgen had no `[loot]` toml section, so `ConfigRename` had nothing to carry; `loottags.js` moved with the tree but its tag ids stay `creativeworldgen:loot/*` (renaming them is a Common dict edit, left for section 6 in P3). Queue SQ-LOOT-01 to -06 (SQ-CWG-05 superseded).
 - 2026-11-17: P3a built (P3a agent), Common, Creative Loot, Worldgen, Compat, Equipment, Devtools, Magic, Labels and Engineering installed: section 6 `forPack` aliases outside Delight and Brewing (only Compat's recipe ids move, to `creativecompat:`; Equipment, Magic, Devtools and Worldgen were already bound by their `recipes(...)` wrappers), V-26 all three files moved, LootJS names `CL/` and `CCM/`; section 7 swap (611 literals; the tool binds by file, not scope: `gear_effects.js` bound `ef` after use and the entity_type tags got item keys, both fixed by hand); loot tags `creativeloot:loot/*`; section 12 V-34 (transport.js), V-43, V-44 outside Delight and Brewing; 12b V-09, V-10, V-32, V-37, V-39 (Equipment), V-40, V-41, V-42, V-46 (every own-namespace name left the pack folder, no shown name changed); 12c the 52 pack-folder trades. `tools/dump_diff.py` and the baseline `kubejs/exported/baseline_rules_p3a_2026-11-17/`; queue SQ-RFX-01 to -06, CQ-RFX-01, -02.
 - 2026-11-17: P3b built (P3b agent), Calendar, Common, Delight and Engineering installed: section 6 in Delight (69 `forPack` aliases, ids unchanged; `CD/` log names; `global.reg.forPack` for Engineering's and Delight's registrations, V-31); section 7 swap in the Delight trees (109 literals after review: generated catalogs skipped, recipe-id lists, entity-type tags and an NBT string kept literal); section 12 V-04 (Delight Java, `CDConfig.on`), D17 in Common's `has.js` (member answers ask `CDConfig`/`CBConfig` per call, membership cached), V-34 as the wheat flour merge, V-35, V-36 (Delight rows), V-43/V-44 (Delight, Fertile Soil line green); 12b V-03 Vintage, V-05, V-10 Display Delight, V-20, V-37, V-39 (`stripTooltipKeys`), V-48; 12c the 14 Delight trades; 12e Oven and Copper Pot; 12f step 2 and Calendar's `DateMoves` (step 3 Calendar side; the reflection stays as fallback until the Vinery port registers in P3c); D25 Delight requires Creative Loot. Not done: V-14 (Miner's repackage: Create Central Kitchen's mixins target `com.sammy.minersdelight` class names, miners_delight.md D1; owner) and section 5 for Delight members (left to P3c with Brewing and Exposure). `tools/dump_diff.py food`. Queue SQ-RFX-07 to -15, CQ-RFX-03, SQ-AV-02, -03, SQ-PST-10c.
+- 2026-11-17: P3c built (P3c agent), Creative Loot, Calendar, Delight, Brewing, Exposure and Compat installed: section 5 done (nine `glm_entries.json` fragments, 56 entries; Delight and Brewing `GlmMerge.gate`; Ends' upstream list left out through `replaced_resources`; Rustic bake and the Brewin', Veggies, Vintage port scripts write fragments; lint `design_rules_audit.py glm`); Brewing sections 6, 7 (139 hunks after review: `potions.js` potion ids and an NBT string in `lava_vision.js` kept literal, an out-of-scope `I` binding fixed), V-30, V-44, V-48, V-35, V-36 (alcohol absolute rows: the applier gained `dropEffects`, `unlessHas`, `visible`, `requireEffects` and the merging `absolute()`), 11 V-01, V-03 (Brewin', Exposure), 12e Keg, 12f steps 1, 3, 4 with the Calendar deletions, D25 Brewing requires Creative Loot; 12d: Creative Loot's drops engine gained `swapDrop`, `onlyDrop` (post-roll LootJS, for the squid chain), `rewrite`, `afterTables` and the `silkTouch`, `state`, `holding`, `notHolding`, `killedByPlayer` options, and every Delight loot rule moved into it; V-41 `jei_order_tags.js` to Compat's pack. Kept, owner: `creativecompat:physics/floats` in `animal_tags.js` (computed before that script removes the wild plants, an ordering dependency), Calendar's Nether's Delight class name in `CropSeasonGrowHookMixin`; kept as optional lookups: `HHBlocks.HOPS_ON`, Feast Plating's pizza ids. Queue SQ-RFX-16 to -24, CQ-RFX-04, SQ-AV-04, SQ-PST-09c; SQ-LOOT-02, SQ-MDL-01, SQ-RFX-14 updated.

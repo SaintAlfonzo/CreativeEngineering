@@ -8,7 +8,7 @@ console.log('tipped arrow tipping starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativebrewing')
 
 // ── Machine tipping of arrows ────────────────────────────────────────────────
 // Vanilla tips arrows in a crafting table: 8 arrows ringed around 1 lingering

@@ -264,9 +264,9 @@ def main():
             kind = path.split('/')[2] if path.startswith('data/') and path.count('/') > 2 else path.split('/')[0]
             name = path.rsplit('/', 1)[-1][:-5]
             if path.startswith('data/forge/loot_modifiers/'):
+                # The pack's jars ship no Forge list: a fragment Creative Loot's GlmMerge reads (plan_rules_fixes.md section 5)
                 d = json.loads(raw)
-                d['entries'] = [e for e in d['entries'] if ':slicing_' in e]
-                write_json(path, d)
+                write_json('data/veggiesdelight/glm_entries.json', {'entries': [e for e in d['entries'] if ':slicing_' in e]})
             elif path.endswith('.nbt'):
                 out = os.path.join(OUT, path)
                 os.makedirs(os.path.dirname(out), exist_ok=True)
