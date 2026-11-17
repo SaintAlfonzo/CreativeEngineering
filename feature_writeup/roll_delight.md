@@ -576,3 +576,7 @@ so nothing was eaten; rerun after the off-hand fallback in the probe.
 - 2026-11-01 (seventh round): cooked whole fish (family tag `fish/cooked`) and Pufferfish added to the chopstick tag (3.3.3); Kippers and Surstromming come in through the cooked tag.
 - 2026-11-01: BUILT (4.2): `backportedRoll` member nested in CD, CD scripts, donor folder in build_deploy; Golden Roll on the golden tier, slice 2 / 1.2 without effects; lengthen factor in `roll_delight-common.toml`. Not installed; SQ-ROLL queued. Open: Display Delight plates, wrapped chopsticks Item Physic / BlockRunner, dump-driven generators.
 - 2026-11-02 (deep scan): CD jar with the member in `mods/` since 2026-11-02 14:01; scratch r1102b: SQ-ROLL-01, -02, -05 to -09 PASS, -03 / -04 OPEN (probe fault).
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-02: 3.3 table rows: FD slices raw and cooked (Fish Tempura removed 2026-11-02), Hostile Guardian Roll and Sashimi, Ocean's rolls, Pufferfish (typed hazard, so no fish tag holds it; it keeps its poison, chopsticks lengthen that too, 3.3.3) (kubejs/data/creativedelight/kubejs/roll_delight/tags.js)

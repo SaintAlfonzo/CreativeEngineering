@@ -3,7 +3,6 @@
 // and alcohol are marked for Creative Brewing (creative_delight.md 29.5). Until then it lives in Creative Delight's
 // creativeengineering/ trees.
 //
-// Moved from the pack's startup_scripts/items/cultures.js 2026-10-27, ids unchanged (they come from the item dict).
 // Creative Delight startup script, loaded from the jar after the pack's startup_scripts, so the dicts exist here.
 // Restart to apply.
 //

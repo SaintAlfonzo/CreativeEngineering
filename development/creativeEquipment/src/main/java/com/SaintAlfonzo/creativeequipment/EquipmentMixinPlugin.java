@@ -8,9 +8,7 @@ import java.util.Map;
 /**
  * Mixin config plugin for creativeequipment.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies only when its mod is loaded (each one targets
- * a class of that mod). Every other mixin targets vanilla and always applies, as it did in patcherMod. The mixins moved
- * from patcherMod on 2026-11-04 unchanged apart from their package (SRG names, remap = false, creativeengineering$
- * member prefixes).
+ * a class of that mod). Every other mixin targets vanilla and always applies, as it did in patcherMod.
  */
 public class EquipmentMixinPlugin extends GatedMixinPlugin {
 
@@ -34,11 +32,11 @@ public class EquipmentMixinPlugin extends GatedMixinPlugin {
             Map.entry("CopperPoisoningEffectMixin", List.of("everythingcopper")),
             Map.entry("EchoArmorEffectProcedureMixin", List.of("create_deep_dark")),
             Map.entry("EchoArmorTooltipMixin", List.of("create_deep_dark")),
-            // Detail Armor Bar overflow row, from Creative Common (2026-11-07)
+            // Detail Armor Bar overflow row, from Creative Common
             Map.entry("ArmorBarRendererAccessor", List.of("detailab")),
             Map.entry("ArmorBarRendererOverflowTickMixin", List.of("detailab")));
 
-    /** Tested version ranges (Detail Armor Bar, moved from Creative Common's CommonMixinPlugin 2026-11-07). */
+    /** Tested version ranges. */
     private static final Map<String, String> MOD_RANGE = Map.ofEntries(
             Map.entry("detailab", "[2.6.4,2.7)"));
 

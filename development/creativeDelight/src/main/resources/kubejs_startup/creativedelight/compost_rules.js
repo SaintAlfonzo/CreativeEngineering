@@ -1,10 +1,10 @@
 // priority: 900
-// Moved from the pack's startup_scripts/compost/compost_rules.js 2026-10-25, rules unchanged. Priority 900: before
-// every other Creative Delight startup file (after cd_core.js), so the tiers exist for anything that reads them at
-// load time. Rule order is the order of the category() calls below, and no other script registers categories.
-// Startup script in the CD jar: an edit needs a CD rebuild and restart.
-// Compost rules - which items count as logically compostable, and at what chance.
-// Engine and full syntax: compost.js in patcherMod's jar (development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/). Per-item chances: <mod>/compost_values.js (generated) and <mod>/compost.js in this tree.
+// Priority 900: before every other Creative Delight startup file (after cd_core.js), so the tiers exist for anything
+// that reads them at load time. Rule order is the order of the category() calls below, and no other script registers
+// categories. Startup script in the CD jar: an edit needs a CD rebuild and restart. Compost rules - which items count
+// as logically compostable, and at what chance. Engine and full syntax: compost.js in patcherMod's jar
+// (development/patcherMod/src/main/resources/kubejs_startup/creativeengineering/func/). Per-item chances:
+// <mod>/compost_values.js (generated) and <mod>/compost.js in this tree.
 //
 // Categories are checked top to bottom; the FIRST one an item matches gives its chance. Anything
 // listed in a values file skips the rules and uses its own chance. Exclusions beat both.
@@ -65,8 +65,8 @@
 		blocks: ['MushroomBlock', 'FungusBlock'],
 	})
 
-	// Every dough, as Farmer's Delight's wheat dough and raw pasta (owner 2026-11-01): Create, oat, cucumber, sweet
-	// potato, sourdough, cookie and ginger doughs. Before crops so a dough typed as raw veggie keeps this value.
+	// Every dough, as Farmer's Delight's wheat dough and raw pasta (owner): Create, oat, cucumber, sweet potato,
+	// sourdough, cookie and ginger doughs. Before crops so a dough typed as raw veggie keeps this value.
 	C.category('doughs', 'very_high', {
 		tags: [i.any_dough],
 		ids: [/dough$/],

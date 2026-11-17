@@ -33,8 +33,9 @@ public enum PassTier {
     BUSH("bush", "Berry bushes: sweet berry, raspberry, grape bushes.",
             v(0.36, 1.0, Growth.ANY, Neighbours.NONE, 3, 0.36, 1.0)),
     /**
-     * Layer height blocks (plan_post_scratch_1115b.md D, owner 2026-11-16): snow layers, leaf piles, bamboo leaves. Replaces the leaf_pile tier. The walk value comes from the block's height
-     * ({@link PassRule#layerWalk}), not from {@code walk}; tag {@code creativecompat:passthrough_layers}.
+     * Layer height blocks (plan_post_scratch_1115b.md D, owner): snow layers, leaf piles, bamboo leaves. Replaces the
+     * leaf_pile tier. The walk value comes from the block's height ({@link PassRule#layerWalk}), not from {@code walk};
+     * tag {@code creativecompat:passthrough_layers}.
      */
     LAYERS("layers", "Layer height blocks: snow layers, leaf piles, bamboo leaves. "
             + "The walk value falls with the height (layerMaxSlow at the highest walk-through layer); high piles act whole.",

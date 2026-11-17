@@ -13,12 +13,11 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
-		//######################### Baking (oven.md 2.6) #########################
-		// The new cookies and cheesecakes join the pack's baking overhaul: upstream's grid recipes out, oven only.
-		// Cookies: cookie dough + 2 flavour -> 12. Maple Cookie (Abnormals Delight, its Autumnity syrup is not in the
-		// pack): maple foods take half Rustic's syrup, half honey as their main flavour (owner 2026-11-01, TODO
-		// creativedelight/members #16), so one syrup and one honey; it does not clash with the Syrup Cookie. Each family
-		// call sweeps the cookie's and cheesecake's other recipes.
+		//######################### Baking (oven.md 2.6) ######################### The new cookies and cheesecakes join
+		// the pack's baking overhaul: upstream's grid recipes out, oven only. Cookies: cookie dough + 2 flavour -> 12.
+		// Maple Cookie (Abnormals Delight, its Autumnity syrup is not in the pack): maple foods take half Rustic's
+		// syrup, half honey as their main flavour (owner, TODO creativedelight/members #16), so one syrup and one honey;
+		// it does not clash with the Syrup Cookie. Each family call sweeps the cookie's and cheesecake's other recipes.
 		var COOKIES = [ // G5 begin (family calls only)
 			[i.syrup_cookie, i.syrup],
 			[i.coffee_cookie, i.roasted_coffee_beans],
@@ -35,20 +34,17 @@ ServerEvents.recipes(e => {
 		]
 		CHEESECAKES.forEach(c => F.pieBake(c[1], c[0]))
 
-		//######################### Maple foods #########################
-		// Abnormals Delight's maple foods stay; Rustic's syrup stands in for Autumnity's (owner 2026-10-25). Maple is half
-		// syrup, half honey (owner 2026-11-01, creativedelight/members #16): the bacon takes one of each (was syrup only),
-		// the Maple Cookie above too.
+		//######################### Maple foods ######################### Abnormals Delight's maple foods stay; Rustic's
+		// syrup stands in for Autumnity's (owner). Maple is half syrup, half honey (owner, creativedelight/members #16):
+		// the bacon takes one of each (was syrup only), the Maple Cookie above too.
 		R.shapeless(i.maple_glazed_bacon, [i.cooked_bacon, i.syrup, i.honey_bottle], e, 'maple_glazed_bacon')
 
-		// The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 
-		//######################### Potato Salad #########################
-		// One Potato Salad (TODO merges/dishes #4, owner 2026-11-02; item_merges.md 2.17): Rustic Delight's stays, with its
-		// texture; More Delight's and Oceanic Delight's merge into it (CD swap lists merges_moredelight.json,
-		// merges_oceanic_delight_potato.json). Their recipes go (Oceanic's pickle and cabbage input with them). Cooking
-		// Pot: 2 potatoes of any kind (potato, sweet potato, or their slices), 1 egg, 1 milk, 1 onion or garlic, in a bowl;
-		// by hand the same plus 1 more potato.
+		//######################### Potato Salad ######################### One Potato Salad (TODO merges/dishes #4, owner;
+		// item_merges.md 2.17): Rustic Delight's stays, with its texture; More Delight's and Oceanic Delight's merge into
+		// it (CD swap lists merges_moredelight.json, merges_oceanic_delight_potato.json). Their recipes go (Oceanic's
+		// pickle and cabbage input with them). Cooking Pot: 2 potatoes of any kind (potato, sweet potato, or their slices),
+		// 1 egg, 1 milk, 1 onion or garlic, in a bowl; by hand the same plus 1 more potato.
 		var POTATO_ANY = [i.any_potato, i.t_vegetables_sweet_potato]
 		var ONION_OR_GARLIC = [i.onion, i.t_crops_garlic]
 		;['rusticdelight:potato_salad', 'moredelight:cooking/potato_salad', 'oceanic_delight:potato_salad'] // G5 (R.remove ids)

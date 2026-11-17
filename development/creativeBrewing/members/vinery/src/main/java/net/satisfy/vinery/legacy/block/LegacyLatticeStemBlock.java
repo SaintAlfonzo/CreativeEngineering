@@ -116,9 +116,8 @@ public class LegacyLatticeStemBlock extends StemBlock {
    }
 
    /**
-    * Pack: a lattice planted with Hearth and Harvest hops before 2026-11-14 was its own block ({@code hearthandharvest:hops});
-    * the swap list loads it as this lattice with its age and facing but grape=none. Age above 0 with no grape only arises that
-    * way, so it becomes hops again here (on a random tick or a use).
+    * The swap list loads it as this lattice with its age and facing but grape=none. Age above 0 with no grape only
+    * arises that way, so it becomes hops again here (on a random tick or a use).
     */
    private static BlockState restoreHops(Level world, BlockPos pos, BlockState state) {
       if ((Integer)state.getValue(AGE) > 0 && state.getValue(GRAPE) == GrapeTypeRegistry.NONE && GrapeTypeRegistry.HOPS.getFruit() != Items.AIR) {

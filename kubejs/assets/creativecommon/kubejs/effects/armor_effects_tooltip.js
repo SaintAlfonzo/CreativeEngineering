@@ -1,9 +1,7 @@
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2), from Creative Brewing; before that the pack's client_scripts/armor_effects_tooltip.js.
-// Tooltip renderer for the global.armorEffects framework (Common startup effects/
-// armor_effects.js). Effects are actually applied server-side by
-// Common server effects/armor_effects.js's PlayerEvents.tick — this file only draws
-// the matching tooltip lines, styled after Create: Deep Dark's echo-armor set-bonus
-// tooltip (patcherMod's EchoArmorTooltipMixin).
+// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Tooltip renderer for the global.armorEffects framework
+// (Common startup effects/armor_effects.js). Effects are actually applied server-side by Common server
+// effects/armor_effects.js's PlayerEvents.tick — this file only draws the matching tooltip lines, styled after Create:
+// Deep Dark's echo-armor set-bonus tooltip (patcherMod's EchoArmorTooltipMixin).
 //
 // A separate ItemEvents.tooltip file (not folded into client_scripts/tooltips.js)
 // because it needs to run AFTER global.armorEffects.piece()/.set() calls have

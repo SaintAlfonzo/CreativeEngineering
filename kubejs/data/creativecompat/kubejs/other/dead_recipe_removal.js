@@ -1,6 +1,6 @@
 // requires: creativecompat
 // requires: vintageimprovements
-// Creative Compat; moved from kubejs/server_scripts/other/dead_recipe_removal.js on 2026-11-01.
+// Creative Compat.
 ServerEvents.recipes(e => {
 
 console.log('dead recipe removal starting')

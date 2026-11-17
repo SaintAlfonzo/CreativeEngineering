@@ -1,7 +1,5 @@
-// Creative Engineering; moved from kubejs/startup_scripts/items/misc_items.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
-// Plain items and the prepared flesh block, migrated from Java (patcherMod
-// CreativeEngineeringItems used to register these as bare Item/Block with no custom
-// behavior) into KubeJS.
+// Creative Engineering. Plain items and the prepared flesh block, migrated from Java (patcherMod
+// CreativeEngineeringItems used to register these as bare Item/Block with no custom behavior) into KubeJS.
 //
 // Item models are KubeJS's own auto-generated item/generated + layer0 (same as
 // component_*/wirecoil_* in components.js) - no hand-authored model needed, just the
@@ -41,8 +39,6 @@ StartupEvents.registry('item', e => {
     reg.item(e, 'brass_wire').displayName('Brass Wire')
     reg.item(e, 'constantan_wire')
 
-    // The mortar and pestle moved to Creative Delight 2026-10-27 (kubejs_startup/creativedelight/bakeware.js).
-    // arrow_fletching moved to Creative Equipment 2026-11-06 (kubejs_startup/creativeequipment/items/archery_items.js).
 })
 
 StartupEvents.registry('block', e => {

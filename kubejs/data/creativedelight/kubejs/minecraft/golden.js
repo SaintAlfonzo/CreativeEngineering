@@ -3,8 +3,8 @@
 // vanilla's three. goldenGild = the food in a ring of 8 gold by hand (vanilla's shaped recipe replaced), a heated
 // Create mixer with 6 gold and an Immersive Engineering Arc Furnace with 5 (each only when that mod is loaded);
 // goldenEnchant = a Create sequenced assembly on the golden apple (1 gold ingot, 125 mB liquid experience, press, 8
-// loops; owner 2026-11-03, was a gold block, 250 mB, 4 loops). Moved from the pack's kubejs/server_scripts/cooking/golden.js 2026-10-25; on the family calls since
-// 2026-11-01 (framework #12), which folded in create/golden.js and immersiveengineering/golden.js.
+// loops; owner, was a gold block, 250 mB, 4 loops). On the family calls (framework #12), which folded in
+// create/golden.js and immersiveengineering/golden.js.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

@@ -45,7 +45,7 @@ public class CreativeCommon
     // -------------------------------------------------------------------------
     // Constants
     // -------------------------------------------------------------------------
-    /** This jar's mod id since the Creative Split swap (2026-11-04, creative_split.md 6 Q1 and 7.13): patcherMod was
+    /** This jar's mod id since the Creative Split swap (creative_split.md 6 Q1 and 7.13): patcherMod was
      *  {@code creativecommon} until then; that id is now Creative Engineering's (development/creativeEngineering). */
     public static final String MODID = "creativecommon";
     /** The namespace of every id, tag, lang key and channel this jar uses: patcherMod's, unchanged by the swap. */
@@ -72,7 +72,7 @@ public class CreativeCommon
         // spec drops them from that file when Forge corrects it). The swap list toml is only renamed.
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(OLD_FILE, FILE, CommonConfig.SECTIONS);
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creativeengineering-swaps.toml", MODID + "-swaps.toml");
-        // [effects] and [magic_resistance] came from Creative Brewing's file (plan_cb_polish.md 2, 2026-11-06), and before
+        // [effects] and [magic_resistance] came from Creative Brewing's file (plan_cb_polish.md 2), and before
         // that from patcherMod's: the first boot copies the player's values in (sections this file already has are kept).
         // CB drops them from its own file when Forge corrects it.
         if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS))
@@ -81,63 +81,55 @@ public class CreativeCommon
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, FILE);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CommonClientConfig.CLIENT_SPEC, "creativecommon-client.toml");
 
-        // Every potion and mob effect the Creative mods own (plan_cb_polish.md 2, from Creative Brewing 2026-11-06):
-        // the creativecommon: potions (Magic Resistance; Better Beacons potions are Creative Brewing's since 2026-11-07; the vanilla-effect ones are KubeJS,
-        // kubejs_startup/creativecommon/effects/potions.js), Magic Resistance's damage cut (the MobEffect itself is
-        // KubeJS, effects/magic_resistance.js) and Phantom Bane's rules.
+        // Every potion and mob effect the Creative mods own (plan_cb_polish.md 2, from Creative Brewing): the
+        // creativecommon: potions (Magic Resistance; Better Beacons potions are Creative Brewing's; the vanilla-effect
+        // ones are KubeJS, kubejs_startup/creativecommon/effects/potions.js), Magic Resistance's damage cut (the
+        // MobEffect itself is KubeJS, effects/magic_resistance.js) and Phantom Bane's rules.
         com.SaintAlfonzo.creativecommon.effect.CommonPotions.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.MagicResistanceEffect.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.PhantomBaneRules.class);
 
         // Sawblade and sawdust items, the shrapnel entity, the dragon breathing recipe type, the wooden bucket:
-        // Creative Engineering (creativeengineering, 2026-11-04, creative_split.md 7.13 wave 8).
-        // Dark Fire and Flint and Terrasteel: Creative Magic (creativemagic, 2026-11-04)
-        // Elytra duplication, tier shields, backpack skins, stepstools, the air brake, Bottled Air, the copper tool tier
-        // and the gear mixins: Creative Equipment (creativeequipment, 2026-11-04, creative_split.md 7.6 wave 7).
-        // Oven, powdered sugar, Display Delight dishes: Creative Delight (2026-11-01, creative_delight.md 34).
-        // Botanist workbench pot and flower box plant models moved to Creative Compat (2026-11-01).
-        // Hands, face, feet Curios slots and the "Slot:" tooltip line: Creative Equipment (2026-11-04).
-        // Spice of Life lunchboxes: Creative Delight (2026-11-01).
-        // Trade sync: the server's villager and wandering trader lists go to dedicated-server clients, so JER's
-        // villager pages show the pack's trades (trader/TradeSync; feature_writeup/trade_sync.md).
+        // Creative Engineering (creativeengineering, creative_split.md 7.13 wave 8). Dark Fire and Flint and
+        // Terrasteel: Creative Magic (creativemagic) Elytra duplication, tier shields, backpack skins, stepstools, the
+        // air brake, Bottled Air, the copper tool tier and the gear mixins: Creative Equipment (creativeequipment,
+        // creative_split.md 7.6 wave 7). Oven, powdered sugar, Display Delight dishes: Creative Delight
+        // (creative_delight.md 34). Hands, face, feet Curios slots and the "Slot:" tooltip line: Creative Equipment.
+        // Spice of Life lunchboxes: Creative Delight. Trade sync: the server's villager and wandering trader lists go
+        // to dedicated-server clients, so JER's villager pages show the pack's trades (trader/TradeSync;
+        // feature_writeup/trade_sync.md).
         com.SaintAlfonzo.creativecommon.trader.TradeSync.register();
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.TradeSync.class);
-        // Corn Delight cob pipe: Creative Delight (2026-11-01).
-        // Swap lists (swap/, Common API): every jar's data/<modid>/swaps/*.json remaps ids it moved when a world loads.
+        // Corn Delight cob pipe: Creative Delight. Swap lists (swap/, Common API): every jar's
+        // data/<modid>/swaps/*.json remaps ids it moved when a world loads.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.SwapRemapper.class);
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.SwapReport.class);
         // Item merges in the lists ("merges", both items still registered): stacks in the world become the survivor
         // (swap/ItemMerges, triggers in creativecommon-swaps.toml; feature_writeup/item_merges.md 6).
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, com.SaintAlfonzo.creativecommon.swap.SwapConfig.SPEC, MODID + "-swaps.toml");
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.ItemMerges.class);
-        // Remainder buffer (cooking/): Creative Delight (2026-11-01); the WTHIT line reads compat.RemainderView.
-        // Cooking for Blockheads corner storage and counter toppers moved to Creative Delight's blockheadsAdditions (2026-10-31).
-        // Armor Trims' item lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
+        // Remainder buffer (cooking/): Creative Delight; the WTHIT line reads compat.RemainderView. Armor Trims' item
+        // lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
         com.SaintAlfonzo.creativecommon.compat.ArmorTrimsItemCache.init();
-        // Sacks as bundles moved to Creative Compat (2026-11-01).
         // Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
 
         // Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Polymorph in the Sophisticated crafting upgrade, IE and Pretty Pipes tables moved to Creative Compat (2026-11-01).
 
-        // Potions, effects, potion machines, the alcohol tooltip and copper poisoning moved to Creative Brewing
-        // (2026-11-01, creative_brewing.md 4.2 phases 2 and 3).
 
-        // TNT shrapnel, the IE tweaks, BlockRunner surfaces (speeds, camo tooltip, sinking): Creative Engineering
-        // (2026-11-04). Its shrapnel burst reaches Compat's burn-explosion rule through util.BurnBursts (Common API).
+        // TNT shrapnel, the IE tweaks, BlockRunner surfaces (speeds, camo tooltip, sinking): Creative Engineering.
+        // Its shrapnel burst reaches Compat's burn-explosion rule through util.BurnBursts (Common API).
 
-        // Vine shearing moved to Creative Compat (2026-11-01).
 
         // Live whistling arrows, so mixin.NeaWhistleGoalSkipMixin skips NEA's per-mob arrow query when there are none.
         MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.perf.WhistleArrowTracker.class);
 
-        // Multi-serving cans, seasonings and placed-food Spice of Life: Creative Delight (2026-11-01).
+        // Multi-serving cans, seasonings and placed-food Spice of Life: Creative Delight.
 
-        // Per-hoe Quark harvest area and its tooltip: Creative Delight (2026-11-01).
+        // Per-hoe Quark harvest area and its tooltip: Creative Delight.
 
-        // [time], seasons and crop seasons (/ccaltime): Creative Calendar (development/creativeCalendar), carved 2026-11-01.
+        // [time], seasons and crop seasons (/ccaltime): Creative Calendar (development/creativeCalendar).
 
         modEventBus.addListener(com.SaintAlfonzo.creativecommon.util.ModDisplayNames::onConfigReload);
 
@@ -151,8 +143,7 @@ public class CreativeCommon
 
         // World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
         // sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the
-        // Farmer's Structures donor, Forgiving Void) moved to Creative Worldgen (2026-11-02, creative_split.md 7.6).
-        // Quark monster boxes as vaults moved to Creative Compat (2026-11-01).
+        // Farmer's Structures donor, Forgiving Void) moved to Creative Worldgen (creative_split.md 7.6).
 
         // /cdevplace (MassPlacer) moved to Creative Devtools (feature_writeup/creative_devtools.md 2).
 
@@ -173,7 +164,7 @@ public class CreativeCommon
 			// Before any chunk loads: sections count their random tickers on load
 			event.enqueueWork(com.SaintAlfonzo.creativecommon.melting.Melting::initRandomTicks);
 
-			// The sawmill classes pre-loaded here for SawmillProcessMixin: Creative Engineering (2026-11-04).
+			// The sawmill classes pre-loaded here for SawmillProcessMixin: Creative Engineering.
 
 			// The shield block handler reaches the damage-tag classes only on the first block
 			// (crash 2026-09-24: NoClassDefFoundError on DamageFlag); pre-load them too.
@@ -182,9 +173,8 @@ public class CreativeCommon
 			forceLoad("com.SaintAlfonzo.creativecommon.damage.DamageTagSnapshot");
 
 			// The liquid XP bridge diagnostic, the dragon breathing fan type and the IE hammer blacklist: Creative
-			// Engineering (2026-11-04).
-			// Salt ticks and Corn Delight villager food: Creative Delight (2026-11-01).
-			// Respite potted tea bush and the KubeJS can action: Creative Delight (2026-11-01).
+			// Engineering. Salt ticks and Corn Delight villager food: Creative Delight. Respite potted tea bush
+			// and the KubeJS can action: Creative Delight.
 
 			LOGGER.info("CreativeCommon setup complete");
 	}
@@ -215,15 +205,15 @@ public class CreativeCommon
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
-            // Detail Armor Bar compat: Creative Equipment.
-            // Lunchbox looks, cob pipe renderer and the oven screen: Creative Delight (2026-11-01).
+            // Detail Armor Bar compat: Creative Equipment. Lunchbox looks, cob pipe renderer and
+            // the oven screen: Creative Delight.
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.client.TradeSyncClient.class);
         }
 
-        // Stepstool key, tier shield item properties: Creative Equipment (2026-11-04).
+        // Stepstool key, tier shield item properties: Creative Equipment.
 
-        // Lunchbox colours (onItemColors): Creative Delight (2026-11-01).
+        // Lunchbox colours (onItemColors): Creative Delight.
 
-        // Shrapnel renderer: Creative Engineering (2026-11-04).
+        // Shrapnel renderer: Creative Engineering.
     }
 }

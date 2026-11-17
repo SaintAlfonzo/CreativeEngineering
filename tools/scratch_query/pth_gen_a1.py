@@ -42,7 +42,7 @@ samples = [  # (name, block, expected tiers)
     ("taiga_grape", "vinery:taiga_grape_bush_red", ["bush"]),
     ("oak_leaf_pile", "immersive_weathering:oak_leaf_pile[layers=4]", ["leaf_pile"]),
     ("grass", "minecraft:grass", ["grass"]),
-    # tiers gained after the row was written (owner 2026-11-15)
+    # tiers gained after the row was written (owner)
     ("salmonberry", "delightful:salmonberry_bush", ["bush"]),
     ("cranberry", "fruitsdelight:cranberry_bush", ["bush"]),
     ("razor_wire", "immersiveengineering:razor_wire", ["cobweb"]),

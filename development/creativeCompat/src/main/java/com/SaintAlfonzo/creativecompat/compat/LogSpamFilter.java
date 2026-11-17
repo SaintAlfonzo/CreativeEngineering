@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * Better Fortresses and Better Dungeons (NoBasaltColumnsInStructuresMixin) warn when a basalt columns feature asks a
  * WorldGenRegion for a chunk outside it. Distant Horizons' FEATURES generator hands features smaller regions than
- * vanilla's 3x3, so every basalt column it generates in the Nether warns: 440,000 lines in 15 minutes on 2026-11-07.
- * YUNG's check still runs (it skips the column); only the line is dropped.
+ * vanilla's 3x3, so every basalt column it generates in the Nether warns: 440,000 lines in 15 minutes. YUNG's check
+ * still runs (it skips the column); only the line is dropped.
  *
  * A config-level filter on the running log4j context: it sees every logger's events, before the message is formatted.
  */

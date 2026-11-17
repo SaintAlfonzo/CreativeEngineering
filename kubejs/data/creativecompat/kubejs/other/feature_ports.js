@@ -1,8 +1,7 @@
 // requires: creativecompat
-// Creative Compat; moved from kubejs/server_scripts/other/feature_ports.js on 2026-11-01.
-// Feature ports, tier 1 (feature_writeup/feature_porting.md 1): small recipe mods absorbed into the pack so their jars
-// can go. Each block below rebuilds a mod's recipes through global.NCH, same inputs and outputs, ids under
-// creativecompat:<kind>/<name>. The jars are in disabledmods/ (2026-10-20).
+// Creative Compat. Feature ports, tier 1 (feature_writeup/feature_porting.md 1): small recipe mods absorbed into the
+// pack so their jars can go. Each block below rebuilds a mod's recipes through global.NCH, same inputs and outputs,
+// ids under creativecompat:<kind>/<name>. The jars are in disabledmods/.
 //
 //   Name Tag Crafting Recipe       1 shaped recipe
 //   Create: Copper Splashing        33 create:splashing recipes (copper weathering, 11 shapes x 3 stages)

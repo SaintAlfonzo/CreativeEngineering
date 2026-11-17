@@ -592,3 +592,9 @@ Notes, as rows:
 - 2026-10-31: scratchpad notes translated into TODO rows (ghast foods removal added to `largecontent/mod-additions #6`). No code changed.
 - 2026-11-04: owner scratchpad notes added as 5.1 (settles D3, D6, D7, D9, D11, D12, D13, D15) and TODO rows `largecontent/mod-additions #43` to `#51` in a new `## Hostile Delight` table. No code changed.
 - 2026-11-17: the integration-report skill now cites this file as a content example (inventory, fold-in steps), not as a layout model (design_rules.md V-62c).
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-01: The family calls (CD.FOOD values, 2026-11-01) replace Hostile's smoker and furnace recipes (1 xp) with all three (kubejs/data/creativedelight/kubejs/hostiledelight/recipes.js)
+- 2026-11-02: Prepared Sea Pickle is a removed item since 2026-11-02 (TODO dishes/pickles-and-ferments #12, CD startup hostiledelight/hostile_items.js): no recipe makes it (kubejs/data/creativedelight/kubejs/hostiledelight/recipes.js)
+- 2026-11-04: Rotten meat (TODO largecontent/mod-additions #47, owner 2026-11-04): one item tag for everything rotten and meaty (kubejs/data/creativedelight/kubejs/hostiledelight/tags.js)

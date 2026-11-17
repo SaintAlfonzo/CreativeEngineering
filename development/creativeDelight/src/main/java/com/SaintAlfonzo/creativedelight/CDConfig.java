@@ -35,7 +35,7 @@ import java.util.Map;
  * <li>{@code [worldgen]}: one switch per worldgen system CD owns ({@link #WORLDGEN}, creative_delight.md 24), default on;
  * scripts read it through {@code global.CD.worldgen(id)}, Java through {@link #worldgen}.</li>
  * <li>{@code [display]}, {@code [vintage]}, {@code [salt]}: the settings of the Display Delight and Vintage Delight ports and of Salt, one section per
- * member (plan_creative_delight.md R3, B1; 2026-11-02). Defined here, read by the member through its shared
+ * member (plan_creative_delight.md R3, B1). Defined here, read by the member through its shared
  * {@code CdSettings} by path; the ports' old files are read once ({@link #MEMBER_FILES}) and renamed.</li>
  * </ul>
  * The {@code integrations} and {@code swappers} sections of 8.1 are added with the first feature that uses them.
@@ -70,7 +70,7 @@ public final class CDConfig {
 	public static final String OLD_FILE = "creativeengineering-common.toml";
 
 	/**
-	 * Sections moved here from creativeengineering-common.toml (2026-11-01, creative_delight.md 34), for the carry-over
+	 * Sections moved here from creativeengineering-common.toml (creative_delight.md 34), for the carry-over
 	 * and the leftover WARN. {@code perf} carries only {@code troughMissCooldownTicks}: Forge drops the other old keys
 	 * when it corrects this file.
 	 */
@@ -78,9 +78,8 @@ public final class CDConfig {
 			"canning", "cooking", "perf");
 
 	/**
-	 * Sections moved here from Creative Compat's file (2026-11-04, creative_split.md 7.9 step 1): {@code [campfire]}, keys,
-	 * comments and defaults unchanged. Carried from {@link #COMPAT_FILE} first, then from {@link #OLD_FILE} for a pack that
-	 * skipped 1.2.00 (where Compat first held it).
+	 * Carried from {@link #COMPAT_FILE} first, then from {@link #OLD_FILE} for a pack that skipped 1.2.00 (where Compat
+	 * first held it).
 	 */
 	public static final String COMPAT_FILE = "creativecompat-common.toml";
 	public static final List<String> COMPAT_SECTIONS = List.of("campfire");
@@ -150,8 +149,8 @@ public final class CDConfig {
 				"Off: every crop as its mod ships it.").define(WILD_CROPS, true));
 		b.pop();
 		defineMemberSettings(b);
-		// Moved from creativeengineering-common.toml at the CD carve (2026-11-01, creative_delight.md 34): same keys,
-		// comments and defaults, in the old order; ConfigRename carries the player's values over on the first boot.
+		// Moved from creativeengineering-common.toml at the CD carve (creative_delight.md 34): same keys, comments
+		// and defaults, in the old order; ConfigRename carries the player's values over on the first boot.
 		CROP_GROWTH = new CropGrowth(b);
 		DANDELION_MATURING = new DandelionMaturing(b);
 		CROP_DROPS = new CropDrops(b);
@@ -740,7 +739,7 @@ public final class CDConfig {
 	/**
 	 * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/minecraft/CampfireRainMixin}) and the
 	 * Comfortable Campfires port ({@code campfire.CampfireComfort}). Unlit Campfire still places them unlit but burns them
-	 * forever with its own rain check off. Read every tick. Moved from Creative Compat's file 2026-11-04 ({@link #COMPAT_SECTIONS}).
+	 * forever with its own rain check off. Read every tick.
 	 */
 	public static final class Campfire {
 		public final ForgeConfigSpec.BooleanValue rainDouses;
@@ -787,9 +786,9 @@ public final class CDConfig {
 	}
 
 	/**
-	 * {@code [cookingforblockheads]}: the counter-top offsets of {@code compat.cookingforblockheads.kitchen.CounterToppers}
-	 * (were blockheads_additions-common.toml {@code [kitchen]}, and before 2026-10-31 creativeengineering-common.toml; same
-	 * keys and defaults, TODO cooking/kitchen #8, #20). Defined whether or not the compartment is on.
+	 * {@code [cookingforblockheads]}: the counter-top offsets of
+	 * {@code compat.cookingforblockheads.kitchen.CounterToppers} (same keys and defaults, TODO cooking/kitchen #8, #20).
+	 * Defined whether or not the compartment is on.
 	 */
 	public static final class Cfb {
 		public final ForgeConfigSpec.DoubleValue cuttingBoardOffsetX;

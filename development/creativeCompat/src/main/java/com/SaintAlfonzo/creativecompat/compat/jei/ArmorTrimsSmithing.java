@@ -40,7 +40,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * <p><b>Why this exists.</b> Armor Trims 1.3.3's own JEI plugin registers its two categories under
  * {@code RecipeType(uid, ArmortrimsRecipe.class)} but adds recipes under {@code RecipeType(uid,
  * IArmortrimsRecipe.class)}. JEI 11.8 matches on both, throws "no recipe category registered" on the first
- * {@code addRecipes}, and both pages stay empty (seen in logs/latest.log 2026-10-05). This adds the recipes
+ * {@code addRecipes}, and both pages stay empty (seen in logs/latest.log). This adds the recipes
  * under the type the categories actually use:
  * <ul>
  *   <li>trimming: Armor Trims' own maker, unchanged (bounded lists, ran in under a second);</li>
@@ -50,7 +50,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * </ul>
  *
  * <p><b>Which recipes need a template.</b> Armor Trims' table ({@code SmithingMenuNew#createResult},
- * bytecode-read 2026-10-05) refuses a template-less recipe when the material is in a tag listed in
+ * bytecode-read) refuses a template-less recipe when the material is in a tag listed in
  * {@code ArmortrimsApi.upgradeBaseBlockedConditions} whose condition is on - by default
  * {@code #forge:ingots/netherite}, switched by {@code "Disable Vanilla Netherite Upgrading"} in
  * {@code config/armor_trims.toml}. With the template it needs the material in the template's tag and the

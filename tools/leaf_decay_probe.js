@@ -9,7 +9,7 @@
 //   zleaftag             blocks in #minecraft:leaves that are not LeavesBlock (the port only handles LeavesBlock)
 // Also logs `[ztick] max gap N ms` for any 2 s window whose longest server tick gap is over 80 ms. For clean timing
 // chop with vanilla `/fill ... minecraft:air replace #minecraft:logs` (14-high slabs) and don't run zcount meanwhile.
-// MIGRATED 2026-11-15 in part (creative_devtools.md): zrt -> /cdevtest randomtick BOX 1, zcount -> /cdevtest count BOX
+// MIGRATED in part (creative_devtools.md): zrt -> /cdevtest randomtick BOX 1, zcount -> /cdevtest count BOX
 // #minecraft:leaves. zplace, zchop, zleaftag stay here.
 var ZT_Leaves = Java.loadClass('net.minecraft.world.level.block.LeavesBlock')
 var ZT_BlockTags = Java.loadClass('net.minecraft.tags.BlockTags')

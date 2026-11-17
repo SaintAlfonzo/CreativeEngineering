@@ -1,8 +1,8 @@
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2: every potion and effect the Creative mods own is registered
-// from Common, under creativecommon:; was creativebrewing:magic_resistance, remapped by
-// data/creativecommon/swaps/effects_potions.json). Common rebuild + restart.
-// creativecommon:magic_resistance — a brand-new, pack-original MobEffect (the first
-// one this pack defines itself, rather than reusing vanilla/Alex's Mobs/Better Beacons).
+// Creative Common (plan_cb_polish.md 2: every potion and effect the Creative mods own is registered from Common,
+// under creativecommon:; was creativebrewing:magic_resistance, remapped by
+// data/creativecommon/swaps/effects_potions.json). Common rebuild + restart. creativecommon:magic_resistance — a
+// brand-new, pack-original MobEffect (the first one this pack defines itself, rather than reusing vanilla/Alex's
+// Mobs/Better Beacons).
 //
 // Registering the effect itself needs no Java: unlike better_beacons:long_reach/phantom_bane
 // (see effects/potions.js's header comment + Common's CommonPotions), there's no

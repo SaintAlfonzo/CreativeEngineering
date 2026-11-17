@@ -17,7 +17,7 @@
 #                                 eval_client.py launch GAME, open CGE2, qrun.py client GAME batches/r1108cge2/c1_sp.qb RES
 #
 # Jars: Common and Compat are COPIED from build/libs into every srv (a parallel build cannot rewrite them mid-run) and
-# must be the 2026-11-08 builds this part targets (Compat with "// phase: helpers" on jei_order.js, Common with the
+# must be the builds this part targets (Compat with "// phase: helpers" on jei_order.js, Common with the
 # LowGravity mixins); the run stops when they are missing. One game JVM at a time: every boot checks game_jvms.sh.
 set -euo pipefail
 INST="$(cd "$(dirname "$0")/../.." && pwd)"

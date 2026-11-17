@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Applies CommonConfig {@code [effects] categoryOverrides} ({@link EffectCategories}). {@code getCategory()} picks the
  * tooltip colour (red for HARMFUL) in potion, food and gear tooltips; {@code isBeneficial()} reads the private field
- * in vanilla, so it is answered here too and the two never disagree. None of the overridden effects' classes
- * override either method (checked 2026-10-20).
+ * in vanilla, so it is answered here too and the two never disagree. None of the overridden effects' classes override
+ * either method (checked).
  *
  * <p>Vanilla-class target, matched by SRG name ({@code m_19483_} = {@code getCategory()},
  * {@code m_19486_} = {@code isBeneficial()}) with {@code remap = false} - same idiom as {@link ToastFilterMixin}.

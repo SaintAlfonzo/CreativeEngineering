@@ -1,7 +1,7 @@
-// Creative Compat: decor blocks with no system of their own (feature_writeup/creative_split.md 7.6); moved from
-// kubejs/startup_scripts/items/decor_blocks.js on 2026-11-01. The id stays in the creativeengineering namespace
-// (item dict key weathered_cardboard_box); blockstate, models and texture ship in this jar under
-// assets/creativeengineering/ (the on-disk files win over the generated blockstate).
+// Creative Compat: decor blocks with no system of their own (feature_writeup/creative_split.md 7.6). The id
+// stays in the creativeengineering namespace (item dict key weathered_cardboard_box); blockstate, models and
+// texture ship in this jar under assets/creativeengineering/ (the on-disk files win over the generated
+// blockstate).
 
 StartupEvents.registry('block', e => {
 	// Weathered Cardboard Box: stats of Dustrial Decor's cardboard box (strength 1.0, blast resistance 0.3,

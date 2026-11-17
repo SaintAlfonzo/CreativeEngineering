@@ -15,7 +15,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
  * are reset, and {@link ModConfigEvent.Reloading} is posted on this mod's bus, so every reader ({@code PassValues},
  * {@code PassSync}'s re-send, {@code SurfaceSpeeds}) acts as on a watched save.
  *
- * <p>Why (E1, 2026-11-15): Forge's watcher is night-config 3.6.7's {@code FileWatcher}, which only acts on an
+ * <p>Why (E1): Forge's watcher is night-config 3.6.7's {@code FileWatcher}, which only acts on an
  * {@code ENTRY_MODIFY} event whose count is 1. An editor or script that saves by writing a new file and renaming it
  * over the old one ({@code sed -i}, atomic-save editors) raises create / delete events instead, and two writes folded
  * into one event (count 2) are skipped too, so such a save is never applied. ModernFix's

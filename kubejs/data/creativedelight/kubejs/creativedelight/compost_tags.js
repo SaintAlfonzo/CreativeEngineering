@@ -1,7 +1,6 @@
 // requires: creativedelight
 // Mulch tags (what the compost and fertile soil recipes take, Creative Engineering wood/sawdust.js) and the seeds the
-// millstone turns into bone meal (../create/seed_milling.js). Moved from Creative Engineering's server scripts
-// (tags/wood_tags.js) 2026-11-06, rows and tag ids unchanged.
+// millstone turns into bone meal (../create/seed_milling.js).
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var t = global.tags

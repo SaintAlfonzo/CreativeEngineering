@@ -19,10 +19,10 @@ import java.util.stream.Stream;
  * hidden data pack only while that mod is loaded ({@code packs/<modA>+<modB>/}: only while all of them are) (Forge 1.19.2 has no conditions for worldgen registries, so a feature
  * or biome modifier naming an absent block would break world loading). Same pattern as Creative Equipment's
  * compat/ModDataPacks and Creative Delight's CompartmentPacks.
- * Moved from the pack's kubejs/data/creativeengineering on 2026-11-06, ids under creativeworldgen: since 2026-11-10: upgrade_aquatic (driftwood on
+ * Ids under creativeworldgen: upgrade_aquatic (driftwood on
  * land, the flotilla driftwood meta part), farmersdelight and fungidelight (wild mushroom colonies and patches),
  * miners_delight (cave carrots), vintagedelight (wild ghost peppers).
- * Since 2026-11-15 also Upgrade Aquatic's own overridden ids (upgrade_aquatic:river_tree configured feature, trees_river
+ * Since also Upgrade Aquatic's own overridden ids (upgrade_aquatic:river_tree configured feature, trees_river
  * and driftwood_* placed features), moved from kubejs/data/upgrade_aquatic/worldgen so a pack without Upgrade Aquatic
  * boots (plan_post_scratch_1115.md D5). UA registers those in Java, so a datapack entry here still overrides them.
  */

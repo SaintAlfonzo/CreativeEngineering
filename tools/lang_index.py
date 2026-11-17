@@ -103,7 +103,7 @@ def script_langs():
     out = {}
     item_ids = None
     # The pack folder first, then the client script trees the Creative jars ship (kubejs/assets/<modid>/kubejs/; their
-    # packs run after the pack folder; Compat, CD and CB names moved there 2026-10-27 to 2026-11-01)
+    # packs run after the pack folder)
     scripts = sorted((INSTANCE / 'kubejs/client_scripts').rglob('*.js'))
     scripts += sorted((INSTANCE / 'kubejs/assets').glob('*/kubejs/**/*.js'))
     for js in scripts:

@@ -11,12 +11,11 @@ import com.SaintAlfonzo.creativecompat.surface.SurfaceTier;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. The sections moved out of patcherMod's
- * creativeengineering-common.toml on 2026-11-01 with keys, comments and defaults unchanged; the first boot with
- * Compat copies a player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}).
+ * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. The first boot with Compat copies a
+ * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}).
  * {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} came from Creative Engineering's file (same name,
- * creativeengineering-common.toml) on 2026-11-06 with the TNT shrapnel, walk speed and Ore Excavation undo code; keys,
- * comments and defaults unchanged, carried or merged the same way ({@link #ENGINEERING_SECTIONS}).
+ * creativeengineering-common.toml) with the TNT shrapnel, walk speed and Ore Excavation undo code; keys, comments and
+ * defaults unchanged, carried or merged the same way ({@link #ENGINEERING_SECTIONS}).
  */
 public final class CompatConfig {
 
@@ -43,23 +42,23 @@ public final class CompatConfig {
     public static final PortalGun PORTAL_GUN;
     public static final Debug DEBUG;
 
-    /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve, 2026-11-07). */
+    /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve). */
     public static final List<String> COMMON_SECTIONS = List.of("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit");
 
     /** How the WTHIT Run Speed line writes a multiplier: 1.50x or +50%. */
     public enum SpeedFormat { MULTIPLIER, PERCENT }
 
     /**
-     * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]} (added 2026-11-01,
-     * after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried. {@code [campfire]}
-     * moved on to Creative Delight's file on 2026-11-04 (creative_split.md 7.9 step 1), which carries it from here.
+     * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]}
+     * and {@code [giant_squid]} are new in this file and are not carried. {@code [campfire]}
+     * moved on to Creative Delight's file (creative_split.md 7.9 step 1), which carries it from here.
      * {@code [leaf_piles]} has no spec since 2026-11-15: carried from an old file, {@code surface.LeafPileMigration}
      * then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it.
      */
     public static final List<String> SECTIONS =
             List.of("leaf_piles", "moss", "vine_shearing", "monster_box", "trash_slot");
 
-    /** The tables that came from Creative Engineering's creativeengineering-common.toml on 2026-11-06. */
+    /** The tables that came from Creative Engineering's creativeengineering-common.toml. */
     public static final List<String> ENGINEERING_SECTIONS = List.of("shrapnel", "surface", "vein_undo");
 
     static {
@@ -70,24 +69,24 @@ public final class CompatConfig {
         TRASH_SLOT = new TrashSlot(builder);
         CATS = new Cats(builder);
         GIANT_SQUID = new GiantSquid(builder);
-        // golem farm cooldown and boat ice friction (plan_small_fixes_1116.md R2, R3; 2026-11-16)
+        // golem farm cooldown and boat ice friction (plan_small_fixes_1116.md R2, R3)
         GOLEMS = new Golems(builder);
         BOAT_FRICTION = new BoatFriction(builder);
         PAINTINGS = new Paintings(builder);
         SHRAPNEL = new Shrapnel(builder);
         SURFACE = new Surface(builder);
         VEIN_UNDO = new VeinUndo(builder);
-        // from creativecommon-common.toml (interface carve, 2026-11-07)
+        // from creativecommon-common.toml (interface carve)
         JEI = new Jei(builder);
         GUI_TITLE = new GuiTitle(builder);
         TOASTS = new Toasts(builder);
         TOOLTIPS = new Tooltips(builder);
         COASTER = new Coaster(builder);
         WTHIT = new Wthit(builder);
-        // Immersive Portals and the Portal Gun (feature_writeup/plan_portal_changes.md, 2026-11-07)
+        // Immersive Portals and the Portal Gun (feature_writeup/plan_portal_changes.md)
         IMMERSIVE_PORTALS = new ImmersivePortals(builder);
         PORTAL_GUN = new PortalGun(builder);
-        // developer switches (plan_passthrough.md 7.3, 2026-11-15)
+        // developer switches (plan_passthrough.md 7.3)
         DEBUG = new Debug(builder);
         SPEC = builder.build();
     }
@@ -1171,7 +1170,7 @@ public final class CompatConfig {
                     "Also show 'Silk Touch Required: False' (red) on every other block. Off by default."
             ).define("silkTouchShowFalse", false);
 
-            // cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar, 2026-11-01)
+            // cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar)
 
             operatorBlocks = b.comment(
                     "WTHIT's blacklist hides barriers, structure voids and light blocks from everyone. With this on, players",

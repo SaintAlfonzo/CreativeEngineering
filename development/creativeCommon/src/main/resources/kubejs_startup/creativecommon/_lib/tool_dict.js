@@ -3,9 +3,9 @@
 // knives and stations of the Creative Delight members. The value is always i.<key>, so items stay defined once in
 // item_dict.js. Key: <category>_<name>, category from global.toolGrammar (food_grammar.js), e.g. t.pot_copper.
 //
-// Kept by hand. Seeded 2026-11-02 by tools/kitchen_dicts.py --seed (108 keys); run tools/kitchen_dicts.py to lint this
-// file and misc_dict.js and list member items with no key. Check on load as for the food dict (food_grammar.js):
-// a missing general key, a value not in global.item, an item named twice or a key outside the grammar throws.
+// Kept by hand. Run tools/kitchen_dicts.py to lint this file and misc_dict.js and list member items with no key. Check
+// on load as for the food dict (food_grammar.js): a missing general key, a value not in global.item, an item named
+// twice or a key outside the grammar throws.
 // global.toolKey is the reverse index (item id -> tool key). Pack scripts alias it t only where t is free.
 global.tool = {}
 ;(function (t, i) {

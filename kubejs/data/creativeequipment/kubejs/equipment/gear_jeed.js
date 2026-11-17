@@ -1,8 +1,7 @@
 // requires: creativeequipment
-// Creative Equipment (plan_cb_polish.md 1, 2026-11-06): JEED effect providers for the gear, moved from Creative
-// Brewing's jeed_providers.js with the gear rows. Reads the frameworks (global.armorEffects / global.toolEffects,
-// Creative Common) after every jar's startup rows are in; recipe ids are creativeequipment:jeed_provider/... One
-// provider recipe per effect from this jar; Creative Brewing writes its own for the other sources, and JEED shows both.
+// Reads the frameworks (global.armorEffects / global.toolEffects, Creative Common) after every jar's startup rows are
+// in; recipe ids are creativeequipment:jeed_provider/... One provider recipe per effect from this jar; Creative Brewing
+// writes its own for the other sources, and JEED shows both.
 
 ServerEvents.recipes(e => {
 global.CEQ.recipes(() => {

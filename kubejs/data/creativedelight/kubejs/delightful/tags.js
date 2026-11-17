@@ -16,8 +16,8 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_hot_spices, [i.blaze_powder, i.t_chilipepper])
 })
 
-// Delightful items in the pack's food and cooking item tags (moved from the pack's server_scripts/tags/cookingtags.js
-// 2026-10-25, rows unchanged; split by the mod owning each entry). Not behind the 3.8.1 backport check above.
+// Delightful items in the pack's food and cooking item tags (split by the mod owning each entry). Not behind the
+// 3.8.1 backport check above.
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('delightful')) return
 	var i = global.item

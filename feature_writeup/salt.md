@@ -185,3 +185,12 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
   reflection; a Creative Delight jar without the `-04` Salt member reads chance 0 (no layer vanishes).
 - Salt member `-04`: `replaced_resources` now lists `assets/salt/lang/en_us.json` (upstream copy plus `item.salt.salt_melt`).
 - SQ-HH-474 (salt dust on an unworn salt block places a layer): by design under B1 and B7 unless the owner says otherwise.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-26: Creative Delight: rock salt stays, beach patches are built on it (owner, 2026-10-26) (development/creativeDelight/members/salt/src/main/java/io/github/mortuusars/salt/Dissolving.java)
+- 2026-11-03: Create salting for every saltable food (salt.md 6 S5, TODO food/seasoning #1, 2026-11-03) (kubejs/data/creativedelight/kubejs/salt/create_salting.js)
+- 2026-11-03: The Salt's saltable tag (#salt:can_be_salted, i.t_can_be_salted): the Salting craft takes any food in it (salt.md 5, TODO food/seasoning #4 and #1, 2026-11-03) (kubejs/data/creativedelight/kubejs/salt/tags.js)
+- 2026-11-03: Salt's butcher trade, mirroring the Barbeque's Delight seasoning powders (barbequesdelight/trades.js): level 1, 12 emeralds for 64 salt, 4 uses, 4 XP, price multiplier 0.05 (salt.md 6 S9, TODO food/seasoning #12, 2026-11-03) (kubejs/data/creativedelight/kubejs/salt/trades.js)

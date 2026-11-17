@@ -126,10 +126,10 @@ versionRange="[0.6,)"
 ordering="AFTER"
 side="BOTH"
 
-# Cooking mods Creative Delight integrates with but does not nest or repack (2026-11-06, owner): each is optional, CD
-# boots and runs its scripts without it (scratch r1106cba: the Creative Brewing chain had none of them, no script
-# error), and its rows are guarded by global.has / requires. AFTER so CD loads after each and its data overrides
-# theirs. Any version; the pack tests the one in mods/.
+# Cooking mods Creative Delight integrates with but does not nest or repack (owner): each is optional, CD boots and
+# runs its scripts without it (scratch r1106cba: the Creative Brewing chain had none of them, no script error), and
+# its rows are guarded by global.has / requires. AFTER so CD loads after each and its data overrides theirs. Any
+# version; the pack tests the one in mods/.
 [[dependencies.creativedelight]]
 modId="abnormals_delight"
 mandatory=false

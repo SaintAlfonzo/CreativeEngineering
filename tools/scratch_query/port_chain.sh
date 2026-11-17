@@ -23,16 +23,16 @@ INST="$(cd "$(dirname "$0")/../.." && pwd)"
 PORT="$INST/../CEPortTesting"
 PARK="$PORT/disabledmods/cba_parked"
 # Hard dependencies of Creative Brewing, all the way down (plan_cb_publish.md 1.2 and 14; nested members' mods.toml
-# checked 2026-11-06: Vinery needs creativecalendar + foundation, Brewin' farmersdelight, both nested; MoreJS required by
-# Creative Brewing since 2026-11-06).
+# checked 2026-11-06: Vinery needs creativecalendar + foundation, Brewin' farmersdelight, both nested; MoreJS required
+# by Creative Brewing).
 CHAIN=(
   "rhino-forge-*.jar" "architectury-*-forge.jar" "kubejs-forge-*.jar"
   "create-1.19.2-*.jar" "kubejs-create-forge-*.jar" "kubejsdelight-*.jar" "lootjs-forge-*.jar" "morejs-forge-*.jar"
   "SereneSeasons-*.jar"
   "creativecommon-*.jar" "creativecompat-*.jar" "creativecalendar-*.jar" "creativedelight-*.jar" "creativebrewing-*.jar"
 )
-# Cooking mods CD / CB integrate with but do not nest or repack (optional dependencies in creativedelight's mods.toml,
-# 2026-11-06), then their own required mods. Applied Cooking (AE2) is left out: no CD/CB rows use it.
+# Cooking mods CD / CB integrate with but do not nest or repack (optional dependencies in creativedelight's
+# mods.toml), then their own required mods. Applied Cooking (AE2) is left out: no CD/CB rows use it.
 COOKING=(
   "fruitsdelight-*.jar" "Hostile_Delight_*.jar" "moredelight-*.jar" "abnormals_delight-*.jar" "alexsdelight-*.jar"
   "chefsdelight-*.jar" "cookingforblockheads-*.jar" "corn_delight-*.jar" "create_central_kitchen-*.jar"
@@ -40,8 +40,8 @@ COOKING=(
   "blueprint-*.jar" "alexsmobs-*.jar" "citadel-*.jar" "balm-forge-*.jar" "mysterious_mountain_lib-*.jar"
   "ImmersiveEngineering-*.jar" "Quark-*.jar" "AutoRegLib-*.jar"
 )
-# Creative Brewing's optional dependencies (its mods.toml, mandatory=false) and their own required jars (SQ-CBO,
-# 2026-11-06). Taken from the pack's mods/ when CEPortTesting lacks them.
+# Creative Brewing's optional dependencies (its mods.toml, mandatory=false) and their own required jars
+# (SQ-CBO). Taken from the pack's mods/ when CEPortTesting lacks them.
 OPTIONAL=(
   "alexsmobs-*.jar" "citadel-*.jar" "appleskin-*.jar" "CerbonsBetterBeacons-*.jar" "Botania-*.jar" "curios-forge-*.jar"
   "Patchouli-*.jar" "buzzier_bees-*.jar" "blueprint-*.jar" "create_central_kitchen-*.jar" "create_deep_dark-*.jar"

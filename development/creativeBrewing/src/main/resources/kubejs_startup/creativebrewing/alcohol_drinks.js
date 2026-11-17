@@ -1,6 +1,5 @@
-// Moved from the pack's startup_scripts/cooking/alcohol_drinks.js 2026-11-01 (creative_brewing.md 4.5).
-// Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
-// Alcoholic drinks (alcohol.md 11). Every drink listed here:
+// Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart. Alcoholic
+// drinks (alcohol.md 11). Every drink listed here:
 //   - fills half a shank (hunger 1) and gives no saturation; AppleSkin draws the shank rotten, since Intoxication is
 //     a harmful effect
 //   - can be drunk at any time (alwaysEat)

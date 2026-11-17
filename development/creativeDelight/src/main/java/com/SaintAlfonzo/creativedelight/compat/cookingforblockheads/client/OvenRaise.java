@@ -31,10 +31,9 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Cooking for Blockheads' oven draws its cook surface at the top of the block (TODO cooking/kitchen, scratchpad
- * 2026-11-03). CfB 13.3.4's oven top sits at 15 px, so a pot or skillet on it floated 1 px above. CfB's models are All
- * Rights Reserved and are not copied or edited: their baked quads are moved at load time instead.
- * <ul>
+ * Cooking for Blockheads' oven draws its cook surface at the top of the block (TODO cooking/kitchen, scratchpad). CfB
+ * 13.3.4's oven top sits at 15 px, so a pot or skillet on it floated 1 px above. CfB's models are All Rights Reserved
+ * and are not copied or edited: their baked quads are moved at load time instead. <ul>
  * <li>Every quad goes up 1 px, so the cook surface is at 16 px and the backsplash reaches 2 px into the block above.</li>
  * <li>The bottom plate (CfB's {@code oven_bottom} texture) and the downward faces at y 0 stay, so the oven still stands
  * on the floor.</li>

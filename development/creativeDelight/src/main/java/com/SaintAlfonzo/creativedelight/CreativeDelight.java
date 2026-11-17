@@ -29,11 +29,10 @@ import java.util.List;
  * client scripts under {@code data/} and {@code assets/creativedelight/kubejs/}) that call the pack's helpers, and
  * {@link CDConfig}.
  *
- * Since the Creative Split CD carve (2026-11-01, creative_delight.md 34) it also holds the kitchen and food Java that
- * was patcherMod's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
+ * Since the Creative Split CD carve (creative_delight.md 34) it also holds the kitchen and food Java that was
+ * patcherMod's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
- * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member). Their ids moved to this mod's namespace on
- * 2026-11-10 (plan_cd_namespace.md).
+ * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member).
  */
 @Mod(CreativeDelight.MOD_ID)
 public class CreativeDelight {
@@ -42,11 +41,9 @@ public class CreativeDelight {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public CreativeDelight() {
-		// Mod id was creative_delight up to 2026-11-01 (creative_split.md 7.6): keep the player's values; ids remap through
-		// data/creativedelight/swaps/creative_split.json.
+		// Ids remap through data/creativedelight/swaps/creative_split.json.
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creative_delight-common.toml", "creativedelight-common.toml");
-		// [campfire] moved from creativecompat-common.toml (2026-11-04, CDConfig.COMPAT_SECTIONS): carried first, so Compat's
-		// value wins; Compat drops the section from its own file when Forge corrects it.
+		// Compat drops the section from its own file when Forge corrects it.
 		boolean campfireCarried = com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(
 				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS)
 				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
@@ -81,7 +78,7 @@ public class CreativeDelight {
 		VillageFarmCrops.LEGACY_PROCESSORS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(VillageFarmCrops::onServerAboutToStart);
 		TreatedSticks.register(FMLJavaModLoadingContext.get().getModEventBus());
-		// Wooden bucket and its farm fluids (moved from Creative Equipment 2026-11-09; farm/bucket/)
+		// Wooden bucket and its farm fluids (farm/bucket/)
 		com.SaintAlfonzo.creativedelight.farm.bucket.WoodenBuckets.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
@@ -114,7 +111,7 @@ public class CreativeDelight {
 		ModList mods = ModList.get();
 		// Oven: FD cooking-pot style baking block + the creativedelight:baking recipe type (oven/; oven.md).
 		com.SaintAlfonzo.creativedelight.oven.OvenRegistry.register(modBus);
-		// creativedelight:biome_tag loot condition for the fishing net tables (from Creative Worldgen, 2026-11-06)
+		// creativedelight:biome_tag loot condition for the fishing net tables (from Creative Worldgen)
 		com.SaintAlfonzo.creativedelight.loot.BiomeTagCondition.register(modBus);
 		// Powdered sugar block + bucket (food/PowderedSugarRegistry). Item and recipes are KubeJS.
 		com.SaintAlfonzo.creativedelight.food.PowderedSugarRegistry.register(modBus);
@@ -123,8 +120,8 @@ public class CreativeDelight {
 		// The oven's leftover slots show on WTHIT through Common's RemainderView (compat/WthitRemainderBuffer).
 		com.SaintAlfonzo.creativecompat.compat.RemainderView.addStation(
 				com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity.class);
-		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin; moved from Compat
-		// 2026-11-04). patcherMod's WTHIT line reads the switch and ticks through Common's CampfireRainInfo holder.
+		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin). patcherMod's
+		// WTHIT line reads the switch and ticks through Common's CampfireRainInfo holder.
 		com.SaintAlfonzo.creativecommon.campfire.CampfireRainInfo.set(
 				() -> CDConfig.SPEC.isLoaded() && CDConfig.CAMPFIRE.rainDouses.get(),
 				() -> CDConfig.SPEC.isLoaded() ? CDConfig.CAMPFIRE.rainOutTicks.get() : 160);
@@ -140,7 +137,7 @@ public class CreativeDelight {
 			com.SaintAlfonzo.creativedelight.lunchbox.LunchboxRecipes.register(modBus);
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.lunchbox.LunchboxTooltip.class);
 		}
-		// Caffeinated adds a hidden Phantom Bane (from Creative Common's PhantomBaneRules, 2026-11-07).
+		// Caffeinated adds a hidden Phantom Bane (from Creative Common's PhantomBaneRules).
 		if (mods.isLoaded("farmersrespite")) {
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.compat.farmersrespite.CaffeinatedPhantomBane.class);
 		}

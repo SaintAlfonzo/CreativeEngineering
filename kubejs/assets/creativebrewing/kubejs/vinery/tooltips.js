@@ -1,7 +1,7 @@
 // requires: creativebrewing
 // requires: vinery
-// Vinery item tooltips (port lines and the flower box). Moved from the pack's client_scripts/tooltips.js 2026-11-01
-// (creative_brewing.md 4.5), rows unchanged; the helpers and palette are read through global.tooltips at event time.
+// Vinery item tooltips (port lines and the flower box). The helpers and palette are read through global.tooltips at
+// event time.
 ItemEvents.tooltip(e => {
 	if (!global.CB || !global.CB.on('vinery')) return
 	var T = global.tooltips

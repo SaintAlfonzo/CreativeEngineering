@@ -1,8 +1,7 @@
 // requires: creativedelight
 // The pack's own food items and food rules: the mortar and pestle, dough blocks, cornmeal grinding and the burger
 // rule (a table over Farmer's, Delightful, More Delight, Alex's Delight and Alex's Mobs burgers). Non-member file:
-// recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's
-// kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
+// recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -16,7 +15,7 @@ ServerEvents.recipes(e => {
 		// TODO cooking/kitchen #10
 		R.shaped(i.mortar_and_pestle, [' L ', 'G G', ' G '], { L: i.lever, G: i.polished_granite }, e, 'mortar_and_pestle')
 
-		// Wooden bucket, a farm tool (moved from Engineering's process.js 2026-11-09): water, sap, milk, honey
+		// Wooden bucket, a farm tool: water, sap, milk, honey
 		R.shaped(Item.of(i.wooden_bucket, 1), ['P P', ' P '], { P: i.planks }, e, 'wooden_bucket')
 
 		//######################### Dough blocks #########################

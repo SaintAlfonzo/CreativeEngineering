@@ -119,8 +119,8 @@ public final class SwapRemapper {
 
 	/**
 	 * The survivor is looked up in the ACTIVE registry. On a world load Forge fires the event from its STAGING copy
-	 * (GameData.injectSnapshot), which holds only the snapshot's ids at that point, so {@code mapping.getRegistry()}
-	 * never contains an id that is new in this version (found 2026-11-01, scratch_run_2026-11-01.md 7).
+	 * (GameData.injectSnapshot), which holds only the snapshot's ids at that point, so {@code mapping.getRegistry}
+	 * never contains an id that is new in this version.
 	 */
 	private static <T> boolean remap(MissingMappingsEvent.Mapping<T> mapping, ResourceLocation target) {
 		IForgeRegistry<T> registry = RegistryManager.ACTIVE.getRegistry(mapping.getRegistry().getRegistryKey());
@@ -133,13 +133,13 @@ public final class SwapRemapper {
 	}
 
 	/**
-	 * Removes the alias leading out of a survivor from the registry Forge is loading into. Forge is about to add old -> survivor,
-	 * and a world saved before an earlier swap the other way (old -> survivor is the reverse of a saved survivor -> old) would
-	 * then hold a cycle. {@code ForgeRegistry.getRaw} follows aliases with no cycle check and spins forever when neither name is
-	 * registered yet, which is the case while it copies the staging registry into the active one (hang found 2026-11-08).
-	 * The survivor is a registered name, so names win over its alias and the alias is dead anyway. Dropping it unconditionally
-	 * also covers cycles closed by two remaps in one event, which a walk of the saved aliases could not see: Forge adds the new
-	 * aliases only after the event, and with every survivor a sink no new alias can be part of a cycle.
+	 * Removes the alias leading out of a survivor from the registry Forge is loading into. Forge is about to add old ->
+	 * survivor, and a world saved before an earlier swap the other way (old -> survivor is the reverse of a saved survivor
+	 * -> old) would then hold a cycle. {@code ForgeRegistry.getRaw} follows aliases with no cycle check and spins forever
+	 * when neither name is registered yet, which is the case while it copies the staging registry into the active one. The
+	 * survivor is a registered name, so names win over its alias and the alias is dead anyway. Dropping it unconditionally
+	 * also covers cycles closed by two remaps in one event, which a walk of the saved aliases could not see: Forge adds
+	 * the new aliases only after the event, and with every survivor a sink no new alias can be part of a cycle.
 	 */
 	static void dropAliasFromSurvivor(Object registry, ResourceLocation survivor) {
 		if (!(registry instanceof ForgeRegistry<?>)) return;

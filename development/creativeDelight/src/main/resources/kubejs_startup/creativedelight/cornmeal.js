@@ -1,4 +1,3 @@
-// Moved from the pack's startup_scripts/cooking/cornmeal.js 2026-10-25, rows unchanged.
 // Creative Delight startup script, loaded from the jar after the pack's startup_scripts, so the dicts exist here.
 // Restart to apply.
 //

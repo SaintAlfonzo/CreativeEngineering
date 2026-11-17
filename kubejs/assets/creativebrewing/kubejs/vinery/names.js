@@ -1,7 +1,6 @@
 // requires: creativebrewing
 // requires: vinery
-// Vinery names. Moved from the pack's client_scripts/namechanges.js 2026-11-01 (creative_brewing.md 4.5), rows
-// unchanged; no other script names these keys, so running after the pack's lang pass gives the same names.
+// Vinery names. No other script names these keys, so running after the pack's lang pass gives the same names.
 ClientEvents.lang('en_us', e => {
   if (!global.CB || !global.CB.on('vinery')) return
   e.add('entity.minecraft.villager.winemaker', 'Winemaker')

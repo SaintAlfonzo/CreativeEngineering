@@ -42,10 +42,10 @@ ServerEvents.recipes(e => {
 		R.vdPickling(Item.of(i.pickle, 5), [PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, i.salt], e,
 			'pickle_from_fermenting', { time: 2400 })
 
-		//######################### Kimchi #########################
-		// One kimchi (merges/dishes #9, owner 2026-11-02): Vintage's kimchi wins, Brewin's is removed (vintage_items.js). Beside
-		// upstream's ghost pepper recipe (kept), one recipe per pickleable in the pepper's slot: 4 cabbage leaves + salt + it
-		// -> 4 kimchi, upstream's time; no pickled pepper on the side (no pepper goes in).
+		//######################### Kimchi ######################### One kimchi (merges/dishes #9, owner): Vintage's kimchi
+		// wins, Brewin's is removed (vintage_items.js). Beside upstream's ghost pepper recipe (kept), one recipe per
+		// pickleable in the pepper's slot: 4 cabbage leaves + salt + it -> 4 kimchi, upstream's time; no pickled pepper on
+		// the side (no pepper goes in).
 		var kimchiBases = [
 			['cucumber', global.CD.on('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber],
 			['onion', i.onion],
@@ -58,11 +58,10 @@ ServerEvents.recipes(e => {
 			R.vdPickling(Item.of(i.vintagedelight_kimchi, 4), [Item.of(i.cabbage_leaf, 4), i.salt, b[1]], e, 'kimchi_from_' + b[0])
 		})
 
-		//######################### Nut mash #########################
-		// One nut butter (merges/dishes #7, owner 2026-11-02): Vintage's nut mash, mason jar only. The bottle and Delightful's
-		// nut butter merge into the jar (swaps); the bottle <-> jar crafts go first, or the merge's swap would turn them into
-		// jar -> 3 jars. Pot: 5 nuts (acorn or peanut, raw or roasted) + sugar -> 3 jars, each in an empty mason jar
-		// (was 5 roasted peanuts -> 1).
+		//######################### Nut mash ######################### One nut butter (merges/dishes #7, owner): Vintage's nut
+		// mash, mason jar only. The bottle and Delightful's nut butter merge into the jar (swaps); the bottle <-> jar crafts
+		// go first, or the merge's swap would turn them into jar -> 3 jars. Pot: 5 nuts (acorn or peanut, raw or roasted) +
+		// sugar -> 3 jars, each in an empty mason jar (was 5 roasted peanuts -> 1).
 		;['vintagedelight:cooking/nut_mash_jar', 'vintagedelight:jam/nut_mash_jar', 'vintagedelight:jam/nut_mash_jar_deconstruct']
 			.forEach(id => R.remove({ id: id }, e))
 		var NUT = [i.t_nuts_acorn, i.roasted_acorn, i.peanut, i.roasted_peanut].filter(n => String(n).charAt(0) === '#' || Item.exists(n))
@@ -118,7 +117,7 @@ ServerEvents.recipes(e => {
 		R.ieCrushing(Item.of(i.ghost_pepper_seeds, 3), i.wild_ghost_peppers, e, 'wild_ghost_pepper',
 			[{ chance: 1.0, output: i.cyan_dye }], 3200)
 
-		// Rows below: Creative Delight members #3, moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, unchanged.
+		// Rows below: Creative Delight members #3.
 
 		//######################### Bread #########################
 		// Oat dough is a #forge:dough: no furnace, smoker or campfire bread (its 3 raw oats -> bread craft stays, as wheat). It bakes

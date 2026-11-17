@@ -428,3 +428,8 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
   a per-file `tipLine(text, role)`; Fertile Soil's villager line is `hint` (green) like Rich Farmland's (was dark blue);
   `global.tooltips.stripTooltipKeys(text, keys)` strips lines by translation key inside a callback (the placeable food
   lines use it; `removeTooltipKey` calls it). Queue CQ-RFX-03.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-01: Bowl, basket and soil lines: Creative Delight (assets/creativedelight/kubejs/farmersdelight/client.js, 2026-11-01) (kubejs/client_scripts/tooltips.js)
+- 2026-11-01: Delight dish, crop and fluid names (Oceanic, Fruits, Veggies, Vintage, Ender's, Rustic, Delightful, The Dirty Stuff, dish renames) and the lunchbox tier names: Creative Delight (assets/creativedelight/kubejs/creativedelight/names.js, moved 2026-11-01) (kubejs/client_scripts/namechanges.js)

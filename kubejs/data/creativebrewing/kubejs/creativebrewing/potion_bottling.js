@@ -1,6 +1,5 @@
 // requires: creativebrewing
-// Moved from the pack's server_scripts/engineering/potion_bottling.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
-// creativebrewing:<type>/<suffix> (were creativeengineering:).
+// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:).
 ServerEvents.recipes(e => {
 if (!global.CB) return
 global.CB.recipes(() => {

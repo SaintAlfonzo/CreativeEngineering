@@ -1,15 +1,14 @@
 // requires: creativedelight
 // requires: vintagedelight
-// Vintage Delight item tags (Creative Delight members #3, moved from the pack's server_scripts/tags/cookingtags.js
-// 2026-10-25, rows unchanged). Nothing in the pack removes from these tags, so running after the pack's tag scripts
+// Vintage Delight item tags. Nothing in the pack removes from these tags, so running after the pack's tag scripts
 // gives the same contents.
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('vintagedelight')) return
 	var t = global.tags
 	var i = global.item
 
-	// Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner, 2026-10-23); cucumber dough
-	// stays a named ingredient. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
+	// Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner); cucumber dough stays a
+	// named ingredient. Cucumber noodles stay in #forge:pasta until the VTD-40 overlap review.
 	t.add(e, i.any_dough, i.oat_dough)
 	// Veggie Noodles (the cucumber noodles, renamed; TODO dishes/meals #43): the dough takes any of these (recipes.js)
 	t.add(e, i.t_veggie_noodle_veg, [i.cucumber, i.broccoli, i.zucchini, i.zucchini_slice, i.cactus_flesh, i.dandelion_leaf])
@@ -20,7 +19,7 @@ ServerEvents.tags('item', e => {
 	// cooked soup veggies (heatless soups): the Pickled Sea Pickle takes the Pickled Pickles' place, Vintage's kimchi takes
 	// Brewin's kimchi's (merges/dishes #9)
 	t.add(e, i.t_soup_veggie_cooked, [i.pickled_sea_pickle, i.vintagedelight_kimchi])
-	// Kimchi pickleables (merges/dishes #9, owner 2026-11-02): every whole raw fish, not slices, squid or shellfish
+	// Kimchi pickleables (merges/dishes #9, owner): every whole raw fish, not slices, squid or shellfish
 	// (recipes.js). Pufferfish is left out (poisonous).
 	t.add(e, i.t_whole_raw_fish, [i.cod, i.salmon, i.tropical_fish, i.lionfish, i.perch, i.pike, i.blobfish, i.flying_fish,
 		i.catfish])
@@ -51,8 +50,7 @@ ServerEvents.tags('block', e => {
 	var b = global.blocks
 	global.tags.add(e, b.t_own_pick_crops, [b.cucumber_crop, b.ghost_pepper_crop])
 
-	// Ghost pepper seeds plant only on these (vintage_delight.md 2.1, S6; moved from the pack's
-	// server_scripts/tags/blocktags.js 2026-10-27). Nylium is left out on purpose: the wild ghost pepper still generates
-	// there (its own block accepts nylium too).
+	// Ghost pepper seeds plant only on these (vintage_delight.md 2.1, S6). Nylium is left out on purpose: the wild ghost
+	// pepper still generates there (its own block accepts nylium too).
 	global.tags.add(e, b.t_ghost_pepper_soil, [b.soul_soil, b.rich_soul_soil, b.iw_nulch])
 })

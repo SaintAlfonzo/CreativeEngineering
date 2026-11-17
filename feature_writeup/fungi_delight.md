@@ -617,3 +617,9 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 - Lightning swaps mooshroom types both ways: red <-> brown, and Inky Cap Cow <-> Morel Cow (replaces "Fungi cows ignore lightning", FGD-27 expectation changes; `FDMCow` loses its lightning immunity and swaps instead).
 - New mushrooms (inky cap, morel): light levels and valid spawn locations match the vanilla mushrooms (FGD-28 cave filter follows vanilla; the "light at most 7" value is replaced). Rates stay lower than vanilla (new ones rarer).
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Fungi Delight item tags (Creative Delight members #4, moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/fungidelight/tags.js)
+- 2026-10-25: Fungi Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/fungidelight/cooking.js)
+- 2026-11-02: A Creative Delight member (folder moved here 2026-11-02): build and install through `:creativeDelight:` only (development/creativeDelight/members/fungi/build.gradle)

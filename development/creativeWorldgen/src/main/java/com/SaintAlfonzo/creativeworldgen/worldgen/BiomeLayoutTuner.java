@@ -55,12 +55,12 @@ import net.minecraftforge.fml.ModList;
  * /dumpclimatecaves exists, its points replace the main dump's underground layer (deeper, denser cave
  * coverage), so the two can be dumped separately.
  *
- * Stats (layer / share_pct / result_pct / note, per dimension samples + model_agreement_pct) are
- * written back into biome_config.json, only when they changed. Results are cached on the input
- * files' contents, so a /reload with nothing edited costs a hash, not a solve. The cache is also kept on
- * disk (biome_layout_cache.json.gz, ships with the pack), so the first datapack load of a new JVM reads it
- * back instead of re-solving (10-11 s). Its key adds a hash of this solver's own class files, so a changed
- * solver never reads a layout an older one wrote.
+ * Stats (layer / share_pct / result_pct / note, per dimension samples + model_agreement_pct) are written
+ * back into biome_config.json, only when they changed. Results are cached on the input files' contents, so
+ * a /reload with nothing edited costs a hash, not a solve. The cache is also kept on disk
+ * (biome_layout_cache.json.gz, ships with the pack), so the first datapack load of a new JVM reads it back
+ * instead of re-solving (s). Its key adds a hash of this solver's own class files, so a changed solver
+ * never reads a layout an older one wrote.
  */
 public final class BiomeLayoutTuner {
 

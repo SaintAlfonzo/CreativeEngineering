@@ -99,9 +99,9 @@ public final class BBQItems {
                     .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 200, 1), 1.0F)
                     .build())));
     /*
-     * Combos (plan_meals_rolls_bbq.md C8, 2026-11-04): ordinary shaped / meal recipes from cooked skewers, no stored
-     * skewers and no carried skewer effects; static values, 0.8 x the inputs (average cooked skewer 7.6 / 11.2 points)
-     * capped at 16 hunger. Upstream: wrap 8 / 0.7, sandwich 14 / 0.7, bibimbap 16 / 0.7.
+     * Combos (plan_meals_rolls_bbq.md C8): ordinary shaped / meal recipes from cooked skewers, no stored skewers and
+     * no carried skewer effects; static values, 0.8 x the inputs (average cooked skewer 7.6 / 11.2 points) capped at
+     * 16 hunger. Upstream: wrap 8 / 0.7, sandwich 14 / 0.7, bibimbap 16 / 0.7.
      */
     public static final RegistryObject<Item> KEBAB_WRAP = ITEMS.register("kebab_wrap",
             () -> new BBQSandwichItem(ModItems.basicItem().food(new FoodProperties.Builder().nutrition(10).saturationMod(0.6F)

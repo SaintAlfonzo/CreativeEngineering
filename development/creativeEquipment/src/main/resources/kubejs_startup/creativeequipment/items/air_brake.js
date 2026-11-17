@@ -1,7 +1,6 @@
-// Creative Equipment; moved from kubejs/startup_scripts/ on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
-// Air Brake — a hold-to-use elytra brake. Right-click and hold, like drawing a bow, while
-// gliding to bleed off speed: horizontal and upward motion decelerate at a steady rate,
-// downward motion is only slowed slightly.
+// Creative Equipment. Air Brake — a hold-to-use elytra brake. Right-click and hold, like drawing a bow, while gliding
+// to bleed off speed: horizontal and upward motion decelerate at a steady rate, downward motion is only slowed
+// slightly.
 //
 // The item here is pure data (id, stacking, use-animation/duration). The actual velocity
 // math can't live in KubeJS: elytra flight is client-predicted, and a server-only change

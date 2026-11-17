@@ -29,11 +29,10 @@ import java.util.regex.Pattern;
  * offline harness; {@link PaintingPack} feeds it the registry and the jars and serves the result.
  *
  * <p>Immersive reads {@code data/<ns>/paintings/**.png} plus a sibling json {name, author, width, height (blocks),
- * resolution (px per block)}. Each variant {@code ns:path} becomes {@code data/creativecompat/paintings/<ns>/<path>.png}
- * + .json (until 2026-11-10 under creativeengineering; mixin/ImmersivePaintingMotiveAliasMixin moves placed paintings
- * that still name the old id). Same rules as the old
- * generator (tools/gen_immersive_paintings.py, which now writes only the vanilla ones):
- * <ul>
+ * resolution (px per block)}. Each variant {@code ns:path} becomes
+ * {@code data/creativecompat/paintings/<ns>/<path>.png} +.json (mixin/ImmersivePaintingMotiveAliasMixin moves placed
+ * paintings that still name the old id). Same rules as the old generator (tools/gen_immersive_paintings.py, which now
+ * writes only the vanilla ones): <ul>
  *   <li>texture {@code assets/<ns>/textures/painting/<path>.png}, the last source that has it wins;</li>
  *   <li>an animated strip keeps its first frame; art off the block grid is stretched to 16 px per block like vanilla;</li>
  *   <li>under 32 px per block it is scaled up (nearest neighbour, whole factor) to 32, the page's default filter;</li>

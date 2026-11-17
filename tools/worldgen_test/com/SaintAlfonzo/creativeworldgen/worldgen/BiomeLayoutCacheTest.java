@@ -24,7 +24,6 @@ public class BiomeLayoutCacheTest {
 	}
 
 	/** What a fresh JVM sees: no in-memory cache. */
-	// WorldgenFiles moved to the util package (2026-11-01): its package-private root override is set by reflection.
 	static void setRootOverride(Path root) throws Exception {
 		Field f = WorldgenFiles.class.getDeclaredField("rootOverride");
 		f.setAccessible(true);

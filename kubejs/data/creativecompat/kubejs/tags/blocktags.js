@@ -1,5 +1,5 @@
 // requires: creativecompat
-// Creative Compat: block tags for the mod tweaks; moved from kubejs/server_scripts/tags/blocktags.js on 2026-11-01.
+// Creative Compat: block tags for the mod tweaks.
 
 ServerEvents.tags('block', e => {
 	var t = global.tags

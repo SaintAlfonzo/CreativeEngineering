@@ -26,7 +26,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
- * Storage in Cooking for Blockheads' kitchen corner (TODO cooking/kitchen #15; moved from patcherMod 2026-10-31). CfB's corner is a counter-sized block
+ * Storage in Cooking for Blockheads' kitchen corner (TODO cooking/kitchen #15). CfB's corner is a counter-sized block
  * with only a kitchen connector; {@code mixin/CfbCornerStorageMixin} makes its block entity a Balm container provider
  * holding a {@link CornerContainer} (27 slots, 54 with CfB's {@code largeCounters}, like a counter), which gives it,
  * through CfB's and Balm's own code, item drops when broken (BlockKitchen#onRemove) and an item handler for hoppers.
@@ -36,7 +36,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class CornerStorage {
 
-    /** Kept from patcherMod, where this lived until 2026-10-31, so corners already filled keep their contents. */
     private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "corner_storage");
 
     private CornerStorage() {}

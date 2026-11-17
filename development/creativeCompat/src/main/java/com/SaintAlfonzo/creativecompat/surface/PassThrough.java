@@ -81,7 +81,7 @@ public final class PassThrough {
         static final Map<PassTier, TagKey<Block>> BLOCK = new EnumMap<>(PassTier.class);
         static final Map<PassTier, TagKey<EntityType<?>>> EXEMPT = new EnumMap<>(PassTier.class);
         static final TagKey<EntityType<?>> EXEMPT_ALL = entityTag("passthrough_exempt/all");
-        /** Layer blocks that never act whole (leaf piles, bamboo leaves; owner 2026-11-16). */
+        /** Layer blocks that never act whole (leaf piles, bamboo leaves; owner). */
         static final TagKey<Block> LAYERS_OPEN = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_layers_open"));
         static final TagKey<Block> GROWTH_ANY = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_growth_any"));
 
@@ -182,11 +182,11 @@ public final class PassThrough {
     // ---- vanilla's fast-fall reset ----
 
     /**
-     * The {@code Level#clip} in {@code Entity#move} ({@code mixin/InsideBlocksMixin}, scratch fixes 2026-11-15,
-     * SQ-PTH-03): moving a block or more in one tick with some fall distance, vanilla resets it when the path crosses a
+     * The {@code Level#clip} in {@code Entity#move} ({@code mixin/InsideBlocksMixin}, scratch fixes SQ-PTH-03): moving
+     * a block or more in one tick with some fall distance, vanilla resets it when the path crosses a
      * {@code #minecraft:fall_damage_resetting} block (cobweb, sweet berry bush, climbables) or water. A web that this
-     * system gives a fall rule, or a bush ({@link #ownsFallReset}), does not reset it: its fall distance factor applies instead. Any
-     * other block or water on the path still does. {@code hit} is vanilla's result, not a miss.
+     * system gives a fall rule, or a bush ({@link #ownsFallReset}), does not reset it: its fall distance factor applies
+     * instead. Any other block or water on the path still does. {@code hit} is vanilla's result, not a miss.
      */
     public static BlockHitResult fallResetClip(Entity e, Level level, ClipContext ctx, BlockHitResult hit) {
         PassValues values = PassValues.of(level.isClientSide);

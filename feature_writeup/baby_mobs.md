@@ -255,3 +255,8 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
 - 2026-10-20: milestone 1 built (babyMobs-1.0.0) after the tier-1 / tier-2 feature ports; milestone 2 planned.
 - 2026-10-22 (second bulk run): SQ-OM-13 and SQ-OM-14 PASS on the scratch server (drops, dolphin feeding, pack shares,
   `squidBabyChance = 1.0`: 1200 of 1200). Looks, sounds and the `babyModels` switch of BM-04 to BM-07 stay in game.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-01: More Mob Variants cat coats: the cat's own vanilla coat baby, also with variantBabies = OLD_MODELS (owner, 2026-11-01); Cozy's end / nether coats stay variants (old baby unless NEW_MODELS) (development/creativeWorldgen/members/babymobs/src/main/java/com/SaintAlfonzo/babymobs/client/family/PetBabies.java)
+- 2026-11-01: Its end and nether coats have no baby texture; catTexture uses the baby of the cat's own vanilla coat (owner, 2026-11-01) (development/creativeWorldgen/members/babymobs/src/main/java/com/SaintAlfonzo/babymobs/client/family/PetBabies.java)

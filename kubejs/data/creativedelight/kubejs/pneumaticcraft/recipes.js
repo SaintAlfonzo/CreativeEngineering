@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: pneumaticcraft
 // PneumaticCraft food: sourdough, tempura, chips and fish and chips, and its machine-only routes for the pack's
-// cornmeal. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's
-// kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
+// cornmeal. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -53,13 +52,12 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'pneumaticcraft:thermo_plant/salmon_tempura' }, e)
 		R.remove({ id: 'pneumaticcraft:raw_salmon_tempura' }, e)
 		R.remove({ id: 'pneumaticcraft:cod_n_chips' }, e)
-		// Fish Tempura and Raw Fish Tempura are removed items (TODO merges/dishes #11, 2026-11-02; CD startup
-		// pneumaticcraft/pneumatic_items.js): no recipe makes them. Fried fish stays as Fish and Chips below.
-		// Fish and Chips (TODO merges/dishes #1, Veggies Delight M1): PneumaticCraft's Cod 'n' Chips merges into Veggies
-		// Delight's (CD startup pneumaticcraft/item_merges.js). One frying route makes the survivor, in its bowl; Veggies
-		// Delight's two pot recipes (egg and potato, egg and diced potatoes) go as duplicates. PneumaticCraft's Chips
-		// (Fries) are removed (owner 2026-11-01, CD startup pneumaticcraft/pneumatic_items.js), so the Fries + fish grid
-		// route went with them.
+		// Fish Tempura and Raw Fish Tempura are removed items (TODO merges/dishes #11; CD startup
+		// pneumaticcraft/pneumatic_items.js): no recipe makes them. Fried fish stays as Fish and Chips below. Fish and
+		// Chips (TODO merges/dishes #1, Veggies Delight M1): PneumaticCraft's Cod 'n' Chips merges into Veggies Delight's
+		// (CD startup pneumaticcraft/item_merges.js). One frying route makes the survivor, in its bowl; Veggies Delight's
+		// two pot recipes (egg and potato, egg and diced potatoes) go as duplicates. PneumaticCraft's Chips (Fries) are
+		// removed (owner, CD startup pneumaticcraft/pneumatic_items.js), so the Fries + fish grid route went with them.
 		if (global.CD.on('veggiesdelight')) {
 			R.remove({ id: 'veggiesdelight:cooking/fish_and_chips' }, e)
 			R.remove({ id: 'veggiesdelight:compat/moredelight/cooking/fish_and_chips' }, e)

@@ -10,9 +10,8 @@ import java.util.Set;
  * Mixin config plugin for creativeengineering.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies only when its mod is loaded (each one targets
  * a class of that mod, or serves only that mod). The rest target vanilla and always apply, as they did in patcherMod.
- * The mixins moved from patcherMod on 2026-11-04 (Creative Split wave 8) unchanged: same package, SRG names with
- * remap = false, creativeengineering$ member prefixes. The XP bridge, Ore Excavation, BlockRunner and camouflage-order
- * mixins moved on to Creative Magic and Creative Compat on 2026-11-06.
+ * The mixins moved from patcherMod (Creative Split wave 8) unchanged: same package, SRG names with remap
+ * = false, creativeengineering$ member prefixes.
  */
 public class EngineeringMixinPlugin extends GatedMixinPlugin {
 
@@ -39,8 +38,8 @@ public class EngineeringMixinPlugin extends GatedMixinPlugin {
             // Result pools (fan/ResultPools, plan_flesh_recipes.md 5.3): crushing and milling output cap, crusher inventory
             Map.entry("CrushingOutputCapMixin", CREATE),
             Map.entry("ProcessingInventoryMixin", CREATE),
-            // From Creative Common 2026-11-07 (creative_engineering.md 7.1): sequenced assembly keeps gear NBT, Builder's
-            // Tea pipe Haste icon, IE fluid inputs by id with subset NBT match, drink fluid effect lines in JEI
+            // From Creative Common (creative_engineering.md 7.1): sequenced assembly keeps gear NBT, Builder's Tea pipe
+            // Haste icon, IE fluid inputs by id with subset NBT match, drink fluid effect lines in JEI
             Map.entry("SequencedAssemblyRecipeMixin", CREATE),
             Map.entry("CreateTeaPipeIconMixin", CREATE),
             Map.entry("FluidTagInputMixin", IE),
@@ -51,8 +50,8 @@ public class EngineeringMixinPlugin extends GatedMixinPlugin {
 
     /**
      * Tested version ranges (Maven syntax), from the version the pack runs to the next minor release; outside one, that
-     * mod's mixins are skipped with one warning instead of crashing (GatedMixinPlugin). Added 2026-11-07 with the mixins
-     * that came from Creative Common, whose ranges they had; the same bounds as Common's and Compat's tables.
+     * mod's mixins are skipped with one warning instead of crashing (GatedMixinPlugin). The same bounds as Common's and
+     * Compat's tables.
      */
     private static final Map<String, String> MOD_RANGE = Map.ofEntries(
             Map.entry("create", "[0.5.1.i,0.5.2)"),

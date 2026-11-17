@@ -257,7 +257,7 @@ public final class CropSeasons {
     }
 
     /**
-     * Greenhouse rule (owner 2026-10-30): a greenhouse removes season fertility. Any block in
+     * Greenhouse rule (owner): a greenhouse removes season fertility. Any block in
      * {@code #sereneseasons:greenhouse_glass} (the pack fills it from crop_seasons.json greenhouse_glass) in the 16
      * blocks straight above the crop makes a fertile or off result neutral. Only that column counts, other blocks
      * between the crop and the glass do not matter, and light is not checked. Nether, End and cave crops ignore it

@@ -1,10 +1,10 @@
 // requires: creativedelight
 // requires: cookingforblockheads
-// Cooking for Blockheads kitchen tooltips, moved from the pack's client_scripts/tooltips.js 2026-10-27, rows unchanged.
-// The oven burns any furnace fuel plus cooking oil (ovenRequiresCookingOil = false + Creative Delight Cooking for Blockheads compartment, CfbOvenFuelMixin), and
-// fuel containers come back to the output. It cooks food from furnace and smoker recipes (Creative Delight compartment
-// CfbOvenSmokingMixin, TODO cooking/oven #4). TODO cooking/kitchen #8.
-// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+// Cooking for Blockheads kitchen tooltips. The oven burns any furnace fuel plus cooking oil (ovenRequiresCookingOil =
+// false + Creative Delight Cooking for Blockheads compartment, CfbOvenFuelMixin), and fuel containers come back to the
+// output. It cooks food from furnace and smoker recipes (Creative Delight compartment CfbOvenSmokingMixin, TODO
+// cooking/oven #4). TODO cooking/kitchen #8. A tooltip line in a col role (global.tooltips, Creative Common's client
+// _lib; read at event time)
 var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
 
 ItemEvents.tooltip(e => {

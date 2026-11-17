@@ -58,7 +58,7 @@ public final class PassValues {
     }
 
     public static final int DEFAULT_STALL_TICKS = 3;
-    /** No per-block overrides by default (leaf layers use the passthrough_layers_open tag, owner 2026-11-16). */
+    /** No per-block overrides by default (leaf layers use the passthrough_layers_open tag, owner). */
     public static final Map<String, Integer> DEFAULT_OVERRIDES = Map.of();
 
     private final Map<Block, Integer> solidBelowFullOf = new ConcurrentHashMap<>();

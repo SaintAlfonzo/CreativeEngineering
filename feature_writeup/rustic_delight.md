@@ -396,3 +396,24 @@ PhantomWing confirmed MIT for the Forge builds and welcomed the port. Effects:
   only our `META-INF` files, no upstream class, every JSON parses, no 1.20 loot condition left (`all_of` remains only as a
   1.19.2 block predicate in the patch features), every `rusticdelight:` model and texture reference resolves. Live: SQ-RDB-01
   to -06, CQ-RDB-01 (queued).
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Moved from the pack's startup_scripts/compost/compost_values.js 2026-10-25, rows unchanged (development/creativeDelight/src/main/resources/kubejs_startup/rusticdelight/compost_values.js)
+- 2026-10-25: ######################### Maple foods ######################### Abnormals Delight's maple foods stay; Rustic's syrup stands in for Autumnity's (owner 2026-10-25) (kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)
+- 2026-10-25: The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged (kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)
+- 2026-10-25: The rows after them moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; shared tags are split by the mod owning each entry (kubejs/data/creativedelight/kubejs/rusticdelight/tags.js)
+- 2026-10-25: Upstream ids the port does not register: Fruit Beignet (owner 2026-10-25), the plain single Pancake and Fried Dough (owner 2026-11-01, TODO creativedelight/members #15, #25) (development/creativeDelight/members/rustic/tools/bake_upstream.py)
+- 2026-10-27: Moved from the pack's server_scripts/loot/09_crop_drops.js 2026-10-27, rows unchanged; it now runs after every pack loot script (they do not touch this table) (kubejs/data/creativedelight/kubejs/rusticdelight/crop_drops.js)
+- 2026-10-27: Moved from the pack's server_scripts/other/item_merges.js 2026-10-27, rows unchanged; moved from farmersrespite/item_merges.js to the Rustic member's tree 2026-11-01 (TODO creativedelight/members #11), rows unchanged (kubejs/data/creativedelight/kubejs/rusticdelight/coffee_merge.js)
+- 2026-11-01: Maple is half syrup, half honey (owner 2026-11-01, creativedelight/members #16): the bacon takes one of each (was syrup only), the Maple Cookie above too (kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)
+- 2026-11-01: Maple Cookie (Abnormals Delight, its Autumnity syrup is not in the pack): maple foods take half Rustic's syrup, half honey as their main flavour (owner 2026-11-01, TODO creativedelight/members #16), so one syrup and one honey; it does not clash with the Syrup Cookie (kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)
+- 2026-11-01: Syrup, Pumpkin and Cherry Blossom Coffee (3 beans, milk and a flavour, as Honey and Chocolate) last the same 900 ticks at level I (owner 2026-11-01, TODO creativedelight/members #11; 1.7.0: Syrup 1800, Pumpkin and Cherry Blossom 1200 with one of the two effects at level II) (development/creativeDelight/members/rustic/src/main/java/com/SaintAlfonzo/creativedelight/rustic/registry/RDFoods.java)
+- 2026-11-01: The plain plate serves Supplementaries' pancake: Rustic's own plain single is not registered (owner 2026-11-01, TODO creativedelight/members #15) (development/creativeDelight/members/rustic/src/main/java/com/SaintAlfonzo/creativedelight/rustic/registry/RDBlocks.java)
+- 2026-11-01: The plain plate's recipes, cut and loot use Supplementaries' pancake instead (owner 2026-11-01) (development/creativeDelight/members/rustic/tools/bake_upstream.py)
+- 2026-11-02: Rustic Delight 1.7.0 Wandering Trader stock (feature_writeup/rustic_delight.md 5.4): Pale and Dark seeds as rare offers, one seed for 48 emeralds (owner 2026-11-02; upstream sells them in the common pool at 5 emeralds, 3 uses) (kubejs/data/creativedelight/kubejs/rusticdelight/trades.js)
+- 2026-11-02: ######################### Potato Salad ######################### One Potato Salad (TODO merges/dishes #4, owner 2026-11-02; item_merges.md 2.17): Rustic Delight's stays, with its texture; More Delight's and Oceanic Delight's merge into it (CD swap lists merges_moredelight.json, merges_oceanic_delight_potato.json) (kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js)
+- 2026-11-02: Very rare (owner 2026-11-02, 95th to 99th percentile): one seed, share 0.03 (kubejs/data/creativedelight/kubejs/rusticdelight/loot.js)
+- 2026-11-10: Files named like a removed id that other kept files need: the coaster pancake model is the parent of the six flavoured pancake coaster models, and its texture is their particle (the runtime translator dropped both; missing model fixed 2026-11-10) (development/creativeDelight/members/rustic/tools/bake_upstream.py)

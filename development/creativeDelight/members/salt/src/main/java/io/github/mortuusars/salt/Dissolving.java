@@ -23,8 +23,8 @@ import net.minecraft.world.phys.Vec3;
 public class Dissolving {
 
     /**
-     * Creative Delight: rock salt stays, beach patches are built on it (owner, 2026-10-26). Melting and cluster
-     * growth are untouched.
+     * Creative Delight: rock salt stays, beach patches are built on it (owner). Melting and cluster growth are
+     * untouched.
      */
     private static boolean isKept(BlockState state) {
         return state.is(Salt.Blocks.RAW_ROCK_SALT_BLOCK.get());

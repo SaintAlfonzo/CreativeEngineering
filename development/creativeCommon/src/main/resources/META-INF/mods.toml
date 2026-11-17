@@ -98,7 +98,7 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# Phantom Bane rules (rest reset, spawner skip); its potions are Creative Brewing's since 2026-11-07
+# Phantom Bane rules (rest reset, spawner skip); its potions are Creative Brewing's
 [[dependencies.creativecommon]]
 modId="better_beacons"
 mandatory=false

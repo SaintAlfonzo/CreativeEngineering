@@ -1,6 +1,5 @@
 // requires: creativebrewing
-// Potion and dragon's breath fluid tags. Moved from the pack's server_scripts/tags/fluidtags.js 2026-11-01
-// (creative_brewing.md 4.5), rows unchanged; ink and XP stay there. Nothing in the pack or CD adds IE's potion fluid to
+// Potion and dragon's breath fluid tags. Ink and XP stay there. Nothing in the pack or CD adds IE's potion fluid to
 // #forge:fluid/potion, so running after the pack's tag scripts gives the same contents.
 ServerEvents.tags('fluid', e => {
 	if (!global.CB) return

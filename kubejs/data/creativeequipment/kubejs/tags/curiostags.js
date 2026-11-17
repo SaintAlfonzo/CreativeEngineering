@@ -1,6 +1,5 @@
 // requires: creativeequipment
-// Creative Equipment; moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-04 (creative_split.md 7.6, wave 7),
-// rows unchanged. Curios slot membership: the feet slot (registered by IMC in patcherMod compat/CuriosSlots;
+// Creative Equipment. Curios slot membership: the feet slot (registered by IMC in patcherMod compat/CuriosSlots;
 // feature_writeup/curios_slots.md) takes the stepstools.
 ServerEvents.tags('item', e => {
 	var t = global.tags

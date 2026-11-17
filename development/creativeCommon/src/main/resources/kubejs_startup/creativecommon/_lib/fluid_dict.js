@@ -85,7 +85,7 @@ f.t_melon_juice = '#forge:fluid/melon_juice';
 f.tomato_sauce = 'create_central_kitchen:tomato_sauce';
 f.t_tomato_sauce = '#forge:fluid/tomato_sauce';
 
-//Pack fluids (Creative Delight kubejs_startup/creativedelight/fluids.js; creativeengineering: until 2026-11-06, remapped by CD swaps/food_fluids.json)
+//Pack fluids (Creative Delight kubejs_startup/creativedelight/fluids.js)
 f.chorus_juice = 'creativedelight:chorus_juice';
 f.t_chorus_juice = '#forge:fluid/chorus_juice';
 f.carrot_juice = 'creativedelight:carrot_juice';

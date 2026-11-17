@@ -221,3 +221,9 @@ queue section SQ-CDJ5.
   (patcherMod `SwapLists`) that makes Forge ignore the old id, so an old world loads without the missing-registry warning
   and the placed plates are gone; its `plate_displayable.json` entry removed. Rerun SQ-CDJ-05 / SQ-DDP-01 with the new
   patcherMod.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-02: A Creative Delight member since 2026-11-02 (plan_creative_delight.md A2): build from the instance root (`./gradlew :backportedDisplay:build`); it ships only through `:creativeDelight:installToMods` (development/creativeDelight/members/display/build.gradle)
+- 2026-11-02: Since the port became a Creative Delight member (2026-11-02, plan_creative_delight.md A6) they are keys of Creative Delight's config, section {@code [display]} (CD's CDConfig defines them, comments and defaults); the port registers no config file of its own (development/creativeDelight/members/display/src/main/java/com/jkvin114/displaydelight/init/DisplayConfig.java)
+- 2026-11-02: development/creativeDelight/members/display (a Creative Delight member since 2026-11-02) (development/creativeDelight/members/display/tools/port_resources.py)

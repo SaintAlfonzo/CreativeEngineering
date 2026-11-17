@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: create_confectionery
 // requires: create
-// Ruby chocolate from dragon's breath fluid in a heated mixer. Moved from the pack's
-// kubejs/server_scripts/cooking/chocolate.js 2026-10-25, rows unchanged.
+// Ruby chocolate from dragon's breath fluid in a heated mixer.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

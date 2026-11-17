@@ -84,7 +84,6 @@ public class FitTest {
 				&& st.fits().get("land/sky").contains("#minecraft:is_ocean"), "sky village -> land/sky (land + the oceans)");
 		check(!st.structures().get("mysticrift_pillagers_towers_aris:oak_wood_pillager_tower").contains("land/spruce"),
 				"no structure gets a sibling fit it isn't tagged with (oak tower has no land/spruce)");
-		// 2026-11-02 (structures/contents #1): Philip's Nether ruin moved to the Nether, on its own fit (no land parent)
 		check(List.of("nether/wastes").equals(st.structures().get("philipsruins:start_nether_ruin")),
 				"Philip's nether ruin -> nether/wastes only");
 

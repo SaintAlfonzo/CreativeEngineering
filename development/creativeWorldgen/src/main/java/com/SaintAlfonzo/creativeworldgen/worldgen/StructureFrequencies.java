@@ -68,10 +68,10 @@ import java.util.function.Supplier;
  * which anchor its start chose ({@link #anchorChosen}); /locate's prediction can't know the anchor yet, so it
  * only rolls the meta's own frequency.
  *
- * BIOME FACTORS (a group's "biome_frequency", 2026-10-14, plan 7.4.5 D4): every member of the set rolls frequency x
- * the factor of the biome at its generation point (the first rule the biome matches, else "default"), the point and
- * biome Structure#generate tests. Generation finds that point again at the roll (findGenerationPoint is seeded from
- * the chunk, so it is the same point); /locate's prediction applies the factor where it already has the point
+ * BIOME FACTORS (a group's "biome_frequency", plan 7.4.5 D4): every member of the set rolls frequency x the factor
+ * of the biome at its generation point (the first rule the biome matches, else "default"), the point and biome
+ * Structure#generate tests. Generation finds that point again at the roll (findGenerationPoint is seeded from the
+ * chunk, so it is the same point); /locate's prediction applies the factor where it already has the point
  * (LocatePrediction#plain). Same roll value, same biome, so both agree. Factors are 0..1, so the frequency-only roll
  * (keepsAt, predictRejects) stays a safe "certainly no".
  *

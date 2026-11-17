@@ -1,13 +1,13 @@
-// creativeCompat: Creative Compat (mod id creativecompat, feature_writeup/creative_compat.md), carved out of patcherMod on
-// 2026-11-01 (creative_split.md 7.5, 7.6). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
-// This file adds what is specific to Compat, the same way creativeCalendar/build.gradle does:
+// creativeCompat: Creative Compat (mod id creativecompat, feature_writeup/creative_compat.md). Shared Forge setup comes
+// from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Compat, the same way
+// creativeCalendar/build.gradle does:
 //   - the Compat script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up without a
 //     rebuild, copied into the jar at the same resource path:
 //       kubejs/data/creativecompat/kubejs/    -> data/creativecompat/kubejs/    (server scripts)
 //       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
 //     Creative Common's startup loader.
-//   - no nested members (Tempad was one until 2026-11-07; now its own jar, development/backportedTempad), so Compat
+//   - no nested members (Tempad was one; now its own jar, development/backportedTempad), so Compat
 //     needs no donor jar.
 // Build: ./gradlew :creativeCompat:build --offline   Install: ./gradlew :creativeCompat:installToMods
 plugins {

@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * colour resolver asks them on every call: is the biome seasonal (blacklist scan), tropical (tropical list scan),
  * "less colour change" (list scan), is the dimension whitelisted (list scan), and reads changeGrassColor /
  * changeFoliageColor, each a ForgeConfigSpec lookup. Xaero's World Map calls the resolver up to 9 times per map pixel
- * and chunk meshing once per tinted block; on 2026-11-07 that was about 6% of the render thread.
+ * and chunk meshing once per tinted block.
  *
  * The answers depend only on the biome or dimension, the season tags and the Serene Seasons and Creative Calendar
  * configs, so they are kept until tags reload (SeasonTypes.onTagsUpdated) or either mod's config loads or reloads

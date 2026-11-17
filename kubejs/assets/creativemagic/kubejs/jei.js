@@ -1,7 +1,7 @@
 // requires: creativemagic
-// Creative Magic: the client half of magic/enchants.js and the three Nock Enough Arrows enchantment mixins; moved from
-// kubejs/client_scripts/jeichanges.js on 2026-11-04, rows unchanged. An enchanted book holding Stockpile, Recovery or
-// Cycle (at any level, read from its NBT) gets the red removed-item line.
+// Creative Magic: the client half of magic/enchants.js and the three Nock Enough Arrows enchantment mixins. An
+// enchanted book holding Stockpile, Recovery or Cycle (at any level, read from its NBT) gets the red removed-item
+// line.
 ItemEvents.tooltip(e => {
 	var unwantedIds = ['nock_enough_arrows:stockpile', 'nock_enough_arrows:recovery', 'nock_enough_arrows:cycle']
 

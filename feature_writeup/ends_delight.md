@@ -454,3 +454,10 @@ Tests (scratch queue SQ-ENM-01 to -05; SQ-DNR-E-01 to -04 and SQ-EDL-01, -03, -0
 ## Owner note (scratchpad 2026-11-13, not built)
 
 TODO `gear/tuning #22`: rework the Dragon Tooth Knife and remove the Dragon Egg Shell Knife. This replaces the decision in `devmods_evaluation.md` 3.1 to smith the tooth knife from the egg shell knife.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-01: <p> Changes made in memory (the same edits the member shipped as files until 2026-11-01): <ul> (development/creativeDelight/members/ends/src/main/java/com/SaintAlfonzo/creativedelight/enders/upstream/EndersTranslator.java)
+- 2026-11-02: Since 2026-11-02 (plan J1, ends_delight.md 5.9) the overlay also holds the enders_additions mod (Ender's Delight 1.1.4's End plants and dishes, our code, package com.SaintAlfonzo.creativedelight.enders), folded in from the former endersAdditions member; its art and data are read at runtime from enders_upstream/ (development/creativeDelight/members/ends/build.gradle)

@@ -91,8 +91,7 @@ final class PassPhase35Test {
                 r.carried() != null && r.carried() == 5
                         && Integer.valueOf(5).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers"))
                         && at(r.text(), "leaf_piles") == null);
-        // what Forge then does: correct the file against the spec; the carried value must survive
-        // then the 2026-11-15 move (PassConfigMigration): leaf_pile -> layers, minLayers 5 carried
+        // what Forge then does: correct the file against the spec
         CommentedConfig cfg = new TomlParser().parse(PassConfigMigration.migrate(r.text()).text());
         CompatConfig.SPEC.correct(cfg);
         check("migrate: then leaf_pile -> layers and Forge's correction keep minLayers 5 and fill the table",

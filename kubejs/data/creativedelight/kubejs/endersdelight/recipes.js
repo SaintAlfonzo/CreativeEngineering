@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: endersdelight
 // Ender's Delight recipe changes: chorus juice (the pack's chorus juice fluid is its liquid form), grid routes,
-// assemblies. Non-member file (2.1): recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes). Moved from
-// the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
+// assemblies. Non-member file (2.1): recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -31,11 +30,11 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
 
-		//######################### Shulker meat #########################
-		// Ender's mollusk and filet are back as their own items (plan_meals_rolls_bbq.md C3, 2026-11-04: the End Skewer
-		// takes the mollusk only; the 11-02 merge, dishes/ingredients #32, is undone for these two). Ender's knife drop and
-		// its mollusk-to-filet cut are upstream's again. Every other recipe keeps End's Delight meat: the stuffed shulker
-		// takes End's shulker meat in place of the mollusk.
+		//######################### Shulker meat ######################### Ender's mollusk and filet are back as their own
+		// items (plan_meals_rolls_bbq.md C3, 2026-11-04: the End Skewer takes the mollusk only; the merge,
+		// dishes/ingredients #32, is undone for these two). Ender's knife drop and its mollusk-to-filet cut are upstream's
+		// again. Every other recipe keeps End's Delight meat: the stuffed shulker takes End's shulker meat in place of the
+		// mollusk.
 		R.replaceInput({ id: 'endersdelight:cooking/stuffed_shulker' }, i.shulker_mollusk, i.shulker_meat, e)
 
 		//######################### Shulker bowls #########################

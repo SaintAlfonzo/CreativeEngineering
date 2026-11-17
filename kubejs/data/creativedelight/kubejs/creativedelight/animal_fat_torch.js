@@ -1,7 +1,6 @@
 // requires: creativedelight
-// The animal-fat torch: Delightful's animal oil bottle torch is replaced by 12 torches from any animal fat over a stick.
-// Moved from Creative Engineering's server scripts (wood/ash.js) 2026-11-06, rows unchanged. Non-member file: recipe
-// ids are creativedelight:<type>/<suffix> (global.CD.recipes; was creativeengineering:).
+// The animal-fat torch: Delightful's animal oil bottle torch is replaced by 12 torches from any animal fat over a
+// stick. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes; was creativeengineering:).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

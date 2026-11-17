@@ -32,8 +32,8 @@ public final class Recolour {
 	}
 
 	/**
-	 * Palette order: brightness, then alpha, blue, green, red. The tool breaks brightness ties in Python set order; this rule
-	 * matches the owner's 2026-10-31 rack art for 20 of its 21 woods (the 21st differs only between equally bright colours).
+	 * Palette order: brightness, then alpha, blue, green, red. The tool breaks brightness ties in Python set order; this
+	 * rule matches the owner's rack art for 20 of its 21 woods (the 21st differs only between equally bright colours).
 	 */
 	static final Comparator<Integer> ORDER = Comparator.<Integer>comparingInt(Recolour::brightness)
 			.thenComparingInt(c -> (c >>> 24) & 0xFF)

@@ -75,10 +75,10 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			Map.entry("LowGravityItemPhysicMixin", List.of("itemphysic")),
 			Map.entry("NeaWhistleGoalSkipMixin", List.of("nock_enough_arrows")),
 			// no MOD_RANGE row: the jar's mods.toml version is ${file.jarVersion} with no Implementation-Version, and the
-			// redirect is require = 0, so any loaded Rare Ice keeps it (2026-11-15, SQ-MELT-09)
+			// redirect is require = 0, so any loaded Rare Ice keeps it (SQ-MELT-09)
 			Map.entry("RareIceLightMeltMixin", List.of("rare_ice")),
-			// effect mixin from Creative Brewing (plan_cb_polish.md 2, 2026-11-06); the Create tea pipe icon went to
-			// Engineering and the Fruits Delight remap to Delight 2026-11-07 (creative_engineering.md 7.1)
+			// effect mixin from Creative Brewing (plan_cb_polish.md 2); the Create tea pipe icon went to Engineering
+			// and the Fruits Delight remap to Delight (creative_engineering.md 7.1)
 			Map.entry("PhantomSpawnerBaneSkipMixin", List.of("better_beacons")));
 
 	/**

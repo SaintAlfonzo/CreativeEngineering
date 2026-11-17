@@ -139,13 +139,13 @@ def save(im, sub, name):
     im.save(path)
 
 
-# Owner picks 2026-11-03 (apply): jar, jam block, jello block and bowl are interpolated for these jams; pepper is left
-# alone (its art is the committed original: jar, interior, jam, jello, bowl); the interiors listed in
-# INTERIOR_DROP_DARKEST are swapped without the sample's darkest colour; the other interiors are the plain swap.
+# Owner picks (apply): jar, jam block, jello block and bowl are interpolated for these jams; pepper is left alone (its
+# art is the committed original: jar, interior, jam, jello, bowl); the interiors listed in INTERIOR_DROP_DARKEST are
+# swapped without the sample's darkest colour; the other interiors are the plain swap.
 INTERPOLATE = {'ancient_fruit', 'banana', 'raspberry', 'green_grape', 'mulberry', 'red_grape', 'salmonberry',
                'strawberries', 'pepper'}
 # SKIP: art kept as it is on disk. Pepper: committed originals, except its jam and jello block (plain swap of the older
-# sample). Accepted by the owner 2026-11-03 (frozen): ancient fruit, banana, cherry, mulberry, raspberry, strawberries.
+# sample). Accepted by the owner (frozen): ancient fruit, banana, cherry, mulberry, raspberry, strawberries.
 SKIP = {'pepper', 'ancient_fruit', 'banana', 'cherry', 'mulberry', 'raspberry', 'salmonberry', 'strawberries'}
 INTERIOR_DROP_DARKEST = {'banana', 'cherry', 'green_grape', 'mulberry', 'raspberry', 'salmonberry'}
 
@@ -159,7 +159,7 @@ GRADIENT_INTERIORS = {'banana', 'raspberry', 'mulberry'}
 EVEN_INTERIORS = {'red_grape': 0, 'green_grape': 1, 'cherry': 1, 'salmonberry': 2}
 
 # Pieces made with even_swap (forced even gradient) instead of the plain swap, which skips non-monotonic palette entries
-# (pepper's dark reds are darker than its browns' brightness rank): owner 2026-11-04
+# (pepper's dark reds are darker than its browns' brightness rank): owner
 EVEN_PIECES = {'pepper': {'jar', 'jam_block'}}
 
 PIECES = ('jar', 'interior', 'jam_block', 'jello_block', 'bowl', 'jars')

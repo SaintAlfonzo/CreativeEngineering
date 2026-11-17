@@ -702,6 +702,23 @@ UI
 - R7 pancake family moves out of Veggies to the food family rules (TODO `dishes/meals #12`, `food/types-and-tuning #13`); no base item.
 - Cucumber dough becomes veggie dough, recoloured to the veggie noodles palette (`dishes/ingredients #33`).
 
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Veggies Delight trades (Creative Delight members #2, moved from the pack's economy/trades.js and economy/wandering_trades.js 2026-10-25, rows unchanged): feature_writeup/veggies_delight.md 4.13 (kubejs/data/creativedelight/kubejs/veggiesdelight/trades.js)
+- 2026-10-25: Moved 2026-10-25 from the pack's startup_scripts/compost/compost_values.js, same rows and chances (12 items); the engine is patcherMod's (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here (development/creativeDelight/src/main/resources/kubejs_startup/veggiesdelight/compost.js)
+- 2026-10-25: Veggies Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js)
+- 2026-10-25: Veggies Delight recipe rows (Creative Delight members #2, creative_delight.md 27; moved from the pack's server_scripts/cooking/cooking.js and baking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js)
+- 2026-10-25: Veggies Delight loot rows: its crop crates and 9 chest entries (Creative Delight members #2, moved from the pack's loot/07_rules.js 2026-10-25, rows unchanged), and Rustic Delight's bell pepper crates (vintageport #5): its bell pepper is Rustic's, whose crates and seed bag had no pack rule (kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js)
+- 2026-10-25: Veggies Delight items in the pack's food and cooking item tags (Creative Delight member #2, moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry) (kubejs/data/creativedelight/kubejs/veggiesdelight/tags.js)
+- 2026-10-27: Coleslaw: 12 hunger, modifier 0.6 kept = 14.4 saturation (upstream 8 / 9.6; 11 from 2026-10-27) (development/creativeDelight/src/main/resources/kubejs_startup/veggiesdelight/veggies_foods.js)
+- 2026-10-28: Rule (TODO dishes/meals #42, owner 2026-10-28): both above the sum of its inputs, zucchini 3 / 2.4 + potato 1 / 0.6 + carrot 3 / 3.6 + cabbage 2 / 1.6 = 9 / 8.2 (development/creativeDelight/src/main/resources/kubejs_startup/veggiesdelight/veggies_foods.js)
+- 2026-11-01: ######################### Vegan pizza ######################### Pizza family rule (food_families.md `pizza/whole`; owner 2026-11-01, creativedelight/members #20, #30 R5): base row any dough, tomato sauce, any dough; toppings above (VD's own: bell pepper, a vegetable, onion) (kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js)
+- 2026-11-01: Mashed Sweet Potatoes take salt like More Delight's Mashed Potatoes (merges/dishes #2, owner 2026-11-01) (kubejs/data/creativedelight/kubejs/veggiesdelight/tags.js)
+- 2026-11-01: ######################### Sweet potato dough ######################### Dough-for-bread rule (owner 2026-11-01, TODO baking/baked-goods #17, #31): like every plain dough it bakes into bread only in the oven on a baking sheet (#forge:dough, farmersdelight/recipes.js); VD's furnace, smoker and campfire bread go (kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js)
+- 2026-11-02: ######################### Zucchini quiche ######################### Quiche (merges/dishes #8, owner 2026-11-02): baking type, oven only with a pie tin, no plating, as Brewin's quiche (brewinandchewin/recipes.js): pie crust + cheese wedge + milk + egg + 2 roasted zucchini (kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js)
+- 2026-11-02: A Creative Delight member (folder moved here 2026-11-02): build and install through `:creativeDelight:` only (development/creativeDelight/members/veggies/build.gradle)
+
+
 ## Owner notes (scratchpad 2026-11-09)
 
 Vegetarian patty renamed Veggie patty, and a cave carrot cut to 2 raw veggie patties (baked: 2 cooked): not started; the recipes still say vegetarian. TODO `dishes/ingredients #43`; related `merges/dishes #13`.

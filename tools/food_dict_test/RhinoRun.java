@@ -24,7 +24,7 @@ public class RhinoRun {
 		}
 		try {
 			cx.evaluateString(scope, food, "food_dict.js", 1, null);
-			// tool and misc dicts (2026-11-02): same check, load order tool (979) then misc (978)
+			// tool and misc dicts: same check, load order tool (979) then misc (978)
 			for (String sub : new String[] {"tool_dict.js", "misc_dict.js"}) {
 				if (Files.exists(lib.resolve(sub))) cx.evaluateString(scope, Files.readString(lib.resolve(sub)), sub, 1, null);
 			}

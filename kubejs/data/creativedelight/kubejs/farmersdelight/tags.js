@@ -16,9 +16,8 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_forge_fences, i.rope_fence)
 	t.add(e, i.t_forge_fence_gates, i.rope_fence_gate)
 
-	// Moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; shared tags are split by
-	// the mod owning each entry (the other entries are in that mod's tags.js beside this folder).
-	// flour / dough cleanup (the PneumaticCraft flour: pneumaticcraft/tags.js)
+	// Shared tags are split by the mod owning each entry (the other entries are in that mod's tags.js beside this
+	// folder). flour / dough cleanup (the PneumaticCraft flour: pneumaticcraft/tags.js)
 	t.clearAll(e, i.out_dough)
 
 	// cooked meat

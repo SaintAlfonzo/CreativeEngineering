@@ -31,7 +31,7 @@ ServerEvents.tags('block', e => {
 
 	// Cobwebs and barbed wire, by id: none of the modded webs extends WebBlock (phase 0 brief 3)
 	t.add(e, PASS.cobweb, [i.cobweb, 'securitycraft:reinforced_cobweb', 'fantasyfurniture:decorations/spider_web_small',
-		'fantasyfurniture:decorations/spider_web_wide', i.barbed_wire, i.razor_wire])  // razor wire: owner 2026-11-15
+		'fantasyfurniture:decorations/spider_web_wide', i.barbed_wire, i.razor_wire])  // razor wire: owner
 
 	// Dense crops; tomatoes on ropes and sticks sit here, not in rope. Rice panicles count as rice's neighbours.
 	t.add(e, PASS.dense_crop, [b.corn_crop, b.hemp, i.farmersdelight_rice,
@@ -50,13 +50,13 @@ ServerEvents.tags('block', e => {
 	t.add(e, PASS.bush, [b.sweet_berry_bush, 'hearthandharvest:raspberry_bush', 'vinery:red_grape_bush',
 		'vinery:white_grape_bush', 'vinery:savanna_grape_bush_red', 'vinery:savanna_grape_bush_white',
 		'vinery:taiga_grape_bush_red', 'vinery:taiga_grape_bush_white',
-		'delightful:salmonberry_bush', b.cranberry_bush])  // salmonberry, cranberry: owner 2026-11-15
+		'delightful:salmonberry_bush', b.cranberry_bush])  // salmonberry, cranberry: owner
 
-	// Layer height blocks (plan_post_scratch_1115b.md D1, 2026-11-15): one rule by height for every stacked-layer block.
-	// Layer height blocks (owner 2026-11-16): snow layers, every Immersive Weathering leaf pile (azalea flower pile
-	// included) and Twigs bamboo leaves. Sand, ash, fodder, sawdust and salt layers are dust/soft: no walk-through.
+	// Layer height blocks (plan_post_scratch_1115b.md D1): one rule by height for every stacked-layer block. Layer
+	// height blocks (owner): snow layers, every Immersive Weathering leaf pile (azalea flower pile included) and Twigs
+	// bamboo leaves. Sand, ash, fodder, sawdust and salt layers are dust/soft: no walk-through.
 	t.addMatching(e, PASS.layers, [b.snow, '/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', i.bamboo_leaves])
-	// Leaf layers never act whole (owner 2026-11-16): no solidBelowFull for them. Snow layers keep it.
+	// Leaf layers never act whole (owner): no solidBelowFull for them. Snow layers keep it.
 	t.addMatching(e, 'creativecompat:passthrough_layers_open', ['#' + PASS.layers], { except: [b.snow] })
 
 	// Vines: vanilla, Vinery jungle grape vines, Hearth hops, Floral Enchantment, Quark, Botania, Immersive Weathering
@@ -75,8 +75,8 @@ ServerEvents.tags('block', e => {
 		i.wild_coffee_bush, i.wild_tea_bush, i.wild_pineapple,
 		i.wild_hops], { except: tiered().filter(x => x !== '#' + PASS.wild_crop) })
 
-	// Planted crops: #minecraft:crops misses many modded ones. Supplementaries flax is out (owner, 2026-11-14).
-	// Farmer's Respite coffee: 2+ blocks from planting, growth `any` (passthrough_growth_any below).
+	// Planted crops: #minecraft:crops misses many modded ones. Supplementaries flax is out (owner). Farmer's
+	// Respite coffee: 2+ blocks from planting, growth `any` (passthrough_growth_any below).
 	t.addMatching(e, PASS.crop, ['#minecraft:crops', 'minecraft:attached_melon_stem', 'minecraft:attached_pumpkin_stem',
 		b.nether_wart_crop, 'farmersrespite:coffee_bush', 'farmersrespite:coffee_bush_top',
 		'farmersrespite:coffee_stem', 'farmersrespite:coffee_stem_middle', 'farmersrespite:coffee_stem_double',
@@ -91,14 +91,14 @@ ServerEvents.tags('block', e => {
 		{ except: [b.tall_blue_pickerelweed, b.tall_purple_pickerelweed]
 			.concat(tiered().filter(x => x !== '#' + PASS.tall_plant)) })
 
-	// Short plants at 1.00. Left out on purpose (they keep their own slowdown, owner 2026-11-14): Floral Enchantment
-	// bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed.
+	// Short plants at 1.00. Left out on purpose (they keep their own slowdown, owner): Floral Enchantment bushes,
+	// Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed.
 	t.addMatching(e, PASS.grass, [i.grass, i.fern, i.dead_bush, i.nether_sprouts,
 		i.crimson_roots, i.warped_roots, i.hanging_roots, 'immersive_weathering:hanging_roots_wall',
 		i.frosty_grass, i.frosty_fern, i.weeds,
 		i.beachgrass, i.sandy_shrub, i.t_small_flowers, i.t_saplings,
 		'flowerpatch:*_patch', i.gossypium,
-		// Botania flowers and mushrooms (owner 2026-11-15); floating flowers are solid, left out
+		// Botania flowers and mushrooms (owner); floating flowers are solid, left out
 		'#botania:mystical_flowers', '#botania:shiny_flowers', i.t_botania_special_flowers, '/^botania:[a-z_]+_mushroom$/'],
 		{ except: [i.azalea, i.flowering_azalea, 'floralench:*_bush', 'farmersrespite:wither_roots', 'farmersrespite:wither_roots_plant',
 			i.beanstalk_thorns, i.blue_pickerelweed, i.purple_pickerelweed]

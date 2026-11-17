@@ -229,9 +229,9 @@ public final class UpstreamTranslator {
     private static final Pattern WINE_RACK = Pattern.compile("block\\.vinery\\.([a-z_]+)_wine_rack_(big|small|mid)");
 
     /**
-     * alcohol/vineryport #16 (test updates 2026-10-20): racks by how many they hold, "Single / Small / Big Oak Wine
-     * Rack" (1, 4, 9 bottles), so the wines' "Fits in" lines can name them. Upstream says "Big Oak Wine Bottle Storage",
-     * "Oak Wine Rack", "Small Oak Wine Bottle Storage".
+     * alcohol/vineryport #16 (test updates): racks by how many they hold, "Single / Small / Big Oak Wine Rack" (1, 4, 9
+     * bottles), so the wines' "Fits in" lines can name them. Upstream says "Big Oak Wine Bottle Storage", "Oak Wine
+     * Rack", "Small Oak Wine Bottle Storage".
      */
     private static void renameWineRacks(JsonObject lang) {
         for (Map.Entry<String, JsonElement> entry : lang.entrySet()) {

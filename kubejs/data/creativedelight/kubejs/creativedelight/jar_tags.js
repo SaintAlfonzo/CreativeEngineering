@@ -6,7 +6,7 @@
 // Every family is nested into #supplementaries:cookies, so putting an item in a family is enough. An item that is
 // jarable but in no family (moredelight:toast, the Hyperexperience bottle) still fills a jar, on its own.
 // Removed items (honey apple, chocolate coins) are left out; see the writeup for what was considered and skipped.
-// Moved from the pack's server_scripts/tags/jartags.js 2026-10-25, rows unchanged: one table, kept whole here.
+// Moved from the pack's server_scripts/tags/jartags.js rows unchanged: one table, kept whole here.
 
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
@@ -19,7 +19,7 @@ ServerEvents.tags('item', e => {
 			i.cookie, i.honey_cookie, i.sweet_berry_cookie, i.green_tea_cookie, i.mulberry_cookie, i.cherry_cookie,
 			i.maple_cookie, i.bayberry_cookie, i.cranberry_cookie, i.lemon_cookie, i.persimmon_cookie, i.golden_cookie,
 			i.enchanted_golden_cookie, i.uncanny_cookies, i.mana_cookie, i.gingerbread_man,
-			// the rest of the cookie family (food_families.md `cookie`, baking audit 2026-10-27)
+			// the rest of the cookie family (food_families.md `cookie`, baking audit)
 			i.oatmeal_cookie, i.bat_cookie, i.chorus_cookie, i.blazecookie, i.ghastcookie, i.guardiancookie,
 			i.magicbuttercookie, i.magmacookie, i.mitecookie, i.pearlcookie,
 		],

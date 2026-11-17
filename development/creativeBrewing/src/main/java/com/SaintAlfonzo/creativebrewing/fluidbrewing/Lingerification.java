@@ -44,8 +44,8 @@ import java.util.List;
  *
  * <p>NBT-carrying {@code create:potion} inputs match on IE's own exact NBT check: the input tag is the
  * {@code {Bottle, Potion}} pair Create writes on every potion fluid. Creative Engineering's
- * {@code FluidTagInputMixin} (optional, since 2026-11-07) relaxes it to a subset match, so stacks with
- * extra keys also match there; nothing here needs it.
+ * {@code FluidTagInputMixin} (optional) relaxes it to a subset match, so stacks with extra keys also
+ * match there; nothing here needs it.
  *
  * <p>Runs once from {@code FMLCommonSetupEvent} (main thread, before recipe load).
  * {@link GeneratedListRecipe#LIST_GENERATORS} is a plain static map and the put survives

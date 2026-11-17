@@ -1,5 +1,5 @@
 // requires: creativeengineering
-// Creative Engineering; moved from kubejs/server_scripts/engineering/create_utilities.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
+// Creative Engineering.
 ServerEvents.recipes(e => {
 console.log('Hello! The create utilities event has started!')
 const R = global.NCH.forPack('creativeengineering')

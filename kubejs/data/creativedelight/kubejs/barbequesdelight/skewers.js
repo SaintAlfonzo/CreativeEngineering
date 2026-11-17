@@ -51,9 +51,9 @@ ServerEvents.recipes(e => {
 				rawInputs: [i.onion, i.tomato, i.t_food_raw_meat], cookedInputs: [i.onion, i.tomato, i.cooked_meat],
 				steps: [i.onion, i.tomato, i.cooked_meat] })
 		}
-		// End Skewer (End's Delight end_barbecue_stick, owner 2026-11-04): 1 skewer, not 3; Ender's Delight's Shulker
-		// Mollusk only (no End's shulker meat, no shulker tag), no endermite meat. The mollusk has no cooked form, so the
-		// heatless craft takes it too; the cooking step is the skewer's. Grill as lamb
+		// End Skewer (End's Delight end_barbecue_stick, owner): 1 skewer, not 3; Ender's Delight's Shulker Mollusk only
+		// (no End's shulker meat, no shulker tag), no endermite meat. The mollusk has no cooked form, so the heatless
+		// craft takes it too; the cooking step is the skewer's. Grill as lamb
 		if (on('ends_delight') && on('endersdelight')) {
 			R.remove({ id: 'ends_delight:food/end_barbecue_stick' }, e)
 			F.skewer({ raw: i.raw_end_barbecue_stick, cooked: i.end_barbecue_stick, grill: 320, shape: 'shapeless',

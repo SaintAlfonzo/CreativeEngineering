@@ -208,6 +208,22 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
   keys, 2 server scripts, 31 lang keys and the WTHIT entry moved; CD and CB require Calendar; Vinery's `PackTime` calls
   it directly. patcherMod, Calendar, CD and CB compile; SQ-CAL rows queued; not installed.
 
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-30: Greenhouse rule (owner 2026-10-30): a greenhouse removes season fertility (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/CropSeasons.java)
+- 2026-11-01: Every section moved from creativeengineering-common.toml on 2026-11-01 with its keys and comments unchanged (rule 3.3 of creative_split.md): {@code [seasons]}, {@code [crop_seasons]}, {@code [time]} (with {@code .day}, {@code .seasons}, {@code .wine}, {@code .wine.boosts}), and the two keys of other sections that only Calendar reads, kept under their old section names: {@code [perf] seasonsMeltIntervalTicks} and {@code [wthit] cropSeasons} / {@code cropOutOfSeason} (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CalendarConfig.java)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md 4.4); moved from kubejs/server_scripts/tags/ on 2026-11-01 (kubejs/data/creativecalendar/kubejs/sereneseasons/seasontags.js)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): moved here from patcherMod's time/ package on 2026-11-01 with the rest of [time]; the class name and getters are the contract with the Vinery port's PackTime (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/time/WineTime.java)
+- 2026-11-01: creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md), carved out of patcherMod on 2026-11-01 (development/creativeCalendar/build.gradle)
+- 2026-11-01: Creative Calendar (feature_writeup/creative_calendar.md): the pack's calendar, day and night length, seasons, season types by biome and crop seasons, carved out of patcherMod on 2026-11-01 (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
+- 2026-11-02: Adding every forward client step instead (before 2026-11-02) counted a jump twice when it came with its sync ({@code /ccaltime date}, /time add): the server's value already held it, and Better Days then glides the client's time of day up to the new one, adding it again (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/mixin/SereneSeasonsClientClockMixin.java)
+- 2026-11-02: LoadingModList, not ModList: IW builds its grass block in vanilla bootstrap, before ModList exists (boot crash 2026-11-02, r1102b) (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/GrassSeasonHook.java)
+- 2026-11-07: Xaero's World Map calls the resolver up to 9 times per map pixel and chunk meshing once per tinted block; on 2026-11-07 that was about 6% of the render thread (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonAnswers.java)
+- 2026-11-10: The namespace of every tag this mod keys (its own mod id since 2026-11-10) (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
+- 2026-11-10: Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE}) since 2026-11-10 (namespace_move.md step 6); they were {@code creativeengineering:} until then (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
+
+
 ## 10. License audit (2026-11-04, plan_cb_publish.md Step 2)
 
 `creativecalendar-1.0.0.jar` (23:34): 65 classes, 25 mixins (Serene Seasons, Better Days, IW, Botania, Vinery, Vintage,

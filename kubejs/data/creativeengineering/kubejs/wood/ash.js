@@ -1,5 +1,5 @@
 // requires: creativeengineering
-// Creative Engineering; moved from kubejs/server_scripts/wood/ash.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
+// Creative Engineering.
 ServerEvents.recipes(e => {
 	console.log('Ash starting')
 
@@ -22,7 +22,6 @@ ServerEvents.recipes(e => {
 		R.axeScraping(Item.of(i.soot).withChance(chance), chimney, e, name, { soot: true })
 	})
 
-	// The animal-fat torch moved to Creative Delight 2026-11-06 (creativeengineering/animal_fat_torch.js there).
 
 	console.log('Ash done')
 })

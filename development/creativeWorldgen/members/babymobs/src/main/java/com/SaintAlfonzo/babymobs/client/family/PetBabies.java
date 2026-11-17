@@ -57,11 +57,11 @@ public final class PetBabies {
                 // 1.19.2 CatRenderer.scale shrinks every cat to 0.8; 26.1 builds that into the adult mesh only
                 .pose((e, pose) -> pose.scale(1.25F, 1.25F, 1.25F))
                 // More Mob Variants cat coats: the cat's own vanilla coat baby, also with variantBabies = OLD_MODELS
-                // (owner, 2026-11-01); Cozy's end / nether coats stay variants (old baby unless NEW_MODELS)
+                // (owner); Cozy's end / nether coats stay variants (old baby unless NEW_MODELS)
                 .poolNamespace("moremobvariants");
         BabyRender.register(EntityType.CAT, cat);
-        // Cozy's Improved Cats: its own cat type (extends Cat, renderer extends CatRenderer, vanilla CatModel). Its end and
-        // nether coats have no baby texture; catTexture uses the baby of the cat's own vanilla coat (owner, 2026-11-01).
+        // Cozy's Improved Cats: its own cat type (extends Cat, renderer extends CatRenderer, vanilla CatModel). Its end
+        // and nether coats have no baby texture; catTexture uses the baby of the cat's own vanilla coat (owner).
         BabyRender.register(new ResourceLocation("cozys-improved-cats", "improved_cat"), cat);
 
         BabyRender.register(EntityType.OCELOT, BabyKit.<Ocelot>of("ocelot", OcelotModel.class, PetBabies::feline, BabyOcelotModel::new,

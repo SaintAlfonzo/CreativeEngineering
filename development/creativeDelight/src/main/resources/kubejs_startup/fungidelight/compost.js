@@ -1,9 +1,8 @@
 // requires: fungidelight
-// Fungi Delight compost values: Creative Delight QoL-4 (creative_delight.md 8). Moved 2026-10-25 from the pack's
-// startup_scripts/compost/compost_values.js, same rows and chances (19 items); the engine is patcherMod's
-// (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here. Startup script in the CD jar: an edit needs a CD rebuild and restart.
-// The rows count only while [qol] compost is on (checked at every table rebuild, after the configs load); off, these
-// foods fall to the rules.
+// Fungi Delight compost values: Creative Delight QoL-4 (creative_delight.md 8). The engine is patcherMod's
+// (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here. Startup script in the
+// CD jar: an edit needs a CD rebuild and restart. The rows count only while [qol] compost is on (checked at every table
+// rebuild, after the configs load); off, these foods fall to the rules.
 ;(function () {
 	var i = global.item
 	var C = global.compost

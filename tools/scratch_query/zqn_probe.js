@@ -5,7 +5,7 @@
 //                         onGround, then bot.tryToStartFallFlying() and isFallFlying
 //   /zqn flying NAME      isFallFlying, dimension, position and motion of the bot
 //   /zqn hand NAME        main-hand item id, damage, enchantments; total XP points and level
-// Output: "[zqn] ..." lines in logs/latest.log, then "[zqn] done". Written 2026-11-15 (r1115 runner-7).
+// Output: "[zqn]..." lines in logs/latest.log, then "[zqn] done".
 (() => {
     const $QArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $QReg = Java.loadClass('net.minecraft.core.Registry')

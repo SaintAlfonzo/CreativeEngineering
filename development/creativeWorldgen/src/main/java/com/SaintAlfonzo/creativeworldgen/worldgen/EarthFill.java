@@ -124,7 +124,7 @@ public final class EarthFill {
 	/** Structures built on a stone or brick base (the drum tower's andesite plate): their base blocks count as earth too. */
 	static final TagKey<Structure> STONE_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeWorldgen.NS, "earth_fill/stone_base"));
 	static final TagKey<Block> STONE_BLOCKS = BlockTags.create(new ResourceLocation(CreativeWorldgen.NS, "earth_fill/stone_base"));
-	/** Desert and badlands structures on sandstone or terracotta floors: those blocks count as earth too (2026-11-02). */
+	/** Desert and badlands structures on sandstone or terracotta floors: those blocks count as earth too. */
 	static final TagKey<Structure> SAND_BASE = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeWorldgen.NS, "earth_fill/sand_base"));
 	static final TagKey<Block> SAND_BLOCKS = BlockTags.create(new ResourceLocation(CreativeWorldgen.NS, "earth_fill/sand_base"));
 	static final TagKey<Structure> WATER_STRUCTURES = TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(CreativeWorldgen.NS, "water_fill/structures"));
@@ -275,7 +275,7 @@ public final class EarthFill {
 				Kind kind = terrain.at(x, y, z);
 				if (kind == Kind.WATER || kind == Kind.AIR) {
 					// open down to the piece's bottom (y - bottom of its own layers), then more than 'fills' below it;
-					// water by its own, shorter reach (waterReach, 2026-11-02)
+					// water by its own, shorter reach (waterReach)
 					int f = kind == Kind.WATER ? fillsWater : fills;
 					int deeper = f + (y - piece.bottom()) + 2;
 					if (f < 0 || terrain.openBelow(x, y, z, deeper) >= deeper) {
@@ -1213,8 +1213,8 @@ public final class EarthFill {
 		EarthFillLog log = WorldgenConfig.earthLog();
 		if (log != EarthFillLog.ALL && earthUnlimited(structure)) return null;
 		// a stone base counts too: its size and its overhang (02_new_mods_tests.md 4.2: the drum tower's 49x45
-		// andesite plate was "small, 10 earth" and could hang over a cliff unchecked)
-		// and a sandstone or terracotta floor in the desert and badlands (2026-11-02, earth_base_scan.py)
+		// andesite plate was "small, 10 earth" and could hang over a cliff unchecked) and a sandstone or
+		// terracotta floor in the desert and badlands (earth_base_scan.py)
 		List<TagKey<Block>> earth = withBases(earthTags(), structure.is(STONE_BASE), structure.is(SAND_BASE));
 		if (earth.isEmpty()) return null;
 		int layers = WorldgenConfig.earthBaseLayers();

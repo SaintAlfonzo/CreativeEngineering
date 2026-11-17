@@ -863,3 +863,12 @@ Donor jars and performance:
   tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.
   Rebuilt into `creativeLabels-1.0.1` (still not installed). SN-61 added.
 - 2026-11-17: the recipe script moved into the jar's own script tree (`kubejs/data/creativelabels/kubejs/other/creative_labels.js`, copied by `build.gradle`; mods.toml requires Creative Common and KubeJS); recipe ids now `creativelabels:` (plan_rules_fixes.md V-26, SQ-RFX-01, -02).
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-21: {@code blockLabelledCrafting} under FastWorkbench (found on the scratch server 2026-10-21): FastWorkbench 7.1.4 overwrites {@code slotsChanged} of both the inventory menu and the crafting table menu to queue its own {@code FastBenchUtil.slotChangedCraftingGrid}, so vanilla's {@code CraftingMenu.slotChangedCraftingGrid} (where {@link CraftingMenuResultMixin} sits) never runs and labelled items crafted freely (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/mixin/FastBenchResultMixin.java)
+- 2026-10-21: Outside the mixin package: Mixin refuses to load ordinary classes from there (a crash on the first craft, scratch server 2026-10-21) (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/crafting/LabelledCrafting.java)
+- 2026-11-03: Centre-note hosts whose top takes one note too (Supplementaries jar, Pickling Jar; owner 2026-11-03) (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/block/Spots.java)
+- 2026-11-03: Tops: only hosts in the note-on-top tag (the jar and the Pickling Jar, whose lid sits 2.5 px down, too deep for the shape test), one note centred on the lid; every other centre-note top (sack neck, trash can rim, botany pot soil) and every bottom takes none (owner 2026-11-03, SQ-LBS-03; the shape test let the jar lid and the sack neck carry spot C) (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/block/Spots.java)
+- 2026-11-10: The mod id before the naming-rule rename (namespace_move.md D-LABELS, 2026-11-10); saved ids move by swap list (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/CreativeLabels.java)
+- 2026-11-10: {@code config/creativelabels-common.toml} and {@code creativelabels-client.toml} (creative_labels-*.toml before 2026-11-10, carried over by {@link CreativeLabels}) (BRIEF 6) (development/creativeLabels/src/main/java/com/SaintAlfonzo/creativelabels/CLConfig.java)

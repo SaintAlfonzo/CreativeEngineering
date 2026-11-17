@@ -30,8 +30,7 @@ Object.keys(global.delightfulFoodValues).forEach(key => {
 	global.foodValueCopies[key] = { absolute: { nutrition: v[0], saturationMod: v[1] } }
 })
 
-// Food value copies (rows of global.foodValueCopies, applied by creativedelight/food_value_copies.js). Moved from
-// the pack's startup_scripts/cooking/food_values.js 2026-10-25, rows unchanged.
+// Food value copies (rows of global.foodValueCopies, applied by creativedelight/food_value_copies.js).
 //   cantaloupe_slice <- pumpkin_slice              Delightful's 4 / 0.8 + Resistance was far above the other melon
 //                                                  slices (feature_writeup/can_parity.md 4.1)
 Object.assign(global.foodValueCopies, {

@@ -1,8 +1,7 @@
 // requires: creativebrewing
-// Moved from the pack's server_scripts/other/jeed_providers.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
-// creativebrewing:<type>/<suffix> (were creativeengineering:).
-// JEED effect providers: one jeed:effect_provider recipe per effect, listing every item that gives it, so each
-// effect's JEI page shows where it comes from (feature_writeup/effects.md 3, TODO ui/effects #4).
+// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). JEED effect providers: one
+// jeed:effect_provider recipe per effect, listing every item that gives it, so each effect's JEI page shows where it
+// comes from (feature_writeup/effects.md 3, TODO ui/effects #4).
 //
 // What JEED finds by itself (EffectInfo.buildStaticCache in jeed-1.19.2-2.1.4), so it isn't repeated here:
 //   - every food's FoodProperties effects (incl. the pack's KubeJS food edits: alcohol, cans);
@@ -124,7 +123,7 @@ global.CB.recipes(() => {
 		i.black_chocolate_candy, i.black_chocolate_candy_2, i.ruby_chocolate_candy_3])
 
 	// Pack gear (the armor and tool effect frameworks) and the echo armor set: Creative Equipment's
-	// equipment/gear_jeed.js, with the gear rows (plan_cb_polish.md 1, 2026-11-06).
+	// equipment/gear_jeed.js, with the gear rows (plan_cb_polish.md 1).
 
 	//######################### Botania brews #########################
 	// BotaniaBrews.registerBrews (Botania 440.2): brew key -> effects, and whether it infuses incense / the pendant

@@ -15,10 +15,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * The wooden bucket, a farming tool (moved from Creative Equipment 2026-11-09 as {@code creativedelight:wooden_*}; the old
- * {@code creativeengineering} ids are remapped by swaps/wooden_buckets.json). It carries the farm fluids only: water, Hearth and Harvest sap, milk and Create honey. Other mods' fluids
- * are matched by id, so none of them is a dependency; a missing one simply never fills. Every filled bucket uses the
- * water bucket texture until its own art exists (TODO {@code textures/art}).
+ * The wooden bucket, a farming tool (the old {@code creativeengineering} ids are remapped by
+ * swaps/wooden_buckets.json). It carries the farm fluids only: water, Hearth and Harvest sap, milk and Create honey.
+ * Other mods' fluids are matched by id, so none of them is a dependency; a missing one simply never fills. Every filled
+ * bucket uses the water bucket texture until its own art exists (TODO {@code textures/art}).
  */
 public final class WoodenBuckets {
 

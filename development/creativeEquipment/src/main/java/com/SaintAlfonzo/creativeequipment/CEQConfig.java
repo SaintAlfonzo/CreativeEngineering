@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Creative Equipment's COMMON config, {@code config/creativeequipment-common.toml}. The sections moved out of
- * patcherMod's creativeengineering-common.toml on 2026-11-04 (creative_split.md 7.6, wave 7) with keys, comments,
+ * patcherMod's creativeengineering-common.toml (creative_split.md 7.6, wave 7) with keys, comments,
  * defaults and field names unchanged: {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]},
  * {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]},
  * {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]}. The first boot with Equipment copies a
@@ -40,10 +40,10 @@ public final class CEQConfig {
     public static final CopperPoisoning COPPER_POISONING;
     public static final ArmorOverflow ARMOR_OVERFLOW;
 
-    /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve, 2026-11-07). */
+    /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve). */
     public static final List<String> COMMON_SECTIONS = List.of("armor_overflow");
 
-    /** Taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1, 2026-11-06). */
+    /** Taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1). */
     public static final List<String> CB_SECTIONS = List.of("copper_poisoning");
 
     /** The toml tables carried over from creativeengineering-common.toml. */
@@ -64,12 +64,12 @@ public final class CEQConfig {
         BACKPACK_SKINS = new BackpackSkins(builder);
         TOOLTIPS = new Tooltips(builder);
         COPPER_POISONING = new CopperPoisoning(builder);
-        // from creativecommon-common.toml (interface carve, 2026-11-07)
+        // from creativecommon-common.toml (interface carve)
         ARMOR_OVERFLOW = new ArmorOverflow(builder);
         SPEC = builder.build();
     }
 
-    /** Curios "Slot:" tooltip line (compat/CuriosSlotTooltip; moved from Creative Common's [tooltips] 2026-11-04). */
+    /** Curios "Slot:" tooltip line (compat/CuriosSlotTooltip). */
     public static final class Tooltips {
         public final ForgeConfigSpec.BooleanValue curiosSlotLine;
 
@@ -263,7 +263,7 @@ public final class CEQConfig {
 
         private Crafting(ForgeConfigSpec.Builder b) {
             b.push("crafting");
-            String magicResistance = "creativecommon:magic_resistance"; // Creative Common since 2026-11-06 (creativebrewing: before, creativeengineering: up to 2026-11-04)
+            String magicResistance = "creativecommon:magic_resistance"; // Creative Common (creativebrewing: before, creativeengineering: up to)
             FELSIC_HELMET = new FelsicPiece(b, "felsic_helmet", magicResistance, 500, 1, 5);
             FELSIC_CHESTPLATE = new FelsicPiece(b, "felsic_chestplate", magicResistance, 500, 1, 5);
             FELSIC_LEGGINGS = new FelsicPiece(b, "felsic_leggings", magicResistance, 500, 1, 5);

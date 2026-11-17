@@ -124,8 +124,6 @@ done
 python3 -c "import json,sys; d=json.load(open('$T/bad/data/creativeworldgen/forge/biome_modifier/mob_spawns.json')); ids=[r['id'] for r in d['rules']]+[c['id'] for c in d['conditions']]; sys.exit(0 if ids==['dup','typo_trait','tag_except','good_cond'] else print('bad rules kept:', ids) or 1)" \
   && echo "bad rules: reported and left out" || status=1
 run "$T/off" "$D/rules_fixture.json" off | tail -1 | grep -q '^0 tags, 0 data files' && echo "off: nothing applied" || status=1
-# The old-jar case (no SpawnTuning class) was removed 2026-11-16: mob_spawns.js loads the class at the top since
-# 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as the class, so the case cannot happen.
 run "$T/miss" "$D/rules_fixture.json" missing=untitledduckmod > "$T/miss.log"
 grep -q 'ducks: mod not loaded' "$T/miss.log" && ! grep -rq 'untitledduckmod' "$T/miss/data" && ! grep -q 'untitledduckmod' "$T/miss/tags.json" \
   && echo "missing mod: its rule, condition mobs, ground blocks and modifiers skipped" || status=1

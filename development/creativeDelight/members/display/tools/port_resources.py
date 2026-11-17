@@ -36,7 +36,7 @@ import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MOD = os.path.dirname(HERE)
-# development/creativeDelight/members/display (a Creative Delight member since 2026-11-02)
+# development/creativeDelight/members/display (a Creative Delight member)
 INSTANCE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(MOD))))
 sys.path.insert(0, os.path.join(INSTANCE, 'tools'))
 import display_delight_jar as ddj  # noqa: E402  (1.7.0's block name -> food rule)

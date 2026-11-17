@@ -11,7 +11,7 @@
 //                              TallFlowerBlock blocks with their #minecraft:flowers membership, and the F-B7 candidates
 //                              by class; writes kubejs/exported/breeding_dump.json (one entity type per tick)
 //   bstate X Y Z               block state string and block entity id at a position (loaded chunks only)
-// MIGRATED 2026-11-15 in part (creative_devtools.md): held -> /cdevtest player, heldeat -> /pbot eat, bstate ->
+// MIGRATED in part (creative_devtools.md): held -> /cdevtest player, heldeat -> /pbot eat, bstate ->
 // /cdevtest state. The rest stays here.
 (() => {
     const $P9Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

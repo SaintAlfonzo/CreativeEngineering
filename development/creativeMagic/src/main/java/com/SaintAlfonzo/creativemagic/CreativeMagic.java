@@ -23,23 +23,20 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 /**
- * Creative Magic (feature_writeup/creative_magic.md): enchanting, magic recipes and the Botania tweaks, carved out of
- * patcherMod on 2026-11-04 (creative_split.md 7.6, wave 6). Dark Fire and Flint and Terrasteel with the Nether portal
- * rule (dimension/PortalFailureHandler: ordinary fire no longer opens a portal), the Nock Enough Arrows enchantments
- * taken off tables and trades, the Botania Trinket Case holding any item ({@code [botania]}), and the liquid XP bridge
- * (PneumaticCraft and Sophisticated Core use Create Enchantment Industry's experience fluid; fluid/FluidBridge, from
- * Creative Engineering 2026-11-06). Requires patcherMod
+ * Creative Magic (feature_writeup/creative_magic.md): enchanting, magic recipes and the Botania tweaks. Dark Fire and
+ * Flint and Terrasteel with the Nether portal rule (dimension/PortalFailureHandler: ordinary fire no longer opens a
+ * portal), the Nock Enough Arrows enchantments taken off tables and trades, the Botania Trinket Case holding any item
+ * ({@code [botania]}), and the liquid XP bridge (PneumaticCraft and Sophisticated Core use Create Enchantment
+ * Industry's experience fluid; fluid/FluidBridge, from Creative Engineering). Requires patcherMod
  * ({@code creativeengineering}, later Creative Common) and Creative Compat.
  *
- * Dark Fire and Flint and Terrasteel are registered under this mod's namespace ({@link #NS}); until the 2026-11-10
- * namespace move (feature_writeup/namespace_move.md) they were {@code creativeengineering}, and the swap list
- * data/creativemagic/swaps/owner_namespace.json carries old saves.
+ * Dark Fire and Flint and Terrasteel are registered under this mod's namespace ({@link #NS}).
  */
 @Mod(CreativeMagic.MOD_ID)
 public class CreativeMagic {
 
     public static final String MOD_ID = "creativemagic";
-    /** The namespace of every id this mod registers (was creativeengineering until the 2026-11-10 namespace move). */
+    /** The namespace of every id this mod registers. */
     public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 

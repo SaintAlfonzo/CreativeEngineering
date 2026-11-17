@@ -2,8 +2,7 @@
 // requires: farmersrespite
 // requires: rusticdelight
 // Coffee merge (feature_writeup/item_merges.md 2.8). Non-member file: recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). Moved from the pack's server_scripts/other/item_merges.js 2026-10-27, rows unchanged; moved from
-// farmersrespite/item_merges.js to the Rustic member's tree 2026-11-01 (TODO creativedelight/members #11), rows unchanged.
+// (global.CD.recipes).
 //
 // Rustic Delight's crop and drinks stay; Farmer's Respite's coffee cake, blazing chili and gambler's tea now take
 // Rustic's beans (swapped by the merge). Removed: Respite's three kettle coffees and Central Kitchen's coffee fluid

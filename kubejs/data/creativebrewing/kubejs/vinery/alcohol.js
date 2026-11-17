@@ -1,8 +1,8 @@
 // requires: creativebrewing
 // requires: vinery
-// Vinery port recipe additions (feature_writeup/alcohol.md 10.5, alcohol/vineryport #17). Moved from the pack's
-// server_scripts/cooking/alcohol.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged. JEED providers for the wine
-// effects: ../creativeengineering/jeed_providers.js. Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:).
+// Vinery port recipe additions (feature_writeup/alcohol.md 10.5, alcohol/vineryport #17). JEED providers for the wine
+// effects: ../creativeengineering/jeed_providers.js. Recipe ids are creativebrewing:<type>/<suffix> (were
+// creativeengineering:).
 ServerEvents.recipes(e => {
 if (!global.CB || !global.CB.on('vinery')) return
 global.CB.recipes(() => {

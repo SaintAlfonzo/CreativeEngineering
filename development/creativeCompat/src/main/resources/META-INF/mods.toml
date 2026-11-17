@@ -190,8 +190,8 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# --- interface carve from Creative Common, 2026-11-07 ---
-# WTHIT plugins: state lines, holder and pot contents, hives, campfires, coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
+# --- interface carve from Creative Common, --- WTHIT plugins: state lines, holder and pot contents, hives, campfires,
+# coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
 [[dependencies.creativecompat]]
 modId="wthit"
 mandatory=false

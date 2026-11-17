@@ -15,11 +15,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 
 /**
- * Comfortable Campfires port (feature_writeup/feature_porting.md 2.1, jar retired 2026-10-20): players near a lit
- * campfire get Farmer's Delight's Comfort (Regeneration when the effect is missing or {@code useComfort} is off) for
- * {@code durationSeconds}, refreshed while under 3 s left. The mod did this every tick for every lit campfire; here a
- * campfire checks once per {@code comfortEveryTicks} (20), spread over campfires by position. Driven from
- * {@code mixin/CampfireRainMixin} like {@link CampfireRain}; vanilla only ticks a campfire's cook tick while lit.
+ * Comfortable Campfires port: players near a lit campfire get Farmer's Delight's Comfort (Regeneration when the
+ * effect is missing or {@code useComfort} is off) for {@code durationSeconds}, refreshed while under 3 s left. The
+ * mod did this every tick for every lit campfire; here a campfire checks once per {@code comfortEveryTicks} (20),
+ * spread over campfires by position. Driven from {@code mixin/CampfireRainMixin} like {@link CampfireRain}; vanilla
+ * only ticks a campfire's cook tick while lit.
  */
 public final class CampfireComfort {
     private static final ResourceLocation COMFORT = new ResourceLocation("farmersdelight", "comfort");

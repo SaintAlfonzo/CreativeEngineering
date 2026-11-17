@@ -4,7 +4,7 @@
 //   /cbo effects   Armor / Tool Effects tables (global.armorEffects, global.toolEffects): entries per item namespace,
 //                  then every entry whose item or effect is not registered ("leak" lines: a guard let an absent
 //                  mod's row in)
-//   /cbo potions   creativecommon potions and mob effects (Creative Common since 2026-11-06) registered, and the potions of the optional mods CB
+//   /cbo potions   creativecommon potions and mob effects (Creative Common) registered, and the potions of the optional mods CB
 //                  touches (long_reach, phantom_bane, Buzzier Bees luck, Alex's Mobs, Quark / Upgrade Aquatic removed)
 // Output: "[cbo] ..." lines in logs/latest.log, then "[cbo] done".
 (() => {

@@ -1,7 +1,6 @@
 // requires: creativedelight
 // requires: veggiesdelight
-// Veggies Delight items in the pack's food and cooking item tags (Creative Delight member #2, moved from the pack's
-// server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry).
+// Veggies Delight items in the pack's food and cooking item tags (split by the mod owning each entry).
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('veggiesdelight')) return
 	var t = global.tags
@@ -17,7 +16,7 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_sliced_potatoes, i.sliced_sweet_potato)
 	t.add(e, i.t_vegetables_sweet_potato, i.sliced_sweet_potato)
 	t.add(e, i.any_potato, i.sliced_sweet_potato)
-	// Mashed Sweet Potatoes take salt like More Delight's Mashed Potatoes (merges/dishes #2, owner 2026-11-01)
+	// Mashed Sweet Potatoes take salt like More Delight's Mashed Potatoes (merges/dishes #2, owner)
 	t.add(e, i.t_can_be_salted, i.veggiesdelight_mashed_potatoes)
 })
 

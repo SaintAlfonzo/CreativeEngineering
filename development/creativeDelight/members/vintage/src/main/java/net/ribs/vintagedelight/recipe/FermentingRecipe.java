@@ -56,12 +56,12 @@ public class FermentingRecipe implements Recipe<SimpleContainer> {
    }
 
    /**
-    * Port fix (creativedelight members #37, plan_creative_delight.md I2; strict per slot 2026-11-04): for each
-    * ingredient entry, the input slot (0-5) it takes one item from, or null when the inputs do not make this recipe.
-    * One item per slot, as upstream's match: every non-empty slot feeds exactly one entry, so the number of filled
-    * slots must equal the number of entries and a stack never feeds two entries. The jar consumes exactly these slots,
-    * so a match and its craft always agree (upstream matched one entry per slot but consumed from the first matching
-    * slot, draining it; the I2 version let entries share a stacked slot, which started batches from too few slots).
+    * Port fix (creativedelight members #37, plan_creative_delight.md I2; strict per slot): for each ingredient entry,
+    * the input slot (0-5) it takes one item from, or null when the inputs do not make this recipe. One item per slot,
+    * as upstream's match: every non-empty slot feeds exactly one entry, so the number of filled slots must equal the
+    * number of entries and a stack never feeds two entries. The jar consumes exactly these slots, so a match and its
+    * craft always agree (upstream matched one entry per slot but consumed from the first matching slot, draining it;
+    * the I2 version let entries share a stacked slot, which started batches from too few slots).
     */
    public int[] assignSlots(Container container) {
       int n = this.inputItems.size();

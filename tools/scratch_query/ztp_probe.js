@@ -37,7 +37,7 @@
 //   /ztp portal P X Y Z ANGLE UPRIGHT [PROVIDER NAME]   Portal Setup close (SyncPortalSettingsPacket) on the workstation
 //                                  context P's open menu holds (open it first with a use on the terminal)
 //   /ztp card P PROVIDER NAME      Teleport app: write the selected location onto the carried blank card (WriteToCardPacket)
-// MIGRATED 2026-11-15 in part (creative_devtools.md): break -> /pbot break, sneak -> /pbot sneak, blocks -> /cdevtest
+// MIGRATED in part (creative_devtools.md): break -> /pbot break, sneak -> /pbot sneak, blocks -> /cdevtest
 // state per position. Tempad, menu clicks and the rest stay here.
 (() => {
     const $TPArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

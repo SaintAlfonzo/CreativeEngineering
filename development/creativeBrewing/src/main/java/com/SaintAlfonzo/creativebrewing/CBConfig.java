@@ -24,7 +24,7 @@ import java.util.Map;
  * </ul>
  * Dials moved from creativeengineering-common.toml keep their keys, comments and defaults (creative_brewing.md 4.3):
  * {@code [alcohol]}, {@code [effects]}, {@code [magic_resistance]}, {@code [copper_poisoning]} ({@link #MOVED_SECTIONS},
- * phase 3, 2026-11-01). {@code [alcohol]} and {@code [effects]} also take that family's feature switches.
+ * phase 3). {@code [alcohol]} and {@code [effects]} also take that family's feature switches.
  *
  * Scripts read it through {@code global.CB} (kubejs_startup/creativebrewing/cb_core.js). COMMON configs load after
  * mod construction, so a startup script must read it inside an event callback, not at top level; before the file is
@@ -72,8 +72,7 @@ public final class CBConfig {
 			featureRows(b, section);
 			b.pop();
 		}
-		// Moved from creativeengineering-common.toml on 2026-11-01 (creative_brewing.md 4.2 phase 3): same keys,
-		// comments and defaults; ConfigRename.mergeSections carries the player's values over on the first boot.
+		// ConfigRename.mergeSections carries the player's values over on the first boot.
 		ALCOHOL = new Alcohol(b);
 		SPEC = b.build();
 	}

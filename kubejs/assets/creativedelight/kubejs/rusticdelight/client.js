@@ -1,6 +1,6 @@
 // requires: creativedelight
 // requires: rusticdelight
-// Rustic Delight block and item names, moved from the pack's client_scripts/namechanges.js 2026-10-27, rows unchanged.
+// Rustic Delight block and item names.
 ClientEvents.lang('en_us', e => {
 	if (!global.CD || !global.CD.on('rusticdelight')) return
 	e.add('block.rusticdelight.bell_peppers', 'Bell Peppers')

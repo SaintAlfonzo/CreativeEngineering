@@ -1,10 +1,9 @@
 // requires: creativebrewing
 // requires: brewinandchewin
 // Brewin' and Chewin' (backport) recipe changes: feature_writeup/alcohol.md 8.6 and 8.7. Brewin' dishes are Creative
-// Delight's (kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js).
-// Moved from the pack's server_scripts/cooking/alcohol.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; the Vinery
-// rows went to ../vinery/alcohol.js. Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:).
-// The port's data stays 4.5.0, so each change removes the upstream id and adds the pack recipe here.
+// Delight's (kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js). The Vinery rows went to
+// ../vinery/alcohol.js. Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). The port's data
+// stays 4.5.0, so each change removes the upstream id and adds the pack recipe here.
 ServerEvents.recipes(e => {
 if (!global.CB || !global.CB.on('brewinandchewin')) return
 global.CB.recipes(() => {
@@ -15,11 +14,11 @@ var i = global.item
 var f = global.fluid
 var R = global.NCH.forPack('creativebrewing')
 
-//######################### Pickling moves to the Pickling Jar #########################
-// The keg is for beer fluids, the cask for wine, the Vintage Pickling Jar for all pickling (vintage_delight.md S7, 3.2).
-// Same inputs as the keg; the 250 mB of honey becomes a honey bottle; the jar's pickle time.
-// Brewin's kimchi is removed (merges/dishes #9, owner 2026-11-02): Vintage Delight's kimchi wins and this recipe is not
-// carried over; Creative Delight's vintagedelight/recipes.js has the kimchi recipes.
+//######################### Pickling moves to the Pickling Jar ######################### The keg is for beer fluids, the
+// cask for wine, the Vintage Pickling Jar for all pickling (vintage_delight.md S7, 3.2). Same inputs as the keg; the
+// 250 mB of honey becomes a honey bottle; the jar's pickle time. Brewin's kimchi is removed (merges/dishes #9, owner):
+// Vintage Delight's kimchi wins and this recipe is not carried over; Creative Delight's vintagedelight/recipes.js has
+// the kimchi recipes.
 R.remove({ id: 'brewinandchewin:fermenting/kimchi' }, e)
 // Pickled Pickles are merged into Creative Delight's Pickled Sea Pickle (sea pickles + salt, no honey; TODO
 // dishes/pickles-and-ferments #1), so the honey recipe is not rebuilt.

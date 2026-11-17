@@ -226,9 +226,9 @@ def convert_soft_fluid(name, d):
             'tint_method': 'no_tint',
             'translation_key': 'fluid.supplementaries.honey',
         }
-    # Mason jars only (dishes/jams #1, owner 2026-11-03): a jar holds one bottle's worth (was 3), and the jam, relish,
-    # nut mash, vinegar and apple sauce bottles are removed or merged items, so their bottle containers go and the jar
-    # is the food item
+    # Mason jars only (dishes/jams #1, owner): a jar holds one bottle's worth (was 3), and the jam, relish, nut mash,
+    # vinegar and apple sauce bottles are removed or merged items, so their bottle containers go and the jar is the
+    # food item
     gone = {f'{NS}:{b}' for b in ('sweet_berry_jam_bottle', 'glow_berry_jam_bottle', 'pepper_jam_bottle',
                                   'relish_bottle', 'nut_mash_bottle', 'vinegar_bottle', 'apple_sauce_bottle')}
     jar = None

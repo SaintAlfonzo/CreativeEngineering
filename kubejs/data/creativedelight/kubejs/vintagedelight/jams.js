@@ -1,11 +1,11 @@
 // requires: creativedelight
 // requires: vintagedelight
-// Jams (TODO dishes/jams #1, #3, #4; owner 2026-10-29; feature_writeup/briefs/dishes_jams.md). Jams are mason jars
-// only: the jam and relish bottles and Vintage's sweet berry and glow berry jams are removed items (CD startup
+// Jams (TODO dishes/jams #1, #3, #4; owner; feature_writeup/briefs/dishes_jams.md). Jams are mason jars only: the jam
+// and relish bottles and Vintage's sweet berry and glow berry jams are removed items (CD startup
 // vintagedelight/vintage_items.js); their recipes go here. The relish jar stays as an ingredient
-// (#creativedelight:food_type/ingredient), not a jam. New mason jar jams: green grape, red grape, cherry, salmonberry and raspberry (pack
-// additions to the Vintage port), from the pot: 4 fruit + sugar + lemon slice -> 1 jar (dishes/jams #2 pattern; 2 jars until
-// dishes/jams #5, 2026-11-02), in an empty mason jar. Slice & Dice copies the pot recipe to the heated mixer.
+// (#creativedelight:food_type/ingredient), not a jam. New mason jar jams: green grape, red grape, cherry, salmonberry
+// and raspberry (pack additions to the Vintage port), from the pot: 4 fruit + sugar + lemon slice -> 1 jar (dishes/jams
+// #2 pattern), in an empty mason jar. Slice & Dice copies the pot recipe to the heated mixer.
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('vintagedelight')) return
 	var t = global.tags
@@ -22,9 +22,9 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.milk, i.nut_milk_jar)
 })
 
-// Pack jam line (TODO dishes/jams #8, owner 2026-11-03; Vintage port jam/PackJams.java). Fruits Delight's jam family for
-// the jams it does not have: jar, jam block, jello block, bowl of jello, jam and melted jello fluids, cauldrons (Java).
-// fruit: the pot and mixer fruit (null: the jar keeps its own pot recipe); on: the mods the fruit needs.
+// Pack jam line (TODO dishes/jams #8, owner; Vintage port jam/PackJams.java). Fruits Delight's jam family for the jams
+// it does not have: jar, jam block, jello block, bowl of jello, jam and melted jello fluids, cauldrons (Java). fruit:
+// the pot and mixer fruit (null: the jar keeps its own pot recipe); on: the mods the fruit needs.
 function packJams() {
 	var i = global.item
 	var f = global.fluid
@@ -78,9 +78,9 @@ ServerEvents.recipes(e => {
 		;[i.sweet_berry_jam_bottle, i.glow_berry_jam_bottle, i.pepper_jam_bottle, i.relish_bottle, i.sweet_berry_jam_jar,
 			i.glow_berry_jam_jar].forEach(id => R.remove({ output: id }, e))
 
-		//######################### Mason jars only (decided 2026-11-02) #########################
-		// items/jars #9: the vinegar and apple sauce bottles merge into their jars (CD startup item_merges.js). Their bottle
-		// <-> jar crafts go first, or the merge's swap would turn them into jar -> 3 jars.
+		//######################### Mason jars only (decided) ######################### items/jars #9: the vinegar and apple
+		// sauce bottles merge into their jars (CD startup item_merges.js). Their bottle <-> jar crafts go first, or the
+		// merge's swap would turn them into jar -> 3 jars.
 		;['vinegar', 'apple_sauce'].forEach(n => {
 			R.remove({ id: 'vintagedelight:jam/' + n + '_jar' }, e)
 			R.remove({ id: 'vintagedelight:jam/' + n + '_jar_deconstruct' }, e)
@@ -105,8 +105,8 @@ ServerEvents.recipes(e => {
 			R.replaceInput({ output: jam }, i.glass_bottle, i.empty_mason_jar, e, true)
 			R.replaceOutput({ input: jam }, i.glass_bottle, i.empty_mason_jar, e, true)
 		})
-		// Jar audit (plan_scratch_bugfix_1103 1.3, mod jar recipe scan 2026-11-03): Handcrafted's Berry Jam Jar (decor) was the
-		// last jam recipe taking a glass bottle.
+		// Jar audit (plan_scratch_bugfix_1103 1.3, mod jar recipe scan): Handcrafted's Berry Jam Jar (decor) was the last jam
+		// recipe taking a glass bottle.
 		if (Platform.isLoaded('handcrafted'))
 			R.replaceInput({ id: 'handcrafted:berry_jam_jar' }, i.glass_bottle, i.empty_mason_jar, e)
 

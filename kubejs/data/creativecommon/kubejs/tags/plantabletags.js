@@ -9,8 +9,7 @@
 //   #creativecommon:plantable/vertical       "Vertical Crop"   sugar cane, cactus, bamboo, chorus flower
 //
 // Membership comes from the item's block class (any mod's subclass counts), so a new mod's plants are covered with no
-// list to keep. Flowers, grass, ferns, leaves and coral get no tag (owner decision 2026-11-01).
-// Rules, first match wins:
+// list to keep. Flowers, grass, ferns, leaves and coral get no tag (owner decision). Rules, first match wins:
 //   1. OVERRIDES below (items whose class says nothing, or says the wrong thing)
 //   2. block class: sapling, fungi sapling, water plant, vertical crop
 //   3. crop blocks (CropBlock, StemBlock, nether wart, cocoa, sweet berry, cave vines), or any other BushBlock /

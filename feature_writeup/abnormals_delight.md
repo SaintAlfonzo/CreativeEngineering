@@ -192,3 +192,9 @@ Prefix `ABD-`. SQ-ABD-01 to 05 PASSED by `/zq` in the 2026-10-26 scratch run ([s
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Re-add Cherry Cream Soda (removed 2026-10-23, N-04): find the removed recipe first. Possibly a fruit soda line, mostly in glass bottles, some in cans, with dyes, cheap and worse than proper drinks: `food/drinks #11`.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Heatless craft (moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, unchanged; rule in farmersdelight/recipes.js "Meals"): pastas take no broth, the pot's bowl (kubejs/data/creativedelight/kubejs/abnormals_delight/recipes.js)

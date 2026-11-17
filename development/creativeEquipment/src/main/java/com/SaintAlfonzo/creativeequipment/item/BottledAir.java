@@ -17,13 +17,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
- * Bottled Air port (feature_writeup/feature_porting.md 2.1, jar retired 2026-10-20). Right-clicking a glass bottle while
- * in water refills {@code airPerBottle} air (150 of 300); vanilla then fills the bottle with water as usual. With a
- * fire source ({@code #creativeequipment:bottled_air/fire_sources}: campfires, fire charge, lava bucket, magma
- * block) in the other hand, one water bottle is taken back out of the inventory and "evaporated": the glass bottle
- * comes back unless it breaks ({@code bottleBreakChance}). Drinking a water bottle while under water is blocked
- * ({@code noDrinkingUnderwater}), so the bottle can't be an endless air supply. Server and client both run the event;
- * only the server changes anything.
+ * Bottled Air port. Right-clicking a glass bottle while in water refills {@code airPerBottle} air (150 of 300); vanilla
+ * then fills the bottle with water as usual. With a fire source ({@code #creativeequipment:bottled_air/fire_sources}:
+ * campfires, fire charge, lava bucket, magma block) in the other hand, one water bottle is taken back out of the
+ * inventory and "evaporated": the glass bottle comes back unless it breaks ({@code bottleBreakChance}). Drinking a
+ * water bottle while under water is blocked ({@code noDrinkingUnderwater}), so the bottle can't be an endless air
+ * supply. Server and client both run the event; only the server changes anything.
  */
 public final class BottledAir {
     public static final TagKey<Item> FIRE_SOURCES =

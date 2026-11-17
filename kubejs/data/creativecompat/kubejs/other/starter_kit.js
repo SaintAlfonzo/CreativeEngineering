@@ -1,8 +1,7 @@
 // requires: creativecompat
-// Creative Compat; moved from kubejs/server_scripts/other/starter_kit.js on 2026-11-01.
-// Starter Kit port (feature_writeup/feature_porting.md 1, Starter Kit 7.0 + Collective gear functions, jar retired
-// 2026-10-20). A player joining a world for the first time gets one of the kits below at random, 10 ticks after the
-// join (as the mod: books other mods hand out on join exist by then and are given back after the kit is set).
+// Creative Compat. Starter Kit port. A player joining a world for the first time gets one of the kits below at
+// random, 10 ticks after the join (as the mod: books other mods hand out on join exist by then and are given back
+// after the kit is set).
 //
 // Who already has one (the mod's own records, so nobody gets a second kit):
 //   - scoreboard tag collective.firstJoin.starterkit (the mod's marker; the port adds it too)

@@ -1,8 +1,8 @@
 // requires: creativedelight
 // requires: veggiesdelight
-// Veggies Delight recipe rows (Creative Delight members #2, creative_delight.md 27; moved from the pack's
-// server_scripts/cooking/cooking.js and baking.js 2026-10-25, rows unchanged). Recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). Grid-meal moves and heatless routes are QoL-5 (cooking.js beside this file).
+// Veggies Delight recipe rows (Creative Delight members #2, creative_delight.md 27). Recipe ids are
+// creativedelight:<type>/<suffix> (global.CD.recipes). Grid-meal moves and heatless routes are QoL-5 (cooking.js beside
+// this file).
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('veggiesdelight')) return
 
@@ -64,19 +64,19 @@ ServerEvents.recipes(e => {
 		var F = global.CD.food(e)
 		var VD_COOKED_MEAT = [i.cooked_beef, i.cooked_chicken, i.cooked_mutton]
 
-		//######################### Zucchini quiche #########################
-		// Quiche (merges/dishes #8, owner 2026-11-02): baking type, oven only with a pie tin, no plating, as Brewin's quiche
-		// (brewinandchewin/recipes.js): pie crust + cheese wedge + milk + egg + 2 roasted zucchini. VD's two recipes go.
-		// Was: 3 roasted zucchini + a cooked meat + milk or any cheese on a crust in the grid, or the assembly.
+		//######################### Zucchini quiche ######################### Quiche (merges/dishes #8, owner): baking type,
+		// oven only with a pie tin, no plating, as Brewin's quiche (brewinandchewin/recipes.js): pie crust + cheese wedge +
+		// milk + egg + 2 roasted zucchini. VD's two recipes go. Was: 3 roasted zucchini + a cooked meat + milk or any cheese
+		// on a crust in the grid, or the assembly.
 		R.remove({ id: 'veggiesdelight:zucchini_quiche' }, e)
 		R.remove({ id: 'veggiesdelight:compat/vintagedelight/zucchini_quiche' }, e)
 		R.ceBaking([fd.dough_pie_crust, i.t_cheese_wedge, i.milk, i.eggs, n(fd.veggie_cooked_zucchini, 2)], fd.dish_zucchini_quiche, e,
 			'zucchini_quiche', { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin })
 
-		//######################### Vegan pizza #########################
-		// Pizza family rule (food_families.md `pizza/whole`; owner 2026-11-01, creativedelight/members #20, #30 R5): base
-		// row any dough, tomato sauce, any dough; toppings above (VD's own: bell pepper, a vegetable, onion). One shaped
-		// recipe (manual only) plus one assembly on the dough.
+		//######################### Vegan pizza ######################### Pizza family rule (food_families.md
+		// `pizza/whole`; owner, creativedelight/members #20, #30 R5): base row any dough, tomato sauce, any dough;
+		// toppings above (VD's own: bell pepper, a vegetable, onion). One shaped recipe (manual only) plus one assembly
+		// on the dough.
 		R.remove({ id: 'veggiesdelight:vegan_pizza' }, e)
 		R.shaped(fd.dish_vegan_pizza, ['abc', 'xOx'], { a: i.any_bell_pepper, b: i.vegetables, c: i.onion, x: i.any_dough, O: fd.sauce_tomato },
 			e, 'vegan_pizza_manual_only')
@@ -115,10 +115,9 @@ ServerEvents.recipes(e => {
 		R.remove({ output: fd.feast_stuffed_bellpeppers }, e)
 		R.remove({ output: fd.dish_stuffed_bellpepper }, e)
 
-		//######################### Sweet potato dough #########################
-		// Dough-for-bread rule (owner 2026-11-01, TODO baking/baked-goods #17, #31): like every plain dough it bakes into
-		// bread only in the oven on a baking sheet (#forge:dough, farmersdelight/recipes.js); VD's furnace, smoker and
-		// campfire bread go.
+		//######################### Sweet potato dough ######################### Dough-for-bread rule (owner, TODO
+		// baking/baked-goods #17, #31): like every plain dough it bakes into bread only in the oven on a baking sheet
+		// (#forge:dough, farmersdelight/recipes.js); VD's furnace, smoker and campfire bread go.
 		;['smelting', 'smoking', 'campfire_cooking'].forEach(t => R.remove({ id: 'veggiesdelight:bread_from_' + t }, e))
 
 		//######################### Mashed Sweet Potatoes #########################

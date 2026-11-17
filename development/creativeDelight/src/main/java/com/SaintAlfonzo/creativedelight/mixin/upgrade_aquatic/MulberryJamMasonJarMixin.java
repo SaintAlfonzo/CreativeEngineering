@@ -11,10 +11,10 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Jams are mason jars ({@code dishes/jams #1}, decided 2026-11-02): Upgrade Aquatic 5.1.0's {@code MulberryJamBottleItem}
- * hands back a hard-coded glass bottle when eaten ({@code finishUsingItem}, two {@code Items.GLASS_BOTTLE} reads: the
- * last-item case and the add-to-inventory case). Both now read Vintage Delight's empty mason jar, falling back to the
- * glass bottle when that item is not registered. The crafting remainder and the recipes are KubeJS (CD startup
+ * Jams are mason jars ({@code dishes/jams #1}): Upgrade Aquatic 5.1.0's {@code MulberryJamBottleItem} hands back a
+ * hard-coded glass bottle when eaten ({@code finishUsingItem}, two {@code Items.GLASS_BOTTLE} reads: the last-item case
+ * and the add-to-inventory case). Both now read Vintage Delight's empty mason jar, falling back to the glass bottle
+ * when that item is not registered. The crafting remainder and the recipes are KubeJS (CD startup
  * vintagedelight/vintage_items.js, server vintagedelight/jams.js).
  */
 @Pseudo

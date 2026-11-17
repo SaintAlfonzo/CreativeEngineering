@@ -28,14 +28,11 @@ import net.minecraftforge.client.model.data.ModelData;
 /**
  * WTHIT plugin: draws the looked-at block's own model as the overlay icon when its item can't.
  *
- * <p>WTHIT's core icon is {@code Block#getCloneItemStack(level, pos, state)} (the vanilla 3-arg
- * method, not Forge's pick-block one). A block with no pick item (the 2026-10-20 audit found 272: 70
- * Display Delight plates, Colored Water's 64 cauldrons, Immersive Posts' 30 post parts, Delightful's and
- * Central Kitchen's pies, Create belt funnels...) leaves the icon empty, and an item whose model is missing
- * shows the purple/black cube. Which blocks qualify is
- * {@link BlockModelIcons#verdict} (any namespace since 2026-10-20; {@code [wthit] iconExclude} opts out). Before the
- * model it tries {@code [wthit] iconItems} and Forge's hit-aware pick block.
- * tools/gen_display_delight_models.py still adds DD's missing item models, for JEI.
+ * <p>WTHIT's core icon is {@code Block#getCloneItemStack(level, pos, state)} (the vanilla 3-arg method, not Forge's
+ * pick-block one). A block with no pick item leaves the icon empty, and an item whose model is missing shows the
+ * purple/black cube. Which blocks qualify is {@link BlockModelIcons#verdict} (any namespace;
+ * {@code [wthit] iconExclude} opts out). Before the model it tries {@code [wthit] iconItems} and Forge's hit-aware
+ * pick block. tools/gen_display_delight_models.py still adds DD's missing item models, for JEI.
  *
  * <p>Priority 1000 runs ahead of WTHIT's core block icon (1100) and returns null for every other
  * case, so the core icon still handles them. Facing is pinned to north so the icon matches how block

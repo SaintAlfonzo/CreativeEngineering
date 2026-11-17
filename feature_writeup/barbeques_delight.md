@@ -863,3 +863,9 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 - 2026-11-17 (plan_rules_fixes.md V-05): `PackSeasonings` compiles against Creative Delight (`compileOnly
   project(':creativeDelight')`) and calls `food.Seasonings` and `food.SeasoningTooltip` directly; the reflection and
   the no-Delight fallback are gone. Queue SQ-RFX-15.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-04: End Skewer (End's Delight end_barbecue_stick, owner 2026-11-04): 1 skewer, not 3; Ender's Delight's Shulker Mollusk only (no End's shulker meat, no shulker tag), no endermite meat (kubejs/data/creativedelight/kubejs/barbequesdelight/skewers.js)
+- 2026-11-04: Combos (plan_meals_rolls_bbq.md C8, 2026-11-04): ordinary shaped / meal recipes from cooked skewers, no stored skewers and no carried skewer effects; static values, 0.8 x the inputs (average cooked skewer 7.6 / 11.2 points) capped at 16 hunger (development/creativeDelight/members/barbeques/src/main/java/com/SaintAlfonzo/creativedelight/barbeques/registry/BBQItems.java)
+- 2026-11-04: Since plan_meals_rolls_bbq.md C8 (2026-11-04) they are plain foods made by shaped and meal recipes: their own values and effects, their own seasoning, nothing from the skewers (development/creativeDelight/members/barbeques/src/main/java/com/SaintAlfonzo/creativedelight/barbeques/item/BBQSandwichItem.java)

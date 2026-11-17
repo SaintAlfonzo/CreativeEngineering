@@ -1,12 +1,10 @@
-// Moved from the pack's startup_scripts/items/potion_buckets.js 2026-11-01 (creative_brewing.md 4.5).
-// Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
-// Potion buckets — three tiers of a throwable "large, short-lived, expanding
-// lingering-potion cloud" item.
+// Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart. Potion
+// buckets — three tiers of a throwable "large, short-lived, expanding lingering-potion cloud" item.
 //
 //   normal    -> creativebrewing:potion_bucket
 //   splash    -> creativebrewing:splash_potion_bucket       (bigger area, longer effects)
 //   lingering -> creativebrewing:lingering_potion_bucket    (bigger still)
-//   (creativeengineering:* up to 2026-11-04; the swap list carries old buckets over, plan_cb_publish.md M4)
+//   (the swap list carries old creativeengineering:* buckets over, plan_cb_publish.md M4)
 //
 // Right-click behaviour + cloud spawning:
 //   CB server creativebrewing/potion_buckets.js

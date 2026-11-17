@@ -120,8 +120,8 @@ public final class TillingEvents {
     }
 
     /**
-     * End stone tills only with a netherite or better hoe (owner 2026-11-14, plan_bugfix_1114 3.2): a TieredItem whose tier
-     * sorts at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count.
+     * End stone tills only with a netherite or better hoe (owner, plan_bugfix_1114 3.2): a TieredItem whose tier sorts
+     * at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count.
      */
     public static boolean netheriteOrBetter(ItemStack stack) {
         if (!(stack.getItem() instanceof TieredItem tiered)) {

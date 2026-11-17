@@ -17,8 +17,7 @@ import java.util.List;
  * with Forge's overload that carries the hovered slot's stack.
  *
  * Callers: patcherMod's {@code CckCookingGuideMealTooltipMixin} / {@code CckBrewingGuideMealTooltipMixin}, and Creative
- * Delight's {@code farmersdelight.CookingPotMealTooltipMixin} / {@code farmersrespite.KettleMealTooltipMixin}
- * (moved there 2026-10-27, CD hard-depends on patcherMod).
+ * Delight's {@code farmersdelight.CookingPotMealTooltipMixin} / {@code farmersrespite.KettleMealTooltipMixin}.
  */
 public final class MealSlotTooltip {
 

@@ -7,12 +7,12 @@
 
 // Effect swaps: on each food, the `from` effects go and `to` takes the first one's duration and level. Other effects,
 // hunger and flags stay.
-//   Rustic Delight's coffees: Speed + Haste -> Caffeinated (Farmer's Respite's), the pack's only coffee family since
+// Rustic Delight's coffees: Speed + Haste -> Caffeinated (Farmer's Respite's), the pack's only coffee family since
 //   Respite's coffee merged into it (item_merges.js). Coffee 1:30, milk 1:00, honey / chocolate 0:45, dark II 0:45;
-//   syrup / pumpkin / cherry blossom 0:45 like the other bean + milk + flavour coffees (owner 2026-11-01, TODO
-//   creativedelight/members #11; the durations are set in the CD Rustic member's RDFoods).
-//   Neapolitan's Agility -> Vinery's Climbing, same durations (potions/effects #9). The banana cake blocks and anything
-//   else that gives Agility are swapped when applied by Creative Brewing ([effects] remap); this fixes the tooltips.
+//   syrup / pumpkin / cherry blossom 0:45 like the other bean + milk + flavour coffees (owner, TODO
+//   creativedelight/members #11; the durations are set in the CD Rustic member's RDFoods). Neapolitan's Agility ->
+//   Vinery's Climbing, same durations (potions/effects #9). The banana cake blocks and anything else that gives Agility
+//   are swapped when applied by Creative Brewing ([effects] remap); this fixes the tooltips.
 var ef = global.effect
 global.foodEffectSwaps = []
 if (global.has('farmersrespite')) {

@@ -1,5 +1,5 @@
 // Older misc builds probe (scratch queue SQ-OM: alcohol ports, feature ports, baby mobs, BlockRunner leaf piles,
-// campfire rain, JEED providers and the world serverconfig payload, built 2026-10-19 to 2026-10-21 and never checked
+// campfire rain, JEED providers and the world serverconfig payload, built and never checked
 // on a server). Scratch-only: copy into a scratch server's kubejs/server_scripts as zz_om_probe.js
 // (tools/creative_labels_test/scratch_server.sh), never into the pack. Run /omprobe <part> or /omprobe all; results are
 // "[omprobe] PASS|FAIL|INFO ..." lines in logs/latest.log, ending "[omprobe] done: N pass, M fail".
@@ -498,7 +498,7 @@
     // ---------------------------------------------------------------- air (featureporting #3, FP-13)
     function air(level) {
         const $RightClick = Java.loadClass('net.minecraftforge.event.entity.player.PlayerInteractEvent$RightClickItem')
-        let cfg = Java.loadClass('com.SaintAlfonzo.creativeequipment.CEQConfig').BOTTLED_AIR  // [bottled_air]: Creative Equipment since 2026-11-04
+        let cfg = Java.loadClass('com.SaintAlfonzo.creativeequipment.CEQConfig').BOTTLED_AIR  // [bottled_air]: Creative Equipment
         info('[bottled_air] enabled=' + cfg.enabled.get() + ' airPerBottle=' + cfg.airPerBottle.get() + ' fireEvaporates=' + cfg.fireEvaporates.get() + ' noDrinkingUnderwater=' + cfg.noDrinkingUnderwater.get())
         let x = 180
         cmd('fill ' + (x - 1) + ' ' + Y + ' ' + (Z - 1) + ' ' + (x + 1) + ' ' + (Y + 3) + ' ' + (Z + 1) + ' minecraft:glass')

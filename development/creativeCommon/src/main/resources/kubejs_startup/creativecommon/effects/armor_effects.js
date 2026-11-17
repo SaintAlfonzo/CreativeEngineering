@@ -1,7 +1,7 @@
 // priority: -100
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2: the effect frameworks live in Common, the rows with the jar
-// that owns the gear: Creative Equipment's kubejs_startup/creativeequipment/gear_effects.js). Was Creative Brewing's,
-// before that the pack's startup_scripts/func/armor_effects.js. Common rebuild + restart.
+// Creative Common (plan_cb_polish.md 2: the effect frameworks live in Common, the rows with the jar that owns the
+// gear: Creative Equipment's kubejs_startup/creativeequipment/gear_effects.js). Was Creative Brewing's, before that
+// the pack's startup_scripts/func/armor_effects.js. Common rebuild + restart.
 //   ^ load after _lib/item_dict.js (priority 0). KubeJS startup-script order is
 //   directory-walk order, not alphabetical, and func/ walks before _lib/ — so
 //   without this, `global.item` is undefined when the set bonuses below read i.*

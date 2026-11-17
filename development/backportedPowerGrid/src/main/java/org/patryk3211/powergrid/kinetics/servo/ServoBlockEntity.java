@@ -60,10 +60,10 @@ public class ServoBlockEntity extends GeneratingKineticBlockEntity implements IE
 
     private int movingTicks;
 
-    // Port fix B9 (extension, 2026-11-14): a move commits only after one full lazyTick averaging window in which every
-    // tick had coil power for 1 RPM or more and the coil sat at the idle resistance (no move running). Upstream fixed
-    // the speed from whatever window came first, so a window that was only partly powered gave a slow move.
-    // windowClean starts false: the first window after load has an unknown length.
+    // Port fix B9 (extension): a move commits only after one full lazyTick averaging window in which every tick had
+    // coil power for 1 RPM or more and the coil sat at the idle resistance (no move running). Upstream fixed the speed
+    // from whatever window came first, so a window that was only partly powered gave a slow move. windowClean starts
+    // false: the first window after load has an unknown length.
     private boolean windowClean = false;
     private boolean fullWindowPowered = false;
 

@@ -14,15 +14,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 /**
- * Creative Engineering (feature_writeup/creative_engineering.md): the pack's machines and engineering content, carved
- * out of patcherMod in the Creative Split wave 8 (2026-11-04, creative_split.md 7.6 and 7.13). Create's dragon
- * breathing fan type, the IE sawmill blade routing and sawdust, the IE and Immersive Posts tweaks, and the engineering
- * scripts (components, metals, wood, machines, the former Creative Computers rows). Requires Creative Common (the
- * shared helpers, the startup loader, the Common APIs) and Creative Compat.
+ * Creative Engineering (feature_writeup/creative_engineering.md): the pack's machines and engineering content.
+ * Create's dragon breathing fan type, the IE sawmill blade routing and sawdust, the IE and Immersive Posts tweaks, and
+ * the engineering scripts (components, metals, wood, machines, the former Creative Computers rows). Requires Creative
+ * Common (the shared helpers, the startup loader, the Common APIs) and Creative Compat.
  *
- * <p>On 2026-11-06 the non-engineering features moved out with their ids unchanged: TNT shrapnel, Ore Excavation's
- * undo rules and BlockRunner surfaces to Creative Compat (with [shrapnel], [surface] and [vein_undo], so this jar has
- * no config file any more), the liquid XP bridge to Creative Magic, the wooden bucket to Creative Equipment.
+ * <p>This jar has no config file: TNT shrapnel, Ore Excavation's undo rules and BlockRunner surfaces are Creative
+ * Compat's (with [shrapnel], [surface] and [vein_undo]), the liquid XP bridge is Creative Magic's, the wooden bucket
+ * Creative Delight's.
  *
  * <p>This jar took over the mod id {@code creativeengineering} at the swap (creative_split.md 6 Q1); what was left of
  * patcherMod became Creative Common ({@code creativecommon}). Every id keeps the {@code creativeengineering}
@@ -45,8 +44,8 @@ public class CreativeEngineering {
         // IE: arc recycling of springs, prefixToIngotMap override (onServerAboutToStart).
         MinecraftForge.EVENT_BUS.register(IECompat.class);
 
-        // Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common 2026-11-07):
-        // client only, and only with Create, whose emptying recipes it reads.
+        // Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common): client
+        // only, and only with Create, whose emptying recipes it reads.
         if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient() && ModList.get().isLoaded("create")) {
             MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativeengineering.compat.DrinkFluidEffects::onRecipesUpdated);
         }

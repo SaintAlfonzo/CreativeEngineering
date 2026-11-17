@@ -9,13 +9,12 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /**
- * D-DIM (namespace_move.md section 4): the pack's own dimensions moved from creativeengineering: to creativeworldgen:
- * on 2026-11-10. A dimension's chunks, entities, POI and per-dimension data live in
- * {@code <world>/dimensions/<namespace>/<path>}, so an old world's folders are renamed to the new namespace when the
- * world is opened (mixin.LevelStorageAccessDimensionMoveMixin: the end of the LevelStorageAccess constructor, after the
- * session lock and before level.dat or any level is read). Only the dimensions in {@link LegacyIds#DIMENSIONS}; a
- * folder whose new twin already exists is left alone and logged (never merged). The dimension ids saved in level.dat,
- * player files and other mods' data are read through {@link LegacyIds#keyAlias}.
+ * A dimension's chunks, entities, POI and per-dimension data live in {@code <world>/dimensions/<namespace>/<path>}, so
+ * an old world's folders are renamed to the new namespace when the world is opened
+ * (mixin.LevelStorageAccessDimensionMoveMixin: the end of the LevelStorageAccess constructor, after the session lock
+ * and before level.dat or any level is read). Only the dimensions in {@link LegacyIds#DIMENSIONS}; a folder whose new
+ * twin already exists is left alone and logged (never merged). The dimension ids saved in level.dat, player files and
+ * other mods' data are read through {@link LegacyIds#keyAlias}.
  */
 public final class DimensionMove {
 	private static final Logger LOG = LogManager.getLogger("creativeworldgen/dimension-move");

@@ -22,8 +22,7 @@ import net.minecraftforge.fml.ModList;
 
 /**
  * The IE potion machine pages: Automated Potion Mixing (IE Mixer potion brews) and Lingerification (IE Refinery
- * lingering conversions). Registered by patcherMod's DragonBreathingJEI until 2026-11-01, when they moved here with the
- * potion code (creative_brewing.md 4.2 phase 2). mixin/immersiveengineering/JEIHelperMixin keeps these recipes out of
+ * lingering conversions). mixin/immersiveengineering/JEIHelperMixin keeps these recipes out of
  * IE's own Mixer and Refinery pages while {@link AutomatedPotionMixingCategory#ACTIVE} /
  * {@link LingerificationCategory#ACTIVE} are set.
  */

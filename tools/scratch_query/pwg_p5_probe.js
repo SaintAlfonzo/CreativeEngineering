@@ -1,23 +1,23 @@
 // Scratch-only probe for the Create: Power Grid port, phase P5 rows (SQ-PWG-45 onward, plan_power_grid.md P5: ponder);
-// since P6 (2026-11-13) it carries the 55 structures of the -07 jar (P5's 36 plus 19 P6 ones; SQ-PWG-46); since P10 (r1113
-// pwg17) also ceiling_tile and wire/string_lights from the -17 jar (57 in all; generated the same way).
-// Copy into a scratch server's kubejs/server_scripts as zz_pwg_p5_probe.js; never into the pack.
-// Checks that every ponder structure the -07 jar ships loads on 1.19.2 (the files are 1.20.1 saves, DataVersion 3465;
-// Create 0.5.1's ponder reads them with StructureTemplate.load and no data fixing). The server has no ponder, so the
-// row copies the 55 files from the jar into a scratch datapack as pwgponder:<path> (data/pwgponder/structures/), and
-// this probe loads each through the server's structure manager (same NbtUtils.readBlockState palette parsing; the
-// manager's data fixer is a no-op for a newer DataVersion), places it with known shapes (no neighbour shape updates)
-// and compares every block with the file: block id, each stored property and value, block entity present.
-// EXPECTED below is generated from the jar's files (palette p: [name, props], blocks b: [x, y, z, palette index, has
-// block entity], e: entity count); a value starting with # was stored as a number, not a string, and is ignored by the
-// reader on 1.20.1 as on 1.19.2. Upstream-same quirks (the files carry them on 1.20.1 too, reported as quirk, not bad):
-// powergrid:creative_voltage_source saved with `axis` (the block has `facing` since; default facing), numeric values;
-// since P6 also powergrid:lv_switch saved with `axis_along_first` (the block has `rotation` since) and powergrid:solar_panel
-// saved with `rotation` (the block has none): both load with the default value, as on 1.20.1. After the r1113 run
-// (SQ-PWG-45) also: powergrid:device_connector saved with `axis_along_first` and powergrid:electromagnet with `facing`
-// (neither block has the property), and powergrid:winding `left` / `right` read back changed (WindingBlock.updateCase
-// sets them from the placed neighbours, as on 1.20.1): quirks, not bad.
-// No chunk loads here: `forceload add` the area first (Rhino deadlock, scratch-test gotchas).
+// since P6 it carries the 55 structures of the -07 jar (P5's 36 plus 19 P6 ones; SQ-PWG-46); since P10 (r1113 pwg17)
+// also ceiling_tile and wire/string_lights from the -17 jar (57 in all; generated the same way). Copy into a scratch
+// server's kubejs/server_scripts as zz_pwg_p5_probe.js; never into the pack. Checks that every ponder structure the -07
+// jar ships loads on 1.19.2 (the files are 1.20.1 saves, DataVersion 3465; Create 0.5.1's ponder reads them with
+// StructureTemplate.load and no data fixing). The server has no ponder, so the row copies the 55 files from the jar
+// into a scratch datapack as pwgponder:<path> (data/pwgponder/structures/), and this probe loads each through the
+// server's structure manager (same NbtUtils.readBlockState palette parsing; the manager's data fixer is a no-op for a
+// newer DataVersion), places it with known shapes (no neighbour shape updates) and compares every block with the file:
+// block id, each stored property and value, block entity present. EXPECTED below is generated from the jar's files
+// (palette p: [name, props], blocks b: [x, y, z, palette index, has block entity], e: entity count); a value starting
+// with # was stored as a number, not a string, and is ignored by the reader on 1.20.1 as on 1.19.2. Upstream-same
+// quirks (the files carry them on 1.20.1 too, reported as quirk, not bad): powergrid:creative_voltage_source saved with
+// `axis` (the block has `facing` since; default facing), numeric values; since P6 also powergrid:lv_switch saved with
+// `axis_along_first` (the block has `rotation` since) and powergrid:solar_panel saved with `rotation` (the block has
+// none): both load with the default value, as on 1.20.1. After the r1113 run (SQ-PWG-45) also:
+// powergrid:device_connector saved with `axis_along_first` and powergrid:electromagnet with `facing` (neither block has
+// the property), and powergrid:winding `left` / `right` read back changed (WindingBlock.updateCase sets them from the
+// placed neighbours, as on 1.20.1): quirks, not bad. No chunk loads here: `forceload add` the area first (Rhino
+// deadlock, scratch-test gotchas).
 //   list                    the 55 structure names
 //   nbt NAME X Y Z          load pwgponder:NAME, place it with its corner at X Y Z, compare
 //   nbtall X Y Z            all 57, one every 12 blocks east of X (57 x 12 = 684 blocks), then a summary line

@@ -156,7 +156,7 @@ public class EarthFillTest {
 				(x, y, z) -> y <= 56 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR, open, reach, false).air() == 1,
 				"brief case: bottom 60, sink 4, earth at y 60 over a 4-block gap counts over air (before the fix: not)");
 
-		// waterReach (2026-11-02): a basin, water from y 60 - x up to 60, so a pad at y 61 has x water blocks under its bottom
+		// waterReach: a basin, water from y 60 - x up to 60, so a pad at y 61 has x water blocks under its bottom
 		EarthFill.Terrain waterBasin = (x, y, z) -> y <= 60 - x ? EarthFill.Kind.SOLID : y <= 60 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR;
 		long[] wetRow = longs(java.util.stream.IntStream.rangeClosed(0, 12).mapToObj(x -> new int[]{x, 60, 0}).toArray(int[][]::new));
 		EarthFill.Reach wreach = new EarthFill.Reach(6, 10, 8, 2);
@@ -170,7 +170,7 @@ public class EarthFillTest {
 				"bury: water reach 2 too (min of 10 and 2)");
 		check(EarthFill.countEarth(List.of(new EarthFill.EarthPiece(wetRow, 61, EarthFill.Beard.BEARD)), waterBasin, open, new EarthFill.Reach(6, 10, 8, 9), false).water() == 6,
 				"water reach above the beard's reach is capped at it (6)");
-		// sand_base (2026-11-02): the base tags combine per structure
+		// sand_base: the base tags combine per structure
 		List<TagKey<Block>> both = EarthFill.withBases(earth, true, true);
 		check(EarthFill.withBases(earth, false, false) == earth, "no base tag: the earth list itself");
 		check(EarthFill.withBases(earth, false, true).equals(List.of(earthTag, EarthFill.SAND_BLOCKS)), "sand base: earth + sand_base");
@@ -193,7 +193,7 @@ public class EarthFillTest {
 		check(er.mound() == 2, "and the deep-water columns are mound columns");
 		er = EarthFill.countEarth(List.of(new EarthFill.EarthPiece(floor, 62, EarthFill.Beard.NONE)), river, open, reach, false);
 		check(er.water() == 4, "no beard: every earth block in water counts");
-		// the footprint's water share (2026-10-19): a lake (water at y 62, its bed below) for x >= 6, dry ground (top y 62) for x < 6
+		// the footprint's water share: a lake (water at y 62, its bed below) for x >= 6, dry ground (top y 62) for x < 6
 		EarthFill.Terrain lakeShore = (x, y, z) -> x >= 6 ? (y <= 58 ? EarthFill.Kind.SEABED : y <= 62 ? EarthFill.Kind.WATER : EarthFill.Kind.AIR)
 				: y <= 62 ? EarthFill.Kind.SOLID : EarthFill.Kind.AIR;
 		EarthFill.Footprint fp = EarthFill.footprint(List.of(new EarthFill.Layer(0, 0, 9, 1, 62)), lakeShore, 3);
@@ -277,7 +277,7 @@ public class EarthFillTest {
 		check(EarthFill.unlimited(new EarthFill.Override("a:b", -1, -1, -1)), "\"a:b=-1,-1,-1\" is unlimited");
 		check(!EarthFill.unlimited(null), "no override: not unlimited");
 
-		// D4 (2026-10-30): pruning drops a piece whose own footprint is too wet, once it has pruneMinWetColumns water columns
+		// D4: pruning drops a piece whose own footprint is too wet, once it has pruneMinWetColumns water columns
 		List<net.minecraft.world.level.levelgen.structure.StructurePiece> village = new ArrayList<>();
 		for (int i = 0; i < 4; i++) village.add(new PoolElementStructurePiece(null, new SinglePoolElement(new StructureTemplate()), BlockPos.ZERO, 0,
 				Rotation.NONE, new BoundingBox(i * 10, 64, 0, i * 10 + 7, 70, 7)));
@@ -305,7 +305,7 @@ public class EarthFillTest {
 		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 0, gap, null, 0, 16, new ArrayList<>()) == two, "unsunk: the beard fills the 4-block gap, kept");
 		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 4, gap, null, 0, 16, new ArrayList<>()).size() == 1, "sink 4: 9 earth hang (> pruneMaxHanging 8), pruned");
 
-		// earthfill #15 (phase 4, 2026-10-30). WET pruning (pruneWetJigsaws): no piece limits, only the water share
+		// earthfill #15 (phase 4). WET pruning (pruneWetJigsaws): no piece limits, only the water share
 		check(EarthFill.pruned(two, padOf, EarthFill.Beard.BEARD, 4, gap, false, null, 0, 16, new ArrayList<>()) == two,
 				"wet only: the 9 hanging earth don't drop the piece");
 		kept = EarthFill.pruned(village, p -> new long[0], EarthFill.Beard.BEARD, 0, (x, y, z) -> EarthFill.Kind.SOLID, false, fps::get, 0.0, 16, new ArrayList<>());

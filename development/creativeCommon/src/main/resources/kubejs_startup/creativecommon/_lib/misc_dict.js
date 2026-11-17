@@ -4,8 +4,8 @@
 // i.<key>, so items stay defined once in item_dict.js. Key: <category>_<name>, category from global.miscGrammar
 // (food_grammar.js), e.g. m.seed_oat; `item_` is the catch-all category.
 //
-// Kept by hand. Seeded 2026-11-02 by tools/kitchen_dicts.py --seed (227 keys); run tools/kitchen_dicts.py to lint.
-// Check on load as for the food dict; global.miscKey is the reverse index (item id -> misc key).
+// Kept by hand. Run tools/kitchen_dicts.py to lint. Check on load as for the food dict; global.miscKey is the
+// reverse index (item id -> misc key).
 global.misc = {}
 ;(function (m, i) {
 

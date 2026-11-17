@@ -1,15 +1,14 @@
 package com.SaintAlfonzo.creativecompat.surface;
 
 /**
- * Superseded 2026-11-15 by the counts baked into the chunk ({@link PassCounts}, plan_post_scratch_1115b.md C2):
- * movement no longer reads this table. Kept for Creative Devtools' bench, whose {@link #clear()} now also makes every
- * chunk recount ({@link PassCountData#forgetAll()}), so its cold cases stay cold.
+ * Kept for Creative Devtools' bench, whose {@link #clear()} now also makes every chunk recount
+ * ({@link PassCountData#forgetAll()}), so its cold cases stay cold.
  *
- * <p>Was: neighbour counts of the current tick, per block position (plan_passthrough.md 7.2 fallback, scratch fixes
- * 2026-11-15): a herd in a field or a crowd in a web block shares cells, so the second entity in a cell reads the count
- * instead of doing the 8 or 26 block lookups again. One per thread ({@link #get()}: server thread, client thread); a
- * new level or game time starts an empty table (a stamp bump, nothing cleared). A block changed during the tick can
- * leave a count one tick stale, which is harmless for a speed.
+ * <p>Was: neighbour counts of the current tick, per block position (plan_passthrough.md 7.2 fallback, scratch fixes): a
+ * herd in a field or a crowd in a web block shares cells, so the second entity in a cell reads the count instead of
+ * doing the 8 or 26 block lookups again. One per thread ({@link #get()}: server thread, client thread); a new level or
+ * game time starts an empty table (a stamp bump, nothing cleared). A block changed during the tick can leave a count
+ * one tick stale, which is harmless for a speed.
  *
  * <p>Open addressing, 4096 slots, up to 8 probes; when those are taken the home slot is overwritten. Plain Java (the
  * level is only an identity key), so the headless harness tests it.

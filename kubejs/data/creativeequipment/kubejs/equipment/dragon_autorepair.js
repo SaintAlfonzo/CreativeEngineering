@@ -1,14 +1,11 @@
 // requires: creativeequipment
-// Creative Equipment; moved from kubejs/server_scripts/equipment/dragon_autorepair.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
-// Passive slow self-repair for dragon-tier gear (#creativeequipment:dragon_gear -
-// server_scripts/tags/equipmenttags.js) while worn/held - the same "repairs very slowly
-// over time when in use" idiom as Allurement's `allurement:reforming` enchantment, but
-// built in-house rather than silently forcing that mod's real enchantment onto our gear:
-// it's a REAL enchantment level (would surface in the item's enchant tooltip unless we
-// then did MORE work to hide it), its rate is that mod's own config (shared with any
-// real reforming book a player finds/crafts, so retuning one retunes both), and it
-// stops working the moment Allurement isn't installed. ItemStack's damage is a plain
-// public field via getDamageValue()/setDamageValue() - no read-only-event problem like
+// Creative Equipment. Passive slow self-repair for dragon-tier gear (#creativeequipment:dragon_gear -
+// server_scripts/tags/equipmenttags.js) while worn/held - the same "repairs very slowly over time when in use" idiom as
+// Allurement's `allurement:reforming` enchantment, but built in-house rather than silently forcing that mod's real
+// enchantment onto our gear: it's a REAL enchantment level (would surface in the item's enchant tooltip unless we then
+// did MORE work to hide it), its rate is that mod's own config (shared with any real reforming book a player
+// finds/crafts, so retuning one retunes both), and it stops working the moment Allurement isn't installed. ItemStack's
+// damage is a plain public field via getDamageValue()/setDamageValue() - no read-only-event problem like
 // magic_resistance's damage reduction had, so this needs no patcherMod/Java at all.
 //
 // dragon_horse_armor is not repaired: as in vanilla, HorseArmorItem has no durability

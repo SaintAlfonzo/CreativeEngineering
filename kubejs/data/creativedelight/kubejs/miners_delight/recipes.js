@@ -11,9 +11,9 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 		var F = global.CD.food(e)
 
-		//######################### Cooking trio #########################
-		// Plain cooked meat is made in all three of smoker, furnace and campfire (food_families.md 3.1 `meat/cooked`).
-		// The port ships the furnace only (0.25 xp); the family call (CD.FOOD values, 2026-11-01) replaces it with all three.
+		//######################### Cooking trio ######################### Plain cooked meat is made in all three of smoker,
+		// furnace and campfire (food_families.md 3.1 `meat/cooked`). The port ships the furnace only (0.25 xp); the family
+		// call (CD.FOOD values) replaces it with all three.
 		F.meatCook(i.arthropod, i.cooked_arthropod)
 
 		//######################### Squid to calamari #########################

@@ -1,6 +1,6 @@
-// creativeEquipment: Creative Equipment (mod id creativeequipment, feature_writeup/creative_equipment.md), carved out of patcherMod on
-// 2026-11-04 (creative_split.md 7.6, wave 7). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
-// This file adds what is specific to Equipment, the same way creativeMagic/build.gradle does:
+// creativeEquipment: Creative Equipment (mod id creativeequipment, feature_writeup/creative_equipment.md). Shared Forge
+// setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Equipment, the
+// same way creativeMagic/build.gradle does:
 //   - the Equipment script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up without a
 //     rebuild, copied into the jar at the same resource path:
 //       kubejs/data/creativeequipment/kubejs/    -> data/creativeequipment/kubejs/    (server scripts)

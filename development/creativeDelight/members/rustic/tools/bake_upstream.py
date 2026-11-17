@@ -36,10 +36,10 @@ DONOR_URL = 'https://cdn.modrinth.com/data/foa4fGIH/versions/z29Gd3ec/' + DONOR_
 EXPORTED = os.path.join(INSTANCE, 'kubejs', 'exported')
 
 NS = 'rusticdelight'
-# Upstream ids the port does not register: Fruit Beignet (owner 2026-10-25), the plain single Pancake and Fried Dough
-# (owner 2026-11-01, TODO creativedelight/members #15, #25). Files and data naming one are dropped, after REPLACED.
+# Upstream ids the port does not register: Fruit Beignet (owner), the plain single Pancake and Fried Dough (owner,
+# TODO creativedelight/members #15, #25). Files and data naming one are dropped, after REPLACED.
 REMOVED = {'fruit_beignet', 'pancake', 'fried_dough'}
-# The plain plate's recipes, cut and loot use Supplementaries' pancake instead (owner 2026-11-01).
+# The plain plate's recipes, cut and loot use Supplementaries' pancake instead (owner).
 REPLACED = {'pancake': 'supplementaries:pancake'}
 # Advancements (the pack drops them all), biome modifiers (Creative Delight's wild_crops.json places every wild plant),
 # upstream's 1.20 edits of five Farmer's Delight recipes.
@@ -70,8 +70,7 @@ KNOWN_SERIALIZERS = {'forge:conditional'}
 # ----------------------------------------------------------------------------------------------------------- rules
 
 # Files named like a removed id that other kept files need: the coaster pancake model is the parent of the six flavoured
-# pancake coaster models, and its texture is their particle (the runtime translator dropped both; missing model fixed
-# 2026-11-10).
+# pancake coaster models, and its texture is their particle (the runtime translator dropped both).
 KEPT_SHARED = {'assets/rusticdelight/models/coaster/pancake.json', 'assets/rusticdelight/textures/block/coaster/pancake.png'}
 
 

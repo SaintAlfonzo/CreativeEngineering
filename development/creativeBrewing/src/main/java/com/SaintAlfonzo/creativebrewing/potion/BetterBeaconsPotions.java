@@ -15,10 +15,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 /**
- * Potions for Better Beacons' effects: creativebrewing:long_reach (base, long_, strong_) and creativebrewing:phantom_bane
- * (base, long_; levelless, Better Beacons only tests hasEffect). Moved from Creative Common's CommonPotions 2026-11-07
- * (owner: Better Beacons potions belong to Creative Brewing; the creativecommon: ids are remapped by
- * data/creativebrewing/swaps/better_beacons_potions.json). Brew mixes: kubejs_startup/creativebrewing/potions.js.
+ * Potions for Better Beacons' effects: creativebrewing:long_reach (base, long_, strong_) and
+ * creativebrewing:phantom_bane (base, long_; levelless, Better Beacons only tests hasEffect). Brew mixes:
+ * kubejs_startup/creativebrewing/potions.js.
  *
  * Why Java: KubeJS evaluates potion registry scripts before any MobEffect is registered, so a potion of a modded
  * effect built there silently never exists. A DeferredRegister supplier runs at the real RegisterEvent&lt;Potion&gt;,

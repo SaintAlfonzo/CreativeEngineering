@@ -3,8 +3,8 @@ package com.SaintAlfonzo.creativelabels;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * {@code config/creativelabels-common.toml} and {@code creativelabels-client.toml} (creative_labels-*.toml before 2026-11-10, carried over by {@link CreativeLabels}) (BRIEF 6). Read through
- * {@link #on}, {@link #num} and {@link #integer}, which fall back to the defaults while the config isn't loaded.
+ * {@code config/creativelabels-common.toml} and {@code creativelabels-client.toml} (BRIEF 6). Read through {@link #on},
+ * {@link #num} and {@link #integer}, which fall back to the defaults while the config isn't loaded.
  */
 public final class CLConfig {
 

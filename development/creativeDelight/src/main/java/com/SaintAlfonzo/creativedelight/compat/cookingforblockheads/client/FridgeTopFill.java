@@ -30,11 +30,9 @@ import org.slf4j.Logger;
 /**
  * Cooking for Blockheads' 2-tall fridge reads as a full block (TODO cooking/kitchen #6, textures/art #1). CfB 13.3.4's
  * upper half stops at y 13, so decor on top floated 3 px above it. Our own model
- * {@code creativedelight:block/fridge_top_fill} is one box (x 1-15, z 1-15, y 13-16) textured with the white inside
- * of CfB's {@code fridge_side}, tintindex 0, so a dyed fridge's box takes the dye from CfB's block colour. Its quads are
- * added to the fridge's baked model for every {@code model_type=large_upper} state; CfB's own models are not touched
- * (until 2026-10-31 this was a copy of CfB's fridge_large_upper model in kubejs/assets, which an All Rights Reserved
- * file may not be).
+ * {@code creativedelight:block/fridge_top_fill} is one box (x 1-15, z 1-15, y 13-16) textured with the white inside of
+ * CfB's {@code fridge_side}, tintindex 0, so a dyed fridge's box takes the dye from CfB's block colour. Its quads are
+ * added to the fridge's baked model for every {@code model_type=large_upper} state; CfB's own models are not touched.
  * <p>
  * CfB's fridge model is a Balm dynamic model, put in the model map in CfB's own {@code ModelEvent.BakingCompleted}
  * listener; this mod loads after CfB (mods.toml ordering), so its listener sees Balm's model and wraps it. The box

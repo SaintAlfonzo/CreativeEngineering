@@ -1,10 +1,9 @@
 // requires: creativebrewing
-// Moved from the pack's client_scripts/fluid_jei.js 2026-11-01 (creative_brewing.md 4.5), unchanged. Runs after the
-// pack's own JEIEvents.addFluids pass (all registered fluids), as it did before.
-// create:potion is a special case: the fluid identity that actually matters is its NBT
-// (`Potion` / `Bottle`), so add one REGULAR-bottle stack per valid potion instead of a bare
-// no-NBT one. Same "every non-empty potion in registry order" loop used to generate the
-// create:potion bottling recipes - see ../../../data/creativebrewing/kubejs/creativebrewing/potion_bottling.js.
+// Runs after the pack's own JEIEvents.addFluids pass (all registered fluids), as it did before. create:potion is a
+// special case: the fluid identity that actually matters is its NBT (`Potion` / `Bottle`), so add one
+// REGULAR-bottle stack per valid potion instead of a bare no-NBT one. Same "every non-empty potion in registry
+// order" loop used to generate the create:potion bottling recipes - see
+// ../../../data/creativebrewing/kubejs/creativebrewing/potion_bottling.js.
 JEIEvents.addFluids(e => {
 	if (!global.has('create')) return
 	const POTIONS = Java.loadClass('net.minecraft.core.Registry').POTION

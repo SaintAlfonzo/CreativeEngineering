@@ -11,8 +11,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Double fridges (TODO cooking/kitchen #36, owner Q27 2026-11-07): two Cooking for Blockheads fridges side by side join
- * like a double door. Visual only: each keeps its own inventory and its own door.
+ * Double fridges (TODO cooking/kitchen #36, owner Q27): two Cooking for Blockheads fridges side by side join like a
+ * double door. Visual only: each keeps its own inventory and its own door.
  * <p>
  * CfB's {@code flipped} state picks the door side. In CfB's model frame (front at north, model +x is
  * {@code facing.getClockWise()} in the world) an unflipped door has its handle at -x and its hinge at +x; a flipped door

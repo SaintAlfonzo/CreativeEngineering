@@ -1,9 +1,7 @@
-// Misc decorative blocks in the creativeengineering namespace.
-// Blockstate / block model / block-item model are hand-authored on disk under
-// assets/creativeengineering/{blockstates,models/block,models/item}/<name>.json
-// (the .model() call just points the generated blockstate at the same model; the on-disk
-// files win). Textures live at creativeengineering:block/<name>.
-// The Weathered Cardboard Box moved to Creative Compat on 2026-11-01 (creativecompat/decor_blocks.js in that jar).
+// Misc decorative blocks in the creativeengineering namespace. Blockstate / block model / block-item model are
+// hand-authored on disk under assets/creativeengineering/{blockstates,models/block,models/item}/<name>.json (the
+// .model() call just points the generated blockstate at the same model; the on-disk files win). Textures live at
+// creativeengineering:block/<name>.
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {

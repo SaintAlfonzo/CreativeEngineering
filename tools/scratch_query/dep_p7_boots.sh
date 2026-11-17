@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# r1115 phase 7 (SQ-DEP-09b drop-one boots, SQ-DEP-02 no-Brewing boot): one scratch server per spec, in order, one JVM at a
-# time. Batches come from tools/scratch_query/dep_gen_p7.py. Written 2026-11-15 (runner-7).
+# r1115 phase 7 (SQ-DEP-09b drop-one boots, SQ-DEP-02 no-Brewing boot): one scratch server per spec, in order, one JVM
+# at a time. Batches come from tools/scratch_query/dep_gen_p7.py.
 #   dep_p7_boots.sh S SPEC [SPEC ...]
 #     S     scratch root (OUT dirs are S/p7<label>)
 #     SPEC  label:group:jarregex[:batch]   e.g. "dbb:A:buzzier_bees-:p7_d_buzzier_bees.qb"; jarregex = ERE matched against

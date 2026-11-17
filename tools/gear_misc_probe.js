@@ -1,4 +1,4 @@
-// Scratch-server probe for the 2026-10-22 gear / mobs / storage / misc work (queue entries SQ-GM-* in
+// Scratch-server probe for the gear / mobs / storage / misc work (queue entries SQ-GM-* in
 // feature_writeup/testing/scratch_queue.md). Scratch-only: copy into a scratch server's kubejs/server_scripts/ as
 // zz_gm_probe.js (tools/creative_labels_test/scratch_server.sh), never into the pack. Run `/gmprobe` for every part or
 // `/gmprobe <part>`; results are "[gmprobe] PASS|FAIL|INFO ..." lines in logs/latest.log, ending

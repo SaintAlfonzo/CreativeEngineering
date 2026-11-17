@@ -127,8 +127,8 @@ public final class SaltLick {
     }
 
     /**
-     * Salt on a full lick (B7, owner 2026-11-15): one salt layer on top of it, or one more on a layer already there
-     * (below 8). False when nothing could be placed (no Vintage Delight, the spot is taken, the layer is full).
+     * Salt on a full lick (B7, owner): one salt layer on top of it, or one more on a layer already there (below 8).
+     * False when nothing could be placed (no Vintage Delight, the spot is taken, the layer is full).
      */
     public static boolean addLayerOnTop(Level level, BlockPos lick) {
         Block layer = saltLayer();

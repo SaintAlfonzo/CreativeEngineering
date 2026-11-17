@@ -1,12 +1,11 @@
 // requires: creativedelight
 // requires: farmersdelight
-// Farmer's Delight client rows, moved from the pack's client_scripts/ 2026-10-27, rows unchanged.
+// Farmer's Delight client rows.
 
-// Bowl, basket and soil lines (moved from the pack's client_scripts/tooltips.js 2026-11-01, rows unchanged; the
-// helpers and palette come through global.tooltips), then the farmer villager line: Creative Delight's Farmer's
-// Delight repack, config/farmersdelight-ce-common.toml [villagers] farmlandBlocks (feature_writeup/farmers_delight.md
-// 3), after the soil lines as before.
-// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+// Bowl, basket and soil lines (the helpers and palette come through global.tooltips), then the farmer villager line:
+// Creative Delight's Farmer's Delight repack, config/farmersdelight-ce-common.toml [villagers] farmlandBlocks
+// (feature_writeup/farmers_delight.md 3), after the soil lines as before. A tooltip line in a col role
+// (global.tooltips, Creative Common's client _lib; read at event time)
 var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
 
 ItemEvents.tooltip(e => {

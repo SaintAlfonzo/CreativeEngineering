@@ -1,5 +1,5 @@
-// Scratch-server probe: farming / wood / worldgen features of 2026-10-22 (queue entries SQ-SF, SQ-WC, SQ-MB, SQ-GE
-// in feature_writeup/testing/scratch_queue.md). Copy into a SCRATCH server's kubejs/server_scripts/ as
+// Scratch-server probe: farming / wood / worldgen features (queue entries SQ-SF, SQ-WC, SQ-MB, SQ-GE in
+// feature_writeup/testing/scratch_queue.md). Copy into a SCRATCH server's kubejs/server_scripts/ as
 // zz_zfw_probe.js (never the pack's). Prefix ZFW_ (all server scripts share one scope).
 //   zfw stem        extra stem fruit (crops.md 2.10): one pad per StemGrownBlock fruit at x 400.., z 400, y 0. Needs
 //                   [stem_fruit] secondFruitMinutes = 0, thirdFruitMinutes = 0, fourthFruitMinutes = 1 in the srv toml

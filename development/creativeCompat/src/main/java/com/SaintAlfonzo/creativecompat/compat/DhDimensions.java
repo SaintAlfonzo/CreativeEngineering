@@ -8,8 +8,7 @@ import java.util.Set;
  *
  * The Nether: no distant generation (mixin.DhNoGenerationMixin), LODs drawn to {@link #NETHER_LOD_RADIUS} chunks
  * instead of the config's lodChunkRenderDistanceRadius, with DH's far fog reaching full thickness at that edge
- * (compat.DhDimensionView, client). Nether terrain under the roof is mostly hidden by fog anyway, and its generation
- * (basalt deltas especially) was a large part of DH's world-gen thread time on 2026-11-07.
+ * (compat.DhDimensionView, client).
  */
 public final class DhDimensions {
 

@@ -104,7 +104,7 @@ public final class Spots {
     public static final ResourceLocation DENY_TAG_ID = new ResourceLocation("creativelabels", "paper/deny");
     public static final ResourceLocation POSTS_TAG_ID = new ResourceLocation("creativelabels", "paper/posts");
     public static final ResourceLocation CENTRE_NOTE_TAG_ID = new ResourceLocation("creativelabels", "paper/centre_note");
-    /** Centre-note hosts whose top takes one note too (Supplementaries jar, Pickling Jar; owner 2026-11-03). */
+    /** Centre-note hosts whose top takes one note too (Supplementaries jar, Pickling Jar; owner). */
     public static final ResourceLocation NOTE_ON_TOP_TAG_ID = new ResourceLocation("creativelabels", "paper/note_on_top");
     @Nullable
     private static volatile TagKey<Block> denyTag, postsTag, centreNoteTag, noteOnTopTag;
@@ -316,7 +316,7 @@ public final class Spots {
         // Centre-note hosts (tag): one note centred on each side face. Tops: only hosts in the note-on-top tag (the
         // jar and the Pickling Jar, whose lid sits 2.5 px down, too deep for the shape test), one note centred on the
         // lid; every other centre-note top (sack neck, trash can rim, botany pot soil) and every bottom takes none
-        // (owner 2026-11-03, SQ-LBS-03; the shape test let the jar lid and the sack neck carry spot C).
+        // (owner, SQ-LBS-03; the shape test let the jar lid and the sack neck carry spot C).
         Fit notes;
         if (!rules.centreNote(host)) notes = shapeFit(shape, face, rotation);
         else if (face.getAxis().isHorizontal()) notes = centreNoteFit(shape, face, rotation);

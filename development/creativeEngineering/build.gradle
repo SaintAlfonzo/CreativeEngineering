@@ -1,7 +1,6 @@
-// creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md), carved
-// out of patcherMod on 2026-11-04 (creative_split.md 7.6 and 7.13, wave 8). Shared Forge setup comes from
-// build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Engineering, the same way
-// creativeEquipment/build.gradle does:
+// creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to
+// Engineering, the same way creativeEquipment/build.gradle does:
 //   - the Engineering script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up
 //     without a rebuild, copied into the jar at the same resource path:
 //       kubejs/data/creativeengineering/kubejs/    -> data/creativeengineering/kubejs/    (server scripts)
@@ -19,8 +18,7 @@ dependencies {
     // Creative Common: a hard dependency (KubeJS, the shared helpers, the startup loader) and the Common APIs this
     // jar calls.
     compileOnly project(':creativeCommon')
-    // Creative Compat: required by every Creative jar (creative_split.md 7.6); no class of it is called since the
-    // surface/ code moved there (2026-11-06).
+    // Creative Compat: required by every Creative jar (creative_split.md 7.6).
     compileOnly project(':creativeCompat')
     // The mods the mixins target (Create, IE, Immersive Posts, Dreams and Desires, JEI): the pack's jars, shared with
     // Creative Common (git-ignored libs/, SRG-named).

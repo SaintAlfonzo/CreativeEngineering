@@ -16,7 +16,6 @@ plugins {
 dependencies {
     // CEConfig, the remainder buffer API and the other pack Java CB's compartments call; Creative Common is a hard dependency.
     compileOnly project(':creativeCommon')
-    // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
     compileOnly project(':creativeCompat')
     // Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
     compileOnly project(':creativeLoot')

@@ -56,7 +56,7 @@ global.CD.FOOD = {
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
 	gold: { mixer: 6, arc: 4 },
 	// Gilded (enchanted golden) food: sequenced assembly loops, each 1 gold ingot + this much liquid XP and a press
-	// (owner 2026-11-03, food.md 3.16; was a gold block + 250 mB, 4 loops)
+	// (owner, food.md 3.16; was a gold block + 250 mB, 4 loops)
 	gilded: { loops: 8, xp: 125 },
 }
 
@@ -161,7 +161,7 @@ global.CD.food = function (e) {
 			R.ceBaking([i.cookie_dough].concat(flavours), Item.of(output, V.cookies), e, suffix(output, ''), ware.sheet)
 		},
 		// Muffins bake in the oven only: the mod's Cooking Pot recipe goes and none replaces it (baking/baked-goods,
-		// owner 2026-10-29). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
+		// owner). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
 		muffinBake(fruit, output) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)

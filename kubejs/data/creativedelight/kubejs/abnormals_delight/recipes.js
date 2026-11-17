@@ -22,8 +22,7 @@ ServerEvents.recipes(e => {
 		F.meatCut(i.raw_duck, i.duck_fillet)
 		F.meatCook(i.duck_fillet, i.cooked_duck_fillet)
 		R.fdCooking([i.t_raw_duck, i.pasta, i.carrot, i.vegetables], i.duck_noodles, e, 'duck_noodles', 1.0, 200, i.bowl)
-		// Heatless craft (moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, unchanged; rule in
-		// farmersdelight/recipes.js "Meals"): pastas take no broth, the pot's bowl
+		// Heatless craft (rule in farmersdelight/recipes.js "Meals"): pastas take no broth, the pot's bowl
 		F.mealCraft([i.t_cooked_duck, i.t_cooked_duck, i.pasta, i.carrot, i.t_soup_veggie_cooked, i.bowl], i.duck_noodles)
 	})
 })

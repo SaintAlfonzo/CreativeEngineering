@@ -17,7 +17,7 @@
 //                                      bowl; prints Copper Pot NBT for 1 and for 3 meals (SQ-RB-21)
 //   /s5 jarrecipe                      vintagedelight:fermenting recipes with a container whose ingredient leaves that
 //                                      container; prints Pickling Jar NBT for 3 batches + 1 container (SQ-RB-22)
-// MIGRATED 2026-11-15 in part (creative_devtools.md): sneak -> /pbot sneak, break -> /pbot break, eat -> /pbot inv set
+// MIGRATED in part (creative_devtools.md): sneak -> /pbot sneak, break -> /pbot break, eat -> /pbot inv set
 // + /pbot eat (a ticked use). The rest stays here.
 (() => {
     const $S5Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

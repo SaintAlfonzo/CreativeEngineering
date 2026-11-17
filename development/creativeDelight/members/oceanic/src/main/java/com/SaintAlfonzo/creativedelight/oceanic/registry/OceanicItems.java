@@ -30,7 +30,7 @@ public final class OceanicItems {
 
     private static final Supplier<Item> BOWL = () -> Items.BOWL;
     // Comfort / Nourishment are not applied here: the pack's Comfort / Nourishment rule sets them on the bowls' food
-    // properties (tools/gen_comfort_nourishment.py, comfort_nourishment.md 10; dishes/ocean #8, 2026-11-02).
+    // properties (tools/gen_comfort_nourishment.py, comfort_nourishment.md 10; dishes/ocean #8).
     private static final Supplier<MobEffect> BREATH = OceanicEffects.INSTANT_BREATH;
 
     public static final RegistryObject<Item> SALMON_EGGS = food("salmon_eggs", 64, Rarity.COMMON, 3, 0.8F, f -> f, b -> b);

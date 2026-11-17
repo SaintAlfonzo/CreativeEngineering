@@ -1,4 +1,3 @@
-// Moved from the pack's startup_scripts/cooking/food_values.js 2026-10-25, rows unchanged.
 // Creative Delight startup script, loaded from the jar after the pack's startup_scripts, so the dicts exist here.
 //
 // Food values copied from one food onto another: target key -> source key (item_dict). The target takes the source's
@@ -26,7 +25,7 @@
 //   Creative Brewing creativebrewing/alcohol_drinks.js  absolute: every alcoholic drink (global.alcohol)
 //   minecraft/food_values.js         glistering_melon_slice
 // The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/
-// effect_swaps.js (moved from the pack's cooking/food_values.js 2026-11-01).
+// effect_swaps.js (moved from the pack's cooking/food_values.js).
 global.foodValueCopies = global.foodValueCopies || {}
 Object.defineProperty(global.foodValueCopies, 'absolute', {
 	enumerable: false,

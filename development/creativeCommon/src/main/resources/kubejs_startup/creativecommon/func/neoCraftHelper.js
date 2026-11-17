@@ -1,8 +1,8 @@
-// Creative Common (patcherMod until 2026-11-04): src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js
-// (was kubejs/startup_scripts/func/neoCraftHelper.js; moved 2026-10-25, creative_delight.md 10.5 item 3).
-// Shipped in patcherMod's jar and loaded by its startup loader (compat/kubejs/JarStartupScripts) BEFORE the
-// pack's startup_scripts folder, so the dicts (global.item, global.fluid) do not exist yet when this file runs:
-// read them inside functions only (at call time), never at top level. An edit needs a patcherMod rebuild.
+// Creative Common: src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js (was
+// kubejs/startup_scripts/func/neoCraftHelper.js). Shipped in patcherMod's jar and loaded by its startup loader
+// (compat/kubejs/JarStartupScripts) BEFORE the pack's startup_scripts folder, so the dicts (global.item, global.fluid)
+// do not exist yet when this file runs: read them inside functions only (at call time), never at top level. An edit
+// needs a patcherMod rebuild.
 
 console.log('Neo Craft Helper starting')
 
@@ -474,9 +474,9 @@ global.NCH = {
   // script _lib/absent_mods.js prints one line per mod after the recipe event. A missing id of a loaded mod still
   // warns or throws as before, so pack bugs stay visible.
   _absentCounts: {},
-  // Item.of / Fluid.of of a missing id give air / the empty fluid before NCH sees the id, so those count as a row for an
-  // absent mod too, under their own label. Nothing in the pack passes air or the empty fluid on purpose (checked
-  // 2026-11-04); in the full pack the label showing up in the [absent mods] summary means a real missing id.
+  // Item.of / Fluid.of of a missing id give air / the empty fluid before NCH sees the id, so those count as a row for
+  // an absent mod too, under their own label. Nothing in the pack passes air or the empty fluid on purpose (checked);
+  // in the full pack the label showing up in the [absent mods] summary means a real missing id.
   _missingStackLabel: 'unknown mod (Item.of or Fluid.of of a missing id gave air or the empty fluid)',
   _absent(id, context) {
     if (id === 'minecraft:air' || id === 'minecraft:empty') {
@@ -883,11 +883,10 @@ global.NCH = {
     return includeAdded ? global.NCH._replaceInAdded(filter, 'output', oldOutput, newOutput, e) : 0
   },
 
-  // Sets the cooking time (ticks) of every loaded recipe the filter matches (smelting-style and Farmer's Delight
-  // pot recipes both read `cookingtime`). Returns the number of recipes changed.
-  // The time goes in as a parsed JSON number: a JS number (and even Integer.valueOf) makes Rhino pick
-  // addProperty(String, String) and write "400.0", which Farmer's Delight rejects ("Expected cookingtime to be a Int"),
-  // dropping the recipe (checked on a scratch server 2026-11-07).
+  // Sets the cooking time (ticks) of every loaded recipe the filter matches (smelting-style and Farmer's Delight pot
+  // recipes both read `cookingtime`). Returns the number of recipes changed. The time goes in as a parsed JSON number:
+  // a JS number (and even Integer.valueOf) makes Rhino pick addProperty(String, String) and write "400.0", which
+  // Farmer's Delight rejects ("Expected cookingtime to be a Int"), dropping the recipe (checked on a scratch server).
   setCookTime(filter, time, e) {
     if (!e) throw new Error('setCookTime called without event object!')
     global.NCH._pruneEmptyIeOutputs(e)
@@ -2361,8 +2360,7 @@ global.NCH = {
 
 		// G5 for steps: a step built by the caller with Fluid.of(<absent mod's fluid>) carries the empty fluid, and Create
 		// rejects the whole recipe (horror lasagna on the chain without Central Kitchen, scratch r1106cbo). Skip the recipe
-		// quietly, counted in the [absent mods] summary, and drop its steps. Until 2026-11-06 night the loop only counted
-		// and the assembly was still built (scratch r1106spf SQ-CBP-03b: horror lasagna kept its empty filling step).
+		// quietly, counted in the [absent mods] summary, and drop its steps.
 		for (var si = 0; si < steps.length; si++) {
 			if (!global.NCH._stepHasEmptyFluid(steps[si])) continue
 			dropSteps()

@@ -91,7 +91,7 @@ def main():
         if cand:
             lt_match[j] = cand[0]
             free.discard(cand[0])
-    lt_manual = {  # owner rewrites 2026-11-07 (plan_creative_tips.md section 7), pinned by exact upstream text
+    lt_manual = {  # owner rewrites (plan_creative_tips.md section 7), pinned by exact upstream text
         "Gold tools mine faster than diamond, are easy to enchant, and naturally apply Fortune or Looting. Unfortunately they aren't very durable": "Gold tools are faster but break easily.",
         "Villagers trade for emeralds, and every trade gives them experience toward better trades": "Villagers love emeralds.",
         "Fortune works on coal, copper, iron, gold, redstone, lapis, diamond, emerald and quartz ores, and on ancient debris": "Fortune works on coal, diamonds, lapis, copper, and iron.",

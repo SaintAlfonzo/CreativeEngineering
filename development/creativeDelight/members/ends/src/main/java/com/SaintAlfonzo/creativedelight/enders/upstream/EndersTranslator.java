@@ -17,9 +17,7 @@ import java.util.Set;
  * Picks this member's files out of the Ender's Delight 1.1.4 donor jar and turns them into 1.19.2 data
  * (feature_writeup/ends_delight.md 5.3). Only the listed paths are taken: Ender's Delight 1.2.2 is installed under the same
  * namespace, and none of these paths exists in its jar, so its own look and data stay untouched.
- * <p>
- * Changes made in memory (the same edits the member shipped as files until 2026-11-01):
- * <ul>
+ * <p> Changes made in memory: <ul>
  * <li>{@code voidpepper_block} blockstate: every multipart case states {@code pepper} ({@code true} for the
  * {@code voidpepper_on} model, else {@code false}), so the plain and the fruiting vine never draw over each other.</li>
  * <li>{@code end_house} structure: 1.1.4's own structure type becomes {@code minecraft:jigsaw}; biome ids get their

@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * {@code blockLabelledCrafting} under FastWorkbench (found on the scratch server 2026-10-21): FastWorkbench 7.1.4
- * overwrites {@code slotsChanged} of both the inventory menu and the crafting table menu to queue its own
- * {@code FastBenchUtil.slotChangedCraftingGrid}, so vanilla's {@code CraftingMenu.slotChangedCraftingGrid} (where
- * {@link CraftingMenuResultMixin} sits) never runs and labelled items crafted freely. Same check at the head of
- * FastWorkbench's copy. Its grid parameter is FastWorkbench's {@code CraftingInventoryExt}, taken here as its
- * vanilla supertype (@Coerce; no compile dependency).
+ * {@code blockLabelledCrafting} under FastWorkbench: FastWorkbench 7.1.4 overwrites {@code slotsChanged} of both
+ * the inventory menu and the crafting table menu to queue its own {@code FastBenchUtil.slotChangedCraftingGrid},
+ * so vanilla's {@code CraftingMenu.slotChangedCraftingGrid} (where {@link CraftingMenuResultMixin} sits) never
+ * runs and labelled items crafted freely. Same check at the head of FastWorkbench's copy. Its grid parameter is
+ * FastWorkbench's {@code CraftingInventoryExt}, taken here as its vanilla supertype (@Coerce; no compile
+ * dependency).
  * <p>
  * Pseudo and by name, gated on {@code fastbench} by {@code CLMixinPlugin}. FastWorkbench's own method is not
  * obfuscated, so nothing is remapped.

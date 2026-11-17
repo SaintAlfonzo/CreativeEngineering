@@ -1,6 +1,5 @@
-// Creative Equipment; moved from kubejs/startup_scripts/ on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
-// Echo-tier tools — pickaxe / axe / shovel / hoe at the same tier as Create: Deep
-// Dark's echo sword + armour (that mod only ships a sword).
+// Creative Equipment. Echo-tier tools — pickaxe / axe / shovel / hoe at the same tier as Create: Deep Dark's echo sword
+// + armour (that mod only ships a sword).
 //
 // Tier numbers lifted straight from create_deep_dark EchoSwordItem's anonymous Tier:
 //   uses 2124 | speed 9.0 | attackDamageBonus 6.0 | enchantmentValue 16

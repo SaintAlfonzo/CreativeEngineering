@@ -1,5 +1,5 @@
 // requires: creativeengineering
-// Creative Engineering; moved from kubejs/server_scripts/tags/engineeringtags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
+// Creative Engineering.
 console.log('engineering tags starting')
 
 ServerEvents.tags('item', e => {
@@ -14,8 +14,6 @@ ServerEvents.tags('item', e => {
 	])
 	t.add(e, 'creativeengineering:carbon_filament', [i.paper, i.bamboo])
 
-	// The culture base tag moved to Creative Delight 2026-10-27 (creativeengineering/cultivated_meat_tags.js; reserved for
-	// Creative Cultivation, creative_delight.md 29.5)
 
 	// Precision sawblade blueprint templates — the "shape reference" ingredient for the
 	// vertical_planks / railing sawblades. No upstream tag exists for either shape, so the

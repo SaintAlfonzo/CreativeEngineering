@@ -21,9 +21,9 @@ import java.util.function.UnaryOperator;
  */
 public final class MinersTranslator {
     /**
-     * Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53 (2026-11-02), the
-     * Copper Cup and every cup (water, milk, powder snow, the 15 soup and stew cups). Files named after them are left out,
-     * files naming them are dropped (tags lose the entry instead), the cup conversion data is not read at all.
+     * Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53, the Copper Cup
+     * and every cup (water, milk, powder snow, the 15 soup and stew cups). Files named after them are left out, files
+     * naming them are dropped (tags lose the entry instead), the cup conversion data is not read at all.
      */
     public static final Set<String> REMOVED = Set.of("hot_cocoa_cup", "copper_cup", "water_cup", "milk_cup", "powder_snow_cup",
             "beetroot_soup_cup", "mushroom_stew_cup", "rabbit_stew_cup", "baked_cod_stew_cup", "noodle_soup_cup", "beef_stew_cup",
@@ -33,8 +33,8 @@ public final class MinersTranslator {
     private static final String ANY_OF = "\"minecraft:any_of\"";
     private static final String ALTERNATIVE = "\"minecraft:alternative\"";
     /**
-     * Textures 1.4.5 redrew that keep their 1.1.2 look (owner 2026-11-01, TODO creativedelight/members #31): read from the
-     * 1.1.2 jar over the 1.4.5 ones. The other nine redraws (cave carrot stages, item and wild patch, gossypium, weird
+     * Textures 1.4.5 redrew that keep their 1.1.2 look (owner, TODO creativedelight/members #31): read from the 1.1.2
+     * jar over the 1.4.5 ones. The other nine redraws (cave carrot stages, item and wild patch, gossypium, weird
      * caviar, bowl of stuffed squid) stay 1.4.5's.
      */
     static final String[] OLD_LOOK = {

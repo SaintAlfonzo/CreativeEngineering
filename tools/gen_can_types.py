@@ -98,8 +98,8 @@ SECTIONS = OrderedDict([
     ('feast',        dict(mult=1,    servings=6,  n=1, dur=1.0,  fast=False, extra=[])),
     ('drink',        dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
     ('golden',       dict(mult=0.25, servings=10, n=2, dur=0.25, fast=False, extra=[])),   # honey is required, see below
-    # 2026-10-21 (can_parity 2.20-2.23): cheese is processed in the Cooking Pot; tomato sauce and dough keep their
-    # value; desserts like soups; cake: 1 cake -> 4 servings of 1.75 slices (7 slices a cake), see the cake recipes below
+    # (can_parity 2.20-2.23): cheese is processed in the Cooking Pot; tomato sauce and dough keep their value; desserts
+    # like soups; cake: 1 cake -> 4 servings of 1.75 slices (7 slices a cake), see the cake recipes below
     ('dairy',        dict(mult=1.25, servings=4,  n=4, dur=1.0,  fast=False, extra=[], pot=True)),
     ('preserve',     dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
     ('dessert',      dict(mult=1.25, servings=8,  n=6, dur=0.75, fast=False, extra=[('_sugar', SWEET, 3, 1)])),
@@ -160,8 +160,8 @@ EXPLICIT = [
     ('raw_veggie', 'canned_cactus_flesh', 'Canned Cactus Flesh', ['cactus_flesh'], False),
     ('raw_veggie', 'canned_gongylidia', 'Canned Gongylidia', ['gongylidia'], False),
     ('raw_veggie', 'canned_corn', 'Canned Corn', ['corn'], False),   # maize only: kernels (4 a maize) are not canned
-    # Veggies Delight and Vintage Delight (2026-10-23): a whole veggie and its 2 cut pieces share the slots, as cabbage.
-    # Not canned: garlic and dandelion leaves (seasoning), raw oats (a grain, as corn kernels)
+    # Veggies Delight and Vintage Delight: a whole veggie and its 2 cut pieces share the slots, as cabbage. Not canned:
+    # garlic and dandelion leaves (seasoning), raw oats (a grain, as corn kernels)
     ('raw_veggie', 'canned_broccoli', 'Canned Broccoli', ['broccoli'], False),
     ('raw_veggie', 'canned_cauliflower', 'Canned Cauliflower', ['cauliflower', 'cauliflower_floret'], False),
     ('raw_veggie', 'canned_sweet_potato', 'Canned Sweet Potato', ['sweet_potato', 'sliced_sweet_potato'], False),
@@ -217,7 +217,7 @@ EXPLICIT = [
     ('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
     ('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
     # Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. End's Delight's meat and
-    # slice since 2026-11-02 (Ender's mollusk and filet merged into them, TODO dishes/ingredients #32)
+    # slice (Ender's mollusk and filet merged into them, TODO dishes/ingredients #32)
     ('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_meat', 'shulker_meat_slice'], False,
      dict(meal=(2, 1))),
 
@@ -272,14 +272,14 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_boiled_corn', 'Canned Boiled Corn', ['boiled_corn'], False),
     ('cooked_veggie', 'canned_dried_banana', 'Canned Dried Banana', ['dried_banana'], False),
     ('cooked_veggie', 'canned_dried_persimmon', 'Canned Dried Persimmon', ['dried_persimmon'], False),
-    # Kimchi merged (merges/dishes #9, owner 2026-11-02): Brewin's kimchi is removed, Vintage Delight's fills the can
+    # Kimchi merged (merges/dishes #9, owner): Brewin's kimchi is removed, Vintage Delight's fills the can
     ('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['vintagedelight_kimchi'], False),
     ('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickles', ['pickle', 'pickled_sea_pickle'], False),   # pickled pickles merged (dishes/pickles-and-ferments #1)
     ('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
     ('cooked_veggie', 'canned_grilled_corn', 'Canned Grilled Corn', ['grilled_corn'], False),
     ('cooked_veggie', 'canned_tortilla_chip', 'Canned Tortilla Chips', ['tortilla_chip'], False),
-    # Veggies Delight and Vintage Delight (2026-10-23); roasted florets alone (no whole roasted cauliflower). Not canned:
-    # the vegetarian patty (patties are not canned cooked), roasted garlic (seasoning), honey roasted peanuts (a sweet)
+    # Veggies Delight and Vintage Delight; roasted florets alone (no whole roasted cauliflower). Not canned: the
+    # vegetarian patty (patties are not canned cooked), roasted garlic (seasoning), honey roasted peanuts (a sweet)
     ('cooked_veggie', 'canned_baked_sweet_potato', 'Canned Baked Sweet Potato', ['baked_sweet_potato'], False),
     ('cooked_veggie', 'canned_roasted_zucchini', 'Canned Roasted Zucchini', ['roasted_zucchini'], False),
     ('cooked_veggie', 'canned_roasted_cauliflower', 'Canned Roasted Cauliflower', ['roasted_cauliflower_floret'], False),
@@ -291,7 +291,7 @@ EXPLICIT = [
     ('cooked_veggie', 'canned_cooked_nether_wart', 'Canned Cooked Nether Wart', ['cooked_nether_wart'], False),   # Roll Delight (roll_delight.md 4.1, D14)
 
     # meat: whole cut, or whole + sliced. Patties, bacon, bison, smoked ham, chevon, hoglin, kangaroo, moose,
-    # bunfungus, lobster and crab are not canned cooked (can_parity.md Want /, 2026-10-13)
+    # bunfungus, lobster and crab are not canned cooked (can_parity.md Want /)
     ('cooked_meat', 'canned_beef', None, ['beef_cooked'], True),
     ('cooked_meat', 'canned_pork', None, ['porkchop_cooked'], True),
     ('cooked_meat', 'canned_chicken', None, ['chicken_cooked', 'chicken_cuts_cooked'], True),
@@ -314,10 +314,10 @@ EXPLICIT = [
     ('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
     # Bayberry Soup is typed drink since 1.1.03, so the soup loop no longer finds it; its can (shipped) stays
     ('soup', 'canned_bayberry_soup', 'Canned Bayberry Soup', ['bayberry_soup'], False),
-    # Farmer's Delight's Ratatouille (TODO cans/canning #18, 2026-11-02): a vegetable stew, canned like the soups
+    # Farmer's Delight's Ratatouille (TODO cans/canning #18): a vegetable stew, canned like the soups
     ('soup', 'canned_ratatouille', 'Canned Ratatouille', ['ratatouille'], False),
-    # Miner's Delight (owner 2026-11-01): these four only; Miner's stays in UNDECIDED_MODS so no other food is canned
-    # and the cups stay cups (miners_delight.md I3)
+    # Miner's Delight (owner): these four only; Miner's stays in UNDECIDED_MODS so no other food is canned and the
+    # cups stay cups (miners_delight.md I3)
     ('soup', 'canned_bat_soup', 'Canned Bat Soup', ['bat_soup'], False),
     ('soup', 'canned_cave_soup', 'Canned Cave Soup', ['cave_soup'], False),
     ('soup', 'canned_insect_stew', 'Canned Insect Stew', ['insect_stew'], False),
@@ -343,7 +343,7 @@ EXPLICIT = [
     ('meal', 'canned_cornbread_stuffing', 'Canned Cornbread Stuffing', ['cornbread_stuffing'], False),
     ('meal', 'canned_creamed_corn', 'Canned Creamed Corn', ['creamed_corn'], False),
     ('meal', 'canned_dumplings', 'Canned Dumplings', ['dumplings'], False),
-    # Veggies Delight and Vintage Delight pastas and noodles (2026-10-23)
+    # Veggies Delight and Vintage Delight pastas and noodles
     ('meal', 'canned_pasta_with_broccoli', 'Canned Pasta with Broccoli', ['pasta_with_broccoli'], False),
     ('meal', 'canned_potato_noodles', 'Canned Potato Noodles', ['potato_noodles'], False),
     ('meal', 'canned_cheese_pasta', 'Canned Cheese Pasta', ['cheese_pasta'], False),
@@ -485,11 +485,11 @@ SKIP = {
 # Mod namespaces installed but not yet in a /dumpfood: their cans are configured above and skipped (listed as waiting)
 # until the catalog has their foods. Empty this once the dump is taken. Vintage Delight: vintage_delight.md 4.0 step 8;
 # Fungi Delight: fungi_delight.md step 8.
-AWAIT_DUMP = {'roll_delight', 'largemeals'}   # emptied 2026-10-25 (Vintage, Fungi Delight); Roll Delight port added 2026-11-01; Large Meals 2026-11-02 (its 4 soup cans)
+AWAIT_DUMP = {'roll_delight', 'largemeals'}   # emptied (Vintage, Fungi Delight); Large Meals (its 4 soup cans)
 # Mods whose foods are typed but whose cans are not decided yet (each mod page's "Cans" row: hostile_delight.md step
 # 12, ends_delight.md, ocean_delight.md, miners_delight.md I3 "cups are not cans"). The type loops skip their foods;
-# explicit cans above still apply. Take a mod out once its cans are decided (Miner's: decided 2026-11-01, four explicit
-# cans only, so it stays listed).
+# explicit cans above still apply. Take a mod out once its cans are decided (Miner's:, four explicit cans only, so it
+# stays listed).
 UNDECIDED_MODS = {'hostiledelight', 'ends_delight', 'miners_delight', 'oceanic_delight', 'oceansdelight'}
 WAITING = []
 # sources that already have an explicit can above (not repeated by the type loops)

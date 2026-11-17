@@ -17,8 +17,8 @@ import vectorwing.farmersdelight.common.item.ConsumableItem;
 import java.util.function.Function;
 
 /**
- * The items of Miner's Delight 1.4.5, in its creative tab order, without the Copper Cup and every cup (TODO dishes/meals
- * #53, 2026-11-02; 1.1.2's hot cocoa cup was never ported, D3). Bowl foods stack to 16 and return a bowl.
+ * The items of Miner's Delight 1.4.5, in its creative tab order, without the Copper Cup and every cup (TODO
+ * dishes/meals #53; 1.1.2's hot cocoa cup was never ported, D3). Bowl foods stack to 16 and return a bowl.
  */
 public final class MDItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MinersDelightMod.MODID);

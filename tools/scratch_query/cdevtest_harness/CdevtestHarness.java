@@ -81,8 +81,8 @@ public class CdevtestHarness {
         m.put("minecraft:farmland", 12);
         eq("map", new TestLine("x").map("on", m).toString(), "[cdevtest] verb=x on=minecraft:dirt:3,minecraft:farmland:12");
         eq("block state value", new TestLine("x").kv("state", "minecraft:wheat[age=7]").toString(), "[cdevtest] verb=x state=\"minecraft:wheat[age=7]\"");
-        // GroundJudge (the under / floating / season verbs, moved from /zq 2026-11-16)
-        // column: solid 64..70 over air 60..63, solid at 59: bottom 64, air first, gap 4, not deep
+        // GroundJudge column: solid 64..70 over air 60..63, solid at 59: bottom 64, air first, gap
+        // 4, not deep
         GroundJudge.Under g = GroundJudge.under(60, 70, y -> y >= 64 || y == 59 ? Kind.SOLID : Kind.AIR);
         eq("under bottom", g.bottom(), 64);
         eq("under first", g.first(), Kind.AIR);

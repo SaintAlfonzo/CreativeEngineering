@@ -45,11 +45,11 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
  *  - {@code <init>}: a {@link StationSlotRule} on the inventory: containers ({@link FdPotContainers}) only in the
  *    container slot, never in an ingredient slot; hand, shift-click and hoppers all go through it.
  *  - {@code getDroppableInventory}: the buffer drops with the pot.
- *  - {@code getCapability}: the side/bottom handler also extracts from the buffer, after FD's output slot. It is
- *    invalidated together with FD's own output handler.
- * Saving is {@code cooking.RemainderBufferStorage}; the GUI slots are CookingPotMenuRemainderMixin.
- * Creative Delight QoL-1 compartment (moved from patcherMod 2026-10-25): applies only with this mod loaded
- * (compat.CDMixinPlugin); new leftovers are stored only while {@code [qol] remainderBuffer} is on (qol.RemainderBufferQol).
+ * - {@code getCapability}: the side/bottom handler also extracts from the buffer, after FD's output slot. It is
+ *    invalidated together with FD's own output handler. Saving is {@code cooking.RemainderBufferStorage}; the GUI slots
+ *    are CookingPotMenuRemainderMixin. Creative Delight QoL-1 compartment: applies only with this mod loaded
+ *    (compat.CDMixinPlugin); new leftovers are stored only while {@code [qol] remainderBuffer} is on
+ *    (qol.RemainderBufferQol).
  */
 @Mixin(value = CookingPotBlockEntity.class, remap = false)
 public abstract class CookingPotRemainderMixin implements RemainderBufferHolder {

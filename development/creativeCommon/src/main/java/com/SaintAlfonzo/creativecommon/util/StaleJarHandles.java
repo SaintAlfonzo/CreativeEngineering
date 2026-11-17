@@ -34,12 +34,12 @@ import java.util.Set;
  * {@code select()}, whose {@code fd_set} only holds 0 to 1023: "stack smashing detected" or a SIGSEGV in libglfw.
  *
  * <p>{@link #release()} runs before glfwInit ({@code FdReleaseMixin}). It closes the discovery-pass filesystem of each
- * jar whose game copy is in the mod list (same jar path, different filesystem object): first its zip filesystem
- * (that frees the descriptor), then the union filesystem (that drops it from the provider's map). Something still
- * references those objects, so a GC alone frees nothing (tested 2026-11-14). About 420 low descriptor numbers come
- * free and GLFW reuses them. Jars with no game copy in the mod list (service jars, plain libraries) are left alone.
- * The private fields are read with {@code sun.misc.Unsafe}: securejarhandler does not open its package to reflection
- * (same idiom as {@link ModDisplayNames}).
+ * jar whose game copy is in the mod list (same jar path, different filesystem object): first its zip filesystem (that
+ * frees the descriptor), then the union filesystem (that drops it from the provider's map). Something still references
+ * those objects, so a GC alone frees nothing (tested). About 420 low descriptor numbers come free and GLFW reuses
+ * them. Jars with no game copy in the mod list (service jars, plain libraries) are left alone. The private fields are
+ * read with {@code sun.misc.Unsafe}: securejarhandler does not open its package to reflection (same idiom as
+ * {@link ModDisplayNames}).
  */
 public final class StaleJarHandles {
     private static final Logger LOGGER = LogUtils.getLogger();

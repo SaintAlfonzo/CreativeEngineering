@@ -1,7 +1,6 @@
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2), from Creative Brewing; before that the pack's server_scripts/magic/armor_effects.js.
-// Applies global.armorEffects (Common startup effects/armor_effects.js; rows in Equipment gear_effects.js) piece()/set()
-// effects every tick to whichever players have the matching armor equipped, and its
-// mount() effects to whichever horses have the matching horse armor equipped.
+// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Applies global.armorEffects (Common startup
+// effects/armor_effects.js; rows in Equipment gear_effects.js) piece()/set() effects every tick to whichever players
+// have the matching armor equipped, and its mount() effects to whichever horses have the matching horse armor equipped.
 // Tooltip text for the same data lives in Common client effects/armor_effects_tooltip.js.
 //
 // Each matching effect is (re)applied every tick as a short, continuously-refreshed

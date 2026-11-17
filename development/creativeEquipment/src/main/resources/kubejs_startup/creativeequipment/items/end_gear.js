@@ -1,15 +1,13 @@
-// Creative Equipment; moved from kubejs/startup_scripts/items/end.js on 2026-11-04. Felsic Scrap, the End gear
-// material (recipes: kubejs/data/creativeequipment/kubejs/equipment/end_gear.js).
+// Creative Equipment. Felsic Scrap, the End gear material (recipes:
+// kubejs/data/creativeequipment/kubejs/equipment/end_gear.js).
 StartupEvents.registry('item', e => {
     e.create('creativeequipment:felsic_scrap').displayName('Felsic Scrap')
 
     // End gear and air brake sequenced assembly incomplete items ('kubejs:incomplete_<key>', ids unchanged; recipes in
-    // kubejs/data/creativeequipment/kubejs/equipment/end_gear.js: echoAssembly, felsicAssembly, dragonAssembly). Moved
-    // from Creative Engineering's changes/transition_items.js on 2026-11-06 (scratch r1106cbp SQ-CBP-08: without
-    // Engineering the felsic ingot assembly failed to parse, TODO `creativebrewing/publish #22`).
-    // Row: [key, texture?, colorHex?]; texture omitted = grey copy of global.item[key]'s sprite.
-    // Create: Deep Dark and Felsic Gear keep their sprites under 'items/' (not 'item/'), so those rows name the texture;
-    // the four creativeengineering:echo_* tools and every dragonloot item auto-derive.
+    // kubejs/data/creativeequipment/kubejs/equipment/end_gear.js: echoAssembly, felsicAssembly, dragonAssembly). Row:
+    // [key, texture?, colorHex?]; texture omitted = grey copy of global.item[key]'s sprite. Create: Deep Dark and
+    // Felsic Gear keep their sprites under 'items/' (not 'item/'), so those rows name the texture; the four
+    // creativeengineering:echo_* tools and every dragonloot item auto-derive.
     const END_GEAR_ASSEMBLIES = [
         // echo
         ['echo_sword',        'create_deep_dark:items/echo_sword'],

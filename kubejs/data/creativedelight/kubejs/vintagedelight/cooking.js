@@ -1,9 +1,9 @@
 // requires: creativedelight
 // requires: vintagedelight
-// Vintage Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's
-// server_scripts/cooking/cooking.js 2026-10-25, rows unchanged). Recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). Switch [qol] manualOnlyRoutes: off skips this file, so the mod's own recipes stay. Rules and
-// helper recipes (bone broth, cooked forms) stay in the pack. Writeup: feature_writeup/vintage_delight.md 4 step 9.
+// Vintage Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8). Recipe ids are
+// creativedelight:<type>/<suffix> (global.CD.recipes). Switch [qol] manualOnlyRoutes: off skips this file, so the mod's
+// own recipes stay. Rules and helper recipes (bone broth, cooked forms) stay in the pack. Writeup:
+// feature_writeup/vintage_delight.md 4 step 9.
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('vintagedelight') || !global.CD.qol('manualOnlyRoutes')) return
 

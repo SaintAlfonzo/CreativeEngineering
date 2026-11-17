@@ -36,7 +36,7 @@
 
     const Y = -60
     const VT = 'vintagedelight:', VG = 'veggiesdelight:', C = 'creativeengineering:'
-    // the pack's food recipes are under C or, since the move into Creative Delight (2026-10-25), CDN
+    // the pack's food recipes are under C or, since the move into Creative Delight, CDN
     const CDN = 'creativedelight:'
     function ours(id, path) { return id.indexOf(C + path) == 0 || id.indexOf(CDN + path) == 0 }
     let pass = 0, fail = 0, part = ''
@@ -60,7 +60,7 @@
         if (byId) return byId
         byId = {}; aliasId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 and brewing into Creative Brewing's on 10-31
+        // Food recipes moved into Creative Delight's tree and brewing into Creative Brewing's
         // (creativedelight: / creativebrewing: ids, same paths): a creativeengineering: id the checks name also finds
         // its twin under either namespace
         let aliased = 0
@@ -368,8 +368,8 @@
             check('no keg recipe for ' + out, keg.length == 0, keg.join(', ') || 'none')
         })
         expectIds(server, [C + 'pickling/pickled_sea_pickle'])
-        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle (2026-10-25); its honey jar recipe is gone.
-        // merges/dishes #9 (item_merges.md 2.19, owner 2026-11-02): Brewin's kimchi is removed, its jar recipe too.
+        // VTD-55: Brewin's pickled pickles merged into Pickled Sea Pickle; its honey jar recipe is gone.
+        // merges/dishes #9 (item_merges.md 2.19, owner): Brewin's kimchi is removed, its jar recipe too.
         expectGone(server, [C + 'pickling/brewin_pickled_pickles', C + 'pickling/brewin_kimchi'])
         check('jar pickled sea pickle: 5 sea pickles + salt -> 5', has(server, C + 'pickling/pickled_sea_pickle') &&
             takes(server, C + 'pickling/pickled_sea_pickle', 'minecraft:sea_pickle') &&

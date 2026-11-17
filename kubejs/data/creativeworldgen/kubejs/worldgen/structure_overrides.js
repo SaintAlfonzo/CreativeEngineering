@@ -48,7 +48,7 @@
 // [worldgen.systems] structureReplacements off, replacements are left out of their group set and the named member keeps
 // every slot.
 //
-// BIOME FREQUENCY (a group's "biome_frequency", 2026-10-14): {"#biome tag" | "biome id": factor 0..1, ..., "default": factor}.
+// BIOME FREQUENCY (a group's "biome_frequency"): {"#biome tag" | "biome id": factor 0..1,..., "default": factor}.
 // Every member's frequency is multiplied by the factor of the biome at its generation point (the first rule the biome
 // matches, else default); patcherMod rolls it in generation and in /locate's prediction alike. The vehicles use it to be
 // twice as common in #creativeworldgen:harsh biomes. Biome tags of our own (harsh) are biome_fits.json "biome_tags",

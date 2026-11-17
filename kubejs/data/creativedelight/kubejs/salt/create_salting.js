@@ -1,12 +1,12 @@
 // requires: creativedelight
 // requires: salt
 // requires: create__the_salt
-// Create salting for every saltable food (salt.md 6 S5, TODO food/seasoning #1, 2026-11-03).
-// Create: The Salt ships one unheated mixing (food + salt -> the food {Salted:1b}) for 65 vanilla and Farmer's
-// Delight foods (COVERED below, read from the 1.19.2-1.1.0 jar, pinned by sha1 in the member's gradle.properties).
-// Here: every food in #salt:can_be_salted it does not cover gets the same mix, and its mixes for foods not in the tag
-// (bone broth, cooked rice, tomato sauce, the raw crops) are removed, so Create salts exactly what the grid salts.
-// The plain item input also matches already-salted food (the salt is wasted); NBT ingredients are avoided.
+// Create salting for every saltable food (salt.md 6 S5, TODO food/seasoning #1). Create: The Salt ships one unheated
+// mixing (food + salt -> the food {Salted:1b}) for 65 vanilla and Farmer's Delight foods (COVERED below, read from
+// the 1.19.2-1.1.0 jar, pinned by sha1 in the member's gradle.properties). Here: every food in #salt:can_be_salted it
+// does not cover gets the same mix, and its mixes for foods not in the tag (bone broth, cooked rice, tomato sauce,
+// the raw crops) are removed, so Create salts exactly what the grid salts. The plain item input also matches
+// already-salted food (the salt is wasted); NBT ingredients are avoided.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

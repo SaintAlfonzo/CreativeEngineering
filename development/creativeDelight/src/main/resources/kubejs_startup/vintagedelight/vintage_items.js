@@ -6,13 +6,13 @@
 // data/creativedelight/kubejs/vintagedelight/recipes.js. Surstromming stays.
 global.removedItems.push(global.item.salted_cod, global.item.salted_salmon)
 
-// One kimchi (merges/dishes #9, owner 2026-11-02): Vintage's kimchi wins. Brewin's kimchi is removed, not merged: hidden
-// in JEI, tags stripped, its recipes not carried over (Creative Brewing's alcohol.js drops the pack's jar recipe). The new
+// One kimchi (merges/dishes #9, owner): Vintage's kimchi wins. Brewin's kimchi is removed, not merged: hidden in JEI,
+// tags stripped, its recipes not carried over (Creative Brewing's alcohol.js drops the pack's jar recipe). The new
 // kimchi recipes are in data/creativedelight/kubejs/vintagedelight/recipes.js; the id is in Creative Brewing's
 // swaps/removed.json.
 if (global.has('brewinandchewin')) global.removedItems.push(global.item.kimchi)
 
-// One nut butter (merges/dishes #7, owner 2026-11-02): Vintage's nut mash jar is the only one. The nut mash bottle,
+// One nut butter (merges/dishes #7, owner): Vintage's nut mash jar is the only one. The nut mash bottle,
 // Delightful's nut butter and its Nut Butter and Jelly Sandwich merge (swaps merges_vintagedelight.json,
 // merges_delightful.json); Delightful's nut dough is removed with its recipe (delightful/recipes.js).
 if (global.has('delightful')) global.removedItems.push(global.item.nut_dough)
@@ -42,16 +42,17 @@ StartupEvents.registry('item', e => {
 // half: data/creativedelight/kubejs/vintagedelight/recipes.js.
 global.removedItems.push(global.item.salt_bucket)
 
-// Jams are mason jars only (TODO dishes/jams #1, #3, owner 2026-10-29): the jam and relish bottles are out, and Vintage's
-// sweet berry and glow berry jams go too (Fruits Delight has both). Hidden in JEI, tags stripped; their recipes are
-// removed in data/creativedelight/kubejs/vintagedelight/jams.js. The pepper jam jar and the relish jar stay; the relish
-// jar is an ingredient, not a jam. The grape and cherry jam jars are pack additions to the Vintage port.
+// Jams are mason jars only (TODO dishes/jams #1, #3, owner): the jam and relish bottles are out, and Vintage's sweet
+// berry and glow berry jams go too (Fruits Delight has both). Hidden in JEI, tags stripped; their recipes are removed
+// in data/creativedelight/kubejs/vintagedelight/jams.js. The pepper jam jar and the relish jar stay; the relish jar is
+// an ingredient, not a jam. The grape and cherry jam jars are pack additions to the Vintage port.
 global.removedItems.push(global.item.sweet_berry_jam_bottle, global.item.glow_berry_jam_bottle, global.item.pepper_jam_bottle,
 	global.item.relish_bottle, global.item.sweet_berry_jam_jar, global.item.glow_berry_jam_jar)
 
-// Mason jars only (decided 2026-11-02, TODO dishes/jams #1, items/jars #9): the vinegar and apple sauce bottles go too;
-// their jars stay with their own food values (the owner reverted the jam-value change, 2026-11-02). The bottles merge into the jars (item_merges.js here: recipes, loot and inventories swap; the merge also lists
-// them as removed items); their bottle <-> jar crafts are removed in data/creativedelight/kubejs/vintagedelight/jams.js.
+// Mason jars only (decided TODO dishes/jams #1, items/jars #9): the vinegar and apple sauce bottles go too; their jars
+// stay with their own food values. The bottles merge into the jars (item_merges.js here: recipes, loot and inventories
+// swap; the merge also lists them as removed items); their bottle <-> jar crafts are removed in
+// data/creativedelight/kubejs/vintagedelight/jams.js.
 
 // Bottle jams become mason jar jams (dishes/jams #1): Fruits Delight's 22 jams and Upgrade Aquatic's mulberry jam leave
 // an empty mason jar, eaten (Fruits Delight's FDFoodItem returns its crafting remainder) or used in a craft. Upgrade
@@ -68,9 +69,9 @@ ItemEvents.modification(e => {
 	})
 })
 
-// Vinegar (plan_scratch_bugfix_1103 5.5, owner 2026-11-03): drinking the vinegar jar gives Nausea 10 s. Its Nourishment is
-// removed by the comfort rule (comfort_nourishment.json `vinegar_jar: none`, which touches only Comfort / Nourishment, so
-// this effect stays). Vinegar used as an ingredient or can additive adds nothing to the dish; no Foul Taste effect.
+// Vinegar (plan_scratch_bugfix_1103 5.5, owner): drinking the vinegar jar gives Nausea 10 s. Its Nourishment is removed
+// by the comfort rule (comfort_nourishment.json `vinegar_jar: none`, which touches only Comfort / Nourishment, so this
+// effect stays). Vinegar used as an ingredient or can additive adds nothing to the dish; no Foul Taste effect.
 ItemEvents.modification(e => {
 	e.modify(global.item.vinegar_jar, item => item.setFoodProperties(fb => fb.effect(global.effect.nausea, 200, 0, 1.0)))
 })

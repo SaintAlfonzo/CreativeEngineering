@@ -664,6 +664,12 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
    a new 0 to 6 layout; references in other docs were rewritten to `alcohol_part_b.md 7.14`. Section numbers 10 to 13
    in it still point to alcohol.md (noted at its top).
 
+9. **Comment rewrites from section 17** (P5, 2026-11-17): `tools/history_extract.py` kept 392 dated rule comments with the
+   date taken out and cut a history clause out of 266 more; every one is listed in
+   [history_extract_review.md](history_extract_review.md) (file, line, was, now) for a read: is the rule still wanted,
+   does it read right. The same file lists 136 undated comment lines that read as history ("moved from", "used to",
+   "no longer") and were left in code, since there is no date to file them under.
+
 ## 21. Done means for this plan
 
 - design_rules.md section 9 status cell per id: fix date and "Built, untested" until the queue row passes.

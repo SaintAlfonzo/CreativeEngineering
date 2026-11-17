@@ -400,3 +400,9 @@ Owner notes for both mods, together with the Hostile Delight notes ([hostile_del
   tomato, an onion and an Elder Guardian Eye.
 - **Fugu** (`dishes/ocean #13`): eating any fugu food has a 0.5% chance of Wither III and Poison III for 10 s.
 - **Elder guardian chunk** (`dishes/ocean #14`, open): a source for the elder guardian chunk; the mob-drop JEI tab updated with it.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-02: Comfort / Nourishment are not applied here: the pack's Comfort / Nourishment rule sets them on the bowls' food properties (tools/gen_comfort_nourishment.py, comfort_nourishment.md 10; dishes/ocean #8, 2026-11-02) (development/creativeDelight/members/oceanic/src/main/java/com/SaintAlfonzo/creativedelight/oceanic/registry/OceanicItems.java)

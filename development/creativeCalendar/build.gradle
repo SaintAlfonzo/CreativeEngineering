@@ -1,6 +1,6 @@
-// creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md), carved out of
-// patcherMod on 2026-11-01. Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file
-// adds what is specific to Calendar, the same way creativeBrewing/build.gradle does for CB:
+// creativeCalendar: Creative Calendar (mod id creativecalendar, feature_writeup/creative_calendar.md). Shared Forge
+// setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Calendar, the
+// same way creativeBrewing/build.gradle does for CB:
 //   - the Calendar server script tree, authored in the pack folder so /reload picks it up without a rebuild, copied into
 //     the jar at the same resource path:
 //       kubejs/data/creativecalendar/kubejs/  -> data/creativecalendar/kubejs/  (server scripts)

@@ -15,10 +15,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Scratch fixes 2026-11-15 (scratch run r1115 phase 11): SQ-PTH-03 (vanilla's fast-fall reset clip on webs), SQ-PTH-11
- * (break projectiles stalled in any web), the 7.2 performance fallback (region counts, per-tick count cache). Called
- * from {@link PassThroughTest#main}. Headless tags are unbound, so "is a fall-resetting block" is passed in as
- * vanilla's {@code #minecraft:fall_damage_resetting} would answer it (cobweb, sweet berry bush).
+ * Scratch fixes (scratch run r1115 phase 11): SQ-PTH-03 (vanilla's fast-fall reset clip on webs), SQ-PTH-11 (break
+ * projectiles stalled in any web), the 7.2 performance fallback (region counts, per-tick count cache). Called from
+ * {@link PassThroughTest#main}. Headless tags are unbound, so "is a fall-resetting block" is passed in as vanilla's
+ * {@code #minecraft:fall_damage_resetting} would answer it (cobweb, sweet berry bush).
  */
 final class PassFixesTest {
 
