@@ -9,7 +9,7 @@
 <!-- generated:status_index end open_work -->
 
 **Status 2026-11-07 night: BUILT except `kitchen #36` (double fridges, not started) and F2 (random-tick audit done as a
-brief, [briefs/random_tick_audit.md](briefs/random_tick_audit.md), fixes await owner approval). Nothing installed, nothing
+brief, [random_tick_audit.md](random_tick_audit.md), fixes await owner approval). Nothing installed, nothing
 run in game. Jars to build and install at a restart: Common, Engineering, Delight (built), Compat (built), Brewing,
 Worldgen. Scratch rows: queue section "SQ-FCK farming and cooking batch". Open owner questions: Supplementaries Doormat
 has no recipe after the flax removal (give one or hide); Floral Enchantment flower bushes never grow naturally (stop ticks

@@ -223,3 +223,8 @@ In the order a port would hit them. Each line names the pack rule that applies.
 ## 7. Tests
 
 None (survey only). Test IDs get drafted with the first build, prefix `UD-`.
+
+## 8. History
+
+- 2026-10-30: overlap survey written from the 5.0 jar (TODO `largecontent/mod-additions #8`); nothing built.
+- 2026-11-17: History section added (design_rules.md DR-W5, V-62c); the integration-report skill now cites this file as a content example for its overlap table, not as a layout model.

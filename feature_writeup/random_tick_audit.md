@@ -1,6 +1,6 @@
 # Random-tick audit (F2, `farming/crops #15`)
 
-Investigation only, nothing built. Plan: [plan_farming_cooking_batch.md](../plan_farming_cooking_batch.md) F2, owner
+Investigation only, nothing built. Plan: [plan_farming_cooking_batch.md](plan_farming_cooking_batch.md) F2, owner
 decision Q14. Output: the list below, for approval before any change.
 
 ## How it was made (2026-11-07)

@@ -3,7 +3,7 @@
 ## Diet Bonuses <!-- icon: solapplepie:food_book -->
 
 - **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor toughness, knockback resistance, permanent buffs, effect slots and effect unlocks. Applies to new worlds.
-- **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, a small speed bonus, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
+- **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
 - **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 8 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. A confirm panel shows the cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity grey out and keep their choice.
@@ -19,7 +19,7 @@
 - **New:** New players start with a Diet Log and a Liquid Diet Log.
 - **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
 - **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. Applies to new worlds.
-- **Changed:** Lava Walker burns like a magma block when standing on lava without Fire Resistance.
+- **Changed:** Lava Walker burns like a Magma Block when standing on lava without Fire Resistance.
 - **Fixed:** Fleet-Footed stayed on for every player while one player sprint-jumped.
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
@@ -28,9 +28,9 @@
 - **New:** Flesh slows walking to 0.6x. Porous Flesh slows walking to 0.45x, halves jump height and slides you down its sides, like a Honey Block.
 - **New:** Flesh Tendons can be climbed like a ladder.
 - **New:** Crushing Wheels and the Millstone crush Flesh and Porous Flesh into drops from four groups. In JEI each group is one slot that cycles its items.
-- **New:** Crushed Flesh gives 1 meat (rotten flesh, Rotten Ham, leather, Spider Leg, Hoglin Ear, Hoglin Loin), bone at 75% (bone, bone meal, Broken Bone, Bone Chunk, Bone Serpent Tooth), eye at 25% (spider eye, Eyebulb, fermented spider eye), and Pus Bubble, Flesh Tendons or Hair at 25%.
+- **New:** Crushed Flesh gives 1 meat (Rotten Flesh, Rotten Ham, Leather, Spider Leg, Hoglin Ear, Hoglin Loin), bone at 75% (Bone, Bone Meal, Broken Bone, Bone Chunk, Bone Serpent Tooth), eye at 25% (Spider Eye, Eyebulb, Fermented Spider Eye), and Pus Bubble, Flesh Tendons or Hair at 25%.
 - **New:** Crushed Porous Flesh gives 1 meat plus a second at 50%, 1 eye, and a Pus Bubble, Flesh Tendons or Hair at 50%, no bone.
-- **New:** Crushing a Pus Bubble gives a slimeball at 25%; crushing Hair gives string at 50%.
+- **New:** Crushing a Pus Bubble gives a Slimeball at 25%; crushing Hair gives String at 50%.
 - **New:** Heated mixing turns Flesh into 250 mB of blood and a bone at 25%, Porous Flesh into 500 mB, Flesh Tendons into 250 mB.
 - **New:** Mixing 2 Porous Flesh, 2 Flesh and 1000 mB of plant oil, seed oil or vegetable oil gives 2 Porous Flesh and 3 Flesh.
 - **New:** Mixing 2 Flesh Tendons, 1 Flesh and 250 mB of blood gives 1 Porous Flesh.
@@ -38,7 +38,7 @@
 ## Walk Speed <!-- icon: minecraft:honey_block -->
 
 - **Fixed:** The view popped up for a moment when walking from one sinking block to another, or onto a Honey Block, Mud or a path from one.
-- **Changed:** Standing on a Honey Block shows the same sink depth as wool or sand (was a smaller one).
+- **Changed:** Standing on a Honey Block shows the same sink depth as wool or sand [smaller].
 - **Changed:** Dropped items lie on top of sinking blocks instead of sinking into them.
 - **Changed:** Banana Slug Slime Blocks slide you down their sides like a Honey Block, with no fall damage.
 - **Fixed:** Framed Blocks and Copycats+ blocks walked at normal speed instead of the speed of their material.
@@ -97,8 +97,8 @@
 - **New:** Wooden buckets hold sap, milk and honey; the Tree Tapper fills them with sap.
 - **New:** A wooden bucket milks cows and goats; a Wooden Milk Bucket is drunk like a milk bucket.
 - **Changed:** The Tree Tapper can be crafted with a wooden bucket.
-- **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles show their tooltip.
-- **Fixed:** Thrown cleavers and pitchforks have names.
+- **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles showed no tooltip.
+- **Fixed:** Thrown cleavers and pitchforks had no names.
 - **New:** Raspberry Pie and its slices have the tooltip "Doesn't run programs".
 - **Changed:** Corn Mazes generate twice as often.
 - **Changed:** Mums go in flower pots, planter boxes and flower boxes, and spread with bone meal like other small flowers.
@@ -154,7 +154,7 @@
 
 ## Crop Yields <!-- icon: farmersdelight:rich_soil_farmland -->
 
-- **Changed:** Fortune no longer changes the drops of any crop, berry bush or wild crop. Melons are unchanged.
+- **Changed:** Fortune no longer changes the drops of any crop, berry bush or wild crop except melons.
 - **Changed:** The better-soil extra is sized on each crop's average harvest rounded to the nearest half. Carrots, Potatoes, Onions and Peanuts average 4.87 on Rich Soil Farmland and 6.02 on Fertile Soil [4.93 and 6.16]; Tobacco, Sweet Potato, Zucchini, Garlic, Hemp and Bell Peppers move by under 0.2.
 - **New:** Right-click picks get the better-soil extra: Tomatoes (the soil under the bottom vine, also on ropes and sticks), Cucumber, Ghost Pepper, Zucchini, Sweet Berries, Strawberries, Blueberries, Cranberries, Lemons and Salmonberries.
 - **New:** Breaking a ripe Sweet Berry Bush, Strawberry Bush, Blueberry Bush, Cranberry Bush or Lemon Tree gives the better-soil extra.
@@ -174,10 +174,6 @@
 - **Changed:** Wild corn gives the same results as corn in the crusher and hand mill.
 - **Fixed:** The Cob Pipe showed as a flat item on the head and now shows its 3D model.
 
-## Pies <!-- icon: minecraft:pumpkin_pie -->
-
-- **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
-
 ## Veggie Patties <!-- icon: minecraft:carrot -->
 
 - **Changed:** Vegetarian Patties are named Veggie Patties.
@@ -192,7 +188,7 @@
 - **New:** Licking a salt block with salt layers on top eats the top layer; the block keeps its size until the layers are gone.
 - **New:** Salt Melt: a 64-use tool made from 2 Salt and 2 Raw Rock Salt. Right-click ice or snow to melt it at once; Packed Ice and Blue Ice go down one tier per use. Works in a dispenser.
 - **Changed:** Salt in a dispenser melts the ice or snow in front, one tier per Salt, or places a salt layer on the ground in front [did nothing].
-- **Changed:** A salt layer has a 5 % chance to lose a layer each time it melts ice or snow; Salt Blocks never wear away.
+- **Changed:** A salt layer has a 5% chance to lose a layer each time it melts ice or snow; Salt Blocks never wear away.
 - **Fixed:** Animals more than 16 blocks from a salt lick never walked to it.
 - **Fixed:** Animals that reached a salt lick could stand beside it without licking.
 
@@ -214,10 +210,6 @@
 - **Changed:** Wild plants still float in water and go in planter and flower boxes, and structures still clear them as plants.
 - **New:** Just Enough Breeding pages for ducks, geese, grizzly bears (Buzzier Bees), Fungi Delight mooshrooms and Cozy cats.
 
-## Rabbits <!-- icon: minecraft:rabbit_foot -->
-
-- **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
-
 ## Mod Ids <!-- icon: creativedelight:oven -->
 
 - **Changed:** Creative Delight items and blocks are listed under Creative Delight [Creative Engineering].
@@ -234,13 +226,9 @@
 
 ## Portals <!-- icon: portalgun:portal_gun -->
 
-- **Fixed:** The Immersive Portals portal block has a name.
+- **Fixed:** The Immersive Portals portal block had no name.
 - **Fixed:** Walking out of a Portal Gun portal on a wall still lifted the player one block, and Nether and End portals did the same. Only portals in a floor lift the player now.
 - **Fixed:** Falling from a floor portal into a wall portal left the player stuck in the floor in front of the wall.
-
-## Rose Gold <!-- icon: mca:rose_gold_ingot -->
-
-- **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
 
 ## Eggs <!-- icon: farmersdelight:fried_egg -->
 
@@ -296,6 +284,7 @@
 - **Changed:** Golden food in the Arc Furnace takes 4 gold [5].
 - **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
 - **Changed:** Vinegar ferments from 3 Apple Mash and any mushroom in the Pickling Jar [any jam and a mushroom].
+- **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -305,7 +294,7 @@
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
-- **Changed:** Create Deco's Cast Iron Block is now called Cast Iron Plating (was Cast Iron Block).
+- **Changed:** Cast Iron Block is named Cast Iron Plating.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
 - **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
@@ -330,6 +319,8 @@
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
+- **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
+- **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
 
 ## Performance & Stability
 
@@ -339,4 +330,4 @@
 
 ## Mods Added & Removed
 
-- **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB], so crowded storage chunks and heavy items no longer kick players.
+- **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB].

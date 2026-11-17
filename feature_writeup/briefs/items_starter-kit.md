@@ -85,4 +85,4 @@ comb and needle and thread in the kit too, and made single-use.
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| #2 | Starter kit never given (bug since the 1.1.01 port) | Testing | Fixed 2026-10-28 in `starter_kit.js`; FP-10 PASSED on bots ([run log](../testing/scratch_queue_run_2026-10-28.md)). Shipped to the client in 1.1.04; the server runs 1.1.05 since 2026-10-31 (`deploy/DEPLOYED.json`), so server joins get the kit now. A real singleplayer join got the Default kit on 2026-10-31 17:19 (`logs/latest.log`). Open: a real client join on the server (FP-03, SQ-SK-01, -02) |
+| #2 | Starter kit never given (bug since the 1.1.01 port) | Testing | Fixed 2026-10-28 in `starter_kit.js`; FP-10 PASSED on bots ([run log](../testing/scratch_run_2026-10-28.md)). Shipped to the client in 1.1.04; the server runs 1.1.05 since 2026-10-31 (`deploy/DEPLOYED.json`), so server joins get the kit now. A real singleplayer join got the Default kit on 2026-10-31 17:19 (`logs/latest.log`). Open: a real client join on the server (FP-03, SQ-SK-01, -02) |

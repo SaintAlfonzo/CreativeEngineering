@@ -18,9 +18,9 @@ real ones so that random ticks, mob spawning and player-gated code run as they d
 
 | Part | Status |
 |---|---|
-| `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PFS-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |
+| `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PFS-01 to -04, [testing/scratch_run_2026-10-28.md](testing/scratch_run_2026-10-28.md)) |
 | Runner `tools/perf/suite/perf_suite.py` (RCON, end-of-server triage, retries, resume, report) | BUILT 2026-10-28; offline self-test 12/12 PASS (section 6) |
-| General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28; first run g1 2026-10-28 03:04 to 05:27, every row ok (baseline; results in [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md) "Perf suite g1"); G09 from rerun g1s |
+| General benchmarks G01 to G12 (`plans/general.py`) | BUILT 2026-10-28; first run g1 2026-10-28 03:04 to 05:27, every row ok (baseline; results in [testing/scratch_run_2026-10-28.md](testing/scratch_run_2026-10-28.md) "Perf suite g1"); G09 from rerun g1s |
 | Cooking scenarios C- | PROPOSED, owner veto pending (section 8) |
 | World interaction scenarios W- | PROPOSED, owner veto pending (section 9) |
 
@@ -217,7 +217,7 @@ Also checked: `./gradlew :perfBot:build --offline` builds; every plan command ex
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-SK-01, -02.
 
-Results 2026-10-28 night ([testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)): PFS-01 to -04 PASS (PFS-02 wheat half: 17 of 81 grew with a bot, 0 without;
+Results 2026-10-28 night ([testing/scratch_run_2026-10-28.md](testing/scratch_run_2026-10-28.md)): PFS-01 to -04 PASS (PFS-02 wheat half: 17 of 81 grew with a bot, 0 without;
 the night-mob half is G03b). PFS-05 is the g1 run.
 
 - [x] **PFS-01 bot logs in:** boot with the jar and `-Dcdevperfbot.out=perf/bot` -> `pbot status` answers. Then `pbot
@@ -252,7 +252,7 @@ probes) does the setup that commands can't.
 | C07 | **owner** Incubation: 50 nests with eggs, chickens laying (Incubation + Incubation Additions) | Nest block entities, egg hatching |
 | C08 | **owner** Incubation at scale: 500 nests | Linearity of C07 |
 | C09 | **owner** Vinery: 50 fermentation barrels, apple presses, grapevine stems and lattices with grapes | Station ticks, vine random ticks |
-| C10 | **owner** Brewin' and Chewin': 50 kegs fermenting, coasters with drinks | Keg ticks |
+| C10 | **owner** Brewin' & Chewin': 50 kegs fermenting, coasters with drinks | Keg ticks |
 | C11 | **owner** Horses with dragon and copper armor: 100 horses with `dragonloot:dragon_horse_armor`, 100 with copper armor, 100 plain | `armor_effects.js` and `dragon_autorepair.js` handlers (perf.md 10.4) against plain horses |
 | C12 | **owner** Hoe harvest area: the bot right-clicks ripe crops with a hoe across a 64 x 64 field, one use per tick (`/pbot use`) | Per-use cost of the area harvest, replant, drops |
 | C13 | **owner** Cooking stations in use: 40 Farmer's Delight cooking pots on stoves cooking, 20 skillets, 20 cutting boards fed by deployers | Station ticks, recipe matching |

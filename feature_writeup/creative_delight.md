@@ -340,7 +340,7 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
    plus a check that the mod list, JEI and WTHIT show "(Creative Delight)".
 8. **Cutover.** `installToMods` moves the old jars to `jar_archive/displaced/`; never while the game runs.
 
-## 7. Parked: Brewin' and Chewin' and Let's Do Vinery
+## 7. Parked: Brewin' & Chewin' and Let's Do Vinery
 
 **Superseded 2026-10-31:** both ports are now members of their own bundle, Creative Brewing ([creative_brewing.md](creative_brewing.md)),
 built on the same `ce.forge-bundle` plugin; CB depends on CD (Farmer's Delight, `global.CD`). The text below is the 2026-10-25 record.
@@ -355,7 +355,7 @@ a later plan can pick them up without re-reading everything:
 - Brewin', Vinery and Vintage share the heat/cold and storage-temperature tags, and Vintage's pickling jar takes Brewin's
   pickled foods; both must still load beside Creative Delight unchanged.
 
-### P.1 Brewin' and Chewin' (Backported Brewin)
+### P.1 Brewin' & Chewin' (Backported Brewin)
 
 - **Base:** full port of 4.5.0+1.21.1 over the pack's 1.19-2.0. Where the versions differ the port follows 4.5.0, except
   the owner's deviations: scrambling (chat, signs, name tags) client-side only, Dread Nog takes a poison potion, no jams,
@@ -1487,12 +1487,12 @@ world on a CD jar built before this move.
 
 ### 29.3 Left for Creative Brewing (TODO `creativebrewing/move #1`)
 
-**2026-10-31 (owner):** the Brewin' and Chewin' food rows and tags below stay in CD after all: moved to
+**2026-10-31 (owner):** the Brewin' & Chewin' food rows and tags below stay in CD after all: moved to
 `kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js` and `tags.js` (`// requires: brewinandchewin`, ids
 `creativedelight:`). The rest goes to Creative Brewing ([creative_brewing.md](creative_brewing.md) 4).
 
 `startup_scripts/cooking/potions.js`, `alcohol_drinks.js`, `server_scripts/cooking/alcohol.js`; the effect swaps and
-Farmer's Respite cake-slice effects (`startup_scripts/cooking/food_values.js`); the Brewin' and Chewin' food rows in
+Farmer's Respite cake-slice effects (`startup_scripts/cooking/food_values.js`); the Brewin' & Chewin' food rows in
 `server_scripts/cooking/cooking.js` (pierogi, pizza, ham and cheese sandwich, quiches with the egg-solution assembly,
 horror lasagna, creamy onion soup, cheesy pasta, vegetable omelet: their egg solution now comes from CD's
 `create/recipes.js`); the Brewin' tags (`tags/cookingtags.js`: lasagna meats, kimchi and pickled pickles as cooked soup
@@ -1602,7 +1602,7 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
 | Farmer's Respite 2.0 | Separate jar | Built (TODO #21): 2.1.2 changes, not run |
 | Corn Delight 1.0.3 | Separate jar | Built (TODO #24): 1.2.11 changes |
 | Display Delight | Own port, `backportedDisplay-...-01.jar` | Produce-family dish blocks built in patcherMod, not run |
-| Brewin' and Chewin' | Own port, `backportedBrewin-...-03.jar` | Parked out of CD (section 7); future Creative Brewing |
+| Brewin' & Chewin' | Own port, `backportedBrewin-...-03.jar` | Parked out of CD (section 7); future Creative Brewing |
 | Let's Do Vinery | Own port, `backportedVinery-...-04.jar` | Parked, same |
 | More Delight 25.07.28 | Separate jar | 26.05.20 changes built 2026-10-25 (TODO #25, more_delight.md), not run: knives retuned, every toast fast, Cheese Toast added; CD folder `moredelight/` (recipes) |
 | Abnormals Delight 4.1.2 | Separate jar | 6.0.3 evaluated 2026-10-25, nothing built (abnormals_delight.md); CD folder `abnormals_delight/` (recipes) |

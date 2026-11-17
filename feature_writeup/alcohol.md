@@ -1,4 +1,4 @@
-# Alcohol: Brewin' and Chewin' and Vinery backports
+# Alcohol: Brewin' & Chewin' and Vinery backports
 
 > **Creative Brewing (2026-10-31):** both ports are now members of the Creative Brewing bundle: sources in
 > `development/creativeBrewing/members/vinery` and `.../members/brewin` (Gradle projects `:backportedVinery`, `:backportedBrewin`
@@ -6,11 +6,11 @@
 > Chewin' (Creative Brewing)" (`foundation`: "Foundation (Creative Brewing)"; both renamed 2026-11-04, plan_cb_publish.md M5). Vinery `-08` and Brewin' `-05` are the first nested builds (built, not installed). Paths
 > `development/backportedVinery` / `development/backportedBrewin` below mean those folders. See [creative_brewing.md](creative_brewing.md).
 
-> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Brewin' and Chewin' (Part A) and Vinery (Part B); its registry namespace and test prefix do not change.
+> **Merge note (2026-10-25):** this port is to be merged with the other Farmer's Delight add-on backports into a single jar, **Creative Delight**. The inventory summary, cross-port interactions and the merge process are in [creative_delight.md](creative_delight.md). This file stays the detailed record for Brewin' & Chewin' (Part A) and Vinery (Part B); its registry namespace and test prefix do not change.
 
 Two backports live in this file:
 
-- **Part A (sections 0 to 10, tests `AL-`): Brewin' and Chewin'.** A full port of 4.5.0+1.21.1 as "Backported Brewin";
+- **Part A (sections 0 to 10, tests `AL-`): Brewin' & Chewin'.** A full port of 4.5.0+1.21.1 as "Backported Brewin";
   `-02` DEPLOYED with pack 1.0.8 (2026-10-19) in place of the 2.0 jar; `-03` (10.13, 10.16, 12) shipped in 1.1.01
   (deployed 2026-10-22). `-04` (effect icons on the HUD for the food effects, TODO `potions/effects #8`) installed in
   `mods/` 2026-10-31 00:30, not yet booted.
@@ -21,16 +21,16 @@ Two backports live in this file:
   seasons for grapes and fruit leaves, Jellie Wine's four effects, Double Jump fix) installed in `mods/` 2026-10-31 00:41,
   not yet booted.
 
-# Part A: Brewin' and Chewin' (Backported Brewin)
+# Part A: Brewin' & Chewin' (Backported Brewin)
 
-This pack shipped Brewin' and Chewin' 1.19-2.0 (Forge 1.19.2) up to 1.0.7. It now ships a **full port** of 4.5.0+1.21.1,
+This pack shipped Brewin' & Chewin' 1.19-2.0 (Forge 1.19.2) up to 1.0.7. It now ships a **full port** of 4.5.0+1.21.1,
 built as our own Forge 1.19.2 jar ("Backported Brewin"). Where the two versions differ, the port follows 4.5.0 unless a line below
 says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port plan (section 3) and the decisions
 (section 4). Both versions are MIT (Umpaz).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8dd9478fadec -->
+<!-- generated:status_index begin open_work sha1=618680dfe078 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 28 open TODO rows (Planned 5, Pinned 1, In Progress 3, Testing 19), 5 Complete.
 
 | Id | Status | Tests | Change |
@@ -44,7 +44,7 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 | `alcohol/brewinport #4` | In Progress | S~ P | Pack-side leftovers |
 | `merges/materials #4` | In Progress | S P | Crate and bag merge |
 | `pack/release #5` | In Progress | S | `/dumpall` refresh with the ports |
-| `alcohol/brewinport #1` | Testing | S+ C~ P | Brewin' and Chewin' 4.5.0 port |
+| `alcohol/brewinport #1` | Testing | S+ C~ P | Brewin' & Chewin' 4.5.0 port |
 | `alcohol/brewinport #2` | Testing | S C~ P | Heat / cold tag audit |
 | `alcohol/brewinport #5` | Testing | C P | Black and purple texture ("plating") |
 | `alcohol/brewinport #6` | Testing | S~ C P | Remainder buffer on the keg |
@@ -302,7 +302,7 @@ Every drink also gives Intoxication. The new drinks last much shorter (Tipsy 2-4
 | O5 | Settings. Client: display unit, numbed-heart flicker, intoxication overlay, scramble switches, fluid render in the keg. Common: keg capacity and temperature thresholds, recipe book |
 | O6 | Remove the old `VillagerEvents` helpers (2.0 never registered trades with them) |
 
-### 2.6 Other mods that touch Brewin' and Chewin'
+### 2.6 Other mods that touch Brewin' & Chewin'
 
 Found by scanning `mods/` for class and data references.
 
@@ -477,7 +477,7 @@ Build order. Each step should boot before starting the next:
 ### 3.3 Old worlds
 
 **REMOVED 2026-10-27** (CLAUDE.md "no old-version or cross-mod conversions"; [pack_hygiene.md](pack_hygiene.md)
-finding 9). The port no longer converts Brewin' and Chewin' 2.0 content: `BnCRemaps` (the `item_coaster`,
+finding 9). The port no longer converts Brewin' & Chewin' 2.0 content: `BnCRemaps` (the `item_coaster`,
 `scarlet_pierogies` and `satisfaction` remaps), `BlockEntityLegacyIdMixin` (the `item_coaster` block entity id), the
 2.0 keg inventory conversion (250 mB per drink, `BnCInventoryVersion`, the pending-drop list) and the 2.0 coaster
 inventory / `legacySizeFix` are gone. A world last saved with the 2.0 jar loses those blocks, items and contents

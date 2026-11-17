@@ -29,7 +29,7 @@ blocks the pack has, with no new structure, structure set or biome change.
 | --- | --- | --- | --- | --- |
 | `SkyVillages-FarmersDelightCompat-1.20.1-1.0.3` | 3 houses (`farmersdelight/sky_village_farmersdelight_farm_0..2`) | 3120 (1.19.2) | `farmersdelight` (24 ids) | all 24 exist (CD member `repackedFarmers`) |
 | `SkyVillages-LetsDoVinery-1.20.1-1.0.4` | 3 houses (`letsdo_vinery/sky_village_letsdo_vinery_0..2`) | 3465 (1.20.1) | `vinery` (32 ids) | 21 exist; 11 are 1.5.5 names the port registers under 1.3.10 ids (2.2) |
-| `SkyVillages-LetsDoBrewery-1.20.1-1.0.4.1` | 2 houses + 9 deco pieces (2x2x2) | 3465 | `brewery` (31 ids) | **none**: Let's Do Brewery is not in the pack (Brewin' and Chewin' is a different mod) |
+| `SkyVillages-LetsDoBrewery-1.20.1-1.0.4.1` | 2 houses + 9 deco pieces (2x2x2) | 3465 | `brewery` (31 ids) | **none**: Let's Do Brewery is not in the pack (Brewin' & Chewin' is a different mod) |
 
 - Every house has the same jigsaws as the base houses (`skyvillages:house` to bridges, `villager_1` to the villager
   pool, and some `deco_part_0` to `skyvillage_deco`), so they drop into the existing pools without edits.

@@ -591,3 +591,4 @@ Notes, as rows:
   2026-10-20 name dump and the four other 2026-10-23 jars, 12 upstream bugs, D1 to D16; later the same day: counts corrected, B12 added). Nothing built.
 - 2026-10-31: scratchpad notes translated into TODO rows (ghast foods removal added to `largecontent/mod-additions #6`). No code changed.
 - 2026-11-04: owner scratchpad notes added as 5.1 (settles D3, D6, D7, D9, D11, D12, D13, D15) and TODO rows `largecontent/mod-additions #43` to `#51` in a new `## Hostile Delight` table. No code changed.
+- 2026-11-17: the integration-report skill now cites this file as a content example (inventory, fold-in steps), not as a layout model (design_rules.md V-62c).

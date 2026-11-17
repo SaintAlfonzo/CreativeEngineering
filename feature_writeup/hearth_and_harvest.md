@@ -43,7 +43,7 @@ Scope rule: integration adds no recipe or mechanic that is not in the mod or def
 
 - **Jar:** `hearthandharvest` 1.4.1, author AlabasterLeking, "A homesteading addon for Farmer's Delight".
 - **Route:** in-tree CD member `backportedHearth` (`development/creativeDelight/members/hearth/`, mod id `hearthandharvest`), our pack-side food code in a CD tree (memory `creative-delight-routing`).
-- **Dependencies:** NeoForge 21.1+, MC 1.21.1, Farmer's Delight 1.3.0+. Optional by `mod_loaded`: Create (54 recipes), Brewin' and Chewin' (41), Botany Pots (14; installed since 2026-10-30), Berry Good (4), Crabber's Delight (3, not installed). Code compat: Every Compat, Thirst Was Taken (not installed), JEI.
+- **Dependencies:** NeoForge 21.1+, MC 1.21.1, Farmer's Delight 1.3.0+. Optional by `mod_loaded`: Create (54 recipes), Brewin' & Chewin' (41), Botany Pots (14; installed since 2026-10-30), Berry Good (4), Crabber's Delight (3, not installed). Code compat: Every Compat, Thirst Was Taken (not installed), JEI.
 - **Not to be confused with** **Hearths** (`hearths-v1.0.0`, a Nether biome datapack, installed).
 - **Dumps:** `kubejs/exported/items_by_mod/` was refreshed 2026-11-05 (after the Creative split, 20 489 ids); `display_names.json` is older than the in-tree lang, so the overlap search also read `development/*/src/**/lang/en_us.json`.
 

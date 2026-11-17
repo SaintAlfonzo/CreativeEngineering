@@ -48,6 +48,10 @@
 	#skillet (#creativedelight:cookware_pickup) into the hand, as if broken; sneak left-click toggles the handle.
 	#Off: sneak right-click toggles the handle as in the original mods.
 	cookwarePickup = true
+	#QoL-8: a cooking pot, copper pot or kettle broken by a player (or picked up, QoL-7) keeps
+	#its ingredients, meal and output in the item, restored when placed; the leftover slots drop. Off: everything but
+	#the meal drops, as in the original mods (QoL-7 pickup then empties the station into the inventory).
+	cookwareKeepContents = true
 
 #One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world
 #to apply; only chunks generated afterwards change.
@@ -118,8 +122,10 @@
 	#Extra produce on better soil. A ripe crop whose block below is the soil gets one extra pool sized
 	#to 'bonus' x the crop's average produce (seeds are not included): 0.33 = about a third more.
 	#A crop that drops one item gets a 'bonus' chance of one more; a crop with a variable count gets
-	#its average raised by the same share. The crop's own drops are unchanged. 0 = nothing for that soil.
-	#Each crop is switched on in [crop_drops.soil_yield.crops].
+	#its average raised by the same share (the average rounded to the nearest 0.5). The crop's own drops
+	#are unchanged. 0 = nothing for that soil. Own right-click picks (tomato vines, cucumber, bushes)
+	#and fungus colony shearing get the same extra. Fortune never changes a crop's yield.
+	#Each crop is switched on in [crop_drops.soil_yield.crops], each bush in [crop_drops.soil_yield.bushes].
 	#feature_writeup/crop_yields.md lists every crop's drops.
 	[crop_drops.soil_yield]
 		#Vanilla farmland: share of extra produce.
@@ -131,7 +137,7 @@
 		#Fertile Soil (Immersive Weathering mulch): share of extra produce.
 		#Range: 0.0 ~ 4.0
 		fertileSoilBonus = 0.66
-		#Untilled Rich Soil (only rice and adzuki grow on it): share of extra produce.
+		#Untilled Rich Soil (rice, adzuki and bushes grow on it): share of extra produce. Equal to Rich Soil Farmland on purpose.
 		#Range: 0.0 ~ 4.0
 		richSoilBonus = 0.33
 		#Rich Soul Soil (nether crops): share of extra produce.

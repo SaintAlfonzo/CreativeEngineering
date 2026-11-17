@@ -49,7 +49,7 @@ bottle, stews and soups -> bowl, buckets -> bucket).
 |---|---|---|---|---|
 | Cooking pot | FD 1.19.2-1.2.4 | `CookingPotBlockEntity.ejectIngredientRemainder(ItemStack)` (protected), called for ingredient slots 0-5 from `processCooking` | `@Inject` at HEAD, cancellable | none |
 | Kettle | Farmer's Respite 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KettleBlockEntity.processBrewing`, ingredient slots 0-1 | `@Redirect` on that call | none |
-| Keg (current jar) | Brewin' and Chewin' 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KegBlockEntity.processFermenting`, ingredient slots 0-3 | `@Redirect` on that call | slot 8 already holds the **fluid-item** slot's (4) leftovers, but ingredient leftovers still fly out |
+| Keg (current jar) | Brewin' & Chewin' 1.19-2.0 | inline `ItemUtils.spawnItemEntity(...)` in `KegBlockEntity.processFermenting`, ingredient slots 0-3 | `@Redirect` on that call | slot 8 already holds the **fluid-item** slot's (4) leftovers, but ingredient leftovers still fly out |
 | Keg (port) | `development/backportedBrewin` (4.5.0 port, in progress) | `KegBlockEntity.ejectIngredientRemainder(ItemStack)`, line ~757 | edit our own source | none |
 | Oven | patcherMod `oven/` | `OvenBlockEntity.ejectIngredientRemainder(ItemStack)` (private) | edit our own source | none |
 

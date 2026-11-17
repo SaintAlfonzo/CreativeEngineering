@@ -416,7 +416,7 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text
 @@text ### 2026-10-28 night: recent feature block and bot players (group A `fq_a1`, group B `fq_b_on` / `fq_b_off` / `fq_b_gfb` on the eval seed; perf session `q1028`; then perf suite `g1`)
 @@text
-@@text Full log, findings and tooling changes: [scratch_queue_run_2026-10-28.md](scratch_queue_run_2026-10-28.md). Jars:
+@@text Full log, findings and tooling changes: [scratch_run_2026-10-28.md](scratch_run_2026-10-28.md). Jars:
 @@text patcherMod 1.1.03 00:16 build (installed 01:19; the 00:01 jar in `mods/` had no soil yield), Creative Delight 00:16,
 @@text perfBot rebuilt 02:24 (chunk-tracking fix). Perf: `perf/sessions/q1028/summary.md` (8 boots, every marked row a
 @@text segment, every tick over 50 ms in `worst_ticks.tsv`).
