@@ -50,29 +50,31 @@ def listed():
 
 
 @lru_cache(maxsize=1)
-def own_prefixes():
-    out = set()
+def own_names():
+    """{jar_name: mod_id} for every own project (development/*/gradle.properties)."""
+    out = {}
     for gp in jarstamp.DEV.glob('*/gradle.properties'):
         p = jarstamp._props(gp)
         if 'mod_id' in p:
-            out.add(p.get('jar_name', p['mod_id']))
+            out[p.get('jar_name', p['mod_id'])] = p['mod_id']
     return out
 
 
 def own_info(path):
-    """(key, identity) for an own jar, else None. key: mod id (lowercase); identity: stamp, or sha1:<12> unstamped."""
+    """(key, identity) for an own jar, else None. key: the project's mod id (lowercase); identity: the build stamp
+    (META-INF/ce-build.json), or sha1:<12> for an own jar built before stamping."""
     path = Path(path)
+    hits = [n for n in own_names() if path.name.startswith(n + '-')]
     own, _members = jarstamp.stamp_info(path)
-    if own and own.get('stamp'):
-        return (own.get('mod_id') or path.name).lower(), own['stamp']
-    stem = re.sub(r'-[0-9][^-]*\.jar$', '', path.name)
-    if stem in own_prefixes():
-        h = hashlib.sha1()
-        with open(path, 'rb') as f:
-            for chunk in iter(lambda: f.read(1 << 20), b''):
-                h.update(chunk)
-        return stem.lower(), 'sha1:' + h.hexdigest()[:12]
-    return None
+    if own and own.get('mod_id') and own.get('stamp'):
+        return own['mod_id'].lower(), own['stamp']
+    if not hits:
+        return None
+    h = hashlib.sha1()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 20), b''):
+            h.update(chunk)
+    return own_names()[max(hits, key=len)].lower(), 'sha1:' + h.hexdigest()[:12]
 
 
 def linked(p):
