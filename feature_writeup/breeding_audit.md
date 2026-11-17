@@ -9,6 +9,10 @@ time (config, lambda, a tag read through a mixin) the row said **check in game**
 Not covered: the roster is the 131 animals in `spawns.json` (mobs that can spawn); modded animals that never spawn
 naturally are absent. Mobs that are not `Animal` (fish, jellyfish, lobster) are not breedable and are skipped.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Animal breeding item and bee flower audit (static read of every jar: breeding items per animal, bee flower tags item vs block, findings F-B1 to F-B7). Status: **r1115 2026-11-15: SQ-BREED-01 PASS by a scratch probe dump; sections 3 and 4 measured.** **r1114 2026-11-14: SQ-BREED-03 PASS.** audit DONE 2026-11-10 (static); JEI page and tag fixes open (TODO `mobs/tweaks #14`, `mobs/bees #1`)
+
 ## 1. Result in short
 
 - **No pack documentation of breeding exists.** No script, tag description or JEI page mentions breeding items. 61 modded

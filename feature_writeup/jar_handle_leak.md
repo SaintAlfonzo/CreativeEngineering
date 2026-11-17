@@ -5,6 +5,10 @@ with no crash report (`*** stack smashing detected ***: terminated` in the launc
 `libglfw.so` with an hs_err file). Core code in Creative Common 1.2.0. Tests: `CQ-FDR-` in
 [scratch_queue.md](testing/scratch_queue.md).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Jar handle leak (Creative Common 1.2.0: Forge leaks one file descriptor per mod jar, so a client with 420+ jars died in glfwCreateWindow when GLFW's descriptors passed 1024; Common closes the leaked jar filesystems before glfwInit). Status: BUILT and installed 2026-11-14; **r1115 2026-11-15: client gate PASSED (CQ-FDR-01 to -04: 421 jars, three sessions, no closed-filesystem error; without the mixin it crashes again)**
+
 ## 1. Cause (confirmed 2026-11-14)
 
 - FML opens every jar in `mods/` twice. `ModDirTransformerDiscoverer` opens each one (`SecureJar.from`) to look for

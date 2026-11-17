@@ -6,6 +6,8 @@ picture, the current numbers, and the canned golem dye in full.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Cans (hub: multi-serving cans and the return roll, 247 serving counts, 26 hand-written + 202 generated cans, dyeable canned golem; detail in food.md 3.6 and can_parity.md). Status: **r1103 2026-11-03: Canned Goods member built, scratch server PASSED (SQ-CNG-01 to -04, -03o, -04b).** **2026-11-02 night: Canned Goods repacked as a CD member (9) BUILT, CD jar installed 2026-11-02 23:16, not booted; CN-07 to CN-09, SQ-CNG-01 to -04, CQ-CNG-01, -02 queued (SQ-CDJ6).** DEPLOYED (servings since 1.0.3, golem 1.0.4, generated cans 1.0.6), CN-01 to CN-06 pending (FO-, CP-, R4-07 elsewhere); findings F1-F4
+
 | Part | Status | Full detail |
 |---|---|---|
 | Multi-serving cans: servings as NBT, a bar and "Servings: x / y", eat one serving at a time, return roll (empty 70 %, crushed 25 %, nothing 5 %), cans in NCH recipes one serving per craft | DEPLOYED (built 2026-09-28; shipped since 1.0.3), FO-14 to FO-22 pending | [food.md](food.md) 3.6 |

@@ -6,6 +6,8 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: WTHIT lines (hub: every pack WTHIT plugin; icons for every mod, jar contents + potion effects, hive bees, state lines (servings, slices, eggs, cauldron levels), campfire burn + rain, IE tank and kitchen station ports, Brewin' keg, sheared grass (WL-34 to 36, Testing); Silk Touch line, crop seasons, barriers for operators (WL-37 to 42, BUILT 2026-10-28, jar not installed); Run Speed, Growth, coaster point to blockrunner.md / crops.md / alcohol.md). Status: DD icons DEPLOYED 1.0.4, Growth 1.0.6; the rest DEPLOYED with 1.1.01, plugins load on a scratch server, 7 lines seen there; Silk Touch / crop seasons / operator blocks DEPLOYED to the client with 1.1.04; WL-01 to WL-31 pending; every change has its own config switch; F1-F8, F10 done, F9 open
+
 | Part | Status | Full detail |
 |---|---|---|
 | Plugin wiring: eleven patcherMod plugins in `waila_plugins.json` (six client-only, five with a server half; the eleventh, `remainder_buffer`, added 2026-10-21) + one in the Brewin' port | BUILT 2026-10-20 (patcherMod 1.1.01 and Brewin' `-03` in `mods/` and `server_mods/`); every plugin initialises on a dedicated scratch server and a scratch client | here, 3 |

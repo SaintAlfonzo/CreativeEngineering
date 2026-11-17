@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Trash slot (pack default screens, per-tier backpack positions, creative support, allContainers switch). Status: DEPLOYED with 1.0.3, TS-01 to TS-13 pending; overwrite replaced by redirects 2026-11-06 (Compat, not installed), CQ-TSL-01, -02 queued
+
 | Part | Status |
 |---|---|
 | Pack default screens (`[trash_slot] enabledScreens`, switched on once per client) | DEPLOYED with 1.0.3 (patcherMod 1.0.3) |

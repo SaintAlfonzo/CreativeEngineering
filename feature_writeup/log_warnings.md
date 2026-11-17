@@ -20,6 +20,8 @@ jumps, is worth a look. Crashes, `Error occurred while handling event` and `Exce
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Log warnings (every repeated startup warning/error by mod: missing blockstate variants, `#missing` textures, missing texture files, model load failures, mixin and Forge noise, KubeJS script warnings; per-mod generated lists, acknowledgement file, ways to silence or fix; play audit not yet done). Status: written 2026-10-24; LW-01 play audit open
+
 | # | Message (shortened) | Lines | Cat. key | Biggest sources | Verdict |
 |---|---|---|---|---|---|
 | 1 | `Exception loading blockstate definition: '<mod>:blockstates/<block>.json' missing model for variant: ...` | 2950 | `blockstate` | redeco 1327, colored_water 1024, displaydelight 552, create_dd 48 | Ignore (A) |

@@ -2,6 +2,10 @@
 
 Block and item dyeing ideas, and the in-world dye and soap audit. Open work: `blocks/dyeing` in [todo/TODO.md](todo/TODO.md).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Dyeing (owner ideas: glow dye; in-world dye and soap audit). Status: audit written 2026-10-27; owner decisions written up 2026-10-27 (section 3, build list), nothing built, DY-01 to DY-13
+
 ## 1. Owner ideas (scratchpad 2026-10-26)
 
 - Glow dye item (`blocks/dyeing #4`): an efficient glow-to-dye ratio, and glow plus dye in one step instead of two.

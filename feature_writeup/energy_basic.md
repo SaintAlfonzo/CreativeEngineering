@@ -6,6 +6,10 @@ electricity, and the home for any later changes to that same core that do not ne
 ever added, a per-world switch picks basic or advanced (power_grid.md 5.1); in basic, **no Power Grid block or item
 is active**, so nothing in this file changes when it is added.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Energy basic mode (the pack's FE electricity today, IE tiers, planned changes). Status: reference (2026-11-12)
+
 ## 1. What basic is today
 
 | Part | State |

@@ -4,6 +4,8 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Composting (`global.compost` rebuilds the composter table on every tag load: 10 rule categories, 688 per-item values, exclusions; `/dumpcompost`, `gen_compost_values.py`). Status: DEPLOYED (since 1.0.3), CM-01 to CM-08 pending; seed milling to bone meal built 2026-10-30, shipped 1.1.05, scratch server PASSED r1031 2026-10-31 (SQ-CP-01); findings F1-F4; prefix CM- (CP- is can parity)
+
 | Part | Status |
 |---|---|
 | `global.compost`: rebuilds the composter table (`ComposterBlock.COMPOSTABLES`) from nothing every time tags load | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |

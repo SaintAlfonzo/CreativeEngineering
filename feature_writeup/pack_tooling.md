@@ -6,6 +6,8 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Pack tooling (hub: item / block / fluid dictionaries and removed items, `global.NCH` recipe helpers, `global.tags` tag helper, CEConfig, the 23 `/dump*` commands and `/dumpall`, `/cdevgen` generators, headless test suites, root Gradle build, item-loss repro harness, Slice & Dice `_manual_only`). Status: in use; TL-01 to TL-16 pending; findings F1-F10 (item_dict tag check probably runs before tags load; test recipes shipped), F3 and F4 need a decision
+
 | Part | Status |
 |---|---|
 | Dictionaries: `global.item` (12,511 keys), `global.blocks`, `global.fluid`, effect and multiblock dicts, `global.removedItems` (309) | in use since the initial commit; startup validation logs missing ids (tag keys: F1, F2) |

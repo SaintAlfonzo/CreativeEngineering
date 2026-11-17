@@ -12,6 +12,8 @@ cooking pot?", and drink > tea "integrate with later bottle/bowl output buffer s
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Remainder buffer (ingredient leftovers: bottles, bowls, buckets stay in FD-style stations: container-slot recycle, two take-only leftover slots, stall when full, automation, `[cooking]` config; pot/kettle mixins, oven native; Brewin' 2.0 keg bottle dupe). Status: **r1114 2026-11-14: SQ-STN-02k, -03, -06 PASS.** **BUILT 2026-11-03, scratch test queued (SQ-STN-01 to -05, CQ-STN-01, SQ-RB-21b rerun; CD jar and patcherMod 1.1.08 rebuilt and installed 2026-11-03 for the 1.2.00 staging, untested): one rule on all five stations (3.8): container slot up to a stack then the leftover slots, containers only in the container slot, one automation face layout, Pickling Jar progress per recipe; fixes r1103 SQ-RB-21b FAIL. SQ-RB-21 PASS; SQ-RB-22 open (owner: no fermenting recipe returns a container).** The GameTest harness compiles the pre-carve patcherMod copies, not run. DEPLOYED with 1.0.7 for pot, kettle (mixins) and oven (native); one leftover per item used DEPLOYED with 1.0.8; oven client-sync fix, WTHIT Holding / Waiting line, plating delay `recycleShowTicks` DEPLOYED with 1.1.01 (2026-10-22), bowl count checked (no dupe); 19 GameTests pass (`tools/test_remainder_buffer.sh`); RB-01 to RB-14 pending; keg not covered by them; keg slot rules scratch server PASSED 2026-10-22 (SQ-OM-01, 3.6)
+
 | Part | Status |
 |---|---|
 | Feasibility study (1, 2) | DONE 2026-10-18, from the decompiled jars the pack uses |

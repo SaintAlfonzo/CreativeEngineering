@@ -6,6 +6,8 @@ the decisions and the tests.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Weather: season types for Serene Seasons (arid and frozen year-round types, tropical by tag with a real savanna wet season, rivers/beaches that adapt to the land around them, SeasonHUD names and day of year, tint and crop fertility). Status: DEPLOYED with 1.0.6 (patcherMod 1.0.5 + 1.0.6 code; server side checked on scratch servers, client side not run); WE-01 to WE-36 pending (WE-25: Cool Rain may ignore the types)
+
 | Part | Status |
 |---|---|
 | Season types (arid, frozen, dry, tropical, temperate, adaptive) | BUILT 2026-10-08, dry + temperate + oceans 2026-10-09, in patcherMod 1.0.5 (in `mods/`, md5 68509043), DEPLOYED with pack 1.0.6 (2026-10-14). Server side checked on scratch servers (sections 6.2, 6.3); client side (rendering, tint, HUD) not run yet |

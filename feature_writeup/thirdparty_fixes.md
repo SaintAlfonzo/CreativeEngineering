@@ -8,6 +8,8 @@ when so many Debugify fixes end up off that a port is cleaner (owner, 2026-11-13
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Third-party bug fixes (Packet Fixer 3.3.2 and Debugify Reforged 1.1.0: every fix with its test or the reason it stays off, the MC-122477 comparison with Creative Common, the Packet Fixer least-intrusive config and the client-only question, the long-term runner plan). Status: **r1115 2026-11-15: shipped Debugify config boots: SQ-TPF-00, -01 (and -11 to -17) PASS; client rows still open.** **2026-11-14: Debugify config shipped (9 fixes, plan_bugfix_1114.md 2), row and changelog.** **r1114 2026-11-14: BROKEN for Debugify: SQ-TPF-01 (all-on boot crash on MC-121706; no debugify.json shipped), -10 (partial), -18, -19 (not reproduced); other server rows PASS; client rows not run. 420+ jars kill the client (TODO `pack/server #39`).** Packet Fixer on both sides DEPLOYED 2026-11-13 (row `both`, bounded config, untested: CQ-TPF-34 to -36 first); Debugify PLANNED (Debugify in `mods/` with no row or config); scratch test queued (server batches ready)
+
 | Part | Status |
 |---|---|
 | Packet Fixer 3.3.2 (MIT) | **Both sides: DEPLOYED 2026-11-13** (owner): `mod_sides.md` row `both`, one bounded config in `config/packetfixer.properties` and `configs_edited/root_config/` (section 4.2 client values; the generated default was `allSizesUnlimited=true`), changelog bullet. Untested: the scratch run measures how effective each side is (client only, server only, both) and whether the server needs lower values than the client (4.7); CQ-TPF-35 to -36 first. Rows SQ-TPF-30 to CQ-TPF-39 |

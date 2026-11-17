@@ -12,6 +12,8 @@ The ask, from cooking.md:
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Oven (FD cooking-pot style baking block in patcherMod: `creativeengineering:baking` recipes with an optional bakeware tool, plating, non-stove heat below, stove heat on top, side automation, JEI; bakeware items; baking copies of the pot's baked goods; muffin dough fix). Status: **r1103 2026-11-03: baked family follow-ups SQ-FFB-02 to -04 PASS.** first version DEPLOYED with 1.0.7; 37 recipes, ingredient counts, hammered bakeware, hammer fix, cornmeal DEPLOYED with 1.0.8; JEI [+] fix DEPLOYED with 1.0.9 (OV-11); OV-01 to OV-19 pending; 2026-10-21 muffins x4, CfB oven smokes + other-oven tooltips built, scratch server PASSED 2026-10-22 (SQ-OF-05, SQ-OF-06; OV-24 done, OV-20, OV-23 in game); 2026-10-22 baking overhaul (all cake / pie / cookie recipes replaced, frosting + cookie dough items, pot pie fillings, opened-can check in patcherMod 1.1.01 in `mods/`) built, scratch server PASSED 2026-10-22; in game OV-25 to OV-32; muffins Oven only, Cooking Pot route removed 2026-10-29, shipped 1.1.05, scratch PASSED r1031 (SQ-BJ-01; OV-36 in game) (deep scan 2026-11-02)
+
 | Part | Status |
 |---|---|
 | Oven block, block entity, menu/screen, `creativedelight:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |

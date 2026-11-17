@@ -5,6 +5,8 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Bee nests (where wild nests generate and how often; `bee_nests.json` per-biome nest chance on generated trees, scale of existing chances, extra bee-nest trees; `/dumpbeenests` measured trees/nests/chunks per biome). Status: DEPLOYED with 1.0.6 with the starter rules (scratch-server verified: 44 biomes); BN-01 to BN-10 pending
+
 | Part | Status |
 |---|---|
 | Investigation: every nest source per biome (section 2, [bee_nests_by_biome.md](bee_nests_by_biome.md)) | DONE 2026-10-10 |

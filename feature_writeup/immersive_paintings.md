@@ -6,6 +6,8 @@ painting screen has not been checked in game**
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Immersive Paintings (every painting variant on Immersive Paintings' Datapacks page at 32 px per block: modded ones built at load from the installed jars by Creative Compat, vanilla ones from a generated pack datapack; `/dumppaintings`, `gen_immersive_paintings.py`). Status: DEPLOYED with 1.0.6 (475 paintings, scratch-server verified); 2026-11-05 built-at-load rework built, NOT installed, scratch test queued (SQ-PA-01 to -04, CQ-PA-01, -02); PA-01 to PA-07 pending, painting screen never checked
+
 | Part | Status |
 |---|---|
 | `/dumppaintings`: every registered painting variant with its size and whether it is placeable | DEPLOYED with 1.0.6, part of `/dumpall`; last run 2026-10-18 18:31 (475 variants) |

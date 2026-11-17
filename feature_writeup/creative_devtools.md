@@ -12,6 +12,8 @@ Written for: the owner and the split agents, as the execution record of the Devt
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Devtools (dev-only jar carved from patcherMod in the Creative Split: /cdevgen, /dumpall and the /dump* scripts, /cdevperf, /cdevplace, block-state and Level-random probes on Common hooks, IE recycling log, test recipes, Flower Test world; nests perfBot and clientCapture; mod_sides side `dev`, never in a payload). Status: carved 2026-11-01, installed; scratch SQ-CDV-01 to -04 PASS (rcs1); CDV- in game open; `/cdevtest` and perfBot test verbs built 2026-11-15 (not installed), scratch test queued SQ-TX-01 to -16
+
 | Piece | Gradle project | Folder | Mod id | Ships |
 |---|---|---|---|---|
 | Creative Devtools (bundle) | `:creativeDevtools` | `development/creativeDevtools` | `creativedevtools` | dev `mods/` only (Q6) |

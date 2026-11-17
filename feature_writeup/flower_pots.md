@@ -6,6 +6,8 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Flower pots and planters (which plant goes in which of the 12 holder kinds: vanilla / framed / hanging pots, flower box, planter box, Beautify, Floral, Vinery, silt pot, planters; findings and decisions for labels and full coverage). Status: **r1103 2026-11-03: SQ-POT-04v FAILED (potted gossypium / potted hemp drop nothing when broken).** **r1102b 2026-11-02: SQ-POT-03 FAILED (`minecraft:hanging_roots` throws in 6 holders; F1 not reproduced, struck), SQ-POT-04 FAILED (Beautify hanging pot loses its plant); `blocks/framed-and-decor #6` Bug.** audit 2026-10-27 (static); `/dumppots`, `/pottest` built, SQ-POT-01 PASSED 2026-10-27, SQ-POT-02 to -04 ran (427 probe mismatches to read), SQ-POT-05 open; POT-01 to POT-07 pending; decisions D1 to D6 open; botanist workbench pot BUILT, installed 2026-10-29, shipped 1.1.05, mixins scratch server PASSED r1031 2026-10-31, SQ-POT-06 client pending (POT-08, CQ-POT-02); flower pot tweaks (section 3.2) BUILT 2026-10-31 in patcherMod 1.1.04 and backportedVinery `-07`, shipped 1.1.06 with the Flower Test world type, SQ-POT-07 and -08 PASSED r1101 (POT-09 to POT-16 in game); r1102b: F1 not reproduced (SQ-POT-03), Beautify hanging pot loses its plant on break (SQ-POT-04, new); Floral pot rebuild planned
+
 | Part | Status | Open |
 |---|---|---|
 | Audit: every holder's accept rule, read from bytecode (section 2) | DONE 2026-10-27 (static); live run 2026-10-27 evening | SQ-POT-05 analysis, CQ-POT-01 |

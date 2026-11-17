@@ -4,6 +4,10 @@ The plan for this run, as I understood the instructions. The reference for what 
 [structure_tuning.md](../../structure_tuning.md) (7.4 for the build, 8.0 for the run order, section 8 for the
 test lines). This folder is the running log of the run.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Structure testing log (7.4 build + scratch run from Phase 3: plan, per-milestone scratchpads and writeups). Status: scratch run 8.0.1 to 8.0.10 done 2026-10-19 (M1 build, M2, Phases 3 to 10), 11 (1.0.8 fixes) and 12 (earth fill camps) done; 8.0.11 (client list) is yours
+
 ## 1. What runs, in order
 
 1. **Build plan 7.4** (new structure mods, `vehicles` group, fortified-town shares), 7.4.0 to 7.4.8 in sequence.

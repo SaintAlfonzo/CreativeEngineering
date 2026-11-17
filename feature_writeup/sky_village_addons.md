@@ -5,6 +5,10 @@ Status: BUILT 2026-10-30 (templates, pools, swap table; data only, `/reload` is 
 Goal: the Sky Villages addon houses spawn in the pack's existing sky villages (`skyvillages:skyvillage`), built from
 blocks the pack has, with no new structure, structure set or biome change.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Sky Village addon houses (Farmer's Delight, Vinery and Let's Do Brewery houses from the Sky Villages addon datapacks, added to the existing sky village pools). Status: BUILT 2026-10-30 (data only, needs a restart): 17 templates, 8 houses at weight 20 + 9 Brewery deco, Brewery blocks swapped to Brewin' / Farmer's Delight / Vinery blocks, hops to grape lattices (swap table `tools/skyvillage_addon_remap.json`); SVA-01 PASSED offline, scratch SQ-SVA-01, -02 PASSED r1031, SQ-SVA-05 (hanging herbs) PASSED r1101; SQ-SVA-03, -04, CQ-SVA and the looks open; `skyvillages #1`
+
 ## 1. What is there (read 2026-10-30)
 
 - Sky Villages is a datapack in `kubejs/data/skyvillages/` (ported 2026-09-27 from

@@ -19,6 +19,8 @@ Written for: the owner, and the session that executes it.
 
 ## 0. Goal and the two steps
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Brewing publish prep (dicts and helpers into Creative Common, script guards for optional mods, CB assets into its jar, `creativebrewing:` namespace for every CB id, display names "Vinery / Brewin' & Chewin' / Foundation (Creative Brewing)", GPLv3 LICENSE in every Creative jar; licence audit of CB and its chain as a separate step). Status: Chain-alone set SQ-CBA / CQ-CBA queued 2026-11-06 (CEPortTesting, scratch test queued). Round 3 SQ-CBC and optional-dependency matrix SQ-CBO server rows run 2026-11-06 (r1106cbo: 49 rows, PASS 40, FAIL 9; fixes open as TODO `creativebrewing/publish #11` to `#16`; client rows CQ-CBC / CQ-CBO not run). **Polish plan (plan_cb_polish.md) BUILT 2026-11-06: #11 to #21 fixed or moved (effects into Common, gear rows into Equipment, food fluids into CD); jars not installed, scratch SQ-CBP and SQ-CDFL queued.**  BUILT 2026-11-04 (Step 1), not installed, scratch rows queued; Step 2 licence audit done 2026-11-04 (creative_brewing.md 9.2), fixes open as TODO `licence/*`
+
 **Goal:** Creative Brewing plus its four dependency jars (Common, Compat, Calendar, Creative Delight (CD)) and their own
 third-party dependencies boot and work with an **empty pack folder** (no `kubejs/startup_scripts`, `server_scripts`,
 `client_scripts`, no `kubejs/assets` overlay). Inside the pack nothing changes for the player apart from the names and

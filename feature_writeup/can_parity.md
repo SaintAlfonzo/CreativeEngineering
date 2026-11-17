@@ -6,6 +6,8 @@ directly; nothing regenerates this file.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Can parity worksheet (hand-kept: one row per food in each canning family; want, can name, sliced input, implemented, texture, recipe, audit, effects; h/s columns postponed). Status: **BROKEN: r1103 2026-11-03 SQ-VNG-01 FAILED (four Vintage pickling recipes still take the merged-away vinegar bottle); SQ-CNP-01, SQ-VNG-02 PASS.** worksheet written 2026-10-13; can values, recipes and removals scratch server PASSED 2026-10-22 (SQ-OF-00 to SQ-OF-03, after a trade fix; CP-09, CP-15 to CP-22 in game); raw can removals, White Strawberries can and Cactus Flesh rename not run in game (CP-01 to CP-05)
+
 | Part | Status |
 |---|---|
 | Raw veggie / fruit / meat cans (hand-written, [cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js)) | 2026-10-13: removed mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus; White Strawberries got their own can; Canned Cactus is now Canned Cactus Flesh (and the item Cactus Chunk is renamed Cactus Flesh). Not run in game (CP-01 to CP-05) |

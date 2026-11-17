@@ -8,6 +8,10 @@ file or class-file string refers to, plus a shortlist of the ones worth reusing 
 - Contact sheets: [food.png](unused_textures/food.png), [engineering.png](unused_textures/engineering.png),
   [blocks.png](unused_textures/blocks.png) (lists: `food.txt`, `engineering.txt`, `blocks.txt` in the same folder).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Unused textures (item/block textures no model or code uses, across all jars; food, engineering and block shortlists with contact sheets). Status: audit 2026-10-22, nothing added yet; regenerate with `python3 tools/texture_audit.py`
+
 ## 1. Method and limits
 
 1. Collect every `assets/<ns>/textures/{item,items,block,blocks}/**.png` in `mods/*.jar`, including jar-in-jar:

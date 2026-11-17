@@ -7,6 +7,10 @@ Written for: the owner and agents working on the split. Own mod `creativeworldge
 `creativeworldgen-1.0.0.jar`, side both): the pack's world generation and fauna. A bundle like Creative Delight: its
 own Java plus two nested members. Same behaviour as before the carve; every registry id keeps `creativeengineering:`.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Worldgen (bundle `creativeworldgen` carved from patcherMod in the Creative Split wave 5: structures, locate, earth and water fill, terrain adaptation, bee nests, wild flowers, leaf decay, loot tuning, mob spawns and caps, named mobs, mooshrooms, Forgiving Void; nests More Mooblooms and Baby Mobs). Status: **BROKEN: r1103 2026-11-03 SQ-CWG-06 FAILED (punch meta `meteorite_desert_pyramid` dropped); SQ-CWG-08 / -08o open (old-world rerun); the other SQ-CWG rows PASS.** built 2026-11-02, NOT installed; scratch SQ-CWG-01 to -10 queued 2026-11-03: punch key, FirstTickWater flag fix, Botania and CC:Tweaked out of village loot; jar rebuilt, not installed.
+
 ## 1. What it holds
 
 - **Java** (`com.SaintAlfonzo.creativeworldgen`, same subpackages as in patcherMod; 59 classes plus 4 new):

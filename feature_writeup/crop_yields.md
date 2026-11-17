@@ -5,6 +5,8 @@ Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Crop yields (every crop's ripe drops; soil yield: extra produce on Rich Farmland, Fertile Soil, Rich Soil and the soul soils, rounded bases, no Fortune on any crop, own picks and six bushes boosted, one switch per crop or bush, all on). Status: BUILT 2026-10-28, reworked 2026-11-03 (installed); wave 2 BUILT 2026-11-14 and installed; **r1115 2026-11-15: wave 2 SQ-SY-14 to -21, CQ-SY-22 built, scratch server PASSED**; adzuki replant open (`farming/crops #56`)
+
 Second wave (rounded bases, no Fortune, own picks, bushes, nether soils, Botany Pots speed): [plan_crop_yields_wave2.md](plan_crop_yields_wave2.md), BUILT 2026-11-14 (jars built, not installed; SQ-SY-14 to -22 queued). Open: adzuki replant on Rich / Fertile Soil (plan 5.1).
 
 | Part | Status | Where |

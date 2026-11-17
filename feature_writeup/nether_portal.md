@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether portal ignition (ordinary ignition fails and turns the frame to crying obsidian; Dark Fire from Flint and Terrasteel opens the portal). Status: DEPLOYED, Flint and Terrasteel still marked temporary; NP-01 to NP-12 pending; findings F1-F6, F1 to F3 decided 2026-10-29 (solid blocks only + new Dark Fire; Overworld only; keep)
+
 | Part | Status |
 |---|---|
 | Any ordinary portal ignition fails: the portal doesn't form, the fire turns to soul fire, the obsidian frame turns to crying obsidian (`PortalFailureHandler`) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); "until confirmed working" diagnostic log still in |

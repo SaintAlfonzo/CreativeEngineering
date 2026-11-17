@@ -4,6 +4,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Food families (every food and whole food block by culinary form: per-family rules for cans, placement and recipe shape by station, cited or marked as decisions; compliance per family and per member; foods without a family; `tools/food_families.py`). Status: **r1103 2026-11-03: pancake family built, scratch server PASSED (SQ-PCK-01 to -05).** **2026-11-02 night: pancake family (4.7) BUILT, CD jar installed 2026-11-02 23:16, not booted; SQ-PCK-01 to -05, CQ-PCK-01, -02 queued (SQ-CDJ6).** Produce families (fruit to dairy) decided and BUILT 2026-10-25 (recipes in the Creative Delight tree, coaster tag, 9 Display Delight dish blocks in patcherMod), shipped with 1.1.03, scratch server PASSED (SQ-FF-00 to -02, deep scan 2026-11-02), not run in game (FF-01 to FF-08); baked families BUILT 2026-10-27, shipped with 1.1.04, SQ-FFB-00 PASS (FF-11 to FF-14); other families DESIGN draft: D1 to D4 open, findings F1 to F9
+
 Every food in the pack, plus every whole food block (cakes, pies, pizzas, feasts), sorted into **families** by culinary
 form (jam, pie slice, juice, burger), so one set of rules covers a whole family: should it be canned, where it can be
 put down, and what recipe shape it takes at each station. Families nest like food types do (`pie/slice` is in `pie`).

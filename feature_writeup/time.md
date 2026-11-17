@@ -10,6 +10,8 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Time system (one `[time]` master for Better Days day length, Serene Seasons / SeasonHUD season length and Vinery wine aging; seasons and wine on the sun clock, wine months = sub-seasons, pause when empty, calendar, `/ccaltime`). Status: **BROKEN: r1103 2026-11-03 SQ-PST-08, -10, -11, -11b FAILED (Botania vivid, Vintage lush, IW rooted grass and IW grass over mycelium get no winter slowdown); SQ-PST-03, -09 PASS.** DEPLOYED with 1.0.8 (2026-10-19, patcherMod 1.0.8): master, push, sun seasons, pause when empty, GUI, `/ccaltime`, presets; the push and the sun migration ran in single player 2026-10-19; open: T5 boosts, the server preset (TODO `pack/release #2`), `tools/time_table.py`; TI-01 to TI-29 pending. Admin date commands `/ccaltime date` and the year fix (3.11) BUILT 2026-10-30, installed 2026-10-31, scratch server PASSED r1031 2026-10-31 (SQ-TD-01 to -03, -05; SQ-TD-04 client pending), TI-32 to TI-37 pending
+
 | Part | Status |
 |---|---|
 | Findings on today's three clocks (2) | VERIFIED 2026-10-18 from the decompiled jars and the config files on disk |

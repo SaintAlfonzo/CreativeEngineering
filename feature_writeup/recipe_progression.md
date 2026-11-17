@@ -18,6 +18,8 @@ Other recipe folders have their own writeups: `equipment/` ([gear_tuning.md](gea
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Recipe progression hub (the order the recipe scripts set, from stone generators to steel, mechanisms and magic; removed items: 309 ids hidden, tagged red, tag-stripped and scanned; dead recipes: `dead_recipe_removal.js`, `kubejs/recipes/`, old `global.CE` blocks). Status: DEPLOYED (since 1.0.3), RP-01 to RP-08 pending; findings F1-F6, F1 (items left without a recipe: dispenser and Explorer's Compass; the blast furnace, smoker and cake still have mod recipes, rechecked 2026-10-21) needs a decision
+
 | Part | Status |
 |---|---|
 | Five per-folder writeups (RE-, RM-, RW-, RC-, RA-) | written 2026-10-18 |

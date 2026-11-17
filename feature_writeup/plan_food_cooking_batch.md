@@ -7,6 +7,10 @@ same session as the build (CLAUDE.md "Done means"). Recipes go through `global.N
 Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, run SQ-MRD-04), so it is not in this batch.
 "merges/baking #5" does not exist; read as `merges/baking #4` (rename stackable pancakes).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Food and cooking batch 2026-11-02 (cabbage leaves, glycerol, shulker / Caesar / CfB rack merges, taco, patties, kebab wrap, squid drops, jams and vinegar, copper cups and prepared sea pickle and tempura removed, cornbread stuffing, seasoning names, canned ratatouille, salmonberry and raspberry jams, stone cutting boards, Kelp Encrusted Cod). Status: **r1103 2026-11-03: SQ-FCB-07, -08b PASS.** **r1102b 2026-11-02: SQ-PSU-06 FAILED (lemon and orange jam-from-slices pot recipes return a glass bottle, `dishes/jams #1` Bug).** TESTING: built 2026-11-02 ("Built"); scratch r1102b on the 14:01 Creative Delight jar: SQ-FCB-00 to -06, -08 PASS, -07 partial (batch fault), SQ-PSU-06 FAIL (lemon and orange jam from slices still bottle); the 21:10 CD build is not in `mods/`; `dishes/meals #40` pinned, `food/stack-sizes #2` open (deep scan 2026-11-02)
+
 ## Wave A: script-only (needs /reload; scratch S tier first)
 
 | Order | Row | Decision / approach |

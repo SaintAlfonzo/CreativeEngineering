@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Effects (every mob effect by mod, vanilla first: brewable, tipped arrow name, superset, JEI potion fluid, JEI description, food sources, subset effects, overlaps, brief and detailed descriptions; overlap groups; harmful / helpful category audit; JEI item lists for every effect (`jeed_providers.js`); `tools/effect_audit.py`). Status: reference, written 2026-10-19 (140 effects); DEPLOYED with 1.1.01, not seen in game: providers (scratch server PASSED 2026-10-22, SQ-OM-16, after a Xaero skip), 16 description fixes, 6 category overrides (patcherMod 1.1.01), Sunny kept hidden; Passion Aloe Nectar marked for removal (F8); EF-01 to EF-19 pending; F2 (10 descriptions kept as `TODO`), F5 (total overlaps) and F12 (potions for unbrewable effects) need a decision; 2026-10-23 built, scratch test queued (SQ-LE): F6 Buzzier Bees' luck mixes removed, F8 nectar and 3 more Abnormals Delight items removed (EF-05, EF-12, EF-20); 2026-10-31 built, scratch server PASSED r1031 2026-10-31 (SQ-EFX-01 to -11): HUD icon audit (2.5), effect swaps and removals (2.6), compound effects (2.7), copper poisoning (2.8), EF-22 to EF-30
+
 | Part | Status |
 |---|---|
 | Effect table (2.1): 140 effects from vanilla and 25 mods, with brewing, tipped arrow, superset, JEI potion fluid, JEI description, food sources, subset effects, overlaps, brief and detailed descriptions | reference, written 2026-10-19 from code (decompiled jars and the two ports), the `/dumppotions` and `/dumpfood` exports, and every lang table the client loads |

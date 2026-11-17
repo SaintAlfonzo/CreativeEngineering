@@ -4,6 +4,10 @@ Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/crea
 (section 7), not run. Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner 2026-11-14). TODO
 `creativedelight/members #56`. Related: [salt.md](salt.md) (The Salt's item click and the switched-off block melt).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Melting (salt, fire and lava melt ice and snow; packed and blue ice one tier down; Nether snow melts when placed; vanilla light melt off; Creative Common `melting/`). Status: **r1115 2026-11-15: SQ-MELT-01 to -07, -09, -P1, SQ-SALT2-06, -06b PASS (-09 Rare Ice log and -P1 config reads fixed in Common 03:15, reruns PASS); SQ-MELT-08 (no per-click salt melt) and -10 (fire-tag lantern does not tick) FAIL for the owner.** **2026-11-15: -08 closed by design (a click places a layer); -10 fixed (lantern dropped from the fire tag) and salt-melt listener added, Common built, not installed; SQ-PS15-09.** BUILT and installed 2026-11-14 (Creative Common 1.2.0)
+
 ## 1. Rules
 
 Three source kinds melt two target kinds. One roll per random tick of the target.

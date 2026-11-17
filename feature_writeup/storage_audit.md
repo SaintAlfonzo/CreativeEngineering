@@ -5,6 +5,10 @@
 and pack scripts. Nothing run in game.
 TODO rows: `alcohol/decisions #6, #7`, `alcohol/vineryport #10, #11, #12`.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Storage audit (wine bottle sizes vs racks, crates and bags across mods: duplicates, one-way recipes, proposed sizes and survivors; compressed). Status: audit 2026-10-19, decisions open; sacks as bundles DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22 for the logic (SQ-GM-10), SB-01 to SB-09 in game
+
 ## 1. Rules (how the port decides)
 
 Updated 2026-10-19 for `-03` ([alcohol.md](alcohol.md) 10.11, 10.12). The audit below this line used to describe `-02`,

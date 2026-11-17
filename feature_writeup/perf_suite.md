@@ -8,6 +8,8 @@ real ones so that random ticks, mob spawning and player-gated code run as they d
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Perf suite (scratch-server performance tests run end to end by `perf_suite.py`: bot players from the dev-only `perfBot` mod, RCON, triage and retry when the server ends without warning, resume; general benchmarks G-, cooking C- and world interaction W- proposals). Status: BUILT 2026-10-28, offline self-test PASSED, scratch server PASSED 2026-10-28 (SQ-PB-01 to -05, suite run g1); C- and W- await the owner's veto
+
 | Part | Status |
 |---|---|
 | `perfBot` dev mod (`cdevperfbot` 0.1.0): bot players, tick log, `/pbot` | BUILT 2026-10-28; chunk-tracking bug fixed 02:24; scratch server PASSED 2026-10-28 (SQ-PB-01 to -04, [testing/scratch_queue_run_2026-10-28.md](testing/scratch_queue_run_2026-10-28.md)) |

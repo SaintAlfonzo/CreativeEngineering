@@ -6,6 +6,8 @@ is the build.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI world-interaction tabs (19 generic tabs: weathering, lava, stripping, waxing, dyeing, soap, jars, knife and grass drops, mobs, burning, campfires, budding; Moobloom Conversion, Grape Planting). Status: DEPLOYED with 1.1.01; tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md): mobs and blocks drawn, per-potion jar rows, joined notes, fluid scale, concrete 30 s) DEPLOYED to the client with 1.1.04 (server on 1.1.03), CQ-JT not run, JW-19 to JW-27; run `/dumpworldjei` + `/cdevgen run jei_world` before release
+
 | Part | Status |
 |---|---|
 | Framework: one generic category, rows from resource files, KubeJS and Java providers (patcherMod `compat/jei/world/`) | BUILT 2026-10-22, seen in game. Text pass, arrow, effect and Nothing slots, jar colours: BUILT 2026-10-22 (patcherMod 1.1.01 rebuilt in place), not in `mods/` |

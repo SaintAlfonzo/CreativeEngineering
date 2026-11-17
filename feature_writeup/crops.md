@@ -4,6 +4,8 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Crops (every crop's type, soils incl. Rich Soil / Rich Farmland / Fertile Soil, Quark right-click replant, hoe area right-click and area break; crop parity layer for non-standard crops; wild generation: biomes, rates, heights, side blocks). Status: **r1103 2026-11-03: SQ-PSF-02, -04, -07, -08, -08a, -08b, SQ-PSD-01 PASS.** reference + tobacco parity, per-hoe areas and wild-crop placement DEPLOYED with 1.0.4; WTHIT growth line (CR-59 to CR-66) and IW soils (CR-67, CR-68) DEPLOYED with 1.0.6; CR-01 to CR-58 pending; G1-G3 fixed, G4-G15 open; extra stem fruit built, scratch server PASSED 2026-10-22 (SQ-SF, after an own-fruit fix), jar in `mods/` (CR-71 to CR-77 in game; F-SS1 fixed 2026-10-30 by crop seasons); crop seasons (types, fertile / neutral / off, §2.12.1) BUILT 2026-10-30, shipped 1.1.05 (code now in Creative Calendar), scratch server PASSED r1031 2026-10-31 (SQ-CS), CQ-CS-07 client PASSED r1101, CR-89 to CR-99 in game; village farm crops (§2.11) DEPLOYED 1.1.03, SQ-VF never run; pre-scratch crop pass 2026-11-02 (hemp, tomatoes, stems, grasses) built, unreleased, r1102b partly PASSED (SQ-PSF / PSD / PST, reruns open); wild-crops batch 2026-10-22 and crop drops built, scratch server PASSED 2026-10-22 (SQ-WC, SQ-CD); wild crop system moved into Creative Delight 2026-10-25 (creative_delight.md 24, SQ-WCD queued)
+
 | Part | Where | Status |
 |---|---|---|
 | Per-crop table: type, soils, right-click, hoe right-click, hoe break | §2.1 | reference; CR-01 to CR-20 check the surprising parts |

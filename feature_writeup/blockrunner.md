@@ -4,6 +4,8 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: BlockRunner walk speed by surface (tiers, sticky facing, camo speed, visual sinking). Status: DEPLOYED, in-game test pending; 1.0.4 mod blocks tiered 2026-10-02 (BR-52); audit 2026-11-10 BUILT (every walkable block tiered, watcher), BR-59..64; pass-through blocks (3.10: crops, plants, vines, ropes, cobwebs, items and projectiles in webs, leaf piles) built, scratch test queued 2026-11-15 (untested; Compat + Devtools jars not installed), BR-67..88
+
 Every block you walk on belongs to at most one speed tier (asphalt 1.50 down to very sticky 0.45).
 BlockRunner applies the speed and KubeJS fills the tiers. patcherMod adds what a block tag can't express:
 sticky pistons only count when they face up, framed and copycat blocks walk like their camo, and

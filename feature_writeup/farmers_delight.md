@@ -11,6 +11,10 @@ KubeJS, data or, since 2026-10-25, the overlay of FD's Creative Delight repack (
 **Licence:** MIT (Forge build, owner-supplied 2026-10-25). Code and art can be reused with the notice kept.
 
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Delight 1.3.4 update (changes against installed 1.2.4: Comfort kept, salvaging recipes at 75%, Gleaming Salad, rope fence, onion and pumpkin loot, rich soil mixins to build). Status: **BROKEN: r1103 2026-11-03 SQ-FDB-05 FAILED (live placeAs toml edits never reload; check by hand first); SQ-FDB-06, -07 open; SQ-FDB-09, -11 PASS.** DEPLOYED with 1.1.03: FD repack `-02` in the CD jar plus CD-tree scripts ([creative_delight.md](creative_delight.md) 21); scratch r1102b 2026-11-02: 7 PASS, SQ-FDB-04 FAILED (Gleaming Salad lost Nourishment), 5 to rerun; Onion Soup left out (owner), pumpkin pie pick and salad cans open; `mod-additions #18`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (669 files added, 275 removed, 784 changed; lang +258 / -96 / ~1).

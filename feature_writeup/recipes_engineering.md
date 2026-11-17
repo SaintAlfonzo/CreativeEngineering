@@ -7,6 +7,8 @@ except the parts that already have a writeup: components, coils and the sample s
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Engineering recipes (machine gating: gold deployer, IE-part press / saw / drill, nether-locked alloy kiln, cast-iron blast brick, steel workbench; compressed iron = steel; mechanisms, redstone, rails, resource stones, cinder-flour dusts). Status: DEPLOYED (since 1.0.3), RE-01 to RE-20 pending; findings F1-F10, F2 (no dispenser recipe), F3 (amethyst crushing clash) need a decision, F1 (blast furnace) has Quark's recipes; buckets BUILT 2026-10-29, installed 2026-10-31, RE-28 scratch server PASSED r1031 2026-10-31, RE-29, RE-30 in game
+
 | Part | Status |
 |---|---|
 | Machine gating: deployer on gold, press / saw / drill on IE parts, alloy kiln nether-locked, IE blast furnace on cast iron, Engineer's Workbench on steel | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); vanilla blast furnace recipe removed, Quark's deepslate / blackstone furnace recipes still make it (F1) |

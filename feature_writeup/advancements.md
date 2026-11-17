@@ -6,6 +6,8 @@ this file is the reference for the switch.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Advancements switched off (every advancement from vanilla, mods and datapacks left out by `[advancements] enabled = false`; one-way effect on saved progress; rewards lost with them). Status: DEPLOYED with 1.0.8 (2026-10-19; ran in single player: 14,828 left out); AV-01 to AV-05 pending
+
 | Part | Status |
 |---|---|
 | `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in patcherMod 1.0.8; DEPLOYED with 1.0.8 (2026-10-19 10:20). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |

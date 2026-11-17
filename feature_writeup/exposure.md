@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Exposure cameras and photographs (our 1.9.19 backport in one jar: base mod, Polaroid instant camera, Expanded lenses/filters/palette films; build-time tag merge; Catalog on hold). Status: DEPLOYED (1.0.3; `-02` with 1.0.4, `-03` album text fix with 1.0.6, `-04` viewfinder click fix with 1.0.7); in-game test pending (EX-11, EX-17 passed); EX-13, EX-25, EX-50
+
 | Part | Status |
 |---|---|
 | Exposure 1.9.19 base port (`exposure`): camera, films, lightroom, albums, frames, camera stand, projector | DEPLOYED (in `mods/`, ships with 1.0.3), in-game test pending (EX-11, EX-17 PASSED); album text fix `-03` with 1.0.6 (EX-13), viewfinder click fix `-04` with 1.0.7 (EX-25) |

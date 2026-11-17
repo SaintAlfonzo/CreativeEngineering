@@ -4,6 +4,10 @@ Source: DecompiledMods/jei-1.21.1-neoforge-19.39.0.371 (class files only; no Jav
 `javap -p -c` dumps of every relevant class are in `_PORT_craftable_first/` inside that folder.
 Target: JEI 1.19.2-forge-11.8.1.1034 (patcherMod client mixin).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI craftable-first port map (JEI 19 sort vs 11.8.1, hook points). Status: reference + implementation; the backport DEPLOYED with 1.0.6 (JEI-01 to JEI-06 pending)
+
 ## Verdict
 
 The feature is present in 19.39.0.371. It is not in 11.8.1.1034, where `IRecipeLayoutList.create(menu, player, list)`

@@ -6,6 +6,8 @@ runs too often or too rarely. The fixes are planned in [plan_process_overhaul.md
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Process review and overhaul plan (where errors and lost time come from in the human and agent loop: hand-copied status, a queue that only grows, rotted headless tests, rules held by memory, unidentifiable builds, design gaps filled by assumption; phase 1 check command, build stamps, design intake, status as data; phase 2 tiered scratch queue). Status: review written 2026-11-16; plan rulings D1 to D9 2026-11-16; P1.5 commit rule and P1.6 memory move done, the rest Planned
+
 | # | Finding | Cost today | Plan |
 |---|---|---|---|
 | 1 | Status is hand-copied into 8 to 10 docs per change and drifts | Stale snapshots, contradicting status words, agent time on bookkeeping | Phase 1, P1.4 |

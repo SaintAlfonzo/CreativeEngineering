@@ -17,6 +17,8 @@ owner asks for it by name. Upstream bugs are fixed (3.6).
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Cozy's Improved Cats and Domestication Innovation overlap and integration report (Cozy 2.1.0 native 1.19.2, LGPL: improved cat entity replacing vanilla cats, stats, classes, ancient fish taming, collar revival; DI 1.6.1 installed: pet revival and command conflicts with Cozy, three pet-bed sets; 17-step fold-in, decisions D1 to D10). Status: owner's cat changes built 2026-11-01 (section 10: no gender, no ancient fish, vanilla fish taming, Cozy owns modes, Feather on a Stick lure and mob hook), built, scratch server PASSED (SQ-CAT-01 to -05, r1102b 2026-11-02); rest of the fold-in planned; CIC-01 to CIC-36 drafted, CQ-CAT queued; `mod-additions #34`
+
 | Part | Where | Status |
 |---|---|---|
 | Cozy inventory (11 items incl. 2 block items, 2 blocks with block entities, 1 entity, 2 menus, 2 recipe serializers, 1 fishing loot modifier, 1 biome modifier, 45 recipe files, 6 tags, 72 advancement files / 24 criteria, 6 commands, 22 + 2 mixins) | section 3 | reference, from the jar and decompiled code |

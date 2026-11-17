@@ -12,6 +12,10 @@ DF- rows not run in game. Member `-01` with the Cactus Soup Cup removed (copper 
 **Result in one line:** about 37 new foods and 30 new knives, but most need mods the pack does not have. About 18 items
 would be enabled here, and 25 existing foods have new values or effects.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Delightful 3.8.1 update (3.4.1 repacked as a Creative Delight member with 20 backported 3.8.1 items: cantaloupe crop and foods, cactus dishes, baklava, milkshakes and cauldrons, gummies, roasted acorn, nut dough, 3 knives; 25 food value changes; jam jars off beside Fruits Delight; MIT). Status: **2026-11-03: cantaloupe names in their own lang namespace (5) BUILT, CD jar installed 2026-11-03 00:08, not booted; CQ-CDM2-01 (SQ-CDJ7).** DEPLOYED with 1.1.03; scratch SQ-DF-01 to -06 PASSED r1102b 2026-11-02, SQ-DF-07 and DF- in game open; `mod-additions #23`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (1685 files added, 285 removed, 576 changed; en_us lang **+147 / -34 / ~4**).

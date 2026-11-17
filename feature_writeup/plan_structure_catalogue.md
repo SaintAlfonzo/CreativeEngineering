@@ -6,6 +6,10 @@ Every structure and piece by family: [structure_catalogue_map.md](structure_cata
 
 Dev-only: no player changelog bullet, no new `mod_sides.md` row.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Structure Catalogue world type (Creative Devtools: flat world laying out every structure by family; family map in [structure_catalogue_map.md](structure_catalogue_map.md)). Status: built, scratch server PASSED (2026-11-12 r1111: SQ-SCAT-06 to -08; client rows not run)
+
 ## 1. Goal
 
 A flat world type that lays out every structure in the pack as a browsable catalogue, sorted by family. It builds itself on the first start of such a world.

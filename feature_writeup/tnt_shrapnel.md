@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: TNT shrapnel (lit TNT, TNT minecarts and burning TNT items fire a ring of no-gravity fragments: 24 pieces, 12 blocks, 3 damage; `[shrapnel]`). Status: DEPLOYED (1.0.3 jar), TN-01 to TN-10 pending; findings F1-F4, F1 (the lighter is immune) answered 2026-10-29, decision to confirm
+
 | Part | Status |
 |---|---|
 | Lit TNT and TNT minecarts fire a burst of shrapnel when they explode (`TntShrapnelHandler`) | DEPLOYED (in the patcherMod jar shipped with 1.0.3; first committed 2026-10-02); in-game test pending |

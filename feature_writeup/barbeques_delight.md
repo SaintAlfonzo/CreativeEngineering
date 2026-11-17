@@ -11,6 +11,8 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Barbeque's Delight 1.3.0 (NeoForge 1.21.1, LGPL-2.1, 36 items + 3 blocks: grill, ingredients basin, tray, 10 skewers raw/grilled, seasonings that boost food effects; overlap with the pack skewer family and seasonings framework, upstream bugs, port plan). Status: **r1114 2026-11-14: BROKEN: SQ-BBQW-02s (stick lost on a one-beef basin); SQ-BBQW-02, -03, SQ-BBQ2-03, -05, -06 PASS.** **r1103 2026-11-03: built, scratch server PASSED (SQ-BBQF-01 to -07, SQ-BBQ-02, -06, -07).** **2026-11-03: fold (4.5) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 queued (SQ-CDJ7), BBQ-22 to -29 in game.** survey 2026-10-30; owner decisions 2026-10-31 (all skewers, wrap / sandwich / bibimbap, six seasonings kept as upstream and marked for the pack framework, no seasoning trades, compost map, Jade to WTHIT; second batch: plain Forge in Creative Delight, vanilla-rule grill campfire, tray for evaluation, seasoning fold and skewer fold designs); port BUILT 2026-11-01 (Creative Delight member `backportedBarbeques`, NCH emitters, 26 recipes, compost, tags, WTHIT, JEI; 4.0), in `mods/` since the CD jar of 11-02 14:01, not played; scratch r1102b SQ-BBQ-01, -03 to -05 PASS, -02, -06, -07 OPEN (batch faults), -08 not run (deep scan 2026-11-02), BBQ-01 to BBQ-21 in game
+
 | Part | Where | Status |
 |---|---|---|
 | Inventory | 36 items (33 plus 3 block items), 3 blocks, 0 effects, 0 potions, 26 recipes, 6 butcher trades, 1 mixin | surveyed (1, 3) |

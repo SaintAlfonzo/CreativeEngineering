@@ -6,6 +6,8 @@ that no recipe describes. Each gap gets a suggested fix so the list can be worke
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI coverage gaps (catalog: crafting recipes JEI hides, recipe types with no category, world interactions; suggested fix per gap). Status: part 1 (crafting) generated, regenerate with `python3 tools/jei_coverage.py` after `/dumpcraftingaudit`; part 2 not started; part 3 catalog done and tabs DEPLOYED with 1.1.01 (jei_world_tabs.md); refreshed 2026-10-22; part 1 fixes BUILT 2026-10-22 (61 cycling pages, AE2 facades hidden; 9 left); part 4 (bulk sets) catalog DONE and Tipped Arrows / Potion Buckets / Canning / Using Cans pages BUILT 2026-10-22, in `mods/` since 2026-10-26 (JC-21 to JC-27)
+
 | Part | Scope | Status |
 |---|---|---|
 | 1 | Crafting-table recipes JEI hides | Catalog DONE (refreshed 2026-10-22). Fixes BUILT 2026-10-22: cycling pages for 61 recipes, AE2 facades hidden (patcherMod, not in `mods/` yet; JC-06 to JC-20) |

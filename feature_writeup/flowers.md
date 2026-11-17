@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wild flowers (flower biomes and rates, Botania colors per biome, pack flower patches filling the bare biomes, existing Terralith flower features rescaled/removed per biome, Flower Patch blocks mixed into wild flowers, Buzzier Bees clovers). Status: DEPLOYED with 1.0.6 (2026-10-14; nether worldgen flower changes with 1.0.9); FL-01 to FL-14 pending
+
 | Part | Status | Open |
 |---|---|---|
 | Rules engine (`wild_flowers.js`): Botania palettes, pack flower patches, existing-feature scale/remove, Flower Patch mixing | BUILT 2026-10-07, offline checks pass, scratch server verified (History); DEPLOYED with pack 1.0.6 (2026-10-14); applied in single player 2026-10-11 | FL-01 to FL-14 |

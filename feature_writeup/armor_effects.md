@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Armor and tool effects (`global.armorEffects` piece/set/mount: set bonuses on wooden to dragon armor, dragon horse armor; `global.toolEffects` on-hit/held: echo and dragon tools; echo armor set bonus retargeted to Night Vision + Phantom Bane; Magic Resistance effect, damage cut and potions). Status: DEPLOYED (since 1.0.3; horse armor interval with 1.0.4), in-game test pending (AE-01 to AE-24); findings F1-F9 open; 2026-10-31 built, scratch server PASSED r1031 2026-10-31 (SQ-EFX): F6 Magic Resistance on the `magic` tag plus Poison / Wither tick cover, F9 horse Regeneration / Health Boost / Resistance II; F4 (dragon bow/crossbow swapped) built, scratch server PASSED 2026-10-22 for the on-hit half (SQ-GM-02), AE-19, AE-20 held effects in game; F10 fixed 2026-10-22 (no tool on-hit effect had ever applied)
+
 | Part | Status |
 |---|---|
 | Armor effects framework `global.armorEffects`: `piece()` (one item worn), `set()` (full set worn), `mount()` (horse armor) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |

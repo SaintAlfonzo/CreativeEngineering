@@ -7,6 +7,10 @@ Written for: the owner and agents working on the split. Own mod `creativecompat`
 `creativecompat-1.0.0.jar`, side both): the pack's tweaks to third-party mods that have no wider system of their own.
 Every other Creative jar requires it (Common <- Compat <- content jars). Same behaviour as before the carve.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Compat (own mod `creativecompat`: tweaks to third-party mods with no wider system, carved from patcherMod in the Creative Split; every other Creative jar requires it). Status: carved 2026-11-01, installed; scratch SQ-CMP-01 to -08 queued, CMP-01 to -04 in game open; licence fixes (banner textures built at load, TrashSlot without overwrite) built 2026-11-06, not installed, SQ-BPT-01, CQ-BPT-01 to -03, CQ-TSL-01, -02 queued
+
 ## 1. What it holds
 
 - **Java** (`com.SaintAlfonzo.creativecompat`, same subpackages as in patcherMod): `compat/` (banner pattern atlas,

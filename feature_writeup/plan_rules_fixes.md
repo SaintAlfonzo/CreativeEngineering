@@ -12,6 +12,8 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Rules violation fix plan (design_rules.md V-01 to V-62: test prefix index, tab and ISO date rules, registration namespaces, dict keys, helper de-duplication, renames). Status: planned (2026-11-16); review pass done, D7 to D19 decided, test prefix index built (10 renames, not applied)
+
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
 
 1. **D1 Licence string**: `GPL-3.0-only` confirmed (can be widened later); change the rule text, not the jars (section 8).

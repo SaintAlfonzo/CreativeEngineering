@@ -4,6 +4,8 @@ Written 2026-10-05. Test prefix `NE-`.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nests and egg crates (Incubation Additions mod: per-bird-mod content sets and built-in packs, nests for emus, ducks and geese, duck/goose egg crates, duck mod egg sprites, egg-layer mixins, foreign-nest guard, old-id remap, texture locations + hotswap route). Status: **r1103 2026-11-03: SQ-NEST-01 PASS; SQ-NEST-02 open (no loaded-ground check, hand-check).** **2026-11-03: wild duck, goose and emu nests (2.4) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-NEST-01, -02 queued (SQ-CDJ7).** own mod `incubation_additions` 1.0.0 DEPLOYED with 1.0.6 (first release; scratch-server verified), nested in Creative Delight since 2026-11-01 (`members/incubation`); emu nest DEPLOYED (1.0.2, old id, remapped); 1.1.0 goose golden egg DEPLOYED with 1.1.02, NE-15/-16 logic scratch PASSED (SQ-VP-13); NE-01 to NE-17 pending
+
 | Part | Status |
 |---|---|
 | **Creative Delight's Incubation compartment** (was the own mod Incubation Additions, `incubation_additions`) | Since M8 (2026-11-04, plan_cb_publish.md 3b): part of Creative Delight's own jar (1.1.0, built, not installed), behind a Java load guard (Incubation loaded, `[compartments] incubation` on); ids `creativedelight:*` (swap list `compartments.json` maps `incubation_additions:*` and the older `creativeengineering:*` nests); packs `packs/incubation/<bird mod>/` added only with Incubation and that bird mod. Scratch SQ-CDFO-01 to -03 queued, CQ-CDFO-01 in game. Before M8: nested member `members/incubation` since the Creative Split CD carve (2026-11-01); BUILT 2026-10-05, DEPLOYED with pack 1.0.6 (2026-10-14). |

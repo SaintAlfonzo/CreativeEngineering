@@ -10,91 +10,417 @@
 > recordings stay for debugging later. If disk runs short, drop the recordings of all-PASS boots first, never those
 > with a FAIL. Details: "Perf session" below and [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) section 0.
 >
-> **2026-11-16 17:21: RUN r1116 STOPPED (SQ-TX PASS 20, INCONCLUSIVE SQ-TX-18; SQ-PS15B / SQ-PTH-06b, -25c PASS 10, FAIL SQ-PS15B-01, -10, -12, SQ-PTH-25c; SQ-PS15 group A PASS 8, FAIL SQ-PS15-01, -07, -14, -16; SQ-PS15 group B, SQ-PTH-28c and client rows deferred), see Run log and [scratch_run_2026-11-16.md](scratch_run_2026-11-16.md).**
-> **2026-11-15 08:18: RUN r1115 (10 phases: rewritten rows, Power Grid P11 on -18, SQ-MELT, SQ-SPD / SQ-SLK, SQ-HOP, SQ-SY wave 2, SQ-DEP, SQ-QN, older server rows, client with the jar handle gate PASS; FAILs SQ-PWG-82, SQ-MELT-08, -10, SQ-HOP-04, -05, -06, SQ-PG-01c URGENT client crash; SQ-PTH not run), see Run log and [scratch_run_2026-11-15.md](scratch_run_2026-11-15.md).**
-> **2026-11-15: added "SQ-TXQ / CQ-TXP qrun lint, crash watch, verdict files, paired runs" at the end (SQ-TXQ-01 to -03, CQ-TXP-01, -02; tooling only, no jar; CQ-TXP waits for the owner's one-JVM carve-out wording).**
-> **2026-11-15 15:45: added "SQ-TX Scratch testing tools, item 3" at the end (SQ-TX-01 to -18, CQ-TXR-01: `/cdevtest` verbs, the D0 layer dump, `/cdevreload compat`, tick warp, random ticks, perfBot attack / eat / walk / inventory verbs, Loading Protection exemption; Creative Devtools and perfBot built 15:38, not installed, prep_srv swaps them in).**
-> **2026-11-15: added "CQ-TXC Client capture runner and in-process client driving" at the end (CQ-TXC-01 to -10; Creative Devtools built 2026-11-15, build/libs only: the runner swaps it into its own game dir, nothing to install).**
-> **2026-11-15 14:40: added "SQ-PTH Pass-through scratch fixes" at the end (reruns SQ-PTH-03b (also the bush no-reset ruling), -06b, -11c, -25b, -28b, CQ-PTH-03b after the r1115 phase 11 FAILs; Compat 14:59 and Devtools 14:39, not installed).**
-> **2026-11-15: added "SQ-PTH Pass-through blocks, phase 6 (benchmark, perf suite, timing log)" at the end (SQ-PTH-25 to -28, CQ-PTH-05; Compat and Devtools built 00:40, not installed; Compat now carries the phase 4 tags).**
-> **2026-11-15: added "SQ-PTH Pass-through blocks, phase 4 (tags and tools)" at the end (SQ-PTH-19 to -24; needs a Compat jar built with passthrough_tags.js, real tags replace the scratch datapack).**
-> **2026-11-15: added "SQ-PTH Pass-through blocks, phases 3 and 5" at the end (SQ-PTH-16 to -18, CQ-PTH-03, -04; Compat built, not installed).**
-> **2026-11-15: added "SQ-PTH Pass-through blocks, phase 2" at the end (SQ-PTH-05 to -15; Compat built, not installed).**
-> **2026-11-14 night: added "SQ-PTH Pass-through blocks, phase 1 core" at the end (SQ-PTH-01 to -04, CQ-PTH-01, -02; Compat built, not installed; scratch datapack tags until phase 4).**
-> **2026-11-14: added "SQ-SY wave 2" at the end (SQ-SY-14 to -22: rounded bases, Fortune strip, own picks, bushes, nether soils, ripe seeds, Botany Pots soils) on Creative Delight 1.1.0 and Creative Common 1.2.0 built 2026-11-14 (not installed), probe `tools/soil_yield_probe/sy_probe.js` (`/syt pick` new).**
-> **2026-11-14 late (plan_bugfix_1114.md 5.2, agent audit): added "SQ-DEP optional-mod guards" at the end (SQ-DEP-09a, -09b drop-one boots; reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01, SQ-CDW-03b; CD, Engineering, Brewing, Storage Delight installed 23:30).**
-> **2026-11-14 (plan_bugfix_1114.md, agent misc): rows rewritten in place, no new section: SQ-TPF-00, -01 (shipped `config/debugify.json`); SQ-PG-01 split into SQ-PG-01a, -01b, new -01c, CQ-PG-03 (Creative Compat 22:23, installed); SQ-GAP-04, SQ-T1-04 (rose gold); SQ-OB-05 (needs the next Creative Delight build); SQ-CBP-11 (1-2 scrap); SQ-HH-328 (corn maze 2x, three seeds); SQ-VH-06 rewritten, new -06b, -06c (Creative Worldgen 22:28, installed; fresh Nether); SQ-LGM-13; SQ-CDW-01 note, new SQ-CDW-03b (next Creative Delight build).**
-> **2026-11-14: added "SQ-PWG Power Grid P11 fixes" at the end (SQ-PWG-97, -80b, -54r, CQ-PWG-66) on gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-18.jar` (B36 to B38) and the pack script `kubejs/server_scripts/other/power_grid.js`; rewritten in place: SQ-PWG-06, -43, -80, -82, -91 (plan_bugfix_1114.md 8).**
-> **2026-11-14: added "SQ-MELT Melting system" at the end (SQ-MELT-01 to -10, SQ-MELT-P1, SQ-SALT2-06b; reruns SQ-SALT2-06 (rewritten in place), SQ-AZW-01, SQ-DCM-02) on Creative Common 1.2.0 built and installed 2026-11-14 (melting, has.js namespace map, sunflower_stem block dict, tilled end stone dict line). Needs Creative Delight with the salt member's block melt off (agent cd-a) for SQ-SALT2-06 and SQ-MELT-01.**
-> **2026-11-14 22:30: coverage audit of `unreleased.md` against the queue: every player-visible bullet has a row (no rows added). Families and rows: Diet Bonuses SQ-RP / CQ-RP; Visceral Heap SQ-VH, SQ-FLR, CQ-VH, CQ-FLR; Walk Speed CQ-SINK, SQ-BRA, CQ-BRA, CQ-VH-05; Wise Oak SQ-WO, CQ-WO; Hearth and Harvest SQ-OB, CQ-OB, CQ-RP-29; Crows SQ-HCS, CQ-HCS; Corn SQ-OB-02, -06, -12, CQ-CN-01; Pies, Veggie Patties, Salt, Rabbits SQ-OB; Bees SQ-BREED; Mod Ids SQ-CDNS, SQ-NSM, CQ-NSM; Portals CQ-OB-02; Food and Cooking SQ-FDI, SQ-GLD-16, CQ-RDB-01; Blocks CQ-NCR-01; Interface CQ-CHK-01; Performance CQ-FDR; Packet Fixer CQ-TPF-30 to -39. Not yet run: most client rows (wait for the jar handle fix, CQ-FDR), and server rows SQ-RP-07, -08, SQ-VH-02 to -11 (part), SQ-FLR-02, SQ-WO-15 to -25, -31, -33, SQ-OB-02, -07, -08, -10, -11, SQ-HCS-10, SQ-BREED-01, SQ-FDI-04, SQ-CDNS-05, -10, -12, SQ-NSM-04, -05, SQ-RDB-03, -05.**
-> **2026-11-14 12:08: RUN r1114 (whole queue, 5 phases: SQ-TPF PASS 9 FAIL 4; r1113 resume steps 1 to 3 PASS 45 FAIL 6 INCONCLUSIVE 1; r1113 step 4 PASS 41 FAIL 6 INCONCLUSIVE 2; SQ-CC12 PASS 3; Power Grid P11 on -17 PASS 93 FAIL 1 INCONCLUSIVE 1; client gate found: 420+ jars kill the client), see Run log and [scratch_run_2026-11-14.md](scratch_run_2026-11-14.md).**
-> **2026-11-13: added "SQ-TPF Third-party bug fixes" at the end (SQ-TPF-00 to CQ-TPF-91: Packet Fixer 3.3.2 and Debugify Reforged 1.1.0, both in `mods/` since 23:20 without `mod_sides.md` rows: write their configs in every scratch dir; long-term runner plan in [thirdparty_fixes.md](../thirdparty_fixes.md) 7; server batches `batches/r1113tpf/`).**
-> **2026-11-13: added "SQ-CC12 Creative Common 1.2.0 publish re-check" at the end (SQ-CC12-01 to -03; build/libs `creativecommon-1.2.0.jar` 22:40, not installed).**
-> **2026-11-09 23:05: RUN r1109wo PARTIAL (SQ-WO boots A1 and restart: PASS 9, FAIL 5; SQ-WO-14 to -37 still to run, batches and runner `wo_run.sh` ready), see Run log and [scratch_run_2026-11-09.md](scratch_run_2026-11-09.md) 1.**
-> **2026-11-13 16:50: RUN r1113 STOPPED (queue group A part: PASS 91, FAIL 6; Power Grid gates P0 to P9d), resume point [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10.**
-> **2026-11-12 22:35: RUN r1112 (SQ-RP-01 to -06 PASS after a Raspberry Pie mods.toml boot fix; r1111 batch-fault reruns: PASS 58, FAIL 3, INCONCLUSIVE 1), see Run log and [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md).**
-> **2026-11-13: SQ-PWG P10 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-90 to -96, CQ-PWG-28, -29: copper plating, ceiling tiles and their four attachments, string light cord and its dye recipe, B30 to B34, the design table and solar bearing recipes, the last two ponder scenes; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-17.jar` (sha1 cbc2ddee37ca4e8f8d844958a9744bc02c148d4a; port phase 10, every upstream id registered), new probe `tools/scratch_query/pwg_p10_probe.js` (fake player `[zpwg10]`). `-17` supersedes `-16` for every PWG row.**
-> **2026-11-13: SQ-PWG P9d gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-84 to -89, CQ-PWG-27: Integrated Circuit, boost recipes by deployers on a depot and a belt, hand boost and B28, boosted drill / saw / baton / zapper numbers against SQ-PWG-58 to -60, electrical gizmo assembly, JEI; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-16.jar` (sha1 618ed8016949c7be095f2f7b80156c6316a54000; port phase 9.4, P9 complete), new probe `tools/scratch_query/pwg_p9d_probe.js` (fake player `[zpwg9d]`; machines from `zpwg9c`). `-16` supersedes `-15` for every PWG row.**
-> **2026-11-13: SQ-PWG P9c gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-76 to -83, CQ-PWG-26: acid fluid, block, bucket and damage, the survival chain schematic copy -> unetched circuit -> acid and etching -> arm assembly into a board (PWG-42 survival part), arm on a belt (B25), battery assembly with acid, JEI Circuit Designing / Circuit Assembly; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-15.jar` (sha1 f95311cc26f8294fe100347ca2d841af193de4dd; port phase 9.3), new probe `tools/scratch_query/pwg_p9c_probe.js` (fake player `[zpwg9c]`; builds belts, deployers, press, spout, basins, arms). `-15` supersedes `-14` for every PWG row; `zpwg9b check` now lists the five P9c items under "items of P9c and P9d".**
-> **2026-11-13: SQ-PWG P9b gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-72 to -75, CQ-PWG-24, -25: the P9b part of PWG-41, design table, schematic item, editor, board edit menu, B21 to B24; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-14.jar` (sha1 d80a8babfdc03300f60b446813f08da9eb31bb7f; port phase 9.2; `-13` is the same without fix B20, the P7 portable battery FE drain: use `-14`, rerun SQ-PWG-57), new probe `tools/scratch_query/pwg_p9b_probe.js` (fake player `[zpwg9b]`; runs the two editor packets' server side). `-14` supersedes `-12` for every PWG row; `zpwg9 check` now lists `circuit_design_table,circuit_schematic` under "items of P9b to P9d".**
-> **2026-11-13: SQ-PWG P9a gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-67 to -71, SQ-PWG-06 moved there and now runnable, CQ-PWG-22, -23: the P9a parts of PWG-42 and PWG-32, non-linear convergence, B19 regression; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-12.jar` (sha1 75aa8fc5b1f41df529101f4e92d69db7f84e8d85; port phase 9.1; carries fix B19 for the `-10` winding crash), new probe `tools/scratch_query/pwg_p9a_probe.js` (fake player `[zpwg9]`; builds boards from a design name). PWG-41 (design table) is P9b, PWG-43 (boost) P9d. Creative tab change since `-11`: CQ-PWG-19's "Incomplete Punch Card" entry is gone (upstream exclusion list).**
-> **2026-11-13: SQ-PWG P8 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-62 to -66, CQ-PWG-19 to -21: PWG-38 to -40 and the P8 part of PWG-32; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-10.jar` (sha1 c4624ce39cffd84966af81de8c5b4a28fd487c7f), new probe `tools/scratch_query/pwg_p8_probe.js` and CC program `tools/scratch_query/pwg_p8_cc_startup.lua`.**
-> **2026-11-13: SQ-PWG P7 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-55 to -61, CQ-PWG-17, -18: PWG-34 to -37; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-09.jar` (sha1 5008eaaf00388d0982cfefe3330a36995e2fc730), new probe `tools/scratch_query/pwg_p7_probe.js` (fake player `[zpwg7]`). SQ-PWG-61 needs a `spawn-animals=true` boot. B11 (growth lamp config comment) fixed in the same jar: no row change.**
-> **2026-11-13: SQ-PWG P6 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-46 to -54, CQ-PWG-15, -16: PWG-20 to -23, -33 and the P6 part of PWG-32; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-08.jar` (also fixes the client crash on the missing `particles/zap.json` of `-04` to `-07`: run CQ-PWG-10, -13, -14 on `-08`), new probe `tools/scratch_query/pwg_p6_probe.js`, `pwg_p5_probe.js` extended to 55 structures (SQ-PWG-47 replaces -45). r1113 row fixes: SQ-PWG-28, -30, -31, -32, -36, -37, -43, -45 (rerun -31 meter part, -32, -37 AC part, -43).**
-> **2026-11-13: SQ-PWG P5 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-45, CQ-PWG-14: PWG-32, every ponder scene; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-06.jar`, new probe `tools/scratch_query/pwg_p5_probe.js` (structure load per file). SQ-PWG-16 and -17 rows and `pwg_grid_probe.js` updated after the P3 run (current-path wire resistance `Rpath`, tick watcher for the overheated flag): rerun both.**
-> **2026-11-13: SQ-PWG P4 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-35 to -44, CQ-PWG-13, and SQ-PWG-07 moved there from the performance section, now runnable; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-05.jar`, new probe `tools/scratch_query/pwg_p4_probe.js`. P2 to P4 = D1 "phase 1" (first evaluation point).**
-> **2026-11-13: SQ-PWG P3 gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-24 to -34, CQ-PWG-10 to -12; run order in that section) on jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-04.jar`, new probe `tools/scratch_query/pwg_p3_probe.js`. The P2 run r1113 fixes ship in the same jar: rerun SQ-PWG-13, -15, -16, -17, -21 on `-04` (rows and `pwg_grid_probe.js` updated; SQ-PWG-18 now sets `overheatedDropChance` explicitly).**
-> **2026-11-13: SQ-PWG P2 (grid base) gate rows added at the end of "SQ-PWG Power Grid port" (SQ-PWG-12 to -23, CQ-PWG-05 to -09; high priority first, order in that section) and the performance rows SQ-PWG-01 to -05, -08, CQ-PWG-01 to -04 refreshed for the real build (no longer held); jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-03.jar`, probe `tools/scratch_query/pwg_grid_probe.js`.**
-> **2026-11-13: added "SQ-PWG Power Grid port" at the end (SQ-PWG-09, -10: P0 gate, high priority; the PG jar is copied from development/backportedPowerGrid/build/libs/ into the scratch srv/mods only, never mods/).**
-> **2026-11-13 22:53: solRaspberryPie reinstalled in mods/: the Diet Log crashed on open (`DiversityPageMixin` redirect matched the pre-`super()` call, static-modifier mismatch); now targets only the min_warning1 call. CQ-RP-31 and CQ-RP-14 cover it.**
-> **2026-11-13: added "SQ-RP 12.4 owner notes" under SQ-RP (SQ-RP-07, -08, CQ-RP-29 to -40; solRaspberryPie 17:57, Creative Delight 17:58 and the Carrot jar installed in mods/).**
-> **2026-11-12: added "SQ-RP Spice of Life: Raspberry Pie Addition" at the end (SQ-RP-01 to -06, CQ-RP-01 to -28; solRaspberryPie 20:47 installed in mods/, fresh world; some rows wait for Common, Creative Delight and Creative Brewing rebuilds).**
-> **2026-11-10: added "SQ-CDNS Creative Delight namespace move" at the end (SQ-CDNS-01 to -12, CQ-CDNS-01; swapper rows use jar_archive/cdns_step2/, move rows wait for the full build).**
-> **2026-11-10: added "SQ-HCS Hearth crow swap" at the end (SQ-HCS-01 to -12, CQ-HCS-01; fixes the r1110 chunk generation crash; Delight and Common built, NOT installed). SQ-HH-401 to -502 rewritten for `hearthandharvest:crow`; SQ-HSC-87, -88, -90, -91 superseded (-89, the salt cave, stays).**
-> **2026-11-10: added "SQ-NSM Namespace moves for the other jars" at the end (SQ-NSM-01 to -10, CQ-NSM-01).**
-> **2026-11-11: added "SQ-BRA part 2 and CQ-NCR" at the end (SQ-BRA-06, -07, CQ-NCR-01: Walk Speed values with no row, Cast Iron Plating rename; same jars as SQ-BRA). Also added on 2026-11-09 and -10 without a header line: "SQ-VH Visceral Heap", "SQ-OB Owner batch", "CQ-SINK Visual sinking", "SQ-RDB Rustic Delight baked", "SQ-BREED", "SQ-FDI Food Dictionary", "SQ-FLR Flesh recipes"; SQ-GLD-16 (golden stews removed) is in the SQ-GLD section.**
-> **2026-11-10: added "SQ-BRA BlockRunner audit" at the end (SQ-BRA-01 to -05, CQ-BRA-01; needs the 22:38 Compat + Devtools and 22:43 Common builds installed together).**
->
-> **2026-11-09: added "SQ-SCAT Structure Catalogue" at the end (SQ-SCAT-06 to -08, CQ-SCAT-05, -09 to -11; Creative Devtools 22:58 installed in mods/).**
-> **2026-11-09: added "SQ-WO Wise Oak" at the end (SQ-WO-01 to -37, CQ-WO-01 to -07, probe `wo_probe.js`; Creative Worldgen 20:25 installed in mods/).**
-> **2026-11-08 night: added "SQ-HH full suite" at the end (577 rows: SQ-HH-201 to -277, -301 to -329, -401 to -502, -1101 to -1328, -1500 to -1612, CQ-HH-101 to -106, -201 to -207, -301 to -304, -401 to -405, -501 to -509, -601; probes `hh_t12_probe.js`, `hh_mw_probe.js`, `hh_crow_probe.js`, `hh_gear_probe.js`; replaces SQ-HH-01 to -15, -A, -B, -C, -D; jars of 22:02 installed).**
-> **2026-11-08 20:30: added "SQ-SWL swap alias cycle fix" at the end (SQ-SWL-01, CQ-SWL-01, -02; Common 20:28 installed in mods/).**
-> **2026-11-08 15:20: RUN r1108cge2 (SQ-CGE part 2: server rows SQ-CGE-07 to -16 all PASS after the ItemPhysic patch and the old tag removal; client CQ-CGE-02a, -02, -02b, -04, -04b PASS, -02c not judged; CQ-CGE-03a to -03c left for the owner), run log below and [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 2. Added SQ-CGE-16, CQ-CGE-04b; Common and Compat now 15:08.**
-> **2026-11-08 14:00: "SQ-CGE part 2" built out: SQ-CGE-07 to -15 (with -10b), CQ-CGE-02 to -04, runner `tools/scratch_query/cge2_run.sh`, judge `cge_judge.py`, batches `batches/r1108cge2/` (4 server boots, 2 client blocks); Common now 13:51. Added 13:25 (SQ-CGE-07 to -12, CQ-CGE-02: low gravity for every falling entity type without motion packets, dimension limit for all, End oxygen with every backtank, `// phase: helpers` script order, physics tags renamed to `creativecompat:`; Common 13:20 + Compat 13:21 built, NOT installed; recommend running SQ-CGE-07 before installing: `require = 1` mixins).**
-> **2026-11-08 01:10: RUN r1108cge (SQ-CGE-01..06, SQ-CPP-01..05, SQ-CMV-04: all PASS after fixes to Common's script-pack order and both Create Gravity mixins, and to the pack's glow lichen count; client rows not run), run log below and [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 1. SQ-GAP's hold ("after SQ-CGE is complete") is lifted for its server rows.**
-> **2026-11-08: added "SQ-GAP Recent features with no scratch row" at the end (SQ-GAP-01 to -09, CQ-GAP-01 to -03; HOLD: run only after the Common suite SQ-CGE is complete, debugged and rerun).**
-> **2026-11-08: added "SQ-CGE Creative Common 1.1.0 of 00:01" at the end (SQ-CGE-01 to -06, CQ-CGE-01: low gravity for falling blocks, items and TNT; SQ-CCO-08 rerun with entity data; re-run list for the publish).**
-> **2026-11-07 night: added "SQ-FCK farming and cooking batch" at the end (SQ-FCK-01 to -18, SQ-AZW-01 to -03, SQ-MG-22 to -24, SQ-BOT-01 to -04, SQ-FCB-09, -10, CQ-FCK-01, -02, CQ-FCB-05, -06, CQ-FAU-01, -02, CQ-AZW-01, CQ-MG-50; jars built where noted, none installed).**
-> **2026-11-07 21:30: RUN r1107cco (SQ-CCO server rows: PASS 15, PARTIAL 1 = SQ-CCO-08 Create Gravity inert on this set; client rows not run), run log below and [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 4.**
-> **2026-11-07 night: added "SQ-CCO Creative Common with its optional mods only" at the end (SQ-CCO-01 to -16, CQ-CCO-01 to -03; server from `tools/scratch_query/cc_only_srv.sh`, batch `batches/r1107cco/b1_full.qb`; Common 1.1.0 newest build, no Compat or Calendar).**
-> **2026-11-07 19:40: RUN r1107cc (SQ-CC + SQ-CPP server rows: PASS 21, SQ-CC-12 and client rows not run; 3 Common helper fixes, 2 Delight / Brewing findings), run log below and [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 3.**
-> **2026-11-07 20:00: added "SQ-CCB Common-alone boot fixes" at the end (SQ-CCB-01, CQ-CCB-01 to -03; Common, Compat, Brewing 20:00 installed in mods/).**
-> **2026-11-07 evening: added "SQ-CC Creative Common 1.1.0 full check" at the end (SQ-CC-01 to -16, CQ-CC-01 to -06; Common 18:02 build, not installed; probe `tools/scratch_query/cc_dict_probe.js`).**
-> **2026-11-07 evening: added "SQ-CPP Creative Common publish cleanup" at the end (SQ-CPP-01 to -05, CQ-CPP-01; Common, Engineering, Compat, Delight, Equipment built, NOT installed).**
-> **2026-11-07 16:50: added "SQ-IP Immersive Portals changes" at the end (SQ-IP-01 to -05, CQ-IP-01 to -04; Magic, Compat and Common 16:44 installed, IP config edited).**
-> **2026-11-07 12:05: added "SQ-TP Tempad port: loot tables, marker anchor id, creative workstation break" at the end (SQ-TP-31 to -39, CQ-TP-16; Compat built 12:01, not installed; rerun SQ-TP-08, -13, -14, -15, -24, -25 with it).**
-> **2026-11-07 12:00: RUN r1107tp (SQ-TP server rows: PASS 26, FAIL 2 = SQ-TP-08, -25; loot table finding), run log below and [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 1.**
-> **2026-11-07: added "SQ-TP Tempad port: upstream bug fixes and whole-mod checks" at the end (SQ-TP-21 to -30, CQ-TP-12 to -15; run after or with SQ-TP-01..20, same jar).**
-> **2026-11-06 23:10: added CQ-SPFX-02 (Heartstone reordered before Immersive Portals, client launch crash; Common 23:11 installed, the 23:07 build missed the config).**
-> **2026-11-06 night: RUN r1106spfx (SQ-SPFX: PASS 6, FAIL 1 = SQ-SPFX-01), run log below and [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 7.**
-> **2026-11-06 night: added "SQ-SPFX Split regression fixes" at the end (SQ-SPFX-01 to -07, CQ-SPFX-01: Immersive Portals with Serene Seasons, felsic guards, horror lasagna and the NCH empty-fluid check, script guards, dict checks, sky islands; all ten Creative jars built 22:07-22:09, not installed).**
-> **2026-11-06 night: RUN r1106spf (SQ-SPF server rows: PASS 33, FAIL 2, PARTIAL 3), run log below and [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 6.**
-> **2026-11-06 evening: added "SQ-SPF Creative split feature regression" at the end (SQ-SPF-00 to -111, CQ-SPF-01, -02: features of every Creative jar on the 18:51-18:54 builds against a baseline boot on the installed jars; reruns SQ-CEQ, SQ-CMG-04/-05, SQ-CDV, SQ-CS, SQ-TD, SQ-VS, SQ-MB, SQ-LP, SQ-IP, SQ-NM, SQ-STL, SQ-SPC, SQ-STN, SQ-CFR, SQ-CDFL, SQ-CBP named in the rows).**
-> **2026-11-06 19:00: added "SQ-ENGM Creative Engineering content moved to its sibling jars" at the end (SQ-ENGM-01 to -05, CQ-ENGM-01; eight jars built 18:51-18:54, not installed).**
-> **2026-11-06 18:40: SQ-CBP-03b, -08b, -11, CQ-CBP-02 in "SQ-CBP" (horror lasagna guard fix; end gear and air brake transition rows, felsic ore data, Felsic Scrap, echo tool, air brake and shield textures moved into Equipment; backpack skin recipes guarded; Common, Engineering, Equipment built 18:35, not installed).**
-> **2026-11-06 evening: RUN r1106cbp (SQ-CBP, SQ-CDFL, SQ-CBO reruns; PASS 52, FAIL 2), run log below and [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 5.**
-> **2026-11-06 late evening: added "SQ-CBP Creative Brewing polish" at the end (SQ-CBP-01 to -10, CQ-CBP-01: absent-mods print, IE empty output tags, loot tables of optional mods, effects and potions into Creative Common, gear rows into Equipment; plan_cb_polish.md 1 to 3).**
-> **2026-11-06 late evening: added "SQ-CDFL Creative Delight food fluids renamed" at the end (SQ-CDFL-01 to -04, CQ-CDFL-01: CD-alone boot with the `creativedelight:` fluids, old-save fluid remap; Common and CD built, not installed).** **2026-11-06 evening: added "SQ-CBO Creative Brewing with and without its optional dependencies" at the end (SQ-CBO-01 to -05 chain, -10 to -18 all 24 optional, -20 to -43 one optional each, -50 to -53 pairs, CQ-CBO-01 to -04; `port_chain.sh` modes `optional`, `ADD=`, `bare optional`; probe `tools/scratch_query/cbo_probe.js`).** **2026-11-06 afternoon: added "SQ-CBC Creative Brewing chain, round 3" at the end (SQ-CBC-01 to -05, CQ-CBC-01: NCH failures, incomplete items in CD, absent-mods summary, Vinery donor label).** **2026-11-06 afternoon: added "SQ-BPT / CQ-TSL Creative Compat licence fixes" at the end (SQ-BPT-01, CQ-BPT-01 to -03, CQ-TSL-01, -02; needs the Compat jar of 11-06 13:17 from build/libs).** **2026-11-06 midday: added "SQ-CBB Creative Brewing chain, round 2" at the end (SQ-CBB-01 to -12; then rerun CQ-CBA-01 to -04; new `port_chain.sh` cooking set, `tools/scratch_query/nch_guard_probe.js`).** **2026-11-06 night: added "SQ-CBA Creative Brewing chain on its own (CEPortTesting)" at the end (SQ-CBA-01 to -18, CQ-CBA-01 to -04; new tool `tools/scratch_query/port_chain.sh`; supersedes SQ-CBS-01, CQ-CBS-01; MoreJS in the chain, culture and dough texture fix; both jars built, not installed).** **2026-11-06 late: added "SQ-MIN Creative jars in a minimal instance" at the end (SQ-MIN-01 to -07; installed in the pack 01:30, CEPortTesting needs the jars copied).** **2026-11-06: added "SQ-CDW Creative Delight worldgen gated on its mods" at the end (SQ-CDW-01 to -04; needs the CD jar of 2026-11-06 with `splitWorldgen`, from build/libs).** **2026-11-05: added "SQ-PA Immersive Paintings built from the installed jars" at the end (SQ-PA-01 to -04, CQ-PA-01, -02; needs the Compat jar of 11-05 00:42 from build/libs).** **2026-11-04 night: added "SQ-DCM / SQ-CBS / SQ-CDFO Creative Brewing publish prep, Step 1" at the end (SQ-DCM-01 to -03, CQ-DCM-01, SQ-CBS-01, -02, SQ-CDFO-01 to -03, CQ-CDFO-01, CQ-CBS-01; nothing installed).** **2026-11-04 evening: added "SQ-CFR Campfire and Ender's stove tag in Creative Delight" at the end (SQ-CFR-01 to -08, CQ-CFR-01; Compat installed 19:05, CD 19:19, patcherMod 1.1.09 19:17).** **2026-11-04 later: added "SQ-BBQW Barbeque's Delight wood basins and trays" at the end (SQ-BBQW-01 to -03, CQ-BBQW-01).** **2026-11-04: added "SQ-BBQS Barbeque's Delight skewer inputs, basin sneak grab, JEI" at the end (SQ-BBQS-01 to -03, CQ-BBQS-01).** **2026-11-03 late: added "SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons" at the end (SQ-TSY-01, -02; CQ-TSY-01, CQ-LNG-01, CQ-BBQF-02; needs a dedicated scratch server).** **2026-11-03: added "SQ-CDJ7 Creative Delight member open rows" at the end (plan_creative_delight.md L: SQ-BBQF-01 to -07, SQ-VTDA-10 to -13, SQ-CDM2-01 to -04, SQ-GLD2-01 to -03, -05, SQ-SALT2-01, SQ-NEST-01, -02, reruns SQ-RD-22, SQ-CDF-08, SQ-VP-06; CQ-VTDA-01, CQ-CDM2-01, CQ-GLD2-04, CQ-MRGT-01, CQ-BBQF-01); SQ-GLD-08 now expects the 8-nugget recipes.** **2026-11-02 night: added "SQ-CDJ6 Creative Delight plan J and open rows" at the end (plan_creative_delight.md K: SQ-SLT-01 to -05, CQ-SLT-01, -02; SQ-CNG-01 to -04, CQ-CNG-01, -02; SQ-ENM-01 to -05; SQ-GLD-01 to -14, CQ-GLD-01 to -03; SQ-MDL-01 to -05; SQ-PCK-01 to -05, CQ-PCK-01, -02; SQ-SWP-01 to -08). SQ-DNR-E-01 to -04 and SQ-EN-01, -03, -05, -07 carry a rerun note for the merged End's member; SQ-MDP-04, -08, -09 superseded by SQ-MDL. Run SQ-CWG in the same session (Creative Worldgen first installed with it).**
->
-> **2026-11-02 night (deep scan): added "Deep scan 2026-11-02: food, cooking and farming rows with no test" at the end (41 rows: SQ-FFB-02 to -04, SQ-RCO-01, -02, SQ-CNP-01, SQ-VNG-01, -02, SQ-PS-06, SQ-FO-01 to -05, SQ-CF-02, SQ-CNS-03, SQ-DRK-07, SQ-WCT-06 to -08, SQ-SGF-01, -02, SQ-VTD9-01, SQ-CN-04b, SQ-MRD-04, SQ-STD-03, and 15 CQ- rows). Not in r1102b's frozen scope; also missing from that scope although never run: SQ-DNR-O-01 to -05, SQ-DNR-E-01 to -04, SQ-VF-01 to -05, most SQ-CDJ5 fix reruns (SQ-CDJ-05, SQ-DDP-01 rerun, SQ-MDP-13, -14, -16, SQ-LOOT-FD1, SQ-VTD8-01).**
->
-> **2026-11-03: added "SQ-STN Cooking stations: one leftover, container-slot and automation rule" at the end (SQ-STN-01 to -07, CQ-STN-01; needs the CD jar of 19:13 and patcherMod 1.1.08 of 18:36 from build/libs); SQ-RB-21 second case rewritten to the new rule (SQ-RB-21b is a rerun note in SQ-STN).**
->
-> **2026-11-14: added "SQ-HOP / Hearth and Harvest hops, tilled end stone, stomping basin" at the end (plan_bugfix_1114 3.1, 3.2, 3.10, cd-b): SQ-HOP-01 to -11, CQ-HOP-01, SQ-HH-304 and SQ-HH-1546 rewritten, SQ-HH-1546b, -1546c, SQ-HH-266 rerun, -266b, -266c; retired SQ-HH-1542 to -1545, -1547 to -1557, -1555h, SQ-HH-D09.**
-> **2026-11-15: added SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c at the end of "SQ-SPD / SQ-SLK and Creative Delight fixes" (fix-2, r1115; CD jar built 03:19, not installed).**
-> **2026-11-14: added "SQ-SPD / SQ-SLK and Creative Delight fixes" at the end (plan_bugfix_1114 CD part, cd-a): SQ-SPD-01 to -08, CQ-SPD-01, SQ-HH-440b, SQ-SLK-01 to -04, CQ-SLK-01, SQ-FDI-03b, and reruns of SQ-HH-1574, -1575, -309, -1593, -434, -440, -1505, -1507, -482, -1534, SQ-FDI-03, SQ-BBQW-02s, SQ-DEP-02, SQ-MIN-03, SQ-CBW-03, SQ-CDW-02 (last).**
-> **2026-11-02 late: SQ-WGE extended with rows 00b to 18 and SQ-MOB-N5 to -N8 (worldgen edit plan steps 3 to 5).** **2026-11-02 late: added "SQ-LBS Creative Labels: labels by surface, centred notes" at the end (SQ-LBS-00 to -05, CQ-LBS-01; needs `creativeLabels-1.0.1` from build/libs).** **2026-11-02 night: added "SQ-CUP Copper cup family removed" at the end (SQ-CUP-01 to -05, CQ-CUP-01); cup parts of SQ-MDP-01/-05/-06/-12, SQ-DF-02, SQ-CDM-05, SQ-RSP-09, SQ-FCB-06, CQ-MND-02, SQ-MND-17 superseded.** **2026-11-02 evening: added "Pre-scratch fix pass" at the end (SQ-PST, SQ-PSD, SQ-PSM, SQ-PSF, SQ-PSW, SQ-PSU: 52 rows for plan_prescratch_fixes.md); SQ-EFB header and SQ-EFB-05 now use `maxWaterSurplus` 0.5; CQ-TD-06 pass text corrected.** **2026-11-02 afternoon: added "SQ-CDJ5 fix rerun" (plan_creative_delight.md I1 to I8 built; 10 rows: SQ-CDJ-12, SQ-MDP-18, SQ-VTD8-02, SQ-LOOT-FD1 new, SQ-VTD8-01 rewritten, reruns of SQ-CDJ-05 / SQ-DDP-01, SQ-MDP-13, -14, -16 / -09, SQ-FGD-14; needs the patcherMod 13:04 build) at the end of SQ-CDJ5.** **2026-11-02: added SQ-FGDC at the end (Fungi census rerun: SQ-FGD-12m, SQ-FGD-15c); SQ-VTD5-01 pass text now allows blast drops; added SQ-CDJ5 at the end (Creative Delight nests the five ports: run plan of six boots and a client block, new SQ-CDJ-09 to -11, CQ-CDJ-01, SQ-DDP-06, -07, SQ-VTD8-01, SQ-MDP-17, SQ-CDFW-10, -11; earlier Display, Fungi, Miner's, Vintage, Veggies-pilot, Rustic coffee, food dict and CDM rows marked "RERUN: nested jar 2026-11-02" in place; SQ-CDJ-05 and SQ-DDP-01 rewritten, SQ-MDP-02 superseded by SQ-MDP-17; prep_srv.sh drops standalone port jars when the CD jar nests them).** **2026-11-02: added SQ-EFB (earth fill judged on the placed blocks: water, air, earth replaced; new `/zq under` probe, untested; rows 17 to 22 cover `waterReach` 2 and `earth_fill/sand_base`, patcherMod build 00:42 not yet in `mods/`) at the end.** **2026-11-02: added CQ-TTP and SQ-WGE (built part of the worldgen edit plan, rewritten in depth: 21 rows, 00 is offline) at the end.** **2026-11-01 late: added SQ-RDX, SQ-NDM, SQ-CDFW, SQ-DNR at the end (Creative Delight integration plans; one CD jar built 20:42 covers all four).** **Queue refreshed 2026-11-01 evening (after the Creative Split waves 1 to 4 run and the cat / baby mobs work): added SQ-BM / CQ-BM at the end; waves 1 to 4, cats, plantable, Curios rows were already here.**
->
+
+<!-- generated:status_index begin queue sha1=624747a9380a -->
+**Queue coverage** (generated by `python3 tools/status_index.py` from the rows below, the run docs' verdict tables and qrun verdict files; never hand-edited): 2984 rows in 399 codes, 1737 never run; latest run r1116 (2026-11-16). The old "added at the end" and run banners are in [../status/history.md](../status/history.md).
+
+<details><summary>Rows per code</summary>
+
+| Code | Rows | Never run | Last run |
+|---|---|---|---|
+| CQ-ABD | 1 | 1 | never |
+| CQ-ATC | 1 | 1 | never |
+| CQ-AZW | 1 | 1 | never |
+| CQ-BBQ2 | 1 | 1 | never |
+| CQ-BBQF | 1 | 1 | never |
+| CQ-BM | 7 | 7 | never |
+| CQ-BPT | 3 | 3 | never |
+| CQ-BRA | 1 | 1 | never |
+| CQ-CAL | 1 | 0 | r1101 2026-11-01: 1 OPEN |
+| CQ-CAT | 10 | 10 | never |
+| CQ-CBA | 4 | 0 | r1106 2026-11-06: 4 NOT-RUN |
+| CQ-CBC | 1 | 0 | r1106 2026-11-06: 1 NOT-RUN |
+| CQ-CBO | 4 | 0 | r1106 2026-11-06: 4 NOT-RUN |
+| CQ-CBP | 2 | 2 | never |
+| CQ-CBS | 1 | 1 | never |
+| CQ-CC | 6 | 2 | r1108 2026-11-08: 2 PASS, 2 PARTIAL |
+| CQ-CCB | 3 | 1 | r1107 2026-11-07: 1 PASS, 1 FAIL |
+| CQ-CCO | 3 | 0 | r1107 2026-11-07: 1 PASS, 1 OTHER, 2 PARTIAL |
+| CQ-CDFL | 1 | 1 | never |
+| CQ-CDFO | 1 | 1 | never |
+| CQ-CDJ | 1 | 1 | never |
+| CQ-CDM2 | 1 | 1 | never |
+| CQ-CDNS | 1 | 1 | never |
+| CQ-CDTX | 1 | 1 | never |
+| CQ-CEN | 1 | 1 | never |
+| CQ-CEQ | 1 | 1 | never |
+| CQ-CFR | 1 | 1 | never |
+| CQ-CGE | 9 | 1 | r1108 2026-11-08: 5 PASS, 5 NOT-RUN, 1 OTHER |
+| CQ-CHK | 1 | 1 | never |
+| CQ-CIF | 1 | 1 | never |
+| CQ-CL | 1 | 1 | never |
+| CQ-CLOG | 2 | 1 | r1108 2026-11-08: 1 PASS |
+| CQ-CMV | 3 | 0 | r1108 2026-11-08: 2 PASS |
+| CQ-CN | 1 | 1 | never |
+| CQ-CNG | 2 | 2 | never |
+| CQ-CNP | 1 | 1 | never |
+| CQ-CNS | 1 | 1 | never |
+| CQ-CPP | 1 | 0 | r1107 2026-11-07: 1 NOT-RUN |
+| CQ-CS | 1 | 1 | never |
+| CQ-CSR | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| CQ-CWG | 1 | 1 | never |
+| CQ-DCM | 1 | 1 | never |
+| CQ-DDP | 2 | 2 | never |
+| CQ-DEP | 1 | 1 | never |
+| CQ-DF | 1 | 1 | never |
+| CQ-DRK | 2 | 2 | never |
+| CQ-DUMP | 6 | 6 | never |
+| CQ-ENGM | 1 | 1 | never |
+| CQ-FAU | 2 | 2 | never |
+| CQ-FBS | 3 | 3 | never |
+| CQ-FCB | 2 | 2 | never |
+| CQ-FCK | 2 | 2 | never |
+| CQ-FDB | 1 | 1 | never |
+| CQ-FDR | 4 | 0 | r1115 2026-11-15: 4 PASS |
+| CQ-FF | 1 | 0 | r1031 2026-10-31: 1 PASS |
+| CQ-FGD | 3 | 3 | never |
+| CQ-FLR | 3 | 3 | never |
+| CQ-FO | 2 | 2 | never |
+| CQ-FR | 1 | 1 | never |
+| CQ-FSD | 1 | 1 | never |
+| CQ-GAP | 3 | 3 | never |
+| CQ-GF31 | 3 | 3 | never |
+| CQ-GLD | 3 | 3 | never |
+| CQ-GLD2 | 1 | 1 | never |
+| CQ-HCS | 1 | 1 | never |
+| CQ-HH | 32 | 32 | never |
+| CQ-HOP | 1 | 0 | r1115 2026-11-15: 1 PASS |
+| CQ-HR | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| CQ-IDS | 6 | 6 | never |
+| CQ-IP | 4 | 4 | never |
+| CQ-JB | 1 | 0 | r1101 2026-11-01: 1 OPEN |
+| CQ-JG | 3 | 0 | r1108 2026-11-08: 2 PASS, 1 NOT-RUN |
+| CQ-JO | 1 | 1 | never |
+| CQ-JT | 10 | 10 | never |
+| CQ-KT | 1 | 0 | r1101 2026-11-01: 1 PASS, 1 BATCH-FAULT |
+| CQ-LB | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| CQ-LBS | 1 | 1 | never |
+| CQ-LCA | 5 | 5 | never |
+| CQ-LGM | 1 | 1 | never |
+| CQ-LT | 15 | 15 | never |
+| CQ-LTC | 1 | 1 | never |
+| CQ-MB | 1 | 1 | never |
+| CQ-MG | 1 | 1 | never |
+| CQ-MND | 3 | 3 | never |
+| CQ-MRD | 1 | 1 | never |
+| CQ-MRGT | 1 | 1 | never |
+| CQ-MXS | 1 | 1 | never |
+| CQ-NCR | 1 | 1 | never |
+| CQ-NDM | 1 | 1 | never |
+| CQ-NEW | 6 | 6 | never |
+| CQ-NS | 1 | 0 | r1101 2026-11-01: 1 OPEN |
+| CQ-NSM | 1 | 1 | never |
+| CQ-OAT | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| CQ-OB | 4 | 4 | never |
+| CQ-OLD | 8 | 8 | never |
+| CQ-PA | 2 | 2 | never |
+| CQ-PCK | 2 | 2 | never |
+| CQ-PG | 5 | 4 | r1115 2026-11-15: 1 LOOK |
+| CQ-PJL | 2 | 2 | never |
+| CQ-PNE | 9 | 9 | never |
+| CQ-PRI | 4 | 0 | r1101 2026-11-01: 4 PASS |
+| CQ-PS15 | 3 | 0 | r1116 2026-11-16: 3 DEFERRED |
+| CQ-PS15B | 2 | 0 | r1116 2026-11-16: 2 DEFERRED |
+| CQ-PSD | 2 | 2 | never |
+| CQ-PSF | 1 | 1 | never |
+| CQ-PST | 2 | 2 | never |
+| CQ-PSU | 5 | 5 | never |
+| CQ-PT | 1 | 1 | never |
+| CQ-PTH | 6 | 0 | r1116 2026-11-16: 1 DEFERRED |
+| CQ-PWG | 30 | 23 | r1115 2026-11-15: 1 INCONCLUSIVE |
+| CQ-RDB | 1 | 1 | never |
+| CQ-ROLL | 1 | 1 | never |
+| CQ-RP | 43 | 43 | never |
+| CQ-RSP | 1 | 1 | never |
+| CQ-RW | 1 | 1 | never |
+| CQ-SCAT | 5 | 5 | never |
+| CQ-SG | 1 | 0 | r1101 2026-11-01: 1 OPEN |
+| CQ-SINK | 3 | 3 | never |
+| CQ-SLK | 1 | 0 | r1115 2026-11-15: 1 PASS |
+| CQ-SLT | 2 | 2 | never |
+| CQ-SPC | 1 | 1 | never |
+| CQ-SPD | 1 | 0 | r1115 2026-11-15: 1 PASS |
+| CQ-SPF | 2 | 0 | r1106 2026-11-06: 2 NOT-RUN |
+| CQ-SPFX | 2 | 0 | r1107 2026-11-07: 1 PARTIAL |
+| CQ-STD | 1 | 1 | never |
+| CQ-SVA | 1 | 1 | never |
+| CQ-SWL | 2 | 2 | never |
+| CQ-SY | 1 | 0 | r1115 2026-11-15: 1 PASS |
+| CQ-TD | 1 | 0 | r1101 2026-11-01: 1 FAIL |
+| CQ-TP | 16 | 15 | r1107 2026-11-07: 2 NOT-RUN |
+| CQ-TPF | 45 | 0 | r1114 2026-11-14: 61 NOT-RUN |
+| CQ-TSK | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| CQ-TSL | 2 | 2 | never |
+| CQ-TTP | 3 | 3 | never |
+| CQ-TX | 4 | 4 | never |
+| CQ-TXC | 10 | 0 | r1116 2026-11-16: 10 DEFERRED |
+| CQ-TXP | 2 | 2 | never |
+| CQ-TXR | 1 | 0 | r1116 2026-11-16: 1 DEFERRED |
+| CQ-UI | 4 | 3 | r1101 2026-11-01: 1 FAIL |
+| CQ-VH | 5 | 5 | never |
+| CQ-VP | 14 | 14 | never |
+| CQ-VTDA | 1 | 1 | never |
+| CQ-WC | 3 | 1 | r1101 2026-11-01: 2 OPEN |
+| CQ-WO | 7 | 7 | never |
+| CQ-WT | 4 | 4 | never |
+| CQ-XAC | 1 | 1 | never |
+| SQ-ABD | 5 | 5 | never |
+| SQ-AC | 5 | 1 | r1101 2026-11-01: 1 PASS |
+| SQ-AD | 2 | 2 | never |
+| SQ-ATC | 4 | 4 | never |
+| SQ-AZW | 3 | 1 | r1115 2026-11-15: 1 PASS |
+| SQ-BBQ | 8 | 8 | never |
+| SQ-BBQ2 | 7 | 4 | r1114 2026-11-14: 3 PASS |
+| SQ-BBQF | 7 | 7 | never |
+| SQ-BBQS | 3 | 3 | never |
+| SQ-BBQW | 4 | 1 | r1115 2026-11-15: 2 PASS, 1 FAIL |
+| SQ-BJ | 3 | 0 | r1031 2026-10-31: 5 PASS |
+| SQ-BLC | 3 | 3 | never |
+| SQ-BM | 2 | 2 | never |
+| SQ-BOT | 4 | 3 | r1114 2026-11-14: 1 PASS |
+| SQ-BPT | 1 | 1 | never |
+| SQ-BRA | 7 | 0 | r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL |
+| SQ-BREED | 3 | 1 | r1115 2026-11-15: 1 PASS |
+| SQ-CAL | 7 | 0 | r1101 2026-11-01: 7 PASS |
+| SQ-CAT | 5 | 5 | never |
+| SQ-CBA | 18 | 0 | r1106 2026-11-06: 15 PASS, 3 FAIL |
+| SQ-CBB | 12 | 0 | r1106 2026-11-06: 10 PASS, 2 BLOCKED |
+| SQ-CBC | 7 | 0 | r1106 2026-11-06: 7 PASS |
+| SQ-CBJ | 5 | 1 | r1101 2026-11-01: 3 PASS, 1 OPEN |
+| SQ-CBJ4 | 7 | 0 | r1101 2026-11-01: 7 PASS |
+| SQ-CBM | 6 | 0 | r1101 2026-11-01: 5 PASS, 1 LOOK |
+| SQ-CBO | 42 | 0 | r1106 2026-11-06: 42 PASS |
+| SQ-CBP | 13 | 2 | r1115 2026-11-15: 1 PASS |
+| SQ-CBS | 2 | 2 | never |
+| SQ-CBW | 3 | 1 | r1115 2026-11-15: 1 PASS |
+| SQ-CC | 16 | 0 | r1108 2026-11-08: 1 NOT-RUN |
+| SQ-CC12 | 3 | 0 | r1114 2026-11-14: 3 PASS |
+| SQ-CCB | 1 | 1 | never |
+| SQ-CCO | 16 | 0 | r1107 2026-11-07: 15 PASS, 1 PARTIAL |
+| SQ-CDB | 16 | 16 | never |
+| SQ-CDF | 9 | 8 | r1101 2026-11-01: 1 PASS |
+| SQ-CDFL | 4 | 0 | r1106 2026-11-06: 4 PASS |
+| SQ-CDFO | 3 | 1 | r1114 2026-11-14: 4 PASS |
+| SQ-CDFW | 11 | 9 | r1102 2026-11-02: 2 PASS |
+| SQ-CDJ | 12 | 8 | r1102 2026-11-02: 3 PASS, 1 FAIL |
+| SQ-CDJ4 | 9 | 1 | r1101 2026-11-01: 4 PASS, 3 FAIL, 1 PARTIAL |
+| SQ-CDM | 6 | 0 | r1102 2026-11-02: 6 PASS |
+| SQ-CDM2 | 4 | 4 | never |
+| SQ-CDNS | 12 | 0 | r1115 2026-11-15: 2 PASS, 1 OTHER |
+| SQ-CDQ | 9 | 9 | never |
+| SQ-CDS | 4 | 0 | r1101 2026-11-01: 4 PASS |
+| SQ-CDT | 16 | 16 | never |
+| SQ-CDV | 4 | 0 | r1101 2026-11-01: 4 PASS |
+| SQ-CDW | 5 | 1 | r1115 2026-11-15: 3 PASS |
+| SQ-CEN | 8 | 7 | r1114 2026-11-14: 3 PASS |
+| SQ-CEQ | 8 | 8 | never |
+| SQ-CF | 2 | 2 | never |
+| SQ-CFR | 8 | 6 | r1114 2026-11-14: 2 PASS |
+| SQ-CFS | 3 | 3 | r1114 2026-11-14: 1 PASS |
+| SQ-CGE | 18 | 0 | r1108 2026-11-08: 18 PASS |
+| SQ-CIF | 4 | 1 | r1114 2026-11-14: 4 PASS |
+| SQ-CL | 1 | 1 | never |
+| SQ-CM | 22 | 3 | r1101 2026-11-01: 2 PASS |
+| SQ-CMG | 5 | 4 | r1114 2026-11-14: 2 PASS |
+| SQ-CMP | 8 | 0 | r1101 2026-11-01: 7 PASS, 1 LOOK |
+| SQ-CMV | 4 | 1 | r1114 2026-11-14: 2 PASS |
+| SQ-CN | 9 | 9 | never |
+| SQ-CNG | 4 | 4 | never |
+| SQ-CNP | 1 | 1 | never |
+| SQ-CNS | 8 | 8 | never |
+| SQ-CP | 1 | 0 | r1031 2026-10-31: 1 PASS |
+| SQ-CPP | 5 | 0 | r1108 2026-11-08: 5 PASS |
+| SQ-CS | 8 | 0 | r1031 2026-10-31: 8 PASS |
+| SQ-CS2 | 8 | 0 | r1101 2026-11-01: 6 PASS, 2 FAIL |
+| SQ-CSI | 2 | 2 | never |
+| SQ-CUP | 5 | 5 | never |
+| SQ-CWG | 10 | 10 | never |
+| SQ-DB | 3 | 3 | never |
+| SQ-DCM | 3 | 2 | r1115 2026-11-15: 1 PASS |
+| SQ-DD | 1 | 0 | r1031 2026-10-31: 1 PASS |
+| SQ-DDP | 7 | 0 | r1102 2026-11-02: 4 PASS, 1 FAIL, 1 LOOK, 2 OTHER |
+| SQ-DEP | 10 | 7 | r1115 2026-11-15: 2 PASS, 1 SKIP |
+| SQ-DF | 7 | 7 | never |
+| SQ-DM | 4 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-DNR | 9 | 9 | never |
+| SQ-DRK | 7 | 7 | never |
+| SQ-DW | 3 | 3 | never |
+| SQ-EF | 12 | 1 | r1031 2026-10-31: 5 PASS, 1 FAIL, 4 OPEN |
+| SQ-EFB | 2 | 2 | never |
+| SQ-EFX | 14 | 3 | r1031 2026-10-31: 12 PASS |
+| SQ-EN | 11 | 7 | r1101 2026-11-01: 2 PASS |
+| SQ-ENGM | 5 | 0 | r1114 2026-11-14: 5 PASS |
+| SQ-ENM | 7 | 7 | never |
+| SQ-FCB | 11 | 9 | r1114 2026-11-14: 2 PASS |
+| SQ-FCK | 18 | 12 | r1114 2026-11-14: 7 PASS, 1 INCONCLUSIVE |
+| SQ-FD | 1 | 0 | r1102 2026-11-02: 1 PASS |
+| SQ-FDB | 15 | 15 | never |
+| SQ-FDI | 6 | 2 | r1115 2026-11-15: 3 PASS |
+| SQ-FF | 3 | 2 | r1031 2026-10-31: 1 PASS |
+| SQ-FFB | 5 | 5 | never |
+| SQ-FFH | 3 | 2 | r1101 2026-11-01: 1 PASS |
+| SQ-FGD | 21 | 2 | r1102 2026-11-02: 18 PASS, 1 FAIL, 1 LOOK, 1 OTHER |
+| SQ-FLR | 6 | 0 | r1115 2026-11-15: 1 PASS |
+| SQ-FN | 6 | 6 | never |
+| SQ-FO | 5 | 5 | never |
+| SQ-FR | 5 | 5 | never |
+| SQ-FSD | 8 | 8 | never |
+| SQ-FTW | 6 | 5 | r1028 2026-10-28: 1 PASS |
+| SQ-GAP | 9 | 7 | r1115 2026-11-15: 1 PASS |
+| SQ-GF | 1 | 1 | never |
+| SQ-GF31 | 4 | 0 | r1031 2026-10-31: 4 PASS |
+| SQ-GFB | 6 | 4 | r1028 2026-10-28: 2 PASS |
+| SQ-GLD | 16 | 15 | r1114 2026-11-14: 1 PASS |
+| SQ-GLD2 | 4 | 4 | never |
+| SQ-GT | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-HCS | 12 | 2 | r1115 2026-11-15: 1 PASS |
+| SQ-HH | 597 | 501 | r1115 2026-11-15: 18 PASS, 1 FAIL |
+| SQ-HOP | 11 | 0 | r1115 2026-11-15: 9 PASS, 2 FAIL |
+| SQ-HR | 5 | 0 | r1101 2026-11-01: 5 PASS |
+| SQ-HRU | 4 | 4 | never |
+| SQ-HSC | 5 | 4 | r1114 2026-11-14: 1 PASS |
+| SQ-HT | 6 | 2 | r1028 2026-10-28: 1 PASS, 1 OTHER |
+| SQ-IDS | 3 | 1 | r1114 2026-11-14: 2 PASS |
+| SQ-IMS | 5 | 5 | never |
+| SQ-INV | 18 | 18 | never |
+| SQ-IP | 7 | 4 | r1114 2026-11-14: 4 PASS |
+| SQ-IPO | 4 | 4 | never |
+| SQ-IWF | 5 | 1 | r1031 2026-10-31: 5 PASS, 1 BATCH-FAULT |
+| SQ-JFP | 5 | 5 | never |
+| SQ-JSL | 2 | 2 | never |
+| SQ-KS | 5 | 5 | never |
+| SQ-KT | 8 | 3 | r1101 2026-11-01: 4 PASS |
+| SQ-LB | 2 | 0 | r1031 2026-10-31: 3 PASS |
+| SQ-LBS | 6 | 6 | never |
+| SQ-LE | 7 | 7 | never |
+| SQ-LEM | 2 | 2 | never |
+| SQ-LGM | 14 | 13 | r1115 2026-11-15: 1 PASS |
+| SQ-LR | 1 | 1 | never |
+| SQ-MB | 8 | 0 | r1031 2026-10-31: 6 PASS, 1 OPEN |
+| SQ-MCL | 7 | 1 | r1031 2026-10-31: 4 PASS, 1 FAIL |
+| SQ-MD | 1 | 0 | r1102 2026-11-02: 1 PASS |
+| SQ-MDL | 5 | 5 | never |
+| SQ-MDP | 17 | 3 | r1102 2026-11-02: 14 PASS, 4 FAIL, 1 LOOK, 2 OTHER |
+| SQ-MELT | 13 | 0 | r1115 2026-11-15: 11 PASS, 2 FAIL |
+| SQ-META31 | 11 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-MG | 9 | 5 | r1114 2026-11-14: 1 PASS |
+| SQ-MIN | 7 | 3 | r1115 2026-11-15: 1 PASS |
+| SQ-MOB | 3 | 0 | r1103 2026-11-03: 3 NOT-RUN |
+| SQ-MRD | 4 | 3 | r1101 2026-11-01: 1 PASS |
+| SQ-MXS | 3 | 0 | r1102 2026-11-02: 2 PASS, 1 OTHER |
+| SQ-NCH | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-NDM | 8 | 8 | never |
+| SQ-NEST | 2 | 2 | never |
+| SQ-NM | 3 | 0 | r1106 2026-11-06: 1 OTHER |
+| SQ-NS | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-NSM | 10 | 1 | r1115 2026-11-15: 1 PASS, 1 NOT-RUN |
+| SQ-OB | 12 | 2 | r1115 2026-11-15: 6 PASS |
+| SQ-OPEN | 5 | 5 | never |
+| SQ-PA | 4 | 4 | never |
+| SQ-PB | 6 | 0 | r1028 2026-10-28: 5 PASS |
+| SQ-PCK | 5 | 5 | never |
+| SQ-PERFCFG | 3 | 3 | never |
+| SQ-PF | 10 | 10 | never |
+| SQ-PF16 | 4 | 1 | r1031 2026-10-31: 2 PASS, 1 OPEN |
+| SQ-PG | 4 | 1 | r1115 2026-11-15: 2 PASS, 1 FAIL |
+| SQ-PJL | 5 | 4 | r1114 2026-11-14: 1 PASS |
+| SQ-POT | 6 | 6 | r1101 2026-11-01: 1 PASS |
+| SQ-PR | 2 | 2 | never |
+| SQ-PRI | 3 | 0 | r1101 2026-11-01: 3 PASS |
+| SQ-PROC | 1 | 1 | never |
+| SQ-PS | 7 | 6 | r1031 2026-10-31: 2 OPEN |
+| SQ-PS15 | 19 | 2 | r1116 2026-11-16: 14 PASS, 4 FAIL, 5 DEFERRED |
+| SQ-PS15B | 12 | 0 | r1116 2026-11-16: 7 PASS, 4 FAIL, 19 LOOK |
+| SQ-PSD | 7 | 7 | never |
+| SQ-PSF | 9 | 9 | never |
+| SQ-PSM | 9 | 9 | never |
+| SQ-PST | 11 | 10 | r1114 2026-11-14: 1 PASS |
+| SQ-PSU | 9 | 8 | r1107 2026-11-07: 1 PASS |
+| SQ-PSW | 2 | 2 | never |
+| SQ-PT | 1 | 1 | never |
+| SQ-PTH | 35 | 0 | r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK |
+| SQ-PWG | 101 | 20 | r1116 2026-11-16: 4 PASS |
+| SQ-QN | 2 | 0 | r1115 2026-11-15: 2 PASS |
+| SQ-RB | 2 | 2 | never |
+| SQ-RCO | 2 | 2 | never |
+| SQ-RD | 33 | 31 | r1115 2026-11-15: 1 PARTIAL |
+| SQ-RDB | 6 | 1 | r1115 2026-11-15: 2 PASS |
+| SQ-RDX | 14 | 12 | r1115 2026-11-15: 1 PASS |
+| SQ-RE | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-RING | 3 | 3 | never |
+| SQ-RM | 4 | 4 | never |
+| SQ-ROLL | 12 | 11 | r1114 2026-11-14: 1 PASS, 1 FAIL |
+| SQ-RP | 8 | 0 | r1115 2026-11-15: 2 PASS |
+| SQ-RS | 2 | 2 | never |
+| SQ-RSP | 15 | 14 | r1101 2026-11-01: 1 PASS |
+| SQ-RW | 9 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-SALT | 14 | 6 | r1028 2026-10-28: 3 PASS, 1 FAIL |
+| SQ-SALT2 | 9 | 7 | r1115 2026-11-15: 2 PASS |
+| SQ-SB | 10 | 0 | r1101 2026-11-01: 1 PASS, 1 FAIL, 4 OPEN |
+| SQ-SB31 | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-SCAT | 3 | 3 | never |
+| SQ-SG | 3 | 0 | r1031 2026-10-31: 3 PASS |
+| SQ-SGF | 2 | 2 | never |
+| SQ-SK | 3 | 3 | never |
+| SQ-SLK | 5 | 0 | r1115 2026-11-15: 5 PASS |
+| SQ-SLT | 5 | 5 | never |
+| SQ-SN | 2 | 2 | never |
+| SQ-SNF | 3 | 3 | never |
+| SQ-SPC | 2 | 0 | r1031 2026-10-31: 2 PASS |
+| SQ-SPD | 9 | 0 | r1115 2026-11-15: 8 PASS, 1 FAIL |
+| SQ-SPF | 38 | 0 | r1106 2026-11-06: 30 PASS, 1 FAIL, 4 OTHER, 3 PARTIAL |
+| SQ-SPFX | 7 | 0 | r1106 2026-11-06: 6 PASS, 1 FAIL |
+| SQ-SSP | 3 | 3 | never |
+| SQ-STC | 2 | 0 | r1028 2026-10-28: 2 PASS |
+| SQ-STD | 3 | 3 | never |
+| SQ-STK | 6 | 6 | never |
+| SQ-STL | 2 | 0 | r1031 2026-10-31: 2 PASS |
+| SQ-STN | 7 | 5 | r1114 2026-11-14: 3 PASS |
+| SQ-SV | 3 | 3 | never |
+| SQ-SVA | 5 | 2 | r1101 2026-11-01: 1 PASS |
+| SQ-SWL | 1 | 1 | never |
+| SQ-SWP | 8 | 8 | never |
+| SQ-SY | 21 | 6 | r1115 2026-11-15: 8 PASS |
+| SQ-T1 | 4 | 3 | r1115 2026-11-15: 1 PASS |
+| SQ-TD | 5 | 0 | r1031 2026-10-31: 4 PASS, 1 OPEN |
+| SQ-TER | 7 | 4 | r1101 2026-11-01: 1 PASS |
+| SQ-TI | 2 | 2 | never |
+| SQ-TIE | 1 | 1 | never |
+| SQ-TL | 1 | 0 | r1101 2026-11-01: 1 OPEN |
+| SQ-TP | 39 | 0 | r1107 2026-11-07: 37 PASS, 2 NOT-RUN |
+| SQ-TPF | 13 | 0 | r1115 2026-11-15: 2 PASS |
+| SQ-TSK | 2 | 0 | r1101 2026-11-01: 2 PASS |
+| SQ-TSY | 2 | 2 | never |
+| SQ-TX | 18 | 0 | r1116 2026-11-16: 19 PASS, 8 FAIL |
+| SQ-TXQ | 3 | 0 | r1116 2026-11-16: 2 PASS, 2 CRASH |
+| SQ-UC | 3 | 0 | r1031 2026-10-31: 2 PASS, 1 BATCH-FAULT, 1 OPEN |
+| SQ-VDF | 10 | 10 | never |
+| SQ-VF | 5 | 5 | never |
+| SQ-VG | 4 | 0 | r1031 2026-10-31: 4 PASS |
+| SQ-VH | 14 | 2 | r1115 2026-11-15: 10 PASS, 2 OTHER |
+| SQ-VL | 3 | 0 | r1031 2026-10-31: 4 PASS |
+| SQ-VNG | 2 | 2 | never |
+| SQ-VP | 20 | 20 | never |
+| SQ-VS | 4 | 0 | r1031 2026-10-31: 8 PASS |
+| SQ-VTD4 | 9 | 7 | r1102 2026-11-02: 2 PASS |
+| SQ-VTD5 | 1 | 0 | r1102 2026-11-02: 1 FAIL |
+| SQ-VTD6 | 2 | 2 | never |
+| SQ-VTD7 | 2 | 2 | never |
+| SQ-VTD8 | 1 | 0 | r1102 2026-11-02: 1 FAIL |
+| SQ-VTD9 | 1 | 1 | never |
+| SQ-VTDA | 4 | 4 | never |
+| SQ-WC | 4 | 0 | r1101 2026-11-01: 2 PASS |
+| SQ-WCD | 7 | 7 | never |
+| SQ-WCT | 8 | 3 | r1101 2026-11-01: 5 PASS |
+| SQ-WE | 4 | 4 | never |
+| SQ-WG30 | 1 | 0 | r1101 2026-11-01: 1 PASS |
+| SQ-WGP | 15 | 14 | r1028 2026-10-28: 1 NOT-RUN |
+| SQ-WO | 37 | 0 | r1115 2026-11-15: 13 PASS |
+| SQ-WT | 1 | 0 | r1031 2026-10-31: 1 PASS |
+
+</details>
+<!-- generated:status_index end queue -->
+
 > **Run the "Priority run" section below first.** Then the **next bulk run (built 2026-10-31, not run):** [scratch_run_2026-10-31.md](scratch_run_2026-10-31.md): every row
 > queued since the 10-28 night run, 202 rows in `tools/scratch_query/batches/r1031/` (server with fake players, then
 > worldgen, then the client, then the longest operations).

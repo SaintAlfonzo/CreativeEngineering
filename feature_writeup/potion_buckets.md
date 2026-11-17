@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Potion buckets and tipped arrows (three bucket tiers bursting a dome of potion clouds, dispenser, bucket ↔ bottle / Spout / Item Drain / Bottler recipes, glass-bottle crafting remainder on vanilla potions, machine-tipped arrows on the Bottler and Spout). Status: DEPLOYED (since 1.0.3), in-game test pending (PB-01 to PB-20); cooldown + no-effect bucket fixes and F5 built 2026-10-23, scratch test queued (SQ-LE, PB-21 to PB-23); dome never checked in game; findings F1-F7 open, F1 (machine tipping cheaper than crafting) and F3 (global bottle remainder) need a decision
+
 | Part | Status |
 |---|---|
 | Three potion buckets (`creativeengineering:potion_bucket`, `splash_potion_bucket`, `lingering_potion_bucket`): right-click a block to burst a dome of potion clouds | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); the dome shape was never confirmed in game |

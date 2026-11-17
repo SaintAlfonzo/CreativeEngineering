@@ -22,6 +22,10 @@ are in `development/creativeDelight/members/display/NOTICE-upstream.txt`, shippe
 **Result in one line:** 210 food display blocks and the 2 plates (1.2.0: 191 and 2). 101 are new, 93 of them for foods the
 pack has today (95 with Creative Delight's Farmer's Delight 1.3.4 foods); every 1.2.0 block for a mod in the pack keeps its id, so placed blocks stay.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Display Delight 1.7.0 port (Backported Display: 210 food display blocks, 101 new and 95 of those for foods the pack has; links by block name, `md_` to the pack's Miner's port; axe plate hide / restore, take-all, silk-touch items, particles, wooden support legs; blocks for 8 mods the pack does not have left out and listed). Status: **Deep scan 2026-11-02:** the SQ-CDJ-05 / SQ-DDP-01 rerun was not in the r1102b scope; patcherMod 1.1.07 (18:41, with the swap-list `removed` key) is installed. DEPLOYED with 1.1.03; **nested in the Creative Delight jar 2026-11-02 as `members/display` (plan_creative_delight.md H), installed; scratch r1102: nesting and config move PASSED, old-world tentacle plate id lost (SQ-CDJ-05 FAIL, `creativedelight/members #36`; fixed 2026-11-02 afternoon by a swap-list removal, `-03` installed, needs the patcherMod 13:04 build, rerun queued), client CQ-DDP open;** scratch test queued (SQ-DDP), client checks CQ-DDP; `mod-additions #22`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (1011 files added, 346 removed, 501 changed; en_us lang **+402 / -0 / ~0**).

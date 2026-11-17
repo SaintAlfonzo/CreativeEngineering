@@ -2,6 +2,10 @@
 
 Moved out of [structure_tuning.md](structure_tuning.md) section 7.2 on 2026-10-13. The system itself is described in structure_tuning.md 3.17; this file holds the plan as built, the inventory, the families and every structure's family. Release state: DEPLOYED with pack 1.0.6 (2026-10-14) as part of the structure tuning, which went out marked INCOMPLETE ([plan_1.0.6.md](plan_1.0.6.md)). Section numbers below (3.x, 7.x) refer to structure_tuning.md.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Biome fits (structure tuning 7.2 in full: plan as built, inventory, families, every structure's family). Status: reference; built 2026-10-12, DEPLOYED with 1.0.6
+
 ## Plan: biome fits for every structure, towers folded in (2026-10-11, BUILT 2026-10-12)
 
 **Built 2026-10-12** as planned, with one addition (`fit_keep`, below). The tables in this section are the reference

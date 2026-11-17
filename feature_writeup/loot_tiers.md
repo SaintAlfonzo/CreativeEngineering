@@ -9,6 +9,10 @@ Related: [loot.md](loot.md) (framework, 3.8 rules, 7 draft table contents), [loo
 `#6` (MCA items), `#11` (enchanted book tiers), `#12` (azalea plants in lush loot), `#13` (Rustic seeds), `#14`
 (seed, crate and raw food loot by biome).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot tuning system (design: every chest table in a category / set / grade tree, tables compose reusable material family tables; Overworld only, nether and End left out). Status: design only, 2026-11-01, nothing built
+
 ## 1. Idea
 
 Every loot table behind an in-world chest becomes a member of a three-level tree:

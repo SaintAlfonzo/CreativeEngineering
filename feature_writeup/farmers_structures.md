@@ -15,6 +15,10 @@ copying ARR files into the pack (see open question 1).
 by a cod pond, the cook house pool grown from 33 to 78 templates. No item, no lang, no code. Almost every new template is
 a 1.21 save, so its chest, item frame and cooking pot contents load empty on 1.19.2 unless converted.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Structures 1.0.6 donor (cod pond for the fishless carp pond, cacaos / fish stew / ratatouille / squid / shepherd farms, 45 more cook house pieces, pike and perch in the ponds; the ARR jar is read in memory from `farmers_upstream/`). Status: DEPLOYED with 1.1.03 (patcherMod `worldgen/donor`), scratch server PASSED for SQ-FSD-01, -03, -04, -06 (2026-10-26), -07, -08 (r1102b); SQ-FSD-02 FAILED r1102b (no donor: world does not load); cook house pool names TODO row 30; client checks open; SQ-FSD-01 to 08; `mod-additions #27`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (152 files added, 57 removed, 20 changed; no lang). 50 of the removed files are the

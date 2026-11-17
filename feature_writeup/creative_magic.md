@@ -11,6 +11,10 @@ script packs `kubejs_startup/creativemagic/`, `kubejs/data/creativemagic/kubejs/
 Same behaviour as before the carve; every registry id keeps `creativeengineering:`. Potions, effects, alcohol and gear
 effects are Creative Brewing's ([creative_brewing.md](creative_brewing.md) 4.2).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Magic (own mod `creativemagic` carved from patcherMod in the Creative Split wave 6: Dark Fire and Flint and Terrasteel with the Nether portal rule, the Nock Enough Arrows enchantments off tables and trades, the Botania Trinket Case, the magic recipes and XP fluid tags). Status: **r1114 2026-11-14: SQ-CMG-02, -02b PASS.** built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted; scratch SQ-CMG-01 to -05 queued
+
 ## 1. What it holds
 
 - **Java** (7 classes plus 3 new): `block/DarkFireBlock`, `item/FlintAndTerraSteelItem` (was package `items`, the

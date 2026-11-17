@@ -17,6 +17,10 @@ Environmental 1.21, neither installed: the knives wait for the Caverns and Chasm
 the update: Boatload / Upgrade Aquatic salvaging, the Adzuki Curry grid craft, two-pickerelweed recipes, Perch / Pike slice
 smelting XP, and 4 Milk Bottles per bucket (all built). The rest is the 1.21 / FD 1.3 data format.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Abnormals Delight 6.0.3 update (changes against installed 4.1.2; owner decisions 2026-10-25: copper knives wait for the Caverns and Chasms port, no new cabinets; all four taken changes built). Status: DEPLOYED with 1.1.03: slice XP, salvaging, Adzuki Curry grid craft, two-pickerelweed recipes, 4-bottle milk; scratch server PASSED 2026-10-26 (SQ-ABD-01 to 05), in-game ABD rows pending; `mod-additions #26`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (530 -> 667 files; 416 added, 279 removed, 107 changed; en_us lang **+9 / -1 / ~0**). Most

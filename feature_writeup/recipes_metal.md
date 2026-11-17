@@ -7,6 +7,8 @@ metal half of [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Metal recipes (one part per metal, mostly IE's; 9-metal ore chain with Create and IE yields 1× / 1.33× / 1.5×; dust, plate and crushed blocks; rods, wires, bars; red electrum, rust washing, spools). Status: DEPLOYED (since 1.0.3), RM-01 to RM-14 pending; findings F1-F7, F1 (plates made three ways) and F4 (hand-crafted rods for 3 metals) need a decision
+
 | Part | Status |
 |---|---|
 | Unification: IE's nuggets, plates, rods and wires are the pack's parts; Create / Everything Copper / Create Compressed / Create Crafts & Additions duplicates swapped out of recipes | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |

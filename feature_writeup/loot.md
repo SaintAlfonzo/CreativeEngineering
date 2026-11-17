@@ -6,6 +6,8 @@ offline sim but are untested in game)
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot (census of every loot table by mod, chest-loot tuning catalog + runtime, pre-roll framework: bans, tag groups, boosts, packed-food splits, additions, injection restores, aliases; LootJS-only scripts, mod loot configs). Status: DEPLOYED, in-game test pending (LT-01, LT-06 passed; LT-14 to LT-27 new); findings 1-7 fixed, 8 (legacy dump) folder gone; catalog, index + census regenerated 2026-10-26
+
 The pack has about 12,400 loot tables, but only 384 matter for chest loot. The rest are block drops (11,682)
 and mob drops (242), which nothing here touches. Chest loot is edited by one framework with two stages, both
 rebuilt by `/reload`:

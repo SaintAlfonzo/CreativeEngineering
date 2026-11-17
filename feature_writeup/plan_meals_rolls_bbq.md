@@ -11,6 +11,8 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Large Meals, Roll Delight and Barbeque's Delight changes 2026-11-04 (broth nausea, feast cans, pot pie and plate-meal families; Cooked Nether Wart type, Salmon Maki Roll Slice, Golden Roll on the golden rule; skewer helper for all 18 lines, 8 raw pack skewers, shulker mollusk merge undone, plain combos, seasoning item tooltip, Skewer renames). Status: BUILT 2026-11-04 (CD jar built, not installed), not run; generator output (cans, families, placeables) waits on `/dumpall`
+
 | Part | Needs | Rebuild | Restart |
 |---|---|---|---|
 | A. Large Meals | Java edit (pufferfish broth effect), generator and tooltip rows, scripts | `:creativeDelight:build` + install | full |

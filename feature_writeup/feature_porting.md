@@ -9,6 +9,8 @@ other small mods for the wider survey in section 3.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Feature porting (small mods the pack could absorb: tiers 1-4 from decompiled jars, Collective payoff, order, redundant rsec, Death Knell lang check). Status: research 2026-10-18; rsec removed, Fast Leaf Decay ported 2026-10-19 (tests in [mob_block_tweaks.md](mob_block_tweaks.md) MT-19 to MT-23); tier 1 (8 mods, Book Fishing kept) + Glowing Illagers, Comfortable Campfires, Bottled Air ported 2026-10-20 (KubeJS + patcherMod 1.1.01, built, scratch server PASSED 2026-10-22 for FP-09, FP-11, FP-13, FP-15 server halves (SQ-OM-10 to SQ-OM-12), DEPLOYED with 1.1.01); FP-01 to FP-15 pending in game; Death Knell confirmed `both` since 1.0.7 (2026-10-20)
+
 - **Where ports go:** recipes through `global.NCH`, tags through `global.tags`, item ids through `item_dict.js`
   (CLAUDE.md). Event-only logic goes into KubeJS when it needs no mixin, otherwise into patcherMod
   (`development/creativeCommon`, one package per feature, knobs in `CEConfig`).

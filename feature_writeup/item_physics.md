@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Item physics (ItemPhysic fire/lava split, float/sink control by four reloadable tags, burn transforms: glass → dirty glass, wood → ash, TNT explodes). Status: DEPLOYED (since 1.0.3), IP-01 to IP-14 pending; F1 fixed in 1.0.9. 2026-10-28: family audit BUILT (report only, SQ-IP-16), families and surface / lava floating DESIGNED (sections 9, 10)
+
 Tag namespace: `creativecompat:physics/*` and `creativecompat:burn/*` since 2026-11-08 (were `creativeengineering:`; renamed with the Compat build of 13:21, creative_engineering.md 7.4).
 
 | Part | Status |

@@ -12,6 +12,10 @@ can be rewritten in our own scripts.
 drink fluids, GUI transfer boxes, pipes, right-click fill / drain and Create filling / emptying for every drink, plus a potted wild tea bush
 fix, two cake-slice effect changes and a death-message fix (section 2).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Respite 2.1.2 update (owner decisions 2026-10-25: patch the 2.0 Kettle into a 4-level fluid tank, one unit per brew and one item out, GUI fill / empty boxes, pipes, right-click, new `base` fluid recipe format, Create filling / emptying for every drink and the water cup, tooltip and WTHIT; Wild Tea Bush pottable, two cake slices lose Speed, death message fixed). Status: **BROKEN: r1103 2026-11-03 SQ-RSP-06, -15 FAILED (a water kettle with tea leaves never starts brewing); SQ-RSP-05, -07, -12 PASS.** DEPLOYED with 1.1.03 (Creative Delight 1.0.0 + patcherMod 1.1.03), scratch partly PASSED (SQ-RSP-01 to -04, -09 to -11, -13; r1102b 2026-11-02), Kettle-insert rows and CQ-RSP open; Spout / drain fix in patcherMod 1.1.07 (not deployed); `mod-additions #21`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (150 files added, 83 removed, 237 changed). Lang en_us **+34 / -2**: 30 `fluid_type` names (one per drink),
