@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=0ef44ce4a887 -->
+<!-- generated:status_index begin readme sha1=5d60537344d6 -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED; SQ-BRA r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL | creativecompat pending, creativedevtools installed 2026-11-17 | DEPLOYED, in-game test pending |
@@ -52,7 +52,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Placeable food catalog | [placeable_catalog.md](placeable_catalog.md) | none | reference | none |  | reference, regenerate with `python3 tools/placeable_catalog.py` after `/dumpplaceable` |
 | Coaster model candidates | [coaster_model_candidates.md](coaster_model_candidates.md) | none | reference | none |  | ANALYSIS 2026-10-26 |
 | Oven | [oven.md](oven.md) | `OV-` | BUILT | none | creativedelight installed 2026-11-16 | first version DEPLOYED with 1.0.7 |
-| Remainder buffer | [remainder_buffer.md](remainder_buffer.md) | `RB-` | BUILT | SQ-STN r1114 2026-11-14: 3 PASS | creativecommon pending, creativedelight installed 2026-11-16 | BUILT 2026-11-03, scratch test queued (SQ-STN-01 to -05, CQ-STN-01, SQ-RB-21b rerun |
+| Remainder buffer | [remainder_buffer.md](remainder_buffer.md), [plan_remainder_buffer_old.md](plan_remainder_buffer_old.md) | `RB-` | BUILT | SQ-STN r1114 2026-11-14: 3 PASS | creativecommon pending, creativedelight installed 2026-11-16 | BUILT 2026-11-03, scratch test queued (SQ-STN-01 to -05, CQ-STN-01, SQ-RB-21b rerun |
 | Item merges | [item_merges.md](item_merges.md) | `MG-` | BUILT | SQ-MG r1114 2026-11-14: 1 PASS; SQ-CM r1101 2026-11-01: 2 PASS; SQ-SALT r1028 2026-10-28: 3 PASS, 1 FAIL | creativecommon pending, creativedelight installed 2026-11-16 | 2026-11-02/03: swap-list merges and world half (6) BUILT, patcherMod 1.1.08 and CD jar installed 2026-11-02 ... |
 | Texture sources | [texture_sources.md](texture_sources.md) | none | reference | none |  | audit 2026-11-13: 4 swap, 27 redo, 349 confirm |
 | Texture reuse | [texture_reuse.md](texture_reuse.md) | none | reference | none |  | research only, 2026-10-22 |
@@ -60,7 +60,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Stack sizes | [stack_sizes.md](stack_sizes.md) | none | reference | none |  | reference from the 2026-10-02 `/dumpstacks` (2141 items), before the stack size policy (DEPLOYED with 1.0.6): ... |
 | Exposure cameras and photographs | [exposure.md](exposure.md) | `EX-` | BUILT | none | exposure in mods/ | DEPLOYED (1.0.3 |
 | Alcohol: Brewin' and Chewin' backport | [alcohol.md](alcohol.md) | `AL-` | BUILT | none | creativebrewing installed 2026-11-16 | port `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar |
-| Alcohol: Vinery backport | [alcohol.md](alcohol.md) | `VB-` | BUILT | none | creativebrewing installed 2026-11-16 | port `-01` DEPLOYED with 1.0.7 (replaces Vinery 1.3.10 + doapi |
+| Alcohol: Vinery backport | [alcohol_part_b.md](alcohol_part_b.md) | `VB-` | BUILT | none | creativebrewing installed 2026-11-16 | port `-01` DEPLOYED with 1.0.7 (replaces Vinery 1.3.10 + doapi |
 | Veggies Delight backport and implementation description | [veggies_delight.md](veggies_delight.md) | `VD-` | BUILT | SQ-DM r1101 2026-11-01: 1 PASS | creativedelight installed 2026-11-16 | 2026-11-02 night: R7 pancakes BUILT, CD jar installed 2026-11-02 23:16, not booted (SQ-PCK, SQ-CDJ6) |
 | Vintage Delight backport and integration plan | [vintage_delight.md](vintage_delight.md) | `VTD-` | BUILT | SQ-VTD8 r1102 2026-11-02: 1 FAIL; SQ-VTD5 r1102 2026-11-02: 1 FAIL; SQ-VTD4 r1102 2026-11-02: 2 PASS; +1 codes | creativedelight installed 2026-11-16 | SQ-VTD6-02 open (hand-check) |
 | Miner's Delight merged backport | [miners_delight.md](miners_delight.md) | `MND-` | BUILT | SQ-MDP r1102 2026-11-02: 14 PASS, 4 FAIL, 1 LOOK, 2 OTHER; SQ-MD r1102 2026-11-02: 1 PASS | creativedelight installed 2026-11-16, creativeworldgen installed 2026-11-16 | 2026-11-02 night: loot modifiers replaced by pack loot rules (8.1) BUILT, CD jar installed 2026-11-02 23:16 ... |
