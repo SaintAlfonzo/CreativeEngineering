@@ -8581,7 +8581,7 @@ Targets the Creative Brewing jar installed 2026-11-16. Group A superflat; lattic
 | SQ-VN-01 | A | stone at 640 -60 520 and 641 -60 520, 642 -60 520; place `vinery:grapevine_lattice` on their south faces (y -59, glass under nothing: the lattice at y -59 has air below); plant jungle white seeds in the first two; `/cdevtest use` with `minecraft:bone_meal*4` on the stage 1 lattice, the empty one, and a stage 3 one | planted stage 1: bone meal used and the lattice at stage 2 or more; empty lattice: bone meal kept (`main=minecraft:bone_meal*4`); stage 3: the click harvests (2 jungle grapes on the ground, back to stage 1, bone meal kept) | `LegacyLatticeStemBlock.isValidBonemealTarget` (age > 0 and not mature, no lattice-below check); the grapevine stem's own trunk rule is separate (2.4) |
 <!-- generated:status_index end rows_VN_1 -->
 
-<!-- generated:status_index begin rows_TT_1 sha1=2f58ed832cf7 -->
+<!-- generated:status_index begin rows_TT_1 sha1=a8dd0d97ce0a -->
 ## CQ-TT American spelling in own lang text, 2026-11-17 ([tooltips.md](../tooltips.md); [plan_rules_fixes.md](../plan_rules_fixes.md) section 15b, TODO `conventions #32`)
 
 Needs the Labels, Delight and Compat jars rebuilt after 2026-11-17 (the lang values changed in source only; P5 rebuilds every jar).
@@ -8589,5 +8589,5 @@ Needs the Labels, Delight and Compat jars rebuilt after 2026-11-17 (the lang val
 |---|---|---|---|---|
 | CQ-TT-01 | client | Served client (`qrun.py client`): read the Label and Eraser tooltips with shift held | Label: "Right-click with a dye: color the icon"; Eraser: "Right-click a labeled item in your inventory: remove its last label"; no "colour" or "labelled" line | creativelabels jar older than the lang edit (rebuild `:creativeLabels:`) |
 | CQ-TT-02 | client | Place an Oven on a stone block (no heat), open it: the status line; JEI on any baking recipe: the heat line | Oven screen: "Not heated: needs fire, a lit campfire, lava, magma or a fueled blaze burner below (not a stove)"; JEI baking page: "... or a fueled blaze burner (not a stove)"; no "fuelled" (LOOK) | creativedelight jar older than the lang edit (rebuild `:creativeDelight:`) |
-| CQ-TT-03 | client | MCA villager editor (or the player editor) with Creative Compat's extra eye colors: the eye color list | the option reads "Gray Eyes", not "Grey Eyes" (LOOK) | creativecompat jar older than the lang edit (rebuild `:creativeCompat:`) |
+| CQ-TT-03 | client | MCA villager editor (or the player editor) with Creative Compat's extra eye colors: the eye color list | the option reads "Gray Eyes", not `Grey Eyes` (LOOK) | creativecompat jar older than the lang edit (rebuild `:creativeCompat:`) |
 <!-- generated:status_index end rows_TT_1 -->
