@@ -14,7 +14,16 @@ fix, two cake-slice effect changes and a death-message fix (section 2).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Respite 2.1.2 update (owner decisions 2026-10-25: patch the 2.0 Kettle into a 4-level fluid tank, one unit per brew and one item out, GUI fill / empty boxes, pipes, right-click, new `base` fluid recipe format, Create filling / emptying for every drink and the water cup, tooltip and WTHIT; Wild Tea Bush pottable, two cake slices lose Speed, death message fixed). Status: **BROKEN: r1103 2026-11-03 SQ-RSP-06, -15 FAILED (a water kettle with tea leaves never starts brewing); SQ-RSP-05, -07, -12 PASS.** DEPLOYED with 1.1.03 (Creative Delight 1.0.0 + patcherMod 1.1.03), scratch partly PASSED (SQ-RSP-01 to -04, -09 to -11, -13; r1102b 2026-11-02), Kettle-insert rows and CQ-RSP open; Spout / drain fix in patcherMod 1.1.07 (not deployed); `mod-additions #21`
+<!-- generated:status_index begin open_work sha1=70e05c52e9a3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/drinks #12` | Testing | S+ P | Spout filling for Kettle drinks and the water cup fails to load |
+| `food/drinks #16` | Testing | S P T | Kettle brews too fast |
+| `largecontent/mod-additions #21` | Testing | S~ C P T | Farmer's Respite 2.1.2 changes on the installed 2.0 |
+| `ui/misc #6` | Testing | C | Shrink the Farmer's Respite fluid bar |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

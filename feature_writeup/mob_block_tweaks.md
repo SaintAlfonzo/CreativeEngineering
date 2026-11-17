@@ -5,7 +5,21 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mob and block tweaks (named mobs, Quark monster box vaults, bubble column immunity for big water mobs, Bushier Flowers growth and worldgen off, Quark feeding-trough retry, D&D asphalt friction reset, MCA Comb eye colour, leaf decay: range 12, decay only after a nearby change, Fast Leaf Decay ported). Status: DEPLOYED (trough 1.0.4, bubble columns and Bushier Flowers 1.0.6), MT-01 to MT-12 pending; leaf decay DEPLOYED with 1.1.01 (FastLeafDecay jar retired; scratch server passed MT-13 to MT-16 and MT-19 to MT-22, MT-13 to MT-23 pending in game); MCA Comb eye colour DEPLOYED with 1.1.01 (MT-40); seagull lunchbox mixins BUILT 2026-10-29, in `mods/`, not deployed; named mobs BUILT 2026-10-30, in `mods/`, not deployed, scratch server PASSED r1031 2026-10-31 (SQ-NM; MT-31 to MT-33 in game); Quark monster box vaults BUILT 2026-10-30, in `mods/`, not deployed, scratch server PASSED r1031 2026-10-31 (SQ-MB, hardness client pending; MT-34 to MT-37, MT-47 to MT-50 in game); pile slow height and the seagull list scratch server PASSED 2026-10-22 (SQ-OM-09, SQ-OM-14, SQ-GM-07; MT-25, MT-26 in game); findings F1-F7
+<!-- generated:status_index begin open_work sha1=fcc9442b5307 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, Testing 8), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/tweaks #4` | Planned | S | Entity dictionary |
+| `farming/trees #1` | Testing | S+ P T | Leaf life distance + decay timing + Fast Leaf Decay port |
+| `flowers #3` | Testing | S P | Bushier Flowers worldgen off file by file |
+| `mobs/tweaks #1` | Testing | S~ P | Mob and block tweaks |
+| `mobs/tweaks #5` | Testing | S P T | Quark monster boxes |
+| `mobs/tweaks #6` | Testing | S C P | Named mobs |
+| `mobs/tweaks #7` | Testing | S P | Seagulls can't take lunchboxes |
+| `mobs/tweaks #12` | Testing | C | MCA villager eye colour |
+| `mobs/tweaks #15` | Testing | S P | Villagers: gates solid, Dramatic Doors usable, ladders |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

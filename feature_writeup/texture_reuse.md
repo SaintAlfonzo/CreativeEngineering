@@ -5,7 +5,9 @@ nothing here is built. One section per mod; Rustic Delight first (2026-10-22).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture reuse (catalogue of culinary-mod textures usable for new items or retextures, per mod; Rustic Delight done). Status: research only, 2026-10-22
+<!-- generated:status_index begin open_work sha1=ba133888da4a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index end open_work -->
 
 | Mod | Version | Surveyed | Notes |
 |---|---|---|---|

@@ -6,7 +6,14 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Toasts (tutorial and advancement toasts dropped for every player by `[toasts]` switches + `ToastFilterMixin`, incl. Exposure and Fairy Lights tutorial toasts; catalogue of every toast in the pack). Status: DEPLOYED with 1.1.01 (patcherMod 1.1.01, 2026-10-22); TO-01 to TO-07 pending
+<!-- generated:status_index begin open_work sha1=41bc67ae68ff -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `ui/toasts #1` | Testing | C P | Disable tutorial toasts |
+| `ui/toasts #2` | Testing | C P | Advancement toasts |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

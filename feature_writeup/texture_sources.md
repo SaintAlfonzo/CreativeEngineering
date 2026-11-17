@@ -6,7 +6,15 @@ Where every pack-owned texture came from, the texture rule, and the textures tha
 
 ## 0. At a glance (2026-11-13)
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture sources (texture rule: human art or the owner's tools only; per-texture provenance ledger of every pack-owned texture, sources and uses of swapped / combined textures, AI textures marked swap / redo, unknowns to confirm). Status: audit 2026-11-13: 4 swap, 27 redo, 349 confirm; regenerate with `python3 tools/texture_provenance.py --write`; TODO `textures/tools #2` to `#4`
+<!-- generated:status_index begin open_work sha1=cefe4240c622 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `textures/tools #2` | Planned | C | Swap the AI echo tool textures |
+| `textures/tools #3` | Planned | C | Redo the AI-transformed textures with the owner's tools |
+| `textures/tools #4` | Planned | none | Owner confirms the 349 textures with no provenance evidence |
+<!-- generated:status_index end open_work -->
 
 2743 PNGs under `development/**/textures` and `kubejs/assets/**/textures` (build output skipped).
 

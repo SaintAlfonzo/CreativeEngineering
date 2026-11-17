@@ -7,7 +7,19 @@ except the parts that already have a writeup: components, coils and the sample s
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Engineering recipes (machine gating: gold deployer, IE-part press / saw / drill, nether-locked alloy kiln, cast-iron blast brick, steel workbench; compressed iron = steel; mechanisms, redstone, rails, resource stones, cinder-flour dusts). Status: DEPLOYED (since 1.0.3), RE-01 to RE-20 pending; findings F1-F10, F2 (no dispenser recipe), F3 (amethyst crushing clash) need a decision, F1 (blast furnace) has Quark's recipes; buckets BUILT 2026-10-29, installed 2026-10-31, RE-28 scratch server PASSED r1031 2026-10-31, RE-29, RE-30 in game
+<!-- generated:status_index begin open_work sha1=c8fa02922ba2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, In Progress 1, Testing 4), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `engineering/dreams-and-desires #9` | Planned | S C P | Bark cleanup for removed woods |
+| `recipes/engineering #6` | Planned | S P T | Create add-on machine recipes on components |
+| `recipes/engineering #1` | In Progress | S P | Blast furnace and dispenser recipes |
+| `recipes/engineering #2` | Testing | S P | Amethyst crushing clash |
+| `recipes/engineering #3` | Testing | S P | Smaller findings |
+| `recipes/engineering #5` | Testing | S C P | Bucket recipes |
+| `recipes/engineering #7` | Testing | S P | IE filling for treated planks |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

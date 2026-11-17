@@ -8,6 +8,18 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
 
 ## 0. At a glance
 
+<!-- generated:status_index begin open_work sha1=f61f45c8ea25 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `ui/loadingtips #2` | Planned | S C | Tip announcements in chat |
+| `ui/loadingtips #3` | In Progress | C | Creative Tips: the pack's own tips |
+| `ui/loadingtips #1` | Testing | S C | Loading screen tip bar and tip packs |
+| `ui/loadingtips #4` | Testing | C | Audit Loading Tips against pack changes |
+| `ui/loadingtips #5` | Testing | C | Tip ids, override packs, tips on every loading screen |
+<!-- generated:status_index end open_work -->
+
 | Part | Status |
 |---|---|
 | Audit of the 335 effective tips (Loading Tips 321 + Creative Tips 14) against the pack | DONE 2026-11-14 |

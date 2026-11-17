@@ -12,7 +12,14 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether's Delight 4.0 update (changes against installed 3.1: Potted Mimicarnation, tags, moves, renames, code-only) and My Nether's Delight (not ported, not added). Status: **r1103 2026-11-03: SQ-NDM-05 PASS.** **BUILT 2026-11-01 as CD member `repackedNethers` (4.9), installed in `mods/` 2026-11-02, not deployed; scratch SQ-NDM-01 to -04, -06, -07 PASSED r1102b, -05, -08 open; renames display-name only (default).** `mod-additions #16`, `#17`
+<!-- generated:status_index begin open_work sha1=de9067a13e8c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativesplit/cdfinish #11` | Testing | S | Finish Creative Delight: campfire from Compat to CD, Nether's Delight repacked as a CD member, Ender's and Cooking for Blockheads leftover rows into CD |
+| `largecontent/mod-additions #16` | Testing | S~ C P | Nether's Delight 4.0 changes on the installed 3.1 |
+<!-- generated:status_index end open_work -->
 
 ## 1. Decisions (user, 2026-10-25)
 

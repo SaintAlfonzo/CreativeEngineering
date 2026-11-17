@@ -12,7 +12,42 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Item merges (total replacements: one item purged, the survivor takes its recipes, tags, loot and inventory copies; banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, cantaloupe and hamimelon (2.10, built 2026-10-28, scratch test queued SQ-CM), Old and Weathered Cardboard Box by washing, Wares boxes recoloured (5.5, built 2026-10-28, scratch test queued SQ-MG-16, MG-45), Farmer's Respite coffee into Rustic Delight's (Rustic coffees give Caffeinated); Vinery cider renamed Hard Cider, Dave's rocky dirt renamed Pebble Dirt; apple cider potion-like chain and JEI drink-fluid effect lines; Quark permafrost renamed Froststone, its cave worldgen on Immersive Weathering's). Status: **r1103 2026-11-03: swap-list merges built, scratch server PASSED (SQ-SWP-01 to -08, -06o, SQ-VTDA-12, SQ-SALT-06, -08).** **2026-11-02/03: swap-list merges and world half (6) BUILT, patcherMod 1.1.08 and CD jar installed 2026-11-02 23:16, not booted, SQ-SWP-01 to -08 (SQ-CDJ6); potato salad, nut mash, kimchi, quiche (2.17 to 2.20) BUILT, CD jar installed 2026-11-03 00:08, not booted, SQ-CDM2-04, SQ-VTDA-11 to -13 (SQ-CDJ7).** built, scratch server PASSED 2026-10-22 (coffee 2.8 built after it, scratch server PASSED 2026-10-22 too, SQ-CO, after two fixes); DEPLOYED with 1.1.01 to 1.1.04 (cantaloupe and cardboard client only, 1.1.04); cantaloupe scratch server PASSED 2026-10-28 (SQ-CM-01 to -03, -09); food merges 2.13 to 2.15 (fish and chips, shulker meat, Caesar salad) BUILT 2026-11-01 / 11-02, scratch PASSED r1102b, unreleased (deep scan 2026-11-02); in-game MG IDs pending
+<!-- generated:status_index begin open_work sha1=609d2a78bd8d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (In Progress 7, Testing 23), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `merges/baking #1` | In Progress | S C P T | Stackable pancakes |
+| `merges/dishes #5` | In Progress | S C P | Merge cheesy pastas |
+| `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
+| `merges/dishes #10` | In Progress | S P T | Burger audit and loaded burger |
+| `merges/materials #1` | In Progress | S C P | Merge cardboard |
+| `merges/materials #2` | In Progress | S C P | Merge rope |
+| `merges/materials #4` | In Progress | S P | Crate and bag merge |
+| `merges/dishes #1` | Testing | S+ C P | Fish and chips |
+| `merges/dishes #2` | Testing | S+ C P | Mashed potatoes: split, not merged |
+| `merges/dishes #3` | Testing | S+ C P | Stuffed peppers: remove Veggies Delight's |
+| `merges/dishes #4` | Testing | S C P | Merge potato salad |
+| `merges/dishes #6` | Testing | S+ C P | Merge Caesar salads |
+| `merges/dishes #7` | Testing | S C P | Merge nut butter and nut mash |
+| `merges/dishes #9` | Testing | S C P | Merge kimchis |
+| `merges/dishes #11` | Testing | S+ C P | Drop fish tempura |
+| `merges/drinks #1` | Testing | S~ P | Dandelion juice and tea |
+| `merges/fruit #1` | Testing | S+ C P | Merge cantaloupe and hami melon |
+| `merges/fruit #2` | Testing | S P | Apple (define) and the green apple source |
+| `merges/materials #3` | Testing | S C P | Rotten flesh: own prepared block and flesh |
+| `merges/mobs #1` | Testing | S P | Merge monkeys |
+| `pack/server #20` | Testing | S~ P | Item merge swap passes in the recipe event |
+| `textures/merges #1` | Testing | C P | Potato salad texture |
+| `textures/merges #2` | Testing | C P | Caesar salad texture |
+| `textures/merges #3` | Testing | C P | Nut butter sandwich texture |
+| `textures/merges #4` | Testing | C P | Kimchi texture |
+| `textures/merges #6` | Testing | C P | Pancake recolours |
+| `textures/merges #7` | Testing | C P | Hami melon popsicle texture |
+| `textures/merges #8` | Testing | C P | Cardboard textures |
+| `textures/merges #9` | Testing | C P | Prepared rotten flesh texture |
+| `ui/names #9` | Testing | C P | Cantaloupe renames |
+<!-- generated:status_index end open_work -->
 
 ## 1. How a merge works
 

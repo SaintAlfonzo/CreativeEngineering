@@ -6,7 +6,18 @@ without errors in single player 2026-10-11)
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Placeable food (tooltip lines "Placeable" / "(while sneaking)" / "Placeable on plate" / "Placeable on small plate" for every food any mod lets you put down: Display Delight, cakes/pies/feasts, Vinery bottles, Fruits Delight jams; `/dumpplaceable`). Status: DEPLOYED with 1.0.6; coaster line and tag DEPLOYED with 1.0.8; 2026-10-25 every produce food on the coaster and the patcherMod egg-dish blocks BUILT and installed 2026-10-26; server half of PL-01 scratch PASSED (SQ-KT-21 r1031, SQ-CDFW-03 r1102b); not run in game (PL-01 to PL-09, FF-06 to FF-08)
+<!-- generated:status_index begin open_work sha1=a3292716d076 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 3, In Progress 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `baking/baked-goods #38` | Planned | S C P | Full candle integration with every cake |
+| `food/placeable #4` | Planned | S C P | Dough blocks for every dough |
+| `tooling/generators-and-tests #10` | Planned | C | `gen_dd_dishes.py` full run rewrites 9 older dish models onto the newer bowl |
+| `food/placeable #2` | In Progress | none | Placeable catalog review pass |
+| `creativedelight/qol #2` | Testing | C | QoL-2 Placeable-food tooltip lines |
+| `food/placeable #1` | Testing | C P | Placeable tooltip lines and coaster line |
+<!-- generated:status_index end open_work -->
 
 Every food that can be put down in the world gets one, two or three tooltip lines, for any mod's placement
 mechanic: "Placeable" (with "(while sneaking)" when sneaking is required), "Placeable on plate", "Placeable on small plate"

@@ -8,7 +8,14 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Lunchboxes (Spice of Life: Lunchbag / Copper / Iron / new Netherite, 5 / 9 / 14 / 18 slots; upgrades keep the food; smithing skins from lower tiers and berry baskets; leather-style dye on the base; soap; slot tooltip; seagulls ignore them). Status: DEPLOYED with 1.1.05 (2026-10-31), scratch server PASSED r1031 2026-10-31 (SQ-LB-01, -02), untested in game (CQ-LB-01)
+<!-- generated:status_index begin open_work sha1=3eec8d0e7f70 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `items/storage-and-item-loss #9` | Testing | S+ C P | Lunchbox tiers, skins and dye |
+| `mobs/tweaks #7` | Testing | S P | Seagulls can't take lunchboxes |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

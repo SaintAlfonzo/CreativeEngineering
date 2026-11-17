@@ -17,7 +17,14 @@ a 1.21 save, so its chest, item frame and cooking pot contents load empty on 1.1
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Farmer's Structures 1.0.6 donor (cod pond for the fishless carp pond, cacaos / fish stew / ratatouille / squid / shepherd farms, 45 more cook house pieces, pike and perch in the ponds; the ARR jar is read in memory from `farmers_upstream/`). Status: DEPLOYED with 1.1.03 (patcherMod `worldgen/donor`), scratch server PASSED for SQ-FSD-01, -03, -04, -06 (2026-10-26), -07, -08 (r1102b); SQ-FSD-02 FAILED r1102b (no donor: world does not load); cook house pool names TODO row 30; client checks open; SQ-FSD-01 to 08; `mod-additions #27`
+<!-- generated:status_index begin open_work sha1=de52e6d4e5df -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Bug 1, Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #27` | Bug | S~ C P | Farmer's Structures 1.0.6 donor |
+| `largecontent/mod-additions #30` | Planned | S | Farmer's Structures cook house pool names |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

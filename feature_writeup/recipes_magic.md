@@ -8,7 +8,13 @@ trades) in [archery.md](archery.md); the Flint and Terrasteel recipe in [nether_
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Magic recipes (Create Enchantment Industry machines on experience blocks; sculk doubled with liquid XP; ender chests behind a Botania third eye, Cloud Storage and Ender Storage on tags; Nature's Compass on terrasteel, Explorer's Compass removed). Status: DEPLOYED (since 1.0.3), RA-01 to RA-08 pending; findings F1-F4, F1 (Explorer's Compass uncraftable) needs a decision
+<!-- generated:status_index begin open_work sha1=e61861ff236a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `recipes/magic #1` | Planned | S P | Explorer's Compass |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

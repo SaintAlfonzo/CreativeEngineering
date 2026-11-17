@@ -2,7 +2,16 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Potion buckets and tipped arrows (three bucket tiers bursting a dome of potion clouds, dispenser, bucket ↔ bottle / Spout / Item Drain / Bottler recipes, glass-bottle crafting remainder on vanilla potions, machine-tipped arrows on the Bottler and Spout). Status: DEPLOYED (since 1.0.3), in-game test pending (PB-01 to PB-20); cooldown + no-effect bucket fixes and F5 built 2026-10-23, scratch test queued (SQ-LE, PB-21 to PB-23); dome never checked in game; findings F1-F7 open, F1 (machine tipping cheaper than crafting) and F3 (global bottle remainder) need a decision
+<!-- generated:status_index begin open_work sha1=d8a00ae7e05b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `potions/potion-buckets #1` | Testing | S C P | Potion buckets and machine-tipped arrows |
+| `potions/potion-buckets #3` | Testing | S P | Dispensed potion clouds have no owner |
+| `potions/potion-buckets #4` | Testing | C P | Survival bucket cooldown never applies |
+| `potions/potion-buckets #5` | Testing | S C P | No-effect potion buckets burst Night Vision |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

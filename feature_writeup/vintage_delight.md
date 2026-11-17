@@ -29,7 +29,41 @@ This file has three parts:
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Vintage Delight backport and integration plan (owner decisions 2026-10-23: gearo berries purged, magic vine tree on test; salt, cheese, kimchi, burgers, jams, nut butter, honey jar, pizzas, doughs, salted fish all kept and marked `*overlaps w/*` for review; pickling jar / keg / cask split; no Dehydrated; vinegar as the pack vinegar; wild oats, peanuts, cucumbers on all dirt soils and ghost peppers on Nether nylium, planted only on soul soil, rich soul soil, nulch; loot tables unwired; goose golden egg; chef hats replace Simple Hats'; the Veggies port's 22 Vintage recipes). Status: **BROKEN: r1103 2026-11-03 SQ-VP-06 FAILED (pepper jam jars are not soft-fluid items: PackJams fluid ids clash); SQ-VTD6-02 open (hand-check); SQ-VTDA-10 to -13, SQ-VTD8-02 to -02c, SQ-VTD9-01, SQ-VP-04, -07 PASS.** **2026-11-03: port `-14` (VTD-80 to -86) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-VTDA-10 to -13, CQ-VTDA-01 queued (SQ-CDJ7).** **built, scratch test queued; r1102b 2026-11-02 write-back: FAIL SQ-VP-06 (pepper jam and relish lose the jar container, stale `kubejs/data` soft fluid copies, `vintageport #1` Bug), SQ-VTD6-01, SQ-VTD7-02 (owner decides); reruns in HANDOVER 4.** **Deep scan 2026-11-02:** port `-13` nested in the installed CD jar (11-02 14:01; deployed `-07`); r1102 / r1102b: SQ-VTD4-03 to -08, SQ-MXS-01, -02, SQ-VTD7-01 PASS; FAIL SQ-VTD6-01 (wild ghost peppers on grass via Terralith nylium tag, `vintageport #7` Bug), SQ-VTD7-02 (bales and salt blocks soft 0.88x), SQ-VTD8-01 (fixed `-12`, rerun open). DEPLOYED with 1.1.02 (port jar, goose golden egg in incubationAdditions 1.1.0, Veggies `-02` compat recipes, pack integration; §4.0); dump-driven steps done 2026-11-01 except the name audit and WTHIT icons (client dumps); Mixed Seeds BUILT 2026-11-01 (port `-10`, not installed, §2.3a); `/vtdtest all` 373+ PASS 2026-10-26; VTD-01 to VTD-79 in game
+<!-- generated:status_index begin open_work sha1=880840229bb9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 29 open TODO rows (Planned 3, Pinned 1, In Progress 3, Testing 22), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/pack #3` | Planned | S C P T | Vintage brews |
+| `dishes/pickles-and-ferments #5` | Planned | S C P | Enzymes from crushed or milled mushrooms |
+| `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
+| `ports/vintageport #6` | Pinned | S C P | Mixed Seeds decision and overlap review |
+| `dishes/meals #29` | In Progress | S C P | Fermented veg in uncooked crafts |
+| `dishes/pickles-and-ferments #2` | In Progress | S C P | Pickle recipes take real pickles only |
+| `ports/vintageport #1` | In Progress | S~ C P | Vintage Delight backport and integration |
+| `creativedelight/members #32` | Testing | S~ C P | Vintage Delight: Mixed Seeds becomes a real seed |
+| `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
+| `dishes/pickles-and-ferments #1` | Testing | S~ C P | Remove pickled pickles; pickled sea pickle |
+| `dishes/pickles-and-ferments #3` | Testing | S+ C P | Pickle soup |
+| `dishes/pickles-and-ferments #6` | Testing | S C P | Vinegar craft |
+| `dishes/pickles-and-ferments #10` | Testing | S+ P T | Fermented garlic honey effects |
+| `dishes/pickles-and-ferments #11` | Testing | S+ C P | Vinegar: drop bottle recipe, accept any jam |
+| `jei/jei-coverage #15` | Testing | C | Better JEI screens for Vintage Delight |
+| `merges/dishes #9` | Testing | S C P | Merge kimchis |
+| `ports/vintageport #2` | Testing | S~ C | Dump-driven steps |
+| `ports/vintageport #3` | Testing | S+ C P | Cooking rules for Vintage foods |
+| `ports/vintageport #5` | Testing | S+ P | Crops loot tables |
+| `ports/vintageport #7` | Testing | S~ P | Ghost pepper seeds plant on farmland |
+| `ports/vintageport #8` | Testing | S+ P | Right-click harvest resets to age 0 |
+| `ports/vintageport #11` | Testing | S+ C P | Remove Vintage Delight's salted fish |
+| `ports/vintageport #12` | Testing | S+ P | Wild ghost pepper seed yield |
+| `ports/vintageport #13` | Testing | S+ P | Ghost charcoal edible |
+| `ports/vintageport #14` | Testing | S P | Golden egg out of the Magic Peanut spawn |
+| `ports/vintageport #15` | Testing | C | Fermenting jar time in seconds |
+| `ports/vintageport #16` | Testing | S+ C P | Bottle output buffer on the fermenting jar |
+| `ports/vintageport #17` | Testing | S+ C | Remove pickling slime block |
+| `ports/vintageport #18` | Testing | S+ P | Magic Peanut, Smooth Salt Block, Vine Tile drop nothing |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

@@ -5,7 +5,13 @@ Generated 2026-10-03 from `loot_index.json`, `tools/.cache/template_loot.json` (
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot table islands (analysis: container tables used by only one or two structures). Status: analysis only, 2026-10-03
+<!-- generated:status_index begin open_work sha1=8908a931904d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `loot/tables #2` | Planned | S | Fold island tables |
+<!-- generated:status_index end open_work -->
 
 ## A1. Placed by 1 to 2 templates
 

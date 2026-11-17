@@ -49,7 +49,15 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Roll Delight 1.3.1 (Forge 1.20.1, ARR, 14 items + 3 blocks: sushi rolls and slices, two roll medleys, chopsticks that eat the off-hand food for an effect; overlap with FD rolls, upstream bugs, fold-in, D1-D10). Status: **r1114 2026-11-14: SQ-ROLL-11 PASS; SQ-ROLL-12b FAIL (medley can recipes live: SQ-ROLL-12 vs -27, owner picks).** **r1103 2026-11-03: built, scratch server PASSED (SQ-ROLL-03, -04 PASS; the rest r1102b).** BUILT 2026-11-01 (CD member `backportedRoll`, scripts); in `mods/` since the CD jar of 11-02 14:01, not played; scratch r1102b SQ-ROLL-01, -02, -05 to -09 PASS, -03 / -04 OPEN (deep scan 2026-11-02); D1-D17 settled; open: plates, dump-driven generators (4.2)
+<!-- generated:status_index begin open_work sha1=16363138ef5a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/types-and-tuning #20` | Planned | S P | Short effects for seafood |
+| `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
+| `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

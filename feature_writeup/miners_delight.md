@@ -22,7 +22,19 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Miner's Delight merged backport (1.1.2 live since 1.1.02 + 1.4.5 in one Forge 1.19.2 jar, mod id `miners_delight`; **all rights reserved**, so the Vinery donor-jar method: upstream jar read in place from `miners_upstream/`, our own code; 50 items (69 minus the Copper Cup and every cup, removed 2026-11-02, `dishes/meals #53`), 10 blocks, 4 potions, 18 loot modifiers; hot cocoa cup dropped; CCK hook points; every overlap ships marked and is reviewed in game before drops; cave carrot worldgen as a cave rule). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-CUP-01 to -04, SQ-MDL-01 to -05, -01b).** **2026-11-02 night: loot modifiers replaced by pack loot rules (8.1) BUILT, CD jar installed 2026-11-02 23:16 with Creative Worldgen, not booted; SQ-MDL-01 to -05 queued (SQ-CDJ6).** **Deep scan 2026-11-02:** port `-05` nested in the installed CD jar (11-02 14:01; deployed `-01`; the 21:10 copper cup build reuses `-05`, not installed); r1102 SQ-MDP mostly PASS, SQ-MD-01 PASS, four FAILs fixed 11-02 (`creativedelight/members #38` to `#41`), SQ-MDP-18 PASS r1102b, other reruns open. **port DEPLOYED with 1.1.03 (2026-10-26)** (`development/creativeDelight/members/miners`, `backportedMiners-1.4.5-ce-19.2-01.jar`; donor = Modrinth `1.20.1-1.4.5-backport` in `miners_upstream/`; offline checks pass; jar in `mods/` since 2026-10-26; scratch checks queued SQ-MDP); **cave carrot worldgen BUILT 2026-10-24** (`mushroom_spawns.json` rule, 3 Y bands, nothing above Y 48; `tools/test_mushroom_spawns.sh` passes; scratch check queued SQ-MD-01, MND-32 in game); MND-01 to MND-41 drafted, none run; **port `-02` BUILT 2026-11-01** (Copper Pot leftover slot I8; 1.1.2 jar as a second donor for four old-look textures, members #31; `build/libs/` only, needs the 1.1.2 jar in the server's `miners_upstream/` too; SQ-MDP-14 to -16, CQ-MND)
+<!-- generated:status_index begin open_work sha1=be4c66032b4d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, Pinned 1, In Progress 1, Testing 4), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `licence/cd #4` | Planned | S | Rewrite the Miner's Delight potted gossypium loot table |
+| `potions/effects #17` | Pinned | S P T | One Creative Engineering Haste effect, shared by every haste source |
+| `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |
+| `creativedelight/members #31` | Testing | C P | Miner's Delight: newer art for four textures |
+| `creativedelight/members #38` | Testing | S | Cave Hamburger has no recipe |
+| `creativedelight/members #51` | Testing | S | Miner's loot rebuilt on the pack loot system |
+| `dishes/meals #53` | Testing | S C P | Remove the copper cup and every cup food |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

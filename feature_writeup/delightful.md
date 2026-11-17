@@ -14,7 +14,13 @@ would be enabled here, and 25 existing foods have new values or effects.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Delightful 3.8.1 update (3.4.1 repacked as a Creative Delight member with 20 backported 3.8.1 items: cantaloupe crop and foods, cactus dishes, baklava, milkshakes and cauldrons, gummies, roasted acorn, nut dough, 3 knives; 25 food value changes; jam jars off beside Fruits Delight; MIT). Status: **2026-11-03: cantaloupe names in their own lang namespace (5) BUILT, CD jar installed 2026-11-03 00:08, not booted; CQ-CDM2-01 (SQ-CDJ7).** DEPLOYED with 1.1.03; scratch SQ-DF-01 to -06 PASSED r1102b 2026-11-02, SQ-DF-07 and DF- in game open; `mod-additions #23`
+<!-- generated:status_index begin open_work sha1=66ef9c2fe5d2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #23` | Testing | S~ C P | Delightful 3.8.1 changes on the installed 3.4.1 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

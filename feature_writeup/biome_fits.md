@@ -4,7 +4,9 @@ Moved out of [structure_tuning.md](structure_tuning.md) section 7.2 on 2026-10-1
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Biome fits (structure tuning 7.2 in full: plan as built, inventory, families, every structure's family). Status: reference; built 2026-10-12, DEPLOYED with 1.0.6
+<!-- generated:status_index begin open_work sha1=ba133888da4a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index end open_work -->
 
 ## Plan: biome fits for every structure, towers folded in (2026-10-11, BUILT 2026-10-12)
 

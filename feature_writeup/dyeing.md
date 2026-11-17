@@ -4,7 +4,14 @@ Block and item dyeing ideas, and the in-world dye and soap audit. Open work: `bl
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Dyeing (owner ideas: glow dye; in-world dye and soap audit). Status: audit written 2026-10-27; owner decisions written up 2026-10-27 (section 3, build list), nothing built, DY-01 to DY-13
+<!-- generated:status_index begin open_work sha1=121d2df7f8b9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, In Progress 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/dyeing #4` | Planned | S C P T | Glow dye item |
+| `blocks/dyeing #1` | In Progress | S C P | Block dyeing and soaping audit |
+<!-- generated:status_index end open_work -->
 
 ## 1. Owner ideas (scratchpad 2026-10-26)
 

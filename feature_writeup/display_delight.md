@@ -24,7 +24,14 @@ pack has today (95 with Creative Delight's Farmer's Delight 1.3.4 foods); every 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Display Delight 1.7.0 port (Backported Display: 210 food display blocks, 101 new and 95 of those for foods the pack has; links by block name, `md_` to the pack's Miner's port; axe plate hide / restore, take-all, silk-touch items, particles, wooden support legs; blocks for 8 mods the pack does not have left out and listed). Status: **Deep scan 2026-11-02:** the SQ-CDJ-05 / SQ-DDP-01 rerun was not in the r1102b scope; patcherMod 1.1.07 (18:41, with the swap-list `removed` key) is installed. DEPLOYED with 1.1.03; **nested in the Creative Delight jar 2026-11-02 as `members/display` (plan_creative_delight.md H), installed; scratch r1102: nesting and config move PASSED, old-world tentacle plate id lost (SQ-CDJ-05 FAIL, `creativedelight/members #36`; fixed 2026-11-02 afternoon by a swap-list removal, `-03` installed, needs the patcherMod 13:04 build, rerun queued), client CQ-DDP open;** scratch test queued (SQ-DDP), client checks CQ-DDP; `mod-additions #22`
+<!-- generated:status_index begin open_work sha1=8e46b1edbfd8 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativedelight/members #36` | Testing | S | Display tentacle plate id lost in old worlds |
+| `largecontent/mod-additions #22` | Testing | S~ C P | Display Delight 1.7.0 port |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

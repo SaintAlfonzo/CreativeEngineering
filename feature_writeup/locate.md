@@ -7,7 +7,19 @@ classes and Async Locator 1.3.0; decisions in 4)
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Locate (what a locate miss is, folding rules into the start prediction, non-blocking miss loads, StructureCheck thread safety, miss logging, `/cwglocate batch` / `census` on Async Locator's pool, deferring the bottom 64-96 blocks). Status: DEPLOYED with 1.0.6 as part of the INCOMPLETE structure tuning (fold stages A+B, non-blocking loads, thread-safe StructureCheck, miss log, /cwglocate batch/census/stats, DH clip below y 48 with fake seabed); fixes for blocking loads (LO-05), census "known" (LO-03, LO-14) and the `stop` label DEPLOYED with 1.0.7; biome-tie census fix (2026-10-27) DEPLOYED to the client with 1.1.04, SQ-TIE-01 not run; LO-01 to LO-17 pending, rerun LO-03, LO-05, LO-14
+<!-- generated:status_index begin open_work sha1=98f43b2f9e47 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Pinned 1, In Progress 1, Testing 5), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `locate #2` | Pinned | S P | Fold stages C to E |
+| `structures/testing #4` | In Progress | S P | Census false negatives: Terralith underground |
+| `locate #1` | Testing | S~ C P | Locate folding, non-blocking loads, census, DH clip |
+| `locate #3` | Testing | none | Distant Horizons pregen on the final server world |
+| `locate #4` | Testing | S+ C | DH clip runs in the Nether and End |
+| `locate #5` | Testing | S | Locate timeout back to 120 s |
+| `structures/terrain #3` | Testing | S+ C P | Skip the bottom 64-96 blocks |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Where it lives |
 |---|---|---|

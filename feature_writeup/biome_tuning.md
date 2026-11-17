@@ -2,7 +2,18 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Biome tuning (per-biome multiplier / replacement for the Overworld, End and Nether, solved against `/dumpclimate` samples by `BiomeLayoutTuner` at world load; biome merges retired for biome fits). Status: DEPLOYED (17 edits, new worlds only), WG-01 to WG-08 pending; Overworld rarity floor (rarest biomes lifted to 0.15 %, never-spawning ones targeted, 12 largest land biomes x0.736) + `target_pct` + 20,000-column and cave samples (`/dumpclimatecaves`) DEPLOYED with 1.0.9 (new worlds only), WG-09 to WG-13 pending; findings F1-F5, F1 (5 targets unreachable) and F3 (skylands at 15 %) need a decision
+<!-- generated:status_index begin open_work sha1=c65d2d121c19 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 3, In Progress 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `worldgen/biomes #2` | Planned | S T | Unreachable targets (4 Nether / End + 10 Overworld) |
+| `worldgen/biomes #3` | Planned | S T | Skylands at 15 % |
+| `worldgen/biomes #4` | Planned | none | End model agreement 80 %, one seed |
+| `worldgen/biomes #9` | In Progress | S P T | Shadowlands not spawning in the End; raise the modded End dimension rate |
+| `worldgen/biomes #1` | Testing | S P T | Rarity floor, `target_pct`, 20,000-column samples, cave samples |
+| `worldgen/biomes #8` | Testing | S~ | Live End may lack crystal peaks and void barrens |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

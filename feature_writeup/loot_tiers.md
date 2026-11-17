@@ -11,7 +11,13 @@ Related: [loot.md](loot.md) (framework, 3.8 rules, 7 draft table contents), [loo
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot tuning system (design: every chest table in a category / set / grade tree, tables compose reusable material family tables; Overworld only, nether and End left out). Status: design only, 2026-11-01, nothing built
+<!-- generated:status_index begin open_work sha1=e98484ff5de9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `loot/tables #1` | Planned | S P T | Comprehensive loot table system |
+<!-- generated:status_index end open_work -->
 
 ## 1. Idea
 

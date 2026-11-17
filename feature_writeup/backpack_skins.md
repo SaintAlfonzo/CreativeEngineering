@@ -7,7 +7,13 @@ sub `#4` ([TODO.md](todo/TODO.md)). Investigated 2026-10-22 against Sophisticate
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Backpack skins (smith a block from a tag onto a Sophisticated Backpack to change its look; skin hitbox, clear by crafting, config-gated equip; first skin the Vinery backport basket). Status: DEPLOYED with 1.1.01, untested in game
+<!-- generated:status_index begin open_work sha1=11e77d732478 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `items/storage-and-item-loss #4` | Testing | S C P T | Backpack reskin by smithing |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | TODO |
 |---|---|---|

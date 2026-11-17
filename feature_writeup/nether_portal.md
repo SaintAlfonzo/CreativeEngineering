@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether portal ignition (ordinary ignition fails and turns the frame to crying obsidian; Dark Fire from Flint and Terrasteel opens the portal). Status: DEPLOYED, Flint and Terrasteel still marked temporary; NP-01 to NP-12 pending; findings F1-F6, F1 to F3 decided 2026-10-29 (solid blocks only + new Dark Fire; Overworld only; keep)
+<!-- generated:status_index begin open_work sha1=d33867ec4d95 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/tnt-and-portal #5` | Planned | S C P | Flint and Terrasteel is still temporary |
+| `gameplay/tnt-and-portal #6` | Planned | S P | Dark Fire lights portals in any dimension |
+| `gameplay/tnt-and-portal #4` | Testing | S P | Nether portal ignition |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

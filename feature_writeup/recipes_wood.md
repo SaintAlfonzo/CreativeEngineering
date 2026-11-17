@@ -6,7 +6,21 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wood recipes (species bark from saw and cutting-board stripping, reattach for 6 species; IE sawdust from every wooden shape; ash, creosote sawdust, wood pellets; compost, fertile soil and nulch from mulches; Create saw shapes for 13 species; chimney soot; removed woods: river wood merged into oak, Mulberry tree). Status: DEPLOYED (since 1.0.3), RW-01 to RW-10 pending; F5 (driftwood bark, Quark stairs) built 2026-10-23, scratch test queued (SQ-LE, RW-21, RW-22); removed woods DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22 (SQ-MB; RW-17 done, RW-15, RW-16, RW-18 to RW-20 in game; river trees almost never generate, 2.6); findings F1-F6, F1 is a bug (IE crusher: planks missing, logs probably 2 sawdust); smoked wood and bark leather BUILT 2026-10-30, BROKEN: scratch r1031 2026-10-31 SQ-RW-23 FAILED (smokable shape tags too wide), RW-25 to RW-27 server halves PASSED, RW-24 client pending; D&D woods removed scratch server PASSED (SQ-RW-28)
+<!-- generated:status_index begin open_work sha1=5dd93ad64f32 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 2, In Progress 1, Testing 6), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `recipes/materials #7` | Planned | S P | Fern, grass and leaf parity in crafts |
+| `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
+| `structures/contents #2` | In Progress | S P | River tree and driftwood cleanup |
+| `engineering/dreams-and-desires #1` | Testing | S C P | Smoked wood recipe |
+| `engineering/dreams-and-desires #4` | Testing | S C P | Extra woods |
+| `engineering/dreams-and-desires #10` | Testing | S C P | Smokable shape tags too wide |
+| `recipes/wood #2` | Testing | S P | Leftover comments |
+| `recipes/wood #3` | Testing | S+ C P | River wood -> oak, Mulberry tree |
+| `recipes/wood #4` | Testing | S P | Leather from fermenting bark |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

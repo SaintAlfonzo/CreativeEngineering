@@ -11,6 +11,21 @@ Related TODO rows: `farming/crops #24` (nether yield), `#45` (tilled End Stone),
 
 ## 0. At a glance
 
+<!-- generated:status_index begin open_work sha1=bde61b2a81ed -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (In Progress 1, Testing 7), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `farming/crops #56` | In Progress | S P | Adzuki, bush, peanut and mini cantaloupe soils |
+| `farming/crops #23` | Testing | S+ P T | Better soils raise crop yield |
+| `farming/crops #24` | Testing | S P T | Better soils raise nether crop yield |
+| `farming/crops #53` | Testing | S P T | Soil yield wave 2: rounded bases, no Fortune |
+| `farming/crops #54` | Testing | S P T | Own picks use soil yield |
+| `farming/crops #55` | Testing | S P T | Nether soil yield |
+| `farming/crops #57` | Testing | S P | Cave carrot growth soils |
+| `largecontent/mod-additions #35` | Testing | S C P T | Integrate Botany Pots, slowed down |
+<!-- generated:status_index end open_work -->
+
 | # | Part | Decision | Kind | Open |
 |---|---|---|---|---|
 | A | Fortune never affects crop yield | decided: strip it from all crop drops (melons and cantaloupe left alone) | loot-table edits | none |

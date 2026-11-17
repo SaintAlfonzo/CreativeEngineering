@@ -6,7 +6,37 @@ The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Performance (always-on JFR recording on the server, dump helpers, per-mod HTML report: mods, tick phases, event handlers, busy seconds, allocation, worldgen threads; `perf/report.sh` crash/lag bundle + `ingest_report.py`). Status: **r1103 2026-11-03: SQ-WE-04b PASS.** DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending; pack events + `/cdevperf` (3.6) built 2026-10-26, scratch server PASSED (SQ-PF-01/02/04/05; PF-03 partial, PF-06 client); Armor Trims list cache (10.3) built 2026-10-27, scratch server PASSED 2026-10-27, client check open (CQ-ATC); no drops from first-tick water (10.6) built 2026-10-27, scratch server PASSED 2026-10-27 (spawn items 593 -> 72); worldgen hot spots options 1-4 (10.8: dimension filter, Tectonic cliffs cache, shared terrain cache, `sampleGrid` 4) BUILT and installed 2026-10-27, scratch server PASSED 2026-10-27 (pregen 5:26 -> 3:50, `Done` 119 -> 86 s; 10.9), SQ-WGP-06 cliffs-alone rerun open; load-time study (11) and its fixes BUILT 2026-10-27 night, scratch server PASSED: WorldEdit lazy state ids (SQ-WE), stronghold rings stored per world (SQ-RING), biome tuner disk cache (SQ-BLC), item merge swap split (SQ-IMS, recipe event 9.7 -> 2.7 s), Immersive Posts materials cut (states 726,031, perf.md 11.3), Distant Horizons and ModernFix defaults (SQ-PERFCFG), per-dimension tick handler fix, CTM removed; generated falling blocks hold until first tick (13.2) built late 2026-10-27; mob cap levels, spawn radius and vertical band (17) BUILT and installed 2026-10-28, BROKEN: scratch r1031 2026-10-31 SQ-MCL-04 FAILED (forced level 2 spawns no monsters on a superflat), SQ-MCL-01 to -03, -05 PASSED; open: heap near the cap, corrupt chunk save (TODO `pack/server #12`, `#21`, `#23`)
+<!-- generated:status_index begin open_work sha1=b33c54336003 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Bug 1, Planned 3, Pinned 1, In Progress 2, Testing 18), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `pack/server #36` | Bug | S P | Forced mob-cap level 2 spawns no monsters on a superflat |
+| `gear/tuning #16` | Planned | S C | Audit trimmable armors and their trim render cost |
+| `pack/server #12` | Planned | S P T | Heap near the cap (server 6 GB, client 10 GB) |
+| `tooling/generators-and-tests #8` | Planned | S | Feature tests for patcherMod and the in-tree mods |
+| `structures/terrain #4` | Pinned | S C P | Avoid straight lines in worldgen noise |
+| `pack/server #21` | In Progress | S~ P | Block state count |
+| `pack/server #38` | In Progress | C | Client swapping, Nether DH, season colour cost, log spam (live client recording 2026-11-07) |
+| `pack/server #9` | Testing | S~ | Performance tooling gaps |
+| `pack/server #10` | Testing | S+ C~ P | Armor Trims JEI page costs 58 s per world join |
+| `pack/server #11` | Testing | S+ P T | Distant Horizons cost on server and client |
+| `pack/server #13` | Testing | S~ C P | Worldgen 3.5x slower than 2026-09-28 |
+| `pack/server #14` | Testing | S+ C P | Cave plants drop as items when chunks first tick |
+| `pack/server #15` | Testing | S+ P | KubeJS per-dimension tick handlers |
+| `pack/server #16` | Testing | C~ P | CTM model bake at client startup |
+| `pack/server #17` | Testing | S+ P | WorldEdit init on every server start |
+| `pack/server #18` | Testing | S+ P | Stronghold rings recomputed every start |
+| `pack/server #19` | Testing | S+ P | Biome tuner solve on every launch |
+| `pack/server #20` | Testing | S~ P | Item merge swap passes in the recipe event |
+| `pack/server #22` | Testing | S+ C~ P | ModernFix evaluation |
+| `pack/server #24` | Testing | S+ C P | Season tint cost in client chunk meshing |
+| `pack/server #25` | Testing | S~ P | Generated falling blocks fall on first tick |
+| `pack/server #26` | Testing | S+ P | Copycats occlusion check throws on unkeyed holders |
+| `pack/server #29` | Testing | S P | Immersive Weathering random-tick dispatch |
+| `pack/server #30` | Testing | S P | Whistle goal and underground bees |
+| `pack/server #31` | Testing | S P T | Mob cap levels, spawn radius and vertical band |
+<!-- generated:status_index end open_work -->
 
 The server records what it spends CPU time on, all the time, at a cost too small to measure: Java Flight
 Recorder (JFR), built into Java, no mod. When it lags, `perf/dump.sh` on the server saves the last minutes to a

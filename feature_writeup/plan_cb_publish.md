@@ -19,7 +19,25 @@ Written for: the owner, and the session that executes it.
 
 ## 0. Goal and the two steps
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Brewing publish prep (dicts and helpers into Creative Common, script guards for optional mods, CB assets into its jar, `creativebrewing:` namespace for every CB id, display names "Vinery / Brewin' & Chewin' / Foundation (Creative Brewing)", GPLv3 LICENSE in every Creative jar; licence audit of CB and its chain as a separate step). Status: Chain-alone set SQ-CBA / CQ-CBA queued 2026-11-06 (CEPortTesting, scratch test queued). Round 3 SQ-CBC and optional-dependency matrix SQ-CBO server rows run 2026-11-06 (r1106cbo: 49 rows, PASS 40, FAIL 9; fixes open as TODO `creativebrewing/publish #11` to `#16`; client rows CQ-CBC / CQ-CBO not run). **Polish plan (plan_cb_polish.md) BUILT 2026-11-06: #11 to #21 fixed or moved (effects into Common, gear rows into Equipment, food fluids into CD); jars not installed, scratch SQ-CBP and SQ-CDFL queued.**  BUILT 2026-11-04 (Step 1), not installed, scratch rows queued; Step 2 licence audit done 2026-11-04 (creative_brewing.md 9.2), fixes open as TODO `licence/*`
+<!-- generated:status_index begin open_work sha1=fad100636f22 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (In Progress 1, Testing 12), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativebrewing/publish #3` | In Progress | none | Publish Creative Brewing on CurseForge |
+| `creativebrewing/publish #9` | Testing | S | Chain: NCH failures, incomplete items, absent-mods summary (r1106cbb open issues 2.2 #2 to #4) |
+| `creativebrewing/publish #11` | Testing | S | `[absent mods]` summary never prints |
+| `creativebrewing/publish #14` | Testing | S | Chain: horror lasagna assembly gets an empty fluid |
+| `creativebrewing/publish #15` | Testing | S | Cooking set: 77 `Empty array?` NCH remove failures left |
+| `creativebrewing/publish #16` | Testing | S | Common compost WARN with Immersive Weathering and no Architect's Palette / Fruits Delight |
+| `creativebrewing/publish #17` | Testing | S | Echo, dragon and copper effect rows, copper poisoning and echo-armor mixins into Equipment |
+| `creativebrewing/publish #18` | Testing | S P | All effects into Creative Common: frameworks, rules, categories, Magic Resistance, potion registrations, `[effects]` config |
+| `creativebrewing/publish #19` | Testing | S | Fix `[absent mods]` print and the 77 `Empty array?` failures |
+| `creativebrewing/publish #20` | Testing | S | Food fluid leftovers into Creative Delight; rename duplicate `kubejs_startup/creativeengineering/` folders |
+| `creativebrewing/publish #22` | Testing | S | Equipment's felsic ingot assembly needs Creative Engineering's incomplete items |
+| `creativedelight/framework #14` | Testing | S | Culture and dough blocks show the missing texture outside the pack |
+| `creativeengineering/carve #1` | Testing | M | Non-engineering content out of Creative Engineering |
+<!-- generated:status_index end open_work -->
 
 **Goal:** Creative Brewing plus its four dependency jars (Common, Compat, Calendar, Creative Delight (CD)) and their own
 third-party dependencies boot and work with an **empty pack folder** (no `kubejs/startup_scripts`, `server_scripts`,

@@ -19,7 +19,34 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Ocean's Delight and Oceanic Delight (overlap survey, tentacle / squid / guardian / shrimp / caviar, fishing net, planned calamari chain). Status: **r1103 2026-11-03: SQ-CDM2-01, -03, -04 PASS; SQ-CDM2-02 open (no loaded-ground check, hand-check).** **2026-11-03: sea grape hoe tag, wild sea grape rule, Oceanic Comfort / Nourishment by rule (8) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-CDM2-01 to -04, CQ-CDM2-01 queued (SQ-CDJ7).** **2026-11-01: Oceanic rebuilt as our own code over the donor jar (`portedOceanic`, 5.6) and net tables moved into CD, in `mods/` since the CD jar of 11-02 14:01, SQ-DNR-O not run; guardian food open.** survey 2026-10-23; fishing net and caviar names DEPLOYED 2026-10-25 (patcherMod 1.1.02 in `mods/`), scratch SQ-FN-01, -04 PASSED, SQ-FN-03 LOOK r1102b, SQ-FN-02 not run, DA-01 to DA-03, DA-08 to DA-11 pending; `mod-additions #5`, `dishes/ocean`; squid chain, glow calamari and braised sea pickle from slices shipped 1.1.03, scratch PASSED (SQ-CDB-03 to -05, -09) (5.3, 5.4); tentacles to calamari (CD `members #24`) shipped 1.1.05 with SQ-CM-32 FAILED r1031, fix PASSED r1101 (SQ-CM-32, -35), unreleased; Kelp Encrusted Cod and one-squid drops BUILT 2026-11-02, scratch PASSED r1102b (7, deep scan 2026-11-02)
+<!-- generated:status_index begin open_work sha1=ecdc9941c69f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 7, In Progress 4, Testing 11), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `dishes/ocean #2` | Planned | S C P | Fish egg roll accepts eggs |
+| `dishes/ocean #6` | Planned | S C P | Caviar use audit |
+| `dishes/ocean #11` | Planned | S C P | Guardian Shell: guardian drop and cutting |
+| `dishes/ocean #12` | Planned | S P | Guardian Soup recipe |
+| `dishes/ocean #13` | Planned | S P | Fugu poisoning chance |
+| `dishes/ocean #14` | Planned | S C | Elder guardian chunk source |
+| `largecontent/mod-additions #14` | Planned | S C P | Rolls Delight, when added |
+| `creativedelight/members #6` | In Progress | S C P | Ocean's and Oceanic: fishing tags and integration pass |
+| `largecontent/mod-additions #5` | In Progress | S C P | Integrate Ocean's Delight and Oceanic Delight |
+| `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |
+| `largecontent/mod-additions #9` | In Progress | S C | Add `mod_sides.md` rows and common integration for the five 2026-10-23 jars |
+| `dishes/ocean #1` | Testing | S~ C P T | Fishing net: cooldown, tooltips, loot by biome |
+| `dishes/ocean #3` | Testing | S+ C P | Squid and glow squid items, calamari chain |
+| `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
+| `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
+| `dishes/ocean #7` | Testing | S+ C P T | Kelp Encrusted Cod |
+| `dishes/ocean #8` | Testing | C | Oceanic Delight JEED Nourishment list |
+| `dishes/pickles-and-ferments #4` | Testing | S+ C P | Braised sea pickle accepts slices |
+| `farming/crops #27` | Testing | S P | Sea grape plant mineable with a hoe |
+| `farming/wild-crops #6` | Testing | S P T | Wild sea grape under the pack's placement system |
+| `largecontent/mod-additions #4` | Testing | S~ C P | Integrate End's Delight (alongside Ender's Delight) |
+| `largecontent/mod-additions #15` | Testing | S C P | End's Delight: succulent and fungus options |
+<!-- generated:status_index end open_work -->
 
 | Mod | Jar | Version | Items | Loot / worldgen | Verdict so far |
 |---|---|---|---|---|---|

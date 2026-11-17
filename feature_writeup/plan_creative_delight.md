@@ -9,6 +9,20 @@ section F and not resolved here. Row ids refer to [todo/TODO.md](todo/TODO.md); 
 
 ## 0. Standing rules for this plan (owner)
 
+<!-- generated:status_index begin open_work sha1=6610a6bf5ffc -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Testing 7), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativedelight/members #47` | Testing | S P | Salt repacked as a CD member |
+| `creativedelight/members #48` | Testing | S P | Create: The Salt repacked as a CD member |
+| `creativedelight/members #49` | Testing | S C P | Canned Goods repacked as a CD member |
+| `creativedelight/members #51` | Testing | S | Miner's loot rebuilt on the pack loot system |
+| `creativedelight/swappers #2` | Testing | S P | Swapper script half (recipes, loot, tags) |
+| `creativedelight/swappers #3` | Testing | S~ P | Swapper world half and triggers |
+| `dishes/meals #12` | Testing | S C P T | Pancake food type |
+<!-- generated:status_index end open_work -->
+
 | # | Rule | Source |
 |---|---|---|
 | R1 | Display Delight becomes a Creative Delight member (mod id `displaydelight`, display name "Display Delight (Creative Delight)"). | Owner 2026-11-02 |

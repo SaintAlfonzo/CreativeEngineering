@@ -31,7 +31,13 @@ Generated 2026-11-05 by `python3 tools/terrain_adaptation_scan.py` (re-run after
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Terrain adaptation scan (generated: which structures could use the soft beard or template trim, pad and air-notch columns per template). Status: reference, regenerate with `python3 tools/terrain_adaptation_scan.py` after adding structure mods
+<!-- generated:status_index begin open_work sha1=8a2dee649438 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `structures/terrain #1` | Testing | S C P | Terrain adaptation batch 4 |
+<!-- generated:status_index end open_work -->
 
 ## 1. Strong candidates
 

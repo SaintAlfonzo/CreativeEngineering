@@ -5,7 +5,14 @@ idea). Not started. Owner 2026-10-30 (on `recipes/metal #6`): find a gold pan, p
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Gold panning (owner idea: pan, dirt, biome tables). Status: idea only, not started
+<!-- generated:status_index begin open_work sha1=747611171d3a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/misc #16` | Planned | S C P T | Gold panning |
+| `recipes/metal #6` | Planned | S C P T | More gold sources |
+<!-- generated:status_index end open_work -->
 
 ## Owner idea (scratchpad 2026-10-26)
 

@@ -2,7 +2,20 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Gear tuning (netherite → echo → felsic → dragon assembly ladder, `tuneTools` / `tuneArmor` stat tables, echo-tier tools, felsic config values, assembly NBT carry, armor enchantability per material, dragon gear autorepair, dragon scale elytra duplication, upgraded dragon chestplate rocket takeoff, air brake). Status: DEPLOYED (since 1.0.3), in-game test pending (GR-01 to GR-30); findings F1-F13 open (F1: felsic shield has no config section; F13: dragon set 36 armor over the 30 cap, cap 50 built, BROKEN: scratch r1031 2026-10-31 SQ-AC-02 FAILED, the set gives 33: DragonLoot's config overrides the tune), F4, F5, F10, F13 need a decision
+<!-- generated:status_index begin open_work sha1=cbadad448bc2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 3, In Progress 1, Testing 4), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gear/tuning #4` | Planned | S P | Gear upgrades keep every NBT |
+| `gear/tuning #5` | Planned | S P T | Untuned dragon bow, crossbow, trident, horse armor |
+| `gear/tuning #19` | Planned | S P | Bound leather automated recipe |
+| `gear/tuning #7` | In Progress | S P | Small gear findings |
+| `gear/tuning #2` | Testing | S C P | Dragon set over the 30 armor cap |
+| `gear/tuning #3` | Testing | S P | Mining level 5 probably does nothing |
+| `gear/tuning #6` | Testing | S | Felsic `potionMb` feeds both fills |
+| `gear/tuning #20` | Testing | S C P | Dragon set gives 33 armor, not 36 |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

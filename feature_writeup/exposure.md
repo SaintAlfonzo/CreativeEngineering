@@ -2,7 +2,14 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Exposure cameras and photographs (our 1.9.19 backport in one jar: base mod, Polaroid instant camera, Expanded lenses/filters/palette films; build-time tag merge; Catalog on hold). Status: DEPLOYED (1.0.3; `-02` with 1.0.4, `-03` album text fix with 1.0.6, `-04` viewfinder click fix with 1.0.7); in-game test pending (EX-11, EX-17 passed); EX-13, EX-25, EX-50
+<!-- generated:status_index begin open_work sha1=b5e8fff1fd90 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 2), 3 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `loot/tables #8` | Planned | S P | Bumpy filter has no source |
+| `ports/exposureport #2` | Planned | S C P | Exposure Catalog 1.1.2 port |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

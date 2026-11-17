@@ -4,7 +4,24 @@ Owner notes of 2026-11-06, written down as the plan. Nothing is built or install
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Portals (Tempad fixed and added; Immersive Portal Gun with a limited Immersive Portals: no new shapes, no global portals, no vertical stacking, mirrors on, vanilla End portal, Nether portal trial in `Mode: normal`). Status: **r1115 2026-11-15: BROKEN: SQ-PG-01c (lighting a Flint and Terrasteel Nether portal kills the client within 3 s, Immersive Portals renderer, URGENT TODO); SQ-PG-01b floor-to-wall leaves the player stuck in the ground; SQ-PG-01a server half PASS.** **2026-11-14: exit lift rebuilt for every portal (plan_bugfix_1114.md 4.1), Creative Compat installed, scratch test queued (SQ-PG-01a, -01b, -01c, CQ-PG-03).** **r1114 2026-11-14: BROKEN: SQ-PG-01a, -01b (portal gun exit-lift flag, Creative Compat); SQ-IP-01, -04, -05, -05b PASS.** Tempad port BUILT 2026-11-07 (with 5 upstream bug fixes), not installed; scratch server rows run 2026-11-07 (r1107tp: PASS 26, FAIL 2, 3 bugs found, TODO `gameplay/tnt-and-portal #10..#12`, fixed and built 12:01, scratch test queued SQ-TP-31..39, CQ-TP-16), client rows (CQ-TP-01..15, SQ-TP-17, -29) queued; Portal Gun fixes and dyeing ([plan_portal_gun.md](plan_portal_gun.md)) BUILT 2026-11-07 15:58 in Creative Compat, installed with the 16:44 jar, tests SQ-PG-01, -02, CQ-PG-01..05 queued; portal changes ([plan_portal_changes.md](plan_portal_changes.md): Nether portal failure with IP, Dark Fire IP portals, view distance, tint and fog, opaque gun portals, gun portal despawn, mirror glass and limits) BUILT and installed 2026-11-07 16:44, tests SQ-IP-01..05, CQ-IP-01..04 queued; Portal Gun and Immersive Portals add-mod (mod_sides rows) still PLANNED
+<!-- generated:status_index begin open_work sha1=7ed87ba374b0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Bug 2, Planned 9, In Progress 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/tnt-and-portal #29` | Bug | S P | Tempad: time shown in game time; chronometers cancel chronitons charging |
+| `gameplay/tnt-and-portal #31` | Bug | C | Tempad: timedoor marker screen bugs |
+| `gameplay/tnt-and-portal #27` | Planned | C | Tempad: rename chronons to chronitons |
+| `gameplay/tnt-and-portal #28` | Planned | C P | Tempad: knowledge projector changes |
+| `gameplay/tnt-and-portal #30` | Planned | C | Tempad: bracelet Curios slot |
+| `gameplay/tnt-and-portal #32` | Planned | S C P | Tempad: timesteel becomes temporal steel, far more complex recipes |
+| `gameplay/tnt-and-portal #33` | Planned | S P | Tempad: knowledge categories basic vs advanced |
+| `gameplay/tnt-and-portal #34` | Planned | S C P | Tempad: suspected issues to verify |
+| `gameplay/tnt-and-portal #35` | Planned | C | Tempad: timedoor projector door angle 180 degrees |
+| `gameplay/tnt-and-portal #36` | Planned | S P | Tempad on a server: chronomarker navigation of mining and resource dimensions |
+| `gameplay/tnt-and-portal #37` | Planned | S P | Portal Gun: portals may move within the same spot |
+| `gameplay/tnt-and-portal #8` | In Progress | S C P | Tempad, Immersive Portal Gun and limited Immersive Portals |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

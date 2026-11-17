@@ -4,7 +4,14 @@ Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IM
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Curios slots (survey of which slots exist; pack adds Hands for the Falconry Glove and Face for Simple Hats masks and chalk stick, Botania cosmetic masks and the Cob Pipe, Feet for the stepstools; rule: Curios items show their slots in the tooltip). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-CSI-01).** BUILT; 2026-11-01 slots moved to IMC (datapack slot files never loaded on 1.19.2), in patcherMod 1.1.07 installed 2026-11-02; slot tooltip line BUILT 2026-11-02 (ui/tooltips #8); CS-01 to CS-08 pending
+<!-- generated:status_index begin open_work sha1=dc2f6f8d6878 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #32` | Planned | S C P T | Terraria-like accessories in Curios slots |
+| `ui/tooltips #8` | Testing | C | Curios items list the slots they fit |
+<!-- generated:status_index end open_work -->
 
 Curios 5.1.6.4 adds no slots itself; every slot comes from a mod by IMC. This version has **no datapack slot loader**: the 1.20
 format (`data/<ns>/curios/slots/*.json`, `curios/entities/*.json`) is silently ignored. The pack first shipped the slots that way

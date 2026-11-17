@@ -1,5 +1,13 @@
 # Plan: farming, cooking and homesteading batch (2026-11-07)
 
+<!-- generated:status_index begin open_work sha1=055003ad7fe0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `farming/crops #4` | Testing | S P | Weeds behaviour |
+<!-- generated:status_index end open_work -->
+
 **Status 2026-11-07 night: BUILT except `kitchen #36` (double fridges, not started) and F2 (random-tick audit done as a
 brief, [briefs/random_tick_audit.md](briefs/random_tick_audit.md), fixes await owner approval). Nothing installed, nothing
 run in game. Jars to build and install at a restart: Common, Engineering, Delight (built), Compat (built), Brewing,

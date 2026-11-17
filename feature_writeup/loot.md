@@ -6,7 +6,27 @@ offline sim but are untested in game)
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot (census of every loot table by mod, chest-loot tuning catalog + runtime, pre-roll framework: bans, tag groups, boosts, packed-food splits, additions, injection restores, aliases; LootJS-only scripts, mod loot configs). Status: DEPLOYED, in-game test pending (LT-01, LT-06 passed; LT-14 to LT-27 new); findings 1-7 fixed, 8 (legacy dump) folder gone; catalog, index + census regenerated 2026-10-26
+<!-- generated:status_index begin open_work sha1=14ffbc41fd0a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (Bug 1, Planned 11, In Progress 2, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/generators-and-tests #9` | Bug | none | `loot_tuning_sim.js` reads the old loot script paths |
+| `loot/lootr #1` | Planned | S P | Missed Lootr chests and fixed-loot chests |
+| `loot/tables #1` | Planned | S P T | Comprehensive loot table system |
+| `loot/tables #3` | Planned | S P T | Chalk frequency |
+| `loot/tables #4` | Planned | S P T | Crates and sacks |
+| `loot/tables #5` | Planned | S P T | Cans in loot |
+| `loot/tables #6` | Planned | S P | MCA items in village houses |
+| `loot/tables #11` | Planned | S P | Enchanted book tiers in loot |
+| `loot/tables #14` | Planned | S P | Seed, crate and raw food loot by biome |
+| `loot/tables #17` | Planned | S P | Remove Exposure filters from chest loot except specific places |
+| `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
+| `loot/tables #19` | Planned | S P | Gun loot: lower the note rate, full guns, more ammo |
+| `loot/lootjs-layer #1` | In Progress | S P | LootJS-only scripts |
+| `loot/lootjs-layer #2` | In Progress | none | Legacy loot dump |
+| `loot/tables #7` | Testing | S P | Coins and PneumaticCraft loot |
+<!-- generated:status_index end open_work -->
 
 The pack has about 12,400 loot tables, but only 384 matter for chest loot. The rest are block drops (11,682)
 and mob drops (242), which nothing here touches. Chest loot is edited by one framework with two stages, both

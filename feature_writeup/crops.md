@@ -4,7 +4,37 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Crops (every crop's type, soils incl. Rich Soil / Rich Farmland / Fertile Soil, Quark right-click replant, hoe area right-click and area break; crop parity layer for non-standard crops; wild generation: biomes, rates, heights, side blocks). Status: **r1103 2026-11-03: SQ-PSF-02, -04, -07, -08, -08a, -08b, SQ-PSD-01 PASS.** reference + tobacco parity, per-hoe areas and wild-crop placement DEPLOYED with 1.0.4; WTHIT growth line (CR-59 to CR-66) and IW soils (CR-67, CR-68) DEPLOYED with 1.0.6; CR-01 to CR-58 pending; G1-G3 fixed, G4-G15 open; extra stem fruit built, scratch server PASSED 2026-10-22 (SQ-SF, after an own-fruit fix), jar in `mods/` (CR-71 to CR-77 in game; F-SS1 fixed 2026-10-30 by crop seasons); crop seasons (types, fertile / neutral / off, §2.12.1) BUILT 2026-10-30, shipped 1.1.05 (code now in Creative Calendar), scratch server PASSED r1031 2026-10-31 (SQ-CS), CQ-CS-07 client PASSED r1101, CR-89 to CR-99 in game; village farm crops (§2.11) DEPLOYED 1.1.03, SQ-VF never run; pre-scratch crop pass 2026-11-02 (hemp, tomatoes, stems, grasses) built, unreleased, r1102b partly PASSED (SQ-PSF / PSD / PST, reruns open); wild-crops batch 2026-10-22 and crop drops built, scratch server PASSED 2026-10-22 (SQ-WC, SQ-CD); wild crop system moved into Creative Delight 2026-10-25 (creative_delight.md 24, SQ-WCD queued)
+<!-- generated:status_index begin open_work sha1=443e6757aae3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 4, In Progress 4, Testing 17), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `farming/crops #10` | Planned | C P | Melon and pumpkin growth stages |
+| `farming/crops #14` | Planned | S P | Bone meal in planters |
+| `farming/wild-crops #1` | Planned | S P T | Densities moved by the placement system |
+| `farming/wild-crops #2` | Planned | S P T | Ground limits |
+| `farming/crops #15` | In Progress | S P | Other plants in random growth? |
+| `farming/wild-crops #3` | In Progress | S P T | Biome gaps and choices |
+| `farming/wild-crops #4` | In Progress | S P T | Sources and duplicates |
+| `food/drinks #3` | In Progress | S+ C P~ | Merges |
+| `creativedelight/members #12` | Testing | S~ P T | Wild crop system into Creative Delight |
+| `farming/crops #1` | Testing | S P | Crop findings G8 to G15 |
+| `farming/crops #2` | Testing | S P | Crop parity for G-list crops |
+| `farming/crops #5` | Testing | S+ C~ P T | Realistic growth seasons |
+| `farming/crops #6` | Testing | S+ P | Apples only from apple trees |
+| `farming/crops #9` | Testing | S+ P T | Bell pepper colours |
+| `farming/crops #11` | Testing | S+ P T | Extra stem fruit |
+| `farming/crops #12` | Testing | S+ P | Extra stem fruit ignores seasons |
+| `farming/crops #17` | Testing | S P | Wet farmland from buckets and water bottles |
+| `farming/crops #19` | Testing | S P T | Village farms grow Rustic crops by the wild-crop rules |
+| `farming/crops #20` | Testing | S~ C P | Melon and pumpkin stems connect to their own fruit |
+| `farming/crops #28` | Testing | S~ P | Grasses: half-speed spread in summer and tropical seasons |
+| `farming/crops #29` | Testing | S~ P | Tomato ropes and sticks harvestable with the hoe harvest area |
+| `farming/trees #3` | Testing | S P | Lemon tree yield |
+| `farming/wild-crops #11` | Testing | S | Wild crop table generator misses Rustic Delight's JSON placed features |
+| `ports/vintageport #8` | Testing | S+ P | Right-click harvest resets to age 0 |
+| `ui/wthit #10` | Testing | C P | Crop growing season on WTHIT |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

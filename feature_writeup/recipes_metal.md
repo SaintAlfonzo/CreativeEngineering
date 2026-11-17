@@ -7,7 +7,16 @@ metal half of [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Metal recipes (one part per metal, mostly IE's; 9-metal ore chain with Create and IE yields 1× / 1.33× / 1.5×; dust, plate and crushed blocks; rods, wires, bars; red electrum, rust washing, spools). Status: DEPLOYED (since 1.0.3), RM-01 to RM-14 pending; findings F1-F7, F1 (plates made three ways) and F4 (hand-crafted rods for 3 metals) need a decision
+<!-- generated:status_index begin open_work sha1=96a729269613 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 3, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `recipes/metal #1` | Planned | S P | Plates made three ways |
+| `recipes/metal #2` | Planned | S P | Hand-crafted rods |
+| `recipes/metal #4` | Planned | S P | Metal standardization gaps |
+| `recipes/metal #3` | Testing | S P | Rose gold in gold tags |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

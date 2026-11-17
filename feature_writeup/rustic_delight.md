@@ -22,7 +22,30 @@ coffees give Caffeinated through `food_values.js`), the bell pepper survivor ove
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Rustic Delight 1.7.0 backport in Creative Delight (port of every 1.7.0 item but Fruit Beignet, MIT art and data baked into the member since 2026-11-10: nine pepper colours, slices, rolls, medleys, giant peppers, pancake plates, syrup, coffee and fried foods; Pale and Dark seeds from chests and the trader, village farm crops by the wild crop rules, Supreme Pizza, cotton rename, coaster cut). Status: **r1114 2026-11-14: SQ-RD-10 INCONCLUSIVE (no cotton in two villages, too rare).** **r1103 2026-11-03: SQ-RD-08, -10, -11, -22, SQ-RDX-12b PASS (SQ-RD-22 fixed); SQ-RD-24, -26 open, SQ-RD-10b batch fault (group B world).** **2026-11-03: one potato salad, Comfort rule recheck (5.12) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-CDM2-04, SQ-RD-22 and SQ-CDF-08 reruns (SQ-CDJ7).** **built, scratch test queued; r1102b 2026-11-02 write-back: FAIL SQ-RD-22 (no Rustic Nourishment rules; owner regenerated the JSON 19:50, rerun pending in r_B.qb).** **Deep scan 2026-11-02:** the 5.10 rows are in the installed CD jar (11-02 14:01), not deployed; SQ-RDX server rows PASS (r1102, r1102b); SQ-RD mostly PASS r1102b, SQ-RD-22 FAIL (Rustic Nourishment, `creativedelight/members #43`). **2026-11-01: owner list rows built (5.10: coffees, pancake merge, maple, Supreme Pizza, glowing calamari crate, Fried Dough removed, roll assemblies, heatless routes, golden beans), not installed (SQ-RDX).** DEPLOYED with 1.1.03 (ships in the CD jar); SQ-RD-01, SQ-RD-25 PASSED 2026-10-25, coffee tooltip fix with 1.1.04; `mod-additions #19`
+<!-- generated:status_index begin open_work sha1=9385e883d52b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 2, Pinned 1, In Progress 1, Testing 14), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativedelight/members #18` | Planned | S C P | Rustic: fried foods and calamari |
+| `farming/wild-crops #10` | Planned | S | Wild bell peppers never found in jungles (SQ-RD-26) |
+| `potions/effects #17` | Pinned | S P T | One Creative Engineering Haste effect, shared by every haste source |
+| `farming/crops #16` | In Progress | S P T | Village farm crops audit |
+| `creativedelight/members #11` | Testing | S+ C P T | Coffee unification in Creative Delight |
+| `creativedelight/members #14` | Testing | S~ C P T | Rustic: peppers, medleys and stuffed peppers |
+| `creativedelight/members #15` | Testing | S~ C P | Rustic: pancake rework |
+| `creativedelight/members #16` | Testing | S+ C P | Rustic: syrup changes and maple foods |
+| `creativedelight/members #17` | Testing | S~ C P | Rustic: coffee foods and brown dye |
+| `creativedelight/members #19` | Testing | S~ C P | Rustic: cherry blossom foods |
+| `creativedelight/members #20` | Testing | S+ C P | Rustic: bell pepper dishes and pizza supreme |
+| `creativedelight/members #21` | Testing | S~ P T | Rustic: food effects pass |
+| `creativedelight/members #43` | Testing | S P | Rustic foods lose Nourishment: comfort/nourishment json has no Rustic entries |
+| `dishes/meals #41` | Testing | S+ C P | Second stuffed pepper recipe |
+| `largecontent/mod-additions #19` | Testing | S~ C P T | Rustic Delight 1.7.0 backport in Creative Delight |
+| `loot/tables #13` | Testing | S P T | Rustic Pale and Dark seeds in the loot overhaul |
+| `loot/trader #4` | Testing | S P T | Rustic pepper seeds from the wandering trader (rare) |
+| `ui/tooltips #10` | Testing | C P | Broken tooltips: Rustic syrup, pumpkin, cherry blossom tea |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

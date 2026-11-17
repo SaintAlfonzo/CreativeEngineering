@@ -13,7 +13,23 @@ effects are Creative Brewing's ([creative_brewing.md](creative_brewing.md) 4.2).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Magic (own mod `creativemagic` carved from patcherMod in the Creative Split wave 6: Dark Fire and Flint and Terrasteel with the Nether portal rule, the Nock Enough Arrows enchantments off tables and trades, the Botania Trinket Case, the magic recipes and XP fluid tags). Status: **r1114 2026-11-14: SQ-CMG-02, -02b PASS.** built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted; scratch SQ-CMG-01 to -05 queued
+<!-- generated:status_index begin open_work sha1=59e7fa073899 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 1, Testing 10), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativesplit/deps #27` | Planned | S C | Audit leftovers: soft Java references, assets, pack files naming Creative jars |
+| `creativesplit/audit #1` | Testing | none | Audit patcherMod and the pack folders for the split: carve Engineering, Equipment, Worldgen, Compat, Calendar, Devtools (and CD / CB rows) first, the remainder becomes Creative Common |
+| `creativesplit/cdfinish #11` | Testing | S | Finish Creative Delight: campfire from Compat to CD, Nether's Delight repacked as a CD member, Ender's and Cooking for Blockheads leftover rows into CD |
+| `creativesplit/deps #26` | Testing | S | Data that names an optional mod sits behind a guard (audit) |
+| `creativesplit/ids #23` | Testing | S C | Ids that name the wrong owner jar: event subscriber mod ids, WTHIT plugin and option ids, JEI plugin uids and category ids, network channels; `ce` / `CE` commands, classes, member mod ids and constants outside Engineering |
+| `creativesplit/ids #24` | Testing | S C P | Creative Delight content to the `creativedelight` namespace |
+| `creativesplit/ids #25` | Testing | S C P | Other jars to their own namespaces |
+| `creativesplit/magic #12` | Testing | none | Carve Creative Magic |
+| `creativesplit/namespace #13` | Testing | S | Move Creative Common's data to the `creativecommon` namespace; meal tooltips to CD, two fixes to Compat, Curios slots to Equipment |
+| `creativesplit/prep #3` | Testing | S | Prep in patcherMod before the first carve: GatedMixinPlugin replaces CEMixinPlugin's accept-all, NCH.cfg per-jar config registration, the Common APIs of creative_split.md 7.2; CD and CB rename |
+| `creativesplit/regression #14` | Testing | S C | Feature regression of every Creative jar after the split |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it holds
 

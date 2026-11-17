@@ -20,7 +20,13 @@ jumps, is worth a look. Crashes, `Error occurred while handling event` and `Exce
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Log warnings (every repeated startup warning/error by mod: missing blockstate variants, `#missing` textures, missing texture files, model load failures, mixin and Forge noise, KubeJS script warnings; per-mod generated lists, acknowledgement file, ways to silence or fix; play audit not yet done). Status: written 2026-10-24; LW-01 play audit open
+<!-- generated:status_index begin open_work sha1=3ad3eb22198c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `textures/art #8` | Planned | C | Startup log missing-texture cases: play audit |
+<!-- generated:status_index end open_work -->
 
 | # | Message (shortened) | Lines | Cat. key | Biggest sources | Verdict |
 |---|---|---|---|---|---|

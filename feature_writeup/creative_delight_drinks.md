@@ -12,7 +12,16 @@ whole or sliced in every recipe below.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Drink rules: juice, tea, latte and coffee (owner 2026-11-01/02; 14 new teas and juices, 17 fluids, pot / Kettle / heated mixer rules, renames). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-DRK-04, -06, -07 PASS; -01 to -03, -05 r1102b).** TESTING: built 2026-11-02 (section 8), in the `mods/` Creative Delight jar; scratch r1102b SQ-DRK-01, -02, -03, -05 PASS, -04 and -06 batch faults (deep scan 2026-11-02); client CQ-DRK-01 and play open
+<!-- generated:status_index begin open_work sha1=5830f4ab3785 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, Pinned 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/drinks #14` | Planned | none | Hot cocoa and apple cider review |
+| `food/drinks #13` | Pinned | none | Milkshake family |
+| `food/drinks #9` | Testing | S C P | Bayberry soup becomes juice |
+| `food/drinks #15` | Testing | S~ C P | Build the drink rules (juice, tea, coffee, new ids) |
+<!-- generated:status_index end open_work -->
 
 ## 1. Fruit juice rule
 

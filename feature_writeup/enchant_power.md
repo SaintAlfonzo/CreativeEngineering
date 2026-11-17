@@ -2,7 +2,9 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Enchantment power (Easy Magic sums `getEnchantPowerBonus` at cap 15; audit of every shelf, pylon, Wise Oak, book pile and crystal source; zero-power shelf families; proposed tag-driven system). Status: audit written 2026-10-31, nothing built; F1 (Wise Oak 15) and F2 (pylons 8 / 15 / 15) need a decision
+<!-- generated:status_index begin open_work sha1=ba133888da4a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

@@ -15,7 +15,13 @@ section 5; tests in section 4.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: More Delight 26.05.20 update (changes against installed 25.07.28: no new item, DelightLib rewrite; knives retuned to Wood / Stone tiers, fast toasts; MIT). Status: **r1103 2026-11-03: SQ-MRD-04 PASS.** DEPLOYED with 1.1.03 (knives, fast toasts, Cheese Toast, singular tags); scratch SQ-MRD-02, -03 PASSED, **SQ-MRD-01 FAILED r1102b (knives mine at 8)**; not run in game; `mod-additions #25`
+<!-- generated:status_index begin open_work sha1=6146bb19c516 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #25` | Testing | S~ C P T | More Delight 26.05.20 changes on the installed 25.07.28 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

@@ -9,7 +9,22 @@ other small mods for the wider survey in section 3.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Feature porting (small mods the pack could absorb: tiers 1-4 from decompiled jars, Collective payoff, order, redundant rsec, Death Knell lang check). Status: research 2026-10-18; rsec removed, Fast Leaf Decay ported 2026-10-19 (tests in [mob_block_tweaks.md](mob_block_tweaks.md) MT-19 to MT-23); tier 1 (8 mods, Book Fishing kept) + Glowing Illagers, Comfortable Campfires, Bottled Air ported 2026-10-20 (KubeJS + patcherMod 1.1.01, built, scratch server PASSED 2026-10-22 for FP-09, FP-11, FP-13, FP-15 server halves (SQ-OM-10 to SQ-OM-12), DEPLOYED with 1.1.01); FP-01 to FP-15 pending in game; Death Knell confirmed `both` since 1.0.7 (2026-10-20)
+<!-- generated:status_index begin open_work sha1=1a2a085dd81d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 5, In Progress 1, Testing 4), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `items/starter-kit #1` | Planned | S P | Starter kit contents |
+| `ports/featureporting #4` | Planned | S C P | Tier 3 batch |
+| `ports/featureporting #5` | Planned | S P | Drop Collective |
+| `ports/featureporting #6` | Planned | S C P | Tier 4 content mods and Survivality |
+| `ports/featureporting #7` | Planned | S C P | More ports: trials, Alex's mods |
+| `ports/featureporting #3` | In Progress | S~ C P | Tier 2 batch (patcherMod) |
+| `items/starter-kit #2` | Testing | S+ P | Starter kit never given (bug since the 1.1.01 port) |
+| `ports/featureporting #1` | Testing | S+ P | Remove rsec |
+| `ports/featureporting #2` | Testing | S+ P | Tier 1 batch (KubeJS / data) |
+| `ui/names #3` | Testing | C P | Death Knell on server and client |
+<!-- generated:status_index end open_work -->
 
 - **Where ports go:** recipes through `global.NCH`, tags through `global.tags`, item ids through `item_dict.js`
   (CLAUDE.md). Event-only logic goes into KubeJS when it needs no mixin, otherwise into patcherMod

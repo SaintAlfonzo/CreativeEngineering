@@ -2,7 +2,18 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Item physics (ItemPhysic fire/lava split, float/sink control by four reloadable tags, burn transforms: glass → dirty glass, wood → ash, TNT explodes). Status: DEPLOYED (since 1.0.3), IP-01 to IP-14 pending; F1 fixed in 1.0.9. 2026-10-28: family audit BUILT (report only, SQ-IP-16), families and surface / lava floating DESIGNED (sections 9, 10)
+<!-- generated:status_index begin open_work sha1=fe472fc14205 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, In Progress 1, Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `items/item-physics #6` | Planned | C P T | Light items skim on water; lavaproof items float on lava |
+| `items/item-physics #7` | Planned | S P T | Player speed in lava; Lava Vision gives water-like lava speed |
+| `items/item-physics #2` | In Progress | S P | Classify modded items |
+| `items/item-physics #1` | Testing | S P | Fire / lava split, float / sink tags, burn transforms |
+| `items/item-physics #3` | Testing | S P | Allurement curses and item physics |
+| `items/item-physics #5` | Testing | S P | Golden egg gets gravity |
+<!-- generated:status_index end open_work -->
 
 Tag namespace: `creativecompat:physics/*` and `creativecompat:burn/*` since 2026-11-08 (were `creativeengineering:`; renamed with the Compat build of 13:21, creative_engineering.md 7.4).
 

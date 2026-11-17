@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wild flowers (flower biomes and rates, Botania colors per biome, pack flower patches filling the bare biomes, existing Terralith flower features rescaled/removed per biome, Flower Patch blocks mixed into wild flowers, Buzzier Bees clovers). Status: DEPLOYED with 1.0.6 (2026-10-14; nether worldgen flower changes with 1.0.9); FL-01 to FL-14 pending
+<!-- generated:status_index begin open_work sha1=675ca8c45123 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `flowers #1` | Testing | S+ P T | Wild flowers system and first tuning pass |
+| `flowers #2` | Testing | none | Moobloom rules follow flowers by hand |
+| `flowers #5` | Testing | S C P | Merge azalea flowers |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Open |
 |---|---|---|

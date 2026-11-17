@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: TNT shrapnel (lit TNT, TNT minecarts and burning TNT items fire a ring of no-gravity fragments: 24 pieces, 12 blocks, 3 damage; `[shrapnel]`). Status: DEPLOYED (1.0.3 jar), TN-01 to TN-10 pending; findings F1-F4, F1 (the lighter is immune) answered 2026-10-29, decision to confirm
+<!-- generated:status_index begin open_work sha1=40e9eb197e82 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Bug 1, Planned 1, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/tnt-and-portal #3` | Bug | S P T | Minecart shrapnel and damage |
+| `gameplay/tnt-and-portal #2` | Planned | S P | Lighter immune to own shrapnel |
+| `gameplay/tnt-and-portal #1` | Testing | S P T | TNT shrapnel |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

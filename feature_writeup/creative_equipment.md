@@ -10,7 +10,14 @@ earlier ([creative_magic.md](creative_magic.md)).
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Equipment (own mod `creativeequipment` carved from patcherMod in the Creative Split wave 7: tier shields, stepstools, backpack skins, air brake, Bottled Air, elytra duplication and chestplates, copper tool tier, armor caps and enchantability, bone meal charm, tool and armor tuning, archery, End gear, harvest tiers). Status: built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted; scratch SQ-CEQ-01 to -08 queued
+<!-- generated:status_index begin open_work sha1=46ed302a6862 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativebrewing/publish #23` | Testing | S | Equipment's backpack skin recipe without Sophisticated Backpacks |
+| `creativesplit/equipment #9` | Testing | none | Carve Creative Equipment |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it holds
 

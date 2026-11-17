@@ -2,7 +2,13 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Client capture (queued visual tests run unattended by a throwaway single-player client: spec files per queue group, dev-only driver mod, framebuffer shots cropped to the GUI / tooltip / HUD region and named by test ID into `test_captures/`). Status: BUILT 2026-11-15 (driver, runner, cropper, channel, qrun driver transport, first specs), scratch test queued (CQ-TXC-01 to -10); visual verdicts only by the owner from `test_captures/judgement/`; decisions D4, D5 open
+<!-- generated:status_index begin open_work sha1=3d47ec4533f0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (In Progress 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/generators-and-tests #6` | In Progress | C | Client capture for Round 2 visual tests |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

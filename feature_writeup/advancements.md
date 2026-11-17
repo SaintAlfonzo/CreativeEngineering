@@ -6,7 +6,14 @@ this file is the reference for the switch.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Advancements switched off (every advancement from vanilla, mods and datapacks left out by `[advancements] enabled = false`; one-way effect on saved progress; rewards lost with them). Status: DEPLOYED with 1.0.8 (2026-10-19; ran in single player: 14,828 left out); AV-01 to AV-05 pending
+<!-- generated:status_index begin open_work sha1=42f8b97c8b39 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/misc #1` | Testing | S P | Advancements off |
+| `ui/toasts #2` | Testing | C P | Advancement toasts |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

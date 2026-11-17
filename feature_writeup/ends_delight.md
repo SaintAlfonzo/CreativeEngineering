@@ -16,7 +16,17 @@ Related pages: [ocean_delight.md](ocean_delight.md), [hostile_delight.md](hostil
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: End's Delight and Ender's Delight (overlap survey, chorus / shulker / enderman / endermite, stoves, planned succulent and fungus options). Status: **BROKEN: r1103 2026-11-03 SQ-ENM-03 FAILED (startup crash without the Ender's 1.2.2 jar), SQ-ENM-04b FAILED (the enders_additions member switch is gone); SQ-ENM-05b waits for the -03 fix; SQ-ENM-01, -02, -04, -05, SQ-EN-03 PASS.** **2026-11-02 night: Ender's additions folded into the End's member (`repackedEnds` -03, 5.9) BUILT, CD jar installed 2026-11-02 23:16, not booted; SQ-ENM-01 to -05 queued (SQ-CDJ6).** **2026-11-01: Ender's additions read from the 1.1.4 donor jar (`enders_upstream/`), member -03, in `mods/` since the CD jar of 11-02 14:01, SQ-DNR-E not run; route superseded 2026-11-02 (5.3).** DEPLOYED with 1.1.03 (section 5: End's 2.6.1 changes, Ender's 1.1.4 content in CD member `enders_additions`, End House, integration rows); scratch SQ-EN-01 to -04, -06 PASSED, SQ-EN-03 OPEN r1102b, EN- in game not run; shulker meat merge BUILT 2026-11-02, scratch PASSED r1102b (5.8, deep scan 2026-11-02); `mod-additions #4`, `#15`, `#28`, `#29`, `members #7`
+<!-- generated:status_index begin open_work sha1=169db7746cc2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, Testing 4), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gear/tuning #22` | Planned | S C P | Rework the Dragon Tooth Knife, remove the Dragon Egg Shell Knife |
+| `creativedelight/members #7` | Testing | S~ C P | End's Delight integration pass |
+| `dishes/ingredients #32` | Testing | S+ P | Shulker meat from End's Delight only |
+| `largecontent/mod-additions #28` | Testing | S~ C P | Ender's Delight 1.1.4 changes on the installed 1.2.2 |
+| `largecontent/mod-additions #29` | Testing | S~ C P T | End's Delight 2.6.1 changes on the installed 2.1 |
+<!-- generated:status_index end open_work -->
 
 | Mod | Jar | Version | Items | Loot / worldgen | Verdict so far |
 |---|---|---|---|---|---|

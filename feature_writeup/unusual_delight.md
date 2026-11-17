@@ -6,7 +6,13 @@ Survey for TODO `largecontent/mod-additions #8`. Written 2026-10-30 from `devmod
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Unusual Delight overlap survey (1.20.1 MCreator, AFL licence, 306 items: blocked by missing mods / 1.20 content, overlaps with Hostile Delight and installed mods, new themes, fold-in list, decisions U1 to U7). Status: survey 2026-10-30, nothing built; `mod-additions #8`
+<!-- generated:status_index begin open_work sha1=8ada6a91dc99 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #8` | Testing | none | Investigate Unusual Delight |
+<!-- generated:status_index end open_work -->
 
 | Bucket | Items | Section |
 |---|---|---|

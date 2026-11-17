@@ -6,7 +6,27 @@ is the build.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI world-interaction tabs (19 generic tabs: weathering, lava, stripping, waxing, dyeing, soap, jars, knife and grass drops, mobs, burning, campfires, budding; Moobloom Conversion, Grape Planting). Status: DEPLOYED with 1.1.01; tab tweaks ([plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md): mobs and blocks drawn, per-potion jar rows, joined notes, fluid scale, concrete 30 s) DEPLOYED to the client with 1.1.04 (server on 1.1.03), CQ-JT not run, JW-19 to JW-27; run `/dumpworldjei` + `/cdevgen run jei_world` before release
+<!-- generated:status_index begin open_work sha1=59378e2d7a1f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (Planned 1, In Progress 1, Testing 13), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/vineryport #24` | Planned | S | Ripe stem shearing may duplicate seeds |
+| `jei/jei-coverage #6` | In Progress | S | Mod bugs found by the tabs |
+| `alcohol/vineryport #23` | Testing | C P | JEI tab for grape planting types |
+| `jei/jei-coverage #5` | Testing | C P | World-interaction tabs |
+| `jei/jei-coverage #16` | Testing | C P | Stripping tab cycles through logs |
+| `jei/jei-coverage #17` | Testing | C P | Soap Washing tab cycles dyed glass and all copper |
+| `jei/jei-coverage #18` | Testing | C P T | Block Dyeing tab cycles every dye input |
+| `jei/jei-coverage #19` | Testing | C P | World tab blocks render as barriers |
+| `jei/jei-coverage #20` | Testing | C P | Burning tab text is cut off |
+| `jei/jei-coverage #21` | Testing | C P | Lava Generation tab becomes Lava Interactions |
+| `jei/jei-coverage #22` | Testing | C P | Mob eggs render as mobs in JEI screens? |
+| `jei/jei-coverage #23` | Testing | C P | Jar Storage tab shows potion fluid as an uncraftable potion |
+| `jei/jei-coverage #25` | Testing | C P | Empty jar JEI icon becomes jar with spout |
+| `jei/jei-coverage #26` | Testing | C P | Knife and Machete Drops: "cut", not "broken" |
+| `jei/jei-coverage #27` | Testing | S C P | Concrete hardening 30 s, not 31 |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

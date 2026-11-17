@@ -4,7 +4,17 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: BlockRunner walk speed by surface (tiers, sticky facing, camo speed, visual sinking). Status: DEPLOYED, in-game test pending; 1.0.4 mod blocks tiered 2026-10-02 (BR-52); audit 2026-11-10 BUILT (every walkable block tiered, watcher), BR-59..64; pass-through blocks (3.10: crops, plants, vines, ropes, cobwebs, items and projectiles in webs, leaf piles) built, scratch test queued 2026-11-15 (untested; Compat + Devtools jars not installed), BR-67..88
+<!-- generated:status_index begin open_work sha1=5de1970def38 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `gameplay/blockrunner #9` | Planned | C P | Jello blocks behave like honey (jump factor, not bounce) |
+| `gameplay/blockrunner #5` | In Progress | S C P T | Speed blocks on BlockRunner tiers |
+| `gameplay/blockrunner #7` | Testing | C P | Sinking: no bump between sunken blocks, items on top |
+| `gameplay/blockrunner #8` | Testing | C P | Visceral Heap flesh walk speeds |
+| `gameplay/blockrunner #10` | Testing | S C P T | Pass-through blocks: walk-through and fall-through speed |
+<!-- generated:status_index end open_work -->
 
 Every block you walk on belongs to at most one speed tier (asphalt 1.50 down to very sticky 0.45).
 BlockRunner applies the speed and KubeJS fills the tiers. patcherMod adds what a block tag can't express:

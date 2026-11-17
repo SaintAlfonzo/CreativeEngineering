@@ -20,7 +20,26 @@ This file has four parts:
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Veggies Delight backport and implementation description (mod inventory from the 1.20.1 jar: 7 crops, wild plants, 72 items, 215 recipes, worldgen, loot, depot houses, trades; decided 2026-10-22: Rustic's bell peppers replace VD's, smoked pepper dropped, pack wild crop / flower rules, mature dandelion drops, juices as fluids, jarable soups, tortilla wraps, baking families, injections through the pack's tools; marked merges Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; 10 remaining overlaps). Status: **r1103 2026-11-03: SQ-VDF-04 PASS (all SQ-VDF rows passed).** **2026-11-02 night: R7 pancakes BUILT, CD jar installed 2026-11-02 23:16, not booted (SQ-PCK, SQ-CDJ6).** **Deep scan 2026-11-02:** port `-05` nested in the installed CD jar (11-02 14:01; deployed `-03`); SQ-DM-01 to -03 PASS r1031; r1102b SQ-VP mostly PASS, SQ-VP-06 FAIL (pepper jam / relish soft fluids), SQ-VDF mostly PASS; SQ-VP-14 and CQ-VP open. DEPLOYED with 1.1.01 (port now `-03`, 1.1.03; `-04` built 2026-11-01, not installed); SQ-VP-00 to -12 PASS 2026-10-23 / -25; merges M1 to M3 and the §3.3 folds BUILT 2026-11-01 (CD jar not rebuilt; SQ-VDF, SQ-MG-21), R2, R3, R7 open; dump-driven steps open (§4.0); VD-01 to VD-54 in game
+<!-- generated:status_index begin open_work sha1=5c2bef1dc8ed -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 7), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/tweaks #13` | Planned | S P | Mob food overhaul |
+| `textures/food #2` | Planned | C P | Retexture cauliflower soup |
+| `ports/culturalport #1` | Pinned | S C P | Cultural Delights as a possible addition |
+| `baking/baked-goods #17` | In Progress | S C P | Dough unification |
+| `dishes/ingredients #21` | In Progress | S C P | Potato and sweet potato compatibility |
+| `dishes/meals #33` | In Progress | S+ C P | Potato noodles become creamy gnocchi |
+| `dishes/meals #35` | In Progress | S C P | Steak and broccoli sides |
+| `creativedelight/members #30` | Testing | S~ C P | Fold the remaining Veggies Delight overlaps into their food families |
+| `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
+| `merges/dishes #1` | Testing | S+ C P | Fish and chips |
+| `merges/dishes #2` | Testing | S+ C P | Mashed potatoes: split, not merged |
+| `ports/veggiesport #1` | Testing | S~ C P | Veggies Delight backport and integration |
+| `ports/veggiesport #3` | Testing | C P | Upstream 1.9.3 carry-over |
+| `ports/veggiesport #4` | Testing | S+ C P | Mature dandelion: grows from a Dandelion on rich soils, shears or a knife revert it |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

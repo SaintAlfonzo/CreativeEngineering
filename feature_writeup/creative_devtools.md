@@ -12,7 +12,14 @@ Written for: the owner and the split agents, as the execution record of the Devt
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Devtools (dev-only jar carved from patcherMod in the Creative Split: /cdevgen, /dumpall and the /dump* scripts, /cdevperf, /cdevplace, block-state and Level-random probes on Common hooks, IE recycling log, test recipes, Flower Test world; nests perfBot and clientCapture; mod_sides side `dev`, never in a payload). Status: carved 2026-11-01, installed; scratch SQ-CDV-01 to -04 PASS (rcs1); CDV- in game open; `/cdevtest` and perfBot test verbs built 2026-11-15 (not installed), scratch test queued SQ-TX-01 to -16
+<!-- generated:status_index begin open_work sha1=f67e1cf5c955 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativesplit/devtools #4` | Testing | none | Carve Creative Devtools |
+| `tooling/generators-and-tests #17` | Testing | SQ-TX-01 to -16, CDV-07 | `/cdevtest` probe verbs, tick warp, random ticks and perfBot test verbs (scratch testing expansion item 3) |
+<!-- generated:status_index end open_work -->
 
 | Piece | Gradle project | Folder | Mod id | Ships |
 |---|---|---|---|---|

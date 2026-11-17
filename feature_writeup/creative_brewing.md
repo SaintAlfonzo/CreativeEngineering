@@ -20,7 +20,21 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Part A Brewin', `
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Brewing (bundle jar nesting the Vinery and Brewin' and Chewin' ports, display names "<Name> (Creative Brewing)"; framework for the potion, alcohol and effect code moving out of patcherMod and the pack scripts: `global.CB`, `creativebrewing-common.toml`, gated mixin plugin, script trees; inventory and phased move plan). Status: **r1114 2026-11-14: SQ-CBP-11 FAIL (owner value: felsic scrap 1-2 vs 2-4, `gear/tuning #23`).** **BUILT 2026-10-31, not installed** (`creativebrewing-1.0.0.jar`: Vinery `-08`, Brewin' `-05`); SQ-CBJ-01 to -05 queued; move plan section 4, nothing moved yet, owner questions 4.4 open
+<!-- generated:status_index begin open_work sha1=c127c1cd1250 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (In Progress 2, Testing 7), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativebrewing/publish #3` | In Progress | none | Publish Creative Brewing on CurseForge |
+| `creativebrewing/publish #4` | In Progress | S | Chain alone: Pale Jane, Steel Toe Stout and Kippers cannot be brewed |
+| `creativebrewing/bundle #2` | Testing | S C | Creative Brewing bundle jar nesting the Vinery and Brewin' ports, plus the framework for the moves |
+| `creativebrewing/move #1` | Testing | S P | Move potion brewing, alcohol, Vinery and effect content into Creative Brewing |
+| `creativebrewing/publish #5` | Testing | S | Creative Worldgen breaks world creation without YUNG's Better Jungle Temples |
+| `creativebrewing/publish #8` | Testing | S | Chain fixes from r1106cbb (built, not installed) |
+| `creativebrewing/publish #12` | Testing | S | Echo tool on-hit rows leak without Creative Engineering |
+| `creativesplit/cdcb #7` | Testing | S C | CB phases 1-3 and the CD-bound Java, troughs and members |
+| `gear/tuning #23` | Testing | S+ T | Felsic block scrap: loot table gives 1-2, its comment and SQ-CBP-11 say 2-4 |
+<!-- generated:status_index end open_work -->
 
 | Member | Gradle project | Folder | Mod ids | Display name | Version |
 |---|---|---|---|---|---|

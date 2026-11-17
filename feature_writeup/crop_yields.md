@@ -5,7 +5,19 @@ Soils and harvesting mechanics: [crops.md](crops.md). Bell pepper colour weights
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Crop yields (every crop's ripe drops; soil yield: extra produce on Rich Farmland, Fertile Soil, Rich Soil and the soul soils, rounded bases, no Fortune on any crop, own picks and six bushes boosted, one switch per crop or bush, all on). Status: BUILT 2026-10-28, reworked 2026-11-03 (installed); wave 2 BUILT 2026-11-14 and installed; **r1115 2026-11-15: wave 2 SQ-SY-14 to -21, CQ-SY-22 built, scratch server PASSED**; adzuki replant open (`farming/crops #56`)
+<!-- generated:status_index begin open_work sha1=dbea3773b890 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (In Progress 1, Testing 6), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `farming/crops #56` | In Progress | S P | Adzuki, bush, peanut and mini cantaloupe soils |
+| `farming/crops #23` | Testing | S+ P T | Better soils raise crop yield |
+| `farming/crops #24` | Testing | S P T | Better soils raise nether crop yield |
+| `farming/crops #53` | Testing | S P T | Soil yield wave 2: rounded bases, no Fortune |
+| `farming/crops #54` | Testing | S P T | Own picks use soil yield |
+| `farming/crops #55` | Testing | S P T | Nether soil yield |
+| `farming/crops #57` | Testing | S P | Cave carrot growth soils |
+<!-- generated:status_index end open_work -->
 
 Second wave (rounded bases, no Fortune, own picks, bushes, nether soils, Botany Pots speed): [plan_crop_yields_wave2.md](plan_crop_yields_wave2.md), BUILT 2026-11-14 (jars built, not installed; SQ-SY-14 to -22 queued). Open: adzuki replant on Rich / Fertile Soil (plan 5.1).
 

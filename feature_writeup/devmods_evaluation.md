@@ -5,7 +5,23 @@ Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Del
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: devmods evaluation (how to diff the newer jars in `devmods/` against the installed versions and ports; which folder each jar belongs in; order). Status: plan 2026-10-25; Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic 1.7.0, Fruits 1.1.3, Farmer's Respite 2.1.2 and eleven more evaluated; only Farmer's Delight 1.3.4 is built (2026-10-25: FD repack `-02` in the Creative Delight jar, installed 2026-10-26, SQ-FDB-01 to 12 queued), the rest are not
+<!-- generated:status_index begin open_work sha1=1586364434c8 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Testing 11), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `largecontent/mod-additions #19` | Testing | S~ C P T | Rustic Delight 1.7.0 backport in Creative Delight |
+| `largecontent/mod-additions #20` | Testing | S+ C P | Fruits Delight 1.1.3 changes on the installed 0.5.11 |
+| `largecontent/mod-additions #22` | Testing | S~ C P | Display Delight 1.7.0 port |
+| `largecontent/mod-additions #23` | Testing | S~ C P | Delightful 3.8.1 changes on the installed 3.4.1 |
+| `largecontent/mod-additions #24` | Testing | S~ C P T | Corn Delight 1.2.11 changes on the installed 1.0.3 |
+| `largecontent/mod-additions #25` | Testing | S~ C P T | More Delight 26.05.20 changes on the installed 25.07.28 |
+| `largecontent/mod-additions #26` | Testing | S+ C P | Abnormals Delight 6.0.3 changes on the installed 4.1.2 |
+| `largecontent/mod-additions #28` | Testing | S~ C P | Ender's Delight 1.1.4 changes on the installed 1.2.2 |
+| `largecontent/mod-additions #29` | Testing | S~ C P T | End's Delight 2.6.1 changes on the installed 2.1 |
+| `largecontent/mod-additions #33` | Testing | S~ C P | Storage Delight 26.10.05 changes on the installed 25.12.09 |
+| `ports/veggiesport #3` | Testing | C P | Upstream 1.9.3 carry-over |
+<!-- generated:status_index end open_work -->
 
 ## 1. Method (same for every jar)
 

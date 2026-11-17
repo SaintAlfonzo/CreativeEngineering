@@ -8,7 +8,13 @@ Dev-only: no player changelog bullet, no new `mod_sides.md` row.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Structure Catalogue world type (Creative Devtools: flat world laying out every structure by family; family map in [structure_catalogue_map.md](structure_catalogue_map.md)). Status: built, scratch server PASSED (2026-11-12 r1111: SQ-SCAT-06 to -08; client rows not run)
+<!-- generated:status_index begin open_work sha1=847913386180 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `tooling/generators-and-tests #13` | Testing | S C | Structure Catalogue world type: flat world laying out every structure by family |
+<!-- generated:status_index end open_work -->
 
 ## 1. Goal
 

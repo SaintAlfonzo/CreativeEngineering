@@ -5,7 +5,14 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Bee nests (where wild nests generate and how often; `bee_nests.json` per-biome nest chance on generated trees, scale of existing chances, extra bee-nest trees; `/dumpbeenests` measured trees/nests/chunks per biome). Status: DEPLOYED with 1.0.6 with the starter rules (scratch-server verified: 44 biomes); BN-01 to BN-10 pending
+<!-- generated:status_index begin open_work sha1=9cab07712ba9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mobs/bees #3` | Testing | S P T | Honeycomb shearing yield |
+| `worldgen/bee-nests #1` | Testing | S+ P T | Bee nest tuning with starter rules |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

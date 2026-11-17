@@ -9,7 +9,19 @@ notices them until WTHIT shows a raw key.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Names (Display Delight placed-food names, Rustic Delight crop/potted names, missing-name catalog, and the display-name audit: client `/cdevdumpnames`, `tools/name_audit.py`, raw keys + Title Case fixes, mod display names via `[mod_names]`). Status: NM-07/08 PASSED 2026-10-02; audit DEPLOYED with 1.1.01 (436 fixes; 116 mod names; patcherMod 1.1.01), NM-09 to NM-11 PASSED (scratch client), NM-01 to NM-06 and NM-12 pending
+<!-- generated:status_index begin open_work sha1=d1ff027a3a6a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Testing 7), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `ui/misc #7` | Testing | C | Splash text 'Stience!' |
+| `ui/names #1` | Testing | C P | Missing-name fixes |
+| `ui/names #2` | Testing | C P | Raw lang keys in game |
+| `ui/names #4` | Testing | C+ P | Display-name audit (raw keys + capitalization) |
+| `ui/names #5` | Testing | C P | Rename Pretty Pipes to "Item Pipes"; mod display names |
+| `ui/names #6` | Testing | C P | Chocolate night berries |
+| `ui/names #8` | Testing | C | Rename Roll of Elder Guardian to Elder Guardian Roll |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

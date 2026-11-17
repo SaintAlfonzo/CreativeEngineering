@@ -2,7 +2,15 @@
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wandering Trader + Wandering Winemaker (independent tick-based spawn timers, 25 + 5 offers, stock edited through `global.trades`: removals, Wares x20, golden listings, saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items). Status: DEPLOYED with 1.0.4; WT-01 to WT-16 pending (WT-06 retired)
+<!-- generated:status_index begin open_work sha1=8482a6f2ed22 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `loot/trader #2` | Planned | S P | Fewer Wares trades |
+| `loot/trader #3` | Planned | S P | Lightman's Currency with Wares |
+| `loot/trader #4` | Testing | S P T | Rustic pepper seeds from the wandering trader (rare) |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

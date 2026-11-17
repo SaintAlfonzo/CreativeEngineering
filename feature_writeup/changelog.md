@@ -5,7 +5,15 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Player changelog (book button on the title screen and pause menu, Quark-style update popup, version list + Markdown notes from `kubejs/assets/creativecommon/changelog/`, working list `unreleased.md`, deploy stamping, deployed files frozen, lint, writing rules for player-facing entries, brief historic changelogs). Status: DEPLOYED with 1.1.01 (2026-10-22), 1.1.02 to 1.1.04 notes shipped; offline checks pass, CL-01 to CL-12 untested; CL-13 fixed 2026-10-27 (1.1.04)
+<!-- generated:status_index begin open_work sha1=dd4b8d06b0ac -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `ui/changelog #1` | Testing | S+ C~ P | Player changelog on the title screen and pause menu |
+| `ui/changelog #2` | Testing | none | Historic changelogs 1.0.0 to 1.0.9 |
+| `ui/changelog #3` | Testing | C P | What's New tooltip renders under the New in Version tooltip |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Where it will live |
 |---|---|---|

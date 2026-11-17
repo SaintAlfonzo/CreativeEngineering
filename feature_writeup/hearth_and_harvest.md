@@ -12,7 +12,21 @@ Scope rule: integration adds no recipe or mechanic that is not in the mod or def
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Hearth and Harvest plan (NeoForge 1.21.1, MIT; port to Forge 1.19.2 as Creative Delight member `backportedHearth`): what is dropped for pack survivors, what is kept or added for evaluation, system overlaps, a 24-step fold-in, owner decisions D1 to D26 and N1 to N22. H&H lands first and complete (butter, mac and cheese, glazed carrots, sunflower seeds, all juices and wines on Vinery's stations, goat cheese like Brewin' cheeses, Water Trough); Extra Delight merges into the pack and existing mods later. Status: **r1114 2026-11-14: SQ-HH-328 PASS with a finding (corn maze not locatable within the shipped 120 s, `locate #6`); SQ-HSC-89 PASS.** **2026-11-12 scratch run r1111: full suite run, 15 FAIL incl. a seed pouch dispenser server crash (TODO `largecontent/mod-additions #65` to `#73`).** Crow swap built 2026-11-10, not installed (4.7: H&H crow replaces AM's, nests make crows, tree-top and roof nests, chunk generation crash fixed; SQ-HCS). Built: raspberries and the six-tier watering can (shipped; spout gun farmland and watering can extras scratch PASSED r1103; CQ-WC-04, -06, -07 open); port tranches 1, 2 and 3 installed 2026-11-08 (4.3, 4.4, 4.6), built, scratch test queued (SQ-HH full suite, 577 rows, map in 8.1), not run; decisions J1 to J91 in 4.5 to confirm; bugfix batch 4.8 (plan_bugfix_1114) built and installed 2026-11-14, scratch test queued (SQ-SPD, SQ-SLK, SQ-HOP, reruns), not run; hops vine and lattice grape type, tilled end stone removal, stomping basin valid items (cd-b, 4.8). Open: next dump pass, WTHIT lines, Lilliput Lane, Botany Pots, evals; tests HNH-01 to HNH-86 drafted; `mod-additions #10`
+<!-- generated:status_index begin open_work sha1=c6713eaf8c1e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 5, Testing 4), 1 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `blocks/new #21` | Planned | S P | Pitchfork: Pinned rules (3 s on players; bosses, flying and swimming mobs exempt) |
+| `blocks/new #22` | Planned | S P T | Manure buildup system |
+| `gameplay/misc #17` | Planned | S C P | Feather fluff |
+| `gameplay/misc #18` | Planned | C P | Dreamcatcher: tooltip, placeable, sleep rewards |
+| `ui/names #11` | Planned | S C P | Wardrobe backpacks: rename, no slots tooltip, no storage |
+| `farming/crops #8` | Testing | S+ C P | Watering can |
+| `farming/crops #32` | Testing | S~ C P | Create spout gun wets farmland |
+| `largecontent/mod-additions #10` | Testing | none | Examine Hearth and Harvest in full |
+| `locate #6` | Testing | S+ P T | Corn maze cannot be located within the 120 s search deadline |
+<!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
 |---|---|---|

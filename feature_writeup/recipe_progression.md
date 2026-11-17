@@ -18,7 +18,17 @@ Other recipe folders have their own writeups: `equipment/` ([gear_tuning.md](gea
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Recipe progression hub (the order the recipe scripts set, from stone generators to steel, mechanisms and magic; removed items: 309 ids hidden, tagged red, tag-stripped and scanned; dead recipes: `dead_recipe_removal.js`, `kubejs/recipes/`, old `global.CE` blocks). Status: DEPLOYED (since 1.0.3), RP-01 to RP-08 pending; findings F1-F6, F1 (items left without a recipe: dispenser and Explorer's Compass; the blast furnace, smoker and cake still have mod recipes, rechecked 2026-10-21) needs a decision
+<!-- generated:status_index begin open_work sha1=0f4e64281e30 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 2, Testing 3), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `recipes/progression #1` | Planned | S C P | Items with no recipe after removals |
+| `tooling/conventions #4` | Planned | S C | Small KubeJS leftovers |
+| `recipes/progression #3` | Testing | S+ C P | `kubejs/recipes/` never loads |
+| `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
+| `tooling/conventions #2` | Testing | S | Define-once violations |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|

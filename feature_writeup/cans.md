@@ -6,7 +6,17 @@ picture, the current numbers, and the canned golem dye in full.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Cans (hub: multi-serving cans and the return roll, 247 serving counts, 26 hand-written + 202 generated cans, dyeable canned golem; detail in food.md 3.6 and can_parity.md). Status: **r1103 2026-11-03: Canned Goods member built, scratch server PASSED (SQ-CNG-01 to -04, -03o, -04b).** **2026-11-02 night: Canned Goods repacked as a CD member (9) BUILT, CD jar installed 2026-11-02 23:16, not booted; CN-07 to CN-09, SQ-CNG-01 to -04, CQ-CNG-01, -02 queued (SQ-CDJ6).** DEPLOYED (servings since 1.0.3, golem 1.0.4, generated cans 1.0.6), CN-01 to CN-06 pending (FO-, CP-, R4-07 elsewhere); findings F1-F4
+<!-- generated:status_index begin open_work sha1=b3b19e28545f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (In Progress 1, Testing 4), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `cans/canning #1` | In Progress | S P T | Can values for meal, pie, feast, drink and hazard cans |
+| `cans/canning #4` | Testing | S+ P | Hand-written raw cans don't carry effects |
+| `cans/canning #9` | Testing | S P | Servings only work in NCH crafting recipes |
+| `cans/canning #11` | Testing | S~ C P | Canned golem, generated cans and parity tests |
+| `cans/canning #17` | Testing | S P | All feasts cannable |
+<!-- generated:status_index end open_work -->
 
 | Part | Status | Full detail |
 |---|---|---|

@@ -9,7 +9,14 @@ own Java plus two nested members. Same behaviour as before the carve; every regi
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Worldgen (bundle `creativeworldgen` carved from patcherMod in the Creative Split wave 5: structures, locate, earth and water fill, terrain adaptation, bee nests, wild flowers, leaf decay, loot tuning, mob spawns and caps, named mobs, mooshrooms, Forgiving Void; nests More Mooblooms and Baby Mobs). Status: **BROKEN: r1103 2026-11-03 SQ-CWG-06 FAILED (punch meta `meteorite_desert_pyramid` dropped); SQ-CWG-08 / -08o open (old-world rerun); the other SQ-CWG rows PASS.** built 2026-11-02, NOT installed; scratch SQ-CWG-01 to -10 queued 2026-11-03: punch key, FirstTickWater flag fix, Botania and CC:Tweaked out of village loot; jar rebuilt, not installed.
+<!-- generated:status_index begin open_work sha1=67f614f8ae9e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creativebrewing/publish #6` | Testing | S | Creative Worldgen breaks world creation without Terralith |
+| `creativesplit/worldgen #8` | Testing | S~ C | Carve Creative Worldgen with fauna |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it holds
 

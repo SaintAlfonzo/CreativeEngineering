@@ -30,7 +30,42 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Alcohol: Brewin' and Chewin' backport (full port of 4.5.0+1.21.1 as Backported Brewin: fluid keg + pouring, recipes, Tipsy rework, Intoxication/Raging, cask/crate/jams, honey/milk choice, client-only scrambling; the 2.0 old-world conversion was removed 2026-10-27). Status: port `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar; FML loaded the port, [plan_1.0.7.md](plan_1.0.7.md) 2.2); `-02` with sections 8 and 10 DEPLOYED with 1.0.8, replacing both jars (not tested in game); heat/cold tag audit applied (10.13); `-03` (10.13, 10.16, coasters 12, 10.18 tooltip) DEPLOYED with 1.1.01; every alcoholic drink half a rotten shank, no saturation, Intoxication + Nausea, Quark's saturation word "Intoxicating Drink" (section 11, BUILT 2026-10-20, patcherMod 1.1.01); keg, coaster, compost, drink values, wine storage, cask / press and village house checks scratch server PASSED 2026-10-22 (SQ-OM-00 to SQ-OM-08, SQ-OM-14, SQ-OM-15); AL-01 to AL-96 pending in game
+<!-- generated:status_index begin open_work sha1=b4ec5e999567 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (Planned 5, Pinned 1, In Progress 3, Testing 21), 5 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `alcohol/pack #3` | Planned | S C P T | Vintage brews |
+| `alcohol/vineryport #4` | Planned | none | Upstream jars on publish |
+| `alcohol/vineryport #5` | Planned | C | I25 tool reruns and `#missing` models |
+| `alcohol/vineryport #22` | Planned | C | Cellar mechanic audit and player docs |
+| `licence/cb #3` | Planned | S | Rewrite the grape bush worldgen features |
+| `alcohol/vineryport #3` | Pinned | S C P T | Wine effect reshuffle (B7.4) |
+| `alcohol/brewinport #4` | In Progress | S~ P | Pack-side leftovers |
+| `merges/materials #4` | In Progress | S P | Crate and bag merge |
+| `pack/release #5` | In Progress | S | `/dumpall` refresh with the ports |
+| `alcohol/brewinport #1` | Testing | S+ C~ P | Brewin' and Chewin' 4.5.0 port |
+| `alcohol/brewinport #2` | Testing | S C~ P | Heat / cold tag audit |
+| `alcohol/brewinport #5` | Testing | C P | Black and purple texture ("plating") |
+| `alcohol/brewinport #6` | Testing | S~ C P | Remainder buffer on the keg |
+| `alcohol/brewinport #7` | Testing | S+ C P | Brewin' slots and side input |
+| `alcohol/brewinport #8` | Testing | S+ C P | Coasters |
+| `alcohol/pack #1` | Testing | S+ C P T | Rotten-food hunger type for alcohol |
+| `alcohol/pack #2` | Testing | S+ P T | Wine boosts beyond the cellar (T5) |
+| `alcohol/vineryport #1` | Testing | S~ C~ P | Vinery 1.5.5 port |
+| `alcohol/vineryport #2` | Testing | S~ C~ P | Decisions built with the recommendation |
+| `alcohol/vineryport #6` | Testing | C P | Grass slab biome tint |
+| `alcohol/vineryport #7` | Testing | S+ C P | Hopper jams |
+| `alcohol/vineryport #9` | Testing | S C P T | Grape stomping: 12 grapes, 4 stomps, 4 bottles |
+| `alcohol/vineryport #13` | Testing | S C P | Duplicate blocks removed, "Cherry" names |
+| `alcohol/vineryport #14` | Testing | S+ C P | Vinery village houses |
+| `alcohol/vineryport #16` | Testing | C~ P | Vinery tooltips |
+| `alcohol/vineryport #27` | Testing | S C P | Jellie Wine: the enchanted golden apple set |
+| `dishes/meals #3` | Testing | S+ C P | Sequenced assembly meals |
+| `gameplay/blockrunner #2` | Testing | S C P T | Finish the BlockRunner audit |
+| `textures/tools #1` | Testing | C | Wine texture dump |
+| `ui/effects #3` | Testing | C P | Merge backported effect descriptions with JEED |
+<!-- generated:status_index end open_work -->
 
 **README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Alcohol: Vinery backport (Fabric 1.5.5 / MC 1.21.1 -> Forge 1.19.2 as Backported Vinery: juice-level barrel, 2-stage apple press, storage/cellar wine aging, new effects, cherry -> dark_cherry rename, removed blocks, Foundation subset, 75 migration issues; the 1.3.10 old-world conversion was removed 2026-10-27, the winemaker spawner moved into the port). Status: port `-01` DEPLOYED with 1.0.7 (replaces Vinery 1.3.10 + doapi; hotfix for the grass slab crash); `-02` with B7 and section 10 DEPLOYED with 1.0.8 (not tested in game); D3-D5, D7-D10, D12 built with the recommendation; `-03` (10.9 to 10.19: sizes, racks, box looks, tooltips, hopper jams; wines eat as rotten food, section 11) then `-04` (village houses in vanilla villages, section 13) DEPLOYED with 1.1.01, `-05` to the client with 1.1.04; VB-73, VB-74, VB-81 to VB-83, VB-87 to VB-89, VB-91 PASSED 2026-10-20, the rest of VB-01 to VB-94 pending
 

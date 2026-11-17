@@ -19,7 +19,15 @@ smelting XP, and 4 Milk Bottles per bucket (all built). The rest is the 1.21 / F
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Abnormals Delight 6.0.3 update (changes against installed 4.1.2; owner decisions 2026-10-25: copper knives wait for the Caverns and Chasms port, no new cabinets; all four taken changes built). Status: DEPLOYED with 1.1.03: slice XP, salvaging, Adzuki Curry grid craft, two-pickerelweed recipes, 4-bottle milk; scratch server PASSED 2026-10-26 (SQ-ABD-01 to 05), in-game ABD rows pending; `mod-additions #26`
+<!-- generated:status_index begin open_work sha1=032442d13df7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `food/drinks #11` | Planned | S C P T | Re-add Cherry Cream Soda and a fruit soda line |
+| `ports/cavesandchasmsport #1` | Planned | S C P | Caverns and Chasms port |
+| `largecontent/mod-additions #26` | Testing | S+ C P | Abnormals Delight 6.0.3 changes on the installed 4.1.2 |
+<!-- generated:status_index end open_work -->
 
 ## 1. How it was read
 

@@ -7,7 +7,14 @@ Status: BUILT and installed 2026-11-09. Never booted; every live check is queued
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Visceral Heap (the one Biomes O' Plenty biome kept: unmodified BOP jar, everything else filtered, TerraBlender stubbed, placed by the biome tuner at 5 % of the Nether). Status: **2026-11-14: all flesh (plan_bugfix_1114.md 6.4) BUILT, Creative Worldgen installed; r1115 2026-11-15: built, scratch server PASSED (SQ-VH-06, -06b, -06c; -06c finding: features spill up to 12 blocks into a neighbouring warped forest, owner TODO).** **r1114 2026-11-14: SQ-FLR-02b, -03, -04, -05 PASS.** BUILT and installed 2026-11-09, never booted; scratch test queued (SQ-VH-01 to -12, CQ-VH-01 to -03); dumps and generator readers wait on a boot. Flesh recipes and Create result pools ([plan_flesh_recipes.md](plan_flesh_recipes.md)) BUILT 2026-11-10, Common and Engineering jars not installed (SQ-FLR-, CQ-FLR-)
+<!-- generated:status_index begin open_work sha1=cc74d2ddb52c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `worldgen/biomes #13` | Planned | C | Eyebulb animation: slower, offset per block |
+| `worldgen/biomes #15` | Planned | S P | Broken bone and bone chunk: pressing, milling and crushing |
+<!-- generated:status_index end open_work -->
 
 ## 1. What it is
 

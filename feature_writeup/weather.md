@@ -6,7 +6,15 @@ the decisions and the tests.
 
 ## 0. At a glance
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Weather: season types for Serene Seasons (arid and frozen year-round types, tropical by tag with a real savanna wet season, rivers/beaches that adapt to the land around them, SeasonHUD names and day of year, tint and crop fertility). Status: DEPLOYED with 1.0.6 (patcherMod 1.0.5 + 1.0.6 code; server side checked on scratch servers, client side not run); WE-01 to WE-36 pending (WE-25: Cool Rain may ignore the types)
+<!-- generated:status_index begin open_work sha1=905626c8a3d1 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `seasons #3` | Planned | C P | Adaptive tint per position |
+| `seasons #1` | Testing | S+ C P | Season types |
+| `seasons #2` | Testing | C P | Cool Rain may ignore season types |
+<!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|
