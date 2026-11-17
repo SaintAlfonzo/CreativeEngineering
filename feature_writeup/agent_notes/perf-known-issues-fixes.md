@@ -1,14 +1,14 @@
 # perf-known-issues-fixes
 
-> 2026-10-03 fixes for the 5 perf.md section 7 hot spots: patcherMod [perf] CEConfig throttles (trough cooldown, Serene Seasons melt, Create Gravity dimensions), Fruits Delight bytecode patch via mixin config plugin, horse armor pass
+> 2026-10-03 fixes for the 5 perf.md section 7 hot spots: Creative Common [perf] CEConfig throttles (trough cooldown, Serene Seasons melt, Create Gravity dimensions), Fruits Delight bytecode patch via mixin config plugin, horse armor pass
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-10-03 (patcherMod 1.0.4 jar in build/libs). Details + dials: feature_writeup/perf.md section 7. Mixins: FeedingTroughModuleMixin + TemptGoalTroughRetryMixin (Quark), SereneSeasonsMeltThrottleMixin, CreateGravityDimensionMixin, FruitsDelightLeafCheckMixin (moved to Creative Delight's fruitsdelight compartment 2026-10-27); CEConfig `[perf]`. The user said "7 known issues" but the writeup lists 5; I did the 5.
+Built 2026-10-03 (Creative Common 1.0.4 jar in build/libs). Details + dials: feature_writeup/perf.md section 7. Mixins: FeedingTroughModuleMixin + TemptGoalTroughRetryMixin (Quark), SereneSeasonsMeltThrottleMixin, CreateGravityDimensionMixin, FruitsDelightLeafCheckMixin (moved to Creative Delight's fruitsdelight compartment 2026-10-27); CEConfig `[perf]`. The user said "7 known issues" but the writeup lists 5; I did the 5.
 
 **Lessons worth keeping:**
-- Mixin will NOT inject into another mixin's merged `handler$...` method, even with a regex selector and a higher priority (silently skipped under require=0; verified in the .mixin.out export). To change another mod's mixin handler, use an `IMixinConfigPlugin.postApply` ASM edit (since 2026-10-27 only CD's `compat/CDMixinPlugin` does this, as an anchor -> edit table; patcherMod has no mixin plugin any more) on an empty anchor mixin with priority 5000. Keep the edit stack-neutral so no stack-map frames change.
-- Third-party libs for compile go in `development/patcherMod/libs/` (git-ignored): added SereneSeasons, create_gravity, fruitsdelight.
+- Mixin will NOT inject into another mixin's merged `handler$...` method, even with a regex selector and a higher priority (silently skipped under require=0; verified in the .mixin.out export). To change another mod's mixin handler, use an `IMixinConfigPlugin.postApply` ASM edit (since 2026-10-27 only CD's `compat/CDMixinPlugin` does this, as an anchor -> edit table; Creative Common has no mixin plugin any more) on an empty anchor mixin with priority 5000. Keep the edit stack-neutral so no stack-map frames change.
+- Third-party libs for compile go in `development/creativeCommon/libs/` (git-ignored): added SereneSeasons, create_gravity, fruitsdelight.
 - Verify mixin application with a scratch server and `-Dmixin.debug.export=true`, then `javap -p -c -cp .mixin.out/class <class>` (memory `scratch-server-verify`). The session scratchpad can be wiped mid-task, rebuild srv/ from the recipe.
 - `minecraft:strong_regeneration` is a potion id; the dragon horse armor mount() used it so it never applied an effect (now `minecraft:regeneration`, amplifier 0). Check [armor-tool-effects](armor-tool-effects.md).
 - Snow Under Trees was removed from the pack in 1.0.2.

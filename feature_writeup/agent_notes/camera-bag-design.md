@@ -1,6 +1,6 @@
 # camera-bag-design
 
-> Camera bags (leather/iron/netherite) in patcherMod camerabag/ - contents in stack NBT, #creativeengineering:camera_equipment, smithing upgrades; status in feature_writeup/camera_bags.md
+> Camera bags (leather/iron/netherite) in Creative Common camerabag/ - contents in stack NBT, #creativeengineering:camera_equipment, smithing upgrades; status in feature_writeup/camera_bags.md
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-02). Repo status docs win over any status line here.
 
@@ -13,7 +13,7 @@ Moved from agent memory 2026-11-16 (last edited there 2026-10-02). Repo status d
 Test status (GUI, slot locking, smithing keeping the contents, tooltip, overflow spill): feature_writeup/camera_bags.md.
 
 **Pieces:**
-- patcherMod `camerabag/`:
+- Creative Common `camerabag/`:
   - `CameraBag`: registries, the `CAMERA_EQUIPMENT` tag key, `canHold`, and load/save/contents/spillOverflow on NBT `CameraBag.Items`.
   - `CameraBagTier`, `CameraBagItem`: right-click opens; onDestroyed spills; tooltip.
   - `CameraBagMenu`: the camera-menu pattern (copy to a SimpleContainer + write back on setChanged); locked bag slot + SWAP block; stillValid by stack identity.
@@ -34,6 +34,6 @@ Test status (GUI, slot locking, smithing keeping the contents, tooltip, overflow
 
 Related: [exposure-backport](exposure-backport.md), [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`.
 
-**Moved 2026-10-02 (1.0.4):** the bags now live in exposureBackport `src/extras` as mod `exposure_extras` (ids `exposure_extras:*_camera_bag`, MissingMappingsEvent remaps the old creativeengineering ids, config `exposure_extras-common.toml [camera_bag]`, tag `#exposure_extras:camera_equipment` defaults in the jar + kubejs add/remove lists). patcherMod 1.0.4 no longer has camerabag/. Status and tests (CB-, R4-04 remap): [camera_bags.md](../camera_bags.md). See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).
+**Moved 2026-10-02 (1.0.4):** the bags now live in exposureBackport `src/extras` as mod `exposure_extras` (ids `exposure_extras:*_camera_bag`, MissingMappingsEvent remaps the old creativeengineering ids, config `exposure_extras-common.toml [camera_bag]`, tag `#exposure_extras:camera_equipment` defaults in the jar + kubejs add/remove lists). Creative Common 1.0.4 no longer has camerabag/. Status and tests (CB-, R4-04 remap): [camera_bags.md](../camera_bags.md). See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).
 
 **Dyeable (2026-10-03):** CameraBagItem implements DyeableLeatherItem (display.color; vanilla dye recipe + cauldron wash work, smithing keeps color). Client item color handler in CameraBagClient tints layer0 `item/camera_bag_dyable`; layer1 is `camera_bag_outline_leather` untinted. Iron + netherite models still point at the leather outline as a placeholder - to give a tier its own outline, add `camera_bag_outline_<tier>.png` and change layer1 in that tier's model json. Textures originated as kubejs/assets/dyable.png + leatheroutline.png (copies kept there). Built and installed to mods/ (-02); no creative-tab dyed variants.

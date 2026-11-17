@@ -25,15 +25,15 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | Part | Status |
 |---|---|
 | Findings on today's three clocks (2) | VERIFIED 2026-10-18 from the decompiled jars and the config files on disk |
-| Master `[time]` section and the push into the other mods (3.1, 3.2) | BUILT 2026-10-18 in patcherMod 1.0.8, DEPLOYED with pack 1.0.8 (2026-10-19 10:20); the push and the sun migration ran in single player 2026-10-19 (`[time]` log lines for every mod and dimension), not tested in game; changes from the design in 3.8 |
+| Master `[time]` section and the push into the other mods (3.1, 3.2) | BUILT 2026-10-18 in Creative Common 1.0.8, DEPLOYED with pack 1.0.8 (2026-10-19 10:20); the push and the sun migration ran in single player 2026-10-19 (`[time]` log lines for every mod and dimension), not tested in game; changes from the design in 3.8 |
 | Seasons that follow the sun (3.3) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Pause while the server is empty (3.4) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Wine aging lengths and boosts (3.5) | Lengths BUILT and pushed from the master. Boosts beyond the cellar (T5): cold x2.0 / warm x0.75 from Brewin' keg temperature BUILT 2026-10-19 ([alcohol.md](alcohol.md) 10.13, cellar now x2.0; Brewin' `-03` in the local `mods/` since 2026-10-20), not deployed, not tested; deep cellar and storage type not built (TODO `alcohol/pack #2`) |
-| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol_part_b.md](alcohol_part_b.md) 7), calendar tooltip and "7:30 pm" clock in patcherMod |
+| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol_part_b.md](alcohol_part_b.md) 7), calendar tooltip and "7:30 pm" clock in Creative Common |
 | GUI integration (3.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/ccaltime` |
 | Offline checks (6) | not built: `tools/time_table.py`, the SUN-counter GameTest |
 | Presets (3.9) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
-| Admin date commands, year fix (3.11) | BUILT 2026-10-30 in patcherMod, installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-TD-01 to -03, -05, SQ-GF31-04 = TI-37 server half); SQ-TD-04 (wine clock, `/wine time` prints bare lang keys on a dedicated server) client check pending; `add` takes singular units only, TI-32 writes `days`; TI-32 to TI-37 in game pending (TODO `gameplay/time #6`) |
+| Admin date commands, year fix (3.11) | BUILT 2026-10-30 in Creative Common, installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-TD-01 to -03, -05, SQ-GF31-04 = TI-37 server half); SQ-TD-04 (wine clock, `/wine time` prints bare lang keys on a dedicated server) client check pending; `add` takes singular units only, TI-32 writes `days`; TI-32 to TI-37 in game pending (TODO `gameplay/time #6`) |
 | Decisions | DECIDED: T1 (A), T2, T3 (SUN), T4 (on), T6, T7 (rejoin), T8, T9, T10, T12, T5 (2026-10-19: cold / warm, 3.5); T11 dropped |
 
 **Files to open first:** `config/creativecalendar-common.toml` `[time]`, `config/betterdays-common.toml`,
@@ -61,7 +61,7 @@ Three mods each keep their own clock, and each is configured separately:
 Today nothing ties these together. A "day" means something different in each one (section 2), and the per-world
 files mean every new single-player world starts on Serene Seasons' defaults.
 
-The plan: one `[time]` section is the only place lengths are set. patcherMod derives every other mod's value from it
+The plan: one `[time]` section is the only place lengths are set. Creative Common derives every other mod's value from it
 and pushes it in at startup, so the four files above stop being edited by hand.
 
 ## 2. Reference: what the three clocks do today
@@ -236,20 +236,20 @@ which are ignored. The startup log says so, with both sets of values. `dayStart`
 restart, because `TimeService` caches them.
 
 **Serene Seasons and SeasonHUD:** both are Forge SERVER configs, loaded per world just before `ServerAboutToStartEvent`.
-In that event patcherMod calls `.set()` on each value. That saves the world's file, and Forge sends the saved file to
+In that event Creative Common calls `.set()` on each value. That saves the world's file, and Forge sends the saved file to
 every client at login, so the HUD sees the same numbers. The fields are public statics (`sereneseasons.config.ServerConfig`,
-`club.iananderson.seasonhud.config.SeasonHudServer`), reached by reflection, so patcherMod gets no compile dependency.
+`club.iananderson.seasonhud.config.SeasonHudServer`), reached by reflection, so Creative Common gets no compile dependency.
 Old worlds get the master values on their next start, and new worlds get them on their first.
 
 **Vinery port (since 2026-10-27, [pack_hygiene.md](pack_hygiene.md) finding 39):** nothing is pushed. Creative Calendar has
 a small public class `time/WineTime` (`active()`, `sunClock()`, `worldDayMinutes()`, `daysPerMonth()`,
 `monthsPerLevel()`, `maxLevel()`, `cellar` / `cold` / `warmMultiplier()`), and the port's `forge/PackTime` calls it
 directly (`compileOnly project(':creativeCalendar')`; Creative Brewing requires Calendar since 2026-11-01, before that a
-soft dependency on patcherMod). The port's `VineryConfig` getters
+soft dependency on Creative Common). The port's `VineryConfig` getters
 (`clockMode()`, `dayUnit()`, `daysPerYear()` and on) return the master's values while `[time] enabled`, else the port's
 own keys. So `vinery-common.toml` is never written by the pack, and its matching `[wine]` / `[aging]` keys are only
 used with the master off (their comments say so). The port's `VintageClockPacket` still carries
-the values to clients. Until 2026-10-27 patcherMod set the `VineryConfig` values by reflection (`TimePush.pushVinery`).
+the values to clients. Until 2026-10-27 Creative Common set the `VineryConfig` values by reflection (`TimePush.pushVinery`).
 
 **Live edits:** a change through Create's Configs screen fires CEConfig's reload, which pushes again. Better Days
 speeds and every Vinery value apply at once (the port reads them live). Serene Seasons / SeasonHUD lengths apply at once on the server, but a
@@ -430,7 +430,7 @@ No conversions between versions: the ports are in development, so nothing below 
 - The 45 real minutes of daylight cover 6:00 am to 8:42 pm, and the 15 min night covers the rest.
 - 12-hour format, lower-case am / pm, to the minute. One clock minute passes about every 3 real seconds by day and
   every 1.5 s at night.
-- One formatter in patcherMod, used by:
+- One formatter in Creative Common, used by:
   - the SeasonHUD line (T6): "Mid Spring (Day 3/24) 7:30 pm"
   - the calendar tooltip (below)
   - `/ccaltime`
@@ -443,7 +443,7 @@ No conversions between versions: the ports are in development, so nothing below 
   - No replacement item; nothing converts.
   - `legacyYearLengthDays` was then only used for reading 1.3.10 wine `Year` NBT; that conversion and the key were
     removed 2026-10-27 (pack_hygiene.md finding 10), so a 1.3.10 wine's `Year` is ignored and it ages as a fresh wine.
-- **The Serene Seasons calendar takes over its tooltip** (patcherMod, `ItemTooltipEvent` on `sereneseasons:calendar`):
+- **The Serene Seasons calendar takes over its tooltip** (Creative Common, `ItemTooltipEvent` on `sereneseasons:calendar`):
   - Line 1: season and day: "Mid Spring, day 3 of 8".
   - Line 2: year and time: "Year 2, 7:30 pm".
   - Line 3 (gray): "Next: Late Spring in 5 days (about 5 h)".
@@ -455,7 +455,7 @@ No conversions between versions: the ports are in development, so nothing below 
 
 ### 3.8 Build status (2026-10-18, not tested in game)
 
-patcherMod **1.0.8** (bumped: 1.0.7 shipped in the pack's 1.0.7, so a rebuild under that name wouldn't reach clients)
+Creative Common **1.0.8** (bumped: 1.0.7 shipped in the pack's 1.0.7, so a rebuild under that name wouldn't reach clients)
 is in `mods/` and `server_mods/`. `creativeengineering-common.toml` gets `[time]` with the defaults on the next start.
 
 | Part | Where | Changes from the design |
@@ -463,7 +463,7 @@ is in `mods/` and `server_mods/`. `creativeengineering-common.toml` gets `[time]
 | `[time]` | `CEConfig.Time` | As 3.1, plus `hudTimeOfDay` (T6 as a switch). `startingSubSeason` 0 = random, as Serene Seasons |
 | Better Days | `BetterDaysConfigMixin` (`@Pseudo`, the four getters), log line at server start | none |
 | Push | `time/TimePush`: `ServerAboutToStartEvent` + every save of the toml (`ModConfigEvent.Reloading`), `/ccaltime push` | Serene Seasons and SeasonHUD are compiled against (both jars are in `libs/`); the Vinery port is not pushed to since 2026-10-27 (it reads `time/WineTime`). Each change is logged old -> new |
-| SUN seasons | `time/SeasonClock`, `SereneSeasonsClockMixin` (server), `SereneSeasonsClientClockMixin` (client mixin since 2026-10-19: as one common mixin its `Minecraft` reference crashed dedicated servers), `SereneSeasonsTimeSkipMixin` | Serene Seasons' +1 per tick **and** its time-skip handler stand down, and patcherMod counts every forward dayTime step itself (the design changed the skip threshold to 0, which needs the same cancel anyway). It syncs every second and at once after a jump. **Client:** between syncs Serene Seasons' client counter also ran +1 per tick, so by day it ran ahead about 3.7 times and snapped back each second, with a full chunk re-render whenever that crossed a sub-season. In SUN mode it follows the client's own dayTime |
+| SUN seasons | `time/SeasonClock`, `SereneSeasonsClockMixin` (server), `SereneSeasonsClientClockMixin` (client mixin since 2026-10-19: as one common mixin its `Minecraft` reference crashed dedicated servers), `SereneSeasonsTimeSkipMixin` | Serene Seasons' +1 per tick **and** its time-skip handler stand down, and Creative Common counts every forward dayTime step itself (the design changed the skip threshold to 0, which needs the same cancel anyway). It syncs every second and at once after a jump. **Client:** between syncs Serene Seasons' client counter also ran +1 per tick, so by day it ran ahead about 3.7 times and snapped back each second, with a full chunk re-render whenever that crossed a sub-season. In SUN mode it follows the client's own dayTime |
 | Sunrise offset | `SeasonClock.migrate` | the counter is lined up with `dayStart` once per level, so the day changes at 6:00 am |
 | Migration | `SeasonClock.Marker` (`data/creativeengineering_season_clock.dat` per level) | keeps sub-season and day number, read with Serene Seasons' lengths from **before** this start's push. Switching back to TICKS clears the marker, so a later switch migrates again |
 | Pause | `BetterDaysTimePauseMixin` (whole tick) + `ServerLevelTimePauseMixin` | Vanilla's `tickTime` isn't canceled, only its `setDayTime`: canceling it would also stop game time, and scheduled block ticks run on game time |
@@ -704,7 +704,7 @@ TI-27 cover what the build added (3.8).
   port's WORLD_TIME clock needs a DAYTIME day unit. T2, T6, T8, T10 decided; T12 added; TI-10 and TI-21 retired;
   TI-23, TI-24 added.
 - 2026-10-18: T12 decided (you): the clock reads sunrise as 6:00 am, so sunset reads 8:42 pm (3.7, TI-23).
-- 2026-10-18: built in patcherMod 1.0.8 (3.8): the `[time]` master, the push, SUN seasons with the sunrise offset
+- 2026-10-18: built in Creative Common 1.0.8 (3.8): the `[time]` master, the push, SUN seasons with the sunrise offset
   and migration, pause when empty, SeasonHUD totals and time of day, the calendar tooltip and action bar, `/ccaltime`.
   T1, T3, T4 and T7 built with the recommendation. Found while building:
   - Serene Seasons' client counter would run ahead between syncs, so in SUN mode it follows the client's dayTime.
@@ -727,9 +727,9 @@ TI-27 cover what the build added (3.8).
 - 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients). The server preset is still open (TODO `pack/release #2`); TI-01 to TI-29 pending.
 - 2026-10-23: 3.10 built: Xaero minimap time line on the pack clock (`XaeroTimeInfoMixin`, `TimeSettings.clock24` / `dayNumber`). Bed clock freeze (TODO time #4) investigated offline, no cause found; TI-30, TI-31 added.
 - 2026-10-27: the Vinery port owns its config (pack_hygiene.md finding 39). `TimePush.pushVinery` (reflection into
-  `VineryConfig`) is gone; the port reads the master through patcherMod's public `time/WineTime` (3.2). Same values
+  `VineryConfig`) is gone; the port reads the master through Creative Common's public `time/WineTime` (3.2). Same values
   and behaviour. The 1.3.10 wine `Year` conversion and `legacyYearLengthDays` were removed (finding 10).
-- 2026-10-30: 3.11 built in patcherMod (`time/TimeDate`): `/ccaltime date` reset / set / next / previous / restart / add,
+- 2026-10-30: 3.11 built in Creative Common (`time/TimeDate`): `/ccaltime date` reset / set / next / previous / restart / add,
   moving the sun, Serene Seasons in every level and the vintage clock together. The year now counts from the first
   sunrise and rounds up (`CalendarDate.year`), fixing a fresh world's two-year year 1. Compiles; TI-32 to TI-37 not run.
 - 2026-11-01: moved to Creative Calendar ([creative_calendar.md](creative_calendar.md)): the `time/` package, `[time]`

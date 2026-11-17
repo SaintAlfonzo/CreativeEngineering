@@ -3,11 +3,11 @@
 Owner decisions of 2026-11-03 applied to every unresolved FAIL. Sources: [scratch_run_2026-11-03.md](testing/scratch_run_2026-11-03.md),
 `perf/runs/r1103/FINAL.md`, `perf/runs/r1103/{sA,sB,p2}/judged.md`, `perf/runs/r1102b/s*/judged.md`, `perf/runs/r1103w/w/results.md`.
 Status: BUILT and INSTALLED 2026-11-03 19:45-19:52 (every item marked below); nothing has booted or run in game. Installed: creativedelight-1.0.0 (19:46, Vintage -17, Golden -02, Farmer's -04),
-creativebrewing-1.0.0 (19:45), creativecalendar-1.0.0 (19:51), creativeworldgen-1.0.0 (19:51), creativeLabels-1.0.1 (19:52), creativeengineering-1.1.08 (patcherMod, 19:52).
+creativebrewing-1.0.0 (19:45), creativecalendar-1.0.0 (19:51), creativeworldgen-1.0.0 (19:51), creativeLabels-1.0.1 (19:52), creativeengineering-1.1.08 (Creative Common, 19:52).
 Left unproven: 4.3 (why only the Vinery hook applied in r1103; hooks are now require = 1 and fail the boot if missed), 4.5 (fix aimed at FirstTickWater, unconfirmed), SQ-GLD-03 (bundle source not found; row reruns on a fresh bot).
 
 Rebuild map: A = KubeJS data only (`/reload`); B = Creative Delight rebuild + install; C = Creative Brewing; D = Creative
-Calendar; E = Creative Worldgen; F = Creative Labels (1.0.1 is still not in `mods/`); G = patcherMod. Everything marked B to G needs a
+Calendar; E = Creative Worldgen; F = Creative Labels (1.0.1 is still not in `mods/`); G = Creative Common. Everything marked B to G needs a
 restart. One jar at a time, never while the game runs.
 
 ## 0. Already fixed in the working tree (verify, do not redo)
@@ -83,7 +83,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 ### 2.3 Cooking-station overflow (SQ-RB-21b) [decided: five stations]
 - **BUILT 2026-11-03** ([remainder_buffer.md](remainder_buffer.md) 3.8): shared `development/shared/stations` (`LeftoverPlan`,
   `StationContainers`) on all five; also containers only in the container slot, one automation face layout, Pickling Jar
-  progress per recipe, Kettle time `[cooking] kettleBrewTicks`. CD jar 19:13 (Miner's `-06`, Vintage `-16`) and patcherMod
+  progress per recipe, Kettle time `[cooking] kettleBrewTicks`. CD jar 19:13 (Miner's `-06`, Vintage `-16`) and Creative Common
   1.1.08 18:36 built, not installed. Which stations lack a container slot: none (all five have one).
 - Cause (judge, matches the code): `CopperPotBlockEntity.leftoversFit` 334-364. With the container slot (5) already holding the served bowl, `recycleRoom` is 0, so the batter's
   bowl leftover has to use the one leftover slot (7), which the oil's bottle took first. Two leftover kinds and one slot stall the pot (`stallWhenFull`).
@@ -119,7 +119,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
   they are not tried).
 - Cannot be named from the log; the stack is missing. Change: make `pot_probe.js` print the full stack (`e.printStackTrace` through
   `Java.loadClass('java.io.StringWriter')`, or log the exception class and the first 6 frames), run `/pottest` for hanging_roots on
-  one holder, then fix at that frame (guard the `setValue` with `hasProperty`, via a mixin in patcherMod or CD).
+  one holder, then fix at that frame (guard the `setValue` with `hasProperty`, via a mixin in Creative Common or CD).
 - Also strike F1 in `flower_pots.md` 3 (did not reproduce).
 - Verify: SQ-POT-03 with 0 `hanging_roots` exceptions.
 
@@ -385,7 +385,7 @@ drunk, golden honey and milk no longer grant the bundle; [Potions] levitation re
 - Verify: SQ-PSF-02 and SQ-PSF-04 (a 1x1 hoe on one vine: unchanged), Damage 1 after a 3x3 sweep.
 
 ### 7.7 Creative Calendar config in its own file only
-- **BUILT 2026-11-03:** 29 old values diffed: all equal; the 3 sections and 3 strays deleted from `config/creativeengineering-common.toml` (127 lines; pre-edit copy in the fork scratchpad; `configs_edited` copy already clean). `CalendarConfigMigration` replaces `warnOldKeys`: strips at construction, writes edited values where the new key still holds its default on first load. Docs: creative_calendar.md 4.3. No patcherMod reader left. Calendar jar 19:35.
+- **BUILT 2026-11-03:** 29 old values diffed: all equal; the 3 sections and 3 strays deleted from `config/creativeengineering-common.toml` (127 lines; pre-edit copy in the fork scratchpad; `configs_edited` copy already clean). `CalendarConfigMigration` replaces `warnOldKeys`: strips at construction, writes edited values where the new key still holds its default on first load. Docs: creative_calendar.md 4.3. No Creative Common reader left. Calendar jar 19:35.
 - State: the move is done in code. `CalendarConfig` writes `config/creativecalendar-common.toml`; `CEConfig` no longer defines `[seasons]`, `[time]`,
   `[crop_seasons]` (comments at CEConfig lines 88, 514, 717, 738). What remains: `config/creativeengineering-common.toml` still holds those three sections
   (lines about 1831 to 1916 and 2161 to 2183), and Creative Calendar only warns ("still has keys that moved") on every boot; edited values are not carried
@@ -394,7 +394,7 @@ drunk, golden honey and milk no longer grant the bundle; [Potions] levitation re
   strays `seasonsMeltIntervalTicks`, `cropSeasons`, `cropOutOfSeason`) from the live file and the `configs_edited` copy, plus the `.bak` copies are left; (3) make
   `CreativeCalendar.warnOldKeys` migrate once instead of warning (copy each old value into the new spec if the new file still holds the default, then
   strip the lines), logging what it moved; (4) grep scripts and docs for the old path (`kubejs/.../cal_server.js`, `creative_calendar.md` 4.3, README, `mod_sides.md`)
-  and `creativeengineering-common.toml [time]` references; (5) confirm no patcherMod code still reads those keys.
+  and `creativeengineering-common.toml [time]` references; (5) confirm no Creative Common code still reads those keys.
 - Verify: boot logs no "moved keys" warning; changing a season length in `creativecalendar-common.toml` takes effect; SQ time/season rows.
 
 ### 7.8 Carrot has a canned source (SQ-FO-02) [accepted]

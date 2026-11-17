@@ -518,7 +518,7 @@ shows status is generated.
    - The plan-named tables ("Scratch 1115 Follow-ups" 1 and 2, 40 rows under Tooling) are refiled into their feature
      families, with `plan` set. Their ids stay.
    - Stale head prose is removed: the 2026-10-21 priorities paragraph (now the High priority list), the run list ending
-     2026-10-28 (now the queue coverage block), "patcherMod" in the Work legend.
+     2026-10-28 (now the queue coverage block), "Creative Common" in the Work legend.
 5. **Plans, writeups and briefs:**
    - Plans: the open task lists (7 plans with `- [ ]` lists, 19 with a `Status:` header) become rows once. A plan keeps
      design, order, rulings and History, and gets the generated row block. Closed plans stay as history.

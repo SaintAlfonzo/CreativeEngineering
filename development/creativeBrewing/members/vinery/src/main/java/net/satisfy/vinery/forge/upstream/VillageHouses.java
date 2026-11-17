@@ -30,7 +30,7 @@ import java.util.Map;
  * to no pool. The port reads them from the donor jar (ARR data, nothing copied: D13), rewrites the palette to the
  * port's ids in memory and serves them as {@code vinery:vinery_<biome>}; at server start each one is appended to its
  * vanilla village houses pool with {@code [village_houses] weight} (0 = the pool's average piece weight, so the house
- * is as common as an average house there). PoolTuner (patcherMod, LOWEST priority) runs after this and records the
+ * is as common as an average house there). PoolTuner (Creative Common, LOWEST priority) runs after this and records the
  * piece in pool_config.json like any mod-injected house, so it can be reweighted or disabled from there.
  */
 public final class VillageHouses {

@@ -23,7 +23,7 @@ ST-296; renumber at build time if another brief took them first.
 
 Status Testing (built 2026-10-30) (as built: [structure_tuning.md](../structure_tuning.md) 3.32; the Build and Decisions below are
 the plan, superseded where 3.32 differs: one data file instead of structure JSON copies, mixes by class, no End tower
-box, box evokers drop no totem) · Work patcherMod / data · TODO `worldgen / structures/contents #3` · revised 2026-10-30 (verified
+box, box evokers drop no totem) · Work Creative Common / data · TODO `worldgen / structures/contents #3` · revised 2026-10-30 (verified
 vanilla mechanics, full audit, owner decision)
 
 ### Goal
@@ -57,7 +57,7 @@ the ForgeFlower jar in the same cache): `Structures`, `ChunkGenerator.getMobsAt`
   - `full` covers the whole bounding box, including the ground and caves under the structure and the air around it;
     `piece` keeps to the pieces. Attempts land at random heights, so a small, tall box catches few of them.
     *Correction 2026-11-02 (`structures/contents #6`): that starved the lone Mysticrift towers (no illager in SQ-SB-03);
-    patcherMod now starts half the attempts in a boxed column inside the box's height range ("Box spawn height",
+    Creative Common now starts half the attempts in a boxed column inside the box's height range ("Box spawn height",
     [structure_tuning.md](../structure_tuning.md) 3.32).*
   - Each mob still needs its own spawn rule. Pillager (`PatrollingMonster.checkPatrollingMonsterSpawnRules`): block
     light 8 or less, any sky light, so they spawn by day. Vindicator, evoker, illusioner, witch, ravager
@@ -67,7 +67,7 @@ the ForgeFlower jar in the same cache): `Structures`, `ChunkGenerator.getMobsAt`
     Bad Omen. Mobs saved in templates never roll.
   - Box mobs are not patrolling, so they despawn like any monster (`removeWhenFarAway`).
 - Besides overrides, only the Nether fortress has a hard-coded spawn path (`isInNetherFortressBounds`, on nether
-  bricks). Forge's `LevelEvent.PotentialSpawns` fires on the final list; patcherMod does not use it today. Patrols
+  bricks). Forge's `LevelEvent.PotentialSpawns` fires on the final list; Creative Common does not use it today. Patrols
   (`PatrolSpawner`) and raids are separate, not tied to structures. The pack's spawn rules and conditions
   (`mob_spawns.json`, `SpawnConditions`) have no illager entries and do not touch overrides.
 
@@ -193,7 +193,7 @@ code). Quark's Spawner Replacer module is off. Botania, PneumaticCraft, Create a
 5. **Pools** come from `mobs/pillagers #1` (camps 0-2 vindicators, towers + 0-1 evoker / illusioner, ...). Never put
    evokers in a repeating box (a Totem of Undying every time, see [mobs_pillagers.md](mobs_pillagers.md) Gotchas).
 6. Document in structure_tuning.md (a 3.x subsection "Spawners and spawn boxes") and in mob_spawns.md 9 (strike "remove
-   pillager spawners" once built). patcherMod rebuild; ships with the next pack version (jar on server and clients;
+   pillager spawners" once built). Creative Common rebuild; ships with the next pack version (jar on server and clients;
    the config key is common). Player changelog bullet then (spawners gone, pillagers respawn in all pillager
    structures).
 

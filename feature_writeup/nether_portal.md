@@ -139,7 +139,7 @@ the frame, lava lighting the frame interior.
 ## 5. File map
 
 - patcherMod: [dimension/PortalFailureHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/dimension/PortalFailureHandler.java), [block/DarkFireBlock.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/DarkFireBlock.java), [block/CreativeEngineeringBlocks.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/block/CreativeEngineeringBlocks.java) (registration), [item/FlintAndTerraSteelItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/FlintAndTerraSteelItem.java), `item/CreativeEngineeringItems.java` (registration).
-- Assets: patcherMod `assets/creativeengineering/{blockstates/dark_fire.json, models/block/dark_fire_0/1.json, models/item/flint_and_terrasteel.json, textures/block/dark_fire_*.png, textures/item/flint_and_terrasteel.png}`. `kubejs/assets/creativeengineering/textures/block/dark_fire_*.png` are different images with the same names; the KubeJS copy is the one the game shows.
+- Assets: Creative Common `assets/creativeengineering/{blockstates/dark_fire.json, models/block/dark_fire_0/1.json, models/item/flint_and_terrasteel.json, textures/block/dark_fire_*.png, textures/item/flint_and_terrasteel.png}`. `kubejs/assets/creativeengineering/textures/block/dark_fire_*.png` are different images with the same names; the KubeJS copy is the one the game shows.
 - KubeJS: [blocktags.js](../kubejs/server_scripts/tags/blocktags.js) (fire tag), [progression.js](../kubejs/server_scripts/magic/progression.js) (recipe), [namechanges.js](../kubejs/client_scripts/namechanges.js), `item_dict.js` (`i.flint_and_terrasteel`), `block_dict.js` (`b.dark_fire`).
 
 ## 6. Offline checks
@@ -177,7 +177,7 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
 - By 2026-09-27 (initial git commit): portal failure handler, Dark Fire (isAir version replaced by the fire tag),
   Flint and Terrasteel (temporary placer); shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests NP-01 to NP-12. No code changed.
-- 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next patcherMod build).
+- 2026-10-19: F6 fixed (DarkFireBlock comment; source only, ships with the next Creative Common build).
 - 2026-11-04: Dark Fire, Flint and Terrasteel and `PortalFailureHandler` moved to Creative Magic ([creative_magic.md](creative_magic.md)); ids unchanged. Same behaviour.
 - 2026-11-07: Immersive Portals interplay fixed (section 3): ordinary fire fails again with IP loaded, Dark Fire builds the IP
   portal. Built and installed 16:44; scratch SQ-PRT-01, -02 queued.

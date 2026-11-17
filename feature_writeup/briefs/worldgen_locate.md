@@ -12,7 +12,7 @@ Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `locat
 | locate #2 | Planned (on hold) | fold stages C to E into the prediction | **second**, only if the rerun census says it pays (see the gate in #2) |
 | locate #3 | Planned | pregenerate the final server world (Chunky + Distant Horizons) | separate; a deploy step on the day the final world is created. Ties in with `pack/server #1` |
 
-| (new) DH clip in every dimension | proposed Bug | limit `DistantClip` to the Overworld | **before #3's Nether/End pregen**; a few lines, can go in any patcherMod build |
+| (new) DH clip in every dimension | proposed Bug | limit `DistantClip` to the Overworld | **before #3's Nether/End pregen**; a few lines, can go in any Creative Common build |
 
 #2 and #3 don't touch each other. #2 is the main code. The new bug is a small fix. #3 is commands and one runbook
 section.
@@ -21,7 +21,7 @@ section.
 
 ## locate #2: Fold stages C to E
 
-Status Planned (on hold, decision 1 in locate.md 4) · Work patcherMod · TODO `worldgen / locate #2`
+Status Planned (on hold, decision 1 in locate.md 4) · Work Creative Common · TODO `worldgen / locate #2`
 
 ### Goal
 

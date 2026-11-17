@@ -52,7 +52,7 @@ This file has three parts, as asked:
 - **Jar:** `mods/Hostile_Delight_0.2.2_1.19.2.jar` (`mods.toml` version string says 1.0.0). Decompile with
   `python3 tools/decompile_mod.py <jar> <out dir>` (123 classes; 45 are on-eat procedures).
 - **Licence:** Academic Free License v3.0. AFL is not GPL-compatible, so the plan keeps Hostile as an untouched jar and
-  does everything in KubeJS and patcherMod (our own code, GPLv3). No fork.
+  does everything in KubeJS and Creative Common (our own code, GPLv3). No fork.
 - **Dependencies:** Minecraft 1.19.2 and Farmer's Delight (mandatory; the other two FD entries in `mods.toml` are
   duplicate optional rows). Recipes use FD's `cooking` and `cutting` types, `farmersdelight:raw_pasta`,
   `cooked_rice`, `cabbage`.
@@ -267,7 +267,7 @@ override is checked in game (HTD-05).
 | B1 | `grolllrecp` (Ghast Roll) and `grollrecp` (Guardian Roll) are `crafting_shapeless` with `pattern` / `key` | Fail at load (`latest.log` line 30515-30516); both rolls have no recipe | Remove, re-add through `global.NCH` by the roll rule (step 6) |
 | B2 | `ppicklerecp` outputs `hostiledelight:preapredseapickle` (typo) | Prepared Sea Pickle has no working recipe | Remove, re-add with the right id. **Built 2026-10-25** (Creative Delight `hostiledelight/recipes.js`, with the campfire recipes the family rule wants; [food_families.md](food_families.md) 4.4, FF-02, FF-04) |
 | B3 | Lang key `item.hostile_delight.blazingale` (wrong namespace) beside the right one | Harmless duplicate | none |
-| B4 | Collapsing's handler calls `setHealth(health - 3)` on any hurt event | Bypasses armor, absorption and the death path (no damage source; `die()` is not called if it reaches 0) | patcherMod: cancel the handler, or route it through a real damage source (D9) |
+| B4 | Collapsing's handler calls `setHealth(health - 3)` on any hurt event | Bypasses armor, absorption and the death path (no damage source; `die()` is not called if it reaches 0) | Creative Common: cancel the handler, or route it through a real damage source (D9) |
 | B5 | Gazing cookie sets air to 20 (of 300) | Under water it empties the air bar instead of filling it (the tooltip reads as a breathing food) | Set to max air (D9) |
 | B6 | Silme Syrup: the honey bottle's crafting remainder (glass bottle) comes back and the syrup also returns a bottle when drunk | One glass bottle gained per syrup | Recipe takes a glass bottle too, or drop the remainder (step 6) |
 | B7 | No item sets a crafting remainder | Bowls and bottles vanish when Glowing / Ardent Sauce (4 recipes), Silme Syrup (2), Ghast Blood (1), Dragon Tonic (1), Bone Gelatin (smoker) are used as ingredients | Crafting remainders in `ItemEvents.modification` (step 6) |
@@ -396,8 +396,8 @@ with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate 
    other modifiers then sit on the vanilla table again. Rows in [loot.md](loot.md) 2.6 (override) and 2.4.
 4. **Item merges** ([item_merges.md](item_merges.md) section 1): Hostile `guardiansoup` -> Ocean's `guardian_soup`
    (D3); raw endermite per D2. Purge, survivor takes recipes, tags, loot, held copies.
-5. **Potion.** Dioxiding as `PotionBrewing.addMix` (patcherMod, as Fungi's Burrowing) for bottle; splash
-   and lingering follow by vanilla's container mixes; drop Hostile's `IBrewingRecipe` (patcherMod mixin on
+5. **Potion.** Dioxiding as `PotionBrewing.addMix` (Creative Common, as Fungi's Burrowing) for bottle; splash
+   and lingering follow by vanilla's container mixes; drop Hostile's `IBrewingRecipe` (Creative Common mixin on
    `DioxidingpotrecpBrewingRecipe.init`). Then [potions.md](potions.md) 2.3 row, `PotionMixDedup` check, Create / IE
    mixers, bottling and the potion fluid, [potion_buckets.md](potion_buckets.md), `tipped_arrows.js`.
 6. **Recipes by the pack rules**, all through `global.NCH`:
@@ -428,7 +428,7 @@ with broken loot in the pack meanwhile. TODO row: `mod-additions #8` (integrate 
 9. **Food types, values, code effects.** `food_types.json` rows for 68 foods; `/dumpfood`, `food_catalog.py`, tune
    against the type bands (Mitey Meal 10 / 1.3 is above every `meal` median; Ghast Tentacle 0 / 1.0). Code effects
    (D10): the 33 items whose procedure only adds lasting effects get those effects as food properties and their
-   procedure canceled by a patcherMod mixin; the 9 others keep their procedure (XP, endermite spawn, void damage, air,
+   procedure canceled by a Creative Common mixin; the 9 others keep their procedure (XP, endermite spawn, void damage, air,
    effect removal, Ghast Brew's heal applied once, B12), each with a pack tooltip line. Values then match AppleSkin, JEED and cans.
 10. **Food families.** `tools/food_families.py` rules so every Hostile food lands in a family (`--check` fails closed on
     unsorted): raw meats -> `meat/raw` or `hazard` (Ghast Tentacle, Raw Endermite, Rotten Ham, Frozen Flesh), cooked ->
@@ -460,7 +460,7 @@ before step 6 (recipes name the survivors).
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
-| D1 | Integrate now, or hold for an Unusual Delight port? | Integrate now, KubeJS + patcherMod only (AFL license, no fork). An Unusual port later merges onto these items | integrate now |
+| D1 | Integrate now, or hold for an Unusual Delight port? | Integrate now, KubeJS + Creative Common only (AFL license, no fork). An Unusual port later merges onto these items | integrate now |
 | D2 | Which raw endermite item does an endermite drop? | One: End's `raw_ender_mite_meat` survives (knife drop, machete set, own tag), Hostile `rawendermite` merged into it; Hostile Cooked Endermite stays as its cooked form; Ender's `mite_crust` kept (knife, separate part). Decide together with `mod-additions #4` | End's survives, knife only |
 | D3 | Guardian meat | Ocean's whole `guardian` stays the drop; cutting board: guardian -> 3 Hostile fillets; Hostile's always-drop removed. Hostile Guardian Soup merged into Ocean's `guardian_soup` | as recommended |
 | D4 | Ghast tentacle rate | 0-2 + looting 0-1, no knife (ghasts are shot); tear and gunpowder back to vanilla | 0-2 + looting |
@@ -470,7 +470,7 @@ before step 6 (recipes name the survivors).
 | D8 | Ender Substance 8 void damage | Keep as the cost of Resistance IV; JEI page and tooltip warn | keep |
 | D9 | Collapsing and the Gazing cookie | Collapsing: cancel the `setHealth` handler and leave the effect unsourced (hidden), or make it 3 magic damage per hit if a source is ever wanted. Gazing cookie: fill air (B5) | cancel handler; fill air |
 | D10 | Code-side effects | Food properties for the 33 plain-effect foods (procedures canceled), code kept for the 9 others (food.md D4) | as recommended |
-| D11 | 69 literal flavor lines | Remove them (pack style, as Vinery's): needs a literal-text helper beside `removeTooltipKey`, or a patcherMod mixin canceling Hostile's `appendHoverText` | remove |
+| D11 | 69 literal flavor lines | Remove them (pack style, as Vinery's): needs a literal-text helper beside `removeTooltipKey`, or a Creative Common mixin canceling Hostile's `appendHoverText` | remove |
 | D12 | Grid cookies, pies, brownies, bread vs the baking overhaul | Rebuild on the pack bases, oven only | rebuild |
 | D13 | Guardian Burger on a raw patty | The burger takes Cooked Guardian Fillet in place of the raw patty (a cooked patty would be a new item) | cooked fillet |
 | D14 | Prepared Sea Pickle (no use anywhere) | Fix the recipe and give it no use (scope rule), or remove the item through `removed_items.js` | fix, keep |
@@ -547,7 +547,7 @@ Notes, as rows:
   recipe or a loot source except the drops.
 - Loot dump: `minecraft:entities/ghast` and `guardian` equal the 2026-10-22 vanilla rows; `endermite` empty.
 - `python3 tools/changelog_lint.py`.
-- patcherMod: headless harness for the Dioxiding mix (memory `patchermod-headless-smoke-test`).
+- Creative Common: headless harness for the Dioxiding mix (memory `patchermod-headless-smoke-test`).
 
 ## 8. In-game test suite (drafted)
 

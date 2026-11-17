@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-10-19 into patcherMod 1.0.9 (rebuilt in mods/). Writeup: feature_writeup/mob_block_tweaks.md
+Built 2026-10-19 into Creative Common 1.0.9 (rebuilt in mods/). Writeup: feature_writeup/mob_block_tweaks.md
 2.5 (MT-13..18; scratch server passed 13-16); TODO `farming/trees #1`.
 
 - Hook: HEAD of `LeavesBlock#randomTick` (m_213898_); Fast Leaf Decay and the pack's fruit leaves all end there.
@@ -25,7 +25,7 @@ Built 2026-10-19 into patcherMod 1.0.9 (rebuilt in mods/). Writeup: feature_writ
 
 Related: [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`.
 
-**2026-10-20 (patcherMod 1.1.01, in mods/, MT-24/25):** IW leaf piles restored. IW's LeavesMixin calls
+**2026-10-20 (Creative Common 1.1.01, in mods/, MT-24/25):** IW leaf piles restored. IW's LeavesMixin calls
 `LeavesGrowth.decayLeavesPile` after removeBlock in randomTick (FLD ran randomTick, so it got piles); our tick-path
 decay now calls it via `block/LeafDecayPiles` (`[leaf_decay] leafPiles`). `[leaf_piles] slowFromLayers` (default 4 =
 IW's `layers > 3`) via `mixin/LeafPileSlowMixin` (@ModifyConstant on the only iconst_3 in LeafPileBlock m_7892_);

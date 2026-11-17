@@ -6,7 +6,7 @@ The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7bbfb9e092e6 -->
+<!-- generated:status_index begin open_work sha1=8461a745a865 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Bug 1, Planned 3, Pinned 1, In Progress 2, Testing 18), 3 Complete.
 
 | Id | Status | Tests | Change |
@@ -14,7 +14,7 @@ The pack's own JFR events (3.6, 2026-10-26) are built, headless-tested, scratch 
 | `pack/server #36` | Bug | S P | Forced mob-cap level 2 spawns no monsters on a superflat |
 | `gear/tuning #16` | Planned | S C | Audit trimmable armors and their trim render cost |
 | `pack/server #12` | Planned | S P T | Heap near the cap (server 6 GB, client 10 GB) |
-| `tooling/generators-and-tests #8` | Planned | S | Feature tests for patcherMod and the in-tree mods |
+| `tooling/generators-and-tests #8` | Planned | S | Feature tests for Creative Common and the in-tree mods |
 | `structures/terrain #4` | Pinned | S C P | Avoid straight lines in worldgen noise |
 | `pack/server #21` | In Progress | S~ P | Block state count |
 | `pack/server #38` | In Progress | C | Client swapping, Nether DH, season color cost, log spam (live client recording 2026-11-07) |
@@ -54,8 +54,8 @@ Recorder (JFR), built into Java, no mod. When it lags, `perf/dump.sh` on the ser
 | Server report (crash/lag bundle) | `server/perf/report.sh` | BUILT 2026-09-30; live, crashed and watchdog paths tested on a scratch server; Linux only |
 | Report intake | `tools/perf/ingest_report.py` | BUILT 2026-09-30; tested on the three scratch archives |
 | Dump on exit | `dumponexit=true,filename=perf/exit` in the `JVMARGS` line | BUILT 2026-09-30; watchdog crash wrote a 254 MB recording |
-| Pack events (exact tick, dimension, chunk-wait, KubeJS-script, entity-type times) | patcherMod `perf/` + 9 mixins, `ce-server.jfc` (3.6) | BUILT 2026-10-26 (patcherMod 1.1.03); JFR logic and report tested headless; scratch test queued (SQ-PF) |
-| `/cdevperf status`, `/cdevperf dump [tag]` | patcherMod `perf/PerfCommand` (3.6) | BUILT 2026-10-26; scratch test queued |
+| Pack events (exact tick, dimension, chunk-wait, KubeJS-script, entity-type times) | Creative Common `perf/` + 9 mixins, `ce-server.jfc` (3.6) | BUILT 2026-10-26 (Creative Common 1.1.03); JFR logic and report tested headless; scratch test queued (SQ-PF) |
+| `/cdevperf status`, `/cdevperf dump [tag]` | Creative Common `perf/PerfCommand` (3.6) | BUILT 2026-10-26; scratch test queued |
 
 **After a crash or lag (preferred):** on the server, `perf/report.sh` (section 3.5). Copy the zip here and run
 `python3 tools/perf/ingest_report.py <zip>`, then open `perf/incoming/<name>/index.html`.
@@ -84,7 +84,7 @@ Sections, in page order:
 1. **Tiles**: tick time (median, p95, max of Minecraft's 100-tick average), estimated server-thread busy share,
    sample count, GC pauses, allocation rate.
 2. **Timelines**: tick time, per-second busy share (estimate), CPU (JVM vs whole machine), heap after GC.
-3. **Measured by the pack's hooks** (recordings from patcherMod 1.1.03 on; section 3.6): exact single-tick times
+3. **Measured by the pack's hooks** (recordings from Creative Common 1.1.03 on; section 3.6): exact single-tick times
    (median, p95, p99, longest per second) and busy share, each dimension's share of the tick, chunk waits with
    the mod and call site that asked, KubeJS handlers by script and line, entity and block entity time by registered
    type with the positions of slow single ticks.
@@ -227,9 +227,9 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
     logger with numbers normalised.
   - The Server thread from each live thread dump, and system.txt.
 
-### 3.6 The pack's own events (patcherMod, 2026-10-26)
+### 3.6 The pack's own events (Creative Common, 2026-10-26)
 
-Closes the blind spots of sampling (section 4) with measured times. patcherMod defines ten JFR events
+Closes the blind spots of sampling (section 4) with measured times. Creative Common defines ten JFR events
 (`perf/PerfJfrEvents`), fired by mixins; `ce-server.jfc` enables them all. They show in the report's
 "Measured by the pack's hooks" section, and in JDK Mission Control under Creative Engineering / Performance.
 
@@ -273,7 +273,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
 
 ## 4. Limits and decisions
 
-**Blind spots of sampling, and what patches them (3.6, patcherMod 1.1.03 on):**
+**Blind spots of sampling, and what patches them (3.6, Creative Common 1.1.03 on):**
 
 - **Waiting.** Waiting on the server thread isn't sampled. It waits for chunks in 0.1 ms parks, which also stay
   under the park threshold. Patched for chunk waits (`ChunkWait`); other waits (a mod's `join()` on a future)
@@ -299,7 +299,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
   position", and it is not in this pack's mods.
 - **Vanilla `/jfr start`.** Its settings take a stop-the-world heap census (`jdk.ObjectCount`) and log every
   file read and write.
-- **patcherMod JFR events (the user's option 3).** Deferred on 2026-09-28, built 2026-10-26 (3.6): per-tick
+- **Creative Common JFR events (the user's option 3).** Deferred on 2026-09-28, built 2026-10-26 (3.6): per-tick
   and per-dimension timing, chunk-wait events with stacks, KubeJS handler timing by script, entity and block
   entity totals by type, `/cdevperf status` and `/cdevperf dump`.
 
@@ -345,7 +345,7 @@ Closes the blind spots of sampling (section 4) with measured times. patcherMod d
 
 ## 7. Known issues: third-party hot spots (fixed 2026-10-03)
 
-Found in the first server profile. Each is a throttle in patcherMod (the jar, 1.0.4, built, not in `mods/`) or
+Found in the first server profile. Each is a throttle in Creative Common (the jar, 1.0.4, built, not in `mods/`) or
 a KubeJS change, with its dial in `config/creativeengineering-common.toml` under `[perf]` (read live).
 Checked on a scratch dedicated server (all 347 server jars, new jar): it booted, the mixin export shows every
 one applied, and there are no errors from them in the log. None of it is tested under real load.
@@ -429,14 +429,14 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
 
 - 2026-10-26: Pack events built (3.6, TODO `server #9`): ten `creativecommon.*` JFR events from 9 patcherMod
   mixins, `/cdevperf status|dump`, the events in `ce-server.jfc`, `PerfParse` and `perf_report.py` read them (new
-  "Measured by the pack's hooks" section). Headless JFR and report tests pass; patcherMod 1.1.03 rebuilt;
+  "Measured by the pack's hooks" section). Headless JFR and report tests pass; Creative Common 1.1.03 rebuilt;
   live checks queued as SQ-PF-01 to -06.
 - 2026-10-26 (scratch run nb2): the 9 perf mixins were in the `client` list of `creativeengineering.mixins.json`, so a
   dedicated server never applied them (`/cdevperf status`: no hook run, 0 handlers wrapped); moved to the common list,
-  patcherMod 1.1.03 rebuilt and installed 15:54. PF-14, PF-15, PF-18 PASSED, PF-16 partial; PF-17, PF-19 open.
+  Creative Common 1.1.03 rebuilt and installed 15:54. PF-14, PF-15, PF-18 PASSED, PF-16 partial; PF-17, PF-19 open.
 
-- 2026-10-03: Known issues (section 7) fixed: 5 throttles in patcherMod `[perf]` plus the horse armor pass, and a
-  wrong effect id found while doing it. Scratch-server boot and mixin export checked. patcherMod 1.0.4 jar built, not
+- 2026-10-03: Known issues (section 7) fixed: 5 throttles in Creative Common `[perf]` plus the horse armor pass, and a
+  wrong effect id found while doing it. Scratch-server boot and mixin export checked. Creative Common 1.0.4 jar built, not
   installed to `mods/`.
 
 - 2026-09-30: Server report built (3.5): `server/perf/report.sh`, `tools/perf/ingest_report.py`,
@@ -456,7 +456,7 @@ Pack events (3.6), scratch-queue rows SQ-PF-01 to -06:
 
 ## 10. Pack evaluation, 2026-10-27
 
-One session, the `mods/` jars of 2026-10-27 00:14 (patcherMod 1.1.03 23:36, CD 22:30; 368 server jars, 413 client
+One session, the `mods/` jars of 2026-10-27 00:14 (Creative Common 1.1.03 23:36, CD 22:30; 368 server jars, 413 client
 jars), Ryzen 5 5600H (12 threads), 14.5 GB RAM, Java 17. Server: three scratch dedicated servers on seed
 -8188900049893920259 (`tools/perf/eval/eval_server.sh`, normal world with structures, `-Xmx6G` as shipped, JFR with
 `ce-server.jfc`). Client: a throwaway client with the user's options (windowed, FPS uncapped, no pause on lost focus),
@@ -501,7 +501,7 @@ load and the JEI start: a real join is about 3x what the log says.
    `LargeItemLists.getAllTrimmable` -> `getAllItemsOfType` -> `getAllItems`, which rebuilds a list of every registered
    item each time (92% of the render thread in the JEI window; 110 MB/s allocation). It makes only 288 trim recipes.
    Fix: cache `LargeItemLists.getAllItems` / `getAllItemsOfType` (the item registry is frozen by then) with a
-   patcherMod mixin, or build the 288 recipes from the pack's own list. Expected: join about 60 s shorter.
+   Creative Common mixin, or build the 288 recipes from the pack's own list. Expected: join about 60 s shorter.
 2. **Distant Horizons.** Server, no player: the DH LOD builder takes 71% of all CPU samples and 72 MB/s of
    allocation while idle; during pregen 37% of samples, 211 MB/s, and the longest tick 664 ms (62 ms without DH);
    pregen 25% slower (5:26 vs 4:21); boot 12 s slower. Single player: DH's world-gen thread is 42% of all client JVM
@@ -586,7 +586,7 @@ What uses CTM in this pack:
   Compat ships CTM metadata for Chipped variants (Chipped is not installed); Fantasy Furniture's
   `mod_support/ctm` pack is not enabled in `options.txt`.
 
-Options were: remove CTM (those two blocks lose connected textures, about 20 s back), or a patcherMod mixin caching
+Options were: remove CTM (those two blocks lose connected textures, about 20 s back), or a Creative Common mixin caching
 `getMaterials` / `getDependencies` per unbaked model inside `onModelBake`. No 1.19.2 Forge replacement found.
 
 **Done 2026-10-27: CTM removed.** Jar moved to `disabledmods/`, `mod_sides.md` row deleted, `pack/manifest.json` and
@@ -608,7 +608,7 @@ files; scripts in the session scratchpad):
 - 389 water marks or ticks border open space (367 below y 50); a flood fill from them inside each chunk reaches
   100 grass, 62 moss carpet, 22 azalea / flowering azalea, 10 cave vines: the same mix as the eval's items.
 
-Fix (patcherMod `worldgen/FirstTickWater`, `LevelChunkFirstTickWaterMixin`, `FlowingFluidSettleMixin`,
+Fix (Creative Common `worldgen/FirstTickWater`, `LevelChunkFirstTickWaterMixin`, `FlowingFluidSettleMixin`,
 `BlockPopResourceSettleMixin`). The water moves as in vanilla; only the items are dropped:
 - `postProcessGeneration` HEAD opens a settling window on the chunk when it has `PostProcessing` marks or
   `InhabitedTime` 0;
@@ -673,14 +673,14 @@ structures 1.1%, and an unknown part of `JigsawStructure` (2.1%, assembles befor
 
 **Options, best first:**
 
-1. **Skip impossible structures (patcherMod, exact).** HEAD of `tryGenerateStructure` (beside `skipVetoedSlot`):
+1. **Skip impossible structures (Creative Common, exact).** HEAD of `tryGenerateStructure` (beside `skipVetoedSlot`):
    return false when the structure's biome set has no biome in the generator's `possibleBiomes()`. The weighted pick
    still rolls the same randoms, so every world generates the same. About 7.5% of worker CPU, plus jigsaw time.
 2. **Cache the cliffs noise (datapack override of `tectonic:overworld/legacy/cliffs`).** Wrap the offset sum and the
    rarity noise in `interpolated(flat_cache(...))`, keep `y` exact. 2D noise drops from per block to per column;
    up to 13.5% of worker CPU, about a third of the noise stage. Not exact: cliff tops move by a fraction of a block,
    so new chunks next to old ones can show a seam at cliffs. Needs a decision for existing worlds.
-3. **Shared EarthFill column cache (patcherMod).** One bounded cache per `RandomState` and grid cell, shared by
+3. **Shared EarthFill column cache (Creative Common).** One bounded cache per `RandomState` and grid cell, shared by
    predictions, retries and the real start, storing only what `Terrain` needs (top, top-is-water, air/water/solid
    runs) instead of a 384-entry `NoiseColumn`. Exact. Removes the repeat reads (at least the 28% from predictions
    and retries). Twigs / MES `getBaseColumn` could go through the same cache with a redirect.
@@ -719,7 +719,7 @@ igloo 0 in both. No family shifts one way, so grid 4 is kept.
 
 Yes. Same seed, square, jar set and machine as the 10.1 evaluation; one scratch server per world, one at a time
 (`tools/perf/eval/wgp_run.sh`, series and group A run in [testing/scratch_queue.md](testing/scratch_queue.md) Run log).
-Jar: patcherMod 1.1.03 built 13:45 (options 1-4, Armor Trims cache, first-tick water), installed 15:14 and hard-linked
+Jar: Creative Common 1.1.03 built 13:45 (options 1-4, Armor Trims cache, first-tick water), installed 15:14 and hard-linked
 into every world, so all seven ran the same build. DH on in all. `wgp_old` = every new option off and first-tick water
 off: the same-day "before"; `wgp_new` = as shipped.
 
@@ -784,7 +784,7 @@ Pregen 21% faster than the same-day all-off world and 29% faster than the mornin
    written. The chunk file was then unreadable (`Failed to read chunk`) and Chunky waited on it forever (stalled at
    513 of 2601). Once in 7 worlds, never in the user's logs; no pack code hooks chunk saving. Suspects: DH's server-side
    LOD builder, mods that write into the chunk tag on save. Trace in `perf/wgp/wgp_cl_stalled/latest.log.gz`. TODO `perf #23`.
-2. The parallel session's patcherMod installed 17:47 crashes at mod loading: `ImmersivePostsValidItemMixin` uses
+2. The parallel session's Creative Common installed 17:47 crashes at mod loading: `ImmersivePostsValidItemMixin` uses
    `@Redirect(method = "*")` with a static handler, which also matches instance methods of `PostBaseBlock`. Reported to
    that work (TODO `perf #21`); it blocked the `wgp_cl` rerun.
 
@@ -815,7 +815,7 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    WorldEdit 7.2.12's `Capability.WORLD_EDITING` init walks `getAllStates` of every block type to register internal
    ids (`BlockState#generateStateMap` / `populate`): 63% of the server thread in the eval's start window. It scales
    with the state count. Options: A, leave WorldEdit out of the player and server jar sets and keep it in the dev
-   instance (`mod_sides.md` lists it `both`); B, a patcherMod mixin that defers the registration to first use.
+   instance (`mod_sides.md` lists it `both`); B, a Creative Common mixin that defers the registration to first use.
    B BUILT 2026-10-27 (TODO server #17). How the init works: `Capability$4.ready` loops `BlockType.REGISTRY`,
    calls `getAllStates()` (which runs `BlockState.generateStateMap`: a cartesian product of property values, a
    `TreeMap` and an `ImmutableMap` key and a `populate` neighbor table per state), then for each state
@@ -831,7 +831,7 @@ named threads in the window. Nothing was changed; status: INVESTIGATED.
    recomputes the 128 ring positions on each start (`ChunkGenerator#generateRingPositions`, a `findBiomeHorizontal`
    per stronghold through Blueprint's `ModdedBiomeSource` and the Tectonic climate noise). It blocks the first chunk
    that needs structure starts, so a new world's "Preparing level" waits on it (29% of that gap in 10.1). Fix: a
-   patcherMod cache of the positions in the world's data, keyed by seed, the stronghold structure set and a biome
+   Creative Common cache of the positions in the world's data, keyed by seed, the stronghold structure set and a biome
    source fingerprint. Exact. BUILT 2026-10-27 (TODO server #18): `ChunkGeneratorRingCacheMixin` on
    `generateRingPositions` (`m_223148_`); HEAD returns a completed future when `RingPositionCache` has the key,
    RETURN chains a store onto vanilla's future on a miss. File: `<world>/data/creativeengineering_ring_positions.json`
@@ -905,7 +905,7 @@ is `maxTrussLength`).
 Kept: wood, aluminium, steel, iron, copper, nickel (29,952 states). Dropped: nether brick, gold, lead, silver,
 constantan, electrum, uranium, concrete, leaded concrete (44,928 states, about 5.8% of the pack's 770,959).
 
-patcherMod 1.1.03:
+Creative Common 1.1.03:
 - `ImmersivePostsRegistrationMixin` redirects `EnumPostMaterial.values()` in the static-init lambdas of
   `IPOContent$Blocks$Posts` and `$HorizontalTruss` to the kept list, so the dropped blocks are never registered.
   `Posts.get` / `HorizontalTruss.get` already return null for a material missing from their map.
@@ -933,8 +933,8 @@ Worldgen and runtime: section 10 (options 1-4 of 10.7 built, Distant Horizons de
 ## 12. Overall measurement, 2026-10-27 night (all changes together)
 
 Owner request: one overall before/after, no per-fix worlds. Same seed (-8188900049893920259), square, machine and
-`-Xmx6G` / client arguments as 10.1. Jars: `mods/` at 18:29 for the first boot (patcherMod with the fixes below,
-Creative Delight 17:20), then the 18:44 patcherMod and 18:43 Creative Delight (same tree plus a parallel session's
+`-Xmx6G` / client arguments as 10.1. Jars: `mods/` at 18:29 for the first boot (Creative Common with the fixes below,
+Creative Delight 17:20), then the 18:44 Creative Common and 18:43 Creative Delight (same tree plus a parallel session's
 changes) for boots 2-5 and the client. Includes everything in 10.3-10.8 and 11.2-11.3: ModernFix 5.18.1, Distant
 Horizons `numberOfThreads = 1` / request distances 256, CTM removed, WorldEdit lazy ids, stored ring positions, biome
 tuner disk cache, item merge split, Immersive Posts cut. Kit: `tools/perf/eval/overall_run.sh` (boot, idle, pregen,
@@ -1015,7 +1015,7 @@ Reading it:
 - Resource packs were not measured here (the eval client ran them all, unsplit). Per-pack cost: [perf_rpack.md](perf_rpack.md)
   (built 2026-10-29, client run CQ-RP queued).
 
-## 13. Follow-ups to the overall run (built 2026-10-27 late, patcherMod 1.1.03, installed 20:44)
+## 13. Follow-ups to the overall run (built 2026-10-27 late, Creative Common 1.1.03, installed 20:44)
 
 From the ranking of the overall run (`ov1-idle`, `ov1-pregen`, and `ov1-client` made from `perf/overall/ov1/client.jfr`
 with `--mods mods`). Scratch tests SQ-STC-01/02, SQ-GFB-01 to -04, SQ-HRU-01/02; client check CQ-STC-01. TODO
@@ -1149,7 +1149,7 @@ IW is about 17% of the random-tick phase in every scenario with players, about 0
 
 | # | Change | Expected | Behavior change |
 |---|---|---|---|
-| A | patcherMod mixin on `BlockGrowthHandler.tickBlock`: cache `block_growths` (refresh on config load), look up the block's growth set and the source's universal set first, return when both are empty, only then build the biome supplier | most of item 1: about 1.5 to 2% of the Server thread (0.5 to 1 ms per tick with players), most of IW's allocation | none |
+| A | Creative Common mixin on `BlockGrowthHandler.tickBlock`: cache `block_growths` (refresh on config load), look up the block's growth set and the source's universal set first, return when both are empty, only then build the biome supplier | most of item 1: about 1.5 to 2% of the Server thread (0.5 to 1 ms per tick with players), most of IW's allocation | none |
 | B | A plus a precomputed per-block flag (an `IdentityHashMap` set at rebuild, or a field on the block) so the early return skips the hash lookup too | a further share of the 15% lookup | none |
 | C | Replace IW's `callTick` injection (mixin plugin cancel in the coremod) with one that only calls when the block has growths for `block_tick`, skipping the palette re-read | the remaining PalettedContainer re-read (2 to 4% of IW) | none if the re-read is kept for blocks that have growths |
 | D | `MossyBlock` / `MossableBlock` `isRandomlyTicking`: read a precomputed per-state boolean | item 2, 0.2 to 0.3% | none |
@@ -1158,7 +1158,7 @@ IW is about 17% of the random-tick phase in every scenario with players, about 0
 A is the clear first step: small, no behavior change, and it applies to every scenario with players. Measure with
 the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
 
-### 15.4 Built: A, B and C (2026-10-28, patcherMod 1.1.03, installed in `mods/` 2026-10-28)
+### 15.4 Built: A, B and C (2026-10-28, Creative Common 1.1.03, installed in `mods/` 2026-10-28)
 
 - `perf/IwGrowthFast`: `tickBlock` reads the block's growth sets from a field on the block (B), returns when neither
   the block nor the tick source has growths, reads `block_growths` once per game tick, and only then builds the
@@ -1181,7 +1181,7 @@ the suite (G03a, G04, G12) against `g1`. TODO `server #29`.
   Scratch r1031 (2026-10-31): SQ-IWF-01, -02, -02b, -03, -04b PASSED (fast path on and off grow the same: 15 / 14 leaf
   piles; growths off grows nothing; caveat: -04b used persistent leaves). SQ-IWF-05 (the gain) not run.
 
-## 16. Four spread-out players: whistle goal and underground bees (built 2026-10-28, patcherMod 1.1.03 installed)
+## 16. Four spread-out players: whistle goal and underground bees (built 2026-10-28, Creative Common 1.1.03 installed)
 
 Suite `g1` G04 (four bots 600 apart, 50.1 ms mean) had the server at its tick budget (scratch run 2026-10-28,
 finding 10). Inclusive shares of the 18,725 Server thread samples in `perf/suite/g1/jfr/G04-1.jfr`:
@@ -1215,7 +1215,7 @@ Tests: scratch queue "Whistle goal skip and underground bees" (SQ-PF16-01 to 04)
 (2026-10-31): SQ-PF16-01 (mixins), -03 (underground bee frozen with no player near, moves again) PASSED; -02 (whistling
 arrow still pulls) client check pending; -04 not run.
 
-## 17. Mob cap levels by spawnable chunks, spawn edge and vertical limits (BUILT 2026-10-28, patcherMod 1.1.03 installed; BROKEN: SQ-MCL-04 FAIL r1031)
+## 17. Mob cap levels by spawnable chunks, spawn edge and vertical limits (BUILT 2026-10-28, Creative Common 1.1.03 installed; BROKEN: SQ-MCL-04 FAIL r1031)
 
 Follows section 16 and finding 10: in G04 four spread-out players ran four full monster caps (about 310 hostiles, 22.0%
 of the Server thread, plus 5.3% natural spawning). Nothing in the pack changes caps or despawn today; they are vanilla.

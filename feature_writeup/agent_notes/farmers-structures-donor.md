@@ -1,6 +1,6 @@
 # farmers-structures-donor
 
-> Farmer's Structures 1.0.6 (ARR, NeoForge) is read from farmers_upstream/ and converted in memory by patcherMod worldgen/donor; gotchas
+> Farmer's Structures 1.0.6 (ARR, NeoForge) is read from farmers_upstream/ and converted in memory by Creative Common worldgen/donor; gotchas
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

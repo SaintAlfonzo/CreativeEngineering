@@ -19,7 +19,7 @@ function writeExportJson(path, data) {
 ServerEvents.loaded(e => {
 	if (!global.CDV) {
 		console.error('[creativedevtools] global.CDV missing: the Devtools jar\'s startup script did not run ' +
-			'(patcherMod without the startup loader, or no creativedevtools jar in mods/)')
+			'(Creative Common without the startup loader, or no creativedevtools jar in mods/)')
 		return
 	}
 	if (!global.guardThrowable || !global.writeExportJson) {

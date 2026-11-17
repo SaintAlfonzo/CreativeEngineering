@@ -118,7 +118,7 @@ tag that includes sculk, is never used.
 
 | Mechanic | What it does upstream | 1.19.2 note |
 |---|---|---|
-| Inky Cap Cow, Morel Cow (`FDMCow extends MushroomCow`) | Mooshroom-style cow with its mushroom on its back. Shears: becomes a cow, drops 5 of its mushroom. Bowl: plain mushroom stew (inherited, red variant). Not changed by lightning. Breeds with any mooshroom (`MushroomCowMixin.canMate`); the calf takes the type of the parent whose breed goal spawns it (a Fungi parent gives its own type, a mooshroom parent a mooshroom). Two cows of the same type: 1 in 1024 calves is the other type. Tempted by wheat. Drops leather and beef as a cow. Spawn rule: vanilla mooshroom rule (mycelium below) | `MushroomCow` is the same shape in 1.19.2; the renderer layer reads `getMushroomBlockState()`. patcherMod's `MushroomCowWalkTargetMixin` covers subclasses |
+| Inky Cap Cow, Morel Cow (`FDMCow extends MushroomCow`) | Mooshroom-style cow with its mushroom on its back. Shears: becomes a cow, drops 5 of its mushroom. Bowl: plain mushroom stew (inherited, red variant). Not changed by lightning. Breeds with any mooshroom (`MushroomCowMixin.canMate`); the calf takes the type of the parent whose breed goal spawns it (a Fungi parent gives its own type, a mooshroom parent a mooshroom). Two cows of the same type: 1 in 1024 calves is the other type. Tempted by wheat. Drops leather and beef as a cow. Spawn rule: vanilla mooshroom rule (mycelium below) | `MushroomCow` is the same shape in 1.19.2; the renderer layer reads `getMushroomBlockState()`. Creative Common's `MushroomCowWalkTargetMixin` covers subclasses |
 | Pig food | Brown and red mushrooms, inky caps, morels, truffles added to `Pig.FOOD_ITEMS` (AT, `CompoundIngredient` wrap) | Veggies and Vintage wrap the same field; all three combine with the current value |
 | Truffle breeding | A pig bred with a truffle is flagged; on birth 50 % of litters get extra piglets (40 % one, 10 % two) | `BabyEntitySpawnEvent` exists in 1.19.2 |
 | Pig digging (`TruffleDiggingGoal`, goal 5) | An adult pig on the ground tries on 1 in 4000 ticks (`chancePigDigging` 2.5e-4). It targets the nearest podzol, mud, rooted dirt or truffle dirt with air above within 6 blocks, digs for 3 s, then: truffle dirt gives 1 to 3 truffles; anything else rolls `gameplay/pig_digging` (truffle 15, stick 35, bone meal 30, clay ball 20). **The block becomes coarse dirt either way, and `mobGriefing` is not checked.** Cooldown 2 min after a dig, 10 s after a give-up | The loot call uses 1.20's `LootDataManager` and `LootParams`; 1.19.2 has `getLootTables().get()` and `LootContext.Builder` |
@@ -303,7 +303,7 @@ fails to load. Game closed: `./gradlew :backportedFungi:installToMods :creativeC
 | Part | Where | Notes |
 |---|---|---|
 | Port jar `backportedFungi-1.3-ce-19.2-01` | `development/creativeDelight/members/fungi` (README lists every deviation) | No config (defaults hard-coded), no sniffer, advancements, Botany Pots, compost hook, Autumnity / Spawn tags, `has_*` biome tags, `#forge:alcohol` file; no biome modifiers or placed features (8 configured features ship). Fixes: inky patch on `inky_cap_placeable_on`; pig digging asks `getMobGriefingEvent` before digging and before changing the block (loot table call on the CHEST parameter set); veil capped at 16 (bone meal refused at the cap); Weak Stomach reads `#creativedelight:food_type/drink/alcohol`; Burrowing as `PotionBrewing.addMix` (AT); stews as `fungidelight:effect_stew` (Luck / Comfort / Haste, 160 ticks; upstream's numeric ids were Blindness, Saturation and 35). `MushroomCowMixin` deleted, `FDMCow` keeps lightning immunity, shearing, renderer. Trades and sounds kept |
-| Mooshroom family | patcherMod `mooshroom/MooshroomFamily`, `MushroomTypeSetter`, mixins `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`; `SpawnTuning` `brown_chance` | Brown on NATURAL / CHUNK_GENERATION `SpecialSpawn` of `minecraft:mooshroom` by the biome's `brown_chance`; any two of red, brown, inky cap cow, morel cow breed, calf 50 % either parent's kind (vanilla 1/1024 mutation only for two same-type vanilla parents); the calf is the chosen parent's entity type. Fungi cows are found by entity id, so patcherMod does not depend on the port. Headless `pickCalf` test passed (400k rolls per pair). Mooblooms extend `Cow`, untouched |
+| Mooshroom family | Creative Common `mooshroom/MooshroomFamily`, `MushroomTypeSetter`, mixins `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`; `SpawnTuning` `brown_chance` | Brown on NATURAL / CHUNK_GENERATION `SpecialSpawn` of `minecraft:mooshroom` by the biome's `brown_chance`; any two of red, brown, inky cap cow, morel cow breed, calf 50 % either parent's kind (vanilla 1/1024 mutation only for two same-type vanilla parents); the calf is the chosen parent's entity type. Fungi cows are found by entity id, so Creative Common does not depend on the port. Headless `pickCalf` test passed (400k rolls per pair). Mooblooms extend `Cow`, untouched |
 | Cow spawns | `mob_spawns.json` | `mooshroom_dark_forests` gains `brown_chance` 0.5; new `mooshroom_mushroom_fields` (factor 1, `brown_chance` 0.25); `inky_cap_cow_dark_forests` (2), `inky_cap_cow_mushroom_fields` (8), `morel_cow_dark_forests_swamps` (2), `morel_cow_mushroom_fields` (8), groups 3 to 4. `spawn_ground` is already met (`#minecraft:mooshrooms_spawnable_on` holds `#minecraft:dirt`). `spawns_by_biome.md` regenerated from the 2026-10-23 dump |
 | Mushroom spawn system (§5.1.1) | `mushroom_spawns.json` / `.js`, shared code `worldgen/_biome_rules.js`, CEConfig `[worldgen.systems] mushroomSpawns`, `tools/test_mushroom_spawns.sh` | Table below. FD brown / red colony rules moved here unchanged. Pack copies of the colony feature for inky cap and morel (dirt and podzol, not mycelium only). Cave mode: no light predicate in 1.19.2 placement, so vanilla's underground test (`surface_relative_threshold_filter` OCEAN_FLOOR_WG at most -13) after an `environment_scan` to a floor; colonies only over `#minecraft:mushroom_grow_block` or `#minecraft:dirt`; noise caves only (features accept `air`, carvers leave `cave_air`) |
 | Truffle dirt | `wild_crops.json` rules `rooted_dirt` (1 in 3) and `truffle_dirt` (every chunk, count 5), new per-rule `step` (`underground_ores`), `dark_oak` or `cold forest` (25 biomes) | Order relies on modifier id order (rooted before truffle): FGD-32 |
@@ -400,9 +400,9 @@ using the existing info-page route (step 18).
 
 - **Brown mooshrooms first:** 1.19.2 has `MushroomCow.MushroomType.BROWN` (vanilla makes one only from lightning
   on a red one). Check it in the pack's classes with `javap` and a lightning test (FGD-27) before anything else:
-  patcherMod and More Mooblooms must not strip it, and the Fungi cows (`FDMCow`) must still ignore lightning.
+  Creative Common and More Mooblooms must not strip it, and the Fungi cows (`FDMCow`) must still ignore lightning.
 - **Natural brown mooshrooms** in dark forests and mushroom fields: vanilla spawns only the entity type, so
-  patcherMod gets a `FinalizeSpawn` hook on `minecraft:mooshroom` (natural and chunk-generation spawns only, not
+  Creative Common gets a `FinalizeSpawn` hook on `minecraft:mooshroom` (natural and chunk-generation spawns only, not
   eggs or breeding) that sets the type to BROWN with the chance of a `mob_spawns.json` field
   (`brown_chance`, per rule). Start values: dark forest 1 in 2, mushroom fields 1 in 4. The existing
   `mooshroom_dark_forests` rule (weight 8) keeps its herd sizes.
@@ -412,7 +412,7 @@ using the existing info-page route (step 18).
   by `mob_spawns.json` rules (D7). Swamp cows need `spawn_ground` for `#mooshrooms_spawnable_on` as the dark
   forest rule does; the mushroom-fields mycelium rule stays.
 - **Breeding:** every mooshroom type breeds with every other (red, brown, inky cap, morel). Calf type: **50 % the
-  type of each parent**, rolled in `getBreedOffspring` through a patcherMod mixin that replaces both vanilla's
+  type of each parent**, rolled in `getBreedOffspring` through a Creative Common mixin that replaces both vanilla's
   red/brown rule and upstream's `MushroomCowMixin.canMate` + "parent whose goal fires" rule. The calf entity is
   the Fungi cow class or the vanilla one by the chosen type. Vanilla's 1 in 1024 red/brown mutation stays for two
   parents of the same vanilla type only; upstream's Fungi mutation is dropped. Mooblooms are a different class and
@@ -601,7 +601,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 - 2026-10-23 (later): owner plan written (§5.1): own mushroom spawn system with cave mode, brown mooshrooms, 50 %
   mooshroom breeding, truffle placement in dark and cold forests, Friendly Griefing for pig digging, suspicious stew
   by effect name, veil cap 16, truffle pie, trades and sounds kept. Tests FGD-27 to FGD-40 added. Nothing built.
-- 2026-10-23 (build): §5.1 built (§4.0): port jar, patcherMod mooshroom family and `brown_chance`, cow spawn rules,
+- 2026-10-23 (build): §5.1 built (§4.0): port jar, Creative Common mooshroom family and `brown_chance`, cow spawn rules,
   mushroom spawn system with cave mode, truffle dirt rules, ids, tags, recipes, truffle pie, food types, cans (waiting
   on the dump), compost, JEED text, JEI info pages, changelog. FGD-02, FGD-15, FGD-23 retired into FGD-28, -30, -35.
   Offline checks (§7) pass. Live checks queued as SQ-FGD at the top of the scratch queue. Jars not installed.

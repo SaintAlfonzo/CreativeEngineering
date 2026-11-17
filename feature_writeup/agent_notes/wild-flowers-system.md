@@ -1,6 +1,6 @@
 # wild-flowers-system
 
-> Wild flower tuning: wild_flowers.json (Botania palettes per biome, pack flower patches, existing-feature scale/remove, Flower Patch share/sizes) applied by worldgen/wild_flowers.js; flowers.md (FL-); patcherMod switch source only
+> Wild flower tuning: wild_flowers.json (Botania palettes per biome, pack flower patches, existing-feature scale/remove, Flower Patch share/sizes) applied by worldgen/wild_flowers.js; flowers.md (FL-); Creative Common switch source only
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-08). Repo status docs win over any status line here.
 
@@ -17,7 +17,7 @@ then mid-build: Flower Patch spawning must also be configurable by density/frequ
 - Buttercup deliberately absent (More Mooblooms removes it pack-wide); clovers taken over from Buzzier Bees.
 - Writeup feature_writeup/flowers.md (FL-01..14), generated report flowers_by_biome.md; test tools/test_wild_flowers.sh
   (Rhino run == generator, incl. byte-equal Flower Patch rewrites).
-- CEConfig `[worldgen.systems] wildFlowers` added to patcherMod source, jar NOT rebuilt; script treats missing method as on.
+- CEConfig `[worldgen.systems] wildFlowers` added to Creative Common source, jar NOT rebuilt; script treats missing method as on.
 
 **How to apply:** tune in wild_flowers.json, rerun the generator and read flowers_by_biome.md sections 1-3 (keep all 16
 Botania colors findable). Related: [vegetation-worldgen-system](vegetation-worldgen-system.md), [iw-soil-wild-plants](iw-soil-wild-plants.md), [moobloom-variants](moobloom-variants.md),

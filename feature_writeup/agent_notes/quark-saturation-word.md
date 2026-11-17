@@ -1,6 +1,6 @@
 # quark-saturation-word
 
-> Quark's food tooltip word = 6 saturation buckets (sat x nutrition x 2) + bad set on a HARMFUL effect; no food value gives a unique word, so patcherMod food.IntoxicatingDrinkTooltip swaps it for "Intoxicating Drink" on Intoxication foods
+> Quark's food tooltip word = 6 saturation buckets (sat x nutrition x 2) + bad set on a HARMFUL effect; no food value gives a unique word, so Creative Common food.IntoxicatingDrinkTooltip swaps it for "Intoxicating Drink" on Intoxication foods
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

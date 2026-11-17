@@ -40,7 +40,7 @@ owner asks for it by name. Upstream bugs are fixed (3.6).
   `mods/domesticationinnovation-1.6.1-1.19.2.jar` (needs Citadel, installed). Both unpacked and decompiled under
   `DecompiledMods/<jar name>/` (`src/`: Cozy 215 classes, DI 118).
 - **Licences:** Cozy LGPL-3.0, DI LGPL-3.0. Both GPL-compatible, so a fork is allowed, but nothing here needs one:
-  every fix is a patcherMod mixin, config or KubeJS.
+  every fix is a Creative Common mixin, config or KubeJS.
 - **Pack references:** DI is mapped in `item_dict.js` (25 keys), `loot_config.json` / `loot_index.json` (pet shop
   chest), `creativeDelight/.../domesticationinnovation/compost_values.js`, `client_scripts/tooltips.js` (pet bed
   line), `tags/blocktags.js` (BlockRunner soft list), `jei/order.js`; config tuned and backed up
@@ -114,13 +114,13 @@ Sell Animals Kitten Crate are unrelated items.
 
 | System | Cozy | Pack / DI | Problem | Proposal |
 |---|---|---|---|---|
-| **Pet revival** *overlaps w/ DI pet beds* | death marks the cat (`NativeAcceptedDeathMixin`), drops a Cat Collar that revives it | DI `onLivingDie` (`CommonProxy.java:922`) does not cancel the death: if the cat slept in a DI pet bed it files a respawn request | a cat with a DI bed comes back twice (DI respawn at dawn + Cozy collar) | D1: patcherMod skips DI's respawn request for `improved_cat`; DI beds keep working for every other pet |
-| **Pet commands** *overlaps w/ DI three-mode commands* | modes follow / stay / wander / guard (GUI, `/cozycats mode`); own interactions run first (`ImprovedCatEntity.java:410`) | empty-hand right-click falls through to vanilla `Cat.mobInteract`, where DI's `CatMixin` swaps sit for its three-mode cycle (`trinary_command_system=true`) | two mode systems on one cat, each with its own saved state | D2: Cozy owns cat modes: patcherMod cancels DI's `CatMixin` interact for `improved_cat`; DI keeps dogs, parrots, foxes and the rest |
+| **Pet revival** *overlaps w/ DI pet beds* | death marks the cat (`NativeAcceptedDeathMixin`), drops a Cat Collar that revives it | DI `onLivingDie` (`CommonProxy.java:922`) does not cancel the death: if the cat slept in a DI pet bed it files a respawn request | a cat with a DI bed comes back twice (DI respawn at dawn + Cozy collar) | D1: Creative Common skips DI's respawn request for `improved_cat`; DI beds keep working for every other pet |
+| **Pet commands** *overlaps w/ DI three-mode commands* | modes follow / stay / wander / guard (GUI, `/cozycats mode`); own interactions run first (`ImprovedCatEntity.java:410`) | empty-hand right-click falls through to vanilla `Cat.mobInteract`, where DI's `CatMixin` swaps sit for its three-mode cycle (`trinary_command_system=true`) | two mode systems on one cat, each with its own saved state | D2: Cozy owns cat modes: Creative Common cancels DI's `CatMixin` interact for `improved_cat`; DI keeps dogs, parrots, foxes and the rest |
 | Follow / teleport | `FollowOwnerTeleportMixin` cancels `FollowOwnerGoal.maybeTeleportTo` while fetching | DI `FollowOwnerGoalMixin` (`canUse`, `canContinueToUse`, `canTeleportTo`) for wander / stay; Waystones Teleport Pets | different methods, no mixin clash; DI wander / stay would still apply if D2 keeps DI commands | test (CIC-10) |
 | Collar enchantments | none | DI collar tags apply to any tamed mob, so to `improved_cat` | wanted: DI enchants (health boost, fireproof, ...) stack with Cozy stats; Cozy's own health 20 to 35 plus DI Extra Health | keep; test (CIC-11) |
 | Baby lock | `AgeableMobGrowthLockMixin`: every `AgeableMob`, `AgeLocked` NBT, `@ModifyArg` x2 on `aiStep` setAge | DI `AgeableMobMixin` `isBaby` HEAD (Curse of Immaturity); Baby Mobs backport | different targets, no clash | none |
 | Targeting | `Mob.setTarget` HEAD, `HurtByTargetGoal.start` / `TargetGoal.canContinueToUse` wraps | DI `MobMixin` (`tick`, `pickUpItem`, `playAmbientSound`), `TameableAnimalMixin.isAlliedTo` | no shared target | none |
-| Tempt | `TemptGoal.shouldFollow` `@Redirect` on `Ingredient.test` | patcherMod `TemptGoalTroughRetryMixin` adds an interface only | redirect is exclusive, but no other redirect there | none |
+| Tempt | `TemptGoal.shouldFollow` `@Redirect` on `Ingredient.test` | Creative Common `TemptGoalTroughRetryMixin` adds an interface only | redirect is exclusive, but no other redirect there | none |
 | Cat food | tag `cozys-improved-cats:cat_food`: 7 vanilla raw meats + 2 ancient fish | pack raw foods: `creativedelight:food_type/raw/fish` (40), `/raw/meat` (42) | cats refuse every modded raw fish and meat | D4: add the two pack tags via `global.tags` |
 | Taming of cats | ancient fish only | DI pet shop cages and Villagers Sell Animals crates hold vanilla cats | those cats are converted, untamed; fine, but a bought kitten needs ancient fish | JEI info (step 13); D5 |
 | Fishing loot | GLM swaps 5% of cod / salmon catches | pack fishing net tables (`kubejs/data/creativeengineering/loot_tables/gameplay/fishing_net`), Oceanic nets | GLM runs on `gameplay/fishing` only; net catches unchanged | none |
@@ -184,8 +184,8 @@ hunger, genetics, homes, dimensionalCats, toggles, misc, ancientFish, classes, n
 
 | # | Bug | Evidence | Fix |
 |---|---|---|---|
-| B1 | `NativePetChunkMigration` throws `IllegalArgumentException` inside `EntityStorage.upgradeChunkTag` when an entity chunk's DataVersion is missing or does not match | code (`restoration/NativePetChunkMigration.java`); not seen yet (no boot) | watch the first boot log; patcherMod catch-and-skip if it fires |
-| B2 | Dreamer with a full inventory drops 1 XP bottle, not `bottleCount` | `classes/custom/DreamerHandler.java` ~37 | patcherMod: drop the whole count |
+| B1 | `NativePetChunkMigration` throws `IllegalArgumentException` inside `EntityStorage.upgradeChunkTag` when an entity chunk's DataVersion is missing or does not match | code (`restoration/NativePetChunkMigration.java`); not seen yet (no boot) | watch the first boot log; Creative Common catch-and-skip if it fires |
+| B2 | Dreamer with a full inventory drops 1 XP bottle, not `bottleCount` | `classes/custom/DreamerHandler.java` ~37 | Creative Common: drop the whole count |
 | B3 | Witchling gift loot table `gameplay/witchling_gift` declared, never used, not in the jar | code | none (dead constant) |
 | B4 | registry under `cozys-improved-cats` while the mod id is `cozys_improved_cats` | Forge "dangerous alternative prefix" warnings expected | none (cosmetic); scripts use the hyphen namespace |
 
@@ -215,7 +215,7 @@ hunger, genetics, homes, dimensionalCats, toggles, misc, ancientFish, classes, n
 9. **Stack sizes** ([stack_sizes.md](stack_sizes.md)): fish by the fish policy; collar, guide, yarn, string stay 1.
 10. **Cans and jars** ([cans.md](cans.md)): cooked ancient fish by the canned-fish rule (D8).
 11. **Compost:** by the pack's raw-fish rule; none if raw fish are not composted. Crops, wild crops, seasons: none.
-12. **Pack mixins (patcherMod):** D1 skip DI's respawn request for `improved_cat`; D2 cancel DI's cat interact on
+12. **Pack mixins (Creative Common):** D1 skip DI's respawn request for `improved_cat`; D2 cancel DI's cat interact on
     `improved_cat`; B2. Headless harness first.
 13. **Names and lang** ([names.md](names.md)): none needed (names are clean). Tooltips
     ([tooltips.md](tooltips.md)): DI pet-bed line names the cat exception (D1); Cat Bed line. JEI info
@@ -234,7 +234,7 @@ CIC-10; 16 before any player-side test.
 
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
-| D1 | Which revival system for cats? | Cozy's collar for cats (it keeps stats); DI pet beds for every other pet; patcherMod skips DI's respawn request for `improved_cat` | as recommended |
+| D1 | Which revival system for cats? | Cozy's collar for cats (it keeps stats); DI pet beds for every other pet; Creative Common skips DI's respawn request for `improved_cat` | as recommended |
 | D2 | Which command system for cats? | Cozy's four modes; DI's three-mode right-click canceled on Cozy cats only | **built 2026-11-01** (10.3) |
 | D3 | Three pet-bed sets (DI, Redeco, Cozy) | keep all three: DI = respawn, Cozy = cat home, Redeco = decor | keep |
 | D4 | Cats eat only vanilla raw meat and fish | add `food_type/raw/fish` and `/raw/meat` to `cat_food` | add |
@@ -264,7 +264,7 @@ CIC-10; 16 before any player-side test.
 - `/dumpall`, then `tools/food_families.py --check` (no unsorted ancient fish) and the crafting audit
   (`kubejs/exported/recipes/crafting_audit.json`) for bowl / yarn clashes.
 - Tag dump: `cozys-improved-cats:cat_food` holds the pack raw fish / meat (D4).
-- patcherMod headless harness for the D1 / D2 mixins (memory `patchermod-headless-smoke-test`).
+- Creative Common headless harness for the D1 / D2 mixins (memory `patchermod-headless-smoke-test`).
 - `python3 tools/changelog_lint.py`.
 
 ## 8. In-game test suite (drafted)

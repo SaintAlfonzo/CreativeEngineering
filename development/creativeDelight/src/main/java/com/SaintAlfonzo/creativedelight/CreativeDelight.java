@@ -30,7 +30,7 @@ import java.util.List;
  * {@link CDConfig}.
  *
  * Since the Creative Split CD carve (creative_delight.md 34) it also holds the kitchen and food Java that was
- * patcherMod's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
+ * Creative Common's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
  * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member).
  */
@@ -49,13 +49,13 @@ public class CreativeDelight {
 				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
 				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS).isEmpty();
 		// The sections moved from creativeengineering-common.toml at the CD carve (CDConfig.MOVED_SECTIONS): the first boot
-		// copies the player's values in (carry when this file is new, merge when it exists); patcherMod drops them from its own file when
+		// copies the player's values in (carry when this file is new, merge when it exists); Creative Common drops them from its own file when
 		// Forge corrects it. Must run before Forge reads the COMMON configs.
 		boolean carried = com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS)
 				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.MOVED_SECTIONS).isEmpty();
-		// A pack that skipped 1.2.00 still has [campfire] in patcherMod's file (Compat never carried it): take it from there.
+		// A pack that skipped 1.2.00 still has [campfire] in Creative Common's file (Compat never carried it): take it from there.
 		if (!campfireCarried) com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
 				CDConfig.OLD_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS);
 		// The Display and Vintage ports' own files, read once into [display] / [vintage] (plan_creative_delight.md A6).
@@ -106,7 +106,7 @@ public class CreativeDelight {
 				com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.INCUBATION) ? "on" : "off");
 	}
 
-	/** The kitchen and food Java moved from patcherMod (creative_delight.md 34), registered as patcherMod did. */
+	/** The kitchen and food Java moved from Creative Common (creative_delight.md 34), registered as Creative Common did. */
 	private static void registerKitchen(IEventBus modBus) {
 		ModList mods = ModList.get();
 		// Oven: FD cooking-pot style baking block + the creativedelight:baking recipe type (oven/; oven.md).
@@ -120,7 +120,7 @@ public class CreativeDelight {
 		// The oven's leftover slots show on WTHIT through Common's RemainderView (compat/WthitRemainderBuffer).
 		com.SaintAlfonzo.creativecompat.compat.RemainderView.addStation(
 				com.SaintAlfonzo.creativedelight.oven.OvenBlockEntity.class);
-		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin). patcherMod's
+		// Campfires: rain puts them out, Comfort nearby (campfire/, mixin.minecraft.CampfireRainMixin). Creative Common's
 		// WTHIT line reads the switch and ticks through Common's CampfireRainInfo holder.
 		com.SaintAlfonzo.creativecommon.campfire.CampfireRainInfo.set(
 				() -> CDConfig.SPEC.isLoaded() && CDConfig.CAMPFIRE.rainDouses.get(),

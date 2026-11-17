@@ -49,12 +49,12 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 | 1.0.4 mods: Corn Delight, Farmer's Respite (tea, coffee), Fruits Delight (bushes, lemon, pineapple, hamimelon, 13 fruit trees) | §2.1 | reference from the decompiled jars 2026-10-02; G12, G13, G15 BUILT 2026-11-07 (not run in game); G14 resolved by the coffee merge; CR-31 to CR-37 |
 | Wild generation: where every crop, bush and fruit tree spawns (biomes, rate, height, ground, side blocks such as Coarse Dirt, Adzuki Soil, mint ponds) | §2.7 + generated [crops_by_biome.md](crops_by_biome.md) | reference 2026-10-03; findings V1 to V12 feed the planned vegetation worldgen system; CR-38 to CR-46 |
 | Pack wild-crop placement: every wild crop and fruit tree moved to the biomes you specified (`wild_crops.json`), leaf apples and AM leaf bananas off, FR Nether coffee off | §2.8 | DEPLOYED with 1.0.4 (2026-10-04); `wild_crops.json` changed again for 1.0.5, DEPLOYED with 1.0.6; not looked at in game; V13 to V20; CR-47 to CR-58 |
-| WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
-| Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (patcherMod 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
+| WTHIT growth line for every plant WTHIT skips (hemp, tobacco, strawberries, salmonberries, mint, grapes, blueberries, cranberries, lemons and the other plants, 62 blocks in all) | §2.9 | BUILT 2026-10-04, headless-tested (38 checks, 290-block audit); in Creative Common 1.0.5 (in `mods/`), DEPLOYED with 1.0.6 (2026-10-14); jar boots clean (single player 2026-10-11); CR-59 to CR-66 |
+| Extra stem fruit: melon, pumpkin and hamimelon stems grow up to 4 fruits, each later one after a longer minimum wait | §2.10 | BUILT 2026-10-22 (Creative Common 1.1.01, in `mods/` since the 2026-10-22 scratch run, md5 a4d48336 with the fix below); built, scratch server PASSED 2026-10-22 (SQ-SF-00 to SQ-SF-05, 17 of 17, `tools/farm_worldgen_probe.js`); CR-71 to CR-75 in game; F-SS1 (extra fruit ignores seasons) open |
 | Wild-crops batch 2026-10-22: tea in 20 biomes, Vinery grapes under the system, wild flax off, Rustic Delight patches out of bone meal, white strawberries from Y 192 | §2.8, §4 V1, V6, V7, V20 | BUILT 2026-10-22 (data + KubeJS), DEPLOYED 1.1.01; `tools/test_wild_crops.sh` passes (53 crop tags, 52 add modifiers); built, scratch server PASSED 2026-10-22 (SQ-WC-00 to SQ-WC-05); CR-83, CR-86 to CR-88 in game |
 | Wild plants, bushes and trees on Immersive Weathering soils (humus, fluvisol, silt, vertisol, cryosol, rooted grass; not permafrost) | §2.8.1 | BUILT 2026-10-05, scratch-server tested (12 features x 9 grounds, before/after); the 65 `kubejs/data` overrides are DEPLOYED with 1.0.6 (2026-10-14); only new chunks change; CR-67, CR-68 |
 | Village farm crops: farm fields grow crops of the village's climate (`VillageFarmCrops`, `village_farms.json`) | §2.11 | BUILT 2026-10-25, DEPLOYED 1.1.03 (new villages only); SQ-VF-01 to -05 (group B) never run (not in r1102b's scope either, deep scan 2026-11-02); TODO `farming/crops #16`; `#19` (Rustic crops by wild rule) BUILT 2026-11-02, unreleased, SQ-PSD-06 LOOK in r1102b (not judged yet) |
-| Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (patcherMod 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); shipped 1.1.05; client CQ-CS-07 PASSED r1101 (tooltips, WTHIT here line); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved. Since the Creative Split the season code lives in Creative Calendar (`development/creativeCalendar`, `seasons/CropSeasons`). Grasses typed (winter offseason, `farming/crops #28`) 2026-11-02, unreleased: r1102b SQ-PST-01, -02, -06, -07 PASS, the spread-rate rows batch faults (rerun) |
+| Growing seasons: every crop has a type (temperate, cold, warm dry, warm wet, Nether, End, cave, mushroom); each season is fertile (+25 %), neutral or off (-25 %) by the biome's calendar | §2.12.1 + generated [crop_seasons_audit.md](crop_seasons_audit.md) | BUILT 2026-10-30 (Creative Common 1.1.04, Vinery `-06`, CD Ender's `-02`; installed 2026-10-31 00:29 to 00:44); scratch server PASSED r1031 (2026-10-31, SQ-CS-01 to -06, -08, -09); shipped 1.1.05; client CQ-CS-07 PASSED r1101 (tooltips, WTHIT here line); CR-89 to CR-99 in game pending; F-SS1, F-SS2 resolved. Since the Creative Split the season code lives in Creative Calendar (`development/creativeCalendar`, `seasons/CropSeasons`). Grasses typed (winter offseason, `farming/crops #28`) 2026-11-02, unreleased: r1102b SQ-PST-01, -02, -06, -07 PASS, the spread-rate rows batch faults (rerun) |
 
 - **Open first:** §2.1 for "can I plant X on Y" or "does X replant on right-click". §2.2 and §2.3 explain why.
 - **Knobs:** `config/quark-common.toml` sections `[tweaks.simple_harvest]` and `[tweaks.hoe_harvesting]`.
@@ -283,7 +283,7 @@ From `vazkii.quark.content.tweaks.module.SimpleHarvestModule` (Quark 3.4-418).
 - **Opt-out tag:** `#quark:simple_harvest_blacklisted` (empty in the pack).
 - **Own-pick crops (pack, 2026-10-25):** a `CropBlock` with its own ripe right-click (pick the fruit, back a few
   stages) would be found by the search and replanted to stage 0 before its own pick runs. Blocks in
-  `#creativedelight:crops/own_pick` get the bush treatment instead (patcherMod `QuarkOwnPickMixin`): empty hand or
+  `#creativedelight:crops/own_pick` get the bush treatment instead (Creative Common `QuarkOwnPickMixin`): empty hand or
   1x1 hoe, the block's own pick; hoe area, Quark clicks each. Members: cucumber, ghost pepper (Vintage port), zucchini
   (Veggies port). Villagers still replant them to stage 0. Test VTD-76.
 
@@ -302,7 +302,7 @@ includes the pack's echo hoe, Dragon Hoe and Felsic Hoe.
 | Any other hoe | Quark's own: 5x5 in `#quark:big_harvesting_hoes`, else 3x3 | none |
 
 - **Where:** tags in [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
-  (via `global.tags` + item_dict keys), read by patcherMod `crops/HoeHarvestArea`. Any size from 1x1 to 9x9
+  (via `global.tags` + item_dict keys), read by Creative Common `crops/HoeHarvestArea`. Any size from 1x1 to 9x9
   has a tag; a hoe in several gets the largest. Tags reload with `/reload`, no rebuild.
 - **Even sizes** can't be centered, so the area reaches one block further on the side the player is
   looking toward, on each axis. A 2x2 is the target block plus the blocks ahead of it. Looking straight
@@ -405,7 +405,7 @@ like wheat on every soil in §2.4 and with both Quark mechanics in §2.2 and §2
 | `creativedelight:crops/farmland_crops` (block tag) | same | non-`CropBlock` plants treated as farmland crops: vanilla farmland under them doesn't revert to dirt, soaked Fertile Soil bone-meals them, Quark's hoe area break includes them. Today: tobacco |
 | Quark `Harvestable Blocks` | [config/quark-common.toml](../config/quark-common.toml) `[tweaks.simple_harvest]` | one `"mod:block[age_prop=max]"` line per crop (optionally `,mod:block[age_prop=0]` for the replant state). Gives right-click and hoe right-click replant. Backed up in `configs_edited/root_config/` and the CreEngServer mirror |
 
-**Code, written once** (patcherMod, `crops/CropParity` holds both tag keys and the two checks):
+**Code, written once** (Creative Common, `crops/CropParity` holds both tag keys and the two checks):
 
 | Mixin | Target | Generic? |
 |---|---|---|
@@ -1033,7 +1033,7 @@ Seasons today (Sp spring, Su summer, Au autumn, Wi winter; Fruits Delight trees 
 Findings (2026-10-30):
 - **F-SS2 Plants that can't be seasonal by tags.** Hemp (`HempBlock` grows in `tick`), sea grapes and the Nether's
   Delight fungus colonies join tobacco and the Vinery grapes (brief decision 2): their growth never fires the event, so
-  each needs a `ForgeHooks.onCropsGrowPre` call (patcherMod mixin, or the in-tree Vinery port) before a tag does
+  each needs a `ForgeHooks.onCropsGrowPre` call (Creative Common mixin, or the in-tree Vinery port) before a tag does
   anything. The chorus flame and succulent are End plants and can stay all year.
 - **F-SS3 Inert season tags.** Saplings (vanilla and the 13 Fruits Delight ones) grow through the sapling event, not the
   crop one, so their tags only color the tooltip; the Fruits Delight leaves carry the real fruit seasons.
@@ -1043,7 +1043,7 @@ Findings (2026-10-30):
 
 #### 2.12.1 Season model (owner spec 2026-10-30, BUILT 2026-10-30)
 
-**As built** (Creative Calendar since 2026-11-01, before that patcherMod: `seasons/CropSeasons`, `CropSeasonTooltip`, `compat/WthitCropSeasons`,
+**As built** (Creative Calendar since 2026-11-01, before that Creative Common: `seasons/CropSeasons`, `CropSeasonTooltip`, `compat/WthitCropSeasons`,
 `mixin/CropSeasonGrowHookMixin`; data [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) ->
 [cropseasontags.js](../kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js) -> block and item tags
 `creativeengineering:crop_seasons/<type>`; `[crop_seasons]` in `creativecalendar-common.toml`):
@@ -1095,7 +1095,7 @@ Findings (2026-10-30):
   Crop"); grapes "Fertile: Cold biomes" / "Offseason: Warm biomes"; "Season: Nether", "Season: End"; cave
   "Fertile: y<0", "Offseason: y>128"; mushroom "Fertile: Mushroom Fields, Spring". **WTHIT** shows the same lines on the crop, then green "Fertile here: grows
   faster" or red "Offseason here: grows slower" (nothing when neutral).
-- **Grow-event hooks** for plants that never fired it (F-SS2): patcherMod mixin on the `tick` of IE hemp, tobacco and
+- **Grow-event hooks** for plants that never fired it (F-SS2): Creative Common mixin on the `tick` of IE hemp, tobacco and
   Nether's Delight fungus colonies (a refused check skips that tick); in source: the Vinery grape bushes, jungle vines,
   grapevine stem and lattice, Vinery apple and cherry leaves (`backportedVinery` `-06`), Ender's Delight chorus flame
   (CD member `endersAdditions` `-02`). Chorus succulent and sea pickle grow by bone meal only (tooltip only).
@@ -1148,7 +1148,7 @@ Findings (2026-10-30):
 
 Replaces the single "in season / out of season (1/6 speed)" rule. Each crop has a **type** and each season is one of
 **fertile** (growth +25 %), **neutral** (default speed; not shown in the tooltip) or **off** (growth -25 %).
-Types: cold, temperate, warm dry, warm wet; nether (below). Needs a patcherMod change: fertility reads the local
+Types: cold, temperate, warm dry, warm wet; nether (below). Needs a Creative Common change: fertility reads the local
 biome's calendar (4 seasons in a temperate or cold biome, wet/dry in a tropical, dry or arid biome) instead of the
 global clock; tags alone cannot express it. Calendar alignment: wet = winter + spring, dry = summer + autumn, thirds offset
 by one sub-season (weather_by_biome.md 1.2).
@@ -1217,19 +1217,19 @@ Soil yield (extra produce on better soil, built 2026-10-28, off per crop by defa
   (pre-roll, like the leaf apples) sets the roll to 1 : 1 : 1 and appends a 15% bonus red pool, so each color averages
   0.483 per ripe harvest. Pools are matched by their items, existing positions kept. Wild bell peppers stay red-only
   (forage hint). TODO `farming/crops #9`, CR-69, CR-70.
-  - Knobs: CEConfig `[crop_drops.bell_peppers]` (patcherMod 1.1.01, server side, `/reload` applies):
+  - Knobs: CEConfig `[crop_drops.bell_peppers]` (Creative Common 1.1.01, server side, `/reload` applies):
     `enabled` (false = the mod's table untouched), `redWeight` / `greenWeight` / `yellowWeight` (0-100, default 1),
     `redBonusChance` / `greenBonusChance` / `yellowBonusChance` (0-1, default 0.15). Color X per ripe harvest =
     weightX / sum of weights + bonusChanceX. The mod's own split is 6 / 1 / 1 with red bonus 0. Read through
-    `global.NCH.cfg(..., 'CROP_DROPS')`; without patcherMod the script uses the same defaults.
+    `global.NCH.cfg(..., 'CROP_DROPS')`; without Creative Common the script uses the same defaults.
   - Other colours: Rustic Delight **1.7.0** (July to September 2026, Forge 1.20.1, NeoForge / Fabric 1.21.x and 26.x;
     the 1.7.0 changelog, not the GitHub wiki or the Modrinth page) added Pale seeds (white, pink, orange) and Dark seeds
     (black, blue, purple), wild Pale / Dark peppers in jungles, giant pepper blocks, slices, rolls and the Bell Pepper
     Medley feast. 1.3.0 (2024-11-15) is the last 1.19.2 build, so none of it is in the pack; having them would be our own
     backport of those items.
-- **Extra stem fruit (built 2026-10-22, patcherMod 1.1.01 in `build/libs` only, not tested):** up to 4 fruits per melon, pumpkin or
+- **Extra stem fruit (built 2026-10-22, Creative Common 1.1.01 in `build/libs` only, not tested):** up to 4 fruits per melon, pumpkin or
   hamimelon stem, each later one after a longer minimum wait (§2.10). CR-71 to CR-75.
-- **Crop parity layer (built 2026-10-02, patcherMod 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
+- **Crop parity layer (built 2026-10-02, Creative Common 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
   and the four mixins.
 
@@ -1399,11 +1399,11 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
 - [config/endercrop-common.toml](../config/endercrop-common.toml): tilled end stone, growth multipliers
 - [kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js): `farmland`, `rich_soil`, `rich_farmland`, `fertile_soil`, `nulch`, `tobacco_seeds`
 - [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js): "Crop parity" section, `crops/farmland_soils` and `crops/farmland_crops`
-- patcherMod `crops/CropParity.java` and `mixin/TobaccoPlacementMixin`, `FarmBlockUnderCropsMixin`,
+- Creative Common `crops/CropParity.java` and `mixin/TobaccoPlacementMixin`, `FarmBlockUnderCropsMixin`,
   `MulchBlockCropGrowthMixin`, `QuarkHoeHarvestMixin` (compile jars for The Dirty Stuff, Quark and IW in `libs/`)
-- patcherMod `crops/HoeHarvestArea.java`, `crops/HoeHarvestTooltip.java`, `mixin/QuarkHoeAreaHarvestMixin`,
+- Creative Common `crops/HoeHarvestArea.java`, `crops/HoeHarvestTooltip.java`, `mixin/QuarkHoeAreaHarvestMixin`,
   `mixin/QuarkHoeAreaBreakMixin`; [equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) "Hoe harvest area"
-- Extra stem fruit (§2.10): patcherMod `crops/StemExtraFruit.java`, `mixin/AttachedStemExtraFruitMixin`, `CEConfig` `[stem_fruit]`
+- Extra stem fruit (§2.10): Creative Common `crops/StemExtraFruit.java`, `mixin/AttachedStemExtraFruitMixin`, `CEConfig` `[stem_fruit]`
 - Crop seasons (§2.12.1): [crop_seasons.json](../kubejs/generation_scripts/worldgen/crop_seasons.json) (the types, the file
   to edit), [cropseasontags.js](../kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js) (tags), Creative Calendar `seasons/CropSeasons`
   (growth, rules), `seasons/CropSeasonTooltip`, `compat/WthitCropSeasons`, `mixin/CropSeasonGrowHookMixin`, `creativecalendar-common.toml`
@@ -1419,7 +1419,7 @@ Brief: [briefs/farming_crops.md](briefs/farming_crops.md). Nothing here is built
   Configs with worldgen knobs: `farmersdelight-common.toml` `[world.*]`, `delightful-common.toml` `chance_*`,
   `rusticdelight-common.toml` `wild_*_chance`, `farmersrespite-common.toml` `teaBushChance` / `coffeeBushChance`,
   `supplementaries-common.toml` `[functional.flax.wild_flax]`, `neapolitan-common.toml` (strawberry height, chimpanzees)
-- WTHIT growth line (§2.9): Creative Delight `compat/wthit/WthitCropGrowth.java` (plugin, entry in CD's `waila_plugins.json`) and patcherMod `crops/CropGrowth.java`
+- WTHIT growth line (§2.9): Creative Delight `compat/wthit/WthitCropGrowth.java` (plugin, entry in CD's `waila_plugins.json`) and Creative Common `crops/CropGrowth.java`
   (rules and maths), [crop_growth.json](../development/creativeDelight/src/main/resources/assets/creativedelight/crop_growth.json)
   (the file to edit), `CEConfig` `[crop_growth]`, lang key `creativeengineering.wthit.crop_harvestable`;
   [kubejs/server_scripts/_lib/dump_crop_growth.js](../kubejs/server_scripts/_lib/dump_crop_growth.js) (`/dumpcropgrowth`),
@@ -1466,7 +1466,7 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   pass; "46 crop tags match the generator", "46 add modifiers, 44 forge:none, 1 remove modifier". The generator printed
   `78 crop/feature rows, 61 crops`, 13 land biomes with no crop (V19) and the flax note (V6). Not covered: the KubeJS
   type wrappers and Forge actually loading the modifiers, which needs the game (CR-47).
-- **WTHIT growth line (§2.9):** `tools/test_crop_growth.sh` (about 5 s; compile patcherMod first with
+- **WTHIT growth line (§2.9):** `tools/test_crop_growth.sh` (about 5 s; compile Creative Common first with
   `./gradlew :creativeCommon:compileJava --offline`). It runs 38 checks on the maths and the shipped rule file, then
   `tools/crop_growth_coverage.py` against `kubejs/exported/crops/crop_growth_audit.json`. After adding mods, run
   `/dumpcropgrowth` (or `/dumpall`) and the coverage script; an UNKNOWN row is a new plant to give a rule or a skip reason.
@@ -1546,7 +1546,7 @@ Wild generation (§2.7). Use a new world, or chunks nobody has explored. `/locat
 
 CR-38 to CR-45 describe the mods' own spawns: since §2.8 they only hold with `creativedelight-common.toml [worldgen] wildCrops = false`.
 
-Pack wild-crop placement (§2.8). Needs patcherMod 1.0.4 rebuilt 2026-10-03 in `mods/` for CR-58 (the scripts default to on
+Pack wild-crop placement (§2.8). Needs Creative Common 1.0.4 rebuilt 2026-10-03 in `mods/` for CR-58 (the scripts default to on
 without it). New world, or unexplored chunks; `/locate biome <id>`.
 
 - [ ] **CR-47 Loads:** create a world -> it loads. `logs/latest.log` has `[wild-crops] 46 crop modifiers added, 44 mod modifiers
@@ -1635,7 +1635,7 @@ the real client (rendering, tooltips, JEI, natural random ticks with a player ne
 
 ### Crop seasons (§2.12.1, added 2026-10-30)
 
-Needs patcherMod 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creativedelight with endersAdditions
+Needs Creative Common 1.1.04 built 2026-10-30 after 21:40, backportedVinery `-06` and creativedelight with endersAdditions
 `-02` in `mods/` (and the server), and a full restart. Scratch server half: SQ-CS in testing/scratch_queue.md, all
 PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the CR-91 growth comparison; CQ-CS-07
 (tooltips, WTHIT) is the client half: PASSED r1101 (2026-11-01).
@@ -1700,13 +1700,13 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   6.1.0, Floral Enchantment 1.4.3, Vinery 1.3.10) and Forge 43.3.9's patched vanilla classes. No pack
   changes made; gaps G1 to G10 open.
 - **2026-10-02:** tobacco brought in line (G1 to G3) through the new crop parity layer (§2.6): two block
-  tags, one Quark config line, four patcherMod mixins. Built into patcherMod 1.0.3 in `mods/`, not
+  tags, one Quark config line, four Creative Common mixins. Built into Creative Common 1.0.3 in `mods/`, not
   deployed, not boot-tested yet. G11 noted.
 - **2026-10-02:** per-hoe harvest area (G5): `hoe_harvest/NxN` item tags, sizes 1x1 to 9x9 with even sizes
-  biased toward the look direction, two Quark mixins and a generated tooltip (§2.3). Built into patcherMod
+  biased toward the look direction, two Quark mixins and a generated tooltip (§2.3). Built into Creative Common
   1.0.3 `build/libs`, not copied to `mods/`, not deployed.
 - **2026-10-02:** everything built since the 1.0.3 deploy is pack 1.0.4: the crop parity layer and the hoe
-  areas ship in patcherMod 1.0.4 (the earlier "1.0.3" labels were the unbumped jar name), now in `mods/`, not
+  areas ship in Creative Common 1.0.4 (the earlier "1.0.3" labels were the unbumped jar name), now in `mods/`, not
   deployed, not boot-tested. See [plan_1.0.4.md](plan_1.0.4.md).
 - **2026-10-02:** 1.0.4 mods added from their decompiled jars (Corn Delight 1.0.3 + Mysterious Mountain Lib
   1.2.3, Farmer's Respite 2.0, Fruits Delight 0.5.11): corn (two-high, lower half replants), tea (shears only, no
@@ -1722,13 +1722,13 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
 - **2026-10-03:** §2.8 wild crop placement built from your spec: `wild_crops.json` (traits for all 146 overworld biomes incl.
   oceans/caves, 46 crop rules), `worldgen/wild_crops.js` (biome tags, 44 mod modifiers to `forge:none`, 46 add modifiers,
   one remove modifier for the vanilla patches), 5 configured + 10 placed pack features, CEConfig `wildCrops` switch
-  (patcherMod 1.0.4 rebuilt; not copied to `mods/` because the game was running). Oak/dark oak leaf apples removed
+  (Creative Common 1.0.4 rebuilt; not copied to `mods/` because the game was running). Oak/dark oak leaf apples removed
   (`loot/08_leaf_apples.js`), Alex's Mobs leaf bananas off, Farmer's Respite Nether coffee off. Generator now evaluates the
   rules, shows before/after densities, biome traits and coverage; it also learned that `minecraft:trees_jungle` grows
   cocoa (rocky jungle, jungle mountains). Offline checks `tools/test_wild_crops.sh` pass; not run in game. V1 to V3, V10
   addressed; V13 to V20 and CR-47 to CR-58 added.
 - **2026-10-04:** §2.9 WTHIT growth line. Cause: WTHIT's `PlantProvider` only handles `CropBlock` subclasses and five vanilla blocks by
-  identity. New `/dumpcropgrowth` audit (290 growing blocks, 22 native, 62 ruled, 206 not crops), `crop_growth.json` rules, patcherMod
+  identity. New `/dumpcropgrowth` audit (290 growing blocks, 22 native, 62 ruled, 206 not crops), `crop_growth.json` rules, Creative Common
   `crops/WthitCropGrowth` + `CropGrowth`, `[crop_growth]` config, coverage tool and `tools/test_crop_growth.sh` (38 checks). Built
   into `development/creativeCommon/build/libs` (md5 23df38e7), not installed to `mods/`; not seen in game. Hemp's state is an enum
   (`growth`), found only after the first audit pass read integer properties alone; Durian leaves use `fruit` not `type`, found by the
@@ -1737,7 +1737,7 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   `grass_block` by name. New tag `creativeengineering:worldgen/grass_like_soils`, generator `tools/gen_soil_compat.py` (65
   `kubejs/data` overrides, `/cdevgen` id `soil_compat`), hamimelon takes the tag. Scratch-server before/after test passed. CR-67, CR-68 added.
 - **2026-10-11:** status refresh. Hoe areas, tobacco parity and wild-crop placement went out with 1.0.4 (DEPLOYED
-  2026-10-04). The WTHIT growth line (in patcherMod 1.0.5), the Immersive Weathering soil overrides and the
+  2026-10-04). The WTHIT growth line (in Creative Common 1.0.5), the Immersive Weathering soil overrides and the
   refreshed `wild_crops.json` are STAGED for 1.0.6 (not deployed); the staged jar booted in single player without
   errors. The ghost-block fix (state id overflow) ships in the same jar.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED
@@ -1746,11 +1746,11 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   the WTHIT coverage audit ([wthit_lines.md](wthit_lines.md) 4.2).
 - 2026-10-21: bell pepper colors even (§3, `loot/09_crop_drops.js`, TODO `farming/crops #9`). Offline sim of the rewritten
   jar table: red 0.483, green 0.485, yellow 0.483 per ripe harvest; a second pass is a no-op. CR-69 added.
-- 2026-10-21: pepper weights and bonus chances made CEConfig `[crop_drops.bell_peppers]` (patcherMod 1.1.01 rebuilt,
+- 2026-10-21: pepper weights and bonus chances made CEConfig `[crop_drops.bell_peppers]` (Creative Common 1.1.01 rebuilt,
   not installed). Offline sim matched the formula for four configs; 6:1:1 with no red bonus reproduces the mod. The
   extra colors some pages mention are Rustic Delight 1.7.0 only (no 1.19.2 build). CR-70 added.
 - 2026-10-22: extra stem fruit (§2.10): up to 4 fruits per attached stem with 10 / 20 / 40 minute minimum waits, re-point
-  on harvest, CEConfig `[stem_fruit]`. patcherMod 1.1.01 built, not installed, not tested in game. CR-71 to CR-75 added.
+  on harvest, CEConfig `[stem_fruit]`. Creative Common 1.1.01 built, not installed, not tested in game. CR-71 to CR-75 added.
 - 2026-10-22: wild-crops batch (§2.8, TODO `farming/wild-crops #3`, `#4`): tea to 20 biomes (V20), Vinery grape bushes
   and jungle vines under the system (V1, four rules), wild flax modifier off (V6), white strawberry height 256 -> 192 plus
   a tooltip, V7 explained. The generator now reads the Vinery port's upstream jars (`vinery_upstream/`), so apple, cherry
@@ -1765,11 +1765,11 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   and SQ-CD-00 to SQ-CD-02 PASS on the scratch server. CR-74 done; the rest keep their game halves. `[wild-crops]` also
   warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error).
 - 2026-10-24: planned from the scratchpad: bone meal in planters, other plants in random growth (`farming/crops #14`, `#15`). No code changed.
-- 2026-10-25: own-pick crops (§2.2): `#creativedelight:crops/own_pick` + patcherMod `QuarkOwnPickMixin` keep Quark
+- 2026-10-25: own-pick crops (§2.2): `#creativedelight:crops/own_pick` + Creative Common `QuarkOwnPickMixin` keep Quark
   off the cucumber, ghost pepper and zucchini picks (vintageport #8). Test VTD-76.
 - 2026-10-30: growing seasons audit (§2.12, TODO `farming/crops #5` step 1): `tools/crop_season_audit.py` and the generated crop_seasons_audit.md, `/dumpcropgrowth` records the planting item; findings F-SS2 (hemp, sea grapes, Nether fungus colonies have no grow event), F-SS3 (inert tags). No gameplay change.
 - 2026-10-30: crop seasons BUILT (§2.12.1, TODO `farming/crops #5`): types for all 123 audited plants in
-  crop_seasons.json, patcherMod `seasons/CropSeasons` (fertile +25 % / off -25 % by the biome calendar), tooltip and
+  crop_seasons.json, Creative Common `seasons/CropSeasons` (fertile +25 % / off -25 % by the biome calendar), tooltip and
   WTHIT lines, grow-event hooks for hemp, tobacco, fungus colonies, the Vinery grapes and fruit leaves and the chorus
   flame; Serene Seasons' crop rule off. F-SS1 (crops #12) and F-SS2 resolved. `crop_season_audit.py` now reads the json.
   CR-76 reworded, CR-89 to CR-97 added; SQ-CS queued.

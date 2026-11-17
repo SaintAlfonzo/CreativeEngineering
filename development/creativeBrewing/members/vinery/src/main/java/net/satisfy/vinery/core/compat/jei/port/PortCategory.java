@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Port-only JEI pages (grape stomping, wine aging): plain slots, an animated arrow and the large result slot, all from
  * JEI's {@code gui_vanilla.png}. Item positions are what {@code addSlot} takes; the draw helpers frame around them.
- * Based on patcherMod's 1.3.10 Vinery pages (feature_writeup/vinery_jei.md), which the port replaces.
+ * Based on Creative Common's 1.3.10 Vinery pages (feature_writeup/vinery_jei.md), which the port replaces.
  */
 abstract class PortCategory<T> implements IRecipeCategory<T> {
     private static final ResourceLocation GUI = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");

@@ -31,7 +31,7 @@ except the parts that already have a writeup: components, coils and the sample s
 | Resource stones: Create ore stones by compacting, 3-heat stone generators, crushing tables for 20 stones | DEPLOYED |
 | Dusts: cinder flour + potion -> 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; amethyst crushing clash fixed 2026-11-01 (F3) |
 | Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool -> hemp, seashells, bottles, CC speaker | DEPLOYED |
-| Buckets (`process.js`, patcherMod `bucket/`): iron bucket from 3 iron plates; Wooden Bucket (3 planks, water only, stacks to 16) | BUILT 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44); RE-28 scratch server PASSED r1031 (2026-10-31, SQ-RE-28); RE-29, RE-30 in game pending; TODO `recipes/engineering #5`, [brief](briefs/recipes_engineering.md) |
+| Buckets (`process.js`, Creative Common `bucket/`): iron bucket from 3 iron plates; Wooden Bucket (3 planks, water only, stacks to 16) | BUILT 2026-10-29 (Creative Common 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44); RE-28 scratch server PASSED r1031 (2026-10-31, SQ-RE-28); RE-29, RE-30 in game pending; TODO `recipes/engineering #5`, [brief](briefs/recipes_engineering.md) |
 
 - **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1 and F2
   need your call; F3 fixed 2026-11-01 (script, `/reload`).
@@ -302,7 +302,7 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - 2026-10-21: `create_generators` removed from the pack; its obsidian recipe is now in `resource_blocks.js`
   (`obsidian_generation_heated`), the 5 `R.remove` lines for its other recipes deleted; test RE-21.
 - 2026-10-29: buckets (TODO `recipes/engineering #5`): `process.js` removes `minecraft:bucket`, adds
-  `shaped/bucket_from_plates` and `shaped/wooden_bucket`; patcherMod `bucket/WoodenBucketItems` + `WoodenBucketItem`
+  `shaped/bucket_from_plates` and `shaped/wooden_bucket`; Creative Common `bucket/WoodenBucketItems` + `WoodenBucketItem`
   (`creativeengineering:wooden_bucket`, `wooden_water_bucket`; water only; cech12's MIT texture). Not done: dispenser,
   cauldron, use as `minecraft:water_bucket` in recipes. Tests RE-28 to RE-30 (scratch queue). Not run in game.
 - 2026-11-09: the wooden bucket moved to Creative Delight as a farm tool (`creativedelight:wooden_*`, CD `farm/bucket/`,

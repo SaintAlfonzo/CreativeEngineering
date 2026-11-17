@@ -11,17 +11,17 @@ Written 2026-10-31 from [TODO](../todo/TODO.md) `# items`, Sub `storage-and-item
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `#1` container sorting audit | tool + scratch script, maybe patcherMod | Mostly a test harness; may turn up a fix |
-| 2 | `#5` Polymorph in more crafting screens | patcherMod | Curios and Cosmetic Armor first (same pattern as 2.29, verified lookups) |
-| 3 | `#8` trash can buffer | patcherMod (common + client mixins) | Independent; one build with #5 |
+| 1 | `#1` container sorting audit | tool + scratch script, maybe Creative Common | Mostly a test harness; may turn up a fix |
+| 2 | `#5` Polymorph in more crafting screens | Creative Common | Curios and Cosmetic Armor first (same pattern as 2.29, verified lookups) |
+| 3 | `#8` trash can buffer | Creative Common (common + client mixins) | Independent; one build with #5 |
 | - | `#2`, `#3`, `#4`, `#7`, `#9` | Testing | Built, needs play (below) |
 
-Steps 2 and 3 can share one patcherMod build. Never replace the jar while the game runs.
+Steps 2 and 3 can share one Creative Common build. Never replace the jar while the game runs.
 
 ---
 
 ## storage-and-item-loss #1: Container sorting audit
-Status **In Progress** / Work patcherMod / tool / TODO `items/storage-and-item-loss #1`
+Status **In Progress** / Work Creative Common / tool / TODO `items/storage-and-item-loss #1`
 
 ### Goal
 Every sort a player can trigger in the pack keeps every item (counts, NBT), proven by a repeatable programmatic test,
@@ -42,7 +42,7 @@ not by hand.
 - **The 2026-09-30 repro** (`tools/item_repro/`, plan_1.0.3.md 4.7, note [item-loss-repro](../agent_notes/item-loss-repro.md)): ~380 random-click rounds
   under lag found no vanilla click loss; the one permanent loss was Sophisticated Backpacks' anti-dupe
   (`UUIDDeduplicator.checkForDuplicateBackpacksAndRemoveTheirUUID`) stripping `contentsUuid` from a re-opened backpack.
-  **No fix and no TODO row** for that loss (grep `contentsUuid` / `UUIDDeduplicator` in patcherMod and TODO: none).
+  **No fix and no TODO row** for that loss (grep `contentsUuid` / `UUIDDeduplicator` in Creative Common and TODO: none).
 
 ### Build
 1. **Inventory of sort paths** (write it into fixes_compat 2.20 as a table): each screen above, the backpack sort, the
@@ -55,7 +55,7 @@ not by hand.
    `SortingHandler.sortInventory` on the block's item capability, and totals again: `PASS` / `FAIL <diff>` per block.
 3. **Backpack sort**: call Sophisticated Core's sort on a backpack's `InventoryHandler` the same way (find the method in
    the 0.6.4 jar with `javap`; unverified name), compare totals.
-4. **Fixes**: any `FAIL` gets a patcherMod fix routed through `QuarkSafeSort`'s validate-first approach.
+4. **Fixes**: any `FAIL` gets a Creative Common fix routed through `QuarkSafeSort`'s validate-first approach.
 5. **SB `contentsUuid` wipe**: ask the user whether to fix it here (a mixin making the dedupe skip the backpack that
    belongs to the open menu, plan_1.0.3.md 4.7) or as a separate row; recommend a separate TODO row.
 6. Queue the scratch rows in scratch_queue.md (SQ-SA-*), then fold results into fixes_compat 2.20.
@@ -82,7 +82,7 @@ not by hand.
 ---
 
 ## storage-and-item-loss #5: Polymorph in modded crafting screens
-Status **In Progress** / Work patcherMod / TODO `items/storage-and-item-loss #5`
+Status **In Progress** / Work Creative Common / TODO `items/storage-and-item-loss #5`
 
 ### Goal
 Polymorph's recipe choice works in every crafting screen of the pack, not only the vanilla ones.
@@ -150,7 +150,7 @@ Polymorph's recipe choice works in every crafting screen of the pack, not only t
 ---
 
 ## storage-and-item-loss #8: Trash can block buffer rework
-Status **Planned** / Work patcherMod / TODO `items/storage-and-item-loss #8`
+Status **Planned** / Work Creative Common / TODO `items/storage-and-item-loss #8`
 
 ### Goal
 The Trash Cans item trash can holds what a player puts in for as long as its screen is open (a chest-sized, 27-slot
@@ -183,7 +183,7 @@ deleting at once.
    and keeps any future side effect of the mod's handler); a stack the filter now refuses (filter changed while open)
    goes back to the player with `player.getInventory().placeItemBackInInventory`.
 4. **Client mixin on `ItemTrashCanScreen`:** size 175 x 172, draw the buffer area (a 9 x 3 slot texture, own PNG in
-   patcherMod resources under `assets/creativeengineering/textures/gui/`) between the filter row and the player
+   Creative Common resources under `assets/creativeengineering/textures/gui/`) between the filter row and the player
    inventory; move the filter label. A small "Deleted when closed" label.
 5. Config `[trash_cans] bufferUntilClose = true` (when false, skip the mixins' effect).
 6. Writeup: a fixes_compat 2.x entry; changelog bullet when built.
@@ -218,7 +218,7 @@ deleting at once.
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| #2 | Items in a sack deleted when dyed | Testing | `SupplementariesDyeBlocksMixin` (patcherMod 1.1.01) skips block-entity blocks and `#creativeengineering:no_world_dye`; [dyeing.md](../dyeing.md) D1. Test in the TODO row (filled sack in world: nothing; grid dye keeps contents; wool still dyes) |
+| #2 | Items in a sack deleted when dyed | Testing | `SupplementariesDyeBlocksMixin` (Creative Common 1.1.01) skips block-entity blocks and `#creativeengineering:no_world_dye`; [dyeing.md](../dyeing.md) D1. Test in the TODO row (filled sack in world: nothing; grid dye keeps contents; wool still dyes) |
 | #3 | Item deleted after middle-click pick | Testing | `CreativePickBlockSyncMixin` (client, 1.1.01), note [creative-pick-block-desync](../agent_notes/creative-pick-block-desync.md). Test on the server in creative with a full hotbar |
 | #4 | Backpack reskin by smithing | Testing | [backpack_skins.md](../backpack_skins.md); BP-01 to BP-05 open; equip block off by default |
 | #7 | Sacks as bundles | Testing | [storage_audit.md](../storage_audit.md) 6; scratch SQ-GM-10 PASSED 2026-10-22; SB-01 to SB-09 in game |

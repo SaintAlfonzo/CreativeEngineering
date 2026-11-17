@@ -11,7 +11,7 @@ Sources of truth:
   options.txt                                         -> enabled resource packs and their order
 
 Every file gets its local sha1 so a rebuilt pack can be checked byte-for-byte. Files with no
-CurseForge/Modrinth entry are marked source "local" (the in-tree patcherMod jar, hand-made packs).
+CurseForge/Modrinth entry are marked source "local" (the in-tree Creative Common jar, hand-made packs).
 
 Re-run after adding, removing or updating anything, then commit pack/.
 

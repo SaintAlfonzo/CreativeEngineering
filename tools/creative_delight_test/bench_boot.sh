@@ -3,7 +3,7 @@
 #   bench_boot.sh OUT ROUNDS
 # OUT is a scratch dir already set up by tools/creative_labels_test/scratch_server.sh (server stopped). Each round
 # boots once without CD (upstream Ocean's, Oceanic, End's jars, pack's kubejs/data/creativedelight moved aside)
-# and once with development/creativeDelight/build/libs/creativedelight-<v>.jar, both with the built patcherMod.
+# and once with development/creativeDelight/build/libs/creativedelight-<v>.jar, both with the built Creative Common.
 # Prints one line per boot: variant, seconds to "Done", KubeJS startup / server script times, recipe event time.
 # Nothing here writes into the instance. Scratch servers only; one JVM at a time.
 set -uo pipefail

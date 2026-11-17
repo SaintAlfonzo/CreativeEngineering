@@ -2,7 +2,7 @@
 """Shields: offline checks for the tier shields and the damage tags they read.
 
 Reads the live [shields] section of config/creativeequipment-common.toml, the code defaults in
-Creative Equipment's ShieldTier.java and the damage tag files in patcherMod, then prints:
+Creative Equipment's ShieldTier.java and the damage tag files in Creative Common, then prints:
 
   1. the effective ladder per tier (what the game uses right now, from the toml)
   2. where the toml differs from the ShieldTier.java defaults (a fresh toml would get the code values)

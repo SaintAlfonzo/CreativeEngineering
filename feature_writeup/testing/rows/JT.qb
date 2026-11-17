@@ -7,7 +7,7 @@
 @@date 2026-10-26
 @@sources feature_writeup/plan_jei_tab_tweaks.md
 @@text
-@@text Client checks (JEI is client side); install the patcherMod and moreMooblooms jars built 2026-10-26 first. One creative
+@@text Client checks (JEI is client side); install the Creative Common and moreMooblooms jars built 2026-10-26 first. One creative
 @@text superflat world covers all but CQ-JT-07, which needs a world with IE.
 @@text
 @@text | ID | World | What to do and look at | Existing test |

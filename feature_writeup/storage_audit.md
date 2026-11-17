@@ -173,7 +173,7 @@ Food 9-blocks only (egg crates, sleeping bags, dyed sacks, IE crates and planter
 ## 6. Sacks as bundles (TODO `items/storage-and-item-loss #7`)
 
 Scratchpad 2026-10-21: "make sacks act as bundles in inventory: scroll to cycle items, take out stack, place 1 w/
-bundle; keep gui open in world interaction". BUILT 2026-10-22, patcherMod 1.1.01; logic scratch server PASSED 2026-10-22 (SQ-GM-10), client tests open.
+bundle; keep gui open in world interaction". BUILT 2026-10-22, Creative Common 1.1.01; logic scratch server PASSED 2026-10-22 (SQ-GM-10), client tests open.
 
 - **Scope:** every `SackItem` (Supplementaries sack and the 16 Supp Squared dyed sacks). Slot count unchanged
   (`[functional.sack] slots = 16`); no bundle weight limit. Loot-table sacks (`LootTable` tag) are left alone.
@@ -191,7 +191,7 @@ bundle; keep gui open in world interaction". BUILT 2026-10-22, patcherMod 1.1.01
   unchanged).
 - An emptied sack loses its `BlockEntityTag` (by our take-out), so it matches a new one.
 
-### Tests (patcherMod 1.1.01)
+### Tests (Creative Common 1.1.01)
 
 In `mods/` (11:06 jar, md5 b5f60533, and the 11:08 `build/libs` one), not in `server_mods/` (01:54). The
 rotate and take-out logic and the empty-sack tag (SB-01, SB-03, SB-04 server halves, SB-02 one-stack rule): scratch server PASSED 2026-10-22

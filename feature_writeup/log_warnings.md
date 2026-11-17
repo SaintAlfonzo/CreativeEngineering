@@ -39,7 +39,7 @@ jumps, is worth a look. Crashes, `Error occurred while handling event` and `Exce
 | 7 | `Reference map '<x>.refmap.json' for <x>.mixins.json could not be read` | 35 | n/a | about 35 mods | Ignore (G) |
 | 8 | `defineId called for: class X from class Y` + `RuntimeException: null` trace | 40 | n/a | MCA 38, babyMobs 2 | Ignore (H) |
 | 9 | `Missing sound for event: ...` | 14 | n/a | twigs 10 | Ignore |
-| 10 | `DetailArmorBarCompat: '...' is not a registered ArmorItem, skipping` | 12 | n/a | our patcherMod | Ignore (expected) |
+| 10 | `DetailArmorBarCompat: '...' is not a registered ArmorItem, skipping` | 12 | n/a | our Creative Common | Ignore (expected) |
 | 11 | Mixin conflicts: `Shift.BY`, `@Final should be final`, `@Redirect conflict`, `Static binding violation`, `Method overwrite conflict` | about 30 | n/a | see 4.4 | Ignore |
 | 12 | `Error loading class: ... ClassNotFoundException` / `@Mixin target ... was not found` | 8+3 | n/a | mixin plugins probing for optional mods | Ignore |
 | 13 | `Failed to process update information` + `HttpConnectTimeoutException` | 7 | n/a | Forge update check | Ignore |
@@ -276,7 +276,7 @@ up if the feature of the losing mod is broken (SecurityCraft camera behavior in 
 
 ### 4.5 Our own mod lines
 
-- `DetailArmorBarCompat: '<id>' is not a registered ArmorItem, skipping` (12): patcherMod's armor-bar compat skipping
+- `DetailArmorBarCompat: '<id>' is not a registered ArmorItem, skipping` (12): Creative Common's armor-bar compat skipping
   non-armor entries in its list. Expected.
 
 ## 5. KubeJS logs (`logs/kubejs/startup.log`, `server.log`, `client.log`)
@@ -307,7 +307,7 @@ From least to most change. Pick per class; the default is 1 and 2.
 | 3 | **Filter the lines out of the log** | A Log4j2 `RegexFilter` (or `MarkerFilter`) so the lines never reach `latest.log` / console. The game still does the same thing. The launcher passes `-Dlog4j.configurationFile=.../assets/log_configs/client-1.19-debug.xml`; copy that XML into the repo, add filters, and point the Java argument at the copy | Edit the launcher's Java arguments (the instance setting is hand-edited, so back it up under `configs_edited/`); filtering hides a real regression of the same shape; filter by exact message prefix only, never by level | The biggest blocks, A to D (about 5400 lines of the 18000), the `Leaked resource` traces, the refmap lines | launcher setting + a repo copy |
 | 4 | **Fix with a resource override** | Add the missing blockstate / model / texture file in `kubejs/assets/<mod>/...` (or a pack) | Time per mod; you maintain it across updates | Cases that show in play (section 3) | `kubejs/assets/` |
 | 5 | **Fix in the mod's config** | A few mods log because of their own config (Philip's Ruins rewrites an invalid TOML each launch; Forgiving Void list types) | Low | Config warnings only | `config/` + `configs_edited/` |
-| 6 | **Patch the mod with a mixin** | Fix the cause from patcherMod | High; version-pinned; needs a [fixes_compat.md](fixes_compat.md) entry | A warning that is a real bug players see (blocky_siege `minecraft:` model path) | patcherMod |
+| 6 | **Patch the mod with a mixin** | Fix the cause from Creative Common | High; version-pinned; needs a [fixes_compat.md](fixes_compat.md) entry | A warning that is a real bug players see (blocky_siege `minecraft:` model path) | Creative Common |
 | 7 | **Remove or replace the mod** | The warnings go with the mod | Loses the content | A mod with a visible bug and no better fix | `mods/`, `mod_sides.md` |
 | 8 | **Report upstream** | The author fixes it; take the update later | No control over timing | Bugs in many logs: redeco shelf variants, interiors chairs, display delight stack models | the mod's tracker |
 
@@ -394,7 +394,7 @@ comes from another mod or Forge, but our change or script causes it; **Mod** = a
 | S12 | `Configuration file ./winecraft/serverconfig/oldguns-server.toml is not correct. Correcting` + 4 `Incorrect key ... was corrected from [X] to its default, [X]` | 5 | Mod | Old Guns list values fail Forge's list validation and are rewritten to the same values each start (same pattern as Philip's Ruins, item 26, also present here) | Ignore; self-heals every start |
 | S13 | `quark: Non-existant flag elder_prismarine_underground_biome being used` | 1 | Mod | A Quark recipe condition names a flag Quark no longer has; not in our data | Ignore |
 | S14 | `@Redirect conflict. Skipping securitycraft.mixins.json:camera.ChunkMapMixin ... already redirected by railways-common` | 1 | Mod | Second SecurityCraft camera redirect lost to Railways (server side of the 4.4 case) | Same as 4.4: only matters if SecurityCraft cameras misbehave near Railways conductors |
-| S15 | `[mod names] <modid> is not loaded; '<name>' not applied` (WARN) | 13 | Pack | patcherMod `ModDisplayNames`: display names for client-only mods (xaerolib, xaerozoomout, transition, notenoughanimations, just_enough_beacons, immediatelyfast, entityculling, enchdesc, ctm, create_questing, conditional_mixin, boatview360, betterf3) | Expected on a server. Fixable: log at INFO when the mod is client-only (10.3) |
+| S15 | `[mod names] <modid> is not loaded; '<name>' not applied` (WARN) | 13 | Pack | Creative Common `ModDisplayNames`: display names for client-only mods (xaerolib, xaerozoomout, transition, notenoughanimations, just_enough_beacons, immediatelyfast, entityculling, enchdesc, ctm, create_questing, conditional_mixin, boatview360, betterf3) | Expected on a server. Fixable: log at INFO when the mod is client-only (10.3) |
 | S16 | `[golden values] minecraft:pumpkin_pie is not a food` (KubeJS startup WARN) | 2 | Pack | `creativedelight` `goldenfood/golden_values.js#41`: the golden and enchanted golden pumpkin pie copy vanilla Pumpkin Pie's food values, but in the pack Pumpkin Pie has no food properties at that point, so those two keep their own values | Real, low priority (10.3) |
 | S17 | `[item_dict] Missing/invalid item IDs:` (23 entries) | 1 block | Pack | Dead keys in `item_dict.js`. Same as K2, now 23 [35]: IE `jei_bucket_{bioethanol,ethanol,memory_essence,yeast_culture}`, `tmted:{melon_juice,tomato_sauce}`, `more_immersive_wires:rs_{coil,connector,relay}`, `everycomp:{af,fd,hc}/vinery/cherry_*`, `dramaticdoors:{short,tall}_vinery_cherry_door`, `vinery:king_danis_wine`, `vinery:mead`, `physics_gun_mod:*` (4), `ricksportalgun:*` (3), and `create_questing:blueprint` (client-only mod, so expected on a server) | Real, low priority: prune (10.3) |
 | S18 | `[fluid_dict]` / `[block_dict] Tag entry ... is not validated` | 53 | Pack | Same as K1 | Ignore |

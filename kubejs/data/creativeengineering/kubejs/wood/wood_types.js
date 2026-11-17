@@ -46,7 +46,7 @@ R.bulk('remove', species.filter(s => s.sawmill).reduce((acc, s) => acc.concat([
 ]), []))
 
 // ── Remove quarkengineering sawmill recipes for the quark trio ──
-// the pack's sawmill JSONs (patcherMod) replace Quark Engineering's slab / log / door / stairs recipes;
+// the pack's sawmill JSONs (Creative Common) replace Quark Engineering's slab / log / door / stairs recipes;
 // its bookshelf recipes stay
 R.bulk('remove', species.filter(s => s.quarkSawmill).reduce((acc, s) => acc.concat([
 	[{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_slab' }, e],

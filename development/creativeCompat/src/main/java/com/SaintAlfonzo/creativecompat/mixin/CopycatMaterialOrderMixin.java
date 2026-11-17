@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * <p>Persisted as a flag inside the newest part's own entry, not as a key of its own:
  * {@code deserialize} turns every top-level key into a part, so an extra key would become a
  * phantom part. {@code MaterialItem.deserialize} ignores unknown fields, so the flag is harmless
- * if patcherMod is ever removed. Serialized data is used for both saving and client sync.
+ * if Creative Common is ever removed. Serialized data is used for both saving and client sync.
  */
 @Mixin(value = MaterialItemStorage.class, remap = false)
 public abstract class CopycatMaterialOrderMixin implements LastInsertedMaterial {

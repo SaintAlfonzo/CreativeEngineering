@@ -46,7 +46,7 @@ public class ChorusFlameBlock extends EndPlantBlock {
         BlockState soil = level.getBlockState(pos.below());
         if (!EndSoil.isSoil(soil)) return;
         double chance = EndSoil.isFast(soil) ? EAConfig.CHORUSFLAME_GROWTH_FAST.get() : EAConfig.CHORUSFLAME_GROWTH_SLOW.get();
-        // fire Forge's crop-grow event so the pack's crop seasons apply (patcherMod seasons/CropSeasons)
+        // fire Forge's crop-grow event so the pack's crop seasons apply (Creative Common seasons/CropSeasons)
         if (random.nextDouble() < chance && ForgeHooks.onCropsGrowPre(level, pos, state, true)) {
             BlockState grown = state.setValue(AGE, age + 1);
             level.setBlock(pos, grown, Block.UPDATE_CLIENTS);

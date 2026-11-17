@@ -3,9 +3,9 @@
 Written 2026-11-01 (Creative Split wave 1, [creative_split.md](creative_split.md) 2.1, 7.6; TODO `creativesplit/devtools #4`).
 
 **Status: INSTALLED 2026-11-01 (dev `mods/`), scratch-verified: SQ-CDV-01 to -04 PASS (run rcs1, [scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 6); CDV-01 to -06 in game open.** `creativedevtools-1.0.0.jar`
-(`development/creativeDevtools/build/libs/`) nests perfBot (`cdevperfbot`) and clientCapture (`cdevcapture`). patcherMod
+(`development/creativeDevtools/build/libs/`) nests perfBot (`cdevperfbot`) and clientCapture (`cdevcapture`). Creative Common
 lost the moved code in the same pass, so `/cdevgen`, `/dumpall`, the `/dump*` commands, `/cdevperf`, `/cdevplace` and the
-probes are gone from the dev instance until this jar is installed beside a rebuilt patcherMod.
+probes are gone from the dev instance until this jar is installed beside a rebuilt Creative Common.
 
 Written for: the owner and the split agents, as the execution record of the Devtools carve. Same shape as
 [creative_brewing.md](creative_brewing.md); only what is specific to Devtools is here.
@@ -37,7 +37,7 @@ always beats a nested copy (creative_delight.md 14.1 point 4).
 
 - **Build:** `ce.forge-bundle` like CB. `build.gradle` copies the pack-folder script trees
   (`kubejs/data/creativedevtools/kubejs/`, `kubejs/assets/creativedevtools/kubejs/`) into the jar at the same paths and
-  fails if the startup or server tree has no `.js`. `compileOnly project(':patcherMod')` plus patcherMod's `libs/`
+  fails if the startup or server tree has no `.js`. `compileOnly project(':creativeCommon')` plus Creative Common's `libs/`
   (the IE API for the recycling diagnostics). No mixins (`mixin_configs=none`, no gated plugin).
 - **Dependencies (`mods.toml`):** `creativeengineering` mandatory, `AFTER` (becomes `creativecommon` at the Q1 swap);
   `creativecompat` is added when Compat is carved (7.6). Worldgen is an optional dependency once it exists
@@ -64,7 +64,7 @@ always beats a nested copy (creative_delight.md 14.1 point 4).
 
 ## 2. What moved
 
-Package `com.SaintAlfonzo.creativedevtools` (PM = patcherMod's `com.SaintAlfonzo.creativeengineering`).
+Package `com.SaintAlfonzo.creativedevtools` (PM = Creative Common's `com.SaintAlfonzo.creativeengineering`).
 
 | From | To | Notes |
 |---|---|---|
@@ -205,7 +205,7 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
 - [ ] **CDV-04 Probes:** with `[debug.block_state_sync] enabled = true` a dedicated server writes
   `logs/cdev_block_state_ranges_server.txt`; with `[debug.level_random] probe = true` the log shows no
   `[LevelRandomProbe]` error at world load. Both off again afterwards.
-- [ ] **CDV-05 Without Devtools:** with only patcherMod (no Devtools jar), the server starts, no `/dumpall`, no
+- [ ] **CDV-05 Without Devtools:** with only Creative Common (no Devtools jar), the server starts, no `/dumpall`, no
   `/cdevgen`, no Flower Test world type, removed items still lose their tags (`/recipescan` gone).
 - [ ] **CDV-06 Flower Test:** the world type "Flower Test" is listed on a dev client and builds its table.
 - [ ] **CDV-07 /cdevtest and bot verbs:** scratch rows SQ-TX-01 to -18, CQ-TXR-01 (layer dump, Compat reload) (queue section "Scratch testing tools, item 3").
@@ -214,7 +214,7 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
 ## 5. Install (game closed)
 
 `./gradlew :creativeCommon:installToMods :creativeDevtools:installToMods --offline` together: patcherMod without Devtools
-loses the tools, Devtools without the new patcherMod fails on the missing hooks. Not part of any player payload.
+loses the tools, Devtools without the new Creative Common fails on the missing hooks. Not part of any player payload.
 
 ## 6. History
 

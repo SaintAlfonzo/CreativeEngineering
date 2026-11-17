@@ -13,13 +13,13 @@ Chalk 1.6.4, CC: Tweaked 1.101.4, Create 0.5.1.i (all in `mods/`). Dumps: `kubej
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `dyeing #1` steps 1-2 (disables, soap targets) | KubeJS tags + patcherMod | Small; fixes player-visible soap results (glass to white) |
-| 2 | `dyeing #1` step 3 (dye with block-entity carry-over) | patcherMod | Needs the DY-07 dupe check before shipping |
-| 3 | `dyeing #4` Glow dye item | KubeJS item + recipes, patcherMod for the in-world glow step | Shares the glow wool code of `dyeing #1` step 5; build with it |
-| 4 | `dyeing #1` steps 4-7 | patcherMod adapters, generator, JEI tabs | Largest part |
-| 5 | `dyeing #2` Colored water fan dyeing | patcherMod fan type + generated recipes | Independent; reuses the color-set dump |
-| 6 | `dyeing #5` Cauldron washing | KubeJS event or patcherMod | Small, independent |
-| 7 | `dyeing #3` Placeable dyed string | patcherMod blocks + KubeJS recipes | Independent; new items |
+| 1 | `dyeing #1` steps 1-2 (disables, soap targets) | KubeJS tags + Creative Common | Small; fixes player-visible soap results (glass to white) |
+| 2 | `dyeing #1` step 3 (dye with block-entity carry-over) | Creative Common | Needs the DY-07 dupe check before shipping |
+| 3 | `dyeing #4` Glow dye item | KubeJS item + recipes, Creative Common for the in-world glow step | Shares the glow wool code of `dyeing #1` step 5; build with it |
+| 4 | `dyeing #1` steps 4-7 | Creative Common adapters, generator, JEI tabs | Largest part |
+| 5 | `dyeing #2` Colored water fan dyeing | Creative Common fan type + generated recipes | Independent; reuses the color-set dump |
+| 6 | `dyeing #5` Cauldron washing | KubeJS event or Creative Common | Small, independent |
+| 7 | `dyeing #3` Placeable dyed string | Creative Common blocks + KubeJS recipes | Independent; new items |
 
 Conventions: tags through `global.tags` (block keys in `kubejs/startup_scripts/_lib/block_dict.js`), recipes through
 `global.NCH`, item ids in `global.item`. Dyeing is not food, so the KubeJS parts stay in the pack's `server_scripts/`
@@ -28,7 +28,7 @@ Conventions: tags through `global.tags` (block keys in `kubejs/startup_scripts/_
 ---
 
 ## dyeing #1: Block dyeing and soaping audit
-Status **In Progress** (audit done 2026-10-27, build not started) · Work: patcherMod / KubeJS / docs · id `blocks/dyeing #1`
+Status **In Progress** (audit done 2026-10-27, build not started) · Work: Creative Common / KubeJS / docs · id `blocks/dyeing #1`
 
 ### Goal
 Carry out the owner decisions of dyeing.md 3 (3.1 disables, 3.2 dye with carry-over, 3.3 soap targets, 3.4 soap
@@ -36,7 +36,7 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
 
 ### Now
 - In-world dye: Supplementaries `[tweaks.dye_blocks] enabled = true` (`config/supplementaries-common.toml:451-453`),
-  limited by patcherMod
+  limited by Creative Common
   [SupplementariesDyeBlocksMixin.java:32-46](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SupplementariesDyeBlocksMixin.java)
   (HEAD of `DyeBehavior.tryPerformingAction`: cancels for any state with a block entity or in
   `#creativeengineering:no_world_dye`).
@@ -53,7 +53,7 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
 1. **Disables (3.1).** Tags (blocktags.js, next to line 78): `t.add(e, b.t_no_world_dye, [...])` with
    `#botania:mystical_flowers`, `#botania:double_mystical_flowers`, `#botania:shiny_flowers`, `#botania:floating_flowers`,
    `#botania:mini_flowers`, the Botania mushrooms and petal blocks, buried petals (dump has all these tags); a new
-   `b.t_no_world_soap = '#creativeengineering:no_world_soap'` with the same list. patcherMod: soap mixin on
+   `b.t_no_world_soap = '#creativeengineering:no_world_soap'` with the same list. Creative Common: soap mixin on
    `SoapWashableHelper` (HEAD, cancel for `no_world_soap`, banners with any pattern layer, flags with patterns); the dye
    mixin also cancels on patterned banners; Colored Water's dye interaction off (mixin on its use handler; find the
    class with `javap` on the jar); CC: Tweaked `TileTurtle` water-bucket wash off (W1).
@@ -66,14 +66,14 @@ adapters, 3.5 new families, 3.6 unclean soap, 3.7 tool interactions, 3.8a glow a
    Create toolboxes and valve handles). Save the BE with `saveWithoutMetadata()`, set the new state with flag 2 and no
    drops (`level.setBlock(pos, newState, 2 | 16)`; remove the old BE first so containers don't spill), load the tag into
    the new BE. Canvas sign stays text-only. DY-07 before shipping.
-4. **Soap adapters (3.4).** One small class per mod in patcherMod `compat/soap/` (CfB, Create belt / nixie / flap
+4. **Soap adapters (3.4).** One small class per mod in Creative Common `compat/soap/` (CfB, Create belt / nixie / flap
    display, Steam Rails, PneumaticCraft, framed target, CC: Tweaked, cat collars), each `boolean tryWash(level, pos,
    state, player)`, called from the soap hook. Each mod guarded by `ModList.isLoaded`.
 5. **New families (3.5)** as Moonlight color sets or own adapters; glow wool two-step and glow ink on wool / carpet
    (1 ink per block). Shares code with `dyeing #4`.
 6. **Unclean pairs and tools (3.6, 3.7).** A generator `tools/gen_unclean_pairs.py` (listed in generators.json, reads
    `block_tags_by_block.json` and the registry dump) writes `kubejs/generation_scripts/dyeing/unclean_pairs.json`
-   (mossy / overgrown / rusty / dirty / sandy / ashen / muddy / floral -> clean twin, shapes kept); patcherMod loads it as
+   (mossy / overgrown / rusty / dirty / sandy / ashen / muddy / floral -> clean twin, shapes kept); Creative Common loads it as
    data and the soap hook applies it. Shears on overgrown and floral, hoe on muddy mangrove roots: a tool-action hook
    (`PlayerInteractEvent.RightClickBlock`), no drops.
 7. **JEI world tabs:** `/dumpworldjei`, then `/cdevgen run jei_world`; manual rows for anything the dump can't see.
@@ -104,7 +104,7 @@ Existing: DY-01 to DY-06 (dyeing.md 2.9), DY-07 to DY-14 (3.9). None queued in `
 ---
 
 ## dyeing #2: Colored water dyeing
-Status **Planned** · Work: KubeJS (really patcherMod fan type + generated recipes) · id `blocks/dyeing #2`
+Status **Planned** · Work: KubeJS (really Creative Common fan type + generated recipes) · id `blocks/dyeing #2`
 
 ### Goal
 A Create fan (bulk washing) recipe through the thickest colored water that dyes any dyeable item or block to that
@@ -119,25 +119,25 @@ colour. "The extra dye in the recipe becomes end stone dust" (TODO wording, see 
   Create's splashing never runs on them: a fan through colored water does nothing today.
 - The in-world dye interaction of colored water is to be disabled (dyeing.md 3.1, `dyeing #1` step 1); this row is
   separate.
-- Model for a custom fan type: patcherMod `fan/DragonBreathingFanProcessingType.java`, `DragonBreathingRecipe(Type)`
+- Model for a custom fan type: Creative Common `fan/DragonBreathingFanProcessingType.java`, `DragonBreathingRecipe(Type)`
   (memory `create-fan-processing-type`); NCH has `R.dragonBreathing` (neoCraftHelper.js:1341) and `R.createSplashing`
   (1330) as patterns for a helper.
 - Color sets for "any dyeable item or block": `color_sets` in `tool_pairs.json` (160 sets, color -> id maps).
 - No end stone dust item exists in the pack (display_names dump has none).
 
 ### Build
-1. patcherMod `fan/ColoredWaterFanProcessingType` (one type per color, or one type whose recipe carries the color):
+1. Creative Common `fan/ColoredWaterFanProcessingType` (one type per color, or one type whose recipe carries the color):
    `isValidAt` = fluid at the position is `colored_water:condense_<c>_fluid` (source or flowing); priority above
    SPLASHING (400) so plain-water recipes don't also fire; particles in the colour. Recipe type
    `creativeengineering:dyeing_<c>` or one `creativeengineering:fan_dyeing` with a `color` field (recommend one type with
    a field: 1 serializer, 1 JEI category).
-2. NCH helper `fanDyeing(output, input, color, e, idOverride)` next to `dragonBreathing` (patcherMod jar file: rebuild +
+2. NCH helper `fanDyeing(output, input, color, e, idOverride)` next to `dragonBreathing` (Creative Common jar file: rebuild +
    restart).
 3. Generator `tools/gen_fan_dyeing.py` (generators.json entry, dump `dumpworldjei`): for every color set, every member
    (and the base) -> the `<c>` member, as items; writes `kubejs/generation_scripts/dyeing/fan_dyeing.json`; a server
    script `kubejs/server_scripts/other/fan_dyeing.js` loops it through `R.fanDyeing`. Also wool, carpet, terracotta,
    glass, concrete powder, beds, candles, banners (plain only).
-4. JEI: a category for the new type (patcherMod JEI plugin) showing the fluid as catalyst.
+4. JEI: a category for the new type (Creative Common JEI plugin) showing the fluid as catalyst.
 5. Fluid use: none per item (as splashing). D3.
 
 ### Ids and data
@@ -165,7 +165,7 @@ Verified: fluid ids, recipe shapes, tags (above). New: recipe type id, ~2000 gen
 ---
 
 ## dyeing #3: Placeable recoloured string
-Status **Planned** · Work: patcherMod / KubeJS · id `blocks/dyeing #3`
+Status **Planned** · Work: Creative Common / KubeJS · id `blocks/dyeing #3`
 
 ### Goal
 Dyed string (16 colors) that places as a string line, like tripwire, in its colour.
@@ -176,7 +176,7 @@ Dyed string (16 colors) that places as a string line, like tripwire, in its colo
 - Dye items: `i.dye_<colour>` ([item_dict.js:2060-](../../kubejs/startup_scripts/_lib/item_dict.js#L2060)).
 
 ### Build
-1. patcherMod: 16 blocks `creativeengineering:<c>_string` (class `DyedStringBlock extends TripWireBlock`, decorative:
+1. Creative Common: 16 blocks `creativeengineering:<c>_string` (class `DyedStringBlock extends TripWireBlock`, decorative:
    no hook signal, D1), 16 `ItemNameBlockItem`s with the same id placing them; blockstates and models copied from vanilla
    tripwire with a `tintindex`, tinted by a `BlockColor` / `ItemColor` per color (one texture). Loot table: drops itself.
 2. Item dict keys `i.<c>_string` (generated by the dict tools or hand block), tags `#forge:string` (so recipes take it)
@@ -227,10 +227,10 @@ like a normal dye and gives the glow version in one step. Also chalk dyeing wool
 2. Recipes: `R.createMilling(Item.of(i.crushed_glow_ink_dye, N), i.glow_ink, e)` and `R.ieCrushing(...)`; then
    `R.shapeless(Item.of(i.glow_dye_<c>, 2), [i.crushed_glow_ink_dye, i.dye_<c>], e)` (D1 ratio).
 3. Grid: `[<c> glow dye, white_wool]` -> `glow_ink_plus:glow_<c>_wool` (and carpet, 8 + 1 -> 8) via NCH.
-4. In world (with `dyeing #1` step 5): patcherMod hook: a glow dye on wool / carpet swaps to the glow block; the
+4. In world (with `dyeing #1` step 5): Creative Common hook: a glow dye on wool / carpet swaps to the glow block; the
    Supplementaries dye behavior must see it as a dye of its color (`#forge:dyes/<c>` tag on the glow dyes) for other
    color sets.
-5. Chalk on wool / glow chalk (3.8a): patcherMod, same hook; glow chalk as 16 new items only if D3 says so.
+5. Chalk on wool / glow chalk (3.8a): Creative Common, same hook; glow chalk as 16 new items only if D3 says so.
 
 ### Ids and data
 New: `creativeengineering:crushed_glow_ink_dye`, `creativeengineering:glow_<colour>_dye` (16). Verified: Glow Ink Plus ids and recipe shape.
@@ -253,7 +253,7 @@ Existing: DY-14 (dyeing.md 3.9: glow dye on wool and carpet, chalk, glow chalk).
 ---
 
 ## dyeing #5: Water in a cauldron for washing recipes
-Status **Planned** · Work: KubeJS / patcherMod · id `blocks/dyeing #5`
+Status **Planned** · Work: KubeJS / Creative Common · id `blocks/dyeing #5`
 
 ### Goal
 Right-click a water cauldron with some items to wash them, for decor washing recipes that today need a Create fan.
@@ -266,7 +266,7 @@ Not progression: e.g. Old and Weathered cardboard boxes.
   `creativeengineering:weathered_cardboard_box`, `merges/materials #1`), the rust -> clean bulk list
   ([misc_metal_crafts.js:55-57](../../kubejs/data/creativeengineering/kubejs/metal/misc_metal_crafts.js#L55-L57)), feature ports
   (`feature_ports.js:45`), cornmeal -> raw tortilla (CD `corn_delight/recipes.js:39`).
-- No pack code uses a cauldron interaction (no `CauldronInteraction` / `water_cauldron` in kubejs or patcherMod).
+- No pack code uses a cauldron interaction (no `CauldronInteraction` / `water_cauldron` in kubejs or Creative Common).
 - JEI world tabs exist for other interactions (`kubejs/assets/creativeengineering/jei_world/<kind>/manual.json`).
 
 ### Build
@@ -286,7 +286,7 @@ Verified: the recipe lines and dict keys above.
   CD) and not ore washing (progression).
 - **D2 Per click.** Recommend the whole held stack per click and one water level per click (vanilla washes one item per
   level; a stack is kinder for decor).
-- **D3 KubeJS or patcherMod.** Recommend KubeJS (`BlockEvents.rightClicked`), no Java needed.
+- **D3 KubeJS or Creative Common.** Recommend KubeJS (`BlockEvents.rightClicked`), no Java needed.
 
 ### Gotchas
 - Vanilla `CauldronInteraction.WATER` already handles leather, banners and shulker boxes; don't cancel those items.

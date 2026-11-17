@@ -26,11 +26,11 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 | Dictionaries: `global.item` (12,511 keys), `global.blocks`, `global.fluid`, effect and multiblock dicts, `global.removedItems` (309) | in use since the initial commit; startup validation logs missing ids (tag keys: F1, F2) |
 | Recipe helpers `global.NCH` (about 60 recipe types, id generation, validation, `strict` mode, `bulk`, `cfg`) | in use |
 | Tag helper `global.tags` (add/remove, wildcard `addMatching`, families, mineable, storage blocks, overlaps, mirror) | in use |
-| `CEConfig` (patcherMod): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
+| `CEConfig` (Creative Common): one Forge common config, 23 sections, live-editable in Create's config screen; `NCH.cfg` reads recipe values from it | in use ([gear_tuning.md](gear_tuning.md) for `NCH.cfg`) |
 | 24 `/dump*` commands writing `kubejs/exported/`, and `/dumpall` | in use |
 | `/cdevgen`: runs `tools/generators.json` (50 Python generators and reports, 2026-10-31) in game, optionally at startup | in use; startup run off |
 | `tools/pack_paths.py`: shared instance paths, item_dict parser, lenient JSON loader, vanilla / Forge jar locator for the Python tools | in use since 2026-10-27 |
-| Headless tests: 9 `tools/test_*.sh` suites (Java on patcherMod classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
+| Headless tests: 9 `tools/test_*.sh` suites (Java on Creative Common classes, the pack's Rhino fork, node sims, Python), plus GameTest projects | in use; machine-specific paths (F7) |
 | Root Gradle build: one build for the 5 in-tree mods, `ce.forge-mod` convention plugin, `installToMods` | in use |
 | Item-loss repro harness (`tools/item_repro/`) | ran 2026-09-30; found the Sophisticated Backpacks wipe ([plan_1.0.3.md](plan_1.0.3.md) 4.7) |
 | Slice & Dice `_manual_only` recipe ids | in use (2 recipes) |
@@ -54,7 +54,7 @@ KubeJS 1902.6.2 (Rhino fork) runs three script sets: `startup_scripts` (once, at
 top-level `const` with the same name in two files kills the second file. Startup scripts load in filesystem-walk
 order within a priority, so anything read at top level must come from a higher `// priority:`.
 
-patcherMod (`creativeengineering`) is the pack's Forge coremod. It carries the Java side of most features, the
+Creative Common (`creativeengineering`) is the pack's Forge coremod. It carries the Java side of most features, the
 config, the Java dump and dev commands, and its jar is built by the root Gradle build.
 
 ## 2. Reference
@@ -145,13 +145,13 @@ One Forge common config built in `CEConfig.java`, 23 sections: `forgiving_void`,
 ### 2.5 Dump commands (op level 2)
 
 All write under `kubejs/exported/` (not committed; [export_io.js](../kubejs/server_scripts/_lib/export_io.js) creates
-folders through patcherMod because KubeJS can't).
+folders through Creative Common because KubeJS can't).
 
 | Command | Writes / used by |
 |---|---|
 | `/dumpbiomes`, `/dumpclimate`, `/dumpclimatecaves`, `/dumpspawns`, `/dumpstructures`, `/dumpstructuregen` | biome, climate, spawn and structure data ([weather.md](weather.md), [mob_spawns.md](mob_spawns.md), [structure_tuning.md](structure_tuning.md)) |
 | `/dumpitemsbymod`, `/dumptags`, `/dumprecipes`, `/dumpcraftingaudit`, `/dumpfluids`, `/dumppotions`, `/dumpnames` | registries, tags, recipes, names ([jei_coverage.md](jei_coverage.md), [names.md](names.md)) |
-| `/dumpworldjei` | world-interaction JEI facts (patcherMod `devtools/WorldJeiDump`; feeds `tools/gen_jei_world.py`, [jei_world_tabs.md](jei_world_tabs.md)) |
+| `/dumpworldjei` | world-interaction JEI facts (Creative Common `devtools/WorldJeiDump`; feeds `tools/gen_jei_world.py`, [jei_world_tabs.md](jei_world_tabs.md)) |
 | `/dumpgear`, `/dumpstacks`, `/dumpfood`, `/dumpplaceable`, `/dumpcropgrowth`, `/dumpcompost`, `/dumppaintings` | per-feature tables ([gear_tuning.md](gear_tuning.md), [stack_sizes.md](stack_sizes.md), [food.md](food.md), ...) |
 | `/dumploot`, `/dumptrades`, `/loottuning` | loot and trades ([loot.md](loot.md), [wandering_trader.md](wandering_trader.md)) |
 | `/dumpbeenests [reset]` | measured nests per biome ([bee_nests.md](bee_nests.md)); **not** in `/dumpall` (a session that generated nothing would overwrite a measurement) |
@@ -164,7 +164,7 @@ Rhino's `try/catch` can't (a `NoClassDefFoundError` used to kill `/dumprecipes` 
 
 [tools/generators.json](../tools/generators.json) lists 50 Python generators and reports (45 on 2026-10-27; silk touch blocks, UA coral growths, item physics audit and crop season audit added since) in run order, each with `groups`
 (`core`, `worldgen`, `loot`, `client`, `pack`, `reports`, `names`, `food`, `blockrunner`, `jei`, `stacks`, `slow`), the `dumps` it
-reads, its `outputs` and an `apply` hint. patcherMod's `devtools/GeneratorRunner` runs them as child processes from the
+reads, its `outputs` and an `apply` hint. Creative Common's `devtools/GeneratorRunner` runs them as child processes from the
 instance root, hashes the outputs before and after, and reports changes.
 
 | Command | |
@@ -221,8 +221,8 @@ which `audit_loot_containers.py` uses too.
 
 ### 2.8 Root Gradle build
 
-- `settings.gradle` includes `patcherMod`, `exposureBackport`, `incubationAdditions`, `moreMooblooms`,
-  `backportedBrewin`, `backportedVinery`, `babyMobs`, `creativeLabels`, `backportedVeggies` from `development/`; project names stay the bare mod names (`:patcherMod`).
+- `settings.gradle` includes Creative Common, `exposureBackport`, `incubationAdditions`, `moreMooblooms`,
+  `backportedBrewin`, `backportedVinery`, `babyMobs`, `creativeLabels`, `backportedVeggies` from `development/`; project names stay the bare mod names (`:creativeCommon`).
 - `build-logic/` holds the `ce.forge-mod` convention plugin (ForgeGradle setup, official 1.19.2 mappings, Java 17,
   mods.toml expansion from `<mod>/gradle.properties`, jar manifest with mixin configs, dev runs, `installToMods`) and
   `ce.forge-mod-refmap` for mods with real Mixin refmaps (below).
@@ -231,9 +231,9 @@ which `audit_loot_containers.py` uses too.
 - `./gradlew :creativeCommon:installToMods` builds and swaps the jar into `mods/`, moving the old one to
   `development/<mod>/jar_archive/displaced/`. `development/<mod>/libs/` (compile-only copies of mod jars) is
   gitignored. The root [README.md](../README.md) has the commands.
-- patcherMod has no refmap and only runs reobfuscated: its mixins on vanilla classes use SRG names with
+- Creative Common has no refmap and only runs reobfuscated: its mixins on vanilla classes use SRG names with
   `remap = false`, and reflection uses SRG strings (`m_20115_`, `f_43494_`). Mods like it set
-  `disable_target_validator=true` (`-AdisableTargetValidator=true` on compileJava; patcherMod, babyMobs,
+  `disable_target_validator=true` (`-AdisableTargetValidator=true` on compileJava; Creative Common, babyMobs,
   clientCapture, incubationAdditions, moreMooblooms, creativeDelight; `ce.forge-repack` always adds it).
 - Every `ce.forge-mod` project gets the `libs/` flatDir repository (`local:<file name without -version>:<version>`);
   a build.gradle adds only other repositories (mavenCentral).
@@ -261,7 +261,7 @@ which `audit_loot_containers.py` uses too.
 
   | Module | Classes | Used by |
   |---|---|---|
-  | `packs` | `BuiltInPacks` (`addFolder`: a `packs/<...>/` folder of the jar; `addMemory`: an in-memory pack of one pack type; `addUpstream`: a port's `<prefix>_assets` / `<prefix>_data` pair at the bottom), `MemoryPackResources` (path -> bytes `PackResources`, description from the caller) | backportedMiners, backportedVinery, Rustic (CD member), creativeLabels (`DonorArt`), patcherMod (`worldgen/donor/FarmersDonor`), moreMooblooms, incubationAdditions |
+  | `packs` | `BuiltInPacks` (`addFolder`: a `packs/<...>/` folder of the jar; `addMemory`: an in-memory pack of one pack type; `addUpstream`: a port's `<prefix>_assets` / `<prefix>_data` pair at the bottom), `MemoryPackResources` (path -> bytes `PackResources`, description from the caller) | backportedMiners, backportedVinery, Rustic (CD member), creativeLabels (`DonorArt`), Creative Common (`worldgen/donor/FarmersDonor`), moreMooblooms, incubationAdditions |
   | `upstream` | `DonorJars` (`Jar` record, `verifyOrFail`, `read` by entry prefix, `readEntry`, `sha1`). Each port keeps its own `upstream/UpstreamJars.java` with the `new Jar("file", "sha1", ...)` pins, which `tools/build_deploy.py` reads | backportedMiners, backportedVinery, Rustic |
   | `mixinplugin` | `GatedMixinPlugin`: a mixin applies only when its mod is loaded, named by a compartment package (`mixin.<modid>.`, optional exact version) or by a simple-name table (any of several mods, each with an optional tested Maven version range, outside it the mod counts as absent with one WARN; Creative Common's `MOD_RANGE` since 2026-11-05); subclasses add `postApply` edits | creativeDelight (`CDMixinPlugin`, compartments + the Fruits Delight bytecode edits), moreMooblooms, incubationAdditions, creativeLabels (tables) |
   | `stations` | `LeftoverPlan` (where a cooking station's ingredient leftovers go: container slot up to a stack, then the overflow slots, the rest returned), `StationContainers` (a station's plating containers from the live recipe manager, rebuilt on reload; container-and-ingredient items logged and left out) ([remainder_buffer.md](remainder_buffer.md) 3.8) | creativeDelight (FD pot, kettle, oven), backportedMiners (copper pot), backportedVintage (Pickling Jar) |
@@ -340,7 +340,7 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `var`; same-arity Java overloads are ambiguous (`PotionUtils.getColor`, `ItemStack.is`); some Mojang names are
   hidden (`getTag`, `getUUID`) and some fields shadow getters (`level`, `x`); `.class` doesn't exist
   (`__javaObject__`); `try/catch` misses `java.lang.Error`.
-- **KubeJS class filter** blocks `java.io` / `java.nio`, so file copies and folder creation go through patcherMod.
+- **KubeJS class filter** blocks `java.io` / `java.nio`, so file copies and folder creation go through Creative Common.
 - **Startup changes need a restart;** server scripts and tags reload with `/reload`.
 
 ### Rejected options
@@ -424,10 +424,15 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `audit_loot_containers` reads `loot_breakdown_scan.scan()`. 15 manifest entries added, the rest named in the
   `_readme` (F5 fixed).
 - 2026-10-27: item dict down to one key per id (finding 20, 2.1 above): 96 extra keys dropped and their uses rewritten
-  across the pack, Creative Delight, patcherMod's `neoCraftHelper.js` (`felsic_ingot` -> `ingot_felsic`), the food JSON
+  across the pack, Creative Delight, Creative Common's `neoCraftHelper.js` (`felsic_ingot` -> `ingot_felsic`), the food JSON
   (`food_types.json`, `can_types.json`, `placeable.json`, `stack_sizes.json`) and `tools/gen_can_types.py` (`cabbage`,
   `crab`). No generator change needed: none of the dropped keys was in a generated section, and the generators pick an
   id's existing key (`best_key`).
+- 2026-11-17: text sweeps of plan_rules_fixes.md P5: `tools/history_extract.py` (dated comments to writeup History,
+  owner map `tools/writeup_owner.json`, check_all `comment_dates`), `tools/us_spelling.py --scope code` and
+  `tools/iso_dates.py --scope code` (lints `spelling_docs`, `spelling_code`, `iso_dates_docs`, `iso_dates_code` fail in
+  check_all), `tools/rename_patchermod.py` (patcherMod to Creative Common in text; hits left as written in
+  [patchermod_left.csv](patchermod_left.csv)).
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
@@ -451,7 +456,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-10-23: Veggies Delight and Vintage Delight pastas and noodles (2026-10-23) (tools/gen_can_types.py)
 - 2026-10-23: Veggies Delight and Vintage Delight (2026-10-23): a whole veggie and its 2 cut pieces share the slots, as cabbage (tools/gen_can_types.py)
 - 2026-10-23: Veggies Delight and Vintage Delight (2026-10-23); roasted florets alone (no whole roasted cauliflower) (tools/gen_can_types.py)
-- 2026-10-25: Compiles the remainder buffer straight from patcherMod's sources (cooking/, oven/ without JEI and client classes) and Creative Delight's (the pot and kettle BE + menu mixins, QoL-1 since 2026-10-25, their switch class and CDConfig) next to the stand-in main class/config and the tests in src/, with Farmer's Delight and Farmer's Respite deobfuscated at runtime (jars in libs/, fetched by the test script) (tools/remainder_buffer_test/build.gradle)
+- 2026-10-25: Compiles the remainder buffer straight from Creative Common's sources (cooking/, oven/ without JEI and client classes) and Creative Delight's (the pot and kettle BE + menu mixins, QoL-1 since 2026-10-25, their switch class and CDConfig) next to the stand-in main class/config and the tests in src/, with Farmer's Delight and Farmer's Respite deobfuscated at runtime (jars in libs/, fetched by the test script) (tools/remainder_buffer_test/build.gradle)
 - 2026-10-25: Grid and pot meals moved into Creative Delight's tree (creativedelight: ids) on 2026-10-25; the oven pie is still C (tools/fungi_probe/fungi_probe.js)
 - 2026-10-25: emptied 2026-10-25 (Vintage, Fungi Delight); Roll Delight port added 2026-11-01; Large Meals 2026-11-02 (its 4 soup cans) (tools/gen_can_types.py)
 - 2026-10-25: the pack's food recipes are under C or, since the move into Creative Delight (2026-10-25), CDN (tools/vintage_probe/vintage_probe.js)
@@ -495,7 +500,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-02: air-below    columns whose first block under the built bottom is air; max gap; gaps over 6 (beardReach) water-below  same for water (waterlogged counts); max depth base water   water inside the bottom 3 layers of the structure (a flooded floor) base earth   ids of earth_fill/earth blocks left in the bottom 3 layers (after ground match) ring         top blocks (OCEAN_FLOOR) every 2 blocks on a ring 3 out from the start's box: the native ground foreign      base earth ids that never occur in the ring (ground match should have swapped them) Untested before its first scratch run (written 2026-11-02 for SQ-EFB); first 30 starts only (tools/scratch_query/zq_probe.js)
 - 2026-11-02: syrup is a cooking ingredient like honey (owner, 2026-11-02) (tools/gen_stack_sizes.py)
 - 2026-11-02: Farmer's Delight's Ratatouille (TODO cans/canning #18, 2026-11-02): a vegetable stew, canned like the soups (tools/gen_can_types.py)
-- 2026-11-02: in the Creative Worldgen jar since the wave 5 carve (2026-11-02; patcherMod before) (tools/build_deploy.py)
+- 2026-11-02: in the Creative Worldgen jar since the wave 5 carve (2026-11-02; Creative Common before) (tools/build_deploy.py)
 - 2026-11-02: The Veggies, Vintage, Fungi, Miner's and Display ports are members too (bundle_members, 2026-11-02; folders moved here the same day) (settings.gradle)
 - 2026-11-02: Label surface test and centered notes (sticky_notes.md 3.3a), on the real shapes of the modded hosts (read from their jars 2026-11-02) and on vanilla blocks (tools/creative_labels_test/SpotsTest.java)
 - 2026-11-02: nested in the Creative Delight jar since 2026-11-02 (plan_creative_delight.md A2) (tools/build_deploy.py)

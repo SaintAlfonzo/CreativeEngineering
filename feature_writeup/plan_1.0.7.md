@@ -21,14 +21,14 @@ test IDs named are the ones still open.
 | QS | Quark sort no longer deletes items from containers holding oversized stacks (`QuarkSafeSort` + `QuarkSortingHandlerMixin`) | fix | DEPLOYED; FS-01 to FS-05 pending | [testing/fridge_sort/plan.md](testing/fridge_sort/plan.md), [fixes_compat.md](fixes_compat.md) 2.20 |
 | RB | Remainder buffer: bottles, bowls and buckets stay in the FD cooking pot and the Farmer's Respite kettle (mixins) and the oven (native), `[cooking] remainderBuffer` / `stallWhenFull` | feature | DEPLOYED; RB-01 to RB-11 pending; keg not covered (port) | [remainder_buffer.md](remainder_buffer.md) |
 | OV | Oven: FD-style baking block (`creativeengineering:baking`, JEI page, heat below, stove heat above), bakeware items, first baking recipes (`baking.js`, `bakeware.js`) | feature | DEPLOYED in its first form; 1.0.8 adds ingredient counts, the 37-recipe set, hammered bakeware and cornmeal. OV-01 to OV-19 pending | [oven.md](oven.md) |
-| JO | JEI ordering steps 1 to 3: patcherMod sorter + JEI mixins, `global.jeiOrder` definition (`startup_scripts/jei/order.js`, `func/jei_order.js`), `jei_order_tags.js`, `client_scripts/jei_order.js`, report tool; dead fluids now come from `packHidden('fluid')` | feature | DEPLOYED; JO-01 to JO-12 pending; filling the tree not started | [jei_ordering.md](jei_ordering.md) |
+| JO | JEI ordering steps 1 to 3: Creative Common sorter + JEI mixins, `global.jeiOrder` definition (`startup_scripts/jei/order.js`, `func/jei_order.js`), `jei_order_tags.js`, `client_scripts/jei_order.js`, report tool; dead fluids now come from `packHidden('fluid')` | feature | DEPLOYED; JO-01 to JO-12 pending; filling the tree not started | [jei_ordering.md](jei_ordering.md) |
 | VB | Vinery port `backportedVinery-1.5.5-ce-19.2-01` replaces Let's Do Vinery 1.3.10 and its API (`doapi`); the two unmodified upstream jars ship in `vinery_upstream/` as resource donors; winemaker leggings id in `fabric.js` / `misc_mods.js`; grape and fruit bags compost at 1.0. **Hotfix in the 19:29 restage:** `SpreadableGrassSlabBlock.performBonemeal` crashed the server with Immersive Weathering (foreign `fertile` property), rebuilt under the same `-01` name | feature + fix | DEPLOYED; the first staging crashed the dedicated server, the fixed `-01` runs there; VB-01 to VB-66 pending | [alcohol_part_b.md](alcohol_part_b.md), [vinery.md](vinery.md) |
 | AL | Brewin' port `backportedBrewin-4.5.0-ce-19.2-01` shipped **beside** `BrewinAndChewin-1.19-2.0.jar` (both in `mods/` at staging, one mod id; FML picked the port on the dedicated server and the dev client). The log entry lists neither as added, because the mod-id diff saw `brewinandchewin` already there. 1.0.8 removes both and ships `-02` | mods | DEPLOYED with two jars of one mod id (2.2) | [alcohol.md](alcohol.md) 8.1 |
 | EX | Exposure `-04`: the viewfinder no longer outlives its player (respawn, dimension change, rejoin) and no longer eats clicks inside open screens | fix | DEPLOYED; untested | [exposure.md](exposure.md), [fixes_compat.md](fixes_compat.md) 2.21 |
 | NM | New mods: Create: The Salt 1.1.0, Storage Labels 1.10 (both). Resource packs Fancy Crops 1.2 and Fancy Beds 4.2 (clients enable them). 14 `mod_sides.md` rows relabelled server -> both (section 3) | mods | DEPLOYED | this file 3 |
 | KJ | Other KubeJS: `effect_dict.js`, `multiblock_dict.js`, splash line, `prepared_flesh.png` and `cornmeal.png` sprites (cornmeal moved under `assets/creativeengineering` in 1.0.8) | data | DEPLOYED | none |
 | CF | Config: `brewinandchewin-common.toml` and `vinery-common.toml` added (port configs); `creativeengineering-common.toml` (`[worldgen.pools]`, `[cooking]`, JEI order keys); JEI sort orders; game-rewritten `rare-ice.properties`, WorldEdit | config | DEPLOYED | this file 1 |
-| VR | Version records: patcherMod **1.0.7** (sha1 9dd6ae4c, built 2026-10-18 16:27), exposureBackport `-04`, backportedVinery `-01` (hotfix rebuild, sha1 a98df174), backportedBrewin `-01`; `vinery_upstream` category and the port's sha1 pins in `build_deploy.py`; then patcherMod `mod_version` 1.0.8 for the next build | bookkeeping | DONE 2026-10-18 | [deploy.md](deploy.md), this file 4 |
+| VR | Version records: Creative Common **1.0.7** (sha1 9dd6ae4c, built 2026-10-18 16:27), exposureBackport `-04`, backportedVinery `-01` (hotfix rebuild, sha1 a98df174), backportedBrewin `-01`; `vinery_upstream` category and the port's sha1 pins in `build_deploy.py`; then Creative Common `mod_version` 1.0.8 for the next build | bookkeeping | DONE 2026-10-18 | [deploy.md](deploy.md), this file 4 |
 
 ## 1. What the payload contains
 
@@ -94,11 +94,11 @@ Integration, Loading Protection, Rain should extinguish campfires, Simple Backup
 
 ## 4. Version records
 
-- patcherMod **1.0.7** shipped: sha1 9dd6ae4c, built 2026-10-18 16:27, in `jar_archive/` and `jar_archive/displaced/`.
+- Creative Common **1.0.7** shipped: sha1 9dd6ae4c, built 2026-10-18 16:27, in `jar_archive/` and `jar_archive/displaced/`.
   Against 1.0.6 it adds the JEI order classes, `QuarkSafeSort`, the remainder buffer and its 8 pot / kettle mixins,
   the `oven/` package, and the SF fixes in existing classes; `FermentationBarrelStackOutputMixin` is gone (the port
   replaces 1.3.10's barrel).
 - exposureBackport `-04` (2026-10-14 20:05 build), backportedVinery `-01` (hotfix rebuild, same name),
   backportedBrewin `-01`. incubationAdditions and moreMooblooms unchanged at 1.0.0.
 - History json rewritten at the 19:29 restage (`deploy/history/1.0.7.json`), so it reflects what shipped.
-- After staging: patcherMod `mod_version` = 1.0.8; Brewin port bumped to `-02` because `-01` shipped.
+- After staging: Creative Common `mod_version` = 1.0.8; Brewin port bumped to `-02` because `-01` shipped.

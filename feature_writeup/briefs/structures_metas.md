@@ -22,7 +22,7 @@ Proposed test ids: **ST-240 to ST-259** (renumber at build time; other worldgen 
 |---|---|---|---|
 | 1 | #5 `avoidCoasts` | config / decision | settle first: every new land meta inherits the answer |
 | 2 | #3 driftwood rates | data | values only; settle with `structures/contents #2` (driftwood log cleanup) |
-| 3 | #1 caravans | data (+ optional patcherMod "line" layout) | existing structures only, no templates |
+| 3 | #1 caravans | data (+ optional Creative Common "line" layout) | existing structures only, no templates |
 | 4 | #2 raft and wreckage variants | templates + a small tool | needs the user's saved damaged rafts; the colour/wood variants can go first |
 | 5 | #4 boat groups | data, or templates + data | data-only convoy first; small boats need templates |
 
@@ -80,7 +80,7 @@ don't change.
 
    Shares on `eugene:camp`: `waysign_camps` 0.25 + `trader_caravan` 0.25 = 0.5, under the cap.
 3. `python3 tools/gen_structure_groups.py`: adds the three metas with weight 1 and the meta note.
-4. Optional, the look "in a line" (patcherMod): a part field `layout` = `"ring"` (default, today) | `"line"`: one
+4. Optional, the look "in a line" (Creative Common): a part field `layout` = `"ring"` (default, today) | `"line"`: one
    bearing per part (rolled once from the meta's random), copy i at distance `min + i * step` along it, alternating
    sides of the anchor (`step` = `spacing`, or `(max - min) / count`), tries jitter the distance by +-spacing/2.
    Files: `MetaStructure.Part` record + codec (line 176: `strict(Codec.STRING, "layout", "ring")`, validate the
@@ -179,7 +179,7 @@ _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove i
 ### Decisions
 - **Template source** (the row's decision): the user builds the damaged and peaceful variants; the color and wood
   variants are generated. Recommend generating first.
-- **Offline variants vs a processor:** a patcherMod structure processor that picks one palette per piece (seeded by
+- **Offline variants vs a processor:** a Creative Common structure processor that picks one palette per piece (seeded by
   the piece origin) would cover any template without files, but needs a registered `StructureProcessorType` and
   testing. Recommend offline variants (small files, deterministic, visible in `/cdevplace templates`).
 - **Color weights:** all 16 equal, or mostly white/brown/grey. Recommend white 4, each other color 1.

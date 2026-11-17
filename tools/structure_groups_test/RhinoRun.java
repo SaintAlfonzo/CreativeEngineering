@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Runs kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js in the pack's own Rhino fork with the KubeJS
  * globals stubbed, and writes what it would add: every structure_set json, frequencies.json (the table handed
- * to patcherMod), rules.raw.json / fits.raw.json (the biome rules and biome fits staged), report.md, tags.raw.json
+ * to Creative Common), rules.raw.json / fits.raw.json (the biome rules and biome fits staged), report.md, tags.raw.json
  * (the creativeengineering:meta/* and fit structure tags its ServerEvents.tags handler adds) and biome_tags.raw.json
  * (the fit biome tags), replacements.raw.json (the replacement table staged to MetaSlots), biome_frequency.raw.json
  * (the group biome factors staged to StructureFrequencies). Usage: RhinoRun <instance root> <out dir> [nopatcher] [density=X] [groupsoff] [testoverrides]

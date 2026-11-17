@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/item_merges.md
 @@text
-@@text patcherMod 1.1.03 with `NCH.replaceItems` and Creative Delight 1.0.0 with the `<mod>/item_merges.js`
+@@text Creative Common 1.1.03 with `NCH.replaceItems` and Creative Delight 1.0.0 with the `<mod>/item_merges.js`
 @@text startup and server files, both in the scratch `mods/`; KubeJS working tree. Group A. Probes: `/mgcore`
 @@text (`tools/item_merges_probe/merge_core_probe.js`), `/fdtest coffee` (`tools/food_drinks_probe/food_drinks_probe.js`).
 @@text
@@ -18,7 +18,7 @@
 @group A
 @commands Boot; grep latest.log for `[itemMerges]`
 @pass `1 pack merges registered` at startup (woods join after); in the recipe event `pack: 93 merges, N recipes swapped` then `creativedelight: 14 merges, N recipes swapped`, each once; no `already merged`, `already ran`, `chains with` line; no `Error occurred while handling event` from an `item_merges.js`
-@fails A group logged twice: the guard keyed on `e.hashCode()` failed; `replaceItems is not a function`: the old patcherMod jar is in `mods/`
+@fails A group logged twice: the guard keyed on `e.hashCode()` failed; `replaceItems is not a function`: the old Creative Common jar is in `mods/`
 @reviewed 2026-11-16
 # item_merges.js logs through the startup console; both KubeJS logs are read so the row does not depend on which
 shell grep -h "\[itemMerges\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-200

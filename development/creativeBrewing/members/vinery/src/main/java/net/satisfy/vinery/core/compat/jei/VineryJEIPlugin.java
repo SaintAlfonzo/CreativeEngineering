@@ -43,7 +43,7 @@ public class VineryJEIPlugin implements IModPlugin {
         registration.addRecipeCategories(new FermentationBarrelCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new ApplePressFermentingCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new ApplePressMashingCategory(registration.getJeiHelpers().getGuiHelper()));
-        // Port: the two pages patcherMod showed for 1.3.10, now with the port's numbers (vinery_jei.md)
+        // Port: the two pages Creative Common showed for 1.3.10, now with the port's numbers (vinery_jei.md)
         registration.addRecipeCategories(new GrapeStompingCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new WineAgingCategory(registration.getJeiHelpers().getGuiHelper()));
         // Port: which grapes grow where (alcohol/vineryport #23)

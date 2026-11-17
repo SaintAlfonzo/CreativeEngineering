@@ -7,7 +7,7 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 
 ## 0. Status
 
-<!-- generated:status_index begin open_work sha1=ab752815e85e -->
+<!-- generated:status_index begin open_work sha1=88811563b645 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (In Progress 2, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -15,17 +15,17 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 | `jei/jei-ordering #2` | In Progress | C | Fill the tree |
 | `jei/jei-ordering #6` | In Progress | C | Equipment family: sort order and unlisted equipment |
 | `jei/jei-ordering #1` | Testing | C P | Pack ingredient order steps 1 to 3 |
-| `jei/jei-ordering #5` | Testing | C~ P | Pack JEI order never reaches patcherMod |
+| `jei/jei-ordering #5` | Testing | C~ P | Pack JEI order never reaches Creative Common |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|
 | Goals (this file) | written 2026-10-18 |
 | Implementation investigation | done 2026-10-18 (9), design and build plan proposed (10, 11) |
-| Build | steps 1-3 BUILT 2026-10-18 and DEPLOYED with 1.0.7 (patcherMod 1.0.7, KubeJS, first small tree, report tool; 12); not run in game, JO-01 to JO-12 pending; step 4 (fill the tree) not started |
+| Build | steps 1-3 BUILT 2026-10-18 and DEPLOYED with 1.0.7 (Creative Common 1.0.7, KubeJS, first small tree, report tool; 12); not run in game, JO-01 to JO-12 pending; step 4 (fill the tree) not started |
 | Moved to Creative Compat | 2026-11-07: helper, client handoff and the tags (`creativecompat:jei/...`) are Compat's; JEI-guarded (creative_engineering.md 7.3, SQ-CCB-01, CQ-CCB-02) |
 | Equipment family | BUILT 2026-10-26 (KubeJS only; 12.5): replaces the first small tree's Equipment > Tools; JO-13 to JO-16 pending |
-| Bug: order never reached patcherMod | FIXED 2026-10-20: `client_scripts/jei_order.js` threw "redeclaration of var $PackIngredientOrder" on every client load (top-level `const` inside `try`, a known quirk of this Rhino, reproduced in the pack's Rhino jar), so `define()` never ran and JEI kept its own order. Now `Java.loadClass(...).define(...)` with no binding; a scratch client logs `[jei order] definition: 4 types, 10 nodes` |
+| Bug: order never reached Creative Common | FIXED 2026-10-20: `client_scripts/jei_order.js` threw "redeclaration of var $PackIngredientOrder" on every client load (top-level `const` inside `try`, a known quirk of this Rhino, reproduced in the pack's Rhino jar), so `define()` never ran and JEI kept its own order. Now `Java.loadClass(...).define(...)` with no binding; a scratch client logs `[jei order] definition: 4 types, 10 nodes` |
 
 ## 1. Why
 
@@ -360,7 +360,7 @@ Sort the whole list by key, write positions into `sortedIndex`, done; re-run aft
 | `JeiStarter.stop` | `@Inject` HEAD | drop the old list |
 | `mezz.jei.gui.ingredients.IngredientFilter.onIngredientsAdded` | `@Inject` TAIL | re-sort later runtime additions |
 | `IngredientFilter.elementSearch`, `ingredientManager`, `notifyListenersOfChange` | `@Accessor` / `@Invoker` | the full element list for the re-sort, and refreshing an open list |
-| `mezz.jei.library.load.PluginCaller.callOnPlugins` | `@Redirect` on `Consumer.accept` (no MixinExtras in patcherMod) | current plugin uid for attribution |
+| `mezz.jei.library.load.PluginCaller.callOnPlugins` | `@Redirect` on `Consumer.accept` (no MixinExtras in Creative Common) | current plugin uid for attribution |
 | `mezz.jei.library.ingredients.IngredientManager.add/removeIngredientsAtRuntime` | `@Inject` HEAD | record runtime adds/removes with the plugin uid |
 
 As built, JEI's own sort is left alone (no `IngredientSorter` hook): it runs as before, its result is kept as
@@ -369,7 +369,7 @@ off nothing is re-sorted, so the feature can ship disabled.
 
 ## 11. Build plan
 
-1. **patcherMod core**: `PackIngredientOrder` (parse the definition JSON, build placement maps
+1. **Creative Common core**: `PackIngredientOrder` (parse the definition JSON, build placement maps
    from tags, keys, sort), the mixins in 10.6, `CEConfig` `[jei] packOrder` / `orderReport`.
    Check the mixins boot clean in single player with `packOrder` off, then on with an empty
    definition (should look like creative order by type).
@@ -464,7 +464,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 ### 12.4 First in-game run
 
 1. Build and install patcherMod (`./gradlew :creativeCommon:installToMods`), set `orderReport = true` under `[jei]`
-   in the patcherMod common config.
+   in the Creative Common common config.
 2. Join a world. latest.log: `[jeiOrder] defined 10 nodes over 4 types` (startup), `[jeiOrder] item: 2 jei
    tags` / `fluid: 1` / `effect: 1` (server), `[jei order] definition: 4 types, 10 nodes`, `[jei order] sorted
    N ingredients in M ms`, `[jei order] report: ...`.
@@ -477,7 +477,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 
 ### 12.5 Equipment family (2026-10-26)
 
-From the 2026-10-26 scratchpad layout. KubeJS only (no patcherMod change): `/kubejs reload startup_scripts`,
+From the 2026-10-26 scratchpad layout. KubeJS only (no Creative Common change): `/kubejs reload startup_scripts`,
 `/kubejs reload client_scripts`, `/reload`, or a restart.
 
 - `item` tree: `equipment` is the first (and so far only) item category. Children, in order: `wood`, `leather`,

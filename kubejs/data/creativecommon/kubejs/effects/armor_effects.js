@@ -6,7 +6,7 @@
 // Each matching effect is (re)applied every tick as a short, continuously-refreshed
 // MobEffectInstance — same "while worn, effectively infinite" idiom Create: Deep
 // Dark's own echo-armor set bonus uses (EchoArmorEffectProcedure, reapplied every
-// tick at a fixed 60-tick duration — see patcherMod's EchoArmorEffectProcedureMixin).
+// tick at a fixed 60-tick duration — see Creative Common's EchoArmorEffectProcedureMixin).
 // ambient=false, visible=false by default (spec.visible: true opts back in) so the
 // bonus doesn't spam a HUD potion icon — the tooltip is the intended indicator,
 // same as CDD's own hidden set-bonus effects.

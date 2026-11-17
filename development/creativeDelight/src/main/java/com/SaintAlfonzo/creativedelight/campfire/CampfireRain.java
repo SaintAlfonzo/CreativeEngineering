@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class CampfireRain {
 
-    /** The keys live in patcherMod (campfire.CampfireRainInfo), which the WTHIT lines read. */
+    /** The keys live in Creative Common (campfire.CampfireRainInfo), which the WTHIT lines read. */
     public static final TagKey<Block> RAIN_DOUSES = CampfireRainInfo.RAIN_DOUSES;
     public static final TagKey<Block> RAIN_PROOF_FUEL = CampfireRainInfo.RAIN_PROOF_FUEL;
 

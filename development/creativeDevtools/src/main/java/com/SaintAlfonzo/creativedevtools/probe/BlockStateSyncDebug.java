@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * of states on both sides, so a block whose properties differ between client and server shifts every
  * id after it.
  *
- * <p>Two halves: the client mixins in patcherMod ({@code BlockUpdateNullStateMixin}, {@code SectionUpdateNullStateMixin},
+ * <p>Two halves: the client mixins in Creative Common ({@code BlockUpdateNullStateMixin}, {@code SectionUpdateNullStateMixin},
  * through {@code util/BlockStateLookupHook}, see {@link #register})
  * record the raw id of every null lookup while the packet is decoded and report it once the packet is
  * built; {@link #dumpRanges} writes the id range of every block, on the client and on the dedicated
@@ -77,7 +77,7 @@ public final class BlockStateSyncDebug {
     // Client: called from the packet mixins
     // -------------------------------------------------------------------------
 
-    /** Subscribes to patcherMod's packet hook (util/BlockStateLookupHook); called from the CreativeDevtools constructor. */
+    /** Subscribes to Creative Common's packet hook (util/BlockStateLookupHook); called from the CreativeDevtools constructor. */
     public static void register() {
         BlockStateLookupHook.register(new BlockStateLookupHook.Listener() {
             @Override

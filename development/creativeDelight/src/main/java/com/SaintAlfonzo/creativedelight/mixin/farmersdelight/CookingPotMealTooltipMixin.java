@@ -11,7 +11,7 @@ import vectorwing.farmersdelight.client.gui.CookingPotScreen;
 import java.util.List;
 
 /**
- * Farmer's Delight cooking pot: the finished-meal slot's tooltip gets its stack, see {@link MealSlotTooltip} (patcherMod, shared with the
+ * Farmer's Delight cooking pot: the finished-meal slot's tooltip gets its stack, see {@link MealSlotTooltip} (Creative Common, shared with the
  * Create Central Kitchen guide mixins there). Client only.
  */
 @Mixin(value = CookingPotScreen.class, remap = false)

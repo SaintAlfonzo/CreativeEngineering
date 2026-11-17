@@ -125,7 +125,7 @@ When fire or lava destroys a dropped item (ItemPhysic's item health reaches 0 fr
 
 ### Findings (2026-10-18)
 
-- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9 (DEPLOYED with pack 1.0.9): if-chain, no `ItemPhysicSplit$1` in the jar ([plan_1.0.9.md](plan_1.0.9.md)). Was (before the fix): `burnDecision` switched on the `Burn` enum, so
+- **F1.** FIXED 2026-10-19 in Creative Common 1.0.9 (DEPLOYED with pack 1.0.9): if-chain, no `ItemPhysicSplit$1` in the jar ([plan_1.0.9.md](plan_1.0.9.md)). Was (before the fix): `burnDecision` switched on the `Burn` enum, so
   javac makes a synthetic `ItemPhysicSplit$1` class that is loaded lazily and isn't covered by the force-load; it
   crashed the server twice in September (`NoClassDefFoundError`). Fix: an if/else chain instead of the switch, or
   force-load `$1` too. Was in the old TODO.md section 3; recurrence since not checked.
@@ -229,10 +229,10 @@ Drop items with Q into the hazard.
   fixed; the `$1` switch class, not fixed).
 - By 2026-09-27 (initial git commit): tags filled; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests IP-01 to IP-14. No code changed.
-- 2026-10-19: F1 fixed in patcherMod 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). IP-13 still to run.
+- 2026-10-19: F1 fixed in Creative Common 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). IP-13 still to run.
 - 2026-10-19: F2 fixed (item_physics.js and item_physics_tags.js headers).
 - 2026-10-24: planned from the scratchpad: golden egg physics (`items/item-physics #5`). No code changed.
-- 2026-10-27: Allurement's Ascension/Fleeting hook sits in the gravity branch that ItemPhysic's `isNoGravity -> true` redirect skips; `ItemPhysicServerMixin` now calls them at the tail of `updatePre` (`AllurementItemCurses`, reflection, optional). Built and installed in patcherMod 1.1.03; IP-15 not run.
+- 2026-10-27: Allurement's Ascension/Fleeting hook sits in the gravity branch that ItemPhysic's `isNoGravity -> true` redirect skips; `ItemPhysicServerMixin` now calls them at the tail of `updatePre` (`AllurementItemCurses`, reflection, optional). Built and installed in Creative Common 1.1.03; IP-15 not run.
 - 2026-10-28: analysis of the integration; F4 measured, F5 resolved from ItemPhysic's source, F7 to F9 added.
   Built the `/dumpphysics` dump and `tools/item_physics_audit.py` (report only). Designed the material families
   (section 9) and surface / lava floating (section 10). No game code changed.

@@ -21,7 +21,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
 
 | Row | Status | Size | Build with |
 |---|---|---|---|
-| `food/drinks #12` Spout filling for Kettle drinks fails to load | Bug | small, patcherMod (NCH) | first: every Kettle drink pair and the Kettle tank's Spout half wait on it |
+| `food/drinks #12` Spout filling for Kettle drinks fails to load | Bug | small, Creative Common (NCH) | first: every Kettle drink pair and the Kettle tank's Spout half wait on it |
 | `food/drinks #3` Merges (banana bunch left) | In Progress | small | any time |
 | `food/drinks #7` Kettle drinks: the rest of the move | In Progress | medium | after #12; with #8 |
 | `food/drinks #8` Juice and tea rule | In Progress | medium | with #7 (one table) |
@@ -32,7 +32,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
 
 **Shared pieces (state 2026-10-31):**
 - **NCH Kettle helper `frBrewing` exists** ([neoCraftHelper.js:1113](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js#L1113);
-  the shared helpers live in patcherMod's jar, so an edit needs a patcherMod rebuild and restart). It writes Creative
+  the shared helpers live in Creative Common's jar, so an edit needs a Creative Common rebuild and restart). It writes Creative
   Delight's tank format (farmers_respite.md K8): 1-2 ingredients, `opts.base` (the tank fluid one brew uses, 250 mB,
   default water, `'none'` for none), `container` (glass bottle), `time` 200, `exp` 0.35, one result. Drink tiers are the
   drink's fluid as base plus one ingredient.
@@ -43,7 +43,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
   shorthand at line 25 for Kettle drinks; ids in [fluid_dict.js](../../kubejs/startup_scripts/_lib/fluid_dict.js)
   ("Pack fluids", e.g. `f.chorus_juice` line 89, `f.milk_coffee` 102), `forge:fluid/<name>` tags in
   [fluidtags.js](../../kubejs/data/creativeengineering/kubejs/tags/fluidtags.js). JEI shows a bottle's effects on its fluid through the
-  emptying recipe (patcherMod `compat/DrinkFluidEffects.java`), so a drink fluid needs a working `createBottle` pair.
+  emptying recipe (Creative Common `compat/DrinkFluidEffects.java`), so a drink fluid needs a working `createBottle` pair.
 - **Kettle recipes** live in Creative Delight's
   [farmersrespite/kettle.js](../../kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js) (109 lines: section 1
   the mods' recipes rewritten on a base, 2 Rustic coffees and Fruits Delight teas, 3 the `createBottle` pairs at 98-107).
@@ -147,12 +147,12 @@ bottle or need plating by hand.
   leftover.
 - **Upgrade plating (2.0 design, superseded by the tank):** `KettleRecipe` (verified) uses the recipe's `container`, or the result's crafting remainder when
   that is empty, and every FR drink has a glass-bottle remainder. So a drink always waits to be plated; a recipe change
-  can't remove that. The built remainder buffer (patcherMod `KettleRemainderMixin`, remainder_buffer.md 3.1) recycles
+  can't remove that. The built remainder buffer (Creative Common `KettleRemainderMixin`, remainder_buffer.md 3.1) recycles
   one of the two returned bottles into the container slot, so the drink plates itself and the second bottle waits in
   the buffer. Nothing is thrown and the player supplies no bottle. Not yet seen in game (RB-03).
 - Placing: none of the FR drinks is placeable; the [food_placeable brief](food_placeable.md) (`placeable #3`) covers
   the Display Delight blocks for all bottled drinks.
-- Fluid tooltips: **built 2026-10-22** (patcherMod `compat/DrinkFluidEffects.java`: JEI fluid tooltips list the drink
+- Fluid tooltips: **built 2026-10-22** (Creative Common `compat/DrinkFluidEffects.java`: JEI fluid tooltips list the drink
   item's effects, item_merges.md 2.6, MG-20). Step 6 below is done.
 - Names and colours: not done (no `long_*` / `strong_*` lang keys in namechanges.js, no `kubejs/assets/farmersrespite/`
   textures). CCK tea mixing untouched.
@@ -173,7 +173,7 @@ bottle or need plating by hand.
    `Fluid.of(f.honey, 250)` for strong. CCK's filling recipes then bottle them.
 4. **Upgrade plating.** No code. Run RB-03; if it passes, the remainder half of this row is done.
 5. **Placeable:** build in `food/placeable #3`.
-6. ~~**Fluid effect tooltip**~~ (done 2026-10-22, `DrinkFluidEffects`; text kept for reference): a patcherMod client hook. JEI draws fluid tooltips through its Forge fluid helper
+6. ~~**Fluid effect tooltip**~~ (done 2026-10-22, `DrinkFluidEffects`; text kept for reference): a Creative Common client hook. JEI draws fluid tooltips through its Forge fluid helper
    (`mezz.jei.forge.platform.FluidHelper#getTooltip`, unverified, decompile the JEI jar first). Append the effect lines
    of the item the fluid fills: build a fluid -> item map from `create:filling` recipes whose input is a glass bottle (or
    bowl), then reuse vanilla `PotionUtils.addPotionTooltip` style lines from the item's `FoodProperties` effects.
@@ -232,7 +232,7 @@ One item per drink or crop where two mods add the same thing; the last open part
 - RC-41 (proposed 2026-10-21, keep): banana bunch crafts into 2 / cuts into 3 Neapolitan bananas; JEI shows both.
 
 ## drinks #7: Kettle with 6 ingredient slots; drinks move to the Kettle
-Status **In Progress** · Work: patcherMod / KubeJS · id `food/drinks #7`
+Status **In Progress** · Work: Creative Common / KubeJS · id `food/drinks #7`
 
 ### State 2026-10-31 (read first; the tables below are the 2026-10-22 audit)
 - The Kettle is now Creative Delight's **tank Kettle** (built 2026-10-25, [farmers_respite.md](../farmers_respite.md)
@@ -265,7 +265,7 @@ Status **In Progress** · Work: patcherMod / KubeJS · id `food/drinks #7`
 ### Goal
 Drinks brew in the Kettle, not the Cooking Pot. Blocked by the Kettle's 2 ingredient slots (`KettleRecipe.matches`
 reads slots 0-1 only, one item each, and ignores the container and water, so two recipes with the same pair clash).
-Planned: 6 slots like the pot and oven (patcherMod), then the recipes with `NCH.frBrewing`. Until then every drink
+Planned: 6 slots like the pot and oven (Creative Common), then the recipes with `NCH.frBrewing`. Until then every drink
 below keeps its current recipes. Grid (manual) crafts stay either way.
 
 ### Decided (owner, 2026-10-22)
@@ -459,7 +459,7 @@ Verified: item id, removed recipe JSON, empty cherry tag, `i.dried_vanilla_pods`
 ---
 
 ## drinks #12: Spout filling for Kettle drinks and the water cup fails to load
-Status **Bug** · Work: patcherMod (NCH) · id `food/drinks #12` · blocks the Kettle tank's Spout half (farmers_respite.md K10)
+Status **Bug** · Work: Creative Common (NCH) · id `food/drinks #12` · blocks the Kettle tank's Spout half (farmers_respite.md K10)
 
 ### Goal
 Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain empties each Kettle drink and the water cup.
@@ -494,7 +494,7 @@ Every `NCH.createBottle` pair loads, so the Spout bottles and the Item Drain emp
    (`e.custom({ type: 'create:filling', ingredients: [_itemJson(container), _fluidJson(fluid with mb)], results: [...] })`),
    which needs no FluidStackJS at all; and make `_validateAny` / `_ingredientLike` return early for fluid-likes
    (`_isFluidLike` first) so other helpers are not hit. Apply the same to the sequenced-assembly `fill` step.
-3. patcherMod rebuild and install (the helper is in its jar), restart; grep latest.log for `Error parsing recipe
+3. Creative Common rebuild and install (the helper is in its jar), restart; grep latest.log for `Error parsing recipe
    creativedelight:create` -> none.
 4. Then run SQ-RSP-09; close the Spout half of K10 in farmers_respite.md.
 

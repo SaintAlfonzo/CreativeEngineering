@@ -1,6 +1,6 @@
 # Curios slots
 
-Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IMC fix 2026-11-01; slot line 2026-11-02; mouth tag dropped and Face render 2026-11-02), in patcherMod 1.1.07 installed 2026-11-02, Creative Compat / Creative Delight changes not built into mods/, untested in game**
+Test prefix **CS-** · Last updated **2026-11-02** · Overall status **BUILT (IMC fix 2026-11-01; slot line 2026-11-02; mouth tag dropped and Face render 2026-11-02), in Creative Common 1.1.07 installed 2026-11-02, Creative Compat / Creative Delight changes not built into mods/, untested in game**
 
 ## 0. At a glance
 
@@ -35,7 +35,7 @@ Nothing registered **hands**, and no mod offers a mouth or face slot. The pack n
 Notes:
 
 - Simple Hats adds every hat to `curios:head` through a mixin, so its face items also stay valid in a head slot. Removing them from
-  head would need a patcherMod mixin; not done.
+  head would need a Creative Common mixin; not done.
 - The Cob Pipe (`creativeengineering:cob_pipe`, [corn_delight.md](corn_delight.md) 2.3, built 2026-10-25) is in `curios:face`
   and `curios:head`. A right click puts it in Face first, then the head slot, then a Curios head slot. Its old
   `curios:mouth` tag was dropped 2026-11-02 (`gameplay/misc #19`): Curios builds the "Slot:" tooltip line from every
@@ -45,15 +45,15 @@ Notes:
   layer and only for the slot named `head`, so a mask in Face was invisible; Creative Compat's
   `SimpleHatsFaceSlotMixin` makes that check accept `face` too (cosmetic stack and the slot's render toggle as for head).
 - Feet slot not showing (scratchpad 2026-11-02, `gameplay/misc #19`): the last played session (`logs/latest.log`, 2026-10-31)
-  predates the IMC registration (2026-11-01, patcherMod 1.1.07 installed 2026-11-02 00:18), so the old datapack files
+  predates the IMC registration (2026-11-01, Creative Common 1.1.07 installed 2026-11-02 00:18), so the old datapack files
   were in use and no pack slot existed. No code change: CS-07 on the 1.1.07 jar is the check.
 - Wardrobe and Portable Wardrobe tag only `minecraft:air` under hands, so no other item landed there.
-- IMC slots need the patcherMod jar on both sides and a full restart; an existing save picks them up on next join (CS-01).
+- IMC slots need the Creative Common jar on both sides and a full restart; an existing save picks them up on next join (CS-01).
   A world's `serverconfig/curios-server.toml` `curiosSettings` can also define slots; the pack leaves it empty.
 
 ## 1. Rule: every Curios item shows its slots in the tooltip
 
-**BUILT 2026-11-02 (patcherMod 1.1.07 installed, not booted; owner request 2026-10-25).** Every item that can go in a Curios
+**BUILT 2026-11-02 (Creative Common 1.1.07 installed, not booted; owner request 2026-10-25).** Every item that can go in a Curios
 slot names the slot(s) it fits. Curios itself already prints "Slot: Face, Head" (gold, names yellow) from
 `getCurioTags(item)`, the `curios:<slot>` item tags plus mixins such as Simple Hats' head rule, so the pack's own slots
 get it once registered. The gap: an item with a curio capability passes that line through `ICurio.getSlotsTooltip`,

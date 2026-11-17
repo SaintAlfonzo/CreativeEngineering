@@ -22,16 +22,16 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 
 | Part | Status |
 |---|---|
-| `/dumpspawns` (KubeJS `kubejs/server_scripts/_lib/dump_spawns.js` -> patcherMod `worldgen/SpawnDump`) | BUILT 2026-10-09, in `/dumpall`; first real dump 2026-10-09 21:58 (`kubejs/exported/spawns.json`) |
+| `/dumpspawns` (KubeJS `kubejs/server_scripts/_lib/dump_spawns.js` -> Creative Common `worldgen/SpawnDump`) | BUILT 2026-10-09, in `/dumpall`; first real dump 2026-10-09 21:58 (`kubejs/exported/spawns.json`) |
 | `tools/gen_spawn_table.py` -> [spawns_by_biome.md](spawns_by_biome.md) | BUILT; report generated from the real dump 2026-10-09 |
-| Spawn tuning: `mob_spawns.json` -> `worldgen/mob_spawns.js` -> biome modifier `creativeengineering:tune_spawns` (patcherMod `worldgen/SpawnTuning`) | BUILT, offline tests pass; 12 rules for the first block of section 9 (2026-10-09); DEPLOYED with pack 1.0.6 (2026-10-14); single player 2026-10-11 applied them (`12 rules, 94 biomes changed, 286 changes`), spawns not looked at |
-| Spawn conditions (`light_only`, `water_only`; patcherMod `worldgen/SpawnConditions` + `SpawnPlacementsConditionsMixin`) and spawn ground (every dirt in the animal ground tags + `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`) | BUILT 2026-10-09, offline tests pass; in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14); conditions applied in single player (`flying_birds, chicken_shores, waterfowl_ponds`) |
+| Spawn tuning: `mob_spawns.json` -> `worldgen/mob_spawns.js` -> biome modifier `creativeengineering:tune_spawns` (Creative Common `worldgen/SpawnTuning`) | BUILT, offline tests pass; 12 rules for the first block of section 9 (2026-10-09); DEPLOYED with pack 1.0.6 (2026-10-14); single player 2026-10-11 applied them (`12 rules, 94 biomes changed, 286 changes`), spawns not looked at |
+| Spawn conditions (`light_only`, `water_only`; Creative Common `worldgen/SpawnConditions` + `SpawnPlacementsConditionsMixin`) and spawn ground (every dirt in the animal ground tags + `AnimalWalkTargetMixin`, `MushroomCowWalkTargetMixin`) | BUILT 2026-10-09, offline tests pass; in Creative Common 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14); conditions applied in single player (`flying_birds, chicken_shores, waterfowl_ponds`) |
 | Shiba off (Quark `Shiba = false`, plan 9.4) | DONE 2026-10-09, `config/` + `configs_edited/`; ships in 1.0.5 (`quark-common.toml`) |
 | CEConfig `[worldgen.systems] mobSpawns` | BUILT, same jar |
 | Cow table in [mooblooms.md](mooblooms.md) (first consumer) | PLANNED |
 | Passive animal analysis (farm animals, duck/goose, Alex's Mobs surface animals) | DONE 2026-10-09, section 10; baseline for the cohesion rules |
 
-- **Jar:** patcherMod's `worldgen/SpawnTuning` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly;
+- **Jar:** Creative Common's `worldgen/SpawnTuning` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly;
   the older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
 - **Measure:** `/dumpspawns` (or `/dumpall`), then `python3 tools/gen_spawn_table.py` (or `/cdevgen run spawns_by_biome`).
 - **Knobs:** `kubejs/generation_scripts/worldgen/mob_spawns.json` (rules, section 3); CEConfig
@@ -174,7 +174,7 @@ since the last restart), a WARNING says so.
   `mobSpawns` is off or the jar has no `SpawnTuning` (logged as an error when rules exist).
 - `ServerEvents.loaded`: checks the live tags against the rules and logs `SpawnTuning.summary()`: rules, biomes
   changed, changes, rules that matched no biome.
-- patcherMod `worldgen/SpawnTuning` runs the rules per biome in Forge's `AFTER_EVERYTHING` phase, after every mod's
+- Creative Common `worldgen/SpawnTuning` runs the rules per biome in Forge's `AFTER_EVERYTHING` phase, after every mod's
   add/remove modifiers, and records each changed biome for `/dumpspawns` (cleared on server stop). An unknown mob
   id logs one warning and skips the rule instead of failing the world load.
 
@@ -217,7 +217,7 @@ Shiba (9.4) is off at the source: Quark's `Shiba` module is `false` in `config/q
 | `where` / `add` / `except` / `rules` | where it applies, as for rules; `rules` = the biomes those rule ids match. None = everywhere. Biome tag `creativeengineering:spawn_conditions/<id>` |
 
 Natural spawns and chunk-generation herds only; spawn eggs, spawners and commands are untouched. The conditions go into
-the same `tune_spawns` modifier (field `conditions`), which hands them to `SpawnConditions`; the patcherMod mixin on
+the same `tune_spawns` modifier (field `conditions`), which hands them to `SpawnConditions`; the Creative Common mixin on
 `SpawnPlacements.checkSpawnRules` asks it before the mob's registered rule. That call runs for mobs without a
 registered rule too (Alex's Mobs' crow).
 
@@ -238,7 +238,7 @@ and then fail at night. `AnimalWalkTargetMixin` / `MushroomCowWalkTargetMixin` m
 effect: wandering animals favor every spawnable dirt the way they favor grass. With the system off the tags are
 vanilla (grass_block, mycelium), so the mixins change nothing.
 
-The block tags rely on patcherMod's walk-value mixins (same jar as `SpawnTuning`).
+The block tags rely on Creative Common's walk-value mixins (same jar as `SpawnTuning`).
 
 **Interplay:** More Mooblooms turns cows into mooblooms at spawn time, after the pick ([mooblooms.md](mooblooms.md)
 4.9), so a cow weight change changes moobloom numbers in the same proportion. `moobloom_cows.json` (cows added to
@@ -353,7 +353,7 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
   2026-10-28 and ships in the same jar.
 
 - 2026-10-06: planned.
-- 2026-10-09: built. `/dumpspawns` reads in Java (patcherMod `SpawnDump`), with biome tags, spawn costs, placement
+- 2026-10-09: built. `/dumpspawns` reads in Java (Creative Common `SpawnDump`), with biome tags, spawn costs, placement
   sources, class chains and the tuning record; `gen_spawn_table.py` with the biome-type table, vanilla rule names
   from the mapped jar, `--mob`; spawn tuning (`mob_spawns.json`, `mob_spawns.js`, modifier type
   `creativeengineering:tune_spawns`, CEConfig `mobSpawns`) with no rules. Offline tests pass; jar not in `mods/`
@@ -366,7 +366,7 @@ has cow (More Mooblooms' set switches Buzzier Bees' removal off).
   Shiba off in Quark's config. Decisions: land animals keep ground + light (no daytime spawns on stone); "birds" =
   flying birds only (not chicken/duck/goose/AM ground birds); lakes and ponds = ducks added to grassy land biomes but
   water-only there. Offline tests extended and passing; jar built, not in `mods/`.
-- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): patcherMod 1.0.5 with `SpawnTuning`, `SpawnConditions` and the
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed): Creative Common 1.0.5 with `SpawnTuning`, `SpawnConditions` and the
   walk-target mixins, `mob_spawns.json` + `mob_spawns.js`, Quark Shiba off. Single player with the staged files applied
   12 rules (94 biomes, 286 changes) and the 3 conditions without errors. New spawns appear in loaded chunks too
   (spawn lists are read live), unlike the worldgen systems. MS-01 to MS-12 still pending.

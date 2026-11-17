@@ -188,12 +188,12 @@ with the block's position as the loot origin. The existing 2.5 s cooldown is the
 `DecompiledMods/`) changes nothing here.
 
 **What the pack changes.**
-- Blocks: patcherMod `OceanicDelightFishingNetMixin` redirects the procedure's four `getBlock()` reads. A block in
+- Blocks: Creative Common `OceanicDelightFishingNetMixin` redirects the procedure's four `getBlock()` reads. A block in
   `#creativedelight:fishing_net/kelp` reads as a kelp stalk, a block in `#creativedelight:fishing_net/sea_grass`
   as tall seagrass. Kelp tag: vanilla kelp and Upgrade Aquatic's ochre, polar, thorny and tongue kelp (top and stalk
   blocks). Sea grass tag: seagrass, tall seagrass, wild sea grape, the sea grape crop, blue and purple pickerelweed (short
   and tall). The "kelp above" rule reads through the same tags. Tags: `server_scripts/tags/loottags.js`.
-- Biomes: 1.19.2 `location_check` takes one biome id, so patcherMod adds the loot condition
+- Biomes: 1.19.2 `location_check` takes one biome id, so Creative Common adds the loot condition
   `creativeengineering:biome_tag` (`loot/BiomeTagCondition`, reads the loot origin). Biome tags (loottags.js):
   `fishing_net/warm_ocean` (warm, lukewarm, deep lukewarm, Terralith's deep warm), `fishing_net/shrimp_ocean` (those plus
   ocean and deep ocean), `fishing_net/ocean` (`#minecraft:is_ocean` plus deep warm, which Terralith leaves out of it),

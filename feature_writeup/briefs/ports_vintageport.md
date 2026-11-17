@@ -131,7 +131,7 @@ In `FermentingCategory`, if ticks < 1200 show `ticks / 20` seconds with a lang k
 ---
 
 ## vintageport #16: Bottle output buffer on the fermenting jar
-Status **Planned** / Work: new jar (patcherMod is the pot / kettle / oven route; the keg's was native) / id `ports/vintageport #16`
+Status **Planned** / Work: new jar (Creative Common is the pot / kettle / oven route; the keg's was native) / id `ports/vintageport #16`
 
 ### Goal
 The jar gets a bottle output buffer like the pot, kettle, oven and keg (`cooking/kitchen #1`).
@@ -147,7 +147,7 @@ Copy the keg's pattern: a take-only slot 9 (menu `FermentingJarMenu` + screen), 
 extract it on the sides and bottom, keep it in saves and drops; port config `remainderBuffer` / `stallWhenFull`.
 
 ### Decisions
-- Patcher mixin vs native: recommend native, as the keg (`D5`); no dependency on patcherMod.
+- Patcher mixin vs native: recommend native, as the keg (`D5`); no dependency on Creative Common.
 
 ### Tests
 - VTD-70 Jar: a recipe using a honey bottle leaves an empty bottle in the buffer; hoppers pull it; breaking drops it.

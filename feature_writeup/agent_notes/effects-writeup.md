@@ -24,7 +24,7 @@ effect/potion/brew/event classes) and the Vinery/Brewin port sources, not guesse
   (spawn eggs), blocks/fluids/gear, code-applied food, armor/tool registries, Botania brews (forge:partial_nbt brewKey),
   Xaero switches -> command block. NCH jeedProvider takes NBT, drops missing ids, skips unregistered effects.
 - effect_audit.py `no JEI source` check (reads effect id literals in jeed_providers.js + registries + wine config).
-- Category audit = effects.md 2.4; overrides in CEConfig `[effects] categoryOverrides` (patcherMod
+- Category audit = effects.md 2.4; overrides in CEConfig `[effects] categoryOverrides` (Creative Common
   potion/EffectCategories + MobEffectCategoryMixin on getCategory m_19483_ / isBeneficial m_19486_). Only red vs blue
   is visible (NEUTRAL renders blue), so only color-wrong effects were overridden (6).
 - User: "leave TODO for any effect description missing" -> 10 placeholders stay until they write text.

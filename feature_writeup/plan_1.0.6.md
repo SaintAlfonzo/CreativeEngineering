@@ -8,7 +8,7 @@ The payload is an update from 1.0.4, because 1.0.4 is still what both sides run.
 
 **Structure tuning is INCOMPLETE in this release** (user, 2026-10-14: "ship all the changes as 1.0.6, just mark the
 structure tuning as incomplete"). Plans 7.1 to 7.4 in [structure_tuning.md](structure_tuning.md) are built and ship in
-the patcherMod 1.0.6 jar and the worldgen data, but their scratch-server run (structure_tuning 8.0) is only partly
+the Creative Common 1.0.6 jar and the worldgen data, but their scratch-server run (structure_tuning 8.0) is only partly
 done: Phases 1 to 4 and the 7.4 block (M2) have run, Phase 5 had just started when this was staged, and Phases 6 to 10
 plus the client list have not run. The known open bugs are listed in section 2. Every part has a CEConfig switch
 (section 2.2) if one misbehaves on the live server.
@@ -21,13 +21,13 @@ in this exact combination.
 | ID | Change | Kind | State | Writeup |
 |---|---|---|---|---|
 | R5 | All of 1.0.5 (rows IA to VR in [plan_1.0.5.md](plan_1.0.5.md) section 0): Incubation Additions, More Mooblooms, stack sizes, generated cans, WTHIT growth line, IW soils, ghost-block fix, shields, placeable food, tooltip/JEI fixes, wild flowers, bee nests, mob spawns, season types, water fill, terrain adaptation, meta structures, tower biome fits, Cool Rain / Pretty Rain / MEED / Breedable Killer Rabbit | everything | STAGED; the 1.0.5 single-player boot (2026-10-11) is the last full-client evidence for these parts | [plan_1.0.5.md](plan_1.0.5.md) |
-| SN | Seasons: snow line (`snowLineY` 320 with the build-height gauge), `snow_seasons` tags (`seasontags.js`), new **cold** type (22 biomes), permanent seasons for the four skylands, Pretty Rain / Rubidium Extra cloud height 350, `DhCloudHeightMixin` (Distant Horizons clouds follow it) | feature | STAGED in patcherMod 1.0.6; not run in game (WE-26 to WE-36) | [weather.md](weather.md) |
+| SN | Seasons: snow line (`snowLineY` 320 with the build-height gauge), `snow_seasons` tags (`seasontags.js`), new **cold** type (22 biomes), permanent seasons for the four skylands, Pretty Rain / Rubidium Extra cloud height 350, `DhCloudHeightMixin` (Distant Horizons clouds follow it) | feature | STAGED in Creative Common 1.0.6; not run in game (WE-26 to WE-36) | [weather.md](weather.md) |
 | CN | Can parity: 11 raw cans removed, White Strawberries can split out, Cactus Flesh rename, every remaining row built through `gen_can_types.py` (381 recipes), new can sprites (`assets/canned_goods`, `assets/creativeengineering`) | feature + data | STAGED; node dry run only, not run in game (CP-01 to CP-05) | [can_parity.md](can_parity.md), [food.md](food.md) |
 | IP | Immersive Paintings: every painting variant of every pack as an Immersive Paintings datapack painting (475, 32 px; 950 files in `kubejs/data/creativeengineering/paintings`), `/dumppaintings` | feature | STAGED; scratch-verified, painting screen untested | none (tools/gen_immersive_paintings.py header) |
 | NM | 23 new mods (section 3) | mods | STAGED; mod_sides rows complete 2026-10-14 | this file 3 |
 | **ST** | **Structure tuning 7.1 to 7.4, INCOMPLETE**: biome fits for every land structure (7.2, 29 fits / 163 structures), replacements + witch huts group, entrance dungeons with surface check, folded standalone structures, vanilla temples as a share of YUNG's, way signs group, placement priority + companion villages + peaceful radius, earth fill 7.3.1 (beard-aware, mound columns, size limits, village piece pruning), locate 7.3.2 (dimension check, meta targets, 120 s timeout, `/celocate stop`), locate folding + non-blocking loads + thread-safe StructureCheck ([locate.md](locate.md)), template block swaps (meat + Nether blocks), ocean geodes, Camps. Castles. Carriages. 2.3.4 port with split camp/castle pools, Campsite Structures as real structures, `vehicles` group, fortified-town meta shares, new structure mods (Subterrestrial, Underground Bunkers), YUNG vanilla-structure switches off | worldgen | **INCOMPLETE**: built, offline checks pass, scratch Phases 1 to 4 + M2 run with open bugs (section 2.1); Phases 5 to 10 and client checks not run. New chunks only | [structure_tuning.md](structure_tuning.md) 3.17 to 3.22, 7.1 to 7.4, 8.0; [testing/structures/](testing/structures/00_plan.md) |
 | CF | Config: `creativeengineering-common.toml` (new `[worldgen.ocean_geodes]`, `[worldgen.placement_priority]`, earth fill 7.3.1 keys, locate keys, `[seasons]` snow keys, systems switches `structureReplacements`, `oceanGeodes`, `placementPriority`, `templateBlockSwaps`, all on); YUNG desert/jungle temple and witch hut "disable vanilla" = false; `prettyrain.json5` cloud height; new `bottledair.json5`, `cyclepaintings.json5`, `dimpaintings-common.toml`, `unlitcampfire-server.toml` (defaultconfigs); JEI sort orders; rewritten-by-game files (`rare-ice.properties`, AP `world.toml`, WorldEdit) | config | STAGED | this file 1 |
-| VR | Version records: patcherMod **1.0.6** (md5 5acd69dc, 2026-10-14 12:44 build, archived), other in-tree mods unchanged; 4 mod_sides rows; 3 `KUBEJS_CLASSES` rules (`meat_block_swaps.json`, `nether_block_swaps.json` runtime; `nether_swap_rules.json` dev); `pack/manifest.json` regenerated; patcherMod `mod_version` -> 1.0.7 for the next build | bookkeeping | DONE 2026-10-14 | [deploy.md](deploy.md), this file 4 |
+| VR | Version records: Creative Common **1.0.6** (md5 5acd69dc, 2026-10-14 12:44 build, archived), other in-tree mods unchanged; 4 mod_sides rows; 3 `KUBEJS_CLASSES` rules (`meat_block_swaps.json`, `nether_block_swaps.json` runtime; `nether_swap_rules.json` dev); `pack/manifest.json` regenerated; Creative Common `mod_version` -> 1.0.7 for the next build | bookkeeping | DONE 2026-10-14 | [deploy.md](deploy.md), this file 4 |
 
 ## 1. What the payload contains
 
@@ -49,7 +49,7 @@ resourcepacks 1). The full list is the 1.0.6 entry in [deploy/DEPLOY_LOG.md](../
 
 **Evidence:** preflight clean (structure_config regenerated equal, structure groups in sync, climate samples
 readable, mod sides and kubejs classes complete); the in-tree jars equal their builds and no source is newer. The
-shipped jar is a 12:44 rebuild of the same source (no patcherMod source changed after 01:28) as the build that ran on
+shipped jar is a 12:44 rebuild of the same source (no Creative Common source changed after 01:28) as the build that ran on
 scratch dedicated servers through structure Phases 3 and 4 (2026-10-14) without mixin or KubeJS errors. There has been **no single-player client boot with this jar set**, so client-only parts (SN clouds/HUD,
 paintings screen, can sprites, Lava Clear View, JEPP) are unchecked.
 
@@ -84,7 +84,7 @@ From the scratch runs in [testing/structures/](testing/structures/00_plan.md) an
 
 Found later (Phase 5, 2026-10-14), also fixed in 1.0.7 (DEPLOYED 2026-10-18): locate loads still blocked the server
 thread (LO-05), Cloud Storage / Domestication Innovation village pieces dropped on reload, village layouts different
-after each restart (pool order), `/celocate stop` row label. All of these shipped in patcherMod 1.0.7 (DEPLOYED
+after each restart (pool order), `/celocate stop` row label. All of these shipped in Creative Common 1.0.7 (DEPLOYED
 2026-10-18, [plan_1.0.7.md](plan_1.0.7.md) SF); [structure_tuning.md](structure_tuning.md) 3.23 and
 [locate.md](locate.md) 8 list them.
 
@@ -119,9 +119,9 @@ too, where it already was).
 
 ## 4. Version records
 
-- patcherMod **1.0.6** ships (md5 5acd69dc, built 2026-10-14 12:44 with the structure work). It overwrote the unshipped
+- Creative Common **1.0.6** ships (md5 5acd69dc, built 2026-10-14 12:44 with the structure work). It overwrote the unshipped
   2026-10-11 snow-line build of 1.0.6 in `jar_archive/`; that build's changes are all in this one.
 - exposureBackport `-03`, incubationAdditions 1.0.0, moreMooblooms 1.0.0: unchanged since 1.0.5.
 - 1.0.5 stays in `deploy/history/` and the log as a version that was staged but never deployed.
-- After staging: patcherMod `mod_version` = **1.0.7** in `development/patcherMod/gradle.properties` (next build, not
+- After staging: Creative Common `mod_version` = **1.0.7** in `development/creativeCommon/gradle.properties` (next build, not
   built), so fixes from the ongoing structure test run never rebuild over the shipped 1.0.6 jar.

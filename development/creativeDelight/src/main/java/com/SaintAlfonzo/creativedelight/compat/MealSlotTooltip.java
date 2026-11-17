@@ -16,7 +16,7 @@ import java.util.List;
  * the one slot that always holds food. The mixins redirect that call here: same lines and position, drawn
  * with Forge's overload that carries the hovered slot's stack.
  *
- * Callers: patcherMod's {@code CckCookingGuideMealTooltipMixin} / {@code CckBrewingGuideMealTooltipMixin}, and Creative
+ * Callers: Creative Common's {@code CckCookingGuideMealTooltipMixin} / {@code CckBrewingGuideMealTooltipMixin}, and Creative
  * Delight's {@code farmersdelight.CookingPotMealTooltipMixin} / {@code farmersrespite.KettleMealTooltipMixin}.
  */
 public final class MealSlotTooltip {

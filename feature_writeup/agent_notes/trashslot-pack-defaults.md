@@ -1,10 +1,10 @@
 # trashslot-pack-defaults
 
-> TrashSlot pack defaults in patcherMod (CEConfig [trash_slot], per-tier backpack ids, creative support); feature_writeup/trashslot.md TS-01..13
+> TrashSlot pack defaults in Creative Common (CEConfig [trash_slot], per-tier backpack ids, creative support); feature_writeup/trashslot.md TS-01..13
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-09-30 as patcherMod 1.0.3 (mod_version bumped on request). By 22:00 a 1.0.3 jar was in mods/ (not by me); I rebuilt it with the gzip climate reader and copied it over.
+Built 2026-09-30 as Creative Common 1.0.3 (mod_version bumped on request). By 22:00 a 1.0.3 jar was in mods/ (not by me); I rebuilt it with the gzip climate reader and copied it over.
 - `compat/TrashSlotCompat.settingsFor` replaces TrashSlot's `getSettings` (via an `onScreenInit` @Overwrite in TrashSlotGuiHandlerMixin). Screens listed in `enabledScreens` are switched on once per client; the switched-on ids are recorded in `TrashSlotSaveState.ce.json` in the game dir, so a later `T` press by the player still sticks.
 - Backpack container id = `...BackpackScreen#<tier item id>` (StorageTierLayout, via sophisticatedcore `getWrappedStorageStack`). The user chose per tier over per UUID.
 - Creative: the creative screen clears the client cursor (no undo). The `runKeyBindings` isEnabled ordinal 0 is redirected off in creative, because it sends the picker slot index and would delete the wrong server slot.

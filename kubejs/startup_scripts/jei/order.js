@@ -1,6 +1,6 @@
 // JEI ingredient order — the pack's definition (helper and shape: startup_scripts/func/jei_order.js,
 // reference + tests: feature_writeup/jei_ordering.md). Order of every array below = the order in JEI.
-// Tags made from this: server_scripts/tags/jei_order_tags.js. Sorting: patcherMod PackIngredientOrder
+// Tags made from this: server_scripts/tags/jei_order_tags.js. Sorting: Creative Common PackIngredientOrder
 // (CEConfig [jei] packOrder). Apply a change: /kubejs reload startup_scripts, /kubejs reload client_scripts,
 // then /reload (tags + JEI restart).
 //

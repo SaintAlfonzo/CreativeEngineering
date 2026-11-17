@@ -14,7 +14,7 @@
 
 | Part | Status |
 |---|---|
-| Lit TNT and TNT minecarts fire a burst of shrapnel when they explode (`TntShrapnelHandler`) | DEPLOYED (in the patcherMod jar shipped with 1.0.3; first committed 2026-10-02); in-game test pending |
+| Lit TNT and TNT minecarts fire a burst of shrapnel when they explode (`TntShrapnelHandler`) | DEPLOYED (in the Creative Common jar shipped with 1.0.3; first committed 2026-10-02); in-game test pending |
 | Burning TNT items (item physics) fire the same burst (`ItemBurnTransform`, `shrapnel = true`) | DEPLOYED |
 | `creativecompat:shrapnel` entity: no gravity, flat damage, despawns after a set distance | DEPLOYED |
 | `[shrapnel]` config: on/off, count, speed, spread, range, damage, item shown | DEPLOYED, live |
@@ -93,7 +93,7 @@ With the defaults: 24 pieces, about 12 blocks, 3 damage each; a mob standing clo
 
 ## 5. File map
 
-- patcherMod [shrapnel/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/): `CreativeEngineeringEntities` (registration), `ShrapnelEntity`, `ShrapnelSpawner`, `TntShrapnelHandler`; `CEConfig.Shrapnel`; listener and renderer registration in `CreativeEngineering.java`.
+- Creative Common [shrapnel/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/shrapnel/): `CreativeEngineeringEntities` (registration), `ShrapnelEntity`, `ShrapnelSpawner`, `TntShrapnelHandler`; `CEConfig.Shrapnel`; listener and renderer registration in `CreativeEngineering.java`.
 - Item trigger: `itemphysic/ItemBurnTransform`, [func/item_physics.js](../kubejs/startup_scripts/func/item_physics.js).
 
 ## 6. Offline checks

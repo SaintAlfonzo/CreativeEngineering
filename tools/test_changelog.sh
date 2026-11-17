@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Offline checks for the player changelog (feature_writeup/changelog.md 6):
-#   1. version ordering + Markdown -> blocks (patcherMod changelog/ classes, headless), and every file in
+#   1. version ordering + Markdown -> blocks (Creative Common changelog/ classes, headless), and every file in
 #      kubejs/assets/creativecommon/changelog/ parses with no raw Markdown left
 #   2. tools/changelog_lint.py on the same folder (+ its own self-test)
 #   3. build_deploy.py staging stamp, --snapshot freeze, frozen deployed files (scratch folder)

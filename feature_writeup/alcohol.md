@@ -76,7 +76,7 @@ says otherwise. This part holds the gap analysis (sections 2.1 to 2.6), the port
 | Changes to make (8) | DONE 2026-10-18 (port + pack), not tested in game. Q1 to Q5 built with my defaults (8.9) |
 | Third list (10) | Brewin' side: 10.3, 10.4 BUILT 2026-10-18 (in `-02`, live); 10.13 and 10.16 BUILT 2026-10-19 (in `-03`, shipped in 1.1.01). Not tested in game |
 | Alcoholic drinks (11) | BUILT 2026-10-20 (pack + Vinery `-03` rebuild), not tested in game |
-| Coasters (12) | BUILT 2026-10-20 (Brewin' `-03` + patcherMod 1.0.10), shipped in 1.1.01; extended 2026-10-29 to 302 foods and drinks. Scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game |
+| Coasters (12) | BUILT 2026-10-20 (Brewin' `-03` + Creative Common 1.0.10), shipped in 1.1.01; extended 2026-10-29 to 302 foods and drinks. Scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game |
 | In-game tests | AL-01 to AL-96 drafted (7), none run |
 
 - **Scope:** everything in 4.5.0 except EMI support, which this pack doesn't have.
@@ -1047,7 +1047,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
   the racks that lay bottles down; alcohol_part_b.md 7.11 settled. VB-59 updated, VB-66 added.
 - 2026-10-18 late: 10.5 to 10.7: Vinery banner crafting recipe, WTHIT stem lines (variety, ripe, leaves pending), and
   the effect-description check (nothing to reuse). VB-64, VB-65 added.
-- 2026-10-18 late: section 10 built. All advancements removed (patcherMod switch), keg JEI [+] fills and empties
+- 2026-10-18 late: section 10 built. All advancements removed (Creative Common switch), keg JEI [+] fills and empties
   the tank (`KegTransfer`), Intoxicated AppleSkin wobble and Tipsy camera drift, D3 decided. AL-67 to AL-72 added.
 - 2026-10-18 evening: `-02` installed in `mods/` (replacing `-01`) and `server_mods/` regenerated. `item_dict.js` checked
   against the registered items: every port item is mapped, the jams were already gone.
@@ -1059,7 +1059,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
   AL-01 to AL-72 pending.
 - 2026-10-19: 10.13 built into `-03` (keg heat tag, running / fueled gates, `isCold` for Vinery, tooltips). AL-73
   to AL-77 added. In `build/libs/` only: the game was running.
-- 2026-10-19: pack 1.0.9 DEPLOYED (15:54) with `-02` unchanged. Late: Vinery `-03` and patcherMod 1.0.10 went into the
+- 2026-10-19: pack 1.0.9 DEPLOYED (15:54) with `-02` unchanged. Late: Vinery `-03` and Creative Common 1.0.10 went into the
   local `mods/` (22:27), Brewin' `-03` didn't (`mods/` has `-02`). Until it does, Vinery logs "no
   BnCHeatSources.climate" and wine storage is never cold or warm. Writeup and TODO statuses brought up to date.
 - 2026-10-19 late: 10.16 built into `-03` (tankard slot icon, keg leftover slot, slot rules, input from every face) plus
@@ -1069,7 +1069,7 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
   with Nausea where it has no drunk effect; Vinery `-03` rebuilt (wines eat, food-effect lines) in `build/libs/` and
   `jar_archive/`, not installed (the game was running). AL-85 to AL-90 added.
 - 2026-10-20: 12 built (`alcohol/brewinport #8`): coasters take only items with a coaster model, Display Delight foods
-  get one, WTHIT lines. Brewin' `-03` and patcherMod 1.0.10 rebuilt into `build/libs/` and `jar_archive/`, not installed
+  get one, WTHIT lines. Brewin' `-03` and Creative Common 1.0.10 rebuilt into `build/libs/` and `jar_archive/`, not installed
   (the game was running). AL-91 to AL-96 added; AL-52's Vinery wine half is superseded by AL-91.
 - 2026-10-20: WTHIT keg lines in the port (`integration/wthit/KegWthit`, its own `waila_plugins.json`,
   `KegBlockEntity#getFermentTime()`): temperature, "Fermenting: Beer 45%", "Beer: Must Be Cold". `-03` rebuilt and
@@ -1087,15 +1087,15 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
 ## 10. Third list (2026-10-18 late, BUILT, not tested in game)
 
 Your list, covering both ports and the time master ([time.md](time.md) 3.9). 10.1 to 10.8 were built 2026-10-18
-into Brewin' `-02`, Vinery `-02` and patcherMod 1.0.8 (rebuilt under the same names, `jar_archive/` copies replaced
+into Brewin' `-02`, Vinery `-02` and Creative Common 1.0.8 (rebuilt under the same names, `jar_archive/` copies replaced
 by hand). 10.9 onward came later, in your follow-up lists.
 
 | Sections | Jars | Where (2026-10-19 late) |
 |---|---|---|
-| 10.1 to 10.8 | Brewin' `-02`, Vinery `-02`, patcherMod 1.0.8 | DEPLOYED with 1.0.8, still live in 1.0.9 |
+| 10.1 to 10.8 | Brewin' `-02`, Vinery `-02`, Creative Common 1.0.8 | DEPLOYED with 1.0.8, still live in 1.0.9 |
 | 10.9 to 10.12, 10.14 | Vinery `-03` | local `mods/` (22:27), not deployed |
 | 10.15, 10.17, 10.18 | Vinery `-03` rebuilt; Brewin' `-03` (10.18) | local `mods/` since 2026-10-20, not deployed; 10.15 / 10.17 mostly TESTED 2026-10-20 |
-| 10.13 | Brewin' `-03`, Vinery `-03`, patcherMod 1.0.10 | Vinery and patcherMod in local `mods/` (22:27); Brewin' `-03` in `build/libs/` only, so cold / warm storage is off until it's installed |
+| 10.13 | Brewin' `-03`, Vinery `-03`, Creative Common 1.0.10 | Vinery and Creative Common in local `mods/` (22:27); Brewin' `-03` in `build/libs/` only, so cold / warm storage is off until it's installed |
 
 ### 10.1 Decisions
 
@@ -1104,7 +1104,7 @@ by hand). 10.9 onward came later, in your follow-up lists.
 
 ### 10.2 Advancements: all of them are gone
 
-- **What:** `[advancements] enabled = false` in `creativeengineering-common.toml`, patcherMod
+- **What:** `[advancements] enabled = false` in `creativeengineering-common.toml`, Creative Common
   `ServerAdvancementManagerMixin`. The advancement JSONs (12,940 across vanilla, mods and datapacks) are swapped for an
   empty map before the tree is built. So nothing shows in the advancement screen, toasts, is awarded or rewards.
   `/reload` applies a change; `true` brings them back.
@@ -1195,7 +1195,7 @@ by hand). 10.9 onward came later, in your follow-up lists.
   - **"Ripe: ready to pick"** at the last stage;
   - **"Grapevine leaves still to grow"** while a grapevine stem's leaves are pending (the alcohol_part_b.md 4.6 gap);
   - **"Nothing planted"** on an empty stem or lattice.
-- Growth % stays patcherMod's crop line (`crop_growth.json` already lists the stem and all ten lattices), so nothing
+- Growth % stays Creative Common's crop line (`crop_growth.json` already lists the stem and all ten lattices), so nothing
   shows twice. Toggle: WTHIT config, Vinery page, "Grapevine stems and lattices".
 - **Test:** VB-65.
 
@@ -1272,7 +1272,7 @@ Your calls, 2026-10-19 (after the alcohol_part_b.md 4.1 look-alike list and the 
   `UpstreamTranslator.REMOVED` (tag entries dropped) and out of `KEEPERS` (their 1.3.10 recipes and loot not read).
   Upstream recipes and loot naming them are left out by `keep()`.
 - **Pack:** 21 `item_dict.js` keys removed; `loot/07_rules.js` packs apples, cherries and red / white grapes into the
-  bags; compost rows for the crates removed (the bags already had them); patcherMod `crop_growth.json` lists only
+  bags; compost rows for the crates removed (the bags already had them); Creative Common `crop_growth.json` lists only
   `grapevine_lattice`. No structure, datapack or other mod's data names any removed id (scanned 2026-10-19).
 - **Old worlds:** no conversion (your rule). Placed removed blocks become air and the items vanish, as with King Danis.
 - **Name clashes left:** "Cherry Cabinet" is also `abnormals_delight:cherry_cabinet` (the 1.3.10 cabinet and drawer
@@ -1395,7 +1395,7 @@ WTHIT shows `cold x2.0`, `cellar x2.0`, `cold cellar x4.0`.
   `coldAgingMultiplier`, `warmAgingMultiplier`). The running game re-saved both tomls and dropped the new keys; Forge
   writes them back at their defaults on the next start, so the SINGLEPLAYER preset still matches. The vintage clock
   packet carries the cold and warm values (Vinery network version 1 -> 2). Since 2026-10-27 nothing is pushed: the
-  port reads these from patcherMod's `time.WineTime` while `[time]` is on ([time.md](time.md) 3.7).
+  port reads these from Creative Common's `time.WineTime` while `[time]` is on ([time.md](time.md) 3.7).
 - **Text:** every block item in either tag: "Heats/Cools the surrounding environment", then "Useful for keg brewing
   and wine casking" on its own line (split 2026-10-20, 10.18); keg: "Sensitive to hot and cold blocks in the environment"; wine racks (9x, 4x, single-bottle) and the wine
   box: "Wine aging is sped up by dark and cold environments, slowed by warm ones" (the last three words added with
@@ -1624,7 +1624,7 @@ reads "Intoxicating Drink".
   applied. It now calls `eat()` when edible (hunger, food effects; a creative player keeps the bottle, as with any
   food) and plays the drink sound at the end. The tooltip lists the food effects under the wine's own effect, in the
   same format; "No Effects" only shows when there are neither.
-- **Tooltip (patcherMod `food/IntoxicatingDrinkTooltip`, `[alcohol] quarkLine`, 2026-10-20):** Quark's food tooltip
+- **Tooltip (Creative Common `food/IntoxicatingDrinkTooltip`, `[alcohol] quarkLine`, 2026-10-20):** Quark's food tooltip
   ends with a saturation word chosen from six buckets of saturation x nutrition x 2 (19+: "Full-Course Meal", 10 to
   19: "Fulfilling Meal", 8: "Hearty", 6: "Meal", 2: "Light Meal", under 2: "Light Snack"), with a "bad" set
   ("Disgusting Snack" for the lowest) when a food effect is harmful. Every drink here is hunger 1 / saturation 0 with
@@ -1642,7 +1642,7 @@ reads "Intoxicating Drink".
 - **Tests:** AL-85 to AL-90.
 
 - **History:** 2026-10-20 built (KubeJS food values + port `-03`). 2026-10-20 later: Quark's saturation word
-  replaced from patcherMod (1.1.01), effect-line rename retired, AL-88 rewritten.
+  replaced from Creative Common (1.1.01), effect-line rename retired, AL-88 rewritten.
 
 ### Planned from the scratchpad (2026-10-24)
 
@@ -1653,7 +1653,7 @@ reads "Intoxicating Drink".
   category" means (JEI category, real items with a tab group, or a tooltip line) and the effects per brew. Brief:
   [briefs/alcohol_pack.md](briefs/alcohol_pack.md).
 
-## 12. Coasters: modeled items only, Display Delight models, WTHIT (port + pack + patcherMod) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
+## 12. Coasters: modeled items only, Display Delight models, WTHIT (port + pack + Creative Common) (BUILT 2026-10-20, scratch server PASSED 2026-10-22 (SQ-OM-02), not tested in game)
 
 Your scratchpad note (2026-10-19, TODO `alcohol/brewinport #8`): remove anything without a model from coasters; add
 Display Delight models to the coaster; add WTHIT info.
@@ -1679,10 +1679,10 @@ Display Delight models to the coaster; add WTHIT info.
   In: the 56 Display Delight foods. This replaces the 8.3 allow-list (8.9 Q3).
   **Superseded 2026-10-29:** the generator now reads DD 1.7.0 multipart blockstates, Vinery wine bottles and
   Vintage mason jars, and borrows models for same-sprite drinks; the tag is 304. Current state: [kitchen.md](kitchen.md) 2.3.
-- **WTHIT (patcherMod `compat/WthitCoaster`, `waila_plugins.json`, needs `brewinandchewin`):** the header already shows
+- **WTHIT (Creative Common `compat/WthitCoaster`, `waila_plugins.json`, needs `brewinandchewin`):** the header already shows
   the top item (the coaster's clone stack). The body adds "Coaster: 3 / 4", with "(put away)" once a sneak-use took
   the coaster itself back, and one line per item in the order they went on, repeats folded ("2x Beer"). It reads the
-  client's synced slots through the block entity's `getItems()` by reflection, so patcherMod doesn't compile against the
+  client's synced slots through the block entity's `getItems()` by reflection, so Creative Common doesn't compile against the
   port. CEConfig `[coaster] wthit` (default true).
 - **Not done:** coaster models for the Vinery and Farmer's Respite drinks (they can't go on any more); a
   `/dumpplaceable` rerun (the catalog used the last dump).
@@ -1708,7 +1708,7 @@ Reverses alcohol_part_b.md 5 D8 (skipped 2026-10-19). [TODO](todo/TODO.md) `alco
   the name village streets look for; the desert one also keeps vanilla's cat jigsaw). A piece already in the pool is
   skipped (singleplayer keeps builtin pools across world loads). The log line
   `[vinery-houses] vinery:vinery_plains added to minecraft:village/plains/houses at weight N (...)` is the evidence.
-  patcherMod's PoolTuner runs after it (lowest priority), rebinds the processor list to the world's and records the
+  Creative Common's PoolTuner runs after it (lowest priority), rebinds the processor list to the world's and records the
   piece in `pool_config.json` like any mod-injected house, so the pack can reweight or disable it there.
 - **Frequency ("same as the flower houses"):** the pack's flower house (`villager_flower_house:flower_house`) is a
   standalone structure in the settlements group (frequency 0.27 on a 48/12 grid), not a village piece, so there is no

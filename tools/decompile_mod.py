@@ -23,7 +23,7 @@ SRG = re.compile(r'\b[mf]_\d+_\b')
 def load_mapping():
     paths = sorted(glob.glob(MAPPING_GLOB))
     if not paths:
-        sys.exit('no srg_to_official_1.19.2.tsrg under ~/.gradle (build patcherMod once to populate it)')
+        sys.exit('no srg_to_official_1.19.2.tsrg under ~/.gradle (build Creative Common once to populate it)')
     names = {}
     with open(paths[-1]) as fh:
         for line in fh:

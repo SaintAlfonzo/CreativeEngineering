@@ -12,21 +12,21 @@ fixes; [gold_panning.md](../gold_panning.md) (no tests yet; proposed prefix `GP-
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #2 | Campfire fuel blocks and rain | In Progress | small: tag entries in `blocktags.js`, one patcherMod mixin (signal smoke), a tooltip; rain audit is reading |
+| #2 | Campfire fuel blocks and rain | In Progress | small: tag entries in `blocktags.js`, one Creative Common mixin (signal smoke), a tooltip; rain audit is reading |
 | #17 | Feather fluff | Planned | small: KubeJS recipes and one tag; firework star needs a mixin or is dropped |
 | #18 | Dreamcatcher: tooltip, placeable, sleep rewards | Planned | tooltip tiny; placeable and rewards medium (KubeJS block + a wake-up handler) |
-| #9 | Rename block | Planned | medium: patcherMod block + menu + screen, model and texture |
-| #14 | Wardrobe items on armor stands | Planned | medium: patcherMod common mixin + client render layer |
+| #9 | Rename block | Planned | medium: Creative Common block + menu + screen, model and texture |
+| #14 | Wardrobe items on armor stands | Planned | medium: Creative Common common mixin + client render layer |
 | #16 | Gold panning | Planned | medium to large: new item, loot tables per biome, an interaction; build with `recipes/metal #6` |
 | #1, #5, #6, #8, #10, #11, #12, #13, #15 | see "Built, needs play" | Testing | play only |
 
 Order: #2 and #17 first (data, no new assets); #18 tooltip with #17 (the dreamcatcher recipe takes feathers); then the
-patcherMod rows (#9, #14) in one build; #16 last, after its tool art is found (owner 2026-10-30 on `recipes/metal #6`).
+Creative Common rows (#9, #14) in one build; #16 last, after its tool art is found (owner 2026-10-30 on `recipes/metal #6`).
 
 ---
 
 ## misc #2: Campfire fuel blocks and rain
-Status **In Progress** / Work patcherMod (+ KubeJS tags, tooltip) / TODO `gameplay/misc #2`
+Status **In Progress** / Work Creative Common (+ KubeJS tags, tooltip) / TODO `gameplay/misc #2`
 
 ### Owner decision 2026-11-02 (one system, no new tag)
 - **Rain does not douse a campfire in the vanilla `SIGNAL_FIRE` state.** `CampfireRain` checks that state instead of looking at the block below; no new system.
@@ -39,7 +39,7 @@ A campfire on a "fuel block" never goes out in rain and sends up tall smoke; the
 fuel block in the pack; the fuel block says so in its tooltip; nothing else puts such a fire out in rain.
 
 ### Now
-- **Built and shipped** (changelog 1.1.01 "Campfires"; the TODO's "patcherMod 1.0.9 in `mods/`, untested" is stale:
+- **Built and shipped** (changelog 1.1.01 "Campfires"; the TODO's "Creative Common 1.0.9 in `mods/`, untested" is stale:
   `mods/creativeengineering-1.1.04.jar` today). Scratch PASSED 2026-10-22 (SQ-OM-05, SQ-OM-06).
   - [campfire/CampfireRain.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/campfire/CampfireRain.java)
     (56 lines): lit campfire in `#creativeengineering:campfire/rain_douses`, `isRainingAt(pos.above())`, block below
@@ -71,7 +71,7 @@ fuel block in the pack; the fuel block says so in its tooltip; nothing else puts
    block). New block_dict keys for the ones without one (item_dict has `i.hay_bale` 1738, `i.straw_bale` 167,
    `i.rice_bale` 166, `i.oat_bale` 14462, `i.stick_block` 3544, `i.petcoke_block` 4266, `i.coke` 1595,
    `i.dried_kelp_block` 2330). Prefer the forge storage tags over single ids so new coal-like blocks join on their own.
-2. **Signal smoke** (patcherMod, common): `mixin/CampfireSignalFuelMixin` on `CampfireBlock#isSmokeSource`
+2. **Signal smoke** (Creative Common, common): `mixin/CampfireSignalFuelMixin` on `CampfireBlock#isSmokeSource`
    (private, RETURN: `|| state.is(CampfireRain.RAIN_PROOF_FUEL)`; read the SRG name from the mapped Forge jar first).
    One tag drives both rules, as the row asks ("longer smoke over them"). `SIGNAL_FIRE` is set on placement and on a
    neighbor update below, so existing campfires update when their fuel block is replaced.
@@ -101,7 +101,7 @@ IP `petcoke_block`, Botania `blaze_block`, magma, hay, FD straw and rice bales, 
 ### Gotchas
 - Changing a block's `SIGNAL_FIRE` source changes chunk-saved state only on the next neighbor update; old campfires
   on coal blocks keep short smoke until touched.
-- Tags are server data (`/reload`); the mixin needs a patcherMod build and restart; the tooltip needs a client reload.
+- Tags are server data (`/reload`); the mixin needs a Creative Common build and restart; the tooltip needs a client reload.
 
 ### Tests (FX-)
 - SQ-OM-05 / SQ-OM-06 cover the built part. **FX-new1** fuel blocks: a campfire on each new fuel block in rain stays
@@ -111,7 +111,7 @@ IP `petcoke_block`, Botania `blaze_block`, magma, hay, FD straw and rice bales, 
 ---
 
 ## misc #9: Rename block
-Status **Planned** / Work new jar / patcherMod / TODO `gameplay/misc #9`
+Status **Planned** / Work new jar / Creative Common / TODO `gameplay/misc #9`
 
 ### Goal
 A cheap block, available before the anvil, that only renames items: costs no levels and never wears out.
@@ -135,7 +135,7 @@ A cheap block, available before the anvil, that only renames items: costs no lev
 5. Pack data: BlockRunner tier `functional` is unfilled, so leave it untiered; WTHIT icon; stack size 64; JEI info.
 
 ### Decisions
-- **Source (TODO decision).** Recommendation: own patcherMod block; the menu is about 80 lines on top of `AnvilMenu`.
+- **Source (TODO decision).** Recommendation: own Creative Common block; the menu is about 80 lines on top of `AnvilMenu`.
 - **"Unbreakable".** Read as "never wears out like an anvil" (normal hardness, mineable). The other reading
   (bedrock hardness) would make it unmovable; recommend not.
 - **Name length / formatting.** Same 50-character limit as the anvil; no color codes.
@@ -151,7 +151,7 @@ A cheap block, available before the anvil, that only renames items: costs no lev
 ---
 
 ## misc #14: Wardrobe items on armor stands
-Status **Planned** / Work patcherMod (common mixin + client layer) / TODO `gameplay/misc #14`
+Status **Planned** / Work Creative Common (common mixin + client layer) / TODO `gameplay/misc #14`
 
 ### Goal
 Every Wardrobe item can be put on an armor stand and shows there as it does on a player, including the ones that only
@@ -169,7 +169,7 @@ fit Curios slots (a scarf shown on the head, an apron on the body).
   Curios 5.1.6.4 exposes `CuriosRendererRegistry.getRenderer(Item)` and `new SlotContext(String id, LivingEntity,
   int index, boolean cosmetic, boolean visible)` (verified with `javap`).
 - Armor stands take items through `ArmorStand#interactAt`, which picks the slot with `Mob.getEquipmentSlotForItem`;
-  a plain item goes to the main hand. Nothing in patcherMod or KubeJS touches armor stands or Wardrobe today
+  a plain item goes to the main hand. Nothing in Creative Common or KubeJS touches armor stands or Wardrobe today
   (58 `wardrobe:` keys in item_dict.js, e.g. `i.black_scarf` 14899, `i.leather_apron` 14887, `i.wardrobe_backpack` 14893).
 
 ### Build
@@ -227,7 +227,7 @@ chance, from tables that differ by biome and lean hard on Luck.
 4. **Work**: use the filled pan while the player stands in water (`isInWater`, or the targeted block is a water
    source); on finish roll the table for the player's biome and give the results, return the empty pan, damage 1.
    Rolling a loot table from KubeJS needs `LootContext` (Java classes; check the KubeJS class filter). If blocked, a
-   10-line patcherMod helper `loot/PanLoot.roll(player, tableId)` exposed to scripts.
+   10-line Creative Common helper `loot/PanLoot.roll(player, tableId)` exposed to scripts.
 5. **Tables**: `kubejs/data/creativeengineering/loot_tables/gameplay/panning/<group>.json` per biome group (river,
    badlands / mesa, desert, mountain stream, swamp, default) by the load: nuggets, redstone, flint, low diamond, with
    `quality` on the rare entries and `bonus_rolls` 0.5 per Luck. Generate them from one table in a `tools/` script if
@@ -291,7 +291,7 @@ in quilted wool, firework star). The dreamcatcher takes feathers too.
    the 16 `davebuildingmod:rec_<colour>_quilted_wool` recipes.
 4. Dreamcatcher: replace `dreamcatcher:dream` with an `NCH.shaped` that adds feathers (`#creativeengineering:feather_like`)
    to the string-and-stick ring (shared with #18).
-5. Firework star: vanilla's `FireworkStarRecipe` maps items to shapes in a static map; a patcherMod mixin adding fluff
+5. Firework star: vanilla's `FireworkStarRecipe` maps items to shapes in a static map; a Creative Common mixin adding fluff
    as a burst shape, or drop this part (see Decisions).
 6. Recipe ids under the pack namespace through NCH; item ids through dict keys (`i.feather_on_a_stick` 1672 and
    `i.feather_fluff` exist; add Handcrafted cushion keys as needed).
@@ -314,7 +314,7 @@ in quilted wool, firework star). The dreamcatcher takes feathers too.
 ---
 
 ## misc #18: Dreamcatcher: tooltip, placeable, sleep rewards
-Status **Planned** / Work KubeJS / patcherMod / TODO `gameplay/misc #18`
+Status **Planned** / Work KubeJS / Creative Common / TODO `gameplay/misc #18`
 
 ### Goal
 The dreamcatcher explains itself, can hang on a wall, and sleeping near one (not only holding it) gives the reward.
@@ -333,8 +333,8 @@ The dreamcatcher explains itself, can hang on a wall, and sleeping near one (not
    texture), placed by right-clicking a wall with the item (`BlockEvents.rightClicked`, consume the item), dropping
    the item when broken. Or skip (Decisions).
 3. Sleep rewards: a wake-up handler (KubeJS startup `ForgeEvents.onEvent('net.minecraftforge.event.entity.player.PlayerWakeUpEvent', ...)`
-   or patcherMod) that checks a placed dreamcatcher within ~8 blocks of the bed and gives the reward; cancel the mod's
-   own hand rule only if the reward changes (a patcherMod mixin on `SleepProcedure.execute`, `remap = false`).
+   or Creative Common) that checks a placed dreamcatcher within ~8 blocks of the bed and gives the reward; cancel the mod's
+   own hand rule only if the reward changes (a Creative Common mixin on `SleepProcedure.execute`, `remap = false`).
 4. The recipe with feathers goes in with #17 step 4.
 
 ### Decisions

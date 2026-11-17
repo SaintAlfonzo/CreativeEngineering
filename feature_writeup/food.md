@@ -53,7 +53,7 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
 | Classifier, checker and catalog | `tools/food_catalog.py` -> [food_catalog.md](food_catalog.md) | BUILT; `--check` passes |
 | Canned Goods recipes removed, new empty-can recipes | [canning.js](../kubejs/data/creativedelight/kubejs/creativedelight/canning.js) | DEPLOYED with 1.0.2. FO-09 to FO-13 |
-| Multi-serving cans, chance can return, cans in recipes | patcherMod `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js), NCH `cans` argument | DEPLOYED (1.0.2 notes "multi-serving cans"; 3.6). FO-14 to FO-22 |
+| Multi-serving cans, chance can return, cans in recipes | Creative Common `food/CanServings` + `ItemStackCanServingsMixin`, CEConfig `[canning]`, [can_servings.json](../kubejs/generation_scripts/food/can_servings.json), [cantags.js](../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js), NCH `cans` argument | DEPLOYED (1.0.2 notes "multi-serving cans"; 3.6). FO-14 to FO-22 |
 | Food canning: raw veggie, fruit, meat | [canning.js](../kubejs/data/creativedelight/kubejs/creativedelight/canning.js), 36 cans in [cans.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js) (beetroot can sprite), servings in can_servings.json | DEPLOYED with 1.0.2. Cooked/prepared cans: next row |
 | Food canning: cookies, cooked veggie/meat/fish, bread, salad, soup, golden | [tools/gen_can_types.py](../tools/gen_can_types.py) -> [can_types.json](../kubejs/generation_scripts/food/can_types.json); items/overrides in cans.js, recipes via `canSection()` in canning.js | BUILT 2026-10-04, 113 new cans + 13 Canned Goods cans re-valued; DEPLOYED with 1.0.6 (2026-10-14); single player 2026-10-11 logged `[cans] registered 113 generated cans`; recipes not checked in game. Pie, feast, meals, drinks, special not built |
 | Tuning system (values, effects, SoL complexity, canned parity) | design in 3.5 | Not built. Decisions D1 to D6 (4.3) first |
@@ -61,10 +61,10 @@ per type, with per-item exceptions, and gives every can the value of what went i
 | Vanilla egg -> `#forge:eggs` migration | list in 3.8 | TODO, not built |
 | Every raw egg stacks to 64 | now a rule of the stack size policy ([stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js), `tools/gen_stack_sizes.py`); `item_properties.js` is removed in 1.0.5 | DEPLOYED with 1.0.6; single player 2026-10-11 logged `[stack_sizes] set 1052 stack sizes`. FO-28 |
 | Glistering Melon Slice edible (Golden Melon Slice values, no effects) | [food_values.js](../kubejs/startup_scripts/cooking/food_values.js), `golden` type in food_types.json | built, scratch server PASSED 2026-10-22 (SQ-OF-12), not run in game (3.10). FO-29 |
-| Seasoning JEI page (salting off the Crafting and Mixing pages) | patcherMod `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, deployed with 1.1.01 (3.11). FO-30, FO-31 |
-| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | patcherMod `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js), NCH `season` | BUILT 2026-10-23, deployed with 1.1.03 (2026-10-26); logic harness 11/11; scratch server PASSED 2026-10-25 (SQ-SN-00, -01) and 2026-10-26 (SQ-SNF-01 to -03, by food family) (3.12). FO-45 to FO-48, FO-56 |
+| Seasoning JEI page (salting off the Crafting and Mixing pages) | Creative Common `compat/jei/SeasoningJEI` + `SeasoningCategory`, CEConfig `[jei] seasoningCategory` | BUILT 2026-10-21, deployed with 1.1.01 (3.11). FO-30, FO-31 |
+| Pack seasonings framework (NBT seasonings, combine rules, bonus on eating; test set cheese / onion / garlic on popcorn) | Creative Common `food/Seasonings`, `SeasoningRecipe`, `SeasoningTooltip`; [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js), [seasoning.js](../kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js), NCH `season` | BUILT 2026-10-23, deployed with 1.1.03 (2026-10-26); logic harness 11/11; scratch server PASSED 2026-10-25 (SQ-SN-00, -01) and 2026-10-26 (SQ-SNF-01 to -03, by food family) (3.12). FO-45 to FO-48, FO-56 |
 | Spice of Life pack config (10 foods to activate, reset on death, queue 256; tier bonuses still WIP) | `defaultconfigs/solapplepie-server.toml` = `configs_edited/server_config/solapplepie-server.toml` | Shipped with 1.1.01 through the deploy's `defaultconfigs`; the instance copy added 2026-10-22. New-world values: scratch server PASSED 2026-10-22 (SQ-CF-01). Last milestone `generic.movement_speed` fix shipped with 1.1.05, not run (SQ-CF-02). FO-32 |
-| Bites from placed pies and cakes count for Spice of Life | patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, deployed with 1.1.01 (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
+| Bites from placed pies and cakes count for Spice of Life | Creative Common `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`, [placed_food_slices.json](../kubejs/generation_scripts/food/placed_food_slices.json) | BUILT 2026-10-22, deployed with 1.1.01 (4.2 finding 5); scratch server PASSED 2026-10-22 (SQ-SOL-01: load, 14 map entries, mixin); the bite: FO-43 in game |
 
 **Open first:** [food_catalog.md](food_catalog.md) (every food), [food_types.json](../kubejs/generation_scripts/food/food_types.json)
 (who is in which type), section 2.3 (Spice of Life), section 4.2 (what is broken today).
@@ -338,7 +338,7 @@ always-edible / fast flags and effects unless the script sets them (`meat(false)
 **Code-side effects are separate.** Canned Goods' procedures, Brewin' & Chewin's Tipsy, Vinery's age-scaled wines,
 Neapolitan's healing items and Farmer's Delight's hot cocoa / milk bottle act in `finishUsingItem`, not through food
 properties, so the step above can't change them. Options per mod: an `ItemEvents.foodEaten` handler that corrects the
-effect a tick later, or a patcherMod mixin that skips the procedure. Decision D4.
+effect a tick later, or a Creative Common mixin that skips the procedure. Decision D4.
 
 **Spice of Life: server.** `server_scripts/food/sol_complexity.js` fills
 `com.tarinoita.solsweetpotato.ConfigHandler.complexityMap` (public, a plain HashMap, rebuilt only at server start)
@@ -549,7 +549,7 @@ Brewing is unchanged. Note: in this pack `minecraft:golden_carrot` is not effect
 ### 3.11 Seasoning JEI page (BUILT 2026-10-21)
 
 Salt shows its one `salt:salting` special craft as a Crafting-page extension, and Create: The Salt adds 65
-`create:mixing` recipes (food + `#forge:salts` -> the same food with `{Salted:1b}`), one Mixing page each. patcherMod's
+`create:mixing` recipes (food + `#forge:salts` -> the same food with `{Salted:1b}`), one Mixing page each. Creative Common's
 `SeasoningJEI` (a `@JeiPlugin`, client only) moves them onto one **Seasoning** page (`creativedelight:seasoning`,
 icon: salt; catalysts: crafting table, mechanical mixer):
 - the salting craft: one page, machine slot = crafting table, every `#salt:can_be_salted` food + salt -> the salted
@@ -572,7 +572,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Definitions:** [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (`global.seasoning`, startup, both
   sides) holds each seasoning once: id, display name, grid item, bonus (`nutrition` hunger points, `saturation` points
   capped at the food level, `heal` health points, timed `effects`) and `combines` (keys it may share a food with;
-  either side listing the other is enough, unlisted pairs don't combine). It passes each one to patcherMod
+  either side listing the other is enough, unlisted pairs don't combine). It passes each one to Creative Common
   `food/Seasonings.define` as JSON. The client lang hook [seasoning_lang.js](../kubejs/assets/creativedelight/kubejs/creativedelight/seasoning_lang.js)
   adds the names (`seasoning.<ns>.<path>`).
 - **Craft:** recipe type `creativeengineering:seasoning` (`food/SeasoningRecipe`, special shapeless): one food
@@ -594,7 +594,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 - **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
   nutrition". The name is lang key `seasoning.<ns>.<path>`, from seasoning_lang.js (a CD client script under
   `assets/`). From the 2026-10-27 move until 2026-10-31 that script did not load at game start (KubeJS loads resource client
-  scripts only on F3+T), so the line showed the raw key; patcherMod `KubeJSClientResourceScriptsMixin` loads them at
+  scripts only on F3+T), so the line showed the raw key; Creative Common `KubeJSClientResourceScriptsMixin` loads them at
   start (creative_delight.md 10.2). FO-59.
 - **JEI:** each seasoning recipe is a page on the Seasoning tab (3.11): food | seasoning item(s) -> seasoned food,
   food and result cycling together.
@@ -629,7 +629,7 @@ gains "eaten fast", "edible when full", "1 heart of burn damage", "effect chance
 Members reach the framework by reflection (`backportedBarbeques` `compat/PackSeasonings`). No seasoned-icon overlays for
 the seven yet.
 
-**Seasoned icons (2026-10-26):** patcherMod `food/SeasonedItemModel` (client) draws one overlay per seasoning over a
+**Seasoned icons (2026-10-26):** Creative Common `food/SeasonedItemModel` (client) draws one overlay per seasoning over a
 seasoned food's own model, salt first (Salt's `salt:item/salted_overlay`), then each pack seasoning in NBT order
 (`creativeengineering:item/seasoned/<path>`, a missing model draws nothing). Hooked by `mixin/SeasonedItemModelMixin`
 at the return of `ItemRenderer.getModel`, so inventory, hand, dropped items and JEI show it; cached per base model and
@@ -666,7 +666,7 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   three). In `#forge:sugar`
   ([cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js)), so it goes wherever the pack-wide sugar swap
   (cooking.js "Sugar") or a pack recipe takes `i.any_sugar`.
-- **Block** `powdered_sugar_block` (patcherMod `food/PowderedSugarBlock`, extends `PowderSnowBlock`, powder snow's
+- **Block** `powdered_sugar_block` (Creative Common `food/PowderedSugarBlock`, extends `PowderSnowBlock`, powder snow's
   properties): sink in it, leather boots walk on it, no fall damage, no block item, drops nothing (as powder snow).
   Unlike powder snow it does not freeze, burning mobs don't melt it, and it makes no snow particles. Inside it there is
   no powder snow fog (vanilla checks the powder snow block itself).
@@ -850,7 +850,7 @@ of 44 drinks`. The `/dumpall` food dump diff must be empty (SQ-RFX-09, SQ-RFX-19
    keep the old line until their `serverconfig/` copy is replaced (TODO `food/types-and-tuning #4`).
 5. **Placed pies and non-vanilla cakes** didn't count for Spice of Life when bitten from the block (only the vanilla
    cake does, as Farmer's Delight's cake slice); their slices do when eaten from the hand. FIXED 2026-10-22
-   (`types-and-tuning #5`): patcherMod `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`
+   (`types-and-tuning #5`): Creative Common `food/PlacedFoodSol` + `mixin/ServerPlayerGameModePlacedFoodMixin`
    (`useItemOn` HEAD/RETURN state compare, server side, no fake players, nothing with a knife in hand) records the
    slice through SoL's `FoodTracker.updateFoodList`. Pies (any FD `PieBlock`) count as their slice item; cakes and
    puddings come from `kubejs/generation_scripts/food/placed_food_slices.json` (own slice where one exists:
@@ -926,16 +926,16 @@ Answered by the owner 2026-11-02 except D3 (pinned) and D4 (open).
 - [stack_sizes.js](../kubejs/startup_scripts/changes/stack_sizes.js): egg stack sizes (the `egg` rule; `item_properties.js` removed in 1.0.5)
 - patcherMod [compat/jei/SeasoningJEI.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/SeasoningJEI.java)
   and [SeasoningCategory.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/SeasoningCategory.java): the Seasoning JEI page (3.11)
-- Pack seasonings (3.12): patcherMod `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
+- Pack seasonings (3.12): Creative Common `food/Seasonings.java`, `SeasoningRecipe.java`, `SeasoningTooltip.java`;
   [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (definitions), [seasoning.js](../kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js) (crafts),
   [seasoning_lang.js](../kubejs/assets/creativedelight/kubejs/creativedelight/seasoning_lang.js) (names), NCH `season`; [seasoning_tags.js](../kubejs/data/creativedelight/kubejs/creativedelight/seasoning_tags.js)
   (family and seasonable tags); `food/SeasonedItemModel.java` + `mixin/SeasonedItemModelMixin.java` and
   [make_seasoning.py](../textureswapper/seasoning/make_seasoning.py) (icons)
-- Powdered sugar (3.13): patcherMod `food/PowderedSugarBlock.java`, `PowderedSugarRegistry.java`;
+- Powdered sugar (3.13): Creative Common `food/PowderedSugarBlock.java`, `PowderedSugarRegistry.java`;
   [powdered_sugar.js](../kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js) (recipes), item in `baking_ingredients.js`, NCH `viVacuumizing`
 - [food_catalog.md](food_catalog.md): generated reference; `kubejs/exported/food/catalog.json` (not in git)
 - Spice of Life config: `defaultconfigs/solapplepie-server.toml` (pack copy), `saves/<world>/serverconfig/solapplepie-server.toml`, client `config/solapplepie-client.toml`
-- Placed food for Spice of Life: patcherMod `food/PlacedFoodSol.java`, `mixin/ServerPlayerGameModePlacedFoodMixin.java`; `kubejs/generation_scripts/food/placed_food_slices.json`; scratch probe `tools/food_drinks_probe/food_drinks_probe.js` (`/fdtest sol`)
+- Placed food for Spice of Life: Creative Common `food/PlacedFoodSol.java`, `mixin/ServerPlayerGameModePlacedFoodMixin.java`; `kubejs/generation_scripts/food/placed_food_slices.json`; scratch probe `tools/food_drinks_probe/food_drinks_probe.js` (`/fdtest sol`)
 - Related configs: `config/salt-common.toml`, `config/farmersdelight-common.toml` (vanilla soups get FD effects,
   stack to 16), `config/survivality-common.toml` (`more_snacks`)
 
@@ -1021,7 +1021,7 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-29 glistering melon** (values, no effects, golden type: scratch server PASSED 2026-10-22, SQ-OF-12; eating and brewing: in game): after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
   eat it: AppleSkin shows 4 hunger / 4.8 saturation (same as a Golden Melon Slice), no effect is applied. It still
   brews Healing in a brewing stand. `logs/kubejs/startup.log` has `[food values] 2 foods copied` and no warning.
-- [ ] **FO-30 Seasoning page:** after installing the patcherMod jar and restarting, `logs/latest.log` has
+- [ ] **FO-30 Seasoning page:** after installing the Creative Common jar and restarting, `logs/latest.log` has
   `[jei] Seasoning page: 2 page(s), moved 1 crafting and 65 mixing recipe(s)` and `[jei] hid 66 seasoning recipe(s)`
   (counts may differ if Create: The Salt recipes are removed). Press U on Salt: a Seasoning tab with two pages
   (crafting table, mechanical mixer); the Crafting tab no longer shows the "food + salt" page. R on Cooked Beef: the
@@ -1040,7 +1040,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   listed. A knife on a placed pie drops a slice and adds
   nothing until the slice is eaten. A Create deployer biting a cake adds nothing. `logs/latest.log` has no
   `PlacedFoodSol` warning.
-- [x] **FO-44 Placed food map loads** (scratch server PASSED 2026-10-22, SQ-SOL-01: 14 entries, chocolate cake -> Abnormals Delight's slice): after a boot with the patcherMod jar,
+- [x] **FO-44 Placed food map loads** (scratch server PASSED 2026-10-22, SQ-SOL-01: 14 entries, chocolate cake -> Abnormals Delight's slice): after a boot with the Creative Common jar,
   `logs/latest.log` has no `PlacedFoodSol` warning or error and no mixin failure for
   `ServerPlayerGameModePlacedFoodMixin`; every block in `placed_food_slices.json` exists and maps to an edible item
   (`/fdtest sol`).
@@ -1060,7 +1060,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   fills by the amount shown. Plain popcorn unchanged.
 - [ ] **FO-48 Stacking:** 2 Garlic + Onion popcorns made in different orders stack in one slot; seasoned and plain
   popcorn don't. `logs/latest.log` has no `Seasonings` error.
-- [ ] **FO-50 Powdered sugar item** (restart; new patcherMod and Creative Delight jars in `mods/`): JEI shows Powdered
+- [ ] **FO-50 Powdered sugar item** (restart; new Creative Common and Creative Delight jars in `mods/`): JEI shows Powdered
   Sugar (white pile) and Powdered Sugar Bucket. JEI uses of Sugar: Crushing and Milling give 1 Powdered Sugar plus a
   second at 50%; the mortar craft takes 3 Sugar for 4 Powdered Sugar. Powdered Sugar shows in a `#forge:sugar` recipe
   (e.g. Frosting: Powdered Sugar + 2 Milk in the grid) and the craft works. Rerun 2026-10-29 (`ingredients #23`).
@@ -1079,7 +1079,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   each.
 - [ ] **FO-53 Sugar seasoning (no foods since 2026-10-26):** Waffle + Sugar gives nothing; the Seasoning JEI tab has no
   Sugar page. Popcorn + Sugar still gives Caramel Popcorn.
-- [ ] **FO-54 AppleSkin with salt** (restart, patcherMod with this change): hover plain popcorn, salted popcorn, onion
+- [ ] **FO-54 AppleSkin with salt** (restart, Creative Common with this change): hover plain popcorn, salted popcorn, onion
   popcorn and salted onion popcorn. Salted shows Salt's extra hunger and saturation; salted onion shows that plus 2
   hunger, and its saturation is salted popcorn's plus nothing (onion adds hunger only); salted cheese popcorn shows
   salted popcorn's saturation plus 2. Eat each at about 10 hunger: the bars fill by what was shown.
@@ -1097,7 +1097,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   shows one page per seasoning (cheese, onion, garlic) and one for garlic + onion, each with popcorn only.
   Server half PASSED on a scratch server 2026-10-26 (SQ-SNF-01 to -03: tags, recipe ids, `/sntest` grid matches 5/5);
   the JEI tab is the open client half.
-- [ ] **FO-59 Seasoning names at game start** (restart with the new patcherMod jar, no F3+T): Popcorn + Garlic shows
+- [ ] **FO-59 Seasoning names at game start** (restart with the new Creative Common jar, no F3+T): Popcorn + Garlic shows
   "Garlic: Speed (0:10)", not `seasoning.creativeengineering.garlic`; Cheese, Onion and Void Pepper lines show their
   names too. `logs/kubejs/client.log` lists `Loaded script creativedelight:kubejs/creativeengineering/seasoning_lang.js`
   (and the other `creativedelight:kubejs/...` client scripts) once, before any F3+T. Placeable food lines (PL-01) show
@@ -1130,7 +1130,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   plates). Food canning not built yet. FO-09 to FO-13.
 - **2026-09-28** Multi-serving cans (3.6): servings from `can_servings.json` tags, NBT servings with a bar and
   tooltip, open cans eaten first, empty/crushed/nothing roll on the last serving (CEConfig `[canning]`), NCH
-  `cans` argument for shaped/shapeless recipes. patcherMod built; the jar isn't in `mods/` yet. FO-14 to FO-22.
+  `cans` argument for shaped/shapeless recipes. Creative Common built; the jar isn't in `mods/` yet. FO-14 to FO-22.
 - **2026-09-29** Food canning for raw veggie (2 Baked Potato meals, salt), raw fruit (3 meals of 5/3, sugar) and
   raw meat (4 meals of 5/3, bone broth): 36 new `creativeengineering:canned_*` items on the Canned Goods beetroot
   sprite, basic ~80% / additive ~60% of the ingredients a can is worth, grid-capped at 8 / 6. Every canning recipe has an
@@ -1175,21 +1175,21 @@ Cooking oil and fried eggs (3.7), after a restart:
   food_values.js entries can drop effects; added to the `golden` type (3.10). FO-29.
 - 2026-10-21: Seasoning JEI page (3.11): Salt's salting craft and Create: The Salt's 65 salting mixes moved off the
   Crafting and Mixing pages onto one Seasoning page; `creativeengineering:shapeless/season/...` crafts join it.
-  patcherMod built, jar not installed. FO-30, FO-31.
+  Creative Common built, jar not installed. FO-30, FO-31.
 - 2026-10-22: Spice of Life pack config in `defaultconfigs/` (FO-32, new-world values passed on the scratch server,
-  SQ-CF-01). Placed pies and cakes count for Spice of Life (4.2 finding 5, patcherMod `PlacedFoodSol`, jar in
+  SQ-CF-01). Placed pies and cakes count for Spice of Life (4.2 finding 5, Creative Common `PlacedFoodSol`, jar in
   `mods/`, not run; FO-43 in game, FO-44 / SQ-SOL-01 on a scratch server). Doc audit: Create C&A's chocolate cake
   bite now counts as Abnormals Delight's chocolate slice (the knife's slice after the merge), not Central Kitchen's.
 - **2026-10-22** Glistering Melon Slice values (3.10, FO-29: hunger and modifier of the Golden Melon Slice, always
   edible, no effects, golden type) queued as scratch SQ-OF-12 (`tools/older_food_probe.js`); eating it stays in game.
 - 2026-10-22 (second bulk run): SQ-SOL-01 and SQ-OF-12 PASS on the scratch server. FO-44 done; FO-29 and FO-43 in game.
 - 2026-10-23: Pack seasonings framework (3.12, `food/seasoning #3` mechanism): NBT seasonings with combine rules and a
-  bonus on eating; test set cheese / onion / garlic on popcorn. patcherMod 1.1.02 jar installed (also carries the 3.11
+  bonus on eating; test set cheese / onion / garlic on popcorn. Creative Common 1.1.02 jar installed (also carries the 3.11
   Seasoning page). FO-45 to FO-48; scratch SQ-SN-00, 01 queued.
 - 2026-10-26: Seasonings by food family (3.12): `seasonable/<seasoning>` tags from families, then single adds and
   removals; `food_family/<path>` tags from the new `food_families.json`; crafts generated per seasoning and per
   combining pair. Popcorn only for now (cheese, onion, garlic); sugar's waffle craft removed. AppleSkin handler after
-  Salt's (FO-54); seasoned icons per seasoning, Salt's overlay drawn by the pack (FO-55, FO-56). patcherMod 1.1.03 and
+  Salt's (FO-54); seasoned icons per seasoning, Salt's overlay drawn by the pack (FO-55, FO-56). Creative Common 1.1.03 and
   Creative Delight rebuilt, not installed.
 - 2026-10-26 (later): Void Pepper seasoning (Crushed Void Pepper, Salt's bonus, popcorn only; FO-57). The seasoning
   overlays are generated by `textureswapper/seasoning/make_seasoning.py` (palette_swap, sources in `src/`) instead of the
@@ -1199,7 +1199,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   mortar 3 -> 4, machines 1 -> 1 + 50%; block texture from the moss block; JEI snow report not traced. Batter grains
   (3.15, `#24`). FO-50 to FO-52 rerun, FO-58 new. Not built.
 - 2026-10-25: Powdered sugar (3.13, `dishes/ingredients #16`): item, powder-snow-like block and bucket, vacuum
-  chamber bucket recipe, `#forge:sugar`, sugar seasoning (sugar or powdered sugar) tested on the waffle. patcherMod
+  chamber bucket recipe, `#forge:sugar`, sugar seasoning (sugar or powdered sugar) tested on the waffle. Creative Common
   built, not installed. FO-50 to FO-53.
 - 2026-10-25: the `powdered_sugar` item was never registered (missing from `baking_ingredients.js`, so every recipe
   and tag naming it would have failed); added. Textures checked against `make_psugar.py`'s picks (item_cocoa_powder,

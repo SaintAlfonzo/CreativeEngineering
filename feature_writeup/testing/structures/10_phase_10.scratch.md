@@ -4,7 +4,7 @@
 
 - Test: LO-10 (locate.md 7): JFR recording of a Chunky pregen (radius 64 chunks) -> per-status chunk generation
   times, written into locate.md 3.7.
-- Server: same scratch server, patcherMod 1.0.7 jar (worldgen = 1.0.8). Toml = the instance's own (density 1, logs at
+- Server: same scratch server, Creative Common 1.0.7 jar (worldgen = 1.0.8). Toml = the instance's own (density 1, logs at
   their defaults) so timings are the pack's. JFR as server/LaunchServer.sh (stackdepth 256, perf/ce-server.jfc,
   repository perf/jfr-repo) but maxage 3h / maxsize 2g (disk 97% full, 14 GB free). user_jvm_args.base = the plain one.
 - World st_10 (seed 8675309, normal), fresh. Area: Chunky square r 1024 blocks (64 chunks) at 2144 -2592 (92% land,

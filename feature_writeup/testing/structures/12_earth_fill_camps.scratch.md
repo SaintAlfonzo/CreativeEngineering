@@ -4,7 +4,7 @@ Live notes while testing; the clean writeup is 12_earth_fill_camps.md. Plan: str
 
 ## State
 
-- Code built (patcherMod 1.0.9 build/libs, 14:33): footprint water share (EarthFill), sunk_start beard (TerrainAdaptation),
+- Code built (Creative Common 1.0.9 build/libs, 14:33): footprint water share (EarthFill), sunk_start beard (TerrainAdaptation),
   avoidCoasts (MetaStructure). Data: biome_fits.json biome_tags.coast_river, structure_tags.json meta/coast_ok,
   terrain_adaptation.js sunk_start = 6 campsites.
 - Offline: test_worldgen_tools.sh all 10 sections pass (earth fill 62 checks, 7 new footprint checks);

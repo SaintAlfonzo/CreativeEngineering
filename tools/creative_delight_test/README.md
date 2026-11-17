@@ -1,7 +1,7 @@
 # Creative Delight scratch test suite
 
 Boilerplate KubeJS suite that runs the pack's existing cooking helper calls from Creative Delight's script trees,
-through the helpers that moved into patcherMod's jar (feature_writeup/creative_delight.md 10). Scratch servers
+through the helpers that moved into Creative Common's jar (feature_writeup/creative_delight.md 10). Scratch servers
 only: never copy it into the pack's `kubejs/` and never ship a jar built with it. Queue entries: SQ-CDT in
 [../../feature_writeup/testing/scratch_queue.md](../../feature_writeup/testing/scratch_queue.md); tests CDT- in
 creative_delight.md 19.
@@ -10,7 +10,7 @@ creative_delight.md 19.
 
 | File | Checks |
 |---|---|
-| `kubejs_startup/creativedelight/_cdtest/cdtest_startup.js` | Startup loader: helpers (patcherMod pack) and dicts (pack folder) exist before the CD pack; `cd_core.js` first by priority; compost helper callable at startup top level |
+| `kubejs_startup/creativedelight/_cdtest/cdtest_startup.js` | Startup loader: helpers (Creative Common pack) and dicts (pack folder) exist before the CD pack; `cd_core.js` first by priority; compost helper callable at startup top level |
 | `kubejs_startup/creativedelight/_cdtest/cdtest_startup_absent.js` | `// requires:` honoured by the startup loader |
 | `data/creativedelight/kubejs/_cdtest/cdtest_cooking_mirror.js` | GENERATED: real single-line helper calls from `kubejs/server_scripts/cooking/`, unchanged, inside `global.CD.recipes()`; each recipe is the `creativedelight:` twin of the pack's `creativeengineering:` recipe |
 | `data/creativedelight/kubejs/_cdtest/cdtest_namespace.js` | `ns()` / `withNamespace()` scoping, nesting, restore after an error; member switch; pack server globals before CD scripts |

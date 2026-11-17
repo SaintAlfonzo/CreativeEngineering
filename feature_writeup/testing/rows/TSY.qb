@@ -44,10 +44,10 @@ look N in the built line = professions + 1; the `sent N trade list(s) to 1 playe
 @@text - CQ-BBQF-02: a skewer seasoned with each of cumin, pepper, chili and each sauce, and a skewer grilled on the Grill, show the
 @@text   salt sparkle overlay; client log has no `Unable to load model: 'barbequesdelight:item/seasoned/`. WTHIT on a burnt
 @@text   skewer on a Grill reads "Burnt".
-@@text - SQ-CS-F1 (2026-11-04, curios_slots.md, corn_delight.md 2.1; needs patcherMod rebuilt for the icon only): tag dump
+@@text - SQ-CS-F1 (2026-11-04, curios_slots.md, corn_delight.md 2.1; needs Creative Common rebuilt for the icon only): tag dump
 @@text   `#curios:face` holds `simplehats:smokingpipe`; recipe dump: `creativedelight:cutting/corncob_kernels` gives 2
 @@text   `corn_delight:corn_seeds`, `createcrushing/corncob_kernels`, `createmilling/corncob_kernels` and the IE crusher
 @@text   `corncob_kernels` give 4 kernels + 0.5 cornmeal, `mortar/corncob_kernels` gives 3 kernels. Fails: script error in
 @@text   `curiostags.js`, `corn_delight/recipes.js`, `creativedelight/recipes.js`, `immersiveengineering/recipes.js`.
-@@text - CQ-CS-F1 (2026-11-04, patcherMod rebuilt): Curios screen, empty Face slot shows the helmet outline (no purple-black
+@@text - CQ-CS-F1 (2026-11-04, Creative Common rebuilt): Curios screen, empty Face slot shows the helmet outline (no purple-black
 @@text   square); the Smoking Pipe goes in Face and draws on the face in F5.

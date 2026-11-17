@@ -9,7 +9,7 @@
 ServerEvents.loaded(e => {
 	if (!global.CD) {
 		console.error('[creativedelight] global.CD missing: the CD jar\'s startup scripts did not run ' +
-			'(patcherMod without the startup loader, or no creativedelight jar in mods/)')
+			'(Creative Common without the startup loader, or no creativedelight jar in mods/)')
 		return
 	}
 	console.info('[creativedelight] server scripts ready, members on: ' +

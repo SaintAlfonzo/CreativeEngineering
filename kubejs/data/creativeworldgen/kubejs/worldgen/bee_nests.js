@@ -9,7 +9,7 @@
 // Per rule in the config:
 //   - biome tag creativeworldgen:bee_nests/<id> = the biomes it matches (ServerEvents.tags, via global.tags);
 //   - chance / scale go into ONE biome modifier, creativeworldgen:forge/biome_modifier/bee_nests.json, of
-//     patcherMod's type creativeworldgen:bee_nests (worldgen/BeeNests): the rules fold in file order per biome,
+//     Creative Common's type creativeworldgen:bee_nests (worldgen/BeeNests): the rules fold in file order per biome,
 //     and every tree generated there gets the result (TreeFeatureBeeNestsMixin). One modifier keeps the order;
 //   - trees: a placed feature creativeworldgen:bee_nests/<id> (the configured tree at the rate, placed like a
 //     vanilla tree: on dry ground where the sapling would survive) and a forge:add_features modifier

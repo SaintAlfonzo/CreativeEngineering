@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Offline checks for the worldgen tools (feature_writeup/structure_tuning.md section 6):
-#   1. GroundMatchTest: ground matching (patcherMod worldgen/GroundMatch)
+#   1. GroundMatchTest: ground matching (Creative Common worldgen/GroundMatch)
 #   2. MassPlacerTest (Creative Devtools): /cdevplace filters, rows on the real structure_tags.json, signs, alignment; WorldgenConfig defaults
 #   3. EarthFillTest: earth-fill and water-fill counting, template earth and water through rotation, pool elements, overrides, seabed
 #   4. node: CEConfig [worldgen.debug] structureDensity scales every set's rate exactly (tools/structure_density_check.js)

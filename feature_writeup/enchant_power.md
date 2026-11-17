@@ -10,7 +10,7 @@
 |---|---|
 | Audit of every jar's `getEnchantPowerBonus` override (section 2) | DONE 2026-10-31, read from bytecode of 417 jars |
 | Findings F1 to F4 (section 4) | open, need a decision |
-| Proposed system (section 5): one block-tag family hooked through patcherMod | proposal, nothing built |
+| Proposed system (section 5): one block-tag family hooked through Creative Common | proposal, nothing built |
 
 - **Pending:** nothing built. No script or in-tree mod touches enchanting power today.
 - **Files to open:** none yet. Easy Magic's config is `config/easymagic-server.toml` (backup in
@@ -76,7 +76,7 @@ Found by scanning every jar for classes declaring `getEnchantPowerBonus`, then r
 
 ## 5. Proposed system
 
-1. patcherMod adds a block-tag family, for example `creativeengineering:enchant_power/quarter`, `/half`, `/one`,
+1. Creative Common adds a block-tag family, for example `creativeengineering:enchant_power/quarter`, `/half`, `/one`,
    `/four`, filled through `global.tags`.
 2. The coremod patches `IForgeBlockState.getEnchantPowerBonus`: return the tag value if the block has one, otherwise
    the block's own value. This serves both new sources and rebalances (Wise Oak, pylons).

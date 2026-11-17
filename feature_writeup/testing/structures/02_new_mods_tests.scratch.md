@@ -8,7 +8,7 @@
 - Milestone: M2 DONE 10:45 (writeup 02_new_mods_tests.md, inline results in structure_tuning.md). Next: M3.
 - SESSION 2 (54725a7d, 2026-10-14): the old srv/ (session 22443b35) was gone; rebuilt in session 54725a7d scratchpad
   srv/ the same way (373 mods: mod_sides server/both + the 4 unlisted campsite_structures, restApi, rsec, unlitcampfire;
-  patcherMod = build/libs creativeengineering-1.0.6.jar of 01:28). Probe rewritten: /zp starts cx cz r | blocks x1 y1 z1
+  Creative Common = build/libs creativeengineering-1.0.6.jar of 01:28). Probe rewritten: /zp starts cx cz r | blocks x1 y1 z1
   x2 y2 z2 | biome x y z (loaded chunks only). Helper scratchpad/cmd.sh "<cmd>" [wait].
 - World st_d, seed 8675309, max-tick-time=-1, view/sim distance 6, port 25599, asyncLocatorThreads = 4.
 - Scratch toml (srv copy only): earth_fill log = ALL, meta_structures log = true, placement_priority log = true.

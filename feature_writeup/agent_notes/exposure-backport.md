@@ -97,7 +97,7 @@ which matters for existing worlds. None of the addons can drop in: every one dep
   - Its Create sequenced-assembly recipes are covered by 1.6.0's spout-developing config.
   - Loot goes through LootJS ([loot-system](loot-system.md)). The 6 instant slides only make sense with Polaroid.
 - **Polaroid (medium, ~1750 lines upstream):**
-  - Instant Camera = a patcherMod `CameraItem` subclass with one slide slot and no attachments menu. Its stats: built-in flash, 20-40mm, 240px, crop 0.75, 40-tick cooldown; it prints a photo into the inventory (merging into stacked photos) and consumes a slide.
+  - Instant Camera = a Creative Common `CameraItem` subclass with one slide slot and no attachments menu. Its stats: built-in flash, 20-40mm, 240px, crop 0.75, 40-tick cooldown; it prints a photo into the inventory (merging into stacked photos) and consumes a slide.
   - The slides need a film-style capture component: contrast 0.2, levels (0,135,255,25,255), HSB (0,0.05,0.05), color balance (0.03,0.01,-0.01); the high-sensitivity slides add sensitivity 2.0 and noise 0.05.
   - Slides must be blocked from the normal camera's film slot and from Create spout developing.
   - The custom viewfinder (exposure slider, slide counter) is optional and needs mixins, because 1.6.0's viewfinder is static.
@@ -115,7 +115,7 @@ which matters for existing worlds. None of the addons can drop in: every one dep
 
 **Suggested order (from before the full-port decision):**
 1. Expanded lenses, filters, hicap and hires films via KubeJS (item_dict/NCH/global.tags, see memory `centralize-recipes-tags-items`).
-2. The film-style capture component in patcherMod.
+2. The film-style capture component in Creative Common.
 3. Exact palettes.
 4. The Instant Camera.
 5. Frames and the projector, if wanted.
@@ -133,7 +133,7 @@ which matters for existing worlds. None of the addons can drop in: every one dep
 - Server storage has `getAllIds()`/`getOrQuery()`/`put()`, but no delete. Catalog needs that, and a 1.19.2 GUI rewrite (1.21 GuiGraphics/sprites/Tooltip).
 - KubeJS 1902 has `StartupEvents.registry(...).createCustom(id, supplier)`, so Java-class items can be registered from JS.
 
-Subclassing Exposure classes from patcherMod hits the SRG/Mojmap libs split (see [patchermod-coremod](patchermod-coremod.md)); consider
+Subclassing Exposure classes from Creative Common hits the SRG/Mojmap libs split (see [patchermod-coremod](patchermod-coremod.md)); consider
 `fg.deobf` for the exposure jar.
 
 ## exposure-login-packet-null-kick

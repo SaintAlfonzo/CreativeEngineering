@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * A built-in pack over a path -> bytes map (a port's translator, Creative Labels' derived art, patcherMod's Farmer's
+ * A built-in pack over a path -> bytes map (a port's translator, Creative Labels' derived art, Creative Common's Farmer's
  * Structures donor). The map is only built when the game first asks for content, after the registries are complete;
  * pack metadata comes from code. Nothing is written to disk. Shared source (development/shared/packs, compiled into each
  * jar under its own package); add packs through {@link BuiltInPacks}.

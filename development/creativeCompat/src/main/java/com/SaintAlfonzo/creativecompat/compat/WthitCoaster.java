@@ -33,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * taken the coaster itself back, and one line per item in the order they went on ("2x Beer" for repeats).
  *
  * <p>Client-side only: the port's coaster syncs its four slots to the client. They are read through the block
- * entity's own {@code getItems()} by reflection, so patcherMod needn't compile against the port. Off with
+ * entity's own {@code getItems()} by reflection, so Creative Common needn't compile against the port. Off with
  * {@code [coaster] wthit}. feature_writeup/alcohol.md 12.
  */
 public final class WthitCoaster implements IWailaClientPlugin, IBlockComponentProvider {

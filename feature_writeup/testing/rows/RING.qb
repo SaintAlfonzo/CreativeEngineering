@@ -7,7 +7,7 @@
 @@date 2026-10-27
 @@jars creativeworldgen
 @@text
-@@text patcherMod 1.1.03 with `ChunkGeneratorRingCacheMixin` and `worldgen/RingPositionCache` (TODO server #18, perf.md
+@@text Creative Common 1.1.03 with `ChunkGeneratorRingCacheMixin` and `worldgen/RingPositionCache` (TODO server #18, perf.md
 @@text 11.2 #2). Group A. Fresh world folder; any player with op.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |

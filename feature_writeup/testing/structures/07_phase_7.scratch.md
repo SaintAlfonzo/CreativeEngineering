@@ -10,7 +10,7 @@
 - Server: session 5 scratchpad srv/. Libraries + run.sh from ~/.local/share/atlauncher/servers/Minecraft1192withForge
   (Forge 1.19.2-43.3.9; the Trash CreEngServer copy is gone). 374 server mods symlinked from mods/ by mod_sides.md
   (45 client skipped); srv/vinery_upstream -> instance vinery_upstream (the Vinery port reads it; boot fails without).
-  Jar: **patcherMod 1.0.7** (build/libs, md5 c0bdc0e1, 2026-10-18 16:27), NOT the 1.0.8 in mods/: **1.0.8 crashes a
+  Jar: **Creative Common 1.0.7** (build/libs, md5 c0bdc0e1, 2026-10-18 16:27), NOT the 1.0.8 in mods/: **1.0.8 crashes a
   dedicated server at mod loading** (Open issues 1). The worldgen package is byte-identical in 1.0.7 and 1.0.8 (jar
   diff: only CEConfig, time/, advancements, oven, IECompat, RemainderBuffer, SeasonHud mixin), so Phase 7 results hold
   for 1.0.8. Over 1.0.6 (Phases 1-6): earth_fill/stone_base, census per-chunk fix, LocateLoads, GroundMatch, PoolTuner.
@@ -42,7 +42,7 @@
 
 - 01:39 first boot (1.0.8 jar) died in FML: (a) vinery missing vinery_upstream/ (setup gap, linked); (b) Serene
   Seasons failed: MixinTransformerError, ClassMetadataNotFoundException net.minecraft.client.Minecraft while applying
-  patcherMod's SereneSeasonsClockMixin (common mixin on sereneseasons.handler.season.SeasonHandler; its onClientTick
+  Creative Common's SereneSeasonsClockMixin (common mixin on sereneseasons.handler.season.SeasonHandler; its onClientTick
   inject uses Minecraft.getInstance()/mc.levelRenderer directly; Mixin's preprocessor resolves every field/method
   owner, and client classes don't exist on a dedicated server). The crashed JVM stays alive after FML crash: kill it.
 - 01:41 swapped to the 1.0.7 jar; 01:48:17 Done (303.6 s). 01:48:42 Chunky square r 800 at -1400 -2592 started.
@@ -219,9 +219,9 @@
 0. (Results so far) ST-162 PASSED, ST-59 PASSED, ST-159 PASSED, ST-160 PARTLY (small villages exist; overrides part
    in boot 2), ST-57 data taken, ST-52 data taken, ST-167/168 pending the prune diagnostic.
 
-1. **patcherMod 1.0.8 cannot boot a dedicated server** (found 01:39): SereneSeasonsClockMixin is in the common mixin
+1. **Creative Common 1.0.8 cannot boot a dedicated server** (found 01:39): SereneSeasonsClockMixin is in the common mixin
    list and references net.minecraft.client.Minecraft inside creativeengineering$sunClient. Fix idea: move the
    client body into a client-only helper (e.g. time/TimeClient static method, returns the new sub-season or null) so
-   the mixin method only references patcherMod classes; or split it into a client mixin on the same target. 1.0.8 is
+   the mixin method only references Creative Common classes; or split it into a client mixin on the same target. 1.0.8 is
    STAGED (plan_1.0.8.md says nothing has booted on the dedicated server) -> tell the user before they deploy. Not
    fixed (time master, not structure work).

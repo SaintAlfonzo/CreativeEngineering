@@ -121,7 +121,7 @@ Lingering `create:potion` only; one recipe pair per potion.
 - **Cloud logic:** one function, `global.potionArea.spawn` ([potion_area.js](../kubejs/startup_scripts/func/potion_area.js)),
   used by both the right click and the dispenser. An earlier single spherical cloud by mixin was removed for the ring
   stack (pure KubeJS, no rebuild).
-- **Dispenser:** KubeJS can't register a dispenser behavior, so patcherMod's `PotionBucketDispenser` registers one per
+- **Dispenser:** KubeJS can't register a dispenser behavior, so Creative Common's `PotionBucketDispenser` registers one per
   bucket in common setup and calls a handler that `potion_area.js` installs at startup.
 - **Rhino workarounds** (all commented in place): color blended by hand because `PotionUtils.getColor` is an
   ambiguous overload; `getOrCreateTag()` because `getTag()` isn't visible; `getLevel()` / `x()` methods instead of

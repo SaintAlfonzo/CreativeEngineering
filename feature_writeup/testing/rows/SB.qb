@@ -7,7 +7,7 @@
 @@date 2026-10-30
 @@jars creativedelight creativeworldgen
 @@text
-@@text patcherMod 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
+@@text Creative Common 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
 @@text CEConfig `[worldgen.systems] spawnBoxes`, `removeSpawners`); data `kubejs/generation_scripts/worldgen/spawn_boxes.json`.
 @@text Full restart. Spawners: new chunks only; boxes: old chunks too. Writeup [structure_tuning.md](../structure_tuning.md) 3.32
 @@text (ST-320 to ST-327). Group B (fresh normal world, difficulty Normal, `/gamerule doDaylightCycle false`, `/time set night`

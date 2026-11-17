@@ -4,7 +4,7 @@
 //   /atctest   checks LargeItemLists against a registry scan done here, and times 288 calls of each list
 //
 // Output: "[atctest] PASS|FAIL|INFO <id>: ..." lines in logs/latest.log. Run it once after boot, then `/reload` and
-// run it again (ATC-07 compares the trimmable list across the tag reload). With the pre-fix patcherMod jar the same
+// run it again (ATC-07 compares the trimmable list across the tag reload). With the pre-fix Creative Common jar the same
 // probe gives the uncached baseline: ATC-03 / ATC-05 FAIL (new list every call) and ATC-06 shows the old timing.
 (() => {
     const $ATLists = Java.loadClass('gg.hipposgrumm.armor_trims.util.LargeItemLists')

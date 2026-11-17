@@ -62,7 +62,7 @@ Nothing. Delete the row (or fold its Decisions "shares" into #3, which is where 
 
 Not a TODO row; listed so a session doesn't build on stale numbers.
 
-1. Join the world with the current pack (patcherMod 1.0.5+ has `SpawnTuning`), check latest.log:
+1. Join the world with the current pack (Creative Common 1.0.5+ has `SpawnTuning`), check latest.log:
    `[mob-spawns] 12 of 12 rules and 3 of 3 conditions` (MS-13).
 2. `/dumpspawns` (or `/cdevgen run spawns_by_biome dumps`), then `python3 tools/gen_spawn_table.py`; the WARNING lines at
    the top of spawns_by_biome.md (lines 11 and 30) must be gone (MS-14). Commit the regenerated report.
@@ -244,7 +244,7 @@ Blocky Siege, Villages & Pillages and Unwrecked Ships jars):
 2. **Pillager cages (pool weights, `pool_config.json`):** in
    `kubejs/generation_scripts/worldgen/pool_config.json`, pool `minecraft:pillager_outpost/features`, raise
    `minecraft:pillager_outpost/feature_cage_with_allays` `current` 1 -> 3 (1 in 14 -> 3 in 16 per feature roll). PoolTuner
-   (patcherMod `worldgen/PoolTuner`) applies it at world load; no new files.
+   (Creative Common `worldgen/PoolTuner`) applies it at world load; no new files.
 3. **More structures (template entities):** the two T&T camps without allays, and the 7 Mysticrift towers without
    them, would need edited template copies (same tooling as `mobs/pillagers #1` and `#3`: copy the template NBT under
    `kubejs/data/<ns>/structures/...` and append an allay entity). Do this with the pillagers overhaul so each template
@@ -356,7 +356,7 @@ Fireflies the player notices at night near firefly bushes, and a way to catch th
 ### Gotchas
 - **Perf:** every firefly bush in loaded chunks reschedules a block tick every tick at night and sends a particle packet
   each time. A swamp with dozens of bushes near a player is dozens of ticks + packets per tick. If the server shows it
-  (spark profile at night in a swamp), a patcherMod mixin on `FireflyBushBlock#tick` to reschedule every 5-10 ticks would
+  (spark profile at night in a swamp), a Creative Common mixin on `FireflyBushBlock#tick` to reschedule every 5-10 ticks would
   fix it; note it in [perf](../perf.md) if seen.
 - `BlockEvents.rightClicked` fires for both hands; check `e.hand == 'main_hand'` or the item check covers it.
 - An empty Supplementaries jar item may carry an empty `BlockEntityTag`; test what `item.nbt` is for a fresh crafted

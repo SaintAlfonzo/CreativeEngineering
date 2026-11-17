@@ -14,7 +14,7 @@
 //     whole dome expands roughly uniformly), lasts `lingerTicks`, and carries the same potion
 //     effects - so more rings = a rounder, taller-looking cloud, not a flat circle
 //
-// (An earlier attempt used a patcherMod Mixin to make a single cloud spherical - ripped out,
+// (An earlier attempt used a Creative Common Mixin to make a single cloud spherical - ripped out,
 // see the patchermod-coremod / potion-buckets memory notes for why. This stacked-ring
 // approach is pure KubeJS, no Java rebuild needed.)
 //
@@ -110,7 +110,7 @@ console.log('potion_area func loading')
     }
 
     // Dispenser support: KubeJS has no API to register a DispenserBlock behavior, so
-    // patcherMod's PotionBucketDispenser owns the actual DispenserBlock.registerBehavior(...)
+    // Creative Common's PotionBucketDispenser owns the actual DispenserBlock.registerBehavior(...)
     // calls (see CreativeEngineering#commonSetup) and just forwards into whatever handler we
     // install here - keeping global.potionArea.spawn (below) the single place that knows
     // about rings/radii/colours/effects. Right-click still goes straight through

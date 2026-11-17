@@ -130,9 +130,9 @@ and template block palettes (MES = constructed except meteorite/prairie/grove/en
 ## Runtime migration (2026-09-26): no node step any more
 
 User didn't want to run a script after every edit, so all three worldgen appliers now run at world load:
-- `kubejs/server_scripts/worldgen/structure_overrides.js`: KubeJS port of gen_structure_overrides.js, run from `ServerEvents.highPriorityData`. It adds each changed set with `event.add('<ns>:worldgen/structure_set/<p>.json', text)` into KubeJS's top-priority virtual pack. It writes structure_tag_report.md through patcherMod `worldgen/WorldgenFiles.writeText`, because KubeJS's class filter blocks java.io/java.nio. Any config error applies nothing and writes an error report.
+- `kubejs/server_scripts/worldgen/structure_overrides.js`: KubeJS port of gen_structure_overrides.js, run from `ServerEvents.highPriorityData`. It adds each changed set with `event.add('<ns>:worldgen/structure_set/<p>.json', text)` into KubeJS's top-priority virtual pack. It writes structure_tag_report.md through Creative Common `worldgen/WorldgenFiles.writeText`, because KubeJS's class filter blocks java.io/java.nio. Any config error applies nothing and writes an error report.
 - `biome_merges.js`: `ServerEvents.tags('worldgen/biome')` -> `global.tags.add` (NOT addTag, which expands parent tags). It detects unknown biomes by checking whether `event.totalAdded` stays unchanged. KubeJS validates tag ids against the live dynamic biome registry (TagManagerMixin gets the RegistryAccess entry), so Terralith biomes resolve.
-- `biome_overrides.js` -> patcherMod `worldgen/BiomeLayoutTuner.run()` (Java port of the solver, getters only, SHA-256 input cache). See [biome-frequency-tuning](biome-frequency-tuning.md).
+- `biome_overrides.js` -> Creative Common `worldgen/BiomeLayoutTuner.run()` (Java port of the solver, getters only, SHA-256 input cache). See [biome-frequency-tuning](biome-frequency-tuning.md).
 - Pack order verified via javap: `wrapResourceManager` = lowPriority virtual (addFirst) … mods … `kubejs/data` … zips … highPriority virtual (addLast = top). `DataPackEventJS.add(RL, String)` takes the full path including `.json`; `addJson` appends `.json` itself.
 - Node scripts are archived in `kubejs/archive/worldgen/`, their 86 kubejs/data outputs are deleted, and the manifests are gone. Python scanners are still manual, but only needed after mod updates.
 - Verification: in real Rhino (see memory `kubejs-headless-rhino-harness`) the outputs are byte-identical to the node oracle on the real config: 34 structure_sets, 237 tag adds, the report, and the biome solve on synthetic samples. The Java solver matched node in 4 scenarios (tuned/removed/replaced/errors/no-samples), including under gson 2.8.9. **Not yet run in game.**
@@ -143,9 +143,9 @@ User didn't want to run a script after every edit, so all three worldgen applier
   on a philipsruins structure_set). Cause: KubeJS 1902.6.2 `VirtualKubeJSDataPack.getResources`
   filters with `path.startsWith(dir)` (no trailing "/"), so listing `worldgen/structure` also
   returned every `worldgen/structure_set/*` added through highPriorityData/lowPriorityData. Fixed by
-  patcherMod `KubeJSVirtualDataPackListMixin` (@Redirect of startsWith in the static lambda
+  Creative Common `KubeJSVirtualDataPackListMixin` (@Redirect of startsWith in the static lambda
   `lambda$getResources$1`, require=1). That also required adding `kubejs-forge-1902.6.2-build.73.jar`
-  to `patcherMod/libs/`. VERIFIED 2026-09-26 (structure_tuning.md section 0). KubeJS's GeneratedResourcePack
+  to `creativeCommon/libs/`. VERIFIED 2026-09-26 (structure_tuning.md section 0). KubeJS's GeneratedResourcePack
   (the kubejs/data folder) already appends "/", so only the virtual pack was affected.
 - **biome_merges "0 added, 237 skipped" was a false report.** `ServerEvents.tags` handlers run first in a
   PreTagEventJS pre-pass (add() only queues an action, totalAdded stays 0, getElementIds() is empty) and are

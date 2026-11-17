@@ -24,7 +24,7 @@ classes and Async Locator 1.3.0; decisions in 4)
 | Part | Status | Where it lives |
 |---|---|---|
 | 3.1 Fold rules into the "could it start here?" check: stages A (set frequency, exclusion zone) + B (biomes); C-E on hold | BUILT 2026-10-12 | `worldgen/LocatePrediction` (from `StructureCheckFrequencyMixin` and `MetaSlots.predictGenerationPoint`) |
-| 3.2 Non-blocking miss loads | BUILT 2026-10-12; still blocked in 1.0.6 (LO-05 failed), FIXED in patcherMod 1.0.7, DEPLOYED 2026-10-18; LO-05 rerun pending | `worldgen/LocateLoads` (redirect in `ChunkGeneratorMetaLocateMixin`, and `MetaSlots.locateAt`) |
+| 3.2 Non-blocking miss loads | BUILT 2026-10-12; still blocked in 1.0.6 (LO-05 failed), FIXED in Creative Common 1.0.7, DEPLOYED 2026-10-18; LO-05 rerun pending | `worldgen/LocateLoads` (redirect in `ChunkGeneratorMetaLocateMixin`, and `MetaSlots.locateAt`) |
 | 3.3 StructureCheck thread safety | BUILT 2026-10-12 | `mixin/StructureCheckThreadSafeMixin` |
 | 3.4 Miss logging (misses before a hit, per search and per structure) | BUILT 2026-10-12 | `worldgen/LocateStats` + `mixin/ChunkGeneratorMetaLocateMixin` |
 | 3.5 `/cwglocate batch` | BUILT 2026-10-12; `stop` label fixed in 1.0.7 (DEPLOYED 2026-10-18) | `worldgen/LocateCommand`, `compat/AsyncLocatorBridge` |
@@ -180,7 +180,7 @@ ticket path vanilla uses (`TicketType.UNKNOWN` at the status level); the only di
 `LocateLoads.offThread` added its ticket and called `getChunkFuture` inside one `supplyAsync(..., server)` task.
 `getChunkFuture` checks the calling thread: on the server thread it calls `getChunkFutureMainThread` and then waits
 in `managedBlock` until the chunk exists. So every load still stalled the tick, as long as the generation took.
-**Fixed 2026-10-18 (patcherMod 1.0.7, DEPLOYED 2026-10-18):** the server task now only adds the ticket.
+**Fixed 2026-10-18 (Creative Common 1.0.7, DEPLOYED 2026-10-18):** the server task now only adds the ticket.
 The search thread waits for that task, then calls `getChunkFuture` itself. Off the server thread that call only hands
 `getChunkFutureMainThread` to the server's chunk executor and returns the future, and the search thread waits on it
 (a quarter second at a time, so a stopped or expired search still ends). The ticket is removed in a server task when
@@ -303,7 +303,7 @@ Terralith's underground set).
 section 11 reports them. One recording of a Chunky pregen on a scratch server gives the real split before anything
 is built.
 
-**Measured 2026-10-19** (LO-10; scratch server, patcherMod 1.0.7 jar = 1.0.8 worldgen, the instance's own toml at
+**Measured 2026-10-19** (LO-10; scratch server, Creative Common 1.0.7 jar = 1.0.8 worldgen, the instance's own toml at
 density 1, seed 8675309, fresh world; Chunky square radius 64 chunks at 2144 -2592, 92% land: 16,641 chunks in
 24.5 min, about 11 chunks/s; JFR as `server/LaunchServer.sh`; log
 [testing/structures/10_phase_10.md](testing/structures/10_phase_10.md)). Worker time per status over the pregen
@@ -456,7 +456,7 @@ fresh level-name.
 - [ ] **LO-09 maps and trades [game]:** a cartographer explorer map and an LC map trade still point at real
   structures with folding on.
 - [x] **LO-10 deep-terrain measurement [scratch]:** JFR recording of a Chunky pregen (radius 64) -> per-status
-  chunk generation times written into 3.7. *2026-10-19 scratch phase 10 (patcherMod 1.0.7 jar = 1.0.8 worldgen, instance toml, Chunky r 64 chunks at 2144 -2592, 16,641 chunks in 24.5 min; log testing/structures/10_phase_10.md): PASSED: per-status times written into 3.7 (noise 38.8%, features 24.4%, light 18.8%, structure starts 6.4%).*
+  chunk generation times written into 3.7. *2026-10-19 scratch phase 10 (Creative Common 1.0.7 jar = 1.0.8 worldgen, instance toml, Chunky r 64 chunks at 2144 -2592, 16,641 chunks in 24.5 min; log testing/structures/10_phase_10.md): PASSED: per-status times written into 3.7 (noise 38.8%, features 24.4%, light 18.8%, structure starts 6.4%).*
 - [ ] **LO-11 DH clip [game]:** fly over a fresh area with DH generating -> distant land looks unchanged from
   above (no holes, no walls at cave openings above y 48); with DH `transparency = "COMPLETE"` (test only), deep
   oceans show a rolling floor around y 8 (4 to 12) and other oceans one just under 48 (44 to 47), or their real
@@ -499,16 +499,16 @@ fresh level-name.
 - 2026-10-12: Decided: fake seabed, deep oceans water to y 0, other oceans floor at the y 48 cut, no
   predicted-surface lookup (decision 4).
 - 2026-10-12: Revised: floors hover (smooth seeded noise, +-4) around y 48 for oceans and y 8 for deep oceans.
-- 2026-10-12: BUILT (patcherMod 1.0.6 in build/libs, not in mods/): stages A + B, non-blocking loads, StructureCheck
+- 2026-10-12: BUILT (Creative Common 1.0.6 in build/libs, not in mods/): stages A + B, non-blocking loads, StructureCheck
   thread safety, miss counters and log line, `/cwglocate batch | census | stats | status | stop` on Async Locator's
   pool, census miss reasons from the generation reject points, the Distant Horizons clip with the fake seabed.
   CEConfig `[worldgen.locate]` and `[worldgen.distant]`. Private vanilla members are read by reflection
   (`LocateReflect`): SRG-named @Accessor/@Invoker fail the mixin annotation processor. Offline: LocateTest 20/20,
   steps 1-7 unchanged. Tests LO-13 to LO-16 added.
-- 2026-10-14: ships INCOMPLETE in pack 1.0.6 with the rest of the structure tuning (patcherMod 1.0.6, update from 1.0.4).
+- 2026-10-14: ships INCOMPLETE in pack 1.0.6 with the rest of the structure tuning (Creative Common 1.0.6, update from 1.0.4).
   The 7.3.2 locate changes (dimension check, `meta_target`, `searchTimeoutSeconds` 120, `/cwglocate stop`) are in the same
   jar. LO- tests still pending.
-- 2026-10-18: Three locate bugs from the scratch run fixed in source for patcherMod 1.0.7 (not built, not shipped):
+- 2026-10-18: Three locate bugs from the scratch run fixed in source for Creative Common 1.0.7 (not built, not shipped):
   the non-blocking loads ran `getChunkFuture` on the server thread and still stalled every tick (3.2, LO-05);
   the census predicted only the first set at each chunk and counted the rest "known" (3.6, LO-03, LO-14); a
   `/cwglocate stop` row still queued said `error: ...CancellationException` instead of `stopped` (LO-17 added).
@@ -518,4 +518,4 @@ fresh level-name.
   Rerun LO-03, LO-05, LO-14 and LO-17 on 1.0.7 or later.
 - 2026-10-30: DH clip gated to the Overworld (`DistantClip.clipsDimension`, used by `mark` and `skipFeature`; TODO
   `locate #4`, found in [briefs/worldgen_locate.md](briefs/worldgen_locate.md)). A dimension check, not the brief's
-  `clipDimensions` config list. patcherMod compiles; test LO-22 (CQ-WG30-A04 in game; boot check SQ-WG30-A04). SQ-WG30-A04 PASSED 2026-10-30; CQ-WG30-A04 not run.
+  `clipDimensions` config list. Creative Common compiles; test LO-22 (CQ-WG30-A04 in game; boot check SQ-WG30-A04). SQ-WG30-A04 PASSED 2026-10-30; CQ-WG30-A04 not run.

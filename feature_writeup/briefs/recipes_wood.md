@@ -3,7 +3,7 @@
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# recipes`, Sub `wood`. Feature writeup:
 [recipes_wood.md](../recipes_wood.md) (test prefix `RW-`, last id RW-10). Code: `kubejs/data/creativeengineering/kubejs/wood/`
 (`bark.js`, `wood_types.js`, `sawdust.js`, `ash.js`); the IE sawmill side is [engineering.md](../engineering.md) 2.1
-(211 JSONs in patcherMod `data/creativeengineering/recipes/sawmill/`).
+(211 JSONs in Creative Common `data/creativeengineering/recipes/sawmill/`).
 
 Jars read for this brief (all in `scratchpad/jars`): Farmer's Delight 1.2.4, Quark Delight 1.0.0, Abnormals Delight
 4.1.2, Architect's Palette 1.3.5, Create 0.5.1.i, Immersive Engineering 9.2.4-170, Quark Engineering, Upgrade Aquatic
@@ -15,7 +15,7 @@ Jars read for this brief (all in `scratchpad/jars`): Farmer's Delight 1.2.4, Qua
 |---|---|---|---|
 | #1 | Twisted wood duplicate | Planned | tiny: there is no duplicate; tidy the code, plus one real duplicate found next to it |
 | #2 | Leftover comments | Planned | tiny, plus one real gap (Quark Engineering stairs) and the Abnormals Delight bark recipes |
-| #3 | Mulberry (Upgrade Aquatic river) wood -> oak | Built 2026-10-22 (recipes_wood.md 2.6) | medium: KubeJS recipes + startup list + one datapack JSON + a patcherMod event for saplings |
+| #3 | Mulberry (Upgrade Aquatic river) wood -> oak | Built 2026-10-22 (recipes_wood.md 2.6) | medium: KubeJS recipes + startup list + one datapack JSON + a Creative Common event for saplings |
 
 **Findings that change the rows:**
 
@@ -32,7 +32,7 @@ Jars read for this brief (all in `scratchpad/jars`): Farmer's Delight 1.2.4, Qua
   river logs (#3 Now, "Sapling").
 
 Build order: #1 and #2 together, in one `/reload` session (both only touch `bark.js` and `wood_types.js`). Then #3, which
-needs a restart (startup list, datapack worldgen, patcherMod) and should ride the next patcherMod build.
+needs a restart (startup list, datapack worldgen, Creative Common) and should ride the next Creative Common build.
 
 Related rows: `farming/composting #2` ([brief](farming_composting.md)) removes the other leftover comment
 (`sawdust.js` "Integrate nulch, move to compost file") and moves the soil recipes. Don't repeat it here.
@@ -67,11 +67,11 @@ drop the misleading comment.
   unstripped ones; the stripped -> planks ones stay, as for every species.
 - **Verified (jar):** IE 9.2.4 has no twisted sawmill recipe. Its sawmill folder covers the 9 vanilla species:
   `<x>_log`, `<x>_door`, `<x>_slab`, `<x>_stairs` and `stripped_<x>_log`, plus bookshelf and treated wood. So
-  `wood_types.js` 18 `sawmill: false` correctly skips a removal that has nothing to remove. patcherMod ships
+  `wood_types.js` 18 `sawmill: false` correctly skips a removal that has nothing to remove. Creative Common ships
   `creativeengineering:sawmill/twisted_log-twisted_planks`, `stripped_twisted_{log,wood}-twisted_planks`,
   `twisted_wood-twisted_planks` and the 11 plank-shape recipes.
 - **Real duplicate found:** IE's `immersiveengineering:sawmill/stripped_{oak,spruce,birch,dark_oak,jungle,acacia,mangrove}_log`
-  (stripped log -> 6 planks, `#forge:dusts/wood`, 800 RF) are not removed. patcherMod ships the same conversion as
+  (stripped log -> 6 planks, `#forge:dusts/wood`, 800 RF) are not removed. Creative Common ships the same conversion as
   `creativeengineering:sawmill/stripped_<x>_log-<x>_planks` (same input, output and energy; secondary
   `immersiveengineering:dust_wood`). bark.js 91-95 removes only `stripped_crimson_log` and `stripped_warped_log`
   (and the 9 unstripped `<x>_log`). With `SawbladeRouting` rule 2 (the first recipe with no `"blade"`) the machine
@@ -96,7 +96,7 @@ drop the misleading comment.
    'stripped_jungle_log', 'stripped_acacia_log', 'stripped_mangrove_log',
    'stripped_crimson_log', 'stripped_warped_log',
    ```
-   and change the section comment to "Remove IE's sawmill log recipes; patcherMod data/creativeengineering/recipes/sawmill/
+   and change the section comment to "Remove IE's sawmill log recipes; Creative Common data/creativeengineering/recipes/sawmill/
    replaces them (engineering.md 2.1)" (the current "add own in CreativeEngineering jar file").
 3. Docs: recipes_wood.md F4 -> resolved (no original, comment fixed); add the stripped-log removal to 2.1's "IE
    sawmill" row and to engineering.md 2.1 if it lists IE's removed recipes.
@@ -111,7 +111,7 @@ drop the misleading comment.
 
 ### Gotchas
 - Don't add `fdLog` ids for twisted: `R.remove` on a missing id is silent, but it suggests a recipe that doesn't exist.
-- IE's `<x>_slab` sawmill recipes stay on purpose. patcherMod has no vanilla planks -> slab recipe and relies on IE's
+- IE's `<x>_slab` sawmill recipes stay on purpose. Creative Common has no vanilla planks -> slab recipe and relies on IE's
   as the default, no-blade route.
 
 ### Tests
@@ -151,7 +151,7 @@ Clear the F5 comments in `wood_types.js` and `bark.js`, and do the work they poi
    ```js
    [{ id: 'quarkengineering:sawmill/' + s.name + '/' + s.name + '_stairs' }, e],
    ```
-   and add a section comment: "the pack's sawmill JSONs (patcherMod) replace Quark Engineering's slab / log / door /
+   and add a section comment: "the pack's sawmill JSONs (Creative Common) replace Quark Engineering's slab / log / door /
    stairs recipes; its bookshelf recipes stay".
 2. **bark.js 97:** finish "Replace FD bark recipes with IW" for driftwood. Add driftwood to the FD-cutting set, with
    removal of Abnormals Delight's two driftwood recipes (river is handled by #3, which removes the whole river set):
@@ -204,7 +204,7 @@ Clear the F5 comments in `wood_types.js` and `bark.js`, and do the work they poi
 ---
 
 ## wood #3: Mulberry wood -> oak
-Status Built 2026-10-22, needs play (RW-15 to RW-18) / Work KubeJS / data (+ patcherMod, see below) / TODO `recipes/wood #3` (scratchpad 2026-10-21)
+Status Built 2026-10-22, needs play (RW-15 to RW-18) / Work KubeJS / data (+ Creative Common, see below) / TODO `recipes/wood #3` (scratchpad 2026-10-21)
 
 **As built (2026-10-22), where it differs from the plan below:** every river item is an item merge into its oak twin
 (`global.removedWoods` joins `global.itemMerges`), so recipe inputs, loot (old placed logs drop oak, step 6) and
@@ -319,7 +319,7 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
    ```
    (River leaves' default state is used. If the log shows the wrong leaf distance, add the state's `Properties` from
    F3.)
-5. **Saplings (patcherMod):** make the river sapling read the dynamic registry. Two ways:
+5. **Saplings (Creative Common):** make the river sapling read the dynamic registry. Two ways:
    - Forge event (preferred if the API is there; **unverified for Forge 43.3.9**: check that
      `net.minecraftforge.event.level.SaplingGrowTreeEvent` has `getFeature()` / `setFeature(Holder)`): in a
      `@SubscribeEvent` handler, if `event.getFeature()` is the `upgrade_aquatic:river_tree` key, replace it with
@@ -383,7 +383,7 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
   a river hedge recipe takes an oak log.
 - **RW-16 River tree:** `/place feature upgrade_aquatic:river_tree` on grass by a river -> oak trunk, river leaves,
   some mulberry vines; new chunks along a river show the same trees.
-- **RW-17 River sapling:** bone-meal a river sapling -> an oak-trunk river tree (the patcherMod fix).
+- **RW-17 River sapling:** bone-meal a river sapling -> an oak-trunk river tree (the Creative Common fix).
 - **RW-18 Old logs:** break a river log placed before the change (or `/setblock` one) -> drops an oak log; a river
   planks item in the grid -> oak planks.
 

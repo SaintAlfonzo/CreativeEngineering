@@ -115,7 +115,7 @@ def main():
                 'it). A lone block has no neighbor of the same block in the template.',
         'entries': 'template id -> [{pos: [x, y, z] in the template, from: block id there, to: {Name, Properties}}]. A swap '
                    'applies only when the template still has `from` at `pos` (a mod update that moves things skips it).',
-        'applied by': 'patcherMod worldgen/TemplateBlockSwaps: each marked template is patched once when it loads (every '
+        'applied by': 'Creative Common worldgen/TemplateBlockSwaps: each marked template is patched once when it loads (every '
                       'rotation and every structure using it get the new block). Read at every world load; new chunks only. '
                       'Switch: CEConfig [worldgen.systems] templateBlockSwaps.'},
         'templates': marks}

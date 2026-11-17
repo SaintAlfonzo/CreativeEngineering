@@ -8,7 +8,7 @@
 @@jars creativecommon creativedelight
 @@sources feature_writeup/kitchen.md
 @@text
-@@text Jars: patcherMod (CfB mixins removed) and Creative Delight (nests the new `blockheadsAdditions`) installed together
+@@text Jars: Creative Common (CfB mixins removed) and Creative Delight (nests the new `blockheadsAdditions`) installed together
 @@text 2026-10-31 16:29. The server half reruns SQ-KT-01 / -02 (`/kttest`) and `/kctest` against the moved code.
 @@text
 @@table
@@ -16,7 +16,7 @@
 @group A
 @commands boot
 @pass `Done (`; mod list has `blockheads_additions`; no mixin error naming `BlockStateCounterTopperMixin`, `CfbOven*`, `CfbCorner*`; no `Duplicate capability key` / `creativeengineering:corner_storage` error; `config/blockheads_additions-common.toml` written with `[kitchen]`; no `[blockheads_additions] could not add the wood racks`
-@fails a mixin error: SRG names; duplicate capability: the old patcherMod still in `mods/`; rack error: `BARacks.addValidBlocks` field name
+@fails a mixin error: SRG names; duplicate capability: the old Creative Common still in `mods/`; rack error: `BARacks.addValidBlocks` field name
 @from batches/r1101/p1_server.qb passed
 bootexpect blockheads_additions
 bootreject (Mixin apply failed|InvalidInjectionException).*(BlockStateCounterTopperMixin|CfbOven|CfbCorner)

@@ -1,6 +1,6 @@
 # banner-pattern-compat-fix
 
-> patcherMod fix so modded banner patterns render on bedspreads beds and customizableelytra elytra, not just vanilla ones; status in feature_writeup/fixes_compat.md
+> Creative Common fix so modded banner patterns render on bedspreads beds and customizableelytra elytra, not just vanilla ones; status in feature_writeup/fixes_compat.md
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-14). Repo status docs win over any status line here.
 
@@ -17,18 +17,18 @@ doesn't matter here). Fixed by dropping `static` from the handler signature. `-A
 (noted below) is exactly why this wasn't caught at compile time — this class of error is
 Mixin-apply-time only, confirming the caveat already written into "Verification done" below.
 Rebuilt clean (`./gradlew build`, BUILD SUCCESSFUL) — but the first pass mistakenly assumed
-`mods/creativeengineering-1.0.0.jar` gets auto-synced from `patcherMod/build/libs/`; there is
+`mods/creativeengineering-1.0.0.jar` gets auto-synced from `creativeCommon/build/libs/`; there is
 **no such gradle task** (`grep -i copy build.gradle` — nothing), and the mods/ jar stayed the
 stale pre-fix build even after a successful compile. Relaunching crashed with the exact same
 `InvalidInjectionException` again. Caught by `javap -p` on the deployed jar's actual class file
 (`private static` still present) vs. the freshly built one (`private`, correctly non-static) —
-different md5, different timestamp. **`patcherMod/build/libs/...jar` must be manually `cp`'d over
+different md5, different timestamp. **`creativeCommon/build/libs/...jar` must be manually `cp`'d over
 `mods/creativeengineering-1.0.0.jar` after every rebuild** (game closed) — there is no automatic
 deploy step in this project. Copied for real this time, byte-identical confirmed via md5sum, game
 was closed throughout. `BedspreadsBannerPatternMixin` had no such static/instance issue (its
 target, `renderPatterns`, actually is static, so the handler's `static` was correct there).
 
-General lesson for future patcherMod `@Redirect`/`@Inject` mixins: match the handler's
+General lesson for future Creative Common `@Redirect`/`@Inject` mixins: match the handler's
 `static`-ness to the **target method's** modifier (`javap -p` the real target class to check),
 not to the modifier of whatever call/field the injection point happens to touch.
 
@@ -92,7 +92,7 @@ This modpack has 6 mods registering their own banner patterns (scanned every mod
   decompiled vanilla source: `TextureAtlas.LOCATION_BLOCKS = InventoryMenu.BLOCK_ATLAS`). Their
   curated/bundled textures work only because each mod separately stitches its own curated set
   into the block atlas at texture-reload time (customizableelytra has its own
-  `AtlasStitchingHandler` for this, not inspected in detail — not needed once patcherMod stitches
+  `AtlasStitchingHandler` for this, not inspected in detail — not needed once Creative Common stitches
   the generic set itself).
 - Consequence: simply resolving the *correct* `<originNamespace>:entity/banner/<path>` location
   is not enough on its own — that sprite lives on `Sheets.BANNER_SHEET`, not
@@ -101,7 +101,7 @@ This modpack has 6 mods registering their own banner patterns (scanned every mod
   `TextureStitchEvent.Pre` listener (see below) that stitches every registered pattern's real
   texture into the block atlas too, rather than trying to reroute either mod through a second
   atlas.
-- Reobfuscation/mapping rules for this project (comment in `patcherMod/build.gradle` ~line 75):
+- Reobfuscation/mapping rules for this project (comment in `creativeCommon/build.gradle` ~line 75):
   no Mixin refmap, always runs reobfuscated. Regular Java method/field references in a mixin
   (or any) class body can use clean Mojmap names — `reobfJar` rewrites them to SRG automatically
   (**empirically confirmed**: decompiled the actual built+reobfuscated jar and every vanilla
@@ -132,23 +132,23 @@ This modpack has 6 mods registering their own banner patterns (scanned every mod
 
 ## Implementation (final)
 
-1. **`patcherMod/libs/bedspreads-forge-6.0.0+1.19.2.jar`** and
-   **`patcherMod/libs/customizableelytra-1.19.0-1.7.4.jar`** — copied in so
+1. **`creativeCommon/libs/bedspreads-forge-6.0.0+1.19.2.jar`** and
+   **`creativeCommon/libs/customizableelytra-1.19.0-1.7.4.jar`** — copied in so
    `compileOnly fileTree(dir: 'libs', include: '*.jar')` puts their classes on the compile
    classpath.
-2. **`patcherMod/src/main/java/.../compat/BannerPatternAtlasCompat.java`** (new) — client-only
+2. **`creativeCommon/src/main/java/.../compat/BannerPatternAtlasCompat.java`** (new) — client-only
    `@Mod.EventBusSubscriber`, `TextureStitchEvent.Pre` handler: when the stitching atlas is
    `TextureAtlas.LOCATION_BLOCKS`, adds `BannerPattern.location(key, true)` for every
    `Registry.BANNER_PATTERN.registryKeySet()` entry via `event.addSprite(...)`. This is what
    makes the two mixins' fallback locations actually resolvable.
-3. **`patcherMod/src/main/java/.../mixin/BedspreadsBannerPatternMixin.java`** (new) — `@Mixin`
+3. **`creativeCommon/src/main/java/.../mixin/BedspreadsBannerPatternMixin.java`** (new) — `@Mixin`
    on `DecoratedBedBlockEntityRenderer`, `@Redirect` on the one
    `new ResourceLocation("bedspreads", ...)` call inside `renderPatterns` (a static method), at
    `@At(value="NEW", target="Lnet/minecraft/resources/ResourceLocation;")`. Parses the origin
    namespace/path back out of the string bedspreads already built (`"entity/<ns>/<path>"`) and
    returns `new ResourceLocation(originNamespace, "entity/banner/" + originPath)` — a full,
    unconditional override (safe: bundled textures are plain same-shape relocations).
-4. **`patcherMod/src/main/java/.../mixin/CustomizableElytraBannerPatternMixin.java`** (new) —
+4. **`creativeCommon/src/main/java/.../mixin/CustomizableElytraBannerPatternMixin.java`** (new) —
    `@Mixin` on `BannerCustomizationHandler` (not `CustomizableElytraItem` — needed to stay at the
    call site where the real `ResourceKey<BannerPattern>` is still in scope, since
    customizableelytra's own mangled location drops the origin namespace and can't be reversed).
@@ -161,8 +161,8 @@ This modpack has 6 mods registering their own banner patterns (scanned every mod
    rendering as nothing.
 5. **`creativeengineering.mixins.json`** — both new mixins added to the `"client"` array
    (alongside the other client-only rendering mixins).
-6. Built (`./gradlew build` from `patcherMod/`), reobfuscation succeeded, and the resulting
-   `patcherMod/build/libs/creativeengineering-1.0.0.jar` was copied over
+6. Built (`./gradlew build` from `creativeCommon/`), reobfuscation succeeded, and the resulting
+   `creativeCommon/build/libs/creativeengineering-1.0.0.jar` was copied over
    `mods/creativeengineering-1.0.0.jar` to actually deploy it.
 
 ## Verification done vs. still needed
@@ -183,4 +183,4 @@ one of the 6 confirmed modded-pattern mods (easiest to test: `supplementaries` o
 customizable elytra instead of blank. See memory `debugging-with-latest-log` for the general
 log-first-not-static-code-guessing approach this project already follows.
 
-See also [patchermod-coremod](patchermod-coremod.md) for general patcherMod mixin/build conventions this followed.
+See also [patchermod-coremod](patchermod-coremod.md) for general Creative Common mixin/build conventions this followed.

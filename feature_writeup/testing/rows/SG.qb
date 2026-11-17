@@ -8,7 +8,7 @@
 @@jars creativecompat
 @@sources feature_writeup/wthit_lines.md
 @@text
-@@text Jars: patcherMod 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).
+@@text Jars: Creative Common 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).
 @@text Group A (superflat), daylight (`/time set noon`). Shearing needs a player, so the server checks place the sheared
 @@text state directly; the line itself is WL-34 in game. Each check: two 5x1x5 patches 8 blocks apart, on a stone layer 4 blocks above the superflat grass (grass spreads at most 1 up), the center block
 @@text sheared in one and not in the other, `/gamerule randomTickSpeed 300`, wait 60 s, then count what is left with

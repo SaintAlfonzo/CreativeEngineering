@@ -50,7 +50,7 @@ ServerEvents.tags('block', e => {
 		b.t_ice, b.polished_packed_ice, b.chiseled_packed_ice,
 	])
 
-	// Ore Excavation undo (patcherMod excavation/VeinUndo.java, CEConfig [vein_undo]). An undo whose vein mine broke
+	// Ore Excavation undo (Creative Common excavation/VeinUndo.java, CEConfig [vein_undo]). An undo whose vein mine broke
 	// any of these is refused; blocks with a block entity are refused in code (a restored chest rerolls its loot).
 	t.add(e, b.t_vein_undo_denied, [b.t_ores, b.t_storage_blocks, item.ore_netherite, item.spawner])
 	t.addMatching(e, b.t_vein_undo_denied, '*:budding_*')
@@ -64,7 +64,7 @@ ServerEvents.tags('block', e => {
 
 	// ── BlockRunner walk speed ──────────────────────────────────────────────
 	// Multipliers live in config/creativeengineering-common.toml [surface.speed], one key per tier
-	// (the numbers below are the defaults, fastest -> slowest). patcherMod's SurfaceTier enum lists the
+	// (the numbers below are the defaults, fastest -> slowest). Creative Common's SurfaceTier enum lists the
 	// tiers for that config, so a new tier needs an entry there too; blockrunner.json only keeps one-offs.
 	// BlockRunner reads the block ~0.2 below your feet (vanilla getOnPos), so carpets, 1–2 layer
 	// snow, pressure plates and IW leaf piles never register (the block under them does).
@@ -391,7 +391,7 @@ ServerEvents.tags('block', e => {
 	])
 
 	// sticky: blocks with one sticky face. Piston heads are shared by plain and sticky pistons, so
-	// patcherMod (StickyFacing) drops the speed unless facing=up and, for heads, type=sticky —
+	// Creative Common (StickyFacing) drops the speed unless facing=up and, for heads, type=sticky —
 	// for everything in #creativecompat:blockrunner_face_up below.
 	t.addMatching(e, runner.sticky, [
 		item.sticky_piston, 'minecraft:piston_head', item.sticky_mechanical_piston,

@@ -1,6 +1,6 @@
 # plan-1-0-9
 
-> 1.0.9 release contents: old TODO 3 single-fix bugs fixed (patcherMod 1.0.9), rsec removed, duplicate-jar preflight; plan in feature_writeup/plan_1.0.9.md, deploy state in deploy.md
+> 1.0.9 release contents: old TODO 3 single-fix bugs fixed (Creative Common 1.0.9), rsec removed, duplicate-jar preflight; plan in feature_writeup/plan_1.0.9.md, deploy state in deploy.md
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-19). Repo status docs win over any status line here.
 

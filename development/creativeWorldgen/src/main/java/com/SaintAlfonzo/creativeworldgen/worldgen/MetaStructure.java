@@ -81,7 +81,7 @@ import java.util.function.Predicate;
  *
  * CHOICES: a part's structures come from a structure tag (creativeworldgen:meta/*, generated from structure_tags.json)
  * or ids, picked uniformly; each must pass its own biome list AND the meta's own valid-biome predicate (which carries
- * patcherMod's biome rules) at its start. Collisions are checked in x/z between piece boxes grown by the part's margin
+ * Creative Common's biome rules) at its start. Collisions are checked in x/z between piece boxes grown by the part's margin
  * ('overlap' parts skip it: an AE2 meteorite carves its crater through whatever its part lands on, since a start places
  * its pieces in order). Tries go from the near end of the distance range outwards, so satellites sit just outside the
  * anchor. A part short of its minimum count keeps what fitted (CWGConfig [worldgen.meta_structures] keepShortParts);

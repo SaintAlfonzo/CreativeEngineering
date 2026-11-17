@@ -18,13 +18,13 @@ Where wild bee nests generate, how often, and a tuning file that gives nests to 
 |---|---|
 | Investigation: every nest source per biome (section 2, [bee_nests_by_biome.md](bee_nests_by_biome.md)) | DONE 2026-10-10 |
 | `tools/gen_bee_nests.py` -> [bee_nests_by_biome.md](bee_nests_by_biome.md) (offline before/after + measured table) | BUILT 2026-10-10 |
-| Nest tuning: `bee_nests.json` -> `worldgen/bee_nests.js` -> biome modifier `creativeengineering:bee_nests` (patcherMod `worldgen/BeeNests` + `TreeFeatureBeeNestsMixin`, `BeehiveDecoratorBeeNestsMixin`) | BUILT 2026-10-10, offline tests pass, scratch-server verified with the starter rules (4,301 chunks, no crash after the leaf-only fix); in patcherMod 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14); single player 2026-10-11 applied `6 rules, 44 biomes tuned` |
+| Nest tuning: `bee_nests.json` -> `worldgen/bee_nests.js` -> biome modifier `creativeengineering:bee_nests` (Creative Common `worldgen/BeeNests` + `TreeFeatureBeeNestsMixin`, `BeehiveDecoratorBeeNestsMixin`) | BUILT 2026-10-10, offline tests pass, scratch-server verified with the starter rules (4,301 chunks, no crash after the leaf-only fix); in Creative Common 1.0.5 (in `mods/`), DEPLOYED with pack 1.0.6 (2026-10-14); single player 2026-10-11 applied `6 rules, 44 biomes tuned` |
 | Extra bee-nest trees (`trees` in a rule: pack placed feature + `forge:add_features`) | BUILT 2026-10-10, offline tests pass |
 | `/dumpbeenests [reset]` (trees, nests, chunks counted per biome as chunks generate; `ChunkGeneratorBeeNestsMixin`) | BUILT 2026-10-10; baseline 41,684 chunks / 73 biomes saved as `bee_nests_baseline.json` |
 | CEConfig `[worldgen.systems] beeNests` | BUILT, same jar |
 | Starter rules (section 9) | IN `bee_nests.json`, calibrated on the baseline; DEPLOYED as they are with pack 1.0.6 (2026-10-14); your review still open |
 
-- **Jar:** patcherMod's `worldgen/BeeNests` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly; the
+- **Jar:** Creative Common's `worldgen/BeeNests` (since 1.0.5, first shipped in pack 1.0.6). The scripts load it directly; the
   older-jar fallback was removed 2026-10-27 ([pack_hygiene.md](pack_hygiene.md) finding 4).
 - **Knobs:** `kubejs/generation_scripts/worldgen/bee_nests.json` (section 3); CEConfig `[worldgen.systems] beeNests`
   (off = nests as the mods ship them). Rejoin to apply; only chunks generated afterwards change.
@@ -125,7 +125,7 @@ per tree and section 2 of the report measures the real trees and nests per chunk
   biome modifier `creativeengineering:forge/biome_modifier/bee_nests.json` of type `creativeengineering:bee_nests`
   with the chance/scale rules in file order, and for each `trees` rule a placed feature
   `creativeengineering:bee_nests/<id>` plus a `forge:add_features` modifier (step `vegetal_decoration`).
-- patcherMod `BeeNests` folds the rules per biome when Forge runs the modifier (phase AFTER_EVERYTHING).
+- Creative Common `BeeNests` folds the rules per biome when Forge runs the modifier (phase AFTER_EVERYTHING).
 - `TreeFeatureBeeNestsMixin`: at `TreeFeature.place` HEAD the biome at the tree's origin is looked up (worldgen
   only: the level must be a `WorldGenRegion`); both reads of `config.decorators` return the tuned list.
 - `BeehiveDecoratorBeeNestsMixin` exposes the decorator's private probability and counts a nest when one is placed;
@@ -226,7 +226,7 @@ Install the jar first (section 0). Use a new world or unexplored terrain.
 - 2026-10-10: investigated (no natural bee spawns; nests only from tree decorators; four mods' JSON; Terralith
   removed nests from most forests), built the tuning (rules, Java tree hook, extra trees, counters + dump,
   generator, offline tests), measured a scratch-server baseline.
-- 2026-10-11: ships in pack 1.0.5 (staged, not deployed) with the starter rules: patcherMod 1.0.5, `bee_nests.json`,
+- 2026-10-11: ships in pack 1.0.5 (staged, not deployed) with the starter rules: Creative Common 1.0.5, `bee_nests.json`,
   `bee_nests.js`; `bee_nests_baseline.json` stays home (dev-only in `KUBEJS_CLASSES`). Single player with the staged
   files: `6 rules, 44 biomes tuned`, 2 bee-tree features, no errors. Only new chunks change. BN-01 to BN-10 pending.
 - 2026-10-14: pack 1.0.5 was never deployed; everything above that was staged for it ships in pack **1.0.6** (STAGED

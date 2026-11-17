@@ -1035,7 +1035,7 @@ look a 0 in one biome is not a fail by itself if the biome tag holds it (the row
 @@text
 @@text #### SQ-PSM: pre-scratch mobs and spawns (added 2026-11-02)
 @@text
-@@text Feature: [../structure_tuning.md](../structure_tuning.md) 3.31 and 3.32, [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.10 (MT-51), [../baby_mobs.md](../baby_mobs.md). Jars: patcherMod and creativecompat built 2026-11-02 (pre-scratch pass). Supersedes the inconclusive SQ-SB-04 to -08: probe first, count spawns second.
+@@text Feature: [../structure_tuning.md](../structure_tuning.md) 3.31 and 3.32, [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.10 (MT-51), [../baby_mobs.md](../baby_mobs.md). Jars: Creative Common and creativecompat built 2026-11-02 (pre-scratch pass). Supersedes the inconclusive SQ-SB-04 to -08: probe first, count spawns second.
 @@text
 @@table
 ## SQ-PSM-01 | spawn-box probe command and the two mixins
@@ -2097,7 +2097,7 @@ look rows/SQ-PSW-05.shell.txt lists the spire chunks; tp a spectator to 3 to 5 o
 @@text
 @@text #### SQ-PSU: pre-scratch fixes, UI, gear, items (added 2026-11-02)
 @@text
-@@text Feature: [../curios_slots.md](../curios_slots.md), [../effects.md](../effects.md) 2.7, [../potion_buckets.md](../potion_buckets.md) F6, [../gear_tuning.md](../gear_tuning.md) 2.10, [../recipes_cooking.md](../recipes_cooking.md) "Mason jars only", [../tooltips.md](../tooltips.md) TT-42. Jars: patcherMod, creativecompat, creativebrewing and creativedelight built from the 2026-11-02 tree. Item physics (`items/item-physics #4`) was built 2026-10-28 and stays on FX-49; also check that dropped items splash under ItemPhysic.
+@@text Feature: [../curios_slots.md](../curios_slots.md), [../effects.md](../effects.md) 2.7, [../potion_buckets.md](../potion_buckets.md) F6, [../gear_tuning.md](../gear_tuning.md) 2.10, [../recipes_cooking.md](../recipes_cooking.md) "Mason jars only", [../tooltips.md](../tooltips.md) TT-42. Jars: Creative Common, creativecompat, creativebrewing and creativedelight built from the 2026-11-02 tree. Item physics (`items/item-physics #4`) was built 2026-10-28 and stays on FX-49; also check that dropped items splash under ItemPhysic.
 @@text
 @@table
 ## SQ-PSU-01 | pre-scratch UI/gear/item mixins

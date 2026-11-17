@@ -31,7 +31,7 @@
 | 15 components (IE iron and steel plus 13 pack ones) by crafting, sequenced assembly and blueprint, with disassembly | DEPLOYED |
 | Wire coils and coil blocks for 12 metals plus the HV coil, by crafting, assembly and blueprint, with disassembly | DEPLOYED |
 | Sample syringe: empty + 7 filled variants, sample 8 mob types, feeds cultivated meat | DEPLOYED |
-| Exclusive chance outputs (`"exclusive_results"` on any Create processing recipe); rose quartz sand blasting 80 % rough / 20 % polished | BUILT 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); EN-21 recipe and log half scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b); EN-19, EN-20 in game pending |
+| Exclusive chance outputs (`"exclusive_results"` on any Create processing recipe); rose quartz sand blasting 80 % rough / 20 % polished | BUILT 2026-10-30 (Creative Common 1.1.04, installed 2026-10-31 00:44); EN-21 recipe and log half scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b); EN-19, EN-20 in game pending |
 | Result pools (`"result_pools"` on any Create processing recipe): several weighted-pick groups per recipe, JEI crushing and milling show one cycling slot per pool; crushing and milling take 24 outputs; crushing wheel inventory 32 slots | BUILT 2026-11-10 (plan_flesh_recipes.md 5.3), jar NOT installed (game open); EN-22 to EN-24 |
 
 - **Pending:** exclusive chance outputs and rose quartz sand blasting (built 2026-10-30, jar installed 2026-10-31 00:44; EN-21 server half PASSED
@@ -43,7 +43,7 @@
   [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js),
   [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js) lines 687-760 (coils),
   [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js).
-- **Knobs:** none in the toml. Recipes are server scripts (`/reload`); the sawmill recipes are in the patcherMod jar
+- **Knobs:** none in the toml. Recipes are server scripts (`/reload`); the sawmill recipes are in the Creative Common jar
   (rebuild); the fan catalyst list is the block tag `#creativeengineering:fan_processing_catalysts/dragon_breathing`.
 
 ## 1. Overview
@@ -61,7 +61,7 @@
 
 ### 2.1 Sawblade routing
 
-- **Blade:** `creativeengineering:precision_sawblade` (patcherMod item, 5000 durability, not enchantable, not
+- **Blade:** `creativeengineering:precision_sawblade` (Creative Common item, 5000 durability, not enchantable, not
   repairable), in `#forge:sawblades` so the sawmill accepts it. Its `{Profile:"<shape>"}` NBT picks the recipe; a plain
   IE sawblade has none. The tooltip shows "Sawmill profile: Stairs" or "Unprogrammed".
 - **Rule** (`SawbladeRouting.route`): among recipes whose input matches,
@@ -75,7 +75,7 @@
   blue dye and paper, or over an empty schematic): IE sawblade + a shape reference (any `#minecraft:wooden_stairs`,
   `#creativeengineering:vertical_planks`, `#creativeengineering:railings`, ...) + 2 steel plates -> precision sawblade
   with that profile. 12 recipes, one per profile.
-- **Recipes:** 211 sawmill JSONs in patcherMod's `data/creativeengineering/recipes/sawmill/` (800 RF, sawdust
+- **Recipes:** 211 sawmill JSONs in Creative Common's `data/creativeengineering/recipes/sawmill/` (800 RF, sawdust
   secondary, optional `"blade"`), plus 2 non-wood ones in `kubejs/data/creativeengineering/recipes/sawmill/` (layered
   obsidian, rose quartz).
 
@@ -171,7 +171,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   - The routing classes are force-loaded at startup (`CreativeEngineering.java` lines 262-269): the mixin applies on the
     first sawmill tick, and a late class load there once crashed.
 - **Sawmill recipes:** [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js) is a node script that
-  writes JSONs into `generation_scripts/recipes/sawmill/`, copied by hand into patcherMod and rebuilt. They're JSON, not
+  writes JSONs into `generation_scripts/recipes/sawmill/`, copied by hand into Creative Common and rebuilt. They're JSON, not
   `NCH.ieSawmill`, because kubejs-immersive-engineering's sawmill schema breaks secondaries.
 - **Fan type:** ported from Create: Halitosis. `DragonBreathingFanProcessingType` registers into Create's
   `FanProcessingTypeRegistry` at common setup; `DragonBreathingRecipe` / `DragonBreathingRecipeType` are a
@@ -217,7 +217,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
 
 ### Findings (2026-10-18)
 
-- **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` -> hand copy into patcherMod -> jar rebuild,
+- **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` -> hand copy into Creative Common -> jar rebuild,
   211 copies. The file's TODO plans an NCH helper adding them as raw JSON from `ServerEvents.highPriorityData`.
   In [TODO](todo/TODO.md) `engineering/sawmill-and-components #2`.
 - **F2. JEI probably can't tell which blade a sawmill recipe needs. Your call.** The `"blade"` field is the pack's; IE's
@@ -288,17 +288,17 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 
 ## 5. File map
 
-- Sawmill: patcherMod [sawmill/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
-- Fan: patcherMod [fan/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/data/creativemagic/kubejs/magic/dragon_breathing.js); `NCH.dragonBreathing`.
+- Sawmill: Creative Common [sawmill/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
+- Fan: Creative Common [fan/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/data/creativemagic/kubejs/magic/dragon_breathing.js); `NCH.dragonBreathing`.
 - Components and coils: [items/components.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js), [items/coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js), [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js), [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js), [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js).
-- Exclusive outputs: patcherMod [fan/ExclusiveResults.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js).
+- Exclusive outputs: Creative Common [fan/ExclusiveResults.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js).
 - Result pools: [fan/ResultPools.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ResultPools.java), [compat/ResultPoolsJei.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/ResultPoolsJei.java), mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`, `CrushingOutputCapMixin`, `ProcessingInventoryMixin`, `JeiCrushingPoolsMixin`, `JeiMillingPoolsMixin`; helper `_pooledProcessing` in neoCraftHelper.js
 - Syringe: [items/sample_syringe.js](../kubejs/startup_scripts/items/sample_syringe.js), [func/sample_syringe.js](../kubejs/startup_scripts/func/sample_syringe.js), [server_scripts/engineering/sample_syringe.js](../kubejs/data/creativeengineering/kubejs/engineering/sample_syringe.js).
 
 ## 6. Offline checks
 
 None scripted. `node kubejs/generation_scripts/sawmill.js` regenerates the sawmill JSONs; diff them against
-patcherMod's copies to see whether the jar is current.
+Creative Common's copies to see whether the jar is current.
 
 ## 7. In-game test suite
 
@@ -359,7 +359,7 @@ patcherMod's copies to see whether the jar is current.
   `coil_block_<metal>`); the coil transition items keep their `kubejs:incomplete_coil_<metal>` ids and now take their
   sprite from `i.wire_coil_<metal>` (`transition_items.js`). No recipe change.
 - 2026-10-30: exclusive chance outputs for Create processing recipes and rose quartz sand blasting
-  (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. patcherMod 1.1.04 built, not installed.
+  (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. Creative Common 1.1.04 built, not installed.
 
 ## Owner notes (scratchpad 2026-11-07)
 

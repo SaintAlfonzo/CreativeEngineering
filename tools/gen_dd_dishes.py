@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Resources for Creative Delight's Display Delight dishes (moved from patcherMod 2026-11-01) (compat/DisplayDelightDishes) from their list.
+"""Resources for Creative Delight's Display Delight dishes (moved from Creative Common 2026-11-01) (compat/DisplayDelightDishes) from their list.
 
 The list is development/creativeDelight/src/main/resources/creativeengineering/displaydelight_dishes.json. For each entry
 this writes, into Creative Delight's resources:

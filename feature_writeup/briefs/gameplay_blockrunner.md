@@ -28,9 +28,9 @@ the blockrunner.md ones.
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #2 | Finish the BlockRunner audit + a watcher | Planned | small: one in-game dump command (patcherMod devtools) + a scan mode in `tools/blockrunner_scan.py`, then tagging in `blocktags.js` |
+| #2 | Finish the BlockRunner audit + a watcher | Planned | small: one in-game dump command (Creative Common devtools) + a scan mode in `tools/blockrunner_scan.py`, then tagging in `blocktags.js` |
 | #5 | Speed blocks on BlockRunner tiers | In Progress (mostly done) | tiny: the leftover speed-factor check rides on #2's dump; one decision |
-| #4 | Slippery blocks and soap | Planned | medium: patcherMod (soap slip on slippery blocks, boat friction), a KubeJS tooltip, docs |
+| #4 | Slippery blocks and soap | Planned | medium: Creative Common (soap slip on slippery blocks, boat friction), a KubeJS tooltip, docs |
 | #3 | Minimum leaf layer height slowdown | Testing | built, see "Built, needs play" |
 
 Build order:
@@ -38,7 +38,7 @@ Build order:
 1. **#2 dump first**, because #4 ("document them") and #5 ("every other speed block") both need its friction /
    speed-factor columns. Then tier the newcomers.
 2. **#5** closes from #2's output (no code unless the dump shows a new speed block).
-3. **#4** last: one patcherMod build with the soap slip and the boat friction, and the tooltip in KubeJS.
+3. **#4** last: one Creative Common build with the soap slip and the boat friction, and the tooltip in KubeJS.
 
 Related rows: `engineering/dreams-and-desires #6` (painted asphalt recipes and names; its brief
 [engineering_dreams-and-desires.md](engineering_dreams-and-desires.md) leaves speed to #5 here), `baking/sweets` D5
@@ -51,7 +51,7 @@ same tiers but is briefed under potions.
 ---
 
 ## blockrunner #2: Finish the BlockRunner audit
-Status Planned / Work KubeJS / tool (+ a patcherMod devtools command) / TODO `gameplay/blockrunner #2`
+Status Planned / Work KubeJS / tool (+ a Creative Common devtools command) / TODO `gameplay/blockrunner #2`
 
 ### Goal
 Every walkable block added since the last audit has a tier (or is untiered on purpose), and a check flags any new
@@ -68,7 +68,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   Bunkers, Campsite Structures, Sticky It!, Unlit Campfire (uses vanilla campfires), Witch Mobility, Bottled Air, Splash
   Milk; Storage Labels ships only a `label` block model (a 1 px label: never registers); Firefly Bush adds
   `fireflybushport:firefly_bush` (a plant, no collision). The painting packs add no blocks.
-- **In-tree mods (read from `development/*/src/main/resources/assets`):** patcherMod `creativeengineering:oven`
+- **In-tree mods (read from `development/*/src/main/resources/assets`):** Creative Common `creativeengineering:oven`
   (furniture-like, untiered by the "functional" rule, blockrunner.md 2) and `dark_fire` (no collision); Exposure
   `exposure:lightroom` (functional) and the photograph frames / flash (thin); `creative_labels:face_paper` (thin);
   Brewin' (above). The Vinery 1.5.5 port ships no blockstates of its own (it uses the upstream jar as a donor), so its
@@ -80,7 +80,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   (8), Oceanic Delight (8), Ocean's Delight (1), Ender's additions (4), Hearth and Harvest port (1), Cooking for
   Blockheads additions (40, kitchen furniture: functional), plus `creativedelight` itself (2). Hostile Delight (1).
   No blocks: Sky Structures, Room for Two, Carry Cats, Baby Mobs, Cozy's Improved Cats (2 vanilla-namespace
-  overrides), ModernFix, `creativebrewing` (its Vinery and Brewin' members are the ones above). patcherMod now also
+  overrides), ModernFix, `creativebrewing` (its Vinery and Brewin' members are the ones above). Creative Common now also
   ships `powdered_sugar_block` and `placed_*` egg dishes (placed food: thin).
 - **KubeJS blocks:** culture blocks are tiered (`'creativeengineering:*_culture_block'`, spongy, blocktags.js 404);
   prepared flesh, layered obsidian, coils, plates and dust piles are tiered (blockrunner.md 2).
@@ -97,7 +97,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   `RunSpeed.standTop` (174) with `REGISTER_HEIGHT` (82, private) is the "collision top >= 0.2 registers" rule.
 
 ### Build
-1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modeled on
+1. **Dump command (Creative Common devtools).** New `devtools/SurfaceAudit.java`, modeled on
    [devtools/WthitIconDump.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java)
    (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/dumpsurface` (op 2;
    tags are loaded on the server) writes `kubejs/exported/surface_audit.json`, one row per block (default state):
@@ -151,7 +151,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 ---
 
 ## blockrunner #5: Speed blocks on BlockRunner tiers
-Status In Progress (mostly done) / Work KubeJS / patcherMod / TODO `gameplay/blockrunner #5`
+Status In Progress (mostly done) / Work KubeJS / Creative Common / TODO `gameplay/blockrunner #5`
 
 ### Goal
 Every block that changes walking speed does so through a BlockRunner tier: painted asphalt walks exactly like IP
@@ -202,7 +202,7 @@ asphalt, and no block keeps a speed of its own on top of a tier.
 ---
 
 ## blockrunner #4: Slippery blocks and soap
-Status Planned / Work patcherMod (+ KubeJS tooltip, docs) / TODO `gameplay/blockrunner #4`
+Status Planned / Work Creative Common (+ KubeJS tooltip, docs) / TODO `gameplay/blockrunner #4`
 
 ### Goal
 Ice and the other slippery blocks get Supplementaries soap's "slip" (a random sideways shove while you walk),
@@ -313,7 +313,7 @@ listed in the writeup; optionally a tooltip says so.
   since, 1.0.9 on 2026-10-19.
 - [blockrunner.md](../blockrunner.md) 0 deploy-state paragraph: "Only the dedicated server copy is still behind" ->
   "was still behind then (caught up since)".
-- [blockrunner.md](../blockrunner.md) 4 Limits: "Server copy is stale" -> fixed (the server runs the same patcherMod;
+- [blockrunner.md](../blockrunner.md) 4 Limits: "Server copy is stale" -> fixed (the server runs the same Creative Common;
   BR-27 untested).
 - [blockrunner.md](../blockrunner.md) line refs: blocktags.js tier block L25-380 -> L76-435 (three places), `var runner`
   L34 -> L85, `wipeTag` L66 -> L117, `dirt` L351 -> L407, `mirror` L364 -> L420; CEConfig `Surface` L460 -> L1144;

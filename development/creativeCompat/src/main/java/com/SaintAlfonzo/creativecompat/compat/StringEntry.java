@@ -26,7 +26,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
  * {@code AbstractSelectionList.Entry#render} override shows up as {@code m_6311_} on
  * {@code ValueEntry}/{@code LabeledEntry}, not the friendly dev-time name this project's own
  * {@code minecraft} dependency resolves it to. This class's own override keeps the friendly
- * name (so javac recognizes it as a real override and patcherMod's reobf pass renames it
+ * name (so javac recognizes it as a real override and Creative Common's reobf pass renames it
  * correctly for runtime), but its {@code super} call has to name Create's method literally.
  */
 public class StringEntry extends ValueEntry<String> {

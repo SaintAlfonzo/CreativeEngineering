@@ -8,7 +8,7 @@
 @@jars creativedelight
 @@sources feature_writeup/barbeques_delight.md
 @@text
-@@text Needs the Creative Delight jar with the `backportedBarbeques` member (built 2026-11-01) and the patcherMod jar with the
+@@text Needs the Creative Delight jar with the `backportedBarbeques` member (built 2026-11-01) and the Creative Common jar with the
 @@text `bbqSkewering` / `bbqGrilling` / `bbqCombine` emitters (same day), plus the pack's `item_dict.js`, `block_dict.js`,
 @@text `food_dict.js`, `food_types.json`: full restart. Group A (superflat). Client rows (BBQ-04 WTHIT, renderers, the flip
 @@text hint) are in the in-game suite, not here.
@@ -19,7 +19,7 @@
 @group A
 @commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|failed to parse\|missing" \| head`; `grep -n "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log \| grep -i "warn\|error" \| head`
 @pass mod `barbequesdelight` loads from the CD jar (`creativedelight_members.txt`); no recipe parse errors; no NCH warning for the 26 recipes; no compost warning for the 24 rows
-@fails `CampfireRainInfo` missing (patcherMod old); an unknown item key in `recipes.js`
+@fails `CampfireRainInfo` missing (Creative Common old); an unknown item key in `recipes.js`
 @from batches/r1102b/s3_A.qb passed
 bootexpect \[creativedelight\] members: \[.*\bbarbequesdelight\b
 bootreject (?i)barbequesdelight.*(exception|failed to parse|missing)
@@ -30,7 +30,7 @@ shell grep -hn "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startu
 @group A
 @commands Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (10), `barbequesdelight:combine` (3); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_basin_from_logs`, `bbq_tray_from_logs`
 @pass 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
-@fails NCH emitters missing (patcherMod jar not rebuilt)
+@fails NCH emitters missing (Creative Common jar not rebuilt)
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > cdevtest rdetail creativedelight:skewering/

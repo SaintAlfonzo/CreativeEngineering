@@ -302,7 +302,7 @@ Vetoed 2026-10-28 (ids not reused): W05 to W07 (Create, AE2, IE), W08 (pipes and
 
 The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Read 2026-10-28:
 
-1. **Baseline timing.** The queue run installs and tests the open builds (patcherMod 1.1.03 with the GFB / HRU /
+1. **Baseline timing.** The queue run installs and tests the open builds (Creative Common 1.1.03 with the GFB / HRU /
    season cache mixins, Creative Delight, the Vintage and Veggies ports, ModernFix). Take the first suite run (g1)
    after it, on the jars it leaves in `mods/`, and treat that run as the baseline. Earlier perf.md numbers are on
    other builds.

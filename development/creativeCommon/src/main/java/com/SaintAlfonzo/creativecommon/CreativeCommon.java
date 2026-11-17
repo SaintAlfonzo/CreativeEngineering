@@ -48,7 +48,7 @@ public class CreativeCommon
     /** This jar's mod id since the Creative Split swap (creative_split.md 6 Q1 and 7.13): patcherMod was
      *  {@code creativecommon} until then; that id is now Creative Engineering's (development/creativeEngineering). */
     public static final String MODID = "creativecommon";
-    /** The namespace of every id, tag, lang key and channel this jar uses: patcherMod's, unchanged by the swap. */
+    /** The namespace of every id, tag, lang key and channel this jar uses: Creative Common's, unchanged by the swap. */
     public static final String NS = "creativecommon";
     /** The file every pre-swap table lived in, now Creative Engineering's own. */
     private static final String OLD_FILE = "creativeengineering-common.toml";
@@ -67,13 +67,13 @@ public class CreativeCommon
         // Must be registered here, during construction - Forge loads every mod's COMMON/CLIENT
         // config immediately after every mod's constructor has run, so anything later (even
         // FMLCommonSetupEvent) is too late and the file is never read.
-        // The tables came from patcherMod's creativeengineering-common.toml, which Creative Engineering keeps for its
+        // The tables came from Creative Common's creativeengineering-common.toml, which Creative Engineering keeps for its
         // [shrapnel], [surface] and [vein_undo]: the first boot copies the player's values over (then Engineering's
         // spec drops them from that file when Forge corrects it). The swap list toml is only renamed.
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(OLD_FILE, FILE, CommonConfig.SECTIONS);
         com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creativeengineering-swaps.toml", MODID + "-swaps.toml");
         // [effects] and [magic_resistance] came from Creative Brewing's file (plan_cb_polish.md 2), and before
-        // that from patcherMod's: the first boot copies the player's values in (sections this file already has are kept).
+        // that from Creative Common's: the first boot copies the player's values in (sections this file already has are kept).
         // CB drops them from its own file when Forge corrects it.
         if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS))
             com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS);

@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Worldgen's COMMON config, {@code config/creativeworldgen-common.toml}. The sections moved out of patcherMod's
+ * Creative Worldgen's COMMON config, {@code config/creativeworldgen-common.toml}. The sections moved out of Creative Common's
  * creativeengineering-common.toml (creative_split.md 7.6, wave 5) with keys, comments and defaults
  * unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of
  * {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]}. The first boot with Worldgen copies a
@@ -363,15 +363,15 @@ public final class CWGConfig {
                     "set as its mod ships it (debug.structureDensity still applies). Rejoin to apply."
             ).define("structureGroups", true);
             structureFrequencies = b.comment(
-                    "The per-structure frequency roll (patcherMod StructureFrequencies). Off: every group member spawns",
+                    "The per-structure frequency roll (Creative Common StructureFrequencies). Off: every group member spawns",
                     "whenever it wins its slot, i.e. at its weight share only. Rejoin to apply."
             ).define("structureFrequencies", true);
             structureBiomeRules = b.comment(
-                    "biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in",
+                    "biome_rules in structure_groups.json (Creative Common StructureBiomeRules): only allowed structures start in",
                     "the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin."
             ).define("structureBiomeRules", true);
             structureBiomeFits = b.comment(
-                    "biome_fits.json + the land/* structure tags (patcherMod StructureBiomeFits): a structure in a fit tag spawns in",
+                    "biome_fits.json + the land/* structure tags (Creative Common StructureBiomeFits): a structure in a fit tag spawns in",
                     "its fit's biomes (land/oak: land/oak + land biomes) instead of its own list. Off: its own list. Rejoin; new chunks only."
             ).define("structureBiomeFits", true);
             poolTuning = b.comment("pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.")
@@ -397,11 +397,11 @@ public final class CWGConfig {
                     "dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.")
                     .define("templateTrim", true);
             metaStructures = b.comment("meta_structures.json: our structures built from other structures and features (a village with peaceful",
-                    "towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; patcherMod MetaStructure, [worldgen.meta_structures]).",
+                    "towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; Creative Common MetaStructure, [worldgen.meta_structures]).",
                     "Off: none generate (their anchors spawn plain). Rejoin; new chunks only.")
                     .define("metaStructures", true);
             structureReplacements = b.comment("Group members with \"replaces\" + \"share\" in structure_groups.json take that share of another member's slots",
-                    "(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the",
+                    "(the vanilla swamp hut in YUNG's witch hut slots; Creative Common MetaSlots). Off: they never generate and the",
                     "structures they replace keep every slot. Rejoin; new chunks only.")
                     .define("structureReplacements", true);
             mushroomSpawns = b.comment("mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves",
@@ -411,55 +411,55 @@ public final class CWGConfig {
                     "(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.")
                     .define("wildFlowers", true);
             mobSpawns = b.comment("mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,",
-                    "patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.")
+                    "Creative Common SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.")
                     .define("mobSpawns", true);
             beeNests = b.comment("bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs",
-                    "worldgen/bee_nests.js, patcherMod BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.")
+                    "worldgen/bee_nests.js, Creative Common BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.")
                     .define("beeNests", true);
             oceanGeodes = b.comment("Geodes under oceans generate lower so fewer break through the sea floor ([worldgen.ocean_geodes];",
-                    "patcherMod OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.")
+                    "Creative Common OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.")
                     .define("oceanGeodes", true);
-            placementPriority = b.comment("Placement priority (structure_groups.json \"priority\"; patcherMod PlacementPriority): a structure whose",
+            placementPriority = b.comment("Placement priority (structure_groups.json \"priority\"; Creative Common PlacementPriority): a structure whose",
                     "pieces would overlap a higher-ranked structure's never starts (settlements > pillagers > dungeons > houses",
                     "and camps > ruins), and companion villages around fortified towns. Off: structures may overlap, no",
                     "companions. Rejoin; new chunks only.")
                     .define("placementPriority", true);
-            templateBlockSwaps = b.comment("meat_block_swaps.json (patcherMod TemplateBlockSwaps): marked blocks in structure templates are swapped",
+            templateBlockSwaps = b.comment("meat_block_swaps.json (Creative Common TemplateBlockSwaps): marked blocks in structure templates are swapped",
                     "when the template loads (lone red glazed terracotta \"meat\" -> Architect's Palette salmon log). Off: templates as",
                     "the mods ship them. Rejoin; new chunks only.")
                     .define("templateBlockSwaps", true);
-            spawnBoxes = b.comment("spawn_boxes.json (patcherMod StructureSpawnBoxes): pillager and witch structures respawn their own mob mix",
+            spawnBoxes = b.comment("spawn_boxes.json (Creative Common StructureSpawnBoxes): pillager and witch structures respawn their own mob mix",
                     "inside a spawn box, members of a meta structure keep their own boxes (or take the meta's), and box evokers drop no",
                     "totem. Off: only the mods' own spawn_overrides (inside metas each part keeps its own either way). Applies at once, old chunks too.")
                     .define("spawnBoxes", true);
-            removeSpawners = b.comment("Mob spawners of these entities are removed from structure templates when the template loads (patcherMod",
+            removeSpawners = b.comment("Mob spawners of these entities are removed from structure templates when the template loads (Creative Common",
                     "TemplateSpawnerFilter); the spawn boxes take their place. A template that loses one also loses its spawners with",
                     "no mob. Empty list: every spawner stays. Rejoin; new chunks only.")
                     .defineList("removeSpawners", java.util.List.of("minecraft:pillager"), o -> o instanceof String);
             permafrostMerge = b.comment("Quark's frozen peaks cave style lays Immersive Weathering's permafrost on floors, ceilings and pillars",
-                    "instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.",
+                    "instead of Quark's own block (renamed Froststone; Creative Common QuarkPermafrostStyleMixin). Walls stay packed ice.",
                     "Off: Quark's block. New chunks only.")
                     .define("permafrostMerge", true);
             mulberrySapling = b.comment("Upgrade Aquatic's river sapling (Mulberry Sapling) grows the datapack's upgrade_aquatic:river_tree, the oak",
-                    "trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,",
+                    "trunk tree that worldgen places by rivers (Creative Common MulberrySapling). Off: UA's built-in tree with river logs,",
                     "which drop oak logs. Applies at once.")
                     .define("mulberrySapling", true);
             firstTickWater = b.comment("Generated water that first flows when its chunk starts ticking (aquifer edges, cave springs) breaks the",
-                    "plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; patcherMod FirstTickWater).",
+                    "plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; Creative Common FirstTickWater).",
                     "Off: vanilla, they drop as items. Applies at once.")
                     .define("firstTickWater", true);
             holdGeneratedFallingBlocks = b.comment("Sand, gravel and other falling blocks left floating by generation stay put when their chunk first",
-                    "ticks, until a later block update next to them (patcherMod GeneratedFallingBlocks). Covers the chunk's",
+                    "ticks, until a later block update next to them (Creative Common GeneratedFallingBlocks). Covers the chunk's",
                     "post-processing, generated water settling in the [worldgen.first_tick_water] window and ticks scheduled during",
                     "generation. Off: vanilla, they fall on the first tick (in the outer ring of loaded chunks the falling entity never",
                     "lands and stays saved). Applies at once.")
                     .define("holdGeneratedFallingBlocks", true);
-            dimensionFilter = b.comment("A structure that cannot start in any biome of a dimension is not tried there (patcherMod DimensionFilter):",
+            dimensionFilter = b.comment("A structure that cannot start in any biome of a dimension is not tried there (Creative Common DimensionFilter):",
                     "no generation point, terrain reads or jigsaw assembly for Nether and End structures in the Overworld.",
                     "Same structures either way, only faster. Off: every structure set is tried in every dimension, as vanilla 1.19.2.")
                     .define("dimensionFilter", true);
             sharedTerrainCache = b.comment("Earth and water fill share one bounded cache of predicted terrain columns across starts, placement",
-                    "priority predictions, meta retries and the real start of a chunk (patcherMod EarthFill). Same results either way,",
+                    "priority predictions, meta retries and the real start of a chunk (Creative Common EarthFill). Same results either way,",
                     "only faster. Off: each start reads its own columns.")
                     .define("sharedTerrainCache", true);
             b.pop(); // systems
@@ -1119,7 +1119,7 @@ public final class CWGConfig {
 
     /**
      * The mob cap levels and spawn areas of {@code perf/MobCapLevels} (perf.md 17; mixin/MobCapMixin,
-     * MobCapLevelTickMixin, MobCapSpawnAreaMixin). The table keeps patcherMod's comment. Read live.
+     * MobCapLevelTickMixin, MobCapSpawnAreaMixin). The table keeps Creative Common's comment. Read live.
      */
     public static final class Perf {
         public final ForgeConfigSpec.BooleanValue mobCapLevels;

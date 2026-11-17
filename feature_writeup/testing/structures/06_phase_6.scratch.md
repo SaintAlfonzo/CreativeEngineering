@@ -6,7 +6,7 @@
   the ST-106 split are skipped); correctness only.
 - Milestone: M6. Tests: LO-03, LO-14, LO-04 (census), ST-141, ST-154, ST-114 (pregen log / census reasons), ST-107,
   ST-20, ST-74, ST-142, LO-12. Point 4 (census shares -> weight-stripping Todo) = hand the shares over, no tuning.
-- Server: session 4 (d6feb4e4) scratchpad srv/ (373 mods, patcherMod build/libs 1.0.6 of 12:44, md5 5acd69dc).
+- Server: session 4 (d6feb4e4) scratchpad srv/ (373 mods, Creative Common build/libs 1.0.6 of 12:44, md5 5acd69dc).
   Toml = scratchpad toml_m5_base.toml (instance defaults + earth_fill log ALL, meta log true, placement log true),
   density 1. srv-only kubejs/server_scripts/zz_scratch_tick.js (tick gaps) still in place.
 - World st_p, seed 8675309, 4 locator threads. Deviation: area centered on 2144 -2592 (92% land) instead of spawn

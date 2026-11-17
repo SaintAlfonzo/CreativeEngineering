@@ -31,7 +31,7 @@ is in NOTICE-upstream-MIT.txt.
 - Fix: `patch_inky_cap_mushroom` places on `#fungidelight:inky_cap_placeable_on` (upstream read the morel tag, so the
   inky cap tag with sculk was never used).
 - Mooshroom breeding: upstream's `MushroomCowMixin` and `FDMCow`'s `canMate` / `getBreedOffspring` overrides are gone;
-  patcherMod's mixin on `MushroomCow` decides partners and calf type for every mooshroom kind. Until that lands, two
+  Creative Common's mixin on `MushroomCow` decides partners and calf type for every mooshroom kind. Until that lands, two
   Fungi cows breed with each other (same class) and give a vanilla mooshroom calf, and they do not breed with
   vanilla mooshrooms. Kept: Fungi cows ignore lightning, shear into a cow and 5 of their mushroom, their renderer
   and mushroom layer, entity ids `fungidelight:inky_cap_cow` / `morel_cow`, the mooshroom spawn rule.

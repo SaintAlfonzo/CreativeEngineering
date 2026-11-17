@@ -99,7 +99,7 @@ the real foods in the catalog's "Review" list into `INCLUDE`.
 ---
 
 ## placeable #3: Drinks placeable
-Status **In Progress** · Work: KubeJS (TODO) / patcherMod (recommended below) (+ tool, assets) · id `food/placeable #3` · overlaps `food/drinks #2`
+Status **In Progress** · Work: KubeJS (TODO) / Creative Common (recommended below) (+ tool, assets) · id `food/placeable #3` · overlaps `food/drinks #2`
 
 ### Goal
 Bottled FD-style drinks with no place-down today ("FD tea-like": Farmer's Respite teas and coffee, Fruits Delight
@@ -122,7 +122,7 @@ breaking it gives the drink back.
 - **Still not placeable:** FR long / strong tiers, Fruits Delight juices and teas, Rustic Delight's 8 coffees,
   Delightful lavender / azalea tea, Neapolitan milkshakes, Builder's Tea, FD milk bottle, the pack's chorus juice and
   others in the drink list (recount after `placeable #2`'s rerun).
-- The pack already registers its own DD blocks in **patcherMod**: `compat/DisplayDelightDishes.java` +
+- The pack already registers its own DD blocks in **Creative Common**: `compat/DisplayDelightDishes.java` +
   `DisplayDelightDishBlocks.java` read `creativeengineering/displaydelight_dishes.json` (10 dishes, kinds `bowl` /
   `plate`), register a DD `FoodBlock` per entry as `creativeengineering:<block>`, and call
   `BlockAssociations.addToMap(item, block, false)` on `LevelEvent.Load`; `tools/gen_dd_dishes.py` writes the
@@ -162,7 +162,7 @@ breaking it gives the drink back.
   catalog and tooltips through the normal `/dumpplaceable` -> tool path.
 
 ### Build
-**Revised 2026-10-31:** build it on the patcherMod dish route instead of KubeJS `createCustom` (steps 2-3 below are the
+**Revised 2026-10-31:** build it on the Creative Common dish route instead of KubeJS `createCustom` (steps 2-3 below are the
 2026-10-21 KubeJS plan, kept as the fallback):
 - A. Extend `displaydelight_dishes.json` with a `dish: "drink"` (and `"mug"`) kind; `DisplayDelightDishBlocks` registers
   a DD `DrinkBlock` / `HotDrinkBlock` for those entries (same `addToMap` link). `gen_dd_dishes.py` writes the drink
@@ -170,8 +170,8 @@ breaking it gives the drink back.
   texture from the item sprite (as step 1 below describes).
 - B. The drink list from step 1's rules (one entry per long / strong tier too), minus everything the 1.7.0 port already
   places (list above).
-- C. Tag via `global.tags` in a Creative Delight tags file (or the patcherMod data tag the dishes already use).
-- D. patcherMod rebuild + install + restart; `/dumpplaceable`; `placeable_catalog.py`; `gen_coaster_models.py`.
+- C. Tag via `global.tags` in a Creative Delight tags file (or the Creative Common data tag the dishes already use).
+- D. Creative Common rebuild + install + restart; `/dumpplaceable`; `placeable_catalog.py`; `gen_coaster_models.py`.
 
 1. **Item list (tool).** New `tools/gen_placed_drinks.py`, registered in [tools/generators.json](../../tools/generators.json):
    - Input: the `drink` type from `kubejs/generation_scripts/food/food_types.json` plus `kubejs/exported/food/drinks.json`
@@ -240,7 +240,7 @@ breaking it gives the drink back.
 - New ids: `creativeengineering:placed_<x>` blocks and block items, keys `b.placed_<x>` (block_dict) and `i.t_dd_displayable`.
 
 ### Decisions
-- **KubeJS `createCustom` with DD's `DrinkBlock`, or patcherMod Java?** Revised recommendation (2026-10-31): patcherMod,
+- **KubeJS `createCustom` with DD's `DrinkBlock`, or Creative Common Java?** Revised recommendation (2026-10-31): Creative Common,
   extending `DisplayDelightDishes` (it already registers DD blocks and links them; one list, one generator). KubeJS
   remains the fallback (the TODO says KubeJS; [plate_blocks.js](../../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/plate_blocks.js)
   shows plates went the other way). Owner to confirm the Work column.
@@ -251,7 +251,7 @@ breaking it gives the drink back.
 ### Gotchas
 - **Pick-block and WTHIT icon on a dedicated server:** DD fills `BlockAssociations` only on the server, so the client's
   `getCloneItemStack` gets air. DD's own blocks behave the same. Test WTHIT with `WthitBlockModelIcon`
-  (patcherMod compat).
+  (Creative Common compat).
 - Sneaking with a DD-displayable item skips the Brewin' coaster (AL-52). Same for these drinks.
 - Some drinks are always-edible: a plain right click still drinks them. Only sneak + right click on a block top places one.
 - `DisplayEvents.on(LivingEntityUseItemEvent.Start)` cancel logic applies only to the plate tags, so it doesn't touch drinks.
@@ -333,7 +333,7 @@ skewers and its 3 combos (Kebab Wrap, Kebab Sandwich, Bibimbap) before any displ
   - wraps: `plated_mutton_wrap` (FD, stackable 2), `md_plated_vegan_wrap`, `df_plated_wrapped_cantaloupe`;
   - sandwiches: `plated_chicken_sandwich` / `plated_egg_sandwich` (stackable 2), `plated_bacon_sandwich` (plated);
   - bowls for Bibimbap: FD's placed rice dishes (pick one in the catalog).
-- The pack's own DD blocks go through patcherMod `DisplayDelightDishes` (`bowl` / `plate` kinds only; see `#3`), so a
+- The pack's own DD blocks go through Creative Common `DisplayDelightDishes` (`bowl` / `plate` kinds only; see `#3`), so a
   stackable-plate kind would be new work there.
 
 ### Build

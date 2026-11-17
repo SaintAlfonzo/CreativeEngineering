@@ -41,7 +41,7 @@ server tree by mod (`kubejs/data/creativedelight/kubejs/<mod>/`), tags through `
 ---
 
 ## jams #1: Merge all jams into one jam jar
-Status **In Progress** / Work: KubeJS / patcherMod / resource pack / id `dishes/jams #1`
+Status **In Progress** / Work: KubeJS / Creative Common / resource pack / id `dishes/jams #1`
 
 ### Goal
 Every jam is a mason jar (mason jars take glass panes; a new empty mason jar texture); each jam recolours to its fruit
@@ -57,7 +57,7 @@ mulberry jam's eat-return), tests RC-176 to RC-179. Left: steps 2 and 3 (panes, 
 
 ### Build
 1. Container swap for the 23 bottle jams (decision D1). Repack route: Fruits Delight and Upgrade Aquatic are not CD
-   members, so either a new CD repack member per mod (memory `creative-delight-routing`) or a patcherMod mixin on
+   members, so either a new CD repack member per mod (memory `creative-delight-routing`) or a Creative Common mixin on
    their item's `getCraftingRemainingItem` / finish-using to return `i.empty_mason_jar`. Then the pot recipes take
    `i.empty_mason_jar` as the container: `R.replaceInput({ type: 'farmersdelight:cooking', output: i.t_fruitsdelight_jelly }, ...)`
    does not touch the container field, so remove and re-add each pot recipe (row 2 does this anyway).
@@ -69,7 +69,7 @@ mulberry jam's eat-return), tests RC-176 to RC-179. Left: steps 2 and 3 (panes, 
 
 ### Decisions
 - **D1 Which jar item stays:** the mason jar (`vintagedelight:empty_mason_jar`); the glass bottle stays the drink bottle.
-  Owner still to choose the route: recommend a patcherMod remainder mixin (no repacks of two non-member mods).
+  Owner still to choose the route: recommend a Creative Common remainder mixin (no repacks of two non-member mods).
 - FD's `*_jelly_block` stays beside the placeable jar block (storage vs placed food). Recommend yes.
 
 ### Gotchas

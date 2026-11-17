@@ -39,6 +39,6 @@ Built 2026-10-04, needs a restart (new items + dict keys). Sections/multipliers 
 - NCH `cans` arg is the can-recipe guard: auto `_manual_only` id (Create's shouldIgnoreInAutomation: mixer, mech
   crafter, JEI) + modifyResult refusing grids with no player (menu without player-inventory slots = IE Assembler, AE2
   assembler); `{ whole: id }` = used up whole, must be full (CanServings.isPartial). ItemStack.getTag is invisible in
-  Rhino, so the check calls patcherMod's CanServings.
+  Rhino, so the check calls Creative Common's CanServings.
 
 Related: [multi-serving-cans](multi-serving-cans.md), [food-tuning-system](food-tuning-system.md), memory `centralize-recipes-tags-items`.

@@ -41,7 +41,7 @@ echo tools) is in Equipment's `kubejs_startup/creativeequipment/gear_effects.js`
 `CopperPoisoningHandler` (`effect/`, registered only with Everything Copper), `CopperPoisoningEffectMixin`,
 `EchoArmorEffectProcedureMixin`, `EchoArmorTooltipMixin` are Equipment's (gated in `EquipmentMixinPlugin`;
 `create_deep_dark` optional in its `mods.toml`). `[copper_poisoning]` moved to `creativeequipment-common.toml` (carried
-over from CB's file, then patcherMod's). The gear JEED block (frameworks plus echo armor) is Equipment's
+over from CB's file, then Creative Common's). The gear JEED block (frameworks plus echo armor) is Equipment's
 `equipment/gear_jeed.js`. `lava_vision.js` stays in CB (a potion-machine brew). CB's `mods.toml` lost its now unused
 optional dependencies `create_deep_dark`, `everythingcopper`, `farmersrespite`, `dragonloot`.
 

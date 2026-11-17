@@ -18,7 +18,7 @@
 		var t = global.tags
 		var b = global.blocks
 
-		// Oven (patcherMod oven/, feature_writeup/oven.md 2.4, 3.1). What heats it from below: FD's open-fire
+		// Oven (Creative Common oven/, feature_writeup/oven.md 2.4, 3.1). What heats it from below: FD's open-fire
 		// sources (fire, campfires, lava; nested, so it stays live) + magma, lava cauldron, blaze burners and
 		// the blaze lantern. Every stove and oven is left out on purpose ("non-stove" rule). OvenHeat gates
 		// lit blocks by `lit` and idle blaze burners by heat level.
@@ -30,7 +30,7 @@
 		t.mineable(e, 'pickaxe', null, b.oven)
 
 		// Bakeware is hammered on the cutting board (NCH.hammering); without this the IE hammer rotates the board
-		// instead of cutting (patcherMod IECompat.registerHammerNoRotate).
+		// instead of cutting (Creative Common IECompat.registerHammerNoRotate).
 		t.add(e, b.t_hammer_no_rotate, b.cutting_board)
 
 		// Cookware picked up by sneak right-click, handle toggled by sneak left-click (TODO cooking/kitchen #27, CD Java

@@ -8,7 +8,7 @@
 @@jars creativecalendar
 @@sources feature_writeup/time.md
 @@text
-@@text Needs patcherMod built after 2026-10-30 21:45 (`time/TimeDate`) installed and a full restart. Fresh normal world with
+@@text Needs Creative Common built after 2026-10-30 21:45 (`time/TimeDate`) installed and a full restart. Fresh normal world with
 @@text Serene Seasons on SUN (either preset); ops level 4 console is enough.
 @@text
 @@text | Entry | Tier | Steps | Pass | Fail meaning |

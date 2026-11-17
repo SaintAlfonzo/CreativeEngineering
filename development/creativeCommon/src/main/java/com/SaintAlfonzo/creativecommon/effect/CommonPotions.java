@@ -17,7 +17,7 @@ import com.mojang.logging.LogUtils;
 import java.util.List;
 
 /**
- * The potions patcherMod registers for effects KubeJS cannot build potions for, one table for all of them.
+ * The potions Creative Common registers for effects KubeJS cannot build potions for, one table for all of them.
  *
  * Why Java: kubejs/startup_scripts/cooking/potions.js can't build these itself. KubeJS evaluates
  * StartupEvents.registry('potion', ...) scripts in one early pass (to gather everything before real Forge

@@ -28,7 +28,7 @@ import java.util.Set;
  *       kind ({@code MushroomCowBreedingMixin}, {@link #pickCalf}). Vanilla's 1 in 1024 red/brown mutation stays for
  *       two parents of the same vanilla type only.</li>
  * </ul>
- * The Fungi cows are known by entity type id only, so patcherMod does not compile against the Fungi port and
+ * The Fungi cows are known by entity type id only, so Creative Common does not compile against the Fungi port and
  * works without it. Lightning ({@code thunderHit}) is not touched here.
  */
 public final class MooshroomFamily {

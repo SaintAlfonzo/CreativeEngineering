@@ -27,7 +27,7 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
   stuffed hoglin, hoglin hide / loin, strider slice, propelplant vs powdery cannon, stoves, soils) is not resolved by
   porting it; the jar stays in `DecompiledMods/` for reference only. No `mod_sides.md` row.
 - **Nether's Delight 3.1 stays the installed mod**; the 4.0 changes below are carried over to it by data and code.
-- **2026-11-01 (owner): Nether's Delight ships as a member of Creative Delight** (not patcherMod), pointed at the current
+- **2026-11-01 (owner): Nether's Delight ships as a member of Creative Delight** (not Creative Common), pointed at the current
   Farmer's Delight systems (the `farmers` member and the pack's FD 1.2.4 + 1.3.4-backport setup). The 3.1 jar stays the
   installed mod (MIT, never repacked); the member is an additions overlay like `enders_additions`: Java (the flower pot
   block, the colony mixin) in a new member `nethersAdditions`, scripts in CD `kubejs_startup/nethersdelight/` (a
@@ -75,7 +75,7 @@ crimson forests. Not pursued.
 
 Owner, 2026-10-25: document only, build nothing. Two questions decide the build and are open:
 
-- **Delivery path.** (A) An overlay on 3.1 (patcherMod plus KubeJS, recommended): small, one patcherMod rebuild. (B) A
+- **Delivery path.** (A) An overlay on 3.1 (Creative Common plus KubeJS, recommended): small, one Creative Common rebuild. (B) A
   backport jar of 4.0 (MIT, so allowed) replacing 3.1, like Backported Vinery: every change comes native, but 4.0's colony
   extends Farmer's Delight 1.3's `MushroomColonyBlock` (the pack runs FD 1.2.4), so that class needs a copy or shim, and
   the stove's save format change loses the items in existing stoves (rule: no conversions).
@@ -89,7 +89,7 @@ The steps below assume (A) and display-name-only renames.
 3.1 already ships `blockstates/potted_mimicarnation.json`, `models/block/potted_mimicarnation.json` and
 `loot_tables/blocks/potted_mimicarnation.json`, but registers no block. Steps:
 
-1. patcherMod: a `DeferredRegister<Block>` under namespace `nethersdelight` registers `potted_mimicarnation` as
+1. Creative Common: a `DeferredRegister<Block>` under namespace `nethersdelight` registers `potted_mimicarnation` as
    `new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, NDBlocks.MIMICARNATION, copy of Blocks.POTTED_POPPY)`.
    Forge logs one "alternative prefix" warning for it. In common setup, call
    `((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(mimicarnation id, potted)` inside `enqueueWork`.

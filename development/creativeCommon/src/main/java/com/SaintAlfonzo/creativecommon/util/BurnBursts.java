@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 /**
  * A shrapnel burst other jars can fire without knowing who draws it. Creative Compat's burn-explosion rule
- * (itemphysic.ItemBurnTransform, {@code shrapnel: true}) calls {@link #burst}; patcherMod's shrapnel side registers
+ * (itemphysic.ItemBurnTransform, {@code shrapnel: true}) calls {@link #burst}; Creative Common's shrapnel side registers
  * shrapnel.ShrapnelSpawner here at construction. With no handler registered a burst does nothing.
  */
 public final class BurnBursts {

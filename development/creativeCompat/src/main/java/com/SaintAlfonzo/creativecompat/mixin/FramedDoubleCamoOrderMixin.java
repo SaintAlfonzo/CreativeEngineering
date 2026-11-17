@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
  * the one path both halves are set through; clearing a half doesn't count as inserting. The flag
  * rides along in the block entity's save NBT and in both client sync paths (block update packet
  * and chunk update tag), since client movement prediction needs it too. Extra top-level key, so
- * FramedBlocks ignores it if patcherMod is ever removed.
+ * FramedBlocks ignores it if Creative Common is ever removed.
  *
  * <p>Third-party target; MC-overridden methods by their SRG names ({@code m_183515_} saveAdditional,
  * {@code m_142466_} load, {@code m_5995_} getUpdateTag), all with {@code remap = false}.

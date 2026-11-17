@@ -10,7 +10,7 @@ Merged 2026-10-19 from 2 memories (index compaction).
 
 DetailArmorBar (modid `detailab`, jar in `mods/`, client-side only) ships a real public
 extension point, `com.redlimerl.detailab.api.DetailArmorBarAPI` — decompiled with CFR (jar
-copied to `patcherMod/libs/DetailArmorBar-2.6.4+1.19.2-forge.jar`, compileOnly) to confirm this
+copied to `creativeCommon/libs/DetailArmorBar-2.6.4+1.19.2-forge.jar`, compileOnly) to confirm this
 before building against it. Its `ArmorBarRenderManager` color arg is a straight RGBA tint
 (`RenderSystem#setShaderColor` under the draw call) — any `java.awt.Color` works, it's not a
 fixed palette. Proof: DetailArmorBar's own leather-armor entry reads the dye color off the
@@ -22,14 +22,14 @@ in the 128x128 `armor_bar.png` — the same offset `CustomArmorBar.DEFAULT` itse
 for unregistered armor), not leather's own slot (x=117/108) — switched 2026-09-17 on request,
 since leather's icon carries an "unranked" connotation iron's plain/default one doesn't. Full
 tile-by-tile mapping of the sheet (visually confirmed via ImageMagick crops at y=9, THEN verified
-authoritative by resolving each SRG field against patcherMod's own `build/createMcpToSrg/output.tsrg`
+authoritative by resolving each SRG field against Creative Common's own `build/createMcpToSrg/output.tsrg`
 — e.g. `f_42480_` = `Items.NETHERITE_HELMET` — rather than trusting the visual guess alone): x=9
 netherite (dark/black), x=27 diamond (cyan), x=45 turtle (green, single-item group), x=63 iron
 (white/silver, = DEFAULT), x=81 chainmail (gray checkered), x=99 gold (yellow), x=117 leather
 (plain white/grey, dynamically tinted from dye color). `NETHERITE_ICON_X/HALF_X` constants reuse
 x=9/x=0 untinted for "matches real netherite" cases (Create's netherite diving gear, below).
 
-Built `patcherMod/.../compat/DetailArmorBarCompat.java` (parallels `IECompat`'s style/package)
+Built `creativeCommon/.../compat/DetailArmorBarCompat.java` (parallels `IECompat`'s style/package)
 with two entry points, called from `CreativeEngineering.ClientModEvents#onClientSetup`
 (guarded by `ModList.get().isLoaded("detailab")`, same optional-dependency pattern as
 `create_deep_dark`/`easyelytratakeoff` in mods.toml — `detailab` entry added there too,
@@ -78,8 +78,8 @@ memory `centralize-recipes-tags-items` style, add calls to `register()` one line
 dragon-only bespoke sheet, and added Botania (manasteel/elementium/terrasteel) + Immersive Armors
 (bone/slime/wither) - 9 sets total, each its own hand-painted `<name>_tint.png` (user staged them
 loose at `kubejs/` root; real destination is
-`patcherMod/src/main/resources/assets/creativeengineering/textures/gui/`, matching the pre-existing
-`dragon_armor_bar.png` convention - bespoke GUI sheets are patcherMod resources, not KubeJS-managed
+`creativeCommon/src/main/resources/assets/creativeengineering/textures/gui/`, matching the pre-existing
+`dragon_armor_bar.png` convention - bespoke GUI sheets are Creative Common resources, not KubeJS-managed
 item/block textures). Added a shared `tintedArmor(ResourceLocation, String...)` helper + `TINT_*`
 constants instead of one-off per-set offsets.
 - **The user's art was 18x9 (half+full icon, 9x9 each, tightly packed) with no blank tile for the
@@ -97,7 +97,7 @@ constants instead of one-off per-set offsets.
   pattern), `immersive_armors:bone_helmet/chestplate/leggings/boots` (+ slime/wither, same pattern).
 - Old `dragon_armor_bar.png` (20x16, the original one-off bespoke sheet) deleted along with its
   now-unused `DRAGON_SHEET_WIDTH/HEIGHT`/`DRAGON_ICON_FULL/HALF`/`DRAGON_NO_OUTLINE` constants -
-  confirmed zero other references first (`grep -rn` across `patcherMod/src` and `kubejs`).
+  confirmed zero other references first (`grep -rn` across `creativeCommon/src` and `kubejs`).
 - This session's crash-debugging also reconfirmed [patchermod-coremod](patchermod-coremod.md)'s "never overwrite `mods/`
   while the game is running" rule end-to-end: checked `pgrep` for a live Minecraft process (none)
   before `cp build/libs/... ../mods/...`, then verified by `md5sum` - same discipline that would
@@ -124,7 +124,7 @@ robes - confirmed real via lang keys + `models/item/manaweave_*.json`, distinct 
 manasteel/elementium/terrasteel above). Staged this time at `kubejs/assets/manaweave_tint.png`
 (not loose at `kubejs/` root like the original 9) - same destination and pad-to-27x9 treatment
 regardless of where the user drops the original; the real home is always
-`patcherMod/src/main/resources/assets/creativeengineering/textures/gui/`. `MANAWEAVE_ARMOR_BAR` +
+`creativeCommon/src/main/resources/assets/creativeengineering/textures/gui/`. `MANAWEAVE_ARMOR_BAR` +
 one `tintedArmor()` call, same pattern as every other bespoke set in this file.
 
 2026-09-17 (third follow-up): added `creategoggles`'s "Goggle Helmet" family - confirmed via
@@ -169,7 +169,7 @@ DetailArmorBar (detailab)'s own `ArmorBarRenderer#render` only ever draws one ro
 armor-point icons and collapses anything past 20 armor points into tiny 3px tick marks to the
 left of the bar (`if (armorPoints.size() > 20) { ... CustomArmorBar.DEFAULT.draw(...) }`). No
 detailab-compatible "armor overflow" mod exists (checked), so
-`patcherMod/.../compat/ArmorOverflowRenderer.java` adds one: real extra rows of the same
+`creativeCommon/.../compat/ArmorOverflowRenderer.java` adds one: real extra rows of the same
 textured/recolored icons ([armor-bar-compat](armor-bar-compat.md)) stacked above row 0.
 
 Mechanism (zero touches to detailab's own render method):

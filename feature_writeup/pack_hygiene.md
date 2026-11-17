@@ -59,9 +59,9 @@ Completed and closed findings moved to section 5 under the same numbers.
 The port conversions (9, 10) were removed 2026-10-27 (section 5). This one is left:
 
 11. **Remaps from our own mod splits.** Judgement (same rule's letter, but these move our own ids, not another version's
-    or mod's). `incubationAdditions/.../IncubationAdditions.java:128` (`creativeengineering:` nests, split in patcherMod
+    or mod's). `incubationAdditions/.../IncubationAdditions.java:128` (`creativeengineering:` nests, split in Creative Common
     1.0.5; [nests.md](nests.md) line 347) and `exposureBackport/src/extras/.../ExposureExtras.java:35` (camera bags,
-    patcherMod 1.0.3; [camera_bags.md](camera_bags.md) F3). Several releases old; removing them loses nests and bags in
+    Creative Common 1.0.3; [camera_bags.md](camera_bags.md) F3). Several releases old; removing them loses nests and bags in
     worlds not loaded since.
 
 ### C. Advancements
@@ -83,7 +83,7 @@ a case). Counts: raw `e.custom` 21 calls in 6 files (12 are sequenced-assembly s
 13 to 17 are fixed (section 5). Left from them: the `mechanisms.js` vibrating step (a sequence step, section 4) and the
 literal shape tag ids in `engineeringtags.js` (TODO `tooling/conventions #1`).
 
-18. **Recipe disabling by path override.** Judgement. `patcherMod/src/main/resources/data/tmted/recipes/crusher/wheat_flour.json`
+18. **Recipe disabling by path override.** Judgement. `creativeCommon/src/main/resources/data/tmted/recipes/crusher/wheat_flour.json`
     and `wheat_flour_from_bale.json` are `forge:false` overrides (5c06f29), undocumented, where `NCH.remove` exists.
     Fix: document why, or move to `R.remove`.
 
@@ -117,7 +117,7 @@ literal shape tag ids in `engineeringtags.js` (TODO `tooling/conventions #1`).
     Fix: absolute-value rows in the one applier.
 33. **Tooltip helpers not shared.** Judgement (cause of finding 5's tooltip case). CD `_qol/placeable_tooltip.js:39-43`
     re-implements `removeTooltipKey` (`client_scripts/tooltips.js:80`) because pack client helpers are top-level
-    functions the CD asset pack cannot see. Fix: put them on `global`, or ship them in the patcherMod jar.
+    functions the CD asset pack cannot see. Fix: put them on `global`, or ship them in the Creative Common jar.
 34. **Armor and tool tuners.** Judgement. `func/tune_armor.js:57-75` and `func/tune_tools.js:59-84` duplicate the generic
     half (durability, stack size, fireproof, rarity). Factor out on the next change.
 35. **Direct CEConfig reads.** Judgement, defensible. `magic/armor_effects.js:30-36` and `equipment/dragon_autorepair.js:25`
@@ -148,9 +148,9 @@ Done (details in 9): the no-risk cleanups, the reference pattern (A), helper cov
 - **Not findings:** the 183 raw `e.recipes.create.*` calls and 12 `e.custom` calls that are sequenced-assembly steps.
   The NCH step helpers call `.id()` and return undefined, so they cannot be nested; the open item is at
   `_lib/sequence_assembly_processes.js:53`.
-- **Not findings:** `kubejs/data/creativeengineering/recipes/sawmill/*.json` and patcherMod's 211 in-jar sawmill JSONs
+- **Not findings:** `kubejs/data/creativeengineering/recipes/sawmill/*.json` and Creative Common's 211 in-jar sawmill JSONs
   (the documented `NCH.ieSawmill` exception); worldgen `event.add` calls (data writes, not tags); `enchants.js`
-  `e.remove` (MoreJS filters); the Brewin' / alcohol food rows (reserved); patcherMod's food Java (oven, remainder
+  `e.remove` (MoreJS filters); the Brewin' / alcohol food rows (reserved); Creative Common's food Java (oven, remainder
   API, cans, seasoning, counter toppers, feast plating, mooshrooms), which creative_delight.md 3.1 rule 3 and 3.2 keep
   there; `CDMixinPlugin`'s `FOR_VERSION` gate (third-party Fruits Delight 0.5.11); `clientCapture` having no
   `mod_sides.md` row (dev-only).
@@ -173,19 +173,19 @@ section 9.
 The in-tree mods and the pack scripts are built and deployed together, so there is only ever one current copy of
 each. Checks for an older copy add code paths that are never taken and hide a broken install instead of failing.
 
-1. **Creative Delight gates on a patcherMod helper version.** **FIXED 2026-10-27** (section 9). Rule, Reinvent. Current state:
+1. **Creative Delight gates on a Creative Common helper version.** **FIXED 2026-10-27** (section 9). Rule, Reinvent. Current state:
    - [neoCraftHelper.js:17](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) publishes `apiVersion: 1` on `global.NCH`.
    - [cd_core.js:19-22](../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_core.js) sets `CD.apiVersion: 1` (read nowhere) and `CD.needsNchApi: 1`; lines 49-52 log an error when `NCH.apiVersion` is lower or missing.
    - Introduced in c36dfc4 (Mid 1.1.03). The docs make it a rule for callers: [creative_delight.md](creative_delight.md) line 478 ("a caller checks it", 10.6), line 505 and the 10.3 row at line 862.
    - Tests depend on it: `tools/creative_delight_test/suite/` (`cdtest_startup.js:7`, `cdtest_probe.js:50` asserts `apiVersion >= 1`, `cdtest_client.js:2`) and [scratch_queue.md](testing/scratch_queue.md) SQ-CDT-02 expects "NCH apiVersion 1".
    - The uncommitted `NCH.replaceItems` addition (item merges) does not touch the gate and is clean.
-   - Fix: remove `apiVersion` from NCH and CD, the check in `cd_core.js`, the cdtest assertion and the SQ-CDT-02 wording, and rewrite creative_delight.md 10.6 to "CD and patcherMod ship together; the mods.toml range is the only check".
-2. **Creative Delight checks for patcherMod's loader class.** **FIXED 2026-10-27** (section 9). Reinvent. `CreativeDelight.java:42-47` does
-   `Class.forName(JarStartupScripts)` and logs "Install the patcherMod built with this jar", while
+   - Fix: remove `apiVersion` from NCH and CD, the check in `cd_core.js`, the cdtest assertion and the SQ-CDT-02 wording, and rewrite creative_delight.md 10.6 to "CD and Creative Common ship together; the mods.toml range is the only check".
+2. **Creative Delight checks for Creative Common's loader class.** **FIXED 2026-10-27** (section 9). Reinvent. `CreativeDelight.java:42-47` does
+   `Class.forName(JarStartupScripts)` and logs "Install the Creative Common built with this jar", while
    `creativeDelight/.../META-INF/mods.toml:31` already declares the mandatory dependency `[1.1.03,)`. Fix: delete
    the check and `LOADER_CLASS`.
 3. **"Older jar" branches in the structure scripts.** **FIXED 2026-10-27** (section 9). Reinvent.
-   [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js) names an older patcherMod
+   [structure_overrides.js](../kubejs/server_scripts/worldgen/structure_overrides.js) names an older Creative Common
    jar on 13 lines, with fallback branches at :112-120, :471-515, :863 and :1338-1353; `MetaStructure.java:91`
    documents the pairing. The guards protect nothing: :109 loads `worldgen.WorldgenFiles` unguarded, so an older
    jar fails there first. Same in the dev dump `_lib/dump_structuregen.js:73`. Fix: drop the branches.
@@ -200,21 +200,21 @@ each. Checks for an older copy add code paths that are never taken and hide a br
    - CD startup `compost.js:10` in farmersdelight, fungidelight, veggiesdelight, vintagedelight, and the CD client scripts (`endersdelight/client.js`, `ends_delight/*`, `fungidelight/jei_info.js`, `_core/cd_client.js`): `!!global.CD &&` inside the jar that defines `global.CD` at priority 1000. The routing memory documents this guard for server scripts only.
    - [seasoning_lang.js:3-8](../kubejs/client_scripts/seasoning_lang.js): `global.seasoning || {}`.
    - [tooltips.js:32-34](../kubejs/client_scripts/tooltips.js) `fdVillagerLine`: `Platform.isLoaded('creativedelight')` feature-detects the pack's own mod.
-   - Judgement: `neoCraftHelper.js:1375` `global.seasoning && ...` (patcherMod's helper detects a global CD owns).
+   - Judgement: `neoCraftHelper.js:1375` `global.seasoning && ...` (Creative Common's helper detects a global CD owns).
    - Fix: use the keys and globals directly; delete the fallbacks.
-6. **patcherMod still carries Vinery 1.3.10 support.** **FIXED 2026-10-27** (section 9). Reinvent. Only `backportedVinery-1.5.5-ce-19.2-04` is in
+6. **Creative Common still carries Vinery 1.3.10 support.** **FIXED 2026-10-27** (section 9). Reinvent. Only `backportedVinery-1.5.5-ce-19.2-04` is in
    `mods/`, and it ships its own JEI (`core/compat/jei/port/`).
-   - `patcherMod/.../compat/vinery/` (about 770 lines): a full JEI plugin for upstream 1.3.x that turns itself off when the backport is loaded (`VineryJEI.java:45`, `:83 isBackport`). The port's `PortCategory.java` is a near-copy of its `VineryCategory.java`.
+   - `creativeCommon/.../compat/vinery/` (about 770 lines): a full JEI plugin for upstream 1.3.x that turns itself off when the backport is loaded (`VineryJEI.java:45`, `:83 isBackport`). The port's `PortCategory.java` is a near-copy of its `VineryCategory.java`.
    - Other 1.3.10 paths: `VineryIds.java:107` (reflective `satisfyu.vinery.config.VineryConfig`), `WinemakerTrades.java:25` (second class name), `WinemakerSpawner.java:179-190` (falls back to `config/vinery/config.json5`), `StuckInBlock.java:62` (`satisfyu` rule), the `TimePush.java:118` comment.
-   - `patcherMod/libs/letsdo-vinery-forge-1.3.10.jar`.
+   - `creativeCommon/libs/letsdo-vinery-forge-1.3.10.jar`.
    - Fix: delete `compat/vinery/`, the jar and the 1.3.10 branches; keep only the backport names. This retires [vinery_jei.md](vinery_jei.md).
 7. **The Vinery port falls back for an older Brewin' port.** **FIXED 2026-10-27** (section 9). Reinvent. `backportedVinery/.../wine/WineYears.java:194-197`
    catches `ReflectiveOperationException` and warns that Brewin' has no `BnCHeatSources.climate`. The
    `ClassNotFoundException` branch (Brewin' absent) is legitimate. Fix: keep only that branch.
-8. **patcherMod compiles against copied jars of in-tree mods.** **FIXED 2026-10-27** (section 9). Reinvent. `patcherMod/libs/backportedBrewin-4.5.0-ce-19.2-03.jar`
-   (used by `CoasterRendererOffsetMixin.java:21`) and `patcherMod/libs/displaydelight-1.2.0.jar` (upstream 1.2.0,
+8. **Creative Common compiles against copied jars of in-tree mods.** **FIXED 2026-10-27** (section 9). Reinvent. `creativeCommon/libs/backportedBrewin-4.5.0-ce-19.2-03.jar`
+   (used by `CoasterRendererOffsetMixin.java:21`) and `creativeCommon/libs/displaydelight-1.2.0.jar` (upstream 1.2.0,
    while in-tree `backportedDisplay` is 1.7.0; `compat/DisplayDelightDishBlocks.java` imports `com.jkvin114`). The root
-   build already does `compileOnly project(':patcherMod')` for CD. Fix: `compileOnly project(':backportedBrewin')` and
+   build already does `compileOnly project(':creativeCommon')` for CD. Fix: `compileOnly project(':backportedBrewin')` and
    `project(':backportedDisplay')`, then delete the copies. The coaster offset could also live in the Brewin' port's
    renderer instead of a mixin on our own code.
 
@@ -311,7 +311,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
     `tooltips.js` `fdVillagerLine` rows (CD repack behavior, finding 5), 7 food renames in `namechanges.js:74-77`, 12
     food tooltips in `tooltips.js` (:495, :501, :508, :586-587, :723, :785, ...). Judgement: `items/misc_items.js:17`
     mortar and pestle (CD `bakeware.js` holds the other kitchen tools).
-28. **Meal tooltip mixins in patcherMod.** **FIXED 2026-10-27** (section 9). Judgement. `mixin/CookingPotMealTooltipMixin.java:14` (Farmer's Delight) and
+28. **Meal tooltip mixins in Creative Common.** **FIXED 2026-10-27** (section 9). Judgement. `mixin/CookingPotMealTooltipMixin.java:14` (Farmer's Delight) and
     `KettleMealTooltipMixin.java:14` (Farmer's Respite, which has about 10 compartment mixins in CD). A shared
     `MealSlotTooltip` may justify the split (creative_delight.md 3.1 rule 2).
 
@@ -328,22 +328,22 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 36. **Upstream-donor plumbing per port.** **FIXED 2026-10-27** (section 9). Reinvent. `MemoryPackResources` in four copies (`backportedMiners/.../upstream/`,
     `backportedVinery/.../forge/upstream/`, `creativeDelight/members/rustic/.../upstream/`, `creativeLabels/.../client/`)
-    plus patcherMod `worldgen/donor/DonorPackResources.java` (8 lines differ after the header). `UpstreamJars` (Miners
+    plus Creative Common `worldgen/donor/DonorPackResources.java` (8 lines differ after the header). `UpstreamJars` (Miners
     and Rustic identical but for names, Vinery longer) and `UpstreamPacks` (3 copies, ids only) in the same folders.
-    Fix: one class in patcherMod, or one shared source dir through `build-logic`.
-37. **Two potion registrars.** **FIXED 2026-10-27** (section 9). Reinvent. patcherMod `potion/MagicResistancePotions.java:42-56` and
+    Fix: one class in Creative Common, or one shared source dir through `build-logic`.
+37. **Two potion registrars.** **FIXED 2026-10-27** (section 9). Reinvent. Creative Common `potion/MagicResistancePotions.java:42-56` and
     `potion/BetterBeaconsPotions.java:44-50`: each has its own `DeferredRegister<Potion>`, supplier pattern and
     BASE / LONG / STRONG constants. Fix: one registrar with a table.
 38. **Smaller copies.** **FIXED 2026-10-27** (section 9). Judgement. Built-in `packs/` registration in `MoreMooblooms.java:117-125` and
     `IncubationAdditions.java:107-122`; three near-identical `NEEDS_MOD` mixin plugins (`MoreMoobloomsMixinPlugin`,
     `IncubationAdditionsMixinPlugin`, `CLMixinPlugin`, where CD's `CDMixinPlugin` is the general form); two
     `ItemHiddenMixin` on `Item.allowedIn` (moreMooblooms, creativeLabels); two Fruits Delight bytecode-rewrite engines
-    (patcherMod `compat/FruitsDelightHooks.java` + `CreativeEngineeringMixinPlugin.postApply`, CD
+    (Creative Common `compat/FruitsDelightHooks.java` + `CreativeEngineeringMixinPlugin.postApply`, CD
     `compat/FruitsDelightHooks.java` + `CDMixinPlugin.postApply`).
-39. **patcherMod drives the Vinery port's config.** **FIXED 2026-10-27** (section 9). Judgement, documented ([time.md](time.md) 3.7). `time/TimePush.java:97-120`
+39. **Creative Common drives the Vinery port's config.** **FIXED 2026-10-27** (section 9). Judgement, documented ([time.md](time.md) 3.7). `time/TimePush.java:97-120`
     writes `VineryConfig` by reflection and reads `vinery-common.toml` by regex; `trader/WinemakerSpawner.java:162-190`
     runs its own spawner while the port's `WanderingTraderSpawnerMixin` swap is kept at 0. Option: the port reads CEConfig.
-40. **Server mods dump in two languages.** **FIXED 2026-10-27** (section 9). Judgement, documented. patcherMod `devtools/ServerModsDump.java` mirrors
+40. **Server mods dump in two languages.** **FIXED 2026-10-27** (section 9). Judgement, documented. Creative Common `devtools/ServerModsDump.java` mirrors
     `tools/dump_server_mods.py` line for line, including a second `mod_sides.md` parser (KubeJS could not copy files;
     `/cdevgen` can now run Python).
 
@@ -364,7 +364,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 44. **Generators missing from the manifest.** **FIXED 2026-10-27** (section 9). Rule (note [cdevgen-generator-runner](agent_notes/cdevgen-generator-runner.md)). `gen_stack_sizes.py` (writes
     `generation_scripts/stacks/stack_sizes.json`, read by `startup_scripts/changes/stack_sizes.js`),
-    `gen_nether_swaps.py` (writes `nether_block_swaps.json`, read by patcherMod `TemplateBlockSwaps`), `food_catalog.py`
+    `gen_nether_swaps.py` (writes `nether_block_swaps.json`, read by Creative Common `TemplateBlockSwaps`), `food_catalog.py`
     (writes `food_types.json` and `item_dict.js`), and the dump readers `jei_coverage.py` and `stack_sizes.py` (in the
     `dumpall-refresh-workflow` run order) are not in [generators.json](../tools/generators.json) or its exclusion list.
     Judgement: `gen_can_types`, `gen_compost_values`, `gen_moobloom_variants`, `gen_cfb_fridge_models`,
@@ -405,7 +405,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 ### L. Minor
 
-54. **Emoji.** **FIXED 2026-10-27** (section 9). Rule. `neoCraftHelper.js:1633` has U+2705 in a block comment. It ships in the patcherMod jar.
+54. **Emoji.** **FIXED 2026-10-27** (section 9). Rule. `neoCraftHelper.js:1633` has U+2705 in a block comment. It ships in the Creative Common jar.
 55. **Dead and stale lines.** **FIXED 2026-10-27** (section 9). `client_scripts/namechanges.js:1` `const CE = global.CE` (never defined, never used);
     CD `ends_delight/jei_info.js:4` points to `endersdelight/jei_info.js`, which is `endersdelight/client.js`.
 
@@ -438,7 +438,7 @@ Each fix adds its checks here as `PH-NN` (and to [scratch_queue.md](testing/scra
 checks) in the session it is made.
 
 **3.3 helper coverage (2026-10-27).** PH-01 to PH-04 are server checks in the scratch queue (boot log, recipe and tag
-dumps against HEAD). In game, after a restart with the new patcherMod jar:
+dumps against HEAD). In game, after a restart with the new Creative Common jar:
 
 | ID | Check | Expected |
 |---|---|---|
@@ -448,17 +448,17 @@ dumps against HEAD). In game, after a restart with the new patcherMod jar:
 | PH-08 | Engineer's Workbench with the precision sawblade blueprint | 12 profiles (button to vertical slab), each sawblade + shape + 2 steel plates |
 
 **3.1 and 3.2 (2026-10-27).** PH-09 to PH-11 are server checks in the scratch queue (boot log, worldgen staging, dev
-dump commands, `/cdtest`). In game, after a restart with the new patcherMod, CD and Vinery jars:
+dump commands, `/cdtest`). In game, after a restart with the new Creative Common, CD and Vinery jars:
 
 | ID | Check | Expected |
 |---|---|---|
-| PH-12 | JEI: look up a grape and the Fermentation Barrel | Only the Vinery port's pages (`vinery:` categories); no patcherMod "Vinery" pages; no missing-lang keys |
+| PH-12 | JEI: look up a grape and the Fermentation Barrel | Only the Vinery port's pages (`vinery:` categories); no Creative Common "Vinery" pages; no missing-lang keys |
 | PH-13 | Hover a placeable food (a pie), a Farmer's Delight rich soil block, and a seasoned food | Placeable lines as before; "Farmer villagers work it like Farmland"; the seasoning name, not a lang key |
 | PH-14 | Place food on a Brewin' coaster on a counter; place a Display Delight dish block | Coaster item sits at the same height as before; dish blocks place and render |
 | PH-15 | JEI: torch | The animal fat torch recipe (12 torches) is still listed |
 
 **Owner batch (2026-10-27).** PH-16 to PH-26 are server checks in the scratch queue. In game, after a restart with the
-new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms and Incubation Additions jars:
+new Creative Common, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms and Incubation Additions jars:
 
 | ID | Check | Expected |
 |---|---|---|
@@ -480,14 +480,14 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
   - 9, 10: the Brewin' and Vinery conversions removed (remaps, legacy block entity ids, keg / coaster / barrel legacy
     loading, `WineYears` legacy years and `legacyYearLengthDays`); alcohol.md, time.md, README rows 51 and 52.
   - 39: the Vinery port owns `vinery-common.toml` and the Winemaker spawner (`[trader] ownSpawner`, `ownSpawnerInterval`;
-    its timer file is now `vinery_winemaker_spawner.dat`); it reads the pack's `[time]` master through patcherMod
-    `time/WineTime` (soft dependency). patcherMod's `TimePush` Vinery push and `trader/WinemakerSpawner` deleted,
+    its timer file is now `vinery_winemaker_spawner.dat`); it reads the pack's `[time]` master through Creative Common
+    `time/WineTime` (soft dependency). Creative Common's `TimePush` Vinery push and `trader/WinemakerSpawner` deleted,
     `winemakerEnabled` / `winemakerIntervalTicks` removed from CEConfig. time.md 3.7, wandering_trader.md.
   - 40: `devtools/ServerModsDump` deleted; `/dumpall` no longer runs it; `tools/dump_server_mods.py` is the route.
   - 36 to 38: shared Java under `development/shared/` (`packs`, `upstream`, `mixinplugin`, `itemhidden`), copied into
     each jar under its own package by the `shared_sources` convention in `ce.forge-mod`; `CommonPotions` replaces the two
     potion registrars; one Fruits Delight bytecode engine (CD). pack_tooling.md 2.8.
-  - 28: the meal tooltip mixins moved to CD; `MealSlotTooltip` stays in patcherMod (two Central Kitchen mixins use it).
+  - 28: the meal tooltip mixins moved to CD; `MealSlotTooltip` stays in Creative Common (two Central Kitchen mixins use it).
   - 41 to 43: `ce.forge-mod-refmap` (`refmap_name`), the resource guard (`resource_guard_*`), `flatDir libs` by default and
     `disable_target_validator`; every jar byte-identical to the baseline after a clean build.
   - 44 to 49: `tools/pack_paths.py` (item dict parser, lenient JSON, jar locator); 15 manifest entries (45), every other
@@ -496,9 +496,9 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
     tooltips and renames and the mortar and pestle moved into CD (creative_delight.md 29.5, 29.6). Cultivated meat is
     marked for a future Creative Cultivation mod. New: a cooking pot recipe beside each culture mixing recipe.
   - 20: 86 ids had 2 to 4 keys (77 items, 9 tags); 96 keys dropped, every use rewritten (most-used key kept;
-    `explorers_compass`). One patcherMod helper line (`neoCraftHelper.js` felsic deploy) changed.
+    `explorers_compass`). One Creative Common helper line (`neoCraftHelper.js` felsic deploy) changed.
   - 51: the backups follow the live configs (DistantHorizons, rubidium, both JEI sort files). Also: mod_sides.md rows
-    for the current patcherMod, Veggies, Vintage, Storage Delight and Create : The Salt jars (413 rows).
+    for the current Creative Common, Veggies, Vintage, Storage Delight and Create : The Salt jars (413 rows).
   - 24 closed with no change (owner).
 
 - 2026-10-27: fix order 3.4 done (finding 29, TODO `creativedelight/framework #11`). Owner: `global.CD.FOOD` holds the rules
@@ -519,7 +519,7 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
     (the documented `!global.CD` server guard stays). 2: the loader class check removed from `CreativeDelight.java`.
   - 1: `apiVersion` / `needsNchApi` and the check removed from NCH, `cd_core.js` and the cdtest suite; creative_delight.md
     10.3 / 10.6 and SQ-CDT-02 rewritten.
-  - 3, 4: `structure_overrides.js` loads its patcherMod classes once at the top; also gone are three fallbacks the audit
+  - 3, 4: `structure_overrides.js` loads its Creative Common classes once at the top; also gone are three fallbacks the audit
     did not list (`frequencyStage`, `stageBiomeFactors`, `biomeRuleStage` and the "jar too old" error). Same in
     `dump_structuregen.js`, `mob_spawns.js`, `bee_nests.js`, `wild_flowers.js`, CD `wild_crops.js`, and the
     `/dumpbeenests` / `/dumpspawns` commands. `mushroom_spawns.js` now uses a new `WorldgenConfig.mushroomSpawnsEnabled()`.
@@ -527,12 +527,12 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
   - 6: `compat/vinery/` (JEI plugin, VineryIds), its 14 lang keys, the 1.3.10 branches in `WinemakerTrades`,
     `WinemakerSpawner` and `StuckInBlock`, and the `TimePush` comment removed; vinery_jei.md retired.
   - 7: `WineYears` keeps the Brewin'-absent branch; a missing `climate` method now throws instead of warning.
-  - 8: patcherMod compiles against `project(':backportedBrewin')` and `project(':backportedDisplay')`.
+  - 8: Creative Common compiles against `project(':backportedBrewin')` and `project(':backportedDisplay')`.
   - Removed lib jars (`letsdo-vinery-forge-1.3.10`, `backportedBrewin-...-03`, `displaydelight-1.2.0`) moved to
     `development/creativeCommon/jar_archive/displaced/`. Built and installed, not tested. The first combined build failed once
     in `:backportedBrewin:reobfJar` and passed on the rerun (that task also passes on its own).
 
-- 2026-10-27: fix order 3.3 done (findings 13 to 17): patcherMod helpers `enderStorage`, `axeScraping` (soot option),
+- 2026-10-27: fix order 3.3 done (findings 13 to 17): Creative Common helpers `enderStorage`, `axeScraping` (soot option),
   NBT-aware `ieBottling` / `createEmptying`, `tags.mineable` `copper` + `exclusive`; 11 server scripts moved onto the
   helpers, 12 blueprint JSONs ported. Built and installed, not tested.
 

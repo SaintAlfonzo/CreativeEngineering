@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [todo/TODO.md](../todo/TODO.md) `# worldgen`, Sub `biomes` (rows #2 to #7; #1 is at Testing).
 `biomes/netherblocks` is a separate subfamily and is not covered here. Feature writeup for the tuning rows:
-[biome_tuning.md](../biome_tuning.md) (tests `WG-`). The solver is patcherMod
+[biome_tuning.md](../biome_tuning.md) (tests `WG-`). The solver is Creative Common
 `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/worldgen/BiomeLayoutTuner.java` (written
 `BiomeLayoutTuner.java` below). Its config is `kubejs/generation_scripts/worldgen/biome_config.json` (written
 `biome_config.json`).
@@ -252,7 +252,7 @@ Decide whether the four Terralith skylands stay at 0.15x, given how many feature
 
 ## biomes #5: Permafrost merge
 
-Status Testing (built 2026-10-22; scratch server PASSED 2026-10-22, SQ-MG-00 to SQ-MG-07; see [item_merges.md](../item_merges.md) 2.7) · Work patcherMod + KubeJS + config · TODO `worldgen / biomes #5`
+Status Testing (built 2026-10-22; scratch server PASSED 2026-10-22, SQ-MG-00 to SQ-MG-07; see [item_merges.md](../item_merges.md) 2.7) · Work Creative Common + KubeJS + config · TODO `worldgen / biomes #5`
 
 ### Goal
 
@@ -300,7 +300,7 @@ Now): check it before doing anything about it.
 
 ### Build
 
-1. **Generation swap (patcherMod).** New class `compat/QuarkPermafrostSwap.java`:
+1. **Generation swap (Creative Common).** New class `compat/QuarkPermafrostSwap.java`:
    - On `FMLCommonSetupEvent.enqueueWork`, if both `quark` and `immersive_weathering` are loaded and the new CEConfig
      `[worldgen.systems] permafrostMerge` (default true) is on, find the Quark module instance.
    - Then set `style.floorState = style.ceilingState = IW permafrost default state`.
@@ -330,7 +330,7 @@ Now): check it before doing anything about it.
    `item.packed_ice` and `item.stone` exist (`item_dict.js:1338, 1314`).
    Optional second recipe: IW permafrost + stone -> Quark's (`'frost_stone_from_permafrost'`).
 4. **Tags:** none needed. The Block Runner tiers already cover both blocks (`blocktags.js:285, 330`).
-5. **Mirror config:** none (the swap is in code). The new CEConfig key needs patcherMod `CEConfig.java`
+5. **Mirror config:** none (the swap is in code). The new CEConfig key needs Creative Common `CEConfig.java`
    `[worldgen.systems]`, next to `wildFlowers` / `beeNests`.
 6. Structures keep `quark:permafrost` (the TODO row asks for that). To know which ones hold it, add a temporary pattern
    `(9, 'quark permafrost', r'quark:permafrost')` to `NETHER_TIERS` in `tools/nether_blocks_scan.py:36`, or run a

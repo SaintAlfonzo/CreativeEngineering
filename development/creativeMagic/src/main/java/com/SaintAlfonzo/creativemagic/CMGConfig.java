@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Magic's COMMON config, {@code config/creativemagic-common.toml}. {@code [botania]} moved out of patcherMod's
+ * Creative Magic's COMMON config, {@code config/creativemagic-common.toml}. {@code [botania]} moved out of Creative Common's
  * creativeengineering-common.toml (creative_split.md 7.6, wave 6) with its key, comment and default
  * unchanged. The first boot with Magic copies a player's value over ({@code swap.ConfigRename.carrySections}, called
  * from {@link CreativeMagic}). The static field name is the pre-carve CEConfig's, so {@code global.NCH.cfg(..., 'BOTANIA')} finds it

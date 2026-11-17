@@ -12,15 +12,15 @@ Related rows: `cooking/kitchen #18` (lava bottles, folded into row 3), `dishes/i
 | Step | Row | Work | Notes |
 |---|---|---|---|
 | 1 | `jars #6` reword the JEI row | tool (`tab_drops.py`) | Smallest; independent |
-| 2 | `jars #1` capacity 60 | config + generator + patcherMod | Do before #4 (soup cost is a capacity value) and before #2 / #3 caps |
+| 2 | `jars #1` capacity 60 | config + generator + Creative Common | Do before #4 (soup cost is a capacity value) and before #2 / #3 caps |
 | 3 | `jars #4` soups take 1 space | generator + render | After #1 |
 | 4 | `jars #3` more foods | KubeJS / data | Hostile Delight cookies and lava bottles already done |
-| 5 | `jars #2` new contents | patcherMod + resource pack | Render work (piles, glow) |
+| 5 | `jars #2` new contents | Creative Common + resource pack | Render work (piles, glow) |
 | 6 | `jars #5` pickled veg storage | KubeJS | Crate route; with `merges/materials #4` |
 
 ## Shared findings
 
-- **Jar machinery** (all patcherMod, see mixed_jars.md 3 and 5): `mixin/SupplementariesJarTileMixin` (one slot per
+- **Jar machinery** (all Creative Common, see mixed_jars.md 3 and 5): `mixin/SupplementariesJarTileMixin` (one slot per
   capacity point, one item per slot), `compat/JarMixing` (`canMix`, families = tags `#creativeengineering:jar_family/<name>`
   from [jar_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js), keys `i.t_jar_family_*`;
   moved there from `server_scripts/tags/jartags.js` 2026-10-25, Creative Delight data tree, runs only with `global.CD`), the two renderer mixins
@@ -37,7 +37,7 @@ Related rows: `cooking/kitchen #18` (lava bottles, folded into row 3), `dishes/i
 ---
 
 ## jars #1: Jar capacity rework
-Status **Planned** / Work patcherMod / TODO `items/jars #1`
+Status **Planned** / Work Creative Common / TODO `items/jars #1`
 
 ### Goal
 Jar maximum 60, every other jar value scaled to the same ratios, for finer steps; raw fruit holds 36.
@@ -75,7 +75,7 @@ the saved capacity is under the new one) or accept a one-off reset. Lowering the
 ---
 
 ## jars #2: New jar contents
-Status **Planned** / Work patcherMod / resource pack / TODO `items/jars #2`
+Status **Planned** / Work Creative Common / resource pack / TODO `items/jars #2`
 
 ### Goal
 Jars take all candy mixes, cotton candy, diamond, emerald, redstone (opaque red with black accents, 36, glows slightly;
@@ -92,7 +92,7 @@ glowstone and gunpowder the same), coal and charcoal.
    gunpowder), `fuels` (coal, charcoal), `candy_mix` merging the sweets; add `i.t_jar_family_*` keys in item_dict.
    Cotton candy: `i.cotton_candy` = `cloudstorage:cotton_candy` (item_dict 12024, verified 2026-10-31).
 2. Render: a "pile" look for dusts and gems (opaque, tinted layers with black accents): extend the renderer mixins with a
-   per-item layer style table, textures under `kubejs/assets/` or the patcherMod resources.
+   per-item layer style table, textures under `kubejs/assets/` or the Creative Common resources.
 3. Glow: the placed jar's light level from its contents (an emissive layer plus `getLightEmission` on the block state); how
    Supplementaries lights a lava jar is unverified: read `JarBlock`.
 
@@ -147,7 +147,7 @@ seashells their own single-kind entries.
 ---
 
 ## jars #4: Soups and stews take 1 jar space
-Status **Planned** / Work patcherMod / TODO `items/jars #4`
+Status **Planned** / Work Creative Common / TODO `items/jars #4`
 
 ### Goal
 A bowl of soup or stew fills 1 space of the jar (was 2); enchanted soups and stews glint in the jar.
@@ -174,7 +174,7 @@ A bowl of soup or stew fills 1 space of the jar (was 2); enchanted soups and ste
 ---
 
 ## jars #5: Pickled veg storage
-Status **Planned** / Work KubeJS / patcherMod / TODO `items/jars #5`
+Status **Planned** / Work KubeJS / Creative Common / TODO `items/jars #5`
 
 ### Goal
 A storage option for pickled vegetables: a crate, or large jars.
@@ -190,7 +190,7 @@ A storage option for pickled vegetables: a crate, or large jars.
 ### Build
 Crate route: KubeJS storage block per the pack's crate recipe convention (`global.NCH` 9 -> 1 recipes, a block in
 [decor_blocks.js](../../kubejs/startup_scripts/items/decor_blocks.js) or reuse an existing crate model). Large-jar route:
-a new patcherMod block entity reusing the jar renderer: much larger.
+a new Creative Common block entity reusing the jar renderer: much larger.
 
 ### Decisions
 Crate or large jars. Recommend a crate (data and recipes only; reuses the crate and bag merge, now `merges/materials #4`,

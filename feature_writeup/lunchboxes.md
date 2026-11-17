@@ -29,7 +29,7 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 | Food only through the item handler too (`LunchboxFoodOnlyMixin`) | BUILT 2026-11-15 (plan_post_scratch_1115.md D1), not installed; SQ-PS15-13 |
 | Seagulls ignore all lunchboxes (inventory and dropped) | BUILT 2026-10-29, untested (MT-26 in [mob_block_tweaks.md](mob_block_tweaks.md)) |
 
-- **Pending:** the in-game suite (section 7); the client checks are CQ-LB-01 (LB-01, -02, -07 to -11). Scratch rows SQ-LB-01, -02 PASSED r1031 (2026-10-31) with patcherMod
+- **Pending:** the in-game suite (section 7); the client checks are CQ-LB-01 (LB-01, -02, -07 to -11). Scratch rows SQ-LB-01, -02 PASSED r1031 (2026-10-31) with Creative Common
   1.1.04 and Creative Delight 1.0.0.
 - **Files to open:** section 5.
 - **Knobs:** none in config. The slot count of the new tier is fixed at registration (`LunchboxItems.NETHERITE_SLOTS`).
@@ -72,7 +72,7 @@ The ids keep Spice of Life's names so existing boxes and their contents carry ov
 
 ## 3. What the pack changes
 
-1. **Netherite tier.** patcherMod registers `creativedelight:netherite_lunchbox` (`LunchboxItems`), 18 slots, fire
+1. **Netherite tier.** Creative Common registers `creativedelight:netherite_lunchbox` (`LunchboxItems`), 18 slots, fire
    resistant, only when Spice of Life is loaded.
 2. **Looks.** New item models in `kubejs/assets/solapplepie/models/item/` point Lunchbox at the copper texture and
    Golden Lunchbox at the iron texture. Spice of Life's own `lunchbox.png` and `golden_lunchbox.png` are untouched:
@@ -188,7 +188,7 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 
 - 2026-10-29: built. Owner decisions in section 4. Textures from the owner's art (`copper_lunchbox.png`,
   `iron_lunchbox.png`, `netherite_lunchbox.png`, two outline masks; moved from `kubejs/assets/` into
-  `kubejs/assets/solapplepie/textures/items/`, the `ntherite` typo fixed). patcherMod and Creative Delight built and
+  `kubejs/assets/solapplepie/textures/items/`, the `ntherite` typo fixed). Creative Common and Creative Delight built and
   installed. Changelog bullets in `unreleased.md` (Food & Cooking, Mobs & Animals).
 - 2026-10-29: checked that eating from a lunchbox records the food in Spice of Life, not the box (section 2): already
   so in Spice of Life 2.2.0, covers the Netherite tier; no code change. LB-14 added.

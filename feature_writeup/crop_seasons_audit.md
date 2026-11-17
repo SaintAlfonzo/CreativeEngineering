@@ -71,7 +71,7 @@ none
 | floralench | `floralench:white_tulip_bush` | `floralench:white_tulip_bush` | temperate | - | yes (WhiteTulipVineBushBlock) | temperate |
 | floralench | `floralench:wither_rose_bush` | `floralench:wither_rose_bush` | temperate | - | yes (VineBushBlock) | temperate |
 | fruitsdelight | `fruitsdelight:apple_leaves` | `fruitsdelight:apple_leaves` | autumn_fruit | Au | yes (PassableLeavesBlock) | autumn_fruit |
-| fruitsdelight | `fruitsdelight:attached_hamimelon_stem` | - | warm_dry | - | yes (pack code) | warm_dry extra fruit (patcherMod StemExtraFruit) fires the event |
+| fruitsdelight | `fruitsdelight:attached_hamimelon_stem` | - | warm_dry | - | yes (pack code) | warm_dry extra fruit (Creative Common StemExtraFruit) fires the event |
 | fruitsdelight | `fruitsdelight:bayberry_leaves` | `fruitsdelight:bayberry_leaves` | warm_wet | Su | yes (PassableLeavesBlock) | warm_wet |
 | fruitsdelight | `fruitsdelight:blueberry_bush` | `fruitsdelight:blueberry_bush` | cold | Sp | yes (BaseBushBlock) | cold |
 | fruitsdelight | `fruitsdelight:cranberry_bush` | `fruitsdelight:cranberry` | temperate | Au | yes (BaseBushBlock) | temperate |
@@ -93,8 +93,8 @@ none
 | fungidelight | `fungidelight:morel_mushroom_colony` | `fungidelight:morel_mushroom_colony` | mushroom | - | yes (MushroomColonyBlock) | mushroom |
 | hearthandharvest | `hearthandharvest:raspberry_bush` | `hearthandharvest:raspberry_pips` | temperate | - | yes | temperate |
 | immersiveengineering | `immersiveengineering:hemp` | `immersiveengineering:seed` | temperate | - | yes (HempBlock, pack hook) | temperate |
-| minecraft | `minecraft:attached_melon_stem` | - | warm_wet | - | yes (pack code) | warm_wet extra fruit (patcherMod StemExtraFruit) fires the event |
-| minecraft | `minecraft:attached_pumpkin_stem` | - | temperate | - | yes (pack code) | temperate extra fruit (patcherMod StemExtraFruit) fires the event |
+| minecraft | `minecraft:attached_melon_stem` | - | warm_wet | - | yes (pack code) | warm_wet extra fruit (Creative Common StemExtraFruit) fires the event |
+| minecraft | `minecraft:attached_pumpkin_stem` | - | temperate | - | yes (pack code) | temperate extra fruit (Creative Common StemExtraFruit) fires the event |
 | minecraft | `minecraft:bamboo` | `minecraft:bamboo` | warm_wet | Sp/Su | yes | warm_wet |
 | minecraft | `minecraft:beetroots` | `minecraft:beetroot_seeds` | temperate | Au | yes | temperate |
 | minecraft | `minecraft:cactus` | `minecraft:cactus` | warm_dry | Su | yes | warm_dry |

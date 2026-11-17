@@ -251,11 +251,11 @@ Source: [food.md](food.md) 3.12 (built 2026-10-23, live since 1.1.03). It is sep
 
 | Part | How it works | Where |
 |---|---|---|
-| Storage | NBT on the food stack, `Seasonings:["creativeengineering:garlic", ...]`, kept sorted so application order does not split stacks | patcherMod `food/Seasonings` |
+| Storage | NBT on the food stack, `Seasonings:["creativeengineering:garlic", ...]`, kept sorted so application order does not split stacks | Creative Common `food/Seasonings` |
 | Definition | Each seasoning is written once: id, display name, grid item, **bonus** (`nutrition` hunger points, `saturation` points capped at the food's, `heal` health points, timed `effects`), `combines` (keys it may share a food with; one side listing the other is enough; unlisted pairs do not combine), `families`, `add`, `remove`, optional `needs` (member mod) | `creativeengineering/seasonings.js` (`global.seasoning`, startup, both sides) |
 | Craft | Special shapeless recipe type `creativeengineering:seasoning`: one food + one of each seasoning item gives the same food with those seasonings added, all other NBT kept. Refused if the food already has the seasoning, a pair does not combine, or the food is outside the seasoning's tag. Emitted by `NCH.season`; one craft per seasoning and per combining pair | `seasoning.js` (server), `SeasoningRecipe` |
 | Which foods | Item tag `#<ns>:seasonable/<path>` per seasoning, built from `families` (every member of each food family and subfamily), then `add`, then `remove`. A seasoning with no foods gets no craft. This is why skewers must join the skewer family before they can be seasoned by the pack system | `seasoning_tags.js`, `food_families.json` |
-| Eating | `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players) applies each bonus after the food's own | patcherMod |
+| Eating | `Seasonings.onEaten` (`LivingEntityUseItemEvent.Finish`, server, players) applies each bonus after the food's own | Creative Common |
 | Display | Tooltip line per seasoning ("Garlic: Speed (0:10)"), AppleSkin hunger and saturation, Seasoned icon overlay, one JEI Seasoning page per craft | `SeasoningTooltip`, `AppleSkinSeasonings`, `SeasoningJEI` |
 
 Differences from BBQ's mechanic, which the fold has to close:
@@ -478,8 +478,8 @@ does).
 
 ### 4.0 Build record (2026-11-01)
 
-Built in one session, steps 0-19. Not installed (the game may be running): the Creative Delight jar and the patcherMod
-jar go to `mods/` together. Offline checks done: member, bundle and patcherMod compile; the bundle nests
+Built in one session, steps 0-19. Not installed (the game may be running): the Creative Delight jar and the Creative Common
+jar go to `mods/` together. Offline checks done: member, bundle and Creative Common compile; the bundle nests
 `backportedBarbeques-1.3.0-ce-19.2-01.jar` and carries the scripts; `recipes.js` run headless through the real NCH gives
 the 26 recipes with the inputs and times of 3.1; the item, block and food dicts load (food grammar check passes). The
 javac logic harness of 7 was not written: the grill tick needs a Level and recipe manager, so it is covered by SQ-BBQ-05
@@ -490,7 +490,7 @@ to -08 instead.
 | 0 Port | yes | `development/creativeDelight/members/barbeques` (project `backportedBarbeques`, mod id `barbequesdelight`, package `com.SaintAlfonzo.creativedelight.barbeques`), nested last in `bundle_members`. Not `development/backportedBarbeques` as planned: CD members live under `members/`. LGPL notice `NOTICE-upstream-LGPL.txt`. B1 fixed. Stack NBT: seasoning `BBQSeasoning` (string), combo contents `Skewers` (list), grill `Entries` |
 | 1 Ids | yes | `item_dict.js` (36 items + `t_raw_skewers`, `t_grilled_skewers`, `t_raw_cod`, `t_raw_bacon`; the blocks are `bbq_grill`, `bbq_basin`, `bbq_tray` because `i.basin` is Create's), `block_dict.js` (3 blocks), `food_dict.js` (34 keys) |
 | 2 Tags | yes | `kubejs/data/creativedelight/kubejs/barbequesdelight/tags.js`; skewer tags also in the port's data; mineable tags in the port's data; CarryOn tag dropped |
-| 3, 7 Recipes | yes | All 26 through `global.NCH` (`recipes.js`): new emitters `bbqSkewering`, `bbqGrilling`, `bbqCombine` in patcherMod's `neoCraftHelper.js`. The port ships **no** recipe data (step 3's "23 stay as data" dropped in favor of step 7) |
+| 3, 7 Recipes | yes | All 26 through `global.NCH` (`recipes.js`): new emitters `bbqSkewering`, `bbqGrilling`, `bbqCombine` in Creative Common's `neoCraftHelper.js`. The port ships **no** recipe data (step 3's "23 stay as data" dropped in favor of step 7) |
 | 8 Effects | none needed | |
 | 9 Food types | yes | `food_types.json`: 10 cooked skewers, wrap, sandwich `handheld` (where the pack skewers are; no skewer type yet), bibimbap `meal`, burnt skewer `hazard`; raw skewers are not food. SoL complexity: nothing to add (the tuning system of food.md 3.5 is not built, defaults apply) |
 | 10 Families | yes | `tools/food_families.py`: cooked skewers in `NO_FAMILY` (closest: skewer, waits for `dishes/meals #46`), bibimbap override `meal/rice`; wrap and sandwich by name (`sandwich/wrap`, `sandwich/roll`), burnt by type (`hazard`). `food_families.json` regenerates after `/dumpall` |

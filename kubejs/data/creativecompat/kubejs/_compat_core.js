@@ -8,5 +8,5 @@
 // Each script pack has its own scope: these scripts read only global.* (NCH, tags, item, blocks, fluid) at event time.
 ServerEvents.loaded(e => {
 	if (!global.itemPhysics) console.error('[creativecompat] global.itemPhysics missing: the Compat jar\'s startup ' +
-		'scripts did not run (patcherMod without the startup loader, or no creativecompat jar in mods/)')
+		'scripts did not run (Creative Common without the startup loader, or no creativecompat jar in mods/)')
 })

@@ -243,7 +243,7 @@ except chorus (10), creepers crush (100) and mellohi (1).
 | Worldgen | biome modifiers per grape type and tree (`forge/biome_modifier/add_*`) | same placed-feature ids (`tree_apple`, `tree_cherry`, `*_grape_bush_chance`), biome tags `spawns_*`; new apple / dark cherry tree variants |
 | Village houses | none | `data/vinery/structure/vinery_{desert,plains,savanna,taiga}.nbt` ship, but **nothing adds them to a pool**, and their palettes still name 1.3-era ids (`vinery:basket`, `chair`, `table`, `loam`, `cherry_*`). Dead data. Per-house breakdown (checked 2026-10-20 from the NBTs): 5 D8 |
 | Commands | none | `/vinery dump grapes|juices|effects`, `grow`, `barrel finish`, `press finish`, `pot fill`, `winemaker spawn|locate`, `effect`, `reload`; `/wine info|time|storage|level|mature|fresh|years|days` (op 2 for edits) |
-| JEI | none (REI only); the pack has its own plugin in patcherMod ([vinery_jei.md](vinery_jei.md)) | built-in: barrel, press mashing, press fermenting, barrel recipe transfer |
+| JEI | none (REI only); the pack has its own plugin in Creative Common ([vinery_jei.md](vinery_jei.md)) | built-in: barrel, press mashing, press fermenting, barrel recipe transfer |
 | HUD | none | Foundation `BlockInfoOverlay`: pot contents/stomps, storage slot contents (`infoOverlay.mode`) |
 | Creative | one tab | one tab with 4 side tabs (essentials, wines, dark cherry, decoration) |
 | Advancements | 60 files | 20 in `main/` + recipe unlocks; `wine_somelier` gives 800 xp + 2 banners |
@@ -266,7 +266,7 @@ Mapping the old keys:
 |---|---|---|
 | `year_length_in_days` | `daysPerYear` | pack sets 16 |
 | `years_per_effect_level` | `yearsPerEffectLevel` | pack sets 2 |
-| `wine_trader_chance` | `trader.spawnChance` | pack sets 0; the port's own spawner (`[trader] ownSpawner`, 96000 ticks, moved from patcherMod 2026-10-27) spawns the Winemaker |
+| `wine_trader_chance` | `trader.spawnChance` | pack sets 0; the port's own spawner (`[trader] ownSpawner`, 96000 ticks, moved from Creative Common 2026-10-27) spawns the Winemaker |
 | `enable_wine_maker_set_bonus` | none | the set bonus is always on |
 | `probability_to_keep_bone_meal` | none | always 100% |
 | `probability_for_damage` | none | always 100% |
@@ -346,13 +346,13 @@ no code.
 | # | Pack file / feature | Impact |
 |---|---|---|
 | I1 | License | code MIT, resources All Rights Reserved (3.6). Settle D13 before building anything that ships upstream files |
-| I2 | patcherMod `FermentationBarrelStackOutputMixin` | targets the 1.3.10 class and slots; 1.5.5 stacks by itself. **Remove** |
-| I3 | patcherMod `compat/vinery` JEI plugin (VineryJEI, 4 pages, [vinery_jei.md](vinery_jei.md); deleted 2026-10-27, pack_hygiene.md finding 6) | the port ships JEI for the barrel and both press stages. Keep only Grape Stomping (12 stomps now) and Wine Aging (rewrite for storage aging and the cellar multiplier); retire Fermentation and Wine Press; update `config/jei/recipe-category-sort-order.ini` (+ `configs_edited/`) |
-| I4 | patcherMod `WinemakerTrades` | reflects on `satisfyu.vinery.entity.WanderingWinemakerEntity`'s static trade map. The class moves to `net.satisfy.vinery.core.entity` and its trades become config-driven: rewrite against the port's API (a direct dependency is fine now, since we own the jar) |
-| I5 | patcherMod `WinemakerSpawner` (moved into the port 2026-10-27: `forge/WinemakerSpawner`, `[trader] ownSpawner`) | reads `config/vinery/config.json5 wine_trader_chance`: switch to the port's `trader.spawnChance` (pack: 0) |
-| I6 | patcherMod `StuckInBlock` | rule keyed by class name `satisfyu.vinery.block.grape.TaigaGrapeBush`: becomes `net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush` |
-| I7 | patcherMod `BonemealCharmMixin` | modeled on Vinery's bone-meal mixin. 1.5.5's version changes the return to PASS, so the charm (which checks for CONSUME) and the winemaker set no longer double-refund. The order still matters if both mixins hit the same call: check (VB-27) |
-| I8 | patcherMod `crop_growth.json` (WTHIT growth line) | `vinery:grapevine_lattice` -> the 10 lattice ids (`vinery:*_lattice`); lattice age now lives in the block entity too, but the state `age` still drives it |
+| I2 | Creative Common `FermentationBarrelStackOutputMixin` | targets the 1.3.10 class and slots; 1.5.5 stacks by itself. **Remove** |
+| I3 | Creative Common `compat/vinery` JEI plugin (VineryJEI, 4 pages, [vinery_jei.md](vinery_jei.md); deleted 2026-10-27, pack_hygiene.md finding 6) | the port ships JEI for the barrel and both press stages. Keep only Grape Stomping (12 stomps now) and Wine Aging (rewrite for storage aging and the cellar multiplier); retire Fermentation and Wine Press; update `config/jei/recipe-category-sort-order.ini` (+ `configs_edited/`) |
+| I4 | Creative Common `WinemakerTrades` | reflects on `satisfyu.vinery.entity.WanderingWinemakerEntity`'s static trade map. The class moves to `net.satisfy.vinery.core.entity` and its trades become config-driven: rewrite against the port's API (a direct dependency is fine now, since we own the jar) |
+| I5 | Creative Common `WinemakerSpawner` (moved into the port 2026-10-27: `forge/WinemakerSpawner`, `[trader] ownSpawner`) | reads `config/vinery/config.json5 wine_trader_chance`: switch to the port's `trader.spawnChance` (pack: 0) |
+| I6 | Creative Common `StuckInBlock` | rule keyed by class name `satisfyu.vinery.block.grape.TaigaGrapeBush`: becomes `net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush` |
+| I7 | Creative Common `BonemealCharmMixin` | modeled on Vinery's bone-meal mixin. 1.5.5's version changes the return to PASS, so the charm (which checks for CONSUME) and the winemaker set no longer double-refund. The order still matters if both mixins hit the same call: check (VB-27) |
+| I8 | Creative Common `crop_growth.json` (WTHIT growth line) | `vinery:grapevine_lattice` -> the 10 lattice ids (`vinery:*_lattice`); lattice age now lives in the block entity too, but the state `age` still drives it |
 | I9 | Foundation `BlockInfoOverlay` HUD | not ported; the lines go into WTHIT (D6, decided) |
 | I10 | KubeJS `item_dict.js` (144 Vinery entries) | rename keys/values per 4.1; add the new ids (lattices, racks, bags, cabinet, drawer, window block, path slab, banner, lilitu wine, new juices). Supplementaries / Every Compat entries follow D1 |
 | I11 | `server_scripts/tags/wood_tags.js` | `vinery:barrel` / `vinery:wooden_barrels` -> the D2 barrel id |
@@ -595,7 +595,7 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 
 | File | Change |
 |---|---|
-| patcherMod | Remove `FermentationBarrelStackOutputMixin` (I2). Trim `compat/vinery` to the stomping and aging pages (I3). Rewrite `WinemakerTrades` (I4). Repoint `WinemakerSpawner` (I5) and `StuckInBlock` (I6). Update `crop_growth.json` (I8) |
+| Creative Common | Remove `FermentationBarrelStackOutputMixin` (I2). Trim `compat/vinery` to the stomping and aging pages (I3). Rewrite `WinemakerTrades` (I4). Repoint `WinemakerSpawner` (I5) and `StuckInBlock` (I6). Update `crop_growth.json` (I8) |
 | [../kubejs/startup_scripts/_lib/item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | I10 |
 | [../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js](../kubejs/data/creativeengineering/kubejs/tags/wood_tags.js), [../kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js) | I11, I12 |
 | [../kubejs/data/creativeengineering/kubejs/engineering/fabric.js](../kubejs/data/creativeengineering/kubejs/engineering/fabric.js), [../kubejs/server_scripts/other/misc_mods.js](../kubejs/server_scripts/other/misc_mods.js) | I13 |
@@ -614,7 +614,7 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | Item | Result |
 |---|---|
 | I2 | `FermentationBarrelStackOutputMixin` deleted, entry removed from `creativeengineering.mixins.json` |
-| I3 | patcherMod's `VineryJEI` stands down entirely when `net.satisfy.vinery.forge.VineryForge` is present: the port ships all five pages (barrel, both press stages, and its own Grape Stomping and Wine Aging). JEI sort order (`config/jei/` + `configs_edited/root_config/jei/`): the four `creativeengineering:vinery_*` lines became `vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging` (in configs_edited after the Brewin' lines) |
+| I3 | Creative Common's `VineryJEI` stands down entirely when `net.satisfy.vinery.forge.VineryForge` is present: the port ships all five pages (barrel, both press stages, and its own Grape Stomping and Wine Aging). JEI sort order (`config/jei/` + `configs_edited/root_config/jei/`): the four `creativeengineering:vinery_*` lines became `vinery:wine_fermentation`, `apple_press_mashing`, `apple_press_fermenting`, `grape_stomping`, `wine_aging` (in configs_edited after the Brewin' lines) |
 | I4 | `WinemakerTrades` tries `net.satisfy.vinery.core.entity.WanderingWinemakerEntity` first, then 1.3.10's class; the port keeps the static `TRADES` map. `/dumptrades` (`villager_trades_dump.js`) does the same |
 | I5 | `WinemakerSpawner` reads `config/vinery-common.toml` `[trader] spawnChance` when that file exists, else 1.3.10's json5; CEConfig comment names both. 2026-10-27: the spawner moved into the port (`[trader] ownSpawner`, `ownSpawnerInterval`); CEConfig `winemakerEnabled` / `winemakerIntervalTicks` and the toml check are gone |
 | I6 | `StuckInBlock` has a rule for the port's `GrapeBushBlock$TaigaGrapeBush` next to the 1.3.10 one |
@@ -636,7 +636,7 @@ Rows shared with Part A 3.1 (data components, codecs, packets, `c:` tags) apply 
 | I23 | no change: the Vinery lines in tooltips.js are commented-out placeholders |
 | I24 | `tools/placeable_catalog.py` knows the port's `DrinkBlockItem` (sneak to place) |
 | I25 | NOT DONE: rerun the generators and `/dumpall` after the jar swap |
-| I26 | mod_sides row swapped, doapi row removed (nothing else needs doapi: scanned every mods.toml); `vinery_upstream/` deploy category. Swap in `mods/` DONE 2026-10-18 (port `-02`, patcherMod 1.0.8) |
+| I26 | mod_sides row swapped, doapi row removed (nothing else needs doapi: scanned every mods.toml); `vinery_upstream/` deploy category. Swap in `mods/` DONE 2026-10-18 (port `-02`, Creative Common 1.0.8) |
 | Config | none to write: the port's spec defaults are the pack values (aging 16 days per year, 2 years per level, 28.2 h per year; `[winemaker_set]` as today; `trader.spawnChance` 0). Forge writes `config/vinery-common.toml` on first boot. 1.3.10's `config/vinery/config.json5` becomes unused |
 
 ### 4.5 Wine aging revamp: playtime clock (decided 2026-10-14)
@@ -732,7 +732,7 @@ clients get the clock in `VintageClockPacket`.
 
 ### 4.6 WTHIT lines (D6, decided 2026-10-14)
 
-These go in patcherMod's WTHIT plugin (next to Run Speed and Growth), not Foundation's overlay:
+These go in Creative Common's WTHIT plugin (next to Run Speed and Growth), not Foundation's overlay:
 
 | Block | Lines |
 |---|---|
@@ -745,9 +745,9 @@ These go in patcherMod's WTHIT plugin (next to Run Speed and Growth), not Founda
 
 Client settings: a WTHIT toggle per line group, using WTHIT's own config.
 
-**Built 2026-10-18, in the port, not patcherMod:** `net.satisfy.vinery.forge.compat.wthit` (`VineryWthit` common:
+**Built 2026-10-18, in the port, not Creative Common:** `net.satisfy.vinery.forge.compat.wthit` (`VineryWthit` common:
 toggles + server data; `VineryWthitClient`: body lines; `waila_plugins.json` in the port jar). The lines need the
-port's block entities and its vintage clock, which patcherMod could only reach by reflection or by compiling against
+port's block entities and its vintage clock, which Creative Common could only reach by reflection or by compiling against
 our own jar. The D6 decision (WTHIT, not Foundation's overlay) is unchanged.
 - Server data for the barrel (juice, level %, recipe and %, bottles), press (both stages with input and %),
   stackable log (fire left, cooking %), and storage contents. Storage pots are read from their saved tag, so looking at
@@ -772,7 +772,7 @@ our own jar. The D6 decision (WTHIT, not Foundation's overlay) is unchanged.
 | `damageAmount` | 1 | damage per piece per use (1.5.5 hardcodes 2) |
 
 - Setting `damageMode = NONE` or `damageAmount = 0` both mean no damage.
-- The bonus runs only when vanilla returned CONSUME. The refund and the patcherMod charm (I7) must never both apply
+- The bonus runs only when vanilla returned CONSUME. The refund and the Creative Common charm (I7) must never both apply
   to the same use: the port's mixin marks the use as refunded, and the charm skips it (VB-27).
 
 ### 4.8 Upstream jars as resource donors (D13 option B, chosen 2026-10-18)
@@ -942,7 +942,7 @@ with the unmodified upstream jar, and the port reads it. How the jar gets onto e
   - Only makes sense combined with B for the art.
 - **D: don't port 1.5.5 as a mod.**
   - Keep the official 1.3.10 jar.
-  - Bring over only behavior that needs no new assets, using patcherMod mixins: barrel juice level, press stages, wine
+  - Bring over only behavior that needs no new assets, using Creative Common mixins: barrel juice level, press stages, wine
     aging rules, effect changes.
   - New blocks (lattices, racks, bags, cabinet, banner) and the new effects' icons would be left out.
 
@@ -1024,7 +1024,7 @@ The decision goes further than the recommendation below: blocks that have a 1.5.
 ### 5 D6. Block info HUD (DECIDED 2026-10-14: WTHIT, see 4.6)
 
 - **Recommended:** don't port Foundation's `BlockInfoOverlay`. Put the same lines (pot grapes and stomps, barrel juice
-  and progress, rack contents) into the patcherMod WTHIT plugin, next to the Run Speed and Growth lines.
+  and progress, rack contents) into the Creative Common WTHIT plugin, next to the Run Speed and Growth lines.
 - **Alternative:** port the overlay with `mode` OFF by default.
 
 ### 5 D7. Foundation (DECIDED 2026-10-19: bundled)
@@ -1119,7 +1119,7 @@ went up because `-01` shipped in 1.0.7, and a rebuild under the same name wouldn
 | 7.5 JEED providers | Built. Port: `WineEffects.all()` (wine -> effect) and `winesByEffect()` (effect id -> wine ids, strings only, for Rhino). Pack: `R.jeedProvider(effect, providers, e, idOverride)` in NCH, called once per effect at the end of `kubejs/server_scripts/cooking/alcohol.js` (`creativeengineering:jeed/vinery_<effect>`). NCH is a startup script, so it needs a game restart, not just `/reload` |
 | 7.6 Mead out | Built. Block, item, storage lists, render layer and effect default are gone. The upstream-pack layer has a `REMOVED` set: tag entries naming `vinery:mead` are dropped, and so are advancement criteria whose item list it empties. **Found:** `wine_somelier` (the advancement that gives the banner) and `the_noble_drop` list mead. The old "leave out the whole file" rule would have dropped both, banner reward included. Now mead is taken out of their lists: 25 -> 24 criteria (checked headless against the 1.5.5 file). Villager trades never had it |
 | 7.7 Banner | Built. `[banner] effect / amplifier / radius / durationSeconds / refreshBelowSeconds` (Health Boost II, 8, 60, 10). Below the threshold the running effect is extended in place with `MobEffectInstance.update` plus a `ClientboundUpdateMobEffectPacket`, never re-added, so the extra hearts aren't clamped. The tooltip line comes from the settings (`tooltip.foundation.banner.effect`) |
-| 7.8 Time | patcherMod side BUILT too (patcherMod 1.0.8, [time.md](time.md) 3.8): the `[time]` master pushes `daysPerMonth`, the clock, the cellar value and the rest into `vinery-common.toml` (since 2026-10-27 the port reads them from `time.WineTime` instead, time.md 3.7); Serene Seasons calendar tooltip; "7:30 pm" clock. Port side built: `[wine] daysPerMonth` 8, `monthsPerEffectLevel` 3, `durationPerMonth` 200, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME, a new `dayUnit` DAYTIME (24000 clock units a day, forced on WORLD_TIME), `playtimeHoursPerMonth`. Real-time text divides by the measured day-time pace (`Snapshot.realTicks`). "Month" in the tooltip, `/wine` (literal `months`), JEI, WTHIT and the upstream keys. The Vinery calendar is removed (block, item, classes, keeper data; `i.calendar` / `i.mead` out of `item_dict.js` and the generated food / stack JSONs) |
+| 7.8 Time | Creative Common side BUILT too (Creative Common 1.0.8, [time.md](time.md) 3.8): the `[time]` master pushes `daysPerMonth`, the clock, the cellar value and the rest into `vinery-common.toml` (since 2026-10-27 the port reads them from `time.WineTime` instead, time.md 3.7); Serene Seasons calendar tooltip; "7:30 pm" clock. Port side built: `[wine] daysPerMonth` 8, `monthsPerEffectLevel` 3, `durationPerMonth` 200, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME, a new `dayUnit` DAYTIME (24000 clock units a day, forced on WORLD_TIME), `playtimeHoursPerMonth`. Real-time text divides by the measured day-time pace (`Snapshot.realTicks`). "Month" in the tooltip, `/wine` (literal `months`), JEI, WTHIT and the upstream keys. The Vinery calendar is removed (block, item, classes, keeper data; `i.calendar` / `i.mead` out of `item_dict.js` and the generated food / stack JSONs) |
 | 7.9 Cask | Built. **Deviation:** the plan put our wording in the port's `assets/vinery/lang/en_us.json`. The jar can't carry upstream's path (`checkNoUpstreamResources`), and the order between the mod's own pack and the upstream pack isn't guaranteed. So the lines live in `src/main/resources/vinery_port/upstream_lang/en_us.json`, and the upstream-pack layer applies them on top of the merged upstream lang (checked headless). Resource packs still override. `dark_cherry_barrel` and 1.3.10's `barrel` keep their names (VQ2) |
 | 7.10 Apple wine | Built (10.12 later made its size come from its per-block limit, 3 = small). `BottleSize.SMALL`. The upstream-pack layer moves `vinery:apple_wine` from `large_bottle` to `small_bottle`, in place of an own tag file (same reason as 7.9). Its block still holds 3 |
 | 7.11 Praetorian | SETTLED by 10.8 (small racks, shrunk); medium since 10.12, so the 4x rack, the wine box and the single-bottle rack, drawn with its own model (no slim, 10.14) |
@@ -1376,7 +1376,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-25 Party:** lilitu wine, hit a zombie -> firework at the target
 - [ ] ~~**VB-26 Banner from the advancement**~~ retired 2026-10-18: advancements are removed (section 10.2); the banner is crafted now (VB-64)
 - [ ] **VB-27 Winemaker set and charm:** full set + bone meal -> bone meal kept, 30% of uses damage all 4 pieces by 1; set + bonemeal charm -> exactly one refund
-- [ ] **VB-28 JEI:** all five Vinery pages (cask, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of patcherMod's `creativeengineering:vinery_*` pages
+- [ ] **VB-28 JEI:** all five Vinery pages (cask, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of Creative Common's `creativeengineering:vinery_*` pages
 - [ ] **VB-29 Old world: ids kept:** a 1.3.10 world with cherry blocks, crates, wine_press, juice bottles, vinemaker armor, stove, sink, flower box -> all present under the same ids; nothing in the missing-mappings log except effects
 - [ ] ~~**VB-30 Old world: storage:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 10). 1.3.10 wine racks, shelves and placed wine bottles keep their bottles
 - [ ] ~~**VB-31 Old world: barrel and wines:**~~ retired 2026-10-27 (old-world conversion removed, pack_hygiene.md finding 10). 1.3.10 barrel with juice and bottles converts per W3; an old 2-year wine shows its age, not "brewed in the future"
@@ -1508,7 +1508,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
     out of its criteria instead.
   - The JEI Cask transfer paired slots in the wrong order.
   VB-20 and VB-33 to VB-36 superseded by the sun clock. VB-61 to VB-63 added.
-- 2026-10-18 evening: the patcherMod half of 7.8 built ([time.md](time.md) 3.8, patcherMod 1.0.8 in `mods/`).
+- 2026-10-18 evening: the Creative Common half of 7.8 built ([time.md](time.md) 3.8, Creative Common 1.0.8 in `mods/`).
   `i.mead` and `i.calendar` removed from `item_dict.js`, and `mead` from the generated placeable, stack-size and
   food-type lists. Every other port item was already mapped.
 - 2026-10-19: `-01` (with the grass slab hotfix) had gone out in pack 1.0.7, DEPLOYED 2026-10-18 19:43. `-02` (7,
@@ -1518,14 +1518,14 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - 2026-10-19: 7.14 built into `-03`: grape pot 12 grapes, 4 stomps, 4 bottles (TODO alcohol-decisions #4 option A).
   VB-10 rewritten. The jar is in `build/libs/`; the game had `-03` open, so it isn't in `mods/` yet.
 - 2026-10-19: 10.13 built into `-03` (cold / cellar / cold cellar storage, rack tooltips, network version 2) with
-  patcherMod 1.0.10 (`[time.wine.boosts]` cellar 2.0, cold 2.0). VB-76 to VB-79 added. Same day: warm x0.75 and the
+  Creative Common 1.0.10 (`[time.wine.boosts]` cellar 2.0, cold 2.0). VB-76 to VB-79 added. Same day: warm x0.75 and the
   sunny x1.0 label added; VB-76 to VB-78 rewritten, VB-80 added. `build/libs/` only: the game
   was running.
 - 2026-10-19: 10.14 built into `-03` (Stal, Sun-kissed, Magnetic medium; slim 4x rack / wine box models; Magnetic box
   look in Strad's shape). VB-81 to VB-83 added. The recolour then moved in memory (`SlimBottles`, no upstream-derived
   art in the jar). `build/libs/` only: the game had `-03` open.
 - 2026-10-19: pack 1.0.9 DEPLOYED (15:54) with `-02` unchanged. Late: `-03` (7.14, 10.9 to 10.14, in-memory slim
-  bottles) and patcherMod 1.0.10 in the local `mods/` (22:27); Brewin' `-03` not yet, so VB-76 to VB-80's cold and warm
+  bottles) and Creative Common 1.0.10 in the local `mods/` (22:27); Brewin' `-03` not yet, so VB-76 to VB-80's cold and warm
   labels need it installed first. Statuses in 0, section 10, 7 and the older rack tests (VB-59, VB-71, VB-73,
   VB-74) brought in line with 10.12 to 10.14.
 - 2026-10-19 late: 10.15 built into `-03` (TODO `alcohol/vineryport #16` to `#18`): wine size and rack capacity

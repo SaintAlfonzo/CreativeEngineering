@@ -521,7 +521,7 @@ Create milling and crushing, 3 by the IE Crusher), `vintagedelight/loot.js` (Vin
 (Rustic bell pepper crates and seed bag), `create/slime.js` (`cooking/kitchen #12`); startup
 `development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/vintage_items.js` (salted cod / salmon
 into `global.removedItems`; ghost charcoal edible: Wither I 0:05, Fire Resistance 3:00, no hunger, always edible).
-These load only with the Creative Delight jar and its patcherMod installed (they return early without `global.CD`).
+These load only with the Creative Delight jar and its Creative Common installed (they return early without `global.CD`).
 `gen_can_types.py` and `food_types.json` no longer name the salted fish. Tests VTD-54, VTD-65 to VTD-74.
 
 Port `-06` (2026-10-25, vintageport #7; carries `-05`): ghost pepper seeds and the wild ghost pepper stay only on their
@@ -534,7 +534,7 @@ Right-click harvest (vintageport #8, investigated 2026-10-25): Quark's harvestin
 `CropBlock`, and its `RightClickBlock` handler runs before the block's `use`, so a ripe cucumber, ghost pepper or
 zucchini was broken for its loot and replanted at stage 0: cucumber / pepper 1 fruit + 0 to 3 seeds (one seed kept
 back as the replant), zucchini 0 to 3 zucchini; the own pick (1 to 2 cucumbers, 1 pepper, 1 to 2 zucchini; back to 5,
-5 and 4) never ran. Kept the own pick (it regrows in 2 or 3 stages, a berry-bush crop): patcherMod
+5 and 4) never ran. Kept the own pick (it regrows in 2 or 3 stages, a berry-bush crop): Creative Common
 `QuarkOwnPickMixin` on `SimpleHarvestModule.getAction` gives blocks in `#creativedelight:crops/own_pick` Quark's
 berry bush treatment (empty hand or 1x1 hoe: Quark steps aside and the block's pick runs; hoe area: Quark clicks each).
 Tag filled in the CD trees (`vintagedelight/tags.js`, `veggiesdelight/tags.js`). Quark's villager harvest still
@@ -1019,7 +1019,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-10-23: Vintage Delight port (vintage_delight.md 3.1): oat dough is a #forge:dough (owner, 2026-10-23); cucumber dough stays a named ingredient (kubejs/data/creativedelight/kubejs/vintagedelight/tags.js)
 - 2026-10-25: Vintage Delight item tags (Creative Delight members #3, moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/vintagedelight/tags.js)
 - 2026-10-25: Rows below: Creative Delight members #3, moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, unchanged (kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js)
-- 2026-10-25: Moved 2026-10-25 from the pack's startup_scripts/compost/compost_values.js, same rows and chances (22 items); the engine is patcherMod's (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here (development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/compost.js)
+- 2026-10-25: Moved 2026-10-25 from the pack's startup_scripts/compost/compost_values.js, same rows and chances (22 items); the engine is Creative Common's (global.compost, func/compost.js), tiers and rules are creativedelight/compost_rules.js here (development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/compost.js)
 - 2026-10-25: Vintage Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/vintagedelight/cooking.js)
 - 2026-10-27: Ghost pepper seeds plant only on these (vintage_delight.md 2.1, S6; moved from the pack's server_scripts/tags/blocktags.js 2026-10-27) (kubejs/data/creativedelight/kubejs/vintagedelight/tags.js)
 - 2026-10-29: Jams are mason jars only (TODO dishes/jams #1, #3, owner 2026-10-29): the jam and relish bottles are out, and Vintage's sweet berry and glow berry jams go too (Fruits Delight has both) (development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/vintage_items.js)

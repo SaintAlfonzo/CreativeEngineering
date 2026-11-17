@@ -18,7 +18,7 @@
 | Part | Status |
 |---|---|
 | `biome_config.json`: a multiplier or a replacement per biome, for every `multi_noise` dimension (Overworld from Terralith, End from Nullscape, vanilla Nether) | DEPLOYED (in the 2026-09-27 initial commit; the same 17 edits until 2026-10-19), applies to worlds created after it. Overworld rarity floor (53 more edits, `tools/biome_rarity_floor.py`) BUILT 2026-10-19, solved on a scratch server, DEPLOYED with 1.0.9 (2026-10-19 15:54) |
-| `BiomeLayoutTuner` (patcherMod) solves the edits against climate samples at every world load; `biome_overrides.js` adds the result to KubeJS's virtual datapack | DEPLOYED |
+| `BiomeLayoutTuner` (Creative Common) solves the edits against climate samples at every world load; `biome_overrides.js` adds the result to KubeJS's virtual datapack | DEPLOYED |
 | `/dumpclimate`: climate samples per dimension, shipped gzipped | DEPLOYED (resampled 2026-09-30 and 2026-10-14); Overworld resampled at 20,000 columns and caves sampled 2026-10-19, DEPLOYED with 1.0.9 |
 | `tools/gen_biome_config.py`: rebuilds the editable config and baselines after a mod update, keeping edits | in use (`/cdevgen` group `core`) |
 | Structure spawn biomes (biome merges) | **retired 2026-10-11** for biome fits ([structure_tuning.md](structure_tuning.md) 7.2, [biome_fits.md](biome_fits.md)) |
@@ -223,7 +223,7 @@ before), only when an input changed: the result is cached on the input hashes in
     to `biome_config.json` only when they change. Results are cached on the input files' hashes, so a `/reload` with no
     edit costs a hash. The last clean solve is also kept in `generation_scripts/worldgen/biome_layout_cache.json.gz`
     (ships with the pack; key adds a hash of the solver's class files), so a new launch reads it back instead of
-    solving. Delete the file to force a solve; a changed config, baseline, sample, solver setting or patcherMod solver
+    solving. Delete the file to force a solve; a changed config, baseline, sample, solver setting or Creative Common solver
     re-solves on its own and rewrites it. Log line on a hit: `inputs unchanged, reusing the last solve (disk)`.
 - **Applying it:** `biome_overrides.js` calls the tuner in `ServerEvents.highPriorityData` (fires during world load,
   world creation included) and adds the files to KubeJS's top-priority virtual datapack, above Terralith and Nullscape.
@@ -345,7 +345,7 @@ before), only when an input changed: the result is cached on the input hashes in
 - 2026-10-19: Overworld resampled at 20,000 columns (88,779 points; scratch server, same seed); rarity floor
   (user: rarest biomes more common, paid by the most common): `tools/biome_rarity_floor.py`, 39 lifted, 14 donors,
   solved in game on the scratch server (2.1). F2 mostly resolved. Tests WG-09, WG-10.
-- 2026-10-19 (round 2): `target_pct` / `target_layer` in `BiomeLayoutTuner` (patcherMod 1.0.9 rebuilt) and
+- 2026-10-19 (round 2): `target_pct` / `target_layer` in `BiomeLayoutTuner` (Creative Common 1.0.9 rebuilt) and
   `gen_biome_config.py`; `/dumpclimatecaves` + caves-file merge; layer by depth-0 entries (the share rule put
   surface biomes underground once deep samples existed, and the floor tool then gave lush caves x10: caught on the
   scratch server); `/dumpclimate` default 20,000 columns (`/dumpall` would otherwise have overwritten the dense

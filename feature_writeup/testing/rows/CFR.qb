@@ -10,7 +10,7 @@
 @@text
 @@text Targets `creativecompat-1.0.0.jar` (installed 2026-11-04 19:05), `creativedelight-1.0.0.jar` (19:19) and `creativeengineering-1.1.09.jar` (19:17) (campfire rain, Comfort,
 @@text Campfire Rules JEI rows and `[campfire]` moved from Compat to CD; mixin now `mixin.minecraft.CampfireRainMixin` in
-@@text `creativedelight.mixins.json`). CFR-08 checks patcherMod 1.1.09's `#creativedelight:stoves` include in
+@@text `creativedelight.mixins.json`). CFR-08 checks Creative Common 1.1.09's `#creativedelight:stoves` include in
 @@text `damage_tags/fire.json` and `burn_tick.json` (built by the Creative Magic and Equipment carve session, installed with
 @@text Creative Magic and Creative Equipment). Group A (superflat) unless noted; CFR-02 to -04 each need their own config state
 @@text before the boot. Run SQ-NDM (Nether's Delight member, same CD jar) in the same boots.
@@ -49,7 +49,7 @@ bootreject could not (carry|merge) config sections
 shell grep -nE "^\[" config/creativedelight-common.toml | tr '\n' ' '; echo; grep -nE "rainOutTicks *=" config/creativedelight-common.toml; grep -cE "^\[campfire\]" config/creativecompat-common.toml; true
 look the carry line comes before the merge line in the log; the CD file has [members] (or [compartments], M8), [campfire] with rainOutTicks = 100 and every other section after Forge's correction; last number 0 = Forge dropped [campfire] from Compat's file
 
-## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old patcherMod file into the existing CD file
+## SQ-CFR-04 | a pack that skipped 1.2.00: [campfire] merged from the old Creative Common file into the existing CD file
 @group A
 @commands Before the boot (pack that skipped 1.2.00): Compat file without `[campfire]` (or no Compat file), `config/creativeengineering-common.toml` with `[campfire] rainOutTicks = 120`, CD file present. Boot
 @pass `[swaps] config sections [campfire] merged from creativeengineering-common.toml into creativedelight-common.toml`; CD file `rainOutTicks = 120`
@@ -123,8 +123,8 @@ look near: comfort 3 to 5 s left; far: none
 ## SQ-CFR-08 | damage tags: creativedelight:stoves
 @group A
 @commands Boot; `grep "\[damage-tags\] loaded" logs/latest.log`; `grep -i "creativedelight:stoves" logs/latest.log`; probe (server script, `/reload`): `DamageTags.is(new DamageSource('endersdelight.endstone_stove'), 'creativecommon:fire')` and the same for `creativecommon:burn_tick`
-@pass Loaded line lists `creativedelight:stoves(1)`; no "neither a built-in flag tag nor defined by any pack" WARN for it; with patcherMod 1.1.09 or later both probes are true (with 1.1.08 also true, from the old direct entry)
-@fails CD jar missing `data/creativedelight/damage_tags/stoves.json`, or patcherMod's files lost the include
+@pass Loaded line lists `creativedelight:stoves(1)`; no "neither a built-in flag tag nor defined by any pack" WARN for it; with Creative Common 1.1.09 or later both probes are true (with 1.1.08 also true, from the old direct entry)
+@fails CD jar missing `data/creativedelight/damage_tags/stoves.json`, or Creative Common's files lost the include
 @from batches/r1106spf/b1.qb passed
 bootexpect \[damage-tags\] loaded.*creativedelight:stoves\(1\)
 bootreject neither a built-in flag tag nor defined by any pack.*creativedelight:stoves

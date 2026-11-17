@@ -9,7 +9,7 @@
 ServerEvents.loaded(e => {
 	if (!global.CB) {
 		console.error('[creativebrewing] global.CB missing: the CB jar\'s startup scripts did not run ' +
-			'(patcherMod without the startup loader, or no creativebrewing jar in mods/)')
+			'(Creative Common without the startup loader, or no creativebrewing jar in mods/)')
 		return
 	}
 	console.info('[creativebrewing] server scripts ready, members on: ' +

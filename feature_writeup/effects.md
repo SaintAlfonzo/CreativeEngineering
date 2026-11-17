@@ -41,8 +41,8 @@
 | JEI item lists for every effect (3, [jeed_providers.js](../kubejs/server_scripts/other/jeed_providers.js)): mobs, blocks, gear, code-applied food, brews, wines, potion carriers | BUILT 2026-10-20, server half scratch server PASSED 2026-10-22 (SQ-OM-00, SQ-OM-16); not seen in game (EF-15, EF-16) |
 | Update 2026-10-22: Rustic Delight's five coffees (Coffee, Milk, Honey, Chocolate, Dark) give Farmer's Respite's Caffeinated instead of Speed + Haste (food_values.js, [item_merges.md](item_merges.md) 2.8); the Speed, Haste and Caffeinated food-source cells in 2.1 predate this | reference note |
 | Description fixes (3): 16 wrong, partial or misspelt JEED texts replaced, Travel Fatigue ported from Effect Insights, 7 stale placeholders gone | BUILT 2026-10-20, not seen in game (EF-17) |
-| Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (patcherMod 1.1.01, rebuilt and installed), not seen in game (EF-18) |
-| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (patcherMod 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Phantom Bane one-player skip fixed 2026-11-02 (CB, not in `mods/`, EF-32, TODO `potions/effects #13`). Open: pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
+| Category audit (2.4): all 140 effects checked for red / blue; 6 overridden in CEConfig `[effects]` | BUILT 2026-10-20 (Creative Common 1.1.01, rebuilt and installed), not seen in game (EF-18) |
+| HUD icons (2.5), swaps and removals (2.6), compound effects and Jellie Wine (2.7), copper poisoning (2.8), Double Jump with Jump Boost (2.7) | BUILT 2026-10-31 (Creative Common 1.1.04 installed 00:44, backportedVinery -06, backportedBrewin -04, Creative Delight 1.0.0, all in `mods/`); scratch server PASSED r1031 (2026-10-31, SQ-EFX-01 to -11: mixins, Magic Resistance, swaps and removals, Caffeinated, copper poisoning, Jellie Wine, crab shell brew); SQ-EFX-12 to -14 not run (client block); EF-22 to EF-31 in game. Phantom Bane one-player skip fixed 2026-11-02 (CB, not in `mods/`, EF-32, TODO `potions/effects #13`). Open: pipe tea Haste and more pipe fluids (2.5, `#15`, `#16`) |
 
 - **Pending:** EF-01 to EF-20 have never been run. The 2026-10-20 work (providers, description fixes, category
   overrides) is built but not seen in game. The exports were refreshed by the client `/dumpall` of 2026-10-30 00:40 (with the ports); left from F10:
@@ -301,7 +301,7 @@ and NEUTRAL are both blue. AppleSkin, Quark's saturation word and `isBeneficial(
 The audit (2026-10-20) asked one question per effect: does the color match what the effect does to whoever has
 it?
 
-- Six didn't. CEConfig `[effects] categoryOverrides` changes them (patcherMod `MobEffectCategoryMixin`).
+- Six didn't. CEConfig `[effects] categoryOverrides` changes them (Creative Common `MobEffectCategoryMixin`).
 - Mixed effects keep their mod's category; the Note column says why.
 - Vanilla keeps vanilla's choices.
 - NEUTRAL and BENEFICIAL show the same blue, so nothing was moved between them.
@@ -548,7 +548,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
 - **Effect potions on every machine** ([potions.md](potions.md)): any potion above is a `create:potion` fluid, bottled,
   splashed, lingered and tipped by machine.
 - **Magic Resistance** ([armor_effects.md](armor_effects.md) 2.5): the pack's one own effect, registered in
-  [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js); the damage cut is patcherMod's
+  [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js); the damage cut is Creative Common's
   `MagicResistanceEffect`.
 - **Effect descriptions, one place:** every pack-side effect text is in
   [creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json). The KubeJS pack sits
@@ -587,7 +587,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
     rest are covered by JEED itself. `effect_audit.py` reports any that lose them.
   - **Helper:** `R.jeedProvider` now takes NBT items, drops ids that don't exist (one bad id makes JEED drop the whole
     recipe) and skips unregistered effects. `R.jeedPotionProvider` is new.
-- **Category overrides** (2.4): CEConfig `[effects] categoryOverrides`, patcherMod `potion/EffectCategories` +
+- **Category overrides** (2.4): CEConfig `[effects] categoryOverrides`, Creative Common `potion/EffectCategories` +
   `mixin/MobEffectCategoryMixin` (`getCategory()` and `isBeneficial()`). It is a common config, read live.
 - **Effects on gear:** [armor_effects.md](armor_effects.md) (set bonuses, Night Vision + Phantom Bane on echo armor,
   dragon gear).
@@ -659,7 +659,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
   of JEI because `NectarItem` only gets a creative tab when `atmospheric` is loaded; its one recipe needs `atmospheric`.
   Plan: [briefs/ui_effects.md](briefs/ui_effects.md).)
 - **F9.** FIXED 2026-10-19 (header now points at `MagicResistancePotions` and `CB_POTION_MIXES`). **Stale comment:** [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js) lines 19-23 say
-  Magic Resistance has no potion; patcherMod's `MagicResistancePotions` added base, long and strong.
+  Magic Resistance has no potion; Creative Common's `MagicResistancePotions` added base, long and strong.
 - **F10. Exports predate the ports.** `mob_effects.json`, `potions.json` and `foods.json` were from 2026-10-18 18:30; the
   Vinery and Brewin ports went into `mods/` at 2026-10-19 00:50. The table uses the port sources for those two mods
   and `effect_audit.py` drops the three removed Vinery effects (`EFFECT_OVERRIDES`). Dumps refreshed 2026-10-30 00:40
@@ -733,8 +733,8 @@ mod in the pack registers a second Haste effect, and every source already gives 
 So there is nothing to unify at the effect level, and no new effect was made. The real overlap is two **potion**
 lines with the same effect (Miner's D7, `MND-40`): one of them would have to stop registering, which leaves stacks in
 old worlds without a potion (no conversions) and, by Miner's D4, is decided only after an in-game test. Also, potion
-registration left patcherMod in wave 4: the pack's own potions are CB's `CommonPotions` (creative_split.md 7.8), so a
-pack-owned Haste potion line would be CB's, not patcherMod's. Owner choice needed: keep both lines, or drop one
+registration left Creative Common in wave 4: the pack's own potions are CB's `CommonPotions` (creative_split.md 7.8), so a
+pack-owned Haste potion line would be CB's, not Creative Common's. Owner choice needed: keep both lines, or drop one
 (which, and whether its brewing ingredient then brews the survivor).
 
 ## 5. File map
@@ -872,7 +872,7 @@ ingredient type.
   - JEI item lists for every effect (`jeed_providers.js`; the Vinery wine providers moved there from `alcohol.js`).
   - 16 description fixes, Travel Fatigue ported, stale placeholders gone (F2, F3, F4).
   - Sunny kept hidden (F7).
-  - Category audit of all 140 effects with 6 overrides (2.4, F13), in patcherMod 1.1.01, rebuilt.
+  - Category audit of all 140 effects with 6 overrides (2.4, F13), in Creative Common 1.1.01, rebuilt.
   - F11 corrected: JEED already lists `FoodProperties` foods.
   - Tests EF-15 to EF-19.
   - F8: Passion Aloe Nectar marked for removal (passion fruit isn't in the game).

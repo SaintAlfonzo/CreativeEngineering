@@ -17,7 +17,7 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 
 | Part | Status |
 |---|---|
-| `[toasts] tutorial / advancement` + `ToastFilterMixin` | DEPLOYED with patcherMod 1.1.01 (2026-10-22); TO-01 to TO-07 not run |
+| `[toasts] tutorial / advancement` + `ToastFilterMixin` | DEPLOYED with Creative Common 1.1.01 (2026-10-22); TO-01 to TO-07 not run |
 | Rubidium Extra `tutorial_toast` / `advancement_toast` = `false` | already set in this instance before this feature; player file, never shipped (3.2) |
 | Every other toast | on, unchanged (2) |
 | In-game tests | TO-01 to TO-07 pending |
@@ -35,7 +35,7 @@ injects at its head and cancels the call when the toast belongs to a family that
 never takes one of the five slots and never plays its sound. The code that made it keeps the object and may still
 call `hide()` on it, which does nothing for a toast that was never added.
 
-Vanilla classes are matched with `instanceof`. Mod classes are matched by class name, so patcherMod needs no mod jar
+Vanilla classes are matched with `instanceof`. Mod classes are matched by class name, so Creative Common needs no mod jar
 to compile and a missing mod is simply no match.
 
 The user asked for this on 2026-10-19 (scratchpad: "disable tutorial toasts", "advancement toasts").
@@ -139,6 +139,6 @@ so only the filter is being tested; put them back afterwards if wanted.
 ## 8. History
 
 - 2026-10-19: built at the user's request (TODO `ui/toasts #1`, `#2`): `ToastFilterMixin` + `CEConfig.Toasts`, into
-  the patcherMod 1.0.9 jar in `build/libs/` without a version bump. Every toast class in the pack catalogued (2). The
+  the Creative Common 1.0.9 jar in `build/libs/` without a version bump. Every toast class in the pack catalogued (2). The
   user kept KubeJS, Do a Barrel Roll, FTB, FTB Quests, WTHIT, CC: Tweaked and AE2 toasts on. TO-01 to TO-07 added,
   none run.

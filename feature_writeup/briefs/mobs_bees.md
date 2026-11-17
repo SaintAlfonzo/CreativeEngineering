@@ -11,9 +11,9 @@ tag), `mobs/tweaks #6` (named mobs: shares the name list with #2).
 | Row | Change | Status | Size |
 |---|---|---|---|
 | #1 | Bee breeding flower audit | Planned | small: one dump, then a few `global.tags` lines in a server tag script |
-| #2 | Anchored bee hive (respawn at the hive, names in crafted hives) | Planned | medium to large: patcherMod (events + SavedData + 1 mixin), a config section, a names file |
+| #2 | Anchored bee hive (respawn at the hive, names in crafted hives) | Planned | medium to large: Creative Common (events + SavedData + 1 mixin), a config section, a names file |
 
-Build order: **#1 first** (a `/reload` job, no restart). **#2** with the next patcherMod release; agree the name list
+Build order: **#1 first** (a `/reload` job, no restart). **#2** with the next Creative Common release; agree the name list
 with `mobs/tweaks #6` (named mobs) first so both read one file.
 
 ---
@@ -113,7 +113,7 @@ Know which items breed bees, and make every flower the pack has count, consisten
 ---
 
 ## bees #2: Anchored bee hive
-Status Planned / Work patcherMod / new jar / TODO `mobs/bees #2` (scratchpad 2026-10-19: "A Domestic Innovation-like
+Status Planned / Work Creative Common / new jar / TODO `mobs/bees #2` (scratchpad 2026-10-19: "A Domestic Innovation-like
 hive")
 
 ### Goal
@@ -132,11 +132,11 @@ comes back to its hive later instead of being lost, the way Domestication Innova
 - Vanilla hive behavior (from memory): a bee remembers `HivePos` (NBT) and goes back to it; `BeehiveBlockEntity`
   holds up to 3 occupants as saved NBT (`addOccupantWithPresetTicks(Entity, boolean hasNectar, int ticksInHive)`,
   `releaseOccupant`); a bee whose hive is gone or full forgets it and looks for another.
-- WTHIT shows "Bees: n / 3" on hives (patcherMod `compat/WthitHive`, `[wthit] hiveBees`).
-- Nothing in patcherMod touches bees yet (`BeehiveDecoratorBeeNestsMixin` is worldgen only).
+- WTHIT shows "Bees: n / 3" on hives (Creative Common `compat/WthitHive`, `[wthit] hiveBees`).
+- Nothing in Creative Common touches bees yet (`BeehiveDecoratorBeeNestsMixin` is worldgen only).
 
 ### Build
-New patcherMod package `com.SaintAlfonzo.creativeengineering.bees`:
+New Creative Common package `com.SaintAlfonzo.creativeengineering.bees`:
 1. **Config** (CEConfig, new section `[bees]`): `anchoredHives` (bool, default true), `respawnDelayTicks` (default 24000,
    one day), `anchoredHiveBlocks` (list, default `minecraft:beehive`, `upgrade_aquatic:driftwood_beehive`,
    `upgrade_aquatic:river_beehive`), `nameBees` (bool). Or a block tag `creativeengineering:anchored_hives` filled in a
@@ -180,7 +180,7 @@ New patcherMod package `com.SaintAlfonzo.creativeengineering.bees`:
   comes back too: that is the point of an anchored hive; players who want to get rid of one can break the hive.
 - **Name list.** Recommendation: one shared file for bees and `mobs/tweaks #6`; bee-themed names first (Buzzby,
   Bumble, Honey ...), 100+ entries; no player names.
-- **patcherMod or a new jar** (TODO Work). Recommendation: patcherMod (it already has the config, WTHIT plugin and
+- **Creative Common or a new jar** (TODO Work). Recommendation: Creative Common (it already has the config, WTHIT plugin and
   event plumbing; a new jar would be a second mod for ~300 lines).
 
 ### Gotchas
@@ -205,7 +205,7 @@ New patcherMod package `com.SaintAlfonzo.creativeengineering.bees`:
 ---
 
 ## bees #3: Honeycomb shearing yield
-Status **Planned** / Work data / KubeJS (a patcherMod mixin is the likely route) / TODO `mobs/bees #3`
+Status **Planned** / Work data / KubeJS (a Creative Common mixin is the likely route) / TODO `mobs/bees #3`
 
 ### Goal
 Shearing a beehive or bee nest with a full honey level gives 2.5 honeycombs on average; Looting adds more.
@@ -214,14 +214,14 @@ Shearing a beehive or bee nest with a full honey level gives 2.5 honeycombs on a
 - Vanilla 1.19.2 gives a fixed 3 honeycombs: `BeehiveBlock.use` (shears) and the dispenser shears behavior both call
   `BeehiveBlock.dropHoneycomb` -> `popResource(level, pos, new ItemStack(Items.HONEYCOMB, 3))`. Unverified in this jar
   (read it with `javap`); it is code, not a loot table, so a KubeJS loot edit cannot change it.
-- Nothing in the pack touches the amount: patcherMod's bee code is `worldgen/BeeNests`, `BeehiveDecoratorBeeNestsMixin`,
+- Nothing in the pack touches the amount: Creative Common's bee code is `worldgen/BeeNests`, `BeehiveDecoratorBeeNestsMixin`,
   `TreeFeatureBeeNestsMixin`, `compat/WthitHive` (see [bee_nests.md](../bee_nests.md)); `i.honeycomb` is
   `minecraft:honeycomb` (item_dict line 557).
 - Honeycomb is also a recipe ingredient and sugar source (`dishes/ingredients #22`: 2 sugar per honeycomb), so the yield
   feeds that economy.
 
 ### Build
-1. patcherMod mixin on `BeehiveBlock.dropHoneycomb` (`@ModifyArg` on the count, or `@Redirect` the `ItemStack`
+1. Creative Common mixin on `BeehiveBlock.dropHoneycomb` (`@ModifyArg` on the count, or `@Redirect` the `ItemStack`
    constructor): count = 2 + 50% chance of +1 (mean 2.5), plus Looting.
 2. Looting: shears cannot carry Looting from the enchanting table or an anvil (Looting is a weapon enchantment), so the
    level has to be read from the held item's NBT (`EnchantmentHelper.getItemEnchantmentLevel(LOOTING, shears)`); it only

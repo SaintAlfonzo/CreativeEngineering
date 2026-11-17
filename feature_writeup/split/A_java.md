@@ -1,7 +1,7 @@
 # Sweep A: Java classes
 
 Audit of [creative_split.md](../creative_split.md) section 4, sweep A. Read-only; one row per non-mixin class. Paths are
-relative to `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`. Targets use the vocabulary of
+relative to `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/`. Targets use the vocabulary of
 [README.md](README.md). `CEConfig` and `CreativeEngineering.MODID` references are not counted as cross-target calls
 (config sections move with their feature, rule 3); a reference to a `mixin.*Accessor` is counted against the target
 of that mixin (sweep B). "Calls into other targets" names the referenced class and its target in brackets.

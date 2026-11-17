@@ -1,4 +1,4 @@
-# Creative split: audit plan for breaking patcherMod into high-level jars
+# Creative split: audit plan for breaking Creative Common into high-level jars
 
 Written 2026-11-01. **Status: signed off 2026-11-01 (7.6 holds every decision and overrides older rows); execution
 started on branch `creative-split`. Waves 1 to 8 carved: Magic and Equipment 2026-11-04 (7.11, 7.12, installed, not
@@ -12,7 +12,7 @@ Written for: the owner, and the agents that will run the audit sweeps. Related: 
 (the move rules this plan reuses, 2.4 and 4.1 to 4.3), [creative_calendar.md](creative_calendar.md) (reserved list),
 [creative_delight.md](creative_delight.md) 29 (food routing, script trees, Creative Cultivation in 29.5).
 
-`PM` = `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`.
+`PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/`.
 
 ## 0. At a glance
 
@@ -33,7 +33,7 @@ Written for: the owner, and the agents that will run the audit sweeps. Related: 
 | `creativesplit/regression #14` | Testing | S C | Feature regression of every Creative jar after the split |
 <!-- generated:status_index end open_work -->
 
-- The audit is **read-only**. It produces an inventory (section 7) that puts every patcherMod class, mixin, config
+- The audit is **read-only**. It produces an inventory (section 7) that puts every Creative Common class, mixin, config
   section, resource folder and pack-folder script into exactly one target jar, lists the cross-jar calls, and fixes
   the carve order. Execution plans are written per jar after the owner signs off on the audit.
 - **Content is carved out first. Whatever is left in patcherMod becomes Creative Common** (owner, 2026-11-01).
@@ -49,7 +49,7 @@ Written for: the owner, and the agents that will run the audit sweeps. Related: 
 
 ## 1. Starting point (measured 2026-11-01)
 
-patcherMod: 629 Java files. 289 mixins in one `creativeengineering.mixins.json`. `CEConfig.java` is 3639 lines with
+Creative Common: 629 Java files. 289 mixins in one `creativeengineering.mixins.json`. `CEConfig.java` is 3639 lines with
 about 60 top-level sections, read from 110 files. `CreativeEngineering.java` is 576 lines and does every registration.
 21 classes hold a `DeferredRegister`.
 
@@ -70,7 +70,7 @@ about 60 top-level sections, read from 110 files. `CreativeEngineering.java` is 
 
 Pack folders: `kubejs/startup_scripts` (`_lib` dicts are 18k lines), `server_scripts` (engineering 2001, worldgen
 3412, loot 1911, tags 1745, metal 966, `_lib` dumps 4037), `client_scripts` 1568, `kubejs/data/` (about 45 structure
-namespaces) and `kubejs/assets/`. Shared helpers live in patcherMod's jar (`kubejs_startup/creativeengineering/func/`).
+namespaces) and `kubejs/assets/`. Shared helpers live in Creative Common's jar (`kubejs_startup/creativeengineering/func/`).
 
 ## 2. Target jars (draft scope; the audit confirms or moves each row)
 
@@ -87,7 +87,7 @@ namespaces) and `kubejs/assets/`. Shared helpers live in patcherMod's jar (`kube
 
 ### 2.2 Into the existing bundles
 
-| Bundle | Takes from patcherMod and the pack |
+| Bundle | Takes from Creative Common and the pack |
 |---|---|
 | **Creative Delight** | Kitchen and food Java (`oven/`, `lunchbox/`, `cooking/`, `food/`, `crops/`, `campfire/`), routed by the standing rule (memory `creative-delight-routing`). **Animal husbandry** (owner, 2026-11-01): the trough code (FeedingTroughModule, TemptGoalTroughRetry, TroughRetryAccess), and `babyMobs`, `moreMooblooms`, `incubationAdditions` as CD members. The audit checks whether `mooshroom/` (breeding and walk target) goes with More Mooblooms or with Worldgen fauna. |
 | **Creative Brewing** | Its existing move plan (creative_brewing.md 4.2 phases 1 to 3), run as one of the carve-outs. |
@@ -106,7 +106,7 @@ twice, and Common never holds them.
 
 ### 2.4 Creative Common (what remains)
 
-After every carve-out, patcherMod should hold only the following. Anything else still there is a carve the audit
+After every carve-out, Creative Common should hold only the following. Anything else still there is a carve the audit
 missed.
 
 - The core: config framework, `util/`, the startup-script loader and KubeJS mixins (`compat/kubejs`, the KubeJS
@@ -180,7 +180,7 @@ targets:
 | D. Registration hub | `CreativeEngineering.java`, the 21 `DeferredRegister` holders, event subscribers, JEI and WTHIT plugin entry points | entry point, target |
 | E. Resources | `PM/../resources` (assets, data, `waila_plugins.json`, `kubejs_startup/`), `kubejs/data`, `kubejs/assets` | path, target or "pack" |
 | F. Pack scripts | `kubejs/startup_scripts`, `server_scripts`, `client_scripts`, and the `global.*` names each defines and reads | file (or row range), target or "pack", the globals that cross |
-| G. External edges | CD and CB references into patcherMod (`compileOnly project(':patcherMod')` users, `PackTime.java`), the own jars going into CD (babyMobs, moreMooblooms, incubationAdditions), `tools/generators.json` output roots, `mod_sides.md` | edge, which new jar it must point at |
+| G. External edges | CD and CB references into Creative Common (`compileOnly project(':creativeCommon')` users, `PackTime.java`), the own jars going into CD (babyMobs, moreMooblooms, incubationAdditions), `tools/generators.json` output roots, `mod_sides.md` | edge, which new jar it must point at |
 
 After the sweeps, a single pass merges them and adds:
 
@@ -197,7 +197,7 @@ After the sweeps, a single pass merges them and adds:
    5. **Worldgen,** with fauna.
    6. **Equipment,** with the Magic rows.
    7. **Engineering,** with the Computers rows, and the id swap (Q1).
-4. A **remainder check**: what is left in patcherMod is compared against 2.4, and every extra row is reported.
+4. A **remainder check**: what is left in Creative Common is compared against 2.4, and every extra row is reported.
 
 ## 5. Deliverables
 
@@ -211,7 +211,7 @@ After the sweeps, a single pass merges them and adds:
 
 ## 6. Open questions (owner)
 
-1. **Mod id swap.** patcherMod keeps `creativeengineering` while the content is carved. At the last carve, the
+1. **Mod id swap.** Creative Common keeps `creativeengineering` while the content is carved. At the last carve, the
    Engineering jar takes `creativeengineering` (and keeps `creativeengineering-common.toml` for its keys), and the
    remainder becomes `creativecommon` (package `com.SaintAlfonzo.creativecommon`, `creativecommon-common.toml`). In
    the same step, CD's and CB's mandatory dependency and the startup loader move to `creativecommon`. Recommended as
@@ -309,7 +309,7 @@ registration before the first carve.
 
 The draft order in section 4 holds. Two preparatory steps come first because every carve needs them:
 
-0. **Prep in patcherMod:** `GatedMixinPlugin` from `development/shared/mixinplugin` replaces `perf/CEMixinPlugin`'s
+0. **Prep in Creative Common:** `GatedMixinPlugin` from `development/shared/mixinplugin` replaces `perf/CEMixinPlugin`'s
    accept-all `shouldApplyMixin` (keep its Immersive Weathering `postApply` rewrite); `NCH.cfg` gains per-jar config
    registration; the Common APIs in 7.2 (DamageTags, WorldgenFiles, glob, doubleIcon, WorldRows.provider users, the
    null-state debug hook, the can-action registry, the seasoning hook) are introduced while everything is still one jar.
@@ -327,7 +327,7 @@ The draft order in section 4 holds. Two preparatory steps come first because eve
 
 ### 7.4 Remainder check and owner rows
 
-After the seven carves, patcherMod holds exactly the 2.4 list: config framework, `util/`, the KubeJS loader and
+After the seven carves, Creative Common holds exactly the 2.4 list: config framework, `util/`, the KubeJS loader and
 mixins, NCH, `tag_helper`, `compost`, the dicts, `GatedMixinPlugin`, `changelog/`, the advancement drop, the shared
 APIs (now including DamageTags, WorldgenFiles, the trade helper and the merge runner), fixes and perf, and the
 Interface rows (3 JEI plugins, 7 WTHIT entries, tooltip stacks, GUI title, armor bar, toasts). Common registers no
@@ -472,7 +472,7 @@ Engineering for good.
   re-applies all actions and names only the id). `global.seasoning` already is the hook CD fills (NCH reads it at event
   time, guarded): no change. `DamageTags` stays in `damage/` with its snapshot and loader; which of the four classes stay
   Common is settled at the Equipment carve. The null-state hook came in wave 1.
-- patcherMod 1.1.06; CD and CB require `[1.1.06,)` (they call `ConfigRename`).
+- Creative Common 1.1.06; CD and CB require `[1.1.06,)` (they call `ConfigRename`).
 
 ### 7.8 Wave 4 as built (2026-11-01; built, scratch-tested, NOT installed)
 
@@ -480,7 +480,7 @@ Built on waves 2 and 3 (installed). Scratch run 2026-11-01 ([scratch_run_2026-11
 7): waves 2, 3 and 4 PASS on the server side after three fixes, all in 1.1.07 / CD: `SwapRemapper` now resolves the
 survivor in Forge's ACTIVE registry (the event comes from the STAGING copy, so 1.1.06 left every renamed block
 missing); `NCH.cfg` treats a missing Java field as "not here" (Rhino throws, so every section moved to CD or CB read as
-undefined); CD `MobCobPipeSlotMixin` targets `LivingEntity` (on `Mob` it never applied in patcherMod and crashed CD,
+undefined); CD `MobCobPipeSlotMixin` targets `LivingEntity` (on `Mob` it never applied in Creative Common and crashed CD,
 which sets `defaultRequire: 1`). Client rows and the baby squid row remain. Detail: [creative_brewing.md](creative_brewing.md) 4.5 and 4.6 (CB), [creative_delight.md](creative_delight.md)
 34 and 29.1 / 29.5 (CD).
 
@@ -500,22 +500,22 @@ which sets `defaultRequire: 1`). Client rows and the baby squid row remain. Deta
   `compat/RemainderView` for the WTHIT leftover line. babyMobs and incubationAdditions nested as CD members
   (`members/babymobs`, `members/incubation`; mod ids unchanged). CD scripts: sample syringe, `other/harvest.js`, the
   kitchen, crop and food-fluid tag rows, Delight names and the bowl / basket / soil tooltips.
-- patcherMod 1.1.07 (never installed before; holds both the CB and CD API changes). CB and CD require `[1.1.07,)`.
+- Creative Common 1.1.07 (never installed before; holds both the CB and CD API changes). CB and CD require `[1.1.07,)`.
 - Instance config values were moved by hand into the CB and CD files and `configs_edited/`.
 - **Settled (owner):** `other/harvest.js` (metal and ore mining tiers) goes to **Equipment**. It moved to CD in this wave, so the Equipment carve must take it back out of CD's script tree.
 - **Known:** `tools/gen_dd_dishes.py --check` cannot see models inside nested jars (old gap); `tools/remainder_buffer_test`
   and `crop_growth_test` repointed but not rerun.
-- **Install** (game closed, after SQ-CS2 and SQ-CMP pass): `./gradlew :patcherMod:installToMods
+- **Install** (game closed, after SQ-CS2 and SQ-CMP pass): `./gradlew :creativeCommon:installToMods
   :creativeCompat:installToMods :creativeCalendar:installToMods :creativeDelight:installToMods
   :creativeBrewing:installToMods --offline`. Scratch: SQ-CBM, SQ-CBJ4, SQ-CDS, SQ-CDJ4 in
   [scratch_queue.md](testing/scratch_queue.md).
 
-- **Installed 2026-11-01:** patcherMod 1.1.07, Compat, Calendar, CD, CB in the dev instance `mods/`.
+- **Installed 2026-11-01:** Creative Common 1.1.07, Compat, Calendar, CD, CB in the dev instance `mods/`.
 - **Client tests on hold (owner):** every client row for waves 2 to 7 is pinned until wave 8 is done or later, then run as one bulk session. Server rows keep running per carve.
 
 ### 7.9 Plan: finishing Creative Delight (owner, 2026-11-01; plan only, nothing built)
 
-**Status 2026-11-04 evening: steps 1 to 3 built and installed (Compat 19:05, CD 19:19, patcherMod 1.1.09 19:17), not booted, not tested** (scratch
+**Status 2026-11-04 evening: steps 1 to 3 built and installed (Compat 19:05, CD 19:19, Creative Common 1.1.09 19:17), not booted, not tested** (scratch
 SQ-CFR-01 to -08, CQ-CFR-01; SQ-NDM for step 2). As built, where it differs from the plan below:
 - Step 1: the JEI JSON helpers were copied into CD's `compat/jei/CampfireRows` (no Common util, no patcherMod change).
   `[campfire]` is carried from `creativecompat-common.toml` first, then from `creativeengineering-common.toml` for a
@@ -523,8 +523,8 @@ SQ-CFR-01 to -08, CQ-CFR-01; SQ-NDM for step 2). As built, where it differs from
   `configs_edited/root_config/` copies updated (section moved, all defaults).
 - Step 3: not a second copy of `data/creativecommon/damage_tags/fire.json` (Forge 1.19.2 serves only the first
   jar's copy of a shared path, so the merge would never happen): CD ships its own tag `creativedelight:stoves`
-  (`data/creativedelight/damage_tags/stoves.json`) and patcherMod's `fire.json` and `burn_tick.json` include
-  `#creativedelight:stoves` in place of the id. That patcherMod edit is in 1.1.09 (built and installed
+  (`data/creativedelight/damage_tags/stoves.json`) and Creative Common's `fire.json` and `burn_tick.json` include
+  `#creativedelight:stoves` in place of the id. That Creative Common edit is in 1.1.09 (built and installed
   by the wave 6/7 carve session, 19:17).
 - Step 2: `mod_sides.md` Nether's row merged into CD's row 2026-11-04. `build_deploy.py` has no `replaces_jars`; its
   nested-id duplicate check covers a stale Nether's jar.
@@ -537,7 +537,7 @@ End's Delight and Ender's Delight CD members. These decisions override the 7.6 r
 
 | Item | Where it is |
 |---|---|
-| `oven/` (11), `lunchbox/` (10), `food/` (9; `IntoxicatingDrinkTooltip` went to CB), `cooking/` (6), `crops/` (7) | `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/`; nothing left in patcherMod |
+| `oven/` (11), `lunchbox/` (10), `food/` (9; `IntoxicatingDrinkTooltip` went to CB), `cooking/` (6), `crops/` (7) | `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/`; nothing left in Creative Common |
 | incubationAdditions | CD member `members/incubation` (mod id unchanged) |
 | End's Delight | CD member `repackedEnds` (repack of the MIT 2.1 jar) |
 | Ender's Delight | ARR, so the jar stays in `mods/`; MIT 1.1.4 content is CD member `endersAdditions` (inside the End's member `repackedEnds` since 2026-11-02) |
@@ -578,7 +578,7 @@ installed, not tested. Items 1 to 3 done; items 2 (jar out of `mods/`) and 5 (`m
    Fungus Colony mixin as `nethersdelight.ce.mixins.json`) and into CD `kubejs/data/creativedelight/kubejs/nethersdelight/`
    (tags through `global.tags`, the `stuffed_hoglin` file move through `global.NCH`). Ids keep 3.1's; renames are lang only.
 4. Edges that stay where they are: Calendar `CropSeasonGrowHookMixin` (gated on `nethersdelight`, id unchanged),
-   CD `FeastPlatingCategory` and `crop_growth.json` rows (already CD), patcherMod `surface/StuckInBlock` (one class-name
+   CD `FeastPlatingCategory` and `crop_growth.json` rows (already CD), Creative Common `surface/StuckInBlock` (one class-name
    string in a generic table), Display Delight's tags, Engineering `fabric.js` hoglin mount row (non-food, rule 9).
 5. `mod_sides.md`: drop the Nether's row, add `nethersdelight` to CD's nested list. Writeup: nethers_delight.md 1 and 4.
 
@@ -606,7 +606,7 @@ exists it stays nested in CD (pulling it out now would mean a standalone jar for
 **Order and gates.** Commit the installed wave 4 first (the CD Java move is uncommitted). Then step 1 and steps 2 + 3
 as separate commits, each with a scratch dedicated-server boot queued (SQ entries, owner runs them in a batch); step 4
 rides the Worldgen carve. Game closed for every install: `./gradlew :creativeCompat:installToMods
-:creativeDelight:installToMods --offline` (plus `:patcherMod:` for the damage-tag edit in step 3).
+:creativeDelight:installToMods --offline` (plus `:creativeCommon:` for the damage-tag edit in step 3).
 
 **Changelog.** Steps 1, 3, 4 are same-behavior moves: no bullet. Step 2 brings Nether's 4.0 changes (Potted
 Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's Delight` family when built.
@@ -616,7 +616,7 @@ Mimicarnation, colony rule, renames) to players: bullets under a `## Nether's De
 Creative Worldgen carved: [creative_worldgen.md](creative_worldgen.md) holds the detail (what moved, edges, what stayed
 in the pack folder and why). In short: 59 classes plus 4 new, 60 mixins, 6 config tables (`[perf]` mob cap keys only),
 the dimension and noise settings data, the worldgen, loot, removed-mob and Worldgen tag scripts, More Mooblooms and Baby
-Mobs as members (7.9 step 4 done). patcherMod 1.1.08. Placed differently from the sweeps: `BubbleColumnImmunityMixin` to
+Mobs as members (7.9 step 4 done). Creative Common 1.1.08. Placed differently from the sweeps: `BubbleColumnImmunityMixin` to
 Worldgen (its tag moved with `entitytags.js`); `QuarkSpiralSpiresTeleportMixin` stays Common (perf). Structure datapacks
 stay in the pack folder (the structure generators tell jar sets from kubejs/data sets). Found on the way: namespace
 script packs load in no fixed order, so CD's loot rules now queue through `global.CWG.lootRules`; `build_deploy.py`
@@ -626,7 +626,7 @@ script packs load in no fixed order, so CD's loot rules now queue through `globa
 
 Creative Magic carved: [creative_magic.md](creative_magic.md) holds the detail. In short: 4 classes plus 3 new (Dark
 Fire, Flint and Terrasteel, the portal rule, `TrinketCaseRules`), 7 mixins, `[botania]`, the Dark Fire and Flint and
-Terrasteel assets, five `magic/` server scripts plus the XP fluid tags, three client rows. patcherMod 1.1.09 (shared with
+Terrasteel assets, five `magic/` server scripts plus the XP fluid tags, three client rows. Creative Common 1.1.09 (shared with
 wave 7). `CreativeEngineering.BLOCKS` and `block/CreativeEngineeringBlocks` are gone (Dark Fire was their only row).
 Placed as sweep H leaned: D1 `dragon_breathing.js` stays for Engineering; D2 and D4 went to Equipment. **Open (owner):
 D3**, the liquid XP bridge (`FluidBridge` and five mixins), stays in patcherMod until the Engineering carve. Found on
@@ -804,7 +804,7 @@ Owner, 2026-11-04, on 7.16:
    `creativecommon:campfire/rain_douses` and `rain_proof_fuel` again, and `block_dict.js` `t_campfire_rain_douses` /
    `t_campfire_rain_proof_fuel` follow, so Compat's and CD's tag scripts fill the new names. Comments, the CD config
    comment (`[campfire]`), wthit_lines.md, barbeques_delight.md, creative_delight.md and SQ-BBQ-03 follow. **Install
-   note:** `block_dict.js` is a pack startup script, so after a restart with the old jars (patcherMod 1.1.09 reads
+   note:** `block_dict.js` is a pack startup script, so after a restart with the old jars (Creative Common 1.1.09 reads
    `creativeengineering:`) rain stops dousing campfires until the new Common goes in; install with the ten jars.
 2. **Common's third-party mixins gated.** `CEMixinPlugin.NEEDS_MOD` has a row for every Common mixin whose target lives
    in another mod: 40 rows (Immersive Weathering x2, Armor Trims, IE, WorldEdit x2, Quark, Create: Gravity, Nock Enough
@@ -994,16 +994,16 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
   starts with Devtools and Calendar on branch `creative-split`.
 - 2026-11-01, wave 2 (7.7): CD and CB renamed with their ids, swap lists and remapper built in Common, prep step 0
   done. Owner changed Q2: the underscored ids move too, through the swapper.
-- 2026-11-01, wave 3: Creative Compat carved ([creative_compat.md](creative_compat.md)); patcherMod 1.1.06 installed with
+- 2026-11-01, wave 3: Creative Compat carved ([creative_compat.md](creative_compat.md)); Creative Common 1.1.06 installed with
   Compat, CD, CB, Calendar, Devtools. Scratch SQ-CS2 and SQ-CMP queued. Next: wave 4 (CB phases 1 to 3, then CD).
-- 2026-11-01, wave 4 (7.8): CB phases 1 to 3 and the CD carve built (patcherMod 1.1.07), not installed while waves 2
+- 2026-11-01, wave 4 (7.8): CB phases 1 to 3 and the CD carve built (Creative Common 1.1.07), not installed while waves 2
   and 3 are untested. Next: test waves 2 and 3, install wave 4, then wave 5 (Worldgen with fauna and More Mooblooms).
 - 2026-11-01, scratch run of waves 2 to 4 ([scratch_run_2026-11-01.md](testing/scratch_run_2026-11-01.md) 7): one save
   taken from the 1.1.05 jars through 1.1.06 to 1.1.07; three bugs fixed (7.8). Next: install wave 4, client rows.
 - 2026-11-01, wave 4 close: `harvest.js` goes to Equipment; wave 4 jars installed to the dev instance; client tests pinned until wave 8+.
 - 2026-11-02, wave 5 (7.10): Creative Worldgen carved with fauna, More Mooblooms and Baby Mobs; built, not installed. Next: SQ-CWG, then wave 6 (Magic).
-- 2026-11-02 23:16, wave 5 installed by the Creative Delight plan-K session (plan_creative_delight.md K): `creativeworldgen-1.0.0.jar` and patcherMod 1.1.08 went into `mods/` with the new CD jar, because 1.1.08 (swappers) is built from the wave-5 tree and the Miner's loot rules use Worldgen's new `loot/09_drops.js`. moreMooblooms-1.1.0.jar displaced. Not booted; SQ-CWG still open. Revert: put back patcherMod 1.1.07 and moreMooblooms from the `jar_archive/displaced/` folders and remove the Worldgen jar (then CD's Miner's drops log an error).
-- 2026-11-04, waves 6 and 7 (7.11, 7.12): Creative Magic and Creative Equipment carved; patcherMod 1.1.09. Installed 19:17 with a clean-built CD jar (the parallel cdfinish session's campfire move and stoves damage tag included). Next: SQ-CMG and SQ-CEQ, the D3 decision, then wave 8 (Engineering).
+- 2026-11-02 23:16, wave 5 installed by the Creative Delight plan-K session (plan_creative_delight.md K): `creativeworldgen-1.0.0.jar` and Creative Common 1.1.08 went into `mods/` with the new CD jar, because 1.1.08 (swappers) is built from the wave-5 tree and the Miner's loot rules use Worldgen's new `loot/09_drops.js`. moreMooblooms-1.1.0.jar displaced. Not booted; SQ-CWG still open. Revert: put back Creative Common 1.1.07 and moreMooblooms from the `jar_archive/displaced/` folders and remove the Worldgen jar (then CD's Miner's drops log an error).
+- 2026-11-04, waves 6 and 7 (7.11, 7.12): Creative Magic and Creative Equipment carved; Creative Common 1.1.09. Installed 19:17 with a clean-built CD jar (the parallel cdfinish session's campfire move and stoves damage tag included). Next: SQ-CMG and SQ-CEQ, the D3 decision, then wave 8 (Engineering).
 - 2026-11-04, wave 8 (7.13): D3 to Engineering (owner). Creative Engineering carved and patcherMod swapped to Creative Common (`creativecommon`, `development/creativeCommon`); all ten Creative jars built, not installed. Next: install the ten jars together, SQ-CEN with SQ-CMG and SQ-CEQ, then the bulk client session.
 - 2026-11-04, wave 9 (7.14): Common's data moved to the `creativecommon` namespace (outright), the pack's changelog and
   JEI world trees to `kubejs/assets/creativecommon/`; meal tooltips to CD, two fixes to Compat, Curios slots to

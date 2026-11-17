@@ -1,10 +1,10 @@
 # jei-craftable-first
 
-> JEI 19 \"craftable recipes first\" backported to JEI 11.8.1 via patcherMod (CraftableFirstRecipeLayoutList + 2 mixins, CEConfig [jei]); status in feature_writeup/jei_craftable_first_port.md
+> JEI 19 \"craftable recipes first\" backported to JEI 11.8.1 via Creative Common (CraftableFirstRecipeLayoutList + 2 mixins, CEConfig [jei]); status in feature_writeup/jei_craftable_first_port.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-10-05 into patcherMod 1.0.5 jar (no version bump).
+Built 2026-10-05 into Creative Common 1.0.5 jar (no version bump).
 Port notes + JEI-01..06 checklist: feature_writeup/jei_craftable_first_port.md. Reference JEI 1.21.1 19.39.0.371
 is extracted (class files only) in DecompiledMods/, javap dumps in its `_PORT_craftable_first/`.
 

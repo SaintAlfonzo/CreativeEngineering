@@ -1,6 +1,6 @@
 # structure-ground-match
 
-> patcherMod worldgen/GroundMatch swaps a structure template's grass/dirt base for sampled local ground where grass isn't native (volcanic peaks ruins); CEConfig [worldgen.ground_match]; status in feature_writeup/structure_tuning.md
+> Creative Common worldgen/GroundMatch swaps a structure template's grass/dirt base for sampled local ground where grass isn't native (volcanic peaks ruins); CEConfig [worldgen.ground_match]; status in feature_writeup/structure_tuning.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

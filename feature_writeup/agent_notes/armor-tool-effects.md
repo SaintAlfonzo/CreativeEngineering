@@ -41,7 +41,7 @@ of strings) directly, proven by this same file's own `addTooltips()` helper alre
 raw array through.
 
 **Tooltip header text is copied verbatim from CDD**: set bonuses get `"§7With full set on:"` —
-the exact string still present in `EchoArmorItem`'s own tooltip (patcherMod's
+the exact string still present in `EchoArmorItem`'s own tooltip (Creative Common's
 `EchoArmorTooltipMixin` only swapped the two effect-name constants, not this header — see
 [echo-tier-gear](echo-tier-gear.md)). Per-piece (non-set) effects get `"§7When worn:"` (author's choice —
 CDD has no single-piece example to copy, since all 4 echo pieces only ever grant the FULL-set
@@ -131,7 +131,7 @@ same wall for stat tuning — see its own comment at the dragon_horse_armor line
 **How to apply:** any other mob-worn (not player-worn) equipment — future horse/wolf/
 llama armor — should go through `.mount()`, not `.piece()`. If a future case needs a
 mob type without a `getSlot()`-style public accessor, that's a strong signal to check
-patcherMod mixins instead, per memory `centralize-recipes-tags-items` preferring KubeJS-first
+Creative Common mixins instead, per memory `centralize-recipes-tags-items` preferring KubeJS-first
 but falling back to Java when reflection can't reach a protected field.
 
 ## tool-effects-framework
@@ -187,13 +187,13 @@ refund it — pure post-hoc refund, no vanilla bonemeal logic touched. A second 
 roll damages the "responsible" item as the cost (Vinery: all 4 armor pieces; ours: the charm).
 
 **Our implementation** (2026-09-24):
-- `patcherMod/.../mixin/BonemealCharmMixin.java` — targets `BoneMealItem`, SRG method id
-  `m_6225_` (= `useOn`, looked up in `patcherMod/build/reobfJar/mappings.tsrg`) with
+- `creativeCommon/.../mixin/BonemealCharmMixin.java` — targets `BoneMealItem`, SRG method id
+  `m_6225_` (= `useOn`, looked up in `creativeCommon/build/reobfJar/mappings.tsrg`) with
   `remap = false`, same idiom as `LivingEntityShieldMixin`/`VanillaShieldDurabilityMixin`
   ("no refmap; the pack only runs reobfuscated" — see [patchermod-coremod](patchermod-coremod.md)). Since bone
   meal occupies whichever hand triggered `useOn` (`context.getHand()`), the charm is checked
   in the OTHER hand.
-- `patcherMod/.../util/BonemealCharms.java` — holds the `TagKey<Item>` for
+- `creativeCommon/.../util/BonemealCharms.java` — holds the `TagKey<Item>` for
   `#creativeengineering:bonemeal_charms`, mirrors `ElytraChestplates.java`'s pattern exactly.
 - `CEConfig.BonemealCharm` — `enabled`/`chance`/`damageChance`/`damagePerUse`, same
   category-class pattern as `CEConfig.Shrapnel`.

@@ -73,7 +73,7 @@ poplar are in 26.10.05 only.
 1. An in-tree 1.19.2 rebuild of Storage Delight 25.12.09 (MIT, same mod id `storagedelight`, so no `mod_sides.md` id
    change, only the jar name) with the extra registrations, block entity valid-block lists, recipes, loot, axe tag and
    fuel items. Clean, but makes the pack own one more jar. Recommended.
-2. patcherMod mixins into `BlockRegistry` / `ItemRegistry` / `EntityTypesRegistry` to append blocks, plus assets and data
+2. Creative Common mixins into `BlockRegistry` / `ItemRegistry` / `EntityTypesRegistry` to append blocks, plus assets and data
    in the resource pack. Avoids a new jar but patches a third mod's registration order.
 
 ### 2.2 Shared blocks (90)
@@ -87,7 +87,7 @@ poplar are in 26.10.05 only.
 
 ## 3. Open questions for the owner
 
-1. Add the new blocks at all (a rebuilt jar, or patcherMod)? If yes, which groups: the 27 vanilla-stone countertops,
+1. Add the new blocks at all (a rebuilt jar, or Creative Common)? If yes, which groups: the 27 vanilla-stone countertops,
    the 9 tuff ones, bamboo, cherry?
 2. Cherry: skip, or retexture to Vinery's dark cherry?
 

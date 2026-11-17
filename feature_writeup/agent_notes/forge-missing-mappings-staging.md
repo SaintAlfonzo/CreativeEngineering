@@ -7,7 +7,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 On a world load Forge fires `MissingMappingsEvent` from `GameData.injectSnapshot`'s STAGING registry copy, which then
 holds only the save's snapshot ids. `mapping.getRegistry().containsKey(newId)` is false for any id new in this version,
 so a remapper must look the survivor up in `RegistryManager.ACTIVE.getRegistry(key)` (Forge's `processMissingEvent`
-resolves the target through the ACTIVE pool anyway). Found when patcherMod 1.1.06 `SwapRemapper` left the renamed
+resolves the target through the ACTIVE pool anyway). Found when Creative Common 1.1.06 `SwapRemapper` left the renamed
 treated-stick blocks missing; fixed in 1.1.07.
 
 Blocks in chunk sections are saved by NAME. A world opened once without the remap drops the old id from level.dat's

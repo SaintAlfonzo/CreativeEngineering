@@ -25,7 +25,7 @@ Status **Pinned** / Work: KubeJS / id `creativedelight/qol #3`. Rules still in d
   [food_types.json](../../kubejs/generation_scripts/food/food_types.json), keyed by **item_dict** keys, not food dict keys;
   removed items lose the tags again in `_core/removed_item_tags.js`. No `qol.foodTypes` switch yet
   (`CDConfig.java:41`: "QoL-3 (foodTypes) gets its key when it moves").
-- Saturation word: Quark's own word; the pack's only override is patcherMod
+- Saturation word: Quark's own word; the pack's only override is Creative Common
   `food/IntoxicatingDrinkTooltip.java` ("Intoxicating Drink", `CEConfig` 1497).
 
 ### Build (when unpinned)
@@ -35,7 +35,7 @@ Status **Pinned** / Work: KubeJS / id `creativedelight/qol #3`. Rules still in d
 Startup tables, if any, load through the jar startup loader (creative_delight.md 10.5).
 
 ### Decisions
-- **Move the saturation word override:** recommend leave it in patcherMod (it is alcohol, which Creative Brewing will own).
+- **Move the saturation word override:** recommend leave it in Creative Common (it is alcohol, which Creative Brewing will own).
 
 ### Tests
 CDQ-new1 (proposed, numbered when queued): `/dumptags` food_type counts unchanged after the re-key; switch off strips them.
@@ -48,7 +48,7 @@ As built: [creative_delight.md](../creative_delight.md) 22; tests in 22.4, scrat
 
 | Row | What | Open tiers | Tests |
 |---|---|---|---|
-| `qol #1` | Remainder buffer: pot and kettle mixins in CD `mixin/farmersdelight/`, `mixin/farmersrespite/`; buffer API and oven stay in patcherMod | S C P | CDQ-01 to -03, SQ-CDQ-01 to -03 |
+| `qol #1` | Remainder buffer: pot and kettle mixins in CD `mixin/farmersdelight/`, `mixin/farmersrespite/`; buffer API and oven stay in Creative Common | S C P | CDQ-01 to -03, SQ-CDQ-01 to -03 |
 | `qol #2` | Placeable-food tooltip lines: `kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js`, switch `qol.placeableTooltips` | C | CDQ-04, SQ-CDQ-04 |
 | `qol #4` | Compost rows for member foods (101 rows in `kubejs_startup/<mod>/compost.js`), switch `qol.compost` | S | CDQ-05, SQ-CDQ-05 |
 | `qol #5` | Heatless pot routes and grid-meal moves into `<mod>/cooking.js`, switch `qol.manualOnlyRoutes` | S | CDQ-06, SQ-CDQ-06 |

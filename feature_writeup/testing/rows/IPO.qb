@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text patcherMod 1.1.03 with `ImmersivePostsRegistrationMixin` and `ImmersivePostsValidItemMixin`. Group A. Any player
+@@text Creative Common 1.1.03 with `ImmersivePostsRegistrationMixin` and `ImmersivePostsValidItemMixin`. Group A. Any player
 @@text with op; Immersive Posts 4.3.0 and Immersive Engineering in the scratch `mods/`.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |

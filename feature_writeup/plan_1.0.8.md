@@ -1,7 +1,7 @@
 # 1.0.8: time master, no advancements, both alcohol ports at -02, the baking update
 
 **DEPLOYED 2026-10-19 10:20 (server + clients).** Restaged 2026-10-19 10:06 in `deploy/latest/` (replaced the 01:16
-staging, whose patcherMod jar could not boot a dedicated server). 1.0.8 is everything built after the 1.0.7 deploy (2026-10-18 19:43, commit `908e831`) up to the working tree on
+staging, whose Creative Common jar could not boot a dedicated server). 1.0.8 is everything built after the 1.0.7 deploy (2026-10-18 19:43, commit `908e831`) up to the working tree on
 2026-10-19 00:50, plus the server crash fix and the worldgen fixes from the structure scratch run (row WG). The payload is
 an update from 1.0.7: the 01:33 1.0.8 snapshot was rolled back to 1.0.7 so the version could be rebuilt.
 
@@ -23,7 +23,7 @@ in game unless the row says so.
 | DR | Data: `food_types.json`, `stack_sizes.json`, `placeable.json`; climate samples and `biome_config.json` resampled 2026-10-18 23:31 (agreement: Overworld 98.9 %, End 80.1 %, Nether 86.4 %); `item_dict.js` / `block_dict.js` / `fluid_dict.js` entries for the ports | data | DEPLOYED | [biome_tuning.md](biome_tuning.md), [stack_sizes.md](stack_sizes.md) |
 | CF | Config: `creativeengineering-common.toml` (`[time]`, `[advancements]`, `[cooking] ovenIngredientCounts`), `brewinandchewin-common.toml` (keg pipe rule), `vinery-common.toml` (new keys), `progression.snbt` (pierogi id), JEI sort orders (`brewinandchewin:aging` next to fermenting), game-rewritten `rare-ice.properties` and WorldEdit; defaultconfigs `sereneseasons-server.toml`, `seasonhud-server.toml` (the pushed 24000 / 8) | config | DEPLOYED | this file 1 |
 | WG | Worldgen fixes from the scratch run ([testing/structures/11_fixes_1_0_8.md](testing/structures/11_fixes_1_0_8.md)): dedicated-server boot (Serene Seasons clock mixin split into server + client), `type/*` structure tags made real so earth-fill pruning runs on villages, `/dumpstructuregen` reads the protected placement fields (`PlacementInfo`), town companion villages 64-96 blocks out (were 112-160), `/ceplace templates` lists per pack, flat / Superflat worlds stay flat with the biome layout on (`RegistryLoaderPresetOverworldMixin`) | fix | DEPLOYED; scratch dedicated server 2026-10-19 (3 boots, all pass) | [structure_tuning.md](structure_tuning.md) 3.10, 3.13, 3.22 |
-| VR | Version records: patcherMod **1.0.8** (md5 d60b5a99, rebuilt 2026-10-19 09:36; the 00:49 f136f818 build is in `jar_archive/displaced/`), backportedVinery **-02** (a3e1164d, 00:50), backportedBrewin **-02** (8441a046, 00:50), all archived; `backportedBrewin` in `IN_TREE_MODS`; `pack/manifest.json` regenerated; next builds bumped to patcherMod 1.0.9, ports `-03` | bookkeeping | DONE 2026-10-19 | [deploy.md](deploy.md), this file 4 |
+| VR | Version records: Creative Common **1.0.8** (md5 d60b5a99, rebuilt 2026-10-19 09:36; the 00:49 f136f818 build is in `jar_archive/displaced/`), backportedVinery **-02** (a3e1164d, 00:50), backportedBrewin **-02** (8441a046, 00:50), all archived; `backportedBrewin` in `IN_TREE_MODS`; `pack/manifest.json` regenerated; next builds bumped to Creative Common 1.0.9, ports `-03` | bookkeeping | DONE 2026-10-19 | [deploy.md](deploy.md), this file 4 |
 
 ## 1. What the payload contains
 
@@ -116,7 +116,7 @@ None added or removed. `brewinandchewin` is now only the port (`mod_sides.md` ro
 
 ## 4. Version records
 
-- patcherMod **1.0.8** ships (md5 d60b5a99, 2026-10-19 09:36 rebuild, archived; the 00:49 f136f818 build, which crashed
+- Creative Common **1.0.8** ships (md5 d60b5a99, 2026-10-19 09:36 rebuild, archived; the 00:49 f136f818 build, which crashed
   dedicated servers, is `jar_archive/displaced/creativeengineering-1.0.8-f136f818-server-crash.jar`). Over f136f818 it
   adds `SereneSeasonsClientClockMixin`, `RegistryLoaderPresetOverworldMixin`, `worldgen/PlacementInfo` and the
   `MassPlacer` template listing. Against 1.0.7 it adds the `time/`
@@ -127,5 +127,5 @@ None added or removed. `brewinandchewin` is now only the port (`mod_sides.md` ro
   1.0.0, moreMooblooms 1.0.0 unchanged.
 - A stray 1.0.8 log section from an 18:36 auto-bumped build on 2026-10-18 (no history json) was replaced by this
   staging.
-- After staging: patcherMod `mod_version` = **1.0.9**, backportedVinery `1.5.5-ce-19.2-03`, backportedBrewin
+- After staging: Creative Common `mod_version` = **1.0.9**, backportedVinery `1.5.5-ce-19.2-03`, backportedBrewin
   `4.5.0-ce-19.2-03` (gradle.properties only, not built), so no rebuild overwrites a shipped jar name.

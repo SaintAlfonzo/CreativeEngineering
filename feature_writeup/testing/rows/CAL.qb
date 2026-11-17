@@ -9,8 +9,8 @@
 @@sources feature_writeup/creative_calendar.md
 @@text
 @@text Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CAL-01 to -07 PASS; CQ-CAL-08 OPEN.
-@@text Needs `creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`, `prep_srv.sh` adds it) with the patcherMod,
-@@text Creative Delight and Creative Brewing jars built in the same pass (patcherMod without `time/` and `seasons/`; CD and CB
+@@text Needs `creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`, `prep_srv.sh` adds it) with the Creative Common,
+@@text Creative Delight and Creative Brewing jars built in the same pass (Creative Common without `time/` and `seasons/`; CD and CB
 @@text requiring `creativecalendar`). Same behavior as before the carve: every row checks that the moved code still runs from
 @@text the new jar. Group A world that already has a `[time]` history; the first boot runs on an instance config that still
 @@text holds the old sections in `creativeengineering-common.toml`.
@@ -20,7 +20,7 @@
 @group A
 @commands Boot; `grep -E "\[creativecalendar\]\|creativecalendar.mixins.json" logs/latest.log`; `grep -E "from creativecalendar.mixins.json" logs/debug.log \| wc -l`
 @pass `[creativecalendar] time, seasons and crop seasons loaded`; no `still has keys that moved` WARN (the migration replaced it, 2026-11-03; on a CE file that still holds the keys: `[creativecalendar] took N moved keys out of ...`); no mixin apply error; debug.log mixes the 10 common mixins (CropSeasonGrowHook only where IE, The Dirty Stuff or Nether's Delight is loaded)
-@fails Jar missing, patcherMod still holding `time/` (duplicate `/ccaltime`, mixins applied twice), or a gate id wrong in `CalendarMixinPlugin`
+@fails Jar missing, Creative Common still holding `time/` (duplicate `/ccaltime`, mixins applied twice), or a gate id wrong in `CalendarMixinPlugin`
 @from batches/r1101/cs1_split.qb
 bootexpect \[creativecalendar\] time, seasons and crop seasons loaded
 bootexpect still has keys that moved to config/creativecalendar-common.toml
@@ -99,7 +99,7 @@ expect CALTAG glass
 @group A
 @commands `/wine time`; `/ccaltime date add 1 month`; `/wine time`; grep latest.log for `WineTime\|NoClassDefFound`
 @pass the wine clock moves 8 days with the month (as SQ-TD-04); no class errors: the Vinery port's `PackTime` reads Calendar's `WineTime`
-@fails CB built against the old patcherMod `time.WineTime`, or Calendar missing
+@fails CB built against the old Creative Common `time.WineTime`, or Calendar missing
 @from batches/r1101/cs1_split.qb
 > wine time
 > cetime date add 1 month

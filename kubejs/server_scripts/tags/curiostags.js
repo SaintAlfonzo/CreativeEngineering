@@ -1,4 +1,4 @@
-// Curios slot membership for the pack's own slots (registered by IMC in patcherMod compat/CuriosSlots; feature_writeup/curios_slots.md).
+// Curios slot membership for the pack's own slots (registered by IMC in Creative Common compat/CuriosSlots; feature_writeup/curios_slots.md).
 // Curios takes an item into a slot when it is in the item tag curios:<slot>.
 
 ServerEvents.tags('item', e => {

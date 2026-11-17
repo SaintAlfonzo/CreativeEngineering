@@ -3,7 +3,7 @@
 //
 // An exploration_map whose destination never generates makes the server scan ~10k candidate
 // chunks on the roll and hang past the 60 s watchdog (Monobank vault rolling a ruined_portal
-// map: debug/crash-2026-09-27_15.32.34-server.txt). patcherMod's ChunkGeneratorLocateMixin
+// map: debug/crash-2026-09-27_15.32.34-server.txt). Creative Common's ChunkGeneratorLocateMixin
 // stops the hang (such maps come out blank); this pass removes the dud map from the table so
 // the roll lands on real loot instead.
 //

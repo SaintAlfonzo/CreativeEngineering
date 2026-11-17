@@ -4,7 +4,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# loot`, Sub `trader`. Refer
 [wandering_trader.md](../wandering_trader.md) (2.2 pools, 4.1 decisions, 7 tests WT-),
 [wandering_trader_catalog.md](../wandering_trader_catalog.md), [loot.md](../loot.md) 3.8 (bans). Code:
 [wandering_trades.js](../../kubejs/server_scripts/economy/wandering_trades.js),
-[trade_helper.js](../../kubejs/startup_scripts/func/trade_helper.js) (`global.trades`), patcherMod
+[trade_helper.js](../../kubejs/startup_scripts/func/trade_helper.js) (`global.trades`), Creative Common
 `trader/TradeListings.java`, [07_rules.js](../../kubejs/server_scripts/loot/07_rules.js),
 [config/wares-common.toml](../../config/wares-common.toml),
 [config/lightmanscurrency-common.lcconfig](../../config/lightmanscurrency-common.lcconfig),
@@ -127,7 +127,7 @@ as quest rewards; plus more coin trades (D1).
 4. **"More trades" (D1):** if it means coin trades on the Wandering Trader, extend `TradeListings` with
    `itemFor(id, count, priceId, priceCount, maxUses)` (coin price instead of emeralds) and `global.trades.sell` with
    `opts.price` (default emeralds); if it means agreements on the trader, extend `TradeListings.item` with an NBT
-   argument and `global.trades.sell` with `opts.nbt`. Both are small Java changes in patcherMod (1.1.x).
+   argument and `global.trades.sell` with `opts.nbt`. Both are small Java changes in Creative Common (1.1.x).
 5. Dict keys to add (item_dict.js, same style as line 13314): `i.delivery_agreement = 'wares:delivery_agreement'`,
    `i.wares_cardboard_box = 'wares:cardboard_box'`, `i.delivery_table = 'wares:delivery_table'`,
    `i.wares_package = 'wares:package'` (only those used).

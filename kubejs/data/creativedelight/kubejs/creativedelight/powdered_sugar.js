@@ -16,7 +16,7 @@ ServerEvents.recipes(e => {
 		R.foodGrinding([i.powdered_sugar, Item.of(i.powdered_sugar, 1).withChance(0.5)], i.sugar, e, 'sugar_powdered_sugar',
 			{ mortar: { count: 4, inputs: 3 } })
 
-		// Block and bucket (patcherMod food/PowderedSugarRegistry): the Vacuum Chamber (evacuating, 600 ticks, as Vintage
+		// Block and bucket (Creative Common food/PowderedSugarRegistry): the Vacuum Chamber (evacuating, 600 ticks, as Vintage
 		// Improvements' powder snow) packs bucket + 4 sugar into a powdered sugar bucket, the best rate (2 powdered sugar a
 		// sugar). The bucket places the block and an empty bucket picks it up, as powder snow. In the grid the bucket holds
 		// 8 powdered sugar: emptying it gives the 8 (the bucket stays), and bucket + 8 powdered sugar fills it.

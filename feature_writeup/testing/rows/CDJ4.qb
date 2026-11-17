@@ -21,7 +21,7 @@
 @group A
 @commands `grep -E "creativedelight.mixins.json\|Mixin apply.*creativedelight\|\[creativedelight\]" logs/latest.log`; `grep -c "from creativedelight.mixins.json" logs/debug.log`
 @pass No mixin apply error; the 22 moved common mixins apply on a server (compartments `minecraft`, `quark`, `alexsmobs`, `immersive_weathering`, `farmersdelight`, `canned_goods`, `the_dirty_stuff`, `salt` with their mods loaded); none from `creativeengineering.mixins.json` for these names
-@fails A compartment name is not the mod id, or patcherMod still lists a moved mixin
+@fails A compartment name is not the mod id, or Creative Common still lists a moved mixin
 @from batches/r1101/cs4_boot3.qb
 bootreject creativedelight\.mixins\.json.*(Error|error|failed)
 shell grep -c "from creativedelight.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativedelight.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cd_mx.txt; wc -l < cd_mx.txt; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cd_mx.txt; rm -f cd_mx.txt

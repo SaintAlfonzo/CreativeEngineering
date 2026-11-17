@@ -18,7 +18,7 @@ Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`,
   server its palettes load into the registry (`/exposure palette export`) and its dungeon loot rolls through the
   merged global loot modifiers; the dev client loads its models, textures and lang. Not yet tested in game.
 - Catalog (`exposure_catalog`) is still empty, and on hold (user, 2026-10-01: not wanted for now).
-- **Extras (`exposureextras`, 2026-10-02):** the leather/iron/netherite camera bags, moved here from patcherMod
+- **Extras (`exposureextras`, 2026-10-02):** the leather/iron/netherite camera bags, moved here from Creative Common
   (they were `creativeengineering:*_camera_bag`; a MissingMappingsEvent remap carries old bags over). Slot counts
   are `config/exposureextras-common.toml` `[camera_bag]`. What a bag accepts is the item tag
   `#exposureextras:camera_equipment`: defaults in `src/extras/resources/data/exposureextras/tags/items/`, pack
@@ -35,7 +35,7 @@ Status (written 2026-10-01; the pack has used the jar since 1.0.3, now at `-04`,
 - Keep the upstream mod ids, packages and class names so the addons port with as few changes as possible,
   and each ported file can be diffed against its upstream original.
 - The upstream source sets stay a faithful port. Pack recipes, tags and loot go through KubeJS (`global.NCH`,
-  `global.tags`, LootJS); Java tweaks to other mods go in patcherMod. New Exposure-related content of our own goes
+  `global.tags`, LootJS); Java tweaks to other mods go in Creative Common. New Exposure-related content of our own goes
   in `src/extras` (mod id `exposureextras`, package `com.SaintAlfonzo.exposureextras`).
 
 ## Version
@@ -73,7 +73,7 @@ One Gradle source set per mod. All five go into the one jar and into the dev run
   - When you add a mixin config, list it in `mixin_configs` in `gradle.properties`, which feeds both the
     jar manifest and the dev runs.
   - Mixins use Mojang names; MixinGradle writes the refmap, so they work in the dev runs and in the game.
-    That's different from patcherMod, which has no refmap and uses SRG names.
+    That's different from Creative Common, which has no refmap and uses SRG names.
   - Until a config has mixins, Mixin logs "Reference map ... could not be read". That's harmless.
   - Upstream bundles MixinExtras but doesn't use it. The pack already gets MixinExtras 0.5.4 through
     other mods if a port needs it.

@@ -1,6 +1,6 @@
 # dead-structure-locate-hang
 
-> Frequency-0 structure sets hang explorer-map/locate searches in 1.19.2; fixed by patcherMod ChunkGeneratorLocateMixin + kubejs loot/06_dead_maps.js; structure groups also empty dead sets so searches never see them; status in feature_writeup/locate.md
+> Frequency-0 structure sets hang explorer-map/locate searches in 1.19.2; fixed by Creative Common ChunkGeneratorLocateMixin + kubejs loot/06_dead_maps.js; structure groups also empty dead sets so searches never see them; status in feature_writeup/locate.md
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-27). Repo status docs win over any status line here.
 

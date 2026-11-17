@@ -23,15 +23,15 @@
 | Echo-tier tools (pickaxe, axe, shovel, hoe) next to CDD's echo sword; `echo` tool tier | DEPLOYED, in-game test pending |
 | Gear ladder recipes: echo / felsic / dragon sequenced assemblies (`NCH.echoAssembly` / `felsicAssembly` / `dragonAssembly`), felsic ingot, original recipes removed | DEPLOYED, in-game test pending |
 | Felsic assembly values from config (`[crafting.felsic_<piece>]`, `NCH.cfg`) | DEPLOYED; the felsic shield has no config section (F1) |
-| Assembly keeps enchantments, name, repair cost, Unbreakable, attribute modifiers (`SequencedAssemblyRecipeMixin`) | DEPLOYED (patcherMod), in-game test pending |
-| Armor enchantability overrides for whole materials (echo 18, felsic 21; `ArmorMaterialEnchantabilityMixin`) | DEPLOYED (patcherMod), in-game test pending |
+| Assembly keeps enchantments, name, repair cost, Unbreakable, attribute modifiers (`SequencedAssemblyRecipeMixin`) | DEPLOYED (Creative Common), in-game test pending |
+| Armor enchantability overrides for whole materials (echo 18, felsic 21; `ArmorMaterialEnchantabilityMixin`) | DEPLOYED (Creative Common), in-game test pending |
 | Dragon gear autorepair (`#creativeequipment:dragon_gear`, 50 durability every 10 s while worn or held) | DEPLOYED, in-game test pending |
-| Armor cap 50 (vanilla 30) so the full dragon set's 36 armor counts (`ArmorCapMixin`, `[dragon_gear] armorCap`) | BROKEN: Built 2026-10-30 (patcherMod 1.1.04, installed 2026-10-31 00:44); cap PASSED r1031 (SQ-AC-01, -03), set gives 33 not 36 (SQ-AC-02 FAIL, DragonLoot config overrides the tune) |
+| Armor cap 50 (vanilla 30) so the full dragon set's 36 armor counts (`ArmorCapMixin`, `[dragon_gear] armorCap`) | BROKEN: Built 2026-10-30 (Creative Common 1.1.04, installed 2026-10-31 00:44); cap PASSED r1031 (SQ-AC-01, -03), set gives 33 not 36 (SQ-AC-02 FAIL, DragonLoot config overrides the tune) |
 | Dragon scale elytra duplication (`creativeequipment:elytra_duplication`) | DEPLOYED; JEI doesn't show it ([jei_coverage.md](jei_coverage.md), JC-02) |
-| Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeequipment:elytra_chestplates`) | DEPLOYED (patcherMod), in-game test pending |
+| Rocket takeoff with the upgraded dragon chestplate (two Easy Elytra Takeoff mixins, `#creativeequipment:elytra_chestplates`) | DEPLOYED (Creative Common), in-game test pending |
 | Air brake (hold-to-use elytra brake, stall; `AirBrakeHandler`) | DEPLOYED; the 2026-09-13 "does nothing" bug was fixed; in-game test pending |
 
-- **Pending:** built and unshipped: F13 (armor cap 50, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch r1031
+- **Pending:** built and unshipped: F13 (armor cap 50, Creative Common 1.1.04 installed 2026-10-31 00:44; scratch r1031
   2026-10-31: cap mixin PASSED (SQ-AC-01, -03), SQ-AC-02 FAILED: full dragon set gives 33, not 36, because
   `dragonloot-common.toml` [dragonloot.armor] 7 / 10 / 9 / 7 overrides the KubeJS tune 7 / 12 / 10 / 7; FIXED 2026-11-01: toml set to 7 / 12 / 10 / 7, toughness 4.5, config only, SQ-AC-02 re-run pending)
   and F4 (dragon tools mining level 4, `tune_tools.js`). GR-01 to GR-30 have never been run. Findings F2, F5, F6, F8 to
@@ -184,7 +184,7 @@ other mod data (F5). Applies to every sequenced assembly, but only does anything
   `creativeengineering:elytraduplication/dragon_scale_elytra`, type `creativeequipment:elytra_duplication`
   (catalyst and result from the JSON).
 - **Rocket takeoff:** Easy Elytra Takeoff 4.2 launches you with a firework only if you wear an `ElytraItem` and nothing
-  but air is in the 3x3 layer two blocks under your feet. Two patcherMod mixins:
+  but air is in the 3x3 layer two blocks under your feet. Two Creative Common mixins:
   - `EasyElytraTakeoffHelperMixin`: "wearing an elytra" also counts any armor stack in
     `#creativeequipment:elytra_chestplates` or for which Forge's `canElytraFly` is true.
   - `EasyElytraTakeoffGroundCheckMixin`: for tagged chestplates the air-below check is skipped, so the rocket works
@@ -228,7 +228,7 @@ Out: Immersive Armors, Wardrobe, Botania, Alex's Mobs, Railways caps, Create Gog
 PneumaticCraft pneumatic armor, IE faraday, cardboard. The list is the brief's recommendation; the render audit
 (`gear/tuning #16`) can move sets in or out with one tag line.
 
-How: patcherMod `compat/ArmorTrimsItemCache` already caches Armor Trims' `LargeItemLists.getAllTrimmable` (perf.md
+How: Creative Common `compat/ArmorTrimsItemCache` already caches Armor Trims' `LargeItemLists.getAllTrimmable` (perf.md
 10.3). When the tag has members, the cached list keeps only them. That one list is what `TrimmableItem.applyTrim`
 checks (smithing table result), and what the JEI trim and untrimming pages, the untrimming recipe and the trimmed-item
 decorator read, so all of them narrow together and follow `/reload` (the cache resets on every tag load). An empty tag
@@ -271,12 +271,12 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
 
 ### Findings (2026-10-18)
 
-- **F1.** FIXED 2026-10-19 in patcherMod 1.0.9, DEPLOYED with pack 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). **The felsic shield has no config section.** [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) line 75
+- **F1.** FIXED 2026-10-19 in Creative Common 1.0.9, DEPLOYED with pack 1.0.9 ([plan_1.0.9.md](plan_1.0.9.md)). **The felsic shield has no config section.** [end_gear.js](../kubejs/server_scripts/equipment/end_gear.js) line 75
   asks for `CRAFTING.FELSIC_SHIELD`, which `CEConfig.Crafting` doesn't define, so every `/reload` logs
   `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section` and the hardcoded 250 mB / 1 loop / 8 blows apply.
   [shields.md](shields.md) 2.7 lists it as if it were configurable. Fix: add
   `FELSIC_SHIELD = new FelsicPiece(b, "felsic_shield", magicResistance, 250, 1, 8)`.
-- **F2. `potionMb` feeds both fills.** BUILT 2026-11-01 (patcherMod built, not installed; TODO `gear/tuning #6`): `FelsicPiece.reachMb`
+- **F2. `potionMb` feeds both fills.** BUILT 2026-11-01 (Creative Common built, not installed; TODO `gear/tuning #6`): `FelsicPiece.reachMb`
   (toml `reachPotionMb`, default = the piece's `potionMb`, so no recipe changes) feeds the Long Reach fill, `mb` (`potionMb`) the last
   fill; `felsicAssembly(..., hammerBlows, reachMb)` falls back to `mb`; `end_gear.js` passes `reachMb`. Test GR-31. DECIDED 2026-10-29 (owner): split it into two config keys. `felsicAssembly` uses the same mB for the Long Reach fill and the Magic
   Resistance fill; the toml comment says "used in the final filling step". A felsic helmet costs 500 + 500 mB a loop.
@@ -315,7 +315,7 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
   [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js) lines 621-626 uses the toml keys
   (`potionMb`, `hammerBlows`); the helper reads Java field names (`mb`, `blows`). Copying the example would fall back
   to defaults with a warning per field.
-- **F13. The dragon set is over the armor cap.** BUILT 2026-10-30 (patcherMod 1.1.04, TODO `gear/tuning #2`): owner
+- **F13. The dragon set is over the armor cap.** BUILT 2026-10-30 (Creative Common 1.1.04, TODO `gear/tuning #2`): owner
   decision 2026-10-29, lift the cap to 50 with a config key. 7 + 12 + 10 + 7 = 36 armor, but vanilla's `generic.armor`
   attribute is clamped to 30 (`RangedAttribute`, max 30, jar-checked). `ArmorCapMixin` overrides
   `RangedAttribute.sanitizeValue` / `getMaxValue` (SRG `m_6740_` / `m_147362_`; no refmap, so the `maxValue` field
@@ -457,16 +457,16 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   autorepair, air brake item; shipped with 1.0.3. The Java side (air brake handler, elytra duplication, rocket
   takeoff mixins, assembly NBT mixin, armor enchantability mixin) was in the jar and first committed 2026-10-02.
 - 2026-10-18: this writeup; findings F1 to F13; tests GR-01 to GR-30. No code changed.
-- 2026-10-19: F1 (`CRAFTING.FELSIC_SHIELD` in CEConfig, patcherMod 1.0.9), F3 (tag helper) and F7 (`useDurationTicks` read per use) fixed ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game; GR-28 now expects a toml change to apply after a config reload.
+- 2026-10-19: F1 (`CRAFTING.FELSIC_SHIELD` in CEConfig, Creative Common 1.0.9), F3 (tag helper) and F7 (`useDurationTicks` read per use) fixed ([plan_1.0.9.md](plan_1.0.9.md)). Not run in game; GR-28 now expects a toml change to apply after a config reload.
 - 2026-10-19: F12 fixed (NCH.cfg example uses the Java field names).
-- 2026-10-30: F13 built: armor cap 50 (`ArmorCapMixin`, `[dragon_gear] armorCap`), patcherMod 1.1.04. Scratch test SQ-AC queued; GR-02 expects 36.
+- 2026-10-30: F13 built: armor cap 50 (`ArmorCapMixin`, `[dragon_gear] armorCap`), Creative Common 1.1.04. Scratch test SQ-AC queued; GR-02 expects 36.
 - 2026-10-31: scratch run r1031: SQ-AC-01, -03 PASSED; SQ-AC-02 FAILED (33 armor: DragonLoot's own armor values win over
   `tune_tools`). No code changed.
 - 2026-11-01: F13 toml fix (`dragonloot-common.toml` 12 chest, 10 legs, toughness 4.5; `gear/tuning #20`). F2 built: `reachPotionMb`
-  key per felsic piece (`gear/tuning #6`, patcherMod built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
+  key per felsic piece (`gear/tuning #6`, Creative Common built, not installed); GR-31 added. NCH numeric defaults (`?? N` returned 0
   in this Rhino) now go through `NCH._or`, incl. `felsicAssembly` hammerBlows.
 - 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativecommon:trimmable_armor`,
-  filter in patcherMod `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
+  filter in Creative Common `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
 - 2026-11-04: `tuneTools` / `tuneArmor`, armor enchantability, the armor cap, the copper tier and the gear scripts moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)); config tables now in `config/creativeequipment-common.toml`. Same behaviour.
 
 ## Owner ideas (scratchpad 2026-10-26)

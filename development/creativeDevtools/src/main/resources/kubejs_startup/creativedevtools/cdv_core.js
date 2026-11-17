@@ -1,7 +1,7 @@
 // priority: 1000
 // requires: creativedevtools
 // Creative Devtools core: global.CDV (feature_writeup/creative_devtools.md 1). Startup script in the Devtools jar,
-// loaded by patcherMod's startup loader after the pack's startup_scripts folder (Devtools' mods.toml orders it AFTER
+// loaded by Creative Common's startup loader after the pack's startup_scripts folder (Devtools' mods.toml orders it AFTER
 // creativeengineering), so global.NCH, the dicts and global.removedItems already exist here. Every other Devtools
 // script reads global.CDV.
 //

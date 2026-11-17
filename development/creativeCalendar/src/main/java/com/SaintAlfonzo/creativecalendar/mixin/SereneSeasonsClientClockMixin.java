@@ -26,7 +26,7 @@ import sereneseasons.season.SeasonTime;
  * glides the client's time of day up to the new one, adding it again. With {@code doDaylightCycle false} no later sync
  * corrected it (TODO {@code gameplay/time #7}, scratch r1101 CQ-TD-06: SeasonHUD read Summer day 1 for Mid Autumn day
  * 13). Listed under "client" in the mixin config: a common mixin referencing {@code Minecraft} fails to apply on a
- * dedicated server (patcherMod 1.0.8 boot crash).
+ * dedicated server (Creative Common 1.0.8 boot crash).
  */
 @Mixin(value = SeasonHandler.class, remap = false)
 public class SereneSeasonsClientClockMixin {

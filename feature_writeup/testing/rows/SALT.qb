@@ -214,7 +214,7 @@
 @@text Plan, notes and verdicts: [scratch_run_2026-11-03.md](scratch_run_2026-11-03.md) section 9; W1 verdicts
 @@text [perf/runs/r1103w/w/judged_w1.md](../../perf/runs/r1103w/w/judged_w1.md). Batches `tools/scratch_query/batches/r1103w/`
 @@text (the r1102b `w_*` copies refreshed for the wave 5 carve, new `w_12_B.qb`, rerun `w_1r_B.qb`, `drive.sh`). Jars:
-@@text patcherMod 1.1.08 build 2026-11-03 01:30, CD 01:31, Devtools 2026-11-02 22:46, Creative Labels 1.0.1, Creative Worldgen 2026-11-02
+@@text Creative Common 1.1.08 build 2026-11-03 01:30, CD 01:31, Devtools 2026-11-02 22:46, Creative Labels 1.0.1, Creative Worldgen 2026-11-02
 @@text 23:16. Perf `perf/sessions/r1103w/summary.md` (no prune). W1 boot 1 crashed with OutOfMemoryError at 6 GB in the
 @@text spawn pregen (Distant Horizons server-side LOD backlog, TODO `pack/server #12`); resumed at 8 GB. Judged 104 rows (97 W1 + 7 W1c and offline):
 @@text PASS 76, FAIL 12, BATCH-FAULT 4, OPEN 9, LOOK-client 3 (SQ-WGE-10 state half too). FAIL: SQ-WGE-08, -01b, -01b-2,
@@ -226,7 +226,7 @@
 @@text Plan, notes and verdicts: [scratch_run_2026-11-03.md](scratch_run_2026-11-03.md); every FAIL with cause and file:
 @@text [perf/runs/r1103/FINAL.md](../../perf/runs/r1103/FINAL.md); per slice `perf/runs/r1103/{sB,sA,p2}/judged.md`.
 @@text Batches `tools/scratch_query/batches/r1103/` (drivers drive_sB.sh, drive_sA.sh, drive_p2.sh, chain*.sh), perf
-@@text `perf/sessions/r1103/summary.md` (no prune). Jars: patcherMod 1.1.08 (2026-11-03 00:08), CD 00:48 (runner rebuild), CB
+@@text `perf/sessions/r1103/summary.md` (no prune). Jars: Creative Common 1.1.08 (2026-11-03 00:08), CD 00:48 (runner rebuild), CB
 @@text 00:08, Creative Worldgen 2026-11-02 23:16, Creative Labels 1.0.1; slice A boot 1 ran the 1.1.06 release (deploy/latest).
 @@text Boot 0 found two boot crashes in the installed pack (CD LemonTreePickYieldMixin, Worldgen loot README.md name),
 @@text both fixed in source. 204 rows judged: PASS 171, FAIL 19, BATCH-FAULT left 2, OPEN 12. FAIL: SQ-VNG-01, SQ-LBS-03,
@@ -239,7 +239,7 @@
 @@text Plan, notes and verdicts: [scratch_run_2026-11-02b.md](scratch_run_2026-11-02b.md) section 8; handover with resume
 @@text steps [perf/runs/r1102b/HANDOVER.md](../../perf/runs/r1102b/HANDOVER.md). Batches `tools/scratch_query/batches/r1102b/`
 @@text (scope.txt, five slices), results `perf/runs/r1102b/s1..s5/judged.md`, perf `perf/sessions/r1102b/summary.md` (24 boots,
-@@text JFR_MAX 200m, no prune). Jars: patcherMod 1.1.07, CD 14:01, CB 13:52; Creative Calendar fixed 15:04 (boot crash) for
+@@text JFR_MAX 200m, no prune). Jars: Creative Common 1.1.07, CD 14:01, CB 13:52; Creative Calendar fixed 15:04 (boot crash) for
 @@text s1 to s3, the owner's 18:41 installs for s5. 357 rows judged: PASS 257, FAIL 14, OPEN 22, BATCH-FAULT without verdict
 @@text 56, NOT RUN 8. FAIL: SQ-VP-06, SQ-VTD6-01, SQ-FDB-04, SQ-RD-22, SQ-CDF-08, SQ-MRD-01, SQ-LEM-01, -02, SQ-VTD7-02,
 @@text SQ-LGM-10, SQ-POT-03, -04, SQ-FSD-02, SQ-PSU-06; owner decision SQ-PSU-09. Worldgen slice (SQ-WGE, SQ-EFB, SQ-FGDC,
@@ -262,7 +262,7 @@
 @@text
 @@text Plan, results and owner points: [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md). Batches
 @@text `tools/scratch_query/batches/r1101/`, results `perf/runs/r1101/` (judged_p1.md, judged_c1.md, shots/), perf
-@@text `perf/sessions/r1101/summary.md` (11 boots, JFR on, no prune). Jars: patcherMod and Creative Delight builds of
+@@text `perf/sessions/r1101/summary.md` (11 boots, JFR on, no prune). Jars: Creative Common and Creative Delight builds of
 @@text 2026-11-01 01:56. Priority server rows and the bug batch: PASS (SQ-AC-02, SQ-CM-32 / -35, SQ-RW-23, SQ-TER-01 now PASS)
 @@text except SQ-CDF-07 without-Brewin' half (pack does not start without Vinery), SQ-CBJ-05 and SQ-TL-09 (OPEN). Worldgen:
 @@text SQ-HR-05, SQ-ENC-01 / -02, SQ-MRD-03, SQ-META31-04b, SQ-WG30-C02b, SQ-SB-01e PASS; SQ-SB-04 likely FAIL, SQ-SB-05 to
@@ -408,7 +408,7 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text
 @@text ### 2026-10-30 afternoon: SQ-WG30 worldgen batch (group B worlds `wg30a`, `wg30e`, `wg30c1`, `wg30c2`, seed 8675309)
 @@text
-@@text patcherMod `creativeengineering-1.1.04.jar` (13:38). No perf session (JFR off). PASS: A01, A04, B01 to B04, C01, C03,
+@@text Creative Common `creativeengineering-1.1.04.jar` (13:38). No perf session (JFR off). PASS: A01, A04, B01 to B04, C01, C03,
 @@text C04, C05, D01, D02, E01, E02. PARTIAL: A02, A03, C02, E03. FAIL: D03 (kept starts under the ocean flooded from
 @@text cave water below an intact seabed). Not run: CQ-WG30-A04 (client). Details in each row of the SQ-WG30 section. Boot logs
 @@text clean of CE warnings and mixin errors; run-time noise only (Hanging entity / POI mismatch, Farmer's Structures pool
@@ -417,7 +417,7 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text ### 2026-10-28 night: recent feature block and bot players (group A `fq_a1`, group B `fq_b_on` / `fq_b_off` / `fq_b_gfb` on the eval seed; perf session `q1028`; then perf suite `g1`)
 @@text
 @@text Full log, findings and tooling changes: [scratch_run_2026-10-28.md](scratch_run_2026-10-28.md). Jars:
-@@text patcherMod 1.1.03 00:16 build (installed 01:19; the 00:01 jar in `mods/` had no soil yield), Creative Delight 00:16,
+@@text Creative Common 1.1.03 00:16 build (installed 01:19; the 00:01 jar in `mods/` had no soil yield), Creative Delight 00:16,
 @@text perfBot rebuilt 02:24 (chunk-tracking fix). Perf: `perf/sessions/q1028/summary.md` (8 boots, every marked row a
 @@text segment, every tick over 50 ms in `worst_ticks.tsv`).
 @@text
@@ -463,9 +463,9 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text
 @@text ### 2026-10-27 late: brief overall rerun (normal world ov2, seed -8188900049893920259, JFR on)
 @@text
-@@text Owner request: a brief check that the 20:44 patcherMod changes took and how performance moved. `PREGEN=400
+@@text Owner request: a brief check that the 20:44 Creative Common changes took and how performance moved. `PREGEN=400
 @@text tools/perf/eval/overall_run.sh OUT ov2` (same method and square as ov1), results in `perf/overall/ov2/`, report
-@@text `perf/reports/ov2-pregen.html` (baseline `ov1-pregen.summary.json`). Jars: patcherMod 20:44, Creative Delight 18:43.
+@@text `perf/reports/ov2-pregen.html` (baseline `ov1-pregen.summary.json`). Jars: Creative Common 20:44, Creative Delight 18:43.
 @@text
 @@text | | ov1 (18:29 jar) | ov2 (20:44 jar) |
 @@text |---|---|---|
@@ -502,8 +502,8 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text Owner request: one overall before/after, no per-fix worlds; then the queued perf scratch tests on the same server.
 @@text Numbers and fixes: [../perf.md](../perf.md) section 12. Kit: `tools/perf/eval/overall_run.sh`, `overall_reboot.sh`,
 @@text `client_drive.sh`; new probes `tools/worldedit_probe/we_probe.js` (`/wetest`), `tools/immersive_posts_probe/ipo_probe.js`
-@@text (`/ipotest`). Boots: 1 new world (patcherMod 18:29), 2-5 restarts of the same world (patcherMod 18:44, Creative Delight
-@@text 18:43; boot 2 first crashed on a patcherMod/CD pair from different builds, relinked), biome config edit / restore in 4-5.
+@@text (`/ipotest`). Boots: 1 new world (Creative Common 18:29), 2-5 restarts of the same world (Creative Common 18:44, Creative Delight
+@@text 18:43; boot 2 first crashed on a creativeCommon/CD pair from different builds, relinked), biome config edit / restore in 4-5.
 @@text
 @@text | Entries | Result |
 @@text |---|---|
@@ -539,7 +539,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text
 @@text ### 2026-10-27 evening: perf fixes measured (group B worlds wgp_*, seed -8188900049893920259, JFR on; then group A qa_1027)
 @@text
-@@text Jars: patcherMod 1.1.03 built 13:45 installed 15:14 and HARD-LINKED into each scratch `mods/` (`eval_server.sh` now
+@@text Jars: Creative Common 1.1.03 built 13:45 installed 15:14 and HARD-LINKED into each scratch `mods/` (`eval_server.sh` now
 @@text links instead of copying: only 2.5 GB free on `/`), so the 7 group B worlds ran one build even though a parallel
 @@text session installed new jars at 17:25 and 17:47. Driver `tools/perf/eval/wgp_run.sh` (per world: boot, entity snapshot at
 @@text Done + 2 min, `/forge tps` at Done + 4 min, `/wgp`, Chunky radius 400 at 4000 4000 with its own JFR `pregen.jfr`,
@@ -649,15 +649,15 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text
 @@text ### 2026-10-26 afternoon run (group B normal world nb2, seed -8188900049893920259, JFR on)
 @@text
-@@text Jars: `mods/` as of 2026-10-26 15:32 (patcherMod 1.1.03, CD 15:31, Vintage -07), COPIED into the scratch `mods/`; second
-@@text boot with patcherMod rebuilt 15:54 (fix 1). Probes: the usual set plus new `tools/seasoning_probe/seasoning_probe.js`
+@@text Jars: `mods/` as of 2026-10-26 15:32 (Creative Common 1.1.03, CD 15:31, Vintage -07), COPIED into the scratch `mods/`; second
+@@text boot with Creative Common rebuilt 15:54 (fix 1). Probes: the usual set plus new `tools/seasoning_probe/seasoning_probe.js`
 @@text (`/sntest`, SQ-SNF-03) and `/zq states all` (block-state count). Boot clean apart from the known `truffle_pie` NCH error.
 @@text
 @@text Fixes made in the run:
 @@text
 @@text 1. **Perf mixins never applied on a dedicated server:** all 9 (`ServerTickPerfMixin` ... `KubeJSEventHandlerContainerMixin`)
 @@text    were in the `client` list of `creativeengineering.mixins.json`; `/cdevperf status` said no hook had run and 0 handlers
-@@text    were wrapped. Moved to `mixins`; patcherMod rebuilt and installed 15:54. Dev / server tooling, no changelog bullet.
+@@text    were wrapped. Moved to `mixins`; Creative Common rebuilt and installed 15:54. Dev / server tooling, no changelog bullet.
 @@text 2. `food_dict.js`: dropped `fruit_jam_bottle`, `fruit_jam_glow`, `drink_juice_prickly_pear` (Delightful items removed in the
 @@text    3.8.1 repack; `tools/food_dict.py` flagged them, no script used them). No changelog bullet.
 @@text
@@ -694,7 +694,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text
 @@text ### 2026-10-26 run (group A superflat qb1, then group B normal world nb1)
 @@text
-@@text Jars: `mods/` as of 2026-10-25 23:59 (patcherMod 1.1.03, CD 23:49, Vintage -06, Incubation Additions 1.1.0, repackedStorage
+@@text Jars: `mods/` as of 2026-10-25 23:59 (Creative Common 1.1.03, CD 23:49, Vintage -06, Incubation Additions 1.1.0, repackedStorage
 @@text -01), COPIED into the scratch `mods/`. KubeJS tree of 2026-10-26 00:06 plus the fixes below. 3 boots of qb1, 1 of nb1.
 @@text New probe: `tools/cdb_en_probe/cdb_en_probe.js` (`/cbetest blocks|soils|growth|dragon|anvil|squid|jars|all`; needs
 @@text `forceload add 400 400`). Probe fixes: `fdtest` resolves `creativeengineering:` ids to their `creativedelight:` twin (listed
@@ -762,7 +762,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text ### 2026-10-25 late run (group A, current 1.1.03 tree, partial)
 @@text
 @@text Jars: everything in `mods/` as of 22:13 (copied into the scratch `mods/`, not symlinked: a parallel session rebuilt
-@@text and installed patcherMod and CD mid-boot once, `NoClassDefFoundError` in RegisterEvent), patcherMod and CD from
+@@text and installed Creative Common and CD mid-boot once, `NoClassDefFoundError` in RegisterEvent), Creative Common and CD from
 @@text `build/libs` with the fixes below. KubeJS tree of 22:24. One superflat world (qa1), 5 boots. New scratch tools:
 @@text `tools/scratch_query/zq_probe.js` (`/zq recipes|rdetail|itemtag|blocktag|tagsof|nbt`), `zq_batch.sh` (a file of
 @@text console commands, prints the `[zq]` lines), `game_jvms.sh` (java pids that are not Gradle: `pgrep -x java` also
@@ -781,7 +781,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text 4. CD Berserker's Brew came out as a plain water bottle: NCH `vdPickling` wrote results through `_itemJson` (no NBT),
 @@text    and `_nbtItemJson` read NBT with `getTag()`, which KubeJS hides from scripts (`.nbt` works). `vdPickling` output and
 @@text    secondary now use `_nbtItemJson`, which reads `.nbt`. Verified: Strength, Resistance, Wither. No `ieBlueprint` call
-@@text    passes an NBT stack, so that helper's recipes are unchanged. patcherMod rebuild + restart.
+@@text    passes an NBT stack, so that helper's recipes are unchanged. Creative Common rebuild + restart.
 @@text
 @@text Probe updates (expectations that went stale with the CD move, not pack bugs): `fungi_probe.js` grid / pot meal ids are
 @@text `creativedelight:`, colony Serene Seasons checks dropped (FD's colonies are in neither tag; fungi_delight.md corrected);
@@ -850,7 +850,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @group PASS: folder path ns / mirror / requires / tags all PASS, startup FAIL by design
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-10
-@group PASS, stronger than the row: the CD error line is logged, the pack's startup scripts fail, and KubeJS stops the boot ("startup script syntax errors"). The two jars must ship together; **the instance's `mods/` patcherMod is the old one, so the user's client cannot boot with the current `kubejs/` until the built jar is installed**
+@group PASS, stronger than the row: the CD error line is logged, the pack's startup scripts fail, and KubeJS stops the boot ("startup script syntax errors"). The two jars must ship together; **the instance's `mods/` Creative Common is the old one, so the user's client cannot boot with the current `kubejs/` until the built jar is installed**
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-KS-01 to -04
 @group PASS (01 via `/reload` discovery, not a fresh boot): a datapack script sees `global.NCH` / `global.LOOT` and makes `creativeengineering:shapeless/sqks_test`; `kubejs/data` reloads; with both copies one runs and `kubejs/data` wins over the world datapack; the folder `creativedelight/kubejs/_core/cd_server.js` wins over the jar's copy (10.4 dev loop holds); `requires: not_a_mod` skipped
@@ -869,12 +869,12 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-CDT-07, SQ-CDJ-03 (client); SQ-CDJ-04 net loot and SQ-FN-02 / -03 (need ocean and river biomes: group B); SQ-CDJ-05 (ports not bundled) |
 @@text
-@@text Performance (boot of the same world, built patcherMod both ways, `bench_boot.sh`): seconds from launch to `Done`, without
+@@text Performance (boot of the same world, built Creative Common both ways, `bench_boot.sh`): seconds from launch to `Done`, without
 @@text CD (upstream Ocean's / Oceanic / End's) 101.5, 110.1, 102.6 (mean 104.7); with the CD jar 112.1, 108.6, 103.4 (mean
 @@text 108.0). The gap is inside the boot-to-boot spread (about 9 s). KubeJS startup scripts 1.09 to 1.13 s without, 1.15 to
 @@text 1.27 s with (about +0.05 s: `cd_core.js`); server scripts 0.22 to 0.32 s both ways; recipe event 202 to 248 ms both ways,
 @@text same 5327 recipes. No measurable boot cost. Tick cost not measured (CD adds no tick handlers; the fishing net mixin
-@@text only moved from patcherMod).
+@@text only moved from Creative Common).
 @@text
 @@text ### 2026-10-23 bulk run (group A only)
 @@text
@@ -961,7 +961,7 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 @@text
 @@text ### 2026-10-22 second bulk run
 @@text
-@@text patcherMod `creativeengineering-1.1.01.jar` installed at md5 4daad5bb, rebuilt in the run to ac3dd59c (stem fruit) and
+@@text Creative Common `creativeengineering-1.1.01.jar` installed at md5 4daad5bb, rebuilt in the run to ac3dd59c (stem fruit) and
 @@text a4d48336 (prismarine geodes), the last one in `mods/`; `moreMooblooms-1.1.0.jar` (c2df0ab6) installed in place of 1.0.0;
 @@text KubeJS working tree of 2026-10-22 plus the fixes below. Worlds: sqA3 (group A, three boots: base with the test
 @@text `[stem_fruit]` values, the SQ-GM-05 + SQ-OM-14 flips together, SQ-OM-15), sqB3 and sqB5 (group B), sqOM2 (group A,
@@ -1028,9 +1028,9 @@ expect creativeengineering:phase": 1b
 @@text    on-hit tool effect and no syringe hit sample ever happened.
 @@text 4. `trades.js`: MoreJS 0.3.0 reads `[1, 5]` as level 1 only (both ends from the first entry); every level range is a
 @@text    real `IntRange(1, 5)` now, so the cleric, chef and engineer removals and the Canned Food filter reach levels 2 to 5.
-@@text 5. patcherMod `StemExtraFruit`: grows only the stem's own fruit (Delightful's slices and cantaloupe extend the vanilla
+@@text 5. Creative Common `StemExtraFruit`: grows only the stem's own fruit (Delightful's slices and cantaloupe extend the vanilla
 @@text    blocks and report the vanilla stem; re-pointing only knew the real fruit).
-@@text 6. patcherMod `OceanGeodes.untouched` checks the alternate inner layer too (Geode Plus' prismarine geode keeps its
+@@text 6. Creative Common `OceanGeodes.untouched` checks the alternate inner layer too (Geode Plus' prismarine geode keeps its
 @@text    budding prismarine there; the inner layer is plain prismarine).
 @@text 7. `jeed_providers.js` skips Xaero's map effects when the mod is not loaded (12 `[NCH] jeedProvider failed` errors on
 @@text    every dedicated server boot).
@@ -1046,7 +1046,7 @@ expect creativeengineering:phase": 1b
 @@text
 @@text ### 2026-10-22 bulk run
 @@text
-@@text patcherMod `creativeengineering-1.1.01.jar` md5 37bb7049 (rebuilt in this run for the Trinket Case change), KubeJS
+@@text Creative Common `creativeengineering-1.1.01.jar` md5 37bb7049 (rebuilt in this run for the Trinket Case change), KubeJS
 @@text working tree of 2026-10-22. Group A (worlds sqA1, sqA2) and group B (sqB1, sqB2). All passed; results are in the
 @@text writeups:
 @@text
@@ -1147,7 +1147,7 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @@jars creativecommon creativedelight
 @@sources feature_writeup/item_merges.md
 @@text
-@@text Server checks; install the CD and patcherMod jars built 2026-10-26 18:xx first. Client rows (textures, names, JEI) are
+@@text Server checks; install the CD and Creative Common jars built 2026-10-26 18:xx first. Client rows (textures, names, JEI) are
 @@text MG-29 and MG-31 in game.
 @@text
 @@text | ID | World | What to do and look at | Existing test |

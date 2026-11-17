@@ -14,7 +14,7 @@ and SQ-GE-01 to SQ-GE-03, a second for SQ-GE-04.
 
 Before the run (game closed, `pgrep -c java` is 0):
 
-1. patcherMod: `./gradlew :patcherMod:installToMods --offline` so `mods/` holds the build with extra stem fruit (build/libs
+1. Creative Common: `./gradlew :creativeCommon:installToMods --offline` so `mods/` holds the build with extra stem fruit (build/libs
    md5 4daad5bb at the sweep; `mods/` had b5f60533 without it). Rebuild first if the source changed since.
 2. More Mooblooms: `./gradlew :moreMooblooms:installToMods --offline` (1.1.0, md5 c2df0ab6, replaces 1.0.0) for SQ-GM-09;
    then mod_sides.md row 1.0.0 -> 1.1.0.
@@ -27,7 +27,7 @@ None of the three probes has run under Rhino yet; expect a probe fix or two (the
 One probe for all six groups: [tools/food_drinks_probe/food_drinks_probe.js](../../tools/food_drinks_probe/food_drinks_probe.js),
 copied before `boot` to `OUT/srv/kubejs/server_scripts/zz_fd_probe.js`. Run `/fdtest <part>` or `/fdtest all`; results are
 `[fdtest] PASS|FAIL <part> ...` lines in `logs/latest.log`, ending `[fdtest] done <part>: N pass, M fail`. Written
-2026-10-22, never run yet (`node --check` only). Target: patcherMod `creativeengineering-1.1.01.jar` (holds `PlacedFoodSol`
+2026-10-22, never run yet (`node --check` only). Target: Creative Common `creativeengineering-1.1.01.jar` (holds `PlacedFoodSol`
 since md5 b5f60533), KubeJS working tree of 2026-10-22 after 11:24 (coffee merge). New fluids: restart, not `/reload`.
 
 #### SQ-DR: drinks (chorus juice, berry matcha latte, milk jars)
@@ -98,7 +98,7 @@ After the run: results into recipes_cooking.md 2.2 / 2.3, mixed_jars.md 9, food.
 Probe: [tools/gear_misc_probe.js](../../tools/gear_misc_probe.js), copied before `boot` to
 `OUT/srv/kubejs/server_scripts/zz_gm_probe.js`. Run `/gmprobe [part]`; results are `[gmprobe] PASS|FAIL|INFO ...` lines in
 `logs/latest.log`, ending `[gmprobe] done: N pass, M fail`. Written 2026-10-22, never run yet (`node --check` only). Target:
-patcherMod `creativeengineering-1.1.01.jar` (holds every class here since md5 b5f60533), KubeJS working tree of 2026-10-22.
+Creative Common `creativeengineering-1.1.01.jar` (holds every class here since md5 b5f60533), KubeJS working tree of 2026-10-22.
 SQ-GM-09 also needs `moreMooblooms-1.1.0.jar` (md5 c2df0ab6, in `development/moreMooblooms/build/libs`) installed into
 `mods/` in place of 1.0.0 before boot (`scratch_server.sh` symlinks `mods/`; game closed). Copy the instance
 `config/creativeengineering-common.toml`, `alexsmobs.toml` and `chalk-common.toml` into `OUT/srv/config/` if setup did not;
@@ -130,9 +130,9 @@ Probe: [tools/farm_worldgen_probe.js](../../tools/farm_worldgen_probe.js), copie
 results `grep '\[zfw\]' logs/latest.log`. Written 2026-10-22, never run yet (`node --check` only). Group A: after boot run
 `forceload add 384 384 655 527` and wait 30 s before the `zfw` commands.
 
-Jar: only `development/patcherMod/build/libs/creativeengineering-1.1.01.jar` (md5 4daad5bb) holds extra stem fruit; `mods/`
-(b5f60533) has everything else here. Either install it first (`:patcherMod:installToMods`, game closed) or after setup:
-`ln -sfn "$PWD/development/patcherMod/build/libs/creativeengineering-1.1.01.jar" OUT/srv/mods/creativeengineering-1.1.01.jar`.
+Jar: only `development/creativeCommon/build/libs/creativeengineering-1.1.01.jar` (md5 4daad5bb) holds extra stem fruit; `mods/`
+(b5f60533) has everything else here. Either install it first (`:creativeCommon:installToMods`, game closed) or after setup:
+`ln -sfn "$PWD/development/creativeCommon/build/libs/creativeengineering-1.1.01.jar" OUT/srv/mods/creativeengineering-1.1.01.jar`.
 Never the `server_mods/` jar (37bb7049, old geode `drop` key, no Mulberry sapling).
 
 #### SQ-SF: extra stem fruit
@@ -180,7 +180,7 @@ Feature: [../crops.md](../crops.md) 3, V17, CR-57, CR-69, TODO `farming/crops #6
 #### SQ-MB: river wood removed, Mulberry tree
 
 Feature: [../recipes_wood.md](../recipes_wood.md) 2.6, RW-15 to RW-20, TODO `recipes/wood #3`. KubeJS tree 2026-10-22 +
-patcherMod `MulberrySapling` (in `mods/` and `build/libs`).
+Creative Common `MulberrySapling` (in `mods/` and `build/libs`).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
@@ -216,7 +216,7 @@ Food builds of 2026-10-19 to 2026-10-21 that a server can check and that never r
 `[ofprobe] PASS|FAIL|INFO ...` lines in `logs/latest.log`, ending `[ofprobe] done: N pass, M fail`. SQ-OF-06 uses the
 existing [tools/kitchen_probe/cfb_oven_smoking_probe.js](../../tools/kitchen_probe/cfb_oven_smoking_probe.js), copied to
 `OUT/srv/kubejs/server_scripts/zz_ko_probe.js` (`/kotest`). Written 2026-10-22, never run (`node --check` only). Target:
-patcherMod `creativeengineering-1.1.01.jar` from `build/libs` (install step 1 above; it holds `CfbOvenSmokingMixin` and
+Creative Common `creativeengineering-1.1.01.jar` from `build/libs` (install step 1 above; it holds `CfbOvenSmokingMixin` and
 `CanServings`), KubeJS working tree of 2026-10-22. All group A; can share the superflat world of the other group A probes.
 Client-only, not queued: JEI (Seasoning page, Feast Plating tab), WTHIT "Holding" line, fridge models, oven tooltips,
 can sprites, names.
@@ -287,7 +287,7 @@ drinks, cask, press, leafslow, raid, air, tier1, baby, jeed; `setup`, `wine`, `c
 `[omprobe] done: N pass, M fail`. Written 2026-10-22, never run yet (`node --check` only). Its blocks go in a strip at
 x 0 to 230, y -60, z 92 to 100: run `forceload add 0 80 239 111` after the boot and wait 30 s before the first part.
 
-Targets: patcherMod `creativeengineering-1.1.01.jar` (every class here is in both the `mods/` build b5f60533 and the
+Targets: Creative Common `creativeengineering-1.1.01.jar` (every class here is in both the `mods/` build b5f60533 and the
 build/libs one 4daad5bb the queue installs first), Brewin' `backportedBrewin-4.5.0-ce-19.2-03.jar` (md5 579cd3fa),
 Vinery `backportedVinery-1.5.5-ce-19.2-04.jar` (md5 2aa87561), `babyMobs-1.0.0.jar` (md5 389cf345): all three already
 in `mods/`, identical to their `build/libs`, nothing to install for this block. KubeJS working tree of 2026-10-22.
@@ -339,7 +339,7 @@ Feature: [alcohol.md](../alcohol.md) 11 (logic of AL-85 to AL-87; the Quark word
 #### SQ-OM-WN: wine storage boosts and campfire rain (one setup, then wait)
 
 Feature: wine storage [alcohol.md](../alcohol.md) 10.13, [time.md](../time.md) 4 T5 (logic of VB-76); campfire rain
-(patcherMod `CampfireRain`, note [campfire-rain](../agent_notes/campfire-rain.md); no writeup section yet). TODO `alcohol/pack #2`, `gameplay/misc #2`
+(Creative Common `CampfireRain`, note [campfire-rain](../agent_notes/campfire-rain.md); no writeup section yet). TODO `alcohol/pack #2`, `gameplay/misc #2`
 (the built part: coal / charcoal block fuel, soul campfire, Unlit Campfire burns forever).
 
 | ID | Group | Commands | Pass | If it fails |

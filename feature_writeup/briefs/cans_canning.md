@@ -5,7 +5,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# cans`, Sub `canning`. Refe
 [food.md](../food.md) 3.5 (tuning) and 3.6 (servings). Code: [canning.js](../../kubejs/data/creativedelight/kubejs/creativedelight/canning.js),
 [cans.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js), [gen_can_types.py](../../tools/gen_can_types.py) ->
 [can_types.json](../../kubejs/generation_scripts/food/can_types.json), [can_servings.json](../../kubejs/generation_scripts/food/can_servings.json),
-[cantags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js), patcherMod `food/CanServings.java`, `compat/KubeJSCanAction.java`.
+[cantags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js), Creative Common `food/CanServings.java`, `compat/KubeJSCanAction.java`.
 
 Updated 2026-10-31 (brief sweep): sections for the built rows (#3, #4, #5, #6, #9, #12, #14, #15) cut to one line
 each under [Built, needs play](#built-needs-play) (can_parity.md and cans.md hold their facts); #2 and #7 closed; the
@@ -35,7 +35,7 @@ Complete: #2, #7.
 2. **#1 golden effect length** (D-B, `dur` 0.25 -> 0.333) can go with step 1; the other #1 values wait on
    `food/types-and-tuning #1` (Planned) and use #3's audit findings.
 3. **#8:** the bowl remainders and the mixer check (KubeJS, no generator run).
-4. **#10:** patcherMod, any time; small.
+4. **#10:** Creative Common, any time; small.
 5. **`textures/food #1`:** ongoing art; `--sprites` lets each batch land without a food export.
 
 Creative Canning (D-A, its own mod) is decided but has no row; do not start it inside these rows. Everything below
@@ -193,17 +193,17 @@ settled.
 ---
 
 ## canning #10: Cosmetic can opener
-Status **Planned** / Work patcherMod / KubeJS / TODO `cans/canning #10`
+Status **Planned** / Work Creative Common / KubeJS / TODO `cans/canning #10`
 
 ### Goal
 A can opener item; while it is in the inventory, opening a can plays a sound.
 
 ### Now
-"Opening" happens in patcherMod `food/CanServings.finishServing` (line 152 on): a partial can elsewhere in the
+"Opening" happens in Creative Common `food/CanServings.finishServing` (line 152 on): a partial can elsewhere in the
 inventory is eaten first (`findOpenCan`, line 160); the source is a full can when `!isPartial(source)` and
 `maxServings(source) > 1`. KubeJS can't tell (the `foodEaten` event sees a copy with no NBT whether or not a can is
 opened). Canned Goods has only golem sounds; the pack has no `sounds.json` under `kubejs/assets/creativeengineering/`
-or patcherMod yet. No can opener id exists.
+or Creative Common yet. No can opener id exists.
 
 ### Build
 1. KubeJS: item `creativeengineering:can_opener` (cans.js or items/), key `i.can_opener` in item_dict's canning block,
@@ -211,7 +211,7 @@ or patcherMod yet. No can opener id exists.
    [can_tags.js](../../kubejs/data/creativedelight/kubejs/creativedelight/can_tags.js); a recipe (iron nugget +
    iron ingot, NCH `shaped`). Sound: `StartupEvents.registry('sound_event', e => e.create('creativeengineering:can_open'))`,
    `kubejs/assets/creativeengineering/sounds.json` + `sounds/can_open.ogg`.
-2. patcherMod `CanServings.finishServing`: before `afterServing` (line 163), `boolean opening = !level.isClientSide &&
+2. Creative Common `CanServings.finishServing`: before `afterServing` (line 163), `boolean opening = !level.isClientSide &&
    !isPartial(source) && maxServings(source) > 1;` then if `opening` and the inventory holds an item in the tag, play
    the sound at the player (`SoundSource.PLAYERS`, pitch 0.9-1.1). Look the sound up by id
    (`ForgeRegistries.SOUND_EVENTS.getValue`), no Java registration.

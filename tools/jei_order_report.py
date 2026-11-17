@@ -4,7 +4,7 @@ place yet (the tagging to-do list, by mod), which JEI never shows and why, and p
 
 Source data:
   kubejs/exported/jei_order.json   written at each JEI start when CEConfig [jei] orderReport = true
-                                   (patcherMod compat/jei/PackOrderReport)
+                                   (Creative Common compat/jei/PackOrderReport)
 
     python3 tools/jei_order_report.py           writes feature_writeup/jei_order_catalog.md
     python3 tools/jei_order_report.py --check   exits 1 when the report lists definition problems

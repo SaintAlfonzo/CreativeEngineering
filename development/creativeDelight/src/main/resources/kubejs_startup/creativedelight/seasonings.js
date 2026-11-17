@@ -1,7 +1,7 @@
 // Creative Delight startup script, loaded from the jar after the pack's startup_scripts, so the dicts exist here.
 // Restart to apply.
 //
-// Pack seasonings (patcherMod food/Seasonings): a seasoning goes on a food as NBT (Seasonings:[...]) by a
+// Pack seasonings (Creative Common food/Seasonings): a seasoning goes on a food as NBT (Seasonings:[...]) by a
 // creativedelight:seasoning craft (global.NCH.season, kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js), and eating the food adds
 // the seasoning's bonus on top of the food's own. Salt (the Salt mod's Salted) is separate and not listed here.
 //
@@ -87,7 +87,7 @@ global.seasoning = {
 	try {
 		$Seasonings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.Seasonings')
 	} catch (err) {
-		console.warn('[seasoning] patcherMod Seasonings missing, seasonings not defined: ' + err)
+		console.warn('[seasoning] Creative Common Seasonings missing, seasonings not defined: ' + err)
 		return
 	}
 	Object.keys(global.seasoning).forEach(key => {

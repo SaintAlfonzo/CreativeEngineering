@@ -94,7 +94,7 @@ No decision is open on these; each needs a jar copied to `mods/` or a test run (
 | E2 | `framework #6` | The dump half of the move-diff harness: registry names, recipe ids and counts, tags, loot table ids |
 | E3 | `members #6` | Guardian food (Elder Guardian Eye vs Ocean's and Hostile Delight lines); waits on `mod-additions #5`, see F |
 | E4 | `members #25` | Final art for the Glowing Calamari Crate (placeholder in) |
-| E5 | `swappers #3` | World half and triggers in patcherMod (`onWorldLoad`, `onPlayerDataLoad`, `onContainerOpen`, `onCommand`, `onceWhenUpdated`) |
+| E5 | `swappers #3` | World half and triggers in Creative Common (`onWorldLoad`, `onPlayerDataLoad`, `onContainerOpen`, `onCommand`, `onceWhenUpdated`) |
 | E6 | `swappers #2` | Script half (recipes, loot, tags) feeding `global.itemMerges`; follows `swappers #1` |
 | E7 | `members #1` | Freeze and bundle the ports: Veggies, Vintage, Fungi, Miner's, plus Display (A). Land each port's open work first: Fungi SQ-FGD, Miner's SQ-MDP / SQ-MD-01, `vintageport #18` and `#4`. Then per port: `bundle_members`, `bundled_in=creativeDelight`, display name, version bump, `replaces_jars`, drop `IN_TREE_MODS` row, grep old names. SQ-CDJ-05 |
 | E8 | `members #34` | The survey is done (38.2); the per-mod calls are F1 |
@@ -133,7 +133,7 @@ Miner's `-03`, Display `-02`) and `mods/creativebrewing-1.0.0.jar`. Old port jar
 | A3 | Done | With C3 |
 | A4 | Done | No "(Backport)" name in scripts; `pack.mcmeta` of the five ports and Miner's donor-missing message now "(Creative Delight)" |
 | A5 | Done | Premise wrong: no pack or CD script writes a Display recipe; `md_` entries are blockstates and loot only. Registry namespace unchanged |
-| A6 | Done | CD `[display]` with nine positive switches; port reads them through `development/shared/cdconfig` (`CdSettings`). Old `displaydelight-common.toml` read once by `compat/MemberConfigMove` ("Disable..." keys inverted), renamed `.moved`. Not `ConfigRename.mergeSections` (patcherMod untouched) |
+| A6 | Done | CD `[display]` with nine positive switches; port reads them through `development/shared/cdconfig` (`CdSettings`). Old `displaydelight-common.toml` read once by `compat/MemberConfigMove` ("Disable..." keys inverted), renamed `.moved`. Not `ConfigRename.mergeSections` (Creative Common untouched) |
 | A7 | Done | Switch generated from `bundle_members`; no CD script rows to gate |
 | A8 | Partial | DDP-13 added in display_delight.md; runs queued in scratch_queue.md section SQ-CDJ5 (boots 0 to 5 and a client block; new rows SQ-CDJ-09 to -11, CQ-CDJ-01, SQ-DDP-06, -07, SQ-VTD8-01, SQ-MDP-17, SQ-CDFW-10, -11; older rows marked RERUN) |
 | A9 | Done | display_delight.md, creative_delight.md 38.4, README, TODO |
@@ -149,7 +149,7 @@ Miner's `-03`, Display `-02`) and `mods/creativebrewing-1.0.0.jar`. Old port jar
 | D3 | Done | CD and CB installed |
 | E1 | Done | `tool_dict.js` (108 keys), `misc_dict.js` (227), `tools/kitchen_dicts.py`; Veggies pilot reads 119 refs as `fd.<key>`, recipe calls byte-identical (CDT-09 offline) |
 | E2 | Done | `cd_move_diff.py dump-snapshot` / `dump-diff`; baseline taken on stale dumps (refresh with `/dumpall` + `/cedumpnames` before the next move) |
-| E5, E6 | Open | Not started (E5 is patcherMod Java; wait for the other patcherMod work to settle) |
+| E5, E6 | Open | Not started (E5 is Creative Common Java; wait for the other Creative Common work to settle) |
 | E7 | Done | Five ports bundled; Veggies, Vintage, Fungi, Miner's folders stay under `development/` |
 
 Manual, not done: server `mods/` gets the new CD and CB jars and loses the five `backported*` jars; server `miners_upstream/`
@@ -185,14 +185,14 @@ only, never while the game runs. Player changelog bullet for each player-visible
 ### I progress (2026-11-02 afternoon, implementation run)
 
 All of I1 to I8 built; `mods/creativedelight-1.0.0.jar` installed 13:06 (Veggies `-05`, Vintage `-12`, Fungi `-02`, Miner's
-`-04`, Display `-03`). patcherMod `creativeengineering-1.1.07` rebuilt 13:04 (swap-list `removed` key) and left in
+`-04`, Display `-03`). Creative Common `creativeengineering-1.1.07` rebuilt 13:04 (swap-list `removed` key) and left in
 `build/libs` (it also carries the not-yet-installed SQ-EFB work). Nothing booted, nothing committed. Queue: "SQ-CDJ5 fix
 rerun" in scratch_queue.md. Changelog bullets added for I1, I2, I3, I6, I7 and the FD loot side effect of I5; I4 and I5 fix
 unreleased bullets (Copper Pot leftover slot, Cave Carrot Crates), so no new bullet.
 
 | # | Status | Result |
 |---|---|---|
-| I1 | Built | Swap lists gained `"removed": [ids]` (patcherMod `SwapLists.isRemoved`, `SwapRemapper` calls Forge `ignore()`); CD `data/creativedelight/swaps/removed.json`; Display `plate_displayable.json` entry dropped. Takes effect only with the new patcherMod |
+| I1 | Built | Swap lists gained `"removed": [ids]` (Creative Common `SwapLists.isRemoved`, `SwapRemapper` calls Forge `ignore()`); CD `data/creativedelight/swaps/removed.json`; Display `plate_displayable.json` entry dropped. Takes effect only with the new Creative Common |
 | I2 | Built | `FermentingRecipe.assignSlots` (one slot per ingredient entry, distinct slots first, backtracking; 2026-11-04 Vintage `-18`: strict, filled slots = entries, no shared slot) drives match, consume and `remaindersFit`; thrown leftovers queue for CD `[vintage.pickling_jar] overflowEjectDelayTicks` (default 20, saved in the block entity, dropped when the jar breaks); `CdSettings.number` added. The duplicate bottle has no code path left (one leftover per consumed item); offline assignment harness passes (split 4, stacked, 2+2, greedy trap, too few, stray slot) |
 | I3 | Built | `creativedelight:shapeless/cave_hamburger` |
 | I4 | Built | Empty meal slot returns `leftoversFit()` |
@@ -264,7 +264,7 @@ References to `salt` and `create__the_salt` found 2026-11-02 (these must keep wo
 | CD scripts | `creativedelight/salt.js` (removes `salt:salt_from_raw_rock_salt` and three `create__the_salt:` recipes by id, rebuilds 4 salt per raw rock salt), `seasoning_tags.js`, `vintagedelight/recipes.js`, startup `vintagedelight/item_merges.js` | Recipe ids unchanged; rows under `creativedelight:` (R2) |
 | Vintage member | its own `salt`, `salt_block`, `evaporator`, `SaltBlock`, `SaltLayerBlock` (not Salt's `ISaltBlock`); salt merge (food/seasoning #6) makes Vintage's salt dust the one salt | No change; both stay members of one jar, so the "only if Vintage is off" fallback in `salt.js` stays |
 | Pack KubeJS | `item_dict.js` (`t_can_be_salted` = `#salt:can_be_salted`), `server_scripts/tags/blocktags.js` (`salt:salt_block`, `salt:raw_rock_salt_block`), `assets/creativecommon/jei_world/salt/manual.json` | Stay; ids unchanged |
-| patcherMod | `WorldTab.SALT` (JEI world tab names `salt:salt_block`, `salt:salt`), `CEConfig` mod-name override `create__the_salt` and the seasoning JEI text | Stay; mod-name override changes to the "(Creative Delight)" name |
+| Creative Common | `WorldTab.SALT` (JEI world tab names `salt:salt_block`, `salt:salt`), `CEConfig` mod-name override `create__the_salt` and the seasoning JEI text | Stay; mod-name override changes to the "(Creative Delight)" name |
 | Config | `config/salt-common.toml` (salting nutrition, saturation, food values) | Move into `creativedelight-common.toml` `[salt]` with `ConfigRename.mergeSections` (R3), old file read once and renamed; copy to `configs_edited/` |
 | Creative Brewing, Calendar, Compat | none found (an earlier grep hit was `basalt`) | none |
 | Recipe ids and tag | `salt:salting` recipe type, `#salt:can_be_salted`, `salt:` loot and worldgen | Kept by id; a move-diff harness run (framework #6) must show them unchanged |
@@ -290,7 +290,7 @@ Owner asked to execute every open Creative Delight change, Golden Food included.
 and bundled by the main session. Installed 23:16 to 23:20 with this instance's game closed: `mods/creativedelight-1.0.0.jar`
 (23 members as written; the jar reinstalled 2026-11-03 00:08 nests 22, Ender's additions being inside End's), `mods/creativeengineering-1.1.08.jar`, `mods/creativeworldgen-1.0.0.jar` (first install of Creative
 Worldgen, wave 5, see creative_split.md history). Displaced: `salt-1.19.2-1.2.4.1.jar`, `create_salt 1.19.2-1.1.0.jar`,
-`CannedGoods-1.19.2-3.jar`, `goldenfood-1.19.2-2.0.0.jar`, patcherMod 1.1.07, `moreMooblooms-1.1.0.jar`. Nothing booted,
+`CannedGoods-1.19.2-3.jar`, `goldenfood-1.19.2-2.0.0.jar`, Creative Common 1.1.07, `moreMooblooms-1.1.0.jar`. Nothing booted,
 nothing committed. Queue: SQ-CDJ6 in testing/scratch_queue.md.
 
 | # | Row | Status | Result |

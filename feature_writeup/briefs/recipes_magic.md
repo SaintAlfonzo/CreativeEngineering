@@ -15,7 +15,7 @@ Geode+ (`geodeforge-1.1.8-1.19.2`), Botania 1.19.2-440.2 (`BaubleBoxItem`, `Baub
 | Row | Change | Status | Size |
 |---|---|---|---|
 | #1 | Explorer's Compass recipe | Planned | tiny KubeJS, one decision |
-| #3 | Botania trinket case takes any item | BUILT 2026-10-22 ([fixes_compat.md](../fixes_compat.md) 2.25) | small **patcherMod** (not KubeJS: the check is Java) |
+| #3 | Botania trinket case takes any item | BUILT 2026-10-22 ([fixes_compat.md](../fixes_compat.md) 2.25) | small **Creative Common** (not KubeJS: the check is Java) |
 | #4 | Magical components | Planned | medium: new items, textures, NCH Botania helpers, recipes; mostly design |
 | #2 | New geode shard uses | Planned | small once #4 is designed. The potion half is already built |
 
@@ -28,10 +28,10 @@ Geode+ (`geodeforge-1.1.8-1.19.2`), Botania 1.19.2-440.2 (`BaubleBoxItem`, `Baub
 - **#1: the compass is safe to hand out.** Explorer's Compass searches through `ChunkGenerator.getPlacementsForStructure`
   (SRG `m_223138_`), the method the pack's `ChunkGeneratorLocateMixin` filters. So removed and frequency-0 structures
   have no placements and can't hang a search (verified in the decompiled `SearchWorkerManager.createWorkers`).
-- **#3 has to be patcherMod.** The case's filter is `EquipmentHandler.isAccessory`: `#botania:rods`, a `BaubleItem`, a
+- **#3 has to be Creative Common.** The case's filter is `EquipmentHandler.isAccessory`: `#botania:rods`, a `BaubleItem`, a
   mana item, or a Curios capability. That is code, and three call sites check it.
 
-Build order: #1 (one `/reload`). #3 rides the next patcherMod build. #4 and #2 together, after a design pass (both
+Build order: #1 (one `/reload`). #3 rides the next Creative Common build. #4 and #2 together, after a design pass (both
 are "what for" decisions), with a restart for the new items.
 
 Related rows: `potions/potions #4` (placeholder reagents: Magic Resistance on amethyst) and `#7` (potions for unbrewable
@@ -106,7 +106,7 @@ leave `i.explore_compass` for the dict-duplicate cleanup.
 ---
 
 ## magic #3: Botania trinket case takes any item
-Status BUILT 2026-10-22 (fixes_compat 2.25, tests FX-21 to FX-24) / Work patcherMod / TODO `recipes/magic #3` (scratchpad 2026-10-19)
+Status BUILT 2026-10-22 (fixes_compat 2.25, tests FX-21 to FX-24) / Work Creative Common / TODO `recipes/magic #3` (scratchpad 2026-10-19)
 
 ### Goal
 Botania's Trinket Case (`botania:bauble_box`) accepts any item, not just trinkets, rods and mana items.
@@ -125,7 +125,7 @@ Botania's Trinket Case (`botania:bauble_box`) accepts any item, not just trinket
   A KubeJS tag (`#botania:rods`) could let chosen items in, but not "any item", and the rods tag has other uses in
   Botania. So: mixin.
 - `BaubleBoxItem.SIZE = 24`. The case drops its contents when the item entity is destroyed (`onDestroyed`).
-- patcherMod mixins against mod classes: `creativeengineering.mixins.json` (package `...creativeengineering.mixin`,
+- Creative Common mixins against mod classes: `creativeengineering.mixins.json` (package `...creativeengineering.mixin`,
   e.g. `QuarkSortingHandlerMixin`), mod jars on the compile classpath from `development/creativeCommon/libs/` (copied from
   `mods/`, git-ignored, build.gradle 17). No refmap: vanilla members by SRG name with `remap = false`.
 
@@ -259,7 +259,7 @@ geodes, by `data/geode/tags/worldgen/biome/has_{celestite,wrappist}_geode.json`)
 - **Botania route.** Runic altar (recommended: it's the Botania crafting station) or mana infusion (cheaper, one input).
 
 ### Gotchas
-- New items need a restart and textures. Ship them with a patcherMod or pack build that has a restart anyway.
+- New items need a restart and textures. Ship them with a Creative Common or pack build that has a restart anyway.
 - Every new sequenced assembly needs its `transition_items.js` row, or the incomplete item is missing at startup.
 - Keep the part counts in step with the metal components (1 ingot per part), or the three routes drift as metal F4 did
   ([engineering.md](../engineering.md) F4).

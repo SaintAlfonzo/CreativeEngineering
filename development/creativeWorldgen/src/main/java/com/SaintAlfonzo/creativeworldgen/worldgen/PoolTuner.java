@@ -643,7 +643,7 @@ public final class PoolTuner {
 	private static final String[][] README = {
 		{"what", "Per-piece weights for every jigsaw template pool in the game (village houses, streets, bastion rooms, T&T buildings...). A village house is not a structure, it is one weighted entry in a pool such as minecraft:village/plains/houses, which is why it isn't in structure_config.json. Mods add many of these pieces in code (IE, Dynamic Village, PneumaticCraft...), so this file is written BY THE GAME at every world load from the live pools; you only edit it."},
 		{"edit", "\"enabled\": false removes a piece. \"current\" is its weight: the chance it's picked each time the pool is drawn is current / (sum of the pool's weights). Leave \"original\" alone (the mod/vanilla weight, refreshed every load). For a category of pieces (all IE houses, all tech houses) use pool_tags.json, whose multipliers apply on top of current."},
-		{"apply", "Rejoin the world (or restart the server). patcherMod worldgen/PoolTuner applies this at world load, after every mod has added its pieces, and writes pool_tag_report.md. Only chunks generated afterwards are affected."},
+		{"apply", "Rejoin the world (or restart the server). Creative Common worldgen/PoolTuner applies this at world load, after every mod has added its pieces, and writes pool_tag_report.md. Only chunks generated afterwards are affected."},
 		{"weights", "Fractional results (current 0.5, or a 0.5 multiplier on a weight-1 piece) are fine: the whole pool is scaled up (at most x10) so the ratios hold. A pool whose pieces are all removed keeps a single minecraft:empty entry, so nothing crashes; a start pool like that just generates no structure (use structure_config.json to remove whole structures instead)."},
 		{"keys", "Pieces are keyed by template id (\"immersiveengineering:village/houses/plains_engineer\"). feature:<id> = a placed-feature piece (hay piles, lamp posts), list:[...] = several templates placed together, minecraft:empty = the empty lot, \" #2\" = a second entry for the same template. \"missing\": true = you edited it but this load didn't find it (mod removed?); it's kept so the edit isn't lost."},
 		{"houses", "Village houses live in minecraft:village/<plains|desert|savanna|snowy|taiga>/houses (and .../zombie/houses for abandoned villages). pool_tag_report.md lists, per pool, every piece another mod injected."},
@@ -697,7 +697,7 @@ public final class PoolTuner {
 			Map<String, Map<String, JsonObject>> stale, int restored) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("# Pool tuning report\n\n");
-		sb.append("Rewritten by patcherMod `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.\n\n");
+		sb.append("Rewritten by Creative Common `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.\n\n");
 		int pieces = pools.values().stream().mapToInt(i -> i.pieces.size()).sum();
 		sb.append("- ").append(pools.size()).append(" pools, ").append(pieces).append(" pieces\n");
 		if (!errors.isEmpty()) {

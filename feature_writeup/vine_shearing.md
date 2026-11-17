@@ -12,7 +12,7 @@
 
 | Part | Status | Files | Knobs |
 |---|---|---|---|
-| Shears stop modded vines (Floral Enchantment, Botania solid vine, any later `VineBlock`) | BUILT 2026-10-31, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-VS-01 to -08) | `block/VineShearing`, `mixin/VineBlockShearMixin` | `[vine_shearing] enabled`, `cutBelow` |
+| Shears stop modded vines (Floral Enchantment, Botania solid vine, any later `VineBlock`) | BUILT 2026-10-31, Creative Common 1.1.04 installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-VS-01 to -08) | `block/VineShearing`, `mixin/VineBlockShearMixin` | `[vine_shearing] enabled`, `cutBelow` |
 | Shears stop weeping, twisting, cave vine and kelp tips (1.20 behavior) | BUILT 2026-10-31, same jar | `block/VineShearing` | `[vine_shearing] enabled` |
 | Trimmed look for sheared modded vines (Quark's cut vine look) | BUILT 2026-10-31, same jar | `block/VineShearingClient` | `[vine_shearing] trimmedLook` (client) |
 | WTHIT lines "Sheared, stops growing" / "Stopped growing" | BUILT 2026-10-31, same jar | `compat/WthitSheared` | `[wthit] sheared` |
@@ -142,5 +142,5 @@ The looks, WTHIT lines and VS-09 to VS-11 are still in game only.
 
 ## 8. History
 
-- 2026-10-31: built (patcherMod 1.1.04; installed 00:44). Jar scan of every vine class, texture investigation (3.3),
+- 2026-10-31: built (Creative Common 1.1.04; installed 00:44). Jar scan of every vine class, texture investigation (3.3),
   quad-trim look chosen over copied textures (Floral Enchantment is ARR).

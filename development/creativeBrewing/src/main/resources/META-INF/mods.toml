@@ -49,7 +49,7 @@ versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
 # Creative Delight: nests Farmer's Delight (Brewin's base) and defines global.CD. AFTER so CB's startup script pack
-# loads after CD's (patcherMod's loader runs jar packs in mod-list order).
+# loads after CD's (Creative Common's loader runs jar packs in mod-list order).
 [[dependencies.creativebrewing]]
 modId="creativedelight"
 mandatory=true

@@ -2,7 +2,7 @@
 //
 //   1. JsonIO.write never creates folders (Files.newBufferedWriter straight onto the path), so a
 //      write into a missing folder throws NoSuchFileException. Scripts can't mkdir themselves -
-//      the class filter blocks java.io/java.nio - so this goes through patcherMod's WorldgenFiles,
+//      the class filter blocks java.io/java.nio - so this goes through Creative Common's WorldgenFiles,
 //      whose writeText does Files.createDirectories. The .keep marker it leaves is empty and is only
 //      rewritten when missing.
 //   2. JsonIO.write takes a JsonObject. A JS array converts to null, and a null object means

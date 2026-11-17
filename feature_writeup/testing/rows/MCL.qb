@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text patcherMod 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
+@@text Creative Common 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
 @@text Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineering-common.toml` (read live).
 @@text
 @@text | ID | World | Commands | Expected | If it fails |

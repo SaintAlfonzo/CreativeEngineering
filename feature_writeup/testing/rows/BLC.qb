@@ -7,7 +7,7 @@
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@text
-@@text patcherMod 1.1.03 (installed 17:25) with the `BiomeLayoutTuner` disk cache and the KubeJS `biome_overrides.js` log
+@@text Creative Common 1.1.03 (installed 17:25) with the `BiomeLayoutTuner` disk cache and the KubeJS `biome_overrides.js` log
 @@text change (TODO server #19, perf.md 11.2 #3). Group A. Fresh world folder; the instance's
 @@text `kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz` copied into the scratch server.
 @@text

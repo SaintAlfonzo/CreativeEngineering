@@ -17,7 +17,7 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 <!-- generated:status_index end open_work -->
 
 Every block you walk on belongs to at most one speed tier (asphalt 1.50 down to very sticky 0.45).
-BlockRunner applies the speed and KubeJS fills the tiers. patcherMod adds what a block tag can't express:
+BlockRunner applies the speed and KubeJS fills the tiers. Creative Common adds what a block tag can't express:
 sticky pistons only count when they face up, framed and copycat blocks walk like their camo, and
 walking on soft or dusty blocks visually sinks you in like soul sand. A WTHIT line shows the speed of
 the block you're looking at.
@@ -27,21 +27,21 @@ the block you're looking at.
 | Audit 2026-11-10: every walkable block tiered, 2 new 1.00 tiers (`furniture`, `flora`), `@mod` filter fix, watcher (`/dumpsurface` + `--audit`) | KubeJS tags, Creative Common `has.js`, Creative Compat `SurfaceTier`, Creative Devtools `SurfaceAudit` | Sim 13828 ids, 0 overlaps. Jars built, not installed (game open); restart needed. BR-59..64 |
 | 28 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). 2026-10-02: 1.0.4 mods tiered, sim 6355 ids, 0 overlaps; needs a restart (new item_dict keys), BR-52. The 11:54 `/dumptags` export matched the sim exactly |
 | SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | Loaded since the 14:49 restart (Rhino harness tested); untested in game (BR-38) |
-| Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behavior untested |
-| Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behavior untested |
-| Framed / copycat blocks sink like their newest camo | patcherMod (`SinkingRender`) | In game since the 14:49 restart (13:12 jar); untested |
+| Sticky tier checks facing | Creative Common mixin | Mixin applies (log 2026-09-26); behavior untested |
+| Visual sinking (camera + models) | Creative Common mixins | Both mixins apply (log 2026-09-26); behavior untested |
+| Framed / copycat blocks sink like their newest camo | Creative Common (`SinkingRender`) | In game since the 14:49 restart (13:12 jar); untested |
 | Sinking follows the block holding the feet (no pop between sunken blocks), even depth on honey/mud, items lie on top | Creative Compat (`SinkingRender`), tag `#creativecompat:sinking_hides_items` | Built 2026-11-10, not installed (game open); BR-53..56 |
 | Visceral Heap flesh: flesh spongy, porous flesh very sticky with honey's jump | KubeJS tags + `block_properties.js` | Built 2026-11-10 (Common rebuilt for the `porous_flesh` dict key); BR-57 |
-| Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking, wthit | patcherMod (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | Working in game: the mixin applies and the log has `[surface] 26 tier speeds applied` (15:21). The old `[block_sinking]`/`[camouflage_speed]` sections were dropped on first load; they held the defaults, so nothing was lost. The trimmed `blockrunner.json` was put in place at 16:45, so it needs a restart |
-| WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialized 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
-| Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | patcherMod mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
+| Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking, wthit | Creative Common (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | Working in game: the mixin applies and the log has `[surface] 26 tier speeds applied` (15:21). The old `[block_sinking]`/`[camouflage_speed]` sections were dropped on first load; they held the defaults, so nothing was lost. The trimmed `blockrunner.json` was put in place at 16:45, so it needs a restart |
+| WTHIT "Run Speed" line on the looked-at block | Creative Common WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialized 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
+| Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | Creative Common mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
 | D&D asphalt friction reset (its own ~3.4× speed boost removed) | KubeJS startup `BlockEvents.modification` | Loaded since the 14:49 restart; untested (BR-28) |
 | Pass-through blocks (3.10): walking and falling through crops, plants, vines, ropes, cobwebs, barbed wire, bushes, leaf piles; items, projectiles and arrows in webs; no field of view change; WTHIT Walk Through lines; `/cdevbench passthrough`, perf suite plan, timing log | Creative Compat `surface/Pass*` + 13 mixins, tags `passthrough_tags.js` (in the Compat jar), Creative Devtools `PassBenchCommand` | Built, untested: Compat and Devtools 1.0.0 build/libs 2026-11-15 00:40, not installed; headless 203/203; BR-67..88, SQ-PTH-01..28, CQ-PTH-01..05 |
 | Tooltips (Speed Multiplier line, camo rewrite, IP asphalt line removed) | see [tooltips.md](tooltips.md) | tests moved to TT-01..05 |
 
 **Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
 [blocktags.js L76-435](../kubejs/server_scripts/tags/blocktags.js#L76-L435) (tier contents),
-[patcherMod surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behavior).
+[Creative Common surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behavior).
 
 **Knobs:** everything is under `[surface]` in `creativeengineering-common.toml`, which shows as one
 "surface" folder in Create's Configs screen (3.7):
@@ -149,7 +149,7 @@ tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys alw
   Palette cod/salmon logs and scales and davebuildingmod vanta/ultra blocks in `decorative`, Botania's disguising
   platforms in `functional`. Doors not in camouflage stay untiered (thin when open, never stood on when closed).
 
-**Helper tags** (pack-owned, read by patcherMod):
+**Helper tags** (pack-owned, read by Creative Common):
 - `#creativecompat:sinking` = soft + dust + spongy + very_sticky
 - `#creativecompat:blockrunner_face_up` = sticky
 - `#creativecompat:camo_speed` = camouflage
@@ -197,7 +197,7 @@ in speed order:
 - **Helpers removed:** the old dedicated speed helpers (`blockSpeed`, `quickBlocks`,
   `blockSpeedConflicts`) were removed on purpose; plain `addMatching` plus `overlaps` replace them.
 
-### 3.2 Sticky tier checks facing (patcherMod)
+### 3.2 Sticky tier checks facing (Creative Common)
 
 BlockRunner looks speeds up per *block*, not per blockstate, so on its own a sideways sticky piston
 would slow you too.
@@ -218,7 +218,7 @@ would slow you too.
 - **Switch:** `[surface.sticky] faceUpOnly = false` turns the facing check off (every block in the tier slows
   you however it faces). Keep it the same on server and client.
 
-### 3.3 Camouflage walks like its camo (patcherMod)
+### 3.3 Camouflage walks like its camo (Creative Common)
 
 With `[surface.camouflage] copyCamo = true`, a framed or copycat block walks like the block it's
 disguised as: framed concrete runs like concrete, framed honey drags like honey.
@@ -246,7 +246,7 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
     predict your own movement.
   - **Storage detail:** FramedBlocks gets its own top-level key. Copycats+ gets a flag *inside* the
     newest part's entry, because Copycats+ turns every top-level key into a part, so a separate key
-    would create a phantom part. Removing patcherMod later leaves both mods loading cleanly.
+    would create a phantom part. Removing Creative Common later leaves both mods loading cleanly.
 - **Fallback when the newest part has been emptied:** framed -> the other half. Copycats+ -> what's
   left, if it's all one material. Otherwise the flat tier. Blocks filled before this feature have no
   record until a part is re-filled; until then framed doubles use their first half.
@@ -259,7 +259,7 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
     is dormant and WTHIT is the place to read camo walk speed.
 - **Config:** `copyCamo` must be the same on server and client, or movement stutters on these blocks.
 
-### 3.4 Visual sinking, like soul sand (patcherMod)
+### 3.4 Visual sinking, like soul sand (Creative Common)
 
 Soul sand's real sink is a lower collision box. That was rejected here (see 4), so the sink is visual
 only: collision, hitboxes, movement, mob AI and spawning are untouched.
@@ -325,7 +325,7 @@ resets them with `BlockEvents.modification` (startup, so it needs a game restart
 | `config/blockrunner.json` | basic tiers + one-off block overrides only | `configs_edited/root_config/blockrunner.json` |
 | `config/blockrunner-client.toml` | tooltip off (2026-11-02, was on), FOV change off | `configs_edited/root_config/blockrunner-client.toml` |
 
-### 3.7 One `[surface]` config section (patcherMod)
+### 3.7 One `[surface]` config section (Creative Common)
 
 Everything tunable about walking on blocks sits under `[surface]` in `creativeengineering-common.toml`.
 Create's Configs screen only shows one common file per mod, so a section (shown there as a "surface"
@@ -351,7 +351,7 @@ folder) keeps it all editable in game.
   Instead, `[surface] BlockRunner loaded blockrunner.json without BlockRunnerSpeedConfigMixin` is logged as an
   error at server start, and every surface tier walks at 1.0.
 
-### 3.8 WTHIT "Run Speed" line (patcherMod)
+### 3.8 WTHIT "Run Speed" line (Creative Common)
 
 Looking at a block with WTHIT shows e.g. **Run Speed: 1.50×** (green), with **(Asphalt)** in gray.
 Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facing up reads 1.00× with
@@ -647,7 +647,7 @@ and powdered sugar got `StuckInBlock` lines.
 - **Speed edits need a new block:** a `[surface.speed]` change reaches BlockRunner immediately but, like
   any tier change, applies to you once you step onto another block.
 - **Server copy (fixed):** was stale on 2026-09-27 (`server_mods/` held `creativeengineering-1.0.0.jar`). The
-  dedicated server has run the same patcherMod as the clients since the pack deploys resumed (1.0.9 on 2026-10-19),
+  dedicated server has run the same Creative Common as the clients since the pack deploys resumed (1.0.9 on 2026-10-19),
   so facing, camo and `[surface.speed]` run server-side too; BR-27 is still untested.
 - **Twigs bamboo leaves are in the `leaves` tier but can never register:** the block has no collision,
   so you always stand on the block beneath. The tier entry is harmless dead weight. Since 2026-11-15 the block is in
@@ -692,7 +692,7 @@ and powdered sugar got `StuckInBlock` lines.
 - Values: `config/creativeengineering-common.toml` `[surface]`; one-offs in [config/blockrunner.json](../config/blockrunner.json); client options in [config/blockrunner-client.toml](../config/blockrunner-client.toml)
 - Tier contents: [kubejs/server_scripts/tags/blocktags.js](../kubejs/server_scripts/tags/blocktags.js#L76-L435)
 - Helpers: [kubejs/startup_scripts/func/tag_helper.js](../kubejs/startup_scripts/func/tag_helper.js) (`addMatching` L36, `_glob` L57, `wipeTag` L102, `overlaps` L188, `mirror` L212)
-- patcherMod behaviour: [surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
+- Creative Common behaviour: [surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/): SurfaceTier, SurfaceSpeeds, RunSpeed, StuckInBlock, WthitRunSpeed, StickyFacing, CamoSpeed, FramedCamo, CopycatsPlusCamo, CamoSpeedTooltip, SinkingRender, LastInsertedCamo, LastInsertedMaterial
 - patcherMod mixins: BlockRunnerBlockStateMixin, BlockRunnerSpeedConfigMixin, FramedDoubleCamoOrderMixin, CopycatMaterialOrderMixin (common); CameraSinkMixin, EntitySinkRenderMixin (client). All in [mixin/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/)
 - patcherMod config: [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java#L1144) `Surface` (`speed`, `Sticky`, `Camouflage`, `Sinking`, `Wthit`); tooltip and SurfaceSpeeds listeners registered in [CreativeEngineering.java L143, L159-161](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CreativeEngineering.java#L143)
 - Text: [patcherMod lang en_us.json](../development/creativeCommon/src/main/resources/assets/creativecommon/lang/en_us.json) `creativeengineering.tooltip.walk_speed.*` (item tooltip), `creativeengineering.wthit.run_speed*` and `creativeengineering.surface.tier.*` (WTHIT line)
@@ -741,10 +741,10 @@ and powdered sugar got `StuckInBlock` lines.
   collision top >= 0.2, no tier, no json override and its own speed factor 1, grouped per mod, and exits 3 when
   there is any (the generator warns). Then an outlier list: friction != 0.6, jump != 1 or speed != 1, tiered or
   not (a tier replaces the speed factor; friction and jump stay). After every new mod: run it, tier what it lists.
-- **patcherMod:** `cd patcherMod && ./gradlew build --offline`. Then copy
+- **Creative Common:** `cd Creative Common && ./gradlew build --offline`. Then copy
   `build/libs/creativeengineering-1.0.1.jar` to `mods/` **with the game closed** and compare `md5sum`
   of both files.
-- **patcherMod logic without the game:** plain `javac`/`java` against the mapped Forge jar, with a
+- **Creative Common logic without the game:** plain `javac`/`java` against the mapped Forge jar, with a
   one-line `FMLEnvironment` stub (see Claude's memory `patchermod-headless-smoke-test`). It can
   bootstrap Minecraft to check real blocks' collision shapes and the `StuckInBlock` table; the Run
   Speed test (31 checks) ran that way. Mixins, WTHIT and rendering still need the game.
@@ -803,7 +803,7 @@ and powdered sugar got `StuckInBlock` lines.
 - [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. -> Still sunk; it rises only as you fall. Queue: CQ-SINK-01.
 - [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. -> Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` -> the item on sand sinks in; wool unchanged. Remove the line afterwards. Queue: CQ-SINK-03.
 
-**Camo sinking (3.4, needs the rebuilt patcherMod jar)** (`[surface.sinking] depthPixels = 8` makes these easy to see)
+**Camo sinking (3.4, needs the rebuilt Creative Common jar)** (`[surface.sinking] depthPixels = 8` makes these easy to see)
 - [ ] **BR-30 Frames sink like their camo:** a framed cube camo'd with wool -> you sink on it (camera and model). Re-camo with stone -> no sink. An empty frame -> no sink.
 - [ ] **BR-31 Hybrids use the newest camo:** framed double slab, stone first, then wool -> sinks. On a fresh one, wool first, then stone -> no sink.
 - [ ] **BR-32 Non-full frames don't sink:** a single framed slab camo'd with wool -> no sink.
@@ -878,7 +878,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
 - [ ] **BR-88 Performance:** `/cdevbench passthrough` -> the field and web-cube entity ticks under 1000 ns; then play a normal session (farm, village, a web build) with `[debug.passthrough] timing = true` and a JFR recording; `python3 tools/perf/passthrough_timing.py logs/latest.log` -> record the share of tick time in 3.10 Performance (decides whether the per-tick count cache is built). Queue: SQ-PTH-25 to -28, CQ-PTH-05.
 
 **Server side (only when the dedicated server is back)**
-- [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. -> Same values, and no rubber-banding when walking across camo'd frames.
+- [ ] **BR-27 Server parity:** with the new Creative Common jar on the server, repeat BR-11, BR-15 and BR-17 while connected. -> Same values, and no rubber-banding when walking across camo'd frames.
 
 ## 8. History
 

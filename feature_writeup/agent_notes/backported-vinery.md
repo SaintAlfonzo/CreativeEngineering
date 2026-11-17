@@ -24,10 +24,10 @@ Key findings:
 - User: wrap 1.20+ worldgen into 1.19.2's vanilla types, never backport worldgen (cherry_foliage_placer -> fancy_foliage_placer in the translator).
 - D3-D5, D7-D10, D12 built with the recommendation, still the user's to confirm.
 - One jar, two mod ids (vinery + foundation): mods.toml needs a memory `mods` entry per @Mod or FML refuses to start (was missing, fixed before any boot).
-- WTHIT lines live in the port (net.satisfy.vinery.forge.compat.wthit), not patcherMod: they need the port's BEs and vintage clock. Server data for barrel/press/log/storage; lootable containers read from saveWithoutMetadata, never getItem (that rolls loot).
-- patcherMod: 1.3.10 support (VineryJEI, both class sets in WinemakerTrades/StuckInBlock/WinemakerSpawner) removed 2026-10-27; only the port's names remain (pack_hygiene.md finding 6).
+- WTHIT lines live in the port (net.satisfy.vinery.forge.compat.wthit), not Creative Common: they need the port's BEs and vintage clock. Server data for barrel/press/log/storage; lootable containers read from saveWithoutMetadata, never getItem (that rolls loot).
+- Creative Common: 1.3.10 support (VineryJEI, both class sets in WinemakerTrades/StuckInBlock/WinemakerSpawner) removed 2026-10-27; only the port's names remain (pack_hygiene.md finding 6).
 - The user does in-game testing for the alcohol ports (said so for Brewin): don't start a scratch server for them.
-- NOT DONE: `./gradlew :patcherMod:installToMods :backportedVinery:installToMods` (game was running; never overwrite a jar under a running JVM), I25 tool reruns, stem "leaves pending" line.
+- NOT DONE: `./gradlew :creativeCommon:installToMods :backportedVinery:installToMods` (game was running; never overwrite a jar under a running JVM), I25 tool reruns, stem "leaves pending" line.
 
 Related: [wandering-trader](wandering-trader.md), [backported-brewin](backported-brewin.md).
 

@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
  *
  * <p>Membership is the {@code #creativeequipment:elytra_chestplates} item tag, populated in
  * KubeJS ({@code kubejs/server_scripts/tags/equipmenttags.js}) so more modded elytra-chestplates
- * can be added without rebuilding patcherMod. The single source of truth for that tag key on the
+ * can be added without rebuilding Creative Common. The single source of truth for that tag key on the
  * Java side lives here; the Easy Elytra Takeoff mixins both read it.
  *
  * @see com.SaintAlfonzo.creativeequipment.mixin.EasyElytraTakeoffHelperMixin

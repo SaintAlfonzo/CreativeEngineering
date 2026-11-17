@@ -5,7 +5,7 @@
 - Constraints (owner, 2026-10-14): correctness only; ignore rates.
 - Tests: ST-39 (preview), ST-41 (templates), ST-42 (status and stop), ST-40 (all of Towns & Towers in rows; walking the
   rows = [game]).
-- Server: M7/M8 scratch server, patcherMod 1.0.7 jar (worldgen = 1.0.8). World st_9: level-type flat,
+- Server: M7/M8 scratch server, Creative Common 1.0.7 jar (worldgen = 1.0.8). World st_9: level-type flat,
   generate-structures false, seed 8675309. Toml = base with density 1.0 and fill logs CANCELED (no worldgen here).
 - Running: nothing; Phase 9 done 07:42. Next: writeup 09_phase_9.md.
 
@@ -40,7 +40,7 @@
   said "Not a flat world: everything is built at this spot's height" (rows at y 147-204 on hills). Retries: st_9b with
   explicit flat generator-settings JSON -> noise; st_9c with a world datapack datapacks/flat_overworld defining
   data/minecraft/dimension/overworld.json as minecraft:flat (enabled as file/flat_overworld) -> still noise. Cause:
-  patcherMod BiomeLayoutTuner (biome_overrides.js, [worldgen.systems] biomeLayout) writes a full
+  Creative Common BiomeLayoutTuner (biome_overrides.js, [worldgen.systems] biomeLayout) writes a full
   minecraft:dimension/overworld.json (noise, tuned biome list) into KubeJS's top-priority virtual datapack, above every
   world datapack and preset; Terralith and Tectonic also ship data/minecraft/dimension/overworld.json (mod packs, below
   file packs). st_9d: biomeLayout = false (srv toml) + the world datapack -> minecraft:flat. Recipe for a flat test

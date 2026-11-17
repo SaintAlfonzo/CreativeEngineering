@@ -12,7 +12,7 @@ import java.util.Map;
  * in neither table (vanilla targets whose feature does nothing without its mod: BlockItemOwnStackFillMixin,
  * StructureTemplateBotanistPotMixin, VineBlockShearMixin; the visual sinking pair CameraSinkMixin and
  * EntitySinkRenderMixin) always apply. The mixins moved from
- * patcherMod unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes).
+ * Creative Common unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes).
  */
 public class CompatMixinPlugin extends GatedMixinPlugin {
 

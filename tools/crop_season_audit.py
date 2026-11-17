@@ -58,9 +58,9 @@ EXTRA = {
     'neapolitan:vanilla_vine': ('neapolitan:vanilla_pods', 'com.teamabnormals.neapolitan.common.block.VanillaVineTopBlock', None),
     'farmersrespite:small_tea_bush': (None, 'umpaz.farmersrespite.common.block.SmallTeaBushBlock', None),
     'farmersrespite:coffee_bush': (None, 'umpaz.farmersrespite.common.block.CoffeeBushBlock', None),
-    'minecraft:attached_melon_stem': (None, None, 'extra fruit (patcherMod StemExtraFruit) fires the event'),
-    'minecraft:attached_pumpkin_stem': (None, None, 'extra fruit (patcherMod StemExtraFruit) fires the event'),
-    'fruitsdelight:attached_hamimelon_stem': (None, None, 'extra fruit (patcherMod StemExtraFruit) fires the event'),
+    'minecraft:attached_melon_stem': (None, None, 'extra fruit (Creative Common StemExtraFruit) fires the event'),
+    'minecraft:attached_pumpkin_stem': (None, None, 'extra fruit (Creative Common StemExtraFruit) fires the event'),
+    'fruitsdelight:attached_hamimelon_stem': (None, None, 'extra fruit (Creative Common StemExtraFruit) fires the event'),
 }
 # Planting items for dumps written before /dumpcropgrowth recorded `item` (checked by hand).
 FALLBACK_ITEMS = {

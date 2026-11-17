@@ -5,7 +5,7 @@ Targeted run, no queue rows, no perf session (single boot).
 
 ## Jars
 
-Built 00:38 with `./gradlew :patcherMod:build :creativeDelight:build :creativeBrewing:build :creativeCalendar:build
+Built 00:38 with `./gradlew :creativeCommon:build :creativeDelight:build :creativeBrewing:build :creativeCalendar:build
 :creativeCompat:build :creativeWorldgen:build --offline` (all passed). Swapped in by prep_srv.sh: creativeengineering-1.1.08,
 creativedelight, creativebrewing, creativecompat, creativecalendar, creativeworldgen (bundle jars unchanged in content;
 Gradle kept them up to date), creativedevtools, repackedStorage. Not installed to `mods/`.

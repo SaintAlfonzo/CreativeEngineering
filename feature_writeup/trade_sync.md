@@ -1,8 +1,8 @@
 # Trade sync: server trades for JER on dedicated-server clients
 
-Status: BUILT 2026-11-03 (patcherMod `trader/TradeSync`, `trader/client/TradeSyncClient`), installed in this instance's
+Status: BUILT 2026-11-03 (Creative Common `trader/TradeSync`, `trader/client/TradeSyncClient`), installed in this instance's
 `mods/`, not booted. Scratch rows SQ-TSY-01, -02 and client rows CQ-TSY-01 ([scratch_queue.md](testing/scratch_queue.md)).
-Needs the new patcherMod on **both** the server and the client.
+Needs the new Creative Common on **both** the server and the client.
 
 ## 0. At a glance
 

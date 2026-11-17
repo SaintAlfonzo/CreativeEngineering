@@ -30,7 +30,7 @@ and "Placeable on a coaster". The lines come from five item tags generated from 
 | Tags `#creativedelight:placeable`, `placeable/sneak`, `placeable_on_plate`, `placeable_on_small_plate`, `placeable_on_coaster` | [placeable_tags.js](../kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js) | DEPLOYED with 1.0.6 (coaster tag 2026-10-18, with 1.0.8) |
 | Tooltip lines + removal of DD / Fruits Delight placement lines | [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js) | DEPLOYED with 1.0.6 (coaster line with 1.0.8); moved into Creative Delight 2026-10-25 (QoL-2, switch `[qol] placeableTooltips`, in the `mods/` Creative Delight jar; creative_delight.md 22, SQ-CDQ-04 client) |
 
-**Counts (live dump of 2026-10-24, catalog of 2026-10-25):** 507 items. 161 placeable (103 only while sneaking), 34 on a Food Plate, 13 on a Small Food Plate, 392 on a coaster (every raw, cooked, egg and dairy food). 9 patcherMod Display Delight egg dishes join "placeable" after the next dump.
+**Counts (live dump of 2026-10-24, catalog of 2026-10-25):** 507 items. 161 placeable (103 only while sneaking), 34 on a Food Plate, 13 on a Small Food Plate, 392 on a coaster (every raw, cooked, egg and dairy food). 9 Creative Common Display Delight egg dishes join "placeable" after the next dump.
 **Open first:** the rules at the top of `tools/placeable_catalog.py` (`INCLUDE`, `EXCLUDE`, `SNEAK_ITEM_CLASSES`).
 **Refresh:** `/dumpplaceable` (or `/dumpall`) in game -> `python3 tools/placeable_catalog.py` (or `/cdevgen run placeable_catalog`) ->
 `/reload` for the tags (restart if the tool added item_dict keys).
@@ -97,14 +97,14 @@ Data flow: `/dumpplaceable` -> `kubejs/exported/food/placeable.json` -> `tools/p
   the `raw/*`, `cooked/*`, `egg` and `dairy` food types had joined `#creativedelight:placeable_on_coaster` and the ones
   without a coaster model lay flat on the tray; that step was cut from `tools/placeable_catalog.py` the same day, so the
   tag holds the Brewin' port's and the pack's coaster models only (152). Adding models for the produce stays open.
-- **Display Delight blocks for foods DD has none for** (patcherMod `compat/DisplayDelightDishes`, list
+- **Display Delight blocks for foods DD has none for** (Creative Common `compat/DisplayDelightDishes`, list
   `creativeengineering/displaydelight_dishes.json` in the jar): 9 egg dishes (Vegetable Omelet, Shulker Omelette, Inky
   Cap Scrambled Eggs, Suspicious Bacon And Eggs, Diced Potatoes with Egg and Tomato, Omelet, Cauliflower Kuku, Dandelion
   Greens And Eggs, Shakshouka). Each is a DD `FoodBlock` named `creativeengineering:placed_<dish>`, linked into DD's
   item <-> block map on server world load the way DD links its own, with the food in `#displaydelight:displayable`
   (jar data). Bowl dishes are DD's bowl with a food surface cut from the item sprite; plated ones the sprite flat on
   DD's food plate. `tools/gen_dd_dishes.py` writes the blockstates, models, loot tables, tag and "Placed ..." names
-  from the list (output in the patcherMod jar: rebuild after a run). `/dumpplaceable` reads DD's live map, so they show
+  from the list (output in the Creative Common jar: rebuild after a run). `/dumpplaceable` reads DD's live map, so they show
   in the catalog after the next dump.
 
 ## 4. Limits and decisions
@@ -157,7 +157,7 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
 ## 8. History
 
 - **2026-10-25:** every raw, cooked, egg and dairy food on the coaster (`add_coaster_produce()`), and 9 Display Delight
-  egg-dish blocks in patcherMod (`compat/DisplayDelightDishes`, `tools/gen_dd_dishes.py`), for the produce family rule
+  egg-dish blocks in Creative Common (`compat/DisplayDelightDishes`, `tools/gen_dd_dishes.py`), for the produce family rule
   ([food_families.md](food_families.md) 4.4). Rerun on the 2026-10-24 dump: 507 items, 392 on a coaster. Tests FF-06 to
   FF-08 in food_families.md; PL-08 updated.
 

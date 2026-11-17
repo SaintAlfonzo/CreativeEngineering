@@ -27,13 +27,13 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Bushier Flowers: no bone-meal growth, no worldgen; its bushes crafted from 4 flowers | DEPLOYED with 1.0.6 (built 2026-10-10); in-game test pending |
 | Quark feeding trough: a hungry animal that finds no trough waits 30 s before searching again | DEPLOYED with 1.0.4 (perf fix); scratch server checked the mixin applies, not measured under load |
 | Create: Dreams & Desires asphalt: friction and speed factor reset to vanilla (BlockRunner tiers it instead) | DEPLOYED; BR-28 pending |
-| Alex's Mobs seagulls never take a lunchbox: not from the inventory, not dropped (patcherMod `AlexsMobsSeagull*Mixin`, every Spice of Life food container; the `seagullStealingBlacklist` config entries from 2026-10-22 stay; [lunchboxes.md](lunchboxes.md)) | Mixins BUILT 2026-10-29 (patcherMod 1.1.04 in `mods/`), not deployed; config list load scratch server PASSED 2026-10-22 (SQ-GM-07); MT-26 in game |
+| Alex's Mobs seagulls never take a lunchbox: not from the inventory, not dropped (Creative Common `AlexsMobsSeagull*Mixin`, every Spice of Life food container; the `seagullStealingBlacklist` config entries from 2026-10-22 stay; [lunchboxes.md](lunchboxes.md)) | Mixins BUILT 2026-10-29 (Creative Common 1.1.04 in `mods/`), not deployed; config list load scratch server PASSED 2026-10-22 (SQ-GM-07); MT-26 in game |
 | MCA Comb sets eye color (11 colors) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22, DEPLOYED with 1.1.01 (2026-10-22); MT-40 pending in game |
 | Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19, DEPLOYED with 1.1.01 (2026-10-22, changelog Farming & Nature); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
 | Named mobs: a naturally spawned farm animal (cow, mooshroom, pig, sheep, chicken, goat) has a 1 in 100 chance of a random name (MCA citizen names); every player sees its death message ("Bessie the Cow was slain by Steve") (patcherMod `mobs.NamedMobs`, `[named_mobs]`, TODO `mobs/tweaks #6`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-NM-01 to -03); MT-31 to MT-33 pending in game |
-| Villagers treat fence gates as walls (open or closed) and path through Dramatic Doors' tall and short wooden doors, opening them (patcherMod `McaVillagerPathGatesMixin`, `WalkNodeEvaluatorVillagerGateMixin`, TODO `mobs/tweaks #15`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VG-00 to -03); MT-41 to MT-43 pending in game |
-| Villagers path up and down ladders (every block named "ladder" that is climbable; patcherMod `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`, `MoveControlVillagerLadderMixin`, tag `#creativeworldgen:villager_ladders`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VL-00 to -02, up and down a ladder); MT-44 to MT-46 pending in game |
-| Quark monster boxes are vaults: the box stays after its wave, ejects one stack from its own loot table once the wave is dead or gone, then re-arms after a 1 hour cooldown; obsidian hardness (diamond pickaxe); breaks only while sneaking, else a chat warning (Lootr's rule); Create drills and saws skip it (patcherMod `mobs.MonsterBoxVault`, `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, TODO `mobs/tweaks #5`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`, 22:59); scratch server PASSED r1031 (2026-10-31, SQ-MB-01 to -04, -06, -07: stays, one-stack reward, re-arm, Create drill, off switch); SQ-MB-05 hardness client check pending (tags pass; queue says 50, changelog 25); MT-34 to MT-37, MT-47 to MT-50 in game pending |
+| Villagers treat fence gates as walls (open or closed) and path through Dramatic Doors' tall and short wooden doors, opening them (Creative Common `McaVillagerPathGatesMixin`, `WalkNodeEvaluatorVillagerGateMixin`, TODO `mobs/tweaks #15`) | BUILT 2026-10-30 (Creative Common 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VG-00 to -03); MT-41 to MT-43 pending in game |
+| Villagers path up and down ladders (every block named "ladder" that is climbable; Creative Common `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`, `MoveControlVillagerLadderMixin`, tag `#creativeworldgen:villager_ladders`) | BUILT 2026-10-30 (Creative Common 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VL-00 to -02, up and down a ladder); MT-44 to MT-46 pending in game |
+| Quark monster boxes are vaults: the box stays after its wave, ejects one stack from its own loot table once the wave is dead or gone, then re-arms after a 1 hour cooldown; obsidian hardness (diamond pickaxe); breaks only while sneaking, else a chat warning (Lootr's rule); Create drills and saws skip it (Creative Common `mobs.MonsterBoxVault`, `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, TODO `mobs/tweaks #5`) | BUILT 2026-10-30 (Creative Common 1.1.04 in `mods/`, 22:59); scratch server PASSED r1031 (2026-10-31, SQ-MB-01 to -04, -06, -07: stays, one-stack reward, re-arm, Create drill, off switch); SQ-MB-05 hardness client check pending (tags pass; queue says 50, changelog 25); MT-34 to MT-37, MT-47 to MT-50 in game pending |
 
 - **Pending:** the leaf decay changes are built and unshipped (next deploy; the release also drops FastLeafDecay-30.jar,
   now in `disabledmods/`). MT-01 to MT-25 untested in game (BR-28 stays in its writeup). Findings F1 to F7 (section 4);
@@ -144,7 +144,7 @@ natural leaves, none past 6.
 Paths are random per placement, so one placement per tree is a sample: a tree can reach a little further than listed.
 12 leaves 2 steps of margin over the longest seen.
 
-**Leaf piles (2026-10-20, patcherMod 1.1.01).** With Fast Leaf Decay installed, decayed leaves left Immersive
+**Leaf piles (2026-10-20, Creative Common 1.1.01).** With Fast Leaf Decay installed, decayed leaves left Immersive
 Weathering leaf piles: FLD ran `randomTick`, and IW's `LeavesMixin` calls `LeavesGrowth.decayLeavesPile` right after
 its `removeBlock`. The port removes leaves in `tick`, so that hook never fired. `block/LeafDecayPiles` now calls the
 same IW method after the port's `removeBlock` (IW's chance `spawn_entity_from_decay` 0.3, its blacklist, a 1-5 layer
@@ -157,7 +157,7 @@ then `[leaf_piles] slowFromLayers` and `mixin/LeafPileSlowMixin` (both removed; 
 The scratchpad's "restore Immersive Weathering leaf drop on decay" (scratchpad 2026-10-21, listed twice) is this
 fix; MT-24 checks it (TODO `farming/trees #1`).
 
-Code check 2026-10-22 (IW 1.2.10 jar disassembled, patcherMod 1.1.01 in `mods/` holds `LeafDecayPiles`): IW has three
+Code check 2026-10-22 (IW 1.2.10 jar disassembled, Creative Common 1.1.01 in `mods/` holds `LeafDecayPiles`): IW has three
 leaf pile paths, and all three still run. (1) Decay piles: IW injects into `LeavesBlock#randomTick` after
 `removeBlock`. With `onlyWhenDisturbed` our HEAD cancel stops that whole random-tick decay, so IW's hook can't fire
 there, and the scheduled-tick decay calls the same `decayLeavesPile` once instead. With `onlyWhenDisturbed = false`
@@ -165,7 +165,7 @@ the random-tick decay runs and IW's own hook fires. No path calls it twice. (2) 
 builtin `leaf_piles_from_leaves` growth (chance 0.0005, `reach` 12, `max_pile_height` 3) runs from IW's
 `ServerLevelMixin` in `ServerLevel#tickChunk`, outside `LeavesBlock#randomTick`, so our gate never touches it.
 (3) Falling-leaf particles: client `animateTick`, untouched. (1) passed live on a scratch server 2026-10-22
-(`tools/leaf_pile_probe.js`, patcherMod md5 37bb7049): scheduled-tick decay of 20 lone leaves of 5 types leaves IW piles
+(`tools/leaf_pile_probe.js`, Creative Common md5 37bb7049): scheduled-tick decay of 20 lone leaves of 5 types leaves IW piles
 (5 of 20 at IW's 0.3, 20 of 20 at 1.0, every type), random ticks decay nothing with `onlyWhenDisturbed`, a felled oak
 decays fully with its piles on the ground (none left in the air), `leafPiles = false` leaves none, and with
 `onlyWhenDisturbed = false` IW's own random-tick hook makes 20 of 20. Vinery's apple leaves default to persistent
@@ -575,35 +575,35 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - 2026-10-10: Bushier Flowers growth and worldgen off, 4-flower recipes (shipped in 1.0.6).
 - 2026-10-18: this writeup; findings F1 to F4; tests MT-01 to MT-12. No code changed.
 - 2026-10-19: leaf decay range ([TODO](todo/TODO.md) `farming/trees #1`): `[leaf_decay]` (default 12), `LeavesDecayRangeMixin`
-  + `LeafDecayRange`, patcherMod 1.0.9 rebuilt into `mods/` (not deployed). Every tree feature and template measured
+  + `LeafDecayRange`, Creative Common 1.0.9 rebuilt into `mods/` (not deployed). Every tree feature and template measured
   (longest 10); scratch server: MT-13 to MT-16 passed. Findings F5, F6; tools leaf_path_scan.py, leaf_path_probe.js.
 - 2026-10-19 (later): decay only after a neighbor change (`onlyWhenDisturbed`, tick hook) and Fast Leaf Decay ported
-  into patcherMod (`FastLeafDecayPort`, `decayMinTicks` / `decayMaxTicks`); FastLeafDecay-30.jar to `disabledmods/`,
+  into Creative Common (`FastLeafDecayPort`, `decayMinTicks` / `decayMaxTicks`); FastLeafDecay-30.jar to `disabledmods/`,
   `mod_sides.md` row deleted, `pack/` and `server_mods/` regenerated. Scratch server: MT-13, MT-15, MT-19 to MT-22
   passed; F6 corrected (diagonal leaves fall at placement, `TreeFeature`'s edge shape updates), F7 added.
 - 2026-10-20: IW leaf piles from the ported decay (`LeafDecayPiles`, `[leaf_decay] leafPiles`) and configurable pile
-  slow height (`[leaf_piles] slowFromLayers`, `LeafPileSlowMixin`, WTHIT line follows). patcherMod 1.1.01 rebuilt into
+  slow height (`[leaf_piles] slowFromLayers`, `LeafPileSlowMixin`, WTHIT line follows). Creative Common 1.1.01 rebuilt into
   `mods/`. MT-24, MT-25 untested.
 - 2026-10-22: leaf piles from decay passed on the scratch server (SQ-LP-00 to SQ-LP-06, `tools/leaf_pile_probe.js`,
-  patcherMod md5 37bb7049; probe fixed in the run: `scheduleTick` overload, Vinery apple leaves set non-persistent).
+  Creative Common md5 37bb7049; probe fixed in the run: `scheduleTick` overload, Vinery apple leaves set non-persistent).
   MT-24 ground piles and the fall in a real forest, and MT-25, stay in game.
-- 2026-10-22: MCA Comb eye color and shape (`McaCombEyeColourMixin`, TODO `mobs/tweaks #12`); patcherMod 1.1.01
+- 2026-10-22: MCA Comb eye color and shape (`McaCombEyeColourMixin`, TODO `mobs/tweaks #12`); Creative Common 1.1.01
   rebuilt into `mods/`. MT-40 untested.
 - 2026-10-22: seagulls skip lunchboxes (`mobs/tweaks #7`): Alex's Mobs `seagullStealingBlacklist` holds the three
   Spice of Life lunchboxes (config only; the dropped-box mixin not built). MT-26 untested.
 - 2026-10-22 (second bulk run): SQ-GM-07 (seagull list) and SQ-OM-09 / SQ-OM-14 (pile slow height, default and 6)
   PASS on the scratch server; MT-25 and MT-26 keep their in-game halves.
 - 2026-10-30: named mobs (`mobs/tweaks #6`): `mobs.NamedMobs`, `[named_mobs]` (farm animals, 1 in 100, MCA names),
-  death announcements; patcherMod 1.1.04 rebuilt into `mods/`. MT-31 to MT-33 untested, SQ-NM queued.
+  death announcements; Creative Common 1.1.04 rebuilt into `mods/`. MT-31 to MT-33 untested, SQ-NM queued.
 - 2026-10-30: villager gates and doors (`mobs/tweaks #15`): gates are FENCE and Dramatic Doors doors get door types in
   MCA's node maker (`McaVillagerPathGatesMixin`), open gates FENCE for vanilla villagers
-  (`WalkNodeEvaluatorVillagerGateMixin`); patcherMod 1.1.04 rebuilt into `mods/`. MT-41 to MT-43 untested, SQ-VG queued.
+  (`WalkNodeEvaluatorVillagerGateMixin`); Creative Common 1.1.04 rebuilt into `mods/`. MT-41 to MT-43 untested, SQ-VG queued.
 - 2026-10-30 (later): villager ladders (section 2.8): `McaVillagerPathLaddersMixin`, `GroundPathNavigationClimbMixin`,
-  `MoveControlVillagerLadderMixin`, `#creativeworldgen:villager_ladders`; patcherMod 1.1.04 rebuilt into `mods/`.
+  `MoveControlVillagerLadderMixin`, `#creativeworldgen:villager_ladders`; Creative Common 1.1.04 rebuilt into `mods/`.
   MT-44 to MT-46 untested, SQ-VL queued.
 - 2026-10-30 (later): Quark monster box vaults (section 2.9, `mobs/tweaks #5`): `mobs.MonsterBoxVault`,
   `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `[monster_box]`, reward table, obsidian hardness and
-  tags, Quark `Enable Extra Loot Table` off. patcherMod 1.1.04 rebuilt into `mods/`. MT-34 to MT-37, MT-47 to
+  tags, Quark `Enable Extra Loot Table` off. Creative Common 1.1.04 rebuilt into `mods/`. MT-34 to MT-37, MT-47 to
   MT-50 untested, SQ-MB queued.
 - 2026-11-16: iron golem farm cooldown (2.11), boat-only ice friction (2.12), Quark game nerfs on (2.13); Creative Compat built and installed, Quark config edited (plan_small_fixes_1116.md R1 to R3). MT-52 to MT-55; queue SQ-MT-01 to -03, CQ-MT-01. Not run.
 
@@ -614,5 +614,5 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 
 - 2026-10-28: planned from the scratchpad: profile and trim Alex's Mobs behavior and tick cost (TODO `mobs/tweaks #17`). No code changed.
 - 2026-10-29: seagulls (`mobs/tweaks #7`): owner reported gulls still stealing lunchboxes from inventories with the
-  config list in place. Two patcherMod mixins now skip every Spice of Life food container, in the inventory and dropped
+  config list in place. Two Creative Common mixins now skip every Spice of Life food container, in the inventory and dropped
   (covers the new Netherite Lunchbox). MT-26 rewritten. [lunchboxes.md](lunchboxes.md).

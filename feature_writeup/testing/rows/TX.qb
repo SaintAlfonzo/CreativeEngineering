@@ -8,7 +8,7 @@
 @@jars creativecommon creativedelight creativedevtools
 @@text
 @@text Client checks (textures are client side). Install the moreMooblooms jar built 2026-10-27 00:14, the CD jar
-@@text (2026-10-26 22:30) and the patcherMod jar (2026-10-26 23:36) first; the fridge and Vintage textures are loose files in
+@@text (2026-10-26 22:30) and the Creative Common jar (2026-10-26 23:36) first; the fridge and Vintage textures are loose files in
 @@text `kubejs/assets/`, so a resource reload is enough for those.
 @@text
 @@text | ID | World | What to do and look at | Existing test |

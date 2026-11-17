@@ -13,9 +13,9 @@ User decisions: land animals = ground (grass + #minecraft:dirt) + light, no dayt
   SpawnPlacementsConditionsMixin (m_217074_ HEAD) for NATURAL/CHUNK_GENERATION; Animal/MushroomCow walk value mixins
   (m_5610_) read the spawnable_on tags so night spawns on dirt pass. Block tags only written when SpawnTuning exists.
 - Scratch server 2026-10-09: log `12 rules, 94 biomes changed, 286 changes; conditions: ...` = generator preview; probes OK.
-  Jar in development/patcherMod/build/libs. 4 mods lack mod_sides.md rows (breedablekillerrabbit, coolrain, MEED, Pretty Rain).
+  Jar in development/creativeCommon/build/libs. 4 mods lack mod_sides.md rows (breedablekillerrabbit, coolrain, MEED, Pretty Rain).
 
-- `/dumpspawns` (kubejs _lib/dump_spawns.js, in /dumpall) is a thin wrapper over patcherMod `worldgen/SpawnDump`
+- `/dumpspawns` (kubejs _lib/dump_spawns.js, in /dumpall) is a thin wrapper over Creative Common `worldgen/SpawnDump`
   (Rhino can't read spawn lists, see memory `rhino-fieldandmethods-gotcha` #13). Spawn predicates are lambdas: dump names the
   registering class; vanilla rule names come from tools/spawn_rules_vanilla.json (javap of SpawnPlacements.<clinit>
   in the ForgeGradle mapped jar, `--refresh-vanilla-rules`).

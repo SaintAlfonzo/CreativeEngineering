@@ -8,7 +8,7 @@
 @@jars creativeworldgen
 @@sources feature_writeup/structure_tuning.md
 @@text
-@@text Targets patcherMod 1.1.07 **build/libs 2026-11-02 00:42** (not in `mods/` yet; prep_srv.sh swaps it in) with `waterReach` (new,
+@@text Targets Creative Common 1.1.07 **build/libs 2026-11-02 00:42** (not in `mods/` yet; prep_srv.sh swaps it in) with `waterReach` (new,
 @@text default 2) and the `earth_fill/sand_base` tags, and the instance `[worldgen.earth_fill]`:
 @@text `baseLayers` 3, `beardReach` 6 (air), `waterReach` 2 (water), `buryReach` 10, `maxMoundHeight` 8, `maxOverWater` 24, sizes small 24/8, medium 64/24,
 @@text large 160/64, huge 320/128 (bounds 150/600/2000), `maxWaterSurplus` **0.5** (the instance value since 2026-11-02, was 0.0;

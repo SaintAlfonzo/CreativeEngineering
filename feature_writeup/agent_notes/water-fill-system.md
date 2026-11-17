@@ -12,6 +12,6 @@ Built 2026-10-08 on request ("extend earth fill to water structures, cap blocks/
 - Used `Fluids.WATER` not `FluidTags.WATER`: fluid tags aren't bound headless (tests failed), and it's stricter.
 - Jigsaw pieces sit 1 below start_height (groundLevelDelta), so T&T ocean outpost water plate is y 57-62, flush with the sea.
 - Fixed in passing: EarthFillTest expected maxOverAir 256 but code default is 128 (toml still says 256).
-- Not done: no game/scratch server run, jar only in patcherMod/build/libs (1.0.5), defaults are a guess -> ST-57 log=ALL calibration.
+- Not done: no game/scratch server run, jar only in creativeCommon/build/libs (1.0.5), defaults are a guess -> ST-57 log=ALL calibration.
 
 Related: [earth-fill-system](earth-fill-system.md), [water-biome-rules-ipo-driftwood](water-biome-rules-ipo-driftwood.md), memory `scratch-server-verify`.

@@ -17,14 +17,14 @@ knockback") and the 2026-10-29 decisions in the writeups' findings.
 | #6 | Dark Fire lights portals in any dimension | Planned | tiny: one dimension check in `DarkFireBlock#onPlace` |
 | #1, #4 | TNT shrapnel, Nether portal ignition | Testing | see "Built, needs play" |
 
-All four open rows are patcherMod: build #2 and #3 together (one shrapnel pass, then TN-01 to TN-10 plus the new
+All four open rows are Creative Common: build #2 and #3 together (one shrapnel pass, then TN-01 to TN-10 plus the new
 tests), and #5 and #6 together (one Dark Fire pass, then NP-01 to NP-12; #4's diagnostic log can go in the same build
 once NP-01 to NP-05 pass).
 
 ---
 
 ## tnt-and-portal #3: Minecart shrapnel and damage
-Status **Bug** / Work patcherMod / TODO `gameplay/tnt-and-portal #3`
+Status **Bug** / Work Creative Common / TODO `gameplay/tnt-and-portal #3`
 
 ### Goal
 TNT minecarts burst correctly; one damage value is a fraction of today's while knockback stays; a chain of TNT does
@@ -91,7 +91,7 @@ not flood the server with projectiles (F2); explosives other than vanilla TNT ca
 ---
 
 ## tnt-and-portal #2: Lighter immune to own shrapnel
-Status **Planned** / Work patcherMod / TODO `gameplay/tnt-and-portal #2`
+Status **Planned** / Work Creative Common / TODO `gameplay/tnt-and-portal #2`
 
 ### Goal
 Settle whether the player who lit the TNT is hit by its shrapnel, and make the code match.
@@ -121,7 +121,7 @@ Settle whether the player who lit the TNT is hit by its shrapnel, and make the c
 ---
 
 ## tnt-and-portal #5: Flint and Terrasteel is still temporary
-Status **Planned** / Work patcherMod (+ textures) / TODO `gameplay/tnt-and-portal #5`
+Status **Planned** / Work Creative Common (+ textures) / TODO `gameplay/tnt-and-portal #5`
 
 ### Goal
 Flint and Terrasteel places Dark Fire only on solid blocks, and Dark Fire becomes its own fire: a faster animation
@@ -140,7 +140,7 @@ and soul-fire sustain block (more magic sustain blocks to come).
   it can't survive. `BaseFireBlock` has no random tick and never spreads (that is `FireBlock`), so "no spreading" is
   already true. In `#minecraft:fire` (blocktags.js 19, `b.dark_fire` block_dict.js 9).
 - Textures: the KubeJS copies win (`kubejs/assets/creativeengineering/textures/block/dark_fire_0.png` / `_1.png`,
-  mcmeta `frametime 2`); the patcherMod copies under the same names are different images (nether_portal.md 5).
+  mcmeta `frametime 2`); the Creative Common copies under the same names are different images (nether_portal.md 5).
 - Ash: `i.ash = 'supplementaries:ash'` (item_dict.js 1292, Supplementaries' ash layer block), `i.soot` IW soot (147).
 - Sustain tags in 1.19.2: `#minecraft:infiniburn_overworld` (magma, netherrack, Quark blaze lantern and charcoal block,
   SecurityCraft netherrack, live dump), `_nether`, `_end`, and `#minecraft:soul_fire_base_blocks`.
@@ -158,7 +158,7 @@ and soul-fire sustain block (more magic sustain blocks to come).
    tag `#creativeengineering:dark_fire_burns`), with a high chance remove it and place Supplementaries ash (`i.ash`
    layer) with chance ~0.7, else air. Does not create new Dark Fire (no spreading).
 5. **Animation**: in the KubeJS texture copies, reverse the frame order of both strips and set `frametime 1` (faster);
-   keep the patcherMod copies in step or delete them (the KubeJS ones are what shows).
+   keep the Creative Common copies in step or delete them (the KubeJS ones are what shows).
 6. Docs: nether_portal.md 2.2 / 2.3 rows, F1 resolved; tests below.
 
 ### Ids and data
@@ -189,7 +189,7 @@ tick rate; the SRG of `BaseFireBlock#tick` is not needed (own override in the pa
 ---
 
 ## tnt-and-portal #6: Dark Fire lights portals in any dimension
-Status **Planned** / Work patcherMod / TODO `gameplay/tnt-and-portal #6`
+Status **Planned** / Work Creative Common / TODO `gameplay/tnt-and-portal #6`
 
 ### Goal
 Dark Fire opens a Nether portal only in the Overworld (decided 2026-10-29).

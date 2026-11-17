@@ -10,7 +10,7 @@ Sister brief [dishes_ingredients.md](dishes_ingredients.md) (bone broth #4, ice 
 
 **Verified against jars** (2026-10-21, rechecked 2026-10-31 in `mods/`): The Salt `salt-1.19.2-1.2.4.1`, Create: The
 Salt `create_salt 1.19.2-1.1.0`, Corn Delight 1.0.3, backportedVintage `0.1.6-ce-19.2-09`, AppleSkin 2.4.2,
-patcherMod `creativeengineering-1.1.04`. Barbeque's Delight is **not** installed and its port
+Creative Common `creativeengineering-1.1.04`. Barbeque's Delight is **not** installed and its port
 (`development/backportedBarbeques`, `largecontent/mod-additions #37`) does not exist yet.
 
 ## Scope and order
@@ -23,7 +23,7 @@ patcherMod `creativeengineering-1.1.04`. Barbeque's Delight is **not** installed
 | 7 | In Progress | Salt layers: place from inside | B (port jar, collision only) |
 | 5 | In Progress | Sugar as a seasoning | C (pack framework, data only) |
 | 3 | In Progress | New seasonings | C (pack framework, data + items) |
-| 11 | Planned | BBQ seasonings into the pack system | D (patcherMod framework kinds; after the BBQ port) |
+| 11 | Planned | BBQ seasonings into the pack system | D (Creative Common framework kinds; after the BBQ port) |
 | 13 | Planned | `grilled` seasoning type | D (after 11 and the skewer fold) |
 | 12 | Planned | Seasoning sources and villager trades | E (temporary source with the port; full pass after 11) |
 | 2, 6, 8, 9 | Testing | JEI page, salt merge, AppleSkin, icons | listed at the end |
@@ -58,7 +58,7 @@ temporary source ships with the port.
   still names `salt:salt`, which the merge's inventory swap turns into salt dust.
 - **Pack framework** (food.md 3.12): `global.seasoning` in CD
   [seasonings.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js)
-  (5 seasonings: cheese, onion, garlic, sugar, void_pepper), patcherMod `food/Seasonings.java` (223 lines; bonus
+  (5 seasonings: cheese, onion, garlic, sugar, void_pepper), Creative Common `food/Seasonings.java` (223 lines; bonus
   kinds `nutrition`, `saturation`, `heal`, `effects`; `combines`), `food/SeasoningRecipe`, crafts by `NCH.season`
   (neoCraftHelper.js 1400-1412) from [seasoning.js](../../kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js),
   foods by `#<ns>:seasonable/<path>` from `families` / `add` / `remove`. Today every seasoning with foods is on popcorn
@@ -251,7 +251,7 @@ Sugar (or powdered sugar) seasons foods through the pack framework.
 ---
 
 ## seasoning #3: New seasonings
-Status **In Progress** · Work: KubeJS / patcherMod · id `food/seasoning #3`
+Status **In Progress** · Work: KubeJS / Creative Common · id `food/seasoning #3`
 
 ### Goal
 Pepper, dill (sea pickle?), cheese, cream and onion, ice cubes for cold drinks; distinct placeable popcorn variants
@@ -306,7 +306,7 @@ Pepper, dill (sea pickle?), cheese, cream and onion, ice cubes for cold drinks; 
 ---
 
 ## seasoning #11: Seasoning fold: Barbeque's Delight seasonings into the pack system
-Status **Planned** · Work: patcherMod / KubeJS · id `food/seasoning #11`
+Status **Planned** · Work: Creative Common / KubeJS · id `food/seasoning #11`
 
 ### Goal
 The six BBQ seasonings (cumin, pepper, chili powders; honey mustard, buffalo, barbeque sauces) become pack
@@ -325,7 +325,7 @@ seasonings: defined once in seasonings.js, applied by shapeless crafts, with a c
   the cooked one, sauces may not; name prefix becomes a tooltip line.
 
 ### Build
-1. **patcherMod `food/Seasonings`**: new optional fields in `define` JSON and `Definition`:
+1. **Creative Common `food/Seasonings`**: new optional fields in `define` JSON and `Definition`:
    `fast` (bool), `alwaysEdible` (bool), `damage` ({ `type`: fire, `amount` }), `transform` ({ `chanceMul`,
    `durationMul`, `amplifierAdd` }). Apply:
    - `fast`, `alwaysEdible`: these change how the item is eaten, so they cannot wait for `onEaten`. Mixin on
@@ -376,7 +376,7 @@ the port. CEConfig keys proposed, not present.
 ---
 
 ## seasoning #13: `grilled` seasoning type
-Status **Planned** · Work: patcherMod / KubeJS · id `food/seasoning #13`
+Status **Planned** · Work: Creative Common / KubeJS · id `food/seasoning #13`
 
 ### Goal
 A skewer cooked on the BBQ Grill carries `grilled` (+2 saturation, capped at the food's hunger); the shapeless cooked
@@ -392,11 +392,11 @@ recipe does not add it; it does not count toward the cap unless configured.
 ### Build
 1. seasonings.js: `grilled: { id: 'creativeengineering:grilled', name: 'Grilled', saturation: 2, station: true,
    families: [], add: [] }`. `station: true` = no craft (seasoning.js skips it, as `hasFoods` does) and no item.
-2. patcherMod `Seasonings`: a `station` flag on `Definition`; `canAdd` ignores station seasonings for the cap unless
+2. Creative Common `Seasonings`: a `station` flag on `Definition`; `canAdd` ignores station seasonings for the cap unless
    `[food] grilledCountsTowardMax`; a public `Seasonings.with(stack, List.of(GRILLED))` call for the station.
 3. Port Grill block entity: when a raw skewer finishes (after the flip), the result stack gets
    `Seasonings.with(result, grilled)` plus the raw skewer's own powders copied (barbeques_delight.md 4.1, O28). The
-   port depends on patcherMod, or calls it reflectively (decide in the port).
+   port depends on Creative Common, or calls it reflectively (decide in the port).
 4. Tooltip "Grilled: +2 saturation" and AppleSkin come free from the existing handlers (`SeasoningTooltip`,
    `AppleSkinSeasonings`), plus an overlay row in `make_seasoning.py` if it should show (decision 4.3 #9: tooltip yes).
 

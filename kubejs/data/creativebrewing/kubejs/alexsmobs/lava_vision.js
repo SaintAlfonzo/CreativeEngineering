@@ -4,12 +4,12 @@
 //
 // AM registers it as  alexsmobs:lava_bottle + alexsmobs:bone_serpent_tooth -> Potion of Lava Vision
 // (a Forge BrewingRecipe). The "from" is a lava-bottle ITEM, not a potion, so neither the Create
-// nor the IE mechanical mixer can generate it. patcherMod's PotionRecipeGeneratorsMixin cancels
+// nor the IE mechanical mixer can generate it. Creative Common's PotionRecipeGeneratorsMixin cancels
 // the broken IE auto-generated recipe and adds the real IE-Mixer one (1500 mB lava + bone serpent
 // tooth). This file only adds the Create Mechanical Mixer version.
 //
 // (The IE side can't be an `e.custom` recipe — kubejs-immersive-engineering ships a MixerRecipeSchema
-// that strips the create:potion NBT off the result — so it lives in patcherMod instead.)
+// that strips the create:potion NBT off the result — so it lives in Creative Common instead.)
 //
 // Once regular Lava Vision fluid exists, splash / lingering / long_lava_vision all flow from the
 // normal container + modifier parity, so nothing else is needed.

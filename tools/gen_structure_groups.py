@@ -9,7 +9,7 @@ THE MODEL
     weight     who wins a grid slot where several members could spawn (vanilla set weight)
     frequency  chance that the winner really spawns there; otherwise the slot stays EMPTY (it does
                not fall through to another member), so turning one member down never makes the
-               others more common. Needs patcherMod (worldgen/StructureFrequencies).
+               others more common. Needs Creative Common (worldgen/StructureFrequencies).
   Where a member is the only one that fits the biome, it takes every slot there x its frequency.
   Every structure not in a group keeps its own set ("standalone") and is tuned in the same file,
   with the same per-structure frequency.
@@ -394,10 +394,10 @@ class Pack:
         self.blocked = {s['structure'] for e in self.sets.values() for s in e['structures'] if s.get('blocked')}
         self.meta = self.config.get('meta_structures', {})
         # metas with an anchor never win a slot themselves: they take a share of the slots their anchors won
-        # (patcherMod MetaSlots), so they are left out of every weighted pick here and estimated from their anchors
+        # (Creative Common MetaSlots), so they are left out of every weighted pick here and estimated from their anchors
         self.converted = {mid: float(m.get('share', 0)) for mid, m in self.meta.items() if m.get('anchor')}
         # group members with "replaces" in structure_groups.json don't win slots by weight either: they take "share" of
-        # the slots the member they name wins and keeps (patcherMod MetaSlots); replaces = {replacement: replaced id}
+        # the slots the member they name wins and keeps (Creative Common MetaSlots); replaces = {replacement: replaced id}
         self.replaces = {}
         if GROUPS.exists():
             for g in read_json(GROUPS).get('groups', {}).values():
@@ -426,7 +426,7 @@ class Pack:
         return out - set(self.meta)
 
     def apply_biome_fits(self, raw, cache):
-        """biome_fits.json, as patcherMod StructureBiomeFits applies it: a structure in a fit's structure tag spawns in
+        """biome_fits.json, as Creative Common StructureBiomeFits applies it: a structure in a fit's structure tag spawns in
         that fit's biomes plus its parent fits' (unless inherit is false), not its own list. Runs before the meta
         structures and biome rules, which see the fitted lists in game too. fitted = {structure id: [fit names]}."""
         fits = read_json(FITS).get('fits', {}) if FITS.exists() else {}
@@ -459,7 +459,7 @@ class Pack:
             self.pools[sid] = frozenset(b for b in pool if b in self.areas)
 
     def apply_biome_rules(self, raw, cache):
-        """biome_rules in structure_groups.json, as patcherMod StructureBiomeRules applies them: a structure
+        """biome_rules in structure_groups.json, as Creative Common StructureBiomeRules applies them: a structure
         that isn't allowed loses the rule's biomes. kept_out = {rule: [structure ids that lost biomes]}."""
         self.kept_out = OrderedDict()
         rules = read_json(GROUPS).get('biome_rules', {}) if GROUPS.exists() else {}
@@ -955,7 +955,7 @@ META_NOTE = ('Meta structure with an anchor: never picked by this weight; it tak
 
 
 def apply_meta_anchors(pack, doc, dens):
-    """A meta structure with an anchor takes "share" of the slots its anchors win in its group (patcherMod MetaSlots):
+    """A meta structure with an anchor takes "share" of the slots its anchors win in its group (Creative Common MetaSlots):
     per biome of its pool, share x the anchors' own densities there. Upper bound: a meta whose parts don't fit is the
     plain anchor. The anchors keep their densities (a meta's anchor is still that structure). A replacement ("replaces"
     in structure_groups.json) is converted the same way from the one member it names, but that member loses what the
@@ -1062,7 +1062,7 @@ def new_densities(pack, doc):
             continue
         K *= 1 - exclusion_loss(p, set_density)
         d = member_densities(K, live, pack.pools)
-        if bf:   # biome_frequency: each member's frequency x the factor of the biome (patcherMod StructureFrequencies)
+        if bf:   # biome_frequency: each member's frequency x the factor of the biome (Creative Common StructureFrequencies)
             f = pack.biome_factor(bf)
             d = {sid: {b: v * f(b) for b, v in m.items()} for sid, m in d.items()}
         dens.update(d)
@@ -1237,7 +1237,7 @@ def groups_readme():
                       'expected structures per area for every structure, from its real biome areas.'),
         ('biome rules', 'biome_rules.<name>: {biomes: [biome ids / #biome tags], allow: "#<structure tag>"}. Only '
                         'the tag\'s structures may start in those biomes; every other structure loses them from its '
-                        'own biome list (patcherMod StructureBiomeRules, which also covers structures no config '
+                        'own biome list (Creative Common StructureBiomeRules, which also covers structures no config '
                         'knows yet). water keeps the open sea for ships, wrecks and ocean ruins.'),
     ])
 

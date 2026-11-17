@@ -234,7 +234,7 @@ Restart the game, or reload resources with F3+T (lang only).
 - 2026-10-02 (late): `/dumpnames` ran through `/dumpall` in single player (NM-07, NM-08 PASSED). Catalog
   regenerated from the dump (191 partial blocks, 65 items, 53 entities...) and the section 9 triage redone from it.
   The new 1.0.4 mods only add the Untitled Duck Mod rows.
-- 2026-10-20: display-name audit (section 11): client dump `/cdevdumpnames` (patcherMod 1.1.01), `tools/name_audit.py`,
+- 2026-10-20: display-name audit (section 11): client dump `/cdevdumpnames` (Creative Common 1.1.01), `tools/name_audit.py`,
   `name_rules.json`, `client_scripts/name_fixes.js`. 436 names fixed (raw keys and Title Case), all 59 namespaces
   through the KubeJS lang event; none needed a resource-pack zip edited. WTHIT plugin toggle names added (wthit_lines F2).
 - 2026-10-20 (later): Pretty Pipes keeps its mod name and creative tab (your call; the items stay "Item Pipe ...").
@@ -349,7 +349,7 @@ item and block name is checked for Title Case. Sections 9 and 10 above are the o
 
 **How it works**
 
-1. **Dump** (patcherMod `devtools/DisplayNameDump`, client side). `/cdevdumpnames` in game, or
+1. **Dump** (Creative Common `devtools/DisplayNameDump`, client side). `/cdevdumpnames` in game, or
    `[debug.names] dumpAtTitle = true` in creativeengineering-common.toml on a client that never joins a world,
    writes `kubejs/exported/display_names.json`: every block, item, effect, enchantment, entity, fluid,
    potion form and villager profession with its key, the text the game shows, and the pack + namespace whose
@@ -883,7 +883,7 @@ None.
 
 The mod name is what JEI prints in blue under every tooltip (and searches with `@`), what WTHIT shows under a
 block, and what the Mods screen lists. It comes from each jar's `mods.toml` `displayName`, so a lang file can't
-change it. patcherMod's `util/ModDisplayNames` rewrites it at common setup from CEConfig `[mod_names] overrides`
+change it. Creative Common's `util/ModDisplayNames` rewrites it at common setup from CEConfig `[mod_names] overrides`
 (`"modid=Name"` entries; the field is private and final in FML's loader layer, which mixins can't reach, so it is
 written with `sun.misc.Unsafe`). The list is the config default in `CEConfig.ModNames`: that is the one place it lives.
 

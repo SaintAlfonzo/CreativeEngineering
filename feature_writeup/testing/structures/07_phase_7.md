@@ -10,7 +10,7 @@ Result lines are inline in [structure_tuning.md](../../structure_tuning.md) sect
   Forge 1.19.2-43.3.9 libraries came from `~/.local/share/atlauncher/servers/Minecraft1192withForge`. 374 server
   mods are symlinked from `mods/` by `mod_sides.md`, and `vinery_upstream/` is linked too (the Vinery port won't
   load without it).
-- **Jar: patcherMod 1.0.7, not 1.0.8.** The deployed 1.0.8 jar crashes a dedicated server at mod loading (3.1). Its
+- **Jar: Creative Common 1.0.7, not 1.0.8.** The deployed 1.0.8 jar crashes a dedicated server at mod loading (3.1). Its
   `worldgen` package is byte-identical to 1.0.7's, so every result here holds for 1.0.8. Against Phases 1-6 (1.0.6),
   the jar adds the stone-base earth tag, the per-chunk census fix, and the LocateLoads, GroundMatch and PoolTuner
   changes.
@@ -115,7 +115,7 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 
 ## 3. Bugs
 
-### 3.1 patcherMod 1.0.8 can't boot a dedicated server (time master, not worldgen)
+### 3.1 Creative Common 1.0.8 can't boot a dedicated server (time master, not worldgen)
 
 - **Symptom:** the first boot died in FML with `MixinTransformerError` / `ClassMetadataNotFoundException:
   net.minecraft.client.Minecraft` while loading Serene Seasons.
@@ -125,7 +125,7 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 - **Impact:** 1.0.8 is staged and [plan_1.0.8.md](../../plan_1.0.8.md) says it hasn't booted on a dedicated
   server. As staged, the server won't start.
 - **Fix idea (not made):** move the client body into a client-only helper (for example a static method on
-  `time/TimeClient` that returns the new sub-season or null), so the mixin only references patcherMod classes. Or
+  `time/TimeClient` that returns the new sub-season or null), so the mixin only references Creative Common classes. Or
   split it into a client mixin on the same target.
 - After the fix, boot a scratch server on the 1.0.8 set once.
 
@@ -186,7 +186,7 @@ The instance's `config/` and `kubejs/` are unchanged.
 
 ## 5. Follow-ups for you
 
-*Resolved 2026-10-19 (user: fix and redeploy as 1.0.8; [11_fixes_1_0_8.md](11_fixes_1_0_8.md)): 3.1 the clock mixin is split into a server and a client mixin; 3.2 fix (a), the `type/*` tags are real tags; 3.3 accepted as is (user: "pruning dropping a size class is fine"); 3.4 the dump's protected placement fields are read by patcherMod `worldgen/PlacementInfo` (the empty structure lists were the emptied sets, not a bug).*
+*Resolved 2026-10-19 (user: fix and redeploy as 1.0.8; [11_fixes_1_0_8.md](11_fixes_1_0_8.md)): 3.1 the clock mixin is split into a server and a client mixin; 3.2 fix (a), the `type/*` tags are real tags; 3.3 accepted as is (user: "pruning dropping a size class is fine"); 3.4 the dump's protected placement fields are read by Creative Common `worldgen/PlacementInfo` (the empty structure lists were the emptied sets, not a bug).*
 
 
 1. **3.1 before deploying 1.0.8:** fix the Serene Seasons mixin, rebuild and restage. Then do one scratch boot on

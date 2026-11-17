@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare the block-state id range files written by the patcherMod debug switch.
+"""Compare the block-state id range files written by the Creative Common debug switch.
 
 Enable [debug.block_state_sync] enabled=true in config/creativedevtools-common.toml on the
 client and on the dedicated server. Each side writes logs/cdev_block_state_ranges_<side>.txt (one

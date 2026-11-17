@@ -57,7 +57,7 @@ prep_srv.sh swaps a build jar in only when it is newer than the `mods/` jar it r
 
 | Jar | `mods/` | build/libs | Rows that need the build |
 |---|---|---|---|
-| patcherMod 1.1.04 | 2026-10-31 00:44 | same | all patcherMod rows (effects batch included) |
+| Creative Common 1.1.04 | 2026-10-31 00:44 | same | all Creative Common rows (effects batch included) |
 | creative_delight 1.0.0 | 2026-10-31 00:29 | same | CD rows, monkey merge, Baklava icon |
 | backportedBrewin -04 | 2026-10-31 00:30 | **00:43** | SQ-EFX-13 food icons |
 | backportedVintage | -08 | **-09** (2026-10-29 20:24) | SQ-BJ-01 to -03 |

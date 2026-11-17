@@ -1,6 +1,6 @@
 # placement-priority
 
-> patcherMod PlacementPriority: ranked groups, lower start dropped if it would overlap a higher one (predicted, order-independent); companions = whole starts around a meta (town_villages); status in feature_writeup/structure_tuning.md
+> Creative Common PlacementPriority: ranked groups, lower start dropped if it would overlap a higher one (predicted, order-independent); companions = whole starts around a meta (town_villages); status in feature_writeup/structure_tuning.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

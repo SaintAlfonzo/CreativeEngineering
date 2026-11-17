@@ -15,7 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 // Fungi Delight 1.3 ported to Forge 1.19.2 (feature_writeup/fungi_delight.md). No config file: every switch upstream
 // read from fungidelight-common.toml is hard-coded to its shipped default. Not ported: the sniffer mixin and tag, the
 // configurable rarity filter, biome modifiers and placed features (the pack places everything), the compost hook,
-// the mooshroom breeding mixin (patcherMod owns mooshroom breeding).
+// the mooshroom breeding mixin (Creative Common owns mooshroom breeding).
 @Mod(FungiDelight.MOD_ID)
 public class FungiDelight {
    public static final String MOD_ID = "fungidelight";

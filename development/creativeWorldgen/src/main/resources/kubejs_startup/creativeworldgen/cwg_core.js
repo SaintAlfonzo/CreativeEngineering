@@ -1,6 +1,6 @@
 // priority: 1000
 // Creative Worldgen core: global.CWG (feature_writeup/creative_split.md 3.9, wave 5). Startup script in the Worldgen jar,
-// loaded by patcherMod's startup loader after the pack's startup_scripts folder, so global.NCH, global.tags and the
+// loaded by Creative Common's startup loader after the pack's startup_scripts folder, so global.NCH, global.tags and the
 // dicts already exist here. The server scripts are in kubejs/data/creativeworldgen/kubejs/ (_worldgen_core.js).
 //
 //   global.CWG.on('moremooblooms')     mod loaded; read it inside an event callback

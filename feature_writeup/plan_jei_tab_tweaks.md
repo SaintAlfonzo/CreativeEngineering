@@ -1,6 +1,6 @@
 # Plan: custom JEI tab tweaks (2026-10-26)
 
-Status: **BUILT 2026-10-26** (owner confirmed "execute all"), not seen in game. patcherMod and moreMooblooms jars
+Status: **BUILT 2026-10-26** (owner confirmed "execute all"), not seen in game. Creative Common and moreMooblooms jars
 installed since and shipped in 1.1.04 (client instance 2026-10-29; the server is on 1.1.03). World-tab data regenerated
 (`python3 tools/gen_jei_world.py`, 3551 rows in 13 tabs). `jeed_providers.js` needs `/reload`. Tests: JW-19 to JW-27
 ([jei_world_tabs.md](jei_world_tabs.md) 4), JC-30, JC-31 ([jei_coverage.md](jei_coverage.md) 7), MB-105, EF-21; queued as
@@ -53,7 +53,7 @@ Applied by `python3 tools/gen_jei_world.py`, then F3+T in game. No jar.
 | A7 | `#11` | Text pass over every cut-off note (stripping, soap / wolf, mob transform, bucket and bottle, lightning, lava, knife and machete, jars, grass, dyeing) to the changelog style, 2 lines where possible. The arrow half of `#11` is already done (world tabs draw the Feast Plating arrow). |
 | A8 | `#28` | No change (kept). |
 
-## Part B: patcherMod Java
+## Part B: Creative Common Java
 
 Files: `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/jei/` (and `world/`),
 `CEConfig.java`, one new IE mixin. One `./gradlew :creativeCommon:build --offline`, plus a headless harness check of the
@@ -75,7 +75,7 @@ pure logic (stand-in map, fluid scale curve, note joining).
 | Step | TODO | Change |
 |---|---|---|
 | C1 | `mobs/mooblooms #6` | Moobloom Conversion tab: the sunflower renders facing backwards. Fix the flower's rotation in moreMooblooms' JEI renderer; rebuild `:moreMooblooms:build`. |
-| C2 | `ui/effects #9` | Potion bundles missing from JEI effect provider pages: find why JEED's potion provider skips the bundle items (likely how the bundle stores its potion NBT, or the item isn't seen as a potion holder), then fix in `jeed_providers.js` (server script, `/reload`) or a patcherMod provider. |
+| C2 | `ui/effects #9` | Potion bundles missing from JEI effect provider pages: find why JEED's potion provider skips the bundle items (likely how the bundle stores its potion NBT, or the item isn't seen as a potion holder), then fix in `jeed_providers.js` (server script, `/reload`) or a Creative Common provider. |
 | C3 | `jei/jei-coverage #8` | Flower crown uses freeze the game for about 20 s: find the cause (likely a recipe lookup over a huge ingredient set, possibly the pack's cycling or world-tab code) from a JFR / thread dump on a scratch client when allowed, otherwise from the code. Fix if it is the pack's code; otherwise report what causes it. |
 
 ---
@@ -88,4 +88,4 @@ pure logic (stand-in map, fluid scale curve, note joining).
   [testing/scratch_queue.md](testing/scratch_queue.md) (no scratch server boot unless asked).
 - Player changelog bullets (JEI family) in `kubejs/assets/creativecommon/changelog/unreleased.md`;
   `python3 tools/changelog_lint.py`.
-- Hand over: test IDs and the jars waiting for `mods/` (patcherMod, moreMooblooms).
+- Hand over: test IDs and the jars waiting for `mods/` (Creative Common, moreMooblooms).

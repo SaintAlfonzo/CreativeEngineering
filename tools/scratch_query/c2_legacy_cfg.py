@@ -4,7 +4,7 @@ never-booted srv (prep_srv.sh done, server stopped). Tables are cut from the srv
 comments match the jars; only the values the rows check are changed.
 
     c2_legacy_cfg.py SRV l1    SQ-CMG-02, SQ-CEN-02, SQ-CFR-04 (+ SQ-CEN-05 shrapnel): a pack that skipped 1.2.00.
-        config/creativeengineering-common.toml = patcherMod's old file: [botania] (trinketCaseAnyItem = false), the nine
+        config/creativeengineering-common.toml = Creative Common's old file: [botania] (trinketCaseAnyItem = false), the nine
         Equipment tables ([shields] wearThreshold = 4.5), [shrapnel] (count = 12), [surface] ([surface.wthit]
         format = "PERCENT"), [vein_undo], [jei] [gui_title] [toasts] (tutorial = true) [tooltips] [coaster] [wthit],
         Compat's five first-release tables, Common's six tables, [campfire] (rainOutTicks = 120).
@@ -91,7 +91,7 @@ def main(srv, mode):
         parts.append(pick(cm, COMMON, 'common'))
         parts.append(setkey(cd['campfire'], 'rainOutTicks', '120'))
         with open(os.path.join(cfg, 'creativeengineering-common.toml'), 'w') as f:
-            f.write('# r1113 c2 legacy patcherMod file (c2_legacy_cfg.py l1)\n' + ''.join(parts))
+            f.write('# r1113 c2 legacy Creative Common file (c2_legacy_cfg.py l1)\n' + ''.join(parts))
         shutil.copy2(os.path.join(cfg, 'creativecommon-swaps.toml'), os.path.join(cfg, 'creativeengineering-swaps.toml'))
         for f in ['creativecommon-common.toml', 'creativecommon-swaps.toml', 'creativemagic-common.toml',
                   'creativeequipment-common.toml', 'creativecompat-common.toml']:
@@ -106,7 +106,7 @@ def main(srv, mode):
         with open(os.path.join(cfg, 'creativecompat-common.toml'), 'w') as f:
             f.write(cpt.rstrip('\n') + '\n\n' + camp)
         with open(os.path.join(cfg, 'creativeengineering-common.toml'), 'w') as f:
-            f.write('# r1113 c2 legacy patcherMod file (c2_legacy_cfg.py l2)\n' + pick(cd, CD_MOVED, 'delight'))
+            f.write('# r1113 c2 legacy Creative Common file (c2_legacy_cfg.py l2)\n' + pick(cd, CD_MOVED, 'delight'))
         os.remove(os.path.join(cfg, 'creativedelight-common.toml'))
         print('l2: compat file + [campfire] rainOutTicks = 100; creativeengineering-common.toml with the CD carve tables; '
               'creativedelight-common.toml removed')

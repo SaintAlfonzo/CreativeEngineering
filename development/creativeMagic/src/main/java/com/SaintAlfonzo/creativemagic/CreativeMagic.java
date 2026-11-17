@@ -27,7 +27,7 @@ import org.slf4j.Logger;
  * Flint and Terrasteel with the Nether portal rule (dimension/PortalFailureHandler: ordinary fire no longer opens a
  * portal), the Nock Enough Arrows enchantments taken off tables and trades, the Botania Trinket Case holding any item
  * ({@code [botania]}), and the liquid XP bridge (PneumaticCraft and Sophisticated Core use Create Enchantment
- * Industry's experience fluid; fluid/FluidBridge, from Creative Engineering). Requires patcherMod
+ * Industry's experience fluid; fluid/FluidBridge, from Creative Engineering). Requires Creative Common
  * ({@code creativeengineering}, later Creative Common) and Creative Compat.
  *
  * Dark Fire and Flint and Terrasteel are registered under this mod's namespace ({@link #NS}).
@@ -60,13 +60,13 @@ public class CreativeMagic {
             () -> new FlintAndTerraSteelItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).durability(65)));
 
     public CreativeMagic() {
-        // [botania] came from patcherMod's file: the first boot copies the player's value over (then patcherMod drops
+        // [botania] came from Creative Common's file: the first boot copies the player's value over (then Creative Common drops
         // it from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         ConfigRename.carrySections(OLD_FILE, FILE, CMGConfig.SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CMGConfig.SPEC, FILE);
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        // Same order as patcherMod's constructor had them: items, then blocks.
+        // Same order as Creative Common's constructor had them: items, then blocks.
         ITEMS.register(modEventBus);
         BLOCKS.register(modEventBus);
         modEventBus.addListener(CreativeMagic::commonSetup);

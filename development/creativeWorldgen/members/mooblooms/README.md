@@ -63,6 +63,6 @@ Part of the root Gradle build:
     ./gradlew :moreMooblooms:installToMods  # copy into ../../mods (not while the game runs)
 
 - `libs/` (git-ignored) holds the compile-only JEI jar copied from `../../mods`.
-- No refmap: mixins use SRG names with `remap = false`, the AP target validator is off (same as patcherMod).
+- No refmap: mixins use SRG names with `remap = false`, the AP target validator is off (same as Creative Common).
 - The coats are drawn for this mod (working copies in `../../textureswapper/moobloom/`); nothing of Buzzier
   Bees' art is used.

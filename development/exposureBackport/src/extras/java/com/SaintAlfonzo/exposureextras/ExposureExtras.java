@@ -17,7 +17,7 @@ import java.nio.file.Path;
  * Exposure Extras: this pack's own additions to Exposure (not upstream code), shipped in the backport jar.
  * So far: camera bags ({@code camerabag/}). Config: {@code exposureextras-common.toml}.
  *
- * The {@code exposure_extras:} ids, and the older {@code creativeengineering:<tier>_camera_bag} ids (before patcherMod
+ * The {@code exposure_extras:} ids, and the older {@code creativeengineering:<tier>_camera_bag} ids (before Creative Common
  * 1.0.3), move by the swap list {@code data/exposureextras/swaps/owner_namespace.json} (read by Creative Common); the
  * config file is carried over here.
  */

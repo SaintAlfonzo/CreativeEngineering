@@ -54,7 +54,7 @@ console.log('sample_syringe func loading')
         },
     }
 
-    // JEI "Sample Syringe" world-interaction tab (patcherMod compat/jei/world, row format in WorldRow.java):
+    // JEI "Sample Syringe" world-interaction tab (Creative Common compat/jei/world, row format in WorldRow.java):
     // one row per filled syringe, every mob that gives it as the input. Built from SAMPLES so the list lives here only.
     const byFilled = {}
     const order = []

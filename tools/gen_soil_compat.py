@@ -44,7 +44,7 @@ GRASS = 'minecraft:grass_block'
 BELOW = [0, -1, 0]
 # Block states the overrides it writes swap as well: blocks purged by an item merge (feature_writeup/item_merges.md).
 # Vintage Delight's salt patch lays a salt block under its layers; since the salt merge it is The Salt's raw rock salt
-# block, which does not dissolve (patcherMod block.SaltBlockTicks), so shoreline patches stay.
+# block, which does not dissolve (Creative Common block.SaltBlockTicks), so shoreline patches stay.
 STATE_SWAPS = {'vintagedelight:salt_block': 'salt:raw_rock_salt_block'}
 KINDS = ('placed_feature', 'configured_feature')
 

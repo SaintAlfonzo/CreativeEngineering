@@ -13,14 +13,14 @@ plugins {
 }
 
 dependencies {
-    // patcherMod: the hooks the probes subscribe to, WorldgenFiles (/cdevplace), PerfEvents (/cdevperf),
+    // Creative Common: the hooks the probes subscribe to, WorldgenFiles (/cdevplace), PerfEvents (/cdevperf),
     // BlockModelIcons (/cdevdumpicons). A hard dependency.
     compileOnly project(':creativeCommon')
     compileOnly project(':creativeCompat')
     // Creative Worldgen: BiomeLayoutTuner and PoolTuner (/cdevplace), SpawnTuning (/dumpspawns), MobCapLevels (/cdevperf).
     // An optional dependency: each reader checks ModList first.
     compileOnly project(':creativeWorldgen')
-    // patcherMod's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
+    // Creative Common's third-party compile jars (copies of mods/ jars): the IE API for ie/IeRecyclingDiagnostics.
     compileOnly fileTree(dir: '../creativeCommon/libs', include: '*.jar')
 }
 

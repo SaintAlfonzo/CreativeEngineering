@@ -8,7 +8,7 @@ Merged 2026-10-19 from 4 memories (index compaction).
 
 ## ie-refinery-lingerification
 
-Added 2026-09-07 (patcherMod [patchermod-coremod](patchermod-coremod.md)). The IE **Refinery** counterpart to the
+Added 2026-09-07 (Creative Common [patchermod-coremod](patchermod-coremod.md)). The IE **Refinery** counterpart to the
 Create-mixer fluid brew [am-potion-brewing-fix](am-potion-brewing-fix.md) / `DragonBreathBrewing`: for every registered
 potion, both `create:potion{REGULAR}` **and** `{SPLASH}` + `forge:fluid/dragon_breath` fluid
 -> `create:potion{LINGERING}`. Coexists with the Create-mixer path and the IE-Mixer item path
@@ -23,7 +23,7 @@ Mirrors IE's own `immersiveengineering:mixer_potion_list` mechanism:
   RefineryRecipe.SERIALIZER.getId(), IERecipeTypes.REFINERY))`.
   Called from `CreativeEngineering.commonSetup` via `event.enqueueWork(...)` (same slot as
   `DragonBreathBrewing::build`). One-shot static put, survives `/reload`.
-- Datapack file `patcherMod/.../data/creativeengineering/recipes/lingerification_list.json`
+- Datapack file `creativeCommon/.../data/creativeengineering/recipes/lingerification_list.json`
   = `{"type":"immersiveengineering:generated_list"}` (identical to IE's `mixer_potion_list.json`;
   `GeneratedListRecipe.from(id)` looks the id up in `LIST_GENERATORS`, `Preconditions.checkNotNull`).
 - `generate()` builds `List<RefineryRecipe>` — `new RefineryRecipe(rl, lingeringFluid, in0, in1,
@@ -86,7 +86,7 @@ Re-verify after a client restart (status: feature_writeup/potions.md).
 
 IE's JEI categories render `create:potion` fluid slots with only IE's generic name + amount. The
 pack routes lots of potion chemistry through `create:potion` NBT fluid ([ie-potion-machines](ie-potion-machines.md),
-[ie-potion-machines](ie-potion-machines.md), [am-potion-brewing-fix](am-potion-brewing-fix.md)), so patcherMod client mixins append
+[ie-potion-machines](ie-potion-machines.md), [am-potion-brewing-fix](am-potion-brewing-fix.md)), so Creative Common client mixins append
 the potion display name + per-effect duration/amplifier lines (Create-style,
 `PotionFluidHandler.addPotionTooltip`) to those slots.
 
@@ -123,16 +123,16 @@ name + effect line shown.
 
 ## ie-bottler-nbt-fluids
 
-Added 2026-09-06 (patcherMod [patchermod-coremod](patchermod-coremod.md)). Lets the IE Bottling Machine bottle
+Added 2026-09-06 (Creative Common [patchermod-coremod](patchermod-coremod.md)). Lets the IE Bottling Machine bottle
 `create:potion` fluid into potion / splash potion / lingering potion items.
 
 ## Architecture (after the 2026-09-06 rework)
 
-Started as a fancy patcherMod `dynamic_output` feature (5 mixins + `PotionFluidHandler.fillBottle`).
+Started as a fancy Creative Common `dynamic_output` feature (5 mixins + `PotionFluidHandler.fillBottle`).
 **That was ripped out** — a plain KubeJS loop generating one concrete recipe per potion is simpler,
 shows properly in JEI, and needs no per-recipe Java. What remains:
 
-### patcherMod — `mixin/FluidTagInputMixin` only (`@Mixin(FluidTagInput.class, remap=false)`)
+### Creative Common — `mixin/FluidTagInputMixin` only (`@Mixin(FluidTagInput.class, remap=false)`)
 `FluidTagInput` is IE's shared fluid-input predicate (Bottler + Mixer + Refinery). Two tweaks:
 1. **Subset NBT match** — `@Redirect` the single `CompoundTag.equals` in `testIgnoringAmount`
    -> `NbtUtils.compareNbt(recipeNbt, stackTag, true)`. So a recipe `nbt:{Bottle,Potion}` matches
@@ -141,7 +141,7 @@ shows properly in JEI, and needs no per-recipe Java. What remains:
 2. Fluid-by-id in `deserialize` (`"fluid":"<id>"` -> `Either.right(List.of(rl))`) — **dormant**,
    nothing uses it, and kjs-ie blocks `"fluid"` keys anyway (see below). Kept, harmless.
 
-Built into patcherMod 1.0.0. The old bottling mixins
+Built into Creative Common 1.0.0. The old bottling mixins
 (`MultiblockProcessBottlingMixin`, `BottlingMachineRecipe(Serializer)Mixin`,
 `BottlingMachineBlockEntityMixin`, `bottling/` package, the 3 `forceLoad`s) are **deleted**.
 
@@ -182,7 +182,7 @@ kubejs-immersive-engineering intercepts **every** `immersiveengineering:*` recip
 
 - `redstone_from_cinder_flour_potion` + `create:potion` bottle-filling: **working in-game** (user
   confirmed). Create *filling* with `create:potion` nbt also confirmed.
-- 2026-09-06 rework (remove IE potion bottling + generate per-potion + strip patcherMod dynamic
+- 2026-09-06 rework (remove IE potion bottling + generate per-potion + strip Creative Common dynamic
   code).
 
 ## IE Mixer -> create:potion  — DONE (see [am-potion-brewing-fix](am-potion-brewing-fix.md) "2026-09-07")
@@ -248,7 +248,7 @@ skips `minecraft:empty`), same as [ie-potion-machines](ie-potion-machines.md)'s 
   amount:250, nbt:'{Bottle:"LINGERING",Potion:<id>}'}, inputs:[{item:'minecraft:arrow',count:8}],
   results:[{item:'minecraft:tipped_arrow',count:8,nbt:'{Potion:<id>}'}]})` — exact hand-craft ratio
   8:250:8. kjs-ie `BottlingRecipeSchema` honors `count` on InputItem/OutputItem; fluid subset-NBT
-  match via patcherMod `FluidTagInputMixin`.
+  match via Creative Common `FluidTagInputMixin`.
 - **Create Spout / filling**: `R.createFilling(Item.of('minecraft:tipped_arrow', '{Potion:<id>}'),
   [Item.of('minecraft:arrow'), Fluid.of(f.create_potion, 31, '{Bottle:"LINGERING",Potion:<id>}')], e, 'tipped_arrow/<idBase>')`.
   Spout fills ONE item per op (`FillingBySpout.fillItem` shrinks stack by 1), so 250/8=31.25 is floored

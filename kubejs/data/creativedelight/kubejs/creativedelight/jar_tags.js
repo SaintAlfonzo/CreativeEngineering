@@ -1,7 +1,7 @@
 // requires: creativedelight
 // Supplementaries jars: what goes in one, and what may share one (feature_writeup/mixed_jars.md).
 //   #supplementaries:cookies                    a jar takes the item at all (the mods only tag their own few)
-//   #creativedelight:jar_family/<name>      items that may be mixed in one jar (patcherMod compat/JarMixing.java:
+//   #creativedelight:jar_family/<name>      items that may be mixed in one jar (Creative Common compat/JarMixing.java:
 //                                               an item joins a jar when one family holds it and everything inside)
 // Every family is nested into #supplementaries:cookies, so putting an item in a family is enough. An item that is
 // jarable but in no family (moredelight:toast, the Hyperexperience bottle) still fills a jar, on its own.

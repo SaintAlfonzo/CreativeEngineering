@@ -1,7 +1,7 @@
 # Creative Equipment
 
 Written 2026-11-04 (Creative Split wave 7, [creative_split.md](creative_split.md) 7.6 and 7.12; TODO `creativesplit/equipment #9`).
-Status: **carved 2026-11-04, built, installed 2026-11-04 19:17 (`mods/creativeequipment-1.0.0.jar`, with patcherMod 1.1.09 and Creative Magic); nothing booted; scratch SQ-CEQ queued.**
+Status: **carved 2026-11-04, built, installed 2026-11-04 19:17 (`mods/creativeequipment-1.0.0.jar`, with Creative Common 1.1.09 and Creative Magic); nothing booted; scratch SQ-CEQ queued.**
 
 Written for: the owner and agents working on the split. Own mod `creativeequipment` (development/creativeEquipment,
 `creativeequipment-1.0.0.jar`, side both): the pack's gear. Same behavior as before the carve; every registry id keeps
@@ -21,7 +21,7 @@ earlier ([creative_magic.md](creative_magic.md)).
 
 ## 1. What it holds
 
-- **Java** (`com.SaintAlfonzo.creativeequipment`, same subpackages as in patcherMod; 35 classes plus 3 new):
+- **Java** (`com.SaintAlfonzo.creativeequipment`, same subpackages as in Creative Common; 35 classes plus 3 new):
   - `shield/` (tier shields, all but `EffectTickContext`) with `shield/client/`; `stepstool/` with `stepstool/client/`
     (the `creativeequipment:stepstool` network channel, renamed 2026-11-07, plan_owner_ids.md); `backpackskin/` (7); `gear/` (air brake,
     elytra duplication and its serializer); `item/BottledAir`; `CEQTiers` (copper tool tier, registered in this
@@ -75,7 +75,7 @@ earlier ([creative_magic.md](creative_magic.md)).
 ## 3. Known effects of the move
 
 - Recipe ids of the moved recipe scripts change namespace (`creativeequipment:`); item, tag and config ids do not.
-- Event listener order shifts a little: Equipment's registrations run in its constructor, after patcherMod and Compat.
+- Event listener order shifts a little: Equipment's registrations run in its constructor, after Creative Common and Compat.
   The copper tier is sorted between stone and iron the same way.
 - Tooltip lines from the moved client rows are added after the pack's own lines for the same item.
 - `tools/shield_test/` (the javac harness for `ShieldConfig`) still uses the old package and needs a path update
@@ -107,7 +107,7 @@ creative_split.md 7.8): CQ-CEQ-01 shields, stepstool, backpack skin and air brak
   SQ-CBP-08b). Every script of the jar carries `// requires: creativeequipment`. Test SQ-SPFX-04, -05 (both PASS r1106spfx);
   echo tool, air brake and tier shield entity textures in the jar; backpack skin recipes skip without Sophisticated Backpacks.
 
-- 2026-11-04: carved (wave 7). patcherMod 1.1.09 loses 35 classes, 20 mixins, 9 config sections, the shield models and
+- 2026-11-04: carved (wave 7). Creative Common 1.1.09 loses 35 classes, 20 mixins, 9 config sections, the shield models and
   8 lang keys; Equipment takes `harvest.js` back from Creative Delight's tree. Installed 19:17 with Creative Magic and
   a clean-built Creative Delight jar (without `harvest.js`).
 - 2026-11-16: `BonemealCharmMixin` refunds only vanilla `minecraft:bone_meal` (the dragon hoe charm; `gear/tuning #15`, R7, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P4; brief [gear_tuning.md](briefs/gear_tuning.md)). Built and installed; no test by ruling.
@@ -121,18 +121,18 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/equipment/dragon_autorepair.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/equipment/dragon_autorepair.js)
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/equipment/archery.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/equipment/archery.js)
 - 2026-11-04: Creative Equipment (tool progression; owner, creative_split.md 7.6); moved from Creative Delight's creativeengineering/harvest.js on 2026-11-04 (it came from the pack's server_scripts/other/harvest.js on 2026-11-01), rows unchanged (kubejs/data/creativeequipment/kubejs/other/harvest.js)
-- 2026-11-04: creativeEquipment: Creative Equipment (mod id creativeequipment, feature_writeup/creative_equipment.md), carved out of patcherMod on 2026-11-04 (creative_split.md 7.6, wave 7) (development/creativeEquipment/build.gradle)
+- 2026-11-04: creativeEquipment: Creative Equipment (mod id creativeequipment, feature_writeup/creative_equipment.md), carved out of Creative Common on 2026-11-04 (creative_split.md 7.6, wave 7) (development/creativeEquipment/build.gradle)
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/tags/equipmenttags.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/tags/equipmenttags.js)
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/equipment/shield.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/equipment/shield.js)
-- 2026-11-04: Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear, carved out of patcherMod on 2026-11-04 (creative_split.md 7.6, wave 7) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CreativeEquipment.java)
-- 2026-11-04: The sections moved out of patcherMod's creativeengineering-common.toml on 2026-11-04 (creative_split.md 7.6, wave 7) with keys, comments, defaults and field names unchanged: {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]}, {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]}, {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]} (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java)
+- 2026-11-04: Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear, carved out of Creative Common on 2026-11-04 (creative_split.md 7.6, wave 7) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CreativeEquipment.java)
+- 2026-11-04: The sections moved out of Creative Common's creativeengineering-common.toml on 2026-11-04 (creative_split.md 7.6, wave 7) with keys, comments, defaults and field names unchanged: {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]}, {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]}, {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]} (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java)
 - 2026-11-04: Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative Common 2026-11-04) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CreativeEquipment.java)
 - 2026-11-04: Creative Equipment; moved from kubejs/startup_scripts/ on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/air_brake.js)
 - 2026-11-04: Creative Equipment: gear tooltips (stepstools, felsic, elytra, air brake, dragon gear); moved from kubejs/client_scripts/tooltips.js on 2026-11-04, rows unchanged (kubejs/assets/creativeequipment/kubejs/tooltips.js)
 - 2026-11-04: Creative Equipment; moved from kubejs/startup_scripts/items/end.js on 2026-11-04 (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/end_gear.js)
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/tags/curiostags.js)
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/equipment/camera_bag.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/equipment/camera_bag.js)
-- 2026-11-04: The mixins moved from patcherMod on 2026-11-04 unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/EquipmentMixinPlugin.java)
+- 2026-11-04: The mixins moved from Creative Common on 2026-11-04 unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/EquipmentMixinPlugin.java)
 - 2026-11-04: Creative Equipment; moved from kubejs/startup_scripts/ on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/stepstools.js)
 - 2026-11-04: Curios "Slot:" tooltip line (compat/CuriosSlotTooltip; moved from Creative Common's [tooltips] 2026-11-04) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java)
 - 2026-11-04: Creative Equipment: display names; moved from kubejs/client_scripts/namechanges.js on 2026-11-04 (kubejs/assets/creativeequipment/kubejs/names.js)
@@ -143,7 +143,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-04: Creative Equipment; moved from kubejs/server_scripts/equipment/bullets.js on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged (kubejs/data/creativeequipment/kubejs/equipment/bullets.js)
 - 2026-11-06: Creative Equipment (plan_cb_polish.md 1, 2026-11-06): JEED effect providers for the gear, moved from Creative Brewing's jeed_providers.js with the gear rows (kubejs/data/creativeequipment/kubejs/equipment/gear_jeed.js)
 - 2026-11-06: Taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1, 2026-11-06) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java)
-- 2026-11-06: [copper_poisoning] came from Creative Brewing's file (plan_cb_polish.md 1, 2026-11-06), before that patcherMod's (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CreativeEquipment.java)
+- 2026-11-06: [copper_poisoning] came from Creative Brewing's file (plan_cb_polish.md 1, 2026-11-06), before that Creative Common's (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CreativeEquipment.java)
 - 2026-11-06: Creative Common since 2026-11-06 (creativebrewing: before, creativeengineering: up to 2026-11-04) (development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java)
 - 2026-11-06: Creative Equipment; moved from Creative Engineering's kubejs_startup/creativeengineering/items/misc_items.js on 2026-11-06 (non-engineering content out of Engineering), id unchanged (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/archery_items.js)
 - 2026-11-06: Gear effect rows (plan_cb_polish.md 1, 2026-11-06): which armor set or tool grants which effect, with the jar that owns the gear (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/gear_effects.js)

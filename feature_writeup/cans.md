@@ -98,7 +98,7 @@ system is built ([food.md](food.md) 3.5).
 ## 3. What the pack changes
 
 See food.md 3.3 and 3.6 (Canned Goods recipes removed, empty-can recipes, servings) and can_parity.md (generation,
-removals, sprites). Code: patcherMod `food/CanServings`, `food/CanServingsTooltip`, `mixin/ItemStackCanServingsMixin`,
+removals, sprites). Code: Creative Common `food/CanServings`, `food/CanServingsTooltip`, `mixin/ItemStackCanServingsMixin`,
 `compat/KubeJSCanAction`; KubeJS `items/cans.js`, `cooking/canning.js`, `tags/cantags.js`, NCH's `cans` argument;
 `tools/gen_can_types.py`.
 

@@ -3,7 +3,7 @@
 // creativedelight:<type>/<suffix> (global.CD.recipes). The cake / pie / cookie tables stay whole here (they
 // span many mods); each row is one
 // global.CD.food family call, which also sweeps that output's other recipes.
-// Block, GUI and recipe type: patcherMod oven/ package. Design and tests: feature_writeup/oven.md.
+// Block, GUI and recipe type: Creative Common oven/ package. Design and tests: feature_writeup/oven.md.
 //
 // Baking overhaul (oven.md 2.6): every cake, pie and cookie recipe of every mod is removed (slice -> whole recipes
 // stay) and each family is rebuilt on one shared base, flavored by 2 of its fruit or flavor item:

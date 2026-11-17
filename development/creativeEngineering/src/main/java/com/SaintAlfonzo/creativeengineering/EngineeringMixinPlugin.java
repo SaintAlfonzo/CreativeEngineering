@@ -9,8 +9,8 @@ import java.util.Set;
 /**
  * Mixin config plugin for creativeengineering.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies only when its mod is loaded (each one targets
- * a class of that mod, or serves only that mod). The rest target vanilla and always apply, as they did in patcherMod.
- * The mixins moved from patcherMod (Creative Split wave 8) unchanged: same package, SRG names with remap
+ * a class of that mod, or serves only that mod). The rest target vanilla and always apply, as they did in Creative Common.
+ * The mixins moved from Creative Common (Creative Split wave 8) unchanged: same package, SRG names with remap
  * = false, creativeengineering$ member prefixes.
  */
 public class EngineeringMixinPlugin extends GatedMixinPlugin {

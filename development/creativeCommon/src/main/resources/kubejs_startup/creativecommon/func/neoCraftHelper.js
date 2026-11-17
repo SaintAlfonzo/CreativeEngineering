@@ -1,8 +1,8 @@
 // Creative Common: src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js (was
-// kubejs/startup_scripts/func/neoCraftHelper.js). Shipped in patcherMod's jar and loaded by its startup loader
+// kubejs/startup_scripts/func/neoCraftHelper.js). Shipped in Creative Common's jar and loaded by its startup loader
 // (compat/kubejs/JarStartupScripts) BEFORE the pack's startup_scripts folder, so the dicts (global.item, global.fluid)
 // do not exist yet when this file runs: read them inside functions only (at call time), never at top level. An edit
-// needs a patcherMod rebuild.
+// needs a Creative Common rebuild.
 
 console.log('Neo Craft Helper starting')
 
@@ -1550,7 +1550,7 @@ global.NCH = {
 		global.NCH.shapeless(output, [global.item.ie_hammer, input], e, idSuffix)
 	},
 
-	// Oven baking, creativedelight:baking (patcherMod oven/, feature_writeup/oven.md 2.2): the FD
+	// Oven baking, creativedelight:baking (Creative Common oven/, feature_writeup/oven.md 2.2): the FD
 	// cooking-pot JSON plus an optional `tool` (bakeware in the oven's tool slot, never used up).
 	// input: one oven slot each (an array entry = any of those). Give a repeated ingredient once with a count,
 	// Item.of(i.wheat, 3) or { id: '#tag', count: 3 } for a tag, and write the original recipe's full cost.
@@ -1897,7 +1897,7 @@ global.NCH = {
 
 	// Dreams n' Desires sanding fan (create_dd:sanding, catalyst #create_dd:fan_processing_catalysts/sanding). One input,
 	// up to 12 outputs, chances allowed. opts: { exclusive } (false): one weighted pick per item instead of an
-	// independent roll per output (patcherMod fan/ExclusiveResults; chances are slices of 1, any remainder gives nothing).
+	// independent roll per output (Creative Common fan/ExclusiveResults; chances are slices of 1, any remainder gives nothing).
 	//   R.ddSanding([Item.of(i.rose_quartz).withChance(0.8), Item.of(i.polished_rose_quartz).withChance(0.2)],
 	//       i.rose_quartz, e, 'rose_quartz', { exclusive: true })
 	ddSanding(output, input, e, idOverride, opts) {
@@ -1924,7 +1924,7 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:ddsanding/${idSuffix}`)
 	},
 
-	// Seasoning craft (patcherMod food/SeasoningRecipe): food + one of each seasoning's item, shapeless, gives the same
+	// Seasoning craft (Creative Common food/SeasoningRecipe): food + one of each seasoning's item, shapeless, gives the same
 	// food with those seasonings added as NBT. seasonings: a global.seasoning key or an array of them
 	// (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js, which holds each one's item, bonus and what it combines with). Ids
 	// shapeless/season/<keys>_on_<food>, so the Seasoning JEI page lists them.
@@ -1950,7 +1950,7 @@ global.NCH = {
 		}).id(`${global.NCH.ns()}:shapeless/season/${idSuffix}`)
 	},
 
-	// Backpack skins (patcherMod backpackskin/): smithing a block from the skin tag onto any Sophisticated Backpack
+	// Backpack skins (Creative Common backpackskin/): smithing a block from the skin tag onto any Sophisticated Backpack
 	// keeps the backpack's data and sets its skin; the clear recipe (backpack alone in the grid) removes it.
 	backpackSkin(skinTag, e, idOverride) {
 		if (!e) throw new Error('backpackSkin called without event object!')
@@ -1971,7 +1971,7 @@ global.NCH = {
 		e.custom({ type: 'creativeequipment:backpack_skin_clear' }).id(`${global.NCH.ns()}:backpackskin/${idSuffix}`)
 	},
 
-	// Lunchboxes (patcherMod lunchbox/): Spice of Life keeps a box's food in a capability, which vanilla
+	// Lunchboxes (Creative Common lunchbox/): Spice of Life keeps a box's food in a capability, which vanilla
 	// shaped and smithing results drop. These types copy the box's contents, name, dye and skin to the result.
 	//   R.lunchboxShaped(i.golden_lunchbox, [' A ', 'ABA', 'AAA'], { A: i.ingot_iron, B: i.lunchbox }, e)
 	lunchboxShaped(output, pattern, keys, e, idOverride) {
@@ -3041,7 +3041,7 @@ global.NCH = {
 	// the "stripped" result CANNOT be added here - kubejs-immersive-engineering's
 	// SawmillRecipeSchema serializes the `secondaries` array in a shape IE's own serializer
 	// rejects ("Missing stripping, expected to find a Boolean"). For those, write a datapack
-	// json (see development/patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/*.json
+	// json (see development/creativeCommon/src/main/resources/data/creativeengineering/recipes/sawmill/*.json
 	// or kubejs/data/creativeengineering/recipes/sawmill/<id>.json), which loads through IE
 	// directly and bypasses the broken schema.
 	ieSawmill(output, input, e, idOverride, opts) {

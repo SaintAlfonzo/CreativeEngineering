@@ -5,7 +5,7 @@
 - Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only.
 - Milestone: M8. Tests: ST-144 (order independence), ST-148 (shaping off), ST-157 second half (peaceful off), ST-145
   (placementPriority off, overlap count; the "about a third" estimate is a rate: skipped).
-- Server: same as M7 (session 5 scratchpad srv/, patcherMod 1.0.7 jar = 1.0.8 worldgen; 374 mods). The M7 scratch tag
+- Server: same as M7 (session 5 scratchpad srv/, Creative Common 1.0.7 jar = 1.0.8 worldgen; 374 mods). The M7 scratch tag
   patch is REVERTED (srv kubejs/server_scripts = instance copy): Phase 8 runs as shipped (pruning dead).
 - Toml = scratchpad toml_m7_base_107.toml (instance + density 4, earth/water fill log ALL, meta + priority logs on).
 - Areas: S1 = Chunky square r 400 at -1400 -2592 (inner main square of M7; villages, peaceful drops known).

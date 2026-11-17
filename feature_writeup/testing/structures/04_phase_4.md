@@ -5,7 +5,7 @@
 
 ## 1. Setup
 
-- Same scratch server as M2 and M3 (patcherMod `build/libs` 1.0.6 of 01:28, seed 8675309).
+- Same scratch server as M2 and M3 (Creative Common `build/libs` 1.0.6 of 01:28, seed 8675309).
 - Baseline toml for this phase = the instance defaults plus three log switches (earth fill `ALL`, meta structures,
   placement priority). Structure density went back to 1 (it was 4 in M2 and M3). Every switch was put back to this
   baseline after its test.

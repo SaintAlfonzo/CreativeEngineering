@@ -19,7 +19,7 @@
 @group A
 @commands `grep -E "\[creativecompat\]\|creativecompat.mixins.json" logs/latest.log`; `grep -c "from creativecompat.mixins.json" logs/debug.log`
 @pass Compat core line; no mixin apply error; the 27 common mixins apply on the server (minus any whose mod is absent)
-@fails Jar missing, a gate id wrong in `CompatMixinPlugin`, or patcherMod still listing a moved mixin (applied twice)
+@fails Jar missing, a gate id wrong in `CompatMixinPlugin`, or Creative Common still listing a moved mixin (applied twice)
 @from batches/r1101/cs2_boot2.qb
 bootexpect \[creativecompat\] loaded \(config/
 bootreject creativecompat\.mixins\.json.*(Error|error|failed)

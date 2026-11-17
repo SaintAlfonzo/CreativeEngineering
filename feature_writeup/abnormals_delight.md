@@ -141,7 +141,7 @@ As built: tag `#creativedelight:pickerelweed` (`i.t_pickerelweed`) in `upgrade_a
 `abnormals_delight/upgrade_aquatic.js`, ids `farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot`. New
 key `i.raw_pike` (`#forge:raw_fishes/pike`). The beetroot is `i.beetroot` (`#forge:crops/beetroot`). **Not kept: the
 recipe book tab.** `NCH.fdCooking` has no tab argument (no pack Cooking Pot recipe sets one), so both land on FD's default
-tab instead of drinks / meals; adding a tab option to the helper needs a patcherMod rebuild.
+tab instead of drinks / meals; adding a tab option to the helper needs a Creative Common rebuild.
 
 ### 3.4 Milk Bottles: 4 per bucket (BUILT 2026-10-25)
 

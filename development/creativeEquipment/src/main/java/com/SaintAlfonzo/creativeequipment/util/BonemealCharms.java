@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
  *
  * <p>Membership is the {@code #creativeequipment:bonemeal_charms} item tag, populated in
  * KubeJS ({@code kubejs/server_scripts/tags/equipmenttags.js}) so more items can opt in without
- * rebuilding patcherMod. The single source of truth for that tag key on the Java side lives
+ * rebuilding Creative Common. The single source of truth for that tag key on the Java side lives
  * here; {@code mixin.BonemealCharmMixin} reads it.
  *
  * @see com.SaintAlfonzo.creativeequipment.mixin.BonemealCharmMixin

@@ -9,7 +9,7 @@ test prefix `MT-`), [structure_tuning.md](../structure_tuning.md) 3.25 (deadwood
 
 | Step | Row | Work | Notes |
 |---|---|---|---|
-| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + patcherMod mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS. BUILT 2026-11-02: the mixin is in Creative Delight (`mixin/fruitsdelight/LemonTreePickYieldMixin`), the cutting recipes remade with 8 slices |
+| 1 | `trees #3` Lemon tree yield | CD KubeJS recipes + Creative Common mixin | The only open row. The pick count is hard-coded in Fruits Delight's Java, so the yield half is a mixin, not KubeJS. BUILT 2026-11-02: the mixin is in Creative Delight (`mixin/fruitsdelight/LemonTreePickYieldMixin`), the cutting recipes remade with 8 slices |
 | - | `trees #1` Leaf decay | Testing | Needs play, see below |
 | - | `trees #2` Acacia stumps and fallen logs | Testing | Needs play; the bush fix is an open decision |
 
@@ -18,7 +18,7 @@ Proposed tests are placeholders (`CR-new1`, ...), numbered when queued.
 ---
 
 ## trees #3: Lemon tree yield
-Status **Planned** · Work KubeJS (+ patcherMod, see Now) · id `farming/trees #3`
+Status **Planned** · Work KubeJS (+ Creative Common, see Now) · id `farming/trees #3`
 
 ### Goal
 Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slices.
@@ -41,7 +41,7 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
 - The compile jar `fruitsdelight-0.5.11.jar` is already in `development/creativeCommon/libs/`.
 
 ### Build
-1. **Pick count (patcherMod).** The TODO says KubeJS, but the count is in Java. Mixin on
+1. **Pick count (Creative Common).** The TODO says KubeJS, but the count is in Java. Mixin on
    `dev.xkmc.fruitsdelight.content.block.DoubleFruitBushBlock` (`remap = false`), `@Redirect` (or `@ModifyArg` on the
    `ItemStack` count) in `m_6227_`: for the lemon bush only (compare the block to `fruitsdelight:lemon_tree`), count =
    2 + `random.nextInt(4)`. Covers the empty hand, Quark's hoe area click and fake players alike. Register it in
@@ -79,7 +79,7 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
 
 | Row | Change | Status | Notes |
 |---|---|---|---|
-| trees #1 | Leaf life distance + decay timing + Fast Leaf Decay port | Testing (S+ P T) | Shipped 1.1.01 (patcherMod), [mob_block_tweaks.md](../mob_block_tweaks.md) 2.5; `[leaf_decay]` in `config/creativeengineering-common.toml` (line 2098 on); scratch server passed, decay piles PASSED 2026-10-22; MT-13 to MT-25 in game (MT-24 leaf piles) |
+| trees #1 | Leaf life distance + decay timing + Fast Leaf Decay port | Testing (S+ P T) | Shipped 1.1.01 (Creative Common), [mob_block_tweaks.md](../mob_block_tweaks.md) 2.5; `[leaf_decay]` in `config/creativeengineering-common.toml` (line 2098 on); scratch server passed, decay piles PASSED 2026-10-22; MT-13 to MT-25 in game (MT-24 leaf piles) |
 | trees #2 | Acacia stumps and fallen logs | Testing (S P T) | Shipped 1.1.03 (new chunks only), [structure_tuning.md](../structure_tuning.md) 3.25 (Geophilic stumps and fallen logs x2, six `meta/deadwood_<wood>` in `group/deadwood`); ST-228 to ST-231, SQ-DW-01 to -03 not run. Open: the sunk log is most likely Geophilic's bush (trunk height 0, `dirt_provider` = its log); fix = trunk height 1 + dirt provider dirt, acacia only or all woods (decision); confirm in game first |
 
 ### Open decision carried by trees #1 (not a build task yet)
@@ -90,8 +90,8 @@ Picking a ripe lemon bush gives 2 to 5 lemons, and cutting a lemon gives 8 slice
 
 ## Writeup corrections made
 
-- [mob_block_tweaks.md](../mob_block_tweaks.md) 0 (leaf decay row): "BUILT 2026-10-19 (patcherMod 1.0.9 rebuild, in
-  `mods/`, not deployed)" -> "(a patcherMod rebuild after the 1.0.9 deploy, now patcherMod 1.1.01 in `mods/`; not
+- [mob_block_tweaks.md](../mob_block_tweaks.md) 0 (leaf decay row): "BUILT 2026-10-19 (Creative Common 1.0.9 rebuild, in
+  `mods/`, not deployed)" -> "(a Creative Common rebuild after the 1.0.9 deploy, now Creative Common 1.1.01 in `mods/`; not
   deployed)" (2026-10-21; the TODO row now says shipped 1.1.01).
 - [mob_block_tweaks.md](../mob_block_tweaks.md) 0 Pending: "MT-01 to MT-23 untested" -> "MT-01 to MT-25 untested"
   (MT-24 / MT-25 exist in 7).

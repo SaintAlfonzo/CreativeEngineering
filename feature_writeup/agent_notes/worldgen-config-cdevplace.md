@@ -1,6 +1,6 @@
 # worldgen-config-cdevplace
 
-> CEConfig [worldgen] (per-system switches, debug structureDensity, solver constants, ground_match, mass_place) read via patcherMod WorldgenConfig; /cdevplace lays structures/templates out in rows for flat-world testing; status in feature_writeup/structure_tuning.md
+> CEConfig [worldgen] (per-system switches, debug structureDensity, solver constants, ground_match, mass_place) read via Creative Common WorldgenConfig; /cdevplace lays structures/templates out in rows for flat-world testing; status in feature_writeup/structure_tuning.md
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

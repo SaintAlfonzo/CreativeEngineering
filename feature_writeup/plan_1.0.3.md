@@ -15,7 +15,7 @@ into its own writeup (or an existing one), and this file keeps only the status l
 | PR | Server performance report script (logs + JFR + system snapshot in one folder/zip) | build | M | BUILT (scratch-tested, Linux), PF-09..12 pending on the real server | [perf.md](perf.md) 3.5 (`PF-09`+) |
 | RD | Large block changes render wrong on clients (pasted structures, phantom leaves) | investigate, then fix | M-L | INVESTIGATING (client side cleared statically, 3.5a) | new `fixes` entry (`RD-`) |
 | IM | Random item deletion in inventories: toggleable item monitor | build a diagnostic, then fix | M | REPRO DONE (4.7): SB backpack storage wipe found; monitor not built | new (`IM-`) |
-| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | DEPLOYED in 1.0.3 (patcherMod 1.0.3) | [trashslot.md](trashslot.md) (`TS-`) |
+| TS | Trash slot missing on most screens (player inventory, Sophisticated Backpacks) | investigate, then fix | S | DEPLOYED in 1.0.3 (Creative Common 1.0.3) | [trashslot.md](trashslot.md) (`TS-`) |
 | SP | Join protection 60 s -> 150 s | config | XS | DONE (config), SP-01 pending | this file (`SP-`) |
 
 **Suggested order:** SP, PR, IM, TS, DP, RD (section 7 has the reasons).
@@ -33,7 +33,7 @@ in-game test.
 | ID | Change | State | Writeup |
 |---|---|---|---|
 | EX | Exposure 1.9.19 backport (base + Polaroid + Expanded) replaces Exposure 1.6.0 | in `mods/`, EX-11/EX-17 passed, rest pending | [exposure.md](exposure.md) (`EX-`) |
-| CB | Camera bags (leather, iron, netherite) | DEPLOYED in 1.0.3 (patcherMod), boot-tested only; moved to Exposure Extras in 1.0.4 | none yet |
+| CB | Camera bags (leather, iron, netherite) | DEPLOYED in 1.0.3 (Creative Common), boot-tested only; moved to Exposure Extras in 1.0.4 | none yet |
 | VJ | Vinery JEI pages + Vinery behavior reference | in `mods/`, VJ-/VN- pending, barrel time bug open | [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md) |
 | CU | Culture storage blocks (7 meats) | scripts live, untested | none yet |
 | CN | Canning recipe changes: alternative additives, canned cookies and bread | scripts live, untested | [food.md](food.md) 3.6 (cans) |
@@ -41,7 +41,7 @@ in-game test.
 | FM | New food mods: Farmer's Respite, Corn Delight, More Delight | in `mods/`, blocks the deploy (no `mod_sides.md` rows) | none yet |
 | WG | Biome tuning re-solved on the new climate samples; village pool config regenerated | data live, new worlds only | [deploy.md](deploy.md), [structure_tuning.md](structure_tuning.md) |
 | CF | Small config changes (JEI sort order and bookmarks, timestamp-only rewrites) | live | none |
-| AM | Modded explorer-map trades (Lightman's Currency cashier, Cloud Storage balloon salesman) through Async Locator | in `mods/` (patcherMod 1.0.3), scratch-server tested | [deploy.md](deploy.md) runbook; this entry |
+| AM | Modded explorer-map trades (Lightman's Currency cashier, Cloud Storage balloon salesman) through Async Locator | in `mods/` (Creative Common 1.0.3), scratch-server tested | [deploy.md](deploy.md) runbook; this entry |
 | CC | Deploy config classes: `--config functional` leaves players' keybinds/HUD/minimap/JEI/video settings alone | built, 1.0.3 staged with it | [deploy.md](deploy.md) |
 | DV | Dev side: repo reorganisation, root Gradle build, new tools, dump commands, writeups | done, not shipped (except the dump commands) | see the entry |
 
@@ -60,10 +60,10 @@ camera stand, Exposure's lens/filter/film tags and the 10 instant slides: 64 ite
 stack's NBT, so a bag can be carried, dropped or upgraded without losing them. Leather bag: shaped recipe;
 iron and netherite: smithing upgrades that keep the contents. Slot counts are CEConfig `[camera_bag]`
 (5 / 9 / 14).
-- Where: patcherMod [camerabag/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/camerabag/),
+- Where: Creative Common [camerabag/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/camerabag/),
   [equipment/camera_bag.js](../kubejs/server_scripts/equipment/camera_bag.js) (recipes),
   [tags/equipmenttags.js](../kubejs/server_scripts/tags/equipmenttags.js) (tag), item_dict keys `i.*_camera_bag`.
-- State: in `mods/` (patcherMod 1.0.3, rebuilt 2026-10-02). A scratch server boot proved the items, config,
+- State: in `mods/` (Creative Common 1.0.3, rebuilt 2026-10-02). A scratch server boot proved the items, config,
   tag and recipes load. The GUI, slot locking, smithing, tooltip and overflow spill are untested. The iron
   and netherite textures are placeholders. Not committed to git yet.
 - Writeup: none yet; the camera-equipment tag belongs next to [exposure.md](exposure.md).
@@ -72,9 +72,9 @@ iron and netherite: smithing upgrades that keep the contents. Slot counts are CE
 Stomping and Wine Aging (Vinery 1.3.10 ships REI support only). Alongside it: a behavior reference for
 Vinery from the decompiled jar, a prefix form of `removeTooltipKey` (`'key.*'`) in
 [tooltips.js](../kubejs/client_scripts/tooltips.js), and commented-out Vinery tooltip placeholders.
-- Where: patcherMod [compat/vinery/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/),
+- Where: Creative Common [compat/vinery/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/),
   `tools/decompile_mod.py`.
-- State: in `mods/` with patcherMod 1.0.3; VJ-01..10 and VN-01..20 pending. Open bug: the barrel page shows
+- State: in `mods/` with Creative Common 1.0.3; VJ-01..10 and VN-01..20 pending. Open bug: the barrel page shows
   1800 ticks, but the barrel really takes about 50.
 - Writeup: [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md).
 
@@ -134,7 +134,7 @@ dev instance's copy yet (it appears on the next launch).
 
 **AM: Async map trades.** Lightman's Currency `ItemsForMapTrade` (cashier ocean/woodland maps) and Cloud Storage
 `SellingMap` (balloon salesman big balloon/sky temple maps) searched for structures on the server thread: a
-scratch server's `/dumptrades` froze 60 s and the watchdog killed it. patcherMod `LCItemsForMapTradeMixin` +
+scratch server's `/dumptrades` froze 60 s and the watchdog killed it. Creative Common `LCItemsForMapTradeMixin` +
 `CSSellingMapMixin` hand off to `compat/AsyncMapTrades`, which returns Async Locator's pending map, searches on
 its thread and fills the map in (LC: locked; CS: tinted). The search is decided one server task later and runs
 for any trader that has ever been in a world, because MCA builds a vanilla villager's offers, discards it and
@@ -145,7 +145,7 @@ pending, no lag warning; `/dumptrades` 5 s (was a watchdog kill).
 (none removed); `trashslot-common.toml` ships once more with 1.0.3.
 
 **DV: Dev side (not shipped).**
-- Reorganisation: patcherMod moved to `development/patcherMod/`, with a root Gradle build
+- Reorganisation: Creative Common moved to `development/creativeCommon/`, with a root Gradle build
   (`settings.gradle` + `build-logic` convention plugins, `installToMods`). Path mentions in scripts were
   updated.
 - New tools: `tools/decompile_mod.py`, `jei_coverage.py`, `missing_names.py`, `lang_index.py`,
@@ -242,7 +242,7 @@ the target at startup should not travel.
 
 | Data | Size | Read at runtime by | Plan |
 |---|---|---|---|
-| `kubejs/exported/worldgen/climate/*.json` | 3.0 MB | BiomeLayoutTuner (biome multipliers are skipped without it) | Java autodump: if the samples are missing or older than the pack version, BiomeLayoutTuner (patcherMod) runs the `/dumpclimate` sampling itself at server start, then tunes. First check whether the samples depend on the world seed: if they do, the server needs its own samples anyway and the dev copies are wrong for it. |
+| `kubejs/exported/worldgen/climate/*.json` | 3.0 MB | BiomeLayoutTuner (biome multipliers are skipped without it) | Java autodump: if the samples are missing or older than the pack version, BiomeLayoutTuner (Creative Common) runs the `/dumpclimate` sampling itself at server start, then tunes. First check whether the samples depend on the world seed: if they do, the server needs its own samples anyway and the dev copies are wrong for it. |
 | `kubejs/exported/worldgen/structuregen.json` | small | structure scripts | same treatment if it is read at runtime; otherwise dev-only |
 | `kubejs/exported/compost/compost.json`, `loot_runtime_additions.json` etc. | small | check each | review in 1.4; any runtime reader gets an "if missing, dump first" guard |
 | rest of `kubejs/exported/` (tags, recipes, loot tables, food, gear, items_by_mod) | about 35 MB | dev tools only | never shipped (already excluded); keep that way |
@@ -262,7 +262,7 @@ git-ignored, minus EXCLUDE"). Starting points found while planning:
   `structure_groups.json`, `pool_config.json` (1 MB), `biome_config.json`, `biome_merges.json`,
   `loot_container_swaps.json`, `food/food_types.json`, `food/can_servings.json`, and possibly
   `sawmill.js`. The `.md` reports, `biome_merge_proposals.json`, `*_suggestions.md`, `*_estimates.md` and
-  `recipes/` (868 KB) look dev-only. Confirm each by grep over patcherMod + kubejs scripts.
+  `recipes/` (868 KB) look dev-only. Confirm each by grep over Creative Common + kubejs scripts.
 - `assets/` (1.6 MB, textures and lang): client only. The server payload can skip it.
 - `client_scripts/`: client only.
 - `startup_scripts/todo/` (120 KB): check whether it's live code or parked notes.
@@ -331,7 +331,7 @@ script uses an allow-list, not a copy of folders.
 "Error occurred while handling event" lines, exception counts by type, "Can't keep up" lines with their
 timestamps placed on the JFR timeline, and the crash report heads.
 
-**Stretch (deferred option 3 from perf.md):** a patcherMod `/ceperf dump [window]` command that dumps the
+**Stretch (deferred option 3 from perf.md):** a Creative Common `/ceperf dump [window]` command that dumps the
 recording in-process through the `jdk.jfr` API (no jcmd, works on a JRE-only Windows server), and an
 optional auto-trigger when MSPT stays above a CEConfig threshold for N seconds, with a cooldown. The report
 script would then pick up the auto-dumped recordings too.
@@ -371,7 +371,7 @@ short time. The first job is to find out which of two layers is wrong, because t
 - **H1, render rebuild missed (client).** Rubidium 0.6.2c (unmaintained) loses section rebuilds under
   bursts of updates. The checkerboard fits: whole 16x16x16 sections not rebuilt. Test: F3+A. Fix candidates:
   replace Rubidium with Embeddium (its maintained successor, has 1.19.2 builds; check rubidium-extra and
-  Oculus compatibility), or a patcherMod client mixin that re-marks neighboring sections dirty after a
+  Oculus compatibility), or a Creative Common client mixin that re-marks neighboring sections dirty after a
   multi-block update packet.
 - **H2, updates never sent (server).** Something sets blocks without the "notify clients" flag: WorldEdit's
   fast/side-effect settings on Forge, TreeChop's leaf breaking, or FastLeafDecay's scheduled removal. The
@@ -384,7 +384,7 @@ short time. The first job is to find out which of two layers is wrong, because t
 - **H4, light only.** Large pastes without light updates give dark sections that look missing. Test: the
   screenshot and F3 light values.
 
-### 3.4 Tools to build for the investigation (patcherMod, useful afterwards too)
+### 3.4 Tools to build for the investigation (Creative Common, useful afterwards too)
 
 - `/ceresync [radius]` (server, op): resends the full chunk packets around the player. If it fixes the
   glitch, the client's data was wrong (H2/H3). It's also the immediate workaround instead of a relog, and
@@ -423,7 +423,7 @@ section changes (which can look like "broke instantly").
 **Decides the next step (3.2 still stands):**
 - Outline box / F3 "Targeted Block" shows leaves -> client data is wrong -> server side (H2/H3). Next: the
   `/cedesync` diagnostic and a server-side look at the chunk broadcast and DH 3.0.2.
-- No outline, crosshair passes through, F3+A clears it -> Rubidium (H1). Fix: Embeddium, or a patcherMod
+- No outline, crosshair passes through, F3+A clears it -> Rubidium (H1). Fix: Embeddium, or a Creative Common
   mixin that queues the rebuild instead of dropping it when `!isBuilt()`.
 
 ### 3.6 Tests (proposed)
@@ -563,7 +563,7 @@ each tick. Logs are in `tools/item_repro/runs/2026-09-30/`.
 - Ship `TrashSlotSaveState.default.json` (client payload) with the screens you want, enabled, at good
   positions. It only applies where no save state exists yet, so the README tells existing players to press
   `T` once, or the deploy removes their old file (your choice, section 8).
-- If positioning is the problem: register layouts from patcherMod's client side for BackpackScreen and any
+- If positioning is the problem: register layouts from Creative Common's client side for BackpackScreen and any
   other screens that move, snapping to the panel edge instead of a fixed offset.
 - If a real render bug turns up: a small client mixin.
 
@@ -615,9 +615,9 @@ Ruled out:
 give the backpack entry `anchorX = 1.0, anchorY = 1.0, slotX = -28, slotY = 0`. With those anchors the slot
 sits at the panel's bottom-right corner (render style `ATTACH_BOTTOM_RIGHT`) at every backpack size, with
 no code. The default file only applies when no save state exists, so existing players need either the
-file deleted in the update (plan question 7) or a small patcherMod client hook that merges the pack's
+file deleted in the update (plan question 7) or a small Creative Common client hook that merges the pack's
 entries into their save state once per pack version. Only if the anchors aren't enough: register a
-`TrashSlotAPI` layout for `BackpackScreen` from patcherMod.
+`TrashSlotAPI` layout for `BackpackScreen` from Creative Common.
 
 **IM link: cleared (2026-09-30).** The user reports items vanish while moving items with no trash slot
 visible or nearby. A hidden slot can't take clicks (`onMouseClick` needs it enabled) and the Delete keys

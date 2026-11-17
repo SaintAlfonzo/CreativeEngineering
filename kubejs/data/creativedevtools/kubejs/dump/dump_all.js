@@ -40,7 +40,7 @@
 		'dumptrades',
 		'dumpclimate',
 		'dumpclimatecaves',
-		'dumpworldjei',     // patcherMod (Java): world-interaction JEI facts (tools/gen_jei_world.py)
+		'dumpworldjei',     // Creative Common (Java): world-interaction JEI facts (tools/gen_jei_world.py)
 	]
 
 	// Skipped unless "/dumpall full": biome/spawn/structure/climate dumps (the climate ones are slow).

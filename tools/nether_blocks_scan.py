@@ -110,7 +110,7 @@ def load_swaps():
 
 def scan(swaps=None):
     """Rows for every Overworld structure holding Nether blocks. With swaps (load_swaps()), counts what the templates
-    hold after patcherMod TemplateBlockSwaps: swapped-out blocks drop, and a Nether block a swap puts in is counted
+    hold after Creative Common TemplateBlockSwaps: swapped-out blocks drop, and a Nether block a swap puts in is counted
     and also listed under 'swapped_in'."""
     pack = GSG.Pack()
     dims = GSG.read_json(GSG.BIOME_CONFIG)['dimensions']

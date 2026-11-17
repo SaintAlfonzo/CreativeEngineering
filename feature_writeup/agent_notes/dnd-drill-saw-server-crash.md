@@ -1,6 +1,6 @@
 # dnd-drill-saw-server-crash
 
-> Create: Dreams & Desires Excavation Drill / Deforester Saw crash dedicated servers (client-only sendToServer + CLIENT config read in common BreakEvent code); fixed by 2 patcherMod @Redirect mixins
+> Create: Dreams & Desires Excavation Drill / Deforester Saw crash dedicated servers (client-only sendToServer + CLIENT config read in common BreakEvent code); fixed by 2 Creative Common @Redirect mixins
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

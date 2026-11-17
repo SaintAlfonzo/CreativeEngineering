@@ -5,7 +5,7 @@
 // the base of every cookie, powdered sugar is ground sugar. Plain items, not food. Own textures (sources in
 // textureswapper/frosting.png, textureswapper/baking/dough/, textureswapper/powdered_sugar/). Recipes:
 // kubejs/data/creativedelight/kubejs/creativedelight/baking.js, kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js. The powdered sugar block and bucket are
-// patcherMod (food/PowderedSugarRegistry.java).
+// Creative Common (food/PowderedSugarRegistry.java).
 
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {

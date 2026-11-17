@@ -5,7 +5,7 @@
 //   does today: water (floats / sinks), fire and lava (survives / destroyed), and why.
 //   Per item: mod, block item, the block's Material (name, flammable, solid) and SoundType name, the item's
 //   own fire resistance, fuel burn time, edible, gear kind (tool tier / armor material), and the live
-//   ItemPhysic + patcherMod answers (ItemPhysicSplit tags and rules, ItemPhysic's three config lists,
+//   ItemPhysic + Creative Common answers (ItemPhysicSplit tags and rules, ItemPhysic's three config lists,
 //   Item#canBeHurtBy for fire and lava).
 //
 // tools/item_physics_audit.py reads it (with the tag dump) and writes feature_writeup/item_physics_audit.md.
@@ -107,7 +107,7 @@ function dumpPhysics() {
 			if (item instanceof $TieredItem) { var gt = guardThrowable(() => String(item.getTier())); if (gt.ok) row.tier = gt.value }
 			if (item instanceof $ArmorItem) { var ga = guardThrowable(() => String(item.getMaterial().getName())); if (ga.ok) row.armorMaterial = ga.value }
 
-			// what ItemPhysic + patcherMod decide for a dropped stack (mirrors ItemPhysicServerMixin.route)
+			// what ItemPhysic + Creative Common decide for a dropped stack (mirrors ItemPhysicServerMixin.route)
 			var now = {}
 			try { now.hurtByFire = !!item.canBeHurtBy($DamageSource.IN_FIRE) } catch (e) { now.hurtByFire = null }
 			try { now.hurtByLava = !!item.canBeHurtBy($DamageSource.LAVA) } catch (e) { now.hurtByLava = null }

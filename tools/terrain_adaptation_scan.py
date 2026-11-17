@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Terrain adaptation scan: which structures would look better with the soft beard and/or template trim
-(patcherMod worldgen/TerrainAdaptation + TemplateTrim, feature_writeup/structure_tuning.md 3.15).
+(Creative Common worldgen/TerrainAdaptation + TemplateTrim, feature_writeup/structure_tuning.md 3.15).
 
 For every structure in the pack (worldgen/structure JSON from the vanilla -extra jar, mods/*.jar and kubejs/data,
 last one wins like datapacks, plus the vanilla jigsaw structures registered in code) it follows the start pool and

@@ -227,7 +227,7 @@ move here when they get a family.
   - [Conventions](#conventions)
   - [Dictionaries](#dictionaries)
   - [Generators and Tests](#generators-and-tests)
-  - [patcherMod Cleanup](#patchermod-cleanup)
+  - [Creative Common Cleanup](#patchermod-cleanup)
   - [Texture Tooling](#texture-tooling)
   - [Process](#process)
 - [archive](#archive): every **Complete** row, by old family
@@ -782,7 +782,7 @@ for a change.
 
 | # | Decision | Status | Options (recommended first) | Blocks | Writeup |
 |---|---|---|---|---|---|
-| 12 | 1.3.10 reference tests (VN-, VJ-) | Open | A: retire them (the VB- suite covers the port); B: rewrite for the port. VJ- can no longer run: patcherMod's pages were deleted 2026-10-27 | alcohol/vineryport #8 | [vinery.md](../vinery.md), [vinery_jei.md](../vinery_jei.md) |
+| 12 | 1.3.10 reference tests (VN-, VJ-) | Open | A: retire them (the VB- suite covers the port); B: rewrite for the port. VJ- can no longer run: Creative Common's pages were deleted 2026-10-27 | alcohol/vineryport #8 | [vinery.md](../vinery.md), [vinery_jei.md](../vinery_jei.md) |
 | 13 | Brewin' / Vinery effects in the brewing stand | Open | Scratchpad "ensure potion effects brewable" excludes them; confirm they stay unbrewable | none | `potions/potions` |
 | 7 | Crate and bag merge | Partly decided: Vinery part 2026-10-19 (bags kept, crates removed: [alcohol.md](../alcohol.md) 10.10); other mods open, audited | [storage_audit.md](../storage_audit.md) 4: one block per contents, both ways via NCH; survivors suggested there. Then pick the texture and the surviving id per crop; Vinery is the biggest source | merges/materials #4 | scratchpad 2026-10-19, [alcohol_part_b.md](../alcohol_part_b.md) 7.12 |
 | 2 | Wine effect reshuffle (7.4): when to unpin | Pinned | A: after the VB- tests and the effects writeup refresh; B: now. When unpinned: two effects per wine, food-mod effects with vanilla / Vinery fallbacks, `tools/wine_effect_candidates.py` | alcohol/vineryport #3 | [alcohol_part_b.md](../alcohol_part_b.md) 7.4, VB-52 |
@@ -856,7 +856,7 @@ Karma example actions, moved verbatim from the scratchpad:
   attacking neutral mobs (slow linear, high cap: zombie pigmen, passive spiders, hitting or looking at endermen);
   stealing honey without a campfire (low exponential, low limit); refuelling a boat (slow linear, low limit); falling
   into the void (exponential, 5 min cooldown, high limit); looting another player's corpse (quick exponential, high
-  limit); killing a named mob (one large decrease per mob; owner 2026-10-30; hook in patcherMod `mobs.NamedMobs.onDeath`,
+  limit); killing a named mob (one large decrease per mob; owner 2026-10-30; hook in Creative Common `mobs.NamedMobs.onDeath`,
   `mobs/tweaks #6`).
 
 <?todo rows Karma?>
@@ -910,7 +910,7 @@ The Creative Delight jar and its members.
 The Creative Delight jar (`development/creativeDelight`) and everything that moves into it. Opened 2026-10-25 from
 [creative_delight.md](../creative_delight.md); rows were taken from `ports/creativedelightport` and `food/types-and-tuning #14`.
 Subfamilies are A to Z, which is also the work order: **framework** (loader, build, tests, dict, config, harness) first, then
-**members** (each Delight mod's rows and Java moving in), **qol** (QoL-1 to QoL-6 leaving patcherMod and the pack folder),
+**members** (each Delight mod's rows and Java moving in), **qol** (QoL-1 to QoL-6 leaving Creative Common and the pack folder),
 **swappers** (later). A member row needs framework #2 (install), #4 (dict) and #6 (move-diff harness) first; a QoL row needs framework #5 (config key) and, for
 Java, #8 (compartments). Owner rule: no ongoing backport or merge features beyond what these rows say.
 
@@ -942,7 +942,7 @@ Moving mod rows and code into the Creative Delight trees.
 
 # Creative Mods
 
-Creative Brewing, Creative Calendar and the patcherMod split.
+Creative Brewing, Creative Calendar and the Creative Common split.
 
 ## Creative Brewing
 
@@ -1014,9 +1014,9 @@ citations, README index, Immersive Paintings writeup, stale comments, ST-53 / ST
 
 <?todo rows Generators and Tests?>
 
-## patcherMod Cleanup
+## Creative Common Cleanup
 
-<?todo rows patcherMod Cleanup?>
+<?todo rows Creative Common Cleanup?>
 
 ## Texture Tooling
 

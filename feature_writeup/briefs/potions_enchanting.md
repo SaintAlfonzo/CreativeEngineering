@@ -17,7 +17,7 @@ What the pack has today (all verified against jars or the repo on 2026-10-21 unl
 | Villager trade edits | MoreJS 0.3.0, [trades.js](../../kubejs/server_scripts/economy/trades.js) | `MoreJSEvents.villagerTrades` (line 12); no librarian section; cleric sells Bottle o' Enchanting at master (line 94) |
 | Enchantment filters | [enchants.js](../../kubejs/server_scripts/magic/enchants.js) | MoreJS `filterEnchantedBookTrade` / `filterAvailableEnchantments` drop NEA Stockpile, Recovery, Cycle |
 | XP storage item | XP Tome 2.1.7 (`xpbook`), item `xpbook:xp_tome` | In the pack since the first commit (2026-09-28); not in item_dict; see #2 |
-| Liquid XP | CEI `create_enchantment_industry:experience` (`f.experience` / `f.xp`, fluid_dict.js:79-80), 1 mB = 1 XP point | patcherMod `XpHelperMixin`, `XPFluidManagerMixin`, `fluid/FluidBridge.java` |
+| Liquid XP | CEI `create_enchantment_industry:experience` (`f.experience` / `f.xp`, fluid_dict.js:79-80), 1 mB = 1 XP point | Creative Common `XpHelperMixin`, `XPFluidManagerMixin`, `fluid/FluidBridge.java` |
 | Extra enchanting power | Supplementaries 2.4.20, Botania, Quark, Blueprint, Create | see #4 |
 
 ## Scope and order
@@ -25,13 +25,13 @@ What the pack has today (all verified against jars or the repo on 2026-10-21 unl
 | Row | Status | Size |
 |---|---|---|
 | `potions/enchanting #1` Enchanted books out of villager trades | Planned | small: ~6 lines in `trades.js` plus the LC cashier (see Now), plus a decision on already-spawned librarians |
-| `potions/enchanting #3` Enchanting overhaul | Planned | medium: one patcherMod mixin + CEConfig section, Easy Magic config, tooltips, a dump command |
-| `potions/enchanting #4` Enchanting power item audit | Planned | medium: a power table (patcherMod mixin + CEConfig list), one tag fix, two Supplementaries config values |
+| `potions/enchanting #3` Enchanting overhaul | Planned | medium: one Creative Common mixin + CEConfig section, Easy Magic config, tooltips, a dump command |
+| `potions/enchanting #4` Enchanting power item audit | Planned | medium: a power table (Creative Common mixin + CEConfig list), one tag fix, two Supplementaries config values |
 | `potions/enchanting #2` XP tomes | Planned | medium-large: recipe, stack size, tooltip, config, fluid capability, book-pile power |
 
 Build order:
 1. **#1** first: independent, `/reload`-only, and it also closes the NEA-books-through-DVT hole (see #1 Now).
-2. **#3 + #4 together** in one patcherMod build: both are "how much power does a table see, and what does it buy".
+2. **#3 + #4 together** in one Creative Common build: both are "how much power does a table see, and what does it buy".
    Decide the top cost (#3 Decisions) before the power values (#4), because the values only mean something against
    the cap. Add `/dumpenchants` (#3 step 1) before deciding.
 3. **#2** last: its storage cap follows #3's top cost, and its "enchanting power by stored XP" is a #4 entry. The
@@ -58,7 +58,7 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
   whose `isTradeable()` (`m_6594_`) is true**. Its offer bypasses vanilla's `EnchantBookForEmeralds.getOffer`, which
   is where MoreJS's `filterEnchantedBookTrade` hooks in. Consequences:
   - `enchants.js`'s trade filter doesn't reach DVT librarians. NEA's three enchantment classes don't override
-    `isTradeable` (checked in `nock_enough_arrows-1.19.2-1.2.0.jar`), and patcherMod's
+    `isTradeable` (checked in `nock_enough_arrows-1.19.2-1.2.0.jar`), and Creative Common's
     `StockpileEnchantmentMixin` / `RecoveryEnchantmentMixin` / `CycleEnchantmentMixin` only override
     `isDiscoverable` (`m_6592_`), `canApplyAtEnchantingTable` and `isAllowedOnBooks`. **So DVT librarians can
     probably sell Stockpile, Recovery and Cycle books today** (unverified in game). Same for any other tradeable
@@ -78,7 +78,7 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
   and are out of this row's scope (see Decisions).
 
 ### Update 2026-11-01 (`loot/tables #10`)
-- The NEA hole is closed at the source, independently of this row: patcherMod's three NEA mixins now also override
+- The NEA hole is closed at the source, independently of this row: Creative Common's three NEA mixins now also override
   `isTradeable` (SRG `m_6594_`) to false, so DVT librarians and Lightman's Currency cashiers skip them. Built, not
   installed. This row (all books out of trades) is still Planned; nothing in `trades.js` was changed.
 - Not in this brief before: **Lightman's Currency cashiers** sell random books too (`lightmanscurrency:enchanted_book_for_coins`
@@ -149,7 +149,7 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
 ---
 
 ## enchanting #3: Enchanting overhaul
-Status **Planned** · Work: config / KubeJS (+ patcherMod) · id `potions/enchanting #3`
+Status **Planned** · Work: config / KubeJS (+ Creative Common) · id `potions/enchanting #3`
 
 ### Goal
 From the row: "Easy Magic's max-enchantment limit makes max-level enchants need a higher level (documented in
@@ -184,7 +184,7 @@ curve is chosen against the enchantments actually in the pack.
    (`/dumpgear` already exports it), which max levels are reachable at a given top cost (modified level
    `m = cost + 1 + rand(e/4+1) + rand(e/4+1)`, times 1 ± 0.15; level `l` qualifies when
    `minCost(l) <= m <= maxCost(l)`). A small table in the new writeup is enough.
-2. **patcherMod mixin `EnchantmentCostCapMixin`** on `net.minecraft.world.item.enchantment.EnchantmentHelper`,
+2. **Creative Common mixin `EnchantmentCostCapMixin`** on `net.minecraft.world.item.enchantment.EnchantmentHelper`,
    method `m_220287_` (`getEnchantmentCost(RandomSource, int, int, ItemStack)`), `remap = false` (the
    `SkullBlockEntityMixin` / `ArmorMaterialEnchantabilityMixin` idiom: SRG names, no refmap). `@ModifyConstant(
    constant = @Constant(intValue = 15))` on both clamp constants (`if (power > 15) power = 15`) returning
@@ -240,7 +240,7 @@ curve is chosen against the enchantments actually in the pack.
 ---
 
 ## enchanting #4: Enchanting power item audit
-Status **Planned** · Work: data / KubeJS (+ patcherMod) · id `potions/enchanting #4`
+Status **Planned** · Work: data / KubeJS (+ Creative Common) · id `potions/enchanting #4`
 
 ### Goal
 Decide and set an enchanting-power value for each candidate the row names (ender crystals, books and enchanted
@@ -274,7 +274,7 @@ The tooltips in [tooltips.js:411-412](../../kubejs/client_scripts/tooltips.js) a
 pile and pedestal values.
 
 ### Build
-1. **Power table mixin** (same patcherMod build as #3). Add `getEnchantPowerBonus(LevelReader, BlockPos)` to
+1. **Power table mixin** (same Creative Common build as #3). Add `getEnchantPowerBonus(LevelReader, BlockPos)` to
    `net.minecraft.world.level.block.state.BlockState` through a mixin class (`EnchantPowerOverrideMixin`, a plain
    added method with the Forge name, no remap): look the state's block up in a table built from
    `CEConfig.ENCHANTING.powerOverrides`; if found return that value, else return
@@ -339,7 +339,7 @@ pile and pedestal values.
 ---
 
 ## enchanting #2: XP tomes
-Status **Planned** · Work: KubeJS / patcherMod · id `potions/enchanting #2`
+Status **Planned** · Work: KubeJS / Creative Common · id `potions/enchanting #2`
 
 ### Goal
 From the row: new recipe; stack like books and enchanted books; enchanting power by stored XP; maybe a crafting
@@ -360,7 +360,7 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
     `max_xp = 1395` (30 levels from 0), `retrieval_percentage = 1.0`, `retrieve_until_next_level = false`,
     `retrieve_xp_orbs = false`, `store_until_previous_level = false`.
 - Not in item_dict, not in `stack_sizes.json`, no recipe edits, no tooltips in the pack.
-- Liquid XP is CEI's fluid at 1 mB per point (patcherMod `XpHelperMixin`, `XPFluidManagerMixin`); `FluidBridge`
+- Liquid XP is CEI's fluid at 1 mB per point (Creative Common `XpHelperMixin`, `XPFluidManagerMixin`); `FluidBridge`
   (`fluid/FluidBridge.java:14, 27`) has `LIQUID_XP_ID` and `getTargetFluidNow()`.
 - Create's spout fills any item with a `FLUID_HANDLER_ITEM` capability: `GenericItemFilling.canItemBeFilled` /
   `fillItem` (decompiled Create 0.5.1.i) split one item off the stack, fill it up to what the spout holds, and
@@ -381,7 +381,7 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
    - Base size: add `'xpbook:xp_tome'` to a new `MISC_16` list (or `BOTTLES_16`) in
      [tools/gen_stack_sizes.py](../../tools/gen_stack_sizes.py) (lists at lines 85-97), rerun, restart
      (`stack_sizes.js` applies it).
-   - Filled = 1: patcherMod mixin `XpTomeStackMixin` on `bl4ckscor3.mod.xptome.XPTomeItem` (`remap = false`) adding
+   - Filled = 1: Creative Common mixin `XpTomeStackMixin` on `bl4ckscor3.mod.xptome.XPTomeItem` (`remap = false`) adding
      Forge's `getMaxStackSize(ItemStack)` (an `IForgeItem` default that `XPTomeItem` doesn't override): return 1
      when `stack.getTag()` has `xp > 0`, else the item's base size. Without this mixin, two tomes with identical
      `xp` would also stack (harmless: the mod refuses to use a stack, so no dupe, but confusing).
@@ -395,7 +395,7 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
 5. **Cap:** ship `defaultconfigs/xptome-server.toml` with `max_xp` = points for #3's top cost from level 0
    (30 -> 1395, 40 -> 2920, 50 -> 5345). Existing worlds already have `serverconfig/xptome-server.toml` generated:
    edit the live server's copy too (deploy note).
-6. **Filling automation:** patcherMod `AttachCapabilitiesEvent<ItemStack>` for `xp_tome` providing an
+6. **Filling automation:** Creative Common `AttachCapabilitiesEvent<ItemStack>` for `xp_tome` providing an
    `IFluidHandlerItem` (one tank, capacity `Configuration.CONFIG.maxXP`, contents `FluidStack(FluidBridge
    target, xp)`, fill → `XPTomeItem.addXP`, drain → `removeXP`, only when the stack count is 1). Spouts fill partial
    tomes with liquid XP, the item drain empties them, CEI / Create pipes work as is. No recipe JSON. The static
@@ -403,14 +403,14 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
    Fluid.of(f.experience, 1395)], e, 'xp_tome_fill')`) only does empty → full and breaks when `max_xp` changes;
    recommend the capability.
 7. **Enchanting power by stored XP:** add `i.xp_tome` to `#supplementaries:placeable_books` (same tag call as #4
-   step 3) so book piles accept it, and a patcherMod mixin on
+   step 3) so book piles accept it, and a Creative Common mixin on
    `net.mehvahdjukaar.supplementaries.common.block.tiles.BookPileBlockTile.updateTileOnInventoryChanged`
    (`@Inject` at `TAIL`, `remap = false`, `@Shadow private float enchantPower`) that, for each tome in the pile's 4
    slots, subtracts the plain-book share the tag gave it (`book_power / 4`) and adds
    `tomePower * xp / max_xp` (`tomePower` a CEConfig value, recommend 1.0 per full tome). Placement itself:
    Supplementaries attaches its book-pile placement per item at startup (Quark tomes get
    `SimplePlacement(BOOK_PILE)` in `InteractEventOverrideHandler`); the tag alone may not make tomes placeable.
-   If it doesn't, register the same `SimplePlacement` for `xp_tome` from patcherMod (Moonlight's `IExtendedItem`).
+   If it doesn't, register the same `SimplePlacement` for `xp_tome` from Creative Common (Moonlight's `IExtendedItem`).
    Unverified; check in game first.
 8. **Ingredient use** (optional): full tomes only, as a `forge:partial_nbt` ingredient
    `{type: 'forge:partial_nbt', item: i.xp_tome, nbt: '{xp:1395}'}` (the form `engineering/dust.js:24` uses with

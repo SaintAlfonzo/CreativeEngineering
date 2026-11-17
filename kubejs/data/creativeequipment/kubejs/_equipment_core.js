@@ -8,5 +8,5 @@
 // Each script pack has its own scope: these scripts read only global.* (NCH, tags, item, fluid) at event time.
 ServerEvents.loaded(e => {
 	if (!global.CEQ) console.error('[creativeequipment] global.CEQ missing: the Equipment jar\'s startup scripts did not run ' +
-		'(patcherMod without the startup loader, or no creativeequipment jar in mods/)')
+		'(Creative Common without the startup loader, or no creativeequipment jar in mods/)')
 })

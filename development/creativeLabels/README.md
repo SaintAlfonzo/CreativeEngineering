@@ -37,7 +37,7 @@ build brief for the agents: [BRIEF.md](BRIEF.md).
 Art comes from the Sticky It! and Labels jars at runtime (both All Rights Reserved: nothing of theirs is in this
 jar; they are mandatory dependencies until phase 5 ships our own art).
 
-Pack side (instance root): `tools/build_deploy.py` IN_TREE_MODS, `mod_sides.md`, `instance.json`, patcherMod's
+Pack side (instance root): `tools/build_deploy.py` IN_TREE_MODS, `mod_sides.md`, `instance.json`, Creative Common's
 `[mod_names]` default, `Creative Common kubejs_startup/creativecommon/_lib/item_dict.js` (`i.cl_sticky_note`, `i.cl_label`, `i.cl_eraser`
 and the three donor keys), `removed_items.js` (donor items hidden in JEI), `neoCraftHelper.js`
 (`creativeLabelsSpecial`) and `kubejs/server_scripts/other/creative_labels.js` (donor recipes removed; note, eraser
@@ -55,7 +55,7 @@ Part of the root Gradle build:
     ./gradlew :creativeLabels:installToMods  # copy into ../../mods (not while the game runs)
 
 - `libs/` (git-ignored) holds compile-only copies of the JEI and Moonlight jars from `../../mods`; WTHIT comes from
-  `../patcherMod/libs`.
+  `../creativeCommon/libs`.
 - Mixins use Mojang names with a real refmap (`creativelabels.refmap.json`), like backportedVinery.
 - `mods.toml` asks for Moonlight `[1.19.2-2.3.0,)`: Moonlight's version string starts with the Minecraft version
   (`1.19.2-2.3.7`), so a bare `[2.3,)` never matches and FML refuses to load (found on the scratch server 2026-10-21).

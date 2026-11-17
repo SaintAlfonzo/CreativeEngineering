@@ -19,7 +19,7 @@ Baby mobs,baby_mobs.md,BM-,BUILT,creativeworldgen,"CQ-BM, SQ-BM","spawn egg on a
 Trash slot,trashslot.md,TS-,VERIFIED,creativecompat,CQ-TSL,"DEPLOYED with 1.0.3, TS-01 to TS-13 pending",,,
 Fridge sort item loss,testing/fridge_sort/plan.md,FS-,BUILT,creativecompat,,fix DEPLOYED with 1.0.7 (2026-10-18),,,
 Deploy pipeline,deploy.md,DP-,BUILT,tools,,"BUILT, used for the 1.0.3, 1.0.4, 1.0.6, 1.0.7, 1.0.8, 1.0.9, 1.1.01 to 1.1.06 and 1.2.00 deploys (server ...",,,
-Vinery JEI pages,vinery_jei.md,VJ-,reference,,,REMOVED 2026-10-27: patcherMod's 1.3.10 plugin deleted (pack_hygiene.md finding 6),reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
+Vinery JEI pages,vinery_jei.md,VJ-,reference,,,REMOVED 2026-10-27: Creative Common's 1.3.10 plugin deleted (pack_hygiene.md finding 6),reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Vinery,vinery.md,VN-,reference,,SQ-VN,"reference, in-game checks pending (VN-01 to VN-20)",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Food catalog,food_catalog.md,,reference,,,"reference, regenerate with `python3 tools/food_catalog.py` after `/dumpfood`",,,
 Food families,food_families.md,FF-,BUILT,"creativecommon, creativedelight","CQ-PCK, SQ-FF, SQ-FFB, SQ-FFH, SQ-PCK, SQ-RM","2026-11-02 night: pancake family (4.7) BUILT, CD jar installed 2026-11-02 23:16, not booted",,,
@@ -27,7 +27,7 @@ Can parity worksheet,can_parity.md,CP-,reference,,,worksheet written 2026-10-13,
 Placeable food,placeable_food.md,PL-,BUILT,creativedelight,,DEPLOYED with 1.0.6,,,
 Plantable items,plantable.md,PT-,BUILT,"creativecommon, kubejs","CQ-PT, SQ-PT","BUILT 2026-11-01, unreleased",,,
 Dyeing,dyeing.md,DY-,BUILT,,,audit written 2026-10-27,,,
-Furniture storage,furniture_storage.md,NS-,BUILT,creativecompat,"CQ-NS, SQ-NS","BUILT 2026-10-31 (patcherMod), installed, NS-01 to NS-05 pending",,,
+Furniture storage,furniture_storage.md,NS-,BUILT,creativecompat,"CQ-NS, SQ-NS","BUILT 2026-10-31 (Creative Common), installed, NS-01 to NS-05 pending",,,
 Placed treated sticks,treated_sticks.md,TSK-,BUILT,creativedelight,"CQ-TSK, SQ-TSK","BUILT 2026-10-31 (Creative Delight), installed, TSK-01 to TSK-05 pending",,,
 Gold panning,gold_panning.md,,planned,,,"idea only, not started",,,
 Mixed jars,mixed_jars.md,MJ-,BUILT,"creativecompat, creativedelight",SQ-JFP,DEPLOYED with 1.1.01 (2026-10-22),,,
@@ -110,13 +110,13 @@ Botany Pots,botany_pots.md,BP-,BUILT,creativecommon,,BUILT 2026-11-07 (script + 
 Wild flowers,flowers.md,FL-,BUILT,creativeworldgen,"CQ-FF, SQ-FCK",DEPLOYED with 1.0.6 (2026-10-14,,,
 Flowers by biome,flowers_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_wild_flowers.py`",,,
 Flower pots and planters,"flower_pots.md, flower_pots_matrix.md",POT-,BUILT,"creativecompat, creativebrewing, creativedevtools","CQ-POT, SQ-POT",audit 2026-10-27 (static),,,
-Weather: season types for Serene Seasons,weather.md,WE-,BUILT,creativecalendar,,DEPLOYED with 1.0.6 (patcherMod 1.0.5 + 1.0.6 code,,,
+Weather: season types for Serene Seasons,weather.md,WE-,BUILT,creativecalendar,,DEPLOYED with 1.0.6 (Creative Common 1.0.5 + 1.0.6 code,,,
 Weather by biome,weather_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_weather_table.py` after `/dumpbiomes` or `/dumpclimate`",,,
-Time system,time.md,TI-,BUILT,creativecalendar,"CQ-TD, SQ-PST, SQ-TD, SQ-TI","DEPLOYED with 1.0.8 (2026-10-19, patcherMod 1.0.8): master, push, sun seasons, pause when empty, GUI, ...",,,
+Time system,time.md,TI-,BUILT,creativecalendar,"CQ-TD, SQ-PST, SQ-TD, SQ-TI","DEPLOYED with 1.0.8 (2026-10-19, Creative Common 1.0.8): master, push, sun seasons, pause when empty, GUI, ...",,,
 Advancements switched off,advancements.md,AV-,BUILT,creativecommon,"CQ-AV, SQ-AV",DEPLOYED with 1.0.8 (2026-10-19,,,
 Player changelog,changelog.md,CL-,BUILT,creativecommon,CQ-CL,"DEPLOYED with 1.1.01 (2026-10-22), 1.1.02 to 1.1.04 notes shipped",,,
 Loading screen tips,"loading_tips.md, plan_creative_tips.md, plan_loading_tips_screens.md, loading_tips_audit.md",LTP-,BUILT,creativecommon,"CQ-LTP, SQ-QN",BUILT 2026-11-06 in creativecommon-1.1.0 (not installed),,,
-Toasts,toasts.md,TO-,BUILT,"creativecompat, exposure",,"DEPLOYED with 1.1.01 (patcherMod 1.1.01, 2026-10-22)",,,
+Toasts,toasts.md,TO-,BUILT,"creativecompat, exposure",,"DEPLOYED with 1.1.01 (Creative Common 1.1.01, 2026-10-22)",,,
 Creative Labels: sticky notes and labels as face paper,sticky_notes.md,SN-,BUILT,creativelabels,"CQ-LBS, SQ-LBS",DEPLOYED with 1.1.01,,,
 Names,names.md,NM-,BUILT,creativecommon,CQ-NM,audit DEPLOYED with 1.1.01 (436 fixes,,,
 JEI coverage gaps,jei_coverage.md,JC-,BUILT,"creativecompat, kubejs",,"part 1 (crafting) generated, regenerate with `python3 tools/jei_coverage.py` after `/dumpcraftingaudit`",,,
@@ -140,9 +140,9 @@ WTHIT lines,wthit_lines.md,WL-,BUILT,creativecompat,"CQ-WT, SQ-SG, SQ-WT","DD ic
 Nether portal ignition,nether_portal.md,NP-,BUILT,creativemagic,,"DEPLOYED, Flint and Terrasteel still marked temporary",,,
 Portals,immersive_portals.md,PRT-,BROKEN,"creativecompat, tempad","CQ-PG, CQ-PRT, CQ-TP, SQ-PRT, SQ-TP","2026-11-14: exit lift rebuilt for every portal (plan_bugfix_1114.md 4.1), Creative Compat installed, scratch ...",BROKEN,"2026-11-16: r1115 SQ-PG-01c FAIL, URGENT Bug gameplay/tnt-and-portal #38 open (client dies lighting a Flint and Terrasteel portal); keep until #38 closes",2026-11-16
 Mob and block tweaks,mob_block_tweaks.md,MT-,BUILT,"creativeworldgen, creativecompat, kubejs","CQ-MB, CQ-MT, SQ-MB, SQ-MT, SQ-NM, SQ-VG, SQ-VL","DEPLOYED (trough 1.0.4, bubble columns and Bushier Flowers 1.0.6), MT-01 to MT-12 pending",,,
-Vine shearing,vine_shearing.md,VS-,BUILT,creativecompat,SQ-VS,"BUILT 2026-10-31 (patcherMod 1.1.04, installed 2026-10-31)",,,
+Vine shearing,vine_shearing.md,VS-,BUILT,creativecompat,SQ-VS,"BUILT 2026-10-31 (Creative Common 1.1.04, installed 2026-10-31)",,,
 Immersive Paintings,immersive_paintings.md,PA-,BUILT,creativecompat,"CQ-PA, SQ-PA","DEPLOYED with 1.0.6 (475 paintings, scratch-server verified)",,,
-JEI ordering,jei_ordering.md,JO-,BUILT,creativecompat,CQ-JO,"steps 1 to 3 DEPLOYED with 1.0.7 (patcherMod sorter + mixins, KubeJS definition/tags, first small tree, ...",,,
+JEI ordering,jei_ordering.md,JO-,BUILT,creativecompat,CQ-JO,"steps 1 to 3 DEPLOYED with 1.0.7 (Creative Common sorter + mixins, KubeJS definition/tags, first small tree, ...",,,
 JEI craftable-first port map,jei_craftable_first_port.md,,reference,,,reference + implementation,reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Loot table islands,loot_islands.md,,reference,,,"analysis only, 2026-10-03",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Loot tuning system,loot_tiers.md,,planned,,,"design only, 2026-11-01, nothing built",,,

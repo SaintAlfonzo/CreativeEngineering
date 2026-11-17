@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Mixin config plugin for creativeworldgen.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies only when one of its mods is loaded (each one
- * targets a class of that mod). Every other mixin targets vanilla and always applies, as it did in patcherMod.
+ * targets a class of that mod). Every other mixin targets vanilla and always applies, as it did in Creative Common.
  */
 public class WorldgenMixinPlugin extends GatedMixinPlugin {
 

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 /**
  * Simple Hats 0.3.2 draws hats on the player only from the Curios slot whose identifier is "head" ({@code HatLayer}:
  * {@code "head".equals(stacksHandler.getIdentifier())} in the per-slot lambda). The pack's Face slot
- * (patcherMod compat/CuriosSlots) takes the Simple Hats masks and chalk stick, so a mask worn there was invisible.
+ * (Creative Common compat/CuriosSlots) takes the Simple Hats masks and chalk stick, so a mask worn there was invisible.
  * Here the same check also passes for "face", so a hat in Face is drawn the same way as one in Head (cosmetic stack and
  * render toggle included). feature_writeup/curios_slots.md, TODO gameplay/misc #20.
  * Pseudo: Simple Hats may be removed; the plugin also gates it on the mod.

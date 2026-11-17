@@ -794,7 +794,7 @@ RULES = {
                 P('Any egg (`#forge:eggs`) in egg recipes via `R.replaceInput`; turtle and parrot eggs open',
                   T('food/types-and-tuning #6'))]),
     'egg/dish': dict(
-        place=[R('Display Delight placed (patcherMod adds a placed block for each dish Display Delight has none for)',
+        place=[R('Display Delight placed (Creative Common adds a placed block for each dish Display Delight has none for)',
                  OWN, placed_on('placed'))],
         recipe=[R('Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms '
                   '(one more main ingredient)', RCK + ' heatless meal rule',

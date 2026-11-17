@@ -13,7 +13,7 @@ said it sets the approach for the remaining crop parity work. Pieces:
 - block tags `creativeengineering:crops/farmland_soils` (farmland, rich farmland, fertile soil) and
   `crops/farmland_crops` (tobacco), in blocktags.js "Crop parity" via global.tags + item_dict keys;
 - Quark `Harvestable Blocks` line `the_dirty_stuff:tobacco_seeds[blockstate=7]` (backed up per memory `configs-edited-backup`);
-- patcherMod `crops/CropParity` + mixins FarmBlockUnderCropsMixin (`m_53250_`), MulchBlockCropGrowthMixin
+- Creative Common `crops/CropParity` + mixins FarmBlockUnderCropsMixin (`m_53250_`), MulchBlockCropGrowthMixin
   (IW `m_213898_`), QuarkHoeHarvestMixin (`canHarvest`): generic, tag-driven. TobaccoPlacementMixin is
   per-crop (each hard-coded soil check needs its own mixin calling `CropParity.isFarmlandSoil`).
 - Rich Farmland's boost needed nothing (FD bone-meals any BonemealableBlock).
@@ -24,4 +24,4 @@ Status and open gaps (G1-G11): feature_writeup/crops.md and feature_writeup/todo
 §2.6 checklist; extend the tags/config, don't add per-crop special cases beyond a placement mixin.
 See memory `feature-writeup-pattern`, [patchermod-coremod](patchermod-coremod.md).
 
-2026-10-02: this ships as patcherMod **1.0.4** (pack 1.0.4), not 1.0.3; now in mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).
+2026-10-02: this ships as Creative Common **1.0.4** (pack 1.0.4), not 1.0.3; now in mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).

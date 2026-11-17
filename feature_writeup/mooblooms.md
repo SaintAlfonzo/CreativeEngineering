@@ -362,7 +362,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 | O10 | Several flowers per variant, each with its own drop chance | a weighted pool per variant, a drop chance per entry (4.4, 4.6) |
 | O11 | Remove the buttercup item entirely, including the Wandering Trader trade | 4.11 |
 | O12 | Remove the Sunny effect entirely (JEI/JEED, the buttercup and moobloom area effect, every source) | 4.11 |
-| O13 | All of it is its own mod, More Mooblooms: the mooblooms, shearing, feeding, spawning, everything is defined there, not in patcherMod or KubeJS | 4.2 |
+| O13 | All of it is its own mod, More Mooblooms: the mooblooms, shearing, feeding, spawning, everything is defined there, not in Creative Common or KubeJS | 4.2 |
 | O14 | If Buzzier Bees is installed, the mod makes the BB changes itself (BB's moobloom, buttercup, Sunny). Without BB it does none of that and still works on its own | content sets (4.2, 4.11) |
 | R1 | Final names, coats and flower mixes (the 11 coats) | 4.4 |
 | R2 | Every moobloom can breed with every other one. The child is random, except for custom combinations defined in data | 4.8 |
@@ -739,7 +739,7 @@ direct spawn like the witherbloom's, not a swap:
   every creature spawn attempt there picks it (the weight only matters if another creature is added).
 - a rule in `creativeengineering.json`: `minecraft:lush_caves` 100% azaleabloom (the direct-spawn variant).
 - azaleabloom's `spawns_in_dark_on: ["minecraft:moss_block"]` (mod data, 4.4): moss floors pass with no grass or
-  light. Other cave blocks only pass on the cow's rules (animal ground plus light; with patcherMod's
+  light. Other cave blocks only pass on the cow's rules (animal ground plus light; with Creative Common's
   `spawn_ground`, mob_spawns.md, that includes rooted dirt and lit moss).
 
 How common: creatures are tried every 400 ticks, in chunks near a player, at random heights, and only while the
@@ -851,7 +851,7 @@ would mean patching BB.
 
 | # | Question | Answer |
 |---|---|---|
-| D1 | patcherMod or its own mod? | its own mod, More Mooblooms (O13) |
+| D1 | Creative Common or its own mod? | its own mod, More Mooblooms (O13) |
 | D2, D42 | Display names | the name alone: "Sunbloom", "Rosebloom"; the eggs "<Name> Spawn Egg", and the moobloom variant's egg reads "Moobloom Spawn Egg", the same as the plain egg |
 | D3 | Tall flowers: which half? | the top half (`[half=upper]`), the bloom |
 | D4 | Azalea bushes at half scale? | yes, azaleabloom `scale` 0.5 |
@@ -1163,7 +1163,7 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   add-a-moobloom design (Option A variants recommended, Option B per-type entities), decisions D1-D4 open.
 - 2026-10-05: overhaul planned (section 4): O1-O8 from the user, 10 variants (9 textures in `kubejs/assets/`), architecture, data formats, spawn roll order, work steps P1-P8, decisions D1-D14, tests MB-20 to MB-45 reserved. Nothing built.
 - 2026-10-05 (later): plan extended with O9-O12: two-stage shearing (stays a moobloom, regrows after eating grass via `EatBlockGoal`/`ate()`), two flowers per variant in fixed slots of BB's flower layer with per-flower chance drops, buttercup item removal (worldgen, trader, recipes, tags, JEI), Sunny effect removal (aura, stew, JEED). The buttercup moobloom becomes a dandelion variant (D15). D8/D13 answered; D15-D21 added; MB-28 retired; MB-46 to MB-58 added.
-- 2026-10-05 (evening): moved the overhaul into its own mod, **More Mooblooms** (O13, O14): its own moobloom entity instead of mixins on BB's, data-driven variants synced to clients, content sets + built-in packs (Incubation Additions pattern), a Buzzier Bees set that converts BB's mooblooms and removes the buttercup and Sunny from outside, compat tag packs. Added BB's Abnormals License 1.0 (4.0) and its rules: nothing of BB's in our jar (own dandelion texture), no mixins into BB, no compile dependency. patcherMod/CEConfig/`copyTags` parts dropped. D1 answered; D14/D15/D21 revised; D22-D26 added; MB-59 to MB-66 added.
+- 2026-10-05 (evening): moved the overhaul into its own mod, **More Mooblooms** (O13, O14): its own moobloom entity instead of mixins on BB's, data-driven variants synced to clients, content sets + built-in packs (Incubation Additions pattern), a Buzzier Bees set that converts BB's mooblooms and removes the buttercup and Sunny from outside, compat tag packs. Added BB's Abnormals License 1.0 (4.0) and its rules: nothing of BB's in our jar (own dandelion texture), no mixins into BB, no compile dependency. creativeCommon/CEConfig/`copyTags` parts dropped. D1 answered; D14/D15/D21 revised; D22-D26 added; MB-59 to MB-66 added.
 - 2026-10-05 (night): answers applied: names "<Id> Moobloom" (D2); one pack rule, 100% random mooblooms in `#creativeengineering:moobloom/flower_variety` (D12); no mod spawn rules, `rareChance` default 0 (D24); D22/D23/D25 as suggested; granular BB switches with per-switch sub-packs (D26). Added 2.8 flower spawns per biome (scratch generator on the crop-table loaders + decompiled vanilla flower features) and the per-moobloom map in 4.4 (names, textures, egg colors, flowers, suggested secondaries, drops, where the flower grows). New D27-D29, MB-38 to MB-40 reworded, MB-67 added.
 - 2026-10-07: **built** (4.15). The user's answers in the 4.14 Notes column applied: bare shearing makes a cow again
   (D8), flowers are the breeding food (D6), BB mooblooms removed rather than converted (D25), corn renamed cornflower
@@ -1191,7 +1191,7 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   took all 10 non-wither variants, then, on the user's word, the 9 flower variants (azaleabloom out). Azaleablooms
   now spawn in lush caves instead: the mod (kept at 1.0.0) gives azaleabloom `spawns_in_dark_on` moss block; the pack adds the
   moobloom to lush caves (weight 10, groups of 1-3) with a 100% azaleabloom rule. About 10.4 mooblooms per 100
-  cows. MB-38/97 reworded, MB-98 added. Rebuilt jar installed in mods/ with patcherMod 1.0.5;
+  cows. MB-38/97 reworded, MB-98 added. Rebuilt jar installed in mods/ with Creative Common 1.0.5;
   not run in game, server not updated.
 - 2026-10-11: ships in pack 1.0.5 (staged, not deployed): `moreMooblooms-1.0.0.jar` (md5 9ced3342) with
   `config/moremooblooms-common.toml`, `kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json`, the two

@@ -7,9 +7,9 @@
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
-@@text patcherMod built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
+@@text Creative Common built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
 @@text `beardFootprint` (default off), `OceanGeodes` `floorPatch` (OFF / CUT / SWAP, default SWAP). Data: `kubejs/server_scripts/worldgen/terrain_adaptation.js`
-@@text (batch 4). Install the patcherMod jar and copy the toml (new keys `[worldgen.earth_fill] beardFootprint`,
+@@text (batch 4). Install the Creative Common jar and copy the toml (new keys `[worldgen.earth_fill] beardFootprint`,
 @@text `[worldgen.ocean_geodes] floorPatch`), full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.30.
 @@text
 @@table

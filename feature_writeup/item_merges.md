@@ -1,11 +1,11 @@
 # Item merges (total replacements)
 
 Status: BUILT 2026-10-22, scratch server PASSED 2026-10-22 (section 4.1), shipped 1.1.01, not tested in game. Cantaloupe (2.10) built 2026-10-28, scratch PASSED (SQ-CM), shipped 1.1.04 / 1.1.05. Food merges 2.13 to 2.15 (2026-11-01 / 2026-11-02): scratch PASSED r1102b, unreleased (deep scan 2026-11-02). KubeJS,
-plus patcherMod for 2.6 (fluid tooltips) and 2.7 (worldgen): a full restart is needed.
+plus Creative Common for 2.6 (fluid tooltips) and 2.7 (worldgen): a full restart is needed.
 Still in game: MG-01, MG-02, MG-04, MG-05, MG-07, MG-13 (2.1 to 2.5), MG-16, MG-17, MG-20 (JEI tooltips), the MG-21
 names, and the machine runs of MG-18 / MG-19. Coffee (2.8, built, scratch server PASSED 2026-10-22 for the recipe and effect parts: SQ-CO-01, SQ-CO-02, `tools/food_drinks_probe/food_drinks_probe.js` `/fdtest coffee`, after two fixes in 2.8); in game MG-23 (JEI), MG-24 (drinking), MG-25 (inventory swap, real player only), MG-26 (JEI), MG-27 (JEI), MG-28 (an old bush).
 
-Swap lists (section 6, TODO `creativedelight/swappers #2`, `#3`): CD merges moved into `swaps/merges_*.json` and the Java world half built 2026-11-02; patcherMod 1.1.08 installed 2026-11-02 23:20 and the CD jar 2026-11-02 23:16 (again 2026-11-03 00:08), not booted (SQ-SWP-01 to -08, queue section SQ-CDJ6).
+Swap lists (section 6, TODO `creativedelight/swappers #2`, `#3`): CD merges moved into `swaps/merges_*.json` and the Java world half built 2026-11-02; Creative Common 1.1.08 installed 2026-11-02 23:20 and the CD jar 2026-11-02 23:16 (again 2026-11-03 00:08), not booted (SQ-SWP-01 to -08, queue section SQ-CDJ6).
 
 One item is purged and the survivor takes over everything it did: recipes, tags, loot, and any copy that still
 reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges` (plans: section 5), plus `food/drinks #3`.
@@ -80,11 +80,11 @@ script. The recipe swap tool runs twice per recipe event (once per group); no pa
   chains with another (a survivor that is purged elsewhere).
 - `global.itemMergeRun.recipes` runs a group once per recipe event (keyed on the event's identity hash; a repeat logs
   `already ran`) and logs `[itemMerges] <group>: <n> merges, <m> recipes swapped`.
-- `NCH.replaceItems(pairs, e)` (patcherMod 1.1.03): one `forEachRecipe` pass over the data recipes with an
+- `NCH.replaceItems(pairs, e)` (Creative Common 1.1.03): one `forEachRecipe` pass over the data recipes with an
   or-filter of a single match for every purged id, then one walk of the added recipes prefiltered by the same match;
   a matched recipe gets every pair's `replaceInput` / `replaceOutput` in list order. Before: two KubeJS data scans and
   two Rhino walks of the added recipes per pair, and Creative Delight repeated the whole pass for every pair. No
-  fallback: the pack scripts and patcherMod ship together, so the run needs a patcherMod with `replaceItems`.
+  fallback: the pack scripts and Creative Common ship together, so the run needs a Creative Common with `replaceItems`.
 - Recipe ids that moved with the food work: the chocolate cake cutting recipe and Gambler's Tea are now
   `creativedelight:` ids (were `creativeengineering:`).
 
@@ -129,7 +129,7 @@ Mixing page and IE's Mixer page, not on Automatic Brewing or Automated Potion Mi
 
 Names and tooltips follow potions: all three items and fluids are "Apple Cider", as every tier of a potion shares
 its name; the tier shows in the effect line. Items already list their effect (FD `DrinkableItem`, effect tooltip on):
-"Absorption (1:00)", long "Absorption (1:30)", strong "Absorption II (0:30)". Fluids now do too: patcherMod
+"Absorption (1:00)", long "Absorption (1:30)", strong "Absorption II (0:30)". Fluids now do too: Creative Common
 `JeiFluidHelperTooltipMixin` + `compat/DrinkFluidEffects` put the same lines under the name of every JEI fluid
 tooltip (ingredient list and all categories). The fluid's effects are its item's, read from Create's emptying
 recipes on the client, so the teas and other drink fluids with an emptying recipe get them as well. A Create potion
@@ -143,7 +143,7 @@ Froststone (`namechanges.js`: Froststone, Froststone Slab / Stairs / Vertical Sl
 Froststone Brick Slab / Stairs / Vertical Slab / Wall; dict keys renamed `i.froststone*`).
 
 - Worldgen: Quark's frozen peaks cave style (y 105-140, `PermafrostModule`) now lays IW's permafrost on floors,
-  ceilings and the floor pillars; walls stay packed ice. patcherMod `QuarkPermafrostStyleMixin` swaps the style's
+  ceilings and the floor pillars; walls stay packed ice. Creative Common `QuarkPermafrostStyleMixin` swaps the style's
   floor / ceiling state at the first fill (Quark sets them while blocks register, before IW's block is sure to
   exist). Switch: `[worldgen.systems] permafrostMerge` (default true; off restores Quark's block). New chunks only.
   IW's own surface patches in icy biomes are unchanged. No structure in any jar uses Quark's block.
@@ -230,7 +230,7 @@ bricks and the 17 lamps stay.
   Vintage's salt dust colors; lamp side: the salt part recoloured, the wood base (2 rows) kept
   (`src/lamp/salt_lamp_side_{salt,wood}.png`). Sources copied to `textureswapper/salt/src/`. The new Salt Block
   texture also goes over Vintage's `block/salt.png` (`kubejs/assets/vintagedelight/`), so the Salt Layer matches it.
-- Seasoning JEI page icon: salt dust (patcherMod `SeasoningJEI`, falls back to The Salt's salt).
+- Seasoning JEI page icon: salt dust (Creative Common `SeasoningJEI`, falls back to The Salt's salt).
 - Block behavior (owner, 2026-10-26; Creative Delight `salt/SaltBlockTicks.java` + mixins `SaltBlockRandomTickMixin`,
   `SaltLayerRandomTickMixin`; the rock salt exemption was `SaltRockNoDissolveMixin`, since 2026-11-02 an edit in the
   Salt member's own `Dissolving`, [salt.md](salt.md)). All through The Salt's own `Melting` / `Dissolving`, so
@@ -240,7 +240,7 @@ bricks and the 17 lamps stay.
     bricks and mixed salt bricks (with stairs, slabs, walls), salt pillar, the 17 salt lamps. Their random ticks are
     switched on at common setup (`BlockBehaviour.isRandomlyTicking`, set by reflection).
   - Dissolve in water (35 %, not from below; a water source beside leaves water), never in rain (`SaltDissolvingInRain = false` in `salt-common.toml`, 2026-10-28): The Salt's Salt
-    Block, ores and Large Salt Lamp (The Salt's own), and the Salt Layer (patcherMod; the snow-layer melt by light is
+    Block, ores and Large Salt Lamp (The Salt's own), and the Salt Layer (Creative Common; the snow-layer melt by light is
     replaced). Not the bricks, smooth salt, pillar, Vintage lamps or the Evaporator.
   - The raw rock salt block never dissolves (the beach patch is built on it). It still melts and grows clusters.
   - Salt Blocks grow no salt layers and no clusters (only raw rock salt block is `#salt:salt_cluster_growables`).
@@ -517,7 +517,7 @@ loot. Engineer's Delight's two crusher flour recipes stay off (`create/recipes.j
 - Salt merge gaps (audit 2026-10-26):
   - Open, owner to decide: using salt on ice or snow, or dispensing it, no longer melts it. The Salt binds right-click
     melting (`SaltItem.useOn`) and the dispenser behavior to `salt:salt` itself, not the tag, so salt dust does
-    neither. The two world JEI rows that promised it are removed. Fix if wanted: a patcherMod use-on / dispenser hook
+    neither. The two world JEI rows that promised it are removed. Fix if wanted: a Creative Common use-on / dispenser hook
     for `#forge:salts`.
   - Open, minor: the Salt Layer has a block item ("Salt Layer", Vintage's creative tab). It drops salt dust
     (1 per layer), not itself.
@@ -606,7 +606,7 @@ to -07) calls each block's random tick itself and times a salt-brick tick agains
 
 ### 4.1 Scratch server results (2026-10-22)
 
-Probes `tools/item_merges_probe/merge_probe.js` (`/mgtest`, `/mgpf`) and `merge_core_probe.js` (`/mgcore`), patcherMod
+Probes `tools/item_merges_probe/merge_probe.js` (`/mgtest`, `/mgpf`) and `merge_core_probe.js` (`/mgcore`), Creative Common
 1.1.01 md5 37bb7049, KubeJS working tree of 2026-10-22. Every check passed:
 
 - Load: `[itemMerges] 5 merges`, no mixin apply error, no script error. The `[jeiRemove]` lines the scan printed for
@@ -729,7 +729,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
   Scratch r1031 (2026-10-31): mixins PASSED (SQ-MG-17); no chimpanzee in a jungle; the foraging drops are unproven
   (SQ-MG-18, -19: the checks logged nothing), client check pending with CQ-MG-20 / MG-46.
 
-## 6. Swap lists: merges from data, and the world half (TODO `creativedelight/swappers #2`, `#3`; built 2026-11-02; patcherMod 1.1.08 and the CD jar installed 2026-11-02 23:16 to 23:20, not booted; SQ-SWP-01 to -08, queue section SQ-CDJ6)
+## 6. Swap lists: merges from data, and the world half (TODO `creativedelight/swappers #2`, `#3`; built 2026-11-02; Creative Common 1.1.08 and the CD jar installed 2026-11-02 23:16 to 23:20, not booted; SQ-SWP-01 to -08, queue section SQ-CDJ6)
 
 Creative Delight's merges moved from startup scripts into its swap lists (the same files Common's `swap/SwapLists` reads
 for the registry remap, [creative_delight.md](creative_delight.md) 11), one place per item. The 38 pairs of 2.1 to 2.4
@@ -777,7 +777,7 @@ The KubeJS inventory swap of 1.1 still runs for both groups (it drops NBT; the J
 ### 6.1 Tests (SWP-)
 
 Offline (2026-11-02): `./gradlew :creativeCommon:build --offline` compiles; harness `MergeCoreTest` (scratchpad, plain
-javac/java on the patcherMod classes) 23 checks pass: top-level and nested rewrite, NBT and caps kept, entity ids
+javac/java on the Creative Common classes) 23 checks pass: top-level and nested rewrite, NBT and caps kept, entity ids
 untouched, int counts, split sums, fingerprint order-free. JSON: 38 pairs, no duplicates, no chains. Live rows
 SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/merges_*.json` hold 40 pairs after
 2.17 to 2.20; the counts in SWP-01 (43) predate them, so recount at the first boot (plan_creative_delight.md L).

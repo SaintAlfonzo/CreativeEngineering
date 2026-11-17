@@ -7,8 +7,8 @@ GR-30), [shields.md](../shields.md) (2.7 recipes, F5 banners, F8 Armor Trims smi
 (effects on this gear). Code: [end_gear.js](../../kubejs/server_scripts/equipment/end_gear.js),
 [tune_tools.js](../../kubejs/startup_scripts/func/tune_tools.js), [tune_armor.js](../../kubejs/startup_scripts/func/tune_armor.js),
 [equipmenttags.js](../../kubejs/server_scripts/tags/equipmenttags.js), [neoCraftHelper.js](../../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
-(in the patcherMod jar since 2026-10; `cfg` 725-758, `echoAssembly` 1507, `felsicAssembly` 1520, `dragonAssembly` 1531),
-patcherMod `CEConfig.java` (`Crafting` 376-438, `DragonGear` 226-240), `mixin/SequencedAssemblyRecipeMixin.java`,
+(in the Creative Common jar since 2026-10; `cfg` 725-758, `echoAssembly` 1507, `felsicAssembly` 1520, `dragonAssembly` 1531),
+Creative Common `CEConfig.java` (`Crafting` 376-438, `DragonGear` 226-240), `mixin/SequencedAssemblyRecipeMixin.java`,
 `gear/AirBrakeHandler.java`. New test ids are placeholders (`GR-newN`), numbered when queued; GR-31 to GR-42 below are
 this brief's own proposals from 2026-10-21 (not in the writeup or the queue yet).
 
@@ -21,15 +21,15 @@ brief does not depend on them.
 | Row | Status | Work | Group |
 |---|---|---|---|
 | #20 Dragon set gives 33 armor, not 36 | Bug | config (`dragonloot-common.toml`) | 0, any time |
-| #6 Felsic `potionMb` feeds both fills | Bug | patcherMod + KubeJS | 1 |
-| #15 Dragon hoe doesn't consume tree fertilizer | Bug | patcherMod mixin | 1 |
-| #4 Gear upgrades keep every NBT | Planned | patcherMod (+ NCH) | 1 |
-| #12 End gear recipes configurable | Planned | patcherMod + KubeJS | 1 |
-| #10 Fortune on shears | Planned (decided: allow) | patcherMod (+ moreMooblooms) | 1 |
-| #5 Untuned dragon bow, crossbow, trident, horse armor | Planned | KubeJS (+ patcherMod) | 2 |
+| #6 Felsic `potionMb` feeds both fills | Bug | Creative Common + KubeJS | 1 |
+| #15 Dragon hoe doesn't consume tree fertilizer | Bug | Creative Common mixin | 1 |
+| #4 Gear upgrades keep every NBT | Planned | Creative Common (+ NCH) | 1 |
+| #12 End gear recipes configurable | Planned | Creative Common + KubeJS | 1 |
+| #10 Fortune on shears | Planned (decided: allow) | Creative Common (+ moreMooblooms) | 1 |
+| #5 Untuned dragon bow, crossbow, trident, horse armor | Planned | KubeJS (+ Creative Common) | 2 |
 | #7 Small gear findings | Planned | KubeJS | 2 |
 | #17 Rebalance the end knife damage | Planned | KubeJS | 2 |
-| #14 Armor trims limited to standard armor | Planned | KubeJS tag + patcherMod | 3 (with #16) |
+| #14 Armor trims limited to standard armor | Planned | KubeJS tag + Creative Common | 3 (with #16) |
 | #16 Audit trimmable armors and trim render cost | Planned | client audit, then #14 | 3 |
 | #8 Hardened leather uses | Planned (decided 2026-10-30) | KubeJS | 3 (with #19) |
 | #19 Bound leather automated recipe | Planned | KubeJS | 3 |
@@ -65,7 +65,7 @@ brief does not depend on them.
 **Build groups and order:**
 
 0. **Config, any time:** #20 (two toml values and the `configs_edited` copy; restart).
-1. **patcherMod batch (one jar build):** #6 + #12 together (both reshape `CEConfig.Crafting`; do #6's split as part
+1. **Creative Common batch (one jar build):** #6 + #12 together (both reshape `CEConfig.Crafting`; do #6's split as part
    of the new piece classes), #4 (carry list, one array), #15 (tree fertilizer refund mixin), #10 (Fortune on shears),
    #7 F8 (`hurtMarked`) if GR-24 shows stutter, #5's enchantability bridge if wanted. Regenerate the `[crafting]` block
    of `config/creativeengineering-common.toml` in the same change.
@@ -83,7 +83,7 @@ Trims list cache) and `gear/tuning #18`; #17 pairs with `jei/jei-ordering #8` (k
 ---
 
 ## tuning #6: Felsic `potionMb` feeds both fills
-Status **BUILT 2026-11-01** (patcherMod built, not installed; steps 1-4 below done, toml in `config/` and `configs_edited/`; test GR-31) · Work: patcherMod / config · id `gear/tuning #6`
+Status **BUILT 2026-11-01** (Creative Common built, not installed; steps 1-4 below done, toml in `config/` and `configs_edited/`; test GR-31) · Work: Creative Common / config · id `gear/tuning #6`
 
 ### Goal
 The config says what it does: either the toml comment is right, or the Long Reach fill and the final fill have
@@ -134,7 +134,7 @@ Java field names are what `R.cfg` reads (`mb`, `reachMb`), toml keys are labels 
 ---
 
 ## tuning #4: Gear upgrades keep every NBT
-Status **Planned** · Work: patcherMod · id `gear/tuning #4` (checked 2026-10-31: carry list unchanged)
+Status **Planned** · Work: Creative Common · id `gear/tuning #4` (checked 2026-10-31: carry list unchanged)
 
 ### Goal
 Every upgrade path keeps the piece's identity: enchantments, name, repair cost, Unbreakable, attribute modifiers,
@@ -158,7 +158,7 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
   `quark:RuneColor` (ItemStack compound), shield banner `BlockEntityTag`.
 
 ### Build
-1. patcherMod `SequencedAssemblyRecipeMixin` line 40-42: add `"trim"`, `"quark:RuneAttached"`, `"quark:RuneColor"`,
+1. Creative Common `SequencedAssemblyRecipeMixin` line 40-42: add `"trim"`, `"quark:RuneAttached"`, `"quark:RuneColor"`,
    `"BlockEntityTag"`, and `"Damage"` if D1 says carry. One array edit. Update the class javadoc.
 2. Crafting-grid upgrades: give `NCH.shaped` (NCH line 798) an option to copy NBT from one ingredient. KubeJS 1902.6 has
    `recipe.modifyResult((grid, result) => ...)` with `grid.find(Ingredient)` (verified in the jar):
@@ -172,7 +172,7 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
    ```
    Then re-add the Iron Fishing Rods shaped recipes through it (with #13) and the PNC compressed iron armor (with #9).
 3. PneumaticCraft pressurizable armor: `modifyResult` doesn't exist for the custom type. Either replace the four
-   recipes with a pressure chamber recipe (#9 decides), or add a patcherMod mixin at `RETURN` of
+   recipes with a pressure chamber recipe (#9 decides), or add a Creative Common mixin at `RETURN` of
    `me.desht.pneumaticcraft.api.crafting.ShapedPressurizableRecipe#m_5874_` (`assemble`, SRG name, so `remap` true or
    target `m_5874_` with `remap = false`) that copies the gear keys from the `A` ingredient.
 4. Update gear_tuning.md 2.7 and F5, shields.md F5.
@@ -226,12 +226,12 @@ armor is assembled from **diamond** horse armor (end_gear.js 131), skipping neth
 1. [tune_tools.js](../../kubejs/startup_scripts/func/tune_tools.js) 137-143 (replace the comment block):
    `tune(i.dragon_bow, { rarity: 'epic' })`, same for crossbow, trident (`damage`, `attackSpeed` only if D2), and
    `tune(i.dragon_horse_armor, { rarity: 'epic' })`. Durability is already 3350, equal to the dragon tools.
-2. Enchantability 25 for the three (optional, D1): patcherMod mixin `@Inject(method = "m_6473_", at = HEAD,
+2. Enchantability 25 for the three (optional, D1): Creative Common mixin `@Inject(method = "m_6473_", at = HEAD,
    cancellable = true)` on `BowItem`, `CrossbowItem`, `TridentItem` reading a new `CEConfig [item_enchantability]
    overrides` list (`"dragonloot:dragon_bow:25"`), same shape as `ArmorEnchant` (CEConfig.java 533+) and its
    `ArmorEnchantabilityBridge`. Also fixes the Iron Fishing Rods if wanted (they override it themselves, so their
    classes would need the same, see #13).
-3. Horse armor protection, if D3 changes it: patcherMod mixin on `HorseArmorItem#m_41368_` (`getProtection`) keyed
+3. Horse armor protection, if D3 changes it: Creative Common mixin on `HorseArmorItem#m_41368_` (`getProtection`) keyed
    by item id from the same kind of config list. `tuneArmor` can't reach it (not an `ArmorItem`).
 4. Dragon horse armor base: switch end_gear.js line 131 (still `i.diamond_horse_armor`, 2026-10-31) to
    `i.netherite_horse_armor` (D4). The dragon horse armor has no durability: its autorepair branch was dropped
@@ -406,7 +406,7 @@ Pneumatic armor is made through PneumaticCraft machines, not a plain grid, and k
 ---
 
 ## tuning #10: Fortune on shears
-Status **Planned** (decided 2026-10-29: allow Fortune on shears) · Work: KubeJS / patcherMod · id `gear/tuning #10`
+Status **Planned** (decided 2026-10-29: allow Fortune on shears) · Work: KubeJS / Creative Common · id `gear/tuning #10`
 
 ### Goal
 Shears take Fortune at the table and the anvil, and the level does something.
@@ -421,10 +421,10 @@ Shears take Fortune at the table and the anvil, and the level does something.
   (development/moreMooblooms/.../entity/Moobloom.java 426-429) also ignores it; it's the one place the pack could use
   the number for free.
 
-- Nothing built (no `ShearsItem` mixin in patcherMod, checked 2026-10-31).
+- Nothing built (no `ShearsItem` mixin in Creative Common, checked 2026-10-31).
 
 ### Build
-1. patcherMod mixin on `Enchantment#m_6081_` (`canEnchant(ItemStack)`): return true for `Enchantments.BLOCK_FORTUNE`
+1. Creative Common mixin on `Enchantment#m_6081_` (`canEnchant(ItemStack)`): return true for `Enchantments.BLOCK_FORTUNE`
    and `stack.getItem() instanceof ShearsItem`. Table: Forge's `canApplyAtEnchantingTable` default calls the
    category check, so also `@Inject` into `ShearsItem` for `canApplyAtEnchantingTable` (IForgeItem default method;
    add the override via mixin).
@@ -465,7 +465,7 @@ Diving helmet, backtank and boots for the echo, felsic and dragon tiers, made by
 - KubeJS can't make these (no backtank builder; needs a block, block entity and renderer).
 
 ### Build
-1. patcherMod (or a new small mod, `development/`): register per tier T in {echo, felsic, dragon}:
+1. Creative Common (or a new small mod, `development/`): register per tier T in {echo, felsic, dragon}:
    `T_diving_helmet` (`DivingHelmetItem`), `T_backtank` (`BacktankItem`) + `T_backtank_placeable`
    (`BacktankItem.BacktankBlockItem`) + block (`BacktankBlock` subclass returning own BE type, as `CGBacktankBlock`),
    `T_diving_boots` (`DivingBootsItem`); one `BlockEntityType<BacktankBlockEntity>` with the three blocks; client:
@@ -577,7 +577,7 @@ durability and enchantability, the dragon rod with its own bonus.
    hard-coded in each rod class's `getEnchantmentValue`, so it needs #5's `[item_enchantability]` mixin (target
    `FishingRodItem#m_6473_` plus the four Iron Fishing Rods classes, which override it). Proposed: iron 270 / 10,
    gold 400 / 22, diamond 1693 / 12, netherite 2139 / 15 fireproof, dragon 3350 / 25.
-4. Dragon rod (patcherMod): `class DragonFishingRodItem extends FishingRodItem`, durability 3350, fireproof, epic,
+4. Dragon rod (Creative Common): `class DragonFishingRodItem extends FishingRodItem`, durability 3350, fireproof, epic,
    repair dragon scale; item model with the `cast` predicate (copy vanilla `fishing_rod.json` / `fishing_rod_cast`);
    recipe `dragonAssembly` from the netherite rod (one `transition_items.js` row, config via #12). Add it to
    `#creativeengineering:dragon_gear` (autorepair).
@@ -706,7 +706,7 @@ meal.
 ---
 
 ## tuning #14: Armor trims limited to standard armor
-Status **Planned** · Work: KubeJS / patcherMod · id `gear/tuning #14` · Do after #16 (the audit names the list)
+Status **Planned** · Work: KubeJS / Creative Common · id `gear/tuning #14` · Do after #16 (the audit names the list)
 
 ### Goal
 Only standard armor (the pieces that render on the vanilla armor model) can be trimmed; and check how trims look on
@@ -721,14 +721,14 @@ what is left.
   item ids only (no tags; `ArmortrimsApi.getItem(ResourceLocation)`), read by `Config.jeiTrimBlacklist()` and used by
   `SmithingMenuNew` and the JEI recipe maker; active because `Armortrims.isModpack()` is "more than 15 mods". It does
   not shrink `LargeItemLists.getAllTrimmable`, which the item decorator and the untrimming recipe also read.
-- patcherMod already wraps that list: `mixin/ArmorTrimsLargeItemListsMixin` + `compat/ArmorTrimsItemCache` (108 lines;
+- Creative Common already wraps that list: `mixin/ArmorTrimsLargeItemListsMixin` + `compat/ArmorTrimsItemCache` (108 lines;
   `putTrimmable` line 65, rebuilt on `TagsUpdatedEvent`), perf.md 10.3.
 - Materials already cut to 8 (`gear/tuning #18`, Testing).
 
 ### Build
 1. Tag through `global.tags` in equipmenttags.js: `creativeengineering:trimmable_armor`, built from whole sets (dict
    keys), per the #16 list.
-2. patcherMod `ArmorTrimsItemCache.putTrimmable`: when the tag is non-empty, keep only items in it (one filter before
+2. Creative Common `ArmorTrimsItemCache.putTrimmable`: when the tag is non-empty, keep only items in it (one filter before
    caching). That narrows the smithing table, JEI pages, the decorator and untrimming in one place, follows `/reload`,
    and needs no generated id list.
 3. Fallback with no Java: write the excluded ids into `"Untrimmable Items"` (generated by a small tool from
@@ -755,7 +755,7 @@ what is left.
 ---
 
 ## tuning #16: Audit trimmable armors and their trim render cost
-Status **Planned** · Work: patcherMod / KubeJS · id `gear/tuning #16` · Feeds #14
+Status **Planned** · Work: Creative Common / KubeJS · id `gear/tuning #16` · Feeds #14
 
 ### Goal
 A list of every trimmable armor with "renders right / wrong / invisible", and a measurement of what trims cost in
@@ -868,7 +868,7 @@ by hand.
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| `gear/tuning #2` | Dragon set over the 30 armor cap | Testing | `ArmorCapMixin`, `[dragon_gear] armorCap` 50, built 2026-10-30 (patcherMod 1.1.04); [gear_tuning.md](../gear_tuning.md) F13. Scratch r1031: SQ-AC-01, -03 PASS, SQ-AC-02 FAIL (33, not 36: `gear/tuning #20`). Open: SQ-AC-04 / GR-02 in a client (C P) |
+| `gear/tuning #2` | Dragon set over the 30 armor cap | Testing | `ArmorCapMixin`, `[dragon_gear] armorCap` 50, built 2026-10-30 (Creative Common 1.1.04); [gear_tuning.md](../gear_tuning.md) F13. Scratch r1031: SQ-AC-01, -03 PASS, SQ-AC-02 FAIL (33, not 36: `gear/tuning #20`). Open: SQ-AC-04 / GR-02 in a client (C P) |
 | `gear/tuning #3` | Mining level 5 probably does nothing | Testing | Every dragon tool `miningLevel: 4` (tune_tools.js 125-129), 2026-10-30; [gear_tuning.md](../gear_tuning.md) F4. Open: GR-05 (echo pickaxe on a `#forge:needs_netherite_tool` block) (S P) |
 | `gear/tuning #18` | Armor trims limited to eight materials | Testing | `config/armor_trims.toml` materials: copper, iron, gold, diamond, netherite, echo ingot, felsic ingot, dragon scale (checked 2026-10-31); deployed 1.1.04. Built 2026-10-29; fold into a new gear_tuning.md Armor Trims section (with #14 / #16). Open: smithing table and JEI trim pages in a client (C P) |
 | tuning #1 | Gear tuning ladder | Complete | GR-01 to GR-30 never run. gear_tuning.md's "Pending" line said F1 to F13 open; F1, F3, F7, F12 are fixed (corrected). 2.7 / F5 named the Armor Trims tag `Trim`; it is `trim` (corrected). |

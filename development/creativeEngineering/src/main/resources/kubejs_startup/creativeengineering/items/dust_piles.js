@@ -1,4 +1,4 @@
-// Creative Engineering. Dust pile blocks (creativeengineering:<metal>_dust_pile) - fully migrated from Java (patcherMod
+// Creative Engineering. Dust pile blocks (creativeengineering:<metal>_dust_pile) - fully migrated from Java (Creative Common
 // CreativeEngineeringItems used to register aluminum/copper/gold/iron/lead/nickel/silver/uranium/zinc/diamond as plain
 // FallingBlocks) into KubeJS, alongside the alloy piles (rose_gold/cast_iron/electrum/steel/constantan). Same
 // FallingBlock behavior (Material.METAL, strength 5.0/5.0, gravel sound, requires a tool) as the old Java blocks.

@@ -12,11 +12,11 @@ the AE-29 / AE-30 proposed under #3 and #6 below). Rows #8 to #11 are in [effect
 | Group | Rows | Work | Why together |
 |---|---|---|---|
 | A | `effects #5` (F3, F5 parts), `effects #2`, `effects #6` (pickaxe), `effects #4` | KubeJS: `startup_scripts/func/tool_effects.js`, `func/armor_effects.js`, `server_scripts/magic/tool_effects.js`, `client_scripts/tool_effects_tooltip.js`, `client_scripts/tooltips.js` | All the same four files. #2 is only worth doing after the F5 projectile fix: the swapped bow / crossbow on-hit effects are what F5 breaks |
-| B | `effects #3`, `effects #5` (F7 part) | patcherMod: `potion/MagicResistanceEffect.java`, `mixin/EchoArmorEffectProcedureMixin.java` | Two one-line Java changes; ride the next patcherMod build with the shield rows ([gear_shields.md](gear_shields.md)) |
+| B | `effects #3`, `effects #5` (F7 part) | Creative Common: `potion/MagicResistanceEffect.java`, `mixin/EchoArmorEffectProcedureMixin.java` | Two one-line Java changes; ride the next Creative Common build with the shield rows ([gear_shields.md](gear_shields.md)) |
 | C | `effects #7` | none (in-game check), docs | Answered from the IE jar below; needs one in-game confirmation |
 | D | `effects #5` (F8 part) | measurement only | Profile first; no change proposed until a profile shows a cost |
 
-Build order: A (one session), then B with the next patcherMod build, C whenever someone is in game, D only with a
+Build order: A (one session), then B with the next Creative Common build, C whenever someone is in game, D only with a
 profile in hand.
 
 **Already done, found during this scan:** the dragon hoe half of `effects #6` exists. `dragonloot:dragon_hoe` is the only
@@ -42,7 +42,7 @@ it's cheap. The whole file is 30 lines.
 ---
 
 ## effects #5: Small effect findings
-Status **Planned** · Work: KubeJS (F3, F5), patcherMod (F7), none (F8) · id `potions/effects #5`
+Status **Planned** · Work: KubeJS (F3, F5), Creative Common (F7), none (F8) · id `potions/effects #5`
 
 ### Goal
 Close armor_effects.md F3, F5, F7 and F8.
@@ -99,7 +99,7 @@ Close armor_effects.md F3, F5, F7 and F8.
      3. the direct entity **is** the attacker (a melee hit) -> the attacker's main-hand item (today's rule);
      4. otherwise -> nothing. That drops thorns, explosions and other credited damage.
    - Keep the `$Tool...` prefix on new top-level `const`s: all server scripts share one scope (armor_effects.md 3).
-3. **F7 (patcherMod):** in `EchoArmorEffectProcedureMixin.java` line 64 pass `0` instead of `original.getAmplifier()`
+3. **F7 (Creative Common):** in `EchoArmorEffectProcedureMixin.java` line 64 pass `0` instead of `original.getAmplifier()`
    for Phantom Bane. Optionally line 56 too: Night Vision has no levels. The tooltip already says "Phantom Bane", so no
    tooltip change. Rewrite F7 in armor_effects.md as fixed and update AE-10 (expect Amplifier 0).
 4. **F8:** no code. If a spark / JFR profile ([perf.md](../perf.md) 3) ever shows `ClientboundUpdateMobEffectPacket`
@@ -200,7 +200,7 @@ gives Resistance II).
 ---
 
 ## effects #3: Magic Resistance vs the `magic` damage tag
-Status **Planned** · Work: patcherMod · id `potions/effects #3`
+Status **Planned** · Work: Creative Common · id `potions/effects #3`
 
 ### Goal
 Magic Resistance cuts the same set of sources the shields' MAGIC column blocks.
@@ -380,7 +380,7 @@ unchanged)" subsection, then run AE-32 / AE-33.
 
 ### Decisions
 - **Extend the suit to the pack's `electric` tag** (lightning, Create Additions tesla, SecurityCraft, razor shock)? That
-  would be a patcherMod `LivingHurtEvent` listener: four `armor_faraday_*` pieces worn and
+  would be a Creative Common `LivingHurtEvent` listener: four `armor_faraday_*` pieces worn and
   `DamageTags.is(source, DamageTags.id("electric"))` -> cancel, or scale like IE's two bands. **Recommend: not now.**
   Record the answer, and open a row only if the user wants lightning immunity from a cheap IE suit. Pairs with
   `potions/potions #9` (shock effects).

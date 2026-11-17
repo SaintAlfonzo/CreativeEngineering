@@ -8,12 +8,12 @@
 @@jars creativeworldgen
 @@sources feature_writeup/plan_worldgen_edit.md
 @@text
-@@text Rewritten in depth 2026-11-02 (one row per changed value, each with a before/after number to compare). Targets: patcherMod
+@@text Rewritten in depth 2026-11-02 (one row per changed value, each with a before/after number to compare). Targets: Creative Common
 @@text 1.1.07 and Creative Calendar 1.0.0 installed in `mods/` 2026-11-02 00:18 or later, plus the same-day data / config edits
 @@text (`pool_config.json`, `structure_groups.json`, `structure_tags.json`, `biome_config.json`, `waystones-common.toml`,
 @@text `creativeengineering-common.toml`; the scratch server needs `waystones-common.toml` copied from `config/`, `prep_srv.sh`
 @@text does not carry it). Fresh normal world (group B) for every worldgen row; seed 8675309 so numbers compare with SQ-WG30.
-@@text Rows 00b to 18 (added 2026-11-02 late) cover steps 3 to 5: A6, A7, B2 to B4, C3 to C6, N1 to N11; they need the Creative Worldgen jar from the wave 5 carve (B2 punch, C6 meteorite heights; patcherMod no longer holds worldgen) and `end_divers.js`. Not queued: B6 (no rule built, owner call), C1 (runs inside the scratch session as SQ-TER-05), N2 and N3 (already in SQ-PSW).
+@@text Rows 00b to 18 (added 2026-11-02 late) cover steps 3 to 5: A6, A7, B2 to B4, C3 to C6, N1 to N11; they need the Creative Worldgen jar from the wave 5 carve (B2 punch, C6 meteorite heights; Creative Common no longer holds worldgen) and `end_divers.js`. Not queued: B6 (no rule built, owner call), C1 (runs inside the scratch session as SQ-TER-05), N2 and N3 (already in SQ-PSW).
 @@text Order: 00 (offline, no boot), then one group B boot for 01 to 05 and 08, one group A boot for 06, one client session for 07.
 @@text
 @@table

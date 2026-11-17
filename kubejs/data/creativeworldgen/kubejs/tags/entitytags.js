@@ -4,7 +4,7 @@ console.log('entity tags starting')
 var t = global.tags
 
 ServerEvents.tags('entity_type', e => {
-	// Bubble columns don't push these (patcherMod BubbleColumnImmunityMixin).
+	// Bubble columns don't push these (Creative Common BubbleColumnImmunityMixin).
 	// Upgrade Aquatic's nautilus and thrasher already ignore bubble columns on their own.
 	t.add(e, 'creativeworldgen:bubble_column_immune', [
 		'minecraft:squid', 'minecraft:glow_squid','minecraft:dolphin','minecraft:turtle',

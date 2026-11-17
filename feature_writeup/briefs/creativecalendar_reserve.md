@@ -58,15 +58,15 @@ A checked list of everything that will move into Creative Calendar, each file ma
 No registry ids (the reserved systems register only commands and config). Command `/ccaltime` keeps its name.
 
 ### Decisions
-- CampfireRain: **stays with the campfire features** in patcherMod (it is about campfires going out, not weather rules).
+- CampfireRain: **stays with the campfire features** in Creative Common (it is about campfires going out, not weather rules).
 - IEConcreteSetTime: **reserve** (it exists because of the day-length master).
 - Mark now or as touched: **now, one pass** (cheap, and it stops another move from taking a file).
 
 ### Gotchas
-- patcherMod must not depend on Creative Calendar, but CD and CB will; CD's wild crops read crop seasons through
+- Creative Common must not depend on Creative Calendar, but CD and CB will; CD's wild crops read crop seasons through
   `global` or the JSON, so the move must keep that interface.
 - Seasons are Serene Seasons' saved state; moving our mixins changes no world data.
-- A forwarding `WineTime` in patcherMod for one release, or a `PackTime` update in the same build.
+- A forwarding `WineTime` in Creative Common for one release, or a `PackTime` update in the same build.
 
 ### Tests
 None for the reserve (docs and comments). The plan row adds a prefix and boot checks.

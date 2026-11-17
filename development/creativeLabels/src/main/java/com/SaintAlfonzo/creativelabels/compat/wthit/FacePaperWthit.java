@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
  * <li>A label: {@link #getOverride} swaps the shown state for the host's, so WTHIT shows the host's name and icon
  * (and other plugins see the host's state; the position stays ours), plus a body line "Label: item".</li>
  * </ul>
- * Priorities: WTHIT's core name and icon run at 1100 (patcherMod's block-model icon at 1000); ours run at 900 for
+ * Priorities: WTHIT's core name and icon run at 1100 (Creative Common's block-model icon at 1000); ours run at 900 for
  * the icon (the core icon then finds a stack already set and keeps it) and 1200 for the name (set after the core).
  * The body provider is registered on the block entity class so it still runs when the state is overridden.
  */

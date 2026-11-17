@@ -3,7 +3,7 @@
 Read-only sweep for [creative_split.md](../creative_split.md) 7.6, written 2026-11-01. Magic (`creativemagic`) is carved in
 this split. Starting point: [creative_magic.md](../creative_magic.md), the 7.6 owner rows (Dark Fire, Flint and
 Terrasteel, `dimension/PortalFailureHandler`, `[botania]`, `TrinketCaseRules`), sweeps A to G, then a fresh search of
-patcherMod Java and `creativeengineering.mixins.json`, `CEConfig`, `kubejs/startup_scripts`, `server_scripts`,
+Creative Common Java and `creativeengineering.mixins.json`, `CEConfig`, `kubejs/startup_scripts`, `server_scripts`,
 `client_scripts`, `kubejs/data`, `kubejs/assets` and the installed jars. Line numbers were read from the working tree on
 2026-11-01 and can move while Devtools and Calendar are carved.
 
@@ -17,9 +17,9 @@ Decisions this sweep rests on:
 - Potions, effects, gear effects, Magic Resistance and lava vision stay CB (section 7).
 - Easy Magic, Supplementaries and Quark enchanting settings are third-party config in the pack, not jar content.
 
-## 1. Java (patcherMod)
+## 1. Java (Creative Common)
 
-Root is `development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/`.
+Root is `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativeengineering/`.
 
 | Path | Lines | Why Magic | Planned target now | Cross-jar edges | Conf |
 |---|---|---|---|---|---|
@@ -84,7 +84,7 @@ Subtotal: 3 rows, 41 lines.
 
 ## 6. Resources
 
-Pack resources live in `development/patcherMod/src/main/resources/assets/creativeengineering/` (PM) and
+Pack resources live in `development/creativeCommon/src/main/resources/assets/creativeengineering/` (PM) and
 `kubejs/assets/creativeengineering/` (KJ).
 
 | Path | Files / lines | Why Magic | Planned target now | Cross-jar edges | Conf |
@@ -129,7 +129,7 @@ Nothing for Magic under `kubejs/data` (the `ancient_enchantment_temple` data is 
 | D7 | `metal_base_materials.js` `xp_nugget` ore outputs (lines 261-310 area) | ~25 | XP | Engineering | Engineering | Ore processing byproduct, not magic |
 | D8 | `tooltips.js` 417-418 (book power), 735 (crystal pedestal power), 397 and 719 (Stasis) | 4 | Enchanting power text | Common / Compat | Leave, move to Magic only when [enchant_power.md](../enchant_power.md) is built | Today they describe Supplementaries and vanilla books |
 | D9 | `blocktags.js` Botania lines (61, 179-182, 226, 255, 267, 277, 286, 310, 363), `curiostags.js` Botania masks, `wild_flowers.js` Botania colors, `jei/order.js` Botania list, `item_dict.js` Botania ids | many | Botania | Common / Compat / Worldgen | Leave | Data about third-party blocks inside shared tag, dict and order files |
-| D10 | `development/patcherMod/src/main/resources/working/` (`FluidMemoryEssence`, `MemoryStickItem`, `xpfluidbridge/`, `xpfluidbridge.zip`) | 4 items | Parked XP code (E line 123 "?") | ? | Follows D3 | If D3 goes to Magic these are its scratch; otherwise delete |
+| D10 | `development/creativeCommon/src/main/resources/working/` (`FluidMemoryEssence`, `MemoryStickItem`, `xpfluidbridge/`, `xpfluidbridge.zip`) | 4 items | Parked XP code (E line 123 "?") | ? | Follows D3 | If D3 goes to Magic these are its scratch; otherwise delete |
 | D11 | Future enchant-power system (enchant_power.md section 5: coremod patch of `IForgeBlockState.getEnchantPowerBonus`, tag family `enchant_power/*`) | not built | Enchanting | not assigned | Magic for the tags and values; the coremod patch lives in Common (the patcherMod coremod is Common) | Needs a Common transformer hook that Magic fills with its tag lookup; flag as the only planned edge into Common beyond the current APIs |
 
 ## 9. Totals (H and M rows only, no doubtful rows)

@@ -1,6 +1,6 @@
 // priority: 1000
 // Creative Delight core: global.CD (creative_delight.md 10.6, 8.1). Startup script in the CD jar, loaded by
-// patcherMod's startup loader after the pack's startup_scripts folder, so global.NCH, global.tags and the dicts
+// Creative Common's startup loader after the pack's startup_scripts folder, so global.NCH, global.tags and the dicts
 // already exist here. Every other CD script reads global.CD.
 //
 //   global.CD.recipes(() => { R.shapeless(...) })   every recipe id the NCH helpers write inside is

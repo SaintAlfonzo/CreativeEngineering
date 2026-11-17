@@ -8,7 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text patcherMod 1.1.03 with `NeaWhistleGoalSkipMixin`, `MobBeeIdleMixin`, `perf.WhistleArrowTracker`. Group A, one player
+@@text Creative Common 1.1.03 with `NeaWhistleGoalSkipMixin`, `MobBeeIdleMixin`, `perf.WhistleArrowTracker`. Group A, one player
 @@text or bot unless stated.
 @@text
 @@text | ID | World | Commands | Expected | If it fails |

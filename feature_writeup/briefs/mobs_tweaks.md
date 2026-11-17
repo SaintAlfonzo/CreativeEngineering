@@ -13,11 +13,11 @@ Jars checked (decompiled with vineflower, under `scratchpad/decomp/`): `alexsmob
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #7 | Seagulls can't take lunchboxes | Planned | tiny: config (2 files); optional patcherMod mixin for dropped boxes |
+| #7 | Seagulls can't take lunchboxes | Planned | tiny: config (2 files); optional Creative Common mixin for dropped boxes |
 | #4 | Entity dictionary | Planned | small: KubeJS, 1 new startup file + 2 edited |
 | #9 | Nock Enough Arrows golem (the Sputter) | Planned | look done here; then config line or docs |
 | #8 | Merge monkeys | Planned | small once decided: config / data, + JEI hide |
-| #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional patcherMod |
+| #6 | Named mobs | Planned | medium: KubeJS (startup + server), optional Creative Common |
 | #5 | Quark monster boxes | Built | vault rework built 2026-10-30 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.9); MT-34 to MT-37, MT-47 to MT-50 |
 | #2 | MCA villagers glitch while sleeping | Bug | reported on adults (owner, 2026-10-22), so the baby wobble isn't it; no client or AI cause found in code, MT-38 decides |
 | #12 | MCA villager eye color | Built | Comb eye controls (`McaCombEyeColourMixin`), 2026-10-22; MT-40 |
@@ -29,7 +29,7 @@ Build order:
 3. **#9 and #8 are decisions.** This brief has the facts for both. Once decided, each is a config line plus a few
    script lines.
 4. **#6 KubeJS part.** Startup + server scripts. Its optional despawn / karma hooks wait for `largecontent/karma #1`.
-5. **patcherMod batch: #5 vault rework, #2 fix, optional #7 mixin.** One patcherMod build and one restart. #2 needs its
+5. **Creative Common batch: #5 vault rework, #2 fix, optional #7 mixin.** One Creative Common build and one restart. #2 needs its
    in-game diagnosis (#2 Tests, MT-38) before any code.
 
 Related rows: `largecontent/karma #1` (karma system, docs only so far; #6 adds the hook), `food/drinks #3` (banana
@@ -41,7 +41,7 @@ area as #5), `gear/archery` ([archery.md](../archery.md); #9's Sputter shoots NE
 ---
 
 ## tweaks #7: Seagulls can't take lunchboxes
-Status Testing (config done 2026-10-22; both mixins built 2026-10-29; SQ-LB-01, MT-26 open) / Work KubeJS / patcherMod (really config) / TODO `mobs/tweaks #7`
+Status Testing (config done 2026-10-22; both mixins built 2026-10-29; SQ-LB-01, MT-26 open) / Work KubeJS / Creative Common (really config) / TODO `mobs/tweaks #7`
 
 ### Goal
 Alex's Mobs seagulls stop stealing Spice of Life lunchboxes from the hotbar. Today they also eat them, contents and
@@ -76,7 +76,7 @@ all.
    	seagullStealingBlacklist = ["solapplepie:lunchbox", "solapplepie:lunchbag", "solapplepie:golden_lunchbox"]
    ```
    A config file can't read `global.item`. Note the three ids in the writeup instead.
-2. **Optional, for dropped boxes (patcherMod).** Add an item tag `creativeengineering:not_mob_food` through
+2. **Optional, for dropped boxes (Creative Common).** Add an item tag `creativeengineering:not_mob_food` through
    `global.tags` in a server tag script (e.g. `kubejs/server_scripts/tags/itemtags.js`, or the file that holds other
    behavior tags) with `i.lunchbox`, `i.lunchbag`, `i.golden_lunchbox`. Then a mixin:
    ```java
@@ -101,7 +101,7 @@ all.
   (verified).
 
 ### Decisions
-- **Config only, or config + mixin?** Recommend config now, and the mixin only with the next patcherMod build. The
+- **Config only, or config + mixin?** Recommend config now, and the mixin only with the next Creative Common build. The
   hotbar theft is the reported problem. A dropped box near gulls is rarer.
 - **Turn stealing off altogether (`seagullStealing = false`)?** No. It's the seagull's flavor, and the row only asks
   to protect lunchboxes.
@@ -244,7 +244,7 @@ Depends on the decision:
 - **Accidental builds.** Any carved pumpkin or jack o'lantern placed on any barrel makes a Sputter. That's a common
   decoration (Halloween builds, storage rooms). The barrel is set to air and its contents spill: `BarrelBlock#onRemove`
   drops them on a server-side `setBlock`. Which barrels are in `#forge:barrels` isn't known offline (Quark or Every
-  Compat variant barrels may be); check with `/dumptags block`. If this is a problem, a patcherMod mixin could narrow
+  Compat variant barrels may be); check with `/dumptags block`. If this is a problem, a Creative Common mixin could narrow
   `PLANKS_PREDICATE` to vanilla `minecraft:barrel` or require sneaking. Not recommended unless it shows up.
 
 ### Tests
@@ -319,9 +319,9 @@ the overlap. The overlap is capuchin vs chimpanzee: same jungles, same bananas.
 ---
 
 ## tweaks #6: Named mobs
-Status Testing / Work patcherMod / TODO `mobs/tweaks #6`
+Status Testing / Work Creative Common / TODO `mobs/tweaks #6`
 
-**Built 2026-10-30 differently from the plan below:** patcherMod Java (`mobs.NamedMobs`, `[named_mobs]` toml), not
+**Built 2026-10-30 differently from the plan below:** Creative Common Java (`mobs.NamedMobs`, `[named_mobs]` toml), not
 KubeJS, so the mob list is a real config. Owner: farm animals only for now, a large karma loss later. Name picked on
 join (server thread), not at spawn: MCA's pool random is shared and not thread safe. As built:
 [mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; tests MT-31 to MT-33 there replace the ones below.
@@ -380,9 +380,9 @@ Killing one costs a little karma later (`largecontent/karma #1`).
      already announced) -> announce it too, for named victims or a hand-picked list only (decision), or chat fills up.
    - Karma hook: when the killer is a player, call `global.karma?.add(player, 'kill_named_mob', -1)` if karma exists.
      It doesn't today, so leave a guarded call and a comment pointing at `largecontent/karma #1`.
-4. **Optional patcherMod:** `Mob#checkDespawn` keeps despawning named mobs (wanted). If they should stay once a player
+4. **Optional Creative Common:** `Mob#checkDespawn` keeps despawning named mobs (wanted). If they should stay once a player
    has hurt them, set `setPersistenceRequired()` in a `EntityEvents.hurt` handler instead. That's KubeJS too, so
-   patcherMod is only needed if the announcement should use a custom chat component or a config file. Recommend
+   Creative Common is only needed if the announcement should use a custom chat component or a config file. Recommend
    KubeJS only.
 5. Writeup: a new section in [mob_block_tweaks.md](../mob_block_tweaks.md) (Mob and block tweaks is the home for
    small mob changes).
@@ -420,7 +420,7 @@ Killing one costs a little karma later (`largecontent/karma #1`).
 ---
 
 ## tweaks #5: Quark monster boxes
-Status Testing (built 2026-10-30, SQ-MB queued) (writeup: [mob_block_tweaks.md](../mob_block_tweaks.md) 2.9) / Work config / patcherMod / data / TODO `mobs/tweaks #5`
+Status Testing (built 2026-10-30, SQ-MB queued) (writeup: [mob_block_tweaks.md](../mob_block_tweaks.md) 2.9) / Work config / Creative Common / data / TODO `mobs/tweaks #5`
 
 ### Goal
 Answer "do they break when they spawn, and is that configurable?" Then rework them into a vault-like box: when its
@@ -459,7 +459,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 ### Build: config-only option
 `"Monster Box" = false` (module off), or keep as is. Nothing else in config changes the breaking.
 
-### Build: vault rework (patcherMod)
+### Build: vault rework (Creative Common)
 1. **Config** `CEConfig.MonsterBox` (new section `[monster_box]`, next to `Raids` at CEConfig 949, built in the
    constructor at line 111):
    - `vaultMode` (true);
@@ -476,7 +476,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
      - **ARMED:** Quark's own countdown. Copy its player check and `breakProgress` logic, or call through. Simplest:
        keep Quark's tick but `@Redirect` the `Level#removeBlock` call in it (target
        `Lnet/minecraft/world/level/Level;m_7471_(Lnet/minecraft/core/BlockPos;Z)Z`, `remap = false` with the SRG
-       name: patcherMod ships no refmap, build.gradle 20-26). That turns removal into "switch to ACTIVE", resets
+       name: Creative Common ships no refmap, build.gradle 20-26). That turns removal into "switch to ACTIVE", resets
        `breakProgress` through an `@Accessor`, and claims the wave.
      - **Claim the wave:** right after `spawnMobs()`, collect mobs within 3 blocks whose persistent data has
        `quark:monster_box_spawned` and no `ce:box` yet. Store their UUIDs and stamp each with `ce:box` = the box's
@@ -511,7 +511,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
    listens to `BlockEvent.BreakEvent` server side. If the block is one of its chests and the player is not
    sneaking (`Player#isShiftKeyDown`), it cancels the event and sends a chat line (`Player#displayClientMessage(msg,
    false)`, aqua `Style`, key `lootr.message.should_sneak`). Creative players follow the same rule. Pack version: a
-   Forge listener `world/MonsterBoxBreakGuard.java` in patcherMod, gated by `vaultMode` like the rest, so MT-37
+   Forge listener `world/MonsterBoxBreakGuard.java` in Creative Common, gated by `vaultMode` like the rest, so MT-37
    restores plain Quark. Logic: `state.is(MonsterBoxModule.monster_box)` (or the block's registry id), player not
    sneaking -> `setCanceled(true)` + translatable `creativeengineering.message.monster_box_sneak`, aqua. Lang:
    "Breaking the monster box destroys it for good. Sneak while mining to break it." (pack lang file
@@ -548,7 +548,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 
 ### Decisions
 - **Rework or config only?** Recommend the rework: it turns a one-shot ambush into a repeatable small dungeon, which
-  is what the row asks for. If the patcherMod time isn't there, leave the config as is (the boxes are harmless).
+  is what the row asks for. If the Creative Common time isn't there, leave the config as is (the boxes are harmless).
 - **Cooldown length:** recommend 72000 ticks (1 hour of server time, gameTime-based so it advances only while the
   chunk's level ticks; the pack's time mods pause time but not `gameTime`. Check `time.md` if that matters).
 - **Per-player rewards like the vanilla vault?** Recommend no: one reward per wave for whoever is there. A per-player
@@ -583,7 +583,7 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 ---
 
 ## tweaks #2: MCA villagers glitch while sleeping
-Status Bug / Work patcherMod / TODO `mobs/tweaks #2`
+Status Bug / Work Creative Common / TODO `mobs/tweaks #2`
 
 ### Goal
 Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent out and jittering.
@@ -657,7 +657,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
    Changing a captured parameter at HEAD needs `@ModifyVariable(argsOnly)` on `limbDistance` -> 0 when sleeping. The
    TAIL reset alone is enough if the wear layers are re-copied: `VillagerEntityModelMCA#setupAnim` copies limbs to
    wear after `super`, so target `VillagerEntityModelMCA` too, or reset the wear parts as well. Use
-   `@Mixin(targets = ...)` and `require = 0`, so a future MCA rename doesn't crash the client. patcherMod ships no refmap
+   `@Mixin(targets = ...)` and `require = 0`, so a future MCA rename doesn't crash the client. Creative Common ships no refmap
    ([build.gradle](../../development/creativeCommon/build.gradle) 20-26): every mixin uses SRG names with `remap = false`,
    so write `method = "m_6973_"` with `remap = false`. Use SRG names for fields too: `ModelPart` xRot `f_104203_`
    and zRot `f_104205_`, `EntityModel` young `f_102609_` (all three seen in MCA's decompiled model). Look up yRot,
@@ -680,7 +680,7 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
   would hide a villager that keeps waking up.
 
 ### Gotchas
-- A client mixin, so every client needs the new patcherMod jar (patcherMod is "both" in
+- A client mixin, so every client needs the new Creative Common jar (Creative Common is "both" in
   [mod_sides.md](../../mod_sides.md); fine).
 - MCA updates often (this jar is a 2026-03 build). Keep the mixin `require = 0` and the target by name.
 
@@ -713,7 +713,7 @@ Ways to set it (pick one):
    gray). The weighting is then simply how many of the 11 slots each color gets. Generated by a tool from MCA's
    own PNGs (palette swap, like `textureswapper/palette_swap.py`); MCA's art license must allow a recoloured
    copy in a shipped pack, check first.
-2. **patcherMod client mixin on `FaceLayer.getSkin`** remapping n to a slot in an allowed list (e.g. 0, 2, 4, 5,
+2. **Creative Common client mixin on `FaceLayer.getSkin`** remapping n to a slot in an allowed list (e.g. 0, 2, 4, 5,
    9, 13 ... plus their +11). No new art, but cuts the variety to the 5 natural colors MCA ships; existing
    villagers change look too (the gene is untouched, only the render).
 3. A server mixin on `Genetics.randomize` writing only allowed FACE ranges: affects only new villagers, children
@@ -737,7 +737,7 @@ Decision needed: which colors are allowed (and whether heterochromia stays, its 
 |---|---|---|---|
 | #1 | Mob and block tweaks (bubble columns, Bushier Flowers off, trough retry, asphalt) | Testing | Nothing wrong found. MT-01 to MT-12 open. The same writeup now also carries the leaf decay work (MT-13 to MT-25, `farming/trees #1`), built 2026-10-19/20 after the 1.0.9 deploy and correctly marked not deployed |
 | #7 | Seagulls skip lunchboxes | Testing | Config 2026-10-22 (`seagullStealingBlacklist`), MT-26; scratch probe SQ-GM-07 checks the list loads |
-| #12 | MCA Comb eye color and shape | Testing | Built 2026-10-22 (patcherMod 1.1.01 in `mods/`), MT-40 in [mob_block_tweaks.md](../mob_block_tweaks.md), client only |
+| #12 | MCA Comb eye color and shape | Testing | Built 2026-10-22 (Creative Common 1.1.01 in `mods/`), MT-40 in [mob_block_tweaks.md](../mob_block_tweaks.md), client only |
 
 ## Writeup corrections made
 

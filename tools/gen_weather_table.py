@@ -26,7 +26,7 @@ Inputs:
 
 The rules restate vanilla 1.19.2 (Biome, LevelRenderer.renderSnowAndRain, ServerLevel.tickChunk), Serene
 Seasons 8.1.0.24 (SeasonHooks, BiomeConfig, SeasonTime, MixinLevelRenderer, transformers/temperature.js) read
-from the decompiled jars, and the patcherMod season mixins (seasons/SeasonTypes.java). The writeup's
+from the decompiled jars, and the Creative Common season mixins (seasons/SeasonTypes.java). The writeup's
 section 1 cites each one.
 """
 import gzip

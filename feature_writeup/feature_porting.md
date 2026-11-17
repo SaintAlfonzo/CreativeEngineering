@@ -1,7 +1,7 @@
 # Feature porting: small mods the pack could absorb into its own code
 
 Test prefix `FP-`. Status: **research done 2026-10-18; ported: Fast Leaf Decay (2026-10-19), tier 1 (8 mods, 2026-10-20,
-KubeJS + data, section 1.1) and Glowing Illagers, Comfortable Campfires, Bottled Air (2026-10-20, patcherMod 1.1.01,
+KubeJS + data, section 1.1) and Glowing Illagers, Comfortable Campfires, Bottled Air (2026-10-20, Creative Common 1.1.01,
 section 2.4); all BUILT, scratch-tested where section 7 says so (tier 1 recipes, Glowing raiders, Bottled Air scratch server PASSED 2026-10-22, SQ-OM-00, SQ-OM-10 to SQ-OM-12, SQ-OM-14), deployed with 1.1.01 (2026-10-22). Book Fishing stays (1.1). Starter Kit: broken for every player from 1.1.01 until the 2026-10-28 fix (FP-10), which ships in 1.1.04.** TODO `ports/featureporting`. The first version of this file (a
 candidate list from mod names and configs) is replaced: every tier 1-3 mod was decompiled
 (`tools/decompile_mod.py`, jars fetched from the manifest links and checked against its sha1) and read, plus about 50
@@ -9,7 +9,7 @@ other small mods for the wider survey in section 3.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=1a2a085dd81d -->
+<!-- generated:status_index begin open_work sha1=43f6a6d6a83c -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 5, In Progress 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -19,7 +19,7 @@ other small mods for the wider survey in section 3.
 | `ports/featureporting #5` | Planned | S P | Drop Collective |
 | `ports/featureporting #6` | Planned | S C P | Tier 4 content mods and Survivality |
 | `ports/featureporting #7` | Planned | S C P | More ports: trials, Alex's mods |
-| `ports/featureporting #3` | In Progress | S~ C P | Tier 2 batch (patcherMod) |
+| `ports/featureporting #3` | In Progress | S~ C P | Tier 2 batch (Creative Common) |
 | `items/starter-kit #2` | Testing | S+ P | Starter kit never given (bug since the 1.1.01 port) |
 | `ports/featureporting #1` | Testing | S+ P | Remove rsec |
 | `ports/featureporting #2` | Testing | S+ P | Tier 1 batch (KubeJS / data) |
@@ -27,7 +27,7 @@ other small mods for the wider survey in section 3.
 <!-- generated:status_index end open_work -->
 
 - **Where ports go:** recipes through `global.NCH`, tags through `global.tags`, item ids through `item_dict.js`
-  (CLAUDE.md). Event-only logic goes into KubeJS when it needs no mixin, otherwise into patcherMod
+  (CLAUDE.md). Event-only logic goes into KubeJS when it needs no mixin, otherwise into Creative Common
   (`development/creativeCommon`, one package per feature, knobs in `CEConfig`).
 - **The rule that decides the tier:** a mod that registers anything saved in the world (items, blocks, entities,
   enchantments, block-state properties) can't be removed without keeping its ids. Enchantment ids sit as strings in
@@ -59,7 +59,7 @@ other small mods for the wider survey in section 3.
 | Tier | Mods | Total new code | Removes |
 |---|---|---|---|
 | 1, data or KubeJS | 9 | ~300 KubeJS lines + recipe/loot files | 9 jars |
-| 2, one handler or mixin each | 16 | ~1,000 patcherMod lines, ~12 mixins | 16 jars (+ rsec for free) |
+| 2, one handler or mixin each | 16 | ~1,000 Creative Common lines, ~12 mixins | 16 jars (+ rsec for free) |
 | 3, already patched or bigger | 7 | ~1,200 lines, ~10 mixins, 2 with client parts | 7 jars and 5 of our own mixins into them |
 
 ## 1. Tier 1: recipes, loot or a KubeJS handler
@@ -110,7 +110,7 @@ Moved out of tier 1: JRFTL (`jrftl:prepared_flesh` is a pack ingredient in `mob_
 Everything (3 items, all mapped in `item_dict`), Create: Netherless (4 items), Death Knell and Glowing Illagers (now tier
 2, they need a mixin or an event in Java), Witch Mobility (content).
 
-## 2. Tier 2: one event handler or mixin each (patcherMod)
+## 2. Tier 2: one event handler or mixin each (Creative Common)
 
 ### 2.1 Candidates
 
@@ -118,7 +118,7 @@ Everything (3 items, all mapped in `item_dict`), Create: Netherless (4 items), D
 |---|---|---|---|---|---|
 | Ice Prevents Crop Growth | `CropGrowEvent.Pre` DENY when the block 2 below the crop (under the farmland) is ice, packed, blue or frosted ice | event in `crops/` | ~15 | server | `crops/CropGrowth` is the WTHIT growth-line logic, not a growth hook; the port could add a "won't grow: ice" WTHIT line there. Collective user |
 | Glowing Illagers | mixin `Raid#addWaveMob` HEAD: Glowing II forever on every raider | KubeJS `EntityEvents.spawned` (raider with `getCurrentRaid()` set) or the same 1-inject mixin | ~10 | server | |
-| Death Knell | mixin `CombatTracker#getDeathMessage` RETURN: random flavor messages by killer type (blaze, cave spider, slime, polar bear, drowned, guardian), weapon tags (`deathknell:cookies`, `books`, `axes`), falls and drowning | the mixin + `DeathKnellCommon` logic + the 3 lang files in patcherMod assets | ~200 + lang | both (lang) | fixes the raw-key bug above; keep the 3 item tags under our namespace |
+| Death Knell | mixin `CombatTracker#getDeathMessage` RETURN: random flavor messages by killer type (blaze, cave spider, slime, polar bear, drowned, guardian), weapon tags (`deathknell:cookies`, `books`, `axes`), falls and drowning | the mixin + `DeathKnellCommon` logic + the 3 lang files in Creative Common assets | ~200 + lang | both (lang) | fixes the raw-key bug above; keep the 3 item tags under our namespace |
 | Comfortable Campfires | mixin `CampfireBlockEntity#litServerTick` HEAD: every lit campfire, **every tick**, queries players in a 3-block box and gives FD Comfort (or Regeneration) for 5 s | mixin with a 20-tick gate per campfire | ~40 | server | the gate is a perf win over the mod |
 | Friendly Griefing | `EntityMobGriefingEvent`: only when gamerule `mobGriefing` is **false**, ALLOW villagers, DENY everyone else | event | ~15 | server | does nothing if the live server keeps `mobGriefing` true: confirm the gamerule first (FP-04) |
 | Golems Are Friends Not Fodder | armorer/toolsmith/weaponsmith work package gets a `RepairGolem` behavior; a sensor (every 241 ticks) remembers a damaged golem; the villager walks to it and heals 25 | mixin on `VillagerGoalPackages#getWorkPackage` + our own memory and sensor types + `EntityJoinLevelEvent` | ~150 | server | memory/sensor ids aren't saved, so re-namespacing is safe |
@@ -138,7 +138,7 @@ Everything (3 items, all mapped in `item_dict`), Create: Netherless (4 items), D
 
 Tax Free Levels moved to tier 3: it is 20 mixins, not one formula (2.3).
 
-### 2.4 Tier 2 ported (2026-10-20, BUILT, patcherMod 1.1.01)
+### 2.4 Tier 2 ported (2026-10-20, BUILT, Creative Common 1.1.01)
 
 User: "glowing illagers, comfortable campfires, bottled air can be ported in the same way". Three jars to
 `disabledmods/`, rows out of `mod_sides.md`, `config/bottledair.json5` and `config/comfortable_campfires.json`
@@ -176,7 +176,7 @@ systems race; remove `rsec` from `mods/` and `mod_sides.md` (FP-06). Done 2026-1
 | Forgiving Void | player tick: below min height - 32, not teleporting -> Blindness, eject, teleport to y 500 at the same X/Z, flag `ForgivingVoidIsFalling` in persistent data, anti-cheat off while falling; on landing the fall damage is 30 (`preventDeath` false) | the ~70 lines of logic + 2 accessor mixins (`ServerPlayer#isChangingDimension`, `ServerGamePacketListenerImpl#awaitingPositionFromClient`); the anchor pull from `ForgivingVoidMixin` becomes plain code; config merges into the existing `CEConfig.ForgivingVoid` | ~120 | the jar, `ForgivingVoidMixin`, `ForgivingVoidBridge`. Keep the persistent-data key so a player mid-fall at the update lands safely. Balm stays (other mods) |
 | Responsive Shields | one `@ModifyConstant` on `LivingEntity#isBlocking` (5 -> `Raise Time`, ours 0) | the same constant change in `shield/` (both sides: the client uses `isBlocking` for the raised pose) | ~15 | the jar. `ShieldBlocking` already documents the dependency |
 | Easy Elytra Takeoff | rocket right-click while standing (3x3 layer 2 below not all air) with an elytra (or a "flight modifier"/"elytra curio modifier" attribute) -> lift 0.2, start gliding, fire the rocket next tick; boosters too | ~60 lines + a server tick; the two pack mixins (`EasyElytraTakeoffGroundCheckMixin`, `...HelperMixin`) become direct checks of `#creativeequipment:elytra_chestplates` | ~90 | the jar, 2 of our mixins; a Collective user. Key by UUID, not player name |
-| Second Chance | damage event: at ≥ 13.5 health, a hit that would kill from explosions or mobs leaves 1 health and plays `classic_hurt`; coyote time: a mixin on `LivingEntity#aiStep`/`jumpFromGround` allows a jump up to 10 ticks after leaving the ground | the event (~40 lines) + the mixin (3 injects) + the sound event and its `.ogg`/`sounds.json` in patcherMod assets | ~120 | the jar. The mixin hits **every** `LivingEntity`, so mobs get coyote jumps too; limit it to players in the port. Both sides (player movement is client-side) |
+| Second Chance | damage event: at ≥ 13.5 health, a hit that would kill from explosions or mobs leaves 1 health and plays `classic_hurt`; coyote time: a mixin on `LivingEntity#aiStep`/`jumpFromGround` allows a jump up to 10 ticks after leaving the ground | the event (~40 lines) + the mixin (3 injects) + the sound event and its `.ogg`/`sounds.json` in Creative Common assets | ~120 | the jar. The mixin hits **every** `LivingEntity`, so mobs get coyote jumps too; limit it to players in the port. Both sides (player movement is client-side) |
 | Charm of Undying *(was tier 4)* | a totem in a Curios `charm` slot works from there: mixin on `checkTotemDeathProtection`, slot registered by IMC, a curio renderer | 2 injects + the IMC + optional renderer | ~150 | the jar; registers no items. Curios stays (Botania, Elytra Slot...) |
 | Sit *(new)* | right-click a slab or stair to sit: an invisible seat entity, removed when you stand | entity type + renderer + 2 events | ~250 | the jar; the seat entity isn't saved, so its id can change |
 | Bushier Flowers | | | | **tier 4 now**: `BushierFlowersDisableMixin` turns growth off, worldgen is off, but its grown-flower blocks are in the world and crafted in `flowers.js` |
@@ -191,7 +191,7 @@ while Placebo stays for others.
 **Tier 4 (content, only by keeping the ids or with a migration):** JRFTL, Create Recycle Everything, Create:
 Netherless, Effishiency, Bushier Flowers, XP Tome, Golden Foods, Simple Netherite Horse Armor, Ender Crop, Momentum
 Protection (enchantment), Iron Fishing Rods, Fortune on Netherite, Dreamcatcher, Create Compact Exp, Splash Milk, Potion
-Bundles. A content port means a startup-script or patcherMod registration **under the old namespace** (Forge allows it;
+Bundles. A content port means a startup-script or Creative Common registration **under the old namespace** (Forge allows it;
 the mod must be gone) so world data keeps working; it trades a jar for code we then maintain, worth it only where the
 pack already reworks the item.
 
@@ -209,7 +209,7 @@ mods (they cost the server nothing).
 
 1. Free: remove `rsec` (2.2). Confirm the Death Knell raw-key bug (FP-01); if real, move it to `both` now.
 2. Tier 1 KubeJS batch: Starter Kit, Book Fishing, the recipe and loot mods (one `/kubejs export` session).
-3. Tier 2 patcherMod batch, server-only first: Ice Prevents Crop Growth, Glowing Illagers, Comfortable Campfires,
+3. Tier 2 Creative Common batch, server-only first: Ice Prevents Crop Growth, Glowing Illagers, Comfortable Campfires,
    Friendly Griefing (after FP-04), Breedable Killer Rabbit, Cherished Items, Loading Protection, Don't Void Arrows,
    ~~Fast Leaf Decay~~ (ported 2026-10-19), Bottled Air, Fish On The Line; then the both-sided ones (Death Knell, SwingThroughGrass, Ice Boat
    Nerf, Fuel Goes Here).
@@ -243,7 +243,7 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
   guide books kept; a player with tag `collective.firstJoin.starterkit` gets nothing.
 - [ ] **FP-04 mobGriefing [game]:** `/gamerule mobGriefing` on the live server; if true, Friendly Griefing is dead weight.
 - [ ] **FP-05 Ice boats [scratch]:** after the port a boat on ice and on grass matches the mod's speeds (or the D2 choice).
-- [x] **FP-06 rsec removed [scratch]:** campfire in the rain goes out via the pack's rain rule (patcherMod `CampfireRain`, 8 s; Unlit Campfire's own rain check is off since 2026-10-19); no rsec log line. *PASSED scratch 2026-10-20: `/weather rain`, lit campfire on stone at 0 151 0 -> `lit=false` within the first check (47 s later; the 8 s itself wasn't timed)*
+- [x] **FP-06 rsec removed [scratch]:** campfire in the rain goes out via the pack's rain rule (Creative Common `CampfireRain`, 8 s; Unlit Campfire's own rain check is off since 2026-10-19); no rsec log line. *PASSED scratch 2026-10-20: `/weather rain`, lit campfire on stone at 0 151 0 -> `lit=false` within the first check (47 s later; the 8 s itself wasn't timed)*
 - [x] **FP-08 Tier 1 recipes load [scratch]:** *PASSED scratch 2026-10-20: the 377 line, no `[NCH]` error, no `Parsing error loading recipe`.* boot log had `[feature-ports] tier 1: 377 recipes (1 name tag, 33 splashing, 26 recycle smelting, 6 generators, 311 AE2 cable)` (371 and no generators since 2026-10-21, FP-15) and no `[NCH]` error from feature_ports.js; `/kubejs export` lists `creativeengineering:shaped/name_tag`, `createsplashing/copper_block_exposed`, `smelting/recycle_anvil`, `createmixing/generator_cobblestone`, `shaped/ae2_black_smart_cable_ring`
 - [ ] **FP-09 Tier 1 in game [game]:** *Server half: scratch server PASSED 2026-10-22 (SQ-OM-12: 311 cable, 26 recycle, 33 splashing, name tag, copper ore drops).* craft a name tag (leather, paper, 2 string); a fan over water weathers a copper block to exposed; smelt a hopper -> iron ingot, a rail -> nugget, an anvil -> iron block; 8 smart cables around black dye -> 8 black smart cables, 8 black around a water bucket -> 8 fluix; mine copper ore -> 1 raw copper (silk touch: the ore)
 - [x] **FP-10 Starter Kit port [scratch]:** *FAILED then fixed, PASSED 2026-10-28 on bot players: the script threw on every first join since the port (`Path.resolve` overload, `isDedicatedServer` and `getStringUUID` not visible to Rhino, JsonIO given a File), so nobody got a kit; fixed in `starter_kit.js` without changing the logic ([run log](testing/scratch_run_2026-10-28.md)). Real-client look (slot 1 selected, books given back) still open. The fix shipped only to the client in 1.1.04; the server (1.1.03) still gives no kit until its 1.1.04 update.* a new player on the scratch server gets Default or Engineer (boots and shield equipped, items in slots 1-3), log `[starter-kit] <kit> kit given to <name>`, `world/data/starterkit/tracking.json` lists the uuid and the player has tag `collective.firstJoin.starterkit`; relog -> nothing; a uuid pre-written into tracking.json -> nothing on first join
@@ -263,7 +263,7 @@ the removal list of the next deploy ([deploy.md](deploy.md)), and a check that n
 - Before: candidate list by mod name and config (tiers 1-4).
 - 2026-10-19: rsec removed (2.2), [plan_1.0.9.md](plan_1.0.9.md). FP-06 still to run.
 - 2026-10-20: tier 1 ported (1.1: 8 jars retired, Book Fishing kept, Create Waystone Recipes found dead, D6), Glowing
-  Illagers + Comfortable Campfires + Bottled Air ported (2.4, patcherMod 1.1.01); FP-08 to FP-14 added.
+  Illagers + Comfortable Campfires + Bottled Air ported (2.4, Creative Common 1.1.01); FP-08 to FP-14 added.
 - 2026-10-20 (later): the Death Knell raw-key bug was a stale read: the jar is `both` since 1.0.7 and every
   client gets it (section 0). FP-01 reworded as a confirmation.
 - 2026-10-19: Fast Leaf Decay ported as part of the leaf decay rework ([mob_block_tweaks.md](mob_block_tweaks.md) 2.5;

@@ -19,10 +19,10 @@ import org.slf4j.Logger;
 import java.util.List;
 
 /**
- * Creative Devtools (feature_writeup/creative_devtools.md): the pack's developer tools, carved out of patcherMod in the
+ * Creative Devtools (feature_writeup/creative_devtools.md): the pack's developer tools, carved out of Creative Common in the
  * Creative Split. Dev {@code mods/} only, never in a player payload. Holds {@code /cdevgen}, {@code /cdevperf}, {@code /cdevbench},
  * {@code /cdevplace}, the {@code /dump*} commands (KubeJS server scripts under {@code data/creativedevtools/kubejs/}), the
- * block-state and Level-random probes (subscribed to patcherMod's hooks in {@code util/}), the IE recycling log, and
+ * block-state and Level-random probes (subscribed to Creative Common's hooks in {@code util/}), the IE recycling log, and
  * nests CE Perf Bot and CE Client Capture, and holds {@code /cdevtest} (test/). Registers nothing.
  */
 @Mod(CreativeDevtools.MOD_ID)
@@ -49,7 +49,7 @@ public class CreativeDevtools {
             MinecraftForge.EVENT_BUS.register(StructureCatalogue.class);
         }
 
-        // Probes on patcherMod's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
+        // Probes on Creative Common's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
         // [debug.*] switch is off.
         BlockStateSyncDebug.register();
         LevelRandomProbe.register();

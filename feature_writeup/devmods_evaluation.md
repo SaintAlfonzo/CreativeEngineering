@@ -40,7 +40,7 @@ Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Del
 7. **Output per jar:** a section in the mod's existing writeup (model: [nethers_delight.md](nethers_delight.md) section 2) with
    decisions: skip, data-only carry-over, extend the port (`-NN` build), or port new code.
 8. **Delivery path:** an installed third-party 1.19.2 jar cannot be swapped for a 1.20.1 build, so new content arrives by
-   KubeJS / data / patcherMod, or by a new port. Ports get a new `-NN` build and a `mod_sides.md` check (mod id unchanged = no edit).
+   KubeJS / data / Creative Common, or by a new port. Ports get a new `-NN` build and a `mod_sides.md` check (mod id unchanged = no edit).
 
 ## 2. Where each jar belongs
 
@@ -56,7 +56,7 @@ Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Del
 | farmersrespite-1.20.1-2.1.2 | 2.0 | **evaluated 2026-10-25**, [farmers_respite.md](farmers_respite.md), `mod-additions #21`: no new item; fluid Kettle rewrite (not ported as is, parts go to `food/drinks #7`); potted Wild Tea Bush fix and death-message lang fix proposed |
 | corn_delight-1.2.11-1.20.1 | 1.0.3 | **evaluated 2026-10-25**, [corn_delight.md](corn_delight.md), `mod-additions #24`: Corncob (replaces straw from corn), Corn Popsicle, Cob Pipe (head / Curios cosmetic); village corn farms and farmer trades (code); straw from knife-harvested corn; Comfort -> Nourishment on 3 foods (kept Comfort); MIT |
 | moredelight-26.05.20-1.20 | 25.07.28 (1.19) | **evaluated 2026-10-25**, [more_delight.md](more_delight.md), `mod-additions #25`: no new item; rewrite onto DelightLib; knives move to vanilla Wood / Stone tiers (installed ones are overtuned), toasts eat fast, Carrot Soup Comfort -> Nourishment (skip); MIT |
-| storagedelight-26.10.05-26.3 (NeoForge) | 25.12.09 (1.19) | **evaluated 2026-10-25**, [storage_delight.md](storage_delight.md), `mod-additions #33`: 94 new blocks, no new block type or behavior; 64 fit the pack (Blackstone / Diorite / Stone Bricks / Tuff countertops on the 9 woods, bamboo on Quark, cherry on Vinery's dark cherry), pale oak and poplar have no wood; needs Java (rebuilt jar or patcherMod); MIT |
+| storagedelight-26.10.05-26.3 (NeoForge) | 25.12.09 (1.19) | **evaluated 2026-10-25**, [storage_delight.md](storage_delight.md), `mod-additions #33`: 94 new blocks, no new block type or behavior; 64 fit the pack (Blackstone / Diorite / Stone Bricks / Tuff countertops on the 9 woods, bamboo on Quark, cherry on Vinery's dark cherry), pale oak and poplar have no wood; needs Java (rebuilt jar or Creative Common); MIT |
 | abnormals_delight-1.21.1-6.0.3 | 1.19.2-4.1.2 | **evaluated 2026-10-25**, [abnormals_delight.md](abnormals_delight.md), `mod-additions #26`: 9 new items (8 copper knives, Plum Cabinet) all need Caverns and Chasms or Environmental (not installed); food values unchanged; Boatload and Upgrade Aquatic salvaging to fold into the FD salvaging carry-over; Adzuki Curry craft and slice XP small carry-overs |
 | FarmersStructures-1.0.6 (1.21.1 NeoForge) | 1.0.0 | **evaluated 2026-10-25**, [farmers_structures.md](farmers_structures.md), `mod-additions #27`: data only; cod pond for the carp pond (installed one spawns fishless), 5 new Overworld structures, cook house pools 33 -> 78 templates, 5 dimension-only structures skipped; 83 of 91 templates are 1.21 saves, so `port_structure_jars.py` needs an item / entity downgrade first; ARR |
 | VeggiesDelight-1.20.1-1.9.3 and 1.21.1-1.9.3 | port `backportedVeggies` from 1.9.2 | **evaluated 2026-10-25**, [veggies_delight.md](veggies_delight.md) 2.7, `ports/veggiesport #3`: mostly FD 1.3 follow-ups; carry the carrot cake cut face; Comfort -> Nourishment on 9 foods waits for the FD survey |
@@ -168,7 +168,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 
 | Change | Class | Decision |
 |---|---|---|
-| Placed Mangosteen Cake bites give no effects (duration and amplifier swapped in 0.5.11) | code, **bug** | proposed: **fix** with a patcherMod mixin |
+| Placed Mangosteen Cake bites give no effects (duration and amplifier swapped in 0.5.11) | code, **bug** | proposed: **fix** with a Creative Common mixin |
 | Fig Pudding takes any egg | data (recipe) | proposed: **carry over** |
 | `forge:jams` gets the 22 Fruits Delight jams; 16 fruit crates in `forge:storage_blocks` | data (tags) | proposed: carry over (jams with `dishes/jams #1`); crates owner's call |
 | Comfort -> Nourishment on Mangosteen Cake, Pear with Rock Sugar, Pineapple Fried Rice | code (food effects) | skip (Comfort kept, FD decision) |
@@ -180,7 +180,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 | Change | Class | Decision |
 |---|---|---|
 | Kettle becomes a 1000 mB fluid tank: 30 drink fluids, pipes, Create filling / emptying, whole tank brews at once (4 bottles per brew, one honey bottle makes 4 strong teas) | code (block entity, recipe format) | proposed: **not ported as is** (replaces the 4 Kettle mixins, `NCH.frBrewing` and the drinks #7 / #8 design); owner decides which parts drinks #7 borrows |
-| Wild Tea Bush cannot be potted in 2.0 (potted block registered, `addPlant` never called) | code, **bug** | proposed: **fix** in patcherMod (tea only; FR coffee purged) |
+| Wild Tea Bush cannot be potted in 2.0 (potted block registered, `addPlant` never called) | code, **bug** | proposed: **fix** in Creative Common (tea only; FR coffee purged) |
 | Wither Roots death message typo; `.player` variant missing in 2.0 (raw key shows when the victim has a kill credit) | lang | proposed: **carry over** as a lang override |
 | Coffee Cake Slice and Rose Hip Pie Slice lose Speed 20 s; Coffee Cake Slice Caffeinated 20 s -> 30 s | code (food values) | proposed: skip (owner's call) |
 | Wild tea `#forge:is_swamp` at 1/25; coffee worldgen as data; damage type, creative tab, advancements | 1.20 / pack-controlled | skip |
@@ -215,7 +215,7 @@ CD script tree (`kubejs/data/creativedelight/kubejs/farmersdelight/`). Live chec
 |---|---|---|
 | Corncob: corn processing gives it in place of straw; paper, organic compost, fuel, IE ethanol | content (data + item) | proposed: **carry over** as a KubeJS item with MIT art on the pack's knife recipe; other routes owner's call |
 | Corn Popsicle, Cob Pipe (worn on the head or in Curios) | content (pipe needs Java) | owner's call |
-| Plains and taiga village corn farms (4 templates) | code (pool insert) + data | owner's call; patcherMod insert, PoolTuner weights, re-save templates at 1.19.2 DataVersion |
+| Plains and taiga village corn farms (4 templates) | code (pool insert) + data | owner's call; Creative Common insert, PoolTuner weights, re-save templates at 1.19.2 DataVersion |
 | Farmer buys corn, sells Cornbread and Tortillas; wandering trader corn kernels and Popcorn Box | code | farmer buy trades: carry over in `trades.js`; wanderer skip (pack sells kernels) |
 | Straw from mature corn broken with a knife | data (loot modifier) | owner's call; default skip (pack: corn gives no straw) |
 | Classic Corn Dog from Corn Dog + Tomato Sauce in the grid | data | proposed: carry over |

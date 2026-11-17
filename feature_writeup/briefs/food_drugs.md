@@ -29,7 +29,7 @@ Related rows:
 ---
 
 ## drugs #1: Smoking
-Status **Planned** · Work: KubeJS / patcherMod · id `food/drugs #1`
+Status **Planned** · Work: KubeJS / Creative Common · id `food/drugs #1`
 
 ### Goal
 From the cooking plan:
@@ -92,7 +92,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 - **Not in the pack:** smokeleaf (no item anywhere), a pipe (`i.pipe` is `quark:pipe`, a pipe block), any Comfort
   link. `tobacconistmod` was removed in 1.0.4 (`tools/gen_stack_sizes.py:34` `STALE_NAMESPACES`).
 - **Building blocks in the pack:**
-  - `farmersdelight:comfort` (FD effect; patcherMod `campfire/CampfireComfort.java:24` applies it).
+  - `farmersdelight:comfort` (FD effect; Creative Common `campfire/CampfireComfort.java:24` applies it).
   - KubeJS effect registration ([magic_resistance.js](../../kubejs/startup_scripts/magic/magic_resistance.js) registers
     `creativeengineering:magic_resistance` with `StartupEvents.registry('mob_effect')`).
   - The Brewin' port's stacking Tipsy and the hidden Intoxication ([alcohol.md](../alcohol.md) 2.4, T1-T6, E1), a model
@@ -200,7 +200,7 @@ effects table in `global.smoking`.
   `i.rolling_paper`, `ef.comfort`, `ef.smoked`.
 
 ### Decisions
-- **Where the code lives** (routing since 2026-10-25, memory `creative-delight-routing`): `NCH` paths are in patcherMod's
+- **Where the code lives** (routing since 2026-10-25, memory `creative-delight-routing`): `NCH` paths are in Creative Common's
   jar (`development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js`); the
   `kubejs/startup_scripts/cooking/smoking.js` / `server_scripts/cooking/smoking.js` paths above are from 2026-10-21.
   Options: Creative Delight's `the_dirty_stuff/` trees (the mod's compost already lives there) or Creative Brewing
@@ -217,7 +217,7 @@ effects table in `global.smoking`.
   `#creativeengineering:lighters` tag (`global.tags`) so a later lighter item or a lit torch counts.
 - **Smokeleaf:** a new crop, or skip it and let herbs carry the effects. Recommend skipping it in the first build; D is
   the most work and the only phase that needs worldgen or loot.
-- **KubeJS or patcherMod for the take-over:** recommend KubeJS (event cancel). Fallback: one patcherMod mixin with
+- **KubeJS or Creative Common for the take-over:** recommend KubeJS (event cancel). Fallback: one Creative Common mixin with
   `@Mixin(value = {CigaretteRightclickedProcedure.class, ...}, remap = false)` on `execute` HEAD, calling a Java handler.
   All 30 procedures share the signature `execute(LevelAccessor, double, double, double, Entity, ItemStack)`, and
   `TobaccoPlacementMixin` already shows the pattern on this mod.

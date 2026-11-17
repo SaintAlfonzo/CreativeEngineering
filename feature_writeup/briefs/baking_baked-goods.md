@@ -296,16 +296,16 @@ the spout 129).
 3. (d) Placement: the cheap route is a coaster model per slice (format of
    `kubejs/assets/creativeengineering/brewinandchewin/coaster/farmersdelight__apple_pie_slice.json`, parent a Display
    Delight `plated_*` model with the pie's block textures), then rerun `tools/placeable_catalog.py`. The family rule asks
-   for the Small Food Plate, which needs new placed blocks (CD or patcherMod, placeable_food.md 2): decide with
+   for the Small Food Plate, which needs new placed blocks (CD or Creative Common, placeable_food.md 2): decide with
    `food/placeable`.
 4. (a) Dragon egg cake: a CD startup item `creativeengineering:dragon_egg_cake` (`i.dragon_egg_cake`), a `CAKES`-style
    oven line `R.ceBaking([i.cake_base, i.frosting, i.dragon_breath, i.dragon_scale], ...)` with `F.ware.cake`, and a
    hand line on the baked base. A placeable cake block needs Java (a `CakeBlock` subclass in CD); flight needs a
-   patcherMod `MobEffect` (sets `abilities.mayfly` while active, clears it on expiry unless creative or spectator).
+   Creative Common `MobEffect` (sets `abilities.mayfly` while active, clears it on expiry unless creative or spectator).
 
 ### Decisions
 - **Dragon egg cake effects** (TODO decision). Recommendation: no dragon egg in the recipe (one per world); regeneration
-  II 30 s, resistance 120 s, slow falling 300 s; flight 60 s only if a patcherMod effect is wanted.
+  II 30 s, resistance 120 s, slow falling 300 s; flight 60 s only if a Creative Common effect is wanted.
 - **Mangosteen name.** Recommendation "Mangosteen Platter" (the sprite is fruit on a plate), out of the cake family.
 - **Slice placement route.** Recommendation coaster now, Small Food Plate later with `food/placeable`.
 
@@ -365,7 +365,7 @@ retextured, owner 2026-10-21), with more variants.
 ---
 
 ## baked-goods #7: Sourdough chain
-Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #7` (cooking plan baked/sourdough, [food_families.md](../food_families.md) 3.1)
+Status In Progress / Work KubeJS / Creative Common / TODO `baking/baked-goods #7` (cooking plan baked/sourdough, [food_families.md](../food_families.md) 3.1)
 
 ### Goal
 Starter -> growing -> fermenting -> sourdough with a timed wait between steps; the sprite grows through the chain;
@@ -380,7 +380,7 @@ sourdough made from it. Sourdough counts as any dough in recipes (scratchpad 202
 - Sourdough is **not** in `#forge:dough` (dump: Create, sweet potato, oat only). Owner rule 2026-10-28 (row #31): only
   doughs with no bread of their own bake into plain bread; putting sourdough in `#forge:dough` would make
   `bread_from_dough_1/3/6` turn it into plain bread.
-- Tools: KubeJS `modifyResult` on crafting recipes (returns empty to block a craft); patcherMod's
+- Tools: KubeJS `modifyResult` on crafting recipes (returns empty to block a craft); Creative Common's
   `CalendarDate.worldDay(Level)` (time.md 3.7) through `Java.loadClass`; the Brewin' keg (`R.bncFermenting`).
 
 ### Build (recommended route: KubeJS, lazy timestamps)
@@ -530,7 +530,7 @@ Fruits Delight's durian and pineapple "pies" (hand-held items, no placed block o
 ---
 
 ## baked-goods #13: Cherry pie
-Status In Progress / Work patcherMod / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6, [food_families.md](../food_families.md) 3.1; decided 2026-10-29: add item, slice, block)
+Status In Progress / Work Creative Common / KubeJS / TODO `baking/baked-goods #13` ([oven.md](../oven.md) 2.6, [food_families.md](../food_families.md) 3.1; decided 2026-10-29: add item, slice, block)
 
 ### Goal
 A whole cherry pie that places Create Central Kitchen's `create_central_kitchen:cherry_pie` block (the whole pie is
@@ -572,7 +572,7 @@ cherry jelly / jam share the cherry route (jam: `dishes/jams #4`).
 ---
 
 ## baked-goods #14: Unobtainable pie slices
-Status In Progress / Work KubeJS / patcherMod / TODO `baking/baked-goods #14` ([oven.md](../oven.md) 2.6, [can_parity.md](../can_parity.md), [food_families.md](../food_families.md) 3.1)
+Status In Progress / Work KubeJS / Creative Common / TODO `baking/baked-goods #14` ([oven.md](../oven.md) 2.6, [can_parity.md](../can_parity.md), [food_families.md](../food_families.md) 3.1)
 
 ### Goal
 Every pie slice in the pack can be obtained, or is hidden.
@@ -979,7 +979,7 @@ of cookie / cake / pie shapes.
 ## Built, needs play
 
 - `baked-goods #3` Cookie recipes: oven only, cookie dough + 2 flavor -> 12 ([oven.md](../oven.md) 2.6, OV-30); open S P.
-- `baked-goods #11` Mixed cookie jars (patcherMod, every cookie jarable): [mixed_jars.md](../mixed_jars.md), MJ-01 to MJ-10;
+- `baked-goods #11` Mixed cookie jars (Creative Common, every cookie jarable): [mixed_jars.md](../mixed_jars.md), MJ-01 to MJ-10;
   scratch passed (`/jartest`); open C P.
 - `baked-goods #15` Maple cookie: cookie dough + 2 Rustic syrup -> 12 (baking.js 82), [food_families.md](../food_families.md)
   4.6, FF-11, SQ-FFB; open S P.

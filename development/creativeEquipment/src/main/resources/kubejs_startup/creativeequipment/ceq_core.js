@@ -1,6 +1,6 @@
 // priority: 1000
 // Creative Equipment core: global.CEQ (feature_writeup/creative_equipment.md, creative_split.md 3.9, wave 7). Startup
-// scripts in the Equipment jar, loaded by patcherMod's startup loader after the pack's startup_scripts folder, so
+// scripts in the Equipment jar, loaded by Creative Common's startup loader after the pack's startup_scripts folder, so
 // global.NCH, global.tags and the dicts already exist here. This pack also holds the gear items made in KubeJS
 // (items/: air brake, echo tools, stepstools, felsic scrap) and the tool and armor tuning (func/: global.tuneTools,
 // global.tuneArmor). The server scripts are in kubejs/data/creativeequipment/kubejs/ (_equipment_core.js), the client

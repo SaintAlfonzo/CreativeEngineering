@@ -17,7 +17,7 @@ import java.util.Map;
  * Mixin config plugin for creativecalendar.mixins.json (feature_writeup/creative_calendar.md 4.1): the table form of the
  * shared {@link GatedMixinPlugin} (development/shared/mixinplugin). A listed mixin applies only when one of its mods is
  * loaded, so Calendar boots the same without Serene Seasons, SeasonHUD, Better Days, Xaero's Minimap or Pretty Rain.
- * Mixins not listed (vanilla targets: ServerLevelTimePauseMixin) always apply. The mixins moved from patcherMod
+ * Mixins not listed (vanilla targets: ServerLevelTimePauseMixin) always apply. The mixins moved from Creative Common
  * unchanged apart from their package (SRG names, remap = false).
  *
  * postApply: CoolRainSeasonMixin is a marker; this edits Cool Rain's merged tickRain handler directly, sending its

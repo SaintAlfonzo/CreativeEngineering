@@ -71,14 +71,14 @@ public class DetailArmorBarCompat {
     // its own sheet - only valid when reusing that sheet (i.e. the 4-arg texture() overload).
     private static final TextureOffset DEFAULT_OUTLINE = new TextureOffset(9, 0);
     private static final TextureOffset DEFAULT_OUTLINE_HALF = new TextureOffset(27, 0);
-    // Real netherite icon (confirmed against patcherMod's own MCP->SRG mapping, not just visual
+    // Real netherite icon (confirmed against Creative Common's own MCP->SRG mapping, not just visual
     // inspection: Items.NETHERITE_HELMET/etc = f_42480_/f_42481_/f_42482_/f_42483_, registered at
     // this exact offset in ClientInitializer). Untinted texture-reuse for "matches real netherite".
     private static final int NETHERITE_ICON_X = 9;
     private static final int NETHERITE_ICON_HALF_X = 0;
     // Real icon offsets for the other vanilla ArmorMaterials, traced the same way as netherite
     // above out of DetailArmorBar's own decompiled ClientInitializer#initializeModFeatures (each
-    // group's TextureOffset args, matched to Items fields via patcherMod's own MCP->SRG mapping).
+    // group's TextureOffset args, matched to Items fields via Creative Common's own MCP->SRG mapping).
     // Iron has no entry here since NEUTRAL_ICON_X/NEUTRAL_ICON_HALF_X above already IS the real
     // iron icon's own offset (ClientInitializer registers vanilla iron there too, just under its
     // own CustomArmorBar instance rather than literally the DEFAULT singleton - see register()'s

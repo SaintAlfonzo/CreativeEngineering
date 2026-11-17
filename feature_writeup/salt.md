@@ -80,7 +80,7 @@ Our overlay is GPLv3.
    `Configuration` with a rewrite that builds its values into Creative Delight's spec (a cross-member dependency on
    CD's main code) or a `MemberConfigMove` that only Display's own source tree can host. That is a rewrite of Salt
    classes, which J2 rules out; the hand-edited copies in `configs_edited/root_config/salt-*.toml` stay valid.
-4. **Mod-name override.** patcherMod `CEConfig` `[mod_names] overrides` default now has
+4. **Mod-name override.** Creative Common `CEConfig` `[mod_names] overrides` default now has
    `create__the_salt=Create: The Salt (Creative Delight)`. The live `config/creativeengineering-common.toml` and its
    `configs_edited/` copy still carry the old value until edited by hand (the default does not rewrite an existing
    list). Salt has no override entry: its mods.toml name shows.
@@ -153,7 +153,7 @@ on crushing wheels and the millstone (S6). A Salt Block unpacks to 9.
 | S8 | Melting: ice -> water outside ultra-warm dimensions, everything -> air in them; snow -> air. Upstream had the check inverted (`DimensionType.ultraWarm`), so it placed water only in the Nether | Salt member: decompiled `Melting` overlay, `replaced_classes` pin, member `-02` | BUILT 2026-11-03 (CD jar built, not installed); SQ-SALT2-06 | owner 2026-11-03 |
 | S9 | Butcher level 1: 12 emeralds -> 64 salt, 4 uses, 4 XP, as the BBQ powders; Salt's four trades off | CD `kubejs/salt/trades.js`; `salt-common.toml` `ButcherSaltTradesEnabled = false` (+ `configs_edited/`); restart | BUILT 2026-11-03; SQ-SALT2-07 | owner 2026-11-03 |
 | S10 | Salt's COMMON config into `creativedelight-common.toml` `[salt]` (same sub-sections and keys); salt-common.toml carried once and renamed `.moved`; pack defaults (rain dissolving off, Salt's trades off); `salt-client.toml` stays (CD has no client config) | Salt member `Configuration` overlay (`-03`); CD `compat/SaltConfigBridge`, `CDConfig` (`[salt]`, `MEMBER_FILES`), `MemberConfigMove` (now any value type), `CreativeDelight` (reload hook) | BUILT 2026-11-03 (headless spec test PASS both init orders; not booted); SQ-SALT2-08 | owner 2026-11-03: move |
-| S11 | One JEI category per seasoning, salt first | patcherMod `SeasoningJEI` | Future (waits for seasonings to settle) | none |
+| S11 | One JEI category per seasoning, salt first | Creative Common `SeasoningJEI` | Future (waits for seasonings to settle) | none |
 
 Not planned until a mod lands: Unusual Delight's salt from quartz and from smelting Soggy Flesh ([unusual_delight.md](unusual_delight.md)).
 

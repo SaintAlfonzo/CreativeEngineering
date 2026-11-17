@@ -52,7 +52,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * "(Harvestable)". Client-side only, display only: the blockstate already reaches the client.
  *
  * <p>Which blocks and how to read them is {@code assets/creativedelight/crop_growth.json}
- * ({@link CropGrowth}, patcherMod's format); copy it to {@code kubejs/assets/creativedelight/} to change it without
+ * ({@link CropGrowth}, Creative Common's format); copy it to {@code kubejs/assets/creativedelight/} to change it without
  * rebuilding. {@code creativedelight-common.toml [crop_growth] fallback} adds any other {@code BushBlock} with an integer
  * {@code age}, so a plant from a new mod isn't silently missing.
  * {@code /dumpcropgrowth} lists every growing block and which ones WTHIT leaves out.

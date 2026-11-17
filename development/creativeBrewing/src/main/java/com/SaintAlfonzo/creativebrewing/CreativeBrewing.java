@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * namespace (Vinery with its second id {@code foundation}, Brewin' and Chewin'). What CB adds is KubeJS scripts
  * (startup scripts in {@code kubejs_startup/}, server and client scripts under {@code data/} and
  * {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect,
- * potion machine and alcohol Java moved here from patcherMod (creative_brewing.md 4.2 phases 2 and 3).
+ * potion machine and alcohol Java moved here from Creative Common (creative_brewing.md 4.2 phases 2 and 3).
  *
  * Ids: everything CB registers or names (the potion buckets, JEI recipe
  * types,  lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
@@ -53,8 +53,8 @@ public class CreativeBrewing {
 
 	public CreativeBrewing() {
 		ConfigRename.carryOver("creative_brewing-common.toml", FILE);
-		// [alcohol], [effects], [magic_resistance], [copper_poisoning] came from patcherMod's file (phase 3): the first
-		// boot copies the player's values in (this file already exists, so merge, not carrySections); patcherMod then
+		// [alcohol], [effects], [magic_resistance], [copper_poisoning] came from Creative Common's file (phase 3): the first
+		// boot copies the player's values in (this file already exists, so merge, not carrySections); Creative Common then
 		// drops them from its own file when Forge corrects it. Must run before Forge reads the COMMON configs.
 		boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CBConfig.MOVED_SECTIONS)
 				|| !ConfigRename.mergeSections(OLD_FILE, FILE, CBConfig.MOVED_SECTIONS).isEmpty();
@@ -90,8 +90,8 @@ public class CreativeBrewing {
 			"^\\s*(\\[(?:alcohol)\\])", Pattern.MULTILINE);
 
 	/**
-	 * When neither carry-over ran (this file already had the sections, or patcherMod's file had none), Forge drops the
-	 * old sections from patcherMod's file on its next correction, so an edited value left there is lost: say which
+	 * When neither carry-over ran (this file already had the sections, or Creative Common's file had none), Forge drops the
+	 * old sections from Creative Common's file on its next correction, so an edited value left there is lost: say which
 	 * ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
 	 */
 	private static void warnOldKeys() {
@@ -108,7 +108,7 @@ public class CreativeBrewing {
 		while (m.find()) found.add(m.group(1));
 		if (found.isEmpty()) return;
 		LOGGER.warn("[creativebrewing] config/{} still has sections that moved to config/{}: {}. "
-				+ "Creative Brewing reads only its own file; copy any edited value over (patcherMod drops these from its file).",
+				+ "Creative Brewing reads only its own file; copy any edited value over (Creative Common drops these from its file).",
 				OLD_FILE, FILE, found);
 	}
 

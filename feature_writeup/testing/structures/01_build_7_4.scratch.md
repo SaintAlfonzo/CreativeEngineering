@@ -10,7 +10,7 @@
 - Current step: M1 DONE (writeup 01_build_7_4.md). Next: 30-minute sleep (constraint 3), then M2 (02_new_mods_tests.scratch.md)
 - Done: 7.4.1-7.4.6 built; tags, groups, fits, D1 shares, vehicles group + biome_frequency (Java/JS/python), rates set
 - Next: M2 scratch server, ST-170..190 minus the skipped Nether/End and rate parts
-- Jar: development/patcherMod/build/libs/creativeengineering-1.0.6.jar built 2026-10-14 01:28 (biome factors)
+- Jar: development/creativeCommon/build/libs/creativeengineering-1.0.6.jar built 2026-10-14 01:28 (biome factors)
 - Backups of the pre-7.4 configs: session scratchpad m1/backup/ (structure_tags/groups/meta/fits/config/estimates/report)
 - Config values changed: none
 - Running: nothing

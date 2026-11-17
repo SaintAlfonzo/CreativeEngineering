@@ -86,7 +86,7 @@ No haste here: Rustic Delight already has one (2.3).
 ### 2.2 Java-registered potions (`creativeengineering:*`)
 
 KubeJS's potion registry runs before any mod's mob effects exist, so potions for modded effects are a Forge
-`DeferredRegister<Potion>` in patcherMod. All three are 3:00 / 8:00 / 1:30 II, from thick.
+`DeferredRegister<Potion>` in Creative Common. All three are 3:00 / 8:00 / 1:30 II, from thick.
 
 | Potion | Effect | Reagent | Class |
 |---|---|---|---|
@@ -300,7 +300,7 @@ Creative for setup, survival-like for the machines. Use JEI (R / U) and F3+H.
 - By 2026-09-27 (initial git commit): all of the above plus the `kubejs:*` potions, Better Beacons and Magic Resistance
   potions, Rustic Delight haste, Luck; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F8; tests PO-01 to PO-26. No code changed.
-- 2026-10-19: F5 fixed (DragonBreathBrewing javadoc; source only, ships with the next patcherMod build).
+- 2026-10-19: F5 fixed (DragonBreathBrewing javadoc; source only, ships with the next Creative Common build).
 - 2026-10-23: Fungi Delight port: Burrowing potions as `PotionBrewing` mixes (2.3), JEED text for Burrowing and Weak
   Stomach, PO-27. Built, scratch test queued.
 
