@@ -29,8 +29,8 @@ own Java plus two nested members. Same behavior as before the carve; every regis
     `LeafDecayPiles`, `LeafDecayRange`.
   - New: `CreativeWorldgen` (main class, every registration that left `CreativeEngineering.java`; the
     `DeferredRegister`s use namespace `creativeengineering`, `CreativeWorldgen.NS`), `CWGConfig`,
-    `WorldgenMixinPlugin` (a `GatedMixinPlugin`), `CWGResources` (copy of `CDResources`: `text(path)` reads a jar
-    resource for the loot framework's json).
+    `WorldgenMixinPlugin` (a `GatedMixinPlugin`). `CWGResources` (the loot framework's json reader) moved to Creative
+    Loot as `CLResources` on 2026-11-17 ([creative_loot.md](creative_loot.md)).
 - **Mixins:** `creativeworldgen.mixins.json`, 60 common, none client, SRG with `remap = false`, member prefixes still
   `creativeengineering$`. The 54 sweep B Worldgen rows, the two mooshroom mating mixins, `NaturalSpawnerBoxHeightMixin`,
   `StructureStartMetaMonumentMixin`, `QuarkSpiralSpireFootprintMixin`, `AeMeteoriteHeightMixin` (the last four
@@ -46,11 +46,12 @@ own Java plus two nested members. Same behavior as before the carve; every regis
 - **Resources in the jar** (same paths, `creativeengineering` namespace): `data/creativeengineering/dimension` (11),
   `dimension_type` (1), `worldgen/noise_settings` (3), the named-mob chat lang key; the data tree
   `data/more_mooblooms/moobloom_spawns/` (authored in the pack folder, copied at build).
-- **Scripts:** startup `kubejs_startup/creativeworldgen/cwg_core.js` (`global.CWG`: `modId`, `on()`, `recipes()`,
-  `lootRules()`); server `kubejs/data/creativeworldgen/kubejs/`: `worldgen/` (11), `loot/` (11 plus
-  `loot_config.json`, `loot_index.json`), `other/removed_mobs.js`, `tags/entitytags.js`, `loottags.js`, the Worldgen
+- **Scripts:** startup `kubejs_startup/creativeworldgen/cwg_core.js` (`global.CWG`: `modId`, `on()`, `recipes()`);
+  server `kubejs/data/creativeworldgen/kubejs/`: `worldgen/` (11), `other/removed_mobs.js`, `tags/entitytags.js`, the Worldgen
   half of `blocktags.js` (villager ladders, ground match, earth fill, template trim, wild plant soils),
-  `mobs/end_divers.js`; opened by `_worldgen_core.js`. No client tree. No recipes, so no recipe id changes.
+  `mobs/end_divers.js`; opened by `_worldgen_core.js`. No client tree. No recipes, so no recipe id changes. The loot
+  framework (`loot/`, its json tables, `loottags.js`, `global.CWG.lootRules`) moved to Creative Loot on 2026-11-17
+  ([creative_loot.md](creative_loot.md)), as `global.LOOT.rules`.
 - **Members** (`development/creativeWorldgen/members/`, mod ids unchanged, no swap list): More Mooblooms
   (`more_mooblooms`, a standalone jar before) and Baby Mobs (`baby_mobs`, in Creative Delight 2026-11-01 to 2026-11-02).
 
@@ -60,15 +61,11 @@ own Java plus two nested members. Same behavior as before the carve; every regis
   both were trimmed. No new Common hook was needed. `WthitHive` reads no Worldgen class.
 - Devtools (`PerfCommand` mobcap, `SpawnDump` tuning block, `MassPlacer`) calls Worldgen behind
   `ModList.isLoaded("creativeworldgen")`; optional dependency in its mods.toml.
-- **Loot rules from Creative Delight.** KubeJS loads namespace script packs in an unordered order, so CD's four
-  `loot.js` (Rustic, Veggies, Vintage, Miner's) can run before Worldgen's `05_tuning.js`. They now queue their rules
-  with `global.CWG.lootRules(fn)`; `05_tuning.js` runs the queue in `ServerEvents.highPriorityData`, before the tag
-  capture, so rules apply in the old order.
+- **Loot** is Creative Loot's since 2026-11-17 ([creative_loot.md](creative_loot.md)): Worldgen requires `creativeloot`
+  (mandatory, AFTER) and ships no loot script of its own.
 - `global.biomeRules` (Worldgen `_biome_rules.js`): CD's `wild_crops.js` reads it at event time and warns once and
   skips when it is missing.
-- `05_tuning.js` reads `guardThrowable` and `writeExportJson` from `global` (pack-folder top-level names are not
-  visible to a jar script pack). It reads the loot json from the pack folder first, then the jar (`CWGResources`).
-- Requires `creativeengineering [1.1.08,)` and `creativecompat [1.0.0,)`, mandatory AFTER.
+- Requires `creativecommon [1.1.0,)`, `creativecompat [1.0.0,)` and `creativeloot [1.0.0,)` (since 2026-11-17), mandatory AFTER.
 
 ## 3. Left in the pack folder or elsewhere on purpose
 
@@ -129,6 +126,10 @@ config defaults. How old worlds carry over:
   their own data. Tests SQ-NSM-07, -08.
 
 ## 6. History
+
+- 2026-11-17: the loot framework moved to Creative Loot (plan_rules_fixes.md section 5b): `loot/`, its json tables,
+  `tags/loottags.js`, `CWGResources` (now `CLResources`) and `global.CWG.lootRules` (now `global.LOOT.rules`); the LootJS
+  dependency went with it, Worldgen requires `creativeloot`. Rebuilt and installed with `creativeloot-1.0.0.jar`.
 
 - 2026-11-02: carved (wave 5). patcherMod 1.1.08 loses the classes, 60 mixins, 6 sections and the resources; More
   Mooblooms and Baby Mobs nested; Devtools gains the optional dependency. Edits that the worldgen edit pass

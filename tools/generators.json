@@ -191,8 +191,8 @@
       "groups": ["core", "loot"],
       "dumps": ["dumploot", "dumptags item"],
       "outputs": [
-        "kubejs/data/creativeworldgen/kubejs/loot/loot_config.json",
-        "kubejs/data/creativeworldgen/kubejs/loot/loot_index.json"
+        "kubejs/data/creativeloot/kubejs/loot/loot_config.json",
+        "kubejs/data/creativeloot/kubejs/loot/loot_index.json"
       ],
       "apply": "/reload"
     },
@@ -277,7 +277,7 @@
       "script": "tools/loot_census.py",
       "groups": ["reports", "loot", "slow"],
       "dumps": ["dumploot"],
-      "outputs": ["kubejs/data/creativeworldgen/kubejs/loot/loot_census.md"],
+      "outputs": ["kubejs/data/creativeloot/kubejs/loot/loot_census.md"],
       "apply": "report only"
     },
     {

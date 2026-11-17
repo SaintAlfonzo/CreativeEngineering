@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — DEAD MAPS.  Drop explorer-map entries that point at structures we've disabled.
 //
 // An exploration_map whose destination never generates makes the server scan ~10k candidate

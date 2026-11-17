@@ -4,9 +4,8 @@
 // This file adds what is specific to Worldgen:
 //   - the Worldgen server script tree, authored in the pack folder so /reload picks it up without a rebuild, copied
 //     into the jar at the same resource path:
-//       kubejs/data/creativeworldgen/kubejs/    -> data/creativeworldgen/kubejs/    (server scripts, with the loot
-//                                                  framework's loot_config.json / loot_index.json, read by
-//                                                  loot/05_tuning.js from the pack folder in dev, else from the jar)
+//       kubejs/data/creativeworldgen/kubejs/    -> data/creativeworldgen/kubejs/    (server scripts; the loot framework
+//                                                  is Creative Loot's since 2026-11-17, development/creativeLoot)
 //     No client tree: no client script is Worldgen's. Startup scripts live in this project
 //     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by Creative Common's startup loader.
 //   - dataTrees: pack-folder data trees shipped in the jar the same way (creative_worldgen.md 1). Only paths no other

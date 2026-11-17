@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — RULES.  Script-side calls into the pre-roll loot framework (05_tuning.js, global.lootTuning).
 //
 // Per-item knobs stay in loot_config.json; this file is for named groups and anything that needs

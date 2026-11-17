@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Loot meta tags: item groups the chest-loot rules (loot/07_rules.js) tune as one unit.
 // A '#tag' rule reads the tag's members from this same reload (loot/95_tag_capture.js), so
 // anything added here or nested in later is picked up by the next /reload.

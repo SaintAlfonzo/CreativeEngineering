@@ -13,13 +13,11 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=af6672b01c86 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 12, In Progress 9, Testing 2), 4 Complete.
+<!-- generated:status_index begin open_work sha1=45ddc89f6f81 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 10, In Progress 10, Testing 3), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #15` | Planned | none | Global loot modifiers |
-| `conventions #16` | Planned | none | Split Creative Loot out of Creative Worldgen |
 | `conventions #22` | Planned | none | Brewin' advancement scan |
 | `conventions #26` | Planned | none | Delight loot through Creative Loot |
 | `conventions #28` | Planned | none | Sideways edges and what the dependencies simplify |
@@ -30,6 +28,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #36` | Planned | none | History audit, low priority, marked |
 | `conventions #37` | Planned | none | Docs and writeup form, last |
 | `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
+| `conventions #15` | In Progress | SQ-LOOT-02 | Global loot modifiers |
 | `conventions #17` | In Progress | none | Registration and namespace |
 | `conventions #18` | In Progress | none | Dict keys for literals and the lints |
 | `conventions #23` | In Progress | none | Member checks, remaps, helper copies |
@@ -40,6 +39,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #32` | In Progress | CQ-TT-01 to -03 | American spelling and arrows |
 | `conventions #33` | In Progress | none | Tab indent only and the rule |
 | `conventions #14` | Testing | SQ-DRK-08 | Tilled end stone and sea pickles |
+| `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
 | `conventions #20` | Testing | CQ-TT-04, CQ-TT-05 | Test-item palette switch |
 <!-- generated:status_index end open_work -->
 
@@ -689,3 +689,4 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
 - 2026-11-16: plan written from the owner brief and the 2026-11-14 audit. Section 4 tilled end stone found already built (plan_bugfix_1114 3.2).
 - 2026-11-17: P0 and P1 built (P1 agent): rule text (DR-L7 for spelling, since DR-L6 was taken), `.editorconfig`; sections 2, 3, 8, 10, 12b docs rows, 15 and 15b doc passes; "Owner list (P1)" added. Mechanical sweep commits carry `[no-stale]`, which `qrowlint.py` now skips when it dates a source change.
 - 2026-11-17: P2 built (P2 agent), Creative Common installed: section 4 dict lines and tilled end stone tags, `tools/dict_lint.py`; section 6 `NCH.forPack` with `logName`, `global.reg.forPack`, `profession_dict.js`, `tools/namespace_lint.py` in report mode (written to [namespace_report.md](namespace_report.md); a separate tool, not inside `id_owner_lint.py`, so the report mode does not fail check_all), allowlist as `tools/namespace_allowlist.csv` (CSV rule, not the TSV named in 6.4); section 7 `tools/literal_id_swap.py` and 44 missing keys; section 9 `paletteDemo`; section 12 `global.effect.resolve`, `col` roles and `global.tooltips.code`, absolute food rows (the applier is Creative Delight's `food_value_copies.js`, not Common's: it ships with the P3 Delight rebuild); 12b V-37 `NCH.cfgClass` / `cfgValue`; 12c `global.trades.villager` with an audit report (the failing lint waits for the P3 conversions); 12e `NoRecipeUnlockMixin`. Queue SQ-DRK-08, CQ-TT-04, -05, SQ-AV-01, CQ-AV-01, -02.
+- 2026-11-17: P2b built (P2b agent), `creativeloot-1.0.0.jar` and `creativeworldgen-1.0.0.jar` installed together: section 5b steps 1 to 4 ([creative_loot.md](creative_loot.md)), `global.LOOT.rules` with the 4 Creative Delight callers edited in the pack folder (they ship with the P3 Delight rebuild, which also adds the D25 `creativeloot` dependency to Delight and Brewing), `tools/loot_tuning_sim.js` migrated and passing; section 5 GlmMerge written (member list files stay until P3; members register `GlmMerge.gate` for their switches then). Findings: Forge 1.19.2's `LootModifierManager` already reads every copy of the list (`getResourceStack`), so only a `"replace": true` copy can drop entries; Worldgen had no `[loot]` toml section, so `ConfigRename` had nothing to carry; `loottags.js` moved with the tree but its tag ids stay `creativeworldgen:loot/*` (renaming them is a Common dict edit, left for section 6 in P3). Queue SQ-LOOT-01 to -06 (SQ-CWG-05 superseded).

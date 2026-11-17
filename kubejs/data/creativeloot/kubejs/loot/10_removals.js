@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — POST-ROLL REMOVALS (LootJS).  Only for what the pre-roll framework can't reach.
 //
 // Removals go pre-roll first, in 07_rules.js: the entry is taken out of the table before the roll,

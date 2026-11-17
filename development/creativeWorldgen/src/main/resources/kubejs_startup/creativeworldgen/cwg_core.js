@@ -6,11 +6,7 @@
 //   global.CWG.on('more_mooblooms')     mod loaded; read it inside an event callback
 //   global.CWG.recipes(() => { ... })   every recipe id the NCH helpers write inside is creativeworldgen:<type>/<suffix>
 //                                       (no Worldgen script writes recipes yet)
-//   global.CWG.lootRules(L => { ... })  queue chest loot rules for the loot engine (loot/05_tuning.js, global.lootTuning).
-//                                       For scripts in other packs (Creative Delight's loot.js files): script packs load
-//                                       in namespace hash order, so such a pack can load before 05_tuning.js has made
-//                                       the current reload's engine. 05_tuning.js runs the queue in highPriorityData,
-//                                       before the tag event that captures '#tag' members, and empties it.
+// Loot rules go to Creative Loot's engine: global.LOOT.rules(L => { ... }) (kubejs_startup/creativeloot/loot_core.js).
 console.info('[creativeworldgen] core starting')
 
 global.CWG = {
@@ -22,12 +18,6 @@ global.CWG = {
 
 	recipes(fn) {
 		return global.NCH.withNamespace(global.CWG.modId, fn)
-	},
-
-	_lootQueue: [],
-
-	lootRules(fn) {
-		global.CWG._lootQueue.push(fn)
 	},
 }
 

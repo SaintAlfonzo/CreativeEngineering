@@ -6,12 +6,11 @@ offline sim but are untested in game)
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=14ffbc41fd0a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (Bug 1, Planned 11, In Progress 2, Testing 1), 1 Complete.
+<!-- generated:status_index begin open_work sha1=e0d44e8ddd51 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 11, In Progress 2, Testing 1), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/generators-and-tests #9` | Bug | none | `loot_tuning_sim.js` reads the old loot script paths |
 | `loot/lootr #1` | Planned | S P | Missed Lootr chests and fixed-loot chests |
 | `loot/tables #1` | Planned | S P T | Comprehensive loot table system |
 | `loot/tables #3` | Planned | S P T | Chalk frequency |
@@ -63,10 +62,10 @@ entries not cataloged, 4 goldenfood dropped village injections, 5 always-empty c
 7 root rule. Open: 8 housekeeping (legacy `loot_table_dump/`, 40 MB, local only, superseded; not deleted; the
 script left the repo in `d0d572c`).
 
-**Open first:** [07_rules.js](../kubejs/server_scripts/loot/07_rules.js) (the rules),
-[loot_config.json](../kubejs/server_scripts/loot/loot_config.json) (per-item knobs),
-[loot_census.md](../kubejs/server_scripts/loot/loot_census.md) (per-mod tables),
-[loot/README.md](../kubejs/server_scripts/loot/README.md) (API + LootJS cheatsheet).
+**Open first:** [07_rules.js](../kubejs/data/creativeloot/kubejs/loot/07_rules.js) (the rules),
+[loot_config.json](../kubejs/data/creativeloot/kubejs/loot/loot_config.json) (per-item knobs),
+[loot_census.md](../kubejs/data/creativeloot/kubejs/loot/loot_census.md) (per-mod tables),
+[loot/README.md](../kubejs/data/creativeloot/kubejs/loot/readme.md) (API + LootJS cheatsheet).
 
 **Knobs:**
 - Per item: `"remove": true` or `"frequency": 0..100` under `items` in `loot_config.json` (above 1 boosts).
@@ -120,7 +119,7 @@ Any `!!!` banner in the log is a ban alarm (3.8).
 
 All numbers come from `python3 tools/loot_census.py` (sources: vanilla jar, `mods/*.jar`, `kubejs/data`, the
 12:08 `/dumploot` export, and a scan of every structure template). The full per-namespace tables are in
-[loot_census.md](../kubejs/server_scripts/loot/loot_census.md).
+[loot_census.md](../kubejs/data/creativeloot/kubejs/loot/loot_census.md).
 
 ### 2.1 Totals
 
@@ -407,7 +406,7 @@ LootJS gotcha: `LootEntry.withChance(int)` is a misnamed alias of `withWeight`; 
 |---|---|---|
 | `/dumploot` (`/dumploot all` also samples villager trades) | `kubejs/exported/loot_tables/<ns>.json` | the live tables, including code pools and the pre-roll rewrite; the generator needs it for code pools. Never deletes files of removed mods |
 | `/loottuning` | chat | what the last reload did |
-| `python3 tools/loot_census.py` (~30 s) | `kubejs/server_scripts/loot/loot_census.md` | the census behind section 2; flags index drift, out-of-scope tables, dead references |
+| `python3 tools/loot_census.py` (~30 s) | `kubejs/data/creativeloot/kubejs/loot/loot_census.md` | the census behind section 2; flags index drift, out-of-scope tables, dead references |
 | `python3 tools/audit_loot_containers.py` | `kubejs/generation_scripts/worldgen/loot_container_audit.md` | which containers Lootr converts, swaps or misses |
 | Just Enough Resources | JEI "Dungeon" tab | shows chest tables from the server's loot manager: pre-roll edits yes, GLMs / post-roll no |
 
@@ -449,7 +448,7 @@ too.
 same as `patterns` (`'ns:id'`, `'@mod'`, `'/regex/'`, `'#ns:tag'`, a JS regex, a list), written as `global.item`
 keys; table filters take ids, `@mod`, regexes or lists. Precedence: bans, then an item's own `loot_config.json`
 entry, then JSON patterns in file order, then script rules in call order. The full API is in
-[loot/README.md](../kubejs/server_scripts/loot/README.md).
+[loot/README.md](../kubejs/data/creativeloot/kubejs/loot/readme.md).
 
 **Bans.** `L.ban(target, { name, why, modLootOn, ownTables })` removes the item like `remove`, and assumes the mod's
 own loot switch already keeps it out. It raises a loud warning (a `!!!` banner at ERROR level in
@@ -627,17 +626,17 @@ two mod configs from disk, so a switched-on config shows up as an alarm there to
 
 ## 5. File map
 
-- Config and data: [loot_config.json](../kubejs/server_scripts/loot/loot_config.json),
-  [loot_index.json](../kubejs/server_scripts/loot/loot_index.json) (generated),
-  [loot_census.md](../kubejs/server_scripts/loot/loot_census.md) (generated),
-  [README.md](../kubejs/server_scripts/loot/README.md)
-- Runtime: [05_tuning.js](../kubejs/server_scripts/loot/05_tuning.js), [07_rules.js](../kubejs/server_scripts/loot/07_rules.js),
-  [95_tag_capture.js](../kubejs/server_scripts/loot/95_tag_capture.js), [loottags.js](../kubejs/server_scripts/tags/loottags.js),
-  [00_lib.js](../kubejs/server_scripts/loot/00_lib.js),
-  [06_dead_maps.js](../kubejs/server_scripts/loot/06_dead_maps.js),
-  [10_removals.js](../kubejs/server_scripts/loot/10_removals.js), [20_frequency.js](../kubejs/server_scripts/loot/20_frequency.js),
-  [30_redistribute.js](../kubejs/server_scripts/loot/30_redistribute.js), [40_targeted.js](../kubejs/server_scripts/loot/40_targeted.js),
-  [99_debug.js](../kubejs/server_scripts/loot/99_debug.js), [_lib/loot_dump.js](../kubejs/server_scripts/_lib/loot_dump.js) (`/dumploot`)
+- Config and data: [loot_config.json](../kubejs/data/creativeloot/kubejs/loot/loot_config.json),
+  [loot_index.json](../kubejs/data/creativeloot/kubejs/loot/loot_index.json) (generated),
+  [loot_census.md](../kubejs/data/creativeloot/kubejs/loot/loot_census.md) (generated),
+  [README.md](../kubejs/data/creativeloot/kubejs/loot/readme.md)
+- Runtime: [05_tuning.js](../kubejs/data/creativeloot/kubejs/loot/05_tuning.js), [07_rules.js](../kubejs/data/creativeloot/kubejs/loot/07_rules.js),
+  [95_tag_capture.js](../kubejs/data/creativeloot/kubejs/loot/95_tag_capture.js), [loottags.js](../kubejs/data/creativeloot/kubejs/tags/loottags.js),
+  [00_lib.js](../kubejs/data/creativeloot/kubejs/loot/00_lib.js),
+  [06_dead_maps.js](../kubejs/data/creativeloot/kubejs/loot/06_dead_maps.js),
+  [10_removals.js](../kubejs/data/creativeloot/kubejs/loot/10_removals.js), [20_frequency.js](../kubejs/data/creativeloot/kubejs/loot/20_frequency.js),
+  [30_redistribute.js](../kubejs/data/creativeloot/kubejs/loot/30_redistribute.js), [40_targeted.js](../kubejs/data/creativeloot/kubejs/loot/40_targeted.js),
+  [99_debug.js](../kubejs/data/creativeloot/kubejs/loot/99_debug.js), [_lib/loot_dump.js](../kubejs/server_scripts/_lib/loot_dump.js) (`/dumploot`)
 - Tools: [gen_loot_config.py](../tools/gen_loot_config.py), [loot_census.py](../tools/loot_census.py),
   [loot_breakdown.py](../tools/loot_breakdown.py) + [loot_breakdown_scan.py](../tools/loot_breakdown_scan.py) (output: [loot_catalog/](loot_catalog/README.md)),
   [loot_tuning_sim.js](../tools/loot_tuning_sim.js),
@@ -851,6 +850,10 @@ Revert every temporary edit and `/reload` afterwards.
   with rolls, entries (id, count, weight, chance, functions), structures and templates; hand-placed containers
   (no table) with positions and fixed contents; a by-structure index; dead references (11 missing tables, 17 containers
   that always open empty). Reference only, nothing applied.
+- **2026-11-17:** the framework moved from Creative Worldgen to the new Creative Loot jar ([creative_loot.md](creative_loot.md)):
+  scripts and tables under `kubejs/data/creativeloot/kubejs/`, `global.CWG.lootRules` became `global.LOOT.rules`,
+  links above repointed (they still named the pre-carve `server_scripts/loot/`). `tools/loot_tuning_sim.js` runs the
+  new tree with `09_drops.js` and passes.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

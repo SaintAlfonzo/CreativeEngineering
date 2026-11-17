@@ -1,5 +1,5 @@
 // priority: 100
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — TUNING.  The pre-roll loot framework: every chest-loot edit the pack makes, applied to
 // the loot table JSON before the game parses it wherever that is possible, and after the roll
 // (LootJS) only where it isn't.
@@ -41,9 +41,9 @@
 
 (function () {
 
-    // Both files sit next to this script (data/creativeworldgen/kubejs/loot/). JsonIO only reads files, so the pack folder
-    // copy is read while it exists (dev) and the jar copy otherwise (CWGResources, as Creative Delight's wild crops do).
-    var DIR = 'data/creativeworldgen/kubejs/loot/'
+    // Both files sit next to this script (data/creativeloot/kubejs/loot/). JsonIO only reads files, so the pack folder
+    // copy is read while it exists (dev) and the jar copy otherwise (CLResources, as Creative Delight's wild crops do).
+    var DIR = 'data/creativeloot/kubejs/loot/'
     var CONFIG_PATH = DIR + 'loot_config.json'
     var INDEX_PATH = DIR + 'loot_index.json'
     var ADDITIONS_PATH = 'kubejs/exported/loot_runtime_additions.json'
@@ -143,11 +143,11 @@
         try {
             var text = String(JsonIO.readString('kubejs/' + path))
             if (text === 'null') {
-                var jar = Java.loadClass('com.SaintAlfonzo.creativeworldgen.CWGResources').text(path)
+                var jar = Java.loadClass('com.SaintAlfonzo.creativeloot.CLResources').text(path)
                 text = jar == null ? 'null' : String(jar)
             }
             var data = JSON.parse(text)
-            if (data === null) throw new Error('no such file in the pack folder or the creativeworldgen jar')
+            if (data === null) throw new Error('no such file in the pack folder or the creativeloot jar')
             return data
         } catch (err) {
             console.error(TAG + 'could not read ' + path + ': ' + err)
@@ -1201,7 +1201,7 @@
         if (typeof global.writeExportJson !== 'function') return
         var res = callGuarded(function () {
             global.writeExportJson(ADDITIONS_PATH, {
-                about: 'Written by Creative Worldgen\'s loot/05_tuning.js at every reload: pools and item entries the ' +
+                about: 'Written by Creative Loot\'s loot/05_tuning.js at every reload: pools and item entries the ' +
                     'pack\'s own rules added pre-roll. tools/gen_loot_config.py ignores them when it diffs /dumploot.',
                 tables: T.additions,
             })
@@ -1311,10 +1311,11 @@
     global.lootTuning = T
 
     // Rules from other jars' script packs (Creative Delight's loot.js files): packs load in namespace hash order, so
-    // one can load before this file has made the fresh T. They queue their rules with global.CWG.lootRules(fn) (the
-    // queue is made at startup, _worldgen_core.js) and run here before the tag event that captures '#tag' members.
+    // one can load before this file has made the fresh T. They queue their rules with global.LOOT.rules(fn) (the
+    // queue is made at startup, the Creative Loot jar's kubejs_startup/creativeloot/loot_core.js) and run here before
+    // the tag event that captures '#tag' members.
     ServerEvents.highPriorityData(function () {
-        var q = global.CWG ? global.CWG._lootQueue : null
+        var q = global.LOOT ? global.LOOT._queue : null
         if (!q) return
         var fns = q.splice(0, q.length)
         fns.forEach(function (fn) {

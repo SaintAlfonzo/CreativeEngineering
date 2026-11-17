@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // global.LOOT — thin conventions + validation layer over LootJS (lootjs-forge 2.9.1, 2.x API).
 //
 // Everything lives in this ONE server script (not a startup script) so a plain /reload
@@ -17,10 +17,13 @@
 // sees loot AFTER the roll, so it can't change a weight and a removal leaves an empty slot.
 // This lib is for what only LootJS can do in 10-40: edits scoped by where the chest is (structure,
 // biome, dimension) or who opened it, stack-size caps, per-roll code. See loot/README.md.
+//
+// global.LOOT itself is made at startup (the Creative Loot jar's kubejs_startup/creativeloot/loot_core.js: modId, the
+// rules(fn) queue). This file adds its fields to that object on every reload, so rules queued by a script pack that
+// loaded before this file are kept.
 
-global.LOOT = {
+var lootLib = {
 
-  modId: 'creativeworldgen',
   strict: true, // true = throw on an unknown item/tag id, false = warn and continue
 
   // ── content lists (fill from a /dumploot export) ────────────────────────────
@@ -138,5 +141,11 @@ global.LOOT = {
     return builder
   },
 }
+
+if (!global.LOOT) {
+	console.error('[creativeloot] global.LOOT missing: the Creative Loot jar\'s startup script did not run')
+	global.LOOT = { modId: 'creativeloot', _queue: [], rules: function (fn) { global.LOOT._queue.push(fn) } }
+}
+for (var lootKey in lootLib) global.LOOT[lootKey] = lootLib[lootKey]
 
 console.log('global.LOOT ready')

@@ -8,9 +8,9 @@
 //
 // The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 
-// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
-// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
-if (global.CWG) global.CWG.lootRules(function (L) {
+// Queued with global.LOOT.rules (Creative Loot's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. Creative Delight requires Creative Loot.
+global.LOOT.rules(function (L) {
     var i = global.item
 
     L.pack(i.broccoli_crate,                i.broccoli)

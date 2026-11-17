@@ -76,6 +76,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-CWG-05 | loot tuning loads from the jar when the kubejs/data json files are gone
 @group A
+@superseded SQ-LOOT-05 (the loot tables moved to Creative Loot 2026-11-17, creative_loot.md)
 @commands Scratch copy with `kubejs/data/creativeworldgen/kubejs/loot/loot_config.json` and `loot_index.json` moved away; boot
 @pass Loot tuning loads from the jar (`CWGResources`); same rule count as -04
 @fails `CWGResources.text` path, or the json missing from the jar

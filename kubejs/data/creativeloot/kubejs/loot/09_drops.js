@@ -1,5 +1,5 @@
 // priority: 99
-// requires: creativeworldgen
+// requires: creativeloot
 // Mob, block and fishing loot — DROPS.  Adds drop rules to the loot engine (global.lootTuning, 05_tuning.js), for the
 // tables the chest framework leaves alone (entities/, blocks/, gameplay/). Like the rest of the engine it rewrites the
 // table JSON before the game parses it (ServerEvents.genericLootTables), so a drop is a real loot pool: the vanilla

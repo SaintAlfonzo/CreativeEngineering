@@ -39,6 +39,7 @@ JAR_ALIASES = [
     ('creativeengineering', r'Creative Engineering(?! 2)|creativeengineering-'),
     ('creativeequipment', r'Creative Equipment|creativeequipment'),
     ('creativelabels', r'Creative Labels|Storage Labels'),
+    ('creativeloot', r'Creative Loot|creativeloot'),
     ('creativemagic', r'Creative Magic|creativemagic'),
     ('creativeworldgen', r'Creative Worldgen|creativeworldgen'),
     ('powergrid', r'Power Grid'),

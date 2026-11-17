@@ -135,6 +135,7 @@ same pass as the renames.
 | `LB-` | [lunchboxes.md](../lunchboxes.md) | CQ-LB (1), SQ-LB (2) |  |  |
 | `LGM-` | [large_meals.md](../large_meals.md) | CQ-LGM (1), SQ-LGM (14) | plan_meals_rolls_bbq.md |  |
 | `LO-` | [locate.md](../locate.md) |  | testing/structures/, briefs/worldgen_locate.md |  |
+| `LOOT-` | [creative_loot.md](../creative_loot.md) | SQ-LOOT (0) | plan_rules_fixes.md | new 2026-11-17 (the Creative Loot jar, plan_rules_fixes.md section 5b); `LT-` stays loot.md's, `LTP-` loading tips' |
 | `LT-` | [loot.md](../loot.md) |  | briefs/loot_lootjs-layer.md, briefs/loot_lootr.md, briefs/loot_tables.md |  |
 | `LTP-` | [loading_tips.md](../loading_tips.md) | CQ-LTP (15) | loading_tips_audit.md, plan_loading_tips_screens.md | new 2026-11-16, was LT- (collided with loot.md); also loading_tips_audit.md and plan_loading_tips_screens.md |
 | `LW-` | [log_warnings.md](../log_warnings.md) |  |  |  |
@@ -521,3 +522,4 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 
 - 2026-11-16: index built from a scan of the docs, the README prefix column and the scratch queue (plan_rules_fixes.md section 2); 10 renames proposed (section 2), none applied yet.
 - 2026-11-17: the 10 renames applied by `tools/test_prefix_rename.py` (591 ids; 9 by hand after the report); queue columns updated; `tools/test_prefix_lint.py` built (fails on 20 queue ids defined twice, listed in plan_rules_fixes.md "Owner list (P1)").
+- 2026-11-17: `LOOT-` added for [creative_loot.md](../creative_loot.md) (Creative Loot jar, plan_rules_fixes.md section 5b).
