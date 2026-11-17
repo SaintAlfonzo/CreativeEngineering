@@ -543,7 +543,7 @@ configs `baby_mobs-common.toml`, `more_mooblooms-common.toml`; lang namespace `v
 
 ## 15b. American spelling and arrows (D20, D21)
 
-- Rule: DR-L6 (new) "American spelling in prose and player text; `->` for arrows". design_rules.md G1 and G19 closed.
+- Rule: DR-L7 (new; DR-L6 is the in-game names rule) "American spelling in prose and player text; `->` for arrows". design_rules.md G1 and G19 closed.
 - Tool `tools/us_spelling.py` (dry-run, report per file): a word list of British to American forms (colour, armour,
   behaviour, grey, centre, metre, litre, licence as a noun, favour, flavour, honour, -ise/-isation verbs, catalogue,
   programme, travelled) applied to prose only. Skips code identifiers, quoted ids (`ns:id`, config keys, file paths),

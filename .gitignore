@@ -7,6 +7,7 @@
 
 # --- repo meta / notes ---
 !/.gitignore
+!/.editorconfig
 !/README.md
 !/CLAUDE.md
 !/mod_sides.md

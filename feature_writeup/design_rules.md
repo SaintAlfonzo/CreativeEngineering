@@ -40,8 +40,10 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | `python3 tools/changelog_lint.py` | DR-P5, DR-P9 | changelog file format, labels (New, Changed, Fixed, Removed), icons, frozen deployed files |
 | `python3 tools/name_audit.py --check` | DR-P10, DR-P11 | raw lang keys shown as names; Title Case of every displayed name |
 | `python3 tools/id_owner_lint.py` | DR-C11 | ids, channels, JEI and WTHIT uids, `ce` names outside Creative Engineering |
+| `python3 tools/test_prefix_lint.py` | DR-W3b | prefix rows, defining lines outside the owner doc, duplicate prefixes, duplicate queue ids (fails) |
+| `python3 tools/iso_dates.py` / `python3 tools/us_spelling.py` | DR-L4b, DR-L5, DR-L7 | sweep tools (dry run by default, report per file); `--apply` rewrites |
 | `python3 tools/texture_provenance.py` | DR-C18 | every derived texture has a `sources.csv` row |
-| `python3 tools/design_rules_audit.py` (`-v` lists every hit; name checks to run only some) | DR-L1, DR-L4, DR-L5, DR-W9, DR-W11, DR-W16, DR-C1, DR-C2, DR-C10, DR-C14, DR-C19, DR-C21 to DR-C25, G1 | report only (exit 0): emoji, relative dates, spelling mix, citation form, path spans, config backups, `mod_sides.md` rows, underscores, licence fields, raw recipe and tag calls, literal ids, formatting counts, doc file names |
+| `python3 tools/design_rules_audit.py` (`-v` lists every hit; name checks to run only some) | DR-L1, DR-L4, DR-L4b, DR-L5, DR-W3b, DR-W9, DR-W11, DR-W16, DR-C1, DR-C2, DR-C10, DR-C14, DR-C19, DR-C21 to DR-C25, G1 | report only (exit 0): emoji, relative and non-ISO dates (DR-L4b), spelling mix, citation form, test prefixes (DR-W3b), path spans, config backups, `mod_sides.md` rows, underscores, licence fields, raw recipe and tag calls, literal ids, formatting counts, doc file names |
 
 ## 2. Language (all text)
 
@@ -51,8 +53,10 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-L2 | Status markers are plain words, never symbols: VERIFIED, DEPLOYED, BUILT, BROKEN, PASSED (writeups); Bug, Planned, Pinned, In Progress, Testing, Complete (TODO). | Hard | README.md "Status legend"; note [todo-layout](agent_notes/todo-layout.md) |
 | DR-L3 | Abbreviations from the CLAUDE.md glossary (CE, CD, FD, IE ...) are fine in docs and chat; spell them out in player-facing text and changelog bullets. | Hard | CLAUDE.md "Glossary" |
 | DR-L4 | Dates are absolute, `YYYY-MM-DD`. Never "yesterday" or "last week" in a file. | Convention | every writeup |
-| DR-L5 | Owner decisions are cited inline with their date: "(owner, 2026-11-02)". | Convention | 279 uses of "owner", 43 older uses of "user" (section 7, G5) |
+| DR-L4b | ISO 8601 only: dates are `YYYY-MM-DD` everywhere (docs, comments, scripts, tool output, memory, TODO rows, queue rows; commit messages excluded); time stamps `YYYY-MM-DD HH:MM` (24-hour). No year-less `11-14`, no `Nov 14`, no `14/11`. | Checked (report) | plan_rules_fixes.md section 15 (owner, 2026-11-16); `design_rules_audit.py dates` |
+| DR-L5 | Owner decisions are cited inline with their date: "(owner, 2026-11-02)"; the word is always "owner", never "user" (D9). | Hard | 279 uses of "owner", 43 older uses of "user" (section 7, G5) |
 | DR-L6 | Use in-game names exactly as the game shows them when naming content in prose. | Hard (changelog); Convention (docs) | changelog.md 3.6 |
+| DR-L7 | American spelling in all own prose and player text: docs, memory, skills, comments, tool output, `unreleased.md`, own lang values, tooltip and chat text (color, armor, behavior, gray, center, license). Code identifiers follow their API; upstream lang text and deployed changelogs are not changed for spelling alone. Arrows are `->` in docs and test lines; player text adds no arrows. | Checked (report) | plan_rules_fixes.md D20, D21, section 15b (owner, 2026-11-16); `tools/us_spelling.py` |
 
 ## 3. Player-facing text
 
@@ -63,7 +67,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-P1 | Write the bullet in the same session that makes the change playable in the dev instance (TODO row reaches Testing), in `kubejs/assets/creativecommon/changelog/unreleased.md`. | Hard | CLAUDE.md "Done means"; changelog.md 3.6 |
 | DR-P2 | Group bullets under a feature family heading (`## Lunchboxes`); a lone change goes under a broad catch-all heading and moves into a family when a second change touches it. | Hard | CLAUDE.md |
 | DR-P3 | Reader: a player who knows the game and the pack's mods, not its code. A change list, not a guide or a pitch. | Hard | changelog.md 3.6 |
-| DR-P4 | Terse, facts only: what changed, where, the numbers. Old value in brackets ("4 Corn Kernels (was 2)"). No benefit clauses, tips, reassurance or empty adjectives. One change per bullet; fragments and colons are fine. | Hard | changelog.md 3.6 (owner, 2026-10-21) |
+| DR-P4 | Terse, facts only: what changed, where, the numbers. Old value in square brackets after the new one ("4 Corn Kernels [2]"), never "(was 2)". No benefit clauses, tips, reassurance or empty adjectives. One change per bullet; fragments and colons are fine. | Hard | changelog.md 3.6 (owner, 2026-10-21) |
 | DR-P5 | Labels: New, Changed, Fixed, Removed. Fixes state the bug in past tense ("The Oven accepted no fuel."). | Checked | changelog.md 3.6 |
 | DR-P6 | Never registry ids, file names, config keys, mod internals, test ids or TODO ids. Commands only if players can run them, in backticks. | Hard | changelog.md 3.6 |
 | DR-P7 | No bullet for tooling, writeups, refactors, dev-only commands, unnoticeable perf work, or ports that behave the same. | Hard | CLAUDE.md; changelog.md 3.6 |
@@ -88,7 +92,8 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 |---|---|---|---|
 | DR-W1 | One writeup per feature in `feature_writeup/`, the single up-to-date reference; code and config stay the source of truth for values. Readers: the owner coming back later, and Claude at the start of a session. | Hard | README.md intro |
 | DR-W2 | Layout: 0 At a glance, 1 Overview, 2 Reference, 3 What the pack changes, 4 Limits and decisions (with rejected options and why), 5 File map, 6 Offline checks, 7 In-game test suite, 8 History. | Hard | README.md "Layout every writeup follows" |
-| DR-W3 | Test ids are `PREFIX-NN`; each test is a checkbox line `**PREFIX-NN name:** setup and action → expected`. Retire an id (strike through, "moved to ...") rather than renumbering. Prefixes and owners: [testing/test_prefix_index.md](testing/test_prefix_index.md) (a new prefix gets its row first). | Hard | README.md; memory `feature-writeup-pattern` |
+| DR-W3 | Test ids are `PREFIX-NN`; each test is a checkbox line `- [ ] **PREFIX-NN Name:** setup and action -> expected`, the colon inside the bold and any result note after the colon (D12). Retire an id (strike through, "(moved to X)") rather than renumbering. Prefixes and owners: [testing/test_prefix_index.md](testing/test_prefix_index.md) (a new prefix gets its row first). | Hard | README.md; memory `feature-writeup-pattern` |
+| DR-W3b | A new test prefix gets its row in [testing/test_prefix_index.md](testing/test_prefix_index.md) first; `tools/test_prefix_lint.py` must pass (no prefix without a row, no id defined outside its owner doc, no prefix on two rows, no queue id defined twice). | Checked | plan_rules_fixes.md section 2 (owner, 2026-11-16) |
 | DR-W4 | Scratch queue rows are a table `ID / Group / Commands / Pass / If it fails`, ids `SQ-<feature>-NN` (server) and `CQ-<feature>-NN` (client), in a dated section at the end of the queue. | Hard | skill `scratch-test` part A |
 | DR-W5 | Any change to a feature updates its writeup in the same session: values, file map, tests and a dated History line. | Hard | CLAUDE.md "Done means"; README.md |
 | DR-W6 | Feature state (built, deployed, tested, versions) lives in the repo docs: README.md index, TODO.md, `plan_*.md`, deploy.md. Memory holds only rules, gotchas and mechanics. | Hard | CLAUDE.md; memory `memory-vs-docs-policy` |
@@ -132,7 +137,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 | Id | Rule | H | Source |
 |---|---|---|---|
-| DR-C14 | No advancements for rewards or unlocks (the pack drops them all at load). No features that grant items, unlock recipes or detect progress through them. | Hard | CLAUDE.md; advancements.md (owner, 2026-10-18) |
+| DR-C14 | No advancements for rewards or unlocks (the pack drops them all at load). No recipe unlocks of any kind (recipe book, advancements, knowledge books). No features that grant items or detect progress through advancements. | Hard | CLAUDE.md; advancements.md (owner, 2026-10-18); plan_rules_fixes.md D23 (owner, 2026-11-16) |
 | DR-C15 | Ports and backports: no old-version or cross-mod conversions or remaps. Code from an ARR donor is written from behaviour, never translated from a decompile. | Hard | CLAUDE.md; skill `port` |
 | DR-C16 | Structure searches go through Async Locator off the server thread, never a synchronous search. | Memory | memory `async-locator-everywhere` |
 | DR-C17 | No `getChunkAt`, `getBiome` or `getHeight` on ungenerated land from a KubeJS command; no `r.getType()` while looping all recipes. | Hard | skill `scratch-test` gotchas.md |
@@ -142,19 +147,19 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 | Id | Rule | H | Source |
 |---|---|---|---|
-| DR-C19 | Own work is GPLv3: full GPL-3 text as the licence file, `license="GNU GPL3"` in mods.toml (the code uses the SPDX form `mod_license=GPL-3.0-only` in every jar instead: G11). Permissive upstream code keeps its notice in a separate file (`NOTICE-upstream-MIT.txt`); each jar ships its LICENSE and NOTICE files. | Hard | CLAUDE.md; memory `license-gplv3` |
+| DR-C19 | Own work is `GPL-3.0-only` (SPDX): full GPL-3 text as the `LICENSE` file, `mod_license=GPL-3.0-only` in `gradle.properties` and so `license="GPL-3.0-only"` in mods.toml (widening to `GPL-3.0-or-later` is a one-line change per jar). Code under another licence keeps its notice in a separate file named `NOTICE-<scope>-<licence>.txt` (`NOTICE-upstream-MIT.txt`, `NOTICE-thirdparty-MIT.txt`); each jar ships its LICENSE and NOTICE files and the build gate in `ce.forge-mod.gradle` checks them. | Checked | CLAUDE.md; plan_rules_fixes.md D1, section 8 (owner, 2026-11-16); `design_rules_audit.py licence` |
 | DR-C20 | Abnormals-licensed and other no-modification mods: our jars carry none of their textures, models or data; reference them by resource location. | Memory | memory `license-gplv3`; mooblooms.md 4.0 |
 
-### 5.5 Formatting (what the code does today; no rule exists)
+### 5.5 Formatting and comments
 
-| Id | Observation (2026-11-13) | H |
-|---|---|---|
-| DR-C21 | Java: 4-space indent in most files; 285 of about 3,430 tracked Java files indent with tabs, and some mix both (`CreativeCommon.java`). | Convention, inconsistent |
-| DR-C22 | JavaScript: 2-space indent in some scripts, tabs in others (495 of about 750 tracked JS files use tabs). | Convention, inconsistent |
-| DR-C23 | Python: 4-space indent in nearly every tool. | Convention |
-| DR-C24 | Line length: no limit; about 10,100 Java lines are over 120 characters. Markdown in writeups wraps near 120 in older files, not at all in newer table rows. | None |
-| DR-C25 | No formatter, `.editorconfig`, Checkstyle or Spotless in the build. | None |
-| DR-C26 | Comments and doc comments: no rule. Owner, 2026-11-01: no source header marks Creative Computers files (creative_computers.md lists them instead). | None |
+| Id | Rule | H | Source |
+|---|---|---|---|
+| DR-C21 | Indent is one tab per level in every own source file: Java, JS, Gradle, Python and own hand-written JSON. No spaces as indent; alignment spaces after the indent are allowed. Out of scope: YAML (tabs are illegal), Markdown, game-written configs, generated files (under `kubejs/generation_scripts/`, `kubejs/exported/`, a `build/` folder, or an output listed in `tools/generators.json`) and files baked from an upstream donor. `.editorconfig` at the root sets this for editors. | Hard (from P0; sweep in plan section 16) | plan_rules_fixes.md D3, D7 (owner, 2026-11-16) |
+| DR-C22 | No trailing whitespace in own source files; files end with one newline; LF line endings. | Hard | plan_rules_fixes.md D7 (owner, 2026-11-16) |
+| DR-C23 | Line length and brace style are free. | Hard | plan_rules_fixes.md D7 (owner, 2026-11-16) |
+| DR-C24 | No formatter in the build (no Spotless or Checkstyle); `.editorconfig` and `design_rules_audit.py format` are the tools. | Hard | plan_rules_fixes.md D7 (owner, 2026-11-16) |
+| DR-C25 | (merged into DR-C21 and DR-C22, 2026-11-16) | | |
+| DR-C26 | Code comments say what the code does now. History, status, dates of past changes and "was X" notes go to the writeup's History, not into comments. File headers stay as they are (no licence header rule); Creative Computers files carry no source header (owner, 2026-11-01). | Hard | plan_rules_fixes.md D8 (owner, 2026-11-16) |
 | DR-C27 | Commit messages: short free text, mostly lowercase ("power grid backport"); no format. | None |
 
 ## 6. Agent and session conduct
@@ -171,14 +176,14 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 The agenda for making these rules hard. Each item names the rule ids it would settle.
 
-- **G1 Spelling.** The docs mix British and American spelling: "colour" 608 times, "color" 84 (mostly in code
+- **G1 Spelling** (closed 2026-11-16: DR-L7). The docs mix British and American spelling: "colour" 608 times, "color" 84 (mostly in code
   names); "capitalisation" 2, "capitalization" 5. Pick one for prose (code identifiers follow the language or API).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D20: American; code identifiers follow their API).
-- **G2 Code formatting** (DR-C21 to DR-C25). Indent per language, tabs or spaces, line length, brace style, and
+- **G2 Code formatting** (closed 2026-11-16: DR-C21 to DR-C24). Indent per language, tabs or spaces, line length, brace style, and
   whether to add an `.editorconfig` (editors apply it with no build change) or a formatter (Spotless rewrites files
   and would need a one-time reformat commit).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D7: tabs as indent in every own source file, Python included; no trailing whitespace; `.editorconfig`; line length and braces free).
-- **G3 Comments** (DR-C26). When a comment or doc comment is required, what it may say (no history or status in
+- **G3 Comments** (closed 2026-11-16: DR-C26). When a comment or doc comment is required, what it may say (no history or status in
   code comments?), and file headers (licence line or none).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D8: comments say what the code does now (DR-C26); history goes to the writeup; no file header rule).
 - **G4 Commit messages** (DR-C27). Format and length, or leave free.
@@ -200,11 +205,11 @@ The agenda for making these rules hard. Each item names the rule ids it would se
 
 Conflicts the 2026-11-14 audit found between a written rule and what the files do:
 
-- **G11 Licence string** (DR-C19). The rule says `license="GNU GPL3"`; all 44 jars use `GPL-3.0-only` (SPDX), with
+- **G11 Licence string** (closed 2026-11-16: DR-C19). The rule says `license="GNU GPL3"`; all 44 jars use `GPL-3.0-only` (SPDX), with
   an "upstream; overlay" form for repacks. Likely fix: change the rule text. Also settle NOTICE file names
   (`NOTICE-upstream-<licence>.txt` for donors, `NOTICE-thirdparty.txt` for libraries).
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D1: `GPL-3.0-only`; NOTICE form `NOTICE-<scope>-<licence>.txt` (plan section 8)).
-- **G12 Old value in changelog bullets** (DR-P4). The rule says "(was 2)"; every file since 1.1.03 uses `[2]` (335
+- **G12 Old value in changelog bullets** (closed 2026-11-16: DR-P4). The rule says "(was 2)"; every file since 1.1.03 uses `[2]` (335
   uses), and unreleased.md mixes both.
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D10: brackets `[2]`; DR-P4 text to change).
 - **G13 Test form** (DR-W3). The README wants ticked checkbox lines; the integration-report skill asks for
@@ -216,7 +221,7 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
   Extend the legend or replace them. This file used DONE until 2026-11-14.
 - **G15 Split migrations** (DR-C15). Config carry-overs from our own jar split (8 `OLD_FILE` readers) and the camera
   bag id remap move our own data, not another version's. Exempt them, or set a release to remove them.
-- **G16 Recipe-book unlocks** (DR-C14). The Oven calls `awardRecipes` like the furnace and Farmer's Delight. Exempt
+- **G16 Recipe-book unlocks** (closed 2026-11-16: DR-C14). The Oven calls `awardRecipes` like the furnace and Farmer's Delight. Exempt
   recipe-book parity, or drop it.
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D23: no recipe unlocks of any kind; the Oven, Keg and Copper Pot stop awarding, and a Common mixin blocks the rest).
 - **G17 JEI and WTHIT in player text** (DR-L3). Players know these mods by the abbreviation (75 and 25 uses in
@@ -224,7 +229,7 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
 - **G18 Writeup layout variants** (DR-W2, DR-W5). 35 writeups add sections after History; integration reports, jar
   upgrades, plans and audits use their own layouts. Name the allowed layouts, say whether appendix sections may
   follow History, and fix the History order (oldest first, appended: 87 files; 11 newest first; 21 mixed).
-- **G19 Arrows** in test lines: `->` (441) and `→` (895) are mixed, often in one file. Pick one.
+- **G19 Arrows** (closed 2026-11-16: DR-L7, DR-W3) in test lines: `->` (441) and `→` (895) are mixed, often in one file. Pick one.
   **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D21: `->`).
 - **G20 Upstream-id exceptions** (DR-C10, DR-C9). `baby_mobs` and `more_mooblooms` (mod id, package, mixin json,
   config name), the `vinery_backport` lang namespace, Golden Food's `minecraft:` overrides and CE's
@@ -244,7 +249,7 @@ Poorly = breaks are common or growing.
 | DR-L1 | Followed | No emoji in own files. The 10 hits are third-party text (WTHIT's default symbols in its config, Kiwi's mod name in the generated mod list) and the lint's own regex |
 | DR-L2 | Poorly | No symbols, but about 15 status words outside the legend (G14), in README.md, TODO.md and this file |
 | DR-L3 | Mostly | Only JEI, WTHIT, IE, AE2 and FTB reach player text (G17) |
-| DR-L4 | Mostly | No relative date words (10 hits are all commands or quotes), but 280 dates have no year ("(owner 11-05)") |
+| DR-L4 | Mostly | No relative date words (10 hits are all commands or quotes), but 280 dates have no year (`(owner 11-05)`) |
 | DR-L5 | Mostly | 339 "(owner, date)" against 74 older "(user, date)" in 31 files |
 | DR-L6 | Mostly | unreleased.md lowercases vanilla and mod names next to Title Case ones |
 | DR-P1, DR-P8 | Followed | No stale or duplicate bullets found in unreleased.md |
@@ -311,7 +316,7 @@ gap in section 7 say so. Deployed changelog files are frozen: their breaks are r
 | V-09 | DR-P15 | `development/creativeEngineering/src/main/resources/assets/creativeengineering/lang/.en_us.json` | Stray hidden lang copy ships in the jar | Delete it | low | Open |
 | V-10 | DR-C9, DR-C11 | `"[creativeengineering]"` log tags in `creativedelight/compat/DisplayDelightDishes.java:62,71`, `DisplayDelightDishBlocks.java:57`; logger names in `creativeCompat/.../ItemBurnTransform.java:42`, `creativeDevtools/.../StructureCatalogue.java:73`, `MassPlacer.java:95`; ticket `creativeengineering_locate` in `creativeWorldgen/.../LocateLoads.java:51` | Runtime names point at the wrong jar (not saved data) | Use each jar's mod id; add the pattern to `id_owner_lint.py` | low | Open |
 | V-11 | DR-C10 | Packages `com.SaintAlfonzo.baby_mobs`, `com.SaintAlfonzo.more_mooblooms`; mixin jsons and default config names `baby_mobs-common.toml`, `more_mooblooms-common.toml`; lang namespace `vinery_backport` | Underscores in own names (mod ids kept on purpose) | G20: name as exceptions, or rename packages and configs | low | Open |
-| V-12 | DR-C19 | Every own `gradle.properties` (`mod_license=GPL-3.0-only`) | Rule text says "GNU GPL3" | G11: fix the rule text | med | Open |
+| V-12 | DR-C19 | Every own `gradle.properties` (`mod_license=GPL-3.0-only`) | Rule text says "GNU GPL3" | G11: fix the rule text | med | Fixed 2026-11-17 (DR-C19 text) |
 | V-13 | DR-C19 | NOTICE names: `NOTICE-upstream-MIT.txt` (19), `NOTICE-thirdparty.txt`, `NOTICE-vinery-upstream.txt`, `NOTICE-upstream.txt`, `NOTICE`, `NOTICE-commonmark.txt`, `NOTICE-upstream-MIT-enders.txt`; `development/backportedPowerGrid/LICENSE` holds Apache 2.0 | No single naming form; Power Grid's `LICENSE` is the upstream licence | G11: settle names; rename Power Grid's file to `NOTICE-upstream-Apache.txt` | low | Open |
 | V-14 | DR-C15 | `development/creativeDelight/members/miners` (34 files in `com.sammy.minersdelight`) | ARR rewrite keeps the upstream package, unlike the other ARR rewrites | Repackage to `com.SaintAlfonzo.creativedelight.miners`, or record the reason in miners_delight.md | low | Open |
 | V-15 | DR-C14 | `creativedelight/oven/OvenBlockEntity.java:365-368` | `awardRecipes` unlocks recipe-book entries | G16 | low | Open |
@@ -477,3 +482,4 @@ each area's numbering. Counts are from 2026-11-14.
   points to the new [testing/test_prefix_index.md](testing/test_prefix_index.md).
 - 2026-11-16: G1 (American spelling) and G19 (`->`) decided, plan D20, D21.
 - 2026-11-16: G16 decided (recipe unlocks removed entirely, plan D23); every V-id scheduled in plan_rules_fixes.md.
+- 2026-11-16: P0 rule text (plan_rules_fixes.md): DR-L4b (ISO dates), DR-L7 (American spelling and `->`; the plan called it DR-L6, which already names in-game names), DR-W3b (prefix index first), DR-W3 test line form (D12), DR-L5 owner only (D9), DR-P4 brackets (D10), DR-C14 no recipe unlocks (D23), DR-C19 `GPL-3.0-only` and NOTICE names (D1), section 5.5 rewritten as rules DR-C21 to DR-C26 (D3, D7, D8); G1, G2, G3, G11, G12, G16, G19 closed; `.editorconfig` added.

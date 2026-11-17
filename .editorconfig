@@ -1,0 +1,25 @@
+# Formatting rules: feature_writeup/design_rules.md DR-C21 to DR-C24 (tabs as indent, no trailing whitespace).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+indent_style = space
+trim_trailing_whitespace = false
+
+[{kubejs/exported/**,kubejs/generation_scripts/**,**/build/**,config/**,defaultconfigs/**}]
+indent_style = unset
+indent_size = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset

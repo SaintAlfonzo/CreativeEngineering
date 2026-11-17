@@ -43,7 +43,8 @@ findings) become a plan, split and classify them and ask the open items before b
 - **Define each item once.** Ids live in `global.item` / `item_dict.js` (and block/fluid dicts, all in Creative Common's
   `kubejs_startup/creativecommon/_lib/`);
   scripts use those keys, not literal `namespace:id` strings.
-- No emoji in any file. Own work is GPLv3. Never publish claude.ai artifacts.
+- No emoji in any file. Own work is GPL-3.0-only (SPDX). Never publish claude.ai artifacts.
+- Dates are ISO 8601 everywhere (`YYYY-MM-DD`, times `YYYY-MM-DD HH:MM`), never year-less `11-14` or `Nov 14`; American spelling and `->` arrows in prose (design_rules.md DR-L4b, DR-L7).
 - **Textures: human art or the owner's tools only.** Never draw, generate or pixel-edit a texture, pick its palette, or
   transform it with an ad-hoc script. Allowed: copy human art (upstream, vanilla, owner's), or run
   `textureswapper/palette_swap.py` / `combine_tex.py` / `scale_tex.py` / `upscale_sprites.py` on a source and palette
