@@ -156,6 +156,31 @@ col.warn = 'dark_red';
 col.good = 'dark_green';
 col.eng = 'gold';
 
+// Roles: what a line says, not how it looks (design rule DR-P12, plan_rules_fixes.md section 12, V-43, V-44).
+// Tooltip scripts pick a role; the raw color names above stay for the palette test item only.
+col.text = 'gray';            // plain description or source of an item ("Ender Dragon drop")
+col.data = 'dark_gray';       // measured values and data lines (Material Information: density, melting point)
+col.hint = 'green';           // how to use an item ("Use on kelp ...", "Gives infinite water")
+col.value = 'gold';           // a highlighted value inside a text line (the Sawmill profile name)
+col.removed = 'red';          // removed or disabled item warnings (bold)
+col.uncanny = 'dark_purple';  // turns a mob into another, sinister effects (Rotten Apple, Sinister Carrot)
+col.strange = 'light_purple'; // chorus and ender oddities (Chorus Wine)
+
+// Section-sign formatting code of a role or color, for code that builds raw strings (effect tooltip lines):
+// global.tooltips.code(col.text) -> '§7'. An unknown name returns '' and warns once.
+var COLOR_CODES = {
+	black: '0', dark_blue: '1', dark_green: '2', dark_aqua: '3', dark_red: '4', dark_purple: '5', gold: '6', gray: '7',
+	dark_gray: '8', blue: '9', green: 'a', aqua: 'b', red: 'c', light_purple: 'd', yellow: 'e', white: 'f',
+};
+var codeWarned = {};
+function colorCode(name) {
+	var c = COLOR_CODES[name] || COLOR_CODES[col[name]];
+	if (c) return '§' + c;
+	if (!codeWarned[name]) console.warn('[tooltips] code(): unknown color or role ' + name);
+	codeWarned[name] = true;
+	return '';
+}
+
 // The helpers and palette for other script packs (Creative Compat's tooltips.js reads them at event time; each script
 // pack has its own scope, only global is shared).
 global.tooltips = {
@@ -165,6 +190,7 @@ global.tooltips = {
 	removeTooltips: removeTooltips,
 	removeTooltipKey: removeTooltipKey,
 	col: col,
+	code: colorCode,
 	_absent: tipAbsent,
 	_absentCounts: tipAbsentCounts,
 }

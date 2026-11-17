@@ -1,0 +1,6 @@
+id,reason
+jrftl:prepared_flesh,Saved id: the item was registered under jrftl before the pack took it over; renaming would break saves (plan D11)
+enders_additions->endersdelight,Ender's Delight is ARR: new ids go through a Creative Delight additions member under its namespace (agent note arr-mod-overrides-route)
+ends_delight->endersdelight,Same member as enders_additions (Ender's Delight additions under its namespace)
+goldenfood->minecraft,Golden Food overrides vanilla golden food items under minecraft (plan D11)
+creativedelight->creative_delight,Load-only alias of the village farm processor id from before the underscore was dropped (VillageFarmCrops.LEGACY_PROCESSORS; never prune)

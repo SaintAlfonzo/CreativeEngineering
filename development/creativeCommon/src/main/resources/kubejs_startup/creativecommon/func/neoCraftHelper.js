@@ -46,6 +46,65 @@ global.NCH = {
 		}
 	},
 
+	// Short tags for LootJS log names, per namespace (logName). A namespace not listed uses itself.
+	_packTags: {
+		creativeengineering: 'CE', creativedelight: 'CD', creativeworldgen: 'CWG', creativebrewing: 'CB',
+		creativeloot: 'CL', creativecommon: 'CCM', creativecompat: 'CCP', creativeequipment: 'CEQ',
+		creativemagic: 'CMG', creativecalendar: 'CCAL', creativedevtools: 'CDEV', creativelabels: 'CLAB',
+	},
+
+	// The recipe helper bound to one script pack's namespace (plan_rules_fixes.md section 6, D22). Every script binds
+	// it once at the top, with its folder's namespace:
+	//   var R = global.NCH.forPack('creativedelight')
+	//   R.shapeless(...)                      -> creativedelight:shapeless/...
+	//   R.withNamespace('other', () => ...)   -> the recorded override: R calls inside use 'other'
+	//   R.logName('corn_knife_corncob')       -> 'CD/corn_knife_corncob' (LootJS modifier names)
+	// Every helper of NCH that exists when forPack runs is wrapped; constants (AXE, strict, modId) read through.
+	// The pack folder (kubejs/server_scripts/) keeps global.NCH, whose namespace is creativeengineering.
+	forPack(ns) {
+		ns = String(ns)
+		if (!/^[a-z0-9_.-]+$/.test(ns)) throw new Error('forPack: invalid namespace ' + ns)
+		var nch = global.NCH
+		var bound = { _packNs: ns, _override: null }
+		var current = () => bound._override || bound._packNs
+		var own = { ns: true, withNamespace: true, forPack: true, logName: true }
+		Object.keys(nch).forEach(key => {
+			if (own[key] || key === '_ns') return
+			var value = nch[key]
+			if (typeof value === 'function') {
+				bound[key] = function () {
+					var args = arguments
+					return nch.withNamespace(current(), () => value.apply(nch, args))
+				}
+				return
+			}
+			try {
+				Object.defineProperty(bound, key, { get: () => nch[key], enumerable: true })
+			} catch (err) {
+				bound[key] = value
+			}
+		})
+		bound.ns = () => current()
+		bound.withNamespace = (other, fn) => {
+			if (!/^[a-z0-9_.-]+$/.test(String(other))) throw new Error('withNamespace: invalid namespace ' + other)
+			var previous = bound._override
+			bound._override = String(other)
+			try {
+				return nch.withNamespace(bound._override, fn)
+			} finally {
+				bound._override = previous
+			}
+		}
+		bound.logName = (name) => (nch._packTags[bound._packNs] || bound._packNs) + '/' + name
+		bound.forPack = (other) => nch.forPack(other)
+		return bound
+	},
+
+	// LootJS log name in the default namespace (the pack folder): 'CE/<name>'. Script packs use R.logName from forPack.
+	logName(name) {
+		return (global.NCH._packTags[global.NCH._ns] || global.NCH._ns) + '/' + name
+	},
+
   // ========================================================================
   // Core id resolution & validation
   // ========================================================================
@@ -1020,6 +1079,60 @@ global.NCH = {
     })
     return values
   },
+
+	// Config reads for scripts (design rule DR-C4, V-37): use these instead of Java.loadClass('...Config') in a script.
+	// cfgClass(modId) returns the config class a jar registered with registerConfig (Common's CommonConfig for
+	// 'creativecommon'), or a named class of that jar: cfgClass('creativeworldgen', 'worldgen.WorldgenConfig') loads
+	// com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig. null when the class is not on the classpath. Cached.
+	//   var wg = global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig')
+	//   if (wg && wg.mobSpawnsEnabled() == true) { ... }
+	cfgClass(modId, className) {
+		var key = modId + (className ? '/' + className : '')
+		var cache = global.NCH._cfgClassCache
+		if (key in cache) return cache[key]
+		var name = null
+		if (className) {
+			name = className.indexOf('com.') === 0 ? className : 'com.SaintAlfonzo.' + modId + '.' + className
+		} else {
+			$NCH_configClasses.forEach(c => { if (c.id === modId) name = c.name })
+		}
+		var cls = null
+		if (name) {
+			try {
+				cls = Java.loadClass(name)
+			} catch (err) {
+				console.warn('[NCH.cfgClass] ' + name + ' not on classpath: ' + err)
+			}
+		} else {
+			console.warn('[NCH.cfgClass] no config class registered for ' + modId)
+		}
+		cache[key] = cls
+		return cls
+	},
+	_cfgClassCache: {},
+
+	// One config value: 'modid:SECTION.FIELD' (the Java field names, as cfg takes them), read live. Returns def when
+	// the jar, section or field is missing.
+	//   var interval = global.NCH.cfgValue('creativecommon:PERF.mountEffectIntervalTicks', 100)
+	cfgValue(path, def) {
+		var colon = path.indexOf(':')
+		if (colon <= 0) throw new Error('cfgValue: path must be modid:SECTION.FIELD, got ' + path)
+		var cls = global.NCH.cfgClass(path.substring(0, colon))
+		if (!cls) return def
+		var node = cls
+		var segs = path.substring(colon + 1).split('.')
+		for (var k = 0; k < segs.length; k++) {
+			try {
+				node = node[segs[k]]
+			} catch (err) {
+				node = null // Rhino throws on a missing Java field (see cfg above)
+			}
+			if (node == null) return def
+		}
+		if (typeof node.get !== 'function') return def
+		var value = node.get()
+		return value == null ? def : value
+	},
 
 	bulk(name, paramSets) {
 	if (!name) throw new Error('bulk called without function name!')

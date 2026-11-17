@@ -273,6 +273,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 - 2026-10-27: the Winemaker spawner moved from patcherMod into the Vinery port (pack_hygiene.md finding 39). Same
   rolls, interval, mules and stay; keys now `vinery-common.toml` `[trader] ownSpawner` / `ownSpawnerInterval`; CEConfig
   `winemakerEnabled` / `winemakerIntervalTicks` and the regex check of the Vinery toml removed. New saved-data name.
+- 2026-11-17: `global.trades.villager(e, profession, level, { buy, buy2, sell, uses, xp, priceMultiplier })` added to the same helper for villager trades, with item_dict and `global.profession` keys ([plan_rules_fixes.md](plan_rules_fixes.md) 12c); the raw `e.addTrade` calls convert in P3.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

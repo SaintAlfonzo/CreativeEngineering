@@ -14,7 +14,7 @@ applied the way kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js and pa
 - tree counts are placement ATTEMPTS: block/noise filters, the biome check and failed trunks are not simulated,
   so heavily filtered features (Terralith's 200-try Yellowstone birches) read far too high. Nest chances are exact.
 - bushes (trunk at most 1 tall) never get a nest: the decorator looks for a log above the first one.
-- Java-only vanilla trees that no jar overrides as JSON are modelled in JAVA_TREES.
+- Java-only vanilla trees that no jar overrides as JSON are modeled in JAVA_TREES.
 The measured table (section 2) comes from /dumpbeenests (kubejs/exported/bee_nests.json) and is the real number.
 
 Calibration: bee_nests_baseline.json is a /dumpbeenests taken with no rules (copy kubejs/exported/bee_nests.json
@@ -306,7 +306,7 @@ def main():
     world = gw.load_world()
     for fid, data in JAVA_TREES.items():
         if fid not in world['placed']:
-            world['placed'][fid] = ('Java (modelled)', data)
+            world['placed'][fid] = ('Java (modeled)', data)
     walker = Walker(world)
     wild = g.load_wild_crops()
     traits = wild[1]

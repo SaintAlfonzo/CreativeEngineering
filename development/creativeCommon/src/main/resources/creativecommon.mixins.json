@@ -53,7 +53,8 @@
     "PhantomSpawnerBaneSkipMixin",
     "MeltingBlockStateMixin",
     "VanillaLightMeltMixin",
-    "RareIceLightMeltMixin"
+    "RareIceLightMeltMixin",
+    "NoRecipeUnlockMixin"
   ],
   "client": [
     "KubeJSClientResourceScriptsMixin",

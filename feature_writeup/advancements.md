@@ -20,7 +20,8 @@ this file is the reference for the switch.
 | `[advancements] enabled = false` + `ServerAdvancementManagerMixin` | BUILT 2026-10-18 in patcherMod 1.0.8; DEPLOYED with 1.0.8 (2026-10-19 10:20). Ran in single player 2026-10-19 00:57: "14828 advancements left out", 931 "Ignored advancement" lines for the saved progress (6) |
 | Vinery `vintage_perfection` left out of the upstream layer | BUILT in the Vinery port `-02` ([alcohol.md](alcohol.md) 10.2) |
 | Replacement sources for lost rewards | Vinery banner: crafting recipe ([alcohol.md](alcohol.md) 10.5). The rest have none (3.2) |
-| In-game tests | AV-01 to AV-05 pending |
+| No recipe unlocks: `NoRecipeUnlockMixin` (3.3) | BUILT 2026-11-17 in Creative Common ([plan_rules_fixes.md](plan_rules_fixes.md) 12e, D23); queue SQ-AV-01, CQ-AV-01, CQ-AV-02 |
+| In-game tests | AV-01 to AV-08 pending |
 
 - **Files to open:** `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ServerAdvancementManagerMixin.java`,
   `CEConfig.Advancements`.
@@ -72,6 +73,22 @@ before the update is the only way back.
 Pack rule from now on (owner, 2026-10-18): don't design features that grant items, unlock recipes or detect
 progress through advancements. Use FTB Quests, loot or code.
 
+### 3.3 No recipe unlocks (BUILT 2026-11-17)
+
+No recipe is ever unlocked in the recipe book, by any path (design rule DR-C14, owner decision
+[plan_rules_fixes.md](plan_rules_fixes.md) D23). `NoRecipeUnlockMixin` in Creative Common returns at once from
+`ServerPlayer.awardRecipes(Collection)` (`m_7281_`, returns 0) and `awardRecipesByKey(ResourceLocation[])`
+(`m_7902_`). Every unlock goes through them: the crafting table's result slot, furnaces, smokers, blast furnaces,
+Farmer's Delight, the knowledge book, advancement rewards, `/recipe give` and other mods. So the recipe book gains no
+entries and no "New Recipes Unlocked" toast shows. JEI is the pack's recipe viewer.
+
+- **Cooking XP is kept.** A furnace pops the stored experience before it calls awardRecipes, so only the unlock is
+  skipped. Creative Delight's Oven, the Keg (Brewin') and the Copper Pot (Miner's) still call the award themselves; the
+  calls and the bookkeeping kept only for them are deleted in plan P3, the XP pop stays.
+- **Saves:** entries already in a player's recipe book stay; nothing is taken away.
+- `/recipe give` answers "No new recipes were learned" for every recipe; `/recipe take` still works.
+- Not covered: a mod that writes into `ServerRecipeBook` directly, without awardRecipes (none known).
+
 ## 4. Limits and decisions
 
 - **Whole map, not a filter.** A per-namespace or per-id filter was not asked for. The mixin is the place to add one
@@ -84,6 +101,7 @@ progress through advancements. Use FTB Quests, loot or code.
 ## 5. File map
 
 - [ServerAdvancementManagerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ServerAdvancementManagerMixin.java)
+- [NoRecipeUnlockMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java) (3.3)
 - [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) `Advancements`
 - Vinery port: `UpstreamTranslator` (`vintage_perfection` dropped), [alcohol.md](alcohol.md) 10.2
 - Banner recipe: [alcohol.js](../kubejs/server_scripts/cooking/alcohol.js), [alcohol.md](alcohol.md) 10.5
@@ -105,6 +123,14 @@ progress through advancements. Use FTB Quests, loot or code.
 - [ ] **AV-05 Dedicated server:** first join on the updated server -> `latest.log` has the "left out" line once per
   data load and "Ignored advancement" lines for the joining player; no error.
 
+**No recipe unlocks (3.3, 2026-11-17)**
+- [ ] **AV-06 Furnace smelt:** a player with an empty recipe book smelts raw iron in a furnace and takes the ingot ->
+  XP as before, no "New Recipes Unlocked" toast, the recipe book gains nothing. (CQ-AV-01)
+- [ ] **AV-07 Crafting:** craft sticks, a crafting table and a furnace by hand -> no toast, nothing new in the recipe
+  book. (CQ-AV-02)
+- [ ] **AV-08 Recipe command:** `/recipe give <player> *` -> "No new recipes were learned"; `/recipe take <player> *` on a
+  fresh player -> "No recipes could be forgotten". (SQ-AV-01)
+
 ## 8. History
 
 - 2026-10-18: built in patcherMod (1.0.8 source) at the user's request, with the Vinery `vintage_perfection` drop and
@@ -113,3 +139,4 @@ progress through advancements. Use FTB Quests, loot or code.
   AV-05 added.
 - 2026-10-19: DEPLOYED with pack 1.0.8 (10:20, server + clients); the first-boot log check on the live server is TODO `pack/release #3`.
 - 2026-10-19: advancement toasts also filtered client-side by `ToastFilterMixin` ([toasts.md](toasts.md)), BUILT.
+- 2026-11-17: no recipe unlocks of any kind (3.3): `NoRecipeUnlockMixin` in Creative Common ([plan_rules_fixes.md](plan_rules_fixes.md) 12e, D23). AV-06 to AV-08, queue SQ-AV-01, CQ-AV-01, CQ-AV-02. The own block entities' award calls go in P3.

@@ -32,3 +32,30 @@ expect READ tooltip_text creativelabels:eraser \d+: .*Right-click a labeled item
 @pass the option reads "Gray Eyes", not `Grey Eyes` (LOOK)
 @fails creativecompat jar older than the lang edit (rebuild `:creativeCompat:`)
 @draft no driver step opens the MCA editor; owner LOOK
+
+@@section 2
+@@title CQ-TT Palette test item switch, 2026-11-17 ([tooltips.md](../tooltips.md) TT-45; [plan_rules_fixes.md](../plan_rules_fixes.md) section 9, V-45, TODO `conventions #20`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon
+@@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CommonConfig.java kubejs/client_scripts/tooltips.js
+@@text
+@@text `[tooltips] paletteDemo` in `creativecommon-common.toml` (default false; the owner's config sets true until TODO `tooling/design-rules #4`). Read when the client scripts load, so each value needs its own client boot. Needs the Creative Common jar of 2026-11-17 or later.
+@@table
+## CQ-TT-04 | paletteDemo = true: White Wool and White Concrete show the palette
+@group client
+@commands Client booted with `paletteDemo = true` (`qrun.py toml config/creativecommon-common.toml tooltips paletteDemo true` on the client instance before boot); read the White Wool and White Concrete tooltips
+@pass White Wool: Normal, Uncommon, Rare, Epic, Legendary, Good, Warning, Engineering lines; White Concrete: Black to White, 16 lines
+@fails Common older than the key (the script reads false), or the key missing from the client's config file
+do {"tooltip_text": "minecraft:white_wool"}
+expect READ tooltip_text minecraft:white_wool \d+: .*Legendary
+do {"tooltip_text": "minecraft:white_concrete"}
+expect READ tooltip_text minecraft:white_concrete \d+: .*Light Purple
+## CQ-TT-05 | paletteDemo = false: no palette lines
+@group client
+@commands Client booted with `paletteDemo = false` (`qrun.py toml config/creativecommon-common.toml tooltips paletteDemo false` before boot); read the same two tooltips
+@pass no Normal to Engineering lines on White Wool, no color-name lines on White Concrete; `logs/kubejs/client.log` has no `[NCH.cfg] no creativecommon:TOOLTIPS` warning
+@fails the script ignores the key (tooltips.js), or the section is not found (CommonConfig.TOOLTIPS)
+do {"tooltip_text": "minecraft:white_wool", "reject": "Legendary"}
+do {"tooltip_text": "minecraft:white_concrete", "reject": "Light Purple"}
+kjsreject \[NCH\.cfg\] no creativecommon:TOOLTIPS

@@ -40,6 +40,7 @@ public final class CommonConfig {
     public static final Effects EFFECTS;
     public static final MagicResistance MAGIC_RESISTANCE;
     public static final MeltingConfig MELTING;
+    public static final Tooltips TOOLTIPS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -67,6 +68,8 @@ public final class CommonConfig {
         MAGIC_RESISTANCE = new MagicResistance(builder);
         // [melting]: new 2026-11-14 (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8)
         MELTING = new MeltingConfig(builder);
+        // [tooltips] paletteDemo: the color palette test item (plan_rules_fixes.md section 9, V-45)
+        TOOLTIPS = new Tooltips(builder);
         // [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm],
         // [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment, 2026-11-04)
         COMMON_SPEC = builder.build();
@@ -243,6 +246,20 @@ public final class CommonConfig {
                     "false: none are loaded, so none show, toast or give rewards (the pack's setting). Default true (vanilla).",
                     "Read when data loads: a change applies on the next /reload or world start."
             ).define("enabled", true);
+            b.pop();
+        }
+    }
+
+    /** Pack tooltips that Common's config switches; read by {@code kubejs/client_scripts/tooltips.js} through NCH.cfg. */
+    public static final class Tooltips {
+        public final ForgeConfigSpec.BooleanValue paletteDemo;
+
+        private Tooltips(ForgeConfigSpec.Builder b) {
+            b.comment("Item tooltips (client side).").push("tooltips");
+            paletteDemo = b.comment(
+                    "true: White Wool and White Concrete show the color palette test tooltips (every tooltip role and",
+                    "text color). Default false. Read when the client scripts load: a change applies after a client restart."
+            ).define("paletteDemo", false);
             b.pop();
         }
     }

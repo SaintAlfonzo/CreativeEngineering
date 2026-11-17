@@ -4,6 +4,14 @@
 // Food values copied from one food onto another: target key -> source key (item_dict). The target takes the source's
 // whole FoodProperties (hunger, saturation, effects, meat/fast/always flags), so anything the target had of its own is
 // dropped. `{ from: key, effects: false }` copies everything but the effects; a non-food target becomes edible.
+// Absolute rows set values instead of copying them (plan_rules_fixes.md section 12, V-36; food_tuning.md):
+//   global.foodValueCopies.ghost_charcoal = { absolute: { nutrition: 0, saturationMod: 0, alwaysEat: true,
+//       effects: [{ effect: 'wither', ticks: 100 }, { effect: 'fire_resistance', ticks: 3600 }] } }
+// Fields of `absolute`: nutrition, saturationMod (the modifier), meat, alwaysEat, fast, effects, keepEffects,
+// dedupeEffects. A field left out keeps the target's own value (no food: 0 and false). `effects` is a list of
+// { effect: id or global.effect key, ticks, amplifier (default 0), chance (default 1) }, added after the target's own
+// effects when keepEffects is true (the default when effects is left out), else in their place. dedupeEffects keeps
+// the longest entry of each effect, in the original order.
 // ItemEvents.modification runs at startup: restart to apply.
 // This file is the one applier. The rows live in the file of the mod that owns the target item, each adding to
 // global.foodValueCopies (created with `global.foodValueCopies = global.foodValueCopies || {}`):
@@ -19,8 +27,55 @@ ItemEvents.modification(e => {
 	var $FoodValuesRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
 	var $FoodValuesBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
 	var done = 0
+	var $FoodValuesEffect = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
+	var absolute = (key, id, spec) => {
+		e.modify(id, item => {
+			var old = item.getFoodProperties()
+			var pick = (field, fromOld, none) => spec[field] !== undefined ? spec[field] : (old ? fromOld() : none)
+			var b = new $FoodValuesBuilder()
+				.nutrition(pick('nutrition', () => old.getNutrition(), 0))
+				.saturationMod(pick('saturationMod', () => old.getSaturationModifier(), 0))
+			if (pick('meat', () => old.isMeat(), false)) b.meat()
+			if (pick('alwaysEat', () => old.canAlwaysEat(), false)) b.alwaysEat()
+			if (pick('fast', () => old.isFastFood(), false)) b.fast()
+			var pairs = []
+			var keep = spec.keepEffects !== undefined ? spec.keepEffects : spec.effects === undefined
+			if (keep && old) {
+				var own = old.getEffects()
+				for (var n = 0; n < own.size(); n++) pairs.push({ inst: own.get(n).getFirst(), chance: own.get(n).getSecond() })
+			}
+			;(spec.effects || []).forEach(fx => {
+				var me = global.effect.resolve(fx.effect)
+				if (!me) { console.warn('[food values] ' + key + ': effect ' + fx.effect + ' skipped'); return }
+				pairs.push({ inst: new $FoodValuesEffect(me, fx.ticks, fx.amplifier || 0), chance: fx.chance === undefined ? 1.0 : fx.chance })
+			})
+			if (spec.dedupeEffects) {
+				var longest = []
+				pairs.forEach(p => {
+					var same = -1
+					for (var k = 0; k < longest.length; k++) if (longest[k].inst.getEffect().equals(p.inst.getEffect())) same = k
+					if (same < 0) longest.push(p)
+					else if (p.inst.getDuration() > longest[same].inst.getDuration()) longest[same] = p
+				})
+				pairs = longest
+			}
+			pairs.forEach(p => b.effect(p.inst, p.chance))
+			item.setFoodProperties(b.build())
+		})
+	}
 	Object.keys(global.foodValueCopies).forEach(key => {
 		var entry = global.foodValueCopies[key]
+		if (entry && typeof entry === 'object' && entry.absolute) {
+			var target = i[key]
+			if (typeof target !== 'string') { console.warn('[food values] ' + key + ': not in item_dict'); return }
+			try {
+				absolute(key, target, entry.absolute)
+				done++
+			} catch (err) {
+				console.error('[food values] could not set food on ' + target + ': ' + err)
+			}
+			return
+		}
 		var srcKey = typeof entry === 'string' ? entry : entry.from
 		var keepEffects = typeof entry === 'string' || entry.effects !== false
 		var id = i[key]
@@ -46,5 +101,5 @@ ItemEvents.modification(e => {
 			console.error('[food values] could not set food on ' + id + ': ' + err)
 		}
 	})
-	console.log('[food values] ' + done + ' foods copied')
+	console.log('[food values] ' + done + ' foods copied or set')
 })

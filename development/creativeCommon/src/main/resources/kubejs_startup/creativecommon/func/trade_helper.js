@@ -1,4 +1,4 @@
-// Trade helper — global.trades. Edits the Wandering Trader's two pools. The Wandering Winemaker's pool
+// Trade helper — global.trades. Edits the Wandering Trader's two pools, and adds villager trades (villager(), at the end). The Wandering Winemaker's pool
 // helpers (winemakerReset / winemakerSell / winemakerSize) moved to Creative Brewing 2026-11-01
 // (kubejs_startup/vinery/winemaker_trades.js in the CB jar), which adds them to this object.
 // Call it inside MoreJSEvents.wandererTrades: MoreJS fires that at server start (after every mod has added its listings) and again on /reload, each time from the untouched pools, so edits never stack.
@@ -89,6 +89,56 @@ global.trades = {
 		const copies = weight || 1
 		taken.forEach(l => { for (let w = 0; w < copies; w++) list.add(l) })
 		return taken.length
+	},
+
+	// ---- Villager trades (plan_rules_fixes.md section 12c, V-33). Call inside MoreJSEvents.villagerTrades.
+
+	// An item for a villager trade: an item_dict key ('emerald'), an id ('minecraft:emerald'), or [keyOrId, count].
+	// Returns an ItemStack, or null (warned) for an unknown key, a tag or an empty value.
+	_tradeStack(v, ctx) {
+		var count = 1
+		if (Array.isArray(v)) {
+			count = v[1] || 1
+			v = v[0]
+		}
+		if (typeof v === 'string' && v.indexOf(':') < 0 && v.charAt(0) !== '#') {
+			var keyed = global.item[v]
+			if (typeof keyed !== 'string') {
+				console.warn('global.trades.villager: ' + ctx + ' "' + v + '" is not an item_dict key')
+				return null
+			}
+			v = keyed
+		}
+		if (!this._validItem(v, 'villager ' + ctx)) return null
+		return Item.of(v, count)
+	},
+
+	// One villager trade. profession: a global.profession key ('farmer') or an id ('minecraft:farmer'); level 1 to 5.
+	// buy, buy2 (optional) and sell take a key, an id or [keyOrId, count]. uses, xp and priceMultiplier are optional
+	// (MoreJS defaults when left out). Returns the MoreJS trade, or null when an item was rejected (nothing added).
+	//   t.villager(e, 'farmer', 1, { buy: [i.broccoli, 26], sell: 'emerald', uses: 12, xp: 2, priceMultiplier: 0.05 })
+	villager(e, profession, level, o) {
+		if (!e) throw new Error('global.trades.villager called without the event')
+		o = o || {}
+		var prof = String(profession)
+		if (prof.indexOf(':') < 0) {
+			var keyed = global.profession ? global.profession[prof] : undefined
+			if (typeof keyed !== 'string') {
+				console.warn('global.trades.villager: "' + prof + '" is not a global.profession key')
+				return null
+			}
+			prof = keyed
+		}
+		if (!(level >= 1 && level <= 5)) throw new Error('global.trades.villager: level must be 1 to 5, got ' + level)
+		var buy = this._tradeStack(o.buy, 'buy')
+		var buy2 = o.buy2 === undefined ? undefined : this._tradeStack(o.buy2, 'buy2')
+		var sell = this._tradeStack(o.sell, 'sell')
+		if (!buy || buy2 === null || !sell) return null
+		var trade = e.addTrade(prof, level, buy2 ? [buy, buy2] : [buy], sell)
+		if (o.uses !== undefined) trade.maxUses(o.uses)
+		if (o.xp !== undefined) trade.villagerExperience(o.xp)
+		if (o.priceMultiplier !== undefined) trade.priceMultiplier(o.priceMultiplier)
+		return trade
 	},
 }
 

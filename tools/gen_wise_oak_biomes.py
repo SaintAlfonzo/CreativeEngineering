@@ -68,9 +68,9 @@ class OakWalker(bn.Walker):
 def main():
     world = gw.load_world()
     for fid, data in JAVA_FEATURES.items():
-        world['placed'].setdefault(fid, ('Java (modelled)', data))
+        world['placed'].setdefault(fid, ('Java (modeled)', data))
     for fid, picks in JAVA_CONFIGURED.items():
-        world['configured'].setdefault(fid, ('Java (modelled)', {'type': 'minecraft:random_selector', 'config': {
+        world['configured'].setdefault(fid, ('Java (modeled)', {'type': 'minecraft:random_selector', 'config': {
             'features': [{'chance': c, 'feature': f} for f, c in picks], 'default': JAVA_DEFAULT[fid]}}))
     for ref in ('minecraft:oak', 'minecraft:fancy_oak', 'minecraft:spruce', 'minecraft:fancy_oak_bees'):
         if ref not in world['configured']:
