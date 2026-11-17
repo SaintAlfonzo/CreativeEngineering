@@ -205,6 +205,10 @@ touch structures.
    check); a deprecated alias on `global.CWG.lootRules` is not kept (all 12 callers are ours and updated in the same change).
    Config section `[loot]` carries over with `ConfigRename.carrySections` from the Worldgen config. Generators in
    `tools/generators.json` that read or write the loot files get their paths updated.
+   **Migrate with the split: `tools/loot_tuning_sim.js`** (TODO `tooling/generators-and-tests #9`). It still runs the
+   pre-wave-5 paths `kubejs/server_scripts/loot/05_tuning.js`, `07_rules.js`, `95_tag_capture.js` (lines 73-76), gone
+   since the move into Worldgen; it is repointed once, at the Creative Loot tree, in this step (and `09_drops.js` added),
+   not first at Worldgen.
 4. Worldgen drops the loot tree and requires Creative Loot (chest loot rules for structures stay data in Worldgen's own
    namespace, registered through `LOOT.rules`).
 5. Order inside P2b: create the jar and move files with the game closed; Worldgen and Loot build and install together
@@ -613,6 +617,7 @@ Every violation is scheduled (owner 2026-11-16: D23 to D26).
 
 ## History
 
+- 2026-11-16: section 5b step 3 names `tools/loot_tuning_sim.js` as a component migrated in the split (owner, TODO `tooling/generators-and-tests #9`).
 - 2026-11-16: Creative Loot split out of Worldgen added (D13 changed, section 5b, phase P2b; D25 now names Creative Loot); V-26 all moved (D28); O5 closed.
 - 2026-11-16: D27 (writeup split by tree-TOC usefulness, not size); V-26 broken down per file in section 6.
 - 2026-11-16: owner answers: V-05, V-14, V-32, V-33, V-38, V-41 scheduled with the recommended fix; recipe unlocks
