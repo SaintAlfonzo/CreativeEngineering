@@ -1,6 +1,7 @@
 # Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers)
 
-Status: Planned 2026-11-16, nothing built. Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
+Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
+P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). Nothing else built. Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
 `tooling/process #1` to `#5`. Code owner: `tools/` and `build-logic/`. Jar changes are limited to a build stamp
 added by the shared Gradle plugin; no gameplay change, so no changelog bullet. Phase 2 continues
 [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md): TX-40, TX-41 and TX-45 were built 2026-11-15;
@@ -21,7 +22,7 @@ Non-goals:
 - Rewriting existing writeups.
 - GameTests (TX-23).
 - Client automation (TX-01 to TX-05; stays in the scratch testing plan).
-- Commit cadence and the weekly consolidation pass (review section 9: owner habits, not tooling).
+- The recurring weekly consolidation pass (review section 9). P1.6 and P2.5 do one-time clean-ups.
 
 ## Phase 1
 
@@ -87,6 +88,21 @@ P1.1 for its lint and P1.2 for jar state).
    the same jar (the 1.1.04 case).
 6. Plans stop writing "built HH:MM, not installed" by hand and cite `jarstamp.py pending` instead. Existing plan
    headers stay as history.
+7. **Install dialog** (owner ruling 2026-11-16). Policy: a rebuild for testing is installed without asking.
+   `installToMods` (after the P1.1 gate) checks for the owner's running game: a `java` process whose cwd is the
+   instance root (pid and cwd only, never the command line; scratch servers run elsewhere and do not count).
+   - Not running: install, write the ledger row.
+   - Running: a `zenity` (fallback `yad`) dialog on the owner's display, titled with the jar and stamp. Buttons:
+     - **Install now:** re-checks the game. If it is still running, the dialog comes back with a "game still
+       running" line; if not, it installs.
+     - **Install on exit:** a detached watcher (`tools/install_watch.py`, pid file in `jar_archive/`) polls the
+       game pid, installs when it exits, sends `notify-send`, and writes the ledger row (`on-exit`).
+     - **Skip:** nothing installed; ledger row `skipped`; `jarstamp.py pending` keeps listing it.
+   - Gradle returns as soon as the owner answers, so an agent session is not blocked by a watcher.
+   - Two watchers for the same jar: the newer replaces the older; stamps make that safe.
+   - No display, or no dialog tool: behave as Skip, and print the reason.
+   - The CLAUDE.md "Build and verify" install line already states this policy; once the dialog is built, drop its
+     "until ... ask" clause.
 
 **Done when:**
 - Two builds of Common with one change between them print different stamps.
@@ -94,7 +110,7 @@ P1.1 for its lint and P1.2 for jar state).
 - The boot line appears in a scratch `latest.log`.
 - A deploy with mismatched server and client stamps is refused.
 
-**Tests:** PO-06 to PO-09 offline. SQ-PO-01 (boot line, stamps match the ledger), queued when built.
+**Tests:** PO-06 to PO-09, PO-15 to PO-18 offline. SQ-PO-01 (boot line, stamps match the ledger), queued when built.
 
 ### P1.3 Design intake before building
 
@@ -184,6 +200,49 @@ feature table, the only place status is written, and generates the rest.
 
 **Tests:** PO-10 to PO-14 offline.
 
+### P1.5 Commit per plan phase (rule in place 2026-11-16)
+
+Review finding 7. The owner's rulings:
+- Agents commit at the end of each plan phase as the configured author (SaintAlfonzo), with the Co-Authored-By trailer.
+- They push `HEAD:agent_staging`, never `main`; the owner merges.
+- Only that phase's files are staged; generated output goes in its own commit.
+
+The rule text is in CLAUDE.md "Build and verify". `agent_staging` was 29 commits behind `main` with nothing of its own,
+so pushes fast-forward; a push that does not is stopped and asked about.
+
+To build later (small):
+- `check_all.py` warns at session end when finished-phase files are still uncommitted, through the Stop hook.
+- A short "Merging agent_staging" note in [agent_notes/git-repo-setup.md](agent_notes/git-repo-setup.md).
+
+### P1.6 Agent notes out of memory (done 2026-11-16)
+
+All 136 `project` memories moved verbatim (frontmatter reduced to title and description, plus a moved-on line) into
+[agent_notes/](agent_notes/README.md). Its index is built from the memory index lines and imported by CLAUDE.md, so it
+still loads every session. Done by a script:
+- `[[links]]` between moved notes became relative links; links from the 32 kept memories now name the repo path.
+- 37 repo docs that cited `memory `x`` for a moved note now link the note.
+- Memory went from 185 files to 48 plus `MEMORY.md`.
+- Backups:
+  - `~/.claude/projects/<instance>/memory_backup_2026-11-16.tar.gz` (the whole folder before the move);
+  - `CLAUDE.md.bak-2026-11-16` (git-ignored).
+
+Impact:
+
+| Area | Before | After |
+|---|---|---|
+| Loaded every session | MEMORY.md, ~78 lines | MEMORY.md 54 lines (5.8 KB) plus the notes index 52 lines (9 KB) through CLAUDE.md: about the same, since the index lines moved and were not dropped |
+| Recall | One-line hooks in MEMORY.md | The same hooks in the imported notes index |
+| Versioning | None (outside git) | Tracked, diffable, pushed with commits (repo is private) |
+| Reach | This machine's Claude Code only | Any checkout: cloud sessions, other machines, agents given a path |
+| Checks | None | Can be linted by `check_all.py` (dead links, status words; P1.4) |
+| Staleness | 39 notes carry status words | Same 39, now flagged by the moved-on line ("repo status docs win") |
+| Policy | 136 project memories against the memory-vs-docs rule | Memory holds owner rules, user facts and references only; memory `memory-vs-docs-policy` updated |
+
+Follow-ups:
+- Strip the status lines from the 39 notes, or confirm them against the repo, in a one-time pass with P1.4.
+- Notes that repeat a writeup get merged into it later, with the note becoming a pointer.
+- Undo: extract the tarball over the memory folder and restore CLAUDE.md from the backup.
+
 ## Phase 2: tiered scratch queue with expiry
 
 Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's lint, dry run and verdict files.
@@ -245,8 +304,9 @@ Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's
 2. Rows for removed features become `superseded`.
 3. The ~562 never-run rows: each section's rows are run once as T2 (if migrated) or listed for the owner to keep or
    drop.
-4. The 387 never-run CQ rows go to the owner playtest checklist, the client automation backlog (scratch plan TX-01 to
-   TX-05), or drop. Owner decision D5.
+4. The 387 never-run CQ rows stay in the queue for now (D5 ruling). Each is converted to the new scratch testing tools
+   when those are built (client capture runner, in-process client driving: scratch plan TX-01 to TX-05). They are not
+   archived, dropped or moved to the playtest list in this phase.
 5. [gotchas.md](../.claude/skills/scratch-test/gotchas.md): merge the per-run "Found in rXXXX" sections into topical
    rules. A gotcha now enforced by a check (`grep -c`, jar pinning, unlisted jars) becomes one line naming that check.
 
@@ -258,15 +318,37 @@ Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's
 
 ## Owner decisions
 
-- D1. Build stamp in the manifest and `ce-build.json` only, file names unchanged (recommended), or also in file names?
-- D2. Gates: `installToMods` refuses on a fast-check FAIL (recommended, `-PskipChecks` to override), or warn only?
-  Stop hook report-only (recommended) or blocking?
-- D3. OK to edit CLAUDE.md ("Done means", "Build and verify", processes line) and the feature-writeup and
-  memory-vs-docs memories for P1.3 and P1.4?
-- D4. Row data as a fenced block under each section (one file, as today), or `.qb` files next to the queue?
-- D5. Never-run client rows: playtest checklist, automation backlog, or drop, per section?
-- D6. README index: move the long feature descriptions into the writeups' section 0, so the generated table stays
-  short (recommended), or keep them in `features.tsv`?
+Settled 2026-11-16:
+
+| # | Ruling |
+|---|---|
+| D1 | Build stamp in the manifest and `ce-build.json` only; file names unchanged |
+| D2 | `installToMods` refuses on a fast-check FAIL (`-PskipChecks` overrides, logged); Stop hook report-only |
+| D3 | CLAUDE.md may be edited, with a backup taken first and the diff shown to the owner after. Done for P1.2's install policy, P1.5 and P1.6 (`CLAUDE.md.bak-2026-11-16`). P1.1, P1.3 and P1.4 add their lines when built, the same way |
+| D5 | Client rows stay; converted to the new scratch testing tools when those are built (P2.5 item 4) |
+| D6 | Long README feature descriptions move into the writeups' section 0 |
+| D7 | Commits: per plan phase, authored as the owner, with the Co-Authored-By trailer, pushed to `agent_staging` (P1.5) |
+| D8 | Install a rebuild for testing without asking; when the game runs, a dialog with Install now (re-shown while it still runs) / Install on exit / Skip (P1.2 item 7) |
+| D9 | Project memories move into the repo (P1.6, done) |
+
+Open:
+- **D4. Where queue row data lives (P2.1).** Today a row is a markdown table line (`| ID | Group | Commands | Pass | If it fails |`).
+  At run time an agent hand-converts it into a `.qb` batch: qrun's format, a text file of commands, `expect` /
+  `waitlog` / `shell` checks and markers (example: `tools/scratch_query/batches/r1113pwg/pwgr1.qb`). Every run
+  rewrites the batches, and the two copies drift; that is one source of the stale and wrong rows in review section 2.
+  Phase 2 needs the row to exist once, as data qrun can run, with the metadata from P2.1 item 2.
+
+  | | Option A: fenced block under each queue section | Option B: one `.qb` file per section, queue tables generated (recommended) |
+  |---|---|---|
+  | Where | Inside `scratch_queue.md`, a fenced `qb` block after each section's table | `feature_writeup/testing/rows/<CODE>.qb`, e.g. `rows/MELT.qb`; `scratch_queue.md` becomes a generated view |
+  | Human view | Table and data side by side in one file; both hand-kept unless the table is generated from the block | Table generated from the `.qb` (id, group, commands summary, pass, if it fails), so it cannot drift |
+  | Queue file size | Grows further (7.5k lines now, roughly doubles) | Shrinks to tables plus the coverage block; old sections archived (P2.5) |
+  | qrun | Needs an extractor (as `hh_queue_to_qb.py` does) | Runs the file directly; `qrun.py plan` picks rows by metadata |
+  | Agent edits | One large file, conflicts between parallel sessions | One small file per feature; parallel sessions rarely touch the same one |
+  | Staleness check (TX-46) | Per block | Per file, using its git history and `sources` |
+  | Migration | In place | Newest sections first; unmigrated sections stay readable in the old file until archived |
+
+  B follows the same pattern as P1.4 (data once, view generated) and suits qrun as it is.
 
 ## Test list (PO-)
 
@@ -288,6 +370,15 @@ Offline (checked by the building agent, results in [process_review.md](process_r
 - [ ] **PO-12 verdict to README:** add a verdict file -> the feature's last-run cell updates.
 - [ ] **PO-13 legend check:** a row with status "Done" outside the archive -> `--check` FAIL.
 - [ ] **PO-14 hand edit:** edit inside a generated block -> `--check` FAIL.
+- [ ] **PO-15 install, game closed:** no java with the instance cwd -> `installToMods` installs, no dialog.
+- [ ] **PO-16 Install now while running:** owner client running -> dialog; Install now -> dialog shown again with
+  "game still running"; close the game, Install now -> installed, ledger row.
+- [ ] **PO-17 Install on exit:** dialog -> Install on exit -> Gradle returns; close the game -> jar swapped,
+  `notify-send` shown, ledger row `on-exit`; a second rebuild before exit replaces the first watcher.
+- [ ] **PO-18 Skip and no display:** Skip -> `mods/` unchanged, `jarstamp.py pending` lists it; `DISPLAY` unset ->
+  behaves as Skip with a reason printed.
+- [x] **PO-19 notes move:** 136 notes in `agent_notes/`, memory 48 files plus index, no `[[x]]` link left pointing at
+  a moved memory, CLAUDE.md imports the index (2026-11-16, script output and diff).
 
 Live (queued when built, per skill `scratch-test`):
 - SQ-PO-01: scratch boot shows the `[creativecommon] builds:` line, and its stamps match `jar_archive/installed.tsv`.
@@ -297,3 +388,8 @@ Live (queued when built, per skill `scratch-test`):
 
 - 2026-11-16: planned from [process_review.md](process_review.md); owner asked for items 1 to 3 and 5 as phase 1,
   item 4 as phase 2.
+- 2026-11-16 evening: rulings D1 to D3 and D5 to D9; D4 detailed and left open.
+  - CLAUDE.md backed up, then edited: agent notes line and import, install policy, commit rule, "or agent notes" in
+    Done means.
+  - P1.6 memory move done.
+  - P1.2 item 7 install dialog, P1.5 and P1.6 added.
