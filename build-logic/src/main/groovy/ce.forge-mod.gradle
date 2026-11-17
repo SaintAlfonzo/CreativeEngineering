@@ -351,12 +351,13 @@ def preInstallChecks = tasks.register('preInstallChecks') {
             workingDir rootProject.projectDir
             commandLine 'python3', 'tools/check_all.py', '--fast', '--changed'
             environment 'CE_IN_GRADLE', '1'
+            environment 'CE_INSTALL_PROJECT', project.name
             standardOutput = out
             errorOutput = out
             ignoreExitValue = true
         }
         def text = out.toString()
-        text.readLines().findAll { it ==~ /^(FAIL|KNOWN|WARN|check_all).*/ }.each { logger.lifecycle(it) }
+        text.readLines().findAll { it ==~ /^(FAIL|KNOWN|WARN|SKIP|check_all).*/ }.each { logger.lifecycle(it) }
         if (r.exitValue != 0) {
             def fails = text.readLines().findAll { it.startsWith('FAIL') }.collect { it.split(/\s+/)[1] }
             throw new GradleException("install refused: check_all FAIL in ${fails.join(', ')} " +

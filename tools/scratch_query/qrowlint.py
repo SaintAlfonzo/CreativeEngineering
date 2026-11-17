@@ -205,13 +205,55 @@ def git_times():
     return times
 
 
+GEN_BLOCK_RE = re.compile(r'<!-- generated:status_index begin.*?<!-- generated:status_index end[^>]*-->', re.S)
+SECTION0_RE = re.compile(r'^\*\*README index entry, moved here[^\n]*(?:\n(?!\s*\n)[^\n]*)*', re.M)
+
+
+def _status_free(text):
+    """A markdown source without its generated blocks and the D6 section 0 status paragraphs (P3.4 h)."""
+    return re.sub(r'\n\s*\n+', '\n\n', SECTION0_RE.sub('', GEN_BLOCK_RE.sub('', text or ''))).strip()
+
+
+def _git_text(rev, path):
+    r = subprocess.run(['git', 'show', '%s:%s' % (rev, path)], cwd=ROOT, capture_output=True, text=True)
+    return r.stdout if r.returncode == 0 else None
+
+
+@lru_cache(maxsize=None)
+def content_change(path):
+    """Time of the newest change to a markdown file that is not confined to generated blocks or section 0 status
+    paragraphs; None when no such change is found in the window git_times() reads."""
+    try:
+        cur = (ROOT / path).read_text(errors='replace')
+    except OSError:
+        return git_times().get(path)   # deleted or unreadable: the plain change time
+    head = _git_text('HEAD', path)
+    if head is None or _status_free(cur) != _status_free(head):
+        return git_times().get(path)
+    r = subprocess.run(['git', 'log', '--format=%H %ct', '--since=2026-09-01', '--', path], cwd=ROOT,
+                       capture_output=True, text=True, timeout=60)
+    for line in r.stdout.split('\n'):
+        if not line.strip():
+            continue
+        sha, t = line.split()
+        new, old = _git_text(sha, path), _git_text(sha + '^', path)
+        if old is None or _status_free(new) != _status_free(old):
+            return int(t)
+    return None
+
+
 @lru_cache(maxsize=None)
 def newest_change(src):
-    """(time, path) of the newest change to src (file or directory), or None."""
+    """(time, path) of the newest change to src (file or directory), or None. A markdown file counts only changes
+    outside its generated blocks and section 0 status paragraphs, so a status-only edit does not stale a row."""
     src = src.rstrip('/')
     best = None
     for p, t in git_times().items():
         if (p == src or p.startswith(src + '/')) and (best is None or t > best[0]):
+            if p.endswith('.md') and p == src:
+                t = content_change(p)
+                if t is None:
+                    continue
             best = (t, p)
     return best
 

@@ -1,12 +1,17 @@
 # Deploy pipeline: update payloads, deployment snapshots, kubejs classes
 
-BUILT 2026-09-30. Offline checks passed (section 6). Used for real deploys: 1.0.3 (2026-10-02) and 1.0.4 (2026-10-04) went out as
-update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026-10-14, update from 1.0.4, folds in 1.0.5),
-1.0.7 (2026-10-18), 1.0.8 (2026-10-19 10:20), 1.0.9 (2026-10-19 15:54), 1.1.01 (2026-10-22 22:39) and 1.1.02
-(2026-10-23, recorded 2026-10-24) and 1.1.03 (2026-10-26 19:04, server and players) went out as update payloads too;
-1.1.05 (update from 1.1.04, 108 files, 18.8 MB) was applied to the CreativeEngineeringClient instance 2026-10-31 12:51 with `--force`
-(verify showed EXTRA on four same-named 1.1.04 jars that the payload replaces: backportedVeggies -03, creativedelight, creativeengineering-1.1.04, repackedStorage; old copies in the session scratchpad). The server is recorded at 1.1.04 (user's word, 2026-10-31) and
-1.1.05 is not applied there yet ([deploy/DEPLOYED.json](../deploy/DEPLOYED.json)).
+BUILT 2026-09-30; offline checks passed (section 6). Every deploy is a bullet in [section 8](#8-history) and an
+entry in [deploy/DEPLOY_LOG.md](../deploy/DEPLOY_LOG.md). Deployed now (generated from
+[deploy/DEPLOYED.json](../deploy/DEPLOYED.json) by `tools/status_index.py`; never hand-edited):
+
+<!-- generated:status_index begin deploy sha1=502b96d0d995 -->
+| Side | Version | Since |
+|---|---|---|
+| server | 1.2.02 | 2026-11-09 17:59 |
+| client | 1.2.02 | 2026-11-09 17:46 |
+
+Last marks: 1.2.02 2026-11-09 17:59 (server); 1.2.02 2026-11-09 17:46 (client); 1.2.01 2026-11-04 22:15 (server); 1.2.01 2026-11-04 22:15 (client); 1.2.00 2026-11-03 20:55 (server)
+<!-- generated:status_index end deploy -->
 
 ## 0. At a glance
 
@@ -14,7 +19,7 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 
 | Part | Status | Open |
 |---|---|---|
-| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; server 1.1.03 (2026-10-26 19:04), client 1.1.04 (2026-10-29 17:16); 1.1.02 on both sides before (2026-10-23) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
+| Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; the deployed versions are the generated block at the top | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
 | `update` / `install` payload modes | BUILT; scratch-tested (DP-01..DP-04 offline) | `select_payload`, `render_readme` |
 | `verify.sh` / `verify.ps1` | BUILT; sh tested, ps1 not run (no PowerShell here). 2026-10-22: `--installed` / `-Installed` checks against the new version (`verify/<target>.installed.*`, both modes); ps1 usage line no longer has a tab for `\t` | `VERIFY_SH`, `VERIFY_PS1` |
 | `apply.sh` / `apply.ps1`: verify (update; stops on DRIFT unless `--force`), removals, copy each folder to its place per target (`CATEGORIES`), `world_serverconfig/` into the server's `level-name` world or the client's `--world` saves, keeps `MEMORY`/`JAVAPATH` (`.bat`: `maxmemory`/`javapath`), verify `--installed`. Install mode moves old jars to `mods_before_<version>/` | BUILT 2026-10-22; sh scratch-tested (synthetic payload: update server + client, rerun refused as DRIFT, install mode, unsafe removal path skipped), ps1 not run | `APPLY_SH`, `APPLY_PS1`, `write_scripts` |
@@ -219,6 +224,11 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
 
 ## 4. Limits and decisions
 
+- **Owner rule (2026-09-30): no content test before a deploy.** Stage, copy the deploy folder out, record the
+  snapshot; content is tested in the scratch queue, not as a release gate.
+- **Owner rule (2026-10-04): Distant Horizons settings are player config.** `DistantHorizons.toml` shipped once in
+  1.0.4 and is classed `player` in `CONFIG_CLASSES` since; it is never pushed again.
+
 - **The samples ship rather than being dumped at runtime.** They depend on the seed, but the solver only
   needs the climate distribution, which is the same for any seed at 3000 columns. A runtime dump can't
   serve the first world creation anyway: the tuner runs at datapack load, before any level exists. The
@@ -382,6 +392,12 @@ from the DEPLOYED.json mark it writes; `--backfill-history VERSION...` adds miss
 - 2026-11-04 22:15: 1.2.01 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.2.00, config functional: 65 files, 15.9 MB.
 - 2026-11-09 17:46: 1.2.02 recorded as deployed with `--snapshot` (client). Payload: update from 1.2.01, config functional: 191 files, 32.9 MB.
 - 2026-11-09 17:59: 1.2.02 recorded as deployed with `--snapshot` (server). Payload: update from 1.2.01, config functional: 191 files, 32.9 MB.
+- 2026-10-22 22:39: 1.1.01 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.0.9, config functional: 245 files, 11.2 MB.
+- 2026-10-26 19:04: 1.1.03 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.1.02, config functional: 267 files, 22.0 MB.
+- 2026-10-31 12:42: 1.1.04 recorded as deployed with `--snapshot` (server). Payload: update from 1.1.03, config functional: 410 files, 16.2 MB.
+- 2026-10-31 12:51: 1.1.05 recorded as deployed with `--snapshot` (client). Payload: update from 1.1.04, config functional: 108 files, 18.8 MB.
+- 2026-10-31 12:52: 1.1.05 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.1.04, config functional: 108 files, 18.8 MB.
+- 2026-10-31 17:58: 1.1.06 recorded as deployed with `--snapshot` (client). Payload: install, config functional: 3798 files, 547.9 MB.
 
 ## Owner notes (scratchpad 2026-11-07)
 

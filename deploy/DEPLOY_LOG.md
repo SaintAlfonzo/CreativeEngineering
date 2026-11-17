@@ -2236,7 +2236,7 @@ Delete on the client (1, also in removals_client.txt):
 - Minecraft 1.19.2, Forge 43.3.9
 - Commit: 9848e5cb + 67 uncommitted file(s)
 - Since: 1.1.06
-- Deployed: client 2026-11-03 20:40; server 2026-11-03 20:55; client 2026-11-03 20:55
+- Deployed: client 2026-11-03 20:40; server 2026-11-03 20:55
 - Contents: 364 server+client mods, 43 client-only mods, 29 resource pack files, 16 shader pack files
 - Payload: install, config functional: 2870 files, 549.2 MB (mods 364, client_mods 43, kubejs 2015, config 362, defaultconfigs 11, resourcepacks 29, shaderpacks 16, vinery_upstream 2, miners_upstream 2, rustic_upstream 1, roll_upstream 1, largemeals_upstream 1, farmers_upstream 1, oceanic_upstream 1, enders_upstream 1, goldenfood_upstream 1, server 8, world_serverconfig 11)
 - Notes: 1.2.00 full install payload (Creative Split): all in-tree mods rebuilt from source 2026-11-03

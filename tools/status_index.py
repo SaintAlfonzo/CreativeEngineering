@@ -50,7 +50,8 @@ TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 
 FEATURE_LEGEND = ('VERIFIED', 'DEPLOYED', 'BUILT', 'BROKEN', 'reference', 'planned')
 TODO_LEGEND = ('Bug', 'Planned', 'Pinned', 'In Progress', 'Testing', 'Complete')
 TIERS = 'SCPT'
-BLOCKS = {'readme': README, 'todo': TODO, 'queue': QUEUE}
+DEPLOY_DOC = FW / 'deploy.md'
+BLOCKS = {'readme': README, 'todo': TODO, 'queue': QUEUE, 'deploy': DEPLOY_DOC}
 BEGIN = re.compile(r'^<!-- generated:status_index begin (\w+) sha1=([0-9a-f]+) -->$')
 CODE_RE = re.compile(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-([A-Za-z0-9.]+)')
 RESULT_RE = re.compile(r'^[*~ ]*(PASS|FAIL|INCONCLUSIVE|BATCH[- ]FAULT|OPEN|SKIP\w*|CRASH|LOOK|OWNER|BLOCKED|'
@@ -442,6 +443,22 @@ def write_features(feats):
     table_io.write(TSV, TSV_COLS, [[f.get(k, '') for k in TSV_COLS] for f in feats], comments)
 
 
+def view_deploy():
+    """deploy.md header: the deployed version per side and the last five marks, from deploy/DEPLOYED.json (P3.4 i)."""
+    try:
+        d = json.load(open(ROOT / 'deploy' / 'DEPLOYED.json'))
+    except (OSError, ValueError):
+        return ['deploy/DEPLOYED.json missing or unreadable']
+    out = ['| Side | Version | Since |', '|---|---|---|']
+    for side in ('server', 'client'):
+        e = d.get(side) or {}
+        out.append('| %s | %s | %s |' % (side, e.get('version', '?'), (e.get('date') or '').replace('T', ' ')))
+    out += ['', 'Last marks: ' + '; '.join('%s %s (%s)' % (e.get('version'), (e.get('date') or '').replace('T', ' '),
+                                                        ', '.join(e.get('targets') or []))
+                                       for e in (d.get('log') or [])[-5:][::-1])]
+    return out
+
+
 def build():
     feats = read_features()
     todo = read_todo()
@@ -449,7 +466,7 @@ def build():
     queue = read_queue()
     runs = read_runs()
     rindex, seen = run_index(runs)
-    views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo),
+    views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo), 'deploy': view_deploy(),
              'queue': view_queue(queue, rindex, seen)}
     views['rows'], views['rows_where'] = rows_views(runs)
     views['features_changed'] = feats_changed
