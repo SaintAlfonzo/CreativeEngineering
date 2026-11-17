@@ -73,7 +73,7 @@ The juice is the matching `*_grapejuice_*_bottle` for the 8 grape types. An unse
 
 ### 2.3 Aging Barrel (`vinery:fermentation_barrel`), wine
 
-The Vinery port calls this block the **Cask** (alcohol.md B7.9). This section describes 1.3.10.
+The Vinery port calls this block the **Cask** (alcohol_part_b.md 7.9). This section describes 1.3.10.
 
 | | |
 |---|---|
@@ -358,7 +358,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
   - Grape and grape seed flavour lines removed. `removeTooltipKey` takes a `*` prefix key. Vinery tooltip placeholders added.
   - Found the 50-tick barrel time (the JEI page says 1800, open).
 - 2026-10-19: this file describes 1.3.10, which left the pack in 1.0.7 (DEPLOYED 2026-10-18) for the port; the port's
-  behaviour is in [alcohol.md](alcohol.md) Part B. Kept as the reference for what changed.
+  behaviour is in [alcohol_part_b.md](alcohol_part_b.md). Kept as the reference for what changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.

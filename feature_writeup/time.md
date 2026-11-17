@@ -5,7 +5,7 @@ One master section, `[time]` in `config/creativecalendar-common.toml` (Creative 
 length of the seasons (Serene Seasons and SeasonHUD) and how fast wine ages (Backported Vinery). It also covers how
 all three show up in the GUI. Every length is given in **world days**: one sunrise to the next, as the player sees it.
 
-Test prefix: `TI-`. Related: [alcohol.md](alcohol.md) B4.5 (the vintage clock), [weather.md](weather.md) (season
+Test prefix: `TI-`. Related: [alcohol_part_b.md](alcohol_part_b.md) 4.5 (the vintage clock), [weather.md](weather.md) (season
 types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per sub-season).
 
 ## 0. At a glance
@@ -29,7 +29,7 @@ types, SeasonHUD mixins), [weather_by_biome.md](weather_by_biome.md) (rain per s
 | Seasons that follow the sun (3.3) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Pause while the server is empty (3.4) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested |
 | Wine aging lengths and boosts (3.5) | Lengths BUILT and pushed from the master. Boosts beyond the cellar (T5): cold x2.0 / warm x0.75 from Brewin' keg temperature BUILT 2026-10-19 ([alcohol.md](alcohol.md) 10.13, cellar now x2.0; Brewin' `-03` in the local `mods/` since 2026-10-20), not deployed, not tested; deep cellar and storage type not built (TODO `alcohol/pack #2`) |
-| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol.md](alcohol.md) B7), calendar tooltip and "7:30 pm" clock in patcherMod |
+| Wine months, sun clock, x2.5 dark, calendar (3.7) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: port side in the Vinery port `-02` ([alcohol_part_b.md](alcohol_part_b.md) 7), calendar tooltip and "7:30 pm" clock in patcherMod |
 | GUI integration (3.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: `[time]` in Create's Configs screen, SeasonHUD "Day x/24" + time of day, calendar tooltip and action bar, `/ccaltime` |
 | Offline checks (6) | not built: `tools/time_table.py`, the SUN-counter GameTest |
 | Presets (3.9) | BUILT 2026-10-18, DEPLOYED with 1.0.8, not tested: SINGLEPLAYER (default) / SERVER / CUSTOM |
@@ -56,7 +56,7 @@ Three mods each keep their own clock, and each is configured separately:
 | Better Days 3.3.4.3 | the sun: overworld `dayTime`, at its own speed by day and by night | `config/betterdays-common.toml` (WhiteNoise config, not Forge) | per instance |
 | Serene Seasons 8.1.0.24 | its own counter, `seasonCycleTicks`, saved per dimension | `<world>/serverconfig/sereneseasons-server.toml` | per world |
 | SeasonHUD 2.0.4 | nothing; it reads Serene Seasons, but keeps its own copy of the lengths | `<world>/serverconfig/seasonhud-server.toml` | per world |
-| Backported Vinery 1.5.5-ce | the vintage clock: real playtime (alcohol.md B4.5) | `config/vinery-common.toml` | per instance |
+| Backported Vinery 1.5.5-ce | the vintage clock: real playtime (alcohol_part_b.md 4.5) | `config/vinery-common.toml` | per instance |
 
 Today nothing ties these together. A "day" means something different in each one (section 2), and the per-world
 files mean every new single-player world starts on Serene Seasons' defaults.
@@ -139,7 +139,7 @@ From `club/iananderson/seasonhud/forge/platform/ForgeSeasonHelper.java`:
 
 ### 2.4 Vinery port (the vintage clock)
 
-From `development/backportedVinery/.../core/wine/VintageClock.java` and `WineYears.java` (alcohol.md B4.5):
+From `development/backportedVinery/.../core/wine/VintageClock.java` and `WineYears.java` (alcohol_part_b.md 4.5):
 
 - `agingTicks` goes up by 1 per tick while a player is online (`clockMode = PLAYTIME`). Sleeping, `/time` and Better
   Days don't touch it.
@@ -349,9 +349,9 @@ Deep cellar and storage type stay optional (T5).
 | **`/ccaltime`** (new, op 0) | none | one chat table: world day (day / night minutes, speeds, current time of day), season (sub-season, day x/y, real time to the next sub-season and to the next year, clock mode), wine (days per year, real time per year and per level, cellar and other boosts, clock mode), and which values the master pushed and which file each went to |
 | **`/ccaltime set day|season|wine ...`** (op 2) | none | shortcut that edits the `[time]` values and pushes them, for testing |
 
-### 3.7 Wine months and the calendar (alcohol.md B7.8)
+### 3.7 Wine months and the calendar (alcohol_part_b.md 7.8)
 
-Your Vinery lists of 2026-10-18 ([alcohol.md](alcohol.md) B7) set the time scale:
+Your Vinery lists of 2026-10-18 ([alcohol_part_b.md](alcohol_part_b.md) 7) set the time scale:
 
 | What | Value | Where |
 |---|---|---|
@@ -694,7 +694,7 @@ TI-27 cover what the build added (3.8).
   MINUTES mode is wrong with the pack's sunrise / sunset; nothing pauses the sun on an empty server. Designed the
   `[time]` master, the push, SUN seasons, pause-when-empty, wine boost options and GUI integration. Decisions T1 to T7
   open. Nothing built.
-- 2026-10-18: added 3.7 from your Vinery list (alcohol.md B7): a wine month is one sub-season, wine ages on the sun
+- 2026-10-18: added 3.7 from your Vinery list (alcohol_part_b.md 7): a wine month is one sub-season, wine ages on the sun
   clock (sleeping counts; replaces B4.5 and 3.5's PLAYTIME), +1 level every 2 months, x2.5 in the dark, "year"
   -> "month" in every wine text, and the Vinery calendar showing the Serene Seasons date. 3.1, 3.2 and 3.5 updated;
   T8 to T11 added (T9 decided by your list); TI-17 to TI-22 added.
@@ -714,7 +714,7 @@ TI-27 cover what the build added (3.8).
 - 2026-10-18 late: presets built (3.9): SINGLEPLAYER (default, 1 month per wine level) / SERVER (3) / CUSTOM, the
   label derived from the values. T1, T3, T4 and T7 decided as recommended. Found: the deploy ships one `config/` to
   both sides, so a SERVER preset doesn't survive a payload (open). TI-28, TI-29 added.
-- 2026-10-18: port side of 3.7 built in the Vinery port (alcohol.md B7): `[wine] daysPerMonth` 8,
+- 2026-10-18: port side of 3.7 built in the Vinery port (alcohol_part_b.md 7): `[wine] daysPerMonth` 8,
   `monthsPerEffectLevel` 3, `durationPerMonth`, `cellarAgingMultiplier` 2.5; `[aging] clockMode` WORLD_TIME with the new
   `dayUnit` DAYTIME (24000 units a day); real-time text uses the measured day-time pace; "month" in every wine text;
   the Vinery calendar removed. The master, the push, the Serene Seasons calendar tooltip and the clock format are

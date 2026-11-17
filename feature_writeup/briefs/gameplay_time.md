@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# gameplay`, Sub `time`. Feature writeup: [time.md](../time.md)
 (test prefix `TI-`, used up to TI-37 on 2026-10-31; new tests here are placeholders `TI-newN`, numbered when queued).
-Related: [weather.md](../weather.md) (SeasonHUD mixins), [alcohol.md](../alcohol.md) B7 (the wine side of the master).
+Related: [weather.md](../weather.md) (SeasonHUD mixins), [alcohol_part_b.md](../alcohol_part_b.md) 7 (the wine side of the master).
 
 Jars checked (decompiled with vineflower or read with `javap`, under `scratchpad/decomp/` and `scratchpad/vanilla/`):
 `betterdays-1.19.2-3.3.4.3-FORGE.jar`, `seasonhud-forge-1.19.2-2.0.4.jar`, `xaerominimap-forge-1.19.2-25.3.10.jar`,
