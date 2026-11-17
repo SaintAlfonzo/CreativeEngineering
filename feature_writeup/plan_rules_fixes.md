@@ -12,7 +12,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D22 from the owner's answers the same day.
+Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
 
 1. **D1 Licence string**: `GPL-3.0-only` confirmed (can be widened later); change the rule text, not the jars (section 8).
 2. **D2 Loot modifiers**: see D14.
@@ -40,8 +40,8 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
 12. **D12 Test line form (G13)**: checkbox lines `- [ ] **PREFIX-NN Name:** setup and action -> expected`, colon inside
     the bold, a result note after the colon, never between the name and the colon. Retired ids are struck through with
     "(moved to X)". The integration-report skill's `| ID | Test | Pass |` table becomes checkbox lines too (section 12b V-62c).
-13. **D13 Loot home**: there is no Creative Loot jar yet. Loot lives in Creative Worldgen (`loot/`, `global.CWG.lootRules`);
-    Worldgen is the owner of shared loot plumbing (section 5) until a later split.
+13. **D13 Loot home**: a new **Creative Loot** jar (mod id `creativeloot`) is split out of Creative Worldgen (owner
+    2026-11-16, section 5b). It owns the loot rule engine, the loot scripts and the global loot modifier merge.
 14. **D14 Global loot modifier list**: design for the worst case. Assume Forge reads only one jar's
     `data/forge/loot_modifiers/global_loot_modifiers.json` and drops the rest (section 5). No test decides it.
 15. **D15 Ids may change for consistency**: recipe ids, LootJS log names and registration ids that move into their owner
@@ -64,13 +64,28 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
     Player text keeps whatever the line already needs (no arrows are added to tooltips or lang).
 22. **D22 Namespace binding**: confirmed (owner 2026-11-16): every script binds the recipe helper to its folder's
     namespace with `global.NCH.forPack(ns)`, and registrations with `global.reg.forPack(ns)` (section 6).
+23. **D23 Recipe unlocks (V-15, G16)**: removed entirely, pack-wide (section 12e). DR-C14 becomes "no recipe unlocks
+    of any kind"; G16 closed.
+24. **D24 Sideways edges (V-16)**: recorded in creative_split.md, and every simplification the existing mandatory
+    dependencies allow is carried out (section 12f): Brewing and Delight both require Calendar, and Brewing requires
+    Delight, so code in the depended-on jar that reaches into the depending jar moves to the depending jar.
+25. **D25 Loot dependency**: Creative Delight and Creative Brewing declare Creative Loot as a mandatory dependency
+    (`ordering="AFTER"`). Creative Loot requires only Common and Compat, so no cycle; Worldgen requires it too. This lets section 5 (GlmMerge) and
+    V-38 (section 12d) call Creative Loot directly with no guards. Exposure stays independent (its fragment is read when
+    Creative Loot is present; recorded in creative_split.md).
+26. **D26 The other unscheduled violations**: V-05, V-14, V-32, V-33, V-38, V-41 take the recommended fix (owner
+    2026-11-16): sections 12b, 12c, 12d.
+27. **D27 Writeup split (G7)**: a writeup splits when its features are more useful to reach from a tree-style table of
+    contents than side by side in one file: a parent doc keeps the overview and a linked contents table, each feature
+    gets its own file (like `testing/structures/`). No line-count threshold. Not scheduled in this plan; the audit
+    lists candidates (creative_delight.md, 2,124 lines) for the owner to judge by that test.
+
+28. **D28 V-26**: all three files move (owner 2026-11-16): dragon_breathing to Magic, creative_labels to Labels (with the
+    build copy step), botany_pots to Compat (section 6).
 
 Still open (owner):
 
-- **O3 Writeup size (G7 first half)**: the split size for large writeups. Not needed by this plan.
-- **O4 Unscheduled violations**: V-05, V-14, V-15 (G16 recipe-book unlocks), V-16, V-32, V-33, V-38, V-41 (section 20 lists
-  the proposed fix for each).
-- **O5 V-26 per file**: default is move (section 6); the owner may keep any of the three in the pack folder.
+
 
 ## 1. Order of work
 
@@ -78,8 +93,9 @@ Still open (owner):
 |---|---|---|---|
 | P0 Decisions and rule text | 0; rule text for DR-W3b, DR-L4b, DR-C19, DR-C21, DR-C26, DR-P4; prefix index (2, written); `.editorconfig`; date and prefix lints in report mode | none | Every later step writes text under these rules; the date lint must run before 2027 starts |
 | P1 Docs and hygiene | 2 (prefix lint, rename run); 3; 10; 12b docs rows (V-60, V-61, V-62a to d); 15 doc pass (docs, memory, skills); 15b spelling and arrows, docs and player text | A | No game risk. Renamed prefixes are needed before any new test is written in P2 to P4. The date sweep must end before 2027-01-01 |
-| P2 Creative Common | 4 (dict lines, dict lint); 6 (`forPack`, `reg`, log names, lint report); 7 (missing dict keys); 9; 12 (resolver, `col` roles, absolute food rows); 12b V-37 getters | C, once | Every user jar calls these helpers; one Common rebuild, then users |
-| P3 Users of Common | Worldgen first: 5 (GlmMerge), its 6, 7, 12, 12b rows. Then B, G, D, E, Exposure, Devtools, pack folder: 6, 7, 11, 12 (V-04 member checks, V-34 to V-36, V-43, V-44), 12b (V-02, V-03, V-09, V-10, V-20, V-39, V-40, V-42, V-46, V-48), 5 (drop member list files) | W, then B, G, D, E, exposure, Devtools | Worldgen's merge must be installed before any member drops its list file, or those modifiers stop loading |
+| P2 Creative Common | 4 (dict lines, dict lint); 6 (`forPack`, `reg`, log names, lint report); 7 (missing dict keys); 9; 12 (resolver, `col` roles, absolute food rows); 12b V-37 getters; 12c villager trade helper; 12e pack-wide unlock block | C, once | Every user jar calls these helpers; one Common rebuild, then users |
+| P2b Creative Loot split | 5b: new jar, engine and loot scripts moved out of Worldgen, GlmMerge (section 5) written in it | Loot, W, once | Delight, Brewing and Worldgen depend on it; must exist before P3 |
+| P3 Users of Common | Creative Loot first (installed in P2b), then Worldgen's 6, 7, 12, 12b rows. Then B, G, D, E, Exposure, Devtools, pack folder: 6, 7, 11, 12 (V-04 member checks, V-34 to V-36, V-43, V-44), 12b (V-02, V-03, V-05, V-09, V-10, V-14, V-20, V-32, V-39, V-40, V-41, V-42, V-46, V-48), 12c trade conversions, 12e own block entities, 12f (Calendar, Delight, Brewing edges), 5 (drop member list files), then 12d (loot routing, last: it touches loot in several jars and needs GlmMerge in place) | W, then Calendar, B, G, D, E, exposure, Devtools | Worldgen's merge must be installed before any member drops its list file, or those modifiers stop loading |
 | P4 Renames that touch saves | 14 (with V-07); 12 V-06 Exposure remap | W, Calendar, Exposure | Both need an old-id save test; one test world covers both |
 | P5 Code sweeps, one commit each, in this order | 17 (history out of code; extracted lines written ISO) -> 15 and 15b code pass (dates and spelling left in comments and strings) -> 13 (patcherMod text) -> 16 (tabs, last) | all, build only | 17 deletes most dated comments, so 15 touches code once; 13 before 16 keeps the tab commit pure whitespace; 16 last isolates blame and allows the byte-identical class check |
 | P6 Docs form | 19b | A | Test ids and anchors are final only after P1 renames and P5 history moves |
@@ -144,23 +160,23 @@ tag. The forge tag line is dead. Unify on `#creativedelight:sea_pickles`:
 Facts: 9 files ship `data/forge/loot_modifiers/global_loot_modifiers.json`: Exposure (main and `expanded` flavours),
 Creative Delight members hearth, veggies, rustic, ends, vintage, the Vinery pack inside Creative Delight
 (`packs/mods/vinery/`), and Brewin' in Creative Brewing. Third-party jars in `mods/` ship their own copies too.
-Creative Delight, Brewing and Exposure depend on Common, not on Worldgen.
+Creative Delight, Brewing and Exposure depend on Common, not on Worldgen or Creative Loot (until D25).
 
 Design (D13, D14: assume only one copy of the list is read, and we cannot choose which):
 1. **No member ships the Forge list file.** Each member moves its `entries` to a fragment
    `data/<member ns>/glm_entries.json` (`{"entries": ["ns:name", ...]}`). The modifier definitions stay where they are
    (`data/<ns>/loot_modifiers/<name>.json`); Forge resolves an entry `ns:name` to that path from any jar.
-2. **Creative Worldgen owns the merge** (`loot/GlmMerge.java`, D13). After Forge's `LootModifierManager` has built its list
+2. **Creative Loot owns the merge** (`GlmMerge.java`, D13). After Forge's `LootModifierManager` has built its list
    on each data reload, GlmMerge adds every entry from (a) every copy of the Forge list in the resource stack
    (`ResourceManager.getResourceStack`, so third-party copies that lost the race still load) and (b) every
    `glm_entries.json` fragment. It skips entries whose serializer is not registered and entries from a member whose switch
    is off (D17), drops duplicates by entry id, and logs one line: `[GlmMerge] N entries (lists: ..., fragments: ...)`.
    The result does not depend on which copy Forge read.
-3. Worldgen ships no list of its own (it has no modifiers today; if it gets one, it uses a fragment as well).
-4. **Dependency**: member loot modifiers need Worldgen. Worldgen ships in every release (`build_deploy.py` marks it
-   required); record the soft edge in [creative_split.md](creative_split.md). Mixin target and reload hook: read Forge
+3. Creative Loot ships no list of its own (no modifiers today; if it gets one, it uses a fragment as well).
+4. **Dependency** (D25): Creative Delight and Creative Brewing require Worldgen in `mods.toml`; Exposure's fragment is
+   read when Worldgen is present (soft edge, recorded in [creative_split.md](creative_split.md)). Mixin target and reload hook: read Forge
    1.19.2 `LootModifierManager` once before writing (the merge must run after Forge's `apply`, on the same reload).
-5. **Order**: Worldgen with GlmMerge is built and installed first (P3); the member list files are removed after, in the
+5. **Order**: Creative Loot with GlmMerge is built and installed first (P3); the member list files are removed after, in the
    same install window, so no modifier is lost in between.
 6. **Lint**: no own jar ships `data/forge/loot_modifiers/global_loot_modifiers.json`; every fragment entry has a
    definition file. Added to `design_rules_audit.py`.
@@ -169,8 +185,30 @@ Design (D13, D14: assume only one copy of the list is read, and we cannot choose
   third-party one (Farmer's Delight).
 - Changelog: none if every modifier loads before and after. If the probe shows modifiers that were missing until now
   (the first-only case was true), a "Fixed" bullet names them.
-- Creative Loot jar: not now (D13). It earns its place when V-38 moves the loot rewrites from Delight into one engine;
-  GlmMerge then moves with Worldgen's `loot/`.
+- The jar itself: section 5b.
+
+## 5b. Split Creative Loot out of Creative Worldgen (D13)
+
+Facts read 2026-11-16: Worldgen's loot lives in `kubejs/data/creativeworldgen/kubejs/loot/` (`00_lib.js` to `99_debug.js`:
+tuning, dead maps, rules, leaf apples, drops, removals, frequency, redistribute, targeted, tag capture, `loot_config.json`,
+`loot_index.json`, `loot_census.md`), the engine API `global.CWG.lootRules` in `cwg_core.js`, and an empty Java `loot/`
+package. 12 script files across the pack use `lootRules` or `global.LOOT`. Loot is not worldgen: only chest loot rules
+touch structures.
+1. New project `development/creativeLoot` (settings.gradle include, `ce.forge-mod` plugin, `mods.toml` requiring Common
+   and Compat, mod id `creativeloot`, GPL-3.0-only, NOTICE and sides rows, `build_deploy.py` required entry, README row,
+   writeup `creative_loot.md`, test prefix `LOOT-` added to the prefix index first; check `LT-`/`LTP-` stay as they are).
+2. Move the loot script tree to `kubejs/data/creativeloot/kubejs/` with its build copy step (as Magic's), the data files
+   (`loot_config.json`, `loot_index.json`, census) to the matching generated-data path, and the Java `loot/` package.
+3. API rename: `global.CWG.lootRules` becomes `global.LOOT.rules` (one global, `global.LOOT` already exists as the id
+   check); a deprecated alias on `global.CWG.lootRules` is not kept (all 12 callers are ours and updated in the same change).
+   Config section `[loot]` carries over with `ConfigRename.carrySections` from the Worldgen config. Generators in
+   `tools/generators.json` that read or write the loot files get their paths updated.
+4. Worldgen drops the loot tree and requires Creative Loot (chest loot rules for structures stay data in Worldgen's own
+   namespace, registered through `LOOT.rules`).
+5. Order inside P2b: create the jar and move files with the game closed; Worldgen and Loot build and install together
+   (neither runs alone); recipe, loot and tag dumps before and after must be identical.
+6. Queue rows: boot log shows the loot engine banner once; `/dumpall` loot dump diff empty; one chest loot probe in a
+   structure; the config values survived. Changelog: none (same behavior).
 
 ## 6. Registration and namespace (V-25, V-26, V-27, V-28, V-31 and "no jar registers wrongly")
 
@@ -203,10 +241,23 @@ Design: **namespace follows the script's folder, bound once per file, with an ex
 Per violation:
 - **V-25** Compat recipes in `misc_items.js`, `flowers.js`, `feature_ports.js` (about 12) use `forPack('creativecompat')`;
   their ids change from `creativeengineering:` to `creativecompat:` (D15).
-- **V-26** (default, O5): `magic/dragon_breathing.js` moves to `kubejs/data/creativemagic/kubejs/` (Magic's pack);
+- **V-26** (D28): `magic/dragon_breathing.js` moves to `kubejs/data/creativemagic/kubejs/` (Magic's pack);
   `other/creative_labels.js` to a new `kubejs/data/creativelabels/kubejs/` (check the Labels jar copies server scripts
   like the others; if not, add the copy to its build); `other/botany_pots.js` to Creative Compat's pack (third-party tweaks
   are Compat's). Ids change to the new namespace.
+  V-26 per file (facts read 2026-11-16):
+  - `magic/dragon_breathing.js` (25 lines): 4 or 5 `R.dragonBreathing` rows using the dict. The helper lives in Common's
+    NCH. Move: clean, no dependencies. Becomes `kubejs/data/creativemagic/kubejs/` (the Magic jar already copies that tree);
+    recipe ids change to `creativemagic:`.
+  - `other/creative_labels.js` (40 lines): 3 recipes plus the four `creativeLabelsSpecial` ones, all making Labels items.
+    Move is right but needs build work: `development/creativeLabels/build.gradle` has no script-tree copy (Magic's does),
+    so add the same copy step, the `kubejs/data/creativelabels/kubejs/` folder, the jar-has-scripts check, and a
+    `mods.toml` dependency on Common (and KubeJS). Ids change to `creativelabels:`.
+  - `other/botany_pots.js` (66 lines, `// requires: botanypots`): not a recipe set but a growth pass over every loaded pot
+    crop recipe, plus `global.BOTANY_*` constants that `client_scripts/tooltips.js` reads. Move to Compat's pack (third-party
+    tweak). The globals stay global, so the tooltip still works, but Compat's server pack must load before the client
+    script reads them (client reads at tooltip time, so safe). Recipe ids unaffected (it edits, not adds) except the
+    soil recipe it adds, which becomes `creativecompat:`.
 - **V-27**: LootJS names `CE/...` in Creative Delight and Worldgen scripts become `CD/...`, `CWG/...` through `R.logName`.
 - **V-28**: allowlisted (D11).
 - **V-31**: `reg.forPack` for CE and CD registrations.
@@ -314,7 +365,11 @@ Group E is section 19b (last). Each is one change, done in the phase of the jar 
 |---|---|---|
 | V-02 | Delete the 3 dead advancement modifier JSONs in the mooblooms pack and their pack switches | W |
 | V-03 | Remove the upstream advancement JSONs in Brewin' (49), Exposure (35) and Vintage (11). Where a member is a repack or bakes from an upstream donor (Vintage; Brewin' if its files are baked), deleting the files does not hold: add `data/*/advancements/**` to that member's repack exclude list or the bake step's drop list, then clean-build (memory `repack-stale-resources`). In-tree files (Exposure) are deleted | G, B, exposure |
+| V-05 | `PackSeasonings.java` (Barbeques member): compile against Creative Delight directly (it is inside the CD jar) and delete the reflection and the "without Creative Delight" fallback (`:47-61`, `:150-160`) | B |
 | V-09 | Delete `assets/creativeengineering/lang/.en_us.json` | CE |
+| V-14 | Repackage the Miner's member from `com.sammy.minersdelight` to `com.SaintAlfonzo.creativedelight.miners` (34 files, its mixin json, `mods.toml` entry class, any reflection strings); registry ids unchanged, so no save risk. Record in miners_delight.md | B |
+| V-32 | Move the 6 builder `.tagBlock(...)` calls (`startup_scripts/items/decor_blocks.js:18-19`, `creativeengineering/items/coil_blocks.js`, `creativecompat/decor_blocks.js`) into the owning tag scripts through `global.tags`; `/dumpall` tag diff empty | A, CE, D |
+| V-41 | Move the tag fills a jar's Java reads out of the pack folder: `creativecompat:` tags in `tags/blocktags.js:598-606` to Compat's script pack, the `creativeequipment:` tag in `tags/feature_port_tags.js:9` to Equipment's, the `creativecommon:` WTHIT tags in `tags/wthittags.js:13-14` to Common's; `/dumpall` tag diff empty | D, E, C |
 | V-10 | Log tags, logger names and the `creativeengineering_locate` ticket name become the owning jar's name (`DisplayDelightDishes.java:62,71`, `DisplayDelightDishBlocks.java:57`, `ItemBurnTransform.java:42`, `StructureCatalogue.java:73`, `MassPlacer.java:95`, `LocateLoads.java:51`); check no log grep or tool matches the old text | B, D, Devtools, W |
 | V-40 | One `buildGrid` in Devtools (`metal_test_recipes.js`, `wood_test_recipes.js`): a shared copy in Devtools' `_lib/` | A |
 | V-48 | The about 19 `Platform.isLoaded` calls on members use the member switch (D17): `global.CD.on(...)` for Creative Delight members, `global.CB.on(...)` for Creative Brewing members (`vinery`, `brewinandchewin`); third-party mods keep `Platform.isLoaded` | B, G |
@@ -346,6 +401,65 @@ Open questions, Tests, Built). Fix (the obvious one, so the owner does not need 
 
 Queue rows: V-03 and V-20 (recipes and loot unchanged: `/dumpall` diff), V-48 (member switch off removes the feature), V-46 (names show).
 Changelog: V-46 only if a shown name changes; V-60/V-61 are changelog edits themselves.
+
+## 12c. Villager trade helper (V-33)
+
+- Common: `trade_helper.js` gets `global.trades.villager(e, profession, level, { buy, buy2, sell, uses, xp, priceMultiplier })`,
+  the villager counterpart of the Wandering Trader helper, with dict keys accepted for every item and the same id checks.
+- Convert the 52 raw `e.addTrade` calls in `kubejs/server_scripts/economy/trades.js` and the 13 in the Creative Delight
+  `trades.js` files (`salt/`, `barbequesdelight/`, `veggiesdelight/`, `hearthandharvest/`, `corn_delight/`). Lint: raw
+  `e.addTrade` outside the helper fails.
+- Verify: `/dumptrades` before and after, diff empty. C, then A and B.
+
+## 12d. Delight loot through Creative Loot (V-38)
+
+- Route Creative Delight's own loot rewrites (`rusticdelight/crop_drops.js:80`, `creativedelight/soil_yield.js:134`, and the
+  raw `LootJS.modifiers` blocks in 5 CD loot scripts) through Creative Loot's engine (`global.LOOT.rules` for table rules and the id checks). D25 makes the call safe without guards.
+- If a rule shape is missing from the engine (block drops by tool or by soil, for example), add it to Creative Loot's engine
+  first; the CD script only declares rules. Log names come from `R.logName` (section 6).
+- Verify: loot probes for each moved rule (same drops before and after); `/dumpall` loot dump diff empty. W, then B.
+- Afterwards every own loot rule is in Creative Loot's one engine.
+
+## 12e. No recipe unlocks (V-15, D23)
+
+- Pack-wide: a Common mixin makes `ServerPlayer.awardRecipes(Collection)` and `awardRecipesByKey(ResourceLocation[])`
+  do nothing. This covers vanilla furnaces, smokers, blast furnaces, the crafting table, Farmer's Delight, the knowledge
+  book and every mod that calls them. `/recipe give` stops working too (no use in this pack: JEI is the recipe viewer).
+  Experience from cooking is not touched: furnaces pop XP before they award recipes, and the award call becomes a no-op.
+- Own code: delete the award calls and the used-recipe bookkeeping kept only for them, but keep the XP pop:
+  `OvenBlockEntity.java:365-368` and `OvenResultSlot.java:53` (Creative Delight), the Keg (`KegBlockEntity.java:963-979`,
+  `KegBlock.java:79`, Brewin' member), the Copper Pot (`CopperPotBlockEntity.java:535-549`, `CopperPotResultSlot.java:51`,
+  Miner's member). Central Kitchen injects at `setRecipeUsed` on the Copper Pot (comment at `:61`): keep the method,
+  drop only the award.
+- Rule DR-C14 text: "No recipe unlocks of any kind (recipe book, advancements, knowledge books)". design_rules.md G16 closed.
+- Player-visible: the recipe book no longer gains entries and no "new recipe" toasts show. Changelog bullet: "Recipes
+  are no longer unlocked in the recipe book by crafting or cooking". Entries already in a save stay.
+- Queue rows: smelt iron ore in a furnace, cook in the Oven, the Keg and the Copper Pot: XP drops as before, the recipe
+  book gains nothing, no toast. C, B, G rebuild.
+
+## 12f. Sideways edges and what the dependencies simplify (V-16, D24)
+
+Brewing and Delight both require Calendar (`mandatory=true`), and Brewing requires Delight. Code in a depended-on jar that
+reaches into a depending jar moves to the depending jar, which can call the other directly:
+1. **Vinery grass slab season** (`creativeCalendar/.../VineryGrassSlabSeasonMixin.java`, a `@Pseudo` mixin gated by
+   `CalendarMixinPlugin`): the Vinery port is our source, so `SpreadableGrassSlabBlock.randomTick` in
+   `members/vinery` calls `GrassSeasonHook.refuse(...)` directly. Delete the mixin, its plugin entry and its mixin json line.
+2. **Vintage lush grass season** (`VintageLushGrassSeasonMixin.java`): the Vintage member's source is in-tree
+   (`members/vintage/src/main/java/net/ribs/vintagedelight`); its lush grass block's random tick calls the hook directly.
+   Same deletions in Calendar.
+3. **Vintage clock reflection** (`creativeCalendar/.../time/TimeDate.java:211-228`, `Class.forName("net.satisfy.vinery.core.wine.VintageClock")`):
+   Calendar gets a small hook, `WineTime.onDateMoved(Consumer)` style, that the Vinery port's `PackTime` registers at setup;
+   `/ccaltime date` calls the registered listeners. No Vinery class name left in Calendar.
+4. **Coaster offset** (`creativeDelight/.../mixin/brewinandchewin/CoasterRendererOffsetMixin.java`, needing
+   `compileOnly project(':backportedBrewin')` in `creativeDelight/build.gradle:52`): Brewing requires Delight, so the change
+   goes into the Brewin' member's coaster renderer source directly; delete the mixin and the compileOnly line.
+5. After the moves, `grep` both bundles and Calendar for the other jar's packages and mod ids (`brewinandchewin` in
+   `FeastPlatingCategory.java`, for example) and apply the same rule to each hit; a hit that is a plain optional mod check
+   stays.
+- Record the edges that remain (Exposure's loot fragment, D25; anything step 5 keeps) in [creative_split.md](creative_split.md).
+- Verify: the queue rows of the crop-season tests for the two grass blocks (SQ-PST-08 to -11b family) rerun; `/ccaltime date`
+  backward moves the vintage clock; the coaster renders offset. Calendar, B, G rebuild, Calendar first.
+- No changelog bullet (same behavior).
 
 ## 13. patcherMod to Creative Common in text (V-18, V-47)
 
@@ -477,16 +591,11 @@ split (O3) is not needed here.
 | Sections 9 to 12 | V-45, V-17, V-01, V-04, V-06, V-34, V-35, V-36, V-43, V-44 |
 | Sections 13 to 17 | V-18, V-47, V-11, V-07, V-59, V-21, V-19 |
 | Sections 18 and 19 | V-55, V-50, V-51 (deferred) |
-| Section 12b | V-02, V-03, V-09, V-10, V-20, V-37, V-39, V-40, V-42, V-46, V-48, V-60, V-61, V-62 |
+| Section 12b | V-02, V-03, V-05, V-09, V-10, V-14, V-20, V-32, V-37, V-39, V-40, V-41, V-42, V-46, V-48, V-60, V-61, V-62 |
+| Sections 12c to 12f | V-33, V-38, V-15, V-16 |
 | Section 19b (last) | V-53, V-54, V-56, V-57, V-58 |
-| Not scheduled: owner pick needed (O4) | V-05, V-14, V-15, V-16, V-32, V-33, V-38, V-41 |
 
-Proposed fixes for O4, for when the owner schedules them: V-05 compile Barbeques' seasonings against Creative Delight
-(`compileOnly`) and drop the reflection; V-14 repackage Miner's to `com.SaintAlfonzo.creativedelight.miners` (ARR rewrite,
-like the other rewrites); V-15 exempt recipe-book parity in DR-C14 (the furnace and Farmer's Delight do the same);
-V-16 record the three sideways edges in creative_split.md; V-32 move the `.tagBlock` calls to the owning tag scripts;
-V-33 a villager helper in `trade_helper.js`; V-38 route the Delight loot rewrites through `global.CWG.lootRules` (also the
-trigger for a Creative Loot jar, D13); V-41 move each tag fill to its jar's script pack.
+Every violation is scheduled (owner 2026-11-16: D23 to D26).
 
 ## 21. Done means for this plan
 
@@ -494,14 +603,19 @@ trigger for a Creative Loot jar, D13); V-41 move each tag fill to its jar's scri
 - New and updated lints registered in design_rules.md section 1; `tools/design_rules_audit.py` clean at the end.
 - Writeups updated for each touched feature (tooltips.md, food_tuning, creative_common, creative_split.md, mod_sides.md),
   History lines added.
-- Changelog bullets: section 15b (American spelling in own lang and tooltips); section 5 only if the probe finds modifiers that were missing; section 9 when TODO
+- Changelog bullets: section 12e (no recipe unlocks); section 15b (American spelling in own lang and tooltips); section 5 only if the probe finds modifiers that were missing; section 9 when TODO
   `tooling/design-rules #4` turns the demo off; V-46 if a shown name changes. Run `python3 tools/changelog_lint.py`.
-- Queue rows for: sea pickle tea, palette switch, GlmMerge count and loot probes, member switch off (`salt`), Exposure
+- Queue rows for: sea pickle tea, palette switch, GlmMerge count and loot probes, member switch off (`salt`), recipe unlocks (12e), trade dump diff (12c), loot probes for moved rules (12d), grass seasons and vintage clock (12f), Exposure
   and underscore-rename old-id save, namespace recipe counts and id diff, food dump diff, tooltip screenshots.
 - Hand-over lists the exact test ids and which jars wait to be copied to `mods/`.
 
 ## History
 
+- 2026-11-16: Creative Loot split out of Worldgen added (D13 changed, section 5b, phase P2b; D25 now names Creative Loot); V-26 all moved (D28); O5 closed.
+- 2026-11-16: D27 (writeup split by tree-TOC usefulness, not size); V-26 broken down per file in section 6.
+- 2026-11-16: owner answers: V-05, V-14, V-32, V-33, V-38, V-41 scheduled with the recommended fix; recipe unlocks
+  removed pack-wide (12e); sideways edges recorded and the Calendar, Delight and Brewing dependencies used to move code
+  into the depending jar (12f); Delight and Brewing require Worldgen (D25). Sections 12c to 12f added; no violation unscheduled.
 - 2026-11-16: review pass. Decisions D7 to D19 and open list O1 to O5 added (O1, O2 then settled as D20, D21; D22 confirmed section 6); phase order rewritten with reasons (Worldgen
   before members for loot, date pass before 2027); test prefix index built ([testing/test_prefix_index.md](testing/test_prefix_index.md),
   10 renames) and pointed to from CLAUDE.md, README, DR-W3 and two skills; section 5 redesigned for a first-only list
