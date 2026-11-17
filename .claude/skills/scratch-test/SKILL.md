@@ -94,8 +94,9 @@ everything below is the default unless the prompt says otherwise.
 
 - Read RUNNER.md. `State: idle` (or `running` with no game JVM up and `Updated` over 2 h old, after asking the user):
   write your claim (format in the file). Update `Phase`, `ETA`, `Updated` at every phase boundary.
-- `game_jvms.sh` empty; `df -h /` (stop below about 10 GB free); jar check: `ls -l --time-style=+%m-%d_%H:%M mods/`
-  against `development/*/build/libs/` for the jars the rows need. prep_srv.sh swaps in build jars newer than
+- `python3 tools/check_all.py --fast` exits 0 (an offline FAIL is fixed or reported before a scratch boot).
+- `game_jvms.sh` empty; `df -h /` (stop below about 10 GB free); jar check: `python3 tools/jarstamp.py pending` and
+  `python3 tools/jarstamp.py diff mods/ <srv>/mods` for the jars the rows need; record the stamps in the run doc. prep_srv.sh swaps in build jars newer than
   `mods/`; a jar the rows need that is in neither: report it, those rows wait.
 - Read the queue header (pinned notes, newest additions), its "World groups" and setup notes, and the latest run
   doc's notes.

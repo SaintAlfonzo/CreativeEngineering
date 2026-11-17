@@ -31,7 +31,8 @@ FTB Feed The Beast mods (Quests, Teams, Library) | NCH neoCraftHelper (`global.N
 
 Processes are project skills in `.claude/skills/`: `integration-report` (new or updated mod: overlap, new content,
 fold-in), `add-mod`, `release`, `port` (ports and backports), `scratch-test` (queue rows, runs, run status). When the
-user asks for one, follow its skill.
+user asks for one, follow its skill. `intake`: whenever owner notes (scratchpad blocks, owner-notes sections, run
+findings) become a plan, split and classify them and ask the open items before building.
 
 ## Preferences
 
@@ -77,10 +78,14 @@ user asks for one, follow its skill.
 ## Build and verify
 
 - Build/install a mod: `./gradlew :<mod>:build --offline`, then `:<mod>:installToMods` (moves old
-  jars to `jar_archive/displaced/`). A rebuild for testing is installed without asking when the game is not
-  running. Never replace a jar while the game is running: until the install dialog is built
-  ([plan_process_overhaul.md](feature_writeup/plan_process_overhaul.md) P1.2), ask; after, `installToMods` shows it
-  (Install now, shown again while the game still runs / Install on exit / Skip).
+  jars to `jar_archive/displaced/`). A rebuild for testing is installed without asking. When the game is running,
+  `installToMods` shows the owner a dialog (Install now, shown again while the game still runs / Install on exit /
+  Skip); never replace a jar under a running game any other way. Every install is a row in `jar_archive/installed.tsv`;
+  `python3 tools/jarstamp.py pending` lists built, not installed jars (cite it instead of writing "not installed").
+- **Checks.** `python3 tools/check_all.py` runs every headless test and lint (`--fast` under a minute, `--changed`
+  only what the diff touches, `-v` output tails). `installToMods` runs `--fast --changed` first and refuses on a FAIL
+  (`-PskipChecks` overrides, logged); `build_deploy.py` runs `--full`; the Stop hook reports. Accepted failures go in
+  `tools/check_known.tsv` with a reason and date.
 - **Commits.** Agents commit at the end of each plan phase, and at session end for any finished work left
   uncommitted, as the repo's configured author (the owner) with the Co-Authored-By trailer, then push with
   `git push origin HEAD:agent_staging` (never `main`; the owner merges). Stage only that phase's files by path

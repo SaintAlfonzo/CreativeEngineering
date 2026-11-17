@@ -164,6 +164,7 @@ same pass as the renames.
 | `PL-` | [placeable_food.md](../placeable_food.md) |  |  |  |
 | `PO-` | [potions.md](../potions.md) |  | briefs/potions_potions.md |  |
 | `POT-` | [flower_pots.md](../flower_pots.md) | SQ-POT (8) |  |  |
+| `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup |
 | `PRT-` | [immersive_portals.md](../immersive_portals.md) | CQ-IP (4) |  | new 2026-11-16, was IP- (README only; item_physics.md owns IP-); queue SQ-IP-01 to -05 and CQ-IP in the Immersive Portals section become SQ-PRT, CQ-PRT |
 | `PS-` | [perf.md](../perf.md) | SQ-PS (7) |  | not in the README index yet |
 | `PT-` | [plantable.md](../plantable.md) | CQ-PT (1), SQ-PT (1) |  |  |
