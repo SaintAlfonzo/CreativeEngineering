@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): correctness only; ignore rates.
+- Constraints (owner, 2026-10-14): correctness only; ignore rates.
 - Tests: ST-39 (preview), ST-41 (templates), ST-42 (status and stop), ST-40 (all of Towns & Towers in rows; walking the
   rows = [game]).
 - Server: M7/M8 scratch server, patcherMod 1.0.7 jar (worldgen = 1.0.8). World st_9: level-type flat,
@@ -26,7 +26,7 @@
   rm.listResources("structures", ...) call throws something JS try/catch cannot catch (an Error). Mixins on the
   resource/template managers: moonlight MultiPackResourceManagerMixin, morejs StructureManagerMixin, kubejs
   inject_resources (MinecraftServerMixin, WorldLoaderPackConfigMixin), mes NamespaceResourceManagerAccessor. Not
-  pinned further. ST-41 FAILED (the templates mode can't list anything); 09-27 notes say templates were never run.
+  pinned further. ST-41 FAILED (the templates mode can't list anything); 2026-09-27 notes say templates were never run.
 - 07:23:50 ST-42: `cdevplace structures by group @philipsruins @hopo` -> "33 structures in 5 row(s) ... (rows: group)"
   (nether_ruins 3, ocean_ruins 6, ruins 13, surface_dungeons 1, no group: standalone 10); `cdevplace status` (07:24:02) ->
   "11/33 started, 10 placed, 0 failed, row 3/5, now philipsruins:ancient_towers (chunks loaded 2/2, placed 0/2)";

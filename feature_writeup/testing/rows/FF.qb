@@ -47,7 +47,7 @@ shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').re
 > execute positioned 0 70 0 run locate biome terralith:brushland
 > execute positioned 0 70 0 run locate biome terralith:orchid_swamp
 sleep 60
-# Terralith biomes (added 10-31 after the first pass counted only savanna and mangrove)
+# Terralith biomes (added 2026-10-31 after the first pass counted only savanna and mangrove)
 > execute positioned 0 70 0 run locate biome terralith:shrubland
 waitlog nearest terralith:shrubland is at 300
 capture SH terralith:shrubland is at \[(-?\d+), (~|-?\d+), (-?\d+)\]

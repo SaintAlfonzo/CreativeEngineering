@@ -20,9 +20,9 @@ run next, ahead of whatever phase is pending (current phase finishes at a row bo
 `CreativeCompat.java` are owned by that session: a Compat fix for a non-PTH row is messaged there first, and
 `:creativeCompat:` is not built or installed by this run.
 
-Taken, in queue order (everything added or rewritten since r1114 ended, 11-14 12:08, then the older server rows the
-11-14 22:30 coverage audit lists as not run):
-1. Rows rewritten in place 11-14 (queue header "agent misc" line): SQ-TPF-00, -01; SQ-PG-01a, -01b, -01c; SQ-GAP-04;
+Taken, in queue order (everything added or rewritten since r1114 ended, 2026-11-14 12:08, then the older server rows the
+2026-11-14 22:30 coverage audit lists as not run):
+1. Rows rewritten in place 2026-11-14 (queue header "agent misc" line): SQ-TPF-00, -01; SQ-PG-01a, -01b, -01c; SQ-GAP-04;
    SQ-T1-04; SQ-OB-05; SQ-CBP-11; SQ-HH-328; SQ-VH-06, -06b, -06c (fresh Nether); SQ-LGM-13; SQ-CDW-01, -03b.
 2. SQ-PWG Power Grid P11 fixes (SQ-PWG-97, -80b, -54r; rewritten SQ-PWG-06, -43, -80, -82, -91).
 3. SQ-MELT Melting system (SQ-MELT-01 to -10, -P1, SQ-SALT2-06, -06b, SQ-AZW-01, SQ-DCM-02).
@@ -51,7 +51,7 @@ pass-through work in progress.
 
 ## 3. Jars
 
-`mods/` at 00:14, all installed 11-14 22:40 to 23:55 (Common 1.2.0 23:53, Compat 23:54, Delight 1.1.0 23:28, Brewing
+`mods/` at 00:14, all installed 2026-11-14 22:40 to 23:55 (Common 1.2.0 23:53, Compat 23:54, Delight 1.1.0 23:28, Brewing
 23:29, Engineering 23:54, Worldgen 22:40, Storage 23:29, Power Grid -18 23:55, solRaspberryPie 23:55). Not used:
 `development/creativeCompat/build/libs/creativecompat-1.0.0.jar` 00:07 (pass-through phase 1 WIP).
 
@@ -181,7 +181,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 - 01:15:31 stopped (saved 01:15:43, JVM gone 01:15:49); boot 2 01:15:58, Done 3.8 s (pid 3269412); p2_r2.qb (-54r,
   BX 1380) 01:17, PASS. Stopped 01:17:37, JVM gone 01:17:44; game_jvms.sh empty. Runner-2 done (about 25 min from the
   first batch edit).
-- 01:20 runner-3 (phase 3, SQ-MELT): installed `creativedelight-1.1.0.jar` (11-14 23:28) nests
+- 01:20 runner-3 (phase 3, SQ-MELT): installed `creativedelight-1.1.0.jar` (2026-11-14 23:28) nests
   `repackedSalt-1.2.4.1-ce-19.2-03.jar` whose `Melting.tryMeltFromBlock` is `iconst_0; ireturn` (salt member block melt
   off, plan_bugfix_1114 3.8): SQ-SALT2-06 and SQ-MELT-01 are judgeable. New probe `tools/scratch_query/zmelt_probe.js`
   (`/zmelt w|show|clear|light`: watches positions every tick, logs each block change with the server tick). Batches
@@ -223,7 +223,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   mostly `ChunkReader` palette checks (`mayHaveTargets`, source-driven magma, randomTickSpeed 1000 phases) and 267
   `ForgeConfigSpec$ConfigValue.getRaw` under `onRandomTick` (config read per tick). The box's top ice layer melted to
   water (3923 of 4096: Serene Seasons, open air). SQ-DCM-02: 0 KubeJS errors after /reload; scratch 32042 recipes vs the
-  pack dump 32168 (11-15 00:02): the missing ids are 115 powergrid, 12 creativebrewing, 1 creativeengineering, 1
+  pack dump 32168 (2026-11-15 00:02): the missing ids are 115 powergrid, 12 creativebrewing, 1 creativeengineering, 1
   create_questing (Power Grid gate jar absent from scratch boots); `[absent mods]` names none of the five G5 mods.
 - 02:15:33 A1 stopped, JVM gone 02:15:38. `qrun.py toml ... melting vanillaLightMelting true` (srv only), boot A2
   02:16:19, Done 3.8 s (pid 3394759). `p3_a2.qb` (targets roofed, bots m3 and m3r): new sea-lantern ice (block light
@@ -270,7 +270,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   40 `myrtrees:rubberwood_log` (r1113: 0), 3358 jungle logs. Stopped 03:13:59, JVM gone 03:14:09; two leaked feeders
   of this phase killed; game_jvms.sh empty. Runner-4 done (02:27 to 03:16).
 - 03:23 runner-5 (phase 5, SQ-HOP + SQ-MELT-09b / -P1b): batches `batches/r1115/p5_o1.qb` (SQ-HOP-11 old-save
-  fixture on the previous CD jar: no pre-11-14 CD jar in jar_archive/displaced, so the 11-14 03:46 build from the r1114
+  fixture on the previous CD jar: no pre-11-14 CD jar in jar_archive/displaced, so the 2026-11-14 03:46 build from the r1114
   scratchpad (pwgperf/srv/mods, nests backportedHearth -04 with hearthandharvest:hops and tilled_end_stone blocks) is
   copied to scratchpad r1115/oldcd/), `p5_a1.qb` (same world on mods/ jars: -11, HH-1546b, HOP-02 to -05, -07 to -10,
   HH-1546, -1546c, HH-266 rerun, -266c, -266b, MELT-09b full-pack half), `p5_a1p.qb` (MELT-P1b boxes as p3_a1b, plus a
@@ -279,7 +279,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   Tooling: `zq_probe.js` gained `/zq items|blocks <text>` (registry ids containing text, with class);
   `hh_mw_probe.js` countset prints "(in K chunks)" per id.
 - 03:23 O1 `NOSWAP=1 prep_srv.sh $S/p5a p5a A spawn-animals=true difficulty=normal` (378 jars, unlisted only cdevperfbot),
-  srv/mods CD replaced by the 11-14 03:46 build (sha1 c98f8504cf38), probes zz_hh2, zz_hh5, zz_zmelt, Loading Protection
+  srv/mods CD replaced by the 2026-11-14 03:46 build (sha1 c98f8504cf38), probes zz_hh2, zz_hh5, zz_zmelt, Loading Protection
   1 s. Done 10.6 s 03:24:40 (pid 3563665). `p5_o1.qb`: old jar has `hearthandharvest:hops` (HopsLatticeBlock) and
   `hearthandharvest:tilled_end_stone`; three fixture blocks placed, saved. Stopped, JVM gone 03:26:12.
 - 03:26 A1 = same world, CD hard link of mods/ (sha1 3eaeaeced71c). Done 4.2 s 03:27:25 (pid 3567871); log
@@ -408,7 +408,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   (pid 3965192): SQ-MIN-03 none of the five lines, ERR 0 in the row list. Stopped 06:13:27; game_jvms.sh empty.
   Runner-7 done (05:05 to 06:15). Verdicts in section 8. Not booted: SQ-CDW-01 myrtrees / endersdelight boots (covered
   by phase 1, CD's only change since is this run's fixes); client rows none in these sections.
-- 06:15 runner-9 (phase 9, older server rows from the 11-14 22:30 audit). From the records, no boot needed: SQ-VH-02 to
+- 06:15 runner-9 (phase 9, older server rows from the 2026-11-14 22:30 audit). From the records, no boot needed: SQ-VH-02 to
   -09 and -12 PASS in r1111 (-06 to -06c this run), -10 RECORDED in r1111 (real TerraBlender wins and boots); only -11
   is open. SQ-WO-15 to -25, -31, -33 PASSed in qrun r1110wo (`perf/runs/r1110wo/results.md`) but never got verdict
   lines; rerun on the current Worldgen jar. SQ-HCS-10 (= the rewritten SQ-HH-401 to -502) is judged from r1111/r1112 and
@@ -552,7 +552,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 - 12:00 `pth_a2.qb` started (projectile and bot rows, SQ-PTH-13/14 despawn timing, -15, -25, -26, -27, SQ-HOP-05, then
   SQ-PTH-14c and save-all for boot 2). Tooling: `tools/perf/suite/server.py` takes `PERF_JARS="a.jar b.jar"` (build
   jars copied over the mods/ jar of the same name prefix; the suite otherwise measures mods/ only, whose Compat
-  11-14 23:54 has no tags) for SQ-PTH-28.
+  2026-11-14 23:54 has no tags) for SQ-PTH-28.
 - 12:00 to 12:11 `pth_a2.qb`. `zpth face` threw (Rhino finds no `setYRot` on perfBot's BotPlayer), so every bot
   throw went due south: harmless except the explosive arrow of SQ-PTH-10 (shot away from the cube; rerun -10b with a
   `tp ... 180 0`; the probe now turns bots with a relative tp). SQ-PTH-14 test 1 ran late (the 4th arrow came after the
@@ -624,7 +624,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-PG-01c | skipped | client row: client-deferred (CQ-PG-03 likewise) |
 | SQ-GAP-04 | PASS | A1 + `p1_a1b.qb`: plate and wire tags hold rose gold sheet/wire; item tag `forge:storage_blocks/gold` holds `mca:rose_gold_block`; clock, mechanical crafter, powered rail (gold rod tag), golden apple, pickaxe, chestplate, carrot (nugget tag) take the tag; `gold_ingot_from_nuggets` and `minecraft:gold_block` literal. qrun FAIL was batch (block tag, vanilla recipe ids) |
 | SQ-T1-04 | PASS | A1: rose gold ingot used by clock, mechanical crafter, golden pickaxe, `creativedelight:shaped/golden_apple`; powered rail through the gold rod tag (`p1_a1b`); not by gold block or gold bars; component_gold takes plate/wire tags. qrun FAIL was batch (vanilla ids) |
-| SQ-LGM-13 | PASS | A1: catalog 11-14 22:30: pot pie block feast/whole, serving feast/serving, omurice feast/serving, omurice block feast/whole, tomato egg soup soup/soup, cod deluxe and hearty lunch meal/plate; live feast/whole tag (33) holds both blocks, cake/whole (14) holds minecraft:cake; no food_family tag error |
+| SQ-LGM-13 | PASS | A1: catalog 2026-11-14 22:30: pot pie block feast/whole, serving feast/serving, omurice feast/serving, omurice block feast/whole, tomato egg soup soup/soup, cod deluxe and hearty lunch meal/plate; live feast/whole tag (33) holds both blocks, cake/whole (14) holds minecraft:cake; no food_family tag error |
 | SQ-CBP-11 | PASS | B1: Equipment 37 transitions, Engineering 67; packs `creativeequipment:felsic_gear` (+nullscape) enabled; no incomplete/duplicate error; 25 felsic blocks in the End highlands box (688 594); one break 1 scrap, 50 rolls 73 |
 | SQ-OB-05 | PASS | B1: 4 recipes (2 cutting + 2 Slice & Dice copies): cave carrot -> 2 raw_vegetarian_patty, baked cave carrot -> 2 cooked_vegetarian_patty |
 | SQ-VH-06 | PASS | B1 (Heap at -10 6): bedrock 2304/2304 at y 0 and 127; interior Heap cells (27 cells all Heap): netherrack 0 of 142461; 945 netherrack only in border cells. Floors flesh+porous 1942/2926, ceilings 2767/3866: rest structure (fortress bricks) and Heap decor (tendons, hair, pus); natural non-flesh floor 51 (97 %), ceiling 35 + 258 tendons |

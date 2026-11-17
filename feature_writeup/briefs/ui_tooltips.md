@@ -309,7 +309,7 @@ exact Forge 43.3.9 statement order (read from memory of Forge 43 sources).
 | Row | Change | Status | Notes |
 |---|---|---|---|
 | tooltips #1 | Tooltip framework and lines | Complete | TT-01 to TT-18 still unticked. tooltips.md had two stale "not in `mods/`" notes (Brewin' lines, shield Shift lines), fixed below |
-| tooltips #4 | AppleSkin bars in more screens | Testing | Matches tooltips.md 3 "Fixed" (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`); TT-19 to TT-30 open. Not deployed yet (1.0.9 was deployed 2026-10-19, before the 10-20 build) |
+| tooltips #4 | AppleSkin bars in more screens | Testing | Matches tooltips.md 3 "Fixed" (patcherMod 1.1.01, Brewin' `-03`, Vinery `-04`); TT-19 to TT-30 open. Not deployed yet (1.0.9 was deployed 2026-10-19, before the 2026-10-20 build) |
 
 ## Writeup corrections made
 

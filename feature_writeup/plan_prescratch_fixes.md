@@ -6,7 +6,7 @@ edit). Queue: "Pre-scratch fix pass" at the end of [scratch_queue.md](testing/sc
 SQ-PSF, SQ-PSW, SQ-PSU, 52 rows), not run. Jars built and installed 2026-11-02: patcherMod, Creative Compat, Creative
 Calendar, Creative Delight, Creative Brewing. After the first boot: `/cegen` for the item physics and WTHIT silk-touch
 generators (azalea wood ids).
-Premises that were wrong: crops #31, #32, #34, #38 and item-physics #4 were already built (10-28 / 10-31); oats #35 shipped
+Premises that were wrong: crops #31, #32, #34, #38 and item-physics #4 were already built (2026-10-28 / 2026-10-31); oats #35 shipped
 in 1.1.06; baby squid (#21) is not a missing rule but a low chance by design; there are no D&D glowstone geodes; the time
 and season code is in Creative Calendar, crops in Creative Delight, potions in Creative Brewing.
 Owner decisions 2026-11-02, applied the same day: oats #35 kept open for a visual sign-off (CQ-PSD-09); azalea logs

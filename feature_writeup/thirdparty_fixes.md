@@ -87,8 +87,8 @@ reason given.
 | MC-124117 (MC-124177) | Changing dimension loses client state | server | c1 | CQ-TPF-44 | test, plus Immersive Portals portal path |
 | MC-135971 | Ctrl+Q does not work on the crafting result | server | c1 | CQ-TPF-45 | test |
 | MC-14923 | Chat spam kick in singleplayer without cheats | server | c1 | CQ-TPF-46 | test (needs a no-cheats world) |
-| MC-12829 | Creative flight slows in ladders, vines, scaffolding | client (gameplay) | c1 | CQ-TPF-47 | test (owner 2026-11-13); singleplayer only unless `gameplay_fixes_in_multiplayer` (section 4.4) |
-| MC-237493 | Telemetry cannot be disabled | client | c1 | CQ-TPF-48 | FORCE on (owner 2026-11-13), with the investigation in section 4.6 |
+| MC-12829 | Creative flight slows in ladders, vines, scaffolding | client (gameplay) | c1 | CQ-TPF-47 | test (owner, 2026-11-13); singleplayer only unless `gameplay_fixes_in_multiplayer` (section 4.4) |
+| MC-237493 | Telemetry cannot be disabled | client | c1 | CQ-TPF-48 | FORCE on (owner, 2026-11-13), with the investigation in section 4.6 |
 | MC-577 | Mouse buttons ignored for inventory controls | client | c2 | CQ-TPF-50 | test (Forge already covers pick, hotbar, swap: check no double action) |
 | MC-143474 | Respawn resets the hotbar slot | client | c2 | CQ-TPF-51 | test |
 | MC-231097 | Use slowdown stays after the item is dropped | client | c2 | CQ-TPF-52 | test |

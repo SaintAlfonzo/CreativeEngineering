@@ -135,7 +135,7 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 ## 3. Defects the verifiers found and left
 
 - HOP SQ-HOP-09: 'expect items=hops:[34]' and 'expect items=hops:3' can both be satisfied by the first (ripe) items line, so the shears=3 check is not isolated; the look still asks the owner, left as is (fix would be capture + shell test)
-- CBO SQ-CBO-22: the '> cbo potions' probe expects 'potion creativecommon:long_reach / phantom_bane registered: true' (probe output, pre-existing, not a /cdevtest line); Better Beacons potions are creativebrewing: since 11-07, so these two expects likely fail; probe source not checked
+- CBO SQ-CBO-22: the '> cbo potions' probe expects 'potion creativecommon:long_reach / phantom_bane registered: true' (probe output, pre-existing, not a /cdevtest line); Better Beacons potions are creativebrewing: since 2026-11-07, so these two expects likely fail; probe source not checked
 - SPF.qb (not in my file list) still runs 'cdevtest potion creativecommon:long_reach' / 'creativecommon:phantom_bane' (should be creativebrewing:)
 - PWG SQ-PWG-48: the old 'reject processing=\?' (unknown processing type) has no equivalent in the entities-NBT rewrite
 - ROLL SQ-ROLL-03: 'cdevtest useair as=rl3 hand=both' stops after the main hand if the chopsticks use consumes the action, so the expected 'hand=off result=(CONSUME|SUCCESS)' line may not print; the old probe targeted the offhand; needs a judgement on chopsticks behaviour
@@ -152,7 +152,7 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 
 ## 4. Drafts not written (per agent; client drafts were low priority)
 
-- RD.qb priority 2: 30 server @draft rows still say only 'no batch holds this row yet' and have no steps: SQ-VP-00, SQ-VP-01, SQ-VP-14, SQ-FN-02, SQ-AD-01, SQ-SN-00, SQ-SN-01, SQ-SNF-01, SQ-SNF-03, SQ-PS-00, SQ-PS-01, SQ-LE-02, SQ-CDT-01 to SQ-CDT-06, SQ-VTD4-02, SQ-RD-01, SQ-RD-09, SQ-INV-01, SQ-INV-08, SQ-INV-09, SQ-INV-13, SQ-INV-15, SQ-INV-16, SQ-INV-18, SQ-FF-01, SQ-FFB-01, SQ-RSP-08, SQ-CDF-03. Many pass texts still use creativeengineering: ids from before 11-09, so each row needs its current ids checked first.
+- RD.qb priority 2: 30 server @draft rows still say only 'no batch holds this row yet' and have no steps: SQ-VP-00, SQ-VP-01, SQ-VP-14, SQ-FN-02, SQ-AD-01, SQ-SN-00, SQ-SN-01, SQ-SNF-01, SQ-SNF-03, SQ-PS-00, SQ-PS-01, SQ-LE-02, SQ-CDT-01 to SQ-CDT-06, SQ-VTD4-02, SQ-RD-01, SQ-RD-09, SQ-INV-01, SQ-INV-08, SQ-INV-09, SQ-INV-13, SQ-INV-15, SQ-INV-16, SQ-INV-18, SQ-FF-01, SQ-FFB-01, SQ-RSP-08, SQ-CDF-03. Many pass texts still use creativeengineering: ids from before 2026-11-09, so each row needs its current ids checked first.
 - RD.qb priority 3: none of the 58 CQ- @draft client rows has capture-driver steps yet. The 14 SQ rows newly marked @client true (listed under left_draft) are also still waiting for driver steps.
 - Client drafts not written (low priority, left @draft 'no batch holds this row yet'): CQ-CBO-01..04 (CEPortTesting port_chain setup around the client), CQ-OB-02, CQ-OB-04, CQ-GAP-01, CQ-GAP-03, CQ-ROLL-10, CQ-PJL-06, CQ-PJL-07, CQ-PNE-02..06, CQ-PNE-08, CQ-PNE-09, CQ-CAL-08, SQ-SV-02 (client group). Item and tab ids for most of these are not in the dumps (rotten ham, fertile soil, Quark and Every Compat blocks, creative tab ids), so I did not guess them.
 - PWG client drafts CQ-PWG-01 to -29 and CQ-PWG-66: not touched (low priority). Most target old gate jars (-04 to -18), dedicated-server joins or hand work. The ponder-shot rows (CQ-PWG-14, -15, -20, -29) could become /create ponder + shot driver steps
@@ -218,7 +218,7 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 - SQ-NSM-04: the NSM fixture has no paintings or banner; the picture and Datapacks page are client looks (reason updated)
 - SQ-DCM-03: needs an old-id fixture save on the pre-11-04 jars, and no builder exists (reason updated)
 - SQ-CDFO-01: needs a pre-M8 old-id fixture save with racks, fridge, oven and nests, and no builder exists (reason updated)
-- SQ-IDS-03: needs a fixture world saved on the 11-06 builds; the cdevtest be/inv reads and expected NBT keys are named in the reason
+- SQ-IDS-03: needs a fixture world saved on the 2026-11-06 builds; the cdevtest be/inv reads and expected NBT keys are named in the reason
 - SQ-RDB-03: a rerun list of RD rows, not a row; the reason gives the qrun --rows command
 - SQ-MT-03: villager golem summoning over game time; kept the existing reason
 - SQ-PWG-18: two boots with different overheatedDropChance; reason written by the earlier run, kept
@@ -254,7 +254,7 @@ Owner request 2026-11-16: rebuild every scratch row (server and client) onto `/c
 - SQ-FFH-01: retired 2026-10-27 (global.foodFamily deleted), so there is nothing to run. Its dump diff is SQ-FFH-02. Reason line updated.
 - SQ-TPF-30: P4 setup. The three packetfixer.properties files are composed by hand from the thirdparty_fixes.md 4.2 candidates. They serve the client-joined P4 rows, which need the owner.
 - SQ-GLD2-05: gen_can_types.py has no --dump option and reads only the instance's exported/food, so it runs in the owner's game.
-- SQ-CC-09: needs a world saved on the 11-06 builds that holds the old long_reach potion.
+- SQ-CC-09: needs a world saved on the 2026-11-06 builds that holds the old long_reach potion.
 - SQ-CC-12: needs the owner's client joined to a dedicated scratch server.
 - SQ-DEP-09b: needs 10 boots, each with one jar removed. That takes a runner loop, not one batch.
 - SQ-CDW-01 (rerun 5.2) in DEP: one boot per removed optional mod (runner loop).

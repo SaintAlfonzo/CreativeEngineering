@@ -47,7 +47,7 @@ predicted the direction). 84 fitted members are capped: their biomes are full, s
 
 Finishes the backlog line "allow structures to spawn in all biomes, not just vanilla": the 3.17 system (biome fits)
 applied to every structure whose biome list is a subset of the land. The towers' `tower/*` fits fold into the same
-`land/*` format (user, 2026-10-11), and the vanilla pillager outpost goes by its wood the way the towers do. No Java or
+`land/*` format (owner, 2026-10-11), and the vanilla pillager outpost goes by its wood the way the towers do. No Java or
 KubeJS change is needed: it is data only (`biome_fits.json`, `structure_tags.json`) plus a `--fit-rates` run. Nothing
 below is applied yet.
 

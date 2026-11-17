@@ -1,4 +1,4 @@
-# Scratch run 2026-10-31: everything queued since the 10-28 night run
+# Scratch run 2026-10-31: everything queued since the 2026-10-28 night run
 
 Owner request (2026-10-31): comprehensive scratch tests for every feature added since the last scratch test, fake
 player and client testing included. Order: server checks, then the worldgen changes, then the client block, then the
@@ -24,14 +24,14 @@ queue sections newer than SQ-EFX.
 
 ## 1. Scope
 
-Every queue row added after the 10-28 night run started (2026-10-28 01:10) that has no result, plus the retest of
-that run's SQ-SALT-01 fix (SQ-CM-10), the Botanist workbench row SQ-POT-06 (10-29) and new rows for changelog bullets
+Every queue row added after the 2026-10-28 night run started (2026-10-28 01:10) that has no result, plus the retest of
+that run's SQ-SALT-01 fix (SQ-CM-10), the Botanist workbench row SQ-POT-06 (2026-10-29) and new rows for changelog bullets
 that had none (SQ-GF31-01 to -06, SQ-RW-28). 202 rows in 11 batch files.
 
 Not in this run:
-- SQ-WG30 rows that PASSED on 10-30; SQ-WG30-D03 FAILED and has no fix yet (TODO `structures/terrain #7`); the
+- SQ-WG30 rows that PASSED on 2026-10-30; SQ-WG30-D03 FAILED and has no fix yet (TODO `structures/terrain #7`); the
   PARTIAL A02, A03, C02, E03 stay as they are.
-- Rows queued before 10-28 01:10 and never run (SQ-PR, SQ-OPEN, the 10-25 to 10-27 Creative Delight, flower pot,
+- Rows queued before 2026-10-28 01:10 and never run (SQ-PR, SQ-OPEN, the 2026-10-25 to 2026-10-27 Creative Delight, flower pot,
   perf-fix and hygiene sections): the older backlog, a separate run.
 - Bugs found but not fixed: `food/drinks #12` (Kettle spout fillings), `baking/baked-goods #37` (zucchini quiche).
 - SQ-EFX-12 (jump height) has no server probe: its check is in the client block (CQ-EFX), as are SQ-EFX-13 and -14
@@ -57,15 +57,15 @@ prep_srv.sh swaps a build jar in only when it is newer than the `mods/` jar it r
 
 | Jar | `mods/` | build/libs | Rows that need the build |
 |---|---|---|---|
-| patcherMod 1.1.04 | 10-31 00:44 | same | all patcherMod rows (effects batch included) |
-| creative_delight 1.0.0 | 10-31 00:29 | same | CD rows, monkey merge, Baklava icon |
-| backportedBrewin -04 | 10-31 00:30 | **00:43** | SQ-EFX-13 food icons |
-| backportedVintage | -08 | **-09** (10-29 20:24) | SQ-BJ-01 to -03 |
-| backportedVeggies -03 | 10-25 | **10-30 18:32** | SQ-DM (mature dandelion) |
-| repackedStorage | 10-25 | **10-29 23:54** | SQ-CM-34 (client mod list) |
-| backportedVinery -06 | 10-31 00:41 | same | crop seasons, vine shearing, SQ-EFX-10, -12 |
-| backportedDisplay -01 | 10-27 | 10-31 00:43 | none queued: not swapped (ask the owner before adding it) |
-| perfBot 0.1.0 | never in `mods/` | 10-28 02:24 | every bot row |
+| patcherMod 1.1.04 | 2026-10-31 00:44 | same | all patcherMod rows (effects batch included) |
+| creative_delight 1.0.0 | 2026-10-31 00:29 | same | CD rows, monkey merge, Baklava icon |
+| backportedBrewin -04 | 2026-10-31 00:30 | **00:43** | SQ-EFX-13 food icons |
+| backportedVintage | -08 | **-09** (2026-10-29 20:24) | SQ-BJ-01 to -03 |
+| backportedVeggies -03 | 2026-10-25 | **2026-10-30 18:32** | SQ-DM (mature dandelion) |
+| repackedStorage | 2026-10-25 | **2026-10-29 23:54** | SQ-CM-34 (client mod list) |
+| backportedVinery -06 | 2026-10-31 00:41 | same | crop seasons, vine shearing, SQ-EFX-10, -12 |
+| backportedDisplay -01 | 2026-10-27 | 2026-10-31 00:43 | none queued: not swapped (ask the owner before adding it) |
+| perfBot 0.1.0 | never in `mods/` | 2026-10-28 02:24 | every bot row |
 
 The client block uses the instance's `mods/` (eval_client.py hard-links them): the three bold jars are only in it if
 the owner installs them first. Otherwise SQ-BJ looks, the mature dandelion look and CQ-CM-33's mod name wait.
@@ -137,11 +137,11 @@ with `[worldgen.debug] testOverrides = true` (share 1 for the meta), as the META
 | CD members 22 to 24 | SQ-CM-30 to -34 | a1_data; c1 CQ-CM-33 |
 | Buckets | RE-28; RE-29, -30 | a1_data; c1 CQ-RE-29 |
 | Rose quartz | EN-21; EN-19, -20 | a1_boot, a1_data; c1 CQ-EN-19 |
-| SQ-EFX effect changes (10-31 00:44) | SQ-EFX-01 to -11; -12 to -14 and EF-22 to EF-30 in the client | a1_effects; c1 CQ-EFX |
+| SQ-EFX effect changes (2026-10-31 00:44) | SQ-EFX-01 to -11; -12 to -14 and EF-22 to EF-30 in the client | a1_effects; c1 CQ-EFX |
 | D&D woods removed (recipes_wood.md 2.6) | SQ-RW-28 (new row); RW-28 | a1_effects; c1 CQ-RW-28 |
 | Gap fill | SQ-SPC-01, -02, SQ-RW-23 to -27, SQ-DD-08, SQ-CP-01; CQ-SPC-01, CQ-RW-23 | a1_data; c1 |
-| 10-28: WTHIT silk touch, whistle and bees, mob cap, IW growth, UA coral, sheared grass, falling block splash | SQ-WT-01, SQ-PF16-01 to -04, SQ-MCL-01 to -06, SQ-IWF-01 to -05, SQ-UC-01 to -03, SQ-SG-01 to -03, CQ-FBS-01 to -03 | a1_boot, a1_world, a2, b1, b1_iwf, L2; c1 CQ-FBS |
-| 10-28 retest | SQ-CM-10 (salt); SALT-02/-03 halves | a1_data; c1 CQ-SALT |
+| 2026-10-28: WTHIT silk touch, whistle and bees, mob cap, IW growth, UA coral, sheared grass, falling block splash | SQ-WT-01, SQ-PF16-01 to -04, SQ-MCL-01 to -06, SQ-IWF-01 to -05, SQ-UC-01 to -03, SQ-SG-01 to -03, CQ-FBS-01 to -03 | a1_boot, a1_world, a2, b1, b1_iwf, L2; c1 CQ-FBS |
+| 2026-10-28 retest | SQ-CM-10 (salt); SALT-02/-03 halves | a1_data; c1 CQ-SALT |
 | Flower potting | SQ-POT-06; CQ-POT-02 | a1_boot, a1_world; c1 |
 | Named mobs, gates, ladders | SQ-NM-01 to -03, SQ-VG-00 to -03, SQ-VL-00 to -02 | b1, a1_boot, a1_world |
 | Sky Village addons | SQ-SVA-01 to -04 | a1_boot, a1_world, w3; c1 CQ-SVA |
@@ -242,7 +242,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     glow_squid_stew, seafood_skewer, squid_and_pickles are gone; sea_pickle_roll, shrimp_rice, squid_salad,
     oceanic_delight:takoyaki keep an empty `#forge:squid_tentacles` slot; `miners_delight:cooking/takoyaki` has two
     empty slots. `[NCH] replaceInput ... "#forge:squid_tentacles" does not exist or is empty` 16 times in the A1 log
-    (new against 10-28). Checked the line order myself.
+    (new against 2026-10-28). Checked the line order myself.
   - SQ-RW-23: `#creativeengineering:smokable/planks` holds 9 Botania planks and `upgrade_aquatic:driftwood_planks`;
     `tags/wood_tags.js` excludes them only from the log and wood tags.
   - Seen in passing: six moredelight potato recipes (mashed_potatoes, potato_salad, four diced_potatoes_with_*) have

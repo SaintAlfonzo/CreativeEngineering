@@ -6,7 +6,7 @@
 - **Scope:** SQ-WO-01 to -37 (server). CQ-WO-01 to -07 are client look rows and are not part of this run unless noted.
 - **Batches:** `tools/scratch_query/batches/r1109wo/` (one per boot), runner `tools/scratch_query/wo_run.sh`, judge `tools/scratch_query/wo_judge.py`.
 - **Results:** `perf/runs/r1109wo/`.
-- **Jars:** Creative Worldgen 11-09 20:25 from `mods/` (same as build/libs), Mystical Oak Tree 1.10.
+- **Jars:** Creative Worldgen 2026-11-09 20:25 from `mods/` (same as build/libs), Mystical Oak Tree 1.10.
 - **Perf:** short targeted run, no perf session opened. JFR stays on for every boot (scratch_server.sh default).
 - **Boots:** A1, A1b (restart for SQ-WO-10), A2, A3, A4, A5, S on one group A world; B on a fresh normal world.
 

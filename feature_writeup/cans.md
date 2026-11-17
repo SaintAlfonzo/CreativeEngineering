@@ -196,7 +196,7 @@ Golem: R4-07 ([plan_1.0.4.md](plan_1.0.4.md)). Repack: CN-07 to CN-09 (section 9
 ## 8. History
 
 - 2026-09-28: multi-serving cans ([food.md](food.md) 8).
-- 2026-09-29 to 10-04: hand-written raw cans, then the generated sections (113 cans) and 13 Canned Goods cans re-valued.
+- 2026-09-29 to 2026-10-04: hand-written raw cans, then the generated sections (113 cans) and 13 Canned Goods cans re-valued.
 - 2026-10-02: canned golem dye (1.0.4).
 - 2026-10-13: can parity: 11 raw cans removed, every remaining row generated (202 generated cans) ([can_parity.md](can_parity.md)).
 - 2026-10-18: this hub; findings F1 to F4; tests CN-01 to CN-06. No code changed.

@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/CC.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title SQ-CC Creative Common 1.1.0 full check: the 11-07 18:02 build and every Common feature since the split, 2026-11-07 ([creative_split.md](../creative_split.md) 7.19, [creative_engineering.md](../creative_engineering.md) 7.1 and 7.2, [loading_tips.md](../loading_tips.md), [effects.md](../effects.md))
+@@title SQ-CC Creative Common 1.1.0 full check: the 2026-11-07 18:02 build and every Common feature since the split, 2026-11-07 ([creative_split.md](../creative_split.md) 7.19, [creative_engineering.md](../creative_engineering.md) 7.1 and 7.2, [loading_tips.md](../loading_tips.md), [effects.md](../effects.md))
 @@date 2026-11-07
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_split.md feature_writeup/creative_engineering.md feature_writeup/loading_tips.md feature_writeup/effects.md
@@ -141,11 +141,11 @@ expect verb=player name=cc08 dim=minecraft:overworld
 reject (?i)Exception.*(immersive_portals|qouteall|sereneseasons)
 reject (Unknown or incomplete command|Incorrect argument for command|No player was found|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 ## SQ-CC-09
-@group B (world saved on the 11-06 builds, as SQ-CIF-02)
+@group B (world saved on the 2026-11-06 builds, as SQ-CIF-02)
 @commands before the swap: a chest holding a `creativecommon:long_reach` potion; after: `/zsa potionat <chest>` (`cc_seqasm_probe.js`); `/ccswap items` rewrites item merges only, so the NBT keeps the old string by design (`PotionByNameRemapMixin` maps it on every read)
 @pass the stack reads `creativebrewing:long_reach` with Better Beacons Long Reach; no exception
 @fails swap list `better_beacons_potions.json`, `/ccswap`
-@draft needs a world saved on the 11-06 builds with a creativecommon:long_reach potion in a chest (an old-build boot first, then the swap); a fresh scratch world cannot hold the old string
+@draft needs a world saved on the 2026-11-06 builds with a creativecommon:long_reach potion in a chest (an old-build boot first, then the swap); a fresh scratch world cannot hold the old string
 ## SQ-CC-10
 @group A (full pack)
 @commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without; Better Beacons: `batches/r1107cc/b1_phantom.qb` or `/zph N` (`cc_phantom_probe.js`), two bots on platforms at y 70 (above the superflat sea level 63), `spawn-monsters=true`

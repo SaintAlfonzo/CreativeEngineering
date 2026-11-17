@@ -28,7 +28,7 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
 |---|---|---|---|
 | 1 | Harvest: scan item tooltips, WTHIT providers, JEI info pages; one draft tip per behaviour | DONE 2026-11-06 | section 4 |
 | 2 | Owner review: mark each draft keep / edit / drop, decide the open questions in section 3 | In progress (first pass 2026-11-07) | `Verdict` column in section 4 |
-| 3 | Fact check every kept draft against code, config and dumps (tooltips can be stale since the 11-04 split) | Open | `Checked` column |
+| 3 | Fact check every kept draft against code, config and dumps (tooltips can be stale since the 2026-11-04 split) | Open | `Checked` column |
 | 4 | Gap harvest: features in `feature_writeup/` and the changelogs with no UI text (seasons, worldgen, mob spawns, loot, structures, Create/IE changes) | Open | section 5 |
 | 5 | Write the tips into the pack files (layout decided in section 3, Q1), run `tools/loading_tips_md.py` | Open | tip files, [loading_tips_list.md](loading_tips_list.md) |
 | 6 | Build and install the owning jars; LTP-03 count check, LTP-01 read-through in game | Open | test IDs |
@@ -37,15 +37,15 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
 
 ## 2. Style rules for tips
 
-- No trailing period (owner 2026-11-07). A tip may hold two sentences; only the final period goes.
-- Capitals (owner 2026-11-07): items, blocks and materials lower case (axe, copper, fishing net, salt dust);
+- No trailing period (owner, 2026-11-07). A tip may hold two sentences; only the final period goes.
+- Capitals (owner, 2026-11-07): items, blocks and materials lower case (axe, copper, fishing net, salt dust);
   enchantments and effects Title Case (Silk Touch, Fortune, Looting, Bad Omen, Night Vision); mobs, places,
   structures, dimensions, mod names, control keys (Shift, Sprint) and quoted UI labels keep their capitals.
   Applied to every tip in Loading Tips and Creative Tips and to section 4.
-- **Concise and informative** (owner 2026-11-14). Every tip tells the player something they can use: a mechanic, a
+- **Concise and informative** (owner, 2026-11-14). Every tip tells the player something they can use: a mechanic, a
   rule, a number, a recipe. No trivia, flavour, jokes, history or tips that only name a thing ("The Wither is a
   powerful boss", "Dragon heads look cool on walls").
-- **The full picture of one feature** (owner 2026-11-14). A tip covers its feature whole: the counter cases, the
+- **The full picture of one feature** (owner, 2026-11-14). A tip covers its feature whole: the counter cases, the
   sister cases and the limits that go with it ("Ice melts near bright light, but packed and blue ice never do", not
   "Ice blocks melt near light sources"). Several short facts about one feature belong in one tip; never split one
   feature over several tips, and never leave out the half that changes what the player does. If the whole feature
@@ -60,7 +60,7 @@ owner notes applied 2026-11-07 (section 6). Nothing from section 4 written to th
 - Name items by their display name. Name a mod only when the player needs it to find the thing (JEI mod filter).
 - A tip must stay true when the optional mod it talks about is absent, or ship in that mod's jar (section 3, Q1).
 
-- **Pack pass over the existing tips** (owner 2026-11-14): after tip audit 2 ([loading_tips_audit.md](loading_tips_audit.md)),
+- **Pack pass over the existing tips** (owner, 2026-11-14): after tip audit 2 ([loading_tips_audit.md](loading_tips_audit.md)),
   a pass that describes the pack itself overrides more Loading Tips by id with pack facts, for example golden and
   gilded foods and ice melting near light. Belongs with step 5 (write the tips).
 
@@ -321,7 +321,7 @@ Not started (step 4).
 
 ## 6. Follow-ups from the review (not tips)
 
-- Explorer's compass: make sure it is a creative-only item (owner 2026-11-07; was the note on draft CT-092, since
+- Explorer's compass: make sure it is a creative-only item (owner, 2026-11-07; was the note on draft CT-092, since
   removed).
 - Kindling (CT-098): the mechanic is not built. Define it (today a coal or charcoal block under a campfire gives rain
   immunity, a hay bale gives signal smoke) and add a kindling JEI page next to Common's "Campfire Rules" page.

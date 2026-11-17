@@ -196,7 +196,7 @@ jungle); the Rustic chance (`ChanceFilter` holds 15 for peppers and coffee in co
 is a leftover upstream file the port never reads); peppers versus coffee (same block class, rarity, heightmap and
 ground rule: the jungle split 0 versus 5 is one coffee patch in a clearing, chance). Also: the r1115 boxes were centred on
 `/locate` results and nobody counted their biome make-up, so "N chunks" below is an upper bound on tag chunks.
-`crop_worldgen.json` (11-14) lacks the four Rustic features although the generator knows them: stale export, rerun
+`crop_worldgen.json` (2026-11-14) lacks the four Rustic features although the generator knows them: stale export, rerun
 `gen_crop_worldgen_table.py`.
 
 | Crop | Rule (where) | Heightmap | Observed r1115 (N chunks) | Expected | Cause / risk |
@@ -224,7 +224,7 @@ ground rule: the jungle split 0 versus 5 is one coffee patch in a clearing, chan
 
 Fix rows that follow (not built; owner to confirm): give every surface wild crop feature that the rules add to
 forest, jungle, swamp or taiga biomes a canopy-proof heightmap (`MOTION_BLOCKING_NO_LEAVES`, as rubber and hops),
-the way `wild/melon` was fixed on 11-03: JSON features (Rustic, Veggies, Vintage members, CD `wild/*`) by editing
+the way `wild/melon` was fixed on 2026-11-03: JSON features (Rustic, Veggies, Vintage members, CD `wild/*`) by editing
 their `heightmap`; Java-registered ones (FD, Delightful, Farmer's Respite, Corn Delight; no placed-feature JSON in
 their jars) by a CD `wild/*` copy with the new heightmap (the cabbage pattern) or a placement override. No rarity change before the census (SQ-PS15-12b, -12c).
 

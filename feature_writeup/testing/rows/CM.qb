@@ -144,7 +144,7 @@ expect verb=player name=cm8 effects=\S*minecraft:night_vision:0:
 expect verb=player name=cm8 effects=\S*phantom_bane:0:
 reject verb=player name=cm8 effects=\S*phantom_bane:[1-9]
 reject verb=\S+ .*done=0
-## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 10-28)
+## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 2026-10-28)
 @group any
 @commands `creativedelight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers)
 @pass none
@@ -429,7 +429,7 @@ reject verb=\S+ .*done=0
 @fails `creativedelight/members #23`
 @from batches/r1113/c1_a1.qb
 @reviewed 2026-11-16
-# id fix: the tag is creativecompat:jei/storage_delight since the 11-09 namespace move (row says creativecommon:)
+# id fix: the tag is creativecompat:jei/storage_delight since the 2026-11-09 namespace move (row says creativecommon:)
 bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
 > cdevtest tag item creativecompat:jei/storage_delight
 waitlog verb=tag kind=item tag=creativecompat:jei/storage_delight n= 30

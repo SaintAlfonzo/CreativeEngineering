@@ -10,13 +10,13 @@ notice in the member's `NOTICE-upstream-MIT.txt`).
 
 | # | Decision | Answer |
 |---|---|---|
-| P1 | Which crow carries the mechanics | **Alex's Mobs' crow** (`alexsmobs:crow`) by default; H&H's entity not ported **until the eval: both crows get an in-game evaluation (owner 2026-11-06, N21)**, then one stays. Not final |
-| P2 | Stash sink | ~~Port H&H's ground nest block~~ **Void (owner 2026-11-06, N21): drop nests totally.** No nest block, stash or nest worldgen **On hold (owner 2026-11-08, N26-2): evaluated with the crows; section 11.** |
+| P1 | Which crow carries the mechanics | **Alex's Mobs' crow** (`alexsmobs:crow`) by default; H&H's entity not ported **until the eval: both crows get an in-game evaluation (owner, 2026-11-06, N21)**, then one stays. Not final |
+| P2 | Stash sink | ~~Port H&H's ground nest block~~ **Void (owner, 2026-11-06, N21): drop nests totally.** No nest block, stash or nest worldgen **On hold (owner, 2026-11-08, N26-2): evaluated with the crows; section 11.** |
 | P3 | Home | Creative Delight member `development/creativeDelight/members/hearth` (`backportedHearth`), packages `hearth.crow`, `hearth.salt`, `hearth.nest`. Goals attach through `EntityJoinLevelEvent` like `FoxBerryGoals`; AM mixins, if any, go in `creativeDelight/.../mixin/alexsmobs/` |
 | P4 | Config | Section `[hearth.crow]` and `[hearth.salt]` in `creativedelight-common.toml`, every feature switchable; copy to `configs_edited/root_config/` |
-| P5 | Crow feather and Bad Omen brew | **Add both** (owner 2026-11-05): the `crow_feather` item and the Bad Omen potion brewed from it (C8). Reverses 5.4's "do not add the item" |
-| P6 | Crop pecking | **Crows damage crops** (owner 2026-11-05): AM's crow only animates a peck today, so C5 adds the real age reset; default on, `mobGriefing` and the scarecrow protect |
-| P7 | Trust system | **Deep dive first** (owner 2026-11-05): see section 8. C1 / C3 / C4 are not to be built until it is written |
+| P5 | Crow feather and Bad Omen brew | **Add both** (owner, 2026-11-05): the `crow_feather` item and the Bad Omen potion brewed from it (C8). Reverses 5.4's "do not add the item" |
+| P6 | Crop pecking | **Crows damage crops** (owner, 2026-11-05): AM's crow only animates a peck today, so C5 adds the real age reset; default on, `mobGriefing` and the scarecrow protect |
+| P7 | Trust system | **Deep dive first** (owner, 2026-11-05): see section 8. C1 / C3 / C4 are not to be built until it is written |
 
 Open owner calls are in section 7. Everything else below is the build.
 
@@ -67,7 +67,7 @@ Salt caves stay as decided in 5.3 (swapped for raw rock salt, a separate row, no
 
 | Step | Work |
 |---|---|
-| R1 | Port the H&H `scarecrow` block (MIT; model, texture, loot, recipe) into the member; **it accepts any farmer's hat (owner 2026-11-06): the four pack hats and the H&H hat through one tag, in the recipe and when dressed**; add it to `#alexsmobs:crow_fears` and `#creativedelight:repels_crows` with `global.tags` |
+| R1 | Port the H&H `scarecrow` block (MIT; model, texture, loot, recipe) into the member; **it accepts any farmer's hat (owner, 2026-11-06): the four pack hats and the H&H hat through one tag, in the recipe and when dressed**; add it to `#alexsmobs:crow_fears` and `#creativedelight:repels_crows` with `global.tags` |
 | R2 | `CrowAvoidRepellingBlocksGoal` on AM crows, reading `#creativedelight:repels_crows` (carved pumpkin, jack o'lantern, scarecrow) with `crow.scareRadius` (H&H's wider radius than AM's tag avoid) |
 | R3 | Dressable scarecrow (`blocks/new #8`): kept as its own later row; its entity joins the same tag, so this block stays the plain version. No rename needed unless the two look alike |
 
@@ -87,7 +87,7 @@ All goals attach to `alexsmobs:crow` only while it is wild (`!isTame()`, not sit
 | C8 | **Crow feather:** item `crow_feather` in `#forge:feathers`; AM crow loot swapped to it (0 to 1, looting) through a global loot modifier replacing the vanilla feather; arrows, brush and book and quill need no recipe (tag). Bad Omen potion (awkward + crow feather) added as a Forge `BrewingRecipeRegistry` entry; effect text and the Pungent and Tempting potions stay with N16 | 60 |
 | C9 | **Spawning:** keep the pack's `flying_birds` rule; add `LivingSpawnEvent.CheckSpawn` ALLOW for crows near a generated nest or `crow.cropRequirement` crops (the H&H rule, additive so AM spawns do not drop); optional deny mode off | 70 |
 
-## 5. Nest block (the stash sink) -- ON HOLD for the crow eval (owner 2026-11-08, N26-2; was void, N21)
+## 5. Nest block (the stash sink) -- ON HOLD for the crow eval (owner, 2026-11-08, N26-2; was void, N21)
 
 Built for the crow eval; kept only if the eval keeps it (section 11).
 

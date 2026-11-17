@@ -70,7 +70,7 @@ Notes:
 
 None in Phase 8. Two side notes:
 - **Beautify pool weights:** the dedicated server writes `original` weight 2 for the 5 `beautify:botanist_house_*`
-  pool entries in `pool_config.json`. Your client's file of 10-18 says 1, and `current` is 1 in both. Beautify
+  pool entries in `pool_config.json`. Your client's file of 2026-10-18 says 1, and `current` is 1 in both. Beautify
   seems to inject them twice on a dedicated server. The effective weight is the same, so nothing to do unless
   `original` feeds a later calculation.
 - **Phase 7's "no companions":** that wasn't a bug. Companions generate in their own chunks around a town, and

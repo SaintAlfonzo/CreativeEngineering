@@ -1,6 +1,6 @@
 # M7: Phase 7, calibration runs (8.0.7)
 
-2026-10-19 (the 10-14 start was lost with its session). Live notes: [07_phase_7.scratch.md](07_phase_7.scratch.md).
+2026-10-19 (the 2026-10-14 start was lost with its session). Live notes: [07_phase_7.scratch.md](07_phase_7.scratch.md).
 Result lines are inline in [structure_tuning.md](../../structure_tuning.md) section 8, with a summary under
 "8.0.7 Phase 7".
 
@@ -137,7 +137,7 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 - **Cause:** `earth_fill.js` fills `earth_fill/prune` with `#creativeengineering:type/village`. But the tags
   handler in `structure_overrides.js` only turns the `meta/*` tags (plus the fit tags and way-sign destinations) of
   `structure_tags.json` into real structure tags. The `type/*` tags exist only inside the script.
-- **Impact:** pruning has never run in a game since it was built (10-13; only the headless sim exercised it). The
+- **Impact:** pruning has never run in a game since it was built (2026-10-13; only the headless sim exercised it). The
   CEConfig overrides example `#creativeengineering:type/village=-1,-1,-1` would match nothing for the same reason.
 - **Tested on the scratch copy only:** the filter also took `t === 'type/village'`. The prune tag then held 37
   structures and pruning worked:
@@ -168,8 +168,8 @@ The 32 / 16 limits cancel 2 of 164 Hopo starts in the main square: a fossil 111 
 
 - **Symptom:** every set gets `_errors` ("Cannot find function locateOffset / frequencyReductionMethod / frequency
   / salt / spacing ...") and an empty structure list.
-- **Not this setup:** the instance's own dump from 10-18 18:31 (your client) is the same. The 10-14 Phase 6 dump
-  worked, and `dump_structuregen.js` hasn't changed since 09-27, so something else changed between 10-14 and 10-18.
+- **Not this setup:** the instance's own dump from 2026-10-18 18:31 (your client) is the same. The 2026-10-14 Phase 6 dump
+  worked, and `dump_structuregen.js` hasn't changed since 2026-09-27, so something else changed between 2026-10-14 and 2026-10-18.
 - **Impact:** `tools/check_structure_live.py` reads this file. Not chased.
 
 ## 4. Values changed

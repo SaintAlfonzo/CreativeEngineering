@@ -482,7 +482,7 @@ pack never has them). The NBT itself keeps the old string until the item is rewr
   a guard changes what a player sees in the pack.
 - No bullet for this plan itself (nothing built).
 
-## 13. Notes for the next plan (owner 2026-11-05): chain licence fixes before publishing
+## 13. Notes for the next plan (owner, 2026-11-05): chain licence fixes before publishing
 
 Input to the plan that follows Step 2 (Compat and CD rows gate the publish order in creative_brewing.md 9.5).
 
@@ -563,4 +563,4 @@ Owner answers 2026-11-06 (built 13:23-13:24, not installed): **CB optional depen
 out, the chain requires it through KubeJS Create). **`metal_dusts`:** the chain does not fill it; it stays empty there and
 Steel Toe Stout keeps the iron ingot fallback (TODO #4). **Geophilic Reforged** (`geophilic_reforged`, the mod the #6
 note called "Geolithic"; in `mods/`) is a mandatory Worldgen dependency. CD's `moved_code_backup` Farmer's Delight
-jar deleted (owner 2026-11-06; nothing read it; still in pushed history). Still open: R6 commit, push and tag. Left for a boot: 2.2 #2 remainder, #7 meta structures, TODO #7 full-pack tag diff (`/dumptags`).
+jar deleted (owner, 2026-11-06; nothing read it; still in pushed history). Still open: R6 commit, push and tag. Left for a boot: 2.2 #2 remainder, #7 meta structures, TODO #7 full-pack tag diff (`/dumptags`).

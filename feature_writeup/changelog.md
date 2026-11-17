@@ -373,7 +373,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
 - 2026-10-31: historic changelog 1.0.9 written (TODO `ui/changelog #2`) from plan_1.0.9.md, the deploy log and the
   feature writeups, in the 1.1.05 family style. Left out as dev-only: code comments, tag and item-dictionary cleanup,
   the reload log line, server-only config sections (felsic shield, air brake), the shield class pre-load (the
-  09-24 shield crash was a stale jar). 1.0.0 to 1.0.8 still to write.
+  2026-09-24 shield crash was a stale jar). 1.0.0 to 1.0.8 still to write.
 - 2026-10-31: historic changelogs 1.0.1 to 1.0.8 written (1.0.6 includes 1.0.5, which never deployed; 1.0.2 says it
   reached clients only, the server going from 1.0.1 to 1.0.3). Sources: plan docs, deploy log entries, git commits
   for 1.0.1 and 1.0.2 (no plans), feature writeups. Same brevity and leave-outs as 1.0.9. 1.0.0 not written.

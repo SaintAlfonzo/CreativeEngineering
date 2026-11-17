@@ -117,4 +117,4 @@ expect verb=tag kind=item tag=creativecompat:flower_box_plants .*ids=.*\b[a-z_]+
 expect verb=tag kind=block tag=creativeworldgen:ground_match/plants .*ids=.*rusticdelight:wild_
 expect verb=tag kind=block tag=creativeworldgen:template_trim/plants .*ids=.*rusticdelight:wild_
 expect verb=tag kind=block tag=chalk:chalk_cannot_draw_on .*ids=.*\b[a-z_]+:wild_
-look counts close to the 11-10 dump (ground_match/plants and template_trim back by about 19 wild crop blocks, physics/floats by about 78, flower_box_plants by the small-flower wild plants)
+look counts close to the 2026-11-10 dump (ground_match/plants and template_trim back by about 19 wild crop blocks, physics/floats by about 78, flower_box_plants by the small-flower wild plants)

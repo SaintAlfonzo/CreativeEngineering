@@ -111,7 +111,7 @@ shell grep -hE "season-types|crop-seasons|food families" logs/kubejs/server.log 
 waitlog verb=tag kind=biome tag=creativecalendar:seasons/arid n= 30
 expect verb=tag kind=biome tag=creativecalendar:seasons/arid n=[1-9]\d* ids=\S*minecraft:desert
 reject \[cdevtest\] .*done=0
-look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 11-09 namespace move)
+look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 2026-11-09 namespace move)
 
 ## SQ-MIN-02
 @group B

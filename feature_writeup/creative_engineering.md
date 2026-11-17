@@ -178,8 +178,8 @@ Audit of `creativecommon-1.1.0.jar` (23:34). Summary row in [creative_brewing.md
 | `ArmorOverflowRenderer.row0Y` / `drawRow` (from Detail Armor Bar 2.6.4 `ArmorBarRenderer#render`) | MIT | yes | OK; MIT notice added 2026-11-05 (`NOTICE-thirdparty.txt`, source comment) |
 | commonmark-java 0.21.0, shaded to `...creativecommon.shadow.commonmark` | BSD-2-Clause | yes, with `NOTICE-commonmark-BSD.txt` | fixed 2026-11-05 (names Creative Common and the `creativecommon` package) |
 | `kubejs_startup/creativecommon/_lib` (12 dicts) and `func/` helpers, `kubejs/_lib` scripts, data, lang, plugin json | own | yes | OK |
-| 12 `textures/gui/*_tint.png` (27x9) | **Mojang-derived**: recolours of the vanilla armor icon | yes | OK: vanilla art and edits of it are accepted everywhere (owner 2026-11-05, [creative_brewing.md](creative_brewing.md) 9.5) |
-| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner 2026-11-05) | no (out 2026-11-07; back and out again 2026-11-08: the capture is a flat sky with no terrain, so it looked blank; vanilla by default); the pack keeps its `kubejs/assets/` copy | OK |
+| 12 `textures/gui/*_tint.png` (27x9) | **Mojang-derived**: recolours of the vanilla armor icon | yes | OK: vanilla art and edits of it are accepted everywhere (owner, 2026-11-05, [creative_brewing.md](creative_brewing.md) 9.5) |
+| 6 title panorama PNGs (`assets/minecraft/.../title/background/`) | own: the owner's in-game capture (owner, 2026-11-05) | no (out 2026-11-07; back and out again 2026-11-08: the capture is a flat sky with no terrain, so it looked blank; vanilla by default); the pack keeps its `kubejs/assets/` copy | OK |
 | `credit.txt` (Numismatics by Layers of Railways, LGPL-3.0; owner 2026-11-05: https://www.curseforge.com/minecraft/mc-mods/numismatics) | the file it covers is not traced (no Numismatics jar to compare against) | yes | OK: kept, URL added |
 | `mods.toml` `GPL-3.0-only`, `creativecommon-LICENSE.txt` | own | yes | OK |
 | Farmer's Structures donor (ARR) | read at runtime from `farmers_upstream/` | no | OK |
@@ -342,7 +342,7 @@ own cleanup).
 effects; on a deploy the `[effects]` values come over from `configs_edited/root_config/creativebrewing-common.toml`
 (`ConfigRename.mergeSections`). Common's `configs_edited/` copy was refreshed from `config/` on 2026-11-07 (r1107cc; no value differed). Creative Tips loads from `kubejs/assets/` (always on, as the required built-in pack was).
 
-Tests: SQ-CPP-01 to -05 PASS (scratch r1107cc 2026-11-07); CQ-CPP-01 open (client). Rows SQ-CGE-01 to -06, CQ-CGE-01 (gravity for falling blocks, items, TNT; SQ-CCO-08 rerun) queued 2026-11-08, with the re-run list for the 11-08 00:01 jar. Scratch r1108cge 2026-11-08 ([scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) 1) on Common 00:49: SQ-CGE-01 to -06 PASS after two Common fixes (Create Gravity's biome list built at server start; the entity correction moved before the move), SQ-CPP-01 to -05 PASS again, SQ-CMV-04 PASS; also fixed: `JarStartupScripts` runs Compat's script pack before `startup_scripts/` (the pack's `jei/order.js` needs Compat's `global.jeiOrder`). CQ-CGE-01 and the client re-run rows open.
+Tests: SQ-CPP-01 to -05 PASS (scratch r1107cc 2026-11-07); CQ-CPP-01 open (client). Rows SQ-CGE-01 to -06, CQ-CGE-01 (gravity for falling blocks, items, TNT; SQ-CCO-08 rerun) queued 2026-11-08, with the re-run list for the 2026-11-08 00:01 jar. Scratch r1108cge 2026-11-08 ([scratch_run_2026-11-08.md](testing/scratch_run_2026-11-08.md) 1) on Common 00:49: SQ-CGE-01 to -06 PASS after two Common fixes (Create Gravity's biome list built at server start; the entity correction moved before the move), SQ-CPP-01 to -05 PASS again, SQ-CMV-04 PASS; also fixed: `JarStartupScripts` runs Compat's script pack before `startup_scripts/` (the pack's `jei/order.js` needs Compat's `global.jeiOrder`). CQ-CGE-01 and the client re-run rows open.
 
 Found and fixed in r1107cc (Common, `neoCraftHelper.js`): `setCookTime` now writes a JSON number (a JS number made
 Rhino write "400.0" and Farmer's Delight dropped the 22 Fruits Delight jelly recipes); a top-level `{ id }` / `{ mod }`
@@ -355,7 +355,7 @@ Found by the owner's client boot of Common alone (CEPortTesting: Forge, Architec
 
 | Finding in `latest.log` | Fix |
 |---|---|
-| `Using missing texture, file creativecommon:textures/mob_effect/magic_resistance.png not found`: the effect is Common's since plan_cb_polish (11-06), the icon stayed in Brewing under `creativebrewing:` (so the pack showed it missing too, unreleased) | icon moved to Common `assets/creativecommon/textures/mob_effect/`; recolored purple (hue shift of the vanilla Resistance icon, owner 2026-11-07 20:25) |
+| `Using missing texture, file creativecommon:textures/mob_effect/magic_resistance.png not found`: the effect is Common's since plan_cb_polish (2026-11-06), the icon stayed in Brewing under `creativebrewing:` (so the pack showed it missing too, unreleased) | icon moved to Common `assets/creativecommon/textures/mob_effect/`; recolored purple (hue shift of the vanilla Resistance icon, owner 2026-11-07 20:25) |
 | `[damage-tags] ... includes '#creativedelight:stoves' ... never match` on every boot without Creative Delight | `DamageTagSnapshot` skips the undefined-include WARN when the include's namespace is a mod that is not loaded (a typo in a loaded namespace still warns) |
 | Potion, splash, lingering and tipped arrow names of Magic Resistance (3 variants each, 12 keys) blank when Common runs alone: they sat in the pack's `kubejs/assets/kubejs/lang/` | moved to Common's `lang/en_us.json` (removed from the pack file) |
 | `fluid_jei.js`: `ReferenceError: "JEIEvents" is not defined` | wrapped in `Platform.isLoaded('jei')`; `global.jeiOrder` read inside the event, empty skip list without Compat |
@@ -389,7 +389,7 @@ low oxygen in the End, per-file header.
   so on) are not covered.
 - **Network (client mirror)**: the scaling runs on server and client alike. The client predicts items, blocks, TNT,
   orbs, arrows and throwables itself and moves a boat its player steers, so both sides compute the same path and only
-  vanilla's normal position updates are sent. The first version (11-08 00:49) set `hurtMarked` and sent one motion
+  vanilla's normal position updates are sent. The first version (2026-11-08 00:49) set `hurtMarked` and sent one motion
   packet per airborne entity per tick; it is gone. Server lookup = the mod's `ServerConfig.getBiomeConfig`; client
   lookup = Common's own parse of the mod's `biome_configs` strings (`CreateGravityConfigAccessor`; Forge syncs SERVER
   configs at login; the mod's parsed list is always empty on a dedicated client because each entry needs the server).
@@ -434,15 +434,15 @@ classes load. `:creativeCommon:build --offline` clean 2026-11-13 22:35.
 
 Before the upload:
 1. Done 2026-11-13 (owner): `mod_version` 1.2.0 (new library API). `creativecommon-1.2.0.jar` built 22:40 in
-   build/libs, NOT installed (`mods/` still holds the 11-12 `creativecommon-1.1.0.jar`; `installToMods` displaces it).
+   build/libs, NOT installed (`mods/` still holds the 2026-11-12 `creativecommon-1.1.0.jar`; `installToMods` displaces it).
    On install, update the `mod_sides.md` row; `pack/MODLIST.md` and `pack/manifest.json` follow at the next deploy.
 2. Done 2026-11-13: project page ([project_pages/creative_common.md](project_pages/creative_common.md)) gained the swap
    list additions (permanent aliases, capability keys, load report), the plantable tags and the chat-key fix (MC-122477).
 3. Deferred (owner 2026-11-13: no changelog yet): CurseForge changelog for the file. Common has no own release notes; the
    pack's `unreleased.md` holds the chat bullet.
-4. Boot check of the 1.2.0 jar: queued as SQ-CC12-01 to -03 (Common alone, Common + Compat + Calendar, full pack); the 11-10 runs predate the chat
-   mixins and the 11-13 dict.
-   **Run r1114 2026-11-14 ([scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8, phase 4; build/libs jar of 11-13 23:12 in scratch srv only): SQ-CC12-01, -02, -03
+4. Boot check of the 1.2.0 jar: queued as SQ-CC12-01 to -03 (Common alone, Common + Compat + Calendar, full pack); the 2026-11-10 runs predate the chat
+   mixins and the 2026-11-13 dict.
+   **Run r1114 2026-11-14 ([scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8, phase 4; build/libs jar of 2026-11-13 23:12 in scratch srv only): SQ-CC12-01, -02, -03
    PASS: built, scratch server PASSED.** No mixin or class error from our jars, 22 of 22 startup files, 0 startup
    ERROR, swap summary with 739 permanent aliases and 4 capability keys on the full pack, "every listed id resolved" on
    stop; Common 1.2.0 also ran under every other r1114 phase without a Common error.

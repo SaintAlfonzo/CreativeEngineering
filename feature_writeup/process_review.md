@@ -44,14 +44,14 @@ files. Run results are pasted as prose into README status cells, the queue's Run
 Drift found on 2026-11-16:
 - TODO.md "Status snapshot (2026-11-03, counts 2026-11-04)" says 1,220 open rows. A recount of the tables gives
   ~1,357: 705 Testing, 469 Planned, 142 In Progress, 26 Bug, 15 Pinned.
-- Statuses that are not in the legend are back after the 11-03 sweep normalised them: 24 "Built", 8 "Built <date>",
+- Statuses that are not in the legend are back after the 2026-11-03 sweep normalised them: 24 "Built", 8 "Built <date>",
   3 "Open", 9 "Done", 17 "Complete" in open tables.
 - [deploy.md](deploy.md) history stops at 2026-11-03 ("server still 1.1.05"). DEPLOYED.json has 1.2.00, 1.2.01 and
   1.2.02 after that.
 - Stale status words:
   - README Creative Worldgen row says "BROKEN ... NOT installed"; it shipped with 1.2.00.
   - creative_split.md:3-5 says wave 8 is not installed; Common has since deployed.
-- TODO.md was re-laid out four times in two weeks: 10-19, 10-24, 10-30 and 11-02.
+- TODO.md was re-laid out four times in two weeks: 2026-10-19, 2026-10-24, 2026-10-30 and 2026-11-02.
 - Memory has 185 files and ~770 KB. 136 are typed `project`, although the policy says status lives in the repo.
 - The queue has 2,917 distinct row ids on 3,177 table lines. Its status words come in three spellings (PASS / pass /
   Pass, open / Open / OPEN, stale / Stale).
@@ -63,7 +63,7 @@ copy is a place to drift, and agents spend a large share of each session on it.
 
 - 7,469 lines, 3,177 row lines, ~40 hand-written "added at the end" banners in the header.
 - **Never run:** ~562 row ids (19%) never appear in any run file, `perf/runs` verdict or the Run log. 407 of those
-  are from sections added before 11-09. This overcounts somewhat, because id ranges are not expanded. Client rows:
+  are from sections added before 2026-11-09. This overcounts somewhat, because id ranges are not expanded. Client rows:
   ~387 of 517 CQ rows (75%) never ran; runs mark the client phase "not run" (scratch_run_2026-11-14.md:441).
 - **Wall time:** whole-queue runs took 12 h over 50 boots (r1114), ~8 h over ~48 boots (r1115) and ~16 h (r1113).
   Judging adds 45 min to 1 h. Focused runs take 7 min to 1.5 h.
@@ -80,9 +80,9 @@ copy is a place to drift, and agents spend a large share of each session on it.
 - **Reruns:** 135 row ids appear in 2 or more run files, 17 in 3 or more, SQ-PG-01b in 5. SQ-TPF-10 went PASS, FAIL,
   PASS over three reruns.
 - **Gotchas recorded but hit again:**
-  - `grep -c` exits 1 on a zero count, which reads as FAIL. Logged 11-06, hit again 11-07, 11-11 and 11-14.
-  - Parallel-session jar swaps: logged four times, hit again 11-02b and 11-15.
-  - Unlisted jars in `mods/`: logged 11-06, hit again 11-13.
+  - `grep -c` exits 1 on a zero count, which reads as FAIL. Logged 2026-11-06, hit again 2026-11-07, 2026-11-11 and 2026-11-14.
+  - Parallel-session jar swaps: logged four times, hit again 2026-11-02b and 2026-11-15.
+  - Unlisted jars in `mods/`: logged 2026-11-06, hit again 2026-11-13.
   - About half of the 570-line [gotchas.md](../.claude/skills/scratch-test/gotchas.md) is per-run "Found in rXXXX"
     sections, not merged topical rules.
 
@@ -123,14 +123,14 @@ test layer has been off since the split, and everything has fallen through to th
 | texture_provenance | 63 s | ledger: 27 redo, 4 swap |
 | changelog_lint | 0.1 s | 0 errors, 55 warnings (all in deployed files, which may not be edited) |
 
-- Example: after the split, the jars broke on optional-mod references in data. A scratch run found it on 11-14
+- Example: after the split, the jars broke on optional-mod references in data. A scratch run found it on 2026-11-14
   (creative_split.md:880), not a pre-build lint. The id-namespace fixes then came as four plans in a row:
-  plan_cb_publish (11-04), plan_cb_polish (11-06), plan_owner_ids (11-07), plan_cd_namespace (11-09).
+  plan_cb_publish (2026-11-04), plan_cb_polish (2026-11-06), plan_owner_ids (2026-11-07), plan_cd_namespace (2026-11-09).
 - The pack's rules are good, but CLAUDE.md and memory are the only things enforcing them, and a long session loses them.
 
 ## 5. Builds cannot be identified
 
-- `mod_version` is fixed per release (`creativecommon-1.2.0.jar` for every build of Common since 11-08), so the same
+- `mod_version` is fixed per release (`creativecommon-1.2.0.jar` for every build of Common since 2026-11-08), so the same
   file name covers many builds. "Which build is in `mods/`" can only be answered by a byte compare (done for this
   review: all identical except Power Grid, where build -19 is not in `mods/` and -18 differs from its build output).
 - About 8 plans each say "built, not installed", each in its own `jar_archive/<plan>/` folder or `build/libs`.
@@ -179,7 +179,7 @@ work (screens, books, textures) is where this costs most, because the owner can 
 
 Earmarked work (README, plan_post_scratch_1115.md, energy_advanced.md, creative_split.md, scratchpad.md):
 - Power Grid P11, then advanced energy: multi-jar, with a per-world mode switch whose up/downgrade is destructive.
-- The 11-16 salt, melting, layers and Diet Log set: Common, Creative Delight (members) and Compat together.
+- The 2026-11-16 salt, melting, layers and Diet Log set: Common, Creative Delight (members) and Compat together.
 - The next release, which has to absorb every built-but-uninstalled jar.
 - The reserved Creative Computers and Creative Economy jars: more carving, more id moves.
 - Scratchpad work in progress: tempad and portals (~30 items), golden food buffs.

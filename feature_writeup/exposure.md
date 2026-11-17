@@ -17,7 +17,7 @@
 | Exposure Polaroid 1.1.6 (`exposure_polaroid`): Instant Camera + 4 instant slides | DEPLOYED, in-game test pending |
 | Exposure: Expanded 1.0.1 (`exposure_expanded`): 2 lenses, 16 filters, palette / hicap / hires films, 6 instant slides | DEPLOYED, in-game test pending |
 | Build-time merge of addon tags and global loot modifiers into the base mod's files | BUILT, offline checks pass |
-| Exposure Catalog 1.1.2 (`exposure_catalog`) | not ported, on hold (user, 2026-10-01) |
+| Exposure Catalog 1.1.2 (`exposure_catalog`) | not ported, on hold (owner, 2026-10-01) |
 | Pack customisation (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behaviour |
 
 - **What it is:** our own port of Exposure 1.9.19 and two of its addons from NeoForge 1.21.1 to Forge 1.19.2.
@@ -246,7 +246,7 @@ palette with `/exposure palette export <id> json <file>`.
   read their old NBT: expect empty cameras and blank photos. 1.6.0's bare wall photographs (entity
   `exposure:photograph`) no longer exist; 1.9.19 has Photograph Frames instead. Lightroom contents may be
   lost. EX-50 checks a copy of the server world before 1.0.3 goes out.
-- **Catalog is on hold** (user, 2026-10-01). Its 1230-line GUI needs a 1.19.2 rewrite. Its source set,
+- **Catalog is on hold** (owner, 2026-10-01). Its 1230-line GUI needs a 1.19.2 rewrite. Its source set,
   mixin configs and mods.toml entry exist but are empty.
 - **Expanded's filters are loot-only**, as upstream. The bumpy filter's only chest (trial chambers) doesn't
   exist in 1.19.2, so it can't be found. Options: a KubeJS recipe, or adding it to another chest through the

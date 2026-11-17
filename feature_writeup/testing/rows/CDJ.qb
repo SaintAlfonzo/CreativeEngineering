@@ -10,7 +10,7 @@
 @@text
 @@text Targets the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 00:45; 20 members, nesting Veggies `-05`, Vintage `-11`,
 @@text Fungi `-02`, Miner's `-03`, Display `-02`) and `mods/creativebrewing-1.0.0.jar` (the 2026-11-01 20:31 jar in `mods/`; a
-@@text newer `-own` build of 11-02 00:48 exists in build/libs, prep_srv.sh swaps the main jar only if newer). Build the scratch
+@@text newer `-own` build of 2026-11-02 00:48 exists in build/libs, prep_srv.sh swaps the main jar only if newer). Build the scratch
 @@text server from the instance `mods/` with `prep_srv.sh` (it now drops a standalone `backported{Veggies,Vintage,Fungi,Miners,Display}`
 @@text jar when the CD jar nests it, and no longer swaps in the old Vintage `-09` / Veggies `-03` build jars), **never from
 @@text `server_mods/`** (it still holds Display `-01`, Fungi `-01`, Miner's `-01`, Veggies `-03`, Vintage `-07`). `miners_upstream/`
@@ -266,14 +266,14 @@ look key counts (108 tool, 227 misc): KubeJS 1.19.2 has no /kubejs eval and the 
 
 ## SQ-CDFW-11 | no Veggies recipe, tag or loot id lost in the pilot move (server dump half)
 @group A (Boot 1, last)
-@commands `/reload`; `grep -n "Error occurred while handling event" logs/latest.log \| tail`; `/dumpall`; offline `python3 tools/cd_move_diff.py dump-diff --exported OUT/srv/kubejs/exported --ns veggiesdelight,creativedelight --verbose`. A fresh pre-pilot dump cannot exist any more: the pilot is in the installed CD jar and no pre-pilot jar of it was archived, so the baseline is the 2026-11-02 00:31 snapshot `tools/creative_delight_test/move_diff_dump_snapshot.json`, built from the 2026-10-30 00:41 dumps (stale: it predates the 11-01 CD moves). Registry half only after CQ-CDJ-01's `/cdevdumpnames` (server `/dumpall` does not refresh `display_names.json`)
-@pass No error after `/reload`; no LOST `veggiesdelight:` recipe, tag or loot id, and no LOST recipe whose output is a Veggies item, other than ids that moved to `creativedelight:<same path>` with the same type (allowed by B4); LOST lines from other 11-01 moves are listed in the run notes, not judged here
+@commands `/reload`; `grep -n "Error occurred while handling event" logs/latest.log \| tail`; `/dumpall`; offline `python3 tools/cd_move_diff.py dump-diff --exported OUT/srv/kubejs/exported --ns veggiesdelight,creativedelight --verbose`. A fresh pre-pilot dump cannot exist any more: the pilot is in the installed CD jar and no pre-pilot jar of it was archived, so the baseline is the 2026-11-02 00:31 snapshot `tools/creative_delight_test/move_diff_dump_snapshot.json`, built from the 2026-10-30 00:41 dumps (stale: it predates the 2026-11-01 CD moves). Registry half only after CQ-CDJ-01's `/cdevdumpnames` (server `/dumpall` does not refresh `display_names.json`)
+@pass No error after `/reload`; no LOST `veggiesdelight:` recipe, tag or loot id, and no LOST recipe whose output is a Veggies item, other than ids that moved to `creativedelight:<same path>` with the same type (allowed by B4); LOST lines from other 2026-11-01 moves are listed in the run notes, not judged here
 @fails A lost Veggies recipe: the pilot's `fd.<key>` lookups (a key missing from `tool_dict.js` / `misc_dict.js` returns undefined and the NCH call drops the row); compare with CDT-09 offline
 @from batches/r1102/b1_main.qb
 # no --ns: the snapshot was taken without one, so a filtered "after" reports every other namespace LOST (r1102: 80857
 # false LOST lines); the Veggies lines are pulled out by the grep below
 shell python3 -I $INST/tools/cd_move_diff.py dump-diff --exported kubejs/exported --verbose > ../cdfw11_diff.txt; echo "exit $?"; tail -2 ../cdfw11_diff.txt; grep "^LOST" ../cdfw11_diff.txt | grep -i veggies
-look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id and no LOST recipe with a Veggies output, other than ids moved to creativedelight:<same path> with the same type; LOST lines from other 11-01 moves go to the run notes (baseline is the stale 10-30 snapshot); the registry half waits for CQ-CDJ-01's /cedumpnames; "no error after /reload" is SQ-CDM-00's reject
+look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id and no LOST recipe with a Veggies output, other than ids moved to creativedelight:<same path> with the same type; LOST lines from other 2026-11-01 moves go to the run notes (baseline is the stale 2026-10-30 snapshot); the registry half waits for CQ-CDJ-01's /cedumpnames; "no error after /reload" is SQ-CDM-00's reject
 
 @@text
 @@text ### SQ-CDJ5 fix rerun (plan I after r1102, built 2026-11-02 13:xx)

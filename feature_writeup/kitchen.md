@@ -139,7 +139,7 @@ water".
   (`gen_coaster_models.py` read only plain-variant blockstates; Display Delight 1.7.0's are multipart) and the
   in-game tag was the port's 96. `gen_coaster_models.py` now writes 208 files from three sources: Display Delight
   1.7.0's default-state model for every food the port registers a block for (155, all links from the jar, not the
-  10-24 dump), the edible block items whose block is Vinery's `WineBottleBlock` or Vintage Delight's `MasonJarBlock`
+  2026-10-24 dump), the edible block items whose block is Vinery's `WineBottleBlock` or Vintage Delight's `MasonJarBlock`
   (34: 26 wines, 8 jars; Vinery's art read from `vinery_upstream/`), and same-sprite borrows (19: Farmer's Respite
   long/strong drinks take the base drink's model, Create Central Kitchen's pumpkin pie slice Delightful's, the
   Enchanted Golden Carrot the golden carrot's with the glint). Each model is scaled to 10 px wide and 16 px tall at
@@ -250,13 +250,13 @@ water".
 - 2.7 update 2026-11-02: CfB's own Spice Rack, Tool Rack and Fruit Basket are merged into the oak versions
   ([item_merges.md](item_merges.md) 2.16); their recipes are gone. Scratch PASSED r1102b (SQ-FCB-05: each turns into its oak survivor).
 
-### 2.9 Cookware pickup and punch toggle (built 2026-11-02, reworked 2026-11-03; r1102b PASS covers the 11-02 version only; tests SQ-FCB-08, -08b, CQ-FCB-04, -04b; TODO `cooking/kitchen #27`)
+### 2.9 Cookware pickup and punch toggle (built 2026-11-02, reworked 2026-11-03; r1102b PASS covers the 2026-11-02 version only; tests SQ-FCB-08, -08b, CQ-FCB-04, -04b; TODO `cooking/kitchen #27`)
 
 - Blocks: `#creativedelight:cookware_pickup` (Farmer's Delight cooking pot and skillet, Miner's copper pot, Farmer's
   Respite kettle; CD `creativedelight/kitchen_tags.js`). Code: CD Java `cooking/CookwareHandling`, switch
   `[qol] cookwarePickup` (QoL-7); WTHIT line `compat/wthit/WthitCookwareToggle`.
 - Sneak right-click, empty main hand: every slot of the block's inventory (ingredients, stored meal, containers,
-  output) goes into the player's inventory, overflow drops at the player (owner 2026-11-03). The hand gets the station
+  output) goes into the player's inventory, overflow drops at the player (owner, 2026-11-03). The hand gets the station
   as a plain item: the loot drop with `BlockEntityTag` removed, so no meal or kettle tank rides along, but the
   skillet keeps its own enchantments and a renamed station its name. The kettle's water / tank is lost. A
   `BreakEvent` is posted first, so claims and spawn protection stop it. Upstream's sneak right-click toggles are no
@@ -272,7 +272,7 @@ water".
 - Kettle handle: placement only (under a block), confirmed by owner 2026-11-03; a punch on the kettle toggles the lid.
 - Since 2026-11-07 with QoL-8 on (2.12) the pickup keeps the contents in the item instead of emptying them into the
   inventory; only the leftover slots drop at the block.
-- History: 11-02 the handle toggle was sneak left-click; on 11-03 it was briefly placement-only, then the punch toggle
+- History: 2026-11-02 the handle toggle was sneak left-click; on 2026-11-03 it was briefly placement-only, then the punch toggle
   replaced it (owner).
 
 ### 2.11 Wood cutting boards (built 2026-11-04; scratch SQ-CBW-01 to -03, CQ-CBW-01; TODO `cooking/kitchen #38`)
@@ -392,16 +392,16 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 
 ## 4. Limits and decisions
 
-- Oven fuel: any furnace fuel plus oil (user, 2026-10-21), not CfB's oil-only design the brief first recommended.
+- Oven fuel: any furnace fuel plus oil (owner, 2026-10-21), not CfB's oil-only design the brief first recommended.
 - Cutting board: drawn 1 px lower with a config offset (user); the hitbox is not moved, so a VoxelShape outside its
   cell can't upset clicks on the board.
 - Fridge: only the 2-tall form (user); the 1-tall fridge and the item model are unchanged; collision was already a
-  full block. A white box on top instead of stretching the model (user, 2026-10-25); it does not reach the block's
+  full block. A white box on top instead of stretching the model (owner, 2026-10-25); it does not reach the block's
   sides, so the 1 px gaps beside counters stay.
 - Corner storage: the floor corner only; a chest GUI (vanilla `ChestMenu`) rather than CfB's counter screen, whose
   menu is tied to `CounterBlockEntity`.
 - Mortar: hand yield = machine average rounded down, no bonus rolls or byproducts; the mortar is the pack's own item
-  (user, 2026-10-21), so food grinding doesn't need Old Guns' Gunsmith's Bench. IE crusher recipes can't be catalogued (the export has no ingredients for them).
+  (owner, 2026-10-21), so food grinding doesn't need Old Guns' Gunsmith's Bench. IE crusher recipes can't be catalogued (the export has no ingredients for them).
 - Rejected: an inventory sweep stripping empty tags from returned bowls (row #5) was built and removed (user); the
   cause was Sticky It!'s tooltip handler, fixed in Creative Labels.
 

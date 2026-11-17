@@ -6,7 +6,7 @@ Owner request 2026-11-07 10:44: "execute the scratch test queue for tempads". Sc
 (SQ-TP-01 to -30 server rows); client rows CQ-TP-01 to -15 and the joined-client rows SQ-TP-17, -29 at the end if time
 allows. Targeted run, no perf session (12 GB free on /).
 
-- Jar: `creativecompat-1.0.0.jar` of 11-07 10:31 from build/libs (prep_srv.sh swap; `mods/` holds the 11-06 22:43 one),
+- Jar: `creativecompat-1.0.0.jar` of 2026-11-07 10:31 from build/libs (prep_srv.sh swap; `mods/` holds the 2026-11-06 22:43 one),
   `tempad_upstream/tempad-1.21.1-3.0.4-all.jar` linked by scratch_server.sh.
 - Left out of every srv: Immersive Portals 2.3.7, Portal Gun, Portal Gels, loadingscreentips (unlisted in mod_sides.md,
   r1106spf / spfx crash with Serene Seasons; the Tempad does not need them).
@@ -157,7 +157,7 @@ loot tables, marker anchor id, creative workstation break" (SQ-TP-31 to -39) plu
 SQ-TP-08, -13, -14, -15; SQ-TP-24, -25). CQ-TP-16 is a client row: not run. Targeted run, no perf session (12 GB free;
 JFR_MAX 200m per boot).
 
-- Jar: `creativecompat-1.0.0.jar` of 11-07 12:01 from build/libs (prep_srv swap; `mods/` holds the 11-06 22:43 one).
+- Jar: `creativecompat-1.0.0.jar` of 2026-11-07 12:01 from build/libs (prep_srv swap; `mods/` holds the 2026-11-06 22:43 one).
   No scratch loot tables in srv. Left out: Immersive Portals, Portal Gun, Portal Gels, loadingscreentips (as r1107tp).
 - srv in the session scratchpad `tp/`, level r1107tp2, group A; bot qa; everything by hand with `cmdlog.sh` + `/ztp`.
 
@@ -275,7 +275,7 @@ instance" = `CEPortTesting/mods/`.
 - 18:56 b2 (same srv and world; `spawn-monsters=true`; `[effects] removed = ["minecraft:slowness"]` for SQ-CC-11),
   Done 4.2 s. 0 "Expected cookingtime" (b1: 22 recipes x every reload); `farmersdelight:cooking/apple_jelly` loads.
   SQ-CC-11 PASS. SQ-CC-09 (emulated: chest NBT `Potion:"creativecommon:long_reach"` written with setblock, the way an
-  11-06 save holds it): `/ccswap items` 0 rewritten (it rewrites item merges, not potion ids); `/zsa potionat`:
+  2026-11-06 save holds it): `/ccswap items` 0 rewritten (it rewrites item merges, not potion ids); `/zsa potionat`:
   the stack reads `creativebrewing:long_reach` with Better Beacons Long Reach 3600 t; NBT keeps the old string,
   which is the documented design of `PotionByNameRemapMixin`. PASS (row wording).
 - 19:00 configs_edited refreshed from the live config for Common, Equipment, Brewing, Delight (keys moved in the carve;
@@ -316,7 +316,7 @@ instance" = `CEPortTesting/mods/`.
 - 19:35-19:38 installed to the dev instance `mods/` (installToMods): Common 19:35 (same neoCraftHelper.js as the tested
   19:31 jar), Compat, Calendar, Delight, Brewing, Equipment, Engineering, Magic, Devtools, Worldgen. Brewing's install
   first failed in the nested Vinery member ("vinery.refmap.json is not in backportedVinery-...jar", build-logic's
-  refmap backstop): `:backportedVinery:clean`, then it built. `repackedStorage` -02 (11-07 14:39) in build/libs is newer
+  refmap backstop): `:backportedVinery:clean`, then it built. `repackedStorage` -02 (2026-11-07 14:39) in build/libs is newer
   than the -01 in `mods/`: not part of this run, left. CEPortTesting/mods: Common replaced (old one in its
   `jar_archive/displaced/creativecommon-1.1.0.1938.jar`); its 4 jars now match the dev instance's.
 
@@ -374,7 +374,7 @@ Owner request 2026-11-07 20:35: "execute the latest creative common scratch test
 queue section "SQ-CCO Creative Common with its optional mods only", server rows SQ-CCO-01 to -16. Not run: CQ-CCO-01 to
 -03 (client rows; need a window). Targeted run, no perf session (JFR on per boot, recordings in each srv's perf/).
 
-- Jars: Common `creativecommon-1.1.0` 11-07 20:28 (build/libs = `mods/`), the optional mods from `mods/`, perfBot
+- Jars: Common `creativecommon-1.1.0` 2026-11-07 20:28 (build/libs = `mods/`), the optional mods from `mods/`, perfBot
   `cdevperfbot-0.1.0` 19:37. Servers from `tools/scratch_query/cc_only_srv.sh` (group B, seed 8675309, difficulty normal).
 - Boots: b1/b2 `full` (srv `cco1`, Done 28.9 s), b3 `full` toggled (IW fast path off, gravityLimitDimensions false,
   effects removed Slowness), seven set boots (`tools/scratch_query/cco_sets.sh`: six `without=` + `alone`, Done 27.2 to

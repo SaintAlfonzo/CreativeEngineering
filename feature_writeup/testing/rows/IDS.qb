@@ -59,11 +59,11 @@ count Unknown or incomplete command == 8
 look each new command printed usage or a result (no "Unknown or incomplete command" before the old names); exactly 8 unknowns = the 8 old names. /cdevgen run food_dict and the perf suite smoke are left out (srv/ has no tools/)
 
 ## SQ-IDS-03
-@group B (world saved on the 11-06 or 7.19 builds)
+@group B (world saved on the 2026-11-06 or 7.19 builds)
 @commands before the swap: kettle with water in its tank, nightstand with items, lunchbox with a skin, backpack with a skin, a half-done sequenced assembly item in a chest; swap to the new builds; reload the world; `/data get block` on kettle and nightstand, `/data get block` on the chest
 @pass kettle tank keeps fluid and level (`CETankFluid`, `CETankLevel`), nightstand keeps `CENightstandItems`, lunchbox and backpack keep `CELunchboxSkin` / `CESkin`, the assembly item keeps `CEStash`
 @fails a saved NBT key renamed with its Java constant
-@draft needs a fixture world saved on the 11-06 builds (kettle with water, nightstand, skinned lunchbox and backpack, half-done assembly item) and no fixture builder exists; once built, the reads are `/cdevtest be` on kettle and nightstand and `/cdevtest inv` on the chest, expecting CETankFluid, CENightstandItems, CELunchboxSkin, CESkin, CEStash
+@draft needs a fixture world saved on the 2026-11-06 builds (kettle with water, nightstand, skinned lunchbox and backpack, half-done assembly item) and no fixture builder exists; once built, the reads are `/cdevtest be` on kettle and nightstand and `/cdevtest inv` on the chest, expecting CETankFluid, CENightstandItems, CELunchboxSkin, CESkin, CEStash
 ## CQ-IDS-01
 @group client (full pack)
 @commands WTHIT config screen, Plugins; look at a state-line block, hive, campfire, coaster, sheared grass, silk-touch block, flower pot with a plant, cooking pot with leftovers, a crop with Serene Seasons on, a Blockrunner road
@@ -86,7 +86,7 @@ shell grep -c "creativecommon:\|creativeengineering:" config/waila/plugin_toggle
 look WTHIT lines show in world with names; the WTHIT config Plugins page (by hand): Creative Compat 15 lines and Creative Calendar Crop Seasons, each named (no raw config.waila.plugin_*); shell count 0 (SQ-IDS-01's client half)
 ## CQ-IDS-02
 @group client (same)
-@commands JEI: open the World tabs, Canning, Can Uses, Feast Plating, Seasoning, Baking; check the tab order against the 11-06 client
+@commands JEI: open the World tabs, Canning, Can Uses, Feast Plating, Seasoning, Baking; check the tab order against the 2026-11-06 client
 @pass the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged; all pages filled
 @fails `recipe-category-sort-order.ini` not shipped with the new ids
 @reviewed 2026-11-16
@@ -97,7 +97,7 @@ do {"screen": "jei_recipes:creativedelight:canned_noodle_soup"}
 shot jei_canning
 do {"screen": "close"}
 shell grep -c "creativecompat\|creativedelight\|creativeworldgen" config/jei/recipe-category-sort-order.ini; true
-look the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged, pages filled (compare with the 11-06 client captures)
+look the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged, pages filled (compare with the 2026-11-06 client captures)
 ## CQ-IDS-03
 @group client (same)
 @commands rename a chest to a 40-character name in an anvil; place and open it; `ls -l kubejs/exported/gui_title_overflow.json`

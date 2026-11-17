@@ -227,7 +227,7 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 
 ### 5.6 Tests (RD-)
 
-- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-RD-02, -04, -05, -06, -07, -13, -14, -15, -16, -17, -18, -19, -20, -21, -23, -27, -28, -33, SQ-RDX-03, -03b, -06, -07, -08, -08b, -09, -10, -11, -12, -14; FAIL SQ-RD-22: every Rustic food lost Nourishment: `comfort_nourishment.json` (10-27) had no `rusticdelight:` entries; owner regenerated 19:50, rerun pending; OPEN (no verdict, rerun row written) SQ-RD-24; rerun pending (batch fault) SQ-RD-08, -10, -11, -26, SQ-RDX-12b; not run SQ-RD-03, -03a.
+- **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-RD-02, -04, -05, -06, -07, -13, -14, -15, -16, -17, -18, -19, -20, -21, -23, -27, -28, -33, SQ-RDX-03, -03b, -06, -07, -08, -08b, -09, -10, -11, -12, -14; FAIL SQ-RD-22: every Rustic food lost Nourishment: `comfort_nourishment.json` (2026-10-27) had no `rusticdelight:` entries; owner regenerated 19:50, rerun pending; OPEN (no verdict, rerun row written) SQ-RD-24; rerun pending (batch fault) SQ-RD-08, -10, -11, -26, SQ-RDX-12b; not run SQ-RD-03, -03a.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RD-08, -11, SQ-RDX-12b, SQ-RD-10, -22; SQ-RD-24 OPEN: rare colours and wild patches pass; the grass-only half is unread (`/zq count ... on:` reads no block below); SQ-RD-10b BATCH-FAULT: the plains box missed the village; needs a group B world; SQ-RD-26 OPEN: jungle half passes; savanna wild cotton 0 (r1102b found 6), needs a second savanna count.
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RDB-03 PASS (aggregate of the r1113 bake reruns), SQ-RDB-05 PASS (old-save crops, plates, crates), SQ-RDX-13 PASS for the plate half (the item half needs a pre-11-02 save); SQ-RD-26 PARTIAL as r1102b: wild bell peppers 0 in every jungle box (owner TODO).
@@ -348,7 +348,7 @@ Still open (not decisions): final Glowing Calamari Crate art (`members #25`), SQ
 - **Comfort / Nourishment** (`members #43`): the rule file has the Rustic foods under item_dict keys; under the rule they get
   Comfort, not Nourishment (comfort_nourishment.md 8, 2026-11-03). SQ-RD-22's expectation changes to Comfort (Calamari Soup 4:00).
 - **Compost** (`members #44`): `tools/gen_compost_values.py --add-new --check` exits 0 (the 21 rows are on disk); the plain
-  `--check` still exits 1 because `kubejs/exported/compost/compost.json` (10-30) predates those rows. It needs a fresh
+  `--check` still exits 1 because `kubejs/exported/compost/compost.json` (2026-10-30) predates those rows. It needs a fresh
   `/dumpcompost` (or `/dumpall`) taken with the current Creative Delight and Creative Brewing jars loaded; nothing to regenerate.
 - **Install and tests:** in the CD jar installed 2026-11-03 00:08, not booted. Queue section SQ-CDJ7: SQ-CDM2-04 (potato salad),
   SQ-RD-22 (rerun, Comfort), SQ-CDF-08 (rerun, after `/dumpcompost`).

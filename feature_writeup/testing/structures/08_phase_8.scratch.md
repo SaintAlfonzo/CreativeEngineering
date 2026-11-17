@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only.
+- Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only.
 - Milestone: M8. Tests: ST-144 (order independence), ST-148 (shaping off), ST-157 second half (peaceful off), ST-145
   (placementPriority off, overlap count; the "about a third" estimate is a rate: skipped).
 - Server: same as M7 (session 5 scratchpad srv/, patcherMod 1.0.7 jar = 1.0.8 worldgen; 374 mods). The M7 scratch tag
@@ -60,7 +60,7 @@
   towns = peaceful off). Same 5 companions. Overlap check A S3: 9 settlements / 59 ranked others: 0.
 - ST-148 so far INCONCLUSIVE: across S2 + S3 (8 towns, 9 companion villages, ~15 grid villages) every village is
   piece-identical with shaping on and off, and no village is dropped with it off: no village ever reached a town.
-- Side finding: srv pool_config.json "original" weight 2 (instance file, written by the client 10-18: 1) for 5
+- Side finding: srv pool_config.json "original" weight 2 (instance file, written by the client 2026-10-18: 1) for 5
   beautify:botanist_house_* entries; "current" 1 in both. Beautify seems to inject them twice on a dedicated server.
 - Plan for ST-148: soft-rule loosening (spacing-type, 7.4.8): meta/town_villages companions distance [112, 160] ->
   [64, 96] in srv meta_structures.json, two fresh worlds st_8f (shape on) / st_8g (shape off), S3 in each.

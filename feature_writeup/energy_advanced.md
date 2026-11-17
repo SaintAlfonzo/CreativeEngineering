@@ -53,7 +53,7 @@ PG's FE inverter computes `fe = ceil(forgeEnergyPerWatt * power)`, read as FE pe
 wire; one PG copper wire at 80 A and 258 V carries about 20 kW (about 200 000 FE/t). IE's tiers are two orders of magnitude
 smaller. Mapping by power would make PG machines absurdly expensive to feed from IE sources.
 
-**Decided (owner 2026-11-13):**
+**Decided (owner, 2026-11-13):**
 1. **`forgeEnergyPerWatt` = 0.1 for the mapping for now**, so a motor at rated speed costs about 260 FE/t, the same as one IE LV
    connector. Check against IE generator outputs (Dynamo, diesel, thermoelectric) and CC&A rates after the first
    running build.
@@ -72,11 +72,11 @@ smaller. Mapping by power would make PG machines absurdly expensive to feed from
 - **Display:** WTHIT plugin, device GUIs and JEI energy bars and tooltips of every converted mod show V / A / W, never FE.
   This needs a per-mod list of FE displays; mods whose GUIs draw their own FE bar (IE, CC&A, PneumaticCraft) need a mixin
   or a resource override for the text.
-- Internal FE buffers are fine: the converter wraps the FE capability and the display shows the equivalent PG value (owner 2026-11-13). Only machines with no FE capability at all (AE2's AE units, PneumaticCraft air pressure) are outside the converter layer (power_grid.md N7).
+- Internal FE buffers are fine: the converter wraps the FE capability and the display shows the equivalent PG value (owner, 2026-11-13). Only machines with no FE capability at all (AE2's AE units, PneumaticCraft air pressure) are outside the converter layer (power_grid.md N7).
 
 ## 5. Mode and world handling
 
-- **The mode is a world creation value** (owner 2026-11-16). A per-world flag holds it (power_grid.md N1); the global
+- **The mode is a world creation value** (owner, 2026-11-16). A per-world flag holds it (power_grid.md N1); the global
   config only sets the default offered for new worlds. No setting, config change or reload changes an existing world's mode.
 - A client joining a dedicated server checks the mode against the server (N2).
 - **Forced switch (admins only).** An admin can force an upgrade (basic to advanced) or a downgrade (advanced to basic).

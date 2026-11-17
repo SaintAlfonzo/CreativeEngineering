@@ -22,6 +22,8 @@ Skipped: fenced code blocks, inline code spans, link targets, deployed changelog
 jar_archive/, version strings (`25.12.09`).
 """
 import argparse
+import csv
+import io
 import datetime as dt
 import re
 import subprocess
@@ -188,6 +190,8 @@ def process(path, apply, lint=False):
 	except (UnicodeDecodeError, FileNotFoundError):
 		return [], [], []
 	limit = last_change(path)
+	if path.suffix == '.csv':
+		return process_csv(path, text, limit, apply, lint)
 	out, changes, unresolved, ambiguous = [], [], [], []
 	fence = False
 	is_md = path.suffix == '.md'
@@ -210,6 +214,28 @@ def process(path, apply, lint=False):
 def ctx(line, old):
 	i = line.find(old)
 	return line[max(0, i - 35):i + len(old) + 25].strip()
+
+
+def process_csv(path, text, limit, apply, lint):
+	"""A CSV table: each cell is converted on its own and the table is written back with the csv module, so a date
+	form that adds a comma ("(owner, 2026-11-05)") stays inside its quoted cell."""
+	rows = list(csv.reader(io.StringIO(text)))
+	changes, unresolved, ambiguous = [], [], []
+	for i, row in enumerate(rows, 1):
+		for j, cell in enumerate(row):
+			parts = cell.split('\n')
+			for k, part in enumerate(parts):
+				new, c, u, a = convert_line(part, limit, lint)
+				changes += [(i, old, nw, part) for old, nw in c]
+				unresolved += [(i, *x) for x in u]
+				ambiguous += [(i, *x) for x in a]
+				parts[k] = new
+			row[j] = '\n'.join(parts)
+	if apply and changes:
+		buf = io.StringIO()
+		csv.writer(buf, lineterminator='\n').writerows(rows)
+		path.write_text(buf.getvalue(), encoding='utf-8')
+	return changes, unresolved, ambiguous
 
 
 def rel(p):

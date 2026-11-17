@@ -44,7 +44,7 @@ Notes:
   the item. Botania's masks and the Cob Pipe have one and draw from Face. Simple Hats instead draws hats from its own
   layer and only for the slot named `head`, so a mask in Face was invisible; Creative Compat's
   `SimpleHatsFaceSlotMixin` makes that check accept `face` too (cosmetic stack and the slot's render toggle as for head).
-- Feet slot not showing (scratchpad 2026-11-02, `gameplay/misc #19`): the last played session (`logs/latest.log`, 10-31)
+- Feet slot not showing (scratchpad 2026-11-02, `gameplay/misc #19`): the last played session (`logs/latest.log`, 2026-10-31)
   predates the IMC registration (2026-11-01, patcherMod 1.1.07 installed 2026-11-02 00:18), so the old datapack files
   were in use and no pack slot existed. No code change: CS-07 on the 1.1.07 jar is the check.
 - Wardrobe and Portable Wardrobe tag only `minecraft:air` under hands, so no other item landed there.

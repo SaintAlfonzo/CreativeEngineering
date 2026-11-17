@@ -35,7 +35,7 @@ look the carry log line (`[swaps] config sections ... carried` or similar) in la
 
 ## SQ-CIF-02 | Better Beacons potions under creativebrewing: mixes exist; drinking phantom_bane gives Better Beacons Phantom Bane
 @group B (same world)
-@commands before the swap: put a `creativecommon:long_reach` potion, a `creativecommon:long_phantom_bane` tipped arrow in a chest (11-06 build); after: `/data get block` on the chest; `/zq recipes` brewing mixes for `creativebrewing:long_long_reach`; `/give @p potion{Potion:"creativebrewing:phantom_bane"}` and drink
+@commands before the swap: put a `creativecommon:long_reach` potion, a `creativecommon:long_phantom_bane` tipped arrow in a chest (2026-11-06 build); after: `/data get block` on the chest; `/zq recipes` brewing mixes for `creativebrewing:long_long_reach`; `/give @p potion{Potion:"creativebrewing:phantom_bane"}` and drink
 @pass chest items read `creativebrewing:` ids; mixes present; drinking gives Better Beacons Phantom Bane
 @fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
 @from batches/r1113/c3_b1.qb
@@ -54,7 +54,7 @@ waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=minecraft:potion 
 waitlog \[cdevtest\] verb=player name=cb effects= 20
 expect \[cdevtest\] verb=player name=cb effects=\S*better_beacons:phantom_bane:
 reject \[cdevtest\] .*(done=0|error=)
-look old-world half (a chest with creativecommon:long_reach potions from an 11-06 save) not run: no 11-06 build kept to make the save
+look old-world half (a chest with creativecommon:long_reach potions from an 2026-11-06 save) not run: no 2026-11-06 build kept to make the save
 
 ## SQ-CIF-03 | Farmer's Respite coffee: Caffeinated plus a hidden Phantom Bane of the same length; rest stat not -24000; reset to 0 when it ends
 @group B (same boot)

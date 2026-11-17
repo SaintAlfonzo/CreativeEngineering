@@ -1889,8 +1889,8 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   Fungi rows added: Truffle (Truffle Slice as alt input) in 2.1, Cooked Inky Cap in 2.6 (fungi_delight.md step 8).
   Hostile, End's, Miner's, Ocean's and Oceanic Delight foods are held out of the type loops (`UNDECIDED_MODS`) until
   their cans are decided. `can_audit.py` rerun.
-- 2026-10-23: Veggies Delight and Vintage Delight rows (116) and cans. Veggies' 24 cans generated from the 10-22 dump
-  (the catalog was rerun first; it was still from 10-20). Vintage has never been in a dump, so its 16 cans (cucumber,
+- 2026-10-23: Veggies Delight and Vintage Delight rows (116) and cans. Veggies' 24 cans generated from the 2026-10-22 dump
+  (the catalog was rerun first; it was still from 2026-10-20). Vintage has never been in a dump, so its 16 cans (cucumber,
   ghost pepper, 3 pickles, roasted peanuts, Surströmming, cheese slices, oatmeal cookies, cheese pasta, pad thai,
   cucumber salad, pickle soup, ghostly chili, oatmeal) and its 4 extra sources of existing cans (kimchi, pickle, salted
   cod and salmon) are configured and skipped through `AWAIT_DUMP` in `gen_can_types.py`; the run lists them as
@@ -1959,6 +1959,6 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   (edible since the Brewin port), Gingerbread and Gingerbread Man (sweets), Fig and Lemon Tart (pie). New families from
   section 3: Hazard (the 4 built Canned Goods hazard cans plus 7 `?`), Egg and dairy (6), Preserves (27 jams, nut butter,
   tomato sauce), Desserts (37 jello, custard, pudding, ice cream), Cake (18). Summary recounted from the rows (it still
-  showed the 10-13 `?` counts). Still outside: 96 sweets, 52 handhelds, 15 ingredients.
+  showed the 2026-10-13 `?` counts). Still outside: 96 sweets, 52 handhelds, 15 ingredients.
 - 2026-10-20: the rest of section 3 pulled in, all `?` (for bulk decisions): Sweets (96), Handheld (52),
   Ingredients (15). Every typed food is now on a sheet. Summary recounted.

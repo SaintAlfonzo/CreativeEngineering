@@ -25,7 +25,7 @@ Scratch servers use COPIED jars so the namespace session can run Gradle during a
 
 | Set | Where | Used for |
 |---|---|---|
-| Old state | `mods/`: Common 11-09 23:00, Compat 17:28, Delight 11-09 00:08, Equipment 17:29 | Fixture, SQ-CDNS-05, control |
+| Old state | `mods/`: Common 2026-11-09 23:00, Compat 17:28, Delight 2026-11-09 00:08, Equipment 17:29 | Fixture, SQ-CDNS-05, control |
 | Step 2 | `jar_archive/cdns_step2/`, Common repatched 00:37 | SQ-CDNS-01, 02, 04, 06, kubejs snapshot 00:15 |
 | Full | `jar_archive/cdns_full/` 00:24, Common 00:37, Equipment from step 2 | SQ-CDNS-03, 05 source save, 07 to 12, current kubejs |
 
@@ -103,7 +103,7 @@ targeted run).
 
 Cause of the owner's errors: `logs/kubejs/startup.log` of the 18:54 session had 14 NCH skips (`#creativeengineering:smokable/*`
 smoking, `#creativeengineering:millable_seeds` milling). The dict already named `creativecommon:` / `creativedelight:`
-(namespace move, [namespace_move.md](../namespace_move.md)); the installed Common jar was from 11-09 23:00. Fixed by the rebuild.
+(namespace move, [namespace_move.md](../namespace_move.md)); the installed Common jar was from 2026-11-09 23:00. Fixed by the rebuild.
 
 Build: all 14 top-level projects. `:backportedVinery:jar` failed "vinery.refmap.json is not in ..." after an incremental
 compile wrote no refmap; `:backportedVinery:clean` then `:creativeBrewing:build` fixed it. Installed all 14 with the game

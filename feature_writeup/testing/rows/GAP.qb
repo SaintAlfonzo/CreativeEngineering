@@ -3,11 +3,11 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/GAP.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title SQ-GAP Recent features with no scratch row of their own, 2026-11-08 (gap sweep of the player changelog and TODO rows dated 11-05 to 11-08)
+@@title SQ-GAP Recent features with no scratch row of their own, 2026-11-08 (gap sweep of the player changelog and TODO rows dated 2026-11-05 to 2026-11-08)
 @@date 2026-11-08
 @@jars creativedelight powergrid
 @@text
-@@text **HOLD: run this section only after the Common suite is finished.** Order: SQ-CGE and its re-run list (Common 11-08 00:01 jar), then every FAIL or PARTIAL from that run debugged and rerun until the Common rows are complete; only then boot for SQ-GAP. Sweep method: every TODO row dated 11-05 to 11-08 in Built / Testing / In Progress with no test ID (13 rows), plus changelog bullets with no table row (Botany Pot tooltip, grape seed tooltip, Pineapple and Tea planting). Features that already have rows (Tempad SQ-TP, Portals SQ-IP / SQ-PG, cans, cookware, skewers, crops, lichen, Rose Gold recipes in SQ-CDFW-08, Nether DH CQ-PNE) are not repeated; swept and found covered: `dishes/meals #8` rotten ham tags (SQ-T1-02), `creativesplit/regression #21` textures (CQ-ENGM-01, extended by CQ-GAP-01), loading tips (SQ-CC-01..03). Jars: whatever Common run left installed in `mods/` plus the 11-07 Engineering, Delight, Compat 23:10 builds; no new build is needed.
+@@text **HOLD: run this section only after the Common suite is finished.** Order: SQ-CGE and its re-run list (Common 2026-11-08 00:01 jar), then every FAIL or PARTIAL from that run debugged and rerun until the Common rows are complete; only then boot for SQ-GAP. Sweep method: every TODO row dated 2026-11-05 to 2026-11-08 in Built / Testing / In Progress with no test ID (13 rows), plus changelog bullets with no table row (Botany Pot tooltip, grape seed tooltip, Pineapple and Tea planting). Features that already have rows (Tempad SQ-TP, Portals SQ-IP / SQ-PG, cans, cookware, skewers, crops, lichen, Rose Gold recipes in SQ-CDFW-08, Nether DH CQ-PNE) are not repeated; swept and found covered: `dishes/meals #8` rotten ham tags (SQ-T1-02), `creativesplit/regression #21` textures (CQ-ENGM-01, extended by CQ-GAP-01), loading tips (SQ-CC-01..03). Jars: whatever Common run left installed in `mods/` plus the 2026-11-07 Engineering, Delight, Compat 23:10 builds; no new build is needed.
 @@text
 @@table
 ## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Fruits Delight jams, jars stack to 64
@@ -285,4 +285,4 @@ look each tooltip line once, no duplicate (shots); a seasoning hovered by hand; 
 @fails `food_types.json` hazard, `forge:rotten_meat` tag
 @draft no batch holds this row yet
 @@text
-@@text Close-out for the section: refresh pass (skill part A step 5): rerun the changelog-versus-queue comparison after the Common suite so any bullet added since 11-08 gets a row, then record the SQ-GAP results in the run doc and the TODO rows named above.
+@@text Close-out for the section: refresh pass (skill part A step 5): rerun the changelog-versus-queue comparison after the Common suite so any bullet added since 2026-11-08 gets a row, then record the SQ-GAP results in the run doc and the TODO rows named above.

@@ -359,7 +359,7 @@ Rows the owner must settle before the execution docs are written (each sweep fil
 Housekeeping found on the way (not split work, listed so it is not lost): one stale lang key
 `waila.h12y.tier.creativeengineering.copper`, three empty resource folders, one advancement json in
 `watchtower_building`, six unused root PNGs in `kubejs/assets`, 1890 lines of stale `startup_scripts/todo/*.txt`,
-`namechanges.js` 249-340 (Delight names left behind by the 10-27 move), `items/CreativeEngineeringItems.java` declares
+`namechanges.js` 249-340 (Delight names left behind by the 2026-10-27 move), `items/CreativeEngineeringItems.java` declares
 package `items` while sitting in `item/`, `FlintAndTerraSteelItem` is headed TEMPORARY, `magic/enchants.js` uses six
 raw event calls instead of NCH.
 
@@ -544,7 +544,7 @@ End's Delight and Ender's Delight CD members. These decisions override the 7.6 r
 | Cooking for Blockheads | ARR, so the jar stays in `mods/`; CD member `blockheadsAdditions` |
 
 Owner, 2026-11-01: Ender's and Cooking for Blockheads stay additions members ("member" = the additions member plus every
-leftover row moved into CD). Nether's Delight is **repacked** into CD like End's (supersedes the 11-01 additions-overlay
+leftover row moved into CD). Nether's Delight is **repacked** into CD like End's (supersedes the 2026-11-01 additions-overlay
 decision in nethers_delight.md 1).
 
 **Step 1: campfire, Compat -> CD** (one commit; Compat and CD rebuild).
@@ -827,7 +827,7 @@ Equipment -50 to -52, Engineering -60 to -62, Worldgen -70 to -73 (fresh normal 
 marked RERUN repeat the earlier feature suites on the split jars. TODO `creativesplit/regression #14`.
 
 Run r1106spf (2026-11-06 night, [scratch_run_2026-11-06.md](testing/scratch_run_2026-11-06.md) 6): every jar's
-features as before the split (recipe counts per type, tags and items equal to the 11-05 dumps apart from the
+features as before the split (recipe counts per type, tags and items equal to the 2026-11-05 dumps apart from the
 intended fluid rename and mead removal). FAIL: SQ-CBP-03b (horror lasagna empty filling step), SQ-CBP-08b (Equipment
 felsic assembly step; `felsic_gear` pack names Nullscape biomes). Findings for TODO `creativesplit/regression #15` to
 `#18`. Worldgen rows partial; CQ-SPF-01, -02 open.

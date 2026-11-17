@@ -124,7 +124,7 @@ name) moves in the same change. Decided by the owner 2026-11-09. Consequence: an
 stops loading those recipes or loot entries; step 7 greps the world `datapacks/` and `kubejs/` folders for old ids so
 nothing in the pack itself is left behind.
 
-**D5. Smokable and plantable tags** go to `creativecommon:` (owner 2026-11-10), their fillers to
+**D5. Smokable and plantable tags** go to `creativecommon:` (owner, 2026-11-10), their fillers to
 `kubejs/data/creativecommon/kubejs/tags/`. Section 1.3 listed them as Creative Delight's, but neither is filled by it.
 
 **D6. Seasoning ids move to `creativedelight:` with no swapper (owner, 2026-11-10).** `creativeengineering:cheese`, `onion`,

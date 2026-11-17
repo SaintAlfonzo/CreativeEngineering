@@ -225,7 +225,7 @@ Drop items with Q into the hazard.
 
 ## 8. History
 
-- 2026-09-08 to 09-09: fire/lava split, float control, burn transforms; two crashes (a wrong `@Redirect` signature,
+- 2026-09-08 to 2026-09-09: fire/lava split, float control, burn transforms; two crashes (a wrong `@Redirect` signature,
   fixed; the `$1` switch class, not fixed).
 - By 2026-09-27 (initial git commit): tags filled; shipped with 1.0.3.
 - 2026-10-18: this writeup; findings F1 to F6; tests IP-01 to IP-14. No code changed.

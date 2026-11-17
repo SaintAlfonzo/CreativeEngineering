@@ -25,9 +25,9 @@ done on 2026-11-02). r1031 deferred long operations L1 to L4 (pregen, perf suite
 ## 2. Tools
 
 `prep_srv.sh`, `scratch_server.sh`, `qrun.py`, `unrun_rows.py` (new). Batches: `tools/scratch_query/batches/r1102b/`,
-written by five batch-writer agents by scope slice: `s1_*` (scope lines 1-20, 10-23 to 10-25 food rows), `s2_*`
-(21-33: Rustic, Delightful, Kettle, investigations, cats), `s3_*` (34-66: 10-25 to 11-01 sections), `w_*` (worldgen:
-first-tick water, census ties, SQ-WGE, SQ-EFB, SQ-FGDC, SQ-PSW), `s5_*` (11-02 food and the pre-scratch pass). Each
+written by five batch-writer agents by scope slice: `s1_*` (scope lines 1-20, 2026-10-23 to 2026-10-25 food rows), `s2_*`
+(21-33: Rustic, Delightful, Kettle, investigations, cats), `s3_*` (34-66: 2026-10-25 to 2026-11-01 sections), `w_*` (worldgen:
+first-tick water, census ties, SQ-WGE, SQ-EFB, SQ-FGDC, SQ-PSW), `s5_*` (2026-11-02 food and the pre-scratch pass). Each
 slice has `<slice>_setup.md` and `<slice>_skip.md`. Results: `perf/runs/r1102b/<boot>/`. OUT: scratchpad `r1102b/`.
 
 ## 3. Jars
@@ -36,12 +36,12 @@ All checked 14:33 against build/libs: `mods/` holds the newest builds.
 
 | Jar | mods/ | build/libs | Rows |
 |---|---|---|---|
-| creativeengineering-1.1.07.jar (patcherMod) | 11-02 14:08 | 11-02 14:08 | all |
-| creativedelight-1.0.0.jar | 11-02 14:01 | 11-02 14:01 | food, CD members |
-| creativebrewing-1.0.0.jar | 11-02 13:52 | 11-02 13:52 | brewing, drinks |
-| creativecalendar-1.0.0.jar | 11-02 14:08 | 11-02 14:08 | SQ-PST, seasons |
-| creativecompat-1.0.0.jar | 11-02 13:52 | 11-02 13:52 | compat rows |
-| creativedevtools-1.0.0.jar | 11-01 12:49 | 11-01 12:49 | probes |
+| creativeengineering-1.1.07.jar (patcherMod) | 2026-11-02 14:08 | 2026-11-02 14:08 | all |
+| creativedelight-1.0.0.jar | 2026-11-02 14:01 | 2026-11-02 14:01 | food, CD members |
+| creativebrewing-1.0.0.jar | 2026-11-02 13:52 | 2026-11-02 13:52 | brewing, drinks |
+| creativecalendar-1.0.0.jar | 2026-11-02 14:08 | 2026-11-02 14:08 | SQ-PST, seasons |
+| creativecompat-1.0.0.jar | 2026-11-02 13:52 | 2026-11-02 13:52 | compat rows |
+| creativedevtools-1.0.0.jar | 2026-11-01 12:49 | 2026-11-01 12:49 | probes |
 
 ## 4. Order
 
@@ -75,7 +75,7 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
 
 ## 7. Run notes
 
-- 14:33 RUNNER.md claimed (its format block had been lost in the 11-02 edit; restored). game_jvms.sh empty, 24 GB
+- 14:33 RUNNER.md claimed (its format block had been lost in the 2026-11-02 edit; restored). game_jvms.sh empty, 24 GB
   free on /. Jars match. Scope 425 server rows (unrun_rows.py). Five batch-writer agents started.
 - s1 in: s1_O (old-world build with pre-nest Vintage -03, Vinery -06, Brewin' -04), s1_A 50 rows, s1_B 3 rows;
   16 skipped. unrun_rows.py misses range notation ("-04, -05"): 8 of s1's IDs were already recorded (fix after the run).
@@ -96,7 +96,7 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
 - 15:17 Boot A (same world, old jars out, probes in): s1_A started. SQ-EFB-00 / -17 gate: tools/test_worldgen_tools.sh
   does not compile (WorldgenFiles moved to util, duplicate local in EarthFillTest, node sim stub): tooling agent fixing it.
 - 15:22 test_worldgen_tools.sh fixed (tools only: util.WorldgenFiles in the tests and the node sim stub,
-  rootOverride by reflection, cache test settles once, FitTest counts 189 / 34 after the 11-02 Nether move): 12 of 12
+  rootOverride by reflection, cache test settles once, FitTest counts 189 / 34 after the 2026-11-02 Nether move): 12 of 12
   checks pass. SQ-EFB-00 / -17 gate open.
 - 15:43 s1_A done: PASS 8, FAIL 19, LOOK 24 (judge agent on perf/runs/r1102b/s1/judged.md). Boot A logs in s1/srvlogs.
   Note: background Bash and Monitor notices here arrive late, not early; wait with a foreground `timeout tail -f`.
@@ -116,7 +116,7 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
   waits for the end, on s1a. Agent note: FDB-05 / -07 toml live reload never fired in run 1 (possible defect).
 - 17:24 s2_A done: totals: FAIL 24, LOOK 43, PASS 13 -> perf/runs/r1102b/s2/results.md. 17:33 s2_B booted.
 - 17:43 s2_B done, 17:48 s2_Coff, 17:52 s2_N, 17:54 s2_RDstop (boot stopped as expected). s2 A+B judged
-  (s2/judged.md): FAIL SQ-RD-22 (comfort_nourishment.json of 10-27 has no rusticdelight entries: every Rustic food
+  (s2/judged.md): FAIL SQ-RD-22 (comfort_nourishment.json of 2026-10-27 has no rusticdelight entries: every Rustic food
   loses Nourishment), SQ-CDF-08 (gen_compost_values.py --check: 21 compostables without a row); 23 BATCH-FAULT (13
   proven PASS), 4 OPEN, 4 NOT RUN. 17:54 s3_A started.
 - 18:31 s3_A done (PASS 32, FAIL 32, LOOK 50; judge agent on s3/judged.md). s3_A2 (no farmers_upstream): SQ-FSD-02

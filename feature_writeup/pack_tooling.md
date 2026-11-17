@@ -404,8 +404,8 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   three files were deleted 2026-10-22, [TODO](todo/TODO.md) `tooling/conventions #3`), tag helper, CEConfig, the first dump commands.
 - 2026-09-27 (initial git commit): root Gradle build and manifest tooling.
 - 2026-09-30: item-loss repro harness run ([plan_1.0.3.md](plan_1.0.3.md) 4.7).
-- 2026-09-27 to 10-02 (first commits): `/dumpall` and `generators.json` (09-27), `java_test_cp.sh` (09-28), the
-  `/cdevgen` command (10-02). The Rhino, node and GameTest harnesses and more dumps came with their features (each
+- 2026-09-27 to 2026-10-02 (first commits): `/dumpall` and `generators.json` (2026-09-27), `java_test_cp.sh` (2026-09-28), the
+  `/cdevgen` command (2026-10-02). The Rhino, node and GameTest harnesses and more dumps came with their features (each
   dated in its feature writeup).
 - 2026-10-18: this writeup; findings F1 to F10; tests TL-01 to TL-16. No code changed.
 - 2026-10-19: F6 fixed (test_crop_growth.sh, neoCraftHelper.js line 1, NCH.cfg example).

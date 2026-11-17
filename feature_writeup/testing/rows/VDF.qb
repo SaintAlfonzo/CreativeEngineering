@@ -157,7 +157,7 @@ reject verb=\S+ .*done=0
 ## SQ-VDF-07 | Chips gone: no recipes, no tags, no Canned Chips
 @group A
 @commands Recipe lookup by output and input `pneumaticcraft:chips`, `creativeengineering:canned_chips`; `/give @p pneumaticcraft:chips`; JEI search "Chips"
-@pass no recipe makes or uses Chips (no `creativedelight:cooking/fries`); Canned Chips does not exist (unknown item); Chips hidden in JEI; `/dumptags` lists no tag on Chips (owner 2026-11-01, `merges/dishes #1`)
+@pass no recipe makes or uses Chips (no `creativedelight:cooking/fries`); Canned Chips does not exist (unknown item); Chips hidden in JEI; `/dumptags` lists no tag on Chips (owner, 2026-11-01, `merges/dishes #1`)
 @fails startup `pneumaticcraft/pneumatic_items.js` not loaded (requires line)
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
@@ -219,7 +219,7 @@ reject verb=\S+ .*done=0
 ## SQ-VDF-10 | doughs compost at 85 %
 @group A
 @commands Hopper into a composter, one stack each: `create:dough`, `vintagedelight:oat_dough`, `vintagedelight:cucumber_dough`, `veggiesdelight:sweet_potato_dough`, `farmersdelight:wheat_dough`; or the compost probe
-@pass each adds a layer at 85 % (owner 2026-11-01); cucumber noodles unchanged
+@pass each adds a layer at 85 % (owner, 2026-11-01); cucumber noodles unchanged
 @fails `doughs` category order in CD `compost_rules.js`
 @from batches/r1102b/s3_A.qb
 > dumpcompost

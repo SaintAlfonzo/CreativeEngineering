@@ -24,7 +24,7 @@ bootexpect Done \(
 shell ls -d rustic_upstream 2>&1; grep -iE "rustic" logs/latest.log | grep -iE "error|exception|couldn't parse|failed to load" | head -20; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")" 
 bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
 
-## SQ-RDB-02 | /dumpall: Rustic recipes, tags, loot and items equal the 11-10 baseline (kubejs/exported copied in by prep)
+## SQ-RDB-02 | /dumpall: Rustic recipes, tags, loot and items equal the 2026-11-10 baseline (kubejs/exported copied in by prep)
 @group A
 @commands `/dumpall`; compare `recipes/all.csv` rusticdelight rows, `tags/item_tags.json` and `tags/block_tags.json` rusticdelight entries, `loot_tables/` rusticdelight with the baseline
 @pass Same recipe ids (270), same tag members, same loot tables

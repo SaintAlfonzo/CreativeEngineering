@@ -27,7 +27,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 ### 1.1 Pickling takes the mason jar of vinegar (SQ-VNG-01)
 - **BUILT 2026-11-03 (fork A):** `i.vinegar` = alias of `i.vinegar_jar`, `i.vinegar_bottle` = the dead id (jams.js removal only); leather and froglight recipes take `i.vinegar_jar` with no secondary (the jar's crafting remainder, the empty mason jar, comes back through the leftover slots, so a `secondary` jar would duplicate it); cans resolve through the alias, no regeneration. Restart (item_dict.js is a startup script); no jar rebuild. SQ-VNG-01 row refreshed.
 - **Fix 2026-11-03:** the alias broke startup (`food dict: ingredient_vinegar_jar: vintagedelight:vinegar_jar already named ingredient_vinegar`): `food_dict.check` rejects two keys for one item. `f.ingredient_vinegar` removed from `food_dict.js`; `f.ingredient_vinegar_jar` is the one entry. `food_dict_index.json` still lists the bottle until the next `/cegen` run.
-- Cause: `i.vinegar` (`item_dict.js` 14836) is `vintagedelight:vinegar_bottle`, which the 11-02 jar merge removed. The two other readers
+- Cause: `i.vinegar` (`item_dict.js` 14836) is `vintagedelight:vinegar_bottle`, which the 2026-11-02 jar merge removed. The two other readers
   are `vintagedelight/recipes.js` 26 (leather) and 90 (the froglight loop). `food_dict.js` 520 `f.ingredient_vinegar` also uses it.
 - Change: point the three callers at `i.vinegar_jar`; give the pickling recipes `secondary: i.empty_mason_jar` where they now
   return a glass bottle (leather and froglights use `secondary: i.glass_bottle` today, which would hand back a bottle for a jar).
@@ -52,7 +52,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 - Verify: `/vtdtest fluids` 26 of 26, jar fills from a tank, no duplicate-key line in boot.log. Rows SQ-VP-06 and SQ-VP-04.
 
 ### 1.3 Every jam and jar uses the mason jar (audit)
-- **DONE 2026-11-03 (fork A):** the 10-30 recipe dumps hold no ingredients, so the audit scanned every jar's recipe JSON (mods/ plus nested jars) for jam / jelly recipes with a glass bottle: 98 hits, all covered by `jams.js` (Fruits Delight crafting, pot, filling, emptying; Upgrade Aquatic and Central Kitchen mulberry removed; Vintage deconstructs removed) except Handcrafted's Berry Jam Jar, now on the mason jar. A live check still needs a fresh `/dumpall` (SQ-PSU-06).
+- **DONE 2026-11-03 (fork A):** the 2026-10-30 recipe dumps hold no ingredients, so the audit scanned every jar's recipe JSON (mods/ plus nested jars) for jam / jelly recipes with a glass bottle: 98 hits, all covered by `jams.js` (Fruits Delight crafting, pot, filling, emptying; Upgrade Aquatic and Central Kitchen mulberry removed; Vintage deconstructs removed) except Handcrafted's Berry Jam Jar, now on the mason jar. A live check still needs a fresh `/dumpall` (SQ-PSU-06).
 - Re-run an audit instead of trusting the earlier passes: dump all recipes whose output or input is a jam / jelly / jar item
   (`#forge:jam_jars`, `#forge:jams`, `fruitsdelight:*_jelly`, `*_jam_jar`, `mulberry_jam_bottle`) and list any that still take or return
   `minecraft:glass_bottle`. Use `/dumpall` recipe dump plus a grep, or a new `/cegen` check beside `gen_compost_values.py --check`.
@@ -150,7 +150,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 ### 3.2 enders_additions member switch (SQ-ENM-04b), more info
 - **BUILT 2026-11-03 (fork B):** option (a): `bundle_extra_mods=enders_additions` in `members/ends/gradle.properties`, read by `writeMembersList` in both bundle `build.gradle`s; the built members file lists it. `CD.on` resolved through `isMember` (so it was always on, not skipped). CD jar 19:43, not installed. Row SQ-ENM-04b.
 - Facts: the End's Delight member jar holds two mods: `ends_delight` (the repack) and `enders_additions` (Ender's 1.1.4 plants and
-  dishes, folded in 11-02). `creativedelight_members.txt` is generated from `bundle_members` as one `mod_id` per nested jar, so it lists
+  dishes, folded in 2026-11-02). `creativedelight_members.txt` is generated from `bundle_members` as one `mod_id` per nested jar, so it lists
   `ends_delight` only. `CDConfig` builds `[members]` switches from that list, so `enders_additions` has no switch. Boot log: "Incorrect
   key members.enders_additions was corrected from true to its default, null".
 - Consequence is worse than "always on": `CDConfig.member()` returns false for an id with no switch, and `additions.js` starts with
@@ -236,7 +236,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
 ## 5. Tuning and tags (A, B)
 
 ### 5.1 More Delight knives (SQ-MRD-01)
-- **BUILT 2026-11-03 (fork B):** the 10-30 dump already had levels 0 / 1 (KubeJS per-item tier copy); its speed column is the tier speed, which `tuneTools` never set. `applySpec` now sets `t.setSpeed` with the dig speed (startup script, restart). Real dig speed was likely already 2 / 4 (item field), so no changelog bullet.
+- **BUILT 2026-11-03 (fork B):** the 2026-10-30 dump already had levels 0 / 1 (KubeJS per-item tier copy); its speed column is the tier speed, which `tuneTools` never set. `applySpec` now sets `t.setSpeed` with the dig speed (startup script, restart). Real dig speed was likely already 2 / 4 (item field), so no changelog bullet.
 - Finding: `tune_tools.js` 134-135 sets wooden knife `miningSpeed 2, miningLevel 0` and stone knife `4, 1`; the live dump still shows speed
   8 (and harvest levels 3 to 4). `tuneTools` applies `setDigSpeed` (Digger items only) and `t.setLevel` on the tier; the knives either are not
   `DiggerItem`s, or share one `Tier` object across both (a level set on a shared tier would be overwritten), or the keys name a different
@@ -270,7 +270,7 @@ Action: rebuild CD (B), install, rerun SQ-LEM-01, -02, SQ-PSU-06, SQ-VTD6-01. No
   cannot be planted on grass, dirt, farmland or nylium, only on the three soils, and a wild one still spawns on nylium.
 
 ### 5.4 Gleaming salad (SQ-FDB-04) [decided: in line with the rule]
-- **BUILT 2026-11-03 (fork A):** `GOLDEN_EXTRA` in `gen_comfort_nourishment.py` (run offline: 2 lines changed, salad 120 s and the strip key `vinegar` -> `vinegar_bottle`); `food_catalog.py` OVERRIDES salad, and `gleaming_salad` added by hand to `food_types.json` and the farmersdelight member script (a full `food_catalog.py` run on the 10-30 dumps would reclassify 103 foods; `--check` still lists 2 other member scripts out of sync, not touched). Golden tuning multipliers do not reach it (it is a salad, not a golden type). Restart.
+- **BUILT 2026-11-03 (fork A):** `GOLDEN_EXTRA` in `gen_comfort_nourishment.py` (run offline: 2 lines changed, salad 120 s and the strip key `vinegar` -> `vinegar_bottle`); `food_catalog.py` OVERRIDES salad, and `gleaming_salad` added by hand to `food_types.json` and the farmersdelight member script (a full `food_catalog.py` run on the 2026-10-30 dumps would reclassify 103 foods; `--check` still lists 2 other member scripts out of sync, not touched). Golden tuning multipliers do not reach it (it is a salad, not a golden type). Restart.
 - State: `comfort_nourishment.json` has `gleaming_salad` as nourishment 240 s by hand; it is in no `food_types.json` list, so the type rules never see it.
 - Change: classify it so the generator's own rules decide: (1) `tools/food_catalog.py` `OVERRIDES`: `'farmersdelight:gleaming_salad': 'salad'`; (2) mark it for golden
   tuning with a `GOLDEN_EXTRA` set in `gen_comfort_nourishment.py` read next to `golden_foods()`, so the golden rule applies: Nourishment 120 s (the 240 s hand row goes);

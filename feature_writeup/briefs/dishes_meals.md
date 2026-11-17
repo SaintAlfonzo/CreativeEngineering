@@ -660,7 +660,7 @@ RC-126 Supreme Pizza crafts only from the new shape; its slice shows the new val
 Status: In Progress (nothing built, grep "tropical" 2026-10-31) / Work: KubeJS / lang / new jar / id `dishes/meals #27` ([recipes_cooking.md](../recipes_cooking.md))
 
 ### Goal
-Pineapple pizza with bacon, named **Tropical Pizza**, tooltip **"Misnomer, invented in Canada"** (owner 2026-10-30).
+Pineapple pizza with bacon, named **Tropical Pizza**, tooltip **"Misnomer, invented in Canada"** (owner, 2026-10-30).
 
 ### Now
 No such item. Pineapple slice `i.pineapple_slice` (Fruits Delight), bacon `i.cooked_bacon`. Pizzas are blocks: Vintage
@@ -753,7 +753,7 @@ RC-129 Each listed dish takes the pickled onion and still the raw one; the cucum
 Status: Planned / Work: KubeJS / lang / id `merges/dishes #6` (was `dishes/meals #30`)
 
 ### Goal
-One Caesar Salad: correct spelling, Veggies Delight's texture, lettuce + tomato + cheese + bread (owner 2026-10-27).
+One Caesar Salad: correct spelling, Veggies Delight's texture, lettuce + tomato + cheese + bread (owner, 2026-10-27).
 
 ### Now
 - `veggiesdelight:cesar_salad` (`i.cesar_salad`, shown "Caesar Salad" via `name_rules.json` line 4; can
@@ -793,7 +793,7 @@ Nut butter sandwich: more jam options, and only square bread.
 - Bread slot is `i.t_bread` (`#forge:bread`, whole loaves). Square bread = `#forge:bread_slices` (`moredelight:bread_slice`,
   `moredelight:toast`).
 - Delightful's `delightful:food/nut_butter_and_jelly_sandwich` still ships (a second sandwich for the same dish).
-- `merges/dishes #7` (owner 2026-10-27) says "Nut butter sandwich: Vintage's texture, Delightful's name; **any bread** +
+- `merges/dishes #7` (owner, 2026-10-27) says "Nut butter sandwich: Vintage's texture, Delightful's name; **any bread** +
   any jam + a nut mash jar", which conflicts with this row's "only square bread".
 
 ### Build

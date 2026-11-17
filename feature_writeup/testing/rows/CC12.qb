@@ -8,8 +8,8 @@
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_engineering.md
 @@text
-@@text Jar: `development/creativeCommon/build/libs/creativecommon-1.2.0.jar` (22:40). The 11-10 SQ-CDNS runs predate the chat mixins
-@@text and the 11-13 dict; these rows re-run the earlier publish boots on 1.2.0. Swap aliases, capability keys and the load
+@@text Jar: `development/creativeCommon/build/libs/creativecommon-1.2.0.jar` (22:40). The 2026-11-10 SQ-CDNS runs predate the chat mixins
+@@text and the 2026-11-13 dict; these rows re-run the earlier publish boots on 1.2.0. Swap aliases, capability keys and the load
 @@text report are already covered by SQ-CDNS-01 to -04, -06 (r1110); the chat fix by CQ-CHK-01 (owner, 2026-11-13).
 @@text
 @@table

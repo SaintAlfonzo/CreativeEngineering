@@ -9,9 +9,9 @@
 @@sources feature_writeup/creative_split.md
 @@text
 @@text Not run. Targets the builds of 2026-11-06 18:51-18:54 (Common 1.1.0, Compat, Calendar, Magic, Equipment, Engineering
-@@text 2.0.0, Worldgen, Delight 1.1.0, Brewing 1.0.0; `prep_srv.sh` swaps them in), Devtools `creativedevtools-1.0.0` of 11-05
-@@text 22:09, Creative Labels 1.0.1 of 11-04 21:53. None of the 18:5x builds is in `mods/` (installed jars are 11-05 22:09 and
-@@text 11-06 01:30). The carve rows (SQ-CEN, SQ-CMG / SQ-CEQ, SQ-CNS, SQ-DEP, SQ-ENGM, SQ-CBP) check that each jar boots and
+@@text 2.0.0, Worldgen, Delight 1.1.0, Brewing 1.0.0; `prep_srv.sh` swaps them in), Devtools `creativedevtools-1.0.0` of 2026-11-05
+@@text 22:09, Creative Labels 1.0.1 of 2026-11-04 21:53. None of the 18:5x builds is in `mods/` (installed jars are 2026-11-05 22:09 and
+@@text 2026-11-06 01:30). The carve rows (SQ-CEN, SQ-CMG / SQ-CEQ, SQ-CNS, SQ-DEP, SQ-ENGM, SQ-CBP) check that each jar boots and
 @@text carries its config; this section checks that the **features** still work, one jar at a time, against a baseline from
 @@text the jars installed today. Rows named "RERUN" are earlier feature rows to run unchanged on these jars (their ids, config
 @@text file and namespace may need the split reading: a table that was in `creativeengineering-common.toml` is now in the
@@ -91,7 +91,7 @@ look offers present; pack trade ids (CD or Engineering items) among them
 
 ## SQ-SPF-04 | Common: potions registered, brewing ingredients
 @group A
-@commands Common, effects and potions (moved in 11-06): `/zq potion <each creativecommon: potion from plan_cb_polish.md 2>`; `/effect give bot <a Common effect, e.g. Magic Resistance> 30`; `/data get entity bot ActiveEffects`
+@commands Common, effects and potions (moved in 2026-11-06): `/zq potion <each creativecommon: potion from plan_cb_polish.md 2>`; `/effect give bot <a Common effect, e.g. Magic Resistance> 30`; `/data get entity bot ActiveEffects`
 @pass every potion registered; brewing ingredients as the baseline; the effect applies and ticks
 @fails registry still in Brewing; `DrinkFluidEffects` call site wrong
 @from batches/r1106spf/b1.qb
@@ -157,7 +157,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-12 | Compat leaf pile slow and surface walk speed
 @group A
-@commands Compat, leaf piles and walk speed (moved from Engineering 11-06): RERUN SQ-LP-00 to -06; bot walks 20 blocks on an asphalt / BlockRunner path and on grass, time each (`/data get entity bot Pos` before and after 40 ticks with `/execute as bot run ...` motion)
+@commands Compat, leaf piles and walk speed (moved from Engineering 2026-11-06): RERUN SQ-LP-00 to -06; bot walks 20 blocks on an asphalt / BlockRunner path and on grass, time each (`/data get entity bot Pos` before and after 40 ticks with `/execute as bot run ...` motion)
 @pass leaf pile slows from the configured layers; path walk faster by the `[surface]` value of `creativecompat-common.toml`
 @fails `LeafPileSlow` hook not set; `[surface]` still read from `CEConfig`
 @from batches/r1106spf/b1.qb
@@ -179,7 +179,7 @@ look x after 2 s on asphalt is greater than on grass by about the [surface] fact
 
 ## SQ-SPF-13 | Compat TNT shrapnel count
 @group A
-@commands Compat, TNT shrapnel and vein undo (moved 11-06): as SQ-CEN-05 second half (count the pieces one tick after the blast: `pace 0.05`, `summon tnt {Fuse:1}` then `kill @e[type=creativeengineering:shrapnel]`; at pace 1 they are gone) and SQ-CEN-07 (vein mining needs the client key)
+@commands Compat, TNT shrapnel and vein undo (moved 2026-11-06): as SQ-CEN-05 second half (count the pieces one tick after the blast: `pace 0.05`, `summon tnt {Fuse:1}` then `kill @e[type=creativeengineering:shrapnel]`; at pace 1 they are gone) and SQ-CEN-07 (vein mining needs the client key)
 @pass shrapnel count = `[shrapnel] count`; ore undo refused, dirt undo works with the cooldown
 @fails shrapnel entity type now registered under Compat but the spawner still in Engineering (or the reverse)
 @from batches/r1106spf/b1.qb
@@ -262,7 +262,7 @@ look clock advanced by 2 days against the base value (SQ-SPF-22-base) plus the b
 
 ## SQ-SPF-30
 @group A
-@commands Devtools: RERUN SQ-CDV-01 to -04 on the 11-05 jar against Common 1.1.0; `/cdevgen list`, `/cdevplace status`, `/cdevperf status`
+@commands Devtools: RERUN SQ-CDV-01 to -04 on the 2026-11-05 jar against Common 1.1.0; `/cdevgen list`, `/cdevplace status`, `/cdevperf status`
 @pass as SQ-CDV; commands present and run
 @fails Devtools built against the old Common API (rebuild needed: report, do not rebuild in the run)
 @draft no batch holds this row yet
@@ -312,7 +312,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-41 | Magic: experience fluid tag and bridge line
 @group A
-@commands Magic, XP fluid bridge (moved from Engineering 11-06): `grep -iE "FluidBridge\|liquid xp" logs/latest.log`; pipe Create liquid experience into a CEI machine or `/zq` the fluid tag `forge:experience`
+@commands Magic, XP fluid bridge (moved from Engineering 2026-11-06): `grep -iE "FluidBridge\|liquid xp" logs/latest.log`; pipe Create liquid experience into a CEI machine or `/zq` the fluid tag `forge:experience`
 @pass bridge startup line names the CEI fluid, logged by `creativemagic`; one fluid in the tag
 @fails `FluidBridge` registration left in Engineering's setup
 @from batches/r1106spf/b1.qb
@@ -347,7 +347,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-51 | Equipment moved in: wooden water bucket place and pick up, fletching recipes
 @group A
-@commands Equipment, moved in 11-06: the fixture wooden water bucket placed and picked up (bot); `/zq recipes` arrow fletching; `/zq makes creativeengineering:wooden_bucket`
+@commands Equipment, moved in 2026-11-06: the fixture wooden water bucket placed and picked up (bot); `/zq recipes` arrow fletching; `/zq makes creativeengineering:wooden_bucket`
 @pass bucket places and refills, keeps its id; fletching and bucket recipes present
 @fails bucket registry now in Equipment but its model or item class still in Engineering
 @from batches/r1106spf/b1.qb
@@ -508,7 +508,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-73 | Worldgen wild crops at the plains SQ-NM-01 located (literal box via {PL}; zq count takes no ~)
 @group B
-@commands Worldgen, wild crops and mushrooms (moved 11-06 with gated packs): seed 8675309 spawns in ocean, so `locate biome minecraft:plains` (and a forest) first, `forceload` a box there and wait for generation; `/zq count` wild crops, cave carrots, morels, ghost peppers with LITERAL coordinates (`zq count` takes no `~`); keep boxes to 4 x 4 chunks (one 10 x 10 chunk box stalled the r1106spf server)
+@commands Worldgen, wild crops and mushrooms (moved 2026-11-06 with gated packs): seed 8675309 spawns in ocean, so `locate biome minecraft:plains` (and a forest) first, `forceload` a box there and wait for generation; `/zq count` wild crops, cave carrots, morels, ghost peppers with LITERAL coordinates (`zq count` takes no `~`); keep boxes to 4 x 4 chunks (one 10 x 10 chunk box stalled the r1106spf server)
 @pass each present; counts within 20 percent of the SQ-CDW / SQ-WGE census
 @fails gated pack folder not enabled (`mod data packs on:` line)
 @from batches/r1106spf/b2.qb
@@ -578,7 +578,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @draft no batch holds this row yet
 ## SQ-SPF-82 | Delight moved in: torch and seeds recipes, millable seeds tag
 @group A
-@commands Delight, moved in 11-06: `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `/zq itemtag creativeengineering:millable_seeds`; `/zq recipes` a seasoned item
+@commands Delight, moved in 2026-11-06: `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `/zq itemtag creativeengineering:millable_seeds`; `/zq recipes` a seasoned item
 @pass present under `creativedelight:`; tags as the baseline
 @fails SQ-ENGM-03 failure text
 @from batches/r1106spf/b1.qb
@@ -648,7 +648,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group A
 @commands Labels: fixture sticky note and label after boot 1 (labels are neither block entities nor `creative_labels:label` entities: `/data` cannot read them, judge in CQ-SPF-02); bot places a new note on a chest face and a floor (`/zq useitem bot`)
 @pass old note and label keep text and colour; new ones place on the surface rules of SQ-LBS
-@fails Labels built 11-04 against the pre-swap Common (only matters if it imports Common)
+@fails Labels built 2026-11-04 against the pre-swap Common (only matters if it imports Common)
 @from batches/r1106spf/b1.qb
 > data get block -20 -60 -19
 > data get block -17 -61 -22
@@ -659,7 +659,7 @@ look old note and label keep text/colour (same data as boot 0); new note placed
 
 ## SQ-SPF-110 | Config files per jar
 @group A
-@commands Cross-jar, config files: list `config/creative*-common.toml`; for each jar, `grep -c "^\[" ` the file; check `creativeengineering-common.toml` is absent (Engineering has no config since 11-06) and no KEY appears in two files (several jars use the same table names, `[perf]`, `[worldgen]`, `[wthit]`, `[tooltips]`, `[members]`, with different keys: that is fine)
+@commands Cross-jar, config files: list `config/creative*-common.toml`; for each jar, `grep -c "^\[" ` the file; check `creativeengineering-common.toml` is absent (Engineering has no config since 2026-11-06) and no KEY appears in two files (several jars use the same table names, `[perf]`, `[worldgen]`, `[wthit]`, `[tooltips]`, `[members]`, with different keys: that is fine)
 @pass one file per jar that has config (Common, Compat, Calendar, Devtools, Magic, Equipment, Worldgen, Delight, Brewing); no duplicate table; values from the baseline kept
 @fails `ConfigRename.carrySections` order; a stale file from the instance copy
 @from batches/r1106spf/b1.qb

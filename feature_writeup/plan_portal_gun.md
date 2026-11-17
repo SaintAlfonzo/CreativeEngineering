@@ -101,12 +101,12 @@ the player clear of the floor block the portal sits on. Wall and ceiling exits g
   `adjustPositionAfterTeleport` GETFIELD returns `portal.getContentDirection().y > 0.5` (the direction the player
   leaves the exit, already in destination space, points up). Plain Mixin, no MixinExtras.
 - It applies to every Immersive Portals portal: nether frames, Portal Gun, End, IP's own. The saved per-portal flag is
-  ignored (IP default on), so the wrong values saved on gun portals since 11-07 are harmless; nothing rewrites them.
+  ignored (IP default on), so the wrong values saved on gun portals since 2026-11-07 are harmless; nothing rewrites them.
 
 Not chosen: (a) the lift off for every gun portal (players may sink into the floor on floor exits); (c) keep the lift
 and filter out the exit wall: a `@Redirect` of `getBlockCollisions` in
 `adjustPlayerPosition` through the exit portal's `CollisionExcluder`. It is the most exact, but `adjustPlayerPosition`
-gets only the player, so the exit portal has to be found, which is more code and more risk. (d) The 11-07 flag on
+gets only the player, so the exit portal has to be found, which is more code and more risk. (d) The 2026-11-07 flag on
 `CustomPortal` (replaced 2026-11-14, see above).
 
 ## 4. Dyeing the portal colours

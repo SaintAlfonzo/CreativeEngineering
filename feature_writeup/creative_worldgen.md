@@ -52,7 +52,7 @@ own Java plus two nested members. Same behaviour as before the carve; every regi
   half of `blocktags.js` (villager ladders, ground match, earth fill, template trim, wild plant soils),
   `mobs/end_divers.js`; opened by `_worldgen_core.js`. No client tree. No recipes, so no recipe id changes.
 - **Members** (`development/creativeWorldgen/members/`, mod ids unchanged, no swap list): More Mooblooms
-  (`more_mooblooms`, a standalone jar before) and Baby Mobs (`baby_mobs`, in Creative Delight 11-01 to 11-02).
+  (`more_mooblooms`, a standalone jar before) and Baby Mobs (`baby_mobs`, in Creative Delight 2026-11-01 to 2026-11-02).
 
 ## 2. Edges
 

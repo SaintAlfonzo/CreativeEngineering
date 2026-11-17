@@ -36,10 +36,10 @@ port phases), and reruns that wait for an owner answer or an unbuilt fix (c4_tri
 
 | Jar | `mods/` | build/libs used | Rows |
 |---|---|---|---|
-| Creative Common | 11-12 18:55 | 11-12 20:46 | all |
-| Creative Compat, Calendar, Brewing | 11-10 | 11-12 20:46 to 20:47 | all |
-| Creative Delight | 11-10 21:20 | 11-11 16:52 | all |
-| Creative Engineering, Devtools | 11-10 21:11, 21:23 | 11-10 23:06, 22:38 | all |
+| Creative Common | 2026-11-12 18:55 | 2026-11-12 20:46 | all |
+| Creative Compat, Calendar, Brewing | 2026-11-10 | 2026-11-12 20:46 to 20:47 | all |
+| Creative Delight | 2026-11-10 21:20 | 2026-11-11 16:52 | all |
+| Creative Engineering, Devtools | 2026-11-10 21:11, 21:23 | 2026-11-10 23:06, 22:38 | all |
 | Power Grid port | never in `mods/` | `jar_archive/pwg_gate/` by the name the orchestrator sends | SQ-PWG |
 
 Scratch servers get COPIES of the build jars (`COPYDEV=1`).

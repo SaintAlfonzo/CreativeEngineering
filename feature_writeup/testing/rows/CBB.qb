@@ -163,7 +163,7 @@ shell grep -qh "structure tuning" logs/latest.log logs/kubejs/server.log
 ## SQ-CBB-12 | full pack: removed count, no gate line, no refused remove
 @group B (full pack)
 @commands `prep_srv.sh OUT cbb12 B`; boot; `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `bootreject structure gate:`; `shell grep -c "remove refused" logs/kubejs/server.log`
-@pass removed close to 1329 (11-05); no gate line (every structure present in the full pack); 0 `remove refused`
+@pass removed close to 1329 (2026-11-05); no gate line (every structure present in the full pack); 0 `remove refused`
 @fails a gate false positive: the structure file path (`data/<ns>/worldgen/structure/<path>.json`) for a namespace loaded another way
 @from batches/r1106cbb/c4.qb passed
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log

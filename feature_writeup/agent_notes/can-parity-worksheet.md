@@ -15,11 +15,11 @@ kangaroo/moose/bison/bunfungus (items, dict keys, recipes, servings, food_types,
 renamed "Cactus Flesh" in namechanges.js. gen_can_types.py ANCHOR now the canned_raw_rabbit dict line.
 The removed ids and canned_cactus shipped in 1.0.4: no remap (closed as no issue in can_parity.md).
 
-Sprites (10-13): textureswapper/canned/newcan -> 19 CE cans in kubejs/assets/creativeengineering/textures/item (cans.js
+Sprites (2026-10-13): textureswapper/canned/newcan -> 19 CE cans in kubejs/assets/creativeengineering/textures/item (cans.js
 drops .texture() for them) + 9 overrides in kubejs/assets/canned_goods/textures/items (fish, cooked_salmon, mushrooms,
-+6 unused CG cans). (Until 10-21 every unsprited can pointed at canned_beets; now each borrows its family sprite, see [generated-per-type-cans](generated-per-type-cans.md).) Sheet 5.1 has the map; CP-06.
++6 unused CG cans). (Until 2026-10-21 every unsprited can pointed at canned_beets; now each borrows its family sprite, see [generated-per-type-cans](generated-per-type-cans.md).) Sheet 5.1 has the map; CP-06.
 
-10-13 (later): all Want x rows built except 6 pie slices with no source in the pack (Delightful blueberry/crimson/green
+2026-10-13 (later): all Want x rows built except 6 pie slices with no source in the pack (Delightful blueberry/crimson/green
 apple/nightshade, CCK cherry/truffle); 15 implemented Want / cans removed (not shipped, no remap needed); AM banana
 dropped. Sheet rows were updated by script from can_types.json; summary counts recomputed by script.
 

@@ -102,7 +102,7 @@ New house entries use `skyvillages:house_processor` like the 13 base houses; dec
 
 Placed foods are set full. Facing on the Brewery bench to Vinery chair swap is unchecked (SVA-05).
 
-Hops (user, 2026-10-30): ripe jungle red grape lattices. A lattice only survives with a full face behind it (opposite
+Hops (owner, 2026-10-30): ripe jungle red grape lattices. A lattice only survives with a full face behind it (opposite
 its `facing`; any neighbour update otherwise breaks it and drops grapes), so the `attach` rule sets facing per block:
 away from an adjacent full block, else back to back with a neighbouring lattice (each panel holds the other; a maximum
 matching, wall-backed lattices may partner the rest), else air. In `letsdo_brewery_0`: 24 hops blocks, 20 lattices
@@ -110,7 +110,7 @@ matching, wall-backed lattices may partner the rest), else air. In `letsdo_brewe
 keg). Set `"unsupported": "keep"` to keep those as fragile lattices. Every lattice in the new templates (the Vinery
 houses' too) passes the survival rule offline.
 
-Dried barley and corn (user, 2026-10-30): hanging herbs wanted, from Dusty Decorations if it is in the pack. It is not
+Dried barley and corn (owner, 2026-10-30): hanging herbs wanted, from Dusty Decorations if it is in the pack. It is not
 (`disabledmods/`), and it has no herb block anyway (its hanging pieces are cod, salmon, knives, pans and a lasso).
 2026-10-31 (user, TODO scratchpad "hanging herb variations (fantasy furniture)"): both now become Fantasy Furniture
 6.7.0's `fantasyfurniture:decorations/hanging_herbs`, its only herb block (one look, no variants), facing kept. Six

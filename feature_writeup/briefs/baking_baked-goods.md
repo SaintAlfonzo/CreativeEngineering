@@ -167,7 +167,7 @@ poppy), "fruit, milk, egg, sugar, flour", served on paper, a sequenced assembly,
 ### Now
 - `F.muffinBake(fruit, output)` ([cd_food.js](../../development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js)
   160-164): oven only, muffin tin, plated on paper, `[2 fruit, i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener]` -> 4
-  (`V.muffinsOven`, line 53). It removes the mods' Cooking Pot recipes (owner 2026-10-29, shipped in 1.1.05; Slice &
+  (`V.muffinsOven`, line 53). It removes the mods' Cooking Pot recipes (owner, 2026-10-29, shipped in 1.1.05; Slice &
   Dice's mixer copies go with them). Takes **wheat flour only** (`i.flour`, line 163): the cornmeal ask is not built.
 - Three muffins ([baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) 143-145): Fruits
   Delight blueberry (5 / 0.4, night vision + brightening 20 s) and cranberry (5 / 0.4, shrinking 80 s), Veggies Delight's
@@ -455,7 +455,7 @@ join), `i.water_bucket` 201.
 ## baked-goods #9: Sliced bread / toast in recipes
 Status In Progress / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan baked/sliced bread, scratchpad 2026-10-21)
 
-Superseded by row #28 (owner 2026-10-29, built, shipped in 1.1.05): any bread works in any bread recipe, no burger, bun or
+Superseded by row #28 (owner, 2026-10-29, built, shipped in 1.1.05): any bread works in any bread recipe, no burger, bun or
 square-slice restrictions. [bread_recipes.js](../../kubejs/data/creativedelight/kubejs/creativedelight/bread_recipes.js)
 swaps every vanilla-bread / bread-slice slot for `#forge:bread` (loaves, flavoured breads, slice, toast); toast-only slots
 stay toast; RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)). The 2026-10-21 per-sandwich audit (slices vs
@@ -893,7 +893,7 @@ A glass baking dish next to the baking sheet, muffin tin, pie tin and cake pan, 
 ---
 
 ## baked-goods #34: Every cake as a sequenced assembly
-Status Planned / Work KubeJS / TODO `baking/baked-goods #34` (owner 2026-10-27, [food_families.md](../food_families.md) 4.6)
+Status Planned / Work KubeJS / TODO `baking/baked-goods #34` (owner, 2026-10-27, [food_families.md](../food_families.md) 4.6)
 
 ### Goal
 Every cake can be assembled on a baked base (frosting, flavour steps); the two existing spouts get more steps.

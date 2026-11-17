@@ -1,7 +1,7 @@
 # Large Meals: overlap and integration report
 
 Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the Large Meals part). **BUILT 2026-11-01** (build notes in
-section 4.2): member `backportedLargeMeals 1.3.0-ce-19.2-01` nested in the Creative Delight jar; installed in `mods/` (CD jar 11-02 14:01), scratch run r1102b (8), not played (deep scan 2026-11-02).
+section 4.2): member `backportedLargeMeals 1.3.0-ce-19.2-01` nested in the Creative Delight jar; installed in `mods/` (CD jar 2026-11-02 14:01), scratch run r1102b (8), not played (deep scan 2026-11-02).
 **Owner decisions D1-D9 answered 2026-11-01** (section 5); the sections below are updated to match.
 Jar: `devmods/toBackport/largemeals-1.20.1-1.3.0.jar`, unpacked to `DecompiledMods/largemeals-1.3.0/`, code in
 `DecompiledMods/largemeals-1.3.0-src/` (7 classes). Forge 1.20.1 only, so a **port is needed**. Licence **All Rights
@@ -33,7 +33,7 @@ asks for it by name. Upstream bugs are fixed (3.5).
 | Already wired in the pack | 2.2 | 13 Display Delight `lm_` blocks (excluded prefix), 4 Spice of Life complexity entries (dead today) |
 | Fold-in | 4 | 21 steps planned |
 | Decisions | 5 | D1-D9 answered 2026-11-01 |
-| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; `/dumpall`, can generator, compost and `/cdevgen` wait on the game |
+| Build | 4.2 | BUILT 2026-11-01 (member + CD scripts + Display Delight `lm_`); in `mods/` since the CD jar of 2026-11-02 14:01, not played; `/dumpall`, can generator, compost and `/cdevgen` wait on the game |
 | Tests | 8 | LGM-01..24 in game: none run. Scratch r1102b (2026-11-02): SQ-LGM-01 to -09 PASS; SQ-LGM-10 FAIL (Chicken Curry recipe ids clash with Ender's, 8); CQ-LGM-11 waits for the client round |
 
 - **Jar:** 156 files, no jarjar. `mods.toml` authors FoundWiz, jamb.
@@ -351,10 +351,10 @@ crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmers
 ## 9. History
 
 - 2026-11-04 (plan_meals_rolls_bbq.md A): Pufferfish Broth Nausea 5 s; feast cans for the three feasts; pot pie and plate-meal family overrides; LGM-21..24 added. Built into the CD jar; generator output waits for `/dumpall`.
-- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 11-02 14:01; scratch r1102b: SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAIL (curry recipe id clash with Ender's).
+- 2026-11-02 (deep scan): CD jar with the member in `mods/` since 2026-11-02 14:01; scratch r1102b: SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAIL (curry recipe id clash with Ender's).
 - 2026-11-02: Roasted Rack pot recipes: a carrot added to each, both at 6 ingredients (dearer one loses a rice); deviation accepted.
 - 2026-11-01: BUILT (4.2): member, scripts, Display Delight `lm_`, names, changelog family, scratch SQ-LGM-01..10; Roasted Rack pot recipes shrunk to the 6-slot limit.
 - 2026-11-01: owner decisions D1-D9 answered and folded into sections 2-5 and 8 (LGM-16..20 added); nothing built.
 - 2026-11-01: dragon eggs kept out of `#forge:eggs`; Q2 and Q3 accepted.
 - 2026-10-30: investigation written (jar inventory, decompiled code, FD 1.19.2 API and pot container checked with
-  `javap`, overlap against the 10-24 item dump), nothing built.
+  `javap`, overlap against the 2026-10-24 item dump), nothing built.

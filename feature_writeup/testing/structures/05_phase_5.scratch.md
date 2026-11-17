@@ -2,7 +2,7 @@
 
 ## State (keep current)
 
-- Constraints (user 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only. Sleep an
+- Constraints (owner, 2026-10-14): ignore Nether/End; ignore structure-to-structure rates; correctness only. Sleep an
   hour if the token limit gets close.
 - Milestone: M5. Tests: LO-02 (world L1, folds on, batch all from spawn first thing), LO-01 (world L2, folds off,
   same batch; compare), LO-06, LO-15, LO-05 (world L1 again).

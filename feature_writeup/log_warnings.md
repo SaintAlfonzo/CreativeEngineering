@@ -2,7 +2,7 @@
 
 A catalogue of the warnings and errors that appear in every client startup, from any mod: what each message is,
 which mods produce it, whether it matters, and how to acknowledge it. Written 2026-10-24 from a real client startup
-(`logs/latest.log`, 18071 lines, about 5700 WARN/ERROR lines; the two earlier 24 Oct launches match within a handful of lines).
+(`logs/latest.log`, 18071 lines, about 5700 WARN/ERROR lines; the two earlier 2026-10-24 launches match within a handful of lines).
 Section 10 adds a dedicated server startup on 1.2.00 (2026-11-03), split into pack-side and mod-side.
 
 Three files work together:
@@ -288,12 +288,12 @@ These are separate from `latest.log` and are where pack-script problems appear.
 | K1 | `[fluid_dict]` / `[block_dict] Tag entry "<key> -> #<tag>" is not validated (tag support not yet implemented)` (about 20) | startup | Our dictionaries do not check tags at that stage | Ignore |
 | K2 | `[item_dict] Missing/invalid item IDs:` then a list (35 entries on this run) | startup | Dead keys in `item_dict.js`: IE `jei_bucket_{bioethanol,ethanol,memory_essence,yeast_culture}`, `tmted:melon_juice`/`tomato_sauce`, `more_immersive_wires:rs_{coil,connector,relay}`, `everycomp:{af,fd,hc}/vinery/cherry_{drawer,cabinet}` and others | Real, low priority: prune or leave |
 | K3 | `sample_syringe: JEI world rows not added: InternalError: TypeError: redeclaration of var $WorldRows` | startup, `func/sample_syringe.js#71` | The class is loaded twice in one script; the syringe's JEI world rows are not registered | **Real bug of ours**; fix |
-| K4 | `Failed to parse recipe '<id>'! Falling back to vanilla: ItemStack 'result' can't be empty / Ingredient can't be empty / Recipe component key 'cookingtime' not found` (24 on the first 24 Oct launch) | server | rusticdelight `cherry_blossom_*` (result empty) and `cooking/*coffee*` (FD recipe key); other mods | Ignore: those recipes do not exist |
+| K4 | `Failed to parse recipe '<id>'! Falling back to vanilla: ItemStack 'result' can't be empty / Ingredient can't be empty / Recipe component key 'cookingtime' not found` (24 on the first 2026-10-24 launch) | server | rusticdelight `cherry_blossom_*` (result empty) and `cooking/*coffee*` (FD recipe key); other mods | Ignore: those recipes do not exist |
 | K5 | `Error parsing recipe <id>[<type>]: ... <reason>` | server | `dramaticdoors:tall_*_casing_door` (empty pattern), `design_decor:item_application/{millstones,crushing_wheels}/special_aluminum_*` (`Unknown item design_decor:aluminum_boiler`), `create:kjs_*[create:deploying]` with fluid `minecraft:empty` (4, scripted), `fulleng:block_requester_terminal_from_part`; seen 2026-10-20: `creativeengineering:fermenting/*` Brewin' & Chewin' recipes with `Fluid Ingredient amount must be at least 1` | Mod-side ones: ignore. Ours (`kjs_*` deploying, `fermenting/*`): check if they still appear |
 | K6 | `[wild-crops] N overworld biomes are not in wild_crops.json and match no rule: terralith:cave/crystal...` | server | Our `worldgen/_biome_rules.js` | Informational |
 | K7 | `[loot-tuning] wares:agreement/wandering_trader/rare_ware: boosts ask for more than the pool has` | server | Our loot tuning | Informational |
 
-`server.log` is rewritten on each world load. The 24 Oct session where the K4/K5 counts came from was overwritten by a
+`server.log` is rewritten on each world load. The 2026-10-24 session where the K4/K5 counts came from was overwritten by a
 later load while this was written, so re-check K4, K5 against a fresh `server.log` before acting on them.
 
 ## 6. Ways to acknowledge a warning you will not fix
@@ -351,8 +351,8 @@ grep -c "" logs/latest.log                               # size
 grep -E "WARN|ERROR" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-200
 ```
 
-The three 24 Oct launches (`logs/2026-10-24-1.log.gz`, `-2.log.gz`, `latest.log`) and the 20 Oct `debug/10_20/kubejs/server.log`
-were compared; the WARN/ERROR line counts were 5722, 5722 and 5728 for the three 24 Oct logs.
+The three 2026-10-24 launches (`logs/2026-10-24-1.log.gz`, `-2.log.gz`, `latest.log`) and the 2026-10-20 `debug/10_20/kubejs/server.log`
+were compared; the WARN/ERROR line counts were 5722, 5722 and 5728 for the three 2026-10-24 logs.
 
 ## 9. Fixable now (small)
 

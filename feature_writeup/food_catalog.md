@@ -2559,7 +2559,7 @@ Not edible as items; eaten or served from the placed block. Display Delight's 10
 ## Excluded (edible in code, not food for tuning)
 
 - `canned_goods:canned_food`: removed: can with no food (can_parity.md)
-- `pneumaticcraft:chips`: removed: PneumaticCraft fries (owner 2026-11-01, merges/dishes #1)
+- `pneumaticcraft:chips`: removed: PneumaticCraft fries (owner, 2026-11-01, merges/dishes #1)
 - `pneumaticcraft:cod_n_chips`: merged into Veggies Delight fish_and_chips (merges/dishes #1)
 - `delightful:cooked_goat`: removed: no source in the pack (types-and-tuning #10)
 - `abnormals_delight:cooked_venison_shanks`: removed: no source in the pack (types-and-tuning #10)

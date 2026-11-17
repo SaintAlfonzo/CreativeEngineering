@@ -302,7 +302,7 @@ melting sees 0.15 there whenever y80 rains, so those caps melt in the first warm
 (`WeatherParticleSpawner.update`). With `spawnAboveClouds` false it clamps the spawn y to `cloudHeight` (was 191).
 Above about y201 every particle then spawned more than 10 blocks below the camera, was flagged out of range on its
 first tick (`removeIfOOB`) and faded out at alpha 0, so nothing was visible. `cloudHeight` is now 350 (500 for a few
-hours on 10-11): rain is drawn up to about y360, and with the gauge, snow falls around a flyer between y320 and y360.
+hours on 2026-10-11): rain is drawn up to about y360, and with the gauge, snow falls around a flyer between y320 and y360.
 
 Performance: the number of spawn attempts per tick is the same at any height (`particleDensity` 75, storm 150, times
 the rain level). Each attempt does the same heightmap check, biome read and `SeasonTypes.precipitationAt` call wherever
@@ -336,7 +336,7 @@ a DH update that renames `preRender` will fail the mixin at startup (require 1),
   (terracotta, but a savanna), as is `arid_highlands` despite its name (packed mud and coarse dirt, no sand).
   `wooded_badlands` stays arid. `hot_shrubland` declares rain but is a dry grassland, so it rains in Mid Wet only.
 - **Savanna rain (decided 2026-10-09):** dry biomes rain in Mid Wet only, which is what Serene Seasons does for a
-  savanna (2 of 12 sub-seasons). The 10-08 build had them rain through all of Early, Mid and Late Wet; that was
+  savanna (2 of 12 sub-seasons). The 2026-10-08 build had them rain through all of Early, Mid and Late Wet; that was
   dropped. Jungles keep the mod's rule (rain except Mid Dry). How much rain that is: section 4.2.
 - **Oceans have seasonal weather, but only frozen oceans get seasonal ice (decided 2026-10-09).** Serene Seasons
   blacklists oceans by default because its temperature also drives freezing. Ocean and cold ocean (base 0.5) read
@@ -513,7 +513,7 @@ Not covered by this: anything client side (what the renderer draws, splashes, ti
 
 ### 6.3 Scratch server probe (2026-10-09): dry, temperate, oceans
 
-Same setup with the 10-09 jar (pack server config, so oceans and `minecraft:river` stay on the blacklist). For each
+Same setup with the 2026-10-09 jar (pack server config, so oceans and `minecraft:river` stay on the blacklist). For each
 biome and sub-season: `BiomeConfig.usesTropicalSeasons`, `enablesSeasonalEffects`,
 `SeasonHooks.shouldRainInBiomeInSeason` and `getBiomeTemperatureInSeason` at y64 (each call at its own position:
 the temperature cache is keyed by position, so reusing one position returns the first biome's value). No mixin
@@ -554,7 +554,7 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - [ ] **WE-01 boot:** start the game and join a world → no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
 - [ ] **WE-02 desert dry:** desert, rain, any season → no rain drawn, no rain sound, a fire on sand keeps burning
 - [ ] **WE-03 badlands dry:** eroded badlands, rain, `/season set spring` (Mid Wet early on) → no rain
-- [ ] **WE-04 savanna Mid Wet only (changed 10-09):** savanna, rain: `LATE_WINTER` and `EARLY_SPRING` → rain; `EARLY_WINTER`, `MID_SPRING`, `MID_SUMMER` → no rain
+- [ ] **WE-04 savanna Mid Wet only (changed 2026-10-09):** savanna, rain: `LATE_WINTER` and `EARLY_SPRING` → rain; `EARLY_WINTER`, `MID_SPRING`, `MID_SUMMER` → no rain
 - [ ] **WE-05 jungle:** jungle, rain, summer → rain except in late summer / early autumn (Mid Dry)
 - [ ] **WE-06 frozen summer:** snowy plains or siberian taiga, rain, `/season set summer` → snow falls; snow layers stay
 - [ ] **WE-07 temperate unchanged:** plains, rain → rain in summer, snow in winter

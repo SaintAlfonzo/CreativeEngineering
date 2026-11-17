@@ -117,7 +117,7 @@ out whether they are stable and how they perform. Everything else Immersive Port
   Later: 2 workstation, portal setup, location card, wallet, broadcaster, screening device; 3 timedoor projector,
   marker, chronomark, metronome, time twister + timeline; 4 compat (Curios, FTB Teams, WTHIT in place of upstream's Jade plugin; upstream has no JEI plugin), guide/handbook (upstream's own screen, no Patchouli).
   Tempad behaviour that needs a later item (time-twister stacking, the timeline app) arrives with that item.
-- **TP-D8 Portable member (owner 2026-11-06).** The Tempad member must be able to move to its own jar or another bundle
+- **TP-D8 Portable member (owner, 2026-11-06).** The Tempad member must be able to move to its own jar or another bundle
   (likely Creative Engineering once crafting is integrated, or a future computing jar for high-level redstone, advanced
   controls and capabilities) by editing only the host's `bundle_members` / `replaces_jars`, its own `bundled_in`,
   `settings.gradle`, the `tempad_upstream` row in `tools/build_deploy.py` (`UPSTREAM_DONORS`), `mod_sides.md` and the

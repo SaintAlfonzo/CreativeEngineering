@@ -374,7 +374,7 @@ kinds: acan, branch, chrome, finger, moss, petal, pillow, prismarine, rock, silk
   biome modifier, no mixin), so they only exist where players place them. Prismarine coral generates in every ocean
   (UA's `prismarine_coral` feature, `#minecraft:is_ocean`), so its growth uses that tag.
 - Recipes: UA already turns 4 corals or fans of a kind into its block, so IW's coral block recipes are not copied.
-- Dead coral blocks do not grow, as in IW. Elder prismarine coral is prismarine coral's dead form (user 2026-10-28), so
+- Dead coral blocks do not grow, as in IW. Elder prismarine coral is prismarine coral's dead form (owner, 2026-10-28), so
   it gets no growth either (`DEAD` in the generator).
 - The Weathering and Growth JEI tab picks the files up after `/cdevgen run jei_world` (82 rows before this).
 
@@ -586,7 +586,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   armor bar, config text field, bonemeal charm, thread-safe random, creative menu, XP merge, IE tags, copper pickaxe;
   shipped with 1.0.3.
 - 2026-10-02: map trades through Async Locator (1.0.3); Exposure kick and refmap (1.0.4).
-- 2026-10-05 to 10-11: ghost blocks, Breezy compat, tooltip fixes, title plaque (staged for 1.0.5, shipped in 1.0.6).
+- 2026-10-05 to 2026-10-11: ghost blocks, Breezy compat, tooltip fixes, title plaque (staged for 1.0.5, shipped in 1.0.6).
 - 2026-10-18: this writeup; findings F1 to F6; tests FX-01 to FX-20. No code changed.
 - 2026-10-19: catalogue entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.

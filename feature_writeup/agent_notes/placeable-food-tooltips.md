@@ -10,6 +10,6 @@ Built 2026-10-05 at the user's request. Everything is in `feature_writeup/placea
 - Display Delight only links a food when a registered DD block's first loot drop is that food AND the food has the matching `displaydelight:*` tag (DisplayEvents.onWorldLoad). The DD jar ships 25 loot tables for unregistered blocks (hamburger, bowl, dog_food...). The tool reads the registered names from the DisplayBlocks/PlatedBlocks/SmallPlatedBlocks class constants.
 - Sneak-only placement: DD placed, Fruits Delight `FDBlockItem` (jams, mangosteen cake). Vinery bottles place on a plain right click on a block.
 - The pack strips DD's and Fruits Delight's own placement lines by translation key. DD config was not changed.
-- Status: catalog built from the fallback data (10-03 /dumpfood + DD jar); `/dumpplaceable` not run yet. Built after 1.0.5 was staged, so it's not in that payload.
+- Status: catalog built from the fallback data (2026-10-03 /dumpfood + DD jar); `/dumpplaceable` not run yet. Built after 1.0.5 was staged, so it's not in that payload.
 
 Related: [display-delight-icons](display-delight-icons.md), [missing-names-catalog](missing-names-catalog.md), [food-tuning-system](food-tuning-system.md), memory `feature-writeup-pattern`, memory `rhino-fieldandmethods-gotcha`.

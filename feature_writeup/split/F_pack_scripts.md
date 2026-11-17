@@ -320,7 +320,7 @@ Row ranges of the mixed files:
 
 | file | lines | target | reason | defines | reads | events; NCH/tags; wrapper | mixed? |
 |---|---|---|---|---|---|---|---|
-| `client_scripts/armor_effects_tooltip.js` | 52 | CB | gear effects tooltip (owner 2026-10-31) | - | armorEffects | ItemEvents.tooltip; NCH 0, tags 0, raw 3; no wrapper | no |
+| `client_scripts/armor_effects_tooltip.js` | 52 | CB | gear effects tooltip (owner, 2026-10-31) | - | armorEffects | ItemEvents.tooltip; NCH 0, tags 0, raw 3; no wrapper | no |
 | `client_scripts/fluid_jei.js` | 63 | Common | JEI fluid list | - ; top: DEAD_FLUIDS | jeiOrder | JEIEvents.addFluids; NCH 0, tags 0, raw 2; no wrapper | yes |
 | `client_scripts/jei_order.js` | 9 | Common | hands global.jeiOrder to PackIngredientOrder | - | jeiOrder | none; NCH 0, tags 0; no wrapper | no |
 | `client_scripts/jeichanges.js` | 58 | Common | JEI hide of removed items and unwanted enchants (Interface) | - ; top: hideRemovedItems, tagRemovedItems, unwantedEnchants | removedItems | ItemEvents.tooltip, JEIEvents.hideItems; NCH 0, tags 0, raw 1; no wrapper | no |
@@ -328,7 +328,7 @@ Row ranges of the mixed files:
 | `client_scripts/namechanges.js` | 349 | Common | display names | - | item | lang; NCH 0, tags 0, raw 134; no wrapper | yes |
 | `client_scripts/potion_buckets.js` | 72 | CB | potion bucket tooltip (creative_brewing.md 4.2) | - ; top: $PB_MobEffectCategory, $PB_PotionUtils, $PB_StringUtil, PB_TOOLTIP_IDS, pbDurationText | potionArea | ItemEvents.tooltip; NCH 0, tags 0; no wrapper | no |
 | `client_scripts/texture_tool.js` | 61 | Devtools | console texture probe (dumpIncompleteItemTextures) | dumpIncompleteItemTextures, getItemTextureLocation, printItemTexture ; top: dumpIncompleteItemTextures, getItemTextureLocation, pendingIncompleteItems, printItemTexture | item | none; NCH 0, tags 0; no wrapper | no |
-| `client_scripts/tool_effects_tooltip.js` | 26 | CB | gear effects tooltip (owner 2026-10-31) | - | armorEffects, toolEffects | ItemEvents.tooltip; NCH 0, tags 0, raw 2; no wrapper | no |
+| `client_scripts/tool_effects_tooltip.js` | 26 | CB | gear effects tooltip (owner, 2026-10-31) | - | armorEffects, toolEffects | ItemEvents.tooltip; NCH 0, tags 0, raw 2; no wrapper | no |
 | `client_scripts/tooltips.js` | 853 | Common | item tooltips | - ; top: NCH_MCRegistry, addTooltipPattern, addTooltips, buildTooltipLine, i, removeTooltipKey, removeTooltips | item | ItemEvents.tooltip; NCH 0, tags 0, raw 3; no wrapper | yes |
 
 Row ranges of the mixed files:
@@ -342,7 +342,7 @@ Row ranges of the mixed files:
   - 62-227: Common (general renames (Quark permafrost etc.))
   - 228-233: CB (Vinery wood and cider names (creative_brewing.md 4.2))
   - 234-248: Common (merge names)
-  - 249-333: CD (Delight dish and crop names (Oceanic, Fruits, Veggies, Vintage, Ender's; the header says food names moved to CD on 10-27, these rows are left behind))
+  - 249-333: CD (Delight dish and crop names (Oceanic, Fruits, Veggies, Vintage, Ender's; the header says food names moved to CD on 2026-10-27, these rows are left behind))
   - 334-340: CD (lunchbox tier names)
   - 341-349: Engineering (painted asphalt names)
 - `client_scripts/tooltips.js`:

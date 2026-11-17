@@ -32,7 +32,7 @@ Owner decisions (2026-11-09):
 | Height | Everything at ground level |
 | Ocean structures | Dried out |
 
-Owner decisions (2026-11-15): structures were too spaced out and most columns held one item. Gaps shrink to 20, 12, 6, 3 and 3. Biome columns fold into biome families whatever the mod or style (all savanna weaponsmiths in one column: vanilla Savanna, T&T Iberian and Mediterranean, acacia-named structures, savanna zombie). Ruined villages (T&T Forest Ruins) move from Village to Ruins. On the 11-09 dump: 622 mapped columns to 407, single-item columns 423 to 196.
+Owner decisions (2026-11-15): structures were too spaced out and most columns held one item. Gaps shrink to 20, 12, 6, 3 and 3. Biome columns fold into biome families whatever the mod or style (all savanna weaponsmiths in one column: vanilla Savanna, T&T Iberian and Mediterranean, acacia-named structures, savanna zombie). Ruined villages (T&T Forest Ruins) move from Village to Ruins. On the 2026-11-09 dump: 622 mapped columns to 407, single-item columns 423 to 196.
 
 Assumptions to overturn at review: unmapped columns are one per mod, each mod running +Z (section 3). Assembled copies of whole villages are not placed, since the decision was pieces only.
 
@@ -195,7 +195,7 @@ Logic, in the plain Java harness:
 - [x] **SCAT-12** (2026-11-15): biome families: vanilla, Iberian, and an acacia-named whole structure all land in Savanna; Terralith desert in Desert, pueblo in Badlands, Swiss meadow in Mountain; 13 street columns, longest 71.
 - [x] **SCAT-13** (2026-11-15): Forest Ruins pieces are in Ruins > Village ruins, function from their piece subfamily; 52 on the dump.
 
-The harness's snapshot checks for whole (279), unmapped (44) and dried (35) counts fail on the 11-09 dump (244, 79, 33): it predates the 11-10 namespace move, so its `creativeengineering:meta/*` ids no longer match the tag file. Rerun `/dumpall` before reading those three.
+The harness's snapshot checks for whole (279), unmapped (44) and dried (35) counts fail on the 2026-11-09 dump (244, 79, 33): it predates the 2026-11-10 namespace move, so its `creativeengineering:meta/*` ids no longer match the tag file. Rerun `/dumpall` before reading those three.
 
 Live, queued in [scratch_queue.md](testing/scratch_queue.md) as `SQ-SCAT` / `CQ-SCAT`:
 

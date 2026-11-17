@@ -1,6 +1,6 @@
 # mob-spawns-system
 
-> Mob spawns: /dumpspawns + gen_spawn_table.py + mob_spawns.json (rules, conditions light_only/water_only, spawn_ground) via tune_spawns; section 9 first block applied 10-09, scratch-server verified, jar not in mods/
+> Mob spawns: /dumpspawns + gen_spawn_table.py + mob_spawns.json (rules, conditions light_only/water_only, spawn_ground) via tune_spawns; section 9 first block applied 2026-10-09, scratch-server verified, jar not in mods/
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-10). Repo status docs win over any status line here.
 
@@ -12,7 +12,7 @@ User decisions: land animals = ground (grass + #minecraft:dirt) + light, no dayt
 - conditions ride in the tune_spawns modifier (`conditions` field) -> SpawnConditions.install in modify();
   SpawnPlacementsConditionsMixin (m_217074_ HEAD) for NATURAL/CHUNK_GENERATION; Animal/MushroomCow walk value mixins
   (m_5610_) read the spawnable_on tags so night spawns on dirt pass. Block tags only written when SpawnTuning exists.
-- Scratch server 10-09: log `12 rules, 94 biomes changed, 286 changes; conditions: ...` = generator preview; probes OK.
+- Scratch server 2026-10-09: log `12 rules, 94 biomes changed, 286 changes; conditions: ...` = generator preview; probes OK.
   Jar in development/patcherMod/build/libs. 4 mods lack mod_sides.md rows (breedablekillerrabbit, coolrain, MEED, Pretty Rain).
 
 - `/dumpspawns` (kubejs _lib/dump_spawns.js, in /dumpall) is a thin wrapper over patcherMod `worldgen/SpawnDump`
@@ -23,8 +23,8 @@ User decisions: land animals = ground (grass + #minecraft:dirt) + light, no dayt
   worldgen/mob_spawns.js writes ONE modifier (rule order deterministic) -> `SpawnTuning` runs in AFTER_EVERYTHING and
   records per-biome before/changes for the dump. Applies to existing worlds on rejoin. CEConfig `[worldgen.systems] mobSpawns`.
 - Generator applies the file to the dump's untuned lists (offline preview) and warns when the dump ran other rules.
-- `bash tools/test_mob_spawns.sh`: Java/Python parity on real vanilla lists (Bootstrap), Rhino run, fixture report. ALL OK 10-09.
-- A real /dumpspawns exists (2026-10-09 21:58); spawns_by_biome.md generated from it 10-09. Still not done: cow table in mooblooms.md.
+- `bash tools/test_mob_spawns.sh`: Java/Python parity on real vanilla lists (Bootstrap), Rhino run, fixture report. ALL OK 2026-10-09.
+- A real /dumpspawns exists (2026-10-09 21:58); spawns_by_biome.md generated from it 2026-10-09. Still not done: cow table in mooblooms.md.
 - 2026-10-09 passive-animal analysis (artifact https://claude.ai/artifact/1BPHFNwL5nh9zVzJrqrgWT, builder in session scratchpad only):
   farm block sheep12/pig10/chicken10/cow8 identical in 63 of 78 biomes (Terralith); #animals_spawnable_on = grass_block only;
   herd sizes from Terralith (8 / 4 swamp+dark+birch+sky / 6 wintry / 2-4 meadow); duck+goose only 3 river biomes,

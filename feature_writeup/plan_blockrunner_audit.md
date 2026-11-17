@@ -25,13 +25,13 @@ Feature doc: [blockrunner.md](blockrunner.md). Earlier design of the tooling: [b
 
 ## Where things stand
 
-- Last full re-check: 2026-10-02 (pack 1.0.4). Since then only point fixes: Brewin' (10-19), Vintage Delight port (11-01),
-  Visceral Heap flesh (11-10).
+- Last full re-check: 2026-10-02 (pack 1.0.4). Since then only point fixes: Brewin' (2026-10-19), Vintage Delight port (2026-11-01),
+  Visceral Heap flesh (2026-11-10).
 - Mods with blocks and no tier work yet (brief, checked 2026-10-31): Botany Pots, Fungi Delight port, Veggies Delight port,
   Miner's Delight port, End's/Oceanic/Ocean's Delight, Ender's additions, Hearth and Harvest port, Cooking for Blockheads
   additions, Hostile Delight, creativedelight itself, Neapolitan ice cream blocks.
-- New since 10-31, not yet looked at: everything in 1.2.00 to 1.2.02 (Immersive Portals / Portal Gun, Biomes O' Plenty
-  update 11-09, repackedStorage 11-07, Creative Common / Compat / Equipment / Magic / Worldgen / Calendar / Brewing
+- New since 2026-10-31, not yet looked at: everything in 1.2.00 to 1.2.02 (Immersive Portals / Portal Gun, Biomes O' Plenty
+  update 2026-11-09, repackedStorage 2026-11-07, Creative Common / Compat / Equipment / Magic / Worldgen / Calendar / Brewing
   carve-outs), plus Rustic Delight fold-in and any block the Creative jars gained when carved.
 - Tooling: `tools/blockrunner_scan.py` (regex "could register" filter, no real shapes) and `blockrunner_tag_sim.js`
   exist. `/dumpsurface`, `--audit` and the watcher do not.
@@ -72,7 +72,7 @@ FOV) and check that WTHIT `hideNormal` hides 1.00 tiers. Tier enum: `creativeCom
 ## Phase 2: audit by recency (tier newcomers)
 
 Work each group in this order. For every group: list its walkable blocks (dump), decide by precedent (blockrunner.md 2 and
-the 10-02 / 11-01 History entries), edit `kubejs/server_scripts/tags/blocktags.js` with `t.addMatching`, keys via
+the 2026-10-02 / 2026-11-01 History entries), edit `kubejs/server_scripts/tags/blocktags.js` with `t.addMatching`, keys via
 `global.item` for single ids (Creative Delight members: keys in their CD item tree), re-run the sim (0 overlaps, no dead
 patterns), commit-sized chunks.
 

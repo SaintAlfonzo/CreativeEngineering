@@ -20,7 +20,7 @@ Details: feature_writeup/oven.md 2.5-2.6 (memory `feature-writeup-pattern`).
   filler first). 9 recipes are trimmed 9->6; each case + savings is in oven.md 2.6.1 (user asked for that list).
   Scripts always write the full original cost (`Item.of(id, n)` / `{ id: '#tag', count: n }`).
 - Bakeware chain via `R.hammering` (FD cutting with IE hammer + shapeless hammer craft):
-  plate -> baking_sheet -> muffin_tin -> pie_tin -> cake_pan (reordered 10-19). Ids kept pie_tin/muffin_tin although the user said "pan".
+  plate -> baking_sheet -> muffin_tin -> pie_tin -> cake_pan (reordered 2026-10-19). Ids kept pie_tin/muffin_tin although the user said "pan".
 - **Gotcha:** the IE Engineer's Hammer's `onItemUseFirst` rotates any block without an IE BE (RotationUtil.rotateBlock)
   before the block's `use()`, so it turned the FD cutting board instead of cutting. Fixed by
   `IECompat.registerHammerNoRotate` (IE rotation blacklist, block tag `#creativeengineering:hammer_no_rotate`).

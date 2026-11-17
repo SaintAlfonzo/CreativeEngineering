@@ -35,7 +35,7 @@ same before and after, apart from the expected `creativeengineering:` -> `creati
   `recipes/all.csv` (id, type, mod; 30096 lines), `recipes/_summary.json` (counts per mod and type),
   `food/recipes.json` (`{count, unreadable, recipes}`: id, type, `in`, `out` for food recipes), `tags/*_tags.json`,
   `loot_tables/<mod>.json` (216 files), `items_by_mod/<mod>.json`.
-- No recipe dump diff tool exists; SQ-FFH-02 ("diff the recipe dump against the 10-26 one") waits on one.
+- No recipe dump diff tool exists; SQ-FFH-02 ("diff the recipe dump against the 2026-10-26 one") waits on one.
 
 ### Build
 1. `cd_move_diff.py snapshot --dumps` adds a `dumps` block: item and block ids from `items_by_mod/`, recipe id -> type
@@ -79,7 +79,7 @@ Status In Progress / Work KubeJS / tool / TODO `creativedelight/framework #4` (T
    (CD scripts alias `f`; pack-folder scripts `fd`), then diff recipes with `#6`'s dump half (CDT-09).
 
 ### Decisions
-- Juice keys: **`fruit_juice_`** (owner 2026-11-01; was the default `drink_juice_`, 13.5). Tag values in `f`: **no** (default).
+- Juice keys: **`fruit_juice_`** (owner, 2026-11-01; was the default `drink_juice_`, 13.5). Tag values in `f`: **no** (default).
 
 ### Gotchas
 `f` is the fluid alias in the pack's startup and server folders; `food_dict.js` keeps its `f` inside a function. Kept by

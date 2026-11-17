@@ -272,7 +272,7 @@ a case). Counts: raw `e.custom` 21 calls in 6 files (12 are sequenced-assembly s
     takes a `copper` level, `tool` null, and `{ exclusive: true }` (also removes the gold and netherite levels, which
     `harvestSwap` skipped).
 17. **Hand-written blueprint recipe JSON.** `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`
-    (12 files, from the 09-27 initial commit). `NCH.ieBlueprint` (`neoCraftHelper.js:2170`) handles the NBT result
+    (12 files, from the 2026-09-27 initial commit). `NCH.ieBlueprint` (`neoCraftHelper.js:2170`) handles the NBT result
     and base-ingredient counts. Fix: port to `engineering/blueprints.js`, delete the JSONs.
     **FIXED 2026-10-27:** a 12-row loop in `blueprints.js` (ids `blueprint/precision_sawblades/precision_sawblade_<profile>`),
     the shape tags as new `i.any_*` dict keys; JSONs deleted.
@@ -305,7 +305,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 25. **Meat cultures registered in the pack.** **FIXED 2026-10-27** (section 9). `startup_scripts/items/cultures.js:16-44` (7 cultures, 7 blocks); their
     recipes already moved to CD `creativedelight/cultivated_meat.js`. Fix: move the file to CD.
 26. **Member content in pack server scripts.** **FIXED 2026-10-27** (section 9). `tags/blocktags.js:20-22` (Vintage Delight ghost-pepper soil tag),
-    `loot/09_crop_drops.js` (Rustic Delight bell-pepper drops, built 10-21 and not moved; creative_delight.md 29.3 does
+    `loot/09_crop_drops.js` (Rustic Delight bell-pepper drops, built 2026-10-21 and not moved; creative_delight.md 29.3 does
     not exempt it), `tags/placeabletags.js` (its tooltip moved to CD `_qol/placeable_tooltip.js`, the tags stayed).
 27. **Food rows in pack client scripts.** **FIXED 2026-10-27** (section 9). `client_scripts/seasoning_lang.js` (CD's seasoning lang),
     `tooltips.js` `fdVillagerLine` rows (CD repack behaviour, finding 5), 7 food renames in `namechanges.js:74-77`, 12

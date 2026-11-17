@@ -24,7 +24,7 @@ shell grep -h "startup script packs in order" logs/kubejs/startup.log | cut -c1-
 shell grep -qE "startup script packs in order: creativecommon," logs/kubejs/startup.log
 shell grep -qE "\[jar-startup\] creativecommon: ([0-9]+) of \1 files loaded" logs/kubejs/startup.log
 shell test "$(grep -cE "ReferenceError|is not defined" logs/kubejs/startup.log)" = 0
-# row text said "18 of 18": Common has 22 files since the 11-07 to 11-12 builds; the check is N of N
+# row text said "18 of 18": Common has 22 files since the 2026-11-07 to 2026-11-12 builds; the check is N of N
 
 ## SQ-DCM-02 | rerun after /reload: no new KubeJS errors, recipe count vs the pack dump, [absent mods] names none of the 5 G5 mods
 @group A
@@ -48,7 +48,7 @@ look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a li
 @commands Old world (pre-migration save): `grep -nE "missing.*registry\|Missing mappings" logs/latest.log \| head`; hold an old `creativeengineering:potion_bucket`, have Magic Resistance active before the update
 @pass no unresolved ids for the moved ones; bucket and effect read as `creativebrewing:`; old bottled potions and potion fluids read as unknown (expected, D5)
 @fails swap list entry missing (`data/creativebrewing/swaps/creative_split.json`). Use a fresh save made with the old ids (memory forge-missing-mappings-staging); also CBR-06 in creative_brewing.md
-@draft needs an old-id fixture save made on the pre-2026-11-04 jars (a bucket in a chest, Magic Resistance on a bot) and no fixture builder exists for it (nsm_fixture.js covers the 11-10 move only); write the steps with that builder
+@draft needs an old-id fixture save made on the pre-2026-11-04 jars (a bucket in a chest, Magic Resistance on a bot) and no fixture builder exists for it (nsm_fixture.js covers the 2026-11-10 move only); write the steps with that builder
 ## CQ-DCM-01
 @group client
 @commands Full pack client: hover a white wool and an Immersive Petroleum asphalt block; open JEI fluid list

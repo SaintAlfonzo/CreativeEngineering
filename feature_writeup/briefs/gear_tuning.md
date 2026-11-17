@@ -312,7 +312,7 @@ armor need.
 - **`wardrobe:bound_leather` and `wardrobe:hardened_leather` are still not in item_dict.js** (the wardrobe block at
   item_dict.js 14854-14895 has the armor, hats and backpacks only). No pack script touches the two items.
 - Ersatz leather: `i.ersatz_leather` (`immersiveengineering:ersatz_leather`, item_dict.js 1604); the pack's recipe is
-  honeycomb + hemp fabric (shapeless and Create deploying, [mob_resources.js](../../kubejs/data/creativeengineering/kubejs/engineering/mob_resources.js) 11-14).
+  honeycomb + hemp fabric (shapeless and Create deploying, [mob_resources.js](../../kubejs/data/creativeengineering/kubejs/engineering/mob_resources.js) 2026-11-14).
 - Targets (verified in jars 2026-10-21): Sophisticated Backpacks `sophisticatedbackpacks:backpack`
   (`i.sophisticatedbackpacks_backpack`; type `sophisticatedbackpacks:basic_backpack`, `L` = `#forge:leather` x4) and
   `sophisticatedbackpacks:upgrade_base` (vanilla shaped, 1 leather); `minecraft:leather_horse_armor`

@@ -24,7 +24,7 @@ bootexpect meta structure\(s\) take slots
 bootexpect 4 replacement\(s\)
 bootreject (?i)share above 100
 bootreject failed to generate as a part
-look meta count 13 higher than the 10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+look meta count 13 higher than the 2026-10-30 W30 boots (perf/sessions or the WG30 rows' logs)
 
 ## SQ-META31-02 | sky metas: clouds, balloons, sky village islands
 @group B
@@ -119,7 +119,7 @@ sleep 30
 > execute positioned {WC1} 70 {WC3} run kill @e[type=minecraft:witch,distance=..64]
 sleep 240
 > execute positioned {WC1} 70 {WC3} as @e[type=minecraft:witch,distance=..64] run data get entity @s Pos
-look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); no witch = patcherMod older than 10-30 17:55
+look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); no witch = patcherMod older than 2026-10-30 17:55
 
 ## SQ-META31-09 | struck monument: guardians in the monument only
 @group B

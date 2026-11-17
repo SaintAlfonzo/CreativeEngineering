@@ -7,7 +7,7 @@
 @@date 2026-11-08
 @@sources feature_writeup/creative_engineering.md
 @@text
-@@text Targets Compat `creativecompat-1.0.0` of 11-08 15:49 (build/libs, NOT installed). `JeiGate` (version range [11.8.1.1034,11.9)) wraps every JEI plugin method (`CyclingCraftingJEI`, `SmithingTemplateJEI`, `PortalGunDyeJEI`, `WorldInteractionJEI`) and the script entry `JeiOrderBridge`; `jei_order.js` skips with no order defined; `CraftingProbe.page` splits variants by blank-cell pattern and `CyclingCraftingExtension` links only filled slots.
+@@text Targets Compat `creativecompat-1.0.0` of 2026-11-08 15:49 (build/libs, NOT installed). `JeiGate` (version range [11.8.1.1034,11.9)) wraps every JEI plugin method (`CyclingCraftingJEI`, `SmithingTemplateJEI`, `PortalGunDyeJEI`, `WorldInteractionJEI`) and the script entry `JeiOrderBridge`; `jei_order.js` skips with no order defined; `CraftingProbe.page` splits variants by blank-cell pattern and `CyclingCraftingExtension` links only filled slots.
 @@text
 @@table
 ## CQ-JG-01

@@ -23,8 +23,8 @@ CQ-MND-01): the queue pin holds creative-split client rows for the bulk client s
 
 | Jar | mods/ | build/libs | Rows |
 |---|---|---|---|
-| creativedelight-1.0.0.jar (20 members) | 11-02 00:45 | 11-02 00:45 | all |
-| creativebrewing-1.0.0.jar | 11-01 20:31 | same (only `-own` rebuilt 00:48; sources unchanged) | SQ-RDX |
+| creativedelight-1.0.0.jar (20 members) | 2026-11-02 00:45 | 2026-11-02 00:45 | all |
+| creativebrewing-1.0.0.jar | 2026-11-01 20:31 | same (only `-own` rebuilt 00:48; sources unchanged) | SQ-RDX |
 | displaced backported{Display -01, Fungi -01, Miners -02, Veggies -04, Vintage -10} | no | jar_archive/displaced | Boot 0 only |
 
 ## 4. Order
@@ -73,7 +73,7 @@ Boots 0 to 4 (perf/runs/r1102/b0..b4; Boot 1 judged from b1/srvlogs). BF = batch
 | SQ-CDJ-05 | FAIL | Unidentified mapping `displaydelight:od_plated_baked_tentacle_on_a_stick` (block + item): Display -02 no longer registers it (tentacle foods removed). Rest passed: all Boot 0 blocks, states and contents survive, region diff empty |
 | SQ-DDP-01 | FAIL | same mapping as SQ-CDJ-05; rest passed |
 | SQ-DDP-02, -03, -05 | PASS | own-mod drops, plate returned; shakshouka/omelette; stew drops FD stew |
-| SQ-DDP-04 | LOOK | 229 links (217 on 10-30); 7 tag items with no Display block (Miner's bat_soup, insect_stew, seasoned_arthropods, insect_sandwich, insect_wrap, improvised_barbecue_stick; Ends steamed_dragon_egg_block); catalog hand step |
+| SQ-DDP-04 | LOOK | 229 links (217 on 2026-10-30); 7 tag items with no Display block (Miner's bat_soup, insect_stew, seasoned_arthropods, insect_sandwich, insect_wrap, improvised_barbecue_stick; Ends steamed_dragon_egg_block); catalog hand step |
 | SQ-DDP-06 | PASS | `[display] takeAll = false` + 8 keys, `.moved`, one "carried into" line |
 | SQ-DDP-07 / -07b | not proven | BF (bot held a pickaxe) and sneak halves need CQ-DDP-01 |
 | SQ-VTD8-01 | FAIL | config carried, bottle ejected, but the jar makes 1 of 3 batches then stalls: `consumeIngredient` drains the first matching slot (FermentingJarBlockEntity) |
@@ -101,7 +101,7 @@ Boot 5 (group B cdj5b, seed 8675309, Chunky squares radius 300):
 
 | ID | Result | Evidence |
 |---|---|---|
-| SQ-MD-01 | PASS | 4412 wild cave carrots in 2601 chunks, max Y 45, min depth 22, all bands non-zero; log says "2 mod modifiers off" (row text "3" stale, as the 11-01 instance log) |
+| SQ-MD-01 | PASS | 4412 wild cave carrots in 2601 chunks, max Y 45, min depth 22, all bands non-zero; log says "2 mod modifiers off" (row text "3" stale, as the 2026-11-01 instance log) |
 | SQ-FGD-12a to -12e | PASS | squares generated |
 | SQ-FGD-12 | LOOK (partial) | dark forest / taiga: Fungi singles rare (1+1) against brown 455 / red 286, huge inky 25 and morel ~190 blocks; swamp: morel blocks 1215; mushroom-fields square is 3 chunks of mushroom fields in ocean at radius 300: not judged |
 | SQ-FGD-13 | PASS | underground Fungi singles: none below the surface band; colonies on stone 3 of 29 and 3 of 16 (not bare stone) |

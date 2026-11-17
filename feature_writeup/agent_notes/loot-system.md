@@ -66,7 +66,7 @@ this memory is the durable pointer). Related helper pattern: memory `item-dict-m
 Built 2026-09-25. Pack-wide "remove item X from every chest" and "X shows up f× as often" knobs.
 **Pre-roll runs in game** (2026-09-27 12:00 log: 3 rules -> 7 tables, 36 entries removed; the 12:08
 /dumploot export shows the rewritten weights). The Rhino pre-roll risk points all worked. Post-roll
-(`ItemFilter.custom`, `stack.id`) is still untested. The 09-25 node harness wasn't saved.
+(`ItemFilter.custom`, `stack.id`) is still untested. The 2026-09-25 node harness wasn't saved.
 
 **2026-09-27 findings (not fixed, user to decide):** index stale (SimplyHouses + the_dirty_stuff added);
 the scope rule misses 39 container tables (untyped outside chests/, IE engineers_house declared

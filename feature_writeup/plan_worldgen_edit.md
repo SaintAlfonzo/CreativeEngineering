@@ -46,7 +46,7 @@ copied to `configs_edited/root_config/`.
 |---|---|---|
 | N1 | `biomes/netherblocks #3` | Rerun `gen_wild_flowers.py` after the Nether flower changes of this plan and commit the output |
 | N2 | `biomes/netherblocks #4` | Scan the pack for Overworld glowstone: D&D glowstone geodes (`engineering/dreams-and-desires #5`), structures (rule 21 already swaps them), features, ores. Fix hits with a feature removal or a block swap; record the scan in nether_worldgen.md |
-| N3 | `structures/contents #5` | Quark End spires: air under the spike's base footprint cancels the spike (owner 2026-11-02; built in patcherMod `QuarkSpiralSpireFootprintMixin`, Quark had no check of its own) |
+| N3 | `structures/contents #5` | Quark End spires: air under the spike's base footprint cancels the spike (owner, 2026-11-02; built in patcherMod `QuarkSpiralSpireFootprintMixin`, Quark had no check of its own) |
 | N5 | `mobs/spawns #4` | Lone villagers in plains, temperate hills, fields and meadows (spawn rule in the mob spawn config) |
 | N6 | `mobs/spawns #5` | Allay spawns in pillager cages, mystical biomes and more structures (spawn boxes and biome rules) |
 | N7 | `mobs/spawns #6` | Fireflies: verify the Firefly Bush port in a swamp at night (tick cost of the per-tick block reschedule), jar catching, jarring near a bush at night; fix the cost if it shows |

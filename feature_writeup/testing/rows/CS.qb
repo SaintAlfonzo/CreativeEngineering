@@ -63,7 +63,7 @@ look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperat
 @from batches/r1031/a2_variants.qb
 @reviewed 2026-11-16
 # measure = mean wheat age per field (`cdevtest ages`), first line open field (x 100), second glass field (x 120);
-# 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (10-31 first run)
+# 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (2026-10-31 first run)
 > kill @e[type=!minecraft:player]
 > forceload add 96 -4 132 12
 > fill 96 -61 -4 132 -61 12 minecraft:grass_block

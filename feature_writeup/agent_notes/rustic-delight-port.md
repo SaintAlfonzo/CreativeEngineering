@@ -1,6 +1,6 @@
 # rustic-delight-port
 
-> Rustic Delight 1.7.0 port nested in Creative Delight, MIT files baked in since 11-10 (bake_upstream.py); 1.20->1.19.2 gotchas beyond Miner's
+> Rustic Delight 1.7.0 port nested in Creative Delight, MIT files baked in since 2026-11-10 (bake_upstream.py); 1.20->1.19.2 gotchas beyond Miner's
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
@@ -23,7 +23,7 @@ Gotchas found (add to the Miner's list):
 - Static init order: RDBlocks must read RDItems only inside suppliers (RDItems registers block items from RDBlocks).
 - New ids only exist with the CD jar, so pack rows naming them go in the CD tree; a wild_crops.json row needing such a
   feature uses the `requires` key (`_biome_rules.js`).
-- The 1.3.0-id `kubejs/data/rusticdelight/worldgen/*_feature.json` overrides and the pack recolours left kubejs on 11-10.
+- The 1.3.0-id `kubejs/data/rusticdelight/worldgen/*_feature.json` overrides and the pack recolours left kubejs on 2026-11-10.
 
 **Why:** owner asked to fold Rustic into CD (the 1.3.0 jar is out of `mods/`; state in rustic_delight.md). **How to apply:** check
 rustic_delight.md 5.7 (cutover) before touching Rustic rows.

@@ -222,7 +222,7 @@ doesn't exist, JFR writes a *file* named `exit`. The launch scripts create the f
   - Lag lines.
   - Crash report heads: description, exception plus 16 frames with the transformer lists stripped, and the
     mod jars named in the stack. On the 7 external-server reports in `debug/` this named Regrowth for the RNG
-    crash and Collective + nohostilesaroundcampfire for the 09-28 hang, as the hand triage did.
+    crash and Collective + nohostilesaroundcampfire for the 2026-09-28 hang, as the hand triage did.
   - `hs_err` heads, KubeJS "Error occurred while handling event" grouped, exceptions by type, ERROR lines by
     logger with numbers normalised.
   - The Server thread from each live thread dump, and system.txt.

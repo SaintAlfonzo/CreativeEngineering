@@ -1,6 +1,6 @@
 # Hearth crow: spawn crash fix and the swap from Alex's Mobs' crow (2026-11-10)
 
-Status: **BUILT 2026-11-10, not installed (the game was running), not run.** Creative Delight and Creative Common jars built; scratch rows SQ-HCS-01 to -12, CQ-HCS-01, rewritten SQ-HH crow rows. Deviations in section 10. Was: PLANNED. One build (owner 2026-11-10): crash fix, H&H crow port, AM crow drop, nest-driven
+Status: **BUILT 2026-11-10, not installed (the game was running), not run.** Creative Delight and Creative Common jars built; scratch rows SQ-HCS-01 to -12, CQ-HCS-01, rewritten SQ-HH crow rows. Deviations in section 10. Was: PLANNED. One build (owner, 2026-11-10): crash fix, H&H crow port, AM crow drop, nest-driven
 spawning and the new nest placements land together. Supersedes the "mechanics on Alex's Mobs' crow" route (D2) in
 [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) and [hearth_and_harvest.md](hearth_and_harvest.md) 3.2 / 5.4, and
 settles the crow evaluation of N21 / N26-2 in favour of the Hearth and Harvest crow. TODO rows: `creativedelight/members #54`
@@ -215,7 +215,7 @@ jar in `downloads/` has no crow). Skill `port`. Ids: `hearthandharvest:crow`, `h
 | N1 | Numbers: flock 2 to 3, cap 3 within 24, refill every 5 min, player within 48 | as listed |
 | N2 | Tree nest rate 1 in 6 chunks of temperate forest; roof chance 25 percent per house | as listed |
 | N3 | Loot: two tables as 5.3, about half the nests empty | as listed |
-| N4 | TODO #60 rest: rename "Nest" to "Crow Nest" (lang) and the straw recipes in this build: crafting a nest gives 2 `i.straw`, milling it gives 3 (recipes through `global.NCH`, one-way, no nest from straw) | both in (owner 2026-11-10) |
+| N4 | TODO #60 rest: rename "Nest" to "Crow Nest" (lang) and the straw recipes in this build: crafting a nest gives 2 `i.straw`, milling it gives 3 (recipes through `global.NCH`, one-way, no nest from straw) | both in (owner, 2026-11-10) |
 
 ## 8. Scratch queue rows (add when built)
 

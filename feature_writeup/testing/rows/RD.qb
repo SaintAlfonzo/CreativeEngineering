@@ -443,7 +443,7 @@ look the vtdtest pickling lines: inputs from the top, container from a side, res
 waitlog \[vtdtest\] done crops 120
 expect \[vtdtest\] done crops: \d+ pass, 0 fail
 reject \[vtdtest\] FAIL
-look the 10-25 FAILs (ghost pepper on farmland, harvest to age 0: vintageport #7 / #8) should be gone with Vintage -06 and later
+look the 2026-10-25 FAILs (ghost pepper on farmland, harvest to age 0: vintageport #7 / #8) should be gone with Vintage -06 and later
 
 ## SQ-VP-10 | /vtdtest mobs
 @group A
@@ -1129,7 +1129,7 @@ look each of the 4 zcount lines (river sea grass, river kelp, ocean sea grass, o
 @fails block dict key typo (startup log `[block_dict] Missing`); `loottags.js`
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
-# id fix: #creativeengineering:fishing_net/* -> #creativedelight:fishing_net/* (tag dump; ids follow the owning jar since 11-09)
+# id fix: #creativeengineering:fishing_net/* -> #creativedelight:fishing_net/* (tag dump; ids follow the owning jar since 2026-11-09)
 > cdevtest tag block creativedelight:fishing_net/kelp
 > cdevtest tag block creativedelight:fishing_net/sea_grass
 expect verb=tag kind=block tag=creativedelight:fishing_net/kelp n=\d+ ids=(?=\S*minecraft:kelp_plant)(?=\S*upgrade_aquatic:ochre_kelp_plant)(?=\S*upgrade_aquatic:polar_kelp_plant)(?=\S*upgrade_aquatic:thorny_kelp_plant)(?=\S*upgrade_aquatic:tongue_kelp_plant)
@@ -1450,7 +1450,7 @@ expect Test passed
 @pass Y rises along the ladder column to the platform, villager reaches the bed
 @fails stays on the ground: no vertical successor (tag, or box check); climbs and stops at the top: exit step
 @from batches/r1031/a1_world.qb
-# clear the SQ-VG beds and villagers first (they pulled the villager away on 10-31); tag the test villager
+# clear the SQ-VG beds and villagers first (they pulled the villager away on 2026-10-31); tag the test villager
 > difficulty peaceful
 > kill @e[type=#zq:villagers]
 > fill 66 -60 -64 76 -53 -56 minecraft:air
@@ -1683,7 +1683,7 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @jars creativecommon creativedelight
 @from batches/r1113/c1_a1.qb
 @reviewed 2026-11-16
-# id fix: serializer creativeengineering:seasoning -> creativedelight:seasoning (row text predates 11-09)
+# id fix: serializer creativeengineering:seasoning -> creativedelight:seasoning (row text predates 2026-11-09)
 > cdevtest bytype creativedelight:seasoning
 waitlog verb=bytype serializer=creativedelight:seasoning n=\d+ 30
 expect verb=bytype id=creativedelight:shapeless/season/cheese result=
@@ -1812,7 +1812,7 @@ reject No entity was found
 @jars creativecommon creativedelight
 @from batches/r1102b/s1_A.qb
 @reviewed 2026-11-16
-# id fix: creativeengineering:powdered_sugar -> creativedelight:powdered_sugar (ids follow the owning jar since 11-09)
+# id fix: creativeengineering:powdered_sugar -> creativedelight:powdered_sugar (ids follow the owning jar since 2026-11-09)
 > cdevtest item creativedelight:powdered_sugar
 > pbot spawn ps04 {H1+4} {H2} {H3-5} minecraft:overworld survival
 sleep 2
@@ -1838,7 +1838,7 @@ reject Unknown item
 @reviewed 2026-11-16
 bootreject (?i)(gingerdough|cookie_dough|sweet_potato_dough|oat_dough|cucumber_dough|sourdough)_block.*(error|missing|unknown)
 shell grep -iE "baking_ingredients\.js.*(error|exception)" logs/kubejs/startup.log | head -3; echo "startup errors naming baking_ingredients: $(grep -ciE 'baking_ingredients\.js.*(error|exception)' logs/kubejs/startup.log)"
-# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 11-09)
+# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09)
 > cdevtest item creativedelight:gingerdough_block
 > cdevtest item creativedelight:sourdough_block
 expect verb=item item=creativedelight:gingerdough_block class=\S+ .*block=creativedelight:gingerdough_block
@@ -1877,7 +1877,7 @@ look each uses list has the block -> 9 shapeless recipe (serializer=minecraft:cr
 @jars creativecommon
 @from batches/r1102b/s1_A.qb passed
 @reviewed 2026-11-16
-# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 11-09)
+# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09)
 > cdevtest tagsof creativedelight:gingerdough_block
 > cdevtest tagsof creativedelight:cookie_dough_block
 > cdevtest tagsof creativedelight:sweet_potato_dough_block
@@ -4693,7 +4693,7 @@ look the [food values] N foods copied line (2 when written) in latest.log or ser
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
-# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 11-09; carrot_juice_bucket is not in the items dump under either namespace)
+# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09; carrot_juice_bucket is not in the items dump under either namespace)
 > cdevtest item creativedelight:baking_sheet
 > cdevtest item creativedelight:cake_pan
 > cdevtest item creativedelight:pie_tin
@@ -4744,7 +4744,7 @@ look counts in rows/SQ-CDF-02.shell.txt against the pre-move dump (development/c
 @reviewed 2026-11-16
 > cdevtest tag item forge:sugar
 > cdevtest tag item forge:cooked_meat
-# id fix: creativeengineering: -> creativedelight: for the soup tag, cake pan and can (ids follow the owning jar since 11-09)
+# id fix: creativeengineering: -> creativedelight: for the soup tag, cake pan and can (ids follow the owning jar since 2026-11-09)
 > cdevtest tag item creativedelight:soup_veggie_cooked
 > cdevtest tagsof creativedelight:cake_pan
 > cdevtest tagsof creativedelight:canned_corn
@@ -4778,7 +4778,7 @@ look value count against the instance dump (744 on 2026-10-25; newer members may
 @reviewed 2026-11-16
 # r1103 p2: the uses reader reads getIngredients only, and BakingRecipe keeps the bakeware in getTool(), so "0 uses" was the
 # probe's blind spot. rdetail prints the tool field (part=fields). Mortar, seasoning and the milk jar halves passed in r1103 p2.
-# id fix: serializer creativeengineering:baking -> creativedelight:baking (OvenRegistry, ids follow the owning jar since 11-09)
+# id fix: serializer creativeengineering:baking -> creativedelight:baking (OvenRegistry, ids follow the owning jar since 2026-11-09)
 > cdevtest bytype creativedelight:baking
 > cdevtest rdetail baking/carrot_cake
 > cdevtest rdetail cake max=600
@@ -4839,7 +4839,7 @@ bootreject (?i)corn_delight/[a-z_]+\.js.*(error|exception)
 @fails CD startup `corn_delight/corn_items.js`
 @from batches/r1102b/s2_A.qb passed
 @reviewed 2026-11-16
-# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 11-09)
+# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09)
 > cdevtest item creativedelight:corncob
 > cdevtest item creativedelight:corn_popsicle
 > cdevtest item creativedelight:cob_pipe
@@ -4925,7 +4925,7 @@ look first zcount: about 10 corncobs from the 40 knife rolls (merged stacks: add
 @fails `corn_delight/tags.js`, `tags/curiostags.js`
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
-# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 11-09)
+# id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09)
 > cdevtest tagsof creativedelight:cob_pipe
 expect verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:head
 reject verb=tagsof id=creativedelight:cob_pipe .*item_tags=\S*curios:mouth
@@ -5033,7 +5033,7 @@ count \[zcount\] entities item:[a-z_]+:[a-z_]+ x1=1$ == 2
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
 bootexpect \[dumpplaceable\] \d+ candidates, \d+ Display Delight links
-shell python3 -I -c "import json,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];b=json.load(open(sys.argv[1]))['displayDelight'];na=sum(len(v) for v in a.values());nb=sum(len(v) for v in b.values());print({k:len(v) for k,v in a.items()},'scratch',na,'instance (10-30 dump)',nb);sys.exit(na<nb)" $INST/kubejs/exported/food/placeable.json
+shell python3 -I -c "import json,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];b=json.load(open(sys.argv[1]))['displayDelight'];na=sum(len(v) for v in a.values());nb=sum(len(v) for v in b.values());print({k:len(v) for k,v in a.items()},'scratch',na,'instance (2026-10-30 dump)',nb);sys.exit(na<nb)" $INST/kubejs/exported/food/placeable.json
 look placeable_catalog.py writes pack files and reads only the instance dump, so it is not run here; "Display Delight gaps": run it by hand on a copy (or after the owner copies this dump back) and compare with the 2026-10-24 numbers (about 95 more links)
 
 ## SQ-DDP-05 | piston-pushed beef stew breaks and drops
@@ -5607,7 +5607,7 @@ look the lines are the two "Hello! The metal base event has started!" console.lo
 ## SQ-INV-05 | block-state count against 2^20
 @group A
 @commands read the block-state count (log line, or a probe of `Block.BLOCK_STATE_REGISTRY.size()`)
-@pass TODO `pack/server #6`: record the count against the 2^20 = 1,048,576 ceiling (761,052 on 10-19); headroom under about 290,000
+@pass TODO `pack/server #6`: record the count against the 2^20 = 1,048,576 ceiling (761,052 on 2026-10-19); headroom under about 290,000
 @fails over the ceiling: the state-id fix breaks, stop adding block mods
 @from batches/r1102b/s2_A.qb passed
 @reviewed 2026-11-16
@@ -5945,7 +5945,7 @@ reject \[syt\] error
 look sum the two "vintagedelight:magic_peanut ... total N" values: about 10 (3 to 20 is fine at this n); about 200 = Vintage's 1 % still in force
 
 @@text
-@@text Results: SQ-SY-01 to -07 PASS 2026-10-28; SQ-SY-08 to -13 not run yet. They target the 11-03 jar now in `mods/`; on a
+@@text Results: SQ-SY-01 to -07 PASS 2026-10-28; SQ-SY-08 to -13 not run yet. They target the 2026-11-03 jar now in `mods/`; on a
 @@text wave 2 jar (section "SQ-SY wave 2" below) -08's line reads `36 crops` with the two soul soils, and -10 / -11 expect
 @@text carrots 3.71 / 4.87 / 6.02 and tobacco 6.71 / 8.86 / 11.00.
 @@text

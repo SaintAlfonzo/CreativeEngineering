@@ -30,7 +30,7 @@
 
 ST-40 details:
 - **The failure:** `towns_and_towers:village_ocean: did not generate here (the structure turned this terrain down:
-  height, water or room)`. It is an ocean village on dry land, the same as on 09-27.
+  height, water or room)`. It is an ocean village on dry land, the same as on 2026-09-27.
 - **Overlaps:** none among the 55 boxes.
 - **Signs:** one in front of each of the 7 rows ("row type/camp 5 items" ...), and one with the id at the front
   corner of all 55 structures.
@@ -56,7 +56,7 @@ ST-40 details:
   accessor. I didn't pin down which one.
 - **Fix idea:** `MassPlacer.templateIds` lists the templates itself: per pack, keeping only paths under
   `structures/`, plus the generated folder. It then no longer depends on `listTemplates()`.
-- **Background:** the 09-27 notes say the templates mode had never been run.
+- **Background:** the 2026-09-27 notes say the templates mode had never been run.
 
 ### 3.2 No flat world in this pack
 

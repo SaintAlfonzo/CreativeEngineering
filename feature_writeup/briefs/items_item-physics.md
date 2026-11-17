@@ -16,7 +16,7 @@ SRG names. "Verified" means read from one of them.
 
 | Row | Change | Status | Size |
 |---|---|---|---|
-| #2 | Classify modded items (families) | Planned | medium: rerun the audit on the 10-30 dump, settle 9.6, then a generator mode writes `physics/family/*` tags; KubeJS maps families to behaviour |
+| #2 | Classify modded items (families) | Planned | medium: rerun the audit on the 2026-10-30 dump, settle 9.6, then a generator mode writes `physics/family/*` tags; KubeJS maps families to behaviour |
 | #6 | Light items skim on water; lavaproof items float on lava | Planned | small-medium: one `Buoyancy` query, extend the existing `updatePre` TAIL inject, a new tag, a config section |
 | #5 | Golden egg gets gravity | Planned | tiny once reproduced: one tag line; folds into #2 (egg -> `organic` family) |
 | #7 | Player speed in lava; Lava Vision speed | Planned | investigation, then a small `LivingEntity#travel` mixin |
@@ -63,7 +63,7 @@ fixes its water and fire behaviour through the existing four physics tags. Nothi
 ### Build
 1. **Rerun the audit** on the existing dump (`/cdevgen run item_physics_audit`, or `python3 tools/item_physics_audit.py`)
    and check the IP-21 / SQ-IP-16 pass line: header "dump yes", unclassified below 650, `minecraft:netherite_scrap`
-   under `fire_resistant_item`. If the dump is stale against `mods/` (new jars since 10-30), `/dumpphysics` again first.
+   under `fire_resistant_item`. If the dump is stale against `mods/` (new jars since 2026-10-30), `/dumpphysics` again first.
 2. **Settle 9.6 with the user** (nether wood fireproof, ice floats, machines fireproof, skim, stone scope) and add the
    user's own adjustments from lines 91-92 as manual overrides (totem, crossbow, armor stand, shield sink; trident
    fireproof). Record each in item_physics.md 9.6.

@@ -21,7 +21,7 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
 | `largecontent/mod-additions #16` | Testing | S~ C P | Nether's Delight 4.0 changes on the installed 3.1 |
 <!-- generated:status_index end open_work -->
 
-## 1. Decisions (user, 2026-10-25)
+## 1. Decisions (owner, 2026-10-25)
 
 - **My Nether's Delight is not ported and not added.** Its overlap with Nether's Delight (fungus colonies, trophies,
   stuffed hoglin, hoglin hide / loin, strider slice, propelplant vs powdery cannon, stoves, soils) is not resolved by

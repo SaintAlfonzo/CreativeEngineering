@@ -50,7 +50,7 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 
 ## 1. Overview
 
-**The spec (user, 2026-10-20, over several messages):**
+**The spec (owner, 2026-10-20, over several messages):**
 
 - One block, `face_paper`, in a new mod named Creative Labels. A face holds **either** one label **or** notes.
 - **Notes:** the same size and curled model as Sticky It's placed note, on every side (floors and ceilings too).
@@ -245,8 +245,8 @@ under 6 px nothing fits. Full faces, chests and barrels get the standard label e
 
 | Host | Label |
 |---|---|
-| Stairs, slabs (user, 2026-11-02) | the five-spot rule: full faces only, never an inset face (slab halves, stair fronts, sides, tops) |
-| Doors, trapdoors (user, 2026-11-02) | none (they swing) |
+| Stairs, slabs (owner, 2026-11-02) | the five-spot rule: full faces only, never an inset face (slab halves, stair fronts, sides, tops) |
+| Doors, trapdoors (owner, 2026-11-02) | none (they swing) |
 | No collision shape (plants, pressure plates), posts, heads, fence gates, the deny tag | none |
 | Supplementaries Jar side | 10 px, 3 px in |
 | Sack side | 10 px, 2 px in, 1 px below centre (under the neck) |
@@ -263,7 +263,7 @@ Jar and Sack, the four trash cans, Vintage Delight's Pickling Jar (`vintagedelig
 `#botanypots:all_botany_pots`. Each side face takes one note, the centre spot moved to the middle of the host's
 visible side (the bounding box of the usable samples, same 1 px window), at that surface's depth. The note's 9
 sample points must lie on that surface. Shifts: jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
-Tops (owner 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creativelabels:paper/note_on_top` (the
+Tops (owner, 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creativelabels:paper/note_on_top` (the
 jar and the Pickling Jar) take one note on top, centred on the lid by the same centre-note test (the Pickling Jar's lid
 is 2.5 px down, too deep for the shape test's 2 px). Every other centre-note top (sack neck, trash can rim, botany pot
 soil) and every bottom takes none; before, tops used the shape test, which let the jar lid and the sack neck carry spot C.
@@ -275,7 +275,7 @@ centred notes follow the new centre.
 
 **Covered face:** when all five spots of a five-spot face hold notes, the hit shape becomes the whole face panel; a
 right-click that lands between notes does nothing, so the crafting table, furnace or chest behind can't be used
-through that face. Faces that can't hold five notes never count as covered (user, 2026-10-20).
+through that face. Faces that can't hold five notes never count as covered (owner, 2026-10-20).
 
 ### 3.4 Notes, placed
 
@@ -299,7 +299,7 @@ and keeps that rotation until the face is empty. Notes' curls and labels' pictur
 
 ### 3.6 Note items and colours
 
-**Colour like leather** (user, 2026-10-20; replaces the 23 fixed variants):
+**Colour like leather** (owner, 2026-10-20; replaces the 23 fixed variants):
 
 - One item, `creativelabels:sticky_note`, stack 64. It implements vanilla `DyeableLeatherItem`, so the colour is any
   RGB value in `display.color`, mixed by vanilla's `dyeArmor` formula (average of the old colour and the new dyes,
@@ -348,7 +348,7 @@ results would make one dye look different from every mix around it, so it isn't 
 
 - **Recipes kept** from the donors (spec): note = 4 paper + 3 iron nuggets makes 2; eraser = 6 dried kelp; label = 8
   paper + antique ink makes 16. They now make our items; the donors' own recipes are removed (3.13).
-- **Copying a note** (user, 2026-10-20): one written note + 8 blank notes (any colour) in the grid makes 9 copies of
+- **Copying a note** (owner, 2026-10-20): one written note + 8 blank notes (any colour) in the grid makes 9 copies of
   the written note: its text, colour and special look. A Java special recipe like the others (`NoteCopyRecipe`).
 
 ### 3.7 Writing notes: the note screen
@@ -374,10 +374,10 @@ removing the last line removes the key, and the tag if it's then empty. A note m
 
 - **Eraser on items:** the eraser on the cursor, right-click a labelled item's slot: removes its last line.
 - **Full:** a fourth line is refused with a bass note and "No room for another label" on the action bar; nothing used.
-- **One label per click** (user, 2026-10-20): a right-click drag with a note on the cursor (Mouse Tweaks) must not
+- **One label per click** (owner, 2026-10-20): a right-click drag with a note on the cursor (Mouse Tweaks) must not
   label every slot it crosses. The server allows one cursor labelling per player per 5 ticks; drag clicks arrive
   within a tick or two of each other, so only the first slot is labelled.
-- **Labelled items can't be used in crafting** (user, 2026-10-20): while `blockLabelledCrafting` is on
+- **Labelled items can't be used in crafting** (owner, 2026-10-20): while `blockLabelledCrafting` is on
   (`creativelabels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labelled item
   in it gives no result. Erase the labels first. A mixin on the menus' shared result update
   (`CraftingMenu.slotChangedCraftingGrid`, used by both). Machines (furnaces, Create, IE) are not covered.
@@ -492,7 +492,7 @@ modpacks that download the jar, the same position as the Vinery donor jars; a pu
   bug, TODO `cooking/kitchen #5`, [kitchen.md](kitchen.md)) and its `[Shift]` text. Can ship ahead of everything else.
   Items already tagged keep their `{}`.
 - **Recipes:** every `sticky_it:` and `labels:` recipe removed (KubeJS through NCH).
-- **Old items removed from play** (user, 2026-10-20): `sticky_it:sticky_note`, `sticky_it:eraser` and `labels:label` are hidden from JEI and the creative tabs and can't be crafted (their recipes now make our items). They can't be unregistered while the jars are donors; leftover stacks stay inert and vanish with the jars in phase 5.
+- **Old items removed from play** (owner, 2026-10-20): `sticky_it:sticky_note`, `sticky_it:eraser` and `labels:label` are hidden from JEI and the creative tabs and can't be crafted (their recipes now make our items). They can't be unregistered while the jars are donors; leftover stacks stay inert and vanish with the jars in phase 5.
 - **Old placed labels and notes:** still load (the mods are installed) and behave as before until broken; an optional
   one-off `/kill @e[type=labels:label]` and `@e[type=sticky_it:sticky]` clears them.
 - Still running: Sticky It's block-break scan, damage handler and tick queue (cheap, idle without placed notes);
@@ -500,7 +500,7 @@ modpacks that download the jar, the same position as the Vinery donor jars; a pu
 
 ### 3.14 Phase 5: our own art, then drop the donors
 
-Planned for later (user, 2026-10-20): custom textures and models for the notes (the plain paper, the greyscale tint base, the four specials), the pen strokes,
+Planned for later (owner, 2026-10-20): custom textures and models for the notes (the plain paper, the greyscale tint base, the four specials), the pen strokes,
 the note screen, the eraser, the label paper and the item icons. When they exist:
 
 - every donor reference in 3.12 points at our own files; the in-memory pack and the runtime baking of
@@ -553,7 +553,7 @@ a choice (Q1 to Q6 in 4.2).
 | C14 | **Pack chores** | root `settings.gradle`, `IN_TREE_MODS`, `mod_sides.md` row (`both`), `instance.json` user-added entry, pack manifest, GPLv3 file, jar archive; `item_dict.js` keys; lang plus the name audit ([names.md](names.md)); tooltip lines recorded in [tooltips.md](tooltips.md) |
 | C15 | **Testing** | headless tests for spots, rotation, colour mixing and NBT; a scratch dedicated server ([deploy.md](deploy.md) tooling) for C4; then the SN- suite in game |
 
-**Settled (user, 2026-10-20):**
+**Settled (owner, 2026-10-20):**
 
 | # | Question | Decision |
 |---|---|---|
@@ -566,7 +566,7 @@ a choice (Q1 to Q6 in 4.2).
 
 ## 4. Decisions
 
-### 4.1 Settled (user, 2026-10-20)
+### 4.1 Settled (owner, 2026-10-20)
 
 - New mod Creative Labels; block `face_paper`; one label **or** notes per face.
 - Notes: Sticky It's size and curled model on every side; five spots, spaced; directional floors and ceilings.

@@ -248,7 +248,7 @@ More custard, shaved ice and popsicle flavours.
 | Popsicle | `creativeengineering:corn_popsicle` (CD `corn_delight/corn_items.js:16`) | CD `corn_delight/recipes.js:66` | stick |
 | Popsicle | `ends_delight:chorus_fruit_popsicle` | End's Delight's own | unverified |
 
-The Fruits Delight hamimelon popsicle is merged into the cantaloupe one (owner 2026-10-28, CD
+The Fruits Delight hamimelon popsicle is merged into the cantaloupe one (owner, 2026-10-28, CD
 `fruitsdelight/item_merges.js:15-16`; its recipe removed in the server `fruitsdelight/item_merges.js:17`).
 Values: food_catalog.md `sweet` table. **Ice is unified (1.1.01, `dishes/ingredients #5`):** `#forge:ice_cubes` holds
 `minecraft:ice` and Neapolitan's cubes (CD `minecraft/tags.js:10`), dict key `i.t_ice_cubes` (item_dict.js:1894), and CD

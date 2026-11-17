@@ -24,7 +24,7 @@ First 1.0.2 feature (started 2026-09-28). **Everything is in `feature_writeup/fo
 - 2026-09-28 canning.js (server_scripts/cooking): all Canned Goods food-can + can + can->ingot recipes removed;
   empty cans: stonecut ingot 4, 2 plates 12 (shaped + deployer), IE components blueprint 4 plates 32. User: no food
   canning and no value changes yet ("more to implement on the can side"); crushed can now has no recipe.
-- 2026-10-02: `/dumpfood` is now in /dumpall (it was missing, so the export sat at 09-28). Refresh: 856 foods, 227 new typed; the classifier misfiles muffins/tarts/pies/jellos as raw or meal and bottled jellies as drink. Precedents used to fix them: jam/jelly bottles = ingredient, custard/pudding/popsicle/candy-on-stick/jello = sweet, dried/baked fruit = cooked/fruit, cut fruit = raw/fruit, jelly bread/corn dog = handheld.
+- 2026-10-02: `/dumpfood` is now in /dumpall (it was missing, so the export sat at 2026-09-28). Refresh: 856 foods, 227 new typed; the classifier misfiles muffins/tarts/pies/jellos as raw or meal and bottled jellies as drink. Precedents used to fix them: jam/jelly bottles = ingredient, custard/pudding/popsicle/candy-on-stick/jello = sweet, dried/baked fruit = cooked/fruit, cut fruit = raw/fruit, jelly bread/corn dog = handheld.
 - 2026-10-20 audit: /dumpfood on a SCRATCH (dedicated) server gives raw lang keys (`item.creativeengineering.canned_x`) and
   pre-resource-pack names for KubeJS/CE items: merge the `name` fields back from a client dump (by id) before running
   food_catalog.py. Then rerun gen_can_types.py too: can effects/values are copied from catalog.json, so a stale catalog

@@ -8,12 +8,12 @@
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/creative_split.md
 @@text
-@@text Targets `creativecommon-1.1.0.jar` of 11-08 20:28 (installed in `mods/`). Fix: `SwapRemapper` drops the alias leading out of a survivor, so a swap A -> B followed by B -> A no longer hangs the world load. `saves/Workspace` still holds the cycle until CQ-SWL-01 opens it, so run that first. After a successful open it no longer reproduces.
+@@text Targets `creativecommon-1.1.0.jar` of 2026-11-08 20:28 (installed in `mods/`). Fix: `SwapRemapper` drops the alias leading out of a survivor, so a swap A -> B followed by B -> A no longer hangs the world load. `saves/Workspace` still holds the cycle until CQ-SWL-01 opens it, so run that first. After a successful open it no longer reproduces.
 @@text
 @@table
 ## CQ-SWL-01
 @group client
-@commands Open world `Workspace` (level.dat of 11-07 13:11, not opened since). `grep -F "[swaps]" logs/latest.log`. Open a chest or inventory holding a Reach or Phantom Bane potion if any
+@commands Open world `Workspace` (level.dat of 2026-11-07 13:11, not opened since). `grep -F "[swaps]" logs/latest.log`. Open a chest or inventory holding a Reach or Phantom Bane potion if any
 @pass World opens, no hang on the load screen. 5 lines `dropped stale alias creativebrewing:<potion> -> creativecommon:<potion>`, line `minecraft:potion: 5 id(s) remapped to their survivors`. LOOK: potions keep their name and effect
 @fails Hang: thread dump (`jstack <pid>`, never print the process command line); `getRaw` on the stack means a cycle not through a survivor (`SwapRemapper.dropAliasFromSurvivor`). `IllegalStateException` `[swaps] could not read ForgeRegistry.aliases`: reflection blocked on the live module layer
 @draft no batch holds this row yet

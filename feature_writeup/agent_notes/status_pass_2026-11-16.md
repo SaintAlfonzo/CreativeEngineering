@@ -22,13 +22,13 @@ Rule used:
 | [plan-1-0-9](plan-1-0-9.md) | "DEPLOYED ... nothing run in game yet"; mods/ jar md5 | plan_1.0.9.md, TODO `pack/release #4` | agrees (`#4` Testing) |
 | [miners-delight-backport-plan](miners-delight-backport-plan.md) | "DEPLOYED.json still says 1.1.01" | DEPLOY_LOG (1.1.02 deployed 2026-10-23) | stale: DEPLOYED.json is at 1.2.02 |
 | [patchermod-coremod](patchermod-coremod.md) | 1.0.5 to 1.0.8 bump diary; kept the instance.json gotcha | deploy.md 8, DEPLOY_LOG | none |
-| [backported-brewin](backported-brewin.md) | `-02` build and install lines; kept the bump-before-rebuild rule | alcohol.md, creative_brewing.md | port is a Creative Brewing member since 10-31 |
+| [backported-brewin](backported-brewin.md) | `-02` build and install lines; kept the bump-before-rebuild rule | alcohol.md, creative_brewing.md | port is a Creative Brewing member since 2026-10-31 |
 | [backported-vinery](backported-vinery.md) | `-02` / `-03` install lines | alcohol.md, creative_brewing.md | none |
 | [alcohol-drink-food-values](alcohol-drink-food-values.md) | "Rebuilt as -03" | alcohol.md | none |
 | [appleskin-tooltip-coverage](appleskin-tooltip-coverage.md) | jar versions installed | tooltips.md TT-19..30, fixes_compat 2.24 | none |
 | [camera-bag-design](camera-bag-design.md) | "in progress", "in mods/, not boot-tested, remap untested" | camera_bags.md (DEPLOYED, R4-04 never run) | agrees |
 | [armor-tool-effects](armor-tool-effects.md) | "NOT yet smoke-tested in-game" | armor_effects.md 0 (DEPLOYED, in-game test pending) | agrees |
-| [campfire-rain](campfire-rain.md) | "Built into creativeengineering-1.0.9.jar in mods/" | barbeques_delight.md weather row; moved to Creative Delight 11-04 (creative_compat.md) | stale jar name |
+| [campfire-rain](campfire-rain.md) | "Built into creativeengineering-1.0.9.jar in mods/" | barbeques_delight.md weather row; moved to Creative Delight 2026-11-04 (creative_compat.md) | stale jar name |
 | [am-potion-brewing-fix](am-potion-brewing-fix.md) | "rebuilt + deployed" (2) | potions.md 0 | none |
 | [bee-nests-system](bee-nests-system.md) | "awaiting user review" | bee_nests.md 0 ("your review still open") | agrees |
 | [blockrunner-speed-tiers](blockrunner-speed-tiers.md) | "deployed 2026-09-26" | README BlockRunner row | none |
@@ -36,9 +36,9 @@ Rule used:
 | [can-parity-worksheet](can-parity-worksheet.md) | "sprites deployed", "no remap yet" | can_parity.md ("no issue, no remap, closed") | note read as open; doc closed it |
 | [incubation-nest-internals](incubation-nest-internals.md) | "copied to mods/, shipped in 1.0.2 restage", "installed 1.0.5 jar still has copies" | nests.md | none |
 | [canned-golem-dye](canned-golem-dye.md) | "installed to mods/" (2) | cans.md 0 (DEPLOYED with 1.0.4, R4-07) | none (built in the 1.0.3 jar, shipped 1.0.4) |
-| [dead-structure-locate-hang](dead-structure-locate-hang.md) | "deployed: the 09-27 jar in mods/" | structure_tuning.md | none |
+| [dead-structure-locate-hang](dead-structure-locate-hang.md) | "deployed: the 2026-09-27 jar in mods/" | structure_tuning.md | none |
 | [exposure-backport](exposure-backport.md) | "Deploy 1.0.3 staged", per-pack jar line, "not yet installed or deployed", a version-bump line that appeared twice | README Exposure row, exposure.md | note claimed the null fix unshipped; it shipped as `-02` (1.0.4) |
-| [structure-groups](structure-groups.md) | 09-27 jar md5 / CreEngServer line; "7.1 NOT BUILT, 12 decisions open" | structure_tuning.md 0, plan-7-1-execution | stale: 7.1 built 2026-10-12 |
+| [structure-groups](structure-groups.md) | 2026-09-27 jar md5 / CreEngServer line; "7.1 NOT BUILT, 12 decisions open" | structure_tuning.md 0, plan-7-1-execution | stale: 7.1 built 2026-10-12 |
 | [structure-ground-match](structure-ground-match.md) | deploy jar and rollback copy | structure_tuning.md 3.8 | none |
 | [structure-gen-framework](structure-gen-framework.md) | "Built and deployed; NOT yet re-tested in game"; dead link `loot-overhaul-lootjs.md` to `loot-system.md` | structure_tuning.md 0 (VERIFIED 2026-09-26) | stale: doc says VERIFIED |
 | [sticky-notes-rebuild](sticky-notes-rebuild.md) | "installed in mods/" | README Creative Labels row | none |
@@ -75,10 +75,10 @@ bushier-flowers-disabled, supplementaries-breezy-wind-vane-crash, dnd-drill-saw-
 - deploy.md's status header (lines 3 to 9) ends at 1.1.05 and has nothing about 1.2.x.
 - deploy.md section 8 has no bullet for these snapshots, which DEPLOY_LOG records:
   - 1.1.01 (2026-10-22 22:39);
-  - 1.1.03 (10-26 19:04);
-  - 1.1.04 server (10-31 12:42);
-  - 1.1.05 (10-31 12:51 / 12:52);
-  - 1.1.06 client (10-31 17:58).
+  - 1.1.03 (2026-10-26 19:04);
+  - 1.1.04 server (2026-10-31 12:42);
+  - 1.1.05 (2026-10-31 12:51 / 12:52);
+  - 1.1.06 client (2026-10-31 17:58).
 
   `build_deploy.py --backfill-history` can add them. Only 1.2.00 to 1.2.02 were added this pass.
 - TODO `pack/release #7` says the server is on 1.1.03 and the 1.1.04 payload was not copied. DEPLOY_LOG says the server

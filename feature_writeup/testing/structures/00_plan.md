@@ -92,7 +92,7 @@ reference.
   scratch parts passed; LO-04 partly; rate tests skipped; LO-03 and LO-14 FAILED on a census bug (slots run set by set,
   the first set loads the chunk, later sets count as "known"). Older locate code, with the Phase 5 load bug: fix for
   1.0.7 is the user's call. Next: M7 (Phase 7, calibration runs).
-- 2026-10-19 04:30: M7 (Phase 7) done, writeup 07_phase_7.md (session 5 restarted it: the 10-14 server was gone; new
+- 2026-10-19 04:30: M7 (Phase 7) done, writeup 07_phase_7.md (session 5 restarted it: the 2026-10-14 server was gone; new
   scratch server from the Minecraft1192withForge libraries, patcherMod 1.0.7 because the staged 1.0.8 crashes a
   dedicated server, worldgen identical). Passed ST-162, 159, 169, 67, 54, 58, 59; ST-53 passed but for its "slot stays
   empty" clause; ST-160 partly; ST-52 / ST-57 data. ST-167 FAILED as shipped (prune tag empty: type/village is not a

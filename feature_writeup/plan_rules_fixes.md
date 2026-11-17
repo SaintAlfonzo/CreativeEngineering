@@ -95,7 +95,7 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
     donor is not overridden for spelling alone; deployed changelogs stay frozen (D6). Sweep in section 15b.
 21. **D21 Arrows (G19)**: `->` in test lines and docs; `→` (895 uses) converts in the V-54 pass and the section 15b sweep.
     Player text keeps whatever the line already needs (no arrows are added to tooltips or lang).
-22. **D22 Namespace binding**: confirmed (owner 2026-11-16): every script binds the recipe helper to its folder's
+22. **D22 Namespace binding**: confirmed (owner, 2026-11-16): every script binds the recipe helper to its folder's
     namespace with `global.NCH.forPack(ns)`, and registrations with `global.reg.forPack(ns)` (section 6).
 23. **D23 Recipe unlocks (V-15, G16)**: removed entirely, pack-wide (section 12e). DR-C14 becomes "no recipe unlocks
     of any kind"; G16 closed.
@@ -113,7 +113,7 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
     gets its own file (like `testing/structures/`). No line-count threshold. Not scheduled in this plan; the audit
     lists candidates (creative_delight.md, 2,124 lines) for the owner to judge by that test.
 
-28. **D28 V-26**: all three files move (owner 2026-11-16): dragon_breathing to Magic, creative_labels to Labels (with the
+28. **D28 V-26**: all three files move (owner, 2026-11-16): dragon_breathing to Magic, creative_labels to Labels (with the
     build copy step), botany_pots to Compat (section 6).
 
 Still open (owner):
@@ -347,7 +347,7 @@ Per violation:
   `backportedPowerGrid-0.6.2-ce-19.2-18.jar`. The audit named `-17`; the file in `mods/` is now `-18`.
   Sides come from each jar's `mods.toml` (`displayTest` / `side` fields) and the owner's pattern of both-sides unless
   the jar is client-only; read before writing. Debugify is both-sides (server fixes plus client fixes).
-- Power Grid `-18` stays in `mods/` (owner 2026-11-16): it is loaded for development testing, to exercise the port in an
+- Power Grid `-18` stays in `mods/` (owner, 2026-11-16): it is loaded for development testing, to exercise the port in an
   unstable environment, and is not distributed until finished. The sides row says so. `build_deploy.py:153-155` already
   marks it not required; its comment ("not in mods/ during the port") is stale: rewrite it to "in mods/ for development
   testing, never staged until energy_advanced.md stage 5", and check the staging code skips a non-required jar found in

@@ -1,6 +1,6 @@
 # campfire-rain
 
-> Campfire rules 10-19 - Unlit Campfire set to infinite burn (its rain off), patcherMod CampfireRain douses plain campfires in rain unless on a rain_proof_fuel block
+> Campfire rules 2026-10-19 - Unlit Campfire set to infinite burn (its rain off), patcherMod CampfireRain douses plain campfires in rain unless on a rain_proof_fuel block
 
 Moved from agent memory 2026-11-16 (last edited there 2026-10-20). Repo status docs win over any status line here.
 

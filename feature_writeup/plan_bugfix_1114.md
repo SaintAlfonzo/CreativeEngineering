@@ -1,4 +1,4 @@
-# Bugfix plan from the 2026-11-11 to 11-14 scratch runs (r1111, r1112, r1113, r1114)
+# Bugfix plan from the 2026-11-11 to 2026-11-14 scratch runs (r1111, r1112, r1113, r1114)
 
 Owner brief 2026-11-14 applied to the unfixed FAILs and findings of
 [scratch_run_2026-11-11.md](testing/scratch_run_2026-11-11.md), [-12](testing/scratch_run_2026-11-12.md),
@@ -33,30 +33,30 @@ One jar at a time, never while the game runs. Every item gets its changelog bull
 <!-- generated:status_index end open_work -->
 
 Defaults chosen from the brief; each is marked **[default]** where it is used.
-1. Seed pouch pattern: fixed 5x5, up to 25 seeds (owner 2026-11-14, was 3x3); matches the pack's Quark `Shift Range = 5`
+1. Seed pouch pattern: fixed 5x5, up to 25 seeds (owner, 2026-11-14, was 3x3); matches the pack's Quark `Shift Range = 5`
    player pattern. (1.1)
 2. "The pouch" = `minecraft:bundle` (Quark bundle recipe on). No other seed container in the pack. (1.1)
 3. Portal exit lift: one geometry test for every Immersive Portals portal; the saved per-portal flag is ignored and removed
-   (portals saved since 11-07 hold wrong values). (4.1)
-4. Corn maze 2x (owner 2026-11-14, was 4x): raise its weight in the `remote` structure group so its share is 2x today's
+   (portals saved since 2026-11-07 hold wrong values). (4.1)
+4. Corn maze 2x (owner, 2026-11-14, was 4x): raise its weight in the `remote` structure group so its share is 2x today's
    (about 845 of the group's total, see 6.3), keeping group spacing. (6.3)
 5. Salt lick stages: raw rock salt texture (`salt:block/raw_rock_salt_block`) on every stage; heights 12 / 8 / 4 px for
    lightly / well / heavily licked; waxed stages the same heights. (3.7)
-6. Melting (owner 2026-11-14): a new system melts ice and snow from three source kinds (salt, fire, lava). Packed and blue
+6. Melting (owner, 2026-11-14): a new system melts ice and snow from three source kinds (salt, fire, lava). Packed and blue
    ice step down one tier at a low chance. Defaults inside it:
    - **[default]** Distance is a sphere, measured through any blocks.
-   - Torches, lanterns and glowstone count as fire (owner 2026-11-14); the modded ones are listed in 3.8. Non-flame light
+   - Torches, lanterns and glowstone count as fire (owner, 2026-11-14); the modded ones are listed in 3.8. Non-flame light
      sources (sea lanterns, shroomlights, redstone torches and lamps, jelly torches, electric lanterns) no longer melt
      anything; a config switch restores vanilla light melting.
    (3.8)
-7. Hops textures (owner 2026-11-14): the white jungle grape art, used in place from the Vinery donor jar. It is not
+7. Hops textures (owner, 2026-11-14): the white jungle grape art, used in place from the Vinery donor jar. It is not
    copied: Vinery's assets are All Rights Reserved and redistribution was refused. Hops grow on Vinery's
    `grapevine_lattice` like jungle grapes; the Hearth and Harvest lattice is removed. (3.1)
 8. Bitten pies: Supplementaries has no pie variant (only `directional_cake`, `double_cake`, `pancake`); pies already count
    through `FdPies`. Only cakes need the fix. (4.3)
 9. Block-form food families (SQ-LGM-13): include whole-block ids in the JSON, and check every tag `seasoning_tags.js` derives. (7.4)
 10. Power Grid acid vs salt mixing clash (`#82`, owner 2026-11-14): the acid recipe also takes rotten flesh. (8.3)
-11. Hops on the lattice (owner 2026-11-14): Vinery's `grapevine_lattice` takes hops through a hops `GrapeType` in Creative
+11. Hops on the lattice (owner, 2026-11-14): Vinery's `grapevine_lattice` takes hops through a hops `GrapeType` in Creative
     Brewing. Hops have no juice, so the stomping pot and JEI skip them. **[default]** Foxes do not eat hops off a lattice. (3.1)
 
 ## 1. Seed pouch and bundle in dispensers (B; TODO `largecontent/mod-additions #65`)
@@ -133,7 +133,7 @@ Status: DONE 2026-11-14 (cd-a). Quark pickup check: no double count (Quark fills
     MC-121903, MC-72151, and MC-206922. MC-206922 helped in 3 of 4 runs; it is partial and stays on, with
     [thirdparty_fixes.md](thirdparty_fixes.md) noting the tickCount <= 8 limit.
   - MC-2025 and MC-224729 stay off. MC-121706 is off: it crashes the boot.
-  - Also MC-237493 forced on, as the 11-13 scan decided.
+  - Also MC-237493 forced on, as the 2026-11-13 scan decided.
 - Copy it to `configs_edited/root_config/debugify.json`. Add the `mod_sides.md` row (P7, skill `add-mod`).
 - Debugify may rewrite the file at load. The first boot that carries it must diff the file afterwards, and the
   configs_edited copy then follows the rewritten form if only the formatting changed.
@@ -173,7 +173,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
   - Harvest at age 2 or more drops 0-1 hops (+1 at age 3) and resets to age 1. Bone meal adds +1 age.
   - The planting item is an `ItemNameBlockItem`, like `GrapeBushSeedItem`.
   - Do not extend the Vinery class. CD must not need Brewing classes at load, so copy the logic.
-- Lattice: Vinery's `grapevine_lattice` (owner 2026-11-14; G Creative Brewing, vinery member;
+- Lattice: Vinery's `grapevine_lattice` (owner, 2026-11-14; G Creative Brewing, vinery member;
   V = `development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery`):
   - How jungle grapes use it: they are a lattice `GrapeType` (`V/core/registry/GrapeTypeRegistry.java:21-22`,
     `lattice = true`). Their seeds plant on `vinery:grapevine_lattice`
@@ -264,7 +264,7 @@ Status: dict part DONE 2026-11-14 (common): `item_dict.js` `i.tilled_end_stone =
   - Lang: `en_us.json:207`.
 - Point the end stone hoe branch `gear/TillingEvents.java:91-92` at `endercrop:tilled_end_stone` when Ender Crop is
   loaded. Otherwise give no H&H conversion.
-- End stone tills only with a netherite or better hoe (owner 2026-11-14):
+- End stone tills only with a netherite or better hoe (owner, 2026-11-14):
   - "Netherite or better" = the hoe is a `TieredItem` whose tier sorts at or above `Tiers.NETHERITE` in Forge's
     `TierSortingRegistry`. That catches modded tiers above netherite.
   - Ender Crop tills end stone itself, with any hoe (`io/github/drmanganese/endercrop/HoeHelper`, `event/ForgeEventHandlers`
@@ -308,10 +308,10 @@ Status: DONE 2026-11-14 (cd-a). Dropped through the Rustic bake (`DROPPED_FILES`
 
 ### 3.5 Crow feeding and breeding (TODO `#66`, `#67`)
 Status: DONE 2026-11-14 (cd-a). A hurt tame crow heals 2 health per food; JEI page on the crow spawn egg.
-- Crow foods (owner 2026-11-14), defined in one place:
+- Crow foods (owner, 2026-11-14), defined in one place:
   - **Crow food** = item tag `creativedelight:crow_food`
     (`kubejs/data/creativedelight/kubejs/hearthandharvest/crow_salt_tags.js:12`): `#forge:seeds` plus the corn tags.
-  - It resolves to 43 items in the 11-13 dump:
+  - It resolves to 43 items in the 2026-11-13 dump:
     - every seed and pip in the pack (vanilla wheat, beetroot, melon and pumpkin seeds; the Farmer's Delight, Rustic,
       Veggies, Vintage, Fruits, Vinery grape, Neapolitan, Berry Good and Delightful seeds and pips; rice; coffee beans;
       Ender seeds; tobacco seeds);
@@ -367,7 +367,7 @@ Status: DONE 2026-11-14 (cd-a). Rows renamed: SQ-HH-483/-486/-487 were taken, so
   - New SQ-HH-486: each stage's collision height.
   - Client CQ-HH-486: the stages look like rock salt layers, no tint.
   - Also rerun SQ-HH-1534 (single till, INCONCLUSIVE r1112).
-- Salt layers refill a licked block (owner 2026-11-14):
+- Salt layers refill a licked block (owner, 2026-11-14):
   - Placing a Vintage Delight salt layer (`vintagedelight:salt`, `members/vintage/.../block/custom/SaltLayerBlock.java`)
     on top of a licked stage drops it into the lick: the layer is consumed and the block goes back one stage (heavily →
     well → lightly → `salt:salt_block`).
@@ -435,7 +435,7 @@ New system, owner 2026-11-14. It replaces the salt member's block-tick melting a
       | botania (1) | | `animated_torch` (redstone) |
       | philipsruins (1) | | `frozen_sea_lantern` |
 
-    - The build re-greps a fresh `/dumpall` for ids added since 11-13. The same name match also turns up any other
+    - The build re-greps a fresh `/dumpall` for ids added since 2026-11-13. The same name match also turns up any other
       flame block (candles are left out **[default]**; their light is 3 per candle).
     - Every fire-tag block must give light 4 or more, so the light check (below) still sees it at 3 blocks. Any lower one
       (magma, light 3) joins magma's source-driven path.
@@ -529,7 +529,7 @@ stomping (their recipe types are fermenting, apple mashing for the Apple Press, 
 `GrapeTypeRegistry` (8 types with juice), written out in `hearthandharvest/vinery_stomping.js`.
 - Today, `machine/StompingBasinBlockEntity.java:121-135` `insert` takes any item; an empty bucket gets swallowed
   (SQ-HH-266). The item handler behind its capability (`:70`, ItemStackHandler at `:346`) does the same for hoppers.
-- Valid items (owner 2026-11-14): only items that appear as an ingredient in some `hearthandharvest:stomping` recipe.
+- Valid items (owner, 2026-11-14): only items that appear as an ingredient in some `hearthandharvest:stomping` recipe.
   - Build a set of valid items from every stomping recipe's ingredients when recipes load (`RecipesUpdatedEvent` and the
     server reload listener). `insert` returns the stack untouched, and the handler's `isItemValid` returns false, for
     anything else.
@@ -824,7 +824,7 @@ below was read from source, with no game run.
     `attach` (`U/electricity/solarpanel/SolarPanelBearingBlockEntity.java:448-478`). The port only changed vector types.
   - Mirror: no change. New SQ-PWG-54r: restart, wait 100 ticks in an entity-ticking chunk, then read the known-good
     X 1340 contraption.
-- `#82` acid vs heated salt mixing (owner 2026-11-14): the acid recipe also takes rotten flesh.
+- `#82` acid vs heated salt mixing (owner, 2026-11-14): the acid recipe also takes rotten flesh.
   - Upstream `PG/src/main/resources/data/powergrid/recipes/mixing/acid.json` is heated: redstone + blaze powder + 250 mB
     water → 250 mB acid.
   - Make it a pack change, not a port change: a new server script guarded on `powergrid` removes

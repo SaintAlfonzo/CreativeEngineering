@@ -57,7 +57,7 @@ look apart about 578 chunks and level 1; together back to level 0 once below 400
 # needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
 # run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
 sleep 10
-# a fresh boot spawns nothing near a just-joined bot for about 2.5 min (seen 10-31, level 0 too): wait it out
+# a fresh boot spawns nothing near a just-joined bot for about 2.5 min (seen 2026-10-31, level 0 too): wait it out
 sleep 160
 > tp qa 0 -60 0
 > time set 18000
@@ -80,7 +80,7 @@ look the four counts sum to about 25 (not 70); the farthest monster within about
 # needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
 # run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
 > pbot spawn qm {PL1} 120 {PL3} minecraft:overworld survival
-# fresh boot: nothing spawns near a just-joined bot for about 2.5 min (10-31): wait it out
+# fresh boot: nothing spawns near a just-joined bot for about 2.5 min (2026-10-31): wait it out
 sleep 160
 > time set 18000
 > kill @e[type=#zq:monsters]

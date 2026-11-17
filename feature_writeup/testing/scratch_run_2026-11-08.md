@@ -1,6 +1,6 @@
 # Scratch runs 2026-11-08
 
-## 1. r1108cge: Creative Common 1.1.0 of 11-08 00:01 (SQ-CGE, with the re-run list's server rows)
+## 1. r1108cge: Creative Common 1.1.0 of 2026-11-08 00:01 (SQ-CGE, with the re-run list's server rows)
 
 Owner request 2026-11-08 00:10: "execute the latest creative common scratch tests. after (for common) notes have been
 taken and bugs that dont require a decision fixed, give a list of concerns to consider". Scope: queue section "SQ-CGE"
@@ -8,8 +8,8 @@ server rows SQ-CGE-01 to -06 and the server rows of its re-run list (SQ-CPP-01 t
 and the other client rows of the re-run list (need a window), SQ-CC-12 (needs the owner client on CreEngServer).
 Targeted run, no perf session (JFR on per boot, recordings in each srv's perf/).
 
-- Jars: Common `creativecommon-1.1.0` 11-08 00:01 (then the rebuilds below), the rest from `mods/` or newer build/libs
-  (prep_srv.sh swaps: Delight 11-07 21:39, Brewing / Calendar 20:00, Compat 23:10 = `mods/`).
+- Jars: Common `creativecommon-1.1.0` 2026-11-08 00:01 (then the rebuilds below), the rest from `mods/` or newer build/libs
+  (prep_srv.sh swaps: Delight 2026-11-07 21:39, Brewing / Calendar 20:00, Compat 23:10 = `mods/`).
 - Probe: new `tools/scratch_query/cge_probe.js` (`/zgv drop|watch|cfg|reload`: tick-exact fall distances of a falling
   block, an item and lit TNT; Create Gravity's own biome lookup). Batches `tools/scratch_query/batches/r1108cge/`.
 - b1: srv `b1/` in the session scratchpad, level r1108cge, group A; left out loadingscreentips (as r1107cc), kept
@@ -25,14 +25,14 @@ Targeted run, no perf session (JFR on per boot, recordings in each srv's perf/).
   gravity until a `/reload` (fits SQ-CCO-08's inert End; singleplayer gets a client-side TagsUpdatedEvent after the
   world loads). b1 checks it before and after a `/reload`.
 - 00:17 b1 CRASHED in mod loading: `startup_scripts:jei/order.js#30: Cannot call method "define" of undefined`.
-  Cause: the JEI order helper moved from Common to Compat at 11-07 19:59 (SQ-CCB), but Common's `JarStartupScripts`
+  Cause: the JEI order helper moved from Common to Compat at 2026-11-07 19:59 (SQ-CCB), but Common's `JarStartupScripts`
   runs only Common's pack before `kubejs/startup_scripts/`; Compat's pack ran after the pack's `jei/order.js`. The
   Compat jar in `mods/` (23:10) has the same file, so the owner's next full-pack launch would crash the same way.
   FIXED (Common): `JarStartupScripts` puts Common's and then Compat's pack before `startup_scripts` (the order
   Compat's `jei_order.js` header already states). Common rebuilt 00:23.
 - 00:24 b1 reboot: script order `creativecommon, creativecompat, startup_scripts, ...`, `[jeiOrder] defined 43 nodes`.
   World creation FAILED: `Error loading registry data: Value provider too high: 256 [312-471]`. Cause (not Common):
-  `kubejs/data/minecraft/worldgen/placed_feature/glow_lichen.json` (farming batch A8, TODO `flowers #4`, 11-07 21:26)
+  `kubejs/data/minecraft/worldgen/placed_feature/glow_lichen.json` (farming batch A8, TODO `flowers #4`, 2026-11-07 21:26)
   sets the lichen count to uniform 312-471; a count provider allows at most 256. FIXED (no decision: same 3x): vanilla
   uniform 104-157 followed by a second `count` 3 (counts multiply). The server hung after the failure (mine, stopped).
 - 00:37 b1 Done 10.3 s (Common 00:23, lichen fix copied into srv). Batch b1: probe faults (Rhino `const` inside `try`
@@ -94,7 +94,7 @@ Fixes this run: Common `JarStartupScripts` (Compat's pack before `startup_script
 256). Changelog: one Fixed bullet (End low gravity missing on dedicated servers after a restart). Tooling:
 `cge_probe.js`, `cpp_chain_srv.sh`, batches `r1108cge/` b1 to b7.
 
-## 2. r1108cge2: Creative Common 1.1.0 of 11-08 13:51 (SQ-CGE part 2)
+## 2. r1108cge2: Creative Common 1.1.0 of 2026-11-08 13:51 (SQ-CGE part 2)
 
 Owner request 2026-11-08: "execute the latest creative common tests". Scope: queue section "SQ-CGE part 2", server
 rows on four boots (b1 to b4, `tools/scratch_query/cge2_run.sh`), then client blocks c1 and c2. Targeted run, no perf
@@ -103,7 +103,7 @@ Batches `tools/scratch_query/batches/r1108cge2/`, results `perf/runs/r1108cge2/`
 
 ### Run notes
 
-- 13:59 claim, preflight: no JVM, 60 GB free; build/libs Common 13:51, Compat 13:21 (`mods/` holds 01:10 and 11-07 23:10).
+- 13:59 claim, preflight: no JVM, 60 GB free; build/libs Common 13:51, Compat 13:21 (`mods/` holds 01:10 and 2026-11-07 23:10).
 - 14:00 first start stopped at the runner's jar check: `grep -q` under pipefail kills unzip (SIGPIPE) and reads as "not found"; check fixed in `cge2_run.sh` (captures the listing first).
 - 14:00 to 14:07 b1 to b4 done. Fall rows: every type at the expected ratio except `item` in the full pack (24.570 = vanilla, b1, b2, b3); Common alone (b4, no ItemPhysic) 4.914. Cause: ItemPhysic's `updatePre` adds its own -0.04 to items, outside `LowGravityPullMixin`'s constant.
 - 14:10 batch faults fixed: Nether column cleared from x 0 wedged the 1.375-wide boat in x -1 (cleared from x -3, chunks -1 force loaded); SQ-CGE-10 expected Air -10 in 8 s, but Create Gravity 1.2.0 takes 4 air every `oxygen_factor` (100) ticks, 390 s to -10; a rerun bot reloaded its saved backtank (row now clears the slot); `cge2_run.sh client` now resets the world's biome list (b2, b3 left End -1).

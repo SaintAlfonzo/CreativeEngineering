@@ -47,7 +47,7 @@ per type, with per-item exceptions, and gives every can the value of what went i
 
 | Part | Layer | Status |
 |---|---|---|
-| `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods), FO-01 PASSED. Re-run 2026-10-02 22:13 after the 1.0.4 mods: 856 foods, 138 food blocks, 26 drinks, 27,499 recipes. Now part of `/dumpall`. Re-run 2026-10-20 23:12 on a scratch server: 1030 foods, 139 food blocks, 33 drinks, 28,031 recipes (server-side names are raw lang keys for KubeJS items; the export keeps the client names from the 10-18 dump) |
+| `/dumpfood` export | KubeJS command, `_lib/dump_food.js` | Works: ran 2026-09-28 19:24 (629 foods), FO-01 PASSED. Re-run 2026-10-02 22:13 after the 1.0.4 mods: 856 foods, 138 food blocks, 26 drinks, 27,499 recipes. Now part of `/dumpall`. Re-run 2026-10-20 23:12 on a scratch server: 1030 foods, 139 food blocks, 33 drinks, 28,031 recipes (server-side names are raw lang keys for KubeJS items; the export keeps the client names from the 2026-10-18 dump) |
 | Food types (31) + canned map | [food_types.json](../kubejs/generation_scripts/food/food_types.json) | BUILT: 1016 foods typed, 14 excluded, 242 cans mapped to 252 sources (227 new foods typed 2026-10-02, 3.2; 5 on 2026-10-20) |
 | Type tags `#creativedelight:food_type/...` + `#creativedelight:canned_source` | [foodtypetags.js](../kubejs/data/creativedelight/kubejs/creativedelight/food_type_tags.js) | DEPLOYED with 1.0.2. FO-02 to FO-08 |
 | item_dict keys for the 216 foods it lacked + 32 tag keys | generated block at the end of [item_dict.js](../kubejs/startup_scripts/_lib/item_dict.js) | BUILT, `node --check` clean |
@@ -593,7 +593,7 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
   seasoning's bonus after the food's own.
 - **Tooltip:** `food/SeasoningTooltip`, one line per seasoning under the name: "Garlic: Speed (0:10)", "Onion: +2
   nutrition". The name is lang key `seasoning.<ns>.<path>`, from seasoning_lang.js (a CD client script under
-  `assets/`). From the 10-27 move until 2026-10-31 that script did not load at game start (KubeJS loads resource client
+  `assets/`). From the 2026-10-27 move until 2026-10-31 that script did not load at game start (KubeJS loads resource client
   scripts only on F3+T), so the line showed the raw key; patcherMod `KubeJSClientResourceScriptsMixin` loads them at
   start (creative_delight.md 10.2). FO-59.
 - **JEI:** each seasoning recipe is a page on the Seasoning tab (3.11): food | seasoning item(s) -> seasoned food,
@@ -682,7 +682,7 @@ from row 3: pepper, dill, cream and onion, ice cubes, popcorn variants. FO-45 to
   (not glycerol), +1 nutrition (placeholder). Test food: Create Factory's waffle. Popcorn is out: Corn Delight's
   popcorn + sugar is caramel popcorn. Which foods take it is still open (`food/seasoning #5`).
 - **Textures** (`textureswapper/powdered_sugar/make_psugar.py`, sheet `preview_sheet.png`): item = sugar's palette on
-  Create Confectionery's cocoa powder; block = the sugar cube palette on Immersive Weathering's vitrified sand (owner 2026-10-31, see above; LGPLv3
+  Create Confectionery's cocoa powder; block = the sugar cube palette on Immersive Weathering's vitrified sand (owner, 2026-10-31, see above; LGPLv3
   credited in CD's NOTICE-thirdparty.txt; 2026-10-29 it was the vanilla moss block, `block_moss_soft1`; before that `block_soft`, sugar and sugar cube palettes on powder
   snow, which read as snow); bucket = sugar and sugar cube palettes on the powder snow bucket's snow pixels. The block
   model keeps powder snow's (inner-face) shape.
@@ -1113,7 +1113,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   oil (pot recipe moved to a `_manual_only` id). Vanilla egg -> `#forge:eggs` migration listed as TODO (3.8).
   FO-23 to FO-27.
 - **2026-09-29** Egg stack size (3.9): the 10 raw eggs in `#forge:eggs` stack to 64. FO-28.
-- **2026-10-02** Refresh for the mods added since 09-28 (Fruits Delight, More Delight, Farmer's Respite, Corn Delight,
+- **2026-10-02** Refresh for the mods added since 2026-09-28 (Fruits Delight, More Delight, Farmer's Respite, Corn Delight,
   Untitled Duck Mod): `/dumpfood` re-run on a scratch server (856 foods) and added to `/dumpall`. The classifier
   typed 227 new foods; 74 of its picks were moved by hand to match earlier calls: bottled jellies -> `ingredient`
   (like jam bottles), jellos, muffins, tarts, single pies, custard, shaved ice, hawberry candy and sweet toasts ->
