@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=5d60537344d6 -->
+<!-- generated:status_index begin readme sha1=72601983c1a4 -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED; SQ-BRA r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL | creativecompat pending, creativedevtools installed 2026-11-17 | DEPLOYED, in-game test pending |
@@ -200,6 +200,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Bugfix run from the 2026-11-11 to 11-14 scratch runs | [plan_bugfix_1114.md](plan_bugfix_1114.md) | `rows named in the plan` | planned | SQ-T1 r1115 2026-11-15: 1 PASS; SQ-SPD r1115 2026-11-15: 8 PASS, 1 FAIL; SQ-PG r1115 2026-11-15: 2 PASS, 1 FAIL; +6 codes | creativedelight installed 2026-11-16, powergrid in mods/ | planned 2026-11-14 |
 | Rules violation fix plan | [plan_rules_fixes.md](plan_rules_fixes.md), [test_prefix_index.md](testing/test_prefix_index.md) | none | planned | none |  | planned (2026-11-16) |
 | Process review and overhaul plan | [process_review.md](process_review.md), [plan_process_overhaul.md](plan_process_overhaul.md) | `PROC-` | BUILT | none | tools | Phases 1 and 2 built 2026-11-16; Phase 3 planned 2026-11-16 |
+| Random-tick audit | [random_tick_audit.md](random_tick_audit.md) | none | reference | none |  | audit 2026-11-07 (plan_farming_cooking_batch.md F2, TODO `farming/crops #15`); moved out of briefs/ 2026-11-17 |
 | Unassigned queue sections | [features_audit_2026-11-16.md](status/features_audit_2026-11-16.md) | none | reference | SQ-TXQ r1116 2026-11-16: 2 PASS, 2 CRASH; SQ-PS15B r1116 2026-11-16: 7 PASS, 4 FAIL, 19 LOOK; CQ-PS15B r1116 2026-11-16: 2 DEFERRED; +23 codes |  | Holding row: queue sections with no single owning feature (mixed owner batches, priority runs) or dropped by the 2026-11-16 audit; reassign each to its feature |
 <!-- generated:status_index end readme -->
 
