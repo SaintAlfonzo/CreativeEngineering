@@ -337,6 +337,30 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 - Owner's "start with the jar, then other containers and the kettle": all go through the same shape rule; no per-block
   table yet. If a container looks wrong in game, a table row (block -> inset, floor) is the next step.
 
+### 2.15 Double fridges (built 2026-11-16, not tested; scratch SQ-KT-29, client CQ-KT-29; TODO `cooking/kitchen #36`)
+
+- Owner Q27 (2026-11-07): two Cooking for Blockheads fridges side by side join like a double door, doors mirrored,
+  inventories and doors separate, no seal in the joint. Visual only.
+- Pairing (`compat/cookingforblockheads/kitchen/FridgePairs`): CfB's `flipped` state picks the door side. In CfB's model
+  frame (front at north, model +x = `facing.getClockWise()`) an unflipped door has its handle at -x and its hinge at +x.
+  Two fridges are a pair when they face the same way, have the same height (1-tall, or both 2-tall) and each one's
+  handle side points at the other, so the hinges are on the outer edges. A handle side holds one neighbour, so a row of
+  fridges pairs without a scan; an odd one out stays single. A 2-tall fridge's door side is its lower block's (CfB's
+  renderer draws both halves from it; the upper block's own `flipped` is ignored).
+- Placement (`mixin/cookingforblockheads/CfbFridgePlaceMixin`, on `getStateForPlacement`): a fridge placed next to a
+  fridge facing the same way whose handle points at it takes the mirrored door side, as vanilla doors pick their hinge;
+  CfB's own choice (from where the player stands) stays when it already pairs or nothing qualifies. Fridges placed
+  before this do not change; place one again to pair it.
+- Drawing (`client/FridgeDouble`): on the joined side, the body gets a 1 px strip to the block edge and a white lip where
+  CfB's grey seal stood (the seal's quads are dropped), and the door gets a 1 px strip to the block edge that swings
+  with it. The pieces are our own models `creativedelight:block/fridge_join_<small|lower|upper>_<body|door>`
+  (`gen_cfb_racks.py`; boxes on CfB's `fridge_side` white, `tintindex` 0 so a dyed fridge matches), built for a joint
+  at model -x and mirrored in code for a flipped door. The body pieces come from a wrapper on every fridge state
+  model (after `FridgeTopFill`, from its listener), which reads the pairing into its model data per block; the door
+  piece from `mixin/cookingforblockheads/CfbFridgeRendererMixin` (CfB's `renderDoor`, the door model argument).
+- A neighbour change rebuilds the chunk section, so pairs update when a fridge is placed, broken or stacked. A 1-tall
+  next to a 2-tall fridge does not join.
+
 ## 3. What the pack changes
 
 - Config: `cookingforblockheads-common.toml` (`ovenRequiresCookingOil`, `sinkRequiresWater`); `creativeengineering-common.toml`
@@ -381,7 +405,9 @@ Brief: [briefs/cooking_kitchen.md](briefs/cooking_kitchen.md). Nothing here is b
   `BlockStateCounterTopperMixin`, `CuttingBoardRendererOffsetMixin`, `CoasterRendererOffsetMixin`,
   `CfbCornerStorageMixin`, `CfbCornerUseMixin`, `CfbOvenLitMixin`, `CfbOvenLitSyncMixin`, `CfbOvenShapeMixin`,
   `CfbOvenRendererMixin`), `kitchen/` (`CounterToppers`, `CornerStorage`), `rack/` (`RackWoods`,
-  `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `client/OvenRaise`, `BAConfig`.
+  `BARacks`, `WoodSpiceRackBlock`, `WoodToolRackBlock`), `client/FridgeTopFill`, `client/OvenRaise`, `BAConfig`. Double fridges (in Creative
+  Delight's compartment): `kitchen/FridgePairs`, `client/FridgeDouble`, `mixin/cookingforblockheads/CfbFridgePlaceMixin`,
+  `CfbFridgeRendererMixin`.
 - KubeJS: [cooking.js](../kubejs/server_scripts/cooking/cooking.js) (bamboo bowl, `foodGrinding` calls),
   [mortar.js](../kubejs/data/creativedelight/kubejs/creativedelight/mortar.js), [cookingtags.js](../kubejs/server_scripts/tags/cookingtags.js),
   [cookingforblockheads/kitchen.js](../kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js) (rack
@@ -495,6 +521,11 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - [ ] **KT-28 Faucet fit (cooking/kitchen #26):** a faucet on the side of a Supplementaries Jar sits against the jar's
   glass (no 3 px gap); open it over a carpet and over a Cooking Pot and a Kettle → the stream ends on the carpet / the
   rim; faucet on a full block over a full block → stream stops at the top of the lower block.
+- [ ] **KT-29 Double fridges (cooking/kitchen #36):** place a fridge, then a second one beside it facing the same
+  way → its door opens the other way, the two handles meet in the middle and no gap or grey seal shows between them;
+  open each door → each has its own inventory, and the joined edge swings with its door. Stack both to 2-tall → still
+  joined, the top boxes meet. A fridge beside a 2-tall fridge, or two whose handles point away from each other, stay
+  apart. Repeat facing another way and with a dyed pair (the joint takes the dye).
 
 ## 8. History
 
@@ -527,6 +558,8 @@ Not covered offline: anything drawn (board offset, fridge), the corner's GUI on 
 - 2026-11-04: M8 (plan_cb_publish.md 3b): blockheadsAdditions folded into Creative Delight's own jar as the optional
   Cooking for Blockheads compartment (section 9); racks and baskets renamed to `creativedelight:*` (swap list
   `compartments.json`), config moved to `[cookingforblockheads]`. CD 1.1.0 built, not installed. SQ-CDFO-01 to -03, CQ-CDFO-01.
+- 2026-11-16: double fridges built (2.15, `cooking/kitchen #36`): pairing, mirrored placement, joint pieces; Creative
+  Delight built and installed. KT-29, SQ-KT-29, CQ-KT-29.
 
 ## 9. Creative Delight's Cooking for Blockheads compartment (was the blockheadsAdditions member)
 

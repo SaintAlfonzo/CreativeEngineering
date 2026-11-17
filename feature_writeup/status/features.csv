@@ -38,7 +38,7 @@ Remainder buffer,remainder_buffer.md,RB-,BUILT,"creativecommon, creativedelight"
 Item merges,item_merges.md,MG-,BUILT,"creativecommon, creativedelight","CQ-MG, SQ-CM, SQ-MG, SQ-SALT, SQ-SWP, SQ-VTDA",,"2026-11-02/03: swap-list merges and world half (6) BUILT, patcherMod 1.1.08 and CD jar installed 2026-11-02 ...",,,
 Texture sources,texture_sources.md,,reference,,,textures/tools #2,"audit 2026-11-13: 4 swap, 27 redo, 349 confirm",reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16
 Texture reuse,texture_reuse.md,,reference,,,,"research only, 2026-10-22",,,
-Kitchen,kitchen.md,KT-,BUILT,"creativecommon, creativedelight","CQ-FAU, CQ-FCB, CQ-KT, CQ-LCA, CQ-TX, SQ-CBW, SQ-CFS, SQ-KT",cooking/kitchen #22,"2026-11-04: wood cutting boards (8 vanilla woods) BUILT, Creative Delight jar installed, SQ-CBW queued",,,
+Kitchen,kitchen.md,KT-,BUILT,"creativecommon, creativedelight","CQ-FAU, CQ-FCB, CQ-KT, CQ-LCA, CQ-TX, SQ-CBW, SQ-CFS, SQ-KT","cooking/kitchen #22, cooking/kitchen #36","2026-11-16: double fridges BUILT (kitchen.md 2.15), Creative Delight installed, SQ-KT-29 / CQ-KT-29 queued; 2026-11-04: wood cutting boards (8 vanilla woods) BUILT, Creative Delight jar installed, SQ-CBW queued",,,
 Stack sizes,stack_sizes.md,,reference,,,,"reference from the 2026-10-02 `/dumpstacks` (2141 items), before the stack size policy (DEPLOYED with 1.0.6): ...",,,
 Exposure cameras and photographs,exposure.md,EX-,BUILT,exposure,,,DEPLOYED (1.0.3,,,
 Alcohol: Brewin' and Chewin' backport,alcohol.md,AL-,BUILT,creativebrewing,,,port `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar,,,

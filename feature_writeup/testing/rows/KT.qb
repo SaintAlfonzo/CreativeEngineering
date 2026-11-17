@@ -91,3 +91,42 @@ sleep 3
 > tp @s 262 -59 3.5 180 20
 shot racks_fridge
 look fridge textured (no checker), racks in their wood. hand: kitchen.md KT-22 to KT-24 (dyed fridge box)
+
+@@section 2
+@@title Double fridges, 2026-11-16 ([kitchen.md](../kitchen.md) 2.15; TODO `cooking/kitchen #36`)
+@@date 2026-11-16
+@@jars creativedelight
+@@sources feature_writeup/kitchen.md
+@@text
+@@text Creative Delight built and installed 2026-11-16. Visual only; the placement mirror needs a player placing by hand (KT-29).
+@@text
+@@table
+## SQ-KT-29 | double fridge mixins apply
+@group A
+@commands boot
+@pass `Done (`; no mixin error naming `CfbFridgePlaceMixin` or `CfbFridgeRendererMixin`
+@fails SRG name `m_5573_` (FridgeBlock.getStateForPlacement) or the `renderDoor` target changed in CfB
+@jars creativedelight
+@draft no batch holds this row yet
+bootreject (Mixin apply failed|InvalidInjectionException).*CfbFridge
+
+## CQ-KT-29 | double fridges drawn joined
+@group client
+@commands setblock pairs facing south: a joined 1-tall pair, a joined 2-tall pair, an unjoined pair (same door side); KT-29 by hand
+@pass joined pairs: no gap or grey seal between them, handles meet in the middle, hinges on the outer edges, the 2-tall top boxes meet; the unjoined pair keeps its gap; no checker texture
+@fails nothing joined: `double fridges are drawn apart` in latest.log (fridge_join_* models missing) or the wrapper not on (FridgeTopFill.wrap); door strip missing only: `CfbFridgeRendererMixin`
+@jars creativedelight
+@draft no batch holds this row yet
+> tp @s 273 -59 6 180 20
+sleep 3
+> setblock 270 -60 0 cookingforblockheads:fridge[facing=south,flipped=false]
+> setblock 271 -60 0 cookingforblockheads:fridge[facing=south,flipped=true]
+> setblock 273 -60 0 cookingforblockheads:fridge[facing=south,flipped=false]
+> setblock 273 -59 0 cookingforblockheads:fridge[facing=south,flipped=false]
+> setblock 274 -60 0 cookingforblockheads:fridge[facing=south,flipped=true]
+> setblock 274 -59 0 cookingforblockheads:fridge[facing=south,flipped=true]
+> setblock 276 -60 0 cookingforblockheads:fridge[facing=south,flipped=false]
+> setblock 277 -60 0 cookingforblockheads:fridge[facing=south,flipped=false]
+sleep 2
+shot double_fridges
+look 270/271 and 273/274 joined (no gap, handles in the middle), 276/277 apart. hand: KT-29 (placing mirrors, doors open apart, other facings, dyed)

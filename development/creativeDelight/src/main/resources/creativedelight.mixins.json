@@ -71,6 +71,7 @@
     "cookingforblockheads.CfbOvenLitMixin",
     "cookingforblockheads.CfbOvenLitSyncMixin",
     "cookingforblockheads.CfbOvenShapeMixin",
+    "cookingforblockheads.CfbFridgePlaceMixin",
     "alexsmobs.EntityEmuEggLayerMixin",
     "untitledduckmod.DuckEntityEggLayerMixin",
     "untitledduckmod.GooseEntityEggLayerMixin",
@@ -95,6 +96,7 @@
     "farmersdelight.CuttingBoardRendererOffsetMixin",
     "brewinandchewin.CoasterRendererOffsetMixin",
     "cookingforblockheads.CfbOvenRendererMixin",
+    "cookingforblockheads.CfbFridgeRendererMixin",
     "supplementaries.FaucetStreamFitMixin"
   ],
   "server": [],
