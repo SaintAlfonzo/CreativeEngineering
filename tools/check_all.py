@@ -72,6 +72,8 @@ LINTS = {
     'texture_provenance': (['python3', 'tools/texture_provenance.py'], ['feature_writeup/texture_sources/',
                                                                        'textureswapper/'], 70, True),
     'design_rules_audit': (['python3', 'tools/design_rules_audit.py'], SCRIPT_TREES + ['feature_writeup/'], 30, True),
+    'test_prefix_lint': (['python3', 'tools/test_prefix_lint.py', '--quiet'],
+                         ['feature_writeup/', 'tools/test_prefix_lint.py'], 1, False),
     'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),
     'cleanup': (['python3', 'tools/cleanup_check.py'], ['feature_writeup/', 'tools/cleanup_check.py',
                                                         'tools/cleanup_thresholds.csv', '.claude/skills/'], 17, False),
