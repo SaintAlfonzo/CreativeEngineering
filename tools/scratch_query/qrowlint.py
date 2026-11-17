@@ -4,6 +4,7 @@
 Stale: a row's `sources` (row @sources, else the section's @@sources) changed after the row was last matched to them.
 That date is the row's @reviewed, else the section's @@reviewed, else its @@date. Source change times come from git
 (last commit touching the path; a directory counts every file under it) and, for uncommitted edits, the file mtime.
+A commit whose subject contains "[no-stale]" (a mechanical sweep: date form, spelling, renamed ids) is skipped.
 The agent that changes a source rewrites the rows written from it in the same session and sets @reviewed (or
 @@reviewed for the whole section) to the day.
 
@@ -178,18 +179,23 @@ def dead_ids(cmd):
 
 # ---------------------------------------------------------------- staleness
 
+NO_STALE = '[no-stale]'
+
+
 @lru_cache(maxsize=1)
 def git_times():
-    """{path: last commit time} for every tracked path, and {path: mtime} for uncommitted edits."""
+    """{path: last commit time} for every tracked path, and {path: mtime} for uncommitted edits. Commits whose
+    subject carries NO_STALE (mechanical sweeps: date form, spelling, id renames) do not count."""
     times = {}
     try:
-        r = subprocess.run(['git', 'log', '--format=@%ct', '--name-only', '--since=2026-09-01'], cwd=ROOT,
+        r = subprocess.run(['git', 'log', '--format=@%ct %s', '--name-only', '--since=2026-09-01'], cwd=ROOT,
                            capture_output=True, text=True, timeout=60)
-        t = 0
+        t, skip = 0, False
         for l in r.stdout.split('\n'):
             if l.startswith('@'):
-                t = int(l[1:])
-            elif l and l not in times:
+                stamp, _, subj = l[1:].partition(' ')
+                t, skip = int(stamp), NO_STALE in subj
+            elif l and l not in times and not skip:
                 times[l] = t
         r = subprocess.run(['git', 'status', '--porcelain', '-uall'], cwd=ROOT, capture_output=True, text=True,
                            timeout=60)
@@ -230,12 +236,14 @@ def content_change(path):
     head = _git_text('HEAD', path)
     if head is None or _status_free(cur) != _status_free(head):
         return git_times().get(path)
-    r = subprocess.run(['git', 'log', '--format=%H %ct', '--since=2026-09-01', '--', path], cwd=ROOT,
+    r = subprocess.run(['git', 'log', '--format=%H %ct %s', '--since=2026-09-01', '--', path], cwd=ROOT,
                        capture_output=True, text=True, timeout=60)
     for line in r.stdout.split('\n'):
         if not line.strip():
             continue
-        sha, t = line.split()
+        sha, t, subj = (line.split(' ', 2) + [''])[:3]
+        if NO_STALE in subj:
+            continue
         new, old = _git_text(sha, path), _git_text(sha + '^', path)
         if old is None or _status_free(new) != _status_free(old):
             return int(t)

@@ -98,6 +98,13 @@ if wants('dates'):
     report('DR-L4b', 'year-less, month-name or dotted dates and "(user, date)" citations (iso_dates.py fixes them)', hits)
     report('DR-L4b', 'year-less dates the tool cannot resolve (owner list or number ranges)', unresolved)
 
+# DR-W3b: test prefixes against feature_writeup/testing/test_prefix_index.md (the lint fails on its own in check_all).
+if wants('prefixes'):
+    out = subprocess.run([sys.executable, str(ROOT / 'tools/test_prefix_lint.py')], cwd=ROOT, capture_output=True,
+                         text=True).stdout.rstrip()
+    print('## DR-W3b ' + out.replace('\n', '\n   ')[:4000])
+    print()
+
 # G1: spelling mix in docs (prose only, code spans removed).
 if wants('spelling'):
     pairs = [('colour', 'color'), ('behaviour', 'behavior'), ('capitalis', 'capitaliz'), ('organis', 'organiz'),
