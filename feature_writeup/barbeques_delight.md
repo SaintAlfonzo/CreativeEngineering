@@ -793,48 +793,46 @@ OPEN, batch faults: SQ-BBQ-02 (skewering 10 and grilling 10 present; the combine
 the row's id pattern is stale), SQ-BBQ-06 and -07 (the bot's click lands outside the grill slot, nothing reached the
 grill). SQ-BBQ-08 not run (bots cannot craft).
 
-| ID | Test | Pass |
-|---|---|---|
-| BBQ-01 | Craft grill; stonecut a log into 2 basins and 4 trays | items appear |
-| BBQ-02 | Basin: beef x2 in a slot, stick in main hand, cabbage x2 in off hand, click | Raw Beef Skewer; 2 beef, 2 cabbage, 1 stick used |
-| BBQ-03 | Basin: mutton x4, off hand empty | Raw Lamb (Mutton) Skewer |
-| BBQ-04 | Grill over a lit FD stove; place raw skewer; WTHIT shows countdown (see BBQ-17) | "Ready to Flip" at half time |
-| BBQ-05 | Sneak-flip, wait | cooked skewer at full time |
-| BBQ-06 | Leave a skewer to 2x time | Burnt Skewer; no further block updates (B1, F3 debug / network) |
-| BBQ-07 | Place grill on a campfire, light it, break it | unlit when placed; lit gives light 15 and heat; drops grill + campfire |
-| BBQ-18 | Lit grill-campfire: water, splash water potion, shovel, rain (on stone, then on a coal block) | extinguished by the first three; out in rain on stone, stays lit on a coal block; relit by flint and steel |
-| BBQ-19 | Tray: place, fill 3 slots, stack trays, break the support | storage works, unsupported tray breaks (for the evaluation row) |
-| BBQ-08 | Grill with no heat after half cooking | progress falls back |
-| BBQ-09 | (retired 2026-11-03 by the fold, see BBQ-22, BBQ-28) | - |
-| BBQ-10 | Eat chili, buffalo, cumin, pepper seasoned skewers | 2 fire damage; 2 fire damage + amplifier +1; heal 2; fast eat |
-| BBQ-11 | Barbeque sauce on beef skewer | Strength 3:00 |
-| BBQ-12 | Eat a cooked skewer | stick returned |
-| BBQ-13 | Kebab wrap (on bread), sandwich, bibimbap by the upstream combine recipes | contents tooltip; skewer effects applied on eating; sticks returned from crafting |
-| BBQ-14 | JEI: Skewering and Grilling categories | pages present with times "each side"; no family mirror recipes |
-| BBQ-15 | (replaced 2026-11-03 by BBQ-27: trades restored) | - |
-| BBQ-16 | Compost a raw skewer, a cooked skewer, the sandwich, bibimbap; seasoning and tray | 25%, 50%, 75%, 100% chance; seasoning and tray not accepted; JEI/`/dumpcompost` lists 24 rows |
-| BBQ-20 | Sauce on a raw skewer by craft; powder on a raw skewer | sauce refused, powder accepted (O28, by seasonable tag since 4.5) |
-| BBQ-21 | Season a raw skewer with a powder, grill it | the cooked skewer keeps the seasoning and name prefix |
-| BBQ-17 | WTHIT on the grill with a skewer on each slot | countdown per slot, Ready to Flip at half time; no Jade needed |
-| BBQ-22 | Craft a cooked beef skewer with chili powder, then with honey mustard sauce; try a sauce on a raw skewer | one powder consumed, "Chili Flavored Beef Skewer", tooltip "Chili: edible when full, 1 heart of burn damage"; sauce craft on raw refused (4.5) |
-| BBQ-23 | Chili skewer + pepper craft; set `[food] maxSeasonings = 1` and retry | refused (no pair defined); with onion + garlic popcorn at cap 1 the pair craft is refused |
-| BBQ-24 | Grill a raw skewer seasoned with cumin | cooked skewer has Cumin and Grilled lines, AppleSkin +2 saturation; eating heals 1 heart |
-| BBQ-25 | Smelt, smoke and campfire-cook a raw beef skewer; craft one from 3 cooked beef, 2 cabbage, stick | Beef Skewer without a Grilled line; does not stack with a grilled one |
-| BBQ-26 | Kebab wrap from a grilled skewer | wrap's stored skewer has no Grilled line; a crafted (not grilled) skewer is accepted too |
-| BBQ-27 | Butcher level 1 offers | BBQ seasonings at 12 emeralds, 64 powders or 16 sauces, 4 uses |
-| BBQ-28 | Right-click a skewer on the grill or a cutting board with a seasoning | nothing happens (use retired); seasonings stack to 64 |
-| BBQ-29 | Eat pepper, buffalo, barbeque sauce beef skewers | eaten fast; Strength II 0:45 and 1 heart burn; Strength 3:00 |
-| BBQ-30 | Basin: 2 sweet potatoes, stick in main hand, 2 bacon in off hand; then 2 FD minced beef + 2 cabbage leaves | Raw Potato Skewer; Raw Beef Skewer |
-| BBQ-31 | Sneak + right click a filled basin well holding a stick (and an off-hand item); then with empty hands | one item into the inventory, hands unchanged; empty-handed: one item into the hand |
-| BBQ-32 | JEI Skewering page | off-hand shield icon left of the lower input slot; slots line up with their frames |
-| BBQ-33 | JEI Grilling page result; Kebab Sandwich with two different cooked skewers | result tooltip has the Grilled line; sandwich crafts |
-| BBQ-34 | Hover each of the six seasoning items, then a skewer seasoned with each | the item's line reads exactly as the food's seasoning line (name, colors, numbers) |
-| BBQ-35 | Each of the eight pack skewers: craft the raw one, then grill, smelt, smoke and campfire-cook it | the cooked pack skewer each time; Nether and Cave have no heatless craft, the other six do; End Skewer craft gives 1 |
-| BBQ-36 | Raw pack skewer + a powder, then + a sauce; grill the powdered one | powder accepted, sauce refused; the cooked skewer keeps the powder line |
-| BBQ-37 | Family dump and can list | every cooked skewer (10 BBQ + 8 pack) in `skewer`; no skewer can |
-| BBQ-38 | Craft Kebab Wrap, Kebab Sandwich, Bibimbap from seasoned skewers; eat each (AppleSkin) | normal JEI pages; no skewer names or effects on the result; 10 / 0.6, 16 / 0.6, 16 / 0.8 |
-| BBQ-39 | Recipe dump before and after: the ten BBQ lines | same ids (`creativedelight:` skewering, grilling, smelting, smoking, campfire, `_from_cooked_manual_only`) |
-| BBQ-40 | Kill a shulker with a knife; cut a Shulker Mollusk; JEI uses of the mollusk | mollusk drops (and End's meat); 2 filets; End Skewer and its heatless craft, stuffed shulker on End's meat |
+- [ ] **BBQ-01:** Craft grill; stonecut a log into 2 basins and 4 trays -> items appear
+- [ ] **BBQ-02:** Basin: beef x2 in a slot, stick in main hand, cabbage x2 in off hand, click -> Raw Beef Skewer; 2 beef, 2 cabbage, 1 stick used
+- [ ] **BBQ-03:** Basin: mutton x4, off hand empty -> Raw Lamb (Mutton) Skewer
+- [ ] **BBQ-04:** Grill over a lit FD stove; place raw skewer; WTHIT shows countdown (see BBQ-17) -> "Ready to Flip" at half time
+- [ ] **BBQ-05:** Sneak-flip, wait -> cooked skewer at full time
+- [ ] **BBQ-06:** Leave a skewer to 2x time -> Burnt Skewer; no further block updates (B1, F3 debug / network)
+- [ ] **BBQ-07:** Place grill on a campfire, light it, break it -> unlit when placed; lit gives light 15 and heat; drops grill + campfire
+- [ ] **BBQ-18:** Lit grill-campfire: water, splash water potion, shovel, rain (on stone, then on a coal block) -> extinguished by the first three; out in rain on stone, stays lit on a coal block; relit by flint and steel
+- [ ] **BBQ-19:** Tray: place, fill 3 slots, stack trays, break the support -> storage works, unsupported tray breaks (for the evaluation row)
+- [ ] **BBQ-08:** Grill with no heat after half cooking -> progress falls back
+- [ ] **BBQ-09:** (retired 2026-11-03 by the fold, see BBQ-22, BBQ-28) -> -
+- [ ] **BBQ-10:** Eat chili, buffalo, cumin, pepper seasoned skewers -> 2 fire damage; 2 fire damage + amplifier +1; heal 2; fast eat
+- [ ] **BBQ-11:** Barbeque sauce on beef skewer -> Strength 3:00
+- [ ] **BBQ-12:** Eat a cooked skewer -> stick returned
+- [ ] **BBQ-13:** Kebab wrap (on bread), sandwich, bibimbap by the upstream combine recipes -> contents tooltip; skewer effects applied on eating; sticks returned from crafting
+- [ ] **BBQ-14:** JEI: Skewering and Grilling categories -> pages present with times "each side"; no family mirror recipes
+- [ ] **BBQ-15:** (replaced 2026-11-03 by BBQ-27: trades restored) -> -
+- [ ] **BBQ-16:** Compost a raw skewer, a cooked skewer, the sandwich, bibimbap; seasoning and tray -> 25%, 50%, 75%, 100% chance; seasoning and tray not accepted; JEI/`/dumpcompost` lists 24 rows
+- [ ] **BBQ-20:** Sauce on a raw skewer by craft; powder on a raw skewer -> sauce refused, powder accepted (O28, by seasonable tag since 4.5)
+- [ ] **BBQ-21:** Season a raw skewer with a powder, grill it -> the cooked skewer keeps the seasoning and name prefix
+- [ ] **BBQ-17:** WTHIT on the grill with a skewer on each slot -> countdown per slot, Ready to Flip at half time; no Jade needed
+- [ ] **BBQ-22:** Craft a cooked beef skewer with chili powder, then with honey mustard sauce; try a sauce on a raw skewer -> one powder consumed, "Chili Flavored Beef Skewer", tooltip "Chili: edible when full, 1 heart of burn damage"; sauce craft on raw refused (4.5)
+- [ ] **BBQ-23:** Chili skewer + pepper craft; set `[food] maxSeasonings = 1` and retry -> refused (no pair defined); with onion + garlic popcorn at cap 1 the pair craft is refused
+- [ ] **BBQ-24:** Grill a raw skewer seasoned with cumin -> cooked skewer has Cumin and Grilled lines, AppleSkin +2 saturation; eating heals 1 heart
+- [ ] **BBQ-25:** Smelt, smoke and campfire-cook a raw beef skewer; craft one from 3 cooked beef, 2 cabbage, stick -> Beef Skewer without a Grilled line; does not stack with a grilled one
+- [ ] **BBQ-26:** Kebab wrap from a grilled skewer -> wrap's stored skewer has no Grilled line; a crafted (not grilled) skewer is accepted too
+- [ ] **BBQ-27:** Butcher level 1 offers -> BBQ seasonings at 12 emeralds, 64 powders or 16 sauces, 4 uses
+- [ ] **BBQ-28:** Right-click a skewer on the grill or a cutting board with a seasoning -> nothing happens (use retired); seasonings stack to 64
+- [ ] **BBQ-29:** Eat pepper, buffalo, barbeque sauce beef skewers -> eaten fast; Strength II 0:45 and 1 heart burn; Strength 3:00
+- [ ] **BBQ-30:** Basin: 2 sweet potatoes, stick in main hand, 2 bacon in off hand; then 2 FD minced beef + 2 cabbage leaves -> Raw Potato Skewer; Raw Beef Skewer
+- [ ] **BBQ-31:** Sneak + right click a filled basin well holding a stick (and an off-hand item); then with empty hands -> one item into the inventory, hands unchanged; empty-handed: one item into the hand
+- [ ] **BBQ-32:** JEI Skewering page -> off-hand shield icon left of the lower input slot; slots line up with their frames
+- [ ] **BBQ-33:** JEI Grilling page result; Kebab Sandwich with two different cooked skewers -> result tooltip has the Grilled line; sandwich crafts
+- [ ] **BBQ-34:** Hover each of the six seasoning items, then a skewer seasoned with each -> the item's line reads exactly as the food's seasoning line (name, colors, numbers)
+- [ ] **BBQ-35:** Each of the eight pack skewers: craft the raw one, then grill, smelt, smoke and campfire-cook it -> the cooked pack skewer each time; Nether and Cave have no heatless craft, the other six do; End Skewer craft gives 1
+- [ ] **BBQ-36:** Raw pack skewer + a powder, then + a sauce; grill the powdered one -> powder accepted, sauce refused; the cooked skewer keeps the powder line
+- [ ] **BBQ-37:** Family dump and can list -> every cooked skewer (10 BBQ + 8 pack) in `skewer`; no skewer can
+- [ ] **BBQ-38:** Craft Kebab Wrap, Kebab Sandwich, Bibimbap from seasoned skewers; eat each (AppleSkin) -> normal JEI pages; no skewer names or effects on the result; 10 / 0.6, 16 / 0.6, 16 / 0.8
+- [ ] **BBQ-39:** Recipe dump before and after: the ten BBQ lines -> same ids (`creativedelight:` skewering, grilling, smelting, smoking, campfire, `_from_cooked_manual_only`)
+- [ ] **BBQ-40:** Kill a shulker with a knife; cut a Shulker Mollusk; JEI uses of the mollusk -> mollusk drops (and End's meat); 2 filets; End Skewer and its heatless craft, stuffed shulker on End's meat
 
 ## 9. History
 

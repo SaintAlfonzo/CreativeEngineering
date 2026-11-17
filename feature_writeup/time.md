@@ -653,7 +653,7 @@ TI-27 cover what the build added (3.8).
   biomes count through the 96-day year, 12 x 8 (SeasonHudHelperMixin)
 - [ ] **TI-09 Pause when empty:** dedicated server, note `/time query daytime`, `/season`, `/wine time`, everyone leaves
   for 5 min -> all three unchanged on rejoin
-- [ ] ~~**TI-10 Wine lengths unchanged**~~ retired 2026-10-18: lengths change on purpose (3.7), no conversions
+- [ ] ~~**TI-10 Wine lengths unchanged:**~~ retired 2026-10-18: lengths change on purpose (3.7), no conversions
 - [ ] **TI-11 Wine in world days:** `/wine clock add 1 days` -> the tooltip age goes up by one day; the JEI Wine Aging
   page shows 8 h per month
 - [ ] **TI-12 Cellar boost:** wine in a rack with no sky light -> WTHIT and tooltip show x2.0 (x2.5 until 2026-10-19, 3.5), `/wine info` shows the
@@ -668,7 +668,7 @@ TI-27 cover what the build added (3.8).
 - [ ] **TI-18 Month = sub-season (3.7):** `/wine clock add 8 days` -> the wine is 1 month older and the calendar is one sub-season on; the JEI Wine Aging page shows 8 h per month
 - [ ] **TI-19 Level every 3 months (3.7):** a fresh wine, `/wine clock add 24 days` -> level 1; the tooltip says months, not years
 - [ ] **TI-20 Dark x2.0 (3.7, x2.5 until 2026-10-19):** two fresh wines, one in a rack with no sky light, one under sky; after the same time the dark one is 2.0 times older; WTHIT shows x2.0
-- [ ] ~~**TI-21 Switch keeps ages**~~ retired 2026-10-18: no conversions
+- [ ] ~~**TI-21 Switch keeps ages:**~~ retired 2026-10-18: no conversions
 - [ ] **TI-22 Calendar (3.7):** no Vinery calendar in JEI or `/give`; hover and hold the Serene Seasons calendar -> season, day x of 8, year and time of day, matching SeasonHUD and `/ccaltime`; next sub-season line counts down
 - [ ] **TI-23 Clock format (3.7):** `/time set 22300` -> 6:00 am; `/time set 13000` -> 8:42 pm; `/time set 11800` -> 7:30 pm; the same on SeasonHUD, the calendar and `/ccaltime`
 - [ ] **TI-24 Day split (3.7):** time one sunrise to sunset and sunset to sunrise -> about 45 and 15 real minutes

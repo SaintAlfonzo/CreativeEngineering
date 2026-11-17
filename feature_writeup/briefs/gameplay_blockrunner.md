@@ -142,10 +142,10 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
 - item_dict.js / tag_helper.js are startup scripts: new keys need a restart, not `/reload`.
 
 ### Tests
-- **BR-53 Audit dump:** `/dumpsurface` -> `kubejs/exported/surface_audit.json` exists, IP asphalt reads tier
+- [ ] **BR-53 Audit dump:** `/dumpsurface` -> `kubejs/exported/surface_audit.json` exists, IP asphalt reads tier
   `asphalt`, soul sand `speedFactor 0.4` and no tier, a carpet `collisionTop` 0.0625; `python3 tools/blockrunner_scan.py
   --audit kubejs/exported/surface_audit.json` exits 0 against the fresh baseline.
-- **BR-54 Watcher catches a newcomer:** remove one tiered id from blocktags.js (e.g. `item.ice_crate`), restart with
+- [ ] **BR-54 Watcher catches a newcomer:** remove one tiered id from blocktags.js (e.g. `item.ice_crate`), restart with
   `[debug.generators]` on -> the startup run lists `brewinandchewin:ice_crate` as untyped. Put it back.
 
 ---
@@ -196,7 +196,7 @@ asphalt, and no block keeps a speed of its own on top of a tier.
   its own factor comes back (why block_properties.js resets D&D's 0.001).
 
 ### Tests
-- BR-28 / BR-29 cover the asphalt. **BR-55 No stray speed blocks:** after the #2 dump, the filter in Build 1 lists
+- [ ] **BR-28:** / BR-29 cover the asphalt. **BR-55 No stray speed blocks:** after the #2 dump, the filter in Build 1 lists
   only soul sand and soul soil.
 
 ---
@@ -292,11 +292,11 @@ listed in the writeup; optionally a tooltip says so.
 - Ice's friction already makes BlockRunner's 1.25 feel faster than 1.25 (blockrunner.md 3.8 "not modeled").
 
 ### Tests
-- **BR-56 Ice slip:** walk across packed ice -> every few steps a sideways nudge, like on a soap block; sneak -> none;
+- [ ] **BR-56 Ice slip:** walk across packed ice -> every few steps a sideways nudge, like on a soap block; sneak -> none;
   `[surface.slippery] soapSlip = false` -> none.
-- **BR-57 Boats:** a boat on Architect's Palette packed ice bricks and on a soap block line -> same top speed as on
+- [ ] **BR-57 Boats:** a boat on Architect's Palette packed ice bricks and on a soap block line -> same top speed as on
   packed ice; blue ice still faster.
-- **BR-58 Tooltip:** hover ice, a soap block, thin ice -> "Slippery: boats glide like on ice"; stone has no such line.
+- [ ] **BR-58 Tooltip:** hover ice, a soap block, thin ice -> "Slippery: boats glide like on ice"; stone has no such line.
 
 ---
 

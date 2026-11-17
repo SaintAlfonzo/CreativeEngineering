@@ -407,16 +407,16 @@ In Creative Common 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
 - [ ] **RB-09 CCK:** Create Central Kitchen's blaze stove under the pot and kettle still signals.
 - [ ] **RB-10 Oven:** a baking recipe with a milk bottle (muffin): bottle in a leftover slot.
 - [ ] **RB-11 Server:** the same on a dedicated server with a client (slots sync, shift-click works).
-- [ ] **RB-12 Oven leftovers stay visible** (Creative Common 1.1.01): bake blueberry muffins (milk bottle) with the GUI
+- [ ] **RB-12 Oven leftovers stay visible:** (Creative Common 1.1.01) bake blueberry muffins (milk bottle) with the GUI
   open, take the muffins out: the bottle stays in the leftover slot. Close and reopen: still there. Take it with a
   click.
-- [ ] **RB-13 Bowl count** (Creative Common 1.1.01): 10 bowls in the pot's plating slot, cook 5 of a tomato-sauce bowl
+- [ ] **RB-13 Bowl count:** (Creative Common 1.1.01) 10 bowls in the pot's plating slot, cook 5 of a tomato-sauce bowl
   meal: bowls in the slot + leftover slots + meals add up to 15. Once with Create Central Kitchen's blaze stove under
   the pot.
-- [ ] **RB-14 Recycle shows** (Creative Common 1.1.01): watch an FD pot cook a tomato-sauce bowl meal with the plating
+- [ ] **RB-14 Recycle shows:** (Creative Common 1.1.01) watch an FD pot cook a tomato-sauce bowl meal with the plating
   slot empty: the bowl appears in the plating slot for half a second, then the meal is plated. The same with hot
   cocoa and a milk bottle in the pot, and strong green tea in the kettle.
-- [ ] **RB-15 Copper pot recycle** (rule of 3.8, CD jar of 2026-11-03 19:13+): a Miner's copper pot over heat, plating
+- [ ] **RB-15 Copper pot recycle:** (rule of 3.8, CD jar of 2026-11-03 19:13+) a Miner's copper pot over heat, plating
   slot empty, a bowl-served recipe with a bowl-food ingredient (tomato sauce): the bowl lands in the container slot and
   the meal comes out plated after about 1 s (bowl in the leftover slot for 0.5 s, then in the container slot for
   0.5 s); nothing on the ground; with 1 bowl already in the container slot the recycled bowl stacks there at once, and
@@ -425,23 +425,23 @@ In Creative Common 1.0.7 and later (pack 1.0.7, DEPLOYED 2026-10-18).
   one in JEI) with one container in the container slot and ingredients for 3 batches: all 3 batches run, the container
   slot ends with 1, nothing thrown.
 
-- [ ] **RB-17 Containers only in the container slot** (3.8): on each of the five stations, try a valid container (a bowl
+- [ ] **RB-17 Containers only in the container slot:** (3.8) on each of the five stations, try a valid container (a bowl
   on the pot, a glass bottle on the kettle, paper on the oven for muffins, a mason jar on the Pickling Jar) in each
   ingredient slot by hand: refused; shift-click a stack of it: it all goes to the container slot and, with that slot
   full, stays in the inventory. A non-container (a carrot) cannot be placed in the container slot. Check latest.log
   for the `[stations] ... also used as an ingredient` lines and that every item listed there still goes in an
   ingredient slot.
-- [ ] **RB-18 Automation faces** (3.8): on the pot, copper pot, kettle and Pickling Jar, a hopper feeding a mix of
+- [ ] **RB-18 Automation faces:** (3.8) on the pot, copper pot, kettle and Pickling Jar, a hopper feeding a mix of
   ingredients and containers into the top and into a side: containers end in the container slot, ingredients in the
   ingredient slots, from both faces. A hopper under each pulls the outputs, then the leftovers, never the container
   slot. On the Pickling Jar a hopper on a side face also pulls the pickles.
-- [ ] **RB-20 Overflow pull** (3.8): FD pot, plating slot empty, a bowl in a leftover slot, a bowl-served meal cooks:
+- [ ] **RB-20 Overflow pull:** (3.8) FD pot, plating slot empty, a bowl in a leftover slot, a bowl-served meal cooks:
   the bowl stays in the leftover slot for 0.5 s, moves to the container slot, stays 0.5 s, then the meal is plated;
   with 3 meals waiting and 5 bowls in a leftover slot, 3 move and 2 stay. A glass bottle in the leftover slot never
   moves for a bowl meal. Same on the kettle (bottle drink), oven (muffins and paper) and copper pot. Pickling Jar: a
   container-recipe's ingredients, container slot empty, the container in slot 9: it moves to slot 6 after 0.5 s and
   the batch starts.
-- [ ] **RB-19 Pickling Jar progress per recipe** (3.8): start pickles (2 min), wait until the arrow is past half, swap
+- [ ] **RB-19 Pickling Jar progress per recipe:** (3.8) start pickles (2 min), wait until the arrow is past half, swap
   the inputs for kimchi: the arrow restarts and the kimchi takes the full 2 min.
 
 ## 8. History

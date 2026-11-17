@@ -124,13 +124,13 @@ All ids above are structure ids as in `/dumpstructuregen`; JSON fields verified 
 - New chunks only; rejoin after changing tags.
 
 ### Tests
-- ST-215 Ponds on a slope [scratch]: `/place structure farmers_structures:aquacultures_common` and `_carp` on a hillside:
+- [ ] **ST-215:** Ponds on a slope [scratch]: `/place structure farmers_structures:aquacultures_common` and `_carp` on a hillside:
   no square pad, no air notch, the water stays in the pond, the rim flush with the slope (carp: no 4-block dip or
   plinth).
-- ST-216 Spire in the hills [scratch]: a placed spire leaves the surrounding hills uncut; its snow cover is whole.
-- ST-217 Level-three ruins [scratch]: two variants on a slope, no grass slab around them; a `meta/large_ruins` cluster
+- [ ] **ST-216:** Spire in the hills [scratch]: a placed spire leaves the surrounding hills uncut; its snow cover is whole.
+- [ ] **ST-217:** Level-three ruins [scratch]: two variants on a slope, no grass slab around them; a `meta/large_ruins` cluster
   with one as anchor looks the same.
-- ST-218 Load line [scratch]: `[terrain-adaptation] world load:` counts go up by the tagged number, `7 sunk starts`.
+- [ ] **ST-218:** Load line [scratch]: `[terrain-adaptation] world load:` counts go up by the tagged number, `7 sunk starts`.
 
 ---
 
@@ -188,7 +188,7 @@ Config: new `beardFootprint` (boolean) in `CEConfig.EarthFill` (class at `CEConf
 
 ### Tests
 - Offline: a `footprint` sim run printed per structure (no pass/fail; numbers go into 3.13).
-- ST-219 Beard pillar caught [scratch] (if step 2): with `beardFootprint = true`, a stone tower on a cliff edge logs
+- [ ] **ST-219:** Beard pillar caught [scratch] (if step 2): with `beardFootprint = true`, a stone tower on a cliff edge logs
   mound columns and is canceled; the same tower on flat ground is kept.
 
 ---
@@ -223,7 +223,7 @@ anything else.
 - None left for the row. Recommended: set the TODO row to Testing (LO-11) and drop "Measure first" from its details.
 
 ### Tests
-- LO-11 [game] (locate.md 7) is the remaining test.
+- [ ] **LO-11:** [game] (locate.md 7) is the remaining test.
 
 ---
 

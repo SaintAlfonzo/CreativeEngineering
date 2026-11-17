@@ -500,7 +500,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - [ ] **MT-25 Pile slow height:** *Superseded 2026-11-15: leaf piles are the pass-through `leaf_pile` tier, `[surface.passthrough.leaf_pile] minLayers` replaces `slowFromLayers` (same default 4); run BR-83 and BR-87 in [blockrunner.md](blockrunner.md) 3.10 instead (queue SQ-PTH-16 to -18, CQ-PTH-04). Kept for the record.* *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles -> only the
   4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat -> 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.
-- [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world): all four
+- [ ] **MT-26 Seagulls skip lunchboxes:** (needs a real player: gulls only target players in the world) all four
   lunchboxes (Lunchbag, Copper, Iron, Netherite), with food inside, anywhere in the inventory on a beach with seagulls
   (no other food): no gull takes one in a few minutes. With a carrot added, a gull still steals the carrot. Drop a
   lunchbox near gulls: none picks it up. Mixins `AlexsMobsSeagullStealMixin` / `AlexsMobsSeagullItemMixin`
@@ -529,7 +529,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   through a floor with a ladder up to the floor level, both ways.
 - [ ] **MT-46 Not ladders:** a vine-covered wall or a scaffolding tower as the only way up -> the villager does not path
   up it. A ladder that stops one block short of the platform -> not used (expected).
-- [ ] **MT-40 Comb eye color** (client only): hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
+- [ ] **MT-40 Comb eye color:** (client only) hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
   top right and `Eye Shape 1` top left. Step the color through all 11 and toggle the shape -> the hair previews show
   the new eyes each time. Press Done -> your villager-model look keeps the eyes (switch to the villager model in the
   full editor if needed), the comb lost 1 use. Repeat by using the comb on an MCA villager: its eyes change in the

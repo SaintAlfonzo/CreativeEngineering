@@ -188,12 +188,12 @@ Any, Sky, Nether and End names, and the per-mod unmapped columns, are not folded
 
 Logic, in the plain Java harness:
 
-- [x] **SCAT-01** (2026-11-09, `tools/test_worldgen_tools.sh` 2b): resolver gives the section 4 home for one id per rule, and multi-type ids land by priority.
-- [x] **SCAT-02** (2026-11-09): an id with no `type/*` tag is unmapped; a `zpointer` id is skipped.
-- [x] **SCAT-03** (2026-11-15): layout gaps of 20, 12, 6, 3 and 3 at the right boundaries, with no overlapping boxes on a random tree.
-- [x] **SCAT-04** (2026-11-15): skipped levels and the street rule (no function split, zombie pieces in their base biome).
-- [x] **SCAT-12** (2026-11-15): biome families: vanilla, Iberian, and an acacia-named whole structure all land in Savanna; Terralith desert in Desert, pueblo in Badlands, Swiss meadow in Mountain; 13 street columns, longest 71.
-- [x] **SCAT-13** (2026-11-15): Forest Ruins pieces are in Ruins > Village ruins, function from their piece subfamily; 52 on the dump.
+- [x] **SCAT-01:** (2026-11-09, `tools/test_worldgen_tools.sh` 2b) resolver gives the section 4 home for one id per rule, and multi-type ids land by priority.
+- [x] **SCAT-02:** (2026-11-09) an id with no `type/*` tag is unmapped; a `zpointer` id is skipped.
+- [x] **SCAT-03:** (2026-11-15) layout gaps of 20, 12, 6, 3 and 3 at the right boundaries, with no overlapping boxes on a random tree.
+- [x] **SCAT-04:** (2026-11-15) skipped levels and the street rule (no function split, zombie pieces in their base biome).
+- [x] **SCAT-12:** (2026-11-15) biome families: vanilla, Iberian, and an acacia-named whole structure all land in Savanna; Terralith desert in Desert, pueblo in Badlands, Swiss meadow in Mountain; 13 street columns, longest 71.
+- [x] **SCAT-13:** (2026-11-15) Forest Ruins pieces are in Ruins > Village ruins, function from their piece subfamily; 52 on the dump.
 
 The harness's snapshot checks for whole (279), unmapped (44) and dried (35) counts fail on the 2026-11-09 dump (244, 79, 33): it predates the 2026-11-10 namespace move, so its `creativeengineering:meta/*` ids no longer match the tag file. Rerun `/dumpall` before reading those three.
 

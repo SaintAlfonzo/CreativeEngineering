@@ -365,9 +365,9 @@ Since M8 (2026-11-04, plan_cb_publish.md 3b) the code is Creative Delight's Incu
 - [ ] **NE-13 duck mod egg sprites:** hold a duck egg and a goose egg -> the new teal duck egg and pale pink goose egg sprites, not the duck mod's originals; also when thrown (thrown eggs use the item model).
 - [ ] **NE-14 egg crates:** 9 duck eggs -> Duck Egg Crate, crate -> 9 duck eggs; same for goose; crates show the new top/side textures with the chicken crate's bottom, mine fastest with an axe, drop themselves.
 
-- [ ] **NE-15 goose golden egg** (VTD-32): set `goldenEggChance` to 1, pen a goose with a goose nest -> it places a Golden Egg block beside itself at lay time, never walks to the nest, the nest stays empty. Set it to 0 -> geese lay into nests as before. Without Vintage Delight nothing changes.
-- [ ] **NE-16 golden egg away from walls** (VTD-32a): chance 1; a goose against a wall or in a corner with open ground within 3 blocks places the egg block on the open ground; in a closed 1x1 pen it drops the item where it stands; never on the far side of a fence.
-- [ ] **NE-17 golden egg block placement**: chance 1; the egg block never lands on the goose, never replaces a torch, flower or rail (a free spot with one is skipped), and falls like sand if the block under it is broken. Breaking it gives its loot table.
+- [ ] **NE-15 goose golden egg:** (VTD-32) set `goldenEggChance` to 1, pen a goose with a goose nest -> it places a Golden Egg block beside itself at lay time, never walks to the nest, the nest stays empty. Set it to 0 -> geese lay into nests as before. Without Vintage Delight nothing changes.
+- [ ] **NE-16 golden egg away from walls:** (VTD-32a) chance 1; a goose against a wall or in a corner with open ground within 3 blocks places the egg block on the open ground; in a closed 1x1 pen it drops the item where it stands; never on the far side of a fence.
+- [ ] **NE-17 golden egg block placement:** chance 1; the egg block never lands on the goose, never replaces a torch, flower or rail (a free spot with one is skipped), and falls like sand if the block under it is broken. Breaking it gives its loot table.
 
 ## 8. History
 

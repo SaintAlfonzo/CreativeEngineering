@@ -874,42 +874,40 @@ to the alcohol scripts.
 
 ## 8. In-game test suite (drafted)
 
-| ID | Test | Pass |
-|---|---|---|
-| EXD-01 | Boot with the port and the H&H port: no ED errors in `latest.log`; JEI shows only kept items | |
-| EXD-02 | None of the 2.1 Drop ids exists (`/give` fails), and no id is registered by both ports | |
-| EXD-03 | Chili, ginger, mallow root, soybean grow, drop seeds / cuttings, harvest by hoe area | |
-| EXD-04 | Wild chili, ginger, mallow, soybean appear in their biomes (crop table) | |
-| EXD-05 | Lime, grapefruit, hazelnut, cinnamon trees generate, drop fruit, saplings grow; fruit and cinnamon wood sets craft | |
-| EXD-06 | Former ED oven recipes bake in the pack oven with the mapped bakeware (pie, loaf, cake, cookie samples) | |
-| EXD-07 | Kept ED bakeware (per D3) is used and returned, never consumed | |
-| EXD-08 | Mixing bowl: needs the set number of stirs with a spoon; JEI page | |
-| EXD-09 | Chiller makes ice cream, jelly, popsicles; JEI page | |
-| EXD-10 | Drying rack dries fruit, chili, corn husk (JEI page matches) | |
-| EXD-11 | Dough shaping makes the shaped gingerbread and sugar cookies and pasta shapes | |
-| EXD-12 | Juicer (D12) presses citrus, berries, melon, tomato; fills bottles | |
-| EXD-13 | Former vat recipes (pickled fish, ginger, rinds, sausage; sauerkraut; natto; miso) ferment in the Vintage jar | |
-| EXD-14 | Former mortar recipes grind on the crushing wheels, Millstone and the pack mortar | |
-| EXD-15 | Feast blocks place, serve with the right container / spatula, and give the bowl back | |
-| EXD-16 | Pie blocks (11 kinds) place, slice and eat | |
-| EXD-17 | Butter: block, slab, stairs craft back to butter; `#forge:butter` holds ED butter only; H&H butter recipes take it | |
-| EXD-18 | Sausage dishes (currywurst, sausage roll...) take H&H sausage | |
-| EXD-19 | D13 cut-tag dishes craft from FD cuts; dropped offal dishes don't exist | |
-| EXD-20 | Chocolate lines (chips, truffles, dipped) craft from Create / Confectionery chocolate | |
-| EXD-21 | Ice creams and milkshakes: no flavor duplicated with Neapolitan | |
-| EXD-22 | ED coffee dishes take Farmer's Respite beans | |
-| EXD-23 | Pickled and Pucker Up effects work (poison ticks negated by chance; field of view narrows) and JEED text shows | |
-| EXD-24 | Clarity from former Sunshine foods clears Blindness and Darkness | |
-| EXD-25 | Eating a melon slice gives a melon rind | |
-| EXD-26 | Dense corn in October gives no Nausea portal (Cornfield dropped, D4) | |
-| EXD-27 | Food values and types: a sample of 10 ED foods shows the pack tuning values, AppleSkin agrees | |
-| EXD-28 | Decor: half cabinets (13 woods) store items; gingham, ribbons, picnic baskets, wreaths place | |
-| EXD-29 | Kept chest additions appear in their structure chests; no dropped id in any chest | |
-| EXD-30 | Names: no duplicate display names with Create (whisk), the pack oven, Vintage cheese, More Delight toast | |
-| EXD-31 | JEI: no ED butter, sunflower seeds, mac and cheese item, glazed carrot, corn husk or shared-wood half cabinet; H&H's are the only ones | |
-| EXD-32 | ED recipe that needs butter accepts H&H's butter | |
-| EXD-33 | Currywurst and Sausage Roll craft with H&H cooked or raw sausage | |
-| EXD-34 | Lime juice comes from the Vinery Apple Press; no ED juicer in JEI | |
+- [ ] **EXD-01:** Boot with the port and the H&H port: no ED errors in `latest.log`; JEI shows only kept items
+- [ ] **EXD-02:** None of the 2.1 Drop ids exists (`/give` fails), and no id is registered by both ports
+- [ ] **EXD-03:** Chili, ginger, mallow root, soybean grow, drop seeds / cuttings, harvest by hoe area
+- [ ] **EXD-04:** Wild chili, ginger, mallow, soybean appear in their biomes (crop table)
+- [ ] **EXD-05:** Lime, grapefruit, hazelnut, cinnamon trees generate, drop fruit, saplings grow; fruit and cinnamon wood sets craft
+- [ ] **EXD-06:** Former ED oven recipes bake in the pack oven with the mapped bakeware (pie, loaf, cake, cookie samples)
+- [ ] **EXD-07:** Kept ED bakeware (per D3) is used and returned, never consumed
+- [ ] **EXD-08:** Mixing bowl: needs the set number of stirs with a spoon; JEI page
+- [ ] **EXD-09:** Chiller makes ice cream, jelly, popsicles; JEI page
+- [ ] **EXD-10:** Drying rack dries fruit, chili, corn husk (JEI page matches)
+- [ ] **EXD-11:** Dough shaping makes the shaped gingerbread and sugar cookies and pasta shapes
+- [ ] **EXD-12:** Juicer (D12) presses citrus, berries, melon, tomato; fills bottles
+- [ ] **EXD-13:** Former vat recipes (pickled fish, ginger, rinds, sausage; sauerkraut; natto; miso) ferment in the Vintage jar
+- [ ] **EXD-14:** Former mortar recipes grind on the crushing wheels, Millstone and the pack mortar
+- [ ] **EXD-15:** Feast blocks place, serve with the right container / spatula, and give the bowl back
+- [ ] **EXD-16:** Pie blocks (11 kinds) place, slice and eat
+- [ ] **EXD-17:** Butter: block, slab, stairs craft back to butter; `#forge:butter` holds ED butter only; H&H butter recipes take it
+- [ ] **EXD-18:** Sausage dishes (currywurst, sausage roll...) take H&H sausage
+- [ ] **EXD-19:** D13 cut-tag dishes craft from FD cuts; dropped offal dishes don't exist
+- [ ] **EXD-20:** Chocolate lines (chips, truffles, dipped) craft from Create / Confectionery chocolate
+- [ ] **EXD-21:** Ice creams and milkshakes: no flavor duplicated with Neapolitan
+- [ ] **EXD-22:** ED coffee dishes take Farmer's Respite beans
+- [ ] **EXD-23:** Pickled and Pucker Up effects work (poison ticks negated by chance; field of view narrows) and JEED text shows
+- [ ] **EXD-24:** Clarity from former Sunshine foods clears Blindness and Darkness
+- [ ] **EXD-25:** Eating a melon slice gives a melon rind
+- [ ] **EXD-26:** Dense corn in October gives no Nausea portal (Cornfield dropped, D4)
+- [ ] **EXD-27:** Food values and types: a sample of 10 ED foods shows the pack tuning values, AppleSkin agrees
+- [ ] **EXD-28:** Decor: half cabinets (13 woods) store items; gingham, ribbons, picnic baskets, wreaths place
+- [ ] **EXD-29:** Kept chest additions appear in their structure chests; no dropped id in any chest
+- [ ] **EXD-30:** Names: no duplicate display names with Create (whisk), the pack oven, Vintage cheese, More Delight toast
+- [ ] **EXD-31:** JEI: no ED butter, sunflower seeds, mac and cheese item, glazed carrot, corn husk or shared-wood half cabinet; H&H's are the only ones
+- [ ] **EXD-32:** ED recipe that needs butter accepts H&H's butter
+- [ ] **EXD-33:** Currywurst and Sausage Roll craft with H&H cooked or raw sausage
+- [ ] **EXD-34:** Lime juice comes from the Vinery Apple Press; no ED juicer in JEI
 
 ## 9. History
 

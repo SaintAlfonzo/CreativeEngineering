@@ -103,7 +103,7 @@ stable ids matter for JEI ordering or tests.
   the same pass.
 
 ### Tests
-- **RM-15 Plates everywhere:** for aluminium, steel and cast iron: JEI plate -> Create press, IE press, hammer, all pack
+- [ ] **RM-15 Plates everywhere:** for aluminium, steel and cast iron: JEI plate -> Create press, IE press, hammer, all pack
   ids; put an aluminium ingot under a mechanical press -> IE aluminium plate (not a hidden VI sheet). Replaces RM-07.
 
 ---
@@ -147,7 +147,7 @@ were wrong; F4 is corrected.
   line 121 didn't swap the input (see metal #3).
 
 ### Tests
-- **RM-16 Hand rods:** 2 lead ingots in a column -> 4 lead rods; same for copper and nickel.
+- [ ] **RM-16 Hand rods:** 2 lead ingots in a column -> 4 lead rods; same for copper and nickel.
 
 ---
 
@@ -227,7 +227,7 @@ Recommended: rose gold is its own metal; only the rods stay interchangeable.
   IE ones above; check JEI uses of the rose gold ingot before and after the change (RM-17) and note what disappears.
 
 ### Tests
-- **RM-17 Rose gold apart:** `/kubejs hand` on a rose gold ingot -> `forge:ingots/rose_gold`, not `forge:ingots/gold`;
+- [ ] **RM-17 Rose gold apart:** `/kubejs hand` on a rose gold ingot -> `forge:ingots/rose_gold`, not `forge:ingots/gold`;
   rose gold ingot in the IE crusher -> rose gold dust; IE alloy kiln rose gold + silver -> nothing; golden carrot does not
   take rose gold nuggets; powered rail still takes rose gold rods. Replaces RM-11.
 
@@ -297,8 +297,8 @@ Door keys: `i.tall_rusty_iron_door` 1290, `i.tall_iron_door` 1300, `i.short_rust
   removal doesn't take, report it and use a Dramatic Doors config option instead (unverified).
 
 ### Tests
-- **RM-18 Rust doors:** wash a tall iron door -> tall rusty iron door; JEI tall rusty iron door -> washing only.
-- **RM-19 Dust recycle (if built):** smelt aluminium dust -> aluminium ingot by a `creativeengineering:` id.
+- [ ] **RM-18 Rust doors:** wash a tall iron door -> tall rusty iron door; JEI tall rusty iron door -> washing only.
+- [ ] **RM-19 Dust recycle (if built):** smelt aluminium dust -> aluminium ingot by a `creativeengineering:` id.
 
 ---
 
@@ -339,7 +339,7 @@ Status Planned · Work KubeJS · TODO `recipes/metal #5`
 - A stonecutter loop (A -> B, B -> A) is fine at 1:1; don't give either direction more than 1.
 
 ### Tests
-- **RM-20 Polished bars:** stonecutter iron bars -> polished iron bars and back; craft an iron catwalk.
+- [ ] **RM-20 Polished bars:** stonecutter iron bars -> polished iron bars and back; craft an iron catwalk.
 
 ---
 
@@ -394,7 +394,7 @@ Recommended, KubeJS only, in `misc_metal_crafts.js` or a "Panning" section of `r
 - Don't give soul sand more gold: it is already a quartz source.
 
 ### Tests
-- **RM-21 Panning:** wash 64 gravel -> about 3 gold nuggets, flint and iron nuggets as before.
+- [ ] **RM-21 Panning:** wash 64 gravel -> about 3 gold nuggets, flint and iron nuggets as before.
 
 ---
 

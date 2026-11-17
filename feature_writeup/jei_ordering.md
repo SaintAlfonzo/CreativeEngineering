@@ -148,19 +148,19 @@ Pack hides stay in one place (`global.removedItems` and the like) so the report 
 
 ## 8. Tests (drafted, `JO-`)
 
-- **JO-01** With the ordering on, the first JEI page starts with Equipment > Tools in the defined
+- [ ] **JO-01:** With the ordering on, the first JEI page starts with Equipment > Tools in the defined
   tier order.
-- **JO-02** Copper tools appear together in the custom-list order, whichever mod adds each.
-- **JO-03** A leaf on mod order shows vanilla, then Create, then IE entries.
-- **JO-04** An untagged item shows after every category.
-- **JO-05** Item types come before multiblocks, then fluids, then effects.
-- **JO-06** Fluids and effects follow their own category order.
-- **JO-07** The report lists every ingredient in one visibility class, and `global.removedItems`
+- [ ] **JO-02:** Copper tools appear together in the custom-list order, whichever mod adds each.
+- [ ] **JO-03:** A leaf on mod order shows vanilla, then Create, then IE entries.
+- [ ] **JO-04:** An untagged item shows after every category.
+- [ ] **JO-05:** Item types come before multiblocks, then fluids, then effects.
+- [ ] **JO-06:** Fluids and effects follow their own category order.
+- [ ] **JO-07:** The report lists every ingredient in one visibility class, and `global.removedItems`
   entries show as hidden by the pack.
-- **JO-08** An ingredient tagged into two leaves is reported and placed by the first.
-- **JO-09** Adding a new leaf tag without an ordering entry still shows the items and reports the
+- [ ] **JO-08:** An ingredient tagged into two leaves is reported and placed by the first.
+- [ ] **JO-09:** Adding a new leaf tag without an ordering entry still shows the items and reports the
   missing entry.
-- **JO-10** Reloading (`/reload` for tags, client resource reload for JEI) applies a changed order
+- [ ] **JO-10:** Reloading (`/reload` for tags, client resource reload for JEI) applies a changed order
   without a restart, if JEI allows it; otherwise note that a restart is needed.
 
 ## 9. Investigation (2026-10-18)
@@ -384,23 +384,23 @@ off nothing is re-sorted, so the feature can ship disabled.
 
 Additional test from the investigation:
 
-- **JO-11** An effect tagged `creativecompat:jei/...` through `ServerEvents.tags('mob_effect')`
+- [ ] **JO-11:** An effect tagged `creativecompat:jei/...` through `ServerEvents.tags('mob_effect')`
   is placed on the client (proves `mob_effect` tags sync; if not, effect leaves move to id lists).
-- **JO-12** The fluids fluid_jei.js adds are sorted with the other fluids, not appended at the end.
+- [ ] **JO-12:** The fluids fluid_jei.js adds are sorted with the other fluids, not appended at the end.
 
 Equipment family (12.5):
 
-- **JO-13** The item list opens with Equipment: wood, leather, stone, copper, ... in the 12.5 family order; inside a
+- [ ] **JO-13:** The item list opens with Equipment: wood, leather, stone, copper, ... in the 12.5 family order; inside a
   family the tools come first (sword, pickaxe, axe, shovel, hoe, knife, machete), then armor (helmet to boots, then
   goggle helmet, diving helmet, backtank, diving boots), then the family's shield, shears and horse armor (fishing
   rods and backpacks moved to their own groups 2026-11-16, JO-17).
-- **JO-14** After the families: misc vanilla (bow, crossbow, trident, ...), misc modded, knives (the leftover
+- [ ] **JO-14:** After the families: misc vanilla (bow, crossbow, trident, ...), misc modded, knives (the leftover
   Delightful knives by name, none of the six placed in a family), arrows (Nock Enough Arrows included), guns (Old
   Guns first, then IE, then PneumaticCraft), then tech, magic and hats last (Simple Hats items unsorted since
   2026-11-16, JO-17).
-- **JO-15** `jei_order_catalog.md` section 2 lists no conflicts and no unknown list ids for `equipment/...`.
-- **JO-16** None of the mechanisms or repair parts of Old Guns sit under `equipment/misc/guns` (`except`).
-- **JO-17** (12.5a, CQ-JO-02) After the material families: Fishing Rods (vanilla, iron, gold, diamond, netherite rod,
+- [ ] **JO-15:** `jei_order_catalog.md` section 2 lists no conflicts and no unknown list ids for `equipment/...`.
+- [ ] **JO-16:** None of the mechanisms or repair parts of Old Guns sit under `equipment/misc/guns` (`except`).
+- [ ] **JO-17:** (12.5a, CQ-JO-02) After the material families: Fishing Rods (vanilla, iron, gold, diamond, netherite rod,
   then the three rod upgrades), then Backpacks (Quark's, Sophisticated Backpacks' basic, copper, iron, gold, diamond,
   netherite), then misc; no rod, rod upgrade or backpack inside a material family or misc. Wardrobe's backpack, large
   and travel backpacks and the Simple Hats items sit after every category (unsorted); `jei_order_catalog.md` reports

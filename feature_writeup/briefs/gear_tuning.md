@@ -128,7 +128,7 @@ Java field names are what `R.cfg` reads (`mb`, `reachMb`), toml keys are labels 
 - Player-visible only if a default changes; with today's defaults no changelog bullet (dev-only config split).
 
 ### Tests
-- GR-31: `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` -> log line `CRAFTING.FELSIC_HELMET.reachMb
+- [ ] **GR-31:** `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` -> log line `CRAFTING.FELSIC_HELMET.reachMb
   overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
 
 ---
@@ -194,11 +194,11 @@ armor trim, Quark rune glint, banner pattern; and damage by decision.
 - Changelog bullet: upgrades keep trims, rune glint and banners (Gear family).
 
 ### Tests
-- GR-33: trim a netherite chestplate (Armor Trims), run it to echo -> trim kept (`/data get entity @s SelectedItem`
+- [ ] **GR-33:** trim a netherite chestplate (Armor Trims), run it to echo -> trim kept (`/data get entity @s SelectedItem`
   shows `trim`).
-- GR-34: rune a netherite sword (Quark), echo assembly -> glint kept.
-- SH-27 (update): bannered netherite shield -> echo assembly -> banner kept.
-- GR-35: enchanted iron fishing rod in the grid -> gold rod keeps the enchantments (after #13).
+- [ ] **GR-34:** rune a netherite sword (Quark), echo assembly -> glint kept.
+- [ ] **SH-27:** (update) bannered netherite shield -> echo assembly -> banner kept.
+- [ ] **GR-35:** enchanted iron fishing rod in the grid -> gold rod keeps the enchantments (after #13).
 
 ---
 
@@ -254,7 +254,7 @@ armor is assembled from **diamond** horse armor (end_gear.js 131), skipping neth
   `durability` on the ranged items shows in game before trusting it.
 
 ### Tests
-- GR-36: hover the three ranged items and the horse armor -> purple name. Enchanting table at 30 levels with the dragon
+- [ ] **GR-36:** hover the three ranged items and the horse armor -> purple name. Enchanting table at 30 levels with the dragon
   bow (if D1) -> enchants comparable to the dragon sword.
 
 ---
@@ -292,7 +292,7 @@ Close F6, F8 and the F11 tag question (F9 is done).
 - `global.tags.remove` only removes direct members; editing the `add` list is simpler here.
 
 ### Tests
-- GR-23 with the tarantula hawk elytra; JEI tag view of `#creativeengineering:dragon_gear` without anvil, air brake
+- [ ] **GR-23:** with the tarantula hawk elytra; JEI tag view of `#creativeengineering:dragon_gear` without anvil, air brake
   and horse armor.
 
 ---
@@ -357,7 +357,7 @@ Recipe ids removed: `sophisticatedbackpacks:backpack`, `minecraft:leather_horse_
 - Leather is common here (rotten flesh to leather); the cost is the string and the time.
 
 ### Tests
-- **GR-37** (this brief's proposal): JEI on the backpack, saddle and leather horse armor shows only the new recipes,
+- [ ] **GR-37:** (this brief's proposal) JEI on the backpack, saddle and leather horse armor shows only the new recipes,
   each accepting hardened or ersatz leather; the old horse armor recipe is gone; a crafted backpack keeps its default
   colours.
 
@@ -401,7 +401,7 @@ Pneumatic armor is made through PneumaticCraft machines, not a plain grid, and k
   tooltip or JEI note.
 
 ### Tests
-- GR-38: JEI on each pneumatic armor piece shows only the new recipe; craft one in a pressure chamber.
+- [ ] **GR-38:** JEI on each pneumatic armor piece shows only the new recipe; craft one in a pressure chamber.
 
 ---
 
@@ -440,7 +440,7 @@ Shears take Fortune at the table and the anvil, and the level does something.
   Leaves and other shear-only block drops stay as they are (they drop the block itself).
 
 ### Tests
-- GR-39 (this brief's proposal): enchanting table and anvil offer Fortune on shears; Fortune III shears on a sheep, 20 shears -> average wool above 2.
+- [ ] **GR-39:** (this brief's proposal) enchanting table and anvil offer Fortune on shears; Fortune III shears on a sheep, 20 shears -> average wool above 2.
 
 ---
 
@@ -491,7 +491,7 @@ Diving helmet, backtank and boots for the echo, felsic and dragon tiers, made by
 - Big art load; split code and art into two sessions.
 
 ### Tests
-- GR-40: full echo diving set in lava -> netherite-style lava vision and no burning while air lasts. Backtank refills at
+- [ ] **GR-40:** full echo diving set in lava -> netherite-style lava vision and no burning while air lasts. Backtank refills at
   a Create air compressor setup (placed backtank).
 
 ---
@@ -535,7 +535,7 @@ Every recipe above netherite reads its numbers from CEConfig through `R.cfg`, li
   felsic `potion`).
 
 ### Tests
-- GR-41: `[crafting.dragon_helmet] loops = 3`, `/reload` -> log override line; JEI shows 3 loops. Same for
+- [ ] **GR-41:** `[crafting.dragon_helmet] loops = 3`, `/reload` -> log override line; JEI shows 3 loops. Same for
   `[crafting.echo_sword] lavaMb = 500`. Put them back.
 
 ---
@@ -597,7 +597,7 @@ durability and enchantability, the dragon rod with its own bonus.
 - Removing the `*_upgrade` items' recipes leaves the items in JEI; hide them (jei hide list) or leave.
 
 ### Tests
-- GR-42: JEI chain vanilla -> dragon rod, one recipe per step; an enchanted diamond rod keeps its enchantments through
+- [ ] **GR-42:** JEI chain vanilla -> dragon rod, one recipe per step; an enchanted diamond rod keeps its enchantments through
   netherite and dragon; the dragon rod repairs itself (autorepair).
 
 ---

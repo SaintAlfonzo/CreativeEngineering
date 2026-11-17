@@ -164,23 +164,23 @@ Decisions taken during the build (correct them if wrong):
 
 Scratch (deep scan 2026-11-02): SQ-RSP-01 PASS (r1101 boot), -09 PASS (r1101), -02, -03, -04, -10, -11, -13 PASS r1102b (`perf/runs/r1102b/s2/judged.md`; -02 now 84 recipes, not 48). Open: -05, -06, -07, -15 (`item replace block` cannot load the Kettle: probe fault, rerun with a bot), -12 (flower pot drop not seen; bot too close), -08 (needs a player), -14 (old-jar boot failed beside CD). CQ-RSP-01 (client) not run. In game:
 
-- RSP-01 Kettle takes water by bucket (level 4) and refuses a tea on top of water; empties to 4 water bottles.
-- RSP-02 Pour 2 Black Tea, then honey + plating bottle: Strong Black Tea, level 1, honey bottle to a leftover slot.
-- RSP-03 Long Black Tea from black tea in the tank + milk bottle.
-- RSP-04 Fill box: 4 Black Tea pour in one by one, 4 empties appear in the empty box; put glass bottles in the empty box: direction flips, bottles fill from the tank; shift-click a tea goes to the fill box; a stone block can't go in either box.
-- RSP-05 Glass bottle placed in an ingredient slot moves to a leftover slot; the brew still plates from the plating slot.
-- RSP-06 Create pump fills in 250 mB steps (a 100 mB offer is refused, 600 mB gives 500); a pump pulls it empty from below and each side.
-- RSP-07 Spout and Item Drain: each new drink fluid both ways; Water Cup <-> Copper Cup + 250 mB water.
-- RSP-08 Right-click: water bottle +1, glass bottle takes one as the drink, empty bucket takes a full tank of water.
-- RSP-09 GUI bar: four steps in the fluid's color, tooltip "Black Tea: 2 / 4" and mB.
-- RSP-10 Kettle item tooltip "Tank: Water, 3 / 4"; placing it back gives level 3.
-- RSP-11 WTHIT "Tank: Black Tea 2 / 4" beside the Holding line.
-- RSP-12 JEI Kettle page shows the base fluid in the bar; Rustic coffees and the five Fruits Delight teas listed.
-- RSP-13 Wild Tea Bush goes into a flower pot and back out.
-- RSP-14 Slice of Coffee Cake: Caffeinated 0:30, no Speed; Rose Hip Pie Slice: Regeneration only.
-- RSP-15 Wither Roots death message: "while gardening", and the "whilst fighting" version when a mob hit you.
-- RSP-16 A world with a 2.0 Kettle at 3 water: unchanged and brews.
-- RSP-17 A heated Kettle with water and 2 black tea leaves takes 10 s (not 1 tick) to make one Black Tea.
+- [ ] **RSP-01:** Kettle takes water by bucket (level 4) and refuses a tea on top of water; empties to 4 water bottles.
+- [ ] **RSP-02:** Pour 2 Black Tea, then honey + plating bottle: Strong Black Tea, level 1, honey bottle to a leftover slot.
+- [ ] **RSP-03:** Long Black Tea from black tea in the tank + milk bottle.
+- [ ] **RSP-04 Fill box:** 4 Black Tea pour in one by one, 4 empties appear in the empty box; put glass bottles in the empty box: direction flips, bottles fill from the tank; shift-click a tea goes to the fill box; a stone block can't go in either box.
+- [ ] **RSP-05:** Glass bottle placed in an ingredient slot moves to a leftover slot; the brew still plates from the plating slot.
+- [ ] **RSP-06:** Create pump fills in 250 mB steps (a 100 mB offer is refused, 600 mB gives 500); a pump pulls it empty from below and each side.
+- [ ] **RSP-07 Spout and Item Drain:** each new drink fluid both ways; Water Cup <-> Copper Cup + 250 mB water.
+- [ ] **RSP-08 Right-click:** water bottle +1, glass bottle takes one as the drink, empty bucket takes a full tank of water.
+- [ ] **RSP-09 GUI bar:** four steps in the fluid's color, tooltip "Black Tea: 2 / 4" and mB.
+- [ ] **RSP-10:** Kettle item tooltip "Tank: Water, 3 / 4"; placing it back gives level 3.
+- [ ] **RSP-11:** WTHIT "Tank: Black Tea 2 / 4" beside the Holding line.
+- [ ] **RSP-12:** JEI Kettle page shows the base fluid in the bar; Rustic coffees and the five Fruits Delight teas listed.
+- [ ] **RSP-13:** Wild Tea Bush goes into a flower pot and back out.
+- [ ] **RSP-14 Slice of Coffee Cake:** Caffeinated 0:30, no Speed; Rose Hip Pie Slice: Regeneration only.
+- [ ] **RSP-15 Wither Roots death message:** "while gardening", and the "whilst fighting" version when a mob hit you.
+- [ ] **RSP-16:** A world with a 2.0 Kettle at 3 water: unchanged and brews.
+- [ ] **RSP-17:** A heated Kettle with water and 2 black tea leaves takes 10 s (not 1 tick) to make one Black Tea.
 
 ## Owner drink rules (2026-11-02)
 

@@ -523,7 +523,7 @@ Needs a Creative Common build in `mods/`.
   counted ingredients show their stack size (apple pie with counts on: crust, 2 apples, sugar, sugar); clicking the GUI arrow opens
   it; "+" moves the counted amounts in.
 - [ ] **OV-12 Break / burn:** breaking drops oven and contents; standing on a lit oven hurts unless sneaking.
-- ~~**OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough.~~ Dropped 2026-10-29: no pot muffins (OV-36).
+- [ ] ~~**OV-13 Muffins:** blueberry and cranberry muffins cook in the pot with Create dough.~~ Dropped 2026-10-29: no pot muffins (OV-36).
 - [ ] **OV-15 Bakeware required:** no recipe bakes without its bakeware in the tool slot; the tool stays afterwards.
   No `dummy_*` recipe in JEI.
 - [ ] **OV-16 Counts off (default):** JEI's apple pie shows 5 single slots (crust, 2 apple, 2 sugar-or-honey); it bakes
@@ -536,11 +536,11 @@ Needs a Creative Common build in `mods/`.
 - [ ] **OV-17 Hammering:** iron plate on a cutting board + Engineer's Hammer -> baking sheet, the board doesn't turn,
   the hammer loses 1 durability; repeat down the chain (muffin tin, pie tin) to the cake pan. Hammer + piece in the crafting grid does the
   same and returns the damaged hammer. The hammer still rotates other blocks and still forms IE multiblocks.
-- [ ] **OV-20 Muffin yield** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-05, baking 4, pot 2; the oven bake and plating: in game): one oven bake of blueberry (and cranberry) muffins gives 4, plated on 4 paper
+- [ ] **OV-20 Muffin yield:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-05, baking 4, pot 2; the oven bake and plating: in game) one oven bake of blueberry (and cranberry) muffins gives 4, plated on 4 paper
   (the pot half is gone, OV-36).
 - [ ] **OV-23 Other-oven tooltips:** CfB oven shows "Cooks food like a furnace and a smoker"; each of the 7 Fantasy
   Furniture ovens shows "Works like a smoker" (client log: `fantasyfurniture:*/oven -> 7 matches`).
-- [x] **OV-24 CfB oven smokes** (scratch server PASSED 2026-10-22, SQ-OF-06, `/kotest` OV-24a to OV-24d): raw ham goes into the CfB oven and comes out as smoked ham (smoker-only recipe);
+- [x] **OV-24 CfB oven smokes:** (scratch server PASSED 2026-10-22, SQ-OF-06, `/kotest` OV-24a to OV-24d) raw ham goes into the CfB oven and comes out as smoked ham (smoker-only recipe);
   beef still cooks; cobblestone is still refused.
 - [ ] **OV-25 Overhaul boot:** after a restart no KubeJS errors for baking.js; Frosting and Cookie Dough exist (cotton
   boll texture). JEI on any cake, pie or cookie shows only the new recipes plus `*_from_slices`. Uses still list the golden
@@ -563,12 +563,12 @@ Needs a Creative Common build in `mods/`.
   Cookie dough + 2 Vinery cherries bakes 12 cherry cookies.
 - [ ] **OV-31 Kept:** 7 cake slices -> cake still crafts; golden cookie / cake / pumpkin pie still craft from the
   finished item; muffins and tarts unchanged (OV-20).
-- [ ] **OV-32 Sweet Berry Pie** (recipes and can values: scratch server PASSED 2026-10-22, `tools/kitchen_probe/sweet_berry_pie_probe.js` 10 of 10; names and the oven screen: in game): the cheesecake shows as Sweet Berry Pie (whole, Slice of Sweet Berry Pie, Incomplete
+- [ ] **OV-32 Sweet Berry Pie:** (recipes and can values: scratch server PASSED 2026-10-22, `tools/kitchen_probe/sweet_berry_pie_probe.js` 10 of 10; names and the oven screen: in game) the cheesecake shows as Sweet Berry Pie (whole, Slice of Sweet Berry Pie, Incomplete
   Sweet Berry Pie, both Display Delight plates; JEI search "cheesecake" by name finds nothing). Cooking Pot: 2 sweet
   berries + 2 sugar + empty can -> Canned Sweet Berry Pie Filling; 4 slices + empty can also craft one. Pie crust +
   full filling bakes a Sweet Berry Pie (pie tin) and crafts one by hand; an opened can does neither. Eating the can:
   4 servings, 3 hunger each, Speed 30 s.
-- [ ] **OV-33 Chocolate cake spout** (recipe loaded: scratch server PASSED 2026-10-22; the Spout run: in game): a Spout with 500 mB chocolate over a Baked Cake Base on a depot gives a
+- [ ] **OV-33 Chocolate cake spout:** (recipe loaded: scratch server PASSED 2026-10-22; the Spout run: in game) a Spout with 500 mB chocolate over a Baked Cake Base on a depot gives a
   Chocolate Cake; JEI shows the filling recipe on the chocolate cake.
 - [ ] **OV-34 Dough textures:** Create Dough has the Farmer's Delight look; Ginger Dough is the same shape in its
   ginger colors; Cookie Dough is Create's old dough shape in oat-dough tan; Frosting is no longer the cotton boll; the
@@ -576,7 +576,7 @@ Needs a Creative Common build in `mods/`.
 - [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
   Sourdough Blocks, each in its dough's color (inventory, placed, held, breaking particles). 9 of a dough in the grid
   gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
-- [ ] **OV-36 No pot muffins** (recipe half: scratch server PASSED r1031, SQ-BJ-01; JEI: in game): JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
+- [ ] **OV-36 No pot muffins:** (recipe half: scratch server PASSED r1031, SQ-BJ-01; JEI: in game) JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
   mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
 - [ ] **OV-37 Sweet Potato Muffin name:** the item formerly Sweet Potato Cupcake reads Sweet Potato Muffin in the
   inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)

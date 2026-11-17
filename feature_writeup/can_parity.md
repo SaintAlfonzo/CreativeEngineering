@@ -1816,7 +1816,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 - [ ] **CP-03 cactus flesh:** the Delightful cactus piece reads "Cactus Flesh"; it cans into "Canned Cactus Flesh"
   (4, or 2 + salt/bone broth).
 - [ ] **CP-04 servings:** eat one Canned White Strawberries and one Canned Cactus Flesh -> bar shows 2/3 and 1/2.
-- [ ] ~~CP-05 cooked cuts still canned~~ superseded: their cooked cans were removed too (CP-07).
+- [ ] ~~**CP-05 cooked cuts still canned:**~~ superseded: their cooked cans were removed too (CP-07).
 - [ ] **CP-06 can sprites:** JEI search "Canned" -> the 19 raw veggie/fruit cans, Canned Fish, Canned Cooked Salmon,
   Canned Mushrooms show their newcan sprites (no purple/black missing texture); Canned Cactus Flesh, White Strawberries,
   the raw meat cans and the generated cans still show the beetroot can. (Superseded by CP-08 for the group sprites.)
@@ -1826,7 +1826,7 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
 - [ ] **CP-08 sprites:** Canned Raw Beef / Mutton / Pork / Cod / Salmon and Canned Cranberries show their own sprites;
   Canned Raw Chicken and Raw Rabbit show the raw beef can, Canned Cactus Flesh the carrot can, Canned White
   Strawberries and the new fruit cans the apple can, Canned Raw Pike (etc.) the raw salmon can. No missing textures.
-- [ ] **CP-09 sliced inputs (2026-10-20)** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no recipe makes a partly full can; JEI, eating: in game): 5 Minced Beef, 5 Raw Beef, or a mix -> a full Canned Raw Beef; 8 Raw Chicken
+- [ ] **CP-09 sliced inputs (2026-10-20):** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no recipe makes a partly full can; JEI, eating: in game) 5 Minced Beef, 5 Raw Beef, or a mix -> a full Canned Raw Beef; 8 Raw Chicken
   Cuts -> a full Canned Raw Chicken (no bar); 3 Lemon Slices -> Canned Lemon; 8 Cod Slices -> a full Canned Raw Cod.
   JEI shows no recipe making a partly full can. 4 Cantaloupe Slices -> Canned Cantaloupe; a Cantaloupe Slice eats as
   3 hunger with no Resistance. Pumpkin: 3 slices + sugar -> Canned Pumpkin (3 servings).
@@ -1840,32 +1840,32 @@ at Canned Goods' beetroot can any more (it was the fallback until 2026-10-21).
   Milk, 4 buckets back; eating a serving with any effect active clears it.
 - [ ] **CP-14 chorus:** Canned Chorus Fruit (3 chorus fruit) teleports on each serving; Canned Ancient Fruit uses the
   apple sprite.
-- [ ] **CP-15 corn** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, SQ-OF-04; crafting: in game): 6 maize, or 4 + salt -> Canned Corn (2 servings); corn kernels make no can. A knife cuts 1 maize
+- [ ] **CP-15 corn:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, SQ-OF-04; crafting: in game) 6 maize, or 4 + salt -> Canned Corn (2 servings); corn kernels make no can. A knife cuts 1 maize
   into 4 kernels.
-- [ ] **CP-16 cheese** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; the pot run: in game): 4 Flaxen Cheese Wedges in a heated Cooking Pot with an empty can in the container slot -> Canned
+- [ ] **CP-16 cheese:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; the pot run: in game) 4 Flaxen Cheese Wedges in a heated Cooking Pot with an empty can in the container slot -> Canned
   Flaxen Cheese (4 servings); same for Scarlet. No crafting-grid recipe.
-- [ ] **CP-17 bowls** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; crafting: in game): 2 Creamed Corn + can -> can and 2 bowls back; 6 Pears with Rock Sugar -> 6 bowls back.
-- [ ] **CP-18 coffee** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, wither 40 t at 0.8, caffeinated 200 t; eating: in game): a Canned Coffee Berries serving gives Caffeinated 10 s and, 80 % of the time, Wither for 2 s.
-- [ ] **CP-19 new cans** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-00, SQ-OF-01, `[cans] registered 228 generated cans`, no `skipped` line; sprites, JEI: in game): every can of the 2026-10-21 build shows its family sprite (no purple/black) and its JEI
+- [ ] **CP-17 bowls:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01; crafting: in game) 2 Creamed Corn + can -> can and 2 bowls back; 6 Pears with Rock Sugar -> 6 bowls back.
+- [ ] **CP-18 coffee:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-02, wither 40 t at 0.8, caffeinated 200 t; eating: in game) a Canned Coffee Berries serving gives Caffeinated 10 s and, 80 % of the time, Wither for 2 s.
+- [ ] **CP-19 new cans:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-00, SQ-OF-01, `[cans] registered 228 generated cans`, no `skipped` line; sprites, JEI: in game) every can of the 2026-10-21 build shows its family sprite (no purple/black) and its JEI
   recipe; startup log `[cans] registered 228 generated cans`; server log has no `[canning] ... skipped` line.
-- [ ] **CP-20 migrated raw cans** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02; crafting, eating: in game): 8 beetroot -> Canned Beetroot, 6 + salt the same; 3 apples / 2 + sugar; 5 raw beef /
+- [ ] **CP-20 migrated raw cans:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02; crafting, eating: in game) 8 beetroot -> Canned Beetroot, 6 + salt the same; 3 apples / 2 + sugar; 5 raw beef /
   4 + bone broth; 4 / 3 + salt Cactus Flesh (the rule; was 4 / 2 + salt). Values unchanged (5 hunger; 2 / 3 / 4 servings). A Canned Banana /
   Glow Berries / Salmonberries serving gives Agility 15 s / Glowing 15 s / Water Breathing 5 s; Canned Raw Chicken
   sometimes Hunger.
-- [ ] **CP-21 Canned Goods values** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no can above modifier 10; AppleSkin: in game): AppleSkin on Canned Cake shows 4 hunger and about 0.7 saturation (was 28 / 112;
+- [ ] **CP-21 Canned Goods values:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-01, SQ-OF-02, no can above modifier 10; AppleSkin: in game) AppleSkin on Canned Cake shows 4 hunger and about 0.7 saturation (was 28 / 112;
   saturation as shown = hunger x modifier x 2); Canned Apples 5 hunger, 3.0 saturation (3 servings); Canned Suspicious Stew 8 hunger (8 servings, Canned Goods' own
   effects still apply). No Canned Goods can shows more saturation than its family's formula gives. Canned Cake: 1 cake
   + can, or 4 slices + sugar -> 4 fast servings.
-- [ ] **CP-22 removed** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-03, after the trade fix in 8, 0 of 240 level 2 butcher offers; JEI: in game): Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
+- [ ] **CP-22 removed:** (values and recipes: scratch server PASSED 2026-10-22, SQ-OF-03, after the trade fix in 8, 0 of 240 level 2 butcher offers; JEI: in game) Canned Food and the Hot Hot Hotpot are hidden in JEI; a butcher (any level) never offers Canned
   Food; the butcher's other trades are still there.
-- [ ] **CP-23 opened filling** (CQ-CNP-01): an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
+- [ ] **CP-23 opened filling:** (CQ-CNP-01) an opened Canned Apple Pie Filling (2 / 4) + Pie Crust gives no result; a full one gives
   an Apple Pie.
-- [ ] **CP-24 manual only** (server half: SQ-CNP-01): JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
+- [ ] **CP-24 manual only:** (server half: SQ-CNP-01) JEI's Create "Shapeless Mixing" / "Automated Crafting" categories list no `*_pie_manual_only`
   recipe; filling + crust in a basin under a mixer, in a mechanical crafter, or in an IE Assembler makes nothing. In a
   crafting terminal with the player's inventory (AE2) the recipe works. Canning recipes (empty can + food) still run in
   the mixer.
 - [ ] **CP-25 dough:** 8 Create dough + can -> Canned Dough (8 servings, not edible, servings bar after a craft uses one).
-- [ ] **CP-26 sweet berry pie** (recipes and can values: scratch server PASSED 2026-10-22; names: in game): 4 Slice of Sweet Berry Pie + can -> Canned Sweet Berry Pie Filling (4 servings, 3 hunger,
+- [ ] **CP-26 sweet berry pie:** (recipes and can values: scratch server PASSED 2026-10-22; names: in game) 4 Slice of Sweet Berry Pie + can -> Canned Sweet Berry Pie Filling (4 servings, 3 hunger,
   Speed 30 s); full can + pie crust -> Sweet Berry Pie by hand and in the oven (OV-32).
 - [ ] **CP-27 Veggies raw cans:** 5 Broccoli + can -> Canned Broccoli; 2 Cauliflower or 2 Cauliflower Florets + can ->
   Canned Cauliflower; 3 Zucchini or Zucchini Slices -> Canned Zucchini; Sweet Potato and Turnip as broccoli. Each also

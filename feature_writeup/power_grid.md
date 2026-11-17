@@ -545,52 +545,50 @@ other mods starts**. A config switch then picks the electricity mode:
 
 ## 8. In-game test suite (drafted)
 
-| ID | Test | Pass |
-|---|---|---|
-| PWG-01 | Creative voltage source 12 V, resistor, current gauge in a loop | gauge reads V / R |
-| PWG-02 | Open the loop (cut a wire) | current 0, no errors in log |
-| PWG-03 | 24-block copper wire run under load | voltage drop matches 0.018 ohm |
-| PWG-04 | Overload a copper wire past 80 A | wire burns, network splits cleanly |
-| PWG-05 | Touch a bare live wire; touch an insulated one | damage only from bare |
-| PWG-06 | Electric Motor at 120 V, 182 V and 258 V | about 55, 127 and 255 RPM (speed = 0.003835 x V^2, capped at 256; corrected 2026-11-13: 120 V is not half speed) |
-| PWG-07 | Motor under heavy vs light stress | current drops at light load |
-| PWG-08 | Generator: clutch, rotors, commutator, windings, separate excitation | voltage rises with RPM |
-| PWG-09 | Self-excited generator | builds voltage without an outside source |
-| PWG-10 | Generator load slows the rotor and loads the clutch | rotor RPM falls under the clutch speed, clutch load and comparator output rise; Create stress stays the assembly impact x coupling (corrected 2026-11-13: the code never raises it with load) |
-| PWG-11 | Carbon pile regulator holds generator voltage under load change | within a few volts |
-| PWG-12 | Small transformer 1:10 | secondary 10x, current 1/10 |
-| PWG-13 | Device over its rating, no cooling | smokes, then breaks (per D4) |
-| PWG-14 | Same device with an encased fan blowing on it | stays below limit |
-| PWG-15 | Fuse at 5 A on a 10 A load | fuse burns, load stops |
-| PWG-16 | Battery charge and discharge | voltage drifts with charge; energy meter counts Wh |
-| PWG-17 | Grounding rod with poor and good ground | resistance falls with conductive blocks |
-| PWG-18 | FE Inverter fed by an IE generator drives a motor | rate matches D3 |
-| PWG-19 | Device Connector on an IE machine | machine runs on grid power |
-| PWG-20 | Heating Coil in a fan stream | bulk blasting at the configured speed; Dragon Breathing fans still work |
-| PWG-21 | Basin Heater at high power | superheated basin recipe runs |
-| PWG-22 | Growth Lamp over an out-of-season crop | crop does not grow out of season (integration target; the port keeps upstream: the lamp has no gate, but its ticks fire `CropGrowEvent.Pre`, so the pack's off-season refusal applies to them; SQ-PWG-53 records the rate) |
-| PWG-23 | Solar panel multiblock, plains vs desert | desert lower |
-| PWG-24 | Nether transformer across a portal | linked pair carries power |
-| PWG-25 | Save and reload a running grid | voltages restore, no wire loss |
-| PWG-26 | Chunk unload of half a grid | no crash, the rest keeps running or pauses cleanly |
-| PWG-27 | Large grid (200+ nodes) on a dedicated server | TPS and client FPS within budget; `/powergrid` perf |
-| PWG-28 | Dedicated server and client: gauges move smoothly | client mirror in sync |
-| PWG-29 | Wire placement with IE copper wire, CE iron and gold wire (D6) | each places with its wire type |
-| PWG-30 | JEI shows magnetization; unported items hidden | as listed |
-| PWG-31 | Magnet: lightning on dropped andesite alloy (corrected 2026-11-13, B7: not iron ingots); electromagnet on a grid over an alloy | some alloy magnetizes (about 5 % per strike); electromagnet magnetizes only when powered |
-| PWG-32 | Open every ported ponder scene | each plays to the end; no missing blocks (P5: 36 scenes; CQ-PWG-14, structures SQ-PWG-45; P6: 58 scenes, CQ-PWG-15, structures SQ-PWG-47) |
-| PWG-33 | Light bulb, LV bulb, Factory Light, Light Fixture on a grid; Electric Pump and Electric Fan run on grid power | light level follows voltage; Factory Light lights 16 blocks down; pump and fan speed follow power |
-| PWG-34 | Portable Battery in the chest slot, charge and drain; Capacity enchantment | 20 000 base, +20 000 per level |
-| PWG-35 | Portable Drill and Portable Saw on a charged battery | mine diamond-level blocks; drill speeds up with use; stop when the battery is empty |
-| PWG-36 | Electro-Baton and Electro-Zapper on mobs | knockback and stun; zap chains between mobs |
-| PWG-37 | Wire Cutters on a sheep (corrected 2026-11-13: not the saw, which does not shear upstream either) | the sheep is sheared for string and hurt by 1, as upstream; no advancement error in the log |
-| PWG-38 | CRT and Modular Display driven by the grid | dot and flip modules follow the inputs |
-| PWG-39 | Plotter and Punch Card Reader | plotter draws voltage over time; reader sequences kinetic output from a card |
-| PWG-40 | CC: Tweaked computer reads a PG gauge (or meter, battery, clutch) as a peripheral and sets a redstone converter (corrected 2026-11-13: upstream has no display peripheral) | values match the gauge |
-| PWG-41 | Circuit Design Table: draw a schematic, save it | schematic item holds the design; editor works at GUI scales 2 and 4 |
-| PWG-42 | Etch and fill a board (Blazing Acid, sequenced assembly, Mechanical Arm) | the board's circuit behaves as designed in the solver |
-| PWG-43 | Boost a Portable Drill with an Integrated Circuit | faster, double power draw, uses count down |
-| PWG-44 | Ceiling tiles (lamp, solar, wire, junction), string lights with dye pattern, Copper Plating | place, connect and light as upstream |
+- [ ] **PWG-01:** Creative voltage source 12 V, resistor, current gauge in a loop -> gauge reads V / R
+- [ ] **PWG-02:** Open the loop (cut a wire) -> current 0, no errors in log
+- [ ] **PWG-03:** 24-block copper wire run under load -> voltage drop matches 0.018 ohm
+- [ ] **PWG-04:** Overload a copper wire past 80 A -> wire burns, network splits cleanly
+- [ ] **PWG-05:** Touch a bare live wire; touch an insulated one -> damage only from bare
+- [ ] **PWG-06:** Electric Motor at 120 V, 182 V and 258 V -> about 55, 127 and 255 RPM (speed = 0.003835 x V^2, capped at 256; corrected 2026-11-13: 120 V is not half speed)
+- [ ] **PWG-07:** Motor under heavy vs light stress -> current drops at light load
+- [ ] **PWG-08:** Generator: clutch, rotors, commutator, windings, separate excitation -> voltage rises with RPM
+- [ ] **PWG-09:** Self-excited generator -> builds voltage without an outside source
+- [ ] **PWG-10:** Generator load slows the rotor and loads the clutch -> rotor RPM falls under the clutch speed, clutch load and comparator output rise; Create stress stays the assembly impact x coupling (corrected 2026-11-13: the code never raises it with load)
+- [ ] **PWG-11:** Carbon pile regulator holds generator voltage under load change -> within a few volts
+- [ ] **PWG-12:** Small transformer 1:10 -> secondary 10x, current 1/10
+- [ ] **PWG-13:** Device over its rating, no cooling -> smokes, then breaks (per D4)
+- [ ] **PWG-14:** Same device with an encased fan blowing on it -> stays below limit
+- [ ] **PWG-15:** Fuse at 5 A on a 10 A load -> fuse burns, load stops
+- [ ] **PWG-16:** Battery charge and discharge -> voltage drifts with charge; energy meter counts Wh
+- [ ] **PWG-17:** Grounding rod with poor and good ground -> resistance falls with conductive blocks
+- [ ] **PWG-18:** FE Inverter fed by an IE generator drives a motor -> rate matches D3
+- [ ] **PWG-19:** Device Connector on an IE machine -> machine runs on grid power
+- [ ] **PWG-20:** Heating Coil in a fan stream -> bulk blasting at the configured speed; Dragon Breathing fans still work
+- [ ] **PWG-21:** Basin Heater at high power -> superheated basin recipe runs
+- [ ] **PWG-22:** Growth Lamp over an out-of-season crop -> crop does not grow out of season (integration target; the port keeps upstream: the lamp has no gate, but its ticks fire `CropGrowEvent.Pre`, so the pack's off-season refusal applies to them; SQ-PWG-53 records the rate)
+- [ ] **PWG-23:** Solar panel multiblock, plains vs desert -> desert lower
+- [ ] **PWG-24:** Nether transformer across a portal -> linked pair carries power
+- [ ] **PWG-25:** Save and reload a running grid -> voltages restore, no wire loss
+- [ ] **PWG-26:** Chunk unload of half a grid -> no crash, the rest keeps running or pauses cleanly
+- [ ] **PWG-27:** Large grid (200+ nodes) on a dedicated server -> TPS and client FPS within budget; `/powergrid` perf
+- [ ] **PWG-28:** Dedicated server and client: gauges move smoothly -> client mirror in sync
+- [ ] **PWG-29:** Wire placement with IE copper wire, CE iron and gold wire (D6) -> each places with its wire type
+- [ ] **PWG-30:** JEI shows magnetization; unported items hidden -> as listed
+- [ ] **PWG-31:** Magnet: lightning on dropped andesite alloy (corrected 2026-11-13, B7: not iron ingots); electromagnet on a grid over an alloy -> some alloy magnetizes (about 5 % per strike); electromagnet magnetizes only when powered
+- [ ] **PWG-32:** Open every ported ponder scene -> each plays to the end; no missing blocks (P5: 36 scenes; CQ-PWG-14, structures SQ-PWG-45; P6: 58 scenes, CQ-PWG-15, structures SQ-PWG-47)
+- [ ] **PWG-33:** Light bulb, LV bulb, Factory Light, Light Fixture on a grid; Electric Pump and Electric Fan run on grid power -> light level follows voltage; Factory Light lights 16 blocks down; pump and fan speed follow power
+- [ ] **PWG-34:** Portable Battery in the chest slot, charge and drain; Capacity enchantment -> 20 000 base, +20 000 per level
+- [ ] **PWG-35:** Portable Drill and Portable Saw on a charged battery -> mine diamond-level blocks; drill speeds up with use; stop when the battery is empty
+- [ ] **PWG-36:** Electro-Baton and Electro-Zapper on mobs -> knockback and stun; zap chains between mobs
+- [ ] **PWG-37:** Wire Cutters on a sheep (corrected 2026-11-13: not the saw, which does not shear upstream either) -> the sheep is sheared for string and hurt by 1, as upstream; no advancement error in the log
+- [ ] **PWG-38:** CRT and Modular Display driven by the grid -> dot and flip modules follow the inputs
+- [ ] **PWG-39:** Plotter and Punch Card Reader -> plotter draws voltage over time; reader sequences kinetic output from a card
+- [ ] **PWG-40:** CC: Tweaked computer reads a PG gauge (or meter, battery, clutch) as a peripheral and sets a redstone converter (corrected 2026-11-13: upstream has no display peripheral) -> values match the gauge
+- [ ] **PWG-41:** Circuit Design Table: draw a schematic, save it -> schematic item holds the design; editor works at GUI scales 2 and 4
+- [ ] **PWG-42:** Etch and fill a board (Blazing Acid, sequenced assembly, Mechanical Arm) -> the board's circuit behaves as designed in the solver
+- [ ] **PWG-43:** Boost a Portable Drill with an Integrated Circuit -> faster, double power draw, uses count down
+- [ ] **PWG-44:** Ceiling tiles (lamp, solar, wire, junction), string lights with dye pattern, Copper Plating -> place, connect and light as upstream
 
 ### 8.1 Owner hand list (P11, written 2026-11-13)
 

@@ -509,73 +509,73 @@ All in Creative Common `src/main/java/com/SaintAlfonzo/creativeengineering/` unl
 - [ ] **FX-23 Trinket case equip:** a trinket in the case still quick-equips from its screen; cobblestone doesn't.
 - [x] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart -> only trinkets, rods, mana items and curios
   (shulker boxes, through Shulker Box Slot) fit; the open case still refused. Scratch server PASS 2026-10-22.
-- [ ] **FX-25 JEI tooltip search needs `$`** (client only): in JEI type `edible`: no items match by tooltip text alone; `$edible`
+- [ ] **FX-25 JEI tooltip search needs `$`:** (client only) in JEI type `edible`: no items match by tooltip text alone; `$edible`
   matches. Name search still works without a prefix. `jei-client.ini TooltipSearchMode = REQUIRE_PREFIX`
   (2026-10-22).
-- [ ] **FX-26 Breezy wind particles** (client only): above y 83 in the open (sea level + 20), wind particles show about 3 times as
+- [ ] **FX-26 Breezy wind particles:** (client only) above y 83 in the open (sea level + 20), wind particles show about 3 times as
   often as before (`breezy-client.toml` frequencies x3: 0.015 / 0.03 / 0.045, 2026-10-22).
 - [ ] **FX-27 Chalk symbols unlocked** (the server's unlock list: scratch server PASSED 2026-10-22, SQ-GM-06, every special symbol unlocked for a new fake player; the symbol screen and drawing:
   client): a new player with no advancements opens the chalk symbol menu (sneak-use
   chalk): Skull, Cross, Heart, Check, Pickaxe and House are all selectable and draw. `chalk-common.toml` every
   `*UnlockAdvancement = ""` (2026-10-22).
-- [ ] **FX-28 Cosmetic armor kept on death** (real player death, in game): wear a cosmetic helmet, die: it is still in the cosmetic slot after
+- [ ] **FX-28 Cosmetic armor kept on death:** (real player death, in game) wear a cosmetic helmet, die: it is still in the cosmetic slot after
   respawn, not in the corpse. Then set `CosArmorKeepThroughDeath = false`, restart, die: it is in the corpse and goes
   back to the cosmetic slot when the corpse is opened (no config change shipped; checks the existing setup).
 - [ ] **FX-29 Drops into the inventory** (vein mining needs the client keybind: in game; Auto Pickup on: scratch server PASSED 2026-10-22,
   SQ-GM-08): vein-mine 20 stone or dirt with room in the inventory: every drop is in the
   inventory, none on the ground. With a full inventory: the drops lie at your feet.
-- [ ] **FX-30 Undo works** (in game): right after FX-29 (inventory case), `/undo_excavation`: the blocks come back and the
+- [ ] **FX-30 Undo works:** (in game) right after FX-29 (inventory case), `/undo_excavation`: the blocks come back and the
   drops leave the inventory; message "Excavation undone" (OE's text).
-- [ ] **FX-31 Cooldown** (rule and message: scratch server PASSED 2026-10-22, SQ-GM-08; the real command: in game): vein-mine twice, undo, undo again at once: refused, "You can undo another vein mine in 5 s"
+- [ ] **FX-31 Cooldown:** (rule and message: scratch server PASSED 2026-10-22, SQ-GM-08; the real command: in game) vein-mine twice, undo, undo again at once: refused, "You can undo another vein mine in 5 s"
   (or 4). After 5 s it works. A refused undo (FX-32) starts no cooldown.
-- [ ] **FX-32 Denied blocks** (rule and message per block: scratch server PASSED 2026-10-22, SQ-GM-08, iron ore, deepslate coal ore, diamond block, budding amethyst, spawner, ancient debris, chest refused; the real command: in game): vein-mine iron ore (or coal ore, deepslate ores), undo: refused, "This vein mine can't
+- [ ] **FX-32 Denied blocks:** (rule and message per block: scratch server PASSED 2026-10-22, SQ-GM-08, iron ore, deepslate coal ore, diamond block, budding amethyst, spawner, ancient debris, chest refused; the real command: in game) vein-mine iron ore (or coal ore, deepslate ores), undo: refused, "This vein mine can't
   be undone: it broke Iron Ore." Same with a few Blocks of Iron, budding amethyst (silk-touch-free mining, it
   drops nothing), and two chests side by side.
-- [ ] **FX-33 XP once** (in game; the offline-player guard on the same restore: scratch server PASSED 2026-10-22, SQ-GM-08): note your XP, vein-mine sculk without Silk Touch (not denied, drops XP; ores are denied),
+- [ ] **FX-33 XP once:** (in game; the offline-player guard on the same restore: scratch server PASSED 2026-10-22, SQ-GM-08) note your XP, vein-mine sculk without Silk Touch (not denied, drops XP; ores are denied),
   note the gain, undo: your XP drops by that gain once, not more (a large vein mine restores over several ticks).
-- [x] **FX-34 Config** (both keys: scratch server PASSED 2026-10-22, SQ-GM-05, chest allowed and no cooldown after the restart): `[vein_undo] cooldownSeconds = 0` in `creativeengineering-common.toml`, restart: undos back to
+- [x] **FX-34 Config:** (both keys: scratch server PASSED 2026-10-22, SQ-GM-05, chest allowed and no cooldown after the restart) `[vein_undo] cooldownSeconds = 0` in `creativeengineering-common.toml`, restart: undos back to
   back work. `denyBlockEntities = false`: two chests can be undone.
-- [ ] **FX-35 Backpack Polymorph choice** (in game): backpack with a crafting upgrade, open its tab, fill the grid with
+- [ ] **FX-35 Backpack Polymorph choice:** (in game) backpack with a crafting upgrade, open its tab, fill the grid with
   a recipe that has two outputs (e.g. a conflicting plank or slab recipe; JEI shows both). The Polymorph button
   shows right of the result slot; pick the other output: the result slot changes, taking it gives that item and
   uses the grid as that recipe does. Shift-click crafts the picked one repeatedly.
-- [ ] **FX-36 Button follows the tab** (in game): close the crafting tab: the button is gone and its spot takes no
+- [ ] **FX-36 Button follows the tab:** (in game) close the crafting tab: the button is gone and its spot takes no
   clicks. Reopen: button back next to the result slot. With an unambiguous recipe the button stays hidden.
-- [ ] **FX-37 Reopen and second upgrade** (in game): leave a conflicting recipe in the grid, close and reopen the
+- [ ] **FX-37 Reopen and second upgrade:** (in game) leave a conflicting recipe in the grid, close and reopen the
   backpack: button and list come back without touching the grid. With two crafting upgrades holding different
   conflicting grids, switching tabs shows each grid's own list.
-- [ ] **FX-38 No regressions** (in game): normal crafting in the upgrade (including a recipe with a remainder, e.g. a
+- [ ] **FX-38 No regressions:** (in game) normal crafting in the upgrade (including a recipe with a remainder, e.g. a
   bucket recipe), the vanilla crafting table's Polymorph button, and JEI transfer into the upgrade grid all work.
-- [ ] **FX-39 Engineer's Crafting Table choice** (in game): fill the IE Engineer's Crafting Table grid with a recipe
+- [ ] **FX-39 Engineer's Crafting Table choice:** (in game) fill the IE Engineer's Crafting Table grid with a recipe
   that has two outputs (JEI shows both). The Polymorph button shows right of the result frame, clear of the title;
   pick the other output: the result changes, taking it gives that item. Shift-click crafts the picked one repeatedly.
   Close and reopen with the grid still filled: the button and list come back without touching the grid.
-- [ ] **FX-40 Crafting Terminal choice** (in game): same in a Pretty Pipes Crafting Terminal (needs a pipe network).
+- [ ] **FX-40 Crafting Terminal choice:** (in game) same in a Pretty Pipes Crafting Terminal (needs a pipe network).
   The button sits right of the result frame and covers no grid slot or the Request button. Reopen with the grid
   filled: the list comes back.
-- [ ] **FX-41 Shared terminal** (in game, two players): both open one Crafting Terminal with a conflicting grid; each
+- [ ] **FX-41 Shared terminal:** (in game, two players) both open one Crafting Terminal with a conflicting grid; each
   picks a different output: each sees and takes their own pick.
-- [ ] **FX-42 No regressions** (in game): plain crafting in both (no button with an unambiguous recipe), the vanilla
+- [ ] **FX-42 No regressions:** (in game) plain crafting in both (no button with an unambiguous recipe), the vanilla
   crafting table's Polymorph button, JEI transfer into both grids, Crafting Terminal ghost items and Request button.
-- [ ] **FX-43 Moss follows the biome** (in game, client): place moss block and moss carpet in Plains, Desert, Swamp
+- [ ] **FX-43 Moss follows the biome:** (in game, client) place moss block and moss carpet in Plains, Desert, Swamp
   and Lush Caves: they match the grass shade of each (desert yellower, swamp darker, Lush Caves the vanilla green).
   Across a biome border the color blends like grass. Breaking particles share the tint.
-- [ ] **FX-44 Moss items and off switch** (in game, client): moss in the inventory, JEI and in hand is the vanilla
+- [ ] **FX-44 Moss items and off switch:** (in game, client) moss in the inventory, JEI and in hand is the vanilla
   green, not gray. Set `[moss] biomeTint = false`, F3+T: placed moss is vanilla everywhere. `tintStrength = 0.5`, F3+A:
   moss shifts half as far.
-- [ ] **FX-45 Moss renders with shaders and Embeddium** (in game, client): no z-fighting, no missing texture, carpet
+- [ ] **FX-45 Moss renders with shaders and Embeddium:** (in game, client) no z-fighting, no missing texture, carpet
   sides still 1 px.
-- [ ] **FX-47 Ghost blocks after the long-shift encoder** (scratch server + client, then the live server): repeat
+- [ ] **FX-47 Ghost blocks after the long-shift encoder:** (scratch server + client, then the live server) repeat
   FX-13 (an explosion among Quark / Every Compat blocks, high state ids) and a few vanilla blocks (low ids): every
   change shows; no "Error executing task on Client"; with `[debug.block_state_sync] enabled` no unresolved id.
-- [ ] **FX-48 Upgrade Aquatic coral grows** (scratch server, then in game): in a warm ocean, `/gamerule randomTickSpeed
+- [ ] **FX-48 Upgrade Aquatic coral grows:** (scratch server, then in game) in a warm ocean, `/gamerule randomTickSpeed
   1000`, place an acan coral block under water with open water around it: within a few minutes acan wall fans appear
   on its sides and acan fans or acan coral on top, rarely a wet sponge; growth stops once 6 or more surround it. A
   prismarine coral block in a cold or plain ocean grows prismarine fans the same way; an acan block there does not.
   A dead acan coral block and an elder prismarine coral block grow nothing. After `/cdevgen run jei_world`, the Weathering and Growth tab has a row per UA
   kind.
-- [ ] **FX-49 Falling block splash** (in game, client): over a pool, drop an anvil from height (`/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`) and sand from 2 blocks up. Each splashes once on entering the water (Effective splash model, droplets, splash sound) and the high drop splashes larger. No splash when it lands on dry ground; the block is not pushed sideways by the water.
-- [x] **FX-50 Chat key not typed** (PASS, owner observed in play 2026-11-13: no doubled key; the hold and rebind sub-checks were not reported separately) (in game, client): press `/` 30 times to open chat (Escape between), at normal
+- [ ] **FX-49 Falling block splash:** (in game, client) over a pool, drop an anvil from height (`/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`) and sand from 2 blocks up. Each splashes once on entering the water (Effective splash model, droplets, splash sound) and the high drop splashes larger. No splash when it lands on dry ground; the block is not pushed sideways by the water.
+- [x] **FX-50 Chat key not typed:** (PASS, owner observed in play 2026-11-13: no doubled key; the hold and rebind sub-checks were not reported separately) (in game, client): press `/` 30 times to open chat (Escape between), at normal
   and fast tapping. Chat always opens with a single `/`. Same with T: always empty. Type `/` again in an open chat:
   a second `/` appears. Hold `/` in an open chat: it repeats. Rebind Command to `.` in Controls: `.` opens chat with
   `/` and no `.`. No error naming `ChatOpen` in `logs/latest.log`.

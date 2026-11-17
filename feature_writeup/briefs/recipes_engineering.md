@@ -89,9 +89,9 @@ the dict. Quark recipe ids verified in the jar.
 - `createDeploying` without `keepIngredient` consumes the bow, as intended.
 
 ### Tests
-- **RE-21 Blast furnace:** JEI `minecraft:blast_furnace` -> the two Quark recipes (with plates if step 1's option is
+- [ ] **RE-21 Blast furnace:** JEI `minecraft:blast_furnace` -> the two Quark recipes (with plates if step 1's option is
   taken); craft one from a deepslate furnace; JEI locomotive and tug accept it. Replaces RE-03's "note whether".
-- **RE-22 Dispenser:** craft a dispenser from a dropper, bow and 2 redstone; deploy a bow onto a dropper; workbench
+- [ ] **RE-22 Dispenser:** craft a dispenser from a dropper, bow and 2 redstone; deploy a bow onto a dropper; workbench
   `redstonecomponents`. Replaces RE-08.
 
 ---
@@ -147,7 +147,7 @@ Ids above (derived from `NCH.toId`; check with `/kubejs` recipe search after the
   file uses (none) or pass an `idOverride` so the id doesn't change when outputs are reordered.
 
 ### Tests
-- **RE-23 Amethyst split:** JEI uses of amethyst shard -> millstone: glowstone; crushing wheels: amethyst dust (+ glowstone
+- [ ] **RE-23 Amethyst split:** JEI uses of amethyst shard -> millstone: glowstone; crushing wheels: amethyst dust (+ glowstone
   if step 2); IE crusher: amethyst dust (+ glowstone). Run each machine once. Replaces RE-16.
 
 ---
@@ -218,11 +218,11 @@ Fix four small inconsistencies in one pass.
 ### Tests
 Built 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7): numbered RE-31, RE-32, RE-33 in
 [recipes_engineering.md](../recipes_engineering.md) (RE-24 to RE-30 were taken); queue SQ-RE-31 to -33.
-- **RE-24 Coal:** 9 coal blocks in a pressure chamber at 8 bar -> a diamond (1 block left) or 2 shards (1 left); either
+- [ ] **RE-24 Coal:** 9 coal blocks in a pressure chamber at 8 bar -> a diamond (1 block left) or 2 shards (1 left); either
   is one diamond's worth.
-- **RE-25 Cinder singles:** spout 25 mB strength / night vision / harming potion onto one cinder flour -> 1 redstone /
+- [ ] **RE-25 Cinder singles:** spout 25 mB strength / night vision / harming potion onto one cinder flour -> 1 redstone /
   glowstone dust / gunpowder.
-- **RE-26 Thunder detector NBT:** a spout with splash mundane potion fluid does not advance the thunder detector
+- [ ] **RE-26 Thunder detector NBT:** a spout with splash mundane potion fluid does not advance the thunder detector
   assembly; regular mundane does.
 
 ---
@@ -273,7 +273,7 @@ Fold AstikorCarts' four recipes into the pack's progression (iron plates, the th
 - Stack sizes: carts are already listed in [stack_sizes.md](../stack_sizes.md) (stack 1); nothing to change.
 
 ### Tests
-- **RE-27 Carts:** craft a wheel from plates and sticks, then each cart and the plow; JEI wheel shows the
+- [ ] **RE-27 Carts:** craft a wheel from plates and sticks, then each cart and the plow; JEI wheel shows the
   `railtransport` blueprint.
 
 ---
@@ -336,8 +336,8 @@ Buckets made from iron plates; an early wooden bucket that carries water.
 - Plates are 1 ingot each in this pack, so the plate bucket costs the same iron as vanilla; it only adds a press step.
 
 ### Tests
-- **RE-28 Plate bucket:** JEI `minecraft:bucket` -> only the plate recipe (and any mod recipe noted); craft one.
-- **RE-29 Wooden bucket:** fill from a water source, place it, refill; it refuses lava; a Create spout / FD cooking pot
+- [ ] **RE-28 Plate bucket:** JEI `minecraft:bucket` -> only the plate recipe (and any mod recipe noted); craft one.
+- [ ] **RE-29 Wooden bucket:** fill from a water source, place it, refill; it refuses lava; a Create spout / FD cooking pot
   accepts water from it.
 
 ---
@@ -441,9 +441,9 @@ In `replaceInput`, match the recipes' tag ingredients: `i.any_log` (`#minecraft:
 - Each machine recipe change is visible in Ponder / guide books that still show the old recipe; acceptable.
 
 ### Tests
-- **RE-30 Add-on machines:** JEI each machine in the table -> the new recipe only (two for the RSC); craft one of each.
-- **RE-31 Laser assembly:** run the laser item assembly on an amethyst lens; workbench blueprint too.
-- **RE-32 Laser plates:** laser cut an iron block -> 12 iron plates (or the chosen count); repeat for aluminium.
+- [ ] **RE-30 Add-on machines:** JEI each machine in the table -> the new recipe only (two for the RSC); craft one of each.
+- [ ] **RE-31 Laser assembly:** run the laser item assembly on an amethyst lens; workbench blueprint too.
+- [ ] **RE-32 Laser plates:** laser cut an iron block -> 12 iron plates (or the chosen count); repeat for aluminium.
 
 ---
 

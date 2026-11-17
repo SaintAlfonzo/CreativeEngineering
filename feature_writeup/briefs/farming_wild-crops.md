@@ -131,7 +131,7 @@ Configured features (verified ids): `neapolitan:mint_pond`, `corn_delight:patch_
   may need adding to its known-feature list (`tools/wild_crops_test/RhinoWildCrops.java`).
 
 ### Tests
-- **CR-79 Densities** (proposed, not yet in crops.md): new world, `/locate biome terralith:highlands` and fly 20 chunks -> mint ponds are occasional
+- [ ] **CR-79 Densities:** (proposed, not yet in crops.md) new world, `/locate biome terralith:highlands` and fly 20 chunks -> mint ponds are occasional
   (a few per few hundred chunks), not every few chunks. `taiga`: pumpkin patches seen within ~100 chunks. A river:
   sugar cane on most sandy banks.
 
@@ -194,9 +194,9 @@ the tag is not extended anywhere today). This
 - Removing biomes from a rule changes the density numbers of #1; do #1 and #2 in one regeneration.
 
 ### Tests
-- **CR-80 Pineapple ground** (proposed): `terralith:tropical_jungle` and `mangrove_swamp` -> wild pineapples on grass / mud as
+- [ ] **CR-80 Pineapple ground:** (proposed) `terralith:tropical_jungle` and `mangrove_swamp` -> wild pineapples on grass / mud as
   well as sand. `/place feature creativedelight:wild/pineapple` on stone -> fails.
-- **CR-81 Cane banks** (proposed): `frozen_river` and `terralith:gravel_beach` -> no cane attempts (generator shows them gone);
+- [ ] **CR-81 Cane banks:** (proposed) `frozen_river` and `terralith:gravel_beach` -> no cane attempts (generator shows them gone);
   `river` -> cane.
 
 ---
@@ -260,8 +260,8 @@ Biome ids above (Terralith verified). No item ids.
 - Moving a crop changes its density; do it in the same regeneration as #1.
 
 ### Tests
-- **CR-82 No warning** (proposed): single-player new world -> `latest.log` has no `[wild-crops] ... not in` warning.
-- CR-83 Tea spread: in crops.md (scratch PASSED 2026-10-22), game part open; see Built, needs play.
+- [ ] **CR-82 No warning:** (proposed) single-player new world -> `latest.log` has no `[wild-crops] ... not in` warning.
+- [ ] **CR-83 Tea spread:** in crops.md (scratch PASSED 2026-10-22), game part open; see Built, needs play.
 
 ---
 
@@ -330,7 +330,7 @@ Verified 2026-10-31: `i.strawberry_pips` = `neapolitan:strawberry_pips` (13333),
 - Removing a trader exclusion: keep the comment at wandering_trades.js 34-36 in step with what is sold.
 
 ### Tests
-- **CR-84 Trader berries** (proposed): `/summon wandering_trader` a few times -> strawberry and salmonberry pips appear in the
+- [ ] **CR-84 Trader berries:** (proposed) `/summon wandering_trader` a few times -> strawberry and salmonberry pips appear in the
   common pool.
 - CR-86, CR-87, CR-88 (built parts) are in crops.md; CR-85 was dropped with the flax decision.
 
@@ -442,7 +442,7 @@ modifier id above; `farmersdelight:wild_crop` feature type (FD 1.19.2). New `cre
   `#creativeengineering:worldgen/grass_like_soils` overrides do not apply (sand only).
 
 ### Tests
-- DA-14 (ocean_delight.md 3.1, proposed there): fresh warm ocean -> sea grape patches once per spot, at the rule's
+- [ ] **DA-14:** (ocean_delight.md 3.1, proposed there) fresh warm ocean -> sea grape patches once per spot, at the rule's
   density; `/place feature oceanic_delight:patch_wild_sea_grape` still works (the feature exists, only the modifier is
   off).
 - CR-new3 (proposed, numbered when queued): biome tag `creativedelight:wild_crops/sea_grape` lists the three oceans;

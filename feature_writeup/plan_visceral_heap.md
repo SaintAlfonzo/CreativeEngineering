@@ -164,20 +164,20 @@ Put files that name BOP ids in `development/creativeWorldgen/src/main/resources/
 
 ## 8. Test list (for `scratch_queue.md`)
 
-- **VH-01 boot:** server and client start; `latest.log` has no mixin errors, no `Couldn't load tag` naming `biomesoplenty`.
-- **VH-02 registries:** the `biomesoplenty` namespace holds exactly the section 4 entries.
-- **VH-03 no TerraBlender:** the mod list shows the stub; no TerraBlender classes or BOP region classes are loaded.
-- **VH-04 locate:** `/locate biome biomesoplenty:visceral_heap` in a new world finds one.
-- **VH-05 share:** after `/dumpclimate`, the Heap's `result_pct` is near `target_pct`.
-- **VH-06 surface:** Heap floor and ceiling are flesh; bedrock layers are intact at top and bottom.
-- **VH-07 features:** flesh tendons, bone spines, blood lakes, eyebulbs and hair generate over many chunks with no worldgen exception.
-- **VH-08 client:** blocks have textures; blood renders with particles; the Heap music plays.
-- **VH-09 data:** vanilla `is_nether` still holds the 5 vanilla biomes; flesh drops itself; axe mines it at tool speed.
-- **VH-10 Nether structures:** fortresses and bastions place in the Heap; Blueprint's `ModdedBiomeSource` wrapper shows no errors.
-- **VH-11 real TerraBlender present:** with a real jar beside the stub, record which loads and whether the boot fails.
-- **VH-12 existing save:** load a pre-change world and enter new Nether chunks; record whether the Heap appears (section 9).
-- **VH-13 Worldgen without BOP:** Creative Worldgen alone loads a world with vanilla's five Nether biomes.
-- **VH-14 tendon pull:** fly a generated Heap at chunk borders and along its biome edges; every `flesh_tendon` strand runs unbroken from floor to ceiling, flesh balls are whole, no strand crosses into another biome, and density looks like the middle of the biome away from the edges.
+- [ ] **VH-01 boot:** server and client start; `latest.log` has no mixin errors, no `Couldn't load tag` naming `biomesoplenty`.
+- [ ] **VH-02 registries:** the `biomesoplenty` namespace holds exactly the section 4 entries.
+- [ ] **VH-03 no TerraBlender:** the mod list shows the stub; no TerraBlender classes or BOP region classes are loaded.
+- [ ] **VH-04 locate:** `/locate biome biomesoplenty:visceral_heap` in a new world finds one.
+- [ ] **VH-05 share:** after `/dumpclimate`, the Heap's `result_pct` is near `target_pct`.
+- [ ] **VH-06 surface:** Heap floor and ceiling are flesh; bedrock layers are intact at top and bottom.
+- [ ] **VH-07 features:** flesh tendons, bone spines, blood lakes, eyebulbs and hair generate over many chunks with no worldgen exception.
+- [ ] **VH-08 client:** blocks have textures; blood renders with particles; the Heap music plays.
+- [ ] **VH-09 data:** vanilla `is_nether` still holds the 5 vanilla biomes; flesh drops itself; axe mines it at tool speed.
+- [ ] **VH-10 Nether structures:** fortresses and bastions place in the Heap; Blueprint's `ModdedBiomeSource` wrapper shows no errors.
+- [ ] **VH-11 real TerraBlender present:** with a real jar beside the stub, record which loads and whether the boot fails.
+- [ ] **VH-12 existing save:** load a pre-change world and enter new Nether chunks; record whether the Heap appears (section 9).
+- [ ] **VH-13 Worldgen without BOP:** Creative Worldgen alone loads a world with vanilla's five Nether biomes.
+- [ ] **VH-14 tendon pull:** fly a generated Heap at chunk borders and along its biome edges; every `flesh_tendon` strand runs unbroken from floor to ceiling, flesh balls are whole, no strand crosses into another biome, and density looks like the middle of the biome away from the edges.
 
 ## 9. Open questions
 

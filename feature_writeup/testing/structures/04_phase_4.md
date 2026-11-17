@@ -50,7 +50,7 @@ None found in Phase 4.
 
 ## 4. Notes for you
 
-- **ST-65:** the `templateTrim = false` half (pads and notches come back) needs a third world. I left it for the
+- [ ] **ST-65:** the `templateTrim = false` half (pads and notches come back) needs a third world. I left it for the
   client list.
 - **Outdated counts in some test texts** (newer counts confirmed instead):
   - ST-36 expects 0 sets written; it is 1, the all-disabled Revamped Shipwrecks set (by design);

@@ -257,11 +257,11 @@ above come from the diag3 log (in-repo summary in 12_earth_fill_camps.md 2). Not
   and the slot falls back to the plain anchor.
 
 ### Tests
-- ST-206 Share value [scratch]: the run of step 2; every share-only cancel probed; none on a shore with mostly dry
+- [ ] **ST-206:** Share value [scratch]: the run of step 2; every share-only cancel probed; none on a shore with mostly dry
   footprint.
-- ST-207 Unlimited override with `log = ALL` (bug A) [scratch]: `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`,
+- [ ] **ST-207:** Unlimited override with `log = ALL` (bug A) [scratch]: `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`,
   `log = ALL`: no village logs `CANCELLED`, the footprint numbers still print.
-- ST-208 Wet piece pruned (only with step 4) [scratch]: a village at a lake shore logs `pruned K of N` with a
+- [ ] **ST-208:** Wet piece pruned (only with step 4) [scratch]: a village at a lake shore logs `pruned K of N` with a
   footprint reason and keeps its dry part.
 
 ---
@@ -334,11 +334,11 @@ Structure ids above (verified in the jars). Tag `creativeengineering:terrain_ada
 - New chunks only.
 
 ### Tests
-- ST-209 Crypt entrance flush [scratch]: a tagged `ancient_crypt` on a slope: the ground around the entrance is at the
+- [ ] **ST-209:** Crypt entrance flush [scratch]: a tagged `ancient_crypt` on a slope: the ground around the entrance is at the
   entrance roof's level, no pit; its rooms open.
-- ST-210 Seabed ruins half buried [scratch] (if tagged): the seabed around an `ocean_ruins` piece is at its original
+- [ ] **ST-210:** Seabed ruins half buried [scratch] (if tagged): the seabed around an `ocean_ruins` piece is at its original
   height, the ruin's bottom 3 layers in the sand.
-- ST-211 Terrain-matching start refused [scratch] (with step 1): tag `village_nilotic` on a scratch server only -> the
+- [ ] **ST-211:** Terrain-matching start refused [scratch] (with step 1): tag `village_nilotic` on a scratch server only -> the
   load log warns and ignores it.
 
 ---
@@ -402,7 +402,7 @@ Option set (pick in Decisions):
   canceled at 1,366 air) and in diag3 (2 canceled too wet); look at both in the same run.
 
 ### Tests
-- ST-212 Castle survives [scratch]: after the change, in the measurement squares at least half of the rolled castles
+- [ ] **ST-212:** Castle survives [scratch]: after the change, in the measurement squares at least half of the rolled castles
   are kept, and none of the kept ones has earth over more than 6 blocks of air (probe one on a slope).
 
 ---
@@ -432,7 +432,7 @@ because `none` counts every earth block of its sunk dirt bowl; the terrain brief
 - Close (recommended) or merge into #2.
 
 ### Tests
-- ST-52 itself is still unticked in structure_tuning.md (it is a DATA test); tick it when the row closes.
+- [ ] **ST-52:** itself is still unticked in structure_tuning.md (it is a DATA test); tick it when the row closes.
 
 ---
 
@@ -521,9 +521,9 @@ Vanilla: `ChunkGenerator#tryGenerateStructure` `m_223104_`, `getBaseColumn` `m_2
   the generator, RandomState and grid.
 
 ### Tests
-- ST-213 Same starts with the filter [scratch]: two fresh worlds, same seed, Chunky r 64 at 2144 -2592, filter on/off:
+- [ ] **ST-213:** Same starts with the filter [scratch]: two fresh worlds, same seed, Chunky r 64 at 2144 -2592, filter on/off:
   identical `/cwglocate census` member counts; the JFR shows no `ObeliskStructure#canGenerate` in the Overworld.
-- ST-214 Terrain cache exact [scratch] (if B): `log = ALL` earth-fill lines identical with the cache on and off over
+- [ ] **ST-214:** Terrain cache exact [scratch] (if B): `log = ALL` earth-fill lines identical with the cache on and off over
   the same square; JFR share of `EarthFill.predicted` down.
 - Offline: an `EarthFillTest` case that the cached and uncached `Terrain` answer the same for a fake generator.
 
@@ -566,7 +566,7 @@ through one tag override on the desert groups (the machinery exists), keeping th
 New chunks only. `/place structure` is not checked by earth fill. Related: `structures/rates-and-groups #10` (pyramid separation).
 
 ### Tests (ST-)
-- ST-229 (proposed): census of 30 desert pyramid starts (scratch server, new chunks): none stands in standing water; the log
+- [ ] **ST-229:** (proposed) census of 30 desert pyramid starts (scratch server, new chunks): none stands in standing water; the log
   shows the fill instead of a cancel.
 
 ---

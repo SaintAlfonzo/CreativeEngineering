@@ -304,76 +304,76 @@ no stray namespace, 18 loot modifier entries, 14 cup rows (onion row dropped).
 
 Boot and inventory
 
-- [ ] MND-01 The game boots with the port and without the 1.1.2 jar; no registry, mixin or recipe error naming
+- [ ] **MND-01:** The game boots with the port and without the 1.1.2 jar; no registry, mixin or recipe error naming
   `miners_delight` in `latest.log`; CCK loads its three Miner's mixins (no "target not found"). `/dumpall` after.
-- [ ] MND-02 The creative tab holds 69 items; every item has a name and texture (no purple-black, no raw key).
-- [ ] MND-03 A world that had 1.1.2 items (if any) keeps them after the swap.
-- [ ] MND-04 With `miners_upstream/` renamed away the game stops at load with the message naming the folder and the
+- [ ] **MND-02:** The creative tab holds 69 items; every item has a name and texture (no purple-black, no raw key).
+- [ ] **MND-03:** A world that had 1.1.2 items (if any) keeps them after the swap.
+- [ ] **MND-04:** With `miners_upstream/` renamed away the game stops at load with the message naming the folder and the
   Modrinth link; with it back, `latest.log` has `Miner's Delight upstream data: 182 files` and `Cup conversions: 15
   bowl foods`. Port `-02`: the same with only the 1.1.2 jar moved away (message names it and the CurseForge link);
   `upstream assets: N files (4 in the 1.1.2 look)`.
-- [ ] MND-05 (port `-02`) Sticky Basket sides, Baked Cave Carrot, Tentacles and Baked Tentacles (`/give`; the tentacles
+- [ ] **MND-05:** (port `-02`) Sticky Basket sides, Baked Cave Carrot, Tentacles and Baked Tentacles (`/give`; the tentacles
   are removed items) show the 1.1.2 art; cave carrot crop stages, wild cave carrots, cave carrot item, gossypium, weird
   caviar and the stuffed squid bowl show the 1.4.5 art.
 
 Copper pot and cups
 
-- [ ] MND-10 The copper pot cooks a 1.1.2 recipe (cave soup) and a 1.4.5 one (takoyaki) over a heat source; the meal
+- [ ] **MND-10:** The copper pot cooks a 1.1.2 recipe (cave soup) and a 1.4.5 one (takoyaki) over a heat source; the meal
   slot and container rules work; the recipe book and JEI [+] fill it.
-- [ ] MND-11 With Create Central Kitchen: a copper pot on a Blaze Stove; when the pot finishes a meal the stove gets
+- [ ] **MND-11 With Create Central Kitchen:** a copper pot on a Blaze Stove; when the pot finishes a meal the stove gets
   its signal (CCK's `processCooking` hook), as with the FD pot.
-- [ ] MND-12 Cup conversions: a bowl soup in the copper pot serves as its cup; each cup drinks, gives its effects and
+- [ ] **MND-12 Cup conversions:** a bowl soup in the copper pot serves as its cup; each cup drinks, gives its effects and
   returns the copper cup; the water and powder snow cups fill and empty at cauldrons; (hot cocoa cup dropped, D3)
 
-- [ ] MND-13 The onion soup cup: a bowl of Brewin' Creamy Onion Soup in the copper pot serves an onion soup cup (D9, P9); the cup drinks and returns the copper cup. No `farmersdelight:onion_soup` row is read.
-- [ ] MND-14 Sticky basket collects items; with CCK, its transfer cooldown behaves as before.
-- [ ] MND-15 On the dedicated server: the copper pot's recipe book ghost and JEI show cup results (e.g. 2 cave soup
+- [ ] **MND-13 The onion soup cup:** a bowl of Brewin' Creamy Onion Soup in the copper pot serves an onion soup cup (D9, P9); the cup drinks and returns the copper cup. No `farmersdelight:onion_soup` row is read.
+- [ ] **MND-14:** Sticky basket collects items; with CCK, its transfer cooldown behaves as before.
+- [ ] **MND-15 On the dedicated server:** the copper pot's recipe book ghost and JEI show cup results (e.g. 2 cave soup
   cups) and a Copper Cup as container, so the cup table reached the client.
-- [ ] MND-16 Empty copper cup: right-click water source = water cup, a cow or goat = milk cup, a fish or axolotl does
+- [ ] **MND-16 Empty copper cup:** right-click water source = water cup, a cow or goat = milk cup, a fish or axolotl does
   nothing (the fish stays, the cup stays); water cup pours a source; powder snow cup places powder snow.
-- [ ] MND-18 (port `-02`, I8, `jei #14`) Leftover slot: cook a recipe with a milk or water bucket or a honey bottle
+- [ ] **MND-18:** (port `-02`, I8, `jei #14`) Leftover slot: cook a recipe with a milk or water bucket or a honey bottle
   (any FD pot recipe of up to four ingredients) in the Copper Pot: the empty bucket or bottle lands in the slot right of
   the output, not on the floor; it cannot take items by hand; shift-click and a hopper under the pot take it out; with
   the slot full of another item the pot does not start the meal; breaking the pot drops it. A pot placed with `-01` and
   holding items keeps them after the swap. With `remainderBuffer = false` leftovers fly out as before. Single player:
   R on a soup cup in JEI opens the Copper Pot recipe that serves it.
-- [ ] MND-19 (I7) The Copper Pot cooks on the pack's heat sources the FD pot uses (campfire, lit oven below), and not
+- [ ] **MND-19:** (I7) The Copper Pot cooks on the pack's heat sources the FD pot uses (campfire, lit oven below), and not
   on an unlit oven.
-- [ ] MND-17 Cups stack to 64 (empty, water, milk, powder snow; soup cups 32 by the pack's stack policy [upstream 16]). With a stack of 5 powder snow cups: place one, the other 4 stay and an empty cup lands in the inventory. A stack of water cups emptied on the ground and filled at a cauldron keeps the rest of the stack. A stack of milk cups drinks one at a time and returns empty cups. The craft: 3 copper ingots (`X X` over ` X `) makes a Copper Cup.
+- [ ] **MND-17:** Cups stack to 64 (empty, water, milk, powder snow; soup cups 32 by the pack's stack policy [upstream 16]). With a stack of 5 powder snow cups: place one, the other 4 stay and an empty cup lands in the inventory. A stack of water cups emptied on the ground and filled at a cauldron keeps the rest of the stack. A stack of milk cups drinks one at a time and returns empty cups. The craft: 3 copper ingots (`X X` over ` X `) makes a Copper Cup.
 
 Food and feasts
 
-- [ ] MND-20 Each feast (stuffed squid, fake meatloaf, glazed arachnid limbs) places, serves its portions with the right
+- [ ] **MND-20:** Each feast (stuffed squid, fake meatloaf, glazed arachnid limbs) places, serves its portions with the right
   container and drops its leftovers.
-- [ ] MND-21 The 1.4.5 foods eat with their effects (nutritional bars, golden nutritional bar, bat cookie fast eat).
-- [ ] MND-22 Haste and mining fatigue potions brew (Copper Carrot into awkward; redstone, glowstone, fermented spider
+- [ ] **MND-21:** The 1.4.5 foods eat with their effects (nutritional bars, golden nutritional bar, bat cookie fast eat).
+- [ ] **MND-22:** Haste and mining fatigue potions brew (Copper Carrot into awkward; redstone, glowstone, fermented spider
   eye variants).
 
 Drops and worldgen
 
-- [ ] MND-30 (D8 rebuilt, §8.1) With a knife: bat (2 bat wings), spider and cave spider (1-3 arthropods, sometimes a
+- [ ] **MND-30:** (D8 rebuilt, §8.1) With a knife: bat (2 bat wings), spider and cave spider (1-3 arthropods, sometimes a
   cobweb; spiders also spider legs), silverfish (1 arthropod, eggs half the time); kills with Fire Aspect give Smoked
   Bat Wing, Cooked Arthropod and Baked Spider Leg instead of the raw ones and no cobweb; without a knife a bat gives a
   wing half the time and a silverfish rarely an egg, nothing else. Squid and glow squid: one squid item each (squid
   chain, not D8). Infested blocks broken with a pickaxe drop 1-3 silverfish eggs most of the time.
-- [ ] MND-31 Fishing can catch a squid (about 1 in 20) and a glow squid (about 1 in 200) item.
-- [ ] MND-32 Wild cave carrots (cave rule, §4.3; runs with the 1.1.2 jar now): in new chunks only, carrots appear in caves
+- [ ] **MND-31:** Fishing can catch a squid (about 1 in 20) and a glow squid (about 1 in 200) item.
+- [ ] **MND-32:** Wild cave carrots (cave rule, §4.3; runs with the 1.1.2 jar now): in new chunks only, carrots appear in caves
   of every overworld biome, **very common around Y 0**, clearly less common but still easy to find at Y 25 to 48 and at
   Y -64 to -25, and **never above Y 48** (check with `F3` at the highest patches, and `/cdevplace`-style counting or a
   Y histogram of `wild_cave_carrots` in a loaded area). None on the surface. The mod's own spawn (1 in 3, Y -54 to 48)
   is off: `latest.log` has no error for `miners_delight:cave_carrots`. Cave carrots plant and grow; WTHIT shows growth.
-- [ ] MND-33 Abandoned mineshaft chests can hold Miner's loot (now a pool the loot engine adds, `L.addPool`).
-- [ ] MND-42 (members #51) `latest.log` / `logs/kubejs/server.log` after a `/reload`: `[loot-drops] 17 drop pools and 2
+- [ ] **MND-33:** Abandoned mineshaft chests can hold Miner's loot (now a pool the loot engine adds, `L.addPool`).
+- [ ] **MND-42:** (members #51) `latest.log` / `logs/kubejs/server.log` after a `/reload`: `[loot-drops] 17 drop pools and 2
   shared entries in 11 tables`, no `[loot-drops]` warning, no `miners_delight` loot modifier error; `/loot spawn ~ ~ ~
   loot minecraft:entities/bat` and `.../entities/spider` give nothing Miner's (no killer, no knife), and
   `/loot spawn ~ ~ ~ kill @e[type=spider,limit=1]` while holding a knife gives arthropods.
-- [ ] MND-34 (I5) `/loottuning` (or the log) lists the cave carrot crate pack; `/loot spawn` on a table with cave carrots (Miner's `chests/md_abandoned_mineshaft`) sometimes gives Cave Carrot Crates instead.
+- [ ] **MND-34:** (I5) `/loottuning` (or the log) lists the cave carrot crate pack; `/loot spawn` on a table with cave carrots (Miner's `chests/md_abandoned_mineshaft`) sometimes gives Cave Carrot Crates instead.
 
 Review (decides the drops)
 
-- [ ] MND-40 Overlap review: every row of §3.1 and §3.2 gets keep both / keep one / merge, written into §3. Includes
+- [ ] **MND-40 Overlap review:** every row of §3.1 and §3.2 gets keep both / keep one / merge, written into §3. Includes
   D7 (haste potions), D9 (onion soup cup) and the 13 redrawn textures.
-- [ ] MND-41 After the drops are built: the dropped ids are gone from JEI, loot and worldgen; nothing in `latest.log`
+- [ ] **MND-41 After the drops are built:** the dropped ids are gone from JEI, loot and worldgen; nothing in `latest.log`
   names them.
 
 ### 8.1 Loot rules that replace the loot modifiers (D8, `creativedelight/members #51`, 2026-11-02)

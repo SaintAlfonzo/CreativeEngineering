@@ -299,9 +299,9 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
 - [ ] **TT-02 Crushed piles:** hover a Create Compressed crushed aluminium pile. -> Name only.
 
 **BlockRunner line** (moved here from the BlockRunner suite)
-- ~~**TT-03 Speed values:**~~ retired 2026-11-02 (line off). asphalt (IP and D&D) -> "Speed Multiplier: 1.5"; glass -> "Speed Multiplier: 1.0"; stone -> "Speed Multiplier: 1.05". *(was BR-06)*
-- ~~**TT-04 Camo lines**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): framed cube -> "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel -> "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
-- ~~**TT-05 Camo off**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube -> "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
+- [ ] ~~**TT-03 Speed values:**~~ retired 2026-11-02 (line off). asphalt (IP and D&D) -> "Speed Multiplier: 1.5"; glass -> "Speed Multiplier: 1.0"; stone -> "Speed Multiplier: 1.05". *(was BR-06)*
+- [ ] ~~**TT-04 Camo lines:**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): framed cube -> "Speed Multiplier: matches its camo"; framed slab, framed panel, any framed double item, Copycats+ copycat slab or byte panel -> "…matches its camo (newest camo sets walk behaviors for hybrid blocks)". Needs `[surface.camouflage] copyCamo = true`. *(was BR-20)*
+- [ ] ~~**TT-05 Camo off:**~~ retired 2026-11-02 (line off). (needs the rebuilt Creative Common jar): set `[surface.camouflage] copyCamo = false` and save. Hover a framed cube -> "Speed Multiplier: 1.0, no matter its camo". Set it back to `true`. *(was the tooltip half of BR-21)*
 
 **Pack lines (samples)**
 - [ ] **TT-06 Patterns:** a Quark hollow log -> "Can be crawled through"; any Create/Quark ladder -> the ladder line.
@@ -315,7 +315,7 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
 
 **Vinery**
 - [ ] **TT-14 Grape lines gone:** hover each grape and each grape seed in JEI. -> Name (and food / mod lines) only, no italic "can be found in ... Biomes" or "needs sunlight" line.
-- ~~**TT-15 Vinery placeholders**~~ moved to VB-84 to VB-86 ([alcohol.md](alcohol.md) 10.15): the text is written.
+- [ ] ~~**TT-15 Vinery placeholders:**~~ moved to VB-84 to VB-86 ([alcohol.md](alcohol.md) 10.15): the text is written.
 
 - [ ] **TT-16 Underline (1.0.5):** hover a diamond chestplate and a netherite sword in the inventory, over a few launches -> the line under the name sits below the spinning model, never across it
 - [ ] **TT-17 AppleSkin in JEI (1.0.5):** open the JEI recipe page of bread, hover the output slot and the catalyst column's crafting table -> the bread slot shows AppleSkin's hunger/saturation bar; the recipe slots also show tooltip images (bundles), like the item list

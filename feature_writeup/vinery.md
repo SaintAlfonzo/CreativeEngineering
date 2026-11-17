@@ -329,17 +329,17 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - [ ] **VN-02 Pot type lock:** 1 white grape, then 5 red -> the juice is white.
 - [ ] **VN-03 Mob stomp:** fill a pot, push a mob onto it from 1 block up 3 times -> the pot reaches the bottling stage.
 - [ ] **VN-04 Press timing:** 10 apples in the Apple Press -> 10 Apple Mash after about 36 s (3.6 s each).
-- [ ] ~~**VN-05 Press hopper jam**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-93.
+- [ ] ~~**VN-05 Press hopper jam:**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-93.
 - [ ] **VN-06 Barrel time:** fill an Aging Barrel with a valid recipe -> the wine appears in about 2.5 s, not 90 s.
 - [ ] **VN-07 Barrel output stacks:** 8 wine bottles and 8 of each ingredient, leave the wine in the output -> it keeps crafting and the output stack grows to 8 with no one taking it. A wine with a different `Year` in the output stops it.
-- [ ] ~~**VN-08 Barrel hopper**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-94.
+- [ ] ~~**VN-08 Barrel hopper:**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-94.
 
 **Growing**
 - [ ] **VN-09 Stem pair:** place a stem with 2+ in hand on grass -> 2-high stem, 2 used. Red seeds on the lower stem are refused; on the upper stem they plant.
 - [ ] **VN-10 Stem harvest:** grow to stage 4 -> right-click drops 3-4 grapes and the stem shows the stage-2 model. Shears on a planted stem drop the seed back and keep full durability.
 - [ ] **VN-11 Stem seed loss:** break a planted stem by hand -> no seed drops.
 - [ ] **VN-12 Taiga seed on stem:** taiga seeds on an upper stem with no podzol, coarse dirt or grass nearby -> plants and grows.
-- [ ] **VN-13 Lattice bone meal** (rewritten 2026-11-16): jungle seeds on a single lattice -> bone meal grows it (stage 1 -> 2 -> 3); a stacked lattice the same; an empty lattice takes none. Bone meal on an upper stem with no stem below still does nothing.
+- [ ] **VN-13 Lattice bone meal:** (rewritten 2026-11-16) jungle seeds on a single lattice -> bone meal grows it (stage 1 -> 2 -> 3); a stacked lattice the same; an empty lattice takes none. Bone meal on an upper stem with no stem below still does nothing.
 - [ ] **VN-14 Taiga bush grass:** taiga seeds on dirt with only grass blocks nearby (no podzol or coarse dirt) -> it can be planted.
 - [ ] **VN-15 Savanna light:** savanna seeds under a 1-block roof at night with no torches -> can't be planted.
 - [ ] **VN-16 Bush seed drop:** break a stage-1 bush -> nothing. Break a stage-3 bush -> 1 seed.
@@ -349,7 +349,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 **Aging and utility**
 - [ ] **VN-19 Aging:** take a fresh wine and note its potency, then `/time add 1536000` (64 days) -> its tooltip potency is one level higher.
 - [ ] **VN-20 Sink:** place a Kitchen Sink (creative) -> an empty-hand click fills it. A bucket gives a water bucket. An empty hand refills it, so it's endless.
-- [ ] **VN-21 Lattice bone meal, server** (2026-11-16, SQ-VN-01): a planted jungle lattice on a wall with nothing below grows one or more stages per bone meal at stages 1 and 2; at stage 3 the click harvests (2 grapes, back to stage 1).
+- [ ] **VN-21 Lattice bone meal, server:** (2026-11-16, SQ-VN-01) a planted jungle lattice on a wall with nothing below grows one or more stages per bone meal at stages 1 and 2; at stage 3 the click harvests (2 grapes, back to stage 1).
 
 ## 8. History
 

@@ -157,11 +157,11 @@ does it for Fruits Delight:
 ### Tests
 
 WE-25 stays, with its second half reworded to the outcome of step 0. New:
-- **WE-37 Cool Rain order:** plains, rain, `MID_SUMMER`, on an iron block -> note whether Cool Rain's metal sound plays
+- [ ] **WE-37 Cool Rain order:** plains, rain, `MID_SUMMER`, on an iron block -> note whether Cool Rain's metal sound plays
   (records which handler wins; see Build step 0).
-- **WE-38 Cool Rain snow:** (patched build, or Cool Rain dropped) plains, rain, `MID_WINTER` -> snow falls, no rain
+- [ ] **WE-38 Cool Rain snow:** (patched build, or Cool Rain dropped) plains, rain, `MID_WINTER` -> snow falls, no rain
   sound and no rain splash on blocks.
-- **WE-39 Cool Rain dry season:** jungle, rain, `LATE_SUMMER` (Mid Dry) -> no rain sound or splash; `MID_SPRING` -> Cool
+- [ ] **WE-39 Cool Rain dry season:** jungle, rain, `LATE_SUMMER` (Mid Dry) -> no rain sound or splash; `MID_SPRING` -> Cool
   Rain's foliage sound under leaves.
 
 ---
@@ -281,10 +281,10 @@ Every hook is on a named method.
 
 ### Tests
 
-- **WE-40 river tint:** river through a desert, `/season set MID_WINTER` then `MID_SUMMER` -> bank grass keeps one
+- [ ] **WE-40 river tint:** river through a desert, `/season set MID_WINTER` then `MID_SUMMER` -> bank grass keeps one
   color (like the desert's, no seasonal shift). River through a jungle -> tropical shift. River through plains ->
   temperate shift as before. A beach next to snowy plains -> no tint change.
-- **WE-41 tint cost and safety:** fly along a large river with Rubidium for 2 minutes -> no exception in `latest.log`,
+- [ ] **WE-41 tint cost and safety:** fly along a large river with Rubidium for 2 minutes -> no exception in `latest.log`,
   FPS within noise of the same flight with `[seasons] enabled = false`.
 
 ---

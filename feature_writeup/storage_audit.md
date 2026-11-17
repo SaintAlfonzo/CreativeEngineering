@@ -198,12 +198,12 @@ rotate and take-out logic and the empty-sack tag (SB-01, SB-03, SB-04 server hal
 (SQ-GM-10, `tools/gear_misc_probe.js sack`); scrolling, the tooltip, Mouse Tweaks and the packet need a client.
 
 
-- [ ] **SB-01 Scroll** (rotate down then up restores the order: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client): sack with 3 kinds in the inventory. Scroll down over it: the Quark tooltip's first cell
+- [ ] **SB-01 Scroll:** (rotate down then up restores the order: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client) sack with 3 kinds in the inventory. Scroll down over it: the Quark tooltip's first cell
   becomes the 2nd kind; scroll up returns it. No item moves to another inventory (Mouse Tweaks).
-- [ ] **SB-02 Single stack** (a one-stack sack never rotates: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client): sack with one stack: scrolling over it does nothing to it (Mouse Tweaks may act as usual).
-- [ ] **SB-03 Take stack** (empty-cursor right-click puts 2 cobblestone on the cursor, 2 stacks left: scratch server PASSED 2026-10-22, SQ-GM-10; the screen and resync: client): empty cursor, right-click the sack: the selected stack is on the cursor, the rest stay.
+- [ ] **SB-02 Single stack:** (a one-stack sack never rotates: scratch server PASSED 2026-10-22, SQ-GM-10; scrolling: client) sack with one stack: scrolling over it does nothing to it (Mouse Tweaks may act as usual).
+- [ ] **SB-03 Take stack:** (empty-cursor right-click puts 2 cobblestone on the cursor, 2 stacks left: scratch server PASSED 2026-10-22, SQ-GM-10; the screen and resync: client) empty cursor, right-click the sack: the selected stack is on the cursor, the rest stay.
   Close and reopen the inventory: same contents (server agrees).
-- [ ] **SB-04 Empty sack** (an emptied sack has no tag: scratch server PASSED 2026-10-22, SQ-GM-10; tooltip: client): right-click an empty sack: it is picked up. Empty one with SB-03 until empty: it has no
+- [ ] **SB-04 Empty sack:** (an emptied sack has no tag: scratch server PASSED 2026-10-22, SQ-GM-10; tooltip: client) right-click an empty sack: it is picked up. Empty one with SB-03 until empty: it has no
   contents tooltip and no tag (F3+H advanced tooltip shows no NBT line).
 - [ ] **SB-05 Place 1:** carry a sack, right-click an empty slot: 1 of the selected item lands there.
 - [ ] **SB-06 Insert:** right-click a stack onto a sack: it goes in; a 17th kind is refused (16 slots).

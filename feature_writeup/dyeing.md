@@ -167,16 +167,16 @@ Not soap cases: Botania mossy apothecary (its own block), sandy waystone (a styl
 
 ### 2.9 In-game checks
 
-- DY-01: dye a placed Fantasy Furniture bed (single and double) with red dye. Expected today (2.5.1): it may turn into
+- [ ] **DY-01:** dye a placed Fantasy Furniture bed (single and double) with red dye. Expected today (2.5.1): it may turn into
   half a vanilla red bed. Record what happens.
-- DY-02: dye a Buzzier Bees soul candle, a Supplementaries soul candle holder and a Farmer's Respite coffee candle cake.
+- [ ] **DY-02:** dye a Buzzier Bees soul candle, a Supplementaries soul candle holder and a Farmer's Respite coffee candle cake.
   Record whether the variant is kept.
-- DY-03: dye a Create belt, then right-click it with a water bucket (W1). Record whether the color clears and the
+- [ ] **DY-03:** dye a Create belt, then right-click it with a water bucket (W1). Record whether the color clears and the
   bucket stays full.
-- DY-04: write on a dyed canvas sign, use soap. Record whether the text is wiped, the sign turns plain, or both.
-- DY-05: soap a brown Create toolbox holding items, and a red valve handle. Expected: white toolbox, contents kept;
+- [ ] **DY-04:** write on a dyed canvas sign, use soap. Record whether the text is wiped, the sign turns plain, or both.
+- [ ] **DY-05:** soap a brown Create toolbox holding items, and a red valve handle. Expected: white toolbox, contents kept;
   white valve handle.
-- DY-06: shear a Create Deco mossy brick, a Quark mossy cobblestone brick and a SecurityCraft reinforced mossy
+- [ ] **DY-06:** shear a Create Deco mossy brick, a Quark mossy cobblestone brick and a SecurityCraft reinforced mossy
   cobblestone. Record which lose their moss (IW shears coverage, 2.7).
 
 ## 3. Owner decisions (2026-10-27, `blocks/dyeing #1`)
@@ -325,17 +325,17 @@ glow chalk marks wash off with soap like plain marks (assumed yes, to nothing).
 
 ### 3.9 In-game checks (add to 2.9)
 
-- DY-07: dye a filled shulker box, sack, present and Lightman's vending machine in world: contents kept, no duplicate on
+- [ ] **DY-07:** dye a filled shulker box, sack, present and Lightman's vending machine in world: contents kept, no duplicate on
   breaking. Soap each back.
-- DY-08: dye and soap a plain banner in world (works), then a banner with a pattern (nothing happens); both still work in the
+- [ ] **DY-08:** dye and soap a plain banner in world (works), then a banner with a pattern (nothing happens); both still work in the
   crafting table.
-- DY-09: right-click an IW sandy stone brick with a shovel (steps down), and with soap (clean stone).
-- DY-10: soap a dyed Create Framed glass, a stained glass and a Quark framed glass: each becomes clear glass, not white.
-- DY-11: soap a colored glow wool: white glow wool; soap again: plain wool; glow ink on wool: glow wool.
-- DY-12: dye a Botania flower with dye and soap: nothing. Colored water: dye interaction off. Turtle with a water bucket:
+- [ ] **DY-09:** right-click an IW sandy stone brick with a shovel (steps down), and with soap (clean stone).
+- [ ] **DY-10:** soap a dyed Create Framed glass, a stained glass and a Quark framed glass: each becomes clear glass, not white.
+- [ ] **DY-11:** soap a colored glow wool: white glow wool; soap again: plain wool; glow ink on wool: glow wool.
+- [ ] **DY-12:** dye a Botania flower with dye and soap: nothing. Colored water: dye interaction off. Turtle with a water bucket:
   dye stays.
-- DY-14: crushed glow ink dye on white wool and carpet: glow version in the dye colour. Chalk on wool and carpet dyes it; glow chalk gives the glow version; glow ink costs 1 per block.
-- DY-13: shears on overgrown algal bricks and floral mossy cobblestone; hoe on muddy mangrove roots; soap on one of each of
+- [ ] **DY-14:** crushed glow ink dye on white wool and carpet: glow version in the dye colour. Chalk on wool and carpet dyes it; glow chalk gives the glow version; glow ink costs 1 per block.
+- [ ] **DY-13:** shears on overgrown algal bricks and floral mossy cobblestone; hoe on muddy mangrove roots; soap on one of each of
   the 3.6 states.
 
 - 2026-10-28: planned from the scratchpad: water in a cauldron for decor washing recipes, e.g. old and weathered cardboard boxes (TODO `blocks/dyeing #5`). No code changed.

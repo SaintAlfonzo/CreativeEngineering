@@ -98,9 +98,9 @@ Verified in the Abnormals Delight 4.1.2 and CCK 1.3.11.c jars: item ids, the `at
 - item_dict and removed_items.js are startup scripts: restart, not `/reload`.
 
 ### Tests (EF-)
-- EF-12 (reworded): `/give @s abnormals_delight:passion_aloe_nectar` -> the item has the red REMOVED line; JEI search
+- [ ] **EF-12:** (reworded) `/give @s abnormals_delight:passion_aloe_nectar` -> the item has the red REMOVED line; JEI search
   "nectar" / "Passion" -> no Abnormals Delight entries; latest.log `[jeiRemove]` lists no recipe for it.
-- EF-20: JEI -> Slow Falling effect page -> Red Wine, no Cherry Cream Soda; `python3 tools/effect_audit.py` reports no
+- [ ] **EF-20:** JEI -> Slow Falling effect page -> Red Wine, no Cherry Cream Soda; `python3 tools/effect_audit.py` reports no
   `no JEI source` for `minecraft:slow_falling`.
 
 ---
@@ -160,7 +160,7 @@ JEED toml take raw ids anyway, so no dict key is needed.
   prefix only.
 
 ### Tests (EF-)
-- EF-02 (reworded): JEI -> Long Reach -> the new text; Patrol Nullifier, Phantom Bane, Magic Resistance, Copper
+- [ ] **EF-02:** (reworded) JEI -> Long Reach -> the new text; Patrol Nullifier, Phantom Bane, Magic Resistance, Copper
   Poisoning and the four World Map switches likewise; JEI effect search shows no blank-named entry (Anti-Fire hidden).
 
 ---
@@ -193,7 +193,7 @@ JEI effect pages (JEED's provider page) show the three potion bundle items with 
 The potion buckets use the same list and work (EF-16); change only the bundle entries.
 
 ### Tests (EF-)
-- EF-21 (proposed): JEI -> Regeneration lists the three bundles with the Regeneration potion shown.
+- [ ] **EF-21:** (proposed) JEI -> Regeneration lists the three bundles with the Regeneration potion shown.
 
 ---
 
@@ -223,7 +223,7 @@ and the effect gets a description.
 Collapse by tag (one slot that cycles) or by a single stand-in item. Recommend tag, if JEED accepts it.
 
 ### Tests (EF-)
-- EF-22 (proposed): the effect's page shows one cycling slot; the hover text and description read well.
+- [ ] **EF-22:** (proposed) the effect's page shows one cycling slot; the hover text and description read well.
 
 ---
 
@@ -257,7 +257,7 @@ Keys `i.cleaned_cap`, `i.inky_caps_salad`, `i.inky_cap_scrambled_eggs` exist (it
 `fruitsdelight:*` (check which durian item is in the tag).
 
 ### Tests (EF-)
-- EF-23 (proposed): JEI -> Weak Stomach lists the cap foods; the description names the cause and the trigger separately.
+- [ ] **EF-23:** (proposed) JEI -> Weak Stomach lists the cap foods; the description names the cause and the trigger separately.
 
 ---
 

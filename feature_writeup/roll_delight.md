@@ -532,35 +532,33 @@ the server loads `roll_upstream_data` clean), -02, -05 to -09 PASS: server half 
 SQ-ROLL-03 and -04 (ROLL-07, 08, 09) OPEN: `zq useitem` tries the main hand only, chopsticks have no use of their own,
 so nothing was eaten; rerun after the off-hand fallback in the probe.
 
-| ID | Test | Pass |
-|---|---|---|
-| ROLL-01 | Boot with the CD jar | no `Failed to parse` naming `roll_delight` in `latest.log` |
-| ROLL-02 | JEI search "roll" | every kept Roll item has a recipe; Rice Roll present (D3), no Ancient Roll (D2), Salmon Maki Roll present (D12) |
-| ROLL-03 | Cut a Rice Roll and a Mushroom Roll on the board plus Salmon Maki Roll | 3 slices each, values per 3.1.1 |
-| ROLL-04 | Craft Tobiko from frogspawn + 3 Rice Roll Slices | 3 Tobiko Rolls |
-| ROLL-05 | Break frogspawn with shears, then with a hand | shears drop frogspawn; hand drops nothing |
-| ROLL-06 | Cook nether wart in the Cooking Pot with a bowl | Cooked Nether Wart; no bowl, no output |
-| ROLL-07 | Chopsticks main hand, Mushroom Roll Slice in off-hand, hunger 19 | slice eaten by the normal animation, hunger 20 (not 27), saturation <= 20, the food's effects last longer (D11), chopsticks lose 1 durability |
-| ROLL-08 | Chopsticks with a dirt block, a non-listed food, or a listed food at full hunger in off-hand | no durability lost (B5), nothing eaten extra |
-| ROLL-09 | Chopsticks eat 10 slices in a row from hunger 10 | saturation never exceeds hunger; Spice of Life counts the food |
-| ROLL-10 | Place a Legendary Medley, take all servings | 3 + 3 + 2 items, then the bowl; block gone |
-| ROLL-11 | Break a half-eaten medley | remaining items + bowl drop |
-| ROLL-12 | Wrapped Chopsticks: add 3, take 4 | stacks to 4 visually; 4 chopsticks back, block gone |
-| ROLL-13 | Golden Roll recipe in JEI and its food tags | `goldenGild` on Rice Roll (nugget ring, mixer, Arc Furnace), `golden` type and tag, no iron |
-| ROLL-14 | Chopsticks on an FD Rice Roll Medley and on a Roll medley | one serving eaten in place through the normal path, same caps as ROLL-07, 1 durability |
-| ROLL-15 | Nether Roll with raw porkchop, with raw bacon, with Prepared Flesh, and mixed | 2 Nether Rolls each time; JEI shows all three |
-| ROLL-16 | Anvil and enchanting table with chopsticks | Unbreaking and Mending offered and applied; a Mending orb repairs them; durability 64 |
-| ROLL-17 | Chopsticks tooltip; empty off-hand right-click | two lines as in 3.3; `latest.log` gets no empty INFO line (B7) |
-| ROLL-18 | Medley with an empty hand, then with a held block and a held non-block | empty hand takes servings in order; the held block places against the medley (B9); no other held item takes one |
-| ROLL-19 | Eat 5 different chopstick foods with chopsticks, then Spice of Life screen | each counts as eaten, as if by hand (diversity, AppleSkin preview, no extra hunger) |
-| ROLL-20 | Ancient Roll in JEI and craft; Cooked Nether Wart can | recipe shows Ancient Fruit and Chorus Flower; the cooked wart can exists and opens to 4 servings |
-| ROLL-21 | Hover a chopstick food without effects (Salmon Slice), one with effects (Glowing Calamari Roll, Cooked Rice), and a non-listed food | first: `Can be eaten in the offhand w/ chopsticks`; the effect foods: `..., lengthens effect length`; non-listed: no line |
-| ROLL-22 | Anvil repair of damaged chopsticks with oak, spruce and a modded plank | each repairs |
-| ROLL-23 | JEI uses of Cooked Nether Wart; `/dumptags` item `creativedelight:food_type/cooked/veggie` | Nether Roll only (and its can); not in the cooked-vegetable tag; the can still crafts |
-| ROLL-24 | Hover the Salmon Maki slice | "Salmon Maki Roll Slice" |
-| ROLL-25 | Eat a Golden Roll and a Golden Roll Slice (AppleSkin) | 20 / 0.6 and 10 / 0.5, no effects, not eaten at full hunger, stack 64 |
-| ROLL-26 | JEI uses of the Golden Roll Slice | cutting result only; no gilding recipe with the slice as base or result |
-| ROLL-27 | JEI search "canned" for any roll, slice or medley | none |
+- [ ] **ROLL-01:** Boot with the CD jar -> no `Failed to parse` naming `roll_delight` in `latest.log`
+- [ ] **ROLL-02:** JEI search "roll" -> every kept Roll item has a recipe; Rice Roll present (D3), no Ancient Roll (D2), Salmon Maki Roll present (D12)
+- [ ] **ROLL-03:** Cut a Rice Roll and a Mushroom Roll on the board plus Salmon Maki Roll -> 3 slices each, values per 3.1.1
+- [ ] **ROLL-04:** Craft Tobiko from frogspawn + 3 Rice Roll Slices -> 3 Tobiko Rolls
+- [ ] **ROLL-05:** Break frogspawn with shears, then with a hand -> shears drop frogspawn; hand drops nothing
+- [ ] **ROLL-06:** Cook nether wart in the Cooking Pot with a bowl -> Cooked Nether Wart; no bowl, no output
+- [ ] **ROLL-07:** Chopsticks main hand, Mushroom Roll Slice in off-hand, hunger 19 -> slice eaten by the normal animation, hunger 20 (not 27), saturation <= 20, the food's effects last longer (D11), chopsticks lose 1 durability
+- [ ] **ROLL-08:** Chopsticks with a dirt block, a non-listed food, or a listed food at full hunger in off-hand -> no durability lost (B5), nothing eaten extra
+- [ ] **ROLL-09:** Chopsticks eat 10 slices in a row from hunger 10 -> saturation never exceeds hunger; Spice of Life counts the food
+- [ ] **ROLL-10:** Place a Legendary Medley, take all servings -> 3 + 3 + 2 items, then the bowl; block gone
+- [ ] **ROLL-11:** Break a half-eaten medley -> remaining items + bowl drop
+- [ ] **ROLL-12:** Wrapped Chopsticks: add 3, take 4 -> stacks to 4 visually; 4 chopsticks back, block gone
+- [ ] **ROLL-13:** Golden Roll recipe in JEI and its food tags -> `goldenGild` on Rice Roll (nugget ring, mixer, Arc Furnace), `golden` type and tag, no iron
+- [ ] **ROLL-14:** Chopsticks on an FD Rice Roll Medley and on a Roll medley -> one serving eaten in place through the normal path, same caps as ROLL-07, 1 durability
+- [ ] **ROLL-15:** Nether Roll with raw porkchop, with raw bacon, with Prepared Flesh, and mixed -> 2 Nether Rolls each time; JEI shows all three
+- [ ] **ROLL-16:** Anvil and enchanting table with chopsticks -> Unbreaking and Mending offered and applied; a Mending orb repairs them; durability 64
+- [ ] **ROLL-17:** Chopsticks tooltip; empty off-hand right-click -> two lines as in 3.3; `latest.log` gets no empty INFO line (B7)
+- [ ] **ROLL-18:** Medley with an empty hand, then with a held block and a held non-block -> empty hand takes servings in order; the held block places against the medley (B9); no other held item takes one
+- [ ] **ROLL-19:** Eat 5 different chopstick foods with chopsticks, then Spice of Life screen -> each counts as eaten, as if by hand (diversity, AppleSkin preview, no extra hunger)
+- [ ] **ROLL-20:** Ancient Roll in JEI and craft; Cooked Nether Wart can -> recipe shows Ancient Fruit and Chorus Flower; the cooked wart can exists and opens to 4 servings
+- [ ] **ROLL-21:** Hover a chopstick food without effects (Salmon Slice), one with effects (Glowing Calamari Roll, Cooked Rice), and a non-listed food -> first: `Can be eaten in the offhand w/ chopsticks`; the effect foods: `..., lengthens effect length`; non-listed: no line
+- [ ] **ROLL-22:** Anvil repair of damaged chopsticks with oak, spruce and a modded plank -> each repairs
+- [ ] **ROLL-23:** JEI uses of Cooked Nether Wart; `/dumptags` item `creativedelight:food_type/cooked/veggie` -> Nether Roll only (and its can); not in the cooked-vegetable tag; the can still crafts
+- [ ] **ROLL-24:** Hover the Salmon Maki slice -> "Salmon Maki Roll Slice"
+- [ ] **ROLL-25:** Eat a Golden Roll and a Golden Roll Slice (AppleSkin) -> 20 / 0.6 and 10 / 0.5, no effects, not eaten at full hunger, stack 64
+- [ ] **ROLL-26:** JEI uses of the Golden Roll Slice -> cutting result only; no gilding recipe with the slice as base or result
+- [ ] **ROLL-27:** JEI search "canned" for any roll, slice or medley -> none
 
 ## 9. History
 

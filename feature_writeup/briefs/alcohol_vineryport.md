@@ -56,7 +56,7 @@ Shearing a planted grapevine stem should give the seed back once and empty the s
 - Ripe stem: grapes and the seed together on one shear (recommend yes, same as harvesting then shearing).
 
 ### Tests
-- **VB-99 (proposed) Stem shearing:** shear a ripe red grape stem: grapes and one seed drop, the stem is empty (age 0, no
+- [ ] **VB-99 (proposed) Stem shearing:** shear a ripe red grape stem: grapes and one seed drop, the stem is empty (age 0, no
   grapes). Shear again: nothing. An unripe stem: one seed, empty.
 
 ---
@@ -101,7 +101,7 @@ Vinery apple and cherry trees seem to grow on top of themselves; check it and st
 - `fruit leaves` crop seasons (`farming/crops #5`) key on the leaves blocks, not the feature: unaffected.
 
 ### Tests
-- **VB-100 (proposed) Tree shape:** an apple and a cherry sapling each grow one trunk with one crown; wild trees in new
+- [ ] **VB-100 (proposed) Tree shape:** an apple and a cherry sapling each grow one trunk with one crown; wild trees in new
   chunks match; apples and cherries still grow on the leaves.
 
 ---
@@ -144,7 +144,7 @@ Ground grape bushes plant only on soil (today any full solid block), and the JEI
   it in the changelog bullet.
 
 ### Tests
-- **VB-101 (proposed) Grape soil:** red grape seeds plant on dirt, grass, farmland, rich soil and moss; not on stone, planks or
+- [ ] **VB-101 (proposed) Grape soil:** red grape seeds plant on dirt, grass, farmland, rich soil and moss; not on stone, planks or
   sand; the taiga rule still applies; JEI says "any soil".
 
 ---
@@ -182,7 +182,7 @@ Shorten the JEI description texts of the Vinery backport items (see `jei/jei-cov
 - Order with `#25`: change the soil text once, after the soil tag is decided (recommend `#25` first, then this pass).
 
 ### Tests
-- **JW-28 (proposed):** the Grape Planting, Grape Stomping and Wine Aging pages show all their text with no cut-off at the
+- [ ] **JW-28 (proposed):** the Grape Planting, Grape Stomping and Wine Aging pages show all their text with no cut-off at the
   default GUI scale; no line wraps more than twice.
 
 ---
@@ -218,7 +218,7 @@ Rerun the generators after the port (I25), and stop the `#missing` texture faces
   `#missing` faces are not known to be label undersides).
 
 ### Tests
-- **VB-102 (proposed) No missing faces:** no `#missing in vinery` line in `latest.log`; Stal, Strad, Aegis and Glowing
+- [ ] **VB-102 (proposed) No missing faces:** no `#missing in vinery` line in `latest.log`; Stal, Strad, Aegis and Glowing
   wines placed, in the single rack and in the wine box show no black-purple face from below.
 
 ---
@@ -264,7 +264,7 @@ Non-Vinery ingredients by family, with the audit question each raises:
   one, else rebuild those rows.
 
 ### Tests
-- **VB-103 (proposed) Ingredients:** an Apple Cider ferments with powdered sugar; the straw hat crafts from FD straw; JEI
+- [ ] **VB-103 (proposed) Ingredients:** an Apple Cider ferments with powdered sugar; the straw hat crafts from FD straw; JEI
   shows the changed rows once.
 
 ---
@@ -300,7 +300,7 @@ Audit how the Vinery cellar works and write it up somewhere players see it.
 - If "sampled once" surprises players: re-sample on a slow block tick (recommend leaving it; say it on the page).
 
 ### Tests
-- **VB-104 (proposed) Cellar rules:** a wine racked in a lit room then darkened keeps "sunny"; removed and reinserted it
+- [ ] **VB-104 (proposed) Cellar rules:** a wine racked in a lit room then darkened keeps "sunny"; removed and reinserted it
   reads "cellar"; a wine in a chest shows no storage line; the JEI page line is there.
 
 ---
@@ -359,7 +359,7 @@ payload.
 - None until publish (D14 decided). Whether the 1.3.10 jar can be dropped as a donor by then would remove the manual step.
 
 ### Tests
-- **DP-11 (proposed, deploy.md):** a `--publish` build has no `vinery_upstream/` jars; `apply.sh` on a clean folder downloads
+- [ ] **DP-11 (proposed, deploy.md):** a `--publish` build has no `vinery_upstream/` jars; `apply.sh` on a clean folder downloads
   the 1.5.5 jar, checks its sha1, and stops with a clear message for 1.3.10.
 
 ---

@@ -148,7 +148,7 @@ If the user keeps the stronghold's (portal rooms look right with it), add `"exce
 
 ### Tests
 
-- **NW-12 Crying obsidian:** `/locate structure betterstrongholds:stronghold`, find a portal treasure room (or
+- [ ] **NW-12 Crying obsidian:** `/locate structure betterstrongholds:stronghold`, find a portal treasure room (or
   `/cdevplace` the `treasure_portal_1` template) -> obsidian, no crying obsidian; same for a jungle pillager tower and an
   old villager statue.
 
@@ -224,12 +224,12 @@ YUNG dungeon, including the ones the template scan can't see. Common config: ser
 
 ### Tests
 
-- **NW-13 Spire lanterns:** `/locate structure terralith:spire` -> hanging lanterns (not soul lanterns), still hanging
+- [ ] **NW-13 Spire lanterns:** `/locate structure terralith:spire` -> hanging lanterns (not soul lanterns), still hanging
   from their chains; the one wall torch at the base is a normal torch on the wall.
-- **NW-14 Jungle temple torches:** `/locate structure betterjungletemples:jungle_temple`, the water parkour and floor 2
+- [ ] **NW-14 Jungle temple torches:** `/locate structure betterjungletemples:jungle_temple`, the water parkour and floor 2
   parkour rooms -> normal wall torches, facing the right way.
-- **NW-15 Ancient city lanterns kept:** an ancient city still has soul lanterns (only if the `except` stays).
-- **NW-16 YUNG dungeons:** with the config switch off, a few zombie / small dungeons (`/locate structure
+- [ ] **NW-15 Ancient city lanterns kept:** an ancient city still has soul lanterns (only if the `except` stays).
+- [ ] **NW-16 YUNG dungeons:** with the config switch off, a few zombie / small dungeons (`/locate structure
   betterdungeons:zombie_dungeon`) -> no soul lantern, soul campfire or soul sand.
 
 ---
@@ -301,11 +301,11 @@ possible there).
 
 ### Tests
 
-- **NW-17 Desert temple wood:** `/locate structure betterdeserttemples:desert_temple` -> the entrance doorway slabs are
+- [ ] **NW-17 Desert temple wood:** `/locate structure betterdeserttemples:desert_temple` -> the entrance doorway slabs are
   mangrove, the big puzzle room plates are dark oak and still open the puzzle, the statue buttons are mangrove.
-- **NW-18 Fortified desert village trapdoors:** a `terralith:fortified_desert_village` cartographer house -> 36 mangrove
+- [ ] **NW-18 Fortified desert village trapdoors:** a `terralith:fortified_desert_village` cartographer house -> 36 mangrove
   trapdoors in the same open / closed and facing states as before.
-- **NW-19 Stronghold buttons:** a `betterstrongholds:stronghold` large junction -> mangrove buttons on the walls (not on
+- [ ] **NW-19 Stronghold buttons:** a `betterstrongholds:stronghold` large junction -> mangrove buttons on the walls (not on
   the floor).
 
 ---

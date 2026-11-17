@@ -54,7 +54,7 @@ None.
 - JEI search "spider" no longer finds it; search "night berries" or `@neapolitan`.
 
 ### Tests (NM-)
-- NM-14: JEI and inventory hover on `neapolitan:chocolate_spider_eye` -> "Chocolate Night Berries"; Canned Goods' spider
+- [ ] **NM-14:** JEI and inventory hover on `neapolitan:chocolate_spider_eye` -> "Chocolate Night Berries"; Canned Goods' spider
   eye can -> "Canned Night Berries".
 
 ---
@@ -83,7 +83,7 @@ The Ocean's Delight roll reads "Elder Guardian Roll" (the row says "Ender Guardi
 "Ender" or "Elder"? The item is the Elder Guardian's. Recommend "Elder Guardian Roll" (the row's "Ender" looks like a slip).
 
 ### Tests (NM-)
-- NM-15 (proposed): JEI and inventory hover show "Elder Guardian Roll"; WTHIT on the placed plate unchanged.
+- [ ] **NM-15:** (proposed) JEI and inventory hover show "Elder Guardian Roll"; WTHIT on the placed plate unchanged.
 
 ---
 

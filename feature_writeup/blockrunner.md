@@ -768,7 +768,7 @@ and powdered sugar got `StuckInBlock` lines.
 - [x] **BR-03 Fast tiers:** `M` on asphalt -> **+0.05**; on concrete -> **+0.04**; on a Quark grate -> **+0.03**; on stone -> **+0.005**.
 - [x] **BR-04 Slow tiers:** `M` on sand -> **−0.015**; on wool -> **−0.012**; on a honey block -> **−0.055** (jumping on honey is still damped).
 - [x] **BR-05 1.00 tiers:** `M` on glass and on grass -> "no modifier". `T blockrunner:surface/glass` on glass passes.
-- ~~**BR-06 Tooltips**~~ moved to [TT-03](tooltips.md).
+- [ ] ~~**BR-06 Tooltips:**~~ moved to [TT-03](tooltips.md).
 - [x] **BR-07 FOV stays put:** sprint from stone onto asphalt -> no FOV zoom beyond normal sprinting.
 - [ ] **BR-08 Mobs too:** walk a horse onto asphalt, then `/attribute @e[type=minecraft:horse,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` -> half the horse's base speed (a positive number).
 - [ ] **BR-09 Soul sand untouched:** `M` on soul sand -> "no modifier". You are still slowed, and Soul Speed boots still cancel it.
@@ -789,7 +789,7 @@ and powdered sugar got `StuckInBlock` lines.
   - Remove the concrete with the Framed Hammer, step off/on -> **+0.01** (falls back to the oak half).
 - [ ] **BR-18 Survives reloads:** redo BR-17's end state (oak first, concrete second). Relog or reload the chunk -> still **+0.04**.
 - [ ] **BR-19 Newest wins (Copycats+):** a Copycats+ copycat slab doubled up: wool first, concrete second -> **+0.04**. Swap the order on a fresh one -> **−0.012**.
-- ~~**BR-20 Tooltips**~~ moved to [TT-04](tooltips.md).
+- [ ] ~~**BR-20 Tooltips:**~~ moved to [TT-04](tooltips.md).
 - [ ] **BR-21 copyCamo off:** set `[surface.camouflage] copyCamo = false` and save (live reload). Step off and back onto the concrete-camo frame from BR-15 -> "no modifier". Set it back to `true`. (The tooltip half is [TT-05](tooltips.md).)
 
 **Visual sinking (3.4)**
@@ -828,7 +828,7 @@ and powdered sugar got `StuckInBlock` lines.
 
 **Native property resets (3.5)**
 - [ ] **BR-28 D&D asphalt matches IP asphalt:** lay a strip alternating IP asphalt and D&D asphalt, and walk (then sprint) along it. -> `M` reads **+0.05** on both. The pace doesn't change between them; before the fix you'd shoot ahead on the D&D blocks and slide when stopping.
-- [ ] **BR-29 D&D asphalt is walkable if untiered** (optional): temporarily remove `create_dd:*_asphalt_block` from the asphalt tier and `/reload` -> normal walking speed, not frozen. Put it back afterwards.
+- [ ] **BR-29 D&D asphalt is walkable if untiered:** (optional) temporarily remove `create_dd:*_asphalt_block` from the asphalt tier and `/reload` -> normal walking speed, not frozen. Put it back afterwards.
 
 **Whole-pack scan (2026-09-27, needs a game restart: tag_helper.js and item_dict.js are startup scripts)**
 - [ ] **BR-34 Modded tiers:** `M` on a Create Deco brick -> **+0.025**; a Dustrial Decor cinder block -> **+0.04**; an Engineer's Decor steel catwalk -> **+0.03**; Railways locometal -> **+0.025**; an Architect's Palette oak board -> **+0.01**.

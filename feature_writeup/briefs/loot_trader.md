@@ -46,7 +46,7 @@ Fewer Sealed Delivery Agreement offers per Wandering Trader than today's ~4.9.
   `t.move(e, [t.COMMON, t.RARE], [i.sealed_delivery_agreement], t.COMMON, 20)`: both Wares listings (regular, 6
   emeralds; former rare, 12) into COMMON, 20 copies each. Common pool 205 entries (165 others + 40), 25 drawn
   (distinct entries) per trader.
-- WT-13 expects "usually 3 to 7" agreements; wandering_trader.md 2.2 and 4.1 describe x20.
+- [ ] **WT-13:** expects "usually 3 to 7" agreements; wandering_trader.md 2.2 and 4.1 describe x20.
 
 ### Build
 1. Change the weight (D1) on line 20; keep both listings in COMMON or put the 12-emerald one back in RARE:
@@ -160,10 +160,10 @@ as quest rewards; plus more coin trades (D1).
 - `ordered` counts above a few stacks take many deliveries at Packager level 1 (batch size 1).
 
 ### Tests (WT- prefix, continuing at WT-17)
-- **WT-17 coin agreement loot:** `/loot give @s loot <village table>` until an agreement drops -> opening it shows
+- [ ] **WT-17 coin agreement loot:** `/loot give @s loot <village table>` until an agreement drops -> opening it shows
   coin payment; completing one pays the coins.
-- **WT-18 quest reward:** claim the new quest -> a sealed agreement with the listed buyer, request and coin payment.
-- **WT-19 no ban alarm:** after WT-17, `logs/kubejs/server.log` has no `!!!` coin banner.
+- [ ] **WT-18 quest reward:** claim the new quest -> a sealed agreement with the listed buyer, request and coin payment.
+- [ ] **WT-19 no ban alarm:** after WT-17, `logs/kubejs/server.log` has no `!!!` coin banner.
 
 ---
 

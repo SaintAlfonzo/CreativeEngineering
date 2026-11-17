@@ -98,9 +98,9 @@ leave `i.explore_compass` for the dict-duplicate cleanup.
   setup isn't involved (the compass doesn't call `/locate`), so a long search costs server time. Watch the first use.
 
 ### Tests
-- **RA-07** (existing, expected answer): JEI Explorer's Compass -> one recipe, cobwebs and cracked stone bricks around
+- [ ] **RA-07:** (existing, expected answer) JEI Explorer's Compass -> one recipe, cobwebs and cracked stone bricks around
   a Nature's Compass.
-- **RA-09 Compass search:** use it, pick a common structure (a village) -> points to one; pick a structure the pack
+- [ ] **RA-09 Compass search:** use it, pick a common structure (a village) -> points to one; pick a structure the pack
   removed -> "not found" within a few seconds, no tick lag.
 
 ---
@@ -172,10 +172,10 @@ Botania's Trinket Case (`botania:bauble_box`) accepts any item, not just trinket
   case, but only trinkets equip.
 
 ### Tests
-- **FX-21 Trinket case, any item:** put cobblestone, a sword and a stack of food in a trinket case by clicking, by
+- [ ] **FX-21 Trinket case, any item:** put cobblestone, a sword and a stack of food in a trinket case by clicking, by
   shift-click and by clicking the stack onto the case item in the inventory -> all accepted; a shulker box and a
   second trinket case -> refused.
-- **FX-22 Config off:** `trinketCaseAnyItem = false`, `/reload` is not enough (restart) -> only trinkets, rods and
+- [ ] **FX-22 Config off:** `trinketCaseAnyItem = false`, `/reload` is not enough (restart) -> only trinkets, rods and
   mana items fit, as in Botania.
 
 ---
@@ -265,9 +265,9 @@ geodes, by `data/geode/tags/worldgen/biome/has_{celestite,wrappist}_geode.json`)
   ([engineering.md](../engineering.md) F4).
 
 ### Tests
-- **RA-10 Arcane components:** JEI each new component -> crafting, sequenced assembly and runic altar recipes; craft a
+- [ ] **RA-10 Arcane components:** JEI each new component -> crafting, sequenced assembly and runic altar recipes; craft a
   manasteel component by hand and on the altar.
-- **RA-11 Gated recipes:** JEI the disenchanter (or whatever the decision picks) -> needs an arcane component.
+- [ ] **RA-11 Gated recipes:** JEI the disenchanter (or whatever the decision picks) -> needs an arcane component.
 
 ---
 
@@ -309,7 +309,7 @@ As above (verified). No new ids beyond #4's.
   a long hunt; keep the counts low.
 
 ### Tests
-- **RA-12 Shard armor:** JEI the chosen armor piece -> takes a warding component; craft it with celestite from a
+- [ ] **RA-12 Shard armor:** JEI the chosen armor piece -> takes a warding component; craft it with celestite from a
   swamp geode.
 
 ---

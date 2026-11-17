@@ -42,7 +42,7 @@
 | ST-148 | PASSED, with the companion distance loosened | Shape on: 3 companions run up to their town with 0 overlapping pieces. Shape off: those 3 slots log `dropped <village> ... overlaps meta/town_villages` |
 
 Notes:
-- **ST-157:** a drop line is logged for each candidate a slot tries, so one slot gives several lines. Counted per
+- [ ] **ST-157:** a drop line is logged for each candidate a slot tries, so one slot gives several lines. Counted per
   slot:
   - S1: a zombie dungeon and a pillager stronghold siege. Both had been dropped near a viking house (radius 3).
   - S2: an OGT outpost and a Tudor outpost near the town (radius 8), an OGT outpost near a house camp, the undead
@@ -50,16 +50,16 @@ Notes:
   - With peaceful on, one slot near the town ended with a `eugene:fake_trader_camp`. That camp is hostile, but its
     small pieces stay more than 8 chunks from the town's pieces, while the bigger outposts tried in the same slot
     reach within 8. The radius is measured piece to piece, so this is correct.
-- **ST-145:** the overlaps with priority off were:
+- [ ] **ST-145:** the overlaps with priority off were:
   - a savanna village with a field-stone ruin;
   - the town at [205, -69] with a ruin scatter.
 
   Priority off also drops every companion village: they belong to the priority system, so S3 has 4 settlements
   instead of 9. Spawn prep took 189 s against about 300 s with priority on.
-- **ST-148, first try:** with the real companion distance (112-160 blocks), shaping never acted. In S2 and S3
+- [ ] **ST-148, first try:** with the real companion distance (112-160 blocks), shaping never acted. In S2 and S3
   (8 towns, 9 companions, about 15 grid villages), every village was piece-identical with shaping on and off,
   and no village was dropped with it off: none reached a town.
-- **ST-148, forced:** I pulled the companions in to 64-96 blocks (a soft spacing rule, allowed for rare cases).
+- [ ] **ST-148, forced:** I pulled the companions in to 64-96 blocks (a soft spacing rule, allowed for rare cases).
   - Shape on: three companions end 0-1 blocks from their town with no overlapping piece: taiga [210, -70], OGT
     [201, -68], flower forest [231, -53].
   - Shape off: those three slots log the drops. Each slot then tries other villages; only [201, -68] gets one, a

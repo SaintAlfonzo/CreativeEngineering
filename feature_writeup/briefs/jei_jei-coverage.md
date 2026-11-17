@@ -112,7 +112,7 @@ Do not add recipes that Miner's Delight does not have: a fake JEI category must 
 `largecontent/mod-additions` (the jar upgrade) may change the whole cup list; do this after it.
 
 ### Tests (JC-)
-- JC-28 (proposed): JEI uses of a beef stew cup shows the description or recipe; or the cup is absent from JEI and
+- [ ] **JC-28:** (proposed) JEI uses of a beef stew cup shows the description or recipe; or the cup is absent from JEI and
   `latest.log` has no `REMOVED ITEM` recipe warnings for it.
 
 ---
@@ -144,7 +144,7 @@ Which recipe types deserve a tab. Recommend only those the player cannot guess (
 the fermenting category already exists.
 
 ### Tests (JC-)
-- JC-29 (proposed): each listed Vintage recipe type has a JEI page; page text shows the container and processing time.
+- [ ] **JC-29:** (proposed) each listed Vintage recipe type has a JEI page; page text shows the container and processing time.
 
 ---
 
@@ -172,7 +172,7 @@ Ambiguous scratchpad note (one row per log, or one cycling row). Recommend one r
 each page also shows its own bark drop and the page count is how the tab already works).
 
 ### Tests (JW-)
-- JW-19 (proposed): Stripping tab after the regenerate: Oak Log -> Stripped Oak Log + Oak Bark on its own page; page
+- [ ] **JW-19:** (proposed) Stripping tab after the regenerate: Oak Log -> Stripped Oak Log + Oak Bark on its own page; page
   count equals the dump's `strip` pairs.
 
 ---
@@ -203,7 +203,7 @@ Cycle (current, fewer pages) or split. Recommend keep cycling for dyed glass and
 close the oxidation question as "already true".
 
 ### Tests (JW-)
-- JW-20 (proposed): Uses of Soap -> a "washes the dye out" glass row cycling all 16 colors; an oxidized copper row
+- [ ] **JW-20:** (proposed) Uses of Soap -> a "washes the dye out" glass row cycling all 16 colors; an oxidized copper row
   cycling exposed, weathered, oxidized and waxed variants.
 
 ---
@@ -235,7 +235,7 @@ Every dye input cycles in the Block Dyeing tab (not a subset); Create sails show
 Whether the cost is acceptable. Recommend measure after the regenerate; fall back to step 2 above 2 s of added load.
 
 ### Tests (JW-)
-- JW-21 (proposed): load time, Block Dyeing page count, Uses of Red Dye -> a Create sail page cycling the other colours.
+- [ ] **JW-21:** (proposed) load time, Block Dyeing page count, Uses of Red Dye -> a Create sail page cycling the other colours.
 
 ---
 
@@ -270,7 +270,7 @@ Per block: stand-in or drop. Recommend: ice family -> Ice; candle cakes -> Cake;
 unless it teaches something not on the item's own page.
 
 ### Tests (JW-)
-- JW-22 (proposed): scan every world tab page (Uses of Ice, Lava Bucket, Knife, Grass, Amethyst Cluster): no Barrier.
+- [ ] **JW-22:** (proposed) scan every world tab page (Uses of Ice, Lava Bucket, Knife, Grass, Amethyst Cluster): no Barrier.
 
 ---
 
@@ -293,7 +293,7 @@ Burning rows show their notes on whole lines, nothing cut.
 Java provider: needs a restart, not F3+T.
 
 ### Tests (JW-)
-- JW-18 (existing): add Burning to the paged list; no row cut. JW-13 covers the rows.
+- [ ] **JW-18:** (existing) add Burning to the paged list; no row cut. JW-13 covers the rows.
 
 ---
 
@@ -322,7 +322,7 @@ Does basalt get a water row (basalt next to water, or basalt to basalt)? Recomme
 mod rule exists (unverified that water + lava ever makes basalt without blue ice and soul soil).
 
 ### Tests (JW-)
-- JW-05 (existing, edit): the tab title reads "Lava Interactions".
+- [ ] **JW-05:** (existing, edit) the tab title reads "Lava Interactions".
 
 ---
 
@@ -353,7 +353,7 @@ keep eggs elsewhere; skip if a mob without a renderer-safe constructor (MCA vill
 Creating client entities in `ClientLevel` for modded mobs can throw; wrap in try/catch and fall back to the egg.
 
 ### Tests (JW-)
-- JW-23 (proposed): Mob Transformations page draws the mob; MCA villager page falls back to the egg without an error log.
+- [ ] **JW-23:** (proposed) Mob Transformations page draws the mob; MCA villager page falls back to the egg without an error log.
 
 ---
 
@@ -382,7 +382,7 @@ Jar Storage shows one row per potion type with a real potion fluid and bottle, n
 All potions or only those a jar can hold (`preserved_tags_from_item` means one potion kind per jar). Recommend all.
 
 ### Tests (JW-)
-- JW-24 (proposed): Uses of a Healing potion -> Jar Storage row with Healing in color, not Swiftness, fluid tooltip names Healing.
+- [ ] **JW-24:** (proposed) Uses of a Healing potion -> Jar Storage row with Healing in color, not Swiftness, fluid tooltip names Healing.
 
 ---
 
@@ -403,7 +403,7 @@ Potion Tipped Arrows, Potion Buckets and Seasoning pages use the same arrow as F
 2. Seasoning later splits into a category per seasoning type (`food/seasoning #1`): keep the arrow in one shared helper.
 
 ### Tests (JC-)
-- JC-30 (proposed): the three tabs show the new arrow, slots still aligned.
+- [ ] **JC-30:** (proposed) the three tabs show the new arrow, slots still aligned.
 
 ---
 
@@ -428,7 +428,7 @@ tinted jar filled with water.
 What "jar with spout" is. Recommend (a): no new assets, uses two real items.
 
 ### Tests (JW-)
-- JW-25 (proposed): both jar tabs show the new icon in the category list and the tab header.
+- [ ] **JW-25:** (proposed) both jar tabs show the new icon in the category list and the tab header.
 
 ---
 
@@ -450,7 +450,7 @@ The Knife and Machete Drops tab reads "Cut with a knife", not "Broken"; the chee
 2. Regenerate with `/cdevgen run jei_world`.
 
 ### Tests (JW-)
-- JW-11 (existing, edit): the wording on a pig row is unchanged (kill); a wheel row and a grass row say "Cut".
+- [ ] **JW-11:** (existing, edit) the wording on a pig row is unchanged (kill); a wheel row and a grass row say "Cut".
 
 ---
 
@@ -474,7 +474,7 @@ Liquid concrete sets in 30 s and the tab says 30 s.
 Mixin targets an IE class by name: `require = 0` and guard with the mod id (the pack's other IE mixins show the pattern).
 
 ### Tests (JW-)
-- JW-06 (existing, edit): place IE liquid concrete, time the set at 30 s; tab text agrees.
+- [ ] **JW-06:** (existing, edit) place IE liquid concrete, time the set at 30 s; tab text agrees.
 
 ---
 
@@ -499,4 +499,4 @@ Is Survivality leaving the pack (then also remove the jar and the `mod_sides.md`
 confirm; if it stays, the row is accurate and should stay.
 
 ### Tests (JW-)
-- JW-12 (existing, edit): Mob Transformations shows no Survivality row.
+- [ ] **JW-12:** (existing, edit) Mob Transformations shows no Survivality row.

@@ -108,11 +108,11 @@ clouds.
   each file wraps them in its own `ServerEvents.recipes` callback. Keep new names inside the callbacks.
 
 ### Tests
-- **PB-21 No noise:** JEI -> Arrow of Awkward / Water Potion Bucket -> no recipe; Potion of Swiftness bucket recipes
+- [ ] **PB-21 No noise:** JEI -> Arrow of Awkward / Water Potion Bucket -> no recipe; Potion of Swiftness bucket recipes
   still there; the load log counts drop.
-- **PB-22 No-effect bucket:** `/give @s creativeengineering:potion_bucket{Potion:"minecraft:awkward"}`, right-click a
+- [ ] **PB-22 No-effect bucket:** `/give @s creativeengineering:potion_bucket{Potion:"minecraft:awkward"}`, right-click a
   block -> nothing happens, bucket kept; a bucket with no NBT still bursts Night Vision.
-- **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other within
+- [ ] **PB-23 Survival cooldown:** survival, two Swiftness buckets in the hotbar, burst one and switch to the other within
   a second -> the second is on cooldown (white sweep on the slot).
 
 ---
@@ -187,7 +187,7 @@ the pack's own bucket-fill recipes do.
 
 ### Tests
 - PB-17 (vanilla tipped arrow returns the bottle) stays the test for "keep".
-- **PB-24 PneumaticCraft upgrades:** craft a Night Vision Upgrade -> a glass bottle is left in the grid (keep) / not
+- [ ] **PB-24 PneumaticCraft upgrades:** craft a Night Vision Upgrade -> a glass bottle is left in the grid (keep) / not
   (scope).
 
 ---

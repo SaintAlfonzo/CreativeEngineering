@@ -176,14 +176,14 @@ the wrench, (f) lunchbox slot count.
   drawn in AppleSkin's own component, so it only appears when they do).
 
 ### Tests (TT-)
-- TT-31 straw: hover Straw and an Iron Knife -> the lines above; break 20 grass with the knife -> a few straw.
-- TT-32 chalk: hover White Chalk -> both lines; sneak + right-click a block -> the symbol picker opens.
-- TT-33 pipes: hover an Item Pipe and the Item Pipe Wrench -> the cover lines; with stone in the off hand, right-click
+- [ ] **TT-31 straw:** hover Straw and an Iron Knife -> the lines above; break 20 grass with the knife -> a few straw.
+- [ ] **TT-32 chalk:** hover White Chalk -> both lines; sneak + right-click a block -> the symbol picker opens.
+- [ ] **TT-33 pipes:** hover an Item Pipe and the Item Pipe Wrench -> the cover lines; with stone in the off hand, right-click
   a pipe with the wrench -> stone cover; sneak + right-click -> cover back.
-- TT-34 lunchboxes: Lunchbag "Holds 5 foods", Lunchbox 9, Golden Lunchbox 14.
-- TT-35 food type: Roast Chicken (feast serving) "Feast", Cookie "Sweets", Bread "Baked", a Canned Beef Stew
+- [ ] **TT-34 lunchboxes:** Lunchbag "Holds 5 foods", Lunchbox 9, Golden Lunchbox 14.
+- [ ] **TT-35 food type:** Roast Chicken (feast serving) "Feast", Cookie "Sweets", Bread "Baked", a Canned Beef Stew
   "Canned: Soup", a lunchbox nothing; latest.log `[food type tooltip]` count equals food_types.json's typed keys.
-- TT-36 can bars: a full Canned Beef Stew -> AppleSkin bars of one serving and "x4" (or its count) right of them, inside
+- [ ] **TT-36 can bars:** a full Canned Beef Stew -> AppleSkin bars of one serving and "x4" (or its count) right of them, inside
   the tooltip box; eat one -> "x3"; `[canning] appleSkinServings = false` -> no label.
 
 ---
@@ -242,9 +242,9 @@ lang and Lexicon (general knowledge, unverified against 440.2 code for the Pure 
   `'botania:*_petal'` with `{exclude: [...]}`, and check `[addTooltipPattern] ... -> N matches` (16 expected).
 
 ### Tests (TT-)
-- TT-37: hover a Balloon, Cloud Chest, Static Cloud Chest, Balloon Arrow -> the lines; a Cloud Chest placed underground
+- [ ] **TT-37:** hover a Balloon, Cloud Chest, Static Cloud Chest, Balloon Arrow -> the lines; a Cloud Chest placed underground
   with a balloon still says "Cloud Chest must be under the sky" (the line matches the mod).
-- TT-38: hover the Lexica, a white mystical flower, a white petal (not the petal block), Pure Daisy -> the lines;
+- [ ] **TT-38:** hover the Lexica, a white mystical flower, a white petal (not the petal block), Pure Daisy -> the lines;
   latest.log pattern lines report 16 matches.
 
 ---
@@ -298,7 +298,7 @@ exact Forge 43.3.9 statement order (read from memory of Forge 43 sources).
   for a conflict.
 
 ### Tests (TT-)
-- TT-39: at GUI scale 4 (or a small window), hover an item with a very long tooltip (a shulker box full of named items,
+- [ ] **TT-39:** at GUI scale 4 (or a small window), hover an item with a very long tooltip (a shulker box full of named items,
   or a Botania Lexicon with Shift) -> the name is at the top of the screen, the end is cut off at the bottom; set
   `keepTopOnScreen = false` -> back to vanilla. A short tooltip near the bottom of the screen still moves up to fit.
 

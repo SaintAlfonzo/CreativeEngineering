@@ -71,17 +71,17 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-CSI-01.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CSI-01.
 
-- CS-01 The Curios screen shows a Hands and a Face slot (Face has the helmet icon, not the missing texture) on a player in an existing world.
-- CS-02 Falconry Glove goes in Hands and nowhere else; nothing else is accepted in Hands.
-- CS-03 Chalk stick, smoking pipe, the six Simple Hats masks and the three Botania cosmetic masks go in Face; a Simple Hats mask also still goes in Head.
-- CS-04 `/curios list` shows `hands`, `face` and `feet`.
-- CS-05 Slot names read "Hands" and "Face" (no raw `curios.identifier` key).
-- CS-06 Once the Cob Pipe exists: it goes in Face.
-- CS-07 The Curios screen shows a Feet slot (boots icon, "Feet"); only stepstools go in it; `/curios list` shows `feet` from `creativeengineering`.
-- CS-08 Hover a stepstool, a Simple Hats mask, the Falconry Glove and the Cob Pipe: one gold "Slot: ..." line each
+- [ ] **CS-01:** The Curios screen shows a Hands and a Face slot (Face has the helmet icon, not the missing texture) on a player in an existing world.
+- [ ] **CS-02:** Falconry Glove goes in Hands and nowhere else; nothing else is accepted in Hands.
+- [ ] **CS-03:** Chalk stick, smoking pipe, the six Simple Hats masks and the three Botania cosmetic masks go in Face; a Simple Hats mask also still goes in Head.
+- [ ] **CS-04:** `/curios list` shows `hands`, `face` and `feet`.
+- [ ] **CS-05:** Slot names read "Hands" and "Face" (no raw `curios.identifier` key).
+- [ ] **CS-06 Once the Cob Pipe exists:** it goes in Face.
+- [ ] **CS-07:** The Curios screen shows a Feet slot (boots icon, "Feet"); only stepstools go in it; `/curios list` shows `feet` from `creativeengineering`.
+- [ ] **CS-08:** Hover a stepstool, a Simple Hats mask, the Falconry Glove and the Cob Pipe: one gold "Slot: ..." line each
   (Feet; Face, Head; Hands; the Cob Pipe's registered slots), never two (same check as TT-40).
-- CS-09 Hover the Cob Pipe: the slot line reads Face, Head (no Mouth). Right click it with an empty Face slot: it goes in Face.
-- CS-10 Wear a Simple Hats mask (hockey mask) in Face: drawn on the head in third person; toggle the slot's render
+- [ ] **CS-09 Hover the Cob Pipe:** the slot line reads Face, Head (no Mouth). Right click it with an empty Face slot: it goes in Face.
+- [ ] **CS-10:** Wear a Simple Hats mask (hockey mask) in Face: drawn on the head in third person; toggle the slot's render
   button off: hidden. A Botania cosmetic mask and the Cob Pipe in Face are drawn too.
 
 ## 8. History

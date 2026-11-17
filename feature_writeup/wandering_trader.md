@@ -233,7 +233,7 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 - [ ] **WT-03 no repeats:** in WT-02's list -> no rare item twice; common items repeat only for Wares agreements.
 - [ ] **WT-04 rare count live:** set `rareTrades` to 2, summon a new trader -> 28 offers. Set it back to 5.
 - [ ] **WT-05 off switch:** set `enabled` false, summon a trader -> 7 offers (quill + 5 + 1). Turn it back on.
-- [ ] ~~**WT-06 Winemaker unchanged**~~: retired 2026-10-03, the Winemaker's pool changed; see WT-09.
+- [ ] ~~**WT-06 Winemaker unchanged:**~~ retired 2026-10-03, the Winemaker's pool changed; see WT-09.
 - [ ] **WT-07 trader wait (new world):** create a world, `/save-all`, read level.dat ->
   `WanderingTraderSpawnDelay` is 96000 or a little less.
 - [ ] **WT-08 trader wait (existing world):** in the dev world, after the current wait runs out, it resets to

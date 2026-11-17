@@ -136,8 +136,8 @@ Keys exist: `i.roast_chicken_block`, `i.honey_glazed_ham_block`, `i.pizza`, `i.p
 - The pizza change is a Creative Brewing jar rebuild and install (client and server); never while the game runs.
 
 ### Tests
-- RC-43 Each feast assembly runs and gives the block; popcorn box is shaped only.
-- RC-44 Pizza: 8 slices by hand and by knife; the placed pizza shows 8 stages; 8 slices craft back to a pizza.
+- [ ] **RC-43:** Each feast assembly runs and gives the block; popcorn box is shaped only.
+- [ ] **RC-44 Pizza:** 8 slices by hand and by knife; the placed pizza shows 8 stages; 8 slices craft back to a pizza.
 
 ---
 
@@ -172,7 +172,7 @@ None open (numbers follow row 9; `food/types-and-tuning #3` may move them for ev
 Glistering melon stays a brewing ingredient; the machine routes make brewing cheaper too (accepted with the golden carrot).
 
 ### Tests
-- RC-45 Heated mixer melon slice + 6 gold nuggets -> 1; arc furnace melon slice + 5 nuggets -> 1; brewing still works.
+- [ ] **RC-45:** Heated mixer melon slice + 6 gold nuggets -> 1; arc furnace melon slice + 5 nuggets -> 1; brewing still works.
 
 ---
 
@@ -214,7 +214,7 @@ shrimp route, and a balance check of that route.
 The shrimp converts the whole held stack at once.
 
 ### Tests
-- RC-49 Tame a mantis shrimp, give it rice, stand it by a furnace: the stack turns into shrimp fried rice; the tooltip
+- [ ] **RC-49:** Tame a mantis shrimp, give it rice, stand it by a furnace: the stack turns into shrimp fried rice; the tooltip
   line and the JEI page show.
 
 ---

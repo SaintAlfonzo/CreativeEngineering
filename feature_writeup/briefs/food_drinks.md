@@ -112,9 +112,9 @@ Verified: lemon juice item / fluid / recipes above. New: 3 fluids, 3 items under
   `i.water_bottle`; leave that recipe alone.
 
 ### Tests
-- RC-33 kettle: 2 lemon + sugar -> lemonade; lemonade + strawberry / blueberry -> pink / blue.
-- RC-34 mixer -> lemonade fluid; spout fills a bottle, drain empties it, for all three.
-- RC-35 drinking: drink animation, effects, bottle back.
+- [ ] **RC-33 kettle:** 2 lemon + sugar -> lemonade; lemonade + strawberry / blueberry -> pink / blue.
+- [ ] **RC-34:** mixer -> lemonade fluid; spout fills a bottle, drain empties it, for all three.
+- [ ] **RC-35 drinking:** drink animation, effects, bottle back.
 
 ---
 
@@ -199,9 +199,9 @@ bottle or need plating by hand.
   row's merges so each tea is checked once.
 
 ### Tests
-- RC-36 JEI: long and strong teas show their own names and colours.
-- RC-37 mixer: 3 leaves + 250 mB water heated -> 250 mB tea; tea + milk -> long tea fluid; spout bottles both.
-- RC-38 (= RB-03) kettle strong green tea: no item thrown, the drink plates itself, one bottle in the buffer.
+- [ ] **RC-36 JEI:** long and strong teas show their own names and colours.
+- [ ] **RC-37 mixer:** 3 leaves + 250 mB water heated -> 250 mB tea; tea + milk -> long tea fluid; spout bottles both.
+- [ ] **RC-38:** (= RB-03) kettle strong green tea: no item thrown, the drink plates itself, one bottle in the buffer.
 
 ---
 
@@ -229,7 +229,7 @@ One item per drink or crop where two mods add the same thing; the last open part
 - Counts: recommendation 2 by hand, 3 on the board (the right-click average is 2).
 
 ### Tests
-- RC-41 (proposed 2026-10-21, keep): banana bunch crafts into 2 / cuts into 3 Neapolitan bananas; JEI shows both.
+- [ ] **RC-41:** (proposed 2026-10-21, keep) banana bunch crafts into 2 / cuts into 3 Neapolitan bananas; JEI shows both.
 
 ## drinks #7: Kettle with 6 ingredient slots; drinks move to the Kettle
 Status **In Progress** · Work: Creative Common / KubeJS · id `food/drinks #7`

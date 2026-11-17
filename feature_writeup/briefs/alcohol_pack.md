@@ -88,7 +88,7 @@ Vintage Delight brews: do any add effects? Split them into their own category, a
   (b) they stop being potions, so recheck that note after the change.
 
 ### Tests
-- AL-97 (proposed) JEI: the six brews sit in the chosen category with their new effects; each jar craft uses one glass bottle;
+- [ ] **AL-97:** (proposed) JEI: the six brews sit in the chosen category with their new effects; each jar craft uses one glass bottle;
   names are spaced correctly.
 
 ---

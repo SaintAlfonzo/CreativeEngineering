@@ -108,7 +108,7 @@ The zucchini quiche assembly the 1.1.04 changelog announced loads: pie crust -> 
 - Strings have no `fill`, so tag and item steps are safe; only arrays hit the branch.
 
 ### Tests
-- FF-14 (exists): JEI shows the assembly; a Create line makes one quiche. Queue a boot grep for
+- [ ] **FF-14:** (exists) JEI shows the assembly; a Create line makes one quiche. Queue a boot grep for
   `zucchini_quiche_sequenced_assembly` errors (SQ-FFB-00 already greps CD script errors).
 
 ---
@@ -151,8 +151,8 @@ Every baked recipe takes flour (or cornmeal), every pie sits on a pie crust, eve
   prices the missing egg and sugar at about 2 dough each).
 
 ### Tests (proposed)
-- RC-176 Crust press: a dough under a Create press gives a pie crust; JEI lists it with the two grid crusts.
-- RC-177 Dough block bases: Create's, sweet potato and oat dough blocks on a cutting board with a knife give 3 raw cake
+- [ ] **RC-176 Crust press:** a dough under a Create press gives a pie crust; JEI lists it with the two grid crusts.
+- [ ] **RC-177 Dough block bases:** Create's, sweet potato and oat dough blocks on a cutting board with a knife give 3 raw cake
   bases; the other dough blocks have no such recipe.
 
 ---
@@ -202,8 +202,8 @@ poppy), "fruit, milk, egg, sugar, flour", served on paper, a sequenced assembly,
 - KubeJS food effects take ticks (20 per second).
 
 ### Tests (proposed)
-- OV-38 Muffin cornmeal: each muffin bakes with cornmeal in the flour slot.
-- FF-15 New muffins: each new muffin bakes 4 on paper and assembles from paper; the two-fruit ones give both effects at
+- [ ] **OV-38 Muffin cornmeal:** each muffin bakes with cornmeal in the flour slot.
+- [ ] **FF-15 New muffins:** each new muffin bakes 4 on paper and assembles from paper; the two-fruit ones give both effects at
   the shorter length.
 
 ---
@@ -257,9 +257,9 @@ items are unused and could be hidden.
   own flavor, so never start one with the sweetener.
 
 ### Tests (proposed)
-- FF-16 Pie assembly: every `PIES` pie assembles from a crust in a Create line (2 loops, flavor + sweetener); JEI lists
+- [ ] **FF-16 Pie assembly:** every `PIES` pie assembles from a crust in a Create line (2 loops, flavor + sweetener); JEI lists
   one assembly per pie.
-- FF-17 Chorus pie spout: the chorus pie assembly takes a chorus fruit and 250 mB chorus juice per loop.
+- [ ] **FF-17 Chorus pie spout:** the chorus pie assembly takes a chorus fruit and 250 mB chorus juice per loop.
 
 ---
 
@@ -314,10 +314,10 @@ the spout 129).
 - Placed non-vanilla cakes don't count for Spice of Life (`food/types-and-tuning #5`).
 
 ### Tests (proposed)
-- FF-18 Dead cake slices: the five CCK cake slices are absent from JEI.
-- FF-19 Mangosteen: JEI and the tooltip show the new name; its recipe follows the decision.
-- FF-20 Dragon egg cake: bakes in the cake pan, eats with the chosen effects, never takes the dragon egg.
-- PL-15 Slices placed: each slice in (d) sits on a coaster with its pie's or cake's look.
+- [ ] **FF-18 Dead cake slices:** the five CCK cake slices are absent from JEI.
+- [ ] **FF-19 Mangosteen:** JEI and the tooltip show the new name; its recipe follows the decision.
+- [ ] **FF-20 Dragon egg cake:** bakes in the cake pan, eats with the chosen effects, never takes the dragon egg.
+- [ ] **PL-15 Slices placed:** each slice in (d) sits on a coaster with its pie's or cake's look.
 
 ---
 
@@ -357,10 +357,10 @@ retextured, owner 2026-10-21), with more variants.
 - Which new fruits. Recommendation: blueberry, peach, orange.
 
 ### Tests (proposed)
-- RC-178 Cake paste pot: sweetener, dough, egg and milk bottle in the Cooking Pot give cake paste; JEI shows no new mixer
+- [ ] **RC-178 Cake paste pot:** sweetener, dough, egg and milk bottle in the Cooking Pot give cake paste; JEI shows no new mixer
   copy.
-- OV-39 Oven waffle: uncooked waffle (or cake paste) + baking sheet -> waffle.
-- FF-21 Tarts as pies: Lemon and Fig show their pie names and sprites; each new fruit pie bakes 2 per batch.
+- [ ] **OV-39 Oven waffle:** uncooked waffle (or cake paste) + baking sheet -> waffle.
+- [ ] **FF-21 Tarts as pies:** Lemon and Fig show their pie names and sprites; each new fruit pie bakes 2 per batch.
 
 ---
 
@@ -408,9 +408,9 @@ sourdough made from it. Sourdough counts as any dough in recipes (scratchpad 202
 - `getPlayer()` is null for autocrafters: treat null as "block" so the chain stays hand-made.
 
 ### Tests (proposed)
-- RC-179 Starter: crafting stamps the day; feeding the same day gives nothing; a day later it works and keeps the name.
-- RC-180 Sourdough from a starter: 8 sourdough named after the starter; the starter stays in the grid.
-- RC-181 Sourdough hand craft: yeast bucket + 8 dough gives 8 (or the recipe is gone).
+- [ ] **RC-179 Starter:** crafting stamps the day; feeding the same day gives nothing; a day later it works and keeps the name.
+- [ ] **RC-180 Sourdough from a starter:** 8 sourdough named after the starter; the starter stays in the grid.
+- [ ] **RC-181 Sourdough hand craft:** yeast bucket + 8 dough gives 8 (or the recipe is gone).
 
 ---
 
@@ -447,8 +447,8 @@ join), `i.water_bucket` 201.
 - Yield. Recommendation 1 colony -> 1 bucket by hand, 500 mB per batch in the mixer.
 
 ### Tests (proposed)
-- RC-182 Yeast crafting: colony + water bucket + sugar gives one yeast culture bucket and no spare empty bucket.
-- RC-183 In-world yeast: sugar in a culture pool and water placed next to it turns the water to culture.
+- [ ] **RC-182 Yeast crafting:** colony + water bucket + sugar gives one yeast culture bucket and no spare empty bucket.
+- [ ] **RC-183 In-world yeast:** sugar in a culture pool and water placed next to it turns the water to culture.
 
 ---
 
@@ -490,7 +490,7 @@ block -> slab (27), -> crustless block (28), slab -> nub (29).
   wants dough blocks in the oven too.
 
 ### Tests (proposed)
-- RC-184 Bread block: a knife on a bread block on the cutting board gives a crustless bread block; 3 bread blocks make
+- [ ] **RC-184 Bread block:** a knife on a bread block on the cutting board gives a crustless bread block; 3 bread blocks make
   6 slabs; the saw still gives 16 bread.
 
 ---
@@ -524,7 +524,7 @@ Fruits Delight's durian and pineapple "pies" (hand-held items, no placed block o
 - **Yield and can.** Recommendation 2 per crust; a full can bakes 4.
 
 ### Tests (proposed)
-- FF-22 Durian and pineapple: each bakes 2 on the baking sheet from crust + 2 fruit + 2 sugar; a full filling can + crust
+- [ ] **FF-22 Durian and pineapple:** each bakes 2 on the baking sheet from crust + 2 fruit + 2 sugar; a full filling can + crust
   gives 4; the pie tin recipe is gone.
 
 ---
@@ -566,7 +566,7 @@ cherry jelly / jam share the cherry route (jam: `dishes/jams #4`).
   a full pie give the new item (the truffle pie needs the same check).
 
 ### Tests (proposed)
-- FF-23 Cherry pie: bakes in the pie tin from crust + 2 cherries + 2 sugar; places CCK's block; a knife cuts 4 slices;
+- [ ] **FF-23 Cherry pie:** bakes in the pie tin from crust + 2 cherries + 2 sugar; places CCK's block; a knife cuts 4 slices;
   the filling can bakes back into a pie.
 
 ---
@@ -603,7 +603,7 @@ Every pie slice in the pack can be obtained, or is hidden.
   hide crimson berry, nightshade berry, green apple, gloomgourd and source berry.
 
 ### Tests (proposed)
-- FF-24 Pie slices: the blueberry pie bakes, places and cuts into 4 slices; the five hidden slices are absent from JEI.
+- [ ] **FF-24 Pie slices:** the blueberry pie bakes, places and cuts into 4 slices; the five hidden slices are absent from JEI.
 
 ---
 
@@ -638,7 +638,7 @@ block.
 - Sweet potato dough smelting routes: recommendation remove (oven only, as the owner ruled for oat dough).
 
 ### Tests (proposed)
-- RC-185 Doughs: JEI `#forge:dough` lists Create, sweet potato and oat dough; sourdough fills a dough slot where the
+- [ ] **RC-185 Doughs:** JEI `#forge:dough` lists Create, sweet potato and oat dough; sourdough fills a dough slot where the
   decision allows; no furnace, smoker or campfire recipe makes bread from sweet potato dough.
 
 ---
@@ -670,7 +670,7 @@ merged cupcakes into muffins (decided 2026-10-29).
   bakes; no new textures (all three have sprites).
 
 ### Tests (proposed)
-- FF-25 Brownies: the beetroot tray bakes in the oven and cuts into brownies; the two Hostile brownies bake on the
+- [ ] **FF-25 Brownies:** the beetroot tray bakes in the oven and cuts into brownies; the two Hostile brownies bake on the
   baking sheet; their grid recipes follow the decision.
 
 ---
@@ -698,7 +698,7 @@ Quiche as a baking type: a pie variant for vegetables and eggs, with its own fam
   both quiches, no new quiche items until a mod brings one.
 
 ### Tests (proposed)
-- FF-26 Quiche oven: both quiches bake in the pie tin from crust, eggs, milk, cheese and filling.
+- [ ] **FF-26 Quiche oven:** both quiches bake in the pie tin from crust, eggs, milk, cheese and filling.
 
 ---
 
@@ -727,7 +727,7 @@ Pizza as a food type with one recipe shape across the four pizzas.
 - Textures: none needed for existing pizzas.
 
 ### Tests (proposed)
-- FF-27 Pizza: each pizza assembles on a dough in a Create line; the shaped recipes stay.
+- [ ] **FF-27 Pizza:** each pizza assembles on a dough in a Create line; the shaped recipes stay.
 
 ---
 
@@ -755,7 +755,7 @@ Lasagna as a baking type, baked in the baking dish (#30).
 - Keep the Cooking Pot route? Recommendation: remove it (baked families are oven-made).
 
 ### Tests (proposed)
-- FF-28 Lasagna: the lasagna pan bakes in the oven with a baking dish in the tool slot and serves slices with a bowl.
+- [ ] **FF-28 Lasagna:** the lasagna pan bakes in the oven with a baking dish in the tool slot and serves slices with a bowl.
 
 ---
 
@@ -782,7 +782,7 @@ baking sheet, `[n(i.uncanny_cookies, 4), i.chorus_fruit_grain]` -> 4 (a dip, not
   pattern; cookies stay oven-made at the base).
 
 ### Tests (proposed)
-- RC-186 Chorus cookie: 8 uncanny cookies + a chorus fruit grain craft 8 chorus cookies; the cookie dough recipe is gone.
+- [ ] **RC-186 Chorus cookie:** 8 uncanny cookies + a chorus fruit grain craft 8 chorus cookies; the cookie dough recipe is gone.
 
 ---
 
@@ -812,7 +812,7 @@ cookie.
 - Grape: either. Recommendation: either grape (a list slot).
 
 ### Tests (proposed)
-- RC-187 Oatmeal cookie bakes from oat dough, 2 sugar and 2 raw oats. RC-188 Oatmeal raisin cookie bakes from oat dough,
+- [ ] **RC-187:** Oatmeal cookie bakes from oat dough, 2 sugar and 2 raw oats. RC-188 Oatmeal raisin cookie bakes from oat dough,
   2 sugar, a raw oat and a grape, and goes in a jar.
 
 ---
@@ -833,7 +833,7 @@ None. Close the row after one JEI look (pie crust -> R: the two grid crafts only
 scratch queue ask the same scan and can be marked answered.
 
 ### Tests
-- RC-189 (proposed) JEI on pie crust: only the flour and the dough grid crafts.
+- [ ] **RC-189:** (proposed) JEI on pie crust: only the flour and the dough grid crafts.
 
 ---
 
@@ -855,7 +855,7 @@ Status In Progress / Work KubeJS / lang / resource pack / TODO `baking/baked-goo
 3. TODO #18: drop its cupcake half (the main session).
 
 ### Tests (proposed)
-- FF-29 Sweet Potato Muffin sprite: the item shows the muffin sprite in hand, inventory and JEI.
+- [ ] **FF-29 Sweet Potato Muffin sprite:** the item shows the muffin sprite in hand, inventory and JEI.
 
 ---
 
@@ -888,7 +888,7 @@ A glass baking dish next to the baking sheet, muffin tin, pie tin and cake pan, 
 - **Craft recipe** (TODO decision). Recommendation: shaped 5 glass, the bowl shape; not hammered (glass can't be).
 
 ### Tests (proposed)
-- OV-40 Baking dish: crafts from 5 glass, sits in the oven tool slot, is not used up by a dish bake.
+- [ ] **OV-40 Baking dish:** crafts from 5 glass, sits in the oven tool slot, is not used up by a dish bake.
 
 ---
 
@@ -919,7 +919,7 @@ Every cake can be assembled on a baked base (frosting, flavor steps); the two ex
   shared `i.incomplete`.
 
 ### Tests (proposed)
-- FF-30 Cake assembly: each cake assembles on a baked base (frosting fill, two flavor deploys); plain and chocolate cake
+- [ ] **FF-30 Cake assembly:** each cake assembles on a baked base (frosting fill, two flavor deploys); plain and chocolate cake
   show their new steps.
 
 ---
@@ -972,7 +972,7 @@ of cookie / cake / pie shapes.
   rolls use the baking sheet.
 
 ### Tests (proposed)
-- FF-31 Desserts: each family member listed above has its oven recipe on the stated bakeware; the spout toppings stay.
+- [ ] **FF-31 Desserts:** each family member listed above has its oven recipe on the stated bakeware; the spout toppings stay.
 
 ---
 

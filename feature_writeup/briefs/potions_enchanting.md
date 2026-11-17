@@ -139,11 +139,11 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
 - Don't use `removeVanillaTrades` for librarians: it would also drop paper, bookshelves, lanterns, glass, etc.
 
 ### Tests
-- **ENC-01 No books:** spawn a librarian, give it a lectern, trade it up to master (`/data merge entity` its
+- [ ] **ENC-01 No books:** spawn a librarian, give it a lectern, trade it up to master (`/data merge entity` its
   `VillagerData.level`, or trade) -> no enchanted book at any level; paper, bookshelf, compass, clock etc. still there.
-- **ENC-02 Old villager:** a librarian that had a book offer before the update -> the offer is gone or disabled (if
+- [ ] **ENC-02 Old villager:** a librarian that had a book offer before the update -> the offer is gone or disabled (if
   step 3 is built).
-- **ENC-03 Other paths intact:** the CEI Printer still copies an enchanted book; Quark's master-librarian tome exchange
+- [ ] **ENC-03 Other paths intact:** the CEI Printer still copies an enchanted book; Quark's master-librarian tome exchange
   still shows when holding an Ancient Tome.
 
 ---
@@ -232,10 +232,10 @@ curve is chosen against the enchantments actually in the pack.
 - The client draws whatever costs the server sends; no client change needed.
 
 ### Tests
-- **ENC-10 Cap:** 15 bookshelves -> top cost 30 (as now); 20 -> 40 with `powerCap = 20`; 25 -> still 40.
-- **ENC-11 Easy Magic:** re-roll still works and its costs are as configured.
-- **ENC-12 Tooltip:** table and bookshelf tooltips show the configured numbers.
-- **ENC-13 Dump:** `/dumpenchants` writes the file; spot-check Sharpness's min/max costs.
+- [ ] **ENC-10 Cap:** 15 bookshelves -> top cost 30 (as now); 20 -> 40 with `powerCap = 20`; 25 -> still 40.
+- [ ] **ENC-11 Easy Magic:** re-roll still works and its costs are as configured.
+- [ ] **ENC-12 Tooltip:** table and bookshelf tooltips show the configured numbers.
+- [ ] **ENC-13 Dump:** `/dumpenchants` writes the file; spot-check Sharpness's min/max costs.
 
 ---
 
@@ -331,10 +331,10 @@ pile and pedestal values.
 - Easy Magic floors the summed power (int cast).
 
 ### Tests
-- **ENC-20 Values:** for each source, a table with only that source in the ring; read the power with a Create Display
+- [ ] **ENC-20 Values:** for each source, a table with only that source in the ring; read the power with a Create Display
   Link "enchant power" source on the table (Create ships `EnchantPowerDisplaySource`) and compare with the config.
-- **ENC-21 Book pile:** 3 enchanted books in one pile -> power 1 (after step 3); 4 plain books -> 1.
-- **ENC-22 Lit candles:** unlit candle -> 0, lit -> its value.
+- [ ] **ENC-21 Book pile:** 3 enchanted books in one pile -> power 1 (after step 3); 4 plain books -> 1.
+- [ ] **ENC-22 Lit candles:** unlit candle -> 0, lit -> its value.
 
 ---
 
@@ -442,12 +442,12 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
   tooltip if players ask.
 
 ### Tests
-- **ENC-30 Recipe:** the new recipe makes an empty tome; the old pearl recipe is gone (JEI).
-- **ENC-31 Stack:** 16 empty tomes stack; a filled one doesn't stack with anything; a stack can't be used.
-- **ENC-32 Tooltip:** a tome holding 315 points reads "15.0 / 30 levels"; full reads "30 / 30".
-- **ENC-33 Spout / drain:** a spout with liquid XP fills an empty tome (two passes for 1395); an item drain empties it
+- [ ] **ENC-30 Recipe:** the new recipe makes an empty tome; the old pearl recipe is gone (JEI).
+- [ ] **ENC-31 Stack:** 16 empty tomes stack; a filled one doesn't stack with anything; a stack can't be used.
+- [ ] **ENC-32 Tooltip:** a tome holding 315 points reads "15.0 / 30 levels"; full reads "30 / 30".
+- [ ] **ENC-33 Spout / drain:** a spout with liquid XP fills an empty tome (two passes for 1395); an item drain empties it
   into a tank; amounts match 1 mB per point.
-- **ENC-34 Book pile:** a full tome in a book pile in the ring adds 1 power (ENC-20 Display Link method); an empty tome
+- [ ] **ENC-34 Book pile:** a full tome in a book pile in the ring adds 1 power (ENC-20 Display Link method); an empty tome
   adds 0.
 
 ---

@@ -169,15 +169,15 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 - [ ] **MJ-09 Hopper:** a hopper with 20 mixed cookies above an empty jar -> the jar fills to 12 in order; a
   comparator next to it reads 15. An apple in the hopper stays there.
 - [ ] **MJ-10 Old jar:** a cookie jar filled before this update (one kind, 5 cookies) still shows 5 and gives 5 back.
-- [ ] **MJ-11 Soup in, soup out** (counts: scratch server PASSED 2026-10-22, SQ-MJ-02; client: the color and the WTHIT line): right-click an empty jar with a bowl of Corn Soup -> soup-colored liquid, one bowl
+- [ ] **MJ-11 Soup in, soup out:** (counts: scratch server PASSED 2026-10-22, SQ-MJ-02; client: the color and the WTHIT line) right-click an empty jar with a bowl of Corn Soup -> soup-colored liquid, one bowl
   back in hand; right-click with an empty bowl -> Corn Soup. Six bowls fill it; a seventh stays in hand. WTHIT reads
   "Contents: Corn Soup (2 / 12)" after one bowl.
-- [ ] **MJ-12 Every soup** (in and out: scratch server PASSED 2026-10-22, SQ-MJ-01 / SQ-MJ-02, all 24 as themselves; client: the colors): each soup in section 9 goes into an empty jar, and each shows a color close to its texture
+- [ ] **MJ-12 Every soup:** (in and out: scratch server PASSED 2026-10-22, SQ-MJ-01 / SQ-MJ-02, all 24 as themselves; client: the colors) each soup in section 9 goes into an empty jar, and each shows a color close to its texture
   (none black, purple-black or gray). Golden and Enchanted Golden soups come back out as the same item.
-- [x] **MJ-13 Shulker bowl only** (scratch server PASSED 2026-10-22, SQ-MJ-02; nothing client-only): Chorus Stew into a jar, one bowl -> the shulker bowl comes back; an empty wooden
+- [x] **MJ-13 Shulker bowl only:** (scratch server PASSED 2026-10-22, SQ-MJ-02; nothing client-only) Chorus Stew into a jar, one bowl -> the shulker bowl comes back; an empty wooden
   bowl on the jar does nothing; an empty shulker bowl takes the Chorus Stew out and the jar is empty again (2 units in,
   2 out, no extra stew).
-- [ ] **MJ-14 Bottle soup** (one bottle: scratch server PASSED 2026-10-22, SQ-MJ-02; 12 bottles: client): a Bayberry Soup bottle pours 1 unit (12 bottles fill a jar); an empty glass bottle takes
+- [ ] **MJ-14 Bottle soup:** (one bottle: scratch server PASSED 2026-10-22, SQ-MJ-02; 12 bottles: client) a Bayberry Soup bottle pours 1 unit (12 bottles fill a jar); an empty glass bottle takes
   one back.
 
 ## 8. History

@@ -770,7 +770,7 @@ temperature 3, 9600 ticks. The recipe is only active when Farmer's Respite is lo
 - [ ] **AL-62 Quiche (8.6):** mushroom quiche crafts with a whole cabbage; both sequenced assemblies run on a Create line
 - [ ] **AL-63 Spout and drain (8.7):** spout 250 mB of beer into a tankard -> beer; drain a beer -> tankard + 250 mB; no spout or drain recipe for the cheese fluids
 - [ ] **AL-64 Keg pipe rule (8.7):** a pump on a fermenting keg takes nothing; after the drink is done it pumps the drink out; piping lava in is refused; the keg tooltip shows the idle-only line; with `pipeDrainOnlyWhenIdle = false` the pump drains mid-ferment and the line is gone
-- [ ] ~~**AL-65 Mead merge**~~ retired 2026-10-18 (no conversions); Vinery mead removal is VB-54
+- [ ] ~~**AL-65 Mead merge:**~~ retired 2026-10-18 (no conversions); Vinery mead removal is VB-54
 
 ## 8. Changes to make (planned 2026-10-18, BUILT 2026-10-18)
 

@@ -200,7 +200,7 @@ Brief: [briefs/items_item-physics.md](briefs/items_item-physics.md). Nothing her
 
 Drop items with Q into the hazard.
 
-- IP-15: drop an item with Curse of Ascension (anvil or `/give` with the enchantment) and one with Curse of Fleeting. Ascension rises; Fleeting pushes nearby mobs and players away. Queued as SQ-IP-15.
+- [ ] **IP-15:** drop an item with Curse of Ascension (anvil or `/give` with the enchantment) and one with Curse of Fleeting. Ascension rises; Fleeting pushes nearby mobs and players away. Queued as SQ-IP-15.
 
 - [ ] **IP-01 Default:** drop a Create cogwheel in water -> sinks; in fire -> burns; in lava -> burns.
 - [ ] **IP-02 Floats:** oak planks, a boat and bone meal in water -> float. Gunpowder -> sinks.

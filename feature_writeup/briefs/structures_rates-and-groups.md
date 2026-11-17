@@ -138,16 +138,16 @@ so structures of one kind keep apart and their rates are set in one place; decid
 - New chunks only: the server world's explored Nether/End keep today's layout.
 
 ### Tests
-- ST-210 Groups load: the `[structure-tuning]` line counts the new groups; `structure_tag_report.md` lists them with
+- [ ] **ST-210 Groups load:** the `[structure-tuning]` line counts the new groups; `structure_tag_report.md` lists them with
   members; no "structure in two groups" error.
-- ST-211 MES off the main island: in a new world `/locate structure mes:monolith` from 0 0 in the End answers more
+- [ ] **ST-211 MES off the main island:** in a new world `/locate structure mes:monolith` from 0 0 in the End answers more
   than 1000 blocks out; a Chunky pregen of radius 1000 blocks around 0 0 in the End has no MES start
   (`/dumpstructuregen` or a structure-start census).
-- ST-212 Fortress and bastion keep apart: `/cwglocate census` (locate.md) over a Nether square: no fortress start
+- [ ] **ST-212 Fortress and bastion keep apart:** `/cwglocate census` (locate.md) over a Nether square: no fortress start
   within 10 chunks of a bastion.
-- ST-213 Deep dungeons (retest of ST-115): skeleton dungeon, bone dungeon, lost soul city `/locate` answers in cave
+- [ ] **ST-213:** Deep dungeons (retest of ST-115): skeleton dungeon, bone dungeon, lost soul city `/locate` answers in cave
   biomes.
-- ST-214 Underground density: a pregenerated 64x64-chunk square has underground cabins and dungeons within x0.5 to
+- [ ] **ST-214 Underground density:** a pregenerated 64x64-chunk square has underground cabins and dungeons within x0.5 to
   x2 of `--check`'s estimate.
 
 ---
@@ -210,9 +210,9 @@ biome tag `#minecraft:is_ocean`. All in the repo's configs.
 - `--fit-rates` writes `fit_base` for structures that lack one; review those new fields in the diff.
 
 ### Tests
-- ST-215 Shipwreck rate: `--check` shows both wrecks at 0.4x the 2026-10-21 estimate; a scratch census of a
+- [ ] **ST-215 Shipwreck rate:** `--check` shows both wrecks at 0.4x the 2026-10-21 estimate; a scratch census of a
   pregenerated ocean square counts about 40 % of the wrecks of a run with the old values (same seed).
-- ST-216 Watchtower: `/locate structure watchtower_building:fresh_watchtower` answers; `--check` 1 per 67 +-5.
+- [ ] **ST-216 Watchtower:** `/locate structure watchtower_building:fresh_watchtower` answers; `--check` 1 per 67 +-5.
 
 ---
 
@@ -266,9 +266,9 @@ No ids beyond `structure_groups.json`. Code: `tools/gen_structure_groups.py` (`f
 - Do it after #1 and #10 so new groups are stripped the same way, and before the final `--check` of #2.
 
 ### Tests
-- ST-217 Strip report: the tool prints every changed member; `tuned` members, metas and replacements unchanged
+- [ ] **ST-217 Strip report:** the tool prints every changed member; `tuned` members, metas and replacements unchanged
   (diff of `structure_groups.json`); node sim clean.
-- ST-218 Census after the strip: per group, members sharing a biome start in about equal numbers (x0.7 to x1.4)
+- [ ] **ST-218 Census after the strip:** per group, members sharing a biome start in about equal numbers (x0.7 to x1.4)
   where their frequencies are equal.
 
 ---
@@ -338,8 +338,8 @@ at line 1878 is the pattern). No mod data.
 - Peaceful radius is separate from rank (a hostile landmark still drops near a village).
 
 ### Tests
-- ST-219 Ranks staged: the report's priority table lists the tiers; `[placement-priority] N structure(s) ranked`.
-- ST-220 Landmark wins: `/place structure minecraft:mansion` beside a predicted pillager tower slot is not the
+- [ ] **ST-219 Ranks staged:** the report's priority table lists the tiers; `[placement-priority] N structure(s) ranked`.
+- [ ] **ST-220 Landmark wins:** `/place structure minecraft:mansion` beside a predicted pillager tower slot is not the
   check (no prediction on `/place`); instead pregenerate a dark-forest square and read `[placement-priority]
   dropped` lines (`log = true`): no mansion is dropped for a lower tier; a drop line names a higher-ranked winner.
 
@@ -384,8 +384,8 @@ None. Files: `kubejs/server_scripts/worldgen/structure_overrides.js`, `CEConfig.
   (one line in its preflight).
 
 ### Tests
-- ST-221 Overrides off: file with entries, switch off -> identical sim output.
-- ST-222 Overrides on: `meta/fortified_ruins` share 1.0 -> the report shows it, the warning logs once; a key like
+- [ ] **ST-221 Overrides off:** file with entries, switch off -> identical sim output.
+- [ ] **ST-222 Overrides on:** `meta/fortified_ruins` share 1.0 -> the report shows it, the warning logs once; a key like
   `biomes` is refused with the rule message and nothing is applied.
 
 ---
@@ -419,9 +419,9 @@ the peaceful radius ([plan_1.0.6.md](../plan_1.0.6.md) 2.1, [structure_tuning.md
 - Timeout 300 vs 600. Recommend 300 (a search of 30+ loads already means the structure is genuinely far).
 
 ### Tests
-- ST-135 rerun with the #5 overrides: both metas answer; the log lists a fortified village with 2 to 6 ruins / 2 to
+- [ ] **ST-135 rerun with the #5 overrides:** both metas answer; the log lists a fortified village with 2 to 6 ruins / 2 to
   4 camps 44 to 108 blocks out.
-- ST-223 Without overrides, `/locate structure creativeengineering:meta/fortified_camps` answers within 300 s or
+- [ ] **ST-223:** Without overrides, `/locate structure creativeengineering:meta/fortified_camps` answers within 300 s or
   reports the timeout cleanly (no stall, LO-05 style).
 
 ---
@@ -474,7 +474,7 @@ floors sit near y 0 (ST-133 partly, [testing/structures/03_phase_3.md](../testin
 - The decision is per geode origin column; a geode near a shore may still reach a shallower neighbor column.
 
 ### Tests
-- ST-133 rerun: shells reaching the floor in ocean chunks drop to under a quarter of the off-switch count; land
+- [ ] **ST-133 rerun:** shells reaching the floor in ocean chunks drop to under a quarter of the off-switch count; land
   geodes unchanged; prismarine geodes unchanged.
 
 ---
@@ -504,7 +504,7 @@ Advanced Peripherals' scientist houses are off by its config; the pool tag that 
   `"optional": true` (small `PoolTuner` change); not worth it for one mod.
 
 ### Tests
-- ST-224 `pool_tag_report.md` after a load: no Warnings section; no scientist house in 5 fresh villages (ST-12 still
+- [ ] **ST-224:** `pool_tag_report.md` after a load: no Warnings section; no scientist house in 5 fresh villages (ST-12 still
   passes).
 
 ---
@@ -558,11 +558,11 @@ Ids above (repo). New group set ids `creativeengineering:group/desert_temples`, 
 - The vanilla pyramid's "10 % of YUNG's slots" holds per group, so it follows.
 
 ### Tests
-- ST-225 Groups: report lists `desert_temples` (32/20) and `jungle_temples` (32/20) with their replacements; no
+- [ ] **ST-225 Groups:** report lists `desert_temples` (32/20) and `jungle_temples` (32/20) with their replacements; no
   config error.
-- ST-226 Distance: a census over a pregenerated desert square: no two desert temple / pyramid starts closer than 21
+- [ ] **ST-226 Distance:** a census over a pregenerated desert square: no two desert temple / pyramid starts closer than 21
   chunks; `--check` desert temple 1 per 60 +-5.
-- ST-227 Priority: a predicted temple drops an overlapping mimic (`[placement-priority] dropped
+- [ ] **ST-227 Priority:** a predicted temple drops an overlapping mimic (`[placement-priority] dropped
   towns_and_towers:mimic_desert ... overlaps betterdeserttemples:desert_temple`), never the reverse.
 
 ---
@@ -625,9 +625,9 @@ templates `waystones:village/common/waystone`, `waystones:village/desert/wayston
 - Existing chunks keep their stones.
 
 ### Tests
-- ST-228 Density: a pregenerated 100 x 100-chunk square (scratch, same seed) has about a quarter of the lone stones
+- [ ] **ST-228 Density:** a pregenerated 100 x 100-chunk square (scratch, same seed) has about a quarter of the lone stones
   at 50 as at 25 (count `waystones:*waystone` blocks with a scratch KubeJS probe or a block census).
-- ST-229 (move variant) a `waysign_camps` meta with its waystone part: the stone is named and usable after first
+- [ ] **ST-229:** (move variant) a `waysign_camps` meta with its waystone part: the stone is named and usable after first
   right-click; `frequency = 0` places no lone stones.
 
 ---

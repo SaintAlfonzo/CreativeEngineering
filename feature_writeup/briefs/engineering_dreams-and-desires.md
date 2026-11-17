@@ -149,7 +149,7 @@ the log warning matters (not needed for the bark).
 
 - RW-new1 (proposed, numbered when queued): Rubberwood Bark shows a bark texture in JEI and in hand; no
   `rubberwood_bark.png` line in `latest.log`.
-- RW-28 (existing) already checks that no rose, rubber or spirit bark is in JEI.
+- [ ] **RW-28:** (existing) already checks that no rose, rubber or spirit bark is in JEI.
 
 ---
 

@@ -135,11 +135,11 @@ biome type: no single wild animal swamping a biome's creature picks, waterfowl a
 - More Mooblooms converts cows after the pick (mob_spawns.md 3.1 Interplay): cow changes move moobloom numbers.
 
 ### Tests
-- **MS-24 parity rules load:** rejoin -> `[mob-spawns] N of N rules`, no errors; spawns_by_biome.md section 1 lists the
+- [ ] **MS-24 parity rules load:** rejoin -> `[mob-spawns] N of N rules`, no errors; spawns_by_biome.md section 1 lists the
   new rules with biomes matched > 0.
-- **MS-25 savanna mix:** new savanna chunks -> herds of cows/sheep/pigs/rabbits appear alongside gazelles and elephants,
+- [ ] **MS-25 savanna mix:** new savanna chunks -> herds of cows/sheep/pigs/rabbits appear alongside gazelles and elephants,
   not mostly gazelles (compare 3 fresh savanna areas).
-- **MS-26 waterfowl:** a swamp, a plains lake and a beach each show ducks and geese within a few hundred blocks.
+- [ ] **MS-26 waterfowl:** a swamp, a plains lake and a beach each show ducks and geese within a few hundred blocks.
 
 ---
 
@@ -196,9 +196,9 @@ Now and then a single villager wanders the open countryside: plains, temperate h
 - MCA's `overwriteOriginalZombieVillagers` is also on; nothing to do here.
 
 ### Tests
-- **MS-27 lone villager rule:** rejoin -> rule `lone_villagers` matched N biomes; `/dumpspawns` -> plains `creature` lists
+- [ ] **MS-27 lone villager rule:** rejoin -> rule `lone_villagers` matched N biomes; `/dumpspawns` -> plains `creature` lists
   `minecraft:villager` 1 (1-1).
-- **MS-28 lone villager in play:** explore new plains / meadow chunks in daylight -> occasionally one MCA villager alone,
+- [ ] **MS-28 lone villager in play:** explore new plains / meadow chunks in daylight -> occasionally one MCA villager alone,
   never in a cave; it is an MCA villager (name tag, MCA interaction screen), not a vanilla one.
 
 ---
@@ -271,9 +271,9 @@ Blocky Siege, Villages & Pillages and Unwrecked Ships jars):
   despawn anyway (unverified for allays specifically; watch in play).
 
 ### Tests
-- **MS-29 allay rule:** `/dumpspawns` -> moonlight_grove `creature` lists `minecraft:allay` 3 (1-2).
-- **MS-30 allays in play:** a moonlight grove in daylight -> allays appear over a few minutes of exploring new chunks.
-- **MS-31 outpost cages:** `/locate structure minecraft:pillager_outpost` x3 in new chunks -> at least one allay cage
+- [ ] **MS-29 allay rule:** `/dumpspawns` -> moonlight_grove `creature` lists `minecraft:allay` 3 (1-2).
+- [ ] **MS-30 allays in play:** a moonlight grove in daylight -> allays appear over a few minutes of exploring new chunks.
+- [ ] **MS-31 outpost cages:** `/locate structure minecraft:pillager_outpost` x3 in new chunks -> at least one allay cage
   (the generated pool_tag_report.md shows the new weight).
 
 ---
