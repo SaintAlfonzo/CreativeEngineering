@@ -1,25 +1,25 @@
 {
-  "group": "CQ-PTH",
-  "world": "flat_creative",
-  "client_config": {},
-  "tests": [
-    {
-      "id": "CQ-PTH-03b",
-      "covers": ["CQ-PTH-03b"],
-      "title": "Walking along a ladder column is capped near 0.150 b/t (tick-exact walk)",
-      "expect": "Survival, 40 ticks of forward input along a ladder column: about 0.150 blocks per tick. The open-ground control run is logged for comparison (vanilla walk about 0.21 b/t averaged over the run-up).",
-      "steps": [
-        {"cmd": "fill $X $Y $Z+2 $X+14 $Y+1 $Z+2 minecraft:stone"},
-        {"cmd": "fill $X $Y $Z+1 $X+14 $Y $Z+1 minecraft:ladder[facing=north]"},
-        {"macro": "survival_ground"},
-        {"cmd": "tp @s $X.5 $Y $Z+5.5 -90 0"},
-        {"wait": "20"},
-        {"walk": 40, "keys": "forward"},
-        {"cmd": "tp @s $X.5 $Y $Z+1.5 -90 0"},
-        {"wait": "20"},
-        {"player_pos": true, "expect": "ground true"},
-        {"walk": 40, "keys": "forward", "expect": "^walk .* bpt 0\\.1[45]\\d"}
-      ]
-    }
-  ]
+	"group": "CQ-PTH",
+	"world": "flat_creative",
+	"client_config": {},
+	"tests": [
+		{
+			"id": "CQ-PTH-03b",
+			"covers": ["CQ-PTH-03b"],
+			"title": "Walking along a ladder column is capped near 0.150 b/t (tick-exact walk)",
+			"expect": "Survival, 40 ticks of forward input along a ladder column: about 0.150 blocks per tick. The open-ground control run is logged for comparison (vanilla walk about 0.21 b/t averaged over the run-up).",
+			"steps": [
+				{"cmd": "fill $X $Y $Z+2 $X+14 $Y+1 $Z+2 minecraft:stone"},
+				{"cmd": "fill $X $Y $Z+1 $X+14 $Y $Z+1 minecraft:ladder[facing=north]"},
+				{"macro": "survival_ground"},
+				{"cmd": "tp @s $X.5 $Y $Z+5.5 -90 0"},
+				{"wait": "20"},
+				{"walk": 40, "keys": "forward"},
+				{"cmd": "tp @s $X.5 $Y $Z+1.5 -90 0"},
+				{"wait": "20"},
+				{"player_pos": true, "expect": "ground true"},
+				{"walk": 40, "keys": "forward", "expect": "^walk .* bpt 0\\.1[45]\\d"}
+			]
+		}
+	]
 }

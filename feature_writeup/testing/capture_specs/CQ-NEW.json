@@ -1,45 +1,45 @@
 {
-  "group": "CQ-NEW",
-  "world": "flat_swamp",
-  "biome": "minecraft:swamp",
-  "client_config": {},
-  "tests": [
-    {
-      "id": "FX-43",
-      "covers": ["CQ-NEW-02"],
-      "title": "Moss follows biome grass colour",
-      "expect": "Swamp world: the moss block and moss carpet left and right of the grass block match its dark olive tint. The moss block in the hotbar stays vanilla bright green.",
-      "steps": [
-        {"cmd": "setblock $X+2 $Y $Z+4 minecraft:moss_block"},
-        {"cmd": "setblock $X+3 $Y $Z+4 minecraft:grass_block"},
-        {"cmd": "setblock $X+4 $Y $Z+4 minecraft:moss_carpet"},
-        {"cmd": "give @s minecraft:moss_block"},
-        {"look": {"from": "$X+3 $Y+2 $Z", "at": "$X+3 $Y $Z+4"}},
-        {"wait": "chunks"}
-      ],
-      "capture": [
-        {"name": "", "crop": "center:200x120", "hide": ["chat", "hand", "crosshair"]},
-        {"name": "hotbar", "crop": "hotbar"}
-      ]
-    },
-    {
-      "id": "N-02",
-      "covers": ["CQ-NEW-04"],
-      "title": "Glycerol tooltip without Shift (text readback)",
-      "expect": "Glycerol's tooltip has the line \"Tastes sweet!\" with no Shift held, and no \"Hold Shift\" hint.",
-      "steps": [
-        {"tooltip_text": "item_dict:glycerol", "expect": "Tastes sweet!", "reject": "(?i)hold.*shift"}
-      ]
-    },
-    {
-      "id": "CQ-NEW-04a",
-      "covers": ["CQ-NEW-04"],
-      "title": "Renamed Creative Delight names (text readback)",
-      "expect": "Salmon Eggs read Caviar; Fried Rice reads Egg Fried Rice.",
-      "steps": [
-        {"tooltip_text": "item_dict:caviar", "expect": " 0: Caviar$"},
-        {"tooltip_text": "item_dict:fried_rice", "expect": " 0: Egg Fried Rice$"}
-      ]
-    }
-  ]
+	"group": "CQ-NEW",
+	"world": "flat_swamp",
+	"biome": "minecraft:swamp",
+	"client_config": {},
+	"tests": [
+		{
+			"id": "FX-43",
+			"covers": ["CQ-NEW-02"],
+			"title": "Moss follows biome grass colour",
+			"expect": "Swamp world: the moss block and moss carpet left and right of the grass block match its dark olive tint. The moss block in the hotbar stays vanilla bright green.",
+			"steps": [
+				{"cmd": "setblock $X+2 $Y $Z+4 minecraft:moss_block"},
+				{"cmd": "setblock $X+3 $Y $Z+4 minecraft:grass_block"},
+				{"cmd": "setblock $X+4 $Y $Z+4 minecraft:moss_carpet"},
+				{"cmd": "give @s minecraft:moss_block"},
+				{"look": {"from": "$X+3 $Y+2 $Z", "at": "$X+3 $Y $Z+4"}},
+				{"wait": "chunks"}
+			],
+			"capture": [
+				{"name": "", "crop": "center:200x120", "hide": ["chat", "hand", "crosshair"]},
+				{"name": "hotbar", "crop": "hotbar"}
+			]
+		},
+		{
+			"id": "N-02",
+			"covers": ["CQ-NEW-04"],
+			"title": "Glycerol tooltip without Shift (text readback)",
+			"expect": "Glycerol's tooltip has the line \"Tastes sweet!\" with no Shift held, and no \"Hold Shift\" hint.",
+			"steps": [
+				{"tooltip_text": "item_dict:glycerol", "expect": "Tastes sweet!", "reject": "(?i)hold.*shift"}
+			]
+		},
+		{
+			"id": "CQ-NEW-04a",
+			"covers": ["CQ-NEW-04"],
+			"title": "Renamed Creative Delight names (text readback)",
+			"expect": "Salmon Eggs read Caviar; Fried Rice reads Egg Fried Rice.",
+			"steps": [
+				{"tooltip_text": "item_dict:caviar", "expect": " 0: Caviar$"},
+				{"tooltip_text": "item_dict:fried_rice", "expect": " 0: Egg Fried Rice$"}
+			]
+		}
+	]
 }
