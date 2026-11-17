@@ -50,6 +50,7 @@ public final class FridgeTopFill {
     public static void register(IEventBus modBus) {
         modBus.addListener((ModelEvent.RegisterAdditional e) -> e.register(FILL));
         modBus.addListener(EventPriority.LOWEST, FridgeTopFill::wrap);
+        FridgeDouble.register(modBus);
     }
 
     private static void wrap(ModelEvent.BakingCompleted event) {
@@ -57,6 +58,7 @@ public final class FridgeTopFill {
         BakedModel fill = models.get(FILL);
         if (fill == null || fill == event.getModelManager().getMissingModel()) {
             LOGGER.warn("[creativedelight/cookingforblockheads] {} did not load: the 2-tall fridge keeps CfB's height", FILL);
+            FridgeDouble.wrap(event);
             return;
         }
         int wrapped = 0;
@@ -69,6 +71,8 @@ public final class FridgeTopFill {
             wrapped++;
         }
         LOGGER.debug("[creativedelight/cookingforblockheads] fridge top fill on {} states", wrapped);
+        // Double fridge joints wrap the filled model (one listener, so the order is fixed).
+        FridgeDouble.wrap(event);
     }
 
     /** CfB's fridge model plus the fill box, in the first render pass the fridge draws in. */

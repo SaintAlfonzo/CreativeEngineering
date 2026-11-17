@@ -15,7 +15,9 @@ creativedelight namespace (plan D6); CfB's namespace is only named as model pare
   - assets/creativedelight/lang/en_us.json (block names; lang files of every pack are merged, so CD's own lang in the
     jar root is not overridden);
   - assets/creativedelight/models/block/fridge_top_fill.json, the box the client adds on top of the 2-tall
-    fridge (compat/cookingforblockheads/client/FridgeTopFill.java).
+    fridge (compat/cookingforblockheads/client/FridgeTopFill.java);
+  - assets/creativedelight/models/block/fridge_join_<small|lower|upper>_<body|door>.json, the joint pieces of a double
+    fridge, built for a joint at model -x (compat/cookingforblockheads/client/FridgeDouble.java mirrors and turns them).
 
 The wood list must match compat/cookingforblockheads/rack/RackWoods.java and compat/art/ArtRecipes.PLANKS. Run from anywhere: python3 tools/gen_cfb_racks.py [--check]
 (--check: exit 1 if any output would change).
@@ -83,6 +85,36 @@ FILL = {
     }],
 }
 
+# Double fridge joint pieces (TODO cooking/kitchen #36), joined side at model -x: body = a 1 px side strip to the block
+# edge plus a white lip where CfB's seal stood (x 1-2.5, z 2-3); door = a 1 px strip to the block edge. Heights: 1-tall
+# fridge 15 px, lower half 16, upper half 13 (the upper body also widens the top fill box, y 13-16).
+JOIN_PIECES = {
+    'small_body': [([0, 0, 2], [1, 15, 15]), ([1, 0, 2], [2.5, 15, 3])],
+    'lower_body': [([0, 0, 2], [1, 16, 15]), ([1, 0, 2], [2.5, 16, 3])],
+    'upper_body': [([0, 0, 2], [1, 13, 15]), ([1, 0, 2], [2.5, 13, 3]), ([0, 13, 1], [1, 16, 15])],
+    'small_door': [([0, 0, 1], [1, 15, 2])],
+    'lower_door': [([0, 0, 1], [1, 16, 2])],
+    'upper_door': [([0, 0, 1], [1, 13, 2])],
+}
+
+
+def join_model(boxes):
+    def uv(w, h):  # the plain white inside of fridge_side: u 1-15, v 1-16
+        return [1, 1, round(1 + min(w, 14), 3), round(1 + min(h, 15), 3)]
+    elements = []
+    for f, t in boxes:
+        dx, dy, dz = (t[i] - f[i] for i in range(3))
+        size = {'north': (dx, dy), 'south': (dx, dy), 'east': (dz, dy), 'west': (dz, dy), 'up': (dx, dz), 'down': (dx, dz)}
+        elements.append({'from': f, 'to': t, 'faces': {
+            d: {'uv': uv(*wh), 'texture': '#fridge_side', 'tintindex': 0} for d, wh in size.items()}})
+    return {
+        'credit': 'Creative Delight (Cooking for Blockheads compartment): joint piece of a double fridge, joined side at '
+                  'model -x (mirrored in code for a flipped door), compat/cookingforblockheads/client/FridgeDouble.java '
+                  '(TODO cooking/kitchen #36)',
+        'textures': FILL['textures'],
+        'elements': elements,
+    }
+
 
 def dump(obj):
     return json.dumps(obj, indent=2) + '\n'
@@ -128,6 +160,8 @@ def outputs():
             lang[f'block.{NS}.{rid}'] = f'{name} {label}'
     yield f'assets/{NS}/lang/en_us.json', dump(lang)
     yield f'assets/{NS}/models/block/fridge_top_fill.json', dump(FILL)
+    for piece, boxes in JOIN_PIECES.items():
+        yield f'assets/{NS}/models/block/fridge_join_{piece}.json', dump(join_model(boxes))
 
 
 def main():

@@ -1,0 +1,83 @@
+{
+  "credit": "Creative Delight (Cooking for Blockheads compartment): joint piece of a double fridge, joined side at model -x (mirrored in code for a flipped door), compat/cookingforblockheads/client/FridgeDouble.java (TODO cooking/kitchen #36)",
+  "textures": {
+    "particle": "cookingforblockheads:block/fridge_side",
+    "fridge_side": "cookingforblockheads:block/fridge_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        1
+      ],
+      "to": [
+        1,
+        15,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            2,
+            16
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            2,
+            16
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            2,
+            16
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            2,
+            16
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            2,
+            2
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            2,
+            2
+          ],
+          "texture": "#fridge_side",
+          "tintindex": 0
+        }
+      }
+    }
+  ]
+}
