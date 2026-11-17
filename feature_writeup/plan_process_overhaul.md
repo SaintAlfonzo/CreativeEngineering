@@ -240,7 +240,7 @@ Impact:
 | Policy | 136 project memories against the memory-vs-docs rule | Memory holds owner rules, user facts and references only; memory `memory-vs-docs-policy` updated |
 
 Follow-ups:
-- Strip the status lines from the 39 notes, or confirm them against the repo, in a one-time pass with P1.4.
+- Strip the status lines from the 39 notes, or confirm them against the repo, in a one-time pass with P1.4. Done 2026-11-16 ([status pass](agent_notes/status_pass_2026-11-16.md)).
 - Notes that repeat a writeup get merged into it later, with the note becoming a pointer.
 - Undo: extract the tarball over the memory folder and restore CLAUDE.md from the backup.
 
@@ -369,11 +369,16 @@ Offline (checked by the building agent, results in [process_review.md](process_r
 - [x] **PROC-07 ledger:** install -> `jar_archive/installed.tsv` row with both stamps.
 - [x] **PROC-08 pending:** `jarstamp.py pending` lists a built-not-installed jar and nothing else.
 - [x] **PROC-09 deploy mismatch:** staged payload with server and client stamps differing -> `build_deploy.py` refuses.
-- [ ] **PROC-10 generated README:** `status_index.py` -> README index block regenerated, no hand text lost outside markers.
-- [ ] **PROC-11 snapshot:** flip one TODO row to Testing -> snapshot counts change by one.
-- [ ] **PROC-12 verdict to README:** add a verdict file -> the feature's last-run cell updates.
-- [ ] **PROC-13 legend check:** a row with status "Done" outside the archive -> `--check` FAIL.
-- [ ] **PROC-14 hand edit:** edit inside a generated block -> `--check` FAIL.
+- [x] **PROC-10 generated README:** `status_index.py` -> README index block regenerated, no hand text lost outside markers.
+  2026-11-16: README outside the markers equal to HEAD before and after the table; old table verbatim in `status/readme_index_2026-11-16.md`.
+- [x] **PROC-11 snapshot:** flip one TODO row to Testing -> snapshot counts change by one.
+  2026-11-16: `food/types-and-tuning #1` Planned -> Testing: Planned 494 -> 493, Testing 780 -> 781; reverted.
+- [x] **PROC-12 verdict to README:** add a verdict file -> the feature's last-run cell updates.
+  2026-11-16: `perf/runs/rPROC12/verdicts/SQ-BRA-01.json` (FAIL) -> BlockRunner cell and queue SQ-BRA row show rPROC12 first; removed.
+- [x] **PROC-13 legend check:** a row with status "Done" outside the archive -> `--check` FAIL.
+  2026-11-16: FAIL naming TODO.md line and id, exit 1; also checked: off-legend features.tsv word, unknown TODO id, queue code with no feature.
+- [x] **PROC-14 hand edit:** edit inside a generated block -> `--check` FAIL.
+  2026-11-16: Tooltips status edited in the README block -> FAIL (hand edit, lines 18-202), exit 1.
 - [x] **PROC-15 install, game closed:** no java with the instance cwd -> `installToMods` installs, no dialog.
 - [ ] **PROC-16 Install now while running:** owner client running -> dialog; Install now -> dialog shown again with
   "game still running"; close the game, Install now -> installed, ledger row.
@@ -423,6 +428,28 @@ P1.2:
 
 P1.3: skill `.claude/skills/intake/SKILL.md`; CLAUDE.md line. Measure starts with the next scratchpad intake.
 
+P1.4 (items 1 to 3; item 4 by the main session, 5 and 6 by another agent):
+- `feature_writeup/status/features.tsv` (183 rows) seeded once by `tools/status_seed.py` from the README index. Status
+  word: a legend word in the cell (outside bold run notes) first, BROKEN when a run note says BROKEN, else keyword
+  inference (built / installed / carved -> BUILT, audit / survey / analysis -> reference, nothing built / idea only ->
+  planned); 37 rows needed inference, listed by the seed run. Jars from name mentions, queue codes from mentions in the
+  feature's writeup (379), queue section links (17), test prefix (2), TODO links (1): all 399 codes owned. Jars and
+  codes are a heuristic seed for the owner to correct by hand.
+- D6: each row's feature and status cells went verbatim into its writeup's section 0 (166 paragraphs, 48 writeups got
+  a new section 0); the 17 generated writeups were skipped (their regeneration would drop it); the whole old table is
+  in `status/readme_index_2026-11-16.md`.
+- `tools/status_index.py`: blocks `<!-- generated:status_index begin NAME sha1=... -->` / `end NAME` in README (index),
+  TODO (snapshot) and the queue header (coverage, in a `<details>`). Runs from `scratch*_run_*.md` tables (`| ID |
+  Result |`, `| Row | Result |`, `| Verdict | Rows |`) and `perf/runs/<run>/**/verdicts/*.json`; jar state from
+  `jarstamp.pending()` and the ledger. Out-of-date block = WARN, hand edit = FAIL. `--check` 0.3 s.
+- The 2026-11-03 snapshot prose and the 85 queue banner lines moved once to `status/history.md`.
+- Item 3: `tools/status_normalise_todo.py`, 85 rows (27 Done / Complete moved to the archive, Status and Tests kept in
+  Details); list in `status/normalise_2026-11-16.md`. Beyond the plan's mapping: "Idea" -> Planned, "Tested" and
+  "Installed ..." -> Testing, "In progress" case. 14 archive rows still carry an open status (listed in the snapshot).
+
+P1.4 (notes, deploy history):
+- Items 5 and 6 done: 33 agent notes lost their status lines (pointers to the owning docs instead), 31 checked and left; list and doc disagreements in [agent_notes/status_pass_2026-11-16.md](agent_notes/status_pass_2026-11-16.md). `build_deploy.py --snapshot` appends its own deploy.md section 8 bullet from the DEPLOYED.json mark (`append_history_rows`); `--backfill-history VERSION...` added 1.2.00 to 1.2.02 (tested on scratch copies, DEPLOYED.json and DEPLOY_LOG untouched).
+
 ## History
 
 - 2026-11-16: planned from [process_review.md](process_review.md); owner asked for items 1 to 3 and 5 as phase 1,
@@ -433,3 +460,5 @@ P1.3: skill `.claude/skills/intake/SKILL.md`; CLAUDE.md line. Measure starts wit
   - P1.6 memory move done.
   - P1.2 item 7 install dialog, P1.5 and P1.6 added.
 - 2026-11-16 night: P1.1 to P1.3 built (Build notes above). CLAUDE.md backed up to `CLAUDE.md.bak-2026-11-16-p1`, then: `intake` line, install line (dialog built), Checks line. Tests renamed PO- to PROC- (PO- is potions.md's).
+- 2026-11-16 night: P1.4 items 5 and 6 (agent notes status pass, deploy.md history from `--snapshot`) done; P1.6 follow-up 1 closed.
+- 2026-11-16 night: P1.4 items 1 to 3 built (Build notes above); PROC-10 to PROC-14 passed offline.
